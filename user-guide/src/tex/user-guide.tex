@@ -1,0 +1,50 @@
+\documentclass[titlepage]{jbook}
+\usepackage{graphicx}
+\usepackage{ascmac}
+\usepackage{framed}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textheight}{43\baselineskip}
+\setlength{\textwidth}{47zw}
+
+
+\title{Fess ユーザーガイド}
+\author{Fess Project}
+
+\begin{document}
+\maketitle
+
+
+% 目次
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+
+% 本文
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\chapter{はじめに}
+\input{index}
+
+\chapter{検索方法}
+Fessでは様々な検索機能を提供しています。
+プルダウンボックスで検索条件を選択したり、検索語にフィールド情報を付加することで、複雑な検索条件も組み立てることが可能です。
+\input{search-and}
+\input{search-or}
+\input{search-sort}
+\input{search-range}
+\input{search-not}
+\input{search-boost}
+\input{search-fuzzy}
+\input{search-label}
+\input{search-field}
+
+\chapter{Ajaxを用いた検索}
+通常のHTMLによるレスポンスに加えて、XMLまたはJSONによる検索結果の返却も可能です。
+\input{xml-response}
+\input{json-response}
+
+
+\end{document}
