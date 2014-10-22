@@ -1,0 +1,13 @@
+#!/bin/sh
+SCRIPT_DIR=$(cd $(dirname $0);pwd)
+
+PROJECT="Fess"
+TITLE="Fess"
+LANG="ja"
+AUTHOR="CodeLibs"
+RELEASE="9.1"
+
+CONFDIR="${SCRIPT_DIR}/../conf"
+BUILDDIR="${SCRIPT_DIR}/_build"
+
+make SPHINXOPTS="-c ${CONFDIR}" BUILDDIR="${BUILDDIR}/${TYPE}" SPHINX_LANG="${LANG}" SPHINX_PROJECT="${PROJECT}" SPHINX_TITLE="${TITLE}" SPHINX_AUTHOR="${CodeLibs}" SPHINX_RELEASE="${RELEASE}" -f ${CONFDIR}/Makefile html
