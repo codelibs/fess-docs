@@ -112,7 +112,7 @@ Following are examples of how to write.
 
 Table: JSP file that you can edit
 
-</table>
+
 You can to edit for PCs and similar portable screen.
 
 .. |image0| image:: ../../../resources/images/en/7.0/admin/design-1.png

@@ -29,7 +29,7 @@ a request. Request parameters are as follows.
 
 Table: Request parameter
 
-</table>
+
 Responses to
 ------------
 
@@ -128,4 +128,4 @@ Each element is as follows.
 
 Table: Responses to information
 
-</table>
+

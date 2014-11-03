@@ -77,7 +77,7 @@ follows.
 
 Table: For DB configuration parameter example
 
-</table>
+
 Script
 ------
 
@@ -129,7 +129,7 @@ marks. Access in the database column name, its value.
 
 Table: Script settings
 
-</table>
+
 Driver
 ------
 

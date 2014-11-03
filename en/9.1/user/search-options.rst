@@ -28,4 +28,4 @@ Following parameters is available in the standard.
 
 Table: Request parameter
 
-</table>
+

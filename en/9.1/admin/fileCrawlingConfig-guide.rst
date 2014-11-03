@@ -71,7 +71,7 @@ for given path pattern.
 
 Table: IP rings contents list
 
-</table>
+
 For example, the path to target if you don't crawl less than/home /
 
 ::

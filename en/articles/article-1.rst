@@ -305,7 +305,7 @@ Search top screen JSP files
       <table>
         <tbody>
           <tr>
-            <td><img id="logo" src="${f:url('/images/ id="logo" src=""></img id="logo" src="${f:url('/images/></td></tr></tbody></table></s:form></div></body></html>')}" alt="<bean:message key="labels.search_top_logo_alt"></bean:message>" />
+            <td><img id="logo" src="${f:url('/images/ id="logo" src=""></img id="logo" src="${f:url('/images/></td></tr></tbody></s:form></div></body></html>')}" alt="<bean:message key="labels.search_top_logo_alt"></bean:message>" />
             <td><div class="input">
               <html:text styleclass="query" property="query" title="Search" size="50" maxlength="1000"></html:text>
               <input class="btn" type="submit" value="<bean:message key=" labels.top.search"/="">"name ="search"/ ></div></td>

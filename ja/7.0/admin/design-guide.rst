@@ -111,7 +111,7 @@ JSP
 
 Table: 編集可能なJSPファイル
 
-</table>
+
 携帯用画面も PC 用と同様に編集することができます。
 
 .. |image0| image:: ../../../resources/images/ja/7.0/admin/design-1.png

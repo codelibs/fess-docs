@@ -24,7 +24,7 @@ You can sort the following fields by default.
 
 Table: Sort fields list
 
-</table>
+
 Adding custom fields as sort in Customizing.
 
 How to use the

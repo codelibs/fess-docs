@@ -346,7 +346,7 @@ http://fess.codelibs.org/ja/
             </div></td>
           </tr>
         </tbody>
-      </table>
+      
     </s:form></div>
     </body>
     </html>
