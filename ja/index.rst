@@ -1,108 +1,102 @@
-============================================
+.. Fess documentation master file, created by
+   sphinx-quickstart on Sat Aug 16 11:40:54 2014.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
 オープンソース全文検索サーバー Fess (フェス)
-============================================
+===========================================
 
-概要
-====
+:更新日: |today|
 
-Fess は「\ **5 分で簡単に構築可能な全文検索サーバー**\ 」です。Java
-実行環境があればどの OS でも実行可能です。Fess は Apache
-ライセンスで提供され、無料 (フリーソフト) でご利用いただけます。
+全般
 
-デモサイト
-==========
+.. toctree::
+   :maxdepth: 3
 
-|image0|
+   downloads
+   quick-start
+   screenshot
 
-標準デモ
-|image1|
+入門
 
-サイト内検索デモ
-|image2|
+.. toctree::
+   :maxdepth: 2
 
-EC向け商品検索デモ
-特徴
-====
+   setup
+   getting-started
 
--  5 分で簡単に構築可能な全文検索サーバー
+インストール
 
--  Apache ライセンスで提供 (フリーソフトなので、無料で利用可能)
+.. toctree::
+   :maxdepth: 2
 
--  OS 非依存 (Java ベースで構築)
+   9.1/install/index
 
--  Web、ファイルシステム、Windows共有フォルダ、データベースをクロール
+検索
 
--  MS Office や PDF など多くのファイル形式に対応
+.. toctree::
+   :maxdepth: 2
 
--  `Apache Solr <http://lucene.apache.org/solr/>`__
-   を検索エンジンとして利用
+   9.1/user/index
 
--  BASIC/DIGEST/NTLM認証のサイトも検索可能
+管理
 
--  ログイン状態により検索結果の出し分けが可能
-   (ActiveDirectoryなど、シングルサイオン環境での利用可能)
+.. toctree::
+   :maxdepth: 2
 
--  地図情報と連携したジオサーチ
+   9.1/admin/index
 
--  ブラウザ上でクロール対象設定や検索画面編集など可能
+設定
 
--  検索結果をラベル付けにより分類
+.. toctree::
+   :maxdepth: 2
 
--  リクエストヘッダーに情報付加、重複ドメインの設定、検索結果のパス変換
+   9.1/config/index
 
--  XML/JSON/JSONP形式で検索結果出力により外部システムとの連携が可能
+チュートリアル
 
--  検索ログおよびクリックログの集計
+.. toctree::
+   :maxdepth: 1
 
--  ファセット・ドリルダウン対応
+   articles/article-1
+   articles/article-2
+   articles/article-3
+   articles/article-4
 
--  オートコンプリート・サジェスト機能
+開発
 
--  ユーザー辞書および同義語辞書編集機能
+.. toctree::
+   :maxdepth: 3
 
--  関連ドキュメント表示機能
+   dev/getting-started
+   source-repository
+   ../apidocs/index.html
+   roadmap
+   dependencies
+   https://github.com/codelibs/fess/issues?state=open
+   team-list
+   mail-lists
 
--  検索結果のキャッシュ表示機能とスクリーンショット表示機能
+その他
 
--  検索結果のプロキシ機能
+.. toctree::
+   :maxdepth: 2
 
--  デスクトップ検索やローカルファイルのクリックオープン機能
+   news
+   articles
+   users
+   license
+   faq
+   supporting-projects
+   supported-files
+   support-services
+   asp
+   donation
 
--  スマートフォン対応 (Responsive Web Design)
+アーカイブ
 
--  Solr サーバーをグループ化して、ハイエンドユースにも対応
+.. toctree::
+   :maxdepth: 2
 
--  用途に応じて柔軟に対応可能な設計
+   archives
 
-ニュース
-========
-
-2014-06-28
-    `Fess 9.2
-    リリース <http://sourceforge.jp/projects/fess/news/24682>`__
-
-2014-03-26
-    `Fess 9.1
-    リリース <http://sourceforge.jp/projects/fess/news/24607>`__
-
-2014-02-07
-    `Fess 9.0.0
-    リリース <http://sourceforge.jp/projects/fess/news/24562>`__
-
-過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
-
-商用サポート
-============
-
-Fess は Apache
-ライセンスで提供されるオープンソース製品で、個人や商用向けでも無料でご自由にご利用いただけます。
-
-|image3|
-
-Fess
-のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート <http://www.n2sm.net/n2search.html>`__\ をご覧ください。また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
-
-.. |image0| image:: ../resources/images/ja/demo-1.png
-.. |image1| image:: ../resources/images/ja/demo-2.png
-.. |image2| image:: ../resources/images/ja/demo-3.png
-.. |image3| image:: ../resources/images/ja/n2search_225x50.png

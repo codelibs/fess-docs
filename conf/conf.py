@@ -49,7 +49,7 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'toc'
+master_doc = 'index'
 
 # General information about the project.
 project = u'Fess'
@@ -256,7 +256,7 @@ latex_elements['preamble'] = r'''
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('toc', project+'.tex', title,
+  ('index', project+'.tex', title,
    author, 'manual'),
 ]
 
@@ -287,7 +287,7 @@ latex_docclass = {'manual': 'jsbook'}
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('toc', project, title,
+    ('index', project, title,
      [author], 1)
 ]
 
@@ -301,7 +301,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('toc', project, title,
+  ('index', project, title,
    author, project, 'One line description of project.',
    'Miscellaneous'),
 ]
@@ -330,13 +330,13 @@ texinfo_documents = [
 # The options element is a dictionary that lets you override
 # this config per-document.
 # For example,
-# ('toc', u'MyProject', u'My Project', u'Author Name',
+# ('index', u'MyProject', u'My Project', u'Author Name',
 #  dict(pdf_compressed = True))
 # would mean that specific document would be compressed
 # regardless of the global pdf_compressed setting.
 
 pdf_documents = [
-    ('toc', project, title, author),
+    ('index', project, title, author),
 ]
 
 # A comma-separated list of custom stylesheets. Example:

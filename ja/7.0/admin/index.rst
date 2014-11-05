@@ -1,71 +1,42 @@
-========
-はじめに
-========
+.. Fess Admin documentation master file, created by
+   sphinx-quickstart on Sat Aug 16 11:40:54 2014.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-対象読者
-========
+Fess 管理者ガイド
+==================
 
-このドキュメントはFessの管理作業を担当するユーザーを対象にしています。
+.. toctree::
+   :maxdepth: 3
 
-お読みになる前に
-================
+   intro
+   wizard-guide
+   crawl-guide
+   system-guide
+   document-guide
+   scheduledJob-guide
+   design-guide
+   dict-guide
+   data-guide
+   webCrawlingConfig-guide
+   fileCrawlingConfig-guide
+   dataCrawlingConfig-guide
+   labelType-guide
+   pathMapping-guide
+   webAuthentication-guide
+   fileAuthentication-guide
+   requestHeader-guide
+   overlappingHost-guide
+   roleType-guide
+   browserType-guide
+   systemInfo-guide
+   jobLog-guide
+   crawlingSession-guide
+   log-guide
+   failureUrl-guide
+   searchList-guide
+   searchLog-guide
+   stats-guide
+   userInfo-guide
+   favoriteLog-guide
 
-このドキュメントでは、Fessの設定管理の方法を示しています。コンピュータ操作の基礎的な知識が必要になります。
-
-オンラインでのアクセス
-======================
-
-ダウンロード、専門的サービス、サポート、その他の開発者情報については、次にアクセスしてください。
-
--  プロジェクトサイト: http://fess.codelibs.org/
-
-技術的なサポートの連絡先
-========================
-
-本製品に関する技術的質問で、ドキュメント内に解決策が得られない場合は、次にアクセスしてください。
-
--  公開フォーラム: http://sourceforge.jp/forum/?group_id=18580
-
--  メーリングリスト: http://sourceforge.jp/mail/?group_id=18580
-
-商用サポート
-------------
-
-本製品に関する技術的対応や保守などの商用サポートが必要な場合は、\ `N2SM,
-Inc. <http://www.n2sm.net/>`__\ にご相談ください。
-
-関連サードパーティー Web サイトの参照
-=====================================
-
-Fess
-プロジェクトでは、このドキュメントに記載されているサードパーティーの Web
-サイトの有効性については責任を持ちません。 Fess
-プロジェクトはそのようなサイトやリソースを通じて、利用可能なコンテンツ、広告、製品、サービス、その他のドキュメントなどについて、保証、責任、義務を負いません。
-Fess
-プロジェクトはそのようなサイトやリソースと通じて、利用可能なコンテンツ、広告、製品、サービス、その他のドキュメントなどを、使用または信用したり、それに関連して発生または申し立てられた、一切の損傷や損害に対しては責任または義務を負いません。
-
-コメントおよび提案の送付方法
-============================
-
-Fess
-プロジェクトは、このドキュメントの改善に努めており、読者からのコメントおよび提案などを歓迎しています。
-
--  メーリングリスト: http://sourceforge.jp/mail/?group_id=18580
-
-管理UIについて
-==============
-
-サポートブラウザ
-----------------
-
-管理 UI がサポートするブラウザは以下の通りです。
-
--  Internet Explorer 7 以上
-
--  Firefox 4 以上
-
--  Chrome (最新版)
-
--  Safari (最新版)
-
--  Opera 11

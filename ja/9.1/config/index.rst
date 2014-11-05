@@ -1,53 +1,34 @@
-========
-はじめに
-========
+.. Fess Config documentation master file, created by
+   sphinx-quickstart on Sat Aug 16 12:01:46 2014.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-対象読者
-========
+Fess 設定ガイド
+==================
 
-このドキュメントは、Fessの設定作業を担当するユーザーを対象にしています。
+Contents:
 
-お読みになる前に
-================
+.. toctree::
+   :maxdepth: 2
 
-このドキュメントでは、Fessの設定方法を示しています。コンピュータ操作の基礎的な知識が必要になります。
+   intro
+   server-port
+   memory-config
+   proxy
+   mobile-device
+   filesize
+   logging
+   solr-failure
+   solr-dynamic-field
+   role-setting
+   replication
+   windows-service
+   tokenizer
+   protwords
+   index-backup
+   install-on-tomcat
+   pdf-with-password
+   db
+   geosearch
+   use-libreoffice
 
-オンラインでのアクセス
-======================
-
-ダウンロード、専門的サービス、サポート、その他の開発者情報については、次にアクセスしてください。
-
--  プロジェクトサイト: http://fess.codelibs.org/
-
-技術的なサポートの連絡先
-========================
-
-本製品に関する技術的質問で、ドキュメント内に解決策が得られない場合は、次にアクセスしてください。
-
--  公開フォーラム: http://sourceforge.jp/forum/?group_id=18580
-
--  メーリングリスト: http://sourceforge.jp/mail/?group_id=18580
-
-商用サポート
-------------
-
-本製品に関する技術的対応や保守などの商用サポートが必要な場合は、\ `N2SM,
-Inc. <http://www.n2sm.net/>`__\ にご相談ください。
-
-関連サードパーティー Web サイトの参照
-=====================================
-
-Fess
-プロジェクトでは、このドキュメントに記載されているサードパーティーの Web
-サイトの有効性については責任を持ちません。 Fess
-プロジェクトはそのようなサイトやリソースを通じて、利用可能なコンテンツ、広告、製品、サービス、その他のドキュメントなどについて、保証、責任、義務を負いません。
-Fess
-プロジェクトはそのようなサイトやリソースと通じて、利用可能なコンテンツ、広告、製品、サービス、その他のドキュメントなどを、使用または信用したり、それに関連して発生または申し立てられた、一切の損傷や損害に対しては責任または義務を負いません。
-
-コメントおよび提案の送付方法
-============================
-
-Fess
-プロジェクトは、このドキュメントの改善に努めており、読者からのコメントおよび提案などを歓迎しています。
-
--  メーリングリスト: http://sourceforge.jp/mail/?group_id=18580
