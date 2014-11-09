@@ -2,8 +2,6 @@
 Fess Download
 =============
 
-:Date:   2009-08-05
-
 Download
 ========
 

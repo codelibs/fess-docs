@@ -2,8 +2,6 @@
 Screenshot
 ==========
 
-:Date:   2010-11-12
-
 Screenshot
 ==========
 

@@ -2,8 +2,6 @@
 Quick Startup Guide
 ===================
 
-:Date:   2010-11-12
-
 Overview
 ========
 

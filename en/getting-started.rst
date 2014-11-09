@@ -2,8 +2,6 @@
 Getting Started with Fess
 =========================
 
-:Date:   2010-11-12
-
 About Fess UI
 =============
 
