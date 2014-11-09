@@ -1,102 +1,88 @@
-.. Fess documentation master file, created by
-   sphinx-quickstart on Sat Aug 16 11:40:54 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
+====================================
 Open Source Enterprise Search Server
-===========================================
+====================================
 
-:Last Updated: |today|
+What is Fess?
+=============
 
-Overview
+Fess is very powerful and easily deployable Enterprise Search Server.
+You can install and run Fess quickly on any platforms, which have Java
+runtime environment. Fess is provided under Apache license.
 
-.. toctree::
-   :maxdepth: 3
+.. figure:: ../resources/images/en/demo-1.png
+   :scale: 100%
+   :alt: Demo
+   :figclass: side-by-side
+   :target: http://search.n2sm.co.jp/
 
-   downloads
-   quick-start
-   screenshot
+   Demo
 
-Basic
 
-.. toctree::
-   :maxdepth: 2
+Fess is `Solr <http://lucene.apache.org/solr/>`__ based search server,
+but knowledge/experience about Solr is NOT needed because of All-in-One
+Enterprise Search Server. Fess provides Administration GUI to configure
+the system on your browser. Fess also contains a crawler, which can
+crawl documents on Web/File System/DB and support many file formats,
+such as MS Office, pdf and zip.
 
-   setup
-   getting-started
+Features
+========
 
-Install
+-  Very Easy Installation/Configuration
 
-.. toctree::
-   :maxdepth: 2
+-  Apache License (OSS)
 
-   9.1/install/index
+-  OS-independent (Runs on Java)
 
-Search
+-  Crawl documents on Web/File System/DB/Windows Shared Folder
 
-.. toctree::
-   :maxdepth: 2
+-  Support many document types, such as MS Office, PDF, Zip archive,...
 
-   9.1/user/index
+-  Support a web page for BASIC/DIGEST/NTLM authentication
 
-Administration
+-  Contain Apache Solr as a search engine
 
-.. toctree::
-   :maxdepth: 2
+-  Provide UI as a responsive web design
 
-   9.1/admin/index
+-  Provide a browser based administative page
 
-Configuration
+-  Support a role authentication
 
-.. toctree::
-   :maxdepth: 2
+-  Support XML/JSON/JSONP format
 
-   9.1/config/index
+-  Provide a search/click log and statistics
 
-Tutorial
+-  Provide auto-complete(suggest)
 
-.. toctree::
-   :maxdepth: 1
+News
+====
 
-   articles/article-1
-   articles/article-2
-   articles/article-3
-   articles/article-4
+2014-11-06
+    `Fess 9.3
+    Released <https://sourceforge.jp/projects/fess/releases/62196>`__
 
-Development
+2014-06-28
+    `Fess 9.2
+    Released <https://sourceforge.jp/projects/fess/releases/?package_id=9987>`__
 
-.. toctree::
-   :maxdepth: 3
+2014-03-26
+    `Fess 9.1
+    Released <https://sourceforge.jp/projects/fess/releases/?package_id=9987>`__
 
-   dev/getting-started
-   source-repository
-   ../apidocs/index.html
-   roadmap
-   dependencies
-   https://github.com/codelibs/fess/issues?state=open
-   team-list
-   mail-lists
+`More news... <news.html>`__
 
-Others
+.. |image0| image:: ../resources/images/en/demo-1.png
 
-.. toctree::
-   :maxdepth: 2
 
-   news
-   articles
-   users
-   license
-   faq
-   supporting-projects
-   supported-files
-   support-services
-   asp
-   donation
-
-Archives
+.. hidden toctree
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
 
+   overview
+   basic
+   documentation
+   development
+   others
    archives
 

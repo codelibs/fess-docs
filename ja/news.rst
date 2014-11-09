@@ -5,6 +5,10 @@
 ニュース一覧
 ============
 
+2014-11-06
+    `Fess 9.3
+    リリース <http://sourceforge.jp/projects/fess/news/24783>`__
+
 2014-06-28
     `Fess 9.2
     リリース <http://sourceforge.jp/projects/fess/news/24682>`__

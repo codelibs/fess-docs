@@ -3,7 +3,7 @@ SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
 LANG="en"
 AUTHOR="CodeLibs"
-RELEASE="9.1"
+RELEASE="9.3"
 
 CONFDIR="${SCRIPT_DIR}/../conf"
 BUILDDIR="${SCRIPT_DIR}/_build/pdf/${RELEASE}"

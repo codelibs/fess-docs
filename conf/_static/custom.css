@@ -1,0 +1,13 @@
+h2 {
+    margin-top: 2em;
+}
+.side-by-side {
+    display: inline-block;
+}
+html*.side-by-side {
+    display: inline;
+    zoom: 1;
+}
+.side-by-side > a img {
+    margin-right: 15px;
+}

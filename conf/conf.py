@@ -33,6 +33,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.ifconfig',
     'rst2pdf.pdfbuilder',
+    'sphinxjp.themes.basicstrap',
     'ext',
 ]
 
@@ -94,6 +95,7 @@ if 'SPHINX_LANG' in os.environ:
 #today = ''
 # Else, today_fmt is used as the format for a strftime call.
 #today_fmt = '%B %d, %Y'
+today_fmt = '%Y-%m-%d'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -129,7 +131,8 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #html_theme = 'default'
-html_theme = 'bootstrap'
+#html_theme = 'bootstrap'
+html_theme = 'basicstrap'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -147,11 +150,11 @@ html_theme_path = ['_themes']
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
-html_short_title = "Hello Sphinx"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = None
+#html_logo = '../resources/images/fess-logo.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -178,6 +181,9 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
+html_sidebars = {
+    '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'blanksearchbox.html'],
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -218,7 +224,7 @@ htmlhelp_basename = project + 'doc'
 latex_elements = {
 'papersize': 'a4paper',
 'pointsize': '10pt',
-'classoptions': ',dvipdfmx,openany,oneside',
+'classoptions': ',dvipdfmx',
 'transition': '',
 'extraclassoptions': ',openany,oneside',
 'classoptions': ',dvipdfmx',
@@ -256,13 +262,14 @@ latex_elements['preamble'] = r'''
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', project+'.tex', title,
+  ('toc', project+'.tex', title,
    author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
 #latex_logo = None
+latex_logo = '../resources/images/fess-logo.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
@@ -394,86 +401,42 @@ pdf_language = language
 #pdf_default_dpi = 94
 #pdf_default_dpi = 50
 
+# -- HTML theme options for `basicstrap` style -------------------------------------
 
-# Bootstrap theme
-# https://github.com/ryan-roemer/sphinx-bootstrap-theme
-# http://ryan-roemer.github.io/sphinx-bootstrap-theme/
-#
-# (Optional) Logo. Should be small enough to fit the navbar (ideally 24x24).
-# Path should be relative to the ``_static`` files directory.
-#html_logo = "fess_logo.png"
-
-# Theme options are theme-specific and customize the look and feel of a
-# theme further.
 html_theme_options = {
-    # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': project,
+    'lang': language,
+    'nosidebar': False,
+    'rightsidebar': False,
+    'sidebar_span': 3,
+    'nav_fixed_top': True,
 
-    # Tab name for entire site. (Default: "Site")
-    'navbar_site_name': "Site",
+    'nav_fixed': False,
+    'nav_width': '900px',
 
-    # A list of tuples containing pages or urls to link to.
-    # Valid tuples should be in the following forms:
-    #    (name, page)                 # a link to a page
-    #    (name, "/aa/bb", 1)          # a link to an arbitrary relative url
-    #    (name, "http://example.com", True) # arbitrary absolute url
-    # Note the "1" or "True" value above as the third argument to indicate
-    # an arbitrary url.
-    'navbar_links': [
-        (u'入門', "setup"),
-        (u'ドキュメント', "setup"),
-        (u'チュートリアル', "9.1/install/index"),
-        (u'開発', "dev/getting-started"),
-        (u'その他', "news"),
-        (u'アーカイブ', "archives"),
-#        ("N2SM", "http://www.n2sm.net/", True),
-    ],
+    'content_fixed': False,
+    'content_width': '900px',
 
-    # Render the next and previous page links in navbar. (Default: true)
-    'navbar_sidebarrel': False,
+    'row_fixed': False,
+    'noresponsive': False,
+    'noflatdesign': False,
 
-    # Render the current pages TOC in the navbar. (Default: true)
-    'navbar_pagenav': True,
+    'googlewebfont': False,
+    'googlewebfont_url': 'http://fonts.googleapis.com/css?family=Lily+Script+One',
+    'googlewebfont_style': u"font-family: 'Lily Script One' cursive;",
 
-    # Tab name for the current pages TOC. (Default: "Page")
-    'navbar_pagenav_name': "Page",
+    'header_inverse': False,
+    'relbar_inverse': False,
 
-    # Global TOC depth for "site" navbar tab. (Default: 1)
-    # Switching to -1 shows all levels.
-    'globaltoc_depth': 2,
+    'inner_theme': False,
+    'inner_theme_name': 'bootswatch-flatly',
 
-    # Include hidden TOCs in Site navbar?
-    #
-    # Note: If this is "false", you cannot have mixed ``:hidden:`` and
-    # non-hidden ``toctree`` directives in the same page, or else the build
-    # will break.
-    #
-    # Values: "true" (default) or "false"
-    'globaltoc_includehidden': "true",
+    'bootstrap_version': '3',
+    'quick_preview': False,
 
-    # HTML navbar class (Default: "navbar") to attach to <div> element.
-    # For black navbar, do "navbar navbar-inverse"
-    #'navbar_class': "navbar navbar-inverse",
-
-    # Fix navigation bar to top of page?
-    # Values: "true" (default) or "false"
-    'navbar_fixed_top': "true",
-
-    # Location of link to source.
-    # Options are "nav" (default), "footer" or anything else to exclude.
-    'source_link_position': "nav",
-
-    # Bootswatch (http://bootswatch.com/) theme.
-    #
-    # Options are nothing with "" (default) or the name of a valid theme
-    # such as "amelia" or "cosmo".
-    #'bootswatch_theme': "united",
-    'bootswatch_theme': "flatly",
-    #'bootswatch_theme': "spacelab",
-    #'bootswatch_theme': "yeti",
-
-    # Choose Bootstrap version.
-    # Values: "3" (default) or "2" (in quotes)
-    'bootstrap_version': "3",
+    # 'h1_size': '3.0em',
+    # 'h2_size': '2.6em',
+    # 'h3_size': '2.2em',
+    # 'h4_size': '1.8em',
+    # 'h5_size': '1.4em',
+    # 'h6_size': '1.1em',
 }
-

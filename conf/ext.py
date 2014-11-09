@@ -66,3 +66,7 @@ def setup(app):
     rst_prolog = u'''
 .. include:: _definition.rst_
     '''
+
+    # custom styles
+    app.add_stylesheet('custom.css')
+

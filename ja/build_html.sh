@@ -5,7 +5,7 @@ PROJECT="Fess"
 TITLE="Fess"
 LANG="ja"
 AUTHOR="CodeLibs"
-RELEASE="9.1"
+RELEASE="9.3"
 
 CONFDIR="${SCRIPT_DIR}/../conf"
 BUILDDIR="${SCRIPT_DIR}/_build"

@@ -1,14 +1,34 @@
-.. Fess documentation master file, created by
-   sphinx-quickstart on Sat Aug 16 11:40:54 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+============================================
+アーカイブ
+============================================
 
+9.2
+~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   9.2/install/index
+   9.2/user/index
+   9.2/admin/index
+   9.2/config/index
+
+9.1
+~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   9.1/install/index
+   9.1/user/index
+   9.1/admin/index
+   9.1/config/index
 
 9.0
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    9.0/install/index
    9.0/user/index
@@ -19,7 +39,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    8.0/install/index
    8.0/user/index
@@ -30,7 +50,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    7.0/install/index
    7.0/user/index
@@ -41,7 +61,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    6.0/install/index
    6.0/user/index
@@ -52,7 +72,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    5.0/user/index
    5.0/admin/index
@@ -62,7 +82,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    4.0/user/index
    4.0/admin/index
@@ -72,7 +92,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    3.0/user/index
    3.0/admin/index
@@ -82,7 +102,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    2.0/user/index
    2.0/admin/index

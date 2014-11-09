@@ -1,0 +1,16 @@
+<div id="toc" class="sidebarRow">
+{%- if theme_lang == 'ja' %}
+<p><a class="externalLink" href="http://www.n2sm.net/products/n2search.html"><img src="_images/n2search_b.png" alt="N2 Search"></a></p>
+{% endif %}
+<!--
+<p>更新日 {{ today }}</p>
+-->
+
+<h3><a href="{{ pathto(master_doc) }}">{{ _('Contents') }}</a></h3>
+{%- if sphinx_version[:3] >= '1.2' %}
+{{ toctree(maxdepth=2, collapse=False, includehidden=True) }}
+{% else %}
+{{ toctree(maxdepth=2, collapse=False) }}
+{% endif %}
+</div>
+
