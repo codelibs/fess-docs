@@ -9,7 +9,7 @@ Fess インストールガイド
 .. toctree::
    :maxdepth: 2
 
-   intro
+   index
    install
    run
    uninstall

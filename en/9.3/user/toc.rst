@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   intro
+   index
    search-and
    search-or
    search-not
