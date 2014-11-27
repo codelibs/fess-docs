@@ -1,4 +1,18 @@
 {% extends "!layout.html" %}
+{% block extrahead %}
+{{ super() }}
+<style type="text/css">
+  body {
+    {%- if theme_bootstrap_version == "3" %}
+    padding-top: 60px;
+    padding-bottom: 40px;
+    {%- else %}
+    padding-top: 60px;
+    padding-bottom: 40px;
+    {%- endif %}
+  }
+</style>
+{% endblock %}
 {% block header %}
 {{ super() }}
 <p class="navbar-text pull-right">

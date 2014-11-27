@@ -408,7 +408,9 @@ html_theme_options = {
     'nosidebar': False,
     'rightsidebar': False,
     'sidebar_span': 3,
-    'nav_fixed_top': True,
+    # disable because of dirty css code
+    # fix in custom layout extrahead
+    'nav_fixed_top': False,
 
     'nav_fixed': False,
     'nav_width': '900px',
