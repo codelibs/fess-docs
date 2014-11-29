@@ -8,7 +8,7 @@ Overview
 ========
 
 Describes the settings related to Solr, here are registered in the
-server settings for crawling and Fess. SOLR servers are grouped by file,
+server settings for crawling and |Fess| . SOLR servers are grouped by file,
 has been registered.
 
 How to set up
@@ -29,8 +29,8 @@ System State
 
 Update server appears as a running if additional documents, such as the.
 Crawl process displays the session ID when running. You can safely shut
-down and Fess server to shut down is not running when shut down. If the
-process does not terminate if you shut a Fess is running to finish
+down and |Fess| server to shut down is not running when shut down. If the
+process does not terminate if you shut a |Fess| is running to finish
 crawling process.
 
 You can manually crawling under the crawl start button press stop if it
@@ -44,7 +44,7 @@ Server group name to search for and update available will be shown.
 SOLR status settings
 --------------------
 
-In Fess Solr Server conducts a management server and index State States.
+In |Fess| Solr Server conducts a management server and index State States.
 Whether or not the server state can be access to the Solr Server
 manages. Whether or not successfully crawl index the State could manage.
 You can use search server status is in effect, regardless of the State

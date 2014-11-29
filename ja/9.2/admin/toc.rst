@@ -1,9 +1,9 @@
-.. Fess Admin documentation master file, created by
+.. |Fess| Admin documentation master file, created by
    sphinx-quickstart on Sat Aug 16 11:40:54 2014.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Fess 管理者ガイド
+|Fess| 管理者ガイド
 ==================
 
 .. toctree::

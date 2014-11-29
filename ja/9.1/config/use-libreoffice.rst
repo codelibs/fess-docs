@@ -5,17 +5,17 @@ LibreOfficeの利用
 OpenOffice/LibreOfficeの利用
 ============================
 
-標準のFess環境において、Apache POI を用いた MS Office
+標準の |Fess| 環境において、Apache POI を用いた MS Office
 系ドキュメントのクロールが可能です。
 オフィス系ドキュメントのクロールに関して、OpenOfficeやLibreOfficeを利用して、ドキュメントからより高精度なテキスト抽出も行うことができます。
 
 設定方法
 ========
 
-JodConverter を Fess
+JodConverter を |Fess| 
 サーバーにインストールします。http://jodconverter.googlecode.com/
 から\ `jodconverter-core-3.0-beta-4-dist.zip <http://jodconverter.googlecode.com/files/jodconverter-core-3.0-beta-4-dist.zip>`__\ をダウンロードします。展開して
-jar ファイルを Fess サーバーにコピーします。
+jar ファイルを |Fess| サーバーにコピーします。
 
 ::
 

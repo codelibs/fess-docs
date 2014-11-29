@@ -51,13 +51,13 @@ XML response
 ------------
 
 Search results can be retrieved in XML format.
-http://localhost:8080/Fess/XML? can get access query = search term.
+http://localhost:8080/ |Fess| /XML? can get access query = search term.
 
 JSON response
 -------------
 
 Search results available in JSON format.
-http://localhost:8080/Fess/JSON? can get access query = search term.
+http://localhost:8080/ |Fess| /JSON? can get access query = search term.
 
 The default label value
 -----------------------
@@ -76,7 +76,7 @@ Featured keyword response
 -------------------------
 
 In JSON format often find search words becomes available.
-http://localhost:8080/Fess/JSON? can be retrieved by accessing the type
+http://localhost:8080/ |Fess| /JSON? can be retrieved by accessing the type
 = hotsearchword.
 
 Specify the number of days before search log delete
@@ -131,7 +131,7 @@ File additional group access rights information added to the role.
 Server switchovers
 ------------------
 
-Fess can combine multiple Solr server as a group, the group can manage
+|Fess| can combine multiple Solr server as a group, the group can manage
 multiple. Solr server group for updates and search for different groups
 to use. For example, if you had two groups using the Group 2 for update,
 search for use of Group 1. After the crawl has been completed if
@@ -142,7 +142,7 @@ group.
 Number of concurrent crawls settings
 ------------------------------------
 
-Fess document crawling is done on Web crawling, and file system CROLL.
+|Fess| document crawling is done on Web crawling, and file system CROLL.
 You can crawl to a set number of values in each crawl specified here
 only to run simultaneously multiple. For example, crawl setting number
 of concurrent as 3 Web crawling set 1-set 10 if the crawling runs until

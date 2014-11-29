@@ -1,5 +1,5 @@
 ===================================================
-Fessで作るApache Solrベースの検索サーバー 〜 導入編
+|Fess| で作るApache Solrベースの検索サーバー 〜 導入編
 ===================================================
 
 はじめに
@@ -9,16 +9,16 @@ Fessで作るApache Solrベースの検索サーバー 〜 導入編
 管理対象ドキュメントが多くなればなるほど、その中から特定の情報をもつものを見つけにくくなっていきます。
 その解決策として、膨大な情報から検索することができる全文検索サーバーを導入することなどがあげられます。
 
-Fess は簡単に導入できる、Java
-ベースのオープンソース全文検索サーバーです。 Fess の検索エンジン部分には
+|Fess| は簡単に導入できる、Java
+ベースのオープンソース全文検索サーバーです。 |Fess| の検索エンジン部分には
 Apache Solr を利用しています。 Solr は、2
 億ドキュメントもインデックス可能と言われる非常に高機能な検索エンジンです。
 一方で、 Apache Solr
 で検索システムを構築しようとする場合、クローラ部分などを自分で実装する必要性があります。
-Fess ではクローラ部分に Seasar Project から提供される S2Robot
+|Fess| ではクローラ部分に Seasar Project から提供される S2Robot
 を利用して、ウェブやファイルシステム上の様々な種類のドキュメントを収集して検索対象とすることができます。
 
-そこで、本記事では Fess による検索サーバーの構築について紹介します。
+そこで、本記事では |Fess| による検索サーバーの構築について紹介します。
 
 対象読者
 ========
@@ -38,29 +38,29 @@ Fess ではクローラ部分に Seasar Project から提供される S2Robot
 
 -  JDK 1.7.0\_21
 
-Fess とは
+|Fess| とは
 =========
 
-Fess
+|Fess| 
 はウェブやファイルシステムを対象とした、オープンソースの全文検索システムです。
 SourceForge.jp の `Fess サイト <http://fess.codelibs.org/ja/>`__\ から
 Apache ライセンスで提供されています。
 
-Fess の特徴
+|Fess| の特徴
 -----------
 
 Java ベースの検索システム
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fess
+|Fess| 
 は以下の図にあるとおり、様々なオープンソースプロダクトを利用して構築されています。
 
-Fess の構造
+|Fess| の構造
 |image0|
 
-配布物は Tomcat に Fess と Solr の war
-ファイルが配備された形になります。 Fess の war
-ファイルは検索画面や管理画面を提供しています。 Fess
+配布物は Tomcat に |Fess| と Solr の war
+ファイルが配備された形になります。 |Fess| の war
+ファイルは検索画面や管理画面を提供しています。 |Fess| 
 は開発フレームワークとして Seasar2 を利用し、プレゼンテーション層には
 SAStruts を採用しています。
 ですので、画面などのカスタマイズが必要な場合は JSP
@@ -69,11 +69,11 @@ SAStruts を採用しています。
 また、設定データやクロールデータを保存するために組み込みデータベースの
 H2Database を利用し、O/R マッパーの DBFlute
 を利用してアクセスしています。 S2Chronos は Seasar
-プロジェクトで提供されるスケジューリングフレームワークで、Fess
+プロジェクトで提供されるスケジューリングフレームワークで、 |Fess| 
 では指定された時間でのクロールを実行するために利用しています。 Solr と
 S2Robot については後述します。
 
-Fess は Java
+|Fess| は Java
 ベースのシステムとして構築されているので、どのプラットフォームでも実行可能です。
 各種設定もウェブブラウザから簡単に設定する UI を備えています。
 
@@ -87,12 +87,12 @@ Apache Solr は Apache Software Foundation から提供される、Lucene
 サーバーの構成次第で、数億ドキュメントにもなり、大規模サイトへもスケールアウトできる検索サーバーです。
 利用実績も日本でも数多くあり、注目されている検索エンジンの一つであると言えます。
 
-Fess では、検索エンジン部分に Apache Solr を採用しています。 Fess
-の配布物には Solr を同梱した形で配布していますが、Fess の Solr
-サーバーを別なサーバーへ切り出して利用することも可能です。 また、Fess
+|Fess| では、検索エンジン部分に Apache Solr を採用しています。 |Fess| 
+の配布物には Solr を同梱した形で配布していますが、 |Fess| の Solr
+サーバーを別なサーバーへ切り出して利用することも可能です。 また、 |Fess| 
 は複数の Solr
 サーバーをグループとして管理して、冗長構成を組むことが可能です。
-このように Fess では Solr
+このように |Fess| では Solr
 のもつ高い拡張性を活かすことができる設計になっています。
 
 S2Robot をクロールエンジンとして利用
@@ -106,17 +106,17 @@ S2Robot は Seasar
 MS Office 系ファイル、zip
 などのアーカイブファイル、画像や音声ファイルなど、数多くのフォーマットに対応しています(画像や音声ファイルの場合はメタ情報を取得します)。
 
-Fess では S2Robot
+|Fess| では S2Robot
 を利用して、ウェブ上およびファイルシステム上のドキュメントを巡回して、テキスト情報を収集します。
 対応するファイルフォーマットも S2Robot
 が扱うことができるものを検索対象とすることができます。 S2Robot
-でクロール実行するためのパラメータ等は Fess の管理 UI
+でクロール実行するためのパラメータ等は |Fess| の管理 UI
 から設定することが可能です。
 
 モバイル対応
 ~~~~~~~~~~~~
 
-Fess は
+|Fess| は
 docomo、au、ソフトバンクの携帯電話端末での閲覧にも対応しています。
 ドキュメントをインデックスする際にどの端末で検索結果を閲覧可能にするかを指定することができます。
 本稿ではモバイル端末での閲覧については省略し、次回説明します。
@@ -124,7 +124,7 @@ docomo、au、ソフトバンクの携帯電話端末での閲覧にも対応し
 インストールと起動
 ==================
 
-ここでは、 Fess を起動させ、検索を行うまでの手順を説明します。 Windows
+ここでは、 |Fess| を起動させ、検索を行うまでの手順を説明します。 Windows
 XP で実行することを想定して説明を行いますが、Mac OS X や Linux
 でもほぼ同様の手順でインストールと起動を行うことができます。
 
@@ -136,7 +136,7 @@ http://sourceforge.jp/projects/fess/releases/
 この記事執筆の時点（2013/06）での最新バージョンは、 8.1.0 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
-Fess のダウンロード
+|Fess| のダウンロード
 |image1|
 
 起動
@@ -148,7 +148,7 @@ CATALINA\_HOME と JAVA\_HOME
 を解凍した場合、CATALINA\_HOME は、C:\\fess\\fess-server-8.1.0
 になります。
 
-Fess の起動
+|Fess| の起動
 ::
 
     C:\fess\fess-server-8.1.0>set "JAVA_HOME=C:\Program Files\Java\jdk1.7.0_21"
@@ -157,7 +157,7 @@ Fess の起動
     C:\fess\fess-server-8.1.0\bin>startup.bat
 
 ブラウザで http://localhost:8080/fess/
-にアクセスし、以下のような画面が表示されれば、 Fess は起動しています。
+にアクセスし、以下のような画面が表示されれば、 |Fess| は起動しています。
 
 検索トップ画面
 |image2|
@@ -167,7 +167,7 @@ Fess の起動
 
 shutdown.bat を実行してください。
 
-Fess の停止
+|Fess| の停止
 ::
 
     C:\fess\fess-server-8.1.0\bin>shutdown.bat
@@ -330,7 +330,7 @@ http://fess.codelibs.org/ja/
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="content-style-type" content="text/css" />
     <meta http-equiv="content-script-type" content="text/javascript" />
-    <title>Fess</title>
+    <title> |Fess| </title>
     <link href="${f:url('/css/style.css')}" rel="stylesheet" type="text/css" />
     </head>
     <body>
@@ -366,7 +366,7 @@ http://fess.codelibs.org/ja/
     <div id="header">
       <s:form action="search">
         <div class="input">
-          <s:link action="index" title="Fess Home">
+          <s:link action="index" title=" |Fess| Home">
             <img class="logo" src="${f:url('/images/')}" alt="<bean:message key="labels.search_header_logo_alt"/>"/>
           </s:link>                                 
           <html:text styleClass="query" property="query" title="Search" size="50" maxlength="1000" />
@@ -384,13 +384,13 @@ JSP ファイルで利用している CSS
 まとめ
 ======
 
-全文検索システムである Fess
+全文検索システムである |Fess| 
 について、インストールから検索までと簡単なカスタマイズ方法について説明をしました。
 特別な環境構築も必要なく、Java
 の実行環境があれば検索システムを簡単に構築できることをご紹介できたと思います。
 既存のシステムにサイト検索機能を追加したいような場合にも導入できるので、ぜひお試しください。
 
-次回は、Fess
+次回は、 |Fess| 
 がサポートするモバイルサイトの検索機能をご紹介したいと思います。
 
 参考資料

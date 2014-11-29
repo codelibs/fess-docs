@@ -32,12 +32,12 @@ You can list the server environment variable.
 System Properties
 -----------------
 
-You can list the system properties on Fess.
+You can list the system properties on |Fess| .
 
-Fess property
+|Fess| property
 -------------
 
-Fess setup information available.
+|Fess| setup information available.
 
 For bug reports
 ---------------

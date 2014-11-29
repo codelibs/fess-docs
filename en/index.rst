@@ -2,12 +2,12 @@
 Open Source Enterprise Search Server
 ====================================
 
-What is Fess?
+What is |Fess| ?
 =============
 
-Fess is very powerful and easily deployable Enterprise Search Server.
-You can install and run Fess quickly on any platforms, which have Java
-runtime environment. Fess is provided under Apache license.
+|Fess| is very powerful and easily deployable Enterprise Search Server.
+You can install and run |Fess| quickly on any platforms, which have Java
+runtime environment. |Fess| is provided under Apache license.
 
 .. figure:: /images/en/demo-1.png
    :scale: 100%
@@ -18,10 +18,10 @@ runtime environment. Fess is provided under Apache license.
    Demo
 
 
-Fess is `Solr <http://lucene.apache.org/solr/>`__ based search server,
+|Fess| is `Solr <http://lucene.apache.org/solr/>`__ based search server,
 but knowledge/experience about Solr is NOT needed because of All-in-One
-Enterprise Search Server. Fess provides Administration GUI to configure
-the system on your browser. Fess also contains a crawler, which can
+Enterprise Search Server. |Fess| provides Administration GUI to configure
+the system on your browser. |Fess| also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
 such as MS Office, pdf and zip.
 

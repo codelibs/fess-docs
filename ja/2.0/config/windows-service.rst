@@ -5,15 +5,15 @@ Windowsサービスへの登録
 Windowsサービスとしての登録
 ===========================
 
-Windows 環境であれば Fess を Windows
+Windows 環境であれば |Fess| を Windows
 のサービスとして登録することができます。サービスの登録方法は Tomcat
 と同様です。
 
 登録方法
 --------
 
-まず、Fess のインストール後、コマンドプロンプトから service.bat
-を実行します (Vista などでは管理者として起動する必要があります)。Fess は
+まず、 |Fess| のインストール後、コマンドプロンプトから service.bat
+を実行します (Vista などでは管理者として起動する必要があります)。 |Fess| は
 C:\\Java\\fess-server-2.0.0 にインストールしたものとします。
 
 ::
@@ -23,7 +23,7 @@ C:\\Java\\fess-server-2.0.0 にインストールしたものとします。
     ...
     The service 'fess' has been installed.
 
-次に Fess 用のプロパティを追加します。以下を実行すると、Tomcat
+次に |Fess| 用のプロパティを追加します。以下を実行すると、Tomcat
 のプロパティ設定ウィンドウが表示されます。
 
 ::

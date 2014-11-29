@@ -8,7 +8,7 @@ Fuzzy search (fuzzy search)
 ===========================
 
 Ambiguity in the case does not match the words word search to search is
-available. Based on the Levenshtein distance in Fess ambiguous
+available. Based on the Levenshtein distance in |Fess| ambiguous
 corresponds to the search (fuzzy search).
 
 How to use the

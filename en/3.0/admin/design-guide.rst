@@ -70,7 +70,7 @@ How to set up
 To view the registration date and modified date
 -----------------------------------------------
 
-If you want to display in the search results crawl in Fess and
+If you want to display in the search results crawl in |Fess| and
 registered or modified files to get the search results page (content),
 write the following.
 

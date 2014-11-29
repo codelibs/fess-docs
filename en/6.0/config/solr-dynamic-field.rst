@@ -8,10 +8,10 @@ Dynamic field of SOLR
 =====================
 
 SOLR is document items (fields) for each to the schema defined in order
-to register. Available in Fess Solr schema is defined in
+to register. Available in |Fess| Solr schema is defined in
 SOLR/core1/conf/schema,XML. dynamic fields and standard fields such as
 title and content can be freely defined field names are defined. The
-dynamic fields that are available in the schema.xml Fess become.
+dynamic fields that are available in the schema.xml |Fess| become.
 Advanced parameter values see a Solr document.
 
 ::

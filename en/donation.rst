@@ -9,7 +9,7 @@ Project support (donations)
 
 The management of the project `N2SM, Inc.... <http://www.n2sm.net/>`__
 From the subject to support. We received contribution of advertising to
-raise awareness of the Fess. Fess, for many people seeking donations
+raise awareness of the |Fess| . |Fess| , for many people seeking donations
 support projects.
 
 |image0|
@@ -21,11 +21,11 @@ here <mailto:payment+fess@n2sm.net>`__\ To contact us please.
 On site advertising
 ===================
 
-In the Fess project site on AdSense ads. Income generated through
-AdSense will Fess awareness and to disseminate will invest in AdWords
+In the |Fess| project site on AdSense ads. Income generated through
+AdSense will |Fess| awareness and to disseminate will invest in AdWords
 intact as advertising expenses.
 
 Please take a look at AdSense in addition to you have any good ideas
-about the spread of the Fess,.
+about the spread of the |Fess| ,.
 
 .. |image0| image:: https://www.paypalobjects.com/ja_JP/i/scr/pixel.gif

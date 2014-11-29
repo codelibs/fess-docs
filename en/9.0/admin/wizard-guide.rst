@@ -9,7 +9,7 @@ Overview
 
 Introduction to the Configuration Wizard.
 
-You can use Settings Wizard, to set you up on the Fess.
+You can use Settings Wizard, to set you up on the |Fess| .
 
 How to set up
 =============

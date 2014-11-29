@@ -9,7 +9,7 @@ Overview
 
 Introduction to the Configuration Wizard.
 
-You can use Settings Wizard, to set you up on the Fess.
+You can use Settings Wizard, to set you up on the |Fess| .
 
 How to set up
 =============
@@ -21,7 +21,7 @@ In Administrator account after logging in, click menu Settings Wizard.
 
 |image0|
 
-First, setting a schedule. During the time in Fess is crawling and
+First, setting a schedule. During the time in |Fess| is crawling and
 indexes. By default, every day is a 0 時 0 分. Schedules can change even
 the General crawl settings.
 

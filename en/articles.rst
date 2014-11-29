@@ -8,19 +8,19 @@ List of published articles
 ==========================
 
 2010-12-16
-    `[In Fess make Apache Solr-based full-text search server-role-based
+    `[In |Fess| make Apache Solr-based full-text search server-role-based
     search] (CodeZine) <http://codezine.jp/article/detail/5605>`__
 
 2010-01-28
-    `[In Fess make Apache Solr-based full-text search Server-Mobile]
+    `[In |Fess| make Apache Solr-based full-text search Server-Mobile]
     (CodeZine) <http://codezine.jp/article/detail/4527>`__
 
 2009-11-20
-    `"Easy build in 5 minutes! Try the full-text search server "Fess" '
+    `"Easy build in 5 minutes! Try the full-text search server " |Fess| " '
     (Wall Street
     Journal) <http://journal.mycom.co.jp/articles/2009/11/20/fess/index.html>`__
 
 2009-11-12
-    `[In Fess make Apache Solr-based full-text search
+    `[In |Fess| make Apache Solr-based full-text search
     Server-Introduction]
     (CodeZine) <http://codezine.jp/article/detail/4526>`__

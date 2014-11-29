@@ -14,7 +14,7 @@ How to set up
 -------------
 
 Proxy is set in to create
-webapps/Fess/Web-INF/classes/s9robot\_client.dicon with the following
+webapps/ |Fess| /Web-INF/classes/s9robot\_client.dicon with the following
 contents.
 
 ::

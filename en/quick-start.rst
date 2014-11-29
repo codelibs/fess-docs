@@ -5,12 +5,12 @@ Quick Startup Guide
 Overview
 ========
 
-This document describes a minimum step to install and use Fess.
+This document describes a minimum step to install and use |Fess| .
 
 Download
 ========
 
-You can get the latest Fess release from
+You can get the latest |Fess| release from
 http://sourceforge.jp/projects/fess/releases/.
 
 Installation
@@ -25,10 +25,10 @@ execution permission to script files in bin directory.
     $ cd fess-server-x.y
     $ chmod +x bin/*.sh
 
-Start Fess Server
+Start |Fess| Server
 =================
 
-Run startup.[sh\|bat] script file to start Fess server.
+Run startup.[sh\|bat] script file to start |Fess| server.
 
 ::
 
@@ -49,7 +49,7 @@ Crawler job. Edit "Schedule" to start a crawling. If you want to start
 crawling at 10:35am, type "0 35 10 \* \* ?" into Schedule field. The
 format is "Sec Min Hour Day Month Day Year", which is like a cron
 format. Click "Confirm" and "Update" button to save parameters. If you
-set a crawling time as 10:35am, Fess start to crawl at 10:35am
+set a crawling time as 10:35am, |Fess| start to crawl at 10:35am
 automatically.
 
 Session Info link show you the crawling information. If the crawl is
@@ -61,10 +61,10 @@ Search
 Finished a crawling, access to http://localhost:8080/fess/. You can
 search indexed documents and see the result.
 
-Stop Fess
+Stop |Fess| 
 =========
 
-Run shutdown.[sh\|bat] script file to stop Fess server.
+Run shutdown.[sh\|bat] script file to stop |Fess| server.
 
 ::
 

@@ -9,10 +9,10 @@ Versioning policy
 
 Version is provided in the form X.Y.Z.
 
--  X: major version. If the information database of the Fess or Solr
+-  X: major version. If the information database of the |Fess| or Solr
    schema has been updated to go up version.
 
--  Y: minor version. If not updated information database of the Fess or
+-  Y: minor version. If not updated information database of the |Fess| or
    Solr schema additions and bug fixes up version.
 
 -  Z: micro version. Critical bug fixes if you go up version. (Even not

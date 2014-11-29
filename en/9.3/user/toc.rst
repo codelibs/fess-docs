@@ -1,9 +1,9 @@
-.. Fess User documentation master file, created by
+.. |Fess| User documentation master file, created by
    sphinx-quickstart on Sat Aug 16 12:40:14 2014.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Fess ユーザーガイド
+|Fess| ユーザーガイド
 ====================
 
 Contents:

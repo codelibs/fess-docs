@@ -8,16 +8,16 @@ About replication settings
 ==========================
 
 Sets the replication of the index Solr replication features. You can
-distribute load during indexing to build two in Fess of the crawl and
-index creation and search for Fess servers.
+distribute load during indexing to build two in |Fess| of the crawl and
+index creation and search for |Fess| servers.
 
 How to build a
 ==============
 
-Building indexes for Fess
+Building indexes for |Fess| 
 -------------------------
 
-Fess, download and install the. When you install MasterServer named
+|Fess| , download and install the. When you install MasterServer named
 host.\ ``/ /opt/fess_mster`` To assume you installed. Edit the
 SOLR/core1/conf/solrconfig.XML like the following.
 
@@ -38,14 +38,14 @@ SOLR/core1/conf/solrconfig.XML like the following.
     </requestHandler>
     ...
 
-Register the crawl settings as well as Fess starts after the normal
-construction. Steps to building the index for Fess remains especially as
+Register the crawl settings as well as |Fess| starts after the normal
+construction. Steps to building the index for |Fess| remains especially as
 normal building procedures.
 
-Search for Fess building
+Search for |Fess| building
 ------------------------
 
-Fess, download and install the.\ ``/ /opt/fess_slave`` To assume you
+|Fess| , download and install the.\ ``/ /opt/fess_slave`` To assume you
 installed. Edit the SOLR/core1/conf/solrconfig.XML like the following.
 
 ::
@@ -64,10 +64,10 @@ installed. Edit the SOLR/core1/conf/solrconfig.XML like the following.
     </requestHandler>
     ...
 
-Start the Fess.
+Start the |Fess| .
 
 Index of synchronization
 ------------------------
 
-Until the above settings copied to search for Fess index crawl after the
-optimization (optimize) the index for Fess.
+Until the above settings copied to search for |Fess| index crawl after the
+optimization (optimize) the index for |Fess| .

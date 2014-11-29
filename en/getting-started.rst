@@ -1,11 +1,11 @@
 =========================
-Getting Started with Fess
+Getting Started with |Fess| 
 =========================
 
-About Fess UI
+About |Fess| UI
 =============
 
-Fess provides the following UI:
+|Fess| provides the following UI:
 
 -  Search Form/Results UI for Browser
 
@@ -14,7 +14,7 @@ Fess provides the following UI:
 Search Form/Results UI for Browser
 ==================================
 
-This UI allows an user to search target documents of Fess on a browser.
+This UI allows an user to search target documents of |Fess| on a browser.
 
 A search form and button are displayed to access to
 http://localhost:8080/fess/. To input a search word into the search form
@@ -26,10 +26,10 @@ following page.
 Administration UI on Browser
 ============================
 
-This is an adiministrative UI to manage Fess server. The administrative
+This is an adiministrative UI to manage |Fess| server. The administrative
 UI does not support an access from a mobile device.
 
 If you access to http://localhost:8080/fess/admin, a login page is
-displayed. You can manage Fess server after logging in as admin user.
+displayed. You can manage |Fess| server after logging in as admin user.
 
 .. |Display the search result on a browser| image:: /images/en/fess_search_result.png

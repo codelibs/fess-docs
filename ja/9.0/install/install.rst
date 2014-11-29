@@ -5,20 +5,20 @@
 インストール要件
 ================
 
-Fess は以下の環境で利用することができます。
+|Fess| は以下の環境で利用することができます。
 
 -  OS: Windows や Unix など Java が実行できる OS 環境
 
 -  Java: Java 7 以上
 
-Fess を利用したい環境に Java
+|Fess| を利用したい環境に Java
 がインストールされていない場合は、http://java.sun.com/ より Java 7
 以上の JDK を取得してインストールしてください。
 
 ダウンロード
 ============
 
-http://sourceforge.jp/projects/fess/releases/ から最新の Fess
+http://sourceforge.jp/projects/fess/releases/ から最新の |Fess| 
 パッケージをダウンロードします。
 
 インストール
@@ -38,7 +38,7 @@ http://sourceforge.jp/projects/fess/releases/ から最新の Fess
 ======================
 
 管理者アカウントはアプリケーションサーバーにより管理されています。標準の
-Fess サーバーは Tomcat を利用しているので、Tomcat
+|Fess| サーバーは Tomcat を利用しているので、Tomcat
 のユーザー変更方法と同様になります。変更する場合は、conf/tomcat-user.xml
 の admin アカウントのパスワードを修正してください。
 
@@ -52,7 +52,7 @@ tomcat-user.xml のファイルによる管理方法以外を利用する場合�
 Solr サーバーのパスワード変更
 =============================
 
-Fess サーバーには Solr
+|Fess| サーバーには Solr
 が組み込まれていますが、アクセスするためにはパスワードが必要になります。実運用などにおいては、デフォルトのパスワードを変更してください。
 
 パスワードの変更方法は、まず、conf/tomcat-user.xml の solradmin
@@ -101,7 +101,7 @@ solrconfig.xml は以下の箇所です。
 Tomcat コンソールのパスワード変更
 =================================
 
-Fess サーバーから Tomcat に配置した Solr
+|Fess| サーバーから Tomcat に配置した Solr
 のコンテキストを管理することができますが、管理するためにはパスワードが必要になります。実運用などにおいては、デフォルトのパスワードを変更してください。
 
 パスワードの変更方法は、conf/tomcat-user.xml の manager

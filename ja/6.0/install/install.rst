@@ -5,20 +5,20 @@
 インストール要件
 ================
 
-Fess は以下の環境で利用することができます。
+|Fess| は以下の環境で利用することができます。
 
 -  OS: Windows や Unix など Java が実行できる OS 環境
 
 -  Java: Java 6 以上
 
-Fess を利用したい環境に Java
+|Fess| を利用したい環境に Java
 がインストールされていない場合は、http://java.sun.com/ より Java 6
 以上の JDK を取得してインストールしてください。
 
 ダウンロード
 ============
 
-http://sourceforge.jp/projects/fess/releases/ から最新の Fess
+http://sourceforge.jp/projects/fess/releases/ から最新の |Fess| 
 パッケージをダウンロードします。
 
 インストール
@@ -38,7 +38,7 @@ http://sourceforge.jp/projects/fess/releases/ から最新の Fess
 ======================
 
 管理者アカウントはアプリケーションサーバーにより管理されています。
-標準の Fess サーバーは Tomcat を利用しているので、Tomcat
+標準の |Fess| サーバーは Tomcat を利用しているので、Tomcat
 のユーザー変更方法と同様になります。
 変更する場合は、conf/tomcat-user.xml の admin
 アカウントのパスワードを修正してください。
@@ -50,7 +50,7 @@ http://sourceforge.jp/projects/fess/releases/ から最新の Fess
 Solr サーバーのパスワード変更
 =============================
 
-Fess サーバーには Solr
+|Fess| サーバーには Solr
 が組み込まれていますが、アクセスするためにはパスワードが必要になります。
 実運用などにおいては、デフォルトのパスワードを変更してください。
 

@@ -15,7 +15,7 @@
 
 そのためトークナイザーの選択は重要です。
 
-Fess の場合デフォルトでは CJKTokenizer が使用されていますが、schema.xml
+|Fess| の場合デフォルトでは CJKTokenizer が使用されていますが、schema.xml
 の analyzer 部分を設定することでトークナイザを変更することができます。
 
 CJKTokenizerについて

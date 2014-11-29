@@ -5,7 +5,7 @@ JSONによる検索結果
 JSON応答による検索
 ==================
 
-Fessの検索結果をJSONにより出力することができます。JSONにより出力するためには管理画面のクロール全般の設定でJSON応答を有効にしておく必要があります。
+|Fess| の検索結果をJSONにより出力することができます。JSONにより出力するためには管理画面のクロール全般の設定でJSON応答を有効にしておく必要があります。
 
 リクエスト
 ----------
@@ -40,7 +40,7 @@ Table: リクエストパラメータ
         "response": {
             "version": 1,
             "status": 0,
-            "query": "Fess",
+            "query": " |Fess| ",
             "execTime": 0.59,
             "pageSize": 20,
             "pageNumber": 1,
@@ -50,13 +50,13 @@ Table: リクエストパラメータ
                 {
                 "created":"2014-05-24T15:13:29.096+0900",
                 "docId":"0592263c6cae4141b3a276894e8e326d",
-                "title":"Fess \u3092\u5229\u7528\u3057\u3066\u3044\u308B\u30B5\u30A4\u30C8",
+                "title":" |Fess| \u3092\u5229\u7528\u3057\u3066\u3044\u308B\u30B5\u30A4\u30C8",
                 "url":"http:\u002F\u002Ffess.codelibs.org\u002Fja\u002Fusers.html",
                 "score":0.7036715,
                 "site":"fess.codelibs.org\u002Fja\u002Fusers.html",
                 "filetype_s":"html",
                 "contentDescription":" <em>fess<\u002Fem> \u5168\u822C \u5165\u9580...",
-                "digest":" Fess \u5168\u822C \u5165\u9580 \u30C9\u30AD\u30E5\u30E1\u30F3 Jav...",
+                "digest":" |Fess| \u5168\u822C \u5165\u9580 \u30C9\u30AD\u30E5\u30E1\u30F3 Jav...",
                 "host":"fess.codelibs.org",
                 "mimetype":"text\u002Fhtml",
                 "contentLength":22788,

@@ -1,5 +1,5 @@
 ==========================================
-Open Source Full Text Search Server - Fess
+Open Source Full Text Search Server - |Fess| 
 ==========================================
 
 News

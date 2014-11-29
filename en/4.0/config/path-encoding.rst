@@ -22,7 +22,7 @@ to resolve paths in Shift\_JIS.
 
 ::
 
-    <component name="fessFileTransformer" class="jp.sf.fess.transformer.FessFileTransformer" instance="singleton">
+    <component name="fessFileTransformer" class="jp.sf.fess.transformer. |Fess| FileTransformer" instance="singleton">
        <property name="name">"fessFileTransformer"</property>
        <property name="ignoreEmptyContent">true</property>
        <property name="encoding">"Shift_JIS"</property>

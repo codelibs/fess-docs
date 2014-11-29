@@ -9,9 +9,9 @@ About desktop search
 
 Increasing awareness of security in the browser environment in recent
 years, open a local file (for example, c:\\hoge.txt) from the Web pages
-on. Standard in Fess, open a file on a file system using the Java
+on. Standard in |Fess| , open a file on a file system using the Java
 applet. As a Java applet and another, offer desktop search
-functionality. You can use desktop environment launches a Fess on a
+functionality. You can use desktop environment launches a |Fess| on a
 local PC, access to the file in the file system. In the environment of
 the server and client desktop search not available.
 
@@ -34,13 +34,13 @@ Then add the following to webapps/fess/WEB-INF/conf/crawler.properties.
 
     search.desktop=true
 
-Start the Fess, after you set up above. How to use Basic remains
+Start the |Fess| , after you set up above. How to use Basic remains
 especially.
 
 Usage precautions
 =================
 
--  Please Fess inaccessible from the outside, such as (for example, 8080
+-  Please |Fess| inaccessible from the outside, such as (for example, 8080
    port does not release).
 
 -  because false Java.awt.headless image size conversion for mobile

@@ -257,5 +257,5 @@ webapps/fess/WEB-INF/classes/s2robot\_rule.dicon.
         </component>
     ...
 
-Fess up after setting the above and please run the crawl. How to use
+|Fess| up after setting the above and please run the crawl. How to use
 Basic remains especially.

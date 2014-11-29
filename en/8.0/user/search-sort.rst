@@ -41,23 +41,23 @@ button will appear.
 Also, for sorting in the search field sort: the field name to sort and
 field names separated by colon (:) fill out the search form, the search.
 
-In ascending order sort the content size as a search term, Fess is
+In ascending order sort the content size as a search term, |Fess| is
 below.
 
 ::
 
-    Fess sort:contentLength
+|Fess| sort:contentLength
 
 To sort in descending order as below.
 
 ::
 
-    Fess sort:contentLength.desc
+|Fess| sort:contentLength.desc
 
 If you sort by multiple fields separated list, shown below.
 
 ::
 
-    Fess sort:contentLength.desc,lastModified
+|Fess| sort:contentLength.desc,lastModified
 
 .. |image0| image:: /images/en/8.0/user/search-sort-1.png

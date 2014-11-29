@@ -224,7 +224,7 @@ multiple settings in addPassword.
     </components>
 
 Next, edit the following to
-Webpps/Fess/Web-INF/clsses/s2robot\_rule.dicon.
+Webpps/ |Fess| /Web-INF/clsses/s2robot\_rule.dicon.
 
 ::
 
@@ -257,5 +257,5 @@ Webpps/Fess/Web-INF/clsses/s2robot\_rule.dicon.
         </component>
     ...
 
-Fess up after setting the above and please run the crawl. How to use
+|Fess| up after setting the above and please run the crawl. How to use
 Basic remains especially.

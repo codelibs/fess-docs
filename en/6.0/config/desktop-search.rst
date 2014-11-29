@@ -10,7 +10,7 @@ About desktop search
 Increasing awareness of security in the browser environment in recent
 years, open a local file (for example, c:\\hoge.txt) from the Web pages
 on. Not to copy and paste the link from the search results, and then
-reopen the usability is good. In order to respond to this in Fess and
+reopen the usability is good. In order to respond to this in |Fess| and
 provides desktop search functionality.
 
 Setting
@@ -32,13 +32,13 @@ Then add the following to webapps/fess/WEB-INF/conf/crawler.properties.
 
     search.desktop=true
 
-Start the Fess, after you set up above. How to use Basic remains
+Start the |Fess| , after you set up above. How to use Basic remains
 especially.
 
 Usage precautions
 =================
 
--  Please Fess inaccessible from the outside, such as (for example, 8080
+-  Please |Fess| inaccessible from the outside, such as (for example, 8080
    port does not release).
 
 -  because false Java.awt.headless image size conversion for mobile

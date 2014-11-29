@@ -8,7 +8,7 @@ Overview
 ========
 
 Describes Web authentication is required when set against here, using
-Web crawling. Fess is corresponding to a crawl for BASIC authentication
+Web crawling. |Fess| is corresponding to a crawl for BASIC authentication
 and DIGEST authentication.
 
 How to set up

@@ -8,7 +8,7 @@ Overview
 ========
 
 Crawls using file system here, describes how to set file system
-authentication is required. Fess is corresponding to a crawl for a
+authentication is required. |Fess| is corresponding to a crawl for a
 shared folder in Windows.
 
 How to set up

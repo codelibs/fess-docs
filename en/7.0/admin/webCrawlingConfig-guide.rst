@@ -9,7 +9,7 @@ Overview
 
 Describes the settings here, using Web crawling.
 
-Recommends that if you want to index document number 100000 over in Fess
+Recommends that if you want to index document number 100000 over in |Fess| 
 crawl settings for one to several tens of thousands of these. One crawl
 setting a target number 100000 from the indexed performance degrades.
 
@@ -161,7 +161,7 @@ Other
 Sitemap
 -------
 
-Fess and crawls sitemap file, as defined in the URL to crawl.
+|Fess| and crawls sitemap file, as defined in the URL to crawl.
 Sitemap\ http://www.sitemaps.org/ Of the specification. Available
 formats are XML Sitemaps and XML Sitemaps Index the text (URL line
 written in)

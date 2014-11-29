@@ -36,22 +36,22 @@ Table: ソート対象フィールド一覧
 
 また、検索フィールドでソートをする場合は、「sort:フィールド名」のようにsortとフィールド名をコロン(:)で区切って検索フォームに入力して検索します。
 
-以下は Fess を検索語として、コンテンツサイズを昇順にソートします。
+以下は |Fess| を検索語として、コンテンツサイズを昇順にソートします。
 
 ::
 
-    Fess sort:contentLength
+|Fess| sort:contentLength
 
 降順にソートする場合は以下のようにします。
 
 ::
 
-    Fess sort:contentLength.desc
+|Fess| sort:contentLength.desc
 
 複数のフィールドでソートする場合は以下のように , 区切りで指定します。
 
 ::
 
-    Fess sort:contentLength.desc,lastModified
+|Fess| sort:contentLength.desc,lastModified
 
 .. |image0| image:: /images/ja/9.2/user/search-sort-1.png

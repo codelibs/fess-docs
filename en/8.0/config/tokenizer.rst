@@ -18,7 +18,7 @@ a search with the word 'Kyoto' will not be hit. For selection of the
 tokenizer is important.
 
 You can change the tokenizer by setting the schema.xml analyzer part is
-if the Fess in the default CJKTokenizer used.
+if the |Fess| in the default CJKTokenizer used.
 
 About CJKTokenizer
 ------------------
@@ -64,4 +64,4 @@ webapps/fess/WEB-INF/classes/app.dicon change to false.
             <property name="useBigram">true</property>
       :
 
-After the restart the Fess.
+After the restart the |Fess| .

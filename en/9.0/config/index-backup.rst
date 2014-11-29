@@ -8,9 +8,9 @@ Index data backup and restore
 =============================
 
 The index data is managed by Solr. Backup from the Administration screen
-of the Fess, and cases will be in the size and number of Gigabit can not
+of the |Fess| , and cases will be in the size and number of Gigabit can not
 index data.
 
-If you need to index data backup stopped the Fess from back
+If you need to index data backup stopped the |Fess| from back
 solr/core1/data and solr/core1-suggest/data directories. Also, index
 data backed up to restore to undo.

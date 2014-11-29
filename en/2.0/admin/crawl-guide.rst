@@ -97,7 +97,7 @@ is issued.
 Server switchovers
 ------------------
 
-Fess can combine multiple Solr server as a group, the group can manage
+|Fess| can combine multiple Solr server as a group, the group can manage
 multiple. Solr server group for updates and search for different groups
 to use. For example, if you had two groups using the Group 2 for update,
 search for use of Group 1. After the crawl has been completed if
@@ -108,7 +108,7 @@ group.
 Committed to the document number of each
 ----------------------------------------
 
-To raise the performance of the index in Fess while crawling and sends
+To raise the performance of the index in |Fess| while crawling and sends
 for Solr document in 20 units. For each value specified here because
 without committing to continue adding documents documents added in the
 Solr on performance, Solr issued document commits. By default, after you
@@ -117,7 +117,7 @@ add documents 1000 is committed.
 Number of concurrent crawls settings
 ------------------------------------
 
-Fess document crawling is done on Web crawling, and file system CROLL.
+|Fess| document crawling is done on Web crawling, and file system CROLL.
 You can crawl to a set number of values in each crawl specified here
 only to run simultaneously multiple. For example, crawl setting number
 of concurrent as 3 Web crawling set 1-set 10 if the crawling runs until

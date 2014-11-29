@@ -5,13 +5,13 @@
 はじめに
 ========
 
-ここでの説明は素早く Fess に触れてみたい人向けのものです。 Fess
+ここでの説明は素早く |Fess| に触れてみたい人向けのものです。 |Fess| 
 を利用するための最小限の手順を記述します。
 
 ダウンロード
 ============
 
-http://sourceforge.jp/projects/fess/releases/ から最新の Fess
+http://sourceforge.jp/projects/fess/releases/ から最新の |Fess| 
 パッケージをダウンロードします。
 
 インストール
@@ -26,10 +26,10 @@ http://sourceforge.jp/projects/fess/releases/ から最新の Fess
     $ cd fess-server-x.y
     $ chmod +x bin/*.sh
 
-Fess の起動
+|Fess| の起動
 ===========
 
-startup スクリプトを実行して Fess を起動します。
+startup スクリプトを実行して |Fess| を起動します。
 
 ::
 
@@ -57,10 +57,10 @@ http://localhost:8080/fess/admin にアクセスします。
 クロール完了後、\ http://localhost:8080/fess/
 にアクセスし、検索すると検索結果が表示されます。
 
-Fess の停止
+|Fess| の停止
 ===========
 
-shutdown スクリプトを実行して Fess を停止します。
+shutdown スクリプトを実行して |Fess| を停止します。
 
 ::
 

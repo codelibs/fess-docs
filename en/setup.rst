@@ -1,11 +1,11 @@
 =================
-Fess Installation
+|Fess| Installation
 =================
 
 How to install
 ==============
 
-Fess can run on any operating system with Java runtime environment.
+|Fess| can run on any operating system with Java runtime environment.
 Requirement detail is as follows.
 
 -  Operating system: Windows, Unix, etc
@@ -144,7 +144,7 @@ step. (In case of Windows 7)
 Setting environment variables
 -----------------------------
 
-Fess requires Windows command prompt with runable JDK command. These
+|Fess| requires Windows command prompt with runable JDK command. These
 steps below set up environtment variables to use JDK command from
 command prompt
 
@@ -202,14 +202,14 @@ value. Click the 'OK' to close dialog.
 
 |image18|
 
-Installing Fess
+Installing |Fess| 
 ===============
 
-Go to download page of Fess
+Go to download page of |Fess| 
 ---------------------------
 
-`http://sourceforge.jp/projects/Fess/releases/ <http://sourceforge.jp/projects/fess/releases/>`__
-Download latest Fess package.
+`http://sourceforge.jp/projects/ |Fess| /releases/ <http://sourceforge.jp/projects/fess/releases/>`__
+Download latest |Fess| package.
 
 Expand file list of the destination URL, then download
 'fess-server-9.x.y.zip'.
@@ -242,13 +242,13 @@ Double-click to open bin folder.
 
 |image22|
 
-Launch of the Fess
+Launch of the |Fess| 
 ------------------
 
 In case of Windows environment, double-click the startup.bat file in the
-bin folder to start Fess.
+bin folder to start |Fess| .
 
-In case of Unix environments, run startup.sh to start Fess.
+In case of Unix environments, run startup.sh to start |Fess| .
 
 ::
 
@@ -256,7 +256,7 @@ In case of Unix environments, run startup.sh to start Fess.
 
 |image23|
 
-After starting Fess, at the end of console message "Server startup... '
+After starting |Fess| , at the end of console message "Server startup... '
 willbe appeared. If this message is not appeared, check Java
 environment's validity.
 
@@ -265,24 +265,24 @@ environment's validity.
 Operation check
 ===============
 
-Go to http://localhost:8080/Fess to check whether Fess started normally.
+Go to http://localhost:8080/ |Fess| to check whether |Fess| started normally.
 
-Fess' management UI is located at / http://localhost:8080/fess/admin.
+|Fess| ' management UI is located at / http://localhost:8080/fess/admin.
 Default Administrator account's user name / password is admin/admin.
 Administrator account is managed by the application server.
-Administrators of Fess' management UI are users whose rolls are
+Administrators of |Fess| ' management UI are users whose rolls are
 certificated by applicatoion server .
 
 Other
 =====
 
-Stop Fess
+Stop |Fess| 
 ---------
 
-To stop Fess, in case of Windows environment double-click shutdown.bat
+To stop |Fess| , in case of Windows environment double-click shutdown.bat
 file in the bin folder.
 
-To stop Fess, in case of Unix environment run the shutdown.sh.
+To stop |Fess| , in case of Unix environment run the shutdown.sh.
 
 ::
 
@@ -291,7 +291,7 @@ To stop Fess, in case of Unix environment run the shutdown.sh.
 Changing administrator password
 -------------------------------
 
-Administrator account is managed by the application server. Fess'
+Administrator account is managed by the application server. |Fess| '
 standard server is Tomcat. So to change administrator password, you need
 to modify conf/tomcat-user.xml.
 
@@ -302,7 +302,7 @@ to modify conf/tomcat-user.xml.
 Changing SOLR server password
 -----------------------------
 
-Password is required to access Solr of Fess. Change the default
+Password is required to access Solr of |Fess| . Change the default
 passwords in production.
 
 To change Solr password, first you must change solradmin password
@@ -367,9 +367,9 @@ In case of SOLR/core1/conf/solrconfig.XML, detail is as follows.
 .. |image16| image:: /images/en/install/java-17.png
 .. |image17| image:: /images/en/install/java-18.png
 .. |image18| image:: /images/en/install/java-19.png
-.. |image19| image:: /images/en/install/Fess-1.png
-.. |image20| image:: /images/en/install/Fess-2.png
-.. |image21| image:: /images/en/install/Fess-3.png
-.. |image22| image:: /images/en/install/Fess-4.png
-.. |image23| image:: /images/en/install/Fess-5.png
-.. |image24| image:: /images/en/install/Fess-6.png
+.. |image19| image:: /images/en/install/ |Fess| -1.png
+.. |image20| image:: /images/en/install/ |Fess| -2.png
+.. |image21| image:: /images/en/install/ |Fess| -3.png
+.. |image22| image:: /images/en/install/ |Fess| -4.png
+.. |image23| image:: /images/en/install/ |Fess| -5.png
+.. |image24| image:: /images/en/install/ |Fess| -6.png
