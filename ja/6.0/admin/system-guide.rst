@@ -54,4 +54,4 @@ Solr サーバーへのアクション
 
 各セッションで登録されたドキュメント数が多い順に表示されます。セッション名をクリックすることでその結果一覧を確認できます。
 
-.. |image0| image:: /images/ja/6.0/admin/system-1.png
+.. |image0| image:: ../../../resources/images/ja/6.0/admin/system-1.png

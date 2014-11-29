@@ -91,5 +91,5 @@ Table: 編集可能なJSPファイル
 
 携帯用画面も PC 用と同様に編集することができます。
 
-.. |image0| image:: /images/ja/8.0/admin/design-1.png
-.. |image1| image:: /images/ja/8.0/admin/design-2.png
+.. |image0| image:: ../../../resources/images/ja/8.0/admin/design-1.png
+.. |image1| image:: ../../../resources/images/ja/8.0/admin/design-2.png

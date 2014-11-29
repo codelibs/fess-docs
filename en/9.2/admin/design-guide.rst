@@ -104,5 +104,5 @@ Table: JSP file that you can edit
 
 </table>
 
-.. |image0| image:: /images/en/9.2/admin/design-1.png
-.. |image1| image:: /images/en/9.2/admin/design-2.png
+.. |image0| image:: ../../../resources/images/en/9.2/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/9.2/admin/design-2.png

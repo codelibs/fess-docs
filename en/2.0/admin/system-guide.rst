@@ -44,4 +44,4 @@ Action to the SOLR server.
 You can publish index commit, optimize for server groups. You can also
 remove a specific search for the session ID.
 
-.. |image0| image:: /images/en/2.0/system-1.png
+.. |image0| image:: ../../../resources/images/en/2.0/system-1.png

@@ -38,5 +38,5 @@ Value
 Specifies the identifier when a classified document. This value will be
 sent to Solr. Must be alphanumeric characters.
 
-.. |image0| image:: /images/en/8.0/admin/roleType-1.png
-.. |image1| image:: /images/en/8.0/admin/roleType-2.png
+.. |image0| image:: ../../../resources/images/en/8.0/admin/roleType-1.png
+.. |image1| image:: ../../../resources/images/en/8.0/admin/roleType-2.png

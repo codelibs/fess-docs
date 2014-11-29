@@ -130,4 +130,4 @@ Solr に対してドキュメントのコミットを発行します。 デフ�
 Google Wireless Transcoder に渡すリンクになります。
 モバイル変換を利用することでモバイル端末でもスムーズな検索を利用することができます。
 
-.. |クロール全般| image:: /images/ja/fess_admin_crawler.png
+.. |クロール全般| image:: ../../images/ja/fess_admin_crawler.png

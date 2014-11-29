@@ -47,5 +47,5 @@ Replacement character
 
 Specifies the string to replace the matched regular expression.
 
-.. |image0| image:: /images/en/9.2/admin/pathMapping-1.png
-.. |image1| image:: /images/en/9.2/admin/pathMapping-2.png
+.. |image0| image:: ../../../resources/images/en/9.2/admin/pathMapping-1.png
+.. |image1| image:: ../../../resources/images/en/9.2/admin/pathMapping-2.png

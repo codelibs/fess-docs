@@ -145,5 +145,5 @@ Snapshot path
 Copy index information from the index directory as the snapshot path, if
 replication is enabled, will be applied.
 
-.. |image0| image:: /images/en/3.0/crawl-1.png
-.. |image1| image:: /images/en/3.0/crawl-2.png
+.. |image0| image:: ../../../resources/images/en/3.0/crawl-1.png
+.. |image1| image:: ../../../resources/images/en/3.0/crawl-2.png

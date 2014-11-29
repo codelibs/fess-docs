@@ -36,5 +36,5 @@
 
 |image1|
 
-.. |image0| image:: /images/ja/8.0/admin/crawlingSession-1.png
-.. |image1| image:: /images/ja/8.0/admin/crawlingSession-2.png
+.. |image0| image:: ../../../resources/images/ja/8.0/admin/crawlingSession-1.png
+.. |image1| image:: ../../../resources/images/ja/8.0/admin/crawlingSession-2.png

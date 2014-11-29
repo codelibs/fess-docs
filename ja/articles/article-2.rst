@@ -160,9 +160,9 @@ docomo端末で検索
 
 -  `FireMobileSimulator <http://firemobilesimulator.org/>`__
 
-.. |image0| image:: /images/ja/article/2/web-crawl-conf-1.png
-.. |image1| image:: /images/ja/article/2/web-crawl-conf-2.png
-.. |image2| image:: /images/ja/article/2/crawl-conf-1.png
-.. |image3| image:: /images/ja/article/2/system-1.png
-.. |image4| image:: /images/ja/article/2/search-1.png
-.. |image5| image:: /images/ja/article/2/search-2.png
+.. |image0| image:: ../../../resources/images/ja/article/2/web-crawl-conf-1.png
+.. |image1| image:: ../../../resources/images/ja/article/2/web-crawl-conf-2.png
+.. |image2| image:: ../../../resources/images/ja/article/2/crawl-conf-1.png
+.. |image3| image:: ../../../resources/images/ja/article/2/system-1.png
+.. |image4| image:: ../../../resources/images/ja/article/2/search-1.png
+.. |image5| image:: ../../../resources/images/ja/article/2/search-2.png

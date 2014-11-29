@@ -12,7 +12,7 @@
 デモサイト
 ==========
 
-.. figure:: /images/ja/demo-1.png
+.. figure:: ../resources/images/ja/demo-1.png
    :scale: 100%
    :alt: 標準デモ 
    :figclass: side-by-side
@@ -20,7 +20,7 @@
 
    標準デモ
 
-.. figure:: /images/ja/demo-2.png
+.. figure:: ../resources/images/ja/demo-2.png
    :scale: 100%
    :alt: サイト内検索デモ
    :figclass: side-by-side
@@ -28,7 +28,7 @@
 
    サイト内検索デモ
 
-.. figure:: /images/ja/demo-3.png
+.. figure:: ../resources/images/ja/demo-3.png
    :scale: 100%
    :alt: EC向け商品検索デモ
    :figclass: side-by-side
@@ -117,12 +117,12 @@
 |Fess| 
 のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート <http://www.n2sm.net/products/n2search.html>`__\ をご覧ください。また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
 
-.. |image0| image:: /images/ja/demo-1.png
-.. |image1| image:: /images/ja/demo-2.png
-.. |image2| image:: /images/ja/demo-3.png
-.. |image3| image:: /images/ja/n2search_225x50.png
+.. |image0| image:: ../resources/images/ja/demo-1.png
+.. |image1| image:: ../resources/images/ja/demo-2.png
+.. |image2| image:: ../resources/images/ja/demo-3.png
+.. |image3| image:: ../resources/images/ja/n2search_225x50.png
    :target: http://www.n2sm.net/products/n2search.html
-.. |image4| image:: /images/ja/n2search_b.png
+.. |image4| image:: ../resources/images/ja/n2search_b.png
 
 
 .. hidden toctree

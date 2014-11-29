@@ -52,8 +52,8 @@ Changes to settings
 Settings in the Setup Wizard you can change from crawl General, Web,
 file system.
 
-.. |image0| image:: /images/en/8.0/admin/config-wizard-1.png
-.. |image1| image:: /images/en/8.0/admin/config-wizard-2.png
-.. |image2| image:: /images/en/8.0/admin/config-wizard-3.png
-.. |image3| image:: /images/en/8.0/admin/config-wizard-4.png
-.. |image4| image:: /images/en/8.0/admin/config-wizard-5.png
+.. |image0| image:: ../../../resources/images/en/8.0/admin/config-wizard-1.png
+.. |image1| image:: ../../../resources/images/en/8.0/admin/config-wizard-2.png
+.. |image2| image:: ../../../resources/images/en/8.0/admin/config-wizard-3.png
+.. |image3| image:: ../../../resources/images/en/8.0/admin/config-wizard-4.png
+.. |image4| image:: ../../../resources/images/en/8.0/admin/config-wizard-5.png

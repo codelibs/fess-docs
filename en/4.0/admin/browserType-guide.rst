@@ -25,4 +25,4 @@ You can set the display name and value. It is used if you want more new
 terminals. You do not need special customizations are used only where
 necessary.
 
-.. |image0| image:: /images/en/4.0/browserType-1.png
+.. |image0| image:: ../../../resources/images/en/4.0/browserType-1.png

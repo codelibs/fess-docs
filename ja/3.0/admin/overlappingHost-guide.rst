@@ -27,5 +27,5 @@
 
 重複しているホスト名を指定します。置き換えたいホスト名を指定します。
 
-.. |image0| image:: /images/ja/3.0/overlappingHost-1.png
-.. |image1| image:: /images/ja/3.0/overlappingHost-2.png
+.. |image0| image:: ../../../resources/images/ja/3.0/overlappingHost-1.png
+.. |image1| image:: ../../../resources/images/ja/3.0/overlappingHost-2.png

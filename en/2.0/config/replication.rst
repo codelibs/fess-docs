@@ -44,4 +44,4 @@ will.
 Time press the update button to save the data and set in Schedule
 performs replication of the index.
 
-.. |image0| image:: /images/en/2.0/crawl-2.png
+.. |image0| image:: ../../../resources/images/en/2.0/crawl-2.png

@@ -22,4 +22,4 @@
 
 人気URLが一覧されます。
 
-.. |image0| image:: /images/ja/9.0/admin/favoriteLog-1.png
+.. |image0| image:: ../../../resources/images/ja/9.0/admin/favoriteLog-1.png

@@ -94,4 +94,4 @@ PC
 有効にすることで、設定されているクロール時刻にクロールされます。
 一時的にクロールしないようにしたい場合に利用できます。
 
-.. |ファイルシステムクロールの設定| image:: /images/ja/fess_admin_fsconfig.png
+.. |ファイルシステムクロールの設定| image:: ../../images/ja/fess_admin_fsconfig.png

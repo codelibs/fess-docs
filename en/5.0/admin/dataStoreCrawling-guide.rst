@@ -139,4 +139,4 @@ adding to $ {doc.latitude\_s}, searchResults.jsp;
                 "tstamp", "title", "digest", "url", "latitude_s","longitude_s" }</property>
         </component>
 
-.. |image0| image:: /images/en/5.0/dataStoreCrawling-1.png
+.. |image0| image:: ../../../resources/images/en/5.0/dataStoreCrawling-1.png

@@ -25,4 +25,4 @@ Statistics
 You can select the target by selecting the type of report, to make sure.
 Displayed in order by the specified criteria.
 
-.. |image0| image:: /images/en/9.1/admin/stats-1.png
+.. |image0| image:: ../../../resources/images/en/9.1/admin/stats-1.png

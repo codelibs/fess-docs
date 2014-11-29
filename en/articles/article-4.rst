@@ -287,6 +287,6 @@ Reference material
 
 -  `jQuery <http://jquery.com/>`__
 
-.. |image0| image:: /images/en/article/4/sameorigin.png
-.. |image1| image:: /images/en/article/4/searchform.png
-.. |image2| image:: /images/en/article/4/searchresult.png
+.. |image0| image:: ../../../resources/images/en/article/4/sameorigin.png
+.. |image1| image:: ../../../resources/images/en/article/4/searchform.png
+.. |image2| image:: ../../../resources/images/en/article/4/searchresult.png

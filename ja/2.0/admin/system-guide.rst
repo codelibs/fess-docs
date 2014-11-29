@@ -42,4 +42,4 @@ Solr サーバーへのアクション
 サーバーグループに対して、インデックスのコミット、最適化を発行することができます。
 また、セッション ID を指定して、特定の検索対象を削除することができます。
 
-.. |image0| image:: /images/ja/2.0/system-1.png
+.. |image0| image:: ../../../resources/images/ja/2.0/system-1.png

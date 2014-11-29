@@ -61,5 +61,5 @@
 ファイルシステムクロール設定を事前に登録しておく必要があります。
 
 ..
-  .. |image0| image:: /images/ja/4.0/fileAuthentication-1.png
+  .. |image0| image:: ../../../resources/images/ja/4.0/fileAuthentication-1.png
 ..

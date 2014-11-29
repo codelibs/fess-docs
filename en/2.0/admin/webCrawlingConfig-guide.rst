@@ -160,4 +160,4 @@ webapps/fess/WEB-INF/classes/s2robot\_rule.dicon can be customized).
 Crawls sitemap file to crawl the HTML file links will crawl the
 following URL in the next crawl.
 
-.. |image0| image:: /images/en/2.0/webCrawlingConfig-1.png
+.. |image0| image:: ../../../resources/images/en/2.0/webCrawlingConfig-1.png

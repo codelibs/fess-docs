@@ -58,4 +58,4 @@
 上記の認証設定を適用するウェブ設定名を選択します。
 ウェブクロール設定を事前に登録しておく必要があります。
 
-.. |ウェブ認証の設定| image:: /images/ja/fess_admin_webauth.png
+.. |ウェブ認証の設定| image:: ../../images/ja/fess_admin_webauth.png

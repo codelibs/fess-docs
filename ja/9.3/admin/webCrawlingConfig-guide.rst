@@ -160,4 +160,4 @@ HTML
 ファイルをクロールするとリンクが次のクロール対象になりますが、サイトマップファイルをクロールするとその中の
 URL が次のクロール対象になります。
 
-.. |image0| image:: /images/ja/9.2/admin/webCrawlingConfig-1.png
+.. |image0| image:: ../../../resources/images/ja/9.2/admin/webCrawlingConfig-1.png

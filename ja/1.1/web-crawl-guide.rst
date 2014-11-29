@@ -100,4 +100,4 @@ PC
 有効にすることで、設定されているクロール時刻にクロールされます。
 一時的にクロールしないようにしたい場合に利用できます。
 
-.. |ウェブクロールの設定| image:: /images/ja/fess_admin_webconfig.png
+.. |ウェブクロールの設定| image:: ../../images/ja/fess_admin_webconfig.png

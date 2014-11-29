@@ -80,8 +80,8 @@ Expand the words you enter in the source in the word after the
 conversion. For example, 'TV', 'TV' and 'television' If you want to
 convert type 'TV', 'TV' and 'TV' type after conversion.
 
-.. |image0| image:: /images/en/9.0/admin/dict-1.png
-.. |image1| image:: /images/en/9.0/admin/dict-4.png
-.. |image2| image:: /images/en/9.0/admin/dict-5.png
-.. |image3| image:: /images/en/9.0/admin/dict-2.png
-.. |image4| image:: /images/en/9.0/admin/dict-3.png
+.. |image0| image:: ../../../resources/images/en/9.0/admin/dict-1.png
+.. |image1| image:: ../../../resources/images/en/9.0/admin/dict-4.png
+.. |image2| image:: ../../../resources/images/en/9.0/admin/dict-5.png
+.. |image3| image:: ../../../resources/images/en/9.0/admin/dict-2.png
+.. |image4| image:: ../../../resources/images/en/9.0/admin/dict-3.png

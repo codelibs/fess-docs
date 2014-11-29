@@ -32,4 +32,4 @@ UI does not support an access from a mobile device.
 If you access to http://localhost:8080/fess/admin, a login page is
 displayed. You can manage |Fess| server after logging in as admin user.
 
-.. |Display the search result on a browser| image:: /images/en/fess_search_result.png
+.. |Display the search result on a browser| image:: ./images/en/fess_search_result.png

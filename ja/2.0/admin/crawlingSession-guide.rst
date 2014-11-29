@@ -46,5 +46,5 @@
 
 -  \*IndexSize: インデックスしたドキュメント数
 
-.. |image0| image:: /images/ja/2.0/crawlingSession-1.png
-.. |image1| image:: /images/ja/2.0/crawlingSession-2.png
+.. |image0| image:: ../../../resources/images/ja/2.0/crawlingSession-1.png
+.. |image1| image:: ../../../resources/images/ja/2.0/crawlingSession-2.png

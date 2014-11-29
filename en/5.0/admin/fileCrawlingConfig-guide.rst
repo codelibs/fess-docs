@@ -149,4 +149,4 @@ State
 Crawl crawl time, is set to enable. If you want to avoid crawling
 temporarily available.
 
-.. |image0| image:: /images/en/5.0/fileCrawlingConfig-1.png
+.. |image0| image:: ../../../resources/images/en/5.0/fileCrawlingConfig-1.png

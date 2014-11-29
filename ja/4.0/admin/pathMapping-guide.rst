@@ -36,5 +36,5 @@
 
 一致した正規表現を置き換える文字列を指定します。
 
-.. |image0| image:: /images/ja/4.0/pathMapping-1.png
-.. |image1| image:: /images/ja/4.0/pathMapping-2.png
+.. |image0| image:: ../../../resources/images/ja/4.0/pathMapping-1.png
+.. |image1| image:: ../../../resources/images/ja/4.0/pathMapping-2.png

@@ -20,4 +20,4 @@
 検索語と日時が一覧されます。詳細でクリックした URL
 なども確認することができます。
 
-.. |image0| image:: /images/ja/5.0/searchLog-1.png
+.. |image0| image:: ../../../resources/images/ja/5.0/searchLog-1.png

@@ -33,5 +33,5 @@
 ドキュメントを分類するときの識別子を指定します。この値は Solr
 に送信されます。英数字で指定してください。
 
-.. |image0| image:: /images/ja/9.0/admin/roleType-1.png
-.. |image1| image:: /images/ja/9.0/admin/roleType-2.png
+.. |image0| image:: ../../../resources/images/ja/9.0/admin/roleType-1.png
+.. |image1| image:: ../../../resources/images/ja/9.0/admin/roleType-2.png

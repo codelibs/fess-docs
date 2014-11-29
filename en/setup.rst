@@ -348,28 +348,28 @@ In case of SOLR/core1/conf/solrconfig.XML, detail is as follows.
           <password>solradmin</password> <!-- パスワード -->
         </credentials>
 
-.. |image0| image:: /images/en/install/java-1.png
-.. |image1| image:: /images/en/install/java-2.png
-.. |image2| image:: /images/en/install/java-3.png
-.. |image3| image:: /images/en/install/java-4.png
-.. |image4| image:: /images/en/install/java-5.png
-.. |image5| image:: /images/en/install/java-6.png
-.. |image6| image:: /images/en/install/java-7.png
-.. |image7| image:: /images/en/install/java-8.png
-.. |image8| image:: /images/en/install/java-9.png
-.. |image9| image:: /images/en/install/java-10.png
-.. |image10| image:: /images/en/install/java-11.png
-.. |image11| image:: /images/en/install/java-12.png
-.. |image12| image:: /images/en/install/java-13.png
-.. |image13| image:: /images/en/install/java-14.png
-.. |image14| image:: /images/en/install/java-15.png
-.. |image15| image:: /images/en/install/java-16.png
-.. |image16| image:: /images/en/install/java-17.png
-.. |image17| image:: /images/en/install/java-18.png
-.. |image18| image:: /images/en/install/java-19.png
-.. |image19| image:: /images/en/install/ |Fess| -1.png
-.. |image20| image:: /images/en/install/ |Fess| -2.png
-.. |image21| image:: /images/en/install/ |Fess| -3.png
-.. |image22| image:: /images/en/install/ |Fess| -4.png
-.. |image23| image:: /images/en/install/ |Fess| -5.png
-.. |image24| image:: /images/en/install/ |Fess| -6.png
+.. |image0| image:: ../resources/images/en/install/java-1.png
+.. |image1| image:: ../resources/images/en/install/java-2.png
+.. |image2| image:: ../resources/images/en/install/java-3.png
+.. |image3| image:: ../resources/images/en/install/java-4.png
+.. |image4| image:: ../resources/images/en/install/java-5.png
+.. |image5| image:: ../resources/images/en/install/java-6.png
+.. |image6| image:: ../resources/images/en/install/java-7.png
+.. |image7| image:: ../resources/images/en/install/java-8.png
+.. |image8| image:: ../resources/images/en/install/java-9.png
+.. |image9| image:: ../resources/images/en/install/java-10.png
+.. |image10| image:: ../resources/images/en/install/java-11.png
+.. |image11| image:: ../resources/images/en/install/java-12.png
+.. |image12| image:: ../resources/images/en/install/java-13.png
+.. |image13| image:: ../resources/images/en/install/java-14.png
+.. |image14| image:: ../resources/images/en/install/java-15.png
+.. |image15| image:: ../resources/images/en/install/java-16.png
+.. |image16| image:: ../resources/images/en/install/java-17.png
+.. |image17| image:: ../resources/images/en/install/java-18.png
+.. |image18| image:: ../resources/images/en/install/java-19.png
+.. |image19| image:: ../resources/images/en/install/Fess-1.png
+.. |image20| image:: ../resources/images/en/install/Fess-2.png
+.. |image21| image:: ../resources/images/en/install/Fess-3.png
+.. |image22| image:: ../resources/images/en/install/Fess-4.png
+.. |image23| image:: ../resources/images/en/install/Fess-5.png
+.. |image24| image:: ../resources/images/en/install/Fess-6.png

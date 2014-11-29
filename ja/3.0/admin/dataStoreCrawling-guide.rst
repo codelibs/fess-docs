@@ -107,4 +107,4 @@ fess
 データベースに接続する際にはドライバが必要となります。webapps/fess/WEB-INF/cmd/lib
 に jar ファイルを置いてください。
 
-.. |image0| image:: /images/ja/3.0/dataStoreCrawling-1.png
+.. |image0| image:: ../../../resources/images/ja/3.0/dataStoreCrawling-1.png

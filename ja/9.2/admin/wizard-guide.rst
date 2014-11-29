@@ -43,7 +43,7 @@
 
 設定ウィザードで設定した内容は、クロール全般、ウェブ、ファイルシステムから変更できます。
 
-.. |image0| image:: /images/ja/9.2/admin/config-wizard-1.png
-.. |image1| image:: /images/ja/9.2/admin/config-wizard-3.png
-.. |image2| image:: /images/ja/9.2/admin/config-wizard-4.png
-.. |image3| image:: /images/ja/9.2/admin/config-wizard-5.png
+.. |image0| image:: ../../../resources/images/ja/9.2/admin/config-wizard-1.png
+.. |image1| image:: ../../../resources/images/ja/9.2/admin/config-wizard-3.png
+.. |image2| image:: ../../../resources/images/ja/9.2/admin/config-wizard-4.png
+.. |image3| image:: ../../../resources/images/ja/9.2/admin/config-wizard-5.png

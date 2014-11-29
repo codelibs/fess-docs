@@ -109,4 +109,4 @@ Driver
 To connect to the database driver is needed. keep the jar file in
 webapps/fess/WEB-INF/cmd/lib.
 
-.. |image0| image:: /images/en/3.0/dataStoreCrawling-1.png
+.. |image0| image:: ../../../resources/images/en/3.0/dataStoreCrawling-1.png

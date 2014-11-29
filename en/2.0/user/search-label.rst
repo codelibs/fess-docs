@@ -18,4 +18,4 @@ To set the label by creating indexes, can search each crawl settings
 specified on the label. All results search search do not specify a label
 is usually the same.
 
-.. |image0| image:: /images/en/2.0/search-label-1.png
+.. |image0| image:: ../../../resources/images/en/2.0/search-label-1.png

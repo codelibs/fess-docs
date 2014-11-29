@@ -39,4 +39,4 @@ Documents added
 Shown by the number of documents registered in each session. Can verify
 the results list by clicking the session name.
 
-.. |image0| image:: /images/en/8.0/admin/document-1.png
+.. |image0| image:: ../../../resources/images/en/8.0/admin/document-1.png

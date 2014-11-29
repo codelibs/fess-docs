@@ -11,4 +11,4 @@
 
 ラベルを設定してインデックスを作成することで、ラベルで指定されたクロール設定ごとに検索をすることができます。ラベルを指定しない検索は通常と同様の全件検索になります。
 
-.. |image0| image:: /images/ja/2.0/search-label-1.png
+.. |image0| image:: ../../../resources/images/ja/2.0/search-label-1.png

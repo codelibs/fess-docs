@@ -136,4 +136,4 @@ PC
 有効にすることで、設定されているクロール時刻にクロールされます。
 一時的にクロールしないようにしたい場合に利用できます。
 
-.. |image0| image:: /images/ja/2.0/fileCrawlingConfig-1.png
+.. |image0| image:: ../../../resources/images/ja/2.0/fileCrawlingConfig-1.png

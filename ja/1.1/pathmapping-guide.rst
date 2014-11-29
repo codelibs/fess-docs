@@ -25,4 +25,4 @@
 そのような場合にパスマッピングを利用して、検索結果のリンクを制御できます。
 パスマッピングは複数指定できます。
 
-.. |パスマッピングの設定| image:: /images/ja/fess_admin_pathmapping.png
+.. |パスマッピングの設定| image:: ../../images/ja/fess_admin_pathmapping.png

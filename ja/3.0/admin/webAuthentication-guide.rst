@@ -56,4 +56,4 @@
 上記の認証設定を適用するウェブ設定名を選択します。
 ウェブクロール設定を事前に登録しておく必要があります。
 
-.. |image0| image:: /images/ja/3.0/webAuthentication-1.png
+.. |image0| image:: ../../../resources/images/ja/3.0/webAuthentication-1.png

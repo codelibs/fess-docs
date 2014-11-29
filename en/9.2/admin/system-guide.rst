@@ -59,4 +59,4 @@ SOLR instance
 You can be sure SOLR server instance state. You can also, for each
 instance, start, stop, reload request.
 
-.. |image0| image:: /images/en/9.2/admin/system-1.png
+.. |image0| image:: ../../../resources/images/en/9.2/admin/system-1.png

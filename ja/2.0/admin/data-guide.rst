@@ -49,4 +49,4 @@ Solr
 
 データの上書きを有効にすると、既に同じデータがある場合は既存のデータの更新を行います。
 
-.. |image0| image:: /images/ja/2.0/data-1.png
+.. |image0| image:: ../../../resources/images/ja/2.0/data-1.png

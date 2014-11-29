@@ -64,4 +64,4 @@ Solr
 XML
 ファイルの設定情報指定の際にデータの上書きを有効にすると、既に同じデータがある場合は既存のデータの更新を行います。
 
-.. |image0| image:: /images/ja/9.2/admin/data-1.png
+.. |image0| image:: ../../../resources/images/ja/9.2/admin/data-1.png

@@ -27,4 +27,4 @@ You can search each document to create an index, set the label to the
 label. All results search search do not specify a label is usually the
 same. If you change the label information to update the index.
 
-.. |image0| image:: /images/en/8.0/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/en/8.0/user/search-label-1.png
