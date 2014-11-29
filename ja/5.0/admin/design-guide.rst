@@ -103,5 +103,5 @@ tstampDate が登録日時、lastModifiedDate
 が更新日時になります。出力する日付フォーマットは SimpeDateFormat
 で指定します。
 
-.. |image0| image:: ../../../resources/images/ja/5.0/design-1.png
-.. |image1| image:: ../../../resources/images/ja/5.0/design-2.png
+.. |image0| image:: /images/ja/5.0/design-1.png
+.. |image1| image:: /images/ja/5.0/design-2.png

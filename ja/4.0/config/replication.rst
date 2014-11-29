@@ -45,4 +45,4 @@ Fess
 
 更新ボタンを押下してデータを保存すると、スケジュールで設定された時間でインデックスのレプリケーションが実行されます。
 
-.. |image0| image:: ../../../resources/images/ja/4.0/crawl-2.png
+.. |image0| image:: /images/ja/4.0/crawl-2.png

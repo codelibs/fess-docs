@@ -77,5 +77,5 @@ WED」の場合は、毎週水曜日の12:00pmにジョブを実行します。�
 
 ジョブ一覧での表示順を指定します。
 
-.. |image0| image:: ../../../resources/images/ja/9.2/admin/scheduledJob-1.png
-.. |image1| image:: ../../../resources/images/ja/9.2/admin/scheduledJob-2.png
+.. |image0| image:: /images/ja/9.2/admin/scheduledJob-1.png
+.. |image1| image:: /images/ja/9.2/admin/scheduledJob-2.png

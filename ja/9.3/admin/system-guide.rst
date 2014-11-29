@@ -52,4 +52,4 @@ Solr インスタンス
 Solr
 サーバーのインスタンス状態を確認することができます。また、各インスタンスに対して、起動、停止、リロードのリクエストを発行することができます。
 
-.. |image0| image:: ../../../resources/images/ja/9.2/admin/system-1.png
+.. |image0| image:: /images/ja/9.2/admin/system-1.png

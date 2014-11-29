@@ -33,4 +33,4 @@ http://localhost:8080/fess/admin
 にアクセスすると、ログイン画面が表示されます。 ログインすることで Fess
 を設定することができます。
 
-.. |ブラウザによる検索結果の表示| image:: ../images//ja/fess_search_result.png
+.. |ブラウザによる検索結果の表示| image:: /images//ja/fess_search_result.png

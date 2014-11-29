@@ -176,4 +176,4 @@ Failure count
 
 Disaster URL exceeds the number of failures will crawl out.
 
-.. |image0| image:: ../../../resources/images/en/9.1/admin/crawl-1.png
+.. |image0| image:: /images/en/9.1/admin/crawl-1.png

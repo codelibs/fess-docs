@@ -34,5 +34,5 @@ time, displays the results, such as.
 
 |image1|
 
-.. |image0| image:: ../../../resources/images/en/9.0/admin/jobLog-1.png
-.. |image1| image:: ../../../resources/images/en/9.0/admin/jobLog-2.png
+.. |image0| image:: /images/en/9.0/admin/jobLog-1.png
+.. |image1| image:: /images/en/9.0/admin/jobLog-2.png

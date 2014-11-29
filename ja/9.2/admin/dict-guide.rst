@@ -75,8 +75,8 @@
 変換元で入力した単語を変換後の単語で展開します。
 たとえば、「TV」を「TV」と「テレビ」として扱いたい場合は、変換元に「TV」を入力して、変換後に「TV」と「テレビ」を入力します。
 
-.. |image0| image:: ../../../resources/images/ja/9.2/admin/dict-1.png
-.. |image1| image:: ../../../resources/images/ja/9.2/admin/dict-4.png
-.. |image2| image:: ../../../resources/images/ja/9.2/admin/dict-5.png
-.. |image3| image:: ../../../resources/images/ja/9.2/admin/dict-2.png
-.. |image4| image:: ../../../resources/images/ja/9.2/admin/dict-3.png
+.. |image0| image:: /images/ja/9.2/admin/dict-1.png
+.. |image1| image:: /images/ja/9.2/admin/dict-4.png
+.. |image2| image:: /images/ja/9.2/admin/dict-5.png
+.. |image3| image:: /images/ja/9.2/admin/dict-2.png
+.. |image4| image:: /images/ja/9.2/admin/dict-3.png

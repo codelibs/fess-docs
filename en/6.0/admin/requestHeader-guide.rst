@@ -43,5 +43,5 @@ Web name
 Select a Web crawl setting name to add request headers. Only selected
 the crawl settings in appended to the request header.
 
-.. |image0| image:: ../../../resources/images/en/6.0/admin/requestHeader-1.png
-.. |image1| image:: ../../../resources/images/en/6.0/admin/requestHeader-2.png
+.. |image0| image:: /images/en/6.0/admin/requestHeader-1.png
+.. |image1| image:: /images/en/6.0/admin/requestHeader-2.png

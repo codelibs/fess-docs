@@ -71,4 +71,4 @@ FS name
 Select the set name to apply the authentication settings for the above
 file system CROLL. Must be registered ago you file system CROLL.
 
-.. |image0| image:: ../../../resources/images/en/9.0/admin/fileAuthentication-1.png
+.. |image0| image:: /images/en/9.0/admin/fileAuthentication-1.png

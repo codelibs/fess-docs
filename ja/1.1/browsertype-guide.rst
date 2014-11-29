@@ -24,4 +24,4 @@
 新規に閲覧端末を増やしたい場合などに利用します。
 特別なカスタマイズが必要場合にしか、利用する必要はありません。
 
-.. |ブラウザタイプの設定| image:: ../../images/ja/fess_admin_browsertype.png
+.. |ブラウザタイプの設定| image:: /images/ja/fess_admin_browsertype.png

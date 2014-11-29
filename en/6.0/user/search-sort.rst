@@ -56,4 +56,4 @@ If you sort by multiple fields separated list, shown below.
 
     Fess sort:contentLength.desc,lastModified
 
-.. |image0| image:: ../../../resources/images/en/6.0/user/search-sort-1.png
+.. |image0| image:: /images/en/6.0/user/search-sort-1.png

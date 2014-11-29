@@ -25,4 +25,4 @@
 
 表示名と値を設定できます。新規に閲覧端末を増やしたい場合などに利用します。特別なカスタマイズが必要場合にしか、利用する必要はありません。
 
-.. |image0| image:: ../../../resources/images/ja/9.0/admin/browserType-1.png
+.. |image0| image:: /images/ja/9.0/admin/browserType-1.png

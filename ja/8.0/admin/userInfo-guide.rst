@@ -22,4 +22,4 @@
 
 利用者のIDが一覧されます。検索ログまたは人気URLのリンクを選択して、各ログの一覧を確認することができます。
 
-.. |image0| image:: ../../../resources/images/ja/8.0/admin/userInfo-1.png
+.. |image0| image:: /images/ja/8.0/admin/userInfo-1.png

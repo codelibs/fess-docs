@@ -39,5 +39,5 @@ time, number of documents indexed and listed.
 
 |image1|
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawlingSession-1.png
-.. |image1| image:: ../../../resources/images/en/9.2/admin/crawlingSession-2.png
+.. |image0| image:: /images/en/9.2/admin/crawlingSession-1.png
+.. |image1| image:: /images/en/9.2/admin/crawlingSession-2.png

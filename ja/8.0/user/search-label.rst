@@ -16,4 +16,4 @@
 
 ラベルを設定してインデックスを作成することで、ラベルが設定されたドキュメントごとに検索をすることができます。ラベルを指定しない検索は通常と同様の全件検索になります。ラベル情報を変更した場合は、インデックスの更新が必要になります。
 
-.. |image0| image:: ../../../resources/images/ja/8.0/user/search-label-1.png
+.. |image0| image:: /images/ja/8.0/user/search-label-1.png

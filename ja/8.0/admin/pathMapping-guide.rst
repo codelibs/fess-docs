@@ -42,5 +42,5 @@
 
 一致した正規表現を置き換える文字列を指定します。
 
-.. |image0| image:: ../../../resources/images/ja/8.0/admin/pathMapping-1.png
-.. |image1| image:: ../../../resources/images/ja/8.0/admin/pathMapping-2.png
+.. |image0| image:: /images/ja/8.0/admin/pathMapping-1.png
+.. |image1| image:: /images/ja/8.0/admin/pathMapping-2.png

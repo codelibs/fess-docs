@@ -54,4 +54,4 @@ Table: ソート対象フィールド一覧
 
     Fess sort:contentLength.desc,lastModified
 
-.. |image0| image:: ../../../resources/images/ja/7.0/user/search-sort-1.png
+.. |image0| image:: /images/ja/7.0/user/search-sort-1.png

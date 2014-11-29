@@ -20,4 +20,4 @@
 
 レポート種別を選択することで、確認する対象を選択することができます。指定された条件で多い順に表示されます。
 
-.. |image0| image:: ../../../resources/images/ja/4.0/stats-1.png
+.. |image0| image:: /images/ja/4.0/stats-1.png

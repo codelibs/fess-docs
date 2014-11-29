@@ -104,5 +104,5 @@ write the following.
 tstampDate will update on registration date, lastModifiedDate. Output
 date format is specified in SimpeDateFormat.
 
-.. |image0| image:: ../../../resources/images/en/4.0/design-1.png
-.. |image1| image:: ../../../resources/images/en/4.0/design-2.png
+.. |image0| image:: /images/en/4.0/design-1.png
+.. |image1| image:: /images/en/4.0/design-2.png

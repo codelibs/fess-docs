@@ -20,4 +20,4 @@
 
 表示されているログファイル名をクリックすると、ログファイルをダウンロードすることができます。
 
-.. |image0| image:: ../../../resources/images/ja/5.0/log-1.png
+.. |image0| image:: /images/ja/5.0/log-1.png

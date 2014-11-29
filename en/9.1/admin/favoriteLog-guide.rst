@@ -26,4 +26,4 @@ Users list
 
 Lists popular URL.
 
-.. |image0| image:: ../../../resources/images/en/9.1/admin/favoriteLog-1.png
+.. |image0| image:: /images/en/9.1/admin/favoriteLog-1.png

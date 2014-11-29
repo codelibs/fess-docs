@@ -51,4 +51,4 @@ on the data.
 If there is already to enable overwriting of data, the same data does
 update existing data.
 
-.. |image0| image:: ../../../resources/images/en/2.0/data-1.png
+.. |image0| image:: /images/en/2.0/data-1.png

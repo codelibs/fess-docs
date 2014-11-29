@@ -29,5 +29,5 @@
 
 |image1|
 
-.. |image0| image:: ../../../resources/images/ja/9.0/admin/jobLog-1.png
-.. |image1| image:: ../../../resources/images/ja/9.0/admin/jobLog-2.png
+.. |image0| image:: /images/ja/9.0/admin/jobLog-1.png
+.. |image1| image:: /images/ja/9.0/admin/jobLog-2.png

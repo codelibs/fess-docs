@@ -43,5 +43,5 @@ Display order
 
 Specifies the order of the labels.
 
-.. |image0| image:: ../../../resources/images/en/5.0/labelType-1.png
-.. |image1| image:: ../../../resources/images/en/5.0/labelType-2.png
+.. |image0| image:: /images/en/5.0/labelType-1.png
+.. |image1| image:: /images/en/5.0/labelType-2.png

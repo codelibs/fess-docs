@@ -51,4 +51,4 @@ button on the data.
 If enable overwrite data in XML file configuration information specified
 when the same data is updating existing data.
 
-.. |image0| image:: ../../../resources/images/en/4.0/data-1.png
+.. |image0| image:: /images/en/4.0/data-1.png

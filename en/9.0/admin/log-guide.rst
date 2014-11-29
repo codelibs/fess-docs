@@ -24,4 +24,4 @@ Download
 
 You can download the log file and click the log file name.
 
-.. |image0| image:: ../../../resources/images/en/9.0/admin/log-1.png
+.. |image0| image:: /images/en/9.0/admin/log-1.png

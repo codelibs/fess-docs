@@ -372,14 +372,14 @@ Reference material
 
 -  `S2Chronos <http://s2chronos.sandbox.seasar.org/ja/>`__
 
-.. |image0| image:: ../../../resources/images/en/article/1/architecture.png
-.. |image1| image:: ../../../resources/images/en/article/1/fess-download.png
-.. |image2| image:: ../../../resources/images/en/article/1/top.png
-.. |image3| image:: ../../../resources/images/en/article/1/login.png
-.. |image4| image:: ../../../resources/images/en/article/1/web-crawl-conf-1.png
-.. |image5| image:: ../../../resources/images/en/article/1/web-crawl-conf-2.png
-.. |image6| image:: ../../../resources/images/en/article/1/web-crawl-conf-3.png
-.. |image7| image:: ../../../resources/images/en/article/1/crawl-schedule-conf.png
-.. |image8| image:: ../../../resources/images/en/article/1/session-info-1.png
-.. |image9| image:: ../../../resources/images/en/article/1/session-info-2.png
-.. |image10| image:: ../../../resources/images/en/article/1/search-result.png
+.. |image0| image:: /images/en/article/1/architecture.png
+.. |image1| image:: /images/en/article/1/fess-download.png
+.. |image2| image:: /images/en/article/1/top.png
+.. |image3| image:: /images/en/article/1/login.png
+.. |image4| image:: /images/en/article/1/web-crawl-conf-1.png
+.. |image5| image:: /images/en/article/1/web-crawl-conf-2.png
+.. |image6| image:: /images/en/article/1/web-crawl-conf-3.png
+.. |image7| image:: /images/en/article/1/crawl-schedule-conf.png
+.. |image8| image:: /images/en/article/1/session-info-1.png
+.. |image9| image:: /images/en/article/1/session-info-2.png
+.. |image10| image:: /images/en/article/1/search-result.png

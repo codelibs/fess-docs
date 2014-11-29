@@ -144,5 +144,5 @@ Fess
 
 レプリケーション機能を有効にした場合に、スナップショットパスとして指定されたインデックスディレクトリからインデックス情報をコピーして適用されます。
 
-.. |image0| image:: ../../../resources/images/ja/2.0/crawl-1.png
-.. |image1| image:: ../../../resources/images/ja/2.0/crawl-2.png
+.. |image0| image:: /images/ja/2.0/crawl-1.png
+.. |image1| image:: /images/ja/2.0/crawl-2.png

@@ -57,5 +57,5 @@ To specify a session ID, you can see crawling content.
 
 -  \* IndexSize: number of documents indexed
 
-.. |image0| image:: ../../../resources/images/en/6.0/admin/crawlingSession-1.png
-.. |image1| image:: ../../../resources/images/en/6.0/admin/crawlingSession-2.png
+.. |image0| image:: /images/en/6.0/admin/crawlingSession-1.png
+.. |image1| image:: /images/en/6.0/admin/crawlingSession-2.png

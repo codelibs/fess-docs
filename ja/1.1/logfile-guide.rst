@@ -22,4 +22,4 @@
 
 表示されているログファイル名をクリックすると、ログファイルをダウンロードすることができます。
 
-.. |セッション情報| image:: ../../images/ja/fess_admin_logfile.png
+.. |セッション情報| image:: /images/ja/fess_admin_logfile.png

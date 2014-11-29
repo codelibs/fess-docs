@@ -93,5 +93,5 @@ Table: JSP file that you can edit
 
 You can to edit for PCs and similar portable screen.
 
-.. |image0| image:: ../../../resources/images/en/8.0/admin/design-1.png
-.. |image1| image:: ../../../resources/images/en/8.0/admin/design-2.png
+.. |image0| image:: /images/en/8.0/admin/design-1.png
+.. |image1| image:: /images/en/8.0/admin/design-2.png

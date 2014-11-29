@@ -28,4 +28,4 @@ Users list
 Lists the ID of the user. You can select the search logs or popular URL
 links, to see a list of each log.
 
-.. |image0| image:: ../../../resources/images/en/7.0/admin/userInfo-1.png
+.. |image0| image:: /images/en/7.0/admin/userInfo-1.png

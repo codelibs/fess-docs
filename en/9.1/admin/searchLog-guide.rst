@@ -27,4 +27,4 @@ Search log list
 Search language and date are listed. You can review and detailed, you
 click the URL.
 
-.. |image0| image:: ../../../resources/images/en/9.1/admin/searchLog-1.png
+.. |image0| image:: /images/en/9.1/admin/searchLog-1.png

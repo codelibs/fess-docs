@@ -156,4 +156,4 @@ Fess
 
 障害回数を超えた障害 URL はクロール対象外になります。
 
-.. |image0| image:: ../../../resources/images/ja/9.1/admin/crawl-1.png
+.. |image0| image:: /images/ja/9.1/admin/crawl-1.png

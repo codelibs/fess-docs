@@ -9,7 +9,7 @@ Fess is very powerful and easily deployable Enterprise Search Server.
 You can install and run Fess quickly on any platforms, which have Java
 runtime environment. Fess is provided under Apache license.
 
-.. figure:: ../resources/images/en/demo-1.png
+.. figure:: /images/en/demo-1.png
    :scale: 100%
    :alt: Demo
    :figclass: side-by-side
@@ -71,7 +71,7 @@ News
 
 `More news... <news.html>`__
 
-.. |image0| image:: ../resources/images/en/demo-1.png
+.. |image0| image:: /images/en/demo-1.png
 
 
 .. hidden toctree

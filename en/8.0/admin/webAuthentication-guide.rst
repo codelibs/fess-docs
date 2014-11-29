@@ -78,4 +78,4 @@ Web name
 Select to apply the above authentication settings Web settings name.
 Must be registered in advance Web crawl settings.
 
-.. |image0| image:: ../../../resources/images/en/8.0/admin/webAuthentication-1.png
+.. |image0| image:: /images/en/8.0/admin/webAuthentication-1.png

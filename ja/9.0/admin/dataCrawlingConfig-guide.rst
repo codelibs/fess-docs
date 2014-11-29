@@ -150,4 +150,4 @@ webapps/fess/WEB-INF/classes/app.dicon に以下のように設定してくだ�
                 "tstamp", "title", "digest", "url", "latitude_s","longitude_s" }</property>
         </component>
 
-.. |image0| image:: ../../../resources/images/ja/9.0/admin/dataStoreCrawling-1.png
+.. |image0| image:: /images/ja/9.0/admin/dataStoreCrawling-1.png

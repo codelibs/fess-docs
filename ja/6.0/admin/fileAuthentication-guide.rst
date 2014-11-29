@@ -66,4 +66,4 @@ Fess は Windows の共有フォルダに対するクロールに対応してい
 上記の認証設定を適用するファイルシステム設定名を選択します。
 ファイルシステムクロール設定を事前に登録しておく必要があります。
 
-.. |image0| image:: ../../../resources/images/ja/6.0/admin/fileAuthentication-1.png
+.. |image0| image:: /images/ja/6.0/admin/fileAuthentication-1.png

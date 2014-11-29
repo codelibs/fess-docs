@@ -23,4 +23,4 @@
 
 表示されているログファイル名をクリックすると、ログファイルをダウンロードすることができます。
 
-.. |image0| image:: ../../../resources/images/ja/9.1/admin/log-1.png
+.. |image0| image:: /images/ja/9.1/admin/log-1.png

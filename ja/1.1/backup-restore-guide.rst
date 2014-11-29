@@ -51,4 +51,4 @@ Solr
 
 データの上書きを有効にすると、既に同じデータがある場合は既存のデータの更新を行います。
 
-.. |バックアップ/リストア| image:: ../../images/ja/fess_admin_backuprestore.png
+.. |バックアップ/リストア| image:: /images/ja/fess_admin_backuprestore.png

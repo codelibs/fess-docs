@@ -24,4 +24,4 @@ role and browser requirements is added implicitly, but do not provide
 management for search. You can document a certain remove from index from
 the search results.
 
-.. |image0| image:: ../../../resources/images/en/5.0/search-1.png
+.. |image0| image:: /images/en/5.0/search-1.png

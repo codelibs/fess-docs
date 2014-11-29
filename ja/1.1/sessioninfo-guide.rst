@@ -48,5 +48,5 @@
 
 -  \*IndexSize: インデックスしたドキュメント数
 
-.. |セッション情報一覧| image:: ../../images/ja/fess_admin_sessioninfo.png
-.. |セッション情報詳細| image:: ../../images/ja/fess_admin_sessioninfo2.png
+.. |セッション情報一覧| image:: /images/ja/fess_admin_sessioninfo.png
+.. |セッション情報詳細| image:: /images/ja/fess_admin_sessioninfo2.png

@@ -32,6 +32,6 @@
 リクエストヘッダーを付加するウェブクロール設定名を選択します。選択したクロール設定だけでリクエストヘッダーに付加されます。
 
 ..
-  .. |image0| image:: ../../../resources/images/ja/5.0/requestHeader-1.png
-  .. |image1| image:: ../../../resources/images/ja/5.0/requestHeader-2.png
+  .. |image0| image:: /images/ja/5.0/requestHeader-1.png
+  .. |image1| image:: /images/ja/5.0/requestHeader-2.png
 ..

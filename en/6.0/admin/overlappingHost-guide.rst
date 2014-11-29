@@ -40,5 +40,5 @@ Duplicate names
 Specify the host names are duplicated. Specifies the host name you want
 to replace.
 
-.. |image0| image:: ../../../resources/images/en/6.0/admin/overlappingHost-1.png
-.. |image1| image:: ../../../resources/images/en/6.0/admin/overlappingHost-2.png
+.. |image0| image:: /images/en/6.0/admin/overlappingHost-1.png
+.. |image1| image:: /images/en/6.0/admin/overlappingHost-2.png
