@@ -6,7 +6,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    9.2/install/index
    9.2/user/index
@@ -17,7 +17,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    9.1/install/index
    9.1/user/index
@@ -28,7 +28,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    9.0/install/index
    9.0/user/index
@@ -39,7 +39,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    8.0/install/index
    8.0/user/index
@@ -50,7 +50,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    7.0/install/index
    7.0/user/index
@@ -61,7 +61,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    6.0/install/index
    6.0/user/index
@@ -72,7 +72,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    5.0/user/index
    5.0/admin/index
@@ -82,7 +82,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    4.0/user/index
    4.0/admin/index
@@ -92,7 +92,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    3.0/user/index
    3.0/admin/index
@@ -102,7 +102,7 @@
 ~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    2.0/user/index
    2.0/admin/index

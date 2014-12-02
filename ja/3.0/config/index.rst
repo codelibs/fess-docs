@@ -1,12 +1,5 @@
-.. |Fess| Config documentation master file, created by
-   sphinx-quickstart on Sat Aug 16 12:01:46 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 |Fess| 設定ガイド
 ==================
-
-Contents:
 
 .. toctree::
    :maxdepth: 2
