@@ -1,5 +1,5 @@
 ===================
-Quick Startup Guide
+Quick Startup
 ===================
 
 Overview

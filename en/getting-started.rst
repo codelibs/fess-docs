@@ -1,5 +1,5 @@
 =========================
-Getting Started with |Fess| 
+Getting Started
 =========================
 
 About |Fess| UI

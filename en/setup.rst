@@ -1,5 +1,5 @@
 =================
-|Fess| Installation
+Installation
 =================
 
 How to install
