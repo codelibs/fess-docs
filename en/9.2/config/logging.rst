@@ -23,7 +23,7 @@ The following summarizes the log file to output the |Fess| .
 
 Table: Log file list
 
-</table>
+
 If you encounter problems to work check the log.
 
 Log settings

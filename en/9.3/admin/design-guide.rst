@@ -102,7 +102,7 @@ Following are examples of how to write.
 
 Table: JSP file that you can edit
 
-</table>
+
 
 .. |image0| image:: ../../../resources/images/en/9.2/admin/design-1.png
 .. |image1| image:: ../../../resources/images/en/9.2/admin/design-2.png

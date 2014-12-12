@@ -100,7 +100,7 @@ JSP
 
 Table: 編集可能なJSPファイル
 
-</table>
+
 
 .. |image0| image:: ../../../resources/images/ja/9.2/admin/design-1.png
 .. |image1| image:: ../../../resources/images/ja/9.2/admin/design-2.png

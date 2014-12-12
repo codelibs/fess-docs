@@ -62,7 +62,7 @@ for specific URL pattern.
 
 Table: URL filtering contents list
 
-</table>
+
 For example, http: URL to crawl if not crawl //localhost/ less than the
 
 ::

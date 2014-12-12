@@ -39,7 +39,7 @@ You can search for a the following fields by default.
 
 Table: Field list is available
 
-</table>
+
 If you do not specify the fields subject to find the content. Fields are
 custom fields are also available by using the dynamic field of Solr.
 

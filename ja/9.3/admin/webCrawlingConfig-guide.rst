@@ -60,7 +60,7 @@ URL のフィルタリング
 
 Table: URLフィルタリング内容一覧
 
-</table>
+
 たとえば、http://localhost/
 以下しかクロールしない場合は、クロール対象とする URL に
 
