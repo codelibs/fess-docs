@@ -20,7 +20,7 @@ webapps/fess/WEB-INF/classes/s2robot\_transformer.dicon
 
 ::
 
-    <component name="fessFileTransformer" class="jp.sf.fess.transformer. |Fess| FileTransformer" instance="singleton">
+    <component name="fessFileTransformer" class="jp.sf.fess.transformer.FessFileTransformer" instance="singleton">
        <property name="name">"fessFileTransformer"</property>
        <property name="ignoreEmptyContent">true</property>
        <property name="encoding">"Shift_JIS"</property>
