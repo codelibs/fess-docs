@@ -19,11 +19,11 @@ Following parameters is available in the standard.
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
 | options.q    | This is similar to the normal query. You can specify multiple options.q. If you specify multiple is treated as a search. Pass the URL encoding.   |
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
-| options.CQ   | Treated as exact match search queries. For example, if you specify the |Fess| Project searches as " |Fess| Project". Pass the URL encoding.            |
+| options.CQ   | Treated as exact match search queries. For example, if you specify "Fess Project" searches as "Fess Project". Pass the URL encoding.            |
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
-| options.OQ   | Is treated as an OR search. For example, if you specify the |Fess| Project search as a |Fess| OR Project. Pass the URL encoding.                      |
+| options.OQ   | Is treated as an OR search. For example, if you specify "Fess Project" search as "Fess OR Project". Pass the URL encoding.                      |
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
-| options.NQ   | Treated as NOT search. For example, if you specify ' |Fess| ' search as NOT |Fess| . Pass the URL encoding.                                              |
+| options.NQ   | Treated as NOT search. For example, if you specify 'Fess' search as "NOT Fess". Pass the URL encoding.                                              |
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Table: Request parameter
