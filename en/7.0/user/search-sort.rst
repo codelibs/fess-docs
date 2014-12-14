@@ -39,23 +39,23 @@ You can select the sorting criteria when you search.
 Also, for sorting in the search field sort: the field name to sort and
 field names separated by colon (:) fill out the search form, the search.
 
-In ascending order sort the content size as a search term, |Fess| is
+In ascending order sort the content size as a search term, fess is
 below.
 
 ::
 
-|Fess| sort:contentLength
+fess sort:contentLength
 
 To sort in descending order as below.
 
 ::
 
-|Fess| sort:contentLength.desc
+fess sort:contentLength.desc
 
 If you sort by multiple fields separated list, shown below.
 
 ::
 
-|Fess| sort:contentLength.desc,lastModified
+fess sort:contentLength.desc,lastModified
 
 .. |image0| image:: ../../../resources/images/en/7.0/user/search-sort-1.png

@@ -22,20 +22,20 @@
 
 ソートをする場合は、「sort:フィールド名」のように検索フォームに入力して検索します。
 
-以下は |Fess| を検索語として、コンテンツサイズを昇順にソートします。
+以下は fess を検索語として、コンテンツサイズを昇順にソートします。
 
 ::
 
-|Fess| sort:contentLength
+fess sort:contentLength
 
 降順にソートする場合は以下のようにします。
 
 ::
 
-|Fess| sort:contentLength.desc
+fess sort:contentLength.desc
 
 複数のフィールドでソートする場合は以下のように , 区切りで指定します。
 
 ::
 
-|Fess| sort:contentLength.desc,lastModified
+fess sort:contentLength.desc,lastModified

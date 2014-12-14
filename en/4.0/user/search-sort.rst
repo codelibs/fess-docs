@@ -25,21 +25,21 @@ How to sort
 If you want to sort ' sort: field name ' in to fill out the search form,
 the search.
 
-In ascending order sort the content size as a search term, |Fess| is
+In ascending order sort the content size as a search term, fess is
 below.
 
 ::
 
-|Fess| sort:contentLength
+fess sort:contentLength
 
 To sort in descending order as below.
 
 ::
 
-|Fess| sort:contentLength.desc
+fess sort:contentLength.desc
 
 If you sort by multiple fields separated list, shown below.
 
 ::
 
-|Fess| sort:contentLength.desc,lastModified
+fess sort:contentLength.desc,lastModified
