@@ -203,7 +203,7 @@ To search from indexing
 Also indexed for search in the State immediately after the launch, make
 a search returned nothing results. So, you must first create the index.
 In this
-case,\ `http:// |Fess| .codelibs.org/ja/ <http://fess.codelibs.org/ja/>`__
+case,\ `http://fess.codelibs.org/ja/ <http://fess.codelibs.org/ja/>`__
 Create index to below, to do a search as an example.
 
 Login to the management page
@@ -228,7 +228,7 @@ Select the [new]
 |image4|
 
 As a Web crawl settings, this
-is\ `http:// |Fess| .codelibs.org/ja/ <http://fess.codelibs.org/ja/>`__ That
+is\ `http://fess.codelibs.org/ja/ <http://fess.codelibs.org/ja/>`__ That
 will crawl all the pages below. In addition, results are displayed when
 you search from any PC or mobile phone, and then select all as the
 browser type.

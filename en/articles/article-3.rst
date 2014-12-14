@@ -269,13 +269,13 @@ Add a crawl settings
 Create a crawl. This time the users in the sales department
 role\ `http://www.n9sm.NET/ <http://www.n2sm.net/>`__\ Only, you can
 search for users of the technology of
-roll\ `http:// |Fess| .codelibs.org/ <http://fess.codelibs.org/>`__\ Just so
+roll\ `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__\ Just so
 that you can find. In order to crawl settings, click on the left menu
 [Web], lists the Web crawl settings. Click the [create new], please
 create a Web crawl settings. First of all, sales for
 the\ `http://www.n2sm.NET/ <http://www.n2sm.net/>`__\ To the Sales
 Department, select [role] item as the crawl settings, create. In the
-following\ `http:// |Fess| .codelibs.org/ <http://fess.codelibs.org/>`__\ The
+following\ `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__\ The
 create a role Select technology, in the crawl settings.
 
 Web crawl settings roll items
@@ -304,7 +304,7 @@ Search screen in the sales role
 
 Taro user logout, please login with hanako users. Destination and so
 have eng role hanako users as well as search
-and\ `http:// |Fess| .codelibs.org/ <http://fess.codelibs.org/>`__\ The only
+and\ `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__\ The only
 search results are displayed.
 
 in the Eng role search screen

@@ -23,7 +23,7 @@ Download, professional services, support, and other developer
 information, visit the following.
 
 -  Project site:
-   `http:// |Fess| .codelibs.org/ <http://fess.codelibs.org/>`__
+   `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__
 
 Technical support contact information
 =====================================
