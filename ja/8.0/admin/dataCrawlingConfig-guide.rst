@@ -93,7 +93,7 @@ Table: DB用設定パラメータ例
     digest=content
     anchor=
     contentLength=content.length()
-    lastModified=@jp.sf.fess.taglib. |Fess| Functions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    lastModified=@jp.sf.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
     location=latitude + "," + longitude
     latitude_s=latitude
     longitude_s=longitude
