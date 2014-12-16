@@ -71,7 +71,7 @@ Support browser
 
 Management UI to support browser as follows.
 
--  Internet Explorer 7 or higher
+-  Internet Explorer 8 or higher
 
 -  Firefox 4 or more
 

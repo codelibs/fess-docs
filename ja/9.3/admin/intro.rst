@@ -60,7 +60,7 @@ Inc. <http://www.n2sm.net/>`__\ にご相談ください。
 
 管理 UI がサポートするブラウザは以下の通りです。
 
--  Internet Explorer 7 以上
+-  Internet Explorer 8 以上
 
 -  Firefox 4 以上
 
