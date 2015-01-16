@@ -44,13 +44,13 @@
 XML応答
 -------
 
-XML形式で検索結果が取得可能になります。http://localhost:8080/fess/xml?query=検索語
+XML形式で検索結果が取得可能になります。``http://localhost:8080/fess/xml?query=検索語``
 にアクセスすることで取得できます。
 
 JSON応答
 --------
 
-JSON形式で検索結果が取得可能になります。http://localhost:8080/fess/json?query=検索語
+JSON形式で検索結果が取得可能になります。``http://localhost:8080/fess/json?query=検索語``
 にアクセスすることで取得できます。
 
 デフォルトラベル値
@@ -66,7 +66,7 @@ JSON形式で検索結果が取得可能になります。http://localhost:8080/
 注目キーワード応答
 ------------------
 
-JSON形式で検索が多い検索語が取得可能になります。http://localhost:8080/fess/json?type=hotsearchword
+JSON形式で検索が多い検索語が取得可能になります。``http://localhost:8080/fess/json?type=hotsearchword``
 にアクセスすることで取得できます。
 
 指定日数以前の検索ログ削除

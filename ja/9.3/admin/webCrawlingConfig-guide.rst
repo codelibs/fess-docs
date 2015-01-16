@@ -61,7 +61,7 @@ URL のフィルタリング
 Table: URLフィルタリング内容一覧
 
 
-たとえば、http://localhost/
+たとえば、``http://localhost/``
 以下しかクロールしない場合は、クロール対象とする URL に
 
 ::

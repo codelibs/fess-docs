@@ -47,7 +47,7 @@ solr/core1/conf/solrconfig.xml の以下の箇所を変更します。
 
 ::
 
-    <arg>http://localhost:8080/solr/core1-suggest</arg>
+    <arg>"http://localhost:8080/solr/core1-suggest"</arg>
 
 **注: Tomcat
 のポートを変更した場合は上記のポートを同様に変更しないと、Solr
