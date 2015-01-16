@@ -38,7 +38,7 @@ Table: リクエストパラメータ
     <response>
       <version>1</version>
       <status>0</status>
-      <query> |Fess| </query>
+      <query>Fess</query>
       <exec-time>0.64</exec-time>
       <page-size>20</page-size>
       <page-number>1</page-number>
@@ -48,7 +48,7 @@ Table: リクエストパラメータ
         <doc>
           <created>2014-05-24T15:13:27.692+0900</created>
           <doc-id>d55275b552da44999cafe118aa8fed62</doc-id>
-          <title> |Fess| &#12398;&#12452;&#12531;...</title>
+          <title>Fess&#12398;&#12452;&#12531;...</title>
           <url>http://fess.codelibs.org/ja/setup.html</url>
           <score>0.83177954</score>
           <site>fess.codelibs.org/ja/setup.html</site>
