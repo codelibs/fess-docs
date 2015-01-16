@@ -17,13 +17,15 @@
    fileCrawlingConfig-guide
    dataCrawlingConfig-guide
    labelType-guide
+   keyMatch-guide
+   documentBoost-guide
    pathMapping-guide
    webAuthentication-guide
    fileAuthentication-guide
    requestHeader-guide
    overlappingHost-guide
    roleType-guide
-   browserType-guide
+   suggestWord-guide
    systemInfo-guide
    jobLog-guide
    crawlingSession-guide

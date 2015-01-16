@@ -222,47 +222,49 @@ htmlhelp_basename = project + 'doc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-'papersize': 'a4paper',
-'pointsize': '10pt',
-'classoptions': ',dvipdfmx',
-'transition': '',
-'extraclassoptions': ',openany,oneside',
-'classoptions': ',dvipdfmx',
-'babel': '\usepackage[japanese]{babel}',
-#'preamble': '',
+    'papersize': 'a4paper',
+    'pointsize': '10pt',
+    'transition': '',
+    'extraclassoptions': ',openany,oneside',
+    'babel': '\usepackage[japanese]{babel}',
+#    'figure_align': 'here',
+#    'preamble': '',
 }
-
-latex_elements['preamble'] = r'''
-\usepackage[export]{adjustbox}
-\usepackage{letltxmacro}
-\LetLtxMacro{\origincludegraphics}{\includegraphics}
-\renewcommand*\includegraphics[2][clip,scale=0.5,max width=\textwidth,max height=\textheight,keepaspectratio]{%
-\begin{minipage}{\columnwidth}
-\begin{wrapfigure}{r}{\columnwidth}
-\origincludegraphics[#1]{#2}
-\end{wrapfigure}
-\end{minipage}
-}
-\let\OrigVerbatim\OriginalVerbatim
-\renewcommand{\OriginalVerbatim}[1][1]{\OrigVerbatim[#1,frame=single]}
-'''
 
 #latex_elements['preamble'] = r'''
 #\usepackage[export]{adjustbox}
 #\usepackage{letltxmacro}
 #\LetLtxMacro{\origincludegraphics}{\includegraphics}
 #\renewcommand*\includegraphics[2][clip,scale=0.5,max width=\textwidth,max height=\textheight,keepaspectratio]{%
-#\begin{figure}[htbp]
+#\begin{minipage}{\columnwidth}
+#\begin{wrapfigure}{r}{\columnwidth}
 #\origincludegraphics[#1]{#2}
-#\end{figure}
+#\end{wrapfigure}
+#\end{minipage}
 #}
+#\let\OrigVerbatim\OriginalVerbatim
+#\renewcommand{\OriginalVerbatim}[1][1]{\OrigVerbatim[#1,frame=single]}
 #'''
+
+latex_elements['preamble'] = r'''
+\usepackage{here}
+\usepackage[export]{adjustbox}
+\usepackage{letltxmacro}
+\LetLtxMacro{\origincludegraphics}{\includegraphics}
+\renewcommand*\includegraphics[2][clip,scale=0.6,max width=\textwidth,max height=\textheight,keepaspectratio]{%
+\begin{figure}[H]
+\origincludegraphics[#1]{#2}
+\end{figure}
+}
+\let\OrigVerbatim\OriginalVerbatim
+\renewcommand{\OriginalVerbatim}[1][1]{\OrigVerbatim[#1,frame=single]}
+'''
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('toc', project+'.tex', title,
+  ('index', project+'.tex', title,
    author, 'manual'),
 ]
 

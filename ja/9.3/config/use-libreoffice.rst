@@ -25,8 +25,8 @@ jar ファイルを |Fess| サーバーにコピーします。
     jodconverter-core-3.0-beta-4/lib/ridl-3.2.1.jar \
     jodconverter-core-3.0-beta-4/lib/unoil-3.2.1.jar \
     jodconverter-core-3.0-beta-4/lib/jodconverter-core-3.0-beta-4.jar \
-    fess-server-9.2.0/webapps/fess/WEB-INF/cmd/lib/
-    $ cd fess-server-9.2.0/
+    fess-server-9.3.0/webapps/fess/WEB-INF/cmd/lib/
+    $ cd fess-server-9.3.0/
 
 次にs2robot\_extractor.diconを作成します。
 

@@ -42,11 +42,11 @@ webapps\\fess\\WEB-INF\\classes\\fess.dicon を編集して、-server
 
 まず、 |Fess| のインストール後、コマンドプロンプトから service.bat
 を実行します (Vista などでは管理者として起動する必要があります)。 |Fess| は
-C:\\Java\\fess-server-9.2.0 にインストールしたものとします。
+C:\\Java\\fess-server-9.3.0 にインストールしたものとします。
 
 ::
 
-    > cd C:\Java\fess-server-9.2.0\bin
+    > cd C:\Java\fess-server-9.3.0\bin
     > service.bat install fess
     ...
     The service 'fess' has been installed.

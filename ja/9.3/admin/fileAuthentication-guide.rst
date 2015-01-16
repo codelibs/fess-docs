@@ -64,4 +64,4 @@ FS設定名
 
 上記の認証設定を適用するファイルシステムクロールの設定名を選択します。ファイルシステムクロール設定を事前に登録しておく必要があります。
 
-.. |image0| image:: ../../../resources/images/ja/9.2/admin/fileAuthentication-1.png
+.. |image0| image:: ../../../resources/images/ja/9.3/admin/fileAuthentication-1.png
