@@ -24,8 +24,6 @@ You can search for a the following fields by default.
 +-----------------+------------------------------------------------+
 | host            | Were included in the crawl URL host name       |
 +-----------------+------------------------------------------------+
-| site            | Site name was included in the crawl URL        |
-+-----------------+------------------------------------------------+
 | title           | Title                                          |
 +-----------------+------------------------------------------------+
 | content         | Text                                           |
