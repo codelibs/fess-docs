@@ -18,7 +18,7 @@
    dataCrawlingConfig-guide
    labelType-guide
    keyMatch-guide
-   documentBoost-guide
+   boostDocumentRule-guide
    pathMapping-guide
    webAuthentication-guide
    fileAuthentication-guide
