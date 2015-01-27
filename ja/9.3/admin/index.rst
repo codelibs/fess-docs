@@ -25,7 +25,8 @@
    requestHeader-guide
    overlappingHost-guide
    roleType-guide
-   suggestWord-guide
+   suggestElevateWord-guide
+   suggestBadWord-guide
    systemInfo-guide
    jobLog-guide
    crawlingSession-guide
