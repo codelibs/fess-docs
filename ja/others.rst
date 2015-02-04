@@ -9,6 +9,8 @@
    利用サイト <users>
    ライセンス <license>
    FAQ <faq>
+   フォーラム <https://sourceforge.jp/projects/fess/forums/>
+   メーリングリスト <https://sourceforge.jp/projects/fess/lists/>
    関連プロジェクト <supporting-projects>
    対応ファイル形式 <supported-files>
    商用サポート <support-services>
