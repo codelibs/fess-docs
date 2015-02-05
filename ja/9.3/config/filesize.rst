@@ -19,7 +19,7 @@ webapps/fess/WEB-INF/classes/s2robot\_contentlength.dicon
             "http://www.seasar.org/dtd/components24.dtd">
     <components>
             <component name="contentLengthHelper"
-                class="org.seasar.robot.helper.ContentLengthHelper" instance="singleton" >
+                class="org.codelibs.robot.helper.ContentLengthHelper" instance="singleton" >
                     <property name="defaultMaxLength">10485760L</property><!-- 10M -->
                     <initMethod name="addMaxLength">
                             <arg>"text/html"</arg>

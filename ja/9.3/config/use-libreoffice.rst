@@ -42,23 +42,23 @@ s2robot\_extractor.diconは以下のような内容でjodExtractorを有効に�
     <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
         "http://www.seasar.org/dtd/components24.dtd">
     <components>
-        <component name="tikaExtractor" class="org.seasar.robot.extractor.impl.TikaExtractor"/>
+        <component name="tikaExtractor" class="org.codelibs.robot.extractor.impl.TikaExtractor"/>
         <component name="msWordExtractor"
-            class="org.seasar.robot.extractor.impl.MsWordExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsWordExtractor"/>
         <component name="msExcelExtractor"
-            class="org.seasar.robot.extractor.impl.MsExcelExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsExcelExtractor"/>
         <component name="msPowerPointExtractor"
-            class="org.seasar.robot.extractor.impl.MsPowerPointExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsPowerPointExtractor"/>
         <component name="msPublisherExtractor"
-            class="org.seasar.robot.extractor.impl.MsPublisherExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsPublisherExtractor"/>
         <component name="msVisioExtractor"
-            class="org.seasar.robot.extractor.impl.MsVisioExtractor"/>
-        <component name="pdfExtractor" class="org.seasar.robot.extractor.impl.PdfExtractor"/>
-        <component name="textExtractor" class="org.seasar.robot.extractor.impl.TextExtractor"/>
-        <component name="htmlExtractor" class="org.seasar.robot.extractor.impl.HtmlExtractor"/>
-        <component name="xmlExtractor" class="org.seasar.robot.extractor.impl.XmlExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsVisioExtractor"/>
+        <component name="pdfExtractor" class="org.codelibs.robot.extractor.impl.PdfExtractor"/>
+        <component name="textExtractor" class="org.codelibs.robot.extractor.impl.TextExtractor"/>
+        <component name="htmlExtractor" class="org.codelibs.robot.extractor.impl.HtmlExtractor"/>
+        <component name="xmlExtractor" class="org.codelibs.robot.extractor.impl.XmlExtractor"/>
         <component name="htmlXpathExtractor"
-            class="org.seasar.robot.extractor.impl.HtmlXpathExtractor">
+            class="org.codelibs.robot.extractor.impl.HtmlXpathExtractor">
             <initMethod name="addFeature">
                 <arg>"http://xml.org/sax/features/namespaces"</arg>
                 <arg>"false"</arg>
@@ -68,14 +68,14 @@ s2robot\_extractor.diconは以下のような内容でjodExtractorを有効に�
             class="org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration">
         </component>
         <component name="jodExtractor"
-            class="org.seasar.robot.extractor.impl.JodExtractor">
+            class="org.codelibs.robot.extractor.impl.JodExtractor">
             <property name="officeManager">
                 officeManagerConfiguration.setOfficeHome("/usr/lib/libreoffice")
                     .buildOfficeManager()
             </property>
         </component>
         
-        <component name="extractorFactory" class="org.seasar.robot.extractor.ExtractorFactory">
+        <component name="extractorFactory" class="org.codelibs.robot.extractor.ExtractorFactory">
             <initMethod name="addExtractor">
                 <arg>{
     "application/msword",

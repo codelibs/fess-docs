@@ -21,18 +21,18 @@
     <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
         "http://www.seasar.org/dtd/components24.dtd">
     <components>
-        <component name="tikaExtractor" class="org.seasar.robot.extractor.impl.TikaExtractor"/>
+        <component name="tikaExtractor" class="org.codelibs.robot.extractor.impl.TikaExtractor"/>
         <component name="msWordExtractor"
-            class="org.seasar.robot.extractor.impl.MsWordExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsWordExtractor"/>
         <component name="msExcelExtractor"
-            class="org.seasar.robot.extractor.impl.MsExcelExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsExcelExtractor"/>
         <component name="msPowerPointExtractor"
-            class="org.seasar.robot.extractor.impl.MsPowerPointExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsPowerPointExtractor"/>
         <component name="msPublisherExtractor"
-            class="org.seasar.robot.extractor.impl.MsPublisherExtractor"/>
+            class="org.codelibs.robot.extractor.impl.MsPublisherExtractor"/>
         <component name="msVisioExtractor"
-            class="org.seasar.robot.extractor.impl.MsVisioExtractor"/>
-        <component name="pdfExtractor" class="org.seasar.robot.extractor.impl.PdfExtractor">
+            class="org.codelibs.robot.extractor.impl.MsVisioExtractor"/>
+        <component name="pdfExtractor" class="org.codelibs.robot.extractor.impl.PdfExtractor">
             <initMethod name="addPassword">
                 <!-- 正規表現で対象ファイルのパスを指定 -->
                 <arg>".*test_.*.pdf"</arg>
@@ -40,11 +40,11 @@
                 <arg>"pass"</arg>
             </initMethod>
         </component>
-        <component name="textExtractor" class="org.seasar.robot.extractor.impl.TextExtractor"/>
-        <component name="htmlExtractor" class="org.seasar.robot.extractor.impl.HtmlExtractor"/>
-        <component name="xmlExtractor" class="org.seasar.robot.extractor.impl.XmlExtractor"/>
+        <component name="textExtractor" class="org.codelibs.robot.extractor.impl.TextExtractor"/>
+        <component name="htmlExtractor" class="org.codelibs.robot.extractor.impl.HtmlExtractor"/>
+        <component name="xmlExtractor" class="org.codelibs.robot.extractor.impl.XmlExtractor"/>
         <component name="htmlXpathExtractor"
-            class="org.seasar.robot.extractor.impl.HtmlXpathExtractor">
+            class="org.codelibs.robot.extractor.impl.HtmlXpathExtractor">
             <initMethod name="addFeature">
                 <arg>"http://xml.org/sax/features/namespaces"</arg>
                 <arg>"false"</arg>
@@ -59,10 +59,10 @@
 ::
 
     ...
-        <component name="fsFileRule" class="org.seasar.robot.rule.impl.RegexRule" >
+        <component name="fsFileRule" class="org.codelibs.robot.rule.impl.RegexRule" >
             <property name="ruleId">"fsFileRule"</property>
             <property name="responseProcessor">
-                <component class="org.seasar.robot.processor.impl.DefaultResponseProcessor">
+                <component class="org.codelibs.robot.processor.impl.DefaultResponseProcessor">
                     <property name="transformer">fessFileTransformer</property>
                 </component>
             </property>
