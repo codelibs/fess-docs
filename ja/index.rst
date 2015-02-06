@@ -87,6 +87,9 @@
 ニュース
 ========
 
+2015-02-06
+    Fess 9.3.3 リリース
+
 2014-11-06
     `Fess 9.3
     リリース <http://sourceforge.jp/projects/fess/news/24783>`__
@@ -94,10 +97,6 @@
 2014-06-28
     `Fess 9.2
     リリース <http://sourceforge.jp/projects/fess/news/24682>`__
-
-2014-03-26
-    `Fess 9.1
-    リリース <http://sourceforge.jp/projects/fess/news/24607>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 

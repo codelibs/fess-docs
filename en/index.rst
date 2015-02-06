@@ -57,16 +57,15 @@ Features
 News
 ====
 
+2015-02-06
+    Fess 9.3.3 Released
+
 2014-11-06
     `Fess 9.3
     Released <https://sourceforge.jp/projects/fess/releases/62196>`__
 
 2014-06-28
     `Fess 9.2
-    Released <https://sourceforge.jp/projects/fess/releases/?package_id=9987>`__
-
-2014-03-26
-    `Fess 9.1
     Released <https://sourceforge.jp/projects/fess/releases/?package_id=9987>`__
 
 `More news... <news.html>`__
