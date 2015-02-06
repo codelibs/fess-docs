@@ -1,5 +1,5 @@
 ====================================
-Open Source Enterprise Search Server
+Open Source Enterprise Search Server: |Fess|
 ====================================
 
 What is |Fess| ?
