@@ -20,16 +20,16 @@ other\_t = hoge のように記述することで hoge カラムのデータを 
 other\_t フィールドに入れることができます。
 
 次にダイナミックフィールドに保存されたデータを検索するためには
-webapps/fess/WEB-INF/classes/app.dicon
+webapps/|fess_context_name|/WEB-INF/classes/app.dicon
 に利用するフィールドを追加する必要があります。以下のように other\_t
 を追加します。
 
 ::
 
-        <component name="queryHelper" class="jp.sf.fess.helper.impl.QueryHelperImpl">
-            <property name="searchFields">new String[]{"url", "host", "site",
-                "title", "content", "contentLength", "lastModified", "mimetype",
-                "label", "segment", "other_t" }</property>
+        <component name="queryHelper" class="jp.sf.fess.helper.QueryHelper">
+            <property name="searchFields">new String[]{"url", "docId", "host", 
+                "title", "content", "contentLength", "lastModified", "mimetype", "filetype_s",
+                "label", "segment", "lang_s", "other_t" }</property>
         </component>
 
 また、ダイナミックフィールドに保存されたデータを Solr
@@ -38,10 +38,12 @@ other\_t を追加します。
 
 ::
 
-        <component name="queryHelper" class="jp.sf.fess.helper.impl.QueryHelperImpl">
-           <property name="responseFields">new String[]{"id", "score", "boost",
-                "contentLength", "host", "site", "lastModified", "mimetype",
-                "tstamp", "title", "digest", "url", "other_t" }</property>
+        <component name="queryHelper" class="jp.sf.fess.helper.QueryHelper">
+            <property name="responseFields">new String[]{ "id", "docId", "score",
+                "boost", "contentLength", "host", "site", "lastModified",
+                "mimetype", "filetype_s", "created", "title", "digest", "url",
+                "clickCount_l_x_dv", "favoriteCount_l_x_dv",
+                "cid_s", "lang_s", "hasCache_s_s", "other_t" }</property>
         </component>
 
 上記の設定で Solr から値を取得できているので、ページ上に表示するために

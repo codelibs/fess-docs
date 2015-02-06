@@ -5,11 +5,10 @@
 ファイルサイズの設定方法
 ========================
 
-|Fess| 
-のクロールするファイルサイズ上限を指定することができます。デフォルトでは
-HTML ファイルは 2.5M バイト、それ以外は 10M
-バイトまで処理します。扱うファイルサイズを変更したい場合は
-webapps/fess/WEB-INF/classes/s2robot\_contentlength.dicon
+|Fess| のクロールするファイルサイズ上限を指定することができます。
+デフォルトでは HTML ファイルは 2.5M バイト、それ以外は 10M バイトまで処理します。
+扱うファイルサイズを変更したい場合は
+webapps/|fess_context_name|/WEB-INF/classes/s2robot\_contentlength.dicon
 を編集します。標準の s2robot\_contentlength.dicon は以下の通りです。
 
 ::

@@ -8,7 +8,6 @@
    server-port
    memory-config
    proxy
-   mobile-device
    filesize
    logging
    solr-failure

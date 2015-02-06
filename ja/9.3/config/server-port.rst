@@ -31,13 +31,13 @@ Solr の設定
 のポートを変更した場合は、 |Fess| の Solr
 サーバーの参照先情報も変更する必要があります。
 
-webapps/fess/WEB-INF/classes/app.dicon の以下の箇所を変更します。
+webapps/|fess_context_name|/WEB-INF/classes/app.dicon の以下の箇所を変更します。
 
 ::
 
     <property name="managerUrl">"http://localhost:8080/manager/text/"</property>
 
-webapps/fess/WEB-INF/classes/solrlib.dicon の以下の箇所を変更します。
+webapps/|fess_context_name|/WEB-INF/classes/solrlib.dicon の以下の箇所を変更します。
 
 ::
 

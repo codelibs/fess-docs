@@ -51,7 +51,7 @@ conf/tomcat-users.xml にロールとユーザーを追加します。今回は 
 fess.diconの設定
 ----------------
 
-webapps/fess/WEB-INF/classes/fess.dicon を以下のように設定します。
+webapps/|fess_context_name|/WEB-INF/classes/fess.dicon を以下のように設定します。
 
 ::
 
@@ -68,7 +68,7 @@ defaultRoleList
 web.xmlの設定
 -------------
 
-webapps/fess/WEB-INF/web.xml を以下のように設定します。
+webapps/|fess_context_name|/WEB-INF/web.xml を以下のように設定します。
 
 ::
 
@@ -116,5 +116,5 @@ Role1 (設定名は任意)、値を role1 でロールを登録します。あ�
 ロールのログアウト
 ------------------
 
-管理者以外のロールでログインした状態で http://localhost:8080/fess/admin
+管理者以外のロールでログインした状態で http://localhost:8080/|fess_context_name|/admin
 にアクセスすると、ログアウトするかどうかの画面が表示されます。ログアウトボタンを押下することでログアウトされます。

@@ -50,17 +50,17 @@ extension/mysql にあります。
     $ mysql -u fess_user --password=fess_pass fess_db < extension/mysql/fess.ddl 
     $ mysql -u s2robot --password=s2robot fess_robot < extension/mysql/robot.ddl 
 
-webapps/fess/WEB-INF/lib に mysql ドライバの jar を配置します。
+webapps/|fess_context_name|/WEB-INF/lib に mysql ドライバの jar を配置します。
 
 ::
 
-    $ cd webapps/fess/WEB-INF/lib/
+    $ cd webapps/|fess_context_name|/WEB-INF/lib/
     $ rm h2-1.*.jar 
     $ wget http://mirrors.ibiblio.org/pub/mirrors/maven2/mysql/mysql-connector-java/5.1.18/ \
     mysql-connector-java-5.1.18.jar
     $ cd ../../../../
 
-webapps/fess/WEB-INF/classes/jdbc.dicon を編集します。
+webapps/|fess_context_name|/WEB-INF/classes/jdbc.dicon を編集します。
 
 ::
 
@@ -100,7 +100,7 @@ webapps/fess/WEB-INF/classes/jdbc.dicon を編集します。
         />
     </components>
 
-webapps/fess/WEB-INF/classes/s2robot\_jdbc.dicon を編集します。
+webapps/|fess_context_name|/WEB-INF/classes/s2robot\_jdbc.dicon を編集します。
 
 ::
 

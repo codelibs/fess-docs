@@ -27,8 +27,8 @@
     <requestHandler name="/replication" >
         <lst name="master">
             <str name="replicateAfter">startup</str>
-            <str name="replicateAfter">optimize</str>
-            <str name="backupAfter">optimize</str>
+            <str name="replicateAfter">commit</str>
+            <str name="backupAfter">commit</str>
             <str name="confFiles">schema.xml,stopwords.txt,stopwords_ja.txt,elevate.xml,
                 stoptags_ja.txt,synonyms.txt,mapping_ja.txt,mapping-FoldToASCII.txt,
                 mapping-ISOLatin1Accent.txt,protwords.txt,compositePOS.txt,spellings.txt,
@@ -70,5 +70,5 @@
 インデックスの同期
 ------------------
 
-上記までの設定で、インデックス作成用 |Fess| がクロール後、最適化
-(optimize) されると、検索用 |Fess| にインデックスがコピーされます。
+上記までの設定で、インデックス作成用 |Fess| がクロール後、コミット
+(commit) されると、検索用 |Fess| にインデックスがコピーされます。

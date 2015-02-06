@@ -21,41 +21,27 @@ Java
     java.lang.OutOfMemoryError: Java heap space
 
 発生した場合は ヒープメモリの最大値を増やしてください。
-bin/setenv.[sh\|bat] に -Xmx1g のように変更します(この場合は最大値を 1G
-に設定)。
+bin/setenv.[sh\|bat] に -Xmx2g のように変更します(この場合はヒープメモリの最大値を 2G に設定)。
 
 ::
 
-    Windowsの場合
-    ...-server -Xmx1g
+    ... -Xmx2g ...
 
-    Unixの場合
-    ...-server -Xmx1g"
-
-クローラ側のメモリー最大値変更
+クローラ側のヒープメモリー最大値変更
 ==============================
 
-クローラ側のメモリーの最大値も変更可能です。デフォルトでは、512Mとなっています。
+クローラ側のヒープメモリーの最大値も変更可能です。
+デフォルトでは、256Mとなっています。
+ファイルシステムなどを激しくクロールする場合は増やす必要があります。
 
-変更するには、webapps/fess/WEB-INF/classes/fess.dicon の
+変更するには、webapps/|fess_context_name|/WEB-INF/classes/fess.dicon の
 crawlerJavaOptions のコメントアウトを外し、-Xmx1g
 のように変更します(この場合は最大値を 1G に設定)。
 
 ::
 
             <property name="crawlerJavaOptions">new String[] {
-    "-Djava.awt.headless=true",
-    "-server",
+    ...
     "-Xmx1g",
-    "-XX:MaxPermSize=128m",
-    "-XX:-UseGCOverheadLimit",
-    "-XX:+UseConcMarkSweepGC",
-    "-XX:CMSInitiatingOccupancyFraction=75",
-    "-XX:+CMSIncrementalMode",
-    "-XX:+CMSIncrementalPacing",
-    "-XX:CMSIncrementalDutyCycleMin=0",
-    "-XX:+UseParNewGC",
-    "-XX:+UseStringCache",
-    "-XX:+UseTLAB",
-    "-XX:+DisableExplicitGC"
+    ...
     }</property>

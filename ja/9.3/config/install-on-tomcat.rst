@@ -32,7 +32,7 @@ Tomcat に依存していないので、任意の Java
     cp $FESS_HOME/conf/server.xml $TOMCAT_HOME/conf
     cp -r $FESS_HOME/solr $TOMCAT_HOME/
     cp -r $FESS_HOME/webapps/solr $TOMCAT_HOME/webapps
-    cp -r $FESS_HOME/webapps/fess $TOMCAT_HOME/webapps
+    cp -r $FESS_HOME/webapps/|fess_context_name| $TOMCAT_HOME/webapps
     # 以下は省略可
     cp $FESS_HOME/bin/crawler.sh $TOMCAT_HOME/bin
     cp $FESS_HOME/bin/service.bat $TOMCAT_HOME/bin
@@ -43,5 +43,5 @@ Tomcat に依存していないので、任意の Java
 起動
 ====
 
-startup.\* で通常の Tomcat と同様に起動して http://localhost:8080/fess/
+startup.\* で通常の Tomcat と同様に起動して http://localhost:8080/|fess_context_name|/
 にアクセスします。
