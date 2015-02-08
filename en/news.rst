@@ -6,7 +6,8 @@ News
 ====
 
 2015-02-06
-    Fess 9.3.3 Released
+    `Fess 9.3.3
+    Released <https://sourceforge.jp/projects/fess/releases/62196>`__
 
 2014-11-06
     `Fess 9.3
