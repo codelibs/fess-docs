@@ -388,6 +388,6 @@ APIを利用することでブラウザベースのアプリケーションに�
 
 -  `jQuery <http://jquery.com/>`__
 
-.. |image0| image:: ../../../resources/images/ja/article/4/sameorigin.png
-.. |image1| image:: ../../../resources/images/ja/article/4/searchform.png
-.. |image2| image:: ../../../resources/images/ja/article/4/searchresult.png
+.. |image0| image:: ../../resources/images/ja/article/4/sameorigin.png
+.. |image1| image:: ../../resources/images/ja/article/4/searchform.png
+.. |image2| image:: ../../resources/images/ja/article/4/searchresult.png

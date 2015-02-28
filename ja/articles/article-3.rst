@@ -282,7 +282,7 @@ J2EEの認証情報を用いたロールベース検索を中心に説明しま�
 
 -  `Fess <http://fess.codelibs.org/ja/>`__
 
-.. |image0| image:: ../../../resources/images/ja/article/3/logout.png
-.. |image1| image:: ../../../resources/images/ja/article/3/crawl-conf-role.png
-.. |image2| image:: ../../../resources/images/ja/article/3/search-by-sales.png
-.. |image3| image:: ../../../resources/images/ja/article/3/search-by-eng.png
+.. |image0| image:: ../../resources/images/ja/article/3/logout.png
+.. |image1| image:: ../../resources/images/ja/article/3/crawl-conf-role.png
+.. |image2| image:: ../../resources/images/ja/article/3/search-by-sales.png
+.. |image3| image:: ../../resources/images/ja/article/3/search-by-eng.png
