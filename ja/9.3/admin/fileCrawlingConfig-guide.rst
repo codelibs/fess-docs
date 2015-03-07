@@ -32,7 +32,7 @@
 パスの指定
 ----------
 
-パスは複数指定できます。file: または smb:
+パスは複数指定できます。file:、ftp: または smb:
 で始まるように指定します。たとえば、
 
 ::
@@ -40,6 +40,7 @@
     file:/home/taro/
     file:/home/documents/
     smb://host1/share/
+    ftp://host1/share/
 
 のように指定します。指定されたディレクトリ以下を巡回します。
 
