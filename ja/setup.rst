@@ -25,7 +25,7 @@ JavaScriptが有効な状態でOracle社の\ `「Java SE
 Downloads」ページ <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__\ にアクセスします。
 
 ※以下の手順とはバージョンが異なりますが、\ `「Java
-7u25」 <http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html#jdk-7u25-oth-JPR>`__\ をインストールしてください(推奨)。[2014/3/13]
+8u40」<http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html#jdk-8u40-oth-JPR>`__\ をインストールしてください(推奨)。[2015/3/13]
 
 JavaSE7の「Download
 JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
