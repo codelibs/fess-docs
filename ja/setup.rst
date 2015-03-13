@@ -27,7 +27,7 @@ Downloads」ページ <http://www.oracle.com/technetwork/java/javase/downloads/i
 ※以下の手順とはバージョンが異なりますが、\ `「Java
 7u25」 <http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html#jdk-7u25-oth-JPR>`__\ をインストールしてください(推奨)。[2014/3/13]
 
-JavaSE7の「Download
+JavaSE8の「Download
 JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
 
 |image0|
@@ -125,9 +125,9 @@ JREのインストールが開始されるので、しばらく待ちます。
 
 1. [コントロールパネル]→[プログラム]→[プログラムと機能]の一覧に表示されます。
 
-   -  Java SE Development Kit 7 Update XX (64-bit)
+   -  Java SE Development Kit 8 Update XX (64-bit)
 
-   -  Java(TM) 7 Update XX (64-bit)
+   -  Java(TM) 8 Update XX (64-bit)
 
 環境変数の設定
 --------------
