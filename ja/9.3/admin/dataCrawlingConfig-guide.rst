@@ -269,4 +269,4 @@ CSVファイル内のデータは、cell[数字]で保持しています(数字�
 CSVファイルのセルにデータが存在しない場合はnullになる場合があります。
 
 
-.. |image0| image:: ../../resources/images/ja/admin/dataStoreCrawling-1.png
+.. |image0| image:: ../../../resources/images/ja/admin/dataStoreCrawling-1.png
