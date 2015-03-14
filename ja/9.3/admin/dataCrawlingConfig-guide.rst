@@ -261,7 +261,7 @@ Table: CSVファイル用設定パラメータ例
     digest=cell3
     anchor=
     contentLength=cell3.length()
-    lastModified=new java.util.Date()
+    lastModified=@jp.sf.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
 
 パラメータは「キー=値」形式になっています。
 キーはデータベースクロールの場合と同様です。
@@ -269,4 +269,4 @@ CSVファイル内のデータは、cell[数字]で保持しています(数字�
 CSVファイルのセルにデータが存在しない場合はnullになる場合があります。
 
 
-.. |image0| image:: ../../../resources/images/ja/admin/dataStoreCrawling-1.png
+.. |image0| image:: ../../../resources/images/ja/9.3/admin/dataStoreCrawling-1.png
