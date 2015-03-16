@@ -1,15 +1,15 @@
 #!/bin/bash
+SCRIPT_DIR=$(cd $(dirname $0);pwd)
+
 PROJECT="Fess"
 TITLE="Fess"
 LANG="ja"
 AUTHOR="CodeLibs"
 RELEASE="9.3"
 
-HTMLCOMPRESSOR_JAR=~/lib/htmlcompressor-1.5.3.jar
-YUICOMPRESSOR_JAR=~/lib/yuicompressor-2.4.8.jar
+HTMLCOMPRESSOR_JAR="${SCRIPT_DIR}/../libs/htmlcompressor-1.5.3.jar"
+YUICOMPRESSOR_JAR="${SCRIPT_DIR}/../libs/yuicompressor-2.4.8.jar"
 TARGET=./_build/html
-
-SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
 CONFDIR="${SCRIPT_DIR}/../conf"
 BUILDDIR="${SCRIPT_DIR}/_build"
