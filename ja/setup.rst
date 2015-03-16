@@ -25,12 +25,12 @@ JavaScriptが有効な状態でOracle社の\ `「Java SE
 Downloads」ページ <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__\ にアクセスします。
 
 ※以下の手順とはバージョンが異なりますが、\ `「Java
-8u40」<http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html#jdk-8u40-oth-JPR>`__\ をインストールしてください(推奨)。[2015/3/13]
+8u40」 <http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html#jdk-8u40-oth-JPR>`__\ をインストールしてください(推奨)。[2015/3/13]
 
 JavaSE8の「Download
 JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
 
-|image0|
+![install1](file:///home/sysadmin/fess-docs/resources/images/ja/install/install1.png)
 
 JavaScriptが有効になっているかどうかは、下記のように確認できます。(Internet
 Explorer 9 の場合)
@@ -57,7 +57,7 @@ Explorer 9 の場合)
 」を読んでライセンスに同意されたら「Accept License
 Agreement」にチェックを入れます。
 
-|image1|
+![install2](file:///home/sysadmin/fess-docs/resources/images/ja/install/install2.png)
 
 ダウンロードの開始
 ------------------
@@ -72,16 +72,16 @@ Windwos 64ビットの場合は「Windows x64」、Windows
 
 1. [コントロールパネル]→[システムとセキュリティ]→[システム]で、「システムの種類」に表示されます。
 
-|image2|
+![install3](file:///home/sysadmin/fess-docs/resources/images/ja/install/install3.png)
 
 JDKインストーラーの実行
 -----------------------
 
-ダウンロードしたJDKインストーラー (jdk-7uXX-windows-x64.exe)
+ダウンロードしたJDKインストーラー (jdk-8uXX-windows-x64.exe)
 を実行します(XXはダウンロードしたアップデートリリースのバージョン)。以下はWindows
 64ビット版の例です。
 
-|image3|
+![install_jdk1](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jdk1.png)
 
 Windowsの設定によっては、「次のプログラムにこのコンピュータへの変更を許可しますか？」というダイアログが表示されることがあります。その場合、[はい]ボタンをクリックしてください。
 
@@ -90,33 +90,33 @@ JDKのインストール
 
 インストーラが起動します。[次へ]ボタンを押します。
 
-|image4|
+![install_jdk2](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jdk2.png)
 
 インストール先のフォルダが変更できます。デフォルトのままで問題なければ、[次へ]ボタンを押します。
 
-|image5|
+![install_jdk3](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jdk3.png)
 
 JDKのインストールが開始されるので、しばらく待ちます。
 
-|image6|
+![install_jdk4](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jdk4.png)
 
 JREのインストール
 -----------------
 
 JDKのインストール後、使用のパソコンにJREがインストールされていなければ、JREのインストールが実行されます。JDK同様にインストール先のフォルダの変更が可能ですが、基本的にはJDKと同じフォルダで問題ありません。[次へ]ボタンを押します。
 
-|image7|
+![install_jre1](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jre1.png)
 
 JREのインストールが開始されるので、しばらく待ちます。
 
-|image8|
+![install_jre2](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jre2.png)
 
 インストール完了
 ----------------
 
 インストール完了のメッセージが表示されます。 [閉じる]ボタンを押します。
 
-|image9|
+![install_jre3](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jre3.png)
 
 インストール完了です。
 
@@ -161,15 +161,15 @@ Windows 7
 
 「変数名」には「JAVA\_HOME」と入力します。
 
-|image16|
+![install_jre4](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_jre4.png)
 
 「変数値」には、JDKがインストールしたディレクトリを記述します。
 
 エクスプローラで「C:\\Program
 Files\\Java」を開き、「jdk・・・」というフォルダを探して、そのアドレスを記述します。
 
-たとえばjdkのバージョン1.7.0\_XXをインストールした場合は、「C:\\Program
-Files\\Java\\jdk1.7.0\_XX」となります。(XXの部分にはインストールしたバージョンが入ります)
+たとえばjdkのバージョン1.8.0\_XXをインストールした場合は、「C:\\Program
+Files\\Java\\jdk1.8.0\_XX」となります。(XXの部分にはインストールしたバージョンが入ります)
 
 記述後、「OK」を押します。
 
@@ -192,7 +192,7 @@ http://sourceforge.jp/projects/fess/releases/ から最新の |Fess|
 
 URL先のリリースファイル一覧から「fess-server-9.x.y.zip」をクリックします。
 
-|image19|
+![install_fess1](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_fess1.png)
 
 インストール
 ------------
@@ -212,11 +212,11 @@ Unix 環境にインストールした場合、bin
 
 解凍したフォルダーをダブルクリックで開きます。
 
-|image21|
+![install_fess2](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_fess2.png)
 
 binフォルダーをダブルクリックで開きます。
 
-|image22|
+![install_fess3](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_fess3.png)
 
 |Fess| の起動
 -----------
@@ -229,7 +229,7 @@ Unix環境の場合はstartup.shを実行します。
 
     $ ./bin/startup.sh
 
-|image23|
+![install_fess4](file:///home/sysadmin/fess-docs/resources/images/ja/install/install_fess4.png)
 
 コマンドプロンプトが表示され起動されます。最後の文に「Server
 startup...」が表示されればセットアップ完了です。
