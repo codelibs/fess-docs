@@ -19,6 +19,7 @@ Analyzer の設定は solr/core1/conf/schema.xml で設定されています。
 |Fess| のデフォルトでは、fieldType 要素で name 属性が text の Analyzer が利用されています。
 
 ::
+
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
       <analyzer type="index">
         <tokenizer class="jp.sf.fess.solr.plugin.analysis.monitor.MonitoringTokenizerFactory"
@@ -64,5 +65,5 @@ type 属性が index であるものがインデクシング時に利用され�
     </fieldType>
 
 Analyzer の設定は検索に大きな影響を与えます。
-schema.xml で Analyzer の変更する場合は、Lucene の Analyzer の動きを理解した上で実施してください。
+schema.xml で Analyzer の変更する場合は、Lucene の Analyzer の動きを理解した上で実施するか、商用サポートにご相談ください。
 

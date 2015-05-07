@@ -19,5 +19,6 @@
    install-on-tomcat
    pdf-with-password
    db
+   analyzer
    geosearch
 
