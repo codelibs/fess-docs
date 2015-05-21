@@ -5,6 +5,10 @@ Open Source Full Text Search Server - |Fess|
 News
 ====
 
+2015-05-21
+    `Fess 9.4.0
+    Released <https://sourceforge.jp/projects/fess/releases/63287>`__
+
 2015-02-06
     `Fess 9.3.3
     Released <https://sourceforge.jp/projects/fess/releases/62196>`__
