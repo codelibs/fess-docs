@@ -7,14 +7,14 @@
 
 動作確認済の安定版リリースです。
 
-* Fess 9.3.3
- * `fess-server-9.3.3.zip <https://sourceforge.jp/projects/fess/downloads/62196/fess-server-9.3.3.zip/>`_
- * `fess-server-h2-9.3.3-1.el6.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/62196/fess-server-h2-9.3.3-1.el6.noarch.rpm/>`_
- * `fess-server-h2-9.3.3-1.el7.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/62196/fess-server-h2-9.3.3-1.el7.noarch.rpm/>`_
-* Fess 9.3.3 (MySQL版)
- * `fess-server-mysql-9.3.3.zip <https://sourceforge.jp/projects/fess/downloads/62196/fess-server-mysql-9.3.3.zip/>`_
- * `fess-server-mysql-9.3.3-1.el6.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/62196/fess-server-mysql-9.3.3-1.el6.noarch.rpm/>`_
- * `fess-server-mysql-9.3.3-1.el7.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/62196/fess-server-mysql-9.3.3-1.el7.noarch.rpm/>`_
+* Fess 9.4.0
+ * `fess-server-9.4.0.zip <https://sourceforge.jp/projects/fess/downloads/63287/fess-server-9.4.0.zip/>`_
+ * `fess-server-h2-9.4.0-1.el6.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/63287/fess-server-h2-9.4.0-1.el6.noarch.rpm/>`_
+ * `fess-server-h2-9.4.0-1.el7.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/63287/fess-server-h2-9.4.0-1.el7.noarch.rpm/>`_
+* Fess 9.4.0 (MySQL版)
+ * `fess-server-mysql-9.4.0.zip <https://sourceforge.jp/projects/fess/downloads/63287/fess-server-mysql-9.4.0.zip/>`_
+ * `fess-server-mysql-9.4.0-1.el6.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/63287/fess-server-mysql-9.4.0-1.el6.noarch.rpm/>`_
+ * `fess-server-mysql-9.4.0-1.el7.noarch.rpm <https://sourceforge.jp/projects/fess/downloads/63287/fess-server-mysql-9.4.0-1.el7.noarch.rpm/>`_
 
 スナップショット版リリース
 ==========================
