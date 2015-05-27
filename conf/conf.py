@@ -433,7 +433,6 @@ html_theme_options = {
     'inner_theme_name': 'bootswatch-flatly',
 
     'bootstrap_version': '3',
-    'quick_preview': False,
 
     # 'h1_size': '3.0em',
     # 'h2_size': '2.6em',
