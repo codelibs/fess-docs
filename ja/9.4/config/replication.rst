@@ -24,7 +24,7 @@
 ::
 
     ...
-    <requestHandler name="/replication" >
+    <requestHandler name="/replication" class="solr.ReplicationHandler" >
         <lst name="master">
             <str name="replicateAfter">startup</str>
             <str name="replicateAfter">commit</str>
@@ -52,7 +52,7 @@
 ::
 
     ...
-    <requestHandler name="/replication" >
+    <requestHandler name="/replication" class="solr.ReplicationHandler" >
         <lst name="slave">
             <str name="masterUrl">http://MasterServer:8080/solr/core1/replication</str>
             <str name="pollInterval">00:00:60</str>
