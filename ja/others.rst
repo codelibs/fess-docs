@@ -10,7 +10,6 @@
    メーリングリスト <https://sourceforge.jp/projects/fess/lists/>
    FAQ <faq>
    ライセンス <license>
-   利用サイト <users>
    関連プロジェクト <supporting-projects>
    対応ファイル形式 <supported-files>
    商用サポート <support-services>
