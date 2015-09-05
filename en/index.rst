@@ -57,16 +57,15 @@ Features
 News
 ====
 
+2015-09-02
+    `N2 Search 9.4.1.0 Released on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
+
 2015-05-21
     `Fess 9.4.0
     Released <https://sourceforge.jp/projects/fess/releases/63287>`__
 
 2015-02-06
     `Fess 9.3.3
-    Released <https://sourceforge.jp/projects/fess/releases/62196>`__
-
-2014-11-06
-    `Fess 9.3
     Released <https://sourceforge.jp/projects/fess/releases/62196>`__
 
 `More news... <news.html>`__

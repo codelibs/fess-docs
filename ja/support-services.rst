@@ -43,3 +43,9 @@ N2 Search
 
 - その他
 
+AWS Marketplace
+===============
+
+ドキュメント数上限等の機能制限をしてありますが、AWS Marketplace で N2 Search をご利用いただくことができます。
+`N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
+
