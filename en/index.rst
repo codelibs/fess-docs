@@ -70,6 +70,18 @@ News
 
 `More news... <news.html>`__
 
+Support Service
+===============
+
+`N2SM, Inc. <http://www.n2sm.net/en/>`__ provides support services for Fess, and also provides Enterprise Search Software, N2 Search, based on Fess.
+
+N2 Search on AWS Marketplace
+----------------------------
+
+N2 Search is available on AWS Marketplace. For more details, see `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__.
+
+
+
 .. |image0| image:: ../resources/images/en/demo-1.png
 
 
