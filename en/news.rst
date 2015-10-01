@@ -5,6 +5,10 @@ Open Source Full Text Search Server - |Fess|
 News
 ====
 
+2015-10-01
+    `Fess 9.4.2
+    Released <https://osdn.jp/projects/fess/releases/63287>`__
+
 2015-09-02
     `N2 Search 9.4.1.0 Released on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
 

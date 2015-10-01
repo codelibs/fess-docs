@@ -5,6 +5,10 @@
 ニュース一覧
 ============
 
+2015-10-01
+    `Fess 9.4.2
+    リリース <http://sourceforge.jp/projects/fess/news/25077>`__
+
 2015-09-02
     `N2 Search 9.4.1.0 on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
 
