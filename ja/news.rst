@@ -5,6 +5,9 @@
 ニュース一覧
 ============
 
+2015-11-26
+    `Fess 10.0.0 beta1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`__
+
 2015-10-01
     `Fess 9.4.2
     リリース <http://sourceforge.jp/projects/fess/news/25077>`__

@@ -87,16 +87,15 @@
 ニュース
 ========
 
+2015-11-26
+    `Fess 10.0.0 beta1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`__
+
 2015-10-01
     `Fess 9.4.2
     リリース <http://osdn.jp/projects/fess/news/25077>`__
 
 2015-09-02
     `N2 Search 9.4.1.0 on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
-
-2015-05-21
-    `Fess 9.4.0
-    リリース <http://sourceforge.jp/projects/fess/news/24948>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
