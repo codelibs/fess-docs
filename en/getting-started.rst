@@ -26,8 +26,7 @@ following page.
 Administration UI on Browser
 ============================
 
-This is an adiministrative UI to manage |Fess| server. The administrative
-UI does not support an access from a mobile device.
+This is an adiministrative UI to manage |Fess| server. 
 
 If you access to http://localhost:8080/fess/admin, a login page is
 displayed. You can manage |Fess| server after logging in as admin user.
