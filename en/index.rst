@@ -18,8 +18,8 @@ runtime environment. |Fess| is provided under Apache license.
    Demo
 
 
-|Fess| is `Solr <http://lucene.apache.org/solr/>`__ based search server,
-but knowledge/experience about Solr is NOT needed because of All-in-One
+|Fess| is Elasticsearch-based search server,
+but knowledge/experience about Elasticsearch is NOT needed because of All-in-One
 Enterprise Search Server. |Fess| provides Administration GUI to configure
 the system on your browser. |Fess| also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
@@ -40,7 +40,7 @@ Features
 
 -  Support a web page for BASIC/DIGEST/NTLM authentication
 
--  Contain Apache Solr as a search engine
+-  Contain Elasticsearch as a search engine
 
 -  Provide UI as a responsive web design
 
@@ -48,14 +48,17 @@ Features
 
 -  Support a role authentication
 
--  Support XML/JSON/JSONP format
+-  Support JSON format
 
--  Provide a search/click log and statistics
+-  Provide Search/Click log and statistics
 
 -  Provide auto-complete(suggest)
 
 News
 ====
+
+2015-11-26
+    `Fess 10.0.0 beta1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`__
 
 2015-10-01
     `Fess 9.4.2
@@ -68,9 +71,6 @@ News
     `Fess 9.4.0
     Released <https://sourceforge.jp/projects/fess/releases/63287>`__
 
-2015-02-06
-    `Fess 9.3.3
-    Released <https://sourceforge.jp/projects/fess/releases/62196>`__
 
 `More news... <news.html>`__
 
