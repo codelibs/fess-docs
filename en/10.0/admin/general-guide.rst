@@ -1,28 +1,13 @@
 ==========================
-TBD
+General Configuration
 ==========================
 
 Overview
 ========
 
-TBD
-
-Setup
-=============
-
-TBD
---------------
-
-TBD
+This administrative page manages configurations for |Fess|.
+You can change |Fess|'s behavior without rebooting the |Fess|.
 
 |image0|
 
-TBD
-============
-
-TBD
-----------
-
-TBD
-
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/general-1.png

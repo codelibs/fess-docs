@@ -6,6 +6,9 @@ Overview
 ========
 
 Dashboard provides a web administration tool for elasticsearch to manage cluster and indices.
+
+|image0|
+
 |Fess| manages the following indices:
 
 * fess: indexed documents
@@ -18,10 +21,15 @@ Dashboard provides a web administration tool for elasticsearch to manage cluster
 * .suggest-array: suggest meta data
 * .suggest-badword: excluding word list for suggest
 
-|image0|
 
 
-TBD
-===
+Check The Number Of Indexed Documents
+=====================================
+
+The number of indexed documents is displayed in fess index as the following figure.
+
+|image1|
+
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/dashboard-2.png
