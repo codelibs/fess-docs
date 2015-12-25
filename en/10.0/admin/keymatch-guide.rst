@@ -1,28 +1,43 @@
-==========================
-TBD
-==========================
+=======================
+Key Match
+=======================
 
 Overview
-========
+===========
 
 TBD
 
 Setup
-=============
-
-TBD
---------------
+======
 
 TBD
 
 |image0|
 
-TBD
-============
+|image1|
+
+Setting item
+=============
+
+Term
+--------------
 
 TBD
-----------
+
+Query
+------
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Size
+------
+
+TBD
+
+Boost
+------
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/keyMatch-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/keyMatch-2.png

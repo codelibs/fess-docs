@@ -1,6 +1,6 @@
-==========================
-TBD
-==========================
+=====================
+Path Mapping
+=====================
 
 Overview
 ========
@@ -11,18 +11,33 @@ Setup
 =============
 
 TBD
---------------
-
-TBD
 
 |image0|
 
-TBD
+|image1|
+
+Setting item
 ============
 
-TBD
-----------
+Regexp.
+------------
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Replacement
+-------------------
+
+TBD
+
+Process Type
+---------------------
+
+TBD
+
+Display Order
+-------------
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/pathMapping-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/pathMapping-2.png

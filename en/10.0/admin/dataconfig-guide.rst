@@ -1,5 +1,5 @@
 ==========================
-TBD
+Data Store
 ==========================
 
 Overview
@@ -11,18 +11,42 @@ Setup
 =============
 
 TBD
---------------
-
-TBD
 
 |image0|
 
 TBD
+
+Setting item
 ============
 
-TBD
-----------
+Name
+---------
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Handler Name
+---------
+
+TBD
+
+Parameter
+---------
+
+TBD
+
+Script
+------
+
+TBD
+
+Boost
+---------
+
+TBD
+
+Role
+---------
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/dataStoreCrawling-1.png

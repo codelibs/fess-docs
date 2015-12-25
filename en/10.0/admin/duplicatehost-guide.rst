@@ -1,6 +1,6 @@
-==========================
-TBD
-==========================
+=======================
+Duplicate Host
+=======================
 
 Overview
 ========
@@ -11,18 +11,21 @@ Setup
 =============
 
 TBD
+
+|image0|
+
+|image1|
+
+Setting item
+============
+
+Regular Name
 --------------
 
 TBD
 
-|image0|
+Duplicate Name
+---------------
 
-TBD
-============
-
-TBD
-----------
-
-TBD
-
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+.. |image0| image:: ../../../resources/images/en/9.2/admin/overlappingHost-1.png
+.. |image1| image:: ../../../resources/images/en/9.2/admin/overlappingHost-2.png

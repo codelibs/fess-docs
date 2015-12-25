@@ -1,6 +1,6 @@
-==========================
-TBD
-==========================
+===============
+Label
+===============
 
 Overview
 ========
@@ -11,18 +11,43 @@ Setup
 =============
 
 TBD
---------------
-
-TBD
 
 |image0|
 
-TBD
+|image1|
+
+Setting item
 ============
 
-TBD
-----------
+Name
+------------
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Value
+-----
+
+TBD
+
+Included Paths
+-------------
+
+TBD
+
+Excluded Paths
+---------------
+
+TBD
+
+Role
+----
+
+TBD
+
+Display Order
+-------------
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/labelType-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/labelType-2.png

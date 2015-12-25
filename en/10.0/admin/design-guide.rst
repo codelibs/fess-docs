@@ -1,5 +1,5 @@
 ==========================
-TBD
+Page Design
 ==========================
 
 Overview
@@ -11,13 +11,12 @@ Setup
 =============
 
 TBD
---------------
-
-TBD
 
 |image0|
 
-TBD
+|image1|
+
+Setting item
 ============
 
 TBD
@@ -25,4 +24,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/design-2.png

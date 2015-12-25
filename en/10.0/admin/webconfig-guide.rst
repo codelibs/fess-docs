@@ -1,5 +1,5 @@
 ==========================
-TBD
+Web Crawling
 ==========================
 
 Overview
@@ -11,18 +11,93 @@ Setup
 =============
 
 TBD
---------------
-
-TBD
 
 |image0|
 
-TBD
+Setting item
 ============
 
-TBD
+Name
+------------
+
+TBd
+
+URLs
 ----------
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Included URLs For Crawling
+-------------
+
+TBD
+
+Excluded URLs For Crawling
+------------------
+
+TBD
+
+Included URLs For Indexing
+-------------
+
+TBD
+
+Excluded URLs For Indexing
+------------------
+
+TBD
+
+Depth
+-----
+
+TBD
+
+Max Access Count
+--------------
+
+TBD
+
+User Agent
+----------
+
+TBD
+
+The number of Tread
+-----------------
+
+TBD
+
+Interval time
+--------
+
+TBD
+
+Boost
+-------
+
+TBD
+
+Role
+----
+
+TBD
+
+Label
+-----
+
+TBD
+
+Status
+-----
+
+TBD
+
+Other
+=====
+
+Sitemap
+-------
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/webCrawlingConfig-1.png
