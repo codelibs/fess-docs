@@ -1,6 +1,6 @@
-==========================
-TBD
-==========================
+=======================================
+File Authentication
+=======================================
 
 Overview
 ========
@@ -11,18 +11,45 @@ Setup
 =============
 
 TBD
---------------
-
-TBD
 
 |image0|
 
-TBD
+Setting item
 ============
 
-TBD
-----------
+Host name
+---------
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Port
+----
+
+TBD
+
+Scheme
+----------------------
+
+TBD
+
+Username
+---------
+
+TBD
+
+Password
+--------
+
+TBD
+
+Parameters
+---------
+
+TBD
+
+FS Config
+-------
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/fileAuthentication-1.png
