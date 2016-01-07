@@ -17,7 +17,7 @@ Search Form/Results UI for Browser
 This UI allows an user to search target documents of |Fess| on a browser.
 
 A search form and button are displayed to access to
-http://localhost:8080/fess/. To input a search word into the search form
+http://localhost:8080/. To input a search word into the search form
 and click the search button, you can get the search results on the
 following page.
 

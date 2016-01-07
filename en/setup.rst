@@ -40,10 +40,9 @@ using 7-zip. In case of Unix, we recommend using unzip command.
 Run |Fess| Server
 ------------------
 
-In case of Windows environment, double-click the fess.bat file in the
-bin folder to start |Fess| .
+For Windows environment, double-click the fess.bat file in the bin folder to start |Fess|.
 
-In case of Unix environments, run fess to start |Fess| .
+For Unix environments, run fess to start |Fess|.
 
 ::
 
@@ -52,9 +51,9 @@ In case of Unix environments, run fess to start |Fess| .
 Open |Fess| Pages
 ===============
 
-Go to http://localhost:8080/fess to check whether |Fess| started normally.
+Go to http://localhost:8080/ to check whether |Fess| started normally.
 
-|Fess|'s management UI is located at http://localhost:8080/fess/admin.
+|Fess|'s administrative UI is located at http://localhost:8080/admin.
 Default Administrator account's username/password is admin/admin.
 
 
