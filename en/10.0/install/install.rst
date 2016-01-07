@@ -20,14 +20,43 @@ Download the latest |Fess| package from the release site, `https://github.com/co
 Installation (ZIP package)
 ============
 
-Unzip the downloaded fess-x.y.zip.
+Unzip the downloaded fess-<version>.zip.
 For UNIX environment, run the following command:
 
 ::
 
-    $ unzip fess-x.y.zip
-    $ cd fess-x.y
+    $ unzip fess-<version>.zip
+    $ cd fess-<version>
 
+Installation (RPM package)
+============
+
+You need to install elasticsearch RPM package before Fess installation.
+Download elasticsearch RPM package from elasticsearch site `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__, and then install the package.
+
+::
+
+    $ sudo rpm -ivh elasticsearch-<version>.rpm
+
+To access from Fess, the following configuration needs to be added to /etc/elasticsearch/elasticsearcy.yml
+
+::
+
+    configsync.config_path: /var/lib/elasticsearch/config
+    script.engine.groovy.inline.update: on
+
+Next, install |Fess| RPM package.
+
+::
+
+    $ sudo rpm -ivh fess-<version>.rpm
+
+|Fess| provides elasticsearch plugins to extend elasticsearch's features for |Fess|.
+Copy them to elasticsearch plugins directory.
+
+::
+
+    $ sudo cp -r /usr/share/fess/es/plugins /usr/share/elasticsearch
 
 Change Encryption Key
 =====================
