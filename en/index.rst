@@ -57,20 +57,14 @@ Features
 News
 ====
 
+2016-01-07
+    `Fess 10.0.0 rc1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-rc1`__
+
+2015-12-21
+    `Fess 10.0.0 beta2 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta2>`__
+
 2015-11-26
     `Fess 10.0.0 beta1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`__
-
-2015-10-01
-    `Fess 9.4.2
-    Released <https://osdn.jp/projects/fess/releases/63287>`__
-
-2015-09-02
-    `N2 Search 9.4.1.0 Released on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
-
-2015-05-21
-    `Fess 9.4.0
-    Released <https://sourceforge.jp/projects/fess/releases/63287>`__
-
 
 `More news... <news.html>`__
 
