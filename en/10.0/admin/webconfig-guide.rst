@@ -1,103 +1,51 @@
 ==========================
-Web Crawling
+Web Crawling Configuration
 ==========================
 
 Overview
 ========
 
-TBD
+Web Crawling Configuaration page manages configurations for Web crawling.
 
-Setup
+Management Operations
 =============
 
-TBD
+Display Configurations
+----------------------
+
+Select Crawler > Web in the left menu to display a list page of Web Crawling Configuration, as below.
 
 |image0|
 
-Setting item
-============
+Click a configuration name if you want to edit it.
 
-Name
-------------
+Create Configuration
+--------------------
 
-TBd
+|image1|
 
-URLs
-----------
+- Name 
+- URLs
+- Included URLs For Crawling
+- Excluded URLs For Crawling
+- Included URLs For Indexing
+- Excluded URLs For Indexing
+- Depth
+- Max Access Count
+- User Agent
+- The number of Tread
+- Interval time
+- Boost
+- Role
+- Label
+- Status
+- Other
 
-TBD
+Delete Configuration
+--------------------
 
-Included URLs For Crawling
--------------
-
-TBD
-
-Excluded URLs For Crawling
-------------------
-
-TBD
-
-Included URLs For Indexing
--------------
-
-TBD
-
-Excluded URLs For Indexing
-------------------
-
-TBD
-
-Depth
------
-
-TBD
-
-Max Access Count
---------------
-
-TBD
-
-User Agent
-----------
-
-TBD
-
-The number of Tread
------------------
-
-TBD
-
-Interval time
---------
-
-TBD
-
-Boost
--------
-
-TBD
-
-Role
-----
-
-TBD
-
-Label
------
-
-TBD
-
-Status
------
-
-TBD
-
-Other
-=====
-
-Sitemap
--------
-
-TBD
+|image2|
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/en/10.0/admin/webconfig-3.png
