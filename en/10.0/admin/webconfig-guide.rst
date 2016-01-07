@@ -8,7 +8,7 @@ Overview
 Web Crawling Configuaration page manages configurations for Web crawling.
 
 Management Operations
-=============
+=====================
 
 Display Configurations
 ----------------------
@@ -67,6 +67,26 @@ Delete Configuration
 
 Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
 Click Delete button to delete the configuration.
+
+Example
+=======
+
+Crawling Fess Site
+------------------
+
+If you want to create Web crawling configuration to crawl pages under http://fess.codelibs.org/, parameters are:
+
++----------------------------+-----------------------------+
+| Name                       | Value                       |
++============================+=============================+
+| Name                       | Fess                        |
++----------------------------+-----------------------------+
+| URLs                       | http://fess.codelibs.org/   |
++----------------------------+-----------------------------+
+| Included URLs For Crawling | http://fess.codelibs.org/.* |
++----------------------------+-----------------------------+
+
+For other parameters, use a default value.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/en/10.0/admin/webconfig-2.png
