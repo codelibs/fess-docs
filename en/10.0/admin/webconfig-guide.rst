@@ -100,4 +100,4 @@ Sitemap
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/webCrawlingConfig-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/webconfig-1.png
