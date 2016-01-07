@@ -58,7 +58,7 @@ News
 ====
 
 2016-01-07
-    `Fess 10.0.0 rc1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-rc1`__
+    `Fess 10.0.0 rc1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-rc1>`__
 
 2015-12-21
     `Fess 10.0.0 beta2 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta2>`__
