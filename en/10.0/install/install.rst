@@ -76,13 +76,4 @@ if using systemd.
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
 
-Change Encryption Key
-=====================
 
-Fess uses a cipyer to encrypt password.
-Please change the default key phrase, especially in production.
-The key phrase is in app/WEB-INF/classes/fess_config.properties (For RPM package, in /etc/fess/fess_config.properties). 
-
-::
-
-    app.cipher.key=__change_me__
