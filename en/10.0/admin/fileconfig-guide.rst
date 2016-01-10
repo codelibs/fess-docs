@@ -26,39 +26,78 @@ Click Create New button to display a form page for File crawling configuration.
 
 |image1|
 
-Crawling configuration contains the following items:
+Configurations
+--------------
 
-+-----------------------------+------------------------------------------------------------------------------------+
-| Name                        | Description                                                                        |
-+=============================+====================================================================================+
-| Name                        | Configuration name.                                                                |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Paths                       | This paths are locations to start crawling(ex. file:// or smb://).                 |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Included Paths For Crawling | This regular expression(Java Format) is allowed path patterns for |Fess| crawler.  |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Excluded Paths For Crawling | This regular expression(Java Format) is rejected path patterns for |Fess| crawler. |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Included Paths For Indexing | This regular expression(Java Format) is allowed path patterns for |Fess| indexer.  |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Excluded Paths For Indexing | This regular expression(Java Format) is rejected path patterns for |Fess| indexer. |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Depth                       | The depth of the file system structure.                                            |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Max Access Count            | The number of indexed paths.                                                       |
-+-----------------------------+------------------------------------------------------------------------------------+
-| The number of Tread         | The number of crawler threads for this configuration.                              |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Interval time               | Interval time to crawl paths for each thread.                                      |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Boost                       | Boost value is a weight for indexed documents of this configuration.               |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Role                        | Roles for this configuration.                                                      |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Label                       | Labels for this configuration.                                                     |
-+-----------------------------+------------------------------------------------------------------------------------+
-| Status                      | If enabled, the scheduled job of Default Crawler includes this configuration.      |
-+-----------------------------+------------------------------------------------------------------------------------+
+Name
+::::
+
+Configuration name.
+
+Paths
+:::::
+
+This paths are locations to start crawling(ex. file:// or smb://).
+
+Included Paths For Crawling
+:::::::::::::::::::::::::::
+
+This regular expression(Java Format) is allowed path patterns for |Fess| crawler.
+
+Excluded Paths For Crawling
+:::::::::::::::::::::::::::
+
+This regular expression(Java Format) is rejected path patterns for |Fess| crawler.
+
+Included Paths For Indexing
+:::::::::::::::::::::::::::
+
+This regular expression(Java Format) is allowed path patterns for |Fess| indexer.
+
+Excluded Paths For Indexing
+:::::::::::::::::::::::::::
+
+This regular expression(Java Format) is rejected path patterns for |Fess| indexer.
+
+Depth
+:::::
+
+The depth of the file system structure.
+
+Max Access Count
+::::::::::::::::
+
+The number of indexed paths.
+
+The number of Thread
+::::::::::::::::::::
+
+The number of crawler threads for this configuration.
+
+Interval time
+:::::::::::::
+
+Interval time to crawl paths for each thread.
+
+Boost
+:::::
+
+Boost value is a weight for indexed documents of this configuration.
+
+Role
+::::
+
+Roles for this configuration. 
+
+Label
+:::::
+
+Labels for this configuration.
+
+Status
+::::::
+
+If enabled, the scheduled job of Default Crawler includes this configuration.
 
 Delete Configuration
 --------------------
