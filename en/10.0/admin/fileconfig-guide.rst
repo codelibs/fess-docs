@@ -108,18 +108,49 @@ Click Delete button to delete the configuration.
 Example
 =======
 
-TBD
-------------------
+Crawling Local File System
+--------------------------
+
+If you want to create File crawling configuration to crawl files under /home/share, parameters for config are:
 
 +----------------------------+-----------------------------+
 | Name                       | Value                       |
 +============================+=============================+
-| Name                       | Fess                        |
+| Name                       | Share Directory             |
 +----------------------------+-----------------------------+
-| Paths                      |                             |
+| Paths                      | file:/home/share            |
 +----------------------------+-----------------------------+
 
 For other parameters, use a default value.
+
+Crawling Windows Shared Folder
+------------------------------
+
+For crawling files in \\SERVER\SharedFolder, File crawling configuration is:
+
++----------------------------+-----------------------------+
+| Name                       | Value                       |
++============================+=============================+
+| Name                       | Share Folder                |
++----------------------------+-----------------------------+
+| Paths                      | smb://SERVER/SharedFolder/  |
++----------------------------+-----------------------------+
+
+If SharedFolder needs username/password to access it, create File Authentication configuration on Crawler > File Auth of the left menu. The configuration is:
+
++----------------------------+-----------------------------+
+| Name                       | Value                       |
++============================+=============================+
+| Hostname                   | SERVER                      |
++----------------------------+-----------------------------+
+| Protocol                   | SAMBA                       |
++----------------------------+-----------------------------+
+| Username                   | (Type your setting)         |
++----------------------------+-----------------------------+
+| Password                   | (Type your setting)         |
++----------------------------+-----------------------------+
+
+
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/fileconfig-1.png
 .. |image1| image:: ../../../resources/images/en/10.0/admin/fileconfig-2.png
