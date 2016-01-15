@@ -1,26 +1,50 @@
-===================
+====
 Role
-===================
+====
 
 Overview
 ========
 
 TBD
 
-Setup
-=============
+Management Operations
+=====================
 
-TBD
+Display Configurations
+----------------------
+
+Select Crawler > Role in the left menu to display a list page of Role Configuration, as below.
 
 |image0|
 
+Click a configuration name if you want to edit it.
+
+Create Configuration
+--------------------
+
+Click Create New button to display a form page for Role configuration.
+
 |image1|
 
-Setting item
-============
+Configurations
+--------------
 
 Name
-------------
+::::
+
+TBD
+
+Delete Configuration
+--------------------
+
+Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
+Click Delete button to delete the configuration.
+
+Example
+=======
+
+TBD
+--------------------------
 
 TBD
 
