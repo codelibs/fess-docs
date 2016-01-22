@@ -58,5 +58,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/documentBoost-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/documentBoost-2.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/boostdoc-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/boostdoc-2.png

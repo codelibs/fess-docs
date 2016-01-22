@@ -58,5 +58,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/requestHeader-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/requestHeader-2.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/reqheader-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/reqheader-2.png

@@ -53,5 +53,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/overlappingHost-1.png
-.. |image1| image:: ../../../resources/images/en/9.2/admin/overlappingHost-2.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/duplicatehost-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/duplicatehost-2.png

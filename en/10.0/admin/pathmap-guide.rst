@@ -63,5 +63,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/pathMapping-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/pathMapping-2.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/pathmap-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/pathmap-2.png
