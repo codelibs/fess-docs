@@ -1,6 +1,6 @@
-==========================
-TBD
-==========================
+=======
+Job Log
+=======
 
 Overview
 ========
@@ -18,11 +18,11 @@ TBD
 |image0|
 
 TBD
-============
-
-TBD
 ----------
 
+|image1|
+
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/joblog-2.png

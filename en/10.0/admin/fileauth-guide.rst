@@ -78,5 +78,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/fileauth-1.png
-.. |image1| image:: ../../../resources/images/en/9.2/admin/fileauth-2.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/fileauth-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/fileauth-2.png

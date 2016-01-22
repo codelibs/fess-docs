@@ -1,28 +1,43 @@
-==========================
-TBD
-==========================
+============
+Synonym List
+============
 
 Overview
 ========
 
 TBD
 
-Setup
-=============
+Management Operations
+=====================
 
-TBD
---------------
+Display Configurations
+----------------------
 
-TBD
+Select System > Dictionaly in the left menu and click synonym to display a list page of Synonym Configuration, as below.
 
 |image0|
 
-TBD
-============
+Click a configuration name if you want to edit it.
+
+Create Configuration
+--------------------
+
+Click Create New button to display a form page for synonym configuration.
+
+|image1|
+
+Configurations
+--------------
+
+Source
+::::::
 
 TBD
-----------
+
+Target
+::::::
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/synonym-2.png

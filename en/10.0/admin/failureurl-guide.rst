@@ -1,5 +1,5 @@
 ==========================
-TBD
+Failure URL
 ==========================
 
 Overview
@@ -25,4 +25,4 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/failureurl-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/failureurl-1.png

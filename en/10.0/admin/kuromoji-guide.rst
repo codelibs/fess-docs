@@ -1,28 +1,53 @@
-==========================
-TBD
-==========================
+=============
+Kuromoji List
+=============
 
 Overview
 ========
 
 TBD
 
-Setup
-=============
+Management Operations
+=====================
 
-TBD
---------------
+Display Configurations
+----------------------
 
-TBD
+Select System > Dictionaly in the left menu and click kuromoji to display a list page of kuromoji Configuration, as below.
 
 |image0|
 
-TBD
-============
+Click a configuration name if you want to edit it.
+
+Create Configuration
+--------------------
+
+Click Create New button to display a form page for kuromoji configuration.
+
+|image1|
+
+Configurations
+--------------
+
+Token
+:::::
 
 TBD
-----------
+
+Segmentation
+::::::::::::
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+Reading
+:::::::
+
+TBD
+
+POS
+:::
+
+TBD
+
+.. |image0| image:: ../../../resources/images/en/10.0/admin/kuromoji-1.png
+.. |image1| image:: ../../../resources/images/en/10.0/admin/kuromoji-2.png

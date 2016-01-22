@@ -1,5 +1,5 @@
 ==========================
-TBD
+Log Files
 ==========================
 
 Overview
@@ -25,4 +25,4 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/9.2/admin/crawl-1.png
+.. |image0| image:: ../../../resources/images/en/10.0/admin/log-1.png
