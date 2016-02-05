@@ -13,7 +13,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Crawler > Scheduler in the left menu to display a list page of Job Scheduler Configuration, as below.
+Select System > Scheduler in the left menu to display a list page of Job Scheduler Configuration, as below.
 
 |image0|
 

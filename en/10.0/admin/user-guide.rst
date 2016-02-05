@@ -13,7 +13,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Crawler > User in the left menu to display a list page of User Configuration, as below.
+Select User > User in the left menu to display a list page of User Configuration, as below.
 
 |image0|
 

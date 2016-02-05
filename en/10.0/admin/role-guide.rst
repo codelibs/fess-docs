@@ -13,7 +13,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Crawler > Role in the left menu to display a list page of Role Configuration, as below.
+Select User > Role in the left menu to display a list page of Role Configuration, as below.
 
 |image0|
 
