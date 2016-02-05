@@ -2,6 +2,28 @@
 アーカイブ
 ============================================
 
+9.4
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   9.4/install/index
+   9.4/user/index
+   9.4/admin/index
+   9.4/config/index
+
+9.3
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   9.3/install/index
+   9.3/user/index
+   9.3/admin/index
+   9.3/config/index
+
 9.2
 ~~~~~
 

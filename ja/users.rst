@@ -9,5 +9,3 @@
 
 -  `株式会社トライアンフ: サイト内検索 <http://www.triumph98.com/>`__
 
--  `グッジョブ:
-   案件グローバル検索 <http://goodjob.n2hiroba.com/search/>`__

@@ -10,13 +10,12 @@
 
 -  Windows や Unix など Java が実行できる OS 環境
 
--  Java: Java 7 以上
+-  Java: Java 8 以上
 
 Javaのインストール
 ==================
 
-Java
-がインストールされていない場合は以下の手順でJavaをインストールしてください。
+Java がインストールされていない場合は以下の手順でJavaをインストールしてください。
 
 Java SE のダウンロードページへアクセス
 --------------------------------------
@@ -27,8 +26,7 @@ Downloads」ページ <http://www.oracle.com/technetwork/java/javase/downloads/i
 ※以下の手順とはバージョンが異なりますが、\ `「Java
 8u40」<http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html#jdk-8u40-oth-JPR>`__\ をインストールしてください(推奨)。[2015/3/13]
 
-JavaSE8の「Download
-JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
+JavaSE 8 の「Download JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
 
 |image0|
 
@@ -187,10 +185,9 @@ Files\\Java\\jdk1.7.0\_XX」となります。(XXの部分にはインストー�
 |Fess| のダウンロードページへアクセス
 ----------------------------------
 
-http://sourceforge.jp/projects/fess/releases/ から最新の |Fess| 
-パッケージをダウンロードします。
+https://github.com/codelibs/fess/releases から最新の |Fess| パッケージをダウンロードします。
 
-URL先のリリースファイル一覧から「fess-server-9.x.y.zip」をクリックします。
+URL先のリリースファイル一覧から「fess-x.y.z.zip」をクリックします。
 
 |image19|
 
@@ -204,9 +201,8 @@ Unix 環境にインストールした場合、bin
 
 ::
 
-    $ unzip fess-server-9.x.y.zip
-    $ cd fess-server-9.x.y
-    $ chmod +x bin/*.sh   # (Unix環境のみ)
+    $ unzip fess-x.y.z.zip
+    $ cd fess-x.y.z
 
 |image20|
 
@@ -221,28 +217,27 @@ binフォルダーをダブルクリックで開きます。
 |Fess| の起動
 -----------
 
-binフォルダにあるstartup.batファイルをダブルクリックして、 |Fess| を起動させます。
+binフォルダにあるfess.batファイルをダブルクリックして、 |Fess| を起動させます。
 
-Unix環境の場合はstartup.shを実行します。
+Unix環境の場合は以下を実行します。
 
 ::
 
-    $ ./bin/startup.sh
+    $ ./bin/fess
 
 |image23|
 
-コマンドプロンプトが表示され起動されます。最後の文に「Server
-startup...」が表示されればセットアップ完了です。
+コマンドプロンプトが表示され起動されます。
 
 |image24|
 
 動作確認
 ========
 
-http://localhost:8080/fess/
+http://localhost:8080/
 にアクセスすることによって、起動を確認できます。
 
-管理 UI は http://localhost:8080/fess/admin/ です。
+管理 UI は http://localhost:8080/admin/ です。
 デフォルトの管理者アカウントのユーザー名/パスワードは、admin/admin
 になります。
 管理者アカウントはアプリケーションサーバーにより管理されています。 |Fess| 
@@ -255,74 +250,12 @@ http://localhost:8080/fess/
 |Fess| の停止
 -----------
 
-binフォルダにあるshutdown.batファイルをダブルクリックして、 |Fess| を停止させます。
-
-Unix環境の場合はshutdown.shを実行します。
-
-::
-
-    $ ./bin/shutdown.sh
+|Fess| のプロセスを停止してください。
 
 管理者パスワードの変更
 ----------------------
 
-管理者アカウントはアプリケーションサーバーにより管理されています。標準の
-|Fess| サーバーは Tomcat を利用しているので、Tomcat
-のユーザー変更方法と同様になります。変更する場合は、conf/tomcat-user.xml
-の admin アカウントのパスワードを修正してください。
-
-::
-
-      <user username="admin" password="admin" roles="fess"/>
-
-Solr サーバーのパスワード変更
------------------------------
-
-|Fess| サーバーには Solr
-が組み込まれていますが、アクセスするためにはパスワードが必要になります。実運用などにおいては、デフォルトのパスワードを変更してください。
-
-パスワードの変更方法は、まず、conf/tomcat-user.xml の solradmin
-のパスワード属性を変更します。
-
-::
-
-      <user username="solradmin" password="solradmin" roles="solr"/>
-
-次に webapps/fess/WEB-INF/classes/solrlib.dicon、fess\_suggest.dicon
-および solr/core1/conf/solrconfig.xml
-の3ファイルを変更します。以下のパスワードの箇所へ tomcat-user.xml
-で指定したものを記述します。
-
-solrlib.dicon の対象箇所を以下のように修正します。
-
-::
-
-    <component class="org.apache.commons.httpclient.UsernamePasswordCredentials">
-        <arg>"solradmin"</arg> <!-- ユーザー名 -->
-        <arg>"solradmin"</arg> <!-- パスワード -->
-    </component>
-
-fess\_suggest.dicon は以下の箇所です。
-
-::
-
-    <component name="suggestCredentials" class="org.apache.http.auth.UsernamePasswordCredentials">
-        <arg>"solradmin"</arg> <!-- ユーザー名 -->
-        <arg>"solradmin"</arg> <!-- パスワード -->
-    </component>
-
-solr/core1/conf/solrconfig.xml は以下の箇所です。
-
-::
-
-    <!-- SuggestTranslogUpdateHandler settings -->
-    <suggest>
-      <solrServer class="org.codelibs.solr.lib.server.SolrLibHttpSolrServer">
-        <arg>http://localhost:8080/solr/core1-suggest</arg>
-        <credentials>
-          <username>solradmin</username> <!-- ユーザー名 -->
-          <password>solradmin</password> <!-- パスワード -->
-        </credentials>
+管理 UI のユーザー編集画面で変更することができます。
 
 .. |image0| image:: ../resources/images/ja/install/java-1.png
 .. |image1| image:: ../resources/images/ja/install/java-2.png

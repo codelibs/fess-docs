@@ -11,42 +11,40 @@
 ダウンロード
 ============
 
-http://sourceforge.jp/projects/fess/releases/ から最新の |Fess| 
+https://github.com/codelibs/fess/releases から最新の |Fess| 
 パッケージをダウンロードします。
 
 インストール
 ============
 
-ダウンロードした fess-server-x.y.zip を展開します。 bin
-以下にあるスクリプトに実行権を付加します。
+ダウンロードした fess-x.y.zip を展開します。
 
 ::
 
-    $ unzip fess-server-x.y.zip
-    $ cd fess-server-x.y
-    $ chmod +x bin/*.sh
+    $ unzip fess-x.y.zip
+    $ cd fess-x.y
 
 |Fess| の起動
 ===========
 
-startup スクリプトを実行して |Fess| を起動します。
+fess スクリプトを実行して |Fess| を起動します。
 
 ::
 
-    $ ./bin/startup.sh
+    $ ./bin/fess
 
 管理 UI にアクセス
 ==================
 
-http://localhost:8080/fess/admin にアクセスします。
+http://localhost:8080/admin にアクセスします。
 管理者アカウントのユーザー名/パスワードは、admin/admin になります。
 
 ログイン後、左側のメニューの「ウェブ」をクリックします。
 新規でウェブクロールの設定情報を作ります(設定名、URL、最大アクセス数(100とか)、ブラウザタイプ(全部))。
 
-次に左側のメニューの「クローラ全般」をクリックします。
-スケジュールに数分後を設定します。 開始時刻が 10:35 am の場合は、0 35 10
-\* \* ? とします(フォーマットは「秒 分 時 日 月 曜日 年」)。
+次に左側のメニューの「スケジューラ」をクリックします。
+「Default Crawler」を選択して、スケジュールを設定します。
+開始時刻が 10:35 am の場合は、35 10 \* \* ? とします(フォーマットは「分 時 日 月 曜日 年」)。
 更新すると、その時間以降にクロールが開始されます。
 開始されているかどうかは、「セッション情報」で確認できます。
 完了していると、セッション情報に WebIndexSize の情報が表示されます。
@@ -54,14 +52,10 @@ http://localhost:8080/fess/admin にアクセスします。
 検索
 ====
 
-クロール完了後、\ http://localhost:8080/fess/
-にアクセスし、検索すると検索結果が表示されます。
+クロール完了後、http://localhost:8080/ にアクセスし、検索すると検索結果が表示されます。
 
 |Fess| の停止
 ===========
 
-shutdown スクリプトを実行して |Fess| を停止します。
+Ctrl-C や kill コマンド等で fess のプロセスを停止します。
 
-::
-
-    $ ./bin/shutdown.sh

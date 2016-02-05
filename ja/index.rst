@@ -44,8 +44,7 @@
 
 -  MS Office や PDF など多くのファイル形式に対応
 
--  `Apache Solr <http://lucene.apache.org/solr/>`__
-   を検索エンジンとして利用
+-  Elasticsearch を検索エンジンとして利用
 
 -  BASIC/DIGEST/NTLM認証のサイトも検索可能
 
@@ -70,31 +69,25 @@
 
 -  ユーザー辞書および同義語辞書編集機能
 
--  関連ドキュメント表示機能
-
 -  検索結果のキャッシュ表示機能とスクリーンショット表示機能
 
 -  検索結果のプロキシ機能
 
--  デスクトップ検索やローカルファイルのクリックオープン機能
-
 -  スマートフォン対応 (Responsive Web Design)
-
--  Solr サーバーをグループ化して、ハイエンドユースにも対応
 
 -  用途に応じて柔軟に対応可能な設計
 
 ニュース
 ========
 
+2016-02-05
+    `Fess 10.0.0 GA リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0>`__
+
 2016-01-07
     `Fess 10.0.0 rc1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-rc1>`__
 
 2015-12-21
     `Fess 10.0.0 beta2 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta2>`__
-
-2015-11-26
-    `Fess 10.0.0 beta1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
