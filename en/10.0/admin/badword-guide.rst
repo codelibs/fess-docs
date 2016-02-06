@@ -5,9 +5,7 @@ Bad Word
 Overview
 ========
 
-TBD
-
-|image0|
+Bad Word Configuration page manages words to exclude them from suggest feature.
 
 Management Operations
 =====================
@@ -34,7 +32,7 @@ Configurations
 Bad Word
 ::::::::
 
-TBD
+Word to exclude it from Suggest.
 
 Delete Configuration
 --------------------
@@ -42,37 +40,24 @@ Delete Configuration
 Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
 Click Delete button to delete the configuration.
 
-Example
-=======
-
-TBD
---------------------------
-
-TBD
-
 Download
 ========
 
-TBD
+You can download a word list file as CSV file.
 
 |image3|
-
-Contents of CSV
----------------
-
-TBD
 
 Upload
 ======
 
-TBD
+You can upload CSV file containing a word list to exclude from Suggest.
 
 |image4|
 
-Contents of CSV
----------------
+CSV File
+--------
 
-TBD
+The content of downloaded/uploaded CSV file is 1 column, and contains only a word.
 
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/elevateword-1.png
