@@ -57,5 +57,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/user-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/user-2.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/user-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/user-2.png

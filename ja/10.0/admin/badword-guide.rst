@@ -8,7 +8,6 @@
 ここでは、サジェストの除外ワードの設定について説明します。
 サジェストは検索語に応じて表示されますが、そのワードをサジェストに表示しないように設定できます。
 
-|image0|
 
 管理方法
 ========
@@ -80,8 +79,8 @@ CSVの内容
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/badword-1.png
-.. |image2| image:: ../../../resources/images/en/10.0/admin/badword-2.png
-.. |image3| image:: ../../../resources/images/en/10.0/admin/badword-3.png
-.. |image4| image:: ../../../resources/images/en/10.0/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/badword-1.png
+.. |image2| image:: ../../../resources/images/ja/10.0/admin/badword-2.png
+.. |image3| image:: ../../../resources/images/ja/10.0/admin/badword-3.png
+.. |image4| image:: ../../../resources/images/ja/10.0/admin/badword-4.png

@@ -10,4 +10,4 @@
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/general-1.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/general-1.png

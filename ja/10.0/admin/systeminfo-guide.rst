@@ -42,4 +42,4 @@ Fess の設定情報を確認できます。
 
 バグを報告する際に添付するためのプロパティ一覧です。個人情報が含まれない値を抽出しています。
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/systeminfo-1.png

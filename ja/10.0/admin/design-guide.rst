@@ -82,5 +82,5 @@ Table: 編集可能なJSPファイル
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/design-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/design-2.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/design-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/design-2.png

@@ -151,5 +151,5 @@ Windowsの共有フォルダをクロール
 
 
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/fileconfig-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/fileconfig-2.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/fileconfig-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/fileconfig-2.png

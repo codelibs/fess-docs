@@ -89,5 +89,5 @@ TBD
 
 TBD
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/webauth-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/webauth-2.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/webauth-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/webauth-2.png

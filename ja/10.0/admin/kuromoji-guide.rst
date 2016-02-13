@@ -52,5 +52,5 @@ kuromojiの設定ページを開くには新規作成ボタンをクリックし
 
 入力した単語の品詞を入力します。
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/kuromoji-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/kuromoji-2.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/kuromoji-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/kuromoji-2.png

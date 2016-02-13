@@ -31,5 +31,5 @@
 |image1|
 
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/en/10.0/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/dashboard-2.png

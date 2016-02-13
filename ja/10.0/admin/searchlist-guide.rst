@@ -24,4 +24,4 @@
 
 指定した条件で検索することができます。通常の検索画面ではロールやブラウザの条件が暗黙的に付加されますが、この管理用検索では付加されません。表示された検索結果から特定なドキュメントをインデックスから削除することもできます。
 
-.. |image0| image:: ../../../resources/images/en/10.0/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/searchlist-1.png
