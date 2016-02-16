@@ -100,4 +100,4 @@ TBD
 TBD
 
 .. |image0| image:: ../../../resources/images/ja/10.0/admin/scheduler-1.png
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/scheduler-2.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/scheduler-2.png

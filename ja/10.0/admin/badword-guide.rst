@@ -48,7 +48,7 @@ NGワードを登録します。
 
 登録したワードをCSV形式でダウンロードします。
 
-|image3|
+|image2|
 
 CSVの内容
 ---------
@@ -66,7 +66,7 @@ CSVの内容
 
 CSV形式でワードを登録します。
 
-|image4|
+|image3|
 
 CSVの内容
 ---------
@@ -79,8 +79,7 @@ CSVの内容
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/badword-1.png
-.. |image2| image:: ../../../resources/images/ja/10.0/admin/badword-2.png
-.. |image3| image:: ../../../resources/images/ja/10.0/admin/badword-3.png
-.. |image4| image:: ../../../resources/images/ja/10.0/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/ja/10.0/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/ja/10.0/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/ja/10.0/admin/badword-4.png
