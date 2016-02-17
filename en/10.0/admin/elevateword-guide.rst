@@ -17,7 +17,7 @@ Display Configurations
 
 Select Crawler > Additional Word in the left menu to display a list page of Additional Word Configuration, as below.
 
-|image0|
+|image1|
 
 Click a configuration name if you want to edit it.
 
@@ -26,7 +26,7 @@ Create Configuration
 
 Click Create New button to display a form page for Additional Word configuration.
 
-|image1|
+|image2|
 
 Configurations
 --------------
