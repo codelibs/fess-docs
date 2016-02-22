@@ -17,9 +17,9 @@
 +-----------------+----------------------------------------+
 | created         | クロールした日時                       |
 +-----------------+----------------------------------------+
-| contentLength   | クロールしたコンテンツサイズ           |
+| content_length  | クロールしたコンテンツサイズ           |
 +-----------------+----------------------------------------+
-| lastModified    | クロールしたコンテンツの最終更新日時   |
+| last_modified   | クロールしたコンテンツの最終更新日時   |
 +-----------------+----------------------------------------+
 
 Table: ソート対象フィールド一覧
@@ -40,18 +40,18 @@ Table: ソート対象フィールド一覧
 
 ::
 
-fess sort:contentLength
+fess sort:content_length
 
 降順にソートする場合は以下のようにします。
 
 ::
 
-fess sort:contentLength.desc
+fess sort:content_length.desc
 
 複数のフィールドでソートする場合は以下のように , 区切りで指定します。
 
 ::
 
-fess sort:contentLength.desc,lastModified
+fess sort:content_length.desc,last_modified
 
 .. |image0| image:: ../../../resources/images/ja/9.4/user/search-sort-1.png
