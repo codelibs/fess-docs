@@ -3,12 +3,12 @@ Introduction
 ============
 
 Who Should Use This Document
-=================
+============================
 
 This document is intended for system administrators responsible for managing the |Fess|.
 
 Before You Read This Document
-===================
+=============================
 
 This document demonstrates administrative operations for |Fess|.
 Basic knowledge of computer operation is required.
