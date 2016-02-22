@@ -59,7 +59,7 @@
 
 -  リクエストヘッダーに情報付加、重複ドメインの設定、検索結果のパス変換
 
--  XML/JSON/JSONP形式で検索結果出力により外部システムとの連携が可能
+-  JSON形式で検索結果出力により外部システムとの連携が可能
 
 -  検索ログおよびクリックログの集計
 
@@ -80,14 +80,14 @@
 ニュース
 ========
 
+2016-02-22
+    `Fess 10.0.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.1>`__
+
 2016-02-05
     `Fess 10.0.0 GA リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0>`__
 
 2016-01-07
     `Fess 10.0.0 rc1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-rc1>`__
-
-2015-12-21
-    `Fess 10.0.0 beta2 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta2>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
