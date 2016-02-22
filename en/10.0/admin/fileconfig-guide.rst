@@ -1,6 +1,6 @@
-==========================
+===========================
 File Crawling Configuration
-==========================
+===========================
 
 Overview
 ========
@@ -87,7 +87,7 @@ Boost value is a weight for indexed documents of this configuration.
 Role
 ::::
 
-Roles for this configuration. 
+Roles for this configuration.
 
 Label
 :::::

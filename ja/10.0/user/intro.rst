@@ -24,9 +24,8 @@
 
 本製品に関する技術的質問で、ドキュメント内に解決策が得られない場合は、次にアクセスしてください。
 
--  公開フォーラム: http://sourceforge.jp/forum/?group_id=18580
-
--  メーリングリスト: http://sourceforge.jp/mail/?group_id=18580
+-  Issues:
+   `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
 
 商用サポート
 ------------
@@ -50,4 +49,6 @@ Inc. <http://www.n2sm.net/>`__\ にご相談ください。
 |Fess| 
 プロジェクトは、このドキュメントの改善に努めており、読者からのコメントおよび提案などを歓迎しています。
 
--  メーリングリスト: http://sourceforge.jp/mail/?group_id=18580
+-  Issues:
+   `https://github.com/codelibs/fess-docs/issues <https://github.com/codelibs/fess-docs/issues>`__
+

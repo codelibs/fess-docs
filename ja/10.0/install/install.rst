@@ -33,13 +33,13 @@ ZIP パッケージを利用する場合
 RPM パッケージを利用する場合
 ----------------------------
 
-Fess をインストールする前に elasticsearch の RPM パッケージをインストールする必要があります。 <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
+|Fess| をインストールする前に elasticsearch の RPM パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch> <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
 
 ::
 
     $ sudo rpm -ivh elasticsearch-<version>.rpm
 
-Fess にアクセスするために、/etc/elasticsearch/elasticsearcy.yml に下記の設定を加えます。
+|Fess| にアクセスするために、/etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。
 
 ::
 

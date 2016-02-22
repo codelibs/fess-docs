@@ -57,8 +57,8 @@ Excluded URLs For Indexing
 
 This regular expression(Java Format) is rejected url patterns for |Fess| indexer.
 
-Setting parameters
-------------------
+Config parameters
+:::::::::::::::::
 
 You can specify the crawl configuration information.
 

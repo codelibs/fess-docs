@@ -1,6 +1,6 @@
-==========================
+======
 Wizard
-==========================
+======
 
 Overview
 ========
@@ -21,10 +21,28 @@ In this page, you can create a new crawling configuration.
 
 |image1|
 
-* Name: Configuration name. (ex. Fess)
-* Crawling Path: URL or file path to start crawling. (ex. http://fess.codelibs.org/)
-* Max Access Count: The number of crawled pages.
-* Depth: The number of the depth of crawled paths.
+Configurations
+--------------
+
+Name
+::::
+
+Configuration name. (ex. Fess)
+
+Crawling Path
+:::::::::::::
+
+URL or file path to start crawling. (ex. http://fess.codelibs.org/)
+
+Max Access Count
+::::::::::::::::
+
+The number of crawled pages.
+
+Depth
+:::::
+
+The number of the depth of crawled paths.
 
 Crawler
 -------

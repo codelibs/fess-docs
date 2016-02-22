@@ -1,5 +1,5 @@
 |Fess| Administration Guide
-=============================
+===========================
 
 .. toctree::
    :maxdepth: 3

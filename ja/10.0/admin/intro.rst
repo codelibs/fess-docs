@@ -25,7 +25,7 @@
 
 本製品に関する技術的質問で、ドキュメント内に解決策が得られない場合は、次にアクセスしてください。
 
-- Issues:
+-  Issues:
    `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
 
 商用サポート
