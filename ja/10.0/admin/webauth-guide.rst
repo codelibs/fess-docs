@@ -81,13 +81,5 @@
 
 一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。さらに削除ボタンを押すと設定が削除されます。
 
-例
-==
-
-TBD
---------------------------
-
-TBD
-
 .. |image0| image:: ../../../resources/images/ja/10.0/admin/webauth-1.png
 .. |image1| image:: ../../../resources/images/ja/10.0/admin/webauth-2.png

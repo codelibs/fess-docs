@@ -40,13 +40,5 @@ Delete Configuration
 Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
 Click Delete button to delete the configuration.
 
-Example
-=======
-
-TBD
---------------------------
-
-TBD
-
 .. |image0| image:: ../../../resources/images/en/10.0/admin/group-1.png
 .. |image1| image:: ../../../resources/images/en/10.0/admin/group-2.png
