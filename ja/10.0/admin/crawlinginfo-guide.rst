@@ -25,4 +25,4 @@ TBD
 TBD
 
 .. |image0| image:: ../../../resources/images/ja/10.0/admin/crawlinginfo-1.png
-.. TODO 画像
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/crawlinginfo-2.png
