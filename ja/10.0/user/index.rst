@@ -15,7 +15,6 @@
    search-range
    search-boost
    search-fuzzy
-   search-options
    search-additional
    json-response
 
