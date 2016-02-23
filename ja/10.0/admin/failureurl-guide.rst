@@ -29,4 +29,7 @@ TBD
 
 TBD
 
+|image1|
+
 .. |image0| image:: ../../../resources/images/ja/10.0/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/ja/10.0/admin/failureurl-2.png
