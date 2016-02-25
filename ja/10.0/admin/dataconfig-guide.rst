@@ -39,9 +39,10 @@ Fess ではデータベースやCSVなどのデータソースをクロール対
 ::::::::::
 
 データストアを処理するハンドラ名です。
+
 * DatabaseDataStore: データベースをクロールする
 * CsvDataStore: CSVファイルを対象としてクロールする
-* FileListDataStore: ファイルのリストから選択する
+* FileListDataStore: インデクシング対象のファイルパスを記述してクロールする
 
 パラメータ
 ::::::::::
@@ -77,7 +78,8 @@ Fess ではデータベースやCSVなどのデータソースをクロール対
 設定の削除
 ----------
 
-一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。さらに削除ボタンを押すと設定が削除されます。
+一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。
+削除ボタンを押すと設定が削除されます。
 
 例
 ==
@@ -114,7 +116,7 @@ DatabaseDataStore
     INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('タイトル 5', 'コンテンツ 5 です．', '35.681382', '139.766084', 1);
 
 パラメータ
-;;;;;;;;;;
+::::::::::
 
 パラメータの設定例は以下のようになります。
 
@@ -158,16 +160,16 @@ Table: DB用設定パラメータ例
     cache=content
     digest=content
     anchor=
-    contentLength=content.length()
-    lastModified=@jp.sf.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    content_length=content.length()
+    last_modified=@jp.sf.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
     location=latitude + "," + longitude
-    latitude_s=latitude
-    longitude_s=longitude
+    latitude=latitude
+    longitude=longitude
 
 パラメータは「キー=値」形式になっています。キーの説明は以下です。
 
-値の側は、OGNL
-で記述します。文字列はダブルクォーテーションで閉じてください。データベースのカラム名でアクセスすれば、その値になります。
+値の側は、Groovy で記述します。
+文字列はダブルクォーテーションで閉じてください。データベースのカラム名でアクセスすれば、その値になります。
 
 +-----------------+--------------------------------------------------------------+
 | url             | URL(検索結果に表示されるリンク)                              |
@@ -186,9 +188,9 @@ Table: DB用設定パラメータ例
 +-----------------+--------------------------------------------------------------+
 | anchor          | コンテンツに含まれるリンク(普通は指定する必要はありません)   |
 +-----------------+--------------------------------------------------------------+
-| contentLength   | コンテンツの長さ                                             |
+| content_length   | コンテンツの長さ                                             |
 +-----------------+--------------------------------------------------------------+
-| lastModified    | コンテンツの最終更新日                                       |
+| last_modified    | コンテンツの最終更新日                                       |
 +-----------------+--------------------------------------------------------------+
 
 Table: スクリプトの設定内容
@@ -197,8 +199,7 @@ Table: スクリプトの設定内容
 ドライバ
 ::::::::
 
-データベースに接続する際にはドライバが必要となります。webapps/ROOT/WEB-INF/cmd/lib
-に jar ファイルを置いてください。
+データベースに接続する際にはドライバが必要となります。app/WEB-INF/lib に jar ファイルを置いてください。
 
 CsvDataStore
 ------------
@@ -261,13 +262,14 @@ Table: CSVファイル用設定パラメータ例
     cache=cell3
     digest=cell3
     anchor=
-    contentLength=cell3.length()
-    lastModified=@jp.sf.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    content_length=cell3.length()
+    last_modified=@org.codelibs.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
 
-パラメータは「キー=値」形式になっています。
+パラメータは「キー=値」形式になります。
 キーはデータベースクロールの場合と同様です。
 CSVファイル内のデータは、cell[数字]で保持しています(数字は 1 から始まります)。
 CSVファイルのセルにデータが存在しない場合はnullになる場合があります。
+
 
 .. |image0| image:: ../../../resources/images/ja/10.0/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/10.0/admin/dataconfig-2.png
