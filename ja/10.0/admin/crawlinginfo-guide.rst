@@ -19,10 +19,9 @@
 詳細
 ====
 
-TBD
-----------
+一覧からクロール情報のセッションIDをクリックすることで、対象のクロール情報詳細が表示されます。
 
-TBD
+|image1|
 
 .. |image0| image:: ../../../resources/images/ja/10.0/admin/crawlinginfo-1.png
 .. |image1| image:: ../../../resources/images/ja/10.0/admin/crawlinginfo-2.png
