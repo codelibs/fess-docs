@@ -17,4 +17,5 @@
    search-fuzzy
    search-additional
    json-response
+   role-search
 
