@@ -16,24 +16,25 @@
    webconfig-guide
    fileconfig-guide
    dataconfig-guide
-   boostdoc-guide
-   duplicatehost-guide
-   reqheader-guide
-   keymatch-guide
    labeltype-guide
-   webauth-guide
+   keymatch-guide
+   boostdoc-guide
    pathmap-guide
+   webauth-guide
    fileauth-guide
+   reqheader-guide
+   duplicatehost-guide
    roletype-guide
    user-guide
    role-guide
    group-guide
    elevateword-guide
    badword-guide
-   log-guide
-   searchlist-guide
    systeminfo-guide
-   crawlinginfo-guide
-   failureurl-guide
    joblog-guide
+   crawlinginfo-guide
+   log-guide
+   failureurl-guide
+   searchlist-guide
+   backup-guide
 
