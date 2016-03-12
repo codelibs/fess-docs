@@ -17,3 +17,11 @@
 最新機能を試してみたい場合などにご利用ください。
 
 http://fess.codelibs.org/snapshot/
+
+過去のリリース
+==============
+
+Fess 9.xまでのリリース物はOSDNよりダウンロードができます。
+
+* `Fess 〜9.x <https://osdn.jp/projects/fess/releases/p9987>`_
+
