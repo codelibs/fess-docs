@@ -5,24 +5,21 @@ Crawling Info
 Overview
 ========
 
-TBD
+Crawling Info page manages execution logs for crawling information.
 
-Setup
+Management Operations
 =============
 
-TBD
+Display Crawling Info
 --------------
 
-TBD
+Select System > Crawling Info in the left menu to display a list page of Crawling Info, as below.
 
 |image0|
 
-TBD
-============
-
-TBD
+Details
 ----------
 
-TBD
+To display details for specific crawling session, click the row of crawling info data.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/crawlinginfo-1.png
