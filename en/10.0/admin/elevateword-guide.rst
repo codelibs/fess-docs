@@ -7,8 +7,6 @@ Overview
 
 TBD
 
-|image0|
-
 Management Operations
 =====================
 
@@ -17,7 +15,7 @@ Display Configurations
 
 Select Crawler > Additional Word in the left menu to display a list page of Additional Word Configuration, as below.
 
-|image1|
+|image0|
 
 Click a configuration name if you want to edit it.
 
@@ -26,7 +24,7 @@ Create Configuration
 
 Click Create New button to display a form page for Additional Word configuration.
 
-|image2|
+|image1|
 
 Configurations
 --------------
@@ -67,7 +65,7 @@ Download
 
 TBD
 
-|image3|
+|image2|
 
 Contents of CSV
 ---------------
@@ -79,7 +77,7 @@ Upload
 
 TBD
 
-|image4|
+|image3|
 
 Contents of CSV
 ---------------
@@ -91,4 +89,3 @@ TBD
 .. |image1| image:: ../../../resources/images/en/10.0/admin/elevateword-2.png
 .. |image2| image:: ../../../resources/images/en/10.0/admin/elevateword-3.png
 .. |image3| image:: ../../../resources/images/en/10.0/admin/elevateword-4.png
-.. |image4| image:: ../../../resources/images/en/10.0/admin/elevateword-5.png
