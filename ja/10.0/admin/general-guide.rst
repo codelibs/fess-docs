@@ -146,13 +146,13 @@ LDAP
 ----
 
 LDAP URL
---------
+::::::::
 
 LDAPサーバのを指定します。
 例: ldap://localhost:389
 
 Bind DN
--------
+:::::::
 
 ユーザーの識別名を指定します。
 例: uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
