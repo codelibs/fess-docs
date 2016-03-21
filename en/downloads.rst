@@ -7,8 +7,9 @@ Download
 
 A stable release is available from:
 
-* Fess 10.0.0 beta1
- * `fess-10.0.0-beta1.zip <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`_
+* `fess-10.0.2.zip <https://github.com/codelibs/fess/releases/tag/fess-10.0.2>`_
+* `fess-10.0.1.zip <https://github.com/codelibs/fess/releases/tag/fess-10.0.1>`_
+* `fess-10.0.0.zip <https://github.com/codelibs/fess/releases/tag/fess-10.0.0>`_
 
 
 Snapshot
