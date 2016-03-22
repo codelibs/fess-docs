@@ -11,11 +11,10 @@
 
 |Fess| は簡単に導入できる、Java
 ベースのオープンソース全文検索サーバーです。 |Fess| の検索エンジン部分には
-Apache Solr を利用しています。 Solr は、2
-億ドキュメントもインデックス可能と言われる非常に高機能な検索エンジンです。
-一方で、 Apache Solr
+Elasticsearch を利用しています。 Elasticsearch は、スケーラブルで柔軟な設計の高機能な検索エンジンです。
+一方で、 Elasticsearch
 で検索システムを構築しようとする場合、クローラ部分などを自分で実装する必要性があります。
-|Fess| ではクローラ部分に Seasar Project から提供される S2Robot
+|Fess| ではクローラ部分に CodeLibs の Fess Crawler
 を利用して、ウェブやファイルシステム上の様々な種類のドキュメントを収集して検索対象とすることができます。
 
 そこで、本記事では |Fess| による検索サーバーの構築について紹介します。
@@ -27,29 +26,29 @@ Apache Solr を利用しています。 Solr は、2
 
 -  既存のシステムに検索機能を追加してみたい方
 
--  Apache Solr に興味がある方
+-  Elasticsearch に興味がある方
 
 必要な環境
 ==========
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Windows 7 (Service Pack1)
+-  Ubuntu 14.04
 
--  JDK 1.7.0\_21
+-  Java 1.8.0\_74
 
 |Fess| とは
 =========
 
 |Fess| 
 はウェブやファイルシステムを対象とした、オープンソースの全文検索システムです。
-SourceForge.jp の `Fess サイト <http://fess.codelibs.org/ja/>`__\ から
+GitHub の `Fess サイト <http://fess.codelibs.org/ja/>`__\ から
 Apache ライセンスで提供されています。
 
 |Fess| の特徴
 -----------
 
-Java ベースの検索システム
+Java ベースの検索システム(TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 |Fess| 
@@ -77,7 +76,7 @@ S2Robot については後述します。
 ベースのシステムとして構築されているので、どのプラットフォームでも実行可能です。
 各種設定もウェブブラウザから簡単に設定する UI を備えています。
 
-Apache Solr を検索エンジンとして利用
+Apache Solr を検索エンジンとして利用(TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Apache Solr は Apache Software Foundation から提供される、Lucene
@@ -95,7 +94,7 @@ Apache Solr は Apache Software Foundation から提供される、Lucene
 このように |Fess| では Solr
 のもつ高い拡張性を活かすことができる設計になっています。
 
-S2Robot をクロールエンジンとして利用
+S2Robot をクロールエンジンとして利用(TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 S2Robot は Seasar
@@ -113,27 +112,18 @@ MS Office 系ファイル、zip
 でクロール実行するためのパラメータ等は |Fess| の管理 UI
 から設定することが可能です。
 
-モバイル対応
-~~~~~~~~~~~~
-
-|Fess| は
-docomo、au、ソフトバンクの携帯電話端末での閲覧にも対応しています。
-ドキュメントをインデックスする際にどの端末で検索結果を閲覧可能にするかを指定することができます。
-本稿ではモバイル端末での閲覧については省略し、次回説明します。
-
 インストールと起動
 ==================
 
-ここでは、 |Fess| を起動させ、検索を行うまでの手順を説明します。 Windows
-XP で実行することを想定して説明を行いますが、Mac OS X や Linux
+ここでは、 |Fess| を起動させ、検索を行うまでの手順を説明します。 Ubuntu14.04 で実行することを想定して説明を行いますが、Mac OS X や Windows
 でもほぼ同様の手順でインストールと起動を行うことができます。
 
 ダウンロードとインストール
 --------------------------
 
-http://sourceforge.jp/projects/fess/releases/
+https://github.com/codelibs/fess/releases
 から最新のパッケージをダウンロードします。
-この記事執筆の時点（2013/06）での最新バージョンは、 8.1.0 です。
+この記事執筆の時点（2016/03）での最新バージョンは、 10.0.2 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 |Fess| のダウンロード
@@ -142,21 +132,14 @@ http://sourceforge.jp/projects/fess/releases/
 起動
 ----
 
-CATALINA\_HOME と JAVA\_HOME
-を環境にあわせ適切に設定し、%CATALINA\_HOME%\\bin\\startup.bat
-を実行してください。 たとえば、C:\\fess に fess-8.1.0.zip
-を解凍した場合、CATALINA\_HOME は、C:\\fess\\fess-server-8.1.0
-になります。
+起動は簡単です。展開したディレクトリfess-<version>の中で以下のコマンドを実行します。
 
 |Fess| の起動
 ::
 
-    C:\fess\fess-server-8.1.0>set "JAVA_HOME=C:\Program Files\Java\jdk1.7.0_21"
-    C:\fess\fess-server-8.1.0>set CATALINA_HOME=C:\fess\fess-server-8.1.0
-    C:\fess\fess-server-8.1.0>cd bin
-    C:\fess\fess-server-8.1.0\bin>startup.bat
+    $ ./bin/fess
 
-ブラウザで http://localhost:8080/fess/
+ブラウザで http://localhost:8080/
 にアクセスし、以下のような画面が表示されれば、 |Fess| は起動しています。
 
 検索トップ画面
@@ -165,12 +148,7 @@ CATALINA\_HOME と JAVA\_HOME
 停止
 ----
 
-shutdown.bat を実行してください。
-
-|Fess| の停止
-::
-
-    C:\fess\fess-server-8.1.0\bin>shutdown.bat
+Fess サーバーを停止させるには Fess のプロセスを kill します。
 
 ディレクトリ構成
 ----------------
@@ -180,55 +158,41 @@ shutdown.bat を実行してください。
 ディレクトリ構成
 ::
 
-    fess-server-8.1.0/
+    fess-10.0.2
     |-- LICENSE
-    |-- NOTICE
-    |-- RELEASE-NOTES
-    |-- RUNNING.txt
+    |-- README.md
+    |-- app/
+    |   |-- META-INF/
+    |   |-- WEB-INF/
+    |   |   |-- cachedirs/
+    |   |   |-- classes/
+    |   |   |-- conf/
+    |   |   |-- crawler/
+    |   |   |-- lib/
+    |   |   |-- logs/
+    |   |   |-- orig/
+    |   |   |-- screenshots/
+    |   |   |-- suggest/
+    |   |   |-- view/
+    |   |   |-- fe.tld
+    |   |   `-- web.xml
+    |   |-- css/
+    |   |-- images/
+    |   |-- js/
+    |   `--favicon.ico
     |-- bin/
-    |-- conf/
+    |-- es/
+    |   |-- config/
+    |   |-- data/
+    |   |-- logs/
+    |   |-- plugins/
+    |   `-- work/
     |-- extension/
     |-- lib/
     |-- logs/
-    |-- solr/                           -- 
-    |   |-- contrib/
-    |   |-- core1/
-    |   |   |-- bin/                    -- 
-    |   |   |-- conf/                   -- 
-    |   |   |-- data/                   -- 
-    |   |   `-- txlog/
-    |   |-- dist/
-    |   `-- lib/
-    |-- temp/
-    |-- webapps/
-    |   |-- fess/
-    |   |   |-- META-INF/
-    |   |   |-- WEB-INF/
-    |   |   |   |-- cachedirs/          -- 
-    |   |   |   |-- classes/            -- 
-    |   |   |   |-- db/                 -- 
-    |   |   |   |-- cmd/
-    |   |   |   |-- conf/
-    |   |   |   |-- lib/
-    |   |   |   |-- orig/
-    |   |   |   |-- logs/               -- 
-    |   |   |   |-- view/               -- 
-    |   |   |   |-- fe.tld
-    |   |   |   |-- struts-config.xml
-    |   |   |   |-- validator-rules.xml
-    |   |   |   `-- web.xml
-    |   |   |-- css/                    -- 
-    |   |   |-- js/                     -- 
-    |   |   |-- images/                 -- 
-    |   |   `-- jar/
-    |   |-- fess.war
-    |   |-- solr/                       -- 
-    |   |-- solr.war
-    |   |-- manager/
-    |   `-- manager.war
-    `-- work/
+    `-- temp/
 
-「fess-server-8.1.0」直下のディレクトリ構成は Tomcat 7
+(TODO)「fess-server-8.1.0」直下のディレクトリ構成は Tomcat 7
 とほぼ同様で、Solr
 のデータディレクトリ「solr」、「fess.war」と「solr.war」が配備された形になります。
 配備された「fess.war」は「webapps/fess/WEB-INF/view」に検索画面や管理画面の
@@ -240,13 +204,13 @@ JSP ファイルが配置されています。 また、利用している CSS
 
 起動直後の状態では、検索するためのインデックスが作成されていないため、検索しても何も結果が返ってきません。
 ですので、まずインデックスを作成する必要があります。 ここでは、
-http://fess.codelibs.org/ja/
+http://fess.codelibs.org/
 以下を対象にインデックスを作成し、検索を行うまでを例として説明します。
 
 管理ページへのログイン
 ----------------------
 
-まず、管理ページである http://localhost:8080/fess/admin
+まず、管理ページである http://localhost:8080/admin
 にアクセスし、ログインしてください。
 デフォルトではユーザー名、パスワードともに admin です。
 
@@ -263,36 +227,30 @@ http://fess.codelibs.org/ja/
 ［新規作成］を選択
 |image4|
 
-ウェブクロールの設定として、今回は、\ http://fess.codelibs.org/ja/
+ウェブクロールの設定として、今回は、\ http://fess.codelibs.org/
 以下のすべてのページをクロール対象とすることにします。
-また、ブラウザタイプとしてもすべてを選択し、PC
-や携帯電話のどのような環境から検索をしても結果が表示されるようにします。
+設定項目は URL : http://fess.codelibs.org/ 、クロール対象とするURL : http://fess.codelibs.org/.*
+、最大アクセス数 : 30 、間隔 : 3000 ミリ秒 とし、他はデフォルトにします。
 
 ウェブクロールの設定
 |image5|
 
-その後、確認画面で［作成］をクリックすることで、クロールの対象を登録することができます。
-登録内容は、［編集］から変更することが可能です。
+［作成］をクリックすることで、クロールの対象を登録することができます。
+登録内容は、各設定を押下して変更することが可能です。
 
 ウェブクロールの設定の登録完了
 |image6|
 
-クロールのスケジュール設定
---------------------------
+クロールを開始する
+------------------
 
-次に、ドキュメントを巡回して収集するクロールスケジュールを設定します。
-クロールのスケジュールは管理ページの左側のメニューの［クロール全般］から設定します。
+次に、システム > スケジューラ > Default Crawler を選択し、[今すぐ開始]を押下します。
 
-設定の書式は、Unix の Cron
-に似ています。左から、秒、分、時、日、月、曜日 を表します。
-たとえば、毎日 12:10am にクロールを行わせたい場合、「0 10 12 \* \* ?」
-とします。
-
-クロールのスケジュール設定
+スケジューラの選択
 |image7|
 
-クロールが開始され、インデックスが作成されているかどうかは、左側のメニューの［セッション情報］から確認することができます。
-クロールが完了している場合、[セッション情報] の
+クロールが開始され、インデックスが作成されているかどうかは、システム情報 > クロール情報 から確認することができます。
+クロールが完了している場合、[クロール情報] の
 インデックスサイズ(ウェブ/ファイル)
 に検索対象としたドキュメント数が表示されます。
 
@@ -319,67 +277,55 @@ http://fess.codelibs.org/ja/
 デザイン自体を変えたい場合については、シンプルな JSP
 ファイルで記述されているので HTML の知識があれば変更することができます。
 
-まず、検索トップ画面は「webapps/fess/WEB-INF/view/index.jsp」ファイルになります。
+まず、検索トップ画面は「app/WEB-INF/view/index.jsp」ファイルになります。
 
-検索トップ画面のJSPファイル
+検索トップ画面のJSPファイルの一部
 ::
 
-    <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-    <html>
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="content-style-type" content="text/css" />
-    <meta http-equiv="content-script-type" content="text/javascript" />
-    <title> |Fess| </title>
-    <link href="${f:url('/css/style.css')}" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
-    <div id='main'>
-    <s:form action="search">
-      <table>
-        <tbody>
-          <tr>
-            <td><img id="logo" src="${f:url('/images/')}" alt="<bean:message key="labels.search_top_logo_alt"/>" /></td>
-            <td><div class="input">
-              <html:text styleClass="query" property="query" title="Search" size="50" maxlength="1000"/>
-              <input class="btn" type="submit" value="<bean:message key="labels.top.search"/>" name="search" />
-            </div></td>
-          </tr>
-        </tbody>
-      
-    </s:form></div>
-    </body>
-    </html>
+	<div class="container">
+		<div class="row content">
+			<div class="center-block searchFormBox">
+				<h1 class="mainLogo">
+					<img src="${f:url('/images/logo.png')}"
+						alt="<la:message key="labels.index_title" />" />
+				</h1>
+				<div class="notification">${notification}</div>
+				<div>
+					<la:info id="msg" message="true">
+						<div class="alert-message info">${msg}</div>
+					</la:info>
+					<la:errors header="errors.front_header"
+						footer="errors.front_footer" prefix="errors.front_prefix"
+						suffix="errors.front_suffix" />
+				</div>
+				<la:form styleClass="form-stacked" action="search" method="get"
+					styleId="searchForm">
+					${fe:facetForm()}${fe:geoForm()}
 
-検索トップ画面に表示される画像を変更する場合は、「logo.gif」の箇所を置き換えたいファイル名に変更します。
-ファイルは「webapps/fess/images」に配置します。
+検索トップ画面に表示される画像を変更する場合は、上記の「logo.png」の箇所を置き換えたいファイル名に変更します。
+ファイルは「app/images」に配置します。
 
-<s:form> や <bean:message> などは JSP タグになります。
+<la:form> や <la:message>などは JSP タグになります。
 たとえば、<s:form> は実際の HTML 表示時に form タグに変換されます。
-詳しい説明は SAStruts のサイトや JSP に関するサイトをご覧ください。
+詳しい説明は LastaFlute のサイトや JSP に関するサイトをご覧ください。
 
-次に、検索結果一覧画面は「webapps/fess/WEB-INF/view/search.jsp」ファイルになります。
+次に、検索結果一覧画面のヘッダー部分は「app/WEB-INF/view/header.jsp」ファイルになります。
 
-検索結果一覧画面のJSPファイルの一部
+ヘッダーJSPファイルの一部
 ::
 
-    <div id="header">
-      <s:form action="search">
-        <div class="input">
-          <s:link action="index" title=" |Fess| Home">
-            <img class="logo" src="${f:url('/images/')}" alt="<bean:message key="labels.search_header_logo_alt"/>"/>
-          </s:link>                                 
-          <html:text styleClass="query" property="query" title="Search" size="50" maxlength="1000" />
-          <input class="btn" type="submit" value="<bean:message key="labels.search"/>" name="search"/>
-        </div>
-      </s:form>
-    </div>
+    <la:link styleClass="navbar-brand" href="/">
+		<img src="${f:url('/images/logo-head.png')}"
+			alt="<la:message key="labels.header_brand_name" />" />
+	</la:link>
 
-検索結果一覧画面の上部に表示される画像を変更する場合は、「logo-head.gif」の箇所のファイル名を変更します。
-「logo.gif」の場合と同様に「webapps/fess/images」に配置します。
+検索結果一覧画面の上部に表示される画像を変更する場合は、上記の「logo-head.png」の箇所のファイル名を変更します。
+「logo.png」の場合と同様に「app/images」に配置します。
+
+また、これらの設定は システム > ページのデザイン からも設定することが可能です。
 
 JSP ファイルで利用している CSS
-ファイルを変更したい場合は「webapps/fess/css」に配置されている「style.css」を編集してください。
+ファイルを変更したい場合は「app/css」に配置されている「style.css」を編集してください。
 
 まとめ
 ======
@@ -390,23 +336,14 @@ JSP ファイルで利用している CSS
 の実行環境があれば検索システムを簡単に構築できることをご紹介できたと思います。
 既存のシステムにサイト検索機能を追加したいような場合にも導入できるので、ぜひお試しください。
 
-次回は、 |Fess| 
-がサポートするモバイルサイトの検索機能をご紹介したいと思います。
-
 参考資料
 ========
 
 -  `Fess <http://fess.codelibs.org/ja/>`__
 
--  `Apache Solr <http://lucene.apache.org/solr/>`__
+-  `Elasticsearch <https://www.elastic.co/products/elasticsearch>`__
 
--  `S2Robot <http://s2robot.sandbox.seasar.org/ja/>`__
-
--  `SAStruts <http://sastruts.seasar.org/>`__
-
--  `DBFlute <http://dbflute.sandbox.seasar.org/>`__
-
--  `S2Chronos <http://s2chronos.sandbox.seasar.org/ja/>`__
+-  `LastaFlute <http://dbflute.seasar.org/ja/lastaflute/>`__
 
 .. |image0| image:: ../../resources/images/ja/article/1/architecture.png
 .. |image1| image:: ../../resources/images/ja/article/1/fess-download.png
@@ -415,7 +352,7 @@ JSP ファイルで利用している CSS
 .. |image4| image:: ../../resources/images/ja/article/1/web-crawl-conf-1.png
 .. |image5| image:: ../../resources/images/ja/article/1/web-crawl-conf-2.png
 .. |image6| image:: ../../resources/images/ja/article/1/web-crawl-conf-3.png
-.. |image7| image:: ../../resources/images/ja/article/1/crawl-schedule-conf.png
+.. |image7| image:: ../../resources/images/ja/article/1/scheduler.png
 .. |image8| image:: ../../resources/images/ja/article/1/session-info-1.png
 .. |image9| image:: ../../resources/images/ja/article/1/session-info-2.png
 .. |image10| image:: ../../resources/images/ja/article/1/search-result.png
