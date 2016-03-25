@@ -5,11 +5,10 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 ロールベー�
 はじめに
 ========
 
-前回の\ `モバイル編 <http://codezine.jp/article/detail/4527>`__\ では、 Fess を用いてどのように携帯端末向け検索システムを構築するかをご紹介しました。
 本記事では Fess の特徴的な機能の一つでもあるロールベース検索機能についてご紹介します。
 
-本記事では Fess 8.2.0 を利用して説明します。
-Fess の構築方法については\ `導入編 <http://codezine.jp/article/detail/4526>`__\ を参照してください。
+本記事では Fess 10.0.2 を利用して説明します。
+Fess の構築方法については\ `導入編 <http://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
 ========
@@ -23,11 +22,11 @@ Fess の構築方法については\ `導入編 <http://codezine.jp/article/deta
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  CentOS 5.5
+-  Ubuntu 14.04
 
--  JDK 1.6.0\_22
+-  JDK 1.8.0\74
 
-ロールベース検索
+ロールベース検索(TODO)
 ================
 
 Fess のロールベース検索とは、任意の認証システムで認証されたユーザーの認証情報を元に検索結果を出し分ける機能です。
@@ -54,225 +53,120 @@ Fess のロールベース検索ではロール情報を以下の場所から取
 ロールベース検索を利用するための設定
 ====================================
 
-Fess 8.2.0 がインストールしてあるものとします。
-まだ、インストールしていない場合は、\ `導入編 <http://codezine.jp/article/detail/4526>`__\ を参考にしてインストールしてください。
+Fess 10.0.2 がインストールしてあるものとします。
+まだ、インストールしていない場合は、\ `導入編 <http://fess.codelibs.org/ja/articles/article-1.html>`__\ を参考にしてインストールしてください。
 
-認証システムには様々なものがありますが、 Fess では別途認証システムを構築せずに Fess の既存のログイン画面を利用したTomcatの認証を試せる環境を提供しているので、本記事ではこれを利用してJ2EEの認証情報（Tomcatの認証）を利用したロールベース検索を説明します。
+(TODO)認証システムには様々なものがありますが、 Fess では別途認証システムを構築せずに Fess の既存のログイン画面を利用したTomcatの認証を試せる環境を提供しているので、本記事ではこれを利用してJ2EEの認証情報（Tomcatの認証）を利用したロールベース検索を説明します。
 
-Tomcatにユーザーを追加
-----------------------
+設定の概要
+----------
 
-まず、検索結果を出し分けて表示するためにユーザーをTomcatに追加します。
-今回は、営業部（sales）と技術部（eng）の2つのロールを作成します。
-そして、ユーザーはsalesロールに属するtaroユーザーとengロールに属するhanakoユーザーを追加します。
-これらのユーザー情報を以下のように「\ ``conf/tomcat-users.xml``\ 」に記述します。
+今回は、営業部（sales）と技術部（eng）の2つのロールを作成します。 そしてtaroユーザーはsalesロールに属し\ http://www.n2sm.net/\ の検索結果を得られるようし、hanakoユーザーはengロールに属し、\ http://fess.codelibs.org/\ の検索結果を得られるようする。 
 
-tomcat-users.xmlの内容
-::
+ロールの作成
+------------
 
-    <?xml version='1.0' encoding='utf-8'?>
-    <tomcat-users>
-      <role rolename="fess"/>
-      <role rolename="solr"/>
-      <role rolename="manager"/>
-      <role rolename="sales"/><!-- 追加 -->
-      <role rolename="eng"/><!-- 追加 -->
-      <user username="admin" password="admin" roles="fess"/>
-      <user username="solradmin" password="solradmin" roles="solr"/>
-      <user username="manager" password="manager" roles="manager"/>
-      <user username="taro" password="taropass" roles="sales"/><!-- 追加 -->
-      <user username="hanako" password="hanakopass" roles="eng"/><!-- 追加 -->
-    </tomcat-users>
+まず管理画面にアクセスします。
+http://localhost:8080/admin/
 
-既存の認証システムを利用する場合はこの設定は不要です。
+ユーザー > ロール > 新規作成 から 名前に｢sales｣と入力し、salesロールを作成します。
+同様にengロールも作成します。
 
-fess.diconの設定
-----------------
+ロールの一覧
+|image0|
 
-ここからが Fess に対する設定になります。
-まず、「\ ``webapps/fess/WEB-INF/classes/fess.dicon``\ 」のroleQueryHelperでデフォルトロールと認証情報の取得方法を設定します。
-今回はJ2EEの認証情報を用いるので、「\ ``fess.dicon``\ 」のroleQueryHelperは以下のような設定になります。
+クローラ用ロールの作成
+--------------------------
 
-fess.diconの内容
-::
+ユーザー > ロール > sales > 新しいクローラ用ロールの作成 を押下します。
+名前に ｢営業部｣と入力し、値は｢sales｣のままで[作成]を押下します。
+すると クローラ > ロール の一覧に営業部の設定が追加されます。
 
-    :
-    <component name="roleQueryHelper" class="jp.sf.fess.helper.impl.RoleQueryHelperImpl">
-        <property name="defaultRoleList">
-            {"guest"}
-        </property>
-    </component>
-    :
+同様に engロールのクローラ用ロールの名前を｢技術部｣として登録します。
 
-上記のようにデフォルトロールを設定します。
-デフォルトロールは、ログインしていない状態で検索するときにそのロールとして検索したと扱われます。
-デフォルトロールを指定しないと、ログインしていない状態の検索ですべての検索結果が表示されてしまいます。
+クローラ用ロールの一覧
+|image1|
 
-J2EEの認証情報以外で利用する場合についてもここで説明しておきます。
-リクエストパラメータから認証情報を取得する場合は以下のように設定します。
 
-fess.diconの内容
-::
+ユーザーの作成
+--------------
 
-    :
-    <component name="roleQueryHelper" class="jp.sf.fess.helper.impl.RoleQueryHelperImpl">
-        <property name="parameterKey">"fessRoles"</property>
-        <property name="encryptedParameterValue">false</property>
-        <property name="defaultRoleList">
-            {"guest"}
-        </property>
-    </component>
-    :
+ユーザー > ユーザー > 新規作成 からtaroユーザーとhanakoユーザーを下図の設定で作成します。
 
-ここでは、リクエストパラメータのキーにfessRolesを指定して、ロール情報をカンマ区切りの値で渡すことができます。
-たとえば、salesロールとadminロールを持つユーザーが検索する際のURLは「\ ``http://hostname/fess/search?...&fessRoles=sales%0aadmin``\ 」のようにfessRolesを付加されます。
-ここではencryptedParameterValueをfalseに設定していますが、この値をtrueにするとfessRolesの値部分をBlowfishやAESなどで暗号化して渡すことができます。
-暗号化して値を渡す場合には、 Fess Cipherコンポーネントを指定して復号化できるように設定する必要があります。
++--------------+-----------+-----------+
+|              | 太郎      | 花子      |
++--------------+-----------+-----------+
+| ユーザー名   | taro      | hanako    |
++--------------+-----------+-----------+
+| パスワード   | taro      | hanako    |
++--------------+-----------+-----------+
+| ロール       | sales     | eng       |
++--------------+-----------+-----------+
 
-リクエストヘッダーから認証情報を取得する場合は以下のように設定します。
-
-fess.diconの内容
-::
-
-    :
-    <component name="roleQueryHelper" class="jp.sf.fess.helper.impl.RoleQueryHelperImpl">
-        <property name="headerKey">"fessRoles"</property>
-        <property name="encryptedParameterValue">false</property>
-        <property name="defaultRoleList">
-            {"guest"}
-        </property>
-    </component>
-    :
-
-リクエストヘッダーのキーにfessRolesを指定して、ロール情報をカンマ区切りの値で渡すことができます。
-
-クッキーから認証情報を取得する場合は以下のように設定します。
-
-fess.diconの内容
-::
-
-    :
-    <component name="roleQueryHelper" class="jp.sf.fess.helper.impl.RoleQueryHelperImpl">
-        <property name="cookieKey">"fessRoles"</property>
-        <property name="encryptedParameterValue">false</property>
-        <property name="defaultRoleList">
-            {"guest"}
-        </property>
-    </component>
-    :
-
-リクエストパラメータと同様に、クッキーの名前にfessRolesを指定して、ロール情報をカンマ区切りの値で渡すことができます。
-
-web.xmlの設定
--------------
-
-「\ ``fess.dicon``\ 」と同様にログインできるようにするために「\ ``webapps/fess/WEB-INF/web.xml``\ 」のセキュリティ関連の設定を変更します。
-以下のような設定になります。
-
-web.xmlの内容
-::
-
-    :
-    <security-constraint>
-      <web-resource-collection>
-        <web-resource-name> Fess Authentication</web-resource-name>
-        <url-pattern>/login/login</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-        <role-name>fess</role-name>
-        <role-name>sales</role-name>
-        <role-name>eng</role-name>
-      </auth-constraint>
-    </security-constraint>
-    :
-    <security-role>
-      <role-name>fess</role-name>
-    </security-role>
-    <security-role>
-      <role-name>sales</role-name>
-    </security-role>
-    <security-role>
-      <role-name>eng</role-name>
-    </security-role>
-    :
-
-リクエストパラメータなどの他の認証を用いる場合には、この設定は不要です。
-
-ロールベース検索の実行
-======================
-
-設定が一通り完了したので、 Fess を起動してください。
 
 登録ユーザーの確認
 ------------------
 
 今回の設定でadmin、taro、hanakoの3つユーザーで Fess にログインできる状態になっています。
 順にログインできることを確認してください。
-http://localhost:8080/fess/admin/\ にアクセスして、adminユーザーでログインすると通常通り管理画面が表示されます。
-次にadminユーザーをログアウトして、再度\ http://localhost:8080/fess/admin/\ にアクセスして、taroとhanakoユーザーでログインしてください。
-ログインが成功すると、\ http://localhost:8080/fess/\ の検索画面が表示されます。
-ログアウトするときは、\ http://localhost:8080/fess/admin/\ にアクセスして［ログアウト］ボタンをクリックします。
+http://localhost:8080/admin/\ にアクセスして、adminユーザーでログインすると通常通り管理画面が表示されます。
+次にadminユーザーをログアウトします。管理画面右上のボタンをクリックしてください。
 
-ログアウト画面
-|image0|
+ログアウトボタン
+|image2|
 
-ロールの作成
-------------
-
-adminユーザーでログインして、左側のメニューの［ロール］をクリックしてロール一覧を表示します。
-今回は次の3つのロールを作成してください。
-
-ロール一覧
-
-+--------------+-----------+
-| ロール名     | 値        |
-+--------------+-----------+
-| デフォルト   | default   |
-+--------------+-----------+
-| 営業部       | sales     |
-+--------------+-----------+
-| 技術部       | eng       |
-+--------------+-----------+
+ユーザー名とパスワードを入力してtaroやhanakoでログインしてください。
+ログインが成功すると、\ http://localhost:8080/\ の検索画面が表示されます。
 
 クロール設定の追加
 ------------------
 
 クロール対象を登録します。
 今回は営業部ロールのユーザーは\ http://www.n2sm.net/\ だけを検索でき、技術部ロールのユーザーは\ http://fess.codelibs.org/\ だけを検索できるようにします。
-これらのクロール設定を登録するため、左側のメニューの［ウェブ］をクリックしてウェブクロール設定一覧を表示します。
-[新規作成] をクリックして、ウェブクロール設定を作成してください。
-まず、営業部用に\ http://www.n2sm.net/\ へのクロール設定として［ロール］項目に営業部を選択して作成します。
-次に\ http://fess.codelibs.org/\ のクロール設定でロールに技術部を選択して作成します。
+これらのクロール設定を登録するため、クローラ > ウェブ > 新規作成 をクリックして、ウェブクロール設定を作成してください。
+今回は下記のような設定にします。他はデフォルトです。
 
-ウェブクロール設定のロール項目
-|image1|
++-----------------------+------------------------+-----------------------------+
+|                       | N2SM                   | Fess                        |
++-----------------------+------------------------+-----------------------------+
+| 名前                  | N2SM                   | Fess                        |
++-----------------------+------------------------+-----------------------------+
+| URL                   | http://www.n2sm.net/   | http://fess.codelibs.org/   |
++-----------------------+------------------------|-----------------------------+
+| クロール対象とするURL | http://www.n2sm.net/.* | http://fess.codelibs.org/.* |
++-----------------------+------------------------+-----------------------------+
+| 最大アクセス数        | 10                     | 10                          |
++-----------------------+------------------------+-----------------------------+
+| 間隔                  | 3000ミリ秒             | 3000ミリ秒                  |
++------------------------------------------------+-----------------------------+
+| ロール                | 営業部                 | 技術部                      |
++------------------------------------------------+-----------------------------+
 
 クロールの開始
 --------------
 
-クロール設定登録後、左側のメニューの［システム設定］をクリックして、システム設定画面で［開始］ボタンをクリックして、クロールを開始します。
-クロールが完了するまでしばらく待ちます。
+クロール設定登録後、システム > スケジューラ > Default Crawler から[今すぐ開始]を押下します。クロールが完了するまでしばらく待ちます。
 
 検索
 ----
 
-クロール完了後、\ http://localhost:8080/fess/\ にアクセスして、ログインしていない状態で「fess」などの単語を検索して、検索結果が表示されないことを確認してください。
+クロール完了後、\ http://localhost:8080/\ にアクセスして、ログインしていない状態で「fess」などの単語を検索して、検索結果が表示されないことを確認してください。
 次にtaroユーザーでログインして、同様に検索してください。
 taroユーザーはsalesロールを持つため、\ http://www.n2sm.net/\ の検索結果だけが表示されます。
 
 salesロールでの検索画面
-|image2|
+|image3|
 
 taroユーザーをログアウトして、hanakoユーザーでログインしてください。
 先ほどと同様に検索すると、hanakoユーザーはengロールを持つので、\ http://fess.codelibs.org/\ の検索結果だけが表示されます。
 
 engロールでの検索画面
-|image3|
+|image4|
 
 まとめ
 ======
 
-Fess のセキュリティー機能の一つであるロールベース検索についてご紹介しました。
+(TODO)Fess のセキュリティー機能の一つであるロールベース検索についてご紹介しました。
 J2EEの認証情報を用いたロールベース検索を中心に説明しましたが、 Fess への認証情報の受け渡しは汎用的な実装であるので様々な認証システムに対応できると思います。
 ユーザーの属性ごとに検索結果を出し分けることができるので、社内ポータルサイトや共有フォルダなどの閲覧権限ごとに検索が必要なシステムも実現することが可能です。
 
@@ -283,7 +177,8 @@ J2EEの認証情報を用いたロールベース検索を中心に説明しま�
 
 -  `Fess <http://fess.codelibs.org/ja/>`__
 
-.. |image0| image:: ../../resources/images/ja/article/3/logout.png
-.. |image1| image:: ../../resources/images/ja/article/3/crawl-conf-role.png
-.. |image2| image:: ../../resources/images/ja/article/3/search-by-sales.png
-.. |image3| image:: ../../resources/images/ja/article/3/search-by-eng.png
+.. |image0| image:: ../../resources/images/ja/article/3/role-1.png
+.. |image1| image:: ../../resources/images/ja/article/3/role-2.png
+.. |image2| image:: ../../resources/images/ja/article/3/logout.png
+.. |image3| image:: ../../resources/images/ja/article/3/search-by-sales.png
+.. |image4| image:: ../../resources/images/ja/article/3/search-by-eng.png

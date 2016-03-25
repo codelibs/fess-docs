@@ -6,13 +6,11 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 REST API 編
 ========
 
 前回の\ `ロールベース検索編 <http://codezine.jp/article/detail/5605>`__\ では、ユーザーに閲覧権限が必要な環境においてどのように Fess を利用できるかをご紹介しました。
-今回は Fess が提供するREST
-APIを利用して、クライアントサイド（ブラウザ側）で検索とその結果の表示を行う方法をご紹介します。
-REST
-APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
+今回は Fess が提供するREST APIを利用して、クライアントサイド（ブラウザ側）で検索とその結果の表示を行う方法をご紹介します。
+REST APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
 
-本記事では Fess 8.1.0を利用して説明します。
-Fess の構築方法については\ `導入編 <http://codezine.jp/article/detail/4526>`__\ を参照してください。
+本記事では Fess 10.0.2を利用して説明します。
+Fess の構築方法については\ `導入編 <http://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
 ========
@@ -26,26 +24,24 @@ Fess の構築方法については\ `導入編 <http://codezine.jp/article/deta
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  IE 10
+-  Google Chrome 49.0.2623.87
 
--  Firefox 21
+-  Firefox 45.0
 
 REST API
 ========
 
-Fess は通常のHTMLによる検索表現以外に、REST
-APIとしてXMLおよびJSON（JSONPも含む）による検索結果の応答が可能です。
-REST
-APIを利用することで、 Fess サーバーを構築しておき、既存のシステムから検索結果だけを問い合わせにいくことも簡単に実現できます。
+Fess は通常のHTMLによる検索表現以外に、REST APIとしてXMLおよびJSON（JSONPも含む）による検索結果の応答が可能です。
+REST APIを利用することで、 Fess サーバーを構築しておき、既存のシステムから検索結果だけを問い合わせにいくことも簡単に実現できます。
 検索結果をXMLやJSONなどの開発言語に依存しない形式で扱えるので、 Fess をJava以外のシステムにも統合しやすいと思います。
 XMLやJSONはJavaScriptのライブラリでもサポートされているので、Ajaxとして利用する場合でも簡単に扱うことができます。
 
 Fess の提供しているREST
 APIがどのような応答を返してくるのかについては以下を参照してください。
 
-1. `XML応答 <http://fess.codelibs.org/ja/4.0/user/xml-response.html>`__
+1. `XML応答 <http://fess.codelibs.org/ja/10.0/user/xml-response.html>`__
 
-2. `JSON（JSONP）応答 <http://fess.codelibs.org/ja/4.0/user/json-response.html>`__
+2. `JSON（JSONP）応答 <http://fess.codelibs.org/ja/10.0/user/json-response.html>`__
 
 Fess は内部の検索エンジンとして Elasticsearch を利用しています。
 ElasticsearchもXMLやJSONによるAPIを提供していますが Fess のAPIは異なるものです。
@@ -58,17 +54,14 @@ REST APIを利用した検索サイトの構築
 今回は Fess のREST APIを利用したサイトを構築する方法を説明します。
 Fess サーバーとのやりとりにはJSON応答を利用します。
 今回利用する Fess サーバーは Fess プロジェクトでデモ用として公開している Fess サーバーを利用しています。
-もし、独自の Fess サーバーを利用したい場合は Fess 
-4.0.0以降のバージョンをインストールしてください。 Fess 
-4.0.0以降でJSONPがサポートされています。
+もし、独自の Fess サーバーを利用したい場合は Fess 10.0.0以降のバージョンをインストールしてください。
 
 JSONとJSONP
 -----------
 
 Ajaxの利用時に注意すべきセキュリティモデルとしてSame-Originポリシーがあります。
 これにより、ブラウザで表示するHTMLを出力するサーバーと Fess サーバーが同じドメインに存在する場合はJSONを利用することができますが、異なる場合はJSONPを利用する必要があります。
-Fess のREST
-APIでは、JSON応答でリクエストパラメータにcallbackキーで値を渡すことでJSONPを利用することができます。
+Fess のREST APIでは、JSON応答でリクエストパラメータにcallbackキーで値を渡すことでJSONPを利用することができます。
 
 Same-Originポリシー。（b）の場合は Fess が返す検索結果（JSON）が別ドメインになるためJSONPを利用する必要があります。
 |image0|
@@ -150,7 +143,7 @@ fess.jsの内容
 
     $(function(){
       // (1) Fess の URL
-      var baseUrl = "http://search.n2sm.co.jp/json?callback=?&query=";
+      var baseUrl = "http://search.n2sm.co.jp/json?callback=?&q=";
       // (2) 検索ボタンのjQueryオブジェクト
       var $searchButton = $('#searchButton');
 
@@ -207,28 +200,28 @@ fess.jsの内容
 
               var $subheader = $('#subheader'),
                   $result = $('#result'),
-                  recordCount = dataResponse.recordCount,
+                  record_count = dataResponse.record_count,
                   offset = 0,
                   buf = [];
-              if(recordCount == 0) { // (11) 検索結果がない場合
+              if(record_count == 0) { // (11) 検索結果がない場合
                 // サブヘッダー領域に出力
                 $subheader[0].innerHTML = "";
                 // 結果領域に出力
-                buf.push("<b>", dataResponse.query, "</b>に一致する情報は見つかりませんでした。");
+                buf.push("<b>", dataResponse.q, "</b>に一致する情報は見つかりませんでした。");
                 $result[0].innerHTML = buf.join("");
               } else { // (12) 検索にヒットした場合
-                var pageNumber = dataResponse.pageNumber,
-                    pageSize = dataResponse.pageSize,
-                    pageCount = dataResponse.pageCount,
-                    startRange = (pageNumber - 1) * pageSize + 1,
-                    endRange = pageNumber * pageSize,
+                var page_number = dataResponse.page_number,
+                    page_size = dataResponse.page_size,
+                    page_count = dataResponse.page_count,
+                    startRange = (page_number - 1) * page_size + 1,
+                    endRange = page_number * page_size,
                     i = 0,
                     max;
                 offset = startRange - 1;
                 // (13) サブヘッダーに出力
-                buf.push("<b>", dataResponse.query, "</b> の検索結果 ",
-                  recordCount, " 件中 ", startRange, " - ",
-                  endRange, " 件目 (", dataResponse.execTime,
+                buf.push("<b>", dataResponse.q, "</b> の検索結果 ",
+                  record_count, " 件中 ", startRange, " - ",
+                  endRange, " 件目 (", dataResponse.exec_time,
                     " 秒)");
                 $subheader[0].innerHTML = buf.join("");
 
@@ -241,21 +234,21 @@ fess.jsの内容
                 for(i = 0, max = results.length; i < max; i++) {
                   buf = [];
                   buf.push('<li><h3 class="title">', '<a href="',
-                    results[i].urlLink, '">', results[i].contentTitle,
+                    results[i].urlLink, '">', results[i].title,
                     '</a></h3><div class="body">', results[i].contentDescription,
                     '<br/><cite>', results[i].site, '</cite></div></li>');
                   $(buf.join("")).appendTo($resultBody);
-                } 
+                }
                 $resultBody.appendTo($result);
 
                 // (15) ページ番号情報の出力
                 buf = [];
-                buf.push('<div id="pageInfo">', pageNumber, 'ページ目<br/>');
-                if(pageNumber > 1) {
+                buf.push('<div id="pageInfo">', page_number, 'ページ目<br/>');
+                if(page_number > 1) {
                   // 前のページへのリンク
                   buf.push('<a id="prevPageLink" href="#">&lt;&lt;前ページへ</a> ');
                 }
-                if(pageNumber < pageCount) {
+                if(page_number < page_count) {
                   // 次のページへのリンク
                   buf.push('<a id="nextPageLink" href="#">次ページへ&gt;&gt;</a>');
                 }
@@ -333,7 +326,7 @@ successの引数には Fess サーバーから返却された検索結果のオ�
 
 まず、10でレスポンスのステータスの内容を確認しています。
 正常に検索リクエストが処理された場合は0が設定されています。
-Fess のJSON応答の詳細は\ `Fess サイト <http://fess.codelibs.org/ja/4.0/user/json-response.html>`__\ を確認してください。
+Fess のJSON応答の詳細は\ `Fess サイト <http://fess.codelibs.org/ja/10.0/user/json-response.html>`__\ を確認してください。
 
 検索リクエストが正常に処理され、検索結果がヒットしなかった場合は11の条件文内でsubheader領域の内容を空にして、result領域で検索結果がヒットしなかった旨のメッセージを表示します。
 
