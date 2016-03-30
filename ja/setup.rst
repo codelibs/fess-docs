@@ -20,40 +20,17 @@ Java がインストールされていない場合は以下の手順でJavaを�
 Java SE のダウンロードページへアクセス
 --------------------------------------
 
-JavaScriptが有効な状態でOracle社の\ `「Java SE
-Downloads」ページ <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__\ にアクセスします。
-
-※以下の手順とはバージョンが異なりますが、\ `「Java
-8u40」<http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html#jdk-8u40-oth-JPR>`__\ をインストールしてください(推奨)。[2015/3/13]
+JavaScriptが有効な状態でOracle社の「`Java SE
+Downloads <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_」ページにアクセスします。
 
 JavaSE 8 の「Download JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
 
 |image0|
 
-JavaScriptが有効になっているかどうかは、下記のように確認できます。(Internet
-Explorer 9 の場合)
-
-1. メニューバーで [ツール] をクリックします。
-
-2. [インターネット オプション] をクリックします。
-
-3. [セキュリティ] タブをクリックします。
-
-4. [レベルのカスタマイズ] をクリックします。
-
-5. [スクリプト] のセクションが表示されるまでスクロールします。
-
-6. [アクティブ スクリプト] セクションで [有効にする]
-   のラジオボタンがをオンなっているかを確認する。
-
-7. オフになっている場合はオンにし、[OK] をクリックします。
-
 ライセンスの確認
 ----------------
 
-「Oracle Binary Code License Agreement for Java SE
-」を読んでライセンスに同意されたら「Accept License
-Agreement」にチェックを入れます。
+「Oracle Binary Code License Agreement for Java SE」を読んでライセンスに同意されたら「Accept License Agreement」にチェックを入れます。
 
 |image1|
 
@@ -61,21 +38,14 @@ Agreement」にチェックを入れます。
 ------------------
 
 インストールを行うパソコンのOSに合わせてJDKのダウンロードを行います。
-Windwos 64ビットの場合は「Windows x64」、Windows
-32ビットの場合は「Windows x86」を選択します (以下はWindows
-64ビット版の例です) 。
-
-使用しているパソコンがどちらなのかは、下記のように確認できます。(Windows
-7の場合)
-
-1. [コントロールパネル]→[システムとセキュリティ]→[システム]で、「システムの種類」に表示されます。
+Windwos 64ビットの場合は「Windows x64」、Windows 32ビットの場合は「Windows x86」を選択します (以下はWindows 64ビット版の例です) 。
 
 |image2|
 
 JDKインストーラーの実行
 -----------------------
 
-ダウンロードしたJDKインストーラー (jdk-7uXX-windows-x64.exe)
+ダウンロードしたJDKインストーラー (jdk-8uXX-windows-x64.exe)
 を実行します(XXはダウンロードしたアップデートリリースのバージョン)。以下はWindows
 64ビット版の例です。
 
