@@ -41,7 +41,7 @@ Download elasticsearch RPM package from elasticsearch site `https://www.elastic.
 
     $ sudo rpm -ivh elasticsearch-<version>.rpm
 
-To access from Fess, the following configuration needs to be added to /etc/elasticsearch/elasticsearcy.yml
+To access from Fess, the following configuration needs to be added to /etc/elasticsearch/elasticsearch.yml
 
 ::
 
@@ -68,7 +68,7 @@ To register them as a service, run the following commands if using chkconfig,
     $ sudo /sbin/chkconfig --add elasticsearch
     $ sudo /sbin/chkconfig --add fess
 
-if using systemd.
+For systemd,
 
 ::
 
