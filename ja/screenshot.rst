@@ -35,10 +35,10 @@
 
 |パスマッピングの設定|
 
-Solr の設定
+ダッシュボード
 -----------
 
-|Solr の設定|
+|ダッシュボード|
 
 ログファイル一覧
 ----------------
@@ -66,7 +66,7 @@ Solr の設定
 .. |ファイルシステムクロールの設定| image:: ../resources/images/ja/screenshot/fess_admin_fsconfig.png
 .. |ウェブ認証の設定| image:: ../resources/images/ja/screenshot/fess_admin_webauth.png
 .. |パスマッピングの設定| image:: ../resources/images/ja/screenshot/fess_admin_pathmapping.png
-.. |Solr の設定| image:: ../resources/images/ja/screenshot/fess_admin_solr.png
+.. |ダッシュボード| image:: ../resources/images/ja/screenshot/fess_dashboard.png
 .. |ログファイル一覧| image:: ../resources/images/ja/screenshot/fess_admin_logfile.png
 .. |セッション情報一覧| image:: ../resources/images/ja/screenshot/fess_admin_sessioninfo.png
 .. |セッション情報詳細| image:: ../resources/images/ja/screenshot/fess_admin_sessioninfo2.png
