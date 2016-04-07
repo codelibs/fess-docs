@@ -52,11 +52,18 @@ RPM パッケージを利用する場合
 
     $ sudo rpm -ivh fess-<version>.rpm
 
-|Fess| には elasticsearch の機能を拡張するためのプラグインがあります。プラグインを elasticsearch の plugins ディレクトリにコピーします。
+|Fess| には elasticsearch の機能を拡張するためのプラグインがあります。
+プラグインを elasticsearch の plugins ディレクトリにインストールします。
 
 ::
 
-    $ sudo cp -r /usr/share/fess/es/plugins /usr/share/elasticsearch
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.1.1
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-ja/2.1.2
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-synonym/2.1.1
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.1.2
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-dataformat/2.1.1
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.1.3
+    $ /usr/share/elasticsearch/bin/plugin install http://maven.codelibs.org/archive/elasticsearch/plugin/kopf/elasticsearch-kopf-2.0.0.0.zip
 
 サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合は
 
