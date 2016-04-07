@@ -55,11 +55,17 @@ Next, install |Fess| RPM package.
     $ sudo rpm -ivh fess-<version>.rpm
 
 |Fess| provides elasticsearch plugins to extend elasticsearch's features for |Fess|.
-Copy them to elasticsearch plugins directory.
+Install them to plugins directory in elasticsearch.
 
 ::
 
-    $ sudo cp -r /usr/share/fess/es/plugins /usr/share/elasticsearch
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.1.1
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-ja/2.1.2
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-synonym/2.1.1
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.1.2
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-dataformat/2.1.1
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.1.3
+    $ /usr/share/elasticsearch/bin/plugin install http://maven.codelibs.org/archive/elasticsearch/plugin/kopf/elasticsearch-kopf-2.0.0.0.zip
 
 To register them as a service, run the following commands if using chkconfig,
 
