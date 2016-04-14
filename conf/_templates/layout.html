@@ -109,6 +109,11 @@
     {%- include "searchbox.html" %}
     {%- endblock %}
     {%- endif %}
+
+{%- if theme_lang == 'ja' %}
+<p><a class="externalLink" href="http://www.n2sm.net/products/n2search.html"><img src="/ja/_images/n2search_b.png" alt="N2 Search"></a></p>
+{% endif %}
+
   </div>
 </div>
 {%- endif %}
@@ -315,6 +320,14 @@
             </li>
             {% endif %}
 
+            <li>
+{%- if theme_lang == 'ja' %}
+<a class="csupport" href="/index.html">English</a>
+{% else %}
+<a class="csupport" href="/ja/index.html">Japanese</a>
+{% endif %}
+            </li>
+
           </ul>
 
         </div>
@@ -390,13 +403,6 @@
       </div>
     </div>
     {%- endif %}
-<p class="navbar-text pull-right">
-{%- if theme_lang == 'ja' %}
-<a class="csupport" href="/index.html">English</a>
-{% else %}
-<a class="csupport" href="/ja/index.html">Japanese</a>
-{% endif %}
-</p>
     {% endblock %}
 
     <!-- container -->
