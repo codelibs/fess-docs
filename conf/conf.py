@@ -464,7 +464,7 @@ html_theme_options = {
     'bootstrap_version': '3',
 
     # Show "theme preview" button in header navbar. Defaults to false.
-    'theme_preview': True,
+    'theme_preview': False,
 
     # Set the Size of Heading text. Defaults to None
     # 'h1_size': '3.0em',
