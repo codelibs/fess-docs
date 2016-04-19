@@ -5,30 +5,21 @@ Dictionary
 Overview
 ========
 
-TBD
+Dictionary page contains the following dictionary management:
 
-Setup
+- Synonym dictionary
+- Kuromoji (Japanese language morphological analysis) dictionary
+
+Management Operations
 =============
 
-TBD
+Display Dictionary page
 --------------
 
-TBD
+Select System > Dictionary in the left menu to display a list page, as below, and then click a dictionary name to edit words.
 
 |image0|
 
 
-kuromoji
-========
-
-:doc:`kuromoji-guide`
-
-
-Synonym
-=======
-
-:doc:`synonym-guide`
-
-TBD
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/dict-1.png
