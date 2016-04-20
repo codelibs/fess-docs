@@ -1,17 +1,16 @@
-===============================================================
-Open source full-text search server - |Fess| development overview
-===============================================================
+=======================
+Development Information
+=======================
 
 Overview
 ========
 
-This page describes steps to develop the |Fess|.
+This page describes development steps for |Fess|.
 
 Requirements
 ============
 
-|Fess| runs on Java 8 or more. To develop |Fess|, The following knowledge
-is required:
+|Fess| runs on Java 8 or more. To develop |Fess|, The following knowledge is required:
 
 -  Java
 
@@ -24,23 +23,23 @@ is required:
 How To Develop |Fess|
 =====================
 
-1. Install Java 8, Eclipse, and Maven 3.x
+1. Install Java 8, IDE(ex. eclipse), and Maven 3.x
 
-2. Clone the source code of the |Fess| from github:
+2. Clone the source code of |Fess| from github:
 
    ::
 
        $ git clone https://github.com/codelibs/fess.git
 
-4. Download Elasticsearch Plugins
+4. Download elasticsearch Plugins
 
    ::
 
        $ mvn antrun:run
 
-4. Import it as Maven project into the Eclipse
+4. If using eclipse, Import it as Maven project into the eclipse
 
-5. Launch org.codelibs.fess.FessBoot as Debug
+5. Launch org.codelibs.fess.FessBoot as Debug mode and then access to http://localhost:8080/
 
 Create |Fess| Package
 =====================
