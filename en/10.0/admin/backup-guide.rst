@@ -7,6 +7,9 @@ Overview
 
 Backup page allows you to download your configuration data for |Fess|.
 
+Management Operations
+=====================
+
 Download Data
 --------------
 
