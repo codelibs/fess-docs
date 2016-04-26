@@ -5,7 +5,8 @@ Additional Word
 Overview
 ========
 
-TBD
+Additional Word page manages preferred words to display on a keyword suggest.
+The keyword suggest words are generated from search queries and indexed contents automatically, and you can add words to them.
 
 Management Operations
 =====================
@@ -32,27 +33,30 @@ Configurations
 Word
 ::::
 
-TBD
+Displayed suggest word.
 
 Reading
 :::::::
 
-TBD
+Reading for suggest word.
 
 Role
 ::::
 
-TBD
+Roles to restrict suggesting.
+If roles are specified, suggest word is displayed in users which has roles.
 
 Label
 :::::
 
-TBD
+Labels to restrict suggesting.
+If labels are specified, suggest word is displayed in users which has labels.
 
 Boost
 :::::
 
-TBD
+Boost value.
+Higher value is displayed at the top.
 
 Delete Configuration
 --------------------
@@ -63,26 +67,23 @@ Click Delete button to delete the configuration.
 Download
 ========
 
-TBD
+You can download a word list file as CSV file.
 
 |image2|
 
-Contents of CSV
----------------
-
-TBD
 
 Upload
 ======
 
-TBD
+You can upload CSV file containing a word list to exclude from Suggest.
 
 |image3|
 
-Contents of CSV
+CSV File
 ---------------
 
-TBD
+The content of downloaded/uploaded CSV file is 5 column.
+
 
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/elevateword-1.png
