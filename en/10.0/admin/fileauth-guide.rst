@@ -5,7 +5,7 @@ File Authentication
 Overview
 ========
 
-TBD
+File Authentication page manages settings for authentication on file crawling.
 
 Management Operations
 =====================
@@ -32,37 +32,37 @@ Configurations
 Host name
 :::::::::
 
-TBD
+Target host name for file crawling.
 
 Port
 ::::
 
-TBD
+Port of the above host.
 
 Scheme
 ::::::
 
-TBD
+Protocol scheme.
 
 Username
 ::::::::
 
-TBD
+Username for authentication.
 
 Password
 ::::::::
 
-TBD
+Password for authentication.
 
 Parameters
 ::::::::::
 
-TBD
+Additional parameters.
 
 FS Config
 :::::::::
 
-TBD
+File Crawling for this setting.
 
 Delete Configuration
 --------------------
