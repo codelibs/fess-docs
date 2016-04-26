@@ -5,7 +5,8 @@ Duplicate Host
 Overview
 ========
 
-TBD
+Duplicate Host page manages settings to normalize a host name.
+For examples, n2sm.net is replaced with www.n2sm.net in url.
 
 Management Operations
 =====================
@@ -32,17 +33,17 @@ Configurations
 Regular Name
 ::::::::::::
 
-TBD
+Normalized host name.
 
 Duplicate Name
 ::::::::::::::
 
-TBD
+Replaced host name.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
+Click a configuration on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/duplicatehost-1.png
