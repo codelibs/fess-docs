@@ -5,24 +5,17 @@ Failure URL
 Overview
 ========
 
-TBD
+Failure URL page display urls/paths which are not correctly crawled.
 
-Setup
+
+Management Operations
 =============
 
-TBD
+Display Failure URL
 --------------
 
-TBD
+Select System Info > Failure URL in the left menu to display a list page of failure urls, as below.
 
 |image0|
-
-TBD
-============
-
-TBD
-----------
-
-TBD
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/failureurl-1.png
