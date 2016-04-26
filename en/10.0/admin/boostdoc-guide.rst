@@ -50,7 +50,7 @@ Order to display/process doc boosts.
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
+Click a configuration on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 

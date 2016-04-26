@@ -77,7 +77,7 @@ TBD
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
+Click a configuration on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/scheduler-1.png

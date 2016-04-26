@@ -110,7 +110,7 @@ If enabled, the scheduled job of Default Crawler includes this configuration.
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
+Click a configuration on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 Example

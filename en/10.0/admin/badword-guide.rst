@@ -37,7 +37,7 @@ Word to exclude it from Suggest.
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a aconfirmation dialog.
+Click a configuration on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 Download
