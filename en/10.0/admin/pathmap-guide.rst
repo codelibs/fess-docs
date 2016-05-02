@@ -5,7 +5,8 @@ Path Mapping
 Overview
 ========
 
-TBD
+Path Mapping replaces crawled url/path with given one.
+In search result page, replaced url links are used.
 
 Management Operations
 =====================
@@ -17,7 +18,7 @@ Select Crawler > Path Mapping in the left menu to display a list page of Path Ma
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a mapping name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,27 +33,29 @@ Configurations
 Regexp.
 :::::::
 
-TBD
+Target string which is written by a regular expression.
 
 Replacement
 :::::::::::
 
-TBD
+Replaced value.
 
 Process Type
 ::::::::::::
 
-TBD
+When this is processed. 
+Crawling is at crawling/indexing time and replaced url/path is indexed.
+View is at searching time and original url/path is indexed.
 
 Display Order
 :::::::::::::
 
-TBD
+Display order.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a mapping on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/pathmap-1.png
