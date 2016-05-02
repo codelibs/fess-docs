@@ -5,7 +5,8 @@ Request Header
 Overview
 ========
 
-TBD
+|Fess| passes information of request header to Web Server at crawling time.
+Request Header page manages request headers for crawling.
 
 Management Operations
 =====================
@@ -32,22 +33,22 @@ Configurations
 Name
 ::::
 
-TBD
+Name of request header.
 
 Value
 :::::
 
-TBD
+Value of request header.
 
 Web Config
 ::::::::::
 
-TBD
+Web Config to which this configuration is applied.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a name on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/reqheader-1.png
