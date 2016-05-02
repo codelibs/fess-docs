@@ -5,7 +5,7 @@ Web Authentication
 Overview
 ========
 
-TBD
+Web Authentication page manages settings for authentication on web crawling.
 
 Management Operations
 =====================
@@ -32,42 +32,42 @@ Configurations
 Hostname
 ::::::::
 
-TBD
+Host name for crawling.
 
 Port
 ::::
 
-TBD
+Port of crawled host.
 
 Realm
 :::::
 
-TBD
+Realm for authentication.
 
 Scheme
 ::::::
 
-TBD
+Protocol scheme.
 
 Username
 ::::::::
 
-TBD
+Username for authentication.
 
 Password
 ::::::::
 
-TBD
+Password for authentication.
 
 Parameters
 ::::::::::
 
-TBD
+Addtional parameters.
 
 Web Config
 ::::::::::
 
-TBD
+Web Crawling for this configuration.
 
 Delete Configuration
 --------------------

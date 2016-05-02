@@ -5,7 +5,7 @@ Data Store
 Overview
 ========
 
-TBD
+Data Store Crawling Configuaration page manages configurations for crawling on Data Strore, such as Database.
 
 Management Operations
 =====================
@@ -32,32 +32,34 @@ Configurations
 Name
 ::::
 
-TBD
+Configuration name.
 
 Handler Name
 ::::::::::::
 
-TBD
-
-Script
-::::::
-
-TBD
+Type of Data Strore.
 
 Parameter
 :::::::::
 
-TBD
+Parameters for Data Strore crawling.
+
+Script
+::::::
+
+Field mapping on index.
+The format is key/value, such as [Field Name In Index]=[Value(Groovy Supported].
 
 Boost
 :::::
 
-TBD
+Boost value is a weight for indexed documents of this configuration.
 
 Role
 ::::
 
-TBD
+Roles for this configuration.
+
 
 Delete Configuration
 --------------------
