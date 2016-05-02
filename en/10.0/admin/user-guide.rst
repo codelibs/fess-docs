@@ -5,7 +5,8 @@ User
 Overview
 ========
 
-TBD
+User Configuration page manages users on |Fess|.
+Managed users is able to login |Fess| and users which has admin role manages |Fess| configuration.
 
 Management Operations
 =====================
@@ -32,17 +33,18 @@ Configurations
 Name
 ::::
 
-TBD
+User name.
 
 Roles
 :::::
 
-TBD
+Roles to which user belongs.
 
 Groups
 ::::::
 
-TBD
+Groups to which user belongs.
+
 
 Delete Configuration
 --------------------
