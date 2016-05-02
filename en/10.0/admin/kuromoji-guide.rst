@@ -1,11 +1,12 @@
 =============
-Kuromoji List
+Kuromoji
 =============
 
 Overview
 ========
 
-TBD
+Kuromoji is Japanese language morphological analysis, and Kuromoji contains a custom dictionary.
+Kuromoji page manages words of the dictionary.
 
 Management Operations
 =====================
@@ -32,22 +33,22 @@ Configurations
 Token
 :::::
 
-TBD
+Target word.
 
 Segmentation
 ::::::::::::
 
-TBD
+Segmentation of Token splited by a space charactor.
 
 Reading
 :::::::
 
-TBD
+Reading with segmentation.
 
 POS
 :::
 
-TBD
+Part of speech.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/kuromoji-1.png
 .. |image1| image:: ../../../resources/images/en/10.0/admin/kuromoji-2.png
