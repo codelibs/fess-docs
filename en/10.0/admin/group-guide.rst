@@ -5,7 +5,7 @@ Group
 Overview
 ========
 
-TBD
+Group Configuration page manages groups of user management.
 
 Management Operations
 =====================
@@ -13,11 +13,11 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Crawler > Group in the left menu to display a list page of Group Configuration, as below.
+Select User > Group in the left menu to display a list page of Group Configuration, as below.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a group name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,12 +32,12 @@ Configurations
 Name
 ::::
 
-TBD
+Group name.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a group name on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/group-1.png
