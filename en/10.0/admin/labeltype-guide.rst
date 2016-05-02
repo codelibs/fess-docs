@@ -5,7 +5,8 @@ Label
 Overview
 ========
 
-TBD
+|Fess| categorize search results with labels.
+Label configuration page manages the labels.
 
 Management Operations
 =====================
@@ -17,7 +18,7 @@ Select Crawler > Label in the left menu to display a list page of Label Configur
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a label name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,37 +33,37 @@ Configurations
 Name
 ::::
 
-TBD
+Label name. This value is displayed on a search result page.
 
 Value
 :::::
 
-TBD
+Label value. This value is used as URL parameter.
 
 Included Paths
 ::::::::::::::
 
-TBD
+Paths which matches crawling url/path are assigned to this label.
 
 Excluded Paths
 ::::::::::::::
 
-TBD
+Paths which matches crawling url/path are not assigned to this label.
 
 Role
 ::::
 
-TBD
+Roles to be abled to display this label.
 
 Display Order
 :::::::::::::
 
-TBD
+Display order.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a label name on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/labeltype-1.png
