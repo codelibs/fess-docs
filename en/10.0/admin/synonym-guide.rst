@@ -5,7 +5,7 @@ Synonym List
 Overview
 ========
 
-TBD
+Synonym page manages dictionary of synonyms.
 
 Management Operations
 =====================
@@ -17,7 +17,7 @@ Select System > Dictionaly in the left menu and click synonym to display a list 
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a word name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,12 +32,12 @@ Configurations
 Source
 ::::::
 
-TBD
+Target words(comma separated).
 
 Target
 ::::::
 
-TBD
+Replaced words(comma separated).
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/synonym-1.png
 .. |image1| image:: ../../../resources/images/en/10.0/admin/synonym-2.png
