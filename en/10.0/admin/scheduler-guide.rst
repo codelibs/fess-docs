@@ -5,7 +5,8 @@ Scheduler
 Overview
 ========
 
-TBD
+|Fess| provides Job Scheduler to manage jobs.
+Scheduler page manages them.
 
 Management Operations
 =====================
@@ -17,7 +18,7 @@ Select System > Scheduler in the left menu to display a list page of Job Schedul
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a job name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,52 +33,53 @@ Configurations
 Name
 ::::
 
-TBD
+Job name.
 
 Target
 ::::::::::::::::
 
-TBD
+Target name on which this job runs.
 
 Schedule
 ::::::::
 
-TBD
+Schedule to run this job. This value is cron-format.
 
 Executor
 ::::::::
 
-TBD
+Execution environment. 
+Only "groovy" is supported at the moment.
 
 Script
 ::::::
 
-TBD
+Scripts for job.
 
 Logging
 :::::::
 
-TBD
+Whether this job prints to a job result.
 
 Crawler Job
 :::::::::::
 
-TBD
+Whether this job is for crawler.
 
 Status
 ::::::
 
-TBD
+Whether this job is available or not.
 
 Display Order
 :::::::::::::
 
-TBD
+Display order.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a job name on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/scheduler-1.png
