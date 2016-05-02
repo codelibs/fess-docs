@@ -5,7 +5,8 @@ Role
 Overview
 ========
 
-TBD
+Role page manages roles to use Role-base search.
+This feature is deprecated in 10.1 release.
 
 Management Operations
 =====================
@@ -17,7 +18,7 @@ Select Crawler > Role in the left menu to display a list page of Role Configurat
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a role name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,17 +33,17 @@ Configurations
 Name
 ::::
 
-TBD
+Role name.
 
 Value
 :::::
 
-TBD
+Role value.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a role name on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/roletype-1.png
