@@ -5,24 +5,38 @@ Log Files
 Overview
 ========
 
-TBD
+Log Files page allows you to download log files.
 
-Setup
+Management Operations
 =============
 
-TBD
+Download Log File
 --------------
 
-TBD
+Select System > Log File in a left menu to display a log file list.
 
 |image0|
 
-TBD
-============
+audit.log
+:::::::::
 
-TBD
-----------
+Audit log file.
 
-TBD
+server_?.log
+::::::::::::
+
+System log file.
+
+fess.log
+::::::::
+
+Application log file.
+
+fess-crawler.log
+::::::::::::::::
+
+Crawler log file.
+
+
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/log-1.png
