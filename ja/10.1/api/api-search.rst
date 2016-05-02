@@ -50,7 +50,7 @@ JSON応答による検索
 
     {
         "response": {
-            "version": 10.0,
+            "version": 10.1,
             "status":0,
             "q":"Fess",
             "exec_time":0.02,
@@ -63,13 +63,13 @@ JSON応答による検索
                 {
                 "filetype":"html",
                 "created":"2016-02-22T06:05:32.312Z",
-                "title":"Fess 10.0 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
+                "title":"Fess 10.1 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
                 "doc_id":"41e962e7e450453daf377063e2e99282",
                 "url":"http:\u002F\u002Ffess.codelibs.org\u002Fja\u002Findex.html",
                 "site":"fess.codelibs.org\u002Fja\u002Findex.html",
-                "contentDescription":" Toggle navigation <strong>Fess<\u002Fstrong> 10.0 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8...",
+                "contentDescription":" Toggle navigation <strong>Fess<\u002Fstrong> 10.1 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8...",
                 "host":"fess.codelibs.org",
-                "digest":" Toggle navigation Fess 10.0 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8 \u76EE\u6B21...",
+                "digest":" Toggle navigation Fess 10.1 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8 \u76EE\u6B21...",
                 "boost":"1.0",
                 "mimetype":"text\u002Fhtml",
                 "last_modified":"2016-02-20T09:25:36.000Z",

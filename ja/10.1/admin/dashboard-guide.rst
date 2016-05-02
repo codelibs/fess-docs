@@ -46,5 +46,5 @@
 各インデックスの右上のアイコンをクリックすると、インデックスに対する操作メニューが表示されます。
 インデックスを削除するとデータが削除されるので注意してください。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/dashboard-2.png

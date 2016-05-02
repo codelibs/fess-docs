@@ -76,5 +76,5 @@ FTP または SAMBA (Windows共有フォルダ認証) を利用することが�
 一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。
 削除ボタンを押すと設定が削除されます。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/fileauth-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/fileauth-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/fileauth-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/fileauth-2.png

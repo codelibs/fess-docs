@@ -52,6 +52,6 @@
 |image2|
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/wizard-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/wizard-2.png
-.. |image2| image:: ../../../resources/images/ja/10.0/admin/wizard-3.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/wizard-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/wizard-2.png
+.. |image2| image:: ../../../resources/images/ja/10.1/admin/wizard-3.png

@@ -53,5 +53,5 @@
 一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。
 削除ボタンを押すと設定が削除されます。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/reqheader-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/reqheader-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/reqheader-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/reqheader-2.png

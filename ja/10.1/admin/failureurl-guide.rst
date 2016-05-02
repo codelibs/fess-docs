@@ -62,5 +62,5 @@ URL
 この例外が発生した時刻。
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/failureurl-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/failureurl-2.png

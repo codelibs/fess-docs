@@ -100,7 +100,7 @@ CSVの内容
 "fess","ふぇす","role1","label1","100"
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/ja/10.0/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/ja/10.0/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/ja/10.1/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/ja/10.1/admin/elevateword-4.png

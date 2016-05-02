@@ -271,5 +271,5 @@ CSVファイル内のデータは、cell[数字]で保持しています(数字�
 CSVファイルのセルにデータが存在しない場合はnullになる場合があります。
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/dataconfig-2.png

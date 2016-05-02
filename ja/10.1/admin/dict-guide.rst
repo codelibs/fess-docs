@@ -30,4 +30,4 @@ kuromoji
 ja/kuromoji.txt に日本語のドキュメントに対して適用されます。
 管理方法については :doc:`kuromoji-guide` を参照してください。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/dict-1.png

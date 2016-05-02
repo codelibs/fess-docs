@@ -26,4 +26,4 @@
 
 インデックスからすべてのドキュメントを削除したい場合は、「*:*」で「このクエリですべてを削除」ボタンをクリックすることで削除されます。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/searchlist-1.png

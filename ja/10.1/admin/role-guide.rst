@@ -48,5 +48,5 @@ LDAP連携する場合などに利用することができます。
 作成したロールに対応するロール検索用のロールを作成することができます。
 ロール検索でロールを利用する場合は検索用のロールを作成する必要があります。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/role-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/role-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/role-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/role-2.png

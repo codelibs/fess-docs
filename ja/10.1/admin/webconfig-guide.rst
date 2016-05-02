@@ -134,5 +134,5 @@ http://fess.codelibs.org/ 以下のページをクロールするウェブクロ
 
 他の設定値はデフォルト値を使用します。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/webconfig-2.png

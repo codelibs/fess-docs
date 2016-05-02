@@ -64,5 +64,5 @@
 
 ジョブの実行結果。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/joblog-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/joblog-2.png

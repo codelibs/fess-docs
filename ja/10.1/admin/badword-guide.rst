@@ -79,7 +79,7 @@ CSVの内容
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/ja/10.0/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/ja/10.0/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/ja/10.1/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/ja/10.1/admin/badword-4.png

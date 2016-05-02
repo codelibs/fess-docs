@@ -51,5 +51,5 @@ Apache Luceneが提供するシノニムの辞書形式でダウンロードす�
 Apache Luceneが提供するシノニムの辞書形式でアップロードすることができます。
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/synonym-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/synonym-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/synonym-2.png

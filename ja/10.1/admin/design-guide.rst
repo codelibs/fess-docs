@@ -92,5 +92,5 @@
 たとえば、logo.png を指定すると、検索トップページの画像が変更されます。
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/design-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/design-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/design-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/design-2.png

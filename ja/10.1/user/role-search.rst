@@ -36,6 +36,6 @@
 
 
 
-.. |image0| image:: ../../../resources/images/ja/10.0/user/role-search-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/user/role-search-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/user/role-search-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/user/role-search-2.png
 

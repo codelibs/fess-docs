@@ -25,5 +25,5 @@
 
 .fess_user インデックスはユーザー、ロールおよびグループの情報を含みます。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/backup-1.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/backup-1.png
 

@@ -83,5 +83,5 @@
 
 クロールが成功したかどうか。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/ja/10.0/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/ja/10.1/admin/crawlinginfo-2.png

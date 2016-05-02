@@ -182,4 +182,4 @@ Base DN
 
 検索トップ画面に表示するメッセージを記述します。
 
-.. |image0| image:: ../../../resources/images/ja/10.0/admin/general-1.png
+.. |image0| image:: ../../../resources/images/ja/10.1/admin/general-1.png
