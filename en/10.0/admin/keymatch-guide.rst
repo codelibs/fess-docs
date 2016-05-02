@@ -5,7 +5,9 @@ Key Match
 Overview
 ========
 
-TBD
+Key Match boosts specific search results for given search word.
+Key Match page manages the configurations.
+
 
 Management Operations
 =====================
@@ -17,7 +19,7 @@ Select Crawler > Key Match in the left menu to display a list page of Key Match 
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a term if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,27 +34,27 @@ Configurations
 Term
 ::::
 
-TBD
+Search word.
 
 Query
 :::::
 
-TBD
+Query which boosts results.
 
 Size
 ::::
 
-TBD
+The number of results for Query.
 
 Boost
 :::::
 
-TBD
+Boost value.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a term on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/keyMatch-1.png
