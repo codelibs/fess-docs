@@ -5,7 +5,7 @@ Role
 Overview
 ========
 
-TBD
+Role Configuration page manages roles of user management.
 
 Management Operations
 =====================
@@ -17,7 +17,7 @@ Select User > Role in the left menu to display a list page of Role Configuration
 
 |image0|
 
-Click a configuration name if you want to edit it.
+Click a role name if you want to edit it.
 
 Create Configuration
 --------------------
@@ -32,12 +32,12 @@ Configurations
 Name
 ::::
 
-TBD
+Role name.
 
 Delete Configuration
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click a role name on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/role-1.png
