@@ -5,24 +5,20 @@ Search
 Overview
 ========
 
-TBD
+Search page displays search results for administration.
+This search results is not filtered by roles.
 
-Setup
+Management Operations
 =============
 
-TBD
+Display Search Result
 --------------
 
-TBD
+Select System Info > Search in a left menu to display a search form.
 
 |image0|
 
-TBD
-============
+Type a keyword to search form and then click Search button.
 
-TBD
-----------
-
-TBD
 
 .. |image0| image:: ../../../resources/images/en/10.0/admin/searchlist-1.png
