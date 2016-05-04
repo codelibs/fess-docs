@@ -24,7 +24,6 @@
    fileauth-guide
    reqheader-guide
    duplicatehost-guide
-   roletype-guide
    user-guide
    role-guide
    group-guide
@@ -37,4 +36,5 @@
    failureurl-guide
    searchlist-guide
    backup-guide
+   upgrade-guide
 
