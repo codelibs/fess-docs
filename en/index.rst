@@ -32,7 +32,7 @@ Features
 
 -  Apache License (OSS)
 
--  OS-independent (Runs on Java)
+-  OS-independent (Java Application)
 
 -  Crawl documents on Web/File System/DB/Windows Shared Folder
 
@@ -40,19 +40,21 @@ Features
 
 -  Support a web page for BASIC/DIGEST/NTLM authentication
 
--  Contain Elasticsearch as a search engine
+-  Contain elasticsearch as a search engine (unlimited scalability)
 
--  Provide UI as a responsive web design
+-  Provide UI as a responsive web design (support any device)
 
--  Provide a browser based administative page
+-  Provide a browser based administative page (admin console)
 
--  Support a role authentication
+-  Support secure search (access control with LDAP/Active Directory)
 
--  Support JSON format
+-  Support JSON format of search results
 
--  Provide Search/Click log and statistics
+-  Provide search/click log and statistics
 
 -  Provide auto-complete(suggest)
+
+-  Internationalization/Localization
 
 News
 ====
