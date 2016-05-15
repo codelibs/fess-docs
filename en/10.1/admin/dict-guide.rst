@@ -7,8 +7,9 @@ Overview
 
 Dictionary page contains the following dictionary management:
 
-- Synonym dictionary
 - Kuromoji (Japanese language morphological analysis) dictionary
+- Seunjeon (Korean language morphological analysis) dictionary
+- Synonym dictionary
 
 Management Operations
 =============

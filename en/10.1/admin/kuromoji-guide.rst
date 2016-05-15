@@ -14,7 +14,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select System > Dictionaly in the left menu and click kuromoji to display a list page of kuromoji Configuration, as below.
+Select System > Dictionaly in the left menu and click kuromoji to display a list page of Kuromoji Configuration, as below.
 
 |image0|
 
@@ -23,7 +23,7 @@ Click a configuration name if you want to edit it.
 Create Configuration
 --------------------
 
-Click Create New button to display a form page for kuromoji configuration.
+Click Create New button to display a form page for Kuromoji configuration.
 
 |image1|
 
