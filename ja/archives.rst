@@ -11,6 +11,7 @@
    10.1/install/index
    10.1/user/index
    10.1/admin/index
+   10.1/config/index
    10.1/api/index
 
 
