@@ -16,4 +16,5 @@
    pdf-with-password
    analyzer
    geosearch
+   kibana
 
