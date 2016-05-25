@@ -3,7 +3,7 @@ SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
 PROJECT="Fess"
 TITLE="Fess"
-LANG="ja"
+DOCLANG="ja"
 AUTHOR="CodeLibs"
 RELEASE="10.0"
 
@@ -15,7 +15,7 @@ CONFDIR="${SCRIPT_DIR}/../conf"
 BUILDDIR="${SCRIPT_DIR}/_build"
 
 # Build html
-make SPHINXOPTS="-c ${CONFDIR}" BUILDDIR="${BUILDDIR}/${TYPE}" SPHINX_LANG="${LANG}" SPHINX_PROJECT="${PROJECT}" SPHINX_TITLE="${TITLE}" SPHINX_AUTHOR="${AUTHOR}" SPHINX_RELEASE="${RELEASE}" -f ${CONFDIR}/Makefile clean html
+make SPHINXOPTS="-c ${CONFDIR}" BUILDDIR="${BUILDDIR}/${TYPE}" SPHINX_LANG="${DOCLANG}" SPHINX_PROJECT="${PROJECT}" SPHINX_TITLE="${TITLE}" SPHINX_AUTHOR="${AUTHOR}" SPHINX_RELEASE="${RELEASE}" -f ${CONFDIR}/Makefile clean html
 
 # Minify html
 #java -jar ${HTMLCOMPRESSOR_JAR} --type html --compress-js --compress-css --recursive -o ./_build/html_compressed/ ./_build/html/
