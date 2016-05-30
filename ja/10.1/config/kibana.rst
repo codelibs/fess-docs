@@ -26,7 +26,7 @@ Kibana 4 によるデータ可視化の設定
 Kibana 4 インストール
 ---------------------
 
-` https://www.elastic.co/downloads/kibana <https://www.elastic.co/downloads/kibana>`__  に従い、Kibana 4をインストールします。
+`https://www.elastic.co/downloads/kibana <https://www.elastic.co/downloads/kibana>`__  に従い、Kibana 4をインストールします。
 Kibana に |Fess| で用いる Elasticsearch を認識させるため、 Kibanaのディレクトリ/config/kibana.yml の elasticsearch.url を以下のように編集します。
 
 ::
@@ -38,7 +38,7 @@ localhost は環境に合わせて設定してください。
 詳細な設定
 ----------
 
-|Fess| を起動した状態でKibanaを起動し、`http://localhost:5601/<http://localhost:5601/>`__ にアクセスします。
+|Fess| を起動した状態でKibanaを起動し、`http://localhost:5601 <http://localhost:5601>`__ にアクセスします。
 
 Kibana のホーム画面が表示されるので、まずは可視化対象のインデックスを指定しましょう。 Index name or pattern のパターンに fess_log と入力し、Time-field name で requestedAt を選択して、Create ボタンを押下します。
 次に、デフォルトの設定をインポートします。画面上部から Settings, その後 Objects を選択します。
@@ -50,4 +50,3 @@ Kibana のホーム画面が表示されるので、まずは可視化対象の�
 このとき、時間の基準が Browser になっていると、正確なログデータが表示できない場合があります。そのようなときは、タイムゾーンを設定することで正しく表示できる場合があります。
 上部より Settings, その後 Advanced を選択します。その中で dateFormat:tz という項目を編集します。
 Actions の列のボタンを押下し、 dateFormat:tz を UTC に変更し、再度データを適用する期間を指定してください。
-
