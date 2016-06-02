@@ -92,10 +92,10 @@ Boost
 
 Boost value is a weight for indexed documents of this configuration.
 
-Role
+Permission 
 ::::
 
-Roles for this configuration.
+Permissions for this configuration.
 
 Label
 :::::
