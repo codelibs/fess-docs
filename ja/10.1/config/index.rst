@@ -13,7 +13,6 @@
    role-setting
    windows-service
    index-backup
-   pdf-with-password
    analyzer
    geosearch
    kibana
