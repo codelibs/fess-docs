@@ -11,7 +11,6 @@
    filesize
    logging
    role-setting
-   windows-service
    index-backup
    analyzer
    geosearch
