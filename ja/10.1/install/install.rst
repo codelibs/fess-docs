@@ -57,13 +57,14 @@ RPM パッケージを利用する場合
 
 ::
 
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.1.1
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-ja/2.1.2
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-synonym/2.1.1
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.1.2
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-dataformat/2.1.1
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.1.3
-    $ /usr/share/elasticsearch/bin/plugin install http://maven.codelibs.org/archive/elasticsearch/plugin/kopf/elasticsearch-kopf-2.0.0.0.zip
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-ja/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-synonym/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-dataformat/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install http://maven.codelibs.org/archive/elasticsearch/plugin/kopf/elasticsearch-kopf-2.0.1.0.zip
+    $ /usr/share/elasticsearch/bin/plugin install org.bitbucket.eunjeon/elasticsearch-analysis-seunjeon/2.3.3.0
 
 サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合は
 
