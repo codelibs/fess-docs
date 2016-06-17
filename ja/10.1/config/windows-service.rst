@@ -5,75 +5,75 @@ Windowsサービスへの登録
 Windowsサービスとしての登録
 ===========================
 
-Windows 環境であれば |Fess| を Windows
-のサービスとして登録することができます。サービスの登録方法は Tomcat
-と同様です。
+| |Fess| を Windows のサービスとして登録することができます。
+| |Fess| を動かすには、Elasticsearch を起動しておく必要があります。
+| ここでは |Fess| を ``c:\opt\fess`` に、Elasticsearch を ``c:\opt\elasticsearch`` にインストールしてあるものとします。
 
 事前準備
---------
+------------------------------------------
 
-Windows のサービスとして登録する場合、クロールプロセスは Windows
-のシステムの環境変数を見にいくため、\ **Java の JAVA\_HOME
-をシステムの環境変数に登録し**\ 、同様に **%JAVA\_HOME%\\bin も Path
-に追加する**\ 必要があります。
+システムの環境変数として JAVA_HOME を設定してください。
+
+Elasticsearchをサービスとして登録
+------------------------------------------
+
+| コマンドプロンプトから ``c:\opt\elasticsearch\bin\service.bat`` を管理者で実行します。
+
+::
+
+    > cd c:\opt\elasticsearch\bin
+    > service.bat install
+    ...
+    The service 'elasticsearch-service-x64' has been installed.
+
+詳細は `Elasticsearch のドキュメント <https://www.elastic.co/guide/en/elasticsearch/reference/2.1/setup-service-win.html>`_ を参照してください。
 
 設定
-----
+------------------------------------------
 
-webapps\\|fess_context_name|\\WEB-INF\\classes\\fess.dicon を編集して、-server
-オプションを取り除きます。
+| ``c:\opt\fess\bin\fess.in.bat`` を編集して ES_HOME に Elasticsearch のインストール先を設定します。
 
 ::
 
-        <component name="systemHelper" class="jp.sf.fess.helper.SystemHelper">
-            ...
-            <property name="crawlerJavaOptions">new String[] {
-                "-Djava.awt.headless=true", "-XX:+UseGCOverheadLimit",
-                "-XX:+UseConcMarkSweepGC", "-XX:+CMSIncrementalMode",
-                "-XX:+UseTLAB", "-Xmx512m", "-XX:MaxPermSize=128m"
-            }</property>
-            ...
-        </component>
+    set ES_HOME=c:/opt/elasticsearch
+
+| |Fess| の検索画面、管理画面のデフォルトのポート番号は 8080 になっています。80 番に変更する場合は ``c:\opt\fess\bin\fess.bat`` の fess.port を変更します。
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
+
 
 登録方法
---------
+------------------------------------------
 
-まず、 |Fess| のインストール後、コマンドプロンプトから service.bat
-を実行します (Vista などでは管理者として起動する必要があります)。 |Fess| は
-C:\\Java\\fess-server にインストールしたものとします。
+| コマンドプロンプトから ``c:\opt\fess\bin\service.bat`` を管理者で実行します。
 
 ::
 
-    > cd C:\Java\fess-server\bin
-    > service.bat install fess
+    > cd c:\opt\fess\bin
+    > service.bat install
     ...
-    The service 'fess' has been installed.
+    The service 'fess-service-x64' has been installed.
 
-設定の確認方法
---------------
-
-以下のようにすることで |Fess| 
-用のプロパティを確認できます。以下を実行すると、Tomcat
-のプロパティ設定ウィンドウが表示されます。
-
-::
-
-    > tomcat7w.exe //ES//fess
 
 サービスの設定
---------------
+------------------------------------------
 
-コントロールパネル - 管理ツール - サービスで管理ツールを表示して、通常の
-Windows のサービスと同様に自動起動などが設定できます。
+サービスを手動で起動する場合は Elasticsearch サービスを先に起動し、その後 |Fess| サービスを起動します。
 
-その他
-======
+自動起動する場合は依存関係を追加します。
 
-32bit環境での利用
------------------
+1. サービスの全般設定でスタートアップの種類を「自動（遅延開始）」とします。
+1. サービスの依存関係はレジストリで設定します。
+レジストリエディタ(regedit)で下記のキーと値を追加します。
 
-|Fess| で配布しているものは 64bit Windows 用の Tomcat
-バイナリをベースにビルドされています。 32bit Windows で利用する場合は
-`Tomcat <http://tomcat.apache.org/download-70.cgi>`__ のサイトから 32bit
-Windows zip などを取得して、tomcat7.exe, tomcat7w.exe, tcnative-1.dll
-を差し替えてください。
+.. list-table::
+
+   * - *キー*
+     - ``コンピューター\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
+   * - *値*
+     - ``elasticsearch-service-x64``
+
+| 追加すると、 |Fess| サービスのプロパティの依存関係に elasticsearch-service-x64 が表示されます。
+
