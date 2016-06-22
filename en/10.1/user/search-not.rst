@@ -22,4 +22,4 @@ search.
 
 ::
 
-    検索語1 NOT 検索語2
+    search term 1 NOT search term 2
