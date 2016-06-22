@@ -8,6 +8,7 @@
    server-port
    memory-config
    proxy
+   windows-service
    filesize
    logging
    role-setting
