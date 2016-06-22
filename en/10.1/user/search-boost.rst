@@ -22,6 +22,6 @@ oranges contained more 'apples', type the following search form.
 
 ::
 
-    りんご^100 みかん
+    apples^100 oranges
 
 Boost value specifies an integer greater than 1.

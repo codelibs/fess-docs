@@ -45,4 +45,4 @@ following search form.
 
 ::
 
-    lastModified:[NOW-30DAY TO NOW](=[2012-01-23T00:00:00Z+TO+2012-02-21T20:00:00Z(現在日時)])
+    lastModified:[NOW-30DAY TO NOW](=[2012-01-23T00:00:00Z+TO+2012-02-21T20:00:00Z(current time)])

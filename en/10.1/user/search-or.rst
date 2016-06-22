@@ -22,6 +22,6 @@ search term 2 search term 1 and type the following search form.
 
 ::
 
-    検索語1 OR 検索語2
+    term1 OR term2
 
 OR between multiple languages are available.

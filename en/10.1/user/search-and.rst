@@ -23,6 +23,6 @@ For example, if you want to find documents that contain the search terms
 
 ::
 
-    検索語1 AND 検索語2
+    terms1 AND terms2
 
 Connecting multiple words with AND are available.
