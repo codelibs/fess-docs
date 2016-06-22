@@ -22,4 +22,4 @@ search.
 
 ::
 
-    search term 1 NOT search term 2
+    "search term 1" NOT "search term 2"

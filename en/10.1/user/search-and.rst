@@ -23,6 +23,6 @@ For example, if you want to find documents that contain the search terms
 
 ::
 
-    search term 1 AND search term 2
+    "search term 1" AND "search term 2"
 
 Connecting multiple words with AND are available.

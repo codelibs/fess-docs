@@ -22,6 +22,6 @@ search term 2 search term 1 and type the following search form.
 
 ::
 
-    search term 1 OR search term 2
+    "search term 1" OR "search term 2"
 
 OR between multiple languages are available.
