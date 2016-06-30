@@ -20,6 +20,11 @@
 
 .fess_config インデックスは |Fess| の設定情報を含んでいます。
 
+.fess_basic_config
+::::::::::::
+
+.fess_basic_config インデックスは障害URLを除いた |Fess| の設定情報を含んでいます。
+
 .fess_user
 ::::::::::
 

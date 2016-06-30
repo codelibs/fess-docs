@@ -198,8 +198,8 @@ Unix環境の場合は以下を実行します。
 |image23|
 
 コマンドプロンプトが表示され起動されます。
-
-|image24|
+fess\logs\server_*.log(更新日時が最新のもの)の内容に
+「Boot successful」が出力されていれば起動完了です。
 
 動作確認
 ========
@@ -251,4 +251,3 @@ http://localhost:8080/
 .. |image21| image:: ../resources/images/ja/install/Fess-3.png
 .. |image22| image:: ../resources/images/ja/install/Fess-4.png
 .. |image23| image:: ../resources/images/ja/install/Fess-5.png
-.. |image24| image:: ../resources/images/ja/install/Fess-6.png
