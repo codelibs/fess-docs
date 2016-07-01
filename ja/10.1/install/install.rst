@@ -83,25 +83,25 @@ systemd を使う場合は
 
 Elasticsearchクラスタの利用方法
 ----------------------------
-Elasticsearchクラスタを利用するにはelasticsearchを起動しておく必要があります。
-elasticsearchの設定方法についてはRPMでの設定方法と同様です。
-Fessの起動オプションを変更します。
-Windows環境では fess-<version>\bin\fess.in.batを変更します。
+
+|Fess| ではElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。
+Elasticsearchの設定方法についてはRPMでの設定方法を参照してください。
+
+|Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
+Windows環境では fess-<version>\\bin\\fess.in.batを変更します。
 elasticss.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
 
 ::
 
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="/<elasticsearch-<version>/data/"
-    （最終行）
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/"
 
 Linux/Unix環境では fess-<version>/bin/fess.in.shを変更します。
 
 ::
 
-    ESS_CLASSPATH=$FESS_HOME/lib/classes # 左記の行の下
-
     ES_HTTP_URL=http://localhost:9200
     ES_TRANSPORT_URL=localhost:9300
-    FESS_DICTIONARY_PATH="/elasticsearch-<version>/data/"
+    FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
+

@@ -84,3 +84,27 @@ For systemd,
     $ sudo /bin/systemctl enable fess.service
 
 
+Using Your Elasticsearch Cluster
+---------------------------------
+
+|Fess| is able to connect to your existing elasticsearch cluster.
+For the details to configure elasticsearch for Fess, please see steps in Using RPM package.
+
+To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
+For Windows environment, the following settings are put into fess-<version>\\bin\\fess.in.bat.
+elasticss.dictionary.path needs to be set to a path of configsync.config_path in elasticsearch.yml.
+
+::
+
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/"
+
+For Unix environment, they are in fess-<version>/bin/fess.in.sh.
+
+::
+
+    ES_HTTP_URL=http://localhost:9200
+    ES_TRANSPORT_URL=localhost:9300
+    FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
+
