@@ -10,6 +10,7 @@
    proxy
    windows-service
    filesize
+   crawler
    logging
    role-setting
    index-backup
