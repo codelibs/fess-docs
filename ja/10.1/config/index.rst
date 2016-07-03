@@ -5,13 +5,9 @@
    :maxdepth: 2
 
    intro
-   server-port
-   memory-config
-   proxy
-   windows-service
-   filesize
+   system
    crawler
-   logging
+   windows-service
    role-setting
    index-backup
    analyzer
