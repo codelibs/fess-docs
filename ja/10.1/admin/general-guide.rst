@@ -161,18 +161,21 @@ Bind DN
 
 ユーザーの識別名を指定します。
 例: uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+例（AD連携）: %s@fess.codelibs.org (Windows2000以降)
 
 Base DN
 :::::::
 
 検索画面にログインするベースの識別名を指定します。
 例: dc=fess,dc=codelibs,dc=org
+例（AD連携）: dc=fess,dc=codelibs,dc=org
 
 アカウントフィルタ
 ::::::::::::::::::
 
 ユーザーのCommon Nameやuidなど指定します。
 例: cn=%s や uid=%s
+例（AD連携）: (&(objectClass=user)(sAMAccountName=%s))
 
 お知らせ表示
 ------------
