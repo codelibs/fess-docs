@@ -7,11 +7,8 @@
 
 動作確認済の安定版リリースです。
 
+* `Fess 10.1.1 <https://github.com/codelibs/fess/releases/tag/fess-10.1.1>`_
 * `Fess 10.0.4 <https://github.com/codelibs/fess/releases/tag/fess-10.0.4>`_
-* `Fess 10.0.3 <https://github.com/codelibs/fess/releases/tag/fess-10.0.3>`_
-* `Fess 10.0.2 <https://github.com/codelibs/fess/releases/tag/fess-10.0.2>`_
-* `Fess 10.0.1 <https://github.com/codelibs/fess/releases/tag/fess-10.0.1>`_
-* `Fess 10.0 <https://github.com/codelibs/fess/releases/tag/fess-10.0.0>`_
 
 スナップショット版リリース
 ==========================
