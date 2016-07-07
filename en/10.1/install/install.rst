@@ -84,8 +84,8 @@ For systemd,
     $ sudo /bin/systemctl enable fess.service
 
 
-Using Your Elasticsearch Cluster
----------------------------------
+Using Your Elasticsearch Cluster On ZIP package
+-----------------------------------------------
 
 |Fess| is able to connect to your existing elasticsearch cluster.
 For the details to configure elasticsearch for Fess, please see steps in Using RPM package.

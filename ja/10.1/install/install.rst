@@ -84,7 +84,7 @@ systemd を使う場合は
 Elasticsearchクラスタの利用方法
 ----------------------------
 
-|Fess| ではElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。
+|Fess| では RPM パッケージでは外部のElasticsearchを標準で利用しますが、ZIPパッケージでのインストールにおいてElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。
 Elasticsearchの設定方法についてはRPMでの設定方法を参照してください。
 
 |Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
