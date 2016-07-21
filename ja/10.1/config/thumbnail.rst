@@ -170,9 +170,11 @@ Linux環境ではRPMパッケージでインストールした場合、|Fess|の
 以下のコマンドの実行結果にfessユーザが存在することを確認します。
 
 ::
+
     grep fess /etc/passwd
 
 |Fess|のサービス停止中に以下のコマンドを実行して、fessユーザのホームディレクトリを変更します。
 
 ::
+
     usermod -d /var/lib/fess fess
