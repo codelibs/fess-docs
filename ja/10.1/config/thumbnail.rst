@@ -2,58 +2,57 @@
 サムネイル画像の設定
 ====================
 
-実施環境と画像作成対象
-======================
+サムネイル画像
+==============
 
-環境:CentOS7
-インストール後でfessユーザが作成済みの状態を想定しています。
-今回は例としてWord(doc, docx),  Excel(xls, xlsx), PowerPoint(ppt, pptx), rtf
-をサムネイルの作成対象としていますが、作成対象は変更することができます。
+|サムネイル画像は検索結果に画像出力対象のmimetypeが存在する場合に作成されます。
+|サムネイル画像の出力対象はmimetypeを設定して追加することができます。
 
 fessユーザのホームディレクトリ変更
 ==================================
 
-Fessインストール後、実行結果にfessユーザが存在することを確認します。
+|Linux環境では`RPM パッケージのインストール <http://fess.codelibs.org/ja/10.1/install/install.html#id1>`後、以下のコマンドの実行結果にfessユーザが存在することを確認します。
 
 ::
     cat /etc/passwd | grep fess
 
-Fessのサービス停止中に以下を実行して、
-fessユーザのホームディレクトリの変更を行います。
+|Fessのサービス停止中に以下のコマンドを実行して、fessユーザのホームディレクトリを変更します。
 
 ::
     usermod -d /var/lib/fess fess
 
-サムネイル画像の作成に必要なパッケージをインストール
-====================================================
+サムネイル画像作成に必要なパッケージをインストール
+==================================================
 
+|画像の作成用に以下のパッケージをインストールします。
 ::
     $ sudo yum install unoconv
     $ sudo yum install libreoffice-headless
     $ sudo yum install vlgothic-fonts
     $ sudo yum install ImageMagick
 
-サムネイル画像の出力対象の設定
-==============================
+サムネイル画像の作成
+====================
 
-以下のコメントを外します。
-/usr/share/fess/app/WEB-INF/classes/fess_screenshot.xml
+|サムネイル画像の作成を有効にするため、/usr/share/fess/app/WEB-INF/classes/fess_screenshot.xmlの以下のコメントを外します。
 
 ::
-    <!-- (削除)
-    		<postConstruct name="add">
-    			<arg>officeScreenShotGenerator</arg>
+    <component name="screenShotManager" class="org.codelibs.fess.screenshot.ScreenShotManager">
+        <postConstruct name="add">
+            <arg>officeScreenShotGenerator</arg>
+       </postConstruct>
+    </component>
+    <component name="officeScreenShotGenerator"
+        class="org.codelibs.fess.screenshot.impl.CommandGenerator">
+        <property name="commandList">
+            ["sh",
+            "/use/share/fess/bin/office-screenshot.sh",
+            "${url}",
+            "${outputFile}"]
+        </property>
 
-        <!-- 省略 -->
-
-    			<arg>"application/rtf"
-    			</arg>
-    		</postConstruct>
-    	</component>
-    --> (削除)
-
-サムネイル作成対象は以下のようにmimetypeを記述することで設定されます。
-PDFを追加する場合は以下のように追加します。
+|サムネイル画像の出力対象は<property name="commandList"> </property> 以下にmimetypeを追加することで設定します。
+|PDFを作成対象とする場合は以下を設定します。
 
 ::
     <postConstruct name="addCondition">
@@ -65,8 +64,8 @@ PDFを追加する場合は以下のように追加します。
 サムネイル画像サイズの変更
 ==========================
 
-サムネイルの画像サイズを変更する場合はconvertのthumbnailオプションの値を変更してください。
-/use/share/fess/bin/office-screenshot.sh
+|サムネイルの画像サイズを変更する場合は /use/share/fess/bin/office-screenshot.sh で
+|convertのthumbnailオプションの値を変更してください。
 
 ::
     convert -thumbnail 200x150! ${pdfFile} ${outputFile}
@@ -74,15 +73,14 @@ PDFを追加する場合は以下のように追加します。
 サムネイル画像の表示
 ====================
 
-以下の行を追加します。
-/usr/share/fess/app/WEB-INF/view/search.jsp
+|サムネイル画像の表示は以下のJSPを編集します。
+|/usr/share/fess/app/WEB-INF/view/search.jsp に以下の行を追加します。
 
 ::
     <script type="text/javascript" src="${f:url('/js/search.js')}"></script>
     <script type="text/javascript" src="${f:url('/js/screenshot.js')}"></script> <!-- 追加 -->
 
-以下の行を追加することでサムネイル画像を表示することができます。
-/usr/share/fess/app/WEB-INF/view/searchResult.jsp
+|/usr/share/fess/app/WEB-INF/view/searchResult.jsp に以下の行を追加します。
 
 ::
     <c:forEach var="doc" varStatus="s" items="${documentItems}">
