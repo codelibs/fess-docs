@@ -12,5 +12,6 @@
    index-backup
    analyzer
    geosearch
+   thumbnail
    kibana
 
