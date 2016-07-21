@@ -2,39 +2,48 @@
 サムネイル画像の設定
 ====================
 
-サムネイル画像
-==============
+サムネイル画像の表示
+====================
 
-|サムネイル画像は検索結果に画像出力対象のmimetypeが存在する場合に作成されます。
-|サムネイル画像の出力対象はmimetypeを設定して追加することができます。
+|Fess|では検索結果の内容として、その結果のサムネイル画像を表示することができます。
+サムネイル画像は検索結果のMIME Typeを元の生成されます。
+サポートしているMIME Typeであれば、検索結果の表示時にサムネイル画像を生成します。
+サムネイル画像を生成する処理はMIME Typeごとに設定して追加することができます。
 
-fessユーザのホームディレクトリ変更
-==================================
+HTMLファイルのサムネイル画像
+============================
 
-|Linux環境では`RPM パッケージのインストール <http://fess.codelibs.org/ja/10.1/install/install.html#id1>`後、以下のコマンドの実行結果にfessユーザが存在することを確認します。
+
+
+MS Officeファイルのサムネイル画像
+=================================
+
+
+実行ユーザのホームディレクトリ変更
+----------------------------------
+
+Linux環境では`RPM パッケージのインストール <http://fess.codelibs.org/ja/10.1/install/install.html#id1>`後、以下のコマンドの実行結果にfessユーザが存在することを確認します。
 
 ::
-    cat /etc/passwd | grep fess
+    grep fess /etc/passwd
 
-|Fessのサービス停止中に以下のコマンドを実行して、fessユーザのホームディレクトリを変更します。
+|Fess|のサービス停止中に以下のコマンドを実行して、fessユーザのホームディレクトリを変更します。
 
 ::
     usermod -d /var/lib/fess fess
 
-サムネイル画像作成に必要なパッケージをインストール
-==================================================
+パッケージのインストール
+------------------------
 
-|画像の作成用に以下のパッケージをインストールします。
+画像の作成用に必要な以下のパッケージをインストールします。
+
 ::
-    $ sudo yum install unoconv
-    $ sudo yum install libreoffice-headless
-    $ sudo yum install vlgothic-fonts
-    $ sudo yum install ImageMagick
+    $ sudo yum install unoconv libreoffice-headless vlgothic-fonts ImageMagick
 
-サムネイル画像の作成
-====================
+設定ファイルの変更
+------------------
 
-|サムネイル画像の作成を有効にするため、/usr/share/fess/app/WEB-INF/classes/fess_screenshot.xmlの以下のコメントを外します。
+サムネイル画像の作成を有効にするため、/usr/share/fess/app/WEB-INF/classes/fess_screenshot.xmlの以下のコメントを外します。
 
 ::
     <component name="screenShotManager" class="org.codelibs.fess.screenshot.ScreenShotManager">
@@ -51,8 +60,8 @@ fessユーザのホームディレクトリ変更
             "${outputFile}"]
         </property>
 
-|サムネイル画像の出力対象は<property name="commandList"> </property> 以下にmimetypeを追加することで設定します。
-|PDFを作成対象とする場合は以下を設定します。
+サムネイル画像の出力対象は<property name="commandList"> </property> 以下にmimetypeを追加することで設定します。
+PDFを作成対象とする場合は以下を設定します。
 
 ::
     <postConstruct name="addCondition">
@@ -61,26 +70,26 @@ fessユーザのホームディレクトリ変更
     	</arg>
     </postConstruct>
 
-サムネイル画像サイズの変更
-==========================
+画像サイズの変更
+----------------
 
-|サムネイルの画像サイズを変更する場合は /use/share/fess/bin/office-screenshot.sh で
-|convertのthumbnailオプションの値を変更してください。
+サムネイルの画像サイズを変更する場合は /use/share/fess/bin/office-screenshot.sh で
+convertのthumbnailオプションの値を変更してください。
 
 ::
     convert -thumbnail 200x150! ${pdfFile} ${outputFile}
 
-サムネイル画像の表示
-====================
+JSPの編集
+---------
 
-|サムネイル画像の表示は以下のJSPを編集します。
-|/usr/share/fess/app/WEB-INF/view/search.jsp に以下の行を追加します。
+サムネイル画像の表示は以下のJSPを編集します。
+/usr/share/fess/app/WEB-INF/view/search.jsp に以下の行を追加します。
 
 ::
     <script type="text/javascript" src="${f:url('/js/search.js')}"></script>
     <script type="text/javascript" src="${f:url('/js/screenshot.js')}"></script> <!-- 追加 -->
 
-|/usr/share/fess/app/WEB-INF/view/searchResult.jsp に以下の行を追加します。
+/usr/share/fess/app/WEB-INF/view/searchResult.jsp に以下の行を追加します。
 
 ::
     <c:forEach var="doc" varStatus="s" items="${documentItems}">
