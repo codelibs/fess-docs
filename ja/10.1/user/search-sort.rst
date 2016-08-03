@@ -54,4 +54,4 @@ fess sort:content_length.desc
 
 fess sort:content_length.desc,last_modified
 
-.. |image0| image:: ../../../resources/images/ja/9.4/user/search-sort-1.png
+.. |image0| image:: ../../../resources/images/ja/10.1/user/search-sort-1.png
