@@ -59,14 +59,14 @@ Features
 News
 ====
 
+2016-08-18
+    `Fess 10.1.3 Released <https://github.com/codelibs/fess/releases/tag/fess-10.1.3>`__
+
 2016-07-21
     `Fess 10.1.2 Released <https://github.com/codelibs/fess/releases/tag/fess-10.1.2>`__
 
 2016-06-16
     `Fess 10.1.1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.1.1>`__
-
-2016-06-09
-    `Fess 10.1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.1.0>`__
 
 `More news... <news.html>`__
 
