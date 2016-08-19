@@ -3,6 +3,10 @@
 ==================
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/exec/Crawler.java
+ - Javaプロセスとして実行されるクロールのクラス
+ - クロールジョブが実行されたときに呼ばれる
+ - コマンドオプション
+  - -s: セッションIDを指定する
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/exec/SuggestCreator.java
 
