@@ -55,18 +55,23 @@ Next, install |Fess| RPM package.
     $ sudo rpm -ivh fess-<version>.rpm
 
 |Fess| provides elasticsearch plugins to extend elasticsearch's features for |Fess|.
-Install them to plugins directory in elasticsearch.
+Install the following plugins to plugins directory in elasticsearch.
 
 ::
 
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-fess/2.3.0
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-ja/2.3.0
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-synonym/2.3.0
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.3.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.3.1
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-dataformat/2.3.0
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.3.0
     $ /usr/share/elasticsearch/bin/plugin install http://maven.codelibs.org/archive/elasticsearch/plugin/kopf/elasticsearch-kopf-2.0.1.0.zip
-    $ /usr/share/elasticsearch/bin/plugin install org.bitbucket.eunjeon/elasticsearch-analysis-seunjeon/2.3.3.0
+
+For Japanese support, install analysis-kuromoji-neologd plugin.
+
+::
+
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.3.1
 
 To register them as a service, run the following commands if using chkconfig,
 
