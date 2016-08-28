@@ -80,7 +80,7 @@ To register them as a service, run the following commands if using chkconfig,
     $ sudo /sbin/chkconfig --add elasticsearch
     $ sudo /sbin/chkconfig --add fess
 
-For systemd,
+For systemd based system(e.g. CentOS 7),
 
 ::
 
