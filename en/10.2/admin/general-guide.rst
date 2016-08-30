@@ -8,37 +8,43 @@ Overview
 This administrative page manages configurations for |Fess|.
 You can change |Fess|'s behavior without rebooting the |Fess|.
 
-
 Management Operations
 ========
+
+Display Configurations
+----------------------
+
+Select System > General in the left menu to display General Configuration page, as below.
+
+|image0|
 
 System
 --------
 
 JSON Response
-::::::::::::::
+:::::::::::::
 
-TBD
+Enable JSON response of Search features.
 
 Login Required
 ::::::::::::::
 
-TBD
+Search pages are not displayed on Guest user if enabled.
 
 Login Link
-::::::::::::::
+::::::::::
 
-TBD
+Login menu is displayed at the top of search pages if enabled.
 
 Default Label Value
-::::::::::::::
+:::::::::::::::::::
 
-TBD
+Specify default labels on search pages.
 
 Default Sort Value
 ::::::::::::::
 
-TBD
+Specify default sort order on search pages.
 
 Popular Word Response
 ::::::::::::::
@@ -180,7 +186,6 @@ Search top page
 TBD
 
 
-|image0|
 
 .. |image0| image:: ../../../resources/images/en/10.2/admin/general-1.png
 
