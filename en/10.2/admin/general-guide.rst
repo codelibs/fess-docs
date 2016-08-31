@@ -49,22 +49,22 @@ Specify default sort order on search pages.
 Popular Word Response
 ::::::::::::::
 
-TBD
+Enable JSON response of Popular words.
 
 Encoding for CSV
 ::::::::::::::
 
-TBD
+This encoding is used in uploaded/downloaded CSV file.
 
 Append Params to URL
 ::::::::::::::
 
-TBD
+Append query parameters to URL of search results.
 
 Notification Email
 ::::::::::::::
 
-TBD
+Specify e-mail address to send notification mail.
 
 Crawler
 --------

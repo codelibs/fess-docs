@@ -14,9 +14,9 @@ Dashboard provides a web administration tool for elasticsearch to manage cluster
 +------------------+----------------------------------+
 | Name             | Description                      |
 +==================+==================================+
-| fess             | indexed documents                |
+| fess.YYYYMMDD    | indexed documents                |
 +------------------+----------------------------------+
-| fess_log         | access logs                      |
+| fess_log         | search logs                      |
 +------------------+----------------------------------+
 | fess.suggest     | suggest words                    |
 +------------------+----------------------------------+
@@ -24,13 +24,13 @@ Dashboard provides a web administration tool for elasticsearch to manage cluster
 +------------------+----------------------------------+
 | .fess_user       | user/role/group data             |
 +------------------+----------------------------------+
-| .configsync      | dictionaries data                |
+| .configsync      | configuration file data          |
 +------------------+----------------------------------+
 | .suggest         | suggest meta data                |
 +------------------+----------------------------------+
 | .suggest-array   | suggest meta data                |
 +------------------+----------------------------------+
-| .suggest-badword | excluding word list gfor suggest |
+| .suggest-badword | excluding word list for suggest  |
 +------------------+----------------------------------+
 
 Check The Number Of Indexed Documents

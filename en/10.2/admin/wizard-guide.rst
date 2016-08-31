@@ -27,7 +27,7 @@ Configurations
 Name
 ::::
 
-Configuration name. (ex. Fess)
+Configuration name. (ex. Fess Site)
 
 Crawling Path
 :::::::::::::
