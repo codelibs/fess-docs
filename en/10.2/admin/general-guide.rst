@@ -40,11 +40,13 @@ Default Label Value
 :::::::::::::::::::
 
 Specify default labels on search pages.
+e.g. "role:admin=label1" is that users which has admin role use labels1 as default labels.
 
 Default Sort Value
 ::::::::::::::
 
 Specify default sort order on search pages.
+e.g. "role:admin=content_length.desc" is that users which has admin role use content_length.desc as default sort order.
 
 Popular Word Response
 ::::::::::::::
@@ -72,32 +74,33 @@ Crawler
 Bots Name For Purge
 ::::::::::::::
 
-TBD
+Bots names to remove search logs.
 
 Check Last Modified
 ::::::::::::::
 
-TBD
+Enable incremental crawling.
+Crawler checks time stamp of a document at indexing time.
 
 Simultaneous Crawler Config
 ::::::::::::::
 
-TBD
+The number of Crawlers which deals with simultaneous crawling configuration.
 
 Remove Documents Before
 ::::::::::::::
 
-TBD
+Days which old documents are removed.
 
 Excluded Failure Type
 ::::::::::::::
 
-TBD
+Ignored crawling failure type.
 
 Failure Count Threshold
 ::::::::::::::
 
-TBD
+Threshold for crawling failures.
 
 Logging
 --------
@@ -105,49 +108,53 @@ Logging
 Search Logging
 ::::::::::::::
 
-TBD
+Enable logging for user's searchs.
 
 User Logging
 ::::::::::::::
 
-TBD
+Enable logging for users.
 
 Favorite Logging
 ::::::::::::::
 
-TBD
+Enable logging for favarite requests.
 
 Purge Search Log Before
 ::::::::::::::
 
-TBD
+Days whilch old search logs are removed.
+To disable log purge, set to -1.
 
 Purge Job Log Before
 ::::::::::::::
 
-TBD
+Days which old job logs are removed.
+To disable log purge, set to -1.
 
 Purge User Before
 ::::::::::::::
 
-TBD
+Days whilc old user logs are removed.
+To disable log purge, set to -1.
 
 Suggest
 --------
+
 Suggest by Search Words
 ::::::::::::::
 
-TBD
+Enable to generate suggested words from search logs.
 
 Suggest by Documents
 ::::::::::::::
 
-TBD
+Enable to generate suggested words from indexed documents.
 
 Purge Suggest Documents Before
 ::::::::::::::
 
-TBD
+Days which old suggested words are removed.
 
 LDAP
 --------
@@ -155,22 +162,22 @@ LDAP
 LDAP URL
 ::::::::::::::
 
-TBD
+URL of LDAP server.
 
 Bind DN
 ::::::::::::::
 
-TBD
+Bind DN of LDAP environment.
 
 Base DN
 ::::::::::::::
 
-TBD
+Base DN of LDAP environment.
 
 Account Filter
 ::::::::::::::
 
-TBD
+LDAP query to fileter user accounts.
 
 Notification
 --------
@@ -178,12 +185,12 @@ Notification
 Login page
 ::::::::::::::
 
-TBD
+Contents displayed on login page.
 
 Search top page
 ::::::::::::::
 
-TBD
+Contents displayed on search top page.
 
 
 
