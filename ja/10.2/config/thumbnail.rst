@@ -19,7 +19,7 @@ phantomjsは事前にインストールしておいてください。
 設定ファイルの変更
 ------------------
 
-サムネイル画像の作成を有効にするため、$FESS_HOME/app/WEB-INF/classes/fess_screenshot.xmlの以下のコメントを外します。
+サムネイル画像の作成を有効にするため、$FESS_HOME/app/WEB-INF/classes/fess_thumbnail.xmlの以下のコメントを外します。
 
 ::
 
@@ -122,42 +122,28 @@ LibreOfficeを利用して、MS Office系ファイルのサムネイル画像を
 生成スクリプトの作成
 --------------------
 
-/usr/share/fess/bin/office-screenshot.shに以下の内容で生成処理を作成します。
+/usr/share/fess/bin/generate-thumbnailに以下の内容で生成処理を作成します。
 
 ::
 
     #!/bin/sh
-    url=$1
-    outputFile=$2
-    targetFile=`echo $url | sed -e "s#^file:/*#/#g"`
-    pdfFile="`echo $outputFile | sed -e "s/\.[^.]*$//g"`.pdf"
-    unoconv -o ${pdfFile} -f pdf ${targetFile}
-    convert -thumbnail 200x150! ${pdfFile} ${outputFile}
+
+    CMD_TYPE=$1
+    URL=$2
+    OUTPUT_FILE=$3
+
+    if [ x"$CMD_TYPE" = "xmsoffice" ] ; then
+      TARGET_FILE=`echo $URL | sed -e "s#^file:/*#/#g"`
+      TMP_FILE=/tmp/thumbnail.$$.pdf
+      unoconv -o $TMP_FILE -f pdf $TARGET_FILE
+      convert -thumbnail 160x120! $TMP_FILE $OUTPUT_FILE
+      rm $TMP_FILE
+    else
+      echo "Unsupported type: $CMD_TYPE"
+      exit 1
+    fi
 
 サムネイルの画像サイズを変更する場合は、convertのthumbnailオプションの値を変更してください。
-
-JSPの編集
-=========
-
-サムネイル画像の表示は以下のJSPを編集します。
-$FESS_HOME/app/WEB-INF/view/search.jsp に以下の行を追加します。
-
-::
-
-    <script type="text/javascript" src="${f:url('/js/search.js')}"></script>
-    <script type="text/javascript" src="${f:url('/js/screenshot.js')}"></script> <!-- 追加 -->
-
-/usr/share/fess/app/WEB-INF/view/searchResult.jsp に以下の行を追加します。
-
-::
-
-    <c:forEach var="doc" varStatus="s" items="${documentItems}">
-        <li id="result${s.index}">
-          <div class="screenShotBox"> <!-- 追加 -->
-            <c:if test="${doc.has_cache=='true'}"> <!-- 追加 -->
-              <img src="/screenshot/?docId=${f:u(doc.doc_id)}&queryId=${f:u(queryId)}" onError="noimage(this)" > <!-- 追加 -->
-            </c:if> <!-- 追加 -->
-          </div> <!-- 追加 -->
 
 その他
 ======
