@@ -163,7 +163,7 @@ DatabaseDataStore
     digest=content
     anchor=
     content_length=content.length()
-    last_modified=@jp.sf.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    last_modified=@org.codelibs.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
     location=latitude + "," + longitude
     latitude=latitude
     longitude=longitude
