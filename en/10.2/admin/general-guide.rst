@@ -36,6 +36,11 @@ Login Link
 
 Login menu is displayed at the top of search pages if enabled.
 
+Thumbnail View
+::::::::::::::
+
+Display thumbnail images in search result page.
+
 Default Label Value
 :::::::::::::::::::
 
