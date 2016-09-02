@@ -41,7 +41,9 @@ Type of Data Strore.
 
 * DatabaseDataStore: crawl data in Database.
 * CsvDataStore: crawl data in CSV file.
-* FileListDataStore: crawl file paths in CSV file.
+* CsvListDataStore: crawl file paths in CSV file.
+* EsDataStore: crawl documents in an index of elasticsearch.
+* EsListDataStore: crawl file paths in an index of elasticsearch.
 
 Parameter
 :::::::::
@@ -59,11 +61,22 @@ Boost
 
 Boost value is a weight for indexed documents of this configuration.
 
-Role
-::::
+Permissions
+:::::::::::
 
-Roles for this configuration.
+Permissions for this configuration.
+This format is "{user/group/role}name".
+For example, to display search results on users who belong to developer group, the permission is {group}developer.
 
+Labels
+::::::
+
+Labels for this configuration.
+
+Status
+::::::
+
+If enabled, the scheduled job of Default Crawler includes this configuration.
 
 Delete Configuration
 --------------------

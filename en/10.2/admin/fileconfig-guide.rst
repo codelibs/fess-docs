@@ -84,12 +84,14 @@ Boost
 
 Boost value is a weight for indexed documents of this configuration.
 
-Role
+Permissions
 ::::
 
-Roles for this configuration.
+Permissions for this configuration.
+This format is "{user/group/role}name".
+For example, to display search results on users who belong to developer group, the permission is {group}developer.
 
-Label
+Labels
 :::::
 
 Labels for this configuration.
