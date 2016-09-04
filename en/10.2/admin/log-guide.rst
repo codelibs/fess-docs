@@ -13,7 +13,7 @@ Management Operations
 Download Log File
 --------------
 
-Select System > Log File in a left menu to display a log file list.
+Select System Info > Log File in a left menu to display a log file list.
 
 |image0|
 
