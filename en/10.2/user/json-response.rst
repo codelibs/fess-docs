@@ -14,7 +14,7 @@ Request
 -------
 
 To get JSON output
-``http://localhost:8080/ |Fess| /JSON? query = search terms`` Of these sends
+``http://localhost:8080/json?query=SearchWords`` Of these sends
 a request. Request parameters are as follows.
 
 +----------------+-----------------------------------------------------------------------------------------------+
