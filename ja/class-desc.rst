@@ -1443,13 +1443,41 @@
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/taglib/FessFunctions.java
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/impl/BaseThumbnailGenerator.java
+  - サムネイル生成用の基本クラス
+  - isTarget
+    conditionMapのvalueに一致した文字があるかを判定
+  - isAvalable
+    - generatorListがnullか空でなければ
+      - PATH,Path,pathでパスを取得し、値があればpathListに入れる
+      - PathListのpathでファイル生成→生成できればfilePathMapにgeneratorとfilePathを入れる
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/impl/WebDriverGenerator.java
-
+    - HTMLのサムネイル生成用クラス
+    - init
+      - phantomjsが存在し、サムネイル出力対象か判定
+      - （調べる）DesiredCapabilities
+      - サムネイルのサイズを設定
+    - destroy
+    - generate
+      - 既にファイルが存在する場合はスクリーンショットを取らない
+      - スクリーンショットがなければ撮影してconvertメソッドで出力する
+    - isAvalable
+      - webDriverがnullでなければtrue
+    - convert
+      - thumbnailWidth, thumbnailHeightでサイズを変更する
+    - loadImage
+      - ImageIOで読み込む
+    - createDriverService
+      - コマンドラインでphantomjsが利用可能か判定する
+      - phantomjs起動
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/impl/CommandGenerator.java
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/ThumbnailGenerator.java
-
+  - サムネイル生成用のインターフェイス
+    - isTarget
+    - isTarget(ドキュメントのMap)
+    - isAvailable
+    - destroy
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/ThumbnailManager.java
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/ds/DataStore.java
