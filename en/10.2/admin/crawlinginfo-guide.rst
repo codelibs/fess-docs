@@ -13,7 +13,7 @@ Management Operations
 Display Crawling Info
 --------------
 
-Select System > Crawling Info in the left menu to display a list page of Crawling Info, as below.
+Select System Info > Crawling Info in the left menu to display a list page of Crawling Info, as below.
 
 |image0|
 
