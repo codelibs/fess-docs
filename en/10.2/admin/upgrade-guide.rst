@@ -12,6 +12,11 @@ Upgrade page provides data migration tools for previous versions of |Fess|.
 Operations
 ========
 
+Backup
+------
+
+Download configuration backup files(.fess_basic_config and .fess_user) on Backup page before executing a migration process.
+
 Migration
 --------
 
