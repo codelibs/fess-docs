@@ -1,13 +1,9 @@
-h2 {
-    margin-top: 2em;
+.wy-side-nav-search p {
+  margin-bottom: 0.6em;
 }
-.side-by-side {
-    display: inline-block;
+.wy-side-nav-search p.pr a {
+  color: rgba(255, 255, 255, 0.8);
 }
-html*.side-by-side {
-    display: inline;
-    zoom: 1;
-}
-.side-by-side > a img {
-    margin-right: 15px;
+.wy-side-nav-search p.pr a:hover {
+  color: #fff;
 }
