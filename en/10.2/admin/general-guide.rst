@@ -96,6 +96,7 @@ Remove Documents Before
 ::::::::::::::
 
 Days which old documents are removed.
+e.g. documents indexed X days ago are removed if they are not updated.
 
 Excluded Failure Type
 ::::::::::::::
