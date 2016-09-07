@@ -114,10 +114,9 @@
 
           <p class="pr">
             {%- if language == 'ja' %}
-              <!-- <a class="externalLink" href="http://www.n2sm.net/services/n2search-asp-campaign.html" target="_blank">[PR] 今なら商用Fessが初期費用無料！</a> -->
-              <a class="externalLink" href="http://www.n2sm.net/recruit/product.html" target="_blank">Fessの開発者募集</a>
+              <a href="{{ context_path }}/{{ conf_py_path }}{{ pagename }}.html">English</a>
             {% else %}
-              <a class="externalLink" href="http://www.n2sm.net/en/support/fess_support.html" target="_blank">Commercial Support</a>
+              <a href="{{ context_path }}/ja/{{ conf_py_path }}{{ pagename }}.html">Japanese</a>
             {% endif %}
           </p>
 
