@@ -88,6 +88,7 @@ N2 Search is available on AWS Marketplace. For more details, see `N2 Search <htt
 .. hidden toctree
 
 .. toctree::
+   :maxdepth: 3
    :hidden:
 
    overview

@@ -123,6 +123,7 @@ N2 Search on AWS Marketplace
 .. hidden toctree
 
 .. toctree::
+   :maxdepth: 3
    :hidden:
 
    overview
