@@ -1,12 +1,12 @@
-=================
+============
+Label Search
+============
+
 Search with label
 =================
 
-Label Search(Category Search)
-=============================
-
 |Fess| is able to assign labels to documents at the indexing time and Label search categorizes documents into the labels on the search result.
-To register Label at an administrative page, you can select the label from Search Options.
+To register a label at administrative page, you can select the label from Search Options.
 
 Usage
 -----
