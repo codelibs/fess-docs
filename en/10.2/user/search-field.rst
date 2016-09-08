@@ -38,7 +38,7 @@ For HTML document, title field is a value of title tag and content field is a va
 Usage
 -----
 
-The format of Field search is colon-separated word, such as fieldname:searchword.
+The format of Field search is colon-separated query, such as fieldname:searchword.
 If field name is not specified, |Fess| searchs documents in values of title and content field.
 
 To search documents that contains "fess" in title field:
