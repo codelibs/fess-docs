@@ -1,8 +1,8 @@
 ==========
-NOT search
+NOT Search
 ==========
 
-NOT search
+NOT Search
 ==========
 
 NOT search provides a search result that does not contain specified search word.

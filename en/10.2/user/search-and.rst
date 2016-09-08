@@ -1,8 +1,8 @@
 ==========
-AND search
+AND Search
 ==========
 
-AND search
+AND Search
 ==========
 
 AND search provides a search result that contains all search words you type at a search box.

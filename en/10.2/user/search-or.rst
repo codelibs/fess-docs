@@ -1,8 +1,8 @@
 =========
-OR search
+OR Search
 =========
 
-OR search
+OR Search
 =========
 
 OR search provides a search result that contains some of search words you type at a search box.
