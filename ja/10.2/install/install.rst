@@ -33,7 +33,7 @@ ZIP パッケージを利用する場合
 RPM パッケージを利用する場合
 ----------------------------
 
-|Fess| をインストールする前に elasticsearch の RPM パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch> <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
+|Fess| をインストールする前に elasticsearch の RPM パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
 
 ::
 
