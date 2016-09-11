@@ -34,7 +34,7 @@ Features
 
 -  OS-independent (Java Application)
 
--  Crawl documents on Web/File System/DB/Windows Shared Folder
+-  Crawler for Web/File System/DB/Windows Shared Folder
 
 -  Support many document types, such as MS Office, PDF, Zip archive,...
 
@@ -46,7 +46,7 @@ Features
 
 -  Provide a browser based administative page (admin console)
 
--  Support secure search (access control with LDAP/Active Directory)
+-  Support secure search (access control with LDAP/Active Directory/SSO)
 
 -  Support JSON format of search results
 
@@ -74,12 +74,6 @@ Support Service
 ===============
 
 `N2SM, Inc. <http://www.n2sm.net/en/>`__ provides support services for Fess, and also provides Enterprise Search Software, N2 Search, based on Fess.
-
-N2 Search on AWS Marketplace
-----------------------------
-
-N2 Search is available on AWS Marketplace. For more details, see `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__.
-
 
 
 .. |image0| image:: ../resources/images/en/demo-1.png
