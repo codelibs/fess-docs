@@ -32,7 +32,7 @@ Commercial Support
 ------------------
 
 If you need commercial support, maintenance and technical support for this product,
-please contact to `N2SM, Inc.... <http://www.n2sm.net/>`__.
+please contact to `N2SM, Inc. <http://www.n2sm.net/>`__.
 
 How To Send Comments And Suggestions
 ====================================
