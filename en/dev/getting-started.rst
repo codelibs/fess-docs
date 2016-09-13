@@ -14,11 +14,11 @@ Requirements
 
 -  Java
 
--  LastaFlute
+-  `LastaFlute <https://github.com/lastaflute>`__
 
--  DBFlute
+-  `DBFlute <https://github.com/dbflute>`__
 
--  Elasticsearch
+-  `Elasticsearch <https://www.elastic.co/>`__
 
 How To Develop |Fess|
 =====================
@@ -31,7 +31,7 @@ How To Develop |Fess|
 
        $ git clone https://github.com/codelibs/fess.git
 
-4. Download elasticsearch Plugins
+4. Download elasticsearch plugins
 
    ::
 
@@ -39,7 +39,13 @@ How To Develop |Fess|
 
 4. If using eclipse, Import it as Maven project into the eclipse
 
-5. Launch org.codelibs.fess.FessBoot as Debug mode and then access to http://localhost:8080/
+5. Build |Fess|
+
+   ::
+
+       $ mvn package
+
+6. Launch org.codelibs.fess.FessBoot as Debug mode and then access to http://localhost:8080/
 
 Create |Fess| Package
 =====================
@@ -51,12 +57,3 @@ You need to execute antrun:run goal before package goal.
 
     $ mvn antrun:run
     $ mvn package
-
-Reference material
-==================
-
--  `LastaFlute <https://github.com/lastaflute>`__
-
--  `DBFlute <https://github.com/dbflute>`__
-
--  `Elasticsearch <https://www.elastic.co/>`__
