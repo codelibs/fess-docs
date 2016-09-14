@@ -12,6 +12,8 @@ The requirement is as follows.
 
 -  Java: Java SE 8 or later
 
+For more details, see Installation Guide.
+
 Install Java
 ===============
 
