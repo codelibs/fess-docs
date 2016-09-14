@@ -28,4 +28,4 @@
 移行元のバージョン。
 
 
-.. |image0| image:: ../../../resources/images/ja/10.2/admin/upgarade-1.png
+.. |image0| image:: ../../../resources/images/ja/10.2/admin/upgrade-1.png
