@@ -71,6 +71,7 @@ RPM パッケージを利用する場合
 
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.3.1
 
+これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
 
 サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合は
 

@@ -73,6 +73,8 @@ For Japanese support, install analysis-kuromoji-neologd plugin.
 
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-kuromoji-neologd/2.3.1
 
+Note that these plugins depends on elasticsearch version.
+
 To register them as a service, run the following commands if using chkconfig,
 
 ::
