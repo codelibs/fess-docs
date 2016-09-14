@@ -19,7 +19,15 @@ The following sort fields are available.
 +-----------------+------------------------------------------------+
 | content_length  | Size of document                               |
 +-----------------+------------------------------------------------+
-| last_modified   | Last modified time of document                |
+| last_modified   | Last modified time of document                 |
++-----------------+------------------------------------------------+
+| score           | Score value                                    |
++-----------------+------------------------------------------------+
+| timestamp       | Indexed time                                   |
++-----------------+------------------------------------------------+
+| click_count     | The number of clicked documents                |
++-----------------+------------------------------------------------+
+| favorite_count  | The number of liked documents                  |
 +-----------------+------------------------------------------------+
 
 Table: Sort fields
