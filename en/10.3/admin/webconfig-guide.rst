@@ -135,5 +135,49 @@ If you want to create Web crawling configuration to crawl pages under http://fes
 
 For other parameters, use a default value.
 
+Crawling Protected Site
+-----------------------
+
+Fess supports BASIC/DIGEST/NTLM/FORM authentication.
+For the authentication information, you can configure it on Web Authentication page.
+
+To crawl Redmine pages (ex. https://<server>/) with password protection, create a setting on Web Config page as below:
+
++----------------------------+------------------------------------------+
+| Name                       | Value                                    |
++============================+==========================================+
+| Name                       | Redmine                                  |
++----------------------------+------------------------------------------+
+| URLs                       | https://<server>/my/page                 |
++----------------------------+------------------------------------------+
+| Included URLs For Crawling | https://<server>/.*                      |
++----------------------------+------------------------------------------+
+| Config Parameters          | client.robotsTxtEnabled=false (Optional) |
++----------------------------+------------------------------------------+
+
+and then create the authentication setting on Web Auth page:
+
++------------+------------------------------------------------------------+
+| Name       | Value                                                      |
++============+============================================================+
+| Scheme     | Form                                                       |
++------------+------------------------------------------------------------+
+| Username   | (Account for crawling)                                     |
++------------+------------------------------------------------------------+
+| Password   | (Password for the account)                                 |
++------------+------------------------------------------------------------+
+| Parameters | encoding=UTF-8                                             |
+|            | token_method=GET                                           |
+|            | token_url=https://<server>/login                           |
+|            | token_pattern=name="authenticity_token" +value="([^"]+)"   |
+|            | token_name=authenticity_token                              |
+|            | login_method=POST                                          |
+|            | login_url=https://<server>/login                           |
+|            | login_parameters=username=${username}&password=${password} |
++------------+------------------------------------------------------------+
+| Web Config | Redmine                                                    |
++------------+------------------------------------------------------------+
+
+
 .. |image0| image:: ../../../resources/images/en/10.3/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/en/10.3/admin/webconfig-2.png
