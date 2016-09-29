@@ -17,3 +17,6 @@ html*.side-by-side {
 .side-by-side > a img {
   margin-right: 15px;
 }
+.wy-breadcrumbs a.externalLink:visited {
+  color: #2980b9;
+}
