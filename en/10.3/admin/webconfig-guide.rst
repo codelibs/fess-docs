@@ -141,6 +141,9 @@ Crawling Protected Site
 Fess supports BASIC/DIGEST/NTLM/FORM authentication.
 For the authentication information, you can configure it on Web Authentication page.
 
+Redmine
+:::::::
+
 To crawl Redmine pages (ex. https://<server>/) with password protection, create a setting on Web Config page as below:
 
 +----------------------------+------------------------------------------+
@@ -177,6 +180,46 @@ and then create the authentication setting on Web Auth page:
 +------------+------------------------------------------------------------+
 | Web Config | Redmine                                                    |
 +------------+------------------------------------------------------------+
+
+XWiki
+:::::
+
+To crawl XWiki pages (ex. https://<server>/xwiki/), Web Crawling setting is:
+
++----------------------------+------------------------------------------+
+| Name                       | Value                                    |
++============================+==========================================+
+| Name                       | XWiki                                    |
++----------------------------+------------------------------------------+
+| URLs                       | https://<server>/xwiki/bin/view/Main/    |
++----------------------------+------------------------------------------+
+| Included URLs For Crawling | https://<server>/.*                      |
++----------------------------+------------------------------------------+
+| Config Parameters          | client.robotsTxtEnabled=false (Optional) |
++----------------------------+------------------------------------------+
+
+and the authentication setting is:
+
++------------+------------------------------------------------------------------+
+| Name       | Value                                                            |
++============+==================================================================+
+| Scheme     | Form                                                             |
++------------+------------------------------------------------------------------+
+| Username   | (Account for crawling)                                           |
++------------+------------------------------------------------------------------+
+| Password   | (Password for the account)                                       |
++------------+------------------------------------------------------------------+
+| Parameters | encoding=UTF-8                                                   |
+|            | token_method=GET                                                 |
+|            | token_url=http://<server>/xwiki/bin/login/XWiki/XWikiLogin       |
+|            | token_pattern=name="form_token" +value="([^"]+)"                 |
+|            | token_name=form_token                                            |
+|            | login_method=POST                                                |
+|            | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin |
+|            | login_parameters=j_username=${username}&j_password=${password}   |
++------------+------------------------------------------------------------------+
+| Web Config | XWiki                                                            |
++------------+------------------------------------------------------------------+
 
 
 .. |image0| image:: ../../../resources/images/en/10.3/admin/webconfig-1.png
