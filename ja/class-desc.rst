@@ -1470,7 +1470,23 @@
     - createDriverService
       - コマンドラインでphantomjsが利用可能か判定する
       - phantomjs起動
+    - findCLIArgumentsFromCaps
+      - webDriverの利用に必要だが詳細は調べる(調)
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/impl/CommandGenerator.java
+  - コマンドを生成するクラス
+    - 初期化
+      - ベースディレクトリを取得
+      - プロセス削除までのタイマーを設定
+    - コマンド生成
+      - デバッグ出力時はパスを表示
+      - 出力ファイルパス、ファイルの存在確認
+      - コマンドのリストに含まれる"url"と"outputFile"を置換
+      - プロセスビルダーにコマンドリストを入れてタスクを開始
+      - コマンドリストをストリング分割してnullチェック
+      - タスクのnullチェック
+      - 出力ファイルが空か長さ0なら消去
+      - チェックに問題なければtrue返却
+    - プロセスを消すクラス(タイムアウト)
 
 * https://github.com/codelibs/fess/blob/master/src/main/java/org/codelibs/fess/thumbnail/ThumbnailGenerator.java
   - サムネイル生成用のインターフェイス
