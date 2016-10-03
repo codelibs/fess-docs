@@ -41,8 +41,10 @@
 データストアを処理するハンドラ名です。
 
 * DatabaseDataStore: データベースをクロールする
-* CsvDataStore: CSVファイルを対象としてクロールする
-* FileListDataStore: インデクシング対象のファイルパスを記述してクロールする
+* CsvDataStore: CSV/TSVファイルを対象としてクロールする
+* CsvListDataStore: インデクシング対象のファイルパスを記述したCSVファイルをクロールする
+* EsDataStore: Elasticsearchのインデックス内のドキュメントをクロールする
+* EsListDataStore: インデクシング対象のファイルパスを記述したElasticsearchのインデックス内のドキュメントをクロールする
 
 パラメータ
 ::::::::::
