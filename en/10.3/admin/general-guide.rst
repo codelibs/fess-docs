@@ -101,12 +101,12 @@ e.g. documents indexed X days ago are removed if they are not updated.
 Excluded Failure Type
 ::::::::::::::
 
-Ignored crawling failure type.
+Crawler does not ignore falure urls included in excluded failure types even if the failure count is over the treshold.
 
 Failure Count Threshold
 ::::::::::::::
 
-Threshold for crawling failures.
+Crawler ignores failure urls of which failure count is over this threshold.
 
 Logging
 --------
