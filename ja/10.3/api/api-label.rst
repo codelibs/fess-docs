@@ -4,8 +4,8 @@
 
 .. TODO: lang, ex_q
 
-JSON応答による検索
-==================
+リクエスト
+==========
 
 |Fess| に、
 ``http://<N2 Search サーバー>/json/?type=label``
