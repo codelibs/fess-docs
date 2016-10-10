@@ -13,6 +13,8 @@
    dict-guide
    kuromoji-guide
    synonym-guide
+   mapping-guide
+   protwords-guide
    webconfig-guide
    fileconfig-guide
    dataconfig-guide
@@ -37,4 +39,5 @@
    searchlist-guide
    backup-guide
    upgrade-guide
+   esreq-guide
 
