@@ -170,15 +170,25 @@ LDAP URL
 
 URL of LDAP server.
 
+Base DN
+::::::::::::::
+
+Base DN of LDAP environment.
+
 Bind DN
 ::::::::::::::
 
 Bind DN of LDAP environment.
 
-Base DN
+Password
 ::::::::::::::
 
-Base DN of LDAP environment.
+Password for Bind DN.
+
+User DN
+::::::::::::::
+
+User definition pattern for user login.
 
 Account Filter
 ::::::::::::::
