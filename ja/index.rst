@@ -40,11 +40,11 @@ Java 実行環境があればどの OS でも実行可能です。
 
 -  Apache ライセンスで提供 (フリーソフトなので、無料で利用可能)
 
--  OS 非依存 (Java ベースで構築)
-
 -  Web、ファイルシステム、Windows共有フォルダ、データベースをクロール
 
--  MS Office や PDF など多くのファイル形式に対応
+-  MS Office(Word/Excel/PowerPoint) や PDF など多くのファイル形式に対応
+
+-  OS 非依存 (Java ベースで構築)
 
 -  Elasticsearch を検索エンジンとして利用
 
