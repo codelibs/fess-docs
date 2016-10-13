@@ -195,6 +195,13 @@ Account Filter
 
 LDAP query to fileter user accounts.
 
+memberOf Attribute
+::::::::::::::
+
+memberOf Attribute name.
+memberOf if LDAP server is Active Directory.
+Some other LDAP server is isMemberOf.
+
 Notification
 --------
 
