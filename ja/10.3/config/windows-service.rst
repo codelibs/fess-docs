@@ -71,7 +71,7 @@ Elasticsearchをサービスとして登録
 .. list-table::
 
    * - *キー*
-     - ``コンピューター\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
+     - ``コンピューター\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services \fess-service-x64\DependOnService``
    * - *値*
      - ``elasticsearch-service-x64``
 
