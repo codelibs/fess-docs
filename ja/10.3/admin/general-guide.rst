@@ -183,7 +183,7 @@ User DN
 memberOf属性
 ::::::::::::::
 
-memberOf属性名です。
+LDAPサーバで利用できるmemberOf属性名を指定します。
 Active Directoryの場合、memberOfです。
 その他のLDAPサーバではisMemberOfの場合もあります。
 
