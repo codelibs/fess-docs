@@ -274,6 +274,60 @@ CSVファイルを対象としたクロールについて説明します。
 CSVファイル内のデータは、cell[数字]で保持しています(数字は 1 から始まります)。
 CSVファイルのセルにデータが存在しない場合はnullになる場合があります。
 
+EsDataStore
+------------
+
+データの取得先がelasticsearchになりますが、基本的な利用方法はCsvDataStoreと同様です。
+
+パラメータ
+::::::::::
+
+パラメータの設定例は以下のようになります。
+
+::
+
+    settings.cluster.name=elasticsearch
+    hosts=localhost:9300
+    index=logindex
+    type=data
+
+パラメータは「キー=値」形式となっています。キーの説明は以下です。
+
++---------------------+----------------------------------------------------+
+| settings.*          | elasticsearchのSettings情報                        |
++---------------------+----------------------------------------------------+
+| hosts               | 接続先のelasticsearch                              |
++---------------------+----------------------------------------------------+
+| index               | インデックス名                                     |
++---------------------+----------------------------------------------------+
+| type                | タイプ名                                           |
++---------------------+----------------------------------------------------+
+| query               | 取得する条件のクエリー                             |
++---------------------+----------------------------------------------------+
+
+表: elasticsearch用設定パラメータ例
+
+
+スクリプト
+::::::::::
+
+スクリプトの設定例は以下のようになります。
+
+::
+
+    url=source.url
+    host="localhost"
+    site="localhost"
+    title=source.title
+    content=source.content
+    digest=
+    anchor=
+    content_length=source.size
+    last_modified=new java.util.Date()
+
+パラメータは「キー=値」形式になります。
+キーはデータベースクロールの場合と同様です。
+source.*により値を取得して、設定することができます。
 
 .. |image0| image:: ../../../resources/images/ja/10.3/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/10.3/admin/dataconfig-2.png
