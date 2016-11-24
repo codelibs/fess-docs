@@ -38,7 +38,7 @@ Features
 
 -  Support many document types, such as MS Office, PDF, Zip archive,...
 
--  Support a web page for BASIC/DIGEST/NTLM authentication
+-  Support a web page for BASIC/DIGEST/NTLM/FORM authentication
 
 -  Contain elasticsearch as a search engine (unlimited scalability)
 
