@@ -80,14 +80,14 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2016-11-24
+    `Fess 10.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.3.0>`__
+
 2016-11-07
     `Fess 10.2.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.2.2>`__
 
 2016-10-02
     `Fess 10.2.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.2.1>`__
-
-2016-08-30
-    `Fess 10.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.2.0>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
@@ -96,7 +96,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 |Fess| は Apache ライセンスで提供されるオープンソース製品で、個人や商用向けでも無料でご自由にご利用いただけます。
 
-|Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート <http://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
+|Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <http://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
 また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
 
 また、企業向け用途に最適化されたパッケージ製品として、N2 Searchも販売しています。
