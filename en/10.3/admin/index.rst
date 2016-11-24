@@ -15,6 +15,7 @@
    synonym-guide
    mapping-guide
    protwords-guide
+   accesstoken-guide
    webconfig-guide
    fileconfig-guide
    dataconfig-guide

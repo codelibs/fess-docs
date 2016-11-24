@@ -1,5 +1,5 @@
 |Fess| 管理者ガイド
-=============================
+===========================
 
 .. toctree::
    :maxdepth: 3
@@ -13,6 +13,9 @@
    dict-guide
    kuromoji-guide
    synonym-guide
+   mapping-guide
+   protwords-guide
+   accesstoken-guide
    webconfig-guide
    fileconfig-guide
    dataconfig-guide
@@ -37,4 +40,5 @@
    searchlist-guide
    backup-guide
    upgrade-guide
+   esreq-guide
 
