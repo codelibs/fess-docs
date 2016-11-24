@@ -9,6 +9,7 @@
 
 -  OS: Windows や Unix など Java が実行できる OS 環境
 -  Java: Java 8u20 以上のバージョン
+-  (RPMまたはDEB) Elasticsearch: 2.4.x
 
 |Fess| を利用したい環境に Java がインストールされていない場合は、`Oracle のサイト <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ より JDK をインストールしてください。
 
@@ -60,9 +61,9 @@ RPM パッケージを利用する場合
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-fess/2.4.0
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-ja/2.4.0
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-analysis-synonym/2.4.0
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.4.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-configsync/2.4.2
     $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-dataformat/2.4.0
-    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.4.0
+    $ /usr/share/elasticsearch/bin/plugin install org.codelibs/elasticsearch-langfield/2.4.1
     $ /usr/share/elasticsearch/bin/plugin install http://maven.codelibs.org/archive/elasticsearch/plugin/kopf/elasticsearch-kopf-2.0.1.0.zip
 
 日本語形態素解析において、標準の Kuromoji 辞書の代わりに Neologd を利用するためには以下のプラグインをインストールします。
