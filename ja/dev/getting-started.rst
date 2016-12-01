@@ -59,10 +59,6 @@ Elasticsearch のプラグインのダウンロードをします。
 
 org.codelibs.fess.FessBoot を Eclipse 上でデバッグ実行をします。
 
-::
-
-   mvn antrun:run
-
 ソースコードの自動生成
 ----------------------
 
