@@ -101,8 +101,9 @@ Java 実行環境があればどの OS でも実行可能です。
 
 |Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <http://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
 また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
+詳しくは、 `こちら <support-services.html>`__ を参照してください。
 
-また、企業向け用途に最適化されたパッケージ製品として、N2 Searchも販売しています。
+企業向け用途に最適化されたパッケージ製品として、N2 Searchも販売しています。
 N2 Searchでは、約25万語の辞書のバンドルやセキュリティ観点の強化等が行われています。
 
 |image3|
@@ -110,7 +111,7 @@ N2 Searchでは、約25万語の辞書のバンドルやセキュリティ観点
 N2 Search on AWS Marketplace
 ----------------------------
 
-一部機能制限をした N2 Search を AWS Marketplace で無料でご利用いただくことができます(EC2のインスタンス料金は別途かかります)。 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
+N2 Search の試用版を AWS Marketplace で無料でご利用いただくことができます(EC2のインスタンス料金は別途かかります)。 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
 
 
 .. |image0| image:: ../resources/images/ja/demo-1.png
