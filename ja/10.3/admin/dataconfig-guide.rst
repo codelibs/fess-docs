@@ -45,6 +45,7 @@
 * CsvListDataStore: インデクシング対象のファイルパスを記述したCSVファイルをクロールする
 * EsDataStore: Elasticsearchのインデックス内のドキュメントをクロールする
 * EsListDataStore: インデクシング対象のファイルパスを記述したElasticsearchのインデックス内のドキュメントをクロールする
+* GitBucketDataStore: `GitBucket <https://github.com/gitbucket/gitbucket>`__ のリポジトリをクロールする (詳細は `GitBucketのFessプラグイン <https://github.com/codelibs/gitbucket-fess-plugin>`__ を参照してください)
 
 パラメータ
 ::::::::::
