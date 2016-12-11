@@ -44,6 +44,7 @@ Type of Data Strore.
 * CsvListDataStore: crawl file paths in CSV file.
 * EsDataStore: crawl documents in an index of elasticsearch.
 * EsListDataStore: crawl file paths in an index of elasticsearch.
+* GitBucketDataStore: crawl repositories of `GitBucket <https://github.com/gitbucket/gitbucket>`__. (See `gitbucket-fess-plugin <https://github.com/codelibs/gitbucket-fess-plugin>`__ for more detail.)
 
 Parameter
 :::::::::
