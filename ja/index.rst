@@ -11,7 +11,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 .. figure:: ../resources/images/ja/demo-1.png
    :scale: 100%
-   :alt: 標準デモ 
+   :alt: 標準デモ
    :figclass: side-by-side
    :target: http://search.n2sm.co.jp/
 
