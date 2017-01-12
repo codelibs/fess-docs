@@ -67,7 +67,8 @@ Fess は DBFlute の機能を利用して、Elasticsearch のスキーマに合�
 
 ::
 
-    mvn dbflute:download # 一度実行すればOK
+    rm -rf mydbflute
+    mvn antrun:run
     mvn dbflute:freegen
     mvn license:format
 
