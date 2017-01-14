@@ -111,7 +111,7 @@ N2 Searchでは、約25万語の辞書のバンドルやセキュリティ観点
 N2 Search on AWS Marketplace
 ----------------------------
 
-N2 Search の試用版を AWS Marketplace で無料でご利用いただくことができます(EC2のインスタンス料金は別途かかります)。 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
+N2 Search (商用版Fessの試用版)を AWS Marketplace で無料でご利用いただくことができます(EC2のインスタンス料金は別途かかります)。 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
 
 
 .. |image0| image:: ../resources/images/ja/demo-1.png
