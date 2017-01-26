@@ -82,15 +82,15 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2017-01-26
+    `Fess 10.3.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.3.2>`__
+
 2016-12-01
     `Fess 10.3.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.3.1>`__
     `Fess 10.2.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.2.3>`__
 
 2016-11-24
     `Fess 10.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.3.0>`__
-
-2016-11-07
-    `Fess 10.2.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-10.2.2>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
