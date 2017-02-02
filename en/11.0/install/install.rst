@@ -12,6 +12,7 @@ Requirements
 -  (RPM or DEB) Elasticsearch: 2.4.x
 
 If Java is not installed in your environment, see we want to |Fess| from `Oracle site <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ to install JDK.
+Embedded Elasticsearch is not recommended for production use.
 
 Download
 ========
