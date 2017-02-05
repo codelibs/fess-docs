@@ -105,7 +105,7 @@ elasticss.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/"
 
-Linux環境では fess-<version>/bin/fess.in.shを変更します。
+ElasticsearchのRPM/DEBパッケージでは fess-<version>/bin/fess.in.shを変更します。
 
 ::
 
