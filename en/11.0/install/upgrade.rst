@@ -25,6 +25,5 @@ Restore Configuration
 ---------------------
 
 Check and merge settings in fess_config.properties, and then start Fess.
-To upgrade configuration data, execute migration process on Upgrade page.
-For more details, see Upgrade of Administration Guide.
+To restore data, upload .fess_basic_config and .fess_user bulk files on Backup page.
 
