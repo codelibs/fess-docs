@@ -4,8 +4,8 @@ DOCUMENTATION
 
 .. toctree::
 
-   Installation <10.3/install/index>
-   Administration <10.3/admin/index>
-   Search <10.3/user/index>
+   Installation <11.0/install/index>
+   Administration <11.0/admin/index>
+   Search <11.0/user/index>
 ..   Configuration <10.0/config/index>
 
