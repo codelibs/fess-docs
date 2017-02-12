@@ -2,10 +2,10 @@
 Upgrade
 =======
 
-Upgrade
+Upgrade From |Fess| 10
 =======
 
-To upgrade Fess from a previous version, see the following steps.
+To upgrade from a previous version, see the following steps.
 
 Backup Data
 -----------
@@ -19,11 +19,19 @@ Configuration data are in the following files:
 Upgrade Package
 ---------------
 
-Stop Fess and then install RPM/DEB package, see Installation of Installation Guide.
+Stop |Fess| and then install RPM/DEB package, see Installation in Installation Guide.
+
+|Fess| 11 requires Elasticsearch 5.1 or the above, and indices for |Fess| 11 is not compatible with |Fess| 10.x.
+To upgrade to Elasticsearch 5, remove old indices and then upgrade Elasticsearch package.
 
 Restore Configuration
 ---------------------
 
-Check and merge settings in fess_config.properties, and then start Fess.
+Check and merge settings in fess_config.properties, and then start |Fess|.
 To restore data, upload .fess_basic_config and .fess_user bulk files on Backup page.
+
+Start Crawler
+-------------
+
+To create new search indices, start Default Crawler job on Scheduler page.
 

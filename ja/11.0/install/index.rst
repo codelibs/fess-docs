@@ -8,5 +8,6 @@
    install
    run
    uninstall
+   upgrade
 
 
