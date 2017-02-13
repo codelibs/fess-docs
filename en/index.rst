@@ -74,7 +74,7 @@ News
 Download
 ========
 
-Please see `download page<downloads.html>`__.
+Please see `download page <news.html>`__ .
 
 Support Service
 ===============
