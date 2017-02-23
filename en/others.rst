@@ -5,3 +5,4 @@ OTHERS
 .. toctree::
 
    News <news>
+   EOL <eol>
