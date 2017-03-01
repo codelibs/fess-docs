@@ -12,6 +12,8 @@
 * `Fess 10.1.3 <https://github.com/codelibs/fess/releases/tag/fess-10.1.3>`_
 * `Fess 10.0.4 <https://github.com/codelibs/fess/releases/tag/fess-10.0.4>`_
 
+インストール方法についてはインストールガイドを参照してください。
+
 スナップショット版リリース
 ==========================
 
