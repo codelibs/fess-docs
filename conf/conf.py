@@ -57,7 +57,7 @@ project = u'Fess'
 if 'SPHINX_PROJECT' in os.environ:
     project = os.environ['SPHINX_PROJECT']
 
-copyright = u'2016 CodeLibs Project'
+copyright = u'2017 CodeLibs Project'
 
 # Document title
 title = 'Fess'
