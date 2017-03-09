@@ -35,10 +35,10 @@ Path Mapping Setting
 
 |Path Mapping Setting|
 
-Solr Setting
+Dashboard
 ------------
 
-|Solr Setting|
+|Dashboard|
 
 Logfile List
 ------------
@@ -66,7 +66,7 @@ Backup/Restore
 .. |File System Crawling Config| image:: ../resources/images/en/screenshot/fess_admin_fsconfig.png
 .. |Web Authentication Setting| image:: ../resources/images/en/screenshot/fess_admin_webauth.png
 .. |Path Mapping Setting| image:: ../resources/images/en/screenshot/fess_admin_pathmapping.png
-.. |Solr Setting| image:: ../resources/images/en/screenshot/fess_admin_solr.png
+.. |Dashboard| image:: ../resources/images/en/screenshot/fess_admin_dashboard.png
 .. |Session Info| image:: ../resources/images/en/screenshot/fess_admin_logfile.png
 .. |Session Info List| image:: ../resources/images/en/screenshot/fess_admin_sessioninfo.png
 .. |Session Info Details| image:: ../resources/images/en/screenshot/fess_admin_sessioninfo2.png
