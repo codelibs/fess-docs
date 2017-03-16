@@ -5,6 +5,11 @@ Google Search Appliance 互換 API
 |Fess| は、検索結果をGoogle Search Appliance(GSA)互換のXMLフォーマットで返すAPIも提供しています。
 XMLのフォーマットについては、\ `GSAの公式ドキュメント <https://www.google.com/support/enterprise/static/gsa/docs/admin/74/gsa_doc_set/xml_reference/results_format.html>`__\ をご覧ください。
 
+設定
+==================
+
+system.properitesに ``web.api.gsa=true`` を追加して、Google Search Appliance互換APIを有効にしてください。
+
 リクエスト
 ==================
 
