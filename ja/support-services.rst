@@ -7,7 +7,8 @@
 
 Fess は Apache ライセンスで提供されるオープンソースで、個人や商用向けでも無料でご自由にご利用いただけます。
 
-`N2SM, Inc. <http://www.n2sm.net/>`__ では、Fessの商用製品版として `N2 Search <http://www.n2sm.net/n2search.html>`__ を提供しています。また、Fess や Elasticsearch のカスタマイズおよび構築支援を行う検索ソリューションのサポートサービスも提供しています。
+`N2SM, Inc. <http://www.n2sm.net/>`__ では、Fessの商用製品版として `N2 Search <http://www.n2sm.net/n2search.html>`__ を提供しています。
+また、Fess や Elasticsearch のカスタマイズおよび構築支援を行う検索ソリューションのサポートサービスも提供しています。
 
 N2 Search
 =========
@@ -33,9 +34,13 @@ N2 Search
 
 - クラスタリング構成
 
+- 自社の企業内検索・社内検索に検索結果の最適化
+
 - Fess/Elasticsearch サーバのチューニング
 
 - インデックス対象とならないファイルの調査・対応 (Fess プロジェクトでは依存するライブラリが読み取れない場合はそれ以上のことはサポートしないため、必要であれば商用サポートでご相談ください)
+
+- 高速全文検索システム環境の構築
 
 - 特定のバージョンの保守 (Fess プロジェクトでは最新バージョンへの修正しか行いません)
 
@@ -47,5 +52,6 @@ AWS Marketplace
 ===============
 
 ドキュメント数上限等の機能制限をしてありますが、AWS Marketplace で N2 Search をご利用いただくことができます。
+中小企業向け文章検索エンジンとしても簡単に導入可能です。
 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
 
