@@ -166,7 +166,7 @@ DatabaseDataStore
     digest=content
     anchor=
     content_length=content.length()
-    last_modified=@org.codelibs.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    last_modified=new java.util.Date()
     location=latitude + "," + longitude
     latitude=latitude
     longitude=longitude
@@ -268,7 +268,7 @@ CSVファイルを対象としたクロールについて説明します。
     digest=cell3
     anchor=
     content_length=cell3.length()
-    last_modified=@org.codelibs.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    last_modified=new java.util.Date()
 
 パラメータは「キー=値」形式になります。
 キーはデータベースクロールの場合と同様です。

@@ -163,7 +163,7 @@ Set script values of crawling config as below.
     digest=content
     anchor=
     content_length=content.length()
-    last_modified=@org.codelibs.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    last_modified=new java.util.Date()
     location=latitude + "," + longitude
     latitude=latitude
     longitude=longitude
@@ -264,7 +264,7 @@ Set script values of crawling config as below.
     digest=cell3
     anchor=
     content_length=cell3.length()
-    last_modified=@org.codelibs.fess.taglib.FessFunctions@formatDate(new java.util.Date(@System@currentTimeMillis()))
+    last_modified=new java.util.Date()
 
 The format is key/value.
 For keys, they are the same as database crawling.
