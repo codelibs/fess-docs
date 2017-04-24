@@ -9,7 +9,7 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 API 編
 今回は Fess が提供するAPIを利用して、クライアントサイド（ブラウザ側）で検索とその結果の表示を行う方法をご紹介します。
 APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
 
-本記事では Fess 10.0.2を利用して説明します。
+本記事では Fess 11.0.3を利用して説明します。
 Fess の構築方法については\ `導入編 <http://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
@@ -229,8 +229,8 @@ fess.jsの内容
                 for(i = 0, max = results.length; i < max; i++) {
                   buf = [];
                   buf.push('<li><h3 class="title">', '<a href="',
-                    results[i].urlLink, '">', results[i].title,
-                    '</a></h3><div class="body">', results[i].contentDescription,
+                    results[i].url_link, '">', results[i].title,
+                    '</a></h3><div class="body">', results[i].content_description,
                     '<br/><cite>', results[i].site, '</cite></div></li>');
                   $(buf.join("")).appendTo($resultBody);
                 }
@@ -327,7 +327,7 @@ Fess のJSON応答の詳細は\ `Fess サイト <http://fess.codelibs.org/ja/10.
 
 検索結果がヒットした場合、12の条件文内では検索結果の処理を行います。
 13ではsubheader領域に表示件数や実行時間のメッセージを設定します。
-14は検索結果をreault領域に追加していきます。
+14は検索結果をresult領域に追加していきます。
 検索結果はdata.response.resultに配列として格納されています。
 results[i].〜でアクセスすることで検索結果ドキュメントのフィールド値を取得することができます。
 
