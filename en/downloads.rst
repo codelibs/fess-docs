@@ -7,6 +7,7 @@ Download
 
 A stable release is available from:
 
+* `Fess 11.1.0 <https://github.com/codelibs/fess/releases/tag/fess-11.1.0>`_
 * `Fess 11.0.3 <https://github.com/codelibs/fess/releases/tag/fess-11.0.3>`_
 * `Fess 10.3.4 <https://github.com/codelibs/fess/releases/tag/fess-10.3.4>`_
 * `Fess 10.2.3 <https://github.com/codelibs/fess/releases/tag/fess-10.2.3>`_
