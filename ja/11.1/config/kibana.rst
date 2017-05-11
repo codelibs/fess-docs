@@ -24,13 +24,13 @@
 を可視化することができます。
 Visualizeから新たなグラフを作成してDashboardに追加することで、独自のモニタを構築できます。
 
-Kibana 4 によるデータ可視化の設定
+Kibana 5 によるデータ可視化の設定
 =================================
 
-Kibana 4 インストール
+Kibana 5 インストール
 ---------------------
 
-`https://www.elastic.co/downloads/kibana <https://www.elastic.co/downloads/kibana>`__  に従い、Kibana 4をインストールします。
+`https://www.elastic.co/downloads/kibana <https://www.elastic.co/downloads/kibana>`__  に従い、Kibana 5をインストールします。
 Kibana に |Fess| で用いる Elasticsearch を認識させるため、 Kibanaのディレクトリ/config/kibana.yml の elasticsearch.url を以下のように編集します。
 
 ::
