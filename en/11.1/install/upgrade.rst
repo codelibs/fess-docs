@@ -23,6 +23,7 @@ Stop |Fess| and then install RPM/DEB package, see Installation in Installation G
 
 |Fess| 11 requires Elasticsearch 5.1 or the above, and indices for |Fess| 11 is not compatible with |Fess| 10.x.
 To upgrade to Elasticsearch 5, remove old indices and then upgrade Elasticsearch package.
+For Elasticsearch plugins, if you upgrade Elasticsearch, re-install all Elasticsearch plugins for the proper Elasticsearch version.
 
 Restore Configuration
 ---------------------
