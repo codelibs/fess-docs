@@ -197,7 +197,7 @@ Fess の組み込み Elasticsearch を利用する場合は、esディレクト�
 |image4|
 
 ウェブクロールの設定として、今回は、 http://fess.codelibs.org/ 以下のすべてのページをクロール対象とすることにします。
-設定項目は URL : http://fess.codelibs.org/ 、クロール対象とするURL : http://fess.codelibs.org/.*、最大アクセス数 : 30 、間隔 : 3000 ミリ秒 とし、他はデフォルトにします。
+設定項目は URL : \http://fess.codelibs.org/ 、クロール対象とするURL : \http://fess.codelibs.org/.*、最大アクセス数 : 30 、間隔 : 3000 ミリ秒 とし、他はデフォルトにします。
 
 ウェブクロールの設定
 |image5|
