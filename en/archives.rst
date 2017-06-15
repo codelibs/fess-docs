@@ -2,6 +2,16 @@
 ARCHIVES
 ============================================
 
+11.1
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   11.1/install/index
+   11.1/user/index
+   11.1/admin/index
+
 11.0
 ~~~~~
 
