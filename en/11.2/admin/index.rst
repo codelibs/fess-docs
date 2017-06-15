@@ -12,6 +12,7 @@
    design-guide
    dict-guide
    kuromoji-guide
+   seunjeon-guide
    synonym-guide
    mapping-guide
    protwords-guide
@@ -30,6 +31,7 @@
    user-guide
    role-guide
    group-guide
+   suggest-guide
    elevateword-guide
    badword-guide
    systeminfo-guide

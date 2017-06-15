@@ -2,7 +2,7 @@
 Upgrade
 =======
 
-Upgrade From |Fess| 10
+Upgrade
 =======
 
 To upgrade from a previous version, see the following steps.
@@ -29,7 +29,10 @@ Restore Configuration
 ---------------------
 
 Check and merge settings in fess_config.properties, and then start |Fess|.
-To restore data, upload .fess_basic_config and .fess_user bulk files on Backup page.
+
+For |Fess| 10, to restore data, upload .fess_basic_config and .fess_user bulk files on Backup page.
+
+For |Fess| 11, execute migration process on Upgrade page. For more details, see Upgrade of Administration Guide.
 
 Start Crawler
 -------------

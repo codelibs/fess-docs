@@ -50,9 +50,9 @@ Access To Browser UI
 
 |Fess| is available at http://localhost:8080/.
 
-Administration UI is http://localhost:8080/admin.
+Administration UI is http://localhost:8080/admin/.
 The default administrator account is admin/admin as username/password.
-In User page on administration UI, you can change the password.
+In User page of administration UI, you can change the password.
 
 Stop |Fess| Server
 ============

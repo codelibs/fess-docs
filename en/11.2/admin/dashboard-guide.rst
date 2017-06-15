@@ -11,32 +11,34 @@ Dashboard provides a web administration tool for elasticsearch to manage cluster
 
 |Fess| manages the following indices:
 
-+------------------+----------------------------------+
-| Name             | Description                      |
-+==================+==================================+
-| fess.YYYYMMDD    | indexed documents                |
-+------------------+----------------------------------+
-| fess_log         | search logs                      |
-+------------------+----------------------------------+
-| fess.suggest     | suggest words                    |
-+------------------+----------------------------------+
-| .fess_config     | configurations                   |
-+------------------+----------------------------------+
-| .fess_user       | user/role/group data             |
-+------------------+----------------------------------+
-| .configsync      | configuration file data          |
-+------------------+----------------------------------+
-| .suggest         | suggest meta data                |
-+------------------+----------------------------------+
-| .suggest-array   | suggest meta data                |
-+------------------+----------------------------------+
-| .suggest-badword | excluding word list for suggest  |
-+------------------+----------------------------------+
++------------------+---------------------------------+
+| Name             | Description                     |
++==================+=================================+
+| fess.YYYYMMDD    | indexed documents               |
++------------------+---------------------------------+
+| fess_log         | search logs                     |
++------------------+---------------------------------+
+| fess.suggest     | suggest words                   |
++------------------+---------------------------------+
+| .fess_config     | configurations                  |
++------------------+---------------------------------+
+| .fess_user       | user/role/group data            |
++------------------+---------------------------------+
+| .configsync      | configuration file data         |
++------------------+---------------------------------+
+| .suggest         | suggest meta data               |
++------------------+---------------------------------+
+| .suggest-array   | suggest meta data               |
++------------------+---------------------------------+
+| .suggest-badword | excluding word list for suggest |
++------------------+---------------------------------+
+| .crawler         | crawling cache data             |
++------------------+---------------------------------+
 
 Check The Number Of Indexed Documents
 =====================================
 
-The number of indexed documents is displayed in fess index as the following figure.
+The number of indexed documents is displayed in fess.YYYYMMDD index as the following figure.
 
 |image1|
 

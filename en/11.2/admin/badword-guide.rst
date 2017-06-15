@@ -13,7 +13,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Crawler > Bad Word in the left menu to display a list page of Bad Word Configuration, as below.
+Select Suggest > Bad Word in the left menu to display a list page of Bad Word Configuration, as below.
 
 |image0|
 

@@ -14,7 +14,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Crawler > Additional Word in the left menu to display a list page of Additional Word Configuration, as below.
+Select Suggest > Additional Word in the left menu to display a list page of Additional Word Configuration, as below.
 
 |image0|
 
