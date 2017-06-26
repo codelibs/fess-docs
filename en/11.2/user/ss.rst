@@ -10,6 +10,7 @@ Settings
 Set the following code where you would like to place the search box of the website.
 
 ::
+
     <script>
       (function() {
         var fess = document.createElement('script');

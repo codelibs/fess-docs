@@ -10,6 +10,7 @@
 以下のコードをHTML中の検索ボックスを表示したい位置に設置します。
 
 ::
+
     <script>
       (function() {
         var fess = document.createElement('script');
