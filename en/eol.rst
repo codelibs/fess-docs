@@ -3,7 +3,7 @@ End of Life Dates
 =================
 
 The following releases have reached End of Life, and are no longer maintained and do not receive any updates.
-To get the latest release, visit  `download page <download.html>`__.
+To get the latest release, visit  `download page <downloads.html>`__.
 If you need a support for your old system, please contact Commercial Support.
 
 Maintenance Tables
