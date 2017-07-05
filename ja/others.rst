@@ -6,8 +6,6 @@
 
    ニュース <news>
    掲載記事 <articles>
-   フォーラム <https://sourceforge.jp/projects/fess/forums/>
-   メーリングリスト <https://sourceforge.jp/projects/fess/lists/>
    FAQ <faq>
    製品サポート期限 <eol>
    ライセンス <license>
