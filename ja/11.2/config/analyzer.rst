@@ -19,5 +19,5 @@ Analyzer の設定は |Fess| の起動時に fess インデックスが存在し
 Analyzer の構成方法は elasticsearch の Analyzer のドキュメントを参照してください。
 
 Analyzer の設定は検索に大きな影響を与えます。
-Analyzer の変更する場合は、Lucene の Analyzer の動きを理解した上で実施するか、商用サポートにご相談ください。
+Analyzer の変更をする場合は、Lucene の Analyzer の動きを理解した上で実施するか、商用サポートにご相談ください。
 
