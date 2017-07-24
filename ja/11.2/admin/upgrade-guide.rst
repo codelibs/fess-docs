@@ -14,7 +14,8 @@
 
 バックアップ
 --------
-アップグレードの前に以下のバックアップファイルをダウンロードします。(.fess_basic_config and .fess_user)
+アップグレードの前に以下のバックアップファイルをダウンロードします。
+(.fess_basic_config and .fess_user)
 
 
 データ移行
