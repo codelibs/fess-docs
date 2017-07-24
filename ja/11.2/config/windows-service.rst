@@ -17,12 +17,12 @@ Windowsサービスとしての登録
 Elasticsearchをサービスとして登録
 ------------------------------------------
 
-| コマンドプロンプトから ``c:\opt\elasticsearch\bin\service.bat`` を管理者で実行します。
+| コマンドプロンプトから ``c:\opt\elasticsearch\bin\elasticsearch-service.bat`` を管理者で実行します。
 
 ::
 
     > cd c:\opt\elasticsearch\bin
-    > service.bat install
+    > elasticsearch-service.bat install
     ...
     The service 'elasticsearch-service-x64' has been installed.
 
