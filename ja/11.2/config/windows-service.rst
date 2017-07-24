@@ -26,7 +26,7 @@ Elasticsearchをサービスとして登録
     ...
     The service 'elasticsearch-service-x64' has been installed.
 
-詳細は `Elasticsearch のドキュメント <https://www.elastic.co/guide/en/elasticsearch/reference/2.1/setup-service-win.html>`_ を参照してください。
+詳細は `Elasticsearch のドキュメント <https://www.elastic.co/guide/en/elasticsearch/reference/5.4/windows.html>`_ を参照してください。
 
 設定
 ------------------------------------------
