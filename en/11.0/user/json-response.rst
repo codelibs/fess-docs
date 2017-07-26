@@ -33,6 +33,7 @@ Available request parameters are as below.
 
 Table: Request parameters
 
+Please note that the HTTP Accept-Language header should be set, depending on the presumed languages of the results the output of ``curl 'http://192.168.0.1:8080/json/?q=maier' -H 'Accept-Language: de-DE,de;'`` can differ substantially from ``curl 'http://192.168.0.1:8080/json/?q=maier'``
 
 Response
 --------
