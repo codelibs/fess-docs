@@ -44,6 +44,8 @@ Java 実行環境があればどの OS でも実行可能です。
 
 -  OS 非依存 (Java ベースで構築)
 
+-  既存サイトへの組み込み用JavaScriptの提供
+
 -  Elasticsearch を検索エンジンとして利用
 
 -  BASIC/DIGEST/NTLM/FORM認証のサイトも検索可能
@@ -82,14 +84,14 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2017-07-29
+    `Fess 11.2.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
+
 2017-07-05
     `Google Site Searchからの移行に対応したFess Site Searchを提供 <http://fess.codelibs.org/ja/11.2/api/api-ss.html>`__
 
 2017-06-30
     `Fess 11.2.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.1>`__
-
-2017-06-15
-    `Fess 11.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.0>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
