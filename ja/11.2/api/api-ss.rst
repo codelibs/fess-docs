@@ -30,7 +30,7 @@
     :widths: 30, 60
 
     "<fess:search>", "検索フォームと検索結果を表示します。"
-    "<fess:search-form-only>", "検索フォームを表示します。この検索フォームはsubmitすると、<script>中で`fess.setAttribute('fess-search-page-path', 'result.html');`で設定したページへ遷移します。"
+    "<fess:search-form-only>", "検索フォームを表示します。この検索フォームはsubmitすると、<script>中で*fess.setAttribute('fess-search-page-path', 'result.html');*で設定したページへ遷移します。"
     "<fess:search-result-only>", "検索結果を表示します。"
 
 
