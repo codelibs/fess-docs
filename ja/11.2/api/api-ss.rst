@@ -19,7 +19,6 @@
         fess.src = '//<Server Name>/js/ss/fess-ss.min.js';
         fess.charset = 'utf-8';
         fess.setAttribute('id', 'fess-ss');
-        fess.setAttribute('fess-search-page-path', 'result.html'); //search-form-onlyを利用する場合に必要
         fess.setAttribute('fess-url', '//<Server Name>/json');
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(fess, s);
@@ -44,7 +43,5 @@
     "<fess:search-form-only>", "検索フォームを表示します。この検索フォームはsubmitすると、<script>中でfess.setAttribute('fess-search-page-path', 'result.html');で設定したページへ遷移します。"
     "<fess:search-result-only>", "検索結果を表示します。"
 
-
-表: 利用可能なタグ
 
 .. |image0| image:: ../../../resources/images/ja/11.2/admin/fess-ss-1.png
