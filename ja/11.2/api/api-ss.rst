@@ -37,7 +37,7 @@
 ==================
 
 .. csv-table:: 表: 利用可能なタグ
-    :widths: 15, 15
+    :widths: 30, 60
 
     "<fess:search>", "検索フォームと検索結果を表示します。"
     "<fess:search-form-only>", "検索フォームを表示します。この検索フォームはsubmitすると、<script>中でfess.setAttribute('fess-search-page-path', 'result.html');で設定したページへ遷移します。"
