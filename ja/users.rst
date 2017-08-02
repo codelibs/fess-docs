@@ -7,6 +7,7 @@
 
 |Fess| を利用している検索サイト一覧です。
 
+-  `ojizo <http://ojizo.jp/>`__
 -  `dot. <http://dot.asahi.com/>`__
 -  `観音寺市情報検索 <http://search.kanonji.si/>`__
 -  `大阪商業大学シラバス検索 <http://syllabus.daishodai.ac.jp/search/>`__
