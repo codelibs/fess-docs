@@ -28,6 +28,7 @@
     <fess:search></fess:search>
 
 .. list-table:: 利用可能なタグ
+   :widths: 10 20
 
    * - ``<fess:search>``
      - 検索フォームと検索結果を表示します。
