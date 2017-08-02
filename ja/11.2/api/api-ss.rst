@@ -20,18 +20,21 @@
         fess.charset = 'utf-8';
         fess.setAttribute('id', 'fess-ss');
         fess.setAttribute('fess-url', '//<Server Name>/json');
+        // fess.setAttribute('fess-search-page-path', 'result.html');
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(fess, s);
       })();
     </script>
     <fess:search></fess:search>
 
-.. csv-table:: 表 利用可能なタグ
-    :widths: 30, 60
+.. list-table:: 利用可能なタグ
 
-    "<fess:search>", "検索フォームと検索結果を表示します。"
-    "<fess:search-form-only>", "検索フォームを表示します。この検索フォームはsubmitすると、<script>中で ``fess.setAttribute('fess-search-page-path', 'result.html');`` で設定した検索結果ページへ、 ``q={キーワード}`` パラメータを付与して遷移します。このタグを利用せず、独自の検索フォームを設置して検索結果ページへ遷移させることも可能です。"
-    "<fess:search-result-only>", "検索結果を表示します。"
+   * - ``<fess:search>``
+     - 検索フォームと検索結果を表示します。
+   * - ``<fess:search-form-only>``
+     - 検索フォームを表示します。この検索フォームはsubmitすると、<script>中で ``fess.setAttribute('fess-search-page-path', 'result.html');`` で設定した検索結果ページへ、 ``q={キーワード}`` パラメータを付与して遷移します。このタグを利用せず、独自の検索フォームを設置して検索結果ページへ遷移させることも可能です。
+   * - ``<fess:search-result-only>``
+     - 検索結果を表示します。
 
 
 イメージ
