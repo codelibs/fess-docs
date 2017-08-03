@@ -85,7 +85,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ========
 
 2017-07-29
-    `Fess 11.2.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
+    `Fess 11.2.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
 
 2017-07-05
     `Google Site Searchからの移行に対応したFess Site Searchを提供 <http://fess.codelibs.org/ja/11.2/api/api-ss.html>`__
