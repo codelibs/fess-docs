@@ -122,6 +122,14 @@ N2 Search on AWS Marketplace
 
 N2 Search (商用版Fessの試用版)を AWS Marketplace で無料でご利用いただくことができます(EC2のインスタンス料金は別途かかります)。 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
 
+Google Site Searchからの移行
+----------------------------
+
+Google Site Search(GSS)は2018年4月1日までにサービスを終了します。
+N2 Search ASPではGSS同様のJavaScriptを提供しているので、既存のJavaScriptを置き換えるだけでN2 Searchへの移行を実現します。
+無料トライアル期間を利用して、FessベースのN2 Search環境へお乗り換えください。
+詳しくは `こちら <http://www.n2sm.net/n2search-campaign.html>`__ をご覧ください。
+
 
 .. |image0| image:: ../resources/images/ja/demo-1.png
 .. |image1| image:: ../resources/images/ja/demo-2.png
