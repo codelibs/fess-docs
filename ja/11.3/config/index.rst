@@ -7,6 +7,7 @@
    intro
    system
    crawler
+   virtual-host
    windows-service
    role-setting
    index-backup
