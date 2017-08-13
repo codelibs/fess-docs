@@ -88,14 +88,14 @@ Google Site Search(GSS)からの移行無料トライアル実施中！
 ニュース
 ========
 
+2017-08-14
+    `Fess 11.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.0>`__
+
 2017-07-29
     `Fess 11.2.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
 
 2017-07-05
     `Google Site Searchからの移行に対応したFess Site Searchを提供 <http://fess.codelibs.org/ja/11.2/api/api-ss.html>`__
-
-2017-06-30
-    `Fess 11.2.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.1>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
