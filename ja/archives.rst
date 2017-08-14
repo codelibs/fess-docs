@@ -2,6 +2,18 @@
 アーカイブ
 ============================================
 
+11.2
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   11.2/install/index
+   11.2/user/index
+   11.2/api/index
+   11.2/admin/index
+   11.2/config/index
+
 11.1
 ~~~~~
 
