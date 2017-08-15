@@ -51,6 +51,12 @@ Boost
 
 Boost value.
 
+Virtual Host
+::::::::::::
+
+Virtual Host key for this configuration.
+e.g. fess (if setting Host:fess.codelibs.org=fess in General)
+
 Delete Configuration
 --------------------
 

@@ -69,6 +69,12 @@ Permissions for this configuration.
 This format is "{user/group/role}name".
 For example, to display search results on users who belong to developer group, the permission is {group}developer.
 
+Virtual Hosts
+:::::::::::::
+
+Virtual Host keys for this configuration.
+e.g. fess (if setting Host:fess.codelibs.org=fess in General)
+
 Labels
 ::::::
 
@@ -78,6 +84,11 @@ Status
 ::::::
 
 If enabled, the scheduled job of Default Crawler includes this configuration.
+
+Description
+:::::::::::
+
+Comments for this configuration.
 
 Delete Configuration
 --------------------

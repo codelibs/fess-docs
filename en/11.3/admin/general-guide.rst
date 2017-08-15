@@ -58,6 +58,13 @@ Default Sort Value
 Specify default sort order on search pages.
 e.g. "role:admin=content_length.desc" is that users which has admin role use content_length.desc as default sort order.
 
+Virtual Hosts
+:::::::::::::
+
+Specify virtual hosts settings.
+The format is REQUEST_HEADER_NAME:REQUEST_HEADER_VALUE=VIRTUAL_HOST_KEY.
+e.g. Host:fess.codelibs.org=fess
+
 Popular Word Response
 :::::::::::::::::::::
 
@@ -152,13 +159,13 @@ Bots names to remove search logs.
 Suggest
 --------
 
-Suggest by Search Words
-:::::::::::::::::::::::
+Suggest from Search Words
+:::::::::::::::::::::::::
 
 Enable to generate suggested words from search logs.
 
-Suggest by Documents
-::::::::::::::::::::
+Suggest from Documents
+::::::::::::::::::::::
 
 Enable to generate suggested words from indexed documents.
 

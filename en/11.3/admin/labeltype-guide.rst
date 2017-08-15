@@ -50,10 +50,18 @@ Excluded Paths
 
 Paths which matches crawling url/path are not assigned to this label.
 
-Role
-::::
+Permissions
+:::::::::::
 
-Roles to be abled to display this label.
+Permissions for this configuration.
+This format is "{user/group/role}name".
+For example, to display search results on users who belong to developer group, the permission is {group}developer.
+
+Virtual Host
+::::::::::::
+
+Virtual Host key for this configuration.
+e.g. fess (if setting Host:fess.codelibs.org=fess in General)
 
 Display Order
 :::::::::::::
