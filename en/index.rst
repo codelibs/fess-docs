@@ -34,7 +34,7 @@ Features
 
 -  OS-independent (Java Application)
 
--  Crawler for Web/File System/DB/Windows Shared Folder
+-  Crawler for Web/File System/DB/Windows Shared Folder(SMB)
 
 -  Support many document types, such as MS Office, PDF, Zip archive,...
 
@@ -48,11 +48,13 @@ Features
 
 -  Support secure search (access control with LDAP/Active Directory/SSO)
 
--  Support JSON format of search results
+-  Support JSON/GSA format of search results
 
 -  Provide search/click log and statistics
 
 -  Provide auto-complete(suggest)
+
+-  Provide embedded JavaScript library(migration from Google Site Search)
 
 -  Internationalization/Localization
 
