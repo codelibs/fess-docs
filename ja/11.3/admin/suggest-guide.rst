@@ -33,5 +33,5 @@
 登録されている単語数
 
 
-.. |image0| image:: ../../../resources/images/en/11.3/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/ja/11.3/admin/suggest-1.png
 
