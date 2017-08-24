@@ -23,6 +23,8 @@
    labeltype-guide
    keymatch-guide
    boostdoc-guide
+   relatedcontent-guide
+   relatedquery-guide
    pathmap-guide
    webauth-guide
    fileauth-guide
