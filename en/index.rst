@@ -56,19 +56,21 @@ Features
 
 -  Provide embedded JavaScript library(migration from Google Site Search)
 
+-  OCR support
+
 -  Internationalization/Localization
 
 News
 ====
+
+2017-09-04
+    `Fess 11.3.1 Released <https://github.com/codelibs/fess/releases/tag/fess-11.3.1>`__
 
 2017-08-14
     `Fess 11.3 Released <https://github.com/codelibs/fess/releases/tag/fess-11.3.0>`__
 
 2017-07-29
     `Fess 11.2.2 Released <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
-
-2017-06-30
-    `Fess 11.2.1 Released <https://github.com/codelibs/fess/releases/tag/fess-11.2.1>`__
 
 `More news... <news.html>`__
 

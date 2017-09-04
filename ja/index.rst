@@ -83,19 +83,21 @@ Google Site Search(GSS)からの移行無料トライアル実施中！
 
 -  アクセストークンにより外部システム連携
 
+-  OCRなどの外部テキスト抽出対応
+
 -  用途に応じて柔軟に対応可能な設計
 
 ニュース
 ========
+
+2017-09-04
+    `Fess 11.3.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.1>`__
 
 2017-08-14
     `Fess 11.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.0>`__
 
 2017-07-29
     `Fess 11.2.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
-
-2017-07-05
-    `Google Site Searchからの移行に対応したFess Site Searchを提供 <http://fess.codelibs.org/ja/11.2/api/api-ss.html>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
