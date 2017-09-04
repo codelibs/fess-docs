@@ -35,7 +35,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 Google Site Search(GSS)からの移行無料トライアル実施中！
 既存のGSSのJavaScriptを置き換えるだけで導入できます。
-詳しくは `こちら <http://www.n2sm.net/n2search-campaign.html>`__ をご覧ください。
+詳しくは `商用サポート <http://www.n2sm.net/n2search-campaign.html>`__ をご覧ください。
 
 特徴
 ====
