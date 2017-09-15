@@ -13,7 +13,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select System > Dictionaly in the left menu and click synonym file to display a list page of Synonym Configuration, as below.
+Select System > Dictionary in the left menu and click synonym file to display a list page of Synonym Configuration, as below.
 
 |image0|
 
