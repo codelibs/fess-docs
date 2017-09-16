@@ -14,7 +14,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select System > Dictionaly in the left menu and click seunjeon to display a list page of Seunjeon Configuration, as below.
+Select System > Dictionary in the left menu and click seunjeon to display a list page of Seunjeon Configuration, as below.
 
 |image0|
 
