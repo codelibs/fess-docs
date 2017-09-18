@@ -13,6 +13,8 @@
    11.3/api/index
    11.3/admin/index
    11.3/config/index
+   JavaDocs <http://fess.codelibs.org/11.3/apidocs/index.html>
+   XRef <http://fess.codelibs.org/11.3/xref/index.html>
    APIDoc <http://fess.codelibs.org/11.3/lastadoc-fess.html>
 
 11.2
