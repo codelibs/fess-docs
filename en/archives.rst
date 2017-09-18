@@ -13,7 +13,7 @@ ARCHIVES
    11.3/admin/index
    JavaDocs <http://fess.codelibs.org/11.3/apidocs/index.html>
    XRef <http://fess.codelibs.org/11.3/xref/index.html>
-   APIDocs <http://fess.codelibs.org/11.3/lastadoc-fess.html>
+   I/F Docs <http://fess.codelibs.org/11.3/lastadoc-fess.html>
 
 11.2
 ~~~~~
