@@ -2,6 +2,17 @@
 ARCHIVES
 ============================================
 
+11.3
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   11.3/install/index
+   11.3/user/index
+   11.3/admin/index
+   APIDocs <http://fess.codelibs.org/11.3/lastadoc-fess.html>
+
 11.2
 ~~~~~
 
