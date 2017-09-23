@@ -90,14 +90,14 @@ Google Site Search(GSS)からの移行無料トライアル実施中！
 ニュース
 ========
 
+2017-09-23
+    `Fess 11.4 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.0>`__
+
+2017-09-21
+    `Fess 11.3.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.2>`__
+
 2017-09-04
     `Fess 11.3.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.1>`__
-
-2017-08-14
-    `Fess 11.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.0>`__
-
-2017-07-29
-    `Fess 11.2.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.2.2>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
