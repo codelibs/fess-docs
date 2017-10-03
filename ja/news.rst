@@ -5,6 +5,9 @@
 ニュース一覧
 ============
 
+2017-10-03
+    `Fess 11.4.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.1>`__
+
 2017-09-23
     `Fess 11.4 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.0>`__
 
