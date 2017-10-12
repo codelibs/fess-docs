@@ -52,49 +52,74 @@
 レスポンス
 ----------
 
-以下のようなレスポンスが返ります。
+| 以下のようなレスポンスが返ります。
+| （整形後のものです）
 
 ::
 
-    {
-        "response": {
-            "version": 11.4,
-            "status":0,
-            "q":"Fess",
-            "exec_time":0.02,
-            "query_time":14,
-            "page_size":20,
-            "page_number":1,
-            "record_count":58,
-            "page_count":3,
-            "result": [
-                {
-                "filetype":"html",
-                "created":"2016-02-22T06:05:32.312Z",
-                "title":"Fess 11.4 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
-                "doc_id":"41e962e7e450453daf377063e2e99282",
-                "url":"http:\u002F\u002Ffess.codelibs.org\u002Fja\u002Findex.html",
-                "site":"fess.codelibs.org\u002Fja\u002Findex.html",
-                "content_description":" Toggle navigation <strong>Fess<\u002Fstrong> 11.4 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8...",
-                "host":"fess.codelibs.org",
-                "digest":" Toggle navigation Fess 11.4 \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8 \u76EE\u6B21...",
-                "boost":"1.0",
-                "mimetype":"text\u002Fhtml",
-                "last_modified":"2016-02-20T09:25:36.000Z",
-                "content_length":"16166",
-                "url_link":"http:\u002F\u002Ffess.codelibs.org\u002Fja\u002Findex.html",
-                "timestamp":"2016-02-20T09:25:36.000Z"
-                },
-    ...
-            ]
-        }
-    }
+   {
+     "response": {
+       "version": 11.4,
+       "status": 0,
+       "q": "Fess",
+       "query_id": "bd60f9579a494dfd8c03db7c8aa905b0",
+       "exec_time": 0.21,
+       "query_time": 171,
+       "page_size": 20,
+       "page_number": 1,
+       "record_count": 31625,
+       "page_count": 1582,
+       "highlight_params": "&hq=n2sm&hq=Fess",
+       "next_page": true,
+       "prev_page": false,
+       "start_record_number": 1,
+       "end_record_number": 20,
+       "page_numbers": [
+         "1",
+         "2",
+         "3",
+         "4",
+         "5",
+         "6"
+       ],
+       "partial": false,
+       "search_query": "(Fess OR n2sm)",
+       "requested_time": 1507822131845,
+       "related_query": [
+         "n2sm"
+       ],
+       "related_contents": [],
+       "result": [
+         {
+           "filetype": "html",
+           "title": "Open Source Enterprise Search Server: Fess — Fess 11.0 documentation",
+           "content_title": "Open Source Enterprise Search Server: Fess — Fe...",
+           "digest": "Docs » Open Source Enterprise Search Server: Fess Commercial Support Open Source Enterprise Search Server: Fess What is Fess ? Fess is very powerful and easily deployable Enterprise Search Server. ...",
+           "host": "fess.codelibs.org",
+           "last_modified": "2017-10-09T22:28:56.000Z",
+           "content_length": "29624",
+           "timestamp": "2017-10-09T22:28:56.000Z",
+           "url_link": "http://fess.codelibs.org/",
+           "created": "2017-10-10T15:00:48.609Z",
+           "site_path": "fess.codelibs.org/",
+           "doc_id": "e79fbfdfb09d4bffb58ec230c68f6f7e",
+           "url": "http://fess.codelibs.org/",
+           "content_description": "Enterprise Search Server: <strong>Fess</strong> Commercial Support Open...Search Server: <strong>Fess</strong> What is <strong>Fess</strong> ? <strong>Fess</strong> is very powerful...You can install and run <strong>Fess</strong> quickly on any platforms...Java runtime environment. <strong>Fess</strong> is provided under Apache...Apache license. Demo <strong>Fess</strong> is Elasticsearch-based search",
+           "site": "fess.codelibs.org/",
+           "boost": "10.0",
+           "mimetype": "text/html"
+         },
+
+         ...
+
+       ]
+     }
+   }
 
 各要素については以下の通りです。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: レスポンス情報
-   :stub-columns: 1
 
    * - response
      - ルート要素。
@@ -115,7 +140,29 @@
    * - record_count
      - 検索語に対してヒットした件数。
    * - page_count
-     -  検索語に対してヒットした件数のページ数。
+     - 検索語に対してヒットした件数のページ数。
+   * - highlight_params
+     - ハイライトのパラメタ。
+   * - next_page
+     - true:次のページが存在する。false:次のページが存在しない。
+   * - prev_page
+     - true:前のページが存在する。false:前のページが存在しない。
+   * - start_record_number
+     - レコード番号の開始位置。
+   * - end_record_number
+     - レコード番号の終了位置。
+   * - page_numbers
+     - ページ番号の配列。
+   * - partial
+     - 検索がタイムアウトしたなど検索結果が打ち切られた場合にtrueとなる。
+   * - search_query
+     - 検索クエリ。
+   * - requested_time
+     - リクエスト時刻。単位はepochミリ秒。
+   * - related_query
+     - 関連クエリ。
+   * - related_contents
+     - 関連コンテンツのクエリ。
    * - facet_field
      - 与えられたファセットフィールドにヒットするドキュメントの情報。 (リクエストパラメータに ``facet.field`` が与えられた場合のみ)
    * - facet_query
@@ -136,7 +183,7 @@
      - ドキュメントのURL。
    * - site
      - サイト名。
-   * -  content_description
+   * - content_description
      - コンテンツの説明。
    * - host
      - ホスト名。
