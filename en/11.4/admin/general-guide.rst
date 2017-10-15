@@ -63,7 +63,7 @@ Virtual Hosts
 
 Specify virtual hosts settings.
 The format is REQUEST_HEADER_NAME:REQUEST_HEADER_VALUE=VIRTUAL_HOST_KEY.
-e.g. Host:fess.codelibs.org=fess
+(e.g. Host:fess.codelibs.org=fess)
 
 Popular Word Response
 :::::::::::::::::::::
