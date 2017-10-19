@@ -86,14 +86,14 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2017-10-19
+    `Fess 11.4.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.2>`__
+
 2017-10-10
     `Fess 11.3.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.3.3>`__
 
 2017-10-03
     `Fess 11.4.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.1>`__
-
-2017-09-23
-    `Fess 11.4 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.0>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
