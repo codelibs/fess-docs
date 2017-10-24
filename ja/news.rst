@@ -5,6 +5,10 @@
 ニュース一覧
 ============
 
+
+2017-10-24
+    `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第1回が掲載されました <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
+
 2017-10-19
     `Fess 11.4.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.2>`__
 
