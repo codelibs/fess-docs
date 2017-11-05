@@ -21,17 +21,9 @@ Java 実行環境があればどの OS でも実行可能です。
    :scale: 100%
    :alt: サイト内検索デモ
    :figclass: side-by-side
-   :target: http://demo.n2search.net/aspdemo/
+   :target: https://www.n2sm.net/search.html?q=Fess
 
    サイト内検索デモ
-
-.. figure:: ../resources/images/ja/demo-3.png
-   :scale: 100%
-   :alt: EC向け商品検索デモ
-   :figclass: side-by-side
-   :target: http://demo.n2search.net/ecdemo/
-
-   EC向け商品検索デモ
 
 特徴
 ====
