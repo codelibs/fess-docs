@@ -15,5 +15,7 @@
    search-range
    search-boost
    search-fuzzy
+   search-options
+   search-geo
    search-additional
    role-search
