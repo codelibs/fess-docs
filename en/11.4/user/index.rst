@@ -17,7 +17,6 @@ Contents:
    search-range
    search-boost
    search-fuzzy
-   search-options
    search-geo
    search-additional
    json-response
