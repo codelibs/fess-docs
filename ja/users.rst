@@ -16,5 +16,5 @@
 -  `畜産情報ネットワーク検索 <http://www.lin.gr.jp/fess/>`__
 -  `パシフィコ横浜 <http://www.pacifico.co.jp/>`__
 -  `新潟県 <http://www.pref.niigata.lg.jp/>`__
--  `株式会社トライアンフ <http://www.triumph98.com/>`__
+-  `プラザホームズ株式会社 <http://www.plazahomes.co.jp/>`__
 
