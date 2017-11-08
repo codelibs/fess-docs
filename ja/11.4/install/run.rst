@@ -14,7 +14,7 @@ Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.ba
 
     $ ./bin/fess
 
-RPM パッケージの場合
+RPM パッケージの場合(chkconfig)
 --------------------
 
 |Fess| を起動する前に elasticsearch を起動する必要があります。
@@ -28,6 +28,21 @@ RPM パッケージの場合
 ::
 
     $ sudo service fess start
+
+RPM パッケージの場合(systemd)
+--------------------
+
+|Fess| を起動する前に elasticsearch を起動する必要があります。
+
+::
+
+    $ sudo systemctl start elasticsearch.service
+
+そして |Fess| を起動します。
+
+::
+
+    $ sudo systemctl start fess.service
 
 ブラウザー UI へのアクセス
 ==========================
