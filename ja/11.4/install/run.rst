@@ -61,7 +61,7 @@ ZIP パッケージの場合
 
 |Fess| サーバーを停止させるには |Fess| のプロセスを kill します。
 
-RPM パッケージの場合
+RPM パッケージの場合(chkconfig)
 --------------------
 
 |Fess| サーバーを停止させるには次のコマンドを入力します。
@@ -70,3 +70,11 @@ RPM パッケージの場合
 
     $ sudo service fess stop
 
+RPM パッケージの場合(systemd)
+--------------------
+
+|Fess| サーバーを停止させるには次のコマンドを入力します。
+
+::
+
+    $ sudo systemctl stop fess.service
