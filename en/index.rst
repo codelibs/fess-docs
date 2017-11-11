@@ -63,14 +63,14 @@ Features
 News
 ====
 
+2017-11-11
+    `Fess Site Search Released <https://fss-generator.codelibs.org/>`__
+
 2017-10-19
     `Fess 11.4.2 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.2>`__
 
 2017-10-10
     `Fess 11.3.3 Released <https://github.com/codelibs/fess/releases/tag/fess-11.3.3>`__
-
-2017-10-03
-    `Fess 11.4.1 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.1>`__
 
 `More news... <news.html>`__
 
@@ -78,6 +78,12 @@ Download
 ========
 
 Please see `download page <downloads.html>`__.
+
+Fess Site Search
+================
+
+Fess Site Search is Google Site Search alternative.
+Please see `FSS JS Generator <https://fss-generator.codelibs.org/docs/manual>`__.
 
 Support Service
 ===============
