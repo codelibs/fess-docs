@@ -6,10 +6,14 @@
 {%- else %}
   {%- set titlesuffix = "" %}
 {%- endif %}
-
+{%- if language == 'ja' %}
+  {%- set htmllang = "ja" %}
+{% else %}
+  {%- set htmllang = "en" %}
+{% endif %}
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="{{ htmllang }}" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="{{ htmllang }}" > <!--<![endif]-->
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-34667351-2"></script>
   <script>
