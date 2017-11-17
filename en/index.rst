@@ -63,6 +63,9 @@ Features
 News
 ====
 
+2017-11-18
+    `Fess 11.4.4 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.4>`__
+
 2017-11-16
     `Fess 11.4.3 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.3>`__
 
