@@ -54,4 +54,4 @@
 
 .. |image0| image:: ../../../resources/images/ja/11.4/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/ja/11.4/admin/dashboard-2.png
-            :width: 400 px
+.. pdf            :width: 400 px

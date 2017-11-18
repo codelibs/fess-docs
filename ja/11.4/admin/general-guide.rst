@@ -244,3 +244,4 @@ LDAPの設定例
 
 
 .. |image0| image:: ../../../resources/images/ja/11.4/admin/general-1.png
+.. pdf            :height: 940 px
