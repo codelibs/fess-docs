@@ -65,3 +65,4 @@ fess sort:content_length.desc
 fess sort:content_length.desc,last_modified
 
 .. |image0| image:: ../../../resources/images/ja/11.4/user/search-sort-1.png
+.. pdf            :width: 300 px

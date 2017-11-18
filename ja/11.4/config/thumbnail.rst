@@ -15,33 +15,12 @@
 HTMLファイルのサムネイル画像
 ============================
 
-HTMLのサムネイル画像はphantomjsを用いて生成されます。
-|Fess| がphantomjsコマンドを検出できた場合は自動で利用されます。
+HTMLのサムネイル画像はHTML内で指定された画像または含まれている画像を利用します。
+以下の順にサムネイル画像を探して指定されている場合に表示します。
 
-コマンドパスの指定
-------------------
-
-phantomjsのコマンドパスを明示的に指定したい場合、$FESS_HOME/app/WEB-INF/classes/fess_thumbnail.xml の${path}/phantomjsの箇所を変更してください。
-
-::
-
-    <component name="htmlThumbnailGenerator" class="org.codelibs.fess.thumbnail.impl.WebDriverGenerator">
-        <property name="generatorList">
-            ["${path}/phantomjs"]
-        </property>
-        <property name="webDriverCapabilities">
-            <component class="org.openqa.selenium.remote.DesiredCapabilities">
-                <postConstruct name="setCapability">
-                    <arg>"phantomjs.binary.path"</arg>
-                    <arg>"${path}/phantomjs"</arg>
-                </postConstruct>
-            </component>
-        </property>
-        <postConstruct name="addCondition">
-            <arg>"mimetype"</arg>
-            <arg>"text/html"</arg>
-        </postConstruct>
-    </component>
+- name属性がthumbnailで指定されたmetaタグののcontentの値
+- property属性がog:imageで指定されたmetaタグののcontentの値
+- imgタグでサムネイルに適したサイズの画像
 
 
 MS Officeファイルのサムネイル画像
@@ -63,4 +42,10 @@ Redhat系OSの場合、画像の作成用に以下のパッケージをインス
 -------------
 
 RPM/Debパッケージでインストールすると、MS Office用のサムネイル生成スクリプトは/usr/share/fess/bin/generate-thumbnailにインストールされます。
+
+PDFファイルのサムネイル画像
+===========================
+
+PDFのサムネイル画像はImageMagickを用いて生成されます。
+convert コマンドがインストールされている場合、サムネイル画像が生成されます。
 

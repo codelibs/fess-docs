@@ -28,6 +28,8 @@
 
 **例:**
 
-``geo.location.point=35.681,139.766&geo.location.distance=10.0km``
+::
+
+    geo.location.point=35.681,139.766&geo.location.distance=10.0km
 
 をリクエストパラメータとして指定すると、(35.681, 139.766) の地点から半径10kmの範囲内の位置情報をもつドキュメントを対象として検索ができます。
