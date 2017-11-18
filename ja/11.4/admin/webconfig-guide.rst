@@ -249,4 +249,5 @@ XWiki(例. https://<server>/xwiki/)のページをクロールするウェブク
 
 .. |image0| image:: ../../../resources/images/ja/11.4/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/11.4/admin/webconfig-2.png
+.. pdf            :height: 940 px
 

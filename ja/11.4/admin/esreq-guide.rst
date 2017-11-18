@@ -1,30 +1,41 @@
 =============
-Query Request
+クエリーリクエスト
 =============
 
-Overview
+概要
 ====
 
-This page sends query request by JSON file to elasticsearch.
+このページではJSONファイルのクエリーリクエストをElasticsearchに送信します。
 
 |image0|
 
-Operations
+操作方法
 ========
 
-Send Request
-------------
+リクエストの送信
+----------------
 
-Type /admin/upgrade/ to URL after logging in as admin user.
-Create JSON file which contains elasticsearch query DSL, select Request File and then click button to send the request to elasticsearch.
+管理者としてログイン後、/admin/esreq/ をURLのパスとして入力してください。
+Elasticsearchに送信したいクエリーリクエストをJSONファイルとして作成して、「リクエストファイル」としてそのJSONファイルを選択肢て「送信」ボタンをクリックして、Elasticsearchにリクエストを送信します。
+レスポンスはファイルとしてダウンロードされます。
 
-Configurations
---------------
+設定項目
+--------
 
-Request File
-::::::::::::
+リクエストファイル
+::::::::::::::::::
 
-JSON file which contains Query DSL.
+クエリーDSLを記述したJSONファイルを指定します。
+たとえば、JSONファイルに以下のような内容になります。
+
+::
+
+    POST /_search
+    {
+      "query": {
+        "match_all": {}
+      }
+    }
 
 .. |image0| image:: ../../../resources/images/ja/11.4/admin/esreq-1.png
 

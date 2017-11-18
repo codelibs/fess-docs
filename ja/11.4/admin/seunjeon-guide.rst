@@ -13,7 +13,7 @@ Seunjeon辞書
 表示方法
 --------
 
-下図のseunjeonの設定一覧ページを開くには、左メニューの [システム > 辞書] を選択した後、seunjeonをクリックします。
+下図のSeunjeonの設定一覧ページを開くには、左メニューの [システム > 辞書] を選択した後、Seunjeonをクリックします。
 
 |image0|
 
@@ -22,7 +22,7 @@ Seunjeon辞書
 設定方法
 --------------------
 
-seunjeonの設定ページを開くには新規作成ボタンをクリックします。
+Seunjeonの設定ページを開くには新規作成ボタンをクリックします。
 
 |image1|
 
@@ -37,12 +37,12 @@ seunjeonの設定ページを開くには新規作成ボタンをクリックし
 ダウンロード
 ============
 
-seunjeonの辞書形式でダウンロードすることができます。
+Seunjeonの辞書形式でダウンロードすることができます。
 
 アップロード
 ============
 
-seunjeonの辞書形式でアップロードすることができます。
+Seunjeonの辞書形式でアップロードすることができます。
 
 .. |image0| image:: ../../../resources/images/ja/11.4/admin/seunjeon-1.png
 .. |image1| image:: ../../../resources/images/ja/11.4/admin/seunjeon-2.png

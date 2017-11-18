@@ -52,3 +52,4 @@
 
 .. |image0| image:: ../../../resources/images/ja/11.4/admin/mapping-1.png
 .. |image1| image:: ../../../resources/images/ja/11.4/admin/mapping-2.png
+

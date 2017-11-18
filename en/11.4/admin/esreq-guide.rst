@@ -15,7 +15,7 @@ Operations
 Send Request
 ------------
 
-Type /admin/upgrade/ to URL after logging in as admin user.
+Type /admin/esreq/ to URL after logging in as admin user.
 Create JSON file which contains elasticsearch query DSL, select Request File and then click button to send the request to elasticsearch.
 
 Configurations
