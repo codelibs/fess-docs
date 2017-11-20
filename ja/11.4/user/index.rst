@@ -18,3 +18,4 @@
    search-geo
    search-additional
    role-search
+   special-char
