@@ -7,6 +7,7 @@
    intro
    system
    crawler
+   search-form
    virtual-host
    windows-service
    role-setting
