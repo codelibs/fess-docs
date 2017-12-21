@@ -78,6 +78,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2017-12-21
+    `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第3回が掲載されました <https://news.mynavi.jp/itsearch/article/bizapp/3341>`__
+
 2017-12-09
     `Fess 11.4.5 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.5>`__
 
@@ -90,15 +93,12 @@ Java 実行環境があればどの OS でも実行可能です。
 2017-11-16
     `Fess 11.4.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.3>`__
 
-2017-10-24
-    `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第1回が掲載されました <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
-
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
 ダウンロード
 ============
 
-ダウンロードについては\ `こちら <downloads.html>`__\ をご覧ください。
+- `Fess 11.4 <downloads.html>`__ (zip/rpm/debパッケージ)
 
 商用サポート
 ============
@@ -107,29 +107,32 @@ Java 実行環境があればどの OS でも実行可能です。
 
 |Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <http://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
 また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
-詳しくは、 `こちら <support-services.html>`__ を参照してください。
 
-N2 Search
----------
+- `N2 Search <http://www.n2sm.net/products/n2search.html>`__ (最適化されたFessの商用向けパッケージ)
 
-企業内検索などの用途に最適化されたパッケージ製品として、N2 Searchも販売しています。
-N2 Searchでは、約25万語の辞書のバンドルやセキュリティ観点の強化等が行われています。
+- `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ (Google Site Search代替サービス)
 
-|image3|
+- `N2 Search on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ (AWSのAMI)
 
-N2 Search on AWS Marketplace
-----------------------------
+- `各種サポートサービス <support-services.html>`__
 
-N2 Search (商用版Fessの試用版)を AWS Marketplace で無料でご利用いただくことができます(EC2のインスタンス料金は別途かかります)。 `N2 Search <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ をご覧ください。
 
 Google Site Searchからの移行
 ----------------------------
 
 Google Site Search(GSS)は2018年4月1日までにサービスを終了します。
-N2 Search ASPではGSS同様のJavaScriptを提供しているので、既存のJavaScriptを置き換えるだけでN2 Searchへの移行を実現します。
-無料トライアル期間を利用して、FessベースのN2 Search環境へお乗り換えください。
-詳しくは `こちら <http://www.n2sm.net/n2search-campaign.html>`__ をご覧ください。
+CodeLibsプロジェクトでは `Fess Site Search(FSS) <https://fss-generator.codelibs.org/ja/>`__ を提供しています。
+FSSで提供しているJavaScriptを利用することで、既存のJavaScriptを置き換えるだけでFessへ移行できます。
+安価なFessサーバが必要な場合は、 `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ をご覧ください。
 
+掲載メディア
+============
+
+- `[IT Search+] 【第3回】設定だけでできるWebスクレイピング <https://news.mynavi.jp/itsearch/article/bizapp/3341>`__
+
+- `[IT Search+] 【第2回】Google Site Searchからの簡単移行 <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
+
+- `[IT Search+] 【第1回】全文検索サーバFessを導入しよう <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
 
 .. |image0| image:: ../resources/images/ja/demo-1.png
 .. |image1| image:: ../resources/images/ja/demo-2.png
