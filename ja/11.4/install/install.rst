@@ -32,26 +32,42 @@ ZIP パッケージを利用する場合
     $ unzip fess-<version>.zip
     $ cd fess-<version>
 
-RPM パッケージを利用する場合
+RPM/DEB パッケージを利用する場合
 ----------------------------
 
-|Fess| をインストールする前に elasticsearch の RPM パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
+|Fess| をインストールする前に elasticsearch の RPM/DEB パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
+
+RPMパッケージの場合
 
 ::
 
     $ sudo rpm -ivh elasticsearch-<version>.rpm
 
-|Fess| にアクセスするために、/etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。
+DEBパッケージの場合
+
+::
+
+    $ sudo dpkg -i elasticsearch-<version>.deb
+
+|Fess| にアクセスするために、/etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。(RPM/DEB共通)
 
 ::
 
     configsync.config_path: /var/lib/elasticsearch/config
 
-次に、|Fess| の RPM パッケージをインストールします。
+次に、|Fess| の RPM/DEB パッケージをインストールします。
+
+RPMパッケージの場合
 
 ::
 
     $ sudo rpm -ivh fess-<version>.rpm
+
+DEBパッケージの場合
+
+::
+
+    $ sudo dpkg -i fess-<version>.deb
 
 |Fess| には elasticsearch の機能を拡張するためのプラグインがあります。
 プラグインを elasticsearch の plugins ディレクトリにインストールします。
@@ -68,25 +84,26 @@ RPM パッケージを利用する場合
 
 これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
 
-サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合は
+サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合(RPM)は
 
 ::
 
     $ sudo /sbin/chkconfig --add elasticsearch
     $ sudo /sbin/chkconfig --add fess
 
-systemd を使う場合は
+systemd を使う場合(RPM/DEB)は
 
 ::
 
     $ sudo /bin/systemctl daemon-reload
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
+    
 
 Elasticsearchクラスタの利用方法
 ----------------------------
 
-|Fess| では RPM パッケージでは外部のElasticsearchを標準で利用しますが、ZIPパッケージでのインストールにおいてElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。
+|Fess| では RPM/DEB パッケージでは外部のElasticsearchを標準で利用しますが、ZIPパッケージでのインストールにおいてElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。
 Elasticsearchの設定方法についてはRPMでの設定方法を参照してください。
 
 |Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
