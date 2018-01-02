@@ -63,6 +63,9 @@ Features
 News
 ====
 
+2018-01-02
+    `Fess 12.0 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.0>`__
+
 2017-12-30
     `Fess 11.4.6 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.6>`__
 
@@ -74,9 +77,6 @@ News
 
 2017-11-16
     `Fess 11.4.3 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.3>`__
-
-2017-11-11
-    `Fess Site Search Released <https://fss-generator.codelibs.org/>`__
 
 `More news... <news.html>`__
 

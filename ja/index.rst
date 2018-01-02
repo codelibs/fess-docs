@@ -78,6 +78,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2018-01-02
+    `Fess 12.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.0.0>`__
+
 2017-12-30
     `Fess 11.4.6 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.6>`__
 
@@ -89,9 +92,6 @@ Java 実行環境があればどの OS でも実行可能です。
 
 2017-11-20
     `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第2回が掲載されました <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
-
-2017-11-18
-    `Fess 11.4.4 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.4>`__
 
 過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
 
