@@ -2,6 +2,29 @@
 ARCHIVES
 ============================================
 
+12.0
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   12.0/install/index
+   12.0/user/index
+   12.0/admin/index
+   JavaDocs <http://fess.codelibs.org/11.3/apidocs/index.html>
+   XRef <http://fess.codelibs.org/11.3/xref/index.html>
+   I/F Docs <http://fess.codelibs.org/11.3/lastadoc-fess.html>
+
+11.4
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   11.4/install/index
+   11.4/user/index
+   11.4/admin/index
+
 11.3
 ~~~~~
 
@@ -11,9 +34,6 @@ ARCHIVES
    11.3/install/index
    11.3/user/index
    11.3/admin/index
-   JavaDocs <http://fess.codelibs.org/11.3/apidocs/index.html>
-   XRef <http://fess.codelibs.org/11.3/xref/index.html>
-   I/F Docs <http://fess.codelibs.org/11.3/lastadoc-fess.html>
 
 11.2
 ~~~~~
