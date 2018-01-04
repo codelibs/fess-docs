@@ -78,12 +78,12 @@ News
 2017-11-16
     `Fess 11.4.3 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.3>`__
 
-`More news... <news.html>`__
+:doc:`More news <news>`...
 
 Download
 ========
 
-Please see `download page <downloads.html>`__.
+See :doc:`download page <downloads>`.
 
 Fess Site Search
 ================

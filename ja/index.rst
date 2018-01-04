@@ -114,7 +114,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 - `N2 Search on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ (AWSのAMI)
 
-- :doc:`各種サポートサービス <support-services>`__
+- :doc:`各種サポートサービス <support-services>`
 
 
 Google Site Searchからの移行
