@@ -110,3 +110,9 @@ For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
     ES_TRANSPORT_URL=localhost:9300
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
+If you change a cluster name of Elasticsearch, modify the following setting in fess_config.properties.
+
+::
+
+    elasticsearch.cluster.name=elasticsearch
+

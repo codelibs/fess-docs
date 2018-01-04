@@ -124,3 +124,10 @@ ElasticsearchのRPM/DEBパッケージでは fess-<version>/bin/fess.in.shを変
     ES_TRANSPORT_URL=localhost:9300
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
+また、Elasticsearchのクラスタ名を変更した場合はfess_config.propertiesを変更します。
+
+::
+
+    elasticsearch.cluster.name=elasticsearch
+
+
