@@ -16,16 +16,16 @@ API Type
 
 |Fess| provides several search APIs.
 Using ``type`` request parameter, API is specified, such as ``http://<Server Name>/json/?type=popularword``.
-``type`` パラメータに設定できる値は以下の通りです。
+Available ``type`` is as below.
 
 .. list-table:: API Type
 
-   * - *search*
+   * - search
      - Search results are returned. ``search`` is a default type.
-   * - *popularword*
+   * - popularword
      - Poplular words are returned.
-   * - *label*
+   * - label
      - Registered labels are returned.
-   * - *ping*
+   * - ping
      - |Fess| server state is returned.
 
