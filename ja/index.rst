@@ -93,12 +93,12 @@ Java 実行環境があればどの OS でも実行可能です。
 2017-11-20
     `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第2回が掲載されました <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
 
-過去のニュースは\ `こちら <news.html>`__\ をご覧ください。
+過去のニュースは :doc:`こちら <news>` をご覧ください。
 
 ダウンロード
 ============
 
-- `Fess 11.4 <downloads.html>`__ (zip/rpm/debパッケージ)
+- :doc:`Fess 12.0 <downloads>` (zip/rpm/debパッケージ)
 
 商用サポート
 ============
@@ -114,7 +114,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 - `N2 Search on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ (AWSのAMI)
 
-- `各種サポートサービス <support-services.html>`__
+- :doc:`各種サポートサービス <support-services>`__
 
 
 Google Site Searchからの移行
