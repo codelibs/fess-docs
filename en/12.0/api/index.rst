@@ -6,7 +6,7 @@
 
    intro
    api-overview
-..   api-search
+   api-search
 ..   api-label
 ..   api-popularword
 ..   api-ping
