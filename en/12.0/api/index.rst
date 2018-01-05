@@ -8,7 +8,7 @@
    api-overview
    api-search
    api-label
-..   api-popularword
+   api-popularword
 ..   api-ping
 ..   api-gsa
 ..   api-ss
