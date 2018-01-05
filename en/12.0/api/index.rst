@@ -7,7 +7,7 @@
    intro
    api-overview
    api-search
-..   api-label
+   api-label
 ..   api-popularword
 ..   api-ping
 ..   api-gsa
