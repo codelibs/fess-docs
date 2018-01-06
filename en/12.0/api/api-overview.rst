@@ -18,6 +18,7 @@ API Type
 Using ``type`` request parameter, API is specified, such as ``http://<Server Name>/json/?type=popularword``.
 Available ``type`` is as below.
 
+.. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: API Type
 
    * - search

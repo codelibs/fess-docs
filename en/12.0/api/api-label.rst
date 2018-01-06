@@ -37,6 +37,7 @@ The response is as below.
 
 Descriptions for properties are as below.
 
+.. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: Properties in Response
 
    * - response

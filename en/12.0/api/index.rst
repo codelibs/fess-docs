@@ -9,6 +9,6 @@
    api-search
    api-label
    api-popularword
-..   api-ping
+   api-ping
 ..   api-gsa
 ..   api-ss
