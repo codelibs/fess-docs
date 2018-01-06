@@ -223,25 +223,31 @@ Active Directoryの場合、memberOfです。
 LDAPの設定例
 ------------
 
-+----------------------------+---------------------------------------------+---------------------------------------------+
-| 名前                       | 値 : LDAP                                   | 値 : AD連携                                 |
-+============================+=============================================+=============================================+
-| LDAP URL                   | ldap://localhost:389                        | ldap://localhost:389                        |
-+----------------------------+---------------------------------------------+---------------------------------------------+
-| Base DN                    | cn=Directory Manager                        | dc=fess,dc=codelibs,dc=org                  |
-+----------------------------+---------------------------------------------+---------------------------------------------+
-| Bind DN                    | uid=%s,ou=People,dc=fess, \                 | manager@fess.codelibs.org \                 |
-|                            | dc=codelibs,dc=org                          |  (Windows2000以降)                          |
-+----------------------------+---------------------------------------------+---------------------------------------------+
-| User DN                    | uid=%s,ou=People,dc=fess, \                 | %s@fess.codelibs.org \                      |
-|                            | dc=codelibs,dc=org                          |  (Windows2000以降)                          |
-+----------------------------+---------------------------------------------+---------------------------------------------+
-| アカウントフィルタ         | cn=%s や uid=%s                             | (&(objectClass=user) \                      |
-|                            |                                             |  (sAMAccountName=%s))                       |
-+----------------------------+---------------------------------------------+---------------------------------------------+
-| memberOf属性               | isMemberOf                                  | memberOf                                    |
-+----------------------------+---------------------------------------------+---------------------------------------------+
+.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. list-table:: LDAP/Active Directory Configuration
+   :header-rows: 1
 
+   * - 名前
+     - 値 (LDAP)
+     - 値 (Active Directory)
+   * - LDAP URL
+     - ldap://SERVERNAME:389
+     - ldap://SERVERNAME:389
+   * - Base DN
+     - cn=Directory Manager
+     - dc=fess,dc=codelibs,dc=org
+   * - Bind DN
+     - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+     - manager@fess.codelibs.org
+   * - User DN
+     - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+     - %s@fess.codelibs.org
+   * - アカウントフィルタ
+     - cn=%s または uid=%s
+     - (&(objectClass=user)(sAMAccountName=%s))
+   * - memberOf
+     - isMemberOf
+     - memberOf
 
 .. |image0| image:: ../../../resources/images/ja/12.0/admin/general-1.png
 .. pdf            :height: 940 px
