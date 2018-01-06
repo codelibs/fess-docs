@@ -235,13 +235,14 @@ LDAP Configuration
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: LDAP/Active Directory Configuration
+   :header-rows: 1
 
    * - Name
      - Value (LDAP)
      - Value (Active Directory)
    * - LDAP URL
-     - ldap://localhost:389
-     - ldap://localhost:389
+     - ldap://SERVERNAME:389
+     - ldap://SERVERNAME:389
    * - Base DN
      - cn=Directory Manager
      - dc=fess,dc=codelibs,dc=org
