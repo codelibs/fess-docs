@@ -227,6 +227,37 @@ Search top page
 
 Contents displayed on search top page.
 
+Example
+=======
+
+LDAP Configuration
+------------------
+
+.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. list-table:: LDAP/Active Directory Configuration
+   :header-rows: 1
+
+   * - Name
+     - LDAP URL
+     - Base DN
+     - Bind DN
+     - User DN
+     - Account Filter
+     - memberOf
+   * - Value (LDAP)
+     - ldap://localhost:389
+     - cn=Directory Manager
+     - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+     - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+     - cn=%s or uid=%s
+     - isMemberOf
+   * - Value (Active Directory)
+     - ldap://localhost:389
+     - dc=fess,dc=codelibs,dc=org
+     - manager@fess.codelibs.org
+     - %s@fess.codelibs.org
+     - (&(objectClass=user)(sAMAccountName=%s))
+     - memberOf
 
 
 .. |image0| image:: ../../../resources/images/en/12.0/admin/general-1.png
