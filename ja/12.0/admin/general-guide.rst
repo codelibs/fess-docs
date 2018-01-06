@@ -224,8 +224,8 @@ LDAPの設定例
 ------------
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: LDAP/Active Directory Configuration
-   :header-rows: 1
+.. list-table:: LDAP/Active Directory の設定
+   :header-rows: 1
 
    * - 名前
      - 値 (LDAP)
@@ -248,6 +248,7 @@ LDAPの設定例
    * - memberOf
      - isMemberOf
      - memberOf
+
 
 .. |image0| image:: ../../../resources/images/ja/12.0/admin/general-1.png
 .. pdf            :height: 940 px
