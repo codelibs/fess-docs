@@ -10,5 +10,4 @@
    api-label
    api-popularword
    api-ping
-..   api-gsa
-..   api-ss
+   api-gsa

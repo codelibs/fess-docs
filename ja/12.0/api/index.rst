@@ -11,4 +11,3 @@
    api-popularword
    api-ping
    api-gsa
-   api-ss
