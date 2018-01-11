@@ -15,7 +15,7 @@
 
 ::
 
-    <form id="searchForm" method="get" action="https://search.n2sm.co.jp//search/">
+    <form id="searchForm" method="get" action="https://search.n2sm.co.jp/search/">
     <input id="query" type="text" name="q" maxlength="1000" autocomplete="off">
     <input type="submit" name="search" value="検索">
     </form>
