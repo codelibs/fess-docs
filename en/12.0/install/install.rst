@@ -85,6 +85,12 @@ For systemd based system(e.g. CentOS 7),
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
 
+To change a cluster name for elasticsearch, modify the following value in fess_config.properties.
+
+::
+
+    elasticsearch.cluster.name=elasticsearch
+
 
 Using Your Elasticsearch Cluster On ZIP package
 -----------------------------------------------
