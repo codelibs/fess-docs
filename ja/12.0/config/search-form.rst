@@ -42,7 +42,7 @@ https://search.n2sm.co.jp/ のURLは構築した |Fess| サーバのURLに変更
           fn : '_default,content,title',
           num : 10
         },
-        minturm: 2,
+        minterm: 2,
         adjustWidthVal : 11,
         searchForm : $('#searchForm')
       });
