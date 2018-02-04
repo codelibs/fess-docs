@@ -27,7 +27,7 @@
 
 |image1|
 
-例えば、``http://fess.codelibs.org/``
+例えば、``https://fess.codelibs.org/``
 を検索対象としたい場合、以下のようになります。
 
 |image2|

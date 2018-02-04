@@ -34,7 +34,7 @@
 ::::
 
 上位に位置づけたいドキュメントの条件を指定します。
-たとえば、http://www.n2sm.net/を含むURLを上位に表示したい場合は、url.matches("http://www.n2sm.net/.*")を記述します。
+たとえば、https://www.n2sm.net/を含むURLを上位に表示したい場合は、url.matches("https://www.n2sm.net/.*")を記述します。
 条件はGroovyで記述することができます。
 
 ブースト値式

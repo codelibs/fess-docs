@@ -13,7 +13,7 @@ Java 実行環境があればどの OS でも実行可能です。
    :scale: 100%
    :alt: 標準デモ
    :figclass: side-by-side
-   :target: http://search.n2sm.co.jp/
+   :target: https://search.n2sm.co.jp/
 
    標準デモ
 
@@ -105,10 +105,10 @@ Java 実行環境があればどの OS でも実行可能です。
 
 |Fess| は Apache ライセンスで提供されるオープンソース製品で、個人や商用向けでも無料でご自由にご利用いただけます。
 
-|Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <http://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
+|Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <https://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
 また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
 
-- `N2 Search <http://www.n2sm.net/products/n2search.html>`__ (最適化されたFessの商用向けパッケージ)
+- `N2 Search <https://www.n2sm.net/products/n2search.html>`__ (最適化されたFessの商用向けパッケージ)
 
 - `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ (Google Site Search代替サービス)
 
@@ -138,7 +138,7 @@ FSSで提供しているJavaScriptを利用することで、既存のJavaScript
 .. |image1| image:: ../resources/images/ja/demo-2.png
 .. |image2| image:: ../resources/images/ja/demo-3.png
 .. |image3| image:: ../resources/images/ja/n2search_225x50.png
-   :target: http://www.n2sm.net/products/n2search.html
+   :target: https://www.n2sm.net/products/n2search.html
 .. |image4| image:: ../resources/images/ja/n2search_b.png
 
 

@@ -43,9 +43,9 @@ XMLやJSONはJavaScriptのライブラリでもサポートされているので
 |Fess| の提供しているREST
 APIがどのような応答を返してくるのかについては以下を参照してください。
 
-1. `XML応答 <http://fess.codelibs.org/ja/4.0/user/xml-response.html>`__
+1. `XML応答 <https://fess.codelibs.org/ja/4.0/user/xml-response.html>`__
 
-2. `JSON（JSONP）応答 <http://fess.codelibs.org/ja/4.0/user/json-response.html>`__
+2. `JSON（JSONP）応答 <https://fess.codelibs.org/ja/4.0/user/json-response.html>`__
 
 |Fess| は内部の検索エンジンとしてApache Solrを利用しています。
 SolrもXMLやJSONによるAPIを提供していますが |Fess| のAPIは異なるものです。
@@ -333,7 +333,7 @@ successの引数には |Fess| サーバーから返却された検索結果の�
 
 まず、10でレスポンスのステータスの内容を確認しています。
 正常に検索リクエストが処理された場合は0が設定されています。
-|Fess| のJSON応答の詳細は\ `Fess サイト <http://fess.codelibs.org/ja/4.0/user/json-response.html>`__\ を確認してください。
+|Fess| のJSON応答の詳細は\ `Fess サイト <https://fess.codelibs.org/ja/4.0/user/json-response.html>`__\ を確認してください。
 
 検索リクエストが正常に処理され、検索結果がヒットしなかった場合は11の条件文内でsubheader領域の内容を空にして、result領域で検索結果がヒットしなかった旨のメッセージを表示します。
 
@@ -384,7 +384,7 @@ APIを利用することでブラウザベースのアプリケーションに�
 参考資料
 ========
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `jQuery <http://jquery.com/>`__
 

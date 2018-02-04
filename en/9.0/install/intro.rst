@@ -23,7 +23,7 @@ Download, professional services, support, and other developer
 information, visit the following.
 
 -  Project site:
-   `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__
+   `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
 
 Technical support contact information
 =====================================
@@ -40,7 +40,7 @@ Commercial support
 ------------------
 
 If you need commercial support, maintenance and technical support for
-this product\ `N9sm, Inc. <http://www.n2sm.net/>`__\ To consult.
+this product\ `N9sm, Inc. <https://www.n2sm.net/>`__\ To consult.
 
 Related third-party Web site references
 =======================================

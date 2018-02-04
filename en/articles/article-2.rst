@@ -90,8 +90,8 @@ Select the [new]
 |image0|
 
 This time the mobile phone site is not that will crawl all the pages of
-http://fess.codelibs.org/ja/ following. any mobile sites that can be
-displayed in DoCoMo handsets instead of http://fess.codelibs.org/ja/ the
+https://fess.codelibs.org/ja/ following. any mobile sites that can be
+displayed in DoCoMo handsets instead of https://fess.codelibs.org/ja/ the
 site URL specifies.
 
 [Browser] and select only the DoCoMo so that appears only in docomo
@@ -179,7 +179,7 @@ authentication of users, roles functions are introduced here.
 Reference material
 ==================
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `mobylet <http://mobylet.seasar.org/>`__
 

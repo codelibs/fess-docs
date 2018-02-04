@@ -10,7 +10,7 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 API 編
 APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
 
 本記事では Fess 11.0.3を利用して説明します。
-Fess の構築方法については\ `導入編 <http://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
+Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
 ========
@@ -36,7 +36,7 @@ APIを利用することで、 Fess サーバーを構築しておき、既存�
 検索結果を開発言語に依存しない形式で扱えるので、 Fess をJava以外のシステムにも統合しやすいと思います。
 JSONはJavaScriptのライブラリでもサポートされているので、Ajaxとして利用する場合でも簡単に扱うことができます。
 
-Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON（JSONP）応答 <http://fess.codelibs.org/ja/10.0/user/json-response.html>`__ を参照してください。
+Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON（JSONP）応答 <https://fess.codelibs.org/ja/10.0/user/json-response.html>`__ を参照してください。
 
 Fess は内部の検索エンジンとして Elasticsearch を利用しています。
 ElasticsearchもJSONによるAPIを提供していますが Fess のAPIは異なるものです。
@@ -321,7 +321,7 @@ successの引数には Fess サーバーから返却された検索結果のオ�
 
 まず、10でレスポンスのステータスの内容を確認しています。
 正常に検索リクエストが処理された場合は0が設定されています。
-Fess のJSON応答の詳細は\ `Fess サイト <http://fess.codelibs.org/ja/10.0/user/json-response.html>`__\ を確認してください。
+Fess のJSON応答の詳細は\ `Fess サイト <https://fess.codelibs.org/ja/10.0/user/json-response.html>`__\ を確認してください。
 
 検索リクエストが正常に処理され、検索結果がヒットしなかった場合は11の条件文内でsubheader領域の内容を空にして、result領域で検索結果がヒットしなかった旨のメッセージを表示します。
 
@@ -370,7 +370,7 @@ JSON APIを利用することでブラウザベースのアプリケーション
 参考資料
 ========
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `jQuery <http://jquery.com/>`__
 

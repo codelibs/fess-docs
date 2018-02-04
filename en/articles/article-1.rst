@@ -47,7 +47,7 @@ And |Fess|
 
 |Fess| is a open source Web and file system using the full text search
 system. The SourceForge.jp\ `Fess 
-sites <http://fess.codelibs.org/ja/>`__\ From the provided in the Apache
+sites <https://fess.codelibs.org/ja/>`__\ From the provided in the Apache
 license.
 
 |Fess| features
@@ -203,7 +203,7 @@ To search from indexing
 Also indexed for search in the State immediately after the launch, make
 a search returned nothing results. So, you must first create the index.
 In this
-case,\ `http://fess.codelibs.org/ja/ <http://fess.codelibs.org/ja/>`__
+case,\ `https://fess.codelibs.org/ja/ <https://fess.codelibs.org/ja/>`__
 Create index to below, to do a search as an example.
 
 Login to the management page
@@ -228,7 +228,7 @@ Select the [new]
 |image4|
 
 As a Web crawl settings, this
-is\ `http://fess.codelibs.org/ja/ <http://fess.codelibs.org/ja/>`__ That
+is\ `https://fess.codelibs.org/ja/ <https://fess.codelibs.org/ja/>`__ That
 will crawl all the pages below. In addition, results are displayed when
 you search from any PC or mobile phone, and then select all as the
 browser type.
@@ -360,7 +360,7 @@ feature.
 Reference material
 ==================
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `Apache Solr <http://lucene.apache.org/solr/>`__
 

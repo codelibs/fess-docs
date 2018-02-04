@@ -19,7 +19,7 @@ Online Access
 Download, professional services, support, and other developer information, visit the following.
 
 -  Project site:
-   `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__
+   `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
 
 Technical Support
 =================
@@ -32,5 +32,5 @@ Technical questions about our products, visit the following.
 Commercial Support
 ------------------
 
-If you need commercial technical supports for this product, please contact to `N2SM, Inc. <http://www.n2sm.net/>`__.
+If you need commercial technical supports for this product, please contact to `N2SM, Inc. <https://www.n2sm.net/>`__.
 

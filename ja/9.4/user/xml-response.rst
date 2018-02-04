@@ -49,7 +49,7 @@ Table: リクエストパラメータ
           <created>2014-05-24T15:13:27.692+0900</created>
           <doc-id>d55275b552da44999cafe118aa8fed62</doc-id>
           <title>Fess&#12398;&#12452;&#12531;...</title>
-          <url>http://fess.codelibs.org/ja/setup.html</url>
+          <url>https://fess.codelibs.org/ja/setup.html</url>
           <score>0.83177954</score>
           <site>fess.codelibs.org/ja/setup.html</site>
           <filetype-s>html</filetype-s>
@@ -60,8 +60,8 @@ Table: リクエストパラメータ
           <content-length>49702</content-length>
           <boost>1.0</boost>
           <last-modified>2014-05-22T11:09:07.000+0900</last-modified>
-          <id>http://fess.codelibs.org/ja/setup.html</id>
-          <url-link>http://fess.codelibs.org/ja/setup.html</url-link>
+          <id>https://fess.codelibs.org/ja/setup.html</id>
+          <url-link>https://fess.codelibs.org/ja/setup.html</url-link>
         </doc>
     ...
       </result>

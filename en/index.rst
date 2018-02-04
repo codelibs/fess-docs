@@ -13,7 +13,7 @@ runtime environment. |Fess| is provided under Apache license.
    :scale: 100%
    :alt: Demo
    :figclass: side-by-side
-   :target: http://search.n2sm.co.jp/
+   :target: https://search.n2sm.co.jp/
 
    Demo
 
@@ -94,7 +94,7 @@ Please see `FSS JS Generator <https://fss-generator.codelibs.org/docs/manual>`__
 Support Service
 ===============
 
-`N2SM, Inc. <http://www.n2sm.net/en/>`__ provides support services for Fess, and also provides Enterprise Search Software, N2 Search, based on Fess.
+`N2SM, Inc. <https://www.n2sm.net/en/>`__ provides support services for Fess, and also provides Enterprise Search Software, N2 Search, based on Fess.
 
 
 .. |image0| image:: ../resources/images/en/demo-1.png

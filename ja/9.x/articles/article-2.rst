@@ -75,8 +75,8 @@ docomoの端末で検索した場合だけで検索結果を表示するウェ�
 ［新規作成］を選択
 |image0|
 
-今回は、携帯端末サイトではない、http://fess.codelibs.org/ja/以下のすべてのページをクロール対象とすることにします。
-docomo端末で表示可能な携帯サイトがあれば、http://fess.codelibs.org/ja/の代わりにそのサイトをURLに指定します。
+今回は、携帯端末サイトではない、https://fess.codelibs.org/ja/以下のすべてのページをクロール対象とすることにします。
+docomo端末で表示可能な携帯サイトがあれば、https://fess.codelibs.org/ja/の代わりにそのサイトをURLに指定します。
 
 また、［ブラウザ］にDoCoMoだけを選択し、docomo端末だけで表示されるようにします。
 auやSoftbank端末で表示したい場合はここでそれらを選択します。
@@ -154,7 +154,7 @@ docomo端末で検索
 参考資料
 ========
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `mobylet <http://mobylet.seasar.org/>`__
 

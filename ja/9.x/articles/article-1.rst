@@ -43,7 +43,7 @@ Apache Solr を利用しています。 Solr は、2
 
 |Fess| 
 はウェブやファイルシステムを対象とした、オープンソースの全文検索システムです。
-SourceForge.jp の `Fess サイト <http://fess.codelibs.org/ja/>`__\ から
+SourceForge.jp の `Fess サイト <https://fess.codelibs.org/ja/>`__\ から
 Apache ライセンスで提供されています。
 
 |Fess| の特徴
@@ -240,7 +240,7 @@ JSP ファイルが配置されています。 また、利用している CSS
 
 起動直後の状態では、検索するためのインデックスが作成されていないため、検索しても何も結果が返ってきません。
 ですので、まずインデックスを作成する必要があります。 ここでは、
-http://fess.codelibs.org/ja/
+https://fess.codelibs.org/ja/
 以下を対象にインデックスを作成し、検索を行うまでを例として説明します。
 
 管理ページへのログイン
@@ -263,7 +263,7 @@ http://fess.codelibs.org/ja/
 ［新規作成］を選択
 |image4|
 
-ウェブクロールの設定として、今回は、\ http://fess.codelibs.org/ja/
+ウェブクロールの設定として、今回は、\ https://fess.codelibs.org/ja/
 以下のすべてのページをクロール対象とすることにします。
 また、ブラウザタイプとしてもすべてを選択し、PC
 や携帯電話のどのような環境から検索をしても結果が表示されるようにします。
@@ -396,7 +396,7 @@ JSP ファイルで利用している CSS
 参考資料
 ========
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `Apache Solr <http://lucene.apache.org/solr/>`__
 

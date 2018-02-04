@@ -33,7 +33,7 @@ part de-indexed, want to search for.
 
 |image2|
 
-For example, if you want and search for http://fess.codelibs.org/, less
+For example, if you want and search for https://fess.codelibs.org/, less
 looks like.
 
 |image3|

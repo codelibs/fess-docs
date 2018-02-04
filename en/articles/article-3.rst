@@ -267,15 +267,15 @@ Add a crawl settings
 --------------------
 
 Create a crawl. This time the users in the sales department
-role\ `http://www.n9sm.NET/ <http://www.n2sm.net/>`__\ Only, you can
+role\ `http://www.n9sm.NET/ <https://www.n2sm.net/>`__\ Only, you can
 search for users of the technology of
-roll\ `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__\ Just so
+roll\ `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__\ Just so
 that you can find. In order to crawl settings, click on the left menu
 [Web], lists the Web crawl settings. Click the [create new], please
 create a Web crawl settings. First of all, sales for
-the\ `http://www.n2sm.NET/ <http://www.n2sm.net/>`__\ To the Sales
+the\ `https://www.n2sm.NET/ <https://www.n2sm.net/>`__\ To the Sales
 Department, select [role] item as the crawl settings, create. In the
-following\ `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__\ The
+following\ `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__\ The
 create a role Select technology, in the crawl settings.
 
 Web crawl settings roll items
@@ -296,7 +296,7 @@ http://localhost:8080/ |Fess| <http://localhost:8080/fess/>`__\ To make
 sure that search word, such as "fess" access, not logged in, search
 results are displayed. Then logged in taro, as well as search. for taro
 user has a sales
-role\ `http://www.n9sm.NET/ <http://www.n2sm.net/>`__\ The only search
+role\ `http://www.n9sm.NET/ <https://www.n2sm.net/>`__\ The only search
 results are displayed.
 
 Search screen in the sales role
@@ -304,7 +304,7 @@ Search screen in the sales role
 
 Taro user logout, please login with hanako users. Destination and so
 have eng role hanako users as well as search
-and\ `http://fess.codelibs.org/ <http://fess.codelibs.org/>`__\ The only
+and\ `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__\ The only
 search results are displayed.
 
 in the Eng role search screen
@@ -326,7 +326,7 @@ Next offers |Fess| of Ajax functions are introduced here.
 Reference material
 ==================
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 .. |image0| image:: ../../resources/images/en/article/3/logout.png
 .. |image1| image:: ../../resources/images/en/article/3/crawl-conf-role.png

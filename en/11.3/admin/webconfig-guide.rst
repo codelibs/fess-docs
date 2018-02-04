@@ -132,16 +132,16 @@ Example
 Crawling Fess Site
 ------------------
 
-If you want to create Web crawling configuration to crawl pages under http://fess.codelibs.org/, parameters are:
+If you want to create Web crawling configuration to crawl pages under https://fess.codelibs.org/, parameters are:
 
 +----------------------------+-----------------------------+
 | Name                       | Value                       |
 +============================+=============================+
 | Name                       | Fess                        |
 +----------------------------+-----------------------------+
-| URLs                       | http://fess.codelibs.org/   |
+| URLs                       | https://fess.codelibs.org/   |
 +----------------------------+-----------------------------+
-| Included URLs For Crawling | http://fess.codelibs.org/.* |
+| Included URLs For Crawling | https://fess.codelibs.org/.* |
 +----------------------------+-----------------------------+
 
 For other parameters, use a default value.

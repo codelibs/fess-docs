@@ -7,16 +7,16 @@
 
 Fess は Apache ライセンスで提供されるオープンソースで、個人や商用向けでも無料でご自由にご利用いただけます。
 
-`N2SM, Inc. <http://www.n2sm.net/>`__ は以下を提供しています。
+`N2SM, Inc. <https://www.n2sm.net/>`__ は以下を提供しています。
 
-- `N2 Search <http://www.n2sm.net/n2search.html>`__: Fessの商用製品版
+- `N2 Search <https://www.n2sm.net/n2search.html>`__: Fessの商用製品版
 
-- `検索ソリューションのサポート <http://www.n2sm.net/products/n2search/support.html>`__: Fess や Elasticsearch のカスタマイズおよび構築支援等
+- `検索ソリューションのサポート <https://www.n2sm.net/products/n2search/support.html>`__: Fess や Elasticsearch のカスタマイズおよび構築支援等
 
 N2 Search
 =========
 
-`N2 Search <http://www.n2sm.net/n2search.html>`__ は Fess と比べて以下の点が異なります。
+`N2 Search <https://www.n2sm.net/n2search.html>`__ は Fess と比べて以下の点が異なります。
 
 - 検索パフォーマンスの向上
 
@@ -29,7 +29,7 @@ N2 Search
 サポートサービス
 ================
 
-以下のようなサービスが必要な場合は `商用サポート(検索ソリューションのサポート) <http://www.n2sm.net/products/n2search/support.html>`__ をご検討ください。
+以下のようなサービスが必要な場合は `商用サポート(検索ソリューションのサポート) <https://www.n2sm.net/products/n2search/support.html>`__ をご検討ください。
 
 - 導入・運用コンサルティング
 

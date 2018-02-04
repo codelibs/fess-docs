@@ -238,11 +238,11 @@ adminユーザーでログインして、左側のメニューの［ロール］
 ------------------
 
 クロール対象を登録します。
-今回は営業部ロールのユーザーは\ http://www.n2sm.net/\ だけを検索でき、技術部ロールのユーザーは\ http://fess.codelibs.org/\ だけを検索できるようにします。
+今回は営業部ロールのユーザーは\ https://www.n2sm.net/\ だけを検索でき、技術部ロールのユーザーは\ https://fess.codelibs.org/\ だけを検索できるようにします。
 これらのクロール設定を登録するため、左側のメニューの［ウェブ］をクリックしてウェブクロール設定一覧を表示します。
 [新規作成] をクリックして、ウェブクロール設定を作成してください。
-まず、営業部用に\ http://www.n2sm.net/\ へのクロール設定として［ロール］項目に営業部を選択して作成します。
-次に\ http://fess.codelibs.org/\ のクロール設定でロールに技術部を選択して作成します。
+まず、営業部用に\ https://www.n2sm.net/\ へのクロール設定として［ロール］項目に営業部を選択して作成します。
+次に\ https://fess.codelibs.org/\ のクロール設定でロールに技術部を選択して作成します。
 
 ウェブクロール設定のロール項目
 |image1|
@@ -258,13 +258,13 @@ adminユーザーでログインして、左側のメニューの［ロール］
 
 クロール完了後、\ http://localhost:8080/fess/\ にアクセスして、ログインしていない状態で「fess」などの単語を検索して、検索結果が表示されないことを確認してください。
 次にtaroユーザーでログインして、同様に検索してください。
-taroユーザーはsalesロールを持つため、\ http://www.n2sm.net/\ の検索結果だけが表示されます。
+taroユーザーはsalesロールを持つため、\ https://www.n2sm.net/\ の検索結果だけが表示されます。
 
 salesロールでの検索画面
 |image2|
 
 taroユーザーをログアウトして、hanakoユーザーでログインしてください。
-先ほどと同様に検索すると、hanakoユーザーはengロールを持つので、\ http://fess.codelibs.org/\ の検索結果だけが表示されます。
+先ほどと同様に検索すると、hanakoユーザーはengロールを持つので、\ https://fess.codelibs.org/\ の検索結果だけが表示されます。
 
 engロールでの検索画面
 |image3|
@@ -281,7 +281,7 @@ J2EEの認証情報を用いたロールベース検索を中心に説明しま�
 参考資料
 ========
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 .. |image0| image:: ../../resources/images/ja/article/3/logout.png
 .. |image1| image:: ../../resources/images/ja/article/3/crawl-conf-role.png

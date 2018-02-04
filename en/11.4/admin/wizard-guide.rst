@@ -32,7 +32,7 @@ Configuration name. (ex. Fess Site)
 Crawling Path
 :::::::::::::
 
-URL or file path to start crawling. (ex. http://fess.codelibs.org/)
+URL or file path to start crawling. (ex. https://fess.codelibs.org/)
 
 Max Access Count
 ::::::::::::::::

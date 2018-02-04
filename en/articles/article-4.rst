@@ -51,10 +51,10 @@ Ajax.
 See below about what return the REST API of |Fess| .
 
 1. `XML
-   response <http://fess.codelibs.org/ja/4.0/user/xml-response.html>`__
+   response <https://fess.codelibs.org/ja/4.0/user/xml-response.html>`__
 
 2. `JSON (JSONP)
-   response <http://fess.codelibs.org/ja/4.0/user/json-response.html>`__
+   response <https://fess.codelibs.org/ja/4.0/user/json-response.html>`__
 
 |Fess| uses Apache Solr as an internal search engine. SOLR also provides
 XML and JSON API that |Fess| API is different. Benefits as well as SOLR
@@ -225,7 +225,7 @@ argument object is passed.
 First of all, in 10 has confirmed the contents of the response status. 0
 is set if the search request was processed successfully. More
 information on |Fess| JSON response\ `Fess 
-sites <http://fess.codelibs.org/ja/4.0/user/json-response.html>`__\ Please
+sites <https://fess.codelibs.org/ja/4.0/user/json-response.html>`__\ Please
 make sure.
 
 Display a message if the search request is processed correctly, did not
@@ -283,7 +283,7 @@ to add full-text search capabilities to an existing database.
 Reference material
 ==================
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `jQuery <http://jquery.com/>`__
 

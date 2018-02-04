@@ -11,9 +11,9 @@ ARCHIVES
    12.0/install/index
    12.0/user/index
    12.0/admin/index
-   JavaDocs <http://fess.codelibs.org/11.3/apidocs/index.html>
-   XRef <http://fess.codelibs.org/11.3/xref/index.html>
-   I/F Docs <http://fess.codelibs.org/11.3/lastadoc-fess.html>
+   JavaDocs <https://fess.codelibs.org/11.3/apidocs/index.html>
+   XRef <https://fess.codelibs.org/11.3/xref/index.html>
+   I/F Docs <https://fess.codelibs.org/11.3/lastadoc-fess.html>
 
 11.4
 ~~~~~

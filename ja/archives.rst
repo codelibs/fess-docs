@@ -13,9 +13,9 @@
    12.0/api/index
    12.0/admin/index
    12.0/config/index
-   JavaDocs <http://fess.codelibs.org/11.3/apidocs/index.html>
-   XRef <http://fess.codelibs.org/11.3/xref/index.html>
-   I/F Doc <http://fess.codelibs.org/11.3/lastadoc-fess.html>
+   JavaDocs <https://fess.codelibs.org/11.3/apidocs/index.html>
+   XRef <https://fess.codelibs.org/11.3/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/11.3/lastadoc-fess.html>
 
 11.4
 ~~~~~

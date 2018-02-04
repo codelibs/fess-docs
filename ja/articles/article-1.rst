@@ -41,7 +41,7 @@ Fess とは
 =========
 
 Fess はウェブやファイルシステムを対象とした、オープンソースの全文検索システムです。
-GitHub の CodeLibs プロジェクトで `Fess サイト <http://fess.codelibs.org/ja/>`__\ から Apache ライセンスで提供されています。
+GitHub の CodeLibs プロジェクトで `Fess サイト <https://fess.codelibs.org/ja/>`__\ から Apache ライセンスで提供されています。
 
 Fess の特徴
 -----------
@@ -176,7 +176,7 @@ Fess の組み込み Elasticsearch を利用する場合は、esディレクト�
 ==============================
 
 起動直後の状態では、検索するためのインデックスが作成されていないため、検索しても何も結果が返ってきません。
-ですので、まずインデックスを作成する必要があります。 ここでは、 http://fess.codelibs.org/ 以下を対象にインデックスを作成し、検索を行うまでを例として説明します。
+ですので、まずインデックスを作成する必要があります。 ここでは、 https://fess.codelibs.org/ 以下を対象にインデックスを作成し、検索を行うまでを例として説明します。
 
 管理ページへのログイン
 ----------------------
@@ -196,8 +196,8 @@ Fess の組み込み Elasticsearch を利用する場合は、esディレクト�
 ［新規作成］を選択
 |image4|
 
-ウェブクロールの設定として、今回は、 http://fess.codelibs.org/ 以下のすべてのページをクロール対象とすることにします。
-設定項目は URL : \http://fess.codelibs.org/ 、クロール対象とするURL : \http://fess.codelibs.org/.*、最大アクセス数 : 30 、間隔 : 3000 ミリ秒 とし、他はデフォルトにします。
+ウェブクロールの設定として、今回は、 https://fess.codelibs.org/ 以下のすべてのページをクロール対象とすることにします。
+設定項目は URL : \https://fess.codelibs.org/ 、クロール対象とするURL : \https://fess.codelibs.org/.*、最大アクセス数 : 30 、間隔 : 3000 ミリ秒 とし、他はデフォルトにします。
 
 ウェブクロールの設定
 |image5|
@@ -300,7 +300,7 @@ JSP ファイルで利用している CSS ファイルを変更したい場合�
 参考資料
 ========
 
--  `Fess <http://fess.codelibs.org/ja/>`__
+-  `Fess <https://fess.codelibs.org/ja/>`__
 
 -  `Elasticsearch <https://www.elastic.co/products/elasticsearch>`__
 

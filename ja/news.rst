@@ -257,7 +257,7 @@
 
 2010-03-18
     `『N2
-    Search( |Fess| )』ご紹介無料セミナ <http://www.n2sm.net/products/n2search-seminar.html>`__\ で |Fess| を紹介します。
+    Search( |Fess| )』ご紹介無料セミナ <https://www.n2sm.net/products/n2search-seminar.html>`__\ で |Fess| を紹介します。
 
 2010-03-11
     `第2回Solr勉強会 <http://atnd.org/events/3142>`__\ で |Fess| を紹介します。
