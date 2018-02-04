@@ -78,6 +78,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2018-02-04
+    `Fess 11.4.8 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.8>`__
+
 2018-01-18
     `Fess 11.4.7 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.7>`__
 
