@@ -134,6 +134,8 @@ FSSで提供しているJavaScriptを利用することで、既存のJavaScript
 掲載メディア
 ============
 
+- `[IT Search+] 【第4回】Fessを使って自然言語処理 <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
+
 - `[IT Search+] 【第3回】設定だけでできるWebスクレイピング <https://news.mynavi.jp/itsearch/article/bizapp/3341>`__
 
 - `[IT Search+] 【第2回】Google Site Searchからの簡単移行 <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
