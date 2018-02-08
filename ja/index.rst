@@ -78,6 +78,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2018-02-08
+    `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第4回 Fessを使って自然言語処理 <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
+
 2018-02-06
     `Fess 12.0.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.0.2>`__
 
