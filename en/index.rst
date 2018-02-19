@@ -60,6 +60,11 @@ Features
 
 -  Internationalization/Localization
 
+Download
+========
+
+- :doc:`Fess 12.1 <downloads>` (zip/rpm/deb packages)
+
 News
 ====
 
@@ -82,11 +87,6 @@ News
     `Fess 12.0 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.0>`__
 
 :doc:`More news <news>`...
-
-Download
-========
-
-See :doc:`download page <downloads>`.
 
 Fess Site Search
 ================

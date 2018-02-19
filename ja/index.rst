@@ -75,6 +75,11 @@ Java 実行環境があればどの OS でも実行可能です。
 
 -  用途に応じて柔軟に対応可能な設計
 
+ダウンロード
+============
+
+- :doc:`Fess 12.1 <downloads>` (zip/rpm/debパッケージ)
+
 ニュース
 ========
 
@@ -100,11 +105,6 @@ Java 実行環境があればどの OS でも実行可能です。
     `Fess 12.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.0.0>`__
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
-
-ダウンロード
-============
-
-- :doc:`Fess 12.0 <downloads>` (zip/rpm/debパッケージ)
 
 商用サポート
 ============
