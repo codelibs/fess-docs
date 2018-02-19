@@ -11,9 +11,9 @@ ARCHIVES
    12.0/install/index
    12.0/user/index
    12.0/admin/index
-   JavaDocs <https://fess.codelibs.org/11.3/apidocs/index.html>
-   XRef <https://fess.codelibs.org/11.3/xref/index.html>
-   I/F Docs <https://fess.codelibs.org/11.3/lastadoc-fess.html>
+   JavaDocs <https://fess.codelibs.org/12.0/apidocs/index.html>
+   XRef <https://fess.codelibs.org/12.0/xref/index.html>
+   I/F Docs <https://fess.codelibs.org/12.0/lastadoc-fess.html>
 
 11.4
 ~~~~~
@@ -24,6 +24,9 @@ ARCHIVES
    11.4/install/index
    11.4/user/index
    11.4/admin/index
+   JavaDocs <https://fess.codelibs.org/11.4/apidocs/index.html>
+   XRef <https://fess.codelibs.org/11.4/xref/index.html>
+   I/F Docs <https://fess.codelibs.org/11.4/lastadoc-fess.html>
 
 11.3
 ~~~~~
@@ -34,6 +37,9 @@ ARCHIVES
    11.3/install/index
    11.3/user/index
    11.3/admin/index
+   JavaDocs <https://fess.codelibs.org/11.3/apidocs/index.html>
+   XRef <https://fess.codelibs.org/11.3/xref/index.html>
+   I/F Docs <https://fess.codelibs.org/11.3/lastadoc-fess.html>
 
 11.2
 ~~~~~
