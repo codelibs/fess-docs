@@ -25,6 +25,11 @@ the system on your browser. |Fess| also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
 such as MS Office, pdf and zip.
 
+Download
+========
+
+- :doc:`Fess 12.1 <downloads>` (zip/rpm/deb packages)
+
 Features
 ========
 
@@ -59,11 +64,6 @@ Features
 -  OCR support
 
 -  Internationalization/Localization
-
-Download
-========
-
-- :doc:`Fess 12.1 <downloads>` (zip/rpm/deb packages)
 
 News
 ====
