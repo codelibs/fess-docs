@@ -9,6 +9,9 @@ Upgrade page provides data migration tools for previous versions of |Fess|.
 
 |image0|
 
+This page is not in a menu pane.
+To display this page, type /admin/upgrade/ to URL.
+
 Operations
 ========
 

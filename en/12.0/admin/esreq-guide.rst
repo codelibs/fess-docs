@@ -9,6 +9,9 @@ This page sends query request by JSON file to elasticsearch.
 
 |image0|
 
+This page is not in a menu pane.
+To display this page, type /admin/esreq/ to URL.
+
 Operations
 ========
 
