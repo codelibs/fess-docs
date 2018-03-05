@@ -25,7 +25,7 @@ Available parameters are as below.
      - Search query. URL-encode is needed.
    * - start
      - Start position. It is started from 0.
-   * - num*
+   * - num
      - The number of returned documents as a search result. The default is 20.
    * - fields.label
      - Label value for filtering a search result.
