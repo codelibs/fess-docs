@@ -92,7 +92,7 @@ For the details to configure elasticsearch for Fess, please see steps in Using R
 
 To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
 For Windows environment, the following settings are put into fess-<version>\\bin\\fess.in.bat.
-elasticss.dictionary.path needs to be set to a path of configsync.config_path in elasticsearch.yml.
+fess.dictionary.path needs to be set to a path of configsync.config_path in elasticsearch.yml.
 
 ::
 

@@ -96,7 +96,7 @@ Elasticsearchの設定方法についてはRPMでの設定方法を参照して�
 
 |Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
 Windows環境では fess-<version>\\bin\\fess.in.batを変更します。
-elasticss.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
+fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
 
 ::
 
