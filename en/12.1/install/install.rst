@@ -106,7 +106,7 @@ elasticss.dictionary.path needs to be set to a path of configsync.config_path in
 
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/"
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
 
 For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
 
