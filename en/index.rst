@@ -69,8 +69,8 @@ News
 ====
 
 2018-03-18
-    `Fess 12.1.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__
-    `Fess 12.0.3 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__
+    `Fess 12.1.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
+    `Fess 12.0.3 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__ \
     `Fess 11.4.10 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.10>`__
 
 2018-02-22
@@ -105,7 +105,13 @@ Please see `FSS JS Generator <https://fss-generator.codelibs.org/docs/manual>`__
 Support Service
 ===============
 
-`N2SM, Inc. <https://www.n2sm.net/en/>`__ provides support services for Fess, and also provides Enterprise Search Software, N2 Search, based on Fess.
+`N2SM, Inc. <https://www.n2sm.net/en/>`__ provides support services for Fess as below.
+
+- N2 Search: Fess based Enterprise Search Software
+
+- `Consulting service <https://www.n2sm.net/en/support/fess_support.html>`__
+
+- X-Pack support package
 
 
 .. |image0| image:: ../resources/images/en/demo-1.png
