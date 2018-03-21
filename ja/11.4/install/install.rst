@@ -75,10 +75,10 @@ DEBパッケージの場合
 ::
 
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:5.6.2
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-ja:5.6.1
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-ja:5.6.2
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-synonym:5.6.1
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:5.6.2
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:5.6.1
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:5.6.3
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-langfield:5.6.1
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:5.6.1
 
@@ -98,7 +98,6 @@ systemd を使う場合(RPM/DEB)は
     $ sudo /bin/systemctl daemon-reload
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
-    
 
 Elasticsearchクラスタの利用方法
 ----------------------------
