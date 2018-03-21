@@ -9,7 +9,7 @@ Requirements
 
 -  OS: Windows/Unix with Java environment
 -  Java: Java 8 update 20 or later
--  (RPM or DEB) Elasticsearch: 5.2.x
+-  (RPM or DEB) Elasticsearch: 5.2.X
 
 If Java is not installed in your environment, see we want to |Fess| from `Oracle site <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ to install JDK.
 Embedded Elasticsearch is not recommended for production use.
