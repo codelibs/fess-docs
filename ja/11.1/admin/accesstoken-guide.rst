@@ -32,30 +32,30 @@
 名前
 ::::
 
-このアクセストークンを説明するための名前。
+このアクセストークンを説明するための名前を指定します。
 
 パーミッション
 ::::
 
-Permissions for this access token.
-This format is "{user/group/role}name".
-For example, to display search results on users who belong to developer group, the permission is {group}developer.
+アクセストークンのパーミッションを設定します。
+「{user/group/role}name」形式で記述します。
+たとえば、developerグループに属するユーザーが検索結果を表示するためには、パーミッションは「{group}developer」を設定します。
 
-Parameter Name
+パラメーター名
 :::::
 
-Request parameter name to specify permissions as a query.
+検索クエリーとしてパーミッションを指定する場合のリクエストパラメータ名を指定します。
 
-Expired Time
+有効期限
 ::::::
 
-Expired time for this access token.
+アクセストークンの有効期限を指定します。
 
-Delete Configuration
+設定の削除
 --------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。
+削除ボタンを押すと設定が削除されます。
 
 
 
