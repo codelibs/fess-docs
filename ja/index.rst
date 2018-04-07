@@ -87,30 +87,30 @@ Java 実行環境があればどの OS でも実行可能です。
     `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第5回 全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
 
 2018-03-18
-    `Fess 12.1.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
-    `Fess 12.0.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__ \
-    `Fess 11.4.9 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.10>`__
+    `Fess 12.1.1 <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
+    `Fess 12.0.3 <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__ \
+    `Fess 11.4.9 <https://github.com/codelibs/fess/releases/tag/fess-11.4.10>`__ リリース
 
 2018-02-22
-    `Fess 11.4.9 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.9>`__
+    `Fess 11.4.9 <https://github.com/codelibs/fess/releases/tag/fess-11.4.9>`__ リリース
 
 2018-02-19
-    `Fess 12.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.1.0>`__
+    `Fess 12.1 <https://github.com/codelibs/fess/releases/tag/fess-12.1.0>`__ リリース
 
 2018-02-08
     `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第4回 Fessを使って自然言語処理 <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
 
 2018-02-06
-    `Fess 12.0.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.0.2>`__
+    `Fess 12.0.2 <https://github.com/codelibs/fess/releases/tag/fess-12.0.2>`__ リリース
 
 2018-02-04
-    `Fess 11.4.8 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.8>`__
+    `Fess 11.4.8 <https://github.com/codelibs/fess/releases/tag/fess-11.4.8>`__ リリース
 
 2018-01-18
-    `Fess 11.4.7 リリース <https://github.com/codelibs/fess/releases/tag/fess-11.4.7>`__
+    `Fess 11.4.7 <https://github.com/codelibs/fess/releases/tag/fess-11.4.7>`__ リリース
 
 2018-01-16
-    `Fess 12.0.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-12.0.1>`__
+    `Fess 12.0.1 <https://github.com/codelibs/fess/releases/tag/fess-12.0.1>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
@@ -128,18 +128,23 @@ Java 実行環境があればどの OS でも実行可能です。
 
 - `N2 Search on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ (AWSのAMI)
 
-- X-Pack対応パッケージ
-
 - :doc:`各種サポートサービス <support-services>`
 
 
-Google Site Searchからの移行
-----------------------------
+Fess Site Search
+================
 
-Google Site Search(GSS)は2018年4月1日までにサービスを終了します。
 CodeLibsプロジェクトでは `Fess Site Search(FSS) <https://fss-generator.codelibs.org/ja/>`__ を提供しています。
-FSSで提供しているJavaScriptを利用することで、既存のJavaScriptを置き換えるだけでFessへ移行できます。
+既存のサイトにJavaScriptを配置するだけで、Fessの検索ページを組み込むことができます。
+FSSを利用することで、Google Site Search(GSS)やGoogle Custom Searchからの移行も簡単にできます。
 安価なFessサーバが必要な場合は、 `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ をご覧ください。
+
+X-Pack対応
+==========
+
+FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/fess-xpack>`__ を参照してください。
+サポートが必要な場合は、 `商用サポート(有償) <https://www.n2sm.net/products/n2search.html>`__ をご利用ください。
+
 
 掲載メディア
 ============

@@ -1,5 +1,5 @@
 ====================================
-Open Source Enterprise Search Server: |Fess|
+Enterprise Search Server: |Fess|
 ====================================
 
 What is |Fess| ?
@@ -69,30 +69,30 @@ News
 ====
 
 2018-03-18
-    `Fess 12.1.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
-    `Fess 12.0.3 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__ \
-    `Fess 11.4.10 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.10>`__
+    `Fess 12.1.1 <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
+    `Fess 12.0.3 <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__ \
+    `Fess 11.4.10 <https://github.com/codelibs/fess/releases/tag/fess-11.4.10>`__ Released
 
 2018-02-22
-    `Fess 11.4.9 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.9>`__
+    `Fess 11.4.9 <https://github.com/codelibs/fess/releases/tag/fess-11.4.9>`__ Released
 
 2018-02-19
-    `Fess 12.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.0>`__
+    `Fess 12.1 <https://github.com/codelibs/fess/releases/tag/fess-12.1.0>`__ Released
 
 2018-02-06
-    `Fess 12.0.2 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.2>`__
+    `Fess 12.0.2 <https://github.com/codelibs/fess/releases/tag/fess-12.0.2>`__ Released
 
 2018-02-04
-    `Fess 11.4.8 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.8>`__
+    `Fess 11.4.8 <https://github.com/codelibs/fess/releases/tag/fess-11.4.8>`__ Released
 
 2018-01-18
-    `Fess 11.4.7 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.7>`__
+    `Fess 11.4.7 <https://github.com/codelibs/fess/releases/tag/fess-11.4.7>`__ Released
 
 2018-01-16
-    `Fess 12.0.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.1>`__
+    `Fess 12.0.1 <https://github.com/codelibs/fess/releases/tag/fess-12.0.1>`__ Released
 
 2018-01-02
-    `Fess 12.0 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.0>`__
+    `Fess 12.0 <https://github.com/codelibs/fess/releases/tag/fess-12.0.0>`__ Released
 
 :doc:`More news <news>`...
 
@@ -102,6 +102,11 @@ Fess Site Search
 Fess Site Search is Google Site Search alternative.
 Please see `FSS JS Generator <https://fss-generator.codelibs.org/docs/manual>`__.
 
+X-Pack Support
+==============
+
+Please see `fess-xpack <https://github.com/codelibs/fess-xpack>`__.
+
 Support Service
 ===============
 
@@ -110,8 +115,6 @@ Support Service
 - N2 Search: Fess based Enterprise Search Software
 
 - `Consulting service <https://www.n2sm.net/en/support/fess_support.html>`__
-
-- X-Pack support package
 
 
 .. |image0| image:: ../resources/images/en/demo-1.png
