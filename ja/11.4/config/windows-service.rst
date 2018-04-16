@@ -37,7 +37,7 @@ Elasticsearchをサービスとして登録
 
     set ES_HOME=c:/opt/elasticsearch
 
-|Fess| の検索画面、管理画面のデフォルトのポート番号は 8080 になっています。80 番に変更する場合は ``c:\opt\fess\bin\fess.bat`` の fess.port を変更します。
+|Fess| の検索画面、管理画面のデフォルトのポート番号は 8080 になっています。80 番に変更する場合は ``c:\opt\fess\bin\fess.in.bat`` の fess.port を変更します。
 
 ::
 

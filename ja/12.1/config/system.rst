@@ -12,7 +12,7 @@
 
     FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.port=8080"
 
-Windows 環境であれば bin\\fess.bat の
+Windows 環境であれば bin\\fess.in.bat の
 
 ::
 
