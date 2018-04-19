@@ -28,3 +28,8 @@ Fess 9.xまでのリリース物はOSDNよりダウンロードができます�
 
 * `Fess 〜9.x <https://osdn.jp/projects/fess/releases/p9987>`_
 
+その他
+======
+
+* :doc:`サポート期限 <eol>`
+
