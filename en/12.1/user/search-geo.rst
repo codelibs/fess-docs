@@ -13,11 +13,13 @@ Usage
 
 Geo information is passed as request parameters.
 
-+--------------------------+---------------------------------------------------+
-| geo.<fieldname>.point    | Comma-separated value that is latitude,longitude. |
-+--------------------------+---------------------------------------------------+
-| geo.<fieldname>.distance | Distance from the above point.                    |
-+--------------------------+---------------------------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - geo.<fieldname>.point
+     - Comma-separated value that is latitude,longitude.
+   * - geo.<fieldname>.distance
+     - Distance from the above point.
 
 Table: Request parameters
 

@@ -12,25 +12,28 @@ Sort field
 
 The following sort fields are available.
 
-+-----------------+------------------------------------------------+
-| Field name      | Description                                    |
-+-----------------+------------------------------------------------+
-| created         | Time to crawl document                         |
-+-----------------+------------------------------------------------+
-| content_length  | Size of document                               |
-+-----------------+------------------------------------------------+
-| last_modified   | Last modified time of document                 |
-+-----------------+------------------------------------------------+
-| filename        | File name                                      |
-+-----------------+------------------------------------------------+
-| score           | Score value                                    |
-+-----------------+------------------------------------------------+
-| timestamp       | Indexed time                                   |
-+-----------------+------------------------------------------------+
-| click_count     | The number of clicked documents                |
-+-----------------+------------------------------------------------+
-| favorite_count  | The number of liked documents                  |
-+-----------------+------------------------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Field name
+     - Description
+   * - created
+     - Time to crawl document
+   * - content_length
+     - Size of document
+   * - last_modified
+     - Last modified time of document
+   * - filename
+     - File name
+   * - score
+     - Score value
+   * - timestamp
+     - Indexed time
+   * - click_count
+     - The number of clicked documents
+   * - favorite_count
+     - The number of liked documents
 
 Table: Sort fields
 

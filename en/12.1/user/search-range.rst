@@ -25,11 +25,13 @@ Date range search is also supported.
 The syntax is "last_modified:[fromdate TO todate].
 The date format supports ISO 8601 or Date Math syntax.
 
-+-----------+-------------------------------------------------------+
-| ISO8601   | YYYY-MM-DDThh:mm:ss.sssZ(ex. 2013-08-02T10:45:23.5Z)  |
-+-----------+-------------------------------------------------------+
-| Date Math | now, y(Year), M(Month), d(Day), h(hour), m(minute)    |
-+-----------+-------------------------------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - ISO8601
+     - YYYY-MM-DDThh:mm:ss.sssZ(ex. 2013-08-02T10:45:23.5Z)
+   * - Date Math
+     - now, y(Year), M(Month), d(Day), h(hour), m(minute)
 
 For example, if you look for documents updated from 30 days prior to now(2/21/2012), it's as below.
 
