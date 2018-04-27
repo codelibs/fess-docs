@@ -5,6 +5,5 @@
 .. toctree::
 
    インストール編 <articles/article-1>
-   ロールベース検索編 <articles/article-2>
    API編 <articles/article-3>
 
