@@ -228,9 +228,9 @@ LDAPの設定例
 .. list-table:: LDAP/Active Directory の設定
    :header-rows: 1
 
-   * - 名前
-     - 値 (LDAP)
-     - 値 (Active Directory)
+   * - 名前
+     - 値 (LDAP)
+     - 値 (Active Directory)
    * - LDAP URL
      - ldap://SERVERNAME:389
      - ldap://SERVERNAME:389
@@ -243,8 +243,8 @@ LDAPの設定例
    * - User DN
      - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
      - %s@fess.codelibs.org
-   * - アカウントフィルタ
-     - cn=%s または uid=%s
+   * - アカウントフィルタ
+     - cn=%s または uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
    * - memberOf
      - isMemberOf

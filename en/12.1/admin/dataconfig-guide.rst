@@ -145,17 +145,19 @@ Set parameters of crawling config as below.
 The value of parameters is key/value format.
 The description is below.
 
-+------------+-----------------------------------+
-| driver     | JDBC driver class                 |
-+------------+-----------------------------------+
-| url        | URL                               |
-+------------+-----------------------------------+
-| username   | Username to access to DB          |
-+------------+-----------------------------------+
-| password   | Password to access to DB          |
-+------------+-----------------------------------+
-| sql        | SQL statement to crawl data       |
-+------------+-----------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - driver
+     - JDBC driver class
+   * - url
+     - URL
+   * - username
+     - Username to access to DB
+   * - password
+     - Password to access to DB
+   * - sql
+     - SQL statement to crawl data
 
 Table: Parameter example for DB
 
@@ -184,27 +186,29 @@ The format is key/value.
 For specified values, Groovy language is available.
 The description for Script is below.
 
-+-----------------+--------------------------------------------------------------+
-| url             | URL(Displayed link in search result page)                    |
-+-----------------+--------------------------------------------------------------+
-| host            | Host name                                                    |
-+-----------------+--------------------------------------------------------------+
-| site            | Site path                                                    |
-+-----------------+--------------------------------------------------------------+
-| title           | Title                                                        |
-+-----------------+--------------------------------------------------------------+
-| content         | Content                                                      |
-+-----------------+--------------------------------------------------------------+
-| cache           | Content Cache(Not search target)                             |
-+-----------------+--------------------------------------------------------------+
-| digest          | Displayed description in search result page                  |
-+-----------------+--------------------------------------------------------------+
-| anchor          | Links contained in this document(optional)                   |
-+-----------------+--------------------------------------------------------------+
-| content_length  | Content length                                               |
-+-----------------+--------------------------------------------------------------+
-| last_modified   | Last modified for this document                              |
-+-----------------+--------------------------------------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - url
+     - URL(Displayed link in search result page)
+   * - host
+     - Host name
+   * - site
+     - Site path
+   * - title
+     - Title
+   * - content
+     - Content
+   * - cache
+     - Content Cache(Not search target)
+   * - digest
+     - Displayed description in search result page
+   * - anchor
+     - Links contained in this document(optional)
+   * - content_length
+     - Content length
+   * - last_modified
+     - Last modified for this document
 
 Table: Configuaration for Script
 
@@ -248,15 +252,17 @@ Set parameters of crawling config as below.
 The value of parameters is key/value format.
 The description is below.
 
-+---------------------+----------------------------------------------------+
-| directories         | Directories which contains csv file(.csv or .tsv)  |
-+---------------------+----------------------------------------------------+
-| files               | CSV files (if you want to specify them)            |
-+---------------------+----------------------------------------------------+
-| fileEncoding        | Encofing of CSV files                              |
-+---------------------+----------------------------------------------------+
-| separatorCharacter  | Separator character in CSV content                 |
-+---------------------+----------------------------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - directories
+     - Directories which contains csv file(.csv or .tsv)
+   * - files
+     - CSV files (if you want to specify them)
+   * - fileEncoding
+     - Encofing of CSV files
+   * - separatorCharacter
+     - Separator character in CSV content
 
 Table: Parameter example for CSV file
 

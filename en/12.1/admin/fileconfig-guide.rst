@@ -126,13 +126,16 @@ Crawling Local File System
 
 If you want to create File crawling configuration to crawl files under /home/share, parameters for config are:
 
-+----------------------------+-----------------------------+
-| Name                       | Value                       |
-+============================+=============================+
-| Name                       | Share Directory             |
-+----------------------------+-----------------------------+
-| Paths                      | file:/home/share            |
-+----------------------------+-----------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Value
+   * - Name
+     - Share Directory
+   * - Paths
+     - file:/home/share
 
 For other parameters, use a default value.
 
@@ -141,27 +144,33 @@ Crawling Windows Shared Folder
 
 For crawling files in \\SERVER\SharedFolder, File crawling configuration is:
 
-+----------------------------+-----------------------------+
-| Name                       | Value                       |
-+============================+=============================+
-| Name                       | Share Folder                |
-+----------------------------+-----------------------------+
-| Paths                      | smb://SERVER/SharedFolder/  |
-+----------------------------+-----------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Value
+   * - Name
+     - Share Folder
+   * - Paths
+     - smb://SERVER/SharedFolder/
 
 If SharedFolder needs username/password to access it, create File Authentication configuration on Crawler > File Auth of the left menu. The configuration is:
 
-+----------------------------+-----------------------------+
-| Name                       | Value                       |
-+============================+=============================+
-| Hostname                   | SERVER                      |
-+----------------------------+-----------------------------+
-| Protocol                   | SAMBA                       |
-+----------------------------+-----------------------------+
-| Username                   | (Type your setting)         |
-+----------------------------+-----------------------------+
-| Password                   | (Type your setting)         |
-+----------------------------+-----------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Value
+   * - Hostname
+     - SERVER
+   * - Protocol
+     - SAMBA
+   * - Username
+     - (Type your setting)
+   * - Password
+     - (Type your setting)
 
 
 

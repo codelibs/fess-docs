@@ -13,23 +13,25 @@ Available fields
 
 The default searchable fields are below.
 
-+-----------------+------------------------------------------------+
-| Field name      | Description                                    |
-+-----------------+------------------------------------------------+
-| url             | Crawled URL                                    |
-+-----------------+------------------------------------------------+
-| host            | Crawled host name                              |
-+-----------------+------------------------------------------------+
-| title           | Title of document                              |
-+-----------------+------------------------------------------------+
-| content         | Content of document                            |
-+-----------------+------------------------------------------------+
-| content_length  | Document size                                  |
-+-----------------+------------------------------------------------+
-| last_modified   | Last modified time of document                 |
-+-----------------+------------------------------------------------+
-| mimetype        | The MIME type of document                      |
-+-----------------+------------------------------------------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - Field name
+     - Description
+   * - url
+     - Crawled URL
+   * - host
+     - Crawled host name
+   * - title
+     - Title of document
+   * - content
+     - Content of document
+   * - content_length
+     - Document size
+   * - last_modified
+     - Last modified time of document
+   * - mimetype
+     - The MIME type of document
 
 Table: Searchable fields
 
