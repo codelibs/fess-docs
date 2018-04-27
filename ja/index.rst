@@ -149,7 +149,9 @@ FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/f
 掲載メディア
 ============
 
-- `[IT Search+]  [第5回] 全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
+- `[IT Search+] 【第6回】全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3671>`__
+
+- `[IT Search+] 【第5回】全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
 
 - `[IT Search+] 【第4回】Fessを使って自然言語処理 <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
 
