@@ -28,7 +28,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 12.1.1 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 12.1.2 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -149,17 +149,17 @@ FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/f
 掲載メディア
 ============
 
-- `【第6回】日本語の全文検索でのAnalyzer <https://news.mynavi.jp/itsearch/article/devsoft/3671> [IT Search+]`__
+- `【第6回】日本語の全文検索でのAnalyzer <https://news.mynavi.jp/itsearch/article/devsoft/3671>`__
 
-- `【第5回】全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3539> [IT Search+]`__
+- `【第5回】全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
 
-- `【第4回】Fessを使って自然言語処理 <https://news.mynavi.jp/itsearch/article/bizapp/3445> [IT Search+]`__
+- `【第4回】Fessを使って自然言語処理 <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
 
-- `【第3回】設定だけでできるWebスクレイピング <https://news.mynavi.jp/itsearch/article/bizapp/3341> [IT Search+]`__
+- `【第3回】設定だけでできるWebスクレイピング <https://news.mynavi.jp/itsearch/article/bizapp/3341>`__
 
-- `【第2回】Google Site Searchからの簡単移行 <https://news.mynavi.jp/itsearch/article/bizapp/3260> [IT Search+]`__
+- `【第2回】Google Site Searchからの簡単移行 <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
 
-- `【第1回】全文検索サーバFessを導入しよう <https://news.mynavi.jp/itsearch/article/bizapp/3154> [IT Search+]`__
+- `【第1回】全文検索サーバFessを導入しよう <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
 
 .. |image0| image:: ../resources/images/ja/demo-1.png
 .. |image1| image:: ../resources/images/ja/demo-2.png
