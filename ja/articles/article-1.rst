@@ -33,9 +33,9 @@ Fess ではクローラ部分に Fess Crawler を利用して、ウェブやフ�
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Ubuntu 14.04
+-  Ubuntu 16.04
 
--  Java 1.8.0\_74
+-  Java 1.8.0\_162
 
 Fess とは
 =========
@@ -91,13 +91,13 @@ Fess Crawler でクロール実行するためのパラメータ等は Fess の�
 ==================
 
 ここでは、 Fess を起動させ、検索を行うまでの手順を説明します。
-Ubuntu14.04 で実行することを想定して説明を行いますが、Mac OS X や Windows でもほぼ同様の手順でインストールと起動を行うことができます。
+Ubuntu16.04 で実行することを想定して説明を行いますが、Mac OS X や Windows でもほぼ同様の手順でインストールと起動を行うことができます。
 
 ダウンロードとインストール
 --------------------------
 
 https://github.com/codelibs/fess/releases から最新のパッケージをダウンロードします。
-この記事執筆の時点（2016/03）での最新バージョンは、 10.0.2 です。
+この記事執筆の時点（2017/05）での最新バージョンは、 12.1.2 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 Fess のダウンロード
@@ -131,23 +131,24 @@ Fess サーバーを停止させるには Fess のプロセスを停止(kill)し
 ディレクトリ構成
 ::
 
-    fess-10.0.2
+    fess-12.1.2
     |-- LICENSE
     |-- README.md
     |-- app/
     |   |-- META-INF/
     |   |-- WEB-INF/
-    |   |   |-- cachedirs/
-    |   |   |-- classes/
-    |   |   |-- conf/
-    |   |   |-- crawler/
-    |   |   |-- lib/
-    |   |   |-- logs/
-    |   |   |-- orig/
-    |   |   |-- screenshots/
-    |   |   |-- suggest/
-    |   |   |-- view/
+    |   |   |-- cachedirs/
+    |   |   |-- classes/
+    |   |   |-- conf/
+    |   |   |-- env/
+    |   |   |-- lib/
+    |   |   |-- logs/
+    |   |   |-- orig/
+    |   |   |-- site/
+    |   |   |-- thumbnails/
+    |   |   |-- view/
     |   |   |-- fe.tld
+    |   |   |-- project.properties
     |   |   `-- web.xml
     |   |-- css/
     |   |-- images/
@@ -155,11 +156,9 @@ Fess サーバーを停止させるには Fess のプロセスを停止(kill)し
     |   `--favicon.ico
     |-- bin/
     |-- es/
-    |   |-- config/
-    |   |-- data/
-    |   |-- logs/
-    |   |-- plugins/
-    |   `-- work/
+    |   |-- data/
+    |   |-- node_1/
+    |   `-- plugins/
     |-- extension/
     |-- lib/
     |-- logs/
