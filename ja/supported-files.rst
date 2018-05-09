@@ -17,7 +17,6 @@
    * - XML
      - | xml
        | mm
-       | xml
    * - HTML
      - html
    * - MS Office

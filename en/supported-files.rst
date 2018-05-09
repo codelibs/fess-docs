@@ -19,7 +19,6 @@ This is a list of the |Fess| found on the crawl and search file format.
    * - XML
      - | XML
        | mm
-       | XML
    * - HTML
      - HTML
    * - MS Office
