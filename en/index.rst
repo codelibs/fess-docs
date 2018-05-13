@@ -28,7 +28,7 @@ such as MS Office, pdf and zip.
 Download
 ========
 
-- :doc:`Fess 12.1.1 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 12.1.2 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
