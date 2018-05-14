@@ -9,51 +9,38 @@ File formats supported by the
 
 This is a list of the |Fess| found on the crawl and search file format.
 
-+-------------------+-------------+
-| Type              | Extension   |
-+-------------------+-------------+
-| Text              | txt         |
-+-------------------+-------------+
-| XML               | XML         |
-+-------------------+-------------+
-| XML               | mm          |
-+-------------------+-------------+
-| XML               | XML         |
-+-------------------+-------------+
-| HTML              | HTML        |
-+-------------------+-------------+
-| MS Office         | PPT         |
-+-------------------+-------------+
-| MS Office         | doc         |
-+-------------------+-------------+
-| MS Office         | pptx        |
-+-------------------+-------------+
-| MS Office         | xls         |
-+-------------------+-------------+
-| MS Office         | xlsx        |
-+-------------------+-------------+
-| MS Office         | docx        |
-+-------------------+-------------+
-| PDF               | PDF         |
-+-------------------+-------------+
-| Source code       | JS          |
-+-------------------+-------------+
-| Source code       | c           |
-+-------------------+-------------+
-| Source code       | h           |
-+-------------------+-------------+
-| Source code       | Java        |
-+-------------------+-------------+
-| Source code       | HPP         |
-+-------------------+-------------+
-| Source code       | CPP         |
-+-------------------+-------------+
-| Compressed file   | gz          |
-+-------------------+-------------+
-| Compressed file   | tar         |
-+-------------------+-------------+
-| Compressed file   | zip         |
-+-------------------+-------------+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - Type
+     - Extension
+   * - Text
+     - txt
+   * - XML
+     - | XML
+       | mm
+   * - HTML
+     - HTML
+   * - MS Office
+     - | PPT
+       | doc
+       | pptx
+       | xls
+       | xlsx
+       | docx
+   * - PDF
+     - PDF
+   * - Source code
+     - | JS
+       | c
+       | h
+       | Java
+       | HPP
+       | CPP
+   * - Compressed file
+     - | gz
+       | tar
+       | zip
 
 Character string extraction from various kinds of unknown files |Fess| .
 Not listed in the above file also crawl and you can find. If you have

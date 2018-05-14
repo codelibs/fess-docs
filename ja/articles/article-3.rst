@@ -9,7 +9,7 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 API 編
 今回は Fess が提供するAPIを利用して、クライアントサイド（ブラウザ側）で検索とその結果の表示を行う方法をご紹介します。
 APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
 
-本記事では Fess 11.0.3を利用して説明します。
+本記事では Fess 12.1を利用して説明します。
 Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
@@ -24,9 +24,9 @@ Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/ar
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Google Chrome 49
+-  Google Chrome 66
 
--  Firefox 45
+-  Firefox 59
 
 JSON API
 ========

@@ -252,16 +252,18 @@ Create a role
 logged in as admin user and lists the role role in the left menu to
 click. We create three roles.
 
-Role list
-+-------------------------+-----------+
-| Role name               | Value     |
-+-------------------------+-----------+
-| By default              | default   |
-+-------------------------+-----------+
-| Sales Department        | sales     |
-+-------------------------+-----------+
-| Technology Department   | Eng       |
-+-------------------------+-----------+
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table:: Role list
+
+   * - Role name
+     - Value
+   * - By default
+     - default
+   * - Sales Department
+     - sales
+   * - Technology Department
+     - Eng
 
 Add a crawl settings
 --------------------
