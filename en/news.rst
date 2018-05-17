@@ -5,6 +5,9 @@ Open Source Full Text Search Server - |Fess|
 News
 ====
 
+2018-05-17
+    `Fess 12.1.3 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.3>`__
+
 2018-04-23
     `Fess 11.4.11 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.11>`__
 
