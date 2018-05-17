@@ -235,21 +235,20 @@ LDAPの設定例
      - ldap://localhost:389
      - ldap://localhost:389
    * - Base DN
-     - cn=Directory Manager
+     - dc=fess,dc=codelibs,dc=org
      - dc=fess,dc=codelibs,dc=org
    * - Bind DN
-     - | uid=%s,ou=People,dc=fess,
-       | dc=codelibs,dc=org
-     - | \ **manager@fess.codelibs.org** \
+     - cn=Directory Manager
+     - | manager@fess.codelibs.org
        | (Windows2000以降)
    * - User DN
      - | uid=%s,ou=People,dc=fess,
        | dc=codelibs,dc=org
-     - | \ **%s@fess.codelibs.org** \
+     - | %s@fess.codelibs.org
        | (Windows2000以降)
    * - アカウントフィルタ
      - cn=%s や uid=%s
-     - | \ **(&(objectClass=user)** \
+     - | (&(objectClass=user)
        | (sAMAccountName=%s))
    * - memberOf属性
      - isMemberOf
