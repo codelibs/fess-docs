@@ -8,7 +8,6 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 FSS 編
 構築したFessサーバを利用して、Webサイトに検索サービスを組み込む方法を紹介します。
 Fess Site Search(FSS) が提供するタグとJavaScriptファイルを利用することで、既存のwebサイトに検索ボックスや検索結果を表示することができます。
 
-FSS JS は fess11.3 より前のバージョンだと正常に動作しない恐れがあります。 Fess11.3以上のバージョンを利用してください。Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
 ========
@@ -28,6 +27,8 @@ FSS JS とは
 
 FSS JSはFessの検索結果を表示するJavaScriptファイルです。このJavaScriptファイルをWebサイトに配置することで検索結果を表示できるようになります。
 FSS JSは、「https://fss-generator.codelibs.org/」のFSS JS Generatorで生成して入手することができます。
+FSS JSはFess 11.3以上のバージョンに対応していますので、Fess構築時はFess11.3以上のバージョンをインストールして下さい。Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
+
 
 FSS JS Generatorでは検索フォームの配色や文字のフォントを指定できます。
 「Generate」ボタンを押下することで、指定された設定のJavaScriptファイルを生成できます。
