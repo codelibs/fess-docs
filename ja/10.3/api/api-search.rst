@@ -16,7 +16,7 @@
 リクエストパラメータ
 --------------------
 
-``http://<Server Name>/json/?q=検索語&num=50&field.label=fess``
+``http://<Server Name>/json/?q=検索語&num=50&fields.label=fess``
 というようにリクエストパラメータを指定することで、より高度な検索を行うことができます。
 使用できるリクエストパラメータは以下の通りです。
 

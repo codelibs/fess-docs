@@ -16,7 +16,7 @@ JSON応答による検索
 リクエストパラメータ
 --------------------
 
-``http://localhost:8080/json/?q=検索語&num=50&field.label=fess``
+``http://localhost:8080/json/?q=検索語&num=50&fields.label=fess``
 というようにリクエストパラメータを指定することで、より高度な検索を行うことができます。
 使用できるリクエストパラメータは以下の通りです。
 
