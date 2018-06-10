@@ -64,7 +64,7 @@
 
 ::
 
-    return container.getComponent("crawlJob").execute(executor, ["1", "2"] as String[],["1"] as String[],[] as String[],"commit");
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
 
 ロギング
 ::::::::
