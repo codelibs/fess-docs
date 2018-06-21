@@ -12,7 +12,7 @@
 -  (RPMまたはDEB) Elasticsearch: 6.2.X
 
 |Fess| を利用したい環境に Java がインストールされていない場合は、`Oracle のサイト <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ より JDK をインストールしてください。
-本番環境での利用では、組み込みElasticsearchでの稼働は推奨しません。
+本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
 
 ダウンロード
 ============
