@@ -103,7 +103,7 @@ systemd を使う場合(RPM/DEB)は
 Elasticsearchクラスタの利用方法
 ----------------------------
 
-|Fess| では RPM/DEB パッケージでは外部のElasticsearchを標準で利用しますが、ZIPパッケージでのインストールにおいてはElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。その際は、プラグインのインストールが必要です。
+|Fess| では RPM/DEB パッケージでは外部のElasticsearchを標準で利用しますが、ZIPパッケージでのインストールにおいてはElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。その際は、Elasticsearchのプラグインのインストールが必要です。
 Elasticsearchの設定方法についてはRPM/DEBでの設定方法を参照してください。
 
 |Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
