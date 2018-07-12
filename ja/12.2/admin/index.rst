@@ -37,6 +37,7 @@
    elevateword-guide
    badword-guide
    systeminfo-guide
+   searchlog-guide
    joblog-guide
    crawlinginfo-guide
    log-guide
