@@ -27,3 +27,4 @@
 
 
 .. |image0| image:: ../../../resources/images/ja/12.2/admin/searchlog-1.png
+.. |image1| image:: ../../../resources/images/ja/12.2/admin/searchlog-2.png
