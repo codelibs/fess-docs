@@ -22,4 +22,7 @@ Details
 
 To display details for a specific search log, click the row of search log data.
 
+|image1|
+
 .. |image0| image:: ../../../resources/images/en/12.2/admin/searchlog-1.png
+.. |image1| image:: ../../../resources/images/en/12.2/admin/searchlog-2.png
