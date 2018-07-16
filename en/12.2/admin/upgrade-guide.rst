@@ -31,15 +31,5 @@ Target Version
 
 |Fess| version from which you want to upgrade.
 
-Reindex
--------
-
-Create new fess.YYMMDD index and copy documents from old fess index.
-
-Update Aliases
-::::::::::::::
-
-Switch fess.search and fess.update aliases after reindexing if enabled.
-
 .. |image0| image:: ../../../resources/images/en/12.2/admin/upgrade-1.png
 
