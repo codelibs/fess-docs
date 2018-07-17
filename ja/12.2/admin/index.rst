@@ -12,7 +12,6 @@
    design-guide
    dict-guide
    kuromoji-guide
-   seunjeon-guide
    synonym-guide
    mapping-guide
    protwords-guide
