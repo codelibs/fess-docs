@@ -28,7 +28,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 12.1.4 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 12.1.5 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -83,6 +83,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2018-07-27
+    `Fess 12.1.5 <https://github.com/codelibs/fess/releases/tag/fess-12.1.5>`__ リリース
+
 2018-06-21
     `Fess 12.1.4 <https://github.com/codelibs/fess/releases/tag/fess-12.1.4>`__ リリース
 
@@ -98,10 +101,6 @@ Java 実行環境があればどの OS でも実行可能です。
 2018-03-22
     `[連載記事] 簡単導入! OSS全文検索サーバFess入門 第5回 全文検索のトークナイズ処理 <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
 
-2018-03-18
-    `Fess 12.1.1 <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
-    `Fess 12.0.3 <https://github.com/codelibs/fess/releases/tag/fess-12.0.3>`__ \
-    `Fess 11.4.9 <https://github.com/codelibs/fess/releases/tag/fess-11.4.10>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
