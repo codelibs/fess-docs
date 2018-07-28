@@ -84,6 +84,12 @@ DEBパッケージの場合
 
 これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
 
+過去のバージョンのインデックスを利用する場合には以下のプラグインのインストールが必要になります。
+
+::
+
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-synonym:6.3.1
+
 サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合(RPM)は
 
 ::

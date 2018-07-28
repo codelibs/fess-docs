@@ -70,6 +70,12 @@ Install the following plugins to plugins directory in elasticsearch.
 
 Note that these plugins depends on elasticsearch version.
 
+To use an index of previous releases, you need to install the following plugin.
+
+::
+
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:6.3.1
+
 To register them as a service, run the following commands if using chkconfig,
 
 ::
