@@ -15,6 +15,8 @@
    synonym-guide
    mapping-guide
    protwords-guide
+   stopwords-guide
+   stemmeroverride-guide
    accesstoken-guide
    webconfig-guide
    fileconfig-guide
