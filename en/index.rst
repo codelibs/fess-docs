@@ -28,7 +28,7 @@ such as MS Office, pdf and zip.
 Download
 ========
 
-- :doc:`Fess 12.1.5 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 12.2.0 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -61,12 +61,17 @@ Features
 
 -  Provide embedded JavaScript library(migration from Google Site Search)
 
+-  Learning To Rank support
+
 -  OCR support
 
 -  Internationalization/Localization
 
 News
 ====
+
+2018-08-09
+    `Fess 12.2.0 <https://github.com/codelibs/fess/releases/tag/fess-12.2.0>`__ Released
 
 2018-07-27
     `Fess 12.1.5 <https://github.com/codelibs/fess/releases/tag/fess-12.1.5>`__ Released
@@ -79,9 +84,6 @@ News
 
 2018-04-23
     `Fess 11.4.11 <https://github.com/codelibs/fess/releases/tag/fess-11.4.11>`__ Released
-
-2018-04-21
-    `Fess 12.1.2 <https://github.com/codelibs/fess/releases/tag/fess-12.1.2>`__ Released
 
 :doc:`More news <news>`...
 
