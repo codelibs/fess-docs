@@ -17,4 +17,5 @@
 -  `畜産情報ネットワーク検索 <http://www.lin.gr.jp/fess/>`__
 -  `新潟県 <http://www.pref.niigata.lg.jp/>`__
 -  `プラザホームズ株式会社 <http://www.plazahomes.co.jp/>`__
+-  `コカ･コーラ ボトラーズジャパン株式会社 <https://www.ccbji.co.jp/>`__
 
