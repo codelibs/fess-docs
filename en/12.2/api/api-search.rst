@@ -27,6 +27,8 @@ Available parameters are as below.
      - Start position. It is started from 0.
    * - num
      - The number of returned documents as a search result. The default is 20.
+   * - sort
+     - Sorting documents.
    * - fields.label
      - Label value for filtering a search result.
    * - callback
