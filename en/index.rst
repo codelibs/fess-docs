@@ -70,6 +70,9 @@ Features
 News
 ====
 
+2018-09-01
+    `Fess 12.2.1 <https://github.com/codelibs/fess/releases/tag/fess-12.2.1>`__ Released
+
 2018-08-09
     `Fess 12.2.0 <https://github.com/codelibs/fess/releases/tag/fess-12.2.0>`__ Released
 
