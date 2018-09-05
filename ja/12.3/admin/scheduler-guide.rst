@@ -93,5 +93,11 @@
 一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。
 削除ボタンを押すと設定が削除されます。
 
+手動クロール方法
+================
+
+「スケジューラ」の「Default Crawler」をクリックし、「今すぐ開始」ボタンをクリックします。
+クローラを停止させる場合は「Default Crawler」をクリックし、「停止」ボタンをクリックしてください。
+
 .. |image0| image:: ../../../resources/images/ja/12.3/admin/scheduler-1.png
 .. |image1| image:: ../../../resources/images/ja/12.3/admin/scheduler-2.png

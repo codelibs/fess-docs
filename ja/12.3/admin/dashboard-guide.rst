@@ -50,7 +50,7 @@
 |image1|
 
 各インデックスの右上のアイコンをクリックすると、インデックスに対する操作メニューが表示されます。
-インデックスを削除するとデータが削除されるので注意してください。
+インデックスされたドキュメントを削除する場合は管理用の検索画面で削除します。「delete index」で削除しないように注意してください。
 
 .. |image0| image:: ../../../resources/images/ja/12.3/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/ja/12.3/admin/dashboard-2.png
