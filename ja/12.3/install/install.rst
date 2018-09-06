@@ -107,15 +107,6 @@ Elasticsearchクラスタの利用方法
 Elasticsearchの設定方法についてはRPM/DEBでの設定方法を参照してください。
 
 |Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
-Windows環境では fess-<version>\\bin\\fess.in.batを変更します。
-fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
-
-::
-
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
-
 ElasticsearchのRPM/DEBパッケージでは fess-<version>/bin/fess.in.shを変更します。
 
 ::
@@ -124,8 +115,55 @@ ElasticsearchのRPM/DEBパッケージでは fess-<version>/bin/fess.in.shを変
     ES_TRANSPORT_URL=localhost:9300
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
+elasticsearchと接続する際のポート番号を指定するために、fess_config.propertiesを変更します。
+
+::
+
+    elasticsearch.http.url=http://localhost:9200
+
 また、Elasticsearchのクラスタ名を変更した場合はfess_config.propertiesを変更します。
 
 ::
 
     elasticsearch.cluster.name=elasticsearch
+
+Windows環境でElasticsearchクラスタを利用する場合
+------------------------------------------------
+
+elasticsearchのzip版をインストールし、展開します。
+
+コマンドプロンプトからelasticsearchのプラグインをインストールします。
+
+::
+
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:6.4.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:6.4.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:6.4.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:6.4.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-langfield:6.4.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:6.4.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-learning-to-rank:6.4.0
+
+これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
+
+|Fess| にアクセスするために、 <elasticsearch-<version>\\config\\elasticsearch.ymlに下記の設定を加えます。
+
+::
+
+    configsync.config_path: c:/<elasticsearch-<version>/config/
+
+|Fess| でElasticsearchクラスタへ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
+fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
+
+::
+
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
+    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
+
+elasticsearchと接続する際のポート番号を指定するために、fess-<version>\app\WEB-INF\classes\fess_config.propertiesを変更します。
+
+::
+
+    elasticsearch.http.url=http://localhost:9200
+
