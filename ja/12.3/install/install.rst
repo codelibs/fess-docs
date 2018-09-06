@@ -152,7 +152,9 @@ elasticsearchのzip版をインストールし、展開します。
 
     configsync.config_path: c:/<elasticsearch-<version>/config/
 
-|Fess| でElasticsearchクラスタへ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
+ダウンロードした fess-<version>.zip を展開します。
+
+|Fess| でElasticsearchへ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
 fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
 
 ::
@@ -166,4 +168,3 @@ elasticsearchと接続する際のポート番号を指定するために、fess
 ::
 
     elasticsearch.http.url=http://localhost:9200
-
