@@ -28,7 +28,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 12.3.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 12.3.1 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
