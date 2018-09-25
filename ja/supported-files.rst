@@ -7,41 +7,30 @@
 
 |Fess| がクロールおよび検索について確認しているファイル形式の一覧です。
 
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
+- テキスト (txt)
 
-   * - 種類
-     - 拡張子
-   * - テキスト
-     - txt
-   * - XML
-     - | xml
-       | mm
-   * - HTML
-     - html
-   * - MS Office
-     - | ppt
-       | doc
-       | pptx
-       | xls
-       | xlsx
-       | docx
-   * - PDF
-     - pdf
-   * - ソースコード
-     - | js
-       | c
-       | h
-       | java
-       | hpp
-       | cpp
-   * - 圧縮ファイル
-     - | gz
-       | tar
-       | zip
+- XML (xml, xhtml, mm等)
 
-|Fess| 
-では未知の様々な種類のファイルからも文字列抽出を行います。上記に記載されていないファイルもクロールおよび検索できます。確認したいファイルがありましたら、\ `検索システム用テストデータリポジトリ <https://github.com/codelibs/fess-testdata>`__\ にプルリクエストをしてください。
+- HTML (html, htm)
+
+- MS Office (doc, xls, ppt, docx, xlsx, pptx等)
+
+- PDF (pdf等)
+
+- ソースコード (js, c, h, java等)
+
+- 圧縮ファイル (gz, tar, zip等)
+
+- リッチテキスト (rtf)
+
+- ePub
+
+- 音声/画像/動画 (メタデータの抽出)
+
+- mbox
+
+
+|Fess| では未知の様々な種類のファイルからも文字列抽出を行います。上記に記載されていないファイルもクロールおよび検索できます。確認したいファイルがありましたら、\ `検索システム用テストデータリポジトリ <https://github.com/codelibs/fess-testdata>`__\ にプルリクエストをしてください。
 
 その他
 ======
