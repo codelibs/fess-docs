@@ -42,6 +42,17 @@ https://search.n2sm.co.jp/ のURLは構築した |Fess| サーバのURLに変更
           fn : '_default,content,title',
           num : 10
         },
+        boxCssInfo: {
+          border: "1px solid rgba(82, 168, 236, 0.5)",
+          "-webkit-box-shadow":
+            "0 1px 1px 0px rgba(0, 0, 0, 0.1), 0 3px 2px 0px rgba(82, 168, 236, 0.2)",
+          "-moz-box-shadow":
+            "0 1px 1px 0px rgba(0, 0, 0, 0.1), 0 3px 2px 0px rgba(82, 168, 236, 0.2)",
+          "box-shadow":
+            "0 1px 1px 0px rgba(0, 0, 0, 0.1), 0 3px 2px 0px rgba(82, 168, 236, 0.2)",
+          "background-color": "#fff",
+          "z-index": "10000"
+        },
         minterm: 2,
         adjustWidthVal : 11,
         searchForm : $('#searchForm')
@@ -51,4 +62,4 @@ https://search.n2sm.co.jp/ のURLは構築した |Fess| サーバのURLに変更
 
 既にサイトでjQueryを利用している場合はjQueryのscript要素は追加する必要はありません。
 
-
+"z-index"で指定する値は、他の要素と重ならない値を指定してください。
