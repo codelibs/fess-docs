@@ -48,3 +48,4 @@ protwords.txtは各言語用に配置して、ステミングの対象外など�
 
 
 .. |image0| image:: ../../../resources/images/ja/12.3/admin/dict-1.png
+            :height: 940px

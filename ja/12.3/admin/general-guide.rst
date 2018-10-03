@@ -224,7 +224,6 @@ Active Directoryの場合、memberOfです。
 LDAPの設定例
 ------------
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: LDAP/Active Directory の設定
    :header-rows: 1
 
