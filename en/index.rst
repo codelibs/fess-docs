@@ -99,13 +99,12 @@ News
 Fess Site Search
 ================
 
-Fess Site Search is Google Site Search alternative.
-Please see `FSS JS Generator <https://fss-generator.codelibs.org/docs/manual>`__.
+`Fess Site Search <https://fss-generator.codelibs.org/docs/manual>`__ is Google Site Search alternative.
 
 X-Pack Support
 ==============
 
-Please see `fess-xpack <https://github.com/codelibs/fess-xpack>`__.
+`Fess X-Pack <https://github.com/codelibs/fess-xpack>`__ provides a feature to support X-Pack.
 
 Support Service
 ===============
