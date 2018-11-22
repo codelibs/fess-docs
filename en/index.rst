@@ -28,7 +28,7 @@ such as MS Office, pdf and zip.
 Download
 ========
 
-- :doc:`Fess 12.3.2 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 12.4.0 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -70,6 +70,9 @@ Features
 News
 ====
 
+2018-11-22
+    `Fess 12.4.0 <https://github.com/codelibs/fess/releases/tag/fess-12.4.0>`__ Released
+
 2018-11-14
     `Fess 12.3.3 <https://github.com/codelibs/fess/releases/tag/fess-12.3.3>`__ Released
 
@@ -90,9 +93,6 @@ News
 
 2018-09-01
     `Fess 12.2.1 <https://github.com/codelibs/fess/releases/tag/fess-12.2.1>`__ Released
-
-2018-08-09
-    `Fess 12.2.0 <https://github.com/codelibs/fess/releases/tag/fess-12.2.0>`__ Released
 
 :doc:`More news <news>`...
 
