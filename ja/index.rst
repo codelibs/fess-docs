@@ -28,7 +28,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 12.4.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 12.4.1 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -85,6 +85,12 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2018-12-16
+    `Fess 12.4.1 <https://github.com/codelibs/fess/releases/tag/fess-12.4.1>`__ リリース
+
+2018-12-16
+    `Fess 12.3.4 <https://github.com/codelibs/fess/releases/tag/fess-12.3.4>`__ リリース
+
 2018-11-22
     `Fess 12.4.0 <https://github.com/codelibs/fess/releases/tag/fess-12.4.0>`__ リリース
 
@@ -105,9 +111,6 @@ Java 実行環境があればどの OS でも実行可能です。
 
 2018-09-04
     `Fess 12.3 <https://github.com/codelibs/fess/releases/tag/fess-12.3.0>`__ リリース
-
-2018-09-01
-    `Fess 12.2.1 <https://github.com/codelibs/fess/releases/tag/fess-12.2.1>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
