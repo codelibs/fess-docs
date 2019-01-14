@@ -1,10 +1,12 @@
   <div class="rst-versions">
     <span class="rst-current-version">
-      {%- if language == 'ja' %}
       <span style="float:left;">
-         <a class="fa fa-info-circle" href="https://www.n2sm.net/recruit/product.html" target="_blank">開発者募集</a>
+        {%- if language == 'ja' %}
+        <a class="fa fa-building" href="https://www.n2sm.net/products/n2search.html" target="_blank">商用サポート</a>
+        {% else %}
+        <a class="fa fa-building" href="https://www.n2sm.net/en/support/fess_support.html" target="_blank">Support</a>
+        {% endif %}
       </span>
-      {% endif %}
       <span>
         {% if pagename != "search" %}
             {% if display_github %}
