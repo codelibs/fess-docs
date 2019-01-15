@@ -85,21 +85,6 @@ News
 2018-11-14
     `Fess 12.3.3 <https://github.com/codelibs/fess/releases/tag/fess-12.3.3>`__ Released
 
-2018-11-01
-    `Fess 12.2.3 <https://github.com/codelibs/fess/releases/tag/fess-12.2.3>`__ Released
-
-2018-10-09
-    `Fess 12.3.2 <https://github.com/codelibs/fess/releases/tag/fess-12.3.2>`__ Released
-
-2018-09-24
-    `Fess 12.3.1 <https://github.com/codelibs/fess/releases/tag/fess-12.3.1>`__ Released
-
-2018-09-23
-    `Fess 12.2.2 <https://github.com/codelibs/fess/releases/tag/fess-12.2.2>`__ Released
-
-2018-09-04
-    `Fess 12.3.0 <https://github.com/codelibs/fess/releases/tag/fess-12.3.0>`__ Released
-
 :doc:`More news <news>`...
 
 Fess Site Search
