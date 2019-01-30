@@ -137,6 +137,10 @@ FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/f
 掲載メディア
 ============
 
+- `【第9回】FessでActive Directory連携 <https://news.mynavi.jp/itsearch/article/bizapp/4283>`__
+
+- `【第8回】ロールベース検索 <https://news.mynavi.jp/itsearch/article/hardware/4201>`__
+
 - `【第7回】認証のあるサイトのクロール <https://news.mynavi.jp/itsearch/article/hardware/4158>`__
 
 - `【第6回】日本語の全文検索でのAnalyzer <https://news.mynavi.jp/itsearch/article/devsoft/3671>`__
