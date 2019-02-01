@@ -124,7 +124,7 @@ Fess Site Search
 
 CodeLibsプロジェクトでは `Fess Site Search(FSS) <https://fss-generator.codelibs.org/ja/>`__ を提供しています。
 既存のサイトにJavaScriptを配置するだけで、Fessの検索ページを組み込むことができます。
-FSSを利用することで、Google Site Search(GSS)やGoogle Custom Searchからの移行も簡単にできます。
+FSSを利用することで、Google Site SearchやYahoo!検索カスタムサーチからの移行も簡単にできます。
 安価なFessサーバが必要な場合は、 `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ をご覧ください。
 
 X-Pack対応
