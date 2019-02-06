@@ -35,6 +35,7 @@ extensions = [
     'rst2pdf.pdfbuilder',
     'sphinxjp.themes.basicstrap',
     'ext',
+    'ogtag',
 ]
 
 [extensions]
@@ -419,3 +420,5 @@ html_context = {
     "github_version": "master",
 }
 
+og_site_url = 'https://fess.codelibs.org/'
+og_twitter_site = ''
