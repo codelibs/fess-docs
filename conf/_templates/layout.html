@@ -29,6 +29,22 @@
   {% block htmltitle %}
   <title>{{ title|striptags|e }}</title>
   {% endblock %}
+  <meta name="description" content="">
+  <meta property="og:title" content="{{ title|striptags|e }}">
+  <meta property="og:description" content="">
+  {%- if language == 'ja' %}
+  <meta property="og:url" content="https://fess.codelibs.org/ja/{{ conf_py_path }}{{ pagename }}.html">
+  {% else %}
+  <meta property="og:url" content="https://fess.codelibs.org/{{ conf_py_path }}{{ pagename }}.html">
+  {% endif %}
+  {% if pagename == master_doc %}
+  <meta property="og:type" content="website">
+  {% else %}
+  <meta property="og:type" content="article">
+  {% endif %}
+  <meta property="og:image" content="">
+  <meta name="twitter:site" content="">
+  <meta name="twitter:card" content="summary">
 
   {# FAVICON #}
   {% if favicon %}
