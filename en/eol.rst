@@ -16,6 +16,8 @@ We support each major release of our products for 18 months from the General Ava
 
    * - Fess
      - EOL Date
+   * - 12.5.x
+     - 2020-08-10
    * - 12.4.x
      - 2020-05-22
    * - 12.3.x
