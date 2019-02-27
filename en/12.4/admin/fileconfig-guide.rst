@@ -97,11 +97,6 @@ Virtual Hosts
 Virtual Host keys for this configuration.
 e.g. fess (if setting Host:fess.codelibs.org=fess in General)
 
-Labels
-::::::
-
-Labels for this configuration.
-
 Status
 ::::::
 
