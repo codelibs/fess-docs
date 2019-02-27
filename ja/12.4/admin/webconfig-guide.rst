@@ -107,11 +107,6 @@ URLをクロールする際のそれぞれのスレッドにおける時間間�
 仮想ホストのホスト名を指定します。
 詳しくは :doc:`../config/virtual-host` を参照してください。
 
-ラベル
-::::::
-
-この設定のラベルを指定します。
-
 状態
 ::::
 
@@ -192,7 +187,7 @@ Redmine
      - (Password for the account)
    * - パラメータ
      - | encoding=UTF-8
-       | token_method=GET 
+       | token_method=GET
        | token_url=https://<server>/login
        | token_pattern=name="authenticity_token" +value="([^"]+)"
        | token_name=authenticity_token
@@ -253,4 +248,3 @@ XWiki(例. https://<server>/xwiki/)のページをクロールするウェブク
 .. |image0| image:: ../../../resources/images/ja/12.4/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/12.4/admin/webconfig-2.png
 .. pdf            :height: 940 px
-

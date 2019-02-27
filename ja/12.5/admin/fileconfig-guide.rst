@@ -96,11 +96,6 @@
 仮想ホストのホスト名を指定します。
 詳しくは :doc:`設定ガイドの仮想ホスト <../config/virtual-host>` を参照してください。
 
-ラベル
-::::::
-
-この設定のラベルを指定します。
-
 状態
 ::::
 
@@ -177,4 +172,3 @@ Windowsの共有フォルダをクロール
 .. |image0| image:: ../../../resources/images/ja/12.5/admin/fileconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/12.5/admin/fileconfig-2.png
 .. pdf            :height: 940 px
-
