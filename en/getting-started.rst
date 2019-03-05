@@ -2,33 +2,30 @@
 Getting Started
 =========================
 
-About |Fess| UI
-=============
+User Interfaces
+=================
 
-|Fess| provides the following UI:
+|Fess| provides 2 user interfaces:
 
--  Search Form/Results UI for Browser
+-  Search form and results
+-  Administration (used to configure and manage |Fess|)
 
--  Administration UI on Browser
+Both interfaces are accessible via a web browser.
 
-Search Form/Results UI for Browser
-==================================
+Search form and results
+==========================
 
-This UI allows an user to search target documents of |Fess| on a browser.
+This is the primary UI which allows end users to run search queries and view results. Users will type in their query and click *Search* to view the results.
 
-A search form and button are displayed to access to
-http://localhost:8080/. To input a search word into the search form
-and click the search button, you can get the search results on the
-following page.
+URL: http://localhost:8080/
 
 |Display the search result on a browser|
 
-Administration UI on Browser
-============================
+Administration
+==========================
 
-This is an adiministrative UI to manage |Fess| server. 
+This UI is only used by administrators to configure and manage |Fess|. Administrators will be prompted to login before they can access the rest of the Administration interface.
 
-If you access to http://localhost:8080/admin, a login page is
-displayed. You can manage |Fess| server after logging in as admin user.
+URL: http://localhost:8080/admin/
 
 .. |Display the search result on a browser| image:: ../resources/images/en/fess_search_result.png
