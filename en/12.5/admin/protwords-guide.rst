@@ -6,7 +6,7 @@ Overview
 ========
 
 Protwords page manages dictionary of protwords.
-Protwords are words which you do not want to be stemmed.
+Protwords are words which you do not want to be [stemmed](https://www.elastic.co/guide/en/elasticsearch/guide/master/stemming.html).
 
 Management Operations
 =====================
