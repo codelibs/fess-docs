@@ -21,3 +21,5 @@ Contents:
    search-additional
    json-response
    ss
+   advanced-search
+   

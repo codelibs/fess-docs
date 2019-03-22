@@ -19,3 +19,4 @@
    search-additional
    role-search
    special-char
+   advanced-search
