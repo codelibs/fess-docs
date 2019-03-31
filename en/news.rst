@@ -2,6 +2,9 @@
 News
 ====
 
+2019-03-31
+    `Fess 12.5.2 Released <https://github.com/codelibs/fess/releases/tag/fess-12.5.2>`__
+
 2019-02-28
     `Fess 12.5.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.5.1>`__
 
