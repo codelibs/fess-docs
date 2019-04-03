@@ -156,6 +156,11 @@ Bots Name For Purge
 
 Bots names to remove search logs.
 
+Log Level
+:::::::::
+
+Log Level in fess.log.
+
 Suggest
 --------
 
