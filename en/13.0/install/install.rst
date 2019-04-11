@@ -8,8 +8,8 @@ Requirements
 |Fess| can be available in these environments.
 
 -  OS: Windows/Unix with Java environment
--  Java: Java 8 update 131 or later
--  (RPM or DEB) Elasticsearch: 6.6.X
+-  Java: Java 11
+-  (RPM or DEB) Elasticsearch: 7.0.X
 
 If Java is not installed in your environment, see we want to |Fess| from `Oracle site <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ to install JDK.
 Embedded Elasticsearch is not recommended for production use.
@@ -60,13 +60,11 @@ Install the following plugins to plugins directory in elasticsearch.
 
 ::
 
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:6.5.1
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:6.5.1
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-langfield:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-learning-to-rank:6.5.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.0.0
 
 Note that these plugins depends on elasticsearch version.
 
@@ -105,7 +103,6 @@ fess.dictionary.path needs to be set to a path of configsync.config_path in elas
 ::
 
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
 
 For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
@@ -113,7 +110,6 @@ For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
 ::
 
     ES_HTTP_URL=http://localhost:9200
-    ES_TRANSPORT_URL=localhost:9300
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
 If you change a cluster name of Elasticsearch, modify the following setting in fess_config.properties.

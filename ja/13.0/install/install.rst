@@ -8,8 +8,8 @@
 |Fess| は以下の環境で利用することができます。
 
 -  OS: Windows や Unix など Java が実行できる OS 環境
--  Java: Java 8u131 以上のバージョン
--  (RPMまたはDEB) Elasticsearch: 6.6.X
+-  Java: Java 11
+-  (RPMまたはDEB) Elasticsearch: 7.0.X
 
 |Fess| を利用したい環境に Java がインストールされていない場合は、`Oracle のサイト <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ より JDK をインストールしてください。
 本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
@@ -74,13 +74,11 @@ DEBパッケージの場合
 
 ::
 
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:6.5.1
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:6.5.1
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-langfield:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:6.5.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-learning-to-rank:6.5.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.0.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.0.0
 
 これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
 
@@ -112,7 +110,6 @@ ElasticsearchのRPM/DEBパッケージでは fess-<version>/bin/fess.in.shを変
 ::
 
     ES_HTTP_URL=http://localhost:9200
-    ES_TRANSPORT_URL=localhost:9300
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
 elasticsearchと接続する際のポート番号を指定するために、fess_config.propertiesを変更します。
@@ -136,13 +133,11 @@ elasticsearchのzip版をインストールし、展開します。
 
 ::
 
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:6.5.1
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:6.5.1
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:6.5.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:6.5.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-langfield:6.5.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:6.5.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-learning-to-rank:6.5.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.0.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.0.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.0.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.0.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.0.0
 
 これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
 
@@ -160,7 +155,6 @@ fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_path
 ::
 
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.transport_addresses=localhost:9300
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
 
 elasticsearchと接続する際のポート番号を指定するために、fess-<version>\app\WEB-INF\classes\fess_config.propertiesを変更します。
