@@ -188,7 +188,7 @@ and then create the authentication setting on Web Auth page:
      - | encoding=UTF-8
        | token_method=GET
        | token_url=https://<server>/login
-       | token_pattern=name="authenticity_token" +value="([^"]+)"
+       | token_pattern=name="authenticity_token"[^>]+value="([^"]+)"
        | token_name=authenticity_token
        | login_method=POST
        | login_url=https://<server>/login
