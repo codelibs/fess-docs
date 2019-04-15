@@ -315,10 +315,10 @@
     `Fess 3.1.2 リリース <http://sourceforge.jp/forum/forum.php?forum_id=23534>`__
 
 2010-07-08
-    `iPhone アプリ向け |Fess| クライアント 1.0.0 <itms://itunes.apple.com/us/app/fess/id379788332?mt=8>`__\ リリース
+    `iPhone アプリ向け Fess クライアント 1.0.0 <itms://itunes.apple.com/us/app/fess/id379788332?mt=8>`__\ リリース
 
 2010-06-13
-    `『Java Cloud Meeting Tokyo 2010 x Seasar Conference 2010』 <http://event.seasarfoundation.org/jcmt2010/2010/05/26/fess/>`__\ で |Fess| を紹介します。
+    `『Java Cloud Meeting Tokyo 2010 x Seasar Conference 2010』 <http://event.seasarfoundation.org/jcmt2010/2010/05/26/fess/>`__\ で Fess を紹介します。
 
 2010-06-09
     `Fess 3.1.1 リリース <http://sourceforge.jp/forum/forum.php?forum_id=23266>`__
@@ -327,10 +327,10 @@
     `Fess 3.1.0 リリース <http://sourceforge.jp/forum/forum.php?forum_id=23147>`__
 
 2010-03-18
-    `『N2 Search( |Fess| )』ご紹介無料セミナ <https://www.n2sm.net/products/n2search-seminar.html>`__\ で |Fess| を紹介します。
+    `『N2 Search(Fess)』ご紹介無料セミナ <https://www.n2sm.net/products/n2search-seminar.html>`__\ で Fess を紹介します。
 
 2010-03-11
-    `第2回Solr勉強会 <http://atnd.org/events/3142>`__\ で |Fess| を紹介します。
+    `第2回Solr勉強会 <http://atnd.org/events/3142>`__\ で Fess を紹介します。
 
 2010-01-16
     `Fess 2.0.0 リリース <http://sourceforge.jp/forum/forum.php?forum_id=21723>`__
@@ -351,7 +351,7 @@
     `Fess 1.1.0 リリース <http://sourceforge.jp/forum/forum.php?forum_id=20548>`__
 
 2009-09-10
-    `Seasar Conference 2009 Autumn で |Fess| の紹介 <http://sourceforge.jp/forum/forum.php?forum_id=20202>`__
+    `Seasar Conference 2009 Autumn で Fess の紹介 <http://sourceforge.jp/forum/forum.php?forum_id=20202>`__
 
 2009-09-10
     `Fess 1.0.0 リリース <http://sourceforge.jp/forum/forum.php?forum_id=20201>`__
