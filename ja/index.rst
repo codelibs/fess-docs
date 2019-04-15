@@ -143,6 +143,8 @@ FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/f
 掲載メディア
 ============
 
+- `【第12回】仮想ホスト機能の使い方 <https://news.mynavi.jp/itsearch/article/devsoft/4394>`__
+
 - `【第11回】Fessでシングルサインオン <https://news.mynavi.jp/itsearch/article/devsoft/4357>`__
 
 - `【第10回】Windows環境での構築方法 <https://news.mynavi.jp/itsearch/article/bizapp/4320>`__
