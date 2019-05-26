@@ -15,5 +15,6 @@
    analyzer
    geosearch
    thumbnail
-   kibana
+   scroll-search
+..   kibana
 
