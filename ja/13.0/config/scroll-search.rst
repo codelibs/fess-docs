@@ -24,7 +24,7 @@ fess_config.properites で以下の設定をtrueに設定することで、ス�
 スクロール検索の利用
 ----------
 
-スクロール検索へのアクセスは、`http://localhost:8080/json/scroll?q=Search_Word`__ にアクセスすることで、検索結果をNDJSON形式で返却されます。
+スクロール検索へのアクセスは、http://localhost:8080/json/scroll?q=Search_Word にアクセスすることで、検索結果をNDJSON形式で返却されます。
 
 1つのドキュメントのレスポンスに返却されるフィールドを追加したい場合は、fess_config.propertiesで以下の設定にカンマ区切りでフィールド名を指定します。
 
