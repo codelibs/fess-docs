@@ -18,7 +18,12 @@ Operations
 Backup
 ------
 
-Download configuration backup files(.fess_basic_config and .fess_user) on Backup page before executing a migration process.
+Download the configuration backup files below on Backup page before executing a migration process.
+
+- .fess_basic_config.bulk
+- .fess_basic_config
+- .fess_user.bulk
+- system.properties
 
 Migration
 ---------
