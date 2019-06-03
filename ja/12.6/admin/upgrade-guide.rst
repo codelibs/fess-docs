@@ -17,9 +17,12 @@
 アップグレードの前に以下のバックアップファイルをダウンロードします。
 
 - .fess_basic_config.bulk
-- .fess_basic_config
 - .fess_user.bulk
 - system.properties
+
+以下のファイルも取得します。
+
+- app/WEB-INF/classes/fess_config.properties
 
 データ移行
 --------
