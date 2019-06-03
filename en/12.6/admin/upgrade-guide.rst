@@ -21,9 +21,12 @@ Backup
 Download the configuration backup files below on Backup page before executing a migration process.
 
 - .fess_basic_config.bulk
-- .fess_basic_config
 - .fess_user.bulk
 - system.properties
+
+Get the following file.
+
+- app/WEB-INF/classes/fess_config.properties
 
 Migration
 ---------
