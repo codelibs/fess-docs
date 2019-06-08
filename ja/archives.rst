@@ -17,6 +17,21 @@
    XRef <https://fess.codelibs.org/13.0/xref/index.html>
    I/F Doc <https://fess.codelibs.org/13.0/lastadoc-fess.html>
 
+12.7
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   12.7/install/index
+   12.7/user/index
+   12.7/api/index
+   12.7/admin/index
+   12.7/config/index
+   JavaDocs <https://fess.codelibs.org/12.7/apidocs/index.html>
+   XRef <https://fess.codelibs.org/12.7/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/12.7/lastadoc-fess.html>
+
 12.6
 ~~~~~
 
