@@ -37,6 +37,14 @@ fess-crawler.log
 
 Crawler log file.
 
+fess-thumbnail.log
+::::::::::::::::
 
+Thumbnail log file.
+
+fess-suggest.log
+::::::::::::::::
+
+Suggest log file.
 
 .. |image0| image:: ../../../resources/images/en/13.0/admin/log-1.png
