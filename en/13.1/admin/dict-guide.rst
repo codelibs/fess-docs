@@ -8,10 +8,11 @@ Overview
 Dictionary page contains the following dictionary management:
 
 - Kuromoji (Japanese language morphological analysis) dictionary
-- Seunjeon (Korean language morphological analysis) dictionary
 - Synonym dictionary
 - Character mapping dictionary
 - Protwords dictionary
+- Stopwords dictionary
+- Stemmeroverride dictionary
 
 Management Operations
 =============

@@ -42,4 +42,14 @@ audit.log
 
 ログイン情報や管理画面のアクセスログが記録されます。
 
+fess-thumbnail.log
+::::::::
+
+サムネイル機能のログが記録されます。
+
+fess-suggest.log
+::::::::
+
+サジェスト機能のログが記録されます。
+
 .. |image0| image:: ../../../resources/images/ja/13.1/admin/log-1.png
