@@ -7,7 +7,7 @@
 
 動作確認済の安定版リリースです。
 
-* `Fess 13.1.0 <https://github.com/codelibs/fess/releases/tag/fess-13.1.0>`_ (`Elasticsearch 7.1.0 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-1-0>`_)
+* `Fess 13.1.1 <https://github.com/codelibs/fess/releases/tag/fess-13.1.1>`_ (`Elasticsearch 7.1.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-1-1>`_)
 * `Fess 13.0.1 <https://github.com/codelibs/fess/releases/tag/fess-13.0.1>`_ (`Elasticsearch 7.0.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-0-1>`_)
 * `Fess 12.7.0 <https://github.com/codelibs/fess/releases/tag/fess-12.7.0>`_ (`Elasticsearch 6.8.0 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-8-0>`_)
 * `Fess 12.6.2 <https://github.com/codelibs/fess/releases/tag/fess-12.6.2>`_ (`Elasticsearch 6.7.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-7-2>`_)
