@@ -8,6 +8,9 @@
 2019-07-04
     `Fess 13.2.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.2.0>`__
 
+2019-07-04
+    `Fess 13.0.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.0.2>`__
+
 2019-06-22
     `Fess 13.1.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.1.1>`__
 
