@@ -10,9 +10,9 @@ This page describes development steps for |Fess|.
 Requirements
 ============
 
-|Fess| runs on Java 8 or more. To develop |Fess|, The following knowledge is required:
+|Fess| runs on Java 11 or more. To develop |Fess|, The following knowledge is required:
 
--  Java
+-  Java 11
 
 -  `LastaFlute <https://github.com/lastaflute>`__
 
@@ -23,7 +23,7 @@ Requirements
 How To Develop |Fess|
 =====================
 
-1. Install Java 8, IDE(ex. eclipse), and Maven 3.x
+1. Install Java 11, IDE(ex. eclipse), and Maven 3.x
 
 2. Clone the source code of |Fess| from github:
 

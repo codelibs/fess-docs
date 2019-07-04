@@ -9,9 +9,9 @@ Requirements
 
 -  OS: Windows/Unix with Java environment
 -  Java: Java 11
--  (RPM or DEB) Elasticsearch: 7.1.X
+-  (RPM or DEB) Elasticsearch: 7.2.X
 
-If Java is not installed in your environment, see we want to |Fess| from `Oracle site <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ to install JDK.
+If Java is not installed in your environment, see we want to |Fess| from `AdoptOpenJDK site <https://adoptopenjdk.net/>`__ to install JDK.
 Embedded Elasticsearch is not recommended for production use.
 
 Download
@@ -60,11 +60,11 @@ Install the following plugins to plugins directory in elasticsearch.
 
 ::
 
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.1.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.1.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.1.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.1.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.1.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.2.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.2.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.2.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.2.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.2.0
 
 Note that these plugins depends on elasticsearch version.
 
