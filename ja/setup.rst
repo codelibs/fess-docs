@@ -10,7 +10,7 @@
 
 -  Windows や Unix など Java が実行できる OS 環境
 
--  Java: Java 8 以上
+-  Java: Java 11
 
 Javaのインストール
 ==================
@@ -23,7 +23,7 @@ Java SE のダウンロードページへアクセス
 JavaScriptが有効な状態でOracle社の「`Java SE
 Downloads <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_」ページにアクセスします。
 
-JavaSE 8 の「Download JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
+JavaSE 11 の「Download JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
 
 |image0|
 
@@ -45,7 +45,7 @@ Windwos 64ビットの場合は「Windows x64」、Windows 32ビットの場合�
 JDKインストーラーの実行
 -----------------------
 
-ダウンロードしたJDKインストーラー (jdk-8uXX-windows-x64.exe)
+ダウンロードしたJDKインストーラー (jdk-11.X.X-windows-x64_bin.exe)
 を実行します(XXはダウンロードしたアップデートリリースのバージョン)。以下はWindows
 64ビット版の例です。
 
@@ -68,23 +68,13 @@ JDKのインストールが開始されるので、しばらく待ちます。
 
 |image6|
 
-JREのインストール
------------------
-
-JDKのインストール後、使用のパソコンにJREがインストールされていなければ、JREのインストールが実行されます。JDK同様にインストール先のフォルダの変更が可能ですが、基本的にはJDKと同じフォルダで問題ありません。[次へ]ボタンを押します。
-
-|image7|
-
-JREのインストールが開始されるので、しばらく待ちます。
-
-|image8|
 
 インストール完了
 ----------------
 
 インストール完了のメッセージが表示されます。 [閉じる]ボタンを押します。
 
-|image9|
+|image7|
 
 インストール完了です。
 
@@ -93,9 +83,9 @@ JREのインストールが開始されるので、しばらく待ちます。
 
 1. [コントロールパネル]→[プログラム]→[プログラムと機能]の一覧に表示されます。
 
-   -  Java SE Development Kit 8 Update XX (64-bit)
+   -  Java SE Development Kit 11 Update XX (64-bit)
 
-   -  Java(TM) 8 Update XX (64-bit)
+   -  Java(TM) 11 Update XX (64-bit)
 
 環境変数の設定
 --------------
@@ -105,49 +95,53 @@ JREのインストールが開始されるので、しばらく待ちます。
 Windows 7
 では以下のように設定します。[コントロールパネル]→[システムとセキュリティ]→[システム]→[システムの詳細設定]→[環境変数]を選択します。
 
-|image10|
+|image8|
 
 「システムとセキュリティ」をクリックします。
 
-|image11|
+|image9|
 
 「システム」をクリックします。
 
-|image12|
+|image10|
 
 「詳細設定」をクリックします。
 
-|image13|
+|image11|
 
 「環境変数」をクリックします。
 
-|image14|
+|image12|
 
 「システム環境変数」の「新規」ボタン（画面下部）をクリックします。
 
-|image15|
+|image13|
 
 「変数名」には「JAVA\_HOME」と入力します。
 
-|image16|
+|image14|
 
 「変数値」には、JDKがインストールしたディレクトリを記述します。
 
 エクスプローラで「C:\\Program
 Files\\Java」を開き、「jdk・・・」というフォルダを探して、そのアドレスを記述します。
 
-たとえばjdkのバージョン1.8.0\_XXをインストールした場合は、「C:\\Program
-Files\\Java\\jdk1.8.0\_XX」となります。(XXの部分にはインストールしたバージョンが入ります)
+たとえばjdkのバージョン11.X.Xをインストールした場合は、「C:\\Program
+Files\\Java\\jdk11.X.X」となります。(XXの部分にはインストールしたバージョンが入ります)
 
 記述後、「OK」を押します。
 
 「システム環境変数」のリストから、「変数」が「Path」である行を探します。
 
+|image15|
+
+その行をクリックして「編集」ボタンを押して開き、「新規」ボタンを押します。
+
+|image16|
+
+「%JAVA\_HOME%\\bin」という文字列を追加し、「OK」をクリックします。
+
 |image17|
-
-その行をクリックして編集ボタンを押して開き、「変数値」の末尾に「;%JAVA\_HOME%\\bin」という文字列を追加し、「OK」をクリックします。
-
-|image18|
 
 |Fess| のインストール
 ==================
@@ -159,7 +153,7 @@ https://github.com/codelibs/fess/releases から最新の |Fess| パッケージ
 
 URL先のリリースファイル一覧から「fess-x.y.z.zip」をクリックします。
 
-|image19|
+|image18|
 
 インストール
 ------------
@@ -174,15 +168,15 @@ Unix 環境にインストールした場合、bin
     $ unzip fess-x.y.z.zip
     $ cd fess-x.y.z
 
-|image20|
+|image19|
 
 解凍したフォルダーをダブルクリックで開きます。
 
-|image21|
+|image20|
 
 binフォルダーをダブルクリックで開きます。
 
-|image22|
+|image21|
 
 |Fess| の起動
 -----------
@@ -195,7 +189,7 @@ Unix環境の場合は以下を実行します。
 
     $ ./bin/fess
 
-|image23|
+|image22|
 
 コマンドプロンプトが表示され起動されます。
 fess\logs\server_*.log(更新日時が最新のもの)の内容に
@@ -210,7 +204,7 @@ http://localhost:8080/
 管理 UI は http://localhost:8080/admin/ です。
 デフォルトの管理者アカウントのユーザー名/パスワードは、admin/admin
 になります。
-管理者アカウントはアプリケーションサーバーにより管理されています。 |Fess| 
+管理者アカウントはアプリケーションサーバーにより管理されています。 |Fess|
 の管理 UI では、アプリケーションサーバーで fess
 ロールで認証されたユーザーを管理者として判断しています。
 
@@ -245,9 +239,8 @@ http://localhost:8080/
 .. |image15| image:: ../resources/images/ja/install/java-16.png
 .. |image16| image:: ../resources/images/ja/install/java-17.png
 .. |image17| image:: ../resources/images/ja/install/java-18.png
-.. |image18| image:: ../resources/images/ja/install/java-19.png
-.. |image19| image:: ../resources/images/ja/install/Fess-1.png
-.. |image20| image:: ../resources/images/ja/install/Fess-2.png
-.. |image21| image:: ../resources/images/ja/install/Fess-3.png
-.. |image22| image:: ../resources/images/ja/install/Fess-4.png
-.. |image23| image:: ../resources/images/ja/install/Fess-5.png
+.. |image18| image:: ../resources/images/ja/install/Fess-1.png
+.. |image19| image:: ../resources/images/ja/install/Fess-2.png
+.. |image20| image:: ../resources/images/ja/install/Fess-3.png
+.. |image21| image:: ../resources/images/ja/install/Fess-4.png
+.. |image22| image:: ../resources/images/ja/install/Fess-5.png
