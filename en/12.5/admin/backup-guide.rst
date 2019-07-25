@@ -5,7 +5,7 @@ Backup
 Overview
 ========
 
-Backup page allows you to download your configuration data for |Fess|.
+Backup page allows you to download and upload your configuration data for |Fess|.
 
 Management Operations
 =====================
@@ -38,30 +38,30 @@ system.properties
 
 System configuration file.
 
-click_log.csv
+click_log.ndjson
 :::::::::::::
 
 Click log file.
 
-favorite_log.csv
+favorite_log.ndjson
 ::::::::::::::::
 
 Favorite log file.
 
-search_log.csv
+search_log.ndjson
 ::::::::::::::
 
 Search log file.
 
-search_field_log.csv
-::::::::::::::::::::
-
-Search log file by fields.
-
-user_info.csv
+user_info.ndjson
 :::::::::::::
 
 Accessed user log file.
 
-.. |image0| image:: ../../../resources/images/en/12.5/admin/backup-1.png
+upload
+--------------
 
+Configuration data can be imported by uploading a file.
+Files that can be restored are \*.bulk and system.properties.
+
+.. |image0| image:: ../../../resources/images/en/12.5/admin/backup-1.png
