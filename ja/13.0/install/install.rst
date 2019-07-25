@@ -157,7 +157,7 @@ fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_path
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
     set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
 
-elasticsearchと接続する際のポート番号を指定するために、fess-<version>\app\WEB-INF\classes\fess_config.propertiesを変更します。
+elasticsearchと接続する際のポート番号を指定するために、fess-<version>\\app\\WEB-INF\\classes\\fess_config.propertiesを変更します。
 
 ::
 
