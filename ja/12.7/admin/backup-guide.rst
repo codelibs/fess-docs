@@ -58,7 +58,7 @@ user_info.ndjson 検索ユーザの情報を含みます。
 アップロード
 ------------
 
-設定情報をアップロードして取り込むことができます。。
+設定情報をアップロードして取り込むことができます。
 リストアが可能なファイルは \*.bulk と system.properties です。
 
 .. |image0| image:: ../../../resources/images/ja/12.7/admin/backup-1.png
