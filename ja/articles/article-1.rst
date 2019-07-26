@@ -33,9 +33,9 @@ Fess ではクローラ部分に Fess Crawler を利用して、ウェブやフ�
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Ubuntu 16.04
+-  Ubuntu 18.04
 
--  Java 1.8.0\_162
+-  OpenJDK 11.0.3
 
 Fess とは
 =========
@@ -78,7 +78,7 @@ Fess の配布物には Elasticsearch を組み込んだ形で配布していま
 Fess Crawler をクロールエンジンとして利用
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fess Crawler は CodeLibs プロジェクトから提供される、クローラフレームワークです。 
+Fess Crawler は CodeLibs プロジェクトから提供される、クローラフレームワークです。
 Fess Crawler はウェブ上にあるドキュメントやファイルシステム上にドキュメントを巡回して収集することができます。
 ドキュメント収集もマルチスレッドで同時に複数のドキュメントを効率良く処理することが可能です。
 また、扱えるドキュメントは HTML はもちろんのこと、Word や Excel などの MS Office 系ファイル、zip などのアーカイブファイル、画像や音声ファイルなど、数多くのフォーマットに対応しています(画像や音声ファイルの場合はメタ情報を取得します)。
@@ -91,29 +91,53 @@ Fess Crawler でクロール実行するためのパラメータ等は Fess の�
 ==================
 
 ここでは、 Fess を起動させ、検索を行うまでの手順を説明します。
-Ubuntu16.04 で実行することを想定して説明を行いますが、Mac OS X や Windows でもほぼ同様の手順でインストールと起動を行うことができます。
+Ubuntu18.04 で実行することを想定して説明を行いますが、Mac OS X や Windows でもほぼ同様の手順でインストールと起動を行うことができます。
 
 ダウンロードとインストール
 --------------------------
 
+Fess のダウンロード
+^^^^^^^^^^^^^^^^^^^^
+
 https://github.com/codelibs/fess/releases から最新のパッケージをダウンロードします。
-この記事執筆の時点（2017/05）での最新バージョンは、 12.1.2 です。
+この記事執筆の時点（2019/07）での最新バージョンは、 13.2.0 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 Fess のダウンロード
 |image1|
 
+Erasticsearch のダウンロード
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Erasticsearch の`ダウンロードページ <https://www.elastic.co/jp/downloads/elasticsearch>`__\ からダウンロードします。
+Fess のダウンロードページでは、各バージョンに対応する Elasticsearch のバージョンを記載していますので、バージョンを確認してダウンロードしてください。
+Fess 13.2.0 に対応するバージョンは `7.2.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-oss-7-2-0>`__\  ですので、このバージョンをダウンロードします。
+ダウンロード完了後、任意のディレクトリに解凍してください。
+
+設定
+----
+
+起動する前に、Fess で Elasticsearch クラスタへ接続するための設定をします。
+zipパッケージの設定方法については、インストールページの `ZIP パッケージを利用する場合  <https://fess.codelibs.org/ja/13.2/install/install.html#zip>`__\  を参照してください。
+利用するパッケージが RPM/DEB パッケージの場合は、インストールページの `RPM/DEB パッケージを利用する場合  <https://fess.codelibs.org/ja/13.2/install/install.html#rpm-deb>`__\  を参照してください。
+
 起動
 ----
 
-起動は簡単です。展開したディレクトリfess-<version>の中で以下のコマンドを実行します。
+起動は簡単です。展開したディレクトリ Elasticsearch-<version> 、 fess-<version> の中で以下のコマンドを実行します。
+Elasticsearch → Fess の順に起動します。
+
+Elasticsearch の起動
+::
+
+    $ ./bin/elasticsearch
 
 Fess の起動
 ::
 
     $ ./bin/fess
 
-ブラウザで http://localhost:8080/ にアクセスし、以下のような画面が表示されれば、 Fess は起動しています。
+ブラウザで http://localhost:8080/ にアクセスし、以下のような画面が表示されれば、 起動できています。
 
 検索トップ画面
 |image2|
@@ -122,54 +146,75 @@ Fess の起動
 ----
 
 Fess サーバーを停止させるには Fess のプロセスを停止(kill)します。
+停止する際は Fess → Elasticsearch の順に停止します。
 
 ディレクトリ構成
 ----------------
 
 ディレクトリ構成は以下のようになります。
 
-ディレクトリ構成
+Fess のディレクトリ構成
 ::
 
-    fess-12.1.2
-    |-- LICENSE
-    |-- README.md
-    |-- app/
-    |   |-- META-INF/
-    |   |-- WEB-INF/
-    |   |   |-- cachedirs/
-    |   |   |-- classes/
-    |   |   |-- conf/
-    |   |   |-- env/
-    |   |   |-- lib/
-    |   |   |-- logs/
-    |   |   |-- orig/
-    |   |   |-- site/
-    |   |   |-- thumbnails/
-    |   |   |-- view/
-    |   |   |-- fe.tld
-    |   |   |-- project.properties
-    |   |   `-- web.xml
-    |   |-- css/
-    |   |-- images/
-    |   |-- js/
-    |   `--favicon.ico
-    |-- bin/
-    |-- es/
-    |   |-- data/
-    |   |-- node_1/
-    |   `-- plugins/
-    |-- extension/
-    |-- lib/
-    |-- logs/
-    `-- temp/
+    fess-13.2.0
+    ├── app/
+    │   ├── META-INF/
+    │   ├── WEB-INF/
+    │   │   ├── cachedirs/
+    │   │   ├── classes/
+    │   │   ├── conf/
+    │   │   ├── env/
+    │   │   ├── lib/
+    │   │   ├── logs/
+    │   │   ├── orig/
+    │   │   ├── site/
+    │   │   ├── thumbnails/
+    │   │   ├── view/
+    │   │   ├── fe.tld
+    │   │   ├── project.properties
+    │   │   └── web.xml
+    │   ├── css/
+    │   ├── images/
+    │   ├── js/
+    │   ├── favicon.ico
+    ├── bin/
+    ├── es/
+    ├── extension/
+    ├── lib/
+    ├── logs/
+    ├── temp/
+    ├── LICENSE
+    └── README.md
+
 
 Fess は LastaFlute が提供する TomcatBoot を元に構成されています。
 Fess のアプリケーション群のファイルはappディレクトリ以下に配置されます。
 管理画面からも編集は可能ですが、検索画面のJSPはapp/WEB-INF/view以下に保存されます。
 また、appディレクトリ直下のjs、css、imagesが検索画面で利用されるファイルになります。
-Fess の組み込み Elasticsearch を利用する場合は、esディレクトリ以下に保存されます。
-インデックスのデータはes/dataディレクトリに保存されます。
+
+Elasticsearch のディレクトリ構成
+::
+
+    Elasticsearch-7.2.0
+    ├── bin/
+    ├── config/
+    │   ├── elasticsearch.keystore
+    │   ├── elasticsearch.yml
+    │   ├── jvm.options
+    │   ├── log4j2.properties
+    │   ├── mapping.txt
+    │   └── synonym.txt
+    ├── data/
+    ├── jdk/
+    ├── lib/
+    ├── logs/
+    ├── modules/
+    ├── plugins/
+    ├── LICENSE.txt
+    ├── NOTICE.txt
+    └── README.textile
+
+インデックスのデータはdataディレクトリに保存されます。
 
 インデックスの作成から検索まで
 ==============================
@@ -195,8 +240,8 @@ Fess の組み込み Elasticsearch を利用する場合は、esディレクト�
 ［新規作成］を選択
 |image4|
 
-ウェブクロールの設定として、今回は、 https://fess.codelibs.org/ 以下のすべてのページをクロール対象とすることにします。
-設定項目は URL : \https://fess.codelibs.org/ 、クロール対象とするURL : \https://fess.codelibs.org/.*、最大アクセス数 : 30 、間隔 : 3000 ミリ秒 とし、他はデフォルトにします。
+ウェブクロールの設定として、今回は、 http://fess.codelibs.org/ 以下のページ群を1秒間隔の2スレッドでクロールして(1秒に2ページ程度をクロール)、100ページ程度を検索対象にします。
+設定項目は URL : \https://fess.codelibs.org/ 、クロール対象とするURL : \https://fess.codelibs.org/.*、最大アクセス数 : 100 、最大アクセス数 : 2 、間隔 : 1000 ミリ秒 とし、他はデフォルトにします。
 
 ウェブクロールの設定
 |image5|
@@ -245,25 +290,27 @@ Fess の組み込み Elasticsearch を利用する場合は、esディレクト�
 検索トップ画面のJSPファイルの一部
 ::
 
-	<div class="container">
-		<div class="row content">
-			<div class="center-block searchFormBox">
-				<h1 class="mainLogo">
-					<img src="${f:url('/images/logo.png')}"
-						alt="<la:message key="labels.index_title" />" />
-				</h1>
-				<div class="notification">${notification}</div>
-				<div>
-					<la:info id="msg" message="true">
-						<div class="alert-message info">${msg}</div>
-					</la:info>
-					<la:errors header="errors.front_header"
-						footer="errors.front_footer" prefix="errors.front_prefix"
-						suffix="errors.front_suffix" />
-				</div>
-				<la:form styleClass="form-stacked" action="search" method="get"
-					styleId="searchForm">
-					${fe:facetForm()}${fe:geoForm()}
+	<la:form action="search" method="get" styleId="searchForm">
+		${fe:facetForm()}${fe:geoForm()}
+		・
+		・
+		・
+		<main class="container">
+			<div class="row">
+				<div class="col text-center searchFormBox">
+					<h1 class="mainLogo">
+						<img src="${fe:url('/images/logo.png')}"
+							alt="<la:message key="labels.index_title" />" />
+					</h1>
+					<div class="notification">${notification}</div>
+					<div>
+						<la:info id="msg" message="true">
+							<div class="alert alert-info">${msg}</div>
+						</la:info>
+						<la:errors header="errors.front_header"
+							footer="errors.front_footer" prefix="errors.front_prefix"
+							suffix="errors.front_suffix" />
+					</div>
 
 検索トップ画面に表示される画像を変更する場合は、上記の「logo.png」の箇所を置き換えたいファイル名に変更します。
 ファイルは「app/images」に配置します。
@@ -277,10 +324,11 @@ Fess の組み込み Elasticsearch を利用する場合は、esディレクト�
 ヘッダーJSPファイルの一部
 ::
 
-    <la:link styleClass="navbar-brand" href="/">
-		<img src="${f:url('/images/logo-head.png')}"
-			alt="<la:message key="labels.header_brand_name" />" />
-	</la:link>
+				<la:link styleClass="navbar-brand d-inline-flex" href="/">
+					<img src="${fe:url('/images/logo-head.png')}"
+						alt="<la:message key="labels.header_brand_name" />"
+						class="align-items-center" />
+				</la:link>
 
 検索結果一覧画面の上部に表示される画像を変更する場合は、上記の「logo-head.png」の箇所のファイル名を変更します。
 「logo.png」の場合と同様に「app/images」に配置します。

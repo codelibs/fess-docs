@@ -8,7 +8,15 @@
 ZIP パッケージの場合
 --------------------
 
-Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.bat をダブルクリックします。UNIX 環境では、以下のコマンドを実行します。
+|Fess| を起動する前に Elasticsearch を起動する必要があります。
+
+Windows 環境で Elasticsearch を起動するには、 bin フォルダ中の elasticsearch.bat をダブルクリックします。UNIX 環境では、以下のコマンドを実行します。
+
+::
+
+    $ ./bin/elasticsearch
+
+そして |Fess| を起動します。Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.bat をダブルクリックします。UNIX 環境では、以下のコマンドを実行します。
 
 ::
 
@@ -17,7 +25,7 @@ Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.ba
 RPM パッケージの場合(chkconfig)
 --------------------
 
-|Fess| を起動する前に elasticsearch を起動する必要があります。
+|Fess| を起動する前に Elasticsearch を起動する必要があります。
 
 ::
 
@@ -32,7 +40,7 @@ RPM パッケージの場合(chkconfig)
 RPM パッケージの場合(systemd)
 --------------------
 
-|Fess| を起動する前に elasticsearch を起動する必要があります。
+|Fess| を起動する前に Elasticsearch を起動する必要があります。
 
 ::
 
