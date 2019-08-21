@@ -18,6 +18,7 @@
    stopwords-guide
    stemmeroverride-guide
    accesstoken-guide
+   plugin-guide
    webconfig-guide
    fileconfig-guide
    dataconfig-guide
