@@ -140,12 +140,6 @@ Elasticsearch と接続する際のポート番号を指定するために、fes
 
     elasticsearch.http.url=http://localhost:9200
 
-また、Elasticsearch のクラスタ名を変更した場合は fess_config.properties を変更します。
-
-::
-
-    elasticsearch.cluster.name=elasticsearch
-
 Windows環境でElasticsearchクラスタを利用する場合
 ------------------------------------------------
 
