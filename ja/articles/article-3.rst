@@ -31,12 +31,12 @@ Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/ar
 JSON API
 ========
 
-Fess は通常のHTMLによる検索表現以外に、APIとしてJSON（JSONPも含む）による検索結果の応答が可能です。
+Fess は通常のHTMLによる検索表現以外に、APIとしてJSONによる検索結果の応答が可能です。
 APIを利用することで、 Fess サーバーを構築しておき、既存のシステムから検索結果だけを問い合わせにいくことも簡単に実現できます。
 検索結果を開発言語に依存しない形式で扱えるので、 Fess をJava以外のシステムにも統合しやすいと思います。
 JSONはJavaScriptのライブラリでもサポートされているので、Ajaxとして利用する場合でも簡単に扱うことができます。
 
-Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON（JSONP）応答 <https://fess.codelibs.org/ja/10.0/user/json-response.html>`__ を参照してください。
+Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON応答 <https://fess.codelibs.org/ja/10.0/user/json-response.html>`__ を参照してください。
 
 Fess は内部の検索エンジンとして Elasticsearch を利用しています。
 ElasticsearchもJSONによるAPIを提供していますが Fess のAPIは異なるものです。
@@ -51,18 +51,26 @@ Fess サーバーとのやりとりにはJSON応答を利用します。
 今回利用する Fess サーバーは Fess プロジェクトでデモ用として公開している Fess サーバーを利用しています。
 もし、独自の Fess サーバーを利用したい場合は Fess 10.0.0以降のバージョンをインストールしてください。
 
-JSONとJSONP
+JSONとCORS
 -----------
 
 Ajaxの利用時に注意すべきセキュリティモデルとしてSame-Originポリシーがあります。
-これにより、ブラウザで表示するHTMLを出力するサーバーと Fess サーバーが同じドメインに存在する場合はJSONを利用することができますが、異なる場合はJSONPを利用する必要があります。
-Fess のJSON APIでは、JSON応答でリクエストパラメータにcallbackキーで値を渡すことでJSONPを利用することができます。
-
-Same-Originポリシー。（b）の場合は Fess が返す検索結果（JSON）が別ドメインになるためJSONPを利用する必要があります。
-|image0|
-
+これにより、ブラウザで表示するHTMLを出力するサーバーと Fess サーバーが同じドメインに存在する場合はJSONを利用することができますが、異なる場合はCORS(Cross-Origin Resource Sharing)を利用する必要があります。
 今回はHTMLが置いてあるサーバーと Fess サーバーが異なるドメインにある場合で話を進めます。
-ですので、JSONPを利用した例になりますが、同じドメインで良い場合はリクエストパラメータからcallbackを取り除いてください。
+FessはCORSに対応しており、設定値はapp/WEB-INF/classes/fess_config.propertiesで設定可能です。 デフォルトでは以下が設定されています。
+
+::
+
+api.cors.allow.origin=*
+api.cors.allow.methods=GET, POST, OPTIONS, DELETE, PUT
+api.cors.max.age=3600
+api.cors.allow.headers=Origin, Content-Type, Accept, Authorization, X-Requested-With
+api.cors.allow.credentials=true
+
+
+今回はこのまま利用しますが、設定を変更した場合はFessを再起動をしてください。
+
+
 
 作成するファイル
 ----------------
@@ -110,7 +118,7 @@ index.htmlの内容
     </div>
     <div id="subheader"></div>
     <div id="result"></div>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="fess.js"></script>
     </body>
     </html>
@@ -183,7 +191,7 @@ fess.jsの内容
           // (9) 検索リクエスト送信
           $.ajax({
             url: urlBuf.join(""),
-            dataType: 'jsonp',
+            dataType: 'json',
             success: function(data) {
               // 検索結果処理
               var dataResponse = data.response;
@@ -277,8 +285,8 @@ fess.jsの内容
 「fess.js」の処理はHTMLファイルのDOMが構築された後に実行されます。
 まずはじめに、1で Fess サーバーのURLを指定しています。
 ここでは、 Fess の公開デモサーバーを指定しています。
-外部サーバーから検索結果のJSONデータを取得するため、JSONPを利用しています。
-JSONPでなく、JSONを利用する場合は、callback=?は指定する必要はありません。
+外部サーバーから検索結果のJSONデータを取得するため、CORSを利用しています。
+CORSでなく、JSONを利用する場合は、callback=?は指定する必要はありません。
 
 2は検索ボタンのjQueryオブジェクトを保存しておきます。
 何度か検索ボタンのjQueryオブジェクトを利用するため、変数に保持して再利用します。
@@ -314,8 +322,6 @@ naviの値は検索処理関数を呼び出す際に渡され、その値はペ�
 1のURLに検索語、表示開始位置、表示件数を結合します。
 
 9でAjaxのリクエストを送信します。
-JSONPを利用しているのでdataTypeにjsonpを指定しています。
-JSONを利用する場合はjsonに変更します。
 リクエストが正常に返ってくると、successの関数が実行されます。
 successの引数には Fess サーバーから返却された検索結果のオブジェクトが渡されます。
 
