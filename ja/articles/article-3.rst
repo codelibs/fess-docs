@@ -216,10 +216,10 @@ fess.jsの内容
                     " 秒)");
                 $subheader[0].innerHTML = buf.join("");
 
-                // (14) 検索結果領域のクリア
+                // 検索結果領域のクリア
                 $result.empty();
 
-                // 検索結果の出力
+                // (14) 検索結果の出力
                 var $resultBody = $("<ol/>");
                 var results = dataResponse.result;
                 for(i = 0, max = results.length; i < max; i++) {
