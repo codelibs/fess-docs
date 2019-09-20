@@ -134,11 +134,6 @@ Elasticsearch のRPM/DEBパッケージでは fess-<version>/bin/fess.in.sh を�
     ES_HTTP_URL=http://localhost:9200
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
-Elasticsearch と接続する際のポート番号を指定するために、fess_config.properties を変更します。
-
-::
-
-    elasticsearch.http.url=http://localhost:9200
 
 Windows環境でElasticsearchクラスタを利用する場合
 ------------------------------------------------
@@ -170,11 +165,5 @@ fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_path
 
 ::
 
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
-
-Elasticsearch と接続する際のポート番号を指定するために、fess-<version>\\app\\WEB-INF\\classes\\fess_config.properties を変更します。
-
-::
-
-    elasticsearch.http.url=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
