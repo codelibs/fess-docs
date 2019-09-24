@@ -13,7 +13,7 @@
 表示方法
 --------
 
-下図のストップワードの設定一覧ページを開くには、左メニューの [システム > 辞書] を選択した後、stopwordsをクリックします。
+下図のストップワードの設定一覧ページを開くには、左メニューの [システム > 辞書] を選択した後、en/stopwords.txtをクリックします。
 
 |image0|
 
@@ -52,4 +52,3 @@
 
 .. |image0| image:: ../../../resources/images/ja/13.2/admin/stopwords-1.png
 .. |image1| image:: ../../../resources/images/ja/13.2/admin/stopwords-2.png
-
