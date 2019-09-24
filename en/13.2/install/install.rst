@@ -25,6 +25,15 @@ Installation
 Using ZIP package
 -----------------
 
+You need to install elasticsearch before Fess installation.
+Download elasticsearch from elasticsearch site `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__, and then install the package.
+Unzip the downloaded elasticsearch-<version>.zip.
+For UNIX environment, run the following command:
+
+::
+
+    $ unzip elasticsearch-<version>.zip
+
 Unzip the downloaded fess-<version>.zip.
 For UNIX environment, run the following command:
 
@@ -32,6 +41,20 @@ For UNIX environment, run the following command:
 
     $ unzip fess-<version>.zip
     $ cd fess-<version>
+
+|Fess| provides elasticsearch plugins to extend elasticsearch's features for |Fess|.
+Install the following plugins to plugins directory in elasticsearch.
+
+::
+
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.2.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.2.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.2.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.2.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.2.0
+
+Note that these plugins depends on elasticsearch version.
+execute: ref: `elasticsearch-cluster` before starting.
 
 Using RPM package
 -----------------
@@ -83,12 +106,46 @@ For systemd based system(e.g. CentOS 7),
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
 
+.. _elasticsearch-cluster:
 
 Using Your Elasticsearch Cluster On ZIP package
 -----------------------------------------------
 
 |Fess| is able to connect to your existing elasticsearch cluster.
 For the details to configure elasticsearch for Fess, please see steps in Using RPM package.
+
+To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
+For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
+
+::
+
+    ES_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
+
+Using an Elasticsearch cluster in a Windows environment.
+--------------------------------------------------------
+
+Download and unzip the Elasticsearch zip version.
+
+Install the following plugins to plugins directory in elasticsearch.
+
+::
+
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.2.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.2.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.2.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.2.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.2.0
+
+Note that these plugins depends on elasticsearch version.
+
+To access from Fess, the following configuration needs to be added to <elasticsearch-<version>\\config\\elasticsearch.yml
+
+::
+
+    configsync.config_path: c:/<elasticsearch-<version>/config/
+
+Unzip the downloaded fess-<version>.zip.
 
 To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
 For Windows environment, the following settings are put into fess-<version>\\bin\\fess.in.bat.
@@ -98,10 +155,3 @@ fess.dictionary.path needs to be set to a path of configsync.config_path in elas
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
-
-For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
-
-::
-
-    ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
