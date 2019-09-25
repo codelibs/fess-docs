@@ -52,3 +52,4 @@
 
 .. |image0| image:: ../../../resources/images/ja/13.2/admin/stopwords-1.png
 .. |image1| image:: ../../../resources/images/ja/13.2/admin/stopwords-2.png
+
