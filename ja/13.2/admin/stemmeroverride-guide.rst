@@ -52,3 +52,4 @@ Stemmer上書きの辞書形式でアップロードすることができます�
 
 .. |image0| image:: ../../../resources/images/ja/13.2/admin/stemmeroverride-1.png
 .. |image1| image:: ../../../resources/images/ja/13.2/admin/stemmeroverride-2.png
+
