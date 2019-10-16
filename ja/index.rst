@@ -146,6 +146,8 @@ FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/f
 掲載メディア
 ============
 
+- `【第17回】データベースのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4659>`__
+
 - `【第16回】検索APIの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/4613>`__
 
 - `【第15回】認証が必要なファイルサーバのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4569>`__
