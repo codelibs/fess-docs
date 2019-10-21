@@ -83,12 +83,6 @@ For systemd based system(e.g. CentOS 7),
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
 
-To change a cluster name for elasticsearch, modify the following value in fess_config.properties.
-
-::
-
-    elasticsearch.cluster.name=elasticsearch
-
 
 Using Your Elasticsearch Cluster On ZIP package
 -----------------------------------------------
@@ -102,8 +96,8 @@ fess.dictionary.path needs to be set to a path of configsync.config_path in elas
 
 ::
 
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
 
 For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
 
@@ -111,10 +105,3 @@ For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
 
     ES_HTTP_URL=http://localhost:9200
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
-
-If you change a cluster name of Elasticsearch, modify the following setting in fess_config.properties.
-
-::
-
-    elasticsearch.cluster.name=elasticsearch
-

@@ -10,19 +10,19 @@ The requirement is as follows.
 
 -  Operating system: Windows, Unix, etc
 
--  Java: Java SE 8 or later
+-  Java: Java SE 11 or later
 
 For more details, see Installation Guide.
 
 Install Java
 ===============
 
-See `JDK 8 Installation <http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html>`__.
+See `JDK 11 Installation <https://docs.oracle.com/en/java/javase/11/install/overview-jdk-installation.html>`__.
 
-Install |Fess| 
+Install |Fess|
 ===============
 
-Go to download page of |Fess| 
+Go to download page of |Fess|
 ---------------------------
 
 Download latest |Fess| package from `releases page <https://github.com/codelibs/fess/releases>`__.
@@ -63,5 +63,3 @@ Change Administrator Password
 -------------------------------
 
 After logging in as admin, you can change the password on User page.
-
-

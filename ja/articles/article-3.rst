@@ -5,11 +5,10 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 API 編
 はじめに
 ========
 
-前回のロールベース検索編では、ユーザーに閲覧権限が必要な環境においてどのように Fess を利用できるかをご紹介しました。
 今回は Fess が提供するAPIを利用して、クライアントサイド（ブラウザ側）で検索とその結果の表示を行う方法をご紹介します。
 APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
 
-本記事では Fess 12.1を利用して説明します。
+本記事では Fess 13.2.0 を利用して説明します。
 Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
@@ -17,26 +16,21 @@ Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/ar
 
 -  既存のウェブシステムに検索機能を加えたい方
 
--  Ajaxを利用した検索システムを構築したい方
-
 必要な環境
 ==========
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Google Chrome 66
-
--  Firefox 59
+-  Google Chrome 76
 
 JSON API
 ========
 
-Fess は通常のHTMLによる検索表現以外に、APIとしてJSON（JSONPも含む）による検索結果の応答が可能です。
+Fess は通常のHTMLによる検索表現以外に、APIとしてJSONによる検索結果の応答が可能です。
 APIを利用することで、 Fess サーバーを構築しておき、既存のシステムから検索結果だけを問い合わせにいくことも簡単に実現できます。
 検索結果を開発言語に依存しない形式で扱えるので、 Fess をJava以外のシステムにも統合しやすいと思います。
-JSONはJavaScriptのライブラリでもサポートされているので、Ajaxとして利用する場合でも簡単に扱うことができます。
 
-Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON（JSONP）応答 <https://fess.codelibs.org/ja/10.0/user/json-response.html>`__ を参照してください。
+Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON応答 <https://fess.codelibs.org/ja/13.2/api/api-search.html>`__ を参照してください。
 
 Fess は内部の検索エンジンとして Elasticsearch を利用しています。
 ElasticsearchもJSONによるAPIを提供していますが Fess のAPIは異なるものです。
@@ -51,25 +45,30 @@ Fess サーバーとのやりとりにはJSON応答を利用します。
 今回利用する Fess サーバーは Fess プロジェクトでデモ用として公開している Fess サーバーを利用しています。
 もし、独自の Fess サーバーを利用したい場合は Fess 10.0.0以降のバージョンをインストールしてください。
 
-JSONとJSONP
+JSONとCORS
 -----------
 
-Ajaxの利用時に注意すべきセキュリティモデルとしてSame-Originポリシーがあります。
-これにより、ブラウザで表示するHTMLを出力するサーバーと Fess サーバーが同じドメインに存在する場合はJSONを利用することができますが、異なる場合はJSONPを利用する必要があります。
-Fess のJSON APIでは、JSON応答でリクエストパラメータにcallbackキーで値を渡すことでJSONPを利用することができます。
-
-Same-Originポリシー。（b）の場合は Fess が返す検索結果（JSON）が別ドメインになるためJSONPを利用する必要があります。
-|image0|
-
+JSONでアクセスする際にはSame-Originポリシーに注意する必要があります。
+これにより、ブラウザで表示するHTMLを出力するサーバーと Fess サーバーが同じドメインに存在する場合はJSONを利用することができますが、異なる場合はCORS(Cross-Origin Resource Sharing)を利用する必要があります。
 今回はHTMLが置いてあるサーバーと Fess サーバーが異なるドメインにある場合で話を進めます。
-ですので、JSONPを利用した例になりますが、同じドメインで良い場合はリクエストパラメータからcallbackを取り除いてください。
+FessはCORSに対応しており、設定値はapp/WEB-INF/classes/fess_config.propertiesで設定可能です。 デフォルトでは以下が設定されています。
+
+::
+
+    api.cors.allow.origin=*
+    api.cors.allow.methods=GET, POST, OPTIONS, DELETE, PUT
+    api.cors.max.age=3600
+    api.cors.allow.headers=Origin, Content-Type, Accept, Authorization, X-Requested-With
+    api.cors.allow.credentials=true
+
+今回はデフォルトの設定を利用しますが、設定を変更した場合はFessを再起動をしてください。
+
 
 作成するファイル
 ----------------
 
 今回はHTML上でJavaScriptを利用して検索処理を実装します。
 JavaScriptのライブラリとしてjQueryを利用しています。
-Ajaxなどの処理などもjQueryで簡単に実装することができます。
 作成するファイルは以下のものになります。
 
 -  検索フォームと検索結果を表示するHTMLファイル「index.html」
@@ -110,7 +109,7 @@ index.htmlの内容
     </div>
     <div id="subheader"></div>
     <div id="result"></div>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="fess.js"></script>
     </body>
     </html>
@@ -119,7 +118,6 @@ bodyタグ以下を見ていくと、まずはid属性がheaderのdivタグの�
 また、hiddenフォームで表示開始位置（start）と表示件数（num）を保持しています。
 検索リクエスト送信後にJavaScriptでstartとnumの値は更新されます。
 ただし、表示件数は1ページあたりの表示件数であり、今回のサンプルコードでは表示件数を変更する機能はないので、numの値は変更されていません。
-また、検索フォームのサブミットについては、検索リクエストはAjaxで通信されるため、JavaScriptが有効になっている場合はこのフォームがページ遷移が発生する送信はされません。
 
 次のsubheaderのdivタグの箇所で検索にヒットした件数などの情報が表示されます。
 resultのdivタグでは検索結果およびページングリンクが表示されます。
@@ -137,54 +135,54 @@ fess.jsの内容
 ::
 
     $(function(){
-      // (1) Fess の URL
-      var baseUrl = "http://search.n2sm.co.jp/json?callback=?&q=";
-      // (2) 検索ボタンのjQueryオブジェクト
-      var $searchButton = $('#searchButton');
+        // (1) Fess の URL
+        var baseUrl = "http://SERVERNAME:8080/json/?q=";
+        // (2) 検索ボタンのjQueryオブジェクト
+        var $searchButton = $('#searchButton');
 
-      // (3) 検索処理関数
-      var doSearch = function(event){
-        // (4) 表示開始位置、表示件数の取得
-        var start = parseInt($('#searchStart').val()),
-            num = parseInt($('#searchNum').val());
-        // 表示開始位置のチェック
-        if(start < 0) {
-          start = 0;
-        }
-        // 表示件数のチェック
-        if(num < 1 || num > 100) {
-          num = 20;
-        }
-        // (5) 表示ページ情報の取得
-        switch(event.data.navi) {
-          case -1:
-            // 前のページの場合
-            start -= num;
-            break;
-          case 1:
-            // 次のページの場合
-            start += num;
-            break;
-          default:
-          case 0:
+        // (3) 検索処理関数
+        var doSearch = function(event){
+          // (4) 表示開始位置、表示件数の取得
+          var start = parseInt($('#searchStart').val()),
+              num = parseInt($('#searchNum').val());
+          // 表示開始位置のチェック
+          if(start < 0) {
             start = 0;
-            break;
-        }
-        // 検索フィールドの値をトリムして格納
-        var searchQuery = $.trim($('#searchQuery').val());
-        // (6) 検索フォームが空文字チェック
-        if(searchQuery.length != 0) {
-          var urlBuf = [];
-          // (7) 検索ボタンを無効にする
-          $searchButton.attr('disabled', true);
-          // (8) URL の構築
-          urlBuf.push(baseUrl, encodeURIComponent(searchQuery),
-            '&start=', start, '&num=', num);
-          // (9) 検索リクエスト送信
-          $.ajax({
-            url: urlBuf.join(""),
-            dataType: 'jsonp',
-            success: function(data) {
+          }
+          // 表示件数のチェック
+          if(num < 1 || num > 100) {
+            num = 20;
+          }
+          // (5) 表示ページ情報の取得
+          switch(event.data.navi) {
+            case -1:
+              // 前のページの場合
+              start -= num;
+              break;
+            case 1:
+              // 次のページの場合
+              start += num;
+              break;
+            default:
+            case 0:
+              start = 0;
+              break;
+          }
+          // 検索フィールドの値をトリムして格納
+          var searchQuery = $.trim($('#searchQuery').val());
+          // (6) 検索フォームが空文字チェック
+          if(searchQuery.length != 0) {
+            var urlBuf = [];
+            // (7) 検索ボタンを無効にする
+            $searchButton.attr('disabled', true);
+            // (8) URL の構築
+            urlBuf.push(baseUrl, encodeURIComponent(searchQuery),
+              '&start=', start, '&num=', num);
+            // (9) 検索リクエスト送信
+            $.ajax({
+              url: urlBuf.join(""),
+              dataType: 'json',
+            }).done(function(data) {
               // 検索結果処理
               var dataResponse = data.response;
               // (10) ステータスチェック
@@ -206,10 +204,8 @@ fess.jsの内容
                 $result[0].innerHTML = buf.join("");
               } else { // (12) 検索にヒットした場合
                 var page_number = dataResponse.page_number,
-                    page_size = dataResponse.page_size,
-                    page_count = dataResponse.page_count,
-                    startRange = (page_number - 1) * page_size + 1,
-                    endRange = page_number * page_size,
+                    startRange = dataResponse.start_record_number,
+                    endRange = dataResponse.end_record_number,
                     i = 0,
                     max;
                 offset = startRange - 1;
@@ -239,11 +235,11 @@ fess.jsの内容
                 // (15) ページ番号情報の出力
                 buf = [];
                 buf.push('<div id="pageInfo">', page_number, 'ページ目<br/>');
-                if(page_number > 1) {
+                if(dataResponse.prev_page) {
                   // 前のページへのリンク
                   buf.push('<a id="prevPageLink" href="#">&lt;&lt;前ページへ</a> ');
                 }
-                if(page_number < page_count) {
+                if(dataResponse.next_page) {
                   // 次のページへのリンク
                   buf.push('<a id="nextPageLink" href="#">次ページへ&gt;&gt;</a>');
                 }
@@ -255,30 +251,25 @@ fess.jsの内容
               $('#searchNum').val(num);
               // (17) ページ表示を上部に移動
               $(document).scrollTop(0);
-            },
-            complete: function() {
+            }).always(function() {
               // (18) 検索ボタンを有効にする
               $searchButton.attr('disabled', false);
-            }
-          });
-        }
-        // (19) サブミットしないので false を返す
-        return false;
-      };
+            });
+          }
+          // (19) サブミットしないので false を返す
+          return false;
+        };
 
-      // (20) 検索入力欄でEnterキーが押されたときの処理
-      $('#searchForm').submit({navi:0}, doSearch);
-      // (21) 前ページリンクが押されたときの処理
-      $('#result').delegate("#prevPageLink", "click", {navi:-1}, doSearch)
-      // (22) 次ページリンクが押されたときの処理
-        .delegate("#nextPageLink", "click", {navi:1}, doSearch);
-    });
+        // (20) 検索入力欄でEnterキーが押されたときの処理
+        $('#searchForm').submit({navi:0}, doSearch);
+        // (21) 前ページリンクが押されたときの処理
+        $('#result').on("click", "#prevPageLink", {navi:-1}, doSearch)
+        // (22) 次ページリンクが押されたときの処理
+          .on("click", "#nextPageLink", {navi:1}, doSearch);
+      });
 
 「fess.js」の処理はHTMLファイルのDOMが構築された後に実行されます。
-まずはじめに、1で Fess サーバーのURLを指定しています。
-ここでは、 Fess の公開デモサーバーを指定しています。
-外部サーバーから検索結果のJSONデータを取得するため、JSONPを利用しています。
-JSONPでなく、JSONを利用する場合は、callback=?は指定する必要はありません。
+まずはじめに、1で 構築した Fess サーバーのURLを指定しています。
 
 2は検索ボタンのjQueryオブジェクトを保存しておきます。
 何度か検索ボタンのjQueryオブジェクトを利用するため、変数に保持して再利用します。
@@ -314,14 +305,12 @@ naviの値は検索処理関数を呼び出す際に渡され、その値はペ�
 1のURLに検索語、表示開始位置、表示件数を結合します。
 
 9でAjaxのリクエストを送信します。
-JSONPを利用しているのでdataTypeにjsonpを指定しています。
-JSONを利用する場合はjsonに変更します。
 リクエストが正常に返ってくると、successの関数が実行されます。
 successの引数には Fess サーバーから返却された検索結果のオブジェクトが渡されます。
 
 まず、10でレスポンスのステータスの内容を確認しています。
 正常に検索リクエストが処理された場合は0が設定されています。
-Fess のJSON応答の詳細は\ `Fess サイト <https://fess.codelibs.org/ja/10.0/user/json-response.html>`__\ を確認してください。
+Fess のJSON応答の詳細は\ `Fess サイト <https://fess.codelibs.org/ja/13.2/api/api-search.html>`__\ を確認してください。
 
 検索リクエストが正常に処理され、検索結果がヒットしなかった場合は11の条件文内でsubheader領域の内容を空にして、result領域で検索結果がヒットしなかった旨のメッセージを表示します。
 
@@ -364,8 +353,6 @@ results[i].〜でアクセスすることで検索結果ドキュメントのフ
 
 Fess のJSON APIを利用してjQueryベースのクライアント検索サイトを構築してみました。
 JSON APIを利用することでブラウザベースのアプリケーションに限らず、別のアプリケーションから呼び出して Fess を利用するシステムも構築できます。
-
-次回は、Active Directoryの認証情報を利用したロールベース検索機能を紹介したいと思います。
 
 参考資料
 ========

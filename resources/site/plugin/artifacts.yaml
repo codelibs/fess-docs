@@ -1,0 +1,25 @@
+# MySQL
+- name: mysql-connector-java
+  version: 8.0.17
+  url: https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.17/mysql-connector-java-8.0.17.jar
+- name: mysql-connector-java
+  version: 6.0.6
+  url: https://repo1.maven.org/maven2/mysql/mysql-connector-java/6.0.6/mysql-connector-java-6.0.6.jar
+- name: mysql-connector-java
+  version: 5.1.48
+  url: https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar
+# Postgresql
+- name: postgresql
+  version: 42.2.6
+  url: https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.6/postgresql-42.2.6.jar
+# Oracle
+- name: ojdbc14
+  version: 10.2.0.4.0
+  url: https://repo1.maven.org/maven2/com/oracle/ojdbc14/10.2.0.4.0/ojdbc14-10.2.0.4.0.jar
+- name: ojdbc14
+  version: 9.0.2.0.0
+  url: https://repo1.maven.org/maven2/com/oracle/ojdbc14/9.0.2.0.0/ojdbc14-9.0.2.0.0.jar
+# MS SQL Server
+- name: mssql-jdbc
+  version: 7.4.1.jre12
+  url: https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/7.4.1.jre12/mssql-jdbc-7.4.1.jre12.jar

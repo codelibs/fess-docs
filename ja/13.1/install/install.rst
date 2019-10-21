@@ -25,17 +25,38 @@
 ZIP パッケージを利用する場合
 ----------------------------
 
+|Fess| をインストールする前に Elasticsearch をインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
+ダウンロードした elasticsearch-<version>.zip を展開します。 UNIX 環境では、 以下のコマンドを実行します。
+
+::
+
+    $ unzip elasticsearch-<version>.zip
+
 ダウンロードした fess-<version>.zip を展開します。 UNIX 環境では、 以下のコマンドを実行します。
 
 ::
 
     $ unzip fess-<version>.zip
-    $ cd fess-<version>
+
+|Fess| には Elasticsearch の機能を拡張するためのプラグインがあります。
+プラグインを Elasticsearch の plugins ディレクトリにインストールします。
+
+::
+
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.1.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.1.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.1.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.1.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.1.0
+
+これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
+
+起動する前に  :ref:`elasticsearch-cluster`  を実施してください。
 
 RPM/DEB パッケージを利用する場合
 ----------------------------
 
-|Fess| をインストールする前に elasticsearch の RPM/DEB パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
+|Fess| をインストールする前に Elasticsearch の RPM/DEB パッケージをインストールする必要があります。 `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ からダウンロードし、インストールします。
 
 RPMパッケージの場合
 
@@ -69,8 +90,8 @@ DEBパッケージの場合
 
     $ sudo dpkg -i fess-<version>.deb
 
-|Fess| には elasticsearch の機能を拡張するためのプラグインがあります。
-プラグインを elasticsearch の plugins ディレクトリにインストールします。
+|Fess| には Elasticsearch の機能を拡張するためのプラグインがあります。
+プラグインを Elasticsearch の plugins ディレクトリにインストールします。
 
 ::
 
@@ -80,7 +101,7 @@ DEBパッケージの場合
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.1.0
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.1.0
 
-これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
+これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合(RPM)は
 
@@ -97,39 +118,29 @@ systemd を使う場合(RPM/DEB)は
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
 
+.. _elasticsearch-cluster:
 
 Elasticsearchクラスタの利用方法
 ----------------------------
 
-|Fess| では RPM/DEB パッケージでは外部のElasticsearchを標準で利用しますが、ZIPパッケージでのインストールにおいてはElasticsearchクラスタを構築しておき、そのElasticsearchクラスタへ接続して利用することができます。その際は、Elasticsearchのプラグインのインストールが必要です。
-Elasticsearchの設定方法についてはRPM/DEBでの設定方法を参照してください。
+|Fess| では RPM/DEB パッケージでは外部の Elasticsearch を標準で利用しますが、ZIPパッケージでのインストールにおいては Elasticsearch クラスタを構築しておき、その Elasticsearch クラスタへ接続して利用することができます。その際は、 Elasticsearch のプラグインのインストールが必要です。
+Elasticsearch の設定方法についてはRPM/DEBでの設定方法を参照してください。
 
-|Fess| でElasticsearchクラスタへ接続するためには、起動オプションで指定します。
-ElasticsearchのRPM/DEBパッケージでは fess-<version>/bin/fess.in.shを変更します。
+|Fess| で Elasticsearch クラスタへ接続するためには、起動オプションで指定します。
+Elasticsearch のRPM/DEBパッケージでは fess-<version>/bin/fess.in.sh を変更します。
 
 ::
 
     ES_HTTP_URL=http://localhost:9200
     FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
-elasticsearchと接続する際のポート番号を指定するために、fess_config.propertiesを変更します。
-
-::
-
-    elasticsearch.http.url=http://localhost:9200
-
-また、Elasticsearchのクラスタ名を変更した場合はfess_config.propertiesを変更します。
-
-::
-
-    elasticsearch.cluster.name=elasticsearch
 
 Windows環境でElasticsearchクラスタを利用する場合
 ------------------------------------------------
 
-elasticsearchのzip版をインストールし、展開します。
+Elasticsearch のzip版をインストールし、展開します。
 
-コマンドプロンプトからelasticsearchのプラグインをインストールします。
+コマンドプロンプトから Elasticsearch のプラグインをインストールします。
 
 ::
 
@@ -139,7 +150,7 @@ elasticsearchのzip版をインストールし、展開します。
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.1.0
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.1.0
 
-これらのプラグインはelasticsearchのバージョンに依存するので注意してください。
+これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 |Fess| にアクセスするために、 <elasticsearch-<version>\\config\\elasticsearch.ymlに下記の設定を加えます。
 
@@ -149,16 +160,10 @@ elasticsearchのzip版をインストールし、展開します。
 
 ダウンロードした fess-<version>.zip を展開します。
 
-|Fess| でElasticsearchへ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
+|Fess| で Elasticsearch へ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
 fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
 
 ::
 
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_PARAMS=%FESS_PARAMS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
-
-elasticsearchと接続する際のポート番号を指定するために、fess-<version>\app\WEB-INF\classes\fess_config.propertiesを変更します。
-
-::
-
-    elasticsearch.http.url=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"

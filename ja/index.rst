@@ -28,7 +28,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 13.2.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 13.4.0 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -85,6 +85,21 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2019-10-10
+    `Fess 13.4.0 <https://github.com/codelibs/fess/releases/tag/fess-13.4.0>`__ リリース
+
+2019-09-30
+    `Fess 13.3.2 <https://github.com/codelibs/fess/releases/tag/fess-13.3.2>`__ リリース
+
+2019-08-31
+    `Fess 13.3.1 <https://github.com/codelibs/fess/releases/tag/fess-13.3.1>`__ リリース
+
+2019-08-22
+    `Fess 13.3.0 <https://github.com/codelibs/fess/releases/tag/fess-13.3.0>`__ リリース
+
+2019-08-01
+    `Fess 13.2.1 <https://github.com/codelibs/fess/releases/tag/fess-13.2.1>`__ リリース
+
 2019-07-04
     `Fess 13.2.0 <https://github.com/codelibs/fess/releases/tag/fess-13.2.0>`__ リリース
 
@@ -93,24 +108,6 @@ Java 実行環境があればどの OS でも実行可能です。
 
 2019-06-22
     `Fess 13.1.1 <https://github.com/codelibs/fess/releases/tag/fess-13.1.1>`__ リリース
-
-2019-06-12
-    `Fess 12.7.0 <https://github.com/codelibs/fess/releases/tag/fess-12.7.0>`__ リリース
-
-2019-06-09
-    `Fess 12.6.2 <https://github.com/codelibs/fess/releases/tag/fess-12.6.2>`__ リリース
-
-2019-06-01
-    `Fess 13.1.0 <https://github.com/codelibs/fess/releases/tag/fess-13.1.0>`__ リリース
-
-2019-05-16
-    `Fess 13.0.1 <https://github.com/codelibs/fess/releases/tag/fess-13.0.1>`__ リリース
-
-2019-05-16
-    `Fess 12.6.1 <https://github.com/codelibs/fess/releases/tag/fess-12.6.1>`__ リリース
-
-2019-05-16
-    `Fess 12.5.3 <https://github.com/codelibs/fess/releases/tag/fess-12.5.3>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
@@ -148,6 +145,12 @@ FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/f
 
 掲載メディア
 ============
+
+- `【第17回】データベースのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4659>`__
+
+- `【第16回】検索APIの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/4613>`__
+
+- `【第15回】認証が必要なファイルサーバのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4569>`__
 
 - `【第14回】管理用APIの使い方 <https://news.mynavi.jp/itsearch/article/devsoft/4514>`__
 

@@ -28,7 +28,7 @@ such as MS Office, pdf and zip.
 Download
 ========
 
-- :doc:`Fess 13.2.0 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 13.4.0 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -70,6 +70,21 @@ Features
 News
 ====
 
+2019-10-10
+    `Fess 13.4.0 <https://github.com/codelibs/fess/releases/tag/fess-13.4.0>`__ Released
+
+2019-09-30
+    `Fess 13.3.2 <https://github.com/codelibs/fess/releases/tag/fess-13.3.2>`__ Released
+
+2019-08-31
+    `Fess 13.3.1 <https://github.com/codelibs/fess/releases/tag/fess-13.3.1>`__ Released
+
+2019-08-22
+    `Fess 13.3.0 <https://github.com/codelibs/fess/releases/tag/fess-13.3.0>`__ Released
+
+2019-08-01
+    `Fess 13.2.1 <https://github.com/codelibs/fess/releases/tag/fess-13.2.1>`__ Released
+
 2019-07-04
     `Fess 13.2.0 <https://github.com/codelibs/fess/releases/tag/fess-13.2.0>`__ Released
 
@@ -78,24 +93,6 @@ News
 
 2019-06-22
     `Fess 13.1.1 <https://github.com/codelibs/fess/releases/tag/fess-13.1.1>`__ Released
-
-2019-06-12
-    `Fess 12.7.0 <https://github.com/codelibs/fess/releases/tag/fess-12.7.0>`__ Released
-
-2019-06-09
-    `Fess 12.6.2 <https://github.com/codelibs/fess/releases/tag/fess-12.6.2>`__ Released
-
-2019-06-01
-    `Fess 13.1.0 <https://github.com/codelibs/fess/releases/tag/fess-13.1.0>`__ Released
-
-2019-05-16
-    `Fess 13.0.1 <https://github.com/codelibs/fess/releases/tag/fess-13.0.1>`__ Released
-
-2019-05-16
-    `Fess 12.6.1 <https://github.com/codelibs/fess/releases/tag/fess-12.6.1>`__ Released
-
-2019-05-16
-    `Fess 12.5.3 <https://github.com/codelibs/fess/releases/tag/fess-12.5.3>`__ Released
 
 :doc:`More news <news>`...
 
