@@ -9,7 +9,7 @@
 
 -  OS: Windows や Unix など Java が実行できる OS 環境
 -  Java: Java 8u131 以上のバージョン
--  (RPMまたはDEB) Elasticsearch: 6.6.X
+-  (RPMまたはDEB) Elasticsearch: 6.7.X
 
 |Fess| を利用したい環境に Java がインストールされていない場合は、`Oracle のサイト <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ より JDK をインストールしてください。
 本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。

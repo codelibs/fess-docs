@@ -9,7 +9,7 @@ Requirements
 
 -  OS: Windows/Unix with Java environment
 -  Java: Java 8 update 131 or later
--  (RPM or DEB) Elasticsearch: 6.6.X
+-  (RPM or DEB) Elasticsearch: 6.8.X
 
 If Java is not installed in your environment, see we want to |Fess| from `Oracle site <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__ to install JDK.
 Embedded Elasticsearch is not recommended for production use.
@@ -99,15 +99,6 @@ Using Your Elasticsearch Cluster On ZIP package
 For the details to configure elasticsearch for Fess, please see steps in Using RPM package.
 
 To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
-For Windows environment, the following settings are put into fess-<version>\\bin\\fess.in.bat.
-fess.dictionary.path needs to be set to a path of configsync.config_path in elasticsearch.yml.
-
-::
-
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.transport_addresses=localhost:9300
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
-
 For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
 
 ::
@@ -121,3 +112,40 @@ If you change a cluster name of Elasticsearch, modify the following setting in f
 ::
 
     elasticsearch.cluster.name=elasticsearch
+
+Using an Elasticsearch cluster in a Windows environment.
+--------------------------------------------------------
+
+Download and unzip the Elasticsearch zip version.
+
+Install the following plugins to plugins directory in elasticsearch.
+
+::
+
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:6.8.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:6.8.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:6.8.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:6.8.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-langfield:6.8.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:6.8.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-learning-to-rank:6.8.0
+
+Note that these plugins depends on elasticsearch version.
+
+To access from Fess, the following configuration needs to be added to <elasticsearch-<version>\\config\\elasticsearch.yml
+
+::
+
+    configsync.config_path: c:/<elasticsearch-<version>/config/
+
+Unzip the downloaded fess-<version>.zip.
+
+To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
+For Windows environment, the following settings are put into fess-<version>\\bin\\fess.in.bat.
+fess.dictionary.path needs to be set to a path of configsync.config_path in elasticsearch.yml.
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.transport_addresses=localhost:9300
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
