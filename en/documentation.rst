@@ -8,5 +8,5 @@ DOCUMENTATION
    Administration <13.4/admin/index>
    Search <13.4/user/index>
    API <13.4/api/index>
-..   Configuration <10.0/config/index>
+   Configuration <13.4/config/index>
 
