@@ -15,7 +15,15 @@ runtime environment. |Fess| is provided under Apache license.
    :figclass: side-by-side
    :target: https://search.n2sm.co.jp/
 
-   Demo
+   Demo (Default)
+
+.. figure:: ../resources/images/ja/demo-2.png
+   :scale: 100%
+   :alt: Code Search
+   :figclass: side-by-side
+   :target: https://codesearch.codelibs.org/
+
+   Source Code Search
 
 
 |Fess| is Elasticsearch-based search server,
@@ -117,6 +125,7 @@ Support Service
 
 
 .. |image0| image:: ../resources/images/en/demo-1.png
+.. |image1| image:: ../resources/images/en/demo-2.png
 
 
 .. hidden toctree
