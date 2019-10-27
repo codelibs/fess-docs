@@ -131,8 +131,6 @@ Java 実行環境があればどの OS でも実行可能です。
 
 - `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ (Google Site Search代替サービス)
 
-- `N2 Search on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__ (AWSのAMI)
-
 - :doc:`各種サポートサービス <support-services>`
 
 
@@ -143,12 +141,6 @@ CodeLibsプロジェクトでは `Fess Site Search(FSS) <https://fss-generator.c
 既存のサイトにJavaScriptを配置するだけで、Fessの検索ページを組み込むことができます。
 FSSを利用することで、Google Site SearchやYahoo!検索カスタムサーチからの移行も簡単にできます。
 安価なFessサーバが必要な場合は、 `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ をご覧ください。
-
-X-Pack対応
-==========
-
-FessでのX-Pack対応については `fess-xpack <https://github.com/codelibs/fess-xpack>`__ を参照してください。
-サポートが必要な場合は、 `商用サポート(有償) <https://www.n2sm.net/products/n2search.html>`__ をご利用ください。
 
 
 掲載メディア
