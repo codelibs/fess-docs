@@ -9,6 +9,7 @@
 正確なヒット件数を表示させる場合は設定変更が必要になります。
 
 検索例
+
 |image0|
 
-.. |image0| image:: ../../resources/images/ja/13.4/config/search-result.png
+.. |image0| image:: ../../../resources/images/ja/13.4/config/search-result.png
