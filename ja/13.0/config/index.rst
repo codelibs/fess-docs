@@ -16,5 +16,5 @@
    geosearch
    thumbnail
    scroll-search
+   search-result-count
 ..   kibana
-
