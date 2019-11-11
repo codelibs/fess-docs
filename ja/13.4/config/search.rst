@@ -1,5 +1,5 @@
 ==================
-検索結果件数の表示
+検索機能
 ==================
 
 検索結果件数の表示
@@ -12,4 +12,4 @@
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/ja/13.3/config/search-result.png
+.. |image0| image:: ../../../resources/images/ja/13.4/config/search-result.png
