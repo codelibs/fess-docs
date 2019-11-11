@@ -12,4 +12,4 @@
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/ja/13.4/config/search-result.png
+.. |image0| image:: ../../../resources/images/ja/13.0/config/search-result.png
