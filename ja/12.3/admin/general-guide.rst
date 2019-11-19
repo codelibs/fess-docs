@@ -197,6 +197,11 @@ User DN
 
 ユーザーのCommon Nameやuidなど指定します。
 
+グループフィルタ
+::::::::::::::::::
+
+取得したいグループのフィルタ条件を指定します。
+
 memberOf属性
 ::::::::::::::
 
@@ -246,6 +251,9 @@ LDAPの設定例
    * - アカウントフィルタ
      - cn=%s または uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
+   * - グループフィルタ
+     - 
+     - (member:1.2.840.113556.1.4.1941:=%s)
    * - memberOf
      - isMemberOf
      - memberOf

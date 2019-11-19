@@ -212,6 +212,11 @@ Account Filter
 
 LDAP query to fileter user accounts.
 
+Group Filter
+::::::::::::::::::
+
+Specify the filter condition for the group.
+
 memberOf Attribute
 ::::::::::::::::::
 
@@ -260,10 +265,12 @@ LDAP Configuration
    * - Account Filter
      - cn=%s or uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
+   * - Group Filter
+     - 
+     - (member:1.2.840.113556.1.4.1941:=%s)
    * - memberOf
      - isMemberOf
      - memberOf
 
 
 .. |image0| image:: ../../../resources/images/en/12.6/admin/general-1.png
-
