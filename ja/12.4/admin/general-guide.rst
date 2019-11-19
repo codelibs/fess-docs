@@ -257,7 +257,7 @@ LDAPの設定例
      - cn=%s または uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
    * - グループフィルタ
-     - ー
+     - 
      - (member:1.2.840.113556.1.4.1941:=%s)
    * - memberOf
      - isMemberOf
