@@ -156,8 +156,6 @@ Descriptions for properties are as below.
      - Facet information for specified facet.field.
    * - facet_query
      - Facet information for specified facet.query.
-   * - geo_distance
-     - Geo information.
    * - result
      - Search result element.
    * - filetype
@@ -190,4 +188,3 @@ Descriptions for properties are as below.
      - URL as a search result.
    * - timestamp
      - Document timestamp.
-
