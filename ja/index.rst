@@ -146,6 +146,8 @@ FSSを利用することで、Google Site SearchやYahoo!検索カスタムサ�
 掲載メディア
 ============
 
+- `【第18回】Google Driveのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4732>`__
+
 - `【第17回】データベースのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4659>`__
 
 - `【第16回】検索APIの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/4613>`__
