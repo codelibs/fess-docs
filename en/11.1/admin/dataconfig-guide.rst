@@ -5,7 +5,7 @@ Data Store Config
 Overview
 ========
 
-Data Store Crawling Configuaration page manages configurations for crawling on Data Strore, such as Database.
+Data Store Crawling Configuaration page manages configurations for crawling on Data Store, such as Database.
 
 Management Operations
 =====================
@@ -37,7 +37,7 @@ Configuration name.
 Handler Name
 ::::::::::::
 
-Type of Data Strore.
+Type of Data Store.
 
 * DatabaseDataStore: crawl data in Database.
 * CsvDataStore: crawl data in CSV file.
@@ -49,7 +49,7 @@ Type of Data Strore.
 Parameter
 :::::::::
 
-Parameters for Data Strore crawling.
+Parameters for Data Store crawling.
 
 Script
 ::::::
@@ -94,7 +94,7 @@ DatabaseDataStore
 This section describes Database crawling.
 
 This example uses MySQL.
-There is the following table in testdb, and you can acccess data with username=foo and password=bar.
+There is the following table in testdb, and you can access data with username=foo and password=bar.
 
 ::
 

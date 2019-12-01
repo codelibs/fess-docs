@@ -11,7 +11,7 @@ Usage
 -----
 
 Boost search syntax is word^number, such as Apple^10.
-The number is boost-weighted value, and higer value is prior.
+The number is boost-weighted value, and higher value is prior.
 
 To search document which contains more apples than oranges, 
 

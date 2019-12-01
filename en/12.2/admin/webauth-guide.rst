@@ -62,7 +62,7 @@ Password for authentication.
 Parameters
 ::::::::::
 
-Addtional parameters.
+Additional parameters.
 
 Web Config
 ::::::::::

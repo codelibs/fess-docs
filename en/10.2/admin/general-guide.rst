@@ -101,7 +101,7 @@ e.g. documents indexed X days ago are removed if they are not updated.
 Excluded Failure Type
 ::::::::::::::
 
-Crawler does not ignore falure urls included in excluded failure types even if the failure count is over the treshold.
+Crawler does not ignore failure urls included in excluded failure types even if the failure count is over the threshold.
 
 Failure Count Threshold
 ::::::::::::::
@@ -114,7 +114,7 @@ Logging
 Search Logging
 ::::::::::::::
 
-Enable logging for user's searchs.
+Enable logging for user's searches.
 
 User Logging
 ::::::::::::::
@@ -183,7 +183,7 @@ Base DN of LDAP environment.
 Account Filter
 ::::::::::::::
 
-LDAP query to fileter user accounts.
+LDAP query to filter user accounts.
 
 Notification
 --------

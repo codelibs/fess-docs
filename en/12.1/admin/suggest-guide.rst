@@ -23,7 +23,7 @@ Word Type
 :::::::::
 
 - All: All registered words.
-- Docuemnt: words are registered from indexed documents.
+- Document: words are registered from indexed documents.
 - Query: words are registered from search logs.
 
 Word Count
