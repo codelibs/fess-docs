@@ -41,7 +41,7 @@ Usage
 -----
 
 The format of Field search is colon-separated query, such as fieldname:searchword.
-If field name is not specified, |Fess| searchs documents in values of title and content field.
+If field name is not specified, |Fess| searches documents in values of title and content field.
 
 To search documents that contains "fess" in title field:
 

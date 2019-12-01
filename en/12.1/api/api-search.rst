@@ -14,7 +14,7 @@ To enable JSON Response at System > General in Administrative page, Search API b
 Request Parameters
 --------------------
 
-Search API contains optional parameters for advance searchs, such as ``http://<Server Name>/json/?q=WORD&num=50&fields.label=fess``.
+Search API contains optional parameters for advance searches, such as ``http://<Server Name>/json/?q=WORD&num=50&fields.label=fess``.
 Available parameters are as below.
 
 .. TODO: facet.field, facet.query の説明を詳しく

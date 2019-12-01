@@ -5,7 +5,7 @@ Introduction
 Who Should Use This Document
 ============================
 
-This document is intended for users who searchs on |Fess|.
+This document is intended for users who search on |Fess|.
 
 Before You Read This Document
 =============================

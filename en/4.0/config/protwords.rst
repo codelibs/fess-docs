@@ -10,8 +10,8 @@ About stemming
 In |Fess| when indexing and searching the stemming process done.
 
 This is to normalize the English word processing, for example, words
-such as recharging and rechargable is normalized to form recharg. Hit
-and even if you search by recharging the word this word rechargable,
+such as recharging and rechargeable are normalized to form recharg. Hit
+and even if you search by recharging the word this word rechargeable,
 less search leakage is expected.
 
 about protwords.txt

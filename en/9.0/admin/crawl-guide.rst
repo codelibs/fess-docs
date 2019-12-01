@@ -62,7 +62,7 @@ http://localhost:8080/ |Fess| /JSON? can get access query = search term.
 Mobile translation
 ------------------
 
-If theses PC website search results on mobile devices may not display
+If these PC website search results on mobile devices may not display
 correctly. And select the mobile conversion, such as if the PC site for
 mobile terminals, and to show that you can. You can if you choose Google
 Google Wireless Transcoder allows to display content on mobile phones.

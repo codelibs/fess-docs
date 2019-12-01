@@ -11,7 +11,7 @@ Usage
 -----
 
 Fuzzy search syntax is word~number, such as Apple~0.8.
-The number is beween 0 and 1, with a value closer to 1 only terms with a higher similarity will be matched.
+The number is between 0 and 1, with a value closer to 1 only terms with a higher similarity will be matched.
 
 
 

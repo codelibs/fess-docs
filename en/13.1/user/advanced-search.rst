@@ -22,7 +22,7 @@ Details
 All these words
 :::::::::::::::
 
-All thses words provides a search result that contains all search words you type at a text box.
+All these words provides a search result that contains all search words you type at a text box.
 
 This exact word or phrase
 :::::::::::::::::::::::::

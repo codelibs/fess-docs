@@ -5,7 +5,7 @@ Data Store
 Overview
 ========
 
-Data Store Crawling Configuaration page manages configurations for crawling on Data Strore, such as Database.
+Data Store Crawling Configuaration page manages configurations for crawling on Data Store, such as Database.
 
 Management Operations
 =====================
@@ -37,12 +37,12 @@ Configuration name.
 Handler Name
 ::::::::::::
 
-Type of Data Strore.
+Type of Data Store.
 
 Parameter
 :::::::::
 
-Parameters for Data Strore crawling.
+Parameters for Data Store crawling.
 
 Script
 ::::::

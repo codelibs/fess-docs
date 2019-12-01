@@ -38,7 +38,7 @@ Target word.
 Segmentation
 ::::::::::::
 
-Segmentation of Token splited by a space charactor.
+Segmentation of Token splited by a space character.
 
 Reading
 :::::::
