@@ -40,7 +40,7 @@ Reading
 
 Reading for suggest word.
 
-Role
+Permissions
 ::::
 
 Roles to restrict suggesting.
