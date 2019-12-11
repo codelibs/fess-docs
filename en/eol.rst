@@ -9,7 +9,8 @@ If you need a support for your old system, please contact Commercial Support.
 Maintenance Tables
 ==================
 
-We support each major release of our products for 18 months from the General Availability date.
+EOL date for our products is the same date as Elasticsearch.
+See `Elasticsearch EOL <https://www.elastic.co/support/eol>`__.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -17,27 +18,27 @@ We support each major release of our products for 18 months from the General Ava
    * - Fess
      - EOL Date
    * - 13.4.x
-     - 2021-04-10
+     - 2021-04-01
    * - 13.3.x
-     - 2021-03-22
+     - 2021-01-31
    * - 13.2.x
-     - 2021-02-04
+     - 2020-12-25
    * - 13.1.x
-     - 2021-01-01
+     - 2020-11-20
    * - 13.0.x
-     - 2020-11-01
+     - 2020-10-10
    * - 12.7.x
-     - 2021-01-12
+     - 2020-11-20
    * - 12.6.x
-     - 2020-10-11
+     - 2020-09-26
    * - 12.5.x
-     - 2020-08-10
+     - 2020-07-29
    * - 12.4.x
-     - 2020-05-22
+     - 2020-05-14
    * - 12.3.x
-     - 2020-03-04
+     - 2020-02-23
    * - 12.2.x
-     - 2020-02-09
+     - 2020-12-13
    * - 12.1.x
      - 2019-08-19
    * - 12.0.x
