@@ -61,10 +61,7 @@ The explanation of the main setting items is as follows.
 .. list-table::
    :header-rows: 1
 
-   * - 設定項目
-     - 設定値
-
-   * - Item name
+   * - Name
      - Description 
    * - URL
      - URL to start crawling (start crawling from this URL)
@@ -86,8 +83,8 @@ This setting crawls the page group under ``https://fess.codelibs.org/`` with two
 .. list-table::
    :header-rows: 1
 
-   * - Item name
-     - Setting value
+   * - Name
+     - Value
    * - Name
      - Fess
    * - URL
@@ -136,7 +133,7 @@ You can build and use a search server with just these simple steps.
 
 In a next article, we will explain how to embed search results in existing web pages.
 
-.. |image0| image:: ../../../resources/images/en/articles/1/fess-search-top.png
-.. |image1| image:: ../../../resources/images/en/articles/1/fess-admin-dashboard.png
-.. |image2| image:: ../../../resources/images/en/articles/1/fess-search-result.png
-.. |image3| image:: ../../../resources/images/en/articles/1/fess-search-result-rwd.png
+.. |image0| image:: ../../../resources/images/en/article/1/fess-search-top.png
+.. |image1| image:: ../../../resources/images/en/article/1/fess-admin-dashboard.png
+.. |image2| image:: ../../../resources/images/en/article/1/fess-search-result.png
+.. |image3| image:: ../../../resources/images/en/article/1/fess-search-result-rwd.png
