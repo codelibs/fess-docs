@@ -140,6 +140,7 @@ Support Service
    overview
    basic
    documentation
+   articles
    development
    others
    archives
