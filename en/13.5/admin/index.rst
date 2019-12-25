@@ -19,6 +19,7 @@
    stemmeroverride-guide
    accesstoken-guide
    plugin-guide
+   storage-guide
    webconfig-guide
    fileconfig-guide
    dataconfig-guide
