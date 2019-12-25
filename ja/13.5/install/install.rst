@@ -68,7 +68,7 @@ fess-<version>/bin/fess.in.sh を変更します。
     FESS_DICTIONARY_PATH=/opt/elasticsearch-<version>/config/
 
 
-ZIP パッケージを利用する場合（Windwos）
+ZIP パッケージを利用する場合（Windows）
 ------------------------------------------------
 
 ダウンロードした elasticsearch-<version>.zip 、fess-<version>.zip は任意の場所に展開します。
