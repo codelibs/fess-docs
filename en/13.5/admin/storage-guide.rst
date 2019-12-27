@@ -5,13 +5,13 @@ Storage
 Overview
 ========
 
-On the Storage, you can manage storage objects on the Object Storage Servers compatible with Amazon S3.
+On the Storage page, you can manage storage objects on the Object Storage Servers compatible with Amazon S3, such as MinIO.
 
 Management Operations
 ========
 
 Object Storage Server Configuration
-----
+--------
 
 Select System > General in the left menu and configure the following parameters on the Storage settings.
 
