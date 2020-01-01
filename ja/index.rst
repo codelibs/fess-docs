@@ -101,6 +101,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2020-01-01
+    `Fess 13.4.4 <https://github.com/codelibs/fess/releases/tag/fess-13.4.4>`__ リリース
+
 2019-12-21
     `Fess 13.5.0 <https://github.com/codelibs/fess/releases/tag/fess-13.5.0>`__ リリース
 
@@ -121,9 +124,6 @@ Java 実行環境があればどの OS でも実行可能です。
 
 2019-08-31
     `Fess 13.3.1 <https://github.com/codelibs/fess/releases/tag/fess-13.3.1>`__ リリース
-
-2019-08-22
-    `Fess 13.3.0 <https://github.com/codelibs/fess/releases/tag/fess-13.3.0>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
