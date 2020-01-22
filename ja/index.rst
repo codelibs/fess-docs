@@ -156,6 +156,8 @@ FSSを利用することで、Google Site SearchやYahoo!検索カスタムサ�
 掲載メディア
 ============
 
+- `【第21回】Slackのメッセージをクロールする <https://news.mynavi.jp/itsearch/article/bizapp/4808>`__
+
 - `【第20回】検索ログを可視化する <https://news.mynavi.jp/itsearch/article/devsoft/4781>`__
 
 - `【第19回】CSVファイルのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4761>`__
