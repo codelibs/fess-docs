@@ -5,6 +5,15 @@
 ニュース一覧
 ============
 
+2020-01-26
+    `Fess 13.5.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.5.1>`__
+
+2020-01-26
+    `Fess 13.4.5 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.4.5>`__
+
+2020-01-26
+    `Fess 13.3.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.3.3>`__
+
 2020-01-01
     `Fess 13.4.4 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.4.4>`__
 
