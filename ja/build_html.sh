@@ -22,9 +22,9 @@ make SPHINXOPTS="-c ${CONFDIR}" BUILDDIR="${BUILDDIR}/${TYPE}" SPHINX_LANG="${DO
 java -jar ${HTMLCOMPRESSOR_JAR} --compress-js --compress-css --recursive -o ${TARGET} ${TARGET}
 
 # Minify js and css
-while read file; do
-  if [[ ! "${file##*/}" =~ ^.*\.min\..*$ ]]; then
-    echo "Compressing $file.."
-    java -jar ${YUICOMPRESSOR_JAR} -o $file $file
-  fi
-done < <(find "${TARGET}" \( -name "*.js" -o -name "*.css" \))
+#while read file; do
+#  if [[ ! "${file##*/}" =~ ^.*\.min\..*$ ]]; then
+#    echo "Compressing $file.."
+#    java -jar ${YUICOMPRESSOR_JAR} -o $file $file
+#  fi
+#done < <(find "${TARGET}" \( -name "*.js" -o -name "*.css" \))
