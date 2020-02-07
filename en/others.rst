@@ -5,5 +5,5 @@ OTHERS
 .. toctree::
 
    News <news>
-   FAQ <https://github.com/codelibs/fess/issues?q=label%3Aquestion>
+   Forum <https://discuss.codelibs.org/c/FessEN/8>
    EOL <eol>

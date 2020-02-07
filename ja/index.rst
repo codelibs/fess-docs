@@ -209,8 +209,7 @@ FSSを利用することで、Google Site SearchやYahoo!検索カスタムサ�
 .. hidden toctree
 
 .. toctree::
-   :maxdepth: 3
-   :hidden:
+   :maxdepth: 2
 
    overview
    basic

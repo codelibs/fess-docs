@@ -5,8 +5,8 @@
 .. toctree::
 
    ニュース <news>
+   フォーラム <https://discuss.codelibs.org/c/FessJA/7>
    掲載記事 <articles>
-   FAQ <faq>
    製品サポート期限 <eol>
    ライセンス <license>
    関連プロジェクト <supporting-projects>

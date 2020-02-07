@@ -137,8 +137,7 @@ Support Service
 .. hidden toctree
 
 .. toctree::
-   :maxdepth: 3
-   :hidden:
+   :maxdepth: 2
 
    overview
    basic
