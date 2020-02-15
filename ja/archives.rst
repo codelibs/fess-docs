@@ -2,6 +2,21 @@
 アーカイブ
 ============================================
 
+13.5
+~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   13.5/install/index
+   13.5/user/index
+   13.5/api/index
+   13.5/admin/index
+   13.5/config/index
+   JavaDocs <https://fess.codelibs.org/13.5/apidocs/index.html>
+   XRef <https://fess.codelibs.org/13.5/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/13.5/lastadoc-fess.html>
+
 13.4
 ~~~~~
 

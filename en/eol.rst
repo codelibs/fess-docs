@@ -17,6 +17,8 @@ See `Elasticsearch EOL <https://www.elastic.co/support/eol>`__.
 
    * - Fess
      - EOL Date
+   * - 13.6.x
+     - 2021-08-11
    * - 13.5.x
      - 2021-06-02
    * - 13.4.x
