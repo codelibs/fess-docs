@@ -125,10 +125,8 @@ Support Service
 .. |image1| image:: ../resources/images/en/demo-2.png
 
 
-.. hidden toctree
-
 .. toctree::
-   :maxdepth: 2
+   :hidden:
 
    overview
    basic

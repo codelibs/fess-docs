@@ -205,10 +205,8 @@ FSSを利用することで、Google Site SearchやYahoo!検索カスタムサ�
 .. |image4| image:: ../resources/images/ja/n2search_b.png
 
 
-.. hidden toctree
-
 .. toctree::
-   :maxdepth: 2
+   :hidden:
 
    overview
    basic

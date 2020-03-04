@@ -405,9 +405,9 @@ pdf_language = language
 # -- HTML theme options for `sphinx_rtd_theme` style -------
 
 html_theme_options = {
-    'collapse_navigation': False,
+    'collapse_navigation': True,
     'display_version': False,
-#    'navigation_depth': 3,
+    'navigation_depth': 3,
 }
 
 html_context = {
