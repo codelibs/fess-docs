@@ -44,7 +44,7 @@ ZIP パッケージを利用する場合
 ::
 
     $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.6.0
-    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.6.0
+    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.6.2
     $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.6.0
     $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.6.0
     $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.6.0
@@ -78,7 +78,7 @@ ZIP パッケージを利用する場合（Windows）
 ::
 
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.6.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.6.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.6.2
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.6.0
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.6.0
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.6.0
@@ -143,7 +143,7 @@ DEBパッケージの場合
 ::
 
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.6.0
-    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.6.0
+    $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.6.2
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.6.0
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-dataformat:7.6.0
     $ /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.6.0
