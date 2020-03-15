@@ -6,7 +6,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    13.5/install/index
    13.5/user/index
@@ -19,7 +18,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    13.4/install/index
    13.4/user/index
@@ -32,7 +30,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    13.3/install/index
    13.3/user/index
@@ -45,7 +42,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    13.2/install/index
    13.2/user/index
@@ -58,7 +54,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    13.1/install/index
    13.1/user/index
@@ -71,7 +66,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    13.0/install/index
    13.0/user/index
@@ -84,7 +78,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.7/install/index
    12.7/user/index
@@ -97,7 +90,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.6/install/index
    12.6/user/index
@@ -110,7 +102,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.5/install/index
    12.5/user/index
@@ -123,7 +114,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.4/install/index
    12.4/user/index
@@ -136,7 +126,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.3/install/index
    12.3/user/index
@@ -149,7 +138,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.2/install/index
    12.2/user/index
@@ -162,7 +150,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.1/install/index
    12.1/user/index
@@ -175,7 +162,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    12.0/install/index
    12.0/user/index
@@ -188,7 +174,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    11.4/install/index
    11.4/user/index
@@ -201,7 +186,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    11.3/install/index
    11.3/user/index
@@ -214,7 +198,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    11.2/install/index
    11.2/user/index
@@ -224,7 +207,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    11.1/install/index
    11.1/user/index
@@ -234,7 +216,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    11.0/install/index
    11.0/user/index
@@ -244,7 +225,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    10.3/install/index
    10.3/user/index
@@ -254,7 +234,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    10.2/install/index
    10.2/user/index
@@ -264,7 +243,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    10.1/install/index
    10.1/user/index
@@ -275,7 +253,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    10.0/install/index
    10.0/user/index
@@ -286,7 +263,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    9.4/install/index
    9.4/user/index
@@ -298,7 +274,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    9.3/install/index
    9.3/user/index
@@ -310,7 +285,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    9.2/install/index
    9.2/user/index
@@ -321,7 +295,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    9.1/install/index
    9.1/user/index
@@ -332,7 +305,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    9.0/install/index
    9.0/user/index
@@ -343,7 +315,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    8.0/install/index
    8.0/user/index
@@ -354,7 +325,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    7.0/install/index
    7.0/user/index
@@ -365,7 +335,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    6.0/install/index
    6.0/user/index
@@ -376,7 +345,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    5.0/user/index
    5.0/admin/index
@@ -386,7 +354,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    4.0/user/index
    4.0/admin/index
@@ -396,7 +363,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    3.0/user/index
    3.0/admin/index
@@ -406,7 +372,6 @@ ARCHIVES
 ~~~~~
 
 .. toctree::
-   :maxdepth: 1
 
    2.0/user/index
    2.0/admin/index

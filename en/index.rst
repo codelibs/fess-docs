@@ -96,10 +96,12 @@ News
 2019-12-21
     `Fess 13.5.0 <https://github.com/codelibs/fess/releases/tag/fess-13.5.0>`__ Released
 
-2019-11-21
-    `Fess 13.4.3 <https://github.com/codelibs/fess/releases/tag/fess-13.4.3>`__ Released
-
 :doc:`More news <news>`...
+
+Discussion
+==========
+
+- `Discussion Forum <https://discuss.codelibs.org/c/FessEN/>`__
 
 Fess Site Search
 ================

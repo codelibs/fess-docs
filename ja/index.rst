@@ -121,13 +121,12 @@ Java 実行環境があればどの OS でも実行可能です。
 2019-12-21
     `Fess 13.5.0 <https://github.com/codelibs/fess/releases/tag/fess-13.5.0>`__ リリース
 
-2019-11-21
-    `Fess 13.4.3 <https://github.com/codelibs/fess/releases/tag/fess-13.4.3>`__ リリース
-
-2019-11-07
-    `Fess 13.4.2 <https://github.com/codelibs/fess/releases/tag/fess-13.4.2>`__ リリース
-
 過去のニュースは :doc:`こちら <news>` をご覧ください。
+
+フォーラム
+==========
+
+質問などがあれば、 `フォーラム <https://discuss.codelibs.org/c/FessJA/>`__ をご利用ください。
 
 商用サポート
 ============
