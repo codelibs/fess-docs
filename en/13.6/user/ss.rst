@@ -32,4 +32,4 @@ Screen Image
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/en/13.6/admin/fess-ss-1.png
+.. |image0| image:: ../../../resources/images/en/13.6/user/fess-ss-1.png
