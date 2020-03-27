@@ -22,4 +22,7 @@ Details
 
 To display details for specific crawling session, click the row of crawling info data.
 
+|image1|
+
 .. |image0| image:: ../../../resources/images/en/13.6/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/en/13.6/admin/crawlinginfo-2.png
