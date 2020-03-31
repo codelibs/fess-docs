@@ -10,10 +10,15 @@
 
 |ブラウザによる検索結果の表示|
 
-クロール全般
+ダッシュボード
+-----------
+
+|ダッシュボード|
+
+全般設定
 ------------
 
-|クロール全般|
+|全般設定|
 
 ウェブクロールの設定
 --------------------
@@ -35,25 +40,20 @@
 
 |パスマッピングの設定|
 
-ダッシュボード
------------
-
-|ダッシュボード|
-
 ログファイル一覧
 ----------------
 
 |ログファイル一覧|
 
-セッション情報一覧
+クロール情報一覧
 ------------------
 
-|セッション情報一覧|
+|クロール情報一覧|
 
-セッション情報詳細
+クロール情報詳細
 ------------------
 
-|セッション情報詳細|
+|クロール情報詳細|
 
 バックアップ/リストア
 ---------------------
@@ -61,13 +61,13 @@
 |バックアップ/リストア|
 
 .. |ブラウザによる検索結果の表示| image:: ../resources/images/ja/screenshot/fess_search_result.png
-.. |クロール全般| image:: ../resources/images/ja/screenshot/fess_admin_crawler.png
+.. |ダッシュボード| image:: ../resources/images/ja/screenshot/fess_admin_dashboard.png
+.. |全般設定| image:: ../resources/images/ja/screenshot/fess_admin_general.png
 .. |ウェブクロールの設定| image:: ../resources/images/ja/screenshot/fess_admin_webconfig.png
-.. |ファイルシステムクロールの設定| image:: ../resources/images/ja/screenshot/fess_admin_fsconfig.png
+.. |ファイルシステムクロールの設定| image:: ../resources/images/ja/screenshot/fess_admin_fileconfig.png
 .. |ウェブ認証の設定| image:: ../resources/images/ja/screenshot/fess_admin_webauth.png
 .. |パスマッピングの設定| image:: ../resources/images/ja/screenshot/fess_admin_pathmapping.png
-.. |ダッシュボード| image:: ../resources/images/ja/screenshot/fess_dashboard.png
-.. |ログファイル一覧| image:: ../resources/images/ja/screenshot/fess_admin_logfile.png
-.. |セッション情報一覧| image:: ../resources/images/ja/screenshot/fess_admin_sessioninfo.png
-.. |セッション情報詳細| image:: ../resources/images/ja/screenshot/fess_admin_sessioninfo2.png
-.. |バックアップ/リストア| image:: ../resources/images/ja/screenshot/fess_admin_backuprestore.png
+.. |ログファイル一覧| image:: ../resources/images/ja/screenshot/fess_admin_log.png
+.. |クロール情報一覧| image:: ../resources/images/ja/screenshot/fess_admin_crawlinginfo.png
+.. |クロール情報詳細| image:: ../resources/images/ja/screenshot/fess_admin_crawlinginfo2.png
+.. |バックアップ/リストア| image:: ../resources/images/ja/screenshot/fess_admin_backup.png

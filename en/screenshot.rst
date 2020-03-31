@@ -10,10 +10,15 @@ Search Results on Browser
 
 |Search Results on Browser|
 
-Crawling Setting
+Dashboard
+------------
+
+|Dashboard|
+
+General Setting
 ----------------
 
-|Crawling Setting|
+|General Setting|
 
 Web Crawling Config
 -------------------
@@ -35,25 +40,20 @@ Path Mapping Setting
 
 |Path Mapping Setting|
 
-Dashboard
+Log Files
 ------------
 
-|Dashboard|
+|Log Files|
 
-Logfile List
-------------
-
-|Session Info|
-
-Session Info List
+Crawling Info List
 -----------------
 
-|Session Info List|
+|Crawling Info List|
 
-Session Info Details
+Crawling Info Details
 --------------------
 
-|Session Info Details|
+|Crawling Info Details|
 
 Backup/Restore
 --------------
@@ -61,13 +61,13 @@ Backup/Restore
 |Backup/Restore|
 
 .. |Search Results on Browser| image:: ../resources/images/en/screenshot/fess_search_result.png
-.. |Crawling Setting| image:: ../resources/images/en/screenshot/fess_admin_crawler.png
+.. |Dashboard| image:: ../resources/images/en/screenshot/fess_admin_dashboard.png
+.. |General Setting| image:: ../resources/images/en/screenshot/fess_admin_general.png
 .. |Web Crawling Config| image:: ../resources/images/en/screenshot/fess_admin_webconfig.png
-.. |File System Crawling Config| image:: ../resources/images/en/screenshot/fess_admin_fsconfig.png
+.. |File System Crawling Config| image:: ../resources/images/en/screenshot/fess_admin_fileconfig.png
 .. |Web Authentication Setting| image:: ../resources/images/en/screenshot/fess_admin_webauth.png
 .. |Path Mapping Setting| image:: ../resources/images/en/screenshot/fess_admin_pathmapping.png
-.. |Dashboard| image:: ../resources/images/en/screenshot/fess_admin_dashboard.png
-.. |Session Info| image:: ../resources/images/en/screenshot/fess_admin_logfile.png
-.. |Session Info List| image:: ../resources/images/en/screenshot/fess_admin_sessioninfo.png
-.. |Session Info Details| image:: ../resources/images/en/screenshot/fess_admin_sessioninfo2.png
-.. |Backup/Restore| image:: ../resources/images/en/screenshot/fess_admin_backuprestore.png
+.. |Log Files| image:: ../resources/images/en/screenshot/fess_admin_log.png
+.. |Crawling Info List| image:: ../resources/images/en/screenshot/fess_admin_crawlinginfo.png
+.. |Crawling Info Details| image:: ../resources/images/en/screenshot/fess_admin_crawlinginfo2.png
+.. |Backup/Restore| image:: ../resources/images/en/screenshot/fess_admin_backup.png
