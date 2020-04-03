@@ -36,7 +36,7 @@ such as MS Office, pdf and zip.
 Download
 ========
 
-- :doc:`Fess 13.6.2 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 13.6.3 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -78,6 +78,9 @@ Features
 News
 ====
 
+2020-04-04
+    `Fess 13.6.3 <https://github.com/codelibs/fess/releases/tag/fess-13.6.3>`__ Released
+
 2020-03-13
     `Fess 13.6.2 <https://github.com/codelibs/fess/releases/tag/fess-13.6.2>`__ Released
 
@@ -93,9 +96,6 @@ News
 2020-01-01
     `Fess 13.4.4 <https://github.com/codelibs/fess/releases/tag/fess-13.4.4>`__ Released
 
-2019-12-21
-    `Fess 13.5.0 <https://github.com/codelibs/fess/releases/tag/fess-13.5.0>`__ Released
-
 :doc:`More news <news>`...
 
 Discussion
@@ -107,11 +107,6 @@ Fess Site Search
 ================
 
 `Fess Site Search <https://fss-generator.codelibs.org/docs/manual>`__ is Google Site Search alternative.
-
-X-Pack Support
-==============
-
-`Fess X-Pack <https://github.com/codelibs/fess-xpack>`__ provides a feature to support X-Pack.
 
 Support Service
 ===============
