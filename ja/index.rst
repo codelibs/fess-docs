@@ -155,6 +155,8 @@ FSSを利用することで、Google Site SearchやYahoo!検索カスタムサ�
 掲載メディア
 ============
 
+- `【第25回】Tesseract OCRを利用する <https://news.mynavi.jp/itsearch/article/devsoft/4928>`__
+
 - `【第24回】GitBucketのクロール <https://news.mynavi.jp/itsearch/article/devsoft/4924>`__
 
 - `【第23回】サジェスト機能の使い方 <https://news.mynavi.jp/itsearch/article/bizapp/4890>`__
