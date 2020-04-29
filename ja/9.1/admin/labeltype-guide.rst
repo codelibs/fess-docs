@@ -53,5 +53,5 @@
 
 ラベルの表示順を指定します。
 
-.. |image0| image:: ../../../resources/images/ja/9.2/admin/labelType-1.png
-.. |image1| image:: ../../../resources/images/ja/9.2/admin/labelType-2.png
+.. |image0| image:: ../../../resources/images/ja/9.1/admin/labeltype-1.png
+.. |image1| image:: ../../../resources/images/ja/9.1/admin/labeltype-2.png

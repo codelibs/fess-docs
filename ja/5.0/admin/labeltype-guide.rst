@@ -27,5 +27,15 @@
 ドキュメントを分類するときの識別子を指定します。この値は Solr
 に送信されます。英数字で指定してください。
 
-.. |image0| image:: ../../../resources/images/ja/2.0/labelType-1.png
-.. |image1| image:: ../../../resources/images/ja/2.0/labelType-2.png
+ロール
+------
+
+ラベルを表示するロールを指定します。
+
+表示順
+------
+
+ラベルの表示順を指定します。
+
+.. |image0| image:: ../../../resources/images/ja/5.0/labeltype-1.png
+.. |image1| image:: ../../../resources/images/ja/5.0/labeltype-2.png

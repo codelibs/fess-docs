@@ -16,7 +16,7 @@
    webCrawlingConfig-guide
    fileCrawlingConfig-guide
    dataCrawlingConfig-guide
-   labelType-guide
+   labeltype-guide
    keyMatch-guide
    boostDocumentRule-guide
    pathMapping-guide
