@@ -27,7 +27,7 @@
    roleType-guide
    suggestElevateWord-guide
    suggestBadWord-guide
-   systemInfo-guide
+   systeminfo-guide
    jobLog-guide
    crawlingSession-guide
    log-guide

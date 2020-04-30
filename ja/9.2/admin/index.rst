@@ -25,7 +25,7 @@
    overlappingHost-guide
    roleType-guide
    browserType-guide
-   systemInfo-guide
+   systeminfo-guide
    jobLog-guide
    crawlingSession-guide
    log-guide

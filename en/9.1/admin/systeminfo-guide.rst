@@ -45,4 +45,4 @@ For bug reports
 Is a list of properties to attach when reporting a bug. Extract the
 value contains no personal information.
 
-.. |image0| image:: ../../../resources/images/en/9.1/admin/systemInfo-1.png
+.. |image0| image:: ../../../resources/images/en/9.1/admin/systeminfo-1.png

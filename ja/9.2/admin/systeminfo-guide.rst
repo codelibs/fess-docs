@@ -40,4 +40,4 @@
 
 バグを報告する際に添付するためのプロパティ一覧です。個人情報が含まれない値を抽出しています。
 
-.. |image0| image:: ../../../resources/images/ja/9.3/admin/systemInfo-1.png
+.. |image0| image:: ../../../resources/images/ja/9.2/admin/systeminfo-1.png
