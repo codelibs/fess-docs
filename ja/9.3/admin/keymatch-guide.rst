@@ -45,5 +45,5 @@
 ドキュメントの重み付けの値を指定します。
 
 
-.. |image0| image:: ../../../resources/images/ja/9.4/admin/keyMatch-1.png
-.. |image1| image:: ../../../resources/images/ja/9.4/admin/keyMatch-2.png
+.. |image0| image:: ../../../resources/images/ja/9.3/admin/keymatch-1.png
+.. |image1| image:: ../../../resources/images/ja/9.3/admin/keymatch-2.png

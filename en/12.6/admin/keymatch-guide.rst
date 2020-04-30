@@ -63,5 +63,5 @@ Delete Configuration
 Click a term on a list page, and click Delete button to display a confirmation dialog.
 Click Delete button to delete the configuration.
 
-.. |image0| image:: ../../../resources/images/en/12.6/admin/keyMatch-1.png
-.. |image1| image:: ../../../resources/images/en/12.6/admin/keyMatch-2.png
+.. |image0| image:: ../../../resources/images/en/12.6/admin/keymatch-1.png
+.. |image1| image:: ../../../resources/images/en/12.6/admin/keymatch-2.png
