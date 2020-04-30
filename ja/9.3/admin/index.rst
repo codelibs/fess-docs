@@ -17,7 +17,7 @@
    fileCrawlingConfig-guide
    dataCrawlingConfig-guide
    labeltype-guide
-   keyMatch-guide
+   keymatch-guide
    boostDocumentRule-guide
    pathMapping-guide
    webAuthentication-guide
@@ -37,4 +37,3 @@
    stats-guide
    userInfo-guide
    favoriteLog-guide
-
