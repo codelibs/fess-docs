@@ -15,7 +15,7 @@ For Unix environments, run fess to start Fess.
 
     $ ./bin/fess
 
-Using RPM package(chkconfig)
+Using RPM/DEB package(chkconfig)
 ----------------------------
 
 Start elasticsearch before |Fess|,
@@ -30,7 +30,7 @@ and then start |Fess| service.
 
     $ sudo service fess start
 
-Using RPM package(systemd)
+Using RPM/DEB package(systemd)
 --------------------------
 
 Start elasticsearch before |Fess|,
@@ -62,7 +62,7 @@ Using ZIP package
 
 To stop |Fess| server, kill the process of |Fess|.
 
-Using RPM package(chkconfig)
+Using RPM/DEB package(chkconfig)
 ----------------------------
 
 To stop |Fess| service, run the following command.
@@ -71,7 +71,7 @@ To stop |Fess| service, run the following command.
 
     $ sudo service fess stop
 
-Using RPM package(systemd)
+Using RPM/DEB package(systemd)
 --------------------------
 
 To stop |Fess| service, run the following command.

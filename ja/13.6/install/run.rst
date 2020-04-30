@@ -22,7 +22,7 @@ Windows 環境で Elasticsearch を起動するには、 bin フォルダ中の 
 
     $ ./bin/fess
 
-RPM パッケージの場合(chkconfig)
+RPM/DEB パッケージの場合(chkconfig)
 --------------------
 
 |Fess| を起動する前に Elasticsearch を起動する必要があります。
@@ -37,7 +37,7 @@ RPM パッケージの場合(chkconfig)
 
     $ sudo service fess start
 
-RPM パッケージの場合(systemd)
+RPM/DEB パッケージの場合(systemd)
 --------------------
 
 |Fess| を起動する前に Elasticsearch を起動する必要があります。
@@ -69,7 +69,7 @@ ZIP パッケージの場合
 
 |Fess| サーバーを停止させるには |Fess| のプロセスを kill します。
 
-RPM パッケージの場合(chkconfig)
+RPM/DEB パッケージの場合(chkconfig)
 --------------------
 
 |Fess| サーバーを停止させるには次のコマンドを入力します。
@@ -78,7 +78,7 @@ RPM パッケージの場合(chkconfig)
 
     $ sudo service fess stop
 
-RPM パッケージの場合(systemd)
+RPM/DEB パッケージの場合(systemd)
 --------------------
 
 |Fess| サーバーを停止させるには次のコマンドを入力します。
