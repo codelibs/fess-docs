@@ -27,5 +27,5 @@
 
 クロールできなかった URL と日時が一覧できます。
 
-.. |image0| image:: ../../../resources/images/ja/9.2/admin/failureUrl-1.png
-.. |image1| image:: ../../../resources/images/ja/9.2/admin/failureUrl-2.png
+.. |image0| image:: ../../../resources/images/ja/9.3/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/ja/9.3/admin/failureurl-2.png

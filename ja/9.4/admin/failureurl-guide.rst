@@ -5,7 +5,7 @@
 概要
 ====
 
-ここでは、障害URLについて説明します。 クロール時に取得できなかった URL
+ここでは、障害URLについて説明します。クロール時に取得できなかった URL
 が記録され、障害 URL として確認することができます。
 
 設定方法
@@ -27,5 +27,5 @@
 
 クロールできなかった URL と日時が一覧できます。
 
-.. |image0| image:: ../../../resources/images/ja/7.0/admin/failureUrl-1.png
-.. |image1| image:: ../../../resources/images/ja/7.0/admin/failureUrl-2.png
+.. |image0| image:: ../../../resources/images/ja/9.4/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/ja/9.4/admin/failureurl-2.png

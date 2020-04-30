@@ -29,7 +29,7 @@
    jobLog-guide
    crawlingSession-guide
    log-guide
-   failureUrl-guide
+   failureurl-guide
    searchList-guide
    searchLog-guide
    stats-guide

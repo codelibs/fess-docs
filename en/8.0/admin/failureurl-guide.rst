@@ -30,5 +30,5 @@ List
 
 A glance could not crawl the URL and date.
 
-.. |image0| image:: ../../../resources/images/en/6.0/admin/failureUrl-1.png
-.. |image1| image:: ../../../resources/images/en/6.0/admin/failureUrl-2.png
+.. |image0| image:: ../../../resources/images/en/8.0/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/en/8.0/admin/failureurl-2.png
