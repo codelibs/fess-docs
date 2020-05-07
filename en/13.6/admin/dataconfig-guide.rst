@@ -151,7 +151,7 @@ The description is below.
    * - sql
      - SQL statement to crawl data
 
-Table: Parameter example for DB
+Table: Parameter for DB
 
 
 Script
@@ -207,16 +207,15 @@ Table: Configuaration for Script
 JDBC Driver
 :::::::::::
 
-To crawl data in database, JDBC driver is needed.
-Put jar file into app/WEB-INF/lib directory.
+To crawl data in database, you need JDBC driver and put Jar file into app/WEB-INF/lib directory.
 In this example, copy mysql-connector-java-5.1.39.jar to app/WEB-INF/lib.
 
 CsvDataStore
 ------------
 
-CsvDataStore is CSV file crawling.
+CsvDataStore is to import data from CSV files.
 
-For example, create test.csv in /home/john/csv and the content is below.
+For example, create test.csv in /home/john/csv, and the content is below.
 
 ::
 
@@ -242,7 +241,7 @@ Set parameters of crawling config as below.
     fileEncoding=UTF-8
 
 The value of parameters is key/value format.
-The description is below.
+For the description, see below.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -256,7 +255,7 @@ The description is below.
    * - separatorCharacter
      - Separator character in CSV content
 
-Table: Parameter example for CSV file
+Table: Parameters for CSV file
 
 Script
 ::::::
@@ -278,30 +277,30 @@ Set script values of crawling config as below.
 
 The format is key/value.
 For keys, they are the same as database crawling.
-You can use values in CSV file as cell[number](cell1 is a first cell).
+You can use values in CSV file as cell[number] (cell1 is a first cell).
 If cell does not exist, it returns null.
 
 CsvListDataStore
 ------------
 
-Use when crawling a large number of files.
-You can shorten the crawl execution time by placing a CSV file that contains the updated file path and crawling only the specified path.
+You can use CsvListDataStore to crawl a large number of target files, and also reduce the crawling time to use CSV file which contains only updated file paths.
 
-Write the path in the following format.
+The file format is as below.
 
 ::
 
     [Action]<Separator character>[Path]
 
-Specify one of the following for the action.
+Specify one of the following value for Action.
 
 create：Created file
 modify：Updated file
 delete：Deleted file
 
-For example, create test.csv in /home/john/csv and the content is below.
+For Path, you can sepecify a path in the same notation as a setting for file crawling.
 
-For the path, describe the path in the same notation as when specifying the path to be crawled by file crawl.
+For example, create test.csv in /home/john/csv, and the content is below.
+
 
 ::
 
@@ -327,7 +326,8 @@ Set parameters of crawling config as below.
     directories=/home/taro/csv
     fileEncoding=Shift_JIS
 
-The value of parameters is key/value format. The description is below.
+The value of parameters is key/value format.
+For the description, see below.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -339,7 +339,7 @@ The value of parameters is key/value format. The description is below.
    * - separatorCharacter
      - Separator character in CSV content
 
-Table: Parameter example for CsvListDataStore
+Table: Parameter for CsvListDataStore
 
 
 Script
@@ -355,7 +355,7 @@ Set script values of crawling config as below.
 The format is key/value.
 For keys, they are the same as database crawling.
 
-If authentication is required at the crawling destination, you must also set the following.
+If authentication is required at the crawling destination, you must also add the following settings.
 
 ::
 
