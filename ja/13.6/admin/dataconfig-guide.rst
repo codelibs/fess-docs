@@ -247,7 +247,7 @@ CSVファイルを対象としたクロールについて説明します。
 パラメータは「キー=値」形式となっています。キーの説明は以下です。
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table:: 
+.. list-table::
 
    * - directories
      - CSVファイルが含まれるディレクトリ (.csvまたは.tsv)
@@ -341,6 +341,92 @@ EsDataStore
 パラメータは「キー=値」形式になります。
 キーはデータベースクロールの場合と同様です。
 source.*により値を取得して、設定することができます。
+
+CsvListDataStore
+------------
+
+大量のファイルをクロールする場合に利用します。
+更新があったファイルのパスを書き込んだCSVファイルを配置し、指定されたパスだけをクロールさせることで、クロールの実行時間を短縮できます。
+
+パスを記述する際のフォーマットは以下になります。
+
+::
+
+    [アクション]<区切り文字>[パス]
+
+アクションには、以下のいずれかを指定します。
+
+create：ファイルが作成された
+modify：ファイルが更新された
+delete：ファイルが削除された
+
+たとえば、/home/taro/csv ディレクトリに test.csv ファイルを以下のような内容で生成しておきます。
+ファイルのエンコーディングは Shift_JIS にしておきます。
+
+パスはファイルクロールでクロール対象のパスを指定するときと同じ表記でパスを記述します。
+以下のように、「file:/[パス]」、または「smb://[パス]」のように指定します。
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    modify,smb://servername/data/testfile2.txt
+    modify,smb://servername/data/testfile3.txt
+    modify,smb://servername/data/testfile4.txt
+    modify,smb://servername/data/testfile5.txt
+    modify,smb://servername/data/testfile6.txt
+    modify,smb://servername/data/testfile7.txt
+    modify,smb://servername/data/testfile8.txt
+    modify,smb://servername/data/testfile9.txt
+    modify,smb://servername/data/testfile10.txt
+
+
+パラメータ
+::::::::::
+
+パラメータの設定例は以下のようになります。
+
+::
+
+    directories=/home/taro/csv
+    fileEncoding=Shift_JIS
+
+パラメータは「キー=値」形式となっています。キーの説明は以下です。
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - directories
+     - CSVファイルが含まれるディレクトリ (.csvまたは.tsv)
+   * - fileEncoding
+     - CSVファイルのエンコーディング
+   * - separatorCharacter
+     - 区切り文字
+
+
+表: CSVファイル用設定パラメータ例
+
+
+スクリプト
+::::::::::
+
+スクリプトの設定例は以下のようになります。
+
+::
+
+    event_type=cell1
+    url=cell2
+
+パラメータは「キー=値」形式になります。
+キーはデータベースクロールの場合と同様です。
+
+クロール先で認証が必要な場合は以下も設定する必要があります。
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
 
 .. |image0| image:: ../../../resources/images/ja/13.6/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/13.6/admin/dataconfig-2.png
