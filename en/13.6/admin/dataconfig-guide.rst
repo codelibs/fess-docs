@@ -281,6 +281,88 @@ For keys, they are the same as database crawling.
 You can use values in CSV file as cell[number](cell1 is a first cell).
 If cell does not exist, it returns null.
 
+CsvListDataStore
+------------
+
+Use when crawling a large number of files.
+You can shorten the crawl execution time by placing a CSV file that contains the updated file path and crawling only the specified path.
+
+Write the path in the following format.
+
+::
+
+    [Action]<Separator character>[Path]
+
+Specify one of the following for the action.
+
+create：Created file
+modify：Updated file
+delete：Deleted file
+
+For example, create test.csv in /home/john/csv and the content is below.
+
+For the path, describe the path in the same notation as when specifying the path to be crawled by file crawl.
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    modify,smb://servername/data/testfile2.txt
+    modify,smb://servername/data/testfile3.txt
+    modify,smb://servername/data/testfile4.txt
+    modify,smb://servername/data/testfile5.txt
+    modify,smb://servername/data/testfile6.txt
+    modify,smb://servername/data/testfile7.txt
+    modify,smb://servername/data/testfile8.txt
+    modify,smb://servername/data/testfile9.txt
+    modify,smb://servername/data/testfile10.txt
+
+
+Parameter
+::::::::::
+
+Set parameters of crawling config as below.
+
+::
+
+    directories=/home/taro/csv
+    fileEncoding=Shift_JIS
+
+The value of parameters is key/value format. The description is below.
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - directories
+     - Directories which contains csv file(.csv or .tsv)
+   * - fileEncoding
+     - Encofing of CSV files
+   * - separatorCharacter
+     - Separator character in CSV content
+
+Table: Parameter example for CsvListDataStore
+
+
+Script
+::::::::::
+
+Set script values of crawling config as below.
+
+::
+
+    event_type=cell1
+    url=cell2
+
+The format is key/value.
+For keys, they are the same as database crawling.
+
+If authentication is required at the crawling destination, you must also set the following.
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
 
 .. |image0| image:: ../../../resources/images/en/13.6/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/13.6/admin/dataconfig-2.png
