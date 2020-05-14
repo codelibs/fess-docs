@@ -36,7 +36,7 @@ such as MS Office, pdf and zip.
 Download
 ========
 
-- :doc:`Fess 13.6.3 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 13.6.4 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -77,6 +77,9 @@ Features
 
 News
 ====
+
+2020-05-14
+    `Fess 13.6.4 <https://github.com/codelibs/fess/releases/tag/fess-13.6.4>`__ Released
 
 2020-04-04
     `Fess 13.6.3 <https://github.com/codelibs/fess/releases/tag/fess-13.6.3>`__ Released

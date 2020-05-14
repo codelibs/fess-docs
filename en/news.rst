@@ -2,6 +2,9 @@
 News
 ====
 
+2020-05-14
+    `Fess 13.6.4 Released <https://github.com/codelibs/fess/releases/tag/fess-13.6.4>`__
+
 2020-04-04
     `Fess 13.6.3 Released <https://github.com/codelibs/fess/releases/tag/fess-13.6.3>`__
 
