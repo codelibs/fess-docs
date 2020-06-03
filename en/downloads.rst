@@ -18,11 +18,11 @@ A stable release is available from:
 * `Fess 12.7.0 <https://github.com/codelibs/fess/releases/tag/fess-12.7.0>`_ (`Elasticsearch 6.8.0 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-8-0>`_)
 * `Fess 12.6.2 <https://github.com/codelibs/fess/releases/tag/fess-12.6.2>`_ (`Elasticsearch 6.7.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-7-2>`_)
 * `Fess 12.5.3 <https://github.com/codelibs/fess/releases/tag/fess-12.5.3>`_ (`Elasticsearch 6.6.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-6-2>`_)
-* `Fess 12.4.4 <https://github.com/codelibs/fess/releases/tag/fess-12.4.4>`_ (`Elasticsearch 6.5.4 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-5-4>`_)
 
 EOLed
 ======
 
+* `Fess 12.4.4 <https://github.com/codelibs/fess/releases/tag/fess-12.4.4>`_ (`Elasticsearch 6.5.4 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-5-4>`_)
 * `Fess 12.3.5 <https://github.com/codelibs/fess/releases/tag/fess-12.3.5>`_ (`Elasticsearch 6.4.3 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-4-3>`_)
 * `Fess 12.2.3 <https://github.com/codelibs/fess/releases/tag/fess-12.2.3>`_ (`Elasticsearch 6.3.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-3-2>`_)
 * `Fess 12.1.5 <https://github.com/codelibs/fess/releases/tag/fess-12.1.5>`_ (`Elasticsearch 6.2.4 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-2-4>`_)
