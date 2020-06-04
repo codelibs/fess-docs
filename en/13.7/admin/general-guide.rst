@@ -266,8 +266,8 @@ LDAP Configuration
      - cn=%s or uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
    * - Group Filter
-     - 
-     - (member:1.2.840.113.76.1.4.1941:=%s)
+     -
+     - (member:1.2.840.113556.1.4.1941:=%s)
    * - memberOf
      - isMemberOf
      - memberOf
