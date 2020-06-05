@@ -112,7 +112,7 @@ fess.dictionary.path needs to be set to a path of configsync.config_path in elas
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.transport_addresses=localhost:9300
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/config/"
 
 For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
 

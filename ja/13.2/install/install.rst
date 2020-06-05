@@ -156,7 +156,7 @@ Elasticsearch のzip版をインストールし、展開します。
 
 ::
 
-    configsync.config_path: c:/<elasticsearch-<version>/config/
+    configsync.config_path: c:/<elasticsearch-<version>/data/config/
 
 ダウンロードした fess-<version>.zip を展開します。
 
@@ -166,4 +166,4 @@ fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_path
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/config/"

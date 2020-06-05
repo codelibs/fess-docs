@@ -52,12 +52,12 @@ ZIP パッケージを利用する場合
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 |Fess| にアクセスするために、./elasticsearch-<version>/config/elasticsearch.yml に下記の設定を加えます。
-./elasticsearch-<version>/config のパスを指定します。
+./elasticsearch-<version>/data/config のパスを指定します。
 設定するパスはインストール先のパスと読み替えてください。
 
 ::
 
-    configsync.config_path: /opt/elasticsearch-<version>/config/
+    configsync.config_path: /opt/elasticsearch-<version>/data/config/
 
 |Fess| で Elasticsearch クラスタへ接続するためには、起動オプションで指定します。
 fess-<version>/bin/fess.in.sh を変更します。
@@ -65,7 +65,7 @@ fess-<version>/bin/fess.in.sh を変更します。
 ::
 
     ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=/opt/elasticsearch-<version>/config/
+    FESS_DICTIONARY_PATH=/opt/elasticsearch-<version>/data/config/
 
 
 ZIP パッケージを利用する場合（Windows）
@@ -89,7 +89,7 @@ ZIP パッケージを利用する場合（Windows）
 
 ::
 
-    configsync.config_path: c:/<elasticsearch-<version>/config/
+    configsync.config_path: c:/<elasticsearch-<version>/data/config/
 
 |Fess| で Elasticsearch へ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
 fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
@@ -97,7 +97,7 @@ fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_path
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/config/"
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/config/"
 
 
 RPM/DEB パッケージを利用する場合
