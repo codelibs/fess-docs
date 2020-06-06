@@ -5,6 +5,9 @@
 ニュース一覧
 ============
 
+2020-06-06
+    `Fess 13.7.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.7.1>`__
+
 2020-05-23
     `Fess 13.7.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.7.0>`__
 
