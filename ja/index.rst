@@ -154,6 +154,36 @@ CodeLibsプロジェクトでは `Fess Site Search(FSS) <https://fss-generator.c
 FSSを利用することで、Google Site SearchやYahoo!検索カスタムサーチからの移行も簡単にできます。
 安価なFessサーバが必要な場合は、 `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ をご覧ください。
 
+Data Store
+==========
+
+- `Confluence/Jira <https://github.com/codelibs/fess-ds-atlassian>`__
+- `Box <https://github.com/codelibs/fess-ds-box>`__
+- `CSV <https://github.com/codelibs/fess-ds-csv>`__
+- `Database <https://github.com/codelibs/fess-ds-db>`__
+- `Dropbox <https://github.com/codelibs/fess-ds-dropbox>`__
+- `Elasticsearch <https://github.com/codelibs/fess-ds-elasticsearch>`__
+- `Git <https://github.com/codelibs/fess-ds-git>`__
+- `Gitbucket <https://github.com/codelibs/fess-ds-gitbucket>`__
+- `G Suite <https://github.com/codelibs/fess-ds-gsuite>`__
+- `JSON <https://github.com/codelibs/fess-ds-json>`__
+- `Office 365< https://github.com/codelibs/fess-ds-office365>`__
+- `S3 <https://github.com/codelibs/fess-ds-s3>`__
+- `Salesforce <https://github.com/codelibs/fess-ds-salesforce>`__
+- `Slack <https://github.com/codelibs/fess-ds-slack>`__
+
+Theme
+=====
+
+- `Simple <https://github.com/codelibs/fess-theme-simple>`__
+- `Classic <https://github.com/codelibs/fess-theme-classic>`__
+
+Ingester
+========
+
+- `Logger <https://github.com/codelibs/fess-ingest-logger>`__
+- `NDJSON <https://github.com/codelibs/fess-ingest-ndjson>`__
+
 
 掲載メディア
 ============
