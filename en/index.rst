@@ -78,6 +78,9 @@ Features
 News
 ====
 
+2020-07-01
+    `Fess 13.7.2 <https://github.com/codelibs/fess/releases/tag/fess-13.7.2>`__ Released
+
 2020-06-25
     `Fess 13.8.0 <https://github.com/codelibs/fess/releases/tag/fess-13.8.0>`__ Released
 
@@ -95,9 +98,6 @@ News
 
 2020-03-13
     `Fess 13.6.2 <https://github.com/codelibs/fess/releases/tag/fess-13.6.2>`__ Released
-
-2020-03-06
-    `Fess 13.6.1 <https://github.com/codelibs/fess/releases/tag/fess-13.6.1>`__ Released
 
 :doc:`More news <news>`...
 
