@@ -109,7 +109,7 @@ Fess のダウンロード
 Erasticsearch のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Erasticsearch の`ダウンロードページ <https://www.elastic.co/jp/downloads/elasticsearch>`__\ からダウンロードします。
+Erasticsearch の `ダウンロードページ <https://www.elastic.co/jp/downloads/elasticsearch>`__\ からダウンロードします。
 Fess のダウンロードページでは、各バージョンに対応する Elasticsearch のバージョンを記載していますので、バージョンを確認してダウンロードしてください。
 Fess 13.2.0 に対応するバージョンは `7.2.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-oss-7-2-0>`__\  ですので、このバージョンをダウンロードします。
 ダウンロード完了後、任意のディレクトリに解凍してください。
