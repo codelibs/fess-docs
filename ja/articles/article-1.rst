@@ -100,7 +100,7 @@ Fess のダウンロード
 ^^^^^^^^^^^^^^^^^^^^
 
 https://github.com/codelibs/fess/releases から最新のパッケージをダウンロードします。
-この記事執筆の時点（2019/07）での最新バージョンは、 13.2.0 です。
+この記事執筆の時点（2020/07）での最新バージョンは、 13.8.1 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 Fess のダウンロード
@@ -111,15 +111,15 @@ Erasticsearch のダウンロード
 
 Erasticsearch の `ダウンロードページ <https://www.elastic.co/jp/downloads/elasticsearch>`__\ からダウンロードします。
 Fess のダウンロードページでは、各バージョンに対応する Elasticsearch のバージョンを記載していますので、バージョンを確認してダウンロードしてください。
-Fess 13.2.0 に対応するバージョンは `7.2.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-oss-7-2-0>`__\  ですので、このバージョンをダウンロードします。
+Fess 13.8.1 に対応するバージョンは `7.8.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-oss-7-8-0>`__\  ですので、このバージョンをダウンロードします。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 設定
 ----
 
 起動する前に、Fess で Elasticsearch クラスタへ接続するための設定をします。
-zipパッケージの設定方法については、インストールページの `ZIP パッケージを利用する場合  <https://fess.codelibs.org/ja/13.2/install/install.html#zip>`__\  を参照してください。
-利用するパッケージが RPM/DEB パッケージの場合は、インストールページの `RPM/DEB パッケージを利用する場合  <https://fess.codelibs.org/ja/13.2/install/install.html#rpm-deb>`__\  を参照してください。
+zipパッケージの設定方法については、インストールページの `ZIP パッケージを利用する場合  <https://fess.codelibs.org/ja/13.8/install/install.html#zip>`__\  を参照してください。
+利用するパッケージが RPM/DEB パッケージの場合は、インストールページの `RPM/DEB パッケージを利用する場合  <https://fess.codelibs.org/ja/13.8/install/install.html#rpm-deb>`__\  を参照してください。
 
 起動
 ----
@@ -156,33 +156,38 @@ Fess サーバーを停止させるには Fess のプロセスを停止(kill)し
 Fess のディレクトリ構成
 ::
 
-    fess-13.2.0
-    ├── app/
-    │   ├── META-INF/
-    │   ├── WEB-INF/
-    │   │   ├── cachedirs/
-    │   │   ├── classes/
-    │   │   ├── conf/
-    │   │   ├── env/
-    │   │   ├── lib/
-    │   │   ├── logs/
-    │   │   ├── orig/
-    │   │   ├── site/
-    │   │   ├── thumbnails/
-    │   │   ├── view/
+    fess-13.8.1
+    ├── app
+    │   ├── META-INF
+    │   ├── WEB-INF
+    │   │   ├── cachedirs
+    │   │   ├── classes
+    │   │   ├── conf
+    │   │   ├── env
     │   │   ├── fe.tld
+    │   │   ├── lib
+    │   │   ├── logs
+    │   │   ├── orig
+    │   │   ├── plugin
     │   │   ├── project.properties
-    │   │   └── web.xml
-    │   ├── css/
-    │   ├── images/
-    │   ├── js/
+    │   │   ├── site
+    │   │   ├── thumbnails
+    │   │   ├── view
+    │   ├── css
+    │   │   ├── admin
+    │   │   ├── bootstrap.min.css
+    │   │   ├── bootstrap.min.css.map
+    │   │   ├── font-awesome.min.css
+    │   │   ├── fonts
     │   ├── favicon.ico
-    ├── bin/
-    ├── es/
-    ├── extension/
-    ├── lib/
-    ├── logs/
-    ├── temp/
+    │   ├── images
+    │   └── js
+    ├── bin
+    ├── es
+    ├── extension
+    ├── lib
+    ├── logs
+    ├── temp
     ├── LICENSE
     └── README.md
 
@@ -195,24 +200,24 @@ Fess のアプリケーション群のファイルはappディレクトリ以下
 Elasticsearch のディレクトリ構成
 ::
 
-    Elasticsearch-7.2.0
-    ├── bin/
-    ├── config/
+    Elasticsearch-7.8.0
+    ├── bin
+    ├── config
     │   ├── elasticsearch.keystore
     │   ├── elasticsearch.yml
     │   ├── jvm.options
-    │   ├── log4j2.properties
-    │   ├── mapping.txt
-    │   └── synonym.txt
-    ├── data/
-    ├── jdk/
-    ├── lib/
-    ├── logs/
-    ├── modules/
-    ├── plugins/
+    │   ├── jvm.options.d
+    │   └── log4j2.properties
+    ├── data
+    ├── jdk.app
+    ├── lib
+    ├── logs
+    ├── modules
+    ├── plugins
     ├── LICENSE.txt
     ├── NOTICE.txt
-    └── README.textile
+    └── README.asciidoc
+
 
 インデックスのデータはdataディレクトリに保存されます。
 
