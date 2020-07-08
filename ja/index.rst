@@ -188,6 +188,10 @@ Ingester
 掲載メディア
 ============
 
+- `【第28回】ログファイルの参照方法 <https://news.mynavi.jp/itsearch/article/devsoft/5032>`__
+
+- `【第27回】Fessのクラスタ化 <https://news.mynavi.jp/itsearch/article/devsoft/4994>`__
+
 - `【第26回】位置情報の検索 <https://news.mynavi.jp/itsearch/article/devsoft/4963>`__
 
 - `【第25回】Tesseract OCRを利用する <https://news.mynavi.jp/itsearch/article/devsoft/4928>`__
