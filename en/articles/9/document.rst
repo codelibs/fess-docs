@@ -117,6 +117,10 @@ After entering the "Name" and "Path", click the "Create" button.
 
 The following is an input example, so replace the path with the path of the crawling destination.
 
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
    * - item
      - Set value
    * - Name
@@ -130,6 +134,10 @@ File authentication settings
 If the shared folder to be crawled requires authentication, file authentication settings are required. Click the [Crawler]> [File Authentication]> [New] button on the management screen to open the file authentication creation screen.
 
 The following is an input example. Enter the host name etc. according to the environment.
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
 
    * - hostname
      - fserver.example.co.jp
