@@ -133,15 +133,13 @@ After creating the crawl settings, go to System> Scheduler> Default Crawler and 
 
 Wait for a while until the crawl is complete.
 
-After the crawl is complete http://localhost:8080/, access " " and search. Since " localhost:8080" is the host name of host1, https://www.n2sm.net/only the search result is displayed.
-
 After crawling is completed, let's access ``http://localhost:8080/`` and search.
 Since ``localhost:8080`` is the host name of host1, only the search result of ``https://www.n2sm.net/`` will be displayed.
 
 |image6|
 
-Next, access "http://127.0.0.1:8080/" and search.
-Since `` 127.0.0.1: 8080 `` is the host name of host2, only the search result of `` https: // fess.codelibs.org / `` will be displayed.
+Next, access ``http://127.0.0.1:8080/`` and search.
+Since ``127.0.0.1: 8080`` is the host name of host2, only the search result of ``https: // fess.codelibs.org /`` will be displayed.
 
 |image7|
 

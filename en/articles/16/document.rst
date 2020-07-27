@@ -245,7 +245,7 @@ Create "fess.js" with the following contents and place it in the same directory 
           .on("click", "#nextPageLink", {navi:1}, doSearch);
       });
 
-Specify the URL of the Fess server in baseUrl. SERVERNAMEPlease replace with the Fess server name. Since it is acquired in JSON format, json/?q=specify after the URL of the server .
+In ``baseUrl``, specify the URL of the Fess server. Please specify ``SERVERNAME`` as the Fess server name. Since it is acquired in JSON format, specify ``json /? q =`` after the URL of the server.
 
 "Fess.js" defines the search processing function doSearch. Invokes doSearch when the search form is submitted and when a page link is clicked.
 

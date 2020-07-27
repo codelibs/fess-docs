@@ -94,7 +94,7 @@ Java settings
 For Java 8 u151 and earlier you need to replace JCE with Unlimited Strength as follows:
 
 1. Download the file from https://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html and unzip it.
-1. Place the US_export_policy.jar and local_policy.jar files in $JAVA_HOME/jre/lib/security.
+2. Place the US_export_policy.jar and local_policy.jar files in $JAVA_HOME/jre/lib/security.
 
 You do not need to replace JCE after Java 8 u161.
 
@@ -182,20 +182,30 @@ IE/edge settings
 Please set the Internet option settings of the terminal to access Fess as follows.
 
 1. Open Internet Options and select the Security tab.
-1. Click Custom Level in the Local Intranet zone.
+2. Click Custom Level in the Local Intranet zone.
+
 |image1|
-1. Select User Authentication> Logon> Automatic Logon Only in Intranet Zone.
+
+3. Select User Authentication> Logon> Automatic Logon Only in Intranet Zone.
+
 |image2|
-1. Click the "OK" button.
-1. On the Security tab, click Site in the Local intranet zone.
-1. Click the "Advanced" button.
-1. Enter the URL of Fess in "Add this website to the zone" and click the "Add" button.
+
+4. Click the "OK" button.
+5. On the Security tab, click Site in the Local intranet zone.
+6. Click the "Advanced" button.
+7. Enter the URL of Fess in "Add this website to the zone" and click the "Add" button.
+
 |image3|
-1. After confirming that the entered URL has been set in the "Website" field, click the "Close" button.
+
+8. After confirming that the entered URL has been set in the "Website" field, click the "Close" button.
+
 |image4|
-1. When you return to the Internet Options screen, select the [Advanced] tab, check [Security]> [Use Integrated Windows Authentication], and click the [OK] button.
+
+9. When you return to the Internet Options screen, select the [Advanced] tab, check [Security]> [Use Integrated Windows Authentication], and click the [OK] button.
+
 |image5|
-1. After changing the settings, log out of Windows once.
+
+10. After changing the settings, log out of Windows once.
 
 Access to Fess
 =============

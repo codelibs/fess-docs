@@ -18,8 +18,8 @@ For example, a salesperson A with the sales department role will see information
 By default, Fess's role-based search can sort search results based on user information managed by Fess. Other than that, it can also be used by linking with the authentication information of LDAP or Active Directory. In addition to those authentication systems, role information can be obtained from the following locations.
 
 1. Request parameter
-1. Request header
-1. cookie
+2. Request header
+3. cookie
 
 As a usage method, the role information can be passed to Fess by saving the authentication information as a cookie for the domain and path where Fess is operating at the time of authentication in the portal server or agent type single sign-on system. Also, in the reverse proxy type single sign-on system, role information can be acquired by Fess by adding authentication information to request parameter and request header when accessing Fess.
 
