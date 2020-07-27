@@ -33,7 +33,7 @@ First, create a crawl setting.
 
 Log in to the management screen of Fess and set the information of the crawl destination in "Crawl"> "File system" on the left menu.
 
-This time \\localhost\share\, set as below to crawl " ". When specifying the path, specify "smb://" at the beginning and "/" for "\". Specify "/" at the end of the path.
+This time, set as below to crawl ``\\localhost\share\``. When specifying the path, specify ``smb: //`` at the beginning, and specify ``\`` with ``/``. Specify ``/`` at the end of the path.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -46,7 +46,7 @@ This time \\localhost\share\, set as below to crawl " ". When specifying the pat
    * - path
      - smb://localhost/share/
 
-When crawling a file server that supports only SMBv1, specify "smb1://" instead of "smb://" for the protocol.
+When crawling a file server that supports only SMBv1, specify ``smb1://`` instead of ``smb://`` for the protocol.
 
 File authentication settings
 =============
@@ -113,15 +113,14 @@ With Fess, if you crawl a Windows shared folder, you can automatically get permi
 
 By linking with Active Directory, you can easily implement different search results for each user according to their access privileges. Fess 12.2 and later support nested groups.
 
-"How about the cooperation Active Directory `[9th] Active Directory work together in Fess <https://news.mynavi.jp/itsearch/article/bizapp/4283>`__ please refer to the article of".
-
+For details on how to link Active Directory, refer to the `[9th] Active Directory work together in Fess <https://news.mynavi.jp/itsearch/article/bizapp/4283>`__ article.
 
 FTP server crawl
 =============
 
 To crawl the FTP server, you also need an account that has access to the FTP server.
 
-The file crawl of the FTP server is the same as that of SMB, so create the file crawl settings first. When crawling an FTP server, the path protocol should be "ftp://" instead of "file://".
+The file crawl of the FTP server is the same as that of SMB, so create the file crawl settings first. When crawling an FTP server, the path protocol should be ``ftp://`` instead of ``file://``.
 
 After creating the crawl settings, select [Crawl]> [File Authentication] in the left menu to set the file authentication. If you want to crawl the FTP server, set the scheme to "FTP".
 
