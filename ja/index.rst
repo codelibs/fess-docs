@@ -185,6 +185,8 @@ Ingester
 掲載メディア
 ============
 
+- `【第29回】Dockerでの使い方 <https://news.mynavi.jp/itsearch/article/devsoft/5058>`__
+
 - `【第28回】ログファイルの参照方法 <https://news.mynavi.jp/itsearch/article/devsoft/5032>`__
 
 - `【第27回】Fessのクラスタ化 <https://news.mynavi.jp/itsearch/article/devsoft/4994>`__
