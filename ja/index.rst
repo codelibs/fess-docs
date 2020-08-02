@@ -66,7 +66,8 @@ Java 実行環境があればどの OS でも実行可能です。
 -  BASIC/DIGEST/NTLM/FORM認証のサイトも検索可能
 
 -  ログイン状態により検索結果の出し分けが可能
-   (ActiveDirectoryやSAMLなど、シングルサイオン環境での利用可能)
+
+-  ActiveDirectoryやSAMLなどを用いたシングルサイオン(SSO)
 
 -  地図情報と連携した位置情報検索
 

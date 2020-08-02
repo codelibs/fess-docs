@@ -59,7 +59,9 @@ Features
 
 -  Provide a browser based administative page (admin console)
 
--  Support secure search (access control with LDAP/Active Directory/SAML)
+-  Support secure search (access control with LDAP/Active Directory)
+
+-  Single Sign On support with SAML/OpenIDConnect
 
 -  Support JSON/GSA format of search results
 
