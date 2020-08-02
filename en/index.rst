@@ -59,7 +59,7 @@ Features
 
 -  Provide a browser based administative page (admin console)
 
--  Support secure search (access control with LDAP/Active Directory/SSO)
+-  Support secure search (access control with LDAP/Active Directory/SAML)
 
 -  Support JSON/GSA format of search results
 
