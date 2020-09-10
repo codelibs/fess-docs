@@ -126,6 +126,7 @@ Data Store
 - `Office 365 <https://github.com/codelibs/fess-ds-office365>`__
 - `S3 <https://github.com/codelibs/fess-ds-s3>`__
 - `Salesforce <https://github.com/codelibs/fess-ds-salesforce>`__
+- `SharePoint <https://github.com/codelibs/fess-ds-sharepoint>`__
 - `Slack <https://github.com/codelibs/fess-ds-slack>`__
 
 Theme
