@@ -7,7 +7,7 @@ Download
 
 A stable release is available from:
 
-* `Fess 13.9.0 <https://github.com/codelibs/fess/releases/tag/fess-13.9.0>`_ (`Elasticsearch 7.9.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-9-1>`_)
+* `Fess 13.9.1 <https://github.com/codelibs/fess/releases/tag/fess-13.9.1>`_ (`Elasticsearch 7.9.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-9-2>`_)
 * `Fess 13.8.2 <https://github.com/codelibs/fess/releases/tag/fess-13.8.2>`_ (`Elasticsearch 7.8.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-8-1>`_)
 * `Fess 13.7.2 <https://github.com/codelibs/fess/releases/tag/fess-13.7.2>`_ (`Elasticsearch 7.7.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-7-1>`_)
 * `Fess 13.6.4 <https://github.com/codelibs/fess/releases/tag/fess-13.6.4>`_ (`Elasticsearch 7.6.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-6-2>`_)
@@ -18,11 +18,11 @@ A stable release is available from:
 * `Fess 13.1.1 <https://github.com/codelibs/fess/releases/tag/fess-13.1.1>`_ (`Elasticsearch 7.1.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-1-1>`_)
 * `Fess 13.0.2 <https://github.com/codelibs/fess/releases/tag/fess-13.0.2>`_ (`Elasticsearch 7.0.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-0-1>`_)
 * `Fess 12.7.0 <https://github.com/codelibs/fess/releases/tag/fess-12.7.0>`_ (`Elasticsearch 6.8.0 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-8-0>`_)
-* `Fess 12.6.2 <https://github.com/codelibs/fess/releases/tag/fess-12.6.2>`_ (`Elasticsearch 6.7.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-7-2>`_)
 
 EOLed
 ======
 
+* `Fess 12.6.2 <https://github.com/codelibs/fess/releases/tag/fess-12.6.2>`_ (`Elasticsearch 6.7.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-7-2>`_)
 * `Fess 12.5.3 <https://github.com/codelibs/fess/releases/tag/fess-12.5.3>`_ (`Elasticsearch 6.6.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-6-2>`_)
 * `Fess 12.4.4 <https://github.com/codelibs/fess/releases/tag/fess-12.4.4>`_ (`Elasticsearch 6.5.4 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-5-4>`_)
 * `Fess 12.3.5 <https://github.com/codelibs/fess/releases/tag/fess-12.3.5>`_ (`Elasticsearch 6.4.3 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-4-3>`_)

@@ -46,7 +46,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 13.9.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 13.9.1 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -103,6 +103,9 @@ Java 実行環境があればどの OS でも実行可能です。
 
 ニュース
 ========
+
+2020-09-25
+    `Fess 13.9.1 <https://github.com/codelibs/fess/releases/tag/fess-13.9.1>`__ リリース
 
 2020-09-06
     `Fess 13.9.0 <https://github.com/codelibs/fess/releases/tag/fess-13.9.0>`__ リリース
