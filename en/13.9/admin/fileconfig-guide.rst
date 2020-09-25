@@ -59,6 +59,11 @@ Excluded Paths For Indexing
 
 This regular expression(Java Format) is rejected path patterns for |Fess| indexer.
 
+Config parameters
+:::::::::::::::::
+
+You can specify the crawl configuration information.
+
 Depth
 :::::
 
