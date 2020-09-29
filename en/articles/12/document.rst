@@ -112,11 +112,11 @@ This time, create the following two settings.
      - N2SM
      - Fess
    * - URL
-     - https://www.n2sm.net/
-     - https://fess.codelibs.org/
+     - ``https://www.n2sm.net/``
+     - ``https://fess.codelibs.org/``
    * - URL to be crawled
-     - https://www.n2sm.net/.*
-     - https://fess.codelibs.org/.*
+     - ``https://www.n2sm.net/.*``
+     - ``https://fess.codelibs.org/.*``
    * - Maximum number of accesses
      - 10
      - 10
@@ -139,7 +139,7 @@ Since ``localhost:8080`` is the host name of host1, only the search result of ``
 |image6|
 
 Next, access ``http://127.0.0.1:8080/`` and search.
-Since ``127.0.0.1: 8080`` is the host name of host2, only the search result of ``https: // fess.codelibs.org /`` will be displayed.
+Since ``127.0.0.1: 8080`` is the host name of host2, only the search result of ``https: //fess.codelibs.org/`` will be displayed.
 
 |image7|
 
