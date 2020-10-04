@@ -25,6 +25,14 @@ runtime environment. |Fess| is provided under Apache license.
 
    Source Code Search
 
+.. figure:: ../resources/images/en/demo-3.png
+   :scale: 100%
+   :alt: Doc Search
+   :figclass: side-by-side
+   :target: https://docsearch.codelibs.org/
+
+   Document Search
+
 
 |Fess| is Elasticsearch-based search server,
 but knowledge/experience about Elasticsearch is NOT needed because of All-in-One
