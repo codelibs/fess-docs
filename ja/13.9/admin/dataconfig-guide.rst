@@ -356,9 +356,9 @@ CsvListDataStore
 
 アクションには、以下のいずれかを指定します。
 
-create：ファイルが作成された
-modify：ファイルが更新された
-delete：ファイルが削除された
+* create：ファイルが作成された
+* modify：ファイルが更新された
+* delete：ファイルが削除された
 
 たとえば、/home/taro/csv ディレクトリに test.csv ファイルを以下のような内容で生成しておきます。
 ファイルのエンコーディングは Shift_JIS にしておきます。
