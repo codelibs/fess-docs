@@ -17,6 +17,13 @@ A stable release is available from:
 * `Fess 13.3.3 <https://github.com/codelibs/fess/releases/tag/fess-13.3.3>`_ (`Elasticsearch 7.3.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-3-2>`_)
 * `Fess 13.2.1 <https://github.com/codelibs/fess/releases/tag/fess-13.2.1>`_ (`Elasticsearch 7.2.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-2-1>`_)
 
+Docker
+======
+
+Docker images are in the following site:
+
+* `ghcr.io/codelibs/fess <https://github.com/orgs/codelibs/packages/container/package/fess>`_
+
 EOLed
 ======
 

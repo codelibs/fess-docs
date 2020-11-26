@@ -19,6 +19,13 @@
 
 インストール方法についてはインストールガイドを参照してください。
 
+Docker
+======
+
+Dockerイメージは以下を参照してください。
+
+* `ghcr.io/codelibs/fess <https://github.com/orgs/codelibs/packages/container/package/fess>`_
+
 過去のリリース(EOL)
 ===================
 
