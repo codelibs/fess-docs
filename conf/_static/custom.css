@@ -21,6 +21,10 @@ html*.side-by-side {
   color: #2980b9;
 }
 
+.wy-nav-content {
+￼ max-width: none;
+}
+
 /* override table width restrictions */
 @media screen and (min-width: 767px) {
 
