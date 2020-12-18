@@ -27,6 +27,14 @@ Java 実行環境があればどの OS でも実行可能です。
 
    標準デモ
 
+.. figure:: ../resources/images/ja/demo-3.png
+   :scale: 100%
+   :alt: サイト内検索デモ
+   :figclass: side-by-side
+   :target: https://www.n2sm.net/search.html?q=Fess
+
+   サイト内検索デモ
+
 .. figure:: ../resources/images/ja/demo-2.png
    :scale: 100%
    :alt: Code Search
@@ -35,13 +43,15 @@ Java 実行環境があればどの OS でも実行可能です。
 
    ソースコード検索
 
-.. figure:: ../resources/images/ja/demo-3.png
+.. figure:: ../resources/images/ja/demo-4.png
    :scale: 100%
-   :alt: サイト内検索デモ
+   :alt: Document Search
    :figclass: side-by-side
-   :target: https://www.n2sm.net/search.html?q=Fess
+   :target: https://docsearch.codelibs.org/
 
-   サイト内検索デモ
+   ドキュメント検索
+
+
 
 ダウンロード
 ============
