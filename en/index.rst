@@ -2,7 +2,7 @@
 Enterprise Search Server: |Fess|
 ====================================
 
-What is |Fess| ?
+What is Fess?
 =============
 
 |Fess| is very powerful and easily deployable Enterprise Search Server.
