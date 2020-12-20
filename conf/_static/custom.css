@@ -25,6 +25,10 @@ html*.side-by-side {
   max-width: none;
 }
 
+.pad5 {
+  padding:5px;
+}
+
 /* override table width restrictions */
 @media screen and (min-width: 767px) {
 
