@@ -38,7 +38,11 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:creator" content="@codelibs">
 
-  <link rel="preload" href="{{ pathto('_static/fonts/fontawesome-webfont.woff2?v=4.7.0', 1) }}" as="font" type="font/woff2" crossorigin>
+  {%- if language == 'ja' %}
+  <link rel="preload" href="https://fess.codelibs.org/ja/{{ pathto('_static/fonts/fontawesome-webfont.woff2?v=4.7.0', 1) }}" as="font" type="font/woff2" crossorigin>
+  {% else %}
+  <link rel="preload" href="https://fess.codelibs.org/{{ pathto('_static/fonts/fontawesome-webfont.woff2?v=4.7.0', 1) }}" as="font" type="font/woff2" crossorigin>
+  {% endif %}
 {#
   <link rel="preload" href="{{ pathto('_static/fonts/Lato/lato-regular.woff2', 1) }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ pathto('_static/fonts/Lato/lato-bold.woff2', 1) }}" as="font" type="font/woff2" crossorigin>
