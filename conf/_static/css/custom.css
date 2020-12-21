@@ -7,6 +7,13 @@
 .wy-side-nav-search p.pr a:hover {
   color: #fff;
 }
+.wy-side-nav-search img {
+  margin: auto;
+  height: 22px;
+￼ width: 103px;
+  padding: 0px;
+￼ border-radius: 0%;
+}
 .side-by-side {
   display: inline-block;
 }
