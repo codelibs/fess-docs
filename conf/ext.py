@@ -55,7 +55,7 @@ def setup(app):
     app.config._raw_config["rst_prolog"] = rst_prolog
 
     # custom styles
-    app.add_stylesheet('custom.css')
+    app.add_stylesheet('css/custom.css')
 
 
 # Add "parsed-code" directive that combines both the features
