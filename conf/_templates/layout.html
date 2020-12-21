@@ -194,6 +194,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             {% block body %}{% endblock %}
+            {%- if language != 'ja' %}
+            <div class="section">
+             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0248074489415800" data-ad-slot="4007241228" data-ad-format="auto" data-full-width-responsive="true"></ins>
+             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+            {% endif %}
            </div>
           </div>
           {% include "footer.html" %}
