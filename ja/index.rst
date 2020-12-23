@@ -190,6 +190,10 @@ Ingester
 掲載メディア
 ============
 
+- `【第32回】インデックスの管理 <https://news.mynavi.jp/itsearch/article/devsoft/5233>`__
+
+- `【第31回】Office 365のクロール <https://news.mynavi.jp/itsearch/article/bizapp/5180>`__
+
 - `【第30回】Azure ADでの認証方法 <https://news.mynavi.jp/itsearch/article/bizapp/5136>`__
 
 - `【第29回】Dockerでの使い方 <https://news.mynavi.jp/itsearch/article/devsoft/5058>`__
