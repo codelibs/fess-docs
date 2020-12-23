@@ -190,6 +190,8 @@ Ingester
 掲載メディア
 ============
 
+- `【第33回】入力支援環境の構築方法 <https://news.mynavi.jp/itsearch/article/devsoft/5292>`__
+
 - `【第32回】インデックスの管理 <https://news.mynavi.jp/itsearch/article/devsoft/5233>`__
 
 - `【第31回】Office 365のクロール <https://news.mynavi.jp/itsearch/article/bizapp/5180>`__
