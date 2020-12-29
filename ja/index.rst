@@ -138,7 +138,7 @@ Java 実行環境があればどの OS でも実行可能です。
 |Fess| は Apache ライセンスで提供されるオープンソース製品で、個人や商用向けでも無料でご自由にご利用いただけます。
 
 |Fess| のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <https://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
-また、検索品質やクロールが遅いなどのパフォーマンスチューニングも商用サポートで対応しています。
+また、検索品質やクロール速度の改善などのパフォーマンスチューニングも商用サポートで対応しています。
 
 - `N2 Search <https://www.n2sm.net/products/n2search.html>`__ (最適化されたFessの商用向けパッケージ)
 
@@ -155,8 +155,8 @@ CodeLibsプロジェクトでは `Fess Site Search(FSS) <https://fss-generator.c
 FSSを利用することで、Google Site SearchやYahoo!検索カスタムサーチからの移行も簡単にできます。
 安価なFessサーバが必要な場合は、 `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ をご覧ください。
 
-Data Store
-==========
+Data Storeプラグイン
+====================
 
 - `Confluence/Jira <https://github.com/codelibs/fess-ds-atlassian>`__
 - `Box <https://github.com/codelibs/fess-ds-box>`__
@@ -174,18 +174,25 @@ Data Store
 - `SharePoint <https://github.com/codelibs/fess-ds-sharepoint>`__
 - `Slack <https://github.com/codelibs/fess-ds-slack>`__
 
-Theme
-=====
+Themeプラグイン
+===============
 
 - `Simple <https://github.com/codelibs/fess-theme-simple>`__
 - `Classic <https://github.com/codelibs/fess-theme-classic>`__
 
-Ingester
-========
+Ingesterプラグイン
+==================
 
 - `Logger <https://github.com/codelibs/fess-ingest-logger>`__
 - `NDJSON <https://github.com/codelibs/fess-ingest-ndjson>`__
 
+関連プロジェクト
+================
+
+- `Code Search <https://github.com/codelibs/docker-codesearch>`__
+- `Document Search <https://github.com/codelibs/docker-docsearch>`__
+- `Fione <https://github.com/codelibs/docker-fione>`__
+- `Form Assist <https://github.com/codelibs/docker-formassist>`__
 
 掲載メディア
 ============
