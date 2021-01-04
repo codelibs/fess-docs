@@ -7,7 +7,7 @@
 
 動作確認済の安定版リリースです。
 
-* `Fess 13.10.1 <https://github.com/codelibs/fess/releases/tag/fess-13.10.1>`_ (`Elasticsearch 7.10.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-10-1>`_)
+* `Fess 13.10.2 <https://github.com/codelibs/fess/releases/tag/fess-13.10.2>`_ (`Elasticsearch 7.10.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-10-1>`_)
 * `Fess 13.9.3 <https://github.com/codelibs/fess/releases/tag/fess-13.9.3>`_ (`Elasticsearch 7.9.3 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-9-3>`_)
 * `Fess 13.8.2 <https://github.com/codelibs/fess/releases/tag/fess-13.8.2>`_ (`Elasticsearch 7.8.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-8-1>`_)
 * `Fess 13.7.2 <https://github.com/codelibs/fess/releases/tag/fess-13.7.2>`_ (`Elasticsearch 7.7.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-7-1>`_)
@@ -15,7 +15,6 @@
 * `Fess 13.5.1 <https://github.com/codelibs/fess/releases/tag/fess-13.5.1>`_ (`Elasticsearch 7.5.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-5-2>`_)
 * `Fess 13.4.5 <https://github.com/codelibs/fess/releases/tag/fess-13.4.5>`_ (`Elasticsearch 7.4.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-4-2>`_)
 * `Fess 13.3.3 <https://github.com/codelibs/fess/releases/tag/fess-13.3.3>`_ (`Elasticsearch 7.3.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-3-2>`_)
-* `Fess 13.2.1 <https://github.com/codelibs/fess/releases/tag/fess-13.2.1>`_ (`Elasticsearch 7.2.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-2-1>`_)
 
 インストール方法についてはインストールガイドを参照してください。
 
@@ -29,6 +28,7 @@ Dockerイメージは以下を参照してください。
 過去のリリース(EOL)
 ===================
 
+* `Fess 13.2.1 <https://github.com/codelibs/fess/releases/tag/fess-13.2.1>`_ (`Elasticsearch 7.2.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-2-1>`_)
 * `Fess 13.1.1 <https://github.com/codelibs/fess/releases/tag/fess-13.1.1>`_ (`Elasticsearch 7.1.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-1-1>`_)
 * `Fess 13.0.2 <https://github.com/codelibs/fess/releases/tag/fess-13.0.2>`_ (`Elasticsearch 7.0.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-0-1>`_)
 * `Fess 12.7.0 <https://github.com/codelibs/fess/releases/tag/fess-12.7.0>`_ (`Elasticsearch 6.8.0 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-6-8-0>`_)
