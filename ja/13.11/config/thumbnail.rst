@@ -49,3 +49,16 @@ PDFファイルのサムネイル画像
 PDFのサムネイル画像はImageMagickを用いて生成されます。
 convert コマンドがインストールされている場合、サムネイル画像が生成されます。
 
+サムネイルジョブの無効化
+===========================
+
+サムネイルジョブを無効化する場合は以下を設定します。
+
+1. 管理画面の システム > 全般 で「サムネイル表示」のチェックを外し、「更新」ボタンをクリック。
+2. ``app/WEB-INF/classes/fess_config.properties`` または ``/etc/fess/fess_config.properties`` の ``thumbnail.crawler.enabled`` に ``false`` を設定。
+
+::
+
+    thumbnail.crawler.enabled=false
+
+3. Fessのサービスを再起動。
