@@ -11,14 +11,13 @@
 -  Java: Java 11
 -  (RPMまたはDEB) Elasticsearch: 7.11.X
 
-|Fess| を利用したい環境に Java がインストールされていない場合は、`AdoptOpenJDK のサイト <https://adoptopenjdk.net/>`__ より JDK をインストールしてください。
+|Fess| を利用する環境に Java がインストールされていない場合は、`AdoptOpenJDK のサイト <https://adoptopenjdk.net/>`__ より JDK をインストールしてください。
 本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
 
 ダウンロード
 ============
 
-`https://github.com/codelibs/fess/releases <https://github.com/codelibs/fess/releases>`__ から最新の |Fess| パッケージをダウンロードします。
-Elasticsearch は `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__ から |Fess| のバージョンに合わせたものをダウンロードします。
+`Fess のダウンロードサイト<https://fess.codelibs.org/ja/downloads.html>`__ から |Fess| と Elasticsearch をダウンロードします。
 
 インストール
 ============
@@ -46,8 +45,7 @@ Elasticsearch を $ES_HOME にインストールしてあるものとします�
 
 ::
 
-    $ CONFIGSYNC_URL=https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
-    $ curl -o /tmp/configsync.zip $CONFIGSYNC_URL
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
     $ mkdir -p $ES_HOME/modules/configsync
     $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
 
@@ -133,8 +131,7 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 
 ::
 
-    $ CONFIGSYNC_URL=https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
-    $ curl -o /tmp/configsync.zip $CONFIGSYNC_URL
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
     $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
     $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
