@@ -23,54 +23,56 @@ Elasticsearch は `https://www.elastic.co/downloads/elasticsearch <https://www.e
 インストール
 ============
 
+Elasticsearchのインストール
+---------------------------
+
+`Elasticsearch Reference<https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html>`__ を参照して、Elasticsearchをインストールしてください。
+
 ZIP パッケージを利用する場合
 ----------------------------
 
-ダウンロードした elasticsearch-<version>.zip を展開します。 UNIX 環境では、 以下のコマンドを実行します。
+Elasticsearch のプラグインを plugins ディレクトリにインストールします。
+Elasticsearch を $ES_HOME にインストールしてあるものとします。
 
 ::
 
-    $ unzip elasticsearch-<version>.zip
-
-ダウンロードした fess-<version>.zip を展開します。 UNIX 環境では、 以下のコマンドを実行します。
-
-::
-
-    $ unzip fess-<version>.zip
-
-|Fess| には Elasticsearch の機能を拡張するためのプラグインがあります。
-プラグインを Elasticsearch の plugins ディレクトリにインストールします。
-
-::
-
-    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
-    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
-    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.11.0
-    $ ./elasticsearch-<version>/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
-|Fess| にアクセスするために、./elasticsearch-<version>/config/elasticsearch.yml に下記の設定を加えます。
-./elasticsearch-<version>/data/config のパスを指定します。
-設定するパスはインストール先のパスと読み替えてください。
+次に elasticsearch-configsync をインストールします。
 
 ::
 
-    configsync.config_path: /opt/elasticsearch-<version>/data/config/
+    $ CONFIGSYNC_URL=https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
+    $ curl -o /tmp/configsync.zip $CONFIGSYNC_URL
+    $ mkdir -p $ES_HOME/modules/configsync
+    $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
 
-|Fess| で Elasticsearch クラスタへ接続するためには、起動オプションで指定します。
-fess-<version>/bin/fess.in.sh を変更します。
+$ES_HOME/config/elasticsearch.yml に下記の設定を加えます。
+configsync.config_path には $ES_HOME/data/config の絶対パスを指定します。
+
+::
+
+    configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
+
+|Fess| の zip ファイルを $FESS_HOME に展開します。
+|Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
+$FESS_HOME/bin/fess.in.sh を変更します。
 
 ::
 
     ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=/opt/elasticsearch-<version>/data/config/
+    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
 
 
 ZIP パッケージを利用する場合（Windows）
-------------------------------------------------
+---------------------------------------
 
-ダウンロードした elasticsearch-<version>.zip 、fess-<version>.zip は任意の場所に展開します。
+elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開します。
+今回は、c:\elasticsearch-<version> と c:\fess-<version> に展開したものとします。
 
 コマンドプロンプトから Elasticsearch のプラグインをインストールします。
 
@@ -78,24 +80,26 @@ ZIP パッケージを利用する場合（Windows）
 
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.11.0
     > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
-|Fess| にアクセスするために、 <elasticsearch-<version>\\config\\elasticsearch.ymlに下記の設定を加えます。
+次に elasticsearch-configsync をインストールします。
+c:\elasticsearch-<version>\modules\configsync フォルダを作成して、https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip をダウンロードして展開します。
+
+c:\elasticsearch-<version>\config\elasticsearch.yml に下記の設定を加えます。
 
 ::
 
-    configsync.config_path: c:/<elasticsearch-<version>/data/config/
+    configsync.config_path: c:/elasticsearch-<version>/data/config/
 
-|Fess| で Elasticsearch へ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
-fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
+|Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
+c:\fess-<version>\bin\fess.in.bat を変更します。
 
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/config/"
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
 
 
 RPM/DEB パッケージを利用する場合
@@ -115,7 +119,26 @@ DEBパッケージの場合
 
     $ sudo dpkg -i elasticsearch-<version>.deb
 
-|Fess| にアクセスするために、/etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。(RPM/DEB共通)
+Elasticsearch プラグインを plugins ディレクトリにインストールします。
+
+::
+
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
+
+これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
+
+次に elasticsearch-configsync をインストールします。
+
+::
+
+    $ CONFIGSYNC_URL=https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
+    $ curl -o /tmp/configsync.zip $CONFIGSYNC_URL
+    $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
+    $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
+
+/etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。(RPM/DEB共通)
 
 ::
 
@@ -134,18 +157,6 @@ DEBパッケージの場合
 ::
 
     $ sudo dpkg -i fess-<version>.deb
-
-|Fess| には Elasticsearch の機能を拡張するためのプラグインがあります。
-プラグインを Elasticsearch の plugins ディレクトリにインストールします。
-
-::
-
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.11.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
-
-これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合(RPM)は
 
