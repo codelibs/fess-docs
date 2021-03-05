@@ -85,7 +85,7 @@ elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開�
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 次に elasticsearch-configsync をインストールします。
-c:\elasticsearch-<version>\modules\configsync フォルダを作成して、https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip をダウンロードして展開します。
+c:\elasticsearch-<version>\modules\configsync フォルダを作成して、 `elasticsearch-configsync-7.11.0.zip<https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip>`__ をダウンロードして展開します。
 
 c:\elasticsearch-<version>\config\elasticsearch.yml に下記の設定を加えます。
 
