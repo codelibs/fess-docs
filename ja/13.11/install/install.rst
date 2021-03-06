@@ -103,7 +103,7 @@ c:\fess-<version>\bin\fess.in.bat を変更します。
 RPM/DEB パッケージを利用する場合
 ----------------------------
 
-|Fess| をインストールする前に Elasticsearch の RPM/DEB パッケージをインストールする必要があります。
+|Fess| をインストールする前に Elasticsearch の RPM/DEB パッケージをインストールします。
 
 RPMパッケージの場合
 

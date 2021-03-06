@@ -5,76 +5,155 @@ Installation
 Requirements
 ============
 
-|Fess| can be available in these environments.
+|Fess| can be available in the following environment:
 
 -  OS: Windows/Unix with Java environment
 -  Java: Java 11
 -  (RPM or DEB) Elasticsearch: 7.11.X
 
-If Java is not installed in your environment, see we want to |Fess| from `AdoptOpenJDK site <https://adoptopenjdk.net/>`__ to install JDK.
-Embedded Elasticsearch is not recommended for production use.
+If Java is not installed in your environment where Fess will be used, install JDK from `AdoptOpenJDK site <https://adoptopenjdk.net/>`__ .
+Embedded Elasticsearch is not recommended for production use or load testing.
+
 
 Download
 ========
 
-Download the latest |Fess| package from the release site, `https://github.com/codelibs/fess/releases <https://github.com/codelibs/fess/releases>`__.
+Download a pakcage for Fess and Elasticsearch from `Download site <https://fess.codelibs.org/ja/downloads.html>`__.
 
 Installation
 ============
 
-Using ZIP package
+Install Elasticsearch
+---------------------
+
+Install Elasticsearch by referring to `Elasticsearch Reference <https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html>`__.
+
+Using ZIP Package
 -----------------
 
-Unzip the downloaded fess-<version>.zip.
-For UNIX environment, run the following command:
+After installing Elasticsearch, install Elasticsearch plugins to plugins directory.
+In this guide, Elasticsearch is installed to $ES_HOME.
 
 ::
 
-    $ unzip fess-<version>.zip
-    $ cd fess-<version>
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
 
-Using RPM package
------------------
+Notice that these plugins depend on a version of Elasticsearch.
 
-You need to install elasticsearch RPM package before Fess installation.
-Download elasticsearch RPM package from elasticsearch site `https://www.elastic.co/downloads/elasticsearch <https://www.elastic.co/downloads/elasticsearch>`__, and then install the package.
+Next, install elasticsearch-configsync,
+
+::
+
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
+    $ mkdir -p $ES_HOME/modules/configsync
+    $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
+
+and add the following setting to $ES_HOME/config/elasticsearch.yml.
+For configsync.config_path, the value is an absolute path of $ES_HOME/data/config.
+
+::
+
+    configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
+
+Unzip |Fess| file to $FESS_HOME, and specify the following settings in $FESS_HOME/bin/fess.in.sh.
+
+::
+
+    ES_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
+
+
+Using Zip Package on Windows
+----------------------------
+
+Download and unzipped |Fess| and Elasticsearch to c:\elasticsearch-<version> and c:\fess-<version> respectively.
+
+Open a command propt and install Elasticsearch plugins to plugins directory.
+
+::
+
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
+
+Notice that these plugins depend on a version of Elasticsearch.
+
+Next, to install elasticsearch-configsync, create c:\elasticsearch-<version>\modules\configsync folder and then download and unzip `elasticsearch-configsync-7.11.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip>`__.
+
+Moreover, add the following setting to c:\elasticsearch-<version>\config\elasticsearch.yml.
+
+::
+
+    configsync.config_path: c:/elasticsearch-<version>/data/config/
+
+To connect |Fess| to Elasticsearch, specify the following settings in c:\fess-<version>\bin\fess.in.bat.
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
+
+
+Using RPM/DEB Package
+---------------------
+
+First, install RPM/DEB package of Elasticsearch before installing |Fess| package.
+
+For RPM package:
 
 ::
 
     $ sudo rpm -ivh elasticsearch-<version>.rpm
 
-To access from Fess, the following configuration needs to be added to /etc/elasticsearch/elasticsearch.yml
+For DEB package:
 
 ::
 
-    configsync.config_path: /var/lib/elasticsearch/config
+    $ sudo dpkg -i elasticsearch-<version>.deb
 
-Next, install |Fess| RPM package.
-
-::
-
-    $ sudo rpm -ivh fess-<version>.rpm
-
-|Fess| provides elasticsearch plugins to extend elasticsearch's features for |Fess|.
-Install the following plugins to plugins directory in elasticsearch.
+Install Elasticsearch plugins to plugins directory.
 
 ::
 
     $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.11.0
     $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.11.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-configsync:7.11.0
     $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.11.0
 
-Note that these plugins depends on elasticsearch version.
+Notice that these plugins depend on a version of Elasticsearch.
 
-To register them as a service, run the following commands if using chkconfig,
+Next, install elasticsearch-configsync,
 
 ::
 
-    $ sudo /sbin/chkconfig --add elasticsearch
-    $ sudo /sbin/chkconfig --add fess
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip
+    $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
+    $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
-For systemd based system(e.g. CentOS 7),
+and add the following setting to /etc/elasticsearch/elasticsearch.yml.
+
+::
+
+    configsync.config_path: /var/lib/elasticsearch/config
+
+After installing Elasticsearch, install RPM/DEB package of |Fess|.
+
+For RPM package:
+
+::
+
+    $ sudo rpm -ivh fess-<version>.rpm
+
+For DEB package:
+
+::
+
+    $ sudo dpkg -i fess-<version>.deb
+
+To add |Fess| and Elasticsearch as a service, run the following command.
+
+If you use systemctl command,
 
 ::
 
@@ -82,25 +161,10 @@ For systemd based system(e.g. CentOS 7),
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
 
-
-Using Your Elasticsearch Cluster On ZIP package
------------------------------------------------
-
-|Fess| is able to connect to your existing elasticsearch cluster.
-For the details to configure elasticsearch for Fess, please see steps in Using RPM package.
-
-To connect to elasticsearch cluster from |Fess|, use JVM options in a launch script file.
-For Windows environment, the following settings are put into fess-<version>\\bin\\fess.in.bat.
-fess.dictionary.path needs to be set to a path of configsync.config_path in elasticsearch.yml.
+and if you use chkconfig command,
 
 ::
 
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/<elasticsearch-<version>/data/config/"
+    $ sudo /sbin/chkconfig --add elasticsearch
+    $ sudo /sbin/chkconfig --add fess
 
-For Elasticsearch RPM/DEB package, they are in fess-<version>/bin/fess.in.sh.
-
-::
-
-    ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
