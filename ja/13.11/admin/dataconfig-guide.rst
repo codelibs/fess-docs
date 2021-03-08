@@ -162,9 +162,9 @@ DatabaseDataStore
 
 ::
 
-    url="http://localhost/" + id
-    host="localhost"
-    site="localhost"
+    url="http://SERVERNAME/" + id
+    host="SERVERNAME"
+    site="SERVERNAME"
     title=title
     content=content
     cache=content
@@ -185,7 +185,7 @@ DatabaseDataStore
 .. list-table::
 
    * - url
-     - URL(検索結果に表示されるリンク)
+     - URL(ご利用の環境に合わせて、データにアクセス可能なURLを設定してください)
    * - host
      - ホスト名
    * - site
@@ -269,9 +269,9 @@ CSVファイルを対象としたクロールについて説明します。
 
 ::
 
-    url="http://localhost/" + cell1
-    host="localhost"
-    site="localhost"
+    url="http://SERVERNAME/" + cell1
+    host="SERVERNAME"
+    site="SERVERNAME"
     title=cell2
     content=cell3
     cache=cell3
@@ -298,7 +298,7 @@ EsDataStore
 ::
 
     settings.cluster.name=elasticsearch
-    hosts=localhost:9300
+    hosts=SERVERNAME:9300
     index=logindex
     type=data
 
@@ -329,8 +329,8 @@ EsDataStore
 ::
 
     url=source.url
-    host="localhost"
-    site="localhost"
+    host="SERVERNAME"
+    site="SERVERNAME"
     title=source.title
     content=source.content
     digest=
