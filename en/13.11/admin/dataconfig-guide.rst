@@ -161,9 +161,9 @@ Set script values of crawling config as below.
 
 ::
 
-    url="http://localhost/" + id
-    host="localhost"
-    site="localhost"
+    url="http://SERVERNAME/" + id
+    host="SERVERNAME"
+    site="SERVERNAME"
     title=title
     content=content
     digest=content
@@ -182,7 +182,7 @@ The description for Script is below.
 .. list-table::
 
    * - url
-     - URL(Displayed link in search result page)
+     - URL(Set the URL that can access the data according to your environment)
    * - host
      - Host name
    * - site
@@ -264,9 +264,9 @@ Set script values of crawling config as below.
 
 ::
 
-    url="http://localhost/" + cell1
-    host="localhost"
-    site="localhost"
+    url="http://SERVERNAME/" + cell1
+    host="SERVERNAME"
+    site="SERVERNAME"
     title=cell2
     content=cell3
     cache=cell3
