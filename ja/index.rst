@@ -46,7 +46,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 13.11.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 13.11.1 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -95,7 +95,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 -  アクセストークンにより外部システム連携
 
--  Learning To Rankサポート
+-  Learning To Rankにも対応可能
 
 -  OCRなどの外部テキスト抽出対応
 
@@ -103,6 +103,9 @@ Java 実行環境があればどの OS でも実行可能です。
 
 ニュース
 ========
+
+2021-03-25
+    `Fess 13.11.1 <https://github.com/codelibs/fess/releases/tag/fess-13.11.1>`__ リリース
 
 2021-03-11
     `Fess 13.11.0 <https://github.com/codelibs/fess/releases/tag/fess-13.11.0>`__ リリース
