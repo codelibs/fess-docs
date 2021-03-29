@@ -21,7 +21,7 @@ Ping API
 
     {
         "response": {
-            "version": 13.11,
+            "version": "13.11",
             "status":0,
         }
     }

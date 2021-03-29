@@ -62,7 +62,7 @@
 
    {
      "response": {
-       "version": 13.11,
+       "version": "13.11",
        "status": 0,
        "q": "Fess",
        "query_id": "bd60f9579a494dfd8c03db7c8aa905b0",

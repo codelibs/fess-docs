@@ -22,7 +22,7 @@
 
     {
         "response":{
-            "version":13.11,
+            "version":"13.11",
             "status":0,
             "record_count":3,
             "result":[

@@ -29,7 +29,7 @@
 
     {
         "response":{
-            "version":13.11,
+            "version":"13.11",
             "status":0,
             "result":[
                  "\u65E5\u672C\u8A9E",
