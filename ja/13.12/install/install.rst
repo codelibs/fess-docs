@@ -70,7 +70,7 @@ ZIP パッケージを利用する場合（Windows）
 ---------------------------------------
 
 elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開します。
-今回は、c:\elasticsearch-<version> と c:\fess-<version> に展開したものとします。
+今回は、c:\\elasticsearch-<version> と c:\\fess-<version> に展開したものとします。
 
 コマンドプロンプトから Elasticsearch のプラグインをインストールします。
 
@@ -83,16 +83,16 @@ elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開�
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 次に elasticsearch-configsync をインストールします。
-c:\elasticsearch-<version>\modules\configsync フォルダを作成して、 `elasticsearch-configsync-7.11.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip>`__ をダウンロードして展開します。
+c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-7.11.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip>`__ をダウンロードして展開します。
 
-c:\elasticsearch-<version>\config\elasticsearch.yml に下記の設定を加えます。
+c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加えます。
 
 ::
 
     configsync.config_path: c:/elasticsearch-<version>/data/config/
 
 |Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
-c:\fess-<version>\bin\fess.in.bat を変更します。
+c:\\fess-<version>\\bin\\fess.in.bat を変更します。
 
 ::
 
