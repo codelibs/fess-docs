@@ -55,20 +55,20 @@ For configsync.config_path, the value is an absolute path of $ES_HOME/data/confi
 
 ::
 
-    configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
+    configsync.config_path: [absolute path of $ES_HOME]/data/config/
 
 Unzip |Fess| file to $FESS_HOME, and specify the following settings in $FESS_HOME/bin/fess.in.sh.
 
 ::
 
     ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
+    FESS_DICTIONARY_PATH=[absolute path of $ES_HOME]/data/config/
 
 
 Using Zip Package on Windows
 ----------------------------
 
-Download and unzipped |Fess| and Elasticsearch to c:\elasticsearch-<version> and c:\fess-<version> respectively.
+Download and unzipped |Fess| and Elasticsearch to c:\\elasticsearch-<version> and c:\\fess-<version> respectively.
 
 Open a command propt and install Elasticsearch plugins to plugins directory.
 
@@ -80,15 +80,15 @@ Open a command propt and install Elasticsearch plugins to plugins directory.
 
 Notice that these plugins depend on a version of Elasticsearch.
 
-Next, to install elasticsearch-configsync, create c:\elasticsearch-<version>\modules\configsync folder and then download and unzip `elasticsearch-configsync-7.11.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip>`__.
+Next, to install elasticsearch-configsync, create c:\\elasticsearch-<version>\\modules\\configsync folder and then download and unzip `elasticsearch-configsync-7.11.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.11.0/elasticsearch-configsync-7.11.0.zip>`__.
 
-Moreover, add the following setting to c:\elasticsearch-<version>\config\elasticsearch.yml.
+Moreover, add the following setting to c:\\elasticsearch-<version>\\config\\elasticsearch.yml.
 
 ::
 
     configsync.config_path: c:/elasticsearch-<version>/data/config/
 
-To connect |Fess| to Elasticsearch, specify the following settings in c:\fess-<version>\bin\fess.in.bat.
+To connect |Fess| to Elasticsearch, specify the following settings in c:\\fess-<version>\\bin\\fess.in.bat.
 
 ::
 
@@ -167,4 +167,3 @@ and if you use chkconfig command,
 
     $ sudo /sbin/chkconfig --add elasticsearch
     $ sudo /sbin/chkconfig --add fess
-

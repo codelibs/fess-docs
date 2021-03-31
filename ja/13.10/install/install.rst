@@ -85,13 +85,13 @@ ZIP パッケージを利用する場合（Windows）
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
-|Fess| にアクセスするために、 elasticsearch-<version>\config\\elasticsearch.ymlに下記の設定を加えます。
+|Fess| にアクセスするために、 elasticsearch-<version>\\config\\elasticsearch.ymlに下記の設定を加えます。
 
 ::
 
     configsync.config_path: c:/elasticsearch-<version>/data/config/
 
-|Fess| で Elasticsearch へ接続するためにfess-<version>\bin\fess.in.batを変更します。
+|Fess| で Elasticsearch へ接続するためにfess-<version>\\bin\\fess.in.batを変更します。
 fess.dictionary.pathにはelasticsearch.ymlに設定したconfigsync.config_pathの値を設定してください。
 
 ::
