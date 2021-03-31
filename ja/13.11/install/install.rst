@@ -92,7 +92,7 @@ c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加�
     configsync.config_path: c:/elasticsearch-<version>/data/config/
 
 |Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
-c:\\fess-<version>\\bin\\ßfess.in.bat を変更します。
+c:\\fess-<version>\\bin\\fess.in.bat を変更します。
 
 ::
 

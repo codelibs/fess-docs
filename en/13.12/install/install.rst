@@ -55,14 +55,14 @@ For configsync.config_path, the value is an absolute path of $ES_HOME/data/confi
 
 ::
 
-    configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
+    configsync.config_path: [absolute path of $ES_HOME]/data/config/
 
 Unzip |Fess| file to $FESS_HOME, and specify the following settings in $FESS_HOME/bin/fess.in.sh.
 
 ::
 
     ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
+    FESS_DICTIONARY_PATH=[absolute path of $ES_HOME]/data/config/
 
 
 Using Zip Package on Windows
