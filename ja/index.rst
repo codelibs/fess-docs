@@ -104,6 +104,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2021-04-09
+    `Fess 13.11.2 <https://github.com/codelibs/fess/releases/tag/fess-13.11.2>`__ リリース
+
 2021-04-08
     `Fess 13.12.0 <https://github.com/codelibs/fess/releases/tag/fess-13.12.0>`__ リリース
 
