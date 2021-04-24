@@ -192,6 +192,12 @@ Ingesterプラグイン
 - `Logger <https://github.com/codelibs/fess-ingest-logger>`__
 - `NDJSON <https://github.com/codelibs/fess-ingest-ndjson>`__
 
+Scriptプラグイン
+==================
+
+- `Groovy <https://github.com/codelibs/fess-script-groovy>`__
+- `OGNL <https://github.com/codelibs/fess-script-ognl>`__
+
 関連プロジェクト
 ================
 

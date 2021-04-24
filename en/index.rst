@@ -158,6 +158,12 @@ Ingester
 - `Logger <https://github.com/codelibs/fess-ingest-logger>`__
 - `NDJSON <https://github.com/codelibs/fess-ingest-ndjson>`__
 
+Script
+======
+
+- `Groovy <https://github.com/codelibs/fess-script-groovy>`__
+- `OGNL <https://github.com/codelibs/fess-script-ognl>`__
+
 Support Service
 ===============
 
