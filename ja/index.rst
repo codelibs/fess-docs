@@ -209,6 +209,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第36回】Elastic Cloudの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5507>`__
+
 - `【第35回】SharePoint Serverのクロール <https://news.mynavi.jp/itsearch/article/devsoft/5457>`__
 
 - `【第34回】OpenID Connectでの認証方法 <https://news.mynavi.jp/itsearch/article/devsoft/5338>`__
