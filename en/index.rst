@@ -103,18 +103,6 @@ News
 2021-03-25
     `Fess 13.11.1 <https://github.com/codelibs/fess/releases/tag/fess-13.11.1>`__ Released
 
-2021-03-11
-    `Fess 13.11.0 <https://github.com/codelibs/fess/releases/tag/fess-13.11.0>`__ Released
-
-2021-02-28
-    `Fess 13.10.4 <https://github.com/codelibs/fess/releases/tag/fess-13.10.4>`__ Released
-
-2021-02-24
-    `Fess 13.10.3 <https://github.com/codelibs/fess/releases/tag/fess-13.10.3>`__ Released
-
-2021-01-04
-    `Fess 13.10.2 <https://github.com/codelibs/fess/releases/tag/fess-13.10.2>`__ Released
-
 :doc:`More news <news>`...
 
 Discussion

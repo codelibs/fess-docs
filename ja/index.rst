@@ -119,18 +119,6 @@ Java 実行環境があればどの OS でも実行可能です。
 2021-03-25
     `Fess 13.11.1 <https://github.com/codelibs/fess/releases/tag/fess-13.11.1>`__ リリース
 
-2021-03-11
-    `Fess 13.11.0 <https://github.com/codelibs/fess/releases/tag/fess-13.11.0>`__ リリース
-
-2021-02-28
-    `Fess 13.10.4 <https://github.com/codelibs/fess/releases/tag/fess-13.10.4>`__ リリース
-
-2021-02-24
-    `Fess 13.10.3 <https://github.com/codelibs/fess/releases/tag/fess-13.10.3>`__ リリース
-
-2021-01-04
-    `Fess 13.10.2 <https://github.com/codelibs/fess/releases/tag/fess-13.10.2>`__ リリース
-
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
 フォーラム
