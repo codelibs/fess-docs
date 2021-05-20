@@ -46,7 +46,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 13.12.1 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 13.12.2 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -103,6 +103,9 @@ Java 実行環境があればどの OS でも実行可能です。
 
 ニュース
 ========
+
+2021-05-20
+    `Fess 13.12.2 <https://github.com/codelibs/fess/releases/tag/fess-13.12.2>`__ リリース
 
 2021-05-10
     `Fess 13.11.3 <https://github.com/codelibs/fess/releases/tag/fess-13.11.3>`__ リリース
