@@ -200,6 +200,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第37回】AWS Elasticsearch Serviceの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5557>`__
+
 - `【第36回】Elastic Cloudの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5507>`__
 
 - `【第35回】SharePoint Serverのクロール <https://news.mynavi.jp/itsearch/article/devsoft/5457>`__
