@@ -9,7 +9,7 @@ Requirements
 
 -  OS: Windows/Unix with Java environment
 -  Java: Java 11
--  (RPM or DEB) Elasticsearch: 7.11.X
+-  (RPM or DEB) Elasticsearch: 7.13.X
 
 If Java is not installed in your environment where Fess will be used, install JDK from `AdoptOpenJDK site <https://adoptopenjdk.net/>`__ .
 Embedded Elasticsearch is not recommended for production use or load testing.
