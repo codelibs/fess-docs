@@ -20,6 +20,12 @@ Windows 環境であれば bin\\fess.in.bat の
 
 を変更します。
 
+Windows 環境でサービス登録して使用する場合は bin\\service.bat のポートも変更してください。
+
+::
+
+    set FESS_PARAMS=-Dfess;-Dfess.home="%FESS_HOME%";-Dfess.es.dir="%ES_HOME%";-Dfess.home="%FESS_HOME%";-Dfess.context.path="/";-Dfess.port=8080;-Dfess.webapp.path="%FESS_HOME%\app";-Dfess.temp.path="%FESS_HOME%\temp";-Dfess.log.name="%APP_NAME%";-Dfess.log.path="%FESS_HOME%\logs";-Dfess.log.level=warn;-Dlasta.env=web;-Dtomcat.config.path=tomcat_config.properties
+
 使用メモリーの設定
 ==================
 
@@ -89,5 +95,3 @@ Table: ログファイル一覧
 
 クローラログはデフォルトでは INFO レベルで出力しています。
 ログレベルを変更する場合は、管理画面のクロールジョブの設定で、logLevel(String)メソッドで指定してください。
-
-
