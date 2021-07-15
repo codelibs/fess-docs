@@ -22,11 +22,11 @@ Available parameters are as below.
 .. list-table:: Request Parameters
 
    * - q
-     - Search query. URL-encode is needed.
+     - Search query. URL-encode is needed. You can add advaced query params to filter the result, e.g. ``http://localhost:8080/json?q=(PHP (developer OR entwickler) filetype:html sort:score.desc)&num=100``
    * - start
      - Start position. It is started from 0.
    * - num
-     - The number of returned documents as a search result. The default is 20.
+     - The number of returned documents as a search result. The default is 10.
    * - sort
      - Sorting documents.
    * - fields.label
