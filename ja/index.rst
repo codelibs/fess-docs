@@ -197,6 +197,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第38回】各種機能の設定方法（ラベル、キーマッチ）<https://news.mynavi.jp/itsearch/article/bizapp/5646>`__
+
 - `【第37回】AWS Elasticsearch Serviceの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5557>`__
 
 - `【第36回】Elastic Cloudの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5507>`__
