@@ -5,6 +5,12 @@
 掲載記事一覧
 ============
 
+- `【第39回】各種機能の設定方法（パスマッピング、リクエストヘッダー、重複ホスト） <https://news.mynavi.jp/itsearch/article/bizapp/5686>`__
+
+- `【第38回】各種機能の設定方法（ラベル、キーマッチ） <https://news.mynavi.jp/itsearch/article/bizapp/5646>`__
+
+- `【第37回】AWS Elasticsearch Serviceの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5557>`__
+
 - `【第36回】Elastic Cloudの利用方法 <https://news.mynavi.jp/itsearch/article/devsoft/5507>`__
 
 - `【第35回】SharePoint Serverのクロール <https://news.mynavi.jp/itsearch/article/devsoft/5457>`__
