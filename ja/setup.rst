@@ -19,131 +19,100 @@ Javaのインストール
 
 Java がインストールされていない場合は以下の手順でJavaをインストールしてください。
 
-Java SE のダウンロードページへアクセス
+ダウンロード
 --------------------------------------
 
-JavaScriptが有効な状態でOracle社の「`Java SE
-Downloads <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_」ページにアクセスします。
+`Adoptium <https://adoptium.net/>`_ページにアクセスします。
+「Temurin 11」を選択して「Latest release」をクリックします。
 
-JavaSE 11 の「Download JDK」をクリックします。(JavaScriptが無効になっているとダウンロードが有効となりません)
+インストールするOSが一致していない場合は「Other Platforms」をクリックし、該当OSのファイルをダウンロードしてください。
 
 |image0|
 
-ライセンスの確認
-----------------
-
-「Oracle Binary Code License Agreement for Java SE」を読んでライセンスに同意されたら「Accept License Agreement」にチェックを入れます。
-
-|image1|
-
-ダウンロードの開始
-------------------
-
-インストールを行うパソコンのOSに合わせてJDKのダウンロードを行います。
-Windwos 64ビットの場合は「Windows x64」、Windows 32ビットの場合は「Windows x86」を選択します (以下はWindows 64ビット版の例です) 。
-
-|image2|
-
-JDKインストーラーの実行
+インストーラーの実行
 -----------------------
 
-ダウンロードしたJDKインストーラー (jdk-11.X.X-windows-x64_bin.exe)
-を実行します(XXはダウンロードしたアップデートリリースのバージョン)。以下はWindows
-64ビット版の例です。
+ダウンロードしたJDKインストーラー (OpenJDKU-jdk_x64_windows_hostspot_11.x.xx_x.msi)を右クリックし、「インストール」を選択します。
+(ファイル名はWindows 64ビット版をダウンロードした場合のファイル名です。XXはダウンロードしたアップデートリリースのバージョンになります。)
 
-|image3|
-
-Windowsの設定によっては、「次のプログラムにこのコンピュータへの変更を許可しますか？」というダイアログが表示されることがあります。その場合、[はい]ボタンをクリックしてください。
 
 JDKのインストール
 -----------------
 
-インストーラが起動します。[次へ]ボタンを押します。
+インストーラーが起動したら、「次へ」ボタンをクリックします。
 
-|image4|
+|image1|
 
-インストール先のフォルダが変更できます。デフォルトのままで問題なければ、[次へ]ボタンを押します。
+インストール先のフォルダが変更できます。
+変更する場合は「参照」ボタンをクリックして変更します。
+デフォルトのままで問題なければ、「次へ」ボタンをクリックします。
 
-|image5|
+|image2|
 
-JDKのインストールが開始されるので、しばらく待ちます。
+「インストール」をクリックします。JDKのインストールが開始されるので、しばらく待ちます。
 
-|image6|
+|image3|
 
 
 インストール完了
 ----------------
 
-インストール完了のメッセージが表示されます。 [閉じる]ボタンを押します。
+インストール完了のメッセージが表示されます。 「完了」ボタンをクリックします。
 
-|image7|
+|image4|
 
-インストール完了です。
-
-インストールされたコンポーネントは、以下の2つです。以下で確認できます。(Windows
-7の場合)
-
-1. [コントロールパネル]→[プログラム]→[プログラムと機能]の一覧に表示されます。
-
-   -  Java SE Development Kit 11 Update XX (64-bit)
-
-   -  Java(TM) 11 Update XX (64-bit)
 
 環境変数の設定
 --------------
 
-「環境変数」とは、プログラムに渡される設定情報です。コマンドプロンプトでJDKのコマンドを実行するために、Javaインストールの後、環境変数の設定が必要です。
+環境変数とは、プログラムに渡される設定情報です。
+Javaをインストール後、コマンドプロンプトでJDKのコマンドを実行するために、環境変数を設定します。
 
-Windows 7
-では以下のように設定します。[コントロールパネル]→[システムとセキュリティ]→[システム]→[システムの詳細設定]→[環境変数]を選択します。
+以下は、Windows 10での設定手順です。
 
-|image8|
+「コントロールパネル」をクリックします。
+
+|image5|
 
 「システムとセキュリティ」をクリックします。
 
-|image9|
+|image6|
 
 「システム」をクリックします。
 
-|image10|
+|image7|
 
-「詳細設定」をクリックします。
+「システムの詳細設定」をクリックします。
 
-|image11|
+|image8|
 
 「環境変数」をクリックします。
 
-|image12|
+|image9|
 
 「システム環境変数」の「新規」ボタン（画面下部）をクリックします。
 
-|image13|
+|image10|
 
 「変数名」には「JAVA\_HOME」と入力します。
+「変数値」には、JDKがインストールしたディレクトリのパスを指定します。
+パスは「ディレクトリの参照」をクリックして、インストール先を指定できます。
 
-|image14|
+パスを指定した後、「OK」をクリックします。
 
-「変数値」には、JDKがインストールしたディレクトリを記述します。
+|image11|
 
-エクスプローラで「C:\\Program
-Files\\Java」を開き、「jdk・・・」というフォルダを探して、そのアドレスを記述します。
+「システム環境変数」のリストから、「変数」が「Path」である行を選択し、「編集」ボタンをクリックします。
 
-たとえばjdkのバージョン11.X.Xをインストールした場合は、「C:\\Program
-Files\\Java\\jdk11.X.X」となります。(XXの部分にはインストールしたバージョンが入ります)
+|image12|
 
-記述後、「OK」を押します。
+「新規」ボタンをクリックします。
 
-「システム環境変数」のリストから、「変数」が「Path」である行を探します。
-
-|image15|
-
-その行をクリックして「編集」ボタンを押して開き、「新規」ボタンを押します。
-
-|image16|
+|image13|
 
 「%JAVA\_HOME%\\bin」という文字列を追加し、「OK」をクリックします。
 
-|image17|
+|image14|
 
 |Fess| のインストール
 ==================
@@ -155,7 +124,7 @@ https://github.com/codelibs/fess/releases から最新の |Fess| パッケージ
 
 URL先のリリースファイル一覧から「fess-x.y.z.zip」をクリックします。
 
-|image18|
+|image15|
 
 インストール
 ------------
@@ -170,15 +139,13 @@ Unix 環境にインストールした場合、bin
     $ unzip fess-x.y.z.zip
     $ cd fess-x.y.z
 
-|image19|
-
 解凍したフォルダーをダブルクリックで開きます。
 
-|image20|
+|image16|
 
 binフォルダーをダブルクリックで開きます。
 
-|image21|
+|image17|
 
 |Fess| の起動
 -----------
@@ -191,11 +158,10 @@ Unix環境の場合は以下を実行します。
 
     $ ./bin/fess
 
-|image22|
+|image18|
 
 コマンドプロンプトが表示され起動されます。
-fess\logs\server_*.log(更新日時が最新のもの)の内容に
-「Boot successful」が出力されていれば起動完了です。
+fess\\logs\\server_*.log(更新日時が最新のもの)の内容に「Boot successful」が出力されていれば起動完了です。
 
 動作確認
 ========
@@ -204,11 +170,9 @@ http://localhost:8080/
 にアクセスすることによって、起動を確認できます。
 
 管理 UI は http://localhost:8080/admin/ です。
-デフォルトの管理者アカウントのユーザー名/パスワードは、admin/admin
-になります。
-管理者アカウントはアプリケーションサーバーにより管理されています。 |Fess|
-の管理 UI では、アプリケーションサーバーで fess
-ロールで認証されたユーザーを管理者として判断しています。
+デフォルトの管理者アカウントのユーザー名/パスワードは、admin/adminになります。
+管理者アカウントはアプリケーションサーバーにより管理されています。
+|Fess|の管理 UI では、アプリケーションサーバーで fess ロールで認証されたユーザーを管理者として判断しています。
 
 その他
 ======
@@ -238,11 +202,7 @@ http://localhost:8080/
 .. |image12| image:: ../resources/images/ja/install/java-13.png
 .. |image13| image:: ../resources/images/ja/install/java-14.png
 .. |image14| image:: ../resources/images/ja/install/java-15.png
-.. |image15| image:: ../resources/images/ja/install/java-16.png
-.. |image16| image:: ../resources/images/ja/install/java-17.png
-.. |image17| image:: ../resources/images/ja/install/java-18.png
-.. |image18| image:: ../resources/images/ja/install/Fess-1.png
-.. |image19| image:: ../resources/images/ja/install/Fess-2.png
-.. |image20| image:: ../resources/images/ja/install/Fess-3.png
-.. |image21| image:: ../resources/images/ja/install/Fess-4.png
-.. |image22| image:: ../resources/images/ja/install/Fess-5.png
+.. |image15| image:: ../resources/images/ja/install/Fess-1.png
+.. |image16| image:: ../resources/images/ja/install/Fess-2.png
+.. |image17| image:: ../resources/images/ja/install/Fess-3.png
+.. |image18| image:: ../resources/images/ja/install/Fess-4.png

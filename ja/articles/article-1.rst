@@ -35,7 +35,7 @@ Fess ではクローラ部分に Fess Crawler を利用して、ウェブやフ�
 
 -  Ubuntu 18.04
 
--  OpenJDK 11.0.3
+-  OpenJDK 11.0.8
 
 Fess とは
 =========
@@ -100,7 +100,7 @@ Fess のダウンロード
 ^^^^^^^^^^^^^^^^^^^^
 
 https://github.com/codelibs/fess/releases から最新のパッケージをダウンロードします。
-この記事執筆の時点（2020/07）での最新バージョンは、 13.8.1 です。
+この記事執筆の時点（2021/10）での最新バージョンは、 13.15.0 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 Fess のダウンロード
@@ -111,15 +111,15 @@ Erasticsearch のダウンロード
 
 Erasticsearch の `ダウンロードページ <https://www.elastic.co/jp/downloads/elasticsearch>`__\ からダウンロードします。
 Fess のダウンロードページでは、各バージョンに対応する Elasticsearch のバージョンを記載していますので、バージョンを確認してダウンロードしてください。
-Fess 13.8.1 に対応するバージョンは `7.8.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-oss-7-8-0>`__\  ですので、このバージョンをダウンロードします。
+Fess 13.15.0 に対応するバージョンは `7.15.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-15-0>`__\  ですので、このバージョンをダウンロードします。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 設定
 ----
 
 起動する前に、Fess で Elasticsearch クラスタへ接続するための設定をします。
-zipパッケージの設定方法については、インストールページの `ZIP パッケージを利用する場合  <https://fess.codelibs.org/ja/13.8/install/install.html#zip>`__\  を参照してください。
-利用するパッケージが RPM/DEB パッケージの場合は、インストールページの `RPM/DEB パッケージを利用する場合  <https://fess.codelibs.org/ja/13.8/install/install.html#rpm-deb>`__\  を参照してください。
+zipパッケージの設定方法については、インストールページの `ZIP パッケージを利用する場合  <https://fess.codelibs.org/ja/13.15/install/install.html#zip>`__\  を参照してください。
+利用するパッケージが RPM/DEB パッケージの場合は、インストールページの `RPM/DEB パッケージを利用する場合  <https://fess.codelibs.org/ja/13.15/install/install.html#rpm-deb>`__\  を参照してください。
 
 起動
 ----
@@ -156,7 +156,9 @@ Fess サーバーを停止させるには Fess のプロセスを停止(kill)し
 Fess のディレクトリ構成
 ::
 
-    fess-13.8.1
+    fess-13.15.0
+    ├── LICENSE
+    ├── README.md
     ├── app
     │   ├── META-INF
     │   ├── WEB-INF
@@ -175,10 +177,21 @@ Fess のディレクトリ構成
     │   │   ├── view
     │   ├── css
     │   │   ├── admin
+    │   │   │   ├── adminlte.min.css
+    │   │   │   ├── adminlte.min.css.map
+    │   │   │   ├── bootstrap.min.css
+    │   │   │   ├── bootstrap.min.css.map
+    │   │   │   ├── font-awesome.min.css
+    │   │   │   ├── fonts
+    │   │   │   ├── html5shiv.min.js
+    │   │   │   ├── plugins
+    │   │   │   ├── respond.min.js
+    │   │   │   └── style.css
     │   │   ├── bootstrap.min.css
     │   │   ├── bootstrap.min.css.map
     │   │   ├── font-awesome.min.css
     │   │   ├── fonts
+    │   │   └── style.css
     │   ├── favicon.ico
     │   ├── images
     │   └── js
@@ -187,9 +200,7 @@ Fess のディレクトリ構成
     ├── extension
     ├── lib
     ├── logs
-    ├── temp
-    ├── LICENSE
-    └── README.md
+    └── temp
 
 
 Fess は LastaFlute が提供する TomcatBoot を元に構成されています。
@@ -200,23 +211,27 @@ Fess のアプリケーション群のファイルはappディレクトリ以下
 Elasticsearch のディレクトリ構成
 ::
 
-    Elasticsearch-7.8.0
+    elasticsearch-7.15.0
+    ├── LICENSE.txt
+    ├── NOTICE.txt
+    ├── README.asciidoc
     ├── bin
     ├── config
     │   ├── elasticsearch.keystore
     │   ├── elasticsearch.yml
     │   ├── jvm.options
     │   ├── jvm.options.d
-    │   └── log4j2.properties
+    │   ├── log4j2.properties
+    │   ├── role_mapping.yml
+    │   ├── roles.yml
+    │   ├── users
+    │   └── users_roles
     ├── data
     ├── jdk.app
     ├── lib
     ├── logs
     ├── modules
-    ├── plugins
-    ├── LICENSE.txt
-    ├── NOTICE.txt
-    └── README.asciidoc
+    └── plugins
 
 
 インデックスのデータはdataディレクトリに保存されます。
@@ -225,7 +240,7 @@ Elasticsearch のディレクトリ構成
 ==============================
 
 起動直後の状態では、検索するためのインデックスが作成されていないため、検索しても何も結果が返ってきません。
-ですので、まずインデックスを作成する必要があります。 ここでは、 https://fess.codelibs.org/ 以下を対象にインデックスを作成し、検索を行うまでを例として説明します。
+ですので、まずインデックスを作成する必要があります。 ここでは、 https://fess.codelibs.org/ja/ 以下を対象にインデックスを作成し、検索を行うまでを例として説明します。
 
 管理ページへのログイン
 ----------------------
@@ -245,8 +260,8 @@ Elasticsearch のディレクトリ構成
 ［新規作成］を選択
 |image4|
 
-ウェブクロールの設定として、今回は、 https://fess.codelibs.org/ 以下のページ群を1秒間隔の2スレッドでクロールして(1秒に2ページ程度をクロール)、100ページ程度を検索対象にします。
-設定項目は URL : \https://fess.codelibs.org/ 、クロール対象とするURL : \https://fess.codelibs.org/.*、最大アクセス数 : 100 、最大アクセス数 : 2 、間隔 : 1000 ミリ秒 とし、他はデフォルトにします。
+ウェブクロールの設定として、今回は、 https://fess.codelibs.org/ja/ 以下のページ群を10秒間隔の2スレッドでクロールして(10秒に2ページ程度をクロール)、100ページ程度を検索対象にします。
+設定項目は URL : \https://fess.codelibs.org/ja/ 、クロール対象とするURL : \https://fess.codelibs.org/ja/.*、最大アクセス数 : 100 、スレッド数 : 2 、間隔 : 10000 ミリ秒 とし、他はデフォルトにします。
 
 ウェブクロールの設定
 |image5|
@@ -295,27 +310,27 @@ Elasticsearch のディレクトリ構成
 検索トップ画面のJSPファイルの一部
 ::
 
-	<la:form action="search" method="get" styleId="searchForm">
-		${fe:facetForm()}${fe:geoForm()}
-		・
-		・
-		・
-		<main class="container">
-			<div class="row">
-				<div class="col text-center searchFormBox">
-					<h1 class="mainLogo">
-						<img src="${fe:url('/images/logo.png')}"
-							alt="<la:message key="labels.index_title" />" />
-					</h1>
-					<div class="notification">${notification}</div>
-					<div>
-						<la:info id="msg" message="true">
-							<div class="alert alert-info">${msg}</div>
-						</la:info>
-						<la:errors header="errors.front_header"
-							footer="errors.front_footer" prefix="errors.front_prefix"
-							suffix="errors.front_suffix" />
-					</div>
+    <la:form action="/search" method="get" styleId="searchForm">
+      ${fe:facetForm()}${fe:geoForm()}
+      ・
+      ・
+      ・
+      <main class="container">
+        <div class="row">
+          <div class="col text-center searchFormBox">
+            <h1 class="mainLogo">
+              <img src="${fe:url('/images/logo.png')}"
+                alt="<la:message key="labels.index_title" />" />
+            </h1>
+            <div class="notification">${notification}</div>
+            <div>
+              <la:info id="msg" message="true">
+                <div class="alert alert-info">${msg}</div>
+              </la:info>
+              <la:errors header="errors.front_header"
+                footer="errors.front_footer" prefix="errors.front_prefix"
+                suffix="errors.front_suffix" />
+            </div>
 
 検索トップ画面に表示される画像を変更する場合は、上記の「logo.png」の箇所を置き換えたいファイル名に変更します。
 ファイルは「app/images」に配置します。

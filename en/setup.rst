@@ -17,7 +17,7 @@ For more details, see Installation Guide.
 Install Java
 ===============
 
-See `JDK 11 Installation <https://docs.oracle.com/en/java/javase/11/install/overview-jdk-installation.html>`__.
+See `JDK 11 Installation <https://adoptium.net/installation.html>`__.
 
 Install |Fess|
 ===============
