@@ -156,51 +156,51 @@ Fess サーバーを停止させるには Fess のプロセスを停止(kill)し
 Fess のディレクトリ構成
 ::
 
-fess-13.15.0
-├── LICENSE
-├── README.md
-├── app
-│   ├── META-INF
-│   ├── WEB-INF
-│   │   ├── cachedirs
-│   │   ├── classes
-│   │   ├── conf
-│   │   ├── env
-│   │   ├── fe.tld
-│   │   ├── lib
-│   │   ├── logs
-│   │   ├── orig
-│   │   ├── plugin
-│   │   ├── project.properties
-│   │   ├── site
-│   │   ├── thumbnails
-│   │   ├── view
-│   ├── css
-│   │   ├── admin
-│   │   │   ├── adminlte.min.css
-│   │   │   ├── adminlte.min.css.map
-│   │   │   ├── bootstrap.min.css
-│   │   │   ├── bootstrap.min.css.map
-│   │   │   ├── font-awesome.min.css
-│   │   │   ├── fonts
-│   │   │   ├── html5shiv.min.js
-│   │   │   ├── plugins
-│   │   │   ├── respond.min.js
-│   │   │   └── style.css
-│   │   ├── bootstrap.min.css
-│   │   ├── bootstrap.min.css.map
-│   │   ├── font-awesome.min.css
-│   │   ├── fonts
-│   │   └── style.css
-│   ├── favicon.ico
-│   ├── images
-│   └── js
-├── bin
-├── es
-├── extension
-├── lib
-├── logs
-└── temp
+    fess-13.15.0
+    ├── LICENSE
+    ├── README.md
+    ├── app
+    │   ├── META-INF
+    │   ├── WEB-INF
+    │   │   ├── cachedirs
+    │   │   ├── classes
+    │   │   ├── conf
+    │   │   ├── env
+    │   │   ├── fe.tld
+    │   │   ├── lib
+    │   │   ├── logs
+    │   │   ├── orig
+    │   │   ├── plugin
+    │   │   ├── project.properties
+    │   │   ├── site
+    │   │   ├── thumbnails
+    │   │   ├── view
+    │   ├── css
+    │   │   ├── admin
+    │   │   │   ├── adminlte.min.css
+    │   │   │   ├── adminlte.min.css.map
+    │   │   │   ├── bootstrap.min.css
+    │   │   │   ├── bootstrap.min.css.map
+    │   │   │   ├── font-awesome.min.css
+    │   │   │   ├── fonts
+    │   │   │   ├── html5shiv.min.js
+    │   │   │   ├── plugins
+    │   │   │   ├── respond.min.js
+    │   │   │   └── style.css
+    │   │   ├── bootstrap.min.css
+    │   │   ├── bootstrap.min.css.map
+    │   │   ├── font-awesome.min.css
+    │   │   ├── fonts
+    │   │   └── style.css
+    │   ├── favicon.ico
+    │   ├── images
+    │   └── js
+    ├── bin
+    ├── es
+    ├── extension
+    ├── lib
+    ├── logs
+    └── temp
 
 
 Fess は LastaFlute が提供する TomcatBoot を元に構成されています。
@@ -211,27 +211,27 @@ Fess のアプリケーション群のファイルはappディレクトリ以下
 Elasticsearch のディレクトリ構成
 ::
 
-elasticsearch-7.15.0
-├── LICENSE.txt
-├── NOTICE.txt
-├── README.asciidoc
-├── bin
-├── config
-│   ├── elasticsearch.keystore
-│   ├── elasticsearch.yml
-│   ├── jvm.options
-│   ├── jvm.options.d
-│   ├── log4j2.properties
-│   ├── role_mapping.yml
-│   ├── roles.yml
-│   ├── users
-│   └── users_roles
-├── data
-├── jdk.app
-├── lib
-├── logs
-├── modules
-└── plugins
+    elasticsearch-7.15.0
+    ├── LICENSE.txt
+    ├── NOTICE.txt
+    ├── README.asciidoc
+    ├── bin
+    ├── config
+    │   ├── elasticsearch.keystore
+    │   ├── elasticsearch.yml
+    │   ├── jvm.options
+    │   ├── jvm.options.d
+    │   ├── log4j2.properties
+    │   ├── role_mapping.yml
+    │   ├── roles.yml
+    │   ├── users
+    │   └── users_roles
+    ├── data
+    ├── jdk.app
+    ├── lib
+    ├── logs
+    ├── modules
+    └── plugins
 
 
 インデックスのデータはdataディレクトリに保存されます。
@@ -310,27 +310,27 @@ elasticsearch-7.15.0
 検索トップ画面のJSPファイルの一部
 ::
 
-<la:form action="/search" method="get" styleId="searchForm">
-  ${fe:facetForm()}${fe:geoForm()}
-  ・
-  ・
-  ・
-  <main class="container">
-    <div class="row">
-      <div class="col text-center searchFormBox">
-        <h1 class="mainLogo">
-          <img src="${fe:url('/images/logo.png')}"
-            alt="<la:message key="labels.index_title" />" />
-        </h1>
-        <div class="notification">${notification}</div>
-        <div>
-          <la:info id="msg" message="true">
-            <div class="alert alert-info">${msg}</div>
-          </la:info>
-          <la:errors header="errors.front_header"
-            footer="errors.front_footer" prefix="errors.front_prefix"
-            suffix="errors.front_suffix" />
-        </div>
+    <la:form action="/search" method="get" styleId="searchForm">
+      ${fe:facetForm()}${fe:geoForm()}
+      ・
+      ・
+      ・
+      <main class="container">
+        <div class="row">
+          <div class="col text-center searchFormBox">
+            <h1 class="mainLogo">
+              <img src="${fe:url('/images/logo.png')}"
+                alt="<la:message key="labels.index_title" />" />
+            </h1>
+            <div class="notification">${notification}</div>
+            <div>
+              <la:info id="msg" message="true">
+                <div class="alert alert-info">${msg}</div>
+              </la:info>
+              <la:errors header="errors.front_header"
+                footer="errors.front_footer" prefix="errors.front_prefix"
+                suffix="errors.front_suffix" />
+            </div>
 
 検索トップ画面に表示される画像を変更する場合は、上記の「logo.png」の箇所を置き換えたいファイル名に変更します。
 ファイルは「app/images」に配置します。
