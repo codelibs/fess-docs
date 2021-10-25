@@ -11,7 +11,7 @@
 -  Java: Java 11
 -  (RPMまたはDEB) Elasticsearch: 7.15.X
 
-|Fess| を利用する環境に Java がインストールされていない場合は、`AdoptOpenJDK のサイト <https://adoptopenjdk.net/>`__ より JDK をインストールしてください。
+|Fess| を利用する環境に Java がインストールされていない場合は、`Adoptium のサイト <https://adoptium.net/>`__ より JDK をインストールしてください。
 本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
 
 ダウンロード

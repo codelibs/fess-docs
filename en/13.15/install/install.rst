@@ -11,7 +11,7 @@ Requirements
 -  Java: Java 11
 -  (RPM or DEB) Elasticsearch: 7.15.X
 
-If Java is not installed in your environment where Fess will be used, install JDK from `AdoptOpenJDK site <https://adoptopenjdk.net/>`__ .
+If Java is not installed in your environment where Fess will be used, install JDK from `Adoptium site <https://adoptium.net/>`__ .
 Embedded Elasticsearch is not recommended for production use or load testing.
 
 
