@@ -197,6 +197,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第41回】Microsoft Teamsのクロール <https://news.mynavi.jp/itsearch/article/bizapp/5880>`__
+
 - `【第40回】各種機能の設定方法（ドキュメントブースト、関連コンテンツ、関連クエリー） <https://news.mynavi.jp/itsearch/article/bizapp/5804>`__
 
 - `【第39回】各種機能の設定方法（パスマッピング、リクエストヘッダー、重複ホスト） <https://news.mynavi.jp/itsearch/article/bizapp/5686>`__
