@@ -18,7 +18,7 @@ Embedded Elasticsearch is not recommended for production use or load testing.
 Download
 ========
 
-Download a pakcage for Fess and Elasticsearch from `Download site <https://fess.codelibs.org/ja/downloads.html>`__.
+Download a package for Fess and Elasticsearch from `Download site <https://fess.codelibs.org/ja/downloads.html>`__.
 
 Installation
 ============
