@@ -57,6 +57,15 @@
 一覧ページの設定名をクリックし、削除ボタンをクリックすると確認画面が表示されます。
 削除ボタンを押すと設定が削除されます。
 
+リクエストパラメーターの利用
+--------------------
+
+作成したアクセストークンをリクエストパラメーターで渡す場合、パラメーター名はfess_config.propertiesで指定します。
+例えば、tokenというパラメーター名を使う場合、以下を設定します。
+
+::
+
+api.access.token.request.parameter=token
 
 
 .. |image0| image:: ../../../resources/images/ja/13.0/admin/accesstoken-1.png
