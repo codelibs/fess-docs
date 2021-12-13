@@ -2,6 +2,13 @@
 Enterprise Search Server: |Fess|
 ====================================
 
+Log4J2 Vulnerability and Fess
+=============================
+
+As you may have seen in the news, the vulnerability has been reported with CVE-2021-44228 against the Log4j library.
+The upgrade to the latest release is highly recommended for Fess users.
+Our announcement is `here <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__.
+
 What is Fess?
 =============
 
