@@ -5,6 +5,9 @@
 ニュース一覧
 ============
 
+2021-12-16
+    `Fess 13.15.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.3`__
+
 2021-12-11
     `Fess 13.15.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.2`__
 
