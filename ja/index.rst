@@ -7,7 +7,7 @@ Log4J2の脆弱性情報
 
 Log4jに脆弱性が発見されました。
 Fessに関しては `アナウンス <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__ を出しています。
-この脆弱性に対応したFess 13.15.3へアップグレードをお願いします。
+この脆弱性に対応したFess 13.15.3以上へアップグレードをお願いします。
 
 
 概要
@@ -54,7 +54,7 @@ Java 実行環境があればどの OS でも実行可能です。
 ダウンロード
 ============
 
-- :doc:`Fess 13.15.3 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 13.16.0 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -112,6 +112,9 @@ Java 実行環境があればどの OS でも実行可能です。
 ニュース
 ========
 
+2021-12-21
+    `Fess 13.16.0 <https://github.com/codelibs/fess/releases/tag/fess-13.16.0>`__ リリース
+
 2021-12-16
     `Fess 13.15.3 <https://github.com/codelibs/fess/releases/tag/fess-13.15.3>`__ リリース
 
@@ -126,9 +129,6 @@ Java 実行環境があればどの OS でも実行可能です。
 
 2021-08-26
     `Fess 13.14.0 <https://github.com/codelibs/fess/releases/tag/fess-13.14.0>`__ リリース
-
-2021-08-07
-    `Fess 13.13.2 <https://github.com/codelibs/fess/releases/tag/fess-13.13.2>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
