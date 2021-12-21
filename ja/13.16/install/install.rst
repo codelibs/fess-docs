@@ -9,7 +9,7 @@
 
 -  OS: Windows や Unix など Java が実行できる OS 環境
 -  Java: Java 11
--  (RPMまたはDEB) Elasticsearch: 7.15.X
+-  (RPMまたはDEB) Elasticsearch: 7.16.X
 
 |Fess| を利用する環境に Java がインストールされていない場合は、`Adoptium のサイト <https://adoptium.net/>`__ より JDK をインストールしてください。
 本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
@@ -35,9 +35,9 @@ Elasticsearch を $ES_HOME にインストールしてあるものとします�
 
 ::
 
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.15.0
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.15.0
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.15.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.16.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.16.0
+    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.16.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
@@ -45,7 +45,7 @@ Elasticsearch を $ES_HOME にインストールしてあるものとします�
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.15.0/elasticsearch-configsync-7.15.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.16.0/elasticsearch-configsync-7.16.0.zip
     $ mkdir -p $ES_HOME/modules/configsync
     $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
 
@@ -76,14 +76,14 @@ elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開�
 
 ::
 
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.15.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.15.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.15.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.16.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.16.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.16.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 次に elasticsearch-configsync をインストールします。
-c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-7.15.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.15.0/elasticsearch-configsync-7.15.0.zip>`__ をダウンロードして展開します。
+c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-7.16.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.16.0/elasticsearch-configsync-7.16.0.zip>`__ をダウンロードして展開します。
 
 c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加えます。
 
@@ -121,9 +121,9 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 
 ::
 
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.15.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.15.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.15.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:7.16.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:7.16.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:7.16.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
@@ -131,7 +131,7 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.15.0/elasticsearch-configsync-7.15.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/7.16.0/elasticsearch-configsync-7.16.0.zip
     $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
     $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
