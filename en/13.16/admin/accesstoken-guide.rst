@@ -5,7 +5,7 @@ Access Token
 Overview
 ========
 
-Access Token Configuaration page manages access tokens.
+Access Token Configuration page manages access tokens.
 
 Management Operations
 =====================

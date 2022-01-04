@@ -70,7 +70,7 @@ Using Zip Package on Windows
 
 Download and unzipped |Fess| and Elasticsearch to c:\\elasticsearch-<version> and c:\\fess-<version> respectively.
 
-Open a command propt and install Elasticsearch plugins to plugins directory.
+Open a command prompt and install Elasticsearch plugins to plugins directory.
 
 ::
 

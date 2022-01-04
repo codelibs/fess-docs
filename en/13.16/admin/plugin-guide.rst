@@ -26,7 +26,7 @@ Click Install button on the list page if you want to install new plugins.
 
 |image1|
 
-Select the plugin you want to install on the dropdown list, and click Install button to install it.
+Select the plugin you want to install on the drop-down list, and click Install button to install it.
 
 .. |image0| image:: ../../../resources/images/en/13.16/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/13.16/admin/plugin-2.png

@@ -8,7 +8,7 @@ For more details about XML format, see `GSA official document <https://www.googl
 Configuration
 ==================
 
-To enable GSA Compatible API, set ``web.api.gsa=true`` in system.properites.
+To enable GSA Compatible API, set ``web.api.gsa=true`` in system.properties.
 
 Request
 ==================

@@ -5,7 +5,7 @@ File Configuration
 Overview
 ========
 
-File Crawling Configuaration page manages configurations for File crawling on file system or shared network folder.
+File Crawling Configuration page manages configurations for File crawling on file system or shared network folder.
 
 Management Operations
 =====================

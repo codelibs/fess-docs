@@ -43,12 +43,12 @@ Label value. This value is used as URL parameter.
 Included Paths
 ::::::::::::::
 
-Paths which matches crawling url/path are assigned to this label.
+Paths which matches crawling URL/path are assigned to this label.
 
 Excluded Paths
 ::::::::::::::
 
-Paths which matches crawling url/path are not assigned to this label.
+Paths which matches crawling URL/path are not assigned to this label.
 
 Permissions
 :::::::::::

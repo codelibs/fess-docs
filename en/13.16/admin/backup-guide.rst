@@ -26,7 +26,7 @@ To download your configuration, click the index name.
 .fess_basic_config
 ::::::::::::
 
-.fess_basic_config index contains |Fess| configuration data without failure urls.
+.fess_basic_config index contains |Fess| configuration data without failure URLs.
 
 .fess_user
 ::::::::::

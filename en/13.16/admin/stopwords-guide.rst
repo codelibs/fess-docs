@@ -5,7 +5,6 @@ Stopwords List
 Overview
 ========
 
-TBD
 Stopwords page manages dictionary of stopwords characters.
 The stopwords dictionary maps characters to other one.
 

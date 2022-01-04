@@ -57,7 +57,7 @@ you can select preferred language.
 Labels
 ::::::
 
-Narrow down search results by labels you select at a pulldown. 
+Narrow down search results by labels you select at a pull-down. 
 
 Last update
 :::::::::::

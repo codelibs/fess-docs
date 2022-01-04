@@ -6,7 +6,7 @@ NOT Search
 ==========
 
 NOT search provides a search result that does not contain specified search word.
-For example, "Appl NOT Compute" is the search result that contains Apple and does not contain Computer.
+For example, "Apple NOT Compute" is the search result that contains Apple and does not contain Computer.
 
 Usage
 -----

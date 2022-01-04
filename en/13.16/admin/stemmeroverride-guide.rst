@@ -5,7 +5,6 @@ Stemmer Override List
 Overview
 ========
 
-TBD
 Stemmer Override page manages dictionary of stemmer override characters.
 The stemmer override dictionary maps characters to other one.
 

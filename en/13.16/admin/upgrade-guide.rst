@@ -32,7 +32,7 @@ Migration
 ---------
 
 Type /admin/upgrade/ to URL after logging in as admin user.
-Select a target version and then click button to execute data mingration process.
+Select a target version and then click button to execute data migration process.
 
 Target Version
 ::::::::::::::

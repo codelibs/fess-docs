@@ -46,7 +46,7 @@ but knowledge/experience about Elasticsearch is NOT needed because of All-in-One
 Enterprise Search Server. |Fess| provides Administration GUI to configure
 the system on your browser. |Fess| also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
-such as MS Office, pdf and zip.
+such as MS Office, PDF and zip.
 
 Download
 ========
@@ -72,7 +72,7 @@ Features
 
 -  Provide UI as a responsive web design (support any device)
 
--  Provide a browser based administative page (admin console)
+-  Provide a browser based administrative page (admin console)
 
 -  Support secure search (access control with LDAP/Active Directory)
 

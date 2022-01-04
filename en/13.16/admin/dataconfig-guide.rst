@@ -5,7 +5,7 @@ Data Store Configuration
 Overview
 ========
 
-Data Store Crawling Configuaration page manages configurations for crawling on Data Store, such as Database.
+Data Store Crawling Configuration page manages configurations for crawling on Data Store, such as Database.
 
 Management Operations
 =====================
@@ -202,7 +202,7 @@ The description for Script is below.
    * - last_modified
      - Last modified for this document
 
-Table: Configuaration for Script
+Table: Configuration for Script
 
 JDBC Driver
 :::::::::::
@@ -247,11 +247,11 @@ For the description, see below.
 .. list-table::
 
    * - directories
-     - Directories which contains csv file(.csv or .tsv)
+     - Directories which contains CSV file(.csv or .tsv)
    * - files
      - CSV files (if you want to specify them)
    * - fileEncoding
-     - Encofing of CSV files
+     - Encoding of CSV files
    * - separatorCharacter
      - Separator character in CSV content
 
@@ -297,7 +297,7 @@ create：Created file
 modify：Updated file
 delete：Deleted file
 
-For Path, you can sepecify a path in the same notation as a setting for file crawling.
+For Path, you can specify a path in the same notation as a setting for file crawling.
 
 For example, create test.csv in /home/john/csv, and the content is below.
 
@@ -333,9 +333,9 @@ For the description, see below.
 .. list-table::
 
    * - directories
-     - Directories which contains csv file(.csv or .tsv)
+     - Directories which contains CSV file(.csv or .tsv)
    * - fileEncoding
-     - Encofing of CSV files
+     - Encoding of CSV files
    * - separatorCharacter
      - Separator character in CSV content
 

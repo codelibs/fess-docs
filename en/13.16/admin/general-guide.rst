@@ -108,12 +108,12 @@ e.g. documents indexed X days ago are removed if they are not updated.
 Excluded Failure Type
 :::::::::::::::::::::
 
-Crawler does not ignore failure urls included in excluded failure types even if the failure count is over the threshold.
+Crawler does not ignore failure URLs included in excluded failure types even if the failure count is over the threshold.
 
 Failure Count Threshold
 :::::::::::::::::::::::
 
-Crawler ignores failure urls of which failure count is over this threshold.
+Crawler ignores failure URLs of which failure count is over this threshold.
 
 Logging
 --------
@@ -131,12 +131,12 @@ Enable logging for users.
 Favorite Logging
 ::::::::::::::::
 
-Enable logging for favarite requests.
+Enable logging for favorite requests.
 
 Purge Search Log Before
 :::::::::::::::::::::::
 
-Days whilch old search logs are removed.
+Days which old search logs are removed.
 To disable log purge, set to -1.
 
 Purge Job Log Before
@@ -148,7 +148,7 @@ To disable log purge, set to -1.
 Purge User Before
 :::::::::::::::::
 
-Days whilc old user logs are removed.
+Days which old user logs are removed.
 To disable log purge, set to -1.
 
 Bots Name For Purge

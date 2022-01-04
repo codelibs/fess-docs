@@ -6,7 +6,7 @@ Overview
 ========
 
 Duplicate Host page manages settings to normalize a host name.
-For examples, n2sm.net is replaced with www.n2sm.net in url.
+For examples, n2sm.net is replaced with www.n2sm.net in URL.
 
 Management Operations
 =====================

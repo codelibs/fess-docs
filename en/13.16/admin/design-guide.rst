@@ -5,7 +5,7 @@ Page Design
 Overview
 ========
 
-Page Design page manages search pages and resource files, such as images and css files.
+Page Design page manages search pages and resource files, such as images and CSS files.
 
 Page Design Menu
 ----------------

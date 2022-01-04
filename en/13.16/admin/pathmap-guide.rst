@@ -5,8 +5,8 @@ Path Mapping
 Overview
 ========
 
-Path Mapping replaces crawled url/path with given one.
-In search result page, replaced url links are used.
+Path Mapping replaces crawled URL/path with given one.
+In search result page, replaced URL links are used.
 
 Management Operations
 =====================
@@ -44,8 +44,8 @@ Process Type
 ::::::::::::
 
 When this is processed. 
-Crawling is at crawling/indexing time and replaced url/path is indexed.
-View is at searching time and original url/path is indexed.
+Crawling is at crawling/indexing time and replaced URL/path is indexed.
+View is at searching time and original URL/path is indexed.
 
 Display Order
 :::::::::::::

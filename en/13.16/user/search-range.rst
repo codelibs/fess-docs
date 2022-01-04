@@ -12,7 +12,7 @@ Usage
 
 The syntax of Range search is "fieldname:[lower TO upper]"
 
-For example, type to search document contentLength field against 1 k to
+For example, type to search document content_length field against 1 k to
 10 k bytes is shown below the search form.
 
 To search documents of which size is from 10 bytes to 100 bytes, the query is below.

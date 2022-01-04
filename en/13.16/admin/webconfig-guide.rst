@@ -5,7 +5,7 @@ Web Configuration
 Overview
 ========
 
-Web Crawling Configuaration page manages configurations for Web crawling.
+Web Crawling Configuration page manages configurations for Web crawling.
 
 Management Operations
 =====================
@@ -40,22 +40,22 @@ This URLs are locations to start crawling.
 Included URLs For Crawling
 ::::::::::::::::::::::::::
 
-This regular expression(Java Format) is allowed url patterns for |Fess| crawler.
+This regular expression(Java Format) is allowed URL patterns for |Fess| crawler.
 
 Excluded URLs For Crawling
 ::::::::::::::::::::::::::
 
-This regular expression(Java Format) is rejected url patterns for |Fess| crawler.
+This regular expression(Java Format) is rejected URL patterns for |Fess| crawler.
 
 Included URLs For Indexing
 ::::::::::::::::::::::::::
 
-This regular expression(Java Format) is allowed url patterns for |Fess| indexer.
+This regular expression(Java Format) is allowed URL patterns for |Fess| indexer.
 
 Excluded URLs For Indexing
 ::::::::::::::::::::::::::
 
-This regular expression(Java Format) is rejected url patterns for |Fess| indexer.
+This regular expression(Java Format) is rejected URL patterns for |Fess| indexer.
 
 Config parameters
 :::::::::::::::::
@@ -65,12 +65,12 @@ You can specify the crawl configuration information.
 Depth
 :::::
 
-The number of linked urls.
+The number of linked URLs.
 
 Max Access Count
 ::::::::::::::::
 
-The number of indexed urls.
+The number of indexed URLs.
 
 User Agent
 ::::::::::
@@ -85,7 +85,7 @@ The number of crawler threads for this configuration.
 Interval time
 :::::::::::::
 
-Interval time to crawl urls for each thread.
+Interval time to crawl URLs for each thread.
 
 Boost
 :::::
