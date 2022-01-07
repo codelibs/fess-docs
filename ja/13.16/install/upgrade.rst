@@ -29,10 +29,10 @@ Elasticsearchをアップグレードする場合、移行に失敗するイン�
 --------------
 
 1. |Fess| をインストールする
-1. fess_config.propertiesの設定差分を確認して、新しい環境に設定を反映する
-1. system.propertiesを新しい環境にコピーする
-1. |Fess| を起動する
-1. fess_basic_config.bulkおよびfess_user.bulkのバルクファイルをバックアップページからアップロードする
+2. fess_config.propertiesの設定差分を確認して、新しい環境に設定を反映する
+3. system.propertiesを新しい環境にコピーする
+4. |Fess| を起動する
+5. fess_basic_config.bulkおよびfess_user.bulkのバルクファイルをバックアップページからアップロードする
 
 クローラの起動
 -------------
