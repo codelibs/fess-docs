@@ -95,7 +95,7 @@ News
     `Fess 13.15.3 <https://github.com/codelibs/fess/releases/tag/fess-13.15.3>`__ Released
 
 2021-12-13
-    `Log4J2 Vulnerability on Fess <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__.
+    `Log4J2 Vulnerability on Fess <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__
 
 2021-12-11
     `Fess 13.15.2 <https://github.com/codelibs/fess/releases/tag/fess-13.15.2>`__ Released
