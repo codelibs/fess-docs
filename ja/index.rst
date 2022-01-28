@@ -2,14 +2,6 @@
 オープンソース全文検索サーバー |Fess|
 =====================================
 
-Log4J2の脆弱性情報
-==================
-
-Log4jに脆弱性が発見されました。
-Fessに関しては `アナウンス <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__ を出しています。
-この脆弱性に対応したFess 13.15.3以上へアップグレードをお願いします。
-
-
 概要
 ====
 
@@ -117,6 +109,9 @@ Java 実行環境があればどの OS でも実行可能です。
 
 2021-12-16
     `Fess 13.15.3 <https://github.com/codelibs/fess/releases/tag/fess-13.15.3>`__ リリース
+
+2021-12-13
+    `Log4J2の脆弱性情報 <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__
 
 2021-12-11
     `Fess 13.15.2 <https://github.com/codelibs/fess/releases/tag/fess-13.15.2>`__ リリース
