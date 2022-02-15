@@ -12,7 +12,7 @@
 
 設定データは以下のファイルになります。
 
-* バックアップページの.fess_basic_configおよび.fess_user (詳細は管理者ガイドのバックアップを参照してください)
+* バックアップページのfess_basic_config.bulkおよびfess_user.bulk (詳細は管理者ガイドのバックアップを参照してください)
 * /etc/fessまたはapp/WEB-INF/confのsystem.properties
 * /etc/fessまたはapp/WEB-INF/confのfess_config.properties
 
@@ -22,7 +22,7 @@
 |Fess| のプロセスを停止して、RPMまたはDEBパッケージをインストールしてください。
 詳細はインストールガイドのインストールを参照してください。
 
-Elasticsearchをアップグレードする場合、移行に失敗するインデックスが発生する可能性があります。
+ElasticsearchまたはOpenSearchをアップグレードする場合、移行に失敗するインデックスが発生する場合もあります。
 安全に移行するためには、Fessに関するインデックスを削除しておくことを推奨します。
 
 設定のリストア
@@ -32,7 +32,8 @@ Elasticsearchをアップグレードする場合、移行に失敗するイン�
 2. fess_config.propertiesの設定差分を確認して、新しい環境に設定を反映する
 3. system.propertiesを新しい環境にコピーする
 4. |Fess| を起動する
-5. fess_basic_config.bulkおよびfess_user.bulkのバルクファイルをバックアップページからアップロードする
+5. 管理画面からログインする
+6. fess_basic_config.bulkおよびfess_user.bulkのファイルをバックアップページからアップロードする
 
 クローラの起動
 -------------

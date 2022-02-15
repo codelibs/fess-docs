@@ -34,8 +34,8 @@ runtime environment. |Fess| is provided under Apache license.
    Document Search
 
 
-|Fess| is Elasticsearch-based search server,
-but knowledge/experience about Elasticsearch is NOT needed because of All-in-One
+|Fess| is Elasticsearch/OpenSearch-based search server,
+but knowledge/experience about Elasticsearch/OpenSearch is NOT needed because of All-in-One
 Enterprise Search Server. |Fess| provides Administration GUI to configure
 the system on your browser. |Fess| also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
@@ -61,7 +61,7 @@ Features
 
 -  Support a web page for BASIC/DIGEST/NTLM/FORM authentication
 
--  Contain elasticsearch as a search engine (unlimited scalability)
+-  Use Elasticsearch or OpenSearch as a search engine (unlimited scalability)
 
 -  Provide UI as a responsive web design (support any device)
 

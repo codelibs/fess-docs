@@ -61,7 +61,7 @@ Java 実行環境があればどの OS でも実行可能です。
 
 -  既存サイトへの組み込み用JavaScriptの提供
 
--  Elasticsearch を検索エンジンとして利用
+-  ElasticsearchまたはOpenSearchを検索エンジンとして利用
 
 -  BASIC/DIGEST/NTLM/FORM認証のサイトも検索可能
 
