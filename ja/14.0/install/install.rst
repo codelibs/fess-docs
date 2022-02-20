@@ -45,7 +45,7 @@ Elasticsearch を $ES_HOME にインストールしてあるものとします�
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.1.zip
     $ mkdir -p $ES_HOME/modules/configsync
     $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
 
@@ -55,6 +55,7 @@ configsync.config_path には $ES_HOME/data/config の絶対パスを指定し�
 ::
 
     configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
+    xpack.security.enabled: false
 
 |Fess| の zip ファイルを $FESS_HOME に展開します。
 |Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
@@ -83,13 +84,14 @@ elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開�
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 次に elasticsearch-configsync をインストールします。
-c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-8.0.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.0.zip>`__ をダウンロードして展開します。
+c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-8.0.1.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.1/elasticsearch-configsync-8.0.1.zip>`__ をダウンロードして展開します。
 
 c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加えます。
 
 ::
 
     configsync.config_path: c:/elasticsearch-<version>/data/config/
+    xpack.security.enabled: false
 
 |Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
 c:\\fess-<version>\\bin\\fess.in.bat を変更します。
@@ -131,7 +133,7 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.1.zip
     $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
     $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
@@ -140,6 +142,7 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 ::
 
     configsync.config_path: /var/lib/elasticsearch/config
+    xpack.security.enabled: false
 
 次に、|Fess| の RPM/DEB パッケージをインストールします。
 

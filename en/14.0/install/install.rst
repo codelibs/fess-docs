@@ -46,7 +46,7 @@ Next, install elasticsearch-configsync,
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.1.zip
     $ mkdir -p $ES_HOME/modules/configsync
     $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
 
@@ -56,6 +56,7 @@ For configsync.config_path, the value is an absolute path of $ES_HOME/data/confi
 ::
 
     configsync.config_path: [absolute path of $ES_HOME]/data/config/
+    xpack.security.enabled: false
 
 Unzip |Fess| file to $FESS_HOME, and specify the following settings in $FESS_HOME/bin/fess.in.sh.
 
@@ -80,13 +81,14 @@ Open a command prompt and install Elasticsearch plugins to plugins directory.
 
 Notice that these plugins depend on a version of Elasticsearch.
 
-Next, to install elasticsearch-configsync, create c:\\elasticsearch-<version>\\modules\\configsync folder and then download and unzip `elasticsearch-configsync-8.0.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.0.zip>`__.
+Next, to install elasticsearch-configsync, create c:\\elasticsearch-<version>\\modules\\configsync folder and then download and unzip `elasticsearch-configsync-8.0.1.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.1/elasticsearch-configsync-8.0.1.zip>`__.
 
 Moreover, add the following setting to c:\\elasticsearch-<version>\\config\\elasticsearch.yml.
 
 ::
 
     configsync.config_path: c:/elasticsearch-<version>/data/config/
+    xpack.security.enabled: false
 
 To connect |Fess| to Elasticsearch, specify the following settings in c:\\fess-<version>\\bin\\fess.in.bat.
 
@@ -127,7 +129,7 @@ Next, install elasticsearch-configsync,
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.0.0/elasticsearch-configsync-8.0.1.zip
     $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
     $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
@@ -136,6 +138,7 @@ and add the following setting to /etc/elasticsearch/elasticsearch.yml.
 ::
 
     configsync.config_path: /var/lib/elasticsearch/config
+    xpack.security.enabled: false
 
 After installing Elasticsearch, install RPM/DEB package of |Fess|.
 
