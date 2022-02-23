@@ -4,9 +4,9 @@
 
 .. toctree::
 
-   インストール <13.16/install/index>
-   検索 <13.16/user/index>
-   管理 <13.16/admin/index>
-   API <13.16/api/index>
-   設定 <13.16/config/index>
+   インストール <14.0/install/index>
+   検索 <14.0/user/index>
+   管理 <14.0/admin/index>
+   API <14.0/api/index>
+   設定 <14.0/config/index>
 
