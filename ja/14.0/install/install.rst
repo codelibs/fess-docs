@@ -17,17 +17,18 @@
 ダウンロード
 ============
 
-`Fess のダウンロードサイト <https://fess.codelibs.org/ja/downloads.html>`__ から |Fess| と Elasticsearch をダウンロードします。
+`ダウンロードサイト <https://fess.codelibs.org/ja/downloads.html>`__ から |Fess| をダウンロードします。
 
-インストール
+ZIP版のインストール (Elasticsearch)
 ============
 
 Elasticsearchのインストール
 ---------------------------
 
-`Elasticsearch Reference <https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html>`__ を参照して、Elasticsearchをインストールしてください。
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.0/install-elasticsearch.html>`__ を参照して、ZIP版のElasticsearchをダウンロードおよびインストールしてください。
+以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
 
-ZIP パッケージを利用する場合
+ZIP パッケージを利用する場合 (Linux)
 ----------------------------
 
 Elasticsearch のプラグインを plugins ディレクトリにインストールします。
@@ -102,22 +103,14 @@ c:\\fess-<version>\\bin\\fess.in.bat を変更します。
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
 
 
-RPM/DEB パッケージを利用する場合
-----------------------------
+RPM/DEB パッケージのインストール (Elasticsearch)
+================================================
 
-|Fess| をインストールする前に Elasticsearch の RPM/DEB パッケージをインストールします。
+Elasticsearchのインストール
+---------------------------
 
-RPMパッケージの場合
-
-::
-
-    $ sudo rpm -ivh elasticsearch-<version>.rpm
-
-DEBパッケージの場合
-
-::
-
-    $ sudo dpkg -i elasticsearch-<version>.deb
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.0/install-elasticsearch.html>`__ を参照して、RPM/DEB版のElasticsearchをダウンロードおよびインストールしてください。
+以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
 
 Elasticsearch プラグインを plugins ディレクトリにインストールします。
 
@@ -143,6 +136,9 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 
     configsync.config_path: /var/lib/elasticsearch/config
     xpack.security.enabled: false
+
+Fessのインストール
+------------------
 
 次に、|Fess| の RPM/DEB パッケージをインストールします。
 
