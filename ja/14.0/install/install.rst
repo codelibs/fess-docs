@@ -7,11 +7,10 @@
 
 |Fess| は以下の環境で利用することができます。
 
--  OS: Windows や Unix など Java が実行できる OS 環境
--  Java: Java 17
--  (RPMまたはDEB) Elasticsearch: 8.0.X
+- OS: WindowsやLinuxなどJavaまたはDockerが実行可能なOS環境
+- `Java 17 <https://adoptium.net/>`__ (TAR.GZ/ZIP/RPM/DEB版をインストールする場合)
+- `Docker <https://docs.docker.com/get-docker/>`__ および `Docker Compose <https://docs.docker.com/compose/install/>`__ (Docker版をインストールする場合)
 
-|Fess| を利用する環境に Java がインストールされていない場合は、`Adoptium のサイト <https://adoptium.net/>`__ より JDK をインストールしてください。
 本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
 
 ダウンロード
@@ -19,17 +18,14 @@
 
 `ダウンロードサイト <https://fess.codelibs.org/ja/downloads.html>`__ から |Fess| をダウンロードします。
 
-ZIP版のインストール (Elasticsearch)
-============
+TAR.GZ版でのインストール (Elasticsearch)
+========================================
 
 Elasticsearchのインストール
 ---------------------------
 
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.0/install-elasticsearch.html>`__ を参照して、ZIP版のElasticsearchをダウンロードおよびインストールしてください。
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.0/install-elasticsearch.html>`__ を参照して、TAR.GZ版のElasticsearchをダウンロードおよびインストールしてください。
 以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
-
-ZIP パッケージを利用する場合 (Linux)
-----------------------------
 
 Elasticsearch のプラグインを plugins ディレクトリにインストールします。
 Elasticsearch を $ES_HOME にインストールしてあるものとします。
@@ -58,6 +54,9 @@ configsync.config_path には $ES_HOME/data/config の絶対パスを指定し�
     configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
     xpack.security.enabled: false
 
+Fessのインストール
+------------------
+
 |Fess| の zip ファイルを $FESS_HOME に展開します。
 |Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
 $FESS_HOME/bin/fess.in.sh を変更します。
@@ -68,8 +67,14 @@ $FESS_HOME/bin/fess.in.sh を変更します。
     FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
 
 
-ZIP パッケージを利用する場合（Windows）
----------------------------------------
+ZIP版でのインストール (Elasticsearch)
+=====================================
+
+Elasticsearchのインストール
+---------------------------
+
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.0/install-elasticsearch.html>`__ を参照して、ZIP版のElasticsearchをダウンロードおよびインストールしてください。
+以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
 
 elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開します。
 今回は、c:\\elasticsearch-<version> と c:\\fess-<version> に展開したものとします。
@@ -94,6 +99,10 @@ c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加�
     configsync.config_path: c:/elasticsearch-<version>/data/config/
     xpack.security.enabled: false
 
+Fessのインストール
+------------------
+
+|Fess| の zip ファイルを %FESS_HOME% に展開します。
 |Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
 c:\\fess-<version>\\bin\\fess.in.bat を変更します。
 
@@ -103,8 +112,8 @@ c:\\fess-<version>\\bin\\fess.in.bat を変更します。
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
 
 
-RPM/DEB パッケージのインストール (Elasticsearch)
-================================================
+RPM/DEB版でのインストール (Elasticsearch)
+=========================================
 
 Elasticsearchのインストール
 ---------------------------
@@ -168,3 +177,23 @@ systemd を使う場合(RPM/DEB)は
     $ sudo /bin/systemctl daemon-reload
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
+
+
+Docker版でのインストール (Elasticsearch)
+========================================
+
+`https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.0.0/compose>`__ から以下のファイルを取得します。
+
+- `docker-compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/docker-compose.yml>`__
+- `docker-compose.standalone.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/docker-compose.standalone.yml>`__
+
+
+Docker版でのインストール (OpenSearch)
+=====================================
+
+`https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.0.0/compose>`__ から以下のファイルを取得します。
+
+- `docker-compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/docker-compose.yml>`__
+- `docker-compose.opensearch.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/docker-compose.opensearch.yml>`__
+- `.env.opensearch <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/.env.opensearch>`__
+

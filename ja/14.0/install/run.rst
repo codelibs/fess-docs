@@ -5,8 +5,8 @@
 起動方法
 ========
 
-ZIP パッケージの場合
---------------------
+TAR.GZ/ZIP版の場合
+------------------
 
 |Fess| を起動する前に Elasticsearch を起動する必要があります。
 
@@ -22,8 +22,8 @@ Windows 環境で Elasticsearch を起動するには、 bin フォルダ中の 
 
     $ ./bin/fess
 
-RPM/DEB パッケージの場合(chkconfig)
---------------------
+RPM/DEB版の場合 (chkconfig)
+---------------------------
 
 |Fess| を起動する前に Elasticsearch を起動する必要があります。
 
@@ -37,8 +37,8 @@ RPM/DEB パッケージの場合(chkconfig)
 
     $ sudo service fess start
 
-RPM/DEB パッケージの場合(systemd)
---------------------
+RPM/DEB版の場合 (systemd)
+-------------------------
 
 |Fess| を起動する前に Elasticsearch を起動する必要があります。
 
@@ -52,6 +52,24 @@ RPM/DEB パッケージの場合(systemd)
 
     $ sudo systemctl start fess.service
 
+Docker版の場合 (Elasticsearch)
+------------------------------
+
+以下のコマンドを実行して、Elasticsearch と |Fess| を起動します。
+
+::
+
+    $ docker-compose -f docker-compose.yml -f docker-compose.standalone.yml up -d
+
+Docker版の場合 (OpenSearch)
+---------------------------
+
+以下のコマンドを実行して、OpenSearchと |Fess| を起動します。
+
+::
+
+    $ docker-compose --env-file .env.opensearch -f docker-compose.yml -f docker-compose.opensearch.yml up -d
+
 ブラウザー UI へのアクセス
 ==========================
 
@@ -64,13 +82,13 @@ RPM/DEB パッケージの場合(systemd)
 停止方法
 ========
 
-ZIP パッケージの場合
---------------------
+TAR.GZ/ZIP版の場合
+------------------
 
 |Fess| サーバーを停止させるには |Fess| のプロセスを kill します。
 
-RPM/DEB パッケージの場合(chkconfig)
---------------------
+RPM/DEB版の場合 (chkconfig)
+---------------------------
 
 |Fess| サーバーを停止させるには次のコマンドを入力します。
 
@@ -78,11 +96,31 @@ RPM/DEB パッケージの場合(chkconfig)
 
     $ sudo service fess stop
 
-RPM/DEB パッケージの場合(systemd)
---------------------
+RPM/DEB版の場合 (systemd)
+-------------------------
 
 |Fess| サーバーを停止させるには次のコマンドを入力します。
 
 ::
 
     $ sudo systemctl stop fess.service
+
+
+Docker版の場合 (Elasticsearch)
+------------------------------
+
+以下のコマンドを実行して、Elasticsearch と |Fess| を停止します。
+
+::
+
+    $ docker-compose -f docker-compose.yml -f docker-compose.standalone.yml down
+
+Docker版の場合 (OpenSearch)
+---------------------------
+
+以下のコマンドを実行して、OpenSearchと |Fess| を停止します。
+
+::
+
+    $ docker-compose --env-file .env.opensearch -f docker-compose.yml -f docker-compose.opensearch.yml down
+
