@@ -5,21 +5,44 @@
 起動方法
 ========
 
-TAR.GZ/ZIP版の場合
-------------------
+TAR.GZ/ZIP版の場合 (Elasticsearch)
+----------------------------------
 
 |Fess| を起動する前に Elasticsearch を起動する必要があります。
 
-Windows 環境で Elasticsearch を起動するには、 bin フォルダ中の elasticsearch.bat をダブルクリックします。UNIX 環境では、以下のコマンドを実行します。
+Windows 環境で Elasticsearch を起動するには、 bin フォルダ中の elasticsearch.bat をダブルクリックします。
+Linux/Mac環境では、以下のコマンドを実行します。
 
 ::
 
+    $ cd $ES_HOME
     $ ./bin/elasticsearch
 
-そして |Fess| を起動します。Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.bat をダブルクリックします。UNIX 環境では、以下のコマンドを実行します。
+次に |Fess| を起動します。Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.bat をダブルクリックします。
+Linux/Mac環境では、以下のコマンドを実行します。
 
 ::
 
+    $ cd $FESS_HOME
+    $ ./bin/fess
+
+TAR.GZ版の場合 (OpenSearch)
+---------------------------
+
+|Fess| を起動する前にOpenSearchを起動する必要があります。
+
+以下のコマンドを実行します。
+
+::
+
+    $ cd $OPENSEARCH_HOME
+    $ ./bin/opensearch
+
+次に |Fess| を起動します。以下のコマンドを実行します。
+
+::
+
+    $ cd $FESS_HOME
     $ ./bin/fess
 
 RPM/DEB版の場合 (chkconfig)
@@ -31,7 +54,7 @@ RPM/DEB版の場合 (chkconfig)
 
     $ sudo service elasticsearch start
 
-そして |Fess| を起動します。
+次に |Fess| を起動します。
 
 ::
 
@@ -46,7 +69,7 @@ RPM/DEB版の場合 (systemd)
 
     $ sudo systemctl start elasticsearch.service
 
-そして |Fess| を起動します。
+次に |Fess| を起動します。
 
 ::
 
