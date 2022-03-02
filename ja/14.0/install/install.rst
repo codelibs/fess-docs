@@ -7,7 +7,7 @@
 
 |Fess| は以下の環境で利用することができます。
 
-- OS: WindowsやLinuxなどJavaまたはDockerが実行可能なOS環境
+- OS: JavaまたはDockerが実行可能なOS環境 (WindowsやLinuxなど)
 - `Java 17 <https://adoptium.net/>`__ (TAR.GZ/ZIP/RPM/DEB版をインストールする場合)
 - `Docker <https://docs.docker.com/get-docker/>`__ および `Docker Compose <https://docs.docker.com/compose/install/>`__ (Docker版をインストールする場合)
 
@@ -186,6 +186,48 @@ Docker版でのインストール (Elasticsearch)
 
 - `docker-compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/docker-compose.yml>`__
 - `docker-compose.standalone.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.0.0/compose/docker-compose.standalone.yml>`__
+
+
+TAR.GZ版でのインストール (OpenSearch)
+=====================================
+
+OpenSearchのインストール
+------------------------
+
+`Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、TAR.GZ版のOpenSearchをダウンロードしてください。
+
+OpenSearchのプラグインを plugins ディレクトリにインストールします。
+OpenSearchを $OPENSEARCH_HOME にインストールしてあるものとします。
+
+::
+
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:1.2.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:1.2.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:1.2.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:1.2.1
+
+
+これらのプラグインはOpenSearchのバージョンに依存するので注意してください。
+
+$OPENSEARCH_HOME/config/opensearch.yml に下記の設定を加えます。
+configsync.config_path には $OPENSEARCH_HOME/data/config の絶対パスを指定します。
+
+::
+
+    configsync.config_path: [$OPENSEARCH_HOMEの絶対パス]/data/config/
+    plugins.security.disabled: true
+
+Fessのインストール
+------------------
+
+|Fess| の zip ファイルを $FESS_HOME に展開します。
+|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+$FESS_HOME/bin/fess.in.sh を変更します。
+
+::
+
+    ES_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
 
 
 Docker版でのインストール (OpenSearch)
