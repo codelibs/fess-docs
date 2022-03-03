@@ -203,6 +203,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第42回】アクセストークンを使った検索APIの利用方法 <https://news.mynavi.jp/techplus/article/_ossfess-42/>`__
+
 - `【第41回】Microsoft Teamsのクロール <https://news.mynavi.jp/itsearch/article/bizapp/5880>`__
 
 - `【第40回】各種機能の設定方法（ドキュメントブースト、関連コンテンツ、関連クエリー） <https://news.mynavi.jp/itsearch/article/bizapp/5804>`__
