@@ -10,20 +10,20 @@ This page describes development steps for |Fess|.
 Requirements
 ============
 
-|Fess| runs on Java 11 or more. To develop |Fess|, The following knowledge is required:
+|Fess| runs on Java 17 or the above. To develop |Fess|, the following knowledge is required:
 
--  Java 11
+-  Java 17
 
 -  `LastaFlute <https://github.com/lastaflute>`__
 
 -  `DBFlute <https://github.com/dbflute>`__
 
--  `Elasticsearch <https://www.elastic.co/>`__
+-  `Elasticsearch <https://github.com/elastic/elasticsearch>`__ or `OpenSearch <https://github.com/opensearch-project/OpenSearch>`__
 
 How To Develop |Fess|
 =====================
 
-1. Install Java 11, IDE(ex. eclipse), and Maven 3.x
+1. Install Java 17, IDE(ex. eclipse), and Maven 3.x
 
 2. Clone the source code of |Fess| from github:
 
@@ -31,13 +31,13 @@ How To Develop |Fess|
 
        $ git clone https://github.com/codelibs/fess.git
 
-4. Download elasticsearch plugins
+4. Download OpenSearch plugins
 
    ::
 
        $ mvn antrun:run
 
-4. If using eclipse, Import it as Maven project into the eclipse
+4. Import it as Maven project into the eclipse
 
 5. Build |Fess|
 
@@ -45,7 +45,7 @@ How To Develop |Fess|
 
        $ mvn package
 
-6. Launch org.codelibs.fess.FessBoot as Debug mode and then access to http://localhost:8080/
+6. Launch org.codelibs.fess.FessBoot with Debug mode and then access to http://localhost:8080/
 
 Create |Fess| Package
 =====================

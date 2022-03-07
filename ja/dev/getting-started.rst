@@ -10,16 +10,16 @@
 必要な知識
 ==========
 
-|Fess| は Java 11 以上の環境で動作するアプリケーションとして開発されています。
+|Fess| は Java 17 以上の環境で動作するアプリケーションとして開発されています。
 以下のような知識が必要になります。
 
--  Java 11
+-  Java 17
 
 -  LastaFlute
 
 -  DBFlute
 
--  Elasticsearch
+-  Elasticsearch/OpenSearch
 
 開発する際には Eclipse および Maven を利用する前提で進めます。
 必要なものは事前にインストールしておいてください。
@@ -33,7 +33,7 @@
 セットアップ
 ------------
 
-1. Java 11, Eclipse, Maven 3.x, |Fess| をインストールして準備します。
+1. Java 17, Eclipse, Maven 3.x, |Fess| をインストールして準備します。
 
 2. |Fess| のソースコードを github から clone します。
 
@@ -62,7 +62,7 @@ org.codelibs.fess.FessBoot を Eclipse 上でデバッグ実行をします。
 ソースコードの自動生成
 ----------------------
 
-Fess は DBFlute の機能を利用して、Elasticsearch のスキーマに合わせてソースコードを自動生成しています。
+Fess は DBFlute の機能を利用して、OpenSearch のスキーマに合わせてソースコードを自動生成しています。
 対象のソースコードを自動生成するには以下を実行します。
 
 ::
