@@ -203,6 +203,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第43回】Elasticsearch 8の利用方法 <https://news.mynavi.jp/techplus/article/_ossfess-43/>`__
+
 - `【第42回】アクセストークンを使った検索APIの利用方法 <https://news.mynavi.jp/techplus/article/_ossfess-42/>`__
 
 - `【第41回】Microsoft Teamsのクロール <https://news.mynavi.jp/itsearch/article/bizapp/5880>`__
