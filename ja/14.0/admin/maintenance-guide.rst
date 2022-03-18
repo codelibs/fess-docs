@@ -55,7 +55,7 @@ Elasticsearhの最大レプリカ数(index.auto_expand_replicas)を指定する�
 Crawlerインデックス
 ----------------
 
-.crawlerインデックス(クロール情報)を削除することができます。
+fess_crawlerインデックス(クロール情報)を削除することができます。
 クローラの実行中には実行しないください。
 
 

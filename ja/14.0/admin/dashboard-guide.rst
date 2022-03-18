@@ -21,21 +21,21 @@
      - アクセスログ
    * - fess.suggest.YYYYMMDD
      - サジェストワード
-   * - .fess_config
+   * - fess_config
      - |Fess| の設定
-   * - .fess_user
+   * - fess_user
      - ユーザー/ロール/グループのデータ
-   * - .configsync
+   * - configsync
      - 辞書の設定
-   * - .suggest
+   * - fess_suggest
      - サジェストのメタデータ
-   * - .suggest_array
+   * - fess_suggest_array
      - サジェストのメタデータ
-   * - .suggest_badword
+   * - fess_suggest_badword
      - サジェストのNGワードリスト
-   * - .suggest_analyzer
+   * - fess_suggest_analyzer
      - サジェストのメタデータ
-   * - .crawler
+   * - fess_crawler
      - クロール情報
 
 
