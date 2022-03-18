@@ -21,19 +21,21 @@ Dashboard provides a web administration tool for elasticsearch to manage cluster
      - search logs
    * - fess.suggest
      - suggest words
-   * - .fess_config
+   * - fess_config
      - configurations
-   * - .fess_user
+   * - fess_user
      - user/role/group data
-   * - .configsync
+   * - configsync
      - configuration file data
-   * - .suggest
+   * - fess_suggest
      - suggest meta data
-   * - .suggest-array
+   * - fess_suggest_array
      - suggest meta data
-   * - .suggest-badword
+   * - fess_suggest_badword
      - excluding word list for suggest
-   * - .crawler
+   * - fess_suggest_analyzer
+     - suggest meta data
+   * - fess_crawler
      - crawling cache data
 
 

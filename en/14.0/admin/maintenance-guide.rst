@@ -48,7 +48,7 @@ Reload(Close/Open) fess index to apply index settings.
 Crawler Indices
 ---------------
 
-Remove .crawler index to clear crawling data.
+Remove Crawler index to clear crawling data.
 Do not execute this task when Crawler is running.
 
 Diagnostic
@@ -57,4 +57,3 @@ Diagnostic
 Download log files and system state information.
 
 .. |image0| image:: ../../../resources/images/en/14.0/admin/maintenance-1.png
-
