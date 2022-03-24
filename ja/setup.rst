@@ -10,7 +10,7 @@
 
 -  Windows や Unix など Java が実行できる OS 環境
 
--  Java: Java 11
+-  Java: Java 11 (Fess 13)、Java 17 (Fess 14)
 
 運用環境を構築する場合は必ずインストールガイドを参照してください。
 
@@ -22,7 +22,7 @@ Java がインストールされていない場合は以下の手順でJavaを�
 ダウンロード
 --------------------------------------
 
-`Adoptium <https://adoptium.net/>`_ページにアクセスします。
+`Adoptium <https://adoptium.net/>`_ ページにアクセスします。
 「Temurin 11」を選択して「Latest release」をクリックします。
 
 インストールするOSが一致していない場合は「Other Platforms」をクリックし、該当OSのファイルをダウンロードしてください。

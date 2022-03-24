@@ -10,7 +10,7 @@ The requirement is as follows.
 
 -  Operating system: Windows, Unix, etc
 
--  Java: Java SE 11 or later
+-  Java: Java SE 17 or later
 
 For more details, see Installation Guide.
 
