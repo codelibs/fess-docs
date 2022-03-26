@@ -106,9 +106,6 @@ News
 2021-12-11
     `Fess 13.15.2 <https://github.com/codelibs/fess/releases/tag/fess-13.15.2>`__ Released
 
-2021-12-04
-    `Fess 13.15.1 <https://github.com/codelibs/fess/releases/tag/fess-13.15.1>`__ Released
-
 :doc:`More news <news>`...
 
 Discussion

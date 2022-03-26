@@ -122,9 +122,6 @@ Java 実行環境があればどの OS でも実行可能です。
 2021-12-11
     `Fess 13.15.2 <https://github.com/codelibs/fess/releases/tag/fess-13.15.2>`__ リリース
 
-2021-12-04
-    `Fess 13.15.1 <https://github.com/codelibs/fess/releases/tag/fess-13.15.1>`__ リリース
-
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
 フォーラム
