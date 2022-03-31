@@ -5,28 +5,27 @@
 インストール方法
 ================
 
-FessではDockerイメージを配布しています。
-Docker Compose を使うことで、Java、Elasticsearch、Fessを個別にインストールすることなく簡単にFessを構築できます。
+Fessでは、ZIPアーカイブ、RPM/DEB/パッケージ、Dockerイメージでの配布物を提供しています。
+Dockerを利用することで、WindowsやMacなどでも、Fessを簡単にセットアップすることができます。
 
 運用環境を構築する場合は必ずインストールガイドを参照してください。
 
-Docker Composer のインストール
-==================
+Docker Desktopのインストール
+============================
 
-Docker Compose がインストールされていない場合は、以下の手順でインストールしてください。
+今回は、Windowsでの利用方法を説明します。
+Docker Desktopがインストールされていない場合は、以下の手順でインストールしてください。
 
 OSごとにダウンロードするファイルや手順に違いがあるので、お使いの環境に合わせて実施する必要があります。
 詳細は`Docker <https://docs.docker.com/get-docker/>`_ のドキュメントを参照してください。
 
-以降の説明はWindows環境での手順になります。
-
 ダウンロード
---------------------------------------
+------------
 
 `Docker Desktop <https://www.docker.com/products/docker-desktop/>`_ で該当OSのインストーラーをダウンロードします。
 
 インストーラーの実行
------------------------
+--------------------
 
 ダウンロードしたインストーラーをダブルクリックして、インストールを開始します。
 
@@ -41,7 +40,7 @@ OKボタンをクリックします。
 |image1|
 
 Docker Desktop の起動
------------------
+---------------------
 
 Windows メニュー内の「Docker Desktop」をクリックして起動します。
 
@@ -55,46 +54,104 @@ Docker Desktop 起動後、利用規約が表示されるので、「I accept th
 |image3|
 
 設定
-==================
+====
 
 Elasticsearch が Docker コンテナとして実行できるようにするため、OS側で「vm.max_map_count」の値を調整します。
 利用する環境によって設定方法が異なるので、それぞれの設定方法については「`Set vm.max_map_count to at least 262144 <https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144>`_ 」を参照してください。
 
-|Fess| のインストール
+Fessのセットアップ
 ==================
 
-Fessの起動に必要な設定は GitHub のリポジトリに登録しているので、gitコマンドでcloneするか、zip形式でダウンロードします。
+起動ファイルの作成
+-------------------
 
-|Fess| のダウンロード
-----------------------------------
+適当なフォルダを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml>`_ を作成します。
 
-`docker-fess<https://github.com/codelibs/docker-fess>`_ にアクセスして、docker-fess をお使いの環境に展開します。
-
-|Fess| の起動
------------
-
-docker compose コマンドで起動します。
-
-Fessに関する設定は「compose.yaml」に、Elasticsearchの設定は「compose-elasticsearch8.yaml」、「compose-elasticsearch7.yaml」に記載しています。
-
-Elasticsearch 7.x を使う場合は「compose-elasticsearch7.yaml」、
-Elasticsearch 8.x を使う場合は「compose-elasticsearch8.yaml」を指定します。
-
-以下の例では Elasticsearch 8.x で起動しています。
+ファイルをダウンロードできない場合は、
+`compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ を以下の内容で作成して、
 
 ::
 
-    cd docker-fess/compose
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:14.0.1
+        container_name: fess01
+        environment:
+          - "ES_HTTP_URL=http://es01:9200"
+          - "FESS_DICTIONARY_PATH=${FESS_DICTIONARY_PATH:-/usr/share/elasticsearch/config/dictionary/}"
+        ports:
+          - "8080:8080"
+        networks:
+          - esnet
+        depends_on:
+          - es01
+        logging:
+          driver: "json-file"
+          options:
+            max-size: "10m"
+            max-file: "5"
+        restart: unless-stopped
+
+    networks:
+      esnet:
+        driver: bridge
+
+`compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml>`_ を以下の内容で作成してください。
+
+::
+
+    services:
+      es01:
+        image: ghcr.io/codelibs/fess-elasticsearch:8.1.0
+        container_name: es01
+        environment:
+          - node.name=es01
+          - discovery.seed_hosts=es01
+          - cluster.initial_master_nodes=es01
+          - cluster.name=fess-es
+          - bootstrap.memory_lock=true
+          - xpack.security.enabled=false
+          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+          - "FESS_DICTIONARY_PATH=/usr/share/elasticsearch/config/dictionary"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+          nofile:
+            soft: 65535
+            hard: 65535
+        volumes:
+          - esdata01:/usr/share/elasticsearch/data
+          - esdictionary01:/usr/share/elasticsearch/config/dictionary
+        ports:
+          - 9200:9200
+        networks:
+          - esnet
+        logging:
+          driver: "json-file"
+          options:
+            max-size: "10m"
+            max-file: "5"
+        restart: unless-stopped
+
+    volumes:
+      esdata01:
+        driver: local
+      esdictionary01:
+        driver: local
+
+Fessの起動
+----------
+
+Fessをdocker composeコマンドで起動します。
+
+
+コマンドプロンプトを開き、compose.yamlファイルがあるフォルダに移動して、以下のコマンドを実行します。
+
+::
+
     docker compose -f compose.yaml -f compose-elasticsearch8.yaml up -d
 
-
-コマンドの実行が終了したら、ターミナルで以下のコマンドを実行し、FessとElasticsearchの状態を確認します。
-
-::
-
-    docker ps
-
-「STARUS」が「UP」になっていれば、起動完了です。
 
 動作確認
 ========
@@ -105,15 +162,15 @@ http://localhost:8080/
 管理 UI は http://localhost:8080/admin/ です。
 デフォルトの管理者アカウントのユーザー名/パスワードは、admin/adminになります。
 管理者アカウントはアプリケーションサーバーにより管理されています。
-|Fess|の管理 UI では、アプリケーションサーバーで fess ロールで認証されたユーザーを管理者として判断しています。
+Fessの管理 UI では、アプリケーションサーバーで fess ロールで認証されたユーザーを管理者として判断しています。
 
 その他
 ======
 
-|Fess| の停止
------------
+Fessの停止
+----------
 
-Fess停止は、ターミナルで以下のコマンドを実行します。
+Fessの停止は、Fessを起動したフォルダで、以下のコマンドを実行します。
 
 ::
 
