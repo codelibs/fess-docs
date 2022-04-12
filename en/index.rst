@@ -6,8 +6,9 @@ What is Fess?
 =============
 
 |Fess| is very powerful and easily deployable Enterprise Search Server.
-You can install and run |Fess| quickly on any platforms, which have Java
-runtime environment. |Fess| is provided under Apache license.
+
+You can install and run |Fess| quickly on any platforms, which have Java runtime environment.
+|Fess| is provided under Apache license.
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
