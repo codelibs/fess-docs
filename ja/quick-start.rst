@@ -5,14 +5,19 @@
 はじめに
 ========
 
-ここでの説明は素早く |Fess| に触れてみたい人向けのものです。 |Fess| 
-を利用するための最小限の手順を記述します。
+ここでの説明は素早く Fess に触れてみたい人向けのものです。
+Fess を利用するための最小限の手順を記述します。
+
+事前準備
+========
+
+Fessを起動する前に、Java 17をインストールしておいてください。
+（Javaではなく、Dockerを利用する方法は `インストール手順 <https://fess.codelibs.org/ja/setup.html>`__ を参照してください）
 
 ダウンロード
 ============
 
-https://github.com/codelibs/fess/releases から最新の |Fess| 
-パッケージをダウンロードします。
+https://github.com/codelibs/fess/releases から最新の Fess パッケージをダウンロードします。
 
 インストール
 ============
@@ -24,10 +29,10 @@ https://github.com/codelibs/fess/releases から最新の |Fess|
     $ unzip fess-x.y.zip
     $ cd fess-x.y
 
-|Fess| の起動
+Fess の起動
 ===========
 
-fess スクリプトを実行して |Fess| を起動します。
+fess スクリプトを実行して Fess を起動します。
 
 ::
 
@@ -54,7 +59,7 @@ http://localhost:8080/admin にアクセスします。
 
 クロール完了後、http://localhost:8080/ にアクセスし、検索すると検索結果が表示されます。
 
-|Fess| の停止
+Fess の停止
 ===========
 
 Ctrl-C や kill コマンド等で fess のプロセスを停止します。
