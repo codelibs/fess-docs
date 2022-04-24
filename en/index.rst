@@ -45,7 +45,7 @@ such as MS Office, PDF and zip.
 Download
 ========
 
-- :doc:`Fess 14.0.1 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 14.1.0 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -89,6 +89,9 @@ Features
 News
 ====
 
+2022-04-24
+    `Fess 14.1.0 <https://github.com/codelibs/fess/releases/tag/fess-14.1.0>`__ Released
+
 2022-03-23
     `Fess 14.0.1 <https://github.com/codelibs/fess/releases/tag/fess-14.0.1>`__ Released
 
@@ -103,9 +106,6 @@ News
 
 2021-12-13
     `Log4J2 Vulnerability on Fess <https://discuss.codelibs.org/t/log4j2-rce-vulnerability-for-cve-2021-44228/1751>`__
-
-2021-12-11
-    `Fess 13.15.2 <https://github.com/codelibs/fess/releases/tag/fess-13.15.2>`__ Released
 
 :doc:`More news <news>`...
 
