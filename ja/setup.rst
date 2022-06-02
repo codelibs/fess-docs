@@ -22,7 +22,7 @@ OSごとにダウンロードするファイルや手順に違いがあるので
 ダウンロード
 ------------
 
-`Docker Desktop <https://www.docker.com/products/docker-desktop/>`_ で該当OSのインストーラーをダウンロードします。
+`Docker Desktop <https://www.docker.com/products/docker-desktop/>`__ で該当OSのインストーラーをダウンロードします。
 
 インストーラーの実行
 --------------------
@@ -65,80 +65,14 @@ Fessのセットアップ
 起動ファイルの作成
 -------------------
 
-適当なフォルダを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml>`_ を作成します。
+適当なフォルダを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml>`_ をダウンロードします。
 
-ファイルをダウンロードできない場合は、
-`compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ を以下の内容で作成して、
-
-::
-
-    services:
-      fess01:
-        image: ghcr.io/codelibs/fess:14.0.1
-        container_name: fess01
-        environment:
-          - "ES_HTTP_URL=http://es01:9200"
-          - "FESS_DICTIONARY_PATH=${FESS_DICTIONARY_PATH:-/usr/share/elasticsearch/config/dictionary/}"
-        ports:
-          - "8080:8080"
-        networks:
-          - esnet
-        depends_on:
-          - es01
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "5"
-        restart: unless-stopped
-
-    networks:
-      esnet:
-        driver: bridge
-
-`compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml>`_ を以下の内容で作成してください。
+curlコマンドで以下のように取得することもできます。
 
 ::
 
-    services:
-      es01:
-        image: ghcr.io/codelibs/fess-elasticsearch:8.1.0
-        container_name: es01
-        environment:
-          - node.name=es01
-          - discovery.seed_hosts=es01
-          - cluster.initial_master_nodes=es01
-          - cluster.name=fess-es
-          - bootstrap.memory_lock=true
-          - xpack.security.enabled=false
-          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-          - "FESS_DICTIONARY_PATH=/usr/share/elasticsearch/config/dictionary"
-        ulimits:
-          memlock:
-            soft: -1
-            hard: -1
-          nofile:
-            soft: 65535
-            hard: 65535
-        volumes:
-          - esdata01:/usr/share/elasticsearch/data
-          - esdictionary01:/usr/share/elasticsearch/config/dictionary
-        ports:
-          - 9200:9200
-        networks:
-          - esnet
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "5"
-        restart: unless-stopped
-
-    volumes:
-      esdata01:
-        driver: local
-      esdictionary01:
-        driver: local
+    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
+    curl -o compose-elasticsearch8.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml
 
 Fessの起動
 ----------
@@ -156,10 +90,9 @@ Fessをdocker composeコマンドで起動します。
 動作確認
 ========
 
-http://localhost:8080/
-にアクセスすることによって、起動を確認できます。
+\http://localhost:8080/ にアクセスすることによって、起動を確認できます。
 
-管理 UI は http://localhost:8080/admin/ です。
+管理 UI は \http://localhost:8080/admin/ です。
 デフォルトの管理者アカウントのユーザー名/パスワードは、admin/adminになります。
 管理者アカウントはアプリケーションサーバーにより管理されています。
 Fessの管理 UI では、アプリケーションサーバーで fess ロールで認証されたユーザーを管理者として判断しています。
