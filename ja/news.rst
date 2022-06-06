@@ -6,52 +6,52 @@
 ============
 
 2022-05-21
-    `Fess 14.1.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.1.1`__
+    `Fess 14.1.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.1.1>`__
 
 2022-04-24
-    `Fess 14.1.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.1.0`__
+    `Fess 14.1.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.1.0>`__
 
 2022-03-23
-    `Fess 14.0.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.0.1`__
+    `Fess 14.0.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.0.1>`__
 
 2022-02-23
-    `Fess 14.0.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.0.0`__
+    `Fess 14.0.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.0.0>`__
 
 2021-12-21
-    `Fess 13.16.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.16.0`__
+    `Fess 13.16.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.16.0>`__
 
 2021-12-16
-    `Fess 13.15.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.3`__
+    `Fess 13.15.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.3>`__
 
 2021-12-11
-    `Fess 13.15.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.2`__
+    `Fess 13.15.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.2>`__
 
 2021-12-04
-    `Fess 13.15.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.1`__
+    `Fess 13.15.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.1>`__
 
 2021-10-14
-    `Fess 13.15.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.0`__
+    `Fess 13.15.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.15.0>`__
 
 2021-08-26
-    `Fess 13.14.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.14.0`__
+    `Fess 13.14.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.14.0>`__
 
 2021-08-07
-    `Fess 13.13.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.13.2`__
+    `Fess 13.13.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.13.2>`__
 
 2021-07-11
-    `Fess 13.13.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.13.1`__
+    `Fess 13.13.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.13.1>`__
 
 2021-06-18
-    `Fess 13.13.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.13.0`__
+    `Fess 13.13.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.13.0>`__
 
 2021-05-20
-    `Fess 13.12.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.12.2`__
+    `Fess 13.12.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.12.2>`__
 
 2021-05-10
-    `Fess 13.11.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.11.3`__
+    `Fess 13.11.3 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.11.3>`__
 
 2021-04-27
-    `Fess 13.12.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.12.1`__
+    `Fess 13.12.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.12.1>`__
 
 2021-04-09
     `Fess 13.11.2 リリース <https://github.com/codelibs/fess/releases/tag/fess-13.11.2>`__
