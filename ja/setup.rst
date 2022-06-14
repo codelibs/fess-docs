@@ -17,7 +17,7 @@ Docker Desktopのインストール
 Docker Desktopがインストールされていない場合は、以下の手順でインストールしてください。
 
 OSごとにダウンロードするファイルや手順に違いがあるので、お使いの環境に合わせて実施する必要があります。
-詳細は`Docker <https://docs.docker.com/get-docker/>`_ のドキュメントを参照してください。
+詳細は `Docker <https://docs.docker.com/get-docker/>`_ のドキュメントを参照してください。
 
 ダウンロード
 ------------
