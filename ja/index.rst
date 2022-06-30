@@ -200,6 +200,8 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第44回】FessでOpenSearchを使用する <https://news.mynavi.jp/techplus/article/_ossfess-44/>`__
+
 - `【第43回】Elasticsearch 8の利用方法 <https://news.mynavi.jp/techplus/article/_ossfess-43/>`__
 
 - `【第42回】アクセストークンを使った検索APIの利用方法 <https://news.mynavi.jp/techplus/article/_ossfess-42/>`__
