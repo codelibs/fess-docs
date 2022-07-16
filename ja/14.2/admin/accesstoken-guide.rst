@@ -38,7 +38,7 @@
 ::::
 
 アクセストークンのパーミッションを設定します。
-「{user/group/role}name」形式で記述します。
+「{user|group|role}name」形式で記述します。
 たとえば、developerグループに属するユーザーが検索結果を表示するためには、パーミッションは「{group}developer」を設定します。
 
 パラメーター名
