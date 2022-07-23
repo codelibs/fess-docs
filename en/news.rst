@@ -2,6 +2,9 @@
 News
 ====
 
+2022-07-23
+    `Fess 14.3.0 Released <https://github.com/codelibs/fess/releases/tag/fess-14.3.0>`__
+
 2022-06-13
     `Fess 14.2.0 Released <https://github.com/codelibs/fess/releases/tag/fess-14.2.0>`__
 
