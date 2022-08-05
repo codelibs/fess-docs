@@ -52,6 +52,8 @@ Elasticsearch を $ES_HOME にインストールしてあるものとします�
     $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
 
 $ES_HOME/config/elasticsearch.yml に下記の設定を加えます。
+既存の設定がある場合は、書き換えてください。
+
 configsync.config_path には $ES_HOME/data/config の絶対パスを指定します。
 
 ::
@@ -101,6 +103,7 @@ elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開�
 c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-8.3.2.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.3.2.0/elasticsearch-configsync-8.3.2.0.zip>`__ をダウンロードして展開します。
 
 c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加えます。
+既存の設定がある場合は、書き換えてください。
 
 ::
 
@@ -151,6 +154,7 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
     $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
 /etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。(RPM/DEB共通)
+既存の設定がある場合は、書き換えてください。
 
 ::
 
@@ -224,6 +228,8 @@ OpenSearchを $OPENSEARCH_HOME にインストールしてあるものとしま�
 これらのプラグインはOpenSearchのバージョンに依存するので注意してください。
 
 $OPENSEARCH_HOME/config/opensearch.yml に下記の設定を加えます。
+既存の設定がある場合は、書き換えてください。
+
 configsync.config_path には $OPENSEARCH_HOME/data/config の絶対パスを指定します。
 
 ::
@@ -252,4 +258,3 @@ Docker版でのインストール (OpenSearch)
 - `docker-compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.3.0/compose/docker-compose.yml>`__
 - `docker-compose.opensearch.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.3.0/compose/docker-compose.opensearch.yml>`__
 - `.env.opensearch <https://raw.githubusercontent.com/codelibs/docker-fess/v14.3.0/compose/.env.opensearch>`__
-
