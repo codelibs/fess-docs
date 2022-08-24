@@ -2,6 +2,13 @@
 ダウンロード
 ============
 
+Docker
+======
+
+Dockerイメージは以下を参照してください。
+
+* `ghcr.io/codelibs/fess <https://github.com/orgs/codelibs/packages/container/package/fess>`_
+
 安定版リリース
 ==============
 
@@ -18,13 +25,6 @@
 * `Fess 13.12.2 <https://github.com/codelibs/fess/releases/tag/fess-13.12.2>`_ (`Elasticsearch 7.12.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-12-1>`_)
 
 インストール方法についてはインストールガイドを参照してください。
-
-Docker
-======
-
-Dockerイメージは以下を参照してください。
-
-* `ghcr.io/codelibs/fess <https://github.com/orgs/codelibs/packages/container/package/fess>`_
 
 過去のリリース(EOL)
 ===================
