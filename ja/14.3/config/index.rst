@@ -7,6 +7,7 @@
    intro
    system
    crawler
+   search-config
    search-form
    virtual-host
    windows-service
