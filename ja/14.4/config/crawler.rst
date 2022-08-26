@@ -76,3 +76,21 @@ HTMLファイルであれば、text/html と扱うファイルサイズの上限
 
     client.proxyHost=プロキシサーバー名(ex. 192.168.1.1)
     client.proxyPort=プロキシサーバーのポート(ex. 8080)
+
+言語の設定
+==============
+
+インデックスの言語を指定したい場合は以下のように指定します。
+以下はenを指定したい場合の例です。
+
+**ウェブクロールの場合**
+
+::
+
+crawler.document.html.default.lang=en
+
+**ファイルシステムクロールの場合**
+
+::
+
+crawler.document.file.default.lang=en
