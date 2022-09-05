@@ -45,7 +45,7 @@ such as MS Office, PDF and zip.
 Download
 ========
 
-- :doc:`Fess 14.3.0 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 14.4.0 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -89,6 +89,9 @@ Features
 News
 ====
 
+2022-09-06
+    `Fess 14.4.0 <https://github.com/codelibs/fess/releases/tag/fess-14.4.0>`__ Released
+
 2022-07-23
     `Fess 14.3.0 <https://github.com/codelibs/fess/releases/tag/fess-14.3.0>`__ Released
 
@@ -103,9 +106,6 @@ News
 
 2022-03-23
     `Fess 14.0.1 <https://github.com/codelibs/fess/releases/tag/fess-14.0.1>`__ Released
-
-2022-02-23
-    `Fess 14.0.0 <https://github.com/codelibs/fess/releases/tag/fess-14.0.0>`__ Released
 
 :doc:`More news <news>`...
 

@@ -46,7 +46,7 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 ダウンロード
 ============
 
-- :doc:`Fess 14.3.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 14.4.0 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -102,6 +102,9 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 ニュース
 ========
 
+2022-09-06
+    `Fess 14.4.0 <https://github.com/codelibs/fess/releases/tag/fess-14.4.0>`__ リリース
+
 2022-07-23
     `Fess 14.3.0 <https://github.com/codelibs/fess/releases/tag/fess-14.3.0>`__ リリース
 
@@ -116,9 +119,6 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 
 2022-03-23
     `Fess 14.0.1 <https://github.com/codelibs/fess/releases/tag/fess-14.0.1>`__ リリース
-
-2022-02-23
-    `Fess 14.0.0 <https://github.com/codelibs/fess/releases/tag/fess-14.0.0>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
