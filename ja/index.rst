@@ -198,6 +198,10 @@ Scriptプラグイン
 掲載メディア
 ============
 
+- `【第47回】MinIOでストレージ管理とクロール <https://news.mynavi.jp/techplus/article/_ossfess-47/>`__
+
+- `【第46回】Amazon S3のクロール <https://news.mynavi.jp/techplus/article/_ossfess-46/>`__
+
 - `【第45回】Compose V2での起動方法 <https://news.mynavi.jp/techplus/article/_ossfess-45/>`__
 
 - `【第44回】FessでOpenSearchを使用する <https://news.mynavi.jp/techplus/article/_ossfess-44/>`__
