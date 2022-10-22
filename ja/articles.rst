@@ -5,6 +5,8 @@
 掲載記事一覧
 ============
 
+- `【第48回】SAMLによるシングルサインオン <https://news.mynavi.jp/techplus/article/_ossfess-48/>`__
+
 - `【第47回】MinIOでストレージ管理とクロール <https://news.mynavi.jp/techplus/article/_ossfess-47/>`__
 
 - `【第46回】Amazon S3のクロール <https://news.mynavi.jp/techplus/article/_ossfess-46/>`__
