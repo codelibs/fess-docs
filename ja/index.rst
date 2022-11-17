@@ -46,7 +46,7 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 ダウンロード
 ============
 
-- :doc:`Fess 14.4.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 14.5.0 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -61,7 +61,7 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 
 -  既存サイトへの組み込み用JavaScriptの提供
 
--  ElasticsearchまたはOpenSearchを検索エンジンとして利用
+-  OpenSearchまたはElasticsearchを検索エンジンとして利用
 
 -  BASIC/DIGEST/NTLM/FORM認証のサイトも検索可能
 
@@ -102,6 +102,9 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 ニュース
 ========
 
+2022-11-17
+    `Fess 14.5.0 <https://github.com/codelibs/fess/releases/tag/fess-14.5.0>`__ リリース
+
 2022-09-06
     `Fess 14.4.0 <https://github.com/codelibs/fess/releases/tag/fess-14.4.0>`__ リリース
 
@@ -116,9 +119,6 @@ JavaまたはDockerの実行環境があればどの OS でも実行可能です
 
 2022-04-24
     `Fess 14.1.0 <https://github.com/codelibs/fess/releases/tag/fess-14.1.0>`__ リリース
-
-2022-03-23
-    `Fess 14.0.1 <https://github.com/codelibs/fess/releases/tag/fess-14.0.1>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 

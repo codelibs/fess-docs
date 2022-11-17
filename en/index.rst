@@ -35,8 +35,8 @@ You can install and run |Fess| quickly on any platforms, which have Java runtime
    Document Search
 
 
-|Fess| is Elasticsearch/OpenSearch-based search server,
-but knowledge/experience about Elasticsearch/OpenSearch is NOT needed because of All-in-One
+|Fess| is OpenSearch/Elasticsearch based search server,
+but knowledge/experience about OpenSearch/Elasticsearch is NOT needed because of All-in-One
 Enterprise Search Server. |Fess| provides Administration GUI to configure
 the system on your browser. |Fess| also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
@@ -45,7 +45,7 @@ such as MS Office, PDF and zip.
 Download
 ========
 
-- :doc:`Fess 14.4.0 <downloads>` (zip/rpm/deb packages)
+- :doc:`Fess 14.5.0 <downloads>` (zip/rpm/deb packages)
 
 Features
 ========
@@ -62,7 +62,7 @@ Features
 
 -  Support a web page for BASIC/DIGEST/NTLM/FORM authentication
 
--  Use Elasticsearch or OpenSearch as a search engine (unlimited scalability)
+-  Use OpenSearch or Elasticsearch as a search engine (unlimited scalability)
 
 -  Provide UI as a responsive web design (support any device)
 
@@ -89,6 +89,9 @@ Features
 News
 ====
 
+2022-11-17
+    `Fess 14.5.0 <https://github.com/codelibs/fess/releases/tag/fess-14.5.0>`__ Released
+
 2022-09-06
     `Fess 14.4.0 <https://github.com/codelibs/fess/releases/tag/fess-14.4.0>`__ Released
 
@@ -103,9 +106,6 @@ News
 
 2022-04-24
     `Fess 14.1.0 <https://github.com/codelibs/fess/releases/tag/fess-14.1.0>`__ Released
-
-2022-03-23
-    `Fess 14.0.1 <https://github.com/codelibs/fess/releases/tag/fess-14.0.1>`__ Released
 
 :doc:`More news <news>`...
 
