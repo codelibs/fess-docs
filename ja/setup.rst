@@ -56,7 +56,7 @@ Docker Desktop 起動後、利用規約が表示されるので、「I accept th
 設定
 ====
 
-Elasticsearch が Docker コンテナとして実行できるようにするため、OS側で「vm.max_map_count」の値を調整します。
+OpenSearch が Docker コンテナとして実行できるようにするため、OS側で「vm.max_map_count」の値を調整します。
 利用する環境によって設定方法が異なるので、それぞれの設定方法については「`Set vm.max_map_count to at least 262144 <https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144>`_ 」を参照してください。
 
 Fessのセットアップ
@@ -65,14 +65,14 @@ Fessのセットアップ
 起動ファイルの作成
 -------------------
 
-適当なフォルダを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml>`_ をダウンロードします。
+適当なフォルダを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch2.yaml>`_ をダウンロードします。
 
 curlコマンドで以下のように取得することもできます。
 
 ::
 
     curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-elasticsearch8.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-elasticsearch8.yaml
+    curl -o compose-opensearch2.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch2.yaml
 
 Fessの起動
 ----------
@@ -84,7 +84,7 @@ Fessをdocker composeコマンドで起動します。
 
 ::
 
-    docker compose -f compose.yaml -f compose-elasticsearch8.yaml up -d
+    docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
 
 
 動作確認
@@ -107,7 +107,7 @@ Fessの停止は、Fessを起動したフォルダで、以下のコマンドを
 
 ::
 
-    docker compose -f compose.yaml -f compose-elasticsearch8.yaml down
+    docker compose -f compose.yaml -f compose-opensearch2.yaml down
 
 管理者パスワードの変更
 ----------------------
