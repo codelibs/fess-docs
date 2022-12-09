@@ -2,8 +2,6 @@
 検索API
 ==================
 
-.. TODO: lang, ex_q
-
 検索結果の取得
 ==============
 
@@ -48,6 +46,10 @@
      - 緯度経度の指定。 (例) ``geo.location.point=35.0,139.0``
    * - geo.location.distance
      - 中心点からの距離の指定。 (例) ``geo.location.distance=10km``
+   * - lang
+     - 検索言語の指定。 (例) ``lang=en``
+   * - preference
+     - 検索時のシャードを指定する文字列。 (例) ``preference=abc``
 
 表: リクエストパラメータ
 
