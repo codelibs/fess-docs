@@ -22,7 +22,7 @@ fess_config.properites で以下の設定をtrueに設定することで、ス�
 
 
 スクロール検索の利用
-----------
+--------------------
 
 スクロール検索へのアクセスは、http://localhost:8080/json/scroll?q=Search_Word にアクセスすることで、検索結果をNDJSON形式で返却されます。
 

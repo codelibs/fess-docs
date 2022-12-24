@@ -39,7 +39,7 @@ Redhat系OSの場合、画像の作成用に以下のパッケージをインス
     $ sudo yum install unoconv libreoffice-headless vlgothic-fonts ImageMagick
 
 生成スクリプト
--------------
+--------------
 
 RPM/Debパッケージでインストールすると、MS Office用のサムネイル生成スクリプトは/usr/share/fess/bin/generate-thumbnailにインストールされます。
 
@@ -50,7 +50,7 @@ PDFのサムネイル画像はImageMagickを用いて生成されます。
 convert コマンドがインストールされている場合、サムネイル画像が生成されます。
 
 サムネイルジョブの無効化
-===========================
+=========================
 
 サムネイルジョブを無効化する場合は以下を設定します。
 
