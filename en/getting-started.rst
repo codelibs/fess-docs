@@ -5,10 +5,10 @@ Getting Started
 User Interfaces
 =================
 
-|Fess| provides 2 user interfaces:
+Fess provides 2 user interfaces:
 
 -  Search form and results
--  Administration (used to configure and manage |Fess|)
+-  Administration (used to configure and manage Fess)
 
 Both interfaces are accessible via a web browser.
 
@@ -24,7 +24,7 @@ URL: http://localhost:8080/
 Administration
 ==========================
 
-This UI is only used by administrators to configure and manage |Fess|. Administrators will be prompted to login before they can access the rest of the Administration interface.
+This UI is only used by administrators to configure and manage Fess. Administrators will be prompted to login before they can access the rest of the Administration interface.
 
 URL: http://localhost:8080/admin/
 

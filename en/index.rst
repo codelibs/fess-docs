@@ -1,14 +1,14 @@
 ====================================
-Enterprise Search Server: |Fess|
+Enterprise Search Server: Fess
 ====================================
 
 What is Fess?
 =============
 
-|Fess| is very powerful and easily deployable Enterprise Search Server.
+Fess is very powerful and easily deployable Enterprise Search Server.
 
-You can install and run |Fess| quickly on any platforms, which have Java runtime environment.
-|Fess| is provided under Apache license.
+You can install and run Fess quickly on any platforms, which have Java runtime environment.
+Fess is provided under Apache license.
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
@@ -35,10 +35,10 @@ You can install and run |Fess| quickly on any platforms, which have Java runtime
    Document Search
 
 
-|Fess| is OpenSearch/Elasticsearch based search server,
+Fess is OpenSearch/Elasticsearch based search server,
 but knowledge/experience about OpenSearch/Elasticsearch is NOT needed because of All-in-One
-Enterprise Search Server. |Fess| provides Administration GUI to configure
-the system on your browser. |Fess| also contains a crawler, which can
+Enterprise Search Server. Fess provides Administration GUI to configure
+the system on your browser. Fess also contains a crawler, which can
 crawl documents on Web/File System/DB and support many file formats,
 such as MS Office, PDF and zip.
 

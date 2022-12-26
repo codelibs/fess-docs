@@ -5,12 +5,12 @@ Quick Startup
 Overview
 ========
 
-This document describes a minimum step to install and use |Fess| .
+This document describes a minimum step to install and use Fess .
 
 Download
 ========
 
-Download the latest |Fess| release from https://github.com/codelibs/fess/releases.
+Download the latest Fess release from https://github.com/codelibs/fess/releases.
 
 Installation
 ============
@@ -22,10 +22,10 @@ Unzip fess-x.y.zip to a directory you want to install.
     $ unzip fess-x.y.zip
     $ cd fess-x.y
 
-Start |Fess| Server
+Start Fess Server
 =================
 
-Run fess script file to start |Fess| server.
+Run fess script file to start Fess server.
 
 ::
 
@@ -47,7 +47,7 @@ Click System > Scheduler link at the menu pane. Click "Default Crawler" for Craw
 If you want to change Crawler schedule and start crawling at 10:35am, type "35 10 \* \* ?" into Schedule field.
 The format is "Min Hour Day Month Day Year", which is like a cron format.
 Click "Update" button to save parameters.
-If you set a crawling time as 10:35am, |Fess| start to crawl at 10:35am automatically.
+If you set a crawling time as 10:35am, Fess start to crawl at 10:35am automatically.
 
 System Info > Crawling Info show you the crawling information.
 If the crawl is finished, the number of crawled documents is set to WebIndexSize at Crawling Info page.

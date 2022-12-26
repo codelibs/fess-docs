@@ -5,7 +5,7 @@ Installation
 How to install
 ==============
 
-|Fess| can run on any operating system with Java runtime environment.
+Fess can run on any operating system with Java runtime environment.
 The requirement is as follows.
 
 -  Operating system: Windows, Unix, etc
@@ -19,13 +19,13 @@ Install Java
 
 See `JDK 11 Installation <https://adoptium.net/installation.html>`__.
 
-Install |Fess|
+Install Fess
 ===============
 
-Go to download page of |Fess|
+Go to download page of Fess
 ---------------------------
 
-Download latest |Fess| package from `releases page <https://github.com/codelibs/fess/releases>`__.
+Download latest Fess package from `releases page <https://github.com/codelibs/fess/releases>`__.
 
 
 Installation
@@ -39,23 +39,23 @@ using 7-zip. In case of Unix, we recommend using unzip command.
     $ unzip fess-x.y.zip
     $ cd fess-x.y
 
-Run |Fess| Server
+Run Fess Server
 ------------------
 
-For Windows environment, double-click the fess.bat file in the bin folder to start |Fess|.
+For Windows environment, double-click the fess.bat file in the bin folder to start Fess.
 
-For Unix environments, run fess to start |Fess|.
+For Unix environments, run fess to start Fess.
 
 ::
 
     $ ./bin/fess
 
-Open |Fess| Pages
+Open Fess Pages
 ===============
 
-Go to http://localhost:8080/ to check whether |Fess| started normally.
+Go to http://localhost:8080/ to check whether Fess started normally.
 
-|Fess|'s administrative UI is located at http://localhost:8080/admin.
+Fess's administrative UI is located at http://localhost:8080/admin.
 Default Administrator account's username/password is admin/admin.
 
 

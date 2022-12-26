@@ -7,10 +7,10 @@
 
 バージョンは X.Y.Z の形式で提供します。
 
--  X: メジャーバージョン。 |Fess| の Elasticsearch
+-  X: メジャーバージョン。 Fess の Elasticsearch
    のスキーマが更新された場合にバージョンが上がる。
 
--  Y: マイナーバージョン。 |Fess| の Elasticsearch
+-  Y: マイナーバージョン。 Fess の Elasticsearch
    のスキーマが更新されない機能追加やバク修正の場合にバージョンが上がる。
 
 -  Z:
