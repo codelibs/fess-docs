@@ -68,3 +68,13 @@ Fess の停止
 
 Ctrl-C や kill コマンド等で fess のプロセスを停止します。
 
+より詳しく知るには
+==================
+
+以下のドキュメントなどを参照してください。
+
+* `ドキュメント一覧 <documentation>`__
+* `[連載] 簡単導入！ OSS全文検索サーバーFess入門 <https://news.mynavi.jp/techplus/series/_ossfess/>`__
+* `開発者向け情報 <development>`__
+* `ディスカッションフォーラム <https://discuss.codelibs.org/c/fessja/>`__
+
