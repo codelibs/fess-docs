@@ -35,13 +35,13 @@ Using ZIP Package
 -----------------
 
 After installing Elasticsearch 8.6.0, install Elasticsearch plugins to plugins directory.
-In this guide, Elasticsearch is installed to $ES_HOME.
+In this guide, Elasticsearch is installed to $SEARCH_ENGINE_HOME.
 
 ::
 
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
 
 Notice that these plugins depend on a version of Elasticsearch.
 
@@ -50,23 +50,23 @@ Next, install elasticsearch-configsync,
 ::
 
     $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip
-    $ mkdir -p $ES_HOME/modules/configsync
-    $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
+    $ mkdir -p $SEARCH_ENGINE_HOME/modules/configsync
+    $ unzip -d $SEARCH_ENGINE_HOME/modules/configsync /tmp/configsync.zip
 
-and add the following setting to $ES_HOME/config/elasticsearch.yml.
-For configsync.config_path, the value is an absolute path of $ES_HOME/data/config.
+and add the following setting to $SEARCH_ENGINE_HOME/config/elasticsearch.yml.
+For configsync.config_path, the value is an absolute path of $SEARCH_ENGINE_HOME/data/config.
 
 ::
 
-    configsync.config_path: [absolute path of $ES_HOME]/data/config/
+    configsync.config_path: [absolute path of $SEARCH_ENGINE_HOME]/data/config/
     xpack.security.enabled: false
 
 Unzip |Fess| file to $FESS_HOME, and specify the following settings in $FESS_HOME/bin/fess.in.sh.
 
 ::
 
-    ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[absolute path of $ES_HOME]/data/config/
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[absolute path of $SEARCH_ENGINE_HOME]/data/config/
 
 
 Using Zip Package on Windows
@@ -97,7 +97,7 @@ To connect |Fess| to Elasticsearch, specify the following settings in c:\\fess-<
 
 ::
 
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
 
 

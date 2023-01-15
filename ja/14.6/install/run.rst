@@ -15,7 +15,7 @@ Linux/Mac環境では、以下のコマンドを実行します。
 
 ::
 
-    $ cd $ES_HOME
+    $ cd $SEARCH_ENGINE_HOME
     $ ./bin/elasticsearch
 
 次に |Fess| を起動します。Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.bat をダブルクリックします。

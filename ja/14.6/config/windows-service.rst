@@ -31,11 +31,11 @@ Elasticsearchをサービスとして登録
 設定
 ------------------------------------------
 
-``c:\opt\fess\bin\fess.in.bat`` を編集して ES_HOME に Elasticsearch のインストール先を設定します。
+``c:\opt\fess\bin\fess.in.bat`` を編集して SEARCH_ENGINE_HOME に Elasticsearch のインストール先を設定します。
 
 ::
 
-    set ES_HOME=c:/opt/elasticsearch
+    set SEARCH_ENGINE_HOME=c:/opt/elasticsearch
 
 |Fess| の検索画面、管理画面のデフォルトのポート番号は 8080 になっています。80 番に変更する場合は ``c:\opt\fess\bin\fess.in.bat`` の fess.port を変更します。
 

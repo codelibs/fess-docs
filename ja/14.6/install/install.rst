@@ -63,8 +63,8 @@ $FESS_HOME/bin/fess.in.sh を変更します。
 
 ::
 
-    ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
 
 
 Docker版でのインストール (OpenSearch)
@@ -89,13 +89,13 @@ ElasticsearchのプラグインはElasticseaarchのバージョンに合わせ�
 Elasticsearch 8.6.0をインストール場合を説明します。
 
 Elasticsearch のプラグインを plugins ディレクトリにインストールします。
-Elasticsearch を $ES_HOME にインストールしてあるものとします。
+Elasticsearch を $SEARCH_ENGINE_HOME にインストールしてあるものとします。
 
 ::
 
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    $ $ES_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
@@ -104,17 +104,17 @@ Elasticsearch を $ES_HOME にインストールしてあるものとします�
 ::
 
     $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip
-    $ mkdir -p $ES_HOME/modules/configsync
-    $ unzip -d $ES_HOME/modules/configsync /tmp/configsync.zip
+    $ mkdir -p $SEARCH_ENGINE_HOME/modules/configsync
+    $ unzip -d $SEARCH_ENGINE_HOME/modules/configsync /tmp/configsync.zip
 
-$ES_HOME/config/elasticsearch.yml に下記の設定を加えます。
+$SEARCH_ENGINE_HOME/config/elasticsearch.yml に下記の設定を加えます。
 既存の設定がある場合は、書き換えてください。
 
-configsync.config_path には $ES_HOME/data/config の絶対パスを指定します。
+configsync.config_path には $SEARCH_ENGINE_HOME/data/config の絶対パスを指定します。
 
 ::
 
-    configsync.config_path: [$ES_HOMEの絶対パス]/data/config/
+    configsync.config_path: [$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
     xpack.security.enabled: false
 
 Fessのインストール
@@ -126,8 +126,8 @@ $FESS_HOME/bin/fess.in.sh を変更します。
 
 ::
 
-    ES_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[$ES_HOMEの絶対パス]/data/config/
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
 
 
 ZIP版でのインストール (Elasticsearch)
@@ -175,7 +175,7 @@ c:\\fess-<version>\\bin\\fess.in.bat を変更します。
 
 ::
 
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.es.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
 
 
