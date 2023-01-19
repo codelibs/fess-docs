@@ -12,8 +12,7 @@ CodeLibs Projectでは、サポート対象のリリースに移行すること�
 メンテナンス表
 ==============
 
-FessのEOL日付はサポートするElasticsearchのEOL日付までになります。
-`Elasticsearch EOL <https://www.elastic.co/jp/support/eol>`__ を参照してください。
+FessのEOL日付は、リリース後、約1年半後の日付になります。
 
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
@@ -21,6 +20,8 @@ FessのEOL日付はサポートするElasticsearchのEOL日付までになりま
 
    * - Fess
      - EOL日付
+   * - 14.6.x
+     - 2024-07-01
    * - 14.5.x
      - 2024-05-01
    * - 14.4.x

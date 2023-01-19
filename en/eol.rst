@@ -9,14 +9,15 @@ If you need a support for your old system, please contact Commercial Support.
 Maintenance Tables
 ==================
 
-EOL date for our products is the same date as Elasticsearch.
-See `Elasticsearch EOL <https://www.elastic.co/support/eol>`__.
+The EOL date for Fess is about 18 months after the release.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
    * - Fess
      - EOL Date
+   * - 14.6.x
+     - 2024-07-01
    * - 14.5.x
      - 2024-05-01
    * - 14.4.x
