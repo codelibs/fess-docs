@@ -1,6 +1,6 @@
-=====================================
+===================================
 オープンソース全文検索サーバー Fess
-=====================================
+===================================
 
 概要
 ====
@@ -46,7 +46,7 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 ダウンロード
 ============
 
-- :doc:`Fess 14.5.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 14.6.0 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -102,6 +102,9 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 ニュース
 ========
 
+2023-01-25
+    `Fess 14.6.0 <https://github.com/codelibs/fess/releases/tag/fess-14.6.0>`__ リリース
+
 2022-11-17
     `Fess 14.5.0 <https://github.com/codelibs/fess/releases/tag/fess-14.5.0>`__ リリース
 
@@ -116,9 +119,6 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 
 2022-05-21
     `Fess 14.1.1 <https://github.com/codelibs/fess/releases/tag/fess-14.1.1>`__ リリース
-
-2022-04-24
-    `Fess 14.1.0 <https://github.com/codelibs/fess/releases/tag/fess-14.1.0>`__ リリース
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
@@ -312,4 +312,5 @@ Scriptプラグイン
    development
    others
    archives
+
 
