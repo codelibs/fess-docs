@@ -16,8 +16,7 @@ Analyzer は CharFilter、Tokenizer および TokenFilter により構成され�
 しかし、「京都」という語で検索を行った場合はヒットしません。
 
 Analyzer の設定は |Fess| の起動時に fess インデックスが存在しない場合に app/WEB-INF/classes/fess_indices/fess.json で fess インデックスを作成して登録されます。
-Analyzer の構成方法は elasticsearch の Analyzer のドキュメントを参照してください。
+Analyzer の構成方法は OpenSearch の Analyzer のドキュメントを参照してください。
 
 Analyzer の設定は検索に大きな影響を与えます。
 Analyzer の変更をする場合は、Lucene の Analyzer の動きを理解した上で実施するか、商用サポートにご相談ください。
-
