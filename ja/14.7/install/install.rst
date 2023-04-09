@@ -9,9 +9,9 @@
 
 - OS: JavaまたはDockerが実行可能なOS環境 (WindowsやLinuxなど)
 - `Java 17 <https://adoptium.net/>`__ (TAR.GZ/ZIP/RPM/DEB版をインストールする場合)
-- `Docker <https://docs.docker.com/get-docker/>`__ および `Docker Compose <https://docs.docker.com/compose/install/>`__ (Docker版をインストールする場合)
+- `Docker <https://docs.docker.com/get-docker/>`__ (Docker版をインストールする場合)
 
-本番環境での利用や負荷検証等では、組み込みElasticsearchでの稼働は推奨しません。
+本番環境での利用や負荷検証等では、組み込みOpenSearchでの稼働は推奨しません。
 
 TAR.GZ/ZIP/RPM/DEB版はElasticsearch/OpenSearchの正しいバージョンをインストールする必要があります。
 
@@ -72,9 +72,8 @@ Docker版でのインストール (OpenSearch)
 
 `https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.7.0/compose>`__ から以下のファイルを取得します。
 
-- `docker-compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/docker-compose.yml>`__
-- `docker-compose.opensearch.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/docker-compose.opensearch.yml>`__
-- `.env.opensearch <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/.env.opensearch>`__
+- `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose.yaml>`__
+- `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose-opensearch2.yaml>`__
 
 TAR.GZ版でのインストール (Elasticsearch)
 ========================================
@@ -255,7 +254,8 @@ Docker版でのインストール (Elasticsearch)
 
 `https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.7.0/compose>`__ から以下のファイルを取得します。
 
-- `docker-compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/docker-compose.yml>`__
-- `docker-compose.standalone.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/docker-compose.standalone.yml>`__
+- `compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose.yaml>`__
+- `compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose-elasticsearch8.yaml>`__
+- `.env.elasticsearch <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/.env.elasticsearch>`__
 
 
