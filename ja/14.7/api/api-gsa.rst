@@ -16,4 +16,4 @@ system.properitesに ``web.api.gsa=true`` を追加して、Google Search Applia
 |Fess| に
 ``http://localhost:8080/gsa/?q=検索語``
 のようなリクエストを送ることで、検索結果を GSA互換XML形式で受け取ることができます。
-リクエストパラメータとして指定できる値は、\ `JSON 応答の検索API <api-search.html>`__\ と同じです。
+リクエストパラメーターとして指定できる値は、\ `JSON 応答の検索API <api-search.html>`__\ と同じです。

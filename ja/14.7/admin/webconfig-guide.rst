@@ -59,8 +59,8 @@ URL
 
 この項目で指定した正規表現(Javaフォーマット)にマッチするURLは検索の対象となりません。
 
-設定パラメータ
-::::::::::::::
+設定パラメーター
+::::::::::::::::
 
 クロール設定情報を指定することができます。
 
@@ -168,7 +168,7 @@ Redmine
      - https://<server>/my/page
    * - クロール対象とするURL
      - https://<server>/.*
-   * - 設定パラメータ
+   * - 設定パラメーター
      - client.robotsTxtEnabled=false (Optional)
 
 そのあと、下記のような設定値でウェブ認証の設定の作成を行います。
@@ -185,7 +185,7 @@ Redmine
      - (Account for crawling)
    * - パスワード
      - (Password for the account)
-   * - パラメータ
+   * - パラメーター
      - | encoding=UTF-8
        | token_method=GET
        | token_url=https://<server>/login
@@ -215,7 +215,7 @@ XWiki(例. https://<server>/xwiki/)のページをクロールするウェブク
      - https://<server>/xwiki/bin/view/Main/
    * - クロール対象とするURL
      - https://<server>/.*
-   * - 設定パラメータ
+   * - 設定パラメーター
      - client.robotsTxtEnabled=false (Optional)
 
 そのあと、下記のような設定値でウェブ認証の設定の作成を行います。
@@ -232,7 +232,7 @@ XWiki(例. https://<server>/xwiki/)のページをクロールするウェブク
      - (Account for crawling)
    * - パスワード
      - (Password for the account)
-   * - パラメータ
+   * - パラメーター
      - | encoding=UTF-8
        | token_method=GET
        | token_url=http://<server>/xwiki/bin/login/XWiki/XWikiLogin
