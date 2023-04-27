@@ -67,6 +67,81 @@ $FESS_HOME/bin/fess.in.sh を変更します。
     FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
 
 
+RPM/DEB版でのインストール (OpenSearch)
+=========================================
+
+OpenSearchのインストール
+---------------------------
+
+`Download & Get Started <https://opensearch.org/versions/opensearch-2-6-0.html>`__ で、RPM/DEB版のOpenSearchをダウンロードしてください。
+
+`Installing OpenSearch <https://opensearch.org/docs/2.6/install-and-configure/install-opensearch/index/>`__ を参照してインストールしてください。
+
+以降でOpenSearchに関する設定を行うので、OpenSearchの設定や起動は行わないでください。
+
+OpenSearchのプラグインはOpenSearchのバージョンに合わせる必要があります。
+OpenSearch 2.6.0をインストールする場合を説明します。
+
+OpenSearch プラグインを plugins ディレクトリにインストールします。
+
+::
+
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.6.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.6.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.6.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.6.0
+
+これらのプラグインは OpenSearch のバージョンに依存するので注意してください。
+
+/etc/opensearch/opensearch.yml に下記の設定を加えます。(RPM/DEB共通)
+既存の設定がある場合は、書き換えてください。
+
+::
+
+    configsync.config_path: /var/lib/opensearch/data/config/
+    plugins.security.disabled: true
+
+Fessのインストール
+------------------
+
+次に、|Fess| の RPM/DEB パッケージをインストールします。
+
+RPMパッケージの場合
+
+::
+
+    $ sudo rpm -ivh fess-<version>.rpm
+
+DEBパッケージの場合
+
+::
+
+    $ sudo dpkg -i fess-<version>.deb
+
+サービスとして登録するには次のコマンドを入力します。 chkconfig を使う場合(RPM)は
+
+::
+
+    $ sudo /sbin/chkconfig --add OpenSearch
+    $ sudo /sbin/chkconfig --add fess
+
+systemd を使う場合(RPM/DEB)は
+
+::
+
+    $ sudo /bin/systemctl daemon-reload
+    $ sudo /bin/systemctl enable OpenSearch.service
+    $ sudo /bin/systemctl enable fess.service
+
+|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+/usr/share/fess/bin/fess.in.sh を変更します。
+
+::
+
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+
+
 Docker版でのインストール (OpenSearch)
 =====================================
 
@@ -81,20 +156,20 @@ TAR.GZ版でのインストール (Elasticsearch)
 Elasticsearchのインストール
 ---------------------------
 
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.3/install-elasticsearch.html>`__ を参照して、TAR.GZ版のElasticsearchをダウンロードおよびインストールしてください。
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.6/install-elasticsearch.html>`__ を参照して、TAR.GZ版のElasticsearchをダウンロードおよびインストールしてください。
 以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
 
 ElasticsearchのプラグインはElasticseaarchのバージョンに合わせる必要があります。
-Elasticsearch 8.6.0をインストール場合を説明します。
+Elasticsearch 8.6.2をインストール場合を説明します。
 
 Elasticsearch のプラグインを plugins ディレクトリにインストールします。
 Elasticsearch を $SEARCH_ENGINE_HOME にインストールしてあるものとします。
 
 ::
 
-    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.2.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.2.0
+    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.2.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
@@ -102,7 +177,7 @@ Elasticsearch を $SEARCH_ENGINE_HOME にインストールしてあるものと
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.2.0/elasticsearch-configsync-8.6.2.0.zip
     $ mkdir -p $SEARCH_ENGINE_HOME/modules/configsync
     $ unzip -d $SEARCH_ENGINE_HOME/modules/configsync /tmp/configsync.zip
 
@@ -135,11 +210,11 @@ ZIP版でのインストール (Elasticsearch)
 Elasticsearchのインストール
 ---------------------------
 
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.3/install-elasticsearch.html>`__ を参照して、ZIP版のElasticsearchをダウンロードおよびインストールしてください。
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.6/install-elasticsearch.html>`__ を参照して、ZIP版のElasticsearchをダウンロードおよびインストールしてください。
 以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
 
 ElasticsearchのプラグインはElasticseaarchのバージョンに合わせる必要があります。
-Elasticsearch 8.6.0をインストール場合を説明します。
+Elasticsearch 8.6.2をインストール場合を説明します。
 
 elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開します。
 今回は、c:\\elasticsearch-<version> と c:\\fess-<version> に展開したものとします。
@@ -148,14 +223,14 @@ elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開�
 
 ::
 
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.2.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.2.0
+    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.2.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
 次に elasticsearch-configsync をインストールします。
-c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-8.6.0.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip>`__ をダウンロードして展開します。
+c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-8.6.2.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.2.0/elasticsearch-configsync-8.6.2.0.zip>`__ をダウンロードして展開します。
 
 c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加えます。
 既存の設定がある場合は、書き換えてください。
@@ -184,19 +259,19 @@ RPM/DEB版でのインストール (Elasticsearch)
 Elasticsearchのインストール
 ---------------------------
 
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.3/install-elasticsearch.html>`__ を参照して、RPM/DEB版のElasticsearchをダウンロードおよびインストールしてください。
+`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.6/install-elasticsearch.html>`__ を参照して、RPM/DEB版のElasticsearchをダウンロードおよびインストールしてください。
 以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
 
 ElasticsearchのプラグインはElasticseaarchのバージョンに合わせる必要があります。
-Elasticsearch 8.6.0をインストール場合を説明します。
+Elasticsearch 8.6.2をインストール場合を説明します。
 
 Elasticsearch プラグインを plugins ディレクトリにインストールします。
 
 ::
 
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.2.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.2.0
+    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.2.0
 
 これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
 
@@ -204,7 +279,7 @@ Elasticsearch プラグインを plugins ディレクトリにインストール
 
 ::
 
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip
+    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.2.0/elasticsearch-configsync-8.6.2.0.zip
     $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
     $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
 
@@ -247,6 +322,12 @@ systemd を使う場合(RPM/DEB)は
     $ sudo /bin/systemctl daemon-reload
     $ sudo /bin/systemctl enable elasticsearch.service
     $ sudo /bin/systemctl enable fess.service
+
+|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+/usr/share/fess/bin/fess.in.sh を変更します。
+
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=/var/lib/elasticsearch/data/config/
 
 
 Docker版でのインストール (Elasticsearch)
