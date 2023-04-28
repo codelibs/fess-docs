@@ -5,7 +5,7 @@ Ping API
 状態の取得
 ==========
 
-|Fess| に、 ``http://<Server Name>/json/?type=ping`` のリクエストを送ることで、 |Fess| のサーバーの状態をJSON形式で受け取ることができます。
+|Fess| に、 ``http://<Server Name>/api/v1/health`` のリクエストを送ることで、 |Fess| のサーバーの状態をJSON形式で受け取ることができます。
 
 リクエストパラメーター
 ----------------------
@@ -20,10 +20,10 @@ Ping API
 ::
 
     {
-        "response": {
-            "version": "14.8",
-            "status":0,
-        }
+      "data": {
+        "status": "green",
+        "timed_out": false
+      }
     }
 
 各要素については以下の通りです。
@@ -31,11 +31,11 @@ Ping API
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table::
 
-   * - response
-     - ルート要素。
-   * - version
-     - フォーマットバージョン。
+   * - data
+     - 検索結果の親要素。
    * - status
-     - レスポンスのステータス。status値は、0:正常、1:検索エラー、2または3:リクエストパラメーターエラー、9:サービス停止中、-1:API種別エラーです。
+     - レスポンスのステータス。正常の場合はgreenが返却されます。
+   * - timed_out
+     - レスポンスの結果。指定された時間内にレスポンスが返された場合はfelseが返却されます。
 
 表: レスポンス情報

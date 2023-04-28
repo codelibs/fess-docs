@@ -14,21 +14,20 @@ APIの種類
 
 .. TODO: favorite, favorites
 
-|Fess| はいくつかのAPIを提供していますが、どのAPIを使用するかは
-``http://<Server Name>/json/?type=popularword``
-のように ``type`` パラメーターに値を与えることで指定します。
-``type`` パラメーターに設定できる値は以下の通りです。
+|Fess| はいくつかのAPIを提供しています。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table::
 
    * - search
-     - 検索結果を取得するAPI。 このAPIを利用する際は ``type`` パラメーターを省略することもできます。
+     - 検索結果を取得するAPI。
    * - popularword
      - 人気ワードを取得するAPI。
    * - label
      - 作成済みのラベルのリストを取得するAPI。
    * - ping
      - サーバーの状態を取得するAPI。
+   * - suggest
+     - サジェストワードを取得するAPI。
 
 表: APIの種類

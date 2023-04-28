@@ -5,7 +5,7 @@
 サジェストワード一覧の取得
 ==========================
 
-|Fess| に、 ``http://<Server Name>/suggest?query=サジェストワード`` のリクエストを送ることで、|Fess| の検索結果をJSON形式で受け取ることができます。
+|Fess| に、 ``http://<Server Name>/api/v1/suggest-words?q=サジェストワード`` のリクエストを送ることで、|Fess| に登録されているサジェストワードの一覧をJSON形式で受け取ることができます。
 サジェストワードAPIを利用するには、管理画面のシステム 全般の設定でドキュメントでサジェスト、検索語でサジェストを有効にしておく必要があります。
 
 リクエストパラメーター
@@ -16,12 +16,16 @@
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: リクエストパラメーター
 
-   * - query
-     - サジェストを行うキーワード。 (例) ``query=fess``
+   * - q
+     - サジェストを行うキーワード。 (例) ``q=fess``
    * - num
      - サジェストされる単語の数。デフォルト10。 (例) ``num=20``
+   * - label
+     - フィルタされたラベル名。 (例) ``fields=java,python``
    * - fields
      - サジェスト対象を絞り込むフィールド名。デフォルト絞り込みなし。 (例) ``fields=content,title``
+   * - lang
+     - 検索言語の指定。 (例) ``lang=en``
 
 
 レスポンス
@@ -31,35 +35,33 @@
 
 ::
 
-      {
-        "response": {
-          "version": "14.8",
-          "status": 0,
-          "result": {
-            "took": "5",
-            "total": "1",
-            "num": "1",
-            "hits": [
-              {
-                "text": "fess",
-                "tags": []
-              }
-            ]
-          }
+    {
+      "query_time": 18,
+      "record_count": 355,
+      "page_size": 10,
+      "data": [
+        {
+          "text": "fess",
+          "labels": [
+            "java",
+            "python"
+          ]
         }
-      }
-
+      ]
+    }
 
 各要素については以下の通りです。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: レスポンス情報
 
-   * - response
-     - ルート要素
-   * - version
-     - フォーマットバージョン
-   * - status
-     - レスポンスのステータス(status値は、0:正常、1:検索エラー、2または3:リクエストパラメーターエラー、9:サービス停止中、-1:API種別エラーです)
-   * - result
-     - サジェストワード
+   * - query_time
+     - クエリ処理時間。
+   * - record_count
+     - サジェストワードのの登録件数。
+   * - data
+     - 検索結果の親要素。
+   * - text
+     - サジェストワード。
+   * - labels
+     - ラベルの値。
