@@ -1,6 +1,6 @@
-==============
-Configuration Wizard
-==============
+======
+Wizard
+======
 
 Overview
 ========
@@ -8,7 +8,7 @@ Overview
 The wizard page provides a setup tool for registering crawl settings.
 
 Quick Setup
-------------
+-----------
 
 This page is the start page for registering crawl settings.
 
@@ -35,12 +35,12 @@ Crawl URL
 Specify the starting URL or file path for crawling (e.g., https://fess.codelibs.org/).
 
 Maximum Page Count
-:::::::::::::::::
+::::::::::::::::::
 
 Set the maximum number of pages to be crawled.
 
 Depth
-::::
+:::::
 
 Set the depth of links to be followed when crawling a document.
 
