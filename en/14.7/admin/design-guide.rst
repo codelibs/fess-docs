@@ -1,17 +1,17 @@
-================
+===========
 Page Design
-================
+===========
 
 Overview
-====
+========
 
 This section explains the settings related to the design of the search page.
 
 Setting Method
-========
+==============
 
 Display Method
---------
+--------------
 
 To open the list page to set the page design as shown below, click [System > Page Design] in the left menu.
 
@@ -19,13 +19,13 @@ To open the list page to set the page design as shown below, click [System > Pag
 
 
 File Manager
---------------------
+------------
 
 You can download or delete files available for the search page.
 
 
 JSP Files
---------------------
+---------
 
 You can edit the JSP files for the search screen.
 By clicking the edit button for the target JSP file, you can edit that JSP file.
@@ -80,12 +80,12 @@ Table: Editable JSP files
 The translated text is understandable, but it could be improved for clarity and naturalness. Here is a possible revised version:
 
 File Upload
----------------
+-----------
 
 You can upload files to be used in the search interface. The supported file types are JPG, GIF, PNG, CSS, and JS.
 
 Upload File
----------------
+-----------
 
 Specify the file to upload.
 
