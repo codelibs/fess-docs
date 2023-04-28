@@ -1,89 +1,83 @@
-=====================
-General Configuration
-=====================
+=======
+General
+=======
 
 Overview
-========
-
-This administrative page manages configurations for |Fess|.
-You can change |Fess|'s behavior without rebooting the |Fess|.
-
-Management Operations
-========
-
-Display Configurations
-----------------------
-
-Select System > General in the left menu to display General Configuration page, as below.
+====
+On this administration page, you can manage the settings of |Fess|.
+You can change various settings of |Fess| without restarting it.
 
 |image0|
 
+Settings
+========
+
 System
---------
+------
 
 JSON Response
 :::::::::::::
 
-Enable JSON response of Search features.
+Specify whether to enable the JSON API.
 
 Login Required
 ::::::::::::::
 
-Search pages are not displayed on Guest user if enabled.
+Specify whether to require login for search functionality.
 
 Login Link
 ::::::::::
 
-Login menu is displayed at the top of search pages if enabled.
+Specify whether to display a link to the login page on the search screen.
 
 Similar Result Collapsed
 ::::::::::::::::::::::::
 
-Collapse similar results in search result page.
+Specify whether to enable collapsing of duplicate results.
 
 Thumbnail View
 ::::::::::::::
 
-Display thumbnail images in search result page.
+Specify whether to enable thumbnail display.
 
 Default Label Value
 :::::::::::::::::::
 
-Specify default labels on search pages.
-e.g. "role:admin=label1" is that users which has admin role use labels1 as default labels.
+Specify the default label value to add to search conditions.
+If specified on a per-role or per-group basis, add role: or group: respectively, e.g., role:admin=label1.
 
 Default Sort Value
 ::::::::::::::::::
 
-Specify default sort order on search pages.
-e.g. "role:admin=content_length.desc" is that users which has admin role use content_length.desc as default sort order.
+Specify the default sort value to add to search conditions.
+If specified on a per-role or per-group basis, add role: or group: respectively, e.g., role:admin=content_length.desc.
 
-Virtual Hosts
-:::::::::::::
+Virtual Host
+::::::::::::
 
-Specify virtual hosts settings.
-The format is REQUEST_HEADER_NAME:REQUEST_HEADER_VALUE=VIRTUAL_HOST_KEY.
-(e.g. Host:fess.codelibs.org=fess)
+Specify the virtual host.
+For details, see :doc:the virtual host section of the configuration guide <../config/virtual-host>.
 
 Popular Word Response
 :::::::::::::::::::::
 
-Enable JSON response of Popular words.
+Specify whether to enable the popular word API.
 
 Encoding for CSV
 ::::::::::::::::
 
-This encoding is used in uploaded/downloaded CSV file.
+Specify the encoding of the CSV file to be downloaded.
 
 Append Params to URL
 ::::::::::::::::::::
 
-Append query parameters to URL of search results.
+Enable to pass parameters to the search result display.
 
 Notification Email
 ::::::::::::::::::
 
-Specify e-mail address to send notification mail.
+Specify the email address to notify when crawling is complete.
+Multiple addresses can be specified separated by commas. A mail server is required to use this feature.
 
 Crawler
 -------
@@ -91,161 +85,158 @@ Crawler
 Check Last Modified
 :::::::::::::::::::
 
-Enable incremental crawling.
-Crawler checks time stamp of a document at indexing time.
+Enable to perform a differential crawl.
 
 Simultaneous Crawler Config
 :::::::::::::::::::::::::::
 
-The number of Crawlers which deals with simultaneous crawling configuration.
+Specify the number of crawl settings to execute simultaneously.
 
 Remove Documents Before
 :::::::::::::::::::::::
 
-Days which old documents are removed.
-e.g. documents indexed X days ago are removed if they are not updated.
+Specify the number of days after the index to keep documents.
 
 Excluded Failure Type
 :::::::::::::::::::::
 
-Crawler does not ignore failure URLs included in excluded failure types even if the failure count is over the threshold.
+Specify the exception names, etc., which are excluded from being crawled as URLs with failures exceeding the threshold.
 
 Failure Count Threshold
 :::::::::::::::::::::::
 
-Crawler ignores failure URLs of which failure count is over this threshold.
+If the number of failures recorded as URLs exceeds the number specified here for documents targeted for crawling, they will be excluded from the next crawl.
 
 Logging
---------
+-------
 
 Search Logging
 ::::::::::::::
 
-Enable logging for user's searches.
+Specify whether to enable the recording of search logs.
 
 User Logging
 ::::::::::::
 
-Enable logging for users.
+Specify whether to enable the recording of user logs.
 
 Favorite Logging
 ::::::::::::::::
 
-Enable logging for favorite requests.
+Specify whether to enable the recording of favorite logs.
 
 Purge Search Log Before
 :::::::::::::::::::::::
 
-Days which old search logs are removed.
-To disable log purge, set to -1.
+Delete search logs older than the specified number of days.
 
 Purge Job Log Before
 ::::::::::::::::::::
 
-Days which old job logs are removed.
-To disable log purge, set to -1.
+Delete job logs older than the specified number of days.
 
 Purge User Before
 :::::::::::::::::
 
-Days which old user logs are removed.
-To disable log purge, set to -1.
+Delete user logs older than the specified number of days.
+
+Here's the translation:
 
 Bots Name For Purge
 :::::::::::::::::::
 
-Bots names to remove search logs.
+Specify bot names to exclude from search logs.
 
 Log Level
 :::::::::
 
-Log Level in fess.log.
+Specify the log level for fess.log.
 
 Suggest
---------
+-------
 
 Suggest from Search Words
 :::::::::::::::::::::::::
 
-Enable to generate suggested words from search logs.
+Specify whether to generate suggestion candidates from search logs.
 
 Suggest from Documents
 ::::::::::::::::::::::
 
-Enable to generate suggested words from indexed documents.
+Specify whether to generate suggestion candidates from indexed documents.
 
 Purge Suggest Documents Before
 ::::::::::::::::::::::::::::::
 
-Days which old suggested words are removed.
+Delete suggest data from the specified number of days ago.
 
 LDAP
---------
+----
 
 LDAP URL
 ::::::::
 
-URL of LDAP server.
+Specify the URL of the LDAP server.
 
 Base DN
 :::::::
 
-Base DN of LDAP environment.
+Specify the base distinguished name for logging in to the search page.
 
 Bind DN
 :::::::
 
-Bind DN of LDAP environment.
+Specify the administrator's bind DN.
 
 Password
 ::::::::
 
-Password for Bind DN.
+Specify the password for the Bind DN.
 
 User DN
 :::::::
 
-User definition pattern for user login.
+Specify the distinguished name of the user.
 
 Account Filter
 ::::::::::::::
 
-LDAP query to filter user accounts.
+Specify the user's common name or uid.
 
 Group Filter
-::::::::::::::::::
+::::::::::::
 
-Specify the filter condition for the group.
+Specify the filter condition for the groups to be acquired.
 
 memberOf Attribute
 ::::::::::::::::::
 
-memberOf Attribute name.
-memberOf if LDAP server is Active Directory.
-Some other LDAP server is isMemberOf.
+Specify the memberOf attribute name available on the LDAP server.
+For Active Directory, it's "memberOf".
+For other LDAP servers, it might be "isMemberOf".
 
 Notification
 ------------
 
-Login page
+Login Page
 ::::::::::
 
-Contents displayed on login page.
+Enter the message to be displayed on the login page.
 
-Search top page
+Search Top Page
 :::::::::::::::
 
-Contents displayed on search top page.
+Enter the message to be displayed on the search top page.
 
 Example
 =======
 
-LDAP Configuration
-------------------
+LDAP Configuration Example
+--------------------------
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{4cm}|p{4cm}|p{4cm}|
 .. list-table:: LDAP/Active Directory Configuration
-   :header-rows: 1
+   :header-rows: 1
 
    * - Name
      - Value (LDAP)
@@ -271,6 +262,5 @@ LDAP Configuration
    * - memberOf
      - isMemberOf
      - memberOf
-
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/general-1.png
