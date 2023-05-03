@@ -130,7 +130,7 @@ systemd を使う場合(RPM/DEB)は
 ::
 
     $ sudo /bin/systemctl daemon-reload
-    $ sudo /bin/systemctl enable OpenSearch.service
+    $ sudo /bin/systemctl enable opensearch.service
     $ sudo /bin/systemctl enable fess.service
 
 |Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。

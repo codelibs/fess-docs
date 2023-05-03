@@ -124,7 +124,7 @@ For RPM/DEB with systemd:
 ::
 
     $ sudo /bin/systemctl daemon-reload
-    $ sudo /bin/systemctl enable OpenSearch.service
+    $ sudo /bin/systemctl enable opensearch.service
     $ sudo /bin/systemctl enable fess.service
 
 To connect |Fess| to the OpenSearch cluster, specify the following startup options in /usr/share/fess/bin/fess.in.sh:
