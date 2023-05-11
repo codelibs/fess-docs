@@ -13,15 +13,15 @@
 
 本番環境での利用や負荷検証等では、組み込みOpenSearchでの稼働は推奨しません。
 
-TAR.GZ/ZIP/RPM/DEB版はElasticsearch/OpenSearchの正しいバージョンをインストールする必要があります。
+TAR.GZ/ZIP/RPM/DEB版はOpenSearchの正しいバージョンをインストールする必要があります。
 
 ダウンロード
 ============
 
 `ダウンロードサイト <https://fess.codelibs.org/ja/downloads.html>`__ から |Fess| をダウンロードします。
 
-TAR.GZ版でのインストール (OpenSearch)
-=====================================
+TAR.GZ版でのインストール
+========================
 
 OpenSearchのインストール
 ------------------------
@@ -67,154 +67,39 @@ $FESS_HOME/bin/fess.in.sh を変更します。
     FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
 
 
-Docker版でのインストール (OpenSearch)
-=====================================
+RPM/DEB版でのインストール
+=========================
 
-`https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.7.0/compose>`__ から以下のファイルを取得します。
+OpenSearchのインストール
+------------------------
 
-- `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose.yaml>`__
-- `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose-opensearch2.yaml>`__
+`Download & Get Started <https://opensearch.org/versions/opensearch-2-6-0.html>`__ で、RPM/DEB版のOpenSearchをダウンロードしてください。
 
-TAR.GZ版でのインストール (Elasticsearch)
-========================================
+`Installing OpenSearch <https://opensearch.org/docs/2.6/install-and-configure/install-opensearch/index/>`__ を参照してインストールしてください。
 
-Elasticsearchのインストール
----------------------------
+以降でOpenSearchに関する設定を行うので、OpenSearchの設定や起動は行わないでください。
 
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.3/install-elasticsearch.html>`__ を参照して、TAR.GZ版のElasticsearchをダウンロードおよびインストールしてください。
-以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
+OpenSearchのプラグインはOpenSearchのバージョンに合わせる必要があります。
+OpenSearch 2.6.0をインストールする場合を説明します。
 
-ElasticsearchのプラグインはElasticseaarchのバージョンに合わせる必要があります。
-Elasticsearch 8.6.0をインストール場合を説明します。
-
-Elasticsearch のプラグインを plugins ディレクトリにインストールします。
-Elasticsearch を $SEARCH_ENGINE_HOME にインストールしてあるものとします。
+OpenSearch プラグインを plugins ディレクトリにインストールします。
 
 ::
 
-    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    $ $SEARCH_ENGINE_HOME/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.6.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.6.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.6.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.6.0
 
-これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
+これらのプラグインは OpenSearch のバージョンに依存するので注意してください。
 
-次に elasticsearch-configsync をインストールします。
-
-::
-
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip
-    $ mkdir -p $SEARCH_ENGINE_HOME/modules/configsync
-    $ unzip -d $SEARCH_ENGINE_HOME/modules/configsync /tmp/configsync.zip
-
-$SEARCH_ENGINE_HOME/config/elasticsearch.yml に下記の設定を加えます。
-既存の設定がある場合は、書き換えてください。
-
-configsync.config_path には $SEARCH_ENGINE_HOME/data/config の絶対パスを指定します。
-
-::
-
-    configsync.config_path: [$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
-    xpack.security.enabled: false
-
-Fessのインストール
-------------------
-
-|Fess| の zip ファイルを $FESS_HOME に展開します。
-|Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
-$FESS_HOME/bin/fess.in.sh を変更します。
-
-::
-
-    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
-
-
-ZIP版でのインストール (Elasticsearch)
-=====================================
-
-Elasticsearchのインストール
----------------------------
-
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.3/install-elasticsearch.html>`__ を参照して、ZIP版のElasticsearchをダウンロードおよびインストールしてください。
-以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
-
-ElasticsearchのプラグインはElasticseaarchのバージョンに合わせる必要があります。
-Elasticsearch 8.6.0をインストール場合を説明します。
-
-elasticsearch-<version>.zip と fess-<version>.zip を任意の場所に展開します。
-今回は、c:\\elasticsearch-<version> と c:\\fess-<version> に展開したものとします。
-
-コマンドプロンプトから Elasticsearch のプラグインをインストールします。
-
-::
-
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    > c:\elasticsearch-<version>\bin\elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
-
-これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
-
-次に elasticsearch-configsync をインストールします。
-c:\\elasticsearch-<version>\\modules\\configsync フォルダを作成して、 `elasticsearch-configsync-8.6.0.0.zip <https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip>`__ をダウンロードして展開します。
-
-c:\\elasticsearch-<version>\\config\\elasticsearch.yml に下記の設定を加えます。
+/etc/opensearch/opensearch.yml に下記の設定を加えます。(RPM/DEB共通)
 既存の設定がある場合は、書き換えてください。
 
 ::
 
-    configsync.config_path: c:/elasticsearch-<version>/data/config/
-    xpack.security.enabled: false
-
-Fessのインストール
-------------------
-
-|Fess| の zip ファイルを %FESS_HOME% に展開します。
-|Fess| を Elasticsearch クラスタへ接続するために、以下の起動オプションで指定します。
-c:\\fess-<version>\\bin\\fess.in.bat を変更します。
-
-::
-
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path="c:/elasticsearch-<version>/data/config/"
-
-
-RPM/DEB版でのインストール (Elasticsearch)
-=========================================
-
-Elasticsearchのインストール
----------------------------
-
-`Installing Elasticsearch <https://www.elastic.co/guide/en/elasticsearch/reference/8.3/install-elasticsearch.html>`__ を参照して、RPM/DEB版のElasticsearchをダウンロードおよびインストールしてください。
-以降でElasticsearchに関する設定を行うので、Elasticsearchの設定や起動は行わないでください。
-
-ElasticsearchのプラグインはElasticseaarchのバージョンに合わせる必要があります。
-Elasticsearch 8.6.0をインストール場合を説明します。
-
-Elasticsearch プラグインを plugins ディレクトリにインストールします。
-
-::
-
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-fess:8.6.0.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-analysis-extension:8.6.0.0
-    $ sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install org.codelibs:elasticsearch-minhash:8.6.0.0
-
-これらのプラグインは Elasticsearch のバージョンに依存するので注意してください。
-
-次に elasticsearch-configsync をインストールします。
-
-::
-
-    $ curl -o /tmp/configsync.zip https://repo.maven.apache.org/maven2/org/codelibs/elasticsearch-configsync/8.6.0.0/elasticsearch-configsync-8.6.0.0.zip
-    $ sudo mkdir -p /usr/share/elasticsearch/modules/configsync
-    $ sudo unzip -d /usr/share/elasticsearch/modules/configsync /tmp/configsync.zip
-
-/etc/elasticsearch/elasticsearch.yml に下記の設定を加えます。(RPM/DEB共通)
-既存の設定がある場合は、書き換えてください。
-
-::
-
-    configsync.config_path: /var/lib/elasticsearch/config
-    xpack.security.enabled: false
+    configsync.config_path: /var/lib/opensearch/data/config/
+    plugins.security.disabled: true
 
 Fessのインストール
 ------------------
@@ -237,7 +122,7 @@ DEBパッケージの場合
 
 ::
 
-    $ sudo /sbin/chkconfig --add elasticsearch
+    $ sudo /sbin/chkconfig --add OpenSearch
     $ sudo /sbin/chkconfig --add fess
 
 systemd を使う場合(RPM/DEB)は
@@ -245,17 +130,23 @@ systemd を使う場合(RPM/DEB)は
 ::
 
     $ sudo /bin/systemctl daemon-reload
-    $ sudo /bin/systemctl enable elasticsearch.service
+    $ sudo /bin/systemctl enable opensearch.service
     $ sudo /bin/systemctl enable fess.service
 
+|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+/usr/share/fess/bin/fess.in.sh を変更します。
 
-Docker版でのインストール (Elasticsearch)
-========================================
+::
+
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+
+
+Docker版でのインストール
+========================
 
 `https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.7.0/compose>`__ から以下のファイルを取得します。
 
-- `compose.yml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose.yaml>`__
-- `compose-elasticsearch8.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose-elasticsearch8.yaml>`__
-- `.env.elasticsearch <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/.env.elasticsearch>`__
-
+- `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose.yaml>`__
+- `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.7.0/compose/compose-opensearch2.yaml>`__
 

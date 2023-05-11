@@ -48,7 +48,15 @@ TAR.GZ版の場合 (OpenSearch)
 RPM/DEB版の場合 (chkconfig)
 ---------------------------
 
-|Fess| を起動する前に Elasticsearch を起動する必要があります。
+|Fess| を起動する前に OpenSearch、または Elasticsearch を起動する必要があります。
+
+(OpenSearch)
+
+::
+
+    $ sudo service opensearch start
+
+(Elasticsearch)
 
 ::
 
@@ -63,7 +71,15 @@ RPM/DEB版の場合 (chkconfig)
 RPM/DEB版の場合 (systemd)
 -------------------------
 
-|Fess| を起動する前に Elasticsearch を起動する必要があります。
+|Fess| を起動する前に OpenSearch、または Elasticsearch を起動する必要があります。
+
+(OpenSearch)
+
+::
+
+    $ sudo systemctl start opensearch.service
+
+(Elasticsearch)
 
 ::
 
