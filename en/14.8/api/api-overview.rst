@@ -1,32 +1,32 @@
-==================
-Overview
-==================
+============
+API Overview
+============
 
 
-Provided API in |Fess|
-==================
+APIs Provided by |Fess|
+=======================
 
-This document describes API provided by |Fess|.
-Using |Fess| API, you can construct a search system with your existing web applications.
+This document provides an explanation of the APIs provided by |Fess|. By utilizing these APIs, you can use |Fess| as a search server within existing web systems and more.
 
-API Type
-==================
+Types of APIs
+=============
 
 .. TODO: favorite, favorites
 
-|Fess| provides several search APIs.
-Using ``type`` request parameter, API is specified, such as ``http://<Server Name>/json/?type=popularword``.
-Available ``type`` is as below.
+|Fess| offers several APIs.
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: API Type
+.. list-table::
 
    * - search
-     - Search results are returned. ``search`` is a default type.
+     - API for retrieving search results.
    * - popularword
-     - Poplular words are returned.
+     - API for retrieving popular words.
    * - label
-     - Registered labels are returned.
+     - API for retrieving a list of created labels.
    * - ping
-     - |Fess| server state is returned.
+     - API for retrieving server status.
+   * - suggest
+     - API for retrieving suggested words.
 
+Table: Types of APIs
