@@ -9,5 +9,4 @@
    api-search
    api-label
    api-popularword
-   api-ping
-   api-gsa
+   api-health
