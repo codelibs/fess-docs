@@ -1,5 +1,5 @@
 |Fess| API Guide
-====================
+================
 
 .. toctree::
    :maxdepth: 2
