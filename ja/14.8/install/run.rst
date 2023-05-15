@@ -5,29 +5,8 @@
 起動方法
 ========
 
-TAR.GZ/ZIP版の場合 (Elasticsearch)
-----------------------------------
-
-|Fess| を起動する前に Elasticsearch を起動する必要があります。
-
-Windows 環境で Elasticsearch を起動するには、 bin フォルダ中の elasticsearch.bat をダブルクリックします。
-Linux/Mac環境では、以下のコマンドを実行します。
-
-::
-
-    $ cd $SEARCH_ENGINE_HOME
-    $ ./bin/elasticsearch
-
-次に |Fess| を起動します。Windows 環境で |Fess| を起動するには、 bin フォルダ中の fess.bat をダブルクリックします。
-Linux/Mac環境では、以下のコマンドを実行します。
-
-::
-
-    $ cd $FESS_HOME
-    $ ./bin/fess
-
-TAR.GZ版の場合 (OpenSearch)
----------------------------
+TAR.GZ版の場合
+-------------
 
 |Fess| を起動する前にOpenSearchを起動する必要があります。
 
@@ -48,19 +27,11 @@ TAR.GZ版の場合 (OpenSearch)
 RPM/DEB版の場合 (chkconfig)
 ---------------------------
 
-|Fess| を起動する前に OpenSearch、または Elasticsearch を起動する必要があります。
-
-(OpenSearch)
+|Fess| を起動する前に OpenSearch を起動する必要があります。
 
 ::
 
     $ sudo service opensearch start
-
-(Elasticsearch)
-
-::
-
-    $ sudo service elasticsearch start
 
 次に |Fess| を起動します。
 
@@ -71,19 +42,11 @@ RPM/DEB版の場合 (chkconfig)
 RPM/DEB版の場合 (systemd)
 -------------------------
 
-|Fess| を起動する前に OpenSearch、または Elasticsearch を起動する必要があります。
-
-(OpenSearch)
+|Fess| を起動する前に OpenSearch を起動する必要があります。
 
 ::
 
     $ sudo systemctl start opensearch.service
-
-(Elasticsearch)
-
-::
-
-    $ sudo systemctl start elasticsearch.service
 
 次に |Fess| を起動します。
 
@@ -91,23 +54,14 @@ RPM/DEB版の場合 (systemd)
 
     $ sudo systemctl start fess.service
 
-Docker版の場合 (Elasticsearch)
-------------------------------
-
-以下のコマンドを実行して、Elasticsearch と |Fess| を起動します。
-
-::
-
-    $ docker-compose -f docker-compose.yml -f docker-compose.standalone.yml up -d
-
-Docker版の場合 (OpenSearch)
----------------------------
+Docker版の場合
+-------------
 
 以下のコマンドを実行して、OpenSearchと |Fess| を起動します。
 
 ::
 
-    $ docker-compose --env-file .env.opensearch -f docker-compose.yml -f docker-compose.opensearch.yml up -d
+    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
 
 ブラウザー UI へのアクセス
 ==========================
@@ -145,21 +99,12 @@ RPM/DEB版の場合 (systemd)
     $ sudo systemctl stop fess.service
 
 
-Docker版の場合 (Elasticsearch)
-------------------------------
-
-以下のコマンドを実行して、Elasticsearch と |Fess| を停止します。
-
-::
-
-    $ docker-compose -f docker-compose.yml -f docker-compose.standalone.yml down
-
-Docker版の場合 (OpenSearch)
----------------------------
+Docker版の場合
+-------------
 
 以下のコマンドを実行して、OpenSearchと |Fess| を停止します。
 
 ::
 
-    $ docker-compose --env-file .env.opensearch -f docker-compose.yml -f docker-compose.opensearch.yml down
+    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
 
