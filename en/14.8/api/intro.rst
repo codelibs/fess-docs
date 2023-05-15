@@ -3,13 +3,13 @@ Introduction
 ============
 
 Who Should Use This Document
-=================
+============================
 
 This document is intended for developers responsible for managing the |Fess|.
 
 
 Before You Read This Document
-===================
+=============================
 
 This document shows how to access |Fess| on API.
 

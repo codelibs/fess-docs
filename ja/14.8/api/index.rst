@@ -1,5 +1,5 @@
 |Fess| APIガイド
-====================
+================
 
 .. toctree::
    :maxdepth: 2
@@ -9,6 +9,5 @@
    api-search
    api-label
    api-popularword
-   api-ping
-   api-gsa
    api-suggest
+   api-health

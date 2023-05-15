@@ -5,7 +5,7 @@
 ラベルの取得
 ============
 
-|Fess| に、 ``http://<Server Name>/json/?type=label`` のリクエストを送ることで、|Fess| に登録されているラベルの一覧をJSON形式で受け取ることができます。
+|Fess| に、 ``http://<Server Name>/api/v1/labels`` のリクエストを送ることで、|Fess| に登録されているラベルの一覧をJSON形式で受け取ることができます。
 
 リクエストパラメーター
 ----------------------
@@ -21,16 +21,13 @@
 ::
 
     {
-        "response":{
-            "version":"14.8",
-            "status":0,
-            "record_count":3,
-            "result":[
-                {"label":"label1", "value":"label1"},
-                {"label":"label2", "value":"label2"},
-                {"label":"label3", "value":"label3"}
-            ]
+      "record_count": 9,
+      "data": [
+        {
+          "label": "AWS",
+          "value": "aws"
         }
+      ]
     }
 
 各要素については以下の通りです。
@@ -39,15 +36,9 @@
 
 .. list-table::
 
-   * - response
-     - ルート要素。
-   * - version
-     - フォーマットバージョン。
-   * - status
-     - レスポンスのステータス。status値は、0:正常、1:検索エラー、2または3:リクエストパラメーターエラー、9:サービス停止中、-1:API種別エラーです。
    * - record_count
      - ラベルの登録件数。
-   * - result
+   * - data
      - 検索結果の親要素。
    * - label
      - ラベルの名前。

@@ -1,57 +1,47 @@
-==================
+=========
 Label API
-==================
+=========
 
-Label API
-============
+Get Labels
+==========
 
-Label API returns registered labels as JSON format.
-URL for Label API is ``http://<Server Name>/json/?type=label``.
+You can retrieve a list of labels registered in |Fess| by sending a request to ``http://<Server Name>/api/v1/labels``. The response will be in JSON format.
 
+Request Parameters
+------------------
 
-Request Parameter
---------------------
-
-No request parameter exists.
-
+There are no available request parameters.
 
 Response
-----------
+--------
 
-The response is as below.
+The response will be as follows:
 
 ::
 
     {
-        "response":{
-            "version":"14.8",
-            "status":0,
-            "record_count":3,
-            "result":[
-                {"label":"label1", "value":"label1"},
-                {"label":"label2", "value":"label2"},
-                {"label":"label3", "value":"label3"}
-            ]
+      "record_count": 9,
+      "data": [
+        {
+          "label": "AWS",
+          "value": "aws"
         }
+      ]
     }
 
-Descriptions for properties are as below.
+The elements in the response are described as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: Properties in Response
 
-   * - response
-     - Root element
-   * - version
-     - API Version.
-   * - status
-     - Response status. (0: successful, 1: search error, 2 or 3: invalid request parameter, 9: service unavailable, -1: invalid API type)
+.. list-table::
+
    * - record_count
-     - The number of labels.
-   * - result
-     - Result element.
+     - The number of registered labels.
+   * - data
+     - The parent element of the search results.
    * - label
-     - Label name.
+     - The name of the label.
    * - value
-     - Label value.
+     - The value of the label.
 
+Table: Response Information
