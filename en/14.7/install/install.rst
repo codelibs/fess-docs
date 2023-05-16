@@ -18,7 +18,7 @@ For the TAR.GZ/ZIP/RPM/DEB version, you must install the correct version of Open
 Download
 ========
 
-Download Fess from the `Download Site <https://fess.codelibs.org/ja/downloads.html>`__.
+Download Fess from the `Download Site <https://fess.codelibs.org/downloads.html>`__.
 
 Installing the TAR.GZ version
 =============================
@@ -65,13 +65,58 @@ Modify $FESS_HOME/bin/fess.in.sh.
     SEARCH_ENGINE_HTTP_URL=http://localhost:9200
     FESS_DICTIONARY_PATH=[absolute path of $SEARCH_ENGINE_HOME]/data/config/
 
+
+Installation with ZIP Version
+==============================
+
+Installing OpenSearch
+-----------------------
+
+For Windows environments, use the ZIP version for installation.
+
+Refer to `Download & Get Started <https://opensearch.org/downloads.html>`__ and Download the ZIP version of OpenSearch.
+
+OpenSearch plugins must be compatible with the version of OpenSearch being installed. Here's an explanation for installing OpenSearch version 2.6.0.
+
+Install the OpenSearch plugins in the plugins directory. Let's assume OpenSearch is installed at $OPENSEARCH_HOME.
+
+::
+
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.6.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.6.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.6.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.6.0
+
+Please note that these plugins are version-dependent, so ensure compatibility with your OpenSearch version.
+
+Add the following settings to $OPENSEARCH_HOME\config\opensearch.yml. If there are existing settings, modify them accordingly.
+
+Specify the absolute path of $OPENSEARCH_HOME\data\config for configsync.config_path.
+
+::
+
+    configsync.config_path: [$absolute path of $OPENSEARCH_HOME]/data/config/
+    plugins.security.disabled: true
+
+Installing Fess
+-----------------
+
+Extract the ZIP file of |Fess| to $FESS_HOME.
+To connect |Fess| to the OpenSearch cluster, specify the following startup options in $FESS_HOME\bin\fess.in.bat.
+
+::
+
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[$absolute path of $SEARCH_ENGINE_HOME]/data/config/
+
+
 Installation with RPM/DEB package
 =================================
 
 Installing OpenSearch
 ----------------------
 
-Please download the RPM/DEB version of OpenSearch from `Download & Get Started <https://opensearch.org/versions/opensearch-2-6-0.html>`__ and install it by following the instructions on `Installing OpenSearch <https://opensearch.org/docs/2.6/install-and-configure/install-opensearch/index/>`__.
+Please download the RPM/DEB version of OpenSearch from `Download & Get Started <https://opensearch.org/downloads.html>`__ and install it by following the instructions on `Installing OpenSearch <https://opensearch.org/docs/2.6/install-and-configure/install-opensearch/index/>`__.
 
 Do not perform any OpenSearch configuration or startup as we will perform the OpenSearch configuration in the following steps.
 
