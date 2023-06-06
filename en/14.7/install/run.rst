@@ -1,82 +1,109 @@
-==============
+=========================
 Start/Stop |Fess| Server
-==============
+=========================
 
 Start |Fess| Server
-============
+====================
 
-Using ZIP package
------------------
+Using TAR.GZ package
+---------------------
 
-For Windows environment, double-click the fess.bat file in the bin folder to start Fess.
-For Unix environments, run fess to start Fess.
+Before starting |Fess|, OpenSearch must be started.
+
+Execute the following command:
 
 ::
 
+    $ cd $OPENSEARCH_HOME
+    $ ./bin/opensearch
+
+Next, start |Fess|. Execute the following command:
+
+::
+
+    $ cd $FESS_HOME
     $ ./bin/fess
 
-Using RPM/DEB package(chkconfig)
-----------------------------
+Using RPM/DEB package (chkconfig)
+---------------------------------
 
-Start elasticsearch before |Fess|,
+Before starting |Fess|, OpenSearch must be started.
 
 ::
 
-    $ sudo service elasticsearch start
+    $ sudo service opensearch start
 
-and then start |Fess| service.
+Next, start |Fess|.
 
 ::
 
     $ sudo service fess start
 
-Using RPM/DEB package(systemd)
---------------------------
+Using RPM/DEB package (systemd)
+--------------------------------
 
-Start elasticsearch before |Fess|,
+Before starting |Fess|, OpenSearch must be started.
 
 ::
 
-    $ sudo systemctl start elasticsearch.service
+    $ sudo systemctl start opensearch.service
 
-and then start |Fess| service.
+Next, start |Fess|.
 
 ::
 
     $ sudo systemctl start fess.service
 
+Using Docker package
+--------------------
+
+Execute the following command to start OpenSearch and |Fess|.
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+
 Access To Browser UI 
-======
+========================
 
-|Fess| is available at http://localhost:8080/.
+|Fess| can be accessed at http://localhost:8080/.
 
-Administration UI is http://localhost:8080/admin/.
-The default administrator account is admin/admin as username/password.
-In User page of administration UI, you can change the password.
+The management UI is located at http://localhost:8080/admin.
+The default admin account username/password is admin/admin.
+You can change the password on the user page in the management UI.
 
 Stop |Fess| Server
-============
+===================
 
-Using ZIP package
------------------
+Using TAR.GZ/ZIP package
+-------------------------
 
-To stop |Fess| server, kill the process of |Fess|.
+To stop the |Fess| server, kill the |Fess| process.
 
-Using RPM/DEB package(chkconfig)
-----------------------------
+Using RPM/DEB package (chkconfig)
+---------------------------------
 
-To stop |Fess| service, run the following command.
+|Fess| To stop the server, enter the following command: 
 
 ::
 
     $ sudo service fess stop
 
-Using RPM/DEB package(systemd)
---------------------------
+Using RPM/DEB package (systemd)
+-------------------------------
 
-To stop |Fess| service, run the following command.
+|Fess| To stop the server, enter the following command: 
 
 ::
 
     $ sudo systemctl stop fess.service
 
+
+Using Docker package
+---------------------
+
+Stop OpenSearch and |Fess| by running the following commands:
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down

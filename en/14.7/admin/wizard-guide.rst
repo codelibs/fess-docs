@@ -35,7 +35,7 @@ Crawl URL
 Specify the starting URL or file path for crawling (e.g., https://fess.codelibs.org/).
 
 Maximum Page Count
-:::::::::::::::::
+::::::::::::::::::
 
 Set the maximum number of pages to be crawled.
 

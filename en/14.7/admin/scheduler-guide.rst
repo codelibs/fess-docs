@@ -20,7 +20,7 @@ To view the list of job scheduler settings shown in the following figure, click 
 To edit the settings, click on the name of the setting.
 
 Creating Settings
-------------------
+-----------------
 
 To create a new setting, click on the "New" button on the scheduler settings page.
 
@@ -35,7 +35,7 @@ Name
 The name displayed in the list.
 
 Target
-::::
+::::::
 
 The target is used as an identifier for whether the job should be executed directly by a batch command or not. Specify "all" if crawling is not performed using a command execution.
 
@@ -84,7 +84,7 @@ Display Order
 Specify the display order in the job list.
 
 Deleting Settings
-----------
+-----------------
 
 Click the setting name on the list page and click the delete button to display the confirmation screen. Clicking the delete button will delete the setting.
 

@@ -1,19 +1,19 @@
-====
+=======
 General
-====
+=======
 
 Overview
-====
+========
 On this administration page, you can manage the settings of |Fess|.
 You can change various settings of |Fess| without restarting it.
 
 |image0|
 
 Settings
-====
+========
 
 System
---------
+------
 
 JSON Response
 ::::::::::::::
@@ -53,7 +53,7 @@ Specify the default sort value to add to search conditions.
 If specified on a per-role or per-group basis, add role: or group: respectively, e.g., role:admin=content_length.desc.
 
 Virtual Host
-::::::::::
+::::::::::::
 
 Specify the virtual host.
 For details, see :doc:the virtual host section of the configuration guide <../config/virtual-host>.
@@ -108,7 +108,7 @@ Failure Count Threshold
 If the number of failures recorded as URLs exceeds the number specified here for documents targeted for crawling, they will be excluded from the next crawl.
 
 Logging
---------
+-------
 
 Search Logging
 :::::::::
@@ -204,7 +204,7 @@ Account Filter
 Specify the user's common name or uid.
 
 Group Filter
-::::::::::::::::
+::::::::::::
 
 Specify the filter condition for the groups to be acquired.
 
@@ -219,12 +219,12 @@ Notification
 --------------------
 
 Login Page
-::::::::::::::
+::::::::::
 
 Enter the message to be displayed on the login page.
 
 Search Top Page
-::::::::::::::::
+:::::::::::::::
 
 Enter the message to be displayed on the search top page.
 

@@ -41,7 +41,7 @@ The dashboard provides a web-based management tool for |Fess| to manage OpenSear
 Indexes starting with a dot (.) are system indexes and are not displayed by default. To display system indexes, enable the "special" checkbox.
 
 Checking the Number of Indexed Documents
-==========================================
+========================================
 
 To check the number of indexed documents, navigate to the fess index as shown in the figure below.
 

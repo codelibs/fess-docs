@@ -2,6 +2,18 @@
 ARCHIVES
 ============================================
 
+14.7
+~~~~~
+
+.. toctree::
+
+   14.7/install/index
+   14.7/user/index
+   14.7/admin/index
+   JavaDocs <https://fess.codelibs.org/14.7/apidocs/index.html>
+   XRef <https://fess.codelibs.org/14.7/xref/index.html>
+   I/F Docs <https://fess.codelibs.org/14.7/lastadoc-fess.html>
+
 14.6
 ~~~~~
 

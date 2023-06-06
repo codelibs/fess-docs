@@ -42,7 +42,7 @@ Stopwords
 This manages the stop words dictionary. stopwords.txt is a list of words used for each language that are used as stop words to replace certain characters.
 
 Stemmer Override
-=================
+================
 
 This manages the Stemmer override dictionary. stemmer_override.txt is a word replacement dictionary file used for each language to override specific characters in Stemmer. 
 
