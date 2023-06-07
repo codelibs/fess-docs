@@ -1,9 +1,9 @@
-================
+===========
 Page Design
-================
+===========
 
 Overview
-====
+========
 
 This section explains the settings related to the design of the search page.
 

@@ -1,6 +1,6 @@
-============
+=========
 Scheduler
-============
+=========
 
 Overview
 ========
@@ -48,12 +48,12 @@ The format is in CRON format and is written in the form of "minute hour day mont
 For example, "0 12 * * 3" runs the job every Wednesday at 12:00 PM.
 
 Executor
-:::::::::::::::
+::::::::
 
 Specify the script execution environment. Currently, only "groovy" is supported.
 
 Script
-::::::::::
+::::::
 
 Write the content of the job execution in the language specified in the execution method.
 
@@ -64,12 +64,12 @@ return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2
 ```
 
 Logging
-::::::::
+:::::::
 
 If enabled, it will be recorded in the job log.
 
 Crawler Job
-::::::::::::::::
+:::::::::::
 
 If enabled, it will be treated as a crawler job.
 
@@ -79,7 +79,7 @@ Status
 Specify the enabled/disabled state of the job. If disabled, the job will not be executed.
 
 Display Order
-::::::::
+:::::::::::::
 
 Specify the display order in the job list.
 

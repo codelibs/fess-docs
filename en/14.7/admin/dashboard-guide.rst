@@ -1,9 +1,9 @@
-==============
+=========
 Dashboard
-==============
+=========
 
 Overview
-====
+========
 
 The dashboard provides a web-based management tool for |Fess| to manage OpenSearch clusters and indexes that it accesses.
 
