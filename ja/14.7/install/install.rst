@@ -67,13 +67,61 @@ $FESS_HOME/bin/fess.in.sh を変更します。
     FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
 
 
+ZIP版でのインストール
+===================
+
+OpenSearchのインストール
+-----------------------
+
+Windows 環境へのインストールはZIP版でインストールします。
+
+`Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、ZIP版のOpenSearchをダウンロードしてください。
+
+OpenSearchのプラグインはOpenSearchのバージョンに合わせる必要があります。
+OpenSearch 2.6.0をインストール場合を説明します。
+
+OpenSearchのプラグインを plugins ディレクトリにインストールします。
+OpenSearchを $OPENSEARCH_HOME にインストールしてあるものとします。
+
+::
+
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.6.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.6.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.6.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.6.0
+
+これらのプラグインはOpenSearchのバージョンに依存するので注意してください。
+
+$OPENSEARCH_HOME\config\opensearch.yml に下記の設定を加えます。
+既存の設定がある場合は、書き換えてください。
+
+configsync.config_path には $OPENSEARCH_HOME\data\config の絶対パスを指定します。
+
+::
+
+    configsync.config_path: [$OPENSEARCH_HOMEの絶対パス]/data/config/
+    plugins.security.disabled: true
+
+Fessのインストール
+-----------------
+
+|Fess| の zip ファイルを $FESS_HOME に展開します。
+|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+$FESS_HOME\bin\fess.in.bat を変更します。
+
+::
+
+    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+    FESS_DICTIONARY_PATH=[$SEARCH_ENGINE_HOMEの絶対パス]/data/config/
+
+
 RPM/DEB版でのインストール
 =========================
 
 OpenSearchのインストール
 ------------------------
 
-`Download & Get Started <https://opensearch.org/versions/opensearch-2-6-0.html>`__ で、RPM/DEB版のOpenSearchをダウンロードしてください。
+`Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、RPM/DEB版のOpenSearchをダウンロードしてください。
 
 `Installing OpenSearch <https://opensearch.org/docs/2.6/install-and-configure/install-opensearch/index/>`__ を参照してインストールしてください。
 
