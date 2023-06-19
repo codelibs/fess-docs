@@ -24,6 +24,17 @@ Next, start |Fess|. Execute the following command:
     $ cd $FESS_HOME
     $ ./bin/fess
 
+
+ZIP Version
+-----------
+
+Before starting Fess, you need to launch OpenSearch.
+
+To start OpenSearch on a Windows environment, double-click on opensearch.bat in the bin folder.
+
+To start Fess, double-click on fess.bat in the bin folder.
+
+
 Using RPM/DEB package (chkconfig)
 ----------------------------------
 
