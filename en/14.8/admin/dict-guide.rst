@@ -46,7 +46,5 @@ Stemmer Override
 
 This manages the Stemmer override dictionary. stemmer_override.txt is a word replacement dictionary file used for each language to override specific characters in Stemmer. 
 
-The translation appears to be grammatically correct and natural.
-
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/dict-1.png
