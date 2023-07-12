@@ -1,78 +1,75 @@
-=====
-Label
-=====
+======
+Labels
+======
 
 Overview
 ========
 
-|Fess| categorize search results with labels.
-Label configuration page manages the labels.
+This section provides an explanation of label configuration. Labels can be used to classify documents displayed in search results. Label settings involve specifying the paths where labels should be applied using regular expressions. If labels are registered, a label dropdown box will appear in the search options.
 
-Management Operations
-=====================
+Label settings described here are applicable to web or file system crawl configurations.
 
-Display Configurations
-----------------------
+Management Methods
+==================
 
-Select Crawler > Label in the left menu to display a list page of Label Configuration, as below.
+Display Method
+---------------
+
+To access the label configuration page shown in the following diagram, click on "[Crawler > Labels]" in the left menu.
 
 |image0|
 
-Click a label name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+------------------
 
-Click Create New button to display a form page for Label configuration.
+To open the label configuration page, click on the "New" button.
 
 |image1|
 
-Configurations
---------------
-
-Name
-::::
-
-Label name. This value is displayed on a search result page.
-
-Value
-:::::
-
-Label value. This value is used as URL parameter.
-
-Included Paths
-::::::::::::::
-
-Paths which matches crawling URL/path are assigned to this label.
-
-Excluded Paths
-::::::::::::::
-
-Paths which matches crawling URL/path are not assigned to this label.
-
-Permissions
-:::::::::::
-
-Permissions for this configuration.
-This format is "{user/group/role}name".
-For example, to display search results on users who belong to developer group, the permission is {group}developer.
-
-Virtual Host
-::::::::::::
-
-Virtual Host key for this configuration.
-e.g. fess (if setting Host:fess.codelibs.org=fess in General)
-
-Display Order
-:::::::::::::
-
-Display order.
-
-Delete Configuration
+Configuration Items
 --------------------
 
-Click a label name on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Name
+:::::
+
+Specify the name to be displayed in the label selection dropdown box during searches.
+
+Value
+::::::
+
+Specify the identifier used for document classification. Please use alphanumeric characters.
+
+Included Paths
+:::::::::::::::
+
+Specify the paths where labels should be applied using regular expressions. You can specify multiple paths by writing them on separate lines. Labels will be applied to documents that match the specified paths.
+
+Excluded Paths
+:::::::::::::::
+
+Specify the paths that should be excluded from crawling using regular expressions. You can specify multiple patterns by writing them on separate lines.
+
+Permissions
+::::::::::::
+
+Specify the permissions for this configuration. For example, to allow users in the developer group to view search results, use the {group}developer notation. User-level specifications use {user}username, role-level specifications use {role}rolename, and group-level specifications use {group}groupname.
+
+Virtual Host
+:::::::::::::
+
+Specify the hostname of the virtual host. For more details, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
+
+Display Order
+::::::::::::::
+
+Specify the display order of labels.
+
+Deleting Settings
+------------------
+
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/labeltype-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/labeltype-2.png
