@@ -22,7 +22,7 @@ To edit a configuration, click on the configuration name.
 Creating a Configuration
 ------------------------
 
-To open the configuration page for data stores, click on the "New" button.
+To open the configuration page for data stores, click on the "Create New" button.
 
 |image1|
 

@@ -22,7 +22,7 @@ To edit, click on the configuration name.
 Creating a Configuration
 ------------------------
 
-To open the Access Token settings page, click the "New" button.
+To open the Access Token settings page, click the "Create New" button.
 
 |image1|
 

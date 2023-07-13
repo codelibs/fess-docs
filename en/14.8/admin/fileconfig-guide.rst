@@ -22,7 +22,7 @@ To edit, click on the setting name.
 Creating Settings
 -----------------
 
-To open the File Crawling configuration page, click on the "New" button.
+To open the File Crawling configuration page, click on the "Create New" button.
 
 |image1|
 

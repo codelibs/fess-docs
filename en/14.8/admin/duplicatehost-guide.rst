@@ -1,50 +1,48 @@
-==============
+===============
 Duplicate Host
-==============
+===============
 
 Overview
 ========
 
-Duplicate Host page manages settings to normalize a host name.
-For examples, n2sm.net is replaced with www.n2sm.net in URL.
+Here, we will explain the configuration for handling duplicate hosts. Duplicate hosts are used when you want to treat different hostnames as the same during crawling. For example, if you want to treat "www.example.com" and "example.com" as the same site, you can use this configuration.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Duplicate Host in the left menu to display a list page of Duplicate Host Configuration, as below.
+To access the list page for configuring duplicate hosts shown below, click on "[Crawler > Duplicate Hosts]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Duplicate Host configuration.
+To open the Duplicate Hosts settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Regular Name
-::::::::::::
+:::::::::::::
 
-Normalized host name.
+Specify the canonical hostname. The duplicate hostnames will be replaced with the canonical hostname.
 
 Duplicate Name
 ::::::::::::::
 
-Replaced host name.
+Specify the duplicate hostname that you want to replace.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/duplicatehost-1.png
 .. |image1| image:: ../../../resources/images/en/14.8/admin/duplicatehost-2.png

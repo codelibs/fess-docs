@@ -1,62 +1,63 @@
-============
+==============
 Path Mapping
-============
+==============
 
 Overview
 ========
 
-Path Mapping replaces crawled URL/path with given one.
-In search result page, replaced URL links are used.
+Here, we will explain the settings for Path Mapping. Path Mapping allows you to replace links displayed in search results or perform other customizations.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Path Mapping in the left menu to display a list page of Path Mapping Configuration, as below.
+To open the list page for configuring Path Mapping shown below, click on "[Crawler > Path Mapping]" in the left menu.
 
 |image0|
 
-Click a mapping name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Path Mapping configuration.
+To open the Path Mapping settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
-Regexp.
-:::::::
+Regular Expression
+::::::::
 
-Target string which is written by a regular expression.
+Specify the string that you want to replace. Follow the Java regular expression syntax.
 
 Replacement
-:::::::::::
+::::
 
-Replaced value.
+Specify the string to replace the matched regular expression.
 
 Process Type
-::::::::::::
+::::::::::
 
-When this is processed. 
-Crawling is at crawling/indexing time and replaced URL/path is indexed.
-View is at searching time and original URL/path is indexed.
+Specify when the replacement should occur.
+
+* Crawling: Replace the URL after retrieving the document during crawling, before indexing.
+* Displaying: Replace the URL before displaying it during search.
+* Crawling/Displaying: Replace the URL during both crawling and displaying.
+* Stored URLs: Replace the URL before retrieving the document during crawling.
 
 Display Order
-:::::::::::::
+::::::::
 
-Display order.
+You can specify the processing order of Path Mapping. It will be processed in ascending order.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a mapping on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/pathmap-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/pathmap-2.png

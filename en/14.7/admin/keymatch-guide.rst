@@ -22,7 +22,7 @@ To edit, click on the configuration name.
 Creating Settings
 ------------------
 
-To open the Key Match settings page, click on the "New" button.
+To open the Key Match settings page, click on the "Create New" button.
 
 |image1|
 
