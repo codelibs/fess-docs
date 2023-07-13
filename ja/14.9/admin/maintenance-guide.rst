@@ -37,13 +37,13 @@
 シャード数
 ::::::::::
 
-Elasticsearhのシャード数(index.number_of_shards)を指定することができます。
+OpenSearchのシャード数(index.number_of_shards)を指定することができます。
 
 
 最大レプリカ数
 ::::::::::::::
 
-Elasticsearhの最大レプリカ数(index.auto_expand_replicas)を指定することができます。
+OpenSearchの最大レプリカ数(index.auto_expand_replicas)を指定することができます。
 
 
 ドキュメントインデックスのリロード
