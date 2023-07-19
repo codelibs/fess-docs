@@ -1,79 +1,91 @@
-==================
+===================
 Web Authentication
-==================
+===================
 
 Overview
 ========
 
-Web Authentication page manages settings for authentication on web crawling.
+Here, we will explain the configuration for web crawling that requires web authentication. |Fess| supports BASIC authentication, DIGEST authentication, and NTLM authentication.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Web Authentication in the left menu to display a list page of Web Authentication Configuration, as below.
+To open the list page for configuring Web Authentication shown below, click on "[Crawler > Web Authentication]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Web Authentication configuration.
+To open the Web Authentication settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Hostname
 ::::::::
 
-Host name for crawling.
+Specify the hostname of the site that requires authentication.
+If omitted, it will apply to any hostname in the specified web crawl configuration.
 
 Port
-::::
-
-Port of crawled host.
-
-Realm
-:::::
-
-Realm for authentication.
-
-Scheme
 ::::::
 
-Protocol scheme.
+Specify the port of the site that requires authentication.
+Specify -1 to apply to all ports.
+In that case, it will apply to any port in the specified web crawl configuration.
+
+Realm
+::::::
+
+Specify the realm name of the site that requires authentication.
+If omitted, it will apply to any realm name in the specified web crawl configuration.
+
+Scheme
+::::::::
+
+Select the authentication method.
+You can use BASIC authentication, DIGEST authentication, NTLM authentication, or FORM authentication.
 
 Username
-::::::::
+::::::::::
 
-Username for authentication.
+Specify the username to log in to the authentication site.
 
 Password
-::::::::
+::::::::::
 
-Password for authentication.
+Specify the password to log in to the authentication site.
 
 Parameters
-::::::::::
+::::::::::::
 
-Additional parameters.
+If there are any required settings to log in to the authentication site, specify them here.
+For NTLM authentication, you can set the values for workstation and domain.
+To set them, use the following format:
+
+::
+
+    workstation=HOGE
+    domain=FUGA
 
 Web Config
-::::::::::
+::::::::::::
 
-Web Crawling for this configuration.
+Select the web configuration to apply the authentication settings.
+You need to pre-register the web crawl configuration.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.9/admin/webauth-1.png
 .. |image1| image:: ../../../resources/images/en/14.9/admin/webauth-2.png

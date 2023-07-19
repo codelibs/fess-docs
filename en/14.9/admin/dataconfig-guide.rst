@@ -1,92 +1,87 @@
-========================
-Data Store Configuration
-========================
+====================
+Data Store Crawling
+====================
 
 Overview
 ========
 
-Data Store Crawling Configuration page manages configurations for crawling on Data Store, such as Database.
+In |Fess|, you can crawl data sources such as databases and CSV files. This section provides an explanation of the necessary configuration for data store crawling.
 
-Management Operations
-=====================
+Management Method
+=================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Data Store in the left menu to display a list page of Data Store Configuration, as below.
+To access the list page for configuring data stores, click on [Crawler > Data Store] in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit a configuration, click on the configuration name.
 
-Create Configuration
---------------------
+Creating a Configuration
+------------------------
 
-Click Create New button to display a form page for Data Store configuration.
+To open the configuration page for data stores, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+--------------------
 
 Name
 ::::
 
-Configuration name.
+Specify the name of the crawl configuration.
 
 Handler Name
 ::::::::::::
 
-Type of Data Store.
+Specifies the handler name for processing the data store.
 
-* DatabaseDataStore: crawl data in Database.
-* CsvDataStore: crawl data in CSV file.
-* CsvListDataStore: crawl file paths in CSV file.
+* DatabaseDataStore: Crawl a database
+* CsvDataStore: Crawl CSV/TSV files
+* CsvListDataStore: Crawl a CSV file that contains indexed file paths
 
 Parameter
-:::::::::
+::::::::::::
 
-Parameters for Data Store crawling.
+Specify parameters related to the data store.
 
 Script
-::::::
+::::::::::
 
-Field mapping on index.
-The format is key/value, such as [Field Name In Index]=[Value(Groovy Supported)].
+Specify how values retrieved from the data store should be assigned to fields. Expressions can be written in Groovy.
 
 Boost
-:::::
+::::::::::
 
-Boost value is a weight for indexed documents of this configuration.
+Specify the boost value for documents crawled with this configuration.
 
 Permissions
-:::::::::::
+::::::::::::::
 
-Permissions for this configuration.
-This format is "{user/group/role}name".
-For example, to display search results on users who belong to developer group, the permission is {group}developer.
+Specify the permissions for this configuration. To display search results to users belonging to the "developer" group, specify {group}developer. User-specific specifications use {user}username, role-specific specifications use {role}rolename, and group-specific specifications use {group}groupname.
 
-Virtual Hosts
+Virtual Host
 :::::::::::::
 
-Virtual Host keys for this configuration.
-e.g. fess (if setting Host:fess.codelibs.org=fess in General)
+Specify the hostname of the virtual host. Refer to the :doc:`Virtual Host section of the Configuration Guide <../config/virtual-host>` for more details.
 
 Status
-::::::
+:::::::
 
-If enabled, the scheduled job of Default Crawler includes this configuration.
+Specify whether to enable or disable this crawl configuration.
 
 Description
-:::::::::::
+::::::::::::
 
-Comments for this configuration.
+Enter a description.
 
-Delete Configuration
---------------------
+Deleting Configuration
+-----------------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+To delete a configuration, click on the configuration name on the list page, and then click the delete button. A confirmation dialog will appear, and the configuration will be deleted when you press the delete button.
 
 Example
 =======
@@ -94,275 +89,293 @@ Example
 DatabaseDataStore
 -----------------
 
-This section describes Database crawling.
+This section describes the database crawl.
 
-This example uses MySQL.
-There is the following table in testdb, and you can access data with username=foo and password=bar.
+As an example, let's assume we have the following table in a MySQL database called "testdb," and we can connect to it using the username "hoge" and the password "fuga". We will provide an explanation based on this scenario.
 
-::
+```
+CREATE TABLE doc (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    content VARCHAR(255) NOT NULL,
+    latitude VARCHAR(20),
+    longitude VARCHAR(20),
+    versionNo INTEGER NOT NULL,
+    PRIMARY KEY (id)
+);
+```
 
-    CREATE TABLE doc (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        title VARCHAR(100) NOT NULL,
-        content VARCHAR(255) NOT NULL,
-        latitude VARCHAR(20),
-        longitude VARCHAR(20),
-        versionNo INTEGER NOT NULL,
-        PRIMARY KEY (id)
-    );
+In this case, we will populate the table with the following data:
 
-Insert the following data.
+```
+INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 1', 'This is content 1.', '37.77493', '-122.419416', 1);
+INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 2', 'This is content 2.', '34.701909', '135.494977', 1);
+INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 3', 'This is content 3.', '-33.868901', '151.207091', 1);
+INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 4', 'This is content 4.', '51.500152', '-0.113736', 1);
+INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 5', 'This is content 5.', '35.681137', '139.766084', 1);
+```
 
-::
+Parameters
+----------
 
-    INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 1', 'This is Content 1.', '37.77493', ' -122.419416', 1);
-    INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 2', 'This is Content 2.', '34.701909', '135.494977', 1);
-    INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 3', 'This is Content 3.', '-33.868901', '151.207091', 1);
-    INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 4', 'This is Content 4.', '51.500152', '-0.113736', 1);
-    INSERT INTO doc (title, content, latitude, longitude, versionNo) VALUES ('Title 5', 'This is Content 5.', '35.681537', '139.766084', 1);
+Here is an example of parameter configuration:
 
-Parameter
-:::::::::
+```
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/testdb?useUnicode=true&characterEncoding=UTF-8
+username=hoge
+password=fuga
+sql=select * from doc
+```
 
-Set parameters of crawling config as below.
+Parameters are in the format of "key=value". The descriptions of the keys are as follows:
 
-::
+| Key      | Description                  |
+|----------|------------------------------|
+| driver   | Driver class name            |
+| url      | URL                          |
+| username | User name for database       |
+| password | Password for database access |
+| sql      | SQL statement to fetch data  |
 
-    driver=com.mysql.jdbc.Driver
-    url=jdbc:mysql://localhost:3306/testdb?useUnicode=true&characterEncoding=UTF-8
-    username=foo
-    password=bar
-    sql=select * from doc
-
-The value of parameters is key/value format.
-The description is below.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - driver
-     - JDBC driver class
-   * - url
-     - URL
-   * - username
-     - Username to access to DB
-   * - password
-     - Password to access to DB
-   * - sql
-     - SQL statement to crawl data
-
-Table: Parameter for DB
+Table: Example of DB configuration parameters
 
 
 Script
-::::::
+------
 
-Set script values of crawling config as below.
+Here is an example of script configuration:
 
-::
+```
+url="http://SERVERNAME/" + id
+host="SERVERNAME"
+site="SERVERNAME"
+title=title
+content=content
+cache=content
+digest=content
+anchor=
+content_length=content.length()
+last_modified=new java.util.Date()
+location=latitude + "," + longitude
+latitude=latitude
+longitude=longitude
+```
 
-    url="http://SERVERNAME/" + id
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=title
-    content=content
-    digest=content
-    anchor=
-    content_length=content.length()
-    last_modified=new java.util.Date()
-    location=latitude + "," + longitude
-    latitude=latitude
-    longitude=longitude
+The parameters are in the format of "key=value". The descriptions of the keys are as follows:
 
-The format is key/value.
-For specified values, Groovy language is available.
-The description for Script is below.
+The values are written in Groovy. Please enclose strings in double quotation marks. You can retrieve the corresponding values by accessing database column names.
 
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
+| Key            | Description                                      |
+|----------------|--------------------------------------------------|
+| url            | URL (Set the URL that allows access to the data according to your environment) |
+| host           | Hostname                                         |
+| site           | Site path                                        |
+| title          | Title                                            |
+| content        | Document content (string to be indexed)          |
+| cache          | Document cache (not indexed)                     |
+| digest         | Digest portion displayed in search results       |
+| anchor         | Links contained in the document (usually not necessary to specify) |
+| content_length | Document length                                  |
+| last_modified  | Document's last modified date                    |
 
-   * - url
-     - URL(Set the URL that can access the data according to your environment)
-   * - host
-     - Host name
-   * - site
-     - Site path
-   * - title
-     - Title
-   * - content
-     - Content
-   * - cache
-     - Content Cache(Not search target)
-   * - digest
-     - Displayed description in search result page
-   * - anchor
-     - Links contained in this document(optional)
-   * - content_length
-     - Content length
-   * - last_modified
-     - Last modified for this document
+Table: Script Configuration Contents
 
-Table: Configuration for Script
+I apologize for any awkward or unnatural phrasing in the previous translation. Here's a revised version of the English translation for the Fess documentation:
 
-JDBC Driver
-:::::::::::
+Driver
+------
 
-To crawl data in database, you need JDBC driver and put Jar file into app/WEB-INF/lib directory.
-In this example, copy mysql-connector-java-5.1.39.jar to app/WEB-INF/lib.
+To connect to the database, a driver is required. Please place the JAR file in the app/WEB-INF/lib directory.
 
 CsvDataStore
 ------------
 
-CsvDataStore is to import data from CSV files.
+This section provides an explanation for crawling CSV files.
 
-For example, create test.csv in /home/john/csv, and the content is below.
+For example, generate a test.csv file with the following content in the /home/taro/csv directory. Set the file encoding to Shift_JIS.
 
-::
+```
+1,Title 1,This is test 1.
+2,Title 2,This is test 2.
+3,Title 3,This is test 3.
+4,Title 4,This is test 4.
+5,Title 5,This is test 5.
+6,Title 6,This is test 6.
+7,Title 7,This is test 7.
+8,Title 8,This is test 8.
+9,Title 9,This is test 9.
+```
 
-    1,Title 1,This is Test1.
-    2,Title 2,This is Test2.
-    3,Title 3,This is Test3.
-    4,Title 4,This is Test4.
-    5,Title 5,This is Test5.
-    6,Title 6,This is Test6.
-    7,Title 7,This is Test7.
-    8,Title 8,This is Test8.
-    9,Title 9,This is Test9.
+Parameters
+----------
 
+Here's an example of parameter configuration:
 
-Parameter
-:::::::::
+```
+directories=/home/taro/csv
+fileEncoding=Shift_JIS
+```
 
-Set parameters of crawling config as below.
+The parameters follow the "key=value" format. The key descriptions are as follows:
 
-::
+| Key                | Description                            |
+|--------------------|----------------------------------------|
+| directories        | Directory containing CSV files (.csv or .tsv) |
+| files              | CSV files (if directly specified)       |
+| fileEncoding       | Encoding of the CSV files               |
+| separatorCharacter | Separator character                     |
 
-    directories=/home/john/csv
-    fileEncoding=UTF-8
+Table: Example of CSV file configuration parameters
 
-The value of parameters is key/value format.
-For the description, see below.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - directories
-     - Directories which contains CSV file(.csv or .tsv)
-   * - files
-     - CSV files (if you want to specify them)
-   * - fileEncoding
-     - Encoding of CSV files
-   * - separatorCharacter
-     - Separator character in CSV content
-
-Table: Parameters for CSV file
 
 Script
-::::::
+------
 
-Set script values of crawling config as below.
+Here's an example of script configuration:
 
-::
+```
+url="http://SERVERNAME/" + cell1
+host="SERVERNAME"
+site="SERVERNAME"
+title=cell2
+content=cell3
+cache=cell3
+digest=cell3
+anchor=
+content_length=cell3.length()
+last_modified=new java.util.Date()
+```
 
-    url="http://SERVERNAME/" + cell1
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=cell2
-    content=cell3
-    cache=cell3
-    digest=cell3
-    anchor=
-    content_length=cell3.length()
-    last_modified=new java.util.Date()
+The parameters follow the "key=value" format. The keys are the same as those used for database crawling. The data in the CSV file is stored using `cell[n]`, where n starts from 1. If a cell in the CSV file is empty, it may be null.
 
-The format is key/value.
-For keys, they are the same as database crawling.
-You can use values in CSV file as cell[number] (cell1 is a first cell).
-If cell does not exist, it returns null.
+EsDataStore
+-----------
+
+Data retrieval is performed from Elasticsearch, and the basic usage is similar to CsvDataStore.
+
+Parameters
+----------
+
+Here's an example of parameter configuration:
+
+```
+settings.cluster.name=elasticsearch
+hosts=SERVERNAME:9300
+index=logindex
+type=data
+```
+
+The parameters follow the "key=value" format. The key descriptions are as follows:
+
+| Key              | Description                       |
+|------------------|-----------------------------------|
+| settings.*       | Elasticsearch settings information |
+| hosts            | Elasticsearch connection target    |
+| index            | Index name                         |
+| type             | Type name                          |
+| query            | Query for data retrieval           |
+
+Table: Example of Elasticsearch configuration parameters
+
+
+Script
+------
+
+Here's an example of script configuration:
+
+```
+url=source.url
+host="SERVERNAME"
+site="SERVERNAME"
+title=source.title
+content=source.content
+digest=
+anchor=
+content_length=source.size
+last_modified=new java.util.Date()
+```
+
+The parameters follow the "key=value" format. The keys are the same as those used for database crawling. Values can be retrieved and set using `source.*`.
+
 
 CsvListDataStore
-------------
+----------------
 
-You can use CsvListDataStore to crawl a large number of target files, and also reduce the crawling time to use CSV file which contains only updated file paths.
+This is used when crawling a large number of files. By providing a CSV file that contains paths to updated files, you can crawl only the specified paths, reducing the crawl execution time.
 
-The file format is as below.
+The format for specifying paths is as follows:
 
-::
+```
+[action]<delimiter>[path]
+```
 
-    [Action]<Separator character>[Path]
+You can use one of the following
 
-Specify one of the following value for Action.
+ actions:
 
-create：Created file
-modify：Updated file
-delete：Deleted file
+- create: When a file is created.
+- modify: When a file is updated.
+- delete: When a file is deleted.
 
-For Path, you can specify a path in the same notation as a setting for file crawling.
+For example, in the /home/taro/csv directory, create a test.csv file with the following content. Set the file encoding to Shift_JIS.
 
-For example, create test.csv in /home/john/csv, and the content is below.
+The path is specified in the same format as when specifying paths for file crawling. Use the notation "file:/[path]" or "smb://[path]".
 
+```
+modify,smb://servername/data/testfile1.txt
+modify,smb://servername/data/testfile2.txt
+modify,smb://servername/data/testfile3.txt
+modify,smb://servername/data/testfile4.txt
+modify,smb://servername/data/testfile5.txt
+modify,smb://servername/data/testfile6.txt
+modify,smb://servername/data/testfile7.txt
+modify,smb://servername/data/testfile8.txt
+modify,smb://servername/data/testfile9.txt
+modify,smb://servername/data/testfile10.txt
+```
 
-::
+Parameters
+----------
 
-    modify,smb://servername/data/testfile1.txt
-    modify,smb://servername/data/testfile2.txt
-    modify,smb://servername/data/testfile3.txt
-    modify,smb://servername/data/testfile4.txt
-    modify,smb://servername/data/testfile5.txt
-    modify,smb://servername/data/testfile6.txt
-    modify,smb://servername/data/testfile7.txt
-    modify,smb://servername/data/testfile8.txt
-    modify,smb://servername/data/testfile9.txt
-    modify,smb://servername/data/testfile10.txt
+Here's an example of parameter configuration:
 
+```
+directories=/home/taro/csv
+fileEncoding=Shift_JIS
+```
 
-Parameter
-::::::::::
+The parameters follow the "key=value" format. The key descriptions are as follows:
 
-Set parameters of crawling config as below.
+| Key                | Description                            |
+|--------------------|----------------------------------------|
+| directories        | Directory containing CSV files (.csv or .tsv) |
+| fileEncoding       | Encoding of the CSV files               |
+| separatorCharacter | Separator character                     |
 
-::
-
-    directories=/home/taro/csv
-    fileEncoding=Shift_JIS
-
-The value of parameters is key/value format.
-For the description, see below.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - directories
-     - Directories which contains CSV file(.csv or .tsv)
-   * - fileEncoding
-     - Encoding of CSV files
-   * - separatorCharacter
-     - Separator character in CSV content
-
-Table: Parameter for CsvListDataStore
+Table: Example of CSV file configuration parameters
 
 
 Script
-::::::::::
+------
 
-Set script values of crawling config as below.
+Here's an example of script configuration:
 
-::
+```
+event_type=cell1
+url=cell2
+```
 
-    event_type=cell1
-    url=cell2
+The parameters follow the "key=value" format. The keys are the same as those used for database crawling.
 
-The format is key/value.
-For keys, they are the same as database crawling.
+If authentication is required for crawling, the following settings are also necessary:
 
-If authentication is required at the crawling destination, you must also add the following settings.
+```
+crawler.file.auth=example
+crawler.file.auth.example.scheme=SAMBA
+crawler.file.auth.example.username=username
+crawler.file.auth.example.password=password
+```
 
-::
-
-    crawler.file.auth=example
-    crawler.file.auth.example.scheme=SAMBA
-    crawler.file.auth.example.username=username
-    crawler.file.auth.example.password=password
-
-.. |image0| image:: ../../../resources/images/en/14.9/admin/dataconfig-1.png
+[Image 0] [Image 1].. |image0| image:: ../../../resources/images/en/14.9/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/14.9/admin/dataconfig-2.png

@@ -1,130 +1,129 @@
-==================
-File Configuration
-==================
+================
+File Crawling
+================
 
 Overview
 ========
 
-File Crawling Configuration page manages configurations for File crawling on file system or shared network folder.
+The File Crawling configuration page allows you to manage settings for crawling files in the file system or shared folders on the network.
 
-Management Operations
-=====================
+Management Method
+=================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > File System in the left menu to display a list page of File Crawling Configuration, as below.
+To open the list page for File Crawling settings, click on "[Crawler > File System]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the setting name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for File crawling configuration.
+To open the File Crawling configuration page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+=============
 
 Name
 ::::
 
-Configuration name.
+The name of the setting.
 
 Paths
 :::::
 
-This paths are locations to start crawling(ex. file:// or smb://).
+Specifies the starting location for crawling (e.g., file:/ or smb://).
 
 Included Paths For Crawling
 :::::::::::::::::::::::::::
 
-This regular expression(Java Format) is allowed path patterns for |Fess| crawler.
+Paths that match the specified regular expression (Java format) in this field will be crawled by the |Fess| crawler.
 
 Excluded Paths For Crawling
 :::::::::::::::::::::::::::
 
-This regular expression(Java Format) is rejected path patterns for |Fess| crawler.
+Paths that match the specified regular expression (Java format) in this field will not be crawled by the |Fess| crawler.
 
 Included Paths For Indexing
 :::::::::::::::::::::::::::
 
-This regular expression(Java Format) is allowed path patterns for |Fess| indexer.
+Paths that match the specified regular expression (Java format) in this field will be included in the search.
 
 Excluded Paths For Indexing
 :::::::::::::::::::::::::::
 
-This regular expression(Java Format) is rejected path patterns for |Fess| indexer.
+Paths that match the specified regular expression (Java format) in this field will be excluded from the search.
 
-Config parameters
-:::::::::::::::::
+Config Parameters
+::::::::::::::::::
 
-You can specify the crawl configuration information.
+You can specify the crawling configuration information.
 
 Depth
 :::::
 
-The depth of the file system structure.
+Specifies the depth of the file system structure to crawl.
 
 Max Access Count
 ::::::::::::::::
 
-The number of indexed paths.
+Specifies the number of paths to index.
 
 The number of Thread
 ::::::::::::::::::::
 
-The number of crawler threads for this configuration.
+Specifies the number of threads to use for this setting.
 
 Interval time
 :::::::::::::
 
-Interval time to crawl paths for each thread.
+Specifies the wait time for threads to crawl paths.
 
 Boost
 :::::
 
-Boost value is a weight for indexed documents of this configuration.
+The boost value represents the priority of documents indexed by this setting.
 
 Permissions
-:::::::::::
+::::::::::::
 
-Permissions for this configuration.
-This format is "{user/group/role}name".
-For example, to display search results on users who belong to developer group, the permission is {group}developer.
+Specifies the permissions for this setting.
+To display search results to users belonging to the developer group, specify {group}developer.
+User-level specification is {user}username, role-level specification is {role}rolename, and group-level specification is {group}groupname.
 
 Virtual Hosts
 :::::::::::::
 
-Virtual Host keys for this configuration.
-e.g. fess (if setting Host:fess.codelibs.org=fess in General)
+Specifies the hostname of the virtual host.
+For more information, refer to the :doc:`Virtual Host section of the Configuration Guide <../config/virtual-host>`.
 
 Status
 ::::::
 
-If enabled, the scheduled job of Default Crawler includes this configuration.
+When this setting is enabled, the default crawler job will include this setting in the crawl.
 
 Description
 :::::::::::
 
-Comments for this configuration.
+You can enter a description.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the setting name on the list page, and then click the delete button to display the confirmation screen. Clicking the delete button will remove the setting.
 
 Example
 =======
 
-Crawling Local File System
---------------------------
+Crawling Local Files
+--------------------
 
-If you want to create File crawling configuration to crawl files under /home/share, parameters for config are:
+If you want to crawl files under /home/share, the settings would be as follows:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -137,12 +136,12 @@ If you want to create File crawling configuration to crawl files under /home/sha
    * - Paths
      - file:/home/share
 
-For other parameters, use a default value.
+Other parameters can be left as default.
 
-Crawling Windows Shared Folder
-------------------------------
+Crawling a Windows Shared Folder
+---------------------------------
 
-For crawling files in \\SERVER\SharedFolder, File crawling configuration is:
+If you want to crawl files under \\SERVER\SharedFolder, the configuration should be as follows:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -151,11 +150,11 @@ For crawling files in \\SERVER\SharedFolder, File crawling configuration is:
    * - Name
      - Value
    * - Name
-     - Share Folder
-   * - Paths
+     - Shared Folder
+   * - Path
      - smb://SERVER/SharedFolder/
 
-If SharedFolder needs username/password to access it, create File Authentication configuration on Crawler > File Auth of the left menu. The configuration is:
+If username and password are required to access the shared folder, you need to create file authentication settings from the [Crawler > File Authentication] section in the left menu. The configuration will be as follows:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -165,14 +164,16 @@ If SharedFolder needs username/password to access it, create File Authentication
      - Value
    * - Hostname
      - SERVER
-   * - Protocol
+   * - Scheme
      - SAMBA
    * - Username
-     - (Type your setting)
+     - (Enter your username)
    * - Password
-     - (Type your setting)
+     - (Enter your password)
+
 
 
 
 .. |image0| image:: ../../../resources/images/en/14.9/admin/fileconfig-1.png
 .. |image1| image:: ../../../resources/images/en/14.9/admin/fileconfig-2.png
+.. pdf            :height: 940 px
