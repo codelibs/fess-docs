@@ -1,6 +1,6 @@
-================
+=============
 Related Query
-================
+=============
 
 Overview
 ========
@@ -30,17 +30,17 @@ Setting Items
 -------------
 
 Term
-:::::::::
+::::
 
 Specify the search term that you want to match with the search query.
 
 Queries
-:::::::::
+:::::::
 
 Specify the query.
 
 Virtual Host
-::::::::::::::::::::
+::::::::::::
 
 Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
 

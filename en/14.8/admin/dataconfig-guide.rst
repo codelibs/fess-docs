@@ -1,6 +1,6 @@
-====================
+===================
 Data Store Crawling
-====================
+===================
 
 Overview
 ========
@@ -27,7 +27,7 @@ To open the configuration page for data stores, click on the "Create New" button
 |image1|
 
 Configuration Items
---------------------
+-------------------
 
 Name
 ::::
@@ -44,42 +44,42 @@ Specifies the handler name for processing the data store.
 * CsvListDataStore: Crawl a CSV file that contains indexed file paths
 
 Parameter
-::::::::::::
+:::::::::
 
 Specify parameters related to the data store.
 
 Script
-::::::::::
+::::::
 
 Specify how values retrieved from the data store should be assigned to fields. Expressions can be written in Groovy.
 
 Boost
-::::::::::
+:::::
 
 Specify the boost value for documents crawled with this configuration.
 
 Permissions
-::::::::::::::
+:::::::::::
 
 Specify the permissions for this configuration. To display search results to users belonging to the "developer" group, specify {group}developer. User-specific specifications use {user}username, role-specific specifications use {role}rolename, and group-specific specifications use {group}groupname.
 
 Virtual Host
-:::::::::::::
+::::::::::::
 
 Specify the hostname of the virtual host. Refer to the :doc:`Virtual Host section of the Configuration Guide <../config/virtual-host>` for more details.
 
 Status
-:::::::
+::::::
 
 Specify whether to enable or disable this crawl configuration.
 
 Description
-::::::::::::
+:::::::::::
 
 Enter a description.
 
 Deleting Configuration
------------------------
+----------------------
 
 To delete a configuration, click on the configuration name on the list page, and then click the delete button. A confirmation dialog will appear, and the configuration will be deleted when you press the delete button.
 

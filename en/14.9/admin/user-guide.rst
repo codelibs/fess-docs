@@ -1,6 +1,6 @@
-========
+====
 User
-========
+====
 
 Overview
 ========
@@ -30,17 +30,17 @@ Setting Items
 -------------
 
 Username
-::::::::::
+::::::::
 
 Specify the username of the user.
 
 Roles
-::::::
+:::::
 
 Specify the roles to which the user belongs.
 
 Groups
-::::::::
+::::::
 
 Specify the groups to which the user belongs.
 

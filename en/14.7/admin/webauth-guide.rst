@@ -1,6 +1,6 @@
-===================
+==================
 Web Authentication
-===================
+==================
 
 Overview
 ========
@@ -36,36 +36,36 @@ Specify the hostname of the site that requires authentication.
 If omitted, it will apply to any hostname in the specified web crawl configuration.
 
 Port
-::::::
+::::
 
 Specify the port of the site that requires authentication.
 Specify -1 to apply to all ports.
 In that case, it will apply to any port in the specified web crawl configuration.
 
 Realm
-::::::
+:::::
 
 Specify the realm name of the site that requires authentication.
 If omitted, it will apply to any realm name in the specified web crawl configuration.
 
 Scheme
-::::::::
+::::::
 
 Select the authentication method.
 You can use BASIC authentication, DIGEST authentication, NTLM authentication, or FORM authentication.
 
 Username
-::::::::::
+::::::::
 
 Specify the username to log in to the authentication site.
 
 Password
-::::::::::
+::::::::
 
 Specify the password to log in to the authentication site.
 
 Parameters
-::::::::::::
+::::::::::
 
 If there are any required settings to log in to the authentication site, specify them here.
 For NTLM authentication, you can set the values for workstation and domain.
@@ -77,7 +77,7 @@ To set them, use the following format:
     domain=FUGA
 
 Web Config
-::::::::::::
+::::::::::
 
 Select the web configuration to apply the authentication settings.
 You need to pre-register the web crawl configuration.

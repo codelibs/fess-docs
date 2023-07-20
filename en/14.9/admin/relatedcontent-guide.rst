@@ -1,6 +1,6 @@
-================
+===============
 Related Content
-================
+===============
 
 Overview
 ========
@@ -30,17 +30,17 @@ Setting Items
 -------------
 
 Term
-:::::::::
+::::
 
 Specify the search term that should match with the search query.
 
 Content
-::::::::::
+:::::::
 
 Specify the content to be displayed in the search results.
 
 Virtual Host
-:::::::::::::::::
+::::::::::::
 
 Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
 

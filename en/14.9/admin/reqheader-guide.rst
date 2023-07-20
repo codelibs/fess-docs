@@ -1,6 +1,6 @@
-==================
+==============
 Request Header
-==================
+==============
 
 Overview
 ========
@@ -35,12 +35,12 @@ Name
 Specify the name of the request header to be included in the requests.
 
 Value
-::::::
+:::::
 
 Specify the value of the request header to be included in the requests.
 
 Web Config
-::::::::::::::::::
+::::::::::
 
 Select the web crawl configuration to which the request headers will be applied.
 Only the selected crawl configuration will have the request headers added.

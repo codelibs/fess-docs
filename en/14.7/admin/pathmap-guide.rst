@@ -1,6 +1,6 @@
-==============
+============
 Path Mapping
-==============
+============
 
 Overview
 ========
@@ -30,17 +30,17 @@ Setting Items
 -------------
 
 Regular Expression
-::::::::
+::::::::::::::::::
 
 Specify the string that you want to replace. Follow the Java regular expression syntax.
 
 Replacement
-::::
+:::::::::::
 
 Specify the string to replace the matched regular expression.
 
 Process Type
-::::::::::
+::::::::::::
 
 Specify when the replacement should occur.
 
@@ -50,7 +50,7 @@ Specify when the replacement should occur.
 * Stored URLs: Replace the URL before retrieving the document during crawling.
 
 Display Order
-::::::::
+:::::::::::::
 
 You can specify the processing order of Path Mapping. It will be processed in ascending order.
 
