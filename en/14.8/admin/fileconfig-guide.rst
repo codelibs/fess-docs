@@ -60,7 +60,7 @@ Excluded Paths For Indexing
 Paths that match the specified regular expression (Java format) in this field will be excluded from the search.
 
 Config Parameters
-::::::::::::::::::
+:::::::::::::::::
 
 You can specify the crawling configuration information.
 
@@ -90,7 +90,7 @@ Boost
 The boost value represents the priority of documents indexed by this setting.
 
 Permissions
-::::::::::::
+:::::::::::
 
 Specifies the permissions for this setting.
 To display search results to users belonging to the developer group, specify {group}developer.
@@ -139,7 +139,7 @@ If you want to crawl files under /home/share, the settings would be as follows:
 Other parameters can be left as default.
 
 Crawling a Windows Shared Folder
----------------------------------
+--------------------------------
 
 If you want to crawl files under \\SERVER\SharedFolder, the configuration should be as follows:
 
