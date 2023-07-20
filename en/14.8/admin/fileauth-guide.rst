@@ -35,28 +35,28 @@ Hostname
 Specify the hostname of the site that requires authentication.
 
 Port
-::::::
+::::
 
 Specify the port of the site that requires authentication.
 
 Scheme
-::::::::
+::::::
 
 Select the authentication method.
 You can choose between FTP or SAMBA (Windows shared folder authentication).
 
 Username
-::::::::::
+::::::::
 
 Specify the username to log in to the authentication site.
 
 Password
-::::::::::
+::::::::
 
 Specify the password to log in to the authentication site.
 
 Parameters
-::::::::::::
+::::::::::
 
 If there are any additional settings required to log in to the authentication site, specify them here.
 For SAMBA, you can set the value for the domain.
@@ -67,7 +67,7 @@ Use the following format to specify the parameters:
     domain=FUGA
 
 File System Config
-::::::::::::::::::::
+::::::::::::::::::
 
 Specify the crawl configuration that will use this authentication setting.
 
