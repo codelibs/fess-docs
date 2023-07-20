@@ -60,7 +60,7 @@ Excluded Paths For Indexing
 Paths that match the specified regular expression (Java format) in this field will be excluded from the search.
 
 Config Parameters
-::::::::::::::::::
+:::::::::::::::::
 
 You can specify the crawling configuration information.
 
