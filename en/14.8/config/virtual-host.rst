@@ -1,14 +1,14 @@
-=======================
+============
 Virtual Host
-=======================
+============
 
 About Virtual Host
-===========================
+==================
 
 You can differentiate search results based on the hostname (URL's host part) when accessing Fess. Since search results are displayed in individual JSP files, you can also customize the design.
 
 System Configuration
-------------------------------------------
+--------------------
 
 Configure the "Virtual Host" in the :doc:`Administrator's Guide > General Settings <../admin/general-guide>`. Specify the configured virtual host name in the crawl settings.
 
@@ -38,7 +38,7 @@ After configuration, the search page JSP files will be generated in the ``WEB-IN
 
 
 Crawl Configuration
-------------------------------------------
+-------------------
 
 Specify the "Virtual Host" in the web crawl settings, file crawl settings, or data store crawl settings. The "Virtual Host" should match one of the virtual host names configured in the system settings.
 
