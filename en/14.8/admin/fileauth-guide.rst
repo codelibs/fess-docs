@@ -5,70 +5,76 @@ File Authentication
 Overview
 ========
 
-File Authentication page manages settings for authentication on file crawling.
+Here, we will explain the configuration for enabling file authentication when crawling files. |Fess| supports authentication for FTP and Windows shared folders.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > File Authentication in the left menu to display a list page of File Authentication Configuration, as below.
+To access the list page for configuring File Authentication shown below, click on "[Crawler > File Authentication]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for File Authentication configuration.
+To open the File Authentication settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
-Host name
-:::::::::
+Hostname
+::::::::
 
-Target host name for file crawling.
+Specify the hostname of the site that requires authentication.
 
 Port
 ::::
 
-Port of the above host.
+Specify the port of the site that requires authentication.
 
 Scheme
 ::::::
 
-Protocol scheme.
+Select the authentication method.
+You can choose between FTP or SAMBA (Windows shared folder authentication).
 
 Username
 ::::::::
 
-Username for authentication.
+Specify the username to log in to the authentication site.
 
 Password
 ::::::::
 
-Password for authentication.
+Specify the password to log in to the authentication site.
 
 Parameters
 ::::::::::
 
-Additional parameters.
+If there are any additional settings required to log in to the authentication site, specify them here.
+For SAMBA, you can set the value for the domain.
+Use the following format to specify the parameters:
 
-FS Config
-:::::::::
+::
 
-File Crawling for this setting.
+    domain=FUGA
 
-Delete Configuration
---------------------
+File System Config
+::::::::::::::::::
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Specify the crawl configuration that will use this authentication setting.
+
+Deleting Settings
+-----------------
+
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/fileauth-1.png
 .. |image1| image:: ../../../resources/images/en/14.8/admin/fileauth-2.png

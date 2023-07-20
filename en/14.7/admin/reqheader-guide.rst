@@ -5,51 +5,50 @@ Request Header
 Overview
 ========
 
-|Fess| passes information of request header to Web Server at crawling time.
-Request Header page manages request headers for crawling.
+Here, we will explain the configuration for request headers. Request headers contain additional information that is added to the requests when crawling and retrieving documents. They can be used, for example, to automatically log in a user based on specific header values, such as in an authentication system.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Request Header in the left menu to display a list page of Request Header Configuration, as below.
+To access the list page for configuring request headers shown below, click on "[Crawler > Request Header]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Request Header configuration.
+To open the Request Headers settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Name
 ::::
 
-Name of request header.
+Specify the name of the request header to be included in the requests.
 
 Value
 :::::
 
-Value of request header.
+Specify the value of the request header to be included in the requests.
 
 Web Config
 ::::::::::
 
-Web Config to which this configuration is applied.
+Select the web crawl configuration to which the request headers will be applied.
+Only the selected crawl configuration will have the request headers added.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a name on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/reqheader-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/reqheader-2.png

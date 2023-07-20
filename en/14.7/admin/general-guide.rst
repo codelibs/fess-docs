@@ -3,7 +3,7 @@ General
 =======
 
 Overview
-====
+========
 On this administration page, you can manage the settings of |Fess|.
 You can change various settings of |Fess| without restarting it.
 

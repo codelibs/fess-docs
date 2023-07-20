@@ -5,52 +5,49 @@ User
 Overview
 ========
 
-User Configuration page manages users on |Fess|.
-Managed users is able to login |Fess| and users which has admin role manages |Fess| configuration.
+This section provides an explanation of user management in |Fess|. You can manage users who log in to the system.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select User > User in the left menu to display a list page of User Configuration, as below.
+To access the list page for user settings shown below, click on "[User > User]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for User configuration.
+To open the User settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
-Name
-::::
+Username
+::::::::
 
-User name.
+Specify the username of the user.
 
 Roles
 :::::
 
-Roles to which user belongs.
+Specify the roles to which the user belongs.
 
 Groups
 ::::::
 
-Groups to which user belongs.
+Specify the groups to which the user belongs.
 
+Deleting Settings
+-----------------
 
-Delete Configuration
---------------------
-
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/user-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/user-2.png

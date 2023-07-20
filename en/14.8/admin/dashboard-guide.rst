@@ -5,47 +5,49 @@ Dashboard
 Overview
 ========
 
-Dashboard provides a web administration tool for elasticsearch to manage cluster and indices.
+The dashboard provides a web-based management tool for |Fess| to manage OpenSearch clusters and indexes that it accesses.
 
 |image0|
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table:: |Fess| manages the following indices
+.. list-table:: Indexes managed by |Fess|
    :header-rows: 1
 
-   * - Name
+   * - Index name
      - Description
    * - fess.YYYYMMDD
-     - indexed documents
+     - Indexed documents
    * - fess_log
-     - search logs
-   * - fess.suggest
-     - suggest words
+     - Access logs
+   * - fess.suggest.YYYYMMDD
+     - Suggest words
    * - fess_config
-     - configurations
+     - |Fess| settings
    * - fess_user
-     - user/role/group data
+     - User/role/group data
    * - configsync
-     - configuration file data
+     - Dictionary settings
    * - fess_suggest
-     - suggest meta data
+     - Suggest metadata
    * - fess_suggest_array
-     - suggest meta data
+     - Suggest metadata
    * - fess_suggest_badword
-     - excluding word list for suggest
+     - Suggest NG word list
    * - fess_suggest_analyzer
-     - suggest meta data
+     - Suggest metadata
    * - fess_crawler
-     - crawling cache data
+     - Crawl information
 
+Indexes starting with a dot (.) are system indexes and are not displayed by default. To display system indexes, enable the "special" checkbox.
 
-Check The Number Of Indexed Documents
-=====================================
+Checking the Number of Indexed Documents
+========================================
 
-The number of indexed documents is displayed in fess.YYYYMMDD index as the following figure.
+To check the number of indexed documents, navigate to the fess index as shown in the figure below.
 
 |image1|
 
+Click the icon in the upper right corner of each index to display the operation menu for that index. To delete indexed documents, use the management search screen. Be careful not to delete an entire index using the "delete index" option.
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/en/14.8/admin/dashboard-2.png

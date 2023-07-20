@@ -5,40 +5,39 @@ Group
 Overview
 ========
 
-Group Configuration page manages groups of user management.
+You can manage the groups to which users belong. This feature can be useful, for example, when integrating with LDAP.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select User > Group in the left menu to display a list page of Group Configuration, as below.
+To access the list page for group settings shown below, click on "[User > Group]" in the left menu.
 
 |image0|
 
-Click a group name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Group configuration.
+To open the Group settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Name
 ::::
 
-Group name.
+The name of the group.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a group name on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/group-1.png
 .. |image1| image:: ../../../resources/images/en/14.8/admin/group-2.png

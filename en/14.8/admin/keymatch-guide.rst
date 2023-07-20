@@ -3,65 +3,61 @@ Key Match
 =========
 
 Overview
-========
+=========
 
-Key Match boosts specific search results for given search word.
-Key Match page manages the configurations.
+This section explains the settings for Key Match. By configuring Key Match settings, you can prioritize documents in search results when they are searched using specific terms. This feature is commonly used for advertising purposes.
 
+Management Methods
+==================
 
-Management Operations
-=====================
+Display Method
+--------------
 
-Display Configurations
-----------------------
-
-Select Crawler > Key Match in the left menu to display a list page of Key Match Configuration, as below.
+To open the Key Match settings list page shown below, click on "[Crawler > Key Match]" in the left menu.
 
 |image0|
 
-Click a term if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Key Match configuration.
+To open the Key Match settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
-Term
-::::
+Search Term
+:::::::::::
 
-Search word.
+Weighting is only applied to search results when searched with this specific term.
 
 Query
 :::::
 
-Query which boosts results.
+Specify the target documents that should be positioned at the top using search queries.
 
 Size
 ::::
 
-The number of results for Query.
+Specify the maximum number of documents that should match the query.
 
-Boost
-:::::
+Boost Value
+:::::::::::
 
-Boost value.
+Specify the weighting value for the document.
 
 Virtual Host
 ::::::::::::
 
-Virtual Host key for this configuration.
-e.g. fess (if setting Host:fess.codelibs.org=fess in General)
+Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a term on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/keymatch-1.png
 .. |image1| image:: ../../../resources/images/en/14.8/admin/keymatch-2.png

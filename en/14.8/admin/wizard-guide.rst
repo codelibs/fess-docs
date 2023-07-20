@@ -5,53 +5,51 @@ Wizard
 Overview
 ========
 
-Wizard page provides a quick setup tool to register crawling configurations.
+The wizard page provides a setup tool for registering crawl settings.
 
 Quick Setup
 -----------
 
-This page is a startup page to register crawling configurations.
+This page is the start page for registering crawl settings.
 
 |image0|
 
-Crawling Settings
------------------
+Crawl Settings
+--------------
 
-In this page, you can create a new crawling configuration.
+This page allows you to create crawl settings.
 
 |image1|
 
-Configurations
---------------
+Settings
+--------
 
 Name
 ::::
 
-Configuration name. (ex. Fess Site)
+Specify the name of the settings (e.g., Fess Site).
 
-Crawling Path
-:::::::::::::
+Crawl URL
+:::::::::
 
-URL or file path to start crawling. (ex. https://fess.codelibs.org/)
+Specify the starting URL or file path for crawling (e.g., https://fess.codelibs.org/).
 
-Max Access Count
-::::::::::::::::
+Maximum Page Count
+::::::::::::::::::
 
-The number of crawled pages.
+Set the maximum number of pages to be crawled.
 
 Depth
 :::::
 
-The number of the depth of crawled paths.
+Set the depth of links to be followed when crawling a document.
 
 Crawler
 -------
 
-You can start |Fess| crawler to click "Start Crawling" button.
-If you do not start it, click "Skip" button.
+To start the Fess crawler, click the "Start Crawling" button. To skip crawling for now, click the "Skip" button.
 
 |image2|
-
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/wizard-1.png
 .. |image1| image:: ../../../resources/images/en/14.8/admin/wizard-2.png

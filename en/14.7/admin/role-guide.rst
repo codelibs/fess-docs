@@ -5,40 +5,39 @@ Role
 Overview
 ========
 
-Role Configuration page manages roles of user management.
+You can manage the roles to which users belong. This feature is useful, for example, when integrating with LDAP.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select User > Role in the left menu to display a list page of Role Configuration, as below.
+To access the list page for role settings shown below, click on "[User > Role]" in the left menu.
 
 |image0|
 
-Click a role name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Role configuration.
+To open the Role settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Name
 ::::
 
-Role name.
+The name of the role.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a role name on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/role-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/role-2.png

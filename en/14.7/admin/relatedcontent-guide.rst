@@ -5,54 +5,49 @@ Related Content
 Overview
 ========
 
-Related Content Configuration page manages related content settings.
-Related content is displayed at the top of search results if the search query matches a registered term.
+Here, we will explain the settings for Related Content. By configuring Related Content settings, you can display related content at the top of search results when the search query matches specified search terms.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Related Content in the left menu to display a list page of Related Content Configuration, as below.
+To open the list page for configuring Related Content shown below, click on "[Crawler > Related Content]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Related Content configuration.
+To open the Related Content settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Term
 ::::
 
-Term to match a search query.
+Specify the search term that should match with the search query.
 
 Content
 :::::::
 
-Displayed content in a search result page.
+Specify the content to be displayed in the search results.
 
 Virtual Host
 ::::::::::::
 
-Virtual Host key for this configuration.
-e.g. fess (if setting Host:fess.codelibs.org=fess in General)
+Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
 
+Deleting Settings
+-----------------
 
-Delete Configuration
---------------------
-
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
-
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/relatedcontent-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/relatedcontent-2.png

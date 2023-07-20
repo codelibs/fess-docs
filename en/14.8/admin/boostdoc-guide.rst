@@ -5,53 +5,49 @@ Doc Boost
 Overview
 ========
 
-Doc Boost Configuration page manages document boost settings.
-This feature sets boosting score for each documents at indexing time and boosts the specific documents in a search result.
+This section explains the settings for Document Boost. By configuring Document Boost settings, you can position documents at the top of search results regardless of the search terms.
 
-Management Operations
-=====================
+Management Methods
+==================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select Crawler > Doc Boost in the left menu to display a list page of Doc Boost Configuration, as below.
+To open the Document Boost settings list page shown below, click on "[Crawler > Doc Boost]" in the left menu.
 
 |image0|
 
-Click a configuration name if you want to edit it.
+To edit, click on the configuration name.
 
-Create Configuration
---------------------
+Creating Settings
+-----------------
 
-Click Create New button to display a form page for Doc Boost configuration.
+To open the Document Boost settings page, click on the "Create New" button.
 
 |image1|
 
-Configurations
---------------
+Setting Items
+-------------
 
 Condition
 :::::::::
 
-Condition to boost a document. 
-This value is written by Groovy.
+Specify the condition for the documents that should be positioned at the top. For example, if you want to prioritize URLs that include "https://www.n2sm.net/", you can write url.matches("https://www.n2sm.net/.*"). Conditions can be written in Groovy.
 
 Boost Expr
 ::::::::::
 
-Boosting score if document matches the condition. 
-This value is written by Groovy.
+Specify the weighting value for the document. Expressions can be written in Groovy.
 
 Sort Order
 ::::::::::
 
-Order to display/process doc boosts.
+Set the sorting order for Document Boost.
 
-Delete Configuration
---------------------
+Deleting Settings
+-----------------
 
-Click a configuration on a list page, and click Delete button to display a confirmation dialog.
-Click Delete button to delete the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
 
 .. |image0| image:: ../../../resources/images/en/14.8/admin/boostdoc-1.png
