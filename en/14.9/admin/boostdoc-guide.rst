@@ -35,12 +35,12 @@ Condition
 Specify the condition for the documents that should be positioned at the top. For example, if you want to prioritize URLs that include "https://www.n2sm.net/", you can write url.matches("https://www.n2sm.net/.*"). Conditions can be written in Groovy.
 
 Boost Expr
-::::::::::::
+::::::::::
 
 Specify the weighting value for the document. Expressions can be written in Groovy.
 
 Sort Order
-::::::::::::
+::::::::::
 
 Set the sorting order for Document Boost.
 
