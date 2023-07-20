@@ -1,6 +1,6 @@
-===============
+==============
 Duplicate Host
-===============
+==============
 
 Overview
 ========
@@ -30,7 +30,7 @@ Setting Items
 -------------
 
 Regular Name
-:::::::::::::
+::::::::::::
 
 Specify the canonical hostname. The duplicate hostnames will be replaced with the canonical hostname.
 
