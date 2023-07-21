@@ -58,7 +58,7 @@ Fessのインストール
 ------------------
 
 |Fess| の zip ファイルを $FESS_HOME に展開します。
-|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+|Fess| をOpenSearchクラスターへ接続するために、以下の起動オプションで指定します。
 $FESS_HOME/bin/fess.in.sh を変更します。
 
 ::
@@ -68,10 +68,10 @@ $FESS_HOME/bin/fess.in.sh を変更します。
 
 
 ZIP版でのインストール
-===================
+=====================
 
 OpenSearchのインストール
------------------------
+------------------------
 
 Windows 環境へのインストールはZIP版を使用します。
 
@@ -103,10 +103,10 @@ configsync.config_path には $OPENSEARCH_HOME\data\config の絶対パスを指
     plugins.security.disabled: true
 
 Fessのインストール
------------------
+------------------
 
 |Fess| の zip ファイルを $FESS_HOME に展開します。
-|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+|Fess| をOpenSearchクラスターへ接続するために、以下の起動オプションで指定します。
 $FESS_HOME\bin\fess.in.bat を変更します。
 
 ::
@@ -181,7 +181,7 @@ systemd を使う場合(RPM/DEB)は
     $ sudo /bin/systemctl enable opensearch.service
     $ sudo /bin/systemctl enable fess.service
 
-|Fess| をOpenSearchクラスタへ接続するために、以下の起動オプションで指定します。
+|Fess| をOpenSearchクラスターへ接続するために、以下の起動オプションで指定します。
 /usr/share/fess/bin/fess.in.sh を変更します。
 
 ::
@@ -197,4 +197,3 @@ Docker版でのインストール
 
 - `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.9.0/compose/compose.yaml>`__
 - `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v14.9.0/compose/compose-opensearch2.yaml>`__
-

@@ -97,7 +97,7 @@
 ================
 
 「スケジューラ」の「Default Crawler」をクリックし、「今すぐ開始」ボタンをクリックします。
-クローラを停止させる場合は「Default Crawler」をクリックし、「停止」ボタンをクリックしてください。
+クローラーを停止させる場合は「Default Crawler」をクリックし、「停止」ボタンをクリックしてください。
 
 .. |image0| image:: ../../../resources/images/ja/14.9/admin/scheduler-1.png
 .. |image1| image:: ../../../resources/images/ja/14.9/admin/scheduler-2.png

@@ -21,7 +21,7 @@
    * - num
      - サジェストされる単語の数。デフォルト10。 (例) ``num=20``
    * - label
-     - フィルタされたラベル名。 (例) ``fields=java,python``
+     - フィルターされたラベル名。 (例) ``fields=java,python``
    * - fields
      - サジェスト対象を絞り込むフィールド名。デフォルト絞り込みなし。 (例) ``fields=content,title``
    * - lang

@@ -6,7 +6,7 @@
 ========
 
 TAR.GZ版の場合
--------------
+--------------
 
 |Fess| を起動する前にOpenSearchを起動する必要があります。
 
@@ -30,9 +30,9 @@ ZIP版の場合
 
 |Fess| を起動する前に OpenSearch を起動する必要があります。
 
-Windows 環境で OpenSearch を起動するには、 bin フォルダ中の opensearch.bat をダブルクリックします。
+Windows 環境で OpenSearch を起動するには、 bin フォルダー中の opensearch.bat をダブルクリックします。
 
-|Fess| の起動は bin フォルダ中の fess.bat をダブルクリックします。
+|Fess| の起動は bin フォルダー中の fess.bat をダブルクリックします。
 
 
 RPM/DEB版の場合 (chkconfig)
@@ -66,7 +66,7 @@ RPM/DEB版の場合 (systemd)
     $ sudo systemctl start fess.service
 
 Docker版の場合
--------------
+--------------
 
 以下のコマンドを実行して、OpenSearchと |Fess| を起動します。
 
@@ -111,7 +111,7 @@ RPM/DEB版の場合 (systemd)
 
 
 Docker版の場合
--------------
+--------------
 
 以下のコマンドを実行して、OpenSearchと |Fess| を停止します。
 
