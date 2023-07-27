@@ -6,12 +6,12 @@ Google Search Appliance 互換 API
 XMLのフォーマットについては、\ `GSAの公式ドキュメント <https://www.google.com/support/enterprise/static/gsa/docs/admin/74/gsa_doc_set/xml_reference/results_format.html>`__\ をご覧ください。
 
 設定
-==================
+====
 
 system.properitesに ``web.api.gsa=true`` を追加して、Google Search Appliance互換APIを有効にしてください。
 
 リクエスト
-==================
+========
 
 |Fess| に
 ``http://localhost:8080/gsa/?q=検索語``

@@ -1,9 +1,9 @@
-==================
+==============
 システム関連の設定
-==================
+==============
 
 使用ポートの設定
-================
+============
 
 |Fess| がデフォルトで利用するポートは 8080 になります。
 変更する場合は、Linux 環境であれば bin/fess.in.sh の
@@ -27,7 +27,7 @@ Windows 環境でサービス登録して使用する場合は bin\\service.bat 
     set FESS_PARAMS=-Dfess;-Dfess.home="%FESS_HOME%";-Dfess.es.dir="%SEARCH_ENGINE_HOME%";-Dfess.home="%FESS_HOME%";-Dfess.context.path="/";-Dfess.port=8080;-Dfess.webapp.path="%FESS_HOME%\app";-Dfess.temp.path="%FESS_HOME%\temp";-Dfess.log.name="%APP_NAME%";-Dfess.log.path="%FESS_HOME%\logs";-Dfess.log.level=warn;-Dlasta.env=web;-Dtomcat.config.path=tomcat_config.properties
 
 使用メモリーの設定
-==================
+==============
 
 Java ではプロセスごとに使用する最大メモリが設定されています。
 ですので、サーバーに 8G の物理メモリがあったとしてもプロセスでの上限以上のメモリを使用することはありません。
@@ -38,7 +38,7 @@ OpenSearchを稼働させるサーバーではOSのファイルシステムの�
 OpenSearchのドキュメントを参照して、適切な設定をしてください。
 
 ヒープメモリーの最大値変更
---------------------------
+--------------------
 
 クロール設定の内容によっては以下のような OutOfMemory エラーが発生する場合があります。
 
@@ -50,17 +50,17 @@ OpenSearchのドキュメントを参照して、適切な設定をしてくだ�
 環境変数 FESS_HEAP_SIZE に FESS_HEAP_SIZE=2g のように指定するか、rpmであれば /etc/sysconfig/fess でFESS_HEAP_SIZEを変更してください。
 
 クローラー側のヒープメモリー最大値変更
---------------------------------------
+-----------------------------
 
 クローラー側のヒープメモリーの最大値も変更可能です。
 ファイルシステムなどを激しくクロールする場合は増やす必要があります。
 変更するには、app/WEB-INF/classes/fess_config.properties または /etc/fess/fess_config.properties のjvm.crawler.options で -Xmx512m の行を変更してください。
 
 ログの設定
-==========
+========
 
 ログのファイル
---------------
+-----------
 
 |Fess| が出力するログファイルを以下にまとめます。
 
@@ -87,7 +87,7 @@ Table: ログファイル一覧
 動作に問題が発生した場合には上記のログを確認してください。
 
 ログレベルの変更
-----------------
+------------
 
 ログを出力する内容は、管理画面の全般でログレベルの値を変更することができます。
 より細かいログまわりの設定をしたい場合は、app/WEB-INF/classes/log4j2.xml または /etc/fess/log4j2.xml で変更することができます。

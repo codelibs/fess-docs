@@ -1,9 +1,9 @@
-====================
+===============
 検索ログ可視化の設定
-====================
+===============
 
 検索ログの可視化について
-========================
+==================
 
 |Fess| ではユーザーの検索ログおよびクリックログを取得しています。
 取得した検索ログを `Kibana <https://www.elastic.co/jp/products/kibana>`__\ を用いて、データ解析・可視化することができます。
@@ -25,10 +25,10 @@
 Visualizeから新たなグラフを作成してDashboardに追加することで、独自のモニタを構築できます。
 
 Kibana 5 によるデータ可視化の設定
-=================================
+===========================
 
 Kibana 5 インストール
----------------------
+------------------
 
 `https://www.elastic.co/downloads/kibana <https://www.elastic.co/downloads/kibana>`__  に従い、Kibana 5をインストールします。
 Kibana に |Fess| で用いる Elasticsearch を認識させるため、 Kibanaのディレクトリ/config/kibana.yml の elasticsearch.url を以下のように編集します。
@@ -40,7 +40,7 @@ Kibana に |Fess| で用いる Elasticsearch を認識させるため、 Kibana�
 localhost は環境に合わせて設定してください。
 
 詳細な設定
-----------
+--------
 
 |Fess| を起動した状態でKibanaを起動し、`http://localhost:5601 <http://localhost:5601>`__ にアクセスします。
 
