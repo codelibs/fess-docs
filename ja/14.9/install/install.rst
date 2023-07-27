@@ -1,9 +1,9 @@
-============
+=========
 インストール
-============
+=========
 
 インストール要件
-================
+============
 
 |Fess| は以下の環境で利用することができます。
 
@@ -16,15 +16,15 @@
 TAR.GZ/ZIP/RPM/DEB版はOpenSearchの正しいバージョンをインストールする必要があります。
 
 ダウンロード
-============
+=========
 
 `ダウンロードサイト <https://fess.codelibs.org/ja/downloads.html>`__ から |Fess| をダウンロードします。
 
 TAR.GZ版でのインストール
-========================
+====================
 
 OpenSearchのインストール
-------------------------
+---------------------
 
 `Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、TAR.GZ版のOpenSearchをダウンロードしてください。
 
@@ -55,7 +55,7 @@ configsync.config_path には $OPENSEARCH_HOME/data/config の絶対パスを指
     plugins.security.disabled: true
 
 Fessのインストール
-------------------
+---------------
 
 |Fess| の zip ファイルを $FESS_HOME に展開します。
 |Fess| をOpenSearchクラスターへ接続するために、以下の起動オプションで指定します。
@@ -68,10 +68,10 @@ $FESS_HOME/bin/fess.in.sh を変更します。
 
 
 ZIP版でのインストール
-=====================
+=================
 
 OpenSearchのインストール
-------------------------
+---------------------
 
 Windows 環境へのインストールはZIP版を使用します。
 
@@ -103,7 +103,7 @@ configsync.config_path には $OPENSEARCH_HOME\data\config の絶対パスを指
     plugins.security.disabled: true
 
 Fessのインストール
-------------------
+---------------
 
 |Fess| の zip ファイルを $FESS_HOME に展開します。
 |Fess| をOpenSearchクラスターへ接続するために、以下の起動オプションで指定します。
@@ -116,10 +116,10 @@ $FESS_HOME\bin\fess.in.bat を変更します。
 
 
 RPM/DEB版でのインストール
-=========================
+=====================
 
 OpenSearchのインストール
-------------------------
+---------------------
 
 `Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、RPM/DEB版のOpenSearchをダウンロードしてください。
 
@@ -150,7 +150,7 @@ OpenSearch プラグインを plugins ディレクトリにインストールし
     plugins.security.disabled: true
 
 Fessのインストール
-------------------
+---------------
 
 次に、|Fess| の RPM/DEB パッケージをインストールします。
 
@@ -191,7 +191,7 @@ systemd を使う場合(RPM/DEB)は
 
 
 Docker版でのインストール
-========================
+====================
 
 `https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.9.0/compose>`__ から以下のファイルを取得します。
 
