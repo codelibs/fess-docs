@@ -52,4 +52,19 @@ fess-suggest.log
 
 サジェスト機能のログが記録されます。
 
+fess-urls.log
+:::::::::::::
+
+1つのクロールにかかった時間が記録されます。
+
+search.log
+::::::::::
+
+検索ログが記録されます。
+
+gc-crawler.log
+::::::::::::::
+
+fessのGCログが記録されています。
+
 .. |image0| image:: ../../../resources/images/ja/14.9/admin/log-1.png
