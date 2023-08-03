@@ -1,6 +1,4 @@
-=================
-End of Life Dates
-=================
+================= End of Life Dates =================
 
 The following releases have reached End of Life, and are no longer maintained and do not receive any updates.
 To get the latest release, visit  `download page <downloads.html>`__.
@@ -16,6 +14,8 @@ The EOL date for Fess is about 18 months after the release.
 
    * - Fess
      - EOL Date
+   * - 14.10.x
+     - 2025-01-01
    * - 14.9.x
      - 2024-12-01
    * - 14.8.x
