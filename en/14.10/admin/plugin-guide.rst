@@ -31,4 +31,3 @@ Select the desired plugin from the dropdown menu and click the install button to
 .. |image0| image:: ../../../resources/images/en/14.10/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/14.10/admin/plugin-2.png
 
-Please note that the image paths used in the document are placeholders and may need to be updated with the actual image paths.

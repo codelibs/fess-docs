@@ -60,4 +60,3 @@ Clicking the delete button will remove the configuration.
 .. |image0| image:: ../../../resources/images/en/14.10/admin/accesstoken-1.png
 .. |image1| image:: ../../../resources/images/en/14.10/admin/accesstoken-2.png
 
-Please note that the image paths used in the document are placeholders and may need to be updated with the actual image paths.

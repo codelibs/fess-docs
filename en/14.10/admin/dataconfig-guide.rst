@@ -377,5 +377,5 @@ crawler.file.auth.example.username=username
 crawler.file.auth.example.password=password
 ```
 
-[Image 0] [Image 1].. |image0| image:: ../../../resources/images/en/14.10/admin/dataconfig-1.png
+.. |image0| image:: ../../../resources/images/en/14.10/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/14.10/admin/dataconfig-2.png
