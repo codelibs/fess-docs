@@ -1,131 +1,133 @@
-==============
-Web Crawling
-==============
+=================
+Web Configuration
+=================
 
 Overview
 ========
 
-The Web Crawling settings page allows you to configure web crawling.
+Web Crawling Configuration page manages configurations for Web crawling.
 
-Management
-==========
+Management Operations
+=====================
 
-Displaying Options
-------------------
+Display Configurations
+----------------------
 
-To open the web crawling configuration list page shown in the diagram below, click [Crawler > Web] in the left menu.
+Select Crawler > Web in the left menu to display a list page of Web Crawling Configuration, as below.
 
 |image0|
 
-To edit, click on the configuration name.
+Click a configuration name if you want to edit it.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
-To open the web crawling configuration page, click the Create button.
+Click Create New button to display a form page for Web crawling configuration.
 
 |image1|
 
-Configuration Items
-===================
+Configurations
+--------------
 
 Name
 ::::
-
-The name of the configuration.
+Configuration name.
 
 URLs
 ::::
+This URLs are locations to start crawling.
 
-The starting URL for crawling.
-
-Included URLs for Crawling
+Included URLs For Crawling
 ::::::::::::::::::::::::::
 
-URLs that match the specified regular expression (in Java format) in this field will be targeted by the |Fess| crawler.
+This regular expression(Java Format) is allowed URL patterns for |Fess| crawler.
 
 Excluded URLs For Crawling
-:::::::::::::::::::::::::::
+::::::::::::::::::::::::::
 
-URLs that match the specified regular expression (in Java format) in this field will not be targeted by the |Fess| crawler.
+This regular expression(Java Format) is rejected URL patterns for |Fess| crawler.
 
 Included URLs For Indexing
-:::::::::::::::::::::::::::
+::::::::::::::::::::::::::
 
-URLs that match the specified regular expression (in Java format) in this field will be included in the search results.
+This regular expression(Java Format) is allowed URL patterns for |Fess| indexer.
 
 Excluded URLs For Indexing
 ::::::::::::::::::::::::::
 
-URLs that match the specified regular expression (in Java format) in this field will be excluded from the search results.
+This regular expression(Java Format) is rejected URL patterns for |Fess| indexer.
 
-Config Parameters
-::::::::::::::::::
+Config parameters
+:::::::::::::::::
 
-You can specify crawling configuration information.
+You can specify the crawl configuration information.
 
 Depth
 :::::
 
-Specifies the depth to follow links within crawled documents.
+The number of linked URLs.
 
 Max Access Count
 ::::::::::::::::
 
-The number of URLs to be indexed.
+The number of indexed URLs.
 
 User Agent
-:::::::::::
+::::::::::
 
-The name of the |Fess| crawler.
+Name of |Fess| crawler.
 
 The number of Thread
 ::::::::::::::::::::
 
-The number of threads to be used for crawling in this configuration.
+The number of crawler threads for this configuration.
 
 Interval time
 :::::::::::::
 
-The time interval for each thread when crawling URLs.
+Interval time to crawl URLs for each thread.
 
 Boost
-::::::
+:::::
 
-The weight of indexed documents in this configuration.
+Boost value is a weight for indexed documents of this configuration.
 
 Permissions
-::::::::::::
+:::::::::::
 
-Specify the permissions for this configuration. For example, to allow users in the developer group to view search results, specify {group}developer. User-specific settings are specified as {user}username, role-specific settings as {role}rolename, and group-specific settings as {group}groupname.
+Permissions for this configuration.
+This format is "{user/group/role}name".
+For example, to display search results on users who belong to developer group, the permission is {group}developer.
 
 Virtual Hosts
 :::::::::::::
 
-Specify the hostname of the virtual host. For details, refer to:doc:`../config/virtual-host`.
+Virtual Host keys for this configuration.
+e.g. fess (if setting Host:fess.codelibs.org=fess in General)
 
 Status
 ::::::
 
-If enabled, the default crawler schedule job will include this configuration.
+If enabled, the scheduled job of Default Crawler includes this configuration.
 
 Description
 :::::::::::
 
-You can enter a description.
+Comments for this configuration.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
-Click on the configuration name in the list page, and then click the delete button to display the confirmation screen. Clicking the delete button will delete the configuration.
+Click a configuration on a list page, and click Delete button to display a confirmation dialog.
+Click Delete button to delete the configuration.
 
 Example
 =======
 
-Crawling fess.codelibs.org
---------------------------
+Crawling Fess Site
+------------------
 
-To create a web crawling configuration that crawls pages under https://fess.codelibs.org/, use the following settings:
+If you want to create Web crawling configuration to crawl pages under https://fess.codelibs.org/, parameters are:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -135,22 +137,23 @@ To create a web crawling configuration that crawls pages under https://fess.code
      - Value
    * - Name
      - Fess
-   * - URL
+   * - URLs
      - https://fess.codelibs.org/
-   * - Included URLs for Crawling
+   * - Included URLs For Crawling
      - https://fess.codelibs.org/.*
 
-Other settings will use the default values.
+For other parameters, use a default value.
 
 Crawling Protected Site
-------------------------
+-----------------------
 
-Fess supports crawling for sites protected with BASIC, DIGEST, and NTLM authentication. For detailed information on web authentication, please refer to the web authentication page.
+Fess supports BASIC/DIGEST/NTLM/FORM authentication.
+For the authentication information, you can configure it on Web Authentication page.
 
 Redmine
 :::::::
 
-To create a web crawling configuration for a password-protected Redmine page (e.g., https://<server>/), use the following settings:
+To crawl Redmine pages (ex. https://<server>/) with password protection, create a setting on Web Config page as below:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -160,14 +163,14 @@ To create a web crawling configuration for a password-protected Redmine page (e.
      - Value
    * - Name
      - Redmine
-   * - URL
+   * - URLs
      - https://<server>/my/page
    * - Included URLs For Crawling
      - https://<server>/.*
    * - Config Parameters
      - client.robotsTxtEnabled=false (Optional)
 
-Next, create web authentication settings using the following values:
+and then create the authentication setting on Web Auth page:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -193,11 +196,10 @@ Next, create web authentication settings using the following values:
    * - Web Config
      - Redmine
 
-
 XWiki
 :::::
 
-To create a web crawling configuration for XWiki pages (e.g., https://<server>/xwiki/), use the following settings:
+To crawl XWiki pages (ex. https://<server>/xwiki/), Web Crawling setting is:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -207,14 +209,14 @@ To create a web crawling configuration for XWiki pages (e.g., https://<server>/x
      - Value
    * - Name
      - XWiki
-   * - URL
+   * - URLs
      - https://<server>/xwiki/bin/view/Main/
    * - Included URLs For Crawling
      - https://<server>/.*
    * - Config Parameters
      - client.robotsTxtEnabled=false (Optional)
 
-Next, create web authentication settings using the following values:
+and the authentication setting is:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -243,4 +245,3 @@ Next, create web authentication settings using the following values:
 
 .. |image0| image:: ../../../resources/images/en/14.7/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/en/14.7/admin/webconfig-2.png
-.. pdf            :height: 940 px
