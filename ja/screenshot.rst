@@ -5,10 +5,10 @@
 一覧
 ====
 
-ブラウザによる検索結果の表示
-----------------------------
+ブラウザーによる検索結果の表示
+------------------------------
 
-|ブラウザによる検索結果の表示|
+|ブラウザーによる検索結果の表示|
 
 ダッシュボード
 --------------
@@ -56,11 +56,11 @@
 |クロール情報詳細|
 
 バックアップ/リストア
----------------------
+----------------------
 
 |バックアップ/リストア|
 
-.. |ブラウザによる検索結果の表示| image:: ../resources/images/ja/screenshot/fess_search_result.png
+.. |ブラウザーによる検索結果の表示| image:: ../resources/images/ja/screenshot/fess_search_result.png
 .. |ダッシュボード| image:: ../resources/images/ja/screenshot/fess_admin_dashboard.png
 .. |全般設定| image:: ../resources/images/ja/screenshot/fess_admin_general.png
 .. |ウェブクロールの設定| image:: ../resources/images/ja/screenshot/fess_admin_webconfig.png

@@ -46,7 +46,7 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 ダウンロード
 ============
 
-- :doc:`Fess 14.8.0 <downloads>` (zip/rpm/debパッケージ)
+- :doc:`Fess 14.10.0 <downloads>` (zip/rpm/debパッケージ)
 
 特徴
 ====
@@ -102,20 +102,20 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 ニュース
 ========
 
-2023-05-24
-    `Fess 14.9.0 <https://github.com/codelibs/fess/releases/tag/fess-14.9.0>`__ リリース
+2023-08-06
+    `Fess 14.10.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.10.0>`__
+
+2023-07-09
+    `Fess 14.9.1 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.9.1>`__
+
+2023-06-24
+    `Fess 14.9.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.9.0>`__
 
 2023-05-13
-    `Fess 14.8.0 <https://github.com/codelibs/fess/releases/tag/fess-14.8.0>`__ リリース
+    `Fess 14.8.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.8.0>`__
 
 2023-03-23
-    `Fess 14.7.0 <https://github.com/codelibs/fess/releases/tag/fess-14.7.0>`__ リリース
-
-2023-02-08
-    `Fess 14.6.1 <https://github.com/codelibs/fess/releases/tag/fess-14.6.1>`__ リリース
-
-2023-01-25
-    `Fess 14.6.0 <https://github.com/codelibs/fess/releases/tag/fess-14.6.0>`__ リリース
+    `Fess 14.7.0 リリース <https://github.com/codelibs/fess/releases/tag/fess-14.7.0>`__
 
 過去のニュースは :doc:`こちら <news>` をご覧ください。
 
