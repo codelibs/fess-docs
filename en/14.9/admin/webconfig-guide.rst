@@ -78,7 +78,7 @@ User Agent
 Name of |Fess| crawler.
 
 The number of Thread
-:::::::::::::::::::
+::::::::::::::::::::
 
 The number of crawler threads for this configuration.
 
