@@ -1,11 +1,14 @@
 |Fess| Configuration Guide
-====================
-
-Contents:
+==========================
 
 .. toctree::
    :maxdepth: 2
 
    intro
    crawler
-   virtual-host   
+   search-config
+   virtual-host
+   windows-service
+   analyzer
+   thumbnail
+..   kibana
