@@ -5,89 +5,69 @@ Register for Windows Service
 Registering as a Windows Service
 ================================
 
-You can register |Fess| as a Windows service, which allows it to run seamlessly in the background on your Windows system. To successfully run |Fess| as a service, you must ensure that OpenSearch is running as a prerequisite. In this guide, we assume that |Fess| is installed in ``c:\opt\fess`` and OpenSearch is installed in ``c:\opt\opensearch.``
+You can register |Fess| as a Windows service. To run |Fess|, you need to have OpenSearch running. In this guide, we assume that |Fess| is installed in ``c:\opt\fess`` and OpenSearch is installed in ``c:\opt\opensearch``.
 
-**Prerequisites**
+Preparations
+------------
 
-Before proceeding with the registration process, please make sure that you have set the JAVA_HOME environment variable as a system-wide setting.
+Please set the JAVA_HOME environment variable in your system.
 
-**Registering OpenSearch as a Service**
+Registering OpenSearch as a Service
+-----------------------------------
 
-To register OpenSearch as a Windows service, follow these steps:
-
-1. Open a Command Prompt with administrative privileges.
-
-2. Navigate to the "c:\opt\opensearch\bin" directory.
-
-3. Run the following command:
-
-   This command will install OpenSearch as a service. You should see a confirmation message like:
+From a command prompt, run ``c:\opt\fess\bin\service.bat`` as administrator.
 
 ::
 
+    > cd c:\opt\opensearch\bin
     > opensearch-service.bat install
     ...
     The service 'opensearch-service-x64' has been installed.
 
-For more detailed information, please refer to the `OpenSearch documentation <https://opensearch.org/docs/2.4/install-and-configure/install-opensearch/windows/>`_.
+For more details, refer to the `OpenSearch documentation <https://opensearch.org/docs/2.4/install-and-configure/install-opensearch/windows/>`_.
 
-**Configuration**
+Configuration
+-------------
 
-To configure |Fess| to work with OpenSearch, you'll need to make some adjustments. Follow these steps:
-
-1. Edit the ``c:\opt\fess\bin\fess.in.bat`` file.
-
-2. Set the SEARCH_ENGINE_HOME variable to the directory where OpenSearch is installed:
+Edit ``c:\opt\fess\bin\fess.in.bat`` and set SEARCH_ENGINE_HOME to the installation path of OpenSearch.
 
 ::
 
-   set SEARCH_ENGINE_HOME=c:/opt/opensearch
+    set SEARCH_ENGINE_HOME=c:/opt/opensearch
 
-By doing this, you specify the location of OpenSearch for |Fess| to use.
-
-3. By default, |Fess| uses port 8080 for its search and administration interfaces. If you want to change the port to 80, modify the ``c:\opt\fess\bin\fess.in.bat`` file by setting the fess.port variable:
+The default port for |Fess| search and administration interfaces is 8080. If you want to change it to port 80, modify the fess.port in ``c:\opt\fess\bin\fess.in.bat``.
 
 ::
 
-   set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
-This will change the port to 80.
+Registration
+------------
 
-**Service Registration**
-
-To register |Fess| as a Windows service, follow these steps:
-
-1. Open a Command Prompt with administrative privileges.
-
-2. Navigate to the ``c:\opt\fess\bin`` directory.
-
-3. Run the following command to install the |Fess| service:
-
-   You will receive a confirmation message like:
+From a command prompt, run ``c:\opt\fess\bin\service.bat`` as administrator.
 
 ::
 
+    > cd c:\opt\fess\bin
     > service.bat install
     ...
     The service 'fess-service-x64' has been installed.
 
-**Service Configuration**
+Service Configuration
+---------------------
 
-If you prefer to start the services manually, ensure that you start the OpenSearch service before starting the |Fess| service. For automatic startup, you can set up a service dependency as follows:
+If you want to start the service manually, first start the OpenSearch service, and then start the |Fess| service. If you want it to start automatically, add dependencies.
 
-1. In the general settings of the |Fess| service, set the startup type to "Automatic (Delayed Start)."
+1. Set the startup type to "Automatic (Delayed Start)" in the service's general settings.
+2. Configure the service dependencies in the registry.
 
-2. Configure the service dependency in the Windows Registry.
-
-   Using the Registry Editor (regedit), add the following key and value:
+In the Registry Editor (regedit), add the following key and value:
 
 .. list-table::
 
    * - *Key*
-     - ``Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
+     - ``Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services \fess-service-x64\DependOnService``
    * - *Value*
      - ``opensearch-service-x64``
 
-After adding this dependency, you will see "opensearch-service-x64" listed as a prerequisite in the properties of the |Fess| service.
-   
-This revised version maintains accuracy while improving readability and comprehension.
+After adding this, opensearch-service-x64 will be listed as a dependency in the properties of the |Fess| service.
