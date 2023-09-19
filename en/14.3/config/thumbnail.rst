@@ -48,7 +48,7 @@ Disabling Thumbnail Jobs
 To disable thumbnail jobs, follow these steps:
 
 1. In the admin panel, navigate to System > General, uncheck the "Thumbnail Display" option, and click "Update."
-2. Set "thumbnail.crawler.enabled" to "false" in either "app/WEB-INF/classes/fess_config.properties" or "/etc/fess/fess_config.properties."
+2. Set ``thumbnail.crawler.enabled`` to ``false`` in either ``app/WEB-INF/classes/fess_config.properties`` or ``/etc/fess/fess_config.properties``.
 
 ::
 

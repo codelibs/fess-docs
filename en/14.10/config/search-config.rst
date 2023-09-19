@@ -161,17 +161,17 @@ Settings for Obtaining Search Results in GSA-Compatible XML Format
 Used when obtaining search results in GSA-compatible XML format.
 
 Specify field names to add to the response when using GSA-compatible XML format.
-    ::
+::
 
-        query.gsa.response.fields=UE,U,T,RK,S,LANG
+    query.gsa.response.fields=UE,U,T,RK,S,LANG
 
 Specify the language when using GSA-compatible XML format.
-    ::
+::
 
-        query.gsa.default.lang=en
+    query.gsa.default.lang=en
 
 Specify the default sort when using GSA-compatible XML format.
-    ::
+::
 
-        query.gsa.default.sort=
+    query.gsa.default.sort=
 

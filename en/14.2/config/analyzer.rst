@@ -12,5 +12,3 @@ In general, items smaller than the units segmented by Analyzers won't be retriev
 Analyzer settings are registered and created for the fess index in the app/WEB-INF/classes/fess_indices/fess.json file if the fess index doesn't exist when |Fess| is started. For information on configuring Analyzers, please refer to the OpenSearch Analyzer documentation.
 
 Analyzer settings have a significant impact on search results. If you intend to modify the Analyzer, it's recommended to do so with an understanding of how Lucene's Analyzers work or consult with commercial support.
-
-These changes mainly involve minor phrasing adjustments to improve clarity and readability.
