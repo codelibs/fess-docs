@@ -89,9 +89,9 @@ Install the OpenSearch plugins in the plugins directory. Let's assume OpenSearch
 
 Please note that these plugins are version-dependent, so ensure compatibility with your OpenSearch version.
 
-Add the following settings to $OPENSEARCH_HOME\config\opensearch.yml. If there are existing settings, modify them accordingly.
+Add the following settings to $OPENSEARCH_HOME\\config\\opensearch.yml. If there are existing settings, modify them accordingly.
 
-Specify the absolute path of $OPENSEARCH_HOME\data\config for configsync.config_path.
+Specify the absolute path of $OPENSEARCH_HOME\\data\\config for configsync.config_path.
 
 ::
 
@@ -102,7 +102,7 @@ Installing Fess
 -----------------
 
 Extract the ZIP file of |Fess| to $FESS_HOME.
-To connect |Fess| to the OpenSearch cluster, specify the following startup options in $FESS_HOME\bin\fess.in.bat.
+To connect |Fess| to the OpenSearch cluster, specify the following startup options in $FESS_HOME\\bin\\fess.in.bat.
 
 ::
 
@@ -116,7 +116,7 @@ Installation with RPM/DEB package
 Installing OpenSearch
 ----------------------
 
-Please download the RPM/DEB version of OpenSearch from `Download & Get Started <https://opensearch.org/downloads.html>`__ and install it by following the instructions on `Installing OpenSearch <https://opensearch.org/docs/2.7/install-and-configure/install-opensearch/index/>`__.
+Please download the RPM/DEB version of OpenSearch from `Download & Get Started <https://opensearch.org/downloads.html>`__ and install it by following the instructions on `Installing OpenSearch <https://opensearch.org/docs/2.9/install-and-configure/install-opensearch/index/>`__.
 
 Do not perform any OpenSearch configuration or startup as we will perform the OpenSearch configuration in the following steps.
 
