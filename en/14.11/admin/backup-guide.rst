@@ -24,7 +24,7 @@ To download your configuration, click the index name.
 .fess_config index contains |Fess| configuration data.
 
 .fess_basic_config
-::::::::::::
+::::::::::::::::::
 
 .fess_basic_config index contains |Fess| configuration data without failure URLs.
 
@@ -39,27 +39,27 @@ system.properties
 System configuration file.
 
 click_log.ndjson
-:::::::::::::
+::::::::::::::::
 
 Click log file.
 
 favorite_log.ndjson
-::::::::::::::::
+:::::::::::::::::::
 
 Favorite log file.
 
 search_log.ndjson
-::::::::::::::
+:::::::::::::::::
 
 Search log file.
 
 user_info.ndjson
-:::::::::::::
+::::::::::::::::
 
 Accessed user log file.
 
 upload
---------------
+------
 
 Configuration data can be imported by uploading a file.
 Files that can be restored are \*.bulk and system.properties.
