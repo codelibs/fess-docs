@@ -32,14 +32,14 @@ https://search.n2sm.co.jp/ のURLは構築した |Fess| サーバのURLに変更
 
 ::
 
-    <script type="text/javascript" src="https://search.n2sm.co.jp/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://search.n2sm.co.jp/js/jquery-3.6.3.min.js"></script>
     <script type="text/javascript" src="https://search.n2sm.co.jp/js/suggestor.js"></script>
     <script>
     $(function() {
       $('#query').suggestor({
         ajaxinfo : {
-          url : 'https://search.n2sm.co.jp/suggest',
-          fn : '_default,content,title',
+          url : 'https://search.n2sm.co.jp/api/v1/suggest-words',
+          fn :  ["_default", "content", "title"],
           num : 10
         },
         boxCssInfo: {
