@@ -14,6 +14,8 @@ The EOL date for Fess is about 18 months after the release.
 
    * - Fess
      - EOL Date
+   * - 14.11.x
+     - 2025-04-01
    * - 14.10.x
      - 2025-01-01
    * - 14.9.x
