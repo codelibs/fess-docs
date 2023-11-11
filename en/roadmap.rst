@@ -19,20 +19,9 @@ Version is provided in the form X.Y.Z.
    fatal if requested by users ' request. Respond on a case by case
    basis)
 
-9.3
-===
-
--  Bug fixes
-
--  SOLR update
-
-Add the other, if anything.
-
-10.0
+15.0
 ====
 
--  Java 8
-
--  SOLR 5 introduction
+-  Java 21
 
 Add the other, if anything.
