@@ -7,11 +7,8 @@ Overview
 
 This section explains the settings related to the design of the search page.
 
-Setting Method
-==============
-
-Display Method
---------------
+Page Design Menu
+================
 
 To open the list page to set the page design as shown below, click [System > Page Design] in the left menu.
 
@@ -85,12 +82,12 @@ File Upload
 You can upload files to be used in the search interface. The supported file types are JPG, GIF, PNG, CSS, and JS.
 
 Upload File
------------
+:::::::::::
 
 Specify the file to upload.
 
 File Name (optional)
---------------------
+::::::::::::::::::::
 
 Use this option to specify a filename for the uploaded file. If you omit this option, the uploaded filename will be used. For example, specifying "logo.png" will change the image on the search home page.
 

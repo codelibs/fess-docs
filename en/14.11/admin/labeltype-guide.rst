@@ -1,6 +1,6 @@
-======
-Labels
-======
+=====
+Label
+=====
 
 Overview
 ========
@@ -9,11 +9,11 @@ This section provides an explanation of label configuration. Labels can be used 
 
 Label settings described here are applicable to web or file system crawl configurations.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To access the label configuration page shown in the following diagram, click on "[Crawler > Labels]" in the left menu.
 
@@ -21,15 +21,15 @@ To access the label configuration page shown in the following diagram, click on 
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the label configuration page, click on the "Create New" button.
 
 |image1|
 
-Configuration Items
--------------------
+Configurations
+--------------
 
 Name
 ::::
@@ -66,8 +66,8 @@ Display Order
 
 Specify the display order of labels.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

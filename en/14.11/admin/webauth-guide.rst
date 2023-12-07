@@ -7,11 +7,11 @@ Overview
 
 Here, we will explain the configuration for web crawling that requires web authentication. |Fess| supports BASIC authentication, DIGEST authentication, and NTLM authentication.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the list page for configuring Web Authentication shown below, click on "[Crawler > Web Authentication]" in the left menu.
 
@@ -19,15 +19,15 @@ To open the list page for configuring Web Authentication shown below, click on "
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Web Authentication settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Hostname
 ::::::::
@@ -82,8 +82,8 @@ Web Config
 Select the web configuration to apply the authentication settings.
 You need to pre-register the web crawl configuration.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

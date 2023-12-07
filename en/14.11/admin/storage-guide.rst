@@ -1,6 +1,6 @@
-================
+=======
 Storage
-================
+=======
 
 Overview
 ========
@@ -8,10 +8,10 @@ Overview
 On the Storage page, you can manage storage objects on MinIO, a object storage server compatible with Amazon S3.
 
 Management Operations
-========
+=====================
 
 Object Storage Server Configuration 
---------
+-----------------------------------
 
 Select System > General in the left menu and configure the following parameters on the Storage settings.
 
@@ -22,7 +22,7 @@ Select System > General in the left menu and configure the following parameters 
 
 
 Display Storage Objects
---------
+-----------------------
 
 Select System > Storage in the left menu to display a list page of the objects on the storage server, as below.
 
@@ -30,37 +30,37 @@ Select System > Storage in the left menu to display a list page of the objects o
 
 
 Name
-::::::::
+::::
 
 The file name of the object.
 
 
 Size
-::::::::
+::::
 
 The size of the object.
 
 
 Last Modified
-::::::::
+:::::::::::::
 
 The last modified date of the object.
 
 
 Download
---------------
+--------
 
 Click Download button on the list page to download the object.
 
 
 Delete
---------------
+------
 
 Click Delete button to delete the object.
 
 
 Upload File
---------------
+-----------
 
 Click Upload File button on the list page if you want to upload a new file.
 

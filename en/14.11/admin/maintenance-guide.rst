@@ -1,9 +1,9 @@
-=======
+===========
 Maintenance
-=======
+===========
 
 Overview
-====
+========
 
 Maintenance page provides system tools for managing |Fess|.
 
@@ -13,7 +13,7 @@ To display this page, select System Info > Maintenance in a left menu.
 
 
 Operations
-========
+==========
 
 Reindex
 -------

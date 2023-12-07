@@ -20,11 +20,11 @@ Download
 
 Download Fess from the `Download Site <https://fess.codelibs.org/downloads.html>`__.
 
-Installing the TAR.GZ version
-=============================
+Using TAR.GZ Package
+====================
 
-Installing OpenSearch
----------------------
+Install OpenSearch
+------------------
 
 Refer to `Download & Get Started <https://opensearch.org/downloads.html>`__ and download the TAR.GZ version of OpenSearch.
 
@@ -53,8 +53,8 @@ Specify the absolute path of $OPENSEARCH_HOME/data/config in configsync.config_p
     configsync.config_path: [absolute path of $OPENSEARCH_HOME]/data/config/
     plugins.security.disabled: true
 
-Installing Fess
----------------
+Install Fess
+------------
 
 Extract the Fess zip file to $FESS_HOME.
 To connect Fess to the OpenSearch cluster, specify the following startup options.
@@ -66,11 +66,11 @@ Modify $FESS_HOME/bin/fess.in.sh.
     FESS_DICTIONARY_PATH=[absolute path of $SEARCH_ENGINE_HOME]/data/config/
 
 
-Installation with ZIP Version
-==============================
+Using ZIP Package
+=================
 
-Installing OpenSearch
------------------------
+Install OpenSearch
+------------------
 
 For Windows environments, use the ZIP version for installation.
 
@@ -98,8 +98,8 @@ Specify the absolute path of $OPENSEARCH_HOME\\data\\config for configsync.confi
     configsync.config_path: [$absolute path of $OPENSEARCH_HOME]/data/config/
     plugins.security.disabled: true
 
-Installing Fess
------------------
+Install Fess
+------------
 
 Extract the ZIP file of |Fess| to $FESS_HOME.
 To connect |Fess| to the OpenSearch cluster, specify the following startup options in $FESS_HOME\\bin\\fess.in.bat.
@@ -110,11 +110,11 @@ To connect |Fess| to the OpenSearch cluster, specify the following startup optio
     FESS_DICTIONARY_PATH=[$absolute path of $SEARCH_ENGINE_HOME]/data/config/
 
 
-Installation with RPM/DEB package
-=================================
+Using with RPM/DEB Package
+==========================
 
-Installing OpenSearch
-----------------------
+Install OpenSearch
+------------------
 
 Please download the RPM/DEB version of OpenSearch from `Download & Get Started <https://opensearch.org/downloads.html>`__ and install it by following the instructions on `Installing OpenSearch <https://opensearch.org/docs/2.11/install-and-configure/install-opensearch/index/>`__.
 
@@ -140,8 +140,8 @@ Add the following settings to /etc/opensearch/opensearch.yml (common for RPM/DEB
     configsync.config_path: /var/lib/opensearch/data/config/
     plugins.security.disabled: true
 
-Installing Fess
----------------
+Install Fess
+------------
 
 Next, install the RPM/DEB package of |Fess|.
 
@@ -179,8 +179,8 @@ To connect |Fess| to the OpenSearch cluster, specify the following startup optio
     SEARCH_ENGINE_HTTP_URL=http://localhost:9200
     FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
-Installation with Docker
-=====================================
+Using Docker images
+===================
 
 For the installation, refer the following files from `https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v14.11.0/compose>`__:
 

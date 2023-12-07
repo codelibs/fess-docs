@@ -7,11 +7,11 @@ Overview
 
 This section provides an explanation of user management in |Fess|. You can manage users who log in to the system.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To access the list page for user settings shown below, click on "[User > User]" in the left menu.
 
@@ -19,15 +19,15 @@ To access the list page for user settings shown below, click on "[User > User]" 
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the User settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Username
 ::::::::
@@ -44,8 +44,8 @@ Groups
 
 Specify the groups to which the user belongs.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

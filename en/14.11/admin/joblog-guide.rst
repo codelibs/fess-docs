@@ -8,10 +8,10 @@ Overview
 Job Log page display results for executing jobs.
 
 Management Operations
-=============
+=====================
 
 Display Job Logs
---------------
+----------------
 
 Select System > Job Log in the left menu to display job logs.
 

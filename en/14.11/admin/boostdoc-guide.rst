@@ -7,11 +7,11 @@ Overview
 
 This section explains the settings for Document Boost. By configuring Document Boost settings, you can position documents at the top of search results regardless of the search terms.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the Document Boost settings list page shown below, click on "[Crawler > Doc Boost]" in the left menu.
 
@@ -19,15 +19,15 @@ To open the Document Boost settings list page shown below, click on "[Crawler > 
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Document Boost settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Condition
 :::::::::
@@ -44,8 +44,8 @@ Sort Order
 
 Set the sorting order for Document Boost.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

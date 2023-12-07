@@ -3,12 +3,12 @@ Introduction
 ============
 
 Who Should Use This Document
-=================
+============================
 
 This document is intended for users responsible for |Fess| installation and uninstallation tasks.
 
 Before You Read This Document
-===================
+=============================
 
 This document shows how to install |Fess|.
 Knowledge of server management is required.

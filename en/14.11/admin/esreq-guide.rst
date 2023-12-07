@@ -3,7 +3,7 @@ Query Request
 =============
 
 Overview
-====
+========
 
 This page sends query request by JSON file to elasticsearch.
 
@@ -13,7 +13,7 @@ This page is not in a menu pane.
 To display this page, type /admin/esreq/ to URL.
 
 Operations
-========
+==========
 
 Send Request
 ------------

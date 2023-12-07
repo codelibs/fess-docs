@@ -1,17 +1,17 @@
-=============
-Access Tokens
-=============
+============
+Access Token
+============
 
 Overview
 ========
 
 The Access Tokens settings page allows you to manage access tokens.
 
-Management Method
-=================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the list page for Access Token settings shown in the figure below, click [System > Access Tokens] in the left menu.
 
@@ -19,15 +19,15 @@ To open the list page for Access Token settings shown in the figure below, click
 
 To edit, click on the configuration name.
 
-Creating a Configuration
-------------------------
+Create Configuration
+--------------------
 
 To open the Access Token settings page, click the "Create New" button.
 
 |image1|
 
-Configuration Items
-===================
+Configurations
+--------------
 
 Name
 ::::
@@ -51,8 +51,8 @@ Expired
 
 Specify the expiration date of the access token.
 
-Deleting a Configuration
-------------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and then click the delete button. A confirmation screen will appear.
 Clicking the delete button will remove the configuration.

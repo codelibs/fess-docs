@@ -9,10 +9,10 @@ Search page displays search results for administration.
 This search results is not filtered by roles.
 
 Management Operations
-=============
+=====================
 
 Display Search Result
---------------
+---------------------
 
 Select System Info > Search in a left menu to display a search form.
 

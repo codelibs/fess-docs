@@ -14,28 +14,28 @@ This page is the start page for registering crawl settings.
 
 |image0|
 
-Crawl Settings
---------------
+Crawling Settings
+-----------------
 
 This page allows you to create crawl settings.
 
 |image1|
 
-Settings
---------
+Configurations
+--------------
 
 Name
 ::::
 
 Specify the name of the settings (e.g., Fess Site).
 
-Crawl URL
-:::::::::
+Crawling Path
+:::::::::::::
 
 Specify the starting URL or file path for crawling (e.g., https://fess.codelibs.org/).
 
-Maximum Page Count
-::::::::::::::::::
+Max Access Count
+::::::::::::::::
 
 Set the maximum number of pages to be crawled.
 
