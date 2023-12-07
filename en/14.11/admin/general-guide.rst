@@ -1,6 +1,6 @@
-=======
-General
-=======
+=====================
+General Configuration
+=====================
 
 Overview
 ========
@@ -9,8 +9,8 @@ You can change various settings of |Fess| without restarting it.
 
 |image0|
 
-Settings
-========
+Management Operations
+=====================
 
 System
 ------
@@ -231,8 +231,8 @@ Enter the message to be displayed on the search top page.
 Example
 =======
 
-LDAP Configuration Example
---------------------------
+LDAP Configuration
+------------------
 
 .. tabularcolumns:: |p{4cm}|p{4cm}|p{4cm}|
 .. list-table:: LDAP/Active Directory Configuration

@@ -1,17 +1,17 @@
-=============
-File Crawling
-=============
+==================
+File Configuration
+==================
 
 Overview
 ========
 
 The File Crawling configuration page allows you to manage settings for crawling files in the file system or shared folders on the network.
 
-Management Method
-=================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the list page for File Crawling settings, click on "[Crawler > File System]" in the left menu.
 
@@ -19,15 +19,15 @@ To open the list page for File Crawling settings, click on "[Crawler > File Syst
 
 To edit, click on the setting name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the File Crawling configuration page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
-=============
+Configurations
+--------------
 
 Name
 ::::
@@ -112,16 +112,16 @@ Description
 
 You can enter a description.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the setting name on the list page, and then click the delete button to display the confirmation screen. Clicking the delete button will remove the setting.
 
 Example
 =======
 
-Crawling Local Files
---------------------
+Crawling Local File System
+--------------------------
 
 If you want to crawl files under /home/share, the settings would be as follows:
 
@@ -138,8 +138,8 @@ If you want to crawl files under /home/share, the settings would be as follows:
 
 Other parameters can be left as default.
 
-Crawling a Windows Shared Folder
---------------------------------
+Crawling Windows Shared Folder
+------------------------------
 
 If you want to crawl files under \\SERVER\SharedFolder, the configuration should be as follows:
 

@@ -7,11 +7,11 @@ Overview
 
 Here, we will explain the configuration for handling duplicate hosts. Duplicate hosts are used when you want to treat different hostnames as the same during crawling. For example, if you want to treat "www.example.com" and "example.com" as the same site, you can use this configuration.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To access the list page for configuring duplicate hosts shown below, click on "[Crawler > Duplicate Hosts]" in the left menu.
 
@@ -19,15 +19,15 @@ To access the list page for configuring duplicate hosts shown below, click on "[
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Duplicate Hosts settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Regular Name
 ::::::::::::
@@ -39,8 +39,8 @@ Duplicate Name
 
 Specify the duplicate hostname that you want to replace.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

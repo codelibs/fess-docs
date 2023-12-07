@@ -7,11 +7,11 @@ Overview
 
 Here, we will explain the settings for Related Content. By configuring Related Content settings, you can display related content at the top of search results when the search query matches specified search terms.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the list page for configuring Related Content shown below, click on "[Crawler > Related Content]" in the left menu.
 
@@ -19,15 +19,15 @@ To open the list page for configuring Related Content shown below, click on "[Cr
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Related Content settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Term
 ::::
@@ -44,8 +44,8 @@ Virtual Host
 
 Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

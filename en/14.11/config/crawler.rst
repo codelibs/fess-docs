@@ -1,6 +1,6 @@
-=====================
-Crawler Configuration
-=====================
+=======
+Crawler
+=======
 
 Setting Maximum Word Length
 ===========================

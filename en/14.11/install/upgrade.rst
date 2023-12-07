@@ -19,21 +19,22 @@ Configuration data are in the following files:
 Upgrade Package
 ---------------
 
-Stop |Fess| and then install RPM/DEB package. For the instruction, see Installation in Installation Guide.
+Stop |Fess| process and install the RPM or DEB package. See Installation in the Installation Guide for more information.
 
-To upgrade to Elasticsearch 8, remove old indices and then upgrade Elasticsearch package.
-For Elasticsearch plugins, if you upgrade Elasticsearch, re-install all Elasticsearch plugins for the correct Elasticsearch version.
+When upgrading Elasticsearch or OpenSearch, you may encounter indexes that fail to migrate. For a safe migration, it is recommended to remove indexes related to |Fess| .
 
-Restore Configuration
----------------------
 
-Check and merge settings in fess_config.properties, and then start |Fess|.
+Restore the configuration
+-------------------------
 
-Upload fess_basic_config.bulk and fess_user.bulk on Backup page to restore data.
+1. Install |Fess| .
+2. Check for configuration differences in fess_config.properties and reflect the configuration in the new environment.
+3. Copy system.properties to the new environment.
+4. Start |Fess| .
+5. Log in from the administration screen.
+6. Upload the fess_basic_config.bulk and fess_user.bulk files from the backup page.
 
 Start Crawler
 -------------
 
-To create new search indices, start Default Crawler job on Scheduler page.
-
-
+Start the Default Crawler job on the Scheduler page to generate the index.

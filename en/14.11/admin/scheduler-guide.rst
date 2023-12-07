@@ -7,11 +7,11 @@ Overview
 
 This section explains the settings for the job scheduler.
 
-Management
-==========
+Management Operations
+=====================
 
-Displaying the Settings
------------------------
+Display Configurations
+----------------------
 
 To view the list of job scheduler settings shown in the following figure, click on [System > Scheduler] in the left menu.
 
@@ -19,15 +19,15 @@ To view the list of job scheduler settings shown in the following figure, click 
 
 To edit the settings, click on the name of the setting.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To create a new setting, click on the "New" button on the scheduler settings page.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Name
 ::::
@@ -74,7 +74,7 @@ Crawler Job
 If enabled, it will be treated as a crawler job.
 
 Status
-::::
+::::::
 
 Specify the enabled/disabled state of the job. If disabled, the job will not be executed.
 
@@ -83,8 +83,8 @@ Display Order
 
 Specify the display order in the job list.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click the setting name on the list page and click the delete button to display the confirmation screen. Clicking the delete button will delete the setting.
 

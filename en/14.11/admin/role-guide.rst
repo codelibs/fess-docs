@@ -7,11 +7,11 @@ Overview
 
 You can manage the roles to which users belong. This feature is useful, for example, when integrating with LDAP.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To access the list page for role settings shown below, click on "[User > Role]" in the left menu.
 
@@ -19,23 +19,23 @@ To access the list page for role settings shown below, click on "[User > Role]" 
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Role settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Name
 ::::
 
 The name of the role.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

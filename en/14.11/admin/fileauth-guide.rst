@@ -7,11 +7,11 @@ Overview
 
 Here, we will explain the configuration for enabling file authentication when crawling files. |Fess| supports authentication for FTP and Windows shared folders.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To access the list page for configuring File Authentication shown below, click on "[Crawler > File Authentication]" in the left menu.
 
@@ -19,15 +19,15 @@ To access the list page for configuring File Authentication shown below, click o
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the File Authentication settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
 Hostname
 ::::::::
@@ -71,8 +71,8 @@ File System Config
 
 Specify the crawl configuration that will use this authentication setting.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

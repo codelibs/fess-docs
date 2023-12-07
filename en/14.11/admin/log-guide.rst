@@ -8,10 +8,10 @@ Overview
 Log Files page allows you to download log files.
 
 Management Operations
-=============
+=====================
 
 Download Log File
---------------
+-----------------
 
 Select System Info > Log File in a left menu to display a log file list.
 
@@ -38,7 +38,7 @@ fess-crawler.log
 Crawler log file.
 
 fess-thumbnail.log
-::::::::::::::::
+::::::::::::::::::
 
 Thumbnail log file.
 

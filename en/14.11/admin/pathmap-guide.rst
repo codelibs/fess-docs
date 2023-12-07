@@ -7,11 +7,11 @@ Overview
 
 Here, we will explain the settings for Path Mapping. Path Mapping allows you to replace links displayed in search results or perform other customizations.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the list page for configuring Path Mapping shown below, click on "[Crawler > Path Mapping]" in the left menu.
 
@@ -19,18 +19,18 @@ To open the list page for configuring Path Mapping shown below, click on "[Crawl
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Path Mapping settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
-Regular Expression
-::::::::::::::::::
+Regexp.
+:::::::
 
 Specify the string that you want to replace. Follow the Java regular expression syntax.
 
@@ -54,8 +54,8 @@ Display Order
 
 You can specify the processing order of Path Mapping. It will be processed in ascending order.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 

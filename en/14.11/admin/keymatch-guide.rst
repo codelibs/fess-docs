@@ -7,11 +7,11 @@ Overview
 
 This section explains the settings for Key Match. By configuring Key Match settings, you can prioritize documents in search results when they are searched using specific terms. This feature is commonly used for advertising purposes.
 
-Management Methods
-==================
+Management Operations
+=====================
 
-Display Method
---------------
+Display Configurations
+----------------------
 
 To open the Key Match settings list page shown below, click on "[Crawler > Key Match]" in the left menu.
 
@@ -19,18 +19,18 @@ To open the Key Match settings list page shown below, click on "[Crawler > Key M
 
 To edit, click on the configuration name.
 
-Creating Settings
------------------
+Create Configuration
+--------------------
 
 To open the Key Match settings page, click on the "Create New" button.
 
 |image1|
 
-Setting Items
--------------
+Configurations
+--------------
 
-Search Term
-:::::::::::
+Term
+::::
 
 Weighting is only applied to search results when searched with this specific term.
 
@@ -44,8 +44,8 @@ Size
 
 Specify the maximum number of documents that should match the query.
 
-Boost Value
-:::::::::::
+Boost
+:::::
 
 Specify the weighting value for the document.
 
@@ -54,8 +54,8 @@ Virtual Host
 
 Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
 
-Deleting Settings
------------------
+Delete Configuration
+--------------------
 
 Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
 
