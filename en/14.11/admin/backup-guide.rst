@@ -18,47 +18,57 @@ To download your configuration, click the index name.
 
 |image0|
 
-.fess_config
-::::::::::::
+fess_config.bulk
+::::::::::::::::
 
-.fess_config index contains |Fess| configuration data.
+fess_config.bulk contains configuration information for Fess.
 
-.fess_basic_config
-::::::::::::::::::
+fess_basic_config.bulk
+::::::::::::::::::::::
 
-.fess_basic_config index contains |Fess| configuration data without failure URLs.
+fess_basic_config.bulk contains Fess configuration information excluding faulty URLs.
 
-.fess_user
-::::::::::
+fess_user.bulk
+::::::::::::::
 
-.fess_user index contains user, role and group information.
+fess_user.bulk includes information about users, roles, and groups.
 
 system.properties
 :::::::::::::::::
 
-System configuration file.
+system.properties contains general settings information.
+
+fess.json
+:::::::::
+
+fess.json contains configuration information for the fess index.
+
+doc.json
+::::::::
+
+doc.json contains mapping information for the fess index.
 
 click_log.ndjson
 ::::::::::::::::
 
-Click log file.
+click_log.ndjson includes click log information.
 
 favorite_log.ndjson
 :::::::::::::::::::
 
-Favorite log file.
+favorite_log.ndjson contains favorite log information.
 
 search_log.ndjson
 :::::::::::::::::
 
-Search log file.
+search_log.ndjson includes search log information.
 
 user_info.ndjson
 ::::::::::::::::
 
-Accessed user log file.
+user_info.ndjson contains information about search users.
 
-upload
+Upload
 ------
 
 Configuration data can be imported by uploading a file.

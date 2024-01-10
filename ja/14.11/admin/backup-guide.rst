@@ -15,25 +15,35 @@
 
 |image0|
 
-.fess_config
-::::::::::::
+fess_config.bulk
+::::::::::::::::
 
-.fess_config インデックスは |Fess| の設定情報を含んでいます。
+fess_config.bulk は |Fess| の設定情報を含んでいます。
 
-.fess_basic_config
-::::::::::::::::::
+fess_basic_config.bulk
+::::::::::::::::::::::
 
-.fess_basic_config インデックスは障害URLを除いた |Fess| の設定情報を含んでいます。
+fess_basic_config.bulk は障害URLを除いた |Fess| の設定情報を含んでいます。
 
-.fess_user
-::::::::::
+fess_user.bulk
+::::::::::::::
 
-.fess_user インデックスはユーザー、ロールおよびグループの情報を含みます。
+fess_user.bulk はユーザー、ロールおよびグループの情報を含みます。
 
 system.properties
 :::::::::::::::::
 
 system.properties 全般設定の情報を含みます。
+
+fess.json
+:::::::::
+
+fess.jsonはfessインデックスの設定情報を含みます。
+
+doc.json
+::::::::
+
+doc.jsonはfessインデックスのマッピング情報を含みます。
 
 click_log.ndjson
 ::::::::::::::::
