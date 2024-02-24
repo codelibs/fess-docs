@@ -5,7 +5,7 @@ PROJECT="Fess"
 TITLE="Fess"
 DOCLANG="ja"
 AUTHOR="CodeLibs"
-RELEASE="13.10"
+RELEASE="14.12"
 
 HTMLCOMPRESSOR_JAR="${SCRIPT_DIR}/../libs/htmlcompressor-1.5.3.jar"
 YUICOMPRESSOR_JAR="${SCRIPT_DIR}/../libs/yuicompressor-2.4.8.jar"

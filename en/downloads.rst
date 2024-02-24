@@ -14,18 +14,19 @@ Download
 
 A stable release is available from:
 
-* `Fess 14.11.0 <https://github.com/codelibs/fess/releases/tag/fess-14.11.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.11.0 <https://opensearch.org/versions/opensearch-2-11-0.html>`_)
+* `Fess 14.12.0 <https://github.com/codelibs/fess/releases/tag/fess-14.12.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.12.0 <https://opensearch.org/versions/opensearch-2-12-0.html>`_)
+* `Fess 14.11.1 <https://github.com/codelibs/fess/releases/tag/fess-14.11.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.11.1 <https://opensearch.org/versions/opensearch-2-11-1.html>`_)
 * `Fess 14.10.1 <https://github.com/codelibs/fess/releases/tag/fess-14.10.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.9.0 <https://opensearch.org/versions/opensearch-2-9-0.html>`_)
 * `Fess 14.9.1 <https://github.com/codelibs/fess/releases/tag/fess-14.9.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.8.0 <https://opensearch.org/versions/opensearch-2-8-0.html>`_)
 * `Fess 14.8.0 <https://github.com/codelibs/fess/releases/tag/fess-14.8.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.7.0 <https://opensearch.org/versions/opensearch-2-7-0.html>`_)
 * `Fess 14.7.0 <https://github.com/codelibs/fess/releases/tag/fess-14.7.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.6.0 <https://opensearch.org/versions/opensearch-2-6-0.html>`_, `Elasticsearch 8.6.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-6-2>`_)
 * `Fess 14.6.1 <https://github.com/codelibs/fess/releases/tag/fess-14.6.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.4.1 <https://opensearch.org/versions/opensearch-2-4-1.html>`_, `Elasticsearch 8.6.0 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-6-0>`_)
 * `Fess 14.5.0 <https://github.com/codelibs/fess/releases/tag/fess-14.5.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.3.0 <https://opensearch.org/versions/opensearch-2-3-0.html>`_, `Elasticsearch 8.5.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-5-1>`_)
-* `Fess 14.4.0 <https://github.com/codelibs/fess/releases/tag/fess-14.4.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `Elasticsearch 8.4.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-4-1>`_, `OpenSearch 2.2.1 <https://opensearch.org/versions/opensearch-2-2-1.html>`_)
 
 EOLed
 ======
 
+* `Fess 14.4.0 <https://github.com/codelibs/fess/releases/tag/fess-14.4.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `Elasticsearch 8.4.1 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-4-1>`_, `OpenSearch 2.2.1 <https://opensearch.org/versions/opensearch-2-2-1.html>`_)
 * `Fess 14.3.0 <https://github.com/codelibs/fess/releases/tag/fess-14.3.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `Elasticsearch 8.3.3 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-3-3>`_, `OpenSearch 2.1.0 <https://opensearch.org/versions/opensearch-2-1-0.html>`_)
 * `Fess 14.2.0 <https://github.com/codelibs/fess/releases/tag/fess-14.2.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `Elasticsearch 8.2.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-2-2>`_, `OpenSearch 2.0.0 <https://opensearch.org/versions/opensearch-2-0-0.html>`_)
 * `Fess 14.1.1 <https://github.com/codelibs/fess/releases/tag/fess-14.1.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `Elasticsearch 8.1.3 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-8-1-3>`_, `OpenSearch 1.3.1 <https://opensearch.org/versions/opensearch-1-3-1.html>`_)
