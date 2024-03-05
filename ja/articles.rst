@@ -5,6 +5,26 @@
 掲載記事一覧
 ============
 
+- `【第58回】OpenAPI対応の検索API <https://news.mynavi.jp/techplus/article/_ossfess-58/>`__
+
+- `【第57回】SSL証明書の適用方法 <https://news.mynavi.jp/techplus/article/_ossfess-57/>`__
+
+- `【第56回】スクリーンショットをサムネイル表示する <https://news.mynavi.jp/techplus/article/_ossfess-56/>`__
+
+- `【第55回】コンテンツプロキシー機能 <https://news.mynavi.jp/techplus/article/_ossfess-55/>`__
+
+- `【第54回】検索ログの確認方法 <https://news.mynavi.jp/techplus/article/_ossfess-54/>`__
+
+- `【第53回】OpenAPI対応の検索APIをJavaScriptで利用する <https://news.mynavi.jp/techplus/article/_ossfess-53/>`__
+
+- `【第52回】セマンティック検索の利用方法 <https://news.mynavi.jp/techplus/article/_ossfess-52/>`__
+
+- `【第51回】クロール完了通知をSlackに送信する <https://news.mynavi.jp/techplus/article/_ossfess-51/>`__
+
+- `【第50回】JavaScriptで生成されるページのクロール <https://news.mynavi.jp/techplus/article/_ossfess-50/>`__
+
+- `【第49回】CSVファイルリストのクロール（SMB認証の利用）<https://news.mynavi.jp/techplus/article/_ossfess-49/>`__
+
 - `【第48回】SAMLによるシングルサインオン <https://news.mynavi.jp/techplus/article/_ossfess-48/>`__
 
 - `【第47回】MinIOでストレージ管理とクロール <https://news.mynavi.jp/techplus/article/_ossfess-47/>`__
