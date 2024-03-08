@@ -23,7 +23,7 @@
 
 - `【第50回】JavaScriptで生成されるページのクロール <https://news.mynavi.jp/techplus/article/_ossfess-50/>`__
 
-- `【第49回】CSVファイルリストのクロール（SMB認証の利用）<https://news.mynavi.jp/techplus/article/_ossfess-49/>`__
+- `【第49回】CSVファイルリストのクロール（SMB認証の利用） <https://news.mynavi.jp/techplus/article/_ossfess-49/>`__
 
 - `【第48回】SAMLによるシングルサインオン <https://news.mynavi.jp/techplus/article/_ossfess-48/>`__
 
