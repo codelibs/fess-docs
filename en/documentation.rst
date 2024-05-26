@@ -4,9 +4,9 @@ DOCUMENTATION
 
 .. toctree::
 
-   Installation <14.13/install/index>
-   Administration <14.13/admin/index>
-   Search <14.13/user/index>
-   API <14.13/api/index>
-   Configuration <14.13/config/index>
+   Installation <14.14/install/index>
+   Administration <14.14/admin/index>
+   Search <14.14/user/index>
+   API <14.14/api/index>
+   Configuration <14.14/config/index>
 
