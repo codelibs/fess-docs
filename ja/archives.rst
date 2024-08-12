@@ -2,6 +2,20 @@
 アーカイブ
 ==========
 
+14.15
+~~~~
+
+.. toctree::
+
+   14.15/install/index
+   14.15/user/index
+   14.15/api/index
+   14.15/admin/index
+   14.15/config/index
+   JavaDocs <https://fess.codelibs.org/14.15/apidocs/index.html>
+   XRef <https://fess.codelibs.org/14.15/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/14.15/lastadoc-fess.html>
+
 14.14
 ~~~~
 
