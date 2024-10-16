@@ -18,4 +18,5 @@
    thumbnail
    scroll-search
    search
+   properties
 ..   kibana
