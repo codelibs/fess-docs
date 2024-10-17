@@ -66,3 +66,18 @@ In the administration panel's crawl settings, specify and save the following set
     client.proxyPort=ProxyServerPort (e.g., 8080)
 
 These revisions aim to provide a clearer and more concise explanation of the settings and procedures while maintaining accuracy in the technical details.
+
+Crawling Dynamic Content
+=========================
+
+To crawl dynamic content like client-side rendered pages,
+the playwright library is required.
+
+The playwright library is required for indexing dynamic content.
+
+Once the playwright library is added,
+add the following config parameter to your crawler settings:
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
