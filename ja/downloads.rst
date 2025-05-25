@@ -14,7 +14,7 @@ Dockerイメージは以下を参照してください。
 
 動作確認済の安定版リリースです。
 
-* `Fess 14.19.1 <https://github.com/codelibs/fess/releases/tag/fess-14.19.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.19.1 <https://opensearch.org/versions/opensearch-2-19-1.html>`_)
+* `Fess 14.19.2 <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.19.1 <https://opensearch.org/versions/opensearch-2-19-1.html>`_)
 * `Fess 14.18.0 <https://github.com/codelibs/fess/releases/tag/fess-14.18.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.18.0 <https://opensearch.org/versions/opensearch-2-18-0.html>`_)
 * `Fess 14.17.0 <https://github.com/codelibs/fess/releases/tag/fess-14.17.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.17.0 <https://opensearch.org/versions/opensearch-2-17-0.html>`_)
 * `Fess 14.16.0 <https://github.com/codelibs/fess/releases/tag/fess-14.16.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.16.0 <https://opensearch.org/versions/opensearch-2-16-0.html>`_)
@@ -22,13 +22,13 @@ Dockerイメージは以下を参照してください。
 * `Fess 14.14.0 <https://github.com/codelibs/fess/releases/tag/fess-14.14.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.14.0 <https://opensearch.org/versions/opensearch-2-14-0.html>`_)
 * `Fess 14.13.0 <https://github.com/codelibs/fess/releases/tag/fess-14.13.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.13.0 <https://opensearch.org/versions/opensearch-2-13-0.html>`_)
 * `Fess 14.12.0 <https://github.com/codelibs/fess/releases/tag/fess-14.12.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.12.0 <https://opensearch.org/versions/opensearch-2-12-0.html>`_)
-* `Fess 14.11.1 <https://github.com/codelibs/fess/releases/tag/fess-14.11.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.11.0 <https://opensearch.org/versions/opensearch-2-11-1.html>`_)
 
 インストール方法についてはインストールガイドを参照してください。
 
 過去のリリース(EOL)
 ===================
 
+* `Fess 14.11.1 <https://github.com/codelibs/fess/releases/tag/fess-14.11.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.11.0 <https://opensearch.org/versions/opensearch-2-11-1.html>`_)
 * `Fess 14.10.1 <https://github.com/codelibs/fess/releases/tag/fess-14.10.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.9.0 <https://opensearch.org/versions/opensearch-2-9-0.html>`_)
 * `Fess 14.9.1 <https://github.com/codelibs/fess/releases/tag/fess-14.9.1>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.8.0 <https://opensearch.org/versions/opensearch-2-8-0.html>`_)
 * `Fess 14.8.0 <https://github.com/codelibs/fess/releases/tag/fess-14.8.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.7.0 <https://opensearch.org/versions/opensearch-2-7-0.html>`_)
