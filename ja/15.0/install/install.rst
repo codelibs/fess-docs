@@ -29,17 +29,17 @@ OpenSearchのインストール
 `Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、TAR.GZ版のOpenSearchをダウンロードしてください。
 
 OpenSearchのプラグインはOpenSearchのバージョンに合わせる必要があります。
-OpenSearch 2.18.0をインストール場合を説明します。
+OpenSearch 3.0.0をインストール場合を説明します。
 
 OpenSearchのプラグインを plugins ディレクトリにインストールします。
 OpenSearchを $OPENSEARCH_HOME にインストールしてあるものとします。
 
 ::
 
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.18.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.18.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.18.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.18.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.0.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.0.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.0.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.0.0
 
 
 これらのプラグインはOpenSearchのバージョンに依存するので注意してください。
@@ -78,17 +78,17 @@ Windows 環境へのインストールはZIP版を使用します。
 `Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、ZIP版のOpenSearchをダウンロードしてください。
 
 OpenSearchのプラグインはOpenSearchのバージョンに合わせる必要があります。
-OpenSearch 2.18.0をインストール場合を説明します。
+OpenSearch 3.0.0をインストール場合を説明します。
 
 OpenSearchのプラグインを plugins ディレクトリにインストールします。
 OpenSearchを $OPENSEARCH_HOME にインストールしてあるものとします。
 
 ::
 
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.18.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.18.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.18.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.18.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.0.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.0.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.0.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.0.0
 
 これらのプラグインはOpenSearchのバージョンに依存するので注意してください。
 
@@ -123,21 +123,21 @@ OpenSearchのインストール
 
 `Download & Get Started <https://opensearch.org/downloads.html>`__ を参照して、RPM/DEB版のOpenSearchをダウンロードしてください。
 
-`Installing OpenSearch <https://opensearch.org/docs/2.18/install-and-configure/install-opensearch/index/>`__ を参照してインストールしてください。
+`Installing OpenSearch <https://opensearch.org/docs/3.0/install-and-configure/install-opensearch/index/>`__ を参照してインストールしてください。
 
 以降でOpenSearchに関する設定を行うので、OpenSearchの設定や起動は行わないでください。
 
 OpenSearchのプラグインはOpenSearchのバージョンに合わせる必要があります。
-OpenSearch 2.18.0をインストールする場合を説明します。
+OpenSearch 3.0.0をインストールする場合を説明します。
 
 OpenSearch プラグインを plugins ディレクトリにインストールします。
 
 ::
 
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.18.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.18.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.18.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.18.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.0.0
 
 これらのプラグインは OpenSearch のバージョンに依存するので注意してください。
 

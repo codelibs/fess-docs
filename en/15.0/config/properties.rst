@@ -1832,7 +1832,7 @@ Online Help
     - Upgrade help name
     - upgrade
   * - online.help.name.esreq
-    - Elasticsearch request help name
+    - OpenSearch request help name
     - esreq
   * - online.help.name.accesstoken
     - Access token help name

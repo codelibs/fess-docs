@@ -97,7 +97,7 @@ Response
           "site_path": "fess.codelibs.org/",
           "doc_id": "e79fbfdfb09d4bffb58ec230c68f6f7e",
           "url": "https://fess.codelibs.org/",
-          "content_description": "Enterprise Search Server: Fess Commercial Support Open...Search Server: Fess What is Fess? Fess is a very powerful...You can quickly install and run Fess on any platform...Fess is provided under the Apache license...Apache license. Demo Fess is an Elasticsearch-based search",
+          "content_description": "Enterprise Search Server: Fess Commercial Support Open...Search Server: Fess What is Fess? Fess is a very powerful...You can quickly install and run Fess on any platform...Fess is provided under the Apache license...Apache license. Demo Fess is an OpenSearch-based search",
           "site": "fess.codelibs.org/",
           "boost": "10.0",
           "mimetype": "text/html"

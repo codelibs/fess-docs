@@ -104,7 +104,7 @@
           "site_path": "fess.codelibs.org/",
           "doc_id": "e79fbfdfb09d4bffb58ec230c68f6f7e",
           "url": "https://fess.codelibs.org/",
-          "content_description": "Enterprise Search Server: <strong>Fess</strong> Commercial Support Open...Search Server: <strong>Fess</strong> What is <strong>Fess</strong> ? <strong>Fess</strong> is very powerful...You can install and run <strong>Fess</strong> quickly on any platforms...Java runtime environment. <strong>Fess</strong> is provided under Apache...Apache license. Demo <strong>Fess</strong> is Elasticsearch-based search",
+          "content_description": "Enterprise Search Server: <strong>Fess</strong> Commercial Support Open...Search Server: <strong>Fess</strong> What is <strong>Fess</strong> ? <strong>Fess</strong> is very powerful...You can install and run <strong>Fess</strong> quickly on any platforms...Java runtime environment. <strong>Fess</strong> is provided under Apache...Apache license. Demo <strong>Fess</strong> is OpenSearch-based search",
           "site": "fess.codelibs.org/",
           "boost": "10.0",
           "mimetype": "text/html"

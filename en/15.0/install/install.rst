@@ -29,17 +29,17 @@ Install OpenSearch
 Refer to `Download & Get Started <https://opensearch.org/downloads.html>`__ and download the TAR.GZ version of OpenSearch.
 
 The OpenSearch plugins need to match the version of OpenSearch.
-The following explains the installation for OpenSearch 2.18.0.
+The following explains the installation for OpenSearch 3.0.0.
 
 Install the OpenSearch plugins in the plugins directory.
 Assume that OpenSearch is installed in $OPENSEARCH_HOME.
 
 ::
 
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.18.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.18.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.18.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.18.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.0.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.0.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.0.0
+    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.0.0
 
 Note that these plugins depend on the version of OpenSearch.
 
@@ -76,16 +76,16 @@ For Windows environments, use the ZIP version for installation.
 
 Refer to `Download & Get Started <https://opensearch.org/downloads.html>`__ and download the ZIP version of OpenSearch.
 
-OpenSearch plugins must be compatible with the version of OpenSearch being installed. Here's an explanation for installing OpenSearch version 2.18.0.
+OpenSearch plugins must be compatible with the version of OpenSearch being installed. Here's an explanation for installing OpenSearch version 3.0.0.
 
 Install the OpenSearch plugins in the plugins directory. Let's assume OpenSearch is installed at $OPENSEARCH_HOME.
 
 ::
 
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.18.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.18.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.18.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.18.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.0.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.0.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.0.0
+    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.0.0
 
 Please note that these plugins are version-dependent, so ensure compatibility with your OpenSearch version.
 
@@ -120,16 +120,16 @@ Please download the RPM/DEB version of OpenSearch from `Download & Get Started <
 
 Do not perform any OpenSearch configuration or startup as we will perform the OpenSearch configuration in the following steps.
 
-Please note that the OpenSearch plugins should match the version of OpenSearch that you installed. The following describes the installation process for OpenSearch 2.18.0.
+Please note that the OpenSearch plugins should match the version of OpenSearch that you installed. The following describes the installation process for OpenSearch 3.0.0.
 
 Install the OpenSearch plugins in the plugins directory:
 
 ::
 
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:2.18.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:2.18.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:2.18.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:2.18.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.0.0
+    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.0.0
 
 Please note that these plugins depend on the version of OpenSearch.
 

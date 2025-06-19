@@ -31,7 +31,7 @@ Kibana 5 インストール
 ------------------
 
 `https://www.elastic.co/downloads/kibana <https://www.elastic.co/downloads/kibana>`__  に従い、Kibana 5をインストールします。
-Kibana に |Fess| で用いる Elasticsearch を認識させるため、 Kibanaのディレクトリ/config/kibana.yml の elasticsearch.url を以下のように編集します。
+Kibana に |Fess| で用いる OpenSearch を認識させるため、 Kibanaのディレクトリ/config/kibana.yml の elasticsearch.url を以下のように編集します。
 
 ::
 

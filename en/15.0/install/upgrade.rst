@@ -21,7 +21,7 @@ Upgrade Package
 
 Stop |Fess| process and install the RPM or DEB package. See Installation in the Installation Guide for more information.
 
-When upgrading Elasticsearch or OpenSearch, you may encounter indexes that fail to migrate. For a safe migration, it is recommended to remove indexes related to |Fess| .
+When upgrading OpenSearch, you may encounter indexes that fail to migrate. For a safe migration, it is recommended to remove indexes related to |Fess| .
 
 
 Restore the configuration
