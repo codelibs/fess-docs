@@ -14,7 +14,7 @@
 
 * バックアップページのfess_basic_config.bulkおよびfess_user.bulk (詳細は管理者ガイドのバックアップを参照してください)
 * /etc/fessまたはapp/WEB-INF/confのsystem.properties
-* /etc/fessまたはapp/WEB-INF/confのfess_config.properties
+* /etc/fessまたはapp/WEB-INF/classesのfess_config.properties
 
 パッケージの更新
 ------------
