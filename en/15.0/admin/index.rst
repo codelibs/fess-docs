@@ -48,6 +48,5 @@
    searchlist-guide
    backup-guide
    maintenance-guide
-   upgrade-guide
    esreq-guide
 
