@@ -2,9 +2,6 @@
 ソート検索
 ========
 
-ソート検索
-========
-
 検索日時などのフィールドを指定して検索結果をソートすることができます。
 
 ソート対象フィールド
@@ -52,19 +49,19 @@
 
 ::
 
-fess sort:content_length
+    fess sort:content_length
 
 降順にソートする場合は以下のようにします。
 
 ::
 
-fess sort:content_length.desc
+    fess sort:content_length.desc
 
 複数のフィールドでソートする場合は以下のように , 区切りで指定します。
 
 ::
 
-fess sort:content_length.desc,last_modified
+    fess sort:content_length.desc,last_modified
 
 .. |image0| image:: ../../../resources/images/ja/15.3/user/search-sort-1.png
 .. pdf            :width: 300 px
