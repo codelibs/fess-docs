@@ -86,7 +86,7 @@ The content of downloaded/uploaded CSV file is 5 column.
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/en/15.3/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/en/15.3/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/ja/15.3/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/ja/15.3/admin/elevateword-4.png

@@ -5,71 +5,82 @@ Label
 Overview
 ========
 
-This section provides an explanation of label configuration. Labels can be used to classify documents displayed in search results. Label settings involve specifying the paths where labels should be applied using regular expressions. If labels are registered, a label dropdown box will appear in the search options.
+This page explains the configuration settings related to labels.
+Labels can classify documents displayed in search results.
+Label configuration specifies the paths to apply labels using regular expressions.
+When labels are registered, a label pull-down box is displayed in the search options.
 
-Label settings described here are applicable to web or file system crawl configurations.
+The label settings here apply to web or file system crawl configurations.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-To access the label configuration page shown in the following diagram, click on "[Crawler > Labels]" in the left menu.
+To open the label configuration list page shown below, click [Crawler > Label] in the left menu.
 
 |image0|
 
-To edit, click on the configuration name.
+Click the configuration name to edit it.
 
-Create Configuration
---------------------
+Creating Configuration
+----------------------
 
-To open the label configuration page, click on the "Create New" button.
+To open the label configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
 Name
 ::::
 
-Specify the name to be displayed in the label selection dropdown box during searches.
+Specifies the name displayed in the label selection pull-down box during searches.
 
 Value
 :::::
 
-Specify the identifier used for document classification. Please use alphanumeric characters.
+Specifies the identifier for classifying documents.
+Specify using alphanumeric characters.
 
 Included Paths
 ::::::::::::::
 
-Specify the paths where labels should be applied using regular expressions. You can specify multiple paths by writing them on separate lines. Labels will be applied to documents that match the specified paths.
+Configures paths to apply labels using regular expressions.
+Multiple paths can be specified by writing on multiple lines.
+Labels are applied to documents matching the paths specified here.
 
 Excluded Paths
 ::::::::::::::
 
-Specify the paths that should be excluded from crawling using regular expressions. You can specify multiple patterns by writing them on separate lines.
+Configures paths to exclude from crawl targets using regular expressions.
+Multiple paths can be specified by writing on multiple lines.
 
-Permissions
-:::::::::::
+Permission
+::::::::::
 
-Specify the permissions for this configuration. For example, to allow users in the developer group to view search results, use the {group}developer notation. User-level specifications use {user}username, role-level specifications use {role}rolename, and group-level specifications use {group}groupname.
+Specifies the permission for this configuration.
+To display search results to users belonging to the developer group, specify {group}developer.
+User-level specification uses {user}username, role-level specification uses {role}rolename, and group-level specification uses {group}groupname.
 
 Virtual Host
 ::::::::::::
 
-Specify the hostname of the virtual host. For more details, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
+Specifies the virtual host hostname.
+For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/virtual-host>`.
 
 Display Order
 :::::::::::::
 
-Specify the display order of labels.
+Specifies the display order of labels.
 
-Delete Configuration
---------------------
+Deleting Configuration
+----------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the Delete button to remove the configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/labeltype-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/labeltype-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/labeltype-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/labeltype-2.png

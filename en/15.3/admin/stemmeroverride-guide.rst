@@ -1,44 +1,53 @@
-=====================
-Stemmer Override List
-=====================
+=============================
+Stemmer Override Dictionary
+=============================
 
 Overview
 ========
 
-Stemmer Override page manages dictionary of stemmer override characters.
-The stemmer override dictionary maps characters to other one.
+You can override stemmer processing for specific characters (symbols, character codes, full-width/half-width).
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select System > Dictionary in the left menu and click stemmer override file to display a list page of Stemmer Override Configuration, as below.
+To open the stemmer override configuration list page shown below, click [System > Dictionary] in the left menu, then click stemmeroverride.
 
 |image0|
 
-Click a word name if you want to edit it.
+Click the configuration name to edit it.
 
-Create Configuration
+Configuration Method
 --------------------
 
-Click Create New button to display a form page for stemmer override configuration.
+To open the stemmer override configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
 Source
 ::::::
 
-Replaced characters.
+Enters the characters (symbols, character codes, full-width/half-width) for stemmer override.
 
 Target
 ::::::
 
-Used character.
+Expands the characters entered in the source field with the converted characters.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/stemmeroverride-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/stemmeroverride-2.png
+Download
+========
+
+You can download in stemmer override dictionary format.
+
+Upload
+======
+
+You can upload in stemmer override dictionary format.
+
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/stemmeroverride-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/stemmeroverride-2.png

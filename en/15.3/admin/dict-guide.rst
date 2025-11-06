@@ -5,46 +5,53 @@ Dictionary
 Overview
 ========
 
-This section explains the settings related to dictionaries.
+This page explains the configuration settings related to dictionaries.
 
-Please be sure to understand the specifications of each dictionary before making any changes. If a dictionary is changed incorrectly, it may become impossible to access the index.
+Make changes to dictionaries only after understanding the specifications of each dictionary.
+Incorrect dictionary changes may make the index inaccessible.
 
-List of Dictionaries
-====================
+List
+====
 
-To open the manageable dictionary list page shown in the figure below, click [System > Dictionary] in the left menu.
+To open the manageable dictionary list page shown below, click [System > Dictionary] in the left menu.
 
 |image0|
 
 Kuromoji
 ========
 
-This manages the dictionary for Japanese morphological analysis. ja/kuromoji.txt is the dictionary used for Japanese morphological analysis.
+Manages the dictionary for Japanese morphological analysis.
+ja/kuromoji.txt is the dictionary file for Japanese morphological analysis.
 
 Synonym
 =======
 
-This manages the synonym dictionary. synonym.txt is the synonym dictionary file used across languages.
+Manages the synonym dictionary.
+synonym.txt is the synonym dictionary file used across all languages.
 
 Mapping
 =======
 
-This manages the character replacement dictionary. mapping.txt is the word replacement dictionary file used across languages or for each language.
+Manages the character replacement dictionary.
+mapping.txt is the word replacement dictionary file used across all languages or for each language.
 
 Protwords
 =========
 
-This manages the protected words dictionary. protwords.txt is a list of words used for each language that are excluded from stemming.
+Manages the protected words dictionary.
+protwords.txt is deployed for each language and contains a list of words to exclude from stemming.
 
 Stopwords
 =========
 
-This manages the stop words dictionary. stopwords.txt is a list of words used for each language that are used as stop words to replace certain characters.
+Manages the stopwords dictionary.
+stopwords.txt is deployed for each language and contains a list of words to exclude during index creation.
 
 Stemmer Override
 ================
 
-This manages the Stemmer override dictionary. stemmer_override.txt is a word replacement dictionary file used for each language to override specific characters in Stemmer. 
+Manages the stemmer override dictionary.
+stemmer_override.txt is deployed for each language and is a word replacement dictionary file for overriding stemming processing.
 
-
-.. |image0| image:: ../../../resources/images/en/15.3/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/dict-1.png
+            :height: 940px

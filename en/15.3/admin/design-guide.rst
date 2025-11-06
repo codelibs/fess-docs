@@ -5,12 +5,15 @@ Page Design
 Overview
 ========
 
-This section explains the settings related to the design of the search page.
+This section describes the configuration settings for the design of the search interface.
 
-Page Design Menu
-================
+Configuration
+=============
 
-To open the list page to set the page design as shown below, click [System > Page Design] in the left menu.
+Display Method
+--------------
+
+To open the page design configuration list page shown below, click [System > Page Design] in the left menu.
 
 |image0|
 
@@ -18,79 +21,81 @@ To open the list page to set the page design as shown below, click [System > Pag
 File Manager
 ------------
 
-You can download or delete files available for the search page.
+You can download or delete files available on the search screen.
 
+Page File Display
+-----------------
 
-JSP Files
----------
+You can edit JSP files for the search screen.
+Click the edit button for the target JSP file to edit that file.
+Clicking the "Use Default" button allows you to edit the JSP file as it was at installation.
+Save your changes by clicking the "Update" button on the edit screen to apply them.
 
-You can edit the JSP files for the search screen.
-By clicking the edit button for the target JSP file, you can edit that JSP file.
-Also, by clicking the "Use Default" button, you can edit the JSP file installed during installation.
-Changes made on the editing screen will be reflected by saving with the "Update" button.
-
-The following is a summary of the editable pages.
+Below is a description of the editable pages.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
    * - /index.jsp
-     - This is the JSP file for the search top page. This JSP file includes the JSP files for each part.
+     - JSP file for the search top page. This JSP file includes JSP files for each section.
    * - /header.jsp
-     - This is the JSP file for the header.
+     - JSP file for the header.
    * - /footer.jsp
-     - This is the JSP file for the footer.
+     - JSP file for the footer.
    * - /search.jsp
-     - This is the JSP file for the search result list page. This JSP file includes the JSP files for each part.
+     - JSP file for the search results list page. This JSP file includes JSP files for each section.
    * - /searchResults.jsp
-     - This is the JSP file that represents the search result section of the search result list page. This JSP file is used when there are search results. If you want to customize the representation of search results, you should change this file.
+     - JSP file representing the search results section of the search results list page. This JSP file is used when there are search results. Modify this to customize the presentation of search results.
    * - /searchNoResult.jsp
-     - This is the JSP file that represents the search result section of the search result list page. This JSP file is used when there are no search results.
+     - JSP file representing the search results section of the search results list page. This JSP file is used when there are no search results.
    * - /searchOptions.jsp
-     - This is the JSP file for the search option screen.
+     - JSP file for the search options screen.
    * - /advance.jsp
-     - This is the JSP file for the advanced search screen.
+     - JSP file for the advanced search screen.
    * - /help.jsp
-     - This is the JSP file for the help page.
+     - JSP file for the help page.
    * - /error/error.jsp
-     - This is the JSP file for the search error page. If you want to customize the representation of search errors, you should change this file.
+     - JSP file for the search error page. Modify this to customize the presentation of search errors.
    * - /error/notFound.jsp
-     - This is the JSP file for the error page displayed when the page is not found.
+     - JSP file for the error page displayed when a page is not found.
    * - /error/system.jsp
-     - This is the JSP file for the error page displayed when there is a system error.
+     - JSP file for the error page displayed for system errors.
    * - /error/redirect.jsp
-     - This is the JSP file for the error page displayed when an HTTP redirect occurs.
+     - JSP file for the error page displayed when an HTTP redirect occurs.
    * - /error/badRequest.jsp
-     - This is the JSP file for the error page displayed when an invalid request occurs.
+     - JSP file for the error page displayed when a bad request occurs.
    * - /cache.hbs
-     - This is the file that displays the search result cache.
+     - File for displaying cached search results.
    * - /login/index.jsp
-     - This is the JSP file for the login screen.
+     - JSP file for the login screen.
    * - /profile/index.jsp
-     - This is the JSP file for the password change screen for users.
+     - JSP for the user password change screen.
+   * - /profile/newpassword.jsp
+     - JSP for the administrator password update screen. Prompts for password change if the username and password are the same string at login.
 
 
-Table: Editable JSP files
+Table: Editable JSP Files
 
 |image1|
 
-The translated text is understandable, but it could be improved for clarity and naturalness. Here is a possible revised version:
+Upload Files
+------------
+
+You can upload files to use on the search screen.
+Supported file types include jpg, gif, png, css, and js.
 
 File Upload
------------
-
-You can upload files to be used in the search interface. The supported file types are JPG, GIF, PNG, CSS, and JS.
-
-Upload File
 :::::::::::
 
 Specify the file to upload.
 
-File Name (optional)
-::::::::::::::::::::
+Filename (Optional)
+:::::::::::::::::::
 
-Use this option to specify a filename for the uploaded file. If you omit this option, the uploaded filename will be used. For example, specifying "logo.png" will change the image on the search home page.
+Use this to specify a filename for the uploaded file.
+If omitted, the uploaded filename is used.
+For example, specifying logo.png will change the image on the search top page.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/design-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/design-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/design-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/design-2.png

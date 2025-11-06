@@ -5,26 +5,26 @@ Storage
 Overview
 ========
 
-On the Storage page, you can manage storage objects on MinIO, a object storage server compatible with Amazon S3.
+On the storage page, you can manage files on MinIO, an Amazon S3-compatible object storage.
 
 Management Operations
 =====================
 
-Object Storage Server Configuration 
------------------------------------
+Object Storage Server Configuration
+------------------------------------
 
-Select System > General in the left menu and configure the following parameters on the Storage settings.
+Open the storage settings from [System > General] and configure the following items:
 
-- Endpoint: The endpoint URL of the object storage.
-- Access Key: The access key of the object storage.
-- Secret Key: The secret key of the object storage.
-- Bucket: The bucket name.
+- Endpoint: The endpoint URL of the storage server
+- Access Key: The access key of the storage server
+- Secret Key: The secret key of the storage server
+- Bucket: The bucket name to manage
 
 
-Display Storage Objects
------------------------
+Display Method
+--------------
 
-Select System > Storage in the left menu to display a list page of the objects on the storage server, as below.
+To open the object list page shown below, click [System > Storage] in the left menu.
 
 |image0|
 
@@ -44,32 +44,31 @@ The size of the object.
 Last Modified
 :::::::::::::
 
-The last modified date of the object.
-
+The last modified date and time of the object.
 
 Download
 --------
 
-Click Download button on the list page to download the object.
+You can download the object by clicking the Download button.
 
 
 Delete
 ------
 
-Click Delete button to delete the object.
+You can delete the object by clicking the Delete button.
 
 
-Upload File
------------
+Upload
+------
 
-Click Upload File button on the list page if you want to upload a new file.
+You can open the file upload window by clicking the File Upload button in the upper right.
 
 
 Create Folder
---------------
+-------------
 
-Click Create Folder button on the list page if you want to create a new folder. Note that you can not create empty folders.
+You can open the folder creation window by clicking the Create Folder button to the right of the path display. Note that you cannot create empty folders.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/storage-1.png
 

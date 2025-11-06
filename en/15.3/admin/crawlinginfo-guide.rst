@@ -24,5 +24,5 @@ To display details for specific crawling session, click the row of crawling info
 
 |image1|
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/crawlinginfo-2.png

@@ -21,4 +21,4 @@ Select System Info > Search in a left menu to display a search form.
 Type a keyword to search form and then click Search button.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/searchlist-1.png

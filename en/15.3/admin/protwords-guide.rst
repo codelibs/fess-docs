@@ -1,40 +1,50 @@
-==============
-Protwords List
-==============
+======================
+Protwords Dictionary
+======================
 
 Overview
 ========
 
-Protwords page manages dictionary of protwords.
-Protwords are words which you do not want to be [stemmed](https://www.elastic.co/guide/en/elasticsearch/guide/master/stemming.html).
+You can manage words to exclude from stemming processing.
+Since stemming processing is fundamentally rule-based, unintended normalization may occur.
+For example, the word "Maine" (the name of a U.S. state) would be normalized to "main".
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select System > Dictionary in the left menu and click a protword file to display a list page of Protwords Configuration, as below.
+To open the Protwords configuration list page shown below, click [System > Dictionary] in the left menu, then click protwords.
 
 |image0|
 
-Click a word name if you want to edit it.
+Click the configuration name to edit it.
 
-Create Configuration
+Configuration Method
 --------------------
 
-Click Create New button to display a form page for protwords configuration.
+To open the Protwords configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
-Source
-::::::
+Word Information
+::::::::::::::::
 
-Target words.
+Enters words to exclude from stemming processing.
 
+Download
+========
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/protwords-2.png
+You can download in Protwords dictionary format.
+
+Upload
+======
+
+You can upload in Protwords dictionary format.
+
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/protwords-2.png
