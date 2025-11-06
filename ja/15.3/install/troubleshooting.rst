@@ -395,7 +395,7 @@ Docker 固有の問題
 
 1. **ログを確認**::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs
 
 2. **メモリ不足を確認**
 
@@ -411,7 +411,7 @@ Docker 固有の問題
 
    YAML ファイルの構文エラーがないか確認します::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml config
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml config
 
 コンテナは起動するが Fess にアクセスできない
 ----------------------------------------
@@ -420,11 +420,11 @@ Docker 固有の問題
 
 1. **コンテナの状態を確認**::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml ps
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
 
 2. **ログを確認**::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs fess
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs fess
 
 3. **ネットワーク設定を確認**::
 
@@ -508,7 +508,6 @@ NSSM などのサードパーティツールを使用して、Windows サービ�
 商用サポートが必要な場合は、N2SM, Inc. にご相談ください：
 
 - **Web**: https://www.n2sm.net/
-- **Email**: support@n2sm.net（商用サポート契約者のみ）
 
 デバッグ情報の収集
 ================
