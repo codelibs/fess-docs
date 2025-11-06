@@ -33,9 +33,9 @@ Fess ではクローラ部分に Fess Crawler を利用して、ウェブやフ�
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Ubuntu 18.04
+-  Ubuntu 22.04
 
--  OpenJDK 11.0.8
+-  OpenJDK 21
 
 Fess とは
 =========
@@ -49,31 +49,28 @@ Fess の特徴
 Java ベースの検索システム
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fess は以下の図にあるとおり、様々なオープンソースプロダクトを利用して構築されています。
-
-Fess の構造
-|image0|
+Fess は様々なオープンソースプロダクトを利用して構築されています。
 
 配布物は実行可能なアプリケーションとして提供されます。
 Fess では検索画面や管理画面を提供しています。
 Fess はウェブフレームワークとして LastaFlute を採用しています。
 ですので、画面などのカスタマイズが必要な場合は JSP を修正することで簡単にカスタマイズが可能です。
-また、設定データやクロールデータは保存されており、それらのデータへのアクセスは、O/R マッパーの DBFlute を利用してアクセスしています。
+また、設定データやクロールデータは OpenSearch に保存されており、それらのデータへのアクセスは、O/R マッパーの DBFlute を利用してアクセスしています。
 
 Fess は Java ベースのシステムとして構築されているので、Java が動作可能なすべてのプラットフォームでも実行可能です。
 各種設定もウェブブラウザーから簡単に設定する UI を備えています。
 
-Elasticsearch を検索エンジンとして利用
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OpenSearch を検索エンジンとして利用
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Elasticsearch は Elastic 社から提供される、Lucene をベースとしたエンタープライズ向け検索サーバーです。
+OpenSearch は AWS から提供される、Lucene をベースとしたオープンソースの検索・分析エンジンです。
 特徴としては、リアルタイム検索、検索結果の強調表示や集計機能などをサポートしていることが上げられます。
-また、検索対象とすることができるドキュメント数は、Elasticsearch サーバーの構成次第で、数億ドキュメントにもなり、大規模サイトへもスケールアウトできる検索サーバーです。
+また、検索対象とすることができるドキュメント数は、OpenSearch サーバーの構成次第で、数億ドキュメントにもなり、大規模サイトへもスケールアウトできる検索サーバーです。
 利用実績も日本でも数多くあり、注目されている検索エンジンの一つであると言えます。
 
-Fess では、検索エンジン部分に Elasticsearch を採用しています。
-Fess の配布物には Elasticsearch を組み込んだ形で配布していますが、 Fess サーバーとは別なサーバーへ切り出して利用することも可能です。
-また、 Fess と Elasticsearch でそれぞれで冗長構成を組むことができ、高い拡張性を活かすことができる設計になっています。
+Fess では、検索エンジン部分に OpenSearch を採用しています。
+Fess の Docker 版では OpenSearch を組み込んだ形で配布していますが、 Fess サーバーとは別なサーバーへ切り出して利用することも可能です。
+また、 Fess と OpenSearch でそれぞれで冗長構成を組むことができ、高い拡張性を活かすことができる設計になっています。
 
 Fess Crawler をクロールエンジンとして利用
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,7 +88,7 @@ Fess Crawler でクロール実行するためのパラメーター等は Fess �
 ==================
 
 ここでは、 Fess を起動させ、検索を行うまでの手順を説明します。
-Ubuntu18.04 で実行することを想定して説明を行いますが、Mac OS X や Windows でもほぼ同様の手順でインストールと起動を行うことができます。
+Ubuntu 22.04 で実行することを想定して説明を行いますが、macOS や Windows でもほぼ同様の手順でインストールと起動を行うことができます。
 
 ダウンロードとインストール
 --------------------------
@@ -100,37 +97,37 @@ Fess のダウンロード
 ^^^^^^^^^^^^^^^^^^^
 
 https://github.com/codelibs/fess/releases から最新のパッケージをダウンロードします。
-この記事執筆の時点（2021/10）での最新バージョンは、 13.15.0 です。
+この記事執筆の時点（2025/11）での最新バージョンは、 15.3.0 です。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 Fess のダウンロード
 |image1|
 
-Erasticsearch のダウンロード
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OpenSearch のダウンロード
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Erasticsearch の `ダウンロードページ <https://www.elastic.co/jp/downloads/elasticsearch>`__\ からダウンロードします。
-Fess のダウンロードページでは、各バージョンに対応する Elasticsearch のバージョンを記載していますので、バージョンを確認してダウンロードしてください。
-Fess 13.15.0 に対応するバージョンは `7.15.0  <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-7-15-0>`__\  ですので、このバージョンをダウンロードします。
+OpenSearch の `ダウンロードページ <https://opensearch.org/downloads.html>`__\ からダウンロードします。
+Fess のダウンロードページでは、各バージョンに対応する OpenSearch のバージョンを記載していますので、バージョンを確認してダウンロードしてください。
+Fess 15.3.0 に対応するバージョンは 3.3.0 ですので、このバージョンをダウンロードします。
 ダウンロード完了後、任意のディレクトリに解凍してください。
 
 設定
 ----
 
-起動する前に、Fess で Elasticsearch クラスタへ接続するための設定をします。
-zipパッケージの設定方法については、インストールページの `ZIP パッケージを利用する場合  <https://fess.codelibs.org/ja/13.15/install/install.html#zip>`__\  を参照してください。
-利用するパッケージが RPM/DEB パッケージの場合は、インストールページの `RPM/DEB パッケージを利用する場合  <https://fess.codelibs.org/ja/13.15/install/install.html#rpm-deb>`__\  を参照してください。
+起動する前に、Fess で OpenSearch クラスタへ接続するための設定をします。
+ZIP/TAR.GZ パッケージの設定方法については、インストールページの `インストール方法 <https://fess.codelibs.org/ja/15.3/install/install.html>`__\ を参照してください。
+利用するパッケージが RPM/DEB パッケージの場合も、同様のインストールページを参照してください。
 
 起動
 ----
 
-起動は簡単です。展開したディレクトリ Elasticsearch-<version> 、 fess-<version> の中で以下のコマンドを実行します。
-Elasticsearch → Fess の順に起動します。
+起動は簡単です。展開したディレクトリ opensearch-<version> 、 fess-<version> の中で以下のコマンドを実行します。
+OpenSearch → Fess の順に起動します。
 
-Elasticsearch の起動
+OpenSearch の起動
 ::
 
-    $ ./bin/elasticsearch
+    $ ./bin/opensearch
 
 Fess の起動
 ::
@@ -146,7 +143,7 @@ Fess の起動
 ----
 
 Fess サーバーを停止させるには Fess のプロセスを停止(kill)します。
-停止する際は Fess → Elasticsearch の順に停止します。
+停止する際は Fess → OpenSearch の順に停止します。
 
 ディレクトリ構成
 ----------------
@@ -156,7 +153,7 @@ Fess サーバーを停止させるには Fess のプロセスを停止(kill)し
 Fess のディレクトリ構成
 ::
 
-    fess-13.15.0
+    fess-15.3.0
     ├── LICENSE
     ├── README.md
     ├── app
@@ -176,27 +173,13 @@ Fess のディレクトリ構成
     │   │   ├── thumbnails
     │   │   ├── view
     │   ├── css
-    │   │   ├── admin
-    │   │   │   ├── adminlte.min.css
-    │   │   │   ├── adminlte.min.css.map
-    │   │   │   ├── bootstrap.min.css
-    │   │   │   ├── bootstrap.min.css.map
-    │   │   │   ├── font-awesome.min.css
-    │   │   │   ├── fonts
-    │   │   │   ├── html5shiv.min.js
-    │   │   │   ├── plugins
-    │   │   │   ├── respond.min.js
-    │   │   │   └── style.css
-    │   │   ├── bootstrap.min.css
-    │   │   ├── bootstrap.min.css.map
-    │   │   ├── font-awesome.min.css
-    │   │   ├── fonts
-    │   │   └── style.css
+    │   │   ├── admin
+    │   │   ├── fonts
+    │   │   └── style.css
     │   ├── favicon.ico
     │   ├── images
     │   └── js
     ├── bin
-    ├── es
     ├── extension
     ├── lib
     ├── logs
@@ -208,31 +191,25 @@ Fess のアプリケーション群のファイルはappディレクトリ以下
 管理画面からも編集は可能ですが、検索画面のJSPはapp/WEB-INF/view以下に保存されます。
 また、appディレクトリ直下のjs、css、imagesが検索画面で利用されるファイルになります。
 
-Elasticsearch のディレクトリ構成
+OpenSearch のディレクトリ構成
 ::
 
-    elasticsearch-7.15.0
+    opensearch-3.3.0
     ├── LICENSE.txt
     ├── NOTICE.txt
-    ├── README.asciidoc
+    ├── README.md
     ├── bin
     ├── config
-    │   ├── elasticsearch.keystore
-    │   ├── elasticsearch.yml
+    │   ├── opensearch.yml
     │   ├── jvm.options
     │   ├── jvm.options.d
     │   ├── log4j2.properties
-    │   ├── role_mapping.yml
-    │   ├── roles.yml
-    │   ├── users
-    │   └── users_roles
+    │   └── ...
     ├── data
-    ├── jdk.app
     ├── lib
     ├── logs
     ├── modules
     └── plugins
-
 
 インデックスのデータはdataディレクトリに保存されます。
 
@@ -369,11 +346,9 @@ JSP ファイルで利用している CSS ファイルを変更したい場合�
 
 -  `Fess <https://fess.codelibs.org/ja/>`__
 
--  `Elasticsearch <https://www.elastic.co/products/elasticsearch>`__
+-  `OpenSearch <https://opensearch.org/>`__
 
--  `LastaFlute <http://dbflute.seasar.org/ja/lastaflute/>`__
-
-.. |image0| image:: ../../resources/images/ja/article/1/architecture.png
+-  `LastaFlute <https://lastaflute.dbflute.org/>`__
 .. |image1| image:: ../../resources/images/ja/article/1/fess-download.png
 .. |image2| image:: ../../resources/images/ja/article/1/top.png
 .. |image3| image:: ../../resources/images/ja/article/1/login.png

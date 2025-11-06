@@ -8,7 +8,7 @@ Fess で作る Elasticsearch ベースの検索サーバー 〜 API 編
 今回は Fess が提供するAPIを利用して、クライアントサイド（ブラウザー側）で検索とその結果の表示を行う方法をご紹介します。
 APIを利用することで、既存のウェブシステムにも Fess を検索サーバーとして利用して、HTMLだけの変更で組み込むことも可能になります。
 
-本記事では Fess 13.2.0 を利用して説明します。
+本記事では Fess 15.3.0 を利用して説明します。
 Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/articles/article-1.html>`__\ を参照してください。
 
 対象読者
@@ -21,7 +21,7 @@ Fess の構築方法については\ `導入編 <https://fess.codelibs.org/ja/ar
 
 この記事の内容に関しては次の環境で、動作確認を行っています。
 
--  Google Chrome 76
+-  Google Chrome 120 以降
 
 JSON API
 ========
@@ -30,12 +30,12 @@ Fess は通常のHTMLによる検索表現以外に、APIとしてJSONによる�
 APIを利用することで、 Fess サーバーを構築しておき、既存のシステムから検索結果だけを問い合わせにいくことも簡単に実現できます。
 検索結果を開発言語に依存しない形式で扱えるので、 Fess をJava以外のシステムにも統合しやすいと思います。
 
-Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON応答 <https://fess.codelibs.org/ja/13.2/api/api-search.html>`__ を参照してください。
+Fess の提供しているAPIがどのような応答を返してくるのかについては `JSON応答 <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__ を参照してください。
 
-Fess は内部の検索エンジンとして Elasticsearch を利用しています。
-ElasticsearchもJSONによるAPIを提供していますが Fess のAPIは異なるものです。
-ElasticsearchのAPIでなく、 Fess のAPIを利用するメリットは、 Fess のAPIを利用することで検索ログの管理や閲覧権限の制御など、様々な Fess 固有の機能を利用できることが挙げられます。
-ドキュメントクロールの仕組みをゼロから独自に開発したい場合はElasticsearchを利用するのが良いと思いますが、簡単に検索機能を追加したいということであれば Fess を利用して多くの開発コストを削減できます。
+Fess は内部の検索エンジンとして OpenSearch を利用しています。
+OpenSearchもJSONによるAPIを提供していますが Fess のAPIは異なるものです。
+OpenSearchのAPIでなく、 Fess のAPIを利用するメリットは、 Fess のAPIを利用することで検索ログの管理や閲覧権限の制御など、様々な Fess 固有の機能を利用できることが挙げられます。
+ドキュメントクロールの仕組みをゼロから独自に開発したい場合はOpenSearchを利用するのが良いと思いますが、簡単に検索機能を追加したいということであれば Fess を利用して多くの開発コストを削減できます。
 
 JSON APIを利用した検索サイトの構築
 ==================================
@@ -43,7 +43,7 @@ JSON APIを利用した検索サイトの構築
 今回は Fess のAPIを利用したサイトを構築する方法を説明します。
 Fess サーバーとのやりとりにはJSON応答を利用します。
 今回利用する Fess サーバーは Fess プロジェクトでデモ用として公開している Fess サーバーを利用しています。
-もし、独自の Fess サーバーを利用したい場合は Fess 10.0.0以降のバージョンをインストールしてください。
+もし、独自の Fess サーバーを利用したい場合は Fess 15.3.0以降のバージョンをインストールしてください。
 
 JSONとCORS
 -----------
@@ -136,7 +136,7 @@ fess.jsの内容
 
     $(function(){
         // (1) Fess の URL
-        var baseUrl = "http://SERVERNAME:8080/json/?q=";
+        var baseUrl = "http://SERVERNAME:8080/api/v1/documents?q=";
         // (2) 検索ボタンのjQueryオブジェクト
         var $searchButton = $('#searchButton');
 
@@ -310,7 +310,7 @@ successの引数には Fess サーバーから返却された検索結果のオ�
 
 まず、10でレスポンスのステータスの内容を確認しています。
 正常に検索リクエストが処理された場合は0が設定されています。
-Fess のJSON応答の詳細は\ `Fess サイト <https://fess.codelibs.org/ja/13.2/api/api-search.html>`__\ を確認してください。
+Fess のJSON応答の詳細は\ `Fess サイト <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__\ を確認してください。
 
 検索リクエストが正常に処理され、検索結果がヒットしなかった場合は11の条件文内でsubheader領域の内容を空にして、result領域で検索結果がヒットしなかった旨のメッセージを表示します。
 
@@ -353,6 +353,9 @@ results[i].〜でアクセスすることで検索結果ドキュメントのフ
 
 Fess のJSON APIを利用してjQueryベースのクライアント検索サイトを構築してみました。
 JSON APIを利用することでブラウザーベースのアプリケーションに限らず、別のアプリケーションから呼び出して Fess を利用するシステムも構築できます。
+
+なお、本記事のサンプルコードでは従来のAPIエンドポイント形式を示していますが、Fess 15.3では ``/api/v1/documents`` エンドポイントの利用が推奨されます。
+詳細は `API仕様 <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__ を参照してください。
 
 参考資料
 ========
