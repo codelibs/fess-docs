@@ -80,4 +80,4 @@ Site or Domain
 
 Filter search results by the site or domain you enter.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/user/advanced-search-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/advanced-search-1.png

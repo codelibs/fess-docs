@@ -18,5 +18,5 @@ You can select label information when searching. Label information can be select
 
 By creating an index with labels configured, you can search documents by their assigned labels. Searching without specifying a label performs a normal full search. If you change label information, you need to update the index.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/search-label-1.png
 .. pdf   :width: 300 px
