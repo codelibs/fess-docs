@@ -1,189 +1,243 @@
-============
-Installation
-============
+============================
+Choosing an Installation Method
+============================
 
-Requirements
-============
+This page provides an overview of |Fess| installation methods.
+Select the appropriate installation method based on your environment.
 
-Fess can be used in the following environments:
+.. warning::
 
-- OS: Operating system that can run Java or Docker (such as Windows or Linux)
-- `Java 21 <https://adoptium.net/>`__ (for installing the TAR.GZ/ZIP/RPM/DEB version)
-- `Docker <https://docs.docker.com/get-docker/>`__ (for installing the Docker version)
+   **Important Notice for Production Environments**
 
-Using Fess in a production environment or for load testing is not recommended with the embedded OpenSearch.
+   Running with the embedded OpenSearch is not recommended for production environments or load testing.
+   Always set up an external OpenSearch server.
 
-For the TAR.GZ/ZIP/RPM/DEB version, you must install the correct version of OpenSearch.
+Verify Prerequisites
+====================
+
+Before starting the installation, verify the system requirements.
+
+For details, refer to :doc:`prerequisites`.
+
+Installation Method Comparison
+===============================
+
+|Fess| can be installed using the following methods. Choose according to your environment and use case.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 25 30 30
+
+   * - Method
+     - Target OS
+     - Recommended Use
+     - Detailed Documentation
+   * - Docker
+     - Linux, Windows, macOS
+     - Development/evaluation environments, rapid setup
+     - :doc:`install-docker`
+   * - TAR.GZ
+     - Linux, macOS
+     - Environments requiring customization
+     - :doc:`install-linux`
+   * - RPM
+     - RHEL, CentOS, Fedora
+     - Production environments (RPM-based)
+     - :doc:`install-linux`
+   * - DEB
+     - Debian, Ubuntu
+     - Production environments (DEB-based)
+     - :doc:`install-linux`
+   * - ZIP
+     - Windows
+     - Development/production on Windows
+     - :doc:`install-windows`
+
+Features of Each Installation Method
+=====================================
+
+Docker Version
+--------------
+
+**Advantages:**
+
+- Fastest setup possible
+- No need to manage dependencies
+- Ideal for development environments
+- Easy to start and stop containers
+
+**Disadvantages:**
+
+- Requires Docker knowledge
+
+**Recommended Environments:** Development environments, evaluation environments, POC, production environments
+
+Details: :doc:`install-docker`
+
+Linux Package Versions (TAR.GZ/RPM/DEB)
+----------------------------------------
+
+**Advantages:**
+
+- High performance in native environments
+- Can be managed as system services (RPM/DEB)
+- Allows detailed customization
+
+**Disadvantages:**
+
+- Requires manual installation of Java and OpenSearch
+- Configuration requires more effort
+
+**Recommended Environments:** Production environments, environments requiring customization
+
+Details: :doc:`install-linux`
+
+Windows Version (ZIP)
+---------------------
+
+**Advantages:**
+
+- Runs in Windows native environments
+- No installer required
+
+**Disadvantages:**
+
+- Requires manual installation of Java and OpenSearch
+- Configuration requires more effort
+
+**Recommended Environments:** Development/evaluation on Windows, production operation on Windows Server
+
+Details: :doc:`install-windows`
+
+Basic Installation Flow
+========================
+
+The basic flow is the same for all installation methods.
+
+1. **Verify System Requirements**
+
+   Refer to :doc:`prerequisites` to ensure system requirements are met.
+
+2. **Download Software**
+
+   Download |Fess| from the `download site <https://fess.codelibs.org/downloads.html>`__.
+
+   For the Docker version, obtain the Docker Compose file.
+
+3. **Set Up OpenSearch**
+
+   For non-Docker versions, OpenSearch must be set up separately.
+
+   - Install OpenSearch 3.3.0
+   - Install required plugins
+   - Edit configuration files
+
+4. **Set Up Fess**
+
+   - Install Fess
+   - Edit configuration files (connection information to OpenSearch, etc.)
+
+5. **Start and Verify**
+
+   - Start services
+   - Verify operation by accessing through a browser
+
+   For details, refer to :doc:`run`.
+
+Required Components
+===================
+
+The following components are required to run |Fess|.
+
+Fess Main System
+----------------
+
+The main full-text search system. Provides functionality such as web interface, crawler, and indexer.
+
+OpenSearch
+----------
+
+OpenSearch is used as the search engine.
+
+- **Supported Version**: OpenSearch 3.3.0
+- **Required Plugins**:
+
+  - opensearch-analysis-fess
+  - opensearch-analysis-extension
+  - opensearch-minhash
+  - opensearch-configsync
+
+.. important::
+
+   The OpenSearch version and plugin versions must match.
+   Version mismatches can cause startup errors or unexpected behavior.
+
+Java (Non-Docker Versions)
+---------------------------
+
+For TAR.GZ/ZIP/RPM/DEB versions, Java 21 or later is required.
+
+- Recommended: `Eclipse Temurin <https://adoptium.net/temurin>`__
+- OpenJDK 21 or later can also be used
+
+.. note::
+
+   For the Docker version, Java is included in the Docker image and does not need to be installed separately.
+
+Next Steps
+==========
+
+Verify the system requirements and select the appropriate installation method.
+
+1. :doc:`prerequisites` - Verify system requirements
+2. Choose an installation method:
+
+   - :doc:`install-docker` - Docker installation
+   - :doc:`install-linux` - Linux installation
+   - :doc:`install-windows` - Windows installation
+
+3. :doc:`run` - Starting |Fess| and initial setup
+4. :doc:`security` - Security configuration (for production environments)
+
+Frequently Asked Questions
+===========================
+
+Q: Is OpenSearch required?
+---------------------------
+
+A: Yes, it is required. |Fess| uses OpenSearch as its search engine.
+For the Docker version, it is automatically set up, but for other methods, manual installation is necessary.
+
+Q: Can I upgrade from a previous version?
+------------------------------------------
+
+A: Yes, you can. For details, refer to :doc:`upgrade`.
+
+Q: Can I configure with multiple servers?
+------------------------------------------
+
+A: Yes, you can. Fess and OpenSearch can run on separate servers.
+Additionally, by configuring OpenSearch as a cluster, high availability and improved performance can be achieved.
 
 Download
 ========
 
-Download Fess from the `Download Site <https://fess.codelibs.org/downloads.html>`__.
+|Fess| and related components can be downloaded from:
 
-Using TAR.GZ Package
-====================
+- **Fess**: `Download Site <https://fess.codelibs.org/downloads.html>`__
+- **OpenSearch**: `Download OpenSearch <https://opensearch.org/downloads.html>`__
+- **Java (Adoptium)**: `Adoptium <https://adoptium.net/>`__
+- **Docker**: `Get Docker <https://docs.docker.com/get-docker/>`__
 
-Install OpenSearch
-------------------
-
-Refer to `Download & Get Started <https://opensearch.org/downloads.html>`__ and download the TAR.GZ version of OpenSearch.
-
-The OpenSearch plugins need to match the version of OpenSearch.
-The following explains the installation for OpenSearch 3.3.0.
-
-Install the OpenSearch plugins in the plugins directory.
-Assume that OpenSearch is installed in $OPENSEARCH_HOME.
-
-::
-
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.0
-    $ $OPENSEARCH_HOME/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
-
-Note that these plugins depend on the version of OpenSearch.
-
-Add the following settings to $OPENSEARCH_HOME/config/opensearch.yml.
-If there are existing settings, overwrite them.
-
-Specify the absolute path of $OPENSEARCH_HOME/data/config in configsync.config_path.
-
-::
-
-    configsync.config_path: [absolute path of $OPENSEARCH_HOME]/data/config/
-    plugins.security.disabled: true
-
-Install Fess
-------------
-
-Extract the Fess zip file to $FESS_HOME.
-To connect Fess to the OpenSearch cluster, specify the following startup options.
-Modify $FESS_HOME/bin/fess.in.sh.
-
-::
-
-    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[absolute path of $SEARCH_ENGINE_HOME]/data/config/
-
-
-Using ZIP Package
-=================
-
-Install OpenSearch
-------------------
-
-For Windows environments, use the ZIP version for installation.
-
-Refer to `Download & Get Started <https://opensearch.org/downloads.html>`__ and download the ZIP version of OpenSearch.
-
-OpenSearch plugins must be compatible with the version of OpenSearch being installed. Here's an explanation for installing OpenSearch version 3.3.0.
-
-Install the OpenSearch plugins in the plugins directory. Let's assume OpenSearch is installed at $OPENSEARCH_HOME.
-
-::
-
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.0
-    $ $OPENSEARCH_HOME\bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
-
-Please note that these plugins are version-dependent, so ensure compatibility with your OpenSearch version.
-
-Add the following settings to $OPENSEARCH_HOME\\config\\opensearch.yml. If there are existing settings, modify them accordingly.
-
-Specify the absolute path of $OPENSEARCH_HOME\\data\\config for configsync.config_path.
-
-::
-
-    configsync.config_path: [$absolute path of $OPENSEARCH_HOME]/data/config/
-    plugins.security.disabled: true
-
-Install Fess
-------------
-
-Extract the ZIP file of |Fess| to $FESS_HOME.
-To connect |Fess| to the OpenSearch cluster, specify the following startup options in $FESS_HOME\\bin\\fess.in.bat.
-
-::
-
-    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=[$absolute path of $SEARCH_ENGINE_HOME]/data/config/
-
-
-Using with RPM/DEB Package
-==========================
-
-Install OpenSearch
-------------------
-
-Please download the RPM/DEB version of OpenSearch from `Download & Get Started <https://opensearch.org/downloads.html>`__ and install it by following the instructions on `Installing OpenSearch <https://opensearch.org/docs/2.11/install-and-configure/install-opensearch/index/>`__.
-
-Do not perform any OpenSearch configuration or startup as we will perform the OpenSearch configuration in the following steps.
-
-Please note that the OpenSearch plugins should match the version of OpenSearch that you installed. The following describes the installation process for OpenSearch 3.3.0.
-
-Install the OpenSearch plugins in the plugins directory:
-
-::
-
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.0
-    $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
-
-Please note that these plugins depend on the version of OpenSearch.
-
-Add the following settings to /etc/opensearch/opensearch.yml (common for RPM/DEB). If there are existing settings, please overwrite them:
-
-::
-
-    configsync.config_path: /var/lib/opensearch/data/config/
-    plugins.security.disabled: true
-
-Install Fess
-------------
-
-Next, install the RPM/DEB package of |Fess|.
-
-For RPM package:
-
-::
-
-    $ sudo rpm -ivh fess-<version>.rpm
-
-For DEB package:
-
-::
-
-    $ sudo dpkg -i fess-<version>.deb
-
-To register as a service, enter the following commands. For RPM with chkconfig:
-
-::
-
-    $ sudo /sbin/chkconfig --add OpenSearch
-    $ sudo /sbin/chkconfig --add fess
-
-For RPM/DEB with systemd:
-
-::
-
-    $ sudo /bin/systemctl daemon-reload
-    $ sudo /bin/systemctl enable opensearch.service
-    $ sudo /bin/systemctl enable fess.service
-
-To connect |Fess| to the OpenSearch cluster, specify the following startup options in /usr/share/fess/bin/fess.in.sh:
-
-::
-
-    SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
-
-Using Docker images
+Version Information
 ===================
 
-For the installation, refer the following files from `https://github.com/codelibs/docker-fess/compose <https://github.com/codelibs/docker-fess/tree/v15.3.0/compose>`__:
+This document covers the following versions:
 
-- `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml>`__
-- `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch2.yaml>`__
+- **Fess**: 15.3.0
+- **OpenSearch**: 3.3.0
+- **Java**: 21 or later
+- **Docker**: 20.10 or later
+- **Docker Compose**: 2.0 or later
 
+For documentation on previous versions, please refer to the documentation for each version.

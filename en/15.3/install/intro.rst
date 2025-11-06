@@ -2,42 +2,68 @@
 Introduction
 ============
 
-Who Should Use This Document
-============================
+About This Document
+===================
 
-This document is intended for users responsible for |Fess| installation and uninstallation tasks.
+This installation guide describes the procedures for installing, starting, upgrading, and uninstalling |Fess|.
+Select the appropriate installation method according to your environment.
 
-Before You Read This Document
-=============================
+Target Audience
+===============
 
-This document shows how to install |Fess|.
-Knowledge of server management is required.
+This document is intended for users responsible for installing and uninstalling |Fess|.
+
+Before You Begin
+================
+
+This document provides installation instructions for |Fess|. The following knowledge is required:
+
+- Basic server administration
+- Linux or Windows command-line operations
+- Basic network and firewall configuration
+- Docker fundamentals (if using the Docker version)
+
+Document Structure
+==================
+
+This installation guide consists of the following sections:
+
+- **System Requirements**: Hardware and software requirements for running |Fess|
+- **Installation**: Platform-specific installation procedures
+
+  - Linux (TAR.GZ/RPM/DEB) installation
+  - Windows (ZIP) installation
+  - Docker installation
+
+- **Startup and Shutdown**: Starting, stopping, and initial setup of the |Fess| server
+- **Upgrade**: Procedures for upgrading from previous versions to the latest release
+- **Uninstall**: Complete uninstallation procedures for |Fess|
+- **Security Settings**: Recommended security configurations for production environments
+- **Troubleshooting**: Common issues and solutions
 
 Online Access
 =============
 
-Download, professional services, support, and other developer
-information, visit the following.
+For downloads, professional services, support, and other developer information, visit:
 
--  Project site: `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
+-  Project Site: `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
 
-Technical Support
-=================
+Technical Support Contact
+=========================
 
-For technical questions and problems about our products, see the following info.
+For technical questions or issues regarding this product, visit:
 
 - Issues: `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
 
 Commercial Support
 ------------------
 
-If you need commercial support, maintenance and technical support for this product,
-please contact to `N2SM, Inc. <https://www.n2sm.net/>`__.
+For commercial support including technical assistance and maintenance, please contact `N2SM, Inc. <https://www.n2sm.net/>`__.
 
-How To Send Comments And Suggestions
-====================================
+How to Submit Comments and Suggestions
+=======================================
 
-If you find problems or improvements, please send from:
+If you have any issues or suggestions for improvement, please submit them here:
 
-- Issues For Product: `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
-- Issues For Document: `https://github.com/codelibs/fess-docs/issues <https://github.com/codelibs/fess-docs/issues>`__
+- Product Issues: `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
+- Documentation Issues: `https://github.com/codelibs/fess-docs/issues <https://github.com/codelibs/fess-docs/issues>`__
