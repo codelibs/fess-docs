@@ -4,7 +4,7 @@
 
 .. toctree::
 
-   開発者ガイド <dev/getting-started>
+   開発者ガイド <dev/index>
    GitHub <https://github.com/codelibs>
    Docker <https://github.com/orgs/codelibs/packages>
    JavaDoc <https://fess.codelibs.org/apidocs/index.html>
