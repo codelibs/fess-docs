@@ -33,7 +33,7 @@ Docker イメージについて
 |Fess| の Docker イメージは以下のコンポーネントで構成されています：
 
 - **Fess**: 全文検索システム本体
-- **OpenSearch**: 検索エンジン（Elasticsearch の代替）
+- **OpenSearch**: 検索エンジン
 
 公式 Docker イメージは `Docker Hub <https://hub.docker.com/r/codelibs/fess>`__ で公開されています。
 
@@ -52,7 +52,7 @@ Docker Compose を使用した起動には、以下のファイルが必要で�
     $ mkdir fess-docker
     $ cd fess-docker
     $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch2.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch3.yaml
 
 方法 2: Git でリポジトリをクローン
 --------------------------------
@@ -78,10 +78,10 @@ Git がインストールされている場合は、リポジトリ全体をク�
 - **環境変数**: Java のヒープサイズなどの設定
 - **ボリューム**: データの永続化設定
 
-``compose-opensearch2.yaml`` の内容
+``compose-opensearch3.yaml`` の内容
 ---------------------------------
 
-``compose-opensearch2.yaml`` には、OpenSearch の設定が含まれています。
+``compose-opensearch3.yaml`` には、OpenSearch の設定が含まれています。
 
 主な設定項目：
 
@@ -118,7 +118,7 @@ Git がインストールされている場合は、リポジトリ全体をク�
 
 ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 .. note::
 
@@ -127,7 +127,7 @@ Git がインストールされている場合は、リポジトリ全体をク�
 
 起動ログの確認::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs -f
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f
 
 ``Ctrl+C`` でログ表示を終了できます。
 
@@ -136,7 +136,7 @@ Git がインストールされている場合は、リポジトリ全体をク�
 
 コンテナの状態を確認します::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml ps
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
 
 以下のようなコンテナが起動していることを確認してください：
 
@@ -192,18 +192,18 @@ Docker コンテナの停止
 
 コンテナを停止する::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml stop
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
 
 コンテナを停止して削除する::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 .. warning::
 
    ``down`` コマンドはコンテナを削除しますが、ボリュームは削除しません。
    ボリュームも削除する場合は ``-v`` オプションを追加します::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml down -v
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
    **注意**: このコマンドを実行すると、すべてのデータが削除されます。
 
@@ -241,7 +241,7 @@ Docker コンテナの停止
 
 既存の OpenSearch クラスターを使用する場合、``compose.yaml`` を編集して接続先を変更します。
 
-1. ``compose-opensearch2.yaml`` を使用しない::
+1. ``compose-opensearch3.yaml`` を使用しない::
 
        $ docker compose -f compose.yaml up -d
 
@@ -307,7 +307,7 @@ Docker Compose での本番運用
 
 1. ログを確認::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs
 
 2. ポート番号の競合を確認::
 
@@ -337,7 +337,7 @@ Linux の場合::
 
 すべてのデータを削除して初期状態に戻す::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down -v
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
     $ docker volume prune
 
 .. warning::
@@ -377,18 +377,18 @@ A: 以下の手順でアップデートします：
 1. 最新の Compose ファイルを取得
 2. コンテナを停止::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 3. 新しいイメージを取得::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml pull
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
 4. コンテナを起動::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 Q: マルチノード構成は可能ですか？
 --------------------------------
 
-A: 可能です。``compose-opensearch2.yaml`` を編集して、複数の OpenSearch ノードを定義することで、
+A: 可能です。``compose-opensearch3.yaml`` を編集して、複数の OpenSearch ノードを定義することで、
 クラスター構成にすることができます。ただし、本番環境では Kubernetes などのオーケストレーションツールの使用を推奨します。
