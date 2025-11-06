@@ -8,7 +8,7 @@ XMLのフォーマットについては、\ `GSAの公式ドキュメント <htt
 設定
 ====
 
-system.properitesに ``web.api.gsa=true`` を追加して、Google Search Appliance互換APIを有効にしてください。
+system.propertiesに ``web.api.gsa=true`` を追加して、Google Search Appliance互換APIを有効にしてください。
 
 リクエスト
 ========
