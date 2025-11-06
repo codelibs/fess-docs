@@ -69,9 +69,8 @@ Docker 版
 **デメリット:**
 
 - Docker の知識が必要
-- リソースのオーバーヘッドが発生
 
-**推奨環境:** 開発環境、評価環境、POC
+**推奨環境:** 開発環境、評価環境、POC、本番環境
 
 詳細: :doc:`install-docker`
 
@@ -104,7 +103,7 @@ Windows 版 (ZIP)
 **デメリット:**
 
 - Java と OpenSearch の手動インストールが必要
-- Linux 環境に比べてパフォーマンスが劣る場合がある
+- 設定の手間がかかる
 
 **推奨環境:** Windows 環境での開発・評価、Windows Server での本番運用
 
@@ -178,7 +177,7 @@ Java (Docker 版以外)
 
 TAR.GZ/ZIP/RPM/DEB 版の場合、Java 21 以降が必要です。
 
-- 推奨: `Adoptium (Eclipse Temurin) <https://adoptium.net/>`__
+- 推奨: `Eclipse Temurin <https://adoptium.net/temurin>`__
 - OpenJDK 21 以降も使用可能
 
 .. note::
@@ -193,8 +192,8 @@ TAR.GZ/ZIP/RPM/DEB 版の場合、Java 21 以降が必要です。
 1. :doc:`prerequisites` - システム要件の確認
 2. インストール方法の選択:
 
-   - :doc:`install-docker` - Docker でのインストール（推奨: 開発・評価環境）
-   - :doc:`install-linux` - Linux へのインストール（推奨: 本番環境）
+   - :doc:`install-docker` - Docker でのインストール
+   - :doc:`install-linux` - Linux へのインストール
    - :doc:`install-windows` - Windows へのインストール
 
 3. :doc:`run` - |Fess| の起動と初回セットアップ
@@ -202,16 +201,6 @@ TAR.GZ/ZIP/RPM/DEB 版の場合、Java 21 以降が必要です。
 
 よくある質問
 ==========
-
-Q: どのインストール方法を選べばよいですか？
-----------------------------------------
-
-A: 用途によって異なります：
-
-- **開発・評価**: Docker 版が最も簡単です
-- **本番環境 (Linux)**: RPM/DEB 版を推奨（systemd によるサービス管理が可能）
-- **本番環境 (Windows)**: ZIP 版を使用
-- **カスタマイズが必要**: TAR.GZ 版を使用
 
 Q: OpenSearch は必須ですか？
 --------------------------
@@ -245,7 +234,7 @@ A: はい、可能です。Fess と OpenSearch を別々のサーバーで実行
 
 このドキュメントは、以下のバージョンを対象としています：
 
-- **Fess**: 15.3.x
+- **Fess**: 15.3.0
 - **OpenSearch**: 3.3.0
 - **Java**: 21 以降
 - **Docker**: 20.10 以降
