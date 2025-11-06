@@ -1,47 +1,37 @@
-============
-Range Search
-============
+====================
+Range-Specified Search
+====================
 
-Range Search
-============
-
-|Fess| supports Range search that specify values between the lower and upper bound by date type or numeric type.
+When data that supports range specification, such as numeric values, is stored in a field, you can perform range-specified searches on that field.
 
 Usage
 -----
 
-The syntax of Range search is "fieldname:[lower TO upper]"
+To perform a range-specified search, enter "field_name:[value TO value]" in the search form.
 
-For example, type to search document content_length field against 1 k to
-10 k bytes is shown below the search form.
-
-To search documents of which size is from 10 bytes to 100 bytes, the query is below.
+For example, to search for documents in the content_length field ranging from 1 kilobyte to 10 kilobytes, enter the following in the search form:
 
 ::
 
-    content_length:[10 TO 100]
+    content_length:[1000 TO 10000]
 
-Date range search is also supported. 
-The syntax is "last_modified:[fromdate TO todate].
-The date format supports ISO 8601 or Date Math syntax.
+To perform a time range-specified search, enter "last_modified:[datetime1 TO datetime2]" (datetime1 < datetime2) in the search form.
 
-.. tabularcolumns:: |p{4cm}|p{8cm}|
+Date and time are based on ISO 8601.
+
 .. list-table::
 
-   * - ISO8601
-     - YYYY-MM-DDThh:mm:ss.sssZ(ex. 2012-12-02T10:45:23.5Z)
-   * - Date Math
-     - now, y(Year), M(Month), d(Day), h(hour), m(minute)
+   * - Date and time with fractional seconds
+     - When based on current date and time
+   * - YYYY-MM-DDThh:mm:sssZ (Example: 2012-12-02T10:45:235Z)
+     - now (current date and time), y (year), M (month), w (week), d (day), h (hour), m (minute), s (second)
 
-For example, if you look for documents updated from 30 days prior to now(2/21/2012), it's as below.
+When based on now or a specific time, you can add symbols such as +, - (addition, subtraction) and / (rounding). However, when based on a specific time, you need to insert || between the time and the symbol.
 
-::
+/ is a symbol that rounds to the unit following /. now-1d/d represents the previous day at 00:00, which is 1 day subtracted from today at 00:00, regardless of what time it is executed today.
 
-    last_modified:[now/d-30d TO now]
-
-or
+For example, to search for documents updated within the last 30 days from February 21, 2016 at 20:00 (current date and time) in the last_modified field, enter the following in the search form:
 
 ::
 
-    last_modified:[2012-11-23T00:00:00Z TO 2012-12-21T20:00:00Z]
-
+    last_modified:[now-30d TO now](=[2016-01-23T00:00:000Z+TO+2016-02-21T20:00:000Z(current date and time)])

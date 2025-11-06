@@ -2,21 +2,20 @@
 Boost Search
 ============
 
-Boost Search
-============
+Boost Search (Weighted Search)
+===============================
 
-|Fess| supports Boost search which prioritize specific search words.
+Use boost search to prioritize specific search terms. Boost search enables searching based on the importance of search terms.
 
 Usage
 -----
 
-Boost search syntax is word^number, such as Apple^10.
-The number is boost-weighted value, and higher value is prior.
+To use boost search, specify a boost value (weighting value) in the format "^boost_value" after the search term.
 
-To search document which contains more apples than oranges, 
+For example, to search for "apple orange" with pages containing more instances of "apple" prioritized, enter the following in the search form:
 
 ::
 
-    apples^100 oranges
+    apple^100 orange
 
-Boost value specifies an integer greater than 1.
+Specify an integer greater than or equal to 1 for the boost value.

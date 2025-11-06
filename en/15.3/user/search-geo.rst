@@ -1,26 +1,19 @@
-==========
-Geo Search
-==========
+=========================
+Geolocation-Based Search
+=========================
 
-Geo Search
-==========
-
-|Fess| supports Geo Search to search documents with location information.
-To perform Geo search, indexed document needs to contains values of latitude and longitude in location field.
+By adding latitude and longitude geolocation information to each document during index generation, you can perform searches using geolocation information.
 
 Usage
-----
+-----
 
-Geo information is passed as request parameters.
+By default, the following parameters are available:
 
-.. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
    * - geo.<fieldname>.point
-     - Comma-separated value that is latitude,longitude.
+     - Specify latitude and longitude in degrees as Double type.
    * - geo.<fieldname>.distance
-     - Distance from the above point.
+     - Specify distance from document in kilometers. Example: 10km
 
-Table: Request parameters
-
-
+Table: Request Parameters

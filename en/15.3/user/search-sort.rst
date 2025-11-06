@@ -1,68 +1,67 @@
-====
-Sort
-====
+===========
+Sort Search
+===========
 
-Sort
-====
+You can sort search results by specifying fields such as search date and time.
 
-To select sort field in Search Options dialog, the search results are sorted by the field.
+Sort Target Fields
+------------------
 
-Sort field
-----------
+By default, you can specify the following fields for sorting:
 
-The following sort fields are available.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
    :header-rows: 1
 
-   * - Field name
+   * - Field Name
      - Description
    * - created
-     - Time to crawl document
+     - Crawled date and time
    * - content_length
-     - Size of document
+     - Crawled document size
    * - last_modified
-     - Last modified time of document
+     - Last modified date and time of the crawled document
    * - filename
      - File name
    * - score
      - Score value
    * - timestamp
-     - Indexed time
+     - Date and time when the document was indexed
    * - click_count
-     - The number of clicked documents
+     - Number of times the document was clicked
    * - favorite_count
-     - The number of liked documents
+     - Number of times the document was favorited
 
-Table: Sort fields
+Table: Sort Target Field List
+
+
+You can also customize to add your own fields as sort targets.
 
 Usage
 -----
 
-To click Options button, Sort fields are selectable on Search Options dialog.
+You can select sort conditions when searching. Sort conditions can be selected in the search options dialog displayed by clicking the Options button.
 
 |image0|
 
-In addition to selecting sort field on the dialog, sort prefix operator is available in query syntax. 
-The format is colon-separated query, such as sort:fieldname.
+To sort using the search field, enter "sort:field_name" in the search form, separating sort and the field name with a colon (:).
 
-To sort search results which contains fess by content size, the query is below.
+The following sorts documents containing fess by document size in ascending order:
 
 ::
 
     fess sort:content_length
 
-To sort in descending order as below.
+To sort in descending order:
 
 ::
 
     fess sort:content_length.desc
 
-If you want to sort by multiple sort fields, it's below.
+To sort by multiple fields, specify them separated by commas:
 
 ::
 
     fess sort:content_length.desc,last_modified
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/search-sort-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/user/search-sort-1.png
+.. pdf            :width: 300 px

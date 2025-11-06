@@ -1,57 +1,63 @@
-============
-Field Search
-============
+========================
+Field-Specified Search
+========================
 
-Search with field
-=================
+Field-Specified Search
+======================
 
-|Fess| stores crawling data to each field, such as title and content, in the indexed document.
-Since some of fields are searchable, you can search documents by the field.
+Content crawled by |Fess| is stored in separate fields such as title and body. You can search by specifying these fields. By specifying fields, you can define detailed search conditions such as by document type or size.
 
-Available fields
+Available Fields
 ----------------
 
-The default searchable fields are below.
+By default, you can search using the following fields:
 
-.. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
+   :header-rows: 1
 
-   * - Field name
+   * - Field Name
      - Description
    * - url
      - Crawled URL
    * - host
-     - Crawled host name
+     - Host name contained in the crawled URL
    * - title
-     - Title of document
+     - Title
    * - content
-     - Content of document
+     - Body text
    * - content_length
-     - Document size
+     - Crawled document size
    * - last_modified
-     - Last modified time of document
+     - Last modified date and time of the crawled document
    * - mimetype
-     - The MIME type of document
+     - Document MIME type
 
-Table: Searchable fields
+Table: Available Field List
 
-For HTML document, title field is a value of title tag and content field is a value under body tag without tags.
+
+If no field is specified, the search targets the title and content fields.
+You can also add custom fields to make them searchable.
+
+For HTML files, the title tag is stored in the title field, and the text under the body tag is stored in the content field.
 
 Usage
 -----
 
-The format of Field search is colon-separated query, such as fieldname:searchword.
-If field name is not specified, |Fess| searches documents in values of title and content field.
+To perform a field-specified search, enter "field_name:search_term" in the search form, separating the field name and search term with a colon (:).
 
-To search documents that contains "fess" in title field:
+To search for fess in the title field, enter:
 
 ::
 
     title:fess
 
-To search documents that contains "fess" in url field:
+The above search displays documents containing fess in the title field.
+
+To search the url field, enter:
 
 ::
 
-    url:"*fess*"
+   url:https\:\/\/fess.codelibs.org\/ja\/15.3\/*
+   url:"https://fess.codelibs.org/ja/15.3/*"
 
+The first format allows wildcard queries, so you can also write it as ``url:*\/\/fess.codelibs.org\/*``. The ":" and "/" characters in URLs are reserved words and must be escaped. The second format does not support wildcard queries but supports prefix queries.

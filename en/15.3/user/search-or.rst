@@ -2,21 +2,17 @@
 OR Search
 =========
 
-OR Search
-=========
-
-OR search provides a search result that contains some of search words you type at a search box.
-For example, "Apple OR Computer" is the search result that contains Apple or Computer.
+Use OR search to find documents that contain any of the specified search terms. When multiple words are entered in the search input field, the default is AND search.
 
 Usage
 -----
 
-OR operator is written in capital letters.
+To use OR search, specify OR between search terms. OR must be written in uppercase letters with spaces before and after it.
 
-For multiple words, type the following query with OR operator at the search form:
+For example, to search for documents containing either "term1" or "term2", enter the following in the search form:
 
 ::
 
-    "term 1" OR "term 2" OR "term 3"
+    term1 OR term2
 
-
+Multiple terms can also be connected with OR.

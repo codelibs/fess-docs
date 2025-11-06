@@ -2,23 +2,18 @@
 Fuzzy Search
 ============
 
-Fuzzy Search
-============
+Fuzzy Search (Approximate Search)
+==================================
 
-|Fess| supports Fuzzy search based on the Levenshtein Distance or Edit Distance algorithm.
+Fuzzy search is available when you want to search for words that do not exactly match the search term. |Fess| supports fuzzy search based on Levenshtein distance.
 
 Usage
 -----
 
-Fuzzy search syntax is word~number, such as Apple~0.8.
-The number is between 0 and 1, with a value closer to 1 only terms with a higher similarity will be matched.
+Add "~" after the search term to which you want to apply fuzzy search.
 
-
-
-To search documents which contains words close to Solr, the query is as below.
+For example, to perform a fuzzy search for the word "Fess", enter the following in the search form to search for documents containing words similar to "Fess" (such as "Fes"):
 
 ::
 
-    Solr~0.8
-
-If no fuzzy value, the default is 0.5.
+    Fess~

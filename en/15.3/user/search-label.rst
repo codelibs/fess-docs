@@ -1,22 +1,22 @@
-============
-Label Search
-============
+=====================
+Label-Specified Search
+=====================
 
-Search with label
-=================
+Label-Specified Search (Category Search)
+=========================================
 
-|Fess| is able to assign labels to documents at the indexing time and Label search categorizes documents into the labels on the search result.
-To register a label at administrative page, you can select the label from Search Options.
+By adding label information to categorize search target documents, you can perform filtered searches by specifying labels at search time.
+
+By registering label information in the administration screen, label-based searching becomes available on the search screen. Available label information can be selected from a dropdown menu when searching. If no labels are registered, the label dropdown box will not be displayed.
 
 Usage
 -----
 
-You can select labels at search time.
-To click Option button at the right of Search button on Search page, Search Options dialog is displayed.
+You can select label information when searching. Label information can be selected in the search options dialog displayed by clicking the Options button.
 
 |image0|
 
-Labels are assigned to documents at the indexing time.
-If you want to update label information, you need to reindex documents.
+By creating an index with labels configured, you can search documents by their assigned labels. Searching without specifying a label performs a normal full search. If you change label information, you need to update the index.
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/user/search-label-1.png
+.. pdf   :width: 300 px
