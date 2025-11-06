@@ -130,26 +130,6 @@ OpenSearchのハイライターに渡す値を指定します。
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
-..
-    TODO
-    ::
-
-        query.highlight.force.source=false
-        query.highlight.fragmenter=span
-        query.highlight.fragment.offset=-1
-        query.highlight.no.match.size=0
-        query.highlight.order=score
-        query.highlight.phrase.limit=256
-        query.highlight.content.description.fields=hl_content,digest
-        query.highlight.boundary.position.detect=true
-        query.highlight.text.fragment.type=query
-        query.highlight.text.fragment.size=3
-        query.highlight.text.fragment.prefix.length=5
-        query.highlight.text.fragment.suffix.length=5
-        query.max.search.result.offset=100000
-        query.additional.default.fields=
-
-
 レスポンスに追加するフィールド名
 ========================
 
@@ -159,13 +139,6 @@ OpenSearchのハイライターに渡す値を指定します。
     query.additional.response.fields=
     query.additional.api.response.fields=
 
-..
-    TODO
-        query.additional.scroll.response.fields=
-        query.additional.cache.response.fields=
-        query.additional.highlighted.fields=
-
-
 フィールド名の追加
 ==============
 
@@ -174,13 +147,6 @@ OpenSearchのハイライターに渡す値を指定します。
 
     query.additional.search.fields=
     query.additional.facet.fields=
-
-..
-    TODO
-        query.additional.sort.fields=
-        query.additional.analyzed.fields=
-        query.additional.not.analyzed.fields=
-
 
 検索結果をGSA互換のXML形式で取得する際の設定
 ===================================
@@ -201,133 +167,3 @@ GSA互換のXML形式を使用する時のデフォルトのソートを指定�
     ::
 
         query.gsa.default.sort=
-
-..
-    TODO
-        query.gsa.meta.prefix=MT_
-        query.gsa.index.field.charset=charset
-        query.gsa.index.field.content_type.=content_type
-        query.collapse.max.concurrent.group.results=4
-        query.collapse.inner.hits.name=similar_docs
-        query.collapse.inner.hits.size=0
-        query.collapse.inner.hits.sorts=
-        query.default.languages=
-        query.json.default.preference=_query
-        query.gsa.default.preference=_query
-        query.language.mapping=\
-        ar=ar\n\
-        bg=bg\n\
-        bn=bn\n\
-        ca=ca\n\
-        ckb-iq=ckb-iq\n\
-        ckb_IQ=ckb-iq\n\
-        cs=cs\n\
-        da=da\n\
-        de=de\n\
-        el=el\n\
-        en=en\n\
-        en-ie=en-ie\n\
-        en_IE=en-ie\n\
-        es=es\n\
-        et=et\n\
-        eu=eu\n\
-        fa=fa\n\
-        fi=fi\n\
-        fr=fr\n\
-        gl=gl\n\
-        gu=gu\n\
-        he=he\n\
-        hi=hi\n\
-        hr=hr\n\
-        hu=hu\n\
-        hy=hy\n\
-        id=id\n\
-        it=it\n\
-        ja=ja\n\
-        ko=ko\n\
-        lt=lt\n\
-        lv=lv\n\
-        mk=mk\n\
-        ml=ml\n\
-        nl=nl\n\
-        no=no\n\
-        pa=pa\n\
-        pl=pl\n\
-        pt=pt\n\
-        pt-br=pt-br\n\
-        pt_BR=pt-br\n\
-        ro=ro\n\
-        ru=ru\n\
-        si=si\n\
-        sq=sq\n\
-        sv=sv\n\
-        ta=ta\n\
-        te=te\n\
-        th=th\n\
-        tl=tl\n\
-        tr=tr\n\
-        uk=uk\n\
-        ur=ur\n\
-        vi=vi\n\
-        zh-cn=zh-cn\n\
-        zh_CN=zh-cn\n\
-        zh-tw=zh-tw\n\
-        zh_TW=zh-tw\n\
-        zh=zh\n\
-        query.boost.title=0.5
-        query.boost.title.lang=1.0
-        query.boost.content=0.05
-        query.boost.content.lang=0.1
-        query.boost.important_content=-1.0
-        query.boost.important_content.lang=-1.0
-        query.boost.fuzzy.min.length=4
-        query.boost.fuzzy.title=0.01
-        query.boost.fuzzy.title.fuzziness=AUTO
-        query.boost.fuzzy.title.expansions=10
-        query.boost.fuzzy.title.prefix_length=0
-        query.boost.fuzzy.title.transpositions=true
-        query.boost.fuzzy.content=0.005
-        query.boost.fuzzy.content.fuzziness=AUTO
-        query.boost.fuzzy.content.expansions=10
-        query.boost.fuzzy.content.prefix_length=0
-        query.boost.fuzzy.content.transpositions=true
-        query.prefix.expansions=50
-        query.prefix.slop=0
-        query.fuzzy.prefix_length=0
-        query.fuzzy.expansions=50
-        query.fuzzy.transpositions=true
-        query.facet.fields=label
-        query.facet.fields.size=100
-        query.facet.fields.min_doc_count=1
-        query.facet.fields.sort=count.desc
-        query.facet.fields.missing=
-        query.facet.queries=\
-        query.boost.title
-        query.boost.title.lang
-        query.boost.content
-        query.boost.content.lang
-        query.boost.important_content
-        query.boost.important_content.lang
-        query.boost.fuzzy.min.length
-        query.boost.fuzzy.title
-        query.boost.fuzzy.title.fuzziness
-        query.boost.fuzzy.title.expansions
-        query.boost.fuzzy.title.prefix_length
-        query.boost.fuzzy.title.transpositions
-        query.boost.fuzzy.content
-        query.boost.fuzzy.content.fuzziness
-        query.boost.fuzzy.content.expansions
-        query.boost.fuzzy.content.prefix_length
-        query.boost.fuzzy.content.transpositions
-        query.prefix.expansions
-        query.prefix.slop
-        query.fuzzy.prefix_length
-        query.fuzzy.expansions
-        query.fuzzy.transpositions
-        query.facet.fields
-        query.facet.fields.size
-        query.facet.fields.min_doc_count
-        query.facet.fields.sort
-        query.facet.fields.missing
-        query.facet.queries
-
