@@ -1,15 +1,16 @@
-=====================
-General Configuration
-=====================
+================
+General Settings
+================
 
 Overview
 ========
-On this administration page, you can manage the settings of |Fess|.
-You can change various settings of |Fess| without restarting it.
+
+This administration page allows you to manage |Fess| configuration settings.
+You can modify various |Fess| settings without restarting |Fess|.
 
 |image0|
 
-Management Operations
+Configuration Options
 =====================
 
 System
@@ -25,15 +26,15 @@ Login Required
 
 Specify whether to require login for search functionality.
 
-Login Link
-::::::::::
+Display Login Link
+::::::::::::::::::
 
-Specify whether to display a link to the login page on the search screen.
+Configures whether to display a link to the login page on the search screen.
 
-Similar Result Collapsed
-::::::::::::::::::::::::
+Result Collapse
+:::::::::::::::
 
-Specify whether to enable collapsing of duplicate results.
+Specifies whether to enable collapsing of duplicate results.
 
 Thumbnail View
 ::::::::::::::
@@ -43,35 +44,35 @@ Specify whether to enable thumbnail display.
 Default Label Value
 :::::::::::::::::::
 
-Specify the default label value to add to search conditions.
-If specified on a per-role or per-group basis, add role: or group: respectively, e.g., role:admin=label1.
+Specifies the label value to add to the search conditions by default.
+To specify per role or group, add "role:" or "group:" prefix, such as "role:admin=label1".
 
 Default Sort Value
 ::::::::::::::::::
 
-Specify the default sort value to add to search conditions.
-If specified on a per-role or per-group basis, add role: or group: respectively, e.g., role:admin=content_length.desc.
+Specifies the sort value to add to the search conditions by default.
+To specify per role or group, add "role:" or "group:" prefix, such as "role:admin=content_length.desc".
 
 Virtual Host
 ::::::::::::
 
-Specify the virtual host.
-For details, see :doc:the virtual host section of the configuration guide <../config/virtual-host>.
+Configures virtual hosts.
+For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/virtual-host>`.
 
 Popular Word Response
 :::::::::::::::::::::
 
 Specify whether to enable the popular word API.
 
-Encoding for CSV
-::::::::::::::::
+CSV File Encoding
+:::::::::::::::::
 
-Specify the encoding of the CSV file to be downloaded.
+Specifies the encoding for downloadable CSV files.
 
-Append Params to URL
-::::::::::::::::::::
+Append Search Parameters
+::::::::::::::::::::::::
 
-Enable to pass parameters to the search result display.
+Enable when passing parameters to the search result display.
 
 Notification Email
 ::::::::::::::::::
@@ -85,67 +86,65 @@ Crawler
 Check Last Modified
 :::::::::::::::::::
 
-Enable to perform a differential crawl.
+Enable to perform differential crawling.
 
-Simultaneous Crawler Config
+Concurrent Crawler Settings
 :::::::::::::::::::::::::::
 
-Specify the number of crawl settings to execute simultaneously.
+Specifies the number of crawl configurations to execute simultaneously.
 
-Remove Documents Before
+Delete Documents Before
 :::::::::::::::::::::::
 
-Specify the number of days after the index to keep documents.
+Specifies the number of days for the retention period after indexing.
 
-Excluded Failure Type
-:::::::::::::::::::::
+Excluded Failure Types
+::::::::::::::::::::::
 
-Specify the exception names, etc., which are excluded from being crawled as URLs with failures exceeding the threshold.
+Failure URLs that exceed the threshold are excluded from crawl targets, but exception names specified here will be crawl targets even if they exceed the failure URL threshold.
 
 Failure Count Threshold
 :::::::::::::::::::::::
 
-If the number of failures recorded as URLs exceeds the number specified here for documents targeted for crawling, they will be excluded from the next crawl.
+If a crawl target document is recorded in failure URLs more times than specified here, it will be excluded from the next crawl.
 
 Logging
 -------
 
-Search Logging
-::::::::::::::
+Search Log
+::::::::::
 
-Specify whether to enable the recording of search logs.
+Specifies whether to enable recording of search logs.
 
-User Logging
+User Log
+::::::::
+
+Specifies whether to enable recording of user logs.
+
+Favorite Log
 ::::::::::::
 
-Specify whether to enable the recording of user logs.
-
-Favorite Logging
-::::::::::::::::
-
-Specify whether to enable the recording of favorite logs.
+Specifies whether to enable recording of favorite logs.
 
 Purge Search Log Before
 :::::::::::::::::::::::
 
-Delete search logs older than the specified number of days.
+Deletes search logs older than the specified number of days.
 
 Purge Job Log Before
 ::::::::::::::::::::
 
-Delete job logs older than the specified number of days.
+Deletes job logs older than the specified number of days.
 
-Purge User Before
-:::::::::::::::::
+Purge User Log Before
+:::::::::::::::::::::
 
-Delete user logs older than the specified number of days.
+Deletes user logs older than the specified number of days.
 
-Here's the translation:
+Purge Bot Name for Log
+::::::::::::::::::::::
 
-Bots Name For Purge
-:::::::::::::::::::
-
-Specify bot names to exclude from search logs.
+Specifies bot names to exclude from search logs.
 
 Log Level
 :::::::::
@@ -158,17 +157,17 @@ Suggest
 Suggest from Search Words
 :::::::::::::::::::::::::
 
-Specify whether to generate suggestion candidates from search logs.
+Specifies whether to generate suggest candidates from search logs.
 
 Suggest from Documents
 ::::::::::::::::::::::
 
-Specify whether to generate suggestion candidates from indexed documents.
+Specifies whether to generate suggest candidates from indexed documents.
 
 Purge Suggest Documents Before
 ::::::::::::::::::::::::::::::
 
-Delete suggest data from the specified number of days ago.
+Deletes suggest data older than the specified number of days.
 
 LDAP
 ----
@@ -176,63 +175,90 @@ LDAP
 LDAP URL
 ::::::::
 
-Specify the URL of the LDAP server.
+Specifies the URL of the LDAP server.
 
 Base DN
 :::::::
 
-Specify the base distinguished name for logging in to the search page.
+Specifies the base distinguished name for logging into the search screen.
 
 Bind DN
 :::::::
 
-Specify the administrator's bind DN.
+Specifies the Bind DN for administrators.
 
 Password
 ::::::::
 
-Specify the password for the Bind DN.
+Specifies the password for the Bind DN.
 
 User DN
 :::::::
 
-Specify the distinguished name of the user.
+Specifies the distinguished name for users.
 
 Account Filter
 ::::::::::::::
 
-Specify the user's common name or uid.
+Specifies the user's Common Name, uid, etc.
 
 Group Filter
 ::::::::::::
 
-Specify the filter condition for the groups to be acquired.
+Specifies the filter conditions for the groups to retrieve.
 
 memberOf Attribute
 ::::::::::::::::::
 
-Specify the memberOf attribute name available on the LDAP server.
-For Active Directory, it's "memberOf".
-For other LDAP servers, it might be "isMemberOf".
+Specifies the memberOf attribute name available on the LDAP server.
+For Active Directory, it is "memberOf".
+For other LDAP servers, it may be "isMemberOf".
 
-Notification
-------------
+
+Notification Display
+--------------------
 
 Login Page
 ::::::::::
 
-Enter the message to be displayed on the login page.
+Enter the message to display on the login screen.
 
 Search Top Page
 :::::::::::::::
 
-Enter the message to be displayed on the search top page.
+Enter the message to display on the search top screen.
 
-Example
-=======
+Storage
+-------
 
-LDAP Configuration
-------------------
+After configuring each item, a [System > Storage] menu will appear in the left menu.
+For file management, see :doc:`Storage <../admin/storage-guide>`.
+
+Endpoint
+::::::::
+
+Specifies the endpoint URL of the MinIO server.
+
+Access Key
+::::::::::
+
+Specifies the access key for the MinIO server.
+
+Secret Key
+::::::::::
+
+Specifies the secret key for the MinIO server.
+
+Bucket
+::::::
+
+Specifies the bucket name to manage.
+
+Examples
+========
+
+LDAP Configuration Example
+--------------------------
 
 .. tabularcolumns:: |p{4cm}|p{4cm}|p{4cm}|
 .. list-table:: LDAP/Active Directory Configuration
@@ -264,3 +290,4 @@ LDAP Configuration
      - memberOf
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/general-1.png
+.. pdf            :height: 940 px

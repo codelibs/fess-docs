@@ -3,61 +3,65 @@ Key Match
 =========
 
 Overview
-=========
+========
 
-This section explains the settings for Key Match. By configuring Key Match settings, you can prioritize documents in search results when they are searched using specific terms. This feature is commonly used for advertising purposes.
+This page explains the configuration settings related to key match.
+By configuring key match settings, you can position documents at the top of search results when searched with registered search terms.
+A common use case is advertising.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-To open the Key Match settings list page shown below, click on "[Crawler > Key Match]" in the left menu.
+To open the key match configuration list page shown below, click [Crawler > Key Match] in the left menu.
 
 |image0|
 
-To edit, click on the configuration name.
+Click the configuration name to edit it.
 
-Create Configuration
---------------------
+Creating Configuration
+----------------------
 
-To open the Key Match settings page, click on the "Create New" button.
+To open the key match configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
-Term
-::::
+Search Term
+:::::::::::
 
-Weighting is only applied to search results when searched with this specific term.
+Weighting is applied only in search results when searched with this term.
 
 Query
 :::::
 
-Specify the target documents that should be positioned at the top using search queries.
+Target documents to position at the top are determined by search queries.
 
 Size
 ::::
 
-Specify the maximum number of documents that should match the query.
+Specifies the maximum number of documents matching the query.
 
-Boost
-:::::
+Boost Value
+:::::::::::
 
-Specify the weighting value for the document.
+Specifies the weighting value for documents.
 
 Virtual Host
 ::::::::::::
 
-Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
+Specifies the virtual host hostname.
+For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/virtual-host>`.
 
-Delete Configuration
---------------------
+Deleting Configuration
+----------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/keymatch-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/keymatch-2.png

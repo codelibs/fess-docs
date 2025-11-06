@@ -5,28 +5,28 @@ Plugin
 Overview
 ========
 
-The Plugin Settings page allows you to manage plugins.
+The plugin settings page manages plugins.
 
 Management Operations
 =====================
 
-Display Installed Plugins
--------------------------
+Display Method
+--------------
 
-To open the list page of installed plugins shown in the figure below, click [System > Plugins] in the left menu.
+To open the installed plugin list page shown below, click [System > Plugin] in the left menu.
 
 |image0|
 
-To uninstall, click the delete button.
+To uninstall, click the Delete button.
 
-Install New Plugins
--------------------
+Installation
+------------
 
-To install a new plugin, click the install button.
+To install a new plugin, click the Install button.
 
 |image1|
 
-Select the desired plugin from the dropdown menu and click the install button to initiate the installation process.
+Select the plugin you want to install from the pull-down menu and click the Install button to start the installation.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/plugin-2.png

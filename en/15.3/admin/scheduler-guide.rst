@@ -5,29 +5,29 @@ Scheduler
 Overview
 ========
 
-This section explains the settings for the job scheduler.
+This page explains the configuration settings for the job scheduler.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-To view the list of job scheduler settings shown in the following figure, click on [System > Scheduler] in the left menu.
+To open the job scheduler configuration list page shown below, click [System > Scheduler] in the left menu.
 
 |image0|
 
-To edit the settings, click on the name of the setting.
+Click the configuration name to edit it.
 
-Create Configuration
---------------------
+Creating Configuration
+----------------------
 
-To create a new setting, click on the "New" button on the scheduler settings page.
+To open the scheduler configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
 Name
 ::::
@@ -37,61 +37,69 @@ The name displayed in the list.
 Target
 ::::::
 
-The target is used as an identifier for whether the job should be executed directly by a batch command or not. Specify "all" if crawling is not performed using a command execution.
+The target serves as an identifier to determine whether a job should be executed when directly invoked via batch commands.
+If you do not execute crawls via command, specify "all".
 
 Schedule
 ::::::::
 
-Set the schedule here. The jobs written in the script will be executed according to the schedule set here.
+Configures the schedule settings.
+Jobs written in the script will be executed according to the schedule configured here.
 
-The format is in CRON format and is written in the form of "minute hour day month day of the week".
-For example, "0 12 * * 3" runs the job every Wednesday at 12:00 PM.
+The notation format follows CRON format: "minute hour day month day-of-week".
+For example, "0 12 \* \* 3" executes the job every Wednesday at 12:00 PM.
 
 Executor
 ::::::::
 
-Specify the script execution environment. Currently, only "groovy" is supported.
+Specifies the script execution environment.
+Currently, only "groovy" is supported.
 
 Script
 ::::::
 
-Write the content of the job execution in the language specified in the execution method.
+Describes the job execution content in the language specified by the execution method.
 
-For example, if you want to execute only three crawl settings as crawl jobs (assuming the ID of web crawl settings are 1 and 2, and the ID of file system crawl settings is 1), write it as follows:
+For example, to execute only three crawl configurations as a crawl job (assuming web crawl configuration IDs are 1 and 2, and file system crawl configuration ID is 1), write as follows:
 
-```
-return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
-```
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
 
 Logging
 :::::::
 
-If enabled, it will be recorded in the job log.
+When enabled, the job is recorded in the job log.
 
 Crawler Job
 :::::::::::
 
-If enabled, it will be treated as a crawler job.
+When enabled, the job is treated as a crawler job.
+By configuring job.max.crawler.processes in fess_config.properties, you can prevent an excessive number of crawlers from starting.
+By default, there is no limit on the number of crawler processes.
 
 Status
 ::::::
 
-Specify the enabled/disabled state of the job. If disabled, the job will not be executed.
+Specifies whether the job is enabled or disabled.
+When disabled, the job will not execute.
 
 Display Order
 :::::::::::::
 
-Specify the display order in the job list.
+Specifies the display order in the job list.
 
-Delete Configuration
---------------------
+Deleting Configuration
+----------------------
 
-Click the setting name on the list page and click the delete button to display the confirmation screen. Clicking the delete button will delete the setting.
+Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the Delete button to remove the configuration.
 
-Manual Crawling Method
-======================
+Manual Crawl Method
+===================
 
-Click "Default Crawler" in the "Scheduler" and click the "Start Now" button. To stop crawling, click "Default Crawler" and then click the "Stop" button.
+Click "Default Crawler" in the "Scheduler" and click the Start Now button.
+To stop the crawler, click "Default Crawler" and click the Stop button.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/scheduler-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/scheduler-2.png

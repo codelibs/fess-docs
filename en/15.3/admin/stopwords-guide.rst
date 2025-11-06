@@ -1,44 +1,53 @@
-==============
-Stopwords List
-==============
+======================
+Stopwords Dictionary
+======================
 
 Overview
 ========
 
-Stopwords page manages dictionary of stopwords characters.
-The stopwords dictionary maps characters to other one.
+You can map specific characters (symbols, character codes, full-width/half-width) to stopwords.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-Select System > Dictionary in the left menu and click stopwords file to display a list page of Stopwords Configuration, as below.
+To open the stopwords configuration list page shown below, click [System > Dictionary] in the left menu, then click stopwords.
 
 |image0|
 
-Click a word name if you want to edit it.
+Click the configuration name to edit it.
 
-Create Configuration
+Configuration Method
 --------------------
 
-Click Create New button to display a form page for stopwords configuration.
+To open the stopwords configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
 Source
 ::::::
 
-Replaced characters.
+Enters the characters (symbols, character codes, full-width/half-width) to be stopwords.
 
 Target
 ::::::
 
-Used character.
+Expands the characters entered in the source field with the converted characters.
+
+Download
+========
+
+You can download in stopwords dictionary format.
+
+Upload
+======
+
+You can upload in stopwords dictionary format.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/stopwords-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/stopwords-2.png

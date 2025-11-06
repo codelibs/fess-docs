@@ -2,35 +2,34 @@
 Introduction
 ============
 
-Who Should Use This Document
-============================
+Intended Audience
+=================
 
-This document is intended for system administrators responsible for managing the |Fess|.
+This document is intended for users responsible for |Fess| administration tasks.
 
-Before You Read This Document
-=============================
+Before You Begin
+================
 
-This document demonstrates administrative operations for |Fess|.
-Basic knowledge of computer operation is required.
+This document describes how to manage |Fess| configuration settings. Basic knowledge of computer operations is required.
 
 Online Access
 =============
 
-Download, professional services, support, and other developer information, visit the following.
+For downloads, professional services, support, and other developer information, please visit:
 
--  Project site:
+-  Project Site:
    `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
 
-Technical Support
-=================
+Technical Support Contact
+=========================
 
-Technical questions about our products, visit the following.
+If you have technical questions about this product that cannot be resolved through the documentation, please visit:
 
-- Issues:
+-  Issues:
    `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
 
 Commercial Support
 ------------------
 
-If you need commercial technical supports for this product, please contact to `N2SM, Inc. <https://www.n2sm.net/>`__.
+If you require commercial support such as technical assistance or maintenance for this product, please contact `N2SM, Inc. <https://www.n2sm.net/>`__
 

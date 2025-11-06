@@ -5,57 +5,57 @@ Access Token
 Overview
 ========
 
-The Access Tokens settings page allows you to manage access tokens.
+The access token settings page manages access tokens.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-To open the list page for Access Token settings shown in the figure below, click [System > Access Tokens] in the left menu.
+To open the access token configuration list page shown below, click [System > Access Token] in the left menu.
 
 |image0|
 
-To edit, click on the configuration name.
+Click the configuration name to edit it.
 
-Create Configuration
---------------------
+Creating Configuration
+----------------------
 
-To open the Access Token settings page, click the "Create New" button.
+To open the access token configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
 Name
 ::::
 
-Specify a name to describe this access token.
+Specifies the name to describe this access token.
 
-Permissions
-:::::::::::
+Permission
+::::::::::
 
-Set the permissions for the access token.
-They should be written in the "{user|group|role}name" format.
-For example, if a user belonging to the "developer" group needs permission to view search results, set the permission as "{group}developer".
+Sets the permission for the access token.
+Described in "{user|group|role}name" format.
+For example, to allow users belonging to the developer group to view search results, set the permission to "{group}developer".
 
 Parameter Name
 ::::::::::::::
 
-Specify the request parameter name when using the permission as a search query.
+Specifies the request parameter name when specifying permission as a search query.
 
-Expired
-:::::::
+Expiration Date
+:::::::::::::::
 
-Specify the expiration date of the access token.
+Specifies the expiration date for the access token.
 
-Delete Configuration
---------------------
+Deleting Configuration
+----------------------
 
-Click on the configuration name on the list page, and then click the delete button. A confirmation screen will appear.
-Clicking the delete button will remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/accesstoken-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/accesstoken-2.png

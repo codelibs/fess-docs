@@ -5,49 +5,53 @@ Related Query
 Overview
 ========
 
-Here, we will explain the settings for Related Queries. By configuring Related Queries settings, you can improve search results using registered related queries. Related queries can be used as alternative terms for search queries.
+This page explains the configuration settings for related queries.
+You can improve search results with registered related queries.
+Related queries can be used as alternative terms for search terms.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-To open the list page for configuring Related Queries shown below, click on "[Crawler > Related Query]" in the left menu.
+To open the related query configuration list page shown below, click [Crawler > Related Query] in the left menu.
 
 |image0|
 
-To edit, click on the configuration name.
+Click the configuration name to edit it.
 
-Create Configuration
---------------------
+Creating Configuration
+----------------------
 
-To open the Related Queries settings page, click on the "Create New" button.
+To open the related query configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
-Term
-::::
+Search Term
+:::::::::::
 
-Specify the search term that you want to match with the search query.
+Specifies the search term to match with the search query.
 
-Queries
-:::::::
+Query
+:::::
 
-Specify the query.
+Specifies the query.
 
 Virtual Host
 ::::::::::::
 
-Specify the hostname of the virtual host. For more information, refer to the :doc:`Virtual Host section of the configuration guide <../config/virtual-host>`.
+Specifies the virtual host hostname.
+For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/virtual-host>`.
 
-Delete Configuration
---------------------
+Deleting Configuration
+----------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/relatedquery-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/relatedquery-2.png

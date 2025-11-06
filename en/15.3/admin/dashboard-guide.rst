@@ -5,15 +5,15 @@ Dashboard
 Overview
 ========
 
-The dashboard provides a web-based management tool for |Fess| to manage OpenSearch clusters and indexes that it accesses.
+The Dashboard provides a web-based management tool for administering the OpenSearch cluster and indices that |Fess| accesses.
 
 |image0|
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table:: Indexes managed by |Fess|
+.. list-table:: Indices Managed by |Fess|
    :header-rows: 1
 
-   * - Index name
+   * - Index Name
      - Description
    * - fess.YYYYMMDD
      - Indexed documents
@@ -22,32 +22,35 @@ The dashboard provides a web-based management tool for |Fess| to manage OpenSear
    * - fess.suggest.YYYYMMDD
      - Suggest words
    * - fess_config
-     - |Fess| settings
+     - |Fess| configuration
    * - fess_user
      - User/role/group data
    * - configsync
-     - Dictionary settings
+     - Dictionary configuration
    * - fess_suggest
      - Suggest metadata
    * - fess_suggest_array
      - Suggest metadata
    * - fess_suggest_badword
-     - Suggest NG word list
+     - Suggest bad word list
    * - fess_suggest_analyzer
      - Suggest metadata
    * - fess_crawler
      - Crawl information
 
-Indexes starting with a dot (.) are system indexes and are not displayed by default. To display system indexes, enable the "special" checkbox.
 
-Check The Number Of Indexed Documents
-=====================================
+Indices starting with a dot (.) are system indices and are not displayed by default.
+To display system indices, enable the "special" checkbox.
 
-To check the number of indexed documents, navigate to the fess index as shown in the figure below.
+Checking Indexed Document Count
+================================
+
+The number of indexed documents is displayed in the fess index as shown below.
 
 |image1|
 
-Click the icon in the upper right corner of each index to display the operation menu for that index. To delete indexed documents, use the management search screen. Be careful not to delete an entire index using the "delete index" option.
+Clicking the icon in the upper right corner of each index displays the operation menu for that index.
+To delete indexed documents, use the administrative search screen. Do not use "delete index" to remove documents.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/dashboard-2.png

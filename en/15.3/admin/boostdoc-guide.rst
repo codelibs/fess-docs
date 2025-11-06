@@ -1,54 +1,57 @@
-=========
-Doc Boost
-=========
+==============
+Document Boost
+==============
 
 Overview
 ========
 
-This section explains the settings for Document Boost. By configuring Document Boost settings, you can position documents at the top of search results regardless of the search terms.
+This page explains the configuration settings related to document boost.
+By configuring document boost settings, you can position documents at the top of search results regardless of search terms.
 
 Management Operations
 =====================
 
-Display Configurations
-----------------------
+Display Method
+--------------
 
-To open the Document Boost settings list page shown below, click on "[Crawler > Doc Boost]" in the left menu.
+To open the document boost configuration list page shown below, click [Crawler > Document Boost] in the left menu.
 
 |image0|
 
-To edit, click on the configuration name.
+Click the configuration name to edit it.
 
-Create Configuration
---------------------
+Creating Configuration
+----------------------
 
-To open the Document Boost settings page, click on the "Create New" button.
+To open the document boost configuration page, click the New button.
 
 |image1|
 
-Configurations
---------------
+Configuration Items
+-------------------
 
 Condition
 :::::::::
 
-Specify the condition for the documents that should be positioned at the top. For example, if you want to prioritize URLs that include "https://www.n2sm.net/", you can write url.matches("https://www.n2sm.net/.*"). Conditions can be written in Groovy.
+Specifies the condition for documents to position at the top.
+For example, to display URLs containing https://www.n2sm.net/ at the top, write url.matches("https://www.n2sm.net/.*").
+Conditions can be written in Groovy.
 
-Boost Expr
-::::::::::
+Boost Value Expression
+::::::::::::::::::::::
 
-Specify the weighting value for the document. Expressions can be written in Groovy.
+Specifies the weighting value for documents.
+Expressions can be written in Groovy.
 
 Sort Order
 ::::::::::
 
-Set the sorting order for Document Boost.
+Configures the sort order for document boost.
 
-Delete Configuration
---------------------
+Deleting Configuration
+----------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
-
+Click the configuration name on the list page, then click the Delete button to display a confirmation screen. Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/boostdoc-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/boostdoc-2.png
