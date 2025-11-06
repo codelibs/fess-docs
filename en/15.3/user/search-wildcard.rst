@@ -1,40 +1,35 @@
-===============
+================
 Wildcard Search
-===============
+================
 
-Wildcard Search
-===============
-
-|Fess| supports single and multiple character wildcard search.
-Wildcard search performs indexed terms, not phrase.
+You can use single-character or multiple-character wildcards within search terms. ? can be specified as a single-character wildcard, and \* can be specified as a multiple-character wildcard. Wildcards apply to words. Wildcard searches on phrases are not supported.
 
 Usage
 -----
 
-To perform a single character wildcard search, use "?" symbol.
+To use a single-character wildcard, use ? as follows:
 
 ::
 
     te?t
 
-The above search looks for terms that match that with the single character replaced, such as text or test.
+In the above case, it is treated as a single-character wildcard, such as text or test.
 
-To perform a multiple character wildcard search, use "*" symbol.
+To use a multiple-character wildcard, use \* as follows:
 
 ::
 
     test*
 
-Multiple character wildcard search looks for 0 or more characters, such as test, tests or tester.
+In the above case, it is treated as a multiple-character wildcard, such as test, tests, or tester. You can also use it within a search term:
 
-You can also use the wildcard search in the middle of a term.
 ::
 
     te*t
 
-Notice
-------
+Usage Conditions
+----------------
 
-Wildcard search support terms, not phrase.
-If a word is indexed by bi-gram and so on, Wildcard search will not work properly.
-So, to use Wildcard search, a proper morphological analysis needs to be used.
+Wildcards are used on strings registered in the index.
+Therefore, if an index is created with bi-gram or similar methods, Japanese text is treated as fixed-length strings without meaning, so wildcards do not work as expected in Japanese.
+When using wildcards in Japanese, use them in fields that utilize morphological analysis.

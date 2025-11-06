@@ -1,7 +1,5 @@
 |Fess| User Guide
-====================
-
-Contents:
+==================
 
 .. toctree::
    :maxdepth: 2
@@ -19,7 +17,6 @@ Contents:
    search-fuzzy
    search-geo
    search-additional
-   json-response
-   ss
+   role-search
+   special-char
    advanced-search
-   

@@ -2,81 +2,82 @@
 Advanced Search
 ===============
 
-Advanced Search
-===============
-
-Narrow down search results for complex searches by using Advanced Search.
+The Advanced Search page enables you to perform more complex searches.
 
 Usage
 -----
 
-You can access Advanced Search page by clicking Advance button in Search Options dialog.
+The Advanced Search page can be accessed by clicking the Advanced Search button in the Options section of the search screen.
 
 |image0|
 
-You can search by pressing Search button at the bottom of the page.
+Click the Search button at the bottom of the page to execute your search.
 
-Details
--------
+Field List
+----------
 
-All these words
+All These Words
 :::::::::::::::
 
-All these words provides a search result that contains all search words you type at a text box.
+Search for documents that contain all of the words you enter.
+Words are separated by spaces.
 
-This exact word or phrase
-:::::::::::::::::::::::::
+This Exact Phrase
+:::::::::::::::::
 
-This exact word or phrase provides a search result that contains exact word or phrase you type at a text box.
+Search for documents that contain the exact phrase you enter.
+The phrase cannot be separated by spaces.
 
-Any of these words
+Any of These Words
 ::::::::::::::::::
 
-Any of these words provides a search result that contains some of search words you type at a text box.
+Search for documents that contain any of the words you enter.
+Words are separated by spaces.
 
-None of these words
+None of These Words
 :::::::::::::::::::
 
-None of these words provides a search result that does not contain specified search word. 
+Search for documents that do not contain all of the words you enter.
+Words are separated by spaces.
 
-Results per page
+Results per Page
 ::::::::::::::::
 
-Change the number of documents in search result page to display them.
+Specify the number of search results to display per page.
 
 Sort
 ::::
 
-Sort search results.
+Sort search results by fields such as search date and time.
 
 Preferred Languages
 :::::::::::::::::::
 
-you can select preferred language.
+Specify the preferred language for search results.
 
 Labels
 ::::::
 
-Narrow down search results by labels you select at a pull-down. 
+Filter search results by label. This option is not displayed if no labels are registered.
 
-Last update
-:::::::::::
+Last Modified
+:::::::::::::
 
-Narrow down search results by last update of documents.
+Filter search results by document modification date and time.
 
 File Type
 :::::::::
 
-Narrow down search results by file type you select at a pull down.
+Filter search results by document file type.
 
-Terms appearing
-:::::::::::::::
+Search Target
+:::::::::::::
 
-you can select the search target.
+Specify the search target from among entire page, page title, or page URL.
 
-Site or domain
+Site or Domain
 ::::::::::::::
 
-Narrow down search results by site or domain you type at a text box.
+Filter search results by the site or domain you enter.
 
 .. |image0| image:: ../../../resources/images/en/15.3/user/advanced-search-1.png

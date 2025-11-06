@@ -2,21 +2,17 @@
 AND Search
 ==========
 
-AND Search
-==========
-
-AND search provides a search result that contains all search words you type at a search box.
-For example, "Apple AND Computer" is the search result that contains both Apple and Computer.
-AND operator is optional, so the default operator is AND in |Fess|.
+Use AND search to find documents that contain all of the specified search terms. When multiple words are separated by spaces in the search input field without specifying AND, AND search is performed by default.
 
 Usage
 -----
 
-AND operator is written in capital letters, and is optional.
+To use AND search, specify AND between search terms. AND must be written in uppercase letters with spaces before and after it. AND can also be omitted.
 
-For multiple words, type the following query with AND operator at the search form:
+For example, to search for documents containing both "term1" and "term2", enter the following in the search form:
 
 ::
 
-    "term 1" AND "term 2" AND "term 3"
+    term1 AND term2
 
+Multiple terms can also be connected with AND.
