@@ -3,54 +3,67 @@ Search API
 ==========
 
 Fetching Search Results
-=======================
+========================
 
-You can retrieve search results from |Fess| in JSON format by sending a request to ``http://<Server Name>/api/v1/documents?q=search term``. To use the search API, you need to enable JSON responses in the Administration screen under "General Settings."
+Request
+-------
+
+==================  ====================================================
+HTTP Method         GET
+Endpoint            ``/api/v1/documents``
+==================  ====================================================
+
+By sending a request to |Fess| like
+``http://<Server Name>/api/v1/documents?q=search_term``,
+you can receive |Fess| search results in JSON format.
+To use the search API, you need to enable JSON responses in the Administration screen under System > General Settings.
 
 Request Parameters
 ------------------
 
-You can specify request parameters to perform advanced searches, such as ``http://<Server Name>/api/v1/documents?q=search term&num=50&fields.label=fess``. The available request parameters are as follows:
+You can perform more advanced searches by specifying request parameters such as
+``http://<Server Name>/api/v1/documents?q=search_term&num=50&fields.label=fess``.
+The available request parameters are as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table::
 
    * - q
-     - The search term. Encode it in the URL.
+     - Search term. Pass it after URL encoding.
    * - start
-     - The starting position of the search results. It starts from 0.
+     - Starting position of the result count. Starts from 0.
    * - num
-     - The number of results to display. The default is 20, and you can display up to 100.
+     - Number of items to display. Default is 20 items. Can display up to 100 items.
    * - sort
-     - Sorting. Used to sort the search results.
+     - Sort order. Used to sort search results.
    * - fields.label
      - Label value. Used to specify a label.
    * - facet.field
-     - Specify a facet field. (e.g., ``facet.field=label``)
+     - Facet field specification. (Example) ``facet.field=label``
    * - facet.query
-     - Specify a facet query. (e.g., ``facet.query=timestamp:[now/d-1d TO *]``)
+     - Facet query specification. (Example) ``facet.query=timestamp:[now/d-1d TO *]``
    * - facet.size
-     - Specify the maximum number of facets to retrieve. This is valid when facet.field is specified.
+     - Specification of the maximum number of facets to retrieve. Valid when facet.field is specified.
    * - facet.minDocCount
-     - Retrieve facets with a count equal to or greater than this value. This is valid when facet.field is specified.
+     - Retrieve facets with a count equal to or greater than this value. Valid when facet.field is specified.
    * - geo.location.point
-     - Specify latitude and longitude. (e.g., ``geo.location.point=35.0,139.0``)
+     - Latitude and longitude specification. (Example) ``geo.location.point=35.0,139.0``
    * - geo.location.distance
-     - Specify the distance from the center point. (e.g., ``geo.location.distance=10km``)
+     - Distance from the center point specification. (Example) ``geo.location.distance=10km``
    * - lang
-     - Specify the search language. (e.g., ``lang=en``)
+     - Search language specification. (Example) ``lang=en``
    * - preference
-     - Specify a string to determine the shard to use during search. (e.g., ``preference=abc``)
+     - String to specify the shard during search. (Example) ``preference=abc``
    * - callback
-     - The callback name when using JSONP. It is not necessary to specify if JSONP is not used.
+     - Callback name when using JSONP. Not necessary to specify if not using JSONP.
 
 Table: Request Parameters
 
 Response
 --------
 
-| The response returned will be as follows:
-| (Formatted version)
+| The following response is returned:
+| (Formatted)
 
 ::
 
@@ -105,7 +118,7 @@ Response
       ]
     }
 
-The response will be as follows:
+Each element is as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: Response Information
@@ -187,9 +200,10 @@ The response will be as follows:
 Searching All Documents
 =======================
 
-To search all documents, send the following request: ``http://<Server Name>/api/v1/documents/all?q=search_term```
+To search all target documents, send the following request:
+``http://<Server Name>/api/v1/documents/all?q=search_term``
 
-To use this feature, you need to set ``api.search.scroll`` to true in the ``fess_config.properties`` file.
+To use this feature, you need to set api.search.scroll to true in fess_config.properties.
 
 Request Parameters
 ------------------
@@ -202,8 +216,32 @@ The available request parameters are as follows:
    * - q
      - Search term. Pass it after URL encoding.
    * - num
-     - Number of items to display. The default value is 20, and you can display up to 100 items.
+     - Number of items to display. Default is 20 items. Can display up to 100 items.
    * - sort
-     - Sort order. Used to sort the search results.
+     - Sort order. Used to sort search results.
 
 Table: Request Parameters
+
+Error Response
+==============
+
+When the search API fails, the following error response is returned:
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Error Response
+
+   * - Status Code
+     - Description
+   * - 400 Bad Request
+     - When request parameters are invalid
+   * - 500 Internal Server Error
+     - When an internal server error occurs
+
+Error response example:
+
+::
+
+    {
+      "message": "Invalid request parameter",
+      "status": 400
+    }

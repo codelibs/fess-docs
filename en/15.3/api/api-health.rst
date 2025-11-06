@@ -2,20 +2,28 @@
 Health API
 ==========
 
-Get Status
-==========
+Fetching Status
+===============
 
-By sending a request to ``http://<Server Name>/api/v1/health`` to |Fess|, you can receive the server status of |Fess| in JSON format.
+Request
+-------
+
+==================  ====================================================
+HTTP Method         GET
+Endpoint            ``/api/v1/health``
+==================  ====================================================
+
+By sending a request to |Fess| at ``http://<Server Name>/api/v1/health``, you can receive the server status of |Fess| in JSON format.
 
 Request Parameters
 ------------------
 
-There are no available request parameters.
+There are no request parameters that can be specified.
 
 Response
 --------
 
-The response will be as follows:
+The following response is returned:
 
 ::
 
@@ -26,16 +34,27 @@ The response will be as follows:
       }
     }
 
-The elements in the response are described as follows:
+Each element is as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
+.. list-table:: Response Information
 
    * - data
-     - The parent element of the response.
+     - Parent element of search results.
    * - status
-     - The status of the response. "green" is returned for normal status.
+     - System status. Returns ``green`` when normal, ``yellow`` when there are warnings, and ``red`` when there are errors.
    * - timed_out
-     - The response result. "false" is returned if the response is received within the specified time.
+     - Whether a timeout occurred. Returns ``false`` if a response is returned within the specified time, ``true`` if it times out.
 
-Table: Response Information
+Error Response
+==============
+
+When the Health API fails, the following error response is returned:
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Error Response
+
+   * - Status Code
+     - Description
+   * - 500 Internal Server Error
+     - When an internal server error occurs
