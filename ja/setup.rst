@@ -5,10 +5,17 @@
 インストール方法
 ================
 
-Fessでは、ZIPアーカイブ、RPM/DEB/パッケージ、Dockerイメージでの配布物を提供しています。
+Fessでは、ZIPアーカイブ、RPM/DEB パッケージ、Dockerイメージでの配布物を提供しています。
 Dockerを利用することで、WindowsやMacなどでも、Fessを簡単にセットアップすることができます。
 
-運用環境を構築する場合は必ずインストールガイドを参照してください。
+運用環境を構築する場合は、必ず :doc:`15.3/install/index` を参照してください。
+
+.. warning::
+
+   **本番環境での重要な注意事項**
+
+   本番環境や負荷検証などでは、組み込み OpenSearch での稼働は推奨しません。
+   必ず外部の OpenSearch サーバーを構築してください。
 
 Docker Desktopのインストール
 ============================
@@ -65,26 +72,34 @@ Fessのセットアップ
 起動ファイルの作成
 ------------------
 
-適当なフォルダーを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-opensearch2.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch2.yaml>`_ をダウンロードします。
+適当なフォルダーを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_ をダウンロードします。
 
 curlコマンドで以下のように取得することもできます。
 
 ::
 
     curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-opensearch2.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch2.yaml
+    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
 
 Fessの起動
 ----------
 
 Fessをdocker composeコマンドで起動します。
 
-
 コマンドプロンプトを開き、compose.yamlファイルがあるフォルダーに移動して、以下のコマンドを実行します。
 
 ::
 
-    docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+    docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   起動には数分かかる場合があります。
+   以下のコマンドでログを確認できます::
+
+       docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f
+
+   ``Ctrl+C`` でログ表示を終了できます。
 
 
 動作確認
@@ -94,6 +109,14 @@ Fessをdocker composeコマンドで起動します。
 
 管理 UI は \http://localhost:8080/admin/ です。
 デフォルトの管理者アカウントのユーザー名/パスワードは、admin/adminになります。
+
+.. warning::
+
+   **セキュリティに関する重要な注意**
+
+   デフォルトのパスワードは必ず変更してください。
+   特に本番環境では、初回ログイン後すぐにパスワードを変更することを強く推奨します。
+
 管理者アカウントはアプリケーションサーバーにより管理されています。
 Fessの管理 UI では、アプリケーションサーバーで fess ロールで認証されたユーザーを管理者として判断しています。
 
@@ -107,7 +130,18 @@ Fessの停止は、Fessを起動したフォルダーで、以下のコマンド
 
 ::
 
-    docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    docker compose -f compose.yaml -f compose-opensearch3.yaml stop
+
+コンテナを停止して削除する場合::
+
+    docker compose -f compose.yaml -f compose-opensearch3.yaml down
+
+.. warning::
+
+   ``down`` コマンドでボリュームも削除する場合は ``-v`` オプションを追加します。
+   この場合、すべてのデータが削除されるため注意してください::
+
+       docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
 管理者パスワードの変更
 ----------------------
