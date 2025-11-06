@@ -52,6 +52,6 @@ The number of indexed documents is displayed in the fess index as shown below.
 Clicking the icon in the upper right corner of each index displays the operation menu for that index.
 To delete indexed documents, use the administrative search screen. Do not use "delete index" to remove documents.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/dashboard-2.png
 .. pdf            :width: 400 px

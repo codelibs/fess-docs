@@ -53,5 +53,5 @@ Deleting Configuration
 Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
 Click the Delete button to remove the configuration.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/relatedquery-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/relatedquery-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/relatedquery-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/relatedquery-2.png

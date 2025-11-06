@@ -49,5 +49,5 @@ Upload
 
 You can upload in stopwords dictionary format.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/stopwords-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/stopwords-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/stopwords-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/stopwords-2.png

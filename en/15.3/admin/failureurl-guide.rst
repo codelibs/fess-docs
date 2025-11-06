@@ -18,4 +18,4 @@ Select System Info > Failure URL in the left menu to display a list page of fail
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/failureurl-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/failureurl-1.png

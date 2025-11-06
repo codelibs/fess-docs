@@ -101,5 +101,5 @@ Manual Crawl Method
 Click "Default Crawler" in the "Scheduler" and click the Start Now button.
 To stop the crawler, click "Default Crawler" and click the Stop button.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/scheduler-2.png

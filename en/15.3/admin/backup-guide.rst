@@ -74,4 +74,4 @@ Upload
 Configuration data can be imported by uploading a file.
 Files that can be restored are \*.bulk and system.properties.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/backup-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/backup-1.png

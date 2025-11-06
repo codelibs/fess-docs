@@ -70,5 +70,5 @@ Create Folder
 You can open the folder creation window by clicking the Create Folder button to the right of the path display. Note that you cannot create empty folders.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/storage-1.png
 

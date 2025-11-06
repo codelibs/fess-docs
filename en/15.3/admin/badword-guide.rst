@@ -60,7 +60,7 @@ CSV File
 The content of downloaded/uploaded CSV file is 1 column, and contains only a word.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/ja/15.3/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/ja/15.3/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/en/15.3/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/en/15.3/admin/badword-4.png

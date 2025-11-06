@@ -97,5 +97,5 @@ If omitted, the uploaded filename is used.
 For example, specifying logo.png will change the image on the search top page.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/design-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/design-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/design-2.png

@@ -53,5 +53,5 @@ Stemmer Override
 Manages the stemmer override dictionary.
 stemmer_override.txt is deployed for each language and is a word replacement dictionary file for overriding stemming processing.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dict-1.png
             :height: 940px

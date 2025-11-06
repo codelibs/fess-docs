@@ -289,5 +289,5 @@ LDAP Configuration Example
      - isMemberOf
      - memberOf
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/general-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/general-1.png
 .. pdf            :height: 940 px

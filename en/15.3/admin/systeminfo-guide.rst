@@ -41,4 +41,4 @@ Bug report properties
 List of properties to attach to a bug report. Values that do not contain personal information are extracted.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/systeminfo-1.png

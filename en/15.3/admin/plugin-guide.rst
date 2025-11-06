@@ -28,6 +28,6 @@ To install a new plugin, click the Install button.
 
 Select the plugin you want to install from the pull-down menu and click the Install button to start the installation.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/plugin-2.png
 
