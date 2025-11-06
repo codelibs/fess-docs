@@ -69,7 +69,7 @@
 TAR.GZ/ZIP/RPM/DEB 版
 ~~~~~~~~~~~~~~~~~~~~
 
-- **Java 21**: `Adoptium <https://adoptium.net/>`__ (旧称 AdoptOpenJDK) を推奨
+- **Java 21**: `Eclipse Temurin <https://adoptium.net/temurin>`__ を推奨
 
   - OpenJDK 21 以降
   - Eclipse Temurin 21 以降
@@ -142,7 +142,7 @@ Docker 版
 - Google Chrome（最新版）
 - Mozilla Firefox（最新版）
 - Microsoft Edge（最新版）
-- Safari 14 以降
+- Safari（最新版）
 
 .. note::
 
