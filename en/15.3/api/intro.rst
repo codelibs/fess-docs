@@ -2,42 +2,64 @@
 Introduction
 ============
 
-Who Should Use This Document
-============================
+Target Audience
+===============
 
-This document is intended for developers responsible for managing the |Fess|.
+This document is intended for developers who will be using |Fess| API features.
+The following knowledge is assumed:
 
+- Basic concepts of REST APIs
+- JSON data format
+- Basic knowledge of HTTP protocol
 
 Before You Read This Document
-=============================
+==============================
 
-This document shows how to access |Fess| on API.
+This document demonstrates how to use the API in |Fess| 15.3.
+
+API Usage Prerequisites
+=======================
+
+Before using the |Fess| API, the following setup is required:
+
+- |Fess| 15.3 or later must be installed and running properly
+- Enable required settings for each API through the administration screen (refer to each API documentation)
+- API endpoints must be accessible via network
 
 Online Access
 =============
 
-Download, professional services, support, and other developer
-information, visit the following.
+For downloads, professional services, support, and other developer information, please visit:
 
--  Project site: `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
+-  Project Site: https://fess.codelibs.org/
 
-Technical Support
-=================
+Technical Support Contact
+=========================
 
-For technical questions and problems about our products, see the following info.
+If you have technical questions about this product that are not resolved in this documentation, please visit:
 
-- Issues: `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
+-  Issues:
+   `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
 
 Commercial Support
 ------------------
 
-If you need commercial support, maintenance and technical support for this product,
-please contact to `N2SM, Inc. <https://www.n2sm.net/>`__.
+If you require commercial support for this product, including technical assistance and maintenance,
+please contact `N2SM, Inc. <https://www.n2sm.net/>`__.
 
-How To Send Comments And Suggestions
-====================================
+References to Related Third-Party Websites
+===========================================
 
-If you find problems or improvements, please send from:
+The |Fess| project is not responsible for the validity of third-party websites referenced in this documentation.
+The |Fess| project makes no warranties, responsibilities, or obligations regarding content, advertisements, products, services,
+or other documentation available through such sites or resources. The |Fess| project assumes no responsibility or liability
+for any damage or loss arising from, or alleged to have arisen from, the use of or reliance on any content, advertisements,
+products, services, or other documentation available through such sites or resources.
 
-- Issues For Product: `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
-- Issues For Document: `https://github.com/codelibs/fess-docs/issues <https://github.com/codelibs/fess-docs/issues>`__
+How to Send Comments and Suggestions
+=====================================
+
+The |Fess| project is committed to improving this documentation and welcomes comments and suggestions from readers.
+
+-  Issues:
+   `https://github.com/codelibs/fess-docs/issues <https://github.com/codelibs/fess-docs/issues>`__

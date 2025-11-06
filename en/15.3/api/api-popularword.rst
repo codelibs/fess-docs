@@ -2,10 +2,19 @@
 Popular Words API
 =================
 
-Get List of Popular Words
-=========================
+Fetching Popular Words List
+============================
 
-By sending a request to ``http://<Server Name>/api/v1/popular-words?seed=123`` to |Fess|, you can receive a list of popular words registered in |Fess| in JSON format. To use the Popular Words API, you need to enable the response of popular words in the general settings of the administration screen.
+Request
+-------
+
+==================  ====================================================
+HTTP Method         GET
+Endpoint            ``/api/v1/popular-words``
+==================  ====================================================
+
+By sending a request to |Fess| at ``http://<Server Name>/api/v1/popular-words?seed=123``, you can receive a list of popular words registered in |Fess| in JSON format.
+To use the Popular Words API, you need to enable popular words response in the Administration screen under System > General Settings.
 
 Request Parameters
 ------------------
@@ -26,23 +35,40 @@ The available request parameters are as follows:
 Response
 --------
 
-The response will be as follows:
+The following response is returned:
 
 ::
 
     {
-      "record_count": 9,
+      "record_count": 3,
       "data": [
-        "python"
+        "python",
+        "java",
+        "javascript"
       ]
     }
 
-The elements in the response are described as follows:
+Each element is as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: Response Information
 
    * - record_count
-     - The number of registered popular words.
+     - Number of registered popular words
    * - data
-     - Popular words.
+     - Array of popular words
+
+Error Response
+==============
+
+When the popular words API fails, the following error response is returned:
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Error Response
+
+   * - Status Code
+     - Description
+   * - 400 Bad Request
+     - When request parameters are invalid
+   * - 500 Internal Server Error
+     - When an internal server error occurs

@@ -2,10 +2,18 @@
 Label API
 =========
 
-Get Labels
-==========
+Fetching Labels
+===============
 
-You can retrieve a list of labels registered in |Fess| by sending a request to ``http://<Server Name>/api/v1/labels``. The response will be in JSON format.
+Request
+-------
+
+==================  ====================================================
+HTTP Method         GET
+Endpoint            ``/api/v1/labels``
+==================  ====================================================
+
+By sending a request to |Fess| at ``http://<Server Name>/api/v1/labels``, you can receive a list of labels registered in |Fess| in JSON format.
 
 Request Parameters
 ------------------
@@ -15,7 +23,7 @@ There are no available request parameters.
 Response
 --------
 
-The response will be as follows:
+The following response is returned:
 
 ::
 
@@ -25,23 +33,59 @@ The response will be as follows:
         {
           "label": "AWS",
           "value": "aws"
+        },
+        {
+          "label": "Azure",
+          "value": "azure"
         }
       ]
     }
 
-The elements in the response are described as follows:
+Each element is as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 
 .. list-table::
 
    * - record_count
-     - The number of registered labels.
+     - Number of registered labels.
    * - data
-     - The parent element of the search results.
+     - Parent element of search results.
    * - label
-     - The name of the label.
+     - Label name.
    * - value
-     - The value of the label.
+     - Label value.
 
 Table: Response Information
+
+Usage Examples
+==============
+
+Request example using curl command:
+
+::
+
+    curl "http://localhost:8080/api/v1/labels"
+
+Request example using JavaScript:
+
+::
+
+    fetch('http://localhost:8080/api/v1/labels')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Label list:', data.data);
+      });
+
+Error Response
+==============
+
+When the label API fails, the following error response is returned:
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Error Response
+
+   * - Status Code
+     - Description
+   * - 500 Internal Server Error
+     - When an internal server error occurs
