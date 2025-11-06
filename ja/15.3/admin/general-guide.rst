@@ -175,7 +175,7 @@ LDAP
 LDAP URL
 ::::::::
 
-LDAPサーバのを指定します。
+LDAPサーバのURLを指定します。
 
 Base DN
 :::::::
