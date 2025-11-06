@@ -33,7 +33,7 @@ fess_user.bulk はユーザー、ロールおよびグループの情報を含�
 system.properties
 :::::::::::::::::
 
-system.properties 全般設定の情報を含みます。
+system.propertiesは全般設定の情報を含みます。
 
 fess.json
 :::::::::
@@ -48,22 +48,22 @@ doc.jsonはfessインデックスのマッピング情報を含みます。
 click_log.ndjson
 ::::::::::::::::
 
-click_log.ndjson クリックログの情報を含みます。
+click_log.ndjsonはクリックログの情報を含みます。
 
 favorite_log.ndjson
 :::::::::::::::::::
 
-favorite_log.ndjson お気に入りログの情報を含みます。
+favorite_log.ndjsonはお気に入りログの情報を含みます。
 
 search_log.ndjson
 :::::::::::::::::
 
-search_log.ndjson 検索ログの情報を含みます。
+search_log.ndjsonは検索ログの情報を含みます。
 
 user_info.ndjson
 ::::::::::::::::
 
-user_info.ndjson 検索ユーザの情報を含みます。
+user_info.ndjsonは検索ユーザの情報を含みます。
 
 アップロード
 ---------
