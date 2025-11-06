@@ -2,35 +2,47 @@
 Introduction
 ============
 
-Who Should Use This Document
-============================
+Target Audience
+===============
 
-This document is intended for system administrators responsible for managing the |Fess|.
+This document is intended for users responsible for configuring |Fess|.
 
-Before You Read This Document
-=============================
+Before You Read
+===============
 
-This document demonstrates administrative operations for |Fess|.
-Basic knowledge of computer operation is required.
+This document describes how to configure |Fess|.
+Basic knowledge of computer operations is required.
 
 Online Access
 =============
 
-Download, professional services, support, and other developer information, visit the following.
+For downloads, professional services, support, and other developer information, please visit:
 
--  Project site:
-   `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
+-  Project Site: https://fess.codelibs.org/
 
-Technical Support
-=================
+Technical Support Contact
+=========================
 
-Technical questions about our products, visit the following.
+If you have technical questions about this product that cannot be resolved through the documentation, please visit:
 
-- Issues:
+-  Issues:
    `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
 
 Commercial Support
 ------------------
 
-If you need commercial technical supports for this product, please contact to `N2SM, Inc. <https://www.n2sm.net/>`__.
+For commercial support including technical assistance and maintenance, please contact `N2SM, Inc. <https://www.n2sm.net/>`__.
 
+Third-Party Website References
+===============================
+
+The |Fess| project is not responsible for the validity of third-party websites referenced in this document.
+The |Fess| project does not guarantee, take responsibility for, or assume obligations regarding content, advertisements, products, services, or other materials available through such sites or resources.
+The |Fess| project is not responsible or liable for any damages or losses incurred or alleged in connection with the use of or reliance on such content, advertisements, products, services, or other materials available through such sites or resources.
+
+How to Submit Comments and Suggestions
+=======================================
+
+The |Fess| project is committed to improving this document and welcomes comments and suggestions from readers.
+
+-  Mailing List: `https://github.com/codelibs/fess/issues <https://github.com/codelibs/fess/issues>`__
