@@ -57,7 +57,7 @@ RPM/DEB 版::
 
 Docker 版::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 TAR.GZ/ZIP 版のアンインストール
 =============================
@@ -241,7 +241,7 @@ Docker 版のアンインストール
 
 ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 ステップ 2: ボリュームの削除
 --------------------------
@@ -261,7 +261,7 @@ Fess 関連のボリュームを削除::
 
 または、すべてのボリュームを一括削除::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down -v
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
 ステップ 3: イメージの削除（オプション）
 ------------------------------------
@@ -287,7 +287,7 @@ Docker Compose が作成したネットワークを削除::
 
 ::
 
-    $ rm compose.yaml compose-opensearch2.yaml
+    $ rm compose.yaml compose-opensearch3.yaml
 
 アンインストールの確認
 ====================

@@ -68,13 +68,13 @@ To treat "fess" and "フェス" as equivalent, write as follows:
 
 ::
 
-    fess,フェス=>fess,フェス
+    fess,フエス=>fess,フエス
 
 In cases like above, you can omit => and write as follows:
 
 ::
 
-    fess,フェス
+    fess,フエス
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/synonym-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/synonym-2.png

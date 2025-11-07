@@ -111,15 +111,15 @@ Docker 版の場合
 
 Docker Compose を使用して起動::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 起動状態の確認::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml ps
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
 
 ログの確認::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
 
 起動の確認
 ==========
@@ -160,7 +160,7 @@ RPM/DEB 版::
 
 Docker 版::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
 
 .. tip::
 
@@ -334,11 +334,11 @@ Docker 版の場合
 
 コンテナの停止::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml stop
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
 
 コンテナの停止と削除::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 .. warning::
 
@@ -369,7 +369,7 @@ Docker 版の場合
 
 ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml restart
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml restart
 
 トラブルシューティング
 ====================
