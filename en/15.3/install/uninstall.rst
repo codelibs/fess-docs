@@ -65,7 +65,7 @@ RPM/DEB version::
 
 Docker version::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Uninstall TAR.GZ/ZIP Version
 =============================
@@ -248,7 +248,7 @@ Step 1: Remove Containers and Networks
 
 ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Step 2: Remove Volumes
 -----------------------
@@ -268,7 +268,7 @@ Remove Fess-related volumes::
 
 Or remove all volumes at once::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down -v
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
 Step 3: Remove Images (Optional)
 ---------------------------------
@@ -294,7 +294,7 @@ Step 5: Remove Compose Files
 
 ::
 
-    $ rm compose.yaml compose-opensearch2.yaml
+    $ rm compose.yaml compose-opensearch3.yaml
 
 Verify Uninstallation
 ======================

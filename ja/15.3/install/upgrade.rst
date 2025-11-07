@@ -128,10 +128,10 @@ Docker 版のバックアップ
 
 Docker ボリュームをバックアップします::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml stop
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
     $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
     $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml start
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 ステップ 2: 現在のバージョンの停止
 ================================
@@ -150,7 +150,7 @@ RPM/DEB 版 (systemd)::
 
 Docker 版::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 ステップ 3: 新しいバージョンのインストール
 ======================================
@@ -194,11 +194,11 @@ Docker 版
 1. 新しいバージョンの Compose ファイルを取得::
 
        $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch2.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch3.yaml
 
 2. 新しいイメージを取得::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml pull
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
 ステップ 4: OpenSearch のアップグレード（必要な場合）
 =================================================
@@ -238,7 +238,7 @@ RPM/DEB 版::
 
 Docker 版::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 ステップ 6: 動作確認
 ==================

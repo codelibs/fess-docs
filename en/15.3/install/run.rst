@@ -111,15 +111,15 @@ Docker Version
 
 Start using Docker Compose::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 Check startup status::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml ps
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
 
 Check logs::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
 
 Verify Startup
 ==============
@@ -160,7 +160,7 @@ Or use journalctl::
 
 Docker version::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
 
 .. tip::
 
@@ -334,11 +334,11 @@ Docker Version
 
 Stop containers::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml stop
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
 
 Stop and remove containers::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 .. warning::
 
@@ -369,7 +369,7 @@ Docker Version
 
 ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml restart
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml restart
 
 Troubleshooting
 ===============

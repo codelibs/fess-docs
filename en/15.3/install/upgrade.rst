@@ -128,10 +128,10 @@ Docker Version Backup
 
 Back up Docker volumes::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml stop
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
     $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
     $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml start
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 Step 2: Stop Current Version
 =============================
@@ -150,7 +150,7 @@ RPM/DEB version (systemd)::
 
 Docker version::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml down
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Step 3: Install New Version
 ============================
@@ -194,11 +194,11 @@ Docker Version
 1. Obtain Compose files for the new version::
 
        $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch2.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch3.yaml
 
 2. Pull new images::
 
-       $ docker compose -f compose.yaml -f compose-opensearch2.yaml pull
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
 Step 4: Upgrade OpenSearch (If Necessary)
 ==========================================
@@ -238,7 +238,7 @@ RPM/DEB version::
 
 Docker version::
 
-    $ docker compose -f compose.yaml -f compose-opensearch2.yaml up -d
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 Step 6: Verify Operation
 =========================
