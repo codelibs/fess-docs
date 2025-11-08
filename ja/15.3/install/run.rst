@@ -22,7 +22,7 @@ OpenSearch の起動
 
 ::
 
-    $ cd /path/to/opensearch-3.3.0
+    $ cd /path/to/opensearch-3.3.2
     $ ./bin/opensearch
 
 バックグラウンドで起動する場合::
@@ -34,7 +34,7 @@ Fess の起動
 
 ::
 
-    $ cd /path/to/fess-15.3.0
+    $ cd /path/to/fess-15.3.2
     $ ./bin/fess
 
 バックグラウンドで起動する場合::
@@ -57,8 +57,8 @@ OpenSearch の起動
 
 または、コマンドプロンプトから::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch.bat
 
 Fess の起動
 ~~~~~~~~~~
@@ -68,8 +68,8 @@ Fess の起動
 
 または、コマンドプロンプトから::
 
-    C:\> cd C:\fess-15.3.0
-    C:\fess-15.3.0> bin\fess.bat
+    C:\> cd C:\fess-15.3.2
+    C:\fess-15.3.2> bin\fess.bat
 
 RPM/DEB 版の場合 (chkconfig)
 --------------------------
@@ -148,7 +148,7 @@ Docker Compose を使用して起動::
 
 TAR.GZ/ZIP 版::
 
-    $ tail -f /path/to/fess-15.3.0/logs/fess.log
+    $ tail -f /path/to/fess-15.3.2/logs/fess.log
 
 RPM/DEB 版::
 

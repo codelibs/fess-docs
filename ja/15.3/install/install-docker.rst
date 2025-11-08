@@ -51,8 +51,8 @@ Docker Compose を使用した起動には、以下のファイルが必要で�
 
     $ mkdir fess-docker
     $ cd fess-docker
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch3.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.2/compose/compose.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.2/compose/compose-opensearch3.yaml
 
 方法 2: Git でリポジトリをクローン
 --------------------------------
@@ -61,7 +61,7 @@ Git がインストールされている場合は、リポジトリ全体をク�
 
 ::
 
-    $ git clone --depth 1 --branch v15.3.0 https://github.com/codelibs/docker-fess.git
+    $ git clone --depth 1 --branch v15.3.2 https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
 ステップ 2: Docker Compose ファイルの確認

@@ -77,5 +77,5 @@ En casos como el anterior, también puede omitir => y describirlo de la siguient
     fess,フエス
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/synonym-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/synonym-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/synonym-2.png

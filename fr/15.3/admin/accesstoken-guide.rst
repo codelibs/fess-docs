@@ -59,5 +59,5 @@ Appuyer sur le bouton Supprimer supprimera la configuration.
 
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/accesstoken-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/accesstoken-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/accesstoken-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/accesstoken-2.png

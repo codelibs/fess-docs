@@ -21,7 +21,7 @@ Suchbeispiel
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/ja/15.3/config/search-result.png
+.. |image0| image:: ../../../resources/images/en/15.3/config/search-result.png
 
 Anzeige der genauen Trefferzahl
 ----------------------

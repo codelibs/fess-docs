@@ -70,4 +70,4 @@ Ordner erstellen
 Klicken Sie auf die Schaltfläche „Ordner erstellen" rechts neben der Pfadanzeige, um das Ordnererstellungsfenster zu öffnen. Beachten Sie, dass leere Ordner nicht erstellt werden können.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/storage-1.png

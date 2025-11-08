@@ -245,6 +245,6 @@ Erstellen Sie dann eine Web-Authentifizierungskonfiguration mit den folgenden Ko
      - XWiki
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/webconfig-2.png
 .. pdf            :height: 940 px

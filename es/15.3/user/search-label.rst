@@ -18,5 +18,5 @@ Puede seleccionar información de etiquetas en el momento de la búsqueda. La in
 
 Al configurar etiquetas y crear el índice, puede buscar documentos que tengan configuradas esas etiquetas. Una búsqueda sin especificar etiquetas será una búsqueda completa normal como de costumbre. Si cambia la información de etiquetas, será necesario actualizar el índice.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/search-label-1.png
 .. pdf   :width: 300 px

@@ -71,4 +71,4 @@ Upload
 Sie können Konfigurationsinformationen hochladen und importieren.
 Dateien, die wiederhergestellt werden können, sind \*.bulk und system.properties.
 
-  .. |image0| image:: ../../../resources/images/ja/15.3/admin/backup-1.png
+  .. |image0| image:: ../../../resources/images/en/15.3/admin/backup-1.png

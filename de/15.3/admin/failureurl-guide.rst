@@ -62,5 +62,5 @@ Letztes Zugriffsdatum
 Die Uhrzeit, zu der diese Ausnahme aufgetreten ist.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/failureurl-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/failureurl-2.png

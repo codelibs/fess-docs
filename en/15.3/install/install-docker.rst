@@ -51,8 +51,8 @@ Download the following files:
 
     $ mkdir fess-docker
     $ cd fess-docker
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch3.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.2/compose/compose.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.2/compose/compose-opensearch3.yaml
 
 Method 2: Clone Repository with Git
 ------------------------------------
@@ -61,7 +61,7 @@ If Git is installed, you can also clone the entire repository:
 
 ::
 
-    $ git clone --depth 1 --branch v15.3.0 https://github.com/codelibs/docker-fess.git
+    $ git clone --depth 1 --branch v15.3.2 https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
 Step 2: Review Docker Compose Files

@@ -22,7 +22,7 @@ Start von OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.0
+    $ cd /path/to/opensearch-3.3.2
     $ ./bin/opensearch
 
 Für Hintergrundstart::
@@ -34,7 +34,7 @@ Start von Fess
 
 ::
 
-    $ cd /path/to/fess-15.3.0
+    $ cd /path/to/fess-15.3.2
     $ ./bin/fess
 
 Für Hintergrundstart::
@@ -57,8 +57,8 @@ Start von OpenSearch
 
 Oder von der Eingabeaufforderung::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch.bat
 
 Start von Fess
 ~~~~~~~~~~~~~~
@@ -68,8 +68,8 @@ Start von Fess
 
 Oder von der Eingabeaufforderung::
 
-    C:\> cd C:\fess-15.3.0
-    C:\fess-15.3.0> bin\fess.bat
+    C:\> cd C:\fess-15.3.2
+    C:\fess-15.3.2> bin\fess.bat
 
 RPM/DEB-Version (chkconfig)
 ----------------------------
@@ -148,7 +148,7 @@ Wenn ``HTTP/1.1 200 OK`` zurückgegeben wird, ist der Start erfolgreich.
 
 TAR.GZ/ZIP-Version::
 
-    $ tail -f /path/to/fess-15.3.0/logs/fess.log
+    $ tail -f /path/to/fess-15.3.2/logs/fess.log
 
 RPM/DEB-Version::
 

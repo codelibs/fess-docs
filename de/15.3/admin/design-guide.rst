@@ -97,5 +97,5 @@ Wenn weggelassen, wird der Name der hochgeladenen Datei verwendet.
 Wenn Sie beispielsweise logo.png angeben, wird das Bild auf der Such-Startseite geändert.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/design-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/design-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/design-2.png

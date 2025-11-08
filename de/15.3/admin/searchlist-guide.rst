@@ -30,4 +30,4 @@ Massenlöschung
 Wenn Sie alle Dokumente aus dem Index löschen möchten, können Sie dies tun, indem Sie „\*:\*" eingeben und auf die Schaltfläche „Alle mit dieser Abfrage löschen" klicken.
 Es ist auch möglich, nur Zieldokumente zu löschen, indem Sie Suchbedingungen angeben.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/searchlist-1.png

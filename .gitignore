@@ -1,4 +1,5 @@
 *.pyc
 _build
 .DS_Store
+.serena
 

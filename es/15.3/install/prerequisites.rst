@@ -74,9 +74,9 @@ Versión TAR.GZ/ZIP/RPM/DEB
   - OpenJDK 21 o posterior
   - Eclipse Temurin 21 o posterior
 
-- **OpenSearch 3.3.0**: Obligatorio para entornos de producción (la versión integrada no es recomendada)
+- **OpenSearch 3.3.2**: Obligatorio para entornos de producción (la versión integrada no es recomendada)
 
-  - Versión compatible: OpenSearch 3.3.0
+  - Versión compatible: OpenSearch 3.3.2
   - Tenga cuidado con la compatibilidad de plugins en otras versiones
 
 Versión Docker

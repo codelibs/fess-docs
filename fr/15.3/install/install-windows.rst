@@ -15,7 +15,7 @@ Prérequis
 
 - La configuration requise décrite dans :doc:`prerequisites` doit être satisfaite
 - Java 21 doit être installé
-- OpenSearch 3.3.0 doit être disponible (ou nouvelle installation)
+- OpenSearch 3.3.2 doit être disponible (ou nouvelle installation)
 - La variable d'environnement Windows ``JAVA_HOME`` doit être configurée de manière appropriée
 
 Vérification de l'installation de Java
@@ -69,7 +69,7 @@ Téléchargement d'OpenSearch
 
    Exemple ::
 
-       C:\opensearch-3.3.0
+       C:\opensearch-3.3.2
 
    .. note::
 
@@ -82,16 +82,16 @@ Ouvrez l'invite de commandes **avec des privilèges d'administrateur** et exécu
 
 ::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.2
 
 .. important::
 
    Les versions des plugins doivent correspondre à la version d'OpenSearch.
-   Dans l'exemple ci-dessus, toutes sont spécifiées en 3.3.0.
+   Dans l'exemple ci-dessus, toutes sont spécifiées en 3.3.2.
 
 Configuration d'OpenSearch
 ---------------------------
@@ -101,7 +101,7 @@ Ouvrez ``config\opensearch.yml`` avec un éditeur de texte et ajoutez les param�
 ::
 
     # Chemin pour la synchronisation de configuration (spécifier en chemin absolu)
-    configsync.config_path: C:/opensearch-3.3.0/data/config/
+    configsync.config_path: C:/opensearch-3.3.2/data/config/
 
     # Désactivation du plugin de sécurité (environnement de développement uniquement)
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ Ouvrez ``config\opensearch.yml`` avec un éditeur de texte et ajoutez les param�
 .. note::
 
    Sous Windows, utilisez ``/`` plutôt que ``\`` comme séparateur de chemin.
-   Écrivez ``C:/opensearch-3.3.0/data/config/`` plutôt que ``C:\opensearch-3.3.0\data\config\``.
+   Écrivez ``C:/opensearch-3.3.2/data/config/`` plutôt que ``C:\opensearch-3.3.2\data\config\``.
 
 .. tip::
 
@@ -140,7 +140,7 @@ Téléchargement de Fess
 
    Exemple ::
 
-       C:\fess-15.3.0
+       C:\fess-15.3.2
 
    .. note::
 
@@ -154,7 +154,7 @@ Ouvrez ``bin\fess.in.bat`` avec un éditeur de texte et ajoutez ou modifiez les 
 ::
 
     set SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    set FESS_DICTIONARY_PATH=C:/opensearch-3.3.0/data/config/
+    set FESS_DICTIONARY_PATH=C:/opensearch-3.3.2/data/config/
 
 .. note::
 
@@ -168,8 +168,8 @@ Vérifiez que les fichiers de configuration ont été correctement modifiés.
 
 Invite de commandes ::
 
-    C:\> findstr "SEARCH_ENGINE_HTTP_URL" C:\fess-15.3.0\bin\fess.in.bat
-    C:\> findstr "FESS_DICTIONARY_PATH" C:\fess-15.3.0\bin\fess.in.bat
+    C:\> findstr "SEARCH_ENGINE_HTTP_URL" C:\fess-15.3.2\bin\fess.in.bat
+    C:\> findstr "FESS_DICTIONARY_PATH" C:\fess-15.3.2\bin\fess.in.bat
 
 Étape 3 : Démarrage
 ====================
@@ -193,11 +193,11 @@ Exemple d'utilisation de NSSM
 
 2. Enregistrement d'OpenSearch en tant que service ::
 
-       C:\> nssm install OpenSearch C:\opensearch-3.3.0\bin\opensearch.bat
+       C:\> nssm install OpenSearch C:\opensearch-3.3.2\bin\opensearch.bat
 
 3. Enregistrement de Fess en tant que service ::
 
-       C:\> nssm install Fess C:\fess-15.3.0\bin\fess.bat
+       C:\> nssm install Fess C:\fess-15.3.2\bin\fess.bat
 
 4. Configuration des dépendances de service (Fess dépend d'OpenSearch) ::
 
@@ -247,7 +247,7 @@ Sous Windows, il existe une limitation de la longueur des chemins. Nous recomman
 Exemple ::
 
     C:\opensearch  (recommandé)
-    C:\Program Files\opensearch-3.3.0  (non recommandé - chemin trop long)
+    C:\Program Files\opensearch-3.3.2  (non recommandé - chemin trop long)
 
 Java n'est pas reconnu
 -----------------------

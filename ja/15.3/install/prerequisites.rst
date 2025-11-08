@@ -74,9 +74,9 @@ TAR.GZ/ZIP/RPM/DEB 版
   - OpenJDK 21 以降
   - Eclipse Temurin 21 以降
 
-- **OpenSearch 3.3.0**: 本番環境では必須（組み込み版は非推奨）
+- **OpenSearch 3.3.2**: 本番環境では必須（組み込み版は非推奨）
 
-  - 対応バージョン: OpenSearch 3.3.0
+  - 対応バージョン: OpenSearch 3.3.2
   - その他のバージョンではプラグインの互換性に注意が必要
 
 Docker 版

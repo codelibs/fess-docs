@@ -97,5 +97,5 @@ Si omis, le nom du fichier téléversé sera utilisé.
 Par exemple, si vous spécifiez logo.png, l'image de la page d'accueil de recherche sera modifiée.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/design-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/design-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/design-2.png

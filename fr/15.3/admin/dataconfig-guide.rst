@@ -426,5 +426,5 @@ Si une authentification est requise à la destination du crawl, vous devez égal
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/dataconfig-2.png

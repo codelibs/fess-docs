@@ -28,5 +28,5 @@ Um ein neues Plug-in zu installieren, klicken Sie auf die Schaltfläche „Insta
 
 Wählen Sie im Dropdown-Menü das zu installierende Plug-in aus und klicken Sie auf die Schaltfläche „Installieren", um die Installation zu starten.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/plugin-2.png

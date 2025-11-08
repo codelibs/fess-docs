@@ -80,4 +80,4 @@ Site ou domaine
 
 Permet de filtrer la recherche par site ou domaine saisi.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/user/advanced-search-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/advanced-search-1.png

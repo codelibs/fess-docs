@@ -101,5 +101,5 @@ Manuelles Crawlen
 Klicken Sie unter „Scheduler" auf „Default Crawler" und dann auf die Schaltfläche „Jetzt starten".
 Um den Crawler zu stoppen, klicken Sie auf „Default Crawler" und dann auf die Schaltfläche „Stoppen".
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/scheduler-2.png

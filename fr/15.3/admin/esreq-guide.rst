@@ -37,4 +37,4 @@ Par exemple, le contenu du fichier JSON serait comme suit.
       }
     }
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/esreq-1.png

@@ -64,4 +64,4 @@ Diagnostic
 
 Vous pouvez télécharger les fichiers journaux au format zip.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/maintenance-1.png

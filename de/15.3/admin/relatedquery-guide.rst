@@ -55,5 +55,5 @@ Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf di
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/relatedquery-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/relatedquery-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/relatedquery-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/relatedquery-2.png

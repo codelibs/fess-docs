@@ -79,7 +79,7 @@ Desde la segunda línea en adelante se describen las palabras excluidas.
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/ja/15.3/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/ja/15.3/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/en/15.3/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/en/15.3/admin/badword-4.png

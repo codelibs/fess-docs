@@ -41,4 +41,4 @@ Fehlerberichts-Eigenschaften
 Dies ist eine Liste von Eigenschaften, die beim Melden von Fehlern angehängt werden sollen.
 Es werden Werte extrahiert, die keine persönlichen Informationen enthalten.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/systeminfo-1.png

@@ -101,5 +101,5 @@ Méthode de crawl manuel
 Cliquez sur « Default Crawler » dans « Planificateur », puis cliquez sur le bouton « Démarrer maintenant ».
 Pour arrêter le crawler, cliquez sur « Default Crawler », puis cliquez sur le bouton « Arrêter ».
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/scheduler-2.png

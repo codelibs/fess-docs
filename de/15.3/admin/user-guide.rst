@@ -50,5 +50,5 @@ Konfiguration löschen
 Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/user-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/user-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/user-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/user-2.png

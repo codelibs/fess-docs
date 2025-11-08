@@ -67,14 +67,14 @@ Désinstallation de la version TAR.GZ/ZIP
 
 Supprimez le répertoire d'installation ::
 
-    $ rm -rf /path/to/fess-15.3.0
+    $ rm -rf /path/to/fess-15.3.2
 
 Étape 2 : Suppression d'OpenSearch
 -----------------------------------
 
 Supprimez le répertoire d'installation d'OpenSearch ::
 
-    $ rm -rf /path/to/opensearch-3.3.0
+    $ rm -rf /path/to/opensearch-3.3.2
 
 Étape 3 : Suppression du répertoire de données (optionnel)
 -----------------------------------------------------------
@@ -269,10 +269,10 @@ Ou suppression groupée de tous les volumes ::
 Pour supprimer les images Docker et libérer de l'espace disque ::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.3.0
+    $ docker rmi codelibs/fess:15.3.2
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.0
+    $ docker rmi opensearchproject/opensearch:3.3.2
 
 Étape 4 : Suppression du réseau (optionnel)
 --------------------------------------------
@@ -319,7 +319,7 @@ Vérification des fichiers
 
 Version TAR.GZ/ZIP ::
 
-    $ ls /path/to/fess-15.3.0  # Vérifiez que le répertoire n'existe pas
+    $ ls /path/to/fess-15.3.2  # Vérifiez que le répertoire n'existe pas
 
 Version RPM/DEB ::
 

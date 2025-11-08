@@ -162,13 +162,13 @@ TAR.GZ/ZIP Version
 
 1. Download and extract the new version::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.0/fess-15.3.0.tar.gz
-       $ tar -xzf fess-15.3.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.2/fess-15.3.2.tar.gz
+       $ tar -xzf fess-15.3.2.tar.gz
 
 2. Copy configuration from the old version::
 
-       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.3.0/app/WEB-INF/conf/
-       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.3.0/bin/
+       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.3.2/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.3.2/bin/
 
 3. Verify configuration differences and adjust as necessary
 
@@ -178,10 +178,10 @@ RPM/DEB Version
 Install the new version package::
 
     # RPM
-    $ sudo rpm -Uvh fess-15.3.0.rpm
+    $ sudo rpm -Uvh fess-15.3.2.rpm
 
     # DEB
-    $ sudo dpkg -i fess-15.3.0.deb
+    $ sudo dpkg -i fess-15.3.2.deb
 
 .. note::
 
@@ -193,8 +193,8 @@ Docker Version
 
 1. Obtain Compose files for the new version::
 
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose.yaml
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.0/compose/compose-opensearch3.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.2/compose/compose.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.3.2/compose/compose-opensearch3.yaml
 
 2. Pull new images::
 
@@ -214,10 +214,10 @@ If you are also upgrading OpenSearch, follow these procedures.
 
 2. Reinstall plugins::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.2
 
 3. Start OpenSearch::
 
@@ -228,7 +228,7 @@ Step 5: Start New Version
 
 TAR.GZ/ZIP version::
 
-    $ cd /path/to/fess-15.3.0
+    $ cd /path/to/fess-15.3.2
     $ ./bin/fess -d
 
 RPM/DEB version::

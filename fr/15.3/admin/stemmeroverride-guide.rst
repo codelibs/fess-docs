@@ -50,6 +50,6 @@ Téléversement
 Vous pouvez téléverser au format de dictionnaire de remplacement Stemmer.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/stemmeroverride-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/stemmeroverride-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/stemmeroverride-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/stemmeroverride-2.png
 

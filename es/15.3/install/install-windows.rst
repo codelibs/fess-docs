@@ -15,7 +15,7 @@ Requisitos Previos
 
 - Cumplir con los requisitos del sistema descritos en :doc:`prerequisites`
 - Java 21 instalado
-- OpenSearch 3.3.0 disponible (o nueva instalación)
+- OpenSearch 3.3.2 disponible (o nueva instalación)
 - Variable de entorno ``JAVA_HOME`` de Windows configurada apropiadamente
 
 Verificación de la Instalación de Java
@@ -69,7 +69,7 @@ Descarga de OpenSearch
 
    Ejemplo::
 
-       C:\opensearch-3.3.0
+       C:\opensearch-3.3.2
 
    .. note::
 
@@ -82,16 +82,16 @@ Abra el Símbolo del sistema **con privilegios de administrador** y ejecute los 
 
 ::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.0
-    C:\opensearch-3.3.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.2
+    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.2
 
 .. important::
 
    Las versiones de los plugins deben coincidir con la versión de OpenSearch.
-   En el ejemplo anterior, se especifica 3.3.0 para todos.
+   En el ejemplo anterior, se especifica 3.3.2 para todos.
 
 Configuración de OpenSearch
 ----------------------------
@@ -101,7 +101,7 @@ Abra ``config\opensearch.yml`` con un editor de texto y agregue la siguiente con
 ::
 
     # Ruta para sincronización de configuración (especificar ruta absoluta)
-    configsync.config_path: C:/opensearch-3.3.0/data/config/
+    configsync.config_path: C:/opensearch-3.3.2/data/config/
 
     # Desactivación del plugin de seguridad (solo entorno de desarrollo)
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ Abra ``config\opensearch.yml`` con un editor de texto y agregue la siguiente con
 .. note::
 
    En Windows, use ``/`` en lugar de ``\`` como separador de ruta.
-   Escriba ``C:/opensearch-3.3.0/data/config/`` en lugar de ``C:\opensearch-3.3.0\data\config\``.
+   Escriba ``C:/opensearch-3.3.2/data/config/`` en lugar de ``C:\opensearch-3.3.2\data\config\``.
 
 .. tip::
 
@@ -140,7 +140,7 @@ Descarga de Fess
 
    Ejemplo::
 
-       C:\fess-15.3.0
+       C:\fess-15.3.2
 
    .. note::
 
@@ -154,7 +154,7 @@ Abra ``bin\fess.in.bat`` con un editor de texto y agregue o modifique la siguien
 ::
 
     set SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    set FESS_DICTIONARY_PATH=C:/opensearch-3.3.0/data/config/
+    set FESS_DICTIONARY_PATH=C:/opensearch-3.3.2/data/config/
 
 .. note::
 
@@ -168,8 +168,8 @@ Verifique que los archivos de configuración se hayan editado correctamente.
 
 En el Símbolo del sistema::
 
-    C:\> findstr "SEARCH_ENGINE_HTTP_URL" C:\fess-15.3.0\bin\fess.in.bat
-    C:\> findstr "FESS_DICTIONARY_PATH" C:\fess-15.3.0\bin\fess.in.bat
+    C:\> findstr "SEARCH_ENGINE_HTTP_URL" C:\fess-15.3.2\bin\fess.in.bat
+    C:\> findstr "FESS_DICTIONARY_PATH" C:\fess-15.3.2\bin\fess.in.bat
 
 Paso 3: Inicio
 ==============
@@ -193,11 +193,11 @@ Ejemplo Usando NSSM
 
 2. Registre OpenSearch como servicio::
 
-       C:\> nssm install OpenSearch C:\opensearch-3.3.0\bin\opensearch.bat
+       C:\> nssm install OpenSearch C:\opensearch-3.3.2\bin\opensearch.bat
 
 3. Registre Fess como servicio::
 
-       C:\> nssm install Fess C:\fess-15.3.0\bin\fess.bat
+       C:\> nssm install Fess C:\fess-15.3.2\bin\fess.bat
 
 4. Configure la dependencia del servicio (Fess depende de OpenSearch)::
 
@@ -247,7 +247,7 @@ En Windows, existe una limitación en la longitud de la ruta. Se recomienda inst
 Ejemplo::
 
     C:\opensearch  (recomendado)
-    C:\Program Files\opensearch-3.3.0  (no recomendado - ruta larga)
+    C:\Program Files\opensearch-3.3.2  (no recomendado - ruta larga)
 
 Java no Reconocido
 ------------------

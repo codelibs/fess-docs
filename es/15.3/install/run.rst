@@ -22,7 +22,7 @@ Inicio de OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.0
+    $ cd /path/to/opensearch-3.3.2
     $ ./bin/opensearch
 
 Para iniciar en segundo plano::
@@ -34,7 +34,7 @@ Inicio de Fess
 
 ::
 
-    $ cd /path/to/fess-15.3.0
+    $ cd /path/to/fess-15.3.2
     $ ./bin/fess
 
 Para iniciar en segundo plano::
@@ -57,8 +57,8 @@ Inicio de OpenSearch
 
 O desde el Símbolo del sistema::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch.bat
 
 Inicio de Fess
 ~~~~~~~~~~~~~~
@@ -68,8 +68,8 @@ Inicio de Fess
 
 O desde el Símbolo del sistema::
 
-    C:\> cd C:\fess-15.3.0
-    C:\fess-15.3.0> bin\fess.bat
+    C:\> cd C:\fess-15.3.2
+    C:\fess-15.3.2> bin\fess.bat
 
 En Caso de Versión RPM/DEB (chkconfig)
 ---------------------------------------
@@ -148,7 +148,7 @@ Verifique el registro de inicio para confirmar que no hay errores.
 
 Para versiones TAR.GZ/ZIP::
 
-    $ tail -f /path/to/fess-15.3.0/logs/fess.log
+    $ tail -f /path/to/fess-15.3.2/logs/fess.log
 
 Para versiones RPM/DEB::
 

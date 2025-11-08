@@ -22,7 +22,7 @@ Start OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.0
+    $ cd /path/to/opensearch-3.3.2
     $ ./bin/opensearch
 
 To start in the background::
@@ -34,7 +34,7 @@ Start Fess
 
 ::
 
-    $ cd /path/to/fess-15.3.0
+    $ cd /path/to/fess-15.3.2
     $ ./bin/fess
 
 To start in the background::
@@ -57,8 +57,8 @@ Start OpenSearch
 
 Or from Command Prompt::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch.bat
 
 Start Fess
 ~~~~~~~~~~
@@ -68,8 +68,8 @@ Start Fess
 
 Or from Command Prompt::
 
-    C:\> cd C:\fess-15.3.0
-    C:\fess-15.3.0> bin\fess.bat
+    C:\> cd C:\fess-15.3.2
+    C:\fess-15.3.2> bin\fess.bat
 
 RPM/DEB Version (chkconfig)
 ---------------------------
@@ -148,7 +148,7 @@ Check the startup logs to ensure there are no errors.
 
 TAR.GZ/ZIP version::
 
-    $ tail -f /path/to/fess-15.3.0/logs/fess.log
+    $ tail -f /path/to/fess-15.3.2/logs/fess.log
 
 RPM/DEB version::
 

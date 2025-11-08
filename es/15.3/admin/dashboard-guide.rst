@@ -52,6 +52,6 @@ El número de documentos indexados se muestra en el índice fess, como se muestr
 Al hacer clic en el icono de la esquina superior derecha de cada índice, se muestra un menú de operaciones para el índice.
 Si desea eliminar documentos indexados, elimínelos desde la pantalla de búsqueda administrativa. Tenga cuidado de no eliminarlos con "delete index".
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/dashboard-2.png
 .. pdf            :width: 400 px

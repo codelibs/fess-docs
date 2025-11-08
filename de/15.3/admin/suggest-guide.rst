@@ -33,5 +33,5 @@ Wortanzahl
 Anzahl der registrierten Wörter
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/suggest-1.png
 

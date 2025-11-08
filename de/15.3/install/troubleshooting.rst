@@ -70,7 +70,7 @@ Plugin-Installation schlägt fehl
 
 2. Passen Sie die Plugin-Version an die OpenSearch-Version an::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
+       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
 
 3. Überprüfen Sie Berechtigungen::
 

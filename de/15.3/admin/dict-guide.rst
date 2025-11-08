@@ -56,5 +56,5 @@ Verwaltet das Stemmer-Überschreibungs-Wörterbuch.
 stemmer_override.txt wird für jede Sprache platziert und ist eine Wortersetzungs-Wörterbuchdatei zum Überschreiben der Stemming-Verarbeitung.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dict-1.png
             :height: 940px

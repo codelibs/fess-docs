@@ -67,4 +67,4 @@ gc-crawler.log
 
 Les journaux GC de fess sont enregistrés.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/log-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/log-1.png

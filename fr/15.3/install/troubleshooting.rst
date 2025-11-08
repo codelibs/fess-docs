@@ -70,7 +70,7 @@ Java n'est pas installé, ou la variable d'environnement PATH n'est pas correcte
 
 2. Adaptez la version du plugin à celle d'OpenSearch ::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
+       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
 
 3. Vérifiez les permissions ::
 

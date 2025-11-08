@@ -22,7 +22,7 @@ Démarrage d'OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.0
+    $ cd /path/to/opensearch-3.3.2
     $ ./bin/opensearch
 
 Pour un démarrage en arrière-plan ::
@@ -34,7 +34,7 @@ Démarrage de Fess
 
 ::
 
-    $ cd /path/to/fess-15.3.0
+    $ cd /path/to/fess-15.3.2
     $ ./bin/fess
 
 Pour un démarrage en arrière-plan ::
@@ -57,8 +57,8 @@ Démarrage d'OpenSearch
 
 Ou depuis l'invite de commandes ::
 
-    C:\> cd C:\opensearch-3.3.0
-    C:\opensearch-3.3.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.3.2
+    C:\opensearch-3.3.2> bin\opensearch.bat
 
 Démarrage de Fess
 ~~~~~~~~~~~~~~~~~
@@ -68,8 +68,8 @@ Démarrage de Fess
 
 Ou depuis l'invite de commandes ::
 
-    C:\> cd C:\fess-15.3.0
-    C:\fess-15.3.0> bin\fess.bat
+    C:\> cd C:\fess-15.3.2
+    C:\fess-15.3.2> bin\fess.bat
 
 Version RPM/DEB (chkconfig)
 ---------------------------
@@ -148,7 +148,7 @@ Vérifiez les logs de démarrage pour confirmer qu'il n'y a pas d'erreurs.
 
 Version TAR.GZ/ZIP ::
 
-    $ tail -f /path/to/fess-15.3.0/logs/fess.log
+    $ tail -f /path/to/fess-15.3.2/logs/fess.log
 
 Version RPM/DEB ::
 

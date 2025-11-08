@@ -52,6 +52,6 @@ Die Anzahl der indizierten Dokumente wird wie in der Abbildung unten im Fess-Ind
 Wenn Sie auf das Symbol oben rechts in jedem Index klicken, wird ein Operationsmenü für den Index angezeigt.
 Um indizierte Dokumente zu löschen, löschen Sie sie über den Verwaltungssuchbildschirm. Achten Sie darauf, NICHT „delete index" zu verwenden.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/dashboard-2.png
 .. pdf            :width: 400 px

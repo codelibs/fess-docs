@@ -15,7 +15,7 @@ Requisitos Previos
 
 - Cumplir con los requisitos del sistema descritos en :doc:`prerequisites`
 - Java 21 instalado
-- OpenSearch 3.3.0 disponible (o nueva instalación)
+- OpenSearch 3.3.2 disponible (o nueva instalación)
 
 Selección del Método de Instalación
 ====================================
@@ -51,13 +51,13 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.3.0/opensearch-3.3.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.3.0-linux-x64.tar.gz
-       $ cd opensearch-3.3.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.3.2/opensearch-3.3.2-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.3.2-linux-x64.tar.gz
+       $ cd opensearch-3.3.2
 
    .. note::
 
-      En este ejemplo se utiliza OpenSearch 3.3.0.
+      En este ejemplo se utiliza OpenSearch 3.3.2.
       Verifique la versión compatible con |Fess|.
 
 2. Instalación de plugins de OpenSearch
@@ -66,16 +66,16 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ cd /path/to/opensearch-3.3.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
+       $ cd /path/to/opensearch-3.3.2
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.2
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.2
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.2
 
    .. important::
 
       Las versiones de los plugins deben coincidir con la versión de OpenSearch.
-      En el ejemplo anterior, se especifica 3.3.0 para todos.
+      En el ejemplo anterior, se especifica 3.3.2 para todos.
 
 3. Configuración de OpenSearch
 
@@ -84,7 +84,7 @@ Paso 1: Instalación de OpenSearch
    ::
 
        # Ruta para sincronización de configuración (especificar ruta absoluta)
-       configsync.config_path: /path/to/opensearch-3.3.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.3.2/data/config/
 
        # Desactivación del plugin de seguridad (solo entorno de desarrollo)
        plugins.security.disabled: true
@@ -116,9 +116,9 @@ Paso 2: Instalación de Fess
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.0/fess-15.3.0.tar.gz
-       $ tar -xzf fess-15.3.0.tar.gz
-       $ cd fess-15.3.0
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.2/fess-15.3.2.tar.gz
+       $ tar -xzf fess-15.3.2.tar.gz
+       $ cd fess-15.3.2
 
 2. Configuración de Fess
 
@@ -134,7 +134,7 @@ Paso 2: Instalación de Fess
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
 
        # Ruta de ubicación de archivos de diccionario (igual que configsync.config_path de OpenSearch)
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.3.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.3.2/data/config/
 
    .. note::
 
@@ -168,8 +168,8 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.3.0/opensearch-3.3.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.3.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.3.2/opensearch-3.3.2-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.3.2-linux-x64.rpm
 
    Alternativamente, también puede agregar un repositorio para instalar.
    Para más detalles, consulte `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
@@ -178,10 +178,10 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.2
 
 3. Configuración de OpenSearch
 
@@ -210,8 +210,8 @@ Paso 2: Instalación de Fess
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.0/fess-15.3.0.rpm
-       $ sudo rpm -ivh fess-15.3.0.rpm
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.2/fess-15.3.2.rpm
+       $ sudo rpm -ivh fess-15.3.2.rpm
 
 2. Configuración de Fess
 
@@ -258,8 +258,8 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.3.0/opensearch-3.3.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.3.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.3.2/opensearch-3.3.2-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.3.2-linux-x64.deb
 
    Alternativamente, también puede agregar un repositorio para instalar.
    Para más detalles, consulte `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.
@@ -268,10 +268,10 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-minhash:3.3.2
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.2
 
 3. Configuración de OpenSearch
 
@@ -300,8 +300,8 @@ Paso 2: Instalación de Fess
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.0/fess-15.3.0.deb
-       $ sudo dpkg -i fess-15.3.0.deb
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.3.2/fess-15.3.2.deb
+       $ sudo dpkg -i fess-15.3.2.deb
 
 2. Configuración de Fess
 
@@ -345,7 +345,7 @@ Después de completar la instalación, verifique lo siguiente:
 
    Para versión TAR.GZ::
 
-       $ ls -ld /path/to/opensearch-3.3.0/data/config/
+       $ ls -ld /path/to/opensearch-3.3.2/data/config/
 
    Para versiones RPM/DEB::
 
@@ -375,7 +375,7 @@ P: ¿Funcionan otras versiones de OpenSearch?
 ---------------------------------------------
 
 R: |Fess| depende de una versión específica de OpenSearch.
-Se recomienda encarecidamente usar la versión recomendada (3.3.0) para garantizar la compatibilidad de los plugins.
+Se recomienda encarecidamente usar la versión recomendada (3.3.2) para garantizar la compatibilidad de los plugins.
 Si usa otras versiones, también debe ajustar apropiadamente las versiones de los plugins.
 
 P: ¿Se puede compartir el mismo OpenSearch entre múltiples instancias de Fess?

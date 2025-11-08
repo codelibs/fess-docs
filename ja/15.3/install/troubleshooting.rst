@@ -70,7 +70,7 @@ Java がインストールされていない、またはPATH環境変数が正�
 
 2. プラグインのバージョンを OpenSearch のバージョンに合わせる::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.0
+       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
 
 3. 権限を確認::
 

@@ -80,4 +80,4 @@ Sitio o dominio
 
 Puede realizar búsquedas filtradas por el sitio o dominio ingresado.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/user/advanced-search-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/advanced-search-1.png

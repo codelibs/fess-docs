@@ -50,6 +50,6 @@ Carga
 Puede cargar en el formato de diccionario de mapeo.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/mapping-2.png
 
