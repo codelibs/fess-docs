@@ -1,9 +1,17 @@
 #!/bin/bash
 
-cd ja
-bash ./build_html.sh
-cd ..
+langs="
+ja
+en
+de
+es
+fr
+zh-cn
+"
 
-cd en
-bash ./build_html.sh
-cd ..
+for lang in $langs ; do
+  cd $lang
+  bash ./build_html.sh
+  cd ..
+done
+

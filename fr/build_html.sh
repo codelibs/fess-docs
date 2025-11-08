@@ -3,7 +3,7 @@ SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
 PROJECT="Fess"
 TITLE="Fess"
-DOCLANG="zh-cn"
+DOCLANG="fr"
 AUTHOR="CodeLibs"
 RELEASE="14.15"
 

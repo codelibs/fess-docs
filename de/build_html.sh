@@ -14,14 +14,14 @@ TARGET=./_build/html
 CONFDIR="${SCRIPT_DIR}/../conf"
 BUILDDIR="${SCRIPT_DIR}/_build"
 
-# HTML erstellen
+# Build html
 make SPHINXOPTS="-c ${CONFDIR}" BUILDDIR="${BUILDDIR}/${TYPE}" SPHINX_LANG="${DOCLANG}" SPHINX_PROJECT="${PROJECT}" SPHINX_TITLE="${TITLE}" SPHINX_AUTHOR="${AUTHOR}" SPHINX_RELEASE="${RELEASE}" -f ${CONFDIR}/Makefile clean html
 
-# HTML minimieren
+# Minify html
 #java -jar ${HTMLCOMPRESSOR_JAR} --type html --compress-js --compress-css --recursive -o ./_build/html_compressed/ ./_build/html/
 java -jar ${HTMLCOMPRESSOR_JAR} --compress-js --compress-css --recursive -o ${TARGET} ${TARGET}
 
-# JS und CSS minimieren
+# Minify js and css
 #while read file; do
 #  if [[ ! "${file##*/}" =~ ^.*\.min\..*$ ]]; then
 #    echo "Compressing $file.."
