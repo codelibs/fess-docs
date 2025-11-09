@@ -7,7 +7,7 @@ Aperçu
 
 Fess est un «\ **serveur de recherche plein texte facile à construire en 5 minutes**\ ».
 
-.. figure:: ../resources/images/ja/demo-1.png
+.. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: Démo standard
    :figclass: side-by-side
@@ -15,7 +15,7 @@ Fess est un «\ **serveur de recherche plein texte facile à construire en 5 min
 
    Démo standard
 
-.. figure:: ../resources/images/ja/demo-3.png
+.. figure:: ../resources/images/en/demo-3.png
    :scale: 100%
    :alt: Démo de recherche sur site
    :figclass: side-by-side
@@ -23,7 +23,7 @@ Fess est un «\ **serveur de recherche plein texte facile à construire en 5 min
 
    Démo de recherche sur site
 
-.. figure:: ../resources/images/ja/demo-2.png
+.. figure:: ../resources/images/en/demo-2.png
    :scale: 100%
    :alt: Code Search
    :figclass: side-by-side
@@ -31,7 +31,7 @@ Fess est un «\ **serveur de recherche plein texte facile à construire en 5 min
 
    Recherche de code source
 
-.. figure:: ../resources/images/ja/demo-4.png
+.. figure:: ../resources/images/en/demo-4.png
    :scale: 100%
    :alt: Document Search
    :figclass: side-by-side
@@ -193,12 +193,12 @@ Projets connexes
 - `Form Assist <https://github.com/codelibs/docker-formassist>`__
 
 
-.. |image0| image:: ../resources/images/ja/demo-1.png
-.. |image1| image:: ../resources/images/ja/demo-2.png
-.. |image2| image:: ../resources/images/ja/demo-3.png
-.. |image3| image:: ../resources/images/ja/n2search_225x50.png
+.. |image0| image:: ../resources/images/en/demo-1.png
+.. |image1| image:: ../resources/images/en/demo-2.png
+.. |image2| image:: ../resources/images/en/demo-3.png
+.. |image3| image:: ../resources/images/en/n2search_225x50.png
    :target: https://www.n2sm.net/products/n2search.html
-.. |image4| image:: ../resources/images/ja/n2search_b.png
+.. |image4| image:: ../resources/images/en/n2search_b.png
 
 
 .. toctree::

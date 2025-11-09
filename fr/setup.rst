@@ -148,7 +148,7 @@ Modification du mot de passe administrateur
 
 Vous pouvez le modifier dans l'écran d'édition des utilisateurs de l'interface d'administration.
 
-.. |image0| image:: ../resources/images/ja/install/dockerdesktop-1.png
-.. |image1| image:: ../resources/images/ja/install/dockerdesktop-2.png
-.. |image2| image:: ../resources/images/ja/install/dockerdesktop-3.png
-.. |image3| image:: ../resources/images/ja/install/dockerdesktop-4.png
+.. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
+.. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
+.. |image2| image:: ../resources/images/en/install/dockerdesktop-3.png
+.. |image3| image:: ../resources/images/en/install/dockerdesktop-4.png

@@ -148,7 +148,7 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
 
 可以在管理界面的用户编辑页面进行更改。
 
-.. |image0| image:: ../resources/images/ja/install/dockerdesktop-1.png
-.. |image1| image:: ../resources/images/ja/install/dockerdesktop-2.png
-.. |image2| image:: ../resources/images/ja/install/dockerdesktop-3.png
-.. |image3| image:: ../resources/images/ja/install/dockerdesktop-4.png
+.. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
+.. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
+.. |image2| image:: ../resources/images/en/install/dockerdesktop-3.png
+.. |image3| image:: ../resources/images/en/install/dockerdesktop-4.png

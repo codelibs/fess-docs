@@ -136,4 +136,4 @@ Après avoir compris l'utilisation de base, vous pouvez en apprendre davantage e
 - **Documentation API** : Intégration de la recherche via l'API REST
 - **Guide du développeur** : Développement de personnalisations et de fonctionnalités d'extension
 
-.. |Affichage des résultats de recherche dans le navigateur| image:: ../resources/images/ja/fess_search_result.png
+.. |Affichage des résultats de recherche dans le navigateur| image:: ../resources/images/en/fess_search_result.png

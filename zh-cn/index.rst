@@ -7,7 +7,7 @@
 
 Fess 是一个"**可在5分钟内轻松构建的全文搜索服务器**"。
 
-.. figure:: ../resources/images/ja/demo-1.png
+.. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: 标准演示
    :figclass: side-by-side
@@ -15,7 +15,7 @@ Fess 是一个"**可在5分钟内轻松构建的全文搜索服务器**"。
 
    标准演示
 
-.. figure:: ../resources/images/ja/demo-3.png
+.. figure:: ../resources/images/en/demo-3.png
    :scale: 100%
    :alt: 站内搜索演示
    :figclass: side-by-side
@@ -23,7 +23,7 @@ Fess 是一个"**可在5分钟内轻松构建的全文搜索服务器**"。
 
    站内搜索演示
 
-.. figure:: ../resources/images/ja/demo-2.png
+.. figure:: ../resources/images/en/demo-2.png
    :scale: 100%
    :alt: Code Search
    :figclass: side-by-side
@@ -31,7 +31,7 @@ Fess 是一个"**可在5分钟内轻松构建的全文搜索服务器**"。
 
    源代码搜索
 
-.. figure:: ../resources/images/ja/demo-4.png
+.. figure:: ../resources/images/en/demo-4.png
    :scale: 100%
    :alt: Document Search
    :figclass: side-by-side
@@ -193,12 +193,12 @@ Script 插件
 - `Form Assist <https://github.com/codelibs/docker-formassist>`__
 
 
-.. |image0| image:: ../resources/images/ja/demo-1.png
-.. |image1| image:: ../resources/images/ja/demo-2.png
-.. |image2| image:: ../resources/images/ja/demo-3.png
-.. |image3| image:: ../resources/images/ja/n2search_225x50.png
+.. |image0| image:: ../resources/images/en/demo-1.png
+.. |image1| image:: ../resources/images/en/demo-2.png
+.. |image2| image:: ../resources/images/en/demo-3.png
+.. |image3| image:: ../resources/images/en/n2search_225x50.png
    :target: https://www.n2sm.net/products/n2search.html
-.. |image4| image:: ../resources/images/ja/n2search_b.png
+.. |image4| image:: ../resources/images/en/n2search_b.png
 
 
 .. toctree::

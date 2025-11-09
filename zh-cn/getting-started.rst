@@ -136,4 +136,4 @@ Fess 提供以下 UI。
 - **API 文档**: 使用 REST API 集成搜索
 - **开发者指南**: 自定义和扩展功能的开发
 
-.. |基于浏览器的搜索结果显示| image:: ../resources/images/ja/fess_search_result.png
+.. |基于浏览器的搜索结果显示| image:: ../resources/images/en/fess_search_result.png

@@ -136,4 +136,4 @@ Nachdem Sie die grundlegende Nutzung verstanden haben, können Sie die folgenden
 - **API-Dokumentation**: Integration der Suche über REST-API
 - **Entwicklerhandbuch**: Entwicklung von Anpassungen und Erweiterungen
 
-.. |Browser-basierte Anzeige von Suchergebnissen| image:: ../resources/images/ja/fess_search_result.png
+.. |Browser-basierte Anzeige von Suchergebnissen| image:: ../resources/images/en/fess_search_result.png

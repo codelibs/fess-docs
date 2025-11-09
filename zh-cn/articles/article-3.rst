@@ -364,6 +364,6 @@ Fess 的 JSON 响应详细信息请参考\ `Fess 网站 <https://fess.codelibs.o
 
 -  `jQuery <http://jquery.com/>`__
 
-.. |image0| image:: ../../resources/images/ja/article/4/sameorigin.png
-.. |image1| image:: ../../resources/images/ja/article/4/searchform.png
-.. |image2| image:: ../../resources/images/ja/article/4/searchresult.png
+.. |image0| image:: ../../resources/images/en/article/4/sameorigin.png
+.. |image1| image:: ../../resources/images/en/article/4/searchform.png
+.. |image2| image:: ../../resources/images/en/article/4/searchresult.png

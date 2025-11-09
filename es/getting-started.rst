@@ -136,5 +136,5 @@ Una vez que comprenda el uso básico, puede consultar la siguiente documentació
 - **Documentación de API**: Integración de búsqueda mediante REST API
 - **Guía del Desarrollador**: Desarrollo de personalizaciones y extensiones
 
-.. |Visualización de resultados de búsqueda en el navegador| image:: ../resources/images/ja/fess_search_result.png
+.. |Visualización de resultados de búsqueda en el navegador| image:: ../resources/images/en/fess_search_result.png
 

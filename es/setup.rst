@@ -148,8 +148,8 @@ Cambio de contraseña de administrador
 
 Puede cambiarlo en la pantalla de edición de usuario de la interfaz de administración.
 
-.. |image0| image:: ../resources/images/ja/install/dockerdesktop-1.png
-.. |image1| image:: ../resources/images/ja/install/dockerdesktop-2.png
-.. |image2| image:: ../resources/images/ja/install/dockerdesktop-3.png
-.. |image3| image:: ../resources/images/ja/install/dockerdesktop-4.png
+.. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
+.. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
+.. |image2| image:: ../resources/images/en/install/dockerdesktop-3.png
+.. |image3| image:: ../resources/images/en/install/dockerdesktop-4.png
 
