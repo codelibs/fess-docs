@@ -46,6 +46,19 @@ Parametername
 
 Geben Sie den Namen des Anforderungsparameters an, wenn Sie die Berechtigung als Suchabfrage angeben.
 
+.. warning::
+
+   Die Parametername-Funktion ist ausschließlich für die Verwendung in vertrauenswürdigen internen Umgebungen konzipiert.
+   Wenn diese Funktion aktiviert ist, können zusätzliche Berechtigungen über URL-Parameter angegeben werden.
+   In extern zugänglichen Umgebungen oder bei Bereitstellung als öffentliche API können jedoch
+   böswillige Benutzer URL-Parameter manipulieren, um sich Berechtigungen zu verschaffen, die sie nicht haben sollten.
+
+   Bitte beachten Sie Folgendes:
+
+   * Verwenden Sie diese Funktion nur, wenn Fess in eine andere Anwendung oder einen Dienst eingebettet ist, der eingehende Anfragen vollständig kontrolliert.
+   * Konfigurieren Sie keinen Parameternamen, wenn Fess für nicht vertrauenswürdige Netzwerke zugänglich ist.
+   * Stellen Sie sicher, dass URL-Parameter bei Verwendung von Zugriffstoken nicht von externen Benutzern manipuliert werden können.
+
 Ablaufdatum
 :::::::::::
 

@@ -46,6 +46,19 @@ Parameter Name
 
 Specifies the request parameter name when specifying permission as a search query.
 
+.. warning::
+
+   The parameter name feature is designed for use in trusted internal environments only.
+   When this feature is enabled, additional permissions can be specified through URL parameters.
+   However, in externally accessible environments or when exposed as a public API,
+   malicious users may manipulate URL parameters to escalate to privileges they should not have.
+
+   Please note the following:
+
+   * Use this feature only when Fess is embedded within another application or service that fully controls inbound requests.
+   * Do not configure a parameter name when Fess is exposed to untrusted networks.
+   * Ensure that URL parameters cannot be manipulated by external users when using access tokens.
+
 Expiration Date
 :::::::::::::::
 

@@ -46,6 +46,19 @@ Nom du paramètre
 
 Spécifiez le nom du paramètre de requête pour spécifier la permission comme requête de recherche.
 
+.. warning::
+
+   La fonctionnalité de nom de paramètre est conçue uniquement pour une utilisation dans des environnements internes de confiance.
+   Lorsque cette fonctionnalité est activée, des permissions supplémentaires peuvent être spécifiées via des paramètres d'URL.
+   Cependant, dans des environnements accessibles de l'extérieur ou exposés comme API publique,
+   des utilisateurs malveillants peuvent manipuler les paramètres d'URL pour obtenir des privilèges qu'ils ne devraient pas avoir.
+
+   Veuillez noter les points suivants :
+
+   * Utilisez cette fonctionnalité uniquement lorsque Fess est intégré dans une autre application ou service qui contrôle entièrement les requêtes entrantes.
+   * Ne configurez pas de nom de paramètre lorsque Fess est exposé à des réseaux non fiables.
+   * Assurez-vous que les paramètres d'URL ne peuvent pas être manipulés par des utilisateurs externes lors de l'utilisation de jetons d'accès.
+
 Date d'expiration
 :::::::::::::::::
 
