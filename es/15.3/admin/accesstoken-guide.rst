@@ -46,6 +46,19 @@ Nombre del parámetro
 
 Especifique el nombre del parámetro de solicitud al especificar permisos como consulta de búsqueda.
 
+.. warning::
+
+   La funcionalidad de nombre de parámetro está diseñada únicamente para su uso en entornos internos de confianza.
+   Cuando esta funcionalidad está habilitada, se pueden especificar permisos adicionales a través de parámetros de URL.
+   Sin embargo, en entornos accesibles externamente o cuando se expone como una API pública,
+   usuarios malintencionados pueden manipular los parámetros de URL para escalar a privilegios que no deberían tener.
+
+   Tenga en cuenta lo siguiente:
+
+   * Use esta funcionalidad solo cuando Fess esté integrado dentro de otra aplicación o servicio que controle completamente las solicitudes entrantes.
+   * No configure un nombre de parámetro cuando Fess esté expuesto a redes no confiables.
+   * Asegúrese de que los parámetros de URL no puedan ser manipulados por usuarios externos al usar tokens de acceso.
+
 Fecha de vencimiento
 ::::::::::::::::::::
 
