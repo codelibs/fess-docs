@@ -236,37 +236,49 @@ Docker コンテナの停止
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Tokyo"
 
-設定ファイルの永続化
-------------------
+設定ファイルによる設定
+--------------------
 
-管理画面で設定した LDAP 設定などを ``docker compose down`` で削除されないように永続化するには、以下の方法があります。
+|Fess| の詳細な設定は ``fess_config.properties`` ファイルに記述します。
+Docker 環境では、このファイルの設定を反映させるために以下の方法があります。
 
-方法 1: 設定ディレクトリのマウント
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+方法 1: 設定ファイルのマウント
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``fess_config.properties`` などの設定ファイルを含むディレクトリをマウントします。
+``fess_config.properties`` などの設定ファイルを含むディレクトリをマウントすることで、
+ホスト側で編集した設定ファイルをコンテナに反映できます。
 
 1. ホスト側に設定ディレクトリを作成::
 
        $ mkdir -p /path/to/fess-config
 
-2. ``compose.yaml`` にボリュームマウントを追加::
+2. 設定ファイルのテンプレートを取得（初回のみ）::
+
+       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+
+3. ``/path/to/fess-config/fess_config.properties`` を編集して必要な設定を記述::
+
+       # LDAP設定の例
+       ldap.admin.enabled=true
+       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
+       ldap.admin.user.filter=uid=%s
+
+4. ``compose.yaml`` にボリュームマウントを追加::
 
        services:
          fess:
            volumes:
              - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
 
-3. 初回起動後、コンテナ内の設定ファイルをホスト側にコピー::
+5. コンテナを起動::
 
-       $ docker compose cp fess:/opt/fess/app/WEB-INF/conf/. /path/to/fess-config/
-
-4. 以降は、ホスト側の ``/path/to/fess-config`` 内のファイルを編集することで設定を永続化できます。
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 .. note::
 
-   ``fess_config.properties`` には、管理画面で設定した LDAP 設定、
-   メール設定、その他のシステム設定が保存されます。
+   ``fess_config.properties`` には、LDAP 設定、クローラー設定、
+   メール設定、その他のシステム設定を記述します。
+   ``docker compose down`` でコンテナを削除しても、ホスト側のファイルは保持されます。
 
 方法 2: システムプロパティによる設定
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
