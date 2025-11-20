@@ -236,7 +236,7 @@ Docker コンテナの停止
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Tokyo"
 
-設定ファイルによる設定
+設定ファイルの反映方法
 --------------------
 
 |Fess| の詳細な設定は ``fess_config.properties`` ファイルに記述します。
@@ -254,14 +254,14 @@ Docker 環境では、このファイルの設定を反映させるために以�
 
 2. 設定ファイルのテンプレートを取得（初回のみ）::
 
-       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
 
 3. ``/path/to/fess-config/fess_config.properties`` を編集して必要な設定を記述::
 
-       # LDAP設定の例
-       ldap.admin.enabled=true
-       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
-       ldap.admin.user.filter=uid=%s
+       # 例
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
 
 4. ``compose.yaml`` にボリュームマウントを追加::
 
@@ -276,7 +276,7 @@ Docker 環境では、このファイルの設定を反映させるために以�
 
 .. note::
 
-   ``fess_config.properties`` には、LDAP 設定、クローラー設定、
+   ``fess_config.properties`` には、検索設定、クローラー設定、
    メール設定、その他のシステム設定を記述します。
    ``docker compose down`` でコンテナを削除しても、ホスト側のファイルは保持されます。
 
@@ -303,13 +303,6 @@ Docker 環境では、このファイルの設定を反映させるために以�
 
    - ``fess_config.properties`` の設定: ``crawler.document.cache.enabled=false``
    - システムプロパティ: ``-Dfess.config.crawler.document.cache.enabled=false``
-
-LDAP 設定の例::
-
-    services:
-      fess:
-        environment:
-          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
 
 よく使われる設定項目：
 
