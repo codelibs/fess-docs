@@ -236,6 +236,108 @@ Exemple ::
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Europe/Paris"
 
+Configuration via fichier de configuration
+-------------------------------------------
+
+Les paramètres détaillés de |Fess| sont écrits dans le fichier ``fess_config.properties``.
+Dans les environnements Docker, il existe les méthodes suivantes pour appliquer ces paramètres de fichier.
+
+Méthode 1 : Monter le fichier de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+En montant un répertoire contenant ``fess_config.properties`` et d'autres fichiers de configuration,
+vous pouvez appliquer les paramètres modifiés côté hôte au conteneur.
+
+1. Créez un répertoire de configuration sur l'hôte ::
+
+       $ mkdir -p /path/to/fess-config
+
+2. Obtenez le modèle du fichier de configuration (première fois uniquement) ::
+
+       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+
+3. Modifiez ``/path/to/fess-config/fess_config.properties`` et ajoutez les paramètres nécessaires ::
+
+       # Exemple de configuration LDAP
+       ldap.admin.enabled=true
+       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
+       ldap.admin.user.filter=uid=%s
+
+4. Ajoutez le montage de volume à ``compose.yaml`` ::
+
+       services:
+         fess:
+           volumes:
+             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+
+5. Démarrez le conteneur ::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   ``fess_config.properties`` contient les paramètres LDAP, les paramètres du crawler,
+   les paramètres de messagerie et d'autres configurations système.
+   Même si vous supprimez les conteneurs avec ``docker compose down``, les fichiers côté hôte sont conservés.
+
+Méthode 2 : Configuration via propriétés système
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Vous pouvez remplacer les éléments de configuration dans ``fess_config.properties`` via des variables d'environnement utilisant des propriétés système.
+
+Les éléments de configuration écrits dans ``fess_config.properties`` (par exemple, ``crawler.document.cache.enabled=false``)
+peuvent être spécifiés au format ``-Dfess.config.nom_paramètre=valeur``.
+
+Ajoutez ``FESS_JAVA_OPTS`` aux variables d'environnement dans ``compose.yaml`` ::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
+
+.. note::
+
+   La partie suivant ``-Dfess.config.`` correspond au nom de l'élément de configuration dans ``fess_config.properties``.
+
+   Exemple :
+
+   - Paramètre dans ``fess_config.properties`` : ``crawler.document.cache.enabled=false``
+   - Propriété système : ``-Dfess.config.crawler.document.cache.enabled=false``
+
+Exemple de configuration LDAP ::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
+
+Éléments de configuration couramment utilisés :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - Élément de configuration dans fess_config.properties
+     - Description
+   * - ``crawler.document.cache.enabled``
+     - Cache de documents du crawler
+   * - ``adaptive.load.control``
+     - Valeur de contrôle de charge adaptative
+   * - ``query.facet.fields``
+     - Champs de recherche à facettes
+   * - ``ldap.admin.enabled``
+     - Activer l'authentification LDAP
+   * - ``ldap.admin.initial.dn``
+     - DN de l'administrateur LDAP
+   * - ``ldap.admin.user.filter``
+     - Filtre d'utilisateur LDAP
+
+.. tip::
+
+   - Les propriétés système remplacent les valeurs dans ``fess_config.properties``
+   - Plusieurs paramètres peuvent être spécifiés séparés par des espaces
+   - La combinaison de la Méthode 1 (montage des fichiers de configuration) permet une configuration plus flexible
+
 Connexion à un OpenSearch externe
 ----------------------------------
 

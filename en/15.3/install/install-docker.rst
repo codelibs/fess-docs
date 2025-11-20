@@ -236,6 +236,108 @@ Example::
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Tokyo"
 
+Configuration File Settings
+----------------------------
+
+Detailed |Fess| settings are written in the ``fess_config.properties`` file.
+In Docker environments, there are the following methods to apply these file settings.
+
+Method 1: Mount Configuration File
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By mounting a directory containing ``fess_config.properties`` and other configuration files,
+you can apply settings edited on the host side to the container.
+
+1. Create a configuration directory on the host::
+
+       $ mkdir -p /path/to/fess-config
+
+2. Get the configuration file template (first time only)::
+
+       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+
+3. Edit ``/path/to/fess-config/fess_config.properties`` to add required settings::
+
+       # LDAP configuration example
+       ldap.admin.enabled=true
+       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
+       ldap.admin.user.filter=uid=%s
+
+4. Add volume mount to ``compose.yaml``::
+
+       services:
+         fess:
+           volumes:
+             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+
+5. Start the container::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   ``fess_config.properties`` contains LDAP settings, crawler settings,
+   mail settings, and other system configurations.
+   Even if you delete containers with ``docker compose down``, files on the host side are preserved.
+
+Method 2: Configuration via System Properties
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can override configuration items in ``fess_config.properties`` via environment variables using system properties.
+
+Configuration items written in ``fess_config.properties`` (e.g., ``crawler.document.cache.enabled=false``)
+can be specified in the format ``-Dfess.config.setting_name=value``.
+
+Add ``FESS_JAVA_OPTS`` to environment variables in ``compose.yaml``::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
+
+.. note::
+
+   The part following ``-Dfess.config.`` corresponds to the configuration item name in ``fess_config.properties``.
+
+   Example:
+
+   - Setting in ``fess_config.properties``: ``crawler.document.cache.enabled=false``
+   - System property: ``-Dfess.config.crawler.document.cache.enabled=false``
+
+LDAP configuration example::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
+
+Commonly used configuration items:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - fess_config.properties configuration item
+     - Description
+   * - ``crawler.document.cache.enabled``
+     - Crawler document cache
+   * - ``adaptive.load.control``
+     - Adaptive load control value
+   * - ``query.facet.fields``
+     - Facet search fields
+   * - ``ldap.admin.enabled``
+     - Enable LDAP authentication
+   * - ``ldap.admin.initial.dn``
+     - LDAP administrator DN
+   * - ``ldap.admin.user.filter``
+     - LDAP user filter
+
+.. tip::
+
+   - System properties override values in ``fess_config.properties``
+   - Multiple settings can be specified separated by spaces
+   - Combining Method 1 (mounting configuration files) allows for more flexible configuration
+
 Connect to External OpenSearch
 -------------------------------
 
