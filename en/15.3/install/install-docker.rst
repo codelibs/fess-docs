@@ -236,8 +236,8 @@ Example::
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Tokyo"
 
-Configuration File Settings
-----------------------------
+How to Apply Configuration Files
+---------------------------------
 
 Detailed |Fess| settings are written in the ``fess_config.properties`` file.
 In Docker environments, there are the following methods to apply these file settings.
@@ -254,14 +254,14 @@ you can apply settings edited on the host side to the container.
 
 2. Get the configuration file template (first time only)::
 
-       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
 
 3. Edit ``/path/to/fess-config/fess_config.properties`` to add required settings::
 
-       # LDAP configuration example
-       ldap.admin.enabled=true
-       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
-       ldap.admin.user.filter=uid=%s
+       # Example
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
 
 4. Add volume mount to ``compose.yaml``::
 
@@ -276,7 +276,7 @@ you can apply settings edited on the host side to the container.
 
 .. note::
 
-   ``fess_config.properties`` contains LDAP settings, crawler settings,
+   ``fess_config.properties`` contains search settings, crawler settings,
    mail settings, and other system configurations.
    Even if you delete containers with ``docker compose down``, files on the host side are preserved.
 
@@ -298,45 +298,6 @@ Add ``FESS_JAVA_OPTS`` to environment variables in ``compose.yaml``::
 .. note::
 
    The part following ``-Dfess.config.`` corresponds to the configuration item name in ``fess_config.properties``.
-
-   Example:
-
-   - Setting in ``fess_config.properties``: ``crawler.document.cache.enabled=false``
-   - System property: ``-Dfess.config.crawler.document.cache.enabled=false``
-
-LDAP configuration example::
-
-    services:
-      fess:
-        environment:
-          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
-
-Commonly used configuration items:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 55
-
-   * - fess_config.properties configuration item
-     - Description
-   * - ``crawler.document.cache.enabled``
-     - Crawler document cache
-   * - ``adaptive.load.control``
-     - Adaptive load control value
-   * - ``query.facet.fields``
-     - Facet search fields
-   * - ``ldap.admin.enabled``
-     - Enable LDAP authentication
-   * - ``ldap.admin.initial.dn``
-     - LDAP administrator DN
-   * - ``ldap.admin.user.filter``
-     - LDAP user filter
-
-.. tip::
-
-   - System properties override values in ``fess_config.properties``
-   - Multiple settings can be specified separated by spaces
-   - Combining Method 1 (mounting configuration files) allows for more flexible configuration
 
 Connect to External OpenSearch
 -------------------------------

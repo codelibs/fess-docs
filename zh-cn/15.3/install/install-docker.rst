@@ -236,7 +236,7 @@
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Shanghai"
 
-通过配置文件进行设置
+如何应用配置文件
 --------------------
 
 |Fess| 的详细设置写在 ``fess_config.properties`` 文件中。
@@ -254,14 +254,14 @@
 
 2. 获取配置文件模板（仅首次）::
 
-       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
 
 3. 编辑 ``/path/to/fess-config/fess_config.properties`` 并添加所需的设置::
 
-       # LDAP 配置示例
-       ldap.admin.enabled=true
-       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
-       ldap.admin.user.filter=uid=%s
+       # 示例
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
 
 4. 在 ``compose.yaml`` 中添加卷挂载::
 
@@ -276,7 +276,7 @@
 
 .. note::
 
-   ``fess_config.properties`` 包含 LDAP 设置、爬虫设置、
+   ``fess_config.properties`` 包含搜索设置、爬虫设置、
    邮件设置和其他系统配置。
    即使使用 ``docker compose down`` 删除容器，主机端的文件也会保留。
 
@@ -298,45 +298,6 @@
 .. note::
 
    ``-Dfess.config.`` 之后的部分对应 ``fess_config.properties`` 中的配置项名称。
-
-   示例：
-
-   - ``fess_config.properties`` 中的设置：``crawler.document.cache.enabled=false``
-   - 系统属性：``-Dfess.config.crawler.document.cache.enabled=false``
-
-LDAP 配置示例::
-
-    services:
-      fess:
-        environment:
-          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
-
-常用配置项：
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 55
-
-   * - fess_config.properties 的配置项
-     - 说明
-   * - ``crawler.document.cache.enabled``
-     - 爬虫文档缓存
-   * - ``adaptive.load.control``
-     - 自适应负载控制值
-   * - ``query.facet.fields``
-     - 分面搜索字段
-   * - ``ldap.admin.enabled``
-     - 启用 LDAP 认证
-   * - ``ldap.admin.initial.dn``
-     - LDAP 管理员 DN
-   * - ``ldap.admin.user.filter``
-     - LDAP 用户过滤器
-
-.. tip::
-
-   - 系统属性会覆盖 ``fess_config.properties`` 中的值
-   - 可以用空格分隔指定多个设置
-   - 结合方法 1（挂载配置文件）可实现更灵活的配置
 
 连接到外部 OpenSearch
 ------------------------

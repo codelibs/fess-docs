@@ -236,8 +236,8 @@ Exemple ::
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Europe/Paris"
 
-Configuration via fichier de configuration
--------------------------------------------
+Comment appliquer les fichiers de configuration
+------------------------------------------------
 
 Les paramètres détaillés de |Fess| sont écrits dans le fichier ``fess_config.properties``.
 Dans les environnements Docker, il existe les méthodes suivantes pour appliquer ces paramètres de fichier.
@@ -254,14 +254,14 @@ vous pouvez appliquer les paramètres modifiés côté hôte au conteneur.
 
 2. Obtenez le modèle du fichier de configuration (première fois uniquement) ::
 
-       $ docker run --rm codelibs/fess:15.3 cat /opt/fess/app/WEB-INF/conf/fess_config.properties > /path/to/fess-config/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
 
 3. Modifiez ``/path/to/fess-config/fess_config.properties`` et ajoutez les paramètres nécessaires ::
 
-       # Exemple de configuration LDAP
-       ldap.admin.enabled=true
-       ldap.admin.initial.dn=cn=admin,dc=example,dc=com
-       ldap.admin.user.filter=uid=%s
+       # Exemple
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
 
 4. Ajoutez le montage de volume à ``compose.yaml`` ::
 
@@ -276,7 +276,7 @@ vous pouvez appliquer les paramètres modifiés côté hôte au conteneur.
 
 .. note::
 
-   ``fess_config.properties`` contient les paramètres LDAP, les paramètres du crawler,
+   ``fess_config.properties`` contient les paramètres de recherche, les paramètres du crawler,
    les paramètres de messagerie et d'autres configurations système.
    Même si vous supprimez les conteneurs avec ``docker compose down``, les fichiers côté hôte sont conservés.
 
@@ -298,45 +298,6 @@ Ajoutez ``FESS_JAVA_OPTS`` aux variables d'environnement dans ``compose.yaml`` :
 .. note::
 
    La partie suivant ``-Dfess.config.`` correspond au nom de l'élément de configuration dans ``fess_config.properties``.
-
-   Exemple :
-
-   - Paramètre dans ``fess_config.properties`` : ``crawler.document.cache.enabled=false``
-   - Propriété système : ``-Dfess.config.crawler.document.cache.enabled=false``
-
-Exemple de configuration LDAP ::
-
-    services:
-      fess:
-        environment:
-          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
-
-Éléments de configuration couramment utilisés :
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 55
-
-   * - Élément de configuration dans fess_config.properties
-     - Description
-   * - ``crawler.document.cache.enabled``
-     - Cache de documents du crawler
-   * - ``adaptive.load.control``
-     - Valeur de contrôle de charge adaptative
-   * - ``query.facet.fields``
-     - Champs de recherche à facettes
-   * - ``ldap.admin.enabled``
-     - Activer l'authentification LDAP
-   * - ``ldap.admin.initial.dn``
-     - DN de l'administrateur LDAP
-   * - ``ldap.admin.user.filter``
-     - Filtre d'utilisateur LDAP
-
-.. tip::
-
-   - Les propriétés système remplacent les valeurs dans ``fess_config.properties``
-   - Plusieurs paramètres peuvent être spécifiés séparés par des espaces
-   - La combinaison de la Méthode 1 (montage des fichiers de configuration) permet une configuration plus flexible
 
 Connexion à un OpenSearch externe
 ----------------------------------
