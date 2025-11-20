@@ -271,36 +271,60 @@ Docker コンテナの停止
 方法 2: システムプロパティによる設定
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-環境変数を使用して、個別の設定を上書きできます。
+``fess_config.properties`` の設定項目を、環境変数経由でシステムプロパティとして上書きできます。
 
-``compose.yaml`` の環境変数に Java のシステムプロパティを追加::
+``fess_config.properties`` に記載される設定項目（例: ``crawler.document.cache.enabled=false``）を、
+``-Dfess.config.設定項目名=値`` の形式で指定します。
+
+``compose.yaml`` の環境変数に ``FESS_JAVA_OPTS`` を追加::
 
     services:
       fess:
         environment:
-          - "FESS_JAVA_OPTS=-Dfess.config.path=/opt/fess/app/WEB-INF/conf/fess_config.properties -Dfess.ldap.admin.enabled=true -Dfess.ldap.admin.initial.dn=cn=admin,dc=example,dc=com"
+          - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
 
-主なシステムプロパティ：
+.. note::
+
+   ``-Dfess.config.`` の後に続く部分が ``fess_config.properties`` の設定項目名に対応します。
+
+   例:
+
+   - ``fess_config.properties`` の設定: ``crawler.document.cache.enabled=false``
+   - システムプロパティ: ``-Dfess.config.crawler.document.cache.enabled=false``
+
+LDAP 設定の例::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.ldap.admin.enabled=true -Dfess.config.ldap.admin.initial.dn=cn=admin,dc=example,dc=com -Dfess.config.ldap.admin.user.filter=uid=%s"
+
+よく使われる設定項目：
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 45 55
 
-   * - システムプロパティ
+   * - fess_config.properties の設定項目
      - 説明
-   * - ``fess.config.path``
-     - 設定ファイルのパス
-   * - ``fess.ldap.admin.enabled``
+   * - ``crawler.document.cache.enabled``
+     - クローラーのドキュメントキャッシュ
+   * - ``adaptive.load.control``
+     - アダプティブ負荷制御の値
+   * - ``query.facet.fields``
+     - ファセット検索のフィールド
+   * - ``ldap.admin.enabled``
      - LDAP 認証の有効化
-   * - ``fess.ldap.admin.initial.dn``
+   * - ``ldap.admin.initial.dn``
      - LDAP 管理者の DN
-   * - ``fess.ldap.admin.user.filter``
+   * - ``ldap.admin.user.filter``
      - LDAP ユーザーフィルター
 
 .. tip::
 
-   設定ファイルとシステムプロパティを組み合わせることで、
-   より柔軟な設定が可能です。システムプロパティは設定ファイルの値を上書きします。
+   - システムプロパティは ``fess_config.properties`` の値を上書きします
+   - 複数の設定を空白区切りで指定できます
+   - 方法1（設定ファイルのマウント）と併用することで、より柔軟な設定が可能です
 
 外部の OpenSearch への接続
 ------------------------
