@@ -236,6 +236,69 @@ Exemple ::
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Europe/Paris"
 
+Comment appliquer les fichiers de configuration
+------------------------------------------------
+
+Les paramètres détaillés de |Fess| sont écrits dans le fichier ``fess_config.properties``.
+Dans les environnements Docker, il existe les méthodes suivantes pour appliquer ces paramètres de fichier.
+
+Méthode 1 : Monter le fichier de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+En montant un répertoire contenant ``fess_config.properties`` et d'autres fichiers de configuration,
+vous pouvez appliquer les paramètres modifiés côté hôte au conteneur.
+
+1. Créez un répertoire de configuration sur l'hôte ::
+
+       $ mkdir -p /path/to/fess-config
+
+2. Obtenez le modèle du fichier de configuration (première fois uniquement) ::
+
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
+
+3. Modifiez ``/path/to/fess-config/fess_config.properties`` et ajoutez les paramètres nécessaires ::
+
+       # Exemple
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
+
+4. Ajoutez le montage de volume à ``compose.yaml`` ::
+
+       services:
+         fess:
+           volumes:
+             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+
+5. Démarrez le conteneur ::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   ``fess_config.properties`` contient les paramètres de recherche, les paramètres du crawler,
+   les paramètres de messagerie et d'autres configurations système.
+   Même si vous supprimez les conteneurs avec ``docker compose down``, les fichiers côté hôte sont conservés.
+
+Méthode 2 : Configuration via propriétés système
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Vous pouvez remplacer les éléments de configuration dans ``fess_config.properties`` via des variables d'environnement utilisant des propriétés système.
+
+Les éléments de configuration écrits dans ``fess_config.properties`` (par exemple, ``crawler.document.cache.enabled=false``)
+peuvent être spécifiés au format ``-Dfess.config.nom_paramètre=valeur``.
+
+Ajoutez ``FESS_JAVA_OPTS`` aux variables d'environnement dans ``compose.yaml`` ::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
+
+.. note::
+
+   La partie suivant ``-Dfess.config.`` correspond au nom de l'élément de configuration dans ``fess_config.properties``.
+
 Connexion à un OpenSearch externe
 ----------------------------------
 

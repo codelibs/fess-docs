@@ -236,6 +236,69 @@
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Shanghai"
 
+如何应用配置文件
+--------------------
+
+|Fess| 的详细设置写在 ``fess_config.properties`` 文件中。
+在 Docker 环境中，可以通过以下方法应用这些文件设置。
+
+方法 1：挂载配置文件
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+通过挂载包含 ``fess_config.properties`` 及其他配置文件的目录，
+可以将主机端编辑的设置应用到容器中。
+
+1. 在主机端创建配置目录::
+
+       $ mkdir -p /path/to/fess-config
+
+2. 获取配置文件模板（仅首次）::
+
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
+
+3. 编辑 ``/path/to/fess-config/fess_config.properties`` 并添加所需的设置::
+
+       # 示例
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
+
+4. 在 ``compose.yaml`` 中添加卷挂载::
+
+       services:
+         fess:
+           volumes:
+             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+
+5. 启动容器::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   ``fess_config.properties`` 包含搜索设置、爬虫设置、
+   邮件设置和其他系统配置。
+   即使使用 ``docker compose down`` 删除容器，主机端的文件也会保留。
+
+方法 2：通过系统属性进行配置
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+可以通过环境变量使用系统属性来覆盖 ``fess_config.properties`` 中的配置项。
+
+在 ``fess_config.properties`` 中写入的配置项（例如 ``crawler.document.cache.enabled=false``）
+可以用 ``-Dfess.config.设置项名称=值`` 的格式指定。
+
+在 ``compose.yaml`` 的环境变量中添加 ``FESS_JAVA_OPTS``::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
+
+.. note::
+
+   ``-Dfess.config.`` 之后的部分对应 ``fess_config.properties`` 中的配置项名称。
+
 连接到外部 OpenSearch
 ------------------------
 

@@ -236,6 +236,69 @@ Docker コンテナの停止
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Tokyo"
 
+設定ファイルの反映方法
+--------------------
+
+|Fess| の詳細な設定は ``fess_config.properties`` ファイルに記述します。
+Docker 環境では、このファイルの設定を反映させるために以下の方法があります。
+
+方法 1: 設定ファイルのマウント
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``fess_config.properties`` などの設定ファイルを含むディレクトリをマウントすることで、
+ホスト側で編集した設定ファイルをコンテナに反映できます。
+
+1. ホスト側に設定ディレクトリを作成::
+
+       $ mkdir -p /path/to/fess-config
+
+2. 設定ファイルのテンプレートを取得（初回のみ）::
+
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.3.2/src/main/resources/fess_config.properties
+
+3. ``/path/to/fess-config/fess_config.properties`` を編集して必要な設定を記述::
+
+       # 例
+       crawler.document.cache.enabled=false
+       adaptive.load.control=20
+       query.facet.fields=label,host
+
+4. ``compose.yaml`` にボリュームマウントを追加::
+
+       services:
+         fess:
+           volumes:
+             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+
+5. コンテナを起動::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   ``fess_config.properties`` には、検索設定、クローラー設定、
+   メール設定、その他のシステム設定を記述します。
+   ``docker compose down`` でコンテナを削除しても、ホスト側のファイルは保持されます。
+
+方法 2: システムプロパティによる設定
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``fess_config.properties`` の設定項目を、環境変数経由でシステムプロパティとして上書きできます。
+
+``fess_config.properties`` に記載される設定項目（例: ``crawler.document.cache.enabled=false``）を、
+``-Dfess.config.設定項目名=値`` の形式で指定します。
+
+``compose.yaml`` の環境変数に ``FESS_JAVA_OPTS`` を追加::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
+
+.. note::
+
+   ``-Dfess.config.`` の後に続く部分が ``fess_config.properties`` の設定項目名に対応します。
+
 外部の OpenSearch への接続
 ------------------------
 
