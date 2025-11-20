@@ -236,6 +236,72 @@ Docker コンテナの停止
       - "FESS_HEAP_SIZE=4g"
       - "TZ=Asia/Tokyo"
 
+設定ファイルの永続化
+------------------
+
+管理画面で設定した LDAP 設定などを ``docker compose down`` で削除されないように永続化するには、以下の方法があります。
+
+方法 1: 設定ディレクトリのマウント
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``fess_config.properties`` などの設定ファイルを含むディレクトリをマウントします。
+
+1. ホスト側に設定ディレクトリを作成::
+
+       $ mkdir -p /path/to/fess-config
+
+2. ``compose.yaml`` にボリュームマウントを追加::
+
+       services:
+         fess:
+           volumes:
+             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+
+3. 初回起動後、コンテナ内の設定ファイルをホスト側にコピー::
+
+       $ docker compose cp fess:/opt/fess/app/WEB-INF/conf/. /path/to/fess-config/
+
+4. 以降は、ホスト側の ``/path/to/fess-config`` 内のファイルを編集することで設定を永続化できます。
+
+.. note::
+
+   ``fess_config.properties`` には、管理画面で設定した LDAP 設定、
+   メール設定、その他のシステム設定が保存されます。
+
+方法 2: システムプロパティによる設定
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+環境変数を使用して、個別の設定を上書きできます。
+
+``compose.yaml`` の環境変数に Java のシステムプロパティを追加::
+
+    services:
+      fess:
+        environment:
+          - "FESS_JAVA_OPTS=-Dfess.config.path=/opt/fess/app/WEB-INF/conf/fess_config.properties -Dfess.ldap.admin.enabled=true -Dfess.ldap.admin.initial.dn=cn=admin,dc=example,dc=com"
+
+主なシステムプロパティ：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - システムプロパティ
+     - 説明
+   * - ``fess.config.path``
+     - 設定ファイルのパス
+   * - ``fess.ldap.admin.enabled``
+     - LDAP 認証の有効化
+   * - ``fess.ldap.admin.initial.dn``
+     - LDAP 管理者の DN
+   * - ``fess.ldap.admin.user.filter``
+     - LDAP ユーザーフィルター
+
+.. tip::
+
+   設定ファイルとシステムプロパティを組み合わせることで、
+   より柔軟な設定が可能です。システムプロパティは設定ファイルの値を上書きします。
+
 外部の OpenSearch への接続
 ------------------------
 
