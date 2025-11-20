@@ -299,38 +299,6 @@ Docker 環境では、このファイルの設定を反映させるために以�
 
    ``-Dfess.config.`` の後に続く部分が ``fess_config.properties`` の設定項目名に対応します。
 
-   例:
-
-   - ``fess_config.properties`` の設定: ``crawler.document.cache.enabled=false``
-   - システムプロパティ: ``-Dfess.config.crawler.document.cache.enabled=false``
-
-よく使われる設定項目：
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 55
-
-   * - fess_config.properties の設定項目
-     - 説明
-   * - ``crawler.document.cache.enabled``
-     - クローラーのドキュメントキャッシュ
-   * - ``adaptive.load.control``
-     - アダプティブ負荷制御の値
-   * - ``query.facet.fields``
-     - ファセット検索のフィールド
-   * - ``ldap.admin.enabled``
-     - LDAP 認証の有効化
-   * - ``ldap.admin.initial.dn``
-     - LDAP 管理者の DN
-   * - ``ldap.admin.user.filter``
-     - LDAP ユーザーフィルター
-
-.. tip::
-
-   - システムプロパティは ``fess_config.properties`` の値を上書きします
-   - 複数の設定を空白区切りで指定できます
-   - 方法1（設定ファイルのマウント）と併用することで、より柔軟な設定が可能です
-
 外部の OpenSearch への接続
 ------------------------
 
