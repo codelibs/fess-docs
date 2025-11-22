@@ -28,7 +28,7 @@
    * - content_length
      - 爬取的文档大小
    * - last_modified
-     - 爬取的文档的最后修改日期
+     - 爬取的文档的最后修改日期和时间
    * - mimetype
      - 文档的 MIME 类型
 

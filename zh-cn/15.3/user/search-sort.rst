@@ -15,17 +15,17 @@
    * - 字段名
      - 说明
    * - created
-     - 爬取的日期
+     - 爬取的日期和时间
    * - content_length
      - 爬取的文档大小
    * - last_modified
-     - 爬取的文档的最后修改日期
+     - 爬取的文档的最后修改日期和时间
    * - filename
      - 文件名
    * - score
      - 评分值
    * - timestamp
-     - 文档索引的日期
+     - 文档索引的日期和时间
    * - click_count
      - 文档的点击次数
    * - favorite_count
