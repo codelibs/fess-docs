@@ -33,5 +33,5 @@ Número de palabras
 Número de palabras registradas
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/es/15.3/admin/suggest-1.png
 

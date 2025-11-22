@@ -28,5 +28,5 @@ Para instalar un nuevo complemento, haga clic en el botón de instalación.
 
 Seleccione el complemento que desea instalar en el menú desplegable y haga clic en el botón de instalación para comenzar la instalación.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/es/15.3/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/es/15.3/admin/plugin-2.png
