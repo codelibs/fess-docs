@@ -1,6 +1,6 @@
 =======================
 Dictionnaire Protwords
-=======================
+======================
 
 Présentation
 ============
@@ -22,14 +22,14 @@ Pour ouvrir la page de liste de configuration Protwords illustrée ci-dessous, s
 Cliquez sur le nom de la configuration pour la modifier.
 
 Méthode de configuration
--------------------------
+------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration Protwords.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Informations sur les mots
 ::::::::::::::::::::::::::
@@ -48,5 +48,5 @@ Téléversement
 Vous pouvez téléverser au format de dictionnaire Protwords.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/protwords-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/protwords-2.png

@@ -18,7 +18,7 @@ Pour ouvrir la page de vérification du journal des tâches illustrée ci-dessou
 |image0|
 
 Détails du journal des tâches
-------------------------------
+-----------------------------
 
 Vous pouvez vérifier le contenu du journal des tâches. Affiche le nom de la tâche, l'état, les heures de début et de fin, les résultats, etc.
 
@@ -64,5 +64,5 @@ Résultat
 
 Résultat de l'exécution de la tâche.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/joblog-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/joblog-2.png

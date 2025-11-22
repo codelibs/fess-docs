@@ -1,6 +1,6 @@
 ==============
 Crawl Web
-==============
+=========
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste de configuration de crawl Web illustrée ci-dessous
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Créer pour ouvrir la page de configuration de crawl Web.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom
 ::::
@@ -118,7 +118,7 @@ Description
 Vous pouvez saisir une description.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
 
@@ -146,7 +146,7 @@ Pour créer une configuration de crawl Web qui crawle les pages sous https://fes
 Les autres valeurs de configuration utilisent les valeurs par défaut.
 
 Crawl Web de site avec authentification Web
---------------------------------------------
+-------------------------------------------
 
 Fess prend en charge le crawl pour l'authentification BASIC, DIGEST et NTLM.
 Pour plus de détails sur l'authentification Web, consultez la page d'authentification Web.
@@ -245,6 +245,6 @@ Ensuite, créez la configuration d'authentification Web avec les valeurs suivant
      - XWiki
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/webconfig-2.png
 .. pdf            :height: 940 px

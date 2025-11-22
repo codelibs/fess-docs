@@ -1,6 +1,6 @@
 ==================
 Fichiers journaux
-==================
+=================
 
 Présentation
 ============
@@ -8,7 +8,7 @@ Présentation
 Cette section explique le téléchargement des fichiers journaux générés par |Fess|.
 
 Méthode de configuration
-=========================
+========================
 
 Affichage
 ---------
@@ -67,4 +67,4 @@ gc-crawler.log
 
 Les journaux GC de fess sont enregistrés.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/log-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/log-1.png

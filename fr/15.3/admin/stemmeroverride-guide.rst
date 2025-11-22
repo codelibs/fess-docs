@@ -1,6 +1,6 @@
 ===================================
 Dictionnaire de remplacement Stemmer
-===================================
+====================================
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste de configuration de remplacement Stemmer illustrée
 Cliquez sur le nom de la configuration pour la modifier.
 
 Méthode de configuration
--------------------------
+------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de remplacement Stemmer.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Source de conversion
 :::::::::::::::::::::
@@ -50,6 +50,6 @@ Téléversement
 Vous pouvez téléverser au format de dictionnaire de remplacement Stemmer.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/stemmeroverride-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/stemmeroverride-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/stemmeroverride-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/stemmeroverride-2.png
 

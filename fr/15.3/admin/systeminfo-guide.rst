@@ -1,6 +1,6 @@
 ==================
 Informations système
-==================
+====================
 
 Présentation
 ============
@@ -41,4 +41,4 @@ Propriétés de rapport de bogue
 C'est une liste de propriétés à joindre lors du signalement d'un bogue.
 Elle extrait les valeurs qui ne contiennent pas d'informations personnelles.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/systeminfo-1.png

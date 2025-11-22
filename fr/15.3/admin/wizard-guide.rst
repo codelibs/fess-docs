@@ -1,6 +1,6 @@
 =======================
 Assistant de configuration
-=======================
+==========================
 
 Présentation
 ============
@@ -8,7 +8,7 @@ Présentation
 La page Assistant fournit un outil de configuration simplifié pour enregistrer les configurations de crawl.
 
 Configuration simplifiée
--------------------------
+------------------------
 
 Cette page est une page de démarrage pour enregistrer la configuration de crawl.
 
@@ -22,7 +22,7 @@ Cette page vous permet de créer une configuration de crawl.
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom
 ::::
@@ -52,6 +52,6 @@ Pour démarrer le crawler |Fess|, cliquez sur le bouton Démarrer le crawl. Si v
 |image2|
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/wizard-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/wizard-2.png
-.. |image2| image:: ../../../resources/images/en/15.3/admin/wizard-3.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/wizard-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/wizard-2.png
+.. |image2| image:: ../../../resources/images/ja/15.3/admin/wizard-3.png

@@ -1,6 +1,6 @@
 =========
 Plugins
-=========
+=======
 
 Présentation
 ============
@@ -28,5 +28,5 @@ Pour installer un nouveau plugin, cliquez sur le bouton Installer.
 
 Sélectionnez le plugin que vous souhaitez installer dans le menu déroulant et cliquez sur le bouton Installer pour démarrer l'installation.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/plugin-2.png

@@ -20,7 +20,7 @@ Créez la requête de recherche que vous souhaitez envoyer à OpenSearch sous fo
 La réponse est téléchargée sous forme de fichier.
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Fichier de requête
 ::::::::::::::::::
@@ -37,4 +37,4 @@ Par exemple, le contenu du fichier JSON serait comme suit.
       }
     }
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/esreq-1.png

@@ -21,7 +21,7 @@ Pour les téléchargements, les services professionnels, le support et d'autres 
    `https://fess.codelibs.org/ <https://fess.codelibs.org/>`__
 
 Contact pour le support technique
-==================================
+=================================
 
 Si vous avez des questions techniques concernant ce produit et que vous ne trouvez pas de solution dans la documentation, veuillez consulter :
 

@@ -1,6 +1,6 @@
 ==========================
 Crawl de système de fichiers
-==========================
+============================
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste pour configurer le crawl de fichiers illustrée ci-
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de crawl de fichiers.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom
 ::::
@@ -113,7 +113,7 @@ Description
 Vous pouvez saisir une description.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
 
@@ -121,7 +121,7 @@ Exemples
 ========
 
 Crawler les fichiers locaux
-----------------------------
+---------------------------
 
 Pour crawler les fichiers sous /home/share, la configuration serait la suivante.
 
@@ -139,7 +139,7 @@ Pour crawler les fichiers sous /home/share, la configuration serait la suivante.
 Les autres paramètres peuvent utiliser la configuration par défaut.
 
 Crawler les dossiers partagés Windows
---------------------------------------
+-------------------------------------
 
 Pour crawler les fichiers sous \\SERVER\SharedFolder, la configuration serait la suivante.
 
@@ -175,6 +175,6 @@ La configuration serait alors la suivante.
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/fileconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/fileconfig-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/fileconfig-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/fileconfig-2.png
 .. pdf            :height: 940 px

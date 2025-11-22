@@ -1,6 +1,6 @@
 ========
 Général
-========
+=======
 
 Présentation
 ============
@@ -11,7 +11,7 @@ Vous pouvez modifier divers paramètres de |Fess| sans redémarrer |Fess|.
 |image0|
 
 Contenu de la configuration
-============================
+===========================
 
 Système
 -------
@@ -258,7 +258,7 @@ Exemples
 ========
 
 Exemples de configuration LDAP
--------------------------------
+------------------------------
 
 .. tabularcolumns:: |p{4cm}|p{4cm}|p{4cm}|
 .. list-table:: Configuration LDAP/Active Directory
@@ -283,12 +283,12 @@ Exemples de configuration LDAP
      - cn=%s ou uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
    * - Filtre de groupe
-     -
+-----------------------
      - (member:1.2.840.113556.1.4.1941:=%s)
    * - memberOf
      - isMemberOf
      - memberOf
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/general-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/general-1.png
 .. pdf            :height: 940 px

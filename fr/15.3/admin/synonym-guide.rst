@@ -1,6 +1,6 @@
 =======================
 Dictionnaire de synonymes
-=======================
+=========================
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste de configuration des synonymes illustrée ci-dessou
 Cliquez sur le nom de la configuration pour la modifier.
 
 Méthode de configuration
--------------------------
+------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des synonymes.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Concernant la création d'index, comme la configuration standard est bi-gram, il est nécessaire de s'assurer que le mot après conversion ne soit pas un caractère unique.
 De plus, lors de l'enregistrement de synonymes, il est nécessaire de s'enregistrer comme suit :
@@ -77,5 +77,5 @@ Dans le cas ci-dessus, vous pouvez également omettre => et décrire comme suit.
     fess,フエス
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/synonym-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/synonym-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/synonym-2.png

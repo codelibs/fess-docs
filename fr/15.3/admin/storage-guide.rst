@@ -1,6 +1,6 @@
 =========
 Stockage
-=========
+========
 
 Présentation
 ============
@@ -11,7 +11,7 @@ Gestion
 =======
 
 Configuration du serveur de stockage d'objets
-----------------------------------------------
+---------------------------------------------
 
 Ouvrez la configuration du stockage depuis [Système > Général] et configurez les éléments suivants :
 
@@ -70,4 +70,4 @@ Création de dossier
 Vous pouvez ouvrir la fenêtre de création de dossier en cliquant sur le bouton Créer le dossier à droite de l'affichage du chemin. Notez que vous ne pouvez pas créer de dossiers vides.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/storage-1.png

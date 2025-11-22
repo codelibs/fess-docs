@@ -20,14 +20,14 @@ Pour ouvrir la page de liste de configuration des utilisateurs illustrée ci-des
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des utilisateurs.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom d'utilisateur
 :::::::::::::::::
@@ -45,10 +45,10 @@ Groupe
 Spécifie les groupes auxquels l'utilisateur appartient.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/user-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/user-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/user-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/user-2.png

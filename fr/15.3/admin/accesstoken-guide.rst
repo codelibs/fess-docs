@@ -1,6 +1,6 @@
 ==================
 Jeton d'accès
-==================
+=============
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste de configuration des jetons d'accès illustrée ci-
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des jetons d'accès.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom
 ::::
@@ -65,12 +65,12 @@ Date d'expiration
 Spécifie la date d'expiration du jeton d'accès.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/accesstoken-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/accesstoken-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/accesstoken-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/accesstoken-2.png

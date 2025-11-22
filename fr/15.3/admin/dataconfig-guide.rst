@@ -1,6 +1,6 @@
 =======================
 Crawl de magasin de données
-=======================
+===========================
 
 Présentation
 ============
@@ -21,14 +21,14 @@ Pour ouvrir la page de liste pour configurer le magasin de données illustrée c
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du magasin de données.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom
 ::::
@@ -84,7 +84,7 @@ Description
 Vous pouvez saisir une description.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
@@ -426,5 +426,5 @@ Si une authentification est requise à la destination du crawl, vous devez égal
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/dataconfig-2.png

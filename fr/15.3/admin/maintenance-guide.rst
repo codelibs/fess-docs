@@ -1,6 +1,6 @@
 ==============
 Maintenance
-==============
+===========
 
 Présentation
 ============
@@ -20,7 +20,7 @@ Exécutez cela lorsque vous souhaitez modifier le mapping de l'index, par exempl
 
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Mise à jour de l'alias
 ::::::::::::::::::::::
@@ -47,7 +47,7 @@ Vous pouvez spécifier le nombre maximum de réplicas OpenSearch (index.auto_exp
 
 
 Rechargement de l'index de documents
--------------------------------------
+------------------------------------
 
 Vous pouvez recharger l'index de documents pour appliquer la configuration de l'index.
 
@@ -64,4 +64,4 @@ Diagnostic
 
 Vous pouvez télécharger les fichiers journaux au format zip.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/maintenance-1.png
