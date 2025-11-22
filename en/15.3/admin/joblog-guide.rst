@@ -26,6 +26,45 @@ Click a job log on the list page to display the details.
 
 |image1|
 
+Name
+::::
+
+The name of the executed job.
+
+Status
+::::::
+
+The execution result of the job.
+
+Target
+::::::
+
+The target for job execution.
+
+Start Time
+::::::::::
+
+UNIX time when the job started.
+
+End Time
+::::::::
+
+UNIX time when the job ended.
+
+Executor
+::::::::
+
+The execution environment where the job was executed.
+
+Script
+::::::
+
+The execution content of the job.
+
+Result
+::::::
+
+The execution result of the job.
 
 .. |image0| image:: ../../../resources/images/en/15.3/admin/joblog-1.png
 .. |image1| image:: ../../../resources/images/en/15.3/admin/joblog-2.png
