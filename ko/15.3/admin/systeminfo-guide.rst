@@ -41,4 +41,4 @@
 버그를 보고할 때 첨부할 속성 목록입니다.
 개인 정보가 포함되지 않은 값을 추출합니다.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/systeminfo-1.png

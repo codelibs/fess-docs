@@ -7,7 +7,7 @@
 
 Fess (페스)는 "\ **5분 만에 간단히 구축 가능한 전문 검색 서버**\ "입니다.
 
-.. figure:: ../resources/images/ja/demo-1.png
+.. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: 표준 데모
    :figclass: side-by-side
@@ -15,7 +15,7 @@ Fess (페스)는 "\ **5분 만에 간단히 구축 가능한 전문 검색 서�
 
    표준 데모
 
-.. figure:: ../resources/images/ja/demo-3.png
+.. figure:: ../resources/images/en/demo-3.png
    :scale: 100%
    :alt: 사이트 내 검색 데모
    :figclass: side-by-side
@@ -23,7 +23,7 @@ Fess (페스)는 "\ **5분 만에 간단히 구축 가능한 전문 검색 서�
 
    사이트 내 검색 데모
 
-.. figure:: ../resources/images/ja/demo-2.png
+.. figure:: ../resources/images/en/demo-2.png
    :scale: 100%
    :alt: Code Search
    :figclass: side-by-side
@@ -31,7 +31,7 @@ Fess (페스)는 "\ **5분 만에 간단히 구축 가능한 전문 검색 서�
 
    소스 코드 검색
 
-.. figure:: ../resources/images/ja/demo-4.png
+.. figure:: ../resources/images/en/demo-4.png
    :scale: 100%
    :alt: Document Search
    :figclass: side-by-side
@@ -291,12 +291,12 @@ Script 플러그인
 
 - `【제1회】전문 검색 서버 Fess 도입 <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
 
-.. |image0| image:: ../resources/images/ja/demo-1.png
-.. |image1| image:: ../resources/images/ja/demo-2.png
-.. |image2| image:: ../resources/images/ja/demo-3.png
-.. |image3| image:: ../resources/images/ja/n2search_225x50.png
+.. |image0| image:: ../resources/images/en/demo-1.png
+.. |image1| image:: ../resources/images/en/demo-2.png
+.. |image2| image:: ../resources/images/en/demo-3.png
+.. |image3| image:: ../resources/images/en/n2search_225x50.png
    :target: https://www.n2sm.net/products/n2search.html
-.. |image4| image:: ../resources/images/ja/n2search_b.png
+.. |image4| image:: ../resources/images/en/n2search_b.png
 
 
 .. toctree::

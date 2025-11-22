@@ -349,13 +349,13 @@ JSP 파일에서 이용하는 CSS 파일을 변경하고 싶은 경우 "app/css"
 -  `OpenSearch <https://opensearch.org/>`__
 
 -  `LastaFlute <https://lastaflute.dbflute.org/>`__
-.. |image1| image:: ../../resources/images/ja/article/1/fess-download.png
-.. |image2| image:: ../../resources/images/ja/article/1/top.png
-.. |image3| image:: ../../resources/images/ja/article/1/login.png
-.. |image4| image:: ../../resources/images/ja/article/1/web-crawl-conf-1.png
-.. |image5| image:: ../../resources/images/ja/article/1/web-crawl-conf-2.png
-.. |image6| image:: ../../resources/images/ja/article/1/web-crawl-conf-3.png
-.. |image7| image:: ../../resources/images/ja/article/1/scheduler.png
-.. |image8| image:: ../../resources/images/ja/article/1/session-info-1.png
-.. |image9| image:: ../../resources/images/ja/article/1/session-info-2.png
-.. |image10| image:: ../../resources/images/ja/article/1/search-result.png
+.. |image1| image:: ../../resources/images/en/article/1/fess-download.png
+.. |image2| image:: ../../resources/images/en/article/1/top.png
+.. |image3| image:: ../../resources/images/en/article/1/login.png
+.. |image4| image:: ../../resources/images/en/article/1/web-crawl-conf-1.png
+.. |image5| image:: ../../resources/images/en/article/1/web-crawl-conf-2.png
+.. |image6| image:: ../../resources/images/en/article/1/web-crawl-conf-3.png
+.. |image7| image:: ../../resources/images/en/article/1/scheduler.png
+.. |image8| image:: ../../resources/images/en/article/1/session-info-1.png
+.. |image9| image:: ../../resources/images/en/article/1/session-info-2.png
+.. |image10| image:: ../../resources/images/en/article/1/search-result.png

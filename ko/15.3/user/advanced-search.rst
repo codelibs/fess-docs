@@ -80,4 +80,4 @@
 
 입력한 사이트 또는 도메인으로 필터링 검색할 수 있습니다.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/user/advanced-search-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/advanced-search-1.png

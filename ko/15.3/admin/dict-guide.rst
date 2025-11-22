@@ -56,5 +56,5 @@ Stemmer 재정의 사전을 관리합니다.
 stemmer_override.txt는 각 언어용으로 배치하여 스테밍 처리를 재정의하기 위한 단어 치환 사전 파일입니다.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dict-1.png
             :height: 940px

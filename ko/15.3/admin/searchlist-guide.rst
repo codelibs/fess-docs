@@ -30,4 +30,4 @@
 인덱스에서 모든 문서를 삭제하려면 "\*:\*"로 "이 쿼리로 모두 삭제" 버튼을 클릭하여 삭제됩니다.
 검색 조건을 지정하여 대상 문서만 삭제하는 것도 가능합니다.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/searchlist-1.png

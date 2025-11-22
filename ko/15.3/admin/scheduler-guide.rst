@@ -101,5 +101,5 @@ fess_config.properties에서 job.max.crawler.processes를 설정하면 크롤러
 "스케줄러"의 "Default Crawler"를 클릭하고 "지금 시작" 버튼을 클릭합니다.
 크롤러를 중지하려면 "Default Crawler"를 클릭하고 "중지" 버튼을 클릭하십시오.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/scheduler-2.png

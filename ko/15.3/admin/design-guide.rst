@@ -97,5 +97,5 @@
 예를 들어 logo.png를 지정하면 검색 최상위 페이지의 이미지가 변경됩니다.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/design-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/design-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/design-2.png
