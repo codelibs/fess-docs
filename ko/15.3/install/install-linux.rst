@@ -112,7 +112,7 @@ TAR.GZ 버전 설치
 
 1. Fess 다운로드 및 압축 해제
 
-   `다운로드 사이트 <https://fess.codelibs.org/ja/downloads.html>`__ 에서 TAR.GZ 버전을 다운로드합니다.
+   `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 TAR.GZ 버전을 다운로드합니다.
 
    ::
 
@@ -206,7 +206,7 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
 
 1. Fess RPM 설치
 
-   `다운로드 사이트 <https://fess.codelibs.org/ja/downloads.html>`__ 에서 RPM 패키지를 다운로드하여 설치합니다.
+   `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 RPM 패키지를 다운로드하여 설치합니다.
 
    ::
 
@@ -296,7 +296,7 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
 1. Fess DEB 설치
 
-   `다운로드 사이트 <https://fess.codelibs.org/ja/downloads.html>`__ 에서 DEB 패키지를 다운로드하여 설치합니다.
+   `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 DEB 패키지를 다운로드하여 설치합니다.
 
    ::
 
