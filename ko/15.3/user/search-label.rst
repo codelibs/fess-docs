@@ -18,5 +18,5 @@
 
 라벨을 설정하고 인덱스를 생성하면 라벨이 설정된 문서별로 검색할 수 있습니다. 라벨을 지정하지 않은 검색은 일반적인 전체 검색과 동일합니다. 라벨 정보를 변경한 경우 인덱스를 업데이트해야 합니다.
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/user/search-label-1.png
 .. pdf   :width: 300 px
