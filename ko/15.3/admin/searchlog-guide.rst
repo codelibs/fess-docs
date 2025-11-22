@@ -26,5 +26,5 @@
 |image1|
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/searchlog-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/searchlog-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/searchlog-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/searchlog-2.png

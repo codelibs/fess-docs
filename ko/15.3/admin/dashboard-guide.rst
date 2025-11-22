@@ -52,6 +52,6 @@
 각 인덱스의 오른쪽 상단 아이콘을 클릭하면 인덱스에 대한 작업 메뉴가 표시됩니다.
 인덱싱된 문서를 삭제하는 경우 관리용 검색 화면에서 삭제합니다. "delete index"로 삭제하지 않도록 주의하십시오.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/dashboard-2.png
 .. pdf            :width: 400 px

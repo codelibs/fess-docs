@@ -21,7 +21,7 @@
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/ja/15.3/config/search-result.png
+.. |image0| image:: ../../../resources/images/en/15.3/config/search-result.png
 
 정확한 히트 건수 표시
 ----------------------

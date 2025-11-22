@@ -190,8 +190,8 @@ J2EE의 인증 정보를 이용한 롤 기반 검색을 중심으로 설명했�
 
 -  `Fess <https://fess.codelibs.org/ja/>`__
 
-.. |image0| image:: ../../resources/images/ja/article/3/role-1.png
-.. |image1| image:: ../../resources/images/ja/article/3/role-2.png
-.. |image2| image:: ../../resources/images/ja/article/3/logout.png
-.. |image3| image:: ../../resources/images/ja/article/3/search-by-sales.png
-.. |image4| image:: ../../resources/images/ja/article/3/search-by-eng.png
+.. |image0| image:: ../../resources/images/en/article/3/role-1.png
+.. |image1| image:: ../../resources/images/en/article/3/role-2.png
+.. |image2| image:: ../../resources/images/en/article/3/logout.png
+.. |image3| image:: ../../resources/images/en/article/3/search-by-sales.png
+.. |image4| image:: ../../resources/images/en/article/3/search-by-eng.png

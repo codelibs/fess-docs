@@ -148,7 +148,7 @@ Fess 정지는 Fess를 시작한 폴더에서 다음 명령을 실행합니다.
 
 관리 UI의 사용자 편집 화면에서 변경할 수 있습니다.
 
-.. |image0| image:: ../resources/images/ja/install/dockerdesktop-1.png
-.. |image1| image:: ../resources/images/ja/install/dockerdesktop-2.png
-.. |image2| image:: ../resources/images/ja/install/dockerdesktop-3.png
-.. |image3| image:: ../resources/images/ja/install/dockerdesktop-4.png
+.. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
+.. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
+.. |image2| image:: ../resources/images/en/install/dockerdesktop-3.png
+.. |image3| image:: ../resources/images/en/install/dockerdesktop-4.png

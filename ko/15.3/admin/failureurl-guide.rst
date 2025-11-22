@@ -62,5 +62,5 @@ URL
 이 예외가 발생한 시각.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/failureurl-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/failureurl-2.png

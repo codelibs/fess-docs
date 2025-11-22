@@ -67,4 +67,4 @@ gc-crawler.log
 
 fess의 GC 로그가 기록되어 있습니다.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/log-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/log-1.png

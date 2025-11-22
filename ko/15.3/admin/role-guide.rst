@@ -42,5 +42,5 @@ LDAP 연계를 하는 경우 등에 사용할 수 있습니다.
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/role-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/role-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/role-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/role-2.png
