@@ -28,7 +28,7 @@ Standardmäßig können die folgenden Felder für die Suche angegeben werden.
    * - content_length
      - Größe des gecrawlten Dokuments
    * - last_modified
-     - Letztes Änderungsdatum des gecrawlten Dokuments
+     - Letztes Änderungsdatum und Uhrzeit des gecrawlten Dokuments
    * - mimetype
      - MIME-Typ des Dokuments
 

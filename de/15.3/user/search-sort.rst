@@ -15,17 +15,17 @@ Standardmäßig können die folgenden Felder zum Sortieren angegeben werden.
    * - Feldname
      - Beschreibung
    * - created
-     - Crawl-Datum
+     - Crawl-Datum und Uhrzeit
    * - content_length
      - Größe des gecrawlten Dokuments
    * - last_modified
-     - Letztes Änderungsdatum des gecrawlten Dokuments
+     - Letztes Änderungsdatum und Uhrzeit des gecrawlten Dokuments
    * - filename
      - Dateiname
    * - score
      - Bewertung
    * - timestamp
-     - Datum der Dokumentindizierung
+     - Datum und Uhrzeit der Dokumentindizierung
    * - click_count
      - Anzahl der Klicks auf das Dokument
    * - favorite_count
@@ -63,5 +63,5 @@ Um nach mehreren Feldern zu sortieren, geben Sie diese durch Kommas getrennt an:
 
     fess sort:content_length.desc,last_modified
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/search-sort-1.png
+.. |image0| image:: ../../../resources/images/de/15.3/user/search-sort-1.png
 .. pdf            :width: 300 px

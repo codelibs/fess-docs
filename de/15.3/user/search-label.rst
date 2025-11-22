@@ -18,5 +18,5 @@ Bei der Suche können Label-Informationen ausgewählt werden. Label-Informatione
 
 Durch Festlegen von Labeln und Erstellen eines Index können Sie nach Dokumenten suchen, für die Label festgelegt wurden. Eine Suche ohne Angabe von Labeln ist eine normale Suche über alle Dokumente. Wenn Label-Informationen geändert werden, muss der Index aktualisiert werden.
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/de/15.3/user/search-label-1.png
 .. pdf   :width: 300 px
