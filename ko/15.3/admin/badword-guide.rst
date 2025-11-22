@@ -79,7 +79,7 @@ CSV 내용
 "BadWord"
 "검색엔진"
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.3/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.3/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/ko/15.3/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/ko/15.3/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/ko/15.3/admin/badword-4.png

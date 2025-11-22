@@ -48,5 +48,5 @@ Protwords 사전 형식으로 다운로드할 수 있습니다.
 Protwords 사전 형식으로 업로드할 수 있습니다.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/protwords-2.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/ko/15.3/admin/protwords-2.png

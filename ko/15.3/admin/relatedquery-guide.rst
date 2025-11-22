@@ -55,5 +55,5 @@
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/relatedquery-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/relatedquery-2.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/relatedquery-1.png
+.. |image1| image:: ../../../resources/images/ko/15.3/admin/relatedquery-2.png

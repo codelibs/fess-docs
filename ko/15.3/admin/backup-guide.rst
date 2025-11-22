@@ -71,4 +71,4 @@ user_info.ndjson은 검색 사용자 정보를 포함합니다.
 설정 정보를 업로드하여 가져올 수 있습니다.
 복원 가능한 파일은 \*.bulk와 system.properties입니다.
 
-  .. |image0| image:: ../../../resources/images/en/15.3/admin/backup-1.png
+  .. |image0| image:: ../../../resources/images/ko/15.3/admin/backup-1.png

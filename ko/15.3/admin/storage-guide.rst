@@ -70,4 +70,4 @@
 경로 표시 오른쪽에 있는 폴더 생성 버튼을 클릭하여 폴더 생성 창을 열 수 있습니다. 빈 폴더는 생성할 수 없음에 유의하십시오.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/storage-1.png

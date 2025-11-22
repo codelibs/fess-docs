@@ -64,5 +64,5 @@
 
 작업의 실행 결과.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/joblog-2.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/ko/15.3/admin/joblog-2.png

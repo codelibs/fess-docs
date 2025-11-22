@@ -37,4 +37,4 @@ OpenSearch에 전송하려는 쿼리 요청을 JSON 파일로 작성하여 "요�
       }
     }
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/esreq-1.png

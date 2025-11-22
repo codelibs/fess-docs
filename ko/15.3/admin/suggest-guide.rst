@@ -33,5 +33,5 @@
 등록된 단어 수
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/suggest-1.png
 

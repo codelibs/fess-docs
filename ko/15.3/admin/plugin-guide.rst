@@ -28,5 +28,5 @@
 
 풀다운 메뉴에서 설치할 플러그인을 선택하고 설치 버튼을 클릭하면 설치가 시작됩니다.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/ko/15.3/admin/plugin-2.png

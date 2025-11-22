@@ -89,5 +89,5 @@
 
 크롤링 전체의 실행 시간(밀리초).
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/ko/15.3/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/ko/15.3/admin/crawlinginfo-2.png
