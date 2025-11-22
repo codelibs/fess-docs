@@ -5,7 +5,7 @@ Introduction
 Intended Audience
 =================
 
-This document is intended for users who use |Fess|.
+This document is intended for |Fess| users.
 
 Before You Read This Document
 ==============================
