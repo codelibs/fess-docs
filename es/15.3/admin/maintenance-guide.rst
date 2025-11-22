@@ -64,4 +64,4 @@ Diagnóstico
 
 Puede descargar archivos de registro en formato zip.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/es/15.3/admin/maintenance-1.png

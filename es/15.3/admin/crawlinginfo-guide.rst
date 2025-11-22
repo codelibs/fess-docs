@@ -89,5 +89,5 @@ Tiempo de ejecución del rastreador
 
 Tiempo de ejecución de todo el rastreo (milisegundos).
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/es/15.3/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/es/15.3/admin/crawlinginfo-2.png

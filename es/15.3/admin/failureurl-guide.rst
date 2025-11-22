@@ -62,5 +62,5 @@ Fecha del último acceso
 Hora en la que ocurrió esta excepción.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/failureurl-2.png
+.. |image0| image:: ../../../resources/images/es/15.3/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/es/15.3/admin/failureurl-2.png
