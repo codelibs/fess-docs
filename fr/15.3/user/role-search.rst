@@ -32,8 +32,8 @@ Lorsque vous êtes connecté, cliquez sur le nom d'utilisateur affiché en haut 
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/role-search-1.png
+.. |image0| image:: ../../../resources/images/fr/15.3/user/role-search-1.png
 .. pdf   :width: 200 px
-.. |image1| image:: ../../../resources/images/en/15.3/user/role-search-2.png
+.. |image1| image:: ../../../resources/images/fr/15.3/user/role-search-2.png
 .. pdf   :width: 300 px
 

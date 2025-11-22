@@ -18,5 +18,5 @@ Vous pouvez sélectionner les informations d'étiquette lors de la recherche. Le
 
 En créant un index avec des étiquettes configurées, vous pouvez effectuer une recherche pour chaque document auquel une étiquette est attribuée. Une recherche sans spécifier d'étiquette est une recherche complète normale. Si les informations d'étiquette sont modifiées, il est nécessaire de mettre à jour l'index.
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/search-label-1.png
+.. |image0| image:: ../../../resources/images/fr/15.3/user/search-label-1.png
 .. pdf   :width: 300 px
