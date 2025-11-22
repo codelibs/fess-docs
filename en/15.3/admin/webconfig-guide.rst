@@ -67,7 +67,7 @@ Specifies crawl configuration information.
 Depth
 :::::
 
-The number of linked URLs.
+Specifies the depth for following links contained in crawled documents.
 
 Max Access Count
 ::::::::::::::::
@@ -134,7 +134,7 @@ To create a Web Crawling configuration to crawl pages under https://fess.codelib
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Name
      - Fess
@@ -160,15 +160,15 @@ To crawl Redmine pages (ex. https://<server>/) with password protection, create 
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Name
      - Redmine
-   * - URLs
+   * - URL
      - https://<server>/my/page
-   * - Included URLs For Crawling
+   * - Included URLs for Crawling
      - https://<server>/.*
-   * - Config Parameters
+   * - Configuration Parameters
      - client.robotsTxtEnabled=false (Optional)
 
 and then create the authentication setting on Web Auth page:
@@ -177,7 +177,7 @@ and then create the authentication setting on Web Auth page:
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Scheme
      - Form
@@ -194,7 +194,7 @@ and then create the authentication setting on Web Auth page:
        | login_method=POST
        | login_url=https://<server>/login
        | login_parameters=username=${username}&password=${password}
-   * - Web Config
+   * - Web Configuration
      - Redmine
 
 XWiki
@@ -206,15 +206,15 @@ To crawl XWiki pages (ex. https://<server>/xwiki/), Web Crawling setting is:
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Name
      - XWiki
-   * - URLs
+   * - URL
      - https://<server>/xwiki/bin/view/Main/
-   * - Included URLs For Crawling
+   * - Included URLs for Crawling
      - https://<server>/.*
-   * - Config Parameters
+   * - Configuration Parameters
      - client.robotsTxtEnabled=false (Optional)
 
 and the authentication setting is:
@@ -223,7 +223,7 @@ and the authentication setting is:
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Scheme
      - Form
@@ -240,7 +240,7 @@ and the authentication setting is:
        | login_method=POST
        | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - Web Config
+   * - Web Configuration
      - XWiki
 
 

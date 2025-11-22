@@ -230,8 +230,8 @@ Set the file encoding to Shift_JIS.
     8,Title 8,This is test 8.
     9,Title 9,This is test 9.
 
-Parameter
-:::::::::
+Parameters
+::::::::::
 
 Here's an example of parameter configuration:
 

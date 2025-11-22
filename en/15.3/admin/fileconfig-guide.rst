@@ -129,7 +129,7 @@ To crawl files under /home/share, the configuration values are as follows:
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Name
      - Share Directory
@@ -147,7 +147,7 @@ To crawl files under \\SERVER\SharedFolder, the configuration values are as foll
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Name
      - Shared Folder
@@ -160,7 +160,7 @@ If a username and password are required to access the shared folder, you need to
 .. list-table::
    :header-rows: 1
 
-   * - Name
+   * - Configuration Item
      - Value
    * - Hostname
      - SERVER
