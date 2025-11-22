@@ -134,7 +134,7 @@ PowerShell 的情况::
 下载 Fess
 -----------------
 
-1. 从 `下载站点 <https://fess.codelibs.org/downloads.html>`__ 下载 Windows 用的 ZIP 包。
+1. 从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 Windows 用的 ZIP 包。
 
 2. 将下载的 ZIP 文件解压到任意目录。
 
