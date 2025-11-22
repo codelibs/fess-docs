@@ -5,4 +5,4 @@
 参考
 ====
 
-请参考 `Installation Guide <https://fess.codelibs.org/ja/15.3/install/index.html>`__。
+请参考 `Installation Guide <https://fess.codelibs.org/zh-cn/15.3/install/index.html>`__。
