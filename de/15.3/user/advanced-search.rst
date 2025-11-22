@@ -80,4 +80,4 @@ Website oder Domain
 
 Sie können nach der eingegebenen Website oder Domain filtern.
 
-.. |image0| image:: ../../../resources/images/en/15.3/user/advanced-search-1.png
+.. |image0| image:: ../../../resources/images/de/15.3/user/advanced-search-1.png
