@@ -35,7 +35,7 @@ Vorbereitung vor dem Upgrade
 Überprüfen Sie die Kompatibilität zwischen der Zielversion und der aktuellen Version des Upgrades.
 
 - `Release Notes <https://github.com/codelibs/fess/releases>`__
-- `Upgrade-Leitfaden <https://fess.codelibs.org/ja/>`__
+- `Upgrade-Leitfaden <https://fess.codelibs.org/de/>`__
 
 Planung der Ausfallzeit
 ------------------------
