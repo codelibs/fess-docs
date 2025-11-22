@@ -35,7 +35,7 @@
 请确认升级目标版本与当前版本的兼容性。
 
 - `发布说明 <https://github.com/codelibs/fess/releases>`__
-- `升级指南 <https://fess.codelibs.org/ja/>`__
+- `升级指南 <https://fess.codelibs.org/>`__
 
 计划停机时间
 ----------------
