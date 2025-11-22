@@ -112,7 +112,7 @@
 
 1. 下载和解压 Fess
 
-   从 `下载站点 <https://fess.codelibs.org/ja/downloads.html>`__ 下载 TAR.GZ 版。
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 TAR.GZ 版。
 
    ::
 
@@ -206,7 +206,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
 1. 安装 Fess RPM
 
-   从 `下载站点 <https://fess.codelibs.org/ja/downloads.html>`__ 下载 RPM 包并安装。
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 RPM 包并安装。
 
    ::
 
@@ -296,7 +296,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
 1. 安装 Fess DEB
 
-   从 `下载站点 <https://fess.codelibs.org/ja/downloads.html>`__ 下载 DEB 包并安装。
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 DEB 包并安装。
 
    ::
 

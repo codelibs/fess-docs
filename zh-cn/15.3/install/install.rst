@@ -120,7 +120,7 @@ Windows 版 (ZIP)
 
 2. **下载软件**
 
-   从 `下载站点 <https://fess.codelibs.org/ja/downloads.html>`__ 下载 |Fess|。
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 |Fess|。
 
    Docker 版的情况下，获取 Docker Compose 文件。
 
@@ -224,7 +224,7 @@ A: 可以。Fess 和 OpenSearch 可以在不同的服务器上运行。
 
 |Fess| 及相关组件可从以下位置下载：
 
-- **Fess**: `下载站点 <https://fess.codelibs.org/ja/downloads.html>`__
+- **Fess**: `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__
 - **OpenSearch**: `Download OpenSearch <https://opensearch.org/downloads.html>`__
 - **Java (Adoptium)**: `Adoptium <https://adoptium.net/>`__
 - **Docker**: `Get Docker <https://docs.docker.com/get-docker/>`__
