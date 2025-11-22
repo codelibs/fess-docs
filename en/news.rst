@@ -1,4 +1,7 @@
-====
+=============================================
+Open Source Full-Text Search Server - News
+=============================================
+
 News
 ====
 
@@ -323,7 +326,7 @@ News
 2018-08-09
     `Fess 12.2.0 Released <https://github.com/codelibs/fess/releases/tag/fess-12.2.0>`__
 
-2018-07-27
+2018-06-27
     `Fess 12.1.5 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.5>`__
 
 2018-06-21
@@ -337,6 +340,9 @@ News
 
 2018-04-21
     `Fess 12.1.2 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.2>`__
+
+2018-03-22
+    `[Article Series] Easy Introduction! OSS Full-Text Search Server Fess - Chapter 5: Tokenization in Full-Text Search <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
 
 2018-03-18
     `Fess 12.1.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.1>`__ \
@@ -352,6 +358,9 @@ News
 
 2018-02-19
     `Fess 12.1 Released <https://github.com/codelibs/fess/releases/tag/fess-12.1.0>`__
+
+2018-02-08
+    `[Article Series] Easy Introduction! OSS Full-Text Search Server Fess - Chapter 4: Natural Language Processing with Fess <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
 
 2018-02-06
     `Fess 12.0.2 Released <https://github.com/codelibs/fess/releases/tag/fess-12.0.2>`__
@@ -371,14 +380,23 @@ News
 2017-12-30
     `Fess 11.4.6 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.6>`__
 
+2017-12-21
+    `[Article Series] Easy Introduction! OSS Full-Text Search Server Fess - Chapter 3 Published <https://news.mynavi.jp/itsearch/article/bizapp/3341>`__
+
 2017-12-09
     `Fess 11.4.5 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.5>`__
+
+2017-11-20
+    `[Article Series] Easy Introduction! OSS Full-Text Search Server Fess - Chapter 2 Published <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
 
 2017-11-18
     `Fess 11.4.4 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.4>`__
 
 2017-11-16
     `Fess 11.4.3 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.3>`__
+
+2017-10-24
+    `[Article Series] Easy Introduction! OSS Full-Text Search Server Fess - Chapter 1 Published <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
 
 2017-10-19
     `Fess 11.4.2 Released <https://github.com/codelibs/fess/releases/tag/fess-11.4.2>`__
@@ -492,25 +510,25 @@ News
     `Fess 10.0.0 beta1 Released <https://github.com/codelibs/fess/releases/tag/fess-10.0.0-beta1>`__
 
 2015-10-01
-    `Fess 9.4.2 Released <https://osdn.jp/projects/fess/releases/63287>`__
+    `Fess 9.4.2 Released <http://sourceforge.jp/projects/fess/news/25077>`__
 
 2015-09-02
-    `N2 Search 9.4.1.0 Released on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
+    `N2 Search 9.4.1.0 on AWS Marketplace <https://aws.amazon.com/marketplace/pp/B014JFU5EW>`__
 
 2015-05-21
-    `Fess 9.4.0 Released <https://sourceforge.jp/projects/fess/releases/63287>`__
+    `Fess 9.4.0 Released <http://sourceforge.jp/projects/fess/news/24948>`__
 
 2015-02-06
-    `Fess 9.3.3 Released <https://sourceforge.jp/projects/fess/releases/62196>`__
+    `Fess 9.3.3 Released <http://sourceforge.jp/projects/fess/news/24865>`__
 
 2014-11-06
-    `Fess 9.3 Released <https://sourceforge.jp/projects/fess/releases/62196>`__
+    `Fess 9.3 Released <http://sourceforge.jp/projects/fess/news/24783>`__
 
 2014-06-28
-    `Fess 9.2 Released <https://sourceforge.jp/projects/fess/releases/?package_id=9987>`__
+    `Fess 9.2 Released <http://sourceforge.jp/projects/fess/news/24682>`__
 
 2014-03-26
-    `Fess 9.1 Released <https://sourceforge.jp/projects/fess/releases/?package_id=9987>`__
+    `Fess 9.1 Released <http://sourceforge.jp/projects/fess/news/24607>`__
 
 2014-02-07
     `Fess 9.0.0 Released <http://sourceforge.jp/projects/fess/news/24562>`__
@@ -531,16 +549,31 @@ News
     `Fess 7.0.1 Released <http://sourceforge.jp/forum/forum.php?forum_id=29825>`__
 
 2012-08-03
-    `Fess 7.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=29619>`__
+    `Fess 7.0.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=29619>`__
 
 2012-03-02
     `Fess 6.0.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=28523>`__
 
+2011-12-30
+    `Fess 5.0.1 Released <http://sourceforge.jp/forum/forum.php?forum_id=27975>`__
+
 2011-12-15
-    `Fess 5.0.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=27851>`__
+    `Fess 5.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=27851>`__
+
+2011-08-12
+    `Java Version Supported by Fess 4.1 <http://sourceforge.jp/forum/forum.php?forum_id=26861>`__
+
+2011-07-24
+    `Fess 4.1.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=26670>`__
+
+2011-01-12
+    "\ `Building an Apache Solr-based Search Server with Fess - REST API Edition <http://codezine.jp/article/detail/5667>`__\ " Published
 
 2010-12-19
     `Fess 4.0.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=24913>`__
+
+2010-12-16
+    "\ `Building an Apache Solr-based Search Server with Fess - Role-based Search Edition <http://codezine.jp/article/detail/5605>`__\ " Published
 
 2010-11-08
     `Fess 4.0.0 beta Released <http://sourceforge.jp/forum/forum.php?forum_id=24538>`__
@@ -552,7 +585,10 @@ News
     `Fess 3.1.2 Released <http://sourceforge.jp/forum/forum.php?forum_id=23534>`__
 
 2010-07-08
-    `Fess Client for iPhone App 1.0.0 Released <itms://itunes.apple.com/us/app/fess/id379788332?mt=8>`__
+    `Fess Client for iPhone 1.0.0 <itms://itunes.apple.com/us/app/fess/id379788332?mt=8>`__\ Released
+
+2010-06-13
+    `Java Cloud Meeting Tokyo 2010 x Seasar Conference 2010 <http://event.seasarfoundation.org/jcmt2010/2010/05/26/fess/>`__\ Presenting Fess
 
 2010-06-09
     `Fess 3.1.1 Released <http://sourceforge.jp/forum/forum.php?forum_id=23266>`__
@@ -560,14 +596,32 @@ News
 2010-05-30
     `Fess 3.1.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=23147>`__
 
+2010-03-18
+    `N2 Search (Fess) Free Introductory Seminar <https://www.n2sm.net/products/n2search-seminar.html>`__\ Presenting Fess
+
+2010-03-11
+    `2nd Solr Study Session <http://atnd.org/events/3142>`__\ Presenting Fess
+
 2010-01-16
     `Fess 2.0.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=21723>`__
 
 2009-12-09
     `Fess 1.1.2 Released <http://sourceforge.jp/forum/forum.php?forum_id=21350>`__
 
+2009-11-20
+    `Explanation Article Published in My Com Journal <http://sourceforge.jp/forum/forum.php?forum_id=21124>`__
+
+2009-11-12
+    `Installation Guide Article Published on CodeZine <http://sourceforge.jp/forum/forum.php?forum_id=21021>`__
+
+2009-10-29
+    `Fess 1.1.1 Released <http://sourceforge.jp/forum/forum.php?forum_id=20819>`__
+
 2009-10-10
     `Fess 1.1.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=20548>`__
+
+2009-09-10
+    `Fess Presentation at Seasar Conference 2009 Autumn <http://sourceforge.jp/forum/forum.php?forum_id=20202>`__
 
 2009-09-10
     `Fess 1.0.0 Released <http://sourceforge.jp/forum/forum.php?forum_id=20201>`__

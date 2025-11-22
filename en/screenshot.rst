@@ -1,57 +1,57 @@
-==========
-Screenshot
-==========
+==================
+Screenshots
+==================
 
-Screenshot
-==========
+Overview
+========
 
 Search Results on Browser
--------------------------
+--------------------------
 
 |Search Results on Browser|
 
 Dashboard
-------------
+---------
 
 |Dashboard|
 
-General Setting
+General Settings
 ----------------
 
-|General Setting|
+|General Settings|
 
-Web Crawling Config
--------------------
-
-|Web Crawling Config|
-
-File System Crawling Config
+Web Crawling Configuration
 ---------------------------
 
-|File System Crawling Config|
+|Web Crawling Configuration|
 
-Web Authentication Setting
---------------------------
+File System Crawling Configuration
+-----------------------------------
 
-|Web Authentication Setting|
+|File System Crawling Configuration|
 
-Path Mapping Setting
---------------------
+Web Authentication Settings
+----------------------------
 
-|Path Mapping Setting|
+|Web Authentication Settings|
+
+Path Mapping Settings
+---------------------
+
+|Path Mapping Settings|
 
 Log Files
-------------
+---------
 
 |Log Files|
 
 Crawling Info List
------------------
+------------------
 
 |Crawling Info List|
 
 Crawling Info Details
---------------------
+---------------------
 
 |Crawling Info Details|
 
@@ -62,11 +62,11 @@ Backup/Restore
 
 .. |Search Results on Browser| image:: ../resources/images/en/screenshot/fess_search_result.png
 .. |Dashboard| image:: ../resources/images/en/screenshot/fess_admin_dashboard.png
-.. |General Setting| image:: ../resources/images/en/screenshot/fess_admin_general.png
-.. |Web Crawling Config| image:: ../resources/images/en/screenshot/fess_admin_webconfig.png
-.. |File System Crawling Config| image:: ../resources/images/en/screenshot/fess_admin_fileconfig.png
-.. |Web Authentication Setting| image:: ../resources/images/en/screenshot/fess_admin_webauth.png
-.. |Path Mapping Setting| image:: ../resources/images/en/screenshot/fess_admin_pathmapping.png
+.. |General Settings| image:: ../resources/images/en/screenshot/fess_admin_general.png
+.. |Web Crawling Configuration| image:: ../resources/images/en/screenshot/fess_admin_webconfig.png
+.. |File System Crawling Configuration| image:: ../resources/images/en/screenshot/fess_admin_fileconfig.png
+.. |Web Authentication Settings| image:: ../resources/images/en/screenshot/fess_admin_webauth.png
+.. |Path Mapping Settings| image:: ../resources/images/en/screenshot/fess_admin_pathmapping.png
 .. |Log Files| image:: ../resources/images/en/screenshot/fess_admin_log.png
 .. |Crawling Info List| image:: ../resources/images/en/screenshot/fess_admin_crawlinginfo.png
 .. |Crawling Info Details| image:: ../resources/images/en/screenshot/fess_admin_crawlinginfo2.png

@@ -1,60 +1,100 @@
-===================
-Quick Startup
-===================
+==============
+Quick Start Guide
+==============
 
-Overview
-========
+Introduction
+============
 
-This document describes a minimum step to install and use Fess .
+This guide is for those who want to quickly try out Fess.
+It describes the minimum steps required to use Fess.
+
+The startup procedure described here is for trial purposes, so for production deployment, please refer to :doc:`Installation Guide <setup>` using Docker or similar methods.
+(Fess started with this procedure is intended for simple testing and is not recommended for production use.)
+
+Prerequisites
+=============
+
+Before starting Fess, please install Java 21.
+We recommend `Eclipse Temurin <https://adoptium.net/temurin>`__ for Java 21.
 
 Download
 ========
 
-Download the latest Fess release from https://github.com/codelibs/fess/releases.
+Download the latest Fess ZIP package from the `GitHub releases page <https://github.com/codelibs/fess/releases>`__.
 
 Installation
 ============
 
-Unzip fess-x.y.zip to a directory you want to install. 
+Extract the downloaded fess-x.y.z.zip file.
 
 ::
 
-    $ unzip fess-x.y.zip
-    $ cd fess-x.y
+    $ unzip fess-x.y.z.zip
+    $ cd fess-x.y.z
 
-Start Fess Server
-=================
+Starting Fess
+=============
 
-Run fess script file to start Fess server.
+Run the fess script to start Fess.
+(On Windows, run fess.bat)
 
 ::
 
-    $ ./bin/fess      # for Unix
+    $ ./bin/fess
 
-    > .\bin\fess.bat  # for Windows
+Accessing the Admin UI
+======================
 
-Access to Administrative GUI
-============================
+Access \http://localhost:8080/admin.
+The default administrator account username/password is admin/admin.
 
-Access to http://localhost:8080/admin/.
-The username/password for an administrator is admin/admin.
+.. warning::
 
-Click Crawler > Web menu at the left menu pane after logging in as admin user.
-Create a web crawling configuration (Name, URL, Max access count,..) to crawl a web site.
+   Be sure to change the default password.
+   In production environments, it is strongly recommended to change the password immediately after the first login.
 
-Click System > Scheduler link at the menu pane. Click "Default Crawler" for Crawler job and then click "Start" to start Crawler.
+Creating a Crawl Configuration
+==============================
 
-If you want to change Crawler schedule and start crawling at 10:35am, type "35 10 \* \* ?" into Schedule field.
-The format is "Min Hour Day Month Day Year", which is like a cron format.
-Click "Update" button to save parameters.
-If you set a crawling time as 10:35am, Fess start to crawl at 10:35am automatically.
+After logging in, click "Crawler" > "Web" in the left menu.
+Click the "New" button to create a web crawl configuration.
 
-System Info > Crawling Info show you the crawling information.
-If the crawl is finished, the number of crawled documents is set to WebIndexSize at Crawling Info page.
+Enter the following information:
+
+- **Name**: Name of the crawl configuration (e.g., Company Website)
+- **URL**: URL to crawl (e.g., https://www.example.com/)
+- **Max Access Count**: Maximum number of pages to crawl
+- **Interval**: Crawl interval (milliseconds)
+
+Running the Crawler
+===================
+
+Click "System" > "Scheduler" in the left menu.
+Click the "Start Now" button for the "Default Crawler" job to start crawling immediately.
+
+To schedule crawling, select "Default Crawler" and configure the schedule.
+For a start time of 10:35 am, enter 35 10 \* \* ? (format is "minute hour day month weekday year").
+After updating, crawling will start at that time.
+
+You can check if crawling has started in "Crawling Info".
+After crawling completes, WebIndexSize information will be displayed in the session information.
 
 Search
 ======
 
-Finished a crawling, access to http://localhost:8080/.
-You can search indexed documents and see the result.
+After crawling completes, access \http://localhost:8080/ to search and view search results.
 
+Stopping Fess
+=============
+
+Stop the fess process with Ctrl-C or the kill command.
+
+To Learn More
+=============
+
+Please refer to the following documentation:
+
+* `Documentation <documentation>`__
+* `[Article Series] Easy Introduction to OSS Full-Text Search Server Fess <https://news.mynavi.jp/techplus/series/_ossfess/>`__
+* `Developer Information <development>`__
+* `Discussion Forum <https://discuss.codelibs.org/c/fessen/>`__

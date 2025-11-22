@@ -1,11 +1,9 @@
 ============================================
-TUTORIAL
+Tutorial
 ============================================
 
 .. toctree::
 
-   Installation <articles/article-1>
-   Mobile <articles/article-2>
-   Role base search <articles/article-3>
-   Ajax <articles/article-4>
-
+   Installation Guide <articles/article-1>
+   API Guide <articles/article-3>
+   FSS Guide <articles/article-4>
