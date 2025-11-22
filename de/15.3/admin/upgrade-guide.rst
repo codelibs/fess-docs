@@ -5,4 +5,4 @@ Aktualisierung
 Referenz
 ========
 
-Bitte beziehen Sie sich auf den `Installationshandbuch <https://fess.codelibs.org/ja/15.3/install/index.html>`__.
+Bitte beziehen Sie sich auf den `Installationshandbuch <https://fess.codelibs.org/de/15.3/install/index.html>`__.
