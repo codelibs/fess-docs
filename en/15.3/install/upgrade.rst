@@ -35,7 +35,7 @@ Verify Version Compatibility
 Verify the compatibility between the upgrade target version and the current version.
 
 - `Release Notes <https://github.com/codelibs/fess/releases>`__
-- `Upgrade Guide <https://fess.codelibs.org/>`__
+- `Upgrade Guide <https://fess.codelibs.org/en/>`__
 
 Plan Downtime
 -------------

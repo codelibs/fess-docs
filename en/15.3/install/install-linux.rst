@@ -112,7 +112,7 @@ Step 2: Install Fess
 
 1. Download and Extract Fess
 
-   Download the TAR.GZ version from the `download site <https://fess.codelibs.org/downloads.html>`__.
+   Download the TAR.GZ version from the `download site <https://fess.codelibs.org/en/downloads.html>`__.
 
    ::
 
@@ -205,7 +205,7 @@ Step 2: Install Fess
 
 1. Install Fess RPM
 
-   Download the RPM package from the `download site <https://fess.codelibs.org/downloads.html>`__ and install it.
+   Download the RPM package from the `download site <https://fess.codelibs.org/en/downloads.html>`__ and install it.
 
    ::
 
@@ -295,7 +295,7 @@ Step 2: Install Fess
 
 1. Install Fess DEB
 
-   Download the DEB package from the `download site <https://fess.codelibs.org/downloads.html>`__ and install it.
+   Download the DEB package from the `download site <https://fess.codelibs.org/en/downloads.html>`__ and install it.
 
    ::
 

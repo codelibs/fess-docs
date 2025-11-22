@@ -134,7 +134,7 @@ Step 2: Install Fess
 Download Fess
 -------------
 
-1. Download the ZIP package for Windows from the `download site <https://fess.codelibs.org/downloads.html>`__.
+1. Download the ZIP package for Windows from the `download site <https://fess.codelibs.org/en/downloads.html>`__.
 
 2. Extract the downloaded ZIP file to any directory.
 
