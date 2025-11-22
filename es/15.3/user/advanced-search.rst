@@ -63,7 +63,7 @@ Puede realizar búsquedas filtradas por información de etiquetas. Si no hay eti
 Fecha de actualización
 ::::::::::::::::::::::
 
-Puede realizar búsquedas filtradas por la fecha de actualización del documento.
+Puede realizar búsquedas filtradas por la fecha y hora de actualización del documento.
 
 Formato de archivo
 ::::::::::::::::::

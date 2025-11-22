@@ -28,7 +28,7 @@ Por defecto, puede buscar especificando los siguientes campos:
    * - content_length
      - Tamaño del documento rastreado
    * - last_modified
-     - Fecha de última modificación del documento rastreado
+     - Fecha y hora de última modificación del documento rastreado
    * - mimetype
      - Tipo MIME del documento
 
