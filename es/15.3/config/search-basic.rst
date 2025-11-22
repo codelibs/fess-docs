@@ -21,7 +21,7 @@ Ejemplo de búsqueda
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/en/15.3/config/search-result.png
+.. |image0| image:: ../../../resources/images/ja/15.3/config/search-result.png
 
 Visualización del número exacto de coincidencias
 -------------------------------------------------
@@ -177,7 +177,7 @@ Estos registros se pueden utilizar para los siguientes propósitos:
 
 Los registros de búsqueda se almacenan en el índice ``fess_log`` de OpenSearch y
 se pueden visualizar y analizar con OpenSearch Dashboards.
-Para más detalles, consulte :doc:`kibana`.
+Para más detalles, consulte :doc:`admin-opensearch-dashboards`.
 
 Ajuste de rendimiento
 ======================
