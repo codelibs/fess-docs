@@ -1,18 +1,18 @@
 =============
-Download
+Downloads
 =============
 
 Docker
 ======
 
-Docker images are in the following site:
+For Docker images, please refer to:
 
 * `ghcr.io/codelibs/fess <https://github.com/orgs/codelibs/packages/container/package/fess>`_
 
-Download
-========
+Stable Release
+==============
 
-A stable release is available from:
+Tested stable releases are available from:
 
 * `Fess 15.3.0 <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.3.0 <https://opensearch.org/versions/opensearch-3-3-0.html>`_)
 * `Fess 15.2.0 <https://github.com/codelibs/fess/releases/tag/fess-15.2.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.2.0 <https://opensearch.org/versions/opensearch-3-2-0.html>`_)
@@ -25,8 +25,10 @@ A stable release is available from:
 * `Fess 14.15.0 <https://github.com/codelibs/fess/releases/tag/fess-14.15.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.15.0 <https://opensearch.org/versions/opensearch-2-15-0.html>`_)
 * `Fess 14.14.0 <https://github.com/codelibs/fess/releases/tag/fess-14.14.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.14.0 <https://opensearch.org/versions/opensearch-2-14-0.html>`_)
 
-EOLed
-======
+For installation instructions, please refer to the Installation Guide.
+
+Past Releases (EOL)
+===================
 
 * `Fess 14.13.0 <https://github.com/codelibs/fess/releases/tag/fess-14.13.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.13.0 <https://opensearch.org/versions/opensearch-2-13-0.html>`_)
 * `Fess 14.12.0 <https://github.com/codelibs/fess/releases/tag/fess-14.12.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.12.0 <https://opensearch.org/versions/opensearch-2-12-0.html>`_)
@@ -77,7 +79,11 @@ EOLed
 * `Fess 10.1.3 <https://github.com/codelibs/fess/releases/tag/fess-10.1.3>`_ (`Elasticsearch 2.3.3 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-2-3-3>`_)
 * `Fess 10.0.4 <https://github.com/codelibs/fess/releases/tag/fess-10.0.4>`_ (`Elasticsearch 2.1.2 <https://www.elastic.co/jp/downloads/past-releases/elasticsearch-2-1-2>`_)
 
-Others
+Releases for Fess 9.x and earlier can be downloaded from OSDN.
+
+* `Fess ~9.x <https://osdn.jp/projects/fess/releases/p9987>`_
+
+Other Information
 ======
 
-* :doc:`End of Life Dates <eol>`
+* :doc:`Product Support Period <eol>`

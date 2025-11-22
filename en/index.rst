@@ -1,22 +1,27 @@
-====================================
-Enterprise Search Server: Fess
-====================================
+===================================
+Open Source Full-Text Search Server Fess
+===================================
 
-What is Fess?
-=============
+Overview
+====
 
-Fess is very powerful and easily deployable Enterprise Search Server.
+Fess is a **full-text search server that can be easily built in 5 minutes**.
 
-You can install and run Fess quickly on any platforms, which have Java runtime environment.
-Fess is provided under Apache license.
-
-.. figure:: ../resources/images/en/demo-1.png
+.. figure:: ../resources/images/ja/demo-1.png
    :scale: 100%
-   :alt: Demo
+   :alt: Standard Demo
    :figclass: side-by-side
    :target: https://search.n2sm.co.jp/
 
-   Demo (Default)
+   Standard Demo
+
+.. figure:: ../resources/images/ja/demo-3.png
+   :scale: 100%
+   :alt: Site Search Demo
+   :figclass: side-by-side
+   :target: https://www.n2sm.net/search.html?q=Fess
+
+   Site Search Demo
 
 .. figure:: ../resources/images/ja/demo-2.png
    :scale: 100%
@@ -26,68 +31,76 @@ Fess is provided under Apache license.
 
    Source Code Search
 
-.. figure:: ../resources/images/en/demo-3.png
+.. figure:: ../resources/images/ja/demo-4.png
    :scale: 100%
-   :alt: Doc Search
+   :alt: Document Search
    :figclass: side-by-side
    :target: https://docsearch.codelibs.org/
 
    Document Search
 
+It can run on any OS with Java or Docker execution environment.
+Fess is provided under the Apache License and is free software available at no cost.
 
-Fess is OpenSearch/Elasticsearch based search server,
-but knowledge/experience about OpenSearch/Elasticsearch is NOT needed because of All-in-One
-Enterprise Search Server. Fess provides Administration GUI to configure
-the system on your browser. Fess also contains a crawler, which can
-crawl documents on Web/File System/DB and support many file formats,
-such as MS Office, PDF and zip.
 
-Download
-========
+Downloads
+============
 
 - :doc:`Fess 15.3.0 <downloads>` (zip/rpm/deb packages)
 
 Features
-========
+====
 
--  Very Easy Installation/Configuration
+-  Provided under Apache License (free software, free to use)
 
--  Apache License (OSS)
+-  Crawls Web, file systems, Windows shared folders, and databases
 
--  OS-independent (Java Application)
+-  Supports many file formats including MS Office (Word/Excel/PowerPoint), PDF, and more
 
--  Crawler for Web/File System/DB/Windows Shared Folder(SMB)
+-  OS-independent (Java-based)
 
--  Support many document types, such as MS Office, PDF, Zip archive,...
+-  JavaScript library for embedding into existing sites
 
--  Support a web page for BASIC/DIGEST/NTLM/FORM authentication
+-  Uses OpenSearch or Elasticsearch as search engine
 
--  Use OpenSearch or Elasticsearch as a search engine (unlimited scalability)
+-  Supports sites with BASIC/DIGEST/NTLM/FORM authentication
 
--  Provide UI as a responsive web design (support any device)
+-  Search result filtering based on login status
 
--  Provide a browser based administrative page (admin console)
+-  Single Sign-On (SSO) with Active Directory and SAML
 
--  Support secure search (access control with LDAP/Active Directory)
+-  Location-based search with map integration
 
--  Single Sign On support with SAML/OpenIDConnect
+-  Configuration of crawl targets and search screen editing in browser
 
--  Support JSON/GSA format of search results
+-  Search result classification with labels
 
--  Provide search/click log and statistics
+-  Request header modification, duplicate domain configuration, search result path conversion
 
--  Provide auto-complete(suggest)
+-  Integration with external systems via JSON format search results
 
--  Provide embedded JavaScript library(migration from Google Site Search)
+-  Aggregation of search logs and click logs
 
--  Learning To Rank support
+-  Facet and drilldown support
 
--  OCR support
+-  Auto-complete and suggest features
 
--  Internationalization/Localization
+-  User dictionary and synonym dictionary editing
+
+-  Search result cache and thumbnail display
+
+-  Search result proxy function
+
+-  Mobile support (Responsive Web Design)
+
+-  External system integration with access tokens
+
+-  External text extraction support including OCR
+
+-  Flexible design for various use cases
 
 News
-====
+========
 
 2025-10-25
     `Fess 15.3.0 Released <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`__
@@ -104,23 +117,38 @@ News
 2025-05-24
     `Fess 14.19.2 Released <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`__
 
-2025-03-02
-    `Fess 14.19.0 Released <https://github.com/codelibs/fess/releases/tag/fess-14.19.0>`__
+For past news, please see :doc:`here <news>`.
 
-:doc:`More news <news>`...
-
-Discussion
+Forum
 ==========
 
-- `Discussion Forum <https://discuss.codelibs.org/c/FessEN/>`__
+If you have questions, please use the `forum <https://discuss.codelibs.org/c/FessJA/>`__.
+
+Commercial Support
+============
+
+Fess is an open source product provided under the Apache License and is free for personal and commercial use.
+
+If you need customization, implementation, or support services for Fess, please see `commercial support (paid) <https://www.n2sm.net/products/n2search.html>`__.
+Commercial support also handles performance tuning such as improving search quality and crawl speed.
+
+- `N2 Search <https://www.n2sm.net/products/n2search.html>`__ (Optimized commercial package of Fess)
+
+- `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ (Google Site Search alternative service)
+
+- :doc:`Various support services <support-services>`
+
 
 Fess Site Search
 ================
 
-`Fess Site Search <https://fss-generator.codelibs.org/docs/manual>`__ is Google Site Search alternative.
+CodeLibs Project provides `Fess Site Search (FSS) <https://fss-generator.codelibs.org/ja/>`__.
+You can embed Fess search pages into existing sites simply by placing JavaScript.
+FSS makes it easy to migrate from Google Site Search and Yahoo! Search Custom Search.
+If you need an affordable Fess server, please see `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__.
 
-Data Store
-==========
+Data Store Plugins
+====================
 
 - `Confluence/Jira <https://github.com/codelibs/fess-ds-atlassian>`__
 - `Box <https://github.com/codelibs/fess-ds-box>`__
@@ -138,36 +166,137 @@ Data Store
 - `SharePoint <https://github.com/codelibs/fess-ds-sharepoint>`__
 - `Slack <https://github.com/codelibs/fess-ds-slack>`__
 
-Theme
-=====
+Theme Plugins
+===============
 
 - `Simple <https://github.com/codelibs/fess-theme-simple>`__
 - `Classic <https://github.com/codelibs/fess-theme-classic>`__
 
-Ingester
-========
+Ingester Plugins
+==================
 
 - `Logger <https://github.com/codelibs/fess-ingest-logger>`__
 - `NDJSON <https://github.com/codelibs/fess-ingest-ndjson>`__
 
-Script
-======
+Script Plugins
+==================
 
 - `Groovy <https://github.com/codelibs/fess-script-groovy>`__
 - `OGNL <https://github.com/codelibs/fess-script-ognl>`__
 
-Support Service
-===============
+Related Projects
+================
 
-`N2SM, Inc. <https://www.n2sm.net/en/>`__ provides support services for Fess as below.
+- `Code Search <https://github.com/codelibs/docker-codesearch>`__
+- `Document Search <https://github.com/codelibs/docker-docsearch>`__
+- `Fione <https://github.com/codelibs/docker-fione>`__
+- `Form Assist <https://github.com/codelibs/docker-formassist>`__
 
-- N2 Search: Fess based Enterprise Search Software
+Media Coverage
+============
 
-- `Consulting service <https://www.n2sm.net/en/support/fess_support.html>`__
+- `Part 48: Single Sign-On with SAML <https://news.mynavi.jp/techplus/article/_ossfess-48/>`__
 
+- `Part 47: Storage Management and Crawling with MinIO <https://news.mynavi.jp/techplus/article/_ossfess-47/>`__
 
-.. |image0| image:: ../resources/images/en/demo-1.png
-.. |image1| image:: ../resources/images/en/demo-2.png
+- `Part 46: Crawling Amazon S3 <https://news.mynavi.jp/techplus/article/_ossfess-46/>`__
+
+- `Part 45: How to Start with Compose V2 <https://news.mynavi.jp/techplus/article/_ossfess-45/>`__
+
+- `Part 44: Using OpenSearch with Fess <https://news.mynavi.jp/techplus/article/_ossfess-44/>`__
+
+- `Part 43: How to Use Elasticsearch 8 <https://news.mynavi.jp/techplus/article/_ossfess-43/>`__
+
+- `Part 42: How to Use Search API with Access Tokens <https://news.mynavi.jp/techplus/article/_ossfess-42/>`__
+
+- `Part 41: Crawling Microsoft Teams <https://news.mynavi.jp/itsearch/article/bizapp/5880>`__
+
+- `Part 40: Configuring Various Features (Document Boost, Related Content, Related Queries) <https://news.mynavi.jp/itsearch/article/bizapp/5804>`__
+
+- `Part 39: Configuring Various Features (Path Mapping, Request Headers, Duplicate Hosts) <https://news.mynavi.jp/itsearch/article/bizapp/5686>`__
+
+- `Part 38: Configuring Various Features (Labels, Key Match) <https://news.mynavi.jp/itsearch/article/bizapp/5646>`__
+
+- `Part 37: How to Use AWS Elasticsearch Service <https://news.mynavi.jp/itsearch/article/devsoft/5557>`__
+
+- `Part 36: How to Use Elastic Cloud <https://news.mynavi.jp/itsearch/article/devsoft/5507>`__
+
+- `Part 35: Crawling SharePoint Server <https://news.mynavi.jp/itsearch/article/devsoft/5457>`__
+
+- `Part 34: Authentication with OpenID Connect <https://news.mynavi.jp/itsearch/article/devsoft/5338>`__
+
+- `Part 33: Building an Input Assistance Environment <https://news.mynavi.jp/itsearch/article/devsoft/5292>`__
+
+- `Part 32: Index Management <https://news.mynavi.jp/itsearch/article/devsoft/5233>`__
+
+- `Part 31: Crawling Office 365 <https://news.mynavi.jp/itsearch/article/bizapp/5180>`__
+
+- `Part 30: Authentication with Azure AD <https://news.mynavi.jp/itsearch/article/bizapp/5136>`__
+
+- `Part 29: How to Use Docker <https://news.mynavi.jp/itsearch/article/devsoft/5058>`__
+
+- `Part 28: How to View Log Files <https://news.mynavi.jp/itsearch/article/devsoft/5032>`__
+
+- `Part 27: Clustering Fess <https://news.mynavi.jp/itsearch/article/devsoft/4994>`__
+
+- `Part 26: Location-Based Search <https://news.mynavi.jp/itsearch/article/devsoft/4963>`__
+
+- `Part 25: Using Tesseract OCR <https://news.mynavi.jp/itsearch/article/devsoft/4928>`__
+
+- `Part 24: Crawling GitBucket <https://news.mynavi.jp/itsearch/article/devsoft/4924>`__
+
+- `Part 23: How to Use the Suggest Feature <https://news.mynavi.jp/itsearch/article/bizapp/4890>`__
+
+- `Part 22: Crawling Dropbox <https://news.mynavi.jp/itsearch/article/bizapp/4844>`__
+
+- `Part 21: Crawling Slack Messages <https://news.mynavi.jp/itsearch/article/bizapp/4808>`__
+
+- `Part 20: Visualizing Search Logs <https://news.mynavi.jp/itsearch/article/devsoft/4781>`__
+
+- `Part 19: Crawling CSV Files <https://news.mynavi.jp/itsearch/article/devsoft/4761>`__
+
+- `Part 18: Crawling Google Drive <https://news.mynavi.jp/itsearch/article/devsoft/4732>`__
+
+- `Part 17: Crawling Databases <https://news.mynavi.jp/itsearch/article/devsoft/4659>`__
+
+- `Part 16: How to Use the Search API <https://news.mynavi.jp/itsearch/article/devsoft/4613>`__
+
+- `Part 15: Crawling File Servers That Require Authentication <https://news.mynavi.jp/itsearch/article/devsoft/4569>`__
+
+- `Part 14: How to Use the Management API <https://news.mynavi.jp/itsearch/article/devsoft/4514>`__
+
+- `Part 13: How to Display Thumbnail Images in Search Results <https://news.mynavi.jp/itsearch/article/devsoft/4456>`__
+
+- `Part 12: How to Use the Virtual Host Feature <https://news.mynavi.jp/itsearch/article/devsoft/4394>`__
+
+- `Part 11: Single Sign-On with Fess <https://news.mynavi.jp/itsearch/article/devsoft/4357>`__
+
+- `Part 10: Building in a Windows Environment <https://news.mynavi.jp/itsearch/article/bizapp/4320>`__
+
+- `Part 9: Fess and Active Directory Integration <https://news.mynavi.jp/itsearch/article/bizapp/4283>`__
+
+- `Part 8: Role-Based Search <https://news.mynavi.jp/itsearch/article/hardware/4201>`__
+
+- `Part 7: Crawling Sites with Authentication <https://news.mynavi.jp/itsearch/article/hardware/4158>`__
+
+- `Part 6: Analyzer for Japanese Full-Text Search <https://news.mynavi.jp/itsearch/article/devsoft/3671>`__
+
+- `Part 5: Tokenization for Full-Text Search <https://news.mynavi.jp/itsearch/article/devsoft/3539>`__
+
+- `Part 4: Natural Language Processing with Fess <https://news.mynavi.jp/itsearch/article/bizapp/3445>`__
+
+- `Part 3: Web Scraping with Configuration Only <https://news.mynavi.jp/itsearch/article/bizapp/3341>`__
+
+- `Part 2: Easy Migration from Google Site Search <https://news.mynavi.jp/itsearch/article/bizapp/3260>`__
+
+- `Part 1: Introducing the Full-Text Search Server Fess <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
+
+.. |image0| image:: ../resources/images/ja/demo-1.png
+.. |image1| image:: ../resources/images/ja/demo-2.png
+.. |image2| image:: ../resources/images/ja/demo-3.png
+.. |image3| image:: ../resources/images/ja/n2search_225x50.png
+   :target: https://www.n2sm.net/products/n2search.html
+.. |image4| image:: ../resources/images/ja/n2search_b.png
 
 
 .. toctree::
@@ -176,8 +305,9 @@ Support Service
    overview
    basic
    documentation
-   articles
+   tutorial
    development
    others
    archives
+
 

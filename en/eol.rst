@@ -1,14 +1,18 @@
-End of Life Dates
-=================
+================
+Product Support Period
+================
 
-The following releases have reached End of Life, and are no longer maintained and do not receive any updates.
-To get the latest release, visit  `download page <downloads.html>`__.
-If you need a support for your old system, please contact Commercial Support.
+Products beyond their End-of-Life (EOL) date will no longer receive maintenance or updates.
+CodeLibs Project strongly recommends migrating to a supported release.
+This prevents situations where necessary services and support become unavailable.
+The latest release can be downloaded from the `download page <downloads.html>`__.
 
-Maintenance Tables
-==================
+If support is needed for products beyond their End-of-Life period, please consult `commercial support <https://www.n2sm.net/products/n2search.html>`__.
 
-The EOL date for Fess is about 18 months after the release.
+Maintenance Table
+==============
+
+The EOL date for Fess is approximately 18 months after release.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
