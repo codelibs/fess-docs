@@ -11,4 +11,3 @@
    api-popularword
    api-suggest
    api-health
-   api-gsa
