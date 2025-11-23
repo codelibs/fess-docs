@@ -35,7 +35,7 @@
 업그레이드 대상 버전과 현재 버전의 호환성을 확인하십시오.
 
 - `릴리스 노트 <https://github.com/codelibs/fess/releases>`__
-- `업그레이드 가이드 <https://fess.codelibs.org/ja/>`__
+- `업그레이드 가이드 <https://fess.codelibs.org/ko/>`__
 
 다운타임 계획
 ----------------

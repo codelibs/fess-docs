@@ -134,7 +134,7 @@ OpenSearch 설정
 Fess 다운로드
 -----------------
 
-1. `다운로드 사이트 <https://fess.codelibs.org/ja/downloads.html>`__ 에서 Windows용 ZIP 패키지를 다운로드합니다.
+1. `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 Windows용 ZIP 패키지를 다운로드합니다.
 
 2. 다운로드한 ZIP 파일을 임의의 디렉터리에 압축 해제합니다.
 

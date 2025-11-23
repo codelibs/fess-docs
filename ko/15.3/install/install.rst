@@ -120,7 +120,7 @@ Windows 버전 (ZIP)
 
 2. **소프트웨어 다운로드**
 
-   `다운로드 사이트 <https://fess.codelibs.org/ja/downloads.html>`__ 에서 |Fess| 를 다운로드합니다.
+   `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 |Fess| 를 다운로드합니다.
 
    Docker 버전의 경우 Docker Compose 파일을 가져옵니다.
 
@@ -224,7 +224,7 @@ A: 예, 가능합니다. Fess와 OpenSearch를 별도의 서버에서 실행할 
 
 |Fess| 및 관련 구성요소는 다음에서 다운로드할 수 있습니다:
 
-- **Fess**: `다운로드 사이트 <https://fess.codelibs.org/ja/downloads.html>`__
+- **Fess**: `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__
 - **OpenSearch**: `Download OpenSearch <https://opensearch.org/downloads.html>`__
 - **Java (Adoptium)**: `Adoptium <https://adoptium.net/>`__
 - **Docker**: `Get Docker <https://docs.docker.com/get-docker/>`__
