@@ -41,4 +41,4 @@ Propiedades del informe de errores
 Es una lista de propiedades para adjuntar al informar un error.
 Extrae valores que no contienen información personal.
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/systeminfo-1.png

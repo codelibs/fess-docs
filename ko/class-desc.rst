@@ -13,7 +13,7 @@ Fess는 검색 시스템 구축을 용이하게 하기 위해 모듈화된 설�
 
 Fess는 다음과 같은 주요 컴포넌트로 구성됩니다:
 
-.. figure:: ../resources/images/ja/architecture-overview.png
+.. figure:: ../resources/images/en/architecture-overview.png
    :scale: 100%
    :alt: Fess 아키텍처 개요
    :align: center

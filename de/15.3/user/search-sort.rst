@@ -63,5 +63,5 @@ Um nach mehreren Feldern zu sortieren, geben Sie diese durch Kommas getrennt an:
 
     fess sort:content_length.desc,last_modified
 
-.. |image0| image:: ../../../resources/images/de/15.3/user/search-sort-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/user/search-sort-1.png
 .. pdf            :width: 300 px

@@ -13,7 +13,7 @@ Fess采用模块化设计，以便于构建搜索系统。
 
 Fess由以下主要组件构成：
 
-.. figure:: ../resources/images/ja/architecture-overview.png
+.. figure:: ../resources/images/en/architecture-overview.png
    :scale: 100%
    :alt: Fess架构概览
    :align: center

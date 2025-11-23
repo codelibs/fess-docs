@@ -136,4 +136,4 @@ After understanding the basic usage, you can refer to the following documents to
 - **API Documentation**: Integration using the REST API
 - **Developer Guide**: Customization and extension development
 
-.. |Browser search results display| image:: ../resources/images/ja/fess_search_result.png
+.. |Browser search results display| image:: ../resources/images/en/fess_search_result.png

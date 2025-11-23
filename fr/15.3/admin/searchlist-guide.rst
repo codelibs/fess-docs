@@ -30,4 +30,4 @@ Suppression en masse
 Si vous souhaitez supprimer tous les documents de l'index, cliquez sur le bouton « Tout supprimer avec cette requête » avec « \*:\* » pour les supprimer.
 Il est également possible de supprimer uniquement les documents cibles en spécifiant les conditions de recherche.
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/searchlist-1.png

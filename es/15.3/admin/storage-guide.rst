@@ -70,4 +70,4 @@ Crear carpeta
 Puede abrir la ventana de creación de carpeta haciendo clic en el botón de crear carpeta a la derecha de la visualización de ruta. Tenga en cuenta que no se pueden crear carpetas vacías.
 
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/storage-1.png

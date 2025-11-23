@@ -71,4 +71,4 @@ Carga
 Puede cargar e importar información de configuración.
 Los archivos que se pueden restaurar son \*.bulk y system.properties.
 
-  .. |image0| image:: ../../../resources/images/es/15.3/admin/backup-1.png
+  .. |image0| image:: ../../../resources/images/en/15.3/admin/backup-1.png

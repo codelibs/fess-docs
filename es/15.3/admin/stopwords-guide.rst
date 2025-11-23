@@ -50,6 +50,6 @@ Carga
 Puede cargar en el formato de diccionario de palabras vacías.
 
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/stopwords-1.png
-.. |image1| image:: ../../../resources/images/es/15.3/admin/stopwords-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/stopwords-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/stopwords-2.png
 

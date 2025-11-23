@@ -13,7 +13,7 @@ Gesamtarchitektur
 
 Fess besteht aus folgenden Hauptkomponenten:
 
-.. figure:: ../resources/images/ja/architecture-overview.png
+.. figure:: ../resources/images/en/architecture-overview.png
    :scale: 100%
    :alt: Fess-Architekturübersicht
    :align: center
