@@ -13,7 +13,7 @@ Overall Architecture
 
 Fess consists of the following main components:
 
-.. figure:: ../resources/images/ja/architecture-overview.png
+.. figure:: ../resources/images/en/architecture-overview.png
    :scale: 100%
    :alt: Fess Architecture Overview
    :align: center

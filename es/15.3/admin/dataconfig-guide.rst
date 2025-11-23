@@ -426,5 +426,5 @@ Si se requiere autenticación en el destino del rastreo, también es necesario c
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/es/15.3/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/dataconfig-2.png

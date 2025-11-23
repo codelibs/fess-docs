@@ -13,7 +13,7 @@ Arquitectura General
 
 Fess consta de los siguientes componentes principales:
 
-.. figure:: ../resources/images/ja/architecture-overview.png
+.. figure:: ../resources/images/en/architecture-overview.png
    :scale: 100%
    :alt: Descripción general de la arquitectura de Fess
    :align: center

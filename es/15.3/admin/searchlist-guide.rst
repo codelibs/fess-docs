@@ -30,4 +30,4 @@ Eliminación masiva
 Si desea eliminar todos los documentos del índice, haga clic en el botón "Eliminar todo con esta consulta" con "\*:\*" para eliminarlos.
 También es posible especificar condiciones de búsqueda y eliminar solo los documentos objetivo.
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/searchlist-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/searchlist-1.png

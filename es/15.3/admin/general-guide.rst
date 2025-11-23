@@ -290,5 +290,5 @@ Ejemplo de configuración LDAP
      - memberOf
 
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/general-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/general-1.png
 .. pdf            :height: 940 px

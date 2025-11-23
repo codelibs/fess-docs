@@ -97,5 +97,5 @@ Si se omite, se utilizará el nombre del archivo cargado.
 Por ejemplo, si especifica logo.png, se cambiará la imagen de la página principal de búsqueda.
 
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/design-1.png
-.. |image1| image:: ../../../resources/images/es/15.3/admin/design-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/design-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/design-2.png

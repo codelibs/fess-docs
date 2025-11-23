@@ -56,5 +56,5 @@ Administra el diccionario de anulación de Stemmer.
 stemmer_override.txt se coloca para cada idioma y es un archivo de diccionario de sustitución de palabras para anular el procesamiento de stemming.
 
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/dict-1.png
             :height: 940px

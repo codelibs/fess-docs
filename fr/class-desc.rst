@@ -13,7 +13,7 @@ Architecture Globale
 
 Fess se compose des composants principaux suivants :
 
-.. figure:: ../resources/images/ja/architecture-overview.png
+.. figure:: ../resources/images/en/architecture-overview.png
    :scale: 100%
    :alt: Vue d'ensemble de l'architecture Fess
    :align: center

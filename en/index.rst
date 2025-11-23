@@ -7,7 +7,7 @@ Overview
 
 Fess is a **full-text search server that can be easily built in 5 minutes**.
 
-.. figure:: ../resources/images/ja/demo-1.png
+.. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: Standard Demo
    :figclass: side-by-side
@@ -15,7 +15,7 @@ Fess is a **full-text search server that can be easily built in 5 minutes**.
 
    Standard Demo
 
-.. figure:: ../resources/images/ja/demo-3.png
+.. figure:: ../resources/images/en/demo-3.png
    :scale: 100%
    :alt: Site Search Demo
    :figclass: side-by-side
@@ -23,7 +23,7 @@ Fess is a **full-text search server that can be easily built in 5 minutes**.
 
    Site Search Demo
 
-.. figure:: ../resources/images/ja/demo-2.png
+.. figure:: ../resources/images/en/demo-2.png
    :scale: 100%
    :alt: Code Search
    :figclass: side-by-side
@@ -31,7 +31,7 @@ Fess is a **full-text search server that can be easily built in 5 minutes**.
 
    Source Code Search
 
-.. figure:: ../resources/images/ja/demo-4.png
+.. figure:: ../resources/images/en/demo-4.png
    :scale: 100%
    :alt: Document Search
    :figclass: side-by-side
@@ -291,12 +291,12 @@ Media Coverage
 
 - `Part 1: Introducing the Full-Text Search Server Fess <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
 
-.. |image0| image:: ../resources/images/ja/demo-1.png
-.. |image1| image:: ../resources/images/ja/demo-2.png
-.. |image2| image:: ../resources/images/ja/demo-3.png
-.. |image3| image:: ../resources/images/ja/n2search_225x50.png
+.. |image0| image:: ../resources/images/en/demo-1.png
+.. |image1| image:: ../resources/images/en/demo-2.png
+.. |image2| image:: ../resources/images/en/demo-3.png
+.. |image3| image:: ../resources/images/en/n2search_225x50.png
    :target: https://www.n2sm.net/products/n2search.html
-.. |image4| image:: ../resources/images/ja/n2search_b.png
+.. |image4| image:: ../resources/images/en/n2search_b.png
 
 
 .. toctree::

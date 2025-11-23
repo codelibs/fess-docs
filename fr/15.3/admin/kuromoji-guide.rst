@@ -72,5 +72,5 @@ Par exemple, cela ressemble à ce qui suit.
     関西国際空港,関西 国際 空港,カンサイ コクサイ クウコウ,カスタム名詞
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/kuromoji-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/kuromoji-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/kuromoji-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/kuromoji-2.png

@@ -41,5 +41,5 @@ Método de eliminación
 Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
-.. |image0| image:: ../../../resources/images/es/15.3/admin/group-1.png
-.. |image1| image:: ../../../resources/images/es/15.3/admin/group-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/group-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/group-2.png

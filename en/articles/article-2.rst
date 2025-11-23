@@ -190,8 +190,8 @@ References
 
 -  `Fess <https://fess.codelibs.org/ja/>`__
 
-.. |image0| image:: ../../resources/images/ja/article/3/role-1.png
-.. |image1| image:: ../../resources/images/ja/article/3/role-2.png
-.. |image2| image:: ../../resources/images/ja/article/3/logout.png
-.. |image3| image:: ../../resources/images/ja/article/3/search-by-sales.png
-.. |image4| image:: ../../resources/images/ja/article/3/search-by-eng.png
+.. |image0| image:: ../../resources/images/en/article/3/role-1.png
+.. |image1| image:: ../../resources/images/en/article/3/role-2.png
+.. |image2| image:: ../../resources/images/en/article/3/logout.png
+.. |image3| image:: ../../resources/images/en/article/3/search-by-sales.png
+.. |image4| image:: ../../resources/images/en/article/3/search-by-eng.png

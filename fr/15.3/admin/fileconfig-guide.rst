@@ -175,6 +175,6 @@ La configuration serait alors la suivante.
 
 
 
-.. |image0| image:: ../../../resources/images/ja/15.3/admin/fileconfig-1.png
-.. |image1| image:: ../../../resources/images/ja/15.3/admin/fileconfig-2.png
+.. |image0| image:: ../../../resources/images/en/15.3/admin/fileconfig-1.png
+.. |image1| image:: ../../../resources/images/en/15.3/admin/fileconfig-2.png
 .. pdf            :height: 940 px
