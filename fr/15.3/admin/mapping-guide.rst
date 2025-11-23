@@ -1,6 +1,6 @@
 =====================
 Dictionnaire de mapping
-=====================
+=======================
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste de configuration de mapping illustrée ci-dessous, 
 Cliquez sur le nom de la configuration pour la modifier.
 
 Méthode de configuration
--------------------------
+------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de mapping.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Source de conversion
 :::::::::::::::::::::
@@ -50,6 +50,6 @@ Téléversement
 Vous pouvez téléverser au format de dictionnaire de mapping.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/mapping-2.png
 

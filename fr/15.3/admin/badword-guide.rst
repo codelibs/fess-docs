@@ -1,6 +1,6 @@
 ==============
 Mots exclus
-==============
+===========
 
 Présentation
 ============
@@ -22,14 +22,14 @@ Pour ouvrir la page de liste de configuration des mots exclus des suggestions il
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Pour ouvrir la page de création de mots exclus des suggestions, cliquez sur le bouton Nouvelle création.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Candidat de suggestion
 ::::::::::::::::::::::
@@ -38,7 +38,7 @@ Enregistre les mots NG.
 Les mots enregistrés ici ne seront plus affichés dans les suggestions.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
@@ -79,7 +79,7 @@ Décrivez les mots exclus à partir de la deuxième ligne.
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.3/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.3/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/ja/15.3/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/ja/15.3/admin/badword-4.png

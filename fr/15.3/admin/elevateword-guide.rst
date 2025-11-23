@@ -1,6 +1,6 @@
 ================
 Mots ajoutés
-================
+============
 
 Présentation
 ============
@@ -20,14 +20,14 @@ Pour ouvrir la page de liste pour configurer les mots ajoutés illustrée ci-des
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des mots ajoutés.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Mot
 ::::
@@ -57,7 +57,7 @@ Valeur de boost
 Configure la valeur de boost pour le mot.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
@@ -100,7 +100,7 @@ Décrivez les mots ajoutés à partir de la deuxième ligne.
 "fess","ふぇす","role1","label1","100"
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/en/15.3/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/en/15.3/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/ja/15.3/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/ja/15.3/admin/elevateword-4.png

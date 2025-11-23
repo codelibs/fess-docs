@@ -1,6 +1,6 @@
 ===============
 Dictionnaire
-===============
+============
 
 Présentation
 ============
@@ -50,11 +50,11 @@ Gère le dictionnaire de mots vides.
 stopwords.txt est placé pour chaque langue et est un fichier de liste de mots à exclure lors de la création de l'index.
 
 Remplacement de Stemmer
-========================
+=======================
 
 Gère le dictionnaire de remplacement de stemmer.
 stemmer_override.txt est placé pour chaque langue et est un fichier de dictionnaire de remplacement de mots pour remplacer le traitement de stemming.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/dict-1.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/dict-1.png
             :height: 940px

@@ -1,6 +1,6 @@
 =====================
 Mappage de chemin
-=====================
+=================
 
 Présentation
 ============
@@ -21,14 +21,14 @@ Pour ouvrir la page de liste de configuration du mappage de chemin illustrée ci
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du mappage de chemin.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Expression régulière
 ::::::::::::::::::::
@@ -58,10 +58,10 @@ Vous pouvez spécifier l'ordre de traitement du mappage de chemin.
 Le traitement s'effectue dans l'ordre croissant.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/pathmap-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/pathmap-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/pathmap-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/pathmap-2.png

@@ -1,6 +1,6 @@
 =====================
 En-tête de requête
-=====================
+==================
 
 Présentation
 ============
@@ -22,14 +22,14 @@ Pour ouvrir la page de liste de configuration des en-têtes de requête illustr�
 Cliquez sur le nom de la configuration pour la modifier.
 
 Création de configuration
---------------------------
+-------------------------
 
 Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des en-têtes de requête.
 
 |image1|
 
 Paramètres de configuration
-----------------------------
+---------------------------
 
 Nom
 ::::
@@ -48,10 +48,10 @@ Sélectionnez le nom de configuration de crawl Web auquel ajouter l'en-tête de 
 L'en-tête de requête sera ajouté uniquement pour la configuration de crawl sélectionnée.
 
 Suppression de configuration
------------------------------
+----------------------------
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/reqheader-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/reqheader-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/reqheader-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/reqheader-2.png

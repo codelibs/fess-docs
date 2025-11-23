@@ -1,6 +1,6 @@
 ==================
 URL en échec
-==================
+============
 
 Présentation
 ============
@@ -21,7 +21,7 @@ Pour ouvrir la page de liste pour vérifier les URL en échec, cliquez sur [Info
 En cliquant sur le lien de vérification de l'URL en échec, les détails s'affichent.
 
 Détails de l'URL en échec
-==========================
+=========================
 
 Les détails de l'URL en échec enregistrent les exceptions survenues lors du crawl.
 
@@ -62,5 +62,5 @@ Date du dernier accès
 Heure à laquelle cette exception s'est produite.
 
 
-.. |image0| image:: ../../../resources/images/en/15.3/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.3/admin/failureurl-2.png
+.. |image0| image:: ../../../resources/images/ja/15.3/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/ja/15.3/admin/failureurl-2.png
