@@ -283,7 +283,7 @@ Exemples de configuration LDAP
      - cn=%s ou uid=%s
      - (&(objectClass=user)(sAMAccountName=%s))
    * - Filtre de groupe
------------------------
+     -
      - (member:1.2.840.113556.1.4.1941:=%s)
    * - memberOf
      - isMemberOf
