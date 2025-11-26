@@ -70,7 +70,7 @@ Java 未安装，或 PATH 环境变量未正确设置。
 
 2. 将插件版本与 OpenSearch 版本匹配::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.1
 
 3. 确认权限::
 
