@@ -70,7 +70,7 @@ Java가 설치되어 있지 않거나 PATH 환경 변수가 올바르게 설정�
 
 2. 플러그인 버전을 OpenSearch 버전에 맞춤::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.2
+       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.1
 
 3. 권한 확인::
 
