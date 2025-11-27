@@ -153,12 +153,12 @@ Konfiguration von Fess
 
 ::
 
-    set SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    set FESS_DICTIONARY_PATH=C:/opensearch-3.3.2/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.3.2/data/config/
 
 .. note::
 
-   - Wenn OpenSearch auf einem anderen Host ausgeführt wird, ändern Sie ``SEARCH_ENGINE_HTTP_URL`` auf den entsprechenden Hostnamen oder die IP-Adresse.
+   - Wenn OpenSearch auf einem anderen Host ausgeführt wird, ändern Sie ``fess.search_engine.http_address`` auf den entsprechenden Hostnamen oder die IP-Adresse.
    - Verwenden Sie ``/`` als Pfadtrennzeichen.
 
 Überprüfung der Installation
@@ -168,8 +168,8 @@ Konfiguration von Fess
 
 In der Eingabeaufforderung::
 
-    C:\> findstr "SEARCH_ENGINE_HTTP_URL" C:\fess-15.3.2\bin\fess.in.bat
-    C:\> findstr "FESS_DICTIONARY_PATH" C:\fess-15.3.2\bin\fess.in.bat
+    C:\> findstr "fess.search_engine.http_address" C:\fess-15.3.2\bin\fess.in.bat
+    C:\> findstr "fess.dictionary.path" C:\fess-15.3.2\bin\fess.in.bat
 
 Schritt 3: Start
 ================
