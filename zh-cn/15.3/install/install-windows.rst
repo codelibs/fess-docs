@@ -153,12 +153,12 @@ PowerShell 的情况::
 
 ::
 
-    set SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-    set FESS_DICTIONARY_PATH=C:/opensearch-3.3.2/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.3.2/data/config/
 
 .. note::
 
-   - 如果 OpenSearch 在其他主机上运行，请将 ``SEARCH_ENGINE_HTTP_URL`` 更改为适当的主机名或 IP 地址。
+   - 如果 OpenSearch 在其他主机上运行，请将 ``fess.search_engine.http_address`` 更改为适当的主机名或 IP 地址。
    - 路径分隔符请使用 ``/``。
 
 确认安装
@@ -168,8 +168,8 @@ PowerShell 的情况::
 
 在命令提示符中::
 
-    C:\> findstr "SEARCH_ENGINE_HTTP_URL" C:\fess-15.3.2\bin\fess.in.bat
-    C:\> findstr "FESS_DICTIONARY_PATH" C:\fess-15.3.2\bin\fess.in.bat
+    C:\> findstr "fess.search_engine.http_address" C:\fess-15.3.2\bin\fess.in.bat
+    C:\> findstr "fess.dictionary.path" C:\fess-15.3.2\bin\fess.in.bat
 
 步骤 3: 启动
 ==============
