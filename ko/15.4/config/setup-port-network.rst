@@ -158,6 +158,24 @@ Windows 환경에서 서비스 등록하여 사용하는 경우 ``bin\service.ba
 .. warning::
    비밀번호는 암호화되지 않고 저장됩니다. 적절한 파일 권한을 설정하십시오.
 
+환경 변수를 통한 프록시 설정
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SSO 인증과 같은 Java 라이브러리가 프록시를 사용해야 하는 경우 환경 변수를 통해 구성해야 합니다.
+이러한 환경 변수는 Java 시스템 속성(``http.proxyHost``, ``https.proxyHost`` 등)으로 변환됩니다.
+
+::
+
+    FESS_PROXY_HOST=proxy.example.com
+    FESS_PROXY_PORT=8080
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
+
+RPM 패키지의 경우 ``/etc/sysconfig/fess`` 에서 구성합니다. DEB 패키지의 경우 ``/etc/default/fess`` 에서 구성합니다.
+
+.. note::
+   ``fess_config.properties`` 의 ``http.proxy.*`` 설정은 Fess 내부의 HTTP 통신에 사용됩니다.
+   SSO 인증과 같은 외부 Java 라이브러리가 프록시를 사용해야 하는 경우 위의 환경 변수도 구성하십시오.
+
 HTTP 통신 설정
 ============
 

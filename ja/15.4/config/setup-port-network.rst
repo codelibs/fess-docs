@@ -158,6 +158,24 @@ Windows 環境でサービス登録して使用する場合は、``bin\service.b
 .. warning::
    パスワードは暗号化されずに保存されます。適切なファイルパーミッションを設定してください。
 
+環境変数によるプロキシ設定
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SSO認証などのJavaライブラリがプロキシを使用する場合は、環境変数で設定する必要があります。
+これらの環境変数はJavaシステムプロパティ（``http.proxyHost``、``https.proxyHost`` 等）に変換されます。
+
+::
+
+    FESS_PROXY_HOST=proxy.example.com
+    FESS_PROXY_PORT=8080
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
+
+RPMパッケージでは ``/etc/sysconfig/fess``、DEBパッケージでは ``/etc/default/fess`` に設定します。
+
+.. note::
+   ``fess_config.properties`` の ``http.proxy.*`` 設定は Fess 内部のHTTP通信で使用されます。
+   SSO認証などの外部Javaライブラリがプロキシを使用する場合は、上記の環境変数も設定してください。
+
 HTTP通信設定
 ============
 
