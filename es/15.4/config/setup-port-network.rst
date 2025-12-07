@@ -158,6 +158,24 @@ Para usar el proxy HTTP en toda la aplicación |Fess|, configure en ``fess_confi
 .. warning::
    Las contraseñas se almacenan sin cifrar. Configure los permisos de archivo apropiados.
 
+Configuración de Proxy mediante Variables de Entorno
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cuando las bibliotecas Java como la autenticación SSO necesitan usar un proxy, debe configurarlo mediante variables de entorno.
+Estas variables de entorno se convierten en propiedades del sistema Java (``http.proxyHost``, ``https.proxyHost``, etc.).
+
+::
+
+    FESS_PROXY_HOST=proxy.example.com
+    FESS_PROXY_PORT=8080
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
+
+Para paquetes RPM, configure en ``/etc/sysconfig/fess``. Para paquetes DEB, configure en ``/etc/default/fess``.
+
+.. note::
+   La configuración ``http.proxy.*`` en ``fess_config.properties`` se usa para las comunicaciones HTTP dentro de Fess.
+   Si las bibliotecas Java externas como la autenticación SSO necesitan usar un proxy, también configure las variables de entorno anteriores.
+
 Configuración de Comunicación HTTP
 ===================================
 

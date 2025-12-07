@@ -158,6 +158,24 @@ Windows 环境配置
 .. warning::
    密码将以未加密形式保存。请设置适当的文件权限。
 
+通过环境变量配置代理
+~~~~~~~~~~~~~~~~~~~~
+
+当 Java 库(如 SSO 认证)需要使用代理时,必须通过环境变量进行配置。
+这些环境变量会被转换为 Java 系统属性(``http.proxyHost``、``https.proxyHost`` 等)。
+
+::
+
+    FESS_PROXY_HOST=proxy.example.com
+    FESS_PROXY_PORT=8080
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
+
+对于 RPM 包,在 ``/etc/sysconfig/fess`` 中配置。对于 DEB 包,在 ``/etc/default/fess`` 中配置。
+
+.. note::
+   ``fess_config.properties`` 中的 ``http.proxy.*`` 设置用于 Fess 内部的 HTTP 通信。
+   如果外部 Java 库(如 SSO 认证)需要使用代理,还需要配置上述环境变量。
+
 HTTP 通信配置
 ============
 
