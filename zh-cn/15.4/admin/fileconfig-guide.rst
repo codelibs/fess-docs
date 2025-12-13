@@ -37,7 +37,7 @@
 路径
 ::::
 
-在此路径中，指定开始抓取的位置（例如：file:/ 或 smb://）。
+在此路径中，指定开始抓取的位置（例如：file:/、smb://、s3://、gcs://）。
 
 包含在抓取中的路径
 :::::::::::::::::
@@ -172,7 +172,53 @@
    * - 密码
      - (请输入)
 
+抓取 Amazon S3 存储桶
+---------------------
 
+如果要抓取 my-bucket 存储桶中的文件，配置如下所示。
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - 名称
+     - 值
+   * - 名称
+     - S3 存储桶
+   * - 路径
+     - s3://my-bucket/
+
+访问 S3 需要认证凭据。在"配置参数"中添加以下内容：
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=您的访问密钥
+    client.secretKey=您的私密密钥
+    client.region=ap-northeast-1
+
+抓取 Google Cloud Storage 存储桶
+---------------------------------
+
+如果要抓取 my-gcs-bucket 存储桶中的文件，配置如下所示。
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - 名称
+     - 值
+   * - 名称
+     - GCS 存储桶
+   * - 路径
+     - gcs://my-gcs-bucket/
+
+访问 GCS 需要认证凭据。在"配置参数"中添加以下内容：
+
+::
+
+    client.projectId=您的项目ID
+    client.credentialsFile=/path/to/service-account.json
 
 
 .. |image0| image:: ../../../resources/images/en/15.4/admin/fileconfig-1.png

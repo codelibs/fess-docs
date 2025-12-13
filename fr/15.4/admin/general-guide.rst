@@ -234,25 +234,54 @@ Stockage
 Après avoir configuré chaque élément, un menu [Système > Stockage] apparaîtra dans le menu de gauche.
 Pour la gestion des fichiers, consultez :doc:`Stockage <../admin/storage-guide>`.
 
-Point de terminaison
-::::::::::::::::::::
+Type
+::::
 
-Spécifie l'URL du point de terminaison du serveur MinIO.
+Spécifie le type de stockage.
+Lorsque « Automatique » est sélectionné, le type de stockage est automatiquement déterminé à partir du point de terminaison.
 
-Clé d'accès
-:::::::::::
-
-Spécifie la clé d'accès du serveur MinIO.
-
-Clé secrète
-:::::::::::
-
-Spécifie la clé secrète du serveur MinIO.
+- **Automatique** : Détection automatique à partir du point de terminaison
+- **S3** : Amazon S3
+- **GCS** : Google Cloud Storage
 
 Bucket
 ::::::
 
 Spécifie le nom du bucket à gérer.
+
+Point de terminaison
+::::::::::::::::::::
+
+Spécifie l'URL du point de terminaison du serveur de stockage.
+
+- S3 : Utilise le point de terminaison AWS par défaut si vide
+- GCS : Utilise le point de terminaison Google Cloud par défaut si vide
+- MinIO, etc. : L'URL du point de terminaison du serveur MinIO
+
+Clé d'accès
+:::::::::::
+
+Spécifie la clé d'accès pour S3 ou le stockage compatible S3.
+
+Clé secrète
+:::::::::::
+
+Spécifie la clé secrète pour S3 ou le stockage compatible S3.
+
+Région
+::::::
+
+Spécifie la région S3 (ex. : ap-northeast-1).
+
+ID de projet
+::::::::::::
+
+Spécifie l'ID de projet Google Cloud pour GCS.
+
+Chemin des identifiants
+:::::::::::::::::::::::
+
+Spécifie le chemin vers le fichier JSON d'identifiants du compte de service pour GCS.
 
 Exemples
 ========

@@ -234,25 +234,54 @@ Storage
 After configuring each item, a [System > Storage] menu will appear in the left menu.
 For file management, see :doc:`Storage <../admin/storage-guide>`.
 
-Endpoint
-::::::::
+Type
+::::
 
-Specifies the endpoint URL of the MinIO server.
+Specifies the storage type.
+When "Auto" is selected, the storage type is automatically determined from the endpoint.
 
-Access Key
-::::::::::
-
-Specifies the access key for the MinIO server.
-
-Secret Key
-::::::::::
-
-Specifies the secret key for the MinIO server.
+- **Auto**: Auto-detect from endpoint
+- **S3**: Amazon S3
+- **GCS**: Google Cloud Storage
 
 Bucket
 ::::::
 
 Specifies the bucket name to manage.
+
+Endpoint
+::::::::
+
+Specifies the endpoint URL of the storage server.
+
+- S3: Uses AWS default endpoint if left blank
+- GCS: Uses Google Cloud default endpoint if left blank
+- MinIO, etc.: The endpoint URL of the MinIO server
+
+Access Key
+::::::::::
+
+Specifies the access key for S3 or S3-compatible storage.
+
+Secret Key
+::::::::::
+
+Specifies the secret key for S3 or S3-compatible storage.
+
+Region
+::::::
+
+Specifies the S3 region (e.g., ap-northeast-1).
+
+Project ID
+::::::::::
+
+Specifies the Google Cloud project ID for GCS.
+
+Credentials Path
+::::::::::::::::
+
+Specifies the path to the service account credentials JSON file for GCS.
 
 Examples
 ========

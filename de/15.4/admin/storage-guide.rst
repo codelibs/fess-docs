@@ -5,7 +5,7 @@ Speicher
 Übersicht
 =========
 
-Auf der Speicherseite können Sie Dateien auf MinIO verwalten, einem Amazon S3-kompatiblen Objektspeicher.
+Auf der Speicherseite können Sie Dateien auf Amazon S3, Google Cloud Storage oder S3-kompatiblem Speicher (wie MinIO) verwalten.
 
 Verwaltung
 ==========
@@ -13,12 +13,35 @@ Verwaltung
 Konfiguration des Objektspeicher-Servers
 -----------------------------------------
 
-Öffnen Sie die Speicherkonfiguration unter [System > Allgemein] und konfigurieren Sie die folgenden Elemente:
+Öffnen Sie die Speicherkonfiguration unter [System > Allgemein] und konfigurieren Sie die folgenden Elemente entsprechend Ihrem Speichertyp.
 
-- Endpunkt: Endpunkt-URL des Speicherservers
-- Zugriffsschlüssel: Zugriffsschlüssel des Speicherservers
-- Geheimer Schlüssel: Geheimer Schlüssel des Speicherservers
+Allgemeine Einstellungen
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Typ: Speichertyp (Automatisch/S3/GCS)
 - Bucket: Name des zu verwaltenden Buckets
+
+S3-Einstellungen
+~~~~~~~~~~~~~~~~
+
+- Endpunkt: S3-Endpunkt (verwendet AWS-Standard, wenn leer)
+- Zugriffsschlüssel: AWS-Zugriffsschlüssel
+- Geheimer Schlüssel: AWS-Geheimschlüssel
+- Region: AWS-Region
+
+GCS-Einstellungen
+~~~~~~~~~~~~~~~~~
+
+- Endpunkt: GCS-Endpunkt (verwendet Google Cloud-Standard, wenn leer)
+- Projekt-ID: Google Cloud-Projekt-ID
+- Anmeldedaten-Pfad: Pfad zur Dienstkonto-Anmeldedaten-JSON-Datei
+
+MinIO (S3-kompatibel) Einstellungen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Endpunkt: MinIO-Server-Endpunkt-URL
+- Zugriffsschlüssel: MinIO-Zugriffsschlüssel
+- Geheimer Schlüssel: MinIO-Geheimschlüssel
 
 
 Anzeige

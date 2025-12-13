@@ -5,7 +5,7 @@ Storage
 Overview
 ========
 
-On the storage page, you can manage files on MinIO, an Amazon S3-compatible object storage.
+On the storage page, you can manage files on Amazon S3, Google Cloud Storage, or S3-compatible storage (such as MinIO).
 
 Management Operations
 =====================
@@ -13,12 +13,35 @@ Management Operations
 Object Storage Server Configuration
 ------------------------------------
 
-Open the storage settings from [System > General] and configure the following items:
+Open the storage settings from [System > General] and configure the following items according to your storage type.
 
-- Endpoint: The endpoint URL of the storage server
-- Access Key: The access key of the storage server
-- Secret Key: The secret key of the storage server
+Common Settings
+~~~~~~~~~~~~~~~
+
+- Type: Storage type (Auto/S3/GCS)
 - Bucket: The bucket name to manage
+
+S3 Settings
+~~~~~~~~~~~
+
+- Endpoint: S3 endpoint (uses AWS default if blank)
+- Access Key: AWS access key
+- Secret Key: AWS secret key
+- Region: AWS region
+
+GCS Settings
+~~~~~~~~~~~~
+
+- Endpoint: GCS endpoint (uses Google Cloud default if blank)
+- Project ID: Google Cloud project ID
+- Credentials Path: Service account credentials JSON file path
+
+MinIO (S3-compatible) Settings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Endpoint: MinIO server endpoint URL
+- Access Key: MinIO access key
+- Secret Key: MinIO secret key
 
 
 Display Method

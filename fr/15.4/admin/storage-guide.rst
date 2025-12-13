@@ -5,7 +5,7 @@ Stockage
 Présentation
 ============
 
-La page Stockage permet de gérer les fichiers sur MinIO, un stockage d'objets compatible Amazon S3.
+La page Stockage permet de gérer les fichiers sur Amazon S3, Google Cloud Storage ou un stockage compatible S3 (comme MinIO).
 
 Gestion
 =======
@@ -13,12 +13,35 @@ Gestion
 Configuration du serveur de stockage d'objets
 ---------------------------------------------
 
-Ouvrez la configuration du stockage depuis [Système > Général] et configurez les éléments suivants :
+Ouvrez la configuration du stockage depuis [Système > Général] et configurez les éléments suivants en fonction de votre type de stockage.
 
-- Point de terminaison : URL du point de terminaison du serveur de stockage
-- Clé d'accès : Clé d'accès du serveur de stockage
-- Clé secrète : Clé secrète du serveur de stockage
+Paramètres communs
+~~~~~~~~~~~~~~~~~~
+
+- Type : Type de stockage (Automatique/S3/GCS)
 - Bucket : Nom du bucket à gérer
+
+Paramètres S3
+~~~~~~~~~~~~~
+
+- Point de terminaison : Point de terminaison S3 (utilise AWS par défaut si vide)
+- Clé d'accès : Clé d'accès AWS
+- Clé secrète : Clé secrète AWS
+- Région : Région AWS
+
+Paramètres GCS
+~~~~~~~~~~~~~~
+
+- Point de terminaison : Point de terminaison GCS (utilise Google Cloud par défaut si vide)
+- ID de projet : ID de projet Google Cloud
+- Chemin des identifiants : Chemin du fichier JSON d'identifiants du compte de service
+
+Paramètres MinIO (compatible S3)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Point de terminaison : URL du point de terminaison du serveur MinIO
+- Clé d'accès : Clé d'accès MinIO
+- Clé secrète : Clé secrète MinIO
 
 
 Affichage

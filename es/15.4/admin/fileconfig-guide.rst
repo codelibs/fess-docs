@@ -37,7 +37,7 @@ Es el nombre de la configuración.
 Ruta
 ::::
 
-En esta ruta, especifique dónde comenzar el rastreo (ejemplo: file:/ o smb://).
+En esta ruta, especifique dónde comenzar el rastreo (ejemplo: file:/, smb://, s3://, gcs://).
 
 Rutas a rastrear
 ::::::::::::::::
@@ -172,7 +172,53 @@ En ese caso, la configuración sería la siguiente.
    * - Contraseña
      - (Ingrese)
 
+Rastrear buckets de Amazon S3
+-----------------------------
 
+Para rastrear archivos en el bucket my-bucket, la configuración sería la siguiente.
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Nombre
+     - Valor
+   * - Nombre
+     - Bucket S3
+   * - Ruta
+     - s3://my-bucket/
+
+El acceso a S3 requiere credenciales de autenticación. Agregue lo siguiente en "Parámetros de configuración":
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=SU_CLAVE_DE_ACCESO
+    client.secretKey=SU_CLAVE_SECRETA
+    client.region=ap-northeast-1
+
+Rastrear buckets de Google Cloud Storage
+-----------------------------------------
+
+Para rastrear archivos en el bucket my-gcs-bucket, la configuración sería la siguiente.
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Nombre
+     - Valor
+   * - Nombre
+     - Bucket GCS
+   * - Ruta
+     - gcs://my-gcs-bucket/
+
+El acceso a GCS requiere credenciales de autenticación. Agregue lo siguiente en "Parámetros de configuración":
+
+::
+
+    client.projectId=su-id-de-proyecto
+    client.credentialsFile=/ruta/a/service-account.json
 
 
 .. |image0| image:: ../../../resources/images/en/15.4/admin/fileconfig-1.png

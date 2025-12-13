@@ -37,7 +37,7 @@ Configuration name.
 Path
 ::::
 
-This path specifies where to start crawling (e.g., file:/ or smb://).
+This path specifies where to start crawling (e.g., file:/, smb://, s3://, gcs://).
 
 Included Paths for Crawling
 ::::::::::::::::::::::::::::
@@ -171,7 +171,53 @@ If a username and password are required to access the shared folder, you need to
    * - Password
      - (Please enter)
 
+Crawling Amazon S3 Buckets
+--------------------------
 
+To crawl files in the my-bucket bucket, the configuration values are as follows:
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Configuration Item
+     - Value
+   * - Name
+     - S3 Bucket
+   * - Path
+     - s3://my-bucket/
+
+S3 access requires authentication credentials. Add the following to "Configuration Parameters":
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=YOUR_ACCESS_KEY
+    client.secretKey=YOUR_SECRET_KEY
+    client.region=ap-northeast-1
+
+Crawling Google Cloud Storage Buckets
+-------------------------------------
+
+To crawl files in the my-gcs-bucket bucket, the configuration values are as follows:
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Configuration Item
+     - Value
+   * - Name
+     - GCS Bucket
+   * - Path
+     - gcs://my-gcs-bucket/
+
+GCS access requires authentication credentials. Add the following to "Configuration Parameters":
+
+::
+
+    client.projectId=your-project-id
+    client.credentialsFile=/path/to/service-account.json
 
 
 .. |image0| image:: ../../../resources/images/en/15.4/admin/fileconfig-1.png

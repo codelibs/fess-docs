@@ -37,7 +37,7 @@ Nom de la configuration.
 Chemin
 ::::::
 
-Ce chemin spécifie l'emplacement de départ du crawl (ex. : file:/ ou smb://).
+Ce chemin spécifie l'emplacement de départ du crawl (ex. : file:/, smb://, s3://, gcs://).
 
 Chemins à crawler
 :::::::::::::::::
@@ -172,7 +172,53 @@ La configuration serait alors la suivante.
    * - Mot de passe
      - (Veuillez saisir)
 
+Crawler les buckets Amazon S3
+-----------------------------
 
+Pour crawler les fichiers dans le bucket my-bucket, la configuration serait la suivante.
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Nom
+     - Valeur
+   * - Nom
+     - Bucket S3
+   * - Chemin
+     - s3://my-bucket/
+
+L'accès à S3 nécessite des identifiants d'authentification. Ajoutez ce qui suit aux « Paramètres de configuration » :
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=VOTRE_CLE_ACCES
+    client.secretKey=VOTRE_CLE_SECRETE
+    client.region=ap-northeast-1
+
+Crawler les buckets Google Cloud Storage
+-----------------------------------------
+
+Pour crawler les fichiers dans le bucket my-gcs-bucket, la configuration serait la suivante.
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - Nom
+     - Valeur
+   * - Nom
+     - Bucket GCS
+   * - Chemin
+     - gcs://my-gcs-bucket/
+
+L'accès à GCS nécessite des identifiants d'authentification. Ajoutez ce qui suit aux « Paramètres de configuration » :
+
+::
+
+    client.projectId=votre-id-projet
+    client.credentialsFile=/chemin/vers/service-account.json
 
 
 .. |image0| image:: ../../../resources/images/en/15.4/admin/fileconfig-1.png

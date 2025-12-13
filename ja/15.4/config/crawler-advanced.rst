@@ -192,7 +192,7 @@ HTTPクローラーのスレッドプール設定です。
      - ``http,https``
    * - ``crawler.file.protocols``
      - ファイルクロールのプロトコル
-     - ``file,smb,smb1,ftp,storage``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
 
 設定例
 ~~~~~~
@@ -200,7 +200,7 @@ HTTPクローラーのスレッドプール設定です。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage
+    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
 
 環境変数パラメーター
 --------------------
@@ -946,6 +946,94 @@ JVM オプション
 5. **ドキュメント化**
 
    変更した設定とその理由をドキュメント化してください。
+
+S3/GCSクローラー設定
+====================
+
+S3クローラー
+------------
+
+S3およびS3互換ストレージ（MinIO等）をクロールするための設定です。
+ファイルクロール設定の「設定パラメーター」に以下を記述します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - パラメーター
+     - 説明
+     - デフォルト
+   * - ``client.endpoint``
+     - S3エンドポイントURL
+     - (必須)
+   * - ``client.accessKey``
+     - アクセスキー
+     - (必須)
+   * - ``client.secretKey``
+     - シークレットキー
+     - (必須)
+   * - ``client.region``
+     - AWSリージョン
+     - ``us-east-1``
+   * - ``client.connectTimeout``
+     - 接続タイムアウト(ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - 読み取りタイムアウト(ms)
+     - ``10000``
+
+設定例
+~~~~~~
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=AKIAIOSFODNN7EXAMPLE
+    client.secretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    client.region=ap-northeast-1
+
+GCSクローラー
+-------------
+
+Google Cloud Storageをクロールするための設定です。
+ファイルクロール設定の「設定パラメーター」に以下を記述します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - パラメーター
+     - 説明
+     - デフォルト
+   * - ``client.projectId``
+     - Google CloudプロジェクトID
+     - (必須)
+   * - ``client.credentialsFile``
+     - サービスアカウントJSONファイルパス
+     - (オプション)
+   * - ``client.endpoint``
+     - カスタムエンドポイント
+     - (オプション)
+   * - ``client.connectTimeout``
+     - 接続タイムアウト(ms)
+     - ``10000``
+   * - ``client.writeTimeout``
+     - 書き込みタイムアウト(ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - 読み取りタイムアウト(ms)
+     - ``10000``
+
+設定例
+~~~~~~
+
+::
+
+    client.projectId=my-gcp-project
+    client.credentialsFile=/etc/fess/gcs-credentials.json
+
+.. note::
+   ``credentialsFile`` を省略した場合、環境変数 ``GOOGLE_APPLICATION_CREDENTIALS`` が使用されます。
 
 参考情報
 ========

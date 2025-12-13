@@ -5,7 +5,7 @@ Almacenamiento
 Descripción general
 ===================
 
-La página de almacenamiento le permite administrar archivos en MinIO, un almacenamiento de objetos compatible con Amazon S3.
+La página de almacenamiento le permite administrar archivos en Amazon S3, Google Cloud Storage o almacenamiento compatible con S3 (como MinIO).
 
 Método de gestión
 ==================
@@ -13,12 +13,35 @@ Método de gestión
 Configuración del servidor de almacenamiento de objetos
 --------------------------------------------------------
 
-Abra la configuración de almacenamiento desde [Sistema > General] y configure los siguientes elementos:
+Abra la configuración de almacenamiento desde [Sistema > General] y configure los siguientes elementos según su tipo de almacenamiento.
 
-- Punto de acceso: URL del punto de acceso del servidor de almacenamiento
-- Clave de acceso: Clave de acceso del servidor de almacenamiento
-- Clave secreta: Clave secreta del servidor de almacenamiento
+Configuración común
+~~~~~~~~~~~~~~~~~~~
+
+- Tipo: Tipo de almacenamiento (Automático/S3/GCS)
 - Bucket: Nombre del bucket a administrar
+
+Configuración de S3
+~~~~~~~~~~~~~~~~~~~
+
+- Punto de acceso: Punto de acceso de S3 (utiliza el predeterminado de AWS si está vacío)
+- Clave de acceso: Clave de acceso de AWS
+- Clave secreta: Clave secreta de AWS
+- Región: Región de AWS
+
+Configuración de GCS
+~~~~~~~~~~~~~~~~~~~~
+
+- Punto de acceso: Punto de acceso de GCS (utiliza el predeterminado de Google Cloud si está vacío)
+- ID de proyecto: ID del proyecto de Google Cloud
+- Ruta de credenciales: Ruta del archivo JSON de credenciales de la cuenta de servicio
+
+Configuración de MinIO (compatible con S3)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Punto de acceso: URL del punto de acceso del servidor MinIO
+- Clave de acceso: Clave de acceso de MinIO
+- Clave secreta: Clave secreta de MinIO
 
 
 Método de visualización
