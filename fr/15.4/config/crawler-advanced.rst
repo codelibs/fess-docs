@@ -192,15 +192,15 @@ Protocoles supportés
      - ``http,https``
    * - ``crawler.file.protocols``
      - Protocoles d'indexation de fichiers
-     - ``file,smb,smb1,ftp,storage``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage
+    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
 
 Paramètres de variables d'environnement
 --------------------
@@ -947,8 +947,96 @@ Bonnes pratiques
 
    Documentez les paramètres modifiés et leur raison.
 
+Configuration du crawler S3/GCS
+===============================
+
+Crawler S3
+----------
+
+Configuration pour crawler S3 et le stockage compatible S3 (comme MinIO).
+Ajoutez ce qui suit aux « Paramètres de configuration » dans les paramètres de crawl de fichiers.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Paramètre
+     - Description
+     - Par défaut
+   * - ``client.endpoint``
+     - URL du point de terminaison S3
+     - (Obligatoire)
+   * - ``client.accessKey``
+     - Clé d'accès
+     - (Obligatoire)
+   * - ``client.secretKey``
+     - Clé secrète
+     - (Obligatoire)
+   * - ``client.region``
+     - Région AWS
+     - ``us-east-1``
+   * - ``client.connectTimeout``
+     - Délai de connexion (ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - Délai de lecture (ms)
+     - ``10000``
+
+Exemple de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=AKIAIOSFODNN7EXAMPLE
+    client.secretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    client.region=ap-northeast-1
+
+Crawler GCS
+-----------
+
+Configuration pour crawler Google Cloud Storage.
+Ajoutez ce qui suit aux « Paramètres de configuration » dans les paramètres de crawl de fichiers.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Paramètre
+     - Description
+     - Par défaut
+   * - ``client.projectId``
+     - ID de projet Google Cloud
+     - (Obligatoire)
+   * - ``client.credentialsFile``
+     - Chemin du fichier JSON du compte de service
+     - (Optionnel)
+   * - ``client.endpoint``
+     - Point de terminaison personnalisé
+     - (Optionnel)
+   * - ``client.connectTimeout``
+     - Délai de connexion (ms)
+     - ``10000``
+   * - ``client.writeTimeout``
+     - Délai d'écriture (ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - Délai de lecture (ms)
+     - ``10000``
+
+Exemple de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    client.projectId=mon-projet-gcp
+    client.credentialsFile=/etc/fess/gcs-credentials.json
+
+.. note::
+   Si ``credentialsFile`` est omis, la variable d'environnement ``GOOGLE_APPLICATION_CREDENTIALS`` est utilisée.
+
 Informations de référence
-========
+=========================
 
 - :doc:`crawler-basic` - Configuration de base du robot d'indexation
 - :doc:`crawler-thumbnail` - Configuration des vignettes

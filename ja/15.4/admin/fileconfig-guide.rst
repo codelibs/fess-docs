@@ -37,7 +37,7 @@
 パス
 ::::
 
-このパスでは、クロールを開始する場所を指定します(例: file:/ または smb://)。
+このパスでは、クロールを開始する場所を指定します（例: file:/, smb://, s3://, gcs://）。
 
 クロール対象とするパス
 :::::::::::::::::
@@ -172,7 +172,53 @@ Windowsの共有フォルダーをクロール
    * - パスワード
      - (入力してください)
 
+Amazon S3バケットをクロール
+------------------------
 
+my-bucket バケット下のファイルをクロールするならば、設定は以下のようになります。
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - 名前
+     - 値
+   * - 名前
+     - S3 バケット
+   * - パス
+     - s3://my-bucket/
+
+S3へのアクセスには認証情報が必要です。「設定パラメーター」に以下を設定します。
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=YOUR_ACCESS_KEY
+    client.secretKey=YOUR_SECRET_KEY
+    client.region=ap-northeast-1
+
+Google Cloud Storageバケットをクロール
+-----------------------------------
+
+my-gcs-bucket バケット下のファイルをクロールするならば、設定は以下のようになります。
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - 名前
+     - 値
+   * - 名前
+     - GCS バケット
+   * - パス
+     - gcs://my-gcs-bucket/
+
+GCSへのアクセスには認証情報が必要です。「設定パラメーター」に以下を設定します。
+
+::
+
+    client.projectId=your-project-id
+    client.credentialsFile=/path/to/service-account.json
 
 
 .. |image0| image:: ../../../resources/images/ja/15.4/admin/fileconfig-1.png

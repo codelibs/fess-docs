@@ -234,25 +234,54 @@ Speicher
 Nach der Konfiguration dieser Elemente wird das Menü [System > Speicher] im linken Menü angezeigt.
 Informationen zur Dateiverwaltung finden Sie unter :doc:`Speicher <../admin/storage-guide>`.
 
-Endpunkt
-::::::::
+Typ
+:::
 
-Geben Sie die Endpunkt-URL des MinIO-Servers an.
+Geben Sie den Speichertyp an.
+Bei Auswahl von „Automatisch" wird der Speichertyp automatisch anhand des Endpunkts bestimmt.
 
-Zugriffsschlüssel
-:::::::::::::::::
-
-Geben Sie den Zugriffsschlüssel des MinIO-Servers an.
-
-Geheimer Schlüssel
-::::::::::::::::::
-
-Geben Sie den geheimen Schlüssel des MinIO-Servers an.
+- **Automatisch**: Automatische Erkennung vom Endpunkt
+- **S3**: Amazon S3
+- **GCS**: Google Cloud Storage
 
 Bucket
 ::::::
 
 Geben Sie den zu verwaltenden Bucket-Namen an.
+
+Endpunkt
+::::::::
+
+Geben Sie die Endpunkt-URL des Speicherservers an.
+
+- S3: Verwendet den AWS-Standard-Endpunkt, wenn leer
+- GCS: Verwendet den Google Cloud-Standard-Endpunkt, wenn leer
+- MinIO usw.: Die Endpunkt-URL des MinIO-Servers
+
+Zugriffsschlüssel
+:::::::::::::::::
+
+Geben Sie den Zugriffsschlüssel für S3 oder S3-kompatiblen Speicher an.
+
+Geheimer Schlüssel
+::::::::::::::::::
+
+Geben Sie den geheimen Schlüssel für S3 oder S3-kompatiblen Speicher an.
+
+Region
+::::::
+
+Geben Sie die S3-Region an (z.B. ap-northeast-1).
+
+Projekt-ID
+::::::::::
+
+Geben Sie die Google Cloud-Projekt-ID für GCS an.
+
+Anmeldedaten-Pfad
+:::::::::::::::::
+
+Geben Sie den Pfad zur Dienstkonto-Anmeldedaten-JSON-Datei für GCS an.
 
 Beispiele
 =========

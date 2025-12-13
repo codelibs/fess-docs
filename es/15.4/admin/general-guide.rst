@@ -234,25 +234,54 @@ Almacenamiento
 Después de configurar cada elemento, aparecerá un menú [Sistema > Almacenamiento] en el menú izquierdo.
 Para la gestión de archivos, consulte :doc:`Almacenamiento <../admin/storage-guide>`.
 
-Punto de acceso
-:::::::::::::::
+Tipo
+::::
 
-Especifique la URL del punto de acceso del servidor MinIO.
+Especifique el tipo de almacenamiento.
+Cuando se selecciona "Automático", el tipo de almacenamiento se determina automáticamente a partir del punto de acceso.
 
-Clave de acceso
-:::::::::::::::
-
-Especifique la clave de acceso del servidor MinIO.
-
-Clave secreta
-:::::::::::::
-
-Especifique la clave secreta del servidor MinIO.
+- **Automático**: Detección automática desde el punto de acceso
+- **S3**: Amazon S3
+- **GCS**: Google Cloud Storage
 
 Bucket
 ::::::
 
 Especifique el nombre del bucket a gestionar.
+
+Punto de acceso
+:::::::::::::::
+
+Especifique la URL del punto de acceso del servidor de almacenamiento.
+
+- S3: Utiliza el punto de acceso predeterminado de AWS si está vacío
+- GCS: Utiliza el punto de acceso predeterminado de Google Cloud si está vacío
+- MinIO, etc.: La URL del punto de acceso del servidor MinIO
+
+Clave de acceso
+:::::::::::::::
+
+Especifique la clave de acceso para S3 o almacenamiento compatible con S3.
+
+Clave secreta
+:::::::::::::
+
+Especifique la clave secreta para S3 o almacenamiento compatible con S3.
+
+Región
+::::::
+
+Especifique la región de S3 (ej.: ap-northeast-1).
+
+ID de proyecto
+::::::::::::::
+
+Especifique el ID del proyecto de Google Cloud para GCS.
+
+Ruta de credenciales
+::::::::::::::::::::
+
+Especifique la ruta al archivo JSON de credenciales de la cuenta de servicio para GCS.
 
 Ejemplo
 =======

@@ -192,7 +192,7 @@ HTTP 爬虫的线程池配置。
      - ``http,https``
    * - ``crawler.file.protocols``
      - 文件爬取协议
-     - ``file,smb,smb1,ftp,storage``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
 
 配置示例
 ~~~~~~
@@ -200,7 +200,7 @@ HTTP 爬虫的线程池配置。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage
+    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
 
 环境变量参数
 --------------------
@@ -946,6 +946,96 @@ JVM 选项
 5. **文档化**
 
    请记录变更的配置及其原因。
+
+S3/GCS 爬虫配置
+==================
+
+S3 爬虫
+-------
+
+用于爬取 Amazon S3 和 S3 兼容存储（MinIO 等）的配置。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 参数
+     - 说明
+     - 默认值
+   * - ``client.endpoint``
+     - S3 端点 URL
+     - (必须)
+   * - ``client.accessKey``
+     - 访问密钥
+     - (必须)
+   * - ``client.secretKey``
+     - 私密密钥
+     - (必须)
+   * - ``client.region``
+     - AWS 区域
+     - ``us-east-1``
+   * - ``client.connectTimeout``
+     - 连接超时(ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - 读取超时(ms)
+     - ``10000``
+
+配置示例
+~~~~~~
+
+在文件抓取配置的"配置参数"中添加以下内容。
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=AKIAIOSFODNN7EXAMPLE
+    client.secretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    client.region=ap-northeast-1
+
+GCS 爬虫
+--------
+
+用于爬取 Google Cloud Storage 的配置。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 参数
+     - 说明
+     - 默认值
+   * - ``client.projectId``
+     - Google Cloud 项目 ID
+     - (必须)
+   * - ``client.credentialsFile``
+     - 服务账户 JSON 文件路径
+     - (可选)
+   * - ``client.endpoint``
+     - 自定义端点
+     - (可选)
+   * - ``client.connectTimeout``
+     - 连接超时(ms)
+     - ``10000``
+   * - ``client.writeTimeout``
+     - 写入超时(ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - 读取超时(ms)
+     - ``10000``
+
+配置示例
+~~~~~~
+
+在文件抓取配置的"配置参数"中添加以下内容。
+
+::
+
+    client.projectId=my-gcp-project
+    client.credentialsFile=/etc/fess/gcs-credentials.json
+
+.. note::
+   省略 ``credentialsFile`` 时，将使用环境变量 ``GOOGLE_APPLICATION_CREDENTIALS``。
 
 参考信息
 ========

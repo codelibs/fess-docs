@@ -192,7 +192,7 @@ Protocolos Compatibles
      - ``http,https``
    * - ``crawler.file.protocols``
      - Protocolos para rastreo de archivos
-     - ``file,smb,smb1,ftp,storage``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -200,7 +200,7 @@ Ejemplo de Configuración
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage
+    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
 
 Parámetros de Variables de Entorno
 -----------------------------------
@@ -946,6 +946,96 @@ Mejores Prácticas
 5. **Documentación**
 
    Documente los cambios realizados en la configuración y su justificación.
+
+Configuración del Rastreador S3/GCS
+====================================
+
+Rastreador S3
+-------------
+
+Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO, etc.).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Parámetro
+     - Descripción
+     - Valor Predeterminado
+   * - ``client.endpoint``
+     - URL del endpoint de S3
+     - (obligatorio)
+   * - ``client.accessKey``
+     - Clave de acceso
+     - (obligatorio)
+   * - ``client.secretKey``
+     - Clave secreta
+     - (obligatorio)
+   * - ``client.region``
+     - Región de AWS
+     - ``us-east-1``
+   * - ``client.connectTimeout``
+     - Tiempo de espera de conexión (ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - Tiempo de espera de lectura (ms)
+     - ``10000``
+
+Ejemplo de Configuración
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=AKIAIOSFODNN7EXAMPLE
+    client.secretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    client.region=ap-northeast-1
+
+Rastreador GCS
+--------------
+
+Configuración para rastrear Google Cloud Storage.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Parámetro
+     - Descripción
+     - Valor Predeterminado
+   * - ``client.projectId``
+     - ID del proyecto de Google Cloud
+     - (obligatorio)
+   * - ``client.credentialsFile``
+     - Ruta del archivo JSON de la cuenta de servicio
+     - (opcional)
+   * - ``client.endpoint``
+     - Endpoint personalizado
+     - (opcional)
+   * - ``client.connectTimeout``
+     - Tiempo de espera de conexión (ms)
+     - ``10000``
+   * - ``client.writeTimeout``
+     - Tiempo de espera de escritura (ms)
+     - ``10000``
+   * - ``client.readTimeout``
+     - Tiempo de espera de lectura (ms)
+     - ``10000``
+
+Ejemplo de Configuración
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
+
+::
+
+    client.projectId=my-gcp-project
+    client.credentialsFile=/etc/fess/gcs-credentials.json
+
+.. note::
+   Si omite ``credentialsFile``, se usará la variable de entorno ``GOOGLE_APPLICATION_CREDENTIALS``.
 
 Información de Referencia
 ==========================
