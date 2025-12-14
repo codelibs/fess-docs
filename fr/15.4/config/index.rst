@@ -44,6 +44,12 @@ Ce guide complet couvre la configuration de |Fess|. Chaque section est organisé
 
 .. toctree::
    :maxdepth: 2
+   :caption: Configuration SSO
+
+   sso-saml
+
+.. toctree::
+   :maxdepth: 2
    :caption: Administration système
 
    admin-logging

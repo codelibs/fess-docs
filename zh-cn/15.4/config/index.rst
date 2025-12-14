@@ -44,6 +44,12 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: SSO配置
+
+   sso-saml
+
+.. toctree::
+   :maxdepth: 2
    :caption: 系统管理
 
    admin-logging

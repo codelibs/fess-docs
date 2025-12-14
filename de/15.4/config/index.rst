@@ -44,6 +44,12 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
 
 .. toctree::
    :maxdepth: 2
+   :caption: SSO-Konfiguration
+
+   sso-saml
+
+.. toctree::
+   :maxdepth: 2
    :caption: Systemverwaltung
 
    admin-logging
