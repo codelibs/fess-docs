@@ -49,6 +49,7 @@ This is a comprehensive guide for configuring |Fess|. Each section is organized 
    sso-saml
    sso-oidc
    sso-entraid
+   sso-spnego
 
 .. toctree::
    :maxdepth: 2
