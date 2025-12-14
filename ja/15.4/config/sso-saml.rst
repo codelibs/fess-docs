@@ -26,7 +26,7 @@ SAML認証では、|Fess| がSP（Service Provider）として動作し、外部
 
 SAML認証を設定する前に、以下の前提条件を確認してください。
 
-- |Fess| 14.0 以降がインストールされていること
+- |Fess| 15.4 以降がインストールされていること
 - SAML 2.0 対応のIdP（Identity Provider）が利用可能であること
 - |Fess| がHTTPSでアクセス可能であること（本番環境では必須）
 - IdP側で |Fess| をSPとして登録できる権限があること

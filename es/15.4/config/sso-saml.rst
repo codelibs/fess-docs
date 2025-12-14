@@ -26,7 +26,7 @@ Prerrequisitos
 
 Antes de configurar la autenticación SAML, verifique los siguientes prerrequisitos:
 
-- |Fess| 14.0 o superior está instalado
+- |Fess| 15.4 o superior está instalado
 - Un IdP (Identity Provider) compatible con SAML 2.0 está disponible
 - |Fess| es accesible a través de HTTPS (requerido para entornos de producción)
 - Tiene permiso para registrar |Fess| como SP en el lado del IdP

@@ -26,7 +26,7 @@ Voraussetzungen
 
 Überprüfen Sie vor der Konfiguration der SAML-Authentifizierung die folgenden Voraussetzungen:
 
-- |Fess| 14.0 oder höher ist installiert
+- |Fess| 15.4 oder höher ist installiert
 - Ein SAML 2.0-kompatibler IdP (Identity Provider) ist verfügbar
 - |Fess| ist über HTTPS erreichbar (erforderlich für Produktionsumgebungen)
 - Sie haben die Berechtigung, |Fess| als SP beim IdP zu registrieren
