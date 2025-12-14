@@ -47,6 +47,7 @@
    :caption: SSO設定
 
    sso-saml
+   sso-oidc
 
 .. toctree::
    :maxdepth: 2

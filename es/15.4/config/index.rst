@@ -47,6 +47,7 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
    :caption: Configuración SSO
 
    sso-saml
+   sso-oidc
 
 .. toctree::
    :maxdepth: 2
