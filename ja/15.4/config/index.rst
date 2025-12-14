@@ -48,6 +48,7 @@
 
    sso-saml
    sso-oidc
+   sso-entraid
 
 .. toctree::
    :maxdepth: 2
