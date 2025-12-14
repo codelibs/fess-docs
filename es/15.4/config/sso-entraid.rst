@@ -1,92 +1,92 @@
 ==========================================
-Configuracion de SSO con Entra ID
+Configuración de SSO con Entra ID
 ==========================================
 
-Descripcion general
+Descripción general
 ===================
 
-|Fess| soporta autenticacion Single Sign-On (SSO) utilizando Microsoft Entra ID (anteriormente Azure AD).
-Al utilizar la autenticacion de Entra ID, puede integrar la informacion de usuario y la informacion de grupo de su entorno Microsoft 365 con la busqueda basada en roles de |Fess|.
+|Fess| soporta autenticación Single Sign-On (SSO) utilizando Microsoft Entra ID (anteriormente Azure AD).
+Al utilizar la autenticación de Entra ID, puede integrar la información de usuario y la información de grupo de su entorno Microsoft 365 con la búsqueda basada en roles de |Fess|.
 
-Como funciona la autenticacion de Entra ID
+Cómo funciona la autenticación de Entra ID
 ------------------------------------------
 
-En la autenticacion de Entra ID, |Fess| opera como un cliente OAuth 2.0/OpenID Connect y colabora con Microsoft Entra ID para la autenticacion.
+En la autenticación de Entra ID, |Fess| opera como un cliente OAuth 2.0/OpenID Connect y colabora con Microsoft Entra ID para la autenticación.
 
 1. El usuario accede al endpoint SSO de |Fess| (``/sso/``)
-2. |Fess| redirige al endpoint de autorizacion de Entra ID
-3. El usuario se autentica con Entra ID (inicio de sesion de Microsoft)
-4. Entra ID redirige el codigo de autorizacion a |Fess|
-5. |Fess| utiliza el codigo de autorizacion para obtener un token de acceso
-6. |Fess| utiliza la API de Microsoft Graph para recuperar la informacion de grupo y rol del usuario
-7. El usuario inicia sesion y la informacion de grupo se aplica a la busqueda basada en roles
+2. |Fess| redirige al endpoint de autorización de Entra ID
+3. El usuario se autentica con Entra ID (inicio de sesión de Microsoft)
+4. Entra ID redirige el código de autorización a |Fess|
+5. |Fess| utiliza el código de autorización para obtener un token de acceso
+6. |Fess| utiliza la API de Microsoft Graph para recuperar la información de grupo y rol del usuario
+7. El usuario inicia sesión y la información de grupo se aplica a la búsqueda basada en roles
 
-Para la integracion con la busqueda basada en roles, consulte :doc:`security-role`.
+Para la integración con la búsqueda basada en roles, consulte :doc:`security-role`.
 
 Prerrequisitos
 ==============
 
-Antes de configurar la autenticacion de Entra ID, verifique los siguientes prerrequisitos:
+Antes de configurar la autenticación de Entra ID, verifique los siguientes prerrequisitos:
 
-- |Fess| 15.4 o superior esta instalado
-- Un tenant de Microsoft Entra ID (Azure AD) esta disponible
-- |Fess| es accesible a traves de HTTPS (requerido para entornos de produccion)
+- |Fess| 15.4 o superior está instalado
+- Un tenant de Microsoft Entra ID (Azure AD) está disponible
+- |Fess| es accesible a través de HTTPS (requerido para entornos de producción)
 - Tiene permiso para registrar aplicaciones en Entra ID
 
-Configuracion basica
+Configuración básica
 ====================
 
 Habilitar SSO
 -------------
 
-Para habilitar la autenticacion de Entra ID, agregue la siguiente configuracion en ``app/WEB-INF/conf/system.properties``:
+Para habilitar la autenticación de Entra ID, agregue la siguiente configuración en ``app/WEB-INF/conf/system.properties``:
 
 ::
 
     sso.type=entraid
 
-Configuracion requerida
+Configuración requerida
 -----------------------
 
-Configure la informacion obtenida de Entra ID.
+Configure la información obtenida de Entra ID.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Por defecto
    * - ``entraid.tenant``
      - ID del tenant (ej: ``xxx.onmicrosoft.com``)
      - (Requerido)
    * - ``entraid.client.id``
-     - ID de aplicacion (Cliente)
+     - ID de aplicación (Cliente)
      - (Requerido)
    * - ``entraid.client.secret``
      - Valor del secreto del cliente
      - (Requerido)
    * - ``entraid.reply.url``
-     - URI de redireccion (URL de callback)
+     - URI de redirección (URL de callback)
      - Usa la URL de la solicitud
 
 .. note::
-   En lugar del prefijo ``entraid.*``, tambien puede usar el prefijo legacy ``aad.*`` para compatibilidad con versiones anteriores.
+   En lugar del prefijo ``entraid.*``, también puede usar el prefijo legacy ``aad.*`` para compatibilidad con versiones anteriores.
 
-Configuracion opcional
+Configuración opcional
 ----------------------
 
-Las siguientes configuraciones pueden agregarse segun sea necesario.
+Las siguientes configuraciones pueden agregarse según sea necesario.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Por defecto
    * - ``entraid.authority``
-     - URL del servidor de autenticacion
+     - URL del servidor de autenticación
      - ``https://login.microsoftonline.com/``
    * - ``entraid.state.ttl``
      - Tiempo de vida del state (segundos)
@@ -98,25 +98,25 @@ Las siguientes configuraciones pueden agregarse segun sea necesario.
      - Roles por defecto (separados por comas)
      - (Ninguno)
 
-Configuracion del lado de Entra ID
+Configuración del lado de Entra ID
 ==================================
 
-Registro de aplicacion en Azure Portal
+Registro de aplicación en Azure Portal
 --------------------------------------
 
-1. Inicie sesion en `Azure Portal <https://portal.azure.com/>`_
+1. Inicie sesión en `Azure Portal <https://portal.azure.com/>`_
 
 2. Seleccione **Microsoft Entra ID**
 
 3. Vaya a **Administrar** → **Registros de aplicaciones** → **Nuevo registro**
 
-4. Registre la aplicacion:
+4. Registre la aplicación:
 
    .. list-table::
       :header-rows: 1
       :widths: 30 70
 
-      * - Configuracion
+      * - Configuración
         - Valor
       * - Nombre
         - Cualquier nombre (ej: Fess SSO)
@@ -124,7 +124,7 @@ Registro de aplicacion en Azure Portal
         - "Solo cuentas en este directorio organizativo"
       * - Plataforma
         - Web
-      * - URI de redireccion
+      * - URI de redirección
         - ``https://<host de Fess>/sso/``
 
 5. Haga clic en **Registrar**
@@ -132,22 +132,22 @@ Registro de aplicacion en Azure Portal
 Crear un secreto de cliente
 ---------------------------
 
-1. En la pagina de detalles de la aplicacion, haga clic en **Certificados y secretos**
+1. En la página de detalles de la aplicación, haga clic en **Certificados y secretos**
 
 2. Haga clic en **Nuevo secreto de cliente**
 
-3. Establezca una descripcion y una fecha de expiracion, luego haga clic en **Agregar**
+3. Establezca una descripción y una fecha de expiración, luego haga clic en **Agregar**
 
-4. Copie y guarde el **Valor** generado (este valor no se mostrara nuevamente)
+4. Copie y guarde el **Valor** generado (este valor no se mostrará nuevamente)
 
 .. warning::
-   El valor del secreto del cliente solo se muestra inmediatamente despues de la creacion.
-   Asegurese de registrarlo antes de salir de la pagina.
+   El valor del secreto del cliente solo se muestra inmediatamente después de la creación.
+   Asegúrese de registrarlo antes de salir de la página.
 
 Configurar permisos de API
 --------------------------
 
-1. Haga clic en **Permisos de API** en el menu izquierdo
+1. Haga clic en **Permisos de API** en el menú izquierdo
 
 2. Haga clic en **Agregar un permiso**
 
@@ -157,7 +157,7 @@ Configurar permisos de API
 
 5. Agregue el siguiente permiso:
 
-   - ``Group.Read.All`` - Requerido para recuperar la informacion de grupo del usuario
+   - ``Group.Read.All`` - Requerido para recuperar la información de grupo del usuario
 
 6. Haga clic en **Agregar permisos**
 
@@ -166,28 +166,28 @@ Configurar permisos de API
 .. note::
    El consentimiento del administrador requiere privilegios de administrador del tenant.
 
-Informacion a obtener
+Información a obtener
 ---------------------
 
-La siguiente informacion se utiliza para la configuracion de Fess:
+La siguiente información se utiliza para la configuración de Fess:
 
-- **ID de aplicacion (Cliente)**: En la pagina Informacion general, como "ID de aplicacion (cliente)"
-- **ID del tenant**: En la pagina Informacion general, como "ID de directorio (tenant)" o en formato ``xxx.onmicrosoft.com``
+- **ID de aplicación (Cliente)**: En la página Información general, como "ID de aplicación (cliente)"
+- **ID del tenant**: En la página Información general, como "ID de directorio (tenant)" o en formato ``xxx.onmicrosoft.com``
 - **Valor del secreto del cliente**: El valor creado en Certificados y secretos
 
 Mapeo de grupos y roles
 =======================
 
-Con la autenticacion de Entra ID, |Fess| recupera automaticamente los grupos y roles a los que pertenece un usuario utilizando la API de Microsoft Graph.
-Los IDs de grupo y nombres de grupo recuperados pueden usarse para la busqueda basada en roles de |Fess|.
+Con la autenticación de Entra ID, |Fess| recupera automáticamente los grupos y roles a los que pertenece un usuario utilizando la API de Microsoft Graph.
+Los IDs de grupo y nombres de grupo recuperados pueden usarse para la búsqueda basada en roles de |Fess|.
 
 Grupos anidados
 ---------------
 
-|Fess| recupera no solo los grupos a los que los usuarios pertenecen directamente, sino tambien los grupos padre (grupos anidados) de forma recursiva.
-Este procesamiento se ejecuta de forma asincrona despues del inicio de sesion para minimizar el impacto en el tiempo de inicio de sesion.
+|Fess| recupera no solo los grupos a los que los usuarios pertenecen directamente, sino también los grupos padre (grupos anidados) de forma recursiva.
+Este procesamiento se ejecuta de forma asíncrona después del inicio de sesión para minimizar el impacto en el tiempo de inicio de sesión.
 
-Configuracion de grupos por defecto
+Configuración de grupos por defecto
 -----------------------------------
 
 Para asignar grupos comunes a todos los usuarios de Entra ID:
@@ -196,36 +196,36 @@ Para asignar grupos comunes a todos los usuarios de Entra ID:
 
     entraid.default.groups=authenticated_users,entra_users
 
-Ejemplos de configuracion
+Ejemplos de configuración
 =========================
 
-Configuracion minima (para pruebas)
+Configuración mínima (para pruebas)
 -----------------------------------
 
-El siguiente es un ejemplo de configuracion minima para verificacion en un entorno de pruebas.
+El siguiente es un ejemplo de configuración mínima para verificación en un entorno de pruebas.
 
 ::
 
     # Habilitar SSO
     sso.type=entraid
 
-    # Configuracion de Entra ID
+    # Configuración de Entra ID
     entraid.tenant=yourcompany.onmicrosoft.com
     entraid.client.id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     entraid.client.secret=your-client-secret-value
     entraid.reply.url=http://localhost:8080/sso/
 
-Configuracion recomendada (para produccion)
+Configuración recomendada (para producción)
 -------------------------------------------
 
-El siguiente es un ejemplo de configuracion recomendada para entornos de produccion.
+El siguiente es un ejemplo de configuración recomendada para entornos de producción.
 
 ::
 
     # Habilitar SSO
     sso.type=entraid
 
-    # Configuracion de Entra ID
+    # Configuración de Entra ID
     entraid.tenant=yourcompany.onmicrosoft.com
     entraid.client.id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     entraid.client.secret=your-client-secret-value
@@ -234,51 +234,51 @@ El siguiente es un ejemplo de configuracion recomendada para entornos de producc
     # Grupos por defecto (opcional)
     entraid.default.groups=authenticated_users
 
-Configuracion legacy (compatibilidad con versiones anteriores)
+Configuración legacy (compatibilidad con versiones anteriores)
 --------------------------------------------------------------
 
-Para compatibilidad con versiones anteriores, tambien se puede usar el prefijo ``aad.*``.
+Para compatibilidad con versiones anteriores, también se puede usar el prefijo ``aad.*``.
 
 ::
 
     # Habilitar SSO
     sso.type=entraid
 
-    # Claves de configuracion legacy
+    # Claves de configuración legacy
     aad.tenant=yourcompany.onmicrosoft.com
     aad.client.id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     aad.client.secret=your-client-secret-value
     aad.reply.url=https://fess.example.com/sso/
 
-Solucion de problemas
+Solución de problemas
 =====================
 
 Problemas comunes y soluciones
 ------------------------------
 
-No se puede regresar a Fess despues de la autenticacion
+No se puede regresar a Fess después de la autenticación
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verifique que la URI de redireccion este configurada correctamente en el registro de aplicaciones del portal Azure
-- Asegurese de que el valor de ``entraid.reply.url`` coincida exactamente con la configuracion del portal Azure
+- Verifique que la URI de redirección esté configurada correctamente en el registro de aplicaciones del portal Azure
+- Asegúrese de que el valor de ``entraid.reply.url`` coincida exactamente con la configuración del portal Azure
 - Verifique que el protocolo (HTTP/HTTPS) coincida
-- Verifique que la URI de redireccion termine con ``/``
+- Verifique que la URI de redirección termine con ``/``
 
-Ocurren errores de autenticacion
+Ocurren errores de autenticación
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verifique que el ID del tenant, ID de cliente y secreto del cliente esten configurados correctamente
+- Verifique que el ID del tenant, ID de cliente y secreto del cliente estén configurados correctamente
 - Verifique que el secreto del cliente no haya expirado
 - Verifique que se haya otorgado el consentimiento del administrador para los permisos de API
 
-No se puede recuperar la informacion de grupo
+No se puede recuperar la información de grupo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Verifique que se haya otorgado el permiso ``Group.Read.All``
 - Verifique que se haya otorgado el consentimiento del administrador
 - Verifique que el usuario pertenezca a grupos en Entra ID
 
-Configuracion de depuracion
+Configuración de depuración
 ---------------------------
 
 Para investigar problemas, puede mostrar logs detallados relacionados con Entra ID ajustando el nivel de log de |Fess|.
@@ -292,6 +292,7 @@ En ``app/WEB-INF/classes/log4j2.xml``, puede agregar el siguiente logger para ca
 Referencia
 ==========
 
-- :doc:`security-role` - Configuracion de busqueda basada en roles
-- :doc:`sso-saml` - Configuracion de SSO con autenticacion SAML
-- :doc:`sso-oidc` - Configuracion de SSO con autenticacion OpenID Connect
+- :doc:`security-role` - Configuración de búsqueda basada en roles
+- :doc:`sso-saml` - Configuración de SSO con autenticación SAML
+- :doc:`sso-oidc` - Configuración de SSO con autenticación OpenID Connect
+

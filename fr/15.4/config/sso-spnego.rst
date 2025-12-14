@@ -1,51 +1,51 @@
 ===================================================
-Configuration SSO avec Auth Integree Windows
+Configuration SSO avec Auth Intégrée Windows
 ===================================================
 
-Apercu
+Aperçu
 ======
 
-|Fess| prend en charge l'authentification Single Sign-On (SSO) en utilisant l'authentification integree Windows (SPNEGO/Kerberos).
-En utilisant l'authentification integree Windows, les utilisateurs connectes a un ordinateur membre d'un domaine Windows peuvent acceder a |Fess| sans operations de connexion supplementaires.
+|Fess| prend en charge l'authentification Single Sign-On (SSO) en utilisant l'authentification intégrée Windows (SPNEGO/Kerberos).
+En utilisant l'authentification intégrée Windows, les utilisateurs connectés à un ordinateur membre d'un domaine Windows peuvent accéder à |Fess| sans opérations de connexion supplémentaires.
 
-Fonctionnement de l'authentification integree Windows
+Fonctionnement de l'authentification intégrée Windows
 -----------------------------------------------------
 
-Dans l'authentification integree Windows, |Fess| utilise le protocole SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) pour l'authentification Kerberos.
+Dans l'authentification intégrée Windows, |Fess| utilise le protocole SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) pour l'authentification Kerberos.
 
 1. L'utilisateur se connecte au domaine Windows
-2. L'utilisateur accede a |Fess|
-3. |Fess| envoie un defi SPNEGO
+2. L'utilisateur accède à |Fess|
+3. |Fess| envoie un défi SPNEGO
 4. Le navigateur obtient un ticket Kerberos et l'envoie au serveur
-5. |Fess| valide le ticket et recupere le nom d'utilisateur
-6. Les informations de groupe de l'utilisateur sont recuperees via LDAP
-7. L'utilisateur est connecte et les informations de groupe sont appliquees a la recherche basee sur les roles
+5. |Fess| valide le ticket et récupère le nom d'utilisateur
+6. Les informations de groupe de l'utilisateur sont récupérées via LDAP
+7. L'utilisateur est connecté et les informations de groupe sont appliquées à la recherche basée sur les rôles
 
-Pour l'integration avec la recherche basee sur les roles, consultez :doc:`security-role`.
+Pour l'intégration avec la recherche basée sur les rôles, consultez :doc:`security-role`.
 
-Prerequis
+Prérequis
 =========
 
-Avant de configurer l'authentification integree Windows, verifiez les prerequis suivants :
+Avant de configurer l'authentification intégrée Windows, vérifiez les prérequis suivants :
 
-- |Fess| 15.4 ou superieur est installe
+- |Fess| 15.4 ou supérieur est installé
 - Un serveur Active Directory (AD) est disponible
 - Le serveur |Fess| est accessible depuis le domaine AD
 - Vous avez la permission de configurer les noms de principal de service (SPN) dans AD
-- Un compte pour recuperer les informations utilisateur via LDAP est disponible
+- Un compte pour récupérer les informations utilisateur via LDAP est disponible
 
-Configuration cote Active Directory
+Configuration côté Active Directory
 ===================================
 
 Enregistrement du nom de principal de service (SPN)
 ---------------------------------------------------
 
 Vous devez enregistrer un SPN pour |Fess| dans Active Directory.
-Ouvrez une invite de commandes sur un ordinateur Windows membre du domaine AD et executez la commande ``setspn``.
+Ouvrez une invite de commandes sur un ordinateur Windows membre du domaine AD et exécutez la commande ``setspn``.
 
 ::
 
-    setspn -S HTTP/<nom d'hote du serveur Fess> <utilisateur d'acces AD>
+    setspn -S HTTP/<nom d'hôte du serveur Fess> <utilisateur d'accès AD>
 
 Exemple :
 
@@ -53,14 +53,14 @@ Exemple :
 
     setspn -S HTTP/fess-server.example.local svc_fess
 
-Pour verifier l'enregistrement :
+Pour vérifier l'enregistrement :
 
 ::
 
-    setspn -L <utilisateur d'acces AD>
+    setspn -L <utilisateur d'accès AD>
 
 .. note::
-   Apres l'enregistrement du SPN, si vous avez execute la commande sur le serveur Fess, deconnectez-vous de Windows et reconnectez-vous.
+   Après l'enregistrement du SPN, si vous avez exécuté la commande sur le serveur Fess, déconnectez-vous de Windows et reconnectez-vous.
 
 Configuration de base
 =====================
@@ -68,7 +68,7 @@ Configuration de base
 Activation du SSO
 -----------------
 
-Pour activer l'authentification integree Windows, ajoutez le parametre suivant dans ``app/WEB-INF/conf/system.properties`` :
+Pour activer l'authentification intégrée Windows, ajoutez le paramètre suivant dans ``app/WEB-INF/conf/system.properties`` :
 
 ::
 
@@ -77,7 +77,7 @@ Pour activer l'authentification integree Windows, ajoutez le parametre suivant d
 Fichier de configuration Kerberos
 ---------------------------------
 
-Creez ``app/WEB-INF/classes/krb5.conf`` avec la configuration Kerberos.
+Créez ``app/WEB-INF/classes/krb5.conf`` avec la configuration Kerberos.
 
 ::
 
@@ -98,12 +98,12 @@ Creez ``app/WEB-INF/classes/krb5.conf`` avec la configuration Kerberos.
         .example.local = EXAMPLE.LOCAL
 
 .. note::
-   Remplacez ``EXAMPLE.LOCAL`` par votre nom de domaine AD (en majuscules) et ``AD-SERVER.EXAMPLE.LOCAL`` par le nom d'hote de votre serveur AD.
+   Remplacez ``EXAMPLE.LOCAL`` par votre nom de domaine AD (en majuscules) et ``AD-SERVER.EXAMPLE.LOCAL`` par le nom d'hôte de votre serveur AD.
 
 Fichier de configuration de connexion
 -------------------------------------
 
-Creez ``app/WEB-INF/classes/auth_login.conf`` avec la configuration de connexion JAAS.
+Créez ``app/WEB-INF/classes/auth_login.conf`` avec la configuration de connexion JAAS.
 
 ::
 
@@ -117,18 +117,18 @@ Creez ``app/WEB-INF/classes/auth_login.conf`` avec la configuration de connexion
         isInitiator=false;
     };
 
-Parametres requis
+Paramètres requis
 -----------------
 
-Ajoutez les parametres suivants a ``app/WEB-INF/conf/system.properties``.
+Ajoutez les paramètres suivants à ``app/WEB-INF/conf/system.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``spnego.preauth.username``
      - Nom d'utilisateur de connexion AD
      - (Requis)
@@ -142,18 +142,18 @@ Ajoutez les parametres suivants a ``app/WEB-INF/conf/system.properties``.
      - Chemin du fichier de configuration de connexion
      - ``auth_login.conf``
 
-Parametres optionnels
+Paramètres optionnels
 ---------------------
 
-Les parametres suivants peuvent etre ajoutes si necessaire.
+Les paramètres suivants peuvent être ajoutés si nécessaire.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``spnego.login.client.module``
      - Nom du module client
      - ``spnego-client``
@@ -164,39 +164,39 @@ Les parametres suivants peuvent etre ajoutes si necessaire.
      - Autoriser l'authentification Basic
      - ``true``
    * - ``spnego.allow.unsecure.basic``
-     - Autoriser l'authentification Basic non securisee
+     - Autoriser l'authentification Basic non sécurisée
      - ``true``
    * - ``spnego.prompt.ntlm``
      - Afficher l'invite NTLM
      - ``true``
    * - ``spnego.allow.localhost``
-     - Autoriser l'acces localhost
+     - Autoriser l'accès localhost
      - ``true``
    * - ``spnego.allow.delegation``
-     - Autoriser la delegation
+     - Autoriser la délégation
      - ``false``
    * - ``spnego.exclude.dirs``
-     - Repertoires exclus de l'authentification (separes par des virgules)
+     - Répertoires exclus de l'authentification (séparés par des virgules)
      - (Aucun)
    * - ``spnego.logger.level``
      - Niveau de log (0-7)
      - (Auto)
 
 .. warning::
-   ``spnego.allow.unsecure.basic=true`` peut envoyer des identifiants encodes en Base64 sur des connexions non chiffrees.
-   Pour les environnements de production, il est fortement recommande de definir cette valeur sur ``false`` et d'utiliser HTTPS.
+   ``spnego.allow.unsecure.basic=true`` peut envoyer des identifiants encodés en Base64 sur des connexions non chiffrées.
+   Pour les environnements de production, il est fortement recommandé de définir cette valeur sur ``false`` et d'utiliser HTTPS.
 
 Configuration LDAP
 ==================
 
-La configuration LDAP est requise pour recuperer les informations de groupe des utilisateurs authentifies via l'authentification integree Windows.
-Configurez les parametres LDAP dans le panneau d'administration de |Fess| sous "Systeme" -> "General".
+La configuration LDAP est requise pour récupérer les informations de groupe des utilisateurs authentifiés via l'authentification intégrée Windows.
+Configurez les paramètres LDAP dans le panneau d'administration de |Fess| sous "Système" -> "Général".
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
-   * - Element
+   * - Élément
      - Exemple
    * - URL LDAP
      - ``ldap://AD-SERVER.example.local:389``
@@ -205,7 +205,7 @@ Configurez les parametres LDAP dans le panneau d'administration de |Fess| sous "
    * - Bind DN
      - ``svc_fess@example.local``
    * - Mot de passe
-     - Mot de passe de l'utilisateur d'acces AD
+     - Mot de passe de l'utilisateur d'accès AD
    * - User DN
      - ``%s@example.local``
    * - Filtre de compte
@@ -213,34 +213,34 @@ Configurez les parametres LDAP dans le panneau d'administration de |Fess| sous "
    * - Attribut memberOf
      - ``memberOf``
 
-Parametres du navigateur
+Paramètres du navigateur
 ========================
 
-Les parametres du navigateur client sont necessaires pour utiliser l'authentification integree Windows.
+Les paramètres du navigateur client sont nécessaires pour utiliser l'authentification intégrée Windows.
 
 Internet Explorer / Microsoft Edge
 ----------------------------------
 
 1. Ouvrir les Options Internet
-2. Selectionner l'onglet "Securite"
+2. Sélectionner l'onglet "Sécurité"
 3. Cliquer sur "Sites" pour la zone "Intranet local"
-4. Cliquer sur "Avance" et ajouter l'URL de Fess
+4. Cliquer sur "Avancé" et ajouter l'URL de Fess
 5. Cliquer sur "Personnaliser le niveau" pour la zone "Intranet local"
-6. Sous "Authentification utilisateur" -> "Connexion", selectionner "Connexion automatique uniquement dans la zone Intranet"
-7. Dans l'onglet "Avance", cocher "Activer l'authentification Windows integree"
+6. Sous "Authentification utilisateur" -> "Connexion", sélectionner "Connexion automatique uniquement dans la zone Intranet"
+7. Dans l'onglet "Avancé", cocher "Activer l'authentification Windows intégrée"
 
 Google Chrome
 -------------
 
-Chrome utilise generalement les parametres des Options Internet de Windows.
-Si une configuration supplementaire est necessaire, definissez ``AuthServerAllowlist`` via la strategie de groupe ou le registre.
+Chrome utilise généralement les paramètres des Options Internet de Windows.
+Si une configuration supplémentaire est nécessaire, définissez ``AuthServerAllowlist`` via la stratégie de groupe ou le registre.
 
 Mozilla Firefox
 ---------------
 
 1. Entrer ``about:config`` dans la barre d'adresse
 2. Rechercher ``network.negotiate-auth.trusted-uris``
-3. Definir l'URL ou le domaine du serveur Fess (ex: ``https://fess-server.example.local``)
+3. Définir l'URL ou le domaine du serveur Fess (ex: ``https://fess-server.example.local``)
 
 Exemples de configuration
 =========================
@@ -257,7 +257,7 @@ Voici un exemple de configuration minimale pour un environnement de test.
     # Activer SSO
     sso.type=spnego
 
-    # Parametres SPNEGO
+    # Paramètres SPNEGO
     spnego.preauth.username=svc_fess
     spnego.preauth.password=your-password
 
@@ -295,10 +295,10 @@ Voici un exemple de configuration minimale pour un environnement de test.
         isInitiator=false;
     };
 
-Configuration recommandee (pour la production)
+Configuration recommandée (pour la production)
 ----------------------------------------------
 
-Voici un exemple de configuration recommandee pour les environnements de production.
+Voici un exemple de configuration recommandée pour les environnements de production.
 
 ``app/WEB-INF/conf/system.properties`` :
 
@@ -307,66 +307,66 @@ Voici un exemple de configuration recommandee pour les environnements de product
     # Activer SSO
     sso.type=spnego
 
-    # Parametres SPNEGO
+    # Paramètres SPNEGO
     spnego.preauth.username=svc_fess
     spnego.preauth.password=your-secure-password
     spnego.krb5.conf=krb5.conf
     spnego.login.conf=auth_login.conf
 
-    # Parametres de securite (production)
+    # Paramètres de sécurité (production)
     spnego.allow.basic=false
     spnego.allow.unsecure.basic=false
     spnego.allow.localhost=false
 
-Depannage
+Dépannage
 =========
 
-Problemes courants et solutions
+Problèmes courants et solutions
 -------------------------------
 
-La boite de dialogue d'authentification apparait
+La boîte de dialogue d'authentification apparaît
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verifiez que le serveur Fess est ajoute a la zone Intranet local dans les parametres du navigateur
-- Verifiez que "Activer l'authentification Windows integree" est active
-- Verifiez que le SPN est correctement enregistre (``setspn -L <nom d'utilisateur>``)
+- Vérifiez que le serveur Fess est ajouté à la zone Intranet local dans les paramètres du navigateur
+- Vérifiez que "Activer l'authentification Windows intégrée" est activé
+- Vérifiez que le SPN est correctement enregistré (``setspn -L <nom d'utilisateur>``)
 
 Des erreurs d'authentification se produisent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verifiez que le nom de domaine (majuscules) et le nom du serveur AD dans ``krb5.conf`` sont corrects
-- Verifiez que ``spnego.preauth.username`` et ``spnego.preauth.password`` sont corrects
-- Verifiez la connectivite reseau vers le serveur AD
+- Vérifiez que le nom de domaine (majuscules) et le nom du serveur AD dans ``krb5.conf`` sont corrects
+- Vérifiez que ``spnego.preauth.username`` et ``spnego.preauth.password`` sont corrects
+- Vérifiez la connectivité réseau vers le serveur AD
 
-Impossible de recuperer les informations de groupe
+Impossible de récupérer les informations de groupe
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verifiez que les parametres LDAP sont corrects
-- Verifiez que le Bind DN et le mot de passe sont corrects
-- Verifiez que l'utilisateur appartient a des groupes dans AD
+- Vérifiez que les paramètres LDAP sont corrects
+- Vérifiez que le Bind DN et le mot de passe sont corrects
+- Vérifiez que l'utilisateur appartient à des groupes dans AD
 
-Parametres de debogage
+Paramètres de débogage
 ----------------------
 
-Pour investiguer les problemes, vous pouvez afficher des logs detailles lies a SPNEGO en ajustant le niveau de log de |Fess|.
+Pour investiguer les problèmes, vous pouvez afficher des logs détaillés liés à SPNEGO en ajustant le niveau de log de |Fess|.
 
-Ajoutez ce qui suit a ``app/WEB-INF/conf/system.properties`` :
+Ajoutez ce qui suit à ``app/WEB-INF/conf/system.properties`` :
 
 ::
 
     spnego.logger.level=1
 
-Ou ajoutez les loggers suivants a ``app/WEB-INF/classes/log4j2.xml`` :
+Ou ajoutez les loggers suivants à ``app/WEB-INF/classes/log4j2.xml`` :
 
 ::
 
     <Logger name="org.codelibs.fess.sso.spnego" level="DEBUG"/>
     <Logger name="org.codelibs.spnego" level="DEBUG"/>
 
-Reference
+Référence
 =========
 
-- :doc:`security-role` - Configuration de la recherche basee sur les roles
+- :doc:`security-role` - Configuration de la recherche basée sur les rôles
 - :doc:`sso-saml` - Configuration SSO avec authentification SAML
 - :doc:`sso-oidc` - Configuration SSO avec authentification OpenID Connect
 - :doc:`sso-entraid` - Configuration SSO avec Microsoft Entra ID
