@@ -20,6 +20,8 @@ La fecha de EOL de Fess es aproximadamente un año y medio después del lanzamie
 
    * - Fess
      - Fecha de EOL
+   * - 15.4.x
+     - 2027-06-01
    * - 15.3.x
      - 2027-04-01
    * - 15.2.x
