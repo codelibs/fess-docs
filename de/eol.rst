@@ -20,6 +20,8 @@ Das EOL-Datum von Fess liegt etwa 1,5 Jahre nach der Veröffentlichung.
 
    * - Fess
      - EOL-Datum
+   * - 15.4.x
+     - 2027-06-01
    * - 15.3.x
      - 2027-04-01
    * - 15.2.x
