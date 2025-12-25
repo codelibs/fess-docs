@@ -5,6 +5,9 @@ Servidor de Búsqueda de Texto Completo de Código Abierto - Lista de Noticias
 Lista de Noticias
 ============
 
+2025-12-25
+    `Lanzamiento de Fess 15.4.0 <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`__
+
 2025-10-25
     `Lanzamiento de Fess 15.3.0 <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`__
 

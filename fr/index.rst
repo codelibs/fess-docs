@@ -46,7 +46,7 @@ Fess est fourni sous licence Apache et peut être utilisé gratuitement (logicie
 Téléchargement
 ============
 
-- :doc:`Fess 15.3.0 <downloads>` (packages zip/rpm/deb)
+- :doc:`Fess 15.4.0 <downloads>` (packages zip/rpm/deb)
 
 Caractéristiques
 ====
@@ -102,6 +102,9 @@ Caractéristiques
 Actualités
 ========
 
+2025-12-25
+    `Version Fess 15.4.0 <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`__
+
 2025-10-25
     `Version Fess 15.3.0 <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`__
 
@@ -113,9 +116,6 @@ Actualités
 
 2025-06-22
     `Version Fess 15.0.0 <https://github.com/codelibs/fess/releases/tag/fess-15.0.0>`__
-
-2025-05-24
-    `Version Fess 14.19.2 <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`__
 
 Pour les anciennes actualités, veuillez consulter :doc:`ici <news>`.
 
