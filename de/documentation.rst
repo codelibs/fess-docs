@@ -4,9 +4,9 @@ Dokumentation
 
 .. toctree::
 
-   Installation <15.3/install/index>
-   Suche <15.3/user/index>
-   Verwaltung <15.3/admin/index>
-   API <15.3/api/index>
-   Konfiguration <15.3/config/index>
+   Installation <15.4/install/index>
+   Suche <15.4/user/index>
+   Verwaltung <15.4/admin/index>
+   API <15.4/api/index>
+   Konfiguration <15.4/config/index>
 
