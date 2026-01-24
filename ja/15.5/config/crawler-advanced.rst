@@ -600,6 +600,50 @@ URLパターンフィルター
     # tempフォルダーを除外
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+MIMEタイプ検出オーバーライド
+------------------------------
+
+|Fess| はデフォルトで Apache Tika を使用してコンテンツベースのMIMEタイプ検出を行います。
+しかし、一部のケースでコンテンツベースの検出が誤った結果を返すことがあります。
+たとえば、``REM`` コメントで始まるOracle SQLファイルは、``REM`` キーワードが
+バッチファイルのマジックパターンに一致するため、``application/x-bat`` として
+誤検出される場合があります。
+
+``crawler.document.mimetype.extension.overrides`` プロパティを使用すると、
+ファイル拡張子に基づいてMIMEタイプ検出をオーバーライドし、
+特定のファイルタイプに対するコンテンツベース検出をバイパスできます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``crawler.document.mimetype.extension.overrides``
+     - 拡張子からMIMEタイプへのオーバーライドマッピング（1行に1つ、形式: ``.ext=mime/type``）
+     - (空)
+
+設定例
+~~~~~~
+
+::
+
+    # SQLファイルのMIMEタイプ検出をオーバーライド
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+各行は ``.拡張子=MIMEタイプ`` の形式で記述します。
+複数のマッピングは ``\n``（改行）で区切ります。
+拡張子のマッチングは大文字小文字を区別しません（``.SQL`` と ``.sql`` は同じ扱い）。
+
+.. note::
+   ファイル拡張子がこのマップのエントリに一致する場合、設定されたMIMEタイプが
+   コンテンツベース検出を行わずに即座に返されます。
+   マップにない拡張子のファイルは、通常のTika検出が使用されます。
+
 キャッシュ設定
 ==============
 

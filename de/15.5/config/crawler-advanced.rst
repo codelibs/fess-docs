@@ -598,6 +598,50 @@ Konfigurationsbeispiel
     # Temp-Ordner ausschließen
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+MIME-Typ-Erkennung überschreiben
+----------------------------------
+
+Standardmäßig verwendet |Fess| Apache Tika für die inhaltsbasierte MIME-Typ-Erkennung.
+In einigen Fällen kann die inhaltsbasierte Erkennung falsche Ergebnisse liefern.
+Beispielsweise können Oracle-SQL-Dateien, die mit ``REM``-Kommentaren beginnen,
+fälschlicherweise als Batch-Dateien (``application/x-bat``) erkannt werden,
+da das Schlüsselwort ``REM`` dem Magic-Pattern von Batch-Dateien entspricht.
+
+Die Eigenschaft ``crawler.document.mimetype.extension.overrides`` ermöglicht es,
+die MIME-Typ-Erkennung basierend auf Dateierweiterungen zu überschreiben und
+die inhaltsbasierte Erkennung für bestimmte Dateitypen zu umgehen.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``crawler.document.mimetype.extension.overrides``
+     - Zuordnungen von Erweiterung zu MIME-Typ (eine pro Zeile, Format: ``.ext=mime/type``)
+     - (leer)
+
+Konfigurationsbeispiel
+~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    # MIME-Typ-Erkennung für SQL-Dateien überschreiben
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+Jede Zeile enthält eine Zuordnung im Format ``.ext=mime/type``.
+Mehrere Zuordnungen werden durch ``\n`` (Zeilenumbruch) getrennt.
+Der Erweiterungsabgleich unterscheidet nicht zwischen Groß- und Kleinschreibung (``.SQL`` und ``.sql`` werden gleich behandelt).
+
+.. note::
+   Wenn eine Dateierweiterung einem Eintrag in dieser Zuordnung entspricht, wird der konfigurierte
+   MIME-Typ sofort zurückgegeben, ohne eine inhaltsbasierte Erkennung durchzuführen.
+   Dateien mit Erweiterungen, die nicht in der Zuordnung enthalten sind, verwenden weiterhin die normale Tika-Erkennung.
+
 Cache-Konfiguration
 ==============
 

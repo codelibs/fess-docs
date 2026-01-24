@@ -600,6 +600,50 @@ URL 패턴 필터
     # temp 폴더 제외
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+MIME 타입 감지 오버라이드
+----------------------------
+
+기본적으로 |Fess| 는 Apache Tika를 사용하여 콘텐츠 기반 MIME 타입 감지를 수행합니다.
+일부 경우 콘텐츠 기반 감지가 잘못된 결과를 반환할 수 있습니다.
+예를 들어, ``REM`` 주석으로 시작하는 Oracle SQL 파일은 ``REM`` 키워드가
+배치 파일의 매직 패턴과 일치하기 때문에 ``application/x-bat`` 으로
+잘못 감지될 수 있습니다.
+
+``crawler.document.mimetype.extension.overrides`` 속성을 사용하면
+파일 확장자를 기반으로 MIME 타입 감지를 오버라이드하여
+특정 파일 유형에 대한 콘텐츠 기반 감지를 우회할 수 있습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 속성
+     - 설명
+     - 기본값
+   * - ``crawler.document.mimetype.extension.overrides``
+     - 확장자에서 MIME 타입으로의 오버라이드 매핑 (한 줄에 하나, 형식: ``.ext=mime/type``)
+     - (빈 값)
+
+설정 예
+~~~~~~~~
+
+::
+
+    # SQL 파일의 MIME 타입 감지 오버라이드
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+각 줄은 ``.확장자=MIME타입`` 형식으로 작성합니다.
+여러 매핑은 ``\n`` (줄바꿈)으로 구분합니다.
+확장자 매칭은 대소문자를 구분하지 않습니다 (``.SQL`` 과 ``.sql`` 은 동일하게 처리).
+
+.. note::
+   파일 확장자가 이 맵의 항목과 일치하면 구성된 MIME 타입이
+   콘텐츠 기반 감지를 수행하지 않고 즉시 반환됩니다.
+   맵에 없는 확장자의 파일은 일반 Tika 감지가 계속 사용됩니다.
+
 캐시 설정
 ==============
 

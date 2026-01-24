@@ -600,6 +600,50 @@ Configuration Example
     # Exclude temp folders
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+MIME Type Detection Override
+----------------------------
+
+By default, |Fess| uses Apache Tika for content-based MIME type detection.
+In some cases, content-based detection can produce incorrect results.
+For example, Oracle SQL files starting with ``REM`` comments may be misdetected
+as batch files (``application/x-bat``) because the ``REM`` keyword matches
+the batch file magic pattern.
+
+The ``crawler.document.mimetype.extension.overrides`` property allows you to
+override MIME type detection based on file extensions, bypassing content-based detection
+for specific file types.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``crawler.document.mimetype.extension.overrides``
+     - Extension-to-MIME-type override mappings (one per line, format: ``.ext=mime/type``)
+     - (empty)
+
+Configuration Example
+~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    # Override MIME type detection for SQL files
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+Each line contains a mapping in the format ``.ext=mime/type``.
+Multiple mappings are separated by ``\n`` (newline).
+The extension matching is case-insensitive (``.SQL`` and ``.sql`` are treated the same).
+
+.. note::
+   When a file extension matches an entry in this map, the configured MIME type
+   is returned immediately without performing content-based detection.
+   Files with extensions not in the map continue to use normal Tika detection.
+
 Cache Settings
 ==============
 
