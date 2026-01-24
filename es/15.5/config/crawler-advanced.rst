@@ -600,6 +600,50 @@ Ejemplo de Configuración
     # Excluir carpetas temp
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+Anulación de Detección de Tipo MIME
+-------------------------------------
+
+De forma predeterminada, |Fess| utiliza Apache Tika para la detección de tipo MIME basada en contenido.
+En algunos casos, la detección basada en contenido puede producir resultados incorrectos.
+Por ejemplo, los archivos SQL de Oracle que comienzan con comentarios ``REM`` pueden ser
+detectados erróneamente como archivos por lotes (``application/x-bat``) porque la palabra clave
+``REM`` coincide con el patrón mágico de los archivos por lotes.
+
+La propiedad ``crawler.document.mimetype.extension.overrides`` permite anular la detección
+de tipo MIME basándose en extensiones de archivo, omitiendo la detección basada en contenido
+para tipos de archivo específicos.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Propiedad
+     - Descripción
+     - Predeterminado
+   * - ``crawler.document.mimetype.extension.overrides``
+     - Asignaciones de extensión a tipo MIME (una por línea, formato: ``.ext=mime/type``)
+     - (vacío)
+
+Ejemplo de Configuración
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    # Anular la detección de tipo MIME para archivos SQL
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+Cada línea contiene una asignación en el formato ``.ext=mime/type``.
+Las asignaciones múltiples se separan con ``\n`` (nueva línea).
+La coincidencia de extensiones no distingue entre mayúsculas y minúsculas (``.SQL`` y ``.sql`` se tratan igual).
+
+.. note::
+   Cuando una extensión de archivo coincide con una entrada en este mapa, el tipo MIME configurado
+   se devuelve inmediatamente sin realizar la detección basada en contenido.
+   Los archivos con extensiones que no están en el mapa continúan usando la detección normal de Tika.
+
 Configuración de Caché
 ======================
 

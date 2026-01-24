@@ -600,6 +600,49 @@ URL 模式过滤器
     # 排除 temp 文件夹
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+MIME 类型检测覆盖
+--------------------
+
+默认情况下，|Fess| 使用 Apache Tika 进行基于内容的 MIME 类型检测。
+在某些情况下，基于内容的检测可能会产生错误的结果。
+例如，以 ``REM`` 注释开头的 Oracle SQL 文件可能会被错误地检测为
+批处理文件（``application/x-bat``），因为 ``REM`` 关键字
+与批处理文件的魔术模式匹配。
+
+``crawler.document.mimetype.extension.overrides`` 属性允许您
+基于文件扩展名覆盖 MIME 类型检测，从而绕过特定文件类型的基于内容的检测。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``crawler.document.mimetype.extension.overrides``
+     - 扩展名到 MIME 类型的覆盖映射（每行一个，格式：``.ext=mime/type``）
+     - (空)
+
+配置示例
+~~~~~~~~~
+
+::
+
+    # 覆盖 SQL 文件的 MIME 类型检测
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+每行包含一个 ``.扩展名=MIME类型`` 格式的映射。
+多个映射使用 ``\n``（换行符）分隔。
+扩展名匹配不区分大小写（``.SQL`` 和 ``.sql`` 被视为相同）。
+
+.. note::
+   当文件扩展名与此映射中的条目匹配时，将立即返回配置的 MIME 类型，
+   而不执行基于内容的检测。
+   扩展名不在映射中的文件将继续使用正常的 Tika 检测。
+
 缓存配置
 ==============
 

@@ -600,6 +600,50 @@ Exemple de configuration
     # Exclure le dossier temp
     crawler.document.file.default.exclude.index.patterns=.*/temp/.*
 
+Remplacement de la Détection du Type MIME
+-------------------------------------------
+
+Par défaut, |Fess| utilise Apache Tika pour la détection du type MIME basée sur le contenu.
+Dans certains cas, la détection basée sur le contenu peut produire des résultats incorrects.
+Par exemple, les fichiers SQL Oracle commençant par des commentaires ``REM`` peuvent être
+détectés à tort comme des fichiers batch (``application/x-bat``) car le mot-clé ``REM``
+correspond au motif magique des fichiers batch.
+
+La propriété ``crawler.document.mimetype.extension.overrides`` permet de remplacer la détection
+du type MIME en se basant sur les extensions de fichier, en contournant la détection basée sur
+le contenu pour des types de fichiers spécifiques.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``crawler.document.mimetype.extension.overrides``
+     - Correspondances extension vers type MIME (une par ligne, format : ``.ext=mime/type``)
+     - (vide)
+
+Exemple de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    # Remplacer la détection du type MIME pour les fichiers SQL
+    crawler.document.mimetype.extension.overrides=\
+    .sql=text/x-sql\n\
+    .plsql=text/x-plsql\n\
+    .pls=text/x-plsql
+
+Chaque ligne contient une correspondance au format ``.ext=mime/type``.
+Les correspondances multiples sont séparées par ``\n`` (saut de ligne).
+La correspondance des extensions est insensible à la casse (``.SQL`` et ``.sql`` sont traités de la même manière).
+
+.. note::
+   Lorsqu'une extension de fichier correspond à une entrée de cette table, le type MIME configuré
+   est renvoyé immédiatement sans effectuer de détection basée sur le contenu.
+   Les fichiers dont les extensions ne sont pas dans la table continuent d'utiliser la détection Tika normale.
+
 Configuration du cache
 ==============
 
