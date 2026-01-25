@@ -57,5 +57,6 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
 
    admin-logging
    admin-index-backup
+   admin-index-export
    admin-analyzer
    admin-opensearch-dashboards

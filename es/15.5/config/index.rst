@@ -57,5 +57,6 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
 
    admin-logging
    admin-index-backup
+   admin-index-export
    admin-analyzer
    admin-opensearch-dashboards
