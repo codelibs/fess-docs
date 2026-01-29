@@ -235,8 +235,8 @@ robots.txt 配置
      - 忽略 robots.txt
      - ``false``
    * - ``crawler.ignore.robots.tags``
-     - 忽略的 robots 标签
-     - (空)
+     - 忽略 robots 元标签
+     - ``false``
    * - ``crawler.ignore.content.exception``
      - 忽略内容异常
      - ``true``

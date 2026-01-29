@@ -235,8 +235,8 @@ robots.txt 설정
      - robots.txt 무시
      - ``false``
    * - ``crawler.ignore.robots.tags``
-     - 무시할 robots 태그
-     - (빈 값)
+     - robots 메타 태그 무시
+     - ``false``
    * - ``crawler.ignore.content.exception``
      - 콘텐츠 예외 무시
      - ``true``
