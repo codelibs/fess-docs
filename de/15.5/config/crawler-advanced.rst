@@ -234,8 +234,8 @@ robots.txt-Konfiguration
      - robots.txt ignorieren
      - ``false``
    * - ``crawler.ignore.robots.tags``
-     - Zu ignorierende Robots-Tags
-     - (leer)
+     - Robots-Meta-Tags ignorieren
+     - ``false``
    * - ``crawler.ignore.content.exception``
      - Inhaltsausnahmen ignorieren
      - ``true``

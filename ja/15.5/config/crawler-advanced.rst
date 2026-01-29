@@ -235,8 +235,8 @@ robots.txt 設定
      - robots.txtを無視
      - ``false``
    * - ``crawler.ignore.robots.tags``
-     - 無視するrobotsタグ
-     - (空)
+     - robotsメタタグを無視
+     - ``false``
    * - ``crawler.ignore.content.exception``
      - コンテンツ例外を無視
      - ``true``
