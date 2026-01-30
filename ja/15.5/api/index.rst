@@ -3,6 +3,7 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: 検索API
 
    intro
    api-overview
@@ -11,3 +12,10 @@
    api-popularword
    api-suggest
    api-health
+   api-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 管理API
+
+   admin/index

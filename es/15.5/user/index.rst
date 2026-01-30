@@ -1,4 +1,4 @@
-Guía de Usuario de |Fess|
+Guia de Usuario de |Fess|
 =========================
 
 .. toctree::
@@ -20,3 +20,4 @@ Guía de Usuario de |Fess|
    role-search
    special-char
    advanced-search
+   chat-search

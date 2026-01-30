@@ -20,3 +20,4 @@
    role-search
    special-char
    advanced-search
+   chat-search

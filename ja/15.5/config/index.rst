@@ -27,6 +27,12 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: データストアコネクタ
+
+   datastore/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: 検索機能設定
 
    search-basic
@@ -41,6 +47,8 @@
 
    security-role
    security-virtual-host
+   ldap-integration
+   multitenancy
 
 .. toctree::
    :maxdepth: 2
@@ -50,6 +58,29 @@
    sso-oidc
    sso-entraid
    sso-spnego
+
+.. toctree::
+   :maxdepth: 2
+   :caption: LLM/AIチャット設定
+
+   llm-overview
+   llm-ollama
+   llm-openai
+   llm-gemini
+   rag-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: スクリプティング
+
+   scripting-overview
+   scripting-groovy
+
+.. toctree::
+   :maxdepth: 2
+   :caption: パフォーマンス・運用
+
+   rate-limiting
 
 .. toctree::
    :maxdepth: 2
