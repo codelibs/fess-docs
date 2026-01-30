@@ -2,7 +2,7 @@
 Theme-Entwicklungsanleitung
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Mit dem Theme-System von |Fess| konnen Sie das Design der Suchoberflache anpassen.

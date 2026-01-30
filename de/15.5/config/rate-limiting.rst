@@ -2,7 +2,7 @@
 Rate-Limiting-Konfiguration
 ==================================
 
-Uebersicht
+Übersicht
 ==========
 
 |Fess| enthaelt Rate-Limiting-Funktionen zur Aufrechterhaltung der Systemstabilitaet und Leistung.
@@ -206,4 +206,4 @@ Referenzinformationen
 
 - :doc:`rag-chat` - RAG-Chat-Konfiguration
 - :doc:`../admin/webconfig-guide` - Web-Crawl-Konfigurationsleitfaden
-- :doc:`../api/api-overview` - API-Uebersicht
+- :doc:`../api/api-overview` - API-Übersicht

@@ -2,7 +2,7 @@
 DataStore-Plugin-Entwicklung
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Durch die Entwicklung eines DataStore-Plugins konnen Sie |Fess| die Fahigkeit
@@ -275,5 +275,5 @@ Referenzinformationen
 =====================
 
 - :doc:`plugin-architecture` - Plugin-Architektur
-- :doc:`../config/datastore/ds-overview` - DataStore-Konnektor-Ubersicht
+- :doc:`../config/datastore/ds-overview` - DataStore-Konnektor-Übersicht
 - `GitHub: fess-ds-* <https://github.com/codelibs?q=fess-ds>`__ - Beispiele fur veroffentlichte Plugins

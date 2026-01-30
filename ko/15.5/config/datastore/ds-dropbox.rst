@@ -60,7 +60,7 @@ Dropbox 커넥터는 Dropbox 클라우드 스토리지에서 파일을 가져와
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 파라미터 목록
@@ -213,7 +213,7 @@ https://www.dropbox.com/developers/apps 에 접속:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
 
 Basic 플랜 설정
 =================
@@ -226,7 +226,7 @@ Dropbox Basic 플랜의 경우 API 제한이 다릅니다.
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=true
 
 이렇게 하면 API 속도 제한에 대응한 처리가 수행됩니다.
@@ -241,7 +241,7 @@ Dropbox 파일 전체 크롤링
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 스크립트:
@@ -264,7 +264,7 @@ Dropbox Paper 문서 크롤링
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 스크립트:
@@ -284,7 +284,7 @@ Dropbox Paper 문서 크롤링
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
     default_permissions={role}admin
 
@@ -409,7 +409,7 @@ Dropbox 공유 설정을 Fess 권한에 반영할 수 있습니다:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     default_permissions={role}dropbox-users
 
 스크립트:

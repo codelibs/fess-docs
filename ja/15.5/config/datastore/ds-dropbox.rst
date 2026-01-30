@@ -60,7 +60,7 @@ Dropboxコネクタは、Dropboxのクラウドストレージからファイル
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 パラメーター一覧
@@ -213,7 +213,7 @@ https://www.dropbox.com/developers/apps にアクセス:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
 
 Basicプランの設定
 =================
@@ -226,7 +226,7 @@ Dropbox Basicプランの場合、API制限が異なります。
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=true
 
 これにより、APIレート制限に対応した処理が行われます。
@@ -241,7 +241,7 @@ Dropboxファイル全体のクロール
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 スクリプト:
@@ -264,7 +264,7 @@ Dropbox Paperドキュメントのクロール
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 スクリプト:
@@ -284,7 +284,7 @@ Dropbox Paperドキュメントのクロール
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
     default_permissions={role}admin
 
@@ -409,7 +409,7 @@ Dropboxの共有設定をFessの権限に反映できます:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     default_permissions={role}dropbox-users
 
 スクリプト:

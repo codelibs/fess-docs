@@ -2,7 +2,7 @@
 Groovy-Skripting-Leitfaden
 ==================================
 
-Uebersicht
+Übersicht
 ==========
 
 Groovy ist die Standard-Skriptsprache fuer |Fess|.
@@ -328,6 +328,6 @@ Referenzinformationen
 =====================
 
 - `Groovy Offizielle Dokumentation <https://groovy-lang.org/documentation.html>`__
-- :doc:`scripting-overview` - Skripting-Uebersicht
+- :doc:`scripting-overview` - Skripting-Übersicht
 - :doc:`../admin/dataconfig-guide` - Datenspeicher-Konfigurationsleitfaden
 - :doc:`../admin/scheduler-guide` - Scheduler-Konfigurationsleitfaden

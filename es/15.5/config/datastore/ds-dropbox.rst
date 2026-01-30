@@ -60,7 +60,7 @@ Configuracion de Parametros
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Lista de Parametros
@@ -213,7 +213,7 @@ Configure el token obtenido en los parametros:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
 
 Configuracion para Plan Basic
 =============================
@@ -226,7 +226,7 @@ Configure el parametro ``basic_plan`` como ``true``:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=true
 
 Esto permite el procesamiento adaptado a los limites de tasa de API.
@@ -241,7 +241,7 @@ Parametros:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Script:
@@ -264,7 +264,7 @@ Parametros:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Script:
@@ -374,7 +374,7 @@ Parametros:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     default_permissions={role}dropbox-users
 
 Script:

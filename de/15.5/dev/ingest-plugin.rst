@@ -2,7 +2,7 @@
 Ingest-Plugin
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Ingest-Plugins bieten Funktionen zur Verarbeitung und Transformation von Daten,

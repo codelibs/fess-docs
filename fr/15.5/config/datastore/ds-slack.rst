@@ -61,7 +61,7 @@ Configuration des parametres
 
 ::
 
-    token=xoxp-123456789012-123456789012-123456789012-abc123def456ghi789jkl012mno345pq
+    token=xoxp-your-token-here
     channels=general,random
     file_crawl=false
     include_private=false

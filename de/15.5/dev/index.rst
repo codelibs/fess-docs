@@ -6,7 +6,7 @@ Dokumentation zur Erweiterungsentwicklung von |Fess|.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Ubersicht
+   :caption: Übersicht
 
    overview
 

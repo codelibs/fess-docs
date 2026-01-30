@@ -1,8 +1,8 @@
 ==================================
-Entwicklerdokumentation Ubersicht
+Entwicklerdokumentation Übersicht
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Dieser Abschnitt beschreibt die Erweiterungsentwicklung von |Fess|.

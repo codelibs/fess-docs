@@ -2,7 +2,7 @@
 Multitenancy-Konfiguration
 ==================================
 
-Uebersicht
+Übersicht
 ==========
 
 Die Multitenancy-Funktion von |Fess| ermoeglicht es Ihnen, mehrere Mandanten

@@ -2,7 +2,7 @@
 Plugin-Architektur
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Das Plugin-System von |Fess| ermoglicht die Erweiterung der Kernfunktionen.

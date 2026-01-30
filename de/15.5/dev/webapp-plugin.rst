@@ -2,7 +2,7 @@
 WebApp-Plugin
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Mit WebApp-Plugins konnen Sie das Web-Interface von Fess erweitern.
@@ -78,4 +78,4 @@ Referenzinformationen
 =====================
 
 - :doc:`plugin-architecture` - Plugin-Architektur
-- :doc:`overview` - Entwicklerdokumentation Ubersicht
+- :doc:`overview` - Entwicklerdokumentation Übersicht

@@ -2,7 +2,7 @@
 Script-Engine-Plugin
 ==================================
 
-Ubersicht
+Übersicht
 =========
 
 Durch die Entwicklung eines Script-Engine-Plugins konnen Sie |Fess| Unterstutzung
@@ -58,4 +58,4 @@ Referenzinformationen
 =====================
 
 - :doc:`plugin-architecture` - Plugin-Architektur
-- :doc:`../config/scripting-overview` - Scripting-Ubersicht
+- :doc:`../config/scripting-overview` - Scripting-Übersicht

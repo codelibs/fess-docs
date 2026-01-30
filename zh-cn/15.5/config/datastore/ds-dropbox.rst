@@ -60,7 +60,7 @@ Dropbox连接器提供从Dropbox云存储获取文件并
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 参数列表
@@ -189,7 +189,7 @@ Dropbox认证设置
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
 
 Basic计划设置
 =================
@@ -202,7 +202,7 @@ Dropbox Basic计划的API限制不同。
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=true
 
 这将进行对应API速率限制的处理。
@@ -217,7 +217,7 @@ Dropbox Basic计划的API限制不同。
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 脚本：
@@ -240,7 +240,7 @@ Dropbox Basic计划的API限制不同。
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 脚本：

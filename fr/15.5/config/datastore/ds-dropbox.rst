@@ -59,7 +59,7 @@ Configuration des parametres
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Liste des parametres
@@ -188,7 +188,7 @@ Configurez le token obtenu dans les parametres :
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
 
 Configuration pour le plan Basic
 ================================
@@ -201,7 +201,7 @@ Definissez le parametre ``basic_plan`` sur ``true`` :
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=true
 
 Cela permet un traitement adapte aux limitations de debit API.
@@ -216,7 +216,7 @@ Parametres :
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Script :
@@ -239,7 +239,7 @@ Parametres :
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Script :

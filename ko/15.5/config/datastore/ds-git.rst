@@ -168,7 +168,7 @@ https://github.com/settings/tokens 에 접속:
 
 ::
 
-    uri=https://username:ghp_abc123def456ghi789jkl012@github.com/company/repo.git
+    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
 
 GitLab Private Token
 --------------------
@@ -188,7 +188,7 @@ GitLab의 User Settings → Access Tokens:
 
 ::
 
-    uri=https://username:glpat-abc123def456@gitlab.com/company/repo.git
+    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
 SSH 인증
 -------
@@ -303,7 +303,7 @@ GitHub 프라이빗 리포지토리
 
 ::
 
-    uri=https://username:ghp_abc123def456ghi789jkl012@github.com/company/repo.git
+    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     delete_old_docs=false

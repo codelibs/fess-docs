@@ -1,8 +1,8 @@
 ==================================
-Skripting-Uebersicht
+Skripting-Übersicht
 ==================================
 
-Uebersicht
+Übersicht
 ==========
 
 |Fess| ermoeglicht es Ihnen, in verschiedenen Szenarien benutzerdefinierte Logik mithilfe von Skripten zu implementieren.

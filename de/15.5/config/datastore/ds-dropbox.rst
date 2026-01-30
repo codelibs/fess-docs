@@ -59,7 +59,7 @@ Parameter-Einstellungen
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Parameterliste
@@ -211,7 +211,7 @@ Setzen Sie das abgerufene Token in den Parametern:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
 
 Basic-Plan-Einstellungen
 ========================
@@ -224,7 +224,7 @@ Setzen Sie den Parameter ``basic_plan`` auf ``true``:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=true
 
 Dadurch wird die Verarbeitung an die API-Ratenbegrenzung angepasst.
@@ -239,7 +239,7 @@ Parameter:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Skript:
@@ -262,7 +262,7 @@ Parameter:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
 
 Skript:
@@ -282,7 +282,7 @@ Parameter:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     basic_plan=false
     default_permissions={role}admin
 
@@ -407,7 +407,7 @@ Parameter:
 
 ::
 
-    access_token=sl.AbCdEfGhIjKlMnOpQrStUvWxYz1234567890AbCdEfGhIj
+    access_token=sl.your-dropbox-token-here
     default_permissions={role}dropbox-users
 
 Skript:

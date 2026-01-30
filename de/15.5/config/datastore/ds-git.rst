@@ -167,7 +167,7 @@ Besuchen Sie https://github.com/settings/tokens:
 
 ::
 
-    uri=https://username:ghp_abc123def456ghi789jkl012@github.com/company/repo.git
+    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
 
 GitLab Private Token
 --------------------
@@ -187,7 +187,7 @@ Unter GitLab User Settings -> Access Tokens:
 
 ::
 
-    uri=https://username:glpat-abc123def456@gitlab.com/company/repo.git
+    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
 SSH-Authentifizierung
 ---------------------
@@ -301,7 +301,7 @@ Parameter:
 
 ::
 
-    uri=https://username:ghp_abc123def456ghi789jkl012@github.com/company/repo.git
+    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     delete_old_docs=false

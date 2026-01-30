@@ -61,7 +61,7 @@ Slack 커넥터는 Slack 워크스페이스의 채널 메시지를 가져와서
 
 ::
 
-    token=xoxp-123456789012-123456789012-123456789012-abc123def456ghi789jkl012mno345pq
+    token=xoxp-your-token-here
     channels=general,random
     file_crawl=false
     include_private=false

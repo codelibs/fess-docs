@@ -68,7 +68,7 @@ Exemple d'authentification JWT (recommande) :
     client_id=hdf8a7sd9f8a7sdf9a87sdf98a7sd
     client_secret=kMN7sd8f7a9sd8f7a9sd8f7a9sd8f
     public_key_id=4tg5h6j7
-    private_key=-----BEGIN ENCRYPTED PRIVATE KEY-----\\nMIIFDj...=\\n-----END ENCRYPTED PRIVATE KEY-----\\n
+    private_key=<YOUR_PRIVATE_KEY>
     passphrase=7ba8sd9f7a9sd8f7a9sd8f7a9sd8f
     enterprise_id=1923456
 

@@ -2,7 +2,7 @@
 LDAP-Integrationsleitfaden
 ==================================
 
-Uebersicht
+Übersicht
 ==========
 
 |Fess| unterstuetzt die Integration mit LDAP-Servern (Lightweight Directory Access Protocol),
