@@ -11,7 +11,7 @@ Esta funcionalidad protege el sistema de solicitudes excesivas y permite una dis
 El limite de tasa se aplica en los siguientes escenarios:
 
 - API de busqueda
-- API de chat RAG
+- API de modo IA
 - Solicitudes del crawler
 
 Limite de tasa de la API de busqueda
@@ -42,10 +42,10 @@ Comportamiento
 - El limite se aplica por direccion IP
 - Los valores de limite se cuentan usando el metodo de ventana deslizante
 
-Limite de tasa del chat RAG
-===========================
+Limite de tasa del modo IA
+==========================
 
-La funcionalidad de chat RAG tiene un limite de tasa para controlar los costos y el consumo de recursos de la API de LLM.
+La funcionalidad de modo IA tiene un limite de tasa para controlar los costos y el consumo de recursos de la API de LLM.
 
 Configuracion
 -------------
@@ -61,7 +61,7 @@ Configuracion
     rag.chat.rate.limit.requests.per.minute=10
 
 .. note::
-   El limite de tasa del chat RAG se aplica por separado del limite de tasa del proveedor LLM.
+   El limite de tasa del modo IA se aplica por separado del limite de tasa del proveedor LLM.
    Considere ambos limites al configurar.
 
 Limite de tasa del crawler
@@ -204,6 +204,6 @@ Si la verificacion del limite de tasa afecta el rendimiento:
 Informacion de referencia
 =========================
 
-- :doc:`rag-chat` - Configuracion de la funcionalidad de chat RAG
+- :doc:`rag-chat` - Configuracion de la funcionalidad de modo IA
 - :doc:`../admin/webconfig-guide` - Guia de configuracion de crawl web
 - :doc:`../api/api-overview` - Descripcion general de API

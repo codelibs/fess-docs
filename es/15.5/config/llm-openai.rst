@@ -6,7 +6,7 @@ Descripcion general
 ===================
 
 OpenAI es un servicio en la nube que proporciona modelos de lenguaje grandes (LLM) de alto rendimiento, comenzando con GPT-4.
-|Fess| puede utilizar la API de OpenAI para implementar la funcionalidad de chat RAG.
+|Fess| puede utilizar la API de OpenAI para implementar la funcionalidad de modo IA.
 
 Al usar OpenAI, es posible generar respuestas de alta calidad con modelos de IA de ultima generacion.
 
@@ -66,7 +66,7 @@ Configuracion minima
 
 ::
 
-    # Habilitar la funcionalidad de chat RAG
+    # Habilitar la funcionalidad de modo IA
     rag.chat.enabled=true
 
     # Configurar el proveedor LLM como OpenAI
@@ -83,7 +83,7 @@ Configuracion recomendada (entorno de produccion)
 
 ::
 
-    # Habilitar la funcionalidad de chat RAG
+    # Habilitar la funcionalidad de modo IA
     rag.chat.enabled=true
 
     # Configuracion del proveedor LLM
@@ -336,4 +336,4 @@ Informacion de referencia
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - Descripcion general de integracion LLM
-- :doc:`rag-chat` - Detalles de la funcionalidad de chat RAG
+- :doc:`rag-chat` - Detalles de la funcionalidad de modo IA

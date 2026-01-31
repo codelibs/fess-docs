@@ -5,7 +5,7 @@ API Chat
 Apercu
 ====
 
-L'API Chat est une API RESTful permettant d'acceder par programmation a la fonctionnalite de chat RAG de |Fess|.
+L'API Chat est une API RESTful permettant d'acceder par programmation a la fonctionnalite de mode IA de |Fess|.
 Vous pouvez obtenir des reponses assistees par IA basees sur les resultats de recherche.
 
 Cette API fournit deux endpoints :
@@ -18,7 +18,7 @@ Prerequis
 
 Pour utiliser l'API Chat, les configurations suivantes sont necessaires :
 
-1. La fonctionnalite de chat RAG doit etre activee (``rag.chat.enabled=true``)
+1. La fonctionnalite de mode IA doit etre activee (``rag.chat.enabled=true``)
 2. Un fournisseur LLM doit etre configure
 
 Pour les methodes de configuration detaillees, consultez :doc:`../config/rag-chat`.
@@ -484,7 +484,7 @@ Points de securite a noter lors de l'utilisation de l'API Chat :
 Informations de reference
 ========
 
-- :doc:`../config/rag-chat` - Configuration de la fonctionnalite de chat RAG
+- :doc:`../config/rag-chat` - Configuration de la fonctionnalite de mode IA
 - :doc:`../config/llm-overview` - Apercu de l'integration LLM
 - :doc:`../user/chat-search` - Guide de recherche par chat pour les utilisateurs
 - :doc:`api-overview` - Apercu des API

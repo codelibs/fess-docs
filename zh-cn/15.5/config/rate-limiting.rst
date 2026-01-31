@@ -11,7 +11,7 @@
 速率限制适用于以下场景:
 
 - 搜索API
-- RAG聊天API
+- AI模式API
 - 爬虫请求
 
 搜索API的速率限制
@@ -42,10 +42,10 @@
 - 限制按IP地址单位应用
 - 限制值使用滑动窗口方式计数
 
-RAG聊天的速率限制
+AI模式的速率限制
 =======================
 
-RAG聊天功能具有速率限制，用于控制LLM API的成本和资源消耗。
+AI模式功能具有速率限制，用于控制LLM API的成本和资源消耗。
 
 设置
 ----
@@ -61,7 +61,7 @@ RAG聊天功能具有速率限制，用于控制LLM API的成本和资源消耗�
     rag.chat.rate.limit.requests.per.minute=10
 
 .. note::
-   RAG聊天的速率限制与LLM提供商端的速率限制分别应用。
+   AI模式的速率限制与LLM提供商端的速率限制分别应用。
    请同时考虑两者的限制进行设置。
 
 爬虫的速率限制
@@ -204,6 +204,6 @@ Web爬取设置
 参考信息
 ========
 
-- :doc:`rag-chat` - RAG聊天功能配置
+- :doc:`rag-chat` - AI模式功能配置
 - :doc:`../admin/webconfig-guide` - Web爬取配置指南
 - :doc:`../api/api-overview` - API概述

@@ -87,7 +87,7 @@ Configuration minimale
 
 ::
 
-    # Activer la fonctionnalite de chat RAG
+    # Activer la fonctionnalite de mode IA
     rag.chat.enabled=true
 
     # Definir le fournisseur LLM sur Ollama
@@ -104,7 +104,7 @@ Configuration recommandee (environnement de production)
 
 ::
 
-    # Activer la fonctionnalite de chat RAG
+    # Activer la fonctionnalite de mode IA
     rag.chat.enabled=true
 
     # Configuration du fournisseur LLM
@@ -300,4 +300,4 @@ Informations de reference
 - `Bibliotheque de modeles Ollama <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - Apercu de l'integration LLM
-- :doc:`rag-chat` - Details de la fonctionnalite de chat RAG
+- :doc:`rag-chat` - Details de la fonctionnalite de mode IA

@@ -1,18 +1,18 @@
 ==========================
-Configuration du chat RAG
+Configuration du mode IA
 ==========================
 
 Apercu
 ====
 
-Le chat RAG (Retrieval-Augmented Generation) est une fonctionnalite qui enrichit les resultats de recherche de |Fess|
+Le mode IA (RAG: Retrieval-Augmented Generation) est une fonctionnalite qui enrichit les resultats de recherche de |Fess|
 avec un LLM (grand modele de langage) pour fournir des informations sous forme de dialogue.
 Les utilisateurs peuvent poser des questions en langage naturel et obtenir des reponses detaillees basees sur les resultats de recherche.
 
-Fonctionnement du chat RAG
-===================
+Fonctionnement du mode IA
+=========================
 
-Le chat RAG fonctionne selon un flux en plusieurs etapes.
+Le mode IA fonctionne selon un flux en plusieurs etapes.
 
 1. **Phase d'analyse d'intention** : Analyse la question de l'utilisateur et extrait les mots-cles optimaux pour la recherche
 2. **Phase de recherche** : Recherche des documents avec les mots-cles extraits en utilisant le moteur de recherche |Fess|
@@ -25,13 +25,13 @@ Ce flux permet des reponses de haute qualite comprenant le contexte, superieur a
 Configuration de base
 ========
 
-Configuration de base pour activer la fonctionnalite de chat RAG.
+Configuration de base pour activer la fonctionnalite de mode IA.
 
 ``app/WEB-INF/conf/system.properties`` :
 
 ::
 
-    # Activer la fonctionnalite de chat RAG
+    # Activer la fonctionnalite de mode IA
     rag.chat.enabled=true
 
     # Selectionner le fournisseur LLM (ollama, openai, gemini)
@@ -193,7 +193,7 @@ Considerations sur la limitation de debit
 Utilisation de l'API
 =========
 
-La fonctionnalite de chat RAG est accessible via API REST.
+La fonctionnalite de mode IA est accessible via API REST.
 
 API non-streaming
 -------------------
@@ -296,7 +296,7 @@ Pour la documentation API detaillee, consultez :doc:`../api/api-chat`.
 Interface Web
 ===================
 
-La fonctionnalite de chat RAG est accessible depuis l'ecran de recherche de l'interface Web |Fess|.
+La fonctionnalite de mode IA est accessible depuis l'ecran de recherche de l'interface Web |Fess|.
 
 Demarrer un chat
 --------------
@@ -323,8 +323,8 @@ Continuer la conversation
 Depannage
 ======================
 
-Le chat RAG ne s'active pas
----------------------------
+Le mode IA ne s'active pas
+--------------------------
 
 **Points a verifier** :
 

@@ -6,7 +6,7 @@ Overview
 ========
 
 OpenAI is a cloud service that provides high-performance Large Language Models (LLM), including GPT-4.
-|Fess| can use the OpenAI API to implement RAG chat functionality.
+|Fess| can use the OpenAI API to implement AI mode functionality.
 
 Using OpenAI enables high-quality response generation powered by state-of-the-art AI models.
 
@@ -66,7 +66,7 @@ Minimal Configuration
 
 ::
 
-    # Enable RAG chat functionality
+    # Enable AI mode functionality
     rag.chat.enabled=true
 
     # Set LLM provider to OpenAI
@@ -83,7 +83,7 @@ Recommended Configuration (Production)
 
 ::
 
-    # Enable RAG chat functionality
+    # Enable AI mode functionality
     rag.chat.enabled=true
 
     # LLM provider setting
@@ -118,7 +118,7 @@ All configuration options available for the OpenAI client.
      - (Required)
    * - ``rag.llm.openai.model``
      - Model name to use
-     - ``gpt-5-mini``
+     - ``gpt-4o-mini``
    * - ``rag.llm.openai.api.url``
      - API base URL
      - ``https://api.openai.com/v1``
@@ -336,4 +336,4 @@ References
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - LLM Integration Overview
-- :doc:`rag-chat` - RAG Chat Details
+- :doc:`rag-chat` - AI Mode Details

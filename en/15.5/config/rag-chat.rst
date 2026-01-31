@@ -1,18 +1,18 @@
 ==========================
-RAG Chat Configuration
+AI Mode Configuration
 ==========================
 
 Overview
 ========
 
-RAG (Retrieval-Augmented Generation) chat extends |Fess| search results with LLM (Large Language Model) capabilities,
+AI mode (RAG: Retrieval-Augmented Generation) extends |Fess| search results with LLM (Large Language Model) capabilities,
 providing information through conversational interaction. Users can ask questions in natural language and receive
 detailed answers based on search results.
 
-How RAG Chat Works
-==================
+How AI Mode Works
+=================
 
-RAG chat operates through the following multi-stage flow.
+AI mode operates through the following multi-stage flow.
 
 1. **Intent Analysis Phase**: Analyzes the user's question and extracts optimal keywords for search
 2. **Search Phase**: Uses |Fess| search engine to find documents with the extracted keywords
@@ -25,13 +25,13 @@ This flow enables higher quality responses that understand context better than s
 Basic Configuration
 ===================
 
-Basic settings for enabling RAG chat functionality.
+Basic settings for enabling AI mode functionality.
 
 ``app/WEB-INF/conf/system.properties``:
 
 ::
 
-    # Enable RAG chat functionality
+    # Enable AI mode functionality
     rag.chat.enabled=true
 
     # Select LLM provider (ollama, openai, gemini)
@@ -193,7 +193,7 @@ Rate Limiting Considerations
 API Usage
 =========
 
-RAG chat functionality is available through REST APIs.
+AI mode functionality is available through REST APIs.
 
 Non-Streaming API
 -----------------
@@ -296,7 +296,7 @@ For detailed API documentation, see :doc:`../api/api-chat`.
 Web Interface
 =============
 
-In the |Fess| web interface, RAG chat functionality is available from the search screen.
+In the |Fess| web interface, AI mode functionality is available from the search screen.
 
 Starting a Chat
 ---------------
@@ -323,8 +323,8 @@ Continuing a Conversation
 Troubleshooting
 ===============
 
-RAG Chat Won't Enable
----------------------
+AI Mode Won't Enable
+--------------------
 
 **Check the following**:
 

@@ -5,7 +5,7 @@ Chat API
 개요
 ====
 
-Chat API는 |Fess|의 RAG 채팅 기능에 프로그램에서 접근하기 위한 RESTful API입니다.
+Chat API는 |Fess|의 AI 모드 기능에 프로그램에서 접근하기 위한 RESTful API입니다.
 검색 결과를 기반으로 한 AI 지원 응답을 가져올 수 있습니다.
 
 이 API는 두 가지 엔드포인트를 제공합니다:
@@ -18,7 +18,7 @@ Chat API는 |Fess|의 RAG 채팅 기능에 프로그램에서 접근하기 위�
 
 Chat API를 사용하려면 다음 설정이 필요합니다:
 
-1. RAG 채팅 기능이 활성화되어 있을 것(``rag.chat.enabled=true``)
+1. AI 모드 기능이 활성화되어 있을 것(``rag.chat.enabled=true``)
 2. LLM 프로바이더가 설정되어 있을 것
 
 자세한 설정 방법은 :doc:`../config/rag-chat`를 참조하세요.
@@ -484,7 +484,7 @@ Chat API 사용 시 보안 관련 주의사항:
 참고 정보
 ========
 
-- :doc:`../config/rag-chat` - RAG 채팅 기능 설정
+- :doc:`../config/rag-chat` - AI 모드 기능 설정
 - :doc:`../config/llm-overview` - LLM 통합 개요
 - :doc:`../user/chat-search` - 최종 사용자용 채팅 검색 가이드
 - :doc:`api-overview` - API 개요

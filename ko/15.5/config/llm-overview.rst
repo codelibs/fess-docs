@@ -5,7 +5,7 @@ LLM 통합 개요
 개요
 ====
 
-|Fess| 15.5에서는 대규모 언어 모델(LLM)을 활용한 RAG(Retrieval-Augmented Generation) 채팅 기능을 지원합니다.
+|Fess| 15.5에서는 대규모 언어 모델(LLM)을 활용한 AI 모드(RAG: Retrieval-Augmented Generation) 기능을 지원합니다.
 이 기능을 통해 사용자는 검색 결과를 기반으로 한 AI 어시스턴트와의 대화 형식으로 정보를 얻을 수 있습니다.
 
 지원 프로바이더
@@ -33,7 +33,7 @@ LLM 통합 개요
 아키텍처
 ==============
 
-RAG 채팅 기능은 다음 흐름으로 동작합니다.
+AI 모드 기능은 다음 흐름으로 동작합니다.
 
 1. **사용자 입력**: 사용자가 채팅 인터페이스에서 질문 입력
 2. **의도 분석**: LLM이 사용자 질문을 분석하고 검색 키워드 추출
@@ -47,12 +47,12 @@ RAG 채팅 기능은 다음 흐름으로 동작합니다.
 
 LLM 기능을 활성화하려면 ``app/WEB-INF/conf/system.properties``에 다음 설정을 추가합니다.
 
-RAG 채팅 활성화
+AI 모드 활성화
 -------------------
 
 ::
 
-    # RAG 채팅 기능 활성화
+    # AI 모드 기능 활성화
     rag.chat.enabled=true
 
 LLM 프로바이더 선택
@@ -199,4 +199,4 @@ API 과부하를 방지하기 위한 속도 제한 설정입니다.
 - :doc:`llm-ollama` - Ollama 상세 설정
 - :doc:`llm-openai` - OpenAI 상세 설정
 - :doc:`llm-gemini` - Google Gemini 상세 설정
-- :doc:`rag-chat` - RAG 채팅 기능 상세 설정
+- :doc:`rag-chat` - AI 모드 기능 상세 설정

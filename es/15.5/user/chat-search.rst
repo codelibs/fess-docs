@@ -137,7 +137,7 @@ P: No se muestra la funcion de chat
 -----------------------------------
 
 R: Es posible que la funcion de chat no este habilitada.
-Consulte con el administrador del sistema si la funcion de chat RAG esta habilitada.
+Consulte con el administrador del sistema si la funcion de modo IA esta habilitada.
 
 P: Toma tiempo mostrar la respuesta
 ------------------------------------

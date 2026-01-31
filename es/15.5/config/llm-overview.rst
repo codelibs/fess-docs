@@ -5,7 +5,7 @@ Descripcion general de integracion LLM
 Descripcion general
 ===================
 
-|Fess| 15.5 soporta la funcionalidad de chat RAG (Retrieval-Augmented Generation) que aprovecha modelos de lenguaje grandes (LLM).
+|Fess| 15.5 soporta la funcionalidad de modo IA (RAG: Retrieval-Augmented Generation) que aprovecha modelos de lenguaje grandes (LLM).
 Esta funcionalidad permite a los usuarios obtener informacion a traves de un dialogo interactivo con un asistente de IA basado en los resultados de busqueda.
 
 Proveedores compatibles
@@ -33,7 +33,7 @@ Proveedores compatibles
 Arquitectura
 ============
 
-La funcionalidad de chat RAG opera con el siguiente flujo.
+La funcionalidad de modo IA opera con el siguiente flujo.
 
 1. **Entrada del usuario**: El usuario ingresa una pregunta en la interfaz de chat
 2. **Analisis de intencion**: El LLM analiza la pregunta del usuario y extrae palabras clave de busqueda
@@ -47,12 +47,12 @@ Configuracion basica
 
 Para habilitar la funcionalidad LLM, agregue la siguiente configuracion en ``app/WEB-INF/conf/system.properties``.
 
-Habilitar chat RAG
-------------------
+Habilitar modo IA
+-----------------
 
 ::
 
-    # Habilitar la funcionalidad de chat RAG
+    # Habilitar la funcionalidad de modo IA
     rag.chat.enabled=true
 
 Seleccion de proveedor LLM
@@ -199,4 +199,4 @@ Siguientes pasos
 - :doc:`llm-ollama` - Configuracion detallada de Ollama
 - :doc:`llm-openai` - Configuracion detallada de OpenAI
 - :doc:`llm-gemini` - Configuracion detallada de Google Gemini
-- :doc:`rag-chat` - Configuracion detallada de la funcionalidad de chat RAG
+- :doc:`rag-chat` - Configuracion detallada de la funcionalidad de modo IA
