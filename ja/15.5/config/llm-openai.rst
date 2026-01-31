@@ -6,7 +6,7 @@ OpenAIの設定
 ====
 
 OpenAIは、GPT-4をはじめとする高性能な大規模言語モデル（LLM）を提供するクラウドサービスです。
-|Fess| ではOpenAI APIを使用してRAGチャット機能を実現できます。
+|Fess| ではOpenAI APIを使用してAIモード機能を実現できます。
 
 OpenAIを使用することで、最先端のAIモデルによる高品質な回答生成が可能になります。
 
@@ -66,7 +66,7 @@ APIキーの取得
 
 ::
 
-    # RAGチャット機能を有効にする
+    # AIモード機能を有効にする
     rag.chat.enabled=true
 
     # LLMプロバイダーをOpenAIに設定
@@ -83,7 +83,7 @@ APIキーの取得
 
 ::
 
-    # RAGチャット機能を有効にする
+    # AIモード機能を有効にする
     rag.chat.enabled=true
 
     # LLMプロバイダー設定
@@ -118,7 +118,7 @@ OpenAIクライアントで使用可能なすべての設定項目です。
      - （必須）
    * - ``rag.llm.openai.model``
      - 使用するモデル名
-     - ``gpt-5-mini``
+     - ``gpt-4o-mini``
    * - ``rag.llm.openai.api.url``
      - APIのベースURL
      - ``https://api.openai.com/v1``
@@ -336,4 +336,4 @@ OpenAI APIを使用する際は、以下のセキュリティ事項に注意し�
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - LLM統合の概要
-- :doc:`rag-chat` - RAGチャット機能の詳細
+- :doc:`rag-chat` - AIモード機能の詳細

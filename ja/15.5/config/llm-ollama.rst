@@ -87,7 +87,7 @@ Docker
 
 ::
 
-    # RAGチャット機能を有効にする
+    # AIモード機能を有効にする
     rag.chat.enabled=true
 
     # LLMプロバイダーをOllamaに設定
@@ -104,7 +104,7 @@ Docker
 
 ::
 
-    # RAGチャット機能を有効にする
+    # AIモード機能を有効にする
     rag.chat.enabled=true
 
     # LLMプロバイダー設定
@@ -300,4 +300,4 @@ OllamaはGPUアクセラレーションをサポートしています。NVIDIA�
 - `Ollamaモデルライブラリ <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - LLM統合の概要
-- :doc:`rag-chat` - RAGチャット機能の詳細
+- :doc:`rag-chat` - AIモード機能の詳細
