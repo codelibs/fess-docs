@@ -5,7 +5,7 @@ Chat API
 概述
 ====
 
-Chat API是用于从程序访问 |Fess| RAG聊天功能的RESTful API。
+Chat API是用于从程序访问 |Fess| AI模式功能的RESTful API。
 可以获取基于搜索结果的AI辅助回答。
 
 此API提供两个端点:
@@ -18,7 +18,7 @@ Chat API是用于从程序访问 |Fess| RAG聊天功能的RESTful API。
 
 使用Chat API需要以下设置:
 
-1. RAG聊天功能已启用（``rag.chat.enabled=true``）
+1. AI模式功能已启用（``rag.chat.enabled=true``）
 2. LLM提供商已配置
 
 详细配置方法请参阅 :doc:`../config/rag-chat`。
@@ -484,7 +484,7 @@ Chat API应用速率限制。
 参考信息
 ========
 
-- :doc:`../config/rag-chat` - RAG聊天功能配置
+- :doc:`../config/rag-chat` - AI模式功能配置
 - :doc:`../config/llm-overview` - LLM集成概述
 - :doc:`../user/chat-search` - 终端用户聊天搜索指南
 - :doc:`api-overview` - API概述

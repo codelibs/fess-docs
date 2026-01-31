@@ -6,7 +6,7 @@ OpenAI 설정
 ====
 
 OpenAI는 GPT-4를 비롯한 고성능 대규모 언어 모델(LLM)을 제공하는 클라우드 서비스입니다.
-|Fess|에서는 OpenAI API를 사용하여 RAG 채팅 기능을 구현할 수 있습니다.
+|Fess|에서는 OpenAI API를 사용하여 AI 모드 기능을 구현할 수 있습니다.
 
 OpenAI를 사용하면 최첨단 AI 모델을 통한 고품질 응답 생성이 가능합니다.
 
@@ -66,7 +66,7 @@ API 키 발급
 
 ::
 
-    # RAG 채팅 기능 활성화
+    # AI 모드 기능 활성화
     rag.chat.enabled=true
 
     # LLM 프로바이더를 OpenAI로 설정
@@ -83,7 +83,7 @@ API 키 발급
 
 ::
 
-    # RAG 채팅 기능 활성화
+    # AI 모드 기능 활성화
     rag.chat.enabled=true
 
     # LLM 프로바이더 설정
@@ -336,4 +336,4 @@ OpenAI API를 사용할 때는 다음 보안 사항에 주의하세요.
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - LLM 통합 개요
-- :doc:`rag-chat` - RAG 채팅 기능 상세
+- :doc:`rag-chat` - AI 모드 기능 상세

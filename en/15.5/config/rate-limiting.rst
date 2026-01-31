@@ -11,7 +11,7 @@ These features protect the system from excessive requests and enable fair resour
 Rate limiting is applied in the following scenarios:
 
 - Search API
-- RAG Chat API
+- AI Mode API
 - Crawler requests
 
 Search API Rate Limiting
@@ -42,10 +42,10 @@ Behavior
 - Limits are applied per IP address
 - Limit values are counted using a sliding window approach
 
-RAG Chat Rate Limiting
-======================
+AI Mode Rate Limiting
+=====================
 
-RAG chat functionality has rate limiting to control LLM API costs and resource consumption.
+AI mode functionality has rate limiting to control LLM API costs and resource consumption.
 
 Configuration
 -------------
@@ -61,7 +61,7 @@ Configuration
     rag.chat.rate.limit.requests.per.minute=10
 
 .. note::
-   RAG chat rate limiting is applied separately from the LLM provider's rate limiting.
+   AI mode rate limiting is applied separately from the LLM provider's rate limiting.
    Configure both limits accordingly.
 
 Crawler Rate Limiting
@@ -204,6 +204,6 @@ If rate limiting checks themselves impact performance:
 Reference Information
 =====================
 
-- :doc:`rag-chat` - RAG Chat Configuration
+- :doc:`rag-chat` - AI Mode Configuration
 - :doc:`../admin/webconfig-guide` - Web Crawl Configuration Guide
 - :doc:`../api/api-overview` - API Overview

@@ -87,7 +87,7 @@ Minimal Configuration
 
 ::
 
-    # Enable RAG chat functionality
+    # Enable AI mode functionality
     rag.chat.enabled=true
 
     # Set LLM provider to Ollama
@@ -104,7 +104,7 @@ Recommended Configuration (Production)
 
 ::
 
-    # Enable RAG chat functionality
+    # Enable AI mode functionality
     rag.chat.enabled=true
 
     # LLM provider setting
@@ -300,4 +300,4 @@ References
 - `Ollama Model Library <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - LLM Integration Overview
-- :doc:`rag-chat` - RAG Chat Details
+- :doc:`rag-chat` - AI Mode Details

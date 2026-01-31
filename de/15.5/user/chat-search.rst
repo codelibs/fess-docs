@@ -136,7 +136,7 @@ F: Die Chat-Funktion wird nicht angezeigt
 -----------------------------------------
 
 A: Möglicherweise ist die Chat-Funktion nicht aktiviert.
-Fragen Sie Ihren Systemadministrator, ob die RAG-Chat-Funktion aktiviert ist.
+Fragen Sie Ihren Systemadministrator, ob die AI-Modus-Funktion aktiviert ist.
 
 F: Die Antwort dauert lange
 ---------------------------

@@ -11,7 +11,7 @@ Diese Funktionen schuetzen das System vor uebermaeessigen Anfragen und ermoeglic
 Rate-Limiting wird in folgenden Szenarien angewendet:
 
 - Such-API
-- RAG-Chat-API
+- AI-Modus-API
 - Crawler-Anfragen
 
 Such-API Rate-Limiting
@@ -42,10 +42,10 @@ Verhalten
 - Limits werden pro IP-Adresse angewendet
 - Grenzwerte werden mit einem gleitenden Fensteransatz gezaehlt
 
-RAG-Chat Rate-Limiting
+AI-Modus Rate-Limiting
 ======================
 
-Die RAG-Chat-Funktionalitaet verfuegt ueber Rate-Limiting zur Kontrolle von LLM-API-Kosten und Ressourcenverbrauch.
+Die AI-Modus-Funktionalitaet verfuegt ueber Rate-Limiting zur Kontrolle von LLM-API-Kosten und Ressourcenverbrauch.
 
 Konfiguration
 -------------
@@ -61,7 +61,7 @@ Konfiguration
     rag.chat.rate.limit.requests.per.minute=10
 
 .. note::
-   Das RAG-Chat-Rate-Limiting wird separat vom Rate-Limiting des LLM-Anbieters angewendet.
+   Das AI-Modus-Rate-Limiting wird separat vom Rate-Limiting des LLM-Anbieters angewendet.
    Konfigurieren Sie beide Limits entsprechend.
 
 Crawler Rate-Limiting
@@ -204,6 +204,6 @@ Wenn die Rate-Limiting-Pruefungen selbst die Leistung beeintraechtigen:
 Referenzinformationen
 =====================
 
-- :doc:`rag-chat` - RAG-Chat-Konfiguration
+- :doc:`rag-chat` - AI-Modus-Konfiguration
 - :doc:`../admin/webconfig-guide` - Web-Crawl-Konfigurationsleitfaden
 - :doc:`../api/api-overview` - API-Übersicht

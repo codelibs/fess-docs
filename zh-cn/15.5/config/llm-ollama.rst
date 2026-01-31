@@ -87,7 +87,7 @@ Docker
 
 ::
 
-    # 启用RAG聊天功能
+    # 启用AI模式功能
     rag.chat.enabled=true
 
     # 设置LLM提供商为Ollama
@@ -104,7 +104,7 @@ Docker
 
 ::
 
-    # 启用RAG聊天功能
+    # 启用AI模式功能
     rag.chat.enabled=true
 
     # LLM提供商设置
@@ -299,5 +299,5 @@ Ollama支持GPU加速。使用NVIDIA GPU可显著提高推理速度。
 - `Ollama模型库 <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - LLM集成概述
-- :doc:`rag-chat` - RAG聊天功能详情
+- :doc:`rag-chat` - AI模式功能详情
 

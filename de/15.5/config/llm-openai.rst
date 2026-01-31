@@ -6,7 +6,7 @@ OpenAI-Konfiguration
 =========
 
 OpenAI ist ein Cloud-Dienst, der leistungsstarke große Sprachmodelle (LLM) wie GPT-4 anbietet.
-|Fess| kann die OpenAI-API verwenden, um die RAG-Chat-Funktion zu realisieren.
+|Fess| kann die OpenAI-API verwenden, um die AI-Modus-Funktion zu realisieren.
 
 Durch die Verwendung von OpenAI wird eine hochwertige Antwortgenerierung durch modernste KI-Modelle ermöglicht.
 
@@ -66,7 +66,7 @@ Minimalkonfiguration
 
 ::
 
-    # RAG-Chat-Funktion aktivieren
+    # AI-Modus-Funktion aktivieren
     rag.chat.enabled=true
 
     # LLM-Anbieter auf OpenAI setzen
@@ -83,7 +83,7 @@ Empfohlene Konfiguration (Produktionsumgebung)
 
 ::
 
-    # RAG-Chat-Funktion aktivieren
+    # AI-Modus-Funktion aktivieren
     rag.chat.enabled=true
 
     # LLM-Anbieter-Einstellungen
@@ -336,4 +336,4 @@ Weiterführende Informationen
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - Übersicht LLM-Integration
-- :doc:`rag-chat` - Details zur RAG-Chat-Funktion
+- :doc:`rag-chat` - Details zur AI-Modus-Funktion

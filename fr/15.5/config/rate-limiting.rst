@@ -11,7 +11,7 @@ Cette fonctionnalite protege le systeme contre les requetes excessives et permet
 La limitation de debit s'applique dans les situations suivantes :
 
 - API de recherche
-- API de chat RAG
+- API de mode IA
 - Requetes du crawler
 
 Limitation de debit de l'API de recherche
@@ -42,10 +42,10 @@ Comportement
 - Les limites sont appliquees par adresse IP
 - Les valeurs limites sont comptees avec une methode de fenetre glissante
 
-Limitation de debit du chat RAG
+Limitation de debit du mode IA
 =======================
 
-La fonctionnalite de chat RAG dispose d'une limitation de debit pour controler les couts de l'API LLM et la consommation de ressources.
+La fonctionnalite de mode IA dispose d'une limitation de debit pour controler les couts de l'API LLM et la consommation de ressources.
 
 Configuration
 ----
@@ -61,7 +61,7 @@ Configuration
     rag.chat.rate.limit.requests.per.minute=10
 
 .. note::
-   La limitation de debit du chat RAG s'applique separement de la limitation de debit cote fournisseur LLM.
+   La limitation de debit du mode IA s'applique separement de la limitation de debit cote fournisseur LLM.
    Configurez en tenant compte des deux limites.
 
 Limitation de debit du crawler
@@ -204,6 +204,6 @@ Si la verification de la limitation de debit affecte les performances :
 Informations de reference
 ========
 
-- :doc:`rag-chat` - Configuration de la fonctionnalite de chat RAG
+- :doc:`rag-chat` - Configuration de la fonctionnalite de mode IA
 - :doc:`../admin/webconfig-guide` - Guide de configuration du crawl Web
 - :doc:`../api/api-overview` - Apercu des API

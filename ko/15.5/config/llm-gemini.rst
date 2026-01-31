@@ -6,7 +6,7 @@ Google Gemini 설정
 ====
 
 Google Gemini는 Google사가 제공하는 최첨단 대규모 언어 모델(LLM)입니다.
-|Fess|에서는 Google AI API(Generative Language API)를 사용하여 Gemini 모델을 통한 RAG 채팅 기능을 구현할 수 있습니다.
+|Fess|에서는 Google AI API(Generative Language API)를 사용하여 Gemini 모델을 통한 AI 모드 기능을 구현할 수 있습니다.
 
 Gemini를 사용하면 Google의 최신 AI 기술을 활용한 고품질 응답 생성이 가능합니다.
 
@@ -66,7 +66,7 @@ API 키 발급
 
 ::
 
-    # RAG 채팅 기능 활성화
+    # AI 모드 기능 활성화
     rag.chat.enabled=true
 
     # LLM 프로바이더를 Gemini로 설정
@@ -83,7 +83,7 @@ API 키 발급
 
 ::
 
-    # RAG 채팅 기능 활성화
+    # AI 모드 기능 활성화
     rag.chat.enabled=true
 
     # LLM 프로바이더 설정
@@ -344,4 +344,4 @@ Google AI API를 사용할 때는 다음 보안 사항에 주의하세요.
 - `Gemini API Documentation <https://ai.google.dev/docs>`__
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - LLM 통합 개요
-- :doc:`rag-chat` - RAG 채팅 기능 상세
+- :doc:`rag-chat` - AI 모드 기능 상세

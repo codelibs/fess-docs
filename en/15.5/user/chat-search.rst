@@ -136,7 +136,7 @@ Q: The chat feature doesn't appear
 ----------------------------------
 
 A: The chat feature may not be enabled.
-Please check with your system administrator whether the RAG chat feature is enabled.
+Please check with your system administrator whether the AI mode feature is enabled.
 
 Q: It takes a long time for answers to appear
 ---------------------------------------------

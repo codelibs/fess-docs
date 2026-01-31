@@ -5,7 +5,7 @@ Chat API
 Descripcion general
 ===================
 
-La Chat API es una API RESTful para acceder programaticamente a la funcionalidad de chat RAG de |Fess|.
+La Chat API es una API RESTful para acceder programaticamente a la funcionalidad de modo IA de |Fess|.
 Permite obtener respuestas asistidas por IA basadas en resultados de busqueda.
 
 Esta API proporciona dos endpoints:
@@ -18,7 +18,7 @@ Requisitos previos
 
 Para usar la Chat API, se requiere la siguiente configuracion:
 
-1. La funcionalidad de chat RAG debe estar habilitada (``rag.chat.enabled=true``)
+1. La funcionalidad de modo IA debe estar habilitada (``rag.chat.enabled=true``)
 2. El proveedor LLM debe estar configurado
 
 Para el metodo de configuracion detallado, consulte :doc:`../config/rag-chat`.
@@ -484,7 +484,7 @@ Notas de seguridad al usar la Chat API:
 Informacion de referencia
 =========================
 
-- :doc:`../config/rag-chat` - Configuracion de la funcionalidad de chat RAG
+- :doc:`../config/rag-chat` - Configuracion de la funcionalidad de modo IA
 - :doc:`../config/llm-overview` - Descripcion general de integracion LLM
 - :doc:`../user/chat-search` - Guia de busqueda con chat para usuarios finales
 - :doc:`api-overview` - Descripcion general de API

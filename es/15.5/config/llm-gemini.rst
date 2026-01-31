@@ -6,7 +6,7 @@ Descripcion general
 ===================
 
 Google Gemini es un modelo de lenguaje grande (LLM) de ultima generacion proporcionado por Google.
-|Fess| puede implementar la funcionalidad de chat RAG con el modelo Gemini utilizando Google AI API (Generative Language API).
+|Fess| puede implementar la funcionalidad de modo IA con el modelo Gemini utilizando Google AI API (Generative Language API).
 
 Al usar Gemini, es posible generar respuestas de alta calidad aprovechando la ultima tecnologia de IA de Google.
 
@@ -66,7 +66,7 @@ Configuracion minima
 
 ::
 
-    # Habilitar la funcionalidad de chat RAG
+    # Habilitar la funcionalidad de modo IA
     rag.chat.enabled=true
 
     # Configurar el proveedor LLM como Gemini
@@ -83,7 +83,7 @@ Configuracion recomendada (entorno de produccion)
 
 ::
 
-    # Habilitar la funcionalidad de chat RAG
+    # Habilitar la funcionalidad de modo IA
     rag.chat.enabled=true
 
     # Configuracion del proveedor LLM
@@ -344,4 +344,4 @@ Informacion de referencia
 - `Gemini API Documentation <https://ai.google.dev/docs>`__
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - Descripcion general de integracion LLM
-- :doc:`rag-chat` - Detalles de la funcionalidad de chat RAG
+- :doc:`rag-chat` - Detalles de la funcionalidad de modo IA

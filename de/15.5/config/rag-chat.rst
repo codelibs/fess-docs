@@ -1,16 +1,16 @@
 ==========================
-RAG-Chat-Funktion konfigurieren
+AI-Modus-Funktion konfigurieren
 ==========================
 
 Übersicht
 =========
 
-RAG-Chat (Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
+AI-Modus (RAG: Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
 
-RAG-Chat-Funktionsweise
+AI-Modus-Funktionsweise
 =======================
 
-RAG-Chat arbeitet mit dem folgenden mehrstufigen Ablauf.
+AI-Modus arbeitet mit dem folgenden mehrstufigen Ablauf.
 
 1. **Absichtsanalysephase**: Analyse der Benutzerfrage und Extraktion optimaler Suchbegriffe
 2. **Suchphase**: Dokumentensuche mit der |Fess|-Suchmaschine anhand der extrahierten Begriffe
@@ -23,13 +23,13 @@ Durch diesen Ablauf sind qualitativ hochwertigere Antworten möglich, die den Ko
 Grundeinstellungen
 ==================
 
-Grundlegende Einstellungen zur Aktivierung der RAG-Chat-Funktion.
+Grundlegende Einstellungen zur Aktivierung der AI-Modus-Funktion.
 
 ``app/WEB-INF/conf/system.properties``:
 
 ::
 
-    # RAG-Chat-Funktion aktivieren
+    # AI-Modus-Funktion aktivieren
     rag.chat.enabled=true
 
     # LLM-Anbieter auswählen (ollama, openai, gemini)
@@ -191,7 +191,7 @@ Ratenbegrenzungseinstellungen zur Vermeidung von API-Überlastung.
 API-Verwendung
 ==============
 
-Die RAG-Chat-Funktion ist über REST-API verfügbar.
+Die AI-Modus-Funktion ist über REST-API verfügbar.
 
 Nicht-Streaming-API
 -------------------
@@ -294,7 +294,7 @@ Detaillierte API-Dokumentation finden Sie unter :doc:`../api/api-chat`.
 Weboberfläche
 =============
 
-In der |Fess|-Weboberfläche ist die RAG-Chat-Funktion über die Suchseite verfügbar.
+In der |Fess|-Weboberfläche ist die AI-Modus-Funktion über die Suchseite verfügbar.
 
 Chat starten
 ------------
@@ -321,7 +321,7 @@ Gespräch fortsetzen
 Fehlerbehebung
 ==============
 
-RAG-Chat wird nicht aktiviert
+AI-Modus wird nicht aktiviert
 -----------------------------
 
 **Zu überprüfen**:

@@ -6,7 +6,7 @@ Google Gemini配置
 ====
 
 Google Gemini是Google公司提供的最先进的大型语言模型（LLM）。
-|Fess| 可以使用Google AI API（Generative Language API）通过Gemini模型实现RAG聊天功能。
+|Fess| 可以使用Google AI API（Generative Language API）通过Gemini模型实现AI模式功能。
 
 使用Gemini，可以利用Google最新的AI技术生成高质量的回答。
 
@@ -66,7 +66,7 @@ Gemini可用的主要模型:
 
 ::
 
-    # 启用RAG聊天功能
+    # 启用AI模式功能
     rag.chat.enabled=true
 
     # 设置LLM提供商为Gemini
@@ -83,7 +83,7 @@ Gemini可用的主要模型:
 
 ::
 
-    # 启用RAG聊天功能
+    # 启用AI模式功能
     rag.chat.enabled=true
 
     # LLM提供商设置
@@ -343,5 +343,5 @@ Google AI API仅在部分地区可用。请查阅Google文档确认支持的地�
 - `Gemini API Documentation <https://ai.google.dev/docs>`__
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - LLM集成概述
-- :doc:`rag-chat` - RAG聊天功能详情
+- :doc:`rag-chat` - AI模式功能详情
 
