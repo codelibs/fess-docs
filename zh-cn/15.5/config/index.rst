@@ -27,6 +27,12 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: 数据存储连接器
+
+   datastore/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: 搜索功能配置
 
    search-basic
@@ -41,6 +47,8 @@
 
    security-role
    security-virtual-host
+   ldap-integration
+   multitenancy
 
 .. toctree::
    :maxdepth: 2
@@ -50,6 +58,29 @@
    sso-oidc
    sso-entraid
    sso-spnego
+
+.. toctree::
+   :maxdepth: 2
+   :caption: LLM/AI聊天配置
+
+   llm-overview
+   llm-ollama
+   llm-openai
+   llm-gemini
+   rag-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 脚本
+
+   scripting-overview
+   scripting-groovy
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 性能与运维
+
+   rate-limiting
 
 .. toctree::
    :maxdepth: 2

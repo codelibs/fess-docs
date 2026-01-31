@@ -1,8 +1,9 @@
-Guía de API de |Fess|
+Guia de API de |Fess|
 =====================
 
 .. toctree::
    :maxdepth: 2
+   :caption: API de Busqueda
 
    intro
    api-overview
@@ -11,3 +12,10 @@ Guía de API de |Fess|
    api-popularword
    api-suggest
    api-health
+   api-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API de Administracion
+
+   admin/index

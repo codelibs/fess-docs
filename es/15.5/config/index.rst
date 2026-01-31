@@ -1,17 +1,17 @@
-Guía de Configuración de |Fess|
+Guia de Configuracion de |Fess|
 ================================
 
-Guía integral sobre la configuración de |Fess|. Cada sección está organizada por propósito.
+Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por proposito.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Introducción
+   :caption: Introduccion
 
    intro
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuración Básica
+   :caption: Configuracion Basica
 
    setup-port-network
    setup-memory
@@ -19,7 +19,7 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuración del Rastreador
+   :caption: Configuracion del Rastreador
 
    crawler-basic
    crawler-advanced
@@ -27,7 +27,13 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuración de Funciones de Búsqueda
+   :caption: Conectores de Data Store
+
+   datastore/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuracion de Funciones de Busqueda
 
    search-basic
    search-advanced
@@ -37,14 +43,16 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuración de Seguridad
+   :caption: Configuracion de Seguridad
 
    security-role
    security-virtual-host
+   ldap-integration
+   multitenancy
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuración SSO
+   :caption: Configuracion SSO
 
    sso-saml
    sso-oidc
@@ -53,7 +61,30 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
 
 .. toctree::
    :maxdepth: 2
-   :caption: Administración del Sistema
+   :caption: Configuracion LLM/Chat IA
+
+   llm-overview
+   llm-ollama
+   llm-openai
+   llm-gemini
+   rag-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Scripting
+
+   scripting-overview
+   scripting-groovy
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Rendimiento y Operacion
+
+   rate-limiting
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Administracion del Sistema
 
    admin-logging
    admin-index-backup
