@@ -3,9 +3,15 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: 搜索API
+   :caption: 入门
 
    intro
+   api-quickstart
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 搜索API
+
    api-overview
    api-search
    api-label

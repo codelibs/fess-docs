@@ -2,6 +2,12 @@
 掲載記事
 ========
 
+ユースケース・活用事例
+====================
+
+- :doc:`articles/use-cases` - 業種別・規模別の活用事例とユースケース
+- :doc:`articles/comparison` - Fess と他の検索ソリューション（Elasticsearch、Solr 等）の比較
+
 掲載記事一覧
 ============
 

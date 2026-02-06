@@ -1,100 +1,186 @@
-==============
+====================
 Schnellstart-Anleitung
-==============
+====================
 
-Einführung
-==========
+Fess in unter 5 Minuten zum Laufen bringen
+==========================================
 
-Diese Anleitung richtet sich an Personen, die Fess schnell ausprobieren möchten.
-Es werden die minimal erforderlichen Schritte zur Nutzung von Fess beschrieben.
+Willkommen! Diese Anleitung hilft Ihnen, Fess so schnell wie möglich zum Laufen zu bringen.
+Wählen Sie die Methode, die am besten zu Ihrer Umgebung passt.
 
-Die hier beschriebene Vorgehensweise dient nur zum Ausprobieren. Für produktive Aufbau-Verfahren siehe die :doc:`Installationsanleitung <setup>` mit Docker.
-(Die in dieser Anleitung gestartete Fess-Instanz ist für einfache Funktionstests gedacht; ein produktiver Betrieb dieser Umgebung wird nicht empfohlen)
+.. tip::
 
-Vorbereitung
-============
+   **Schnellster Weg: Docker (Empfohlen)**
 
-Bevor Sie Fess starten, installieren Sie bitte Java 21.
-Für Java 21 wird `Eclipse Temurin <https://adoptium.net/temurin>`__ empfohlen.
+   Wenn Sie Docker installiert haben, können Sie Fess in etwa 3 Minuten
+   mit nur wenigen Befehlen starten – keine weiteren Abhängigkeiten erforderlich.
 
-Download
-========
+----
 
-Laden Sie das neueste Fess-ZIP-Paket von der `GitHub-Release-Seite <https://github.com/codelibs/fess/releases>`__ herunter.
+Methode 1: Docker (Empfohlen)
+=============================
 
-Installation
-============
+Docker bietet den schnellsten und zuverlässigsten Weg, Fess auszuführen. Alle Abhängigkeiten
+sind gebündelt, sodass Sie nichts anderes installieren müssen.
 
-Entpacken Sie die heruntergeladene Datei fess-x.y.z.zip.
+**Voraussetzungen:**
 
-::
+- Docker 20.10 oder neuer
+- Docker Compose 2.0 oder neuer
 
-    $ unzip fess-x.y.z.zip
-    $ cd fess-x.y.z
+**Schritt 1: Konfigurationsdateien herunterladen**
 
-Starten von Fess
-================
+.. code-block:: bash
 
-Führen Sie das fess-Skript aus, um Fess zu starten.
-(Unter Windows führen Sie bitte fess.bat aus)
+    mkdir fess-docker && cd fess-docker
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
 
-::
+**Schritt 2: Container starten**
 
-    $ ./bin/fess
+.. code-block:: bash
 
-Zugriff auf die Verwaltungs-UI
-===============================
+    docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
-Rufen Sie \http://localhost:8080/admin auf.
-Der Standard-Benutzername/das Passwort für das Administratorkonto ist admin/admin.
+**Schritt 3: Auf Fess zugreifen**
+
+Warten Sie einige Minuten, bis die Dienste initialisiert sind, und öffnen Sie dann Ihren Browser:
+
+- **Suchoberfläche:** http://localhost:8080/
+- **Admin-Bereich:** http://localhost:8080/admin
+- **Standard-Anmeldedaten:** admin / admin
 
 .. warning::
 
-   Ändern Sie unbedingt das Standardpasswort.
-   In Produktionsumgebungen wird dringend empfohlen, das Passwort sofort nach der ersten Anmeldung zu ändern.
+   **Sicherheitshinweis:** Ändern Sie das Standard-Admin-Passwort sofort nach Ihrer ersten Anmeldung.
 
-Erstellen einer Crawl-Konfiguration
-====================================
+**Fess stoppen:**
 
-Klicken Sie nach der Anmeldung im linken Menü auf „Crawler" > „Web".
-Klicken Sie auf die Schaltfläche „Neu erstellen", um Informationen zur Web-Crawl-Konfiguration zu erstellen.
+.. code-block:: bash
 
-Geben Sie folgende Informationen ein:
+    docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-- **Name**: Name der Crawl-Konfiguration (z. B. Firmen-Website)
-- **URL**: Zu crawlende URL (z. B. https://www.example.com/)
-- **Maximale Zugriffe**: Obergrenze für zu crawlende Seiten
-- **Intervall**: Crawl-Intervall (Millisekunden)
+Für erweiterte Docker-Konfiguration (benutzerdefinierte Einstellungen, externes OpenSearch, Kubernetes)
+siehe die `Docker-Installationsanleitung <15.5/install/install-docker.html>`__.
 
-Ausführen des Crawls
-=====================
+----
 
-Klicken Sie im linken Menü auf „System" > „Scheduler".
-Klicken Sie auf die Schaltfläche „Jetzt starten" für den Job „Default Crawler", um den Crawl sofort zu starten.
+Methode 2: ZIP-Paket
+====================
 
-Für eine geplante Ausführung wählen Sie „Default Crawler" und konfigurieren Sie einen Zeitplan.
-Wenn die Startzeit 10:35 Uhr sein soll, geben Sie 35 10 \* \* ? ein (Format: „Minute Stunde Tag Monat Wochentag Jahr").
-Nach der Aktualisierung wird der Crawl nach dieser Zeit gestartet.
+Wenn Sie Docker nicht verwenden möchten, können Sie Fess direkt aus dem ZIP-Paket ausführen.
 
-Sie können unter „Crawl-Informationen" überprüfen, ob der Crawl gestartet wurde.
-Nach Abschluss des Crawls werden die WebIndexSize-Informationen in den Sitzungsinformationen angezeigt.
+.. note::
 
-Suche
-=====
+   Diese Methode ist für Evaluierungszwecke gedacht. Für Produktionsumgebungen
+   empfehlen wir Docker oder die Installation mit :doc:`RPM/DEB-Paketen <setup>`.
 
-Nach Abschluss des Crawls rufen Sie \http://localhost:8080/ auf und führen Sie eine Suche durch, um die Suchergebnisse anzuzeigen.
+Voraussetzungen
+---------------
 
-Stoppen von Fess
-================
+**Java 21** ist erforderlich. Wir empfehlen `Eclipse Temurin <https://adoptium.net/temurin>`__.
 
-Stoppen Sie den Fess-Prozess mit Strg-C oder dem kill-Befehl.
+Überprüfen Sie Ihre Java-Installation:
 
-Mehr erfahren
-=============
+.. code-block:: bash
 
-Weitere Informationen finden Sie in den folgenden Dokumenten:
+    java -version
 
-* `Dokumentationsübersicht <documentation>`__
-* `[Serie] Einfache Einführung! Einführung in den OSS-Volltextsuchserver Fess <https://news.mynavi.jp/techplus/series/_ossfess/>`__
-* `Informationen für Entwickler <development>`__
-* `Diskussionsforum <https://discuss.codelibs.org/c/fessja/>`__
+Download und Installation
+-------------------------
+
+1. Laden Sie das neueste ZIP-Paket von `GitHub Releases <https://github.com/codelibs/fess/releases>`__ herunter
+
+2. Entpacken Sie es und wechseln Sie in das Verzeichnis:
+
+.. code-block:: bash
+
+    unzip fess-15.5.0.zip
+    cd fess-15.5.0
+
+Fess starten
+------------
+
+.. code-block:: bash
+
+    # Linux/Mac
+    ./bin/fess
+
+    # Windows
+    bin\fess.bat
+
+Warten Sie etwa 30 Sekunden, bis Fess gestartet ist, und greifen Sie dann zu auf:
+
+- http://localhost:8080/ (Suche)
+- http://localhost:8080/admin (Admin - Login: admin/admin)
+
+Fess stoppen
+------------
+
+Drücken Sie ``Strg+C`` im Terminal oder verwenden Sie ``kill``, um den Fess-Prozess zu beenden.
+
+----
+
+Ihre erste Suche: Ein kurzes Tutorial
+=====================================
+
+Jetzt, da Fess läuft, richten wir Ihren ersten Web-Crawl ein.
+
+Schritt 1: Web-Crawl-Konfiguration erstellen
+--------------------------------------------
+
+1. Melden Sie sich im Admin-Bereich an (http://localhost:8080/admin)
+2. Navigieren Sie zu **Crawler** → **Web** im linken Menü
+3. Klicken Sie auf **Neu**, um eine neue Konfiguration zu erstellen
+4. Füllen Sie die erforderlichen Felder aus:
+
+   - **Name:** Mein erster Crawl
+   - **URL:** https://fess.codelibs.org/ (oder eine beliebige Website, die Sie indexieren möchten)
+   - **Max. Zugriffe:** 100 (begrenzt die zu crawlenden Seiten)
+   - **Intervall:** 1000 (Millisekunden zwischen Anfragen)
+
+5. Klicken Sie auf **Erstellen**, um zu speichern
+
+Schritt 2: Crawler ausführen
+----------------------------
+
+1. Gehen Sie zu **System** → **Scheduler**
+2. Finden Sie **Default Crawler** in der Liste
+3. Klicken Sie auf **Jetzt starten**
+4. Überwachen Sie den Fortschritt unter **System** → **Crawl-Informationen**
+
+Schritt 3: Ihre Inhalte durchsuchen
+-----------------------------------
+
+Sobald das Crawling abgeschlossen ist (prüfen Sie WebIndexSize in den Sitzungsinformationen):
+
+1. Besuchen Sie http://localhost:8080/
+2. Geben Sie einen Suchbegriff ein, der sich auf die gecrawlten Seiten bezieht
+3. Sehen Sie Ihre Suchergebnisse!
+
+----
+
+Was kommt als Nächstes?
+=======================
+
+**Bereit, tiefer einzusteigen?**
+
+- `Vollständige Dokumentation <documentation.html>`__ - Umfassendes Referenzhandbuch
+- `Installationsanleitung <setup.html>`__ - Optionen für Produktionsbereitstellung
+- `Admin-Handbuch <15.5/admin/index.html>`__ - Konfiguration und Verwaltung
+- `API-Referenz <15.5/api/index.html>`__ - Integration der Suche in Ihre Anwendungen
+
+**Brauchen Sie Hilfe?**
+
+- `Diskussionsforum <https://discuss.codelibs.org/c/fessen/>`__ - Fragen stellen, Tipps teilen
+- `GitHub Issues <https://github.com/codelibs/fess/issues>`__ - Fehler melden, Features anfordern
+- `Kommerzieller Support <support-services.html>`__ - Professionelle Unterstützung
+
+**Weitere Funktionen entdecken:**
+
+- Dateisystem-Crawling (lokale Dateien, Netzwerkfreigaben)
+- Datenbankintegration
+- LDAP/Active Directory-Authentifizierung
+- Benutzerdefiniertes Ranking der Suchergebnisse
+- Mehrsprachige Unterstützung
+

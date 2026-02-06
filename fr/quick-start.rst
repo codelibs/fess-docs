@@ -11,6 +11,43 @@ Elle décrit les étapes minimales pour utiliser Fess.
 La procédure décrite ici est une méthode de démarrage à des fins d'essai. Pour les procédures de construction en environnement de production, veuillez consulter la :doc:`procédure d'installation <setup>` utilisant Docker, etc.
 (Le Fess démarré avec cette procédure est destiné à une simple vérification de fonctionnement et l'utilisation de cet environnement en production n'est pas recommandée)
 
+Démarrage rapide avec Docker (recommandé)
+==========================================
+
+La méthode la plus simple pour essayer Fess est d'utiliser Docker.
+
+**Étape 1 : Télécharger les fichiers Docker Compose**
+
+.. code-block:: bash
+
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+
+**Étape 2 : Démarrer les conteneurs**
+
+.. code-block:: bash
+
+    docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+**Étape 3 : Vérifier le démarrage**
+
+Accédez à http://localhost:8080/ dans votre navigateur. (L'initialisation peut prendre 1 à 2 minutes)
+
+**Étape 4 : Arrêter**
+
+.. code-block:: bash
+
+    docker compose -f compose.yaml -f compose-opensearch3.yaml down
+
+.. note::
+
+   Pour plus de détails sur le déploiement Docker, consultez le `Guide d'installation Docker <15.5/install/install-docker.html>`__.
+
+----
+
+Démarrage avec le package ZIP
+==============================
+
 Préparation préalable
 ========
 

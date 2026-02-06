@@ -2,6 +2,12 @@
 刊登文章
 ========
 
+用例与示例
+==========
+
+- :doc:`articles/use-cases` - 按行业和企业规模分类的用例
+- :doc:`articles/comparison` - Fess与其他搜索解决方案的比较（Elasticsearch、Solr等）
+
 刊登文章列表
 ============
 
@@ -128,4 +134,3 @@
 - `「5分钟简单构建！试用全文搜索服务器Fess」 (マイコミジャーナル) <http://journal.mycom.co.jp/articles/2009/11/20/fess/index.html>`__
 
 - `「使用Fess创建基于Apache Solr的全文搜索服务器 ～ 导入篇」 (CodeZine) <http://codezine.jp/article/detail/4526>`__
-

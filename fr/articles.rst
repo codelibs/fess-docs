@@ -2,6 +2,12 @@
 Articles
 ========
 
+Cas d'utilisation et exemples
+=============================
+
+- :doc:`articles/use-cases` - Cas d'utilisation par secteur et par taille d'entreprise
+- :doc:`articles/comparison` - Comparaison de Fess avec d'autres solutions de recherche (Elasticsearch, Solr, etc.)
+
 Liste des articles
 ============
 

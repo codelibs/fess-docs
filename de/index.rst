@@ -46,7 +46,20 @@ Fess wird unter der Apache-Lizenz bereitgestellt und ist kostenlos (Freeware) nu
 Download
 ========
 
-- :doc:`Fess 15.4.0 <downloads>` (zip/rpm/deb-Pakete)
+- :doc:`Fess 15.5.0 <downloads>` (zip/rpm/deb-Pakete)
+
+.. tip::
+
+   **Schnellster Einstieg mit Docker:**
+
+   .. code-block:: bash
+
+       mkdir fess && cd fess
+       curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
+       curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+       docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+   Nach wenigen Minuten: http://localhost:8080/ (Admin: admin/admin)
 
 Funktionen
 ==========
@@ -102,6 +115,9 @@ Funktionen
 Nachrichten
 ===========
 
+2026-01-25
+    `Fess 15.5.0 Release <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`__
+
 2025-12-25
     `Fess 15.4.0 Release <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`__
 
@@ -113,9 +129,6 @@ Nachrichten
 
 2025-07-20
     `Fess 15.1.0 Release <https://github.com/codelibs/fess/releases/tag/fess-15.1.0>`__
-
-2025-06-22
-    `Fess 15.0.0 Release <https://github.com/codelibs/fess/releases/tag/fess-15.0.0>`__
 
 Für ältere Nachrichten siehe :doc:`hier <news>`.
 
