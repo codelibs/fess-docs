@@ -3,9 +3,15 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: Such-API
+   :caption: Erste Schritte
 
    intro
+   api-quickstart
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Such-API
+
    api-overview
    api-search
    api-label

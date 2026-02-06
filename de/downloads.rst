@@ -2,8 +2,19 @@
 Downloads
 ============
 
-Docker
-======
+Docker (Empfohlen)
+==================
+
+Der schnellste Weg, Fess zu starten:
+
+.. code-block:: bash
+
+    mkdir fess && cd fess
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+Nach wenigen Minuten: http://localhost:8080/
 
 Für Docker-Images siehe:
 
@@ -14,6 +25,7 @@ Stabile Releases
 
 Getestete stabile Releases.
 
+* `Fess 15.5.0 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.5.0 <https://opensearch.org/versions/opensearch-3-5-0.html>`_) **Neueste Version**
 * `Fess 15.4.0 <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.4.0 <https://opensearch.org/versions/opensearch-3-4-0.html>`_)
 * `Fess 15.3.0 <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.3.0 <https://opensearch.org/versions/opensearch-3-3-0.html>`_)
 * `Fess 15.2.0 <https://github.com/codelibs/fess/releases/tag/fess-15.2.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.2.0 <https://opensearch.org/versions/opensearch-3-2-0.html>`_)
@@ -21,10 +33,8 @@ Getestete stabile Releases.
 * `Fess 15.0.0 <https://github.com/codelibs/fess/releases/tag/fess-15.0.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.0.0 <https://opensearch.org/versions/opensearch-3-0-0.html>`_)
 * `Fess 14.19.2 <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.19.1 <https://opensearch.org/versions/opensearch-2-19-1.html>`_)
 * `Fess 14.18.0 <https://github.com/codelibs/fess/releases/tag/fess-14.18.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.18.0 <https://opensearch.org/versions/opensearch-2-18-0.html>`_)
-* `Fess 14.17.0 <https://github.com/codelibs/fess/releases/tag/fess-14.17.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.17.0 <https://opensearch.org/versions/opensearch-2-17-0.html>`_)
-* `Fess 14.16.0 <https://github.com/codelibs/fess/releases/tag/fess-14.16.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.16.0 <https://opensearch.org/versions/opensearch-2-16-0.html>`_)
-* `Fess 14.15.0 <https://github.com/codelibs/fess/releases/tag/fess-14.15.0>`_ (`Java 17 <https://adoptium.net/temurin/releases?version=17>`_, `OpenSearch 2.15.0 <https://opensearch.org/versions/opensearch-2-15-0.html>`_)
-Für Installationsinformationen siehe die Installationsanleitung.
+
+Für Installationsinformationen siehe die :doc:`Installationsanleitung <setup>`.
 
 Ältere Releases (EOL)
 =====================

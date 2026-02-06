@@ -2,6 +2,12 @@
 게재 기사
 ========
 
+활용 사례 및 비교
+==================
+
+- :doc:`articles/use-cases` - 업종별, 규모별 활용 사례
+- :doc:`articles/comparison` - Fess와 다른 검색 솔루션 비교 (Elasticsearch, Solr 등)
+
 게재 기사 목록
 ============
 
@@ -121,10 +127,10 @@
 
 - `【제1회】전문 검색 서버 Fess 도입하기 <https://news.mynavi.jp/itsearch/article/bizapp/3154>`__
 
-- `「Fess로 만드는 Apache Solr 기반 전문 검색 서버 ～ 역할 기반 검색 편」 (CodeZine) <http://codezine.jp/article/detail/5605>`__
+- `「Fess로 만드는 Apache Solr 기반 전문 검색 서버 ~ 역할 기반 검색 편」 (CodeZine) <http://codezine.jp/article/detail/5605>`__
 
-- `「Fess로 만드는 Apache Solr 기반 전문 검색 서버 ～ 모바일 편」 (CodeZine) <http://codezine.jp/article/detail/4527>`__
+- `「Fess로 만드는 Apache Solr 기반 전문 검색 서버 ~ 모바일 편」 (CodeZine) <http://codezine.jp/article/detail/4527>`__
 
 - `「5분만에 간단 구축! 전문 검색 서버 Fess를 시험해보자」 (マイコミジャーナル) <http://journal.mycom.co.jp/articles/2009/11/20/fess/index.html>`__
 
-- `「Fess로 만드는 Apache Solr 기반 전문 검색 서버 ～ 도입 편」 (CodeZine) <http://codezine.jp/article/detail/4526>`__
+- `「Fess로 만드는 Apache Solr 기반 전문 검색 서버 ~ 도입 편」 (CodeZine) <http://codezine.jp/article/detail/4526>`__

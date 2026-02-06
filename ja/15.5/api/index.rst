@@ -3,9 +3,15 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: 検索API
+   :caption: はじめに
 
    intro
+   api-quickstart
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 検索API
+
    api-overview
    api-search
    api-label

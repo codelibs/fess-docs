@@ -2,6 +2,12 @@
 Articles
 ========
 
+Use Cases & Examples
+====================
+
+- :doc:`articles/use-cases` - Industry-specific and scale-based use cases
+- :doc:`articles/comparison` - Fess vs other search solutions (Elasticsearch, Solr, etc.)
+
 List of Articles
 ================
 

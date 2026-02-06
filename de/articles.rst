@@ -2,6 +2,12 @@
 Veröffentlichte Artikel
 ========
 
+Anwendungsfälle und Beispiele
+=============================
+
+- :doc:`articles/use-cases` - Branchenspezifische und größenabhängige Anwendungsfälle
+- :doc:`articles/comparison` - Fess im Vergleich zu anderen Suchlösungen (Elasticsearch, Solr usw.)
+
 Artikelübersicht
 ================
 
