@@ -81,6 +81,7 @@
    :caption: パフォーマンス・運用
 
    rate-limiting
+   load-control
 
 .. toctree::
    :maxdepth: 2

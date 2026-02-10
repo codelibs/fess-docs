@@ -53,6 +53,13 @@ Ce guide complet couvre la configuration de |Fess|. Chaque section est organisé
 
 .. toctree::
    :maxdepth: 2
+   :caption: Performance et Operations
+
+   rate-limiting
+   load-control
+
+.. toctree::
+   :maxdepth: 2
    :caption: Administration système
 
    admin-logging

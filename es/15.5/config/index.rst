@@ -81,6 +81,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
    :caption: Rendimiento y Operacion
 
    rate-limiting
+   load-control
 
 .. toctree::
    :maxdepth: 2

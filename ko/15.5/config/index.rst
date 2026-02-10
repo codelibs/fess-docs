@@ -44,6 +44,13 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: 성능 및 운영
+
+   rate-limiting
+   load-control
+
+.. toctree::
+   :maxdepth: 2
    :caption: 시스템 관리
 
    admin-logging
