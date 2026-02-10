@@ -81,6 +81,7 @@
    :caption: 性能与运维
 
    rate-limiting
+   load-control
 
 .. toctree::
    :maxdepth: 2

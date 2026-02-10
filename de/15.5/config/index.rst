@@ -53,6 +53,13 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
 
 .. toctree::
    :maxdepth: 2
+   :caption: Leistung und Betrieb
+
+   rate-limiting
+   load-control
+
+.. toctree::
+   :maxdepth: 2
    :caption: Systemverwaltung
 
    admin-logging
