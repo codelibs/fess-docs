@@ -46,7 +46,7 @@ Fess 采用 Apache 许可证提供，可以免费使用（自由软件）。
 下载
 ============
 
-- :doc:`Fess 15.4.0 <downloads>` (zip/rpm/deb包)
+- :doc:`Fess 15.5.0 <downloads>` (zip/rpm/deb包)
 
 特点
 ====
@@ -102,6 +102,9 @@ Fess 采用 Apache 许可证提供，可以免费使用（自由软件）。
 新闻
 ========
 
+2026-02-14
+    `Fess 15.5.0 发布 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`__
+
 2025-12-25
     `Fess 15.4.0 发布 <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`__
 
@@ -113,9 +116,6 @@ Fess 采用 Apache 许可证提供，可以免费使用（自由软件）。
 
 2025-07-20
     `Fess 15.1.0 发布 <https://github.com/codelibs/fess/releases/tag/fess-15.1.0>`__
-
-2025-06-22
-    `Fess 15.0.0 发布 <https://github.com/codelibs/fess/releases/tag/fess-15.0.0>`__
 
 过去的新闻请查看 :doc:`这里 <news>`。
 

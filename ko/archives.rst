@@ -2,6 +2,20 @@
 아카이브
 ==========
 
+15.4
+~~~~
+
+.. toctree::
+
+   15.4/install/index
+   15.4/user/index
+   15.4/api/index
+   15.4/admin/index
+   15.4/config/index
+   JavaDocs <https://fess.codelibs.org/15.4/apidocs/index.html>
+   XRef <https://fess.codelibs.org/15.4/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/15.4/lastadoc-fess.html>
+
 15.3
 ~~~~
 
