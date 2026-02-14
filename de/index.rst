@@ -115,7 +115,7 @@ Funktionen
 Nachrichten
 ===========
 
-2026-01-25
+2026-02-14
     `Fess 15.5.0 Release <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`__
 
 2025-12-25
