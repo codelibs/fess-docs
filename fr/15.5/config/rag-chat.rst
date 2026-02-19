@@ -27,7 +27,7 @@ Configuration de base
 
 Configuration de base pour activer la fonctionnalite de mode IA.
 
-``app/WEB-INF/conf/system.properties`` :
+``app/WEB-INF/conf/fess_config.properties`` :
 
 ::
 

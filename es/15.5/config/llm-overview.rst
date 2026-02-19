@@ -45,7 +45,7 @@ La funcionalidad de modo IA opera con el siguiente flujo.
 Configuracion basica
 ====================
 
-Para habilitar la funcionalidad LLM, agregue la siguiente configuracion en ``app/WEB-INF/conf/system.properties``.
+Para habilitar la funcionalidad LLM, agregue la siguiente configuracion en ``app/WEB-INF/conf/fess_config.properties``.
 
 Habilitar modo IA
 -----------------

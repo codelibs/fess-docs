@@ -46,7 +46,7 @@ La fonctionnalite de mode IA fonctionne selon le flux suivant.
 Configuration de base
 ========
 
-Pour activer la fonctionnalite LLM, ajoutez les parametres suivants dans ``app/WEB-INF/conf/system.properties``.
+Pour activer la fonctionnalite LLM, ajoutez les parametres suivants dans ``app/WEB-INF/conf/fess_config.properties``.
 
 Activation du mode IA
 -------------------

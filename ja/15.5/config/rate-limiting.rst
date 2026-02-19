@@ -10,55 +10,47 @@
 
 レート制限は以下の場面で適用されます:
 
-- 検索API
-- AIモードAPI
-- クローラーのリクエスト
+- 検索APIやAIモードAPIを含む全HTTPリクエスト（``RateLimitFilter``）
+- クローラーのリクエスト（クロール設定による制御）
 
-検索APIのレート制限
-===================
+HTTPリクエストのレート制限
+==========================
 
-検索APIへのリクエスト数を制限できます。
+|Fess| へのHTTPリクエスト数をIPアドレス単位で制限できます。
+この制限は検索API、AIモードAPI、管理画面などすべてのHTTPリクエストに適用されます。
 
 設定
 ----
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
-    # レート制限を有効にする
-    api.rate.limit.enabled=true
+    # レート制限を有効にする（デフォルト: false）
+    rate.limit.enabled=true
 
-    # IPアドレスごとの1分あたりの最大リクエスト数
-    api.rate.limit.requests.per.minute=60
+    # ウィンドウあたりの最大リクエスト数（デフォルト: 100）
+    rate.limit.requests.per.window=100
 
-    # レート制限のウィンドウサイズ（秒）
-    api.rate.limit.window.seconds=60
+    # ウィンドウサイズ（ミリ秒）（デフォルト: 60000）
+    rate.limit.window.ms=60000
 
 動作
 ----
 
 - レート制限を超えたリクエストは HTTP 429 (Too Many Requests) を返します
+- ブロックIPリストに含まれるIPからのリクエストは HTTP 403 (Forbidden) を返します
 - 制限はIPアドレス単位で適用されます
-- 制限値はスライディングウィンドウ方式でカウントされます
+- IPごとに最初のリクエストからウィンドウが開始し、ウィンドウ期間経過後にカウントがリセットされます（固定ウィンドウ方式）
+- 制限超過時はIPが ``rate.limit.block.duration.ms`` の期間ブロックされます
 
 AIモードのレート制限
 ====================
 
 AIモード機能にはLLM APIのコストとリソース消費を制御するためのレート制限があります。
+AIモードには上記のHTTPリクエストレート制限に加えて、AIモード固有のレート制限も設定できます。
 
-設定
-----
-
-``app/WEB-INF/conf/system.properties``:
-
-::
-
-    # チャットのレート制限を有効にする
-    rag.chat.rate.limit.enabled=true
-
-    # 1分あたりの最大リクエスト数
-    rag.chat.rate.limit.requests.per.minute=10
+AIモード固有のレート制限設定については :doc:`rag-chat` を参照してください。
 
 .. note::
    AIモードのレート制限は、LLMプロバイダー側のレート制限とは別に適用されます。
@@ -100,13 +92,53 @@ robots.txtの尊重
     User-agent: *
     Crawl-delay: 10
 
+レート制限の全設定項目
+======================
+
+``app/WEB-INF/conf/fess_config.properties`` で設定可能なすべてのプロパティです。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``rate.limit.enabled``
+     - レート制限を有効にする
+     - ``false``
+   * - ``rate.limit.requests.per.window``
+     - ウィンドウあたりの最大リクエスト数
+     - ``100``
+   * - ``rate.limit.window.ms``
+     - ウィンドウサイズ（ミリ秒）
+     - ``60000``
+   * - ``rate.limit.block.duration.ms``
+     - 制限超過時のIPブロック期間（ミリ秒）
+     - ``300000``
+   * - ``rate.limit.retry.after.seconds``
+     - Retry-Afterヘッダー値（秒）
+     - ``60``
+   * - ``rate.limit.whitelist.ips``
+     - レート制限から除外するIPアドレス（カンマ区切り）
+     - ``127.0.0.1,::1``
+   * - ``rate.limit.blocked.ips``
+     - ブロックするIPアドレス（カンマ区切り）
+     - （空）
+   * - ``rate.limit.trusted.proxies``
+     - 信頼するプロキシIP（X-Forwarded-For/X-Real-IPの取得元）
+     - ``127.0.0.1,::1``
+   * - ``rate.limit.cleanup.interval``
+     - メモリリーク防止のためのクリーンアップ間隔（リクエスト数）
+     - ``1000``
+
 高度なレート制限設定
 ====================
 
 カスタムレート制限
 ------------------
 
-特定のユーザーやロールに対して異なる制限を適用する場合は、
+特定の条件に基づいて異なるレート制限ロジックを適用する場合は、
 カスタムコンポーネントの実装が必要です。
 
 ::
@@ -114,36 +146,31 @@ robots.txtの尊重
     // RateLimitHelperのカスタマイズ例
     public class CustomRateLimitHelper extends RateLimitHelper {
         @Override
-        public boolean isAllowed(String key) {
+        public boolean allowRequest(String ip) {
             // カスタムロジック
         }
     }
 
-バースト制限
-------------
-
-短時間の突発的なリクエストを許容しつつ、継続的な高負荷を防ぐ設定:
-
-::
-
-    # バースト許容量
-    api.rate.limit.burst.size=20
-
-    # 持続的な制限
-    api.rate.limit.sustained.requests.per.second=1
-
 除外設定
 ========
 
-特定のIPアドレスやユーザーをレート制限から除外できます。
+特定のIPアドレスをレート制限から除外したり、ブロックしたりできます。
 
 ::
 
-    # 除外IPアドレス（カンマ区切り）
-    api.rate.limit.excluded.ips=192.168.1.100,10.0.0.0/8
+    # ホワイトリストIP（レート制限から除外、カンマ区切り）
+    rate.limit.whitelist.ips=127.0.0.1,::1,192.168.1.100
 
-    # 除外ロール
-    api.rate.limit.excluded.roles=admin
+    # ブロックIPリスト（常にブロック、カンマ区切り）
+    rate.limit.blocked.ips=203.0.113.50
+
+    # 信頼するプロキシIP（カンマ区切り）
+    rate.limit.trusted.proxies=127.0.0.1,::1
+
+.. note::
+   リバースプロキシを使用している場合は、``rate.limit.trusted.proxies`` に
+   プロキシのIPアドレスを設定してください。信頼するプロキシからのリクエストのみ、
+   X-Forwarded-ForおよびX-Real-IPヘッダーからクライアントIPを取得します。
 
 監視とアラート
 ==============
@@ -159,15 +186,6 @@ robots.txtの尊重
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
-メトリクス
-----------
-
-レート制限に関するメトリクスは、システム統計APIで取得できます:
-
-::
-
-    GET /api/admin/stats
-
 トラブルシューティング
 ======================
 
@@ -178,9 +196,9 @@ robots.txtの尊重
 
 **解決方法**:
 
-1. ``requests.per.minute`` を増やす
-2. 特定のIPを除外リストに追加
-3. ウィンドウサイズを調整
+1. ``rate.limit.requests.per.window`` を増やす
+2. 特定のIPをホワイトリストに追加（``rate.limit.whitelist.ips``）
+3. ウィンドウサイズ（``rate.limit.window.ms``）を調整
 
 レート制限が効かない
 --------------------
@@ -189,7 +207,7 @@ robots.txtの尊重
 
 **確認事項**:
 
-1. ``api.rate.limit.enabled=true`` が設定されているか
+1. ``rate.limit.enabled=true`` が設定されているか
 2. 設定ファイルが正しく読み込まれているか
 3. |Fess| を再起動したか
 
@@ -198,8 +216,8 @@ robots.txtの尊重
 
 レート制限のチェック自体がパフォーマンスに影響する場合:
 
-1. レート制限のストレージをRedisなどに変更
-2. チェック頻度を調整
+1. ホワイトリストを活用して信頼できるIPのチェックをスキップ
+2. レート制限を無効にする（``rate.limit.enabled=false``）
 
 参考情報
 ========

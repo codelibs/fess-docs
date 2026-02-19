@@ -27,7 +27,7 @@ Configuracion basica
 
 Configuracion basica para habilitar la funcionalidad de modo IA.
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 

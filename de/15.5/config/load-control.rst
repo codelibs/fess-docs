@@ -5,10 +5,9 @@ Laststeuerung-Konfiguration
 Uebersicht
 ==========
 
-|Fess| enthaelt eine Laststeuerungsfunktion, die Anfragen basierend auf der CPU-Auslastung von OpenSearch steuert.
-Diese Funktion begrenzt Anfragen bei hoher Suchmaschinenlast automatisch und schuetzt die Systemstabilitaet.
+|Fess| enthaelt zwei Arten von Laststeuerungsfunktionen, die die Systemstabilitaet basierend auf der CPU-Auslastung schuetzen.
 
-Funktionen der Laststeuerung:
+**HTTP-Anfragen-Laststeuerung** (``web.load.control`` / ``api.load.control``):
 
 - Echtzeitueberwachung der OpenSearch-Cluster-CPU-Auslastung
 - Unabhaengige Schwellenwerte fuer Web-Anfragen und API-Anfragen
@@ -16,8 +15,15 @@ Funktionen der Laststeuerung:
 - Admin-Panel, Login und statische Ressourcen sind von der Steuerung ausgenommen
 - Standardmaessig deaktiviert (Schwellenwert=100)
 
-Konfiguration
-=============
+**Adaptive Laststeuerung** (``adaptive.load.control``):
+
+- Ueberwacht die System-CPU-Auslastung des Fess-Servers selbst
+- Drosselt automatisch Hintergrundaufgaben wie Crawling, Indexierung, Suggest-Aktualisierungen und Thumbnail-Generierung
+- Wenn die CPU-Auslastung den Schwellenwert erreicht oder ueberschreitet, werden Verarbeitungsthreads angehalten und bei Unterschreitung fortgesetzt
+- Standardmaessig aktiviert (Schwellenwert=50)
+
+HTTP-Anfragen-Laststeuerung-Konfiguration
+==========================================
 
 Setzen Sie die folgenden Eigenschaften in ``fess_config.properties``:
 
@@ -164,10 +170,68 @@ Diese schuetzen das System mit unterschiedlichen Ansaetzen.
      - HTTP 429
      - HTTP 429
    * - Anwendungsbereich
-     - Such-API / AI-Modus-API
-     - Web-Anfragen / API-Anfragen
+     - Alle HTTP-Anfragen
+     - Web-Anfragen / API-Anfragen (Admin-Panel usw. ausgenommen)
 
 Die Kombination beider Funktionen ermoeglicht einen robusteren Systemschutz.
+
+Adaptive Laststeuerung
+======================
+
+Die adaptive Laststeuerung passt die Verarbeitungsgeschwindigkeit von Hintergrundaufgaben
+automatisch basierend auf der System-CPU-Auslastung des Fess-Servers an.
+
+Konfiguration
+-------------
+
+``fess_config.properties``:
+
+::
+
+    # Adaptive Laststeuerung CPU-Auslastungs-Schwellenwert (%)
+    # Haelt Hintergrundaufgaben an, wenn die System-CPU-Auslastung diesen Wert erreicht oder ueberschreitet
+    # Auf 0 oder darunter setzen zum Deaktivieren (Standard: 50)
+    adaptive.load.control=50
+
+Verhalten
+---------
+
+- Ueberwacht die System-CPU-Auslastung des Servers, auf dem Fess laeuft
+- Wenn die CPU-Auslastung den Schwellenwert erreicht oder ueberschreitet, warten die betroffenen Verarbeitungsthreads, bis die CPU-Auslastung unter den Schwellenwert faellt
+- Wenn die CPU-Auslastung unter den Schwellenwert faellt, wird die Verarbeitung automatisch fortgesetzt
+
+**Betroffene Hintergrundaufgaben:**
+
+- Crawling (Web / Dateisystem)
+- Indexierung (Dokumentenregistrierung)
+- Datenspeicher-Verarbeitung
+- Suggest-Aktualisierungen
+- Thumbnail-Generierung
+- Sicherung und Wiederherstellung
+
+.. note::
+   Die adaptive Laststeuerung ist standardmaessig aktiviert (Schwellenwert=50).
+   Sie arbeitet unabhaengig von der HTTP-Anfragen-Laststeuerung (``web.load.control`` / ``api.load.control``).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - Aspekt
+     - HTTP-Anfragen-Laststeuerung
+     - Adaptive Laststeuerung
+   * - Ueberwachungsziel
+     - OpenSearch CPU-Auslastung
+     - Fess-Server System-CPU-Auslastung
+   * - Steuerungsziel
+     - HTTP-Anfragen (Web / API)
+     - Hintergrundaufgaben
+   * - Steuerungsmethode
+     - Lehnt Anfragen mit HTTP 429 ab
+     - Haelt Verarbeitungsthreads voruebergehend an
+   * - Standard
+     - Deaktiviert (Schwellenwert=100)
+     - Aktiviert (Schwellenwert=50)
 
 Fehlerbehebung
 ==============
@@ -197,6 +261,22 @@ Legitime Anfragen werden abgelehnt
 .. warning::
    Wenn Schwellenwerte zu niedrig gesetzt werden, koennen Anfragen auch bei normaler Last abgelehnt werden.
    Ueberpruefen Sie die normale CPU-Auslastung Ihres OpenSearch-Clusters, bevor Sie geeignete Schwellenwerte festlegen.
+
+Crawling ist langsam
+--------------------
+
+**Ursache**: Threads befinden sich aufgrund der adaptiven Laststeuerung im Wartezustand
+
+**Pruefen**:
+
+1. Ob ``Cpu Load XX% is greater than YY%`` in den Logs erscheint
+2. Ob der ``adaptive.load.control``-Schwellenwert zu niedrig ist
+
+**Loesungen**:
+
+1. Den Wert von ``adaptive.load.control`` erhoehen (z.B. 70)
+2. CPU-Ressourcen des Fess-Servers erweitern
+3. Auf 0 setzen, um die adaptive Laststeuerung zu deaktivieren (nicht empfohlen)
 
 Referenzinformationen
 =====================

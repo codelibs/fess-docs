@@ -27,7 +27,7 @@ Basic Configuration
 
 Basic settings for enabling AI mode functionality.
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 

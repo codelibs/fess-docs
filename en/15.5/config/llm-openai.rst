@@ -59,7 +59,7 @@ Obtaining an API Key
 Basic Configuration
 ===================
 
-Add the following settings to ``app/WEB-INF/conf/system.properties``.
+Add the following settings to ``app/WEB-INF/conf/fess_config.properties``.
 
 Minimal Configuration
 ---------------------

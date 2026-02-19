@@ -59,7 +59,7 @@ APIキーの取得
 基本設定
 ========
 
-``app/WEB-INF/conf/system.properties`` に以下の設定を追加します。
+``app/WEB-INF/conf/fess_config.properties`` に以下の設定を追加します。
 
 最小構成
 --------

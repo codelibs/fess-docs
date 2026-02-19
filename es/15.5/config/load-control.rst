@@ -5,10 +5,9 @@ Configuracion de control de carga
 Descripcion general
 ===================
 
-|Fess| incluye una funcion de control de carga que controla las solicitudes en funcion del uso de CPU de OpenSearch.
-Esta funcion limita automaticamente las solicitudes cuando el motor de busqueda esta bajo alta carga, protegiendo la estabilidad del sistema.
+|Fess| incluye dos tipos de funciones de control de carga que protegen la estabilidad del sistema en funcion del uso de CPU.
 
-Caracteristicas del control de carga:
+**Control de carga de solicitudes HTTP** (``web.load.control`` / ``api.load.control``):
 
 - Monitoreo en tiempo real del uso de CPU del cluster de OpenSearch
 - Umbrales independientes para solicitudes web y solicitudes API
@@ -16,8 +15,15 @@ Caracteristicas del control de carga:
 - El panel de administracion, el inicio de sesion y los recursos estaticos estan excluidos del control
 - Deshabilitado por defecto (umbral=100)
 
-Configuracion
-=============
+**Control de carga adaptativo** (``adaptive.load.control``):
+
+- Monitorea el uso de CPU del sistema del propio servidor Fess
+- Regula automaticamente las tareas en segundo plano como rastreo, indexacion, actualizaciones de sugerencias y generacion de miniaturas
+- Cuando el uso de CPU alcanza o supera el umbral, los hilos de procesamiento se pausan y se reanudan cuando desciende por debajo del umbral
+- Habilitado por defecto (umbral=50)
+
+Configuracion del control de carga de solicitudes HTTP
+======================================================
 
 Configure las siguientes propiedades en ``fess_config.properties``:
 
@@ -164,10 +170,68 @@ Estas protegen el sistema usando enfoques diferentes.
      - HTTP 429
      - HTTP 429
    * - Alcance
-     - API de busqueda / API de modo IA
-     - Solicitudes web / Solicitudes API
+     - Todas las solicitudes HTTP
+     - Solicitudes web / Solicitudes API (panel de administracion etc. excluido)
 
 Combinar ambas funciones permite una proteccion del sistema mas robusta.
+
+Control de carga adaptativo
+===========================
+
+El control de carga adaptativo ajusta automaticamente la velocidad de procesamiento de las tareas
+en segundo plano en funcion del uso de CPU del sistema del servidor Fess.
+
+Configuracion
+-------------
+
+``fess_config.properties``:
+
+::
+
+    # Umbral de uso de CPU del control de carga adaptativo (%)
+    # Pausa las tareas en segundo plano cuando el uso de CPU del sistema alcanza o supera este valor
+    # Establecer en 0 o menos para deshabilitar (predeterminado: 50)
+    adaptive.load.control=50
+
+Comportamiento
+--------------
+
+- Monitorea el uso de CPU del sistema del servidor donde se ejecuta Fess
+- Cuando el uso de CPU alcanza o supera el umbral, los hilos de procesamiento afectados esperan hasta que el uso de CPU descienda por debajo del umbral
+- Cuando el uso de CPU desciende por debajo del umbral, el procesamiento se reanuda automaticamente
+
+**Tareas en segundo plano afectadas:**
+
+- Rastreo (Web / Sistema de archivos)
+- Indexacion (registro de documentos)
+- Procesamiento de almacen de datos
+- Actualizaciones de sugerencias
+- Generacion de miniaturas
+- Respaldo y restauracion
+
+.. note::
+   El control de carga adaptativo esta habilitado por defecto (umbral=50).
+   Opera de forma independiente del control de carga de solicitudes HTTP (``web.load.control`` / ``api.load.control``).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - Aspecto
+     - Control de carga de solicitudes HTTP
+     - Control de carga adaptativo
+   * - Objetivo de monitoreo
+     - Uso de CPU de OpenSearch
+     - Uso de CPU del sistema del servidor Fess
+   * - Objetivo de control
+     - Solicitudes HTTP (Web / API)
+     - Tareas en segundo plano
+   * - Metodo de control
+     - Rechaza solicitudes devolviendo HTTP 429
+     - Pausa temporalmente los hilos de procesamiento
+   * - Predeterminado
+     - Deshabilitado (umbral=100)
+     - Habilitado (umbral=50)
 
 Solucion de problemas
 =====================
@@ -197,6 +261,22 @@ Solicitudes legitimas son rechazadas
 .. warning::
    Establecer umbrales demasiado bajos puede causar que las solicitudes sean rechazadas incluso bajo carga normal.
    Verifique el uso normal de CPU de su cluster de OpenSearch antes de establecer umbrales apropiados.
+
+El rastreo es lento
+-------------------
+
+**Causa**: Los hilos estan en estado de espera debido al control de carga adaptativo
+
+**Verificaciones**:
+
+1. Si ``Cpu Load XX% is greater than YY%`` aparece en los logs
+2. Si el umbral de ``adaptive.load.control`` es demasiado bajo
+
+**Solucion**:
+
+1. Aumentar el valor de ``adaptive.load.control`` (ej: 70)
+2. Aumentar los recursos de CPU del servidor Fess
+3. Establecer en 0 para deshabilitar el control de carga adaptativo (no recomendado)
 
 Informacion de referencia
 =========================

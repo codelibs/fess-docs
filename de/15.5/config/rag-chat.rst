@@ -25,7 +25,7 @@ Grundeinstellungen
 
 Grundlegende Einstellungen zur Aktivierung der AI-Modus-Funktion.
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 

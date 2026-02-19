@@ -27,7 +27,7 @@ AI 모드는 다음과 같은 다단계 플로우로 동작합니다.
 
 AI 모드 기능을 활성화하기 위한 기본 설정입니다.
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 

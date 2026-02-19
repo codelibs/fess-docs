@@ -59,7 +59,7 @@ Gemini可用的主要模型:
 基本配置
 ========
 
-在 ``app/WEB-INF/conf/system.properties`` 中添加以下配置。
+在 ``app/WEB-INF/conf/fess_config.properties`` 中添加以下配置。
 
 最小配置
 --------

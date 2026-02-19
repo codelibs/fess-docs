@@ -45,7 +45,7 @@ The AI mode feature operates with the following flow.
 Basic Configuration
 ===================
 
-To enable LLM functionality, add the following settings to ``app/WEB-INF/conf/system.properties``.
+To enable LLM functionality, add the following settings to ``app/WEB-INF/conf/fess_config.properties``.
 
 Enabling AI Mode
 ----------------
