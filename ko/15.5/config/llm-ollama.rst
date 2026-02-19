@@ -80,7 +80,7 @@ Docker
 기본 설정
 ========
 
-``app/WEB-INF/conf/system.properties``에 다음 설정을 추가합니다.
+``app/WEB-INF/conf/fess_config.properties``에 다음 설정을 추가합니다.
 
 최소 구성
 --------

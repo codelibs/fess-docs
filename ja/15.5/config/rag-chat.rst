@@ -27,7 +27,7 @@ AIモードは以下の多段階フローで動作します。
 
 AIモード機能を有効にするための基本設定です。
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 

@@ -5,10 +5,9 @@ Load Control Configuration
 Overview
 ========
 
-|Fess| includes a load control feature that controls requests based on OpenSearch CPU usage.
-This feature automatically limits requests during high search engine load, protecting system stability.
+|Fess| includes two types of load control features that protect system stability based on CPU usage.
 
-Load control features:
+**HTTP Request Load Control** (``web.load.control`` / ``api.load.control``):
 
 - Real-time monitoring of OpenSearch cluster CPU usage
 - Independent thresholds for web requests and API requests
@@ -16,8 +15,15 @@ Load control features:
 - Admin panel, login, and static resources are excluded from control
 - Disabled by default (threshold=100)
 
-Configuration
-=============
+**Adaptive Load Control** (``adaptive.load.control``):
+
+- Monitors the Fess server's own system CPU usage
+- Automatically throttles background tasks such as crawling, indexing, suggest updates, and thumbnail generation
+- When CPU usage is at or above the threshold, processing threads are paused and resume when it drops below the threshold
+- Enabled by default (threshold=50)
+
+HTTP Request Load Control Configuration
+========================================
 
 Set the following properties in ``fess_config.properties``:
 
@@ -164,10 +170,68 @@ These protect the system using different approaches.
      - HTTP 429
      - HTTP 429
    * - Scope
-     - Search API / AI Mode API
-     - Web requests / API requests
+     - All HTTP requests
+     - Web requests / API requests (admin panel etc. excluded)
 
 Combining both features enables more robust system protection.
+
+Adaptive Load Control
+=====================
+
+Adaptive load control automatically adjusts the processing speed of background tasks
+based on the Fess server's own system CPU usage.
+
+Configuration
+-------------
+
+``fess_config.properties``:
+
+::
+
+    # Adaptive load control CPU usage threshold (%)
+    # Pauses background tasks when system CPU usage is at or above this value
+    # Set to 0 or below to disable (default: 50)
+    adaptive.load.control=50
+
+Behavior
+--------
+
+- Monitors the system CPU usage of the server where Fess is running
+- When CPU usage is at or above the threshold, target processing threads wait until CPU usage drops below the threshold
+- When CPU usage drops below the threshold, processing automatically resumes
+
+**Target background tasks:**
+
+- Crawling (Web / File system)
+- Indexing (document registration)
+- Data store processing
+- Suggest updates
+- Thumbnail generation
+- Backup and restore
+
+.. note::
+   Adaptive load control is enabled by default (threshold=50).
+   It operates independently from HTTP request load control (``web.load.control`` / ``api.load.control``).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - Item
+     - HTTP Request Load Control
+     - Adaptive Load Control
+   * - Monitoring Target
+     - OpenSearch CPU usage
+     - Fess server system CPU usage
+   * - Control Target
+     - HTTP requests (Web / API)
+     - Background tasks
+   * - Control Method
+     - Rejects requests by returning HTTP 429
+     - Pauses processing threads temporarily
+   * - Default
+     - Disabled (threshold=100)
+     - Enabled (threshold=50)
 
 Troubleshooting
 ===============
@@ -197,6 +261,22 @@ Legitimate Requests Being Rejected
 .. warning::
    Setting thresholds too low may cause requests to be rejected even under normal load.
    Check the normal CPU usage of your OpenSearch cluster before setting appropriate thresholds.
+
+Crawling Is Slow
+----------------
+
+**Cause**: Threads are in waiting state due to adaptive load control
+
+**Check**:
+
+1. Check if ``Cpu Load XX% is greater than YY%`` appears in logs
+2. Check if the ``adaptive.load.control`` threshold is too low
+
+**Solutions**:
+
+1. Increase the ``adaptive.load.control`` value (e.g., 70)
+2. Scale up the Fess server's CPU resources
+3. Set to 0 to disable adaptive load control (not recommended)
 
 Reference Information
 =====================

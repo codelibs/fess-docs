@@ -45,7 +45,7 @@ Die AI-Modus-Funktion arbeitet mit dem folgenden Ablauf.
 Grundeinstellungen
 ==================
 
-Um die LLM-Funktion zu aktivieren, fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/system.properties`` hinzu.
+Um die LLM-Funktion zu aktivieren, fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/fess_config.properties`` hinzu.
 
 AI-Modus aktivieren
 -------------------

@@ -80,7 +80,7 @@ Modell-Download
 Grundeinstellungen
 ==================
 
-Fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/system.properties`` hinzu.
+Fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/fess_config.properties`` hinzu.
 
 Minimalkonfiguration
 --------------------

@@ -45,7 +45,7 @@ AIモード機能は以下のフローで動作します。
 基本設定
 ========
 
-LLM機能を有効にするには、``app/WEB-INF/conf/system.properties`` に以下の設定を追加します。
+LLM機能を有効にするには、``app/WEB-INF/conf/fess_config.properties`` に以下の設定を追加します。
 
 AIモードの有効化
 ----------------

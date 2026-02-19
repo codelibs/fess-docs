@@ -59,7 +59,7 @@ Obtencion de clave API
 Configuracion basica
 ====================
 
-Agregue la siguiente configuracion en ``app/WEB-INF/conf/system.properties``.
+Agregue la siguiente configuracion en ``app/WEB-INF/conf/fess_config.properties``.
 
 Configuracion minima
 --------------------

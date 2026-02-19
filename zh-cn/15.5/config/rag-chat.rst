@@ -27,7 +27,7 @@ AI模式通过以下多阶段流程运行。
 
 启用AI模式功能的基本设置。
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 

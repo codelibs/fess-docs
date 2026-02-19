@@ -45,7 +45,7 @@ AI 모드 기능은 다음 흐름으로 동작합니다.
 기본 설정
 ========
 
-LLM 기능을 활성화하려면 ``app/WEB-INF/conf/system.properties``에 다음 설정을 추가합니다.
+LLM 기능을 활성화하려면 ``app/WEB-INF/conf/fess_config.properties``에 다음 설정을 추가합니다.
 
 AI 모드 활성화
 -------------------

@@ -10,55 +10,47 @@ Esta funcionalidad protege el sistema de solicitudes excesivas y permite una dis
 
 El limite de tasa se aplica en los siguientes escenarios:
 
-- API de busqueda
-- API de modo IA
-- Solicitudes del crawler
+- Todas las solicitudes HTTP, incluyendo API de busqueda, API de modo IA y pantallas de administracion (``RateLimitFilter``)
+- Solicitudes del crawler (controladas por la configuracion de crawl)
 
-Limite de tasa de la API de busqueda
-====================================
+Limitacion de tasa de solicitudes HTTP
+=======================================
 
-Puede limitar el numero de solicitudes a la API de busqueda.
+Puede limitar el numero de solicitudes HTTP a |Fess| por direccion IP.
+Esta limitacion se aplica a todas las solicitudes HTTP, incluyendo la API de busqueda, la API de modo IA, las pantallas de administracion, etc.
 
 Configuracion
 -------------
 
-``app/WEB-INF/conf/system.properties``:
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
-    # Habilitar limite de tasa
-    api.rate.limit.enabled=true
+    # Habilitar limite de tasa (predeterminado: false)
+    rate.limit.enabled=true
 
-    # Numero maximo de solicitudes por minuto por direccion IP
-    api.rate.limit.requests.per.minute=60
+    # Numero maximo de solicitudes por ventana (predeterminado: 100)
+    rate.limit.requests.per.window=100
 
-    # Tamano de ventana del limite de tasa (segundos)
-    api.rate.limit.window.seconds=60
+    # Tamano de ventana (milisegundos) (predeterminado: 60000)
+    rate.limit.window.ms=60000
 
 Comportamiento
 --------------
 
 - Las solicitudes que excedan el limite de tasa devuelven HTTP 429 (Too Many Requests)
+- Las solicitudes de IPs incluidas en la lista de bloqueo devuelven HTTP 403 (Forbidden)
 - El limite se aplica por direccion IP
-- Los valores de limite se cuentan usando el metodo de ventana deslizante
+- La ventana se inicia con la primera solicitud de cada IP y el contador se reinicia despues de que expire el periodo de ventana (metodo de ventana fija)
+- Cuando se excede el limite, la IP se bloquea durante el periodo definido en ``rate.limit.block.duration.ms``
 
 Limite de tasa del modo IA
 ==========================
 
 La funcionalidad de modo IA tiene un limite de tasa para controlar los costos y el consumo de recursos de la API de LLM.
+El modo IA tiene la limitacion de tasa de solicitudes HTTP descrita anteriormente, ademas de configuraciones de limite de tasa especificas del modo IA.
 
-Configuracion
--------------
-
-``app/WEB-INF/conf/system.properties``:
-
-::
-
-    # Habilitar limite de tasa para chat
-    rag.chat.rate.limit.enabled=true
-
-    # Numero maximo de solicitudes por minuto
-    rag.chat.rate.limit.requests.per.minute=10
+Para la configuracion especifica del limite de tasa del modo IA, consulte :doc:`rag-chat`.
 
 .. note::
    El limite de tasa del modo IA se aplica por separado del limite de tasa del proveedor LLM.
@@ -100,13 +92,53 @@ Respeto de robots.txt
     User-agent: *
     Crawl-delay: 10
 
+Todas las opciones de configuracion de limite de tasa
+=====================================================
+
+Todas las propiedades configurables en ``app/WEB-INF/conf/fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripcion
+     - Predeterminado
+   * - ``rate.limit.enabled``
+     - Habilitar limite de tasa
+     - ``false``
+   * - ``rate.limit.requests.per.window``
+     - Numero maximo de solicitudes por ventana
+     - ``100``
+   * - ``rate.limit.window.ms``
+     - Tamano de ventana (milisegundos)
+     - ``60000``
+   * - ``rate.limit.block.duration.ms``
+     - Periodo de bloqueo de IP cuando se excede el limite (milisegundos)
+     - ``300000``
+   * - ``rate.limit.retry.after.seconds``
+     - Valor del encabezado Retry-After (segundos)
+     - ``60``
+   * - ``rate.limit.whitelist.ips``
+     - Direcciones IP excluidas del limite de tasa (separadas por comas)
+     - ``127.0.0.1,::1``
+   * - ``rate.limit.blocked.ips``
+     - Direcciones IP a bloquear (separadas por comas)
+     - (vacio)
+   * - ``rate.limit.trusted.proxies``
+     - IPs de proxies confiables (para obtener X-Forwarded-For/X-Real-IP)
+     - ``127.0.0.1,::1``
+   * - ``rate.limit.cleanup.interval``
+     - Intervalo de limpieza para prevenir fugas de memoria (numero de solicitudes)
+     - ``1000``
+
 Configuracion avanzada de limite de tasa
 ========================================
 
 Limite de tasa personalizado
 ----------------------------
 
-Para aplicar limites diferentes a usuarios o roles especificos,
+Para aplicar una logica de limite de tasa diferente basada en condiciones especificas,
 se requiere una implementacion de componente personalizado.
 
 ::
@@ -114,36 +146,31 @@ se requiere una implementacion de componente personalizado.
     // Ejemplo de personalizacion de RateLimitHelper
     public class CustomRateLimitHelper extends RateLimitHelper {
         @Override
-        public boolean isAllowed(String key) {
+        public boolean allowRequest(String ip) {
             // Logica personalizada
         }
     }
 
-Limite de rafaga
-----------------
-
-Configuracion que permite rafagas breves de solicitudes mientras previene alta carga continua:
-
-::
-
-    # Cantidad de rafaga permitida
-    api.rate.limit.burst.size=20
-
-    # Limite sostenido
-    api.rate.limit.sustained.requests.per.second=1
-
 Configuracion de exclusion
 ==========================
 
-Puede excluir direcciones IP o usuarios especificos del limite de tasa.
+Puede excluir direcciones IP especificas del limite de tasa o bloquearlas.
 
 ::
 
-    # Direcciones IP excluidas (separadas por comas)
-    api.rate.limit.excluded.ips=192.168.1.100,10.0.0.0/8
+    # IPs en lista blanca (excluidas del limite de tasa, separadas por comas)
+    rate.limit.whitelist.ips=127.0.0.1,::1,192.168.1.100
 
-    # Roles excluidos
-    api.rate.limit.excluded.roles=admin
+    # IPs bloqueadas (siempre bloqueadas, separadas por comas)
+    rate.limit.blocked.ips=203.0.113.50
+
+    # IPs de proxies confiables (separadas por comas)
+    rate.limit.trusted.proxies=127.0.0.1,::1
+
+.. note::
+   Si esta usando un proxy inverso, configure la direccion IP del proxy en ``rate.limit.trusted.proxies``.
+   Solo se obtendrá la IP del cliente de los encabezados X-Forwarded-For y X-Real-IP
+   cuando la solicitud provenga de un proxy confiable.
 
 Monitoreo y alertas
 ===================
@@ -159,15 +186,6 @@ Cuando se aplica el limite de tasa, se registra en el log:
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
-Metricas
---------
-
-Las metricas relacionadas con el limite de tasa se pueden obtener a traves de la API de estadisticas del sistema:
-
-::
-
-    GET /api/admin/stats
-
 Solucion de problemas
 =====================
 
@@ -178,9 +196,9 @@ Solicitudes legitimas son bloqueadas
 
 **Solucion**:
 
-1. Aumentar ``requests.per.minute``
-2. Agregar IPs especificas a la lista de exclusion
-3. Ajustar el tamano de la ventana
+1. Aumentar ``rate.limit.requests.per.window``
+2. Agregar IPs especificas a la lista blanca (``rate.limit.whitelist.ips``)
+3. Ajustar el tamano de la ventana (``rate.limit.window.ms``)
 
 Limite de tasa no funciona
 --------------------------
@@ -189,7 +207,7 @@ Limite de tasa no funciona
 
 **Verificaciones**:
 
-1. Si ``api.rate.limit.enabled=true`` esta configurado
+1. Si ``rate.limit.enabled=true`` esta configurado
 2. Si el archivo de configuracion se esta leyendo correctamente
 3. Si |Fess| fue reiniciado
 
@@ -198,8 +216,8 @@ Impacto en el rendimiento
 
 Si la verificacion del limite de tasa afecta el rendimiento:
 
-1. Cambiar el almacenamiento del limite de tasa a Redis u otro
-2. Ajustar la frecuencia de verificacion
+1. Utilizar la lista blanca para omitir la verificacion de IPs confiables
+2. Deshabilitar el limite de tasa (``rate.limit.enabled=false``)
 
 Informacion de referencia
 =========================

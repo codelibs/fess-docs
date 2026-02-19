@@ -5,10 +5,9 @@ Configuration du controle de charge
 Apercu
 ======
 
-|Fess| dispose d'une fonctionnalite de controle de charge qui controle les requetes en fonction de l'utilisation CPU d'OpenSearch.
-Cette fonctionnalite limite automatiquement les requetes lors d'une charge elevee du moteur de recherche, protegeant la stabilite du systeme.
+|Fess| dispose de deux types de fonctionnalites de controle de charge qui protegent la stabilite du systeme en fonction de l'utilisation CPU.
 
-Caracteristiques du controle de charge :
+**Controle de charge des requetes HTTP** (``web.load.control`` / ``api.load.control``) :
 
 - Surveillance en temps reel de l'utilisation CPU du cluster OpenSearch
 - Seuils independants pour les requetes web et les requetes API
@@ -16,8 +15,15 @@ Caracteristiques du controle de charge :
 - Le panneau d'administration, la connexion et les ressources statiques sont exclus du controle
 - Desactive par defaut (seuil=100)
 
-Configuration
-=============
+**Controle de charge adaptatif** (``adaptive.load.control``) :
+
+- Surveille l'utilisation CPU systeme du serveur Fess lui-meme
+- Ralentit automatiquement les taches en arriere-plan telles que le crawling, l'indexation, les mises a jour de suggestions et la generation de vignettes
+- Lorsque l'utilisation CPU atteint ou depasse le seuil, les threads de traitement sont mis en pause et reprennent lorsqu'elle descend en dessous du seuil
+- Active par defaut (seuil=50)
+
+Configuration du controle de charge des requetes HTTP
+=====================================================
 
 Definissez les proprietes suivantes dans ``fess_config.properties`` :
 
@@ -164,10 +170,68 @@ Celles-ci protegent le systeme avec des approches differentes.
      - HTTP 429
      - HTTP 429
    * - Portee
-     - API de recherche / API de mode IA
-     - Requetes web / Requetes API
+     - Toutes les requetes HTTP
+     - Requetes web / Requetes API (panneau d'administration etc. exclu)
 
 La combinaison des deux fonctionnalites permet une protection systeme plus robuste.
+
+Controle de charge adaptatif
+============================
+
+Le controle de charge adaptatif ajuste automatiquement la vitesse de traitement des taches
+en arriere-plan en fonction de l'utilisation CPU systeme du serveur Fess.
+
+Configuration
+-------------
+
+``fess_config.properties`` :
+
+::
+
+    # Seuil d'utilisation CPU du controle de charge adaptatif (%)
+    # Met en pause les taches en arriere-plan lorsque l'utilisation CPU systeme atteint ou depasse cette valeur
+    # Definir a 0 ou moins pour desactiver (defaut : 50)
+    adaptive.load.control=50
+
+Comportement
+------------
+
+- Surveille l'utilisation CPU systeme du serveur ou Fess s'execute
+- Lorsque l'utilisation CPU atteint ou depasse le seuil, les threads de traitement concernes attendent que l'utilisation CPU descende en dessous du seuil
+- Lorsque l'utilisation CPU descend en dessous du seuil, le traitement reprend automatiquement
+
+**Taches en arriere-plan concernees :**
+
+- Crawling (Web / Systeme de fichiers)
+- Indexation (enregistrement de documents)
+- Traitement du magasin de donnees
+- Mises a jour des suggestions
+- Generation de vignettes
+- Sauvegarde et restauration
+
+.. note::
+   Le controle de charge adaptatif est active par defaut (seuil=50).
+   Il fonctionne independamment du controle de charge des requetes HTTP (``web.load.control`` / ``api.load.control``).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - Aspect
+     - Controle de charge des requetes HTTP
+     - Controle de charge adaptatif
+   * - Cible de surveillance
+     - Utilisation CPU d'OpenSearch
+     - Utilisation CPU systeme du serveur Fess
+   * - Cible de controle
+     - Requetes HTTP (Web / API)
+     - Taches en arriere-plan
+   * - Methode de controle
+     - Rejette les requetes en retournant HTTP 429
+     - Met en pause temporairement les threads de traitement
+   * - Defaut
+     - Desactive (seuil=100)
+     - Active (seuil=50)
 
 Depannage
 =========
@@ -197,6 +261,22 @@ Les requetes legitimes sont rejetees
 .. warning::
    Definir des seuils trop bas peut entrainer le rejet de requetes meme sous charge normale.
    Verifiez l'utilisation CPU normale de votre cluster OpenSearch avant de definir des seuils appropries.
+
+Le crawling est lent
+--------------------
+
+**Cause** : Les threads sont en etat d'attente en raison du controle de charge adaptatif
+
+**Points a verifier** :
+
+1. Verifier si ``Cpu Load XX% is greater than YY%`` apparait dans les logs
+2. Verifier si le seuil ``adaptive.load.control`` est trop bas
+
+**Solution** :
+
+1. Augmenter la valeur de ``adaptive.load.control`` (ex : 70)
+2. Augmenter les ressources CPU du serveur Fess
+3. Definir a 0 pour desactiver le controle de charge adaptatif (non recommande)
 
 Informations de reference
 =========================
