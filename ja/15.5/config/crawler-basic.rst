@@ -344,6 +344,18 @@ PDFファイルを5MBまで処理する設定を追加しています。
 .. warning::
    扱うファイルサイズを増やす場合は、クローラーのメモリ設定も増やしてください。
 
+.. note::
+   ドキュメントサイズが50MBを超える場合は、OpenSearch側の設定も変更する必要があります。
+   OpenSearchではJSONコンテンツの文字列フィールドの最大長がデフォルトで50MBに制限されています。
+
+   ``opensearch.yml`` に以下を追加してください:
+
+   ::
+
+       opensearch.xcontent.string.length.max: 104857600
+
+   上記は100MBに設定する例です。詳細は `OpenSearchのドキュメント <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ を参照してください。
+
 単語の長さ制限
 ==============
 

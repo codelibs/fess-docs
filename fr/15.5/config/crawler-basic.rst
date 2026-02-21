@@ -344,6 +344,18 @@ Cela ajoute une configuration pour traiter les fichiers PDF jusqu'à 5 Mo.
 .. warning::
    Lors de l'augmentation de la taille des fichiers traités, augmentez également les paramètres de mémoire du robot d'indexation.
 
+.. note::
+   Si la taille du document dépasse 50 Mo, vous devez également modifier les paramètres d'OpenSearch.
+   OpenSearch limite par défaut la longueur maximale des champs de chaîne dans le contenu JSON à 50 Mo.
+
+   Ajoutez ce qui suit dans ``opensearch.yml`` :
+
+   ::
+
+       opensearch.xcontent.string.length.max: 104857600
+
+   L'exemple ci-dessus définit la limite à 100 Mo. Pour plus de détails, consultez la `documentation OpenSearch <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
+
 Limitation de la longueur des mots
 ==============
 

@@ -344,6 +344,18 @@ URL模式限制
 .. warning::
    增加处理文件大小时,也需要增加爬虫的内存配置。
 
+.. note::
+   当文档大小超过50MB时,还需要更改OpenSearch端的设置。
+   OpenSearch默认将JSON内容中字符串字段的最大长度限制为50MB。
+
+   请在 ``opensearch.yml`` 中添加以下内容:
+
+   ::
+
+       opensearch.xcontent.string.length.max: 104857600
+
+   以上是设置为100MB的示例。详细信息请参阅 `OpenSearch文档 <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ 。
+
 单词长度限制
 ==============
 
