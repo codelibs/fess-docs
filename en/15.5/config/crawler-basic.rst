@@ -344,6 +344,18 @@ This adds a configuration to process PDF files up to 5MB.
 .. warning::
    When increasing file sizes to handle, also increase crawler memory settings.
 
+.. note::
+   If the document size exceeds 50MB, you also need to change the OpenSearch settings.
+   OpenSearch limits the maximum length of string fields in JSON content to 50MB by default.
+
+   Add the following to ``opensearch.yml``:
+
+   ::
+
+       opensearch.xcontent.string.length.max: 104857600
+
+   The above example sets the limit to 100MB. For details, see the `OpenSearch documentation <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
+
 Word Length Restrictions
 =========================
 

@@ -344,6 +344,18 @@ Se ha agregado una configuración para procesar archivos PDF hasta 5MB.
 .. warning::
    Si aumenta el tamaño de archivo a manejar, también aumente la configuración de memoria del rastreador.
 
+.. note::
+   Si el tamaño del documento supera los 50 MB, también debe cambiar la configuración de OpenSearch.
+   OpenSearch limita la longitud máxima de los campos de cadena en el contenido JSON a 50 MB de forma predeterminada.
+
+   Agregue lo siguiente a ``opensearch.yml``:
+
+   ::
+
+       opensearch.xcontent.string.length.max: 104857600
+
+   El ejemplo anterior establece el límite en 100 MB. Para más detalles, consulte la `documentación de OpenSearch <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
+
 Limitación de Longitud de Palabras
 ===================================
 

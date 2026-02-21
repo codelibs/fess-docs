@@ -344,6 +344,18 @@ Fügt Konfiguration für PDF-Dateien bis zu 5 MB hinzu.
 .. warning::
    Bei größeren Dateigrößen erhöhen Sie auch die Crawler-Speichereinstellungen.
 
+.. note::
+   Wenn die Dokumentgröße 50 MB überschreitet, müssen Sie auch die OpenSearch-Einstellungen ändern.
+   OpenSearch begrenzt die maximale Länge von Zeichenfolgenfeldern in JSON-Inhalten standardmäßig auf 50 MB.
+
+   Fügen Sie Folgendes zu ``opensearch.yml`` hinzu:
+
+   ::
+
+       opensearch.xcontent.string.length.max: 104857600
+
+   Das obige Beispiel setzt das Limit auf 100 MB. Weitere Details finden Sie in der `OpenSearch-Dokumentation <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
+
 Längenbeschränkung für Wörter
 ==============
 
