@@ -27,6 +27,12 @@ This is a comprehensive guide for configuring |Fess|. Each section is organized 
 
 .. toctree::
    :maxdepth: 2
+   :caption: Datastore Connectors
+
+   datastore/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: Search Features
 
    search-basic
@@ -42,6 +48,8 @@ This is a comprehensive guide for configuring |Fess|. Each section is organized 
 
    security-role
    security-virtual-host
+   ldap-integration
+   multitenancy
 
 .. toctree::
    :maxdepth: 2
@@ -51,6 +59,23 @@ This is a comprehensive guide for configuring |Fess|. Each section is organized 
    sso-oidc
    sso-entraid
    sso-spnego
+
+.. toctree::
+   :maxdepth: 2
+   :caption: LLM/AI Chat Settings
+
+   llm-overview
+   llm-ollama
+   llm-openai
+   llm-gemini
+   rag-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Scripting
+
+   scripting-overview
+   scripting-groovy
 
 .. toctree::
    :maxdepth: 2

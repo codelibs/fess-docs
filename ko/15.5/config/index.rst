@@ -27,6 +27,12 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: 데이터 스토어 커넥터
+
+   datastore/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: 검색 기능 설정
 
    search-basic
@@ -42,6 +48,34 @@
 
    security-role
    security-virtual-host
+   ldap-integration
+   multitenancy
+
+.. toctree::
+   :maxdepth: 2
+   :caption: SSO 설정
+
+   sso-saml
+   sso-oidc
+   sso-entraid
+   sso-spnego
+
+.. toctree::
+   :maxdepth: 2
+   :caption: LLM/AI 채팅 설정
+
+   llm-overview
+   llm-ollama
+   llm-openai
+   llm-gemini
+   rag-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 스크립팅
+
+   scripting-overview
+   scripting-groovy
 
 .. toctree::
    :maxdepth: 2
