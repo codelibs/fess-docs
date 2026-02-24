@@ -34,6 +34,7 @@
    search-geosearch
    search-scroll
    search-form-integration
+   rank-fusion
 
 .. toctree::
    :maxdepth: 2

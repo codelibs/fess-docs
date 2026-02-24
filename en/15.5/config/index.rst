@@ -34,6 +34,7 @@ This is a comprehensive guide for configuring |Fess|. Each section is organized 
    search-geosearch
    search-scroll
    search-form-integration
+   rank-fusion
 
 .. toctree::
    :maxdepth: 2

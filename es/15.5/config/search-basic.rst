@@ -232,3 +232,4 @@ Se muestran resultados de baja relevancia
 2. Revise la configuración de búsqueda difusa.
 3. Verifique la configuración del analizador (Analyzer).
 4. Si es necesario, consulte con el soporte comercial.
+5. También puede mejorar la precisión de búsqueda utilizando Rank Fusion. Consulte :doc:`rank-fusion` para más detalles.

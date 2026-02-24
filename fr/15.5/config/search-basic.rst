@@ -232,3 +232,4 @@ Des résultats peu pertinents s'affichent
 2. Revoyez les paramètres de recherche floue.
 3. Vérifiez la configuration de l'analyseur.
 4. Si nécessaire, consultez le support commercial.
+5. Vous pouvez également améliorer la précision de la recherche en utilisant Rank Fusion. Consultez :doc:`rank-fusion` pour plus de détails.

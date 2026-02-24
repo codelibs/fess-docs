@@ -200,3 +200,4 @@ Siguientes pasos
 - :doc:`llm-openai` - Configuracion detallada de OpenAI
 - :doc:`llm-gemini` - Configuracion detallada de Google Gemini
 - :doc:`rag-chat` - Configuracion detallada de la funcionalidad de modo IA
+- :doc:`rank-fusion` - Configuracion de Rank Fusion (Fusion de resultados de busqueda hibrida)
