@@ -200,4 +200,5 @@ AI模式功能按以下流程运作。
 - :doc:`llm-openai` - OpenAI详细配置
 - :doc:`llm-gemini` - Google Gemini详细配置
 - :doc:`rag-chat` - AI模式功能详细配置
+- :doc:`rank-fusion` - Rank Fusion配置（混合搜索结果融合）
 

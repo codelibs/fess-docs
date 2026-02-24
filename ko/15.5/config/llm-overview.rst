@@ -200,3 +200,4 @@ API 과부하를 방지하기 위한 속도 제한 설정입니다.
 - :doc:`llm-openai` - OpenAI 상세 설정
 - :doc:`llm-gemini` - Google Gemini 상세 설정
 - :doc:`rag-chat` - AI 모드 기능 상세 설정
+- :doc:`rank-fusion` - Rank Fusion 설정 (하이브리드 검색 결과 통합)

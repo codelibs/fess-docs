@@ -232,3 +232,4 @@ Ergebnisse mit geringer Relevanz angezeigt
 2. Überprüfen Sie Fuzzy-Such-Einstellungen.
 3. Überprüfen Sie Analyzer-Konfiguration.
 4. Konsultieren Sie bei Bedarf kommerziellen Support.
+5. Sie können die Suchgenauigkeit auch durch den Einsatz von Rank Fusion verbessern. Weitere Informationen finden Sie unter :doc:`rank-fusion`.

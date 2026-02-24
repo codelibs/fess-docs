@@ -232,3 +232,4 @@ Irrelevant Results Displayed
 2. Review fuzzy search settings.
 3. Check Analyzer configuration.
 4. If necessary, consult commercial support.
+5. You can also improve search accuracy by utilizing Rank Fusion. See :doc:`rank-fusion` for details.
