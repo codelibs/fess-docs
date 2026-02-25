@@ -293,4 +293,4 @@ APIキー認証
 
 - :doc:`../../admin/dataconfig-guide` - データストア設定ガイド
 - :doc:`../../admin/plugin-guide` - プラグイン管理ガイド
-- :doc:`../api/admin/api-admin-dataconfig` - データストア設定API
+- :doc:`../../api/admin/api-admin-dataconfig` - データストア設定API

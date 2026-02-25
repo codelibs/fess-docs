@@ -289,5 +289,5 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
-- :doc:`../search-api` - 検索API
+- :doc:`../api-search` - 検索API
 - :doc:`../../admin/labeltype-guide` - ラベルタイプ管理ガイド

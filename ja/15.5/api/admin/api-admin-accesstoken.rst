@@ -279,5 +279,5 @@ APIトークン作成
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
-- :doc:`../search-api` - 検索API
+- :doc:`../api-search` - 検索API
 - :doc:`../../admin/accesstoken-guide` - アクセストークン管理ガイド

@@ -321,4 +321,3 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
 
 - :doc:`api-admin-overview` - Admin API概要
 - :doc:`../../admin/dict-guide` - 辞書管理ガイド
-- :doc:`../../config/dict-config` - 辞書設定ガイド
