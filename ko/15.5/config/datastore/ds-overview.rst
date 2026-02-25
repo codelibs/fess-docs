@@ -293,4 +293,4 @@ API 키 인증
 
 - :doc:`../../admin/dataconfig-guide` - 데이터스토어 설정 가이드
 - :doc:`../../admin/plugin-guide` - 플러그인 관리 가이드
-- :doc:`../api/admin/api-admin-dataconfig` - 데이터스토어 설정 API
+- :doc:`../../api/admin/api-admin-dataconfig` - 데이터스토어 설정 API

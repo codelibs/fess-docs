@@ -293,4 +293,4 @@ Informacion de Referencia
 
 - :doc:`../../admin/dataconfig-guide` - Guia de Configuracion de Almacen de Datos
 - :doc:`../../admin/plugin-guide` - Guia de Administracion de Plugins
-- :doc:`../api/admin/api-admin-dataconfig` - API de Configuracion de Almacen de Datos
+- :doc:`../../api/admin/api-admin-dataconfig` - API de Configuracion de Almacen de Datos

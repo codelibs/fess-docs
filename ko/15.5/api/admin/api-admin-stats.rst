@@ -265,4 +265,4 @@ Stats API는 |Fess| 의 통계 정보를 조회하기 위한 API입니다.
 - :doc:`api-admin-overview` - Admin API 개요
 - :doc:`api-admin-log` - 로그 API
 - :doc:`api-admin-systeminfo` - 시스템 정보 API
-- :doc:`../../admin/stats-guide` - 통계 관리 가이드
+- :doc:`../../admin/searchlog-guide` - 검색 로그

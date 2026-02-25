@@ -321,5 +321,4 @@ Dict API是用于管理 |Fess| 词典文件的API。
 
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`../../admin/dict-guide` - 词典管理指南
-- :doc:`../../config/dict-config` - 词典配置指南
 

@@ -33,7 +33,7 @@ Aktivierung der Scroll-Suche
 ----------------------
 
 Standardmäßig ist Scroll-Suche aus Sicherheits- und Leistungsgründen deaktiviert.
-Zur Aktivierung ändern Sie in ``fess_config.properties`` oder ``/etc/fess/fess_config.properties``
+Zur Aktivierung ändern Sie in ``app/WEB-INF/classes/fess_config.properties`` oder ``/etc/fess/fess_config.properties``
 folgende Einstellung:
 
 ::

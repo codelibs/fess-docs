@@ -429,5 +429,5 @@ SearchLog API是用于获取和管理 |Fess| 搜索日志的API。
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`api-admin-stats` - 系统统计API
 - :doc:`../../admin/searchlog-guide` - 搜索日志管理指南
-- :doc:`../../config/search-analytics` - 搜索分析配置指南
+- :doc:`../../config/admin-opensearch-dashboards` - 搜索分析配置指南
 

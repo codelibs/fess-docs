@@ -279,6 +279,6 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
-- :doc:`../search-api` - 搜索API
+- :doc:`../api-search` - 搜索API
 - :doc:`../../admin/accesstoken-guide` - 访问令牌管理指南
 

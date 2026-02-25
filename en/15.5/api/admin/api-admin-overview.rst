@@ -396,6 +396,8 @@ System
      - System statistics
    * - :doc:`api-admin-log`
      - Log retrieval
+   * - :doc:`api-admin-searchlog`
+     - Search Log Management
    * - :doc:`api-admin-storage`
      - Storage management
    * - :doc:`api-admin-plugin`

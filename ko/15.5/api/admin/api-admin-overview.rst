@@ -396,6 +396,8 @@ HTTP 상태 코드
      - 시스템 통계
    * - :doc:`api-admin-log`
      - 로그 조회
+   * - :doc:`api-admin-searchlog`
+     - 검색 로그 관리
    * - :doc:`api-admin-storage`
      - 스토리지 관리
    * - :doc:`api-admin-plugin`

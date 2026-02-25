@@ -429,5 +429,5 @@ Reference
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`api-admin-stats` - System Stats API
 - :doc:`../../admin/searchlog-guide` - Search Log Management Guide
-- :doc:`../../config/search-analytics` - Search Analytics Configuration Guide
+- :doc:`../../config/admin-opensearch-dashboards` - Search Analytics Settings Guide
 

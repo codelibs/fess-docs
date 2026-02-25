@@ -321,5 +321,4 @@ Reference
 
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`../../admin/dict-guide` - Dictionary Management Guide
-- :doc:`../../config/dict-config` - Dictionary Configuration Guide
 

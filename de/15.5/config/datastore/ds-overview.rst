@@ -292,4 +292,4 @@ Weiterführende Informationen
 
 - :doc:`../../admin/dataconfig-guide` - Leitfaden zur Datenspeicher-Konfiguration
 - :doc:`../../admin/plugin-guide` - Leitfaden zur Plugin-Verwaltung
-- :doc:`../api/admin/api-admin-dataconfig` - Datenspeicher-Konfigurations-API
+- :doc:`../../api/admin/api-admin-dataconfig` - Datenspeicher-Konfigurations-API

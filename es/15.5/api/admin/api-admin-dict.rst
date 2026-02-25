@@ -321,4 +321,3 @@ Informacion de Referencia
 
 - :doc:`api-admin-overview` - Vision general de Admin API
 - :doc:`../../admin/dict-guide` - Guia de gestion de diccionarios
-- :doc:`../../config/dict-config` - Guia de configuracion de diccionarios

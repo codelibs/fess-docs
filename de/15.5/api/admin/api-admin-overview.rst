@@ -396,6 +396,8 @@ System
      - Systemstatistiken
    * - :doc:`api-admin-log`
      - Protokoll abrufen
+   * - :doc:`api-admin-searchlog`
+     - Suchprotokoll-Verwaltung
    * - :doc:`api-admin-storage`
      - Speicherverwaltung
    * - :doc:`api-admin-plugin`

@@ -321,4 +321,3 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
 
 - :doc:`api-admin-overview` - Admin API 개요
 - :doc:`../../admin/dict-guide` - 사전 관리 가이드
-- :doc:`../../config/dict-config` - 사전 설정 가이드

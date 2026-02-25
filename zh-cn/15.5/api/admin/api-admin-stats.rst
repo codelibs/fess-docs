@@ -175,5 +175,5 @@ Stats API是用于获取 |Fess| 统计信息的API。
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`api-admin-log` - 日志API
 - :doc:`api-admin-systeminfo` - 系统信息API
-- :doc:`../../admin/stats-guide` - 统计管理指南
+- :doc:`../../admin/searchlog-guide` - 搜索日志
 

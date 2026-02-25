@@ -293,4 +293,4 @@ Informations de reference
 
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration DataStore
 - :doc:`../../admin/plugin-guide` - Guide de gestion des plugins
-- :doc:`../api/admin/api-admin-dataconfig` - API de configuration DataStore
+- :doc:`../../api/admin/api-admin-dataconfig` - API de configuration DataStore

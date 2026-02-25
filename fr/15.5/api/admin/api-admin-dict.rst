@@ -321,4 +321,3 @@ Informations complementaires
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`../../admin/dict-guide` - Guide de gestion des dictionnaires
-- :doc:`../../config/dict-config` - Guide de configuration des dictionnaires
