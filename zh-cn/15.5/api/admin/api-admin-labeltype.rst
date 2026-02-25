@@ -289,6 +289,6 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
-- :doc:`../search-api` - 搜索API
+- :doc:`../api-search` - 搜索API
 - :doc:`../../admin/labeltype-guide` - 标签类型管理指南
 

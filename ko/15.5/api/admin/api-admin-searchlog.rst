@@ -429,4 +429,4 @@ SearchLog API는 |Fess| 의 검색 로그를 조회 및 관리하기 위한 API�
 - :doc:`api-admin-overview` - Admin API 개요
 - :doc:`api-admin-stats` - 시스템 통계 API
 - :doc:`../../admin/searchlog-guide` - 검색 로그 관리 가이드
-- :doc:`../../config/search-analytics` - 검색 분석 설정 가이드
+- :doc:`../../config/admin-opensearch-dashboards` - 검색 분석 설정 가이드

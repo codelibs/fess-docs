@@ -396,6 +396,8 @@ Sistema
      - Estadisticas del sistema
    * - :doc:`api-admin-log`
      - Obtencion de registros
+   * - :doc:`api-admin-searchlog`
+     - Gestion de registros de busqueda
    * - :doc:`api-admin-storage`
      - Gestion de almacenamiento
    * - :doc:`api-admin-plugin`

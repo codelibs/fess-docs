@@ -429,4 +429,4 @@ Informations complementaires
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-stats` - API des statistiques systeme
 - :doc:`../../admin/searchlog-guide` - Guide de gestion des journaux de recherche
-- :doc:`../../config/search-analytics` - Guide de configuration de l'analyse de recherche
+- :doc:`../../config/admin-opensearch-dashboards` - Guide de configuration de l'analyse de recherche

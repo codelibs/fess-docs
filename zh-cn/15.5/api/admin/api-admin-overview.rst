@@ -396,6 +396,8 @@ HTTP状态码
      - 系统统计
    * - :doc:`api-admin-log`
      - 日志获取
+   * - :doc:`api-admin-searchlog`
+     - 搜索日志管理
    * - :doc:`api-admin-storage`
      - 存储管理
    * - :doc:`api-admin-plugin`

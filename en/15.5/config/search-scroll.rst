@@ -33,7 +33,7 @@ Enabling Scroll Search
 ----------------------
 
 By default, scroll search is disabled from security and performance perspectives.
-To enable it, change the following setting in ``fess_config.properties`` or ``/etc/fess/fess_config.properties``.
+To enable it, change the following setting in ``app/WEB-INF/classes/fess_config.properties`` or ``/etc/fess/fess_config.properties``.
 
 ::
 

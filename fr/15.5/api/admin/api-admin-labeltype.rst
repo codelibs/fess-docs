@@ -289,5 +289,5 @@ Informations complementaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`../search-api` - API de recherche
+- :doc:`../api-search` - API de recherche
 - :doc:`../../admin/labeltype-guide` - Guide de gestion des types de labels

@@ -293,4 +293,4 @@ API密钥认证
 
 - :doc:`../../admin/dataconfig-guide` - 数据存储设置指南
 - :doc:`../../admin/plugin-guide` - 插件管理指南
-- :doc:`../api/admin/api-admin-dataconfig` - 数据存储设置API
+- :doc:`../../api/admin/api-admin-dataconfig` - 数据存储设置API

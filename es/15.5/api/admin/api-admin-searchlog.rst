@@ -429,4 +429,4 @@ Informacion de Referencia
 - :doc:`api-admin-overview` - Vision general de Admin API
 - :doc:`api-admin-stats` - API de estadisticas del sistema
 - :doc:`../../admin/searchlog-guide` - Guia de gestion de registros de busqueda
-- :doc:`../../config/search-analytics` - Guia de configuracion de analisis de busqueda
+- :doc:`../../config/admin-opensearch-dashboards` - Guia de configuracion de analisis de busqueda

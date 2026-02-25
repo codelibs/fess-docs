@@ -33,7 +33,7 @@
 ----------------------
 
 기본적으로 보안과 성능 관점에서 스크롤 검색은 비활성화되어 있습니다.
-활성화하려면 ``fess_config.properties`` 또는 ``/etc/fess/fess_config.properties`` 에서
+활성화하려면 ``app/WEB-INF/classes/fess_config.properties`` 또는 ``/etc/fess/fess_config.properties`` 에서
 다음 설정을 변경합니다.
 
 ::
@@ -382,6 +382,6 @@ jq 명령을 사용하여 CSV로 변환하는 예:
 참고 정보
 ========
 
-- :doc:`search` - 검색 기능 자세히 보기
-- :doc:`search-config` - 검색 관련 설정
+- :doc:`search-basic` - 검색 기능 자세히 보기
+- :doc:`search-scroll` - 검색 관련 설정
 - `OpenSearch Scroll API <https://opensearch.org/docs/latest/api-reference/scroll/>`_

@@ -33,7 +33,7 @@
 ----------------------
 
 默认情况下,出于安全和性能考虑,滚动搜索被禁用。
-要启用,请在 ``fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 中
+要启用,请在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 中
 修改以下配置。
 
 ::
@@ -382,6 +382,6 @@ Python 处理示例
 参考信息
 ========
 
-- :doc:`search` - 搜索功能详情
-- :doc:`search-config` - 搜索相关配置
+- :doc:`search-basic` - 搜索功能详情
+- :doc:`search-scroll` - 搜索相关配置
 - `OpenSearch Scroll API <https://opensearch.org/docs/latest/api-reference/scroll/>`_

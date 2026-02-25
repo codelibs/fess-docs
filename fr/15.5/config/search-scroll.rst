@@ -33,7 +33,7 @@ Activation de la recherche par défilement
 ----------------------
 
 Par défaut, la recherche par défilement est désactivée pour des raisons de sécurité et de performances.
-Pour l'activer, modifiez le paramètre suivant dans ``fess_config.properties`` ou ``/etc/fess/fess_config.properties``.
+Pour l'activer, modifiez le paramètre suivant dans ``app/WEB-INF/classes/fess_config.properties`` ou ``/etc/fess/fess_config.properties``.
 
 ::
 
@@ -381,6 +381,6 @@ La réponse est vide
 Informations de référence
 ========
 
-- :doc:`search` - Détails de la fonction de recherche
-- :doc:`search-config` - Paramètres liés à la recherche
+- :doc:`search-basic` - Détails de la fonction de recherche
+- :doc:`search-scroll` - Paramètres liés à la recherche
 - `API Scroll d'OpenSearch <https://opensearch.org/docs/latest/api-reference/scroll/>`_

@@ -167,4 +167,4 @@ Informations complementaires
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-log` - API des journaux
 - :doc:`api-admin-systeminfo` - API des informations systeme
-- :doc:`../../admin/stats-guide` - Guide des statistiques
+- :doc:`../../admin/searchlog-guide` - Journaux de recherche

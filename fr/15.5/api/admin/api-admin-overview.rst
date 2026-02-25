@@ -396,6 +396,8 @@ Systeme
      - Statistiques systeme
    * - :doc:`api-admin-log`
      - Obtention des journaux
+   * - :doc:`api-admin-searchlog`
+     - Gestion des journaux de recherche
    * - :doc:`api-admin-storage`
      - Gestion du stockage
    * - :doc:`api-admin-plugin`

@@ -31,7 +31,7 @@ Habilitación de la Búsqueda Scroll
 ----------------------------------
 
 Por defecto, la búsqueda scroll está deshabilitada por motivos de seguridad y rendimiento.
-Para habilitarla, modifique la siguiente configuración en ``fess_config.properties`` o ``/etc/fess/fess_config.properties``.
+Para habilitarla, modifique la siguiente configuración en ``app/WEB-INF/classes/fess_config.properties`` o ``/etc/fess/fess_config.properties``.
 
 ::
 
@@ -379,6 +379,6 @@ La Respuesta Está Vacía
 Información de Referencia
 ==========================
 
-- :doc:`search` - Detalles de la función de búsqueda
-- :doc:`search-config` - Configuración relacionada con la búsqueda
+- :doc:`search-basic` - Detalles de la función de búsqueda
+- :doc:`search-scroll` - Configuración relacionada con la búsqueda
 - `OpenSearch Scroll API <https://opensearch.org/docs/latest/api-reference/scroll/>`_
