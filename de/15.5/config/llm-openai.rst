@@ -23,13 +23,18 @@ Unterstützte Modelle
 
 Hauptsächlich verfügbare Modelle bei OpenAI:
 
-- ``gpt-4o`` - Neuestes Hochleistungsmodell
+- ``gpt-4o`` - Hochleistungs-Multimodalmodell
 - ``gpt-4o-mini`` - Kompaktversion von GPT-4o (kosteneffizienter)
+- ``o3-mini`` - Leichtgewichtiges Modell für Schlussfolgerungen
+- ``o4-mini`` - Leichtgewichtiges Modell der nächsten Generation für Schlussfolgerungen
 - ``gpt-4-turbo`` - Schnelle Version von GPT-4
 - ``gpt-3.5-turbo`` - Modell mit gutem Preis-Leistungs-Verhältnis
 
 .. note::
    Aktuelle Informationen zu verfügbaren Modellen finden Sie unter `OpenAI Models <https://platform.openai.com/docs/models>`__.
+
+.. note::
+   Bei Verwendung von Modellen der o1/o3/o4-Serie oder der gpt-5-Serie verwendet |Fess| automatisch den OpenAI-API-Parameter ``max_completion_tokens``. Eine Konfigurationsänderung ist nicht erforderlich.
 
 Voraussetzungen
 ===============
@@ -207,6 +212,10 @@ Richtlinien zur Modellauswahl je nach Verwendungszweck.
      - Hoch
      - Sehr hoch
      - Komplexe Schlussfolgerungen, wenn hohe Qualität erforderlich
+   * - ``o3-mini`` / ``o4-mini``
+     - Mittel
+     - Sehr hoch
+     - Schlussfolgerungsaufgaben wie Mathematik und Programmierung
    * - ``gpt-4-turbo``
      - Hoch
      - Sehr hoch

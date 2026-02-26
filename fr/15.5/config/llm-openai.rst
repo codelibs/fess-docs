@@ -23,13 +23,18 @@ Modeles pris en charge
 
 Principaux modeles disponibles avec OpenAI :
 
-- ``gpt-4o`` - Dernier modele haute performance
+- ``gpt-4o`` - Modele multimodal haute performance
 - ``gpt-4o-mini`` - Version allegee de GPT-4o (bon rapport cout-efficacite)
+- ``o3-mini`` - Modele leger specialise dans le raisonnement
+- ``o4-mini`` - Modele leger de nouvelle generation specialise dans le raisonnement
 - ``gpt-4-turbo`` - Version rapide de GPT-4
 - ``gpt-3.5-turbo`` - Modele avec excellent rapport cout-performance
 
 .. note::
    Pour les derniers modeles disponibles, consultez `OpenAI Models <https://platform.openai.com/docs/models>`__.
+
+.. note::
+   Lors de l'utilisation de modeles de la serie o1/o3/o4 ou de la serie gpt-5, |Fess| utilise automatiquement le parametre ``max_completion_tokens`` de l'API OpenAI. Aucune modification de configuration n'est necessaire.
 
 Prerequis
 ========
@@ -207,6 +212,10 @@ Guide pour la selection du modele selon l'usage.
      - Eleve
      - Maximale
      - Raisonnement complexe, haute qualite requise
+   * - ``o3-mini`` / ``o4-mini``
+     - Moyen
+     - Maximale
+     - Taches de raisonnement comme les mathematiques et la programmation
    * - ``gpt-4-turbo``
      - Eleve
      - Maximale

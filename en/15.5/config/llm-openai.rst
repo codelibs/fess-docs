@@ -23,13 +23,18 @@ Supported Models
 
 Main models available with OpenAI:
 
-- ``gpt-4o`` - Latest high-performance model
+- ``gpt-4o`` - High-performance multimodal model
 - ``gpt-4o-mini`` - Lightweight version of GPT-4o (cost-efficient)
+- ``o3-mini`` - Lightweight reasoning-focused model
+- ``o4-mini`` - Next-generation lightweight reasoning model
 - ``gpt-4-turbo`` - High-speed version of GPT-4
 - ``gpt-3.5-turbo`` - Model with excellent cost performance
 
 .. note::
    For the latest information on available models, see `OpenAI Models <https://platform.openai.com/docs/models>`__.
+
+.. note::
+   When using o1/o3/o4 series or gpt-5 series models, |Fess| automatically uses the OpenAI API ``max_completion_tokens`` parameter. No configuration changes are required.
 
 Prerequisites
 =============
@@ -207,6 +212,10 @@ Guidelines for selecting models based on intended use.
      - High
      - Highest
      - Complex reasoning, when high quality is needed
+   * - ``o3-mini`` / ``o4-mini``
+     - Medium
+     - Highest
+     - Reasoning tasks such as math and coding
    * - ``gpt-4-turbo``
      - High
      - Highest
