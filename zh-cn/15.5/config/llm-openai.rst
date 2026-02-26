@@ -23,13 +23,18 @@ OpenAI是提供GPT-4等高性能大型语言模型（LLM）的云服务。
 
 OpenAI可用的主要模型:
 
-- ``gpt-4o`` - 最新的高性能模型
+- ``gpt-4o`` - 高性能多模态模型
 - ``gpt-4o-mini`` - GPT-4o的轻量版（成本效益高）
+- ``o3-mini`` - 推理特化的轻量模型
+- ``o4-mini`` - 下一代推理特化轻量模型
 - ``gpt-4-turbo`` - GPT-4的高速版
 - ``gpt-3.5-turbo`` - 性价比优秀的模型
 
 .. note::
    可用模型的最新信息请查阅 `OpenAI Models <https://platform.openai.com/docs/models>`__
+
+.. note::
+   使用o1/o3/o4系列或gpt-5系列模型时，|Fess| 会自动使用OpenAI API的 ``max_completion_tokens`` 参数。无需更改配置。
 
 前提条件
 ========
@@ -207,6 +212,10 @@ systemd环境
      - 高
      - 最高
      - 复杂推理、需要高质量
+   * - ``o3-mini`` / ``o4-mini``
+     - 中
+     - 最高
+     - 数学、编程等推理任务
    * - ``gpt-4-turbo``
      - 高
      - 最高

@@ -23,13 +23,18 @@ OpenAIを使用することで、最先端のAIモデルによる高品質な回
 
 OpenAIで利用可能な主なモデル:
 
-- ``gpt-4o`` - 最新の高性能モデル
+- ``gpt-4o`` - 高性能マルチモーダルモデル
 - ``gpt-4o-mini`` - GPT-4oの軽量版（コスト効率が良い）
+- ``o3-mini`` - 推論特化の軽量モデル
+- ``o4-mini`` - 推論特化の次世代軽量モデル
 - ``gpt-4-turbo`` - GPT-4の高速版
 - ``gpt-3.5-turbo`` - コストパフォーマンスに優れたモデル
 
 .. note::
    利用可能なモデルの最新情報は `OpenAI Models <https://platform.openai.com/docs/models>`__ で確認できます。
+
+.. note::
+   o1/o3/o4系やgpt-5系のモデルを使用する場合、|Fess| はOpenAI APIの ``max_completion_tokens`` パラメータを自動的に使用します。設定の変更は不要です。
 
 前提条件
 ========
@@ -207,6 +212,10 @@ Microsoft Azure経由でOpenAIモデルを使用する場合は、APIエンド�
      - 高
      - 最高
      - 複雑な推論、高品質が必要な場合
+   * - ``o3-mini`` / ``o4-mini``
+     - 中
+     - 最高
+     - 数学・コーディングなどの推論タスク
    * - ``gpt-4-turbo``
      - 高
      - 最高
