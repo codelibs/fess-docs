@@ -23,10 +23,10 @@ Gemini를 사용하면 Google의 최신 AI 기술을 활용한 고품질 응답 
 
 Gemini에서 이용 가능한 주요 모델:
 
-- ``gemini-2.5-flash`` - 빠르고 효율적인 모델(권장)
-- ``gemini-2.5-pro`` - 더 높은 추론 능력을 가진 모델
-- ``gemini-1.5-flash`` - 안정 버전의 Flash 모델
-- ``gemini-1.5-pro`` - 안정 버전의 Pro 모델
+- ``gemini-3-flash-preview`` - 최신 고속 모델(권장)
+- ``gemini-3.1-pro-preview`` - 최신 고추론 모델
+- ``gemini-2.5-flash`` - 안정 버전의 고속 모델
+- ``gemini-2.5-pro`` - 안정 버전의 고추론 모델
 
 .. note::
    이용 가능한 모델의 최신 정보는 `Google AI for Developers <https://ai.google.dev/models/gemini>`__에서 확인할 수 있습니다.
@@ -76,7 +76,7 @@ API 키 발급
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # 사용할 모델
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
 권장 구성(프로덕션 환경)
 --------------------
@@ -93,7 +93,7 @@ API 키 발급
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # 모델 설정(고속 모델 사용)
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
     # API 엔드포인트(일반적으로 변경 불필요)
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -118,7 +118,7 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다.
      - (필수)
    * - ``rag.llm.gemini.model``
      - 사용할 모델명
-     - ``gemini-2.5-flash``
+     - ``gemini-3-flash-preview``
    * - ``rag.llm.gemini.api.url``
      - API의 기본 URL
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -150,7 +150,7 @@ docker-compose.yml
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_TYPE=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-2.5-flash
+          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
 systemd 환경
 -----------
@@ -185,30 +185,30 @@ Vertex AI를 사용하는 경우 API 엔드포인트와 인증 방법이 다릅�
      - 속도
      - 품질
      - 용도
+   * - ``gemini-3-flash-preview``
+     - 고속
+     - 최고
+     - 일반적인 용도(권장)
+   * - ``gemini-3.1-pro-preview``
+     - 중속
+     - 최고
+     - 복잡한 추론
    * - ``gemini-2.5-flash``
      - 고속
      - 높음
-     - 일반적인 용도, 균형 중시(권장)
+     - 안정 버전, 비용 중시
    * - ``gemini-2.5-pro``
      - 중속
-     - 최고
-     - 복잡한 추론, 고품질이 필요한 경우
-   * - ``gemini-1.5-flash``
-     - 고속
-     - 양호
-     - 비용 중시, 안정성 중시
-   * - ``gemini-1.5-pro``
-     - 중속
      - 높음
-     - 긴 컨텍스트가 필요한 경우
+     - 안정 버전, 긴 컨텍스트
 
 컨텍스트 윈도우
 ----------------------
 
 Gemini 모델은 매우 긴 컨텍스트 윈도우를 지원합니다:
 
-- **Gemini 1.5/2.5 Flash**: 최대 100만 토큰
-- **Gemini 1.5/2.5 Pro**: 최대 200만 토큰
+- **Gemini 3 Flash / 2.5 Flash**: 최대 100만 토큰
+- **Gemini 3.1 Pro / 2.5 Pro**: 최대 100만 토큰(3.1 Pro) / 200만 토큰(2.5 Pro)
 
 이 특징을 활용하여 더 많은 검색 결과를 컨텍스트에 포함할 수 있습니다.
 
@@ -230,15 +230,18 @@ Google AI API는 사용량에 따라 요금이 부과됩니다(무료 할당량 
    * - 모델
      - 입력(100만 문자)
      - 출력(100만 문자)
-   * - Gemini 1.5 Flash
+   * - Gemini 3 Flash Preview
+     - $0.50
+     - $3.00
+   * - Gemini 3.1 Pro Preview
+     - $2.00
+     - $12.00
+   * - Gemini 2.5 Flash
      - $0.075
      - $0.30
-   * - Gemini 1.5 Pro
+   * - Gemini 2.5 Pro
      - $1.25
      - $5.00
-   * - Gemini 2.5 Flash
-     - 가격 변동 가능
-     - 가격 변동 가능
 
 .. note::
    최신 가격 및 무료 할당량 정보는 `Google AI Pricing <https://ai.google.dev/pricing>`__에서 확인하세요.
