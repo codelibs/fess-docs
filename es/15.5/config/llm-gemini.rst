@@ -23,10 +23,10 @@ Modelos compatibles
 
 Principales modelos disponibles en Gemini:
 
-- ``gemini-2.5-flash`` - Modelo rapido y eficiente (recomendado)
-- ``gemini-2.5-pro`` - Modelo con mayor capacidad de razonamiento
-- ``gemini-1.5-flash`` - Modelo Flash version estable
-- ``gemini-1.5-pro`` - Modelo Pro version estable
+- ``gemini-3-flash-preview`` - Ultimo modelo rapido (recomendado)
+- ``gemini-3.1-pro-preview`` - Ultimo modelo de alto razonamiento
+- ``gemini-2.5-flash`` - Modelo rapido version estable
+- ``gemini-2.5-pro`` - Modelo de alto razonamiento version estable
 
 .. note::
    Para la informacion mas reciente sobre modelos disponibles, consulte `Google AI for Developers <https://ai.google.dev/models/gemini>`__.
@@ -76,7 +76,7 @@ Configuracion minima
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Modelo a usar
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
 Configuracion recomendada (entorno de produccion)
 -------------------------------------------------
@@ -93,7 +93,7 @@ Configuracion recomendada (entorno de produccion)
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Configuracion del modelo (usar modelo rapido)
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
     # Endpoint de API (normalmente no necesita cambios)
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -118,7 +118,7 @@ Todas las opciones de configuracion disponibles para el cliente de Gemini.
      - (requerido)
    * - ``rag.llm.gemini.model``
      - Nombre del modelo a usar
-     - ``gemini-2.5-flash``
+     - ``gemini-3-flash-preview``
    * - ``rag.llm.gemini.api.url``
      - URL base de la API
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -150,7 +150,7 @@ docker-compose.yml
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_TYPE=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-2.5-flash
+          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
 Entorno systemd
 ---------------
@@ -185,30 +185,30 @@ Guia para la seleccion de modelos segun el proposito de uso.
      - Velocidad
      - Calidad
      - Uso
+   * - ``gemini-3-flash-preview``
+     - Rapido
+     - Maxima
+     - Uso general (recomendado)
+   * - ``gemini-3.1-pro-preview``
+     - Medio
+     - Maxima
+     - Razonamiento complejo
    * - ``gemini-2.5-flash``
      - Rapido
      - Alta
-     - Uso general, enfasis en equilibrio (recomendado)
+     - Version estable, enfasis en costos
    * - ``gemini-2.5-pro``
      - Medio
-     - Maxima
-     - Razonamiento complejo, cuando se requiere alta calidad
-   * - ``gemini-1.5-flash``
-     - Rapido
-     - Buena
-     - Enfasis en costos, enfasis en estabilidad
-   * - ``gemini-1.5-pro``
-     - Medio
      - Alta
-     - Cuando se requiere contexto largo
+     - Version estable, contexto largo
 
 Ventana de contexto
 -------------------
 
 Los modelos Gemini soportan ventanas de contexto muy largas:
 
-- **Gemini 1.5/2.5 Flash**: Hasta 1 millon de tokens
-- **Gemini 1.5/2.5 Pro**: Hasta 2 millones de tokens
+- **Gemini 3 Flash / 2.5 Flash**: Hasta 1 millon de tokens
+- **Gemini 3.1 Pro / 2.5 Pro**: Hasta 1 millon de tokens (3.1 Pro) / 2 millones de tokens (2.5 Pro)
 
 Aprovechando esta caracteristica, puede incluir mas resultados de busqueda en el contexto.
 
@@ -230,15 +230,18 @@ La API de Google AI cobra segun el uso (con cuota gratuita disponible).
    * - Modelo
      - Entrada (1M caracteres)
      - Salida (1M caracteres)
-   * - Gemini 1.5 Flash
+   * - Gemini 3 Flash Preview
+     - $0.50
+     - $3.00
+   * - Gemini 3.1 Pro Preview
+     - $2.00
+     - $12.00
+   * - Gemini 2.5 Flash
      - $0.075
      - $0.30
-   * - Gemini 1.5 Pro
+   * - Gemini 2.5 Pro
      - $1.25
      - $5.00
-   * - Gemini 2.5 Flash
-     - Los precios pueden variar
-     - Los precios pueden variar
 
 .. note::
    Para los precios mas recientes e informacion sobre la cuota gratuita, consulte `Google AI Pricing <https://ai.google.dev/pricing>`__.

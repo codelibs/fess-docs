@@ -23,10 +23,10 @@ Modeles pris en charge
 
 Principaux modeles disponibles avec Gemini :
 
-- ``gemini-2.5-flash`` - Modele rapide et efficace (recommande)
-- ``gemini-2.5-pro`` - Modele avec capacites de raisonnement superieures
-- ``gemini-1.5-flash`` - Version stable du modele Flash
-- ``gemini-1.5-pro`` - Version stable du modele Pro
+- ``gemini-3-flash-preview`` - Dernier modele rapide (recommande)
+- ``gemini-3.1-pro-preview`` - Dernier modele de raisonnement avance
+- ``gemini-2.5-flash`` - Version stable du modele rapide
+- ``gemini-2.5-pro`` - Version stable du modele de raisonnement
 
 .. note::
    Pour les derniers modeles disponibles, consultez `Google AI for Developers <https://ai.google.dev/models/gemini>`__.
@@ -76,7 +76,7 @@ Configuration minimale
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Modele a utiliser
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
 Configuration recommandee (environnement de production)
 --------------------
@@ -93,7 +93,7 @@ Configuration recommandee (environnement de production)
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Configuration du modele (utiliser le modele rapide)
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
     # Point de terminaison API (generalement pas besoin de modifier)
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -118,7 +118,7 @@ Tous les elements de configuration disponibles pour le client Gemini.
      - (Requis)
    * - ``rag.llm.gemini.model``
      - Nom du modele a utiliser
-     - ``gemini-2.5-flash``
+     - ``gemini-3-flash-preview``
    * - ``rag.llm.gemini.api.url``
      - URL de base de l'API
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -150,7 +150,7 @@ docker-compose.yml
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_TYPE=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-2.5-flash
+          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
 Environnement systemd
 -----------
@@ -185,30 +185,30 @@ Guide pour la selection du modele selon l'usage.
      - Vitesse
      - Qualite
      - Usage
+   * - ``gemini-3-flash-preview``
+     - Rapide
+     - Maximale
+     - Usage general (recommande)
+   * - ``gemini-3.1-pro-preview``
+     - Moyenne
+     - Maximale
+     - Raisonnement complexe
    * - ``gemini-2.5-flash``
      - Rapide
      - Elevee
-     - Usage general, equilibre (recommande)
+     - Version stable, priorite au cout
    * - ``gemini-2.5-pro``
      - Moyenne
-     - Maximale
-     - Raisonnement complexe, haute qualite requise
-   * - ``gemini-1.5-flash``
-     - Rapide
-     - Bonne
-     - Priorite au cout, stabilite
-   * - ``gemini-1.5-pro``
-     - Moyenne
      - Elevee
-     - Long contexte requis
+     - Version stable, long contexte
 
 Fenetre de contexte
 ----------------------
 
 Les modeles Gemini prennent en charge des fenetres de contexte tres longues :
 
-- **Gemini 1.5/2.5 Flash** : Maximum 1 million de tokens
-- **Gemini 1.5/2.5 Pro** : Maximum 2 millions de tokens
+- **Gemini 3 Flash / 2.5 Flash** : Maximum 1 million de tokens
+- **Gemini 3.1 Pro / 2.5 Pro** : Maximum 1 million de tokens (3.1 Pro) / 2 millions de tokens (2.5 Pro)
 
 Cette caracteristique permet d'inclure davantage de resultats de recherche dans le contexte.
 
@@ -230,15 +230,18 @@ L'API Google AI est facturee a l'usage (avec une offre gratuite).
    * - Modele
      - Entree (1M caracteres)
      - Sortie (1M caracteres)
-   * - Gemini 1.5 Flash
+   * - Gemini 3 Flash Preview
+     - $0.50
+     - $3.00
+   * - Gemini 3.1 Pro Preview
+     - $2.00
+     - $12.00
+   * - Gemini 2.5 Flash
      - $0.075
      - $0.30
-   * - Gemini 1.5 Pro
+   * - Gemini 2.5 Pro
      - $1.25
      - $5.00
-   * - Gemini 2.5 Flash
-     - Les prix peuvent varier
-     - Les prix peuvent varier
 
 .. note::
    Pour les derniers prix et informations sur l'offre gratuite, consultez `Google AI Pricing <https://ai.google.dev/pricing>`__.

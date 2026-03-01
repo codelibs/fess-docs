@@ -23,10 +23,10 @@ Geminiを使用することで、Googleの最新AI技術を活用した高品質
 
 Geminiで利用可能な主なモデル:
 
-- ``gemini-2.5-flash`` - 高速で効率的なモデル（推奨）
-- ``gemini-2.5-pro`` - より高い推論能力を持つモデル
-- ``gemini-1.5-flash`` - 安定版のFlashモデル
-- ``gemini-1.5-pro`` - 安定版のProモデル
+- ``gemini-3-flash-preview`` - 最新の高速モデル（推奨）
+- ``gemini-3.1-pro-preview`` - 最新の高推論モデル
+- ``gemini-2.5-flash`` - 安定版の高速モデル
+- ``gemini-2.5-pro`` - 安定版の高推論モデル
 
 .. note::
    利用可能なモデルの最新情報は `Google AI for Developers <https://ai.google.dev/models/gemini>`__ で確認できます。
@@ -76,7 +76,7 @@ APIキーの取得
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # 使用するモデル
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
 推奨構成（本番環境）
 --------------------
@@ -93,7 +93,7 @@ APIキーの取得
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # モデル設定（高速モデルを使用）
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
     # APIエンドポイント（通常は変更不要）
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -118,7 +118,7 @@ Geminiクライアントで使用可能なすべての設定項目です。
      - （必須）
    * - ``rag.llm.gemini.model``
      - 使用するモデル名
-     - ``gemini-2.5-flash``
+     - ``gemini-3-flash-preview``
    * - ``rag.llm.gemini.api.url``
      - APIのベースURL
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -150,7 +150,7 @@ docker-compose.yml
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_TYPE=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-2.5-flash
+          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
 systemd環境
 -----------
@@ -185,30 +185,30 @@ Vertex AIを使用する場合は、APIエンドポイントと認証方法が�
      - 速度
      - 品質
      - 用途
+   * - ``gemini-3-flash-preview``
+     - 高速
+     - 最高
+     - 一般的な用途（推奨）
+   * - ``gemini-3.1-pro-preview``
+     - 中速
+     - 最高
+     - 複雑な推論
    * - ``gemini-2.5-flash``
      - 高速
      - 高
-     - 一般的な用途、バランス重視（推奨）
+     - 安定版、コスト重視
    * - ``gemini-2.5-pro``
      - 中速
-     - 最高
-     - 複雑な推論、高品質が必要な場合
-   * - ``gemini-1.5-flash``
-     - 高速
-     - 良好
-     - コスト重視、安定性重視
-   * - ``gemini-1.5-pro``
-     - 中速
      - 高
-     - 長いコンテキストが必要な場合
+     - 安定版、長いコンテキスト
 
 コンテキストウィンドウ
 ----------------------
 
 Geminiモデルは非常に長いコンテキストウィンドウをサポートしています:
 
-- **Gemini 1.5/2.5 Flash**: 最大100万トークン
-- **Gemini 1.5/2.5 Pro**: 最大200万トークン
+- **Gemini 3 Flash / 2.5 Flash**: 最大100万トークン
+- **Gemini 3.1 Pro / 2.5 Pro**: 最大100万トークン（3.1 Pro）/ 200万トークン（2.5 Pro）
 
 この特徴を活かして、より多くの検索結果をコンテキストに含めることができます。
 
@@ -230,15 +230,18 @@ Google AI APIは使用量に基づいて課金されます（無料枠あり）�
    * - モデル
      - 入力（100万文字）
      - 出力（100万文字）
-   * - Gemini 1.5 Flash
+   * - Gemini 3 Flash Preview
+     - $0.50
+     - $3.00
+   * - Gemini 3.1 Pro Preview
+     - $2.00
+     - $12.00
+   * - Gemini 2.5 Flash
      - $0.075
      - $0.30
-   * - Gemini 1.5 Pro
+   * - Gemini 2.5 Pro
      - $1.25
      - $5.00
-   * - Gemini 2.5 Flash
-     - 価格は変動する場合あり
-     - 価格は変動する場合あり
 
 .. note::
    最新の価格と無料枠の情報は `Google AI Pricing <https://ai.google.dev/pricing>`__ で確認してください。

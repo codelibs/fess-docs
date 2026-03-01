@@ -23,10 +23,10 @@ Google Gemini是Google公司提供的最先进的大型语言模型（LLM）。
 
 Gemini可用的主要模型:
 
-- ``gemini-2.5-flash`` - 高速高效的模型（推荐）
-- ``gemini-2.5-pro`` - 具有更高推理能力的模型
-- ``gemini-1.5-flash`` - 稳定版Flash模型
-- ``gemini-1.5-pro`` - 稳定版Pro模型
+- ``gemini-3-flash-preview`` - 最新高速模型（推荐）
+- ``gemini-3.1-pro-preview`` - 最新高推理模型
+- ``gemini-2.5-flash`` - 稳定版高速模型
+- ``gemini-2.5-pro`` - 稳定版高推理模型
 
 .. note::
    可用模型的最新信息请查阅 `Google AI for Developers <https://ai.google.dev/models/gemini>`__
@@ -76,7 +76,7 @@ Gemini可用的主要模型:
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # 使用的模型
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
 推荐配置（生产环境）
 --------------------
@@ -93,7 +93,7 @@ Gemini可用的主要模型:
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # 模型设置（使用高速模型）
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
     # API端点（通常无需更改）
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -118,7 +118,7 @@ Gemini客户端可用的所有配置项。
      - （必需）
    * - ``rag.llm.gemini.model``
      - 使用的模型名称
-     - ``gemini-2.5-flash``
+     - ``gemini-3-flash-preview``
    * - ``rag.llm.gemini.api.url``
      - API的基础URL
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -150,7 +150,7 @@ docker-compose.yml
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_TYPE=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-2.5-flash
+          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
 systemd环境
 -----------
@@ -185,30 +185,30 @@ systemd环境
      - 速度
      - 质量
      - 用途
+   * - ``gemini-3-flash-preview``
+     - 高速
+     - 最高
+     - 一般用途（推荐）
+   * - ``gemini-3.1-pro-preview``
+     - 中速
+     - 最高
+     - 复杂推理
    * - ``gemini-2.5-flash``
      - 高速
      - 高
-     - 一般用途、平衡优先（推荐）
+     - 稳定版、成本优先
    * - ``gemini-2.5-pro``
      - 中速
-     - 最高
-     - 复杂推理、需要高质量
-   * - ``gemini-1.5-flash``
-     - 高速
-     - 良好
-     - 成本优先、稳定性优先
-   * - ``gemini-1.5-pro``
-     - 中速
      - 高
-     - 需要长上下文
+     - 稳定版、长上下文
 
 上下文窗口
 ----------
 
 Gemini模型支持非常长的上下文窗口:
 
-- **Gemini 1.5/2.5 Flash**: 最大100万令牌
-- **Gemini 1.5/2.5 Pro**: 最大200万令牌
+- **Gemini 3 Flash / 2.5 Flash**: 最大100万令牌
+- **Gemini 3.1 Pro / 2.5 Pro**: 最大100万令牌（3.1 Pro）/ 200万令牌（2.5 Pro）
 
 利用此特性，可以在上下文中包含更多搜索结果。
 
@@ -230,15 +230,18 @@ Google AI API按使用量计费（有免费额度）。
    * - 模型
      - 输入（100万字符）
      - 输出（100万字符）
-   * - Gemini 1.5 Flash
+   * - Gemini 3 Flash Preview
+     - $0.50
+     - $3.00
+   * - Gemini 3.1 Pro Preview
+     - $2.00
+     - $12.00
+   * - Gemini 2.5 Flash
      - $0.075
      - $0.30
-   * - Gemini 1.5 Pro
+   * - Gemini 2.5 Pro
      - $1.25
      - $5.00
-   * - Gemini 2.5 Flash
-     - 价格可能变动
-     - 价格可能变动
 
 .. note::
    最新价格和免费额度信息请查阅 `Google AI Pricing <https://ai.google.dev/pricing>`__

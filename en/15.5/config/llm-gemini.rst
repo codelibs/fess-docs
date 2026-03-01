@@ -23,10 +23,10 @@ Supported Models
 
 Main models available with Gemini:
 
-- ``gemini-2.5-flash`` - Fast and efficient model (recommended)
-- ``gemini-2.5-pro`` - Model with higher reasoning capabilities
-- ``gemini-1.5-flash`` - Stable Flash model
-- ``gemini-1.5-pro`` - Stable Pro model
+- ``gemini-3-flash-preview`` - Latest fast model (recommended)
+- ``gemini-3.1-pro-preview`` - Latest high reasoning model
+- ``gemini-2.5-flash`` - Stable fast model
+- ``gemini-2.5-pro`` - Stable high reasoning model
 
 .. note::
    For the latest information on available models, see `Google AI for Developers <https://ai.google.dev/models/gemini>`__.
@@ -76,7 +76,7 @@ Minimal Configuration
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Model to use
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
 Recommended Configuration (Production)
 --------------------------------------
@@ -93,7 +93,7 @@ Recommended Configuration (Production)
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Model setting (use fast model)
-    rag.llm.gemini.model=gemini-2.5-flash
+    rag.llm.gemini.model=gemini-3-flash-preview
 
     # API endpoint (usually no change needed)
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -118,7 +118,7 @@ All configuration options available for the Gemini client.
      - (Required)
    * - ``rag.llm.gemini.model``
      - Model name to use
-     - ``gemini-2.5-flash``
+     - ``gemini-3-flash-preview``
    * - ``rag.llm.gemini.api.url``
      - API base URL
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -150,7 +150,7 @@ docker-compose.yml
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_TYPE=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-2.5-flash
+          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
 systemd Environment
 -------------------
@@ -185,30 +185,30 @@ Guidelines for selecting models based on intended use.
      - Speed
      - Quality
      - Use Case
+   * - ``gemini-3-flash-preview``
+     - Fast
+     - Highest
+     - General use (recommended)
+   * - ``gemini-3.1-pro-preview``
+     - Medium
+     - Highest
+     - Complex reasoning
    * - ``gemini-2.5-flash``
      - Fast
      - High
-     - General use, balanced approach (recommended)
+     - Stable version, cost-focused
    * - ``gemini-2.5-pro``
      - Medium
-     - Highest
-     - Complex reasoning, when high quality is needed
-   * - ``gemini-1.5-flash``
-     - Fast
-     - Good
-     - Cost-focused, stability-focused
-   * - ``gemini-1.5-pro``
-     - Medium
      - High
-     - When long context is needed
+     - Stable version, long context
 
 Context Window
 --------------
 
 Gemini models support very long context windows:
 
-- **Gemini 1.5/2.5 Flash**: Up to 1 million tokens
-- **Gemini 1.5/2.5 Pro**: Up to 2 million tokens
+- **Gemini 3 Flash / 2.5 Flash**: Up to 1 million tokens
+- **Gemini 3.1 Pro / 2.5 Pro**: Up to 1 million tokens (3.1 Pro) / 2 million tokens (2.5 Pro)
 
 You can leverage this feature to include more search results in the context.
 
@@ -230,15 +230,18 @@ Google AI API is billed based on usage (free tier available).
    * - Model
      - Input (per 1M characters)
      - Output (per 1M characters)
-   * - Gemini 1.5 Flash
+   * - Gemini 3 Flash Preview
+     - $0.50
+     - $3.00
+   * - Gemini 3.1 Pro Preview
+     - $2.00
+     - $12.00
+   * - Gemini 2.5 Flash
      - $0.075
      - $0.30
-   * - Gemini 1.5 Pro
+   * - Gemini 2.5 Pro
      - $1.25
      - $5.00
-   * - Gemini 2.5 Flash
-     - Prices may vary
-     - Prices may vary
 
 .. note::
    For the latest pricing and free tier information, see `Google AI Pricing <https://ai.google.dev/pricing>`__.
