@@ -11,6 +11,34 @@
 掲載記事一覧
 ============
 
+- `【第72回】AI検索モードによる検索 <https://news.mynavi.jp/techplus/article/_ossfess-72/>`__
+
+- `【第71回】Entra ID認証でのTeamsクロール <https://news.mynavi.jp/techplus/article/_ossfess-71/>`__
+
+- `【第70回】SharePoint Onlineのクロール <https://news.mynavi.jp/techplus/article/_ossfess-70/>`__
+
+- `【第69回】Microsoft Entra IDでの認証方法 <https://news.mynavi.jp/techplus/article/_ossfess-69/>`__
+
+- `【第68回】コマンドラインからFessを操作する <https://news.mynavi.jp/techplus/article/_ossfess-68/>`__
+
+- `【第67回】Fessのアップグレード方法 <https://news.mynavi.jp/techplus/article/_ossfess-67/>`__
+
+- `【第66回】ファイルシステムクロールでS3をクロールする <https://news.mynavi.jp/techplus/article/_ossfess-66/>`__
+
+- `【第65回】Boxのクロール <https://news.mynavi.jp/techplus/article/_ossfess-65/>`__
+
+- `【第64回】複数ドキュメントをAPIでインデクシング <https://news.mynavi.jp/techplus/article/_ossfess-64/>`__
+
+- `【第63回】Fessのマルチインスタンス環境の活用 <https://news.mynavi.jp/techplus/article/_ossfess-63/>`__
+
+- `【第62回】クロール対象のファイルサイズ上限の設定 <https://news.mynavi.jp/techplus/article/_ossfess-62/>`__
+
+- `【第61回】ベクトル検索を用いた画像検索 <https://news.mynavi.jp/techplus/article/_ossfess-61/>`__
+
+- `【第60回】運用のための監視方法 <https://news.mynavi.jp/techplus/article/_ossfess-60/>`__
+
+- `【第59回】検索フィールドの追加 <https://news.mynavi.jp/techplus/article/_ossfess-59/>`__
+
 - `【第58回】OpenAPI対応の検索API <https://news.mynavi.jp/techplus/article/_ossfess-58/>`__
 
 - `【第57回】SSL証明書の適用方法 <https://news.mynavi.jp/techplus/article/_ossfess-57/>`__
