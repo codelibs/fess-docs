@@ -8,9 +8,10 @@ This is the documentation repository for Fess, an open-source full-text search s
 
 ## Repository Structure
 
-- `ja/`, `en/`, `de/`, `fr/`, `es/`, `zh-cn/`: Language-specific documentation directories
-- Each language directory contains version subdirectories (e.g., `15.3/`, `15.2/`, `14.15/`)
-- Within each version: `install/`, `admin/`, `user/`, `api/`, `config/` sections
+- `ja/`, `en/`, `de/`, `fr/`, `es/`, `ko/`, `zh-cn/`: Language-specific documentation directories
+- Each language directory contains version subdirectories (e.g., `15.5/`, `15.4/`, `15.3/`)
+- Within each version: `install/`, `admin/`, `user/`, `api/`, `config/`, `dev/` sections
+- `ja/articles/`, `ko/articles/`: Article listings (language-specific)
 - `conf/`: Shared Sphinx configuration files
   - `conf.py`: Main Sphinx configuration
   - `Makefile`: Build targets for Sphinx
@@ -37,11 +38,11 @@ cd ja
 bash ./build_pdf.sh
 ```
 
-### Using Makefile directly
-From within a version directory (e.g., `ja/15.3/install/`):
+### Create a new documentation version
 ```bash
-make SPHINXOPTS="-c ${CONFDIR}" BUILDDIR="${BUILDDIR}" SPHINX_LANG="${DOCLANG}" SPHINX_PROJECT="${PROJECT}" SPHINX_TITLE="${TITLE}" SPHINX_AUTHOR="${AUTHOR}" SPHINX_RELEASE="${RELEASE}" -f ${CONFDIR}/Makefile html
+./create_version.sh <new_version>  # e.g., ./create_version.sh 15.6
 ```
+Copies the previous version's docs and images, replaces version numbers in all RST files across all languages (`ja`, `en`, `de`, `fr`, `es`, `zh-cn`, `ko`).
 
 ## Documentation Format
 
@@ -73,6 +74,7 @@ The build process:
 3. **user**: User guides (search syntax, advanced search features)
 4. **api**: API documentation (search API, GSA API, etc.)
 5. **config**: Configuration guides (crawler setup, search customization, security roles)
+6. **dev**: Developer guides (available in newer versions like 15.5)
 
 ## Working with Translations
 
@@ -80,11 +82,11 @@ When updating documentation across languages:
 - The Japanese (`ja/`) documentation is typically the source/primary version
 - Other languages follow the same structure and file naming
 - Version numbers should be consistent across languages
-- Check recent git commits for translation patterns (see commit history showing French, Spanish, German translations)
+- `ko/` (Korean) is included in `create_version.sh` but not in `build.sh` — build it separately if needed
+- Check recent git commits for translation patterns
 
 ## Important Notes
 
-- The git status shows recent directory rename: `zh-CN/` → `zh-cn/` (lowercase)
 - HTML builds include minification for production deployment
 - PDF builds use Japanese LaTeX engine (`latexpdfja`) for Japanese docs, regular `latexpdf` for others
 - Theme configuration in `conf.py` includes GitHub integration and custom navigation settings
