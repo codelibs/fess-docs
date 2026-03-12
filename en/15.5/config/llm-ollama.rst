@@ -8,7 +8,7 @@ Overview
 Ollama is an open-source platform for running Large Language Models (LLM) in local environments.
 It is configured as the default LLM provider for |Fess| and is suitable for use in private environments.
 
-Using Ollama allows you to use AI chat functionality without sending data externally.
+Using Ollama allows you to use AI search mode functionality without sending data externally.
 
 Key Features
 ------------

@@ -1,16 +1,16 @@
 ==========================
-KI-Chat-Suche
+KI-Suchmodus
 ==========================
 
 Übersicht
 =========
 
-Mit der KI-Chat-Suche von |Fess| können Sie neben der herkömmlichen Stichwortsuche auch
+Mit dem KI-Suchmodus von |Fess| können Sie neben der herkömmlichen Stichwortsuche auch
 in natürlicher Gesprächsform nach Informationen suchen. Wenn Sie eine Frage eingeben,
 analysiert der KI-Assistent die Suchergebnisse und generiert eine verständliche Antwort.
 
-Merkmale der KI-Chat-Suche
-==========================
+Merkmale des KI-Suchmodus
+=========================
 
 Dialogbasierte Suche
 --------------------

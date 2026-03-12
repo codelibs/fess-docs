@@ -1,16 +1,16 @@
-==========================
-Recherche par chat IA
-==========================
+==============================
+Mode de recherche IA
+==============================
 
 Apercu
 ====
 
-La fonctionnalite de recherche par chat IA de |Fess| vous permet de rechercher des informations
+La fonctionnalite de mode de recherche IA de |Fess| vous permet de rechercher des informations
 sous forme de conversation naturelle, en complement de la recherche par mots-cles traditionnelle.
 Lorsque vous posez une question, l'assistant IA analyse les resultats de recherche
 et genere une reponse comprehensible.
 
-Caracteristiques de la recherche par chat IA
+Caracteristiques du mode de recherche IA
 ====================
 
 Recherche sous forme de dialogue

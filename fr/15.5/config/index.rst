@@ -62,7 +62,7 @@ Ce guide complet couvre la configuration de |Fess|. Chaque section est organisé
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuration LLM/Chat IA
+   :caption: Configuration LLM/Mode de recherche IA
 
    llm-overview
    llm-ollama

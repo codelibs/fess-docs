@@ -62,7 +62,7 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: LLM/AI聊天配置
+   :caption: LLM/AI搜索模式配置
 
    llm-overview
    llm-ollama

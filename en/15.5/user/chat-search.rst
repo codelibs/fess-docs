@@ -1,15 +1,15 @@
 ==========================
-AI Chat Search
+AI Search Mode
 ==========================
 
 Overview
 ========
 
-The AI chat search feature in |Fess| allows you to search for information through natural conversational interaction,
+The AI search mode feature in |Fess| allows you to search for information through natural conversational interaction,
 in addition to traditional keyword search. When you enter a question, the AI assistant analyzes
 the search results and generates easy-to-understand answers.
 
-Features of AI Chat Search
+Features of AI Search Mode
 ==========================
 
 Conversational Search
