@@ -22,7 +22,7 @@ Inicio de OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.2
+    $ cd /path/to/opensearch-3.4.0
     $ ./bin/opensearch
 
 Para iniciar en segundo plano::
@@ -57,8 +57,8 @@ Inicio de OpenSearch
 
 O desde el Símbolo del sistema::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.4.0
+    C:\opensearch-3.4.0> bin\opensearch.bat
 
 Inicio de Fess
 ~~~~~~~~~~~~~~

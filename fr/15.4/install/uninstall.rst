@@ -74,7 +74,7 @@ Supprimez le répertoire d'installation ::
 
 Supprimez le répertoire d'installation d'OpenSearch ::
 
-    $ rm -rf /path/to/opensearch-3.3.2
+    $ rm -rf /path/to/opensearch-3.4.0
 
 Étape 3 : Suppression du répertoire de données (optionnel)
 -----------------------------------------------------------
@@ -272,7 +272,7 @@ Pour supprimer les images Docker et libérer de l'espace disque ::
     $ docker rmi codelibs/fess:15.4.0
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.2
+    $ docker rmi opensearchproject/opensearch:3.4.0
 
 Étape 4 : Suppression du réseau (optionnel)
 --------------------------------------------

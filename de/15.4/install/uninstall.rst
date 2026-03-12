@@ -74,7 +74,7 @@ Schritt 2: Löschen von OpenSearch
 
 Löschen Sie das OpenSearch-Installationsverzeichnis::
 
-    $ rm -rf /path/to/opensearch-3.3.2
+    $ rm -rf /path/to/opensearch-3.4.0
 
 Schritt 3: Löschen des Datenverzeichnisses (Optional)
 ------------------------------------------------------
@@ -272,7 +272,7 @@ Falls Sie Docker-Images löschen und Festplattenplatz freigeben möchten::
     $ docker rmi codelibs/fess:15.4.0
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.2
+    $ docker rmi opensearchproject/opensearch:3.4.0
 
 Schritt 4: Löschen der Netzwerke (Optional)
 --------------------------------------------

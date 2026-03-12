@@ -22,7 +22,7 @@ OpenSearch の起動
 
 ::
 
-    $ cd /path/to/opensearch-3.3.2
+    $ cd /path/to/opensearch-3.5.0
     $ ./bin/opensearch
 
 バックグラウンドで起動する場合::
@@ -57,8 +57,8 @@ OpenSearch の起動
 
 または、コマンドプロンプトから::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.5.0
+    C:\opensearch-3.5.0> bin\opensearch.bat
 
 Fess の起動
 ~~~~~~~~~~

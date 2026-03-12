@@ -128,7 +128,7 @@ Windows 버전 (ZIP)
 
    Docker 버전 이외의 경우 OpenSearch를 별도로 설정해야 합니다.
 
-   - OpenSearch 3.3.2 설치
+   - OpenSearch 3.5.0 설치
    - 필수 플러그인 설치
    - 설정 파일 편집
 
@@ -159,7 +159,7 @@ OpenSearch
 
 검색 엔진으로 OpenSearch를 사용합니다.
 
-- **지원 버전**: OpenSearch 3.3.2
+- **지원 버전**: OpenSearch 3.5.0
 - **필수 플러그인**:
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ A: 예, 가능합니다. Fess와 OpenSearch를 별도의 서버에서 실행할 
 이 문서는 다음 버전을 대상으로 합니다:
 
 - **Fess**: 15.5.0
-- **OpenSearch**: 3.3.2
+- **OpenSearch**: 3.5.0
 - **Java**: 21 이상
 - **Docker**: 20.10 이상
 - **Docker Compose**: 2.0 이상

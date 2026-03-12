@@ -74,7 +74,7 @@ TAR.GZ/ZIP 버전 제거
 
 OpenSearch 설치 디렉터리를 삭제합니다::
 
-    $ rm -rf /path/to/opensearch-3.3.2
+    $ rm -rf /path/to/opensearch-3.4.0
 
 단계 3: 데이터 디렉터리 삭제(옵션)
 -------------------------------------------
@@ -272,7 +272,7 @@ Docker 이미지를 삭제하여 디스크 공간을 확보하는 경우::
     $ docker rmi codelibs/fess:15.4.0
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.2
+    $ docker rmi opensearchproject/opensearch:3.4.0
 
 단계 4: 네트워크 삭제(옵션)
 ----------------------------------------

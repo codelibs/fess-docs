@@ -22,7 +22,7 @@ Démarrage d'OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.2
+    $ cd /path/to/opensearch-3.5.0
     $ ./bin/opensearch
 
 Pour un démarrage en arrière-plan ::
@@ -57,8 +57,8 @@ Démarrage d'OpenSearch
 
 Ou depuis l'invite de commandes ::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.5.0
+    C:\opensearch-3.5.0> bin\opensearch.bat
 
 Démarrage de Fess
 ~~~~~~~~~~~~~~~~~

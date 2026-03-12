@@ -82,7 +82,7 @@ Step 2: Remove OpenSearch
 
 Delete the OpenSearch installation directory::
 
-    $ rm -rf /path/to/opensearch-3.3.2
+    $ rm -rf /path/to/opensearch-3.5.0
 
 Step 3: Delete Data Directory (Optional)
 -----------------------------------------
@@ -279,7 +279,7 @@ To remove Docker images to free up disk space::
     $ docker rmi codelibs/fess:15.5.0
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.2
+    $ docker rmi opensearchproject/opensearch:3.5.0
 
 Step 4: Remove Networks (Optional)
 -----------------------------------

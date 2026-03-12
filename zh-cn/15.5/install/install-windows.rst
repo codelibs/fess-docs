@@ -15,7 +15,7 @@
 
 - 满足 :doc:`prerequisites` 中描述的系统要求
 - 已安装 Java 21
-- OpenSearch 3.3.2 可用（或新安装）
+- OpenSearch 3.5.0 可用（或新安装）
 - 已适当设置 Windows 环境变量 ``JAVA_HOME``
 
 确认 Java 安装
@@ -69,7 +69,7 @@ PowerShell 的情况::
 
    例::
 
-       C:\opensearch-3.3.2
+       C:\opensearch-3.5.0
 
    .. note::
 
@@ -82,16 +82,16 @@ PowerShell 的情况::
 
 ::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.1
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.1
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.1
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.1
+    C:\> cd C:\opensearch-3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.5.0
 
 .. important::
 
    插件版本必须与 OpenSearch 版本一致。
-   在上述示例中，所有版本都指定为 3.3.2。
+   在上述示例中，所有版本都指定为 3.5.0。
 
 配置 OpenSearch
 ---------------
@@ -101,7 +101,7 @@ PowerShell 的情况::
 ::
 
     # 配置同步路径（使用绝对路径指定）
-    configsync.config_path: C:/opensearch-3.3.2/data/config/
+    configsync.config_path: C:/opensearch-3.5.0/data/config/
 
     # 禁用安全插件（仅限开发环境）
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ PowerShell 的情况::
 .. note::
 
    在 Windows 中，路径分隔符请使用 ``/`` 而不是 ``\``。
-   应写为 ``C:/opensearch-3.3.2/data/config/`` 而不是 ``C:\opensearch-3.3.2\data\config\``。
+   应写为 ``C:/opensearch-3.5.0/data/config/`` 而不是 ``C:\opensearch-3.5.0\data\config\``。
 
 .. tip::
 
@@ -154,7 +154,7 @@ PowerShell 的情况::
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.3.2/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.5.0/data/config/
 
 .. note::
 
@@ -193,7 +193,7 @@ PowerShell 的情况::
 
 2. 将 OpenSearch 注册为服务::
 
-       C:\> nssm install OpenSearch C:\opensearch-3.3.2\bin\opensearch.bat
+       C:\> nssm install OpenSearch C:\opensearch-3.5.0\bin\opensearch.bat
 
 3. 将 Fess 注册为服务::
 
@@ -247,7 +247,7 @@ Windows 对路径长度有限制。建议安装到尽可能短的路径。
 例::
 
     C:\opensearch  (推荐)
-    C:\Program Files\opensearch-3.3.2  (不推荐 - 路径过长)
+    C:\Program Files\opensearch-3.5.0  (不推荐 - 路径过长)
 
 Java 未被识别
 -----------------

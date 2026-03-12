@@ -128,7 +128,7 @@ Windows 版 (ZIP)
 
    Docker 版以外的情况下，需要单独设置 OpenSearch。
 
-   - 安装 OpenSearch 3.3.2
+   - 安装 OpenSearch 3.4.0
    - 安装必需插件
    - 编辑配置文件
 
@@ -159,7 +159,7 @@ OpenSearch
 
 使用 OpenSearch 作为搜索引擎。
 
-- **支持版本**: OpenSearch 3.3.2
+- **支持版本**: OpenSearch 3.4.0
 - **必需插件**:
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ A: 可以。Fess 和 OpenSearch 可以在不同的服务器上运行。
 本文档适用于以下版本：
 
 - **Fess**: 15.4.0
-- **OpenSearch**: 3.3.2
+- **OpenSearch**: 3.4.0
 - **Java**: 21 或更高版本
 - **Docker**: 20.10 或更高版本
 - **Docker Compose**: 2.0 或更高版本

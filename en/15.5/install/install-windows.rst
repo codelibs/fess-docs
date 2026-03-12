@@ -15,7 +15,7 @@ Prerequisites
 
 - System requirements described in :doc:`prerequisites` are met
 - Java 21 is installed
-- OpenSearch 3.3.2 is available (or new installation)
+- OpenSearch 3.5.0 is available (or new installation)
 - Windows environment variable ``JAVA_HOME`` is configured appropriately
 
 Verify Java Installation
@@ -69,7 +69,7 @@ Download OpenSearch
 
    Example::
 
-       C:\opensearch-3.3.2
+       C:\opensearch-3.5.0
 
    .. note::
 
@@ -82,16 +82,16 @@ Open Command Prompt **with administrator privileges** and execute the following 
 
 ::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.3.1
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.3.1
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.3.1
-    C:\opensearch-3.3.2> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.3.1
+    C:\> cd C:\opensearch-3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.5.0
+    C:\opensearch-3.5.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.5.0
 
 .. important::
 
    Plugin versions must match the OpenSearch version.
-   In the example above, all are specified as 3.3.2.
+   In the example above, all are specified as 3.5.0.
 
 Configure OpenSearch
 --------------------
@@ -101,7 +101,7 @@ Open ``config\opensearch.yml`` with a text editor and add the following settings
 ::
 
     # Configuration synchronization path (specify absolute path)
-    configsync.config_path: C:/opensearch-3.3.2/data/config/
+    configsync.config_path: C:/opensearch-3.5.0/data/config/
 
     # Disable security plugin (development environment only)
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ Open ``config\opensearch.yml`` with a text editor and add the following settings
 .. note::
 
    On Windows, use ``/`` instead of ``\`` for path separators.
-   Write ``C:/opensearch-3.3.2/data/config/`` instead of ``C:\opensearch-3.3.2\data\config\``.
+   Write ``C:/opensearch-3.5.0/data/config/`` instead of ``C:\opensearch-3.5.0\data\config\``.
 
 .. tip::
 
@@ -154,7 +154,7 @@ Open ``bin\fess.in.bat`` with a text editor and add or modify the following sett
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.3.2/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.5.0/data/config/
 
 .. note::
 
@@ -193,7 +193,7 @@ Example Using NSSM
 
 2. Register OpenSearch as a service::
 
-       C:\> nssm install OpenSearch C:\opensearch-3.3.2\bin\opensearch.bat
+       C:\> nssm install OpenSearch C:\opensearch-3.5.0\bin\opensearch.bat
 
 3. Register Fess as a service::
 
@@ -247,7 +247,7 @@ Windows has a path length limitation. It is recommended to install in a path as 
 Example::
 
     C:\opensearch  (recommended)
-    C:\Program Files\opensearch-3.3.2  (not recommended - path is too long)
+    C:\Program Files\opensearch-3.5.0  (not recommended - path is too long)
 
 Java Not Recognized
 -------------------

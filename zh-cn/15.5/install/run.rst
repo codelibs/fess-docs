@@ -22,7 +22,7 @@ TAR.GZ 版的情况
 
 ::
 
-    $ cd /path/to/opensearch-3.3.2
+    $ cd /path/to/opensearch-3.5.0
     $ ./bin/opensearch
 
 在后台启动::
@@ -57,8 +57,8 @@ ZIP 版的情况（Windows）
 
 或者，从命令提示符::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.5.0
+    C:\opensearch-3.5.0> bin\opensearch.bat
 
 启动 Fess
 ~~~~~~~~~~
