@@ -74,7 +74,7 @@ TAR.GZ/ZIP 版のアンインストール
 
 OpenSearch のインストールディレクトリを削除します::
 
-    $ rm -rf /path/to/opensearch-3.3.2
+    $ rm -rf /path/to/opensearch-3.5.0
 
 ステップ 3: データディレクトリの削除（オプション）
 -------------------------------------------
@@ -272,7 +272,7 @@ Docker イメージを削除してディスクスペースを解放する場合:
     $ docker rmi codelibs/fess:15.5.0
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.2
+    $ docker rmi opensearchproject/opensearch:3.5.0
 
 ステップ 4: ネットワークの削除（オプション）
 ----------------------------------------

@@ -74,7 +74,7 @@ TAR.GZ/ZIP 版的卸载
 
 删除 OpenSearch 的安装目录::
 
-    $ rm -rf /path/to/opensearch-3.3.2
+    $ rm -rf /path/to/opensearch-3.5.0
 
 步骤 3: 删除数据目录（可选）
 -------------------------------------------
@@ -272,7 +272,7 @@ Docker 版的卸载
     $ docker rmi codelibs/fess:15.5.0
 
     $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.3.2
+    $ docker rmi opensearchproject/opensearch:3.5.0
 
 步骤 4: 删除网络（可选）
 ----------------------------------------

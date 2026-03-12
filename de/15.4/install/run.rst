@@ -22,7 +22,7 @@ Start von OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.3.2
+    $ cd /path/to/opensearch-3.4.0
     $ ./bin/opensearch
 
 Für Hintergrundstart::
@@ -57,8 +57,8 @@ Start von OpenSearch
 
 Oder von der Eingabeaufforderung::
 
-    C:\> cd C:\opensearch-3.3.2
-    C:\opensearch-3.3.2> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.4.0
+    C:\opensearch-3.4.0> bin\opensearch.bat
 
 Start von Fess
 ~~~~~~~~~~~~~~

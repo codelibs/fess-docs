@@ -128,7 +128,7 @@ The basic flow is the same for all installation methods.
 
    For non-Docker versions, OpenSearch must be set up separately.
 
-   - Install OpenSearch 3.3.2
+   - Install OpenSearch 3.4.0
    - Install required plugins
    - Edit configuration files
 
@@ -159,7 +159,7 @@ OpenSearch
 
 OpenSearch is used as the search engine.
 
-- **Supported Version**: OpenSearch 3.3.2
+- **Supported Version**: OpenSearch 3.4.0
 - **Required Plugins**:
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ Version Information
 This document covers the following versions:
 
 - **Fess**: 15.4.0
-- **OpenSearch**: 3.3.2
+- **OpenSearch**: 3.4.0
 - **Java**: 21 or later
 - **Docker**: 20.10 or later
 - **Docker Compose**: 2.0 or later
