@@ -8,7 +8,7 @@ Ollama-Konfiguration
 Ollama ist eine Open-Source-Plattform zur Ausführung großer Sprachmodelle (LLM) in lokalen Umgebungen.
 Es ist als Standard-LLM-Anbieter in |Fess| konfiguriert und eignet sich für den Einsatz in privaten Umgebungen.
 
-Durch die Verwendung von Ollama können Sie die KI-Chat-Funktion nutzen, ohne Daten extern zu senden.
+Durch die Verwendung von Ollama können Sie die KI-Suchmodus-Funktion nutzen, ohne Daten extern zu senden.
 
 Hauptmerkmale
 -------------

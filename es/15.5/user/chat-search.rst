@@ -1,17 +1,17 @@
-==========================
-Busqueda con chat de IA
-==========================
+==============================
+Modo de busqueda IA
+==============================
 
 Descripcion general
 ===================
 
-La funcionalidad de busqueda con chat de IA de |Fess| le permite buscar informacion
+La funcionalidad de modo de busqueda IA de |Fess| le permite buscar informacion
 en formato de conversacion natural, ademas de la busqueda tradicional por palabras clave.
 Al ingresar una pregunta, el asistente de IA analiza los resultados de busqueda
 y genera una respuesta facil de entender.
 
-Caracteristicas de la busqueda con chat de IA
-=============================================
+Caracteristicas del modo de busqueda IA
+=======================================
 
 Busqueda en formato de dialogo
 ------------------------------

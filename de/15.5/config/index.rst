@@ -62,7 +62,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
 
 .. toctree::
    :maxdepth: 2
-   :caption: LLM/KI-Chat-Konfiguration
+   :caption: LLM/KI-Suchmodus-Konfiguration
 
    llm-overview
    llm-ollama

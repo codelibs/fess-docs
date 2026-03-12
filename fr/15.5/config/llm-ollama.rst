@@ -8,7 +8,7 @@ Apercu
 Ollama est une plateforme open source permettant d'executer des grands modeles de langage (LLM) en local.
 Il est configure comme fournisseur LLM par defaut de |Fess| et convient a une utilisation en environnement prive.
 
-L'utilisation d'Ollama permet d'utiliser la fonctionnalite de chat IA sans envoyer de donnees a l'exterieur.
+L'utilisation d'Ollama permet d'utiliser la fonctionnalite du mode de recherche IA sans envoyer de donnees a l'exterieur.
 
 Caracteristiques principales
 --------

@@ -8,7 +8,7 @@ Descripcion general
 Ollama es una plataforma de codigo abierto para ejecutar modelos de lenguaje grandes (LLM) en entorno local.
 Esta configurado como el proveedor LLM predeterminado de |Fess| y es adecuado para uso en entornos privados.
 
-Al usar Ollama, puede utilizar la funcionalidad de chat de IA sin enviar datos al exterior.
+Al usar Ollama, puede utilizar la funcionalidad del modo de busqueda IA sin enviar datos al exterior.
 
 Caracteristicas principales
 ---------------------------
