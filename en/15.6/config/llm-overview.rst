@@ -8,6 +8,8 @@ Overview
 |Fess| 15.6 supports AI mode (RAG: Retrieval-Augmented Generation) functionality powered by Large Language Models (LLM).
 This feature allows users to retrieve information through conversational AI assistance based on search results.
 
+In |Fess| 15.6, LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
+
 Supported Providers
 ===================
 
@@ -15,20 +17,37 @@ Supported Providers
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 30 50
+   :widths: 20 20 30 30
 
    * - Provider
      - Configuration Value
+     - Plugin
      - Description
    * - Ollama
      - ``ollama``
+     - ``fess-llm-ollama``
      - An open-source LLM server that runs in local environments. Supports models like Llama, Mistral, and Gemma. Default setting.
    * - OpenAI
      - ``openai``
+     - ``fess-llm-openai``
      - OpenAI's cloud API. Enables use of models like GPT-4.
    * - Google Gemini
      - ``gemini``
+     - ``fess-llm-gemini``
      - Google's cloud API. Enables use of Gemini models.
+
+Plugin Installation
+===================
+
+In |Fess| 15.6, LLM functionality is separated as plugins. You must place the JAR file of the ``fess-llm-{provider}`` plugin corresponding to your provider in the plugin directory.
+
+For example, to use the OpenAI provider, download ``fess-llm-openai-15.6.0.jar`` and place it in the following directory.
+
+::
+
+    app/WEB-INF/plugin/
+
+After placement, restart |Fess| to load the plugin.
 
 Architecture
 ============
@@ -45,23 +64,31 @@ The AI mode feature operates with the following flow.
 Basic Configuration
 ===================
 
-To enable LLM functionality, add the following settings to ``app/WEB-INF/conf/fess_config.properties``.
+LLM functionality is configured in the following two locations.
 
-Enabling AI Mode
-----------------
+Administration Screen General Settings / system.properties
+----------------------------------------------------------
+
+Configure in the administration screen general settings or in ``system.properties``. Used for selecting the LLM provider.
+
+::
+
+    # Specify LLM provider (ollama, openai, gemini)
+    rag.llm.name=ollama
+
+fess_config.properties
+----------------------
+
+Configure in ``app/WEB-INF/conf/fess_config.properties``. These settings are loaded at startup and are used to enable AI mode, configure session and history-related settings, and set provider-specific parameters such as connection URL, API key, and generation parameters.
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
 
-Selecting LLM Provider
-----------------------
-
-::
-
-    # Specify LLM provider (ollama, openai, gemini)
-    rag.llm.type=ollama
+    # Example of provider-specific settings (for OpenAI)
+    rag.llm.openai.api.key=sk-...
+    rag.llm.openai.answer.temperature=0.7
 
 For detailed configuration of each provider, please refer to the following documentation.
 
@@ -72,24 +99,7 @@ For detailed configuration of each provider, please refer to the following docum
 Common Settings
 ===============
 
-Configuration items used across all LLM providers.
-
-Generation Parameters
----------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 35 45 20
-
-   * - Property
-     - Description
-     - Default
-   * - ``rag.chat.max.tokens``
-     - Maximum number of tokens to generate
-     - ``4096``
-   * - ``rag.chat.temperature``
-     - Generation randomness (0.0-1.0). Lower values produce more deterministic responses
-     - ``0.7``
+Configuration items used across all LLM providers. These are configured in ``fess_config.properties``.
 
 Context Settings
 ----------------
@@ -104,42 +114,41 @@ Context Settings
    * - ``rag.chat.context.max.documents``
      - Maximum number of documents to include in context
      - ``5``
-   * - ``rag.chat.context.max.chars``
-     - Maximum number of characters in context
-     - ``4000``
    * - ``rag.chat.content.fields``
      - Fields to retrieve from documents
      - ``title,url,content,...``
 
+.. note::
+
+   The maximum number of characters in context (``context.max.chars``) has been changed to a per-provider and per-prompt-type setting. Configure it as ``rag.llm.{provider}.{promptType}.context.max.chars`` in ``fess_config.properties``.
+
 System Prompt
 -------------
 
-::
+In |Fess| 15.6, system prompts are managed in the DI XML files of each plugin rather than in properties files.
 
-    rag.chat.system.prompt=You are an AI assistant for Fess search engine. Answer questions based on the search results provided. Always cite your sources using [1], [2], etc.
-
-This prompt defines the basic behavior of the LLM. You can customize it as needed.
+System prompts are defined in the ``fess_llm++.xml`` file included in each ``fess-llm-*`` plugin. To customize prompts, edit the DI XML file in the plugin directory.
 
 Availability Check
 ------------------
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - Property
      - Description
      - Default
-   * - ``rag.llm.availability.check.interval``
+   * - ``rag.llm.{provider}.availability.check.interval``
      - Interval (in seconds) to check LLM availability. Set to 0 to disable
      - ``60``
 
-This setting allows |Fess| to periodically verify the connection status with the LLM provider.
+This setting is configured in ``fess_config.properties``. |Fess| periodically verifies the connection status with the LLM provider.
 
 Session Management
 ==================
 
-Configuration for chat session management.
+Settings for chat sessions. These are configured in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
@@ -158,40 +167,110 @@ Configuration for chat session management.
      - Maximum number of messages to retain in conversation history
      - ``20``
 
-Rate Limiting
-=============
+Concurrency Control
+===================
 
-Rate limiting settings to prevent API overload.
+Settings for controlling the number of concurrent requests to the LLM. Configure in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - Property
      - Description
      - Default
-   * - ``rag.chat.rate.limit.enabled``
-     - Enable rate limiting
-     - ``true``
-   * - ``rag.chat.rate.limit.requests.per.minute``
-     - Maximum requests per minute
-     - ``10``
+   * - ``rag.llm.{provider}.max.concurrent.requests``
+     - Maximum number of concurrent requests to the provider
+     - ``5``
+
+For example, to configure the concurrency for the OpenAI provider:
+
+::
+
+    rag.llm.openai.max.concurrent.requests=10
 
 Evaluation Settings
 ===================
 
-Settings for search result evaluation.
+Settings for search result evaluation. Configure in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - Property
      - Description
      - Default
-   * - ``rag.chat.evaluation.max.relevant.docs``
+   * - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs``
      - Maximum number of relevant documents to select in the evaluation phase
      - ``3``
+
+Per-Prompt-Type Settings
+========================
+
+In |Fess| 15.6, generation parameters can be configured per prompt type. This allows fine-grained adjustments based on the intended use. Configure in ``fess_config.properties``.
+
+Prompt Type List
+----------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Prompt Type
+     - Configuration Value
+     - Description
+   * - Intent Analysis
+     - ``intent``
+     - Analyzes the user's question and extracts search keywords
+   * - Evaluation
+     - ``evaluation``
+     - Evaluates the relevance of search results
+   * - Unclear Question
+     - ``unclear``
+     - Generates a response when the question is unclear
+   * - No Results
+     - ``noresults``
+     - Generates a response when no search results are found
+   * - Document Not Found
+     - ``docnotfound``
+     - Generates a response when the corresponding document does not exist
+   * - Answer Generation
+     - ``answer``
+     - Generates an answer based on search results
+   * - Summary
+     - ``summary``
+     - Generates a summary of documents
+   * - FAQ
+     - ``faq``
+     - Generates FAQ-style answers
+   * - Direct Answer
+     - ``direct``
+     - Generates a direct answer without going through search
+
+Configuration Pattern
+---------------------
+
+Per-prompt-type settings are specified using the following pattern.
+
+::
+
+    rag.llm.{provider}.{promptType}.temperature
+    rag.llm.{provider}.{promptType}.max.tokens
+    rag.llm.{provider}.{promptType}.context.max.chars
+
+Configuration Examples (for OpenAI provider):
+
+::
+
+    # Set answer generation temperature lower
+    rag.llm.openai.answer.temperature=0.5
+    # Maximum tokens for answer generation
+    rag.llm.openai.answer.max.tokens=4096
+    # Intent analysis requires only short responses, so set lower
+    rag.llm.openai.intent.max.tokens=256
+    # Maximum context characters for summary
+    rag.llm.openai.summary.context.max.chars=8000
 
 Next Steps
 ==========

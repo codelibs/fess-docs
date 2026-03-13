@@ -6,7 +6,7 @@ Google Gemini-Konfiguration
 =========
 
 Google Gemini ist ein hochmodernes großes Sprachmodell (LLM) von Google.
-|Fess| kann die Google AI API (Generative Language API) verwenden, um die AI-Modus-Funktion mit Gemini-Modellen zu realisieren.
+|Fess| kann die Google AI API (Generative Language API) verwenden, um die AI-Suchmodus-Funktion mit Gemini-Modellen zu realisieren.
 
 Durch die Verwendung von Gemini wird eine hochwertige Antwortgenerierung mit Googles neuester KI-Technologie ermöglicht.
 
@@ -56,21 +56,43 @@ API-Schlüssel abrufen
    - Nicht in Logs ausgeben
    - Mit Umgebungsvariablen oder sicheren Konfigurationsdateien verwalten
 
-Grundeinstellungen
-==================
+Plugin-Installation
+===================
 
-Fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/fess_config.properties`` hinzu.
+In |Fess| 15.6 wird die Gemini-Integrationsfunktion als Plugin ``fess-llm-gemini`` bereitgestellt.
+Zur Verwendung von Gemini ist die Installation des Plugins erforderlich.
 
-Minimalkonfiguration
---------------------
+1. Laden Sie `fess-llm-gemini-15.6.0.jar` herunter
+2. Legen Sie die Datei im Verzeichnis ``app/WEB-INF/plugin/`` von |Fess| ab
+3. Starten Sie |Fess| neu
 
 ::
 
-    # AI-Modus-Funktion aktivieren
-    rag.chat.enabled=true
+    # Beispiel für die Plugin-Ablage
+    cp fess-llm-gemini-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
 
-    # LLM-Anbieter auf Gemini setzen
-    rag.llm.type=gemini
+.. note::
+   Die Plugin-Version muss mit der Version von |Fess| übereinstimmen.
+
+Grundeinstellungen
+==================
+
+In |Fess| 15.6 wird die Aktivierung der AI-Suchmodus-Funktion und Gemini-spezifische Einstellungen in ``fess_config.properties`` vorgenommen, während die Auswahl des LLM-Anbieters (``rag.llm.name``) über die Administrationsoberfläche oder in ``system.properties`` konfiguriert wird.
+
+LLM-Anbieter konfigurieren
+---------------------------
+
+Der LLM-Anbieter wird über die Administrationsoberfläche (Administration > System > Allgemein) oder in ``system.properties`` konfiguriert.
+
+Minimalkonfiguration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``app/WEB-INF/conf/fess_config.properties``:
+
+::
+
+    # AI-Suchmodus-Funktion aktivieren
+    rag.chat.enabled=true
 
     # Gemini API-Schlüssel
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -78,16 +100,22 @@ Minimalkonfiguration
     # Zu verwendendes Modell
     rag.llm.gemini.model=gemini-3-flash-preview
 
-Empfohlene Konfiguration (Produktionsumgebung)
-----------------------------------------------
+``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
 
 ::
 
-    # AI-Modus-Funktion aktivieren
-    rag.chat.enabled=true
+    # LLM-Anbieter auf Gemini setzen
+    rag.llm.name=gemini
 
-    # LLM-Anbieter-Einstellungen
-    rag.llm.type=gemini
+Empfohlene Konfiguration (Produktionsumgebung)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``app/WEB-INF/conf/fess_config.properties``:
+
+::
+
+    # AI-Suchmodus-Funktion aktivieren
+    rag.chat.enabled=true
 
     # Gemini API-Schlüssel
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -101,10 +129,17 @@ Empfohlene Konfiguration (Produktionsumgebung)
     # Timeout-Einstellungen
     rag.llm.gemini.timeout=60000
 
+``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
+
+::
+
+    # LLM-Anbieter auf Gemini setzen
+    rag.llm.name=gemini
+
 Einstellungselemente
 ====================
 
-Alle verfügbaren Einstellungselemente für den Gemini-Client.
+Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellungen werden in ``fess_config.properties`` vorgenommen.
 
 .. list-table::
    :header-rows: 1
@@ -125,9 +160,102 @@ Alle verfügbaren Einstellungselemente für den Gemini-Client.
    * - ``rag.llm.gemini.timeout``
      - Anfrage-Timeout (Millisekunden)
      - ``60000``
+   * - ``rag.llm.gemini.availability.check.interval``
+     - Intervall der Verfügbarkeitsprüfung (Sekunden)
+     - ``60``
+   * - ``rag.llm.gemini.max.concurrent.requests``
+     - Maximale Anzahl gleichzeitiger Anfragen
+     - ``5``
+   * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
+     - Maximale Anzahl relevanter Dokumente bei der Bewertung
+     - ``3``
+
+Prompttypspezifische Einstellungen
+===================================
+
+In |Fess| können LLM-Parameter für jeden Prompttyp detailliert konfiguriert werden.
+Prompttypspezifische Einstellungen werden in ``fess_config.properties`` eingetragen.
+
+Konfigurationsformat
+--------------------
+
+::
+
+    rag.llm.gemini.{promptType}.temperature
+    rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.context.max.chars
+
+Verfügbare Prompttypen
+-----------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Prompttyp
+     - Beschreibung
+   * - ``intent``
+     - Prompt zur Bestimmung der Benutzerabsicht
+   * - ``evaluation``
+     - Prompt zur Bewertung der Dokumentrelevanz
+   * - ``unclear``
+     - Prompt bei unklarer Frage
+   * - ``noresults``
+     - Prompt bei fehlenden Suchergebnissen
+   * - ``docnotfound``
+     - Prompt, wenn kein Dokument gefunden wurde
+   * - ``answer``
+     - Prompt zur Antwortgenerierung
+   * - ``summary``
+     - Prompt zur Zusammenfassungsgenerierung
+   * - ``faq``
+     - Prompt zur FAQ-Generierung
+   * - ``direct``
+     - Prompt für direkte Antworten
+
+Konfigurationsbeispiel
+----------------------
+
+::
+
+    # Temperatureinstellung für die Antwortgenerierung
+    rag.llm.gemini.answer.temperature=0.7
+
+    # Maximale Token-Anzahl für die Zusammenfassungsgenerierung
+    rag.llm.gemini.summary.max.tokens=2048
+
+    # Maximale Zeichenzahl des Kontexts für die Antwortgenerierung
+    rag.llm.gemini.answer.context.max.chars=16000
+
+    # Maximale Zeichenzahl des Kontexts für die Zusammenfassungsgenerierung
+    rag.llm.gemini.summary.context.max.chars=16000
+
+    # Maximale Zeichenzahl des Kontexts für die FAQ-Generierung
+    rag.llm.gemini.faq.context.max.chars=10000
+
+.. note::
+   Der Standardwert von ``context.max.chars`` variiert je nach Prompttyp.
+   Für ``answer`` und ``summary`` beträgt er 16000, für ``faq`` 10000.
+
+Unterstützung für Thinking-Modelle
+====================================
+
+Gemini unterstützt Thinking-Modelle.
+Bei Verwendung von Thinking-Modellen führt das Modell vor der Antwortgenerierung einen internen Denkprozess durch und kann so genauere Antworten liefern.
+
+Das Thinking-Budget kann in ``fess_config.properties`` konfiguriert werden.
+
+::
+
+    # Thinking-Budget konfigurieren
+    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+
+.. note::
+   Die Konfiguration des Thinking-Budgets kann die Antwortzeit verlängern.
+   Setzen Sie einen geeigneten Wert entsprechend dem Verwendungszweck.
 
 Konfiguration mit Umgebungsvariablen
-====================================
+======================================
 
 Aus Sicherheitsgründen wird empfohlen, den API-Schlüssel über Umgebungsvariablen zu konfigurieren.
 
@@ -148,7 +276,7 @@ docker-compose.yml
         image: codelibs/fess:15.6.0
         environment:
           - RAG_CHAT_ENABLED=true
-          - RAG_LLM_TYPE=gemini
+          - RAG_LLM_NAME=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
           - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
@@ -163,7 +291,7 @@ systemd-Umgebung
     Environment="RAG_LLM_GEMINI_API_KEY=AIzaSy..."
 
 Verwendung über Vertex AI
-=========================
+==========================
 
 Wenn Sie Google Cloud Platform verwenden, können Sie Gemini auch über Vertex AI nutzen.
 Bei Verwendung von Vertex AI unterscheiden sich API-Endpunkt und Authentifizierungsmethode.
@@ -173,7 +301,7 @@ Bei Verwendung von Vertex AI unterscheiden sich API-Endpunkt und Authentifizieru
    Falls die Verwendung über Vertex AI erforderlich ist, kann eine benutzerdefinierte Implementierung notwendig sein.
 
 Modellauswahl-Leitfaden
-=======================
+========================
 
 Richtlinien zur Modellauswahl je nach Verwendungszweck.
 
@@ -214,9 +342,8 @@ Diese Eigenschaft ermöglicht es, mehr Suchergebnisse in den Kontext einzubezieh
 
 ::
 
-    # Mehr Dokumente in den Kontext einbeziehen
-    rag.chat.context.max.documents=10
-    rag.chat.context.max.chars=20000
+    # Mehr Dokumente in den Kontext einbeziehen (Konfiguration in fess_config.properties)
+    rag.llm.gemini.answer.context.max.chars=20000
 
 Kostenrichtlinien
 -----------------
@@ -246,25 +373,29 @@ Die Google AI API wird nutzungsbasiert abgerechnet (mit Gratiskontingent).
 .. note::
    Aktuelle Preise und Informationen zum Gratiskontingent finden Sie unter `Google AI Pricing <https://ai.google.dev/pricing>`__.
 
-Ratenbegrenzung
-===============
+Gleichzeitige Anfragensteuerung
+=================================
 
-Die Google AI API hat Ratenbegrenzungen. Kombinieren Sie diese mit der Ratenbegrenzungsfunktion von |Fess|.
+In |Fess| kann die Anzahl gleichzeitiger Anfragen an Gemini gesteuert werden.
+Konfigurieren Sie dazu folgendes Property in ``fess_config.properties``.
 
 ::
 
-    # Fess-Ratenbegrenzungseinstellungen
-    rag.chat.rate.limit.enabled=true
-    rag.chat.rate.limit.requests.per.minute=10
+    # Maximale Anzahl gleichzeitiger Anfragen (Standard: 5)
+    rag.llm.gemini.max.concurrent.requests=5
+
+Diese Einstellung verhindert übermäßige Anfragen an die Google AI API und vermeidet Ratenbegrenzungsfehler.
 
 Gratiskontingent-Limits
------------------------
+------------------------
 
 Die Google AI API hat ein Gratiskontingent, aber folgende Einschränkungen:
 
 - Anfragen/Minute: 15 RPM
 - Token/Minute: 1 Million TPM
 - Anfragen/Tag: 1.500 RPD
+
+Bei Verwendung des Gratiskontingents wird empfohlen, ``rag.llm.gemini.max.concurrent.requests`` auf einen niedrigen Wert zu setzen.
 
 Fehlerbehebung
 ==============
@@ -288,9 +419,9 @@ Ratenbegrenzungsfehler
 
 **Lösung**:
 
-1. Konfigurieren Sie strengere Ratenbegrenzungen in |Fess|::
+1. Verringern Sie die Anzahl gleichzeitiger Anfragen in ``fess_config.properties``::
 
-    rag.chat.rate.limit.requests.per.minute=5
+    rag.llm.gemini.max.concurrent.requests=3
 
 2. Warten Sie einige Minuten und versuchen Sie es erneut
 3. Beantragen Sie bei Bedarf eine Kontingenterhöhung
@@ -346,4 +477,4 @@ Weiterführende Informationen
 - `Gemini API Documentation <https://ai.google.dev/docs>`__
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - Übersicht LLM-Integration
-- :doc:`rag-chat` - Details zur AI-Modus-Funktion
+- :doc:`rag-chat` - Details zur AI-Suchmodus-Funktion

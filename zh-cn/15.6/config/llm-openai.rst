@@ -6,7 +6,7 @@ OpenAI配置
 ====
 
 OpenAI是提供GPT-4等高性能大型语言模型（LLM）的云服务。
-|Fess| 可以使用OpenAI API实现AI模式功能。
+|Fess| 可以使用OpenAI API实现AI搜索模式功能。
 
 使用OpenAI，可以通过最先进的AI模型生成高质量的回答。
 
@@ -23,12 +23,12 @@ OpenAI是提供GPT-4等高性能大型语言模型（LLM）的云服务。
 
 OpenAI可用的主要模型:
 
+- ``gpt-5`` - 最新高性能模型
+- ``gpt-5-mini`` - GPT-5的轻量版（成本效益高）
 - ``gpt-4o`` - 高性能多模态模型
-- ``gpt-4o-mini`` - GPT-4o的轻量版（成本效益高）
+- ``gpt-4o-mini`` - GPT-4o的轻量版
 - ``o3-mini`` - 推理特化的轻量模型
 - ``o4-mini`` - 下一代推理特化轻量模型
-- ``gpt-4-turbo`` - GPT-4的高速版
-- ``gpt-3.5-turbo`` - 性价比优秀的模型
 
 .. note::
    可用模型的最新信息请查阅 `OpenAI Models <https://platform.openai.com/docs/models>`__
@@ -61,38 +61,61 @@ OpenAI可用的主要模型:
    - 不要在日志中输出
    - 使用环境变量或安全配置文件管理
 
+插件安装
+========================
+
+|Fess| 15.6中，OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-openai`` 插件。
+
+1. 下载 `fess-llm-openai-15.6.0.jar`
+2. 将JAR文件放置到 |Fess| 安装目录下的 ``app/WEB-INF/plugin/`` 目录::
+
+    cp fess-llm-openai-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+
+3. 重启 |Fess|
+
+.. note::
+   插件版本请与 |Fess| 本体版本保持一致。
+
 基本配置
 ========
 
-在 ``app/WEB-INF/conf/fess_config.properties`` 中添加以下配置。
+|Fess| 15.6中，配置项根据用途分别存放在以下两个文件中。
+
+- ``app/WEB-INF/conf/fess_config.properties`` - |Fess| 本体配置及LLM提供商专属配置
+- ``system.properties`` - 在管理界面（管理界面 > 系统 > 通用）或文件中配置LLM提供商名称（ ``rag.llm.name`` ）
 
 最小配置
 --------
 
+``app/WEB-INF/conf/fess_config.properties``:
+
 ::
 
-    # 启用AI模式功能
+    # 启用AI搜索模式功能
     rag.chat.enabled=true
-
-    # 设置LLM提供商为OpenAI
-    rag.llm.type=openai
 
     # OpenAI API密钥
     rag.llm.openai.api.key=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # 使用的模型
-    rag.llm.openai.model=gpt-4o-mini
+    rag.llm.openai.model=gpt-5-mini
+
+``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+
+::
+
+    # 将LLM提供商设置为OpenAI
+    rag.llm.name=openai
 
 推荐配置（生产环境）
 --------------------
 
+``app/WEB-INF/conf/fess_config.properties``:
+
 ::
 
-    # 启用AI模式功能
+    # 启用AI搜索模式功能
     rag.chat.enabled=true
-
-    # LLM提供商设置
-    rag.llm.type=openai
 
     # OpenAI API密钥
     rag.llm.openai.api.key=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -104,35 +127,175 @@ OpenAI可用的主要模型:
     rag.llm.openai.api.url=https://api.openai.com/v1
 
     # 超时设置
-    rag.llm.openai.timeout=60000
+    rag.llm.openai.timeout=120000
+
+    # 并发请求数限制
+    rag.llm.openai.max.concurrent.requests=5
+
+``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+
+::
+
+    # LLM提供商设置
+    rag.llm.name=openai
 
 配置项
 ======
 
-OpenAI客户端可用的所有配置项。
+OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.properties`` 或管理界面中进行设置，其他配置均在 ``fess_config.properties`` 中进行。
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 35 35 15 15
 
    * - 属性
      - 说明
      - 默认值
+     - 配置位置
+   * - ``rag.llm.name``
+     - LLM提供商名称（指定 ``openai``）
+     - （必需）
+     - system.properties
    * - ``rag.llm.openai.api.key``
      - OpenAI API密钥
      - （必需）
+     - fess_config.properties
    * - ``rag.llm.openai.model``
      - 使用的模型名称
      - ``gpt-5-mini``
+     - fess_config.properties
    * - ``rag.llm.openai.api.url``
      - API的基础URL
      - ``https://api.openai.com/v1``
+     - fess_config.properties
    * - ``rag.llm.openai.timeout``
      - 请求超时时间（毫秒）
-     - ``60000``
+     - ``120000``
+     - fess_config.properties
+   * - ``rag.llm.openai.availability.check.interval``
+     - 可用性检查间隔（秒）
+     - ``60``
+     - fess_config.properties
+   * - ``rag.llm.openai.max.concurrent.requests``
+     - 最大并发请求数
+     - ``5``
+     - fess_config.properties
+   * - ``rag.llm.openai.chat.evaluation.max.relevant.docs``
+     - 评估时的最大相关文档数
+     - ``3``
+     - fess_config.properties
+   * - ``rag.chat.enabled``
+     - 启用AI搜索模式功能
+     - ``false``
+     - fess_config.properties
+
+提示词类型别配置
+======================
+
+|Fess| 中可以按提示词类型分别设置参数。配置在 ``fess_config.properties`` 中进行。
+
+配置模式
+------------
+
+按提示词类型的配置以如下模式指定:
+
+- ``rag.llm.openai.{promptType}.temperature`` - 生成随机性（0.0〜2.0）
+- ``rag.llm.openai.{promptType}.max.tokens`` - 最大token数
+- ``rag.llm.openai.{promptType}.context.max.chars`` - 上下文最大字符数
+
+提示词类型
+----------------
+
+可用的提示词类型:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - 提示词类型
+     - 说明
+   * - ``intent``
+     - 判定用户意图的提示词
+   * - ``evaluation``
+     - 评估搜索结果相关性的提示词
+   * - ``unclear``
+     - 针对不明确查询的响应提示词
+   * - ``noresults``
+     - 无搜索结果时的响应提示词
+   * - ``docnotfound``
+     - 文档未找到时的响应提示词
+   * - ``answer``
+     - 生成回答的提示词
+   * - ``summary``
+     - 生成摘要的提示词
+   * - ``faq``
+     - 生成FAQ的提示词
+   * - ``direct``
+     - 直接响应的提示词
+
+配置示例
+------
+
+::
+
+    # answer提示词的temperature设置
+    rag.llm.openai.answer.temperature=0.7
+
+    # answer提示词的最大token数
+    rag.llm.openai.answer.max.tokens=2048
+
+    # summary提示词的temperature设置（摘要设置较低）
+    rag.llm.openai.summary.temperature=0.3
+
+    # intent提示词的temperature设置（意图判定设置较低）
+    rag.llm.openai.intent.temperature=0.1
+
+推理模型支持
+==============
+
+使用o1/o3/o4系列或gpt-5系列推理模型时，|Fess| 会自动使用OpenAI API的 ``max_completion_tokens`` 参数代替 ``max_tokens``。无需额外更改配置。
+
+推理模型的附加参数
+----------------------------
+
+使用推理模型时，可在 ``fess_config.properties`` 中设置以下附加参数:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``rag.llm.openai.reasoning.effort``
+     - o系列模型的推理effort设置（``low``、``medium``、``high``）
+     - （未设置）
+   * - ``rag.llm.openai.top.p``
+     - token选择的概率阈值（0.0〜1.0）
+     - （未设置）
+   * - ``rag.llm.openai.frequency.penalty``
+     - 频率惩罚（-2.0〜2.0）
+     - （未设置）
+   * - ``rag.llm.openai.presence.penalty``
+     - 存在惩罚（-2.0〜2.0）
+     - （未设置）
+
+配置示例
+------
+
+::
+
+    # 对o3-mini将推理effort设置为high
+    rag.llm.openai.model=o3-mini
+    rag.llm.openai.reasoning.effort=high
+
+    # 对gpt-5设置top_p和惩罚
+    rag.llm.openai.model=gpt-5
+    rag.llm.openai.top.p=0.9
+    rag.llm.openai.frequency.penalty=0.5
 
 环境变量配置
-============
+================
 
 出于安全考虑，建议使用环境变量设置API密钥。
 
@@ -153,9 +316,9 @@ docker-compose.yml
         image: codelibs/fess:15.6.0
         environment:
           - RAG_CHAT_ENABLED=true
-          - RAG_LLM_TYPE=openai
+          - RAG_LLM_NAME=openai
           - RAG_LLM_OPENAI_API_KEY=${OPENAI_API_KEY}
-          - RAG_LLM_OPENAI_MODEL=gpt-4o-mini
+          - RAG_LLM_OPENAI_MODEL=gpt-5-mini
 
 systemd环境
 -----------
@@ -168,7 +331,7 @@ systemd环境
     Environment="RAG_LLM_OPENAI_API_KEY=sk-xxx..."
 
 使用Azure OpenAI
-================
+==================
 
 通过Microsoft Azure使用OpenAI模型时，需更改API端点。
 
@@ -200,78 +363,64 @@ systemd环境
      - 成本
      - 质量
      - 用途
-   * - ``gpt-3.5-turbo``
-     - 低
-     - 良好
-     - 一般问答、成本优先
-   * - ``gpt-4o-mini``
+   * - ``gpt-5-mini``
      - 中
      - 高
-     - 平衡用途（推荐）
-   * - ``gpt-4o``
+     - 均衡用途（推荐）
+   * - ``gpt-4o-mini``
+     - 低〜中
+     - 高
+     - 成本优先的用途
+   * - ``gpt-5``
      - 高
      - 最高
      - 复杂推理、需要高质量
+   * - ``gpt-4o``
+     - 中〜高
+     - 最高
+     - 需要多模态支持
    * - ``o3-mini`` / ``o4-mini``
      - 中
      - 最高
      - 数学、编程等推理任务
-   * - ``gpt-4-turbo``
-     - 高
-     - 最高
-     - 需要快速响应
 
 成本估算
---------
+------------
 
-OpenAI API按使用量计费。以下是2024年的参考价格。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 35 35
-
-   * - 模型
-     - 输入（1K令牌）
-     - 输出（1K令牌）
-   * - gpt-3.5-turbo
-     - $0.0005
-     - $0.0015
-   * - gpt-4o-mini
-     - $0.00015
-     - $0.0006
-   * - gpt-4o
-     - $0.005
-     - $0.015
+OpenAI API按使用量计费。
 
 .. note::
    最新价格请查阅 `OpenAI Pricing <https://openai.com/pricing>`__
 
-速率限制
-========
+并发请求控制
+==================
 
-OpenAI API有速率限制。请结合 |Fess| 的速率限制功能适当配置。
+|Fess| 中可通过 ``fess_config.properties`` 的 ``rag.llm.openai.max.concurrent.requests`` 控制对OpenAI API的并发请求数。默认值为 ``5``。
 
 ::
 
-    # Fess速率限制设置
-    rag.chat.rate.limit.enabled=true
-    rag.chat.rate.limit.requests.per.minute=10
+    # 设置最大并发请求数
+    rag.llm.openai.max.concurrent.requests=5
+
+通过此设置，可防止向OpenAI API发送过多请求，避免速率限制错误。
 
 OpenAI Tier限制
----------------
+------------------
 
-限制因OpenAI账户Tier而异:
+OpenAI API端的限制因账户Tier而异:
 
 - **Free**: 3 RPM（请求/分钟）
 - **Tier 1**: 500 RPM
 - **Tier 2**: 5,000 RPM
 - **Tier 3+**: 更高限制
 
+请根据OpenAI账户Tier适当调整 ``rag.llm.openai.max.concurrent.requests``。
+
 故障排除
-========
+======================
 
 认证错误
---------
+----------
 
 **症状**: 发生"401 Unauthorized"错误
 
@@ -288,9 +437,9 @@ OpenAI Tier限制
 
 **解决方法**:
 
-1. 加严 |Fess| 速率限制设置::
+1. 减小 ``rag.llm.openai.max.concurrent.requests`` 的值::
 
-    rag.chat.rate.limit.requests.per.minute=5
+    rag.llm.openai.max.concurrent.requests=3
 
 2. 升级OpenAI账户Tier
 
@@ -313,12 +462,12 @@ OpenAI Tier限制
 
 1. 延长超时时间::
 
-    rag.llm.openai.timeout=120000
+    rag.llm.openai.timeout=180000
 
-2. 考虑使用更快的模型（如gpt-3.5-turbo）
+2. 考虑使用更快的模型（如gpt-5-mini等）
 
 调试设置
---------
+------------
 
 调查问题时，可调整 |Fess| 日志级别输出OpenAI相关的详细日志。
 
@@ -329,7 +478,7 @@ OpenAI Tier限制
     <Logger name="org.codelibs.fess.llm.openai" level="DEBUG"/>
 
 安全注意事项
-============
+========================
 
 使用OpenAI API时，请注意以下安全事项。
 
@@ -345,5 +494,4 @@ OpenAI Tier限制
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - LLM集成概述
-- :doc:`rag-chat` - AI模式功能详情
-
+- :doc:`rag-chat` - AI搜索模式功能详情

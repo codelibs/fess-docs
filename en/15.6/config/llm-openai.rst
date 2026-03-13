@@ -23,12 +23,12 @@ Supported Models
 
 Main models available with OpenAI:
 
+- ``gpt-5`` - Latest high-performance model
+- ``gpt-5-mini`` - Lightweight version of GPT-5 (cost-efficient)
 - ``gpt-4o`` - High-performance multimodal model
-- ``gpt-4o-mini`` - Lightweight version of GPT-4o (cost-efficient)
+- ``gpt-4o-mini`` - Lightweight version of GPT-4o
 - ``o3-mini`` - Lightweight reasoning-focused model
 - ``o4-mini`` - Next-generation lightweight reasoning model
-- ``gpt-4-turbo`` - High-speed version of GPT-4
-- ``gpt-3.5-turbo`` - Model with excellent cost performance
 
 .. note::
    For the latest information on available models, see `OpenAI Models <https://platform.openai.com/docs/models>`__.
@@ -61,38 +61,61 @@ Obtaining an API Key
    - Do not output to logs
    - Manage using environment variables or secure configuration files
 
+Plugin Installation
+===================
+
+In |Fess| 15.6, OpenAI integration is provided as a plugin. To use it, you must install the ``fess-llm-openai`` plugin.
+
+1. Download `fess-llm-openai-15.6.0.jar`
+2. Place the JAR file in the ``app/WEB-INF/plugin/`` directory of your |Fess| installation directory::
+
+    cp fess-llm-openai-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+
+3. Restart |Fess|
+
+.. note::
+   The plugin version should match the version of |Fess|.
+
 Basic Configuration
 ===================
 
-Add the following settings to ``app/WEB-INF/conf/fess_config.properties``.
+In |Fess| 15.6, configuration items are divided into the following two files based on their purpose.
+
+- ``app/WEB-INF/conf/fess_config.properties`` - |Fess| core settings and LLM provider-specific settings
+- ``system.properties`` (Administration > System > General) - LLM provider selection (``rag.llm.name`` only)
 
 Minimal Configuration
 ---------------------
+
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
-
-    # Set LLM provider to OpenAI
-    rag.llm.type=openai
 
     # OpenAI API key
     rag.llm.openai.api.key=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Model to use
-    rag.llm.openai.model=gpt-4o-mini
+    rag.llm.openai.model=gpt-5-mini
+
+``system.properties`` (also configurable from Administration > System > General):
+
+::
+
+    # Set LLM provider to OpenAI
+    rag.llm.name=openai
 
 Recommended Configuration (Production)
---------------------------------------
+---------------------------------------
+
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
-
-    # LLM provider setting
-    rag.llm.type=openai
 
     # OpenAI API key
     rag.llm.openai.api.key=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -104,35 +127,175 @@ Recommended Configuration (Production)
     rag.llm.openai.api.url=https://api.openai.com/v1
 
     # Timeout setting
-    rag.llm.openai.timeout=60000
+    rag.llm.openai.timeout=120000
+
+    # Concurrent request limit
+    rag.llm.openai.max.concurrent.requests=5
+
+``system.properties`` (also configurable from Administration > System > General):
+
+::
+
+    # LLM provider setting
+    rag.llm.name=openai
 
 Configuration Options
 =====================
 
-All configuration options available for the OpenAI client.
+All configuration options available for the OpenAI client. All settings except ``rag.llm.name`` are configured in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 35 35 15 15
 
    * - Property
      - Description
      - Default
+     - Location
+   * - ``rag.llm.name``
+     - LLM provider name (specify ``openai``)
+     - (Required)
+     - system.properties
    * - ``rag.llm.openai.api.key``
      - OpenAI API key
      - (Required)
+     - fess_config.properties
    * - ``rag.llm.openai.model``
      - Model name to use
-     - ``gpt-4o-mini``
+     - ``gpt-5-mini``
+     - fess_config.properties
    * - ``rag.llm.openai.api.url``
      - API base URL
      - ``https://api.openai.com/v1``
+     - fess_config.properties
    * - ``rag.llm.openai.timeout``
      - Request timeout (in milliseconds)
-     - ``60000``
+     - ``120000``
+     - fess_config.properties
+   * - ``rag.llm.openai.availability.check.interval``
+     - Availability check interval (in seconds)
+     - ``60``
+     - fess_config.properties
+   * - ``rag.llm.openai.max.concurrent.requests``
+     - Maximum number of concurrent requests
+     - ``5``
+     - fess_config.properties
+   * - ``rag.llm.openai.chat.evaluation.max.relevant.docs``
+     - Maximum number of relevant documents during evaluation
+     - ``3``
+     - fess_config.properties
+   * - ``rag.chat.enabled``
+     - Enable AI mode functionality
+     - ``false``
+     - fess_config.properties
+
+Per-Prompt-Type Settings
+========================
+
+In |Fess|, individual parameters can be configured per prompt type. Configure in ``fess_config.properties``.
+
+Configuration Pattern
+---------------------
+
+Per-prompt-type settings are specified using the following pattern:
+
+- ``rag.llm.openai.{promptType}.temperature`` - Generation randomness (0.0 to 2.0)
+- ``rag.llm.openai.{promptType}.max.tokens`` - Maximum number of tokens
+- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximum number of context characters
+
+Prompt Types
+------------
+
+Available prompt types:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Prompt Type
+     - Description
+   * - ``intent``
+     - Prompt for determining user intent
+   * - ``evaluation``
+     - Prompt for evaluating search result relevance
+   * - ``unclear``
+     - Response prompt for unclear queries
+   * - ``noresults``
+     - Response prompt when no search results are found
+   * - ``docnotfound``
+     - Response prompt when documents are not found
+   * - ``answer``
+     - Prompt for generating answers
+   * - ``summary``
+     - Prompt for generating summaries
+   * - ``faq``
+     - Prompt for generating FAQs
+   * - ``direct``
+     - Prompt for direct responses
+
+Configuration Examples
+----------------------
+
+::
+
+    # Temperature setting for answer prompt
+    rag.llm.openai.answer.temperature=0.7
+
+    # Maximum tokens for answer prompt
+    rag.llm.openai.answer.max.tokens=2048
+
+    # Temperature setting for summary prompt (set lower for summaries)
+    rag.llm.openai.summary.temperature=0.3
+
+    # Temperature setting for intent prompt (set lower for intent analysis)
+    rag.llm.openai.intent.temperature=0.1
+
+Reasoning Model Support
+=======================
+
+When using reasoning models such as o1/o3/o4 series or gpt-5 series, |Fess| automatically uses the OpenAI API ``max_completion_tokens`` parameter instead of ``max_tokens``. No additional configuration changes are required.
+
+Additional Parameters for Reasoning Models
+-------------------------------------------
+
+When using reasoning models, the following additional parameters can be configured in ``fess_config.properties``:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``rag.llm.openai.reasoning.effort``
+     - Reasoning effort setting for o-series models (``low``, ``medium``, ``high``)
+     - (Not set)
+   * - ``rag.llm.openai.top.p``
+     - Token selection probability threshold (0.0 to 1.0)
+     - (Not set)
+   * - ``rag.llm.openai.frequency.penalty``
+     - Frequency penalty (-2.0 to 2.0)
+     - (Not set)
+   * - ``rag.llm.openai.presence.penalty``
+     - Presence penalty (-2.0 to 2.0)
+     - (Not set)
+
+Configuration Examples
+----------------------
+
+::
+
+    # Set reasoning effort to high for o3-mini
+    rag.llm.openai.model=o3-mini
+    rag.llm.openai.reasoning.effort=high
+
+    # Set top_p and penalties for gpt-5
+    rag.llm.openai.model=gpt-5
+    rag.llm.openai.top.p=0.9
+    rag.llm.openai.frequency.penalty=0.5
 
 Environment Variable Configuration
-==================================
+===================================
 
 For security reasons, it is recommended to configure API keys using environment variables.
 
@@ -153,9 +316,9 @@ docker-compose.yml
         image: codelibs/fess:15.6.0
         environment:
           - RAG_CHAT_ENABLED=true
-          - RAG_LLM_TYPE=openai
+          - RAG_LLM_NAME=openai
           - RAG_LLM_OPENAI_API_KEY=${OPENAI_API_KEY}
-          - RAG_LLM_OPENAI_MODEL=gpt-4o-mini
+          - RAG_LLM_OPENAI_MODEL=gpt-5-mini
 
 systemd Environment
 -------------------
@@ -200,62 +363,46 @@ Guidelines for selecting models based on intended use.
      - Cost
      - Quality
      - Use Case
-   * - ``gpt-3.5-turbo``
-     - Low
-     - Good
-     - General Q&A, cost-focused
-   * - ``gpt-4o-mini``
+   * - ``gpt-5-mini``
      - Medium
      - High
      - Balanced use cases (recommended)
-   * - ``gpt-4o``
+   * - ``gpt-4o-mini``
+     - Low-Medium
+     - High
+     - Cost-focused use cases
+   * - ``gpt-5``
      - High
      - Highest
      - Complex reasoning, when high quality is needed
+   * - ``gpt-4o``
+     - Medium-High
+     - Highest
+     - When multimodal support is needed
    * - ``o3-mini`` / ``o4-mini``
      - Medium
      - Highest
      - Reasoning tasks such as math and coding
-   * - ``gpt-4-turbo``
-     - High
-     - Highest
-     - When fast response is needed
 
 Cost Reference
 --------------
 
-OpenAI API is billed based on usage. The following are reference prices as of 2024.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 35 35
-
-   * - Model
-     - Input (per 1K tokens)
-     - Output (per 1K tokens)
-   * - gpt-3.5-turbo
-     - $0.0005
-     - $0.0015
-   * - gpt-4o-mini
-     - $0.00015
-     - $0.0006
-   * - gpt-4o
-     - $0.005
-     - $0.015
+OpenAI API is billed based on usage.
 
 .. note::
    For the latest pricing, see `OpenAI Pricing <https://openai.com/pricing>`__.
 
-Rate Limiting
-=============
+Concurrency Control
+===================
 
-OpenAI API has rate limits. Configure appropriately in combination with |Fess| rate limiting functionality.
+In |Fess|, the number of concurrent requests to the OpenAI API can be controlled with ``rag.llm.openai.max.concurrent.requests`` in ``fess_config.properties``. The default value is ``5``.
 
 ::
 
-    # Fess rate limit settings
-    rag.chat.rate.limit.enabled=true
-    rag.chat.rate.limit.requests.per.minute=10
+    # Set maximum concurrent requests
+    rag.llm.openai.max.concurrent.requests=5
+
+This setting prevents excessive requests to the OpenAI API and helps avoid rate limit errors.
 
 OpenAI Tier-based Limits
 ------------------------
@@ -266,6 +413,8 @@ Limits vary based on your OpenAI account tier:
 - **Tier 1**: 500 RPM
 - **Tier 2**: 5,000 RPM
 - **Tier 3+**: Higher limits
+
+Adjust ``rag.llm.openai.max.concurrent.requests`` appropriately based on your OpenAI account tier.
 
 Troubleshooting
 ===============
@@ -288,9 +437,9 @@ Rate Limit Errors
 
 **Solutions**:
 
-1. Set stricter rate limits in |Fess|::
+1. Reduce the value of ``rag.llm.openai.max.concurrent.requests``::
 
-    rag.chat.rate.limit.requests.per.minute=5
+    rag.llm.openai.max.concurrent.requests=3
 
 2. Upgrade your OpenAI account tier
 
@@ -313,9 +462,9 @@ Timeout
 
 1. Extend timeout duration::
 
-    rag.llm.openai.timeout=120000
+    rag.llm.openai.timeout=180000
 
-2. Consider using a faster model (e.g., gpt-3.5-turbo)
+2. Consider using a faster model (e.g., gpt-5-mini)
 
 Debug Settings
 --------------

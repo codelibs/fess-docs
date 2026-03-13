@@ -6,7 +6,7 @@ Overview
 ========
 
 Ollama is an open-source platform for running Large Language Models (LLM) in local environments.
-It is configured as the default LLM provider for |Fess| and is suitable for use in private environments.
+In |Fess| 15.6, Ollama integration is provided as the ``fess-llm-ollama`` plugin and is suitable for use in private environments.
 
 Using Ollama allows you to use AI search mode functionality without sending data externally.
 
@@ -77,21 +77,38 @@ Downloading Models
     # Verify model works
     ollama run gemma3:4b "Hello, how are you?"
 
+Plugin Installation
+===================
+
+In |Fess| 15.6, Ollama integration has been separated as a plugin.
+To use Ollama, you must install the ``fess-llm-ollama`` plugin.
+
+1. Download `fess-llm-ollama-15.6.0.jar`.
+2. Place it in the ``app/WEB-INF/plugin/`` directory of your |Fess| installation directory.
+
+::
+
+    cp fess-llm-ollama-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+
+3. Restart |Fess|.
+
+.. note::
+   The plugin version should match the version of |Fess|.
+
 Basic Configuration
 ===================
 
-Add the following settings to ``app/WEB-INF/conf/fess_config.properties``.
+In |Fess| 15.6, LLM-related configuration is split across multiple configuration files.
 
 Minimal Configuration
 ---------------------
+
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
-
-    # Set LLM provider to Ollama
-    rag.llm.type=ollama
 
     # Ollama URL (for local environment)
     rag.llm.ollama.api.url=http://localhost:11434
@@ -99,16 +116,25 @@ Minimal Configuration
     # Model to use
     rag.llm.ollama.model=gemma3:4b
 
+``system.properties`` (also configurable from Administration > System > General):
+
+::
+
+    # Set LLM provider to Ollama
+    rag.llm.name=ollama
+
+.. note::
+   The LLM provider setting can also be configured by setting ``rag.llm.name`` from the administration screen (Administration > System > General).
+
 Recommended Configuration (Production)
---------------------------------------
+---------------------------------------
+
+``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
-
-    # LLM provider setting
-    rag.llm.type=ollama
 
     # Ollama URL
     rag.llm.ollama.api.url=http://localhost:11434
@@ -119,10 +145,20 @@ Recommended Configuration (Production)
     # Timeout setting (increased for large models)
     rag.llm.ollama.timeout=120000
 
+    # Concurrent request control
+    rag.llm.ollama.max.concurrent.requests=5
+
+``system.properties``:
+
+::
+
+    # LLM provider setting
+    rag.llm.name=ollama
+
 Configuration Options
 =====================
 
-All configuration options available for the Ollama client.
+All configuration options available for the Ollama client. All settings except ``rag.llm.name`` are configured in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
@@ -140,6 +176,125 @@ All configuration options available for the Ollama client.
    * - ``rag.llm.ollama.timeout``
      - Request timeout (in milliseconds)
      - ``60000``
+   * - ``rag.llm.ollama.availability.check.interval``
+     - Availability check interval (in seconds)
+     - ``60``
+   * - ``rag.llm.ollama.max.concurrent.requests``
+     - Maximum number of concurrent requests
+     - ``5``
+   * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
+     - Maximum number of relevant documents during evaluation
+     - ``3``
+
+Concurrency Control
+-------------------
+
+Use ``rag.llm.ollama.max.concurrent.requests`` to control the number of concurrent requests to Ollama.
+The default is 5. Adjust according to the resources of your Ollama server.
+Too many concurrent requests may overload the Ollama server and degrade response speed.
+
+Per-Prompt-Type Settings
+========================
+
+In |Fess|, LLM parameters can be customized per prompt type.
+Configure in ``fess_config.properties``.
+
+The following parameters can be set per prompt type:
+
+- ``rag.llm.ollama.{promptType}.temperature`` - Temperature during generation
+- ``rag.llm.ollama.{promptType}.max.tokens`` - Maximum number of tokens
+- ``rag.llm.ollama.{promptType}.context.max.chars`` - Maximum number of context characters
+
+Available prompt types:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Prompt Type
+     - Description
+   * - ``intent``
+     - Prompt for determining user intent
+   * - ``evaluation``
+     - Prompt for evaluating search results
+   * - ``unclear``
+     - Response prompt for unclear queries
+   * - ``noresults``
+     - Prompt for when no results are found
+   * - ``docnotfound``
+     - Prompt for when documents are not found
+   * - ``answer``
+     - Answer generation prompt
+   * - ``summary``
+     - Summary generation prompt
+   * - ``faq``
+     - FAQ generation prompt
+   * - ``direct``
+     - Direct response prompt
+
+Configuration Examples::
+
+    # Set temperature for answer generation
+    rag.llm.ollama.answer.temperature=0.7
+
+    # Set maximum tokens for summary generation
+    rag.llm.ollama.summary.max.tokens=2048
+
+    # Set maximum context characters for intent analysis
+    rag.llm.ollama.intent.context.max.chars=4000
+
+Ollama Model Options
+====================
+
+Ollama model parameters can be configured in ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``rag.llm.ollama.top.p``
+     - Top-P sampling value (0.0 to 1.0)
+     - (Not set)
+   * - ``rag.llm.ollama.top.k``
+     - Top-K sampling value
+     - (Not set)
+   * - ``rag.llm.ollama.num.ctx``
+     - Context window size
+     - (Not set)
+   * - ``rag.llm.ollama.default.*``
+     - Default fallback settings
+     - (Not set)
+   * - ``rag.llm.ollama.options.*``
+     - Global options
+     - (Not set)
+
+Configuration Examples::
+
+    # Top-P sampling
+    rag.llm.ollama.top.p=0.9
+
+    # Top-K sampling
+    rag.llm.ollama.top.k=40
+
+    # Context window size
+    rag.llm.ollama.num.ctx=4096
+
+Thinking Model Support
+======================
+
+When using thinking models such as qwen3.5, |Fess| supports configuring a thinking budget.
+
+Set the following in ``fess_config.properties``:
+
+::
+
+    # Thinking budget configuration
+    rag.llm.ollama.thinking.budget=1024
+
+By setting the thinking budget, you can control the number of tokens allocated to the "thinking" step that the model performs before generating a response.
 
 Network Configuration
 =====================
@@ -159,7 +314,7 @@ Example configuration when running both |Fess| and Ollama in Docker.
         image: codelibs/fess:15.6.0
         environment:
           - RAG_CHAT_ENABLED=true
-          - RAG_LLM_TYPE=ollama
+          - RAG_LLM_NAME=ollama
           - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
           - RAG_LLM_OLLAMA_MODEL=gemma3:4b
         depends_on:
@@ -252,6 +407,8 @@ Connection Errors
     ollama list
 
 3. Check firewall settings
+
+4. Verify the ``fess-llm-ollama`` plugin is placed in ``app/WEB-INF/plugin/``
 
 Model Not Found
 ---------------

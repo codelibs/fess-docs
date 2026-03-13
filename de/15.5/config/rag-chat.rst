@@ -1,16 +1,16 @@
 ==========================
-AI-Modus-Funktion konfigurieren
+AI-Suchmodus-Funktion konfigurieren
 ==========================
 
 Übersicht
 =========
 
-AI-Modus (RAG: Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
+AI-Suchmodus (RAG: Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
 
-AI-Modus-Funktionsweise
+AI-Suchmodus-Funktionsweise
 =======================
 
-AI-Modus arbeitet mit dem folgenden mehrstufigen Ablauf.
+AI-Suchmodus arbeitet mit dem folgenden mehrstufigen Ablauf.
 
 1. **Absichtsanalysephase**: Analyse der Benutzerfrage und Extraktion optimaler Suchbegriffe
 2. **Suchphase**: Dokumentensuche mit der |Fess|-Suchmaschine anhand der extrahierten Begriffe
@@ -23,13 +23,13 @@ Durch diesen Ablauf sind qualitativ hochwertigere Antworten möglich, die den Ko
 Grundeinstellungen
 ==================
 
-Grundlegende Einstellungen zur Aktivierung der AI-Modus-Funktion.
+Grundlegende Einstellungen zur Aktivierung der AI-Suchmodus-Funktion.
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
-    # AI-Modus-Funktion aktivieren
+    # AI-Suchmodus-Funktion aktivieren
     rag.chat.enabled=true
 
     # LLM-Anbieter auswählen (ollama, openai, gemini)
@@ -191,7 +191,7 @@ Ratenbegrenzungseinstellungen zur Vermeidung von API-Überlastung.
 API-Verwendung
 ==============
 
-Die AI-Modus-Funktion ist über REST-API verfügbar.
+Die AI-Suchmodus-Funktion ist über REST-API verfügbar.
 
 Nicht-Streaming-API
 -------------------
@@ -294,7 +294,7 @@ Detaillierte API-Dokumentation finden Sie unter :doc:`../api/api-chat`.
 Weboberfläche
 =============
 
-In der |Fess|-Weboberfläche ist die AI-Modus-Funktion über die Suchseite verfügbar.
+In der |Fess|-Weboberfläche ist die AI-Suchmodus-Funktion über die Suchseite verfügbar.
 
 Chat starten
 ------------
@@ -321,7 +321,7 @@ Gespräch fortsetzen
 Fehlerbehebung
 ==============
 
-AI-Modus wird nicht aktiviert
+AI-Suchmodus wird nicht aktiviert
 -----------------------------
 
 **Zu überprüfen**:

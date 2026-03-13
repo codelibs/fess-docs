@@ -10,14 +10,14 @@ Diese Funktionen schützen das System vor übermäßigen Anfragen und ermöglich
 
 Rate-Limiting wird in folgenden Szenarien angewendet:
 
-- Alle HTTP-Anfragen einschließlich Such-API und AI-Modus-API (``RateLimitFilter``)
+- Alle HTTP-Anfragen einschließlich Such-API und AI-Suchmodus-API (``RateLimitFilter``)
 - Crawler-Anfragen (Steuerung über Crawl-Konfiguration)
 
 HTTP-Anfrage-Ratenbegrenzung
 ============================
 
 Sie können die Anzahl der HTTP-Anfragen an |Fess| pro IP-Adresse begrenzen.
-Diese Begrenzung gilt für alle HTTP-Anfragen einschließlich Such-API, AI-Modus-API, Admin-Seiten usw.
+Diese Begrenzung gilt für alle HTTP-Anfragen einschließlich Such-API, AI-Suchmodus-API, Admin-Seiten usw.
 
 Konfiguration
 -------------
@@ -44,16 +44,16 @@ Verhalten
 - Pro IP-Adresse beginnt das Fenster mit der ersten Anfrage; nach Ablauf der Fensterperiode wird der Zähler zurückgesetzt (Festes-Fenster-Verfahren)
 - Bei Überschreitung wird die IP für die Dauer von ``rate.limit.block.duration.ms`` blockiert
 
-AI-Modus Rate-Limiting
+AI-Suchmodus Rate-Limiting
 ======================
 
-Die AI-Modus-Funktionalität verfügt über Rate-Limiting zur Kontrolle von LLM-API-Kosten und Ressourcenverbrauch.
-Für den AI-Modus gilt zusätzlich zur oben beschriebenen HTTP-Anfrage-Ratenbegrenzung eine eigene, AI-Modus-spezifische Ratenbegrenzung.
+Die AI-Suchmodus-Funktionalität verfügt über Rate-Limiting zur Kontrolle von LLM-API-Kosten und Ressourcenverbrauch.
+Für den AI-Suchmodus gilt zusätzlich zur oben beschriebenen HTTP-Anfrage-Ratenbegrenzung eine eigene, AI-Suchmodus-spezifische Ratenbegrenzung.
 
-AI-Modus-spezifische Rate-Limiting-Einstellungen finden Sie unter :doc:`rag-chat`.
+AI-Suchmodus-spezifische Rate-Limiting-Einstellungen finden Sie unter :doc:`rag-chat`.
 
 .. note::
-   Das AI-Modus-Rate-Limiting wird separat vom Rate-Limiting des LLM-Anbieters angewendet.
+   Das AI-Suchmodus-Rate-Limiting wird separat vom Rate-Limiting des LLM-Anbieters angewendet.
    Konfigurieren Sie beide Limits entsprechend.
 
 Crawler Rate-Limiting
@@ -222,6 +222,6 @@ Wenn die Rate-Limiting-Prüfungen selbst die Leistung beeinträchtigen:
 Referenzinformationen
 =====================
 
-- :doc:`rag-chat` - AI-Modus-Konfiguration
+- :doc:`rag-chat` - AI-Suchmodus-Konfiguration
 - :doc:`../admin/webconfig-guide` - Web-Crawl-Konfigurationsleitfaden
 - :doc:`../api/api-overview` - API-Übersicht

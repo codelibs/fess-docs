@@ -5,7 +5,7 @@ LLM統合の概要
 概要
 ====
 
-|Fess| 15.5では、大規模言語モデル（LLM）を活用したAIモード（RAG: Retrieval-Augmented Generation）機能をサポートしています。
+|Fess| 15.5では、大規模言語モデル（LLM）を活用したAI検索モード（RAG: Retrieval-Augmented Generation）機能をサポートしています。
 この機能により、ユーザーは検索結果を基にしたAIアシスタントとの対話形式で情報を取得できます。
 
 対応プロバイダー
@@ -33,7 +33,7 @@ LLM統合の概要
 アーキテクチャ
 ==============
 
-AIモード機能は以下のフローで動作します。
+AI検索モード機能は以下のフローで動作します。
 
 1. **ユーザー入力**: ユーザーがチャットインターフェースで質問を入力
 2. **意図解析**: LLMがユーザーの質問を分析し、検索キーワードを抽出
@@ -47,12 +47,12 @@ AIモード機能は以下のフローで動作します。
 
 LLM機能を有効にするには、``app/WEB-INF/conf/fess_config.properties`` に以下の設定を追加します。
 
-AIモードの有効化
+AI検索モードの有効化
 ----------------
 
 ::
 
-    # AIモード機能を有効にする
+    # AI検索モード機能を有効にする
     rag.chat.enabled=true
 
 LLMプロバイダーの選択
@@ -199,5 +199,5 @@ APIの過負荷を防ぐためのレート制限設定です。
 - :doc:`llm-ollama` - Ollamaの詳細設定
 - :doc:`llm-openai` - OpenAIの詳細設定
 - :doc:`llm-gemini` - Google Geminiの詳細設定
-- :doc:`rag-chat` - AIモード機能の詳細設定
+- :doc:`rag-chat` - AI検索モード機能の詳細設定
 - :doc:`rank-fusion` - Rank Fusion設定（ハイブリッド検索の結果統合）

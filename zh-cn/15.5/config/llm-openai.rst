@@ -6,7 +6,7 @@ OpenAI配置
 ====
 
 OpenAI是提供GPT-4等高性能大型语言模型（LLM）的云服务。
-|Fess| 可以使用OpenAI API实现AI模式功能。
+|Fess| 可以使用OpenAI API实现AI搜索模式功能。
 
 使用OpenAI，可以通过最先进的AI模型生成高质量的回答。
 
@@ -71,7 +71,7 @@ OpenAI可用的主要模型:
 
 ::
 
-    # 启用AI模式功能
+    # 启用AI搜索模式功能
     rag.chat.enabled=true
 
     # 设置LLM提供商为OpenAI
@@ -88,7 +88,7 @@ OpenAI可用的主要模型:
 
 ::
 
-    # 启用AI模式功能
+    # 启用AI搜索模式功能
     rag.chat.enabled=true
 
     # LLM提供商设置
@@ -345,5 +345,5 @@ OpenAI Tier限制
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - LLM集成概述
-- :doc:`rag-chat` - AI模式功能详情
+- :doc:`rag-chat` - AI搜索模式功能详情
 

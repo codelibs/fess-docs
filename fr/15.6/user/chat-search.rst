@@ -137,7 +137,7 @@ Q: La fonctionnalite de chat ne s'affiche pas
 -------------------------------
 
 R: La fonctionnalite de chat peut ne pas etre activee.
-Verifiez aupres de l'administrateur systeme si la fonctionnalite de mode IA est activee.
+Verifiez aupres de l'administrateur systeme si la fonctionnalite de mode de recherche IA est activee.
 
 Q: La reponse met du temps a s'afficher
 ---------------------------------------

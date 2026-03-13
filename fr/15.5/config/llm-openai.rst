@@ -6,7 +6,7 @@ Apercu
 ====
 
 OpenAI est un service cloud fournissant des grands modeles de langage (LLM) haute performance,
-dont GPT-4. |Fess| peut utiliser l'API OpenAI pour realiser la fonctionnalite de mode IA.
+dont GPT-4. |Fess| peut utiliser l'API OpenAI pour realiser la fonctionnalite de mode de recherche IA.
 
 L'utilisation d'OpenAI permet de generer des reponses de haute qualite avec les modeles d'IA les plus avances.
 
@@ -71,7 +71,7 @@ Configuration minimale
 
 ::
 
-    # Activer la fonctionnalite de mode IA
+    # Activer la fonctionnalite de mode de recherche IA
     rag.chat.enabled=true
 
     # Definir le fournisseur LLM sur OpenAI
@@ -88,7 +88,7 @@ Configuration recommandee (environnement de production)
 
 ::
 
-    # Activer la fonctionnalite de mode IA
+    # Activer la fonctionnalite de mode de recherche IA
     rag.chat.enabled=true
 
     # Configuration du fournisseur LLM
@@ -345,4 +345,4 @@ Informations de reference
 - `OpenAI API Reference <https://platform.openai.com/docs/api-reference>`__
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - Apercu de l'integration LLM
-- :doc:`rag-chat` - Details de la fonctionnalite de mode IA
+- :doc:`rag-chat` - Details de la fonctionnalite de mode de recherche IA

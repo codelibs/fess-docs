@@ -10,14 +10,14 @@ Esta funcionalidad protege el sistema de solicitudes excesivas y permite una dis
 
 El limite de tasa se aplica en los siguientes escenarios:
 
-- Todas las solicitudes HTTP, incluyendo API de busqueda, API de modo IA y pantallas de administracion (``RateLimitFilter``)
+- Todas las solicitudes HTTP, incluyendo API de busqueda, API de modo de búsqueda IA y pantallas de administracion (``RateLimitFilter``)
 - Solicitudes del crawler (controladas por la configuracion de crawl)
 
 Limitacion de tasa de solicitudes HTTP
 =======================================
 
 Puede limitar el numero de solicitudes HTTP a |Fess| por direccion IP.
-Esta limitacion se aplica a todas las solicitudes HTTP, incluyendo la API de busqueda, la API de modo IA, las pantallas de administracion, etc.
+Esta limitacion se aplica a todas las solicitudes HTTP, incluyendo la API de busqueda, la API de modo de búsqueda IA, las pantallas de administracion, etc.
 
 Configuracion
 -------------
@@ -44,16 +44,16 @@ Comportamiento
 - La ventana se inicia con la primera solicitud de cada IP y el contador se reinicia despues de que expire el periodo de ventana (metodo de ventana fija)
 - Cuando se excede el limite, la IP se bloquea durante el periodo definido en ``rate.limit.block.duration.ms``
 
-Limite de tasa del modo IA
+Limite de tasa del modo de búsqueda IA
 ==========================
 
-La funcionalidad de modo IA tiene un limite de tasa para controlar los costos y el consumo de recursos de la API de LLM.
-El modo IA tiene la limitacion de tasa de solicitudes HTTP descrita anteriormente, ademas de configuraciones de limite de tasa especificas del modo IA.
+La funcionalidad de modo de búsqueda IA tiene un limite de tasa para controlar los costos y el consumo de recursos de la API de LLM.
+El modo de búsqueda IA tiene la limitacion de tasa de solicitudes HTTP descrita anteriormente, ademas de configuraciones de limite de tasa especificas del modo de búsqueda IA.
 
-Para la configuracion especifica del limite de tasa del modo IA, consulte :doc:`rag-chat`.
+Para la configuracion especifica del limite de tasa del modo de búsqueda IA, consulte :doc:`rag-chat`.
 
 .. note::
-   El limite de tasa del modo IA se aplica por separado del limite de tasa del proveedor LLM.
+   El limite de tasa del modo de búsqueda IA se aplica por separado del limite de tasa del proveedor LLM.
    Considere ambos limites al configurar.
 
 Limite de tasa del crawler
@@ -222,6 +222,6 @@ Si la verificacion del limite de tasa afecta el rendimiento:
 Informacion de referencia
 =========================
 
-- :doc:`rag-chat` - Configuracion de la funcionalidad de modo IA
+- :doc:`rag-chat` - Configuracion de la funcionalidad de modo de búsqueda IA
 - :doc:`../admin/webconfig-guide` - Guia de configuracion de crawl web
 - :doc:`../api/api-overview` - Descripcion general de API

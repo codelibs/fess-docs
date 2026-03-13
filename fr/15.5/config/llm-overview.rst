@@ -5,7 +5,7 @@ Apercu de l'integration LLM
 Apercu
 ====
 
-|Fess| 15.5 prend en charge la fonctionnalite de mode IA (RAG: Retrieval-Augmented Generation) utilisant
+|Fess| 15.5 prend en charge la fonctionnalite de mode de recherche IA (RAG: Retrieval-Augmented Generation) utilisant
 les grands modeles de langage (LLM). Cette fonctionnalite permet aux utilisateurs d'obtenir des informations
 sous forme de dialogue avec un assistant IA base sur les resultats de recherche.
 
@@ -34,7 +34,7 @@ Fournisseurs pris en charge
 Architecture
 ==============
 
-La fonctionnalite de mode IA fonctionne selon le flux suivant.
+La fonctionnalite de mode de recherche IA fonctionne selon le flux suivant.
 
 1. **Entree utilisateur** : L'utilisateur saisit une question dans l'interface de chat
 2. **Analyse d'intention** : Le LLM analyse la question de l'utilisateur et extrait les mots-cles de recherche
@@ -48,12 +48,12 @@ Configuration de base
 
 Pour activer la fonctionnalite LLM, ajoutez les parametres suivants dans ``app/WEB-INF/conf/fess_config.properties``.
 
-Activation du mode IA
+Activation du mode de recherche IA
 -------------------
 
 ::
 
-    # Activer la fonctionnalite de mode IA
+    # Activer la fonctionnalite de mode de recherche IA
     rag.chat.enabled=true
 
 Selection du fournisseur LLM
@@ -200,5 +200,5 @@ Etapes suivantes
 - :doc:`llm-ollama` - Configuration detaillee d'Ollama
 - :doc:`llm-openai` - Configuration detaillee d'OpenAI
 - :doc:`llm-gemini` - Configuration detaillee de Google Gemini
-- :doc:`rag-chat` - Configuration detaillee de la fonctionnalite de mode IA
+- :doc:`rag-chat` - Configuration detaillee de la fonctionnalite de mode de recherche IA
 - :doc:`rank-fusion` - Configuration du Rank Fusion (Fusion des resultats de recherche hybride)

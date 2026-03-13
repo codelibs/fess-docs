@@ -5,7 +5,7 @@
 Übersicht
 =========
 
-|Fess| 15.5 unterstützt eine AI-Modus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
+|Fess| 15.5 unterstützt eine AI-Suchmodus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
 Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten Format mit einem KI-Assistenten abrufen, der auf Suchergebnissen basiert.
 
 Unterstützte Anbieter
@@ -33,7 +33,7 @@ Unterstützte Anbieter
 Architektur
 ===========
 
-Die AI-Modus-Funktion arbeitet mit dem folgenden Ablauf.
+Die AI-Suchmodus-Funktion arbeitet mit dem folgenden Ablauf.
 
 1. **Benutzereingabe**: Benutzer gibt eine Frage in der Chat-Oberfläche ein
 2. **Absichtsanalyse**: LLM analysiert die Benutzerfrage und extrahiert Suchbegriffe
@@ -47,12 +47,12 @@ Grundeinstellungen
 
 Um die LLM-Funktion zu aktivieren, fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/fess_config.properties`` hinzu.
 
-AI-Modus aktivieren
+AI-Suchmodus aktivieren
 -------------------
 
 ::
 
-    # AI-Modus-Funktion aktivieren
+    # AI-Suchmodus-Funktion aktivieren
     rag.chat.enabled=true
 
 LLM-Anbieter auswählen
@@ -199,5 +199,5 @@ Nächste Schritte
 - :doc:`llm-ollama` - Detaillierte Ollama-Konfiguration
 - :doc:`llm-openai` - Detaillierte OpenAI-Konfiguration
 - :doc:`llm-gemini` - Detaillierte Google Gemini-Konfiguration
-- :doc:`rag-chat` - Detaillierte Konfiguration der AI-Modus-Funktion
+- :doc:`rag-chat` - Detaillierte Konfiguration der AI-Suchmodus-Funktion
 - :doc:`rank-fusion` - Rank Fusion Konfiguration (Hybride Suchergebnis-Zusammenführung)

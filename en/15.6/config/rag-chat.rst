@@ -9,6 +9,10 @@ AI mode (RAG: Retrieval-Augmented Generation) extends |Fess| search results with
 providing information through conversational interaction. Users can ask questions in natural language and receive
 detailed answers based on search results.
 
+In |Fess| 15.6, LLM functionality has been separated as ``fess-llm-*`` plugins.
+Core settings and LLM provider-specific settings are configured in ``fess_config.properties``, while
+the LLM provider selection (``rag.llm.name``) is configured in ``system.properties`` or from the administration screen.
+
 How AI Mode Works
 =================
 
@@ -25,17 +29,34 @@ This flow enables higher quality responses that understand context better than s
 Basic Configuration
 ===================
 
-Basic settings for enabling AI mode functionality.
+AI mode configuration is divided into core settings and provider settings.
 
-``app/WEB-INF/conf/fess_config.properties``:
+Core Settings (fess_config.properties)
+---------------------------------------
+
+Basic settings for enabling AI mode functionality.
+Configure in ``app/WEB-INF/conf/fess_config.properties``.
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
 
+LLM Provider Selection (system.properties / Administration Screen)
+-------------------------------------------------------------------
+
+The LLM provider is selected from the administration screen or in ``system.properties``. Only ``rag.llm.name`` is configured here.
+
+**Configuring from the administration screen**:
+
+Select the LLM provider to use from the settings screen at Administration > System > General.
+
+**Configuring in system.properties**:
+
+::
+
     # Select LLM provider (ollama, openai, gemini)
-    rag.llm.type=ollama
+    rag.llm.name=ollama
 
 For detailed LLM provider configuration, refer to:
 
@@ -43,37 +64,83 @@ For detailed LLM provider configuration, refer to:
 - :doc:`llm-openai` - OpenAI Configuration
 - :doc:`llm-gemini` - Google Gemini Configuration
 
-Generation Parameters
-=====================
+Core Settings List
+==================
 
-Parameters that control LLM generation behavior.
+List of core settings that can be configured in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - Property
      - Description
      - Default
-   * - ``rag.chat.max.tokens``
-     - Maximum number of tokens to generate
-     - ``4096``
-   * - ``rag.chat.temperature``
-     - Generation randomness (0.0-1.0)
-     - ``0.7``
+   * - ``rag.chat.enabled``
+     - Enable AI mode functionality
+     - ``false``
+   * - ``rag.chat.context.max.documents``
+     - Maximum number of documents to include in context
+     - ``5``
+   * - ``rag.chat.session.timeout.minutes``
+     - Session timeout duration (in minutes)
+     - ``30``
+   * - ``rag.chat.session.max.size``
+     - Maximum number of concurrent sessions
+     - ``10000``
+   * - ``rag.chat.history.max.messages``
+     - Maximum number of messages to retain in conversation history
+     - ``20``
+   * - ``rag.chat.intent.history.max.messages``
+     - Maximum number of conversation history messages used for intent analysis
+     - ``4``
+   * - ``rag.chat.content.fields``
+     - Fields to retrieve from documents
+     - ``title,url,content,doc_id,content_title,content_description``
+   * - ``rag.chat.message.max.length``
+     - Maximum number of characters in user messages
+     - ``4000``
+   * - ``rag.chat.highlight.fragment.size``
+     - Fragment size for highlight display
+     - ``500``
+   * - ``rag.chat.highlight.number.of.fragments``
+     - Number of fragments for highlight display
+     - ``3``
+   * - ``rag.chat.history.assistant.content``
+     - Type of content to include in assistant history
+     - ``source_titles``
+   * - ``rag.chat.history.assistant.max.chars``
+     - Maximum number of characters in assistant history
+     - ``500``
+   * - ``rag.chat.history.assistant.summary.max.chars``
+     - Maximum number of characters for assistant history summary
+     - ``500``
+   * - ``rag.chat.history.max.chars``
+     - Maximum number of characters in conversation history
+     - ``2000``
 
-Temperature Setting
--------------------
+Generation Parameters
+=====================
 
-- **0.0**: Deterministic responses (always the same response for the same input)
-- **0.3-0.5**: Consistent responses (appropriate for fact-based questions)
-- **0.7**: Balanced responses (default)
-- **1.0**: Creative responses (appropriate for brainstorming, etc.)
+In |Fess| 15.6, generation parameters (maximum tokens, temperature, etc.) are configured
+per provider and per prompt type. These settings are managed as part of each ``fess-llm-*``
+plugin's configuration rather than as core settings.
+
+For details, refer to each provider's documentation:
+
+- :doc:`llm-ollama` - Ollama generation parameter settings
+- :doc:`llm-openai` - OpenAI generation parameter settings
+- :doc:`llm-gemini` - Google Gemini generation parameter settings
 
 Context Settings
 ================
 
 Settings for the context passed from search results to the LLM.
+
+Core Settings
+-------------
+
+The following settings are configured in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
@@ -85,15 +152,22 @@ Settings for the context passed from search results to the LLM.
    * - ``rag.chat.context.max.documents``
      - Maximum number of documents to include in context
      - ``5``
-   * - ``rag.chat.context.max.chars``
-     - Maximum number of characters in context
-     - ``4000``
    * - ``rag.chat.content.fields``
      - Fields to retrieve from documents
-     - ``title,url,content,...``
-   * - ``rag.chat.evaluation.max.relevant.docs``
-     - Maximum number of relevant documents to select in evaluation phase
-     - ``3``
+     - ``title,url,content,doc_id,content_title,content_description``
+
+Provider-Specific Settings
+--------------------------
+
+The following settings are configured per provider in ``fess_config.properties``.
+
+- ``rag.llm.{provider}.{promptType}.context.max.chars`` - Maximum number of context characters
+- ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - Maximum number of relevant documents to select in the evaluation phase
+
+``{provider}`` is replaced with the provider name such as ``ollama``, ``openai``, or ``gemini``.
+``{promptType}`` is replaced with the prompt type such as ``chat``, ``intent_analysis``, or ``evaluation``.
+
+For details, refer to each provider's documentation.
 
 Content Fields
 --------------
@@ -110,29 +184,26 @@ Fields that can be specified in ``rag.chat.content.fields``:
 System Prompt
 =============
 
-The system prompt defines the basic behavior of the LLM.
+In |Fess| 15.6, system prompts are defined in the DI XML (``fess_llm++.xml``) of each ``fess-llm-*``
+plugin rather than in properties files.
 
-Default Setting
----------------
+Customizing Prompts
+-------------------
 
-::
+To customize system prompts, override the ``fess_llm++.xml`` from the plugin JAR.
 
-    rag.chat.system.prompt=You are an AI assistant for Fess search engine. Answer questions based on the search results provided. Always cite your sources using [1], [2], etc.
+1. Retrieve ``fess_llm++.xml`` from the plugin JAR file you are using
+2. Make the necessary changes
+3. Place it in the appropriate location under ``app/WEB-INF/`` to override
 
-Customization Examples
-----------------------
+Different system prompts are defined for each prompt type (intent analysis, evaluation, generation),
+optimized for their respective purposes.
 
-For prioritizing Japanese responses:
+For details, refer to each provider's documentation:
 
-::
-
-    rag.chat.system.prompt=You are an AI assistant for the Fess search engine. Please answer questions based on the provided search results. Respond in Japanese and always cite your sources using [1], [2], etc.
-
-For specialized domains:
-
-::
-
-    rag.chat.system.prompt=You are a technical documentation assistant. Provide detailed and accurate answers based on the search results. Include code examples when relevant. Always cite your sources using [1], [2], etc.
+- :doc:`llm-ollama` - Ollama prompt settings
+- :doc:`llm-openai` - OpenAI prompt settings
+- :doc:`llm-gemini` - Google Gemini prompt settings
 
 Session Management
 ==================
@@ -164,31 +235,24 @@ Session Behavior
 - Sessions are automatically deleted after the timeout period
 - When conversation history exceeds the maximum message count, older messages are deleted first
 
-Rate Limiting
-=============
+Concurrency Control
+===================
 
-Rate limiting settings to prevent API overload.
+The number of concurrent requests to the LLM is controlled per provider in ``fess_config.properties``.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 35 45 20
+::
 
-   * - Property
-     - Description
-     - Default
-   * - ``rag.chat.rate.limit.enabled``
-     - Enable rate limiting
-     - ``true``
-   * - ``rag.chat.rate.limit.requests.per.minute``
-     - Maximum requests per minute
-     - ``10``
+    # Maximum concurrent requests per provider
+    rag.llm.ollama.max.concurrent.requests=5
+    rag.llm.openai.max.concurrent.requests=10
+    rag.llm.gemini.max.concurrent.requests=10
 
-Rate Limiting Considerations
-----------------------------
+Concurrency Control Considerations
+------------------------------------
 
-- Consider the LLM provider's rate limits when configuring
-- In high-load environments, stricter limits are recommended
-- When rate limits are reached, users will see an error message
+- Configure with the LLM provider's rate limits in mind
+- In high-load environments, it is recommended to set lower values
+- When the concurrency limit is reached, requests are queued and processed sequentially
 
 API Usage
 =========
@@ -329,8 +393,9 @@ AI Mode Won't Enable
 **Check the following**:
 
 1. Is ``rag.chat.enabled=true`` configured?
-2. Is the LLM provider correctly configured?
-3. Is the connection to the LLM provider possible?
+2. Is the LLM provider correctly configured with ``rag.llm.name``?
+3. Is the corresponding ``fess-llm-*`` plugin installed?
+4. Is the connection to the LLM provider possible?
 
 Low Response Quality
 --------------------
@@ -339,8 +404,8 @@ Low Response Quality
 
 1. Use a higher-performance LLM model
 2. Increase ``rag.chat.context.max.documents``
-3. Customize the system prompt
-4. Adjust ``rag.chat.temperature``
+3. Customize system prompts in the DI XML
+4. Adjust provider-specific temperature settings (refer to each ``fess-llm-*`` plugin's documentation)
 
 Slow Responses
 --------------
@@ -348,8 +413,8 @@ Slow Responses
 **Improvements**:
 
 1. Use a faster LLM model (e.g., Gemini Flash)
-2. Decrease ``rag.chat.max.tokens``
-3. Decrease ``rag.chat.context.max.chars``
+2. Decrease provider-specific max.tokens settings (refer to each ``fess-llm-*`` plugin's documentation)
+3. Decrease ``rag.chat.context.max.documents``
 
 Session Not Maintained
 ----------------------

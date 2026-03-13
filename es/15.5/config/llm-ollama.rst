@@ -87,7 +87,7 @@ Configuracion minima
 
 ::
 
-    # Habilitar la funcionalidad de modo IA
+    # Habilitar la funcionalidad de modo de búsqueda IA
     rag.chat.enabled=true
 
     # Configurar el proveedor LLM como Ollama
@@ -104,7 +104,7 @@ Configuracion recomendada (entorno de produccion)
 
 ::
 
-    # Habilitar la funcionalidad de modo IA
+    # Habilitar la funcionalidad de modo de búsqueda IA
     rag.chat.enabled=true
 
     # Configuracion del proveedor LLM
@@ -300,4 +300,4 @@ Informacion de referencia
 - `Biblioteca de modelos Ollama <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - Descripcion general de integracion LLM
-- :doc:`rag-chat` - Detalles de la funcionalidad de modo IA
+- :doc:`rag-chat` - Detalles de la funcionalidad de modo de búsqueda IA
