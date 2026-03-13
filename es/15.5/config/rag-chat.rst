@@ -1,18 +1,18 @@
 ==========================
-Configuracion de la funcionalidad de modo IA
+Configuracion de la funcionalidad de modo de búsqueda IA
 ==========================
 
 Descripcion general
 ===================
 
-El modo IA (RAG: Retrieval-Augmented Generation) es una funcionalidad que extiende los resultados de busqueda de |Fess| con LLM (Modelo de Lenguaje Grande),
+El modo de búsqueda IA (RAG: Retrieval-Augmented Generation) es una funcionalidad que extiende los resultados de busqueda de |Fess| con LLM (Modelo de Lenguaje Grande),
 proporcionando informacion en formato de dialogo. Los usuarios pueden hacer preguntas en lenguaje natural
 y obtener respuestas detalladas basadas en los resultados de busqueda.
 
-Como funciona el modo IA
+Como funciona el modo de búsqueda IA
 ========================
 
-El modo IA opera con el siguiente flujo de multiples etapas.
+El modo de búsqueda IA opera con el siguiente flujo de multiples etapas.
 
 1. **Fase de analisis de intencion**: Analiza la pregunta del usuario y extrae las palabras clave mas adecuadas para la busqueda
 2. **Fase de busqueda**: Busca documentos usando el motor de busqueda de |Fess| con las palabras clave extraidas
@@ -25,13 +25,13 @@ Este flujo permite respuestas de alta calidad con comprension del contexto, supe
 Configuracion basica
 ====================
 
-Configuracion basica para habilitar la funcionalidad de modo IA.
+Configuracion basica para habilitar la funcionalidad de modo de búsqueda IA.
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
 ::
 
-    # Habilitar la funcionalidad de modo IA
+    # Habilitar la funcionalidad de modo de búsqueda IA
     rag.chat.enabled=true
 
     # Seleccionar el proveedor LLM (ollama, openai, gemini)
@@ -193,7 +193,7 @@ Consideraciones del limite de tasa
 Uso de la API
 =============
 
-La funcionalidad de modo IA esta disponible a traves de la API REST.
+La funcionalidad de modo de búsqueda IA esta disponible a traves de la API REST.
 
 API sin streaming
 -----------------
@@ -296,7 +296,7 @@ Para documentacion detallada de la API, consulte :doc:`../api/api-chat`.
 Interfaz web
 ============
 
-En la interfaz web de |Fess|, puede usar la funcionalidad de modo IA desde la pantalla de busqueda.
+En la interfaz web de |Fess|, puede usar la funcionalidad de modo de búsqueda IA desde la pantalla de busqueda.
 
 Iniciar chat
 ------------
@@ -323,7 +323,7 @@ Continuar conversacion
 Solucion de problemas
 =====================
 
-El modo IA no se habilita
+El modo de búsqueda IA no se habilita
 -------------------------
 
 **Verificaciones**:

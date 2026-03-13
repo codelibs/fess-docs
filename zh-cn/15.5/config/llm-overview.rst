@@ -5,7 +5,7 @@ LLM集成概述
 概述
 ====
 
-|Fess| 15.5支持利用大型语言模型（LLM）的AI模式（RAG：Retrieval-Augmented Generation）功能。
+|Fess| 15.5支持利用大型语言模型（LLM）的AI搜索模式（RAG：Retrieval-Augmented Generation）功能。
 通过此功能，用户可以以与AI助手对话的形式，基于搜索结果获取信息。
 
 支持的提供商
@@ -33,7 +33,7 @@ LLM集成概述
 架构
 ====
 
-AI模式功能按以下流程运作。
+AI搜索模式功能按以下流程运作。
 
 1. **用户输入**: 用户在聊天界面输入问题
 2. **意图分析**: LLM分析用户问题，提取搜索关键词
@@ -47,12 +47,12 @@ AI模式功能按以下流程运作。
 
 要启用LLM功能，请在 ``app/WEB-INF/conf/fess_config.properties`` 中添加以下配置。
 
-启用AI模式
+启用AI搜索模式
 -----------
 
 ::
 
-    # 启用AI模式功能
+    # 启用AI搜索模式功能
     rag.chat.enabled=true
 
 选择LLM提供商
@@ -199,6 +199,6 @@ AI模式功能按以下流程运作。
 - :doc:`llm-ollama` - Ollama详细配置
 - :doc:`llm-openai` - OpenAI详细配置
 - :doc:`llm-gemini` - Google Gemini详细配置
-- :doc:`rag-chat` - AI模式功能详细配置
+- :doc:`rag-chat` - AI搜索模式功能详细配置
 - :doc:`rank-fusion` - Rank Fusion配置（混合搜索结果融合）
 

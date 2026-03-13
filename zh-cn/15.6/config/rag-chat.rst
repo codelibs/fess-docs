@@ -1,18 +1,22 @@
 ==========================
-AI模式功能配置
+AI搜索模式功能配置
 ==========================
 
 概述
 ====
 
-AI模式（RAG：检索增强生成）是通过LLM（大型语言模型）扩展 |Fess| 搜索结果，
+AI搜索模式（RAG：检索增强生成）是通过LLM（大型语言模型）扩展 |Fess| 搜索结果，
 以对话形式提供信息的功能。用户可以用自然语言提问，
 获得基于搜索结果的详细回答。
 
-AI模式的工作原理
-===================
+|Fess| 15.6中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
+核心配置及LLM提供商专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）
+在 ``system.properties`` 或管理界面中进行。
 
-AI模式通过以下多阶段流程运行。
+AI搜索模式的工作原理
+================
+
+AI搜索模式通过以下多阶段流程运行。
 
 1. **意图分析阶段**: 分析用户的问题，提取最适合搜索的关键词
 2. **搜索阶段**: 使用提取的关键词通过 |Fess| 搜索引擎搜索文档
@@ -22,58 +26,121 @@ AI模式通过以下多阶段流程运行。
 
 通过此流程，可以提供比简单关键词搜索更理解上下文的高质量回答。
 
-基本设置
+基本配置
 ========
 
-启用AI模式功能的基本设置。
+AI搜索模式功能的配置分为核心配置和提供商配置两部分。
 
-``app/WEB-INF/conf/fess_config.properties``:
+核心配置 (fess_config.properties)
+----------------------------------
+
+启用AI搜索模式功能的基本配置。
+在 ``app/WEB-INF/conf/fess_config.properties`` 中进行设置。
 
 ::
 
-    # 启用AI模式功能
+    # 启用AI搜索模式功能
     rag.chat.enabled=true
 
-    # 选择LLM提供商（ollama, openai, gemini）
-    rag.llm.type=ollama
+提供商配置 (system.properties / 管理界面)
+-------------------------------------------------
 
-LLM提供商的详细设置请参阅以下内容:
+LLM提供商的选择在管理界面或系统属性中进行。
+
+**从管理界面配置时**:
+
+在管理界面 > 系统 > 通用的设置画面中，选择要使用的LLM提供商。
+
+**在system.properties中配置时**:
+
+::
+
+    # 选择LLM提供商（ollama, openai, gemini）
+    rag.llm.name=ollama
+
+有关LLM提供商的详细配置，请参阅以下内容:
 
 - :doc:`llm-ollama` - Ollama配置
 - :doc:`llm-openai` - OpenAI配置
 - :doc:`llm-gemini` - Google Gemini配置
 
-生成参数
-================
+核心配置一览
+============
 
-控制LLM生成行为的参数。
+可在 ``fess_config.properties`` 中设置的核心配置一览。
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - 属性
      - 说明
      - 默认值
-   * - ``rag.chat.max.tokens``
-     - 生成的最大令牌数
-     - ``4096``
-   * - ``rag.chat.temperature``
-     - 生成的随机性（0.0〜1.0）
-     - ``0.7``
+   * - ``rag.chat.enabled``
+     - 启用AI搜索模式功能
+     - ``false``
+   * - ``rag.chat.context.max.documents``
+     - 上下文中包含的最大文档数
+     - ``5``
+   * - ``rag.chat.session.timeout.minutes``
+     - 会话超时时间（分钟）
+     - ``30``
+   * - ``rag.chat.session.max.size``
+     - 可同时保持的最大会话数
+     - ``10000``
+   * - ``rag.chat.history.max.messages``
+     - 对话历史中保留的最大消息数
+     - ``20``
+   * - ``rag.chat.intent.history.max.messages``
+     - 意图分析使用的对话历史最大消息数
+     - ``4``
+   * - ``rag.chat.content.fields``
+     - 从文档获取的字段
+     - ``title,url,content,doc_id,content_title,content_description``
+   * - ``rag.chat.message.max.length``
+     - 用户消息的最大字符数
+     - ``4000``
+   * - ``rag.chat.highlight.fragment.size``
+     - 高亮显示的片段大小
+     - ``500``
+   * - ``rag.chat.highlight.number.of.fragments``
+     - 高亮显示的片段数
+     - ``3``
+   * - ``rag.chat.history.assistant.content``
+     - 助手历史中包含的内容类型
+     - ``source_titles``
+   * - ``rag.chat.history.assistant.max.chars``
+     - 助手历史的最大字符数
+     - ``500``
+   * - ``rag.chat.history.assistant.summary.max.chars``
+     - 助手历史摘要的最大字符数
+     - ``500``
+   * - ``rag.chat.history.max.chars``
+     - 对话历史的最大字符数
+     - ``2000``
 
-temperature设置
----------------
-
-- **0.0**: 确定性回答（对相同输入始终给出相同回答）
-- **0.3〜0.5**: 一致性回答（适合基于事实的问题）
-- **0.7**: 平衡的回答（默认）
-- **1.0**: 创造性回答（适合头脑风暴等）
-
-上下文设置
+生成参数
 ================
 
-从搜索结果传递给LLM的上下文设置。
+|Fess| 15.6中，生成参数（最大token数、temperature等）按提供商
+和提示词类型分别进行设置。这些配置不是核心配置，而是作为各 ``fess-llm-*``
+插件的配置进行管理。
+
+详情请参阅各提供商的文档:
+
+- :doc:`llm-ollama` - Ollama生成参数配置
+- :doc:`llm-openai` - OpenAI生成参数配置
+- :doc:`llm-gemini` - Google Gemini生成参数配置
+
+上下文配置
+================
+
+从搜索结果传递给LLM的上下文配置。
+
+核心配置
+--------
+
+以下配置在 ``fess_config.properties`` 中进行。
 
 .. list-table::
    :header-rows: 1
@@ -85,15 +152,22 @@ temperature设置
    * - ``rag.chat.context.max.documents``
      - 上下文中包含的最大文档数
      - ``5``
-   * - ``rag.chat.context.max.chars``
-     - 上下文的最大字符数
-     - ``4000``
    * - ``rag.chat.content.fields``
      - 从文档获取的字段
-     - ``title,url,content,...``
-   * - ``rag.chat.evaluation.max.relevant.docs``
-     - 评估阶段选择的最大相关文档数
-     - ``3``
+     - ``title,url,content,doc_id,content_title,content_description``
+
+提供商专属配置
+-----------------------
+
+以下配置按提供商在 ``fess_config.properties`` 中进行。
+
+- ``rag.llm.{provider}.{promptType}.context.max.chars`` - 上下文最大字符数
+- ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - 评估阶段选择的最大相关文档数
+
+``{provider}`` 处填入 ``ollama``、``openai``、``gemini`` 等提供商名称。
+``{promptType}`` 处填入 ``chat``、``intent_analysis``、``evaluation`` 等提示词类型。
+
+详情请参阅各提供商的文档。
 
 内容字段
 --------------------
@@ -110,34 +184,31 @@ temperature设置
 系统提示词
 ==================
 
-系统提示词定义LLM的基本行为。
+|Fess| 15.6中，系统提示词不在属性文件中定义，而是在各 ``fess-llm-*``
+插件的DI XML（``fess_llm++.xml``）中定义。
 
-默认设置
---------------
+自定义提示词
+-------------------------
 
-::
+如需自定义系统提示词，请覆盖插件JAR中的 ``fess_llm++.xml``。
 
-    rag.chat.system.prompt=You are an AI assistant for Fess search engine. Answer questions based on the search results provided. Always cite your sources using [1], [2], etc.
+1. 从正在使用的插件JAR文件中获取 ``fess_llm++.xml``
+2. 进行必要的修改
+3. 放置到 ``app/WEB-INF/`` 以下适当位置以进行覆盖
 
-自定义示例
---------------
+每种提示词类型（意图分析、评估、生成）都定义了不同的系统提示词，
+并针对各自用途进行了优化。
 
-优先使用中文回答时:
+详情请参阅各提供商的文档:
 
-::
-
-    rag.chat.system.prompt=你是Fess搜索引擎的AI助手。请根据提供的搜索结果回答问题。回答请使用中文，并务必以[1]、[2]等格式标明出处。
-
-专业领域定制:
-
-::
-
-    rag.chat.system.prompt=You are a technical documentation assistant. Provide detailed and accurate answers based on the search results. Include code examples when relevant. Always cite your sources using [1], [2], etc.
+- :doc:`llm-ollama` - Ollama提示词配置
+- :doc:`llm-openai` - OpenAI提示词配置
+- :doc:`llm-gemini` - Google Gemini提示词配置
 
 会话管理
 ==============
 
-聊天会话管理相关设置。
+聊天会话管理相关配置。
 
 .. list-table::
    :header-rows: 1
@@ -153,7 +224,7 @@ temperature设置
      - 可同时保持的最大会话数
      - ``10000``
    * - ``rag.chat.history.max.messages``
-     - 对话历史中保持的最大消息数
+     - 对话历史中保留的最大消息数
      - ``20``
 
 会话行为
@@ -164,36 +235,29 @@ temperature设置
 - 超过超时时间后，会话自动删除
 - 对话历史超过最大消息数时，从旧消息开始删除
 
-速率限制
-==========
+并发控制
+============
 
-防止API过载的速率限制设置。
+对LLM的请求并发数按提供商在 ``fess_config.properties`` 中控制。
 
-.. list-table::
-   :header-rows: 1
-   :widths: 35 45 20
+::
 
-   * - 属性
-     - 说明
-     - 默认值
-   * - ``rag.chat.rate.limit.enabled``
-     - 启用速率限制
-     - ``true``
-   * - ``rag.chat.rate.limit.requests.per.minute``
-     - 每分钟最大请求数
-     - ``10``
+    # 各提供商的最大并发请求数
+    rag.llm.ollama.max.concurrent.requests=5
+    rag.llm.openai.max.concurrent.requests=10
+    rag.llm.gemini.max.concurrent.requests=10
 
-速率限制注意事项
---------------------
+并发控制的注意事项
+-----------------------
 
-- 设置时也请考虑LLM提供商端的速率限制
-- 高负载环境中建议设置更严格的限制
-- 达到速率限制时，将向用户显示错误消息
+- 请同时考虑LLM提供商端的速率限制进行设置
+- 高负载环境中建议设置更小的值
+- 达到并发数上限时，请求将进入队列依次处理
 
 API使用
 =========
 
-AI模式功能可通过REST API使用。
+AI搜索模式功能可通过REST API使用。
 
 非流式API
 -------------------
@@ -296,7 +360,7 @@ SSE事件:
 Web界面
 ===================
 
-在 |Fess| 的Web界面中，可以从搜索画面使用AI模式功能。
+在 |Fess| 的Web界面中，可以从搜索画面使用AI搜索模式功能。
 
 开始聊天
 --------------
@@ -323,14 +387,15 @@ Web界面
 故障排除
 ======================
 
-AI模式无法启用
----------------------------
+AI搜索模式无法启用
+------------------------
 
 **确认事项**:
 
 1. 是否设置了 ``rag.chat.enabled=true``
-2. LLM提供商是否正确配置
-3. 是否可以连接到LLM提供商
+2. 是否通过 ``rag.llm.name`` 正确配置了LLM提供商
+3. 对应的 ``fess-llm-*`` 插件是否已安装
+4. 是否可以连接到LLM提供商
 
 回答质量低
 ----------------
@@ -339,8 +404,8 @@ AI模式无法启用
 
 1. 使用更高性能的LLM模型
 2. 增加 ``rag.chat.context.max.documents``
-3. 自定义系统提示词
-4. 调整 ``rag.chat.temperature``
+3. 在DI XML中自定义系统提示词
+4. 调整提供商专属的temperature设置（请参阅各 ``fess-llm-*`` 插件的文档）
 
 响应慢
 ----------------
@@ -348,8 +413,8 @@ AI模式无法启用
 **改进方法**:
 
 1. 使用更快的LLM模型（例: Gemini Flash）
-2. 减少 ``rag.chat.max.tokens``
-3. 减少 ``rag.chat.context.max.chars``
+2. 减少提供商专属的max.tokens设置（请参阅各 ``fess-llm-*`` 插件的文档）
+3. 减少 ``rag.chat.context.max.documents``
 
 会话无法保持
 ------------------------
@@ -363,7 +428,7 @@ AI模式无法启用
 调试设置
 ------------
 
-调查问题时，可以调整日志级别输出详细日志。
+调查问题时，可调整日志级别输出详细日志。
 
 ``app/WEB-INF/classes/log4j2.xml``:
 

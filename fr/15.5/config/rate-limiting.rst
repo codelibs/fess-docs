@@ -10,14 +10,14 @@ Cette fonctionnalite protege le systeme contre les requetes excessives et permet
 
 La limitation de debit s'applique dans les situations suivantes :
 
-- Toutes les requetes HTTP, y compris l'API de recherche, l'API de mode IA et les pages d'administration (``RateLimitFilter``)
+- Toutes les requetes HTTP, y compris l'API de recherche, l'API de mode de recherche IA et les pages d'administration (``RateLimitFilter``)
 - Requetes du crawler (controlees par la configuration du crawl)
 
 Limitation de debit des requetes HTTP
 ======================================
 
 Vous pouvez limiter le nombre de requetes HTTP vers |Fess| par adresse IP.
-Cette limitation s'applique a toutes les requetes HTTP, y compris l'API de recherche, l'API de mode IA, les pages d'administration, etc.
+Cette limitation s'applique a toutes les requetes HTTP, y compris l'API de recherche, l'API de mode de recherche IA, les pages d'administration, etc.
 
 Configuration
 ----
@@ -44,16 +44,16 @@ Comportement
 - Pour chaque IP, la fenetre commence au premier requete et le compteur est reinitialise apres l'expiration de la periode de la fenetre (methode de fenetre fixe)
 - Le depassement de la limite entraine le blocage de l'IP pendant la duree ``rate.limit.block.duration.ms``
 
-Limitation de debit du mode IA
+Limitation de debit du mode de recherche IA
 ====================
 
-La fonctionnalite de mode IA dispose d'une limitation de debit pour controler les couts de l'API LLM et la consommation de ressources.
-Le mode IA est soumis a la limitation de debit des requetes HTTP decrite ci-dessus, et dispose egalement de parametres de limitation de debit specifiques au mode IA.
+La fonctionnalite de mode de recherche IA dispose d'une limitation de debit pour controler les couts de l'API LLM et la consommation de ressources.
+Le mode de recherche IA est soumis a la limitation de debit des requetes HTTP decrite ci-dessus, et dispose egalement de parametres de limitation de debit specifiques au mode de recherche IA.
 
-Pour la configuration specifique de la limitation de debit du mode IA, consultez :doc:`rag-chat`.
+Pour la configuration specifique de la limitation de debit du mode de recherche IA, consultez :doc:`rag-chat`.
 
 .. note::
-   La limitation de debit du mode IA s'applique separement de la limitation de debit cote fournisseur LLM.
+   La limitation de debit du mode de recherche IA s'applique separement de la limitation de debit cote fournisseur LLM.
    Configurez en tenant compte des deux limites.
 
 Limitation de debit du crawler
@@ -222,6 +222,6 @@ Si la verification de la limitation de debit affecte les performances :
 Informations de reference
 ========
 
-- :doc:`rag-chat` - Configuration de la fonctionnalite de mode IA
+- :doc:`rag-chat` - Configuration de la fonctionnalite de mode de recherche IA
 - :doc:`../admin/webconfig-guide` - Guide de configuration du crawl Web
 - :doc:`../api/api-overview` - Apercu des API

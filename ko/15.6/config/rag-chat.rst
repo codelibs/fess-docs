@@ -1,18 +1,22 @@
 ==========================
-AI 모드 기능 설정
+AI 검색 모드 기능 설정
 ==========================
 
 개요
 ====
 
-AI 모드(RAG: Retrieval-Augmented Generation)는 |Fess|의 검색 결과를 LLM(대규모 언어 모델)으로 확장하여
+AI 검색 모드(RAG: Retrieval-Augmented Generation)는 |Fess|의 검색 결과를 LLM(대규모 언어 모델)으로 확장하여
 대화 형식으로 정보를 제공하는 기능입니다. 사용자는 자연어로 질문하고 검색 결과를 기반으로 한
 상세한 응답을 얻을 수 있습니다.
 
-AI 모드의 구조
+|Fess| 15.6에서는 LLM 기능이 ``fess-llm-*`` 플러그인으로 분리되었습니다.
+코어 설정 및 LLM 프로바이더 고유의 설정은 ``fess_config.properties`` 에서 수행하고,
+LLM 프로바이더 선택(``rag.llm.name``)은 ``system.properties`` 또는 관리 화면에서 수행합니다.
+
+AI 검색 모드의 구조
 ==============
 
-AI 모드는 다음과 같은 다단계 플로우로 동작합니다.
+AI 검색 모드는 다음과 같은 다단계 플로우로 동작합니다.
 
 1. **의도 분석 단계**: 사용자의 질문을 분석하고 검색에 최적화된 키워드 추출
 2. **검색 단계**: 추출한 키워드로 |Fess| 검색 엔진을 사용하여 문서 검색
@@ -25,17 +29,34 @@ AI 모드는 다음과 같은 다단계 플로우로 동작합니다.
 기본 설정
 ========
 
-AI 모드 기능을 활성화하기 위한 기본 설정입니다.
+AI 검색 모드 기능의 설정은 코어 설정과 프로바이더 설정의 두 가지로 나뉩니다.
 
-``app/WEB-INF/conf/fess_config.properties``:
+코어 설정 (fess_config.properties)
+----------------------------------
+
+AI 검색 모드 기능을 활성화하기 위한 기본 설정입니다.
+``app/WEB-INF/conf/fess_config.properties`` 에 설정합니다.
 
 ::
 
-    # AI 모드 기능 활성화
+    # AI 검색 모드 기능 활성화
     rag.chat.enabled=true
 
+프로바이더 설정 (system.properties / 관리 화면)
+-------------------------------------------------
+
+LLM 프로바이더 선택은 관리 화면 또는 시스템 프로퍼티에서 수행합니다.
+
+**관리 화면에서 설정하는 경우**:
+
+관리 화면 > 시스템 > 전반 설정 화면에서 사용할 LLM 프로바이더를 선택합니다.
+
+**system.properties 에서 설정하는 경우**:
+
+::
+
     # LLM 프로바이더 선택(ollama, openai, gemini)
-    rag.llm.type=ollama
+    rag.llm.name=ollama
 
 LLM 프로바이더의 상세 설정은 다음을 참조하세요:
 
@@ -43,37 +64,83 @@ LLM 프로바이더의 상세 설정은 다음을 참조하세요:
 - :doc:`llm-openai` - OpenAI 설정
 - :doc:`llm-gemini` - Google Gemini 설정
 
-생성 파라미터
-================
+코어 설정 목록
+============
 
-LLM의 생성 동작을 제어하는 파라미터입니다.
+``fess_config.properties`` 에서 설정 가능한 코어 설정 목록입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - 프로퍼티
      - 설명
      - 기본값
-   * - ``rag.chat.max.tokens``
-     - 생성할 최대 토큰 수
-     - ``4096``
-   * - ``rag.chat.temperature``
-     - 생성의 무작위성(0.0~1.0)
-     - ``0.7``
+   * - ``rag.chat.enabled``
+     - AI 검색 모드 기능 활성화
+     - ``false``
+   * - ``rag.chat.context.max.documents``
+     - 컨텍스트에 포함할 최대 문서 수
+     - ``5``
+   * - ``rag.chat.session.timeout.minutes``
+     - 세션 타임아웃 시간(분)
+     - ``30``
+   * - ``rag.chat.session.max.size``
+     - 동시에 유지할 수 있는 세션의 최대 수
+     - ``10000``
+   * - ``rag.chat.history.max.messages``
+     - 대화 이력에 유지할 최대 메시지 수
+     - ``20``
+   * - ``rag.chat.intent.history.max.messages``
+     - 의도 분석에 사용할 대화 이력의 최대 메시지 수
+     - ``4``
+   * - ``rag.chat.content.fields``
+     - 문서에서 가져올 필드
+     - ``title,url,content,doc_id,content_title,content_description``
+   * - ``rag.chat.message.max.length``
+     - 사용자 메시지의 최대 문자 수
+     - ``4000``
+   * - ``rag.chat.highlight.fragment.size``
+     - 하이라이트 표시의 프래그먼트 크기
+     - ``500``
+   * - ``rag.chat.highlight.number.of.fragments``
+     - 하이라이트 표시의 프래그먼트 수
+     - ``3``
+   * - ``rag.chat.history.assistant.content``
+     - 어시스턴트 이력에 포함할 콘텐츠 종류
+     - ``source_titles``
+   * - ``rag.chat.history.assistant.max.chars``
+     - 어시스턴트 이력의 최대 문자 수
+     - ``500``
+   * - ``rag.chat.history.assistant.summary.max.chars``
+     - 어시스턴트 이력 요약의 최대 문자 수
+     - ``500``
+   * - ``rag.chat.history.max.chars``
+     - 대화 이력의 최대 문자 수
+     - ``2000``
 
-temperature 설정
----------------
+생성 파라미터
+================
 
-- **0.0**: 결정적인 응답(동일한 입력에 대해 항상 동일한 응답)
-- **0.3~0.5**: 일관성 있는 응답(사실에 기반한 질문에 적합)
-- **0.7**: 균형 잡힌 응답(기본값)
-- **1.0**: 창의적인 응답(브레인스토밍 등에 적합)
+|Fess| 15.6에서는 생성 파라미터(최대 토큰 수, temperature 등)를 프로바이더별,
+프롬프트 타입별로 설정합니다. 이 설정들은 코어 설정이 아닌 각 ``fess-llm-*``
+플러그인의 설정으로 관리됩니다.
+
+상세 내용은 각 프로바이더 문서를 참조하세요:
+
+- :doc:`llm-ollama` - Ollama 생성 파라미터 설정
+- :doc:`llm-openai` - OpenAI 생성 파라미터 설정
+- :doc:`llm-gemini` - Google Gemini 생성 파라미터 설정
 
 컨텍스트 설정
 ================
 
 검색 결과에서 LLM에 전달하는 컨텍스트 설정입니다.
+
+코어 설정
+--------
+
+다음 설정은 ``fess_config.properties`` 에서 수행합니다.
 
 .. list-table::
    :header-rows: 1
@@ -85,54 +152,59 @@ temperature 설정
    * - ``rag.chat.context.max.documents``
      - 컨텍스트에 포함할 최대 문서 수
      - ``5``
-   * - ``rag.chat.context.max.chars``
-     - 컨텍스트의 최대 문자 수
-     - ``4000``
    * - ``rag.chat.content.fields``
      - 문서에서 가져올 필드
-     - ``title,url,content,...``
-   * - ``rag.chat.evaluation.max.relevant.docs``
-     - 평가 단계에서 선택할 최대 관련 문서 수
-     - ``3``
+     - ``title,url,content,doc_id,content_title,content_description``
 
-컨텐츠 필드
+프로바이더 고유 설정
+-----------------------
+
+다음 설정은 프로바이더별로 ``fess_config.properties`` 에서 수행합니다.
+
+- ``rag.llm.{provider}.{promptType}.context.max.chars`` - 컨텍스트의 최대 문자 수
+- ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - 평가 단계에서 선택할 최대 관련 문서 수
+
+``{provider}`` 에는 ``ollama``, ``openai``, ``gemini`` 등의 프로바이더명이 들어갑니다.
+``{promptType}`` 에는 ``chat``, ``intent_analysis``, ``evaluation`` 등의 프롬프트 타입이 들어갑니다.
+
+상세 내용은 각 프로바이더 문서를 참조하세요.
+
+콘텐츠 필드
 --------------------
 
-``rag.chat.content.fields``로 지정할 수 있는 필드:
+``rag.chat.content.fields`` 로 지정할 수 있는 필드:
 
 - ``title`` - 문서의 제목
 - ``url`` - 문서의 URL
 - ``content`` - 문서의 본문
 - ``doc_id`` - 문서 ID
-- ``content_title`` - 컨텐츠의 제목
-- ``content_description`` - 컨텐츠의 설명
+- ``content_title`` - 콘텐츠의 제목
+- ``content_description`` - 콘텐츠의 설명
 
 시스템 프롬프트
 ==================
 
-시스템 프롬프트는 LLM의 기본적인 동작을 정의합니다.
+|Fess| 15.6에서는 시스템 프롬프트가 프로퍼티 파일이 아닌 각 ``fess-llm-*``
+플러그인의 DI XML(``fess_llm++.xml``)에서 정의됩니다.
 
-기본 설정
---------------
+프롬프트 커스터마이즈
+-------------------------
 
-::
+시스템 프롬프트를 커스터마이즈하려면 플러그인 JAR 내의 ``fess_llm++.xml`` 을
+오버라이드합니다.
 
-    rag.chat.system.prompt=You are an AI assistant for Fess search engine. Answer questions based on the search results provided. Always cite your sources using [1], [2], etc.
+1. 사용 중인 플러그인의 JAR 파일에서 ``fess_llm++.xml`` 을 취득
+2. 필요한 변경을 가함
+3. ``app/WEB-INF/`` 아래의 적절한 위치에 배치하여 오버라이드
 
-커스터마이즈 예
---------------
+각 프롬프트 타입(의도 분석, 평가, 생성)별로 서로 다른 시스템 프롬프트가
+정의되어 있어 용도에 따른 최적화가 이루어집니다.
 
-한국어 응답을 우선하는 경우:
+상세 내용은 각 프로바이더 문서를 참조하세요:
 
-::
-
-    rag.chat.system.prompt=당신은 Fess 검색 엔진의 AI 어시스턴트입니다. 제공된 검색 결과를 기반으로 질문에 답변하세요. 응답은 한국어로 하고, 출처를 [1], [2] 등의 형식으로 반드시 명시하세요.
-
-전문 분야용 커스터마이즈:
-
-::
-
-    rag.chat.system.prompt=You are a technical documentation assistant. Provide detailed and accurate answers based on the search results. Include code examples when relevant. Always cite your sources using [1], [2], etc.
+- :doc:`llm-ollama` - Ollama 프롬프트 설정
+- :doc:`llm-openai` - OpenAI 프롬프트 설정
+- :doc:`llm-gemini` - Google Gemini 프롬프트 설정
 
 세션 관리
 ==============
@@ -164,36 +236,29 @@ temperature 설정
 - 타임아웃 시간이 경과하면 세션이 자동으로 삭제됩니다
 - 대화 이력이 최대 메시지 수를 초과하면 오래된 메시지부터 삭제됩니다
 
-속도 제한
-==========
+동시 실행 제어
+==============
 
-API 과부하를 방지하기 위한 속도 제한 설정입니다.
+LLM으로의 요청 동시 실행 수는 프로바이더별로 ``fess_config.properties`` 에서 제어합니다.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 35 45 20
+::
 
-   * - 프로퍼티
-     - 설명
-     - 기본값
-   * - ``rag.chat.rate.limit.enabled``
-     - 속도 제한 활성화
-     - ``true``
-   * - ``rag.chat.rate.limit.requests.per.minute``
-     - 1분당 최대 요청 수
-     - ``10``
+    # 프로바이더별 최대 동시 요청 수
+    rag.llm.ollama.max.concurrent.requests=5
+    rag.llm.openai.max.concurrent.requests=10
+    rag.llm.gemini.max.concurrent.requests=10
 
-속도 제한 고려 사항
---------------------
+동시 실행 제어 고려 사항
+-----------------------
 
-- LLM 프로바이더 측의 속도 제한도 고려하여 설정하세요
-- 고부하 환경에서는 더 엄격한 제한을 설정하는 것이 좋습니다
-- 속도 제한에 도달하면 사용자에게 오류 메시지가 표시됩니다
+- LLM 프로바이더 측의 레이트 제한도 고려하여 설정하세요
+- 고부하 환경에서는 더 작은 값을 설정하는 것을 권장합니다
+- 동시 실행 수의 상한에 도달한 경우 요청은 큐에 들어가 순차적으로 처리됩니다
 
 API 사용
 =========
 
-AI 모드 기능은 REST API를 통해 이용할 수 있습니다.
+AI 검색 모드 기능은 REST API를 통해 이용할 수 있습니다.
 
 비스트리밍 API
 -------------------
@@ -296,7 +361,7 @@ SSE 이벤트:
 웹 인터페이스
 ===================
 
-|Fess|의 웹 인터페이스에서는 검색 화면에서 AI 모드 기능을 이용할 수 있습니다.
+|Fess|의 웹 인터페이스에서는 검색 화면에서 AI 검색 모드 기능을 이용할 수 있습니다.
 
 채팅 시작
 --------------
@@ -323,14 +388,15 @@ SSE 이벤트:
 문제 해결
 ======================
 
-AI 모드가 활성화되지 않음
+AI 검색 모드가 활성화되지 않음
 ---------------------------
 
 **확인 사항**:
 
-1. ``rag.chat.enabled=true``가 설정되어 있는지
-2. LLM 프로바이더가 올바르게 설정되어 있는지
-3. LLM 프로바이더에 연결이 가능한지
+1. ``rag.chat.enabled=true`` 가 설정되어 있는지
+2. ``rag.llm.name`` 으로 LLM 프로바이더가 올바르게 설정되어 있는지
+3. 해당 ``fess-llm-*`` 플러그인이 설치되어 있는지
+4. LLM 프로바이더에 연결이 가능한지
 
 응답 품질이 낮음
 ----------------
@@ -339,8 +405,8 @@ AI 모드가 활성화되지 않음
 
 1. 더 고성능의 LLM 모델 사용
 2. ``rag.chat.context.max.documents`` 증가
-3. 시스템 프롬프트 커스터마이즈
-4. ``rag.chat.temperature`` 조정
+3. DI XML에서 시스템 프롬프트 커스터마이즈
+4. 프로바이더 고유의 temperature 설정 조정(각 ``fess-llm-*`` 플러그인 문서 참조)
 
 응답이 느림
 ----------------
@@ -348,8 +414,8 @@ AI 모드가 활성화되지 않음
 **개선 방법**:
 
 1. 더 빠른 LLM 모델 사용(예: Gemini Flash)
-2. ``rag.chat.max.tokens`` 감소
-3. ``rag.chat.context.max.chars`` 감소
+2. 프로바이더 고유의 max.tokens 설정 감소(각 ``fess-llm-*`` 플러그인 문서 참조)
+3. ``rag.chat.context.max.documents`` 감소
 
 세션이 유지되지 않음
 ------------------------

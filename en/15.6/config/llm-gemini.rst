@@ -56,21 +56,41 @@ Obtaining an API Key
    - Do not output to logs
    - Manage using environment variables or secure configuration files
 
+Plugin Installation
+===================
+
+In |Fess| 15.6, Gemini integration is provided as the ``fess-llm-gemini`` plugin.
+To use Gemini, you must install the plugin.
+
+1. Download `fess-llm-gemini-15.6.0.jar`
+2. Place it in the ``app/WEB-INF/plugin/`` directory of |Fess|
+3. Restart |Fess|
+
+::
+
+    # Example of placing the plugin
+    cp fess-llm-gemini-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+
+.. note::
+   The plugin version should match the version of |Fess|.
+
 Basic Configuration
 ===================
 
-Add the following settings to ``app/WEB-INF/conf/fess_config.properties``.
+In |Fess| 15.6, enabling AI mode functionality and Gemini-specific settings are done in ``fess_config.properties``, while selecting the LLM provider is done from the administration screen or in ``system.properties``.
 
-Minimal Configuration
----------------------
+fess_config.properties Settings
+--------------------------------
+
+Add the AI mode enable setting and Gemini-specific settings to ``app/WEB-INF/conf/fess_config.properties``.
+
+Minimal Configuration (fess_config.properties)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
-
-    # Set LLM provider to Gemini
-    rag.llm.type=gemini
 
     # Gemini API key
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -78,16 +98,13 @@ Minimal Configuration
     # Model to use
     rag.llm.gemini.model=gemini-3-flash-preview
 
-Recommended Configuration (Production)
---------------------------------------
+Recommended Configuration (Production, fess_config.properties)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
     # Enable AI mode functionality
     rag.chat.enabled=true
-
-    # LLM provider setting
-    rag.llm.type=gemini
 
     # Gemini API key
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -101,10 +118,20 @@ Recommended Configuration (Production)
     # Timeout setting
     rag.llm.gemini.timeout=60000
 
+LLM Provider Settings
+---------------------
+
+The LLM provider is configured from the administration screen (Administration > System > General) or in ``system.properties``.
+
+::
+
+    # Set LLM provider to Gemini
+    rag.llm.name=gemini
+
 Configuration Options
 =====================
 
-All configuration options available for the Gemini client.
+All configuration options available for the Gemini client. All settings except ``rag.llm.name`` are configured in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
@@ -125,9 +152,101 @@ All configuration options available for the Gemini client.
    * - ``rag.llm.gemini.timeout``
      - Request timeout (in milliseconds)
      - ``60000``
+   * - ``rag.llm.gemini.availability.check.interval``
+     - Availability check interval (in seconds)
+     - ``60``
+   * - ``rag.llm.gemini.max.concurrent.requests``
+     - Maximum number of concurrent requests
+     - ``5``
+   * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
+     - Maximum number of relevant documents during evaluation
+     - ``3``
+
+Per-Prompt-Type Settings
+========================
+
+In |Fess|, LLM parameters can be configured in detail per prompt type.
+Configure per-prompt-type settings in ``fess_config.properties``.
+
+Configuration Format
+--------------------
+
+::
+
+    rag.llm.gemini.{promptType}.temperature
+    rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.context.max.chars
+
+Available Prompt Types
+----------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Prompt Type
+     - Description
+   * - ``intent``
+     - Prompt for determining user intent
+   * - ``evaluation``
+     - Prompt for evaluating document relevance
+   * - ``unclear``
+     - Prompt for when the question is unclear
+   * - ``noresults``
+     - Prompt for when no results are found
+   * - ``docnotfound``
+     - Prompt for when documents are not found
+   * - ``answer``
+     - Answer generation prompt
+   * - ``summary``
+     - Summary generation prompt
+   * - ``faq``
+     - FAQ generation prompt
+   * - ``direct``
+     - Direct response prompt
+
+Configuration Examples
+----------------------
+
+::
+
+    # Temperature setting for answer generation
+    rag.llm.gemini.answer.temperature=0.7
+
+    # Maximum tokens for summary generation
+    rag.llm.gemini.summary.max.tokens=2048
+
+    # Maximum context characters for answer generation
+    rag.llm.gemini.answer.context.max.chars=16000
+
+    # Maximum context characters for summary generation
+    rag.llm.gemini.summary.context.max.chars=16000
+
+    # Maximum context characters for FAQ generation
+    rag.llm.gemini.faq.context.max.chars=10000
+
+.. note::
+   The default value of ``context.max.chars`` varies by prompt type.
+   ``answer`` and ``summary`` are 16000, and ``faq`` is 10000.
+
+Thinking Model Support
+======================
+
+Gemini supports thinking models. Using a thinking model, the model executes an internal reasoning process before generating a response, enabling more accurate answers.
+
+The thinking budget can be configured in ``fess_config.properties``.
+
+::
+
+    # Thinking budget configuration
+    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+
+.. note::
+   Setting a thinking budget may increase response time.
+   Set an appropriate value based on your use case.
 
 Environment Variable Configuration
-==================================
+===================================
 
 For security reasons, it is recommended to configure API keys using environment variables.
 
@@ -148,7 +267,7 @@ docker-compose.yml
         image: codelibs/fess:15.6.0
         environment:
           - RAG_CHAT_ENABLED=true
-          - RAG_LLM_TYPE=gemini
+          - RAG_LLM_NAME=gemini
           - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
           - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
 
@@ -214,9 +333,8 @@ You can leverage this feature to include more search results in the context.
 
 ::
 
-    # Include more documents in context
-    rag.chat.context.max.documents=10
-    rag.chat.context.max.chars=20000
+    # Include more documents in context (configure in fess_config.properties)
+    rag.llm.gemini.answer.context.max.chars=20000
 
 Cost Reference
 --------------
@@ -246,25 +364,29 @@ Google AI API is billed based on usage (free tier available).
 .. note::
    For the latest pricing and free tier information, see `Google AI Pricing <https://ai.google.dev/pricing>`__.
 
-Rate Limiting
-=============
+Concurrency Control
+===================
 
-Google AI API has rate limits. Configure appropriately in combination with |Fess| rate limiting functionality.
+In |Fess|, the number of concurrent requests to Gemini can be controlled.
+Configure the following property in ``fess_config.properties``.
 
 ::
 
-    # Fess rate limit settings
-    rag.chat.rate.limit.enabled=true
-    rag.chat.rate.limit.requests.per.minute=10
+    # Maximum concurrent requests (default: 5)
+    rag.llm.gemini.max.concurrent.requests=5
 
-Free Tier Limits
-----------------
+This setting prevents excessive requests to the Google AI API and helps avoid rate limit errors.
+
+Free Tier Limits (Reference)
+-----------------------------
 
 Google AI API has a free tier with the following limits:
 
 - Requests/minute: 15 RPM
 - Tokens/minute: 1 million TPM
 - Requests/day: 1,500 RPD
+
+When using the free tier, it is recommended to set ``rag.llm.gemini.max.concurrent.requests`` to a lower value.
 
 Troubleshooting
 ===============
@@ -288,9 +410,9 @@ Rate Limit Errors
 
 **Solutions**:
 
-1. Set stricter rate limits in |Fess|::
+1. Reduce the number of concurrent requests in ``fess_config.properties``::
 
-    rag.chat.rate.limit.requests.per.minute=5
+    rag.llm.gemini.max.concurrent.requests=3
 
 2. Wait a few minutes before retrying
 3. Request quota increase if necessary

@@ -6,7 +6,7 @@ Google Gemini-Konfiguration
 =========
 
 Google Gemini ist ein hochmodernes großes Sprachmodell (LLM) von Google.
-|Fess| kann die Google AI API (Generative Language API) verwenden, um die AI-Modus-Funktion mit Gemini-Modellen zu realisieren.
+|Fess| kann die Google AI API (Generative Language API) verwenden, um die AI-Suchmodus-Funktion mit Gemini-Modellen zu realisieren.
 
 Durch die Verwendung von Gemini wird eine hochwertige Antwortgenerierung mit Googles neuester KI-Technologie ermöglicht.
 
@@ -66,7 +66,7 @@ Minimalkonfiguration
 
 ::
 
-    # AI-Modus-Funktion aktivieren
+    # AI-Suchmodus-Funktion aktivieren
     rag.chat.enabled=true
 
     # LLM-Anbieter auf Gemini setzen
@@ -83,7 +83,7 @@ Empfohlene Konfiguration (Produktionsumgebung)
 
 ::
 
-    # AI-Modus-Funktion aktivieren
+    # AI-Suchmodus-Funktion aktivieren
     rag.chat.enabled=true
 
     # LLM-Anbieter-Einstellungen
@@ -346,4 +346,4 @@ Weiterführende Informationen
 - `Gemini API Documentation <https://ai.google.dev/docs>`__
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - Übersicht LLM-Integration
-- :doc:`rag-chat` - Details zur AI-Modus-Funktion
+- :doc:`rag-chat` - Details zur AI-Suchmodus-Funktion

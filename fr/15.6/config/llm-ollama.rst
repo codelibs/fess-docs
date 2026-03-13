@@ -6,7 +6,7 @@ Apercu
 ====
 
 Ollama est une plateforme open source permettant d'executer des grands modeles de langage (LLM) en local.
-Il est configure comme fournisseur LLM par defaut de |Fess| et convient a une utilisation en environnement prive.
+Dans |Fess| 15.6, la fonctionnalite d'integration Ollama est fournie sous forme de plugin ``fess-llm-ollama``, et convient a une utilisation en environnement prive.
 
 L'utilisation d'Ollama permet d'utiliser la fonctionnalite du mode de recherche IA sans envoyer de donnees a l'exterieur.
 
@@ -77,21 +77,38 @@ Telechargement du modele
     # Verifier le fonctionnement du modele
     ollama run gemma3:4b "Hello, how are you?"
 
+Installation du plugin
+========================
+
+Dans |Fess| 15.6, la fonctionnalite d'integration Ollama a ete separee en plugin.
+Pour utiliser Ollama, l'installation du plugin ``fess-llm-ollama`` est necessaire.
+
+1. Telechargez `fess-llm-ollama-15.6.0.jar`.
+2. Placez-le dans le repertoire ``app/WEB-INF/plugin/`` du repertoire d'installation de |Fess|.
+
+::
+
+    cp fess-llm-ollama-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+
+3. Redemarrez |Fess|.
+
+.. note::
+   La version du plugin doit correspondre a la version de |Fess|.
+
 Configuration de base
 ========
 
-Ajoutez les parametres suivants dans ``app/WEB-INF/conf/fess_config.properties``.
+Dans |Fess| 15.6, les configurations LLM sont reparties dans plusieurs fichiers de configuration.
 
 Configuration minimale
 --------
 
+``app/WEB-INF/conf/fess_config.properties`` :
+
 ::
 
-    # Activer la fonctionnalite de mode IA
+    # Activer la fonctionnalite de mode de recherche IA
     rag.chat.enabled=true
-
-    # Definir le fournisseur LLM sur Ollama
-    rag.llm.type=ollama
 
     # URL d'Ollama (environnement local)
     rag.llm.ollama.api.url=http://localhost:11434
@@ -99,16 +116,25 @@ Configuration minimale
     # Modele a utiliser
     rag.llm.ollama.model=gemma3:4b
 
-Configuration recommandee (environnement de production)
---------------------
+``system.properties`` (configurable egalement via Administration > Systeme > General) :
 
 ::
 
-    # Activer la fonctionnalite de mode IA
-    rag.chat.enabled=true
+    # Definir le fournisseur LLM sur Ollama
+    rag.llm.name=ollama
 
-    # Configuration du fournisseur LLM
-    rag.llm.type=ollama
+.. note::
+   La configuration du fournisseur LLM peut egalement etre effectuee via l'administration (Administration > Systeme > General) en configurant ``rag.llm.name``.
+
+Configuration recommandee (environnement de production)
+--------------------
+
+``app/WEB-INF/conf/fess_config.properties`` :
+
+::
+
+    # Activer la fonctionnalite de mode de recherche IA
+    rag.chat.enabled=true
 
     # URL d'Ollama
     rag.llm.ollama.api.url=http://localhost:11434
@@ -119,10 +145,20 @@ Configuration recommandee (environnement de production)
     # Configuration du timeout (augmente pour les grands modeles)
     rag.llm.ollama.timeout=120000
 
+    # Controle du nombre de requetes simultanees
+    rag.llm.ollama.max.concurrent.requests=5
+
+``system.properties`` :
+
+::
+
+    # Configuration du fournisseur LLM
+    rag.llm.name=ollama
+
 Elements de configuration
 ========
 
-Tous les elements de configuration disponibles pour le client Ollama.
+Tous les elements de configuration disponibles pour le client Ollama. Tous se configurent dans ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
@@ -140,6 +176,125 @@ Tous les elements de configuration disponibles pour le client Ollama.
    * - ``rag.llm.ollama.timeout``
      - Timeout de la requete (millisecondes)
      - ``60000``
+   * - ``rag.llm.ollama.availability.check.interval``
+     - Intervalle de verification de disponibilite (secondes)
+     - ``60``
+   * - ``rag.llm.ollama.max.concurrent.requests``
+     - Nombre maximum de requetes simultanees
+     - ``5``
+   * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
+     - Nombre maximum de documents pertinents lors de l'evaluation
+     - ``3``
+
+Controle de la concurrence
+------------
+
+``rag.llm.ollama.max.concurrent.requests`` permet de controler le nombre de requetes simultanees vers Ollama.
+La valeur par defaut est 5. Ajustez-la en fonction des ressources du serveur Ollama.
+Un nombre trop eleve de requetes simultanees peut surcharger le serveur Ollama et reduire la vitesse de reponse.
+
+Configuration par type de prompt
+======================
+
+Dans |Fess|, les parametres du LLM peuvent etre personnalises par type de prompt.
+La configuration s'ecrit dans ``fess_config.properties``.
+
+Les parametres suivants peuvent etre configures par type de prompt :
+
+- ``rag.llm.ollama.{promptType}.temperature`` - Temperature lors de la generation
+- ``rag.llm.ollama.{promptType}.max.tokens`` - Nombre maximum de tokens
+- ``rag.llm.ollama.{promptType}.context.max.chars`` - Nombre maximum de caracteres du contexte
+
+Types de prompt disponibles :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Type de prompt
+     - Description
+   * - ``intent``
+     - Prompt pour determiner l'intention de l'utilisateur
+   * - ``evaluation``
+     - Prompt d'evaluation des resultats de recherche
+   * - ``unclear``
+     - Prompt de reponse pour les requetes peu claires
+   * - ``noresults``
+     - Prompt pour le cas ou il n'y a pas de resultats de recherche
+   * - ``docnotfound``
+     - Prompt pour le cas ou le document n'est pas trouve
+   * - ``answer``
+     - Prompt de generation de reponse
+   * - ``summary``
+     - Prompt de generation de resume
+   * - ``faq``
+     - Prompt de generation de FAQ
+   * - ``direct``
+     - Prompt de reponse directe
+
+Exemple de configuration::
+
+    # Configurer la temperature lors de la generation de reponse
+    rag.llm.ollama.answer.temperature=0.7
+
+    # Configurer le nombre maximum de tokens lors de la generation de resume
+    rag.llm.ollama.summary.max.tokens=2048
+
+    # Configurer le nombre maximum de caracteres du contexte lors de la determination d'intention
+    rag.llm.ollama.intent.context.max.chars=4000
+
+Options du modele Ollama
+======================
+
+Les parametres du modele Ollama peuvent etre configures dans ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriete
+     - Description
+     - Valeur par defaut
+   * - ``rag.llm.ollama.top.p``
+     - Valeur d'echantillonnage Top-P (0.0 a 1.0)
+     - (Non defini)
+   * - ``rag.llm.ollama.top.k``
+     - Valeur d'echantillonnage Top-K
+     - (Non defini)
+   * - ``rag.llm.ollama.num.ctx``
+     - Taille de la fenetre de contexte
+     - (Non defini)
+   * - ``rag.llm.ollama.default.*``
+     - Configuration de repli par defaut
+     - (Non defini)
+   * - ``rag.llm.ollama.options.*``
+     - Options globales
+     - (Non defini)
+
+Exemple de configuration::
+
+    # Echantillonnage Top-P
+    rag.llm.ollama.top.p=0.9
+
+    # Echantillonnage Top-K
+    rag.llm.ollama.top.k=40
+
+    # Taille de la fenetre de contexte
+    rag.llm.ollama.num.ctx=4096
+
+Prise en charge des modeles de reflexion
+==============
+
+Lors de l'utilisation de modeles de reflexion (thinking model) tels que qwen3.5, |Fess| prend en charge la configuration du budget de reflexion (thinking budget).
+
+Configurez les elements suivants dans ``fess_config.properties`` :
+
+::
+
+    # Configuration du budget de reflexion
+    rag.llm.ollama.thinking.budget=1024
+
+La configuration du budget de reflexion permet de controler le nombre de tokens alloues a l'etape de "reflexion" du modele avant la generation de la reponse.
 
 Configuration reseau
 ================
@@ -159,7 +314,7 @@ Exemple de configuration lorsque |Fess| et Ollama fonctionnent tous deux dans Do
         image: codelibs/fess:15.6.0
         environment:
           - RAG_CHAT_ENABLED=true
-          - RAG_LLM_TYPE=ollama
+          - RAG_LLM_NAME=ollama
           - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
           - RAG_LLM_OLLAMA_MODEL=gemma3:4b
         depends_on:
@@ -253,6 +408,8 @@ Erreur de connexion
 
 3. Verifier les parametres du pare-feu
 
+4. Verifier si le plugin ``fess-llm-ollama`` est bien place dans ``app/WEB-INF/plugin/``
+
 Modele introuvable
 --------------------
 
@@ -300,4 +457,4 @@ Informations de reference
 - `Bibliotheque de modeles Ollama <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - Apercu de l'integration LLM
-- :doc:`rag-chat` - Details de la fonctionnalite de mode IA
+- :doc:`rag-chat` - Details de la fonctionnalite de mode de recherche IA

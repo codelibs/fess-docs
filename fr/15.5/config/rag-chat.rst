@@ -1,18 +1,18 @@
 ==========================
-Configuration du mode IA
+Configuration du mode de recherche IA
 ==========================
 
 Apercu
 ====
 
-Le mode IA (RAG: Retrieval-Augmented Generation) est une fonctionnalite qui enrichit les resultats de recherche de |Fess|
+Le mode de recherche IA (RAG: Retrieval-Augmented Generation) est une fonctionnalite qui enrichit les resultats de recherche de |Fess|
 avec un LLM (grand modele de langage) pour fournir des informations sous forme de dialogue.
 Les utilisateurs peuvent poser des questions en langage naturel et obtenir des reponses detaillees basees sur les resultats de recherche.
 
-Fonctionnement du mode IA
+Fonctionnement du mode de recherche IA
 =========================
 
-Le mode IA fonctionne selon un flux en plusieurs etapes.
+Le mode de recherche IA fonctionne selon un flux en plusieurs etapes.
 
 1. **Phase d'analyse d'intention** : Analyse la question de l'utilisateur et extrait les mots-cles optimaux pour la recherche
 2. **Phase de recherche** : Recherche des documents avec les mots-cles extraits en utilisant le moteur de recherche |Fess|
@@ -25,13 +25,13 @@ Ce flux permet des reponses de haute qualite comprenant le contexte, superieur a
 Configuration de base
 ========
 
-Configuration de base pour activer la fonctionnalite de mode IA.
+Configuration de base pour activer la fonctionnalite de mode de recherche IA.
 
 ``app/WEB-INF/conf/fess_config.properties`` :
 
 ::
 
-    # Activer la fonctionnalite de mode IA
+    # Activer la fonctionnalite de mode de recherche IA
     rag.chat.enabled=true
 
     # Selectionner le fournisseur LLM (ollama, openai, gemini)
@@ -193,7 +193,7 @@ Considerations sur la limitation de debit
 Utilisation de l'API
 =========
 
-La fonctionnalite de mode IA est accessible via API REST.
+La fonctionnalite de mode de recherche IA est accessible via API REST.
 
 API non-streaming
 -------------------
@@ -296,7 +296,7 @@ Pour la documentation API detaillee, consultez :doc:`../api/api-chat`.
 Interface Web
 ===================
 
-La fonctionnalite de mode IA est accessible depuis l'ecran de recherche de l'interface Web |Fess|.
+La fonctionnalite de mode de recherche IA est accessible depuis l'ecran de recherche de l'interface Web |Fess|.
 
 Demarrer un chat
 --------------
@@ -323,7 +323,7 @@ Continuer la conversation
 Depannage
 ======================
 
-Le mode IA ne s'active pas
+Le mode de recherche IA ne s'active pas
 --------------------------
 
 **Points a verifier** :
