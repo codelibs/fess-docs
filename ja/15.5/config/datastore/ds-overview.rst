@@ -41,7 +41,7 @@
      - fess-ds-gsuite
      - Google Drive、Gmailなどをクロール
    * - :doc:`ds-microsoft365`
-     - fess-ds-office365
+     - fess-ds-microsoft365
      - OneDrive、SharePointなどをクロール
 
 コラボレーションツール
@@ -92,7 +92,7 @@
      - プラグイン
      - 説明
    * - :doc:`ds-database`
-     - （組み込み）
+     - fess-ds-db
      - JDBC対応データベースからデータを取得
    * - :doc:`ds-csv`
      - fess-ds-csv

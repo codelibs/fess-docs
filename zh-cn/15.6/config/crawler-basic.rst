@@ -474,15 +474,6 @@ User-Agent 配置
 
     client.userAgent=MyCompanyCrawler/1.0
 
-系统全局配置
-------------------
-
-在 ``fess_config.properties`` 中配置:
-
-::
-
-    crawler.user.agent=MyCompanyCrawler/1.0
-
 编码配置
 ====================
 
@@ -493,7 +484,7 @@ User-Agent 配置
 
 ::
 
-    crawler.crawling.data.encoding=UTF-8
+    crawler.crawling.data.encoding=
 
 文件名编码
 ----------------------------

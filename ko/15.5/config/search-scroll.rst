@@ -55,21 +55,6 @@
 
 여러 필드를 지정하는 경우 쉼표로 구분하여 나열합니다.
 
-스크롤 타임아웃 설정
-----------------------------
-
-스크롤 컨텍스트의 유효 기간을 설정할 수 있습니다.
-기본값은 1분입니다.
-
-::
-
-    api.search.scroll.timeout=1m
-
-단위:
-- ``s``: 초
-- ``m``: 분
-- ``h``: 시간
-
 사용 방법
 ========
 
@@ -80,7 +65,7 @@
 
 ::
 
-    http://localhost:8080/json/scroll?q=검색키워드
+    http://localhost:8080/api/v1/documents/all?q=검색키워드
 
 검색 결과는 NDJSON(Newline Delimited JSON) 형식으로 반환됩니다.
 1행마다 1개의 문서가 JSON 형식으로 출력됩니다.
@@ -89,7 +74,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 요청 파라미터
 --------------------
@@ -120,19 +105,19 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=검색엔진"
+    curl "http://localhost:8080/api/v1/documents/all?q=검색엔진"
 
 **예: 필드 지정 검색**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **예: 전체 취득(검색 조건 없음)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 취득 건수 지정
 --------------
@@ -141,7 +126,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    ``size`` 파라미터를 너무 크게 하면 메모리 사용량이 증가합니다.
@@ -154,7 +139,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 인증이 필요한 경우
 ----------------
@@ -163,14 +148,14 @@
 
 ::
 
-    curl -u username:password "http://localhost:8080/json/scroll?q=Fess"
+    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 또는 API 토큰 사용:
 
 ::
 
     curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 응답 형식
 ==============
@@ -214,7 +199,7 @@ Python으로 처리하는 예
     import json
 
     # 스크롤 검색 실행
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -237,7 +222,7 @@ Python으로 처리하는 예
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 CSV로 변환
 -----------
@@ -246,7 +231,7 @@ jq 명령을 사용하여 CSV로 변환하는 예:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 데이터 분석
@@ -312,7 +297,7 @@ jq 명령을 사용하여 CSV로 변환하는 예:
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # 스트리밍으로 처리
@@ -361,8 +346,7 @@ jq 명령을 사용하여 CSV로 변환하는 예:
 타임아웃 오류가 발생함
 ----------------------------
 
-1. ``api.search.scroll.timeout`` 의 값을 늘리십시오.
-2. ``size`` 파라미터를 작게 하여 처리를 분산하십시오.
+1. ``size`` 파라미터를 작게 하여 처리를 분산하십시오.
 3. 검색 조건을 좁혀 취득하는 데이터 양을 줄이십시오.
 
 메모리 부족 오류

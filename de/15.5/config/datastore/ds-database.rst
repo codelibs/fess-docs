@@ -7,7 +7,7 @@ Datenbank-Konnektor
 
 Der Datenbank-Konnektor bietet die Funktionalität, Daten aus JDBC-kompatiblen relationalen Datenbanken abzurufen und im |Fess|-Index zu registrieren.
 
-Diese Funktion ist in |Fess| integriert und erfordert kein zusätzliches Plugin.
+Für diese Funktion ist das Plugin ``fess-ds-db`` erforderlich.
 
 Unterstützte Datenbanken
 ========================
@@ -109,7 +109,7 @@ Parameterliste
    * - ``sql``
      - Ja
      - SQL-Query zum Abrufen der Daten
-   * - ``fetch.size``
+   * - ``fetch_size``
      - Nein
      - Fetch-Größe (Standard: 100)
 

@@ -41,7 +41,7 @@
      - fess-ds-gsuite
      - 抓取Google Drive、Gmail等
    * - :doc:`ds-microsoft365`
-     - fess-ds-office365
+     - fess-ds-microsoft365
      - 抓取OneDrive、SharePoint等
 
 协作工具
@@ -92,7 +92,7 @@
      - 插件
      - 说明
    * - :doc:`ds-database`
-     - （内置）
+     - fess-ds-db
      - 从JDBC兼容数据库获取数据
    * - :doc:`ds-csv`
      - fess-ds-csv

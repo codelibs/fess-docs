@@ -55,21 +55,6 @@
 
 指定多个字段时,请用逗号分隔。
 
-滚动超时配置
-----------------------------
-
-可以配置滚动上下文的有效期。
-默认为1分钟。
-
-::
-
-    api.search.scroll.timeout=1m
-
-单位:
-- ``s``: 秒
-- ``m``: 分钟
-- ``h``: 小时
-
 使用方法
 ========
 
@@ -80,7 +65,7 @@
 
 ::
 
-    http://localhost:8080/json/scroll?q=搜索关键词
+    http://localhost:8080/api/v1/documents/all?q=搜索关键词
 
 搜索结果以 NDJSON(Newline Delimited JSON)格式返回。
 每行以 JSON 格式输出一个文档。
@@ -89,7 +74,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 请求参数
 --------------------
@@ -120,19 +105,19 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=搜索引擎"
+    curl "http://localhost:8080/api/v1/documents/all?q=搜索引擎"
 
 **示例: 字段指定搜索**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **示例: 全量获取(无搜索条件)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 指定获取条数
 --------------
@@ -141,7 +126,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    ``size`` 参数过大会增加内存使用量。
@@ -154,7 +139,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 需要认证时
 ----------------
@@ -163,14 +148,14 @@
 
 ::
 
-    curl -u username:password "http://localhost:8080/json/scroll?q=Fess"
+    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 或使用 API 令牌:
 
 ::
 
     curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 响应格式
 ==============
@@ -214,7 +199,7 @@ Python 处理示例
     import json
 
     # 执行滚动搜索
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -237,7 +222,7 @@ Python 处理示例
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 转换为 CSV
 -----------
@@ -246,7 +231,7 @@ Python 处理示例
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 数据分析
@@ -312,7 +297,7 @@ Python 处理示例
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # 流式处理
@@ -361,8 +346,7 @@ Python 处理示例
 发生超时错误
 ----------------------------
 
-1. 请增加 ``api.search.scroll.timeout`` 的值。
-2. 请减小 ``size`` 参数以分散处理。
+1. 请减小 ``size`` 参数以分散处理。
 3. 请缩小搜索条件以减少获取数据量。
 
 内存不足错误

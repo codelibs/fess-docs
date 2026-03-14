@@ -474,15 +474,6 @@ Fügen Sie zu den „Konfigurationsparametern" der Crawl-Konfiguration hinzu:
 
     client.userAgent=MyCompanyCrawler/1.0
 
-Systemweite Konfiguration
-------------------
-
-Konfigurieren Sie in ``fess_config.properties``:
-
-::
-
-    crawler.user.agent=MyCompanyCrawler/1.0
-
 Codierungs-Konfiguration
 ====================
 
@@ -502,7 +493,7 @@ Codierung von Dateinamen im Dateisystem:
 
 ::
 
-    crawler.document.file.name.encoding=UTF-8
+    crawler.document.file.name.encoding=
 
 Fehlersuche beim Crawling
 ================================

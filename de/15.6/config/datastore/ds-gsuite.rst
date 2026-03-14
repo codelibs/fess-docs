@@ -61,7 +61,7 @@ Grundeinstellungen
    * - Name
      - Company Google Drive
    * - Handler-Name
-     - GSuiteDataStore
+     - GoogleDriveDataStore
    * - Aktiviert
      - Ein
 

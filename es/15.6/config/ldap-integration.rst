@@ -69,7 +69,7 @@ Configuracion de busqueda de usuarios
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # Filtro de busqueda de usuarios
-    ldap.user.search.filter=(uid={0})
+    ldap.account.filter=(uid={0})
 
     # Atributo de nombre de usuario
     ldap.user.name.attribute=uid
@@ -83,7 +83,7 @@ Configuracion de busqueda de grupos
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # Filtro de busqueda de grupos
-    ldap.group.search.filter=(member={0})
+    ldap.group.filter=(member={0})
 
     # Atributo de nombre de grupo
     ldap.group.name.attribute=cn
@@ -108,12 +108,12 @@ Configuracion basica
 
     # Busqueda de usuarios
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.user.search.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName={0})
     ldap.user.name.attribute=sAMAccountName
 
     # Busqueda de grupos
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.search.filter=(member={0})
+    ldap.group.filter=(member={0})
     ldap.group.name.attribute=cn
 
 Configuracion especifica de Active Directory
@@ -125,7 +125,7 @@ Configuracion especifica de Active Directory
     ldap.memberof.enabled=true
 
     # Usar atributo memberOf
-    ldap.group.search.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
 
 Configuracion de OpenLDAP
 =========================
@@ -144,12 +144,12 @@ Ejemplo de configuracion para OpenLDAP.
 
     # Busqueda de usuarios
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.user.search.filter=(uid={0})
+    ldap.account.filter=(uid={0})
     ldap.user.name.attribute=uid
 
     # Busqueda de grupos
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.search.filter=(memberUid={0})
+    ldap.group.filter=(memberUid={0})
     ldap.group.name.attribute=cn
 
 Configuracion de seguridad
@@ -208,50 +208,6 @@ Mapeo personalizado
     ldap.group.role.mapping.Administrators=admin
     ldap.group.role.mapping.PowerUsers=editor
     ldap.group.role.mapping.Users=guest
-
-Sincronizacion de informacion de usuarios
-=========================================
-
-Puede sincronizar informacion de usuarios de LDAP a |Fess|.
-
-Sincronizacion automatica
--------------------------
-
-Sincronizar automaticamente informacion de usuario al iniciar sesion:
-
-::
-
-    ldap.user.sync.enabled=true
-
-Atributos a sincronizar
------------------------
-
-::
-
-    # Direccion de email
-    ldap.user.email.attribute=mail
-
-    # Nombre para mostrar
-    ldap.user.displayname.attribute=displayName
-
-Pool de conexiones
-==================
-
-Configuracion de pool de conexiones para mejorar el rendimiento:
-
-::
-
-    # Habilitar pool de conexiones
-    ldap.connection.pool.enabled=true
-
-    # Numero minimo de conexiones
-    ldap.connection.pool.min=1
-
-    # Numero maximo de conexiones
-    ldap.connection.pool.max=10
-
-    # Timeout de conexion (milisegundos)
-    ldap.connection.timeout=5000
 
 Failover
 ========

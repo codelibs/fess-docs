@@ -80,7 +80,7 @@ Zugriff auf Scroll-Suche erfolgt über folgende URL:
 
 ::
 
-    http://localhost:8080/json/scroll?q=Suchschlüsselwort
+    http://localhost:8080/api/v1/documents/all?q=Suchschlüsselwort
 
 Suchergebnisse werden im NDJSON-Format (Newline Delimited JSON) zurückgegeben.
 Pro Zeile wird ein Dokument im JSON-Format ausgegeben.
@@ -89,7 +89,7 @@ Pro Zeile wird ein Dokument im JSON-Format ausgegeben.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Request-Parameter
 --------------------
@@ -120,19 +120,19 @@ Sie können Suchabfragen wie bei normaler Suche angeben.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Suchmaschine"
+    curl "http://localhost:8080/api/v1/documents/all?q=Suchmaschine"
 
 **Beispiel: Feldspezifische Suche**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **Beispiel: Vollständiger Abruf (ohne Suchbedingung)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 Angabe der Abrufanzahl
 --------------
@@ -141,7 +141,7 @@ Sie können die Anzahl pro Scroll-Abruf ändern.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    Zu großer ``size``-Parameter erhöht Speichernutzung.
@@ -154,7 +154,7 @@ Sie können nur Dokumente bestimmter Labels abrufen.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 Bei erforderlicher Authentifizierung
 ----------------
@@ -163,14 +163,14 @@ Bei Verwendung rollenbasierter Suche müssen Sie Authentifizierungsinformationen
 
 ::
 
-    curl -u username:password "http://localhost:8080/json/scroll?q=Fess"
+    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Oder mit API-Token:
 
 ::
 
     curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Response-Format
 ==============
@@ -214,7 +214,7 @@ Verarbeitungsbeispiel mit Python
     import json
 
     # Scroll-Suche ausführen
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -237,7 +237,7 @@ Beispiel zum Speichern von Suchergebnissen in Datei:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 Konvertierung zu CSV
 -----------
@@ -246,7 +246,7 @@ Beispiel für Konvertierung zu CSV mit jq-Befehl:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 Datenanalyse
@@ -312,7 +312,7 @@ Bei Verarbeitung großer Datenmengen verwenden Sie Streaming-Verarbeitung zur Re
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # Mit Streaming verarbeiten

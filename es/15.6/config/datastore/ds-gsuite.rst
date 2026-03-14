@@ -62,7 +62,7 @@ Configuracion Basica
    * - Nombre
      - Company Google Drive
    * - Nombre del manejador
-     - GSuiteDataStore
+     - GoogleDriveDataStore
    * - Habilitado
      - Activado
 

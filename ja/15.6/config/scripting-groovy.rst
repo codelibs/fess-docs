@@ -198,8 +198,8 @@ URLの生成
 
     def results = []
 
-    // インデックス最適化
-    results << container.getComponent("optimizeJob").execute()
+    // サジェスト更新
+    results << container.getComponent("suggestJob").execute()
 
     // クロール実行
     results << container.getComponent("crawlJob").execute()

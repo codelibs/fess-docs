@@ -253,12 +253,15 @@ Geminiクライアントで使用可能なすべての設定項目です。 ``ra
 Geminiでは思考モデル（Thinking Model）をサポートしています。
 思考モデルを使用すると、モデルが回答を生成する前に内部的な推論プロセスを実行し、より精度の高い回答を生成できます。
 
-``fess_config.properties`` で思考バジェットを設定できます。
+思考バジェットはプロンプトタイプごとに ``fess_config.properties`` で設定できます。
 
 ::
 
-    # 思考バジェットの設定
-    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+    # 回答生成時の思考バジェットの設定
+    rag.llm.gemini.answer.thinking.budget=1024
+
+    # 要約生成時の思考バジェットの設定
+    rag.llm.gemini.summary.thinking.budget=1024
 
 .. note::
    思考バジェットを設定すると、応答時間が長くなる場合があります。

@@ -62,7 +62,7 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
    * - 名称
      - Company Google Drive
    * - 处理器名称
-     - GSuiteDataStore
+     - GoogleDriveDataStore
    * - 启用
      - 开
 

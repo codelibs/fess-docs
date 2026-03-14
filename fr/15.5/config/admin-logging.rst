@@ -162,13 +162,13 @@ Exemples de configuration de base
 
 ::
 
-    <Logger name="org.codelibs.fess" level="warn"/>
+    <Logger name="org.codelibs" level="warn"/>
 
 **Exemple : Changement au niveau DEBUG**
 
 ::
 
-    <Logger name="org.codelibs.fess" level="debug"/>
+    <Logger name="org.codelibs" level="debug"/>
 
 **Exemple : Modification du niveau de journalisation pour un paquet spécifique**
 
@@ -189,7 +189,7 @@ Vous pouvez également spécifier le niveau de journalisation lors du démarrage
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dlog.level=debug"
+    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
 
 Configuration des journaux d'exploration
 ====================
@@ -225,14 +225,6 @@ Modification du niveau de journalisation uniquement pour des modèles d'URL spé
         logLevel("DEBUG")
     }
 
-Modification du niveau de journalisation pour l'ensemble du processus d'exploration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Configuration dans ``fess_config.properties`` :
-
-::
-
-    logging.level.org.codelibs.fess.crawler=DEBUG
 
 Rotation des journaux
 ==================
@@ -257,12 +249,12 @@ Exemple de fichier de configuration (``log4j2.xml``) :
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>
@@ -274,10 +266,10 @@ Pour une rotation quotidienne plutôt que par taille :
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -291,10 +283,10 @@ Pour compresser automatiquement lors de la rotation :
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -440,7 +432,7 @@ Format de journal par défaut de |Fess| :
 
 ::
 
-    %d{ISO8601} [%t] %-5p %c - %m%n
+    %d [%t] %-5p %msg%n
 
 Explication de chaque élément :
 
@@ -499,7 +491,7 @@ Bonnes pratiques
    ::
 
        <Async name="AsyncFile">
-           <AppenderRef ref="FessFile"/>
+           <AppenderRef ref="AppFile"/>
        </Async>
 
 4. **Assurer un espace disque suffisant**
@@ -604,7 +596,7 @@ Impossible de trouver un journal spécifique
 
    ::
 
-       grep "org.codelibs.fess" /etc/fess/log4j2.xml
+       grep "org.codelibs" /etc/fess/log4j2.xml
 
 2. **Vérifier le chemin du fichier journal**
 
@@ -641,7 +633,7 @@ Caractères corrompus dans les journaux
 
    ::
 
-       <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n" charset="UTF-8"/>
+       <PatternLayout pattern="%d [%t] %-5p %msg%n" charset="UTF-8"/>
 
 2. **Configuration des variables d'environnement**
 

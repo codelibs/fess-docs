@@ -267,32 +267,34 @@ o1/o3/o4系やgpt-5系の推論モデルを使用する場合、|Fess| は自動
    * - プロパティ
      - 説明
      - デフォルト
-   * - ``rag.llm.openai.reasoning.effort``
+   * - ``rag.llm.openai.{promptType}.reasoning.effort``
      - o系モデルの推論effort設定（``low``、``medium``、``high``）
      - （未設定）
-   * - ``rag.llm.openai.top.p``
+   * - ``rag.llm.openai.{promptType}.top.p``
      - トークン選択の確率閾値（0.0〜1.0）
      - （未設定）
-   * - ``rag.llm.openai.frequency.penalty``
+   * - ``rag.llm.openai.{promptType}.frequency.penalty``
      - 頻度ペナルティ（-2.0〜2.0）
      - （未設定）
-   * - ``rag.llm.openai.presence.penalty``
+   * - ``rag.llm.openai.{promptType}.presence.penalty``
      - 存在ペナルティ（-2.0〜2.0）
      - （未設定）
+
+``{promptType}`` には ``intent``、``evaluation``、``answer``、``summary`` 等のプロンプトタイプが入ります。
 
 設定例
 ------
 
 ::
 
-    # o3-miniで推論effortをhighに設定
+    # o3-miniで回答生成時の推論effortをhighに設定
     rag.llm.openai.model=o3-mini
-    rag.llm.openai.reasoning.effort=high
+    rag.llm.openai.answer.reasoning.effort=high
 
-    # gpt-5でtop_pとペナルティを設定
+    # gpt-5で回答生成時のtop_pとペナルティを設定
     rag.llm.openai.model=gpt-5
-    rag.llm.openai.top.p=0.9
-    rag.llm.openai.frequency.penalty=0.5
+    rag.llm.openai.answer.top.p=0.9
+    rag.llm.openai.answer.frequency.penalty=0.5
 
 環境変数での設定
 ================

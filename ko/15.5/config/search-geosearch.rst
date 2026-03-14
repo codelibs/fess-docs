@@ -144,12 +144,7 @@ JSON API에서도 위치 정보 검색을 사용할 수 있습니다.
 
 ::
 
-    curl -X POST "http://localhost:8080/json/?q=호텔" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "geo.location.point": "37.566536,126.977966",
-        "geo.location.distance": "5km"
-      }'
+    curl "http://localhost:8080/json/?q=호텔&geo.location.point=37.566536,126.977966&geo.location.distance=5km"
 
 필드 이름 사용자 정의
 ==========================
@@ -231,7 +226,7 @@ Google Maps와의 연계
 
 대량의 위치 정보 데이터를 다루는 경우 인덱스 설정을 최적화합니다.
 
-``app/WEB-INF/classes/fess_indices/fess.json`` 에서 위치 정보 필드의 설정을 확인하십시오.
+``app/WEB-INF/classes/fess_indices/fess/doc.json`` 에서 위치 정보 필드의 설정을 확인하십시오.
 
 ::
 

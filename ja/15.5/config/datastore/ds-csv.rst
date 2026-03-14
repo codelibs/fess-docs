@@ -66,31 +66,21 @@ CSVコネクタは、CSVファイルからデータを取得して
 
 ::
 
-    file_path=/path/to/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
-
-HTTPファイル:
-
-::
-
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 複数ファイル:
 
 ::
 
-    file_path=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data1.csv,/path/to/data2.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 パラメーター一覧
 ~~~~~~~~~~~~~~~~
@@ -102,19 +92,19 @@ HTTPファイル:
    * - パラメーター
      - 必須
      - 説明
-   * - ``file_path``
+   * - ``files``
      - はい
-     - CSVファイルのパス（ローカル、HTTP、複数指定可：カンマ区切り）
-   * - ``encoding``
+     - CSVファイルのパス（複数指定可：カンマ区切り）
+   * - ``file_encoding``
      - いいえ
      - 文字エンコーディング（デフォルト: UTF-8）
-   * - ``has_header``
+   * - ``has_header_line``
      - いいえ
      - ヘッダー行の有無（デフォルト: true）
-   * - ``separator``
+   * - ``separator_character``
      - いいえ
      - 区切り文字（デフォルト: カンマ ``,``）
-   * - ``quote``
+   * - ``quote_character``
      - いいえ
      - 引用符（デフォルト: ダブルクォート ``"``）
 
@@ -135,16 +125,16 @@ HTTPファイル:
 
 ::
 
-    url="https://example.com/product/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/product/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 利用可能なフィールド
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<列名>`` - ヘッダー行の列名（has_header=true の場合）
-- ``data.col<N>`` - 列インデックス（has_header=false の場合、0始まり）
+- ``data.<列名>`` - ヘッダー行の列名（has_header_line=true の場合）
+- ``data.cell<N>`` - 列インデックス（has_header_line=false の場合、0始まり）
 
 CSV形式の詳細
 =============
@@ -167,14 +157,14 @@ CSV形式の詳細
 ::
 
     # パラメーター
-    separator=\t
+    separator_character=\t
 
 セミコロン区切り:
 
 ::
 
     # パラメーター
-    separator=;
+    separator_character=;
 
 カスタム引用符
 --------------
@@ -184,7 +174,7 @@ CSV形式の詳細
 ::
 
     # パラメーター
-    quote='
+    quote_character='
 
 エンコーディング
 ----------------
@@ -193,13 +183,13 @@ CSV形式の詳細
 
 ::
 
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
 日本語ファイル（EUC-JP）:
 
 ::
 
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
 使用例
 ======
@@ -220,11 +210,11 @@ CSVファイル（products.csv）:
 
 ::
 
-    file_path=/var/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 スクリプト:
 
@@ -263,11 +253,11 @@ CSVファイル（employees.csv）:
 
 ::
 
-    file_path=/var/data/employees.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/employees.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 スクリプト:
 
@@ -293,20 +283,20 @@ CSVファイル（data.csv）:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=false
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=false
+    separator_character=,
+    quote_character="
 
 スクリプト:
 
 ::
 
-    url="https://example.com/item/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/item/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 複数CSVファイルの統合
 ---------------------
@@ -315,11 +305,11 @@ CSVファイル（data.csv）:
 
 ::
 
-    file_path=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 スクリプト:
 
@@ -329,27 +319,6 @@ CSVファイル（data.csv）:
     title=data.title
     content=data.content
     timestamp=data.date
-
-HTTPからCSVを取得
------------------
-
-パラメーター:
-
-::
-
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
-
-スクリプト:
-
-::
-
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
 
 タブ区切り（TSV）ファイル
 -------------------------
@@ -366,11 +335,11 @@ TSVファイル（data.tsv）:
 
 ::
 
-    file_path=/var/data/data.tsv
-    encoding=UTF-8
-    has_header=true
-    separator=\t
-    quote="
+    files=/var/data/data.tsv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=\t
+    quote_character="
 
 スクリプト:
 
@@ -408,16 +377,16 @@ TSVファイル（data.tsv）:
 ::
 
     # UTF-8
-    encoding=UTF-8
+    file_encoding=UTF-8
 
     # Shift_JIS
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
     # EUC-JP
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
     # Windows標準（CP932）
-    encoding=Windows-31J
+    file_encoding=Windows-31J
 
 ファイルのエンコーディングを確認:
 
@@ -439,13 +408,13 @@ TSVファイル（data.tsv）:
    ::
 
        # カンマ
-       separator=,
+       separator_character=,
 
        # タブ
-       separator=\t
+       separator_character=\t
 
        # セミコロン
-       separator=;
+       separator_character=;
 
 2. 引用符の設定を確認
 3. CSVファイルの形式を確認（RFC 4180準拠か）
@@ -461,13 +430,13 @@ TSVファイル（data.tsv）:
 
 ::
 
-    has_header=true
+    has_header_line=true
 
 ヘッダー行がない場合:
 
 ::
 
-    has_header=false
+    has_header_line=false
 
 データが取得できない
 --------------------
@@ -478,7 +447,7 @@ TSVファイル（data.tsv）:
 
 1. CSVファイルが空でないか確認
 2. スクリプト設定が正しいか確認
-3. 列名が正しいか確認（has_header=true の場合）
+3. 列名が正しいか確認（has_header_line=true の場合）
 4. ログでエラーメッセージを確認
 
 大きなCSVファイル
@@ -510,11 +479,11 @@ RFC 4180形式では、引用符で囲むことで改行を含むフィールド
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 スクリプトの高度な使用例
 ========================

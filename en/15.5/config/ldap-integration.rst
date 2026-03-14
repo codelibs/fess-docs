@@ -60,33 +60,24 @@ LDAP Connection Settings
     # Bind password
     ldap.admin.security.credentials=your_password
 
-User Search Settings
---------------------
+Account Filter Settings
+------------------------
 
 ::
 
-    # User search base DN
-    ldap.user.search.base=ou=users,dc=example,dc=com
+    # Account filter (search filter for user authentication)
+    ldap.account.filter=uid=%s
 
-    # User search filter
-    ldap.user.search.filter=(uid={0})
-
-    # Username attribute
-    ldap.user.name.attribute=uid
-
-Group Search Settings
----------------------
+Group Filter Settings
+----------------------
 
 ::
 
-    # Group search base DN
-    ldap.group.search.base=ou=groups,dc=example,dc=com
+    # Group filter
+    ldap.group.filter=(member={0})
 
-    # Group search filter
-    ldap.group.search.filter=(member={0})
-
-    # Group name attribute
-    ldap.group.name.attribute=cn
+    # memberOf attribute name
+    ldap.memberof.attribute=memberOf
 
 Active Directory Configuration
 ==============================
@@ -106,26 +97,22 @@ Basic Configuration
     ldap.security.principal=fess@example.com
     ldap.admin.security.credentials=your_password
 
-    # User search
-    ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.user.search.filter=(sAMAccountName={0})
-    ldap.user.name.attribute=sAMAccountName
+    # Account filter
+    ldap.account.filter=sAMAccountName=%s
 
-    # Group search
-    ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.search.filter=(member={0})
-    ldap.group.name.attribute=cn
+    # Group filter
+    ldap.group.filter=(member={0})
 
 Active Directory Specific Settings
 ----------------------------------
 
 ::
 
-    # Nested group resolution
-    ldap.memberof.enabled=true
-
     # Using memberOf attribute
-    ldap.group.search.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.memberof.attribute=memberOf
+
+    # Nested group resolution (LDAP_MATCHING_RULE_IN_CHAIN)
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
 
 OpenLDAP Configuration
 ======================
@@ -142,15 +129,11 @@ Configuration example for OpenLDAP.
     ldap.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
-    # User search
-    ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.user.search.filter=(uid={0})
-    ldap.user.name.attribute=uid
+    # Account filter
+    ldap.account.filter=uid=%s
 
-    # Group search
-    ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.search.filter=(memberUid={0})
-    ldap.group.name.attribute=cn
+    # Group filter
+    ldap.group.filter=(memberUid={0})
 
 Security Settings
 =================
@@ -164,9 +147,6 @@ Use encrypted connections:
 
     # Use LDAPS
     ldap.provider.url=ldaps://ldap.example.com:636
-
-    # Use StartTLS
-    ldap.start.tls=true
 
 For self-signed certificates, import the certificate into the Java truststore:
 
@@ -183,75 +163,6 @@ Set passwords using environment variables:
 ::
 
     ldap.admin.security.credentials=${LDAP_PASSWORD}
-
-Role Mapping
-============
-
-You can map LDAP groups to |Fess| roles.
-
-Automatic Mapping
------------------
-
-Group names are used directly as role names:
-
-::
-
-    # LDAP group "fess-users" -> Fess role "fess-users"
-    ldap.group.role.mapping.enabled=true
-
-Custom Mapping
---------------
-
-::
-
-    # Map group names to roles
-    ldap.group.role.mapping.Administrators=admin
-    ldap.group.role.mapping.PowerUsers=editor
-    ldap.group.role.mapping.Users=guest
-
-User Information Synchronization
-================================
-
-You can synchronize user information from LDAP to |Fess|.
-
-Automatic Synchronization
--------------------------
-
-Automatically synchronize user information on login:
-
-::
-
-    ldap.user.sync.enabled=true
-
-Attributes to Synchronize
--------------------------
-
-::
-
-    # Email address
-    ldap.user.email.attribute=mail
-
-    # Display name
-    ldap.user.displayname.attribute=displayName
-
-Connection Pooling
-==================
-
-Connection pool settings for performance improvement:
-
-::
-
-    # Enable connection pool
-    ldap.connection.pool.enabled=true
-
-    # Minimum connections
-    ldap.connection.pool.min=1
-
-    # Maximum connections
-    ldap.connection.pool.max=10
-
-    # Connection timeout (milliseconds)
-    ldap.connection.timeout=5000
 
 Failover
 ========

@@ -23,20 +23,7 @@ Principaux avantages :
 Algorithmes pris en charge
 ===========================
 
-|Fess| prend en charge les algorithmes de Rank Fusion suivants :
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - Algorithme
-     - Description
-   * - RRF (Reciprocal Rank Fusion)
-     - Algorithme de fusion utilisant l'inverse du rang
-   * - Score Fusion
-     - Fusion par normalisation des scores et moyenne ponderee
-   * - Borda Count
-     - Fusion de classement basee sur le vote
+|Fess| prend en charge l'algorithme RRF (Reciprocal Rank Fusion).
 
 RRF (Reciprocal Rank Fusion)
 ----------------------------
@@ -47,7 +34,7 @@ Formule ::
 
     score(d) = Σ 1 / (k + rank(d))
 
-- ``k`` : Parametre constant (par defaut : 60)
+- ``k`` : Parametre constant (par defaut : 20)
 - ``rank(d)`` : Rang du document d dans chaque resultat de recherche
 
 Configuration
@@ -58,59 +45,23 @@ fess_config.properties
 
 Configuration de base ::
 
-    # Activer le Rank Fusion
-    rank.fusion.enabled=true
+    # Taille de la fenetre (nombre de resultats pour la fusion)
+    rank.fusion.window_size=200
 
-    # Algorithme a utiliser
-    rank.fusion.algorithm=rrf
+    # Constante de classement RRF (parametre k)
+    rank.fusion.rank_constant=20
 
-    # Parametre k de RRF
-    rank.fusion.rrf.k=60
+    # Nombre de threads pour le traitement parallele (-1 par defaut)
+    rank.fusion.threads=-1
 
-    # Types de recherche pour la fusion
-    rank.fusion.search.types=keyword,semantic
-
-Configuration par algorithme
------------------------------
-
-Configuration RRF ::
-
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-Configuration Score Fusion ::
-
-    rank.fusion.algorithm=score
-    rank.fusion.score.normalize=true
-    rank.fusion.score.weights=0.7,0.3
-
-Configuration Borda Count ::
-
-    rank.fusion.algorithm=borda
-    rank.fusion.borda.top_n=100
+    # Nom du champ de score
+    rank.fusion.score_field=rf_score
 
 Integration avec la recherche hybride
 =======================================
 
 Le Rank Fusion est particulierement efficace dans la recherche hybride combinant
 la recherche par mots-cles et la recherche semantique.
-
-Exemple de configuration
---------------------------
-
-::
-
-    # Activer la recherche hybride
-    search.hybrid.enabled=true
-
-    # Fusionner les resultats de recherche par mots-cles et semantique
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-    # Poids pour chaque type de recherche
-    search.hybrid.keyword.weight=0.6
-    search.hybrid.semantic.weight=0.4
 
 Exemples d'utilisation
 =======================
@@ -139,54 +90,11 @@ Flux de recherche ::
                       ↓
               Final Ranking
 
-Notation personnalisee
------------------------
-
-Exemple de combinaison de plusieurs facteurs de notation ::
-
-    # Score de recherche de base + Boost par date + Popularite
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=score
-    rank.fusion.score.factors=relevance,recency,popularity
-    rank.fusion.score.weights=0.5,0.3,0.2
-
 Considerations de performance
 ================================
 
-Utilisation memoire
---------------------
-
 - L'utilisation memoire augmente car plusieurs resultats de recherche sont conserves
-- Limitez le nombre maximum de cibles de fusion avec ``rank.fusion.max.results``
-
-::
-
-    # Nombre maximum de resultats pour la fusion
-    rank.fusion.max.results=1000
-
-Temps de traitement
---------------------
-
 - Le temps de reponse augmente car plusieurs recherches sont executees
-- Envisagez l'optimisation par execution parallele
-
-::
-
-    # Activer l'execution parallele
-    rank.fusion.parallel=true
-    rank.fusion.thread.pool.size=4
-
-Cache
-------
-
-- Utilisez le cache pour les requetes frequentes
-
-::
-
-    # Cache pour les resultats de Rank Fusion
-    rank.fusion.cache.enabled=true
-    rank.fusion.cache.size=1000
-    rank.fusion.cache.expire=300
 
 Depannage
 ==========
@@ -199,8 +107,8 @@ Les resultats de recherche different des attentes
 **Verifications** :
 
 1. Verifier les resultats de chaque type de recherche individuellement
-2. Verifier que la ponderation est appropriee
-3. Ajuster la valeur du parametre k
+2. Ajuster la valeur de ``rank.fusion.rank_constant``
+3. Ajuster la valeur de ``rank.fusion.window_size``
 
 La recherche est lente
 -----------------------
@@ -209,17 +117,13 @@ La recherche est lente
 
 **Solutions** :
 
-1. Activer l'execution parallele ::
+1. Reduire ``rank.fusion.window_size`` ::
 
-       rank.fusion.parallel=true
+       rank.fusion.window_size=100
 
-2. Limiter le nombre de resultats cibles de fusion ::
+2. Ajuster ``rank.fusion.threads`` ::
 
-       rank.fusion.max.results=500
-
-3. Activer le cache ::
-
-       rank.fusion.cache.enabled=true
+       rank.fusion.threads=4
 
 Memoire insuffisante
 ---------------------
@@ -228,9 +132,8 @@ Memoire insuffisante
 
 **Solutions** :
 
-1. Reduire le nombre maximum de resultats cibles de fusion
+1. Reduire ``rank.fusion.window_size``
 2. Augmenter la taille du tas JVM
-3. Desactiver les types de recherche inutiles
 
 Reference
 ==========

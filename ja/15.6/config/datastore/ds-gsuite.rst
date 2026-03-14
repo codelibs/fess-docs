@@ -62,7 +62,7 @@ Google Workspaceコネクタは、Google Drive（旧G Suite）からファイル
    * - 名前
      - Company Google Drive
    * - ハンドラ名
-     - GSuiteDataStore
+     - GoogleDriveDataStore
    * - 有効
      - オン
 

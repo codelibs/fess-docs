@@ -24,9 +24,6 @@ Langages de script pris en charge
    * - Groovy
      - ``groovy``
      - Langage de script par defaut. Compatible avec Java et offre des fonctionnalites puissantes
-   * - JavaScript
-     - ``javascript``
-     - Langage familier aux developpeurs web
 
 .. note::
    Groovy est le plus largement utilise, et les exemples de cette documentation sont ecrits en Groovy.
@@ -132,9 +129,9 @@ Principaux objets utilisables dans les scripts :
    * - ``container``
      - Conteneur DI (acces aux composants)
    * - ``systemHelper``
-     - Helper systeme
+     - Helper systeme (``container.getComponent("systemHelper")``)
    * - ``fessConfig``
-     - Configuration de |Fess|
+     - Configuration de |Fess| (``container.getComponent("fessConfig")``)
 
 Securite
 ============

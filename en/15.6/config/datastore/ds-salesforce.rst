@@ -66,7 +66,7 @@ OAuth Token authentication (recommended):
     client_id=3MVG9...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
     custom=FessObj,CustomProduct
     FessObj.title=Name
     FessObj.contents=Name,Description__c
@@ -84,7 +84,7 @@ OAuth Password authentication:
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 Parameter List
 ~~~~~~~~~~~~~~
@@ -120,7 +120,7 @@ Parameter List
    * - ``number_of_threads``
      - No
      - Number of parallel processing threads (default: 1)
-   * - ``ignoreError``
+   * - ``ignore_error``
      - No
      - Continue processing on error (default: true)
    * - ``custom``
@@ -301,7 +301,7 @@ Parameters:
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 Script:
 
@@ -327,7 +327,7 @@ Parameters:
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=2
-    ignoreError=true
+    ignore_error=true
     custom=Product__c,Contract__c
     Product__c.title=Name
     Product__c.contents=Name,Description__c,Category__c
@@ -358,7 +358,7 @@ Parameters:
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 Script:
 

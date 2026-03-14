@@ -23,20 +23,7 @@ Rank Fusion 是一种将多个搜索算法或评分方法的结果
 支持的算法
 ===========
 
-|Fess| 支持以下 Rank Fusion 算法:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - 算法
-     - 说明
-   * - RRF (Reciprocal Rank Fusion)
-     - 使用排名倒数的融合算法
-   * - Score Fusion
-     - 通过分数归一化和加权平均进行融合
-   * - Borda Count
-     - 基于投票的排名融合
+|Fess| 支持 RRF (Reciprocal Rank Fusion) 算法。
 
 RRF (Reciprocal Rank Fusion)
 ----------------------------
@@ -47,7 +34,7 @@ RRF 通过对每个结果排名的倒数求和来计算分数。
 
     score(d) = Σ 1 / (k + rank(d))
 
-- ``k``: 常数参数（默认: 60）
+- ``k``: 常数参数（默认: 20）
 - ``rank(d)``: 文档 d 在各搜索结果中的排名
 
 配置
@@ -58,59 +45,23 @@ fess_config.properties
 
 基本配置::
 
-    # 启用 Rank Fusion
-    rank.fusion.enabled=true
+    # 窗口大小（融合对象的结果数）
+    rank.fusion.window_size=200
 
-    # 使用的算法
-    rank.fusion.algorithm=rrf
+    # RRF 的 rank_constant（k 参数）
+    rank.fusion.rank_constant=20
 
-    # RRF 的 k 参数
-    rank.fusion.rrf.k=60
+    # 并行处理的线程数（-1 为默认值）
+    rank.fusion.threads=-1
 
-    # 融合对象的搜索类型
-    rank.fusion.search.types=keyword,semantic
-
-按算法配置
------------
-
-RRF 配置::
-
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-Score Fusion 配置::
-
-    rank.fusion.algorithm=score
-    rank.fusion.score.normalize=true
-    rank.fusion.score.weights=0.7,0.3
-
-Borda Count 配置::
-
-    rank.fusion.algorithm=borda
-    rank.fusion.borda.top_n=100
+    # 分数字段名
+    rank.fusion.score_field=rf_score
 
 与混合搜索的集成
 ==================
 
 Rank Fusion 在结合关键词搜索和语义搜索的
 混合搜索中特别有效。
-
-配置示例
----------
-
-::
-
-    # 启用混合搜索
-    search.hybrid.enabled=true
-
-    # 融合关键词搜索和语义搜索的结果
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-    # 各搜索类型的权重
-    search.hybrid.keyword.weight=0.6
-    search.hybrid.semantic.weight=0.4
 
 使用示例
 ========
@@ -139,17 +90,6 @@ Rank Fusion 在结合关键词搜索和语义搜索的
                       ↓
               Final Ranking
 
-自定义评分
------------
-
-组合多个评分因素的示例::
-
-    # 基本搜索分数 + 日期提升 + 热门度
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=score
-    rank.fusion.score.factors=relevance,recency,popularity
-    rank.fusion.score.weights=0.5,0.3,0.2
-
 性能注意事项
 =============
 
@@ -157,36 +97,23 @@ Rank Fusion 在结合关键词搜索和语义搜索的
 ---------
 
 - 由于保留多个搜索结果,内存使用量会增加
-- 使用 ``rank.fusion.max.results`` 限制融合对象的最大数量
+- 使用 ``rank.fusion.window_size`` 限制融合对象的最大数量
 
 ::
 
-    # 融合对象的最大结果数
-    rank.fusion.max.results=1000
+    # 融合对象的窗口大小
+    rank.fusion.window_size=200
 
 处理时间
 ---------
 
 - 由于执行多个搜索,响应时间会增加
-- 考虑通过并行执行进行优化
+- 使用 ``rank.fusion.threads`` 设置并行执行的线程数
 
 ::
 
-    # 启用并行执行
-    rank.fusion.parallel=true
-    rank.fusion.thread.pool.size=4
-
-缓存
-------
-
-- 对频繁的查询使用缓存
-
-::
-
-    # Rank Fusion 结果缓存
-    rank.fusion.cache.enabled=true
-    rank.fusion.cache.size=1000
-    rank.fusion.cache.expire=300
+    # 并行执行的线程数（-1 为默认值）
+    rank.fusion.threads=-1
 
 故障排除
 ========
@@ -199,8 +126,8 @@ Rank Fusion 在结合关键词搜索和语义搜索的
 **检查事项**:
 
 1. 分别确认各搜索类型的结果
-2. 确认权重是否适当
-3. 调整 k 参数值
+2. 调整 ``rank.fusion.rank_constant`` 的值
+3. 调整 ``rank.fusion.window_size`` 的值
 
 搜索缓慢
 ----------
@@ -209,17 +136,13 @@ Rank Fusion 在结合关键词搜索和语义搜索的
 
 **解决方法**:
 
-1. 启用并行执行::
+1. 减小 ``rank.fusion.window_size``::
 
-       rank.fusion.parallel=true
+       rank.fusion.window_size=100
 
-2. 限制融合对象的结果数::
+2. 调整 ``rank.fusion.threads``::
 
-       rank.fusion.max.results=500
-
-3. 启用缓存::
-
-       rank.fusion.cache.enabled=true
+       rank.fusion.threads=4
 
 内存不足
 ---------
@@ -228,9 +151,8 @@ Rank Fusion 在结合关键词搜索和语义搜索的
 
 **解决方法**:
 
-1. 减少融合对象的最大结果数
+1. 减小 ``rank.fusion.window_size``
 2. 增加 JVM 堆大小
-3. 禁用不需要的搜索类型
 
 参考信息
 ========

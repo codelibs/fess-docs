@@ -66,7 +66,7 @@ OAuth Token认证（推荐）:
     client_id=3MVG9...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
     custom=FessObj,CustomProduct
     FessObj.title=Name
     FessObj.contents=Name,Description__c
@@ -84,7 +84,7 @@ OAuth Password认证:
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 参数列表
 ~~~~~~~~~~~~~~~~
@@ -120,7 +120,7 @@ OAuth Password认证:
    * - ``number_of_threads``
      - 否
      - 并行处理线程数（默认: 1）
-   * - ``ignoreError``
+   * - ``ignore_error``
      - 否
      - 出错时继续处理（默认: true）
    * - ``custom``
@@ -301,7 +301,7 @@ Salesforce Connected App设置
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 脚本:
 
@@ -327,7 +327,7 @@ Salesforce Connected App设置
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=2
-    ignoreError=true
+    ignore_error=true
     custom=Product__c,Contract__c
     Product__c.title=Name
     Product__c.contents=Name,Description__c,Category__c
@@ -358,7 +358,7 @@ Salesforce Connected App设置
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 脚本:
 

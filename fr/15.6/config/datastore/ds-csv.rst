@@ -66,31 +66,31 @@ Fichier local :
 
 ::
 
-    file_path=/path/to/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Fichier HTTP :
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Fichiers multiples :
 
 ::
 
-    file_path=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Liste des parametres
 ~~~~~~~~~~~~~~~~
@@ -102,19 +102,19 @@ Liste des parametres
    * - Parametre
      - Requis
      - Description
-   * - ``file_path``
+   * - ``files``
      - Oui
      - Chemin du fichier CSV (local, HTTP, plusieurs fichiers separes par des virgules)
-   * - ``encoding``
+   * - ``file_encoding``
      - Non
      - Encodage des caracteres (par defaut : UTF-8)
-   * - ``has_header``
+   * - ``has_header_line``
      - Non
      - Presence d'une ligne d'en-tete (par defaut : true)
-   * - ``separator``
+   * - ``separator_character``
      - Non
      - Caractere de separation (par defaut : virgule ``,``)
-   * - ``quote``
+   * - ``quote_character``
      - Non
      - Caractere de citation (par defaut : guillemet double ``"``)
 
@@ -135,16 +135,16 @@ Sans en-tete (index de colonne) :
 
 ::
 
-    url="https://example.com/product/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/product/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Champs disponibles
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<nom_colonne>`` - Nom de colonne de la ligne d'en-tete (si has_header=true)
-- ``data.col<N>`` - Index de colonne (si has_header=false, commence a 0)
+- ``data.<nom_colonne>`` - Nom de colonne de la ligne d'en-tete (si has_header_line=true)
+- ``data.cell<N>`` - Index de colonne (si has_header_line=false, commence a 0)
 
 Details du format CSV
 =============
@@ -167,14 +167,14 @@ Tabulation (TSV) :
 ::
 
     # Parametre
-    separator=\t
+    separator_character=\t
 
 Point-virgule :
 
 ::
 
     # Parametre
-    separator=;
+    separator_character=;
 
 Caractere de citation personnalise
 --------------
@@ -184,7 +184,7 @@ Guillemet simple :
 ::
 
     # Parametre
-    quote='
+    quote_character='
 
 Encodage
 ----------------
@@ -193,13 +193,13 @@ Fichier japonais (Shift_JIS) :
 
 ::
 
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
 Fichier japonais (EUC-JP) :
 
 ::
 
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
 Exemples d'utilisation
 ======
@@ -220,11 +220,11 @@ Parametres :
 
 ::
 
-    file_path=/var/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script :
 
@@ -263,11 +263,11 @@ Parametres :
 
 ::
 
-    file_path=/var/data/employees.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/employees.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script :
 
@@ -293,20 +293,20 @@ Parametres :
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=false
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=false
+    separator_character=,
+    quote_character="
 
 Script :
 
 ::
 
-    url="https://example.com/item/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/item/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Integration de plusieurs fichiers CSV
 ---------------------
@@ -315,11 +315,11 @@ Parametres :
 
 ::
 
-    file_path=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script :
 
@@ -337,11 +337,11 @@ Parametres :
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script :
 
@@ -366,11 +366,11 @@ Parametres :
 
 ::
 
-    file_path=/var/data/data.tsv
-    encoding=UTF-8
-    has_header=true
-    separator=\t
-    quote="
+    files=/var/data/data.tsv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=\t
+    quote_character="
 
 Script :
 
@@ -408,13 +408,13 @@ Specifier le bon encodage :
 ::
 
     # UTF-8
-    encoding=UTF-8
+    file_encoding=UTF-8
 
     # Windows (CP1252)
-    encoding=Windows-1252
+    file_encoding=Windows-1252
 
     # ISO-8859-1
-    encoding=ISO-8859-1
+    file_encoding=ISO-8859-1
 
 Verifier l'encodage du fichier :
 
@@ -456,13 +456,13 @@ Si une ligne d'en-tete existe :
 
 ::
 
-    has_header=true
+    has_header_line=true
 
 Si aucune ligne d'en-tete n'existe :
 
 ::
 
-    has_header=false
+    has_header_line=false
 
 Impossible de recuperer les donnees
 --------------------
@@ -473,7 +473,7 @@ Impossible de recuperer les donnees
 
 1. Verifier si le fichier CSV n'est pas vide
 2. Verifier si la configuration du script est correcte
-3. Verifier si les noms de colonnes sont corrects (si has_header=true)
+3. Verifier si les noms de colonnes sont corrects (si has_header_line=true)
 4. Verifier les messages d'erreur dans les logs
 
 Fichiers CSV volumineux
@@ -505,11 +505,11 @@ Parametres :
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Exemples d'utilisation avancee des scripts
 ========================

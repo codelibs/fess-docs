@@ -52,21 +52,6 @@ Por defecto, solo se devuelven campos básicos, pero puede especificar campos ad
 
 Al especificar múltiples campos, enumérelos separados por comas.
 
-Configuración del Tiempo de Espera del Scroll
-----------------------------------------------
-
-Puede configurar el período de validez del contexto de scroll.
-El valor predeterminado es 1 minuto.
-
-::
-
-    api.search.scroll.timeout=1m
-
-Unidades:
-- ``s``: segundos
-- ``m``: minutos
-- ``h``: horas
-
 Método de Uso
 =============
 
@@ -77,7 +62,7 @@ Para acceder a la búsqueda scroll, utilice la siguiente URL.
 
 ::
 
-    http://localhost:8080/json/scroll?q=palabra_clave_búsqueda
+    http://localhost:8080/api/v1/documents/all?q=palabra_clave_búsqueda
 
 Los resultados de búsqueda se devuelven en formato NDJSON (Newline Delimited JSON).
 Cada línea representa un documento en formato JSON.
@@ -86,7 +71,7 @@ Cada línea representa un documento en formato JSON.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Parámetros de Solicitud
 -----------------------
@@ -117,19 +102,19 @@ Puede especificar consultas de búsqueda de la misma manera que en las búsqueda
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=motor_búsqueda"
+    curl "http://localhost:8080/api/v1/documents/all?q=motor_búsqueda"
 
 **Ejemplo: Búsqueda con campo especificado**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **Ejemplo: Obtención completa (sin condiciones de búsqueda)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 Especificación del Número de Registros a Obtener
 -------------------------------------------------
@@ -138,7 +123,7 @@ Puede cambiar el número de registros a obtener en cada scroll.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    Si el parámetro ``size`` es demasiado grande, aumentará el uso de memoria.
@@ -151,7 +136,7 @@ Puede obtener solo los documentos que pertenecen a una etiqueta específica.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 Cuando se Requiere Autenticación
 ---------------------------------
@@ -160,14 +145,14 @@ Si utiliza búsqueda basada en roles, necesita incluir información de autentica
 
 ::
 
-    curl -u usuario:contraseña "http://localhost:8080/json/scroll?q=Fess"
+    curl -u usuario:contraseña "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 O, utilizando un token de API:
 
 ::
 
     curl -H "Authorization: Bearer SU_TOKEN_API" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Formato de Respuesta
 ====================
@@ -211,7 +196,7 @@ Ejemplo de Procesamiento en Python
     import json
 
     # Ejecutar búsqueda scroll
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -234,7 +219,7 @@ Ejemplo de cómo guardar los resultados de búsqueda en un archivo:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 Conversión a CSV
 ----------------
@@ -243,7 +228,7 @@ Ejemplo de conversión a CSV utilizando el comando jq:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 Análisis de Datos
@@ -309,7 +294,7 @@ Al procesar grandes volúmenes de datos, utilice procesamiento en streaming para
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # Procesar en streaming
@@ -358,8 +343,7 @@ La Búsqueda Scroll No Está Disponible
 Se Produce un Error de Tiempo de Espera
 ----------------------------------------
 
-1. Aumente el valor de ``api.search.scroll.timeout``.
-2. Reduzca el parámetro ``size`` para distribuir el procesamiento.
+1. Reduzca el parámetro ``size`` para distribuir el procesamiento.
 3. Refine las condiciones de búsqueda para reducir la cantidad de datos obtenidos.
 
 Error de Memoria Insuficiente

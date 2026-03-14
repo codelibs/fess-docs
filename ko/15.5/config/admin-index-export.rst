@@ -40,7 +40,7 @@
      - 기본값
      - 설명
    * - ``index.export.path``
-     - ``/var/fess/export``
+     - ``/var/lib/fess/export``
      - 내보낸 파일이 저장되는 디렉토리
    * - ``index.export.exclude.fields``
      - ``cache``
@@ -92,7 +92,7 @@ cron 표현식 예:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "created:>=now-7d"
@@ -102,7 +102,7 @@ cron 표현식 예:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "url:*example.com*"
@@ -117,7 +117,7 @@ cron 표현식 예:
 
 ::
 
-    /var/fess/export/
+    /var/lib/fess/export/
     └── example.com/
         └── docs/
             └── guide/
@@ -194,7 +194,7 @@ cron 표현식 예:
 파일에 액세스할 수 없음
 -----------------------
 
-1. 파일 권한 확인: ``ls -la /var/fess/export``
+1. 파일 권한 확인: ``ls -la /var/lib/fess/export``
 2. 디렉토리 소유자가 |Fess| 프로세스 사용자와 일치하는지 확인
 3. SELinux 또는 AppArmor 정책이 액세스를 허용하는지 확인
 

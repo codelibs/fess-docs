@@ -474,15 +474,6 @@ User-Agent の設定
 
     client.userAgent=MyCompanyCrawler/1.0
 
-システム全体の設定
-------------------
-
-``fess_config.properties`` で設定:
-
-::
-
-    crawler.user.agent=MyCompanyCrawler/1.0
-
 エンコーディング設定
 ====================
 
@@ -502,7 +493,7 @@ User-Agent の設定
 
 ::
 
-    crawler.document.file.name.encoding=UTF-8
+    crawler.document.file.name.encoding=
 
 クロールのトラブルシューティング
 ================================

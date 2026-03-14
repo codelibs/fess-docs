@@ -66,31 +66,31 @@ CSV连接器提供从CSV文件获取数据并注册到
 
 ::
 
-    file_path=/path/to/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 HTTP文件:
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 多个文件:
 
 ::
 
-    file_path=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 参数列表
 ~~~~~~~~~~~~~~~~
@@ -102,19 +102,19 @@ HTTP文件:
    * - 参数
      - 必需
      - 说明
-   * - ``file_path``
+   * - ``files``
      - 是
      - CSV文件路径（本地、HTTP，可指定多个：逗号分隔）
-   * - ``encoding``
+   * - ``file_encoding``
      - 否
      - 字符编码（默认: UTF-8）
-   * - ``has_header``
+   * - ``has_header_line``
      - 否
      - 是否有标题行（默认: true）
-   * - ``separator``
+   * - ``separator_character``
      - 否
      - 分隔符（默认: 逗号 ``,``）
-   * - ``quote``
+   * - ``quote_character``
      - 否
      - 引号（默认: 双引号 ``"``）
 
@@ -135,16 +135,16 @@ HTTP文件:
 
 ::
 
-    url="https://example.com/product/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/product/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 可用字段
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<列名>`` - 标题行的列名（has_header=true 时）
-- ``data.col<N>`` - 列索引（has_header=false 时，从0开始）
+- ``data.<列名>`` - 标题行的列名（has_header_line=true 时）
+- ``data.cell<N>`` - 列索引（has_header_line=false 时，从0开始）
 
 CSV格式详情
 =============
@@ -167,14 +167,14 @@ CSV格式详情
 ::
 
     # 参数
-    separator=\t
+    separator_character=\t
 
 分号分隔:
 
 ::
 
     # 参数
-    separator=;
+    separator_character=;
 
 自定义引号
 --------------
@@ -184,7 +184,7 @@ CSV格式详情
 ::
 
     # 参数
-    quote='
+    quote_character='
 
 编码
 ----------------
@@ -193,13 +193,13 @@ CSV格式详情
 
 ::
 
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
 日语文件（EUC-JP）:
 
 ::
 
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
 使用示例
 ======
@@ -220,11 +220,11 @@ CSV文件（products.csv）:
 
 ::
 
-    file_path=/var/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 脚本:
 
@@ -263,11 +263,11 @@ CSV文件（employees.csv）:
 
 ::
 
-    file_path=/var/data/employees.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/employees.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 脚本:
 
@@ -293,20 +293,20 @@ CSV文件（data.csv）:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=false
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=false
+    separator_character=,
+    quote_character="
 
 脚本:
 
 ::
 
-    url="https://example.com/item/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/item/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 多CSV文件整合
 ---------------------
@@ -315,11 +315,11 @@ CSV文件（data.csv）:
 
 ::
 
-    file_path=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 脚本:
 
@@ -329,27 +329,6 @@ CSV文件（data.csv）:
     title=data.title
     content=data.content
     timestamp=data.date
-
-从HTTP获取CSV
------------------
-
-参数:
-
-::
-
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
-
-脚本:
-
-::
-
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
 
 制表符分隔（TSV）文件
 -------------------------
@@ -366,11 +345,11 @@ TSV文件（data.tsv）:
 
 ::
 
-    file_path=/var/data/data.tsv
-    encoding=UTF-8
-    has_header=true
-    separator=\t
-    quote="
+    files=/var/data/data.tsv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=\t
+    quote_character="
 
 脚本:
 
@@ -408,16 +387,16 @@ TSV文件（data.tsv）:
 ::
 
     # UTF-8
-    encoding=UTF-8
+    file_encoding=UTF-8
 
     # Shift_JIS
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
     # EUC-JP
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
     # Windows标准（CP932）
-    encoding=Windows-31J
+    file_encoding=Windows-31J
 
 确认文件编码:
 
@@ -439,13 +418,13 @@ TSV文件（data.tsv）:
    ::
 
        # 逗号
-       separator=,
+       separator_character=,
 
        # 制表符
-       separator=\t
+       separator_character=\t
 
        # 分号
-       separator=;
+       separator_character=;
 
 2. 确认引号设置
 3. 确认CSV文件格式（是否符合RFC 4180）
@@ -461,13 +440,13 @@ TSV文件（data.tsv）:
 
 ::
 
-    has_header=true
+    has_header_line=true
 
 无标题行时:
 
 ::
 
-    has_header=false
+    has_header_line=false
 
 无法获取数据
 --------------------
@@ -478,7 +457,7 @@ TSV文件（data.tsv）:
 
 1. 确认CSV文件是否为空
 2. 确认脚本设置是否正确
-3. 确认列名是否正确（has_header=true 时）
+3. 确认列名是否正确（has_header_line=true 时）
 4. 在日志中确认错误信息
 
 大型CSV文件
@@ -510,11 +489,11 @@ RFC 4180格式中，可以通过引号包裹来处理包含换行符的字段:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 脚本的高级使用示例
 ========================

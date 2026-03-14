@@ -162,13 +162,13 @@
 
 ::
 
-    <Logger name="org.codelibs.fess" level="warn"/>
+    <Logger name="org.codelibs" level="warn"/>
 
 **예: DEBUG 레벨로 변경**
 
 ::
 
-    <Logger name="org.codelibs.fess" level="debug"/>
+    <Logger name="org.codelibs" level="debug"/>
 
 **예: 특정 패키지의 로그 레벨 변경**
 
@@ -189,7 +189,7 @@
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dlog.level=debug"
+    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
 
 크롤러 로그 설정
 ====================
@@ -225,15 +225,6 @@
         logLevel("DEBUG")
     }
 
-크롤러 프로세스 전체의 로그 레벨 변경
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``fess_config.properties`` 에서 설정:
-
-::
-
-    logging.level.org.codelibs.fess.crawler=DEBUG
-
 로그 로테이션
 ==================
 
@@ -250,19 +241,19 @@ Log4j2를 통한 자동 로테이션
 기본 설정
 ~~~~~~~~~~~~~~~~
 
-- **파일 크기**: 10MB를 초과하면 로테이션
+- **파일 크기**: 100MB를 초과하면 로테이션
 - **보존 세대 수**: 최대 10개 파일
 
 설정 파일 예(``log4j2.xml``):
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>
@@ -274,10 +265,10 @@ Log4j2를 통한 자동 로테이션
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -291,10 +282,10 @@ Log4j2를 통한 자동 로테이션
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -440,15 +431,14 @@ tail 명령으로 실시간 모니터링:
 
 ::
 
-    %d{ISO8601} [%t] %-5p %c - %m%n
+    %d [%t] %-5p %msg%n
 
 각 요소의 설명:
 
-- ``%d{ISO8601}``: 타임스탬프(ISO8601 형식)
+- ``%d``: 타임스탬프
 - ``[%t]``: 스레드 이름
 - ``%-5p``: 로그 레벨(5자 너비, 왼쪽 정렬)
-- ``%c``: 로거 이름(패키지 이름)
-- ``%m``: 메시지
+- ``%msg``: 메시지
 - ``%n``: 줄 바꿈
 
 사용자 정의 형식 예
@@ -499,7 +489,7 @@ JSON 형식으로 로그 출력
    ::
 
        <Async name="AsyncFile">
-           <AppenderRef ref="FessFile"/>
+           <AppenderRef ref="AppFile"/>
        </Async>
 
 4. **적절한 디스크 용량 확보**
@@ -604,7 +594,7 @@ JSON 형식으로 로그 출력
 
    ::
 
-       grep "org.codelibs.fess" /etc/fess/log4j2.xml
+       grep "org.codelibs" /etc/fess/log4j2.xml
 
 2. **로그 파일 경로 확인**
 
@@ -641,7 +631,7 @@ JSON 형식으로 로그 출력
 
    ::
 
-       <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n" charset="UTF-8"/>
+       <PatternLayout pattern="%d [%t] %-5p %msg%n" charset="UTF-8"/>
 
 2. **환경 변수 설정**
 

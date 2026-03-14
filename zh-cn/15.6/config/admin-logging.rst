@@ -162,13 +162,13 @@
 
 ::
 
-    <Logger name="org.codelibs.fess" level="warn"/>
+    <Logger name="org.codelibs" level="warn"/>
 
 **示例: 更改为DEBUG级别**
 
 ::
 
-    <Logger name="org.codelibs.fess" level="debug"/>
+    <Logger name="org.codelibs" level="debug"/>
 
 **示例: 更改特定包的日志级别**
 
@@ -189,7 +189,7 @@
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dlog.level=debug"
+    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
 
 爬虫日志配置
 ====================
@@ -225,15 +225,6 @@
         logLevel("DEBUG")
     }
 
-更改整个爬虫进程的日志级别
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-在 ``fess_config.properties`` 中配置:
-
-::
-
-    logging.level.org.codelibs.fess.crawler=DEBUG
-
 日志轮转
 ==================
 
@@ -250,19 +241,19 @@ Log4j2 自动轮转
 默认配置
 ~~~~~~~~~~~~~~~~
 
-- **文件大小**: 超过 10MB 时轮转
+- **文件大小**: 超过 100MB 时轮转
 - **保留世代数**: 最多10个文件
 
 配置文件示例(``log4j2.xml``):
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>
@@ -274,10 +265,10 @@ Log4j2 自动轮转
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -291,10 +282,10 @@ Log4j2 自动轮转
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -440,7 +431,7 @@ logrotate 轮转
 
 ::
 
-    %d{ISO8601} [%t] %-5p %c - %m%n
+    %d [%t] %-5p %msg%n
 
 各元素说明:
 
@@ -499,7 +490,7 @@ JSON格式输出日志
    ::
 
        <Async name="AsyncFile">
-           <AppenderRef ref="FessFile"/>
+           <AppenderRef ref="AppFile"/>
        </Async>
 
 4. **确保适当的磁盘容量**
@@ -604,7 +595,7 @@ JSON格式输出日志
 
    ::
 
-       grep "org.codelibs.fess" /etc/fess/log4j2.xml
+       grep "org.codelibs" /etc/fess/log4j2.xml
 
 2. **确认日志文件路径**
 
@@ -641,7 +632,7 @@ JSON格式输出日志
 
    ::
 
-       <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n" charset="UTF-8"/>
+       <PatternLayout pattern="%d [%t] %-5p %msg%n" charset="UTF-8"/>
 
 2. **环境变量配置**
 

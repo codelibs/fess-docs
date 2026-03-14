@@ -162,13 +162,13 @@ Basic Configuration Examples
 
 ::
 
-    <Logger name="org.codelibs.fess" level="warn"/>
+    <Logger name="org.codelibs" level="warn"/>
 
 **Example: Change to DEBUG level**
 
 ::
 
-    <Logger name="org.codelibs.fess" level="debug"/>
+    <Logger name="org.codelibs" level="debug"/>
 
 **Example: Change log level for specific package**
 
@@ -189,7 +189,7 @@ You can also specify log level at system startup.
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dlog.level=debug"
+    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
 
 Crawler Log Configuration
 ==========================
@@ -225,15 +225,6 @@ Change Log Level for Specific URL Patterns Only
         logLevel("DEBUG")
     }
 
-Change Log Level for Entire Crawler Process
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Configure in ``fess_config.properties``:
-
-::
-
-    logging.level.org.codelibs.fess.crawler=DEBUG
-
 Log Rotation
 ============
 
@@ -250,19 +241,19 @@ Automatic Rotation with Log4j2
 Default Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-- **File Size**: Rotate when exceeding 10MB
+- **File Size**: Rotate when exceeding 100MB
 - **Generations to Keep**: Maximum 10 files
 
 Configuration file example (``log4j2.xml``):
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>
@@ -274,10 +265,10 @@ For daily rotation instead of size-based:
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -291,10 +282,10 @@ For automatic compression during rotation:
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -440,15 +431,14 @@ Default Format
 
 ::
 
-    %d{ISO8601} [%t] %-5p %c - %m%n
+    %d [%t] %-5p %msg%n
 
 Explanation of each element:
 
-- ``%d{ISO8601}``: Timestamp (ISO8601 format)
+- ``%d``: Timestamp
 - ``[%t]``: Thread name
 - ``%-5p``: Log level (5 character width, left-aligned)
-- ``%c``: Logger name (package name)
-- ``%m``: Message
+- ``%msg``: Message
 - ``%n``: Newline
 
 Custom Format Examples
@@ -499,7 +489,7 @@ Best Practices
    ::
 
        <Async name="AsyncFile">
-           <AppenderRef ref="FessFile"/>
+           <AppenderRef ref="AppFile"/>
        </Async>
 
 4. **Ensure adequate disk space**
@@ -641,7 +631,7 @@ Logs Have Character Encoding Issues
 
    ::
 
-       <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n" charset="UTF-8"/>
+       <PatternLayout pattern="%d [%t] %-5p %msg%n" charset="UTF-8"/>
 
 2. **Environment Variable Configuration**
 

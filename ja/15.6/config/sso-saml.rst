@@ -290,7 +290,7 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
      - ``true``
    * - ``saml.security.signature_algorithm``
      - 署名アルゴリズム
-     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha1``
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.sp.nameidformat``
      - NameIDフォーマット
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
@@ -380,7 +380,7 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
 
 ::
 
-    saml.security.debug=true
+    saml.debug=true
 
 また、|Fess| のログレベルを調整することで、SAML関連の詳細なログを出力できます。
 

@@ -8,7 +8,7 @@ Descripcion General
 El conector de base de datos proporciona funcionalidad para obtener datos de bases de datos
 relacionales compatibles con JDBC y registrarlos en el indice de |Fess|.
 
-Esta funcionalidad esta incorporada en |Fess| y no requiere plugins adicionales.
+Esta funcionalidad requiere el plugin ``fess-ds-db``.
 
 Bases de Datos Compatibles
 ==========================
@@ -110,7 +110,7 @@ Lista de Parametros
    * - ``sql``
      - Si
      - Consulta SQL para obtener datos
-   * - ``fetch.size``
+   * - ``fetch_size``
      - No
      - Tamano de obtencion (predeterminado: 100)
 

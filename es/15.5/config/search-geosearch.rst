@@ -144,12 +144,7 @@ La búsqueda por geolocalización también se puede utilizar con la API JSON.
 
 ::
 
-    curl -X POST "http://localhost:8080/json/?q=hotel" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "geo.location.point": "35.681236,139.767125",
-        "geo.location.distance": "5km"
-      }'
+    curl -X GET "http://localhost:8080/json/?q=hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Personalización del Nombre del Campo
 =====================================
@@ -231,7 +226,7 @@ Optimización de la Configuración del Índice
 
 Al manejar grandes cantidades de datos de ubicación, optimice la configuración del índice.
 
-Verifique la configuración del campo de información de ubicación en ``app/WEB-INF/classes/fess_indices/fess.json``.
+Verifique la configuración del campo de información de ubicación en ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

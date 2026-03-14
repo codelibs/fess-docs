@@ -40,7 +40,7 @@ Configurez la fonction d'exportation d'index dans ``fess_config.properties`` :
      - Valeur par défaut
      - Description
    * - ``index.export.path``
-     - ``/var/fess/export``
+     - ``/var/lib/fess/export``
      - Répertoire où les fichiers exportés sont stockés
    * - ``index.export.exclude.fields``
      - ``cache``
@@ -92,7 +92,7 @@ Exemple de script avec filtre de date :
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "created:>=now-7d"
@@ -102,7 +102,7 @@ Exemple de script avec filtre de site :
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "url:*example.com*"
@@ -117,7 +117,7 @@ Par exemple, un document avec l'URL ``https://example.com/docs/guide/intro.html`
 
 ::
 
-    /var/fess/export/
+    /var/lib/fess/export/
     └── example.com/
         └── docs/
             └── guide/
@@ -194,7 +194,7 @@ L'exportation échoue en cours de route
 Fichiers non accessibles
 ------------------------
 
-1. Vérifiez les permissions des fichiers : ``ls -la /var/fess/export``
+1. Vérifiez les permissions des fichiers : ``ls -la /var/lib/fess/export``
 2. Vérifiez que le propriétaire du répertoire correspond à l'utilisateur du processus |Fess|
 3. Confirmez que les politiques SELinux ou AppArmor autorisent l'accès
 

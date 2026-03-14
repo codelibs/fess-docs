@@ -54,21 +54,6 @@ By default, only basic fields are returned, but you can specify additional field
 
 When specifying multiple fields, list them separated by commas.
 
-Scroll Timeout Configuration
------------------------------
-
-You can configure the lifespan of scroll contexts.
-The default is 1 minute.
-
-::
-
-    api.search.scroll.timeout=1m
-
-Units:
-- ``s``: seconds
-- ``m``: minutes
-- ``h``: hours
-
 Usage
 =====
 
@@ -79,7 +64,7 @@ Access scroll search using the following URL:
 
 ::
 
-    http://localhost:8080/json/scroll?q=search keyword
+    http://localhost:8080/api/v1/documents/all?q=search keyword
 
 Search results are returned in NDJSON (Newline Delimited JSON) format.
 Each line outputs one document in JSON format.
@@ -88,7 +73,7 @@ Each line outputs one document in JSON format.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Request Parameters
 ------------------
@@ -119,19 +104,19 @@ You can specify search queries just like normal searches.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=search engine"
+    curl "http://localhost:8080/api/v1/documents/all?q=search engine"
 
 **Example: Field-specific search**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **Example: Retrieve all (no search conditions)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 Specifying Retrieval Count
 ---------------------------
@@ -140,7 +125,7 @@ You can change the number of items retrieved per scroll.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    Setting the ``size`` parameter too large increases memory usage.
@@ -153,7 +138,7 @@ You can retrieve only documents belonging to a specific label.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 When Authentication is Required
 --------------------------------
@@ -162,14 +147,14 @@ When using role-based search, you need to include authentication information.
 
 ::
 
-    curl -u username:password "http://localhost:8080/json/scroll?q=Fess"
+    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Or use an API token:
 
 ::
 
     curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Response Format
 ===============
@@ -213,7 +198,7 @@ Python Processing Example
     import json
 
     # Execute scroll search
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -236,7 +221,7 @@ Example of saving search results to a file:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 Converting to CSV
 -----------------
@@ -245,7 +230,7 @@ Example of converting to CSV using jq command:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 Data Analysis
@@ -311,7 +296,7 @@ When processing large amounts of data, use streaming processing to reduce memory
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # Process with streaming
@@ -360,9 +345,8 @@ Cannot Use Scroll Search
 Timeout Errors Occur
 --------------------
 
-1. Increase the value of ``api.search.scroll.timeout``.
-2. Reduce the ``size`` parameter to distribute processing.
-3. Narrow search conditions to reduce amount of retrieved data.
+1. Reduce the ``size`` parameter to distribute processing.
+2. Narrow search conditions to reduce amount of retrieved data.
 
 Out of Memory Errors
 --------------------

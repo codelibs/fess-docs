@@ -41,7 +41,7 @@ Stockage cloud
      - fess-ds-gsuite
      - Exploration de Google Drive, Gmail, etc.
    * - :doc:`ds-microsoft365`
-     - fess-ds-office365
+     - fess-ds-microsoft365
      - Exploration de OneDrive, SharePoint, etc.
 
 Outils de collaboration
@@ -92,7 +92,7 @@ Bases de donnees et fichiers
      - Plugin
      - Description
    * - :doc:`ds-database`
-     - (integre)
+     - fess-ds-db
      - Recuperation de donnees depuis les bases de donnees compatibles JDBC
    * - :doc:`ds-csv`
      - fess-ds-csv

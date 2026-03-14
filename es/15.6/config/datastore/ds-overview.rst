@@ -41,7 +41,7 @@ Almacenamiento en la Nube
      - fess-ds-gsuite
      - Rastrea Google Drive, Gmail, etc.
    * - :doc:`ds-microsoft365`
-     - fess-ds-office365
+     - fess-ds-microsoft365
      - Rastrea OneDrive, SharePoint, etc.
 
 Herramientas de Colaboracion
@@ -92,7 +92,7 @@ Bases de Datos y Archivos
      - Plugin
      - Descripcion
    * - :doc:`ds-database`
-     - (incorporado)
+     - fess-ds-db
      - Obtiene datos de bases de datos compatibles con JDBC
    * - :doc:`ds-csv`
      - fess-ds-csv

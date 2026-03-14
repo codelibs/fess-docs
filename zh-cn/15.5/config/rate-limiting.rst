@@ -22,7 +22,7 @@ HTTP请求的速率限制
 设置
 ----
 
-``app/WEB-INF/conf/fess_config.properties``:
+``app/WEB-INF/classes/fess_config.properties``:
 
 ::
 
@@ -95,7 +95,7 @@ Web爬取设置
 速率限制的全部配置项
 ======================
 
-``app/WEB-INF/conf/fess_config.properties`` 中可配置的所有属性。
+``app/WEB-INF/classes/fess_config.properties`` 中可配置的所有属性。
 
 .. list-table::
    :header-rows: 1

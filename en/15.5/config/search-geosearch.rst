@@ -143,12 +143,7 @@ Geolocation search can also be used with the JSON API.
 
 ::
 
-    curl -X POST "http://localhost:8080/json/?q=hotel" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "geo.location.point": "35.681236,139.767125",
-        "geo.location.distance": "5km"
-      }'
+    curl "http://localhost:8080/json/?q=hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Field Name Customization
 ========================
@@ -230,7 +225,7 @@ Index Configuration Optimization
 
 When handling large amounts of location data, optimize index configuration.
 
-Check location field settings in ``app/WEB-INF/classes/fess_indices/fess.json``.
+Check location field settings in ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

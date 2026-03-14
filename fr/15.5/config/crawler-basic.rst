@@ -474,14 +474,6 @@ Ajoutez aux « Paramètres de configuration » de la configuration d'indexation 
 
     client.userAgent=MyCompanyCrawler/1.0
 
-Configuration à l'échelle du système
-------------------
-
-Configurez dans ``fess_config.properties`` :
-
-::
-
-    crawler.user.agent=MyCompanyCrawler/1.0
 
 Configuration de l'encodage
 ====================
@@ -493,7 +485,7 @@ Configurez dans ``fess_config.properties`` :
 
 ::
 
-    crawler.crawling.data.encoding=UTF-8
+    crawler.crawling.data.encoding=
 
 Encodage des noms de fichiers
 ----------------------------

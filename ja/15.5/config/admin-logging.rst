@@ -162,13 +162,13 @@
 
 ::
 
-    <Logger name="org.codelibs.fess" level="warn"/>
+    <Logger name="org.codelibs" level="warn"/>
 
 **例: DEBUGレベルに変更**
 
 ::
 
-    <Logger name="org.codelibs.fess" level="debug"/>
+    <Logger name="org.codelibs" level="debug"/>
 
 **例: 特定のパッケージのログレベル変更**
 
@@ -189,7 +189,7 @@
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dlog.level=debug"
+    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
 
 クローラーログの設定
 ====================
@@ -225,15 +225,6 @@
         logLevel("DEBUG")
     }
 
-クローラープロセス全体のログレベル変更
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``fess_config.properties`` で設定:
-
-::
-
-    logging.level.org.codelibs.fess.crawler=DEBUG
-
 ログローテーション
 ==================
 
@@ -250,19 +241,19 @@ Log4j2による自動ローテーション
 デフォルトの設定
 ~~~~~~~~~~~~~~~~
 
-- **ファイルサイズ**: 10MB を超えたらローテーション
+- **ファイルサイズ**: 100MB を超えたらローテーション
 - **保持世代数**: 最大10ファイル
 
 設定ファイルの例(``log4j2.xml``):
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>
@@ -274,10 +265,10 @@ Log4j2による自動ローテーション
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -291,10 +282,10 @@ Log4j2による自動ローテーション
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -440,15 +431,14 @@ tailコマンドでリアルタイム監視:
 
 ::
 
-    %d{ISO8601} [%t] %-5p %c - %m%n
+    %d [%t] %-5p %msg%n
 
 各要素の説明:
 
-- ``%d{ISO8601}``: タイムスタンプ(ISO8601形式)
+- ``%d``: タイムスタンプ
 - ``[%t]``: スレッド名
 - ``%-5p``: ログレベル(5文字幅、左寄せ)
-- ``%c``: ロガー名(パッケージ名)
-- ``%m``: メッセージ
+- ``%msg``: メッセージ
 - ``%n``: 改行
 
 カスタムフォーマット例
@@ -468,7 +458,7 @@ JSON形式でログ出力
 
 ::
 
-    <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c{1.} [%F:%L] - %m%n"/>
+    <PatternLayout pattern="%d [%t] %-5p %c{1.} [%F:%L] - %msg%n"/>
 
 追加される情報:
 
@@ -499,7 +489,7 @@ JSON形式でログ出力
    ::
 
        <Async name="AsyncFile">
-           <AppenderRef ref="FessFile"/>
+           <AppenderRef ref="AppFile"/>
        </Async>
 
 4. **適切なディスク容量の確保**
@@ -641,7 +631,7 @@ JSON形式でログ出力
 
    ::
 
-       <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n" charset="UTF-8"/>
+       <PatternLayout pattern="%d [%t] %-5p %msg%n" charset="UTF-8"/>
 
 2. **環境変数の設定**
 

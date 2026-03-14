@@ -22,7 +22,7 @@ Cette limitation s'applique a toutes les requetes HTTP, y compris l'API de reche
 Configuration
 ----
 
-``app/WEB-INF/conf/fess_config.properties`` :
+``app/WEB-INF/classes/fess_config.properties`` :
 
 ::
 
@@ -95,7 +95,7 @@ Respect de robots.txt
 Liste complete des proprietes de limitation de debit
 ======================
 
-Toutes les proprietes configurables dans ``app/WEB-INF/conf/fess_config.properties``.
+Toutes les proprietes configurables dans ``app/WEB-INF/classes/fess_config.properties``.
 
 .. list-table::
    :header-rows: 1

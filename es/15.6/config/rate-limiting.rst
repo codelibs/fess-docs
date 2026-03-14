@@ -22,7 +22,7 @@ Esta limitacion se aplica a todas las solicitudes HTTP, incluyendo la API de bus
 Configuracion
 -------------
 
-``app/WEB-INF/conf/fess_config.properties``:
+``app/WEB-INF/classes/fess_config.properties``:
 
 ::
 
@@ -95,7 +95,7 @@ Respeto de robots.txt
 Todas las opciones de configuracion de limite de tasa
 =====================================================
 
-Todas las propiedades configurables en ``app/WEB-INF/conf/fess_config.properties``.
+Todas las propiedades configurables en ``app/WEB-INF/classes/fess_config.properties``.
 
 .. list-table::
    :header-rows: 1

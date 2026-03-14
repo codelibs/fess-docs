@@ -32,7 +32,7 @@ https://search.n2sm.co.jp/ 의 URL은 구축한 |Fess| 서버의 URL로 변경�
 
 ::
 
-    <script type="text/javascript" src="https://search.n2sm.co.jp/js/jquery-3.6.3.min.js"></script>
+    <script type="text/javascript" src="https://search.n2sm.co.jp/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="https://search.n2sm.co.jp/js/suggestor.js"></script>
     <script>
     $(function() {

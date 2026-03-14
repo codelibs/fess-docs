@@ -66,31 +66,31 @@ Local file:
 
 ::
 
-    file_path=/path/to/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 HTTP file:
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Multiple files:
 
 ::
 
-    file_path=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Parameter List
 ~~~~~~~~~~~~~~
@@ -102,19 +102,19 @@ Parameter List
    * - Parameter
      - Required
      - Description
-   * - ``file_path``
+   * - ``files``
      - Yes
      - CSV file path (local, HTTP, multiple separated by comma)
-   * - ``encoding``
+   * - ``file_encoding``
      - No
      - Character encoding (default: UTF-8)
-   * - ``has_header``
+   * - ``has_header_line``
      - No
      - Whether header row exists (default: true)
-   * - ``separator``
+   * - ``separator_character``
      - No
      - Separator character (default: comma ``,``)
-   * - ``quote``
+   * - ``quote_character``
      - No
      - Quote character (default: double quote ``"``)
 
@@ -135,16 +135,16 @@ Without header row (column index):
 
 ::
 
-    url="https://example.com/product/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/product/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Available Fields
 ~~~~~~~~~~~~~~~~
 
-- ``data.<column_name>`` - Header row column name (when has_header=true)
-- ``data.col<N>`` - Column index (when has_header=false, 0-based)
+- ``data.<column_name>`` - Header row column name (when has_header_line=true)
+- ``data.cell<N>`` - Column index (when has_header_line=false, 0-based)
 
 CSV Format Details
 ==================
@@ -167,14 +167,14 @@ Tab-separated (TSV):
 ::
 
     # Parameter
-    separator=\t
+    separator_character=\t
 
 Semicolon-separated:
 
 ::
 
     # Parameter
-    separator=;
+    separator_character=;
 
 Custom Quote Character
 ----------------------
@@ -184,7 +184,7 @@ Single quote:
 ::
 
     # Parameter
-    quote='
+    quote_character='
 
 Encoding
 --------
@@ -193,13 +193,13 @@ Japanese file (Shift_JIS):
 
 ::
 
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
 Japanese file (EUC-JP):
 
 ::
 
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
 Usage Examples
 ==============
@@ -220,11 +220,11 @@ Parameters:
 
 ::
 
-    file_path=/var/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -263,11 +263,11 @@ Parameters:
 
 ::
 
-    file_path=/var/data/employees.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/employees.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -293,20 +293,20 @@ Parameters:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=false
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=false
+    separator_character=,
+    quote_character="
 
 Script:
 
 ::
 
-    url="https://example.com/item/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/item/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Multiple CSV Files Integration
 ------------------------------
@@ -315,11 +315,11 @@ Parameters:
 
 ::
 
-    file_path=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -337,11 +337,11 @@ Parameters:
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -366,11 +366,11 @@ Parameters:
 
 ::
 
-    file_path=/var/data/data.tsv
-    encoding=UTF-8
-    has_header=true
-    separator=\t
-    quote="
+    files=/var/data/data.tsv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=\t
+    quote_character="
 
 Script:
 
@@ -408,16 +408,16 @@ Specify the correct character encoding:
 ::
 
     # UTF-8
-    encoding=UTF-8
+    file_encoding=UTF-8
 
     # Shift_JIS
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
     # EUC-JP
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
     # Windows standard (CP932)
-    encoding=Windows-31J
+    file_encoding=Windows-31J
 
 Check file encoding:
 
@@ -461,13 +461,13 @@ When header row exists:
 
 ::
 
-    has_header=true
+    has_header_line=true
 
 When header row does not exist:
 
 ::
 
-    has_header=false
+    has_header_line=false
 
 No Data Retrieved
 -----------------
@@ -478,7 +478,7 @@ No Data Retrieved
 
 1. Verify CSV file is not empty
 2. Verify script settings are correct
-3. Verify column names are correct (when has_header=true)
+3. Verify column names are correct (when has_header_line=true)
 4. Check logs for error messages
 
 Large CSV Files
@@ -510,11 +510,11 @@ Parameters:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Advanced Script Examples
 ========================

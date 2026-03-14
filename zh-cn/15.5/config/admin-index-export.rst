@@ -40,7 +40,7 @@
      - 默认值
      - 说明
    * - ``index.export.path``
-     - ``/var/fess/export``
+     - ``/var/lib/fess/export``
      - 导出文件存储目录
    * - ``index.export.exclude.fields``
      - ``cache``
@@ -92,7 +92,7 @@ cron 表达式示例：
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "created:>=now-7d"
@@ -102,7 +102,7 @@ cron 表达式示例：
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "url:*example.com*"
@@ -117,7 +117,7 @@ cron 表达式示例：
 
 ::
 
-    /var/fess/export/
+    /var/lib/fess/export/
     └── example.com/
         └── docs/
             └── guide/
@@ -194,7 +194,7 @@ cron 表达式示例：
 文件无法访问
 ------------
 
-1. 验证文件权限：``ls -la /var/fess/export``
+1. 验证文件权限：``ls -la /var/lib/fess/export``
 2. 检查目录所有者是否与 |Fess| 进程用户匹配
 3. 确认 SELinux 或 AppArmor 策略允许访问
 

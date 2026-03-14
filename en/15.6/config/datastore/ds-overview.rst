@@ -41,7 +41,7 @@ Cloud Storage
      - fess-ds-gsuite
      - Crawl Google Drive, Gmail, etc.
    * - :doc:`ds-microsoft365`
-     - fess-ds-office365
+     - fess-ds-microsoft365
      - Crawl OneDrive, SharePoint, etc.
 
 Collaboration Tools
@@ -92,7 +92,7 @@ Databases & Files
      - Plugin
      - Description
    * - :doc:`ds-database`
-     - (Built-in)
+     - fess-ds-db
      - Retrieve data from JDBC-compatible databases
    * - :doc:`ds-csv`
      - fess-ds-csv
