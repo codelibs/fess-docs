@@ -110,7 +110,7 @@ Parameter List
    * - ``sql``
      - Yes
      - SQL query for data retrieval
-   * - ``fetch.size``
+   * - ``fetch_size``
      - No
      - Fetch size (default: 100)
 

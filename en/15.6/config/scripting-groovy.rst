@@ -199,7 +199,7 @@ Execute Multiple Jobs Sequentially
     def results = []
 
     // Index optimization
-    results << container.getComponent("optimizeJob").execute()
+    results << container.getComponent("suggestJob").execute()
 
     // Execute crawl
     results << container.getComponent("crawlJob").execute()

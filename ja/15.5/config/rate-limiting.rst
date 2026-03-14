@@ -22,7 +22,7 @@ HTTPリクエストのレート制限
 設定
 ----
 
-``app/WEB-INF/conf/fess_config.properties``:
+``app/WEB-INF/classes/fess_config.properties``:
 
 ::
 
@@ -95,7 +95,7 @@ robots.txtの尊重
 レート制限の全設定項目
 ======================
 
-``app/WEB-INF/conf/fess_config.properties`` で設定可能なすべてのプロパティです。
+``app/WEB-INF/classes/fess_config.properties`` で設定可能なすべてのプロパティです。
 
 .. list-table::
    :header-rows: 1

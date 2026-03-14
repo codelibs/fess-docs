@@ -290,7 +290,7 @@ IdP侧配置
      - ``true``
    * - ``saml.security.signature_algorithm``
      - 签名算法
-     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha1``
+     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha256``
    * - ``saml.sp.nameidformat``
      - NameID格式
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
@@ -380,7 +380,7 @@ IdP侧配置
 
 ::
 
-    saml.security.debug=true
+    saml.debug=true
 
 您还可以调整|Fess|的日志级别以输出详细的SAML相关日志。
 

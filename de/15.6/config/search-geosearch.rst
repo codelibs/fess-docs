@@ -144,12 +144,7 @@ Standortsuche kann auch in JSON-API verwendet werden.
 
 ::
 
-    curl -X POST "http://localhost:8080/json/?q=Hotel" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "geo.location.point": "35.681236,139.767125",
-        "geo.location.distance": "5km"
-      }'
+    curl "http://localhost:8080/json/?q=Hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Anpassung von Feldnamen
 ==========================
@@ -231,7 +226,7 @@ Optimierung der Indexeinstellungen
 
 Bei Umgang mit großen Mengen an Standortdaten optimieren Sie Indexeinstellungen.
 
-Überprüfen Sie Standortfeld-Einstellungen in ``app/WEB-INF/classes/fess_indices/fess.json``.
+Überprüfen Sie Standortfeld-Einstellungen in ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

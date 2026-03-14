@@ -40,7 +40,7 @@ Configure the Index Export feature in ``fess_config.properties``:
      - Default Value
      - Description
    * - ``index.export.path``
-     - ``/var/fess/export``
+     - ``/var/lib/fess/export``
      - Directory where exported files are stored
    * - ``index.export.exclude.fields``
      - ``cache``
@@ -92,7 +92,7 @@ Example script with date filter:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "created:>=now-7d"
@@ -102,7 +102,7 @@ Example script with site filter:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "url:*example.com*"
@@ -117,7 +117,7 @@ For example, a document with URL ``https://example.com/docs/guide/intro.html`` w
 
 ::
 
-    /var/fess/export/
+    /var/lib/fess/export/
     └── example.com/
         └── docs/
             └── guide/
@@ -194,7 +194,7 @@ Export Fails Midway
 Files Not Accessible
 --------------------
 
-1. Verify file permissions: ``ls -la /var/fess/export``
+1. Verify file permissions: ``ls -la /var/lib/fess/export``
 2. Check directory ownership matches |Fess| process user
 3. Confirm SELinux or AppArmor policies allow access
 

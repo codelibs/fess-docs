@@ -24,9 +24,6 @@ Lenguajes de scripting compatibles
    * - Groovy
      - ``groovy``
      - Lenguaje de scripting predeterminado. Compatible con Java y proporciona funcionalidades potentes
-   * - JavaScript
-     - ``javascript``
-     - Lenguaje familiar para desarrolladores web
 
 .. note::
    Groovy es el mas ampliamente utilizado, y los ejemplos en esta documentacion estan escritos en Groovy.
@@ -131,9 +128,9 @@ Principales objetos disponibles dentro de los scripts:
      - Datos obtenidos del data store
    * - ``container``
      - Contenedor DI (acceso a componentes)
-   * - ``systemHelper``
+   * - ``container.getComponent("systemHelper")``
      - Helper del sistema
-   * - ``fessConfig``
+   * - ``container.getComponent("fessConfig")``
      - Configuracion de |Fess|
 
 Seguridad

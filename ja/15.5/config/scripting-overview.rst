@@ -24,12 +24,6 @@
    * - Groovy
      - ``groovy``
      - デフォルトのスクリプト言語。Java互換で強力な機能を提供
-   * - JavaScript
-     - ``javascript``
-     - Web開発者に馴染みのある言語
-
-.. note::
-   Groovyが最も広く使用されており、本ドキュメントの例はGroovyで記述しています。
 
 スクリプトの使用場面
 ====================
@@ -131,10 +125,10 @@ URLの正規化やパスの変換にスクリプトを使用できます。
      - データストアから取得したデータ
    * - ``container``
      - DIコンテナ（コンポーネントへのアクセス）
-   * - ``systemHelper``
-     - システムヘルパー
-   * - ``fessConfig``
-     - |Fess| の設定
+   * - ``container.getComponent("systemHelper")``
+     - システムヘルパー（containerから取得）
+   * - ``container.getComponent("fessConfig")``
+     - |Fess| の設定（containerから取得）
 
 セキュリティ
 ============

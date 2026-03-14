@@ -141,19 +141,19 @@ Automatische Rotation durch Log4j2
 Standardkonfiguration
 ~~~~~~~~~~~~~~~~
 
-- **Dateigröße**: Rotation bei über 10 MB
+- **Dateigröße**: Rotation bei über 100 MB
 - **Aufbewahrungsgenerationen**: Maximal 10 Dateien
 
 Beispiel für Konfigurationsdatei (``log4j2.xml``):
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>

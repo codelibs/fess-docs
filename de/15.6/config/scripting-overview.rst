@@ -24,9 +24,6 @@ Unterstuetzte Skriptsprachen
    * - Groovy
      - ``groovy``
      - Die Standard-Skriptsprache. Java-kompatibel mit leistungsstarken Funktionen
-   * - JavaScript
-     - ``javascript``
-     - Eine fuer Webentwickler vertraute Sprache
 
 .. note::
    Groovy wird am haeufigsten verwendet, und die Beispiele in dieser Dokumentation sind in Groovy geschrieben.
@@ -130,10 +127,10 @@ Hauptobjekte, die innerhalb von Skripten verfuegbar sind:
      - Aus dem Datenspeicher abgerufene Daten
    * - ``container``
      - DI-Container (Zugriff auf Komponenten)
-   * - ``systemHelper``
-     - System-Helfer
-   * - ``fessConfig``
-     - |Fess| Konfiguration
+   * - ``container.getComponent("systemHelper")``
+     - System-Helfer (Zugriff ueber Container)
+   * - ``container.getComponent("fessConfig")``
+     - |Fess| Konfiguration (Zugriff ueber Container)
 
 Sicherheit
 ==========

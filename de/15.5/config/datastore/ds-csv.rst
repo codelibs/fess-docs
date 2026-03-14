@@ -65,31 +65,21 @@ Lokale Datei:
 
 ::
 
-    file_path=/path/to/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
-
-HTTP-Datei:
-
-::
-
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Mehrere Dateien:
 
 ::
 
-    file_path=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data1.csv,/path/to/data2.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Parameterliste
 ~~~~~~~~~~~~~~
@@ -101,19 +91,19 @@ Parameterliste
    * - Parameter
      - Erforderlich
      - Beschreibung
-   * - ``file_path``
+   * - ``files``
      - Ja
      - Pfad zur CSV-Datei (lokal, HTTP, mehrere kommagetrennt)
-   * - ``encoding``
+   * - ``file_encoding``
      - Nein
      - Zeichenkodierung (Standard: UTF-8)
-   * - ``has_header``
+   * - ``has_header_line``
      - Nein
      - Vorhandensein einer Kopfzeile (Standard: true)
-   * - ``separator``
+   * - ``separator_character``
      - Nein
      - Trennzeichen (Standard: Komma ``,``)
-   * - ``quote``
+   * - ``quote_character``
      - Nein
      - Anführungszeichen (Standard: Doppeltes Anführungszeichen ``"``)
 
@@ -134,16 +124,16 @@ Ohne Kopfzeile (Spaltenindex):
 
 ::
 
-    url="https://example.com/product/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/product/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Verfügbare Felder
 ~~~~~~~~~~~~~~~~~
 
-- ``data.<Spaltenname>`` - Spaltenname der Kopfzeile (bei has_header=true)
-- ``data.col<N>`` - Spaltenindex (bei has_header=false, beginnend bei 0)
+- ``data.<Spaltenname>`` - Spaltenname der Kopfzeile (bei has_header_line=true)
+- ``data.cell<N>`` - Spaltenindex (bei has_header_line=false, beginnend bei 0)
 
 CSV-Format-Details
 ==================
@@ -166,14 +156,14 @@ Tab-getrennt (TSV):
 ::
 
     # Parameter
-    separator=\t
+    separator_character=\t
 
 Semikolon-getrennt:
 
 ::
 
     # Parameter
-    separator=;
+    separator_character=;
 
 Benutzerdefinierte Anführungszeichen
 ------------------------------------
@@ -183,7 +173,7 @@ Einfache Anführungszeichen:
 ::
 
     # Parameter
-    quote='
+    quote_character='
 
 Zeichenkodierung
 ----------------
@@ -192,13 +182,13 @@ Japanische Datei (Shift_JIS):
 
 ::
 
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
 Deutsche Datei (ISO-8859-1):
 
 ::
 
-    encoding=ISO-8859-1
+    file_encoding=ISO-8859-1
 
 Anwendungsbeispiele
 ===================
@@ -219,11 +209,11 @@ Parameter:
 
 ::
 
-    file_path=/var/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Skript:
 
@@ -262,11 +252,11 @@ Parameter:
 
 ::
 
-    file_path=/var/data/employees.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/employees.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Skript:
 
@@ -292,20 +282,20 @@ Parameter:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=false
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=false
+    separator_character=,
+    quote_character="
 
 Skript:
 
 ::
 
-    url="https://example.com/item/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/item/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Mehrere CSV-Dateien zusammenführen
 ----------------------------------
@@ -314,11 +304,11 @@ Parameter:
 
 ::
 
-    file_path=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Skript:
 
@@ -328,27 +318,6 @@ Skript:
     title=data.title
     content=data.content
     timestamp=data.date
-
-CSV über HTTP abrufen
----------------------
-
-Parameter:
-
-::
-
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
-
-Skript:
-
-::
-
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
 
 Tab-getrennte Datei (TSV)
 -------------------------
@@ -365,11 +334,11 @@ Parameter:
 
 ::
 
-    file_path=/var/data/data.tsv
-    encoding=UTF-8
-    has_header=true
-    separator=\t
-    quote="
+    files=/var/data/data.tsv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=\t
+    quote_character="
 
 Skript:
 
@@ -407,13 +376,13 @@ Geben Sie die richtige Zeichenkodierung an:
 ::
 
     # UTF-8
-    encoding=UTF-8
+    file_encoding=UTF-8
 
     # ISO-8859-1 (Westeuropäisch)
-    encoding=ISO-8859-1
+    file_encoding=ISO-8859-1
 
     # Windows-1252
-    encoding=Windows-1252
+    file_encoding=Windows-1252
 
 Zeichenkodierung der Datei ermitteln:
 
@@ -433,13 +402,13 @@ Spalten werden nicht korrekt erkannt
    ::
 
        # Komma
-       separator=,
+       separator_character=,
 
        # Tab
-       separator=\t
+       separator_character=\t
 
        # Semikolon
-       separator=;
+       separator_character=;
 
 2. Überprüfen Sie die Anführungszeichen-Einstellung
 3. Überprüfen Sie das CSV-Dateiformat (RFC 4180-konform?)
@@ -455,13 +424,13 @@ Bei vorhandener Kopfzeile:
 
 ::
 
-    has_header=true
+    has_header_line=true
 
 Ohne Kopfzeile:
 
 ::
 
-    has_header=false
+    has_header_line=false
 
 Keine Daten abrufbar
 --------------------
@@ -472,7 +441,7 @@ Keine Daten abrufbar
 
 1. Überprüfen Sie, ob die CSV-Datei nicht leer ist
 2. Überprüfen Sie die Skript-Einstellungen
-3. Überprüfen Sie die Spaltennamen (bei has_header=true)
+3. Überprüfen Sie die Spaltennamen (bei has_header_line=true)
 4. Überprüfen Sie die Logs auf Fehlermeldungen
 
 Große CSV-Dateien
@@ -504,11 +473,11 @@ Parameter:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Erweiterte Skript-Beispiele
 ===========================

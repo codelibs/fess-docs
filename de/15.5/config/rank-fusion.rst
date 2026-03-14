@@ -23,20 +23,7 @@ Hauptvorteile:
 Unterstützte Algorithmen
 =========================
 
-|Fess| unterstützt die folgenden Rank Fusion-Algorithmen:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - Algorithmus
-     - Beschreibung
-   * - RRF (Reciprocal Rank Fusion)
-     - Fusionsalgorithmus basierend auf dem Kehrwert der Rangposition
-   * - Score Fusion
-     - Fusion durch Score-Normalisierung und gewichteten Durchschnitt
-   * - Borda Count
-     - Abstimmungsbasierte Ranking-Fusion
+|Fess| unterstützt den RRF (Reciprocal Rank Fusion)-Algorithmus.
 
 RRF (Reciprocal Rank Fusion)
 ----------------------------
@@ -47,7 +34,7 @@ Formel::
 
     score(d) = Σ 1 / (k + rank(d))
 
-- ``k``: Konstanter Parameter (Standard: 60)
+- ``k``: Konstanter Parameter (Standard: 20)
 - ``rank(d)``: Rang des Dokuments d in jedem Suchergebnis
 
 Einstellungen
@@ -58,59 +45,23 @@ fess_config.properties
 
 Grundeinstellungen::
 
-    # Rank Fusion aktivieren
-    rank.fusion.enabled=true
+    # Fenstergröße (Anzahl der Ergebnisse für die Fusion)
+    rank.fusion.window_size=200
 
-    # Zu verwendender Algorithmus
-    rank.fusion.algorithm=rrf
+    # RRF rank_constant (k-Parameter)
+    rank.fusion.rank_constant=20
 
-    # RRF k-Parameter
-    rank.fusion.rrf.k=60
+    # Anzahl der Threads für parallele Verarbeitung (-1 ist Standard)
+    rank.fusion.threads=-1
 
-    # Suchtypen für die Fusion
-    rank.fusion.search.types=keyword,semantic
-
-Algorithmus-spezifische Einstellungen
---------------------------------------
-
-RRF-Einstellungen::
-
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-Score Fusion-Einstellungen::
-
-    rank.fusion.algorithm=score
-    rank.fusion.score.normalize=true
-    rank.fusion.score.weights=0.7,0.3
-
-Borda Count-Einstellungen::
-
-    rank.fusion.algorithm=borda
-    rank.fusion.borda.top_n=100
+    # Name des Score-Felds
+    rank.fusion.score_field=rf_score
 
 Integration mit Hybridsuche
 ============================
 
 Rank Fusion ist besonders effektiv bei der Hybridsuche, die Schlüsselwortsuche
 und semantische Suche kombiniert.
-
-Konfigurationsbeispiel
------------------------
-
-::
-
-    # Hybridsuche aktivieren
-    search.hybrid.enabled=true
-
-    # Ergebnisse von Schlüsselwortsuche und semantischer Suche fusionieren
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-    # Gewichtung für jeden Suchtyp
-    search.hybrid.keyword.weight=0.6
-    search.hybrid.semantic.weight=0.4
 
 Anwendungsbeispiele
 ====================
@@ -139,17 +90,6 @@ Suchablauf::
                       ↓
               Final Ranking
 
-Benutzerdefiniertes Scoring
-----------------------------
-
-Beispiel für die Kombination mehrerer Score-Faktoren::
-
-    # Basis-Suchscore + Datums-Boost + Popularität
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=score
-    rank.fusion.score.factors=relevance,recency,popularity
-    rank.fusion.score.weights=0.5,0.3,0.2
-
 Leistungsüberlegungen
 ======================
 
@@ -157,36 +97,23 @@ Speicherverbrauch
 ------------------
 
 - Der Speicherverbrauch steigt, da mehrere Suchergebnisse gehalten werden
-- Begrenzen Sie die maximale Anzahl der Fusionsziele mit ``rank.fusion.max.results``
+- Begrenzen Sie die maximale Anzahl der Fusionsziele mit ``rank.fusion.window_size``
 
 ::
 
-    # Maximale Ergebnisanzahl für die Fusion
-    rank.fusion.max.results=1000
+    # Fenstergröße für die Fusion
+    rank.fusion.window_size=200
 
 Verarbeitungszeit
 ------------------
 
 - Die Antwortzeit steigt, da mehrere Suchen ausgeführt werden
-- Erwägen Sie Optimierung durch parallele Ausführung
+- Setzen Sie die Anzahl der Threads für parallele Ausführung mit ``rank.fusion.threads``
 
 ::
 
-    # Parallele Ausführung aktivieren
-    rank.fusion.parallel=true
-    rank.fusion.thread.pool.size=4
-
-Cache
-------
-
-- Nutzen Sie Caching für häufige Abfragen
-
-::
-
-    # Cache für Rank Fusion-Ergebnisse
-    rank.fusion.cache.enabled=true
-    rank.fusion.cache.size=1000
-    rank.fusion.cache.expire=300
+    # Anzahl der Threads für parallele Ausführung (-1 ist Standard)
+    rank.fusion.threads=-1
 
 Fehlersuche
 ============
@@ -199,8 +126,8 @@ Suchergebnisse weichen von Erwartungen ab
 **Prüfpunkte**:
 
 1. Ergebnisse jedes Suchtyps einzeln überprüfen
-2. Prüfen, ob die Gewichtung angemessen ist
-3. Den k-Parameterwert anpassen
+2. Den ``rank.fusion.rank_constant``-Wert anpassen
+3. Den ``rank.fusion.window_size``-Wert anpassen
 
 Suche ist langsam
 ------------------
@@ -209,17 +136,13 @@ Suche ist langsam
 
 **Lösungen**:
 
-1. Parallele Ausführung aktivieren::
+1. ``rank.fusion.window_size`` reduzieren::
 
-       rank.fusion.parallel=true
+       rank.fusion.window_size=100
 
-2. Anzahl der Fusionsziel-Ergebnisse begrenzen::
+2. ``rank.fusion.threads`` anpassen::
 
-       rank.fusion.max.results=500
-
-3. Caching aktivieren::
-
-       rank.fusion.cache.enabled=true
+       rank.fusion.threads=4
 
 Speichermangel
 ---------------
@@ -228,9 +151,8 @@ Speichermangel
 
 **Lösungen**:
 
-1. Maximale Anzahl der Fusionsziel-Ergebnisse reduzieren
+1. ``rank.fusion.window_size`` reduzieren
 2. JVM-Heap-Größe erhöhen
-3. Nicht benötigte Suchtypen deaktivieren
 
 Referenz
 ========

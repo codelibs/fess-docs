@@ -62,7 +62,7 @@ Basic Settings
    * - Name
      - Company Google Drive
    * - Handler Name
-     - GSuiteDataStore
+     - GoogleDriveDataStore
    * - Enabled
      - On
 

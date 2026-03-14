@@ -24,8 +24,6 @@ Supported Scripting Languages
    * - Groovy
      - ``groovy``
      - The default scripting language. Java-compatible with powerful features
-   * - JavaScript
-     - ``javascript``
      - A familiar language for web developers
 
 .. note::

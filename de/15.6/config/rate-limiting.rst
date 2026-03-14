@@ -22,7 +22,7 @@ Diese Begrenzung gilt für alle HTTP-Anfragen einschließlich Such-API, AI-Suchm
 Konfiguration
 -------------
 
-``app/WEB-INF/conf/fess_config.properties``:
+``app/WEB-INF/classes/fess_config.properties``:
 
 ::
 
@@ -95,7 +95,7 @@ Beachtung von robots.txt
 Alle Rate-Limiting-Einstellungen
 =================================
 
-Alle in ``app/WEB-INF/conf/fess_config.properties`` konfigurierbaren Eigenschaften.
+Alle in ``app/WEB-INF/classes/fess_config.properties`` konfigurierbaren Eigenschaften.
 
 .. list-table::
    :header-rows: 1

@@ -65,36 +65,15 @@ Lokale Datei:
 
 ::
 
-    file_path=/path/to/data.json
-    encoding=UTF-8
-    json_path=$
-
-HTTP-Datei:
-
-::
-
-    file_path=https://api.example.com/products.json
-    encoding=UTF-8
-    json_path=$.data
-
-REST-API (mit Authentifizierung):
-
-::
-
-    file_path=https://api.example.com/v1/items
-    encoding=UTF-8
-    json_path=$.items
-    http_method=GET
-    auth_type=bearer
-    auth_token=your_api_token_here
+    files=/path/to/data.json
+    fileEncoding=UTF-8
 
 Mehrere Dateien:
 
 ::
 
-    file_path=/path/to/data1.json,https://api.example.com/data2.json
-    encoding=UTF-8
-    json_path=$
+    files=/path/to/data1.json,/path/to/data2.json
+    fileEncoding=UTF-8
 
 Parameterliste
 ~~~~~~~~~~~~~~
@@ -106,33 +85,12 @@ Parameterliste
    * - Parameter
      - Erforderlich
      - Beschreibung
-   * - ``file_path``
+   * - ``files``
      - Ja
-     - Pfad zur JSON-Datei oder API-URL (mehrere kommagetrennt)
-   * - ``encoding``
+     - Pfad zur JSON-Datei (mehrere kommagetrennt)
+   * - ``fileEncoding``
      - Nein
      - Zeichenkodierung (Standard: UTF-8)
-   * - ``json_path``
-     - Nein
-     - JSONPath für Datenextraktion (Standard: ``$``)
-   * - ``http_method``
-     - Nein
-     - HTTP-Methode (GET, POST usw., Standard: GET)
-   * - ``auth_type``
-     - Nein
-     - Authentifizierungstyp (bearer, basic)
-   * - ``auth_token``
-     - Nein
-     - Authentifizierungstoken (bei Bearer-Authentifizierung)
-   * - ``auth_username``
-     - Nein
-     - Authentifizierungs-Benutzername (bei Basic-Authentifizierung)
-   * - ``auth_password``
-     - Nein
-     - Authentifizierungs-Passwort (bei Basic-Authentifizierung)
-   * - ``http_headers``
-     - Nein
-     - Benutzerdefinierte HTTP-Header (JSON-Format)
 
 Skript-Einstellungen
 --------------------
@@ -202,7 +160,6 @@ Parameter:
 
 ::
 
-    json_path=$
 
 Verschachtelte Struktur
 -----------------------
@@ -232,7 +189,6 @@ Parameter:
 
 ::
 
-    json_path=$.data.products
 
 Skript:
 
@@ -268,7 +224,6 @@ Parameter:
 
 ::
 
-    json_path=$.articles
 
 Skript:
 
@@ -280,215 +235,8 @@ Skript:
     author=data.author.name
     tags=data.tags.join(", ")
 
-JSONPath verwenden
-==================
-
-Was ist JSONPath
-----------------
-
-JSONPath ist eine Abfragesprache zur Angabe von Elementen innerhalb von JSON.
-Es entspricht XPath für XML.
-
-Grundlegende Syntax
-~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Syntax
-     - Beschreibung
-   * - ``$``
-     - Wurzelelement
-   * - ``$.field``
-     - Feld auf oberster Ebene
-   * - ``$.parent.child``
-     - Verschachteltes Feld
-   * - ``$.array[0]``
-     - Erstes Element des Arrays
-   * - ``$.array[*]``
-     - Alle Elemente des Arrays
-   * - ``$..field``
-     - Rekursive Suche
-
-JSONPath-Beispiele
-------------------
-
-Alle Elemente (Wurzel):
-
-::
-
-    json_path=$
-
-Bestimmtes Array:
-
-::
-
-    json_path=$.data.items
-
-Verschachteltes Array:
-
-::
-
-    json_path=$.response.results.products
-
-Rekursive Suche:
-
-::
-
-    json_path=$..products
-
 Anwendungsbeispiele
 ===================
-
-Produktkatalog-API
-------------------
-
-API-Antwort:
-
-::
-
-    {
-      "status": "success",
-      "data": {
-        "products": [
-          {
-            "product_id": "P001",
-            "name": "Notebook PC",
-            "description": "Hochleistungs-Notebook",
-            "price": 1200,
-            "category": "Computer",
-            "in_stock": true
-          }
-        ]
-      }
-    }
-
-Parameter:
-
-::
-
-    file_path=https://api.example.com/products
-    encoding=UTF-8
-    json_path=$.data.products
-
-Skript:
-
-::
-
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " Preis: " + data.price + " EUR"
-    digest=data.category
-    price=data.price
-
-Blog-Artikel-API
-----------------
-
-API-Antwort:
-
-::
-
-    {
-      "posts": [
-        {
-          "id": 1,
-          "title": "Artikeltitel",
-          "body": "Artikelinhalt...",
-          "author": {
-            "name": "Max Mustermann",
-            "email": "mustermann@example.com"
-          },
-          "tags": ["Technik", "Programmierung"],
-          "published_at": "2024-01-15T10:00:00Z"
-        }
-      ]
-    }
-
-Parameter:
-
-::
-
-    file_path=https://blog.example.com/api/posts
-    encoding=UTF-8
-    json_path=$.posts
-
-Skript:
-
-::
-
-    url="https://blog.example.com/post/" + data.id
-    title=data.title
-    content=data.body
-    author=data.author.name
-    tags=data.tags.join(", ")
-    created=data.published_at
-
-API mit Bearer-Authentifizierung
---------------------------------
-
-Parameter:
-
-::
-
-    file_path=https://api.example.com/v1/items
-    encoding=UTF-8
-    json_path=$.items
-    http_method=GET
-    auth_type=bearer
-    auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
-Skript:
-
-::
-
-    url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.description
-
-API mit Basic-Authentifizierung
--------------------------------
-
-Parameter:
-
-::
-
-    file_path=https://api.example.com/data
-    encoding=UTF-8
-    json_path=$.data
-    http_method=GET
-    auth_type=basic
-    auth_username=apiuser
-    auth_password=password123
-
-Skript:
-
-::
-
-    url="https://example.com/data/" + data.id
-    title=data.name
-    content=data.content
-
-Benutzerdefinierte Header verwenden
------------------------------------
-
-Parameter:
-
-::
-
-    file_path=https://api.example.com/items
-    encoding=UTF-8
-    json_path=$.items
-    http_method=GET
-    http_headers={"X-API-Key":"your-api-key","Accept":"application/json"}
-
-Skript:
-
-::
-
-    url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.content
 
 Mehrere JSON-Dateien zusammenführen
 -----------------------------------
@@ -497,37 +245,14 @@ Parameter:
 
 ::
 
-    file_path=/var/data/data1.json,/var/data/data2.json,https://api.example.com/data3.json
-    encoding=UTF-8
-    json_path=$.items
+    files=/var/data/data1.json,/var/data/data2.json
+    fileEncoding=UTF-8
 
 Skript:
 
 ::
 
     url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.content
-
-POST-Anfrage
-------------
-
-Parameter:
-
-::
-
-    file_path=https://api.example.com/search
-    encoding=UTF-8
-    json_path=$.results
-    http_method=POST
-    http_headers={"Content-Type":"application/json"}
-    post_body={"query":"search term","limit":100}
-
-Skript:
-
-::
-
-    url="https://example.com/result/" + data.id
     title=data.title
     content=data.content
 
@@ -564,36 +289,6 @@ JSON-Parsing-Fehler
 3. Überprüfen Sie auf ungültige Zeichen oder Zeilenumbrüche
 4. Überprüfen Sie, ob Kommentare enthalten sind (im JSON-Standard sind Kommentare nicht erlaubt)
 
-JSONPath-Fehler
----------------
-
-**Symptom**: Keine Daten abrufbar oder leeres Ergebnis
-
-**Zu überprüfen**:
-
-1. Überprüfen Sie die JSONPath-Syntax
-2. Überprüfen Sie, ob das Zielelement existiert
-3. Validieren Sie JSONPath mit einem Test-Tool:
-
-   ::
-
-       # Überprüfung mit jq
-       cat data.json | jq '$.data.products'
-
-4. Überprüfen Sie, ob der Pfad auf die richtige Hierarchie zeigt
-
-Authentifizierungsfehler
-------------------------
-
-**Symptom**: ``401 Unauthorized`` oder ``403 Forbidden``
-
-**Zu überprüfen**:
-
-1. Überprüfen Sie, ob der Authentifizierungstyp korrekt ist (bearer, basic)
-2. Überprüfen Sie das Authentifizierungstoken oder Benutzername/Passwort
-3. Überprüfen Sie das Ablaufdatum des Tokens
-4. Überprüfen Sie die Berechtigungseinstellungen der API
-
 Keine Daten abrufbar
 --------------------
 
@@ -601,9 +296,8 @@ Keine Daten abrufbar
 
 **Zu überprüfen**:
 
-1. Überprüfen Sie, ob JSONPath auf die richtigen Elemente zeigt
-2. Überprüfen Sie die JSON-Struktur
-3. Überprüfen Sie die Skript-Einstellungen
+1. Überprüfen Sie die JSON-Struktur
+2. Überprüfen Sie die Skript-Einstellungen
 4. Überprüfen Sie die Feldnamen (einschließlich Groß-/Kleinschreibung)
 5. Überprüfen Sie die Logs auf Fehlermeldungen
 
@@ -623,7 +317,6 @@ Parameter:
 
 ::
 
-    json_path=$
 
 Wenn JSON ein Objekt mit Array ist:
 
@@ -640,7 +333,6 @@ Parameter:
 
 ::
 
-    json_path=$.items
 
 Große JSON-Dateien
 ------------------
@@ -653,17 +345,6 @@ Große JSON-Dateien
 2. Extrahieren Sie mit JSONPath nur benötigte Teile
 3. Bei APIs Paginierung verwenden
 4. Erhöhen Sie die Heap-Größe von |Fess|
-
-API-Ratenbegrenzung
--------------------
-
-**Symptom**: ``429 Too Many Requests``
-
-**Lösung**:
-
-1. Verlängern Sie das Crawl-Intervall
-2. Überprüfen Sie die Ratenbegrenzung der API
-3. Verwenden Sie mehrere API-Schlüssel zur Lastverteilung
 
 Erweiterte Skript-Beispiele
 ===========================
@@ -731,5 +412,4 @@ Weiterführende Informationen
 - :doc:`ds-database` - Datenbank-Konnektor
 - :doc:`../../admin/dataconfig-guide` - Leitfaden zur Datenspeicher-Konfiguration
 - `JSON (JavaScript Object Notation) <https://www.json.org/>`_
-- `JSONPath <https://goessner.net/articles/JsonPath/>`_
 - `jq - JSON processor <https://stedolan.github.io/jq/>`_

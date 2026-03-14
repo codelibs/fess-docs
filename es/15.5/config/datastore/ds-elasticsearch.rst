@@ -72,30 +72,30 @@ Conexion basica:
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 Conexion con autenticacion:
 
 ::
 
-    hosts=https://elasticsearch.example.com:9200
+    settings.fesen.http.url=https://elasticsearch.example.com:9200
     index=myindex
-    username=elastic
-    password=changeme
-    scroll_size=100
-    scroll_timeout=5m
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    size=100
+    scroll=5m
 
 Configuracion de multiples hosts:
 
 ::
 
-    hosts=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
+    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 Lista de parametros
 ~~~~~~~~~~~~~~~~~~~
@@ -107,24 +107,24 @@ Lista de parametros
    * - Parametro
      - Requerido
      - Descripcion
-   * - ``hosts``
+   * - ``settings.fesen.http.url``
      - Si
      - Host(s) de Elasticsearch/OpenSearch (multiples separados por comas)
    * - ``index``
      - Si
      - Nombre del indice objetivo
-   * - ``username``
+   * - ``settings.fesen.username``
      - No
      - Nombre de usuario para autenticacion
-   * - ``password``
+   * - ``settings.fesen.password``
      - No
      - Contrasena para autenticacion
-   * - ``scroll_size``
+   * - ``size``
      - No
      - Cantidad de registros por scroll (predeterminado: 100)
-   * - ``scroll_timeout``
+   * - ``scroll``
      - No
-     - Timeout del scroll (predeterminado: 5m)
+     - Timeout del scroll (predeterminado: 1m)
    * - ``query``
      - No
      - Query en JSON (predeterminado: match_all)
@@ -206,10 +206,10 @@ Limitar campos a obtener con el parametro fields
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
-    scroll_size=100
+    size=100
 
 Para obtener todos los campos, no especifique ``fields`` o dejelo vacio.
 
@@ -223,10 +223,10 @@ Parametros:
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=articles
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 Script:
 
@@ -245,12 +245,12 @@ Parametros:
 
 ::
 
-    hosts=https://es.example.com:9200
+    settings.fesen.http.url=https://es.example.com:9200
     index=products
-    username=elastic
-    password=changeme
-    scroll_size=200
-    scroll_timeout=10m
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    size=200
+    scroll=10m
 
 Script:
 
@@ -269,10 +269,10 @@ Parametros:
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
     query={"query":{"term":{"level":"error"}}}
-    scroll_size=100
+    size=100
 
 Script:
 
@@ -291,12 +291,12 @@ Parametros:
 
 ::
 
-    hosts=https://opensearch.example.com:9200
+    settings.fesen.http.url=https://opensearch.example.com:9200
     index=documents
-    username=admin
-    password=admin
-    scroll_size=100
-    scroll_timeout=5m
+    settings.fesen.username=admin
+    settings.fesen.password=admin
+    size=100
+    scroll=5m
 
 Script:
 
@@ -314,10 +314,10 @@ Parametros:
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
-    scroll_size=100
+    size=100
 
 Script:
 
@@ -335,10 +335,10 @@ Parametros:
 
 ::
 
-    hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 Script:
 
@@ -421,17 +421,17 @@ Timeout de scroll
 
 **Solucion**:
 
-1. Aumentar el ``scroll_timeout``:
+1. Aumentar el ``scroll``:
 
    ::
 
-       scroll_timeout=10m
+       scroll=10m
 
-2. Reducir el ``scroll_size``:
+2. Reducir el ``size``:
 
    ::
 
-       scroll_size=50
+       size=50
 
 3. Verificar los recursos del cluster
 
@@ -442,12 +442,12 @@ Crawl de grandes volumenes de datos
 
 **Solucion**:
 
-1. Ajustar ``scroll_size`` (demasiado grande puede hacerlo lento):
+1. Ajustar ``size`` (demasiado grande puede hacerlo lento):
 
    ::
 
-       scroll_size=100  # predeterminado
-       scroll_size=500  # mas grande
+       size=100  # predeterminado
+       size=500  # mas grande
 
 2. Limitar los campos a obtener con ``fields``
 3. Filtrar solo los documentos necesarios con ``query``
@@ -460,7 +460,7 @@ Memoria insuficiente
 
 **Solucion**:
 
-1. Reducir ``scroll_size``
+1. Reducir ``size``
 2. Limitar los campos a obtener con ``fields``
 3. Aumentar el tamano del heap de |Fess|
 4. Excluir campos grandes (datos binarios, etc.)

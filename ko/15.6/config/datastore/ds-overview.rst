@@ -41,7 +41,7 @@
      - fess-ds-gsuite
      - Google Drive, Gmail 등을 크롤링
    * - :doc:`ds-microsoft365`
-     - fess-ds-office365
+     - fess-ds-microsoft365
      - OneDrive, SharePoint 등을 크롤링
 
 협업 도구

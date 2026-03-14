@@ -54,20 +54,6 @@ Par défaut, seuls les champs de base sont renvoyés, mais vous pouvez spécifie
 
 Pour spécifier plusieurs champs, énumérez-les séparés par des virgules.
 
-Configuration du délai d'expiration du défilement
-----------------------------
-
-Vous pouvez configurer la durée de validité du contexte de défilement.
-La valeur par défaut est de 1 minute.
-
-::
-
-    api.search.scroll.timeout=1m
-
-Unités :
-- ``s`` : secondes
-- ``m`` : minutes
-- ``h`` : heures
 
 Méthode d'utilisation
 ========
@@ -79,7 +65,7 @@ L'accès à la recherche par défilement s'effectue via l'URL suivante.
 
 ::
 
-    http://localhost:8080/json/scroll?q=mot-clé
+    http://localhost:8080/api/v1/documents/all?q=mot-clé
 
 Les résultats de recherche sont renvoyés au format NDJSON (Newline Delimited JSON).
 Chaque ligne contient un document au format JSON.
@@ -88,7 +74,7 @@ Chaque ligne contient un document au format JSON.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Paramètres de requête
 --------------------
@@ -119,19 +105,19 @@ Vous pouvez spécifier une requête de recherche comme dans une recherche normal
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=moteur de recherche"
+    curl "http://localhost:8080/api/v1/documents/all?q=moteur de recherche"
 
 **Exemple : Recherche par champ spécifique**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **Exemple : Récupération de tous les éléments (sans condition de recherche)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 Spécification du nombre d'éléments à récupérer
 --------------
@@ -140,7 +126,7 @@ Vous pouvez modifier le nombre d'éléments récupérés par défilement.
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    Si le paramètre ``size`` est trop élevé, l'utilisation de la mémoire augmente.
@@ -153,7 +139,7 @@ Vous pouvez récupérer uniquement les documents appartenant à une étiquette s
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 En cas d'authentification requise
 ----------------
@@ -162,14 +148,14 @@ Si vous utilisez la recherche basée sur les rôles, vous devez inclure des info
 
 ::
 
-    curl -u username:password "http://localhost:8080/json/scroll?q=Fess"
+    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Ou en utilisant un jeton API :
 
 ::
 
     curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 Format de réponse
 ==============
@@ -213,7 +199,7 @@ Exemple de traitement en Python
     import json
 
     # Exécution de la recherche par défilement
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -236,7 +222,7 @@ Exemple d'enregistrement des résultats de recherche dans un fichier :
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 Conversion en CSV
 -----------
@@ -245,7 +231,7 @@ Exemple de conversion en CSV à l'aide de la commande jq :
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 Analyse de données
@@ -311,7 +297,7 @@ Lors du traitement de grandes quantités de données, utilisez le traitement en 
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # Traitement en streaming
@@ -360,9 +346,8 @@ La recherche par défilement n'est pas disponible
 Une erreur de délai d'expiration se produit
 ----------------------------
 
-1. Augmentez la valeur de ``api.search.scroll.timeout``.
-2. Réduisez le paramètre ``size`` pour répartir le traitement.
-3. Affinez les conditions de recherche pour réduire la quantité de données récupérées.
+1. Réduisez le paramètre ``size`` pour répartir le traitement.
+2. Affinez les conditions de recherche pour réduire la quantité de données récupérées.
 
 Erreur de mémoire insuffisante
 ----------------

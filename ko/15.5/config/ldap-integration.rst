@@ -71,7 +71,7 @@ LDAP 연결 설정
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # 사용자 검색 필터
-    ldap.user.search.filter=(uid={0})
+    ldap.account.filter=(uid={0})
 
     # 사용자명 속성
     ldap.user.name.attribute=uid
@@ -85,7 +85,7 @@ LDAP 연결 설정
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # 그룹 검색 필터
-    ldap.group.search.filter=(member={0})
+    ldap.group.filter=(member={0})
 
     # 그룹명 속성
     ldap.group.name.attribute=cn
@@ -110,12 +110,12 @@ Microsoft Active Directory용 설정 예입니다.
 
     # 사용자 검색
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.user.search.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName={0})
     ldap.user.name.attribute=sAMAccountName
 
     # 그룹 검색
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.search.filter=(member={0})
+    ldap.group.filter=(member={0})
     ldap.group.name.attribute=cn
 
 Active Directory 고유 설정
@@ -127,7 +127,7 @@ Active Directory 고유 설정
     ldap.memberof.enabled=true
 
     # memberOf 속성 사용
-    ldap.group.search.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
 
 OpenLDAP 설정
 ============
@@ -146,12 +146,12 @@ OpenLDAP용 설정 예입니다.
 
     # 사용자 검색
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.user.search.filter=(uid={0})
+    ldap.account.filter=(uid={0})
     ldap.user.name.attribute=uid
 
     # 그룹 검색
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.search.filter=(memberUid={0})
+    ldap.group.filter=(memberUid={0})
     ldap.group.name.attribute=cn
 
 보안 설정
@@ -190,70 +190,6 @@ LDAPS(SSL/TLS)
 ================
 
 LDAP 그룹을 |Fess| 역할에 매핑할 수 있습니다.
-
-자동 매핑
---------------
-
-그룹명이 그대로 역할명으로 사용됩니다:
-
-::
-
-    # LDAP 그룹 "fess-users" -> Fess 역할 "fess-users"
-    ldap.group.role.mapping.enabled=true
-
-커스텀 매핑
-------------------
-
-::
-
-    # 그룹명을 역할에 매핑
-    ldap.group.role.mapping.Administrators=admin
-    ldap.group.role.mapping.PowerUsers=editor
-    ldap.group.role.mapping.Users=guest
-
-사용자 정보 동기화
-==================
-
-LDAP에서 사용자 정보를 |Fess|에 동기화할 수 있습니다.
-
-자동 동기화
---------
-
-로그인 시 자동으로 사용자 정보 동기화:
-
-::
-
-    ldap.user.sync.enabled=true
-
-동기화할 속성
-------------
-
-::
-
-    # 이메일 주소
-    ldap.user.email.attribute=mail
-
-    # 표시 이름
-    ldap.user.displayname.attribute=displayName
-
-연결 풀링
-==============
-
-성능 향상을 위한 연결 풀 설정:
-
-::
-
-    # 연결 풀 활성화
-    ldap.connection.pool.enabled=true
-
-    # 최소 연결 수
-    ldap.connection.pool.min=1
-
-    # 최대 연결 수
-    ldap.connection.pool.max=10
-
-    # 연결 타임아웃(밀리초)
-    ldap.connection.timeout=5000
 
 페일오버
 ================

@@ -144,12 +144,7 @@ La recherche par géolocalisation peut également être utilisée avec l'API JSO
 
 ::
 
-    curl -X POST "http://localhost:8080/json/?q=hôtel" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "geo.location.point": "35.681236,139.767125",
-        "geo.location.distance": "5km"
-      }'
+    curl "http://localhost:8080/json/?q=hôtel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Personnalisation du nom de champ
 ==========================
@@ -231,7 +226,7 @@ Optimisation de la configuration de l'index
 
 Lors du traitement de grandes quantités de données de géolocalisation, optimisez la configuration de l'index.
 
-Vérifiez la configuration du champ de géolocalisation dans ``app/WEB-INF/classes/fess_indices/fess.json``.
+Vérifiez la configuration du champ de géolocalisation dans ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

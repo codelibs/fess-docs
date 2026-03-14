@@ -24,8 +24,6 @@
    * - Groovy
      - ``groovy``
      - 기본 스크립트 언어. Java 호환으로 강력한 기능 제공
-   * - JavaScript
-     - ``javascript``
      - 웹 개발자에게 친숙한 언어
 
 .. note::

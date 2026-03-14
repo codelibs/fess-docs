@@ -72,30 +72,30 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=1m
 
 認証ありの接続:
 
 ::
 
-    hosts=https://elasticsearch.example.com:9200
+    settings.fesen.http.url=https://elasticsearch.example.com:9200
     index=myindex
-    username=elastic
-    password=changeme
-    scroll_size=100
-    scroll_timeout=5m
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    size=100
+    scroll=1m
 
 複数ホストの設定:
 
 ::
 
-    hosts=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
+    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=1m
 
 パラメーター一覧
 ~~~~~~~~~~~~~~~~
@@ -107,24 +107,24 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
    * - パラメーター
      - 必須
      - 説明
-   * - ``hosts``
+   * - ``settings.fesen.http.url``
      - はい
      - Elasticsearch/OpenSearchのホスト（カンマ区切りで複数指定可）
    * - ``index``
      - はい
      - 対象インデックス名
-   * - ``username``
+   * - ``settings.fesen.username``
      - いいえ
      - 認証用ユーザー名
-   * - ``password``
+   * - ``settings.fesen.password``
      - いいえ
      - 認証用パスワード
-   * - ``scroll_size``
+   * - ``size``
      - いいえ
      - スクロール時の取得件数（デフォルト: 100）
-   * - ``scroll_timeout``
+   * - ``scroll``
      - いいえ
-     - スクロールのタイムアウト（デフォルト: 5m）
+     - スクロールのタイムアウト（デフォルト: 1m）
    * - ``query``
      - いいえ
      - クエリJSON（デフォルト: match_all）
@@ -206,10 +206,10 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
-    scroll_size=100
+    size=100
 
 すべてのフィールドを取得する場合は ``fields`` を指定しないか、空にします。
 
@@ -223,10 +223,10 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=articles
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=1m
 
 スクリプト:
 
@@ -245,12 +245,12 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    hosts=https://es.example.com:9200
+    settings.fesen.http.url=https://es.example.com:9200
     index=products
-    username=elastic
-    password=changeme
-    scroll_size=200
-    scroll_timeout=10m
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    size=200
+    scroll=10m
 
 スクリプト:
 
@@ -269,10 +269,10 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
     query={"query":{"term":{"level":"error"}}}
-    scroll_size=100
+    size=100
 
 スクリプト:
 
@@ -291,12 +291,12 @@ OpenSearchクラスタのクロール
 
 ::
 
-    hosts=https://opensearch.example.com:9200
+    settings.fesen.http.url=https://opensearch.example.com:9200
     index=documents
-    username=admin
-    password=admin
-    scroll_size=100
-    scroll_timeout=5m
+    settings.fesen.username=admin
+    settings.fesen.password=admin
+    size=100
+    scroll=1m
 
 スクリプト:
 
@@ -314,10 +314,10 @@ OpenSearchクラスタのクロール
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
-    scroll_size=100
+    size=100
 
 スクリプト:
 
@@ -335,10 +335,10 @@ OpenSearchクラスタのクロール
 
 ::
 
-    hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=1m
 
 スクリプト:
 
@@ -421,17 +421,17 @@ OpenSearchクラスタのクロール
 
 **解決方法**:
 
-1. ``scroll_timeout`` を長くする:
+1. ``scroll`` を長くする:
 
    ::
 
-       scroll_timeout=10m
+       scroll=10m
 
-2. ``scroll_size`` を小さくする:
+2. ``size`` を小さくする:
 
    ::
 
-       scroll_size=50
+       size=50
 
 3. クラスタのリソースを確認
 
@@ -442,12 +442,12 @@ OpenSearchクラスタのクロール
 
 **解決方法**:
 
-1. ``scroll_size`` を調整（大きすぎると遅くなる）:
+1. ``size`` を調整（大きすぎると遅くなる）:
 
    ::
 
-       scroll_size=100  # デフォルト
-       scroll_size=500  # 大きめ
+       size=100  # デフォルト
+       size=500  # 大きめ
 
 2. ``fields`` で取得フィールドを限定
 3. ``query`` で必要なドキュメントのみフィルタリング
@@ -460,7 +460,7 @@ OpenSearchクラスタのクロール
 
 **解決方法**:
 
-1. ``scroll_size`` を小さくする
+1. ``size`` を小さくする
 2. ``fields`` で取得フィールドを限定
 3. |Fess| のヒープサイズを増やす
 4. 大きなフィールド（バイナリデータなど）を除外

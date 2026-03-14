@@ -32,7 +32,7 @@
 
 ::
 
-    <script type="text/javascript" src="https://search.n2sm.co.jp/js/jquery-3.6.3.min.js"></script>
+    <script type="text/javascript" src="https://search.n2sm.co.jp/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="https://search.n2sm.co.jp/js/suggestor.js"></script>
     <script>
     $(function() {

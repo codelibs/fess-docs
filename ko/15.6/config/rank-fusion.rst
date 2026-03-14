@@ -23,20 +23,7 @@ Rank Fusion은 여러 검색 알고리즘이나 스코어링 방법의 결과를
 지원 알고리즘
 ==============
 
-|Fess| 에서는 다음 Rank Fusion 알고리즘을 지원합니다:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - 알고리즘
-     - 설명
-   * - RRF (Reciprocal Rank Fusion)
-     - 순위의 역수를 사용한 융합 알고리즘
-   * - Score Fusion
-     - 스코어 정규화 및 가중 평균에 의한 융합
-   * - Borda Count
-     - 투표 기반 랭킹 융합
+|Fess| 에서는 RRF (Reciprocal Rank Fusion) 알고리즘을 지원합니다.
 
 RRF (Reciprocal Rank Fusion)
 ----------------------------
@@ -47,7 +34,7 @@ RRF는 각 결과의 순위 역수를 합산하여 스코어를 계산합니다.
 
     score(d) = Σ 1 / (k + rank(d))
 
-- ``k``: 상수 파라미터 (기본값: 60)
+- ``k``: 상수 파라미터 (기본값: 20)
 - ``rank(d)``: 각 검색 결과에서 문서 d의 순위
 
 설정
@@ -58,59 +45,23 @@ fess_config.properties
 
 기본 설정::
 
-    # Rank Fusion 활성화
-    rank.fusion.enabled=true
+    # 윈도우 사이즈 (융합 대상 결과 수)
+    rank.fusion.window_size=200
 
-    # 사용할 알고리즘
-    rank.fusion.algorithm=rrf
+    # RRF의 rank_constant (k 파라미터)
+    rank.fusion.rank_constant=20
 
-    # RRF의 k 파라미터
-    rank.fusion.rrf.k=60
+    # 병렬 처리 스레드 수 (-1은 기본값)
+    rank.fusion.threads=-1
 
-    # 융합 대상 검색 유형
-    rank.fusion.search.types=keyword,semantic
-
-알고리즘별 설정
-----------------
-
-RRF 설정::
-
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-Score Fusion 설정::
-
-    rank.fusion.algorithm=score
-    rank.fusion.score.normalize=true
-    rank.fusion.score.weights=0.7,0.3
-
-Borda Count 설정::
-
-    rank.fusion.algorithm=borda
-    rank.fusion.borda.top_n=100
+    # 스코어 필드명
+    rank.fusion.score_field=rf_score
 
 하이브리드 검색과의 연계
 ==========================
 
 Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 하이브리드 검색에서 특히 효과적입니다.
-
-설정 예
---------
-
-::
-
-    # 하이브리드 검색 활성화
-    search.hybrid.enabled=true
-
-    # 키워드 검색과 시맨틱 검색 결과를 융합
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=rrf
-    rank.fusion.rrf.k=60
-
-    # 각 검색 유형의 가중치
-    search.hybrid.keyword.weight=0.6
-    search.hybrid.semantic.weight=0.4
 
 사용 예
 ========
@@ -139,17 +90,6 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
                       ↓
               Final Ranking
 
-커스텀 스코어링
------------------
-
-여러 스코어 요소를 결합하는 예::
-
-    # 기본 검색 스코어 + 날짜 부스트 + 인기도
-    rank.fusion.enabled=true
-    rank.fusion.algorithm=score
-    rank.fusion.score.factors=relevance,recency,popularity
-    rank.fusion.score.weights=0.5,0.3,0.2
-
 성능 고려 사항
 ===============
 
@@ -157,36 +97,23 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 --------------
 
 - 여러 검색 결과를 보유하므로 메모리 사용량이 증가
-- ``rank.fusion.max.results`` 로 융합 대상 최대 건수를 제한
+- ``rank.fusion.window_size`` 로 융합 대상 최대 건수를 제한
 
 ::
 
-    # 융합 대상 최대 결과 수
-    rank.fusion.max.results=1000
+    # 융합 대상 윈도우 사이즈
+    rank.fusion.window_size=200
 
 처리 시간
 ----------
 
 - 여러 검색을 실행하므로 응답 시간이 증가
-- 병렬 실행으로 최적화 고려
+- ``rank.fusion.threads`` 로 병렬 실행 스레드 수를 설정
 
 ::
 
-    # 병렬 실행 활성화
-    rank.fusion.parallel=true
-    rank.fusion.thread.pool.size=4
-
-캐시
-------
-
-- 빈번한 쿼리에 대해 캐시를 활용
-
-::
-
-    # Rank Fusion 결과 캐시
-    rank.fusion.cache.enabled=true
-    rank.fusion.cache.size=1000
-    rank.fusion.cache.expire=300
+    # 병렬 실행 스레드 수 (-1은 기본값)
+    rank.fusion.threads=-1
 
 문제 해결
 ==========
@@ -199,8 +126,8 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 **확인 사항**:
 
 1. 각 검색 유형의 결과를 개별적으로 확인
-2. 가중치가 적절한지 확인
-3. k 파라미터 값을 조정
+2. ``rank.fusion.rank_constant`` 값을 조정
+3. ``rank.fusion.window_size`` 값을 조정
 
 검색이 느림
 ------------
@@ -209,17 +136,13 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 
 **해결 방법**:
 
-1. 병렬 실행 활성화::
+1. ``rank.fusion.window_size`` 를 줄이기::
 
-       rank.fusion.parallel=true
+       rank.fusion.window_size=100
 
-2. 융합 대상 결과 수 제한::
+2. ``rank.fusion.threads`` 를 조정::
 
-       rank.fusion.max.results=500
-
-3. 캐시 활성화::
-
-       rank.fusion.cache.enabled=true
+       rank.fusion.threads=4
 
 메모리 부족
 ------------
@@ -228,9 +151,8 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 
 **해결 방법**:
 
-1. 융합 대상 최대 결과 수 줄이기
+1. ``rank.fusion.window_size`` 를 줄이기
 2. JVM 힙 크기 늘리기
-3. 불필요한 검색 유형 비활성화
 
 참고 정보
 ==========

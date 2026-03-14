@@ -290,7 +290,7 @@ Weitere Sicherheitseinstellungen
      - ``true``
    * - ``saml.security.signature_algorithm``
      - Signaturalgorithmus
-     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha1``
+     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha256``
    * - ``saml.sp.nameidformat``
      - NameID-Format
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
@@ -380,7 +380,7 @@ Um Probleme zu untersuchen, können Sie den Debug-Modus mit der folgenden Einste
 
 ::
 
-    saml.security.debug=true
+    saml.debug=true
 
 Sie können auch die |Fess|-Protokollierungsebenen anpassen, um detaillierte SAML-bezogene Protokolle auszugeben.
 

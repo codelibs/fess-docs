@@ -22,7 +22,7 @@ This applies to all HTTP requests including search API, AI mode API, admin pages
 Configuration
 -------------
 
-``app/WEB-INF/conf/fess_config.properties``:
+``app/WEB-INF/classes/fess_config.properties``:
 
 ::
 
@@ -95,7 +95,7 @@ Respecting robots.txt
 All Rate Limiting Properties
 ============================
 
-All properties configurable in ``app/WEB-INF/conf/fess_config.properties``.
+All properties configurable in ``app/WEB-INF/classes/fess_config.properties``.
 
 .. list-table::
    :header-rows: 1

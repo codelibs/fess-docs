@@ -66,36 +66,22 @@ JSON连接器提供从JSON文件或JSON API获取数据并注册到
 
 ::
 
-    file_path=/path/to/data.json
-    encoding=UTF-8
-    json_path=$
+    files=/path/to/data.json
+    fileEncoding=UTF-8
 
 HTTP文件:
 
 ::
 
-    file_path=https://api.example.com/products.json
-    encoding=UTF-8
-    json_path=$.data
-
-REST API（带认证）:
-
-::
-
-    file_path=https://api.example.com/v1/items
-    encoding=UTF-8
-    json_path=$.items
-    http_method=GET
-    auth_type=bearer
-    auth_token=your_api_token_here
+    files=https://api.example.com/products.json
+    fileEncoding=UTF-8
 
 多个文件:
 
 ::
 
-    file_path=/path/to/data1.json,https://api.example.com/data2.json
-    encoding=UTF-8
-    json_path=$
+    files=/path/to/data1.json,https://api.example.com/data2.json
+    fileEncoding=UTF-8
 
 参数列表
 ~~~~~~~~~~~~~~~~
@@ -107,33 +93,12 @@ REST API（带认证）:
    * - 参数
      - 必需
      - 说明
-   * - ``file_path``
+   * - ``files``
      - 是
      - JSON文件路径或API URL（可指定多个：逗号分隔）
-   * - ``encoding``
+   * - ``fileEncoding``
      - 否
      - 字符编码（默认: UTF-8）
-   * - ``json_path``
-     - 否
-     - JSONPath数据提取路径（默认: ``$``）
-   * - ``http_method``
-     - 否
-     - HTTP方法（GET、POST等，默认: GET）
-   * - ``auth_type``
-     - 否
-     - 认证类型（bearer、basic）
-   * - ``auth_token``
-     - 否
-     - 认证令牌（bearer认证时）
-   * - ``auth_username``
-     - 否
-     - 认证用户名（basic认证时）
-   * - ``auth_password``
-     - 否
-     - 认证密码（basic认证时）
-   * - ``http_headers``
-     - 否
-     - 自定义HTTP头（JSON格式）
 
 脚本设置
 --------------
@@ -203,7 +168,6 @@ JSON格式详情
 
 ::
 
-    json_path=$
 
 嵌套结构
 --------------
@@ -233,7 +197,6 @@ JSON格式详情
 
 ::
 
-    json_path=$.data.products
 
 脚本:
 
@@ -269,7 +232,6 @@ JSON格式详情
 
 ::
 
-    json_path=$.articles
 
 脚本:
 
@@ -280,64 +242,6 @@ JSON格式详情
     content=data.content
     author=data.author.name
     tags=data.tags.join(", ")
-
-JSONPath的使用
-===============
-
-什么是JSONPath
-------------
-
-JSONPath是用于指定JSON内元素的查询语言。
-相当于XML中的XPath。
-
-基本语法
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - 语法
-     - 说明
-   * - ``$``
-     - 根元素
-   * - ``$.field``
-     - 顶层字段
-   * - ``$.parent.child``
-     - 嵌套字段
-   * - ``$.array[0]``
-     - 数组的第一个元素
-   * - ``$.array[*]``
-     - 数组的所有元素
-   * - ``$..field``
-     - 递归搜索
-
-JSONPath示例
--------------
-
-所有元素（根）:
-
-::
-
-    json_path=$
-
-特定数组:
-
-::
-
-    json_path=$.data.items
-
-嵌套数组:
-
-::
-
-    json_path=$.response.results.products
-
-递归搜索:
-
-::
-
-    json_path=$..products
 
 使用示例
 ======
@@ -369,9 +273,8 @@ API响应:
 
 ::
 
-    file_path=https://api.example.com/products
-    encoding=UTF-8
-    json_path=$.data.products
+    files=https://api.example.com/products
+    fileEncoding=UTF-8
 
 脚本:
 
@@ -410,9 +313,8 @@ API响应:
 
 ::
 
-    file_path=https://blog.example.com/api/posts
-    encoding=UTF-8
-    json_path=$.posts
+    files=https://blog.example.com/api/posts
+    fileEncoding=UTF-8
 
 脚本:
 
@@ -425,72 +327,6 @@ API响应:
     tags=data.tags.join(", ")
     created=data.published_at
 
-Bearer认证API
----------------
-
-参数:
-
-::
-
-    file_path=https://api.example.com/v1/items
-    encoding=UTF-8
-    json_path=$.items
-    http_method=GET
-    auth_type=bearer
-    auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
-脚本:
-
-::
-
-    url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.description
-
-Basic认证API
---------------
-
-参数:
-
-::
-
-    file_path=https://api.example.com/data
-    encoding=UTF-8
-    json_path=$.data
-    http_method=GET
-    auth_type=basic
-    auth_username=apiuser
-    auth_password=password123
-
-脚本:
-
-::
-
-    url="https://example.com/data/" + data.id
-    title=data.name
-    content=data.content
-
-使用自定义头
-----------------------
-
-参数:
-
-::
-
-    file_path=https://api.example.com/items
-    encoding=UTF-8
-    json_path=$.items
-    http_method=GET
-    http_headers={"X-API-Key":"your-api-key","Accept":"application/json"}
-
-脚本:
-
-::
-
-    url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.content
-
 多JSON文件整合
 ---------------------
 
@@ -498,37 +334,14 @@ Basic认证API
 
 ::
 
-    file_path=/var/data/data1.json,/var/data/data2.json,https://api.example.com/data3.json
-    encoding=UTF-8
-    json_path=$.items
+    files=/var/data/data1.json,/var/data/data2.json,https://api.example.com/data3.json
+    fileEncoding=UTF-8
 
 脚本:
 
 ::
 
     url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.content
-
-POST请求
---------------
-
-参数:
-
-::
-
-    file_path=https://api.example.com/search
-    encoding=UTF-8
-    json_path=$.results
-    http_method=POST
-    http_headers={"Content-Type":"application/json"}
-    post_body={"query":"search term","limit":100}
-
-脚本:
-
-::
-
-    url="https://example.com/result/" + data.id
     title=data.title
     content=data.content
 
@@ -624,7 +437,6 @@ JSON为数组的情况:
 
 ::
 
-    json_path=$
 
 JSON为包含数组的对象的情况:
 
@@ -641,7 +453,6 @@ JSON为包含数组的对象的情况:
 
 ::
 
-    json_path=$.items
 
 大型JSON文件
 ------------------

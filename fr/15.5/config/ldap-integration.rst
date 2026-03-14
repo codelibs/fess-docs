@@ -69,7 +69,7 @@ Configuration de recherche d'utilisateurs
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # Filtre de recherche d'utilisateurs
-    ldap.user.search.filter=(uid={0})
+    ldap.account.filter=(uid={0})
 
     # Attribut du nom d'utilisateur
     ldap.user.name.attribute=uid
@@ -83,7 +83,7 @@ Configuration de recherche de groupes
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # Filtre de recherche de groupes
-    ldap.group.search.filter=(member={0})
+    ldap.group.filter=(member={0})
 
     # Attribut du nom de groupe
     ldap.group.name.attribute=cn
@@ -108,24 +108,14 @@ Configuration de base
 
     # Recherche d'utilisateurs
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.user.search.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName={0})
     ldap.user.name.attribute=sAMAccountName
 
     # Recherche de groupes
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.search.filter=(member={0})
+    ldap.group.filter=(member={0})
     ldap.group.name.attribute=cn
 
-Configuration specifique a Active Directory
---------------------------
-
-::
-
-    # Resolution des groupes imbriques
-    ldap.memberof.enabled=true
-
-    # Utiliser l'attribut memberOf
-    ldap.group.search.filter=(member:1.2.840.113556.1.4.1941:={0})
 
 Configuration OpenLDAP
 ============
@@ -144,12 +134,12 @@ Exemple de configuration pour OpenLDAP.
 
     # Recherche d'utilisateurs
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.user.search.filter=(uid={0})
+    ldap.account.filter=(uid={0})
     ldap.user.name.attribute=uid
 
     # Recherche de groupes
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.search.filter=(memberUid={0})
+    ldap.group.filter=(memberUid={0})
     ldap.group.name.attribute=cn
 
 Configuration de securite
@@ -165,8 +155,6 @@ Utiliser une connexion chiffree :
     # Utiliser LDAPS
     ldap.provider.url=ldaps://ldap.example.com:636
 
-    # Utiliser StartTLS
-    ldap.start.tls=true
 
 Pour les certificats auto-signes, importez le certificat dans le truststore Java :
 
@@ -183,75 +171,6 @@ Configurer le mot de passe via une variable d'environnement :
 ::
 
     ldap.admin.security.credentials=${LDAP_PASSWORD}
-
-Mappage des roles
-================
-
-Vous pouvez mapper les groupes LDAP aux roles de |Fess|.
-
-Mappage automatique
---------------
-
-Les noms de groupes sont utilises directement comme noms de roles :
-
-::
-
-    # Groupe LDAP "fess-users" -> Role Fess "fess-users"
-    ldap.group.role.mapping.enabled=true
-
-Mappage personnalise
-------------------
-
-::
-
-    # Mapper les noms de groupes aux roles
-    ldap.group.role.mapping.Administrators=admin
-    ldap.group.role.mapping.PowerUsers=editor
-    ldap.group.role.mapping.Users=guest
-
-Synchronisation des informations utilisateur
-==================
-
-Vous pouvez synchroniser les informations utilisateur depuis LDAP vers |Fess|.
-
-Synchronisation automatique
---------
-
-Synchroniser automatiquement les informations utilisateur lors de la connexion :
-
-::
-
-    ldap.user.sync.enabled=true
-
-Attributs a synchroniser
-------------
-
-::
-
-    # Adresse email
-    ldap.user.email.attribute=mail
-
-    # Nom d'affichage
-    ldap.user.displayname.attribute=displayName
-
-Pool de connexions
-==============
-
-Configuration du pool de connexions pour ameliorer les performances :
-
-::
-
-    # Activer le pool de connexions
-    ldap.connection.pool.enabled=true
-
-    # Nombre minimum de connexions
-    ldap.connection.pool.min=1
-
-    # Nombre maximum de connexions
-    ldap.connection.pool.max=10
-
-    # Timeout de connexion (millisecondes)
-    ldap.connection.timeout=5000
 
 Basculement
 ================

@@ -199,7 +199,7 @@ URL 생성
     def results = []
 
     // 인덱스 최적화
-    results << container.getComponent("optimizeJob").execute()
+    results << container.getComponent("suggestJob").execute()
 
     // 크롤 실행
     results << container.getComponent("crawlJob").execute()

@@ -40,7 +40,7 @@
      - デフォルト値
      - 説明
    * - ``index.export.path``
-     - ``/var/fess/export``
+     - ``/var/lib/fess/export``
      - エクスポートファイルを保存するディレクトリ
    * - ``index.export.exclude.fields``
      - ``cache``
@@ -92,8 +92,8 @@ cron 式の例:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
-    
+    import org.codelibs.fess.job.IndexExportJob
+
     def job = new IndexExportJob()
     job.query = "created:>=now-7d"
     job.execute()
@@ -102,8 +102,8 @@ cron 式の例:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
-    
+    import org.codelibs.fess.job.IndexExportJob
+
     def job = new IndexExportJob()
     job.query = "url:*example.com*"
     job.execute()
@@ -117,7 +117,7 @@ cron 式の例:
 
 ::
 
-    /var/fess/export/
+    /var/lib/fess/export/
     └── example.com/
         └── docs/
             └── guide/
@@ -194,7 +194,7 @@ cron 式の例:
 ファイルにアクセスできない
 --------------------------
 
-1. ファイルパーミッションを確認: ``ls -la /var/fess/export``
+1. ファイルパーミッションを確認: ``ls -la /var/lib/fess/export``
 2. ディレクトリの所有者が |Fess| プロセスユーザーと一致するか確認
 3. SELinux や AppArmor のポリシーがアクセスを許可しているか確認
 

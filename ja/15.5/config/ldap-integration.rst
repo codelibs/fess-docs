@@ -67,28 +67,16 @@ LDAP接続設定
 
 ::
 
-    # ユーザー検索のベースDN
-    ldap.user.search.base=ou=users,dc=example,dc=com
-
     # ユーザー検索フィルター
-    ldap.user.search.filter=(uid={0})
-
-    # ユーザー名属性
-    ldap.user.name.attribute=uid
+    ldap.account.filter=(uid={0})
 
 グループ検索設定
 ----------------
 
 ::
 
-    # グループ検索のベースDN
-    ldap.group.search.base=ou=groups,dc=example,dc=com
-
     # グループ検索フィルター
-    ldap.group.search.filter=(member={0})
-
-    # グループ名属性
-    ldap.group.name.attribute=cn
+    ldap.group.filter=(member={0})
 
 Active Directory設定
 ====================
@@ -109,25 +97,18 @@ Microsoft Active Directory向けの設定例です。
     ldap.admin.security.credentials=your_password
 
     # ユーザー検索
-    ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.user.search.filter=(sAMAccountName={0})
-    ldap.user.name.attribute=sAMAccountName
+    ldap.account.filter=(sAMAccountName={0})
 
     # グループ検索
-    ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.search.filter=(member={0})
-    ldap.group.name.attribute=cn
+    ldap.group.filter=(member={0})
 
 Active Directory固有の設定
 --------------------------
 
 ::
 
-    # 入れ子グループの解決
-    ldap.memberof.enabled=true
-
-    # memberOf属性を使用
-    ldap.group.search.filter=(member:1.2.840.113556.1.4.1941:={0})
+    # memberOf属性を使用（入れ子グループの解決）
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
 
 OpenLDAP設定
 ============
@@ -145,14 +126,10 @@ OpenLDAP向けの設定例です。
     ldap.admin.security.credentials=your_password
 
     # ユーザー検索
-    ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.user.search.filter=(uid={0})
-    ldap.user.name.attribute=uid
+    ldap.account.filter=(uid={0})
 
     # グループ検索
-    ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.search.filter=(memberUid={0})
-    ldap.group.name.attribute=cn
+    ldap.group.filter=(memberUid={0})
 
 セキュリティ設定
 ================
@@ -166,9 +143,6 @@ LDAPS（SSL/TLS）
 
     # LDAPSを使用
     ldap.provider.url=ldaps://ldap.example.com:636
-
-    # StartTLSを使用
-    ldap.start.tls=true
 
 自己署名証明書の場合は、Java truststore に証明書をインポート:
 
@@ -185,75 +159,6 @@ LDAPS（SSL/TLS）
 ::
 
     ldap.admin.security.credentials=${LDAP_PASSWORD}
-
-ロールマッピング
-================
-
-LDAPグループを |Fess| のロールにマッピングできます。
-
-自動マッピング
---------------
-
-グループ名がそのままロール名として使用されます:
-
-::
-
-    # LDAPグループ "fess-users" → Fessロール "fess-users"
-    ldap.group.role.mapping.enabled=true
-
-カスタムマッピング
-------------------
-
-::
-
-    # グループ名をロールにマッピング
-    ldap.group.role.mapping.Administrators=admin
-    ldap.group.role.mapping.PowerUsers=editor
-    ldap.group.role.mapping.Users=guest
-
-ユーザー情報の同期
-==================
-
-LDAPからユーザー情報を |Fess| に同期できます。
-
-自動同期
---------
-
-ログイン時に自動的にユーザー情報を同期:
-
-::
-
-    ldap.user.sync.enabled=true
-
-同期する属性
-------------
-
-::
-
-    # メールアドレス
-    ldap.user.email.attribute=mail
-
-    # 表示名
-    ldap.user.displayname.attribute=displayName
-
-接続プーリング
-==============
-
-パフォーマンス向上のための接続プール設定:
-
-::
-
-    # 接続プールを有効にする
-    ldap.connection.pool.enabled=true
-
-    # 最小接続数
-    ldap.connection.pool.min=1
-
-    # 最大接続数
-    ldap.connection.pool.max=10
-
-    # 接続タイムアウト（ミリ秒）
-    ldap.connection.timeout=5000
 
 フェイルオーバー
 ================

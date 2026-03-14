@@ -8,7 +8,7 @@ Apercu
 Le connecteur de base de donnees fournit une fonctionnalite pour recuperer des donnees depuis
 des bases de donnees relationnelles compatibles JDBC et les enregistrer dans l'index de |Fess|.
 
-Cette fonctionnalite est integree a |Fess| et ne necessite pas de plugin supplementaire.
+Cette fonctionnalite necessite le plugin ``fess-ds-db``.
 
 Bases de donnees prises en charge
 =================================
@@ -110,7 +110,7 @@ Liste des parametres
    * - ``sql``
      - Oui
      - Requete SQL pour la recuperation des donnees
-   * - ``fetch.size``
+   * - ``fetch_size``
      - Non
      - Taille de fetch (defaut : 100)
 

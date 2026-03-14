@@ -162,13 +162,13 @@ Ejemplos de Configuración Básica
 
 ::
 
-    <Logger name="org.codelibs.fess" level="warn"/>
+    <Logger name="org.codelibs" level="warn"/>
 
 **Ejemplo: Cambiar al nivel DEBUG**
 
 ::
 
-    <Logger name="org.codelibs.fess" level="debug"/>
+    <Logger name="org.codelibs" level="debug"/>
 
 **Ejemplo: Cambiar el nivel de registro de paquetes específicos**
 
@@ -189,7 +189,7 @@ También puede especificar el nivel de registro al iniciar el sistema.
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dlog.level=debug"
+    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
 
 Configuración de Registros del Rastreador
 ==========================================
@@ -225,15 +225,6 @@ Cambiar el Nivel de Registro Solo para Patrones de URL Específicos
         logLevel("DEBUG")
     }
 
-Cambiar el Nivel de Registro de Todo el Proceso del Rastreador
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Configure en ``fess_config.properties``:
-
-::
-
-    logging.level.org.codelibs.fess.crawler=DEBUG
-
 Rotación de Registros
 ======================
 
@@ -250,19 +241,19 @@ Rotación Automática mediante Log4j2
 Configuración Predeterminada
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- **Tamaño de archivo**: Rotación cuando se superan los 10MB
+- **Tamaño de archivo**: Rotación cuando se superan los 100MB
 - **Número de generaciones conservadas**: Máximo 10 archivos
 
 Ejemplo de archivo de configuración (``log4j2.xml``):
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
         </Policies>
         <DefaultRolloverStrategy max="10"/>
     </RollingFile>
@@ -274,10 +265,10 @@ Para rotar diariamente en lugar de por tamaño:
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -291,10 +282,10 @@ Para comprimir automáticamente durante la rotación:
 
 ::
 
-    <RollingFile name="FessFile"
+    <RollingFile name="AppFile"
                  fileName="${log.dir}/fess.log"
                  filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
-        <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
+        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         </Policies>
@@ -440,7 +431,7 @@ Formato de registro predeterminado de |Fess|:
 
 ::
 
-    %d{ISO8601} [%t] %-5p %c - %m%n
+    %d [%t] %-5p %msg%n
 
 Explicación de cada elemento:
 
@@ -499,7 +490,7 @@ Mejores Prácticas
    ::
 
        <Async name="AsyncFile">
-           <AppenderRef ref="FessFile"/>
+           <AppenderRef ref="AppFile"/>
        </Async>
 
 4. **Asegurar espacio en disco adecuado**
@@ -641,7 +632,7 @@ Aparecen Caracteres Corruptos en el Registro
 
    ::
 
-       <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n" charset="UTF-8"/>
+       <PatternLayout pattern="%d [%t] %-5p %msg%n" charset="UTF-8"/>
 
 2. **Configuración de variables de entorno**
 

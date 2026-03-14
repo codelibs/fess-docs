@@ -66,7 +66,7 @@ OAuth Token 인증(권장):
     client_id=3MVG9...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
     custom=FessObj,CustomProduct
     FessObj.title=Name
     FessObj.contents=Name,Description__c
@@ -84,7 +84,7 @@ OAuth Password 인증:
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 파라미터 목록
 ~~~~~~~~~~~~~~~~
@@ -120,7 +120,7 @@ OAuth Password 인증:
    * - ``number_of_threads``
      - 아니오
      - 병렬 처리 스레드 수(기본값: 1)
-   * - ``ignoreError``
+   * - ``ignore_error``
      - 아니오
      - 오류 시에도 처리 계속(기본값: true)
    * - ``custom``
@@ -301,7 +301,7 @@ OAuth 설정에서:
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 스크립트:
 
@@ -327,7 +327,7 @@ OAuth 설정에서:
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
     number_of_threads=2
-    ignoreError=true
+    ignore_error=true
     custom=Product__c,Contract__c
     Product__c.title=Name
     Product__c.contents=Name,Description__c,Category__c
@@ -358,7 +358,7 @@ Sandbox 환경 크롤링
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz
     number_of_threads=1
-    ignoreError=true
+    ignore_error=true
 
 스크립트:
 

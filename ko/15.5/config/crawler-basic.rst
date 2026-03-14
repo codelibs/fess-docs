@@ -474,15 +474,6 @@ User-Agent 설정
 
     client.userAgent=MyCompanyCrawler/1.0
 
-시스템 전체 설정
-------------------
-
-``fess_config.properties`` 에서 설정:
-
-::
-
-    crawler.user.agent=MyCompanyCrawler/1.0
-
 인코딩 설정
 ====================
 
@@ -493,7 +484,7 @@ User-Agent 설정
 
 ::
 
-    crawler.crawling.data.encoding=UTF-8
+    crawler.crawling.data.encoding=
 
 파일명 인코딩
 ----------------------------

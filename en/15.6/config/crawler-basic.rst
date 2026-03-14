@@ -481,7 +481,6 @@ Configure in ``fess_config.properties``:
 
 ::
 
-    crawler.user.agent=MyCompanyCrawler/1.0
 
 Encoding Configuration
 ======================

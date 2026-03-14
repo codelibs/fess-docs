@@ -199,7 +199,7 @@ Ejecucion secuencial de multiples trabajos
     def results = []
 
     // Optimizacion de indice
-    results << container.getComponent("optimizeJob").execute()
+    results << container.getComponent("suggestJob").execute()
 
     // Ejecucion de crawl
     results << container.getComponent("crawlJob").execute()

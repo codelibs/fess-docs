@@ -72,30 +72,30 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 带认证的连接:
 
 ::
 
-    hosts=https://elasticsearch.example.com:9200
+    settings.fesen.http.url=https://elasticsearch.example.com:9200
     index=myindex
-    username=elastic
-    password=changeme
-    scroll_size=100
-    scroll_timeout=5m
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    size=100
+    scroll=5m
 
 多主机设置:
 
 ::
 
-    hosts=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
+    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 参数列表
 ~~~~~~~~~~~~~~~~
@@ -107,24 +107,24 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
    * - 参数
      - 必需
      - 说明
-   * - ``hosts``
+   * - ``settings.fesen.http.url``
      - 是
      - Elasticsearch/OpenSearch主机（可用逗号分隔指定多个）
    * - ``index``
      - 是
      - 目标索引名
-   * - ``username``
+   * - ``settings.fesen.username``
      - 否
      - 认证用户名
-   * - ``password``
+   * - ``settings.fesen.password``
      - 否
      - 认证密码
-   * - ``scroll_size``
+   * - ``size``
      - 否
      - 滚动时的获取数量（默认: 100）
-   * - ``scroll_timeout``
+   * - ``scroll``
      - 否
-     - 滚动超时时间（默认: 5m）
+     - 滚动超时时间（默认: 1m）
    * - ``query``
      - 否
      - 查询JSON（默认: match_all）
@@ -206,10 +206,10 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
-    scroll_size=100
+    size=100
 
 要获取所有字段，请不指定 ``fields`` 或留空。
 
@@ -223,10 +223,10 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=articles
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 脚本:
 
@@ -245,12 +245,12 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    hosts=https://es.example.com:9200
+    settings.fesen.http.url=https://es.example.com:9200
     index=products
-    username=elastic
-    password=changeme
-    scroll_size=200
-    scroll_timeout=10m
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    size=200
+    scroll=10m
 
 脚本:
 
@@ -269,10 +269,10 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
     query={"query":{"term":{"level":"error"}}}
-    scroll_size=100
+    size=100
 
 脚本:
 
@@ -291,12 +291,12 @@ OpenSearch集群爬取
 
 ::
 
-    hosts=https://opensearch.example.com:9200
+    settings.fesen.http.url=https://opensearch.example.com:9200
     index=documents
-    username=admin
-    password=admin
-    scroll_size=100
-    scroll_timeout=5m
+    settings.fesen.username=admin
+    settings.fesen.password=admin
+    size=100
+    scroll=5m
 
 脚本:
 
@@ -314,10 +314,10 @@ OpenSearch集群爬取
 
 ::
 
-    hosts=http://localhost:9200
+    settings.fesen.http.url=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
-    scroll_size=100
+    size=100
 
 脚本:
 
@@ -335,10 +335,10 @@ OpenSearch集群爬取
 
 ::
 
-    hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
-    scroll_size=100
-    scroll_timeout=5m
+    size=100
+    scroll=5m
 
 脚本:
 
@@ -421,17 +421,17 @@ OpenSearch集群爬取
 
 **解决方法**:
 
-1. 增加 ``scroll_timeout``:
+1. 增加 ``scroll``:
 
    ::
 
-       scroll_timeout=10m
+       scroll=10m
 
-2. 减小 ``scroll_size``:
+2. 减小 ``size``:
 
    ::
 
-       scroll_size=50
+       size=50
 
 3. 确认集群资源
 
@@ -442,12 +442,12 @@ OpenSearch集群爬取
 
 **解决方法**:
 
-1. 调整 ``scroll_size``（太大会变慢）:
+1. 调整 ``size``（太大会变慢）:
 
    ::
 
-       scroll_size=100  # 默认
-       scroll_size=500  # 较大
+       size=100  # 默认
+       size=500  # 较大
 
 2. 使用 ``fields`` 限制获取字段
 3. 使用 ``query`` 只过滤必要的文档
@@ -460,7 +460,7 @@ OpenSearch集群爬取
 
 **解决方法**:
 
-1. 减小 ``scroll_size``
+1. 减小 ``size``
 2. 使用 ``fields`` 限制获取字段
 3. 增加 |Fess| 的堆大小
 4. 排除大字段（二进制数据等）

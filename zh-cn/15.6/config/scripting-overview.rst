@@ -24,9 +24,6 @@
    * - Groovy
      - ``groovy``
      - 默认脚本语言。与Java兼容，提供强大功能
-   * - JavaScript
-     - ``javascript``
-     - Web开发者熟悉的语言
 
 .. note::
    Groovy使用最广泛，本文档中的示例以Groovy编写。
@@ -130,9 +127,9 @@
      - 从数据存储获取的数据
    * - ``container``
      - DI容器（访问组件）
-   * - ``systemHelper``
+   * - ``container.getComponent("systemHelper")``
      - 系统帮助器
-   * - ``fessConfig``
+   * - ``container.getComponent("fessConfig")``
      - |Fess| 的配置
 
 安全性

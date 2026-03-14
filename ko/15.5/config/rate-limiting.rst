@@ -22,7 +22,7 @@ HTTP 요청 속도 제한
 설정
 ----
 
-``app/WEB-INF/conf/fess_config.properties``:
+``app/WEB-INF/classes/fess_config.properties``:
 
 ::
 
@@ -95,7 +95,7 @@ robots.txt 준수
 속도 제한 전체 설정 항목
 =========================
 
-``app/WEB-INF/conf/fess_config.properties``에서 설정 가능한 모든 프로퍼티입니다.
+``app/WEB-INF/classes/fess_config.properties``에서 설정 가능한 모든 프로퍼티입니다.
 
 .. list-table::
    :header-rows: 1

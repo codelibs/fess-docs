@@ -55,21 +55,6 @@
 
 複数のフィールドを指定する場合は、カンマ区切りで列挙します。
 
-スクロールのタイムアウト設定
-----------------------------
-
-スクロールコンテキストの有効期間を設定できます。
-デフォルトは1分です。
-
-::
-
-    api.search.scroll.timeout=1m
-
-単位:
-- ``s``: 秒
-- ``m``: 分
-- ``h``: 時間
-
 使用方法
 ========
 
@@ -80,7 +65,7 @@
 
 ::
 
-    http://localhost:8080/json/scroll?q=検索キーワード
+    http://localhost:8080/api/v1/documents/all?q=検索キーワード
 
 検索結果は NDJSON(Newline Delimited JSON)形式で返却されます。
 1行ごとに1つのドキュメントがJSON形式で出力されます。
@@ -89,7 +74,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 リクエストパラメータ
 --------------------
@@ -120,19 +105,19 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=検索エンジン"
+    curl "http://localhost:8080/api/v1/documents/all?q=検索エンジン"
 
 **例: フィールド指定検索**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=title:Fess"
+    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
 
 **例: 全件取得(検索条件なし)**
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
 
 取得件数の指定
 --------------
@@ -141,7 +126,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
 
 .. note::
    ``size`` パラメータを大きくしすぎると、メモリ使用量が増加します。
@@ -154,7 +139,7 @@
 
 ::
 
-    curl "http://localhost:8080/json/scroll?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
 認証が必要な場合
 ----------------
@@ -163,14 +148,14 @@
 
 ::
 
-    curl -u username:password "http://localhost:8080/json/scroll?q=Fess"
+    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 または、APIトークンを使用:
 
 ::
 
     curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/json/scroll?q=Fess"
+         "http://localhost:8080/api/v1/documents/all?q=Fess"
 
 レスポンス形式
 ==============
@@ -214,7 +199,7 @@ Pythonでの処理例
     import json
 
     # スクロール検索の実行
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
         "size": 100
@@ -237,7 +222,7 @@ Pythonでの処理例
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
 
 CSVへの変換
 -----------
@@ -246,7 +231,7 @@ jqコマンドを使用してCSVに変換する例:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/json/scroll?q=Fess" | \
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
         jq -r '[.url, .title, .score] | @csv' > results.csv
 
 データ分析
@@ -312,7 +297,7 @@ jqコマンドを使用してCSVに変換する例:
     import requests
     import json
 
-    url = "http://localhost:8080/json/scroll"
+    url = "http://localhost:8080/api/v1/documents/all"
     params = {"q": "*:*", "size": 100}
 
     # ストリーミングで処理

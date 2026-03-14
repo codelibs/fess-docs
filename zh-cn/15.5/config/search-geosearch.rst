@@ -144,12 +144,7 @@ JSON API 也可以使用位置信息搜索。
 
 ::
 
-    curl -X POST "http://localhost:8080/json/?q=酒店" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "geo.location.point": "35.681236,139.767125",
-        "geo.location.distance": "5km"
-      }'
+    curl "http://localhost:8080/json/?q=酒店&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 字段名自定义
 ==========================
@@ -231,7 +226,7 @@ Google 地图集成
 
 处理大量位置信息数据时,请优化索引配置。
 
-请在 ``app/WEB-INF/classes/fess_indices/fess.json`` 中确认位置信息字段的配置。
+请在 ``app/WEB-INF/classes/fess_indices/fess/doc.json`` 中确认位置信息字段的配置。
 
 ::
 

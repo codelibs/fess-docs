@@ -66,31 +66,31 @@ Archivo local:
 
 ::
 
-    file_path=/path/to/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Archivo HTTP:
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Multiples archivos:
 
 ::
 
-    file_path=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Lista de parametros
 ~~~~~~~~~~~~~~~~~~~
@@ -102,19 +102,19 @@ Lista de parametros
    * - Parametro
      - Requerido
      - Descripcion
-   * - ``file_path``
+   * - ``files``
      - Si
      - Ruta del archivo CSV (local, HTTP, multiples separados por comas)
-   * - ``encoding``
+   * - ``file_encoding``
      - No
      - Codificacion de caracteres (predeterminado: UTF-8)
-   * - ``has_header``
+   * - ``has_header_line``
      - No
      - Si tiene fila de encabezado (predeterminado: true)
-   * - ``separator``
+   * - ``separator_character``
      - No
      - Caracter separador (predeterminado: coma ``,``)
-   * - ``quote``
+   * - ``quote_character``
      - No
      - Caracter de comillas (predeterminado: comillas dobles ``"``)
 
@@ -135,16 +135,16 @@ Sin encabezado (especificando indice de columna):
 
 ::
 
-    url="https://example.com/product/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/product/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Campos disponibles
 ~~~~~~~~~~~~~~~~~~
 
-- ``data.<nombre_columna>`` - Nombre de columna del encabezado (cuando has_header=true)
-- ``data.col<N>`` - Indice de columna (cuando has_header=false, comenzando desde 0)
+- ``data.<nombre_columna>`` - Nombre de columna del encabezado (cuando has_header_line=true)
+- ``data.cell<N>`` - Indice de columna (cuando has_header_line=false, comenzando desde 0)
 
 Detalles del formato CSV
 ========================
@@ -167,14 +167,14 @@ Delimitado por tabulador (TSV):
 ::
 
     # Parametro
-    separator=\t
+    separator_character=\t
 
 Delimitado por punto y coma:
 
 ::
 
     # Parametro
-    separator=;
+    separator_character=;
 
 Comillas personalizadas
 -----------------------
@@ -184,7 +184,7 @@ Comillas simples:
 ::
 
     # Parametro
-    quote='
+    quote_character='
 
 Codificacion
 ------------
@@ -193,13 +193,13 @@ Archivo en japones (Shift_JIS):
 
 ::
 
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
 Archivo en japones (EUC-JP):
 
 ::
 
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
 Ejemplos de uso
 ===============
@@ -220,11 +220,11 @@ Parametros:
 
 ::
 
-    file_path=/var/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -263,11 +263,11 @@ Parametros:
 
 ::
 
-    file_path=/var/data/employees.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/employees.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -293,20 +293,20 @@ Parametros:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=false
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=false
+    separator_character=,
+    quote_character="
 
 Script:
 
 ::
 
-    url="https://example.com/item/" + data.col0
-    title=data.col1
-    content=data.col2
-    price=data.col3
+    url="https://example.com/item/" + data.cell0
+    title=data.cell1
+    content=data.cell2
+    price=data.cell3
 
 Integracion de multiples archivos CSV
 -------------------------------------
@@ -315,11 +315,11 @@ Parametros:
 
 ::
 
-    file_path=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/2024-01.csv,/var/data/2024-02.csv,/var/data/2024-03.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -337,11 +337,11 @@ Parametros:
 
 ::
 
-    file_path=https://example.com/data/products.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=https://example.com/data/products.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Script:
 
@@ -366,11 +366,11 @@ Parametros:
 
 ::
 
-    file_path=/var/data/data.tsv
-    encoding=UTF-8
-    has_header=true
-    separator=\t
-    quote="
+    files=/var/data/data.tsv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=\t
+    quote_character="
 
 Script:
 
@@ -408,16 +408,16 @@ Especificar la codificacion correcta:
 ::
 
     # UTF-8
-    encoding=UTF-8
+    file_encoding=UTF-8
 
     # Shift_JIS
-    encoding=Shift_JIS
+    file_encoding=Shift_JIS
 
     # EUC-JP
-    encoding=EUC-JP
+    file_encoding=EUC-JP
 
     # Windows estandar (CP932)
-    encoding=Windows-31J
+    file_encoding=Windows-31J
 
 Verificar la codificacion del archivo:
 
@@ -439,13 +439,13 @@ Las columnas no se reconocen correctamente
    ::
 
        # Coma
-       separator=,
+       separator_character=,
 
        # Tabulador
-       separator=\t
+       separator_character=\t
 
        # Punto y coma
-       separator=;
+       separator_character=;
 
 2. Verificar la configuracion de comillas
 3. Verificar el formato del archivo CSV (si cumple con RFC 4180)
@@ -461,13 +461,13 @@ Cuando hay fila de encabezado:
 
 ::
 
-    has_header=true
+    has_header_line=true
 
 Cuando no hay fila de encabezado:
 
 ::
 
-    has_header=false
+    has_header_line=false
 
 No se obtienen datos
 --------------------
@@ -478,7 +478,7 @@ No se obtienen datos
 
 1. Verificar que el archivo CSV no este vacio
 2. Verificar que la configuracion del script sea correcta
-3. Verificar que los nombres de columna sean correctos (cuando has_header=true)
+3. Verificar que los nombres de columna sean correctos (cuando has_header_line=true)
 4. Revisar los mensajes de error en el log
 
 Archivo CSV grande
@@ -510,11 +510,11 @@ Parametros:
 
 ::
 
-    file_path=/var/data/data.csv
-    encoding=UTF-8
-    has_header=true
-    separator=,
-    quote="
+    files=/var/data/data.csv
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+    quote_character="
 
 Ejemplos avanzados de scripts
 =============================

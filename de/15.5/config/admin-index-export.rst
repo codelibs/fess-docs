@@ -40,7 +40,7 @@ Konfigurieren Sie die Index-Export-Funktion in ``fess_config.properties``:
      - Standardwert
      - Beschreibung
    * - ``index.export.path``
-     - ``/var/fess/export``
+     - ``/var/lib/fess/export``
      - Verzeichnis für exportierte Dateien
    * - ``index.export.exclude.fields``
      - ``cache``
@@ -92,7 +92,7 @@ Beispielskript mit Datumsfilter:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "created:>=now-7d"
@@ -102,7 +102,7 @@ Beispielskript mit Website-Filter:
 
 ::
 
-    import org.codelibs.fess.exec.IndexExportJob
+    import org.codelibs.fess.job.IndexExportJob
     
     def job = new IndexExportJob()
     job.query = "url:*example.com*"
@@ -117,7 +117,7 @@ Beispielsweise würde ein Dokument mit der URL ``https://example.com/docs/guide/
 
 ::
 
-    /var/fess/export/
+    /var/lib/fess/export/
     └── example.com/
         └── docs/
             └── guide/
@@ -194,7 +194,7 @@ Export schlägt mittendrin fehl
 Dateien nicht zugänglich
 ------------------------
 
-1. Überprüfen Sie Dateiberechtigungen: ``ls -la /var/fess/export``
+1. Überprüfen Sie Dateiberechtigungen: ``ls -la /var/lib/fess/export``
 2. Prüfen Sie, ob der Verzeichnisbesitzer mit dem |Fess|-Prozessbenutzer übereinstimmt
 3. Bestätigen Sie, dass SELinux- oder AppArmor-Richtlinien den Zugriff erlauben
 

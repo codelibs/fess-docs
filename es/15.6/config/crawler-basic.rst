@@ -474,15 +474,6 @@ Agregue a "Parámetros de Configuración" en la configuración de rastreo:
 
     client.userAgent=MyCompanyCrawler/1.0
 
-Configuración para Todo el Sistema
------------------------------------
-
-Configure en ``fess_config.properties``:
-
-::
-
-    crawler.user.agent=MyCompanyCrawler/1.0
-
 Configuración de Codificación
 ==============================
 
@@ -502,7 +493,7 @@ Codificación de nombres de archivo del sistema de archivos:
 
 ::
 
-    crawler.document.file.name.encoding=UTF-8
+    crawler.document.file.name.encoding=
 
 Solución de Problemas de Rastreo
 =================================

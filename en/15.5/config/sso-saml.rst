@@ -290,7 +290,7 @@ Other Security Settings
      - ``true``
    * - ``saml.security.signature_algorithm``
      - Signature algorithm
-     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha1``
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.sp.nameidformat``
      - NameID format
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``

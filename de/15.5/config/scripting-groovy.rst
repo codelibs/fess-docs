@@ -199,7 +199,7 @@ Mehrere Aufgaben nacheinander ausfuehren
     def results = []
 
     // Indexoptimierung
-    results << container.getComponent("optimizeJob").execute()
+    results << container.getComponent("suggestJob").execute()
 
     // Crawl ausfuehren
     results << container.getComponent("crawlJob").execute()
