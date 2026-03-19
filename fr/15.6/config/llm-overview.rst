@@ -58,9 +58,10 @@ La fonctionnalite de mode de recherche IA fonctionne selon le flux suivant.
 1. **Entree utilisateur** : L'utilisateur saisit une question dans l'interface de chat
 2. **Analyse d'intention** : Le LLM analyse la question de l'utilisateur et extrait les mots-cles de recherche
 3. **Execution de la recherche** : Recherche de documents pertinents avec le moteur de recherche |Fess|
-4. **Evaluation des resultats** : Le LLM evalue la pertinence des resultats de recherche et selectionne les meilleurs documents
-5. **Generation de reponse** : Le LLM genere une reponse basee sur les documents selectionnes
-6. **Citation des sources** : La reponse inclut des liens vers les documents sources
+4. **Regeneration de requete** : Lorsqu'aucun resultat n'est trouve, le LLM regenere la requete et reessaie
+5. **Evaluation des resultats** : Le LLM evalue la pertinence des resultats de recherche et selectionne les meilleurs documents
+6. **Generation de reponse** : Le LLM genere une reponse basee sur les documents selectionnes (avec rendu Markdown)
+7. **Citation des sources** : La reponse inclut des liens vers les documents sources
 
 Configuration de base
 ========
@@ -166,7 +167,7 @@ Configuration relative aux sessions de chat. Ces elements se configurent dans ``
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Nombre maximum de messages dans l'historique de conversation
-     - ``20``
+     - ``30``
 
 Controle de la concurrence
 ============
@@ -248,6 +249,9 @@ Liste des types de prompt
    * - Reponse directe
      - ``direct``
      - Genere une reponse directe sans passer par la recherche
+   * - Regeneration de requete
+     - ``query_regeneration``
+     - Regenere la requete lorsqu'aucun resultat de recherche n'est trouve
 
 Patterns de configuration
 ------------
