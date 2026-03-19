@@ -57,9 +57,10 @@ Die AI-Suchmodus-Funktion arbeitet mit dem folgenden Ablauf.
 1. **Benutzereingabe**: Benutzer gibt eine Frage in der Chat-Oberfläche ein
 2. **Absichtsanalyse**: LLM analysiert die Benutzerfrage und extrahiert Suchbegriffe
 3. **Suchausführung**: Suche nach relevanten Dokumenten mit der |Fess|-Suchmaschine
-4. **Ergebnisbewertung**: LLM bewertet die Relevanz der Suchergebnisse und wählt optimale Dokumente aus
-5. **Antwortgenerierung**: LLM generiert eine Antwort basierend auf den ausgewählten Dokumenten
-6. **Quellenangabe**: Die Antwort enthält Links zu den Quelldokumenten
+4. **Query-Regenerierung**: Wenn keine Suchergebnisse gefunden werden, regeneriert das LLM die Abfrage und versucht es erneut
+5. **Ergebnisbewertung**: LLM bewertet die Relevanz der Suchergebnisse und wählt optimale Dokumente aus
+6. **Antwortgenerierung**: LLM generiert eine Antwort basierend auf den ausgewählten Dokumenten (mit Markdown-Rendering)
+7. **Quellenangabe**: Die Antwort enthält Links zu den Quelldokumenten
 
 Grundeinstellungen
 ==================
@@ -165,7 +166,7 @@ Einstellungen zu Chat-Sitzungen. Diese werden in ``fess_config.properties`` konf
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Maximale Anzahl der Nachrichten im Gesprächsverlauf
-     - ``20``
+     - ``30``
 
 Gleichzeitigkeitssteuerung
 ===========================
@@ -247,6 +248,9 @@ Prompttypen-Übersicht
    * - Direkte Antwort
      - ``direct``
      - Generiert eine Antwort ohne Suchumweg
+   * - Query-Regenerierung
+     - ``query_regeneration``
+     - Regeneriert die Abfrage, wenn keine Suchergebnisse gefunden werden
 
 Konfigurationsmuster
 --------------------

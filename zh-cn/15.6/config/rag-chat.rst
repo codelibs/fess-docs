@@ -20,11 +20,13 @@ AI搜索模式通过以下多阶段流程运行。
 
 1. **意图分析阶段**: 分析用户的问题，提取最适合搜索的关键词
 2. **搜索阶段**: 使用提取的关键词通过 |Fess| 搜索引擎搜索文档
-3. **评估阶段**: 评估搜索结果的相关性，选择最合适的文档
-4. **生成阶段**: LLM基于选择的文档生成回答
-5. **输出阶段**: 向用户返回回答和来源信息
+3. **查询再生成回退**: 当没有搜索结果时，LLM重新生成查询并重试搜索
+4. **评估阶段**: 评估搜索结果的相关性，选择最合适的文档
+5. **生成阶段**: LLM基于选择的文档生成回答
+6. **输出阶段**: 向用户返回回答和来源信息（支持Markdown渲染）
 
 通过此流程，可以提供比简单关键词搜索更理解上下文的高质量回答。
+查询再生成可以在初始搜索查询不够理想时提高回答的覆盖范围。
 
 基本配置
 ========
@@ -90,10 +92,7 @@ LLM提供商的选择在管理界面或系统属性中进行。
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - 对话历史中保留的最大消息数
-     - ``20``
-   * - ``rag.chat.intent.history.max.messages``
-     - 意图分析使用的对话历史最大消息数
-     - ``4``
+     - ``30``
    * - ``rag.chat.content.fields``
      - 从文档获取的字段
      - ``title,url,content,doc_id,content_title,content_description``
@@ -107,17 +106,8 @@ LLM提供商的选择在管理界面或系统属性中进行。
      - 高亮显示的片段数
      - ``3``
    * - ``rag.chat.history.assistant.content``
-     - 助手历史中包含的内容类型
-     - ``source_titles``
-   * - ``rag.chat.history.assistant.max.chars``
-     - 助手历史的最大字符数
-     - ``500``
-   * - ``rag.chat.history.assistant.summary.max.chars``
-     - 助手历史摘要的最大字符数
-     - ``500``
-   * - ``rag.chat.history.max.chars``
-     - 对话历史的最大字符数
-     - ``2000``
+     - 助手历史中包含的内容类型（ ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` ）
+     - ``smart_summary``
 
 生成参数
 ================
@@ -225,7 +215,7 @@ LLM提供商的选择在管理界面或系统属性中进行。
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - 对话历史中保留的最大消息数
-     - ``20``
+     - ``30``
 
 会话行为
 ----------------
@@ -253,6 +243,58 @@ LLM提供商的选择在管理界面或系统属性中进行。
 - 请同时考虑LLM提供商端的速率限制进行设置
 - 高负载环境中建议设置更小的值
 - 达到并发数上限时，请求将进入队列依次处理
+
+对话历史模式
+============
+
+``rag.chat.history.assistant.content`` 可以设置助手响应在对话历史中的存储方式。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - 模式
+     - 说明
+   * - ``smart_summary``
+     - （默认）保留响应的开头部分（60%）和结尾部分（40%），中间部分用省略标记替换。同时附加来源标题
+   * - ``full``
+     - 完整保留响应原文
+   * - ``source_titles``
+     - 仅保留来源标题
+   * - ``source_titles_and_urls``
+     - 保留来源标题和URL
+   * - ``truncated``
+     - 将响应截断到最大字符数
+   * - ``none``
+     - 不保留历史
+
+.. note::
+
+   在 ``smart_summary`` 模式下，可以高效保留长响应的上下文，同时减少token使用量。
+   用户和助手的消息对按轮次分组，在字符预算内进行最优打包。
+   历史的最大字符数和摘要的最大字符数由各 ``fess-llm-*`` 插件的 ``LlmClient`` 实现控制。
+
+查询再生成
+==========
+
+当没有搜索结果或未找到相关结果时，LLM会自动重新生成查询并重试搜索。
+
+- 搜索结果为零时：以原因 ``no_results`` 执行查询再生成
+- 未找到相关文档时：以原因 ``no_relevant_results`` 执行查询再生成
+- 再生成失败时回退到原始查询
+
+此功能默认启用，并集成到同步和流式RAG流程中。
+查询再生成提示词在各 ``fess-llm-*`` 插件中定义。
+
+Markdown渲染
+=============
+
+AI搜索模式的响应以Markdown格式渲染。
+
+- LLM的响应被解析为Markdown并转换为HTML
+- 转换后的HTML经过清理，仅允许安全的标签和属性
+- 支持标题、列表、代码块、表格、链接等Markdown语法
+- 客户端使用 ``marked.js`` 和 ``DOMPurify``，服务端使用OWASP清理器
 
 API使用
 =========
@@ -351,9 +393,9 @@ SSE事件:
    * - ``sources``
      - 参考文档信息
    * - ``done``
-     - 处理完成（sessionId, htmlContent）
+     - 处理完成（sessionId, htmlContent）。htmlContent包含Markdown渲染后的HTML字符串
    * - ``error``
-     - 错误信息
+     - 错误信息。提供超时、上下文长度超出、模型未找到、无效响应、连接错误等类型的具体消息
 
 详细的API文档请参阅 :doc:`../api/api-chat`。
 
@@ -437,6 +479,17 @@ AI搜索模式无法启用
     <Logger name="org.codelibs.fess.llm" level="DEBUG"/>
     <Logger name="org.codelibs.fess.api.chat" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
+
+主要日志消息带有 ``[RAG]`` 前缀，
+各阶段使用 ``[RAG:INTENT]``、``[RAG:EVAL]``、``[RAG:ANSWER]`` 等子前缀。
+INFO级别输出聊天完成日志（耗时、来源数），DEBUG级别输出token使用量、
+并发控制、历史打包的详细信息。
+
+搜索日志与访问类型
+------------------
+
+通过AI搜索模式进行的搜索，会在搜索日志中以LLM提供商名称（如 ``ollama``、``openai``、``gemini``）作为访问类型记录。
+这样可以在分析中区分AI搜索模式的搜索与普通Web搜索或API搜索。
 
 参考信息
 ========

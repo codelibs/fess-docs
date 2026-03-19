@@ -20,11 +20,13 @@ Le mode de recherche IA fonctionne selon un flux en plusieurs etapes.
 
 1. **Phase d'analyse d'intention** : Analyse la question de l'utilisateur et extrait les mots-cles optimaux pour la recherche
 2. **Phase de recherche** : Recherche des documents avec les mots-cles extraits en utilisant le moteur de recherche |Fess|
-3. **Phase d'evaluation** : Evalue la pertinence des resultats de recherche et selectionne les documents les plus appropries
-4. **Phase de generation** : Le LLM genere une reponse basee sur les documents selectionnes
-5. **Phase de sortie** : Retourne la reponse et les informations sources a l'utilisateur
+3. **Fallback de regeneration de requete** : Lorsqu'aucun resultat n'est trouve, le LLM regenere la requete et reessaie
+4. **Phase d'evaluation** : Evalue la pertinence des resultats de recherche et selectionne les documents les plus appropries
+5. **Phase de generation** : Le LLM genere une reponse basee sur les documents selectionnes
+6. **Phase de sortie** : Retourne la reponse et les informations sources a l'utilisateur (avec rendu Markdown)
 
 Ce flux permet des reponses de haute qualite comprenant le contexte, superieur a la simple recherche par mots-cles.
+La regeneration de requete ameliore la couverture des reponses lorsque la requete initiale n'est pas optimale.
 
 Configuration de base
 ========
@@ -90,10 +92,7 @@ Liste des configurations principales disponibles dans ``fess_config.properties``
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Nombre maximum de messages dans l'historique de conversation
-     - ``20``
-   * - ``rag.chat.intent.history.max.messages``
-     - Nombre maximum de messages de l'historique de conversation utilises pour l'analyse d'intention
-     - ``4``
+     - ``30``
    * - ``rag.chat.content.fields``
      - Champs a recuperer des documents
      - ``title,url,content,doc_id,content_title,content_description``
@@ -107,17 +106,8 @@ Liste des configurations principales disponibles dans ``fess_config.properties``
      - Nombre de fragments pour l'affichage en surbrillance
      - ``3``
    * - ``rag.chat.history.assistant.content``
-     - Type de contenu a inclure dans l'historique de l'assistant
-     - ``source_titles``
-   * - ``rag.chat.history.assistant.max.chars``
-     - Nombre maximum de caracteres de l'historique de l'assistant
-     - ``500``
-   * - ``rag.chat.history.assistant.summary.max.chars``
-     - Nombre maximum de caracteres du resume de l'historique de l'assistant
-     - ``500``
-   * - ``rag.chat.history.max.chars``
-     - Nombre maximum de caracteres de l'historique de conversation
-     - ``2000``
+     - Type de contenu a inclure dans l'historique de l'assistant ( ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` )
+     - ``smart_summary``
 
 Parametres de generation
 ================
@@ -225,7 +215,7 @@ Configuration de la gestion des sessions de chat.
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Nombre maximum de messages dans l'historique de conversation
-     - ``20``
+     - ``30``
 
 Comportement des sessions
 ----------------
@@ -253,6 +243,58 @@ Considerations sur le controle de la concurrence
 - Tenez compte egalement des limitations de debit cote fournisseur LLM
 - Dans les environnements a forte charge, il est recommande de configurer des valeurs plus petites
 - Lorsque la limite de concurrence est atteinte, les requetes entrent dans une file d'attente et sont traitees sequentiellement
+
+Mode d'historique de conversation
+=================================
+
+``rag.chat.history.assistant.content`` controle la maniere dont les reponses de l'assistant sont stockees dans l'historique de conversation.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Mode
+     - Description
+   * - ``smart_summary``
+     - (Par defaut) Preserve le debut (60%) et la fin (40%) de la reponse, en remplacant le milieu par un marqueur d'omission. Les titres des sources sont egalement ajoutes
+   * - ``full``
+     - Preserve la reponse entiere telle quelle
+   * - ``source_titles``
+     - Preserve uniquement les titres des sources
+   * - ``source_titles_and_urls``
+     - Preserve les titres et URLs des sources
+   * - ``truncated``
+     - Tronque la reponse a la limite maximale de caracteres
+   * - ``none``
+     - Ne preserve pas l'historique
+
+.. note::
+
+   En mode ``smart_summary``, le contexte des longues reponses est preserve efficacement tout en reduisant l'utilisation des tokens.
+   Les paires de messages utilisateur et assistant sont groupees en tours et empaquetees de maniere optimale dans un budget de caracteres.
+   Les limites maximales de caracteres pour l'historique et le resume sont controlees par l'implementation ``LlmClient`` de chaque plugin ``fess-llm-*``.
+
+Regeneration de requete
+=======================
+
+Lorsqu'aucun resultat de recherche n'est trouve ou qu'aucun resultat pertinent n'est identifie, le LLM regenere automatiquement la requete et relance la recherche.
+
+- Avec zero resultats de recherche : Regeneration de requete avec raison ``no_results``
+- Lorsqu'aucun document pertinent n'est trouve : Regeneration de requete avec raison ``no_relevant_results``
+- Retombe sur la requete originale si la regeneration echoue
+
+Cette fonctionnalite est activee par defaut et integree dans les flux RAG synchrones et en streaming.
+Les prompts de regeneration de requete sont definis dans chaque plugin ``fess-llm-*``.
+
+Rendu Markdown
+==============
+
+Les reponses du mode de recherche IA sont rendues au format Markdown.
+
+- Les reponses du LLM sont analysees en Markdown et converties en HTML
+- Le HTML converti est assaini, n'autorisant que les balises et attributs surs
+- Prend en charge les titres, listes, blocs de code, tableaux, liens et autres syntaxes Markdown
+- Cote client, ``marked.js`` et ``DOMPurify`` sont utilises ; cote serveur, le sanitizer OWASP
 
 Utilisation de l'API
 =========
@@ -351,9 +393,9 @@ Evenements SSE :
    * - ``sources``
      - Information sur les documents sources
    * - ``done``
-     - Traitement termine (sessionId, htmlContent)
+     - Traitement termine (sessionId, htmlContent). htmlContent contient la chaine HTML rendue depuis Markdown
    * - ``error``
-     - Information d'erreur
+     - Information d'erreur. Fournit des messages specifiques pour le timeout, le depassement de la longueur du contexte, le modele non trouve, la reponse invalide et les erreurs de connexion
 
 Pour la documentation API detaillee, consultez :doc:`../api/api-chat`.
 
@@ -437,6 +479,14 @@ Pour investiguer les problemes, ajustez le niveau de log pour afficher des logs 
     <Logger name="org.codelibs.fess.llm" level="DEBUG"/>
     <Logger name="org.codelibs.fess.api.chat" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
+
+Les messages de log utilisent le prefixe ``[RAG]``, avec des sous-prefixes tels que ``[RAG:INTENT]``, ``[RAG:EVAL]`` et ``[RAG:ANSWER]`` pour chaque phase.
+Au niveau INFO, les logs de fin de chat (duree, nombre de sources) sont emis. Au niveau DEBUG, les details d'utilisation des tokens, de controle de concurrence et d'empaquetage de l'historique sont emis.
+
+Journal de recherche et type d'acces
+-------------------------------------
+
+Les recherches via le mode de recherche IA sont enregistrees avec le nom du fournisseur LLM (par ex. ``ollama``, ``openai``, ``gemini``) comme type d'acces dans les journaux de recherche. Cela permet de distinguer les recherches du mode IA des recherches web ou API regulieres dans les analyses.
 
 Informations de reference
 ========

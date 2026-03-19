@@ -57,9 +57,10 @@ La funcionalidad de modo de búsqueda IA opera con el siguiente flujo.
 1. **Entrada del usuario**: El usuario ingresa una pregunta en la interfaz de chat
 2. **Analisis de intencion**: El LLM analiza la pregunta del usuario y extrae palabras clave de busqueda
 3. **Ejecucion de busqueda**: Busca documentos relacionados usando el motor de busqueda de |Fess|
-4. **Evaluacion de resultados**: El LLM evalua la relevancia de los resultados de busqueda y selecciona los documentos mas apropiados
-5. **Generacion de respuesta**: El LLM genera una respuesta basada en los documentos seleccionados
-6. **Cita de fuentes**: La respuesta incluye enlaces a los documentos de referencia
+4. **Regeneracion de consulta**: Cuando no se encuentran resultados, el LLM regenera la consulta y reintenta
+5. **Evaluacion de resultados**: El LLM evalua la relevancia de los resultados de busqueda y selecciona los documentos mas apropiados
+6. **Generacion de respuesta**: El LLM genera una respuesta basada en los documentos seleccionados (con renderizado Markdown)
+7. **Cita de fuentes**: La respuesta incluye enlaces a los documentos de referencia
 
 Configuracion basica
 ====================
@@ -165,7 +166,7 @@ Configuracion relacionada con las sesiones de chat. Estas se configuran en ``fes
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Numero maximo de mensajes a mantener en el historial de conversacion
-     - ``20``
+     - ``30``
 
 Control de concurrencia
 =======================
@@ -247,6 +248,9 @@ Lista de tipos de prompt
    * - Respuesta directa
      - ``direct``
      - Genera una respuesta directa sin pasar por la busqueda
+   * - Regeneracion de consulta
+     - ``query_regeneration``
+     - Regenera la consulta cuando no se encuentran resultados de busqueda
 
 Patron de configuracion
 -----------------------

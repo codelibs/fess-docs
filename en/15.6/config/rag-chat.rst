@@ -20,11 +20,13 @@ AI mode operates through the following multi-stage flow.
 
 1. **Intent Analysis Phase**: Analyzes the user's question and extracts optimal keywords for search
 2. **Search Phase**: Uses |Fess| search engine to find documents with the extracted keywords
-3. **Evaluation Phase**: Evaluates relevance of search results and selects the most appropriate documents
-4. **Generation Phase**: LLM generates a response based on the selected documents
-5. **Output Phase**: Returns the response and source information to the user
+3. **Query Regeneration Fallback**: When no search results are found, LLM regenerates the query and retries
+4. **Evaluation Phase**: Evaluates relevance of search results and selects the most appropriate documents
+5. **Generation Phase**: LLM generates a response based on the selected documents
+6. **Output Phase**: Returns the response and source information to the user (with Markdown rendering)
 
 This flow enables higher quality responses that understand context better than simple keyword searches.
+Query regeneration improves answer coverage when the initial search query is not optimal.
 
 Basic Configuration
 ===================
@@ -90,10 +92,7 @@ List of core settings that can be configured in ``fess_config.properties``.
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Maximum number of messages to retain in conversation history
-     - ``20``
-   * - ``rag.chat.intent.history.max.messages``
-     - Maximum number of conversation history messages used for intent analysis
-     - ``4``
+     - ``30``
    * - ``rag.chat.content.fields``
      - Fields to retrieve from documents
      - ``title,url,content,doc_id,content_title,content_description``
@@ -107,18 +106,8 @@ List of core settings that can be configured in ``fess_config.properties``.
      - Number of fragments for highlight display
      - ``3``
    * - ``rag.chat.history.assistant.content``
-     - Type of content to include in assistant history
-     - ``source_titles``
-   * - ``rag.chat.history.assistant.max.chars``
-     - Maximum number of characters in assistant history
-     - ``500``
-   * - ``rag.chat.history.assistant.summary.max.chars``
-     - Maximum number of characters for assistant history summary
-     - ``500``
-   * - ``rag.chat.history.max.chars``
-     - Maximum number of characters in conversation history
-     - ``2000``
-
+     - Type of content to include in assistant history ( ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` )
+     - ``smart_summary``
 Generation Parameters
 =====================
 
@@ -225,7 +214,7 @@ Settings for chat session management.
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Maximum number of messages to retain in conversation history
-     - ``20``
+     - ``30``
 
 Session Behavior
 ----------------
@@ -253,6 +242,58 @@ Concurrency Control Considerations
 - Configure with the LLM provider's rate limits in mind
 - In high-load environments, it is recommended to set lower values
 - When the concurrency limit is reached, requests are queued and processed sequentially
+
+Conversation History Mode
+=========================
+
+``rag.chat.history.assistant.content`` controls how assistant responses are stored in conversation history.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Mode
+     - Description
+   * - ``smart_summary``
+     - (Default) Preserves the beginning (60%) and end (40%) of the response, replacing the middle with an omission marker. Source titles are also appended
+   * - ``full``
+     - Preserves the entire response as-is
+   * - ``source_titles``
+     - Preserves only source titles
+   * - ``source_titles_and_urls``
+     - Preserves source titles and URLs
+   * - ``truncated``
+     - Truncates the response to the maximum character limit
+   * - ``none``
+     - Does not preserve history
+
+.. note::
+
+   In ``smart_summary`` mode, long response context is efficiently preserved while reducing token usage.
+   User and assistant message pairs are grouped as turns and optimally packed within a character budget.
+   Maximum character limits for history and summary are controlled by the ``LlmClient`` implementation of each ``fess-llm-*`` plugin.
+
+Query Regeneration
+==================
+
+When no search results are found or no relevant results are identified, the LLM automatically regenerates the query and retries the search.
+
+- When zero search results: Query regeneration with reason ``no_results``
+- When no relevant documents found: Query regeneration with reason ``no_relevant_results``
+- Falls back to the original query if regeneration fails
+
+This feature is enabled by default and integrated into both synchronous and streaming RAG flows.
+Query regeneration prompts are defined in each ``fess-llm-*`` plugin.
+
+Markdown Rendering
+==================
+
+AI mode responses are rendered in Markdown format.
+
+- LLM responses are parsed as Markdown and converted to HTML
+- Converted HTML is sanitized, allowing only safe tags and attributes
+- Supports headings, lists, code blocks, tables, links, and other Markdown syntax
+- Client-side uses ``marked.js`` and ``DOMPurify``; server-side uses OWASP sanitizer
 
 API Usage
 =========
@@ -351,9 +392,9 @@ SSE Events:
    * - ``sources``
      - Reference document information
    * - ``done``
-     - Processing complete (sessionId, htmlContent)
+     - Processing complete (sessionId, htmlContent). htmlContent contains the Markdown-rendered HTML string
    * - ``error``
-     - Error information
+     - Error information. Provides specific messages for timeout, context length exceeded, model not found, invalid response, and connection errors
 
 For detailed API documentation, see :doc:`../api/api-chat`.
 
@@ -437,6 +478,14 @@ When investigating issues, adjust log levels to output detailed logs.
     <Logger name="org.codelibs.fess.llm" level="DEBUG"/>
     <Logger name="org.codelibs.fess.api.chat" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
+
+Log messages use the ``[RAG]`` prefix, with sub-prefixes such as ``[RAG:INTENT]``, ``[RAG:EVAL]``, and ``[RAG:ANSWER]`` for each phase.
+At INFO level, chat completion logs (elapsed time, source count) are output. At DEBUG level, token usage, concurrency control, and history packing details are output.
+
+Search Log and Access Type
+--------------------------
+
+Searches through AI mode are recorded with the LLM provider name (e.g., ``ollama``, ``openai``, ``gemini``) as the access type in search logs. This allows distinguishing AI mode searches from regular web or API searches in analytics.
 
 References
 ==========

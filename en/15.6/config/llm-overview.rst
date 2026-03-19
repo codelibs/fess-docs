@@ -57,9 +57,10 @@ The AI mode feature operates with the following flow.
 1. **User Input**: User enters a question in the chat interface
 2. **Intent Analysis**: LLM analyzes the user's question and extracts search keywords
 3. **Search Execution**: |Fess| search engine retrieves relevant documents
-4. **Result Evaluation**: LLM evaluates the relevance of search results and selects optimal documents
-5. **Response Generation**: LLM generates a response based on the selected documents
-6. **Source Citation**: The response includes links to referenced source documents
+4. **Query Regeneration**: When no search results are found, LLM regenerates the query and retries
+5. **Result Evaluation**: LLM evaluates the relevance of search results and selects optimal documents
+6. **Response Generation**: LLM generates a response based on the selected documents (with Markdown rendering)
+7. **Source Citation**: The response includes links to referenced source documents
 
 Basic Configuration
 ===================
@@ -165,7 +166,7 @@ Settings for chat sessions. These are configured in ``fess_config.properties``.
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Maximum number of messages to retain in conversation history
-     - ``20``
+     - ``30``
 
 Concurrency Control
 ===================
@@ -247,6 +248,9 @@ Prompt Type List
    * - Direct Answer
      - ``direct``
      - Generates a direct answer without going through search
+   * - Query Regeneration
+     - ``query_regeneration``
+     - Regenerates the query when no search results are found
 
 Configuration Pattern
 ---------------------

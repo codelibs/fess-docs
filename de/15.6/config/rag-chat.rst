@@ -18,11 +18,13 @@ AI-Suchmodus arbeitet mit dem folgenden mehrstufigen Ablauf.
 
 1. **Absichtsanalysephase**: Analyse der Benutzerfrage und Extraktion optimaler Suchbegriffe
 2. **Suchphase**: Dokumentensuche mit der |Fess|-Suchmaschine anhand der extrahierten Begriffe
-3. **Bewertungsphase**: Bewertung der Relevanz der Suchergebnisse und Auswahl der am besten geeigneten Dokumente
-4. **Generierungsphase**: LLM generiert eine Antwort basierend auf den ausgewählten Dokumenten
-5. **Ausgabephase**: Rückgabe von Antwort und Quellinformationen an den Benutzer
+3. **Query-Regenerierungsfallback**: Wenn keine Suchergebnisse gefunden werden, regeneriert das LLM die Abfrage und versucht es erneut
+4. **Bewertungsphase**: Bewertung der Relevanz der Suchergebnisse und Auswahl der am besten geeigneten Dokumente
+5. **Generierungsphase**: LLM generiert eine Antwort basierend auf den ausgewählten Dokumenten
+6. **Ausgabephase**: Rückgabe von Antwort und Quellinformationen an den Benutzer (mit Markdown-Rendering)
 
 Durch diesen Ablauf sind qualitativ hochwertigere Antworten möglich, die den Kontext besser verstehen als eine einfache Stichwortsuche.
+Die Query-Regenerierung verbessert die Antwortabdeckung, wenn die ursprüngliche Suchabfrage nicht optimal ist.
 
 Grundeinstellungen
 ==================
@@ -88,10 +90,7 @@ Liste der Kerneinstellungen, die in ``fess_config.properties`` konfiguriert werd
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Maximale Anzahl der Nachrichten im Gesprächsverlauf
-     - ``20``
-   * - ``rag.chat.intent.history.max.messages``
-     - Maximale Anzahl der für die Absichtsanalyse verwendeten Verlaufsnachrichten
-     - ``4``
+     - ``30``
    * - ``rag.chat.content.fields``
      - Aus Dokumenten abzurufende Felder
      - ``title,url,content,doc_id,content_title,content_description``
@@ -105,17 +104,8 @@ Liste der Kerneinstellungen, die in ``fess_config.properties`` konfiguriert werd
      - Anzahl der Fragmente für die Hervorhebungsanzeige
      - ``3``
    * - ``rag.chat.history.assistant.content``
-     - Art des im Assistentenverlauf enthaltenen Inhalts
-     - ``source_titles``
-   * - ``rag.chat.history.assistant.max.chars``
-     - Maximale Zeichenzahl des Assistentenverlaufs
-     - ``500``
-   * - ``rag.chat.history.assistant.summary.max.chars``
-     - Maximale Zeichenzahl der Zusammenfassung des Assistentenverlaufs
-     - ``500``
-   * - ``rag.chat.history.max.chars``
-     - Maximale Zeichenzahl des Gesprächsverlaufs
-     - ``2000``
+     - Art des im Assistentenverlauf enthaltenen Inhalts ( ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` )
+     - ``smart_summary``
 
 Generierungsparameter
 =====================
@@ -221,7 +211,7 @@ Einstellungen zur Verwaltung von Chat-Sitzungen.
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Maximale Anzahl der Nachrichten im Gesprächsverlauf
-     - ``20``
+     - ``30``
 
 Sitzungsverhalten
 -----------------
@@ -249,6 +239,58 @@ Die Anzahl gleichzeitiger LLM-Anfragen wird pro Anbieter in ``fess_config.proper
 - Berücksichtigen Sie auch die Ratenbegrenzung des LLM-Anbieters
 - In Hochlastumgebungen wird ein niedrigerer Wert empfohlen
 - Bei Erreichen der maximalen gleichzeitigen Anfragen werden weitere Anfragen in die Warteschlange gestellt und der Reihe nach verarbeitet
+
+Gesprächsverlaufsmodus
+======================
+
+``rag.chat.history.assistant.content`` steuert, wie Assistentenantworten im Gesprächsverlauf gespeichert werden.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Modus
+     - Beschreibung
+   * - ``smart_summary``
+     - (Standard) Behält den Anfang (60%) und das Ende (40%) der Antwort bei und ersetzt die Mitte durch einen Auslassungsmarker. Quelltitel werden ebenfalls angehängt
+   * - ``full``
+     - Behält die gesamte Antwort unverändert bei
+   * - ``source_titles``
+     - Behält nur die Quelltitel bei
+   * - ``source_titles_and_urls``
+     - Behält Quelltitel und URLs bei
+   * - ``truncated``
+     - Kürzt die Antwort auf die maximale Zeichenzahl
+   * - ``none``
+     - Speichert keinen Verlauf
+
+.. note::
+
+   Im ``smart_summary``-Modus wird der Kontext langer Antworten effizient beibehalten und gleichzeitig der Tokenverbrauch reduziert.
+   Benutzer- und Assistentennachrichtenpaare werden als Turns gruppiert und innerhalb eines Zeichenbudgets optimal gepackt.
+   Die maximale Zeichenzahl für Verlauf und Zusammenfassung wird durch die ``LlmClient``-Implementierung jedes ``fess-llm-*``-Plugins gesteuert.
+
+Query-Regenerierung
+===================
+
+Wenn keine Suchergebnisse gefunden werden oder keine relevanten Ergebnisse identifiziert werden, regeneriert das LLM automatisch die Abfrage und wiederholt die Suche.
+
+- Bei null Suchergebnissen: Query-Regenerierung mit Grund ``no_results``
+- Wenn keine relevanten Dokumente gefunden werden: Query-Regenerierung mit Grund ``no_relevant_results``
+- Fällt auf die ursprüngliche Abfrage zurück, wenn die Regenerierung fehlschlägt
+
+Diese Funktion ist standardmäßig aktiviert und in synchrone und Streaming-RAG-Flows integriert.
+Query-Regenerierungsprompts werden in jedem ``fess-llm-*``-Plugin definiert.
+
+Markdown-Rendering
+==================
+
+Antworten des AI-Suchmodus werden im Markdown-Format gerendert.
+
+- LLM-Antworten werden als Markdown geparst und in HTML konvertiert
+- Das konvertierte HTML wird bereinigt, wobei nur sichere Tags und Attribute zugelassen werden
+- Unterstützt Überschriften, Listen, Codeblöcke, Tabellen, Links und andere Markdown-Syntax
+- Clientseitig werden ``marked.js`` und ``DOMPurify`` verwendet; serverseitig der OWASP-Sanitizer
 
 API-Verwendung
 ==============
@@ -347,9 +389,9 @@ SSE-Events:
    * - ``sources``
      - Informationen zu Quelldokumenten
    * - ``done``
-     - Verarbeitung abgeschlossen (sessionId, htmlContent)
+     - Verarbeitung abgeschlossen (sessionId, htmlContent). htmlContent enthält den Markdown-gerenderten HTML-String
    * - ``error``
-     - Fehlerinformationen
+     - Fehlerinformationen. Liefert spezifische Meldungen für Timeout, Kontextlängenüberschreitung, Modell nicht gefunden, ungültige Antwort und Verbindungsfehler
 
 Detaillierte API-Dokumentation finden Sie unter :doc:`../api/api-chat`.
 
@@ -433,6 +475,14 @@ Zur Untersuchung von Problemen können Sie den Log-Level anpassen, um detaillier
     <Logger name="org.codelibs.fess.llm" level="DEBUG"/>
     <Logger name="org.codelibs.fess.api.chat" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
+
+Die Log-Meldungen verwenden das Präfix ``[RAG]``, mit Unterpräfixen wie ``[RAG:INTENT]``, ``[RAG:EVAL]`` und ``[RAG:ANSWER]`` für jede Phase.
+Auf INFO-Ebene werden Chat-Abschluss-Logs (Dauer, Quellenanzahl) ausgegeben. Auf DEBUG-Ebene werden Tokenverbrauch, Gleichzeitigkeitssteuerung und Verlaufspaketierungsdetails ausgegeben.
+
+Suchprotokoll und Zugriffstyp
+------------------------------
+
+Suchen über den AI-Suchmodus werden mit dem LLM-Anbieternamen (z.B. ``ollama``, ``openai``, ``gemini``) als Zugriffstyp im Suchprotokoll aufgezeichnet. Dies ermöglicht die Unterscheidung von AI-Suchmodus-Suchen und regulären Web- oder API-Suchen in der Analyse.
 
 Weiterführende Informationen
 ============================
