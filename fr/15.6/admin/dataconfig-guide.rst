@@ -14,7 +14,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer le magasin de données illustrée ci-dessous, cliquez sur [Crawler > Magasin de données] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer le magasin de données illustrée ci-dessous, cliquez sur [Robot d'exploration > Magasin de données] dans le menu de gauche.
 
 |image0|
 

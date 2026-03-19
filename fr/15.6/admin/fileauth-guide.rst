@@ -14,7 +14,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer l'authentification de fichier illustrée ci-dessous, cliquez sur [Crawler > Authentification de fichier] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer l'authentification de fichier illustrée ci-dessous, cliquez sur [Robot d'exploration > Authentification de fichier] dans le menu de gauche.
 
 |image0|
 

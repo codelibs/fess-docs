@@ -15,7 +15,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Pfad-Mapping-Konfigurationsübersichtsseite zu öffnen, klicken Sie im linken Menü auf [Crawler > Pfad-Mapping].
+Um die Pfad-Mapping-Konfigurationsübersichtsseite zu öffnen, klicken Sie im linken Menü auf [Crawler > Pfadzuordnung].
 
 |image0|
 
@@ -42,12 +42,12 @@ Ersetzung
 
 Geben Sie die Zeichenkette an, durch die der übereinstimmende reguläre Ausdruck ersetzt werden soll.
 
-Verarbeitungstyp
-::::::::::::::::
+Prozesstyp
+::::::::::
 
 Geben Sie den Zeitpunkt der Ersetzung an. Wählen Sie den geeigneten Typ entsprechend Ihrem Zweck.
 
-Crawl
+Crawling
   Ersetzt die URL nach dem Abrufen des Dokuments beim Crawlen und vor der Indizierung.
   Die konvertierte URL wird im Index gespeichert.
   Verwenden Sie dies, wenn Sie Dateipfade in Web-Server-URLs konvertieren und im Index speichern möchten.
@@ -57,7 +57,7 @@ Anzeige
   Im Index gespeicherte URLs werden nicht geändert.
   Verwenden Sie dies, wenn Sie die Original-URL im Index behalten, aber beim Anzeigen der Suchergebnisse in eine andere URL konvertieren möchten.
 
-Crawl/Anzeige
+Crawling/Anzeige
   Ersetzt die URL sowohl beim Crawlen als auch bei der Anzeige.
   Verwenden Sie dies, wenn Sie die gleiche Konvertierung zu beiden Zeitpunkten anwenden möchten.
 
@@ -67,14 +67,14 @@ Extrahierte URL-Konvertierung
   Im Index gespeicherte URLs werden nicht geändert.
   Verwenden Sie dies, wenn Sie aus HTML extrahierte Link-URLs konvertieren und zur Crawl-Warteschlange hinzufügen möchten.
 
-Anzeigereihenfolge
+Sortierreihenfolge
 ::::::::::::::::::
 
-Sie können die Verarbeitungsreihenfolge des Pfad-Mappings angeben.
+Sie können die Verarbeitungsreihenfolge der Pfadzuordnung angeben.
 Wird in aufsteigender Reihenfolge verarbeitet.
 
-Benutzer-Agent
-::::::::::::::
+User-Agent
+::::::::::
 
 Geben Sie dies an, wenn Sie Pfad-Mapping nur auf bestimmte Benutzer-Agenten anwenden möchten.
 Das Matching erfolgt mittels regulärer Ausdrücke.
@@ -104,8 +104,8 @@ Dies ist eine Beispielkonfiguration zum Crawlen von Dokumenten von einem Dateise
      - ``file:/srv/documents/``
    * - Ersetzung
      - ``http://fileserver.example.com/documents/``
-   * - Verarbeitungstyp
-     - Crawl
+   * - Prozesstyp
+     - Crawling
 
 Mit dieser Konfiguration werden URLs als ``http://fileserver.example.com/documents/...`` im Index gespeichert.
 
@@ -124,7 +124,7 @@ Dies ist eine Beispielkonfiguration zum Beibehalten des ursprünglichen Dateipfa
      - ``file:/srv/documents/``
    * - Ersetzung
      - ``http://fileserver.example.com/documents/``
-   * - Verarbeitungstyp
+   * - Prozesstyp
      - Anzeige
 
 Mit dieser Konfiguration werden URLs als ``file:/srv/documents/...`` im Index gespeichert und beim Klicken auf Suchergebnisse in ``http://...`` konvertiert.
@@ -144,7 +144,7 @@ Dies ist eine Beispielkonfiguration zum Konvertieren von Links in HTML von einem
      - ``http://old-server\\.example\\.com/``
    * - Ersetzung
      - ``http://new-server.example.com/``
-   * - Verarbeitungstyp
+   * - Prozesstyp
      - Extrahierte URL-Konvertierung
 
 Mit dieser Konfiguration werden aus HTML extrahierte Links konvertiert und zur Crawl-Warteschlange hinzugefügt.

@@ -16,7 +16,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer les requêtes associées illustrée ci-dessous, cliquez sur [Crawler > Requête associée] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer les requêtes associées illustrée ci-dessous, cliquez sur [Robot d'exploration > Requête associée] dans le menu de gauche.
 
 |image0|
 

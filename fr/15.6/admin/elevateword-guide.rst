@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer les mots ajoutés illustrée ci-dessous, cliquez sur [Suggestion > Mots ajoutés] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer les mots ajoutés illustrée ci-dessous, cliquez sur [Suggérer > Élever un mot] dans le menu de gauche.
 
 |image0|
 

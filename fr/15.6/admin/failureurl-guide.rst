@@ -56,8 +56,8 @@ Nombre d'erreurs
 
 Nombre de fois où cette exception s'est produite.
 
-Date du dernier accès
-:::::::::::::::::::::
+Heure du dernier accès
+::::::::::::::::::::::
 
 Heure à laquelle cette exception s'est produite.
 

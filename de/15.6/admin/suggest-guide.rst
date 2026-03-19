@@ -13,7 +13,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Vorschlagswort-Übersichtsseite zu öffnen, klicken Sie im linken Menü auf [Vorschläge > Vorschlagswort].
+Um die Vorschlagswort-Übersichtsseite zu öffnen, klicken Sie im linken Menü auf [Vorschlagen > Wort vorschlagen].
 
 |image0|
 

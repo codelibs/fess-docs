@@ -13,7 +13,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite der installierten Plug-ins zu öffnen, klicken Sie im linken Menü auf [System > Plug-ins].
+Um die Übersichtsseite der installierten Plug-ins zu öffnen, klicken Sie im linken Menü auf [System > Plugin].
 
 |image0|
 

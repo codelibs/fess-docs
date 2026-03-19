@@ -74,8 +74,8 @@ Número máximo de accesos
 
 Número de URLs que se indexarán.
 
-Agente de usuario
-:::::::::::::::::
+User-Agent
+::::::::::
 
 Nombre del rastreador de |Fess|.
 

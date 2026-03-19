@@ -13,7 +13,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite für die Konfiguration zusätzlicher Wörter zu öffnen, klicken Sie im linken Menü auf [Vorschläge > Zusätzliche Wörter].
+Um die Übersichtsseite für die Konfiguration zusätzlicher Wörter zu öffnen, klicken Sie im linken Menü auf [Vorschlagen > Wort erhöhen].
 
 |image0|
 
@@ -34,8 +34,8 @@ Wort
 
 Geben Sie das Wort an, das als Vorschlagskandidat angezeigt werden soll.
 
-Lesung
-::::::
+Lesen
+:::::
 
 Geben Sie die Lesung des Vorschlagskandidatenworts an.
 

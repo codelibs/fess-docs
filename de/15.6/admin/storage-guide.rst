@@ -64,8 +64,8 @@ Größe
 Die Größe des Objekts
 
 
-Letztes Änderungsdatum
-::::::::::::::::::::::
+Letzte Änderung
+:::::::::::::::
 
 Das letzte Änderungsdatum des Objekts
 

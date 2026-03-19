@@ -42,8 +42,8 @@ Reemplazo
 
 Especifique la cadena que reemplazará la expresión regular coincidente.
 
-Tipo de procesamiento
-:::::::::::::::::::::
+Tipo de proceso
+:::::::::::::::
 
 Especifique el momento del reemplazo. Seleccione el tipo apropiado según su propósito.
 
@@ -67,14 +67,14 @@ Conversión de URL extraída
   Las URLs guardadas en el índice no se modifican.
   Utilice esto cuando desee convertir URLs de enlaces extraídas de HTML y agregarlas a la cola de rastreo.
 
-Orden de visualización
-:::::::::::::::::::::::
+Orden de clasificación
+::::::::::::::::::::::
 
 Puede especificar el orden de procesamiento del mapeo de rutas.
 Se procesa en orden ascendente.
 
-Agente de usuario
-:::::::::::::::::
+User-Agent
+::::::::::
 
 Especifique esto cuando desee aplicar el mapeo de rutas solo a agentes de usuario específicos.
 La coincidencia se realiza mediante expresiones regulares.
@@ -104,7 +104,7 @@ Este es un ejemplo de configuración para rastrear documentos de un servidor de 
      - ``file:/srv/documents/``
    * - Reemplazo
      - ``http://fileserver.example.com/documents/``
-   * - Tipo de procesamiento
+   * - Tipo de proceso
      - Rastreo
 
 Con esta configuración, las URLs se guardan en el índice como ``http://fileserver.example.com/documents/...``.
@@ -124,7 +124,7 @@ Este es un ejemplo de configuración para mantener la ruta de archivo original e
      - ``file:/srv/documents/``
    * - Reemplazo
      - ``http://fileserver.example.com/documents/``
-   * - Tipo de procesamiento
+   * - Tipo de proceso
      - Visualización
 
 Con esta configuración, las URLs se guardan en el índice como ``file:/srv/documents/...`` y se convierten a ``http://...`` al hacer clic en los resultados de búsqueda.
@@ -144,7 +144,7 @@ Este es un ejemplo de configuración para convertir enlaces en HTML de un servid
      - ``http://old-server\\.example\\.com/``
    * - Reemplazo
      - ``http://new-server.example.com/``
-   * - Tipo de procesamiento
+   * - Tipo de proceso
      - Conversión de URL extraída
 
 Con esta configuración, los enlaces extraídos de HTML se convierten y se agregan a la cola de rastreo.

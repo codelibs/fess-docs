@@ -14,7 +14,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Konfigurationsübersichtsseite für Dokument-Boosting zu öffnen, klicken Sie im linken Menü auf [Crawler > Dokument-Boosting].
+Um die Konfigurationsübersichtsseite für Dokument-Boosting zu öffnen, klicken Sie im linken Menü auf [Crawler > Dokument-Boost].
 
 |image0|
 
@@ -37,8 +37,8 @@ Geben Sie die Bedingung für Dokumente an, die höher positioniert werden sollen
 Wenn Sie beispielsweise URLs mit https://www.n2sm.net/ höher anzeigen möchten, schreiben Sie url.matches("https://www.n2sm.net/.*").
 Bedingungen können in Groovy geschrieben werden.
 
-Boost-Wert-Ausdruck
-:::::::::::::::::::
+Boost-Ausdruck
+::::::::::::::
 
 Geben Sie den Gewichtungswert für das Dokument an.
 Ausdrücke können in Groovy geschrieben werden.

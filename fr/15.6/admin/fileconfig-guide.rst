@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer le crawl de fichiers illustrée ci-dessous, cliquez sur [Crawler > Système de fichiers] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer le crawl de fichiers illustrée ci-dessous, cliquez sur [Robot d'exploration > Système de fichiers] dans le menu de gauche.
 
 |image0|
 
@@ -154,7 +154,7 @@ Pour crawler les fichiers sous \\SERVER\SharedFolder, la configuration serait la
    * - Chemin
      - smb://SERVER/SharedFolder/
 
-Si l'accès au dossier partagé nécessite un nom d'utilisateur/mot de passe, vous devez créer une configuration d'authentification de fichier depuis [Crawler > Authentification de fichier] dans le menu de gauche.
+Si l'accès au dossier partagé nécessite un nom d'utilisateur/mot de passe, vous devez créer une configuration d'authentification de fichier depuis [Robot d'exploration > Authentification de fichier] dans le menu de gauche.
 La configuration serait alors la suivante.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

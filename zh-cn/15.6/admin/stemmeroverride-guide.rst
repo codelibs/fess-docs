@@ -13,7 +13,7 @@ Stemmer覆盖词典
 显示方法
 ------
 
-要打开下图所示的 Stemmer 覆盖配置列表页面,请在左侧菜单中选择[系统 > 词典],然后单击 stemmeroverride。
+要打开下图所示的 Stemmer 覆盖配置列表页面,请在左侧菜单中选择[系统 > 字典],然后单击 stemmeroverride。
 
 |image0|
 

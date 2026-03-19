@@ -16,7 +16,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite für die Konfiguration verwandter Abfragen zu öffnen, klicken Sie im linken Menü auf [Crawler > Verwandte Abfragen].
+Um die Übersichtsseite für die Konfiguration verwandter Abfragen zu öffnen, klicken Sie im linken Menü auf [Crawler > Verwandte Abfrage].
 
 |image0|
 
@@ -32,13 +32,13 @@ Um die Konfigurationsseite für verwandte Abfragen zu öffnen, klicken Sie auf d
 Konfigurationsparameter
 -----------------------
 
-Suchbegriff
-:::::::::::
+Begriff
+:::::::
 
 Geben Sie den Suchbegriff an, mit dem die Suchabfrage übereinstimmen soll.
 
-Abfrage
-:::::::
+Abfragen
+::::::::
 
 Geben Sie die Abfrage an.
 

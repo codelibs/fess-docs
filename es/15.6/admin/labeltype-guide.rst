@@ -19,7 +19,7 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista de configuración de etiquetas que se muestra a continuación, haga clic en [Rastreador > Etiquetas] en el menú izquierdo.
+Para abrir la página de lista de configuración de etiquetas que se muestra a continuación, haga clic en [Rastreador > Etiqueta] en el menú izquierdo.
 
 |image0|
 
@@ -72,10 +72,10 @@ Host virtual
 Especifique el nombre de host del host virtual.
 Para más detalles, consulte :doc:`Host virtual en la guía de configuración <../config/virtual-host>`.
 
-Orden de visualización
-:::::::::::::::::::::::
+Orden de clasificación
+::::::::::::::::::::::
 
-Especifique el orden de visualización de las etiquetas.
+Especifique el orden de clasificación de las etiquetas.
 
 Eliminar configuración
 ----------------------

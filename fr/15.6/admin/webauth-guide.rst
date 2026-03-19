@@ -14,7 +14,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration d'authentification Web illustrée ci-dessous, cliquez sur [Crawler > Authentification Web] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration d'authentification Web illustrée ci-dessous, cliquez sur [Robot d'exploration > Authentification Web] dans le menu de gauche.
 
 |image0|
 

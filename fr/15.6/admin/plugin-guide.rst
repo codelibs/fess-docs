@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste des plugins installés illustrée ci-dessous, cliquez sur [Système > Plugins] dans le menu de gauche.
+Pour ouvrir la page de liste des plugins installés illustrée ci-dessous, cliquez sur [Système > Plugin] dans le menu de gauche.
 
 |image0|
 

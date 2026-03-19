@@ -19,7 +19,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration des étiquettes illustrée ci-dessous, cliquez sur [Crawler > Étiquette] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration des étiquettes illustrée ci-dessous, cliquez sur [Robot d'exploration > Étiquette] dans le menu de gauche.
 
 |image0|
 
@@ -72,8 +72,8 @@ Hôte virtuel
 Spécifie le nom d'hôte de l'hôte virtuel.
 Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le guide de configuration <../config/virtual-host>`.
 
-Ordre d'affichage
-:::::::::::::::::
+Ordre de tri
+::::::::::::
 
 Spécifie l'ordre d'affichage des étiquettes.
 

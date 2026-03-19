@@ -30,8 +30,8 @@ Um die Konfigurationsseite für Schlüsselübereinstimmungen zu öffnen, klicken
 Konfigurationsparameter
 -----------------------
 
-Suchbegriff
-:::::::::::
+Begriff
+:::::::
 
 Die Gewichtung wird nur in Suchergebnissen angewendet, wenn nach diesem Suchbegriff gesucht wird.
 

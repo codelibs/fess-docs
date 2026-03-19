@@ -37,8 +37,8 @@ Especifique la condición de los documentos que desea posicionar en la parte sup
 Por ejemplo, si desea mostrar en la parte superior las URL que contienen https://www.n2sm.net/, describa url.matches("https://www.n2sm.net/.*").
 Las condiciones se pueden describir en Groovy.
 
-Expresión de valor de impulso
-::::::::::::::::::::::::::::::
+Expresión de impulso
+::::::::::::::::::::
 
 Especifique el valor de ponderación del documento.
 Las expresiones se pueden describir en Groovy.

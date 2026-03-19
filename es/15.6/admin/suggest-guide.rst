@@ -1,6 +1,6 @@
-=======================
-Palabra de Sugerencia
-=======================
+=================
+Palabra sugerida
+=================
 
 Descripción general
 ===================
@@ -13,7 +13,7 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista de palabras de sugerencia que se muestra a continuación, haga clic en [Sugerencia > Palabra de sugerencia] en el menú izquierdo.
+Para abrir la página de lista de palabras de sugerencia que se muestra a continuación, haga clic en [Sugerir > Palabra sugerida] en el menú izquierdo.
 
 |image0|
 

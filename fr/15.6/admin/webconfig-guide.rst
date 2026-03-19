@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration de crawl Web illustrée ci-dessous, cliquez sur [Crawler > Web] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration de crawl Web illustrée ci-dessous, cliquez sur [Robot d'exploration > Web] dans le menu de gauche.
 
 |image0|
 

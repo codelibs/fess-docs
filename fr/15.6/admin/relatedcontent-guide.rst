@@ -15,7 +15,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer le contenu associé illustrée ci-dessous, cliquez sur [Crawler > Contenu associé] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer le contenu associé illustrée ci-dessous, cliquez sur [Robot d'exploration > Contenu associé] dans le menu de gauche.
 
 |image0|
 

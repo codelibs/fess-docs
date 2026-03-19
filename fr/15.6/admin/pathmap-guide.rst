@@ -15,7 +15,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration du mappage de chemin illustrée ci-dessous, cliquez sur [Crawler > Mappage de chemin] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration du mappage de chemin illustrée ci-dessous, cliquez sur [Robot d'exploration > Mappage de chemin] dans le menu de gauche.
 
 |image0|
 
@@ -42,12 +42,12 @@ Remplacement
 
 Spécifie la chaîne de caractères pour remplacer l'expression régulière correspondante.
 
-Type de traitement
+Type de processus
 ::::::::::::::::::
 
 Spécifie le moment du remplacement. Sélectionnez le type approprié selon votre objectif.
 
-Crawl
+Exploration
   Remplace l'URL après l'obtention du document lors du crawl et avant l'indexation.
   L'URL convertie est enregistrée dans l'index.
   Utilisez ceci lorsque vous souhaitez convertir les chemins du serveur de fichiers en URLs de serveur web et les enregistrer dans l'index.
@@ -57,7 +57,7 @@ Affichage
   Les URLs stockées dans l'index ne sont pas modifiées.
   Utilisez ceci lorsque vous souhaitez conserver l'URL originale dans l'index mais la convertir en une URL différente uniquement lors de l'affichage des résultats de recherche.
 
-Crawl/Affichage
+Exploration/Affichage
   Remplace l'URL lors du crawl et de l'affichage.
   Utilisez ceci lorsque vous souhaitez appliquer la même conversion aux deux moments.
 
@@ -67,8 +67,8 @@ Conversion d'URL extraite
   Les URLs enregistrées dans l'index ne sont pas modifiées.
   Utilisez ceci lorsque vous souhaitez convertir les URLs de liens extraites du HTML et les ajouter à la file d'attente de crawl.
 
-Ordre d'affichage
-:::::::::::::::::
+Ordre de tri
+::::::::::::
 
 Vous pouvez spécifier l'ordre de traitement du mappage de chemin.
 Le traitement s'effectue dans l'ordre croissant.
@@ -104,8 +104,8 @@ Ceci est un exemple de configuration pour explorer des documents d'un serveur de
      - ``file:/srv/documents/``
    * - Remplacement
      - ``http://fileserver.example.com/documents/``
-   * - Type de traitement
-     - Crawl
+   * - Type de processus
+     - Exploration
 
 Avec cette configuration, les URLs sont enregistrées dans l'index comme ``http://fileserver.example.com/documents/...``.
 
@@ -124,7 +124,7 @@ Ceci est un exemple de configuration pour conserver le chemin de fichier origina
      - ``file:/srv/documents/``
    * - Remplacement
      - ``http://fileserver.example.com/documents/``
-   * - Type de traitement
+   * - Type de processus
      - Affichage
 
 Avec cette configuration, les URLs sont enregistrées dans l'index comme ``file:/srv/documents/...`` et converties en ``http://...`` lors du clic sur les résultats de recherche.
@@ -144,7 +144,7 @@ Ceci est un exemple de configuration pour convertir les liens dans le HTML d'un 
      - ``http://old-server\\.example\\.com/``
    * - Remplacement
      - ``http://new-server.example.com/``
-   * - Type de traitement
+   * - Type de processus
      - Conversion d'URL extraite
 
 Avec cette configuration, les liens extraits du HTML sont convertis et ajoutés à la file d'attente de crawl.

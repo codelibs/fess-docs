@@ -154,7 +154,7 @@ Um Dateien unter \\SERVER\SharedFolder zu crawlen, würde die Konfiguration wie 
    * - Pfad
      - smb://SERVER/SharedFolder/
 
-Wenn für den Zugriff auf den Freigabeordner ein Benutzername/Passwort erforderlich ist, müssen Sie eine Dateiauthentifizierungskonfiguration über [Crawler > Dateiauthentifizierung] im linken Menü erstellen.
+Wenn für den Zugriff auf den Freigabeordner ein Benutzername/Passwort erforderlich ist, müssen Sie eine Dateiauthentifizierungskonfiguration über [Crawler > Datei-Authentifizierung] im linken Menü erstellen.
 Die Konfiguration dafür würde wie folgt aussehen:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

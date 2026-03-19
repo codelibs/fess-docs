@@ -15,7 +15,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer les hôtes en double illustrée ci-dessous, cliquez sur [Crawler > Hôte en double] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer les hôtes en double illustrée ci-dessous, cliquez sur [Robot d'exploration > Hôte en double] dans le menu de gauche.
 
 |image0|
 
@@ -31,10 +31,10 @@ Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de
 Paramètres de configuration
 ---------------------------
 
-Nom canonique
-::::::::::::::
+Nom régulier
+:::::::::::::
 
-Spécifie le nom d'hôte canonique. Les noms d'hôte en double seront remplacés par le nom d'hôte canonique.
+Spécifie le nom d'hôte régulier. Les noms d'hôte en double seront remplacés par le nom d'hôte régulier.
 
 Nom en double
 ::::::::::::::

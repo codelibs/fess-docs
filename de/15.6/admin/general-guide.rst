@@ -31,17 +31,17 @@ Anmeldelink anzeigen
 
 Konfiguriert, ob auf dem Suchbildschirm ein Link zur Anmeldeseite angezeigt werden soll.
 
-Doppelte Ergebnisse zusammenklappen
-::::::::::::::::::::::::::::::::::::
+Doppelte Ergebnisse ausblenden
+:::::::::::::::::::::::::::::::
 
-Konfiguriert, ob das Zusammenklappen doppelter Ergebnisse aktiviert werden soll.
+Konfiguriert, ob das Ausblenden doppelter Ergebnisse aktiviert werden soll.
 
-Thumbnail-Anzeige
-:::::::::::::::::
+Miniaturansicht anzeigen
+::::::::::::::::::::::::
 
-Konfiguriert, ob die Thumbnail-Anzeige aktiviert werden soll.
+Konfiguriert, ob die Miniaturansicht aktiviert werden soll.
 
-Standard-Label-Wert
+Standard-Labelwert
 :::::::::::::::::::
 
 Beschreiben Sie den Label-Wert, der standardmäßig zur Suchbedingung hinzugefügt werden soll.
@@ -59,23 +59,23 @@ Virtueller Host
 Konfigurieren Sie den virtuellen Host.
 Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/virtual-host>`.
 
-Beliebte Wörter-Antwort
-:::::::::::::::::::::::
+Antwort für beliebtes Wort
+::::::::::::::::::::::::::
 
 Gibt an, ob die API für beliebte Wörter aktiviert werden soll.
 
-CSV-Datei-Kodierung
+CSV-Dateikodierung
 :::::::::::::::::::
 
 Geben Sie die Kodierung für heruntergeladene CSV-Dateien an.
 
-Suchparameter hinzufügen
-::::::::::::::::::::::::
+Suchparameter anhängen
+::::::::::::::::::::::
 
 Aktivieren Sie dies, wenn Sie Parameter an die Suchergebnisanzeige übergeben möchten.
 
 Benachrichtigungs-E-Mail
-::::::::::::::::::::::::
+:::::::::::::::::::::::::
 
 Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
 Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
@@ -83,28 +83,28 @@ Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Serv
 Crawler
 -------
 
-Letztes Änderungsdatum überprüfen
-::::::::::::::::::::::::::::::::::
+Letzte Änderung prüfen
+::::::::::::::::::::::
 
 Aktivieren Sie dies für differenzielles Crawling.
 
-Gleichzeitige Crawler-Konfigurationen
-::::::::::::::::::::::::::::::::::::::
+Gleichzeitige Crawler-Konfiguration
+:::::::::::::::::::::::::::::::::::::
 
 Geben Sie die Anzahl der gleichzeitig auszuführenden Crawl-Konfigurationen an.
 
-Vorherige Dokumente löschen
-::::::::::::::::::::::::::::
+Alte Dokumente löschen
+::::::::::::::::::::::
 
 Geben Sie die Anzahl der Tage für die Gültigkeitsdauer nach der Indizierung an.
 
-Auszuschließende Fehlertypen
-::::::::::::::::::::::::::::
+Fehlertypen ignorieren
+::::::::::::::::::::::
 
 Fehler-URLs, die den Schwellenwert überschreiten, werden vom Crawlen ausgeschlossen, aber hier angegebene Ausnahmenamen werden auch dann gecrawlt, wenn sie den Schwellenwert überschreiten.
 
-Fehlerzahl-Schwellenwert
-::::::::::::::::::::::::
+Fehleranzahlschwelle
+::::::::::::::::::::
 
 Wenn ein zu crawlendes Dokument mehr als die hier angegebene Anzahl in Fehler-URLs aufgezeichnet wurde, wird es beim nächsten Crawl ausgeschlossen.
 
@@ -126,18 +126,18 @@ Favoritenprotokoll
 
 Gibt an, ob die Favoritenprotokollierung aktiviert werden soll.
 
-Vorherige Suchprotokolle löschen
-:::::::::::::::::::::::::::::::::
+Alte Suchprotokolle löschen
+:::::::::::::::::::::::::::
 
 Löscht Suchprotokolle, die älter als die angegebene Anzahl von Tagen sind.
 
-Vorherige Jobprotokolle löschen
-::::::::::::::::::::::::::::::::
+Alte Jobprotokolle löschen
+::::::::::::::::::::::::::
 
 Löscht Jobprotokolle, die älter als die angegebene Anzahl von Tagen sind.
 
-Vorherige Benutzerprotokolle löschen
-:::::::::::::::::::::::::::::::::::::
+Alte Benutzerprotokolle löschen
+:::::::::::::::::::::::::::::::
 
 Löscht Benutzerprotokolle, die älter als die angegebene Anzahl von Tagen sind.
 
@@ -151,21 +151,21 @@ Protokollebene
 
 Geben Sie die Protokollebene für fess.log an.
 
-Vorschlag
----------
+Vorschlagen
+-----------
 
-Vorschlag aus Suchbegriffen
-:::::::::::::::::::::::::::
+Vorschläge aus Suchbegriffen
+::::::::::::::::::::::::::::
 
 Gibt an, ob Vorschlagskandidaten aus Suchprotokollen generiert werden sollen.
 
-Vorschlag aus Dokumenten
-::::::::::::::::::::::::
+Vorschläge aus Dokumenten
+:::::::::::::::::::::::::
 
 Gibt an, ob Vorschlagskandidaten aus indizierten Dokumenten generiert werden sollen.
 
-Vorherige Vorschlagsinformationen löschen
-::::::::::::::::::::::::::::::::::::::::::
+Alte Vorschlagsinformationen löschen
+:::::::::::::::::::::::::::::::::::::
 
 Löscht Vorschlagsdaten, die älter als die angegebene Anzahl von Tagen sind.
 
@@ -215,8 +215,8 @@ Für Active Directory ist es memberOf.
 Für andere LDAP-Server kann es isMemberOf sein.
 
 
-Benachrichtigungsanzeige
-------------------------
+Benachrichtigung
+-----------------
 
 Anmeldeseite
 ::::::::::::

@@ -31,10 +31,10 @@ Para abrir la página de configuración de host duplicado, haga clic en el botó
 Parámetros de configuración
 ----------------------------
 
-Nombre canónico
-:::::::::::::::
+Nombre regular
+::::::::::::::
 
-Especifique el nombre de host canónico. Los nombres de host duplicados se reemplazan con el nombre de host canónico.
+Especifique el nombre de host regular. Los nombres de host duplicados se reemplazan con el nombre de host regular.
 
 Nombre duplicado
 ::::::::::::::::

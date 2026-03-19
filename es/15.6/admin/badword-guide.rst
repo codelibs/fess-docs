@@ -1,5 +1,5 @@
 ==================
-Palabra Excluida
+Palabra no deseada
 ==================
 
 Descripción general
@@ -15,7 +15,7 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista de configuración de palabras excluidas de sugerencias que se muestra a continuación, haga clic en [Sugerencia > Palabra excluida] en el menú izquierdo.
+Para abrir la página de lista de configuración de palabras excluidas de sugerencias que se muestra a continuación, haga clic en [Sugerir > Palabra no deseada] en el menú izquierdo.
 
 |image0|
 
@@ -31,8 +31,8 @@ Para abrir la página de creación de palabra excluida de sugerencia, haga clic 
 Parámetros de configuración
 ----------------------------
 
-Candidato de sugerencia
-:::::::::::::::::::::::
+Palabra no deseada
+:::::::::::::::::::
 
 Registre palabras prohibidas.
 Las palabras registradas aquí no se mostrarán en las sugerencias.

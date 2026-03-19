@@ -13,7 +13,7 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de verificación de registro de trabajos que se muestra a continuación, haga clic en [Información del sistema > Registro de trabajos] en el menú izquierdo.
+Para abrir la página de verificación de registro de trabajos que se muestra a continuación, haga clic en [Información del sistema > Registro de trabajo] en el menú izquierdo.
 
 |image0|
 
@@ -34,10 +34,10 @@ Estado
 
 Resultado de la ejecución del trabajo.
 
-Destino
-:::::::
+Objetivo
+::::::::
 
-Destino en el que se ejecuta el trabajo.
+Objetivo en el que se ejecuta el trabajo.
 
 Hora de inicio
 ::::::::::::::
@@ -49,8 +49,8 @@ Hora de finalización
 
 Hora UNIX en la que finalizó el trabajo.
 
-Método de ejecución
-:::::::::::::::::::
+Tipo de ejecución
+:::::::::::::::::
 
 Entorno de ejecución en el que se ejecutó el trabajo.
 

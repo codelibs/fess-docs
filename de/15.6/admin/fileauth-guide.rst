@@ -14,7 +14,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite für die Dateiauthentifizierungskonfiguration zu öffnen, klicken Sie im linken Menü auf [Crawler > Dateiauthentifizierung].
+Um die Übersichtsseite für die Dateiauthentifizierungskonfiguration zu öffnen, klicken Sie im linken Menü auf [Crawler > Datei-Authentifizierung].
 
 |image0|
 
