@@ -14,7 +14,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration du boost de document illustrée ci-dessous, cliquez sur [Crawler > Boost de document] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration du boost de document illustrée ci-dessous, cliquez sur [Robot d'exploration > Boost de document] dans le menu de gauche.
 
 |image0|
 
@@ -37,8 +37,8 @@ Spécifie la condition des documents que vous souhaitez positionner en haut.
 Par exemple, pour afficher en haut les URL contenant https://www.n2sm.net/, décrivez url.matches("https://www.n2sm.net/.*").
 Les conditions peuvent être écrites en Groovy.
 
-Expression de valeur de boost
-::::::::::::::::::::::::::::::
+Expression de boost
+:::::::::::::::::::
 
 Spécifie la valeur de pondération du document.
 L'expression peut être écrite en Groovy.

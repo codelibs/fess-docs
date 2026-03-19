@@ -15,7 +15,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite für die Duplikat-Host-Konfiguration zu öffnen, klicken Sie im linken Menü auf [Crawler > Duplikat-Hosts].
+Um die Übersichtsseite für die Duplikat-Host-Konfiguration zu öffnen, klicken Sie im linken Menü auf [Crawler > Doppelter Host].
 
 |image0|
 
@@ -31,13 +31,13 @@ Um die Duplikat-Host-Konfigurationsseite zu öffnen, klicken Sie auf die Schaltf
 Konfigurationsparameter
 -----------------------
 
-Kanonischer Name
-::::::::::::::::
+Regulärer Name
+::::::::::::::
 
 Geben Sie den kanonischen Hostnamen an. Duplikat-Hostnamen werden durch den kanonischen Hostnamen ersetzt.
 
-Duplikat-Name
-:::::::::::::
+Doppelter Name
+::::::::::::::
 
 Geben Sie den duplizierenden Hostnamen an. Geben Sie den Hostnamen an, der ersetzt werden soll.
 

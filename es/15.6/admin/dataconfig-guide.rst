@@ -35,10 +35,10 @@ Nombre
 
 Especifique el nombre de la configuración de rastreo.
 
-Nombre del controlador
-::::::::::::::::::::::
+Nombre del manejador
+::::::::::::::::::::
 
-Es el nombre del controlador que procesa el almacén de datos.
+Es el nombre del manejador que procesa el almacén de datos.
 
 * DatabaseDataStore: Rastrea bases de datos
 * CsvDataStore: Rastrea archivos CSV/TSV

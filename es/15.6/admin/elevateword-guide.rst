@@ -13,7 +13,7 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista para configurar palabras adicionales que se muestra a continuación, haga clic en [Sugerencia > Palabra adicional] en el menú izquierdo.
+Para abrir la página de lista para configurar palabras adicionales que se muestra a continuación, haga clic en [Sugerir > Palabra elevada] en el menú izquierdo.
 
 |image0|
 

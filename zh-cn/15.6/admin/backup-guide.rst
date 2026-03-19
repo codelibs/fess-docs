@@ -23,7 +23,7 @@ fess_config.bulk 包含 |Fess| 的配置信息。
 fess_basic_config.bulk
 ::::::::::::::::::::::
 
-fess_basic_config.bulk 包含除故障URL外的 |Fess| 配置信息。
+fess_basic_config.bulk 包含除失败URL外的 |Fess| 配置信息。
 
 fess_user.bulk
 ::::::::::::::

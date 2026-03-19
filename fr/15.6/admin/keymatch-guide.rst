@@ -1,12 +1,12 @@
 =====================
-Correspondance de clés
-======================
+Correspondance de clé
+=====================
 
 Présentation
 ============
 
-Cette section explique la configuration de la correspondance de clés.
-En configurant la correspondance de clés, vous pouvez positionner des documents en haut des résultats de recherche lorsqu'une recherche est effectuée avec le terme de recherche enregistré.
+Cette section explique la configuration de la correspondance de clé.
+En configurant la correspondance de clé, vous pouvez positionner des documents en haut des résultats de recherche lorsqu'une recherche est effectuée avec le terme de recherche enregistré.
 Une utilisation courante est la publicité.
 
 Gestion
@@ -14,7 +14,7 @@ Gestion
 
 Affichage
 ---------
-Pour ouvrir la page de liste de configuration de correspondance de clés illustrée ci-dessous, cliquez sur [Crawler > Correspondance de clés] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration de correspondance de clé illustrée ci-dessous, cliquez sur [Robot d'exploration > Correspondance de clé] dans le menu de gauche.
 
 |image0|
 
@@ -23,7 +23,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de correspondance de clés.
+Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de correspondance de clé.
 
 |image1|
 

@@ -13,7 +13,7 @@ Konfiguration
 Anzeige
 -------
 
-Um die Übersichtsseite für die Seitendesignkonfiguration zu öffnen, klicken Sie im linken Menü auf [System > Seitendesign].
+Um die Übersichtsseite für die Seitendesignkonfiguration zu öffnen, klicken Sie im linken Menü auf [System > Seitengestaltung].
 
 |image0|
 

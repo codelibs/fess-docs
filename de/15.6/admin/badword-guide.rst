@@ -15,7 +15,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Konfigurationsübersichtsseite für Ausschlusswörter für Vorschläge zu öffnen, klicken Sie im linken Menü auf [Vorschläge > Ausschlusswörter].
+Um die Konfigurationsübersichtsseite für Ausschlusswörter für Vorschläge zu öffnen, klicken Sie im linken Menü auf [Vorschlagen > Schlechtes Wort].
 
 |image0|
 
@@ -31,8 +31,8 @@ Um die Erstellungsseite für Ausschlusswörter für Vorschläge zu öffnen, klic
 Konfigurationsparameter
 -----------------------
 
-Vorschlagskandidat
-::::::::::::::::::
+Schlechtes Wort
+:::::::::::::::
 
 Registrieren Sie unerwünschte Wörter.
 Wörter, die hier registriert sind, werden nicht in den Vorschlägen angezeigt.

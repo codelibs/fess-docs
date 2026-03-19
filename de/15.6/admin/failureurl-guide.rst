@@ -14,7 +14,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite zur Überprüfung von Fehler-URLs zu öffnen, klicken Sie im linken Menü auf [Systeminformationen > Fehler-URLs].
+Um die Übersichtsseite zur Überprüfung von Fehler-URLs zu öffnen, klicken Sie im linken Menü auf [Systeminformationen > Fehler-URL].
 
 |image0|
 
@@ -56,8 +56,8 @@ Fehleranzahl
 
 Die Anzahl, wie oft diese Ausnahme aufgetreten ist.
 
-Letztes Zugriffsdatum
-:::::::::::::::::::::
+Letzte Zugriffszeit
+:::::::::::::::::::
 
 Die Uhrzeit, zu der diese Ausnahme aufgetreten ist.
 

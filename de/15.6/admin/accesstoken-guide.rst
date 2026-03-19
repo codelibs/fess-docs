@@ -59,8 +59,8 @@ Geben Sie den Namen des Anforderungsparameters an, wenn Sie die Berechtigung als
    * Konfigurieren Sie keinen Parameternamen, wenn Fess für nicht vertrauenswürdige Netzwerke zugänglich ist.
    * Stellen Sie sicher, dass URL-Parameter bei Verwendung von Zugriffstoken nicht von externen Benutzern manipuliert werden können.
 
-Ablaufdatum
-:::::::::::
+Läuft ab
+::::::::
 
 Geben Sie das Ablaufdatum des Zugriffstokens an.
 

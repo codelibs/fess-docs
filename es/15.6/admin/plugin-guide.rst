@@ -13,7 +13,7 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista de complementos instalados que se muestra a continuación, haga clic en [Sistema > Complemento] en el menú izquierdo.
+Para abrir la página de lista de complementos instalados que se muestra a continuación, haga clic en [Sistema > Plugin] en el menú izquierdo.
 
 |image0|
 

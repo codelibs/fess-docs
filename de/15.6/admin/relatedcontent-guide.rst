@@ -15,7 +15,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite für die Konfiguration verwandter Inhalte zu öffnen, klicken Sie im linken Menü auf [Crawler > Verwandte Inhalte].
+Um die Übersichtsseite für die Konfiguration verwandter Inhalte zu öffnen, klicken Sie im linken Menü auf [Crawler > Verwandter Inhalt].
 
 |image0|
 
@@ -31,8 +31,8 @@ Um die Konfigurationsseite für verwandte Inhalte zu öffnen, klicken Sie auf di
 Konfigurationsparameter
 -----------------------
 
-Suchbegriff
-:::::::::::
+Begriff
+:::::::
 
 Geben Sie den Suchbegriff an, mit dem die Suchabfrage übereinstimmen soll.
 

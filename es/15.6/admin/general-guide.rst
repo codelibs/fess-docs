@@ -21,8 +21,8 @@ Respuesta JSON
 
 Especifique si desea habilitar la API JSON.
 
-Se requiere inicio de sesión
-:::::::::::::::::::::::::::::
+Requiere inicio de sesión
+:::::::::::::::::::::::::
 
 Especifique si desea hacer que el inicio de sesión sea obligatorio para la función de búsqueda.
 
@@ -36,19 +36,19 @@ Contraer resultados duplicados
 
 Configure si desea habilitar la contracción de resultados duplicados.
 
-Mostrar miniaturas
+Mostrar miniatura
 ::::::::::::::::::
 
 Configure si desea habilitar la visualización de miniaturas.
 
-Valor de etiqueta predeterminado
-:::::::::::::::::::::::::::::::::
+Valor de etiqueta por defecto
+:::::::::::::::::::::::::::::
 
 Describa el valor de etiqueta que se agregará a las condiciones de búsqueda de forma predeterminada.
 Si especifica por rol o grupo, añada "role:" o "group:" como en "role:admin=label1".
 
-Valor de ordenamiento predeterminado
-:::::::::::::::::::::::::::::::::::::
+Valor de ordenación por defecto
+::::::::::::::::::::::::::::::::
 
 Describa el valor de ordenamiento que se agregará a las condiciones de búsqueda de forma predeterminada.
 Si especifica por rol o grupo, añada "role:" o "group:" como en "role:admin=content_length.desc".
@@ -64,13 +64,13 @@ Respuesta de palabras populares
 
 Especifique si desea habilitar la API de palabras populares.
 
-Codificación de archivos CSV
-:::::::::::::::::::::::::::::
+Codificación de archivo CSV
+:::::::::::::::::::::::::::
 
 Especifique la codificación de los archivos CSV que se descargarán.
 
-Agregar parámetros de búsqueda
-:::::::::::::::::::::::::::::::
+Añadir parámetro de búsqueda
+::::::::::::::::::::::::::::
 
 Habilite esto si desea pasar parámetros a la visualización de resultados de búsqueda.
 
@@ -83,13 +83,13 @@ Se pueden especificar varias direcciones separadas por comas. Se requiere un ser
 Rastreador
 ----------
 
-Verificar fecha de última actualización
-::::::::::::::::::::::::::::::::::::::::
+Comprobar fecha de última modificación
+:::::::::::::::::::::::::::::::::::::::
 
 Habilite esto para realizar rastreo diferencial.
 
-Configuración simultánea del rastreador
-::::::::::::::::::::::::::::::::::::::::
+Configuración de rastreadores simultáneos
+::::::::::::::::::::::::::::::::::::::::::
 
 Especifique el número de configuraciones de rastreo que se ejecutarán simultáneamente.
 
@@ -98,13 +98,13 @@ Eliminar documentos anteriores
 
 Especifique el número de días del período de validez después de la indexación.
 
-Tipos de error excluidos
+Tipos de error a ignorar
 :::::::::::::::::::::::::
 
 Las URL con fallas que excedan el umbral se excluyen del rastreo, pero los nombres de excepción especificados aquí seguirán siendo objeto de rastreo incluso si exceden el umbral de URL con fallas.
 
-Umbral de número de fallas
-:::::::::::::::::::::::::::
+Umbral de recuento de fallos
+::::::::::::::::::::::::::::
 
 Si un documento objeto de rastreo se registra en las URL con fallas más veces que el número especificado aquí, se excluirá del próximo rastreo.
 
@@ -131,18 +131,18 @@ Eliminar registros de búsqueda anteriores
 
 Elimina los registros de búsqueda anteriores al número de días especificado.
 
-Eliminar registros de trabajo anteriores
-:::::::::::::::::::::::::::::::::::::::::
+Eliminar registros de trabajos anteriores
+::::::::::::::::::::::::::::::::::::::::::
 
 Elimina los registros de trabajo anteriores al número de días especificado.
 
-Eliminar registros de usuario anteriores
-:::::::::::::::::::::::::::::::::::::::::
+Eliminar registros de usuarios anteriores
+::::::::::::::::::::::::::::::::::::::::::
 
 Elimina los registros de usuario anteriores al número de días especificado.
 
-Nombres de bots para eliminar del registro
-:::::::::::::::::::::::::::::::::::::::::::
+Nombre del bot para eliminar registros
+:::::::::::::::::::::::::::::::::::::::
 
 Especifique los nombres de bots que se excluirán de los registros de búsqueda.
 
@@ -151,16 +151,16 @@ Nivel de registro
 
 Especifique el nivel de registro para fess.log.
 
-Sugerencias
------------
+Sugerir
+-------
 
-Sugerir con términos de búsqueda
-:::::::::::::::::::::::::::::::::
+Sugerir por término de búsqueda
+::::::::::::::::::::::::::::::::
 
 Especifique si desea generar candidatos de sugerencia a partir de los registros de búsqueda.
 
-Sugerir con documentos
-:::::::::::::::::::::::
+Sugerir por documentos
+::::::::::::::::::::::
 
 Especifique si desea generar candidatos de sugerencia a partir de los documentos indexados.
 
@@ -177,23 +177,23 @@ URL de LDAP
 
 Especifique la URL del servidor LDAP.
 
-Base DN
+DN base
 :::::::
 
 Especifique el nombre distinguido base para iniciar sesión en la pantalla de búsqueda.
 
-Bind DN
-:::::::
+DN de enlace
+::::::::::::
 
-Especifique el Bind DN del administrador.
+Especifique el DN de enlace del administrador.
 
 Contraseña
 ::::::::::
 
-Especifique la contraseña del Bind DN.
+Especifique la contraseña del DN de enlace.
 
-User DN
-:::::::
+DN de usuario
+:::::::::::::
 
 Especifique el nombre distinguido del usuario.
 
@@ -215,16 +215,16 @@ Para Active Directory, es memberOf.
 Para otros servidores LDAP, puede ser isMemberOf.
 
 
-Visualización de notificaciones
---------------------------------
+Mostrar notificación
+---------------------
 
 Página de inicio de sesión
 :::::::::::::::::::::::::::
 
 Describa el mensaje que se mostrará en la pantalla de inicio de sesión.
 
-Página principal de búsqueda
-:::::::::::::::::::::::::::::
+Página superior de búsqueda
+:::::::::::::::::::::::::::
 
 Describa el mensaje que se mostrará en la pantalla principal de búsqueda.
 
@@ -238,25 +238,25 @@ Tipo
 ::::
 
 Especifique el tipo de almacenamiento.
-Cuando se selecciona "Automático", el tipo de almacenamiento se determina automáticamente a partir del punto de acceso.
+Cuando se selecciona "Automático", el tipo de almacenamiento se determina automáticamente a partir del punto final.
 
-- **Automático**: Detección automática desde el punto de acceso
+- **Automático**: Detección automática desde el punto final
 - **S3**: Amazon S3
 - **GCS**: Google Cloud Storage
 
-Bucket
-::::::
+Cubo
+::::
 
-Especifique el nombre del bucket a gestionar.
+Especifique el nombre del cubo a gestionar.
 
-Punto de acceso
-:::::::::::::::
+Punto final
+:::::::::::
 
-Especifique la URL del punto de acceso del servidor de almacenamiento.
+Especifique la URL del punto final del servidor de almacenamiento.
 
-- S3: Utiliza el punto de acceso predeterminado de AWS si está vacío
-- GCS: Utiliza el punto de acceso predeterminado de Google Cloud si está vacío
-- MinIO, etc.: La URL del punto de acceso del servidor MinIO
+- S3: Utiliza el punto final predeterminado de AWS si está vacío
+- GCS: Utiliza el punto final predeterminado de Google Cloud si está vacío
+- MinIO, etc.: La URL del punto final del servidor MinIO
 
 Clave de acceso
 :::::::::::::::
@@ -299,13 +299,13 @@ Ejemplo de configuración LDAP
    * - URL de LDAP
      - ldap://SERVERNAME:389
      - ldap://SERVERNAME:389
-   * - Base DN
+   * - DN base
      - cn=Directory Manager
      - dc=fess,dc=codelibs,dc=org
-   * - Bind DN
+   * - DN de enlace
      - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
      - manager@fess.codelibs.org
-   * - User DN
+   * - DN de usuario
      - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
      - %s@fess.codelibs.org
    * - Filtro de cuenta

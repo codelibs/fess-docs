@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de recherche illustrée ci-dessous, cliquez sur [Informations système > Recherche] dans le menu de gauche.
+Pour ouvrir la page de recherche illustrée ci-dessous, cliquez sur [Informations système > Rechercher] dans le menu de gauche.
 
 |image0|
 

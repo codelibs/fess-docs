@@ -13,7 +13,7 @@ Méthode de configuration
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer la conception de page illustrée ci-dessous, cliquez sur [Système > Conception de page] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer la conception de page illustrée ci-dessous, cliquez sur [Système > Conception de la page] dans le menu de gauche.
 
 |image0|
 

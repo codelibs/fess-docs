@@ -31,13 +31,13 @@ Afficher le lien de connexion
 
 Configure l'affichage du lien vers la page de connexion sur l'écran de recherche.
 
-Replier les résultats en double
+Réduire les résultats en double
 ::::::::::::::::::::::::::::::::
 
-Configure l'activation du repliement des résultats en double.
+Configure l'activation de la réduction des résultats en double.
 
-Affichage des vignettes
-::::::::::::::::::::::::
+Afficher la miniature
+:::::::::::::::::::::
 
 Configure l'activation de l'affichage des vignettes.
 
@@ -59,8 +59,8 @@ Hôte virtuel
 Configure l'hôte virtuel.
 Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le guide de configuration <../config/virtual-host>`.
 
-Réponse des mots populaires
-::::::::::::::::::::::::::::
+Réponse de mot populaire
+::::::::::::::::::::::::
 
 Spécifie s'il faut activer l'API des mots populaires.
 
@@ -80,31 +80,31 @@ E-mail de notification
 Spécifie l'adresse e-mail pour la notification à la fin du crawl.
 Plusieurs adresses peuvent être spécifiées séparées par des virgules. Un serveur de messagerie est requis pour l'utilisation.
 
-Crawler
--------
+Robot d'exploration
+-------------------
 
-Vérifier la date de dernière modification
-::::::::::::::::::::::::::::::::::::::::::
+Vérifier la dernière modification
+::::::::::::::::::::::::::::::::::
 
 Active le crawl différentiel.
 
-Configuration du crawler simultané
-:::::::::::::::::::::::::::::::::::
+Configuration du robot d'exploration simultané
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 Spécifie le nombre de configurations de crawl à exécuter simultanément.
 
-Supprimer les documents précédents
-:::::::::::::::::::::::::::::::::::
+Supprimer les anciens documents
+::::::::::::::::::::::::::::::::
 
 Spécifie le nombre de jours de la période de validité après l'indexation.
 
-Types d'erreur exclus
-:::::::::::::::::::::
+Ignorer les types d'échec
+:::::::::::::::::::::::::
 
 Les URL en échec qui dépassent le seuil sont exclues des cibles de crawl, mais les noms d'exception spécifiés ici seront des cibles de crawl même si elles dépassent le seuil.
 
-Seuil du nombre d'échecs
-:::::::::::::::::::::::::
+Seuil de nombre d'échecs
+::::::::::::::::::::::::
 
 Si le document cible de crawl est enregistré dans les URL en échec plus que le nombre de fois spécifié ici, il sera exclu du prochain crawl.
 
@@ -126,23 +126,23 @@ Journal des favoris
 
 Spécifie s'il faut activer l'enregistrement du journal des favoris.
 
-Supprimer les journaux de recherche précédents
-:::::::::::::::::::::::::::::::::::::::::::::::
+Supprimer les anciens journaux de recherche
+:::::::::::::::::::::::::::::::::::::::::::
 
 Supprime les journaux de recherche antérieurs au nombre de jours spécifié.
 
-Supprimer les journaux de tâches précédents
-::::::::::::::::::::::::::::::::::::::::::::
+Supprimer les anciens journaux de tâches
+::::::::::::::::::::::::::::::::::::::::
 
 Supprime les journaux de tâches antérieurs au nombre de jours spécifié.
 
-Supprimer les journaux utilisateur précédents
-::::::::::::::::::::::::::::::::::::::::::::::
+Supprimer les anciens journaux utilisateur
+::::::::::::::::::::::::::::::::::::::::::
 
 Supprime les journaux utilisateur antérieurs au nombre de jours spécifié.
 
-Nom de bot pour supprimer les journaux
-:::::::::::::::::::::::::::::::::::::::
+Noms de robots pour supprimer les journaux
+:::::::::::::::::::::::::::::::::::::::::::
 
 Spécifie le nom du bot à exclure des journaux de recherche.
 
@@ -151,21 +151,21 @@ Niveau de journalisation
 
 Spécifie le niveau de journalisation de fess.log.
 
-Suggestion
-----------
+Suggérer
+--------
 
-Suggestion avec mots de recherche
-::::::::::::::::::::::::::::::::::
+Suggérer à partir des termes de recherche
+::::::::::::::::::::::::::::::::::::::::::
 
 Spécifie s'il faut générer des candidats de suggestion à partir des journaux de recherche.
 
-Suggestion avec documents
-:::::::::::::::::::::::::
+Suggérer à partir des documents
+::::::::::::::::::::::::::::::::
 
 Spécifie s'il faut générer des candidats de suggestion à partir des documents indexés.
 
-Supprimer les informations de suggestion précédentes
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
+Supprimer les anciennes informations de suggestion
+:::::::::::::::::::::::::::::::::::::::::::::::::::
 
 Supprime les données de suggestion antérieures au nombre de jours spécifié.
 
@@ -177,23 +177,23 @@ URL LDAP
 
 Spécifie l'URL du serveur LDAP.
 
-Base DN
-:::::::
+DN de base
+::::::::::
 
 Spécifie le nom distinctif de base pour se connecter à l'écran de recherche.
 
-Bind DN
-:::::::
+DN de liaison
+:::::::::::::
 
-Spécifie le Bind DN de l'administrateur.
+Spécifie le DN de liaison de l'administrateur.
 
 Mot de passe
 ::::::::::::
 
-Spécifie le mot de passe du Bind DN.
+Spécifie le mot de passe du DN de liaison.
 
-User DN
-:::::::
+DN de l'utilisateur
+:::::::::::::::::::
 
 Spécifie le nom distinctif de l'utilisateur.
 
@@ -215,16 +215,16 @@ Pour Active Directory, c'est memberOf.
 Pour d'autres serveurs LDAP, cela peut être isMemberOf.
 
 
-Affichage des annonces
-----------------------
+Notification
+------------
 
 Page de connexion
 :::::::::::::::::
 
 Décrit le message à afficher sur l'écran de connexion.
 
-Page d'accueil de recherche
-::::::::::::::::::::::::::::
+Page d'accueil de la recherche
+::::::::::::::::::::::::::::::
 
 Décrit le message à afficher sur l'écran d'accueil de recherche.
 
@@ -244,10 +244,10 @@ Lorsque « Automatique » est sélectionné, le type de stockage est automatique
 - **S3** : Amazon S3
 - **GCS** : Google Cloud Storage
 
-Bucket
-::::::
+Compartiment
+::::::::::::
 
-Spécifie le nom du bucket à gérer.
+Spécifie le nom du compartiment à gérer.
 
 Point de terminaison
 ::::::::::::::::::::
@@ -299,13 +299,13 @@ Exemples de configuration LDAP
    * - URL LDAP
      - ldap://SERVERNAME:389
      - ldap://SERVERNAME:389
-   * - Base DN
+   * - DN de base
      - cn=Directory Manager
      - dc=fess,dc=codelibs,dc=org
-   * - Bind DN
+   * - DN de liaison
      - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
      - manager@fess.codelibs.org
-   * - User DN
+   * - DN de l'utilisateur
      - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
      - %s@fess.codelibs.org
    * - Filtre de compte

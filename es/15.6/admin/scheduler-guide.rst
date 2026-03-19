@@ -34,10 +34,10 @@ Nombre
 
 Es el nombre que se muestra en la lista.
 
-Destino
-:::::::
+Objetivo
+::::::::
 
-El destino se puede utilizar como identificador para determinar si ejecutar o no el trabajo al ejecutarlo directamente con un comando en un lote, etc.
+El objetivo se puede utilizar como identificador para determinar si ejecutar o no el trabajo al ejecutarlo directamente con un comando en un lote, etc.
 Si no ejecuta el rastreo mediante comandos, especifique "all".
 
 Programación
@@ -49,8 +49,8 @@ El trabajo descrito en el script se ejecutará según la programación configura
 El formato de descripción es formato CRON con el formato "minuto hora día mes día_de_la_semana".
 Por ejemplo, "0 12 \* \* 3" ejecutará el trabajo todos los miércoles a las 12:00 PM.
 
-Método de ejecución
-:::::::::::::::::::
+Tipo de ejecución
+:::::::::::::::::
 
 Especifique el entorno de ejecución del script.
 Actualmente solo se admite "groovy".
@@ -84,10 +84,10 @@ Estado
 Especifique el estado habilitado/deshabilitado del trabajo.
 Si se deshabilita, el trabajo no se ejecutará.
 
-Orden de visualización
-:::::::::::::::::::::::
+Orden de clasificación
+::::::::::::::::::::::
 
-Especifique el orden de visualización en la lista de trabajos.
+Especifique el orden de clasificación en la lista de trabajos.
 
 Eliminar configuración
 ----------------------

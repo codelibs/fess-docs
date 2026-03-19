@@ -15,7 +15,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration des mots exclus des suggestions illustrée ci-dessous, cliquez sur [Suggestion > Mots exclus] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration des mots exclus des suggestions illustrée ci-dessous, cliquez sur [Suggérer > Mot incorrect] dans le menu de gauche.
 
 |image0|
 

@@ -19,12 +19,12 @@ Configuración común
 ~~~~~~~~~~~~~~~~~~~
 
 - Tipo: Tipo de almacenamiento (Automático/S3/GCS)
-- Bucket: Nombre del bucket a administrar
+- Cubo: Nombre del cubo a administrar
 
 Configuración de S3
 ~~~~~~~~~~~~~~~~~~~
 
-- Punto de acceso: Punto de acceso de S3 (utiliza el predeterminado de AWS si está vacío)
+- Punto final: Punto final de S3 (utiliza el predeterminado de AWS si está vacío)
 - Clave de acceso: Clave de acceso de AWS
 - Clave secreta: Clave secreta de AWS
 - Región: Región de AWS
@@ -32,14 +32,14 @@ Configuración de S3
 Configuración de GCS
 ~~~~~~~~~~~~~~~~~~~~
 
-- Punto de acceso: Punto de acceso de GCS (utiliza el predeterminado de Google Cloud si está vacío)
+- Punto final: Punto final de GCS (utiliza el predeterminado de Google Cloud si está vacío)
 - ID de proyecto: ID del proyecto de Google Cloud
 - Ruta de credenciales: Ruta del archivo JSON de credenciales de la cuenta de servicio
 
 Configuración de MinIO (compatible con S3)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Punto de acceso: URL del punto de acceso del servidor MinIO
+- Punto final: URL del punto final del servidor MinIO
 - Clave de acceso: Clave de acceso de MinIO
 - Clave secreta: Clave secreta de MinIO
 
@@ -64,10 +64,10 @@ Tamaño
 Tamaño del objeto
 
 
-Fecha de última actualización
-::::::::::::::::::::::::::::::
+Última modificación
+:::::::::::::::::::
 
-Fecha de última actualización del objeto
+Última modificación del objeto
 
 Descarga
 --------

@@ -19,7 +19,7 @@ Paramètres communs
 ~~~~~~~~~~~~~~~~~~
 
 - Type : Type de stockage (Automatique/S3/GCS)
-- Bucket : Nom du bucket à gérer
+- Compartiment : Nom du compartiment à gérer
 
 Paramètres S3
 ~~~~~~~~~~~~~
@@ -64,8 +64,8 @@ Taille
 Taille de l'objet
 
 
-Date de dernière modification
-::::::::::::::::::::::::::::::
+Dernière modification
+:::::::::::::::::::::
 
 Date de dernière modification de l'objet
 

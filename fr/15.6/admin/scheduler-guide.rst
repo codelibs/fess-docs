@@ -71,8 +71,8 @@ Journalisation
 
 L'activation enregistre dans le journal des tâches.
 
-Tâche de crawl
-::::::::::::::
+Tâche du robot d'exploration
+:::::::::::::::::::::::::::::
 
 L'activation traite comme une tâche de crawl.
 En configurant job.max.crawler.processes dans fess_config.properties, vous pouvez empêcher le démarrage excessif du crawler.
@@ -84,8 +84,8 @@ Par défaut, il n'y a aucune limite au nombre de démarrages du crawler.
 Spécifie l'état actif/inactif de la tâche.
 Si désactivé, la tâche ne sera pas exécutée.
 
-Ordre d'affichage
-:::::::::::::::::
+Ordre de tri
+::::::::::::
 
 Spécifie l'ordre d'affichage dans la liste des tâches.
 

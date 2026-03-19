@@ -15,7 +15,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste de configuration des en-têtes de requête illustrée ci-dessous, cliquez sur [Crawler > En-tête de requête] dans le menu de gauche.
+Pour ouvrir la page de liste de configuration des en-têtes de requête illustrée ci-dessous, cliquez sur [Robot d'exploration > En-tête de requête] dans le menu de gauche.
 
 |image0|
 

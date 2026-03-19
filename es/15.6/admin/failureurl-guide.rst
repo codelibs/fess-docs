@@ -1,12 +1,12 @@
-================
-URL con Falla
-================
+============
+URL de fallo
+============
 
 Descripción general
 ===================
 
-Aquí se explica sobre las URL con falla.
-Las URL que no se pudieron obtener durante el rastreo se registran y se pueden verificar como URL con falla.
+Aquí se explica sobre las URL de fallo.
+Las URL que no se pudieron obtener durante el rastreo se registran y se pueden verificar como URL de fallo.
 
 Método de gestión
 ==================
@@ -14,16 +14,16 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista para verificar las URL con falla, haga clic en [Información del sistema > URL con falla] en el menú izquierdo.
+Para abrir la página de lista para verificar las URL de fallo, haga clic en [Información del sistema > URL de fallo] en el menú izquierdo.
 
 |image0|
 
-Al hacer clic en el enlace de verificación de URL con falla, se muestran los detalles.
+Al hacer clic en el enlace de verificación de URL de fallo, se muestran los detalles.
 
-Detalles de URL con falla
+Detalles de URL de fallo
 ==========================
 
-Los detalles de URL con falla registran las excepciones que ocurrieron durante el rastreo.
+Los detalles de URL de fallo registran las excepciones que ocurrieron durante el rastreo.
 
 |image1|
 

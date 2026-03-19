@@ -13,7 +13,7 @@ Méthode de configuration
 Affichage
 ---------
 
-Pour ouvrir la page des fichiers journaux illustrée ci-dessous, cliquez sur [Informations système > Fichiers journaux] dans le menu de gauche.
+Pour ouvrir la page des fichiers journaux illustrée ci-dessous, cliquez sur [Informations système > Fichier journal] dans le menu de gauche.
 
 |image0|
 

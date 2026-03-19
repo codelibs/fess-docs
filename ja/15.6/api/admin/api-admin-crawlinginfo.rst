@@ -247,6 +247,6 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
-- :doc:`api-admin-failureurl` - 失敗URL API
+- :doc:`api-admin-failureurl` - 障害URL API
 - :doc:`api-admin-joblog` - ジョブログAPI
 - :doc:`../../admin/crawlinginfo-guide` - クロール情報ガイド

@@ -317,7 +317,7 @@ HTTPステータスコード
    * - :doc:`api-admin-crawlinginfo`
      - クロール情報
    * - :doc:`api-admin-failureurl`
-     - 失敗URL管理
+     - 障害URL管理
    * - :doc:`api-admin-backup`
      - バックアップ/リストア
 

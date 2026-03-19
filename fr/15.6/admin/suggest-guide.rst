@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste des mots de suggestion illustrée ci-dessous, cliquez sur [Suggestion > Mots de suggestion] dans le menu de gauche.
+Pour ouvrir la page de liste des mots de suggestion illustrée ci-dessous, cliquez sur [Suggérer > Suggérer un mot] dans le menu de gauche.
 
 |image0|
 
