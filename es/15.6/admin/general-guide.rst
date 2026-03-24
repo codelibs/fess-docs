@@ -74,11 +74,26 @@ Añadir parámetro de búsqueda
 
 Habilite esto si desea pasar parámetros a la visualización de resultados de búsqueda.
 
-Correo de notificación
-::::::::::::::::::::::
+Proxy de archivos de búsqueda
+:::::::::::::::::::::::::::::
 
-Especifique las direcciones de correo electrónico que recibirán notificaciones al completarse el rastreo.
-Se pueden especificar varias direcciones separadas por comas. Se requiere un servidor de correo para su uso.
+Especifique si desea habilitar el proxy de archivos para los resultados de búsqueda.
+
+Usar configuración regional del navegador
+::::::::::::::::::::::::::::::::::::::::::
+
+Especifique si desea usar la configuración regional del navegador para la búsqueda.
+
+Tipo de SSO
+:::::::::::
+
+Especifica el tipo de inicio de sesión único (Single Sign-On).
+
+- **Ninguno**: No usar SSO
+- **OpenID Connect**: Usar OpenID Connect
+- **SAML**: Usar SAML
+- **SPNEGO**: Usar SPNEGO
+- **Entra ID**: Usar Microsoft Entra ID
 
 Rastreador
 ----------
@@ -92,6 +107,11 @@ Configuración de rastreadores simultáneos
 ::::::::::::::::::::::::::::::::::::::::::
 
 Especifique el número de configuraciones de rastreo que se ejecutarán simultáneamente.
+
+Agente de usuario
+:::::::::::::::::
+
+Especifica el nombre del agente de usuario utilizado por el rastreador.
 
 Eliminar documentos anteriores
 :::::::::::::::::::::::::::::::
@@ -214,9 +234,210 @@ Especifique el nombre del atributo memberOf disponible en el servidor LDAP.
 Para Active Directory, es memberOf.
 Para otros servidores LDAP, puede ser isMemberOf.
 
+Autenticación de seguridad
+::::::::::::::::::::::::::
 
-Mostrar notificación
----------------------
+Especifica el método de autenticación de seguridad LDAP (ej.: simple).
+
+Fábrica de contexto inicial
+::::::::::::::::::::::::::::
+
+Especifica la clase de fábrica de contexto inicial LDAP (ej.: com.sun.jndi.ldap.LdapCtxFactory).
+
+OpenID Connect
+--------------
+
+ID de cliente
+:::::::::::::
+
+Especifica el ID de cliente del proveedor de OpenID Connect.
+
+Secreto de cliente
+::::::::::::::::::
+
+Especifica el secreto de cliente del proveedor de OpenID Connect.
+
+URL del servidor de autorización
+:::::::::::::::::::::::::::::::::
+
+Especifica la URL del servidor de autorización para OpenID Connect.
+
+URL del servidor de tokens
+::::::::::::::::::::::::::
+
+Especifica la URL del servidor de tokens para OpenID Connect.
+
+URL de redirección
+::::::::::::::::::
+
+Especifica la URL de redirección para OpenID Connect.
+
+Alcance
+:::::::
+
+Especifica el alcance para OpenID Connect.
+
+URL base
+::::::::
+
+Especifica la URL base para OpenID Connect.
+
+Grupos por defecto
+::::::::::::::::::
+
+Especifica los grupos por defecto que se asignarán a los usuarios durante la autenticación OpenID Connect.
+
+Roles por defecto
+:::::::::::::::::
+
+Especifica los roles por defecto que se asignarán a los usuarios durante la autenticación OpenID Connect.
+
+SAML
+----
+
+URL base del SP
+:::::::::::::::
+
+Especifica la URL base del proveedor de servicios SAML.
+
+Nombre de atributo de grupo
+::::::::::::::::::::::::::::
+
+Especifica el nombre del atributo para obtener grupos de la respuesta SAML.
+
+Nombre de atributo de rol
+:::::::::::::::::::::::::
+
+Especifica el nombre del atributo para obtener roles de la respuesta SAML.
+
+Grupos por defecto
+::::::::::::::::::
+
+Especifica los grupos por defecto que se asignarán a los usuarios durante la autenticación SAML.
+
+Roles por defecto
+:::::::::::::::::
+
+Especifica los roles por defecto que se asignarán a los usuarios durante la autenticación SAML.
+
+SPNEGO
+------
+
+Configuración Krb5
+:::::::::::::::::::
+
+Especifica la ruta al archivo de configuración de Kerberos 5.
+
+Configuración de inicio de sesión
+::::::::::::::::::::::::::::::::::
+
+Especifica la ruta al archivo de configuración de inicio de sesión JAAS (Java Authentication and Authorization Service).
+
+Módulo de cliente de inicio de sesión
+::::::::::::::::::::::::::::::::::::::
+
+Especifica el nombre del módulo de inicio de sesión del cliente JAAS.
+
+Módulo de servidor de inicio de sesión
+:::::::::::::::::::::::::::::::::::::::
+
+Especifica el nombre del módulo de inicio de sesión del servidor JAAS.
+
+Nombre de usuario de preautenticación
+::::::::::::::::::::::::::::::::::::::
+
+Especifica el nombre de usuario para la preautenticación SPNEGO.
+
+Contraseña de preautenticación
+:::::::::::::::::::::::::::::::
+
+Especifica la contraseña para la preautenticación SPNEGO.
+
+Permitir autenticación básica
+:::::::::::::::::::::::::::::
+
+Especifique si desea permitir la autenticación básica como alternativa.
+
+Permitir autenticación básica no segura
+::::::::::::::::::::::::::::::::::::::::
+
+Especifique si desea permitir la autenticación básica a través de conexiones no seguras (HTTP).
+
+Solicitud NTLM
+:::::::::::::::
+
+Especifique si desea habilitar la solicitud NTLM.
+
+Permitir localhost
+::::::::::::::::::
+
+Especifique si desea permitir el acceso desde localhost.
+
+Permitir delegación
+:::::::::::::::::::
+
+Especifique si desea permitir la delegación Kerberos.
+
+Directorios excluidos
+:::::::::::::::::::::
+
+Especifica los directorios que se excluirán de la autenticación SPNEGO.
+
+Entra ID
+--------
+
+ID de cliente
+:::::::::::::
+
+Especifica el ID de aplicación (cliente) para Microsoft Entra ID.
+
+Secreto de cliente
+::::::::::::::::::
+
+Especifica el secreto de cliente para Microsoft Entra ID.
+
+Inquilino
+:::::::::
+
+Especifica el ID de inquilino para Microsoft Entra ID.
+
+Autoridad
+:::::::::
+
+Especifica la URL de autoridad para Microsoft Entra ID.
+
+URL de respuesta
+::::::::::::::::
+
+Especifica la URL de respuesta (redirección) para Microsoft Entra ID.
+
+TTL de estado
+:::::::::::::
+
+Especifica el tiempo de vida (TTL) del estado de autenticación.
+
+Grupos por defecto
+::::::::::::::::::
+
+Especifica los grupos por defecto que se asignarán a los usuarios durante la autenticación Entra ID.
+
+Roles por defecto
+:::::::::::::::::
+
+Especifica los roles por defecto que se asignarán a los usuarios durante la autenticación Entra ID.
+
+Campos de permisos
+::::::::::::::::::
+
+Especifica los campos para obtener información de permisos de Entra ID.
+
+Usar servicio de dominio
+::::::::::::::::::::::::
+
+Especifique si desea utilizar el servicio de dominio de Entra ID.
+
+Aviso
+-----
 
 Página de inicio de sesión
 :::::::::::::::::::::::::::
@@ -227,6 +448,30 @@ Página superior de búsqueda
 :::::::::::::::::::::::::::
 
 Describa el mensaje que se mostrará en la pantalla principal de búsqueda.
+
+Página de búsqueda avanzada
+::::::::::::::::::::::::::::
+
+Describa el mensaje que se mostrará en la pantalla de búsqueda avanzada.
+
+Notificación
+------------
+
+Correo de notificación
+::::::::::::::::::::::
+
+Especifique las direcciones de correo electrónico que recibirán notificaciones al completarse el rastreo.
+Se pueden especificar varias direcciones separadas por comas. Se requiere un servidor de correo para su uso.
+
+Slack Webhook URL
+:::::::::::::::::
+
+Especifica la URL del webhook para las notificaciones de Slack.
+
+Google Chat Webhook URL
+:::::::::::::::::::::::
+
+Especifica la URL del webhook para las notificaciones de Google Chat.
 
 Almacenamiento
 --------------

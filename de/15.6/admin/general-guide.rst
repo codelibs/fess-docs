@@ -74,11 +74,26 @@ Suchparameter anhängen
 
 Aktivieren Sie dies, wenn Sie Parameter an die Suchergebnisanzeige übergeben möchten.
 
-Benachrichtigungs-E-Mail
-:::::::::::::::::::::::::
+Suchdatei-Proxy
+:::::::::::::::
 
-Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
-Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
+Gibt an, ob der Datei-Proxy für Suchergebnisse aktiviert werden soll.
+
+Browser-Gebietsschema verwenden
+::::::::::::::::::::::::::::::::
+
+Gibt an, ob das Browser-Gebietsschema für die Suche verwendet werden soll.
+
+SSO-Typ
+:::::::
+
+Gibt den Typ der Einmalanmeldung (Single Sign-On) an.
+
+- **Keine**: SSO nicht verwenden
+- **OpenID Connect**: OpenID Connect verwenden
+- **SAML**: SAML verwenden
+- **SPNEGO**: SPNEGO verwenden
+- **Entra ID**: Microsoft Entra ID verwenden
 
 Crawler
 -------
@@ -92,6 +107,11 @@ Gleichzeitige Crawler-Konfiguration
 :::::::::::::::::::::::::::::::::::::
 
 Geben Sie die Anzahl der gleichzeitig auszuführenden Crawl-Konfigurationen an.
+
+Benutzer-Agent
+::::::::::::::
+
+Geben Sie den Benutzer-Agent-Namen an, der vom Crawler verwendet wird.
 
 Alte Dokumente löschen
 ::::::::::::::::::::::
@@ -214,9 +234,210 @@ Geben Sie den memberOf-Attributnamen an, der auf dem LDAP-Server verfügbar ist.
 Für Active Directory ist es memberOf.
 Für andere LDAP-Server kann es isMemberOf sein.
 
+Sicherheitsauthentifizierung
+::::::::::::::::::::::::::::
 
-Benachrichtigung
------------------
+Gibt die LDAP-Sicherheitsauthentifizierungsmethode an (z.B. simple).
+
+Initiale Kontextfabrik
+::::::::::::::::::::::
+
+Gibt die LDAP-Klasse der initialen Kontextfabrik an (z.B. com.sun.jndi.ldap.LdapCtxFactory).
+
+OpenID Connect
+--------------
+
+Client-ID
+:::::::::
+
+Gibt die Client-ID des OpenID Connect-Anbieters an.
+
+Client-Geheimnis
+::::::::::::::::
+
+Gibt das Client-Geheimnis des OpenID Connect-Anbieters an.
+
+Autorisierungsserver-URL
+::::::::::::::::::::::::
+
+Gibt die URL des Autorisierungsservers für OpenID Connect an.
+
+Token-Server-URL
+::::::::::::::::
+
+Gibt die URL des Token-Servers für OpenID Connect an.
+
+Weiterleitungs-URL
+::::::::::::::::::
+
+Gibt die Weiterleitungs-URL für OpenID Connect an.
+
+Geltungsbereich
+:::::::::::::::
+
+Gibt den Geltungsbereich für OpenID Connect an.
+
+Basis-URL
+:::::::::
+
+Gibt die Basis-URL für OpenID Connect an.
+
+Standardgruppen
+:::::::::::::::
+
+Gibt die Standardgruppen an, die Benutzern bei der OpenID Connect-Authentifizierung zugewiesen werden.
+
+Standardrollen
+::::::::::::::
+
+Gibt die Standardrollen an, die Benutzern bei der OpenID Connect-Authentifizierung zugewiesen werden.
+
+SAML
+----
+
+SP-Basis-URL
+::::::::::::
+
+Gibt die Basis-URL des SAML Service Providers an.
+
+Gruppenattributname
+:::::::::::::::::::
+
+Gibt den Attributnamen zum Abrufen von Gruppen aus der SAML-Antwort an.
+
+Rollenattributname
+::::::::::::::::::
+
+Gibt den Attributnamen zum Abrufen von Rollen aus der SAML-Antwort an.
+
+Standardgruppen
+:::::::::::::::
+
+Gibt die Standardgruppen an, die Benutzern bei der SAML-Authentifizierung zugewiesen werden.
+
+Standardrollen
+::::::::::::::
+
+Gibt die Standardrollen an, die Benutzern bei der SAML-Authentifizierung zugewiesen werden.
+
+SPNEGO
+------
+
+Krb5-Konfiguration
+::::::::::::::::::
+
+Gibt den Pfad zur Kerberos 5-Konfigurationsdatei an.
+
+Anmeldekonfiguration
+::::::::::::::::::::
+
+Gibt den Pfad zur JAAS-Anmeldekonfigurationsdatei (Java Authentication and Authorization Service) an.
+
+Anmelde-Client-Modul
+::::::::::::::::::::
+
+Gibt den Namen des JAAS-Client-Anmeldemoduls an.
+
+Anmelde-Server-Modul
+::::::::::::::::::::
+
+Gibt den Namen des JAAS-Server-Anmeldemoduls an.
+
+Vorab-Authentifizierung Benutzername
+::::::::::::::::::::::::::::::::::::
+
+Gibt den Benutzernamen für die SPNEGO-Vorab-Authentifizierung an.
+
+Vorab-Authentifizierung Passwort
+::::::::::::::::::::::::::::::::
+
+Gibt das Passwort für die SPNEGO-Vorab-Authentifizierung an.
+
+Basic-Authentifizierung erlauben
+::::::::::::::::::::::::::::::::
+
+Gibt an, ob Basic-Authentifizierung als Fallback erlaubt werden soll.
+
+Unsichere Basic-Authentifizierung erlauben
+::::::::::::::::::::::::::::::::::::::::::
+
+Gibt an, ob Basic-Authentifizierung über unsichere (HTTP) Verbindungen erlaubt werden soll.
+
+NTLM-Aufforderung
+::::::::::::::::::
+
+Gibt an, ob die NTLM-Aufforderung aktiviert werden soll.
+
+Localhost erlauben
+::::::::::::::::::
+
+Gibt an, ob der Zugriff vom Localhost erlaubt werden soll.
+
+Delegation erlauben
+:::::::::::::::::::
+
+Gibt an, ob Kerberos-Delegation erlaubt werden soll.
+
+Verzeichnisse ausschließen
+::::::::::::::::::::::::::
+
+Gibt Verzeichnisse an, die von der SPNEGO-Authentifizierung ausgeschlossen werden sollen.
+
+Entra ID
+--------
+
+Client-ID
+:::::::::
+
+Gibt die Anwendungs-(Client-)ID für Microsoft Entra ID an.
+
+Client-Geheimnis
+::::::::::::::::
+
+Gibt das Client-Geheimnis für Microsoft Entra ID an.
+
+Mandant
+:::::::
+
+Gibt die Mandanten-ID für Microsoft Entra ID an.
+
+Autorität
+:::::::::
+
+Gibt die Autoritäts-URL für Microsoft Entra ID an.
+
+Antwort-URL
+:::::::::::
+
+Gibt die Antwort-(Weiterleitungs-)URL für Microsoft Entra ID an.
+
+Status-TTL
+::::::::::
+
+Gibt die Gültigkeitsdauer (TTL) des Authentifizierungsstatus an.
+
+Standardgruppen
+:::::::::::::::
+
+Gibt die Standardgruppen an, die Benutzern bei der Entra ID-Authentifizierung zugewiesen werden.
+
+Standardrollen
+::::::::::::::
+
+Gibt die Standardrollen an, die Benutzern bei der Entra ID-Authentifizierung zugewiesen werden.
+
+Berechtigungsfelder
+:::::::::::::::::::
+
+Gibt die Felder an, aus denen Berechtigungsinformationen von Entra ID abgerufen werden.
+
+Domänendienst verwenden
+:::::::::::::::::::::::
+
+Gibt an, ob der Entra ID-Domänendienst verwendet werden soll.
+
+Hinweis
+-------
 
 Anmeldeseite
 ::::::::::::
@@ -227,6 +448,30 @@ Such-Startseite
 :::::::::::::::
 
 Beschreiben Sie die Nachricht, die auf dem Such-Startbildschirm angezeigt werden soll.
+
+Erweiterte Suchseite
+::::::::::::::::::::
+
+Beschreiben Sie die Nachricht, die auf dem erweiterten Suchbildschirm angezeigt werden soll.
+
+Benachrichtigung
+----------------
+
+Benachrichtigungs-E-Mail
+:::::::::::::::::::::::::
+
+Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
+Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
+
+Slack Webhook URL
+:::::::::::::::::
+
+Gibt die Webhook-URL für Slack-Benachrichtigungen an.
+
+Google Chat Webhook URL
+:::::::::::::::::::::::
+
+Gibt die Webhook-URL für Google Chat-Benachrichtigungen an.
 
 Speicher
 --------

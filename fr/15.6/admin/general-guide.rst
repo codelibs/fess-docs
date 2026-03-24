@@ -74,11 +74,26 @@ Ajouter des paramètres de recherche
 
 Active le passage de paramètres à l'affichage des résultats de recherche.
 
-E-mail de notification
-::::::::::::::::::::::
+Proxy de fichier de recherche
+:::::::::::::::::::::::::::::
 
-Spécifie l'adresse e-mail pour la notification à la fin du crawl.
-Plusieurs adresses peuvent être spécifiées séparées par des virgules. Un serveur de messagerie est requis pour l'utilisation.
+Spécifie s'il faut activer le proxy de fichier pour les résultats de recherche.
+
+Utiliser les paramètres régionaux du navigateur
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Spécifie s'il faut utiliser les paramètres régionaux du navigateur pour la recherche.
+
+Type de SSO
+:::::::::::
+
+Spécifie le type d'authentification unique (Single Sign-On).
+
+- **Aucun** : Ne pas utiliser le SSO
+- **OpenID Connect** : Utiliser OpenID Connect
+- **SAML** : Utiliser SAML
+- **SPNEGO** : Utiliser SPNEGO
+- **Entra ID** : Utiliser Microsoft Entra ID
 
 Robot d'exploration
 -------------------
@@ -92,6 +107,11 @@ Configuration du robot d'exploration simultané
 :::::::::::::::::::::::::::::::::::::::::::::::
 
 Spécifie le nombre de configurations de crawl à exécuter simultanément.
+
+Agent utilisateur
+:::::::::::::::::
+
+Spécifie le nom de l'agent utilisateur utilisé par le robot d'exploration.
 
 Supprimer les anciens documents
 ::::::::::::::::::::::::::::::::
@@ -214,9 +234,210 @@ Spécifie le nom de l'attribut memberOf disponible sur le serveur LDAP.
 Pour Active Directory, c'est memberOf.
 Pour d'autres serveurs LDAP, cela peut être isMemberOf.
 
+Authentification de sécurité
+::::::::::::::::::::::::::::
 
-Notification
-------------
+Spécifie la méthode d'authentification de sécurité LDAP (ex. : simple).
+
+Fabrique de contexte initial
+:::::::::::::::::::::::::::::
+
+Spécifie la classe de fabrique de contexte initial LDAP (ex. : com.sun.jndi.ldap.LdapCtxFactory).
+
+OpenID Connect
+--------------
+
+ID client
+:::::::::
+
+Spécifie l'ID client du fournisseur OpenID Connect.
+
+Secret client
+:::::::::::::
+
+Spécifie le secret client du fournisseur OpenID Connect.
+
+URL du serveur d'autorisation
+::::::::::::::::::::::::::::::
+
+Spécifie l'URL du serveur d'autorisation pour OpenID Connect.
+
+URL du serveur de jetons
+::::::::::::::::::::::::
+
+Spécifie l'URL du serveur de jetons pour OpenID Connect.
+
+URL de redirection
+::::::::::::::::::
+
+Spécifie l'URL de redirection pour OpenID Connect.
+
+Portée
+::::::
+
+Spécifie la portée pour OpenID Connect.
+
+URL de base
+:::::::::::
+
+Spécifie l'URL de base pour OpenID Connect.
+
+Groupes par défaut
+::::::::::::::::::
+
+Spécifie les groupes par défaut à attribuer aux utilisateurs lors de l'authentification OpenID Connect.
+
+Rôles par défaut
+::::::::::::::::
+
+Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authentification OpenID Connect.
+
+SAML
+----
+
+URL de base du SP
+:::::::::::::::::
+
+Spécifie l'URL de base du fournisseur de services SAML.
+
+Nom d'attribut de groupe
+::::::::::::::::::::::::
+
+Spécifie le nom d'attribut pour récupérer les groupes de la réponse SAML.
+
+Nom d'attribut de rôle
+::::::::::::::::::::::
+
+Spécifie le nom d'attribut pour récupérer les rôles de la réponse SAML.
+
+Groupes par défaut
+::::::::::::::::::
+
+Spécifie les groupes par défaut à attribuer aux utilisateurs lors de l'authentification SAML.
+
+Rôles par défaut
+::::::::::::::::
+
+Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authentification SAML.
+
+SPNEGO
+------
+
+Configuration Krb5
+:::::::::::::::::::
+
+Spécifie le chemin vers le fichier de configuration Kerberos 5.
+
+Configuration de connexion
+::::::::::::::::::::::::::
+
+Spécifie le chemin vers le fichier de configuration de connexion JAAS (Java Authentication and Authorization Service).
+
+Module client de connexion
+::::::::::::::::::::::::::
+
+Spécifie le nom du module de connexion client JAAS.
+
+Module serveur de connexion
+:::::::::::::::::::::::::::
+
+Spécifie le nom du module de connexion serveur JAAS.
+
+Nom d'utilisateur de pré-authentification
+::::::::::::::::::::::::::::::::::::::::::
+
+Spécifie le nom d'utilisateur pour la pré-authentification SPNEGO.
+
+Mot de passe de pré-authentification
+:::::::::::::::::::::::::::::::::::::
+
+Spécifie le mot de passe pour la pré-authentification SPNEGO.
+
+Autoriser l'authentification Basic
+:::::::::::::::::::::::::::::::::::
+
+Spécifie s'il faut autoriser l'authentification Basic comme solution de repli.
+
+Autoriser l'authentification Basic non sécurisée
+:::::::::::::::::::::::::::::::::::::::::::::::::
+
+Spécifie s'il faut autoriser l'authentification Basic sur les connexions non sécurisées (HTTP).
+
+Invite NTLM
+::::::::::::
+
+Spécifie s'il faut activer l'invite NTLM.
+
+Autoriser localhost
+:::::::::::::::::::
+
+Spécifie s'il faut autoriser l'accès depuis localhost.
+
+Autoriser la délégation
+:::::::::::::::::::::::
+
+Spécifie s'il faut autoriser la délégation Kerberos.
+
+Répertoires exclus
+::::::::::::::::::
+
+Spécifie les répertoires à exclure de l'authentification SPNEGO.
+
+Entra ID
+--------
+
+ID client
+:::::::::
+
+Spécifie l'ID d'application (client) pour Microsoft Entra ID.
+
+Secret client
+:::::::::::::
+
+Spécifie le secret client pour Microsoft Entra ID.
+
+Locataire
+:::::::::
+
+Spécifie l'ID du locataire pour Microsoft Entra ID.
+
+Autorité
+::::::::
+
+Spécifie l'URL de l'autorité pour Microsoft Entra ID.
+
+URL de réponse
+::::::::::::::
+
+Spécifie l'URL de réponse (redirection) pour Microsoft Entra ID.
+
+TTL de l'état
+:::::::::::::
+
+Spécifie la durée de vie (TTL) de l'état d'authentification.
+
+Groupes par défaut
+::::::::::::::::::
+
+Spécifie les groupes par défaut à attribuer aux utilisateurs lors de l'authentification Entra ID.
+
+Rôles par défaut
+::::::::::::::::
+
+Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authentification Entra ID.
+
+Champs de permissions
+:::::::::::::::::::::
+
+Spécifie les champs pour récupérer les informations de permissions depuis Entra ID.
+
+Utiliser le service de domaine
+:::::::::::::::::::::::::::::::
+
+Spécifie s'il faut utiliser le service de domaine Entra ID.
+
+Avis
+----
 
 Page de connexion
 :::::::::::::::::
@@ -227,6 +448,30 @@ Page d'accueil de la recherche
 ::::::::::::::::::::::::::::::
 
 Décrit le message à afficher sur l'écran d'accueil de recherche.
+
+Page de recherche avancée
+:::::::::::::::::::::::::
+
+Décrit le message à afficher sur l'écran de recherche avancée.
+
+Notification
+------------
+
+E-mail de notification
+::::::::::::::::::::::
+
+Spécifie l'adresse e-mail pour la notification à la fin du crawl.
+Plusieurs adresses peuvent être spécifiées séparées par des virgules. Un serveur de messagerie est requis pour l'utilisation.
+
+Slack Webhook URL
+:::::::::::::::::
+
+Spécifie l'URL du webhook pour les notifications Slack.
+
+Google Chat Webhook URL
+:::::::::::::::::::::::
+
+Spécifie l'URL du webhook pour les notifications Google Chat.
 
 Stockage
 --------

@@ -74,11 +74,26 @@ Append Search Parameters
 
 Enable when passing parameters to the search result display.
 
-Notification Email
+Search File Proxy
+:::::::::::::::::
+
+Specify whether to enable file proxy for search results.
+
+Use Browser Locale
 ::::::::::::::::::
 
-Specify the email address to notify when crawling is complete.
-Multiple addresses can be specified separated by commas. A mail server is required to use this feature.
+Specify whether to use the browser locale for search.
+
+SSO Type
+::::::::
+
+Specifies the single sign-on type.
+
+- **None**: Do not use SSO
+- **OpenID Connect**: Use OpenID Connect
+- **SAML**: Use SAML
+- **SPNEGO**: Use SPNEGO
+- **Entra ID**: Use Microsoft Entra ID
 
 Crawler
 -------
@@ -92,6 +107,11 @@ Concurrent Crawler Settings
 :::::::::::::::::::::::::::
 
 Specifies the number of crawl configurations to execute simultaneously.
+
+User Agent
+::::::::::
+
+Specifies the user agent name used by the crawler.
 
 Delete Documents Before
 :::::::::::::::::::::::
@@ -214,9 +234,210 @@ Specifies the memberOf attribute name available on the LDAP server.
 For Active Directory, it is "memberOf".
 For other LDAP servers, it may be "isMemberOf".
 
+Security Authentication
+:::::::::::::::::::::::
 
-Notification Display
---------------------
+Specifies the LDAP security authentication method (e.g., simple).
+
+Initial Context Factory
+:::::::::::::::::::::::
+
+Specifies the LDAP initial context factory class (e.g., com.sun.jndi.ldap.LdapCtxFactory).
+
+OpenID Connect
+--------------
+
+Client ID
+:::::::::
+
+Specifies the client ID of the OpenID Connect provider.
+
+Client Secret
+:::::::::::::
+
+Specifies the client secret of the OpenID Connect provider.
+
+Auth Server URL
+:::::::::::::::
+
+Specifies the authorization server URL for OpenID Connect.
+
+Token Server URL
+::::::::::::::::
+
+Specifies the token server URL for OpenID Connect.
+
+Redirect URL
+::::::::::::
+
+Specifies the redirect URL for OpenID Connect.
+
+Scope
+:::::
+
+Specifies the scope for OpenID Connect.
+
+Base URL
+::::::::
+
+Specifies the base URL for OpenID Connect.
+
+Default Groups
+::::::::::::::
+
+Specifies the default groups to assign to users during OpenID Connect authentication.
+
+Default Roles
+:::::::::::::
+
+Specifies the default roles to assign to users during OpenID Connect authentication.
+
+SAML
+----
+
+SP Base URL
+:::::::::::
+
+Specifies the base URL of the SAML Service Provider.
+
+Group Attribute Name
+::::::::::::::::::::
+
+Specifies the attribute name to retrieve groups from the SAML response.
+
+Role Attribute Name
+:::::::::::::::::::
+
+Specifies the attribute name to retrieve roles from the SAML response.
+
+Default Groups
+::::::::::::::
+
+Specifies the default groups to assign to users during SAML authentication.
+
+Default Roles
+:::::::::::::
+
+Specifies the default roles to assign to users during SAML authentication.
+
+SPNEGO
+------
+
+Krb5 Configuration
+::::::::::::::::::
+
+Specifies the path to the Kerberos 5 configuration file.
+
+Login Configuration
+:::::::::::::::::::
+
+Specifies the path to the JAAS (Java Authentication and Authorization Service) login configuration file.
+
+Login Client Module
+:::::::::::::::::::
+
+Specifies the JAAS client login module name.
+
+Login Server Module
+:::::::::::::::::::
+
+Specifies the JAAS server login module name.
+
+Pre-Auth Username
+:::::::::::::::::
+
+Specifies the username for SPNEGO pre-authentication.
+
+Pre-Auth Password
+:::::::::::::::::
+
+Specifies the password for SPNEGO pre-authentication.
+
+Allow Basic
+:::::::::::
+
+Specify whether to allow Basic authentication fallback.
+
+Allow Unsecure Basic
+::::::::::::::::::::
+
+Specify whether to allow Basic authentication over unsecure (HTTP) connections.
+
+Prompt NTLM
+::::::::::::
+
+Specify whether to enable NTLM prompt.
+
+Allow Localhost
+:::::::::::::::
+
+Specify whether to allow access from localhost.
+
+Allow Delegation
+::::::::::::::::
+
+Specify whether to allow Kerberos delegation.
+
+Exclude Dirs
+::::::::::::
+
+Specifies directories to exclude from SPNEGO authentication.
+
+Entra ID
+--------
+
+Client ID
+:::::::::
+
+Specifies the application (client) ID for Microsoft Entra ID.
+
+Client Secret
+:::::::::::::
+
+Specifies the client secret for Microsoft Entra ID.
+
+Tenant
+::::::
+
+Specifies the tenant ID for Microsoft Entra ID.
+
+Authority
+:::::::::
+
+Specifies the authority URL for Microsoft Entra ID.
+
+Reply URL
+:::::::::
+
+Specifies the reply (redirect) URL for Microsoft Entra ID.
+
+State TTL
+:::::::::
+
+Specifies the time-to-live (TTL) for the authentication state.
+
+Default Groups
+::::::::::::::
+
+Specifies the default groups to assign to users during Entra ID authentication.
+
+Default Roles
+:::::::::::::
+
+Specifies the default roles to assign to users during Entra ID authentication.
+
+Permission Fields
+:::::::::::::::::
+
+Specifies the fields to retrieve permission information from Entra ID.
+
+Use Domain Service
+::::::::::::::::::
+
+Specify whether to use Entra ID Domain Service.
+
+Notice
+------
 
 Login Page
 ::::::::::
@@ -227,6 +448,30 @@ Search Top Page
 :::::::::::::::
 
 Enter the message to display on the search top screen.
+
+Advanced Search Page
+::::::::::::::::::::
+
+Enter the message to display on the advanced search screen.
+
+Notify
+------
+
+Notification Email
+::::::::::::::::::
+
+Specify the email address to notify when crawling is complete.
+Multiple addresses can be specified separated by commas. A mail server is required to use this feature.
+
+Slack Webhook URL
+:::::::::::::::::
+
+Specifies the webhook URL for Slack notifications.
+
+Google Chat Webhook URL
+:::::::::::::::::::::::
+
+Specifies the webhook URL for Google Chat notifications.
 
 Storage
 -------
@@ -291,7 +536,7 @@ LDAP Configuration Example
 
 .. tabularcolumns:: |p{4cm}|p{4cm}|p{4cm}|
 .. list-table:: LDAP/Active Directory Configuration
-   :header-rows: 1
+   :header-rows: 1
 
    * - Name
      - Value (LDAP)
