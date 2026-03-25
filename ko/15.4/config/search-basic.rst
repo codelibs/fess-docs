@@ -177,7 +177,6 @@ NOT 검색
 
 검색 로그는 OpenSearch의 ``fess_log`` 인덱스에 저장되며,
 OpenSearch Dashboards에서 시각화하고 분석할 수 있습니다.
-자세한 내용은 :doc:`kibana` 를 참조하십시오.
 
 성능 튜닝
 ==========================

@@ -177,7 +177,6 @@ Ces journaux peuvent être utilisés aux fins suivantes :
 
 Les journaux de recherche sont stockés dans l'index ``fess_log`` d'OpenSearch,
 et peuvent être visualisés et analysés dans OpenSearch Dashboards.
-Pour plus de détails, consultez :doc:`kibana`.
 
 Optimisation des performances
 ==========================
