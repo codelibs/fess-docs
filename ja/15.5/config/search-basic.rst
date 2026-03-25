@@ -177,7 +177,6 @@ NOT検索
 
 検索ログは OpenSearch の ``fess_log`` インデックスに保存され、
 OpenSearch Dashboards で可視化・分析できます。
-詳細は :doc:`kibana` を参照してください。
 
 パフォーマンスチューニング
 ==========================

@@ -177,7 +177,6 @@ Diese Protokolle können für folgende Zwecke verwendet werden:
 
 Suchprotokolle werden im ``fess_log``-Index von OpenSearch gespeichert
 und können in OpenSearch Dashboards visualisiert und analysiert werden.
-Details siehe :doc:`kibana`.
 
 Leistungsoptimierung
 ==========================

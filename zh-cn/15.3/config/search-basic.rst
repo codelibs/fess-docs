@@ -177,7 +177,6 @@ NOT 搜索
 
 搜索日志存储在 OpenSearch 的 ``fess_log`` 索引中,
 可在 OpenSearch Dashboards 中可视化和分析。
-详情请参阅 :doc:`kibana`。
 
 性能调优
 ==========================
