@@ -171,6 +171,24 @@ Nivel de registro
 
 Especifique el nivel de registro para fess.log.
 
+Notificacion de registro
+::::::::::::::::::::::::
+
+Especifica si se habilita la funcion de notificacion de registro que captura automaticamente eventos de registro de nivel ERROR y WARN y envia notificaciones.
+Para mas detalles, consulte :doc:`Configuracion de notificaciones de registro <../config/admin-log-notification>`.
+
+Nivel de notificacion de registro
+:::::::::::::::::::::::::::::::::
+
+Especifica el nivel de registro para las notificaciones de registro.
+Los eventos de registro en el nivel seleccionado y superiores seran notificados.
+
+- **ERROR**: Solo notificar errores (predeterminado)
+- **WARN**: Notificar advertencias y superiores
+- **INFO**: Notificar informacion y superiores
+- **DEBUG**: Notificar depuracion y superiores
+- **TRACE**: Notificar todos los registros
+
 Sugerir
 -------
 

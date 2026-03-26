@@ -643,6 +643,7 @@ Logs Have Character Encoding Issues
 References
 ==========
 
+- :doc:`admin-log-notification` - Log Notification Configuration
 - :doc:`setup-memory` - Memory Configuration
 - :doc:`crawler-advanced` - Advanced Crawler Configuration
 - :doc:`admin-index-backup` - Index Backup

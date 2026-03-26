@@ -643,6 +643,7 @@ JSON 형식으로 로그 출력
 참고 정보
 ========
 
+- :doc:`admin-log-notification` - 로그 알림 설정
 - :doc:`setup-memory` - 메모리 설정
 - :doc:`crawler-advanced` - 크롤러 고급 설정
 - :doc:`admin-index-backup` - 인덱스 백업

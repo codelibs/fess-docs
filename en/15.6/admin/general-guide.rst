@@ -171,6 +171,24 @@ Log Level
 
 Specify the log level for fess.log.
 
+Log Notification
+::::::::::::::::
+
+Specifies whether to enable the log notification feature that automatically captures ERROR and WARN level log events and sends notifications.
+For details, see :doc:`Log Notification Configuration <../config/admin-log-notification>`.
+
+Log Notification Level
+::::::::::::::::::::::
+
+Specifies the log level threshold for log notifications.
+Log events at the selected level and above will be notified.
+
+- **ERROR**: Notify errors only (default)
+- **WARN**: Notify warnings and above
+- **INFO**: Notify info and above
+- **DEBUG**: Notify debug and above
+- **TRACE**: Notify all logs
+
 Suggest
 -------
 

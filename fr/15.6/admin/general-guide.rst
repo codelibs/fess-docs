@@ -171,6 +171,24 @@ Niveau de journalisation
 
 Spécifie le niveau de journalisation de fess.log.
 
+Notification des journaux
+:::::::::::::::::::::::::
+
+Spécifie s'il faut activer la fonction de notification des journaux qui capture automatiquement les événements de niveau ERROR et WARN et envoie des notifications.
+Pour plus de détails, consultez :doc:`Configuration des notifications de journaux <../config/admin-log-notification>`.
+
+Niveau de notification des journaux
+::::::::::::::::::::::::::::::::::::
+
+Spécifie le niveau de journalisation pour les notifications.
+Les événements de journalisation au niveau sélectionné et au-dessus seront notifiés.
+
+- **ERROR** : Notifier uniquement les erreurs (par défaut)
+- **WARN** : Notifier les avertissements et au-dessus
+- **INFO** : Notifier les informations et au-dessus
+- **DEBUG** : Notifier le débogage et au-dessus
+- **TRACE** : Notifier tous les journaux
+
 Suggérer
 --------
 

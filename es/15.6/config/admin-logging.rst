@@ -644,6 +644,7 @@ Aparecen Caracteres Corruptos en el Registro
 Información de Referencia
 ==========================
 
+- :doc:`admin-log-notification` - Configuración de notificaciones de log
 - :doc:`setup-memory` - Configuración de memoria
 - :doc:`crawler-advanced` - Configuración avanzada del rastreador
 - :doc:`admin-index-backup` - Copia de seguridad de índices

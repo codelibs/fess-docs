@@ -644,6 +644,7 @@ JSON格式输出日志
 参考信息
 ========
 
+- :doc:`admin-log-notification` - 日志通知配置
 - :doc:`setup-memory` - 内存配置
 - :doc:`crawler-advanced` - 爬虫高级配置
 - :doc:`admin-index-backup` - 索引备份
