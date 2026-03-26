@@ -40,6 +40,22 @@ Auto expand replicas
 
 Specify auto-expand the number of replicas(index.auto_expand_replicas).
 
+Rebuild Config Index
+--------------------
+
+You can rebuild configuration indices (fess_config, fess_user, fess_log) with the latest mappings.
+This operation runs in the background. Please back up your configuration before executing.
+
+Target Indices
+::::::::::::::
+
+Select the indices to rebuild. You can choose from fess_config, fess_user, and fess_log.
+
+Load Default Data
+:::::::::::::::::
+
+If enabled, default data will be loaded during the rebuild. Existing documents will not be overwritten.
+
 Reload Doc Index
 ----------------
 
