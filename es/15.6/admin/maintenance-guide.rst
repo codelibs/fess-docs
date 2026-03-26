@@ -46,6 +46,22 @@ Número máximo de réplicas
 Puede especificar el número máximo de réplicas de OpenSearch (index.auto_expand_replicas).
 
 
+Reconstruir índice de configuración
+-------------------------------------
+
+Puede reconstruir los índices de configuración (fess_config, fess_user, fess_log) con los mapeos más recientes.
+Esta operación se ejecuta en segundo plano. Realice una copia de seguridad de la configuración antes de ejecutar.
+
+Índices de destino
+::::::::::::::::::
+
+Seleccione los índices a reconstruir. Puede elegir entre fess_config, fess_user y fess_log.
+
+Cargar datos predeterminados
+::::::::::::::::::::::::::::
+
+Al habilitarlo, se cargarán los datos predeterminados durante la reconstrucción. Los documentos existentes no se sobrescribirán.
+
 Recargar índice de documentos
 ------------------------------
 

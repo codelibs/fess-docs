@@ -46,6 +46,22 @@ Maximale Replikatanzahl
 Sie können die maximale OpenSearch-Replikatanzahl (index.auto_expand_replicas) angeben.
 
 
+Konfigurationsindex neu erstellen
+----------------------------------
+
+Sie können Konfigurationsindizes (fess_config, fess_user, fess_log) mit den neuesten Mappings neu erstellen.
+Dieser Vorgang wird im Hintergrund ausgeführt. Bitte erstellen Sie vor der Ausführung eine Sicherungskopie Ihrer Konfiguration.
+
+Zielindizes
+:::::::::::
+
+Wählen Sie die neu zu erstellenden Indizes aus. Sie können aus fess_config, fess_user und fess_log wählen.
+
+Standarddaten laden
+:::::::::::::::::::
+
+Durch Aktivierung werden bei der Neuerstellung Standarddaten geladen. Vorhandene Dokumente werden nicht überschrieben.
+
 Dokumentindex neu laden
 -----------------------
 
