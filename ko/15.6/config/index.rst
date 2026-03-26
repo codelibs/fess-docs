@@ -89,6 +89,7 @@
    :caption: 시스템 관리
 
    admin-logging
+   admin-log-notification
    admin-index-backup
    admin-index-export
    admin-analyzer

@@ -643,6 +643,7 @@ JSON形式でログ出力
 参考情報
 ========
 
+- :doc:`admin-log-notification` - ログ通知設定
 - :doc:`setup-memory` - メモリ設定
 - :doc:`crawler-advanced` - クローラー詳細設定
 - :doc:`admin-index-backup` - インデックスバックアップ

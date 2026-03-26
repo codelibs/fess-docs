@@ -161,6 +161,7 @@ Beispiel für Konfigurationsdatei (``log4j2.xml``):
 Referenzinformationen
 ========
 
+- :doc:`admin-log-notification` - Log-Benachrichtigungskonfiguration
 - :doc:`setup-memory` - Speicherkonfiguration
 - :doc:`crawler-advanced` - Erweiterte Crawler-Konfiguration
 - :doc:`admin-index-backup` - Index-Backup

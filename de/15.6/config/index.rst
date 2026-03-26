@@ -89,6 +89,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    :caption: Systemverwaltung
 
    admin-logging
+   admin-log-notification
    admin-index-backup
    admin-index-export
    admin-analyzer

@@ -89,6 +89,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
    :caption: Administracion del Sistema
 
    admin-logging
+   admin-log-notification
    admin-index-backup
    admin-index-export
    admin-analyzer

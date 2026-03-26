@@ -171,6 +171,24 @@ Protokollebene
 
 Geben Sie die Protokollebene für fess.log an.
 
+Protokollbenachrichtigung
+:::::::::::::::::::::::::
+
+Gibt an, ob die Protokollbenachrichtigungsfunktion aktiviert werden soll, die automatisch ERROR- und WARN-Protokollereignisse erfasst und Benachrichtigungen sendet.
+Weitere Informationen finden Sie unter :doc:`Protokollbenachrichtigungskonfiguration <../config/admin-log-notification>`.
+
+Protokollbenachrichtigungsebene
+:::::::::::::::::::::::::::::::
+
+Gibt die Protokollebene für Protokollbenachrichtigungen an.
+Protokollereignisse auf der ausgewählten Ebene und darüber werden benachrichtigt.
+
+- **ERROR**: Nur Fehler benachrichtigen (Standard)
+- **WARN**: Warnungen und höher benachrichtigen
+- **INFO**: Informationen und höher benachrichtigen
+- **DEBUG**: Debug und höher benachrichtigen
+- **TRACE**: Alle Protokolle benachrichtigen
+
 Vorschlagen
 -----------
 

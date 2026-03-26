@@ -89,6 +89,7 @@ This is a comprehensive guide for configuring |Fess|. Each section is organized 
    :caption: System Administration
 
    admin-logging
+   admin-log-notification
    admin-index-backup
    admin-index-export
    admin-analyzer

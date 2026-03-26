@@ -645,6 +645,7 @@ Caractères corrompus dans les journaux
 Informations de référence
 ========
 
+- :doc:`admin-log-notification` - Configuration des notifications de log
 - :doc:`setup-memory` - Configuration de la mémoire
 - :doc:`crawler-advanced` - Configuration avancée de l'explorateur
 - :doc:`admin-index-backup` - Sauvegarde de l'index
