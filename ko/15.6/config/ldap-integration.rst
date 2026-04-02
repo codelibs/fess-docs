@@ -56,10 +56,13 @@ LDAP 연결 설정
     # 베이스 DN
     ldap.base.dn=dc=example,dc=com
 
-    # 바인드 DN(서비스 계정)
-    ldap.security.principal=cn=fess,ou=services,dc=example,dc=com
+    # 사용자 인증용 바인드 DN 템플릿 (%s에 사용자 이름이 대입됨)
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # 바인드 비밀번호
+    # 관리용 바인드 DN (LDAP 검색용 서비스 계정)
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+
+    # 관리용 바인드 비밀번호
     ldap.admin.security.credentials=your_password
 
 사용자 검색 설정
@@ -75,6 +78,29 @@ LDAP 연결 설정
 
     # 사용자명 속성
     ldap.user.name.attribute=uid
+
+    # LDAP 관리 콘솔의 사용자 검색 필터
+    ldap.admin.user.filter=uid=%s
+
+.. note::
+
+   ``ldap.account.filter``는 사용자 인증 시 검색 필터이며,
+   ``ldap.admin.user.filter``는 LDAP 관리 화면에서의 사용자 검색 필터입니다.
+   용도가 다르므로 각각 적절하게 설정하세요.
+
+LDAP 관리용 베이스 DN 설정
+----------------------------
+
+::
+
+    # 사용자 검색 베이스 DN
+    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+
+    # 역할 검색 베이스 DN
+    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+
+    # 그룹 검색 베이스 DN
+    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
 
 그룹 검색 설정
 ----------------
@@ -104,8 +130,11 @@ Microsoft Active Directory용 설정 예입니다.
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # 서비스 계정(UPN 형식)
-    ldap.security.principal=fess@example.com
+    # 사용자 인증용 바인드 DN 템플릿 (UPN 형식)
+    ldap.security.principal=%s@example.com
+
+    # 관리용 바인드 DN (서비스 계정)
+    ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # 사용자 검색
@@ -140,8 +169,11 @@ OpenLDAP용 설정 예입니다.
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # 서비스 계정
-    ldap.security.principal=cn=admin,dc=example,dc=com
+    # 사용자 인증용 바인드 DN 템플릿
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
+
+    # 관리용 바인드 DN (서비스 계정)
+    ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # 사용자 검색

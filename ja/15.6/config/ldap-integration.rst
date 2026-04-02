@@ -56,10 +56,13 @@ LDAP接続設定
     # ベースDN
     ldap.base.dn=dc=example,dc=com
 
-    # バインドDN（サービスアカウント）
-    ldap.security.principal=cn=fess,ou=services,dc=example,dc=com
+    # ユーザー認証用バインドDNテンプレート（%sにユーザー名が埋め込まれる）
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # バインドパスワード
+    # 管理用バインドDN（LDAP検索用サービスアカウント）
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+
+    # 管理用バインドパスワード
     ldap.admin.security.credentials=your_password
 
 アカウントフィルター設定
@@ -69,6 +72,29 @@ LDAP接続設定
 
     # アカウントフィルター（ユーザー認証時の検索フィルター）
     ldap.account.filter=uid=%s
+
+    # LDAP管理画面でのユーザー検索フィルター
+    ldap.admin.user.filter=uid=%s
+
+.. note::
+
+   ``ldap.account.filter`` はユーザー認証時の検索フィルターで、
+   ``ldap.admin.user.filter`` はLDAP管理画面でのユーザー検索フィルターです。
+   用途が異なるため、それぞれ適切に設定してください。
+
+LDAP管理用ベースDN設定
+----------------------
+
+::
+
+    # ユーザー検索ベースDN
+    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+
+    # ロール検索ベースDN
+    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+
+    # グループ検索ベースDN
+    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
 
 グループフィルター設定
 ----------------------
@@ -95,8 +121,11 @@ Microsoft Active Directory向けの設定例です。
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # サービスアカウント（UPN形式）
-    ldap.security.principal=fess@example.com
+    # ユーザー認証用バインドDNテンプレート（UPN形式）
+    ldap.security.principal=%s@example.com
+
+    # 管理用バインドDN（サービスアカウント）
+    ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # アカウントフィルター
@@ -127,8 +156,11 @@ OpenLDAP向けの設定例です。
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # サービスアカウント
-    ldap.security.principal=cn=admin,dc=example,dc=com
+    # ユーザー認証用バインドDNテンプレート
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
+
+    # 管理用バインドDN（サービスアカウント）
+    ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # アカウントフィルター

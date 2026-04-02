@@ -54,10 +54,13 @@ LDAP-Verbindungseinstellungen
     # Base DN
     ldap.base.dn=dc=example,dc=com
 
-    # Bind DN (Dienstkonto)
-    ldap.security.principal=cn=fess,ou=services,dc=example,dc=com
+    # Bind-DN-Vorlage fuer Benutzerauthentifizierung (%s wird durch den Benutzernamen ersetzt)
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # Bind-Passwort
+    # Admin-Bind-DN (Dienstkonto fuer LDAP-Suche)
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+
+    # Admin-Bind-Passwort
     ldap.admin.security.credentials=your_password
 
 Benutzersuche-Einstellungen
@@ -73,6 +76,29 @@ Benutzersuche-Einstellungen
 
     # Benutzername-Attribut
     ldap.user.name.attribute=uid
+
+    # Admin-Benutzersuchfilter fuer die LDAP-Verwaltungskonsole
+    ldap.admin.user.filter=uid=%s
+
+.. note::
+
+   ``ldap.account.filter`` ist der Suchfilter fuer die Benutzerauthentifizierung,
+   ``ldap.admin.user.filter`` ist der Benutzersuchfilter fuer die LDAP-Verwaltungskonsole.
+   Konfigurieren Sie beide entsprechend, da sie unterschiedliche Zwecke erfuellen.
+
+LDAP-Admin-Basis-DN-Einstellungen
+----------------------------------
+
+::
+
+    # Benutzer-Suche-Basis-DN
+    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+
+    # Rollen-Suche-Basis-DN
+    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+
+    # Gruppen-Suche-Basis-DN
+    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
 
 Gruppensuche-Einstellungen
 --------------------------
@@ -102,8 +128,11 @@ Grundkonfiguration
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Dienstkonto (UPN-Format)
-    ldap.security.principal=fess@example.com
+    # Bind-DN-Vorlage fuer Benutzerauthentifizierung (UPN-Format)
+    ldap.security.principal=%s@example.com
+
+    # Admin-Bind-DN (Dienstkonto)
+    ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # Benutzersuche
@@ -138,8 +167,11 @@ Konfigurationsbeispiel fuer OpenLDAP.
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Dienstkonto
-    ldap.security.principal=cn=admin,dc=example,dc=com
+    # Bind-DN-Vorlage fuer Benutzerauthentifizierung
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
+
+    # Admin-Bind-DN (Dienstkonto)
+    ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # Benutzersuche

@@ -64,7 +64,6 @@ Beispiel für öffentliches Repository:
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Beispiel für privates Repository (mit Authentifizierung):
 
@@ -74,7 +73,6 @@ Beispiel für privates Repository (mit Authentifizierung):
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Parameterliste
 ~~~~~~~~~~~~~~
@@ -98,9 +96,9 @@ Parameterliste
    * - ``prev_commit_id``
      - Nein
      - Vorherige Commit-ID (für differentielles Crawling)
-   * - ``delete_old_docs``
+   * - ``commit_id``
      - Nein
-     - Gelöschte Dateien aus dem Index entfernen (Standard: ``false``)
+     - Ziel-Commit-ID (Standard: HEAD). Branch oder Tag kann angegeben werden
 
 Skript-Einstellungen
 --------------------
@@ -256,7 +254,6 @@ Nach dem ersten Crawling die ``prev_commit_id`` auf die vorherige Commit-ID setz
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
-    delete_old_docs=true
 
 .. note::
    Die Commit-ID wird auf die Commit-ID des letzten Crawlings gesetzt.
@@ -265,7 +262,7 @@ Nach dem ersten Crawling die ``prev_commit_id`` auf die vorherige Commit-ID setz
 Verarbeitung gelöschter Dateien
 -------------------------------
 
-Bei ``delete_old_docs=true`` werden aus dem Git-Repository gelöschte Dateien auch aus dem Index entfernt.
+Wenn ``base_url`` gesetzt ist, werden über Git DiffEntry (``ChangeType.DELETE``) erkannte gelöschte Dateien automatisch aus dem Index entfernt.
 
 Anwendungsbeispiele
 ===================
@@ -280,7 +277,6 @@ Parameter:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
-    delete_old_docs=false
 
 Skript:
 
@@ -304,7 +300,6 @@ Parameter:
     uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
-    delete_old_docs=false
 
 Skript:
 
@@ -329,7 +324,6 @@ Parameter:
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Skript:
 
@@ -352,7 +346,6 @@ Parameter:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
-    delete_old_docs=false
 
 Skript:
 
@@ -460,14 +453,13 @@ Große Repositories
 Branch angeben
 --------------
 
-Um einen anderen als den Standard-Branch zu crawlen:
+Um einen anderen Branch als den Standard zu crawlen, geben Sie den Branch-Namen oder Tag über den ``commit_id`` Parameter an:
 
 ::
 
-    uri=https://github.com/company/repo.git#develop
+    uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
-
-Geben Sie den Branch-Namen nach ``#`` an.
+    commit_id=develop
 
 URL-Generierung
 ===============

@@ -65,7 +65,6 @@ Git连接器提供从Git仓库获取文件并注册到
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 私有仓库示例（带认证）:
 
@@ -75,7 +74,6 @@ Git连接器提供从Git仓库获取文件并注册到
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 参数列表
 ~~~~~~~~~~~~~~~~
@@ -99,9 +97,9 @@ Git连接器提供从Git仓库获取文件并注册到
    * - ``prev_commit_id``
      - 否
      - 上次提交ID（用于增量爬取）
-   * - ``delete_old_docs``
+   * - ``commit_id``
      - 否
-     - 从索引中删除已删除的文件（默认: ``false``）
+     - 目标提交ID（默认：HEAD）。可以指定分支或标签
 
 脚本设置
 --------------
@@ -257,7 +255,6 @@ SSH认证
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
-    delete_old_docs=true
 
 .. note::
    提交ID设置为最后一次爬取时的提交ID。
@@ -266,8 +263,7 @@ SSH认证
 已删除文件的处理
 ------------------------
 
-设置 ``delete_old_docs=true`` 时，从Git仓库删除的文件
-也会从索引中删除。
+当设置了 ``base_url`` 时，通过Git DiffEntry检测到的已删除文件（``ChangeType.DELETE``）将自动从索引中删除。
 
 使用示例
 ======
@@ -282,7 +278,6 @@ GitHub公共仓库
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
-    delete_old_docs=false
 
 脚本:
 
@@ -306,7 +301,6 @@ GitHub私有仓库
     uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
-    delete_old_docs=false
 
 脚本:
 
@@ -331,7 +325,6 @@ GitLab（自托管）
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 脚本:
 
@@ -354,7 +347,6 @@ GitLab（自托管）
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
-    delete_old_docs=false
 
 脚本:
 
@@ -462,14 +454,13 @@ MIME类型错误
 分支指定
 --------------
 
-爬取非默认分支的情况:
+要爬取默认分支以外的分支，请使用 ``commit_id`` 参数指定分支名称或标签：
 
 ::
 
-    uri=https://github.com/company/repo.git#develop
+    uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
-
-在 ``#`` 后指定分支名。
+    commit_id=develop
 
 URL生成
 =========

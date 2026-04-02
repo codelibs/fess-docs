@@ -54,10 +54,13 @@ LDAP连接设置
     # 基础DN
     ldap.base.dn=dc=example,dc=com
 
-    # 绑定DN（服务账号）
-    ldap.security.principal=cn=fess,ou=services,dc=example,dc=com
+    # 用户认证绑定DN模板（%s将被替换为用户名）
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # 绑定密码
+    # 管理绑定DN（LDAP搜索服务账户）
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+
+    # 管理绑定密码
     ldap.admin.security.credentials=your_password
 
 用户搜索设置
@@ -73,6 +76,29 @@ LDAP连接设置
 
     # 用户名属性
     ldap.user.name.attribute=uid
+
+    # LDAP管理控制台的用户搜索过滤器
+    ldap.admin.user.filter=uid=%s
+
+.. note::
+
+   ``ldap.account.filter`` 是用户认证时的搜索过滤器，
+   ``ldap.admin.user.filter`` 是LDAP管理画面中的用户搜索过滤器。
+   由于用途不同，请分别进行适当设置。
+
+LDAP管理基础DN设置
+--------------------
+
+::
+
+    # 用户搜索基础DN
+    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+
+    # 角色搜索基础DN
+    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+
+    # 组搜索基础DN
+    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
 
 组搜索设置
 ----------------
@@ -102,8 +128,11 @@ Active Directory设置
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # 服务账号（UPN格式）
-    ldap.security.principal=fess@example.com
+    # 用户认证绑定DN模板（UPN格式）
+    ldap.security.principal=%s@example.com
+
+    # 管理绑定DN（服务账户）
+    ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # 用户搜索
@@ -138,8 +167,11 @@ OpenLDAP设置
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # 服务账号
-    ldap.security.principal=cn=admin,dc=example,dc=com
+    # 用户认证绑定DN模板
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
+
+    # 管理绑定DN（服务账户）
+    ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # 用户搜索

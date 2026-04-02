@@ -139,30 +139,29 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 访问嵌套字段:
 
 ::
 
-    url=data.metadata.url
-    title=data.title
-    content=data.body.content
-    author=data.author.name
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.metadata.url
+    title=source.title
+    content=source.body.content
+    author=source.author.name
+    created=source.created_at
+    last_modified=source.updated_at
 
 可用字段
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<field_name>`` - Elasticsearch文档的字段
-- ``data._id`` - 文档ID
-- ``data._index`` - 索引名
-- ``data._type`` - 文档类型（Elasticsearch 7以下版本）
-- ``data._score`` - 搜索得分
+- ``source.<field_name>`` - Elasticsearch文档的 ``_source`` 字段
+- ``id`` - 文档ID
+- ``index`` - 索引名
+- ``score`` - 搜索得分
 
 查询设置
 ============
@@ -232,11 +231,11 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.url
+    title=source.title
+    content=source.content
+    created=source.created_at
+    last_modified=source.updated_at
 
 从带认证的集群爬取
 ------------------------------
@@ -256,11 +255,11 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " " + data.specifications
-    digest=data.category
-    last_modified=data.updated_at
+    url="https://shop.example.com/product/" + source.product_id
+    title=source.name
+    content=source.description + " " + source.specifications
+    digest=source.category
+    last_modified=source.updated_at
 
 从多个索引爬取
 ------------------------------
@@ -278,11 +277,11 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    url="https://logs.example.com/view/" + data._id
-    title=data.message
-    content=data.stack_trace
-    digest=data.service + " - " + data.level
-    last_modified=data.timestamp
+    url="https://logs.example.com/view/" + id
+    title=source.message
+    content=source.stack_trace
+    digest=source.service + " - " + source.level
+    last_modified=source.timestamp
 
 OpenSearch集群爬取
 ----------------------------
@@ -302,10 +301,10 @@ OpenSearch集群爬取
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.body
-    last_modified=data.modified_date
+    url=source.url
+    title=source.title
+    content=source.body
+    last_modified=source.modified_date
 
 限制字段爬取
 ----------------------------
@@ -323,10 +322,10 @@ OpenSearch集群爬取
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 多主机负载均衡
 ----------------------
@@ -344,10 +343,10 @@ OpenSearch集群爬取
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 故障排除
 ======================
@@ -510,9 +509,9 @@ SSL/TLS连接
 
 ::
 
-    url=data.full_url
-    title=data.title
-    content=data.content
+    url=source.full_url
+    title=source.title
+    content=source.content
 
 参考信息
 ========

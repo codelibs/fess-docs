@@ -110,7 +110,7 @@ HTTP 파일:
      - 문자 인코딩(기본값: UTF-8)
    * - ``has_header_line``
      - 아니오
-     - 헤더 행 유무(기본값: true)
+     - 헤더 행 유무(기본값: false)
    * - ``separator_character``
      - 아니오
      - 구분 문자(기본값: 쉼표 ``,``)
@@ -135,16 +135,16 @@ HTTP 파일:
 
 ::
 
-    url="https://example.com/product/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/product/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 사용 가능한 필드
 ~~~~~~~~~~~~~~~~~~~~
 
 - ``data.<열명>`` - 헤더 행의 열명(has_header_line=true인 경우)
-- ``data.cell<N>`` - 열 인덱스(has_header_line=false인 경우, 0부터 시작)
+- ``data.cell<N>`` - 열 인덱스(has_header_line=false인 경우, 1부터 시작: ``cell1``, ``cell2``...)
 
 CSV 형식 상세
 =============
@@ -303,10 +303,10 @@ CSV 파일(data.csv):
 
 ::
 
-    url="https://example.com/item/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/item/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 복수 CSV 파일 통합
 ---------------------

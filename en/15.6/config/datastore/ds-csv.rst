@@ -110,7 +110,7 @@ Parameter List
      - Character encoding (default: UTF-8)
    * - ``has_header_line``
      - No
-     - Whether header row exists (default: true)
+     - Whether header row exists (default: false)
    * - ``separator_character``
      - No
      - Separator character (default: comma ``,``)
@@ -135,16 +135,16 @@ Without header row (column index):
 
 ::
 
-    url="https://example.com/product/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/product/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 Available Fields
 ~~~~~~~~~~~~~~~~
 
 - ``data.<column_name>`` - Header row column name (when has_header_line=true)
-- ``data.cell<N>`` - Column index (when has_header_line=false, 0-based)
+- ``data.cell<N>`` - Column index (when has_header_line=false, 1-based: ``cell1``, ``cell2``...)
 
 CSV Format Details
 ==================
@@ -303,10 +303,10 @@ Script:
 
 ::
 
-    url="https://example.com/item/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/item/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 Multiple CSV Files Integration
 ------------------------------

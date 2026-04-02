@@ -54,10 +54,13 @@ LDAP Connection Settings
     # Base DN
     ldap.base.dn=dc=example,dc=com
 
-    # Bind DN (service account)
-    ldap.security.principal=cn=fess,ou=services,dc=example,dc=com
+    # User authentication bind DN template (%s is replaced with username)
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # Bind password
+    # Admin bind DN (service account for LDAP searches)
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+
+    # Admin bind password
     ldap.admin.security.credentials=your_password
 
 Account Filter Settings
@@ -67,6 +70,29 @@ Account Filter Settings
 
     # Account filter (search filter for user authentication)
     ldap.account.filter=uid=%s
+
+    # Admin user search filter for LDAP management console
+    ldap.admin.user.filter=uid=%s
+
+.. note::
+
+   ``ldap.account.filter`` is the search filter for user authentication, while
+   ``ldap.admin.user.filter`` is the user search filter for the LDAP management console.
+   Set each appropriately as they serve different purposes.
+
+LDAP Admin Base DN Settings
+----------------------------
+
+::
+
+    # User search base DN
+    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+
+    # Role search base DN
+    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+
+    # Group search base DN
+    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
 
 Group Filter Settings
 ----------------------
@@ -93,8 +119,11 @@ Basic Configuration
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Service account (UPN format)
-    ldap.security.principal=fess@example.com
+    # User auth bind DN template (UPN format)
+    ldap.security.principal=%s@example.com
+
+    # Admin bind DN (service account)
+    ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # Account filter
@@ -125,8 +154,11 @@ Configuration example for OpenLDAP.
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Service account
-    ldap.security.principal=cn=admin,dc=example,dc=com
+    # User auth bind DN template
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
+
+    # Admin bind DN (service account)
+    ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # Account filter

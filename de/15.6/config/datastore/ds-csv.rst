@@ -99,7 +99,7 @@ Parameterliste
      - Zeichenkodierung (Standard: UTF-8)
    * - ``has_header_line``
      - Nein
-     - Vorhandensein einer Kopfzeile (Standard: true)
+     - Vorhandensein einer Kopfzeile (Standard: false)
    * - ``separator_character``
      - Nein
      - Trennzeichen (Standard: Komma ``,``)
@@ -124,16 +124,16 @@ Ohne Kopfzeile (Spaltenindex):
 
 ::
 
-    url="https://example.com/product/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/product/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 Verfügbare Felder
 ~~~~~~~~~~~~~~~~~
 
 - ``data.<Spaltenname>`` - Spaltenname der Kopfzeile (bei has_header_line=true)
-- ``data.cell<N>`` - Spaltenindex (bei has_header_line=false, beginnend bei 0)
+- ``data.cell<N>`` - Spaltenindex (bei has_header_line=false, beginnend bei 1: ``cell1``, ``cell2``...)
 
 CSV-Format-Details
 ==================
@@ -292,10 +292,10 @@ Skript:
 
 ::
 
-    url="https://example.com/item/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/item/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 Mehrere CSV-Dateien zusammenführen
 ----------------------------------

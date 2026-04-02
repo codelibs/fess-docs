@@ -65,7 +65,6 @@ Exemple de depot public :
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Exemple de depot prive (avec authentification) :
 
@@ -75,7 +74,6 @@ Exemple de depot prive (avec authentification) :
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Liste des parametres
 ~~~~~~~~~~~~~~~~
@@ -99,9 +97,9 @@ Liste des parametres
    * - ``prev_commit_id``
      - Non
      - ID du commit precedent (pour le crawl differentiel)
-   * - ``delete_old_docs``
+   * - ``commit_id``
      - Non
-     - Supprimer les fichiers supprimes de l'index (par defaut : ``false``)
+     - ID de commit cible (par défaut : HEAD). Une branche ou un tag peut être spécifié
 
 Configuration du script
 --------------
@@ -257,7 +255,6 @@ Apres le premier crawl, definissez l'ID du commit precedent dans ``prev_commit_i
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
-    delete_old_docs=true
 
 .. note::
    L'ID de commit est celui du dernier crawl.
@@ -266,8 +263,7 @@ Apres le premier crawl, definissez l'ID du commit precedent dans ``prev_commit_i
 Traitement des fichiers supprimes
 ------------------------
 
-Si ``delete_old_docs=true`` est defini, les fichiers supprimes du depot Git
-seront egalement supprimes de l'index.
+Lorsque ``base_url`` est défini, les fichiers détectés comme supprimés via Git DiffEntry (``ChangeType.DELETE``) sont automatiquement supprimés de l'index.
 
 Exemples d'utilisation
 ======
@@ -282,7 +278,6 @@ Parametres :
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
-    delete_old_docs=false
 
 Script :
 
@@ -306,7 +301,6 @@ Parametres :
     uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
-    delete_old_docs=false
 
 Script :
 
@@ -331,7 +325,6 @@ Parametres :
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Script :
 
@@ -354,7 +347,6 @@ Parametres :
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
-    delete_old_docs=false
 
 Script :
 
@@ -462,14 +454,13 @@ Depots volumineux
 Specification de branche
 --------------
 
-Pour crawler une branche autre que la branche par defaut :
+Pour crawler une branche autre que celle par défaut, spécifiez le nom de la branche ou du tag avec le paramètre ``commit_id`` :
 
 ::
 
-    uri=https://github.com/company/repo.git#develop
+    uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
-
-Specifiez le nom de la branche apres ``#``.
+    commit_id=develop
 
 Generation d'URL
 =========

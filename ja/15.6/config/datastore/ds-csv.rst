@@ -100,7 +100,7 @@ CSVコネクタは、CSVファイルからデータを取得して
      - 文字エンコーディング（デフォルト: UTF-8）
    * - ``has_header_line``
      - いいえ
-     - ヘッダー行の有無（デフォルト: true）
+     - ヘッダー行の有無（デフォルト: false）
    * - ``separator_character``
      - いいえ
      - 区切り文字（デフォルト: カンマ ``,``）
@@ -128,16 +128,16 @@ CSVコネクタは、CSVファイルからデータを取得して
 
 ::
 
-    url="https://example.com/product/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/product/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 利用可能なフィールド
 ~~~~~~~~~~~~~~~~~~~~
 
 - ``data.<列名>`` - ヘッダー行の列名（has_header_line=true の場合）
-- ``data.cell<N>`` - 列インデックス（has_header_line=false の場合、``cell0``、``cell1``...のように0始まり）
+- ``data.cell<N>`` - 列インデックス（has_header_line=false の場合、``cell1``、``cell2``...のように1始まり）
 
 CSV形式の詳細
 =============
@@ -296,10 +296,10 @@ CSVファイル（data.csv）:
 
 ::
 
-    url="https://example.com/item/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/item/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 複数CSVファイルの統合
 ---------------------
