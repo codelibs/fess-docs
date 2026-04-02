@@ -59,6 +59,9 @@ Sie können die Portnummer auch über eine Umgebungsvariable angeben.
 
     export FESS_PORT=8080
 
+.. warning::
+   Die Umgebungsvariable ``FESS_PORT`` ist nur unter Linux verfügbar. Unter Windows bearbeiten Sie ``-Dfess.port`` direkt in ``bin\fess.in.bat``.
+
 Bei RPM/DEB-Paketen
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -88,11 +91,24 @@ Konfiguration des Kontextpfads
 
 Wenn Sie |Fess| in einem Unterverzeichnis veröffentlichen möchten, können Sie einen Kontextpfad konfigurieren.
 
+**Linux:**
+
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.context.path=/search"
+    export FESS_CONTEXT_PATH=/search
+
+**Windows:**
+
+Bearbeiten Sie ``bin\fess.in.bat``:
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.context.path=/search
 
 Mit dieser Einstellung wird der Zugriff unter ``http://localhost:8080/search/`` möglich.
+
+.. warning::
+   Die Umgebungsvariable ``FESS_CONTEXT_PATH`` ist nur unter Linux verfügbar. Unter Windows bearbeiten Sie ``-Dfess.context.path`` direkt in ``bin\fess.in.bat``.
 
 .. warning::
    Wenn Sie den Kontextpfad ändern, müssen Sie auch die Pfade für statische Dateien entsprechend konfigurieren.

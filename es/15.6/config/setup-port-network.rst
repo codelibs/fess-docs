@@ -59,6 +59,9 @@ También puede especificar el número de puerto mediante una variable de entorno
 
     export FESS_PORT=8080
 
+.. warning::
+   La variable de entorno ``FESS_PORT`` solo está disponible en Linux. En Windows, edite ``-Dfess.port`` directamente en ``bin\fess.in.bat``.
+
 Para Paquetes RPM/DEB
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -88,9 +91,20 @@ Configuración de Ruta de Contexto
 
 Si publica |Fess| en un subdirectorio, puede configurar la ruta de contexto.
 
+En Linux:
+
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.context.path=/search"
+    export FESS_CONTEXT_PATH=/search
+
+En Windows:
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.context.path=/search
+
+.. warning::
+   La variable de entorno ``FESS_CONTEXT_PATH`` solo está disponible en Linux. En Windows, use ``-Dfess.context.path`` directamente en ``FESS_JAVA_OPTS``.
 
 Con esta configuración, podrá acceder mediante ``http://localhost:8080/search/``.
 

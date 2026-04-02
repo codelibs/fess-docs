@@ -59,6 +59,9 @@ Linux 环境配置
 
     export FESS_PORT=8080
 
+.. warning::
+   ``FESS_PORT`` 环境变量仅在 Linux 环境中可用。在 Windows 环境中，请直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.port``。
+
 RPM/DEB 软件包配置
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -88,11 +91,28 @@ Windows 环境配置
 
 要在子目录中发布 |Fess|,可以配置上下文路径。
 
+Linux 环境:
+
 ::
 
     FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.context.path=/search"
 
+或者使用环境变量:
+
+::
+
+    export FESS_CONTEXT_PATH=/search
+
+Windows 环境:
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.context.path=/search
+
 此配置将使您可以通过 ``http://localhost:8080/search/`` 访问。
+
+.. warning::
+   ``FESS_CONTEXT_PATH`` 环境变量仅在 Linux 环境中可用。在 Windows 环境中，请直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.context.path``。
 
 .. warning::
    变更上下文路径后,还需要正确配置静态文件的路径。

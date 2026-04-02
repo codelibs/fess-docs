@@ -13,6 +13,14 @@ Antes de Leer
 Este documento describe los métodos de configuración de |Fess|.
 Se requieren conocimientos básicos de operación de computadoras.
 
+Requisitos Previos
+==================
+
+Para instalar y configurar |Fess|, se requiere el siguiente software:
+
+- **Java 21** o superior
+- **OpenSearch 3.x**
+
 Acceso en Línea
 ===============
 

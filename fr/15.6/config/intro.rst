@@ -13,6 +13,14 @@ Avant de commencer
 Ce document présente les méthodes de configuration de |Fess|.
 Des connaissances de base en informatique sont requises.
 
+Prérequis
+=========
+
+Les composants suivants sont nécessaires pour exécuter |Fess| :
+
+- Java 21 ou supérieur
+- OpenSearch 3.x
+
 Accès en ligne
 ==============
 

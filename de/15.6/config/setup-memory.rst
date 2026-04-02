@@ -42,6 +42,33 @@ Einheiten:
 - ``m``: Megabyte
 - ``g``: Gigabyte
 
+Detaillierte Speichersteuerung
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``FESS_HEAP_SIZE`` setzt ``-Xms`` und ``-Xmx`` auf denselben Wert. Um die anfängliche und maximale Heap-Größe unabhängig zu steuern, verwenden Sie die Umgebungsvariablen ``FESS_MIN_MEM`` und ``FESS_MAX_MEM``.
+
+::
+
+    export FESS_MIN_MEM=256m
+    export FESS_MAX_MEM=2g
+
+.. list-table:: Standard-Speichereinstellungen nach Plattform
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Plattform
+     - FESS_MIN_MEM (Standard)
+     - FESS_MAX_MEM (Standard)
+   * - Linux
+     - 256m
+     - 2g
+   * - Windows
+     - 256m
+     - 1g
+
+.. note::
+   Wenn ``FESS_HEAP_SIZE`` gesetzt ist, werden ``FESS_MIN_MEM`` und ``FESS_MAX_MEM`` ignoriert.
+
 Bei RPM/DEB-Paketen
 ------------------------
 
@@ -142,7 +169,7 @@ Die Standardkonfiguration umfasst folgende Optimierungen:
    * - ``-XX:+UseG1GC``
      - Verwendung des G1-Garbage-Collectors
    * - ``-XX:MaxGCPauseMillis=60000``
-     - Ziel für GC-Pausenzeit (60 Sekunden)
+     - Maximales GC-Pausenzeit-Ziel (60 Sekunden) – ein bewusst lockeres Ziel für Crawler-Workloads (typischer Standardwert ~200 ms)
    * - ``-XX:-HeapDumpOnOutOfMemoryError``
      - Deaktivierung von Heap-Dumps bei OutOfMemory
 
@@ -168,15 +195,9 @@ Konfigurationsmethode
 Linux-Umgebungen
 ~~~~~~~~~
 
-Der Heap-Speicher von OpenSearch wird über Umgebungsvariablen oder die OpenSearch-Konfigurationsdatei angegeben.
+Der Heap-Speicher von OpenSearch wird über die OpenSearch-Konfigurationsdatei ``config/jvm.options`` angegeben.
 
-Konfiguration über Umgebungsvariable:
-
-::
-
-    export OPENSEARCH_HEAP_SIZE=2g
-
-Oder bearbeiten Sie ``config/jvm.options``:
+Bearbeiten Sie ``config/jvm.options``:
 
 ::
 
@@ -185,6 +206,13 @@ Oder bearbeiten Sie ``config/jvm.options``:
 
 .. note::
    Es wird empfohlen, die minimale Heap-Größe (``-Xms``) und die maximale Heap-Größe (``-Xmx``) auf denselben Wert zu setzen.
+
+.. note::
+   Die Umgebungsvariable ``OPENSEARCH_HEAP_SIZE`` ist in OpenSearch 3.x veraltet (deprecated). Verwenden Sie stattdessen ``config/jvm.options`` oder die Umgebungsvariable ``OPENSEARCH_JAVA_OPTS``:
+
+   ::
+
+       export OPENSEARCH_JAVA_OPTS="-Xms2g -Xmx2g"
 
 Windows-Umgebungen
 ~~~~~~~~~~~
@@ -411,4 +439,4 @@ Referenzinformationen
 - :doc:`crawler-advanced` - Erweiterte Crawler-Konfiguration
 - :doc:`admin-logging` - Protokollkonfiguration
 - `OpenSearch Memory Settings <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/index/#important-settings>`_
-- `Java GC Tuning <https://docs.oracle.com/en/java/javase/11/gctuning/>`_
+- `Java GC Tuning <https://docs.oracle.com/en/java/javase/21/gctuning/>`_

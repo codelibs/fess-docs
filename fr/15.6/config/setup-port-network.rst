@@ -59,6 +59,9 @@ Vous pouvez également spécifier le numéro de port via une variable d'environn
 
     export FESS_PORT=8080
 
+.. warning::
+   La variable d'environnement ``FESS_PORT`` n'est disponible que sous Linux. Sous Windows, modifiez ``-Dfess.port`` directement dans ``bin\fess.in.bat``.
+
 Pour les packages RPM/DEB
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -88,11 +91,28 @@ Configuration du chemin de contexte
 
 Si vous publiez |Fess| dans un sous-répertoire, vous pouvez configurer le chemin de contexte.
 
+**Sous Linux :**
+
 ::
 
     FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.context.path=/search"
 
+Ou via la variable d'environnement :
+
+::
+
+    export FESS_CONTEXT_PATH=/search
+
+**Sous Windows :**
+
+::
+
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.context.path=/search
+
 Avec cette configuration, vous pourrez accéder à ``http://localhost:8080/search/``.
+
+.. warning::
+   La variable d'environnement ``FESS_CONTEXT_PATH`` n'est disponible que sous Linux. Sous Windows, utilisez ``-Dfess.context.path`` dans ``bin\fess.in.bat``.
 
 .. warning::
    Si vous modifiez le chemin de contexte, vous devez également configurer correctement le chemin des fichiers statiques.

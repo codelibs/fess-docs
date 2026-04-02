@@ -42,6 +42,33 @@ Unidades:
 - ``m``: megabytes
 - ``g``: gigabytes
 
+Control Detallado de Memoria
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``FESS_HEAP_SIZE`` establece ``-Xms`` y ``-Xmx`` al mismo valor. Para controlar el tamaño de heap inicial y máximo de forma independiente, use las variables de entorno ``FESS_MIN_MEM`` y ``FESS_MAX_MEM``.
+
+::
+
+    export FESS_MIN_MEM=256m
+    export FESS_MAX_MEM=2g
+
+.. list-table:: Configuración de Memoria Predeterminada por Plataforma
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Plataforma
+     - FESS_MIN_MEM (Predeterminado)
+     - FESS_MAX_MEM (Predeterminado)
+   * - Linux
+     - 256m
+     - 2g
+   * - Windows
+     - 256m
+     - 1g
+
+.. note::
+   Cuando se establece ``FESS_HEAP_SIZE``, ``FESS_MIN_MEM`` y ``FESS_MAX_MEM`` se ignoran.
+
 Para Paquetes RPM/DEB
 ----------------------
 
@@ -142,7 +169,7 @@ La configuración predeterminada incluye las siguientes optimizaciones.
    * - ``-XX:+UseG1GC``
      - Uso del recolector de basura G1
    * - ``-XX:MaxGCPauseMillis=60000``
-     - Tiempo objetivo de pausa de GC (60 segundos)
+     - Objetivo máximo de tiempo de pausa de GC (60 segundos), objetivo relajado para cargas de trabajo del rastreador (el valor típico es ~200ms)
    * - ``-XX:-HeapDumpOnOutOfMemoryError``
      - Desactivar heap dump en OutOfMemory
 
@@ -167,15 +194,7 @@ Método de Configuración
 Entorno Linux
 ~~~~~~~~~~~~~
 
-La memoria heap de OpenSearch se especifica mediante variables de entorno o el archivo de configuración de OpenSearch.
-
-Configuración mediante variable de entorno:
-
-::
-
-    export OPENSEARCH_HEAP_SIZE=2g
-
-O edite ``config/jvm.options``:
+La memoria heap de OpenSearch se configura editando el archivo ``config/jvm.options``:
 
 ::
 
@@ -184,6 +203,14 @@ O edite ``config/jvm.options``:
 
 .. note::
    Se recomienda configurar el tamaño heap mínimo (``-Xms``) y el tamaño heap máximo (``-Xmx``) al mismo valor.
+
+.. warning::
+   La variable de entorno ``OPENSEARCH_HEAP_SIZE`` está obsoleta en OpenSearch 3.x y puede no tener efecto.
+   Si necesita configurar el heap mediante una variable de entorno, use ``OPENSEARCH_JAVA_OPTS``:
+
+   ::
+
+       export OPENSEARCH_JAVA_OPTS="-Xms2g -Xmx2g"
 
 Entorno Windows
 ~~~~~~~~~~~~~~~
@@ -410,4 +437,4 @@ Información de Referencia
 - :doc:`crawler-advanced` - Configuración Avanzada del Rastreador
 - :doc:`admin-logging` - Configuración de Logs
 - `OpenSearch Memory Settings <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/index/#important-settings>`_
-- `Java GC Tuning <https://docs.oracle.com/en/java/javase/11/gctuning/>`_
+- `Java GC Tuning <https://docs.oracle.com/en/java/javase/21/gctuning/>`_

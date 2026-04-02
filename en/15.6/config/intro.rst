@@ -13,6 +13,14 @@ Before You Read
 This document describes how to configure |Fess|.
 Basic knowledge of computer operations is required.
 
+Prerequisites
+=============
+
+The following software is required to use |Fess| 15.6:
+
+- Java 21 or later
+- OpenSearch 3.x
+
 Online Access
 =============
 
