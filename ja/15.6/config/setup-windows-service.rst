@@ -43,6 +43,9 @@ OpenSearchをサービスとして登録
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
+.. note::
+   サービスとして登録する場合は、``bin\service.bat`` 内の ``FESS_PARAMS`` にも ``-Dfess.port=8080`` がハードコードされています。ポートを変更する際は ``service.bat`` も同様に編集してください。
+
 
 登録方法
 ------

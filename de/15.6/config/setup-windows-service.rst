@@ -43,6 +43,8 @@ Die Standardportnummer für Such- und Verwaltungsoberfläche von |Fess| ist 8080
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
+.. note::
+   Die Datei ``bin\service.bat`` enthält ebenfalls einen fest eingetragenen Wert ``-Dfess.port=8080`` in ``FESS_PARAMS``. Wenn Sie den Port ändern, müssen Sie diesen Wert auch in ``service.bat`` anpassen.
 
 Registrierungsmethode
 ------

@@ -13,6 +13,14 @@ Bevor Sie beginnen
 Dieses Dokument beschreibt die Konfiguration von |Fess|.
 Grundlegende Kenntnisse im Umgang mit Computern sind erforderlich.
 
+Voraussetzungen
+============
+
+Für die Installation und den Betrieb von |Fess| sind folgende Komponenten erforderlich:
+
+- Java 21 oder höher
+- OpenSearch 2.x
+
 Online-Zugriff
 =================
 

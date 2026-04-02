@@ -42,6 +42,33 @@ Fess Web 应用程序的内存配置
 - ``m``: 兆字节
 - ``g``: 吉字节
 
+精细内存控制
+~~~~~~~~~~~~
+
+``FESS_HEAP_SIZE`` 将 ``-Xms`` 和 ``-Xmx`` 设置为相同的值。如需分别控制初始堆大小和最大堆大小，请使用 ``FESS_MIN_MEM`` 和 ``FESS_MAX_MEM`` 环境变量。
+
+::
+
+    export FESS_MIN_MEM=256m
+    export FESS_MAX_MEM=2g
+
+.. list-table:: 各平台默认内存设置
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - 平台
+     - FESS_MIN_MEM（默认值）
+     - FESS_MAX_MEM（默认值）
+   * - Linux
+     - 256m
+     - 2g
+   * - Windows
+     - 256m
+     - 1g
+
+.. note::
+   设置 ``FESS_HEAP_SIZE`` 后，``FESS_MIN_MEM`` 和 ``FESS_MAX_MEM`` 将被忽略。
+
 RPM/DEB 软件包配置
 ------------------------
 
@@ -142,7 +169,7 @@ RPM/DEB 软件包配置
    * - ``-XX:+UseG1GC``
      - 使用 G1 垃圾收集器
    * - ``-XX:MaxGCPauseMillis=60000``
-     - GC 停止时间目标值(60秒)
+     - 最大GC暂停时间目标（60秒）。这是针对爬虫工作负载的宽松设置（一般应用程序通常为200ms左右）
    * - ``-XX:-HeapDumpOnOutOfMemoryError``
      - 禁用 OutOfMemory 时的堆转储
 
@@ -167,15 +194,7 @@ OpenSearch 配置内存时需要考虑以下两点。
 Linux 环境
 ~~~~~~~~~
 
-OpenSearch 的堆内存通过环境变量或 OpenSearch 配置文件指定。
-
-通过环境变量配置:
-
-::
-
-    export OPENSEARCH_HEAP_SIZE=2g
-
-或者,编辑 ``config/jvm.options``:
+推荐通过编辑 ``config/jvm.options`` 配置 OpenSearch 的堆内存:
 
 ::
 
@@ -184,6 +203,13 @@ OpenSearch 的堆内存通过环境变量或 OpenSearch 配置文件指定。
 
 .. note::
    推荐将最小堆大小(``-Xms``)和最大堆大小(``-Xmx``)设置为相同的值。
+
+.. deprecated::
+   ``OPENSEARCH_HEAP_SIZE`` 环境变量已被弃用。请改用 ``config/jvm.options`` 进行配置。如需通过环境变量设置，请使用 ``OPENSEARCH_JAVA_OPTS``：
+
+   ::
+
+       export OPENSEARCH_JAVA_OPTS="-Xms2g -Xmx2g"
 
 Windows 环境
 ~~~~~~~~~~~
@@ -410,4 +436,4 @@ GC 停止时间过长
 - :doc:`crawler-advanced` - 爬虫高级配置
 - :doc:`admin-logging` - 日志配置
 - `OpenSearch Memory Settings <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/index/#important-settings>`_
-- `Java GC Tuning <https://docs.oracle.com/en/java/javase/11/gctuning/>`_
+- `Java GC Tuning <https://docs.oracle.com/en/java/javase/21/gctuning/>`_

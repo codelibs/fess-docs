@@ -43,6 +43,8 @@ El número de puerto predeterminado para la pantalla de búsqueda y pantalla de 
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
+.. note::
+   ``bin\service.bat`` contiene el puerto codificado en ``FESS_PARAMS``. Si cambia el puerto en ``fess.in.bat``, también debe actualizar el valor del puerto en ``service.bat`` para que coincida.
 
 Método de Registro
 ------------------
