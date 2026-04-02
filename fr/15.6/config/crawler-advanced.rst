@@ -79,7 +79,7 @@ Configuration de base
      - Description
      - Par défaut
    * - ``crawler.document.max.site.length``
-     - Nombre maximum de lignes du site du document
+     - Longueur maximale en caractères du champ nom de site
      - ``100``
    * - ``crawler.document.site.encoding``
      - Encodage du site du document
@@ -159,10 +159,10 @@ Configuration du traitement des caractères
      - Par défaut
    * - ``crawler.document.space.chars``
      - Définition des caractères d'espacement
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - Définition des caractères de ponctuation
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 Exemple de configuration
 ~~~~~~
@@ -170,9 +170,9 @@ Exemple de configuration
 ::
 
     # Valeur par défaut (incluant les caractères Unicode)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 Configuration des protocoles
 ==============
@@ -220,6 +220,24 @@ Paramètres de variables d'environnement
 
     # Les variables d'environnement commençant par FESS_ENV_ peuvent être utilisées dans la configuration d'indexation
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+Sérialiseur de données
+-----------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``crawler.data.serializer``
+     - Méthode de sérialisation des données d'indexation
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 Configuration de robots.txt
 ===============
@@ -717,6 +735,11 @@ Configuration par défaut
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   Ce qui précède ne montre que les options principales. Les valeurs par défaut réelles comprennent environ 30 options couvrant les délais jcifs SMB, les paramètres Netty, la configuration Log4j, les paramètres détaillés G1GC, les paramètres PDFBox, etc.
+   Consultez ``fess_config.properties`` pour les valeurs par défaut complètes.
+   Lors de la personnalisation, ne modifiez que les options nécessaires et conservez les autres valeurs par défaut.
 
 Description des principales options
 ----------------------

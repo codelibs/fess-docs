@@ -249,6 +249,17 @@ HTMLのサムネイル画像はHTML内で指定された画像または含まれ
     # サムネイル生成の間隔（ミリ秒）
     thumbnail.generator.interval=0
 
+    # サムネイル生成対象
+    thumbnail.generator.targets=all
+
+    # サムネイルシステム監視間隔（秒）
+    thumbnail.system.monitor.interval=60
+
+.. note::
+   以下のプロパティは ``fess_config.properties`` ではなく、管理画面の「全般の設定」または ``system.properties`` で設定します。
+
+::
+
     # コマンド実行タイムアウト（ミリ秒）
     thumbnail.command.timeout=30000
 
@@ -376,7 +387,7 @@ RPM/Debパッケージでインストールすると、 ``/usr/share/fess/bin/ge
 サムネイルジョブを無効化する場合は以下を設定します。
 
 1. 管理画面の システム > 全般 で「サムネイル表示」のチェックを外し、「更新」ボタンをクリック。
-2. ``app/WEB-INF/classes/fess_config.properties`` または ``/etc/fess/fess_config.properties`` の ``thumbnail.crawler.enabled`` に ``false`` を設定。
+2. ``app/WEB-INF/classes/fess_config.properties`` または ``/etc/fess/fess_config.properties`` の ``thumbnail.crawler.enabled`` に ``false`` を設定（デフォルト値は ``true`` ）。
 
 ::
 

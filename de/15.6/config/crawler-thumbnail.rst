@@ -249,6 +249,17 @@ Die folgenden Optionen können in ``app/WEB-INF/classes/fess_config.properties``
     # Thumbnail-Generierungsintervall (Millisekunden)
     thumbnail.generator.interval=0
 
+    # Thumbnail-Generierungsziele
+    thumbnail.generator.targets=all
+
+    # Thumbnail-Systemüberwachungsintervall (Sekunden)
+    thumbnail.system.monitor.interval=60
+
+.. note::
+   Die folgenden Eigenschaften werden in der Verwaltungsoberfläche unter „Allgemeine Einstellungen" oder in ``system.properties`` konfiguriert, nicht in ``fess_config.properties``.
+
+::
+
     # Befehlsausführungs-Timeout (Millisekunden)
     thumbnail.command.timeout=30000
 
@@ -376,7 +387,7 @@ Deaktivierung des Thumbnail-Jobs
 Um den Thumbnail-Job zu deaktivieren, konfigurieren Sie Folgendes:
 
 1. Entfernen Sie in der Verwaltungsoberfläche unter System > Allgemein das Häkchen bei "Thumbnail-Anzeige" und klicken Sie auf "Aktualisieren".
-2. Setzen Sie ``thumbnail.crawler.enabled`` in ``app/WEB-INF/classes/fess_config.properties`` oder ``/etc/fess/fess_config.properties`` auf ``false``.
+2. Setzen Sie ``thumbnail.crawler.enabled`` in ``app/WEB-INF/classes/fess_config.properties`` oder ``/etc/fess/fess_config.properties`` auf ``false`` (Standardwert ist ``true``).
 
 ::
 

@@ -194,6 +194,9 @@ Pour vérifier l'état de l'indexation en cours :
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      Le chemin ci-dessus correspond aux installations par paquets RPM/DEB. Pour les déploiements zip/tar.gz, les journaux se trouvent dans le répertoire ``logs/``.
+
 Paramètres de configuration de base
 ================
 
@@ -317,6 +320,8 @@ Vous pouvez définir la limite supérieure de la taille à indexer pour chaque t
 
 **Fichier de configuration :** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**Configuration par défaut :**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,14 +337,17 @@ Vous pouvez définir la limite supérieure de la taille à indexer pour chaque t
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
+            </component>
+    </components>
+
+**Exemple de personnalisation (ajout du traitement des fichiers PDF jusqu'à 5 Mo) :**
+
+::
+
                     <postConstruct name="addMaxLength">
                             <arg>"application/pdf"</arg>
                             <arg>5242880</arg><!-- 5M -->
                     </postConstruct>
-            </component>
-    </components>
-
-Cela ajoute une configuration pour traiter les fichiers PDF jusqu'à 5 Mo.
 
 .. warning::
    Lors de l'augmentation de la taille des fichiers traités, augmentez également les paramètres de mémoire du robot d'indexation.

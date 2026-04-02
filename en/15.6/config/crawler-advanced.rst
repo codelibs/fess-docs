@@ -79,7 +79,7 @@ Basic Settings
      - Description
      - Default
    * - ``crawler.document.max.site.length``
-     - Maximum lines for document site
+     - Maximum character length for site name field
      - ``100``
    * - ``crawler.document.site.encoding``
      - Document site encoding
@@ -159,10 +159,10 @@ Character Processing Settings
      - Default
    * - ``crawler.document.space.chars``
      - Whitespace character definition
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - Period character definition
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
@@ -170,9 +170,9 @@ Configuration Example
 ::
 
     # Default values (includes Unicode characters)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 Protocol Settings
 =================
@@ -220,6 +220,24 @@ Environment Variable Parameters
 
     # Environment variables starting with FESS_ENV_ can be used in crawl configuration
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+Data Serializer
+---------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``crawler.data.serializer``
+     - Serialization method for crawl data
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 robots.txt Settings
 ===================
@@ -717,6 +735,11 @@ Default Settings
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   The above shows only the main options. The actual defaults include approximately 30 options covering jcifs SMB timeouts, Netty settings, Log4j configuration, detailed G1GC settings, PDFBox settings, etc.
+   See ``fess_config.properties`` for the complete default values.
+   When customizing, change only the required options and keep the other defaults.
 
 Key Options Explained
 ----------------------

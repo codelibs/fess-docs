@@ -194,6 +194,9 @@ SMB/CIFS(Windows文件共享)
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      以上路径适用于RPM/DEB软件包安装。对于zip/tar.gz部署，日志位于 ``logs/`` 目录下。
+
 基本配置项
 ================
 
@@ -317,6 +320,8 @@ URL模式限制
 
 **配置文件:** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**默认配置:**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,14 +337,17 @@ URL模式限制
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
-                    <postConstruct name="addMaxLength">
-                            <arg>"application/pdf"</arg>
-                            <arg>5242880</arg><!-- 5M -->
-                    </postConstruct>
             </component>
     </components>
 
-添加了处理PDF文件最大5MB的配置。
+**自定义示例（添加处理PDF文件最大5MB的配置）:**
+
+::
+
+    <postConstruct name="addMaxLength">
+            <arg>"application/pdf"</arg>
+            <arg>5242880</arg><!-- 5M -->
+    </postConstruct>
 
 .. warning::
    增加处理文件大小时,也需要增加爬虫的内存配置。

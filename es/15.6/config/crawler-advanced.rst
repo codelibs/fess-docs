@@ -79,7 +79,7 @@ Configuración Básica
      - Descripción
      - Valor Predeterminado
    * - ``crawler.document.max.site.length``
-     - Número máximo de líneas del sitio del documento
+     - Longitud máxima de caracteres del campo de nombre del sitio
      - ``100``
    * - ``crawler.document.site.encoding``
      - Codificación del sitio del documento
@@ -159,10 +159,10 @@ Configuración de Procesamiento de Caracteres
      - Valor Predeterminado
    * - ``crawler.document.space.chars``
      - Definición de caracteres de espacio
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - Definición de caracteres de punto final
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,9 +170,9 @@ Ejemplo de Configuración
 ::
 
     # Valores predeterminados (incluyendo caracteres Unicode)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 Configuración de Protocolos
 ============================
@@ -220,6 +220,24 @@ Parámetros de Variables de Entorno
 
     # Variables de entorno que comienzan con FESS_ENV_ están disponibles en la configuración de rastreo
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+Serializador de datos
+---------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Propiedad
+     - Descripción
+     - Predeterminado
+   * - ``crawler.data.serializer``
+     - Método de serialización para datos de rastreo
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 Configuración de robots.txt
 ============================
@@ -717,6 +735,11 @@ Configuración Predeterminada
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   Lo anterior muestra solo las opciones principales. Los valores predeterminados reales incluyen aproximadamente 30 opciones que cubren tiempos de espera jcifs SMB, configuración de Netty, configuración de Log4j, configuración detallada de G1GC, configuración de PDFBox, etc.
+   Consulte ``fess_config.properties`` para los valores predeterminados completos.
+   Al personalizar, cambie solo las opciones necesarias y mantenga los demás valores predeterminados.
 
 Descripción de las Opciones Principales
 ----------------------------------------

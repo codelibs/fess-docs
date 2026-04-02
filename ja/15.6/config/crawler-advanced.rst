@@ -79,7 +79,7 @@ HTTPクローラーのスレッドプール設定です。
      - 説明
      - デフォルト
    * - ``crawler.document.max.site.length``
-     - ドキュメントサイトの最大行数
+     - サイト名フィールドの最大文字数
      - ``100``
    * - ``crawler.document.site.encoding``
      - ドキュメントサイトのエンコーディング
@@ -159,10 +159,10 @@ HTTPクローラーのスレッドプール設定です。
      - デフォルト
    * - ``crawler.document.space.chars``
      - 空白文字の定義
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - 句点文字の定義
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 設定例
 ~~~~~~
@@ -170,9 +170,9 @@ HTTPクローラーのスレッドプール設定です。
 ::
 
     # デフォルト値(Unicode文字を含む)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 プロトコル設定
 ==============
@@ -220,6 +220,24 @@ HTTPクローラーのスレッドプール設定です。
 
     # FESS_ENV_で始まる環境変数をクロール設定で使用可能
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+データシリアライザー
+--------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``crawler.data.serializer``
+     - クロールデータのシリアライズ方式
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 robots.txt 設定
 ===============
@@ -717,6 +735,11 @@ JVM オプション
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   上記は主要なオプションの抜粋です。実際のデフォルト値には、jcifs SMBタイムアウト、Netty設定、Log4j設定、G1GC詳細設定、PDFBox設定など、約30のオプションが含まれています。
+   完全なデフォルト値は ``fess_config.properties`` を参照してください。
+   カスタマイズ時は必要なオプションのみを変更し、他のデフォルト値は維持してください。
 
 主要なオプションの説明
 ----------------------

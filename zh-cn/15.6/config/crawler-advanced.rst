@@ -79,7 +79,7 @@ HTTP 爬虫的线程池配置。
      - 说明
      - 默认值
    * - ``crawler.document.max.site.length``
-     - 文档站点的最大行数
+     - 站点名称字段的最大字符数
      - ``100``
    * - ``crawler.document.site.encoding``
      - 文档站点编码
@@ -159,10 +159,10 @@ HTTP 爬虫的线程池配置。
      - 默认值
    * - ``crawler.document.space.chars``
      - 空白字符定义
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - 句点字符定义
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 配置示例
 ~~~~~~
@@ -170,9 +170,9 @@ HTTP 爬虫的线程池配置。
 ::
 
     # 默认值(包含Unicode字符)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 协议配置
 ==============
@@ -220,6 +220,24 @@ HTTP 爬虫的线程池配置。
 
     # 可在爬取配置中使用以 FESS_ENV_ 开头的环境变量
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+数据序列化器
+--------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``crawler.data.serializer``
+     - 爬取数据的序列化方式
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 robots.txt 配置
 ===============
@@ -716,6 +734,11 @@ JVM 选项
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   以上仅为主要选项的摘录。实际默认值包含约30个选项，涵盖jcifs SMB超时、Netty设置、Log4j配置、详细G1GC设置、PDFBox设置等。
+   完整的默认值请参阅 ``fess_config.properties``。
+   自定义时，仅更改需要的选项，其他默认值请保持不变。
 
 主要选项说明
 ----------------------

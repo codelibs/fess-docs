@@ -79,7 +79,7 @@ Grundkonfiguration
      - Beschreibung
      - Standard
    * - ``crawler.document.max.site.length``
-     - Maximale Zeilenanzahl für Dokumentsite
+     - Maximale Zeichenlänge des Sitenamenfelds
      - ``100``
    * - ``crawler.document.site.encoding``
      - Codierung der Dokumentsite
@@ -158,10 +158,10 @@ Zeichenverarbeitungs-Konfiguration
      - Standard
    * - ``crawler.document.space.chars``
      - Definition von Leerzeichen
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - Definition von Satzendzeichen
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 Konfigurationsbeispiel
 ~~~~~~
@@ -169,9 +169,9 @@ Konfigurationsbeispiel
 ::
 
     # Standardwerte (einschließlich Unicode-Zeichen)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 Protokoll-Konfiguration
 ==============
@@ -219,6 +219,24 @@ Umgebungsvariablen-Parameter
 
     # Umgebungsvariablen beginnend mit FESS_ENV_ können in Crawl-Konfigurationen verwendet werden
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+Daten-Serialisierer
+--------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``crawler.data.serializer``
+     - Serialisierungsmethode für Crawl-Daten
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 robots.txt-Konfiguration
 ===============
@@ -715,6 +733,11 @@ Standardkonfiguration
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   Oben sind nur die wichtigsten Optionen aufgeführt. Die tatsächlichen Standardwerte umfassen etwa 30 Optionen, darunter jcifs-SMB-Timeouts, Netty-Einstellungen, Log4j-Konfiguration, detaillierte G1GC-Einstellungen, PDFBox-Einstellungen usw.
+   Die vollständigen Standardwerte finden Sie in ``fess_config.properties``.
+   Ändern Sie bei der Anpassung nur die erforderlichen Optionen und behalten Sie die anderen Standardwerte bei.
 
 Erklärung wichtiger Optionen
 ----------------------

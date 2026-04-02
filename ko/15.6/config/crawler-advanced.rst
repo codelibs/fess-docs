@@ -79,7 +79,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - 설명
      - 기본값
    * - ``crawler.document.max.site.length``
-     - 문서 사이트의 최대 행 수
+     - 사이트 이름 필드의 최대 문자 수
      - ``100``
    * - ``crawler.document.site.encoding``
      - 문서 사이트의 인코딩
@@ -159,10 +159,10 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - 기본값
    * - ``crawler.document.space.chars``
      - 공백 문자 정의
-     - ``\u0009\u000A...``
+     - ``u0009u000A...``
    * - ``crawler.document.fullstop.chars``
      - 마침표 문자 정의
-     - ``\u002e\u06d4...``
+     - ``u002eu06d4...``
 
 설정 예
 ~~~~~~
@@ -170,9 +170,9 @@ HTTP 크롤러의 스레드 풀 설정입니다.
 ::
 
     # 기본값(유니코드 문자 포함)
-    crawler.document.space.chars=\u0009\u000A\u000B\u000C\u000D\u001C\u001D\u001E\u001F\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u200C\u202F\u205F\u3000\uFEFF\uFFFD\u00B6
+    crawler.document.space.chars=u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6
 
-    crawler.document.fullstop.chars=\u002e\u06d4\u2e3c\u3002
+    crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 프로토콜 설정
 ==============
@@ -220,6 +220,24 @@ HTTP 크롤러의 스레드 풀 설정입니다.
 
     # FESS_ENV_로 시작하는 환경 변수를 크롤 설정에서 사용 가능
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
+
+데이터 시리얼라이저
+--------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 속성
+     - 설명
+     - 기본값
+   * - ``crawler.data.serializer``
+     - 크롤 데이터의 직렬화 방식
+     - ``kryo``
+
+::
+
+    crawler.data.serializer=kryo
 
 robots.txt 설정
 ===============
@@ -717,6 +735,11 @@ JVM 옵션
         -XX:+UseG1GC \
         -XX:MaxGCPauseMillis=60000 \
         -XX:-HeapDumpOnOutOfMemoryError
+
+.. note::
+   위의 내용은 주요 옵션만 발췌한 것입니다. 실제 기본값에는 jcifs SMB 타임아웃, Netty 설정, Log4j 설정, 상세 G1GC 설정, PDFBox 설정 등 약 30개의 옵션이 포함되어 있습니다.
+   전체 기본값은 ``fess_config.properties`` 를 참조하십시오.
+   사용자 지정 시 필요한 옵션만 변경하고 나머지 기본값은 유지하십시오.
 
 주요 옵션 설명
 ----------------------

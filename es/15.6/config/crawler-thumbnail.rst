@@ -249,6 +249,17 @@ Las siguientes opciones pueden configurarse en ``app/WEB-INF/classes/fess_config
     # Intervalo de generación de miniaturas (milisegundos)
     thumbnail.generator.interval=0
 
+    # Objetivos de generación de miniaturas
+    thumbnail.generator.targets=all
+
+    # Intervalo de monitoreo del sistema de miniaturas (segundos)
+    thumbnail.system.monitor.interval=60
+
+.. note::
+   Las siguientes propiedades se configuran en la pantalla de administración en "Configuración general" o en ``system.properties``, no en ``fess_config.properties``.
+
+::
+
     # Tiempo de espera de ejecución de comando (milisegundos)
     thumbnail.command.timeout=30000
 
@@ -376,7 +387,7 @@ Desactivación del Trabajo de Miniaturas
 Para desactivar el trabajo de miniaturas, configure lo siguiente:
 
 1. En la pantalla de administración, vaya a Sistema > General, desmarque "Visualización de miniaturas" y haga clic en el botón "Actualizar".
-2. Establezca ``thumbnail.crawler.enabled`` en ``false`` en ``app/WEB-INF/classes/fess_config.properties`` o ``/etc/fess/fess_config.properties``.
+2. Establezca ``thumbnail.crawler.enabled`` en ``false`` en ``app/WEB-INF/classes/fess_config.properties`` o ``/etc/fess/fess_config.properties`` (el valor predeterminado es ``true``).
 
 ::
 
