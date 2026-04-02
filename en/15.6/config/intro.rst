@@ -19,7 +19,7 @@ Prerequisites
 The following software is required to use |Fess| 15.6:
 
 - Java 21 or later
-- OpenSearch 2.x
+- OpenSearch 3.x
 
 Online Access
 =============

@@ -19,7 +19,7 @@ Prérequis
 Les composants suivants sont nécessaires pour exécuter |Fess| :
 
 - Java 21 ou supérieur
-- OpenSearch 2.x
+- OpenSearch 3.x
 
 Accès en ligne
 ==============

@@ -19,7 +19,7 @@ Requisitos Previos
 Para instalar y configurar |Fess|, se requiere el siguiente software:
 
 - **Java 21** o superior
-- **OpenSearch 2.x**
+- **OpenSearch 3.x**
 
 Acceso en Línea
 ===============

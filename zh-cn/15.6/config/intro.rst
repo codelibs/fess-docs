@@ -19,7 +19,7 @@
 运行 |Fess| 需要以下环境:
 
 - Java 21 或更高版本
-- OpenSearch 2.x
+- OpenSearch 3.x
 
 在线访问
 =================

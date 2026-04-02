@@ -207,7 +207,7 @@ Edit ``config/jvm.options``:
    It is recommended to set the minimum heap size (``-Xms``) and maximum heap size (``-Xmx``) to the same value.
 
 .. note::
-   The ``OPENSEARCH_HEAP_SIZE`` environment variable is deprecated in OpenSearch 2.x and later. Use ``config/jvm.options`` or the ``OPENSEARCH_JAVA_OPTS`` environment variable instead.
+   The ``OPENSEARCH_HEAP_SIZE`` environment variable is deprecated in OpenSearch 3.x and later. Use ``config/jvm.options`` or the ``OPENSEARCH_JAVA_OPTS`` environment variable instead.
 
    ::
 

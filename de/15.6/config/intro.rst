@@ -19,7 +19,7 @@ Voraussetzungen
 Für die Installation und den Betrieb von |Fess| sind folgende Komponenten erforderlich:
 
 - Java 21 oder höher
-- OpenSearch 2.x
+- OpenSearch 3.x
 
 Online-Zugriff
 =================
