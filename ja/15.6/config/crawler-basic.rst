@@ -194,6 +194,9 @@ SMB/CIFS(Windowsファイル共有)
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      上記はRPM/DEBパッケージインストール時のパスです。zip/tar.gz展開の場合は ``logs/`` ディレクトリ配下になります。
+
 基本的な設定項目
 ================
 
@@ -317,6 +320,8 @@ URLパターンによる制限
 
 **設定ファイル:** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**デフォルト設定:**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,14 +337,17 @@ URLパターンによる制限
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
-                    <postConstruct name="addMaxLength">
-                            <arg>"application/pdf"</arg>
-                            <arg>5242880</arg><!-- 5M -->
-                    </postConstruct>
             </component>
     </components>
 
-PDFファイルを5MBまで処理する設定を追加しています。
+**カスタマイズ例（PDFファイルを5MBまで処理する設定を追加）:**
+
+::
+
+    <postConstruct name="addMaxLength">
+            <arg>"application/pdf"</arg>
+            <arg>5242880</arg><!-- 5M -->
+    </postConstruct>
 
 .. warning::
    扱うファイルサイズを増やす場合は、クローラーのメモリ設定も増やしてください。

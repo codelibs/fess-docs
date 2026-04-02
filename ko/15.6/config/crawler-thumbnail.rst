@@ -55,7 +55,7 @@ convert 명령이 설치되어 있으면 썸네일 이미지가 생성됩니다.
 썸네일 작업을 비활성화하는 경우 다음과 같이 설정합니다.
 
 1. 관리 화면의 시스템 > 전반에서 "썸네일 표시" 체크를 해제하고 "업데이트" 버튼을 클릭합니다.
-2. ``app/WEB-INF/classes/fess_config.properties`` 또는 ``/etc/fess/fess_config.properties`` 의 ``thumbnail.crawler.enabled`` 에 ``false`` 를 설정합니다.
+2. ``app/WEB-INF/classes/fess_config.properties`` 또는 ``/etc/fess/fess_config.properties`` 의 ``thumbnail.crawler.enabled`` (기본값은 ``true``) 에 ``false`` 를 설정합니다.
 
 ::
 

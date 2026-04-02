@@ -194,6 +194,9 @@ Para verificar el estado del rastreo en ejecución:
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      La ruta anterior es para instalaciones de paquetes RPM/DEB. Para implementaciones zip/tar.gz, los registros se encuentran en el directorio ``logs/``.
+
 Elementos Básicos de Configuración
 ===================================
 
@@ -317,6 +320,8 @@ Puede configurar el límite superior del tamaño a indexar para cada tipo de arc
 
 **Archivo de configuración:** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**Configuración predeterminada:**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,14 +337,17 @@ Puede configurar el límite superior del tamaño a indexar para cada tipo de arc
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
+            </component>
+    </components>
+
+**Ejemplo de personalización (agregar procesamiento de archivos PDF hasta 5MB):**
+
+::
+
                     <postConstruct name="addMaxLength">
                             <arg>"application/pdf"</arg>
                             <arg>5242880</arg><!-- 5M -->
                     </postConstruct>
-            </component>
-    </components>
-
-Se ha agregado una configuración para procesar archivos PDF hasta 5MB.
 
 .. warning::
    Si aumenta el tamaño de archivo a manejar, también aumente la configuración de memoria del rastreador.

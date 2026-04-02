@@ -194,6 +194,9 @@ SMB/CIFS(Windows 파일 공유)
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      위 경로는 RPM/DEB 패키지 설치 시의 경로입니다. zip/tar.gz 배포의 경우 ``logs/`` 디렉터리에 로그가 위치합니다.
+
 기본 설정 항목
 ================
 
@@ -317,6 +320,8 @@ URL 패턴에 의한 제한
 
 **설정 파일:** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**기본 설정:**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,14 +337,17 @@ URL 패턴에 의한 제한
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
+            </component>
+    </components>
+
+**사용자 지정 예제 (PDF 파일을 5MB까지 처리하는 설정 추가):**
+
+::
+
                     <postConstruct name="addMaxLength">
                             <arg>"application/pdf"</arg>
                             <arg>5242880</arg><!-- 5M -->
                     </postConstruct>
-            </component>
-    </components>
-
-PDF 파일을 5MB까지 처리하는 설정을 추가했습니다.
 
 .. warning::
    처리할 파일 크기를 늘리는 경우 크롤러의 메모리 설정도 늘리십시오.

@@ -194,6 +194,9 @@ Um Crawls regelmäßig auszuführen:
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      Der obige Pfad gilt für RPM/DEB-Paketinstallationen. Bei zip/tar.gz-Bereitstellungen befinden sich die Protokolle im Verzeichnis ``logs/``.
+
 Grundlegende Konfigurationselemente
 ================
 
@@ -317,6 +320,8 @@ Sie können Obergrenzen für zu indizierende Größen nach Dateityp festlegen.
 
 **Konfigurationsdatei:** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**Standardkonfiguration:**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,12 +337,17 @@ Sie können Obergrenzen für zu indizierende Größen nach Dateityp festlegen.
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
+            </component>
+    </components>
+
+**Anpassungsbeispiel (PDF-Dateien bis zu 5 MB verarbeiten):**
+
+::
+
                     <postConstruct name="addMaxLength">
                             <arg>"application/pdf"</arg>
                             <arg>5242880</arg><!-- 5M -->
                     </postConstruct>
-            </component>
-    </components>
 
 Fügt Konfiguration für PDF-Dateien bis zu 5 MB hinzu.
 

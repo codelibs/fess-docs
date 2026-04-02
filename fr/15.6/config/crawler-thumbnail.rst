@@ -249,6 +249,17 @@ Les options suivantes peuvent être configurées dans ``app/WEB-INF/classes/fess
     # Intervalle de génération des vignettes (millisecondes)
     thumbnail.generator.interval=0
 
+    # Cibles de génération des vignettes
+    thumbnail.generator.targets=all
+
+    # Intervalle de surveillance système des vignettes (secondes)
+    thumbnail.system.monitor.interval=60
+
+.. note::
+   Les propriétés suivantes sont configurées dans l'interface d'administration sous « Paramètres généraux » ou dans ``system.properties``, et non dans ``fess_config.properties``.
+
+::
+
     # Délai d'expiration de l'exécution de commande (millisecondes)
     thumbnail.command.timeout=30000
 
@@ -376,7 +387,7 @@ Désactivation du travail de vignettes
 Pour désactiver le travail de vignettes, configurez ce qui suit :
 
 1. Dans l'interface d'administration, allez dans Système > Général, décochez "Affichage des vignettes", et cliquez sur le bouton "Mettre à jour".
-2. Définissez ``thumbnail.crawler.enabled`` sur ``false`` dans ``app/WEB-INF/classes/fess_config.properties`` ou ``/etc/fess/fess_config.properties``.
+2. Définissez ``thumbnail.crawler.enabled`` sur ``false`` dans ``app/WEB-INF/classes/fess_config.properties`` ou ``/etc/fess/fess_config.properties`` (la valeur par défaut est ``true``).
 
 ::
 

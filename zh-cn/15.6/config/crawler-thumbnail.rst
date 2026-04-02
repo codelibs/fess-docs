@@ -249,6 +249,17 @@ HTML 的缩略图使用 HTML 中指定的图片或包含的图片。
     # 缩略图生成间隔（毫秒）
     thumbnail.generator.interval=0
 
+    # 缩略图生成目标
+    thumbnail.generator.targets=all
+
+    # 缩略图系统监控间隔（秒）
+    thumbnail.system.monitor.interval=60
+
+.. note::
+   以下属性在管理页面的"常规设置"或 ``system.properties`` 中配置，而不是在 ``fess_config.properties`` 中。
+
+::
+
     # 命令执行超时（毫秒）
     thumbnail.command.timeout=30000
 
@@ -376,7 +387,7 @@ generate-thumbnail 脚本
 要禁用缩略图任务,请进行以下设置:
 
 1. 在管理页面的"系统">"常规"中取消勾选"缩略图显示",然后点击"更新"按钮。
-2. 在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 的 ``thumbnail.crawler.enabled`` 中设置 ``false``。
+2. 在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 的 ``thumbnail.crawler.enabled`` 中设置 ``false`` （默认值为 ``true`` ）。
 
 ::
 

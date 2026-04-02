@@ -194,6 +194,9 @@ To check running crawl status:
 
        tail -f /var/log/fess/fess_crawler.log
 
+   .. note::
+      The above path is for RPM/DEB package installations. For zip/tar.gz deployments, logs are located under the ``logs/`` directory.
+
 Basic Configuration Items
 ==========================
 
@@ -317,6 +320,8 @@ You can set upper limits for indexing sizes by file type.
 
 **Configuration file:** ``app/WEB-INF/classes/crawler/contentlength.xml``
 
+**Default configuration:**
+
 ::
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -332,14 +337,17 @@ You can set upper limits for indexing sizes by file type.
                             <arg>"text/html"</arg>
                             <arg>2621440</arg><!-- 2.5M -->
                     </postConstruct>
+            </component>
+    </components>
+
+**Customization example (adding PDF file processing up to 5MB):**
+
+::
+
                     <postConstruct name="addMaxLength">
                             <arg>"application/pdf"</arg>
                             <arg>5242880</arg><!-- 5M -->
                     </postConstruct>
-            </component>
-    </components>
-
-This adds a configuration to process PDF files up to 5MB.
 
 .. warning::
    When increasing file sizes to handle, also increase crawler memory settings.
