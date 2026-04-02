@@ -367,5 +367,5 @@ Python 处理示例
 ========
 
 - :doc:`search-basic` - 搜索功能详情
-- :doc:`search-scroll` - 搜索相关配置
+- :doc:`search-advanced` - 搜索相关配置
 - `OpenSearch Scroll API <https://opensearch.org/docs/latest/api-reference/scroll/>`_

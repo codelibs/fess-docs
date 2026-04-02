@@ -202,7 +202,7 @@ Googleマップとの連携
     });
 
     // Fess APIで位置情報検索を実行
-    fetch('/json/?q=店舗&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
+    fetch('/api/v1/documents?q=店舗&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
         .then(response => response.json())
         .then(data => {
             // 検索結果をマーカーとして表示

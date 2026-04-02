@@ -144,7 +144,7 @@ La búsqueda por geolocalización también se puede utilizar con la API JSON.
 
 ::
 
-    curl -X GET "http://localhost:8080/json/?q=hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
+    curl "http://localhost:8080/api/v1/documents?q=hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Personalización del Nombre del Campo
 =====================================
@@ -202,7 +202,7 @@ Ejemplo de visualización de resultados de búsqueda con marcadores en Google Ma
     });
 
     // Ejecutar búsqueda por geolocalización con API de Fess
-    fetch('/json/?q=tienda&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
+    fetch('/api/v1/documents?q=tienda&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
         .then(response => response.json())
         .then(data => {
             // Mostrar resultados de búsqueda como marcadores

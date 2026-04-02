@@ -130,6 +130,25 @@ Especifica los valores que se pasan al resaltador de OpenSearch.
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
+Configuración Avanzada de Resaltado
+=====================================
+
+Configuración para controlar el comportamiento detallado del resaltado.
+::
+
+    query.highlight.force.source=false
+    query.highlight.fragmenter=span
+    query.highlight.fragment.offset=-1
+    query.highlight.no.match.size=0
+    query.highlight.order=score
+    query.highlight.phrase.limit=256
+    query.highlight.content.description.fields=hl_content,digest
+    query.highlight.boundary.position.detect=true
+    query.highlight.text.fragment.type=query
+    query.highlight.text.fragment.size=3
+    query.highlight.text.fragment.prefix.length=5
+    query.highlight.text.fragment.suffix.length=5
+
 Nombres de Campo Adicionales en Respuesta
 ==========================================
 
@@ -167,3 +186,23 @@ Especifica la ordenación predeterminada al usar el formato XML compatible con G
     ::
 
         query.gsa.default.sort=
+
+Especifica el prefijo de metadatos al usar el formato XML compatible con GSA.
+    ::
+
+        query.gsa.meta.prefix=MT_
+
+Especifica el campo charset al usar el formato XML compatible con GSA.
+    ::
+
+        query.gsa.index.field.charset=charset
+
+Especifica el campo content_type al usar el formato XML compatible con GSA.
+    ::
+
+        query.gsa.index.field.content_type.=content_type
+
+Especifica la preferencia predeterminada al usar el formato XML compatible con GSA.
+    ::
+
+        query.gsa.default.preference=_query

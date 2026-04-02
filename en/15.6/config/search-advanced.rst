@@ -130,6 +130,25 @@ Specifies values passed to the OpenSearch highlighter.
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
+Advanced Highlight Settings
+============================
+
+Settings to control the detailed behavior of highlighting.
+::
+
+    query.highlight.force.source=false
+    query.highlight.fragmenter=span
+    query.highlight.fragment.offset=-1
+    query.highlight.no.match.size=0
+    query.highlight.order=score
+    query.highlight.phrase.limit=256
+    query.highlight.content.description.fields=hl_content,digest
+    query.highlight.boundary.position.detect=true
+    query.highlight.text.fragment.type=query
+    query.highlight.text.fragment.size=3
+    query.highlight.text.fragment.prefix.length=5
+    query.highlight.text.fragment.suffix.length=5
+
 Field Names to Add to Response
 ===============================
 
@@ -167,3 +186,23 @@ Specify default sort when using GSA-compatible XML format.
     ::
 
         query.gsa.default.sort=
+
+Specify metadata prefix when using GSA-compatible XML format.
+    ::
+
+        query.gsa.meta.prefix=MT_
+
+Specify charset field when using GSA-compatible XML format.
+    ::
+
+        query.gsa.index.field.charset=charset
+
+Specify content_type field when using GSA-compatible XML format.
+    ::
+
+        query.gsa.index.field.content_type.=content_type
+
+Specify default preference when using GSA-compatible XML format.
+    ::
+
+        query.gsa.default.preference=_query

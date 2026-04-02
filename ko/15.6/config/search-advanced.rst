@@ -130,6 +130,25 @@ OpenSearch 하이라이터에 전달할 값을 지정합니다.
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
+고급 하이라이트 설정
+====================
+
+하이라이트의 세부 동작을 제어하기 위한 설정입니다.
+::
+
+    query.highlight.force.source=false
+    query.highlight.fragmenter=span
+    query.highlight.fragment.offset=-1
+    query.highlight.no.match.size=0
+    query.highlight.order=score
+    query.highlight.phrase.limit=256
+    query.highlight.content.description.fields=hl_content,digest
+    query.highlight.boundary.position.detect=true
+    query.highlight.text.fragment.type=query
+    query.highlight.text.fragment.size=3
+    query.highlight.text.fragment.prefix.length=5
+    query.highlight.text.fragment.suffix.length=5
+
 응답에 추가할 필드명
 ========================
 
@@ -167,3 +186,23 @@ GSA 호환 XML 형식을 사용할 때 기본 정렬을 지정.
     ::
 
         query.gsa.default.sort=
+
+GSA 호환 XML 형식을 사용할 때 메타데이터 접두사를 지정.
+    ::
+
+        query.gsa.meta.prefix=MT_
+
+GSA 호환 XML 형식을 사용할 때 charset 필드를 지정.
+    ::
+
+        query.gsa.index.field.charset=charset
+
+GSA 호환 XML 형식을 사용할 때 content_type 필드를 지정.
+    ::
+
+        query.gsa.index.field.content_type.=content_type
+
+GSA 호환 XML 형식을 사용할 때 기본 preference를 지정.
+    ::
+
+        query.gsa.default.preference=_query

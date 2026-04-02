@@ -364,5 +364,5 @@ Información de Referencia
 ==========================
 
 - :doc:`search-basic` - Detalles de la función de búsqueda
-- :doc:`search-scroll` - Configuración relacionada con la búsqueda
+- :doc:`search-advanced` - Configuración relacionada con la búsqueda
 - `OpenSearch Scroll API <https://opensearch.org/docs/latest/api-reference/scroll/>`_

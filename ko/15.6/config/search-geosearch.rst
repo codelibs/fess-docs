@@ -144,7 +144,7 @@ JSON API에서도 위치 정보 검색을 사용할 수 있습니다.
 
 ::
 
-    curl "http://localhost:8080/json/?q=호텔&geo.location.point=37.566536,126.977966&geo.location.distance=5km"
+    curl "http://localhost:8080/api/v1/documents?q=호텔&geo.location.point=37.566536,126.977966&geo.location.distance=5km"
 
 필드 이름 사용자 정의
 ==========================
@@ -202,7 +202,7 @@ Google Maps와의 연계
     });
 
     // Fess API로 위치 정보 검색 실행
-    fetch('/json/?q=매장&geo.location.point=37.566536,126.977966&geo.location.distance=5km')
+    fetch('/api/v1/documents?q=매장&geo.location.point=37.566536,126.977966&geo.location.distance=5km')
         .then(response => response.json())
         .then(data => {
             // 검색 결과를 마커로 표시

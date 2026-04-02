@@ -116,7 +116,7 @@ Fuzzy-Suche
 ------------
 
 Fuzzy-Suche für Rechtschreibfehler und Schreibvarianten ist verfügbar.
-Standardmäßig wird Fuzzy-Suche automatisch auf Schlüsselwörter mit 4 oder mehr Zeichen angewendet.
+Standardmäßig wird bei Schlüsselwörtern mit 4 oder mehr Zeichen zusätzlich zur normalen Suche eine Fuzzy-Suchabfrage ausgeführt.
 
 ::
 

@@ -144,7 +144,7 @@ JSON API 也可以使用位置信息搜索。
 
 ::
 
-    curl "http://localhost:8080/json/?q=酒店&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
+    curl "http://localhost:8080/api/v1/documents?q=酒店&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 字段名自定义
 ==========================
@@ -202,7 +202,7 @@ Google 地图集成
     });
 
     // 使用 Fess API 执行位置信息搜索
-    fetch('/json/?q=店铺&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
+    fetch('/api/v1/documents?q=店铺&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
         .then(response => response.json())
         .then(data => {
             // 将搜索结果显示为标记

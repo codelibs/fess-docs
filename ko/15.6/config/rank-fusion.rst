@@ -158,5 +158,5 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 ==========
 
 - :doc:`scripting-overview` - 스크립팅 개요
-- :doc:`../admin/search-settings` - 검색 설정 가이드
+- :doc:`search-advanced` - 고급 검색 설정
 - :doc:`llm-overview` - LLM 통합 가이드 (시맨틱 검색)

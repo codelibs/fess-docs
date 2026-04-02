@@ -130,6 +130,25 @@ Spécifie les valeurs transmises au surligneur d'OpenSearch.
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
+Paramètres avancés de surlignage
+=================================
+
+Paramètres pour contrôler le comportement détaillé du surlignage.
+::
+
+    query.highlight.force.source=false
+    query.highlight.fragmenter=span
+    query.highlight.fragment.offset=-1
+    query.highlight.no.match.size=0
+    query.highlight.order=score
+    query.highlight.phrase.limit=256
+    query.highlight.content.description.fields=hl_content,digest
+    query.highlight.boundary.position.detect=true
+    query.highlight.text.fragment.type=query
+    query.highlight.text.fragment.size=3
+    query.highlight.text.fragment.prefix.length=5
+    query.highlight.text.fragment.suffix.length=5
+
 Noms de champs à ajouter à la réponse
 ========================
 
@@ -167,3 +186,23 @@ Spécifie le tri par défaut lors de l'utilisation du format XML compatible GSA.
     ::
 
         query.gsa.default.sort=
+
+Spécifie le préfixe des métadonnées lors de l'utilisation du format XML compatible GSA.
+    ::
+
+        query.gsa.meta.prefix=MT_
+
+Spécifie le champ charset lors de l'utilisation du format XML compatible GSA.
+    ::
+
+        query.gsa.index.field.charset=charset
+
+Spécifie le champ content_type lors de l'utilisation du format XML compatible GSA.
+    ::
+
+        query.gsa.index.field.content_type.=content_type
+
+Spécifie la préférence par défaut lors de l'utilisation du format XML compatible GSA.
+    ::
+
+        query.gsa.default.preference=_query

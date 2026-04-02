@@ -140,5 +140,5 @@ Reference
 =========
 
 - :doc:`scripting-overview` - Scripting Overview
-- :doc:`../admin/search-settings` - Search Settings Guide
+- :doc:`search-advanced` - Advanced Search Settings
 - :doc:`llm-overview` - LLM Integration Guide (Semantic Search)

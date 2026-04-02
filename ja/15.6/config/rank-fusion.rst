@@ -158,5 +158,5 @@ Rank Fusionは、キーワード検索とセマンティック検索を組み合
 ========
 
 - :doc:`scripting-overview` - スクリプティング概要
-- :doc:`../admin/search-settings` - 検索設定ガイド
+- :doc:`search-advanced` - 検索の詳細設定
 - :doc:`llm-overview` - LLM統合ガイド（セマンティック検索）

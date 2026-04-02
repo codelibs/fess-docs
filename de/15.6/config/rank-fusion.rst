@@ -158,5 +158,5 @@ Referenz
 ========
 
 - :doc:`scripting-overview` - Scripting-Übersicht
-- :doc:`../admin/search-settings` - Sucheinstellungen-Leitfaden
+- :doc:`search-advanced` - Erweiterte Sucheinstellungen
 - :doc:`llm-overview` - LLM-Integrations-Leitfaden (Semantische Suche)

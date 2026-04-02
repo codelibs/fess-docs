@@ -367,5 +367,5 @@ jq 명령을 사용하여 CSV로 변환하는 예:
 ========
 
 - :doc:`search-basic` - 검색 기능 자세히 보기
-- :doc:`search-scroll` - 검색 관련 설정
+- :doc:`search-advanced` - 검색 관련 설정
 - `OpenSearch Scroll API <https://opensearch.org/docs/latest/api-reference/scroll/>`_

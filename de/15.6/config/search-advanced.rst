@@ -130,6 +130,25 @@ Gibt an OpenSearch-Highlighter übergebene Werte an.
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
+Erweiterte Hervorhebungseinstellungen
+======================================
+
+Einstellungen zur Steuerung des detaillierten Hervorhebungsverhaltens.
+::
+
+    query.highlight.force.source=false
+    query.highlight.fragmenter=span
+    query.highlight.fragment.offset=-1
+    query.highlight.no.match.size=0
+    query.highlight.order=score
+    query.highlight.phrase.limit=256
+    query.highlight.content.description.fields=hl_content,digest
+    query.highlight.boundary.position.detect=true
+    query.highlight.text.fragment.type=query
+    query.highlight.text.fragment.size=3
+    query.highlight.text.fragment.prefix.length=5
+    query.highlight.text.fragment.suffix.length=5
+
 Zu Response hinzuzufügende Feldnamen
 ========================
 
@@ -167,3 +186,23 @@ Gibt Standard-Sortierung bei Verwendung von GSA-kompatiblem XML-Format an.
     ::
 
         query.gsa.default.sort=
+
+Gibt Metadaten-Präfix bei Verwendung von GSA-kompatiblem XML-Format an.
+    ::
+
+        query.gsa.meta.prefix=MT_
+
+Gibt charset-Feld bei Verwendung von GSA-kompatiblem XML-Format an.
+    ::
+
+        query.gsa.index.field.charset=charset
+
+Gibt content_type-Feld bei Verwendung von GSA-kompatiblem XML-Format an.
+    ::
+
+        query.gsa.index.field.content_type.=content_type
+
+Gibt Standard-Preference bei Verwendung von GSA-kompatiblem XML-Format an.
+    ::
+
+        query.gsa.default.preference=_query
