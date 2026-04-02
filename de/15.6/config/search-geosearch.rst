@@ -144,7 +144,7 @@ Standortsuche kann auch in JSON-API verwendet werden.
 
 ::
 
-    curl "http://localhost:8080/json/?q=Hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
+    curl "http://localhost:8080/api/v1/documents?q=Hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Anpassung von Feldnamen
 ==========================
@@ -202,7 +202,7 @@ Beispiel für Anzeige von Suchergebnissen als Marker auf Google Maps:
     });
 
     // Standortsuche mit Fess-API ausführen
-    fetch('/json/?q=Geschäfte&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
+    fetch('/api/v1/documents?q=Geschäfte&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
         .then(response => response.json())
         .then(data => {
             // Suchergebnisse als Marker anzeigen

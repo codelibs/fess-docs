@@ -130,6 +130,25 @@
     query.highlight.boundary.scanner=chars
     query.highlight.encoder=default
 
+高级高亮设置
+============
+
+用于控制高亮详细行为的设置。
+::
+
+    query.highlight.force.source=false
+    query.highlight.fragmenter=span
+    query.highlight.fragment.offset=-1
+    query.highlight.no.match.size=0
+    query.highlight.order=score
+    query.highlight.phrase.limit=256
+    query.highlight.content.description.fields=hl_content,digest
+    query.highlight.boundary.position.detect=true
+    query.highlight.text.fragment.type=query
+    query.highlight.text.fragment.size=3
+    query.highlight.text.fragment.prefix.length=5
+    query.highlight.text.fragment.suffix.length=5
+
 添加到响应的字段名
 ========================
 
@@ -167,3 +186,23 @@
     ::
 
         query.gsa.default.sort=
+
+指定使用 GSA 兼容 XML 格式时的元数据前缀。
+    ::
+
+        query.gsa.meta.prefix=MT_
+
+指定使用 GSA 兼容 XML 格式时的 charset 字段。
+    ::
+
+        query.gsa.index.field.charset=charset
+
+指定使用 GSA 兼容 XML 格式时的 content_type 字段。
+    ::
+
+        query.gsa.index.field.content_type.=content_type
+
+指定使用 GSA 兼容 XML 格式时的默认 preference。
+    ::
+
+        query.gsa.default.preference=_query

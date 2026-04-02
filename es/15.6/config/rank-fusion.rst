@@ -158,5 +158,5 @@ Referencia
 ==========
 
 - :doc:`scripting-overview` - Descripcion general de scripting
-- :doc:`../admin/search-settings` - Guia de configuracion de busqueda
+- :doc:`search-advanced` - Configuración avanzada de búsqueda
 - :doc:`llm-overview` - Guia de integracion LLM (Busqueda semantica)

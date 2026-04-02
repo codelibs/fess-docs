@@ -143,7 +143,7 @@ Geolocation search can also be used with the JSON API.
 
 ::
 
-    curl "http://localhost:8080/json/?q=hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
+    curl "http://localhost:8080/api/v1/documents?q=hotel&geo.location.point=35.681236,139.767125&geo.location.distance=5km"
 
 Field Name Customization
 ========================
@@ -201,7 +201,7 @@ Example of displaying search results as markers on Google Maps:
     });
 
     // Execute geolocation search with Fess API
-    fetch('/json/?q=store&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
+    fetch('/api/v1/documents?q=store&geo.location.point=35.681236,139.767125&geo.location.distance=5km')
         .then(response => response.json())
         .then(data => {
             // Display search results as markers

@@ -139,5 +139,5 @@ Reference
 ==========
 
 - :doc:`scripting-overview` - Apercu du scripting
-- :doc:`../admin/search-settings` - Guide de configuration de la recherche
+- :doc:`search-advanced` - Configuration avancée de la recherche
 - :doc:`llm-overview` - Guide d'integration LLM (Recherche semantique)

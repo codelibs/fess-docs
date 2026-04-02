@@ -158,5 +158,5 @@ Rank Fusion 在结合关键词搜索和语义搜索的
 ========
 
 - :doc:`scripting-overview` - 脚本概述
-- :doc:`../admin/search-settings` - 搜索设置指南
+- :doc:`search-advanced` - 高级搜索设置
 - :doc:`llm-overview` - LLM 集成指南（语义搜索）

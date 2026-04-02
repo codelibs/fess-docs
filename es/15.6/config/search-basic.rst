@@ -116,7 +116,7 @@ Búsqueda difusa
 ---------------
 
 Puede utilizar la búsqueda difusa que admite errores ortográficos y variaciones de notación.
-De forma predeterminada, la búsqueda difusa se aplica automáticamente a palabras clave de 4 o más caracteres.
+De forma predeterminada, para palabras clave de 4 o más caracteres, se ejecuta una consulta de búsqueda difusa adicional junto con la búsqueda normal.
 
 ::
 

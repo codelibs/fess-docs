@@ -116,7 +116,7 @@ Fuzzy Search
 ------------
 
 Fuzzy search for spelling mistakes and notation variations is available.
-By default, fuzzy search is automatically applied to keywords of 4 or more characters.
+By default, for keywords of 4 or more characters, a fuzzy search query is additionally executed alongside the normal search.
 
 ::
 

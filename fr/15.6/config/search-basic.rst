@@ -116,7 +116,7 @@ Recherche floue
 ------------
 
 Une recherche floue qui gère les fautes de frappe et les variations d'orthographe est disponible.
-Par défaut, une recherche floue est automatiquement appliquée aux mots-clés de 4 caractères ou plus.
+Par défaut, pour les mots-clés de 4 caractères ou plus, une requête de recherche floue est exécutée en complément de la recherche normale.
 
 ::
 
