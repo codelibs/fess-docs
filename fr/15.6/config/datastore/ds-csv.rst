@@ -110,7 +110,7 @@ Liste des parametres
      - Encodage des caracteres (par defaut : UTF-8)
    * - ``has_header_line``
      - Non
-     - Presence d'une ligne d'en-tete (par defaut : true)
+     - Presence d'une ligne d'en-tete (par defaut : false)
    * - ``separator_character``
      - Non
      - Caractere de separation (par defaut : virgule ``,``)
@@ -135,16 +135,16 @@ Sans en-tete (index de colonne) :
 
 ::
 
-    url="https://example.com/product/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/product/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 Champs disponibles
 ~~~~~~~~~~~~~~~~~~~~
 
 - ``data.<nom_colonne>`` - Nom de colonne de la ligne d'en-tete (si has_header_line=true)
-- ``data.cell<N>`` - Index de colonne (si has_header_line=false, commence a 0)
+- ``data.cell<N>`` - Index de colonne (si has_header_line=false, commence a 1 : ``cell1``, ``cell2``...)
 
 Details du format CSV
 =============
@@ -303,10 +303,10 @@ Script :
 
 ::
 
-    url="https://example.com/item/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/item/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 Integration de plusieurs fichiers CSV
 ---------------------

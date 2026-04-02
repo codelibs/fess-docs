@@ -139,30 +139,29 @@ Basic mapping:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Accessing nested fields:
 
 ::
 
-    url=data.metadata.url
-    title=data.title
-    content=data.body.content
-    author=data.author.name
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.metadata.url
+    title=source.title
+    content=source.body.content
+    author=source.author.name
+    created=source.created_at
+    last_modified=source.updated_at
 
 Available Fields
 ~~~~~~~~~~~~~~~~
 
-- ``data.<field_name>`` - Elasticsearch document field
-- ``data._id`` - Document ID
-- ``data._index`` - Index name
-- ``data._type`` - Document type (Elasticsearch < 7)
-- ``data._score`` - Search score
+- ``source.<field_name>`` - Elasticsearch document ``_source`` field
+- ``id`` - Document ID
+- ``index`` - Index name
+- ``score`` - Search score
 
 Query Configuration
 ===================
@@ -232,11 +231,11 @@ Script:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.url
+    title=source.title
+    content=source.content
+    created=source.created_at
+    last_modified=source.updated_at
 
 Authenticated Cluster Crawl
 ---------------------------
@@ -256,11 +255,11 @@ Script:
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " " + data.specifications
-    digest=data.category
-    last_modified=data.updated_at
+    url="https://shop.example.com/product/" + source.product_id
+    title=source.name
+    content=source.description + " " + source.specifications
+    digest=source.category
+    last_modified=source.updated_at
 
 Multiple Indices Crawl
 ----------------------
@@ -278,11 +277,11 @@ Script:
 
 ::
 
-    url="https://logs.example.com/view/" + data._id
-    title=data.message
-    content=data.stack_trace
-    digest=data.service + " - " + data.level
-    last_modified=data.timestamp
+    url="https://logs.example.com/view/" + id
+    title=source.message
+    content=source.stack_trace
+    digest=source.service + " - " + source.level
+    last_modified=source.timestamp
 
 OpenSearch Cluster Crawl
 ------------------------
@@ -302,10 +301,10 @@ Script:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.body
-    last_modified=data.modified_date
+    url=source.url
+    title=source.title
+    content=source.body
+    last_modified=source.modified_date
 
 Crawl with Limited Fields
 -------------------------
@@ -323,10 +322,10 @@ Script:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Load Balancing with Multiple Hosts
 ----------------------------------
@@ -344,10 +343,10 @@ Script:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Troubleshooting
 ===============
@@ -510,9 +509,9 @@ Script:
 
 ::
 
-    url=data.full_url
-    title=data.title
-    content=data.content
+    url=source.full_url
+    title=source.title
+    content=source.content
 
 Reference
 =========

@@ -110,7 +110,7 @@ HTTP文件:
      - 字符编码（默认: UTF-8）
    * - ``has_header_line``
      - 否
-     - 是否有标题行（默认: true）
+     - 是否有标题行（默认: false）
    * - ``separator_character``
      - 否
      - 分隔符（默认: 逗号 ``,``）
@@ -135,16 +135,16 @@ HTTP文件:
 
 ::
 
-    url="https://example.com/product/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/product/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 可用字段
 ~~~~~~~~~~~~~~~~~~~~
 
 - ``data.<列名>`` - 标题行的列名（has_header_line=true 时）
-- ``data.cell<N>`` - 列索引（has_header_line=false 时，从0开始）
+- ``data.cell<N>`` - 列索引（has_header_line=false 时，从1开始: ``cell1``, ``cell2``...）
 
 CSV格式详情
 =============
@@ -303,10 +303,10 @@ CSV文件（data.csv）:
 
 ::
 
-    url="https://example.com/item/" + data.cell0
-    title=data.cell1
-    content=data.cell2
-    price=data.cell3
+    url="https://example.com/item/" + data.cell1
+    title=data.cell2
+    content=data.cell3
+    price=data.cell4
 
 多CSV文件整合
 ---------------------

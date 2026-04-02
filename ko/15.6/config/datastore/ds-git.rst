@@ -65,7 +65,6 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 프라이빗 리포지토리 예(인증 있음):
 
@@ -75,7 +74,6 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 파라미터 목록
 ~~~~~~~~~~~~~~~~
@@ -99,9 +97,9 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
    * - ``prev_commit_id``
      - 아니오
      - 이전 커밋 ID(차등 크롤링용)
-   * - ``delete_old_docs``
+   * - ``commit_id``
      - 아니오
-     - 삭제된 파일을 인덱스에서 삭제(기본값: ``false``)
+     - 대상 커밋 ID (기본값: HEAD). 브랜치 또는 태그 지정 가능
 
 스크립트 설정
 --------------
@@ -257,7 +255,6 @@ MIME 타입별 추출기
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
-    delete_old_docs=true
 
 .. note::
    커밋 ID는 마지막 크롤링 시점의 커밋 ID를 설정합니다.
@@ -266,8 +263,7 @@ MIME 타입별 추출기
 삭제된 파일 처리
 ------------------------
 
-``delete_old_docs=true``를 설정하면 Git 리포지토리에서 삭제된 파일이
-인덱스에서도 삭제됩니다.
+``base_url``이 설정된 경우, Git DiffEntry에서 감지된 삭제 파일(``ChangeType.DELETE``)은 자동으로 인덱스에서 제거됩니다.
 
 사용 예
 ======
@@ -282,7 +278,6 @@ GitHub 퍼블릭 리포지토리
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
-    delete_old_docs=false
 
 스크립트:
 
@@ -306,7 +301,6 @@ GitHub 프라이빗 리포지토리
     uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
-    delete_old_docs=false
 
 스크립트:
 
@@ -331,7 +325,6 @@ GitLab(셀프 호스팅)
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 스크립트:
 
@@ -354,7 +347,6 @@ GitLab(셀프 호스팅)
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
-    delete_old_docs=false
 
 스크립트:
 
@@ -462,14 +454,13 @@ MIME 타입 오류
 브랜치 지정
 --------------
 
-기본 브랜치 외를 크롤링하는 경우:
+기본 브랜치가 아닌 다른 브랜치를 크롤링하려면 ``commit_id`` 파라미터로 브랜치 이름이나 태그를 지정합니다:
 
 ::
 
-    uri=https://github.com/company/repo.git#develop
+    uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
-
-``#`` 뒤에 브랜치명을 지정합니다.
+    commit_id=develop
 
 URL 생성
 =========

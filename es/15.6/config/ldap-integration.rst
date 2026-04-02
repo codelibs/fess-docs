@@ -54,10 +54,13 @@ Configuracion de conexion LDAP
     # Base DN
     ldap.base.dn=dc=example,dc=com
 
-    # Bind DN (cuenta de servicio)
-    ldap.security.principal=cn=fess,ou=services,dc=example,dc=com
+    # Plantilla de DN de enlace para autenticacion de usuario (%s se reemplaza con el nombre de usuario)
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # Contrasena de Bind
+    # DN de enlace de administracion (cuenta de servicio para busquedas LDAP)
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+
+    # Contrasena de enlace de administracion
     ldap.admin.security.credentials=your_password
 
 Configuracion de busqueda de usuarios
@@ -73,6 +76,29 @@ Configuracion de busqueda de usuarios
 
     # Atributo de nombre de usuario
     ldap.user.name.attribute=uid
+
+    # Filtro de busqueda de usuarios del administrador para la consola de gestion LDAP
+    ldap.admin.user.filter=uid=%s
+
+.. note::
+
+   ``ldap.account.filter`` es el filtro de busqueda para la autenticacion de usuarios,
+   mientras que ``ldap.admin.user.filter`` es el filtro de busqueda de usuarios para la
+   consola de gestion LDAP. Configure cada uno adecuadamente ya que tienen propositos diferentes.
+
+Configuracion de DN base de administracion LDAP
+------------------------------------------------
+
+::
+
+    # DN base de busqueda de usuarios
+    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+
+    # DN base de busqueda de roles
+    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+
+    # DN base de busqueda de grupos
+    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
 
 Configuracion de busqueda de grupos
 -----------------------------------
@@ -102,8 +128,11 @@ Configuracion basica
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Cuenta de servicio (formato UPN)
-    ldap.security.principal=fess@example.com
+    # Plantilla de DN de enlace para autenticacion de usuario (formato UPN)
+    ldap.security.principal=%s@example.com
+
+    # DN de enlace de administracion (cuenta de servicio)
+    ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # Busqueda de usuarios
@@ -138,8 +167,11 @@ Ejemplo de configuracion para OpenLDAP.
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Cuenta de servicio
-    ldap.security.principal=cn=admin,dc=example,dc=com
+    # Plantilla de DN de enlace para autenticacion de usuario
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
+
+    # DN de enlace de administracion (cuenta de servicio)
+    ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
     # Busqueda de usuarios

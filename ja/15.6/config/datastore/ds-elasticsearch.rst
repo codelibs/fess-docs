@@ -130,30 +130,29 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 ネストしたフィールドへのアクセス:
 
 ::
 
-    url=data.metadata.url
-    title=data.title
-    content=data.body.content
-    author=data.author.name
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.metadata.url
+    title=source.title
+    content=source.body.content
+    author=source.author.name
+    created=source.created_at
+    last_modified=source.updated_at
 
 利用可能なフィールド
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<field_name>`` - Elasticsearchドキュメントのフィールド
-- ``data._id`` - ドキュメントID
-- ``data._index`` - インデックス名
-- ``data._type`` - ドキュメントタイプ（Elasticsearch 7未満）
-- ``data._score`` - 検索スコア
+- ``source.<field_name>`` - Elasticsearchドキュメントの ``_source`` フィールド
+- ``id`` - ドキュメントID
+- ``index`` - インデックス名
+- ``score`` - 検索スコア
 
 クエリの設定
 ============
@@ -223,11 +222,11 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.url
+    title=source.title
+    content=source.content
+    created=source.created_at
+    last_modified=source.updated_at
 
 認証付きクラスタからのクロール
 ------------------------------
@@ -247,11 +246,11 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " " + data.specifications
-    digest=data.category
-    last_modified=data.updated_at
+    url="https://shop.example.com/product/" + source.product_id
+    title=source.name
+    content=source.description + " " + source.specifications
+    digest=source.category
+    last_modified=source.updated_at
 
 複数インデックスからのクロール
 ------------------------------
@@ -269,11 +268,11 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    url="https://logs.example.com/view/" + data._id
-    title=data.message
-    content=data.stack_trace
-    digest=data.service + " - " + data.level
-    last_modified=data.timestamp
+    url="https://logs.example.com/view/" + id
+    title=source.message
+    content=source.stack_trace
+    digest=source.service + " - " + source.level
+    last_modified=source.timestamp
 
 OpenSearchクラスタのクロール
 ----------------------------
@@ -293,10 +292,10 @@ OpenSearchクラスタのクロール
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.body
-    last_modified=data.modified_date
+    url=source.url
+    title=source.title
+    content=source.body
+    last_modified=source.modified_date
 
 フィールドを限定してクロール
 ----------------------------
@@ -314,10 +313,10 @@ OpenSearchクラスタのクロール
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 複数ホストでの負荷分散
 ----------------------
@@ -335,10 +334,10 @@ OpenSearchクラスタのクロール
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 トラブルシューティング
 ======================
@@ -501,9 +500,9 @@ SSL/TLS接続
 
 ::
 
-    url=data.full_url
-    title=data.title
-    content=data.content
+    url=source.full_url
+    title=source.title
+    content=source.content
 
 参考情報
 ========

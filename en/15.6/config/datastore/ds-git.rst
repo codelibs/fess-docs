@@ -65,7 +65,6 @@ Public repository example:
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Private repository example (with authentication):
 
@@ -75,7 +74,6 @@ Private repository example (with authentication):
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Parameter List
 ~~~~~~~~~~~~~~
@@ -99,9 +97,9 @@ Parameter List
    * - ``prev_commit_id``
      - No
      - Previous commit ID (for incremental crawl)
-   * - ``delete_old_docs``
+   * - ``commit_id``
      - No
-     - Delete removed files from index (default: ``false``)
+     - Target commit ID (default: HEAD). Branch or tag can be specified
 
 Script Settings
 ---------------
@@ -257,7 +255,6 @@ After initial crawl, set ``prev_commit_id`` to the previous commit ID:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
-    delete_old_docs=true
 
 .. note::
    Set the commit ID to the one from the last crawl.
@@ -266,8 +263,7 @@ After initial crawl, set ``prev_commit_id`` to the previous commit ID:
 Handling Deleted Files
 ----------------------
 
-Setting ``delete_old_docs=true`` will remove files deleted from the Git repository
-from the index as well.
+When ``base_url`` is set, files detected as deleted via Git DiffEntry (``ChangeType.DELETE``) are automatically removed from the index.
 
 Usage Examples
 ==============
@@ -282,7 +278,6 @@ Parameters:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
-    delete_old_docs=false
 
 Script:
 
@@ -306,7 +301,6 @@ Parameters:
     uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
-    delete_old_docs=false
 
 Script:
 
@@ -331,7 +325,6 @@ Parameters:
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Script:
 
@@ -354,7 +347,6 @@ Parameters:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
-    delete_old_docs=false
 
 Script:
 
@@ -462,14 +454,13 @@ Large Repositories
 Specifying Branch
 -----------------
 
-To crawl a branch other than default:
+To crawl a branch other than the default, specify the branch name or tag using the ``commit_id`` parameter:
 
 ::
 
-    uri=https://github.com/company/repo.git#develop
+    uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
-
-Specify branch name after ``#``.
+    commit_id=develop
 
 URL Generation
 ==============

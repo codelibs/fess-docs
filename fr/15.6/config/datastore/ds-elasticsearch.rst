@@ -139,30 +139,29 @@ Mapping de base :
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Acces aux champs imbriques :
 
 ::
 
-    url=data.metadata.url
-    title=data.title
-    content=data.body.content
-    author=data.author.name
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.metadata.url
+    title=source.title
+    content=source.body.content
+    author=source.author.name
+    created=source.created_at
+    last_modified=source.updated_at
 
 Champs disponibles
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<field_name>`` - Champ du document Elasticsearch
-- ``data._id`` - ID du document
-- ``data._index`` - Nom de l'index
-- ``data._type`` - Type de document (Elasticsearch < 7)
-- ``data._score`` - Score de recherche
+- ``source.<field_name>`` - Champ ``_source`` du document Elasticsearch
+- ``id`` - ID du document
+- ``index`` - Nom de l'index
+- ``score`` - Score de recherche
 
 Configuration des requetes
 ============
@@ -232,11 +231,11 @@ Script :
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.url
+    title=source.title
+    content=source.content
+    created=source.created_at
+    last_modified=source.updated_at
 
 Crawl d'un cluster avec authentification
 ------------------------------
@@ -256,11 +255,11 @@ Script :
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " " + data.specifications
-    digest=data.category
-    last_modified=data.updated_at
+    url="https://shop.example.com/product/" + source.product_id
+    title=source.name
+    content=source.description + " " + source.specifications
+    digest=source.category
+    last_modified=source.updated_at
 
 Crawl de plusieurs index
 ------------------------------
@@ -278,11 +277,11 @@ Script :
 
 ::
 
-    url="https://logs.example.com/view/" + data._id
-    title=data.message
-    content=data.stack_trace
-    digest=data.service + " - " + data.level
-    last_modified=data.timestamp
+    url="https://logs.example.com/view/" + id
+    title=source.message
+    content=source.stack_trace
+    digest=source.service + " - " + source.level
+    last_modified=source.timestamp
 
 Crawl d'un cluster OpenSearch
 ----------------------------
@@ -302,10 +301,10 @@ Script :
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.body
-    last_modified=data.modified_date
+    url=source.url
+    title=source.title
+    content=source.body
+    last_modified=source.modified_date
 
 Crawl avec limitation de champs
 ----------------------------
@@ -323,10 +322,10 @@ Script :
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Repartition de charge multi-hotes
 ----------------------
@@ -344,10 +343,10 @@ Script :
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Depannage
 ======================
@@ -510,9 +509,9 @@ Script :
 
 ::
 
-    url=data.full_url
-    title=data.title
-    content=data.content
+    url=source.full_url
+    title=source.title
+    content=source.content
 
 Informations de reference
 ========

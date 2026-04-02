@@ -65,7 +65,6 @@ Ejemplo de repositorio publico:
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Ejemplo de repositorio privado (con autenticacion):
 
@@ -75,7 +74,6 @@ Ejemplo de repositorio privado (con autenticacion):
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Lista de parametros
 ~~~~~~~~~~~~~~~~~~~
@@ -99,9 +97,9 @@ Lista de parametros
    * - ``prev_commit_id``
      - No
      - ID del commit anterior (para crawl diferencial)
-   * - ``delete_old_docs``
+   * - ``commit_id``
      - No
-     - Eliminar archivos borrados del indice (predeterminado: ``false``)
+     - ID de commit objetivo (predeterminado: HEAD). Se puede especificar rama o etiqueta
 
 Configuracion de scripts
 ------------------------
@@ -257,7 +255,6 @@ Despues del primer crawl, configure ``prev_commit_id`` con el ID del commit ante
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
-    delete_old_docs=true
 
 .. note::
    El commit ID debe ser el del ultimo crawl.
@@ -266,8 +263,7 @@ Despues del primer crawl, configure ``prev_commit_id`` con el ID del commit ante
 Procesamiento de archivos eliminados
 ------------------------------------
 
-Al configurar ``delete_old_docs=true``, los archivos eliminados del repositorio Git
-tambien se eliminaran del indice.
+Cuando ``base_url`` está configurado, los archivos detectados como eliminados a través de Git DiffEntry (``ChangeType.DELETE``) se eliminan automáticamente del índice.
 
 Ejemplos de uso
 ===============
@@ -282,7 +278,6 @@ Parametros:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
-    delete_old_docs=false
 
 Script:
 
@@ -306,7 +301,6 @@ Parametros:
     uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
-    delete_old_docs=false
 
 Script:
 
@@ -331,7 +325,6 @@ Parametros:
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
-    delete_old_docs=false
 
 Script:
 
@@ -354,7 +347,6 @@ Parametros:
     uri=https://github.com/codelibs/fess.git
     base_url=https://github.com/codelibs/fess/blob/master/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
-    delete_old_docs=false
 
 Script:
 
@@ -462,14 +454,13 @@ Repositorio grande
 Especificacion de rama
 ----------------------
 
-Para crawlear una rama diferente a la predeterminada:
+Para rastrear una rama diferente a la predeterminada, especifique el nombre de la rama o etiqueta usando el parámetro ``commit_id``:
 
 ::
 
-    uri=https://github.com/company/repo.git#develop
+    uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
-
-Especifique el nombre de la rama despues de ``#``.
+    commit_id=develop
 
 Generacion de URL
 =================

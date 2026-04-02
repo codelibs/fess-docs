@@ -138,30 +138,29 @@ Einfaches Mapping:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Zugriff auf verschachtelte Felder:
 
 ::
 
-    url=data.metadata.url
-    title=data.title
-    content=data.body.content
-    author=data.author.name
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.metadata.url
+    title=source.title
+    content=source.body.content
+    author=source.author.name
+    created=source.created_at
+    last_modified=source.updated_at
 
 Verfügbare Felder
 ~~~~~~~~~~~~~~~~~
 
-- ``data.<field_name>`` - Felder des Elasticsearch-Dokuments
-- ``data._id`` - Dokument-ID
-- ``data._index`` - Indexname
-- ``data._type`` - Dokumenttyp (Elasticsearch vor Version 7)
-- ``data._score`` - Suchpunktzahl
+- ``source.<field_name>`` - ``_source``-Feld des Elasticsearch-Dokuments
+- ``id`` - Dokument-ID
+- ``index`` - Indexname
+- ``score`` - Suchpunktzahl
 
 Query-Konfiguration
 ===================
@@ -231,11 +230,11 @@ Skript:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    created=data.created_at
-    last_modified=data.updated_at
+    url=source.url
+    title=source.title
+    content=source.content
+    created=source.created_at
+    last_modified=source.updated_at
 
 Crawling von Cluster mit Authentifizierung
 ------------------------------------------
@@ -255,11 +254,11 @@ Skript:
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " " + data.specifications
-    digest=data.category
-    last_modified=data.updated_at
+    url="https://shop.example.com/product/" + source.product_id
+    title=source.name
+    content=source.description + " " + source.specifications
+    digest=source.category
+    last_modified=source.updated_at
 
 Crawling aus mehreren Indizes
 -----------------------------
@@ -277,11 +276,11 @@ Skript:
 
 ::
 
-    url="https://logs.example.com/view/" + data._id
-    title=data.message
-    content=data.stack_trace
-    digest=data.service + " - " + data.level
-    last_modified=data.timestamp
+    url="https://logs.example.com/view/" + id
+    title=source.message
+    content=source.stack_trace
+    digest=source.service + " - " + source.level
+    last_modified=source.timestamp
 
 OpenSearch-Cluster crawlen
 --------------------------
@@ -301,10 +300,10 @@ Skript:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.body
-    last_modified=data.modified_date
+    url=source.url
+    title=source.title
+    content=source.body
+    last_modified=source.modified_date
 
 Crawling mit eingeschränkten Feldern
 ------------------------------------
@@ -322,10 +321,10 @@ Skript:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Lastverteilung über mehrere Hosts
 ---------------------------------
@@ -343,10 +342,10 @@ Skript:
 
 ::
 
-    url=data.url
-    title=data.title
-    content=data.content
-    last_modified=data.timestamp
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
 
 Fehlerbehebung
 ==============
@@ -509,9 +508,9 @@ Skript:
 
 ::
 
-    url=data.full_url
-    title=data.title
-    content=data.content
+    url=source.full_url
+    title=source.title
+    content=source.content
 
 Weiterführende Informationen
 ============================
