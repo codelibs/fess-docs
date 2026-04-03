@@ -24,7 +24,7 @@ Modeles pris en charge
 Principaux modeles disponibles avec Ollama :
 
 - ``llama3.3:70b`` - Llama 3.3 de Meta (70B parametres)
-- ``gemma3:4b`` - Gemma 3 de Google (4B parametres, par defaut)
+- ``gemma4:e4b`` - Gemma 4 de Google (E4B parametres, par defaut)
 - ``mistral:7b`` - Mistral de Mistral AI (7B parametres)
 - ``codellama:13b`` - Code Llama de Meta (13B parametres)
 - ``phi3:3.8b`` - Phi-3 de Microsoft (3.8B parametres)
@@ -68,14 +68,14 @@ Telechargement du modele
 
 ::
 
-    # Telecharger le modele par defaut (Gemma 3 4B)
-    ollama pull gemma3:4b
+    # Telecharger le modele par defaut (Gemma 4 E4B)
+    ollama pull gemma4:e4b
 
     # Telecharger Llama 3.3
     ollama pull llama3.3:70b
 
     # Verifier le fonctionnement du modele
-    ollama run gemma3:4b "Hello, how are you?"
+    ollama run gemma4:e4b "Hello, how are you?"
 
 Installation du plugin
 ========================
@@ -114,7 +114,7 @@ Configuration minimale
     rag.llm.ollama.api.url=http://localhost:11434
 
     # Modele a utiliser
-    rag.llm.ollama.model=gemma3:4b
+    rag.llm.ollama.model=gemma4:e4b
 
 ``system.properties`` (configurable egalement via Administration > Systeme > General) :
 
@@ -172,7 +172,7 @@ Tous les elements de configuration disponibles pour le client Ollama. Tous se co
      - ``http://localhost:11434``
    * - ``rag.llm.ollama.model``
      - Nom du modele a utiliser (modele telecharge dans Ollama)
-     - ``gemma3:4b``
+     - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
      - Timeout de la requete (millisecondes)
      - ``60000``
@@ -285,7 +285,7 @@ Exemple de configuration::
 Prise en charge des modeles de reflexion
 ==============
 
-Lors de l'utilisation de modeles de reflexion (thinking model) tels que qwen3.5, |Fess| prend en charge la configuration du budget de reflexion (thinking budget).
+Lors de l'utilisation de modeles de reflexion (thinking model) tels que gemma4 ou qwen3.5, |Fess| prend en charge la configuration du budget de reflexion (thinking budget).
 
 Configurez les elements suivants dans ``fess_config.properties`` :
 
@@ -316,7 +316,7 @@ Exemple de configuration lorsque |Fess| et Ollama fonctionnent tous deux dans Do
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_NAME=ollama
           - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma3:4b
+          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
         depends_on:
           - ollama
         # ... autres configurations
@@ -364,10 +364,10 @@ Guide pour la selection du modele selon l'usage.
      - Petit
      - 4GB+
      - Environnement leger, questions-reponses simples
-   * - ``gemma3:4b``
+   * - ``gemma4:e4b``
      - Petit-Moyen
-     - 6GB+
-     - Usage general equilibre (par defaut)
+     - 8GB+
+     - Usage general equilibre, support du thinking (par defaut)
    * - ``mistral:7b``
      - Moyen
      - 8GB+
@@ -386,7 +386,7 @@ ameliore considerablement la vitesse d'inference.
 ::
 
     # Verification de la prise en charge GPU
-    ollama run gemma3:4b --verbose
+    ollama run gemma4:e4b --verbose
 
 Depannage
 ======================
@@ -424,7 +424,7 @@ Modele introuvable
 
 2. Telecharger le modele necessaire ::
 
-    ollama pull gemma3:4b
+    ollama pull gemma4:e4b
 
 Timeout
 ------------
