@@ -24,7 +24,7 @@ Unterstützte Modelle
 Hauptsächlich verfügbare Modelle bei Ollama:
 
 - ``llama3.3:70b`` - Llama 3.3 von Meta (70B Parameter)
-- ``gemma3:4b`` - Gemma 3 von Google (4B Parameter, Standard)
+- ``gemma4:e4b`` - Gemma 4 von Google (E4B Parameter, Standard)
 - ``mistral:7b`` - Mistral von Mistral AI (7B Parameter)
 - ``codellama:13b`` - Code Llama von Meta (13B Parameter)
 - ``phi3:3.8b`` - Phi-3 von Microsoft (3.8B Parameter)
@@ -68,14 +68,14 @@ Modell-Download
 
 ::
 
-    # Standardmodell (Gemma 3 4B) herunterladen
-    ollama pull gemma3:4b
+    # Standardmodell (Gemma 4 E4B) herunterladen
+    ollama pull gemma4:e4b
 
     # Llama 3.3 herunterladen
     ollama pull llama3.3:70b
 
     # Modell testen
-    ollama run gemma3:4b "Hello, how are you?"
+    ollama run gemma4:e4b "Hello, how are you?"
 
 Plugin-Installation
 ===================
@@ -114,7 +114,7 @@ Minimalkonfiguration
     rag.llm.ollama.api.url=http://localhost:11434
 
     # Zu verwendendes Modell
-    rag.llm.ollama.model=gemma3:4b
+    rag.llm.ollama.model=gemma4:e4b
 
 ``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
 
@@ -172,7 +172,7 @@ Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellunge
      - ``http://localhost:11434``
    * - ``rag.llm.ollama.model``
      - Zu verwendendes Modell (muss in Ollama heruntergeladen sein)
-     - ``gemma3:4b``
+     - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
      - Anfrage-Timeout (Millisekunden)
      - ``60000``
@@ -285,7 +285,7 @@ Konfigurationsbeispiel::
 Unterstützung für Thinking-Modelle
 ====================================
 
-Bei Verwendung von Thinking-Modellen wie qwen3.5 unterstützt |Fess| die Konfiguration des Thinking-Budgets.
+Bei Verwendung von Thinking-Modellen wie gemma4 oder qwen3.5 unterstützt |Fess| die Konfiguration des Thinking-Budgets.
 
 Folgendes in ``fess_config.properties`` eintragen:
 
@@ -316,7 +316,7 @@ Beispielkonfiguration, wenn sowohl |Fess| als auch Ollama in Docker laufen.
           - RAG_CHAT_ENABLED=true
           - RAG_LLM_NAME=ollama
           - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma3:4b
+          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
         depends_on:
           - ollama
         # ... weitere Einstellungen
@@ -363,10 +363,10 @@ Richtlinien zur Modellauswahl je nach Verwendungszweck.
      - Klein
      - 4GB+
      - Leichte Umgebung, einfache Frage-Antwort
-   * - ``gemma3:4b``
+   * - ``gemma4:e4b``
      - Klein-Mittel
-     - 6GB+
-     - Ausgewogener Allzweck (Standard)
+     - 8GB+
+     - Ausgewogener Allzweck, Thinking-Unterstützung (Standard)
    * - ``mistral:7b``
      - Mittel
      - 8GB+
@@ -384,7 +384,7 @@ Ollama unterstützt GPU-Beschleunigung. Mit NVIDIA-GPUs wird die Inferenzgeschwi
 ::
 
     # GPU-Unterstützung prüfen
-    ollama run gemma3:4b --verbose
+    ollama run gemma4:e4b --verbose
 
 Fehlerbehebung
 ==============
@@ -422,7 +422,7 @@ Modell nicht gefunden
 
 2. Laden Sie das benötigte Modell herunter::
 
-    ollama pull gemma3:4b
+    ollama pull gemma4:e4b
 
 Timeout
 -------
