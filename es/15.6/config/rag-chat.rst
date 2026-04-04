@@ -384,8 +384,6 @@ Eventos SSE:
 
    * - Evento
      - Descripcion
-   * - ``session``
-     - Informacion de sesion (sessionId)
    * - ``phase``
      - Inicio/fin de fase de procesamiento (intent_analysis, search, evaluation, generation)
    * - ``chunk``

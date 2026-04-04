@@ -285,7 +285,7 @@ Other Security Settings
    * - Property
      - Description
      - Default
-   * - ``saml.security.strict``
+   * - ``saml.strict``
      - Strict mode (perform strict validation)
      - ``true``
    * - ``saml.security.signature_algorithm``

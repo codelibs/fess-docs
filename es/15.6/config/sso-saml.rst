@@ -285,7 +285,7 @@ Otras configuraciones de seguridad
    * - Propiedad
      - Descripción
      - Por defecto
-   * - ``saml.security.strict``
+   * - ``saml.strict``
      - Modo estricto (realizar validación estricta)
      - ``true``
    * - ``saml.security.signature_algorithm``

@@ -285,7 +285,7 @@ Weitere Sicherheitseinstellungen
    * - Eigenschaft
      - Beschreibung
      - Standard
-   * - ``saml.security.strict``
+   * - ``saml.strict``
      - Strikter Modus (strenge Validierung durchführen)
      - ``true``
    * - ``saml.security.signature_algorithm``

@@ -384,8 +384,6 @@ SSE事件:
 
    * - 事件
      - 说明
-   * - ``session``
-     - 会话信息（sessionId）
    * - ``phase``
      - 处理阶段的开始/完成（intent_analysis, search, evaluation, generation）
    * - ``chunk``

@@ -249,7 +249,7 @@ Prompt Type List
      - ``direct``
      - Generates a direct answer without going through search
    * - Query Regeneration
-     - ``query_regeneration``
+     - ``queryregeneration``
      - Regenerates the query when no search results are found
 
 Configuration Pattern

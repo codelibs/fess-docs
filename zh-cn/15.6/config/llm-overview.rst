@@ -249,7 +249,7 @@ fess_config.properties
      - ``direct``
      - 不经过搜索直接生成回答
    * - 查询再生成
-     - ``query_regeneration``
+     - ``queryregeneration``
      - 当没有搜索结果时重新生成查询
 
 配置模式

@@ -63,7 +63,7 @@ es posible un control de acceso mas detallado:
 
     # Ejemplo de configuracion
     virtual.host=tenant1.example.com
-    permissions=role_tenant1_user
+    permissions={role}tenant1_user
 
 Busqueda basada en roles
 ------------------------

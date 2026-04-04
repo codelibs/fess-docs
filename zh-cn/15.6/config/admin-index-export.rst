@@ -48,6 +48,9 @@
    * - ``index.export.scroll.size``
      - ``100``
      - 每批处理的文档数
+   * - ``index.export.format``
+     - ``html``
+     - 导出文件格式
 
 配置示例：
 

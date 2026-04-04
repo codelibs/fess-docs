@@ -384,8 +384,6 @@ Evenements SSE :
 
    * - Evenement
      - Description
-   * - ``session``
-     - Information de session (sessionId)
    * - ``phase``
      - Debut/fin de phase de traitement (intent_analysis, search, evaluation, generation)
    * - ``chunk``

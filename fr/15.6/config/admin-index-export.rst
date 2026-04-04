@@ -48,6 +48,9 @@ Configurez la fonction d'exportation d'index dans ``fess_config.properties`` :
    * - ``index.export.scroll.size``
      - ``100``
      - Nombre de documents traités par lot
+   * - ``index.export.format``
+     - ``html``
+     - Format de fichier d'exportation
 
 Exemple de configuration :
 
