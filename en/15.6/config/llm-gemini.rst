@@ -141,8 +141,8 @@ All configuration options available for the Gemini client. All settings except `
      - Description
      - Default
    * - ``rag.llm.gemini.api.key``
-     - Google AI API key
-     - (Required)
+     - Google AI API key (must be set to use the Gemini API)
+     - ``""``
    * - ``rag.llm.gemini.model``
      - Model name to use
      - ``gemini-3-flash-preview``
@@ -161,6 +161,27 @@ All configuration options available for the Gemini client. All settings except `
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
      - Maximum number of relevant documents during evaluation
      - ``3``
+   * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
+     - Maximum characters for document description during evaluation
+     - ``500``
+   * - ``rag.llm.gemini.concurrency.wait.timeout``
+     - Concurrent request wait timeout (milliseconds)
+     - ``30000``
+   * - ``rag.llm.gemini.history.max.chars``
+     - Maximum characters for chat history
+     - ``10000``
+   * - ``rag.llm.gemini.intent.history.max.messages``
+     - Maximum history messages for intent determination
+     - ``10``
+   * - ``rag.llm.gemini.intent.history.max.chars``
+     - Maximum history characters for intent determination
+     - ``5000``
+   * - ``rag.llm.gemini.history.assistant.max.chars``
+     - Maximum characters for assistant history
+     - ``1000``
+   * - ``rag.llm.gemini.history.assistant.summary.max.chars``
+     - Maximum characters for assistant summary history
+     - ``1000``
 
 Per-Prompt-Type Settings
 ========================
@@ -175,6 +196,7 @@ Configuration Format
 
     rag.llm.gemini.{promptType}.temperature
     rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.thinking.budget
     rag.llm.gemini.{promptType}.context.max.chars
 
 Available Prompt Types
@@ -204,6 +226,62 @@ Available Prompt Types
      - FAQ generation prompt
    * - ``direct``
      - Direct response prompt
+   * - ``queryregeneration``
+     - Query regeneration prompt
+
+Prompt Type Default Values
+------------------------------
+
+Default values for each prompt type. These values are used when not explicitly configured.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20
+
+   * - Prompt Type
+     - temperature
+     - max.tokens
+     - thinking.budget
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``evaluation``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``256``
+     - ``0``
+   * - ``direct``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``faq``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``answer``
+     - ``0.5``
+     - ``4096``
+     - ``2048``
+   * - ``summary``
+     - ``0.3``
+     - ``4096``
+     - ``2048``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
 
 Configuration Examples
 ----------------------
@@ -227,19 +305,22 @@ Configuration Examples
 
 .. note::
    The default value of ``context.max.chars`` varies by prompt type.
-   ``answer`` and ``summary`` are 16000, and ``faq`` is 10000.
+   ``answer`` and ``summary`` are 16000, ``faq`` is 10000, and other prompt types are 10000.
 
 Thinking Model Support
 ======================
 
 Gemini supports thinking models. Using a thinking model, the model executes an internal reasoning process before generating a response, enabling more accurate answers.
 
-The thinking budget can be configured in ``fess_config.properties``.
+The thinking budget can be configured per prompt type in ``fess_config.properties``.
 
 ::
 
-    # Thinking budget configuration
-    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+    # Thinking budget for answer generation
+    rag.llm.gemini.answer.thinking.budget=1024
+
+    # Thinking budget for summary generation
+    rag.llm.gemini.summary.thinking.budget=1024
 
 .. note::
    Setting a thinking budget may increase response time.

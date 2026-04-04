@@ -212,7 +212,7 @@ Accedez a https://admin.google.com/ :
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. Cliquez sur "Autoriser"
 
@@ -343,7 +343,7 @@ Erreur d'authentification
 2. Verifier si l'API Google Drive est activee
 3. Verifier si la delegation a l'echelle du domaine est configuree
 4. Verifier si l'autorisation a ete accordee dans la console d'administration Google Workspace
-5. Verifier si le scope OAuth est correct (``https://www.googleapis.com/auth/drive.readonly``)
+5. Verifier si le scope OAuth est correct (``https://www.googleapis.com/auth/drive``)
 
 Erreur de delegation a l'echelle du domaine
 ------------------------
@@ -355,7 +355,7 @@ Erreur de delegation a l'echelle du domaine
 1. Verifier l'autorisation dans la console d'administration Google Workspace :
 
    - L'ID client est-il correctement enregistre ?
-   - Le scope OAuth est-il correct ? (``https://www.googleapis.com/auth/drive.readonly``)
+   - Le scope OAuth est-il correct ? (``https://www.googleapis.com/auth/drive``)
 
 2. Verifier si la delegation a l'echelle du domaine est activee sur le compte de service
 

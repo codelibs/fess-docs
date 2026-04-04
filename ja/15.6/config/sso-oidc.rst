@@ -49,6 +49,7 @@ SSO機能の有効化
 ---------------
 
 OpenID Connect認証を有効にするには、``app/WEB-INF/conf/system.properties`` に以下の設定を追加します。
+これらの設定は、管理画面の「システム > 全般」ページからも設定できます。
 
 ::
 
@@ -68,10 +69,10 @@ OPから取得した情報を設定します。
      - デフォルト
    * - ``oic.auth.server.url``
      - 認可エンドポイントURL
-     - （必須）
+     - ``https://accounts.google.com/o/oauth2/auth``
    * - ``oic.token.server.url``
      - トークンエンドポイントURL
-     - （必須）
+     - ``https://accounts.google.com/o/oauth2/token``
 
 .. note::
    これらのURLは、OPのDiscoveryエンドポイント（``/.well-known/openid-configuration``）から取得できます。
@@ -90,13 +91,13 @@ OP側で登録したクライアント情報を設定します。
      - デフォルト
    * - ``oic.client.id``
      - クライアントID
-     - （必須）
+     - （空文字）
    * - ``oic.client.secret``
      - クライアントシークレット
-     - （必須）
+     - （空文字）
    * - ``oic.scope``
      - 要求するスコープ
-     - （必須）
+     - （空文字）
 
 .. note::
    スコープには少なくとも ``openid`` を含める必要があります。
@@ -124,6 +125,31 @@ OP側で登録したクライアント情報を設定します。
 .. note::
    ``oic.redirect.url`` を省略した場合、``oic.base.url`` から自動的に構成されます。
    本番環境では、``oic.base.url`` にHTTPSのURLを設定してください。
+
+ユーザー属性設定
+----------------
+
+OIDCで認証されたユーザーに割り当てるデフォルトのグループ・ロールを設定します。
+ユーザーIDは、ID Token（JWT）の ``email`` クレームから取得されます。
+グループは、ID Tokenの ``groups`` クレームから取得されますが、``groups`` クレームが存在しない場合は ``oic.default.groups`` の値が使用されます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``oic.default.groups``
+     - デフォルトグループ（カンマ区切り）
+     - （空文字）
+   * - ``oic.default.roles``
+     - デフォルトロール（カンマ区切り）
+     - （空文字）
+
+.. note::
+   ロールベース検索を使用する場合は、ユーザーに適切なグループまたはロールを割り当てる必要があります。
+   詳細は :doc:`security-role` を参照してください。
 
 OP側での設定
 ============

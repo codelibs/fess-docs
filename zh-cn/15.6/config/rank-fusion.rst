@@ -35,7 +35,7 @@ RRF 通过对每个结果排名的倒数求和来计算分数。
     score(d) = Σ 1 / (k + rank(d))
 
 - ``k``: 常数参数（默认: 20）
-- ``rank(d)``: 文档 d 在各搜索结果中的排名
+- ``rank(d)``: 文档 d 在各搜索结果中的排名（从0开始）
 
 配置
 ====
@@ -46,16 +46,26 @@ fess_config.properties
 基本配置::
 
     # 窗口大小（融合对象的结果数）
+    # 注意: 必须 >= paging.search.page.max.size × 2。
+    # 如果设定值低于此最小值，将自动使用最小值。
     rank.fusion.window_size=200
 
     # RRF 的 rank_constant（k 参数）
     rank.fusion.rank_constant=20
 
-    # 并行处理的线程数（-1 为默认值）
+    # 并行处理的线程数（-1 表示 availableProcessors * 1.5 + 1）
     rank.fusion.threads=-1
 
     # 分数字段名
     rank.fusion.score_field=rf_score
+
+JVM 系统属性
+-------------
+
+以下属性在 ``fess.in.sh``（或 ``fess.in.bat``）中作为 JVM 选项设置::
+
+    # 指定使用的 searcher（逗号分隔）
+    -Drank.fusion.searchers=default,semantic
 
 与混合搜索的集成
 ==================
@@ -112,7 +122,7 @@ Rank Fusion 在结合关键词搜索和语义搜索的
 
 ::
 
-    # 并行执行的线程数（-1 为默认值）
+    # 并行执行的线程数（-1 表示 availableProcessors * 1.5 + 1）
     rank.fusion.threads=-1
 
 故障排除

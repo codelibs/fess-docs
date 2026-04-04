@@ -24,10 +24,16 @@
      - 内容
    * - ``fess.log``
      - 管理页面和搜索页面的操作日志、应用程序错误、系统事件
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - 爬取执行时的日志、爬取目标URL、获取的文档信息、错误
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - 建议(搜索候选)生成时的日志、索引更新信息
+   * - ``fess-llm.log``
+     - LLM/RAG聊天相关日志
+   * - ``searchlog.log``
+     - 搜索日志
+   * - ``fess-urls.log``
+     - 爬虫URL统计日志(由爬取进程输出)
    * - ``server_?.log``
      - Tomcat等应用服务器的系统日志
    * - ``audit.log``
@@ -56,7 +62,7 @@
 1. **识别错误类型**
 
    - 应用程序错误 → ``fess.log``
-   - 爬取错误 → ``fess_crawler.log``
+   - 爬取错误 → ``fess-crawler.log``
    - 认证错误 → ``audit.log``
    - 服务器错误 → ``server_?.log``
 
@@ -142,7 +148,9 @@
 4. 点击"更新"按钮。
 
 .. note::
-   管理页面的变更在 |Fess| 重启后也会保持。
+   管理页面的日志级别变更仅适用于正在运行的实例。
+   重启后将恢复为 ``fess.in.sh`` 中的 ``FESS_LOG_LEVEL`` 设定值。
+   要永久变更,请编辑 ``fess.in.sh`` 中的 ``FESS_LOG_LEVEL``。
 
 通过配置文件变更
 ----------------------
@@ -153,7 +161,7 @@
 ~~~~~~~~~~~~~~~~~~
 
 - **Zip安装**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEB软件包**: ``/etc/fess/log4j2.xml``
+- **RPM/DEB软件包**: ``/usr/share/fess/lib/classes/log4j2.xml``
 
 基本配置示例
 ~~~~~~~~~~~~~~
@@ -186,26 +194,29 @@
 ~~~~~~~~~~~~~~~~~~
 
 系统启动时也可以指定日志级别。
+在 ``fess.in.sh`` (Windows下为 ``fess.in.bat``)中设置 ``FESS_LOG_LEVEL``。
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
+    FESS_LOG_LEVEL=debug
+
+默认值为 ``warn``。
 
 爬虫日志配置
 ====================
 
 爬虫日志默认以 ``INFO`` 级别输出。
 
-管理页面配置
-----------------
+调度器配置
+--------------
 
-1. 从管理页面的"爬虫"菜单打开目标爬取配置。
-2. 在"配置"选项卡中选择"脚本"。
-3. 在脚本栏中添加以下内容。
+1. 从管理页面的"系统"菜单选择"调度器"。
+2. 打开目标爬取作业(例如:Default Crawler)。
+3. 将脚本中的 ``.logLevel("info")`` 更改为所需级别。
 
 ::
 
-    logLevel("DEBUG")
+    return container.getComponent("crawlJob").logLevel("DEBUG")...
 
 可配置的值:
 
@@ -215,15 +226,6 @@
 - ``INFO``
 - ``DEBUG``
 - ``TRACE``
-
-仅更改特定URL模式的日志级别
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    if (url.contains("example.com")) {
-        logLevel("DEBUG")
-    }
 
 日志轮转
 ==================
@@ -249,13 +251,20 @@ Log4j2 自动轮转
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
-            <SizeBasedTriggeringPolicy size="100MB"/>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 每日轮转配置
@@ -266,8 +275,8 @@ Log4j2 自动轮转
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -283,8 +292,8 @@ Log4j2 自动轮转
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}.gz">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -544,7 +553,7 @@ JSON格式输出日志
    ::
 
        # 配置文件语法检查
-       xmllint --noout /etc/fess/log4j2.xml
+       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
 
 4. **SELinux确认**
 
@@ -567,7 +576,7 @@ JSON格式输出日志
    ::
 
        # 确认log4j2.xml配置
-       grep -A 5 "RollingFile" /etc/fess/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
 
 3. **禁用不必要的日志输出**
 
@@ -595,7 +604,7 @@ JSON格式输出日志
 
    ::
 
-       grep "org.codelibs" /etc/fess/log4j2.xml
+       grep "org.codelibs" /usr/share/fess/lib/classes/log4j2.xml
 
 2. **确认日志文件路径**
 

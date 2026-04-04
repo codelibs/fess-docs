@@ -155,25 +155,47 @@ Datumsverarbeitung
 
 ::
 
-    // Datum parsen
-    import java.text.SimpleDateFormat
-    def sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-    lastModified=sdf.parse(data.date_string)
+    // Datum parsen (Einzelausdruck mit FQCN)
+    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // Konvertierung von Epochensekunden
     lastModified=new Date(data.timestamp * 1000L)
+
+Verfuegbare Objekte
+===================
+
+Die in Skripten verfuegbaren Objekte variieren je nach Ausfuehrungskontext.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - Kontext
+     - Objekt
+     - Beschreibung
+   * - Alle Kontexte
+     - ``container``
+     - DI-Container. Wird fuer den Zugriff auf Komponenten verwendet
+   * - Geplante Aufgaben
+     - ``executor``
+     - Job-Ausfuehrungssteuerung ( ``JobExecutor`` ). Erforderlich fuer die Unterstuetzung des Jobstopps
+   * - Datenspeicher
+     - (Connector-spezifisch)
+     - Von jedem Datenspeicher bereitgestellte Datensatzvariablen
 
 Geplante Aufgaben-Skripte
 =========================
 
 Beispiele fuer Groovy-Skripte in geplanten Aufgaben.
+In geplanten Aufgaben sind ``container`` und ``executor`` verfuegbar.
+Durch Uebergabe von ``executor`` an die ``execute()``-Methode des Jobs wird die Jobstoppsteuerung aktiviert.
 
 Crawl-Aufgabe ausfuehren
 ------------------------
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
 Bedingtes Crawling
 ------------------
@@ -187,7 +209,7 @@ Bedingtes Crawling
 
     // Nur ausserhalb der Geschaeftszeiten crawlen
     if (hour < 9 || hour >= 18) {
-        return container.getComponent("crawlJob").execute()
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     }
     return "Waehrend der Geschaeftszeiten uebersprungen"
 
@@ -199,10 +221,10 @@ Mehrere Aufgaben nacheinander ausfuehren
     def results = []
 
     // Indexoptimierung
-    results << container.getComponent("suggestJob").execute()
+    results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Crawl ausfuehren
-    results << container.getComponent("crawlJob").execute()
+    results << container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
 
     return results.join("\n")
 

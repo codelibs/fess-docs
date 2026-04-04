@@ -155,18 +155,19 @@ Si le serveur proxy nécessite une authentification, ajoutez ce qui suit.
 Exclusion d'hôtes spécifiques du proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Pour se connecter à des hôtes spécifiques (comme des serveurs intranet) sans passer par le proxy :
+Les paramètres de proxy du crawler ne prennent pas en charge nonProxyHosts.
+Pour exclure des hôtes spécifiques du proxy, utilisez la variable d'environnement ``FESS_NON_PROXY_HOSTS``.
+Ce paramètre est converti en propriété système Java ``http.nonProxyHosts`` et s'applique à toutes les communications HTTP de Fess.
 
 ::
 
-    client.proxyHost=proxy.example.com
-    client.proxyPort=8080
-    client.nonProxyHosts=localhost|*.local|192.168.*
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
 
-Configuration du proxy HTTP à l'échelle du système
+Configuration du proxy par défaut du crawler
 ------------------------------
 
-Pour utiliser un proxy HTTP pour l'ensemble de l'application |Fess|, configurez dans ``fess_config.properties``.
+Pour définir un proxy par défaut lorsque ``client.proxyHost`` n'est pas spécifié dans les configurations de crawl individuelles, configurez dans ``fess_config.properties``.
+Ce paramètre s'applique uniquement aux communications HTTP du crawler. Il ne s'applique pas à l'authentification SSO ni aux connexions d'API externes.
 
 ::
 
@@ -177,6 +178,9 @@ Pour utiliser un proxy HTTP pour l'ensemble de l'application |Fess|, configurez 
 
 .. warning::
    Les mots de passe sont stockés sans chiffrement. Configurez les permissions de fichier appropriées.
+
+.. note::
+   Pour utiliser un proxy pour l'ensemble de l'application Fess (y compris SSO, intégration LLM, etc.), utilisez les variables d'environnement ``FESS_PROXY_HOST`` et ``FESS_PROXY_PORT``. Consultez la section « Configuration du proxy via les variables d'environnement » ci-dessous pour plus de détails.
 
 Configuration du proxy via les variables d'environnement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -193,8 +197,8 @@ Ces variables d'environnement sont converties en propriétés système Java (``h
 Pour les packages RPM, configurez dans ``/etc/sysconfig/fess``. Pour les packages DEB, configurez dans ``/etc/default/fess``.
 
 .. note::
-   Les paramètres ``http.proxy.*`` dans ``fess_config.properties`` sont utilisés pour les communications HTTP au sein de Fess.
-   Si des bibliothèques Java externes telles que l'authentification SSO doivent utiliser un proxy, configurez également les variables d'environnement ci-dessus.
+   Les paramètres ``http.proxy.*`` dans ``fess_config.properties`` sont utilisés comme proxy par défaut du crawler.
+   Pour utiliser un proxy pour l'ensemble de l'application Fess y compris l'authentification SSO et l'intégration LLM, configurez les variables d'environnement ci-dessus.
 
 Configuration de la communication HTTP
 ============

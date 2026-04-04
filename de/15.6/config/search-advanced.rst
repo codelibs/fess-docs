@@ -53,10 +53,10 @@ Bei Standardeinstellung erfolgt bei über 10.000 Treffern folgende Anzeige:
 
     query.track.total.hits=10000
 
-Indexname für Standortsuche
+Feldname für Standortsuche
 =======================
 
-Gibt den Indexnamen für Standortsuche an.
+Gibt den Feldnamen für Standortsuche an.
 Standardwert ist `location`.
 ::
 

@@ -159,8 +159,8 @@ Todos los elementos de configuracion disponibles para el cliente de Gemini. Todo
      - Descripcion
      - Predeterminado
    * - ``rag.llm.gemini.api.key``
-     - Clave API de Google AI
-     - (requerido)
+     - Clave API de Google AI (debe configurarse para usar la API de Gemini)
+     - ``""``
    * - ``rag.llm.gemini.model``
      - Nombre del modelo a usar
      - ``gemini-3-flash-preview``
@@ -179,6 +179,27 @@ Todos los elementos de configuracion disponibles para el cliente de Gemini. Todo
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
      - Numero maximo de documentos relevantes en la evaluacion
      - ``3``
+   * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
+     - Numero maximo de caracteres para la descripcion del documento en la evaluacion
+     - ``500``
+   * - ``rag.llm.gemini.concurrency.wait.timeout``
+     - Tiempo de espera de solicitudes simultaneas (milisegundos)
+     - ``30000``
+   * - ``rag.llm.gemini.history.max.chars``
+     - Numero maximo de caracteres del historial de chat
+     - ``10000``
+   * - ``rag.llm.gemini.intent.history.max.messages``
+     - Numero maximo de mensajes del historial para la determinacion de intencion
+     - ``10``
+   * - ``rag.llm.gemini.intent.history.max.chars``
+     - Numero maximo de caracteres del historial para la determinacion de intencion
+     - ``5000``
+   * - ``rag.llm.gemini.history.assistant.max.chars``
+     - Numero maximo de caracteres del historial del asistente
+     - ``1000``
+   * - ``rag.llm.gemini.history.assistant.summary.max.chars``
+     - Numero maximo de caracteres del resumen del historial del asistente
+     - ``1000``
 
 Configuracion por tipo de prompt
 =================================
@@ -193,6 +214,7 @@ Formato de configuracion
 
     rag.llm.gemini.{promptType}.temperature
     rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.thinking.budget
     rag.llm.gemini.{promptType}.context.max.chars
 
 Tipos de prompt disponibles
@@ -222,6 +244,62 @@ Tipos de prompt disponibles
      - Prompt de generacion de FAQ
    * - ``direct``
      - Prompt de respuesta directa
+   * - ``queryregeneration``
+     - Prompt de regeneracion de consulta
+
+Valores predeterminados por tipo de prompt
+-------------------------------------------
+
+Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuando no se configuran explicitamente.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20
+
+   * - Tipo de prompt
+     - temperature
+     - max.tokens
+     - thinking.budget
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``evaluation``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``256``
+     - ``0``
+   * - ``direct``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``faq``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``answer``
+     - ``0.5``
+     - ``4096``
+     - ``2048``
+   * - ``summary``
+     - ``0.3``
+     - ``4096``
+     - ``2048``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
 
 Ejemplo de configuracion
 ------------------------
@@ -245,7 +323,7 @@ Ejemplo de configuracion
 
 .. note::
    El valor predeterminado de ``context.max.chars`` varia segun el tipo de prompt.
-   ``answer`` y ``summary`` son 16000, ``faq`` es 10000.
+   ``answer`` y ``summary`` son 16000, ``faq`` es 10000, y otros tipos de prompt son 10000.
 
 Soporte de modelo de pensamiento
 ==================================
@@ -253,12 +331,15 @@ Soporte de modelo de pensamiento
 Gemini soporta modelos de pensamiento (Thinking Model).
 Al usar un modelo de pensamiento, el modelo ejecuta un proceso de razonamiento interno antes de generar una respuesta, lo que permite generar respuestas con mayor precision.
 
-El presupuesto de pensamiento se puede configurar en ``fess_config.properties``.
+El presupuesto de pensamiento se puede configurar por tipo de prompt en ``fess_config.properties``.
 
 ::
 
-    # Configuracion del presupuesto de pensamiento
-    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+    # Configuracion del presupuesto de pensamiento para generacion de respuestas
+    rag.llm.gemini.answer.thinking.budget=1024
+
+    # Configuracion del presupuesto de pensamiento para generacion de resumenes
+    rag.llm.gemini.summary.thinking.budget=1024
 
 .. note::
    Al configurar el presupuesto de pensamiento, el tiempo de respuesta puede aumentar.

@@ -149,8 +149,8 @@ Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellunge
      - Beschreibung
      - Standard
    * - ``rag.llm.gemini.api.key``
-     - Google AI API-Schlüssel
-     - (erforderlich)
+     - Google AI API-Schlüssel (muss zur Nutzung der Gemini API gesetzt werden)
+     - ``""``
    * - ``rag.llm.gemini.model``
      - Name des zu verwendenden Modells
      - ``gemini-3-flash-preview``
@@ -169,6 +169,27 @@ Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellunge
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
      - Maximale Anzahl relevanter Dokumente bei der Bewertung
      - ``3``
+   * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
+     - Maximale Zeichenzahl für Dokumentbeschreibung bei der Bewertung
+     - ``500``
+   * - ``rag.llm.gemini.concurrency.wait.timeout``
+     - Wartezeit bei gleichzeitigen Anfragen (Millisekunden)
+     - ``30000``
+   * - ``rag.llm.gemini.history.max.chars``
+     - Maximale Zeichenzahl für Chat-Verlauf
+     - ``10000``
+   * - ``rag.llm.gemini.intent.history.max.messages``
+     - Maximale Anzahl von Verlaufsnachrichten für Absichtserkennung
+     - ``10``
+   * - ``rag.llm.gemini.intent.history.max.chars``
+     - Maximale Verlaufszeichenzahl für Absichtserkennung
+     - ``5000``
+   * - ``rag.llm.gemini.history.assistant.max.chars``
+     - Maximale Zeichenzahl für Assistenten-Verlauf
+     - ``1000``
+   * - ``rag.llm.gemini.history.assistant.summary.max.chars``
+     - Maximale Zeichenzahl für Assistenten-Zusammenfassungsverlauf
+     - ``1000``
 
 Prompttypspezifische Einstellungen
 ===================================
@@ -183,6 +204,7 @@ Konfigurationsformat
 
     rag.llm.gemini.{promptType}.temperature
     rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.thinking.budget
     rag.llm.gemini.{promptType}.context.max.chars
 
 Verfügbare Prompttypen
@@ -212,6 +234,62 @@ Verfügbare Prompttypen
      - Prompt zur FAQ-Generierung
    * - ``direct``
      - Prompt für direkte Antworten
+   * - ``queryregeneration``
+     - Prompt zur Abfrageneugenerierung
+
+Standardwerte pro Prompttyp
+------------------------------
+
+Standardwerte für jeden Prompttyp. Diese Werte werden verwendet, wenn keine explizite Konfiguration vorliegt.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20
+
+   * - Prompttyp
+     - temperature
+     - max.tokens
+     - thinking.budget
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``evaluation``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``256``
+     - ``0``
+   * - ``direct``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``faq``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``answer``
+     - ``0.5``
+     - ``4096``
+     - ``2048``
+   * - ``summary``
+     - ``0.3``
+     - ``4096``
+     - ``2048``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
 
 Konfigurationsbeispiel
 ----------------------
@@ -235,7 +313,7 @@ Konfigurationsbeispiel
 
 .. note::
    Der Standardwert von ``context.max.chars`` variiert je nach Prompttyp.
-   Für ``answer`` und ``summary`` beträgt er 16000, für ``faq`` 10000.
+   Für ``answer`` und ``summary`` beträgt er 16000, für ``faq`` 10000, für andere Prompttypen 10000.
 
 Unterstützung für Thinking-Modelle
 ====================================
@@ -243,12 +321,15 @@ Unterstützung für Thinking-Modelle
 Gemini unterstützt Thinking-Modelle.
 Bei Verwendung von Thinking-Modellen führt das Modell vor der Antwortgenerierung einen internen Denkprozess durch und kann so genauere Antworten liefern.
 
-Das Thinking-Budget kann in ``fess_config.properties`` konfiguriert werden.
+Das Thinking-Budget kann pro Prompttyp in ``fess_config.properties`` konfiguriert werden.
 
 ::
 
-    # Thinking-Budget konfigurieren
-    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+    # Thinking-Budget für die Antwortgenerierung
+    rag.llm.gemini.answer.thinking.budget=1024
+
+    # Thinking-Budget für die Zusammenfassungsgenerierung
+    rag.llm.gemini.summary.thinking.budget=1024
 
 .. note::
    Die Konfiguration des Thinking-Budgets kann die Antwortzeit verlängern.

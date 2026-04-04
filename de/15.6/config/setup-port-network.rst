@@ -150,18 +150,19 @@ Wenn der Proxy-Server eine Authentifizierung erfordert, fügen Sie Folgendes hin
 Ausschluss bestimmter Hosts vom Proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Um bestimmte Hosts (z. B. Server im Intranet) ohne Proxy zu verbinden:
+Die Crawler-Proxy-Einstellungen unterstützen nonProxyHosts nicht.
+Um bestimmte Hosts vom Proxy auszuschließen, verwenden Sie die Umgebungsvariable ``FESS_NON_PROXY_HOSTS``.
+Diese Einstellung wird in die Java-Systemeigenschaft ``http.nonProxyHosts`` umgewandelt und gilt für die gesamte HTTP-Kommunikation von Fess.
 
 ::
 
-    client.proxyHost=proxy.example.com
-    client.proxyPort=8080
-    client.nonProxyHosts=localhost|*.local|192.168.*
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
 
-Systemweite HTTP-Proxy-Konfiguration
+Standard-Proxy-Konfiguration für den Crawler
 ------------------------------
 
-Um einen HTTP-Proxy für die gesamte |Fess|-Anwendung zu verwenden, konfigurieren Sie dies in ``fess_config.properties``.
+Um einen Standard-Proxy festzulegen, wenn ``client.proxyHost`` nicht in den einzelnen Crawl-Konfigurationen angegeben ist, konfigurieren Sie dies in ``fess_config.properties``.
+Diese Einstellung gilt nur für die HTTP-Kommunikation des Crawlers. Sie gilt nicht für SSO-Authentifizierung oder externe API-Verbindungen.
 
 ::
 
@@ -172,6 +173,9 @@ Um einen HTTP-Proxy für die gesamte |Fess|-Anwendung zu verwenden, konfiguriere
 
 .. warning::
    Passwörter werden unverschlüsselt gespeichert. Setzen Sie entsprechende Dateiberechtigungen.
+
+.. note::
+   Um einen Proxy für die gesamte Fess-Anwendung (einschließlich SSO, LLM-Integration usw.) zu verwenden, nutzen Sie die Umgebungsvariablen ``FESS_PROXY_HOST`` und ``FESS_PROXY_PORT``. Weitere Details finden Sie im Abschnitt „Proxy-Konfiguration über Umgebungsvariablen" weiter unten.
 
 Proxy-Konfiguration über Umgebungsvariablen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,8 +192,8 @@ Diese Umgebungsvariablen werden in Java-Systemeigenschaften (``http.proxyHost``,
 Für RPM-Pakete konfigurieren Sie in ``/etc/sysconfig/fess``. Für DEB-Pakete konfigurieren Sie in ``/etc/default/fess``.
 
 .. note::
-   Die ``http.proxy.*``-Einstellungen in ``fess_config.properties`` werden für HTTP-Kommunikation innerhalb von Fess verwendet.
-   Wenn externe Java-Bibliotheken wie SSO-Authentifizierung einen Proxy verwenden müssen, konfigurieren Sie auch die obigen Umgebungsvariablen.
+   Die ``http.proxy.*``-Einstellungen in ``fess_config.properties`` werden als Standard-Proxy für den Crawler verwendet.
+   Um einen Proxy für die gesamte Fess-Anwendung einschließlich SSO-Authentifizierung und LLM-Integration zu verwenden, konfigurieren Sie die obigen Umgebungsvariablen.
 
 HTTP-Kommunikationseinstellungen
 ============

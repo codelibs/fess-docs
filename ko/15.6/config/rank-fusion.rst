@@ -35,7 +35,7 @@ RRF는 각 결과의 순위 역수를 합산하여 스코어를 계산합니다.
     score(d) = Σ 1 / (k + rank(d))
 
 - ``k``: 상수 파라미터 (기본값: 20)
-- ``rank(d)``: 각 검색 결과에서 문서 d의 순위
+- ``rank(d)``: 각 검색 결과에서 문서 d의 순위 (0부터 시작)
 
 설정
 ====
@@ -46,16 +46,26 @@ fess_config.properties
 기본 설정::
 
     # 윈도우 사이즈 (융합 대상 결과 수)
+    # 주의: paging.search.page.max.size × 2 이상이어야 합니다.
+    # 설정값이 이 최소값보다 작으면 최소값이 자동으로 사용됩니다.
     rank.fusion.window_size=200
 
     # RRF의 rank_constant (k 파라미터)
     rank.fusion.rank_constant=20
 
-    # 병렬 처리 스레드 수 (-1은 기본값)
+    # 병렬 처리 스레드 수 (-1의 경우 availableProcessors * 1.5 + 1)
     rank.fusion.threads=-1
 
     # 스코어 필드명
     rank.fusion.score_field=rf_score
+
+JVM 시스템 프로퍼티
+-------------------
+
+다음 프로퍼티는 ``fess.in.sh`` (또는 ``fess.in.bat``) 에서 JVM 옵션으로 설정합니다::
+
+    # 사용할 searcher 지정 (쉼표 구분)
+    -Drank.fusion.searchers=default,semantic
 
 하이브리드 검색과의 연계
 ==========================
@@ -112,7 +122,7 @@ Rank Fusion은 키워드 검색과 시맨틱 검색을 결합한
 
 ::
 
-    # 병렬 실행 스레드 수 (-1은 기본값)
+    # 병렬 실행 스레드 수 (-1의 경우 availableProcessors * 1.5 + 1)
     rank.fusion.threads=-1
 
 문제 해결

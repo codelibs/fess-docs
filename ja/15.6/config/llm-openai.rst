@@ -154,7 +154,7 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
      - 設定場所
    * - ``rag.llm.name``
      - LLMプロバイダー名（``openai`` を指定）
-     - （必須）
+     - ``ollama``
      - system.properties
    * - ``rag.llm.openai.api.key``
      - OpenAI APIキー
@@ -184,6 +184,38 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
      - 評価時の最大関連ドキュメント数
      - ``3``
      - fess_config.properties
+   * - ``rag.llm.openai.concurrency.wait.timeout``
+     - 同時リクエスト待機タイムアウト（ミリ秒）
+     - ``30000``
+     - fess_config.properties
+   * - ``rag.llm.openai.reasoning.token.multiplier``
+     - 推論モデル使用時のmax_tokens倍率
+     - ``4``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.max.chars``
+     - 会話履歴の最大文字数
+     - ``8000``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.messages``
+     - 意図判定時の最大履歴メッセージ数
+     - ``8``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.chars``
+     - 意図判定時の最大履歴文字数
+     - ``4000``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.max.chars``
+     - アシスタントメッセージの最大文字数
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.summary.max.chars``
+     - アシスタント要約の最大文字数
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.chat.evaluation.description.max.chars``
+     - 評価時のドキュメント説明最大文字数
+     - ``500``
+     - fess_config.properties
    * - ``rag.chat.enabled``
      - AI検索モード機能の有効化
      - ``false``
@@ -199,9 +231,9 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
 
 プロンプトタイプ別の設定は以下のパターンで指定します:
 
-- ``rag.llm.openai.{promptType}.temperature`` - 生成のランダム性（0.0〜2.0）
+- ``rag.llm.openai.{promptType}.temperature`` - 生成のランダム性（0.0〜2.0）。推論モデル（o1/o3/o4/gpt-5系）では無視されます
 - ``rag.llm.openai.{promptType}.max.tokens`` - 最大トークン数
-- ``rag.llm.openai.{promptType}.context.max.chars`` - コンテキストの最大文字数
+- ``rag.llm.openai.{promptType}.context.max.chars`` - コンテキストの最大文字数（デフォルト: answer/summaryは ``16000`` 、その他は ``10000`` ）
 
 プロンプトタイプ
 ----------------
@@ -232,6 +264,62 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
      - FAQを生成するプロンプト
    * - ``direct``
      - 直接応答するプロンプト
+   * - ``queryregeneration``
+     - 検索クエリを再生成するプロンプト
+
+デフォルト値
+------------
+
+各プロンプトタイプのデフォルト値は以下の通りです。推論モデル（o1/o3/o4/gpt-5系）ではtemperatureの設定は無視されます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 20 35
+
+   * - プロンプトタイプ
+     - Temperature
+     - Max Tokens
+     - 備考
+   * - ``intent``
+     - 0.1
+     - 256
+     - 意図判定は決定的に
+   * - ``evaluation``
+     - 0.1
+     - 256
+     - 関連性評価は決定的に
+   * - ``unclear``
+     - 0.7
+     - 512
+     -
+   * - ``noresults``
+     - 0.7
+     - 512
+     -
+   * - ``docnotfound``
+     - 0.7
+     - 256
+     -
+   * - ``direct``
+     - 0.7
+     - 1024
+     -
+   * - ``faq``
+     - 0.7
+     - 1024
+     -
+   * - ``answer``
+     - 0.5
+     - 2048
+     - メイン回答生成
+   * - ``summary``
+     - 0.3
+     - 2048
+     - 要約生成
+   * - ``queryregeneration``
+     - 0.3
+     - 256
+     - クエリ再生成
 
 設定例
 ------
@@ -255,6 +343,9 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
 
 o1/o3/o4系やgpt-5系の推論モデルを使用する場合、|Fess| は自動的にOpenAI APIの ``max_completion_tokens`` パラメータを ``max_tokens`` の代わりに使用します。追加の設定変更は不要です。
 
+.. note::
+   推論モデル（o1/o3/o4/gpt-5系）では ``temperature`` の設定は無視され、固定値（1）が使用されます。また、推論モデル使用時はデフォルトの ``max_tokens`` が ``reasoning.token.multiplier``（デフォルト: 4）倍に増加されます。
+
 推論モデル向け追加パラメータ
 ----------------------------
 
@@ -269,7 +360,7 @@ o1/o3/o4系やgpt-5系の推論モデルを使用する場合、|Fess| は自動
      - デフォルト
    * - ``rag.llm.openai.{promptType}.reasoning.effort``
      - o系モデルの推論effort設定（``low``、``medium``、``high``）
-     - （未設定）
+     - ``low``（intent/evaluation/docnotfound/unclear/noresults/queryregeneration）、未設定（その他）
    * - ``rag.llm.openai.{promptType}.top.p``
      - トークン選択の確率閾値（0.0〜1.0）
      - （未設定）

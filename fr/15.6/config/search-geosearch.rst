@@ -128,15 +128,6 @@ Pour rechercher dans un rayon de 1 km autour de la position actuelle de l'utilis
 
     http://localhost:8080/search?q=ramen&geo.location.point=35.681236,139.767125&geo.location.distance=1km
 
-Tri par distance
-----------------
-
-Pour trier les résultats de recherche par ordre de distance, utilisez le paramètre ``sort``.
-
-::
-
-    http://localhost:8080/search?q=magasin&geo.location.point=35.681236,139.767125&geo.location.distance=5km&sort=location.distance
-
 Utilisation avec l'API
 -----------
 
@@ -226,7 +217,7 @@ Optimisation de la configuration de l'index
 
 Lors du traitement de grandes quantités de données de géolocalisation, optimisez la configuration de l'index.
 
-Vérifiez la configuration du champ de géolocalisation dans ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
+Le champ de geolocalisation est defini dans le code source a ``src/main/resources/fess_indices/fess/doc.json``.
 
 ::
 

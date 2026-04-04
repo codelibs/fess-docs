@@ -35,7 +35,7 @@ Formula::
     score(d) = Σ 1 / (k + rank(d))
 
 - ``k``: Rank constant parameter (default: 20)
-- ``rank(d)``: Rank of document d in each search result
+- ``rank(d)``: Rank of document d in each search result (0-based)
 
 Settings
 ========
@@ -46,12 +46,14 @@ fess_config.properties
 Configuration properties::
 
     # Window size for rank fusion
+    # Note: Must be >= paging.search.page.max.size × 2.
+    # If the value is below this minimum, the minimum is used automatically.
     rank.fusion.window_size=200
 
     # Rank constant (k parameter for RRF)
     rank.fusion.rank_constant=20
 
-    # Number of threads (-1 for auto)
+    # Number of threads (-1 means availableProcessors * 1.5 + 1)
     rank.fusion.threads=-1
 
     # Score field name in results
@@ -72,10 +74,18 @@ Configuration properties::
      - The k constant in the RRF formula; controls how much weight is given to lower-ranked results
    * - ``rank.fusion.threads``
      - ``-1``
-     - Number of threads for parallel execution (-1 for automatic)
+     - Number of threads for parallel execution (-1 means availableProcessors * 1.5 + 1)
    * - ``rank.fusion.score_field``
      - ``rf_score``
      - Field name used to store the computed rank fusion score
+
+JVM System Properties
+---------------------
+
+The following properties are set as JVM options in ``fess.in.sh`` (or ``fess.in.bat``)::
+
+    # Specify searchers (comma-separated)
+    -Drank.fusion.searchers=default,semantic
 
 Usage Examples
 ==============
@@ -108,7 +118,7 @@ Performance Considerations
 ===========================
 
 - Adjust ``rank.fusion.window_size`` to balance quality and speed; larger values consider more candidates but use more memory
-- Set ``rank.fusion.threads`` to control parallelism; ``-1`` automatically determines the thread count
+- Set ``rank.fusion.threads`` to control parallelism; ``-1`` means availableProcessors * 1.5 + 1
 - Memory usage increases with larger window sizes as more search results are retained
 
 Troubleshooting

@@ -53,10 +53,10 @@ De forma predeterminada, cuando hay más de 10,000 resultados, se muestra de la 
 
     query.track.total.hits=10000
 
-Nombre del Índice para Búsqueda Geoespacial
+Nombre del Campo para Búsqueda Geoespacial
 ============================================
 
-Especifica el nombre del índice para búsquedas geoespaciales.
+Especifica el nombre del campo para búsquedas geoespaciales.
 El valor predeterminado es `location`.
 ::
 

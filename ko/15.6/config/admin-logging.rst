@@ -24,10 +24,16 @@
      - 내용
    * - ``fess.log``
      - 관리 화면이나 검색 화면에서의 작업 로그, 애플리케이션 오류, 시스템 이벤트
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - 크롤 실행 시의 로그, 크롤 대상 URL, 취득한 문서 정보, 오류
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - 제안(검색 후보) 생성 시의 로그, 인덱스 업데이트 정보
+   * - ``fess-llm.log``
+     - LLM/RAG 채팅 관련 로그
+   * - ``searchlog.log``
+     - 검색 로그
+   * - ``fess-urls.log``
+     - 크롤러 URL 통계 로그(크롤 프로세스에서 출력)
    * - ``server_?.log``
      - Tomcat 등 애플리케이션 서버의 시스템 로그
    * - ``audit.log``
@@ -56,7 +62,7 @@
 1. **오류 유형 식별**
 
    - 애플리케이션 오류 → ``fess.log``
-   - 크롤 오류 → ``fess_crawler.log``
+   - 크롤 오류 → ``fess-crawler.log``
    - 인증 오류 → ``audit.log``
    - 서버 오류 → ``server_?.log``
 
@@ -142,7 +148,9 @@
 4. "업데이트" 버튼을 클릭합니다.
 
 .. note::
-   관리 화면에서의 변경은 |Fess| 재시작 후에도 유지됩니다.
+   관리 화면에서의 로그 레벨 변경은 실행 중인 인스턴스에만 반영됩니다.
+   재시작 후에는 ``fess.in.sh`` 의 ``FESS_LOG_LEVEL`` 설정값으로 돌아갑니다.
+   영구적으로 변경하려면 ``fess.in.sh`` 의 ``FESS_LOG_LEVEL`` 을 편집하십시오.
 
 설정 파일을 통한 변경
 ----------------------
@@ -153,7 +161,7 @@
 ~~~~~~~~~~~~~~~~~~
 
 - **Zip 설치**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEB 패키지**: ``/etc/fess/log4j2.xml``
+- **RPM/DEB 패키지**: ``/usr/share/fess/lib/classes/log4j2.xml``
 
 기본 설정 예
 ~~~~~~~~~~~~~~
@@ -186,26 +194,29 @@
 ~~~~~~~~~~~~~~~~~~
 
 시스템 시작 시 로그 레벨을 지정할 수도 있습니다.
+``fess.in.sh`` (Windows의 경우 ``fess.in.bat``)에서 ``FESS_LOG_LEVEL`` 을 설정합니다.
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
+    FESS_LOG_LEVEL=debug
+
+기본값은 ``warn`` 입니다.
 
 크롤러 로그 설정
 ====================
 
 크롤러 로그는 기본적으로 ``INFO`` 레벨로 출력됩니다.
 
-관리 화면에서 설정
-----------------
+스케줄러에서 설정
+------------------
 
-1. 관리 화면의 "크롤러" 메뉴에서 대상 크롤 설정을 엽니다.
-2. "설정" 탭에서 "스크립트"를 선택합니다.
-3. 스크립트 란에 다음을 추가합니다.
+1. 관리 화면의 "시스템" 메뉴에서 "스케줄러"를 선택합니다.
+2. 대상 크롤 작업(예: Default Crawler)을 엽니다.
+3. 스크립트 내의 ``.logLevel("info")`` 을 원하는 레벨로 변경합니다.
 
 ::
 
-    logLevel("DEBUG")
+    return container.getComponent("crawlJob").logLevel("DEBUG")...
 
 설정 가능한 값:
 
@@ -215,15 +226,6 @@
 - ``INFO``
 - ``DEBUG``
 - ``TRACE``
-
-특정 URL 패턴만 로그 레벨 변경
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    if (url.contains("example.com")) {
-        logLevel("DEBUG")
-    }
 
 로그 로테이션
 ==================
@@ -249,13 +251,20 @@ Log4j2를 통한 자동 로테이션
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
-            <SizeBasedTriggeringPolicy size="100MB"/>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 일일 로테이션 설정
@@ -266,8 +275,8 @@ Log4j2를 통한 자동 로테이션
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -283,8 +292,8 @@ Log4j2를 통한 자동 로테이션
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}.gz">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -543,7 +552,7 @@ JSON 형식으로 로그 출력
    ::
 
        # 설정 파일 구문 검사
-       xmllint --noout /etc/fess/log4j2.xml
+       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
 
 4. **SELinux 확인**
 
@@ -566,7 +575,7 @@ JSON 형식으로 로그 출력
    ::
 
        # log4j2.xml 설정 확인
-       grep -A 5 "RollingFile" /etc/fess/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
 
 3. **불필요한 로그 출력 비활성화**
 
@@ -594,7 +603,7 @@ JSON 형식으로 로그 출력
 
    ::
 
-       grep "org.codelibs" /etc/fess/log4j2.xml
+       grep "org.codelibs" /usr/share/fess/lib/classes/log4j2.xml
 
 2. **로그 파일 경로 확인**
 

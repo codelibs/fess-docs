@@ -240,12 +240,10 @@ CSV 파일(products.csv):
 
 ::
 
-    if (data.in_stock == "true") {
-        url="https://shop.example.com/product/" + data.product_id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    url=data.in_stock == "true" ? "https://shop.example.com/product/" + data.product_id : null
+    title=data.in_stock == "true" ? data.name : null
+    content=data.in_stock == "true" ? data.description : null
+    price=data.in_stock == "true" ? data.price : null
 
 직원 명부 CSV
 -------------
@@ -522,7 +520,7 @@ RFC 4180 형식에서는 인용 부호로 감싸면 줄바꿈을 포함하는 �
     url="https://example.com/product/" + data.id
     title=data.name
     content=data.description
-    price=parseInt(data.price)
+    price=Integer.parseInt(data.price)
     category=data.category.toLowerCase()
 
 조건부 인덱싱
@@ -531,12 +529,10 @@ RFC 4180 형식에서는 인용 부호로 감싸면 줄바꿈을 포함하는 �
 ::
 
     # 가격이 10000 이상인 상품만
-    if (parseInt(data.price) >= 10000) {
-        url="https://example.com/product/" + data.id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    url=Integer.parseInt(data.price) >= 10000 ? "https://example.com/product/" + data.id : null
+    title=Integer.parseInt(data.price) >= 10000 ? data.name : null
+    content=Integer.parseInt(data.price) >= 10000 ? data.description : null
+    price=Integer.parseInt(data.price) >= 10000 ? data.price : null
 
 복수 열 결합
 ------------

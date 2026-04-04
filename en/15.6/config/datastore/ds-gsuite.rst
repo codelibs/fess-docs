@@ -212,7 +212,7 @@ Access https://admin.google.com/:
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. Click "Authorize"
 
@@ -343,7 +343,7 @@ Authentication Error
 2. Verify Google Drive API is enabled
 3. Verify domain-wide delegation is configured
 4. Verify authorization in Google Workspace admin console
-5. Verify OAuth scope is correct (``https://www.googleapis.com/auth/drive.readonly``)
+5. Verify OAuth scope is correct (``https://www.googleapis.com/auth/drive``)
 
 Domain-wide Delegation Error
 ----------------------------
@@ -355,7 +355,7 @@ Domain-wide Delegation Error
 1. Verify authorization in Google Workspace admin console:
 
    - Is the Client ID registered correctly?
-   - Is the OAuth scope correct? (``https://www.googleapis.com/auth/drive.readonly``)
+   - Is the OAuth scope correct? (``https://www.googleapis.com/auth/drive``)
 
 2. Verify domain-wide delegation is enabled for the service account
 

@@ -53,10 +53,10 @@ By default, when there are more than 10,000 hits, it displays as follows:
 
     query.track.total.hits=10000
 
-Index Name for Geolocation Search
+Field Name for Geolocation Search
 ==================================
 
-Specifies the index name for geolocation search.
+Specifies the field name for geolocation search.
 The default is ``location``.
 ::
 

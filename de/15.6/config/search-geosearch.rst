@@ -128,15 +128,6 @@ Suche innerhalb 1 km vom aktuellen Standort des Benutzers:
 
     http://localhost:8080/search?q=Ramen&geo.location.point=35.681236,139.767125&geo.location.distance=1km
 
-Sortierung nach Entfernung
-----------------
-
-Um Suchergebnisse nach Entfernung zu sortieren, verwenden Sie den ``sort``-Parameter.
-
-::
-
-    http://localhost:8080/search?q=Convenience&geo.location.point=35.681236,139.767125&geo.location.distance=5km&sort=location.distance
-
 Verwendung in API
 -----------
 
@@ -226,7 +217,7 @@ Optimierung der Indexeinstellungen
 
 Bei Umgang mit großen Mengen an Standortdaten optimieren Sie Indexeinstellungen.
 
-Überprüfen Sie Standortfeld-Einstellungen in ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
+Das Standortfeld ist im Quellcode unter ``src/main/resources/fess_indices/fess/doc.json`` definiert.
 
 ::
 

@@ -68,7 +68,7 @@ Agregar Configuración Básica de Rastreo
 
    - **Nombre**: Nombre de identificación de la configuración de rastreo (ej: Wiki Corporativo)
    - **URL**: URL de inicio del rastreo (ej: ``https://wiki.example.com/``)
-   - **Intervalo de Rastreo**: Frecuencia de ejecución del rastreo (ej: cada 1 hora)
+   - **Intervalo**: Intervalo de acceso por URL en milisegundos (ej: 10000)
    - **Número de Hilos**: Número de rastreos paralelos (ej: 5)
    - **Profundidad**: Profundidad de niveles de enlaces a seguir (ej: 3)
 
@@ -192,7 +192,7 @@ Para verificar el estado del rastreo en ejecución:
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       La ruta anterior es para instalaciones de paquetes RPM/DEB. Para implementaciones zip/tar.gz, los registros se encuentran en el directorio ``logs/``.
@@ -431,9 +431,12 @@ Agregue lo siguiente a "Parámetros de Configuración" en la configuración de r
 
 **Excluir hosts específicos del proxy:**
 
+Los hosts a excluir del proxy no se configuran en los parámetros de configuración de rastreo, sino mediante propiedades del sistema JVM.
+Configure la variable de entorno ``FESS_NON_PROXY_HOSTS`` en ``fess.in.sh`` (Linux/Mac) o ``fess.in.bat`` (Windows).
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 Configuración de Proxy para Todo el Sistema
 --------------------------------------------
@@ -524,7 +527,7 @@ El Rastreo No Inicia
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 El Rastreo se Detiene a Mitad
 ------------------------------
@@ -533,7 +536,7 @@ El Rastreo se Detiene a Mitad
 
 1. **Falta de memoria**
 
-   - Verificar si hay ``OutOfMemoryError`` en ``fess_crawler.log``
+   - Verificar si hay ``OutOfMemoryError`` en ``fess-crawler.log``
    - Aumentar la memoria del rastreador (ver :doc:`setup-memory`)
 
 2. **Error de red**

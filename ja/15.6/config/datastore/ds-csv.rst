@@ -93,8 +93,8 @@ CSVコネクタは、CSVファイルからデータを取得して
      - 必須
      - 説明
    * - ``files``
-     - はい
-     - CSVファイルのパス（ローカル、複数指定可：カンマ区切り）
+     - いいえ
+     - CSVファイルのパス（ローカル、複数指定可：カンマ区切り）。 ``files`` または ``directories`` のいずれかの指定が必要です。両方指定した場合は ``files`` が優先されます。
    * - ``file_encoding``
      - いいえ
      - 文字エンコーディング（デフォルト: UTF-8）
@@ -109,7 +109,7 @@ CSVコネクタは、CSVファイルからデータを取得して
      - 引用符（デフォルト: ダブルクォート ``"``）
    * - ``directories``
      - いいえ
-     - CSVファイルを含むディレクトリのパス
+     - CSVファイルを含むディレクトリのパス（複数指定可：カンマ区切り）。ディレクトリ内の ``.csv`` および ``.tsv`` ファイルのみが対象となります。 ``files`` が指定されていない場合に使用されます。
    * - ``escape_character``
      - いいえ
      - エスケープ文字（デフォルト: バックスラッシュ ``\``）
@@ -268,12 +268,10 @@ CSVファイル（products.csv）:
 
 ::
 
-    if (data.in_stock == "true") {
-        url="https://shop.example.com/product/" + data.product_id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    url=data.in_stock == "true" ? "https://shop.example.com/product/" + data.product_id : null
+    title=data.in_stock == "true" ? data.name : null
+    content=data.in_stock == "true" ? data.description : null
+    price=data.in_stock == "true" ? data.price : null
 
 社員名簿のCSV
 -------------
@@ -523,6 +521,50 @@ RFC 4180形式では、引用符で囲むことで改行を含むフィールド
     separator_character=,
     quote_character="
 
+CsvListDataStore
+=================
+
+``fess-ds-csv`` プラグインには、 ``CsvDataStore`` に加えて ``CsvListDataStore`` ハンドラも含まれています。
+
+``CsvListDataStore`` は ``CsvDataStore`` を拡張し、以下の追加機能を提供します:
+
+- マルチスレッド処理（ ``num_of_threads`` パラメーターで制御）
+- 処理済みCSVファイルの自動削除
+- タイムスタンプベースのファイルフィルタリング（書き込み中のファイルをスキップ）
+
+基本設定
+--------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - 項目
+     - 設定例
+   * - ハンドラ名
+     - CsvListDataStore
+
+追加パラメーター
+----------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - パラメーター
+     - 必須
+     - 説明
+   * - ``timestamp_margin``
+     - いいえ
+     - ファイルの最終更新時刻からの経過時間（ミリ秒）。この時間が経過していないファイルはスキップされます（デフォルト: 10000）
+   * - ``num_of_threads``
+     - いいえ
+     - 処理スレッド数（デフォルト: 1）
+
+.. note::
+
+   ``CsvListDataStore`` は処理完了後にCSVファイルを自動的に削除します。処理中にエラーが発生した場合、ファイルは ``.txt`` にリネームされます。
+
 スクリプトの高度な使用例
 ========================
 
@@ -534,7 +576,7 @@ RFC 4180形式では、引用符で囲むことで改行を含むフィールド
     url="https://example.com/product/" + data.id
     title=data.name
     content=data.description
-    price=parseInt(data.price)
+    price=Integer.parseInt(data.price)
     category=data.category.toLowerCase()
 
 条件付きインデックス
@@ -542,13 +584,11 @@ RFC 4180形式では、引用符で囲むことで改行を含むフィールド
 
 ::
 
-    # 価格が10000以上の商品のみ
-    if (parseInt(data.price) >= 10000) {
-        url="https://example.com/product/" + data.id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    # 価格が10000以上の商品のみインデックス
+    url=Integer.parseInt(data.price) >= 10000 ? "https://example.com/product/" + data.id : null
+    title=Integer.parseInt(data.price) >= 10000 ? data.name : null
+    content=Integer.parseInt(data.price) >= 10000 ? data.description : null
+    price=Integer.parseInt(data.price) >= 10000 ? data.price : null
 
 複数列の結合
 ------------

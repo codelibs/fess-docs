@@ -35,7 +35,7 @@ Formel::
     score(d) = Σ 1 / (k + rank(d))
 
 - ``k``: Konstanter Parameter (Standard: 20)
-- ``rank(d)``: Rang des Dokuments d in jedem Suchergebnis
+- ``rank(d)``: Rang des Dokuments d in jedem Suchergebnis (0-basiert)
 
 Einstellungen
 ==============
@@ -46,16 +46,26 @@ fess_config.properties
 Grundeinstellungen::
 
     # Fenstergröße (Anzahl der Ergebnisse für die Fusion)
+    # Hinweis: Muss >= paging.search.page.max.size × 2 sein.
+    # Wenn der Wert unter diesem Minimum liegt, wird das Minimum automatisch verwendet.
     rank.fusion.window_size=200
 
     # RRF rank_constant (k-Parameter)
     rank.fusion.rank_constant=20
 
-    # Anzahl der Threads für parallele Verarbeitung (-1 ist Standard)
+    # Anzahl der Threads für parallele Verarbeitung (-1 bedeutet availableProcessors * 1.5 + 1)
     rank.fusion.threads=-1
 
     # Name des Score-Felds
     rank.fusion.score_field=rf_score
+
+JVM-Systemeigenschaften
+-----------------------
+
+Die folgenden Eigenschaften werden als JVM-Optionen in ``fess.in.sh`` (oder ``fess.in.bat``) festgelegt::
+
+    # Verwendete Searcher angeben (kommagetrennt)
+    -Drank.fusion.searchers=default,semantic
 
 Integration mit Hybridsuche
 ============================
@@ -112,7 +122,7 @@ Verarbeitungszeit
 
 ::
 
-    # Anzahl der Threads für parallele Ausführung (-1 ist Standard)
+    # Anzahl der Threads für parallele Ausführung (-1 bedeutet availableProcessors * 1.5 + 1)
     rank.fusion.threads=-1
 
 Fehlersuche

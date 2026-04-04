@@ -211,7 +211,7 @@ Besuchen Sie https://admin.google.com/:
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. Klicken Sie auf "Autorisieren"
 
@@ -342,7 +342,7 @@ Authentifizierungsfehler
 2. Überprüfen Sie, ob die Google Drive API aktiviert ist
 3. Überprüfen Sie, ob die Domain-weite Delegierung konfiguriert ist
 4. Überprüfen Sie, ob die Genehmigung in der Google Workspace Admin-Konsole erteilt wurde
-5. Überprüfen Sie den OAuth-Bereich (``https://www.googleapis.com/auth/drive.readonly``)
+5. Überprüfen Sie den OAuth-Bereich (``https://www.googleapis.com/auth/drive``)
 
 Fehler bei Domain-weiter Delegierung
 ------------------------------------
@@ -354,7 +354,7 @@ Fehler bei Domain-weiter Delegierung
 1. Überprüfen Sie die Genehmigung in der Google Workspace Admin-Konsole:
 
    - Ist die Client-ID korrekt registriert?
-   - Ist der OAuth-Bereich korrekt (``https://www.googleapis.com/auth/drive.readonly``)?
+   - Ist der OAuth-Bereich korrekt (``https://www.googleapis.com/auth/drive``)?
 
 2. Überprüfen Sie, ob die Domain-weite Delegierung beim Dienstkonto aktiviert ist
 

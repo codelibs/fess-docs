@@ -154,7 +154,7 @@ Alle verfügbaren Einstellungselemente für den OpenAI-Client.
      - Konfigurationsort
    * - ``rag.llm.name``
      - Name des LLM-Anbieters (``openai`` angeben)
-     - (erforderlich)
+     - ``ollama``
      - system.properties
    * - ``rag.llm.openai.api.key``
      - OpenAI API-Schlüssel
@@ -184,6 +184,38 @@ Alle verfügbaren Einstellungselemente für den OpenAI-Client.
      - Maximale Anzahl relevanter Dokumente bei der Bewertung
      - ``3``
      - fess_config.properties
+   * - ``rag.llm.openai.concurrency.wait.timeout``
+     - Timeout fuer gleichzeitige Anfragewartung (ms)
+     - ``30000``
+     - fess_config.properties
+   * - ``rag.llm.openai.reasoning.token.multiplier``
+     - Max-Tokens-Multiplikator fuer Reasoning-Modelle
+     - ``4``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.max.chars``
+     - Maximale Zeichenzahl fuer Konversationsverlauf
+     - ``8000``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.messages``
+     - Maximale Verlaufsnachrichten fuer Absichtserkennung
+     - ``8``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.chars``
+     - Maximale Verlaufszeichen fuer Absichtserkennung
+     - ``4000``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.max.chars``
+     - Maximale Zeichenzahl fuer Assistenznachrichten
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.summary.max.chars``
+     - Maximale Zeichenzahl fuer Assistenzzusammenfassung
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.chat.evaluation.description.max.chars``
+     - Maximale Zeichenzahl fuer Dokumentbeschreibung bei der Bewertung
+     - ``500``
+     - fess_config.properties
    * - ``rag.chat.enabled``
      - AI-Suchmodus-Funktion aktivieren
      - ``false``
@@ -199,9 +231,9 @@ Konfigurationsmuster
 
 Prompttypspezifische Einstellungen werden nach folgendem Muster angegeben:
 
-- ``rag.llm.openai.{promptType}.temperature`` - Zufälligkeit der Generierung (0.0-2.0)
+- ``rag.llm.openai.{promptType}.temperature`` - Zufaelligkeit der Generierung (0.0-2.0). Wird bei Reasoning-Modellen (o1/o3/o4/gpt-5-Serie) ignoriert
 - ``rag.llm.openai.{promptType}.max.tokens`` - Maximale Token-Anzahl
-- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximale Zeichenzahl des Kontexts
+- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximale Zeichenzahl des Kontexts (Standard: ``16000`` fuer answer/summary, ``10000`` fuer andere)
 
 Prompttypen
 -----------
@@ -231,7 +263,63 @@ Verfügbare Prompttypen:
    * - ``faq``
      - Prompt zur FAQ-Generierung
    * - ``direct``
-     - Prompt für direkte Antworten
+     - Prompt fuer direkte Antworten
+   * - ``queryregeneration``
+     - Prompt zur Neugenerierung von Suchanfragen
+
+Standardwerte
+-------------
+
+Standardwerte fuer jeden Prompttyp. Die Temperatureinstellung wird bei Reasoning-Modellen (o1/o3/o4/gpt-5-Serie) ignoriert.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 20 35
+
+   * - Prompttyp
+     - Temperature
+     - Max Tokens
+     - Hinweise
+   * - ``intent``
+     - 0.1
+     - 256
+     - Deterministische Absichtserkennung
+   * - ``evaluation``
+     - 0.1
+     - 256
+     - Deterministische Relevanzbewertung
+   * - ``unclear``
+     - 0.7
+     - 512
+     -
+   * - ``noresults``
+     - 0.7
+     - 512
+     -
+   * - ``docnotfound``
+     - 0.7
+     - 256
+     -
+   * - ``direct``
+     - 0.7
+     - 1024
+     -
+   * - ``faq``
+     - 0.7
+     - 1024
+     -
+   * - ``answer``
+     - 0.5
+     - 2048
+     - Hauptantwortgenerierung
+   * - ``summary``
+     - 0.3
+     - 2048
+     - Zusammenfassungsgenerierung
+   * - ``queryregeneration``
+     - 0.3
+     - 256
+     - Suchanfrageneugenerierung
 
 Konfigurationsbeispiel
 ----------------------
@@ -253,9 +341,12 @@ Konfigurationsbeispiel
 Unterstützung für Reasoning-Modelle
 =====================================
 
-Bei Verwendung von Reasoning-Modellen der o1/o3/o4-Serie oder der gpt-5-Serie verwendet |Fess| automatisch den OpenAI-API-Parameter ``max_completion_tokens`` anstelle von ``max_tokens``. Keine zusätzlichen Konfigurationsänderungen sind erforderlich.
+Bei Verwendung von Reasoning-Modellen der o1/o3/o4-Serie oder der gpt-5-Serie verwendet |Fess| automatisch den OpenAI-API-Parameter ``max_completion_tokens`` anstelle von ``max_tokens``. Keine zusaetzlichen Konfigurationsaenderungen sind erforderlich.
 
-Zusätzliche Parameter für Reasoning-Modelle
+.. note::
+   Reasoning-Modelle (o1/o3/o4/gpt-5-Serie) ignorieren die ``temperature``-Einstellung und verwenden einen festen Wert (1). Ausserdem wird bei Reasoning-Modellen der Standard-``max_tokens`` mit ``reasoning.token.multiplier`` (Standard: 4) multipliziert.
+
+Zusaetzliche Parameter fuer Reasoning-Modelle
 --------------------------------------------
 
 Bei Verwendung von Reasoning-Modellen können folgende zusätzliche Parameter in ``fess_config.properties`` konfiguriert werden:
@@ -267,18 +358,20 @@ Bei Verwendung von Reasoning-Modellen können folgende zusätzliche Parameter in
    * - Eigenschaft
      - Beschreibung
      - Standard
-   * - ``rag.llm.openai.reasoning.effort``
-     - Reasoning-Effort-Einstellung für o-Modelle (``low``, ``medium``, ``high``)
+   * - ``rag.llm.openai.{promptType}.reasoning.effort``
+     - Reasoning-Effort-Einstellung fuer o-Modelle (``low``, ``medium``, ``high``)
+     - ``low`` (intent/evaluation/docnotfound/unclear/noresults/queryregeneration), nicht gesetzt (andere)
+   * - ``rag.llm.openai.{promptType}.top.p``
+     - Wahrscheinlichkeitsschwelle fuer die Token-Auswahl (0.0-1.0)
      - (nicht gesetzt)
-   * - ``rag.llm.openai.top.p``
-     - Wahrscheinlichkeitsschwelle für die Token-Auswahl (0.0-1.0)
+   * - ``rag.llm.openai.{promptType}.frequency.penalty``
+     - Haeufigkeitsstrafe (-2.0-2.0)
      - (nicht gesetzt)
-   * - ``rag.llm.openai.frequency.penalty``
-     - Häufigkeitsstrafe (-2.0-2.0)
-     - (nicht gesetzt)
-   * - ``rag.llm.openai.presence.penalty``
+   * - ``rag.llm.openai.{promptType}.presence.penalty``
      - Anwesenheitsstrafe (-2.0-2.0)
      - (nicht gesetzt)
+
+``{promptType}`` kann ``intent``, ``evaluation``, ``answer``, ``summary`` usw. sein.
 
 Konfigurationsbeispiel
 ----------------------

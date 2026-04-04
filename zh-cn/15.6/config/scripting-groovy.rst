@@ -155,25 +155,47 @@ URL生成
 
 ::
 
-    // 解析日期
-    import java.text.SimpleDateFormat
-    def sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-    lastModified=sdf.parse(data.date_string)
+    // 解析日期（使用FQCN的单一表达式）
+    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // 从epoch秒转换
     lastModified=new Date(data.timestamp * 1000L)
+
+可用对象
+========
+
+脚本中可用的对象因执行上下文而异。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - 上下文
+     - 对象
+     - 说明
+   * - 所有上下文
+     - ``container``
+     - DI容器。用于访问组件
+   * - 计划任务
+     - ``executor``
+     - 任务执行控制（ ``JobExecutor`` ）。任务停止支持所必需
+   * - 数据存储
+     - （连接器特定）
+     - 各数据存储提供的数据记录变量
 
 计划任务脚本
 ============================
 
 计划任务中使用的Groovy脚本示例。
+在计划任务中，``container`` 和 ``executor`` 可用。
+将 ``executor`` 传递给任务的 ``execute()`` 方法可启用任务停止控制。
 
 执行爬取任务
 --------------------
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
 条件爬取
 ----------------
@@ -187,7 +209,7 @@ URL生成
 
     // 仅在非工作时间爬取
     if (hour < 9 || hour >= 18) {
-        return container.getComponent("crawlJob").execute()
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     }
     return "Skipped during business hours"
 
@@ -199,10 +221,10 @@ URL生成
     def results = []
 
     // 索引优化
-    results << container.getComponent("suggestJob").execute()
+    results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // 执行爬取
-    results << container.getComponent("crawlJob").execute()
+    results << container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
 
     return results.join("\n")
 

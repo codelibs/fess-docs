@@ -111,15 +111,24 @@ Microsoft 365コネクタは、Microsoft 365サービス（OneDrive、OneNote、
    * - ``ignore_error``
      - いいえ
      - エラー時も処理を継続（デフォルト: false）
-   * - ``include_pattern``
+   * - ``max_content_length``
      - いいえ
-     - 含めるコンテンツの正規表現パターン
-   * - ``exclude_pattern``
+     - 取得コンテンツの最大サイズ（デフォルト: -1、無制限）
+   * - ``cache_size``
      - いいえ
-     - 除外するコンテンツの正規表現パターン
-   * - ``default_permissions``
+     - ユーザー・グループ情報のキャッシュサイズ（デフォルト: 10000）
+   * - ``proxy_host``
      - いいえ
-     - デフォルトロール割り当て
+     - HTTPプロキシホスト
+   * - ``proxy_port``
+     - いいえ
+     - HTTPプロキシポート
+   * - ``proxy_username``
+     - いいえ
+     - プロキシ認証ユーザー名
+   * - ``proxy_password``
+     - いいえ
+     - プロキシ認証パスワード
 
 Azure ADアプリケーション登録
 ============================
@@ -246,6 +255,9 @@ OneDrive
 - ``file.last_modified`` - 最終更新日時
 - ``file.size`` - ファイルサイズ
 - ``file.web_url`` - ブラウザで開くURL
+- ``file.url`` - ファイルURL
+- ``file.id`` - ドライブアイテムID
+- ``file.parent_path`` - 親フォルダのパス
 - ``file.roles`` - アクセス権限
 
 OneNote
@@ -292,6 +304,10 @@ Teams
 - ``message.web_url`` - ブラウザで開くURL
 - ``message.roles`` - アクセス権限
 - ``message.from`` - 送信者情報
+- ``message.subject`` - メッセージ件名
+- ``message.importance`` - 重要度
+- ``message.team`` - チーム情報
+- ``message.channel`` - チャネル情報
 
 SharePoint Document Libraries
 ------------------------------
@@ -313,7 +329,12 @@ SharePoint Document Libraries
 - ``doclib.created`` - 作成日時
 - ``doclib.modified`` - 最終更新日時
 - ``doclib.url`` - SharePoint URL
+- ``doclib.web_url`` - ブラウザで開くURL
+- ``doclib.id`` - ドキュメントライブラリID
+- ``doclib.type`` - ドキュメントタイプ
 - ``doclib.site_name`` - サイト名
+- ``doclib.site_url`` - サイトURL
+- ``doclib.roles`` - アクセス権限
 
 SharePoint Lists
 ----------------
@@ -334,7 +355,11 @@ SharePoint Lists
 - ``item.created`` - 作成日時
 - ``item.modified`` - 最終更新日時
 - ``item.url`` - SharePoint URL
+- ``item.web_url`` - ブラウザで開くURL
+- ``item.id`` - リストアイテムID
+- ``item.content_type`` - コンテンツタイプ
 - ``item.fields`` - すべてのフィールドのマップ
+- ``item.attachments`` - 添付ファイル
 - ``item.roles`` - アクセス権限
 
 SharePoint Pages
@@ -356,7 +381,14 @@ SharePoint Pages
 - ``page.created`` - 作成日時
 - ``page.modified`` - 最終更新日時
 - ``page.url`` - SharePoint URL
+- ``page.web_url`` - ブラウザで開くURL
+- ``page.id`` - ページID
+- ``page.description`` - ページの説明
+- ``page.author`` - 作成者
 - ``page.type`` - ページタイプ（news/article/page）
+- ``page.site_name`` - サイト名
+- ``page.site_url`` - サイトURL
+- ``page.promotion_state`` - プロモーション状態
 - ``page.roles`` - アクセス権限
 
 データストア別の追加パラメーター
@@ -370,6 +402,10 @@ OneDrive
     max_content_length=-1
     ignore_folder=true
     supported_mimetypes=.*
+    include_pattern=
+    exclude_pattern=
+    url_filter=
+    default_permissions=
     drive_id=
     shared_documents_drive_crawler=true
     user_drive_crawler=true
@@ -394,6 +430,7 @@ Teams
     include_visibility=
     channel_id=
     chat_id=
+    default_permissions=
     ignore_replies=false
     append_attachment=true
     ignore_system_events=true
@@ -407,6 +444,10 @@ SharePoint Document Libraries
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_libraries=true
 
 SharePoint Lists
@@ -418,6 +459,10 @@ SharePoint Lists
     list_id=
     exclude_list_id=
     list_template_filter=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_lists=true
 
 SharePoint Pages
@@ -427,6 +472,10 @@ SharePoint Pages
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_pages=true
     page_type_filter=
 

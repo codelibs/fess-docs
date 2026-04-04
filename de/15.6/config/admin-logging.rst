@@ -26,10 +26,16 @@ Hauptprotokolldateien, die |Fess| ausgibt:
      - Inhalt
    * - ``fess.log``
      - Betriebsprotokolle in Verwaltungs- und Suchoberfläche, Anwendungsfehler, Systemereignisse
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - Protokolle bei Crawler-Ausführung, Ziel-URLs, abgerufene Dokumentinformationen, Fehler
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - Protokolle bei Vorschlags-Generierung, Index-Aktualisierungsinformationen
+   * - ``fess-llm.log``
+     - LLM/RAG-Chat-bezogene Protokolle
+   * - ``searchlog.log``
+     - Suchprotokolle
+   * - ``fess-urls.log``
+     - Crawler-URL-Statistikprotokoll (wird vom Crawl-Prozess ausgegeben)
    * - ``server_?.log``
      - Systemprotokolle des Anwendungsservers wie Tomcat
    * - ``audit.log``
@@ -58,7 +64,7 @@ Bei Problemen überprüfen Sie Protokolle wie folgt:
 1. **Fehlertyp identifizieren**
 
    - Anwendungsfehler → ``fess.log``
-   - Crawler-Fehler → ``fess_crawler.log``
+   - Crawler-Fehler → ``fess-crawler.log``
    - Authentifizierungsfehler → ``audit.log``
    - Serverfehler → ``server_?.log``
 
@@ -149,13 +155,20 @@ Beispiel für Konfigurationsdatei (``log4j2.xml``):
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
-            <SizeBasedTriggeringPolicy size="100MB"/>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 Referenzinformationen
