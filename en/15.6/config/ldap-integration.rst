@@ -100,7 +100,7 @@ Group Filter Settings
 ::
 
     # Group filter
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
     # memberOf attribute name
     ldap.memberof.attribute=memberOf
@@ -130,7 +130,7 @@ Basic Configuration
     ldap.account.filter=sAMAccountName=%s
 
     # Group filter
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
 Active Directory Specific Settings
 ----------------------------------
@@ -141,7 +141,7 @@ Active Directory Specific Settings
     ldap.memberof.attribute=memberOf
 
     # Nested group resolution (LDAP_MATCHING_RULE_IN_CHAIN)
-    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:=%s)
 
 OpenLDAP Configuration
 ======================
@@ -165,7 +165,7 @@ Configuration example for OpenLDAP.
     ldap.account.filter=uid=%s
 
     # Group filter
-    ldap.group.filter=(memberUid={0})
+    ldap.group.filter=(memberUid=%s)
 
 Security Settings
 =================

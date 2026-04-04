@@ -113,6 +113,15 @@ PostgreSQLの例:
    * - ``sql``
      - はい
      - データ取得用のSQLクエリ
+   * - ``default_mimetype``
+     - いいえ
+     - BLOB抽出時のデフォルトMIMEタイプ
+   * - ``info.*``
+     - いいえ
+     - 追加のJDBC接続プロパティ（例: ``info.ssl=true``）
+   * - ``column_label.*``
+     - いいえ
+     - カラムメタデータマッピング
 
 スクリプト設定
 --------------

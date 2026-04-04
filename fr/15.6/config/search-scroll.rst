@@ -46,13 +46,16 @@ Configuration des champs de réponse
 --------------------------
 
 Vous pouvez personnaliser les champs inclus dans la réponse des résultats de recherche.
-Par défaut, seuls les champs de base sont renvoyés, mais vous pouvez spécifier des champs supplémentaires.
+Par défaut, de nombreux champs sont renvoyés, mais vous pouvez spécifier des champs supplémentaires.
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
 
 Pour spécifier plusieurs champs, énumérez-les séparés par des virgules.
+
+.. note::
+   Le champ ``content`` n'est pas inclus par défaut dans la réponse. Ajoutez-le explicitement si nécessaire.
 
 
 Méthode d'utilisation
@@ -81,6 +84,9 @@ Paramètres de requête
 
 Les paramètres suivants peuvent être utilisés pour la recherche par défilement.
 
+.. note::
+   La recherche par défilement ne prend en charge que la méthode GET.
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -89,12 +95,13 @@ Les paramètres suivants peuvent être utilisés pour la recherche par défileme
      - Description
    * - ``q``
      - Requête de recherche (obligatoire)
-   * - ``size``
-     - Nombre d'éléments à récupérer par défilement (par défaut : 100)
-   * - ``scroll``
-     - Durée de validité du contexte de défilement (par défaut : 1m)
+   * - ``num``
+     - Nombre d'éléments à récupérer par défilement (par défaut : 10, maximum : 100)
    * - ``fields.label``
      - Filtrage par étiquette
+
+.. note::
+   La valeur maximale de ``num`` peut être modifiée via le paramètre ``paging.search.page.max.size`` dans ``fess_config.properties``.
 
 Spécification de la requête de recherche
 ----------------
@@ -126,11 +133,11 @@ Vous pouvez modifier le nombre d'éléments récupérés par défilement.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   Si le paramètre ``size`` est trop élevé, l'utilisation de la mémoire augmente.
-   Il est généralement recommandé de le définir dans la plage de 100 à 1000.
+   Si le paramètre ``num`` est trop élevé, l'utilisation de la mémoire augmente.
+   La valeur maximale par défaut est 100. Elle peut être modifiée via ``paging.search.page.max.size``.
 
 Filtrage par étiquette
 --------------------------
@@ -141,21 +148,13 @@ Vous pouvez récupérer uniquement les documents appartenant à une étiquette s
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-En cas d'authentification requise
-----------------
+À propos de l'authentification
+-------------------------------
 
-Si vous utilisez la recherche basée sur les rôles, vous devez inclure des informations d'authentification.
-
-::
-
-    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-Ou en utilisant un jeton API :
-
-::
-
-    curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   La recherche par défilement n'applique pas le contrôle d'accès basé sur les rôles (RBAC) de |Fess|.
+   Tous les documents correspondant aux critères de recherche sont renvoyés indépendamment des autorisations de l'utilisateur.
+   Si des restrictions d'accès sont nécessaires, configurez des restrictions d'adresses IP ou une authentification via un proxy inverse.
 
 Format de réponse
 ==============
@@ -179,13 +178,31 @@ Champs de réponse
 
 Principaux champs inclus par défaut :
 
+- ``url_link`` : URL du document (lien)
 - ``url`` : URL du document
-- ``title`` : Titre
-- ``content`` : Corps du texte (extrait)
-- ``score`` : Score de recherche
-- ``boost`` : Valeur de boost
-- ``created`` : Date de création
+- ``doc_id`` : Identifiant du document
+- ``site`` : Site
+- ``host`` : Hôte
+- ``content_length`` : Taille du contenu
 - ``last_modified`` : Date de dernière modification
+- ``timestamp`` : Horodatage
+- ``created`` : Date de création
+- ``boost`` : Valeur de boost
+- ``title`` : Titre
+- ``click_count`` : Nombre de clics
+- ``favorite_count`` : Nombre de favoris
+- ``mimetype`` : Type MIME
+- ``filetype`` : Type de fichier
+- ``filename`` : Nom du fichier
+- ``_id`` : Identifiant interne
+- ``digest`` : Résumé
+- ``score`` : Score de recherche
+- ``content_title`` : Titre du contenu
+- ``content_description`` : Description du contenu
+- ``site_path`` : Chemin du site
+
+.. note::
+   Le champ ``content`` n'est pas inclus par défaut. Pour l'ajouter, configurez ``query.additional.scroll.response.fields=content``.
 
 Exemples de traitement de données
 ============
@@ -202,7 +219,7 @@ Exemple de traitement en Python
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -268,11 +285,11 @@ Performances et meilleures pratiques
 Méthodes d'utilisation efficaces
 ----------------
 
-1. **Configuration appropriée du paramètre size**
+1. **Configuration appropriée du paramètre num**
 
    - Une valeur trop petite augmente la surcharge de communication
    - Une valeur trop grande augmente l'utilisation de la mémoire
-   - Recommandé : 100 à 1000
+   - Maximum par défaut : 100
 
 2. **Optimisation des conditions de recherche**
 
@@ -298,7 +315,7 @@ Lors du traitement de grandes quantités de données, utilisez le traitement en 
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # Traitement en streaming
     with requests.get(url, params=params, stream=True) as response:
@@ -346,13 +363,13 @@ La recherche par défilement n'est pas disponible
 Une erreur de délai d'expiration se produit
 ----------------------------
 
-1. Réduisez le paramètre ``size`` pour répartir le traitement.
+1. Réduisez le paramètre ``num`` pour répartir le traitement.
 2. Affinez les conditions de recherche pour réduire la quantité de données récupérées.
 
 Erreur de mémoire insuffisante
 ----------------
 
-1. Réduisez le paramètre ``size``.
+1. Réduisez le paramètre ``num``.
 2. Augmentez la taille de la mémoire heap de |Fess|.
 3. Vérifiez la taille de la mémoire heap d'OpenSearch.
 

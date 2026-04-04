@@ -48,15 +48,15 @@
    默认情况下仅 ``ERROR`` 级别为通知对象。
    选择 ``WARN`` 时,``WARN`` 和 ``ERROR`` 都会被通知。
 
-通过配置文件启用
+通过系统属性启用
 ~~~~~~~~~~~~~~~~
 
-也可以直接编辑 ``fess_config.properties`` 来启用。
+也可以直接设置在管理页面的"常规"设置中保存的系统属性。
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 通知目标设置
 ------------
@@ -66,12 +66,11 @@
 
 要使用邮件通知,需要进行以下设置。
 
-1. 邮件服务器设置(``fess_config.properties``):
+1. 邮件服务器设置(``fess_env.properties``):
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. 在管理页面的"常规"设置中,在"通知目标"中输入邮件地址。多个地址用逗号分隔。
 
@@ -207,7 +206,7 @@ OpenSearch 索引
 
 3. **确认邮件服务器设置**
 
-   确认 ``fess_config.properties`` 中邮件服务器是否正确配置。
+   确认 ``fess_env.properties`` 中邮件服务器是否正确配置。
 
 4. **确认日志**
 

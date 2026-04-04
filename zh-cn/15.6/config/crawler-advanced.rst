@@ -193,6 +193,9 @@ HTTP 爬虫的线程池配置。
    * - ``crawler.file.protocols``
      - 文件爬取协议
      - ``file,smb,smb1,ftp,storage,s3,gcs``
+   * - ``crawler.crawling.data.encoding``
+     - 爬取数据编码
+     - ``UTF-8``
 
 配置示例
 ~~~~~~
@@ -201,6 +204,7 @@ HTTP 爬虫的线程池配置。
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.crawling.data.encoding=UTF-8
 
 环境变量参数
 --------------------

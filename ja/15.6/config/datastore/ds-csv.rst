@@ -110,6 +110,39 @@ CSVコネクタは、CSVファイルからデータを取得して
    * - ``directories``
      - いいえ
      - CSVファイルを含むディレクトリのパス
+   * - ``escape_character``
+     - いいえ
+     - エスケープ文字（デフォルト: バックスラッシュ ``\``）
+
+高度なパラメーター
+~~~~~~~~~~~~~~~~~~
+
+以下のパラメーターはCSVの解析動作を細かく制御します:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - パラメーター
+     - 説明
+   * - ``skip_lines``
+     - スキップする先頭行数
+   * - ``ignore_line_patterns``
+     - 無視する行の正規表現パターン
+   * - ``ignore_empty_lines``
+     - 空行を無視するか（デフォルト: false）
+   * - ``ignore_trailing_whitespaces``
+     - 末尾の空白を無視するか（デフォルト: false）
+   * - ``ignore_leading_whitespaces``
+     - 先頭の空白を無視するか（デフォルト: false）
+   * - ``null_string``
+     - null値として扱う文字列
+   * - ``break_string``
+     - 改行の置換文字列
+   * - ``escape_disabled``
+     - エスケープ処理を無効にするか（デフォルト: false）
+   * - ``quote_disabled``
+     - 引用符処理を無効にするか（デフォルト: false）
 
 スクリプト設定
 --------------
@@ -138,6 +171,8 @@ CSVコネクタは、CSVファイルからデータを取得して
 
 - ``data.<列名>`` - ヘッダー行の列名（has_header_line=true の場合）
 - ``data.cell<N>`` - 列インデックス（has_header_line=false の場合、``cell1``、``cell2``...のように1始まり）
+- ``data.csvfile`` - 処理中のCSVファイルのフルパス
+- ``data.csvfilename`` - 処理中のCSVファイル名
 
 CSV形式の詳細
 =============

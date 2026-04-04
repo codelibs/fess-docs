@@ -204,7 +204,7 @@ La memoria heap de OpenSearch se configura editando el archivo ``config/jvm.opti
 .. note::
    Se recomienda configurar el tamaño heap mínimo (``-Xms``) y el tamaño heap máximo (``-Xmx``) al mismo valor.
 
-.. warning::
+.. note::
    La variable de entorno ``OPENSEARCH_HEAP_SIZE`` está obsoleta en OpenSearch 3.x y puede no tener efecto.
    Si necesita configurar el heap mediante una variable de entorno, use ``OPENSEARCH_JAVA_OPTS``:
 

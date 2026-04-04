@@ -35,6 +35,14 @@ Configure "Virtual Host" in :doc:`Administrator Guide > General Settings <../adm
    Host:abc.example.com:8080=host1
    Host:192.168.1.123:8080=host2
 
+.. note::
+
+   Only alphanumeric characters and underscores ( ``a-z`` , ``A-Z`` , ``0-9`` , ``_`` ) can be used in virtual host names.
+   Other characters are automatically removed.
+
+   The following names are reserved and cannot be used as virtual host names:
+   ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
+
 After configuration, search page JSPs are generated in ``WEB-INF/view/virtual host name``.
 By editing these, you can also change page designs for each virtual host.
 

@@ -35,6 +35,14 @@ Configure el "Host Virtual" en :doc:`Guía del Administrador > Configuración Ge
    Host:abc.example.com:8080=host1
    Host:192.168.1.123:8080=host2
 
+.. note::
+
+   Solo se pueden usar caracteres alfanuméricos y guiones bajos ( ``a-z`` , ``A-Z`` , ``0-9`` , ``_`` ) en los nombres de host virtual.
+   Los demás caracteres se eliminan automáticamente.
+
+   Los siguientes nombres están reservados y no se pueden usar como nombres de host virtual:
+   ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
+
 Una vez configurado, se generan los archivos JSP de las páginas de búsqueda en ``WEB-INF/view/nombre_host_virtual``.
 Puede cambiar el diseño de las páginas para cada host virtual editando estos archivos.
 

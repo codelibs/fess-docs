@@ -97,6 +97,12 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    * - ``entraid.default.roles``
      - Standardrollen (kommagetrennt)
      - (Keine)
+   * - ``entraid.permission.fields``
+     - Berechtigungsfelder (kommagetrennt)
+     - ``mail``
+   * - ``entraid.use.ds``
+     - Domänendienste verwenden
+     - ``true``
 
 Konfiguration auf der Entra ID-Seite
 ====================================

@@ -78,7 +78,34 @@ Parameter List
      - Dropbox access token (generated in App Console)
    * - ``basic_plan``
      - No
-     - Set to ``true`` for Basic plan (default: ``false``)
+     - Set to ``true`` for individual accounts, ``false`` for team accounts (default: ``false``)
+   * - ``max_size``
+     - No
+     - Maximum file size for indexing in bytes (default: ``10000000``)
+   * - ``number_of_threads``
+     - No
+     - Number of threads for crawling (default: ``1``)
+   * - ``ignore_folder``
+     - No
+     - Whether to skip folder metadata (default: ``true``)
+   * - ``ignore_error``
+     - No
+     - Whether to ignore errors during content extraction (default: ``true``)
+   * - ``supported_mimetypes``
+     - No
+     - Regex patterns for allowed MIME types, comma-separated (default: ``.*``)
+   * - ``include_pattern``
+     - No
+     - URL pattern to include in crawling
+   * - ``exclude_pattern``
+     - No
+     - URL pattern to exclude from crawling
+   * - ``default_permissions``
+     - No
+     - Default permissions for indexed documents, comma-separated
+   * - ``max_cached_content_size``
+     - No
+     - Maximum content size cached in memory in bytes (default: ``1048576``)
 
 Script Configuration
 --------------------
@@ -126,6 +153,16 @@ Available fields:
      - Last modified date on server side
    * - ``file.roles``
      - File access permissions
+   * - ``file.id``
+     - Dropbox file ID
+   * - ``file.path_lower``
+     - Lower-cased file path
+   * - ``file.parent_shared_folder_id``
+     - Parent shared folder ID
+   * - ``file.content_hash``
+     - Content hash
+   * - ``file.rev``
+     - File revision
 
 For Dropbox Paper
 ~~~~~~~~~~~~~~~~~
@@ -161,6 +198,8 @@ Available fields:
      - Paper document owner
    * - ``paper.roles``
      - Document access permissions
+   * - ``paper.revision``
+     - Paper document revision
 
 Dropbox Authentication Setup
 ============================
@@ -215,21 +254,22 @@ Set the obtained token in the parameters:
 
     access_token=sl.your-dropbox-token-here
 
-Basic Plan Settings
-===================
+Individual Account Settings
+===========================
 
-Dropbox Basic Plan Limitations
-------------------------------
+Using Individual Accounts
+-------------------------
 
-For Dropbox Basic plan, API limits differ.
-Set the ``basic_plan`` parameter to ``true``:
+For individual accounts (not team accounts),
+set the ``basic_plan`` parameter to ``true``:
 
 ::
 
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-This enables processing that accommodates API rate limits.
+When ``false`` (default), it operates as a team account and crawls files from team members and team folders.
+When ``true``, it operates as an individual account and crawls files directly from the account.
 
 Usage Examples
 ==============
@@ -277,6 +317,58 @@ Script:
     mimetype=paper.mimetype
     filetype=paper.filetype
 
+Crawling with Permissions
+-------------------------
+
+Parameters:
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    default_permissions={role}admin
+
+Script (Dropbox Files):
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    content_length=file.size
+    last_modified=file.client_modified
+    role=file.roles
+
+Script (Dropbox Paper):
+
+::
+
+    title=paper.title
+    content=paper.contents
+    url=paper.url
+    mimetype=paper.mimetype
+    filetype=paper.filetype
+    role=paper.roles
+
+Crawling Specific File Types Only
+----------------------------------
+
+Filtering in script:
+
+::
+
+    # PDF and Word files only
+    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        url=file.url
+        title=file.name
+        content=file.contents
+        mimetype=file.mimetype
+        filename=file.name
+        last_modified=file.client_modified
+    }
+
 Troubleshooting
 ===============
 
@@ -322,6 +414,57 @@ API Rate Limit Errors
 1. For Basic plan, set ``basic_plan=true``
 2. Increase crawl interval
 3. Use multiple access tokens for load distribution
+
+Paper Documents Cannot Be Retrieved
+------------------------------------
+
+**Symptom**: Paper documents are not crawled
+
+**Check**:
+
+1. Verify handler name is ``DropboxPaperDataStore``
+2. Verify ``files.content.read`` permission is included
+3. Verify Paper documents actually exist
+
+When There Are Many Files
+-------------------------
+
+**Symptom**: Crawling takes a long time or times out
+
+**Resolution**:
+
+1. Split data stores into multiple (e.g., by folder)
+2. Distribute load with schedule settings
+3. For Basic plan, note API rate limits
+
+Permissions and Access Control
+==============================
+
+Reflecting Dropbox Sharing Permissions
+--------------------------------------
+
+Dropbox sharing settings can be reflected in Fess permissions:
+
+Parameters:
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    default_permissions={role}dropbox-users
+
+Script:
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    role=file.roles
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
+
+``file.roles`` or ``paper.roles`` contain Dropbox sharing information.
 
 Reference Information
 =====================

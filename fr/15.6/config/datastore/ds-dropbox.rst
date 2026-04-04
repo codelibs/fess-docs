@@ -77,7 +77,34 @@ Liste des parametres
      - Token d'acces Dropbox (genere dans App Console)
    * - ``basic_plan``
      - Non
-     - ``true`` pour le plan Basic (defaut : ``false``)
+     - ``true`` pour les comptes individuels, ``false`` pour les comptes d'equipe (defaut : ``false``)
+   * - ``max_size``
+     - Non
+     - Taille maximale des fichiers pour l'indexation en octets (defaut : ``10000000``)
+   * - ``number_of_threads``
+     - Non
+     - Nombre de threads pour l'exploration (defaut : ``1``)
+   * - ``ignore_folder``
+     - Non
+     - Ignorer les metadonnees des dossiers (defaut : ``true``)
+   * - ``ignore_error``
+     - Non
+     - Ignorer les erreurs lors de l'extraction de contenu (defaut : ``true``)
+   * - ``supported_mimetypes``
+     - Non
+     - Motifs regex pour les types MIME autorises, separes par des virgules (defaut : ``.*``)
+   * - ``include_pattern``
+     - Non
+     - Motif d'URL a inclure dans l'exploration
+   * - ``exclude_pattern``
+     - Non
+     - Motif d'URL a exclure de l'exploration
+   * - ``default_permissions``
+     - Non
+     - Permissions par defaut pour les documents indexes, separees par des virgules
+   * - ``max_cached_content_size``
+     - Non
+     - Taille maximale du contenu en cache en memoire en octets (defaut : ``1048576``)
 
 Configuration du script
 -----------------------
@@ -125,6 +152,16 @@ Champs disponibles :
      - Date de derniere modification cote serveur
    * - ``file.roles``
      - Autorisations d'acces au fichier
+   * - ``file.id``
+     - Identifiant du fichier Dropbox
+   * - ``file.path_lower``
+     - Chemin du fichier en minuscules
+   * - ``file.parent_shared_folder_id``
+     - ID du dossier partage parent
+   * - ``file.content_hash``
+     - Hash du contenu
+   * - ``file.rev``
+     - Revision du fichier
 
 Pour Dropbox Paper
 ~~~~~~~~~~~~~~~~~~
@@ -137,6 +174,31 @@ Pour Dropbox Paper
     mimetype=paper.mimetype
     filetype=paper.filetype
     role=paper.roles
+
+Champs disponibles :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Champ
+     - Description
+   * - ``paper.url``
+     - Lien de previsualisation du document Paper
+   * - ``paper.contents``
+     - Contenu texte du document Paper
+   * - ``paper.mimetype``
+     - Type MIME
+   * - ``paper.filetype``
+     - Type de fichier
+   * - ``paper.title``
+     - Titre du document Paper
+   * - ``paper.owner``
+     - Proprietaire du document Paper
+   * - ``paper.roles``
+     - Autorisations d'acces au document
+   * - ``paper.revision``
+     - Revision du document Paper
 
 Configuration de l'authentification Dropbox
 ===========================================
@@ -190,21 +252,22 @@ Configurez le token obtenu dans les parametres :
 
     access_token=sl.your-dropbox-token-here
 
-Configuration pour le plan Basic
-================================
+Configuration pour compte individuel
+=====================================
 
-Limitations du plan Dropbox Basic
----------------------------------
+Utilisation avec un compte individuel
+-------------------------------------
 
-Si vous utilisez le plan Dropbox Basic, les limitations API sont differentes.
-Definissez le parametre ``basic_plan`` sur ``true`` :
+Pour les comptes individuels (pas les comptes d'equipe),
+definissez le parametre ``basic_plan`` sur ``true`` :
 
 ::
 
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-Cela permet un traitement adapte aux limitations de debit API.
+Quand ``false`` (defaut), il fonctionne comme un compte d'equipe et explore les fichiers des membres et des dossiers d'equipe.
+Quand ``true``, il fonctionne comme un compte individuel et explore les fichiers directement depuis le compte.
 
 Exemples d'utilisation
 ======================
@@ -269,6 +332,41 @@ Filtrage dans le script :
         last_modified=file.client_modified
     }
 
+Exploration avec permissions
+----------------------------
+
+Parametres :
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    default_permissions={role}admin
+
+Script (fichiers Dropbox) :
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    content_length=file.size
+    last_modified=file.client_modified
+    role=file.roles
+
+Script (Dropbox Paper) :
+
+::
+
+    title=paper.title
+    content=paper.contents
+    url=paper.url
+    mimetype=paper.mimetype
+    filetype=paper.filetype
+    role=paper.roles
+
 Depannage
 =========
 
@@ -314,6 +412,57 @@ Erreur de limitation de debit API
 1. Pour le plan Basic, configurez ``basic_plan=true``
 2. Augmentez l'intervalle d'exploration
 3. Utilisez plusieurs tokens d'acces pour repartir la charge
+
+Impossible de recuperer les documents Paper
+-------------------------------------------
+
+**Symptome** : Les documents Paper ne sont pas explores
+
+**Points a verifier** :
+
+1. Verifiez que le nom du handler est ``DropboxPaperDataStore``
+2. Verifiez que ``files.content.read`` est inclus dans les permissions
+3. Verifiez que des documents Paper existent reellement
+
+En cas de grand nombre de fichiers
+----------------------------------
+
+**Symptome** : L'exploration prend du temps ou timeout
+
+**Solution** :
+
+1. Divisez les datastores en plusieurs (par dossier, etc.)
+2. Repartissez la charge avec les parametres de planification
+3. Pour le plan Basic, attention aux limites de debit API
+
+Permissions et controle d'acces
+===============================
+
+Reflet des permissions de partage Dropbox
+-----------------------------------------
+
+Les parametres de partage Dropbox peuvent etre refletes dans les permissions Fess :
+
+Parametres :
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    default_permissions={role}dropbox-users
+
+Script :
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    role=file.roles
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
+
+``file.roles`` ou ``paper.roles`` contiennent les informations de partage Dropbox.
 
 Informations de reference
 =========================

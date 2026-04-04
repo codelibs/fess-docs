@@ -5,7 +5,7 @@ JSON连接器
 概述
 ====
 
-JSON连接器提供从JSON文件或JSON API获取数据并注册到
+JSON连接器提供从本地JSON文件或JSONL文件获取数据并注册到
 |Fess| 索引的功能。
 
 此功能需要 ``fess-ds-json`` 插件。
@@ -14,7 +14,7 @@ JSON连接器提供从JSON文件或JSON API获取数据并注册到
 ========
 
 1. 需要安装插件
-2. 需要对JSON文件或API的访问权限
+2. 需要对JSON文件的访问权限
 3. 需要理解JSON的结构
 
 插件安装
@@ -69,18 +69,18 @@ JSON连接器提供从JSON文件或JSON API获取数据并注册到
     files=/path/to/data.json
     fileEncoding=UTF-8
 
-HTTP文件:
-
-::
-
-    files=https://api.example.com/products.json
-    fileEncoding=UTF-8
-
 多个文件:
 
 ::
 
-    files=/path/to/data1.json,https://api.example.com/data2.json
+    files=/path/to/data1.json,/path/to/data2.json
+    fileEncoding=UTF-8
+
+目录指定:
+
+::
+
+    directories=/path/to/json_dir/
     fileEncoding=UTF-8
 
 参数列表
@@ -94,11 +94,22 @@ HTTP文件:
      - 必需
      - 说明
    * - ``files``
-     - 是
-     - JSON文件路径或API URL（可指定多个：逗号分隔）
+     - 否
+     - JSON文件路径（可指定多个：逗号分隔）
+   * - ``directories``
+     - 否
+     - 包含JSON文件的目录路径
    * - ``fileEncoding``
      - 否
      - 字符编码（默认: UTF-8）
+
+.. warning::
+   必须指定 ``files`` 或 ``directories`` 其中之一。
+   如果两者都未指定，将会发生 ``DataStoreException`` 。
+   如果两者都指定了， ``files`` 优先， ``directories`` 将被忽略。
+
+.. note::
+   此连接器仅支持本地文件系统上的JSON文件，不支持HTTP访问或API认证功能。
 
 脚本设置
 --------------
@@ -144,136 +155,34 @@ HTTP文件:
 JSON格式详情
 ==============
 
-简单数组
-----------
+JSON文件格式
+----------------
+
+JSON连接器读取JSONL（JSON Lines）格式的文件。
+这是一种每行记录一个JSON对象的格式。
+
+.. note::
+   数组格式的JSON文件（ ``[{...}, {...}]`` ）无法直接读取。
+   请转换为JSONL格式。
+
+JSONL格式的文件:
 
 ::
 
-    [
-      {
-        "id": 1,
-        "name": "Product A",
-        "description": "Description A",
-        "price": 1000
-      },
-      {
-        "id": 2,
-        "name": "Product B",
-        "description": "Description B",
-        "price": 2000
-      }
-    ]
-
-参数:
-
-::
-
-
-嵌套结构
---------------
-
-::
-
-    {
-      "data": {
-        "products": [
-          {
-            "id": 1,
-            "name": "Product A",
-            "details": {
-              "description": "Description A",
-              "price": 1000,
-              "category": {
-                "id": 10,
-                "name": "Electronics"
-              }
-            }
-          }
-        ]
-      }
-    }
-
-参数:
-
-::
-
-
-脚本:
-
-::
-
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.details.description
-    price=data.details.price
-    category=data.details.category.name
-
-复杂数组
-----------
-
-::
-
-    {
-      "articles": [
-        {
-          "id": 1,
-          "title": "Article 1",
-          "content": "Content 1",
-          "tags": ["tag1", "tag2", "tag3"],
-          "author": {
-            "name": "John Doe",
-            "email": "john@example.com"
-          }
-        }
-      ]
-    }
-
-参数:
-
-::
-
-
-脚本:
-
-::
-
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    author=data.author.name
-    tags=data.tags.join(", ")
+    {"id": 1, "name": "Product A", "description": "Description A"}
+    {"id": 2, "name": "Product B", "description": "Description B"}
 
 使用示例
 ======
 
-产品目录API
----------------
-
-API响应:
-
-::
-
-    {
-      "status": "success",
-      "data": {
-        "products": [
-          {
-            "product_id": "P001",
-            "name": "笔记本电脑",
-            "description": "高性能笔记本电脑",
-            "price": 120000,
-            "category": "电脑",
-            "in_stock": true
-          }
-        ]
-      }
-    }
+产品目录
+--------------
 
 参数:
 
 ::
 
-    files=https://api.example.com/products
+    files=/var/data/products.json
     fileEncoding=UTF-8
 
 脚本:
@@ -286,47 +195,6 @@ API响应:
     digest=data.category
     price=data.price
 
-博客文章API
--------------
-
-API响应:
-
-::
-
-    {
-      "posts": [
-        {
-          "id": 1,
-          "title": "文章标题",
-          "body": "文章正文...",
-          "author": {
-            "name": "张三",
-            "email": "zhang@example.com"
-          },
-          "tags": ["技术", "编程"],
-          "published_at": "2024-01-15T10:00:00Z"
-        }
-      ]
-    }
-
-参数:
-
-::
-
-    files=https://blog.example.com/api/posts
-    fileEncoding=UTF-8
-
-脚本:
-
-::
-
-    url="https://blog.example.com/post/" + data.id
-    title=data.title
-    content=data.body
-    author=data.author.name
-    tags=data.tags.join(", ")
-    created=data.published_at
-
 多JSON文件整合
 ---------------------
 
@@ -334,7 +202,7 @@ API响应:
 
 ::
 
-    files=/var/data/data1.json,/var/data/data2.json,https://api.example.com/data3.json
+    files=/var/data/data1.json,/var/data/data2.json
     fileEncoding=UTF-8
 
 脚本:
@@ -351,14 +219,13 @@ API响应:
 找不到文件
 ----------------------
 
-**症状**: ``FileNotFoundException`` 或 ``404 Not Found``
+**症状**: ``FileNotFoundException``
 
 **确认事项**:
 
-1. 确认文件路径或URL是否正确
+1. 确认文件路径是否正确
 2. 确认文件是否存在
-3. 如果是URL，确认API是否正在运行
-4. 确认网络连接
+3. 确认是否有文件读取权限
 
 JSON解析错误
 --------------
@@ -378,36 +245,6 @@ JSON解析错误
 3. 确认是否有非法字符或换行
 4. 确认是否包含注释（JSON标准不允许注释）
 
-JSONPath错误
---------------
-
-**症状**: 无法获取数据或结果为空
-
-**确认事项**:
-
-1. 确认JSONPath语法是否正确
-2. 确认目标元素是否存在
-3. 使用测试工具验证JSONPath:
-
-   ::
-
-       # 使用jq确认
-       cat data.json | jq '$.data.products'
-
-4. 确认路径是否指向正确的层级
-
-认证错误
-----------
-
-**症状**: ``401 Unauthorized`` 或 ``403 Forbidden``
-
-**确认事项**:
-
-1. 确认认证类型是否正确（bearer、basic）
-2. 确认认证令牌或用户名/密码是否正确
-3. 确认令牌的有效期
-4. 确认API的权限设置
-
 无法获取数据
 --------------------
 
@@ -415,44 +252,10 @@ JSONPath错误
 
 **确认事项**:
 
-1. 确认JSONPath是否指向正确的元素
-2. 确认JSON结构
-3. 确认脚本设置是否正确
-4. 确认字段名是否正确（包括大小写）
-5. 在日志中确认错误信息
-
-数组处理
-----------
-
-JSON为数组的情况:
-
-::
-
-    [
-      {"id": 1, "name": "Item 1"},
-      {"id": 2, "name": "Item 2"}
-    ]
-
-参数:
-
-::
-
-
-JSON为包含数组的对象的情况:
-
-::
-
-    {
-      "items": [
-        {"id": 1, "name": "Item 1"},
-        {"id": 2, "name": "Item 2"}
-      ]
-    }
-
-参数:
-
-::
-
+1. 确认JSON结构
+2. 确认脚本设置是否正确
+3. 确认字段名是否正确（包括大小写）
+4. 在日志中确认错误信息
 
 大型JSON文件
 ------------------
@@ -462,20 +265,7 @@ JSON为包含数组的对象的情况:
 **解决方法**:
 
 1. 将JSON文件分割成多个
-2. 使用JSONPath只提取必要的部分
-3. 如果是API，使用分页
-4. 增加 |Fess| 的堆大小
-
-API速率限制
--------------
-
-**症状**: ``429 Too Many Requests``
-
-**解决方法**:
-
-1. 增加爬取间隔
-2. 确认API的速率限制
-3. 使用多个API密钥进行负载均衡
+2. 增加 |Fess| 的堆大小
 
 脚本的高级使用示例
 ========================
@@ -483,14 +273,14 @@ API速率限制
 条件处理
 ------------
 
+每个字段作为独立的表达式进行求值。条件值使用三元运算符:
+
 ::
 
-    if (data.status == "published" && data.price > 1000) {
-        url="https://example.com/product/" + data.id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    url=data.status == "published" ? "https://example.com/product/" + data.id : null
+    title=data.status == "published" ? data.name : null
+    content=data.status == "published" ? data.description : null
+    price=data.status == "published" ? data.price : null
 
 数组合并
 ----------
@@ -501,7 +291,7 @@ API速率限制
     title=data.title
     content=data.content
     tags=data.tags ? data.tags.join(", ") : ""
-    categories=data.categories.map(function(c) { return c.name; }).join(", ")
+    categories=data.categories.collect { it.name }.join(", ")
 
 设置默认值
 ------------------
@@ -509,9 +299,9 @@ API速率限制
 ::
 
     url="https://example.com/item/" + data.id
-    title=data.title || "无标题"
-    content=data.description || data.summary || "无描述"
-    price=data.price || 0
+    title=data.title ?: "无标题"
+    content=data.description ?: (data.summary ?: "无描述")
+    price=data.price ?: 0
 
 日期格式化
 ------------------
@@ -532,8 +322,8 @@ API速率限制
     url="https://example.com/product/" + data.id
     title=data.name
     content=data.description
-    price=parseFloat(data.price)
-    stock=parseInt(data.stock_quantity)
+    price=data.price as Float
+    stock=data.stock_quantity as Integer
 
 参考信息
 ========

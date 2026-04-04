@@ -78,7 +78,34 @@ Dropboxコネクタは、Dropboxのクラウドストレージからファイル
      - Dropboxのアクセストークン（App Consoleで生成）
    * - ``basic_plan``
      - いいえ
-     - Basicプランの場合は ``true``（デフォルト: ``false``）
+     - 個人アカウントの場合は ``true``、チームアカウントの場合は ``false``（デフォルト: ``false``）
+   * - ``max_size``
+     - いいえ
+     - インデックス対象の最大ファイルサイズ（バイト）（デフォルト: ``10000000``）
+   * - ``number_of_threads``
+     - いいえ
+     - クロールに使用するスレッド数（デフォルト: ``1``）
+   * - ``ignore_folder``
+     - いいえ
+     - フォルダメタデータをスキップするかどうか（デフォルト: ``true``）
+   * - ``ignore_error``
+     - いいえ
+     - コンテンツ抽出時のエラーを無視するかどうか（デフォルト: ``true``）
+   * - ``supported_mimetypes``
+     - いいえ
+     - 許可するMIMEタイプの正規表現パターン（カンマ区切り）（デフォルト: ``.*``）
+   * - ``include_pattern``
+     - いいえ
+     - クロール対象に含めるURLパターン
+   * - ``exclude_pattern``
+     - いいえ
+     - クロール対象から除外するURLパターン
+   * - ``default_permissions``
+     - いいえ
+     - インデックスされたドキュメントのデフォルト権限（カンマ区切り）
+   * - ``max_cached_content_size``
+     - いいえ
+     - メモリにキャッシュするコンテンツの最大サイズ（バイト）（デフォルト: ``1048576``）
 
 スクリプト設定
 --------------
@@ -126,6 +153,16 @@ Dropboxファイルの場合
      - サーバー側での最終更新日時
    * - ``file.roles``
      - ファイルのアクセス権限
+   * - ``file.id``
+     - DropboxファイルID
+   * - ``file.path_lower``
+     - 小文字のファイルパス
+   * - ``file.parent_shared_folder_id``
+     - 親共有フォルダID
+   * - ``file.content_hash``
+     - コンテンツハッシュ
+   * - ``file.rev``
+     - ファイルリビジョン
 
 Dropbox Paperの場合
 ~~~~~~~~~~~~~~~~~~~
@@ -161,6 +198,8 @@ Dropbox Paperの場合
      - Paperドキュメントの所有者
    * - ``paper.roles``
      - ドキュメントのアクセス権限
+   * - ``paper.revision``
+     - Paperドキュメントのリビジョン
 
 Dropbox認証の設定
 =================
@@ -215,13 +254,13 @@ https://www.dropbox.com/developers/apps にアクセス:
 
     access_token=sl.your-dropbox-token-here
 
-Basicプランの設定
-=================
+個人アカウントの設定
+====================
 
-Dropbox Basicプランの制限
--------------------------
+個人アカウントでの利用
+----------------------
 
-Dropbox Basicプランの場合、API制限が異なります。
+個人アカウント（チームアカウントではない）の場合、
 ``basic_plan`` パラメーターを ``true`` に設定してください:
 
 ::
@@ -229,7 +268,8 @@ Dropbox Basicプランの場合、API制限が異なります。
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-これにより、APIレート制限に対応した処理が行われます。
+``false``（デフォルト）の場合はチームアカウントとして動作し、チームメンバーやチームフォルダのファイルをクロールします。
+``true`` の場合は個人アカウントとして動作し、アカウント内のファイルを直接クロールします。
 
 使用例
 ======

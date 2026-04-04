@@ -72,7 +72,7 @@ Benutzersuche-Einstellungen
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # Benutzersuche-Filter
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
 
     # Benutzername-Attribut
     ldap.user.name.attribute=uid
@@ -109,7 +109,7 @@ Gruppensuche-Einstellungen
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # Gruppensuche-Filter
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
     # Gruppenname-Attribut
     ldap.group.name.attribute=cn
@@ -137,12 +137,12 @@ Grundkonfiguration
 
     # Benutzersuche
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.account.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName=%s)
     ldap.user.name.attribute=sAMAccountName
 
     # Gruppensuche
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
     ldap.group.name.attribute=cn
 
 Active-Directory-spezifische Einstellungen
@@ -154,7 +154,7 @@ Active-Directory-spezifische Einstellungen
     ldap.memberof.enabled=true
 
     # memberOf-Attribut verwenden
-    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:=%s)
 
 OpenLDAP-Konfiguration
 ======================
@@ -176,12 +176,12 @@ Konfigurationsbeispiel fuer OpenLDAP.
 
     # Benutzersuche
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
     ldap.user.name.attribute=uid
 
     # Gruppensuche
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.filter=(memberUid={0})
+    ldap.group.filter=(memberUid=%s)
     ldap.group.name.attribute=cn
 
 Sicherheitseinstellungen

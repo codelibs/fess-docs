@@ -380,7 +380,7 @@ To investigate issues, you can enable debug mode with the following setting:
 
 ::
 
-    saml.security.debug=true
+    saml.debug=true
 
 You can also adjust |Fess| log levels to output detailed SAML-related logs.
 

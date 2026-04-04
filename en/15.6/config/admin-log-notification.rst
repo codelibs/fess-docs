@@ -48,15 +48,15 @@ Enabling from the Administration Screen
    By default, only ``ERROR`` level events are targeted for notification.
    If you select ``WARN``, both ``WARN`` and ``ERROR`` events will be notified.
 
-Enabling via Configuration File
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enabling via System Properties
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also enable the feature by directly editing ``fess_config.properties``.
+You can also enable the feature by directly setting the system properties saved in the "General" settings of the administration screen.
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 Notification Destination Configuration
 --------------------------------------
@@ -66,12 +66,11 @@ Email Notification
 
 To use email notification, the following configuration is required.
 
-1. Mail server configuration (``fess_config.properties``):
+1. Mail server configuration (``fess_env.properties``):
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. Enter an email address in "Notification Destination" in the "General" settings of the administration screen. Multiple addresses can be specified separated by commas.
 
@@ -207,7 +206,7 @@ Notifications Are Not Being Sent
 
 3. **Verify mail server configuration**
 
-   Verify that the mail server is correctly configured in ``fess_config.properties``.
+   Verify that the mail server is correctly configured in ``fess_env.properties``.
 
 4. **Check logs**
 

@@ -50,7 +50,7 @@
      - 每批处理的文档数
    * - ``index.export.format``
      - ``html``
-     - 导出文件格式
+     - 导出文件格式（``html`` 或 ``json``）
 
 配置示例：
 
@@ -69,7 +69,7 @@
 
 1. 登录 |Fess| 管理控制台
 2. 导航至 **系统** > **调度器**
-3. 在作业列表中找到 **Index Export Job**
+3. 在作业列表中找到 **Index Exporter**
 4. 点击编辑作业设置
 5. 使用 cron 表达式设置计划
 6. 保存设置
@@ -88,28 +88,32 @@ cron 表达式示例：
 添加自定义查询过滤器：
 
 1. 导航至 **系统** > **调度器**
-2. 编辑 **Index Export Job**
+2. 编辑 **Index Exporter**
 3. 修改作业脚本以包含查询过滤器
 
-带日期过滤器的脚本示例：
+带日期过滤器的脚本示例（仅导出最近7天的文档）：
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "created:>=now-7d"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .execute()
 
-带站点过滤器的脚本示例：
+带站点过滤器的脚本示例（仅导出特定站点的文档）：
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "url:*example.com*"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .execute()
+
+以 JSON 格式导出的脚本示例：
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .format("json")
+        .execute()
 
 导出文件结构
 ============
@@ -184,7 +188,7 @@ cron 表达式示例：
 ::
 
     # 检查索引文档数
-    curl -X GET "localhost:9201/fess.YYYYMMDD/_count?pretty"
+    curl -X GET "localhost:9201/fess.search/_count?pretty"
 
 导出中途失败
 ------------

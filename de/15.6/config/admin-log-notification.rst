@@ -48,15 +48,15 @@ Aktivierung über die Verwaltungsoberfläche
    Standardmäßig wird nur die Ebene ``ERROR`` benachrichtigt.
    Bei Auswahl von ``WARN`` werden sowohl ``WARN`` als auch ``ERROR`` benachrichtigt.
 
-Aktivierung über die Konfigurationsdatei
+Aktivierung über Systemeigenschaften
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Die Aktivierung kann auch durch direkte Bearbeitung der Datei ``fess_config.properties`` erfolgen.
+Die Aktivierung kann auch durch direkte Bearbeitung der Systemeigenschaften erfolgen, die in den "Allgemein"-Einstellungen der Verwaltungsoberfläche gespeichert werden.
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 Konfiguration der Benachrichtigungsziele
 ------------
@@ -66,12 +66,11 @@ E-Mail-Benachrichtigung
 
 Für die E-Mail-Benachrichtigung sind folgende Einstellungen erforderlich.
 
-1. Konfiguration des Mailservers (``fess_config.properties``):
+1. Konfiguration des Mailservers (``fess_env.properties``):
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. Geben Sie in den "Allgemein"-Einstellungen der Verwaltungsoberfläche unter "Benachrichtigungsziel" die E-Mail-Adresse ein. Mehrere Adressen können durch Komma getrennt angegeben werden.
 
@@ -207,7 +206,7 @@ Benachrichtigungen werden nicht gesendet
 
 3. **Mailserver-Einstellungen überprüfen**
 
-   Überprüfen Sie in ``fess_config.properties``, ob der Mailserver korrekt konfiguriert ist.
+   Überprüfen Sie in ``fess_env.properties``, ob der Mailserver korrekt konfiguriert ist.
 
 4. **Protokolle überprüfen**
 

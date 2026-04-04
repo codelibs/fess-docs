@@ -27,28 +27,45 @@ How It Works
 3. Applies the corresponding virtual host configuration
 4. Displays tenant-specific content and UI
 
-Virtual Host Configuration
-==========================
+Virtual Host Header Configuration
+==================================
 
-Configuration via Admin Panel
+To enable the virtual host feature, configure the ``virtual.host.headers`` property.
+This property is defined in ``fess_config.properties``.
+
+Configuration Format
+--------------------
+
+Specify each entry in the format ``HeaderName:HeaderValue=VirtualHostKey``, one per line:
+
+::
+
+    # fess_config.properties
+    virtual.host.headers=Host:tenant1.example.com=tenant1\n\
+    Host:tenant2.example.com=tenant2
+
+For multiple virtual hosts, separate entries with newlines.
+
+Virtual Host Key Restrictions
 -----------------------------
 
-1. Log in to the admin panel
-2. Navigate to "Crawler" -> "Virtual Host"
-3. Click "Create New"
-4. Configure the following:
+Virtual host keys have the following restrictions:
 
-   - **Hostname**: ``tenant1.example.com``
-   - **Path**: ``/tenant1`` (optional)
+- Only alphanumeric characters and underscores (``a-zA-Z0-9_``) are allowed. Other characters are automatically removed.
+- The following key names are reserved and cannot be used: ``admin``, ``common``, ``error``, ``login``, ``profile``
 
-Integration with Crawl Configuration
-------------------------------------
+Admin Panel Configuration
+==========================
+
+Crawl Configuration
+--------------------
 
 By specifying a virtual host in web crawl settings, you can separate content:
 
-1. Create a crawl configuration under "Crawler" -> "Web"
-2. Select the target virtual host in the "Virtual Host" field
-3. Content crawled with this configuration will only be searchable from the specified virtual host
+1. Log in to the admin panel
+2. Create a crawl configuration under "Crawler" -> "Web"
+3. Select a virtual host key defined in ``virtual.host.headers`` in the "Virtual Host" field
+4. Content crawled with this configuration will only be searchable from the specified virtual host
 
 Access Control
 ==============
@@ -57,13 +74,17 @@ Combining Virtual Hosts and Roles
 ---------------------------------
 
 By combining virtual hosts with role-based access control,
-finer-grained access control is possible:
+finer-grained access control is possible.
+
+Configure the virtual host and permissions together in the crawl configuration:
 
 ::
 
-    # Configuration example
-    virtual.host=tenant1.example.com
-    permissions={role}tenant1_user
+    # Virtual host in crawl configuration
+    tenant1
+
+    # Permissions in crawl configuration
+    {role}tenant1_user
 
 Role-Based Search
 -----------------
@@ -86,12 +107,7 @@ Apply different themes for each virtual host:
 Custom CSS
 ----------
 
-Apply custom CSS for each virtual host:
-
-::
-
-    # Virtual host-specific CSS file
-    /webapp/WEB-INF/view/tenant1/css/custom.css
+To apply custom CSS per virtual host, edit CSS files in the admin panel under "System" -> "Design". You can also place custom templates in the view directory corresponding to the virtual host key.
 
 Label Settings
 --------------
@@ -174,18 +190,20 @@ If complete data separation is required, consider the following approaches:
 Index-Level Separation
 ----------------------
 
-Use separate indexes for each tenant:
+Use separate |Fess| instances and indexes for each tenant:
 
 ::
 
-    # Index for tenant 1
+    # Tenant 1 Fess instance (fess_config.properties)
     index.document.search.index=fess_tenant1.search
 
-    # Index for tenant 2
+    # Tenant 2 Fess instance (fess_config.properties)
     index.document.search.index=fess_tenant2.search
 
 .. note::
-   Index-level separation may require custom implementation.
+   ``index.document.search.index`` can only be set to one value per instance.
+   For complete index-level separation, you need to run separate |Fess| instances per tenant
+   or implement custom code. For typical multitenancy, logical separation via the virtual host feature is sufficient.
 
 Best Practices
 ==============

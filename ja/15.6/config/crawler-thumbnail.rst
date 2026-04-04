@@ -19,7 +19,7 @@
 ----------
 
 .. list-table::
-   :widths: 15.60 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - 形式
@@ -51,7 +51,7 @@
 ----------------
 
 .. list-table::
-   :widths: 15.60 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - 形式
@@ -64,7 +64,7 @@
      - ``application/msword``, ``application/vnd.openxmlformats-officedocument.wordprocessingml.document``
      - Word文書
    * - Excel
-     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``
+     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``, ``application/vnd.ms-excel.sheet.2``, ``application/vnd.ms-excel.sheet.3``, ``application/vnd.ms-excel.sheet.4``, ``application/vnd.ms-excel.workspace.3``, ``application/vnd.ms-excel.workspace.4``
      - Excelスプレッドシート
    * - PowerPoint
      - ``application/vnd.ms-powerpoint``, ``application/vnd.openxmlformats-officedocument.presentationml.presentation``
@@ -286,7 +286,7 @@ RPM/Debパッケージでインストールすると、 ``/usr/share/fess/bin/ge
 ----
 
 .. list-table::
-   :widths: 15.60 30
+   :widths: 15 50 30
    :header-rows: 1
 
    * - 引数

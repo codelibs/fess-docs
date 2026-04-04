@@ -44,11 +44,14 @@ Configuración de Campos de Respuesta
 -------------------------------------
 
 Puede personalizar los campos que se incluyen en la respuesta de los resultados de búsqueda.
-Por defecto, solo se devuelven campos básicos, pero puede especificar campos adicionales.
+Por defecto, se devuelven muchos campos, pero puede especificar campos adicionales.
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
+
+.. note::
+   El campo ``content`` no está incluido en la respuesta predeterminada. Si necesita el contenido del documento, agréguelo explícitamente como se muestra arriba.
 
 Al especificar múltiples campos, enumérelos separados por comas.
 
@@ -78,6 +81,9 @@ Parámetros de Solicitud
 
 En la búsqueda scroll, puede utilizar los siguientes parámetros.
 
+.. note::
+   La búsqueda scroll solo admite el método GET.
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -86,12 +92,13 @@ En la búsqueda scroll, puede utilizar los siguientes parámetros.
      - Descripción
    * - ``q``
      - Consulta de búsqueda (obligatorio)
-   * - ``size``
-     - Número de registros a obtener en cada scroll (predeterminado: 100)
-   * - ``scroll``
-     - Tiempo de validez del contexto de scroll (predeterminado: 1m)
+   * - ``num``
+     - Número de registros a obtener en cada scroll (predeterminado: 10, máximo: 100)
    * - ``fields.label``
      - Filtrado por etiqueta
+
+.. note::
+   El valor máximo de ``num`` se puede cambiar con la propiedad ``paging.search.page.max.size`` en ``fess_config.properties``.
 
 Especificación de Consulta de Búsqueda
 ---------------------------------------
@@ -123,11 +130,11 @@ Puede cambiar el número de registros a obtener en cada scroll.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   Si el parámetro ``size`` es demasiado grande, aumentará el uso de memoria.
-   Normalmente se recomienda configurarlo en el rango de 100 a 1000.
+   Si el parámetro ``num`` es demasiado grande, aumentará el uso de memoria.
+   El valor máximo predeterminado es 100, configurable mediante ``paging.search.page.max.size``.
 
 Filtrado por Etiqueta
 ---------------------
@@ -138,21 +145,13 @@ Puede obtener solo los documentos que pertenecen a una etiqueta específica.
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-Cuando se Requiere Autenticación
----------------------------------
+Acerca de la Autenticación
+---------------------------
 
-Si utiliza búsqueda basada en roles, necesita incluir información de autenticación.
-
-::
-
-    curl -u usuario:contraseña "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-O, utilizando un token de API:
-
-::
-
-    curl -H "Authorization: Bearer SU_TOKEN_API" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   La búsqueda scroll no aplica el control de acceso basado en roles (RBAC) de |Fess|.
+   Todos los documentos que coincidan con los criterios de búsqueda se devuelven independientemente de los permisos del usuario.
+   Si se necesitan restricciones de acceso, configure restricciones de dirección IP o autenticación a través de un proxy inverso.
 
 Formato de Respuesta
 ====================
@@ -174,15 +173,33 @@ Cada línea representa un documento.
 Campos de Respuesta
 -------------------
 
-Principales campos incluidos por defecto:
+Campos incluidos por defecto:
 
 - ``url``: URL del documento
 - ``title``: Título
-- ``content``: Contenido (extracto)
 - ``score``: Puntuación de búsqueda
 - ``boost``: Valor de boost
 - ``created``: Fecha de creación
 - ``last_modified``: Fecha de última modificación
+- ``content_length``: Longitud del contenido
+- ``doc_id``: ID del documento
+- ``host``: Host
+- ``site``: Sitio
+- ``content_title``: Título del contenido
+- ``content_description``: Descripción del contenido
+- ``digest``: Resumen
+- ``timestamp``: Marca de tiempo
+- ``label``: Etiqueta
+- ``segment``: Segmento
+- ``click_count``: Número de clics
+- ``favorite_count``: Número de favoritos
+- ``config_id``: ID de configuración
+- ``filetype``: Tipo de archivo
+- ``filename``: Nombre de archivo
+- ``thumbnail``: Miniatura
+
+.. note::
+   El campo ``content`` no está incluido en la respuesta predeterminada. Para incluirlo, configure ``query.additional.scroll.response.fields=content`` en ``fess_config.properties``.
 
 Ejemplos de Procesamiento de Datos
 ===================================
@@ -199,7 +216,7 @@ Ejemplo de Procesamiento en Python
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -265,11 +282,11 @@ Rendimiento y Mejores Prácticas
 Uso Eficiente
 -------------
 
-1. **Configuración Apropiada del Parámetro size**
+1. **Configuración Apropiada del Parámetro num**
 
    - Si es demasiado pequeño, aumenta la sobrecarga de comunicación
    - Si es demasiado grande, aumenta el uso de memoria
-   - Recomendado: 100-1000
+   - Máximo predeterminado: 100
 
 2. **Optimización de Condiciones de Búsqueda**
 
@@ -295,7 +312,7 @@ Al procesar grandes volúmenes de datos, utilice procesamiento en streaming para
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # Procesar en streaming
     with requests.get(url, params=params, stream=True) as response:
@@ -343,13 +360,13 @@ La Búsqueda Scroll No Está Disponible
 Se Produce un Error de Tiempo de Espera
 ----------------------------------------
 
-1. Reduzca el parámetro ``size`` para distribuir el procesamiento.
+1. Reduzca el parámetro ``num`` para distribuir el procesamiento.
 3. Refine las condiciones de búsqueda para reducir la cantidad de datos obtenidos.
 
 Error de Memoria Insuficiente
 ------------------------------
 
-1. Reduzca el parámetro ``size``.
+1. Reduzca el parámetro ``num``.
 2. Aumente el tamaño de memoria heap de |Fess|.
 3. Verifique el tamaño de memoria heap de OpenSearch.
 

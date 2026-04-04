@@ -97,6 +97,12 @@ Entra ID认证的工作原理
    * - ``entraid.default.roles``
      - 默认角色（逗号分隔）
      - （无）
+   * - ``entraid.permission.fields``
+     - 权限字段（逗号分隔）
+     - ``mail``
+   * - ``entraid.use.ds``
+     - 使用域服务
+     - ``true``
 
 Entra ID侧配置
 ==============

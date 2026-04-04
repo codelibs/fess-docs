@@ -47,13 +47,16 @@
 --------------------------
 
 可以自定义搜索结果响应中包含的字段。
-默认仅返回基本字段,但可以指定其他字段。
+默认返回多个字段,但可以通过以下配置追加字段。
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
 
 指定多个字段时,请用逗号分隔。
+
+.. note::
+   ``content`` 字段默认不包含在响应中。如需获取正文内容,请通过上述配置追加。
 
 使用方法
 ========
@@ -81,6 +84,9 @@
 
 滚动搜索可使用以下参数。
 
+.. note::
+   滚动搜索仅支持 GET 方法。
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -89,12 +95,13 @@
      - 说明
    * - ``q``
      - 搜索查询(必需)
-   * - ``size``
-     - 一次滚动获取的条数(默认: 100)
-   * - ``scroll``
-     - 滚动上下文有效时间(默认: 1m)
+   * - ``num``
+     - 一次获取的条数(默认: 10, 最大: 100)
    * - ``fields.label``
      - 按标签过滤
+
+.. note::
+   最大获取条数可通过 ``paging.search.page.max.size`` 进行变更。
 
 指定搜索查询
 ----------------
@@ -126,11 +133,11 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   ``size`` 参数过大会增加内存使用量。
-   通常建议设置在100〜1000范围内。
+   ``num`` 参数的最大值默认为100。
+   可通过 ``paging.search.page.max.size`` 进行变更。
 
 按标签过滤
 --------------------------
@@ -141,21 +148,13 @@
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-需要认证时
-----------------
+关于认证
+----------
 
-使用基于角色的搜索时,需要包含认证信息。
-
-::
-
-    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-或使用 API 令牌:
-
-::
-
-    curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   滚动搜索不会应用 |Fess| 的基于角色的访问控制（RBAC）。
+   与搜索条件匹配的所有文档将无视用户权限返回。
+   如需访问限制,请通过反向代理等配置 IP 地址限制或认证。
 
 响应格式
 ==============
@@ -179,13 +178,31 @@ NDJSON 格式
 
 默认包含的主要字段:
 
+- ``url_link``: 显示用 URL
 - ``url``: 文档 URL
-- ``title``: 标题
-- ``content``: 正文(摘录)
-- ``score``: 搜索评分
-- ``boost``: 提升值
-- ``created``: 创建时间
+- ``doc_id``: 文档 ID
+- ``content_length``: 内容长度
+- ``host``: 主机名
+- ``site``: 站点
 - ``last_modified``: 最后更新时间
+- ``timestamp``: 时间戳
+- ``boost``: 提升值
+- ``click_count``: 点击次数
+- ``favorite_count``: 收藏次数
+- ``config_id``: 配置 ID
+- ``parent_id``: 父文档 ID
+- ``segment``: 段
+- ``score``: 搜索评分
+- ``digest``: 摘要
+- ``title``: 标题
+- ``filetype``: 文件类型
+- ``filename``: 文件名
+- ``mimetype``: MIME 类型
+- ``created``: 创建时间
+- ``content_title``: 内容标题
+
+.. note::
+   ``content`` 字段默认不包含在响应中。如需获取正文内容,请在 ``query.additional.scroll.response.fields`` 中追加 ``content``。
 
 数据处理示例
 ============
@@ -202,7 +219,7 @@ Python 处理示例
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -268,11 +285,11 @@ Python 处理示例
 高效使用方法
 ----------------
 
-1. **设置适当的 size 参数**
+1. **设置适当的 num 参数**
 
    - 太小会增加通信开销
    - 太大会增加内存使用量
-   - 推荐: 100〜1000
+   - 默认最大值: 100
 
 2. **优化搜索条件**
 
@@ -298,7 +315,7 @@ Python 处理示例
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # 流式处理
     with requests.get(url, params=params, stream=True) as response:
@@ -346,13 +363,13 @@ Python 处理示例
 发生超时错误
 ----------------------------
 
-1. 请减小 ``size`` 参数以分散处理。
-3. 请缩小搜索条件以减少获取数据量。
+1. 请减小 ``num`` 参数以分散处理。
+2. 请缩小搜索条件以减少获取数据量。
 
 内存不足错误
 ----------------
 
-1. 请减小 ``size`` 参数。
+1. 请减小 ``num`` 参数。
 2. 请增加 |Fess| 的堆内存大小。
 3. 请确认 OpenSearch 的堆内存大小。
 

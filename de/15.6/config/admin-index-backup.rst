@@ -20,16 +20,16 @@ Index-Struktur
 
    * - Indexname
      - Beschreibung
-   * - ``fess.{Datum}``
-     - Index für zu durchsuchende Dokumente (täglich erstellt)
-   * - ``fess_log``
-     - Suchprotokolle und Klickprotokolle
-   * - ``fess_user``
-     - Benutzerinformationen
-   * - ``fess_config``
-     - Systemkonfigurationsinformationen
-   * - ``configsync``
-     - Konfigurationssynchronisierungsinformationen
+   * - ``fess.{Zeitstempel}``
+     - Suchdokument-Index (bei Index-Neuaufbau erstellt, über ``fess.search``-Alias referenziert)
+   * - ``fess_config.*``
+     - Systemkonfiguration (bestehend aus mehreren Sub-Indizes wie ``fess_config.web_config``, ``fess_config.scheduled_job``)
+   * - ``fess_user.*``
+     - Benutzerinformationen (``fess_user.user``, ``fess_user.role``, ``fess_user.group``)
+   * - ``fess_log.*``
+     - Such- und Klickprotokolle (``fess_log.search_log``, ``fess_log.click_log`` usw.)
+   * - ``fess_crawler``
+     - Temporärer Index während des Crawlings
 
 Index-Backup und -Wiederherstellung
 ====================================

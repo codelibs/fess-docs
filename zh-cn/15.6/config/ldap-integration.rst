@@ -72,7 +72,7 @@ LDAP连接设置
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # 用户搜索过滤器
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
 
     # 用户名属性
     ldap.user.name.attribute=uid
@@ -109,7 +109,7 @@ LDAP管理基础DN设置
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # 组搜索过滤器
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
     # 组名属性
     ldap.group.name.attribute=cn
@@ -137,12 +137,12 @@ Active Directory设置
 
     # 用户搜索
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.account.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName=%s)
     ldap.user.name.attribute=sAMAccountName
 
     # 组搜索
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
     ldap.group.name.attribute=cn
 
 Active Directory特定设置
@@ -154,7 +154,7 @@ Active Directory特定设置
     ldap.memberof.enabled=true
 
     # 使用memberOf属性
-    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:=%s)
 
 OpenLDAP设置
 ============
@@ -176,12 +176,12 @@ OpenLDAP设置
 
     # 用户搜索
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
     ldap.user.name.attribute=uid
 
     # 组搜索
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.filter=(memberUid={0})
+    ldap.group.filter=(memberUid=%s)
     ldap.group.name.attribute=cn
 
 安全设置

@@ -35,6 +35,14 @@ Configurez « Hôte virtuel » dans :doc:`Guide administrateur > Configuration g
    Host:abc.example.com:8080=host1
    Host:192.168.1.123:8080=host2
 
+.. note::
+
+   Seuls les caractères alphanumériques et les tirets bas ( ``a-z`` , ``A-Z`` , ``0-9`` , ``_`` ) peuvent être utilisés dans les noms d'hôtes virtuels.
+   Les autres caractères sont automatiquement supprimés.
+
+   Les noms suivants sont réservés et ne peuvent pas être utilisés comme noms d'hôtes virtuels :
+   ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
+
 Une fois la configuration effectuée, les JSP de la page de recherche sont générés dans ``WEB-INF/view/nom_hôte_virtuel``.
 En les modifiant, il est également possible de changer le design de la page pour chaque hôte virtuel.
 

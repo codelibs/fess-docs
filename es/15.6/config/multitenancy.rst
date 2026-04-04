@@ -27,28 +27,45 @@ Mecanismo
 3. Se aplica la configuracion de host virtual correspondiente
 4. Se muestra el contenido y la UI especificos del inquilino
 
-Configuracion de host virtual
-=============================
+Configuracion de encabezados de host virtual
+=============================================
+
+Para habilitar la funcionalidad de host virtual, configure la propiedad ``virtual.host.headers``.
+Esta propiedad se define en ``fess_config.properties``.
+
+Formato de configuracion
+------------------------
+
+Especifique cada entrada en el formato ``NombreEncabezado:ValorEncabezado=ClaveHostVirtual``, una por linea:
+
+::
+
+    # fess_config.properties
+    virtual.host.headers=Host:tenant1.example.com=tenant1\n\
+    Host:tenant2.example.com=tenant2
+
+Para multiples hosts virtuales, separe las entradas con saltos de linea.
+
+Restricciones de claves de host virtual
+----------------------------------------
+
+Las claves de host virtual tienen las siguientes restricciones:
+
+- Solo se permiten caracteres alfanumericos y guiones bajos (``a-zA-Z0-9_``). Otros caracteres se eliminan automaticamente.
+- Los siguientes nombres de clave estan reservados y no se pueden usar: ``admin``, ``common``, ``error``, ``login``, ``profile``
 
 Configuracion desde la pantalla de administracion
--------------------------------------------------
+==================================================
 
-1. Iniciar sesion en la pantalla de administracion
-2. Navegar a "Crawler" -> "Host Virtual"
-3. Hacer clic en "Crear nuevo"
-4. Configurar lo siguiente:
-
-   - **Nombre de host**: ``tenant1.example.com``
-   - **Ruta**: ``/tenant1`` (opcional)
-
-Vinculacion con configuracion de crawl
---------------------------------------
+Configuracion de crawl
+----------------------
 
 Puede separar el contenido especificando el host virtual en la configuracion de crawl web:
 
-1. Crear configuracion de crawl en "Crawler" -> "Web"
-2. Seleccionar el host virtual objetivo en el campo "Host Virtual"
-3. El contenido crawleado con esta configuracion solo sera buscable en el host virtual especificado
+1. Iniciar sesion en la pantalla de administracion
+2. Crear configuracion de crawl en "Crawler" -> "Web"
+3. Seleccionar una clave de host virtual definida en ``virtual.host.headers`` en el campo "Host Virtual"
+4. El contenido crawleado con esta configuracion solo sera buscable en el host virtual especificado
 
 Control de acceso
 =================
@@ -59,11 +76,15 @@ Combinacion de host virtual y roles
 Al combinar hosts virtuales con control de acceso basado en roles,
 es posible un control de acceso mas detallado:
 
+Configure el host virtual y los permisos juntos en la configuracion de crawl:
+
 ::
 
-    # Ejemplo de configuracion
-    virtual.host=tenant1.example.com
-    permissions={role}tenant1_user
+    # Host virtual en la configuracion de crawl
+    tenant1
+
+    # Permisos en la configuracion de crawl
+    {role}tenant1_user
 
 Busqueda basada en roles
 ------------------------
@@ -86,12 +107,7 @@ Aplicar un tema diferente para cada host virtual:
 CSS personalizado
 -----------------
 
-Aplicar CSS personalizado para cada host virtual:
-
-::
-
-    # Archivo CSS especifico del host virtual
-    /webapp/WEB-INF/view/tenant1/css/custom.css
+Para aplicar CSS personalizado por host virtual, edite los archivos CSS en la pantalla de administracion en "Sistema" -> "Diseno". Tambien puede colocar plantillas personalizadas en el directorio de vista correspondiente a la clave del host virtual.
 
 Configuracion de etiquetas
 --------------------------
@@ -174,18 +190,20 @@ Si se requiere separacion completa de datos, considere los siguientes enfoques:
 Separacion a nivel de indice
 ----------------------------
 
-Usar indices separados para cada inquilino:
+Usar instancias e indices separados de |Fess| para cada inquilino:
 
 ::
 
-    # Indice para inquilino 1
+    # Instancia Fess del inquilino 1 (fess_config.properties)
     index.document.search.index=fess_tenant1.search
 
-    # Indice para inquilino 2
+    # Instancia Fess del inquilino 2 (fess_config.properties)
     index.document.search.index=fess_tenant2.search
 
 .. note::
-   La separacion a nivel de indice puede requerir implementacion personalizada.
+   ``index.document.search.index`` solo puede establecerse en un valor por instancia.
+   Para una separacion completa a nivel de indice, necesita ejecutar instancias separadas de |Fess| por inquilino
+   o implementar codigo personalizado. Para multitenencia tipica, la separacion logica mediante la funcionalidad de host virtual es suficiente.
 
 Mejores practicas
 =================

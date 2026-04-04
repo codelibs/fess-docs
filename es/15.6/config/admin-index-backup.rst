@@ -20,16 +20,16 @@ Estructura de Índices
 
    * - Nombre del Índice
      - Descripción
-   * - ``fess.{fecha}``
-     - Índice de documentos de búsqueda (creado diariamente)
-   * - ``fess_log``
-     - Registros de búsqueda y clics
-   * - ``fess_user``
-     - Información de usuarios
-   * - ``fess_config``
-     - Información de configuración del sistema
-   * - ``configsync``
-     - Información de sincronización de configuración
+   * - ``fess.{marca_de_tiempo}``
+     - Índice de documentos de búsqueda (creado durante la reconstrucción del índice, referenciado mediante el alias ``fess.search``)
+   * - ``fess_config.*``
+     - Configuración del sistema (compuesto por múltiples subíndices como ``fess_config.web_config``, ``fess_config.scheduled_job``)
+   * - ``fess_user.*``
+     - Información de usuarios (``fess_user.user``, ``fess_user.role``, ``fess_user.group``)
+   * - ``fess_log.*``
+     - Registros de búsqueda y clics (``fess_log.search_log``, ``fess_log.click_log``, etc.)
+   * - ``fess_crawler``
+     - Índice temporal utilizado durante el rastreo
 
 Respaldo y Restauración de Índices
 ===================================
@@ -109,7 +109,7 @@ Respalda solo índices específicos.
 
     curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess.*,fess_config",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'

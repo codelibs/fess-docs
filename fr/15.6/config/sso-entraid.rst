@@ -97,6 +97,12 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    * - ``entraid.default.roles``
      - Rôles par défaut (séparés par des virgules)
      - (Aucun)
+   * - ``entraid.permission.fields``
+     - Champs de permissions (séparés par des virgules)
+     - ``mail``
+   * - ``entraid.use.ds``
+     - Utiliser les services de domaine
+     - ``true``
 
 Configuration côté Entra ID
 ===========================

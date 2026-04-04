@@ -61,7 +61,7 @@ URLの正規化やパスの変換にスクリプトを使用できます。
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").execute(executor);
 
 基本的な構文
 ============
@@ -125,11 +125,11 @@ URLの正規化やパスの変換にスクリプトを使用できます。
    * - オブジェクト
      - 説明
    * - ``data``
-     - データストアから取得したデータ
-   * - ``container``
-     - DIコンテナ（コンポーネントへのアクセス）
+     - データストアから取得したデータ（データストアスクリプトで使用可能）
    * - ``container``
      - DIコンテナ（ ``container.getComponent("systemHelper")`` や ``container.getComponent("fessConfig")`` で各コンポーネントにアクセス可能）
+   * - ``executor``
+     - ジョブ実行インスタンス（スケジュールジョブスクリプトで使用可能。ジョブのシャットダウン制御に使用）
 
 セキュリティ
 ============
@@ -140,6 +140,7 @@ URLの正規化やパスの変換にスクリプトを使用できます。
 - スクリプトはサーバー上で実行されます
 - ファイルシステムやネットワークへのアクセスが可能です
 - 管理者権限を持つユーザーのみがスクリプトを編集できるようにしてください
+- スクリプトの実行は監査ログに記録されます（ ``script.audit.log.enabled`` で制御、デフォルト: ``true`` ）
 
 パフォーマンス
 ==============

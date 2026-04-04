@@ -102,7 +102,7 @@ LDAP管理用ベースDN設定
 ::
 
     # グループフィルター
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
     # memberOf属性名
     ldap.memberof.attribute=memberOf
@@ -132,7 +132,7 @@ Microsoft Active Directory向けの設定例です。
     ldap.account.filter=sAMAccountName=%s
 
     # グループフィルター
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
 Active Directory固有の設定
 --------------------------
@@ -143,7 +143,7 @@ Active Directory固有の設定
     ldap.memberof.attribute=memberOf
 
     # 入れ子グループの解決（LDAP_MATCHING_RULE_IN_CHAIN）
-    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:=%s)
 
 OpenLDAP設定
 ============
@@ -167,7 +167,7 @@ OpenLDAP向けの設定例です。
     ldap.account.filter=uid=%s
 
     # グループフィルター
-    ldap.group.filter=(memberUid={0})
+    ldap.group.filter=(memberUid=%s)
 
 セキュリティ設定
 ================

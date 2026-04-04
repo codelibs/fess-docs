@@ -47,28 +47,24 @@ Konfiguration von Response-Feldern
 --------------------------
 
 Sie können Felder anpassen, die in Suchergebnissen enthalten sind.
-Standardmäßig werden nur Grundfelder zurückgegeben, Sie können jedoch zusätzliche Felder angeben.
+Standardmäßig werden viele Felder zurückgegeben, Sie können jedoch zusätzliche Felder angeben.
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
 
-Bei Angabe mehrerer Felder trennen Sie diese durch Kommas.
+.. note::
+   ``content`` ist standardmäßig nicht in den Response-Feldern enthalten.
 
 Timeout-Einstellung für Scroll
 ----------------------------
 
-Sie können die Gültigkeitsdauer des Scroll-Kontexts konfigurieren.
-Standard ist 1 Minute.
+Die Gültigkeitsdauer des Scroll-Kontexts wird serverseitig konfiguriert.
+Standard ist ``3m`` (3 Minuten).
 
 ::
 
-    api.search.scroll.timeout=1m
-
-Einheiten:
-- ``s``: Sekunden
-- ``m``: Minuten
-- ``h``: Stunden
+    index.scroll.search.timeout=3m
 
 Verwendungsmethode
 ========
@@ -96,6 +92,9 @@ Request-Parameter
 
 Für Scroll-Suche können folgende Parameter verwendet werden:
 
+.. note::
+   Scroll-Suche unterstützt nur die GET-Methode.
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -104,12 +103,13 @@ Für Scroll-Suche können folgende Parameter verwendet werden:
      - Beschreibung
    * - ``q``
      - Suchabfrage (erforderlich)
-   * - ``size``
-     - Anzahl pro Scroll-Abruf (Standard: 100)
-   * - ``scroll``
-     - Gültigkeitszeit des Scroll-Kontexts (Standard: 1m)
+   * - ``num``
+     - Anzahl pro Scroll-Abruf (Standard: 10, Maximum: 100)
    * - ``fields.label``
      - Filterung nach Label
+
+.. note::
+   Der maximale Wert von ``num`` wird durch ``paging.search.page.max.size`` gesteuert.
 
 Angabe von Suchabfragen
 ----------------
@@ -141,11 +141,11 @@ Sie können die Anzahl pro Scroll-Abruf ändern.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   Zu großer ``size``-Parameter erhöht Speichernutzung.
-   Normalerweise wird Bereich von 100–1000 empfohlen.
+   Zu großer ``num``-Parameter erhöht Speichernutzung.
+   Normalerweise wird ein Wert bis maximal 100 empfohlen.
 
 Filterung nach Label
 --------------------------
@@ -156,21 +156,13 @@ Sie können nur Dokumente bestimmter Labels abrufen.
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-Bei erforderlicher Authentifizierung
-----------------
+Hinweis zur Authentifizierung
+-----------------------------
 
-Bei Verwendung rollenbasierter Suche müssen Sie Authentifizierungsinformationen einschließen.
-
-::
-
-    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-Oder mit API-Token:
-
-::
-
-    curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   Bei der Scroll-Suche wird die rollenbasierte Zugriffskontrolle (RBAC) von |Fess| nicht angewendet.
+   Alle Dokumente, die den Suchkriterien entsprechen, werden unabhängig von den Benutzerberechtigungen zurückgegeben.
+   Falls Zugriffsbeschränkungen erforderlich sind, konfigurieren Sie IP-Adressen-Beschränkung oder Authentifizierung über einen Reverse-Proxy.
 
 Response-Format
 ==============
@@ -192,15 +184,34 @@ Jede Zeile repräsentiert ein Dokument.
 Response-Felder
 --------------------
 
-Standardmäßig enthaltene Hauptfelder:
+Standardmäßig enthaltene Felder:
 
 - ``url``: Dokument-URL
+- ``doc_id``: Dokument-ID
 - ``title``: Titel
-- ``content``: Haupttext (Auszug)
 - ``score``: Such-Score
 - ``boost``: Boost-Wert
-- ``created``: Erstellungsdatum
+- ``content_length``: Inhaltslänge
+- ``host``: Hostname
+- ``site``: Site
+- ``content_title``: Inhaltstitel
+- ``content_description``: Inhaltsbeschreibung
+- ``url_link``: URL-Link
 - ``last_modified``: Letztes Änderungsdatum
+- ``timestamp``: Zeitstempel
+- ``created``: Erstellungsdatum
+- ``mimetype``: MIME-Typ
+- ``filetype``: Dateityp
+- ``filename``: Dateiname
+- ``favorite_count``: Favoritenanzahl
+- ``click_count``: Klickanzahl
+- ``config_id``: Konfiguration-ID
+- ``_id``: Interne ID
+- ``label``: Label
+
+.. note::
+   ``content`` ist standardmäßig nicht in den Response-Feldern enthalten.
+   Um ``content`` zu erhalten, konfigurieren Sie ``query.additional.scroll.response.fields=content``.
 
 Datenverarbeitungsbeispiele
 ============
@@ -217,7 +228,7 @@ Verarbeitungsbeispiel mit Python
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -283,11 +294,11 @@ Leistung und Best Practices
 Effiziente Verwendung
 ----------------
 
-1. **Angemessene size-Parameter-Einstellung**
+1. **Angemessene num-Parameter-Einstellung**
 
    - Zu klein erhöht Kommunikations-Overhead
    - Zu groß erhöht Speichernutzung
-   - Empfohlen: 100–1000
+   - Standard-Maximum: 100
 
 2. **Optimierung von Suchbedingungen**
 
@@ -313,7 +324,7 @@ Bei Verarbeitung großer Datenmengen verwenden Sie Streaming-Verarbeitung zur Re
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # Mit Streaming verarbeiten
     with requests.get(url, params=params, stream=True) as response:
@@ -361,14 +372,14 @@ Scroll-Suche nicht verfügbar
 Timeout-Fehler tritt auf
 ----------------------------
 
-1. Erhöhen Sie Wert von ``api.search.scroll.timeout``.
-2. Verkleinern Sie ``size``-Parameter für verteilte Verarbeitung.
+1. Erhöhen Sie Wert von ``index.scroll.search.timeout``.
+2. Verkleinern Sie ``num``-Parameter für verteilte Verarbeitung.
 3. Grenzen Sie Suchbedingungen ein, um abzurufende Datenmenge zu reduzieren.
 
 Speichermangel-Fehler
 ----------------
 
-1. Verkleinern Sie ``size``-Parameter.
+1. Verkleinern Sie ``num``-Parameter.
 2. Erhöhen Sie Heap-Speichergröße von |Fess|.
 3. Überprüfen Sie Heap-Speichergröße von OpenSearch.
 

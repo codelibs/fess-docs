@@ -48,15 +48,15 @@
    デフォルトでは ``ERROR`` レベルのみが通知対象です。
    ``WARN`` を選択すると、``WARN`` と ``ERROR`` の両方が通知されます。
 
-設定ファイルによる有効化
-~~~~~~~~~~~~~~~~~~~~~~~~
+システムプロパティによる有効化
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``fess_config.properties`` を直接編集して有効化することもできます。
+管理画面の「全般」設定で保存されるシステムプロパティを直接設定することもできます。
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 通知先の設定
 ------------
@@ -66,12 +66,11 @@
 
 メール通知を利用するには、以下の設定が必要です。
 
-1. メールサーバーの設定（``fess_config.properties``）:
+1. メールサーバーの設定（``fess_env.properties``）:
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. 管理画面の「全般」設定で「通知先」にメールアドレスを入力します。複数のアドレスはカンマ区切りで指定できます。
 
@@ -207,7 +206,7 @@ OpenSearch インデックス
 
 3. **メールサーバー設定の確認**
 
-   ``fess_config.properties`` でメールサーバーが正しく設定されているか確認します。
+   ``fess_env.properties`` でメールサーバーが正しく設定されているか確認します。
 
 4. **ログの確認**
 

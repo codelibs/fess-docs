@@ -193,6 +193,9 @@ HTTP 크롤러의 스레드 풀 설정입니다.
    * - ``crawler.file.protocols``
      - 파일 크롤링 프로토콜
      - ``file,smb,smb1,ftp,storage``
+   * - ``crawler.crawling.data.encoding``
+     - 크롤링 데이터 인코딩
+     - ``UTF-8``
 
 설정 예
 ~~~~~~
@@ -201,6 +204,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage
+    crawler.crawling.data.encoding=UTF-8
 
 환경 변수 파라미터
 --------------------

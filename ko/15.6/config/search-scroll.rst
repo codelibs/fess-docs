@@ -47,13 +47,14 @@
 --------------------------
 
 검색 결과 응답에 포함할 필드를 사용자 정의할 수 있습니다.
-기본적으로 기본 필드만 반환되지만 추가 필드를 지정할 수 있습니다.
+기본적으로 많은 필드가 반환되지만 추가 필드를 지정할 수 있습니다.
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
 
-여러 필드를 지정하는 경우 쉼표로 구분하여 나열합니다.
+.. note::
+   ``content`` 필드는 기본 응답에 포함되지 않습니다. 필요한 경우 위 설정으로 추가하십시오.
 
 사용 방법
 ========
@@ -81,6 +82,9 @@
 
 스크롤 검색에서는 다음 파라미터를 사용할 수 있습니다.
 
+.. note::
+   스크롤 검색은 GET 메서드만 지원합니다.
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -89,12 +93,13 @@
      - 설명
    * - ``q``
      - 검색 쿼리(필수)
-   * - ``size``
-     - 1회 스크롤로 취득할 건수(기본값: 100)
-   * - ``scroll``
-     - 스크롤 컨텍스트의 유효 시간(기본값: 1m)
+   * - ``num``
+     - 1회 스크롤로 취득할 건수(기본값: 10, 최대: 100)
    * - ``fields.label``
      - 레이블에 의한 필터링
+
+.. note::
+   ``num`` 의 최대값은 ``paging.search.page.max.size`` 설정에 의해 결정됩니다.
 
 검색 쿼리 지정
 ----------------
@@ -126,11 +131,11 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   ``size`` 파라미터를 너무 크게 하면 메모리 사용량이 증가합니다.
-   일반적으로 100〜1000 범위로 설정하는 것을 권장합니다.
+   ``num`` 파라미터를 너무 크게 하면 메모리 사용량이 증가합니다.
+   최대값은 ``paging.search.page.max.size`` 설정(기본값: 100)에 의해 결정됩니다.
 
 레이블에 의한 필터링
 --------------------------
@@ -141,21 +146,13 @@
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-인증이 필요한 경우
-----------------
+인증에 대하여
+--------------
 
-역할 기반 검색을 사용하는 경우 인증 정보를 포함해야 합니다.
-
-::
-
-    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-또는 API 토큰 사용:
-
-::
-
-    curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   스크롤 검색에서는 |Fess| 의 역할 기반 접근 제어(RBAC)가 적용되지 않습니다.
+   검색 조건에 일치하는 모든 문서가 사용자의 권한에 관계없이 반환됩니다.
+   접근 제한이 필요한 경우 리버스 프록시 등에서 IP 주소 제한이나 인증을 설정하십시오.
 
 응답 형식
 ==============
@@ -177,15 +174,34 @@ NDJSON 형식
 응답 필드
 --------------------
 
-기본적으로 포함되는 주요 필드:
+기본적으로 포함되는 필드:
 
-- ``url``: 문서의 URL
-- ``title``: 제목
-- ``content``: 본문(발췌)
-- ``score``: 검색 점수
-- ``boost``: 부스트 값
-- ``created``: 생성 날짜 및 시간
+- ``url_link``: 표시용 URL
+- ``content_description``: 콘텐츠 설명
+- ``site_path``: 사이트 경로
+- ``content_title``: 콘텐츠 제목
+- ``content_length``: 콘텐츠 길이
+- ``host``: 호스트명
 - ``last_modified``: 최종 수정 날짜 및 시간
+- ``timestamp``: 타임스탬프
+- ``cache``: 캐시 데이터
+- ``doc_id``: 문서 ID
+- ``url``: 문서의 URL
+- ``created``: 생성 날짜 및 시간
+- ``site``: 사이트
+- ``boost``: 부스트 값
+- ``title``: 제목
+- ``click_count``: 클릭 수
+- ``mimetype``: MIME 타입
+- ``favorite_count``: 즐겨찾기 수
+- ``_id``: 내부 ID
+- ``filetype``: 파일 유형
+- ``filename``: 파일명
+- ``score``: 검색 점수
+
+.. note::
+   ``content`` 필드는 기본 응답에 포함되지 않습니다.
+   ``query.additional.scroll.response.fields=content`` 설정으로 추가할 수 있습니다.
 
 데이터 처리 예
 ============
@@ -202,7 +218,7 @@ Python으로 처리하는 예
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -268,11 +284,11 @@ jq 명령을 사용하여 CSV로 변환하는 예:
 효율적인 사용 방법
 ----------------
 
-1. **적절한 size 파라미터 설정**
+1. **적절한 num 파라미터 설정**
 
    - 너무 작으면 통신 오버헤드가 증가
    - 너무 크면 메모리 사용량이 증가
-   - 권장: 100〜1000
+   - 기본 최대값: 100
 
 2. **검색 조건 최적화**
 
@@ -298,7 +314,7 @@ jq 명령을 사용하여 CSV로 변환하는 예:
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # 스트리밍으로 처리
     with requests.get(url, params=params, stream=True) as response:
@@ -346,13 +362,13 @@ jq 명령을 사용하여 CSV로 변환하는 예:
 타임아웃 오류가 발생함
 ----------------------------
 
-1. ``size`` 파라미터를 작게 하여 처리를 분산하십시오.
-3. 검색 조건을 좁혀 취득하는 데이터 양을 줄이십시오.
+1. ``num`` 파라미터를 작게 하여 처리를 분산하십시오.
+2. 검색 조건을 좁혀 취득하는 데이터 양을 줄이십시오.
 
 메모리 부족 오류
 ----------------
 
-1. ``size`` 파라미터를 작게 하십시오.
+1. ``num`` 파라미터를 작게 하십시오.
 2. |Fess| 의 힙 메모리 크기를 늘리십시오.
 3. OpenSearch의 힙 메모리 크기를 확인하십시오.
 

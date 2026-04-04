@@ -78,7 +78,34 @@ Dropbox连接器提供从Dropbox云存储获取文件并
      - Dropbox的访问令牌（在App Console中生成）
    * - ``basic_plan``
      - 否
-     - Basic计划时为 ``true``（默认：``false``）
+     - 个人账户时为 ``true``，团队账户时为 ``false``（默认：``false``）
+   * - ``max_size``
+     - 否
+     - 索引对象的最大文件大小（字节）（默认：``10000000``）
+   * - ``number_of_threads``
+     - 否
+     - 抓取使用的线程数（默认：``1``）
+   * - ``ignore_folder``
+     - 否
+     - 是否跳过文件夹元数据（默认：``true``）
+   * - ``ignore_error``
+     - 否
+     - 是否忽略内容提取中的错误（默认：``true``）
+   * - ``supported_mimetypes``
+     - 否
+     - 允许的MIME类型正则表达式模式（逗号分隔）（默认：``.*``）
+   * - ``include_pattern``
+     - 否
+     - 抓取中包含的URL模式
+   * - ``exclude_pattern``
+     - 否
+     - 抓取中排除的URL模式
+   * - ``default_permissions``
+     - 否
+     - 索引文档的默认权限（逗号分隔）
+   * - ``max_cached_content_size``
+     - 否
+     - 内存中缓存的最大内容大小（字节）（默认：``1048576``）
 
 脚本设置
 --------------
@@ -126,6 +153,16 @@ Dropbox文件的情况
      - 服务器端最后更新日期
    * - ``file.roles``
      - 文件访问权限
+   * - ``file.id``
+     - Dropbox文件ID
+   * - ``file.path_lower``
+     - 小写文件路径
+   * - ``file.parent_shared_folder_id``
+     - 父共享文件夹ID
+   * - ``file.content_hash``
+     - 内容哈希
+   * - ``file.rev``
+     - 文件修订版本
 
 Dropbox Paper的情况
 ~~~~~~~~~~~~~~~~~~~
@@ -138,6 +175,31 @@ Dropbox Paper的情况
     mimetype=paper.mimetype
     filetype=paper.filetype
     role=paper.roles
+
+可用字段：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 字段
+     - 说明
+   * - ``paper.url``
+     - Paper文档预览链接
+   * - ``paper.contents``
+     - Paper文档的文本内容
+   * - ``paper.mimetype``
+     - MIME类型
+   * - ``paper.filetype``
+     - 文件类型
+   * - ``paper.title``
+     - Paper文档标题
+   * - ``paper.owner``
+     - Paper文档所有者
+   * - ``paper.roles``
+     - 文档访问权限
+   * - ``paper.revision``
+     - Paper文档修订版本
 
 Dropbox认证设置
 =================
@@ -191,13 +253,13 @@ Dropbox认证设置
 
     access_token=sl.your-dropbox-token-here
 
-Basic计划设置
+个人账户设置
 =================
 
-Dropbox Basic计划的限制
+个人账户的使用
 -------------------------
 
-Dropbox Basic计划的API限制不同。
+对于个人账户（非团队账户），
 请将 ``basic_plan`` 参数设置为 ``true``：
 
 ::
@@ -205,7 +267,8 @@ Dropbox Basic计划的API限制不同。
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-这将进行对应API速率限制的处理。
+``false``（默认）时作为团队账户运行，抓取团队成员和团队文件夹的文件。
+``true`` 时作为个人账户运行，直接抓取账户中的文件。
 
 使用示例
 ======
@@ -253,6 +316,58 @@ Dropbox Basic计划的API限制不同。
     mimetype=paper.mimetype
     filetype=paper.filetype
 
+带权限抓取
+----------------
+
+参数：
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    default_permissions={role}admin
+
+脚本（Dropbox文件）：
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    content_length=file.size
+    last_modified=file.client_modified
+    role=file.roles
+
+脚本（Dropbox Paper）：
+
+::
+
+    title=paper.title
+    content=paper.contents
+    url=paper.url
+    mimetype=paper.mimetype
+    filetype=paper.filetype
+    role=paper.roles
+
+仅抓取特定文件类型
+--------------------------------
+
+脚本中进行过滤：
+
+::
+
+    # 仅PDF和Word文件
+    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        url=file.url
+        title=file.name
+        content=file.contents
+        mimetype=file.mimetype
+        filename=file.name
+        last_modified=file.client_modified
+    }
+
 故障排除
 ======================
 
@@ -298,6 +413,57 @@ API速率限制错误
 1. Basic计划时，设置 ``basic_plan=true``
 2. 增加抓取间隔
 3. 使用多个访问令牌进行负载均衡
+
+无法获取Paper文档
+-------------------------------
+
+**症状**：Paper文档未被抓取
+
+**检查项**：
+
+1. 确认处理器名为 ``DropboxPaperDataStore``
+2. 确认权限中包含 ``files.content.read``
+3. 确认Paper文档确实存在
+
+大量文件时
+------------------------
+
+**症状**：抓取耗时很长或超时
+
+**解决方法**：
+
+1. 将数据存储分成多个（按文件夹等）
+2. 通过计划设置分散负载
+3. Basic计划时注意API速率限制
+
+权限和访问控制
+==================
+
+反映Dropbox共享权限
+-----------------------
+
+可以将Dropbox的共享设置反映到Fess的权限中：
+
+参数：
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    default_permissions={role}dropbox-users
+
+脚本：
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    role=file.roles
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
+
+``file.roles`` 或 ``paper.roles`` 包含Dropbox的共享信息。
 
 参考信息
 ========

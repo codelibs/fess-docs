@@ -193,6 +193,9 @@ Supported Protocols
    * - ``crawler.file.protocols``
      - File crawl protocols
      - ``file,smb,smb1,ftp,storage,s3,gcs``
+   * - ``crawler.crawling.data.encoding``
+     - Crawling data encoding
+     - ``UTF-8``
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
@@ -201,6 +204,7 @@ Configuration Example
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.crawling.data.encoding=UTF-8
 
 Environment Variable Parameters
 --------------------------------

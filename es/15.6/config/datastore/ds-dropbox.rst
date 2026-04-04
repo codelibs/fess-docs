@@ -78,7 +78,34 @@ Lista de Parametros
      - Token de acceso de Dropbox (generado en App Console)
    * - ``basic_plan``
      - No
-     - ``true`` para plan Basic (predeterminado: ``false``)
+     - ``true`` para cuenta individual, ``false`` para cuenta de equipo (predeterminado: ``false``)
+   * - ``max_size``
+     - No
+     - Tamano maximo de archivo para indexacion en bytes (predeterminado: ``10000000``)
+   * - ``number_of_threads``
+     - No
+     - Numero de hilos para rastreo (predeterminado: ``1``)
+   * - ``ignore_folder``
+     - No
+     - Omitir metadatos de carpetas (predeterminado: ``true``)
+   * - ``ignore_error``
+     - No
+     - Ignorar errores durante la extraccion de contenido (predeterminado: ``true``)
+   * - ``supported_mimetypes``
+     - No
+     - Patrones regex para tipos MIME permitidos, separados por comas (predeterminado: ``.*``)
+   * - ``include_pattern``
+     - No
+     - Patron de URL a incluir en el rastreo
+   * - ``exclude_pattern``
+     - No
+     - Patron de URL a excluir del rastreo
+   * - ``default_permissions``
+     - No
+     - Permisos predeterminados para documentos indexados, separados por comas
+   * - ``max_cached_content_size``
+     - No
+     - Tamano maximo de contenido en cache en memoria en bytes (predeterminado: ``1048576``)
 
 Configuracion de Script
 -----------------------
@@ -126,6 +153,16 @@ Campos disponibles:
      - Fecha de ultima modificacion del lado del servidor
    * - ``file.roles``
      - Permisos de acceso del archivo
+   * - ``file.id``
+     - ID del archivo de Dropbox
+   * - ``file.path_lower``
+     - Ruta del archivo en minusculas
+   * - ``file.parent_shared_folder_id``
+     - ID de la carpeta compartida principal
+   * - ``file.content_hash``
+     - Hash del contenido
+   * - ``file.rev``
+     - Revision del archivo
 
 Para Dropbox Paper
 ~~~~~~~~~~~~~~~~~~
@@ -161,6 +198,8 @@ Campos disponibles:
      - Propietario del documento Paper
    * - ``paper.roles``
      - Permisos de acceso del documento
+   * - ``paper.revision``
+     - Revision del documento Paper
 
 Configuracion de Autenticacion de Dropbox
 =========================================
@@ -215,21 +254,22 @@ Configure el token obtenido en los parametros:
 
     access_token=sl.your-dropbox-token-here
 
-Configuracion para Plan Basic
-=============================
+Configuracion para Cuenta Individual
+=====================================
 
-Limitaciones del Plan Basic de Dropbox
---------------------------------------
+Uso con Cuentas Individuales
+-----------------------------
 
-Para el plan Basic de Dropbox, los limites de API son diferentes.
-Configure el parametro ``basic_plan`` como ``true``:
+Para cuentas individuales (no cuentas de equipo),
+configure el parametro ``basic_plan`` como ``true``:
 
 ::
 
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-Esto permite el procesamiento adaptado a los limites de tasa de API.
+Cuando es ``false`` (predeterminado), opera como cuenta de equipo y rastrea archivos de miembros y carpetas del equipo.
+Cuando es ``true``, opera como cuenta individual y rastrea archivos directamente de la cuenta.
 
 Ejemplos de Uso
 ===============

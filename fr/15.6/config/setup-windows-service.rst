@@ -44,7 +44,7 @@ Le numéro de port par défaut pour l'interface de recherche et d'administration
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
 .. note::
-   Le fichier ``bin\service.bat`` contient le port codé en dur dans ``FESS_PARAMS``. Si vous modifiez le port dans ``fess.in.bat``, vous devez également mettre à jour la valeur correspondante dans ``bin\service.bat`` pour que le service Windows utilise le bon port.
+   Lors de l'enregistrement en tant que service, ``-Dfess.port=8080`` est également codé en dur dans ``FESS_PARAMS`` dans ``bin\service.bat``. Lors du changement de port, modifiez également ``service.bat`` en conséquence.
 
 Méthode d'enregistrement
 ------
@@ -73,7 +73,7 @@ Ajoutez la clé et la valeur suivantes dans l'éditeur de registre (regedit).
 .. list-table::
 
    * - *Clé*
-     - ``Ordinateur\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services \fess-service-x64\DependOnService``
+     - ``Ordinateur\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
    * - *Valeur*
      - ``opensearch-service-x64``
 

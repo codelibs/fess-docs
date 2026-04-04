@@ -72,7 +72,7 @@ Configuracion de busqueda de usuarios
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # Filtro de busqueda de usuarios
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
 
     # Atributo de nombre de usuario
     ldap.user.name.attribute=uid
@@ -109,7 +109,7 @@ Configuracion de busqueda de grupos
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # Filtro de busqueda de grupos
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
     # Atributo de nombre de grupo
     ldap.group.name.attribute=cn
@@ -137,12 +137,12 @@ Configuracion basica
 
     # Busqueda de usuarios
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.account.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName=%s)
     ldap.user.name.attribute=sAMAccountName
 
     # Busqueda de grupos
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
     ldap.group.name.attribute=cn
 
 Configuracion especifica de Active Directory
@@ -154,7 +154,7 @@ Configuracion especifica de Active Directory
     ldap.memberof.enabled=true
 
     # Usar atributo memberOf
-    ldap.group.filter=(member:1.2.840.113556.1.4.1941:={0})
+    ldap.group.filter=(member:1.2.840.113556.1.4.1941:=%s)
 
 Configuracion de OpenLDAP
 =========================
@@ -176,12 +176,12 @@ Ejemplo de configuracion para OpenLDAP.
 
     # Busqueda de usuarios
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
     ldap.user.name.attribute=uid
 
     # Busqueda de grupos
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.filter=(memberUid={0})
+    ldap.group.filter=(memberUid=%s)
     ldap.group.name.attribute=cn
 
 Configuracion de seguridad
