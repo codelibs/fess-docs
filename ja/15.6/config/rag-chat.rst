@@ -385,8 +385,6 @@ SSEイベント:
 
    * - イベント
      - 説明
-   * - ``session``
-     - セッション情報（sessionId）
    * - ``phase``
      - 処理フェーズの開始/完了（intent_analysis, search, evaluation, generation）
    * - ``chunk``

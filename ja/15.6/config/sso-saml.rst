@@ -285,7 +285,7 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
    * - プロパティ
      - 説明
      - デフォルト
-   * - ``saml.security.strict``
+   * - ``saml.strict``
      - 厳密モード（検証を厳密に行う）
      - ``true``
    * - ``saml.security.signature_algorithm``

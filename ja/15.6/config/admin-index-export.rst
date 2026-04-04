@@ -48,6 +48,9 @@
    * - ``index.export.scroll.size``
      - ``100``
      - バッチあたりの処理ドキュメント数
+   * - ``index.export.format``
+     - ``html``
+     - エクスポートファイルのフォーマット
 
 設定例:
 
