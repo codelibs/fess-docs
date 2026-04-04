@@ -63,7 +63,7 @@
 
     # 配置示例
     virtual.host=tenant1.example.com
-    permissions=role_tenant1_user
+    permissions={role}tenant1_user
 
 基于角色的搜索
 ----------------

@@ -256,7 +256,7 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
      - ``direct``
      - 검색을 거치지 않고 직접 응답을 생성
    * - 쿼리 재생성
-     - ``query_regeneration``
+     - ``queryregeneration``
      - 검색 결과가 없는 경우 쿼리를 재생성
 
 설정 패턴

@@ -249,7 +249,7 @@ Lista de tipos de prompt
      - ``direct``
      - Genera una respuesta directa sin pasar por la busqueda
    * - Regeneracion de consulta
-     - ``query_regeneration``
+     - ``queryregeneration``
      - Regenera la consulta cuando no se encuentran resultados de busqueda
 
 Patron de configuracion

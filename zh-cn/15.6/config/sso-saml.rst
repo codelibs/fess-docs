@@ -285,7 +285,7 @@ IdP侧配置
    * - 属性
      - 描述
      - 默认值
-   * - ``saml.security.strict``
+   * - ``saml.strict``
      - 严格模式（执行严格验证）
      - ``true``
    * - ``saml.security.signature_algorithm``

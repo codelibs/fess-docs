@@ -249,7 +249,7 @@ Prompttypen-Übersicht
      - ``direct``
      - Generiert eine Antwort ohne Suchumweg
    * - Query-Regenerierung
-     - ``query_regeneration``
+     - ``queryregeneration``
      - Regeneriert die Abfrage, wenn keine Suchergebnisse gefunden werden
 
 Konfigurationsmuster

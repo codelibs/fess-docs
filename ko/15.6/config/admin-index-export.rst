@@ -48,6 +48,9 @@
    * - ``index.export.scroll.size``
      - ``100``
      - 일괄 처리당 처리되는 문서 수
+   * - ``index.export.format``
+     - ``html``
+     - 내보내기 파일 형식
 
 설정 예:
 

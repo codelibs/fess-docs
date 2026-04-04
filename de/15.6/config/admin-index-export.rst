@@ -48,6 +48,9 @@ Konfigurieren Sie die Index-Export-Funktion in ``fess_config.properties``:
    * - ``index.export.scroll.size``
      - ``100``
      - Anzahl der pro Stapel verarbeiteten Dokumente
+   * - ``index.export.format``
+     - ``html``
+     - Exportdateiformat
 
 Konfigurationsbeispiel:
 
