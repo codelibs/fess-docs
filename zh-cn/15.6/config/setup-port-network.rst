@@ -155,18 +155,19 @@ Windows 环境:
 从代理服务器排除特定主机
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-当需要直连特定主机(如内网服务器)而不通过代理服务器时:
+爬虫的代理设置不支持 nonProxyHosts。
+要从代理中排除特定主机,请使用环境变量 ``FESS_NON_PROXY_HOSTS``。
+此设置会被转换为 Java 系统属性 ``http.nonProxyHosts``，并应用于 Fess 的所有 HTTP 通信。
 
 ::
 
-    client.proxyHost=proxy.example.com
-    client.proxyPort=8080
-    client.nonProxyHosts=localhost|*.local|192.168.*
+    FESS_NON_PROXY_HOSTS=localhost|*.local|192.168.*
 
-系统全局 HTTP 代理配置
+爬虫默认代理配置
 ------------------------------
 
-如果 |Fess| 应用程序整体都使用 HTTP 代理,请在 ``fess_config.properties`` 中配置。
+当爬虫配置中未单独指定 ``client.proxyHost`` 时，可以在 ``fess_config.properties`` 中设置默认代理。
+此设置仅适用于爬虫的 HTTP 通信。不适用于 SSO 认证或外部 API 连接。
 
 ::
 
@@ -177,6 +178,9 @@ Windows 环境:
 
 .. warning::
    密码将以未加密形式保存。请设置适当的文件权限。
+
+.. note::
+   如需在整个 Fess 应用程序（包括 SSO、LLM 集成等）中使用代理，请使用环境变量 ``FESS_PROXY_HOST`` 和 ``FESS_PROXY_PORT``。详情请参阅下文的"通过环境变量配置代理"。
 
 通过环境变量配置代理
 ~~~~~~~~~~~~~~~~~~~~
@@ -193,8 +197,8 @@ Windows 环境:
 对于 RPM 包,在 ``/etc/sysconfig/fess`` 中配置。对于 DEB 包,在 ``/etc/default/fess`` 中配置。
 
 .. note::
-   ``fess_config.properties`` 中的 ``http.proxy.*`` 设置用于 Fess 内部的 HTTP 通信。
-   如果外部 Java 库(如 SSO 认证)需要使用代理,还需要配置上述环境变量。
+   ``fess_config.properties`` 中的 ``http.proxy.*`` 设置用作爬虫的默认代理。
+   如需在包括 SSO 认证和 LLM 集成在内的整个 Fess 应用程序中使用代理，请配置上述环境变量。
 
 HTTP 通信配置
 ============

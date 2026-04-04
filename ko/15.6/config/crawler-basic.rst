@@ -68,7 +68,7 @@
 
    - **이름**: 크롤링 설정 식별명(예: 사내 위키)
    - **URL**: 크롤링 시작 URL(예: ``https://wiki.example.com/``)
-   - **크롤링 간격**: 크롤링 실행 빈도(예: 1시간마다)
+   - **간격**: 각 URL에 대한 액세스 간격(밀리초)(예: 10000)
    - **스레드 수**: 병렬 크롤링 수(예: 5)
    - **깊이**: 링크를 따라갈 계층 깊이(예: 3)
 
@@ -192,7 +192,7 @@ SMB/CIFS(Windows 파일 공유)
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       위 경로는 RPM/DEB 패키지 설치 시의 경로입니다. zip/tar.gz 배포의 경우 ``logs/`` 디렉터리에 로그가 위치합니다.
@@ -431,9 +431,12 @@ URL 패턴에 의한 제한
 
 **특정 호스트를 프록시에서 제외:**
 
+프록시에서 제외할 호스트는 크롤링 설정의 설정 매개변수가 아닌 JVM 시스템 프로퍼티로 설정합니다.
+``fess.in.sh`` (Linux/Mac) 또는 ``fess.in.bat`` (Windows)에서 환경 변수 ``FESS_NON_PROXY_HOSTS`` 를 설정하십시오.
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 시스템 전체 프록시 설정
 --------------------------
@@ -524,7 +527,7 @@ User-Agent 설정
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 크롤링이 중간에 중지됨
 ------------------------
@@ -533,7 +536,7 @@ User-Agent 설정
 
 1. **메모리 부족**
 
-   - ``fess_crawler.log`` 에 ``OutOfMemoryError`` 가 없는지 확인
+   - ``fess-crawler.log`` 에 ``OutOfMemoryError`` 가 없는지 확인
    - 크롤러 메모리 늘리기(자세한 내용은 :doc:`setup-memory`)
 
 2. **네트워크 오류**

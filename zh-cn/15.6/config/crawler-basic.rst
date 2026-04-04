@@ -68,7 +68,7 @@
 
    - **名称**: 爬取配置的标识名称(例: 公司Wiki)
    - **URL**: 爬取起始URL(例: ``https://wiki.example.com/``)
-   - **爬取间隔**: 爬取执行频率(例: 每1小时)
+   - **间隔**: 每个URL的访问间隔（毫秒）(例: 10000)
    - **线程数**: 并行爬取数(例: 5)
    - **深度**: 追踪链接的层级深度(例: 3)
 
@@ -192,7 +192,7 @@ SMB/CIFS(Windows文件共享)
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       以上路径适用于RPM/DEB软件包安装。对于zip/tar.gz部署，日志位于 ``logs/`` 目录下。
@@ -431,9 +431,12 @@ URL模式限制
 
 **从代理服务器排除特定主机:**
 
+从代理排除的主机不在爬取配置的配置参数中设置，而是通过JVM系统属性配置。
+请在 ``fess.in.sh`` (Linux/Mac) 或 ``fess.in.bat`` (Windows) 中设置环境变量 ``FESS_NON_PROXY_HOSTS``。
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 系统全局代理配置
 --------------------------
@@ -524,7 +527,7 @@ User-Agent 配置
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 爬取中途停止
 ------------------------
@@ -533,7 +536,7 @@ User-Agent 配置
 
 1. **内存不足**
 
-   - 确认 ``fess_crawler.log`` 中是否有 ``OutOfMemoryError``
+   - 确认 ``fess-crawler.log`` 中是否有 ``OutOfMemoryError``
    - 增加爬虫内存(详情参阅 :doc:`setup-memory`)
 
 2. **网络错误**

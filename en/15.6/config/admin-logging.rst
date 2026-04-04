@@ -24,10 +24,16 @@ The main log files output by |Fess| are as follows:
      - Contents
    * - ``fess.log``
      - Administration and search screen operation logs, application errors, system events
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - Crawl execution logs, crawl target URLs, retrieved document information, errors
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - Suggest (search suggestions) generation logs, index update information
+   * - ``fess-llm.log``
+     - LLM/RAG chat related logs
+   * - ``searchlog.log``
+     - Search logs
+   * - ``fess-urls.log``
+     - Crawler URL statistics log (output by crawl process)
    * - ``server_?.log``
      - Application server system logs such as Tomcat
    * - ``audit.log``
@@ -56,7 +62,7 @@ When problems occur, check logs using the following procedure:
 1. **Identify Error Type**
 
    - Application errors → ``fess.log``
-   - Crawl errors → ``fess_crawler.log``
+   - Crawl errors → ``fess-crawler.log``
    - Authentication errors → ``audit.log``
    - Server errors → ``server_?.log``
 
@@ -142,7 +148,9 @@ The easiest method is changing from the administration screen.
 4. Click the "Update" button.
 
 .. note::
-   Changes made from the administration screen are retained after |Fess| restart.
+   Log level changes in the administration screen only apply to the running instance.
+   After restart, the log level reverts to the ``FESS_LOG_LEVEL`` setting in ``fess.in.sh``.
+   For permanent changes, edit ``FESS_LOG_LEVEL`` in ``fess.in.sh``.
 
 Changing via Configuration File
 --------------------------------
@@ -153,7 +161,7 @@ Configuration File Location
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **ZIP installation**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEB packages**: ``/etc/fess/log4j2.xml``
+- **RPM/DEB packages**: ``/usr/share/fess/lib/classes/log4j2.xml``
 
 Basic Configuration Examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,26 +194,29 @@ Configuration via Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can also specify log level at system startup.
+Set ``FESS_LOG_LEVEL`` in ``fess.in.sh`` (or ``fess.in.bat`` on Windows).
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
+    FESS_LOG_LEVEL=debug
+
+The default value is ``warn``.
 
 Crawler Log Configuration
 ==========================
 
 Crawler logs are output at ``INFO`` level by default.
 
-Configuration from Administration Screen
------------------------------------------
+Configuration from Scheduler
+-----------------------------
 
-1. Open the target crawl configuration from the "Crawler" menu in the administration screen.
-2. Select "Script" in the "Settings" tab.
-3. Add the following to the script field.
+1. Select "Scheduler" from the "System" menu in the administration screen.
+2. Open the target crawl job (e.g., Default Crawler).
+3. Change ``.logLevel("info")`` in the script to the desired level.
 
 ::
 
-    logLevel("DEBUG")
+    return container.getComponent("crawlJob").logLevel("DEBUG")...
 
 Configurable values:
 
@@ -215,15 +226,6 @@ Configurable values:
 - ``INFO``
 - ``DEBUG``
 - ``TRACE``
-
-Change Log Level for Specific URL Patterns Only
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    if (url.contains("example.com")) {
-        logLevel("DEBUG")
-    }
 
 Log Rotation
 ============
@@ -249,13 +251,20 @@ Configuration file example (``log4j2.xml``):
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
-            <SizeBasedTriggeringPolicy size="100MB"/>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 Daily Rotation Configuration
@@ -266,8 +275,8 @@ For daily rotation instead of size-based:
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -283,8 +292,8 @@ For automatic compression during rotation:
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}.gz">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -543,7 +552,7 @@ Logs Not Being Output
    ::
 
        # Check configuration file syntax
-       xmllint --noout /etc/fess/log4j2.xml
+       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
 
 4. **Check SELinux**
 
@@ -566,7 +575,7 @@ Log Files Become Too Large
    ::
 
        # Check log4j2.xml configuration
-       grep -A 5 "RollingFile" /etc/fess/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
 
 3. **Disable Unnecessary Log Output**
 
@@ -594,7 +603,7 @@ Cannot Find Specific Logs
 
    ::
 
-       grep "org.codelibs.fess" /etc/fess/log4j2.xml
+       grep "org.codelibs.fess" /usr/share/fess/lib/classes/log4j2.xml
 
 2. **Check Log File Path**
 

@@ -127,15 +127,6 @@ To search within 1km from the user's current location:
 
     http://localhost:8080/search?q=ramen&geo.location.point=35.681236,139.767125&geo.location.distance=1km
 
-Sorting by Distance
--------------------
-
-To sort search results by distance, use the ``sort`` parameter.
-
-::
-
-    http://localhost:8080/search?q=convenience store&geo.location.point=35.681236,139.767125&geo.location.distance=5km&sort=location.distance
-
 API Usage
 ---------
 
@@ -225,7 +216,7 @@ Index Configuration Optimization
 
 When handling large amounts of location data, optimize index configuration.
 
-Check location field settings in ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
+The location field is defined in the source code at ``src/main/resources/fess_indices/fess/doc.json``.
 
 ::
 

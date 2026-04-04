@@ -155,25 +155,47 @@ URLの生成
 
 ::
 
-    // 日付のパース
-    import java.text.SimpleDateFormat
-    def sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-    lastModified=sdf.parse(data.date_string)
+    // 日付のパース（FQCNを使用した単一式）
+    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // エポック秒からの変換
     lastModified=new Date(data.timestamp * 1000L)
+
+利用可能なオブジェクト
+======================
+
+スクリプトの実行コンテキストによって、利用可能なオブジェクトが異なります。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - コンテキスト
+     - オブジェクト
+     - 説明
+   * - 全コンテキスト
+     - ``container``
+     - DIコンテナ。コンポーネントへのアクセスに使用
+   * - スケジュールジョブ
+     - ``executor``
+     - ジョブ実行制御（ ``JobExecutor`` ）。ジョブの停止サポートに必要
+   * - データストア
+     - （コネクタ固有）
+     - 各データストアが提供するデータレコード変数
 
 スケジュールジョブスクリプト
 ============================
 
 スケジュールジョブで使用するGroovyスクリプトの例です。
+スケジュールジョブでは ``container`` と ``executor`` が利用可能です。
+``executor`` をジョブの ``execute()`` メソッドに渡すことで、ジョブの停止制御が有効になります。
 
 クロールジョブの実行
 --------------------
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
 条件付きクロール
 ----------------
@@ -187,7 +209,7 @@ URLの生成
 
     // 業務時間外のみクロール
     if (hour < 9 || hour >= 18) {
-        return container.getComponent("crawlJob").execute()
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     }
     return "Skipped during business hours"
 
@@ -199,10 +221,10 @@ URLの生成
     def results = []
 
     // サジェスト更新
-    results << container.getComponent("suggestJob").execute()
+    results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // クロール実行
-    results << container.getComponent("crawlJob").execute()
+    results << container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
 
     return results.join("\n")
 

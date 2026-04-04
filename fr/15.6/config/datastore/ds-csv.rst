@@ -240,12 +240,10 @@ Filtrage des informations de stock :
 
 ::
 
-    if (data.in_stock == "true") {
-        url="https://shop.example.com/product/" + data.product_id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    url=data.in_stock == "true" ? "https://shop.example.com/product/" + data.product_id : null
+    title=data.in_stock == "true" ? data.name : null
+    content=data.in_stock == "true" ? data.description : null
+    price=data.in_stock == "true" ? data.price : null
 
 Annuaire des employes CSV
 -------------
@@ -522,7 +520,7 @@ Traitement des donnees
     url="https://example.com/product/" + data.id
     title=data.name
     content=data.description
-    price=parseInt(data.price)
+    price=Integer.parseInt(data.price)
     category=data.category.toLowerCase()
 
 Indexation conditionnelle
@@ -531,12 +529,10 @@ Indexation conditionnelle
 ::
 
     # Uniquement les produits dont le prix est superieur ou egal a 10000
-    if (parseInt(data.price) >= 10000) {
-        url="https://example.com/product/" + data.id
-        title=data.name
-        content=data.description
-        price=data.price
-    }
+    url=Integer.parseInt(data.price) >= 10000 ? "https://example.com/product/" + data.id : null
+    title=Integer.parseInt(data.price) >= 10000 ? data.name : null
+    content=Integer.parseInt(data.price) >= 10000 ? data.description : null
+    price=Integer.parseInt(data.price) >= 10000 ? data.price : null
 
 Concatenation de plusieurs colonnes
 ------------

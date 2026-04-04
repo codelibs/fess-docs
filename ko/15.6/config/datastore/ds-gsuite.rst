@@ -212,7 +212,7 @@ https://admin.google.com/ 에 접속:
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. "승인" 클릭
 
@@ -343,7 +343,7 @@ Google 문서만:
 2. Google Drive API가 활성화되어 있는지 확인
 3. 도메인 전체 위임이 설정되어 있는지 확인
 4. Google Workspace 관리 콘솔에서 승인되었는지 확인
-5. OAuth 범위가 올바른지 확인(``https://www.googleapis.com/auth/drive.readonly``)
+5. OAuth 범위가 올바른지 확인(``https://www.googleapis.com/auth/drive``)
 
 도메인 전체 위임 오류
 ------------------------
@@ -355,7 +355,7 @@ Google 문서만:
 1. Google Workspace 관리 콘솔에서 승인 확인:
 
    - 클라이언트 ID가 올바르게 등록되어 있는지
-   - OAuth 범위가 올바른지(``https://www.googleapis.com/auth/drive.readonly``)
+   - OAuth 범위가 올바른지(``https://www.googleapis.com/auth/drive``)
 
 2. 서비스 계정에서 도메인 전체 위임이 활성화되어 있는지 확인
 

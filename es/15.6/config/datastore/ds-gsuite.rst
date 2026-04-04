@@ -212,7 +212,7 @@ Acceda a https://admin.google.com/:
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. Haga clic en "Autorizar"
 
@@ -273,7 +273,7 @@ Error de Autenticacion
 2. Verificar que Google Drive API este habilitada
 3. Verificar que la delegacion de dominio este configurada
 4. Verificar que este autorizado en la consola de administracion de Google Workspace
-5. Verificar que el ambito OAuth sea correcto (``https://www.googleapis.com/auth/drive.readonly``)
+5. Verificar que el ambito OAuth sea correcto (``https://www.googleapis.com/auth/drive``)
 
 Error de Delegacion de Dominio
 ------------------------------
@@ -285,7 +285,7 @@ Error de Delegacion de Dominio
 1. Verificar la autorizacion en la consola de administracion de Google Workspace:
 
    - El ID de cliente esta registrado correctamente
-   - El ambito OAuth es correcto (``https://www.googleapis.com/auth/drive.readonly``)
+   - El ambito OAuth es correcto (``https://www.googleapis.com/auth/drive``)
 
 2. Verificar que la delegacion de dominio este habilitada en la cuenta de servicio
 

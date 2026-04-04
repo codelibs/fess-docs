@@ -154,7 +154,7 @@ All configuration options available for the OpenAI client. All settings except `
      - Location
    * - ``rag.llm.name``
      - LLM provider name (specify ``openai``)
-     - (Required)
+     - ``ollama``
      - system.properties
    * - ``rag.llm.openai.api.key``
      - OpenAI API key
@@ -184,6 +184,38 @@ All configuration options available for the OpenAI client. All settings except `
      - Maximum number of relevant documents during evaluation
      - ``3``
      - fess_config.properties
+   * - ``rag.llm.openai.concurrency.wait.timeout``
+     - Concurrent request wait timeout (ms)
+     - ``30000``
+     - fess_config.properties
+   * - ``rag.llm.openai.reasoning.token.multiplier``
+     - Max tokens multiplier for reasoning models
+     - ``4``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.max.chars``
+     - Max characters for conversation history
+     - ``8000``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.messages``
+     - Max history messages for intent detection
+     - ``8``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.chars``
+     - Max history chars for intent detection
+     - ``4000``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.max.chars``
+     - Max chars for assistant messages
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.summary.max.chars``
+     - Max chars for assistant summary
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.chat.evaluation.description.max.chars``
+     - Max chars for doc description in evaluation
+     - ``500``
+     - fess_config.properties
    * - ``rag.chat.enabled``
      - Enable AI mode functionality
      - ``false``
@@ -199,9 +231,9 @@ Configuration Pattern
 
 Per-prompt-type settings are specified using the following pattern:
 
-- ``rag.llm.openai.{promptType}.temperature`` - Generation randomness (0.0 to 2.0)
+- ``rag.llm.openai.{promptType}.temperature`` - Generation randomness (0.0 to 2.0). Ignored for reasoning models (o1/o3/o4/gpt-5 series)
 - ``rag.llm.openai.{promptType}.max.tokens`` - Maximum number of tokens
-- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximum number of context characters
+- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximum number of context characters (default: ``16000`` for answer/summary, ``10000`` for others)
 
 Prompt Types
 ------------
@@ -232,6 +264,62 @@ Available prompt types:
      - Prompt for generating FAQs
    * - ``direct``
      - Prompt for direct responses
+   * - ``queryregeneration``
+     - Query regeneration prompt
+
+Default Values
+--------------
+
+Default values for each prompt type. Temperature settings are ignored for reasoning models (o1/o3/o4/gpt-5 series).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 20 35
+
+   * - Prompt Type
+     - Temperature
+     - Max Tokens
+     - Notes
+   * - ``intent``
+     - 0.1
+     - 256
+     - Deterministic intent detection
+   * - ``evaluation``
+     - 0.1
+     - 256
+     - Deterministic relevance evaluation
+   * - ``unclear``
+     - 0.7
+     - 512
+     -
+   * - ``noresults``
+     - 0.7
+     - 512
+     -
+   * - ``docnotfound``
+     - 0.7
+     - 256
+     -
+   * - ``direct``
+     - 0.7
+     - 1024
+     -
+   * - ``faq``
+     - 0.7
+     - 1024
+     -
+   * - ``answer``
+     - 0.5
+     - 2048
+     - Main answer generation
+   * - ``summary``
+     - 0.3
+     - 2048
+     - Summary generation
+   * - ``queryregeneration``
+     - 0.3
+     - 256
+     - Query regeneration
 
 Configuration Examples
 ----------------------
@@ -255,6 +343,9 @@ Reasoning Model Support
 
 When using reasoning models such as o1/o3/o4 series or gpt-5 series, |Fess| automatically uses the OpenAI API ``max_completion_tokens`` parameter instead of ``max_tokens``. No additional configuration changes are required.
 
+.. note::
+   Reasoning models (o1/o3/o4/gpt-5 series) ignore the ``temperature`` setting and use a fixed value (1). Also, when using reasoning models, the default ``max_tokens`` is multiplied by ``reasoning.token.multiplier`` (default: 4).
+
 Additional Parameters for Reasoning Models
 -------------------------------------------
 
@@ -267,18 +358,20 @@ When using reasoning models, the following additional parameters can be configur
    * - Property
      - Description
      - Default
-   * - ``rag.llm.openai.reasoning.effort``
+   * - ``rag.llm.openai.{promptType}.reasoning.effort``
      - Reasoning effort setting for o-series models (``low``, ``medium``, ``high``)
-     - (Not set)
-   * - ``rag.llm.openai.top.p``
+     - ``low`` (intent/evaluation/docnotfound/unclear/noresults/queryregeneration), not set (others)
+   * - ``rag.llm.openai.{promptType}.top.p``
      - Token selection probability threshold (0.0 to 1.0)
      - (Not set)
-   * - ``rag.llm.openai.frequency.penalty``
+   * - ``rag.llm.openai.{promptType}.frequency.penalty``
      - Frequency penalty (-2.0 to 2.0)
      - (Not set)
-   * - ``rag.llm.openai.presence.penalty``
+   * - ``rag.llm.openai.{promptType}.presence.penalty``
      - Presence penalty (-2.0 to 2.0)
      - (Not set)
+
+``{promptType}`` can be ``intent``, ``evaluation``, ``answer``, ``summary``, etc.
 
 Configuration Examples
 ----------------------

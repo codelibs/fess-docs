@@ -53,10 +53,10 @@ Par défaut, lorsque plus de 10 000 résultats sont trouvés, l'affichage est le
 
     query.track.total.hits=10000
 
-Nom de l'index lors de la recherche par géolocalisation
+Nom du champ lors de la recherche par géolocalisation
 =======================
 
-Spécifie le nom de l'index lors de la recherche par géolocalisation.
+Spécifie le nom du champ lors de la recherche par géolocalisation.
 La valeur initiale est `location`.
 ::
 

@@ -24,10 +24,16 @@ Los principales archivos de registro generados por |Fess| son los siguientes:
      - Contenido
    * - ``fess.log``
      - Registros de operaciones en la pantalla de administración y búsqueda, errores de aplicación y eventos del sistema
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - Registros de ejecución de rastreo, URLs rastreadas, información de documentos obtenidos y errores
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - Registros de generación de sugerencias (candidatos de búsqueda) e información de actualización de índices
+   * - ``fess-llm.log``
+     - Registros relacionados con chat LLM/RAG
+   * - ``searchlog.log``
+     - Registros de búsqueda
+   * - ``fess-urls.log``
+     - Registro de estadísticas de URLs del rastreador (generado por el proceso de rastreo)
    * - ``server_?.log``
      - Registros del sistema del servidor de aplicaciones como Tomcat
    * - ``audit.log``
@@ -56,7 +62,7 @@ Cuando ocurra un problema, verifique los registros siguiendo estos pasos:
 1. **Identificar el tipo de error**
 
    - Error de aplicación → ``fess.log``
-   - Error de rastreo → ``fess_crawler.log``
+   - Error de rastreo → ``fess-crawler.log``
    - Error de autenticación → ``audit.log``
    - Error del servidor → ``server_?.log``
 
@@ -142,7 +148,9 @@ La forma más sencilla es cambiar desde la pantalla de administración.
 4. Haga clic en el botón "Actualizar".
 
 .. note::
-   Los cambios realizados desde la pantalla de administración se conservan incluso después de reiniciar |Fess|.
+   Los cambios de nivel de registro en la pantalla de administración solo se aplican a la instancia en ejecución.
+   Después del reinicio, se revierte a la configuración ``FESS_LOG_LEVEL`` en ``fess.in.sh``.
+   Para cambios permanentes, edite ``FESS_LOG_LEVEL`` en ``fess.in.sh``.
 
 Cambios mediante Archivo de Configuración
 ------------------------------------------
@@ -153,7 +161,7 @@ Ubicación del Archivo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **Instalación ZIP**: ``app/WEB-INF/classes/log4j2.xml``
-- **Paquetes RPM/DEB**: ``/etc/fess/log4j2.xml``
+- **Paquetes RPM/DEB**: ``/usr/share/fess/lib/classes/log4j2.xml``
 
 Ejemplos de Configuración Básica
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,26 +194,29 @@ Configuración mediante Variables de Entorno
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 También puede especificar el nivel de registro al iniciar el sistema.
+Configure ``FESS_LOG_LEVEL`` en ``fess.in.sh`` (o ``fess.in.bat`` en Windows).
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
+    FESS_LOG_LEVEL=debug
+
+El valor predeterminado es ``warn``.
 
 Configuración de Registros del Rastreador
 ==========================================
 
 Los registros del rastreador se generan de forma predeterminada en el nivel ``INFO``.
 
-Configuración desde la Pantalla de Administración
---------------------------------------------------
+Configuración desde el Planificador
+-------------------------------------
 
-1. Abra la configuración de rastreo objetivo desde el menú "Rastreador" de la pantalla de administración.
-2. Seleccione "Script" en la pestaña "Configuración".
-3. Agregue lo siguiente en el campo de script:
+1. Seleccione "Planificador" en el menú "Sistema" de la pantalla de administración.
+2. Abra el trabajo de rastreo objetivo (por ejemplo, Default Crawler).
+3. Cambie ``.logLevel("info")`` en el script al nivel deseado.
 
 ::
 
-    logLevel("DEBUG")
+    return container.getComponent("crawlJob").logLevel("DEBUG")...
 
 Valores configurables:
 
@@ -215,15 +226,6 @@ Valores configurables:
 - ``INFO``
 - ``DEBUG``
 - ``TRACE``
-
-Cambiar el Nivel de Registro Solo para Patrones de URL Específicos
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    if (url.contains("example.com")) {
-        logLevel("DEBUG")
-    }
 
 Rotación de Registros
 ======================
@@ -249,13 +251,20 @@ Ejemplo de archivo de configuración (``log4j2.xml``):
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
-            <SizeBasedTriggeringPolicy size="100MB"/>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 Configuración de Rotación Diaria
@@ -266,8 +275,8 @@ Para rotar diariamente en lugar de por tamaño:
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -283,8 +292,8 @@ Para comprimir automáticamente durante la rotación:
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}.gz">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -544,7 +553,7 @@ Los Registros no se Generan
    ::
 
        # Verificar sintaxis del archivo de configuración
-       xmllint --noout /etc/fess/log4j2.xml
+       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
 
 4. **Verificación de SELinux**
 
@@ -567,7 +576,7 @@ Los Archivos de Registro se Hacen Demasiado Grandes
    ::
 
        # Verificar configuración de log4j2.xml
-       grep -A 5 "RollingFile" /etc/fess/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
 
 3. **Deshabilitar salida de registros innecesaria**
 
@@ -595,7 +604,7 @@ No se Encuentra un Registro Específico
 
    ::
 
-       grep "org.codelibs.fess" /etc/fess/log4j2.xml
+       grep "org.codelibs.fess" /usr/share/fess/lib/classes/log4j2.xml
 
 2. **Verificar la ruta del archivo de registro**
 

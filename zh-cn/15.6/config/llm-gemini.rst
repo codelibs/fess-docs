@@ -159,8 +159,8 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 说明
      - 默认值
    * - ``rag.llm.gemini.api.key``
-     - Google AI API密钥
-     - （必需）
+     - Google AI API密钥（使用Gemini API需要设置）
+     - ``""``
    * - ``rag.llm.gemini.model``
      - 使用的模型名称
      - ``gemini-3-flash-preview``
@@ -179,6 +179,27 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
      - 评估时的最大相关文档数
      - ``3``
+   * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
+     - 评估时文档描述的最大字符数
+     - ``500``
+   * - ``rag.llm.gemini.concurrency.wait.timeout``
+     - 并发请求等待超时（毫秒）
+     - ``30000``
+   * - ``rag.llm.gemini.history.max.chars``
+     - 聊天历史的最大字符数
+     - ``10000``
+   * - ``rag.llm.gemini.intent.history.max.messages``
+     - 意图判定时的历史最大消息数
+     - ``10``
+   * - ``rag.llm.gemini.intent.history.max.chars``
+     - 意图判定时的历史最大字符数
+     - ``5000``
+   * - ``rag.llm.gemini.history.assistant.max.chars``
+     - 助手历史的最大字符数
+     - ``1000``
+   * - ``rag.llm.gemini.history.assistant.summary.max.chars``
+     - 助手摘要历史的最大字符数
+     - ``1000``
 
 提示词类型别配置
 ======================
@@ -193,6 +214,7 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 
     rag.llm.gemini.{promptType}.temperature
     rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.thinking.budget
     rag.llm.gemini.{promptType}.context.max.chars
 
 可用的提示词类型
@@ -222,6 +244,62 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 生成FAQ的提示词
    * - ``direct``
      - 直接响应的提示词
+   * - ``queryregeneration``
+     - 查询再生成的提示词
+
+提示词类型别默认值
+------------------------------
+
+各提示词类型的默认值如下。未设置时将使用这些值。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20
+
+   * - 提示词类型
+     - temperature
+     - max.tokens
+     - thinking.budget
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``evaluation``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``256``
+     - ``0``
+   * - ``direct``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``faq``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``answer``
+     - ``0.5``
+     - ``4096``
+     - ``2048``
+   * - ``summary``
+     - ``0.3``
+     - ``4096``
+     - ``2048``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
 
 配置示例
 ------
@@ -245,7 +323,7 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 
 .. note::
    ``context.max.chars`` 的默认值因提示词类型而异。
-   ``answer`` 和 ``summary`` 为16000，``faq`` 为10000。
+   ``answer`` 和 ``summary`` 为16000，``faq`` 为10000，其他提示词类型为10000。
 
 思考模型支持
 ==============
@@ -253,12 +331,15 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 Gemini支持思考模型（Thinking Model）。
 使用思考模型时，模型在生成回答前会执行内部推理过程，从而生成精度更高的回答。
 
-可在 ``fess_config.properties`` 中设置思考预算。
+可按提示词类型在 ``fess_config.properties`` 中设置思考预算。
 
 ::
 
-    # 设置思考预算
-    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+    # 回答生成时的思考预算设置
+    rag.llm.gemini.answer.thinking.budget=1024
+
+    # 摘要生成时的思考预算设置
+    rag.llm.gemini.summary.thinking.budget=1024
 
 .. note::
    设置思考预算后，响应时间可能会变长。

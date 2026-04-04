@@ -212,7 +212,7 @@ Google Cloud Platform设置
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. 点击「授权」
 
@@ -343,7 +343,7 @@ Google Drive全体爬取
 2. 确认Google Drive API是否已启用
 3. 确认是否已设置域全域委派
 4. 确认是否已在Google Workspace管理控制台授权
-5. 确认OAuth范围是否正确（``https://www.googleapis.com/auth/drive.readonly``）
+5. 确认OAuth范围是否正确（``https://www.googleapis.com/auth/drive``）
 
 域全域委派错误
 ------------------------
@@ -355,7 +355,7 @@ Google Drive全体爬取
 1. 在Google Workspace管理控制台确认授权:
 
    - 客户端ID是否正确注册
-   - OAuth范围是否正确（``https://www.googleapis.com/auth/drive.readonly``）
+   - OAuth范围是否正确（``https://www.googleapis.com/auth/drive``）
 
 2. 确认服务账号是否启用了域全域委派
 

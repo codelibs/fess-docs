@@ -154,7 +154,7 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 配置位置
    * - ``rag.llm.name``
      - LLM提供商名称（指定 ``openai``）
-     - （必需）
+     - ``ollama``
      - system.properties
    * - ``rag.llm.openai.api.key``
      - OpenAI API密钥
@@ -184,6 +184,38 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 评估时的最大相关文档数
      - ``3``
      - fess_config.properties
+   * - ``rag.llm.openai.concurrency.wait.timeout``
+     - 并发请求等待超时（毫秒）
+     - ``30000``
+     - fess_config.properties
+   * - ``rag.llm.openai.reasoning.token.multiplier``
+     - 推理模型的max_tokens倍率
+     - ``4``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.max.chars``
+     - 会话历史的最大字符数
+     - ``8000``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.messages``
+     - 意图判定时的最大历史消息数
+     - ``8``
+     - fess_config.properties
+   * - ``rag.llm.openai.intent.history.max.chars``
+     - 意图判定时的最大历史字符数
+     - ``4000``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.max.chars``
+     - 助手消息的最大字符数
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.history.assistant.summary.max.chars``
+     - 助手摘要的最大字符数
+     - ``800``
+     - fess_config.properties
+   * - ``rag.llm.openai.chat.evaluation.description.max.chars``
+     - 评估时文档描述的最大字符数
+     - ``500``
+     - fess_config.properties
    * - ``rag.chat.enabled``
      - 启用AI搜索模式功能
      - ``false``
@@ -199,9 +231,9 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 
 按提示词类型的配置以如下模式指定:
 
-- ``rag.llm.openai.{promptType}.temperature`` - 生成随机性（0.0〜2.0）
+- ``rag.llm.openai.{promptType}.temperature`` - 生成随机性（0.0〜2.0）。推理模型（o1/o3/o4/gpt-5系列）会忽略此设置
 - ``rag.llm.openai.{promptType}.max.tokens`` - 最大token数
-- ``rag.llm.openai.{promptType}.context.max.chars`` - 上下文最大字符数
+- ``rag.llm.openai.{promptType}.context.max.chars`` - 上下文最大字符数（默认值: answer/summary为 ``16000``，其他为 ``10000``）
 
 提示词类型
 ----------------
@@ -232,6 +264,62 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 生成FAQ的提示词
    * - ``direct``
      - 直接响应的提示词
+   * - ``queryregeneration``
+     - 搜索查询再生成的提示词
+
+默认值
+------
+
+各提示词类型的默认值如下。推理模型（o1/o3/o4/gpt-5系列）会忽略temperature设置。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 20 35
+
+   * - 提示词类型
+     - Temperature
+     - Max Tokens
+     - 备注
+   * - ``intent``
+     - 0.1
+     - 256
+     - 确定性意图判定
+   * - ``evaluation``
+     - 0.1
+     - 256
+     - 确定性相关性评估
+   * - ``unclear``
+     - 0.7
+     - 512
+     -
+   * - ``noresults``
+     - 0.7
+     - 512
+     -
+   * - ``docnotfound``
+     - 0.7
+     - 256
+     -
+   * - ``direct``
+     - 0.7
+     - 1024
+     -
+   * - ``faq``
+     - 0.7
+     - 1024
+     -
+   * - ``answer``
+     - 0.5
+     - 2048
+     - 主要回答生成
+   * - ``summary``
+     - 0.3
+     - 2048
+     - 摘要生成
+   * - ``queryregeneration``
+     - 0.3
+     - 256
+     - 查询再生成
 
 配置示例
 ------
@@ -255,6 +343,9 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 
 使用o1/o3/o4系列或gpt-5系列推理模型时，|Fess| 会自动使用OpenAI API的 ``max_completion_tokens`` 参数代替 ``max_tokens``。无需额外更改配置。
 
+.. note::
+   推理模型（o1/o3/o4/gpt-5系列）会忽略 ``temperature`` 设置，使用固定值（1）。此外，使用推理模型时，默认的 ``max_tokens`` 会乘以 ``reasoning.token.multiplier``（默认值: 4）。
+
 推理模型的附加参数
 ----------------------------
 
@@ -267,18 +358,20 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
    * - 属性
      - 说明
      - 默认值
-   * - ``rag.llm.openai.reasoning.effort``
+   * - ``rag.llm.openai.{promptType}.reasoning.effort``
      - o系列模型的推理effort设置（``low``、``medium``、``high``）
-     - （未设置）
-   * - ``rag.llm.openai.top.p``
+     - ``low``（intent/evaluation/docnotfound/unclear/noresults/queryregeneration），未设置（其他）
+   * - ``rag.llm.openai.{promptType}.top.p``
      - token选择的概率阈值（0.0〜1.0）
      - （未设置）
-   * - ``rag.llm.openai.frequency.penalty``
+   * - ``rag.llm.openai.{promptType}.frequency.penalty``
      - 频率惩罚（-2.0〜2.0）
      - （未设置）
-   * - ``rag.llm.openai.presence.penalty``
+   * - ``rag.llm.openai.{promptType}.presence.penalty``
      - 存在惩罚（-2.0〜2.0）
      - （未设置）
+
+``{promptType}`` 可以是 ``intent``、``evaluation``、``answer``、``summary`` 等提示词类型。
 
 配置示例
 ------

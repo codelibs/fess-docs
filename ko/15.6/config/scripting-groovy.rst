@@ -155,25 +155,47 @@ URL 생성
 
 ::
 
-    // 날짜 파싱
-    import java.text.SimpleDateFormat
-    def sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-    lastModified=sdf.parse(data.date_string)
+    // 날짜 파싱 (FQCN을 사용한 단일 식)
+    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // 에포크 초에서 변환
     lastModified=new Date(data.timestamp * 1000L)
+
+사용 가능한 객체
+=================
+
+스크립트 실행 컨텍스트에 따라 사용 가능한 객체가 다릅니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - 컨텍스트
+     - 객체
+     - 설명
+   * - 모든 컨텍스트
+     - ``container``
+     - DI 컨테이너. 컴포넌트 접근에 사용
+   * - 스케줄 작업
+     - ``executor``
+     - 작업 실행 제어 ( ``JobExecutor`` ). 작업 정지 지원에 필요
+   * - 데이터 스토어
+     - (커넥터별)
+     - 각 데이터 스토어가 제공하는 데이터 레코드 변수
 
 스케줄 작업 스크립트
 ============================
 
 스케줄 작업에서 사용하는 Groovy 스크립트 예입니다.
+스케줄 작업에서는 ``container`` 와 ``executor`` 를 사용할 수 있습니다.
+``executor`` 를 작업의 ``execute()`` 메서드에 전달하면 작업 정지 제어가 활성화됩니다.
 
 크롤 작업 실행
 --------------------
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
 조건부 크롤링
 ----------------
@@ -187,7 +209,7 @@ URL 생성
 
     // 업무 시간 외에만 크롤링
     if (hour < 9 || hour >= 18) {
-        return container.getComponent("crawlJob").execute()
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     }
     return "Skipped during business hours"
 
@@ -199,10 +221,10 @@ URL 생성
     def results = []
 
     // 인덱스 최적화
-    results << container.getComponent("suggestJob").execute()
+    results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // 크롤 실행
-    results << container.getComponent("crawlJob").execute()
+    results << container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
 
     return results.join("\n")
 

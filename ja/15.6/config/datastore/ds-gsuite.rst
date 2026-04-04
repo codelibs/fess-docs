@@ -94,6 +94,48 @@ Google Workspaceコネクタは、Google Drive（旧G Suite）からファイル
    * - ``client_email``
      - はい
      - サービスアカウントのメールアドレス
+   * - ``max_size``
+     - いいえ
+     - インデックス対象の最大ファイルサイズ（バイト）。デフォルト: ``10485760`` （10MB）
+   * - ``ignore_folder``
+     - いいえ
+     - フォルダをスキップするかどうか。デフォルト: ``true``
+   * - ``ignore_error``
+     - いいえ
+     - エラー発生時に処理を継続するかどうか。デフォルト: ``true``
+   * - ``supported_mimetypes``
+     - いいえ
+     - インデックス対象のMIMEタイプ（正規表現、カンマ区切り）。デフォルト: ``.*`` （全タイプ）
+   * - ``include_pattern``
+     - いいえ
+     - インデックス対象URLの正規表現パターン
+   * - ``exclude_pattern``
+     - いいえ
+     - 除外するURLの正規表現パターン
+   * - ``default_permissions``
+     - いいえ
+     - デフォルトの権限（カンマ区切り、例: ``{role}drive-users``）
+   * - ``number_of_threads``
+     - いいえ
+     - 並列処理スレッド数。デフォルト: ``1``
+   * - ``query``
+     - いいえ
+     - Google Drive API検索クエリ文字列
+   * - ``corpora``
+     - いいえ
+     - 検索対象のコーパス。デフォルト: ``allDrives``
+   * - ``read_timeout``
+     - いいえ
+     - HTTP読み取りタイムアウト（ミリ秒）。デフォルト: ``20000``
+   * - ``connect_timeout``
+     - いいえ
+     - HTTP接続タイムアウト（ミリ秒）。デフォルト: ``20000``
+   * - ``proxy_host``
+     - いいえ
+     - プロキシサーバーのホスト名
+   * - ``proxy_port``
+     - いいえ
+     - プロキシサーバーのポート番号
 
 スクリプト設定
 --------------
@@ -145,7 +187,30 @@ Google Workspaceコネクタは、Google Drive（旧G Suite）からファイル
      - ファイルサイズ（バイト）
    * - ``file.roles``
      - アクセス権限
+   * - ``file.web_content_link``
+     - ダウンロードリンク
+   * - ``file.id``
+     - Google DriveファイルID
+   * - ``file.file_extension``
+     - ファイル拡張子
+   * - ``file.original_filename``
+     - アップロード時のファイル名
+   * - ``file.md5_checksum``
+     - MD5チェックサム
+   * - ``file.owners``
+     - ファイルのオーナー
+   * - ``file.parents``
+     - 親フォルダID
+   * - ``file.shared``
+     - 共有されているかどうか
+   * - ``file.version``
+     - ファイルバージョン番号
+   * - ``file.icon_link``
+     - ファイルタイプアイコンURL
+   * - ``file.kind``
+     - リソースの種類（``drive#file``）
 
+上記以外にも多数のフィールドが利用可能です。
 詳細は `Google Drive Files API <https://developers.google.com/drive/api/v3/reference/files>`_ を参照してください。
 
 Google Cloud Platform設定
@@ -212,7 +277,7 @@ https://admin.google.com/ にアクセス:
 
    ::
 
-       https://www.googleapis.com/auth/drive.readonly
+       https://www.googleapis.com/auth/drive
 
 6. 「承認」をクリック
 
@@ -311,18 +376,28 @@ Google Drive全体のクロール
 特定のファイルタイプのみクロール
 --------------------------------
 
-Googleドキュメントのみ:
+Googleドキュメントのみをクロールする場合は、 ``supported_mimetypes`` パラメーターを使用します。
+
+パラメーター:
 
 ::
 
-    if (file.mimetype == "application/vnd.google-apps.document") {
-        title=file.name
-        content=file.description + "\n" + file.contents
-        mimetype=file.mimetype
-        created=file.created_time
-        last_modified=file.modified_time
-        url=file.web_view_link
-    }
+    private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQE...\n-----END PRIVATE KEY-----\n
+    private_key_id=46812a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p8q9r
+    client_email=fess-crawler@your-project-123456.iam.gserviceaccount.com
+    supported_mimetypes=application/vnd\.google-apps\.document
+
+スクリプト:
+
+::
+
+    title=file.name
+    content=file.description + "\n" + file.contents
+    mimetype=file.mimetype
+    created=file.created_time
+    last_modified=file.modified_time
+    url=file.web_view_link
+    filename=file.name
 
 トラブルシューティング
 ======================
@@ -343,7 +418,7 @@ Googleドキュメントのみ:
 2. Google Drive APIが有効になっているか確認
 3. Domain全体への委任が設定されているか確認
 4. Google Workspace管理コンソールで承認されているか確認
-5. OAuth スコープが正しいか確認（``https://www.googleapis.com/auth/drive.readonly``）
+5. OAuth スコープが正しいか確認（``https://www.googleapis.com/auth/drive``）
 
 Domain全体への委任エラー
 ------------------------
@@ -355,7 +430,7 @@ Domain全体への委任エラー
 1. Google Workspace管理コンソールで承認を確認:
 
    - クライアントIDが正しく登録されているか
-   - OAuth スコープが正しいか（``https://www.googleapis.com/auth/drive.readonly``）
+   - OAuth スコープが正しいか（``https://www.googleapis.com/auth/drive``）
 
 2. サービスアカウントでDomain全体への委任が有効になっているか確認
 

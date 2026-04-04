@@ -68,7 +68,7 @@ Hinzufügen grundlegender Crawl-Konfigurationen
 
    - **Name**: Identifikationsname der Crawl-Konfiguration (z. B. Firmen-Wiki)
    - **URL**: Start-URL für das Crawling (z. B. ``https://wiki.example.com/``)
-   - **Crawl-Intervall**: Häufigkeit der Crawl-Ausführung (z. B. jede Stunde)
+   - **Intervall**: Zugriffsintervall pro URL in Millisekunden (z. B. 10000)
    - **Thread-Anzahl**: Anzahl paralleler Crawls (z. B. 5)
    - **Tiefe**: Hierarchietiefe für das Folgen von Links (z. B. 3)
 
@@ -192,7 +192,7 @@ Um Crawls regelmäßig auszuführen:
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       Der obige Pfad gilt für RPM/DEB-Paketinstallationen. Bei zip/tar.gz-Bereitstellungen befinden sich die Protokolle im Verzeichnis ``logs/``.
@@ -433,9 +433,12 @@ Fügen Sie in der Verwaltungsoberfläche in der Crawl-Konfiguration unter „Kon
 
 **Bestimmte Hosts vom Proxy ausschließen:**
 
+Hosts, die vom Proxy ausgeschlossen werden sollen, werden nicht in den Konfigurationsparametern der Crawl-Konfiguration, sondern über JVM-Systemeigenschaften konfiguriert.
+Setzen Sie die Umgebungsvariable ``FESS_NON_PROXY_HOSTS`` in ``fess.in.sh`` (Linux/Mac) oder ``fess.in.bat`` (Windows).
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 Systemweite Proxy-Konfiguration
 --------------------------
@@ -526,7 +529,7 @@ Crawling startet nicht
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 Crawling stoppt mittendrin
 ------------------------
@@ -535,7 +538,7 @@ Crawling stoppt mittendrin
 
 1. **Speichermangel**
 
-   - Überprüfen Sie ``fess_crawler.log`` auf ``OutOfMemoryError``
+   - Überprüfen Sie ``fess-crawler.log`` auf ``OutOfMemoryError``
    - Erhöhen Sie den Crawler-Speicher (Details siehe :doc:`setup-memory`)
 
 2. **Netzwerkfehler**

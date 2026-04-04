@@ -68,7 +68,7 @@ Ajout d'une configuration d'indexation de base
 
    - **Nom** : Nom d'identification de la configuration d'indexation (ex : Wiki d'entreprise)
    - **URL** : URL de départ de l'indexation (ex : ``https://wiki.example.com/``)
-   - **Intervalle d'indexation** : Fréquence d'exécution de l'indexation (ex : toutes les heures)
+   - **Intervalle** : Intervalle d'accès par URL en millisecondes (ex : 10000)
    - **Nombre de threads** : Nombre d'indexations parallèles (ex : 5)
    - **Profondeur** : Profondeur des niveaux de liens à suivre (ex : 3)
 
@@ -192,7 +192,7 @@ Pour vérifier l'état de l'indexation en cours :
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       Le chemin ci-dessus correspond aux installations par paquets RPM/DEB. Pour les déploiements zip/tar.gz, les journaux se trouvent dans le répertoire ``logs/``.
@@ -431,9 +431,12 @@ Dans la configuration d'indexation de l'interface d'administration, ajoutez ce q
 
 **Exclure des hôtes spécifiques du proxy :**
 
+Les hôtes à exclure du proxy ne sont pas configurés dans les paramètres de configuration de l'indexation, mais via les propriétés système JVM.
+Définissez la variable d'environnement ``FESS_NON_PROXY_HOSTS`` dans ``fess.in.sh`` (Linux/Mac) ou ``fess.in.bat`` (Windows).
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 Configuration proxy à l'échelle du système
 --------------------------
@@ -525,7 +528,7 @@ L'indexation ne démarre pas
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 L'indexation s'arrête en cours de route
 ------------------------
@@ -534,7 +537,7 @@ L'indexation s'arrête en cours de route
 
 1. **Mémoire insuffisante**
 
-   - Vérifiez s'il y a des ``OutOfMemoryError`` dans ``fess_crawler.log``
+   - Vérifiez s'il y a des ``OutOfMemoryError`` dans ``fess-crawler.log``
    - Augmenter la mémoire du robot d'indexation (voir :doc:`setup-memory`)
 
 2. **Erreur réseau**

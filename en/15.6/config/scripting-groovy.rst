@@ -155,25 +155,47 @@ Date Processing
 
 ::
 
-    // Date parsing
-    import java.text.SimpleDateFormat
-    def sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-    lastModified=sdf.parse(data.date_string)
+    // Date parsing (single expression using FQCN)
+    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // Conversion from epoch seconds
     lastModified=new Date(data.timestamp * 1000L)
+
+Available Objects
+=================
+
+The objects available in scripts vary depending on the execution context.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - Context
+     - Object
+     - Description
+   * - All contexts
+     - ``container``
+     - DI container. Used to access components
+   * - Scheduled jobs
+     - ``executor``
+     - Job execution control ( ``JobExecutor`` ). Required for job stop support
+   * - Data store
+     - (connector-specific)
+     - Data record variables provided by each data store
 
 Scheduled Job Scripts
 =====================
 
 Examples of Groovy scripts used in scheduled jobs.
+In scheduled jobs, ``container`` and ``executor`` are available.
+Passing ``executor`` to the job's ``execute()`` method enables job stop control.
 
 Execute Crawl Job
 -----------------
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
 Conditional Crawling
 --------------------
@@ -187,7 +209,7 @@ Conditional Crawling
 
     // Crawl only outside business hours
     if (hour < 9 || hour >= 18) {
-        return container.getComponent("crawlJob").execute()
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     }
     return "Skipped during business hours"
 
@@ -199,10 +221,10 @@ Execute Multiple Jobs Sequentially
     def results = []
 
     // Index optimization
-    results << container.getComponent("suggestJob").execute()
+    results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Execute crawl
-    results << container.getComponent("crawlJob").execute()
+    results << container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
 
     return results.join("\n")
 

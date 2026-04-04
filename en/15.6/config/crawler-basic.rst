@@ -68,7 +68,7 @@ Adding Basic Crawl Configuration
 
    - **Name**: Identifier for the crawl configuration (e.g., Corporate Wiki)
    - **URL**: Crawl start URL (e.g., ``https://wiki.example.com/``)
-   - **Crawl Interval**: Crawl execution frequency (e.g., every hour)
+   - **Interval**: Access interval per URL in milliseconds (e.g., 10000)
    - **Thread Count**: Number of parallel crawls (e.g., 5)
    - **Depth**: Link traversal depth (e.g., 3)
 
@@ -192,7 +192,7 @@ To check running crawl status:
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       The above path is for RPM/DEB package installations. For zip/tar.gz deployments, logs are located under the ``logs/`` directory.
@@ -431,9 +431,12 @@ Add the following to "Configuration Parameters" in the crawl configuration on th
 
 **Exclude specific hosts from proxy:**
 
+Hosts to exclude from proxy are not set in the crawl configuration parameters, but via JVM system properties.
+Set the ``FESS_NON_PROXY_HOSTS`` environment variable in ``fess.in.sh`` (Linux/Mac) or ``fess.in.bat`` (Windows).
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 System-Wide Proxy Configuration
 --------------------------------
@@ -532,7 +535,7 @@ Crawl Does Not Start
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 Crawl Stops Midway
 -------------------
@@ -541,7 +544,7 @@ Crawl Stops Midway
 
 1. **Memory shortage**
 
-   - Check for ``OutOfMemoryError`` in ``fess_crawler.log``
+   - Check for ``OutOfMemoryError`` in ``fess-crawler.log``
    - Increase crawler memory (see :doc:`setup-memory`)
 
 2. **Network errors**

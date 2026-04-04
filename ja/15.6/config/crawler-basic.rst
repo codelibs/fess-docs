@@ -68,7 +68,7 @@
 
    - **名前**: クロール設定の識別名(例: 社内Wiki)
    - **URL**: クロール開始URL(例: ``https://wiki.example.com/``)
-   - **クロール間隔**: クロール実行頻度(例: 1時間ごと)
+   - **間隔**: 各URLへのア��セス間隔（ミリ秒���(例: 10000)
    - **スレッド数**: 並列クロール数(例: 5)
    - **深さ**: リンクをたどる階層の深さ(例: 3)
 
@@ -192,7 +192,7 @@ SMB/CIFS(Windowsファイル共有)
 
    ::
 
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
    .. note::
       上記はRPM/DEBパッケージインストール時のパスです。zip/tar.gz展開の場合は ``logs/`` ディレクトリ配下になります。
@@ -431,9 +431,12 @@ URLパターンによる制限
 
 **特定のホストをプロキシから除外:**
 
+プロキシから除外するホストは、クロール設定の設定パラメーターではなく、JVMシステムプロパティで設定します。
+``fess.in.sh`` (Linux/Mac) または ``fess.in.bat`` (Windows) で環境変数 ``FESS_NON_PROXY_HOSTS`` を設定してください。
+
 ::
 
-    client.nonProxyHosts=localhost|127.0.0.1|*.example.com
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
 システム全体のプロキシ設定
 --------------------------
@@ -524,7 +527,7 @@ User-Agent の設定
    ::
 
        tail -f /var/log/fess/fess.log
-       tail -f /var/log/fess/fess_crawler.log
+       tail -f /var/log/fess/fess-crawler.log
 
 クロールが途中で停止する
 ------------------------

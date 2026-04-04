@@ -155,25 +155,47 @@ Procesamiento de fechas
 
 ::
 
-    // Parseo de fecha
-    import java.text.SimpleDateFormat
-    def sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-    lastModified=sdf.parse(data.date_string)
+    // Parseo de fecha (expresion unica usando FQCN)
+    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // Conversion desde segundos epoch
     lastModified=new Date(data.timestamp * 1000L)
+
+Objetos disponibles
+===================
+
+Los objetos disponibles en los scripts varian segun el contexto de ejecucion.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - Contexto
+     - Objeto
+     - Descripcion
+   * - Todos los contextos
+     - ``container``
+     - Contenedor DI. Se usa para acceder a los componentes
+   * - Trabajos programados
+     - ``executor``
+     - Control de ejecucion de trabajos ( ``JobExecutor`` ). Necesario para el soporte de detencion de trabajos
+   * - Data Store
+     - (especifico del conector)
+     - Variables de registro de datos proporcionadas por cada data store
 
 Scripts de trabajos programados
 ===============================
 
 Ejemplos de scripts Groovy para trabajos programados.
+En los trabajos programados, ``container`` y ``executor`` estan disponibles.
+Pasar ``executor`` al metodo ``execute()`` del trabajo habilita el control de detencion del trabajo.
 
 Ejecucion de trabajo de crawl
 -----------------------------
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
 Crawl condicional
 -----------------
@@ -187,7 +209,7 @@ Crawl condicional
 
     // Crawl solo fuera de horario laboral
     if (hour < 9 || hour >= 18) {
-        return container.getComponent("crawlJob").execute()
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     }
     return "Skipped during business hours"
 
@@ -199,10 +221,10 @@ Ejecucion secuencial de multiples trabajos
     def results = []
 
     // Optimizacion de indice
-    results << container.getComponent("suggestJob").execute()
+    results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Ejecucion de crawl
-    results << container.getComponent("crawlJob").execute()
+    results << container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
 
     return results.join("\n")
 

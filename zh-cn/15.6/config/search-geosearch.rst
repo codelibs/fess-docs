@@ -128,15 +128,6 @@
 
     http://localhost:8080/search?q=拉面&geo.location.point=35.681236,139.767125&geo.location.distance=1km
 
-按距离排序
-----------------
-
-要按距离对搜索结果排序,请使用 ``sort`` 参数。
-
-::
-
-    http://localhost:8080/search?q=便利店&geo.location.point=35.681236,139.767125&geo.location.distance=5km&sort=location.distance
-
 API 使用
 -----------
 
@@ -226,7 +217,7 @@ Google 地图集成
 
 处理大量位置信息数据时,请优化索引配置。
 
-请在 ``app/WEB-INF/classes/fess_indices/fess/doc.json`` 中确认位置信息字段的配置。
+位置信息字段在源代码的 ``src/main/resources/fess_indices/fess/doc.json`` 中定义。
 
 ::
 

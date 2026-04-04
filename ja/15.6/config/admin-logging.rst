@@ -24,10 +24,16 @@
      - 内容
    * - ``fess.log``
      - 管理画面や検索画面での操作ログ、アプリケーションエラー、システムイベント
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - クロール実行時のログ、クロール対象URL、取得したドキュメント情報、エラー
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - サジェスト(検索候補)生成時のログ、インデックス更新情報
+   * - ``fess-llm.log``
+     - LLM/RAGチャット関連のログ
+   * - ``searchlog.log``
+     - 検索ログ
+   * - ``fess-urls.log``
+     - クローラーURL統計ログ（クロールプロセスで出力）
    * - ``server_?.log``
      - Tomcatなどのアプリケーションサーバーのシステムログ
    * - ``audit.log``
@@ -56,7 +62,7 @@
 1. **エラーの種類を特定**
 
    - アプリケーションエラー → ``fess.log``
-   - クロールエラー → ``fess_crawler.log``
+   - クロールエラー → ``fess-crawler.log``
    - 認証エラー → ``audit.log``
    - サーバーエラー → ``server_?.log``
 
@@ -142,7 +148,9 @@
 4. 「更新」ボタンをクリックします。
 
 .. note::
-   管理画面での変更は |Fess| の再起動後も保持されます。
+   管理画面でのログレベル変更は実行中のインスタンスにのみ反映されます。
+   再起動後は ``fess.in.sh`` の ``FESS_LOG_LEVEL`` 設定値に戻ります。
+   永続的に変更するには、 ``fess.in.sh`` の ``FESS_LOG_LEVEL`` を編集してください。
 
 設定ファイルによる変更
 ----------------------
@@ -153,7 +161,7 @@
 ~~~~~~~~~~~~~~~~~~
 
 - **Zipインストール**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEBパッケージ**: ``/etc/fess/log4j2.xml``
+- **RPM/DEBパッケージ**: ``/usr/share/fess/lib/classes/log4j2.xml``
 
 基本的な設定例
 ~~~~~~~~~~~~~~
@@ -186,26 +194,29 @@
 ~~~~~~~~~~~~~~~~~~
 
 システム起動時にログレベルを指定することもできます。
+``fess.in.sh`` （Windowsの場合は ``fess.in.bat`` ）で ``FESS_LOG_LEVEL`` を設定します。
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
+    FESS_LOG_LEVEL=debug
+
+デフォルト値は ``warn`` です。
 
 クローラーログの設定
 ====================
 
 クローラーログはデフォルトで ``INFO`` レベルで出力されます。
 
-管理画面での設定
-----------------
+スケジューラーでの設定
+----------------------
 
-1. 管理画面の「クローラー」メニューから対象のクロール設定を開きます。
-2. 「設定」タブで「スクリプト」を選択します。
-3. スクリプト欄に以下を追加します。
+1. 管理画面の「システム」メニューから「スケジューラー」を選択します。
+2. 対象のクロールジョブ（例: Default Crawler）を開きます。
+3. スクリプト内の ``.logLevel("info")`` を希望するレベルに変更します。
 
 ::
 
-    logLevel("DEBUG")
+    return container.getComponent("crawlJob").logLevel("DEBUG")...
 
 設定可能な値:
 
@@ -215,15 +226,6 @@
 - ``INFO``
 - ``DEBUG``
 - ``TRACE``
-
-特定のURLパターンのみログレベルを変更
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    if (url.contains("example.com")) {
-        logLevel("DEBUG")
-    }
 
 ログローテーション
 ==================
@@ -249,13 +251,20 @@ Log4j2による自動ローテーション
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
+            <TimeBasedTriggeringPolicy />
             <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 日次ローテーションの設定
@@ -266,8 +275,8 @@ Log4j2による自動ローテーション
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}">
         <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -283,8 +292,8 @@ Log4j2による自動ローテーション
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}.gz">
         <PatternLayout pattern="%d{ISO8601} [%t] %-5p %c - %m%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -543,7 +552,7 @@ JSON形式でログ出力
    ::
 
        # 設定ファイルの構文チェック
-       xmllint --noout /etc/fess/log4j2.xml
+       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
 
 4. **SELinuxの確認**
 
@@ -566,7 +575,7 @@ JSON形式でログ出力
    ::
 
        # log4j2.xmlの設定確認
-       grep -A 5 "RollingFile" /etc/fess/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
 
 3. **不要なログ出力の無効化**
 
@@ -594,7 +603,7 @@ JSON形式でログ出力
 
    ::
 
-       grep "org.codelibs.fess" /etc/fess/log4j2.xml
+       grep "org.codelibs.fess" /usr/share/fess/lib/classes/log4j2.xml
 
 2. **ログファイルパスの確認**
 

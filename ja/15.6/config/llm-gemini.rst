@@ -159,8 +159,8 @@ Geminiクライアントで使用可能なすべての設定項目です。 ``ra
      - 説明
      - デフォルト
    * - ``rag.llm.gemini.api.key``
-     - Google AI APIキー
-     - （必須）
+     - Google AI APIキー（Gemini APIを使用するには設定が必要です）
+     - ``""``
    * - ``rag.llm.gemini.model``
      - 使用するモデル名
      - ``gemini-3-flash-preview``
@@ -179,6 +179,27 @@ Geminiクライアントで使用可能なすべての設定項目です。 ``ra
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
      - 評価時の最大関連ドキュメント数
      - ``3``
+   * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
+     - 評価時のドキュメント説明最大文字数
+     - ``500``
+   * - ``rag.llm.gemini.concurrency.wait.timeout``
+     - 同時リクエスト待機タイムアウト（ミリ秒）
+     - ``30000``
+   * - ``rag.llm.gemini.history.max.chars``
+     - チャット履歴の最大文字数
+     - ``10000``
+   * - ``rag.llm.gemini.intent.history.max.messages``
+     - 意図判定時の履歴最大メッセージ数
+     - ``10``
+   * - ``rag.llm.gemini.intent.history.max.chars``
+     - 意図判定時の履歴最大文字数
+     - ``5000``
+   * - ``rag.llm.gemini.history.assistant.max.chars``
+     - アシスタント履歴の最大文字数
+     - ``1000``
+   * - ``rag.llm.gemini.history.assistant.summary.max.chars``
+     - アシスタント要約履歴の最大文字数
+     - ``1000``
 
 プロンプトタイプ別設定
 ======================
@@ -193,6 +214,7 @@ Geminiクライアントで使用可能なすべての設定項目です。 ``ra
 
     rag.llm.gemini.{promptType}.temperature
     rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.thinking.budget
     rag.llm.gemini.{promptType}.context.max.chars
 
 利用可能なプロンプトタイプ
@@ -222,6 +244,62 @@ Geminiクライアントで使用可能なすべての設定項目です。 ``ra
      - FAQ生成プロンプト
    * - ``direct``
      - 直接応答プロンプト
+   * - ``queryregeneration``
+     - クエリ再生成プロンプト
+
+プロンプトタイプ別デフォルト値
+------------------------------
+
+各プロンプトタイプのデフォルト値は以下の通りです。設定されていない場合、これらの値が使用されます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20
+
+   * - プロンプトタイプ
+     - temperature
+     - max.tokens
+     - thinking.budget
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``evaluation``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``256``
+     - ``0``
+   * - ``direct``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``faq``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``answer``
+     - ``0.5``
+     - ``4096``
+     - ``2048``
+   * - ``summary``
+     - ``0.3``
+     - ``4096``
+     - ``2048``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
 
 設定例
 ------
@@ -245,7 +323,7 @@ Geminiクライアントで使用可能なすべての設定項目です。 ``ra
 
 .. note::
    ``context.max.chars`` のデフォルト値はプロンプトタイプによって異なります。
-   ``answer`` と ``summary`` は16000、``faq`` は10000です。
+   ``answer`` と ``summary`` は16000、``faq`` は10000、その他のプロンプトタイプは10000です。
 
 思考モデル対応
 ==============

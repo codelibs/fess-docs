@@ -24,10 +24,16 @@ Les principaux fichiers journaux générés par |Fess| sont les suivants.
      - Contenu
    * - ``fess.log``
      - Journaux d'opérations dans l'interface d'administration et de recherche, erreurs d'application, événements système
-   * - ``fess_crawler.log``
+   * - ``fess-crawler.log``
      - Journaux lors de l'exécution de l'exploration, URL explorées, informations sur les documents récupérés, erreurs
-   * - ``fess_suggest.log``
+   * - ``fess-suggest.log``
      - Journaux lors de la génération de suggestions (candidats de recherche), informations de mise à jour d'index
+   * - ``fess-llm.log``
+     - Journaux liés au chat LLM/RAG
+   * - ``searchlog.log``
+     - Journaux de recherche
+   * - ``fess-urls.log``
+     - Journal de statistiques d'URL du crawler (généré par le processus d'exploration)
    * - ``server_?.log``
      - Journaux système du serveur d'applications comme Tomcat
    * - ``audit.log``
@@ -56,7 +62,7 @@ En cas de problème, vérifiez les journaux en suivant ces étapes.
 1. **Identifier le type d'erreur**
 
    - Erreur d'application → ``fess.log``
-   - Erreur d'exploration → ``fess_crawler.log``
+   - Erreur d'exploration → ``fess-crawler.log``
    - Erreur d'authentification → ``audit.log``
    - Erreur de serveur → ``server_?.log``
 
@@ -142,7 +148,9 @@ La méthode la plus simple consiste à modifier via l'interface d'administration
 4. Cliquez sur le bouton « Mettre à jour ».
 
 .. note::
-   Les modifications dans l'interface d'administration sont conservées même après le redémarrage de |Fess|.
+   Les modifications du niveau de journalisation dans l'interface d'administration ne s'appliquent qu'à l'instance en cours d'exécution.
+   Après le redémarrage, le niveau revient à la valeur ``FESS_LOG_LEVEL`` configurée dans ``fess.in.sh``.
+   Pour des modifications permanentes, éditez ``FESS_LOG_LEVEL`` dans ``fess.in.sh``.
 
 Modification via le fichier de configuration
 ----------------------
@@ -153,7 +161,7 @@ Emplacement du fichier de configuration
 ~~~~~~~~~~~~~~~~~~
 
 - **Installation Zip** : ``app/WEB-INF/classes/log4j2.xml``
-- **Paquets RPM/DEB** : ``/etc/fess/log4j2.xml``
+- **Paquets RPM/DEB** : ``/usr/share/fess/lib/classes/log4j2.xml``
 
 Exemples de configuration de base
 ~~~~~~~~~~~~~~
@@ -186,26 +194,29 @@ Configuration via les variables d'environnement
 ~~~~~~~~~~~~~~~~~~
 
 Vous pouvez également spécifier le niveau de journalisation lors du démarrage du système.
+Configurez ``FESS_LOG_LEVEL`` dans ``fess.in.sh`` (ou ``fess.in.bat`` sous Windows).
 
 ::
 
-    FESS_JAVA_OPTS="$FESS_JAVA_OPTS -Dfess.log.level=debug"
+    FESS_LOG_LEVEL=debug
+
+La valeur par défaut est ``warn``.
 
 Configuration des journaux d'exploration
 ====================
 
 Les journaux d'exploration sont générés au niveau ``INFO`` par défaut.
 
-Configuration dans l'interface d'administration
-----------------
+Configuration depuis le planificateur
+--------------------------------------
 
-1. Ouvrez la configuration d'exploration cible depuis le menu « Explorateur » de l'interface d'administration.
-2. Sélectionnez « Script » dans l'onglet « Configuration ».
-3. Ajoutez ce qui suit dans le champ script.
+1. Sélectionnez « Planificateur » dans le menu « Système » de l'interface d'administration.
+2. Ouvrez le travail d'exploration cible (par exemple, Default Crawler).
+3. Modifiez ``.logLevel("info")`` dans le script au niveau souhaité.
 
 ::
 
-    logLevel("DEBUG")
+    return container.getComponent("crawlJob").logLevel("DEBUG")...
 
 Valeurs configurables :
 
@@ -215,16 +226,6 @@ Valeurs configurables :
 - ``INFO``
 - ``DEBUG``
 - ``TRACE``
-
-Modification du niveau de journalisation uniquement pour des modèles d'URL spécifiques
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    if (url.contains("example.com")) {
-        logLevel("DEBUG")
-    }
-
 
 Rotation des journaux
 ==================
@@ -250,13 +251,20 @@ Exemple de fichier de configuration (``log4j2.xml``) :
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%i">
-        <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
+                 fileName="${log.file.basedir}/${domain.name}.log"
+                 filePattern="${log.file.basedir}/${domain.name}${backup.date.suffix}-%i.log.gz">
+        <PatternLayout><Pattern>${log.pattern}</Pattern></PatternLayout>
         <Policies>
-            <SizeBasedTriggeringPolicy size="100MB"/>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="100 MB"/>
         </Policies>
-        <DefaultRolloverStrategy max="10"/>
+        <DefaultRolloverStrategy fileIndex="max" min="1"
+            max="${backup.max.history}" compressionLevel="9">
+            <Delete basePath="${log.file.basedir}">
+                <IfFileName glob="${domain.name}*.log.gz" />
+                <IfLastModified age="P${backup.max.age}D" />
+            </Delete>
+        </DefaultRolloverStrategy>
     </RollingFile>
 
 Configuration de rotation quotidienne
@@ -267,8 +275,8 @@ Pour une rotation quotidienne plutôt que par taille :
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -284,8 +292,8 @@ Pour compresser automatiquement lors de la rotation :
 ::
 
     <RollingFile name="AppFile"
-                 fileName="${log.dir}/fess.log"
-                 filePattern="${log.dir}/fess.log.%d{yyyy-MM-dd}.gz">
+                 fileName="${log.file.basedir}/fess.log"
+                 filePattern="${log.file.basedir}/fess.log.%d{yyyy-MM-dd}.gz">
         <PatternLayout pattern="%d [%t] %-5p %msg%n"/>
         <Policies>
             <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -545,7 +553,7 @@ Les journaux ne sont pas générés
    ::
 
        # Vérifier la syntaxe du fichier de configuration
-       xmllint --noout /etc/fess/log4j2.xml
+       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
 
 4. **Vérifier SELinux**
 
@@ -568,7 +576,7 @@ Le fichier journal devient trop volumineux
    ::
 
        # Vérifier la configuration de log4j2.xml
-       grep -A 5 "RollingFile" /etc/fess/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
 
 3. **Désactiver les sorties de journaux inutiles**
 
@@ -596,7 +604,7 @@ Impossible de trouver un journal spécifique
 
    ::
 
-       grep "org.codelibs" /etc/fess/log4j2.xml
+       grep "org.codelibs" /usr/share/fess/lib/classes/log4j2.xml
 
 2. **Vérifier le chemin du fichier journal**
 

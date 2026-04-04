@@ -153,8 +153,8 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
      - 설명
      - 기본값
    * - ``rag.llm.gemini.api.key``
-     - Google AI API 키
-     - (필수)
+     - Google AI API 키(Gemini API를 사용하려면 설정이 필요합니다)
+     - ``""``
    * - ``rag.llm.gemini.model``
      - 사용할 모델명
      - ``gemini-3-flash-preview``
@@ -173,6 +173,27 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
      - 평가 시 최대 관련 문서 수
      - ``3``
+   * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
+     - 평가 시 문서 설명 최대 문자 수
+     - ``500``
+   * - ``rag.llm.gemini.concurrency.wait.timeout``
+     - 동시 요청 대기 타임아웃(밀리초)
+     - ``30000``
+   * - ``rag.llm.gemini.history.max.chars``
+     - 채팅 이력의 최대 문자 수
+     - ``10000``
+   * - ``rag.llm.gemini.intent.history.max.messages``
+     - 의도 판정 시 이력 최대 메시지 수
+     - ``10``
+   * - ``rag.llm.gemini.intent.history.max.chars``
+     - 의도 판정 시 이력 최대 문자 수
+     - ``5000``
+   * - ``rag.llm.gemini.history.assistant.max.chars``
+     - 어시스턴트 이력의 최대 문자 수
+     - ``1000``
+   * - ``rag.llm.gemini.history.assistant.summary.max.chars``
+     - 어시스턴트 요약 이력의 최대 문자 수
+     - ``1000``
 
 프롬프트 타입별 설정
 ======================
@@ -187,6 +208,7 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
 
     rag.llm.gemini.{promptType}.temperature
     rag.llm.gemini.{promptType}.max.tokens
+    rag.llm.gemini.{promptType}.thinking.budget
     rag.llm.gemini.{promptType}.context.max.chars
 
 이용 가능한 프롬프트 타입
@@ -216,6 +238,62 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
      - FAQ 생성 프롬프트
    * - ``direct``
      - 직접 응답 프롬프트
+   * - ``queryregeneration``
+     - 쿼리 재생성 프롬프트
+
+프롬프트 타입별 기본값
+------------------------------
+
+각 프롬프트 타입의 기본값은 다음과 같습니다. 설정되지 않은 경우 이 값이 사용됩니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20
+
+   * - 프롬프트 타입
+     - temperature
+     - max.tokens
+     - thinking.budget
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``evaluation``
+     - ``0.1``
+     - ``256``
+     - ``0``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``256``
+     - ``0``
+   * - ``direct``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``faq``
+     - ``0.7``
+     - ``2048``
+     - ``1024``
+   * - ``answer``
+     - ``0.5``
+     - ``4096``
+     - ``2048``
+   * - ``summary``
+     - ``0.3``
+     - ``4096``
+     - ``2048``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
 
 설정 예
 ------
@@ -239,7 +317,7 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
 
 .. note::
    ``context.max.chars`` 의 기본값은 프롬프트 타입에 따라 다릅니다.
-   ``answer`` 와 ``summary`` 는 16000, ``faq`` 는 10000입니다.
+   ``answer`` 와 ``summary`` 는 16000, ``faq`` 는 10000, 기타 프롬프트 타입은 10000입니다.
 
 사고 모델 지원
 ==============
@@ -247,12 +325,15 @@ Gemini 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
 Gemini에서는 사고 모델(Thinking Model)을 지원합니다.
 사고 모델을 사용하면 모델이 응답을 생성하기 전에 내부적인 추론 프로세스를 실행하여 더 정확한 응답을 생성할 수 있습니다.
 
-``fess_config.properties`` 에서 사고 버짓을 설정할 수 있습니다.
+프롬프트 타입별로 ``fess_config.properties`` 에서 사고 버짓을 설정할 수 있습니다.
 
 ::
 
-    # 사고 버짓 설정
-    rag.llm.gemini.thinkingConfig.thinkingBudget=1024
+    # 응답 생성 시 사고 버짓 설정
+    rag.llm.gemini.answer.thinking.budget=1024
+
+    # 요약 생성 시 사고 버짓 설정
+    rag.llm.gemini.summary.thinking.budget=1024
 
 .. note::
    사고 버짓을 설정하면 응답 시간이 길어질 수 있습니다.
