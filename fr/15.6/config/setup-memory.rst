@@ -204,7 +204,7 @@ La méthode recommandée pour configurer la mémoire heap OpenSearch est d'édit
 .. note::
    Il est recommandé de définir la taille heap minimale (``-Xms``) et maximale (``-Xmx``) à la même valeur.
 
-.. deprecated::
+.. note::
    La variable d'environnement ``OPENSEARCH_HEAP_SIZE`` est obsolète. Utilisez ``OPENSEARCH_JAVA_OPTS`` à la place si vous avez besoin de définir la mémoire via une variable d'environnement :
 
    ::

@@ -44,7 +44,7 @@ OpenSearch를 서비스로 등록
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
 .. note::
-   ``bin\service.bat`` 에는 ``FESS_PARAMS`` 에 포트 번호가 하드코딩되어 있습니다. 포트를 변경한 경우 ``service.bat`` 내의 ``FESS_PARAMS`` 값도 함께 변경해야 합니다.
+   서비스로 등록하는 경우, ``bin\service.bat`` 의 ``FESS_PARAMS`` 에 ``-Dfess.port=8080`` 이 하드코딩되어 있습니다. 포트를 변경하는 경우 ``service.bat`` 도 마찬가지로 편집하십시오.
 
 등록 방법
 ------
@@ -73,7 +73,7 @@ OpenSearch를 서비스로 등록
 .. list-table::
 
    * - *키*
-     - ``컴퓨터\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services \fess-service-x64\DependOnService``
+     - ``컴퓨터\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
    * - *값*
      - ``opensearch-service-x64``
 

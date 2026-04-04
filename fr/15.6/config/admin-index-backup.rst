@@ -20,16 +20,16 @@ Structure des index
 
    * - Nom de l'index
      - Description
-   * - ``fess.{date}``
-     - Index des documents à rechercher (créé quotidiennement)
-   * - ``fess_log``
-     - Journaux de recherche et de clics
-   * - ``fess_user``
-     - Informations utilisateur
-   * - ``fess_config``
-     - Informations de configuration système
-   * - ``configsync``
-     - Informations de synchronisation de configuration
+   * - ``fess.{horodatage}``
+     - Index des documents de recherche (créé lors de la reconstruction de l'index, référencé via l'alias ``fess.search``)
+   * - ``fess_config.*``
+     - Configuration système (composé de plusieurs sous-index tels que ``fess_config.web_config``, ``fess_config.scheduled_job``)
+   * - ``fess_user.*``
+     - Informations utilisateur (``fess_user.user``, ``fess_user.role``, ``fess_user.group``)
+   * - ``fess_log.*``
+     - Journaux de recherche et de clics (``fess_log.search_log``, ``fess_log.click_log``, etc.)
+   * - ``fess_crawler``
+     - Index temporaire utilisé pendant le crawl
 
 Sauvegarde et restauration des index
 ====================================
@@ -109,7 +109,7 @@ Sauvegarder uniquement des index spécifiques.
 
     curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess.*,fess_config",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'

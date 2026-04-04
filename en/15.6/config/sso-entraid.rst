@@ -97,6 +97,12 @@ The following settings can be added as needed.
    * - ``entraid.default.roles``
      - Default roles (comma-separated)
      - (None)
+   * - ``entraid.permission.fields``
+     - Permission fields (comma-separated)
+     - ``mail``
+   * - ``entraid.use.ds``
+     - Use Domain Services
+     - ``true``
 
 Entra ID Side Configuration
 ===========================

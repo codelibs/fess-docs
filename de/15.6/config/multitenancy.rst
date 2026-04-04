@@ -27,28 +27,45 @@ Funktionsweise
 3. Wendet die entsprechende Virtual-Host-Konfiguration an
 4. Zeigt mandantenspezifische Inhalte und UI an
 
-Virtual-Host-Konfiguration
+Virtual-Host-Header-Konfiguration
+==================================
+
+Um die Virtual-Host-Funktion zu aktivieren, konfigurieren Sie die Eigenschaft ``virtual.host.headers``.
+Diese Eigenschaft wird in ``fess_config.properties`` definiert.
+
+Konfigurationsformat
+--------------------
+
+Geben Sie jeden Eintrag im Format ``HeaderName:HeaderWert=VirtualHostKey`` an, einen pro Zeile:
+
+::
+
+    # fess_config.properties
+    virtual.host.headers=Host:tenant1.example.com=tenant1\n\
+    Host:tenant2.example.com=tenant2
+
+Fuer mehrere Virtual Hosts trennen Sie die Eintraege durch Zeilenumbrueche.
+
+Einschraenkungen fuer Virtual-Host-Keys
+----------------------------------------
+
+Virtual-Host-Keys unterliegen folgenden Einschraenkungen:
+
+- Nur alphanumerische Zeichen und Unterstriche (``a-zA-Z0-9_``) sind erlaubt. Andere Zeichen werden automatisch entfernt.
+- Folgende Key-Namen sind reserviert und koennen nicht verwendet werden: ``admin``, ``common``, ``error``, ``login``, ``profile``
+
+Admin-Panel-Konfiguration
 ==========================
 
-Konfiguration ueber das Admin-Panel
------------------------------------
-
-1. Melden Sie sich im Admin-Panel an
-2. Navigieren Sie zu "Crawler" -> "Virtual Host"
-3. Klicken Sie auf "Neu erstellen"
-4. Konfigurieren Sie Folgendes:
-
-   - **Hostname**: ``tenant1.example.com``
-   - **Pfad**: ``/tenant1`` (optional)
-
-Integration mit Crawl-Konfiguration
------------------------------------
+Crawl-Konfiguration
+--------------------
 
 Durch Angabe eines Virtual Hosts in den Web-Crawl-Einstellungen koennen Sie Inhalte trennen:
 
-1. Erstellen Sie eine Crawl-Konfiguration unter "Crawler" -> "Web"
-2. Waehlen Sie den Ziel-Virtual-Host im Feld "Virtual Host"
-3. Mit dieser Konfiguration gecrawlte Inhalte sind nur vom angegebenen Virtual Host durchsuchbar
+1. Melden Sie sich im Admin-Panel an
+2. Erstellen Sie eine Crawl-Konfiguration unter "Crawler" -> "Web"
+3. Waehlen Sie einen in ``virtual.host.headers`` definierten Virtual-Host-Key im Feld "Virtual Host"
+4. Mit dieser Konfiguration gecrawlte Inhalte sind nur vom angegebenen Virtual Host durchsuchbar
 
 Zugriffskontrolle
 =================
@@ -59,11 +76,15 @@ Kombination von Virtual Hosts und Rollen
 Durch die Kombination von Virtual Hosts mit rollenbasierter Zugriffskontrolle
 ist eine feinere Zugriffskontrolle moeglich:
 
+Konfigurieren Sie Virtual Host und Berechtigungen gemeinsam in der Crawl-Konfiguration:
+
 ::
 
-    # Konfigurationsbeispiel
-    virtual.host=tenant1.example.com
-    permissions={role}tenant1_user
+    # Virtual Host in der Crawl-Konfiguration
+    tenant1
+
+    # Berechtigungen in der Crawl-Konfiguration
+    {role}tenant1_user
 
 Rollenbasierte Suche
 --------------------
@@ -86,12 +107,7 @@ Wenden Sie verschiedene Themes fuer jeden Virtual Host an:
 Benutzerdefiniertes CSS
 -----------------------
 
-Wenden Sie benutzerdefiniertes CSS fuer jeden Virtual Host an:
-
-::
-
-    # Virtual-Host-spezifische CSS-Datei
-    /webapp/WEB-INF/view/tenant1/css/custom.css
+Um benutzerdefiniertes CSS pro Virtual Host anzuwenden, bearbeiten Sie CSS-Dateien im Admin-Panel unter "System" -> "Design". Sie koennen auch benutzerdefinierte Templates im View-Verzeichnis des entsprechenden Virtual-Host-Keys ablegen.
 
 Label-Einstellungen
 -------------------
@@ -174,18 +190,20 @@ Wenn vollstaendige Datentrennung erforderlich ist, erwaegen Sie folgende Ansaetz
 Index-Level-Trennung
 --------------------
 
-Verwenden Sie separate Indizes fuer jeden Mandanten:
+Verwenden Sie separate |Fess|-Instanzen und Indizes fuer jeden Mandanten:
 
 ::
 
-    # Index fuer Mandant 1
+    # Mandant-1-Fess-Instanz (fess_config.properties)
     index.document.search.index=fess_tenant1.search
 
-    # Index fuer Mandant 2
+    # Mandant-2-Fess-Instanz (fess_config.properties)
     index.document.search.index=fess_tenant2.search
 
 .. note::
-   Die Trennung auf Index-Ebene erfordert moeglicherweise eine benutzerdefinierte Implementierung.
+   ``index.document.search.index`` kann nur auf einen Wert pro Instanz gesetzt werden.
+   Fuer eine vollstaendige Trennung auf Index-Ebene muessen Sie separate |Fess|-Instanzen pro Mandant betreiben
+   oder benutzerdefinierten Code implementieren. Fuer typische Multitenancy reicht die logische Trennung ueber die Virtual-Host-Funktion aus.
 
 Best Practices
 ==============

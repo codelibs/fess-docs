@@ -77,7 +77,34 @@ Parameterliste
      - Zugriffstoken von Dropbox (in der App Console generiert)
    * - ``basic_plan``
      - Nein
-     - Bei Basic-Plan auf ``true`` setzen (Standard: ``false``)
+     - Bei Einzelkonto auf ``true``, bei Teamkonto auf ``false`` setzen (Standard: ``false``)
+   * - ``max_size``
+     - Nein
+     - Maximale Dateigröße für die Indizierung in Bytes (Standard: ``10000000``)
+   * - ``number_of_threads``
+     - Nein
+     - Anzahl der Threads für das Crawling (Standard: ``1``)
+   * - ``ignore_folder``
+     - Nein
+     - Ordner-Metadaten überspringen (Standard: ``true``)
+   * - ``ignore_error``
+     - Nein
+     - Fehler bei der Inhaltsextraktion ignorieren (Standard: ``true``)
+   * - ``supported_mimetypes``
+     - Nein
+     - Regex-Muster für erlaubte MIME-Typen, kommagetrennt (Standard: ``.*``)
+   * - ``include_pattern``
+     - Nein
+     - URL-Muster für einzuschließendes Crawling
+   * - ``exclude_pattern``
+     - Nein
+     - URL-Muster für auszuschließendes Crawling
+   * - ``default_permissions``
+     - Nein
+     - Standardberechtigungen für indizierte Dokumente, kommagetrennt
+   * - ``max_cached_content_size``
+     - Nein
+     - Maximale im Speicher gecachte Inhaltsgröße in Bytes (Standard: ``1048576``)
 
 Skript-Einstellungen
 --------------------
@@ -125,6 +152,16 @@ Verfügbare Felder:
      - Letztes Änderungsdatum auf Server-Seite
    * - ``file.roles``
      - Zugriffsberechtigungen der Datei
+   * - ``file.id``
+     - Dropbox-Datei-ID
+   * - ``file.path_lower``
+     - Dateipfad in Kleinbuchstaben
+   * - ``file.parent_shared_folder_id``
+     - ID des übergeordneten freigegebenen Ordners
+   * - ``file.content_hash``
+     - Inhaltshash
+   * - ``file.rev``
+     - Dateirevision
 
 Für Dropbox Paper
 ~~~~~~~~~~~~~~~~~
@@ -160,6 +197,8 @@ Verfügbare Felder:
      - Eigentümer des Paper-Dokuments
    * - ``paper.roles``
      - Zugriffsberechtigungen des Dokuments
+   * - ``paper.revision``
+     - Revision des Paper-Dokuments
 
 Dropbox-Authentifizierung konfigurieren
 =======================================
@@ -213,21 +252,22 @@ Setzen Sie das abgerufene Token in den Parametern:
 
     access_token=sl.your-dropbox-token-here
 
-Basic-Plan-Einstellungen
-========================
+Einzelkonto-Einstellungen
+=========================
 
-Einschränkungen des Dropbox Basic-Plans
----------------------------------------
+Nutzung mit Einzelkonten
+------------------------
 
-Bei einem Dropbox Basic-Plan gelten andere API-Einschränkungen.
-Setzen Sie den Parameter ``basic_plan`` auf ``true``:
+Bei einem Einzelkonto (kein Teamkonto)
+setzen Sie den Parameter ``basic_plan`` auf ``true``:
 
 ::
 
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-Dadurch wird die Verarbeitung an die API-Ratenbegrenzung angepasst.
+Bei ``false`` (Standard) wird als Teamkonto gearbeitet und Dateien von Teammitgliedern und Teamordnern gecrawlt.
+Bei ``true`` wird als Einzelkonto gearbeitet und Dateien direkt aus dem Konto gecrawlt.
 
 Anwendungsbeispiele
 ===================

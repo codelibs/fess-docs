@@ -97,6 +97,12 @@ Entra ID에서 취득한 정보를 설정합니다.
    * - ``entraid.default.roles``
      - 기본 역할（쉼표 구분）
      - （없음）
+   * - ``entraid.permission.fields``
+     - 권한 필드（쉼표 구분）
+     - ``mail``
+   * - ``entraid.use.ds``
+     - 도메인 서비스 사용
+     - ``true``
 
 Entra ID 측 설정
 ==================

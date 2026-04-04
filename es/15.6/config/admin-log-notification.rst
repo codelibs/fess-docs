@@ -48,15 +48,15 @@ Habilitacion desde la Pantalla de Administracion
    Por defecto, solo se notifica el nivel ``ERROR``.
    Si selecciona ``WARN``, se notificaran tanto ``WARN`` como ``ERROR``.
 
-Habilitacion mediante Archivo de Configuracion
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Habilitacion mediante Propiedades del Sistema
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Tambien puede habilitar la funcionalidad editando directamente ``fess_config.properties``.
+Tambien puede habilitar la funcionalidad configurando directamente las propiedades del sistema que se guardan en la configuracion "General" de la pantalla de administracion.
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 Configuracion del Destino de Notificacion
 ------------------------------------------
@@ -66,12 +66,11 @@ Notificacion por Correo Electronico
 
 Para utilizar la notificacion por correo electronico, es necesaria la siguiente configuracion.
 
-1. Configuracion del servidor de correo (``fess_config.properties``):
+1. Configuracion del servidor de correo (``fess_env.properties``):
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. Introduzca la direccion de correo electronico en "Destino de Notificacion" en la configuracion "General" de la pantalla de administracion. Puede especificar varias direcciones separadas por comas.
 
@@ -207,7 +206,7 @@ Las Notificaciones no se Envian
 
 3. **Verificar la configuracion del servidor de correo**
 
-   Verifique que el servidor de correo este configurado correctamente en ``fess_config.properties``.
+   Verifique que el servidor de correo este configurado correctamente en ``fess_env.properties``.
 
 4. **Verificar los registros**
 

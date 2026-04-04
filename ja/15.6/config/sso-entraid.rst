@@ -97,6 +97,12 @@ Entra IDから取得した情報を設定します。
    * - ``entraid.default.roles``
      - デフォルトロール（カンマ区切り）
      - （なし）
+   * - ``entraid.permission.fields``
+     - パーミッションフィールド（カンマ区切り）
+     - ``mail``
+   * - ``entraid.use.ds``
+     - ドメインサービスの使用
+     - ``true``
 
 Entra ID側での設定
 ==================

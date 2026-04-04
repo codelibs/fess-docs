@@ -72,7 +72,7 @@ Configuration de recherche d'utilisateurs
     ldap.user.search.base=ou=users,dc=example,dc=com
 
     # Filtre de recherche d'utilisateurs
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
 
     # Attribut du nom d'utilisateur
     ldap.user.name.attribute=uid
@@ -109,7 +109,7 @@ Configuration de recherche de groupes
     ldap.group.search.base=ou=groups,dc=example,dc=com
 
     # Filtre de recherche de groupes
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
 
     # Attribut du nom de groupe
     ldap.group.name.attribute=cn
@@ -137,12 +137,12 @@ Configuration de base
 
     # Recherche d'utilisateurs
     ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.account.filter=(sAMAccountName={0})
+    ldap.account.filter=(sAMAccountName=%s)
     ldap.user.name.attribute=sAMAccountName
 
     # Recherche de groupes
     ldap.group.search.base=ou=Groups,dc=example,dc=com
-    ldap.group.filter=(member={0})
+    ldap.group.filter=(member=%s)
     ldap.group.name.attribute=cn
 
 
@@ -166,12 +166,12 @@ Exemple de configuration pour OpenLDAP.
 
     # Recherche d'utilisateurs
     ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.account.filter=(uid={0})
+    ldap.account.filter=(uid=%s)
     ldap.user.name.attribute=uid
 
     # Recherche de groupes
     ldap.group.search.base=ou=groups,dc=example,dc=com
-    ldap.group.filter=(memberUid={0})
+    ldap.group.filter=(memberUid=%s)
     ldap.group.name.attribute=cn
 
 Configuration de securite

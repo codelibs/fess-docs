@@ -204,7 +204,7 @@ Linux 环境
 .. note::
    推荐将最小堆大小(``-Xms``)和最大堆大小(``-Xmx``)设置为相同的值。
 
-.. deprecated::
+.. note::
    ``OPENSEARCH_HEAP_SIZE`` 环境变量已被弃用。请改用 ``config/jvm.options`` 进行配置。如需通过环境变量设置，请使用 ``OPENSEARCH_JAVA_OPTS``：
 
    ::

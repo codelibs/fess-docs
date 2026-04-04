@@ -290,7 +290,7 @@ IdP侧配置
      - ``true``
    * - ``saml.security.signature_algorithm``
      - 签名算法
-     - ``http://www.w3.org/2000/09/xmldsig#rsa-sha256``
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.sp.nameidformat``
      - NameID格式
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``

@@ -50,7 +50,7 @@
      - 일괄 처리당 처리되는 문서 수
    * - ``index.export.format``
      - ``html``
-     - 내보내기 파일 형식
+     - 내보내기 파일 형식 (``html`` 또는 ``json``)
 
 설정 예:
 
@@ -69,7 +69,7 @@
 
 1. |Fess| 관리 콘솔에 로그인
 2. **시스템** > **스케줄러**로 이동
-3. 작업 목록에서 **Index Export Job** 찾기
+3. 작업 목록에서 **Index Exporter** 찾기
 4. 클릭하여 작업 설정 편집
 5. cron 표현식을 사용하여 일정 설정
 6. 설정 저장
@@ -88,28 +88,32 @@ cron 표현식 예:
 사용자 정의 쿼리 필터를 추가하려면:
 
 1. **시스템** > **스케줄러**로 이동
-2. **Index Export Job** 편집
+2. **Index Exporter** 편집
 3. 쿼리 필터를 포함하도록 작업 스크립트 수정
 
-날짜 필터가 있는 스크립트 예:
+날짜 필터가 있는 스크립트 예 (최근 7일간의 문서만 내보내기):
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "created:>=now-7d"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .execute()
 
-사이트 필터가 있는 스크립트 예:
+사이트 필터가 있는 스크립트 예 (특정 사이트의 문서만 내보내기):
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "url:*example.com*"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .execute()
+
+JSON 형식으로 내보내기 예:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .format("json")
+        .execute()
 
 내보낸 파일 구조
 ================
@@ -184,7 +188,7 @@ cron 표현식 예:
 ::
 
     # 인덱스 문서 수 확인
-    curl -X GET "localhost:9201/fess.YYYYMMDD/_count?pretty"
+    curl -X GET "localhost:9201/fess.search/_count?pretty"
 
 내보내기가 중간에 실패함
 ------------------------

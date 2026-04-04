@@ -20,16 +20,16 @@
 
    * - インデックス名
      - 説明
-   * - ``fess.{日付}``
-     - 検索対象ドキュメントのインデックス(日次で作成)
-   * - ``fess_log``
-     - 検索ログとクリックログ
-   * - ``fess_user``
-     - ユーザー情報
-   * - ``fess_config``
-     - システム設定情報
-   * - ``configsync``
-     - 設定の同期情報
+   * - ``fess.{タイムスタンプ}``
+     - 検索対象ドキュメントのインデックス（インデックス再構築時に作成、 ``fess.search`` エイリアスで参照）
+   * - ``fess_config.*``
+     - システム設定情報（ ``fess_config.web_config`` 、 ``fess_config.scheduled_job`` など複数のサブインデックスで構成）
+   * - ``fess_user.*``
+     - ユーザー情報（ ``fess_user.user`` 、 ``fess_user.role`` 、 ``fess_user.group`` ）
+   * - ``fess_log.*``
+     - 検索ログとクリックログ（ ``fess_log.search_log`` 、 ``fess_log.click_log`` など）
+   * - ``fess_crawler``
+     - クロール処理中の一時インデックス
 
 インデックスのバックアップとリストア
 ====================================
@@ -109,7 +109,7 @@ S3をバックアップ先とする場合は、``repository-s3`` プラグイン
 
     curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess.*,fess_config",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'

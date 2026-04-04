@@ -193,6 +193,9 @@ Protocoles supportés
    * - ``crawler.file.protocols``
      - Protocoles d'indexation de fichiers
      - ``file,smb,smb1,ftp,storage,s3,gcs``
+   * - ``crawler.crawling.data.encoding``
+     - Encodage des données de crawl
+     - ``UTF-8``
 
 Exemple de configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,6 +204,7 @@ Exemple de configuration
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.crawling.data.encoding=UTF-8
 
 Paramètres de variables d'environnement
 --------------------

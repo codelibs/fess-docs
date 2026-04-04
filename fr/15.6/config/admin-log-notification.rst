@@ -48,15 +48,15 @@ Activation depuis l'interface d'administration
    Par défaut, seul le niveau ``ERROR`` est ciblé pour la notification.
    Si vous sélectionnez ``WARN``, les niveaux ``WARN`` et ``ERROR`` seront tous deux notifiés.
 
-Activation via le fichier de configuration
+Activation via les propriétés système
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Vous pouvez également activer cette fonctionnalité en éditant directement ``fess_config.properties``.
+Vous pouvez également activer cette fonctionnalité en configurant directement les propriétés système enregistrées dans les paramètres « Général » de l'interface d'administration.
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 Configuration des destinataires
 ------------
@@ -66,12 +66,11 @@ Notification par e-mail
 
 Pour utiliser la notification par e-mail, la configuration suivante est nécessaire.
 
-1. Configuration du serveur de messagerie (``fess_config.properties``) :
+1. Configuration du serveur de messagerie (``fess_env.properties``) :
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. Dans les paramètres « Général » de l'interface d'administration, saisissez les adresses e-mail dans le champ « Destinataires ». Plusieurs adresses peuvent être séparées par des virgules.
 
@@ -207,7 +206,7 @@ Les notifications ne sont pas envoyées
 
 3. **Vérifier la configuration du serveur de messagerie**
 
-   Vérifiez que le serveur de messagerie est correctement configuré dans ``fess_config.properties``.
+   Vérifiez que le serveur de messagerie est correctement configuré dans ``fess_env.properties``.
 
 4. **Vérifier les journaux**
 

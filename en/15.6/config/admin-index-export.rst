@@ -50,7 +50,7 @@ Configure the Index Export feature in ``fess_config.properties``:
      - Number of documents processed per batch
    * - ``index.export.format``
      - ``html``
-     - Export file format
+     - Export file format (``html`` or ``json``)
 
 Example configuration:
 
@@ -69,7 +69,7 @@ To enable the job:
 
 1. Log in to the |Fess| administration console
 2. Navigate to **System** > **Scheduler**
-3. Find **Index Export Job** in the job list
+3. Find **Index Exporter** in the job list
 4. Click to edit the job settings
 5. Set the schedule using a cron expression
 6. Save the settings
@@ -88,28 +88,32 @@ You can customize the export job to export only specific documents by modifying 
 To add a custom query filter:
 
 1. Navigate to **System** > **Scheduler**
-2. Edit the **Index Export Job**
+2. Edit the **Index Exporter**
 3. Modify the job script to include a query filter
 
-Example script with date filter:
+Example script with date filter (export documents from the last 7 days):
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "created:>=now-7d"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .execute()
 
-Example script with site filter:
+Example script with site filter (export documents from a specific site):
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "url:*example.com*"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .execute()
+
+Example script to export in JSON format:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .format("json")
+        .execute()
 
 Exported File Structure
 =======================
@@ -184,7 +188,7 @@ Empty Export Directory
 ::
 
     # Check index document count
-    curl -X GET "localhost:9201/fess.YYYYMMDD/_count?pretty"
+    curl -X GET "localhost:9201/fess.search/_count?pretty"
 
 Export Fails Midway
 -------------------

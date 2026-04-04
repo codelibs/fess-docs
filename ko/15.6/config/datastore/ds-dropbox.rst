@@ -78,7 +78,34 @@ Dropbox 커넥터는 Dropbox 클라우드 스토리지에서 파일을 가져와
      - Dropbox 액세스 토큰 (App Console에서 생성)
    * - ``basic_plan``
      - 아니오
-     - Basic 플랜인 경우 ``true`` (기본값: ``false``)
+     - 개인 계정인 경우 ``true``, 팀 계정인 경우 ``false`` (기본값: ``false``)
+   * - ``max_size``
+     - 아니오
+     - 인덱싱 대상 최대 파일 크기(바이트) (기본값: ``10000000``)
+   * - ``number_of_threads``
+     - 아니오
+     - 크롤링에 사용할 스레드 수 (기본값: ``1``)
+   * - ``ignore_folder``
+     - 아니오
+     - 폴더 메타데이터를 건너뛸지 여부 (기본값: ``true``)
+   * - ``ignore_error``
+     - 아니오
+     - 콘텐츠 추출 중 오류를 무시할지 여부 (기본값: ``true``)
+   * - ``supported_mimetypes``
+     - 아니오
+     - 허용할 MIME 타입의 정규식 패턴(쉼표 구분) (기본값: ``.*``)
+   * - ``include_pattern``
+     - 아니오
+     - 크롤링에 포함할 URL 패턴
+   * - ``exclude_pattern``
+     - 아니오
+     - 크롤링에서 제외할 URL 패턴
+   * - ``default_permissions``
+     - 아니오
+     - 인덱싱된 문서의 기본 권한(쉼표 구분)
+   * - ``max_cached_content_size``
+     - 아니오
+     - 메모리에 캐시할 콘텐츠 최대 크기(바이트) (기본값: ``1048576``)
 
 스크립트 설정
 --------------
@@ -126,6 +153,16 @@ Dropbox 파일의 경우
      - 서버 측 최종 수정 일시
    * - ``file.roles``
      - 파일 액세스 권한
+   * - ``file.id``
+     - Dropbox 파일 ID
+   * - ``file.path_lower``
+     - 소문자 파일 경로
+   * - ``file.parent_shared_folder_id``
+     - 상위 공유 폴더 ID
+   * - ``file.content_hash``
+     - 콘텐츠 해시
+   * - ``file.rev``
+     - 파일 리비전
 
 Dropbox Paper의 경우
 ~~~~~~~~~~~~~~~~~~~
@@ -161,6 +198,8 @@ Dropbox Paper의 경우
      - Paper 문서 소유자
    * - ``paper.roles``
      - 문서 액세스 권한
+   * - ``paper.revision``
+     - Paper 문서 리비전
 
 Dropbox 인증 설정
 =================
@@ -215,13 +254,13 @@ https://www.dropbox.com/developers/apps 에 접속:
 
     access_token=sl.your-dropbox-token-here
 
-Basic 플랜 설정
+개인 계정 설정
 =================
 
-Dropbox Basic 플랜 제한
+개인 계정 사용
 -------------------------
 
-Dropbox Basic 플랜의 경우 API 제한이 다릅니다.
+개인 계정(팀 계정이 아닌 경우)에서는
 ``basic_plan`` 파라미터를 ``true``로 설정하세요:
 
 ::
@@ -229,7 +268,8 @@ Dropbox Basic 플랜의 경우 API 제한이 다릅니다.
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-이렇게 하면 API 속도 제한에 대응한 처리가 수행됩니다.
+``false``(기본값)인 경우 팀 계정으로 동작하여 팀 멤버와 팀 폴더의 파일을 크롤링합니다.
+``true``인 경우 개인 계정으로 동작하여 계정 내 파일을 직접 크롤링합니다.
 
 사용 예
 ======

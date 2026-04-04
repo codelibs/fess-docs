@@ -101,6 +101,25 @@
      - fess-ds-json
      - JSONファイルからデータを取得
 
+その他
+------
+
+以下のコネクタも利用可能です:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 25 50
+
+   * - コネクタ
+     - プラグイン
+     - 説明
+   * - SharePoint
+     - fess-ds-sharepoint
+     - SharePointリポジトリからデータを取得（レガシー版）
+   * - Wikipedia
+     - fess-ds-wikipedia
+     - Wikipediaのコンテンツを取得
+
 コネクタのインストール
 ======================
 

@@ -193,6 +193,9 @@ Protocolos Compatibles
    * - ``crawler.file.protocols``
      - Protocolos para rastreo de archivos
      - ``file,smb,smb1,ftp,storage,s3,gcs``
+   * - ``crawler.crawling.data.encoding``
+     - Codificación de datos de rastreo
+     - ``UTF-8``
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,6 +204,7 @@ Ejemplo de Configuración
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.crawling.data.encoding=UTF-8
 
 Parámetros de Variables de Entorno
 -----------------------------------

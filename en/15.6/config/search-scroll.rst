@@ -46,13 +46,16 @@ Response Field Configuration
 -----------------------------
 
 You can customize fields included in search result responses.
-By default, only basic fields are returned, but you can specify additional fields.
+By default, many fields are returned, but you can specify additional fields.
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
 
 When specifying multiple fields, list them separated by commas.
+
+.. note::
+   ``content`` is not included in default response fields.
 
 Usage
 =====
@@ -80,6 +83,9 @@ Request Parameters
 
 The following parameters can be used with scroll search:
 
+.. note::
+   Scroll search only supports the GET method.
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -88,12 +94,13 @@ The following parameters can be used with scroll search:
      - Description
    * - ``q``
      - Search query (required)
-   * - ``size``
-     - Number of items to retrieve per scroll (default: 100)
-   * - ``scroll``
-     - Scroll context validity period (default: 1m)
+   * - ``num``
+     - Number of items to retrieve per scroll (default: 10, max: 100)
    * - ``fields.label``
      - Filtering by label
+
+.. note::
+   The maximum value of ``num`` is controlled by ``paging.search.page.max.size`` (default: 100). Values exceeding the maximum are automatically capped.
 
 Specifying Search Queries
 --------------------------
@@ -125,11 +132,11 @@ You can change the number of items retrieved per scroll.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   Setting the ``size`` parameter too large increases memory usage.
-   It is recommended to set it in the range of 100-1000.
+   The ``num`` parameter has a default maximum of 100.
+   To allow larger values, change ``paging.search.page.max.size``.
 
 Filtering by Label
 ------------------
@@ -140,21 +147,13 @@ You can retrieve only documents belonging to a specific label.
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-When Authentication is Required
---------------------------------
+About Authentication
+--------------------
 
-When using role-based search, you need to include authentication information.
-
-::
-
-    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-Or use an API token:
-
-::
-
-    curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   Scroll search does not apply |Fess| role-based access control (RBAC).
+   All documents matching the search criteria are returned regardless of user permissions.
+   If access restrictions are needed, configure IP address restrictions or authentication via a reverse proxy.
 
 Response Format
 ===============
@@ -176,15 +175,34 @@ Each line represents one document.
 Response Fields
 ---------------
 
-Main fields included by default:
+Fields included by default:
 
-- ``url``: Document URL
-- ``title``: Title
-- ``content``: Body (excerpt)
 - ``score``: Search score
+- ``id``: Document ID
+- ``doc_id``: Document ID (internal)
 - ``boost``: Boost value
-- ``created``: Creation date/time
+- ``content_length``: Content length
+- ``host``: Hostname
+- ``site``: Site
 - ``last_modified``: Last modified date/time
+- ``timestamp``: Timestamp
+- ``mimetype``: MIME type
+- ``filetype``: File type
+- ``filename``: Filename
+- ``created``: Creation date/time
+- ``title``: Title
+- ``digest``: Body excerpt
+- ``url``: Document URL
+- ``thumbnail``: Thumbnail
+- ``click_count``: Click count
+- ``favorite_count``: Favorite count
+- ``config_id``: Config ID
+- ``lang``: Language
+- ``has_cache``: Cache availability
+
+.. note::
+   ``content`` (full text) is not included by default.
+   It can be added via ``query.additional.scroll.response.fields``.
 
 Data Processing Examples
 ========================
@@ -201,7 +219,7 @@ Python Processing Example
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -267,11 +285,11 @@ Performance and Best Practices
 Efficient Usage
 ---------------
 
-1. **Set appropriate size parameter**
+1. **Set appropriate num parameter**
 
    - Too small increases communication overhead
    - Too large increases memory usage
-   - Recommended: 100-1000
+   - Default maximum: 100
 
 2. **Optimize search conditions**
 
@@ -297,7 +315,7 @@ When processing large amounts of data, use streaming processing to reduce memory
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # Process with streaming
     with requests.get(url, params=params, stream=True) as response:
@@ -345,13 +363,13 @@ Cannot Use Scroll Search
 Timeout Errors Occur
 --------------------
 
-1. Reduce the ``size`` parameter to distribute processing.
+1. Reduce the ``num`` parameter to distribute processing.
 2. Narrow search conditions to reduce amount of retrieved data.
 
 Out of Memory Errors
 --------------------
 
-1. Reduce the ``size`` parameter.
+1. Reduce the ``num`` parameter.
 2. Increase |Fess| heap memory size.
 3. Check OpenSearch heap memory size.
 

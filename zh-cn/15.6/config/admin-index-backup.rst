@@ -20,16 +20,16 @@
 
    * - 索引名
      - 说明
-   * - ``fess.{日期}``
-     - 搜索对象文档的索引(每日创建)
-   * - ``fess_log``
-     - 搜索日志和点击日志
-   * - ``fess_user``
-     - 用户信息
-   * - ``fess_config``
-     - 系统配置信息
-   * - ``configsync``
-     - 配置同步信息
+   * - ``fess.{时间戳}``
+     - 搜索文档索引（索引重建时创建，通过 ``fess.search`` 别名引用）
+   * - ``fess_config.*``
+     - 系统配置信息（由多个子索引组成，如 ``fess_config.web_config``、``fess_config.scheduled_job``）
+   * - ``fess_user.*``
+     - 用户信息（``fess_user.user``、``fess_user.role``、``fess_user.group``）
+   * - ``fess_log.*``
+     - 搜索和点击日志（``fess_log.search_log``、``fess_log.click_log`` 等）
+   * - ``fess_crawler``
+     - 爬取过程中使用的临时索引
 
 索引备份和恢复
 ====================================
@@ -109,7 +109,7 @@
 
     curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess.*,fess_config",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'

@@ -50,7 +50,7 @@ Configure la función de Exportación de Índice en ``fess_config.properties``:
      - Número de documentos procesados por lote
    * - ``index.export.format``
      - ``html``
-     - Formato de archivo de exportación
+     - Formato de archivo de exportación (``html`` o ``json``)
 
 Ejemplo de configuración:
 
@@ -69,7 +69,7 @@ Para habilitar el trabajo:
 
 1. Inicie sesión en la consola de administración de |Fess|
 2. Navegue a **Sistema** > **Programador**
-3. Encuentre **Index Export Job** en la lista de trabajos
+3. Encuentre **Index Exporter** en la lista de trabajos
 4. Haga clic para editar la configuración del trabajo
 5. Establezca el horario usando una expresión cron
 6. Guarde la configuración
@@ -88,28 +88,32 @@ Puede personalizar el trabajo de exportación para exportar solo documentos espe
 Para agregar un filtro de consulta personalizado:
 
 1. Navegue a **Sistema** > **Programador**
-2. Edite el **Index Export Job**
+2. Edite el **Index Exporter**
 3. Modifique el script del trabajo para incluir un filtro de consulta
 
-Ejemplo de script con filtro de fecha:
+Ejemplo de script con filtro de fecha (exportar documentos de los últimos 7 días):
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "created:>=now-7d"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .execute()
 
-Ejemplo de script con filtro de sitio:
+Ejemplo de script con filtro de sitio (exportar documentos de un sitio específico):
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
-    
-    def job = new IndexExportJob()
-    job.query = "url:*example.com*"
-    job.execute()
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .execute()
+
+Ejemplo de script para exportar en formato JSON:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .format("json")
+        .execute()
 
 Estructura de Archivos Exportados
 =================================
@@ -184,7 +188,7 @@ Directorio de Exportación Vacío
 ::
 
     # Verificar conteo de documentos en el índice
-    curl -X GET "localhost:9201/fess.YYYYMMDD/_count?pretty"
+    curl -X GET "localhost:9201/fess.search/_count?pretty"
 
 La Exportación Falla a Mitad de Camino
 --------------------------------------

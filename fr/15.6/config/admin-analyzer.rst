@@ -1,9 +1,9 @@
-=========================
+============================
 Configuration de l'Analyzer
-=========================
+============================
 
 À propos de l'Analyzer
-==============
+======================
 
 Lors de la création d'un index pour la recherche, il est nécessaire de segmenter les documents pour les enregistrer en tant qu'index.
 |Fess| enregistre la fonctionnalité de décomposition des documents en mots en tant qu'Analyzer.

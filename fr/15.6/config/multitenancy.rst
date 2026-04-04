@@ -27,28 +27,45 @@ Fonctionnement
 3. Applique la configuration de l'hote virtuel correspondant
 4. Affiche le contenu et l'interface specifiques au tenant
 
-Configuration de l'hote virtuel
-================
+Configuration des en-tetes d'hote virtuel
+==========================================
+
+Pour activer la fonctionnalite d'hote virtuel, configurez la propriete ``virtual.host.headers``.
+Cette propriete est definie dans ``fess_config.properties``.
+
+Format de configuration
+-----------------------
+
+Specifiez chaque entree au format ``NomEnTete:ValeurEnTete=CleHoteVirtuel``, une par ligne :
+
+::
+
+    # fess_config.properties
+    virtual.host.headers=Host:tenant1.example.com=tenant1\n\
+    Host:tenant2.example.com=tenant2
+
+Pour plusieurs hotes virtuels, separez les entrees par des retours a la ligne.
+
+Restrictions des cles d'hote virtuel
+-------------------------------------
+
+Les cles d'hote virtuel ont les restrictions suivantes :
+
+- Seuls les caracteres alphanumeriques et les underscores (``a-zA-Z0-9_``) sont autorises. Les autres caracteres sont automatiquement supprimes.
+- Les noms de cles suivants sont reserves et ne peuvent pas etre utilises : ``admin``, ``common``, ``error``, ``login``, ``profile``
 
 Configuration via l'ecran d'administration
-----------------
+==========================================
 
-1. Connectez-vous a l'ecran d'administration
-2. Allez dans "Crawler" -> "Hotes virtuels"
-3. Cliquez sur "Nouveau"
-4. Configurez les elements suivants :
-
-   - **Nom d'hote** : ``tenant1.example.com``
-   - **Chemin** : ``/tenant1`` (optionnel)
-
-Integration avec la configuration du crawl
---------------------
+Configuration du crawl
+----------------------
 
 Vous pouvez isoler le contenu en specifiant l'hote virtuel dans la configuration du crawl Web :
 
-1. Creez une configuration de crawl dans "Crawler" -> "Web"
-2. Selectionnez l'hote virtuel cible dans le champ "Hote virtuel"
-3. Le contenu crawle avec cette configuration ne sera recherchable que sur l'hote virtuel specifie
+1. Connectez-vous a l'ecran d'administration
+2. Creez une configuration de crawl dans "Crawler" -> "Web"
+3. Selectionnez une cle d'hote virtuel definie dans ``virtual.host.headers`` dans le champ "Hote virtuel"
+4. Le contenu crawle avec cette configuration ne sera recherchable que sur l'hote virtuel specifie
 
 Controle d'acces
 ============
@@ -59,11 +76,15 @@ Combinaison d'hote virtuel et de roles
 En combinant les hotes virtuels avec le controle d'acces base sur les roles,
 un controle d'acces plus granulaire est possible :
 
+Configurez l'hote virtuel et les permissions ensemble dans la configuration du crawl :
+
 ::
 
-    # Exemple de configuration
-    virtual.host=tenant1.example.com
-    permissions={role}tenant1_user
+    # Hote virtuel dans la configuration du crawl
+    tenant1
+
+    # Permissions dans la configuration du crawl
+    {role}tenant1_user
 
 Recherche basee sur les roles
 ----------------
@@ -86,12 +107,7 @@ Appliquer differents themes par hote virtuel :
 CSS personnalise
 -----------
 
-Appliquer un CSS personnalise par hote virtuel :
-
-::
-
-    # Fichier CSS specifique a l'hote virtuel
-    /webapp/WEB-INF/view/tenant1/css/custom.css
+Pour appliquer un CSS personnalise par hote virtuel, editez les fichiers CSS dans l'ecran d'administration sous "Systeme" -> "Design". Vous pouvez egalement placer des templates personnalises dans le repertoire de vue correspondant a la cle de l'hote virtuel.
 
 Configuration des labels
 ----------
@@ -174,18 +190,20 @@ Si une isolation complete des donnees est necessaire, considerez les approches s
 Isolation au niveau de l'index
 ------------------------
 
-Utiliser des index separes pour chaque tenant :
+Utiliser des instances et des index |Fess| separes pour chaque tenant :
 
 ::
 
-    # Index pour le tenant 1
+    # Instance Fess du tenant 1 (fess_config.properties)
     index.document.search.index=fess_tenant1.search
 
-    # Index pour le tenant 2
+    # Instance Fess du tenant 2 (fess_config.properties)
     index.document.search.index=fess_tenant2.search
 
 .. note::
-   L'isolation au niveau de l'index peut necessiter une implementation personnalisee.
+   ``index.document.search.index`` ne peut etre defini qu'a une seule valeur par instance.
+   Pour une isolation complete au niveau de l'index, vous devez executer des instances |Fess| separees par tenant
+   ou implementer du code personnalise. Pour un multi-tenant classique, l'isolation logique via la fonctionnalite d'hote virtuel est suffisante.
 
 Bonnes pratiques
 ==================

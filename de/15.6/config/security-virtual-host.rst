@@ -35,6 +35,14 @@ Konfigurieren Sie "Virtueller Host" unter :doc:`Administratorhandbuch > Allgemei
    Host:abc.example.com:8080=host1
    Host:192.168.1.123:8080=host2
 
+.. note::
+
+   Für virtuelle Hostnamen können nur alphanumerische Zeichen und Unterstriche ( ``a-z`` , ``A-Z`` , ``0-9`` , ``_`` ) verwendet werden.
+   Andere Zeichen werden automatisch entfernt.
+
+   Die folgenden Namen sind reserviert und können nicht als virtuelle Hostnamen verwendet werden:
+   ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
+
 Nach Konfiguration werden JSPs der Suchseite unter ``WEB-INF/view/Virtueller Hostname`` generiert.
 Durch Bearbeitung dieser können Sie Seitendesign für jeden virtuellen Host ändern.
 

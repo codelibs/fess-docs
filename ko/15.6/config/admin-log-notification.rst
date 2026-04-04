@@ -48,15 +48,15 @@
    기본적으로 ``ERROR`` 레벨만 통지 대상입니다.
    ``WARN`` 을 선택하면 ``WARN`` 과 ``ERROR`` 모두 통지됩니다.
 
-설정 파일을 통한 활성화
+시스템 프로퍼티를 통한 활성화
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-``fess_config.properties`` 를 직접 편집하여 활성화할 수도 있습니다.
+관리 화면의 "전반" 설정에서 저장되는 시스템 프로퍼티를 직접 설정할 수도 있습니다.
 
 ::
 
     log.notification.enabled=true
-    log.notification.level=ERROR
+    fess.log.notification.level=ERROR
 
 통지 대상 설정
 --------------
@@ -66,12 +66,11 @@
 
 메일 통지를 이용하려면 다음 설정이 필요합니다.
 
-1. 메일 서버 설정(``fess_config.properties``):
+1. 메일 서버 설정(``fess_env.properties``):
 
    ::
 
-       mail.smtp.host=smtp.example.com
-       mail.smtp.port=587
+       mail.smtp.server.main.host.and.port=smtp.example.com:587
 
 2. 관리 화면의 "전반" 설정에서 "통지 대상"에 메일 주소를 입력합니다. 여러 주소는 쉼표로 구분하여 지정할 수 있습니다.
 
@@ -207,7 +206,7 @@ OpenSearch 인덱스
 
 3. **메일 서버 설정 확인**
 
-   ``fess_config.properties`` 에서 메일 서버가 올바르게 설정되어 있는지 확인합니다.
+   ``fess_env.properties`` 에서 메일 서버가 올바르게 설정되어 있는지 확인합니다.
 
 4. **로그 확인**
 

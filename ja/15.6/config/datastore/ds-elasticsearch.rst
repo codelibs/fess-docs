@@ -61,9 +61,12 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
    * - 名前
      - External Elasticsearch
    * - ハンドラ名
-     - ElasticsearchDataStore
+     - ElasticsearchDataStore / ElasticsearchListDataStore
    * - 有効
      - オン
+
+.. note::
+   ``ElasticsearchListDataStore`` は ``ElasticsearchDataStore`` を拡張したハンドラで、取得したデータをファイルリストとして処理し、マルチスレッドでのインデックス登録をサポートします。
 
 パラメーター設定
 ----------------

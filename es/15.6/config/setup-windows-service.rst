@@ -44,7 +44,7 @@ El número de puerto predeterminado para la pantalla de búsqueda y pantalla de 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
 .. note::
-   ``bin\service.bat`` contiene el puerto codificado en ``FESS_PARAMS``. Si cambia el puerto en ``fess.in.bat``, también debe actualizar el valor del puerto en ``service.bat`` para que coincida.
+   Al registrar como servicio, ``-Dfess.port=8080`` también está codificado en ``FESS_PARAMS`` en ``bin\service.bat``. Al cambiar el puerto, edite también ``service.bat`` de la misma manera.
 
 Método de Registro
 ------------------
@@ -73,7 +73,7 @@ Agregue la siguiente clave y valor en el Editor del Registro (regedit).
 .. list-table::
 
    * - *Clave*
-     - ``Equipo\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services \fess-service-x64\DependOnService``
+     - ``Equipo\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
    * - *Valor*
      - ``opensearch-service-x64``
 

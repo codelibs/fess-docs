@@ -65,7 +65,7 @@ AI 검색 모드 기능은 다음 흐름으로 동작합니다.
 기본 설정
 ========
 
-LLM 기능의 설정은 다음 세 곳에서 수행합니다.
+LLM 기능의 설정은 다음 두 곳에서 수행합니다.
 
 관리 화면의 전반 설정 / system.properties
 ------------------------------------------
@@ -80,19 +80,12 @@ LLM 기능의 설정은 다음 세 곳에서 수행합니다.
 fess_config.properties
 ----------------------
 
-``app/WEB-INF/conf/fess_config.properties`` 에서 설정합니다. 시작 시 로드되는 설정으로, AI 검색 모드 활성화 및 세션·이력 관련 설정을 수행합니다.
+``app/WEB-INF/conf/fess_config.properties`` 에서 설정합니다. 시작 시 로드되는 설정으로, AI 검색 모드 활성화, 세션·이력 관련 설정 및 프로바이더 고유의 설정(접속 URL, API 키, 생성 파라미터 등)을 수행합니다.
 
 ::
 
     # AI 검색 모드 기능 활성화
     rag.chat.enabled=true
-
-fess_config.properties(프로바이더 고유 설정)
-----------------------------------------------
-
-``fess_config.properties`` 에서 프로바이더 고유의 설정을 수행합니다. 접속 URL, API 키, 생성 파라미터 등을 설정합니다.
-
-::
 
     # 프로바이더 고유 설정 예(OpenAI의 경우)
     rag.llm.openai.api.key=sk-...

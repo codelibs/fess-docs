@@ -43,17 +43,31 @@
 .. note::
    設定変更後は、|Fess| を再起動する必要があります。
 
+スクロールタイムアウトの設定
+----------------------------
+
+スクロールコンテキストの有効時間はサーバー側の設定で制御されます。
+デフォルトは ``3m`` (3分)です。
+
+::
+
+    index.scroll.search.timeout=3m
+
 レスポンスフィールドの設定
 --------------------------
 
 検索結果のレスポンスに含めるフィールドをカスタマイズできます。
-デフォルトでは基本的なフィールドのみが返されますが、追加のフィールドを指定することができます。
+デフォルトで多数のフィールドが返されますが、追加のフィールドを指定することもできます。
 
 ::
 
-    query.additional.scroll.response.fields=content,mimetype,filename,created,last_modified
+    query.additional.scroll.response.fields=content
 
 複数のフィールドを指定する場合は、カンマ区切りで列挙します。
+
+.. note::
+   ``content`` フィールドはデフォルトのレスポンスには含まれません。
+   全文を取得する場合は上記設定で追加してください。
 
 使用方法
 ========
@@ -81,6 +95,9 @@
 
 スクロール検索では、以下のパラメータを使用できます。
 
+.. note::
+   スクロール検索は GET メソッドのみ対応しています。
+
 .. list-table::
    :header-rows: 1
    :widths: 25 75
@@ -89,12 +106,14 @@
      - 説明
    * - ``q``
      - 検索クエリ(必須)
-   * - ``size``
-     - 1回のスクロールで取得する件数(デフォルト: 100)
-   * - ``scroll``
-     - スクロールコンテキストの有効時間(デフォルト: 1m)
+   * - ``num``
+     - 1回のスクロールで取得する件数(デフォルト: 10、最大: 100)
    * - ``fields.label``
      - ラベルによるフィルタリング
+
+.. note::
+   ``num`` の最大値は ``paging.search.page.max.size`` (デフォルト: 100)で制御されます。
+   最大値を超える値を指定した場合、自動的に最大値に切り詰められます。
 
 検索クエリの指定
 ----------------
@@ -126,11 +145,12 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&size=500"
+    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
 
 .. note::
-   ``size`` パラメータを大きくしすぎると、メモリ使用量が増加します。
-   通常は100〜1000の範囲で設定することを推奨します。
+   ``num`` パラメータを大きくしすぎると、メモリ使用量が増加します。
+   デフォルトの最大値は100です。より大きな値が必要な場合は
+   ``paging.search.page.max.size`` の設定を変更してください。
 
 ラベルによるフィルタリング
 --------------------------
@@ -141,21 +161,13 @@
 
     curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
 
-認証が必要な場合
-----------------
+認証について
+------------
 
-ロールベース検索を使用している場合、認証情報を含める必要があります。
-
-::
-
-    curl -u username:password "http://localhost:8080/api/v1/documents/all?q=Fess"
-
-または、APIトークンを使用:
-
-::
-
-    curl -H "Authorization: Bearer YOUR_API_TOKEN" \
-         "http://localhost:8080/api/v1/documents/all?q=Fess"
+.. warning::
+   スクロール検索では、|Fess| のロールベースアクセス制御(RBAC)は適用されません。
+   検索条件に一致するすべてのドキュメントがユーザーの権限に関係なく返されます。
+   アクセス制限が必要な場合は、リバースプロキシ等でIPアドレス制限や認証を設定してください。
 
 レスポンス形式
 ==============
@@ -177,15 +189,34 @@ NDJSON形式
 レスポンスフィールド
 --------------------
 
-デフォルトで含まれる主なフィールド:
+デフォルトで含まれるフィールド:
 
-- ``url``: ドキュメントのURL
-- ``title``: タイトル
-- ``content``: 本文(抜粋)
 - ``score``: 検索スコア
+- ``id``: ドキュメントID
+- ``doc_id``: ドキュメントID(内部)
 - ``boost``: ブースト値
-- ``created``: 作成日時
+- ``content_length``: コンテンツ長
+- ``host``: ホスト名
+- ``site``: サイト
 - ``last_modified``: 最終更新日時
+- ``timestamp``: タイムスタンプ
+- ``mimetype``: MIMEタイプ
+- ``filetype``: ファイルタイプ
+- ``filename``: ファイル名
+- ``created``: 作成日時
+- ``title``: タイトル
+- ``digest``: 本文抜粋
+- ``url``: ドキュメントのURL
+- ``thumbnail``: サムネイル
+- ``click_count``: クリック数
+- ``favorite_count``: お気に入り数
+- ``config_id``: 設定ID
+- ``lang``: 言語
+- ``has_cache``: キャッシュ有無
+
+.. note::
+   ``content`` (全文)はデフォルトでは含まれません。
+   ``query.additional.scroll.response.fields`` で追加できます。
 
 データ処理例
 ============
@@ -202,7 +233,7 @@ Pythonでの処理例
     url = "http://localhost:8080/api/v1/documents/all"
     params = {
         "q": "Fess",
-        "size": 100
+        "num": 100
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -268,11 +299,11 @@ jqコマンドを使用してCSVに変換する例:
 効率的な使用方法
 ----------------
 
-1. **適切なsizeパラメータの設定**
+1. **適切なnumパラメータの設定**
 
    - 小さすぎると通信オーバーヘッドが増加
    - 大きすぎるとメモリ使用量が増加
-   - 推奨: 100〜1000
+   - デフォルトの最大値: 100
 
 2. **検索条件の最適化**
 
@@ -298,7 +329,7 @@ jqコマンドを使用してCSVに変換する例:
     import json
 
     url = "http://localhost:8080/api/v1/documents/all"
-    params = {"q": "*:*", "size": 100}
+    params = {"q": "*:*", "num": 100}
 
     # ストリーミングで処理
     with requests.get(url, params=params, stream=True) as response:
@@ -346,13 +377,13 @@ jqコマンドを使用してCSVに変換する例:
 タイムアウトエラーが発生する
 ----------------------------
 
-1. ``size`` パラメータを小さくして、処理を分散してください。
+1. ``num`` パラメータを小さくして、処理を分散してください。
 2. 検索条件を絞り込んで、取得するデータ量を減らしてください。
 
 メモリ不足エラー
 ----------------
 
-1. ``size`` パラメータを小さくしてください。
+1. ``num`` パラメータを小さくしてください。
 2. |Fess| のヒープメモリサイズを増やしてください。
 3. OpenSearch のヒープメモリサイズを確認してください。
 

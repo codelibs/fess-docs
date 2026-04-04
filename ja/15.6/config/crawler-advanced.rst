@@ -193,6 +193,9 @@ HTTPクローラーのスレッドプール設定です。
    * - ``crawler.file.protocols``
      - ファイルクロールのプロトコル
      - ``file,smb,smb1,ftp,storage,s3,gcs``
+   * - ``crawler.crawling.data.encoding``
+     - クロールデータのエンコーディング
+     - ``UTF-8``
 
 設定例
 ~~~~~~
@@ -201,6 +204,7 @@ HTTPクローラーのスレッドプール設定です。
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.crawling.data.encoding=UTF-8
 
 環境変数パラメーター
 --------------------

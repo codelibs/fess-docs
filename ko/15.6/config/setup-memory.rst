@@ -204,7 +204,7 @@ OpenSearch의 힙 메모리는 ``config/jvm.options`` 파일에서 지정하는 
 .. note::
    최소 힙 크기(``-Xms``)와 최대 힙 크기(``-Xmx``)는 동일한 값으로 설정하는 것을 권장합니다.
 
-.. deprecated::
+.. note::
    ``OPENSEARCH_HEAP_SIZE`` 환경 변수는 더 이상 권장되지 않습니다. 대신 ``config/jvm.options`` 를 사용하십시오. 환경 변수로 설정해야 하는 경우 ``OPENSEARCH_JAVA_OPTS="-Xms2g -Xmx2g"`` 를 사용하십시오.
 
 Windows 환경

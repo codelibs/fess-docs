@@ -192,6 +192,9 @@ Unterstützte Protokolle
    * - ``crawler.file.protocols``
      - Protokolle für Datei-Crawling
      - ``file,smb,smb1,ftp,storage,s3,gcs``
+   * - ``crawler.crawling.data.encoding``
+     - Kodierung der Crawling-Daten
+     - ``UTF-8``
 
 Konfigurationsbeispiel
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -200,6 +203,7 @@ Konfigurationsbeispiel
 
     crawler.web.protocols=http,https
     crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.crawling.data.encoding=UTF-8
 
 Umgebungsvariablen-Parameter
 --------------------

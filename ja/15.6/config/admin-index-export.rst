@@ -50,7 +50,7 @@
      - バッチあたりの処理ドキュメント数
    * - ``index.export.format``
      - ``html``
-     - エクスポートファイルのフォーマット
+     - エクスポートファイルのフォーマット（``html`` または ``json``）
 
 設定例:
 
@@ -69,7 +69,7 @@
 
 1. |Fess| 管理コンソールにログイン
 2. **システム** > **スケジューラ** に移動
-3. ジョブ一覧から **Index Export Job** を探す
+3. ジョブ一覧から **Index Exporter** を探す
 4. クリックしてジョブ設定を編集
 5. cron 式でスケジュールを設定
 6. 設定を保存
@@ -88,28 +88,32 @@ cron 式の例:
 カスタムクエリフィルタを追加するには:
 
 1. **システム** > **スケジューラ** に移動
-2. **Index Export Job** を編集
+2. **Index Exporter** を編集
 3. ジョブスクリプトを変更してクエリフィルタを追加
 
-日付フィルタの例:
+日付フィルタの例（直近7日間のドキュメントのみエクスポート）:
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .execute()
 
-    def job = new IndexExportJob()
-    job.query = "created:>=now-7d"
-    job.execute()
-
-サイトフィルタの例:
+サイトフィルタの例（特定サイトのドキュメントのみエクスポート）:
 
 ::
 
-    import org.codelibs.fess.job.IndexExportJob
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .execute()
 
-    def job = new IndexExportJob()
-    job.query = "url:*example.com*"
-    job.execute()
+JSON フォーマットでエクスポートする例:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .format("json")
+        .execute()
 
 エクスポートされたファイル構造
 ==============================
@@ -184,7 +188,7 @@ cron 式の例:
 ::
 
     # インデックスのドキュメント数を確認
-    curl -X GET "localhost:9201/fess.YYYYMMDD/_count?pretty"
+    curl -X GET "localhost:9201/fess.search/_count?pretty"
 
 エクスポートが途中で失敗する
 ----------------------------

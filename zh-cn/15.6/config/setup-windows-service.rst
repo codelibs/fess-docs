@@ -44,7 +44,7 @@
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
 .. note::
-   ``bin\service.bat`` 中的 ``FESS_PARAMS`` 变量包含硬编码的端口号。变更端口时，还需要编辑 ``service.bat`` 中的 ``FESS_PARAMS`` 以确保端口号一致。
+   注册为服务时，``bin\service.bat`` 中的 ``FESS_PARAMS`` 也硬编码了 ``-Dfess.port=8080``。变更端口时，请同样编辑 ``service.bat``。
 
 
 注册方法
@@ -74,7 +74,7 @@
 .. list-table::
 
    * - *键*
-     - ``计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services \fess-service-x64\DependOnService``
+     - ``计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
    * - *值*
      - ``opensearch-service-x64``
 
