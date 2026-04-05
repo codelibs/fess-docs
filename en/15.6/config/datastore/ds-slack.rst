@@ -61,7 +61,7 @@ Parameter Configuration
 
 ::
 
-    token=xoxp-your-token-here
+    token=xoxb-your-slack-bot-token-here
     channels=general,random
     file_crawl=false
     include_private=false
@@ -80,14 +80,50 @@ Parameter List
      - Yes
      - Slack app OAuth Access Token
    * - ``channels``
-     - Yes
-     - Target channels for crawling (comma-separated, or ``*all``)
+     - No
+     - Target channels for crawling (comma-separated, or ``*all``). If not specified, all channels are fetched (same behavior as ``*all``)
    * - ``file_crawl``
      - No
      - Also crawl files (default: ``false``)
    * - ``include_private``
      - No
      - Include private channels (default: ``false``)
+   * - ``number_of_threads``
+     - No
+     - Number of parallel processing threads (default: ``1``)
+   * - ``max_filesize``
+     - No
+     - Maximum file size in bytes to crawl (default: ``10000000``)
+   * - ``ignore_error``
+     - No
+     - Continue processing on error (default: ``true``)
+   * - ``supported_mimetypes``
+     - No
+     - Regex for allowed MIME types (default: ``.*``)
+   * - ``include_pattern``
+     - No
+     - Regex pattern for URLs to include
+   * - ``exclude_pattern``
+     - No
+     - Regex pattern for URLs to exclude
+   * - ``proxy_host``
+     - No
+     - HTTP proxy host
+   * - ``proxy_port``
+     - No
+     - HTTP proxy port (required when ``proxy_host`` is specified)
+   * - ``file_types``
+     - No
+     - File type filter for Slack API
+   * - ``channel_count``
+     - No
+     - Number of channels per API page (default: ``100``)
+   * - ``message_count``
+     - No
+     - Number of messages per API page (default: ``100``)
+   * - ``file_count``
+     - No
+     - Number of files per API page (default: ``20``)
 
 Script Configuration
 --------------------
@@ -110,6 +146,8 @@ Available Fields
 
    * - Field
      - Description
+   * - ``message.title``
+     - Title (empty string for messages, file name and title for file entries)
    * - ``message.text``
      - Message text content
    * - ``message.user``
@@ -148,6 +186,7 @@ For public channels only:
 
 - ``channels:history`` - Read public channel messages
 - ``channels:read`` - Read public channel information
+- ``users:read`` - Read user information (required for display name resolution)
 
 When including private channels (``include_private=true``):
 
@@ -155,6 +194,7 @@ When including private channels (``include_private=true``):
 - ``channels:read``
 - ``groups:history`` - Read private channel messages
 - ``groups:read`` - Read private channel information
+- ``users:read``
 
 When also crawling files (``file_crawl=true``):
 
@@ -402,31 +442,6 @@ Large Number of Messages
 
 Advanced Script Examples
 ========================
-
-Message Filtering
------------------
-
-Index only messages from a specific user:
-
-::
-
-    if (message.user == "John Doe") {
-        title=message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
-
-Messages containing specific keywords only:
-
-::
-
-    if (message.text.contains("important") || message.text.contains("incident")) {
-        title="[Important] " + message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
 
 Message Processing
 ------------------

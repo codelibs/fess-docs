@@ -80,6 +80,7 @@ OAuth Password authentication:
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -97,8 +98,8 @@ Parameter List
      - Required
      - Description
    * - ``base_url``
-     - Yes
-     - Salesforce URL (Production: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
+     - No
+     - Salesforce URL (default: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
    * - ``auth_type``
      - Yes
      - Authentication type (``oauth_token`` or ``oauth_password``)
@@ -114,6 +115,9 @@ Parameter List
    * - ``client_secret``
      - For oauth_password
      - Connected App Consumer Secret
+   * - ``password``
+     - For oauth_password
+     - Salesforce password
    * - ``security_token``
      - For oauth_password
      - User's security token
@@ -132,6 +136,30 @@ Parameter List
    * - ``<object>.contents``
      - No
      - Field names to use for content (comma-separated)
+   * - ``<object>.descriptions``
+     - No
+     - Field names for description (comma-separated)
+   * - ``<object>.thumbnail``
+     - No
+     - Field name for thumbnail
+   * - ``include_pattern``
+     - No
+     - URL filter include pattern (regex)
+   * - ``exclude_pattern``
+     - No
+     - URL filter exclude pattern (regex)
+   * - ``refresh_token_interval``
+     - No
+     - Token refresh interval in seconds (default: 3540)
+   * - ``proxy_host``
+     - No
+     - HTTP proxy hostname
+   * - ``proxy_port``
+     - Required if proxy_host is set
+     - HTTP proxy port number
+   * - ``readInterval``
+     - No
+     - Wait time between record processing (milliseconds)
 
 Script Configuration
 --------------------
@@ -284,6 +312,12 @@ Field Mapping Rules
 
 - ``<object_name>.title`` - Field to use for title (single field)
 - ``<object_name>.contents`` - Fields to use for content (comma-separated for multiple)
+- ``<object_name>.descriptions`` - Fields to use for description (comma-separated for multiple)
+- ``<object_name>.thumbnail`` - Field to use for thumbnail (single field)
+
+.. note::
+
+   Standard objects use UPPER_UNDERSCORE names (e.g., ``ACCOUNT.title=Name``).
 
 Usage Examples
 ==============
@@ -354,6 +388,7 @@ Parameters:
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

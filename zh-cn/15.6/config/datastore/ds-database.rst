@@ -8,7 +8,7 @@
 数据库连接器提供从JDBC兼容的关系数据库获取数据并
 注册到 |Fess| 索引的功能。
 
-此功能需要 ``fess-ds-db`` 插件。
+此功能需要安装 ``fess-ds-db`` 插件。
 
 支持的数据库
 ================
@@ -102,17 +102,26 @@ PostgreSQL示例：
      - 是
      - JDBC连接URL
    * - ``username``
-     - 是
+     - 否
      - 数据库用户名
    * - ``password``
-     - 是
+     - 否
      - 数据库密码
    * - ``sql``
      - 是
      - 数据获取用SQL查询
    * - ``fetch_size``
      - 否
-     - 获取大小（默认：100）
+     - 获取大小（默认：100）。对于MySQL，可设置为 ``MIN_VALUE`` 字符串以启用流式结果集读取，避免大数据量时的内存溢出。
+   * - ``column_label.*``
+     - 否
+     - 列标签映射设置。可用于BLOB列的MIME类型映射（例如 ``column_label.content_type=application/pdf``），指定BLOB数据提取时的MIME类型。
+   * - ``readInterval``
+     - 否
+     - 每行读取之间的延迟时间（毫秒）。默认值为0（无延迟）。
+   * - ``script_type``
+     - 否
+     - 脚本类型。默认值为 ``groovy``。
 
 脚本设置
 --------------
@@ -121,14 +130,14 @@ PostgreSQL示例：
 
 ::
 
-    url="https://example.com/articles/" + data.id
-    title=data.title
-    content=data.content
-    lastModified=data.updated_at
+    url="https://example.com/articles/" + id
+    title=title
+    content=content
+    lastModified=updated_at
 
 可用字段：
 
-- ``data.<column_name>`` - SQL查询的结果列
+- ``<column_name>`` - SQL查询的结果列（直接使用列标签名称访问）
 
 SQL查询设计
 ===============
@@ -143,8 +152,11 @@ SQL查询设计
     # 使用索引的高效查询
     SELECT id, title, content, url, updated_at
     FROM articles
-    WHERE updated_at >= :last_crawl_date
+    WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
+
+.. note::
+   SQL查询将原样发送到数据库，不支持参数绑定（如 ``:last_crawl_date``）。请直接在SQL中写入具体的日期值。
 
 增量抓取
 ------------
@@ -167,13 +179,13 @@ URL生成
 ::
 
     # 固定模式
-    url="https://example.com/article/" + data.id
+    url="https://example.com/article/" + id
 
     # 组合多个字段
-    url="https://example.com/" + data.category + "/" + data.slug
+    url="https://example.com/" + category + "/" + slug
 
     # 使用存储在数据库中的URL
-    url=data.url
+    url=url
 
 多字节字符支持
 ====================
@@ -195,17 +207,6 @@ PostgreSQL通常默认使用UTF-8。如有需要：
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
-
-连接池
-==============
-
-处理大量数据时，请考虑连接池：
-
-::
-
-    # 使用HikariCP时的设置
-    datasource.class=com.zaxxer.hikari.HikariDataSource
-    pool.size=5
 
 安全性
 ============
@@ -253,10 +254,10 @@ PostgreSQL通常默认使用UTF-8。如有需要：
 
 ::
 
-    url="https://shop.example.com/product/" + data.id
-    title=data.name
-    content=data.description + " 类别：" + data.category + " 价格：" + data.price + "元"
-    lastModified=data.updated_at
+    url="https://shop.example.com/product/" + id
+    title=name
+    content=description + " 类别：" + category + " 价格：" + price + "元"
+    lastModified=updated_at
 
 知识库文章
 ------------------
@@ -275,13 +276,13 @@ PostgreSQL通常默认使用UTF-8。如有需要：
 
 ::
 
-    url="https://kb.example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    digest=data.tags
-    author=data.author
-    created=data.created_at
-    lastModified=data.updated_at
+    url="https://kb.example.com/article/" + id
+    title=title
+    content=body
+    digest=tags
+    author=author
+    created=created_at
+    lastModified=updated_at
 
 故障排除
 ======================

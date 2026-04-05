@@ -60,7 +60,7 @@ Parameter-Einstellungen
 
 ::
 
-    token=xoxp-your-token-here
+    token=xoxb-your-slack-bot-token-here
     channels=general,random
     file_crawl=false
     include_private=false
@@ -79,14 +79,50 @@ Parameterliste
      - Ja
      - OAuth Access Token der Slack-App
    * - ``channels``
-     - Ja
-     - Zu crawlende Kanäle (kommagetrennt oder ``*all``)
+     - Nein
+     - Zu crawlende Kanäle (kommagetrennt oder ``*all``). Wenn nicht angegeben, werden alle Kanäle abgerufen (gleiches Verhalten wie ``*all``)
    * - ``file_crawl``
      - Nein
      - Auch Dateien crawlen (Standard: ``false``)
    * - ``include_private``
      - Nein
      - Private Kanäle einschließen (Standard: ``false``)
+   * - ``number_of_threads``
+     - Nein
+     - Anzahl der parallelen Verarbeitungs-Threads (Standard: ``1``)
+   * - ``max_filesize``
+     - Nein
+     - Maximale Dateigröße in Bytes (Standard: ``10000000``)
+   * - ``ignore_error``
+     - Nein
+     - Verarbeitung bei Fehler fortsetzen (Standard: ``true``)
+   * - ``supported_mimetypes``
+     - Nein
+     - Regex für erlaubte MIME-Typen (Standard: ``.*``)
+   * - ``include_pattern``
+     - Nein
+     - Regex-Muster für einzuschließende URLs
+   * - ``exclude_pattern``
+     - Nein
+     - Regex-Muster für auszuschließende URLs
+   * - ``proxy_host``
+     - Nein
+     - HTTP-Proxy-Host
+   * - ``proxy_port``
+     - Nein
+     - HTTP-Proxy-Port (erforderlich, wenn ``proxy_host`` angegeben)
+   * - ``file_types``
+     - Nein
+     - Dateitypfilter für die Slack-API
+   * - ``channel_count``
+     - Nein
+     - Anzahl der Kanäle pro API-Seite (Standard: ``100``)
+   * - ``message_count``
+     - Nein
+     - Anzahl der Nachrichten pro API-Seite (Standard: ``100``)
+   * - ``file_count``
+     - Nein
+     - Anzahl der Dateien pro API-Seite (Standard: ``20``)
 
 Skript-Einstellungen
 --------------------
@@ -109,6 +145,8 @@ Verfügbare Felder
 
    * - Feld
      - Beschreibung
+   * - ``message.title``
+     - Titel (leerer String für Nachrichten, Dateiname und Titel für Dateieinträge)
    * - ``message.text``
      - Textinhalt der Nachricht
    * - ``message.user``
@@ -147,6 +185,7 @@ Nur für öffentliche Kanäle:
 
 - ``channels:history`` - Lesen von Nachrichten in öffentlichen Kanälen
 - ``channels:read`` - Lesen von Informationen öffentlicher Kanäle
+- ``users:read`` - Lesen von Benutzerinformationen (erforderlich für die Auflösung von Anzeigenamen)
 
 Private Kanäle einschließen (``include_private=true``):
 
@@ -154,6 +193,7 @@ Private Kanäle einschließen (``include_private=true``):
 - ``channels:read``
 - ``groups:history`` - Lesen von Nachrichten in privaten Kanälen
 - ``groups:read`` - Lesen von Informationen privater Kanäle
+- ``users:read``
 
 Auch Dateien crawlen (``file_crawl=true``):
 
@@ -401,31 +441,6 @@ Bei großen Nachrichtenmengen
 
 Erweiterte Skript-Beispiele
 ===========================
-
-Nachrichten filtern
--------------------
-
-Nur Nachrichten eines bestimmten Benutzers indizieren:
-
-::
-
-    if (message.user == "Max Mustermann") {
-        title=message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
-
-Nur Nachrichten mit bestimmten Schlüsselwörtern:
-
-::
-
-    if (message.text.contains("wichtig") || message.text.contains("Störung")) {
-        title="[Wichtig] " + message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
 
 Nachrichten formatieren
 -----------------------

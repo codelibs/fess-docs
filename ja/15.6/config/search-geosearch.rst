@@ -217,7 +217,7 @@ Googleマップとの連携
 
 大量の位置情報データを扱う場合は、インデックスの設定を最適化します。
 
-ソースコード上では ``src/main/resources/fess_indices/fess/doc.json`` で位置情報フィールドが定義されています。
+``app/WEB-INF/classes/fess_indices/fess/doc.json`` で位置情報フィールドが定義されています。
 
 ::
 

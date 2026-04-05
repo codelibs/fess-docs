@@ -80,6 +80,7 @@ OAuth Password认证:
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -97,8 +98,8 @@ OAuth Password认证:
      - 必需
      - 说明
    * - ``base_url``
-     - 是
-     - Salesforce的URL（生产: ``https://login.salesforce.com``，沙盒: ``https://test.salesforce.com``）
+     - 否
+     - Salesforce的URL（默认: ``https://login.salesforce.com``，沙盒: ``https://test.salesforce.com``）
    * - ``auth_type``
      - 是
      - 认证类型（``oauth_token`` 或 ``oauth_password``）
@@ -114,6 +115,9 @@ OAuth Password认证:
    * - ``client_secret``
      - oauth_password时
      - Connected App的Consumer Secret
+   * - ``password``
+     - oauth_password时
+     - Salesforce密码
    * - ``security_token``
      - oauth_password时
      - 用户的安全令牌
@@ -132,6 +136,30 @@ OAuth Password认证:
    * - ``<对象>.contents``
      - 否
      - 用于内容的字段名（逗号分隔）
+   * - ``<对象>.descriptions``
+     - 否
+     - 用于描述的字段名（逗号分隔）
+   * - ``<对象>.thumbnail``
+     - 否
+     - 用于缩略图的字段名
+   * - ``include_pattern``
+     - 否
+     - URL过滤器包含模式（正则表达式）
+   * - ``exclude_pattern``
+     - 否
+     - URL过滤器排除模式（正则表达式）
+   * - ``refresh_token_interval``
+     - 否
+     - 令牌刷新间隔（秒，默认值：3540）
+   * - ``proxy_host``
+     - 否
+     - HTTP代理主机名
+   * - ``proxy_port``
+     - 设置了proxy_host时
+     - HTTP代理端口号
+   * - ``readInterval``
+     - 否
+     - 记录处理间等待时间（毫秒）
 
 脚本设置
 --------------
@@ -284,6 +312,12 @@ Salesforce Connected App设置
 
 - ``<对象名>.title`` - 用于标题的字段（单个字段）
 - ``<对象名>.contents`` - 用于内容的字段（可用逗号分隔指定多个）
+- ``<对象名>.descriptions`` - 用于描述的字段（可用逗号分隔指定多个）
+- ``<对象名>.thumbnail`` - 用于缩略图的字段（单个字段）
+
+.. note::
+
+   标准对象使用大写下划线命名（UPPER_UNDERSCORE）。例如: ``ACCOUNT.title=Name``
 
 使用示例
 ======
@@ -354,6 +388,7 @@ Salesforce Connected App设置
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

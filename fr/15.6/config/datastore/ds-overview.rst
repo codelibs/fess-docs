@@ -107,7 +107,7 @@ Installation des connecteurs
 Installation des plugins
 ------------------------
 
-Les plugins de connecteurs DataStore peuvent etre installes depuis l'interface d'administration ou via la commande `plugin`.
+Les plugins de connecteurs DataStore peuvent etre installes depuis l'interface d'administration.
 
 Depuis l'interface d'administration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,25 +117,6 @@ Depuis l'interface d'administration
 3. Dans l'onglet "Disponibles", recherchez le plugin souhaite
 4. Cliquez sur "Installer"
 5. Redemarrez |Fess|
-
-Ligne de commande
-~~~~~~~~~~~~~~~~~
-
-::
-
-    # Installer un plugin
-    ./bin/fess-plugin install fess-ds-box
-
-    # Verifier les plugins installes
-    ./bin/fess-plugin list
-
-Environnement Docker
-~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    # Installer des plugins au demarrage
-    docker run -e FESS_PLUGINS="fess-ds-box,fess-ds-dropbox" codelibs/fess:15.6.0
 
 Configuration de base des DataStores
 ====================================
@@ -155,6 +136,8 @@ Elements de configuration communs a tous les connecteurs DataStore :
      - Description
    * - Nom
      - Nom d'identification de la configuration
+   * - Description
+     - Description de la configuration
    * - Nom du handler
      - Nom du handler du connecteur a utiliser (ex: ``BoxDataStore``)
    * - Parametres
@@ -163,6 +146,12 @@ Elements de configuration communs a tous les connecteurs DataStore :
      - Script de mapping des champs d'index
    * - Boost
      - Priorite dans les resultats de recherche
+   * - Autorisations
+     - Autorisations d'acces aux documents recuperes par ce connecteur
+   * - Hotes virtuels
+     - Hote virtuel auquel cette configuration s'applique
+   * - Ordre d'affichage
+     - Ordre d'affichage dans la liste des configurations
    * - Actif
      - Activer ou non cette configuration
 
@@ -180,7 +169,9 @@ Les parametres sont specifies au format ``key=value`` separes par des retours a 
 Configuration du script
 -----------------------
 
-Le script permet de mapper les donnees recuperees vers les champs d'index de |Fess| :
+Le script permet de mapper les donnees recuperees vers les champs d'index de |Fess|.
+
+Voici un exemple utilisant le prefixe ``data.*`` pour les connecteurs CSV/JSON :
 
 ::
 
@@ -194,62 +185,36 @@ Le script permet de mapper les donnees recuperees vers les champs d'index de |Fe
     lastModified=data.lastModified
     contentLength=data.contentLength
 
+.. note::
+
+   Le prefixe des champs dans le script varie selon le connecteur.
+   Par exemple, Box/Dropbox/Google Drive/OneDrive utilisent ``file.*``, Slack utilise ``message.*``,
+   Jira utilise ``issue.*``.
+   Consultez la documentation de chaque connecteur pour plus de details.
+
 Configuration de l'authentification
 ===================================
 
-La plupart des connecteurs DataStore necessitent une authentification OAuth 2.0 ou par cle API.
+La plupart des connecteurs DataStore necessitent une authentification (OAuth 2.0, cle API, compte de service, etc.).
 
-Authentification OAuth 2.0
---------------------------
+Les parametres d'authentification varient selon le connecteur.
+Consultez la documentation de chaque connecteur pour les details de configuration de l'authentification.
 
-Parametres de configuration OAuth 2.0 courants :
+Parametres communs
+==================
 
-::
+Parametres communs a tous les connecteurs DataStore :
 
-    client.id=ID client
-    client.secret=Secret client
-    refresh.token=Token de rafraichissement
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
 
-Ou :
-
-::
-
-    access.token=Token d'acces
-
-Authentification par cle API
-----------------------------
-
-::
-
-    api.key=Cle API
-    api.secret=Secret API
-
-Authentification par compte de service
---------------------------------------
-
-::
-
-    service.account.email=Adresse email du compte de service
-    service.account.key=Cle privee (format JSON ou chemin du fichier de cle)
-
-Optimisation des performances
-=============================
-
-Configuration pour le traitement de grandes quantites de donnees :
-
-::
-
-    # Taille du lot
-    batch.size=100
-
-    # Delai entre les requetes (millisecondes)
-    interval=1000
-
-    # Nombre de threads paralleles
-    thread.size=1
-
-    # Timeout (millisecondes)
-    timeout=30000
+   * - Parametre
+     - Defaut
+     - Description
+   * - ``readInterval``
+     - ``0``
+     - Delai d'attente entre le traitement de chaque enregistrement (en millisecondes). Utilisez ce parametre pour reduire la charge du serveur lors du traitement de grandes quantites de donnees.
 
 Depannage
 =========

@@ -107,35 +107,13 @@ Installing Connectors
 Installing Plugins
 ------------------
 
-Data Store Connector plugins can be installed from the admin console or using the ``plugin`` command.
-
-From Admin Console
-~~~~~~~~~~~~~~~~~~
+Data Store Connector plugins can be installed from the admin UI.
 
 1. Log in to the admin console
 2. Navigate to "System" -> "Plugins"
 3. Search for the target plugin in the "Available" tab
 4. Click "Install"
 5. Restart |Fess|
-
-Command Line
-~~~~~~~~~~~~
-
-::
-
-    # Install a plugin
-    ./bin/fess-plugin install fess-ds-box
-
-    # List installed plugins
-    ./bin/fess-plugin list
-
-Docker Environment
-~~~~~~~~~~~~~~~~~~
-
-::
-
-    # Install plugins at startup
-    docker run -e FESS_PLUGINS="fess-ds-box,fess-ds-dropbox" codelibs/fess:15.6.0
 
 Data Store Configuration Basics
 ===============================
@@ -157,10 +135,18 @@ Configuration items common to all Data Store Connectors:
      - Identifier name for the configuration
    * - Handler Name
      - Handler name for the connector (e.g., ``BoxDataStore``)
+   * - Description
+     - A free-text description of the configuration
    * - Parameters
      - Connector-specific configuration parameters (key=value format)
    * - Script
      - Index field mapping script
+   * - Permissions
+     - Access permissions for crawled documents (e.g., ``{role}guest``)
+   * - Virtual Hosts
+     - Virtual host keys to restrict which site this config applies to
+   * - Sort Order
+     - Display order in the configuration list
    * - Boost
      - Search result priority
    * - Enabled
@@ -180,7 +166,11 @@ Parameters are specified in ``key=value`` format, separated by newlines:
 Script Configuration
 --------------------
 
-Scripts map retrieved data to |Fess| index fields:
+Scripts map retrieved data to |Fess| index fields.
+The example below uses the ``data.*`` prefix, which is used by CSV and JSON connectors.
+Other connectors use their own prefix: ``file.*`` for Box/Dropbox/Google Drive/OneDrive,
+``message.*`` for Slack, ``issue.*`` for Jira, etc.
+See each connector's documentation for the available fields.
 
 ::
 
@@ -197,59 +187,26 @@ Scripts map retrieved data to |Fess| index fields:
 Authentication Configuration
 ============================
 
-Many Data Store Connectors require OAuth 2.0 or API key authentication.
+Many Data Store Connectors require authentication (OAuth 2.0, API keys, service accounts, etc.).
+The specific authentication parameters differ for each connector.
+Refer to the individual connector documentation for the required settings.
 
-OAuth 2.0 Authentication
-------------------------
+Common Parameters
+=================
 
-Common OAuth 2.0 configuration parameters:
+The following parameter is inherited from ``AbstractDataStore`` and available in all connectors:
 
-::
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
 
-    client.id=Client ID
-    client.secret=Client Secret
-    refresh.token=Refresh Token
-
-Or:
-
-::
-
-    access.token=Access Token
-
-API Key Authentication
-----------------------
-
-::
-
-    api.key=API Key
-    api.secret=API Secret
-
-Service Account Authentication
-------------------------------
-
-::
-
-    service.account.email=Service account email address
-    service.account.key=Private key (JSON format or key file path)
-
-Performance Tuning
-==================
-
-Configuration for processing large amounts of data:
-
-::
-
-    # Batch size
-    batch.size=100
-
-    # Wait time between requests (milliseconds)
-    interval=1000
-
-    # Number of parallel threads
-    thread.size=1
-
-    # Timeout (milliseconds)
-    timeout=30000
+   * - Parameter
+     - Default
+     - Description
+   * - ``readInterval``
+     - ``0``
+     - Delay in milliseconds between processing each record. Increase this value to
+       reduce load on the external service.
 
 Troubleshooting
 ===============

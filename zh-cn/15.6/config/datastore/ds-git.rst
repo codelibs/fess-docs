@@ -89,17 +89,44 @@ Git连接器提供从Git仓库获取文件并注册到
      - 是
      - Git仓库URI（用于clone）
    * - ``base_url``
-     - 是
-     - 文件显示用的基础URL
+     - 否
+     - 文件显示用的基础URL。如未设置，URL将为空，且已删除文件的自动删除也将被禁用
+   * - ``username``
+     - 否
+     - Git认证用户名。与 ``password`` 一起使用，作为在URI中嵌入凭据的替代方式
+   * - ``password``
+     - 否
+     - Git认证密码或令牌。与 ``username`` 一起使用
    * - ``extractors``
      - 否
      - 按MIME类型的提取器设置
+   * - ``default_extractor``
+     - 否
+     - 当没有MIME模式匹配时的回退提取器（默认：``tikaExtractor``）
    * - ``prev_commit_id``
      - 否
-     - 上次提交ID（用于增量爬取）
+     - 上次提交ID（用于增量爬取）。爬取成功后自动更新
    * - ``commit_id``
      - 否
      - 目标提交ID（默认：HEAD）。可以指定分支或标签
+   * - ``ref_specs``
+     - 否
+     - Git ref specs（默认：``+refs/heads/*:refs/heads/*``）
+   * - ``repository_path``
+     - 否
+     - 本地仓库路径。如未设置，将创建临时目录并在爬取后删除
+   * - ``include_pattern``
+     - 否
+     - 文件路径包含过滤器（正则表达式）
+   * - ``exclude_pattern``
+     - 否
+     - 文件路径排除过滤器（正则表达式）
+   * - ``max_size``
+     - 否
+     - 索引的最大文件大小（字节，默认：``10000000``）
+   * - ``cache_threshold``
+     - 否
+     - 内存和磁盘缓冲切换阈值（字节，默认：``1000000``）
 
 脚本设置
 --------------
@@ -142,7 +169,11 @@ Git连接器提供从Git仓库获取文件并注册到
    * - ``mimetype``
      - 文件的MIME类型
    * - ``author``
-     - 最后提交者信息
+     - 最后提交作者信息 (PersonIdent)
+   * - ``committer``
+     - 提交者信息 (PersonIdent)。可能与author不同
+   * - ``uri``
+     - Git仓库URI
 
 Git仓库认证
 ===================
@@ -257,8 +288,8 @@ SSH认证
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   提交ID设置为最后一次爬取时的提交ID。
-   这样只会爬取该提交之后的变更。
+   ``prev_commit_id`` 在爬取成功后会自动更新为最新的提交ID。
+   初次爬取时留空即可处理所有文件，之后的爬取只会处理变更内容。
 
 已删除文件的处理
 ------------------------
@@ -493,7 +524,7 @@ base_url设置模式
 
 ::
 
-    url=base_url + path
+    url=url
     title=name
     content=content
 

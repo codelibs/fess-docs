@@ -217,7 +217,7 @@ Google 地图集成
 
 处理大量位置信息数据时,请优化索引配置。
 
-位置信息字段在源代码的 ``src/main/resources/fess_indices/fess/doc.json`` 中定义。
+位置信息字段在 ``app/WEB-INF/classes/fess_indices/fess/doc.json`` 中定义。
 
 ::
 

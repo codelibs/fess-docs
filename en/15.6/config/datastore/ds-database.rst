@@ -8,7 +8,7 @@ Overview
 The Database Connector provides functionality to retrieve data from JDBC-compatible relational databases
 and register it in the |Fess| index.
 
-This feature is built into |Fess| and requires no additional plugins.
+This feature requires the ``fess-ds-db`` plugin.
 
 Supported Databases
 ===================
@@ -102,17 +102,26 @@ Parameter List
      - Yes
      - JDBC connection URL
    * - ``username``
-     - Yes
+     - No
      - Database username
    * - ``password``
-     - Yes
+     - No
      - Database password
    * - ``sql``
      - Yes
      - SQL query for data retrieval
    * - ``fetch_size``
      - No
-     - Fetch size (default: 100)
+     - Fetch size (default: 100). For MySQL streaming result sets, set to ``MIN_VALUE``.
+   * - ``readInterval``
+     - No
+     - Delay in milliseconds between processing each row. Default: 0
+   * - ``script_type``
+     - No
+     - Script engine type. Default: groovy
+   * - ``column_label.*``
+     - No
+     - BLOB extraction MIME type mapping (e.g., ``column_label.mimetype=content_type``)
 
 Script Configuration
 --------------------
@@ -121,14 +130,14 @@ Map SQL column names to index fields:
 
 ::
 
-    url="https://example.com/articles/" + data.id
-    title=data.title
-    content=data.content
-    lastModified=data.updated_at
+    url="https://example.com/articles/" + id
+    title=title
+    content=content
+    lastModified=updated_at
 
 Available fields:
 
-- ``data.<column_name>`` - SQL query result columns
+- ``<column_name>`` - SQL query result columns, accessed by their label name in the SELECT clause
 
 SQL Query Design
 ================
@@ -143,8 +152,11 @@ Query performance is important when handling large amounts of data:
     # Efficient query using indexes
     SELECT id, title, content, url, updated_at
     FROM articles
-    WHERE updated_at >= :last_crawl_date
+    WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
+
+.. note::
+   SQL is sent to the database as-is. Parameter binding (e.g., named parameters) is not supported.
 
 Incremental Crawling
 --------------------
@@ -167,13 +179,13 @@ Generate document URLs in the script:
 ::
 
     # Fixed pattern
-    url="https://example.com/article/" + data.id
+    url="https://example.com/article/" + id
 
     # Combination of multiple fields
-    url="https://example.com/" + data.category + "/" + data.slug
+    url="https://example.com/" + category + "/" + slug
 
     # Use URL stored in database
-    url=data.url
+    url=url
 
 Multi-byte Character Support
 ============================
@@ -195,17 +207,6 @@ PostgreSQL uses UTF-8 by default. If needed:
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
-
-Connection Pooling
-==================
-
-Consider connection pooling when processing large amounts of data:
-
-::
-
-    # HikariCP configuration
-    datasource.class=com.zaxxer.hikari.HikariDataSource
-    pool.size=5
 
 Security
 ========
@@ -253,10 +254,10 @@ Script:
 
 ::
 
-    url="https://shop.example.com/product/" + data.id
-    title=data.name
-    content=data.description + " Category: " + data.category + " Price: $" + data.price
-    lastModified=data.updated_at
+    url="https://shop.example.com/product/" + id
+    title=name
+    content=description + " Category: " + category + " Price: $" + price
+    lastModified=updated_at
 
 Knowledge Base Articles
 -----------------------
@@ -275,13 +276,13 @@ Script:
 
 ::
 
-    url="https://kb.example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    digest=data.tags
-    author=data.author
-    created=data.created_at
-    lastModified=data.updated_at
+    url="https://kb.example.com/article/" + id
+    title=title
+    content=body
+    digest=tags
+    author=author
+    created=created_at
+    lastModified=updated_at
 
 Troubleshooting
 ===============

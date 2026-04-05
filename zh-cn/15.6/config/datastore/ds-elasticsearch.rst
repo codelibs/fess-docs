@@ -108,11 +108,11 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
      - 必需
      - 说明
    * - ``settings.fesen.http.url``
-     - 是
-     - Elasticsearch/OpenSearch主机（可用逗号分隔指定多个）
+     - 否
+     - Elasticsearch/OpenSearch主机（可用逗号分隔指定多个）。未指定时会发生连接错误
    * - ``index``
-     - 是
-     - 目标索引名
+     - 否
+     - 目标索引名（默认: ``_all``）。可用逗号分隔指定多个
    * - ``settings.fesen.username``
      - 否
      - 认证用户名
@@ -127,10 +127,22 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
      - 滚动超时时间（默认: 1m）
    * - ``query``
      - 否
-     - 查询JSON（默认: match_all）
+     - 查询JSON（默认: match_all）。仅指定查询主体（外部 ``{"query":...}`` 包装不需要）
    * - ``fields``
      - 否
      - 要获取的字段（逗号分隔）
+   * - ``timeout``
+     - 否
+     - 请求超时时间（默认: 1m）
+   * - ``preference``
+     - 否
+     - 搜索执行时的分片副本优先设置（默认: ``_local``）
+   * - ``delete.processed.doc``
+     - 否
+     - 是否从源索引中删除已处理的文档（默认: false）
+   * - ``readInterval``
+     - 否
+     - 每个文档处理之间的等待时间（毫秒，默认: 0）
 
 脚本设置
 --------------
@@ -162,6 +174,11 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 - ``id`` - 文档ID
 - ``index`` - 索引名
 - ``score`` - 搜索得分
+- ``version`` - 文档版本
+- ``seqNo`` - 序列号
+- ``primaryTerm`` - 主要期限
+- ``clusterAlias`` - 集群别名（用于跨集群搜索）
+- ``hit`` - SearchHit对象（高级用法）
 
 查询设置
 ============
@@ -177,25 +194,23 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
 ::
 
-    query={"query":{"term":{"status":"published"}}}
+    query={"term":{"status":"published"}}
 
 范围指定:
 
 ::
 
-    query={"query":{"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}}
+    query={"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}
 
 多条件:
 
 ::
 
-    query={"query":{"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}}
+    query={"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}
 
-排序指定:
-
-::
-
-    query={"query":{"match_all":{}},"sort":[{"timestamp":{"order":"desc"}}]}
+.. note::
+   ``query`` 参数仅接受查询主体。不需要外部 ``{"query":...}`` 包装。
+   排序等搜索级别的选项不能在此参数中指定。
 
 只获取特定字段
 ========================
@@ -270,7 +285,7 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 
     settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
-    query={"query":{"term":{"level":"error"}}}
+    query={"term":{"level":"error"}}
     size=100
 
 脚本:
@@ -492,26 +507,16 @@ SSL/TLS连接
 ----------------
 
 .. note::
-   聚合结果不会被获取，只获取文档。
-
-::
-
-    query={"query":{"match_all":{}},"aggs":{"categories":{"terms":{"field":"category"}}}}
+   ``query`` 参数仅接受查询主体。聚合（aggs）、排序等搜索级别的
+   选项不能指定。只获取文档。
 
 脚本字段
 --------------------
 
-::
-
-    query={"query":{"match_all":{}},"script_fields":{"full_url":{"script":"doc['protocol'].value + '://' + doc['host'].value + doc['path'].value"}}}
-
-脚本:
-
-::
-
-    url=source.full_url
-    title=source.title
-    content=source.content
+.. note::
+   Elasticsearch/OpenSearch的脚本字段不包含在 ``_source`` 中，因此无法
+   通过 ``source.*`` 前缀访问。要使用脚本字段，请通过 ``hit`` 对象的
+   ``hit.getFields()`` 方法访问。
 
 参考信息
 ========

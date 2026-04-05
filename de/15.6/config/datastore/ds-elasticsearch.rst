@@ -107,11 +107,11 @@ Parameterliste
      - Erforderlich
      - Beschreibung
    * - ``settings.fesen.http.url``
-     - Ja
-     - Elasticsearch/OpenSearch-Hosts (mehrere kommagetrennt)
+     - Nein
+     - Elasticsearch/OpenSearch-Hosts (mehrere kommagetrennt). Verbindungsfehler bei fehlender Angabe
    * - ``index``
-     - Ja
-     - Name des Zielindexes
+     - Nein
+     - Name des Zielindexes (Standard: ``_all``). Mehrere Indizes können kommagetrennt angegeben werden
    * - ``settings.fesen.username``
      - Nein
      - Benutzername für Authentifizierung
@@ -126,10 +126,22 @@ Parameterliste
      - Scroll-Timeout (Standard: 1m)
    * - ``query``
      - Nein
-     - Query-JSON (Standard: match_all)
+     - Query-JSON (Standard: match_all). Nur den Query-Body angeben (äußerer ``{"query":...}``-Wrapper nicht erforderlich)
    * - ``fields``
      - Nein
      - Abzurufende Felder (kommagetrennt)
+   * - ``timeout``
+     - Nein
+     - Timeout für die Anfrage (Standard: 1m)
+   * - ``preference``
+     - Nein
+     - Shard-Replikat-Präferenz für die Suchausführung (Standard: ``_local``)
+   * - ``delete.processed.doc``
+     - Nein
+     - Ob verarbeitete Dokumente aus dem Quellindex gelöscht werden sollen (Standard: false)
+   * - ``readInterval``
+     - Nein
+     - Wartezeit zwischen der Verarbeitung jedes Dokuments in Millisekunden (Standard: 0)
 
 Skript-Einstellungen
 --------------------
@@ -161,6 +173,11 @@ Verfügbare Felder
 - ``id`` - Dokument-ID
 - ``index`` - Indexname
 - ``score`` - Suchpunktzahl
+- ``version`` - Dokumentversion
+- ``seqNo`` - Sequenznummer
+- ``primaryTerm`` - Primärterm
+- ``clusterAlias`` - Cluster-Alias (für Cross-Cluster-Suche)
+- ``hit`` - SearchHit-Objekt (für fortgeschrittene Nutzung)
 
 Query-Konfiguration
 ===================
@@ -176,25 +193,23 @@ Nach bestimmten Bedingungen filtern
 
 ::
 
-    query={"query":{"term":{"status":"published"}}}
+    query={"term":{"status":"published"}}
 
 Bereichsangabe:
 
 ::
 
-    query={"query":{"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}}
+    query={"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}
 
 Mehrere Bedingungen:
 
 ::
 
-    query={"query":{"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}}
+    query={"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}
 
-Sortierung angeben:
-
-::
-
-    query={"query":{"match_all":{}},"sort":[{"timestamp":{"order":"desc"}}]}
+.. note::
+   Der ``query``-Parameter akzeptiert nur den Query-Body. Der äußere ``{"query":...}``-Wrapper ist nicht erforderlich.
+   Such-level-Optionen wie Sortierung können in diesem Parameter nicht angegeben werden.
 
 Nur bestimmte Felder abrufen
 ============================
@@ -269,7 +284,7 @@ Parameter:
 
     settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
-    query={"query":{"term":{"level":"error"}}}
+    query={"term":{"level":"error"}}
     size=100
 
 Skript:
@@ -491,26 +506,16 @@ Query mit Aggregationen
 -----------------------
 
 .. note::
-   Aggregationsergebnisse werden nicht abgerufen, nur Dokumente.
-
-::
-
-    query={"query":{"match_all":{}},"aggs":{"categories":{"terms":{"field":"category"}}}}
+   Der ``query``-Parameter akzeptiert nur den Query-Body. Aggregationen (aggs), Sortierung und andere
+   Such-level-Optionen können nicht angegeben werden. Es werden nur Dokumente abgerufen.
 
 Skript-Felder
 -------------
 
-::
-
-    query={"query":{"match_all":{}},"script_fields":{"full_url":{"script":"doc['protocol'].value + '://' + doc['host'].value + doc['path'].value"}}}
-
-Skript:
-
-::
-
-    url=source.full_url
-    title=source.title
-    content=source.content
+.. note::
+   Elasticsearch/OpenSearch-Skriptfelder sind nicht in ``_source`` enthalten und können daher nicht
+   über den ``source.*``-Präfix zugegriffen werden. Um Skriptfelder zu verwenden, greifen Sie über das
+   ``hit``-Objekt mittels ``hit.getFields()`` zu.
 
 Weiterführende Informationen
 ============================

@@ -80,6 +80,7 @@ OAuth Password認証:
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -97,14 +98,17 @@ OAuth Password認証:
      - 必須
      - 説明
    * - ``base_url``
-     - はい
-     - SalesforceのURL（本番: ``https://login.salesforce.com``、Sandbox: ``https://test.salesforce.com``）
+     - いいえ
+     - SalesforceのURL（デフォルト: ``https://login.salesforce.com``、Sandbox: ``https://test.salesforce.com``）
    * - ``auth_type``
      - はい
      - 認証タイプ（``oauth_token`` または ``oauth_password``）
    * - ``username``
      - はい
      - Salesforceユーザー名
+   * - ``password``
+     - oauth_passwordの場合
+     - Salesforceパスワード
    * - ``client_id``
      - はい
      - 接続アプリケーションのConsumer Key
@@ -126,12 +130,36 @@ OAuth Password認証:
    * - ``custom``
      - いいえ
      - カスタムオブジェクト名（カンマ区切り）
+   * - ``include_pattern``
+     - いいえ
+     - URLフィルターの包含パターン（正規表現）
+   * - ``exclude_pattern``
+     - いいえ
+     - URLフィルターの除外パターン（正規表現）
+   * - ``refresh_token_interval``
+     - いいえ
+     - トークン更新間隔（秒、デフォルト: 3540）
+   * - ``proxy_host``
+     - いいえ
+     - HTTPプロキシホスト名
+   * - ``proxy_port``
+     - proxy_hostが設定されている場合
+     - HTTPプロキシポート番号
+   * - ``readInterval``
+     - いいえ
+     - レコード処理間の待機時間（ミリ秒）
    * - ``<オブジェクト>.title``
      - いいえ
      - タイトルに使用するフィールド名
    * - ``<オブジェクト>.contents``
      - いいえ
      - コンテンツに使用するフィールド名（カンマ区切り）
+   * - ``<オブジェクト>.descriptions``
+     - いいえ
+     - 説明に使用するフィールド名（カンマ区切り）
+   * - ``<オブジェクト>.thumbnail``
+     - いいえ
+     - サムネイルに使用するフィールド名
 
 スクリプト設定
 --------------
@@ -284,6 +312,14 @@ OAuth設定で:
 
 - ``<オブジェクト名>.title`` - タイトルに使用するフィールド（単一フィールド）
 - ``<オブジェクト名>.contents`` - コンテンツに使用するフィールド（カンマ区切りで複数指定可）
+- ``<オブジェクト名>.descriptions`` - 説明に使用するフィールド（カンマ区切りで複数指定可）
+- ``<オブジェクト名>.thumbnail`` - サムネイルに使用するフィールド
+
+.. note::
+
+   標準オブジェクトのフィールドマッピングでは、オブジェクト名に大文字のスネークケースを使用します
+   （例: ``ACCOUNT.title=Name``、``DAND_B_COMPANY.title=Name``）。
+   カスタムオブジェクトの場合は、API参照名をそのまま使用します（例: ``Product__c.title=Name``）。
 
 使用例
 ======
@@ -354,6 +390,7 @@ Sandbox環境のクロール
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

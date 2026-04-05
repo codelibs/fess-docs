@@ -216,7 +216,7 @@ Index Configuration Optimization
 
 When handling large amounts of location data, optimize index configuration.
 
-The location field is defined in the source code at ``src/main/resources/fess_indices/fess/doc.json``.
+The location field is defined in ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

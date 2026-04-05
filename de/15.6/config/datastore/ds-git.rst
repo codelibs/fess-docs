@@ -88,17 +88,44 @@ Parameterliste
      - Ja
      - URI des Git-Repositories (für Clone)
    * - ``base_url``
-     - Ja
-     - Basis-URL für die Dateianzeige
+     - Nein
+     - Basis-URL für die Dateianzeige. Wenn nicht gesetzt, bleiben URLs leer und die automatische Löschung entfernter Dateien ist deaktiviert
+   * - ``username``
+     - Nein
+     - Git-Authentifizierungsbenutzername. Wird mit ``password`` als Alternative zum Einbetten von Anmeldedaten in der URI verwendet
+   * - ``password``
+     - Nein
+     - Git-Authentifizierungspasswort oder Token. Wird mit ``username`` verwendet
    * - ``extractors``
      - Nein
      - Extraktoren nach MIME-Typ
+   * - ``default_extractor``
+     - Nein
+     - Fallback-Extraktor, wenn kein MIME-Muster übereinstimmt (Standard: ``tikaExtractor``)
    * - ``prev_commit_id``
      - Nein
-     - Vorherige Commit-ID (für differentielles Crawling)
+     - Vorherige Commit-ID (für differentielles Crawling). Wird nach erfolgreichem Crawling automatisch aktualisiert
    * - ``commit_id``
      - Nein
      - Ziel-Commit-ID (Standard: HEAD). Branch oder Tag kann angegeben werden
+   * - ``ref_specs``
+     - Nein
+     - Git Ref-Specs (Standard: ``+refs/heads/*:refs/heads/*``)
+   * - ``repository_path``
+     - Nein
+     - Lokaler Repository-Pfad. Wenn nicht gesetzt, wird ein temporäres Verzeichnis erstellt und nach dem Crawling gelöscht
+   * - ``include_pattern``
+     - Nein
+     - Dateipfad-Inklusionsfilter (Regex)
+   * - ``exclude_pattern``
+     - Nein
+     - Dateipfad-Ausschlussfilter (Regex)
+   * - ``max_size``
+     - Nein
+     - Maximale Dateigröße zum Indexieren in Bytes (Standard: ``10000000``)
+   * - ``cache_threshold``
+     - Nein
+     - Schwellenwert in Bytes für den Wechsel zwischen Speicher- und Festplattenpufferung (Standard: ``1000000``)
 
 Skript-Einstellungen
 --------------------
@@ -141,7 +168,11 @@ Verfügbare Felder
    * - ``mimetype``
      - MIME-Typ der Datei
    * - ``author``
-     - Informationen zum letzten Committer
+     - Informationen zum letzten Commit-Autor (PersonIdent)
+   * - ``committer``
+     - Committer-Informationen (PersonIdent). Kann sich vom Autor unterscheiden
+   * - ``uri``
+     - Git-Repository-URI
 
 Git-Repository-Authentifizierung
 ================================
@@ -256,8 +287,8 @@ Nach dem ersten Crawling die ``prev_commit_id`` auf die vorherige Commit-ID setz
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   Die Commit-ID wird auf die Commit-ID des letzten Crawlings gesetzt.
-   Dadurch werden nur Änderungen seit diesem Commit gecrawlt.
+   ``prev_commit_id`` wird nach einem erfolgreichen Crawling automatisch auf die neueste Commit-ID aktualisiert.
+   Lassen Sie es beim ersten Crawling leer, um alle Dateien zu verarbeiten; nachfolgende Crawlings verarbeiten nur Änderungen.
 
 Verarbeitung gelöschter Dateien
 -------------------------------
@@ -492,7 +523,7 @@ URL-Generierung im Skript
 
 ::
 
-    url=base_url + path
+    url=url
     title=name
     content=content
 

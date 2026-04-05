@@ -135,7 +135,7 @@ Server版（OAuth 1.0a）示例：
      - 刷新令牌（OAuth 2.0）
    * - ``oauth2.token_url``
      - 否
-     - 令牌URL（OAuth 2.0，有默认值）
+     - 令牌URL（OAuth 2.0，默认值: ``https://auth.atlassian.com/oauth/token``）
    * - ``basic.username``
      - Basic认证时
      - 用户名
@@ -145,6 +145,36 @@ Server版（OAuth 1.0a）示例：
    * - ``issue.jql``
      - 否
      - JQL（仅Jira，高级搜索条件）
+   * - ``issue_max_results``
+     - 否
+     - Jira API每次请求的最大结果数（默认值: ``50``，仅Jira）
+   * - ``content_limit``
+     - 否
+     - Confluence API每次请求的最大内容数（默认值: ``25``，仅Confluence）
+   * - ``ignore_error``
+     - 否
+     - 出错时是否继续处理（默认值: ``true``）
+   * - ``include_pattern``
+     - 否
+     - URL包含模式（正则表达式）
+   * - ``exclude_pattern``
+     - 否
+     - URL排除模式（正则表达式）
+   * - ``number_of_threads``
+     - 否
+     - 并行处理的线程数（默认值: ``1``）
+   * - ``proxy_host``
+     - 否
+     - HTTP代理主机名
+   * - ``proxy_port``
+     - 否
+     - HTTP代理端口号
+   * - ``connection_timeout``
+     - 否
+     - HTTP连接超时（毫秒）
+   * - ``read_timeout``
+     - 否
+     - HTTP读取超时（毫秒）
 
 脚本设置
 --------------
@@ -280,7 +310,7 @@ Jira Cloud抓取
 ::
 
     url=issue.view_url
-    title="[" + issue.key + "] " + issue.summary
+    title=issue.summary
     content=issue.description + "\n\n评论：\n" + issue.comments
     last_modified=issue.last_modified
 

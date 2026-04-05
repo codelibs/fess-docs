@@ -80,6 +80,7 @@ OAuth Password 인증:
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -97,8 +98,8 @@ OAuth Password 인증:
      - 필수
      - 설명
    * - ``base_url``
-     - 예
-     - Salesforce URL(프로덕션: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
+     - 아니오
+     - Salesforce URL(기본값: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
    * - ``auth_type``
      - 예
      - 인증 타입(``oauth_token`` 또는 ``oauth_password``)
@@ -114,6 +115,9 @@ OAuth Password 인증:
    * - ``client_secret``
      - oauth_password인 경우
      - Connected App의 Consumer Secret
+   * - ``password``
+     - oauth_password인 경우
+     - Salesforce 비밀번호
    * - ``security_token``
      - oauth_password인 경우
      - 사용자의 보안 토큰
@@ -132,6 +136,30 @@ OAuth Password 인증:
    * - ``<오브젝트>.contents``
      - 아니오
      - 콘텐츠에 사용할 필드명(쉼표 구분)
+   * - ``<오브젝트>.descriptions``
+     - 아니오
+     - 설명에 사용할 필드명 (쉼표 구분)
+   * - ``<오브젝트>.thumbnail``
+     - 아니오
+     - 썸네일에 사용할 필드명
+   * - ``include_pattern``
+     - 아니오
+     - URL 필터 포함 패턴 (정규식)
+   * - ``exclude_pattern``
+     - 아니오
+     - URL 필터 제외 패턴 (정규식)
+   * - ``refresh_token_interval``
+     - 아니오
+     - 토큰 갱신 간격(초, 기본값: 3540)
+   * - ``proxy_host``
+     - 아니오
+     - HTTP 프록시 호스트명
+   * - ``proxy_port``
+     - proxy_host가 설정된 경우
+     - HTTP 프록시 포트 번호
+   * - ``readInterval``
+     - 아니오
+     - 레코드 처리 간 대기 시간(밀리초)
 
 스크립트 설정
 --------------
@@ -284,6 +312,12 @@ OAuth 설정에서:
 
 - ``<오브젝트명>.title`` - 제목에 사용할 필드(단일 필드)
 - ``<오브젝트명>.contents`` - 콘텐츠에 사용할 필드(쉼표 구분으로 복수 지정 가능)
+- ``<오브젝트명>.descriptions`` - 설명에 사용할 필드(쉼표 구분으로 복수 지정 가능)
+- ``<오브젝트명>.thumbnail`` - 썸네일에 사용할 필드(단일 필드)
+
+.. note::
+
+   표준 오브젝트는 UPPER_UNDERSCORE 형식의 이름을 사용합니다 (예: ``ACCOUNT.title=Name``, ``CONTACT.contents=Name,Email``).
 
 사용 예
 ======
@@ -354,6 +388,7 @@ Sandbox 환경 크롤링
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

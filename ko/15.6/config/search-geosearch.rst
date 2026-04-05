@@ -217,7 +217,7 @@ Google Maps와의 연계
 
 대량의 위치 정보 데이터를 다루는 경우 인덱스 설정을 최적화합니다.
 
-소스 코드의 ``src/main/resources/fess_indices/fess/doc.json`` 에서 위치 정보 필드가 정의되어 있습니다.
+``app/WEB-INF/classes/fess_indices/fess/doc.json`` 에서 위치 정보 필드가 정의되어 있습니다.
 
 ::
 

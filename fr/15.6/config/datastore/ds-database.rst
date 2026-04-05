@@ -102,17 +102,26 @@ Liste des parametres
      - Oui
      - URL de connexion JDBC
    * - ``username``
-     - Oui
+     - Non
      - Nom d'utilisateur de la base de donnees
    * - ``password``
-     - Oui
+     - Non
      - Mot de passe de la base de donnees
    * - ``sql``
      - Oui
      - Requete SQL pour la recuperation des donnees
    * - ``fetch_size``
      - Non
-     - Taille de fetch (defaut : 100)
+     - Taille de fetch (defaut : 100). Pour le streaming MySQL, specifiez la chaine ``MIN_VALUE``.
+   * - ``readInterval``
+     - Non
+     - Delai en millisecondes entre chaque lecture de ligne (defaut : 0)
+   * - ``script_type``
+     - Non
+     - Type du moteur de script (defaut : groovy)
+   * - ``column_label.*``
+     - Non
+     - Mappage de type MIME pour l'extraction de colonnes BLOB (ex: ``column_label.content=application/pdf``)
 
 Configuration du script
 -----------------------
@@ -121,14 +130,14 @@ Mappez les noms de colonnes SQL vers les champs d'index :
 
 ::
 
-    url="https://example.com/articles/" + data.id
-    title=data.title
-    content=data.content
-    lastModified=data.updated_at
+    url="https://example.com/articles/" + id
+    title=title
+    content=content
+    lastModified=updated_at
 
 Champs disponibles :
 
-- ``data.<column_name>`` - Colonnes du resultat de la requete SQL
+- ``<column_name>`` - Colonnes du resultat de la requete SQL, accessibles directement par le nom de colonne
 
 Conception des requetes SQL
 ===========================
@@ -141,9 +150,10 @@ Pour les grands volumes de donnees, les performances de requete sont importantes
 ::
 
     # Requete efficace utilisant un index
+    # La requete SQL est envoyee telle quelle a la base de donnees
     SELECT id, title, content, url, updated_at
     FROM articles
-    WHERE updated_at >= :last_crawl_date
+    WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
 
 Exploration incrementale
@@ -167,13 +177,13 @@ L'URL du document est generee par le script :
 ::
 
     # Motif fixe
-    url="https://example.com/article/" + data.id
+    url="https://example.com/article/" + id
 
     # Combinaison de plusieurs champs
-    url="https://example.com/" + data.category + "/" + data.slug
+    url="https://example.com/" + category + "/" + slug
 
     # Utilisation de l'URL stockee dans la base de donnees
-    url=data.url
+    url=url
 
 Prise en charge des caracteres multi-octets
 ===========================================
@@ -195,17 +205,6 @@ PostgreSQL utilise generalement UTF-8 par defaut. Si necessaire :
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
-
-Pooling de connexions
-=====================
-
-Pour le traitement de grands volumes de donnees, envisagez le pooling de connexions :
-
-::
-
-    # Configuration avec HikariCP
-    datasource.class=com.zaxxer.hikari.HikariDataSource
-    pool.size=5
 
 Securite
 ========
@@ -253,10 +252,10 @@ Script :
 
 ::
 
-    url="https://shop.example.com/product/" + data.id
-    title=data.name
-    content=data.description + " Categorie: " + data.category + " Prix: " + data.price + " EUR"
-    lastModified=data.updated_at
+    url="https://shop.example.com/product/" + id
+    title=name
+    content=description + " Categorie: " + category + " Prix: " + price + " EUR"
+    lastModified=updated_at
 
 Articles de base de connaissances
 ---------------------------------
@@ -275,13 +274,13 @@ Script :
 
 ::
 
-    url="https://kb.example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    digest=data.tags
-    author=data.author
-    created=data.created_at
-    lastModified=data.updated_at
+    url="https://kb.example.com/article/" + id
+    title=title
+    content=body
+    digest=tags
+    author=author
+    created=created_at
+    lastModified=updated_at
 
 Depannage
 =========

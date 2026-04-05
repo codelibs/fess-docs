@@ -213,7 +213,7 @@ HTML 的缩略图使用 HTML 中指定的图片或包含的图片。
 
 ::
 
-    src/main/resources/fess_thumbnail.xml
+    app/WEB-INF/classes/fess_thumbnail.xml
 
 主要配置项（fess_config.properties）
 ------------------------------------

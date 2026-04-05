@@ -108,11 +108,11 @@ Lista de parametros
      - Requerido
      - Descripcion
    * - ``settings.fesen.http.url``
-     - Si
-     - Host(s) de Elasticsearch/OpenSearch (multiples separados por comas)
+     - No
+     - Host(s) de Elasticsearch/OpenSearch (multiples separados por comas). Error de conexion si no se especifica
    * - ``index``
-     - Si
-     - Nombre del indice objetivo
+     - No
+     - Nombre del indice objetivo (predeterminado: ``_all``). Se pueden especificar multiples indices separados por comas
    * - ``settings.fesen.username``
      - No
      - Nombre de usuario para autenticacion
@@ -127,10 +127,22 @@ Lista de parametros
      - Timeout del scroll (predeterminado: 1m)
    * - ``query``
      - No
-     - Query en JSON (predeterminado: match_all)
+     - Query en JSON (predeterminado: match_all). Especificar solo el cuerpo de la query (el wrapper externo ``{"query":...}`` no es necesario)
    * - ``fields``
      - No
      - Campos a obtener (separados por comas)
+   * - ``timeout``
+     - No
+     - Timeout de la solicitud (predeterminado: 1m)
+   * - ``preference``
+     - No
+     - Preferencia de replica de shard para la ejecucion de busqueda (predeterminado: ``_local``)
+   * - ``delete.processed.doc``
+     - No
+     - Si se eliminan los documentos procesados del indice fuente (predeterminado: false)
+   * - ``readInterval``
+     - No
+     - Tiempo de espera entre el procesamiento de cada documento en milisegundos (predeterminado: 0)
 
 Configuracion de scripts
 ------------------------
@@ -162,6 +174,11 @@ Campos disponibles
 - ``id`` - ID del documento
 - ``index`` - Nombre del indice
 - ``score`` - Puntuacion de busqueda
+- ``version`` - Version del documento
+- ``seqNo`` - Numero de secuencia
+- ``primaryTerm`` - Termino primario
+- ``clusterAlias`` - Alias del cluster (para busqueda entre clusters)
+- ``hit`` - Objeto SearchHit (uso avanzado)
 
 Configuracion de consultas
 ==========================
@@ -177,25 +194,23 @@ Filtrado con condiciones especificas
 
 ::
 
-    query={"query":{"term":{"status":"published"}}}
+    query={"term":{"status":"published"}}
 
 Especificacion de rango:
 
 ::
 
-    query={"query":{"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}}
+    query={"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}
 
 Multiples condiciones:
 
 ::
 
-    query={"query":{"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}}
+    query={"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}
 
-Especificacion de ordenamiento:
-
-::
-
-    query={"query":{"match_all":{}},"sort":[{"timestamp":{"order":"desc"}}]}
+.. note::
+   El parametro ``query`` solo acepta el cuerpo de la query. El wrapper externo ``{"query":...}`` no es necesario.
+   Las opciones a nivel de busqueda como ordenamiento no pueden especificarse en este parametro.
 
 Obtener solo campos especificos
 ===============================
@@ -270,7 +285,7 @@ Parametros:
 
     settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
-    query={"query":{"term":{"level":"error"}}}
+    query={"term":{"level":"error"}}
     size=100
 
 Script:
@@ -492,26 +507,16 @@ Consulta con agregacion
 -----------------------
 
 .. note::
-   Los resultados de agregacion no se obtienen, solo se obtienen los documentos.
-
-::
-
-    query={"query":{"match_all":{}},"aggs":{"categories":{"terms":{"field":"category"}}}}
+   El parametro ``query`` solo acepta el cuerpo de la query. Agregaciones (aggs), ordenamiento y otras
+   opciones a nivel de busqueda no pueden especificarse. Solo se obtienen los documentos.
 
 Campos de script
 ----------------
 
-::
-
-    query={"query":{"match_all":{}},"script_fields":{"full_url":{"script":"doc['protocol'].value + '://' + doc['host'].value + doc['path'].value"}}}
-
-Script:
-
-::
-
-    url=source.full_url
-    title=source.title
-    content=source.content
+.. note::
+   Los campos de script de Elasticsearch/OpenSearch no estan incluidos en ``_source``, por lo que no se
+   puede acceder a ellos mediante el prefijo ``source.*``. Para usar campos de script, acceda a ellos
+   mediante el objeto ``hit`` usando ``hit.getFields()``.
 
 Informacion de referencia
 =========================

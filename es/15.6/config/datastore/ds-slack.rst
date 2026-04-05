@@ -61,7 +61,7 @@ Configuracion de Parametros
 
 ::
 
-    token=xoxp-your-token-here
+    token=xoxb-your-slack-bot-token-here
     channels=general,random
     file_crawl=false
     include_private=false
@@ -80,14 +80,50 @@ Lista de Parametros
      - Si
      - OAuth Access Token de la Slack App
    * - ``channels``
-     - Si
-     - Canales a rastrear (separados por comas, o ``*all``)
+     - No
+     - Canales a rastrear (separados por comas, o ``*all``). Si no se especifica, se obtienen todos los canales (mismo comportamiento que ``*all``)
    * - ``file_crawl``
      - No
      - Rastrear archivos tambien (predeterminado: ``false``)
    * - ``include_private``
      - No
      - Incluir canales privados (predeterminado: ``false``)
+   * - ``number_of_threads``
+     - No
+     - Número de hilos de procesamiento paralelo (predeterminado: ``1``)
+   * - ``max_filesize``
+     - No
+     - Tamaño máximo de archivo en bytes (predeterminado: ``10000000``)
+   * - ``ignore_error``
+     - No
+     - Continuar procesamiento en caso de error (predeterminado: ``true``)
+   * - ``supported_mimetypes``
+     - No
+     - Regex para tipos MIME permitidos (predeterminado: ``.*``)
+   * - ``include_pattern``
+     - No
+     - Patrón regex para URLs a incluir
+   * - ``exclude_pattern``
+     - No
+     - Patrón regex para URLs a excluir
+   * - ``proxy_host``
+     - No
+     - Host del proxy HTTP
+   * - ``proxy_port``
+     - No
+     - Puerto del proxy HTTP (requerido cuando se especifica ``proxy_host``)
+   * - ``file_types``
+     - No
+     - Filtro de tipo de archivo para la API de Slack
+   * - ``channel_count``
+     - No
+     - Número de canales por página de API (predeterminado: ``100``)
+   * - ``message_count``
+     - No
+     - Número de mensajes por página de API (predeterminado: ``100``)
+   * - ``file_count``
+     - No
+     - Número de archivos por página de API (predeterminado: ``20``)
 
 Configuracion de Script
 -----------------------
@@ -110,6 +146,8 @@ Campos Disponibles
 
    * - Campo
      - Descripcion
+   * - ``message.title``
+     - Título (cadena vacía para mensajes, nombre y título del archivo para entradas de archivo)
    * - ``message.text``
      - Contenido de texto del mensaje
    * - ``message.user``
@@ -148,6 +186,7 @@ Para solo canales publicos:
 
 - ``channels:history`` - Lectura de mensajes de canales publicos
 - ``channels:read`` - Lectura de informacion de canales publicos
+- ``users:read`` - Lectura de información de usuario (requerido para resolución de nombre para mostrar)
 
 Para incluir canales privados (``include_private=true``):
 
@@ -155,6 +194,7 @@ Para incluir canales privados (``include_private=true``):
 - ``channels:read``
 - ``groups:history`` - Lectura de mensajes de canales privados
 - ``groups:read`` - Lectura de informacion de canales privados
+- ``users:read``
 
 Para rastrear archivos tambien (``file_crawl=true``):
 

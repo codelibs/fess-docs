@@ -135,7 +135,7 @@ Server版（OAuth 1.0a）の例:
      - リフレッシュトークン（OAuth 2.0）
    * - ``oauth2.token_url``
      - いいえ
-     - トークンURL（OAuth 2.0、デフォルト値あり）
+     - トークンURL（OAuth 2.0、デフォルト: ``https://auth.atlassian.com/oauth/token``）
    * - ``basic.username``
      - Basic認証の場合
      - ユーザー名
@@ -145,6 +145,36 @@ Server版（OAuth 1.0a）の例:
    * - ``issue.jql``
      - いいえ
      - JQL（Jiraのみ、高度な検索条件）
+   * - ``issue_max_results``
+     - いいえ
+     - Jira APIの1リクエストあたりの最大取得件数（デフォルト: ``50``、Jiraのみ）
+   * - ``content_limit``
+     - いいえ
+     - Confluence APIの1リクエストあたりの最大取得件数（デフォルト: ``25``、Confluenceのみ）
+   * - ``ignore_error``
+     - いいえ
+     - エラー時に処理を継続するかどうか（デフォルト: ``true``）
+   * - ``include_pattern``
+     - いいえ
+     - 取得対象のURLパターン（正規表現）
+   * - ``exclude_pattern``
+     - いいえ
+     - 除外するURLパターン（正規表現）
+   * - ``number_of_threads``
+     - いいえ
+     - 並列処理のスレッド数（デフォルト: ``1``）
+   * - ``proxy_host``
+     - いいえ
+     - HTTPプロキシのホスト名
+   * - ``proxy_port``
+     - いいえ
+     - HTTPプロキシのポート番号
+   * - ``connection_timeout``
+     - いいえ
+     - HTTP接続タイムアウト（ミリ秒）
+   * - ``read_timeout``
+     - いいえ
+     - HTTP読み取りタイムアウト（ミリ秒）
 
 スクリプト設定
 --------------
@@ -280,7 +310,7 @@ Jira Cloudのクロール
 ::
 
     url=issue.view_url
-    title="[" + issue.key + "] " + issue.summary
+    title=issue.summary
     content=issue.description + "\n\nコメント:\n" + issue.comments
     last_modified=issue.last_modified
 

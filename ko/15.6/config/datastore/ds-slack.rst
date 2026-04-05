@@ -61,7 +61,7 @@ Slack 커넥터는 Slack 워크스페이스의 채널 메시지를 가져와서
 
 ::
 
-    token=xoxp-your-token-here
+    token=xoxb-your-slack-bot-token-here
     channels=general,random
     file_crawl=false
     include_private=false
@@ -80,14 +80,50 @@ Slack 커넥터는 Slack 워크스페이스의 채널 메시지를 가져와서
      - 예
      - Slack 앱의 OAuth Access Token
    * - ``channels``
-     - 예
-     - 크롤링 대상 채널(쉼표 구분 또는 ``*all``)
+     - 아니오
+     - 크롤링 대상 채널(쉼표 구분 또는 ``*all``). 미지정 시 모든 채널을 가져옵니다(``*all`` 과 동일한 동작).
    * - ``file_crawl``
      - 아니오
      - 파일도 크롤링(기본값: ``false``)
    * - ``include_private``
      - 아니오
      - 프라이빗 채널도 포함(기본값: ``false``)
+   * - ``number_of_threads``
+     - 아니오
+     - 병렬 처리 스레드 수(기본값: ``1``)
+   * - ``max_filesize``
+     - 아니오
+     - 크롤링할 파일의 최대 크기(바이트 단위, 기본값: ``10000000``)
+   * - ``ignore_error``
+     - 아니오
+     - 오류 발생 시 처리 계속(기본값: ``true``)
+   * - ``supported_mimetypes``
+     - 아니오
+     - 크롤링 대상 MIME 타입(정규식, 기본값: ``.*``)
+   * - ``include_pattern``
+     - 아니오
+     - 크롤링 대상 URL의 정규식 패턴
+   * - ``exclude_pattern``
+     - 아니오
+     - 크롤링 제외 URL의 정규식 패턴
+   * - ``proxy_host``
+     - 아니오
+     - HTTP 프록시 호스트
+   * - ``proxy_port``
+     - 아니오
+     - HTTP 프록시 포트(``proxy_host`` 지정 시 필수)
+   * - ``file_types``
+     - 아니오
+     - Slack API의 파일 타입 필터
+   * - ``channel_count``
+     - 아니오
+     - 채널 목록의 페이지당 가져오기 건수(기본값: ``100``)
+   * - ``message_count``
+     - 아니오
+     - 메시지의 페이지당 가져오기 건수(기본값: ``100``)
+   * - ``file_count``
+     - 아니오
+     - 파일의 페이지당 가져오기 건수(기본값: ``20``)
 
 스크립트 설정
 --------------
@@ -110,6 +146,8 @@ Slack 커넥터는 Slack 워크스페이스의 채널 메시지를 가져와서
 
    * - 필드
      - 설명
+   * - ``message.title``
+     - 타이틀(메시지의 경우 빈 문자열, 파일의 경우 파일명과 타이틀)
    * - ``message.text``
      - 메시지 텍스트 콘텐츠
    * - ``message.user``
@@ -148,6 +186,7 @@ https://api.slack.com/apps 에 접속:
 
 - ``channels:history`` - 퍼블릭 채널 메시지 읽기
 - ``channels:read`` - 퍼블릭 채널 정보 읽기
+- ``users:read`` - 사용자 정보 읽기(표시 이름 해결에 필요)
 
 프라이빗 채널도 포함하는 경우(``include_private=true``):
 
@@ -155,6 +194,7 @@ https://api.slack.com/apps 에 접속:
 - ``channels:read``
 - ``groups:history`` - 프라이빗 채널 메시지 읽기
 - ``groups:read`` - 프라이빗 채널 정보 읽기
+- ``users:read``
 
 파일도 크롤링하는 경우(``file_crawl=true``):
 
@@ -400,33 +440,8 @@ Slack API 제한:
 2. 크롤링 스케줄 분산
 3. 오래된 메시지를 제외하는 설정 고려
 
-스크립트 고급 사용 예
+스크립트 응용 예
 ========================
-
-메시지 필터링
---------------------------
-
-특정 사용자의 메시지만 인덱싱:
-
-::
-
-    if (message.user == "홍길동") {
-        title=message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
-
-키워드를 포함하는 메시지만:
-
-::
-
-    if (message.text.contains("중요") || message.text.contains("장애")) {
-        title="[중요] " + message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
 
 메시지 가공
 ----------------
