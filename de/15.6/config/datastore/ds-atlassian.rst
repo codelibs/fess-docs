@@ -134,7 +134,7 @@ Parameterliste
      - Refresh Token (OAuth 2.0)
    * - ``oauth2.token_url``
      - Nein
-     - Token-URL (OAuth 2.0, Standardwert vorhanden)
+     - Token-URL (OAuth 2.0, Standard: ``https://auth.atlassian.com/oauth/token``)
    * - ``basic.username``
      - Bei Basic-Authentifizierung
      - Benutzername
@@ -144,6 +144,36 @@ Parameterliste
    * - ``issue.jql``
      - Nein
      - JQL (nur Jira, erweiterte Suchbedingungen)
+   * - ``issue_max_results``
+     - Nein
+     - Maximale Ergebnisse pro Jira-API-Anfrage (Standard: ``50``, nur Jira)
+   * - ``content_limit``
+     - Nein
+     - Maximale Inhalte pro Confluence-API-Anfrage (Standard: ``25``, nur Confluence)
+   * - ``ignore_error``
+     - Nein
+     - Verarbeitung bei Fehlern fortsetzen (Standard: ``true``)
+   * - ``include_pattern``
+     - Nein
+     - URL-Einschlussmuster (Regex)
+   * - ``exclude_pattern``
+     - Nein
+     - URL-Ausschlussmuster (Regex)
+   * - ``number_of_threads``
+     - Nein
+     - Anzahl der Threads fuer parallele Verarbeitung (Standard: ``1``)
+   * - ``proxy_host``
+     - Nein
+     - HTTP-Proxy-Hostname
+   * - ``proxy_port``
+     - Nein
+     - HTTP-Proxy-Portnummer
+   * - ``connection_timeout``
+     - Nein
+     - HTTP-Verbindungs-Timeout (Millisekunden)
+   * - ``read_timeout``
+     - Nein
+     - HTTP-Lese-Timeout (Millisekunden)
 
 Skript-Einstellungen
 --------------------
@@ -279,7 +309,7 @@ Skript:
 ::
 
     url=issue.view_url
-    title="[" + issue.key + "] " + issue.summary
+    title=issue.summary
     content=issue.description + "\n\nKommentare:\n" + issue.comments
     last_modified=issue.last_modified
 

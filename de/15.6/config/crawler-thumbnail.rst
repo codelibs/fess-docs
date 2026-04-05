@@ -213,7 +213,7 @@ Der Thumbnail-Generator wird in ``fess_thumbnail.xml`` konfiguriert.
 
 ::
 
-    src/main/resources/fess_thumbnail.xml
+    app/WEB-INF/classes/fess_thumbnail.xml
 
 Hauptkonfigurationsoptionen (fess_config.properties)
 ----------------------------------------------------

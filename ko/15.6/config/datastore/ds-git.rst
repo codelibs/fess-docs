@@ -89,17 +89,44 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
      - 예
      - Git 리포지토리의 URI(clone용)
    * - ``base_url``
-     - 예
-     - 파일 표시용 기본 URL
+     - 아니오
+     - 파일 표시용 기본 URL. 설정하지 않으면 URL이 비어 있고 삭제된 파일의 자동 삭제도 비활성화됩니다
+   * - ``username``
+     - 아니오
+     - Git 인증 사용자 이름. URI에 인증 정보를 포함하는 대안으로 ``password``와 함께 사용합니다
+   * - ``password``
+     - 아니오
+     - Git 인증 비밀번호 또는 토큰. ``username``과 함께 사용합니다
    * - ``extractors``
      - 아니오
      - MIME 타입별 추출기 설정
+   * - ``default_extractor``
+     - 아니오
+     - MIME 패턴이 일치하지 않을 때의 폴백 추출기 (기본값: ``tikaExtractor``)
    * - ``prev_commit_id``
      - 아니오
-     - 이전 커밋 ID(차등 크롤링용)
+     - 이전 커밋 ID(차등 크롤링용). 크롤링 성공 후 자동으로 업데이트됩니다
    * - ``commit_id``
      - 아니오
      - 대상 커밋 ID (기본값: HEAD). 브랜치 또는 태그 지정 가능
+   * - ``ref_specs``
+     - 아니오
+     - Git ref 스펙 (기본값: ``+refs/heads/*:refs/heads/*``)
+   * - ``repository_path``
+     - 아니오
+     - 로컬 리포지토리 경로. 설정하지 않으면 임시 디렉토리가 생성되고 크롤링 후 삭제됩니다
+   * - ``include_pattern``
+     - 아니오
+     - 파일 경로 포함 필터 (정규표현식)
+   * - ``exclude_pattern``
+     - 아니오
+     - 파일 경로 제외 필터 (정규표현식)
+   * - ``max_size``
+     - 아니오
+     - 인덱싱할 최대 파일 크기(바이트 단위, 기본값: ``10000000``)
+   * - ``cache_threshold``
+     - 아니오
+     - 메모리와 디스크 버퍼링 전환 임계값(바이트 단위, 기본값: ``1000000``)
 
 스크립트 설정
 --------------
@@ -142,7 +169,11 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
    * - ``mimetype``
      - 파일 MIME 타입
    * - ``author``
-     - 최종 커밋자 정보
+     - 최종 커밋 작성자 정보 (PersonIdent)
+   * - ``committer``
+     - 커미터 정보 (PersonIdent). author와 다를 수 있습니다
+   * - ``uri``
+     - Git 리포지토리 URI
 
 Git 리포지토리 인증
 ===================
@@ -257,8 +288,8 @@ MIME 타입별 추출기
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   커밋 ID는 마지막 크롤링 시점의 커밋 ID를 설정합니다.
-   이렇게 하면 해당 커밋 이후의 변경 사항만 크롤링됩니다.
+   ``prev_commit_id``는 크롤링 성공 후 자동으로 최신 커밋 ID로 업데이트됩니다.
+   초기 크롤링 시 비워두면 모든 파일이 처리되고, 이후 크롤링에서는 변경 사항만 처리됩니다.
 
 삭제된 파일 처리
 ------------------------
@@ -493,7 +524,7 @@ base_url 설정 패턴
 
 ::
 
-    url=base_url + path
+    url=url
     title=name
     content=content
 

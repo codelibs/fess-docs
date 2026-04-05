@@ -80,6 +80,7 @@ Authentification OAuth Password :
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -97,14 +98,17 @@ Liste des parametres
      - Requis
      - Description
    * - ``base_url``
-     - Oui
-     - URL Salesforce (Production : ``https://login.salesforce.com``, Sandbox : ``https://test.salesforce.com``)
+     - Non
+     - URL Salesforce (par defaut : ``https://login.salesforce.com``, Sandbox : ``https://test.salesforce.com``)
    * - ``auth_type``
      - Oui
      - Type d'authentification (``oauth_token`` ou ``oauth_password``)
    * - ``username``
      - Oui
      - Nom d'utilisateur Salesforce
+   * - ``password``
+     - Pour oauth_password
+     - Mot de passe Salesforce
    * - ``client_id``
      - Oui
      - Consumer Key de l'application connectee
@@ -132,6 +136,30 @@ Liste des parametres
    * - ``<objet>.contents``
      - Non
      - Noms des champs a utiliser pour le contenu (separes par des virgules)
+   * - ``<objet>.descriptions``
+     - Non
+     - Noms de champs pour la description (separes par des virgules)
+   * - ``<objet>.thumbnail``
+     - Non
+     - Nom du champ pour la miniature
+   * - ``include_pattern``
+     - Non
+     - Modele d'inclusion du filtre URL (regex)
+   * - ``exclude_pattern``
+     - Non
+     - Modele d'exclusion du filtre URL (regex)
+   * - ``refresh_token_interval``
+     - Non
+     - Intervalle d'actualisation du jeton en secondes (par defaut : 3540)
+   * - ``proxy_host``
+     - Non
+     - Nom d'hote du proxy HTTP
+   * - ``proxy_port``
+     - Si proxy_host est defini
+     - Numero de port du proxy HTTP
+   * - ``readInterval``
+     - Non
+     - Temps d'attente entre le traitement des enregistrements (millisecondes)
 
 Configuration du script
 --------------
@@ -284,6 +312,13 @@ Regles de mapping des champs
 
 - ``<nom_objet>.title`` - Champ a utiliser pour le titre (champ unique)
 - ``<nom_objet>.contents`` - Champs a utiliser pour le contenu (plusieurs separes par des virgules)
+- ``<nom_objet>.descriptions`` - Champs a utiliser pour la description (plusieurs separes par des virgules)
+- ``<nom_objet>.thumbnail`` - Champ a utiliser pour la miniature (champ unique)
+
+.. note::
+
+   Les objets standard utilisent des noms en MAJUSCULES_SEPAREES_PAR_DES_UNDERSCORES.
+   Par exemple : ``ACCOUNT.title=Name``, ``CONTACT.title=LastName``.
 
 Exemples d'utilisation
 ======
@@ -354,6 +389,7 @@ Parametres :
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

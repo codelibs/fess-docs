@@ -108,11 +108,11 @@ Parameter List
      - Required
      - Description
    * - ``settings.fesen.http.url``
-     - Yes
-     - Elasticsearch/OpenSearch hosts (comma-separated for multiple)
+     - No
+     - Elasticsearch/OpenSearch hosts (comma-separated for multiple). Connection error occurs if not specified
    * - ``index``
-     - Yes
-     - Target index name
+     - No
+     - Target index name (default: ``_all``). Multiple indices can be specified with comma separation
    * - ``settings.fesen.username``
      - No
      - Authentication username
@@ -125,9 +125,21 @@ Parameter List
    * - ``scroll``
      - No
      - Scroll timeout (default: 1m)
+   * - ``timeout``
+     - No
+     - Request timeout (default: 1m)
+   * - ``preference``
+     - No
+     - Shard replica preference for search execution (default: ``_local``)
+   * - ``delete.processed.doc``
+     - No
+     - Whether to delete processed documents from source index (default: false)
+   * - ``readInterval``
+     - No
+     - Wait time between processing each document in milliseconds (default: 0)
    * - ``query``
      - No
-     - Query JSON (default: match_all)
+     - Query JSON (default: match_all). Specify query body only (outer ``{"query":...}`` wrapper is not needed)
    * - ``fields``
      - No
      - Fields to retrieve (comma-separated)
@@ -162,6 +174,11 @@ Available Fields
 - ``id`` - Document ID
 - ``index`` - Index name
 - ``score`` - Search score
+- ``version`` - Document version
+- ``seqNo`` - Sequence number
+- ``primaryTerm`` - Primary term
+- ``clusterAlias`` - Cluster alias (for cross-cluster search)
+- ``hit`` - SearchHit object (advanced usage)
 
 Query Configuration
 ===================
@@ -177,25 +194,23 @@ Filtering with Specific Conditions
 
 ::
 
-    query={"query":{"term":{"status":"published"}}}
+    query={"term":{"status":"published"}}
 
 Range query:
 
 ::
 
-    query={"query":{"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}}
+    query={"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}
 
 Multiple conditions:
 
 ::
 
-    query={"query":{"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}}
+    query={"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}
 
-Sorting:
-
-::
-
-    query={"query":{"match_all":{}},"sort":[{"timestamp":{"order":"desc"}}]}
+.. note::
+   The ``query`` parameter accepts only the query body. The outer ``{"query":...}`` wrapper is not needed.
+   Search-level options such as sort cannot be specified in this parameter.
 
 Retrieving Specific Fields Only
 ===============================
@@ -270,7 +285,7 @@ Parameters:
 
     settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
-    query={"query":{"term":{"level":"error"}}}
+    query={"term":{"level":"error"}}
     size=100
 
 Script:
@@ -492,26 +507,16 @@ Query with Aggregation
 ----------------------
 
 .. note::
-   Aggregation results are not retrieved, only documents.
-
-::
-
-    query={"query":{"match_all":{}},"aggs":{"categories":{"terms":{"field":"category"}}}}
+   The ``query`` parameter accepts only the query body. Aggregations (aggs), sort, and other
+   search-level options cannot be specified. Only documents are retrieved.
 
 Script Fields
 -------------
 
-::
-
-    query={"query":{"match_all":{}},"script_fields":{"full_url":{"script":"doc['protocol'].value + '://' + doc['host'].value + doc['path'].value"}}}
-
-Script:
-
-::
-
-    url=source.full_url
-    title=source.title
-    content=source.content
+.. note::
+   Elasticsearch/OpenSearch script fields are not included in ``_source``, so they cannot be
+   accessed via the ``source.*`` prefix. To use script fields, access them via the ``hit``
+   object using ``hit.getFields()``.
 
 Reference
 =========

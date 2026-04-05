@@ -213,7 +213,7 @@ Le générateur de vignettes est configuré dans ``fess_thumbnail.xml``.
 
 ::
 
-    src/main/resources/fess_thumbnail.xml
+    app/WEB-INF/classes/fess_thumbnail.xml
 
 Principales options de configuration (fess_config.properties)
 -------------------------------------------------------------

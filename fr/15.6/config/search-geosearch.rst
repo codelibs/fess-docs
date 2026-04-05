@@ -217,7 +217,7 @@ Optimisation de la configuration de l'index
 
 Lors du traitement de grandes quantités de données de géolocalisation, optimisez la configuration de l'index.
 
-Le champ de geolocalisation est defini dans le code source a ``src/main/resources/fess_indices/fess/doc.json``.
+Le champ de geolocalisation est defini dans ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

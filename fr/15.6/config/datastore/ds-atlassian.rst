@@ -134,7 +134,7 @@ Liste des parametres
      - Token de rafraichissement (OAuth 2.0)
    * - ``oauth2.token_url``
      - Non
-     - URL du token (OAuth 2.0, valeur par defaut disponible)
+     - URL du token (OAuth 2.0, defaut : ``https://auth.atlassian.com/oauth/token``)
    * - ``basic.username``
      - Pour auth basique
      - Nom d'utilisateur
@@ -144,6 +144,36 @@ Liste des parametres
    * - ``issue.jql``
      - Non
      - JQL (Jira uniquement, conditions de recherche avancees)
+   * - ``issue_max_results``
+     - Non
+     - Nombre maximum de resultats par requete API Jira (defaut : ``50``, Jira uniquement)
+   * - ``content_limit``
+     - Non
+     - Nombre maximum d'elements par requete API Confluence (defaut : ``25``, Confluence uniquement)
+   * - ``ignore_error``
+     - Non
+     - Continuer le traitement en cas d'erreur (defaut : ``true``)
+   * - ``include_pattern``
+     - Non
+     - Modele d'inclusion d'URL (regex)
+   * - ``exclude_pattern``
+     - Non
+     - Modele d'exclusion d'URL (regex)
+   * - ``number_of_threads``
+     - Non
+     - Nombre de threads pour le traitement parallele (defaut : ``1``)
+   * - ``proxy_host``
+     - Non
+     - Nom d'hote du proxy HTTP
+   * - ``proxy_port``
+     - Non
+     - Numero de port du proxy HTTP
+   * - ``connection_timeout``
+     - Non
+     - Delai de connexion HTTP (millisecondes)
+   * - ``read_timeout``
+     - Non
+     - Delai de lecture HTTP (millisecondes)
 
 Configuration du script
 -----------------------
@@ -279,7 +309,7 @@ Script :
 ::
 
     url=issue.view_url
-    title="[" + issue.key + "] " + issue.summary
+    title=issue.summary
     content=issue.description + "\\n\\nCommentaires:\\n" + issue.comments
     last_modified=issue.last_modified
 

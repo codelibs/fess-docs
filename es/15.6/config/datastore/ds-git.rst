@@ -89,17 +89,44 @@ Lista de parametros
      - Si
      - URI del repositorio Git (para clonar)
    * - ``base_url``
-     - Si
-     - URL base para visualizacion de archivos
+     - No
+     - URL base para visualizacion de archivos. Si no se configura, las URL estaran vacias y la eliminacion automatica de archivos borrados estara desactivada
+   * - ``username``
+     - No
+     - Nombre de usuario para autenticacion Git. Se usa con ``password`` como alternativa a incluir credenciales en la URI
+   * - ``password``
+     - No
+     - Contrasena o token para autenticacion Git. Se usa con ``username``
    * - ``extractors``
      - No
      - Configuracion de extractores por tipo MIME
+   * - ``default_extractor``
+     - No
+     - Extractor de respaldo cuando ningun patron MIME coincide (predeterminado: ``tikaExtractor``)
    * - ``prev_commit_id``
      - No
-     - ID del commit anterior (para crawl diferencial)
+     - ID del commit anterior (para crawl diferencial). Se actualiza automaticamente despues de un crawl exitoso
    * - ``commit_id``
      - No
      - ID de commit objetivo (predeterminado: HEAD). Se puede especificar rama o etiqueta
+   * - ``ref_specs``
+     - No
+     - Git ref specs (predeterminado: ``+refs/heads/*:refs/heads/*``)
+   * - ``repository_path``
+     - No
+     - Ruta del repositorio local. Si no se configura, se crea un directorio temporal que se elimina despues del crawl
+   * - ``include_pattern``
+     - No
+     - Filtro de inclusion de rutas de archivo (regex)
+   * - ``exclude_pattern``
+     - No
+     - Filtro de exclusion de rutas de archivo (regex)
+   * - ``max_size``
+     - No
+     - Tamano maximo de archivo para indexar en bytes (predeterminado: ``10000000``)
+   * - ``cache_threshold``
+     - No
+     - Umbral en bytes para cambiar entre buffering en memoria y disco (predeterminado: ``1000000``)
 
 Configuracion de scripts
 ------------------------
@@ -142,7 +169,11 @@ Campos disponibles
    * - ``mimetype``
      - Tipo MIME del archivo
    * - ``author``
-     - Informacion del ultimo autor del commit
+     - Informacion del ultimo autor del commit (PersonIdent)
+   * - ``committer``
+     - Informacion del committer (PersonIdent). Puede diferir del autor
+   * - ``uri``
+     - URI del repositorio Git
 
 Autenticacion en repositorios Git
 =================================
@@ -257,8 +288,8 @@ Despues del primer crawl, configure ``prev_commit_id`` con el ID del commit ante
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   El commit ID debe ser el del ultimo crawl.
-   Esto hara que solo se procesen los cambios desde ese commit.
+   ``prev_commit_id`` se actualiza automaticamente al ultimo ID de commit despues de un crawl exitoso.
+   Dejelo vacio para el crawl inicial para procesar todos los archivos; los crawls posteriores solo procesaran los cambios.
 
 Procesamiento de archivos eliminados
 ------------------------------------
@@ -493,7 +524,7 @@ Generacion de URL en script
 
 ::
 
-    url=base_url + path
+    url=url
     title=name
     content=content
 

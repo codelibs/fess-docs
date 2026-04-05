@@ -101,17 +101,26 @@ Parameterliste
      - Ja
      - JDBC-Verbindungs-URL
    * - ``username``
-     - Ja
+     - Nein
      - Datenbank-Benutzername
    * - ``password``
-     - Ja
+     - Nein
      - Datenbank-Passwort
    * - ``sql``
      - Ja
      - SQL-Query zum Abrufen der Daten
    * - ``fetch_size``
      - Nein
-     - Fetch-Größe (Standard: 100)
+     - Fetch-Größe (Standard: 100). Für MySQL-Streaming kann der Wert ``MIN_VALUE`` als String angegeben werden.
+   * - ``column_label.*``
+     - Nein
+     - Spaltenbezeichnung-Zuordnung. Bei BLOB-Spalten wird der MIME-Typ über die Dateierweiterung ermittelt und für die Inhaltsextraktion verwendet.
+   * - ``readInterval``
+     - Nein
+     - Verzögerung in Millisekunden zwischen der Verarbeitung jeder Zeile. Standard: 0
+   * - ``script_type``
+     - Nein
+     - Skript-Engine-Typ. Standard: groovy
 
 Skript-Einstellungen
 --------------------
@@ -120,14 +129,14 @@ Ordnen Sie die SQL-Spaltennamen den Index-Feldern zu:
 
 ::
 
-    url="https://example.com/articles/" + data.id
-    title=data.title
-    content=data.content
-    lastModified=data.updated_at
+    url="https://example.com/articles/" + id
+    title=title
+    content=content
+    lastModified=updated_at
 
 Verfügbare Felder:
 
-- ``data.<column_name>`` - Ergebnisspalten der SQL-Query
+- ``<column_name>`` - Ergebnisspalten der SQL-Query (direkt über den Spaltennamen zugänglich)
 
 SQL-Query-Design
 ================
@@ -142,7 +151,7 @@ Bei großen Datenmengen ist die Query-Performance wichtig:
     # Effiziente Query mit Index-Nutzung
     SELECT id, title, content, url, updated_at
     FROM articles
-    WHERE updated_at >= :last_crawl_date
+    WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
 
 Inkrementelles Crawling
@@ -166,13 +175,13 @@ Die Dokument-URL wird im Skript generiert:
 ::
 
     # Festes Muster
-    url="https://example.com/article/" + data.id
+    url="https://example.com/article/" + id
 
     # Kombination mehrerer Felder
-    url="https://example.com/" + data.category + "/" + data.slug
+    url="https://example.com/" + category + "/" + slug
 
     # In der Datenbank gespeicherte URL verwenden
-    url=data.url
+    url=url
 
 Multibyte-Zeichenunterstützung
 ==============================
@@ -194,17 +203,6 @@ PostgreSQL verwendet standardmäßig UTF-8. Bei Bedarf:
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
-
-Connection-Pooling
-==================
-
-Bei der Verarbeitung großer Datenmengen sollten Sie Connection-Pooling in Betracht ziehen:
-
-::
-
-    # Einstellungen bei Verwendung von HikariCP
-    datasource.class=com.zaxxer.hikari.HikariDataSource
-    pool.size=5
 
 Sicherheit
 ==========
@@ -252,10 +250,10 @@ Skript:
 
 ::
 
-    url="https://shop.example.com/product/" + data.id
-    title=data.name
-    content=data.description + " Kategorie: " + data.category + " Preis: " + data.price + " EUR"
-    lastModified=data.updated_at
+    url="https://shop.example.com/product/" + id
+    title=name
+    content=description + " Kategorie: " + category + " Preis: " + price + " EUR"
+    lastModified=updated_at
 
 Wissensdatenbank-Artikel
 ------------------------
@@ -274,13 +272,13 @@ Skript:
 
 ::
 
-    url="https://kb.example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    digest=data.tags
-    author=data.author
-    created=data.created_at
-    lastModified=data.updated_at
+    url="https://kb.example.com/article/" + id
+    title=title
+    content=body
+    digest=tags
+    author=author
+    created=created_at
+    lastModified=updated_at
 
 Fehlerbehebung
 ==============

@@ -80,6 +80,7 @@ Autenticacion OAuth Password:
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -97,8 +98,8 @@ Lista de parametros
      - Requerido
      - Descripcion
    * - ``base_url``
-     - Si
-     - URL de Salesforce (Produccion: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
+     - No
+     - URL de Salesforce (predeterminado: ``https://login.salesforce.com``; Sandbox: ``https://test.salesforce.com``)
    * - ``auth_type``
      - Si
      - Tipo de autenticacion (``oauth_token`` o ``oauth_password``)
@@ -108,6 +109,9 @@ Lista de parametros
    * - ``client_id``
      - Si
      - Consumer Key de la aplicacion conectada
+   * - ``password``
+     - Para oauth_password
+     - Contrasena de Salesforce
    * - ``private_key``
      - Para oauth_token
      - Clave privada (formato PEM, saltos de linea como ``\n``)
@@ -132,6 +136,30 @@ Lista de parametros
    * - ``<objeto>.contents``
      - No
      - Nombres de campos a usar para el contenido (separados por comas)
+   * - ``<objeto>.descriptions``
+     - No
+     - Nombres de campos para descripcion (separados por comas)
+   * - ``<objeto>.thumbnail``
+     - No
+     - Nombre del campo para miniatura
+   * - ``include_pattern``
+     - No
+     - Patron de inclusion del filtro URL (regex)
+   * - ``exclude_pattern``
+     - No
+     - Patron de exclusion del filtro URL (regex)
+   * - ``refresh_token_interval``
+     - No
+     - Intervalo de actualizacion del token en segundos (predeterminado: 3540)
+   * - ``proxy_host``
+     - No
+     - Nombre del host del proxy HTTP
+   * - ``proxy_port``
+     - Si proxy_host esta configurado
+     - Numero de puerto del proxy HTTP
+   * - ``readInterval``
+     - No
+     - Tiempo de espera entre procesamiento de registros (milisegundos)
 
 Configuracion de scripts
 ------------------------
@@ -284,6 +312,12 @@ Reglas de mapeo de campos
 
 - ``<nombre_objeto>.title`` - Campo a usar para el titulo (campo unico)
 - ``<nombre_objeto>.contents`` - Campos a usar para el contenido (multiples separados por comas)
+- ``<nombre_objeto>.descriptions`` - Campos a usar para la descripcion (multiples separados por comas)
+- ``<nombre_objeto>.thumbnail`` - Campo a usar para la miniatura (campo unico)
+
+.. note::
+
+   Los objetos estandar utilizan nombres en formato UPPER_UNDERSCORE. Por ejemplo: ``ACCOUNT.title=Name``, ``CONTACT.title=Name``.
 
 Ejemplos de uso
 ===============
@@ -354,6 +388,7 @@ Parametros:
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

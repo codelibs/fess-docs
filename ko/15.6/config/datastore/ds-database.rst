@@ -102,17 +102,26 @@ PostgreSQL 예:
      - 예
      - JDBC 연결 URL
    * - ``username``
-     - 예
+     - 아니요
      - 데이터베이스 사용자명
    * - ``password``
-     - 예
+     - 아니요
      - 데이터베이스 비밀번호
    * - ``sql``
      - 예
      - 데이터 취득용 SQL 쿼리
    * - ``fetch_size``
      - 아니요
-     - 페치 크기 (기본값: 100)
+     - 페치 크기 (기본값: 100). MySQL에서 스트리밍 결과를 사용하려면 ``MIN_VALUE`` 문자열을 지정합니다.
+   * - ``column_label.*``
+     - 아니요
+     - 열 라벨 매핑. BLOB 데이터 추출 시 ``column_label.content=application/pdf`` 와 같이 MIME 타입을 지정할 수 있습니다.
+   * - ``readInterval``
+     - 아니요
+     - 각 행 처리 사이의 지연 시간 (밀리초, 기본값: 0)
+   * - ``script_type``
+     - 아니요
+     - 스크립트 언어 타입 (기본값: groovy)
 
 스크립트 설정
 --------------
@@ -121,14 +130,14 @@ SQL 열 이름을 인덱스 필드에 매핑합니다:
 
 ::
 
-    url="https://example.com/articles/" + data.id
-    title=data.title
-    content=data.content
-    lastModified=data.updated_at
+    url="https://example.com/articles/" + id
+    title=title
+    content=content
+    lastModified=updated_at
 
 사용 가능한 필드:
 
-- ``data.<column_name>`` - SQL 쿼리 결과 열
+- ``<column_name>`` - SQL 쿼리 결과의 열 라벨명으로 직접 접근
 
 SQL 쿼리 설계
 ===============
@@ -140,10 +149,10 @@ SQL 쿼리 설계
 
 ::
 
-    # 인덱스를 사용한 효율적인 쿼리
+    # 인덱스를 사용한 효율적인 쿼리 (SQL은 그대로 데이터베이스에 전송됩니다)
     SELECT id, title, content, url, updated_at
     FROM articles
-    WHERE updated_at >= :last_crawl_date
+    WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
 
 차분 크롤링
@@ -167,13 +176,13 @@ URL 생성
 ::
 
     # 고정 패턴
-    url="https://example.com/article/" + data.id
+    url="https://example.com/article/" + id
 
     # 여러 필드 조합
-    url="https://example.com/" + data.category + "/" + data.slug
+    url="https://example.com/" + category + "/" + slug
 
     # 데이터베이스에 저장된 URL 사용
-    url=data.url
+    url=url
 
 다국어 문자 지원
 ====================
@@ -195,17 +204,6 @@ PostgreSQL은 보통 UTF-8이 기본입니다. 필요한 경우:
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
-
-커넥션 풀링
-==============
-
-대량의 데이터를 처리할 경우, 커넥션 풀링을 고려하세요:
-
-::
-
-    # HikariCP 사용 시 설정
-    datasource.class=com.zaxxer.hikari.HikariDataSource
-    pool.size=5
 
 보안
 ============
@@ -253,10 +251,10 @@ PostgreSQL은 보통 UTF-8이 기본입니다. 필요한 경우:
 
 ::
 
-    url="https://shop.example.com/product/" + data.id
-    title=data.name
-    content=data.description + " 카테고리: " + data.category + " 가격: " + data.price + "원"
-    lastModified=data.updated_at
+    url="https://shop.example.com/product/" + id
+    title=name
+    content=description + " 카테고리: " + category + " 가격: " + price + "원"
+    lastModified=updated_at
 
 지식 베이스 문서
 ------------------
@@ -275,13 +273,13 @@ PostgreSQL은 보통 UTF-8이 기본입니다. 필요한 경우:
 
 ::
 
-    url="https://kb.example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    digest=data.tags
-    author=data.author
-    created=data.created_at
-    lastModified=data.updated_at
+    url="https://kb.example.com/article/" + id
+    title=title
+    content=body
+    digest=tags
+    author=author
+    created=created_at
+    lastModified=updated_at
 
 문제 해결
 ======================

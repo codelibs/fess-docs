@@ -89,17 +89,44 @@ Liste des parametres
      - Oui
      - URI du depot Git (pour le clone)
    * - ``base_url``
-     - Oui
-     - URL de base pour l'affichage des fichiers
+     - Non
+     - URL de base pour l'affichage des fichiers. Si non defini, les URLs seront vides et la suppression automatique des fichiers supprimes sera desactivee
+   * - ``username``
+     - Non
+     - Nom d'utilisateur pour l'authentification Git. Utilise avec ``password`` comme alternative a l'inclusion des identifiants dans l'URI
+   * - ``password``
+     - Non
+     - Mot de passe ou token pour l'authentification Git. Utilise avec ``username``
    * - ``extractors``
      - Non
      - Configuration des extracteurs par type MIME
+   * - ``default_extractor``
+     - Non
+     - Extracteur de repli quand aucun motif MIME ne correspond (par defaut : ``tikaExtractor``)
    * - ``prev_commit_id``
      - Non
-     - ID du commit precedent (pour le crawl differentiel)
+     - ID du commit precedent (pour le crawl differentiel). Mis a jour automatiquement apres un crawl reussi
    * - ``commit_id``
      - Non
-     - ID de commit cible (par défaut : HEAD). Une branche ou un tag peut être spécifié
+     - ID de commit cible (par defaut : HEAD). Une branche ou un tag peut etre specifie
+   * - ``ref_specs``
+     - Non
+     - Git ref specs (par defaut : ``+refs/heads/*:refs/heads/*``)
+   * - ``repository_path``
+     - Non
+     - Chemin du depot local. Si non defini, un repertoire temporaire est cree et supprime apres le crawl
+   * - ``include_pattern``
+     - Non
+     - Filtre d'inclusion des chemins de fichier (regex)
+   * - ``exclude_pattern``
+     - Non
+     - Filtre d'exclusion des chemins de fichier (regex)
+   * - ``max_size``
+     - Non
+     - Taille maximale de fichier a indexer en octets (par defaut : ``10000000``)
+   * - ``cache_threshold``
+     - Non
+     - Seuil en octets pour le basculement entre la mise en memoire tampon et le disque (par defaut : ``1000000``)
 
 Configuration du script
 --------------
@@ -142,7 +169,11 @@ Champs disponibles
    * - ``mimetype``
      - Type MIME du fichier
    * - ``author``
-     - Informations sur le dernier commiteur
+     - Informations sur le dernier auteur du commit (PersonIdent)
+   * - ``committer``
+     - Informations sur le commiteur (PersonIdent). Peut differer de l'auteur
+   * - ``uri``
+     - URI du depot Git
 
 Authentification Git
 ===================
@@ -257,8 +288,8 @@ Apres le premier crawl, definissez l'ID du commit precedent dans ``prev_commit_i
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   L'ID de commit est celui du dernier crawl.
-   Seules les modifications apres ce commit seront crawlees.
+   ``prev_commit_id`` est automatiquement mis a jour avec le dernier ID de commit apres un crawl reussi.
+   Laissez-le vide pour le premier crawl afin de traiter tous les fichiers ; les crawls suivants ne traiteront que les modifications.
 
 Traitement des fichiers supprimes
 ------------------------
@@ -493,7 +524,7 @@ Generation d'URL dans le script
 
 ::
 
-    url=base_url + path
+    url=url
     title=name
     content=content
 

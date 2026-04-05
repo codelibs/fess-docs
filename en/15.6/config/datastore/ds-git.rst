@@ -89,17 +89,44 @@ Parameter List
      - Yes
      - Git repository URI (for cloning)
    * - ``base_url``
-     - Yes
-     - Base URL for file viewing
+     - No
+     - Base URL for file viewing. If not set, URLs will be empty and automatic deletion of removed files will be disabled
+   * - ``username``
+     - No
+     - Git authentication username. Used with ``password`` as an alternative to embedding credentials in URI
+   * - ``password``
+     - No
+     - Git authentication password or token. Used with ``username``
    * - ``extractors``
      - No
      - Extractor settings by MIME type
+   * - ``default_extractor``
+     - No
+     - Fallback extractor when no MIME pattern matches (default: ``tikaExtractor``)
    * - ``prev_commit_id``
      - No
-     - Previous commit ID (for incremental crawl)
+     - Previous commit ID (for incremental crawl). Automatically updated after successful crawl
    * - ``commit_id``
      - No
      - Target commit ID (default: HEAD). Branch or tag can be specified
+   * - ``ref_specs``
+     - No
+     - Git ref specs (default: ``+refs/heads/*:refs/heads/*``)
+   * - ``repository_path``
+     - No
+     - Local repository path. If not set, a temporary directory is created and cleaned up after crawl
+   * - ``include_pattern``
+     - No
+     - File path inclusion filter (regex)
+   * - ``exclude_pattern``
+     - No
+     - File path exclusion filter (regex)
+   * - ``max_size``
+     - No
+     - Maximum file size to index in bytes (default: ``10000000``)
+   * - ``cache_threshold``
+     - No
+     - Threshold in bytes for switching between memory and disk buffering (default: ``1000000``)
 
 Script Settings
 ---------------
@@ -142,7 +169,11 @@ Available Fields
    * - ``mimetype``
      - File MIME type
    * - ``author``
-     - Last committer information
+     - Last commit author information (PersonIdent)
+   * - ``committer``
+     - Committer information (PersonIdent). May differ from author
+   * - ``uri``
+     - Git repository URI
 
 Git Repository Authentication
 =============================
@@ -257,8 +288,8 @@ After initial crawl, set ``prev_commit_id`` to the previous commit ID:
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   Set the commit ID to the one from the last crawl.
-   This will only crawl changes since that commit.
+   ``prev_commit_id`` is automatically updated to the latest commit ID after a successful crawl.
+   Set it to empty for the initial crawl to process all files; subsequent crawls will only process changes.
 
 Handling Deleted Files
 ----------------------
@@ -493,7 +524,7 @@ URL Generation in Script
 
 ::
 
-    url=base_url + path
+    url=url
     title=name
     content=content
 

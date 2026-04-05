@@ -79,6 +79,7 @@ OAuth Password-Authentifizierung:
     base_url=https://login.salesforce.com
     auth_type=oauth_password
     username=admin@example.com
+    password=YourPassword
     client_id=3MVG9...
     client_secret=1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrSt
@@ -96,14 +97,17 @@ Parameterliste
      - Erforderlich
      - Beschreibung
    * - ``base_url``
-     - Ja
-     - Salesforce-URL (Produktion: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
+     - Nein
+     - Salesforce-URL (Standard: ``https://login.salesforce.com``, Sandbox: ``https://test.salesforce.com``)
    * - ``auth_type``
      - Ja
      - Authentifizierungstyp (``oauth_token`` oder ``oauth_password``)
    * - ``username``
      - Ja
      - Salesforce-Benutzername
+   * - ``password``
+     - bei oauth_password
+     - Salesforce-Passwort
    * - ``client_id``
      - Ja
      - Consumer Key der Connected App
@@ -131,6 +135,30 @@ Parameterliste
    * - ``<Objekt>.contents``
      - Nein
      - Feldnamen für Inhalt (kommagetrennt)
+   * - ``<Objekt>.descriptions``
+     - Nein
+     - Feldnamen für Beschreibung (kommagetrennt)
+   * - ``<Objekt>.thumbnail``
+     - Nein
+     - Feldname für Thumbnail
+   * - ``include_pattern``
+     - Nein
+     - URL-Filter Einschlussmuster (Regex)
+   * - ``exclude_pattern``
+     - Nein
+     - URL-Filter Ausschlussmuster (Regex)
+   * - ``refresh_token_interval``
+     - Nein
+     - Token-Aktualisierungsintervall in Sekunden (Standard: 3540)
+   * - ``proxy_host``
+     - Nein
+     - HTTP-Proxy-Hostname
+   * - ``proxy_port``
+     - Wenn proxy_host gesetzt
+     - HTTP-Proxy-Port
+   * - ``readInterval``
+     - Nein
+     - Wartezeit zwischen Datensatzverarbeitung (Millisekunden)
 
 Skript-Einstellungen
 --------------------
@@ -282,6 +310,12 @@ Feldmapping-Regeln
 
 - ``<Objektname>.title`` - Feld für Titel (einzelnes Feld)
 - ``<Objektname>.contents`` - Felder für Inhalt (mehrere kommagetrennt)
+- ``<Objektname>.descriptions`` - Felder für Beschreibung (mehrere kommagetrennt)
+- ``<Objektname>.thumbnail`` - Feld für Thumbnail (einzelnes Feld)
+
+.. note::
+
+   Standardobjekte verwenden UPPER_UNDERSCORE-Namen (z.B. ``ACCOUNT.title=Name``).
 
 Anwendungsbeispiele
 ===================
@@ -352,6 +386,7 @@ Parameter:
     base_url=https://test.salesforce.com
     auth_type=oauth_password
     username=admin@example.com.sandbox
+    password=YourPassword
     client_id=3MVG9A2kN3Bn17hvOLkjEo7GFdC...
     client_secret=1234567890ABCDEF1234567890ABCDEF
     security_token=AbCdEfGhIjKlMnOpQrStUvWxYz

@@ -100,15 +100,15 @@ PostgreSQLの例:
      - JDBCドライバーのクラス名
    * - ``fetch_size``
      - いいえ
-     - フェッチサイズ
+     - JDBCフェッチサイズ。MySQLのストリーミング結果セットには ``MIN_VALUE`` を指定
    * - ``url``
      - はい
      - JDBC接続URL
    * - ``username``
-     - はい
+     - いいえ
      - データベースユーザー名
    * - ``password``
-     - はい
+     - いいえ
      - データベースパスワード
    * - ``sql``
      - はい
@@ -121,7 +121,13 @@ PostgreSQLの例:
      - 追加のJDBC接続プロパティ（例: ``info.ssl=true``）
    * - ``column_label.*``
      - いいえ
-     - カラムメタデータマッピング
+     - BLOB抽出時のカラムメタデータマッピング（例: ``column_label.mimetype=content_type`` でMIMEタイプ列を指定）
+   * - ``readInterval``
+     - いいえ
+     - 行間の処理遅延（ミリ秒）。デフォルト: 0
+   * - ``script_type``
+     - いいえ
+     - スクリプトエンジンの種類。デフォルト: groovy
 
 スクリプト設定
 --------------
@@ -130,14 +136,14 @@ SQLの列名をインデックスフィールドにマッピングします:
 
 ::
 
-    url="https://example.com/articles/" + data.id
-    title=data.title
-    content=data.content
-    lastModified=data.updated_at
+    url="https://example.com/articles/" + id
+    title=title
+    content=content
+    lastModified=updated_at
 
 利用可能なフィールド:
 
-- ``data.<column_name>`` - SQLクエリの結果列
+- ``<column_name>`` - SQLクエリの結果列（カラムラベル名でアクセス）
 
 SQLクエリの設計
 ===============
@@ -145,14 +151,14 @@ SQLクエリの設計
 効率的なクエリ
 --------------
 
-大量のデータを扱う場合、クエリのパフォーマンスが重要です:
+大量のデータを扱う場合、クエリのパフォーマンスが重要です。
+SQLはそのままデータベースに送信されます（パラメーターバインドは行われません）:
 
 ::
 
-    # インデックスを使用した効率的なクエリ
     SELECT id, title, content, url, updated_at
     FROM articles
-    WHERE updated_at >= :last_crawl_date
+    WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
 
 差分クロール
@@ -176,13 +182,13 @@ URLの生成
 ::
 
     # 固定パターン
-    url="https://example.com/article/" + data.id
+    url="https://example.com/article/" + id
 
     # 複数フィールドの組み合わせ
-    url="https://example.com/" + data.category + "/" + data.slug
+    url="https://example.com/" + category + "/" + slug
 
     # データベースに格納されたURLを使用
-    url=data.url
+    url=url
 
 マルチバイト文字対応
 ====================
@@ -204,17 +210,6 @@ PostgreSQLは通常UTF-8がデフォルトです。必要に応じて:
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
-
-接続プーリング
-==============
-
-大量のデータを処理する場合、接続プーリングを検討してください:
-
-::
-
-    # HikariCP使用時の設定
-    datasource.class=com.zaxxer.hikari.HikariDataSource
-    pool.size=5
 
 セキュリティ
 ============
@@ -262,10 +257,10 @@ PostgreSQLは通常UTF-8がデフォルトです。必要に応じて:
 
 ::
 
-    url="https://shop.example.com/product/" + data.id
-    title=data.name
-    content=data.description + " カテゴリ: " + data.category + " 価格: " + data.price + "円"
-    lastModified=data.updated_at
+    url="https://shop.example.com/product/" + id
+    title=name
+    content=description + " カテゴリ: " + category + " 価格: " + price + "円"
+    lastModified=updated_at
 
 ナレッジベース記事
 ------------------
@@ -284,13 +279,13 @@ PostgreSQLは通常UTF-8がデフォルトです。必要に応じて:
 
 ::
 
-    url="https://kb.example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    digest=data.tags
-    author=data.author
-    created=data.created_at
-    lastModified=data.updated_at
+    url="https://kb.example.com/article/" + id
+    title=title
+    content=body
+    digest=tags
+    author=author
+    created=created_at
+    lastModified=updated_at
 
 トラブルシューティング
 ======================

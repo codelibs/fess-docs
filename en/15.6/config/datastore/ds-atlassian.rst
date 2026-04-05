@@ -135,7 +135,7 @@ Parameter List
      - Refresh token (OAuth 2.0)
    * - ``oauth2.token_url``
      - No
-     - Token URL (OAuth 2.0, has default value)
+     - Token URL (OAuth 2.0, default: ``https://auth.atlassian.com/oauth/token``)
    * - ``basic.username``
      - For Basic auth
      - Username
@@ -145,6 +145,36 @@ Parameter List
    * - ``issue.jql``
      - No
      - JQL (Jira only, advanced search conditions)
+   * - ``issue_max_results``
+     - No
+     - Maximum results per Jira API request (default: ``50``, Jira only)
+   * - ``content_limit``
+     - No
+     - Maximum content items per Confluence API request (default: ``25``, Confluence only)
+   * - ``ignore_error``
+     - No
+     - Whether to continue processing on error (default: ``true``)
+   * - ``include_pattern``
+     - No
+     - URL include pattern (regex)
+   * - ``exclude_pattern``
+     - No
+     - URL exclude pattern (regex)
+   * - ``number_of_threads``
+     - No
+     - Number of threads for parallel processing (default: ``1``)
+   * - ``proxy_host``
+     - No
+     - HTTP proxy hostname
+   * - ``proxy_port``
+     - No
+     - HTTP proxy port number
+   * - ``connection_timeout``
+     - No
+     - HTTP connection timeout (milliseconds)
+   * - ``read_timeout``
+     - No
+     - HTTP read timeout (milliseconds)
 
 Script Configuration
 --------------------
@@ -280,7 +310,7 @@ Script:
 ::
 
     url=issue.view_url
-    title="[" + issue.key + "] " + issue.summary
+    title=issue.summary
     content=issue.description + "\n\nComments:\n" + issue.comments
     last_modified=issue.last_modified
 

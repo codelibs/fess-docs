@@ -135,7 +135,7 @@ Server 버전(OAuth 1.0a) 예:
      - 리프레시 토큰 (OAuth 2.0)
    * - ``oauth2.token_url``
      - 아니요
-     - 토큰 URL (OAuth 2.0, 기본값 있음)
+     - 토큰 URL (OAuth 2.0, 기본값: ``https://auth.atlassian.com/oauth/token``)
    * - ``basic.username``
      - Basic 인증의 경우
      - 사용자명
@@ -145,6 +145,36 @@ Server 버전(OAuth 1.0a) 예:
    * - ``issue.jql``
      - 아니요
      - JQL (Jira만, 고급 검색 조건)
+   * - ``issue_max_results``
+     - 아니요
+     - Jira API 요청당 최대 결과 수 (기본값: ``50``, Jira만)
+   * - ``content_limit``
+     - 아니요
+     - Confluence API 요청당 최대 콘텐츠 수 (기본값: ``25``, Confluence만)
+   * - ``ignore_error``
+     - 아니요
+     - 오류 시 처리를 계속할지 여부 (기본값: ``true``)
+   * - ``include_pattern``
+     - 아니요
+     - URL 포함 패턴 (정규식)
+   * - ``exclude_pattern``
+     - 아니요
+     - URL 제외 패턴 (정규식)
+   * - ``number_of_threads``
+     - 아니요
+     - 병렬 처리 스레드 수 (기본값: ``1``)
+   * - ``proxy_host``
+     - 아니요
+     - HTTP 프록시 호스트명
+   * - ``proxy_port``
+     - 아니요
+     - HTTP 프록시 포트 번호
+   * - ``connection_timeout``
+     - 아니요
+     - HTTP 연결 타임아웃 (밀리초)
+   * - ``read_timeout``
+     - 아니요
+     - HTTP 읽기 타임아웃 (밀리초)
 
 스크립트 설정
 --------------
@@ -280,7 +310,7 @@ Jira Cloud 크롤링
 ::
 
     url=issue.view_url
-    title="[" + issue.key + "] " + issue.summary
+    title=issue.summary
     content=issue.description + "\n\n코멘트:\n" + issue.comments
     last_modified=issue.last_modified
 

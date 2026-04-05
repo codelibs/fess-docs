@@ -61,7 +61,7 @@ Configuration des parametres
 
 ::
 
-    token=xoxp-your-token-here
+    token=xoxb-your-slack-bot-token-here
     channels=general,random
     file_crawl=false
     include_private=false
@@ -80,14 +80,50 @@ Liste des parametres
      - Oui
      - OAuth Access Token de l'application Slack
    * - ``channels``
-     - Oui
-     - Canaux cibles du crawl (separes par des virgules, ou ``*all``)
+     - Non
+     - Canaux cibles du crawl (separes par des virgules, ou ``*all``). Si non spécifié, tous les canaux sont récupérés (même comportement que ``*all``)
    * - ``file_crawl``
      - Non
      - Crawler egalement les fichiers (par defaut : ``false``)
    * - ``include_private``
      - Non
      - Inclure les canaux prives (par defaut : ``false``)
+   * - ``number_of_threads``
+     - Non
+     - Nombre de threads de traitement parallèle (par défaut : ``1``)
+   * - ``max_filesize``
+     - Non
+     - Taille maximale des fichiers en octets (par défaut : ``10000000``)
+   * - ``ignore_error``
+     - Non
+     - Continuer le traitement en cas d'erreur (par défaut : ``true``)
+   * - ``supported_mimetypes``
+     - Non
+     - Regex pour les types MIME autorisés (par défaut : ``.*``)
+   * - ``include_pattern``
+     - Non
+     - Modèle regex pour les URLs à inclure
+   * - ``exclude_pattern``
+     - Non
+     - Modèle regex pour les URLs à exclure
+   * - ``proxy_host``
+     - Non
+     - Hôte du proxy HTTP
+   * - ``proxy_port``
+     - Non
+     - Port du proxy HTTP (requis lorsque ``proxy_host`` est spécifié)
+   * - ``file_types``
+     - Non
+     - Filtre de type de fichier pour l'API Slack
+   * - ``channel_count``
+     - Non
+     - Nombre de canaux par page API (par défaut : ``100``)
+   * - ``message_count``
+     - Non
+     - Nombre de messages par page API (par défaut : ``100``)
+   * - ``file_count``
+     - Non
+     - Nombre de fichiers par page API (par défaut : ``20``)
 
 Configuration du script
 --------------
@@ -110,6 +146,8 @@ Champs disponibles
 
    * - Champ
      - Description
+   * - ``message.title``
+     - Titre (chaîne vide pour les messages, nom et titre du fichier pour les entrées de fichier)
    * - ``message.text``
      - Contenu textuel du message
    * - ``message.user``
@@ -148,6 +186,7 @@ Pour les canaux publics uniquement :
 
 - ``channels:history`` - Lecture des messages des canaux publics
 - ``channels:read`` - Lecture des informations des canaux publics
+- ``users:read`` - Lecture des informations utilisateur (requis pour la résolution des noms d'affichage)
 
 Pour inclure les canaux prives (``include_private=true``) :
 
@@ -155,6 +194,7 @@ Pour inclure les canaux prives (``include_private=true``) :
 - ``channels:read``
 - ``groups:history`` - Lecture des messages des canaux prives
 - ``groups:read`` - Lecture des informations des canaux prives
+- ``users:read``
 
 Pour crawler egalement les fichiers (``file_crawl=true``) :
 
@@ -402,31 +442,6 @@ Cas de nombreux messages
 
 Exemples d'utilisation avancee des scripts
 ========================
-
-Filtrage des messages
---------------------------
-
-Indexer uniquement les messages d'un utilisateur specifique :
-
-::
-
-    if (message.user == "Jean Dupont") {
-        title=message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
-
-Uniquement les messages contenant des mots-cles :
-
-::
-
-    if (message.text.contains("important") || message.text.contains("incident")) {
-        title="[Important] " + message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
 
 Traitement des messages
 ----------------

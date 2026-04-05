@@ -61,7 +61,7 @@ Slack连接器提供从Slack工作区获取频道消息并注册到
 
 ::
 
-    token=xoxp-your-token-here
+    token=xoxb-your-slack-bot-token-here
     channels=general,random
     file_crawl=false
     include_private=false
@@ -80,14 +80,50 @@ Slack连接器提供从Slack工作区获取频道消息并注册到
      - 是
      - Slack App的OAuth Access Token
    * - ``channels``
-     - 是
-     - 爬取目标频道（逗号分隔，或 ``*all``）
+     - 否
+     - 爬取目标频道（逗号分隔，或 ``*all``）。未指定时获取所有频道（与 ``*all`` 相同的行为）
    * - ``file_crawl``
      - 否
      - 是否也爬取文件（默认: ``false``）
    * - ``include_private``
      - 否
      - 是否包含私有频道（默认: ``false``）
+   * - ``number_of_threads``
+     - 否
+     - 并行处理线程数（默认: ``1``）
+   * - ``max_filesize``
+     - 否
+     - 爬取文件的最大大小（字节, 默认: ``10000000``）
+   * - ``ignore_error``
+     - 否
+     - 发生错误时继续处理（默认: ``true``）
+   * - ``supported_mimetypes``
+     - 否
+     - 允许的MIME类型（正则表达式, 默认: ``.*``）
+   * - ``include_pattern``
+     - 否
+     - 包含URL的正则表达式模式
+   * - ``exclude_pattern``
+     - 否
+     - 排除URL的正则表达式模式
+   * - ``proxy_host``
+     - 否
+     - HTTP代理主机
+   * - ``proxy_port``
+     - 否
+     - HTTP代理端口（指定 ``proxy_host`` 时必需）
+   * - ``file_types``
+     - 否
+     - Slack API的文件类型筛选器
+   * - ``channel_count``
+     - 否
+     - 每页获取的频道数（默认: ``100``）
+   * - ``message_count``
+     - 否
+     - 每页获取的消息数（默认: ``100``）
+   * - ``file_count``
+     - 否
+     - 每页获取的文件数（默认: ``20``）
 
 脚本设置
 --------------
@@ -110,6 +146,8 @@ Slack连接器提供从Slack工作区获取频道消息并注册到
 
    * - 字段
      - 说明
+   * - ``message.title``
+     - 标题（消息时为空字符串，文件时为文件名和标题）
    * - ``message.text``
      - 消息的文本内容
    * - ``message.user``
@@ -148,6 +186,7 @@ Slack App设置
 
 - ``channels:history`` - 读取公共频道消息
 - ``channels:read`` - 读取公共频道信息
+- ``users:read`` - 读取用户信息（显示名称解析所需）
 
 包含私有频道时（``include_private=true``）:
 
@@ -155,6 +194,7 @@ Slack App设置
 - ``channels:read``
 - ``groups:history`` - 读取私有频道消息
 - ``groups:read`` - 读取私有频道信息
+- ``users:read``
 
 也爬取文件时（``file_crawl=true``）:
 
@@ -400,33 +440,8 @@ Slack API限制:
 2. 分散爬取计划
 3. 考虑设置排除旧消息
 
-脚本的高级使用示例
+脚本应用示例
 ========================
-
-消息过滤
---------------------------
-
-只索引特定用户的消息:
-
-::
-
-    if (message.user == "张三") {
-        title=message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
-
-只索引包含关键词的消息:
-
-::
-
-    if (message.text.contains("重要") || message.text.contains("故障")) {
-        title="[重要] " + message.user + " #" + message.channel
-        content=message.text
-        created=message.timestamp
-        url=message.permalink
-    }
 
 消息加工
 ----------------

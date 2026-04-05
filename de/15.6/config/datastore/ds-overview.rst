@@ -106,7 +106,7 @@ Installation von Konnektoren
 Plugin-Installation
 -------------------
 
-Datenspeicher-Konnektor-Plugins können über die Administrationsoberfläche oder den ``plugin``-Befehl installiert werden.
+Datenspeicher-Konnektor-Plugins können über die Administrationsoberfläche installiert werden.
 
 Über die Administrationsoberfläche
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,24 +117,6 @@ Datenspeicher-Konnektor-Plugins können über die Administrationsoberfläche ode
 4. Klicken Sie auf "Installieren"
 5. Starten Sie |Fess| neu
 
-Über die Kommandozeile
-~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    # Plugin installieren
-    ./bin/fess-plugin install fess-ds-box
-
-    # Installierte Plugins anzeigen
-    ./bin/fess-plugin list
-
-Docker-Umgebung
-~~~~~~~~~~~~~~~
-
-::
-
-    # Plugins beim Start installieren
-    docker run -e FESS_PLUGINS="fess-ds-box,fess-ds-dropbox" codelibs/fess:15.6.0
 
 Grundlagen der Datenspeicher-Konfiguration
 ==========================================
@@ -162,6 +144,14 @@ Einstellungen, die allen Datenspeicher-Konnektoren gemeinsam sind:
      - Mapping-Skript für Index-Felder
    * - Boost
      - Priorität in den Suchergebnissen
+   * - Berechtigungen
+     - Zugriffsberechtigungen für die gecrawlten Dokumente
+   * - Virtuelle Hosts
+     - Virtuelle Hosts, denen diese Konfiguration zugeordnet ist
+   * - Beschreibung
+     - Optionale Beschreibung dieser Konfiguration
+   * - Sortierreihenfolge
+     - Reihenfolge zur Sortierung der Konfigurationen in der Verwaltungsliste
    * - Aktiviert
      - Ob diese Konfiguration aktiviert ist
 
@@ -193,62 +183,40 @@ Im Skript werden die abgerufenen Daten auf die Index-Felder von |Fess| abgebilde
     lastModified=data.lastModified
     contentLength=data.contentLength
 
+.. note::
+
+   Das Präfix ``data.*`` wird hier als Beispiel gezeigt und gilt für CSV- und JSON-Konnektoren.
+   Jeder Konnektor verwendet sein eigenes Präfix für die abgerufenen Daten, z.B.:
+
+   - ``file.*`` -- Box, Dropbox, Google Drive, OneDrive
+   - ``message.*`` -- Slack
+   - ``issue.*`` -- Jira
+   - ``page.*`` -- Confluence
+
+   Weitere Informationen finden Sie in der Dokumentation des jeweiligen Konnektors.
+
 Authentifizierung
 =================
 
-Viele Datenspeicher-Konnektoren erfordern OAuth 2.0 oder API-Schlüssel-Authentifizierung.
+Die Authentifizierungsparameter sind konnektorspezifisch.
+Jeder Konnektor erfordert unterschiedliche Anmeldedaten und Konfigurationsschlüssel.
+Weitere Informationen finden Sie in der Dokumentation des jeweiligen Konnektors.
 
-OAuth 2.0-Authentifizierung
----------------------------
+Gemeinsame Parameter
+====================
 
-Typische OAuth 2.0-Konfigurationsparameter:
+Der folgende Parameter wird von ``AbstractDataStore`` vererbt und steht in allen Konnektoren zur Verfügung:
 
-::
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
 
-    client.id=Client-ID
-    client.secret=Client-Secret
-    refresh.token=Refresh-Token
-
-Oder:
-
-::
-
-    access.token=Access-Token
-
-API-Schlüssel-Authentifizierung
--------------------------------
-
-::
-
-    api.key=API-Schlüssel
-    api.secret=API-Secret
-
-Service-Account-Authentifizierung
----------------------------------
-
-::
-
-    service.account.email=Service-Account-E-Mail-Adresse
-    service.account.key=Privater Schlüssel (JSON-Format oder Pfad zur Schlüsseldatei)
-
-Performance-Optimierung
-=======================
-
-Einstellungen für die Verarbeitung großer Datenmengen:
-
-::
-
-    # Batch-Größe
-    batch.size=100
-
-    # Wartezeit zwischen Anfragen (Millisekunden)
-    interval=1000
-
-    # Anzahl paralleler Threads
-    thread.size=1
-
-    # Timeout (Millisekunden)
-    timeout=30000
+   * - Parameter
+     - Standardwert
+     - Beschreibung
+   * - ``readInterval``
+     - ``0``
+     - Wartezeit in Millisekunden zwischen der Verarbeitung einzelner Datensätze. Kann verwendet werden, um die Last auf die Datenquelle zu begrenzen.
 
 Fehlerbehebung
 ==============

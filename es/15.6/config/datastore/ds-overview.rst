@@ -107,7 +107,7 @@ Instalacion de Conectores
 Instalacion de Plugins
 ----------------------
 
-Los plugins de conectores de almacen de datos pueden instalarse desde la consola de administracion o mediante el comando `plugin`.
+Los plugins de conectores de almacen de datos pueden instalarse desde la consola de administracion.
 
 Desde la Consola de Administracion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,25 +117,6 @@ Desde la Consola de Administracion
 3. Busque el plugin deseado en la pestana "Disponible"
 4. Haga clic en "Instalar"
 5. Reinicie |Fess|
-
-Linea de Comandos
-~~~~~~~~~~~~~~~~~
-
-::
-
-    # Instalar un plugin
-    ./bin/fess-plugin install fess-ds-box
-
-    # Verificar plugins instalados
-    ./bin/fess-plugin list
-
-Entorno Docker
-~~~~~~~~~~~~~~
-
-::
-
-    # Instalar plugins al inicio
-    docker run -e FESS_PLUGINS="fess-ds-box,fess-ds-dropbox" codelibs/fess:15.6.0
 
 Conceptos Basicos de Configuracion del Almacen de Datos
 =======================================================
@@ -155,6 +136,8 @@ Elementos de configuracion comunes a todos los conectores de almacen de datos:
      - Descripcion
    * - Nombre
      - Nombre identificador de la configuracion
+   * - Descripcion
+     - Texto descriptivo de la configuracion
    * - Nombre del Manejador
      - Nombre del manejador del conector a utilizar (ej., ``BoxDataStore``)
    * - Parametros
@@ -163,6 +146,12 @@ Elementos de configuracion comunes a todos los conectores de almacen de datos:
      - Script de mapeo de campos del indice
    * - Boost
      - Prioridad en los resultados de busqueda
+   * - Permisos
+     - Permisos de acceso para los documentos obtenidos de este almacen de datos
+   * - Hosts virtuales
+     - Host virtual al que se aplica esta configuracion
+   * - Orden de visualizacion
+     - Orden de visualizacion en la lista de configuraciones
    * - Habilitado
      - Si esta configuracion esta activa o no
 
@@ -180,7 +169,9 @@ Los parametros se especifican en formato ``key=value`` separados por saltos de l
 Configuracion de Script
 -----------------------
 
-Los scripts mapean los datos obtenidos a los campos del indice de |Fess|:
+Los scripts mapean los datos obtenidos a los campos del indice de |Fess|.
+
+El siguiente es un ejemplo utilizando el prefijo ``data.*`` para conectores CSV/JSON:
 
 ::
 
@@ -194,62 +185,36 @@ Los scripts mapean los datos obtenidos a los campos del indice de |Fess|:
     lastModified=data.lastModified
     contentLength=data.contentLength
 
+.. note::
+
+   El prefijo de los campos en el script varia segun el conector.
+   Por ejemplo, Box/Dropbox/Google Drive/OneDrive utilizan ``file.*``, Slack utiliza ``message.*``,
+   Jira utiliza ``issue.*``.
+   Consulte la documentacion individual de cada conector para mas detalles.
+
 Configuracion de Autenticacion
 ==============================
 
-Muchos conectores de almacen de datos requieren autenticacion mediante OAuth 2.0 o claves API.
+Muchos conectores de almacen de datos requieren autenticacion mediante OAuth 2.0, claves API, cuentas de servicio, etc.
 
-Autenticacion OAuth 2.0
------------------------
+Los parametros de autenticacion varian segun el conector.
+Consulte la documentacion individual de cada conector para los detalles de configuracion de autenticacion.
 
-Parametros tipicos de configuracion OAuth 2.0:
+Parametros Comunes
+==================
 
-::
+Parametros comunes disponibles para todos los conectores de almacen de datos:
 
-    client.id=ID del cliente
-    client.secret=Secreto del cliente
-    refresh.token=Token de actualizacion
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
 
-O:
-
-::
-
-    access.token=Token de acceso
-
-Autenticacion con Clave API
----------------------------
-
-::
-
-    api.key=Clave API
-    api.secret=Secreto API
-
-Autenticacion con Cuenta de Servicio
-------------------------------------
-
-::
-
-    service.account.email=Correo de la cuenta de servicio
-    service.account.key=Clave privada (formato JSON o ruta del archivo de clave)
-
-Ajuste de Rendimiento
-=====================
-
-Configuracion para procesar grandes cantidades de datos:
-
-::
-
-    # Tamano del lote
-    batch.size=100
-
-    # Tiempo de espera entre solicitudes (milisegundos)
-    interval=1000
-
-    # Numero de hilos paralelos
-    thread.size=1
-
-    # Tiempo de espera (milisegundos)
-    timeout=30000
+   * - Parametro
+     - Valor por defecto
+     - Descripcion
+   * - ``readInterval``
+     - ``0``
+     - Tiempo de espera entre el procesamiento de cada registro (milisegundos). Se utiliza para reducir la carga del servidor al procesar grandes cantidades de datos.
 
 Solucion de Problemas
 =====================

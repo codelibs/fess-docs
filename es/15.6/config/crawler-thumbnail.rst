@@ -213,7 +213,7 @@ El generador de miniaturas se configura en ``fess_thumbnail.xml``.
 
 ::
 
-    src/main/resources/fess_thumbnail.xml
+    app/WEB-INF/classes/fess_thumbnail.xml
 
 Principales Opciones de Configuración (fess_config.properties)
 --------------------------------------------------------------

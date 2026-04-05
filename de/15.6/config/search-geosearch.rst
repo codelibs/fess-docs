@@ -217,7 +217,7 @@ Optimierung der Indexeinstellungen
 
 Bei Umgang mit großen Mengen an Standortdaten optimieren Sie Indexeinstellungen.
 
-Das Standortfeld ist im Quellcode unter ``src/main/resources/fess_indices/fess/doc.json`` definiert.
+Das Standortfeld ist in ``app/WEB-INF/classes/fess_indices/fess/doc.json`` definiert.
 
 ::
 

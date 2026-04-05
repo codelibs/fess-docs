@@ -217,7 +217,7 @@ Optimización de la Configuración del Índice
 
 Al manejar grandes cantidades de datos de ubicación, optimice la configuración del índice.
 
-El campo de ubicacion esta definido en el codigo fuente en ``src/main/resources/fess_indices/fess/doc.json``.
+El campo de ubicacion esta definido en ``app/WEB-INF/classes/fess_indices/fess/doc.json``.
 
 ::
 

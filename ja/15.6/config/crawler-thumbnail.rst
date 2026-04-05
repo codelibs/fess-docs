@@ -213,7 +213,7 @@ HTMLのサムネイル画像はHTML内で指定された画像または含まれ
 
 ::
 
-    src/main/resources/fess_thumbnail.xml
+    app/WEB-INF/classes/fess_thumbnail.xml
 
 主な設定項目（fess_config.properties）
 ----------------------------------

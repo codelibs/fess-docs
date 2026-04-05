@@ -67,6 +67,7 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 .. note::
    ``ElasticsearchListDataStore`` は ``ElasticsearchDataStore`` を拡張したハンドラで、取得したデータをファイルリストとして処理し、マルチスレッドでのインデックス登録をサポートします。
+   ``num_of_threads`` パラメーターでスレッド数を指定できます（デフォルト: 1）。
 
 パラメーター設定
 ----------------
@@ -102,8 +103,8 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
      - 必須
      - 説明
    * - ``settings.fesen.http.url``
-     - はい
-     - Elasticsearch/OpenSearchのURL
+     - いいえ
+     - Elasticsearch/OpenSearchのURL（未指定の場合、接続エラーになります）
    * - ``settings.fesen.username``
      - いいえ
      - 認証用ユーザー名
@@ -111,20 +112,32 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
      - いいえ
      - 認証用パスワード
    * - ``index``
-     - はい
-     - 対象インデックス名
+     - いいえ
+     - 対象インデックス名（デフォルト: ``_all``）。カンマ区切りで複数指定可能
    * - ``size``
      - いいえ
      - スクロール時の取得件数
    * - ``scroll``
      - いいえ
      - スクロールのタイムアウト（デフォルト: 1m）
+   * - ``timeout``
+     - いいえ
+     - リクエストのタイムアウト（デフォルト: 1m）
    * - ``query``
      - いいえ
-     - クエリJSON（デフォルト: match_all）
+     - クエリJSON（デフォルト: match_all）。クエリ本体のみ指定（外側の ``{"query":...}`` は不要）
    * - ``fields``
      - いいえ
      - 取得するフィールド（カンマ区切り）
+   * - ``preference``
+     - いいえ
+     - 検索実行時のシャードレプリカの優先設定（デフォルト: ``_local``）
+   * - ``delete.processed.doc``
+     - いいえ
+     - 処理済みドキュメントをソースインデックスから削除するかどうか（デフォルト: false）
+   * - ``readInterval``
+     - いいえ
+     - 各ドキュメント処理間の待機時間（ミリ秒、デフォルト: 0）
 
 スクリプト設定
 --------------
@@ -156,6 +169,11 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 - ``id`` - ドキュメントID
 - ``index`` - インデックス名
 - ``score`` - 検索スコア
+- ``version`` - ドキュメントバージョン
+- ``seqNo`` - シーケンス番号
+- ``primaryTerm`` - プライマリターム
+- ``clusterAlias`` - クラスタエイリアス（クロスクラスタ検索時）
+- ``hit`` - SearchHitオブジェクト（上級者向け）
 
 クエリの設定
 ============
@@ -171,25 +189,23 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 ::
 
-    query={"query":{"term":{"status":"published"}}}
+    query={"term":{"status":"published"}}
 
 範囲指定:
 
 ::
 
-    query={"query":{"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}}
+    query={"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}
 
 複数条件:
 
 ::
 
-    query={"query":{"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}}
+    query={"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}
 
-ソート指定:
-
-::
-
-    query={"query":{"match_all":{}},"sort":[{"timestamp":{"order":"desc"}}]}
+.. note::
+   ``query`` パラメーターにはクエリ本体のみを指定します。外側の ``{"query":...}`` ラッパーは不要です。
+   また、ソートなどの検索レベルのオプションはこのパラメーターでは指定できません。
 
 特定のフィールドのみ取得
 ========================
@@ -264,7 +280,7 @@ fieldsパラメーターで取得フィールドを限定
 
     settings.fesen.http.url=http://localhost:9200
     index=logs-2024-*
-    query={"query":{"term":{"level":"error"}}}
+    query={"term":{"level":"error"}}
     size=100
 
 スクリプト:
@@ -486,26 +502,16 @@ SSL/TLS接続
 ----------------
 
 .. note::
-   集約結果は取得されず、ドキュメントのみが取得されます。
-
-::
-
-    query={"query":{"match_all":{}},"aggs":{"categories":{"terms":{"field":"category"}}}}
+   ``query`` パラメーターはクエリ本体のみを受け付けます。集約（aggs）やソートなどの
+   検索レベルのオプションは指定できません。ドキュメントのみが取得されます。
 
 スクリプトフィールド
 --------------------
 
-::
-
-    query={"query":{"match_all":{}},"script_fields":{"full_url":{"script":"doc['protocol'].value + '://' + doc['host'].value + doc['path'].value"}}}
-
-スクリプト:
-
-::
-
-    url=source.full_url
-    title=source.title
-    content=source.content
+.. note::
+   Elasticsearch/OpenSearchのスクリプトフィールドは ``_source`` には含まれないため、
+   ``source.*`` プレフィックスではアクセスできません。スクリプトフィールドを使用する場合は、
+   ``hit`` オブジェクトから ``hit.getFields()`` 経由でアクセスする必要があります。
 
 参考情報
 ========
