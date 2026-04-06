@@ -347,18 +347,8 @@ Ejecución de Fess
 Ejecución desde Línea de Comandos
 --------------------
 
-Ejecute usando Maven:
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-O empaquete y luego ejecute:
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+Para el desarrollo, se recomienda ejecutar la clase ``org.codelibs.fess.FessBoot``
+directamente desde su IDE (consulte la siguiente sección).
 
 Ejecución desde IDE
 ------------
@@ -395,13 +385,7 @@ Confirmación de Inicio
 --------
 
 Fess tarda 1-2 minutos en iniciarse.
-Si aparecen los siguientes registros en la consola, el inicio está completo:
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-Verifique el funcionamiento accediendo a lo siguiente en el navegador:
+Una vez que el inicio esté completo, puede verificar el funcionamiento accediendo a lo siguiente en el navegador:
 
 - **Pantalla de búsqueda**: http://localhost:8080/
 - **Pantalla de administración**: http://localhost:8080/admin/
@@ -414,12 +398,17 @@ Cambiar Número de Puerto
 
 Si el puerto predeterminado 8080 está en uso, puede cambiarlo en el siguiente archivo:
 
-``src/main/resources/fess_config.properties``
+Puede cambiar el puerto usando la variable de entorno ``FESS_PORT`` en ``bin/fess.in.sh``:
 
-.. code-block:: properties
+.. code-block:: bash
 
-    # Cambiar número de puerto
-    server.port=8080
+    export FESS_PORT=9080
+
+O especifíquelo como propiedad del sistema JVM:
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 Ejecución de Depuración
 ==========
@@ -452,11 +441,11 @@ Depuración Remota
 
 También puede conectar un depurador a Fess iniciado desde la línea de comandos.
 
-Inicie Fess en modo de depuración:
+Agregue lo siguiente a ``FESS_JAVA_OPTS`` en ``bin/fess.in.sh`` e inicie Fess:
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 Conecte depuración remota desde IDE:
 
@@ -500,12 +489,8 @@ Habilitar Hot Deploy
 
 LastaFlute puede reflejar algunos cambios sin reiniciar.
 
-Configure lo siguiente en ``src/main/resources/fess_config.properties``:
-
-.. code-block:: properties
-
-    # Habilitar hot deploy
-    development.here=true
+El archivo ``src/main/resources/fess_env.properties`` contiene la configuración de hot deploy.
+Por defecto ya está habilitado (``development.here=true``) en el entorno de desarrollo.
 
 Sin embargo, se requiere reiniciar para los siguientes cambios:
 
@@ -545,9 +530,8 @@ edite ``src/main/resources/fess_config.properties``:
 
 .. code-block:: properties
 
-    # Deshabilitar OpenSearch integrado
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    # Usar OpenSearch externo
+    search_engine.http.url=http://localhost:9200
 
 Generación de Código con DBFlute
 ======================

@@ -347,18 +347,8 @@ Fess 的运行
 从命令行运行
 --------------------
 
-使用 Maven 运行：
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-或者，打包后运行：
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+在开发环境中，推荐从 IDE 直接运行 ``org.codelibs.fess.FessBoot`` 类
+（请参阅下一节）。
 
 从 IDE 运行
 ------------
@@ -395,13 +385,7 @@ VS Code 的情况
 --------
 
 Fess 的启动需要 1〜2 分钟。
-控制台显示类似以下日志即表示启动完成：
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-在浏览器中访问以下地址确认运行：
+启动完成后，可以在浏览器中访问以下地址确认运行：
 
 - **搜索界面**: http://localhost:8080/
 - **管理界面**: http://localhost:8080/admin/
@@ -414,12 +398,17 @@ Fess 的启动需要 1〜2 分钟。
 
 如果默认端口 8080 正在使用，可以在以下文件中更改：
 
-``src/main/resources/fess_config.properties``
+可以通过 ``bin/fess.in.sh`` 中的环境变量 ``FESS_PORT`` 进行更改：
 
-.. code-block:: properties
+.. code-block:: bash
 
-    # 更改端口号
-    server.port=8080
+    export FESS_PORT=9080
+
+或者指定为 JVM 系统属性：
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 调试运行
 ==========
@@ -452,11 +441,11 @@ VS Code 的情况
 
 也可以将调试器连接到从命令行启动的 Fess。
 
-以调试模式启动 Fess：
+在 ``bin/fess.in.sh`` 的 ``FESS_JAVA_OPTS`` 中添加以下内容并启动 Fess：
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 从 IDE 连接远程调试：
 
@@ -500,11 +489,12 @@ VS Code 的情况
 
 LastaFlute 可以在不重启的情况下反映部分更改。
 
-在 ``src/main/resources/fess_config.properties`` 中设置以下内容：
+在 ``src/main/resources/fess_env.properties`` 中，``development.here`` 默认为 ``true``。
+确认该设置已启用即可：
 
 .. code-block:: properties
 
-    # 启用热部署
+    # 启用热部署（默认已启用）
     development.here=true
 
 但是，以下更改需要重启：
@@ -545,9 +535,8 @@ OpenSearch 的位置：
 
 .. code-block:: properties
 
-    # 禁用内置 OpenSearch
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    # 使用外部 OpenSearch
+    search_engine.http.url=http://localhost:9200
 
 通过 DBFlute 生成代码
 ======================

@@ -42,7 +42,7 @@ Maven 的配置文件。位于项目的根目录。
 创建包
 --------------
 
-创建可执行的 JAR 文件：
+创建 WAR 文件和发布用 zip 包：
 
 .. code-block:: bash
 
@@ -53,8 +53,9 @@ Maven 的配置文件。位于项目的根目录。
 .. code-block:: text
 
     target/
-    ├── fess-15.3.x.jar
-    └── fess-15.3.x/
+    ├── fess.war
+    └── releases/
+        └── fess-{version}.zip
 
 完整构建
 --------
@@ -141,11 +142,18 @@ Maven 的配置文件。位于项目的根目录。
 集成测试的执行
 --------------
 
-执行包括集成测试在内的所有测试：
+集成测试需要使用 ``integrationTests`` 配置文件。
+需要 |Fess| 服务器和 OpenSearch 正在运行：
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests \
+        -Dtest.fess.url="http://localhost:8080" \
+        -Dtest.search_engine.url="http://localhost:9201"
+
+.. note::
+
+   集成测试类使用 ``*Tests.java`` 命名模式（单元测试使用 ``*Test.java``）。
 
 测试的编写
 ============
@@ -256,41 +264,6 @@ Maven 的配置文件。位于项目的根目录。
     // 集合
     assertIterableEquals(expectedList, actualList);
 
-使用 Mock
-~~~~~~~~~~
-
-使用 Mockito 创建 Mock：
-
-.. code-block:: java
-
-    import static org.mockito.Mockito.*;
-    import org.mockito.Mock;
-    import org.mockito.junit.jupiter.MockitoExtension;
-    import org.junit.jupiter.api.extension.ExtendWith;
-
-    @ExtendWith(MockitoExtension.class)
-    public class SearchServiceTest {
-
-        @Mock
-        private SearchEngineClient searchEngineClient;
-
-        @Test
-        public void testSearch() {
-            // Mock 设置
-            when(searchEngineClient.search(anyString()))
-                .thenReturn(new SearchResponse());
-
-            // 执行测试
-            SearchService service = new SearchService();
-            service.setSearchEngineClient(searchEngineClient);
-            SearchResponse response = service.search("test");
-
-            // 验证
-            assertNotNull(response);
-            verify(searchEngineClient, times(1)).search("test");
-        }
-    }
-
 测试覆盖率
 --------------
 
@@ -302,52 +275,46 @@ Maven 的配置文件。位于项目的根目录。
 
 报告生成在 ``target/site/jacoco/index.html``。
 
-代码质量检查
+代码格式化
 ================
 
-Checkstyle
-----------
+|Fess| 使用以下工具来维护代码质量。
 
-检查编码风格：
+代码格式化器
+------------------
 
-.. code-block:: bash
-
-    mvn checkstyle:check
-
-配置文件在 ``checkstyle.xml``。
-
-SpotBugs
---------
-
-检测潜在的错误：
+统一编码风格：
 
 .. code-block:: bash
 
-    mvn spotbugs:check
+    mvn formatter:format
 
-PMD
----
+许可证头
+----------------
 
-检测代码质量问题：
-
-.. code-block:: bash
-
-    mvn pmd:check
-
-执行所有检查
---------------------
+向源文件添加许可证头：
 
 .. code-block:: bash
 
-    mvn clean verify checkstyle:check spotbugs:check pmd:check
+    mvn license:format
+
+提交前检查
+------------------
+
+提交前请同时执行：
+
+.. code-block:: bash
+
+    mvn formatter:format
+    mvn license:format
 
 创建发布包
 ==================
 
-创建发布包
---------------------
+创建 zip 包
+------------------
 
-创建用于发布的包：
+创建用于发布的 zip 包：
 
 .. code-block:: bash
 
@@ -358,62 +325,46 @@ PMD
 .. code-block:: text
 
     target/releases/
-    ├── fess-15.3.x.tar.gz      # Linux/macOS 用
-    ├── fess-15.3.x.zip         # Windows 用
-    ├── fess-15.3.x.rpm         # RPM 包
-    └── fess-15.3.x.deb         # DEB 包
+    └── fess-{version}.zip
 
-创建 Docker 镜像
--------------------
-
-创建 Docker 镜像：
+创建 RPM 包
+------------------
 
 .. code-block:: bash
 
-    mvn package docker:build
+    mvn rpm:rpm
 
-生成的镜像：
+创建 DEB 包
+------------------
 
 .. code-block:: bash
 
-    docker images | grep fess
+    mvn jdeb:jdeb
 
 配置文件
 ==========
 
-可以使用 Maven 配置文件为不同环境应用不同的设置。
+可以使用 Maven 配置文件来切换测试类型。
 
-开发配置文件
---------------
+build（默认）
+-----------------
 
-使用开发配置进行构建：
-
-.. code-block:: bash
-
-    mvn package -Pdev
-
-生产配置文件
---------------
-
-使用生产配置进行构建：
+默认配置文件。运行单元测试（``*Test.java``）：
 
 .. code-block:: bash
 
-    mvn package -Pprod
+    mvn package
 
-快速构建
---------
+integrationTests
+----------------
 
-跳过测试和检查进行快速构建：
+用于运行集成测试（``*Tests.java``）的配置文件：
 
 .. code-block:: bash
 
-    mvn package -Pfast
-
-.. warning::
-
-   快速构建仅用于开发中的确认。
-   创建 PR 之前，务必执行完整构建。
+    mvn test -P integrationTests \
+        -Dtest.fess.url="http://localhost:8080" \
+        -Dtest.search_engine.url="http://localhost:9201"
 
 CI/CD
 =====
@@ -429,9 +380,7 @@ GitHub Actions
 
 - 构建
 - 单元测试
-- 集成测试
-- 代码风格检查
-- 代码质量检查
+- 包创建
 
 本地 CI 检查
 -----------------------
@@ -440,7 +389,7 @@ GitHub Actions
 
 .. code-block:: bash
 
-    mvn clean verify checkstyle:check
+    mvn clean package
 
 故障排除
 ====================
@@ -461,7 +410,7 @@ GitHub Actions
 .. code-block:: bash
 
     # 增加 Maven 的内存
-    export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512m"
+    export MAVEN_OPTS="-Xmx2g"
     mvn clean package
 
 **错误: Java 版本过旧**
@@ -539,14 +488,15 @@ GitHub Actions
 
     mvn test
 
-代码质量检查
+代码格式化的执行
 ------------------
 
-创建 PR 之前检查代码质量：
+创建 PR 之前执行代码格式化：
 
 .. code-block:: bash
 
-    mvn checkstyle:check spotbugs:check
+    mvn formatter:format
+    mvn license:format
 
 依赖更新
 ------------
@@ -602,6 +552,12 @@ Maven 命令参考
     # 显示项目信息
     mvn help:effective-pom
 
+    # 代码格式化
+    mvn formatter:format
+
+    # 添加许可证头
+    mvn license:format
+
 下一步
 ==========
 
@@ -616,5 +572,4 @@ Maven 命令参考
 
 - `Maven 官方文档 <https://maven.apache.org/guides/>`__
 - `JUnit 5 用户指南 <https://junit.org/junit5/docs/current/user-guide/>`__
-- `Mockito 文档 <https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html>`__
 - `JaCoCo 文档 <https://www.jacoco.org/jacoco/trunk/doc/>`__

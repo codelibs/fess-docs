@@ -42,7 +42,7 @@ Remove build artifacts and rebuild:
 Creating Packages
 --------------
 
-Create an executable JAR file:
+Create a WAR file and distribution zip package:
 
 .. code-block:: bash
 
@@ -53,8 +53,9 @@ Artifacts are generated in the ``target/`` directory:
 .. code-block:: text
 
     target/
-    ├── fess-15.3.x.jar
-    └── fess-15.3.x/
+    ├── fess.war
+    └── releases/
+        └── fess-{version}.zip
 
 Full Build
 --------
@@ -141,11 +142,18 @@ To build without running tests:
 Running Integration Tests
 --------------
 
-Run all tests including integration tests:
+Integration tests require the ``integrationTests`` profile.
+A running |Fess| server and OpenSearch are required:
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests \
+        -Dtest.fess.url="http://localhost:8080" \
+        -Dtest.search_engine.url="http://localhost:9201"
+
+.. note::
+
+   Integration test classes use the ``*Tests.java`` naming pattern (unit tests use ``*Test.java``).
 
 Writing Tests
 ============
@@ -256,41 +264,6 @@ Use JUnit 5 assertions:
     // Collection
     assertIterableEquals(expectedList, actualList);
 
-Using Mocks
-~~~~~~~~~~
-
-Create mocks using Mockito:
-
-.. code-block:: java
-
-    import static org.mockito.Mockito.*;
-    import org.mockito.Mock;
-    import org.mockito.junit.jupiter.MockitoExtension;
-    import org.junit.jupiter.api.extension.ExtendWith;
-
-    @ExtendWith(MockitoExtension.class)
-    public class SearchServiceTest {
-
-        @Mock
-        private SearchEngineClient searchEngineClient;
-
-        @Test
-        public void testSearch() {
-            // Setup mock
-            when(searchEngineClient.search(anyString()))
-                .thenReturn(new SearchResponse());
-
-            // Execute test
-            SearchService service = new SearchService();
-            service.setSearchEngineClient(searchEngineClient);
-            SearchResponse response = service.search("test");
-
-            // Verify
-            assertNotNull(response);
-            verify(searchEngineClient, times(1)).search("test");
-        }
-    }
-
 Test Coverage
 --------------
 
@@ -302,52 +275,46 @@ Measure test coverage with JaCoCo:
 
 The report is generated at ``target/site/jacoco/index.html``.
 
-Code Quality Checks
+Code Formatting
 ================
 
-Checkstyle
-----------
+|Fess| uses the following tools to maintain code quality.
 
-Check coding style:
+Code Formatter
+------------------
 
-.. code-block:: bash
-
-    mvn checkstyle:check
-
-The configuration file is ``checkstyle.xml``.
-
-SpotBugs
---------
-
-Detect potential bugs:
+Unify coding style:
 
 .. code-block:: bash
 
-    mvn spotbugs:check
+    mvn formatter:format
 
-PMD
----
+License Headers
+----------------
 
-Detect code quality issues:
-
-.. code-block:: bash
-
-    mvn pmd:check
-
-Running All Checks
---------------------
+Add license headers to source files:
 
 .. code-block:: bash
 
-    mvn clean verify checkstyle:check spotbugs:check pmd:check
+    mvn license:format
+
+Pre-commit Checks
+------------------
+
+Run both before committing:
+
+.. code-block:: bash
+
+    mvn formatter:format
+    mvn license:format
 
 Creating Distribution Packages
 ==================
 
-Creating Release Packages
---------------------
+Creating zip Packages
+------------------
 
-Create packages for distribution:
+Create a zip package for distribution:
 
 .. code-block:: bash
 
@@ -358,62 +325,46 @@ Generated artifacts:
 .. code-block:: text
 
     target/releases/
-    ├── fess-15.3.x.tar.gz      # For Linux/macOS
-    ├── fess-15.3.x.zip         # For Windows
-    ├── fess-15.3.x.rpm         # RPM package
-    └── fess-15.3.x.deb         # DEB package
+    └── fess-{version}.zip
 
-Creating Docker Images
--------------------
-
-Create a Docker image:
+Creating RPM Packages
+------------------
 
 .. code-block:: bash
 
-    mvn package docker:build
+    mvn rpm:rpm
 
-Generated image:
+Creating DEB Packages
+------------------
 
 .. code-block:: bash
 
-    docker images | grep fess
+    mvn jdeb:jdeb
 
 Profiles
 ==========
 
-Maven profiles allow you to apply different configurations for different environments.
+Maven profiles allow you to switch between test types.
 
-Development Profile
---------------
+build (default)
+-----------------
 
-Build with development settings:
-
-.. code-block:: bash
-
-    mvn package -Pdev
-
-Production Profile
---------------
-
-Build with production settings:
+The default profile. Runs unit tests (``*Test.java``):
 
 .. code-block:: bash
 
-    mvn package -Pprod
+    mvn package
 
-Fast Build
---------
+integrationTests
+----------------
 
-Build quickly by skipping tests and checks:
+Profile for running integration tests (``*Tests.java``):
 
 .. code-block:: bash
 
-    mvn package -Pfast
-
-.. warning::
-
-   Fast build is for development verification only.
-   Before creating a PR, always execute a full build.
+    mvn test -P integrationTests \
+        -Dtest.fess.url="http://localhost:8080" \
+        -Dtest.search_engine.url="http://localhost:9201"
 
 CI/CD
 =====
@@ -429,9 +380,7 @@ Automatically executed checks:
 
 - Build
 - Unit tests
-- Integration tests
-- Code style checks
-- Code quality checks
+- Package creation
 
 Local CI Checks
 -----------------------
@@ -440,7 +389,7 @@ Before creating a PR, you can run checks similar to CI locally:
 
 .. code-block:: bash
 
-    mvn clean verify checkstyle:check
+    mvn clean package
 
 Troubleshooting
 ====================
@@ -461,7 +410,7 @@ Build Errors
 .. code-block:: bash
 
     # Increase Maven memory
-    export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512m"
+    export MAVEN_OPTS="-Xmx2g"
     mvn clean package
 
 **Error: Java version is old**
@@ -539,14 +488,15 @@ Always run tests before committing:
 
     mvn test
 
-Code Quality Checks
-------------------
+Running Code Formatting
+----------------------
 
-Check code quality before creating a PR:
+Run code formatting before creating a PR:
 
 .. code-block:: bash
 
-    mvn checkstyle:check spotbugs:check
+    mvn formatter:format
+    mvn license:format
 
 Updating Dependencies
 ------------
@@ -602,6 +552,12 @@ Frequently Used Commands
     # Display project information
     mvn help:effective-pom
 
+    # Code formatting
+    mvn formatter:format
+
+    # Add license headers
+    mvn license:format
+
 Next Steps
 ==========
 
@@ -616,5 +572,4 @@ References
 
 - `Maven Official Documentation <https://maven.apache.org/guides/>`__
 - `JUnit 5 User Guide <https://junit.org/junit5/docs/current/user-guide/>`__
-- `Mockito Documentation <https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html>`__
 - `JaCoCo Documentation <https://www.jacoco.org/jacoco/trunk/doc/>`__

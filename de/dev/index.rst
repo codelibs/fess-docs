@@ -99,12 +99,7 @@ Wenn Sie sofort mit der |Fess|-Entwicklung beginnen möchten, folgen Sie diesen 
 
 4. **Ausführen**
 
-   Führen Sie ``org.codelibs.fess.FessBoot`` von der IDE aus
-   oder führen Sie es von Maven aus:
-
-   .. code-block:: bash
-
-       mvn compile exec:java
+   Führen Sie ``org.codelibs.fess.FessBoot`` von der IDE aus.
 
 Weitere Informationen finden Sie unter :doc:`setup`.
 

@@ -347,18 +347,8 @@ Ausführen von Fess
 Ausführung von der Kommandozeile
 --------------------
 
-Ausführung mit Maven:
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-Oder packen Sie es und führen Sie es aus:
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+Für die Entwicklung wird empfohlen, die Klasse ``org.codelibs.fess.FessBoot``
+direkt von Ihrer IDE aus auszuführen (siehe nächsten Abschnitt).
 
 Ausführung von der IDE
 ------------
@@ -395,13 +385,7 @@ Im Fall von VS Code
 --------
 
 Der Start von Fess dauert 1-2 Minuten.
-Wenn folgendes Log in der Konsole angezeigt wird, ist der Start abgeschlossen:
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-Überprüfen Sie den Betrieb durch Zugriff im Browser:
+Sobald der Start abgeschlossen ist, können Sie den Betrieb im Browser überprüfen:
 
 - **Suchseite**: http://localhost:8080/
 - **Verwaltungsseite**: http://localhost:8080/admin/
@@ -414,12 +398,17 @@ Wenn folgendes Log in der Konsole angezeigt wird, ist der Start abgeschlossen:
 
 Wenn der Standardport 8080 verwendet wird, können Sie ihn in folgender Datei ändern:
 
-``src/main/resources/fess_config.properties``
+Sie können den Port mit der Umgebungsvariable ``FESS_PORT`` in ``bin/fess.in.sh`` ändern:
 
-.. code-block:: properties
+.. code-block:: bash
 
-    # Portnummer ändern
-    server.port=8080
+    export FESS_PORT=9080
+
+Oder als JVM-Systemeigenschaft angeben:
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 Debug-Ausführung
 ==========
@@ -452,11 +441,11 @@ Remote-Debugging
 
 Sie können auch einen Debugger an Fess anschließen, das von der Kommandozeile gestartet wurde.
 
-Starten Sie Fess im Debug-Modus:
+Fügen Sie Folgendes zu ``FESS_JAVA_OPTS`` in ``bin/fess.in.sh`` hinzu und starten Sie Fess:
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 Remote-Debug-Verbindung von der IDE:
 
@@ -500,12 +489,8 @@ Aktivieren von Hot Deploy
 
 LastaFlute kann einige Änderungen ohne Neustart widerspiegeln.
 
-Setzen Sie Folgendes in ``src/main/resources/fess_config.properties``:
-
-.. code-block:: properties
-
-    # Hot Deploy aktivieren
-    development.here=true
+In ``src/main/resources/fess_env.properties`` ist ``development.here=true`` standardmäßig gesetzt.
+Das bedeutet, dass Hot Deploy in der Entwicklungsumgebung bereits aktiviert ist.
 
 Allerdings erfordern folgende Änderungen einen Neustart:
 
@@ -546,8 +531,7 @@ bearbeiten Sie ``src/main/resources/fess_config.properties``:
 .. code-block:: properties
 
     # Eingebettetes OpenSearch deaktivieren
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    search_engine.http.url=http://localhost:9200
 
 Code-Generierung mit DBFlute
 ======================

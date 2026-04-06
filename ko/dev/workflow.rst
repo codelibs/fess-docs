@@ -71,8 +71,10 @@ Step 1: Issue 확인·작성
 
 4. ``Submit new issue`` 클릭
 
-Issue 템플릿
+Issue 작성 예시
 ~~~~~~~~~~~~~~~~~~
+
+다음은 Issue를 작성할 때의 예시 형식입니다.
 
 **버그 리포트:**
 
@@ -181,7 +183,7 @@ Step 3: 코딩
 ~~~~~~~~~~~~~~
 
 - **인덴트**: 공백 4개
-- **줄 길이**: 120자 이내 권장
+- **줄 길이**: 140자 이내 권장
 - **인코딩**: UTF-8
 - **개행 코드**: LF(Unix 스타일)
 
@@ -283,11 +285,8 @@ null 처리
 로컬 실행
 ~~~~~~~~~~
 
-IDE 또는 명령줄에서 Fess를 실행하고 동작을 확인합니다:
-
-.. code-block:: bash
-
-    mvn compile exec:java
+IDE에서 ``org.codelibs.fess.FessBoot`` 클래스를 실행하고 동작을 확인합니다.
+자세한 내용은 :doc:`building` 을 참조하세요.
 
 디버그 실행
 ~~~~~~~~~~
@@ -326,21 +325,21 @@ Step 4: 로컬 테스트 실행
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests -Dtest.fess.url="http://localhost:8080" -Dtest.search_engine.url="http://localhost:9201"
 
-코드 스타일 검사
+코드 포맷 검사
 --------------------
 
 .. code-block:: bash
 
-    mvn checkstyle:check
+    mvn formatter:validate
 
 모든 검사 실행
 -------------------
 
 .. code-block:: bash
 
-    mvn clean verify
+    mvn clean test
 
 Step 5: 커밋
 ==============
@@ -439,8 +438,10 @@ PR 작성 절차
 6. PR 내용 기입(템플릿 따름)
 7. ``Create pull request`` 클릭
 
-PR 템플릿
+PR 작성 예시
 ---------------
+
+다음은 Pull Request를 작성할 때의 추천 형식입니다.
 
 .. code-block:: markdown
 
@@ -637,8 +638,8 @@ Step 10: 병합
 
 어려움이 있을 때는 다음을 활용합니다:
 
-- `GitHub Discussions <https://github.com/codelibs/fess/discussions>`__
-- `Fess Forum <https://discuss.codelibs.org/c/FessJA>`__
+- `Fess Forum (EN) <https://discuss.codelibs.org/c/FessEN/>`__
+- `Fess Forum (JA) <https://discuss.codelibs.org/c/FessJA/>`__
 - GitHub의 Issue 코멘트
 
 다음 단계

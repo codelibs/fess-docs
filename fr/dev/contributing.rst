@@ -103,7 +103,7 @@ Style de base
 - **Indentation** : 4 espaces
 - **Code de fin de ligne** : LF (style Unix)
 - **Encodage** : UTF-8
-- **Longueur de ligne** : 120 caractères maximum recommandé
+- **Longueur de ligne** : 140 caractères maximum recommandé
 
 Conventions de nommage
 ~~~~~~
@@ -435,7 +435,7 @@ Q: Que faire en cas de violation des conventions de codage ?
 ---------------------------------------
 
 R: Elles seront signalées lors de la revue, donc les corriger ne posera pas de problème.
-Vous pouvez vérifier à l'avance en exécutant Checkstyle.
+Vous pouvez vérifier et corriger le formatage à l'avance en exécutant ``mvn formatter:format``. Vous pouvez aussi formater automatiquement les en-têtes de licence avec ``mvn license:format``.
 
 Q: Comment ajouter une grande fonctionnalité ?
 -------------------------------

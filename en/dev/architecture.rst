@@ -54,7 +54,7 @@ Overall Architecture
                         ↓
     ┌─────────────────────────────────────────────────┐
     │               Data Store                        │
-    │              OpenSearch 3.3.0                   │
+    │              OpenSearch 3.5.0                   │
     └─────────────────────────────────────────────────┘
 
 Layer Descriptions
@@ -99,7 +99,7 @@ Access layer to OpenSearch using DBFlute.
 Data Store Layer
 ~~~~~~~~~~~~
 
-Uses OpenSearch 3.3.0 as the search engine.
+Uses OpenSearch 3.5.0 as the search engine.
 
 Project Structure
 ==============
@@ -121,14 +121,16 @@ Directory Structure
     │   │   │   │   │   └── ...Action.java
     │   │   │   │   └── service/      # Service layer
     │   │   │   ├── crawler/          # Crawler
-    │   │   │   │   ├── client/       # Crawler client
-    │   │   │   │   ├── extractor/    # Content extraction
-    │   │   │   │   ├── filter/       # Filter
+    │   │   │   │   ├── helper/       # Crawler helper
+    │   │   │   │   ├── processor/    # Crawl processing
+    │   │   │   │   ├── service/      # Crawler service
     │   │   │   │   └── transformer/  # Data transformation
-    │   │   │   ├── es/               # OpenSearch related
+    │   │   │   ├── opensearch/       # OpenSearch related
     │   │   │   │   ├── client/       # OpenSearch client
+    │   │   │   │   ├── config/       # Configuration management
+    │   │   │   │   ├── log/          # Log management
     │   │   │   │   ├── query/        # Query builder
-    │   │   │   │   └── config/       # Configuration management
+    │   │   │   │   └── user/         # User management
     │   │   │   ├── helper/           # Helper classes
     │   │   │   │   ├── ...Helper.java
     │   │   │   ├── job/              # Jobs
@@ -143,10 +145,9 @@ Directory Structure
     │   │   │   └── FessBoot.java     # Boot class
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties  # Configuration file
-    │   │   │   ├── fess_config.xml         # Additional configuration
+    │   │   │   ├── fess_config.xml         # LastaDi component configuration
     │   │   │   ├── fess_message_ja.properties  # Messages (Japanese)
     │   │   │   ├── fess_message_en.properties  # Messages (English)
-    │   │   │   ├── log4j2.xml              # Log configuration
     │   │   │   └── ...
     │   │   └── webapp/
     │   │       ├── WEB-INF/
@@ -202,13 +203,13 @@ Implements admin screen features.
 
 **Main classes:**
 
-- ``BwCrawlingConfigAction.java``: Web crawl configuration
-- ``BwSchedulerAction.java``: Scheduler management
-- ``BwUserAction.java``: User management
+- ``AdminWebconfigAction.java``: Web crawl configuration
+- ``AdminSchedulerAction.java``: Scheduler management
+- ``AdminUserAction.java``: User management
 
 **Naming conventions:**
 
-- ``Bw`` prefix: Admin Action
+- ``Admin`` prefix: Admin Action
 - ``Action`` suffix: Action class
 - ``Form`` suffix: Form class
 
@@ -219,7 +220,7 @@ Service layer that implements business logic.
 
 **Main classes:**
 
-- ``SearchService.java``: Search service
+- ``SearchLogService.java``: Search log service
 - ``UserService.java``: User management service
 - ``ScheduledJobService.java``: Job management service
 
@@ -227,73 +228,60 @@ Service layer that implements business logic.
 
 .. code-block:: java
 
-    public class SearchService {
-        public SearchResponse search(SearchRequestParams params) {
-            // Search logic implementation
-        }
+    public class ScheduledJobService {
+        @Resource
+        private ScheduledJobBhv scheduledJobBhv;
+
+        // Job CRUD operations implementation
     }
 
-crawler Package
-----------------
+crawler Package (fess-crawler library)
+----------------------------------------
 
 Implements data collection features.
 
-crawler.client Package
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Implements access to various data sources.
-
 **Main classes:**
 
-- ``FessClient.java``: Base class for crawler clients
-- ``WebClient.java``: Website crawling
+- ``CrawlerClient.java``: Base class for crawler clients
+- ``HcHttpClient.java``: HTTP crawling client
 - ``FileSystemClient.java``: File system crawling
-- ``DataStoreClient.java``: Database crawling, etc.
-
-crawler.extractor Package
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Extracts text from documents.
-
-**Main classes:**
-
 - ``ExtractorFactory.java``: Extractor factory
 - ``TikaExtractor.java``: Extraction using Apache Tika
+- ``Transformer.java``: Transformation processing interface
 
-crawler.transformer Package
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+crawler Package (fess main)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Transforms crawled data into search format.
+Crawler integration in the main Fess application.
 
 **Main classes:**
 
-- ``Transformer.java``: Transformation processing interface
-- ``BasicTransformer.java``: Basic transformation processing
+- ``FessStandardTransformer.java``: Standard transformation processing
+- ``FessXpathTransformer.java``: XPath-based transformation processing
 
-es Package
------------
+opensearch Package
+-------------------
 
 Implements integration with OpenSearch.
 
-es.client Package
-~~~~~~~~~~~~~~~~~~
+opensearch.client Package
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OpenSearch client implementation.
 
 **Main classes:**
 
-- ``FessEsClient.java``: OpenSearch client
-- ``SearchEngineClient.java``: Search engine client interface
+- ``SearchEngineClient.java``: OpenSearch client
 
-es.query Package
-~~~~~~~~~~~~~~~~~
+opensearch.query Package
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Implements search query construction.
 
 **Main classes:**
 
-- ``QueryHelper.java``: Query construction helper
-- ``FunctionScoreQueryBuilder.java``: Scoring adjustment
+- ``QueryCommand.java``: Query command
+- ``QueryProcessor.java``: Query processing
 
 helper Package
 ---------------
@@ -307,13 +295,15 @@ Helper classes used throughout the application.
 - ``SearchLogHelper.java``: Search log helper
 - ``UserInfoHelper.java``: User information helper
 - ``ViewHelper.java``: View-related helper
+- ``QueryHelper.java``: Query construction helper
 
 **Example:**
 
 .. code-block:: java
 
     public class SystemHelper {
-        public void initializeSystem() {
+        @PostConstruct
+        public void init() {
             // System initialization processing
         }
     }
@@ -333,9 +323,9 @@ Implements jobs executed on a schedule.
 
 .. code-block:: java
 
-    public class CrawlJob extends LaJob {
+    public class CrawlJob extends ExecJob {
         @Override
-        public void run() {
+        public void execute() {
             // Crawl processing implementation
         }
     }
@@ -400,16 +390,13 @@ Example:
 .. code-block:: java
 
     // Controller (Action)
-    public class SearchAction extends FessBaseAction {
+    public class SearchAction extends FessSearchAction {
         @Resource
-        private SearchService searchService;  // Model (Service)
+        private SearchHelper searchHelper;  // Model (Service)
 
         @Execute
         public HtmlResponse index(SearchForm form) {
-            SearchResponse response = searchService.search(form);
-            return asHtml(path_IndexJsp).renderWith(data -> {
-                data.register("response", response);  // Pass data to View (JSP)
-            });
+            return search(form);
         }
     }
 
@@ -436,7 +423,7 @@ Used for creating various components.
 .. code-block:: java
 
     public class ExtractorFactory {
-        public Extractor createExtractor(String mimeType) {
+        public Extractor getExtractor(String key) {
             // Create Extractor according to MIME type
         }
     }
@@ -449,7 +436,7 @@ Used in crawlers and transformers.
 .. code-block:: java
 
     public interface Transformer {
-        Map<String, Object> transform(Map<String, Object> data);
+        ResultData transform(ResponseData responseData);
     }
 
     public class HtmlTransformer implements Transformer {
@@ -468,24 +455,24 @@ Defines main application configuration.
 
 .. code-block:: properties
 
-    # Port number
-    server.port=8080
-
     # OpenSearch connection settings
-    opensearch.http.url=http://localhost:9201
+    search_engine.http.url=http://localhost:9201
 
     # Crawl settings
-    crawler.document.max.size=10000000
+    crawler.document.max.site.length=100
+    crawler.document.cache.enabled=true
 
 fess_config.xml
 --------------
 
-Additional configuration in XML format.
+LastaDi component configuration file.
 
 .. code-block:: xml
 
-    <component name="searchService" class="...SearchService">
-        <property name="maxSearchResults">1000</property>
+    <component name="systemProperties" class="org.codelibs.core.misc.DynamicProperties">
+        <arg>
+            org.codelibs.fess.util.ResourceUtil.getConfPath("system.properties")
+        </arg>
     </component>
 
 fess_message_*.properties
@@ -527,7 +514,7 @@ Crawl Flow
        ↓
     2. CrawlingConfigHelper retrieves crawl configuration
        ↓
-    3. FessClient accesses target site
+    3. CrawlerClient accesses target site
        ↓
     4. Extractor extracts text from content
        ↓
@@ -543,7 +530,7 @@ Extension Points
 Adding Custom Crawlers
 --------------------
 
-Inherit ``FessClient`` to support custom data sources.
+Implement the ``CrawlerClient interface`` to support custom data sources.
 
 Adding Custom Transformers
 ----------------------------
@@ -558,7 +545,7 @@ Implement ``Extractor`` to add custom content extraction processing.
 Adding Custom Plugins
 --------------------
 
-Implement the ``Plugin`` interface to create custom plugins.
+Plugins can be managed through the admin UI plugin management screen.
 
 References
 ======

@@ -34,9 +34,9 @@ Target Versions
 
 This documentation targets the following versions:
 
-- **Fess**: 15.3.0
+- **Fess**: 15.6
 - **Java**: 21 or later
-- **OpenSearch**: 3.3.0
+- **OpenSearch**: 3.5.0
 - **Maven**: 3.x
 
 Main Technologies and Frameworks
@@ -93,7 +93,7 @@ OpenSearch
 `OpenSearch <https://opensearch.org/>`__ is the distributed search and analytics engine
 used as |Fess|'s search engine.
 
-**Supported version**: OpenSearch 3.3.0
+**Supported version**: OpenSearch 3.5.0
 
 **Required plugins:**
 
@@ -196,7 +196,7 @@ Official Documentation
 ~~~~~~~~~~~~~~
 
 - `Fess User Manual <https://fess.codelibs.org/ja/>`__
-- `Fess Administrator Guide <https://fess.codelibs.org/ja/15.3/admin/index.html>`__
+- `Fess Administrator Guide <https://fess.codelibs.org/ja/15.6/admin/index.html>`__
 
 Community
 ~~~~~~~~~~
@@ -272,13 +272,18 @@ Project Structure Overview
     │   │   ├── java/
     │   │   │   └── org/codelibs/fess/
     │   │   │       ├── app/           # Web application layer
-    │   │   │       │   ├── web/       # Search screen
+    │   │   │       │   ├── web/       # Controllers (Actions)
     │   │   │       │   └── service/   # Service layer
+    │   │   │       ├── api/           # REST API
     │   │   │       ├── crawler/       # Crawler features
-    │   │   │       ├── es/            # OpenSearch related
+    │   │   │       ├── ds/            # Data store connectors
     │   │   │       ├── helper/        # Helper classes
     │   │   │       ├── job/           # Job processing
+    │   │   │       ├── llm/           # LLM integration
+    │   │   │       ├── opensearch/    # OpenSearch integration (DBFlute)
+    │   │   │       ├── sso/           # SSO authentication
     │   │   │       ├── util/          # Utilities
+    │   │   │       ├── ...            # Other packages
     │   │   │       └── FessBoot.java  # Boot class
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties
@@ -307,11 +312,11 @@ crawler
 Code for data collection features such as web crawler, file crawler,
 and data store crawler.
 
-es
-~~
+opensearch
+~~~~~~~~~~
 
 Code for OpenSearch integration.
-Includes index operations and search query construction.
+Includes type-safe data access via DBFlute.
 
 helper
 ~~~~~~
@@ -356,13 +361,7 @@ Steps
 
 3. **Run**
 
-   Run from Maven:
-
-   .. code-block:: bash
-
-       mvn compile exec:java
-
-   Or, run the ``org.codelibs.fess.FessBoot`` class from your IDE (Eclipse, IntelliJ IDEA, etc.).
+   Run the ``org.codelibs.fess.FessBoot`` class from your IDE (Eclipse, IntelliJ IDEA, etc.).
 
 4. **Access**
 
@@ -392,13 +391,13 @@ However, changes to class structure require a restart.
 Checking Logs
 --------
 
-Logs are output to the ``target/fess/logs/`` directory.
+Logs are output to the ``target/logs/`` directory.
 Check log files when problems occur.
 
 Operating OpenSearch
 ----------------
 
-The embedded OpenSearch is located in ``target/fess/es/``.
+In the development environment, Fess connects to a separately running OpenSearch instance.
 You can also debug by calling OpenSearch API directly:
 
 .. code-block:: bash

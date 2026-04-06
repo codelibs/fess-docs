@@ -346,18 +346,8 @@ Exécution de Fess
 Exécution depuis la ligne de commande
 --------------------
 
-Exécutez avec Maven :
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-Ou empaquez puis exécutez :
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+Pour le développement, il est recommandé d'exécuter la classe ``org.codelibs.fess.FessBoot``
+directement depuis votre IDE (voir la section suivante).
 
 Exécution depuis l'IDE
 ------------
@@ -394,13 +384,7 @@ Vérification du démarrage
 --------
 
 Le démarrage de Fess prend 1 à 2 minutes.
-Le démarrage est terminé lorsque les journaux suivants s'affichent dans la console :
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-Vérifiez le fonctionnement en accédant aux URL suivantes dans le navigateur :
+Une fois le démarrage terminé, vous pouvez vérifier le fonctionnement en accédant aux URL suivantes dans le navigateur :
 
 - **Écran de recherche** : http://localhost:8080/
 - **Écran d'administration** : http://localhost:8080/admin/
@@ -413,12 +397,17 @@ Changement du numéro de port
 
 Si le port par défaut 8080 est utilisé, vous pouvez le changer dans le fichier suivant :
 
-``src/main/resources/fess_config.properties``
+Vous pouvez changer le port en utilisant la variable d'environnement ``FESS_PORT`` dans ``bin/fess.in.sh`` :
 
-.. code-block:: properties
+.. code-block:: bash
 
-    # Changer le numéro de port
-    server.port=8080
+    export FESS_PORT=9080
+
+Ou spécifiez-le comme propriété système JVM :
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 Exécution en débogage
 ==========
@@ -451,11 +440,11 @@ Débogage à distance
 
 Vous pouvez également connecter un débogueur à Fess démarré depuis la ligne de commande.
 
-Démarrez Fess en mode débogage :
+Ajoutez ce qui suit à ``FESS_JAVA_OPTS`` dans ``bin/fess.in.sh`` et démarrez Fess :
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 Connexion de débogage à distance depuis l'IDE :
 
@@ -499,7 +488,7 @@ Activation du hot deploy
 
 LastaFlute peut refléter certaines modifications sans redémarrage.
 
-Configurez ce qui suit dans ``src/main/resources/fess_config.properties`` :
+Le fichier ``src/main/resources/fess_env.properties`` contient le paramètre suivant (activé par défaut en mode développement) :
 
 .. code-block:: properties
 
@@ -545,8 +534,7 @@ modifiez ``src/main/resources/fess_config.properties`` :
 .. code-block:: properties
 
     # Désactiver OpenSearch intégré
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    search_engine.http.url=http://localhost:9200
 
 Génération de code par DBFlute
 ======================

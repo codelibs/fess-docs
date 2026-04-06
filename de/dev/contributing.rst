@@ -103,7 +103,7 @@ Grundstil
 - **Einrückung**: 4 Leerzeichen
 - **Zeilenumbruch**: LF (Unix-Stil)
 - **Kodierung**: UTF-8
-- **Zeilenlänge**: maximal 120 Zeichen empfohlen
+- **Zeilenlänge**: maximal 140 Zeichen empfohlen
 
 Namenskonventionen
 ~~~~~~
@@ -435,7 +435,7 @@ F: Was passiert, wenn ich gegen Codierungskonventionen verstoße?
 ---------------------------------------
 
 A: Es wird im Review darauf hingewiesen, also ist es kein Problem, wenn Sie es korrigieren.
-Sie können es vorab überprüfen, indem Sie Checkstyle ausführen.
+Sie können die Formatierung vorab überprüfen und korrigieren, indem Sie ``mvn formatter:format`` ausführen. Mit ``mvn license:format`` können Sie auch die Lizenz-Header automatisch formatieren.
 
 F: Was ist, wenn ich eine große Funktion hinzufügen möchte?
 -------------------------------

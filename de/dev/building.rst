@@ -42,7 +42,7 @@ Löscht Build-Artefakte und baut dann neu:
 Erstellen von Paketen
 --------------
 
-Erstellt eine ausführbare JAR-Datei:
+Erstellt eine WAR-Datei und ein Distributions-Zip-Paket:
 
 .. code-block:: bash
 
@@ -53,8 +53,9 @@ Die Artefakte werden im Verzeichnis ``target/`` generiert:
 .. code-block:: text
 
     target/
-    ├── fess-15.3.x.jar
-    └── fess-15.3.x/
+    ├── fess.war
+    └── releases/
+        └── fess-{version}.zip
 
 Vollständiger Build
 --------
@@ -141,11 +142,18 @@ Wenn Sie beim Bauen Tests überspringen möchten:
 Ausführen von Integrationstests
 --------------
 
-Führt alle Tests einschließlich Integrationstests aus:
+Für Integrationstests wird das Profil ``integrationTests`` verwendet.
+Ein laufender |Fess|-Server und OpenSearch sind erforderlich:
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests \
+        -Dtest.fess.url="http://localhost:8080" \
+        -Dtest.search_engine.url="http://localhost:9201"
+
+.. note::
+
+   Integrationstestklassen verwenden das Namensmuster ``*Tests.java`` (Unit-Tests verwenden ``*Test.java``).
 
 Schreiben von Tests
 ============
@@ -256,41 +264,6 @@ Verwenden Sie JUnit 5-Assertions:
     // Collections
     assertIterableEquals(expectedList, actualList);
 
-Verwendung von Mocks
-~~~~~~~~~~
-
-Verwenden Sie Mockito zum Erstellen von Mocks:
-
-.. code-block:: java
-
-    import static org.mockito.Mockito.*;
-    import org.mockito.Mock;
-    import org.mockito.junit.jupiter.MockitoExtension;
-    import org.junit.jupiter.api.extension.ExtendWith;
-
-    @ExtendWith(MockitoExtension.class)
-    public class SearchServiceTest {
-
-        @Mock
-        private SearchEngineClient searchEngineClient;
-
-        @Test
-        public void testSearch() {
-            // Mock-Konfiguration
-            when(searchEngineClient.search(anyString()))
-                .thenReturn(new SearchResponse());
-
-            // Test ausführen
-            SearchService service = new SearchService();
-            service.setSearchEngineClient(searchEngineClient);
-            SearchResponse response = service.search("test");
-
-            // Überprüfung
-            assertNotNull(response);
-            verify(searchEngineClient, times(1)).search("test");
-        }
-    }
-
 Test-Coverage
 --------------
 
@@ -302,52 +275,46 @@ Messen Sie die Test-Coverage mit JaCoCo:
 
 Der Bericht wird unter ``target/site/jacoco/index.html`` generiert.
 
-Code-Qualitätsprüfung
+Code-Formatierung
 ================
 
-Checkstyle
-----------
+|Fess| verwendet die folgenden Tools, um die Codequalität aufrechtzuerhalten.
 
-Überprüft den Codierungsstil:
+Code-Formatter
+------------------
 
-.. code-block:: bash
-
-    mvn checkstyle:check
-
-Die Konfigurationsdatei befindet sich unter ``checkstyle.xml``.
-
-SpotBugs
---------
-
-Erkennt potenzielle Bugs:
+Einheitlichen Codierungsstil sicherstellen:
 
 .. code-block:: bash
 
-    mvn spotbugs:check
+    mvn formatter:format
 
-PMD
----
+Lizenz-Header
+----------------
 
-Erkennt Code-Qualitätsprobleme:
-
-.. code-block:: bash
-
-    mvn pmd:check
-
-Alle Prüfungen ausführen
---------------------
+Lizenz-Header zu Quelldateien hinzufügen:
 
 .. code-block:: bash
 
-    mvn clean verify checkstyle:check spotbugs:check pmd:check
+    mvn license:format
+
+Prüfungen vor dem Commit
+------------------
+
+Führen Sie beide vor dem Commit aus:
+
+.. code-block:: bash
+
+    mvn formatter:format
+    mvn license:format
 
 Erstellen von Verteilungspaketen
 ==================
 
-Erstellen von Release-Paketen
---------------------
+Erstellen von Zip-Paketen
+------------------
 
-Erstellt Pakete für die Verteilung:
+Erstellt ein Zip-Paket zur Verteilung:
 
 .. code-block:: bash
 
@@ -358,62 +325,46 @@ Generierte Artefakte:
 .. code-block:: text
 
     target/releases/
-    ├── fess-15.3.x.tar.gz      # Für Linux/macOS
-    ├── fess-15.3.x.zip         # Für Windows
-    ├── fess-15.3.x.rpm         # RPM-Paket
-    └── fess-15.3.x.deb         # DEB-Paket
+    └── fess-{version}.zip
 
-Erstellen von Docker-Images
--------------------
-
-Erstellt ein Docker-Image:
+Erstellen von RPM-Paketen
+------------------
 
 .. code-block:: bash
 
-    mvn package docker:build
+    mvn rpm:rpm
 
-Generiertes Image:
+Erstellen von DEB-Paketen
+------------------
 
 .. code-block:: bash
 
-    docker images | grep fess
+    mvn jdeb:jdeb
 
 Profile
 ==========
 
-Sie können Maven-Profile verwenden, um verschiedene Einstellungen pro Umgebung anzuwenden.
+Maven-Profile ermöglichen das Umschalten zwischen Test-Typen.
 
-Entwicklungsprofil
---------------
+build (Standard)
+-----------------
 
-Baut mit Entwicklungseinstellungen:
-
-.. code-block:: bash
-
-    mvn package -Pdev
-
-Produktionsprofil
---------------
-
-Baut mit Produktionseinstellungen:
+Das Standardprofil. Führt Unit-Tests (``*Test.java``) aus:
 
 .. code-block:: bash
 
-    mvn package -Pprod
+    mvn package
 
-Schneller Build
---------
+integrationTests
+----------------
 
-Überspringt Tests und Prüfungen für schnelles Bauen:
+Profil zum Ausführen von Integrationstests (``*Tests.java``):
 
 .. code-block:: bash
 
-    mvn package -Pfast
-
-.. warning::
-
-   Schnelle Builds sind nur zur Überprüfung während der Entwicklung gedacht.
-   Führen Sie vor dem Erstellen eines PR unbedingt einen vollständigen Build aus.
+    mvn test -P integrationTests \
+        -Dtest.fess.url="http://localhost:8080" \
+        -Dtest.search_engine.url="http://localhost:9201"
 
 CI/CD
 =====
@@ -429,9 +380,7 @@ Automatisch ausgeführte Prüfungen:
 
 - Build
 - Unit-Tests
-- Integrationstests
-- Code-Stil-Prüfung
-- Code-Qualitätsprüfung
+- Paketerstellung
 
 Lokale CI-Prüfungen
 -----------------------
@@ -440,7 +389,7 @@ Vor dem Erstellen eines PR können Sie lokal die gleichen Prüfungen wie in der 
 
 .. code-block:: bash
 
-    mvn clean verify checkstyle:check
+    mvn clean package
 
 Fehlerbehebung
 ====================
@@ -461,7 +410,7 @@ Build-Fehler
 .. code-block:: bash
 
     # Maven-Speicher erhöhen
-    export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512m"
+    export MAVEN_OPTS="-Xmx2g"
     mvn clean package
 
 **Fehler: Java-Version ist veraltet**
@@ -539,14 +488,15 @@ Führen Sie vor dem Commit immer Tests aus:
 
     mvn test
 
-Code-Qualitätsprüfung
+Code-Formatierung ausführen
 ------------------
 
-Überprüfen Sie die Code-Qualität vor dem Erstellen eines PR:
+Führen Sie die Code-Formatierung vor dem Erstellen eines PR aus:
 
 .. code-block:: bash
 
-    mvn checkstyle:check spotbugs:check
+    mvn formatter:format
+    mvn license:format
 
 Aktualisieren von Abhängigkeiten
 ------------
@@ -602,6 +552,12 @@ Häufig verwendete Befehle
     # Projektinformationen anzeigen
     mvn help:effective-pom
 
+    # Code-Formatierung
+    mvn formatter:format
+
+    # Lizenz-Header hinzufügen
+    mvn license:format
+
 Nächste Schritte
 ==========
 
@@ -616,5 +572,4 @@ Referenzmaterialien
 
 - `Offizielle Maven-Dokumentation <https://maven.apache.org/guides/>`__
 - `JUnit 5-Benutzerhandbuch <https://junit.org/junit5/docs/current/user-guide/>`__
-- `Mockito-Dokumentation <https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html>`__
 - `JaCoCo-Dokumentation <https://www.jacoco.org/jacoco/trunk/doc/>`__

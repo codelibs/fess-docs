@@ -54,7 +54,7 @@
                         ↓
     ┌─────────────────────────────────────────────────┐
     │               데이터 스토어                         │
-    │              OpenSearch 3.3.0                   │
+    │              OpenSearch 3.5.0                   │
     └─────────────────────────────────────────────────┘
 
 계층 설명
@@ -99,7 +99,7 @@ DBFlute를 사용한 OpenSearch 액세스 계층입니다.
 데이터 스토어 계층
 ~~~~~~~~~~~~
 
-검색 엔진으로 OpenSearch 3.3.0을 사용합니다.
+검색 엔진으로 OpenSearch 3.5.0을 사용합니다.
 
 프로젝트 구조
 ==============
@@ -120,15 +120,17 @@ DBFlute를 사용한 OpenSearch 액세스 계층입니다.
     │   │   │   │   │   │   └── ...Form.java
     │   │   │   │   │   └── ...Action.java
     │   │   │   │   └── service/      # 서비스 계층
-    │   │   │   ├── crawler/          # 크롤러
-    │   │   │   │   ├── client/       # 크롤러 클라이언트
-    │   │   │   │   ├── extractor/    # 콘텐츠 추출
-    │   │   │   │   ├── filter/       # 필터
-    │   │   │   │   └── transformer/  # 데이터 변환
-    │   │   │   ├── es/               # OpenSearch 관련
-    │   │   │   │   ├── client/       # OpenSearch 클라이언트
-    │   │   │   │   ├── query/        # 쿼리 빌더
-    │   │   │   │   └── config/       # 설정 관리
+    │   │   │   ├── crawler/          # Crawler
+    │   │   │   │   ├── helper/       # Crawler helper
+    │   │   │   │   ├── processor/    # Crawl processing
+    │   │   │   │   ├── service/      # Crawler service
+    │   │   │   │   └── transformer/  # Data transformation
+    │   │   │   ├── opensearch/       # OpenSearch related
+    │   │   │   │   ├── client/       # OpenSearch client
+    │   │   │   │   ├── config/       # Configuration management
+    │   │   │   │   ├── log/          # Log management
+    │   │   │   │   ├── query/        # Query builder
+    │   │   │   │   └── user/         # User management
     │   │   │   ├── helper/           # 헬퍼 클래스
     │   │   │   │   ├── ...Helper.java
     │   │   │   ├── job/              # 작업
@@ -143,10 +145,9 @@ DBFlute를 사용한 OpenSearch 액세스 계층입니다.
     │   │   │   └── FessBoot.java     # 시작 클래스
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties  # 설정 파일
-    │   │   │   ├── fess_config.xml         # 추가 설정
+    │   │   │   ├── fess_config.xml         # LastaDi component configuration
     │   │   │   ├── fess_message_ja.properties  # 메시지(일본어)
     │   │   │   ├── fess_message_en.properties  # 메시지(영어)
-    │   │   │   ├── log4j2.xml              # 로그 설정
     │   │   │   └── ...
     │   │   └── webapp/
     │   │       ├── WEB-INF/
@@ -202,13 +203,13 @@ app.web.admin 패키지
 
 **주요 클래스:**
 
-- ``BwCrawlingConfigAction.java``: 웹 크롤 설정
-- ``BwSchedulerAction.java``: 스케줄러 관리
-- ``BwUserAction.java``: 사용자 관리
+- ``AdminWebconfigAction.java``: 웹 크롤 설정
+- ``AdminSchedulerAction.java``: 스케줄러 관리
+- ``AdminUserAction.java``: 사용자 관리
 
 **명명 규칙:**
 
-- ``Bw`` 접두사: Admin용 Action
+- ``Admin`` 접두사: Admin용 Action
 - ``Action`` 접미사: Action 클래스
 - ``Form`` 접미사: Form 클래스
 
@@ -219,7 +220,7 @@ app.service 패키지
 
 **주요 클래스:**
 
-- ``SearchService.java``: 검색 서비스
+- ``SearchLogService.java``: 검색 서비스
 - ``UserService.java``: 사용자 관리 서비스
 - ``ScheduledJobService.java``: 작업 관리 서비스
 
@@ -227,10 +228,11 @@ app.service 패키지
 
 .. code-block:: java
 
-    public class SearchService {
-        public SearchResponse search(SearchRequestParams params) {
-            // 검색 로직 구현
-        }
+    public class ScheduledJobService {
+        @Resource
+        private ScheduledJobBhv scheduledJobBhv;
+
+        // Job CRUD operations implementation
     }
 
 crawler 패키지
@@ -238,62 +240,49 @@ crawler 패키지
 
 데이터 수집 기능을 구현합니다.
 
-crawler.client 패키지
-~~~~~~~~~~~~~~~~~~~~~~~
-
-각종 데이터 소스에 대한 액세스를 구현합니다.
+crawler 패키지 (fess-crawler 라이브러리)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **주요 클래스:**
 
-- ``FessClient.java``: 크롤러 클라이언트의 기본 클래스
-- ``WebClient.java``: 웹사이트 크롤링
-- ``FileSystemClient.java``: 파일 시스템 크롤링
-- ``DataStoreClient.java``: 데이터베이스 등 크롤링
-
-crawler.extractor 패키지
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-문서에서 텍스트를 추출합니다.
-
-**주요 클래스:**
-
+- ``CrawlerClient.java``: 크롤러 클라이언트 인터페이스
+- ``HcHttpClient.java``: HTTP 클라이언트
+- ``FileSystemClient.java``: 파일 시스템 클라이언트
 - ``ExtractorFactory.java``: 추출기 팩토리
 - ``TikaExtractor.java``: Apache Tika를 사용한 추출
+- ``Transformer.java``: 변환 인터페이스
 
-crawler.transformer 패키지
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-크롤링한 데이터를 검색용 형식으로 변환합니다.
+crawler 패키지 (fess main)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **주요 클래스:**
 
-- ``Transformer.java``: 변환 처리 인터페이스
-- ``BasicTransformer.java``: 기본 변환 처리
+- ``FessStandardTransformer.java``: Fess 표준 트랜스포머
+- ``FessXpathTransformer.java``: Fess XPath 트랜스포머
 
-es 패키지
------------
+opensearch 패키지
+-------------------
 
 OpenSearch와의 연동을 구현합니다.
 
-es.client 패키지
-~~~~~~~~~~~~~~~~~~
+opensearch.client 패키지
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OpenSearch 클라이언트 구현입니다.
 
 **주요 클래스:**
 
-- ``FessEsClient.java``: OpenSearch 클라이언트
-- ``SearchEngineClient.java``: 검색 엔진 클라이언트 인터페이스
+- ``SearchEngineClient.java``: OpenSearch 클라이언트
 
-es.query 패키지
-~~~~~~~~~~~~~~~~~
+opensearch.query 패키지
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 검색 쿼리 구축을 구현합니다.
 
 **주요 클래스:**
 
-- ``QueryHelper.java``: 쿼리 구축 헬퍼
-- ``FunctionScoreQueryBuilder.java``: 스코어링 조정
+- ``QueryCommand.java``: 쿼리 명령
+- ``QueryProcessor.java``: 쿼리 처리
 
 helper 패키지
 ---------------
@@ -307,13 +296,15 @@ helper 패키지
 - ``SearchLogHelper.java``: 검색 로그 헬퍼
 - ``UserInfoHelper.java``: 사용자 정보 헬퍼
 - ``ViewHelper.java``: 뷰 관련 헬퍼
+- ``QueryHelper.java``: 쿼리 구축 헬퍼
 
 **예:**
 
 .. code-block:: java
 
     public class SystemHelper {
-        public void initializeSystem() {
+        @PostConstruct
+        public void init() {
             // 시스템 초기화 처리
         }
     }
@@ -333,9 +324,9 @@ job 패키지
 
 .. code-block:: java
 
-    public class CrawlJob extends LaJob {
+    public class CrawlJob extends ExecJob {
         @Override
-        public void run() {
+        public void execute() {
             // 크롤 처리 구현
         }
     }
@@ -400,16 +391,13 @@ LastaFlute에 의한 MVC 패턴으로 구현되어 있습니다.
 .. code-block:: java
 
     // Controller (Action)
-    public class SearchAction extends FessBaseAction {
+    public class SearchAction extends FessSearchAction {
         @Resource
-        private SearchService searchService;  // Model (Service)
+        private SearchHelper searchHelper;  // Model (Service)
 
         @Execute
         public HtmlResponse index(SearchForm form) {
-            SearchResponse response = searchService.search(form);
-            return asHtml(path_IndexJsp).renderWith(data -> {
-                data.register("response", response);  // View (JSP)로 데이터 전달
-            });
+            return search(form);
         }
     }
 
@@ -436,7 +424,7 @@ Factory 패턴
 .. code-block:: java
 
     public class ExtractorFactory {
-        public Extractor createExtractor(String mimeType) {
+        public Extractor getExtractor(String key) {
             // MIME 타입에 따른 Extractor 생성
         }
     }
@@ -449,7 +437,7 @@ Strategy 패턴
 .. code-block:: java
 
     public interface Transformer {
-        Map<String, Object> transform(Map<String, Object> data);
+        ResultData transform(ResponseData responseData);
     }
 
     public class HtmlTransformer implements Transformer {
@@ -468,24 +456,24 @@ fess_config.properties
 
 .. code-block:: properties
 
-    # 포트 번호
-    server.port=8080
-
     # OpenSearch 연결 설정
-    opensearch.http.url=http://localhost:9201
+    search_engine.http.url=http://localhost:9201
 
     # 크롤 설정
-    crawler.document.max.size=10000000
+    crawler.document.max.site.length=100
+    crawler.document.cache.enabled=true
 
 fess_config.xml
 --------------
 
-XML 형식의 추가 설정입니다.
+LastaDi component configuration file.
 
 .. code-block:: xml
 
-    <component name="searchService" class="...SearchService">
-        <property name="maxSearchResults">1000</property>
+    <component name="systemProperties" class="org.codelibs.core.misc.DynamicProperties">
+        <arg>
+            org.codelibs.fess.util.ResourceUtil.getConfPath("system.properties")
+        </arg>
     </component>
 
 fess_message_*.properties
@@ -527,7 +515,7 @@ fess_message_*.properties
        ↓
     2. CrawlingConfigHelper가 크롤 설정 취득
        ↓
-    3. FessClient가 대상 사이트에 접속
+    3. CrawlerClient가 대상 사이트에 접속
        ↓
     4. Extractor가 콘텐츠에서 텍스트 추출
        ↓
@@ -543,7 +531,7 @@ fess_message_*.properties
 커스텀 크롤러 추가
 --------------------
 
-``FessClient`` 를 상속하여 독자적인 데이터 소스에 대응할 수 있습니다.
+``CrawlerClient`` 인터페이스를 구현하여 독자적인 데이터 소스에 대응할 수 있습니다.
 
 커스텀 트랜스포머 추가
 ----------------------------
@@ -558,7 +546,7 @@ fess_message_*.properties
 커스텀 플러그인 추가
 --------------------
 
-``Plugin`` 인터페이스를 구현하여 독자적인 플러그인을 만들 수 있습니다.
+관리 UI의 플러그인 관리 기능을 통해 플러그인을 관리할 수 있습니다.
 
 참고 자료
 ======

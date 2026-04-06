@@ -70,8 +70,10 @@ Pour une nouvelle fonctionnalité ou une correction de bug, créez un problème.
 
 4. Cliquez sur ``Submit new issue``
 
-Modèle de problème
+Exemples de format de problème
 ~~~~~~~~~~~~~~~~~~
+
+Voici des exemples de formats pour la création de problèmes.
 
 **Rapport de bug :**
 
@@ -180,7 +182,7 @@ Style de base
 ~~~~~~~~~~~~~~
 
 - **Indentation** : 4 espaces
-- **Longueur de ligne** : 120 caractères maximum recommandé
+- **Longueur de ligne** : 140 caractères maximum recommandé
 - **Encodage** : UTF-8
 - **Code de fin de ligne** : LF (style Unix)
 
@@ -282,11 +284,8 @@ Pendant le développement, testez de la manière suivante :
 Exécution locale
 ~~~~~~~~~~
 
-Exécutez Fess dans l'IDE ou en ligne de commande et vérifiez le fonctionnement :
-
-.. code-block:: bash
-
-    mvn compile exec:java
+Exécutez la classe ``org.codelibs.fess.FessBoot`` dans votre IDE et vérifiez le fonctionnement.
+Consultez :doc:`building` pour plus de détails.
 
 Exécution en débogage
 ~~~~~~~~~~
@@ -325,21 +324,21 @@ Exécution des tests d'intégration
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests -Dtest.fess.url="http://localhost:8080" -Dtest.search_engine.url="http://localhost:9201"
 
-Vérification du style de code
+Vérification du format de code
 --------------------
 
 .. code-block:: bash
 
-    mvn checkstyle:check
+    mvn formatter:validate
 
 Exécution de toutes les vérifications
 -------------------
 
 .. code-block:: bash
 
-    mvn clean verify
+    mvn clean test
 
 Étape 5 : Commit
 ==============
@@ -438,8 +437,10 @@ Procédure de création de PR
 6. Remplissez le contenu de la PR (suivez le modèle)
 7. Cliquez sur ``Create pull request``
 
-Modèle de PR
+Exemple de format de PR
 ---------------
+
+Voici le format recommandé pour la création de pull requests.
 
 .. code-block:: markdown
 
@@ -636,8 +637,8 @@ Résolution de problèmes
 
 En cas de difficulté, utilisez les ressources suivantes :
 
-- `GitHub Discussions <https://github.com/codelibs/fess/discussions>`__
-- `Forum Fess <https://discuss.codelibs.org/c/FessJA>`__
+- `Forum Fess (EN) <https://discuss.codelibs.org/c/FessEN/>`__
+- `Forum Fess (JA) <https://discuss.codelibs.org/c/FessJA/>`__
 - Commentaires de problème GitHub
 
 Étapes suivantes

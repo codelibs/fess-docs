@@ -347,18 +347,8 @@ Fess の実行
 コマンドラインからの実行
 --------------------
 
-Maven を使用して実行：
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-または、パッケージ化してから実行：
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+開発環境では、IDE から ``org.codelibs.fess.FessBoot`` クラスを
+直接実行する方法を推奨します（次のセクションを参照）。
 
 IDE からの実行
 ------------
@@ -395,13 +385,7 @@ VS Code の場合
 --------
 
 Fess の起動には 1〜2 分かかります。
-コンソールに以下のようなログが表示されれば起動完了です：
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-ブラウザーで以下にアクセスして動作を確認：
+起動が完了すると、ブラウザーで以下にアクセスして動作を確認できます：
 
 - **検索画面**: http://localhost:8080/
 - **管理画面**: http://localhost:8080/admin/
@@ -412,14 +396,18 @@ Fess の起動には 1〜2 分かかります。
 ポート番号の変更
 --------------
 
-デフォルトのポート 8080 が使用中の場合、以下のファイルで変更できます：
+デフォルトのポート 8080 が使用中の場合、
+``bin/fess.in.sh`` の環境変数 ``FESS_PORT`` で変更できます：
 
-``src/main/resources/fess_config.properties``
+.. code-block:: bash
 
-.. code-block:: properties
+    export FESS_PORT=9080
 
-    # ポート番号を変更
-    server.port=8080
+または、JVM システムプロパティとして指定します：
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 デバッグ実行
 ==========
@@ -452,11 +440,11 @@ VS Code の場合
 
 コマンドラインから起動した Fess にデバッガーを接続することもできます。
 
-Fess をデバッグモードで起動：
+``bin/fess.in.sh`` の ``FESS_JAVA_OPTS`` に以下を追加して起動：
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 IDE からリモートデバッグ接続：
 
@@ -500,12 +488,13 @@ IDE からリモートデバッグ接続：
 
 LastaFlute は、一部の変更について再起動なしで反映できます。
 
-``src/main/resources/fess_config.properties`` で以下を設定：
+``src/main/resources/fess_env.properties`` で以下を設定します
+（開発環境ではデフォルトで ``true`` に設定されています）：
 
 .. code-block:: properties
 
-    # ホットデプロイを有効化
-    development.here=true
+    # ホットデプロイを有効化（デフォルト: true）
+    development.here = true
 
 ただし、以下の変更は再起動が必要です：
 
@@ -545,9 +534,8 @@ OpenSearch API への直接アクセス：
 
 .. code-block:: properties
 
-    # 組み込み OpenSearch を無効化
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    # 外部 OpenSearch を使用（デフォルト: http://localhost:9201）
+    search_engine.http.url=http://localhost:9200
 
 DBFlute によるコード生成
 ======================
