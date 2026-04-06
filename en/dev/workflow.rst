@@ -71,8 +71,10 @@ For new features or bug fixes, create an Issue.
 
 4. Click ``Submit new issue``
 
-Issue Templates
+Issue Examples
 ~~~~~~~~~~~~~~~~~~
+
+Below are example formats when creating issues.
 
 **Bug Report:**
 
@@ -181,7 +183,7 @@ Basic Style
 ~~~~~~~~~~~~~~
 
 - **Indentation**: 4 spaces
-- **Line length**: 120 characters or less recommended
+- **Line length**: 140 characters or less recommended
 - **Encoding**: UTF-8
 - **Line endings**: LF (Unix style)
 
@@ -283,11 +285,8 @@ During development, test using the following methods:
 Local Execution
 ~~~~~~~~~~
 
-Run Fess in IDE or command line to verify behavior:
-
-.. code-block:: bash
-
-    mvn compile exec:java
+Run ``org.codelibs.fess.FessBoot`` class in your IDE to verify behavior.
+See :doc:`building` for details.
 
 Debug Execution
 ~~~~~~~~~~
@@ -326,21 +325,21 @@ Running Integration Tests
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests -Dtest.fess.url="http://localhost:8080" -Dtest.search_engine.url="http://localhost:9201"
 
-Code Style Checks
+Code Format Checks
 --------------------
 
 .. code-block:: bash
 
-    mvn checkstyle:check
+    mvn formatter:validate
 
 Running All Checks
 -------------------
 
 .. code-block:: bash
 
-    mvn clean verify
+    mvn clean test
 
 Step 5: Commit
 ==============
@@ -439,8 +438,10 @@ PR Creation Steps
 6. Fill in PR content (follow the template)
 7. Click ``Create pull request``
 
-PR Template
+PR Example Format
 ---------------
+
+Below is the recommended format when creating a pull request.
 
 .. code-block:: markdown
 
@@ -637,8 +638,8 @@ Problem Solving
 
 When stuck, use the following:
 
-- `GitHub Discussions <https://github.com/codelibs/fess/discussions>`__
-- `Fess Forum <https://discuss.codelibs.org/c/FessJA>`__
+- `Fess Forum (EN) <https://discuss.codelibs.org/c/FessEN/>`__
+- `Fess Forum (JA) <https://discuss.codelibs.org/c/FessJA/>`__
 - GitHub Issue comments
 
 Next Steps

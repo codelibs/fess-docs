@@ -101,7 +101,7 @@ Estilo Básico
 - **Indentación**: 4 espacios
 - **Código de nueva línea**: LF (estilo Unix)
 - **Codificación**: UTF-8
-- **Longitud de línea**: Se recomienda 120 caracteres o menos
+- **Longitud de línea**: Se recomienda 140 caracteres o menos
 
 Convenciones de Nomenclatura
 ~~~~~~
@@ -434,7 +434,7 @@ P: ¿Qué pasa si se violan las convenciones de codificación?
 ---------------------------------------
 
 R: Se señalará en la revisión, por lo que no hay problema si lo corrige.
-Puede verificarlo de antemano ejecutando Checkstyle.
+Puede verificar y corregir el formato de antemano ejecutando ``mvn formatter:format``. También puede formatear automáticamente los encabezados de licencia con ``mvn license:format``.
 
 P: ¿Qué pasa si quiero agregar una función grande?
 -------------------------------

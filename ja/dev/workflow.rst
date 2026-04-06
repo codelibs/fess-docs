@@ -71,8 +71,10 @@ Step 1: Issue の確認・作成
 
 4. ``Submit new issue`` をクリック
 
-Issue のテンプレート
+Issue の記載例
 ~~~~~~~~~~~~~~~~~~
+
+以下は Issue を作成する際の記載例です。
 
 **バグレポート:**
 
@@ -181,7 +183,7 @@ Step 3: コーディング
 ~~~~~~~~~~~~~~
 
 - **インデント**: スペース 4 つ
-- **行の長さ**: 120 文字以内を推奨
+- **行の長さ**: 140 文字以内を推奨
 - **エンコーディング**: UTF-8
 - **改行コード**: LF（Unix スタイル）
 
@@ -283,11 +285,8 @@ null の扱い
 ローカル実行
 ~~~~~~~~~~
 
-IDE またはコマンドラインで Fess を実行し、動作を確認します：
-
-.. code-block:: bash
-
-    mvn compile exec:java
+IDE で ``org.codelibs.fess.FessBoot`` クラスを実行し、動作を確認します。
+詳細は :doc:`building` を参照してください。
 
 デバッグ実行
 ~~~~~~~~~~
@@ -326,21 +325,21 @@ Step 4: ローカルテストの実行
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests -Dtest.fess.url="http://localhost:8080" -Dtest.search_engine.url="http://localhost:9201"
 
-コードスタイルのチェック
---------------------
+コードフォーマットのチェック
+------------------------
 
 .. code-block:: bash
 
-    mvn checkstyle:check
+    mvn formatter:validate
 
 すべてのチェックを実行
 -------------------
 
 .. code-block:: bash
 
-    mvn clean verify
+    mvn clean test
 
 Step 5: コミット
 ==============
@@ -439,8 +438,10 @@ PR の作成手順
 6. PR の内容を記入（テンプレートに従う）
 7. ``Create pull request`` をクリック
 
-PR のテンプレート
+PR の記載例
 ---------------
+
+以下は PR を作成する際の推奨フォーマットです。
 
 .. code-block:: markdown
 
@@ -637,8 +638,8 @@ Step 10: マージ
 
 困ったときは、以下を利用します：
 
-- `GitHub Discussions <https://github.com/codelibs/fess/discussions>`__
-- `Fess Forum <https://discuss.codelibs.org/c/FessJA>`__
+- `Fess Forum (JA) <https://discuss.codelibs.org/c/FessJA/>`__
+- `Fess Forum (EN) <https://discuss.codelibs.org/c/FessEN/>`__
 - GitHub の Issue コメント
 
 次のステップ

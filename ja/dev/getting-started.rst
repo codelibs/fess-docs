@@ -34,9 +34,9 @@
 
 このドキュメントは、以下のバージョンを対象としています：
 
-- **Fess**: 15.3.0
+- **Fess**: 15.6
 - **Java**: 21 以降
-- **OpenSearch**: 3.3.0
+- **OpenSearch**: 3.5.0
 - **Maven**: 3.x
 
 主要な技術とフレームワーク
@@ -93,7 +93,7 @@ OpenSearch
 `OpenSearch <https://opensearch.org/>`__ は、
 |Fess| の検索エンジンとして使用されている分散検索・分析エンジンです。
 
-**対応バージョン**: OpenSearch 3.3.0
+**対応バージョン**: OpenSearch 3.5.0
 
 **必須プラグイン:**
 
@@ -196,7 +196,7 @@ VS Code
 ~~~~~~~~~~~~~~
 
 - `Fess ユーザーマニュアル <https://fess.codelibs.org/ja/>`__
-- `Fess 管理者ガイド <https://fess.codelibs.org/ja/15.3/admin/index.html>`__
+- `Fess 管理者ガイド <https://fess.codelibs.org/ja/15.6/admin/index.html>`__
 
 コミュニティ
 ~~~~~~~~~~
@@ -272,13 +272,18 @@ VS Code
     │   │   ├── java/
     │   │   │   └── org/codelibs/fess/
     │   │   │       ├── app/           # Web アプリケーション層
-    │   │   │       │   ├── web/       # 検索画面
+    │   │   │       │   ├── web/       # コントローラー（Action）
     │   │   │       │   └── service/   # サービス層
+    │   │   │       ├── api/           # REST API
     │   │   │       ├── crawler/       # クローラー機能
-    │   │   │       ├── es/            # OpenSearch 関連
+    │   │   │       ├── ds/            # データストアコネクタ
     │   │   │       ├── helper/        # ヘルパークラス
     │   │   │       ├── job/           # ジョブ処理
+    │   │   │       ├── llm/           # LLM 連携
+    │   │   │       ├── opensearch/    # OpenSearch 連携（DBFlute）
+    │   │   │       ├── sso/           # SSO 認証
     │   │   │       ├── util/          # ユーティリティ
+    │   │   │       ├── ...            # その他のパッケージ
     │   │   │       └── FessBoot.java  # 起動クラス
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties
@@ -307,11 +312,11 @@ crawler
 Web クローラー、ファイルクローラー、データストアクローラーなど、
 データ収集機能のコードです。
 
-es
-~~
+opensearch
+~~~~~~~~~~
 
 OpenSearch との連携コードです。
-インデックス操作、検索クエリの構築などが含まれます。
+DBFlute によるタイプセーフなデータアクセスが含まれます。
 
 helper
 ~~~~~~
@@ -356,13 +361,7 @@ job
 
 3. **実行**
 
-   Maven から実行：
-
-   .. code-block:: bash
-
-       mvn compile exec:java
-
-   または、IDE（Eclipse、IntelliJ IDEA など）から ``org.codelibs.fess.FessBoot`` クラスを実行します。
+   IDE（Eclipse、IntelliJ IDEA など）から ``org.codelibs.fess.FessBoot`` クラスを実行します。
 
 4. **アクセス**
 
@@ -392,13 +391,13 @@ LastaFlute は、一部の変更について再起動なしで反映できます
 ログの確認
 --------
 
-ログは ``target/fess/logs/`` ディレクトリに出力されます。
+ログは ``target/logs/`` ディレクトリに出力されます。
 問題が発生した場合は、ログファイルを確認してください。
 
 OpenSearch の操作
 ----------------
 
-組み込みの OpenSearch は ``target/fess/es/`` に配置されます。
+開発環境では、別途起動した OpenSearch に接続します。
 直接 OpenSearch API を呼び出してデバッグすることも可能です：
 
 .. code-block:: bash

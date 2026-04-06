@@ -100,12 +100,7 @@
 
 4. **実行**
 
-   IDE から ``org.codelibs.fess.FessBoot`` を実行するか、
-   Maven から実行します：
-
-   .. code-block:: bash
-
-       mvn compile exec:java
+   IDE から ``org.codelibs.fess.FessBoot`` を実行します。
 
 詳細は :doc:`setup` を参照してください。
 

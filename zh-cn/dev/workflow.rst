@@ -71,8 +71,10 @@ Step 1: 确认・创建 Issue
 
 4. 点击 ``Submit new issue``
 
-Issue 模板
+Issue 示例格式
 ~~~~~~~~~~~~~~~~~~
+
+以下是创建 Issue 时的示例格式。
 
 **错误报告:**
 
@@ -181,7 +183,7 @@ Step 3: 编码
 ~~~~~~~~~~~~~~
 
 - **缩进**: 4个空格
-- **行长度**: 建议在120字符以内
+- **行长度**: 建议在140字符以内
 - **编码**: UTF-8
 - **换行符**: LF（Unix 风格）
 
@@ -283,11 +285,8 @@ null 的处理
 本地运行
 ~~~~~~~~~~
 
-在 IDE 或命令行运行 Fess，确认行为：
-
-.. code-block:: bash
-
-    mvn compile exec:java
+在 IDE 中运行 ``org.codelibs.fess.FessBoot`` 类，确认行为。
+详情请参阅 :doc:`building`。
 
 调试运行
 ~~~~~~~~~~
@@ -326,21 +325,21 @@ Step 4: 执行本地测试
 
 .. code-block:: bash
 
-    mvn verify
+    mvn test -P integrationTests -Dtest.fess.url="http://localhost:8080" -Dtest.search_engine.url="http://localhost:9201"
 
-代码风格检查
+代码格式检查
 --------------------
 
 .. code-block:: bash
 
-    mvn checkstyle:check
+    mvn formatter:validate
 
 执行所有检查
 -------------------
 
 .. code-block:: bash
 
-    mvn clean verify
+    mvn clean test
 
 Step 5: 提交
 ==============
@@ -439,8 +438,10 @@ PR 的创建步骤
 6. 填写 PR 内容（按照模板）
 7. 点击 ``Create pull request``
 
-PR 模板
+PR 示例格式
 ---------------
+
+以下是创建 Pull Request 时的推荐格式。
 
 .. code-block:: markdown
 
@@ -637,8 +638,8 @@ Step 10: 合并
 
 遇到困难时，使用以下资源：
 
-- `GitHub Discussions <https://github.com/codelibs/fess/discussions>`__
-- `Fess Forum <https://discuss.codelibs.org/c/FessJA>`__
+- `Fess Forum (EN) <https://discuss.codelibs.org/c/FessEN/>`__
+- `Fess Forum (JA) <https://discuss.codelibs.org/c/FessJA/>`__
 - GitHub 的 Issue 评论
 
 下一步

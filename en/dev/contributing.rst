@@ -104,7 +104,7 @@ Basic Style
 - **Indentation**: 4 spaces
 - **Line endings**: LF (Unix style)
 - **Encoding**: UTF-8
-- **Line length**: 120 characters or less recommended
+- **Line length**: 140 characters or less recommended
 
 Naming Conventions
 ~~~~~~
@@ -436,7 +436,7 @@ Q: What if I violate coding conventions?
 ---------------------------------------
 
 A: It will be pointed out in the review, so you can fix it.
-You can check in advance by running Checkstyle.
+You can check and fix formatting in advance by running ``mvn formatter:format``. You can also auto-format license headers with ``mvn license:format``.
 
 Q: What if I want to add a large feature?
 -------------------------------

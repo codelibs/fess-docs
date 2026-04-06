@@ -346,18 +346,8 @@ Running Fess
 Running from Command Line
 --------------------
 
-Run using Maven:
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-Or, package and then run:
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+For development, it is recommended to run the ``org.codelibs.fess.FessBoot`` class
+directly from your IDE (see the next section).
 
 Running from IDE
 ------------
@@ -394,13 +384,7 @@ Verifying Startup
 --------
 
 Fess startup takes 1-2 minutes.
-Startup is complete when you see logs like the following in the console:
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-Access the following in a browser to verify operation:
+Once startup is complete, you can access the following in a browser to verify operation:
 
 - **Search screen**: http://localhost:8080/
 - **Admin screen**: http://localhost:8080/admin/
@@ -413,12 +397,17 @@ Changing the Port Number
 
 If the default port 8080 is in use, you can change it in the following file:
 
-``src/main/resources/fess_config.properties``
+You can change the port using the ``FESS_PORT`` environment variable in ``bin/fess.in.sh``:
 
-.. code-block:: properties
+.. code-block:: bash
 
-    # Change port number
-    server.port=8080
+    export FESS_PORT=9080
+
+Or specify it as a JVM system property:
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 Debug Execution
 ==========
@@ -451,11 +440,11 @@ Remote Debugging
 
 You can also attach a debugger to Fess started from the command line.
 
-Start Fess in debug mode:
+Add the following to ``FESS_JAVA_OPTS`` in ``bin/fess.in.sh`` and start Fess:
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 Connect remote debugger from IDE:
 
@@ -499,12 +488,8 @@ Enabling Hot Deploy
 
 LastaFlute can reflect some changes without restarting.
 
-Configure the following in ``src/main/resources/fess_config.properties``:
-
-.. code-block:: properties
-
-    # Enable hot deploy
-    development.here=true
+This is controlled by the file ``src/main/resources/fess_env.properties``,
+where ``development.here=true`` is already set by default in the development profile.
 
 However, the following changes require a restart:
 
@@ -544,9 +529,8 @@ edit ``src/main/resources/fess_config.properties``:
 
 .. code-block:: properties
 
-    # Disable embedded OpenSearch
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    # Use external OpenSearch
+    search_engine.http.url=http://localhost:9200
 
 Code Generation with DBFlute
 ======================

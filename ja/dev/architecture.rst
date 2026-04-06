@@ -54,7 +54,7 @@
                         ↓
     ┌─────────────────────────────────────────────────┐
     │               データストア                        │
-    │              OpenSearch 3.3.0                   │
+    │              OpenSearch 3.5.0                   │
     └─────────────────────────────────────────────────┘
 
 レイヤーの説明
@@ -99,7 +99,7 @@ DBFlute を使用した OpenSearch へのアクセス層です。
 データストア層
 ~~~~~~~~~~~~
 
-検索エンジンとして OpenSearch 3.3.0 を使用します。
+検索エンジンとして OpenSearch 3.5.0 を使用します。
 
 プロジェクト構造
 ==============
@@ -121,14 +121,16 @@ DBFlute を使用した OpenSearch へのアクセス層です。
     │   │   │   │   │   └── ...Action.java
     │   │   │   │   └── service/      # サービス層
     │   │   │   ├── crawler/          # クローラー
-    │   │   │   │   ├── client/       # クローラークライアント
-    │   │   │   │   ├── extractor/    # コンテンツ抽出
-    │   │   │   │   ├── filter/       # フィルタ
+    │   │   │   │   ├── helper/       # クローラーヘルパー
+    │   │   │   │   ├── processor/    # クロール処理
+    │   │   │   │   ├── service/      # クローラーサービス
     │   │   │   │   └── transformer/  # データ変換
-    │   │   │   ├── es/               # OpenSearch 関連
+    │   │   │   ├── opensearch/       # OpenSearch 関連
     │   │   │   │   ├── client/       # OpenSearch クライアント
+    │   │   │   │   ├── config/       # 設定管理
+    │   │   │   │   ├── log/          # ログ管理
     │   │   │   │   ├── query/        # クエリビルダー
-    │   │   │   │   └── config/       # 設定管理
+    │   │   │   │   └── user/         # ユーザー管理
     │   │   │   ├── helper/           # ヘルパークラス
     │   │   │   │   ├── ...Helper.java
     │   │   │   ├── job/              # ジョブ
@@ -143,10 +145,9 @@ DBFlute を使用した OpenSearch へのアクセス層です。
     │   │   │   └── FessBoot.java     # 起動クラス
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties  # 設定ファイル
-    │   │   │   ├── fess_config.xml         # 追加設定
+    │   │   │   ├── fess_config.xml         # LastaDi コンポーネント設定
     │   │   │   ├── fess_message_ja.properties  # メッセージ（日本語）
     │   │   │   ├── fess_message_en.properties  # メッセージ（英語）
-    │   │   │   ├── log4j2.xml              # ログ設定
     │   │   │   └── ...
     │   │   └── webapp/
     │   │       ├── WEB-INF/
@@ -202,13 +203,13 @@ app.web.admin パッケージ
 
 **主要なクラス:**
 
-- ``BwCrawlingConfigAction.java``: Web クロール設定
-- ``BwSchedulerAction.java``: スケジューラー管理
-- ``BwUserAction.java``: ユーザー管理
+- ``AdminWebconfigAction.java``: Web クロール設定
+- ``AdminSchedulerAction.java``: スケジューラー管理
+- ``AdminUserAction.java``: ユーザー管理
 
 **命名規則:**
 
-- ``Bw`` プレフィックス: Admin 用 Action
+- ``Admin`` プレフィックス: Admin 用 Action
 - ``Action`` サフィックス: Action クラス
 - ``Form`` サフィックス: Form クラス
 
@@ -219,7 +220,7 @@ app.service パッケージ
 
 **主要なクラス:**
 
-- ``SearchService.java``: 検索サービス
+- ``SearchLogService.java``: 検索ログサービス
 - ``UserService.java``: ユーザー管理サービス
 - ``ScheduledJobService.java``: ジョブ管理サービス
 
@@ -227,10 +228,11 @@ app.service パッケージ
 
 .. code-block:: java
 
-    public class SearchService {
-        public SearchResponse search(SearchRequestParams params) {
-            // 検索ロジックの実装
-        }
+    public class ScheduledJobService {
+        @Resource
+        private ScheduledJobBhv scheduledJobBhv;
+
+        // ジョブの CRUD 操作の実装
     }
 
 crawler パッケージ
@@ -238,62 +240,53 @@ crawler パッケージ
 
 データ収集機能を実装します。
 
-crawler.client パッケージ
-~~~~~~~~~~~~~~~~~~~~~~~
+crawler パッケージ（fess-crawler ライブラリ）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-各種データソースへのアクセスを実装します。
+クローラーの基盤機能は ``fess-crawler`` ライブラリで実装されています。
 
-**主要なクラス:**
+**主要なクラス（fess-crawler）:**
 
-- ``FessClient.java``: クローラークライアントの基底クラス
-- ``WebClient.java``: Web サイトのクロール
+- ``CrawlerClient.java``: クローラークライアントのインターフェース
+- ``HcHttpClient.java``: Web サイトのクロール（HTTP クライアント）
 - ``FileSystemClient.java``: ファイルシステムのクロール
-- ``DataStoreClient.java``: データベースなどのクロール
-
-crawler.extractor パッケージ
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ドキュメントからテキストを抽出します。
-
-**主要なクラス:**
-
 - ``ExtractorFactory.java``: エクストラクターのファクトリ
 - ``TikaExtractor.java``: Apache Tika を使用した抽出
+- ``Transformer.java``: 変換処理のインターフェース
 
-crawler.transformer パッケージ
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+crawler パッケージ（fess 本体）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-クロールしたデータを検索用の形式に変換します。
+|Fess| 固有のクローラー拡張を実装します。
 
 **主要なクラス:**
 
-- ``Transformer.java``: 変換処理のインターフェース
-- ``BasicTransformer.java``: 基本的な変換処理
+- ``FessStandardTransformer.java``: 標準的な変換処理
+- ``FessXpathTransformer.java``: XPath を使用した変換処理
 
-es パッケージ
------------
+opensearch パッケージ
+-------------------
 
 OpenSearch との連携を実装します。
 
-es.client パッケージ
-~~~~~~~~~~~~~~~~~~
+opensearch.client パッケージ
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OpenSearch クライアントの実装です。
 
 **主要なクラス:**
 
-- ``FessEsClient.java``: OpenSearch クライアント
-- ``SearchEngineClient.java``: 検索エンジンクライアントのインターフェース
+- ``SearchEngineClient.java``: 検索エンジンクライアント
 
-es.query パッケージ
-~~~~~~~~~~~~~~~~~
+opensearch.query パッケージ
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 検索クエリの構築を実装します。
 
 **主要なクラス:**
 
-- ``QueryHelper.java``: クエリ構築のヘルパー
-- ``FunctionScoreQueryBuilder.java``: スコアリング調整
+- ``QueryCommand.java``: クエリコマンド
+- ``QueryProcessor.java``: クエリ処理
 
 helper パッケージ
 ---------------
@@ -303,6 +296,7 @@ helper パッケージ
 **主要なクラス:**
 
 - ``SystemHelper.java``: システム全体のヘルパー
+- ``QueryHelper.java``: クエリ構築のヘルパー
 - ``CrawlingConfigHelper.java``: クロール設定のヘルパー
 - ``SearchLogHelper.java``: 検索ログのヘルパー
 - ``UserInfoHelper.java``: ユーザー情報のヘルパー
@@ -313,7 +307,8 @@ helper パッケージ
 .. code-block:: java
 
     public class SystemHelper {
-        public void initializeSystem() {
+        @PostConstruct
+        public void init() {
             // システム初期化処理
         }
     }
@@ -333,9 +328,9 @@ job パッケージ
 
 .. code-block:: java
 
-    public class CrawlJob extends LaJob {
+    public class CrawlJob extends ExecJob {
         @Override
-        public void run() {
+        public String execute() {
             // クロール処理の実装
         }
     }
@@ -400,16 +395,13 @@ LastaFlute による MVC パターンで実装されています。
 .. code-block:: java
 
     // Controller (Action)
-    public class SearchAction extends FessBaseAction {
+    public class SearchAction extends FessSearchAction {
         @Resource
-        private SearchService searchService;  // Model (Service)
+        protected SearchHelper searchHelper;
 
         @Execute
         public HtmlResponse index(SearchForm form) {
-            SearchResponse response = searchService.search(form);
-            return asHtml(path_IndexJsp).renderWith(data -> {
-                data.register("response", response);  // View (JSP) へデータ渡し
-            });
+            return search(form);
         }
     }
 
@@ -436,8 +428,8 @@ Factory パターン
 .. code-block:: java
 
     public class ExtractorFactory {
-        public Extractor createExtractor(String mimeType) {
-            // MIME タイプに応じた Extractor を生成
+        public Extractor getExtractor(String key) {
+            // キーに応じた Extractor を取得
         }
     }
 
@@ -449,7 +441,7 @@ Strategy パターン
 .. code-block:: java
 
     public interface Transformer {
-        Map<String, Object> transform(Map<String, Object> data);
+        ResultData transform(ResponseData responseData);
     }
 
     public class HtmlTransformer implements Transformer {
@@ -468,24 +460,24 @@ fess_config.properties
 
 .. code-block:: properties
 
-    # ポート番号
-    server.port=8080
-
     # OpenSearch 接続設定
-    opensearch.http.url=http://localhost:9201
+    search_engine.http.url=http://localhost:9201
 
     # クロール設定
-    crawler.document.max.size=10000000
+    crawler.document.max.site.length=100
+    crawler.document.cache.enabled=true
 
 fess_config.xml
 --------------
 
-XML 形式の追加設定です。
+LastaDi コンポーネント設定ファイルです。
 
 .. code-block:: xml
 
-    <component name="searchService" class="...SearchService">
-        <property name="maxSearchResults">1000</property>
+    <component name="systemProperties" class="org.codelibs.core.misc.DynamicProperties">
+        <arg>
+            org.codelibs.fess.util.ResourceUtil.getConfPath("system.properties")
+        </arg>
     </component>
 
 fess_message_*.properties
@@ -527,7 +519,7 @@ fess_message_*.properties
        ↓
     2. CrawlingConfigHelper がクロール設定を取得
        ↓
-    3. FessClient が対象サイトにアクセス
+    3. CrawlerClient が対象サイトにアクセス
        ↓
     4. Extractor がコンテンツからテキストを抽出
        ↓
@@ -543,7 +535,7 @@ fess_message_*.properties
 カスタムクローラーの追加
 --------------------
 
-``FessClient`` を継承して、独自のデータソースに対応できます。
+``CrawlerClient`` インターフェースを実装して、独自のデータソースに対応できます。
 
 カスタムトランスフォーマーの追加
 ----------------------------
@@ -558,7 +550,7 @@ fess_message_*.properties
 カスタムプラグインの追加
 --------------------
 
-``Plugin`` インターフェースを実装して、独自のプラグインを作成できます。
+管理画面のプラグイン管理機能を使用して、独自のプラグインを追加できます。
 
 参考資料
 ======

@@ -54,7 +54,7 @@
                         ↓
     ┌─────────────────────────────────────────────────┐
     │               数据存储                          │
-    │              OpenSearch 3.3.0                   │
+    │              OpenSearch 3.5.0                   │
     └─────────────────────────────────────────────────┘
 
 层的说明
@@ -99,7 +99,7 @@ Web 应用层
 数据存储层
 ~~~~~~~~~~~~
 
-使用 OpenSearch 3.3.0 作为搜索引擎。
+使用 OpenSearch 3.5.0 作为搜索引擎。
 
 项目结构
 ==============
@@ -120,15 +120,17 @@ Web 应用层
     │   │   │   │   │   │   └── ...Form.java
     │   │   │   │   │   └── ...Action.java
     │   │   │   │   └── service/      # 服务层
-    │   │   │   ├── crawler/          # 爬虫
-    │   │   │   │   ├── client/       # 爬虫客户端
-    │   │   │   │   ├── extractor/    # 内容提取
-    │   │   │   │   ├── filter/       # 过滤器
-    │   │   │   │   └── transformer/  # 数据转换
-    │   │   │   ├── es/               # OpenSearch 相关
-    │   │   │   │   ├── client/       # OpenSearch 客户端
-    │   │   │   │   ├── query/        # 查询构建器
-    │   │   │   │   └── config/       # 配置管理
+    │   │   │   ├── crawler/          # Crawler
+    │   │   │   │   ├── helper/       # Crawler helper
+    │   │   │   │   ├── processor/    # Crawl processing
+    │   │   │   │   ├── service/      # Crawler service
+    │   │   │   │   └── transformer/  # Data transformation
+    │   │   │   ├── opensearch/       # OpenSearch related
+    │   │   │   │   ├── client/       # OpenSearch client
+    │   │   │   │   ├── config/       # Configuration management
+    │   │   │   │   ├── log/          # Log management
+    │   │   │   │   ├── query/        # Query builder
+    │   │   │   │   └── user/         # User management
     │   │   │   ├── helper/           # 辅助类
     │   │   │   │   ├── ...Helper.java
     │   │   │   ├── job/              # 作业
@@ -143,10 +145,9 @@ Web 应用层
     │   │   │   └── FessBoot.java     # 启动类
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties  # 配置文件
-    │   │   │   ├── fess_config.xml         # 附加配置
+    │   │   │   ├── fess_config.xml         # LastaDi component configuration
     │   │   │   ├── fess_message_ja.properties  # 消息（日语）
     │   │   │   ├── fess_message_en.properties  # 消息（英语）
-    │   │   │   ├── log4j2.xml              # 日志配置
     │   │   │   └── ...
     │   │   └── webapp/
     │   │       ├── WEB-INF/
@@ -202,13 +203,13 @@ app.web.admin 包
 
 **主要类:**
 
-- ``BwCrawlingConfigAction.java``: Web 爬取配置
-- ``BwSchedulerAction.java``: 调度程序管理
-- ``BwUserAction.java``: 用户管理
+- ``AdminWebconfigAction.java``: Web 爬取配置
+- ``AdminSchedulerAction.java``: 调度程序管理
+- ``AdminUserAction.java``: 用户管理
 
 **命名规则:**
 
-- ``Bw`` 前缀: Admin 用 Action
+- ``Admin`` 前缀: Admin 用 Action
 - ``Action`` 后缀: Action 类
 - ``Form`` 后缀: Form 类
 
@@ -219,7 +220,7 @@ app.service 包
 
 **主要类:**
 
-- ``SearchService.java``: 搜索服务
+- ``SearchLogService.java``: 搜索服务
 - ``UserService.java``: 用户管理服务
 - ``ScheduledJobService.java``: 作业管理服务
 
@@ -227,10 +228,11 @@ app.service 包
 
 .. code-block:: java
 
-    public class SearchService {
-        public SearchResponse search(SearchRequestParams params) {
-            // 搜索逻辑的实现
-        }
+    public class ScheduledJobService {
+        @Resource
+        private ScheduledJobBhv scheduledJobBhv;
+
+        // Job CRUD operations implementation
     }
 
 crawler 包
@@ -238,62 +240,49 @@ crawler 包
 
 实现数据收集功能。
 
-crawler.client 包
-~~~~~~~~~~~~~~~~~~~~~~~
-
-实现对各种数据源的访问。
+crawler 包 (fess-crawler 库)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **主要类:**
 
-- ``FessClient.java``: 爬虫客户端的基类
-- ``WebClient.java``: 网站爬取
-- ``FileSystemClient.java``: 文件系统爬取
-- ``DataStoreClient.java``: 数据库等的爬取
-
-crawler.extractor 包
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-从文档中提取文本。
-
-**主要类:**
-
+- ``CrawlerClient.java``: 爬虫客户端接口
+- ``HcHttpClient.java``: HTTP 客户端
+- ``FileSystemClient.java``: 文件系统客户端
 - ``ExtractorFactory.java``: 提取器工厂
 - ``TikaExtractor.java``: 使用 Apache Tika 提取
+- ``Transformer.java``: 转换接口
 
-crawler.transformer 包
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-将爬取的数据转换为搜索用的格式。
+crawler 包 (fess main)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **主要类:**
 
-- ``Transformer.java``: 转换处理的接口
-- ``BasicTransformer.java``: 基本转换处理
+- ``FessStandardTransformer.java``: Fess 标准转换器
+- ``FessXpathTransformer.java``: Fess XPath 转换器
 
-es 包
------------
+opensearch 包
+-------------------
 
 实现与 OpenSearch 的集成。
 
-es.client 包
-~~~~~~~~~~~~~~~~~~
+opensearch.client 包
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OpenSearch 客户端的实现。
 
 **主要类:**
 
-- ``FessEsClient.java``: OpenSearch 客户端
-- ``SearchEngineClient.java``: 搜索引擎客户端的接口
+- ``SearchEngineClient.java``: OpenSearch 客户端
 
-es.query 包
-~~~~~~~~~~~~~~~~~
+opensearch.query 包
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 实现搜索查询的构建。
 
 **主要类:**
 
-- ``QueryHelper.java``: 查询构建的辅助类
-- ``FunctionScoreQueryBuilder.java``: 调整评分
+- ``QueryCommand.java``: 查询命令
+- ``QueryProcessor.java``: 查询处理
 
 helper 包
 ---------------
@@ -307,13 +296,15 @@ helper 包
 - ``SearchLogHelper.java``: 搜索日志的辅助类
 - ``UserInfoHelper.java``: 用户信息的辅助类
 - ``ViewHelper.java``: 视图相关的辅助类
+- ``QueryHelper.java``: 查询构建的辅助类
 
 **例:**
 
 .. code-block:: java
 
     public class SystemHelper {
-        public void initializeSystem() {
+        @PostConstruct
+        public void init() {
             // 系统初始化处理
         }
     }
@@ -333,9 +324,9 @@ job 包
 
 .. code-block:: java
 
-    public class CrawlJob extends LaJob {
+    public class CrawlJob extends ExecJob {
         @Override
-        public void run() {
+        public void execute() {
             // 爬取处理的实现
         }
     }
@@ -400,16 +391,13 @@ MVC 模式
 .. code-block:: java
 
     // Controller (Action)
-    public class SearchAction extends FessBaseAction {
+    public class SearchAction extends FessSearchAction {
         @Resource
-        private SearchService searchService;  // Model (Service)
+        private SearchHelper searchHelper;  // Model (Service)
 
         @Execute
         public HtmlResponse index(SearchForm form) {
-            SearchResponse response = searchService.search(form);
-            return asHtml(path_IndexJsp).renderWith(data -> {
-                data.register("response", response);  // 向 View (JSP) 传递数据
-            });
+            return search(form);
         }
     }
 
@@ -436,7 +424,7 @@ Factory 模式
 .. code-block:: java
 
     public class ExtractorFactory {
-        public Extractor createExtractor(String mimeType) {
+        public Extractor getExtractor(String key) {
             // 根据 MIME 类型生成 Extractor
         }
     }
@@ -449,7 +437,7 @@ Strategy 模式
 .. code-block:: java
 
     public interface Transformer {
-        Map<String, Object> transform(Map<String, Object> data);
+        ResultData transform(ResponseData responseData);
     }
 
     public class HtmlTransformer implements Transformer {
@@ -468,24 +456,24 @@ fess_config.properties
 
 .. code-block:: properties
 
-    # 端口号
-    server.port=8080
-
     # OpenSearch 连接配置
-    opensearch.http.url=http://localhost:9201
+    search_engine.http.url=http://localhost:9201
 
     # 爬取配置
-    crawler.document.max.size=10000000
+    crawler.document.max.site.length=100
+    crawler.document.cache.enabled=true
 
 fess_config.xml
 --------------
 
-XML 格式的附加配置。
+LastaDi component configuration file.
 
 .. code-block:: xml
 
-    <component name="searchService" class="...SearchService">
-        <property name="maxSearchResults">1000</property>
+    <component name="systemProperties" class="org.codelibs.core.misc.DynamicProperties">
+        <arg>
+            org.codelibs.fess.util.ResourceUtil.getConfPath("system.properties")
+        </arg>
     </component>
 
 fess_message_*.properties
@@ -527,7 +515,7 @@ fess_message_*.properties
        ↓
     2. CrawlingConfigHelper 获取爬取配置
        ↓
-    3. FessClient 访问目标站点
+    3. CrawlerClient 访问目标站点
        ↓
     4. Extractor 从内容提取文本
        ↓
@@ -543,7 +531,7 @@ fess_message_*.properties
 添加自定义爬虫
 --------------------
 
-继承 ``FessClient``，可以支持独特的数据源。
+实现 ``CrawlerClient`` 接口，可以支持独特的数据源。
 
 添加自定义转换器
 ----------------------------
@@ -558,7 +546,7 @@ fess_message_*.properties
 添加自定义插件
 --------------------
 
-实现 ``Plugin`` 接口，可以创建独特的插件。
+通过管理 UI 的插件管理功能来管理插件。
 
 参考资料
 ======

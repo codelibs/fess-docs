@@ -347,18 +347,8 @@ Fess 실행
 명령줄에서 실행
 --------------------
 
-Maven을 사용하여 실행:
-
-.. code-block:: bash
-
-    mvn compile exec:java
-
-또는 패키징 후 실행:
-
-.. code-block:: bash
-
-    mvn package
-    java -jar target/fess-15.3.x.jar
+개발 환경에서는 IDE에서 ``org.codelibs.fess.FessBoot`` 클래스를
+직접 실행하는 방법을 권장합니다 (다음 섹션 참조).
 
 IDE에서 실행
 ------------
@@ -395,13 +385,7 @@ VS Code의 경우
 --------
 
 Fess 시작에는 1~2분이 소요됩니다.
-콘솔에 다음과 같은 로그가 표시되면 시작 완료입니다:
-
-.. code-block:: text
-
-    [INFO] Boot Thread: Boot process completed successfully.
-
-브라우저에서 다음에 접속하여 동작 확인:
+시작이 완료되면 브라우저에서 다음에 접속하여 동작을 확인할 수 있습니다:
 
 - **검색 화면**: http://localhost:8080/
 - **관리 화면**: http://localhost:8080/admin/
@@ -414,12 +398,17 @@ Fess 시작에는 1~2분이 소요됩니다.
 
 기본 포트 8080이 사용 중인 경우 다음 파일에서 변경할 수 있습니다:
 
-``src/main/resources/fess_config.properties``
+``bin/fess.in.sh`` 의 환경 변수 ``FESS_PORT`` 로 변경할 수 있습니다:
 
-.. code-block:: properties
+.. code-block:: bash
 
-    # 포트 번호 변경
-    server.port=8080
+    export FESS_PORT=9080
+
+또는 JVM 시스템 프로퍼티로 지정합니다:
+
+.. code-block:: bash
+
+    -Dfess.port=9080
 
 디버그 실행
 ==========
@@ -452,11 +441,11 @@ VS Code의 경우
 
 명령줄에서 시작한 Fess에 디버거를 연결할 수도 있습니다.
 
-Fess를 디버그 모드로 시작:
+``bin/fess.in.sh`` 의 ``FESS_JAVA_OPTS`` 에 다음을 추가하고 Fess를 시작합니다:
 
 .. code-block:: bash
 
-    mvn compile exec:java -Dexec.args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export FESS_JAVA_OPTS="$FESS_JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 IDE에서 원격 디버그 연결:
 
@@ -500,12 +489,8 @@ IDE에서 원격 디버그 연결:
 
 LastaFlute는 일부 변경에 대해 재시작 없이 반영할 수 있습니다.
 
-``src/main/resources/fess_config.properties`` 에서 다음을 설정:
-
-.. code-block:: properties
-
-    # 핫 디플로이 활성화
-    development.here=true
+``src/main/resources/fess_env.properties`` 에서 ``development.here=true`` 가
+기본으로 설정되어 있습니다 (개발 환경에서는 변경 불필요).
 
 다만 다음 변경은 재시작이 필요합니다:
 
@@ -545,9 +530,8 @@ OpenSearch API 직접 접속:
 
 .. code-block:: properties
 
-    # 내장 OpenSearch 비활성화
-    opensearch.cluster.name=fess
-    opensearch.http.url=http://localhost:9200
+    # 외부 OpenSearch 접속 URL
+    search_engine.http.url=http://localhost:9200
 
 DBFlute 코드 생성
 ======================

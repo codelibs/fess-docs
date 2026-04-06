@@ -55,7 +55,7 @@ Arquitectura General
                         ↓
     ┌─────────────────────────────────────────────────┐
     │               Almacén de Datos                   │
-    │              OpenSearch 3.3.0                   │
+    │              OpenSearch 3.5.0                   │
     └─────────────────────────────────────────────────┘
 
 Descripción de Capas
@@ -100,7 +100,7 @@ Esta es la capa de acceso a OpenSearch usando DBFlute.
 Capa de Almacén de Datos
 ~~~~~~~~~~~~
 
-Usa OpenSearch 3.3.0 como motor de búsqueda.
+Usa OpenSearch 3.5.0 como motor de búsqueda.
 
 Estructura del Proyecto
 ==============
@@ -122,14 +122,16 @@ Estructura de Directorios
     │   │   │   │   │   └── ...Action.java
     │   │   │   │   └── service/      # Capa de servicio
     │   │   │   ├── crawler/          # Crawler
-    │   │   │   │   ├── client/       # Cliente de crawler
-    │   │   │   │   ├── extractor/    # Extracción de contenido
-    │   │   │   │   ├── filter/       # Filtros
-    │   │   │   │   └── transformer/  # Transformación de datos
-    │   │   │   ├── es/               # Relacionado con OpenSearch
-    │   │   │   │   ├── client/       # Cliente de OpenSearch
-    │   │   │   │   ├── query/        # Constructor de consultas
-    │   │   │   │   └── config/       # Gestión de configuración
+    │   │   │   │   ├── helper/       # Crawler helper
+    │   │   │   │   ├── processor/    # Crawl processing
+    │   │   │   │   ├── service/      # Crawler service
+    │   │   │   │   └── transformer/  # Data transformation
+    │   │   │   ├── opensearch/       # OpenSearch related
+    │   │   │   │   ├── client/       # OpenSearch client
+    │   │   │   │   ├── config/       # Configuration management
+    │   │   │   │   ├── log/          # Log management
+    │   │   │   │   ├── query/        # Query builder
+    │   │   │   │   └── user/         # User management
     │   │   │   ├── helper/           # Clases helper
     │   │   │   │   ├── ...Helper.java
     │   │   │   ├── job/              # Jobs
@@ -144,10 +146,9 @@ Estructura de Directorios
     │   │   │   └── FessBoot.java     # Clase de inicio
     │   │   ├── resources/
     │   │   │   ├── fess_config.properties  # Archivo de configuración
-    │   │   │   ├── fess_config.xml         # Configuración adicional
+    │   │   │   ├── fess_config.xml         # LastaDi component configuration
     │   │   │   ├── fess_message_ja.properties  # Mensajes (japonés)
     │   │   │   ├── fess_message_en.properties  # Mensajes (inglés)
-    │   │   │   ├── log4j2.xml              # Configuración de registro
     │   │   │   └── ...
     │   │   └── webapp/
     │   │       ├── WEB-INF/
@@ -203,13 +204,13 @@ Implementa funciones de la pantalla de administración.
 
 **Clases principales:**
 
-- ``BwCrawlingConfigAction.java``: Configuración de rastreo web
-- ``BwSchedulerAction.java``: Gestión de programador
-- ``BwUserAction.java``: Gestión de usuarios
+- ``AdminWebconfigAction.java``: Configuración de rastreo web
+- ``AdminSchedulerAction.java``: Gestión de programador
+- ``AdminUserAction.java``: Gestión de usuarios
 
 **Convenciones de nomenclatura:**
 
-- Prefijo ``Bw``: Action para administración
+- Prefijo ``Admin``: Action para administración
 - Sufijo ``Action``: Clase Action
 - Sufijo ``Form``: Clase Form
 
@@ -220,7 +221,7 @@ Esta es la capa de servicio que implementa la lógica de negocio.
 
 **Clases principales:**
 
-- ``SearchService.java``: Servicio de búsqueda
+- ``SearchLogService.java``: Servicio de registro de búsqueda
 - ``UserService.java``: Servicio de gestión de usuarios
 - ``ScheduledJobService.java``: Servicio de gestión de jobs
 
@@ -228,73 +229,60 @@ Esta es la capa de servicio que implementa la lógica de negocio.
 
 .. code-block:: java
 
-    public class SearchService {
-        public SearchResponse search(SearchRequestParams params) {
-            // Implementación de lógica de búsqueda
-        }
+    public class ScheduledJobService {
+        @Resource
+        private ScheduledJobBhv scheduledJobBhv;
+
+        // Job CRUD operations implementation
     }
 
-Paquete crawler
-----------------
+Paquete crawler (biblioteca fess-crawler)
+-------------------------------------------
 
 Implementa funcionalidad de recopilación de datos.
 
-Paquete crawler.client
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Implementa acceso a diversas fuentes de datos.
-
 **Clases principales:**
 
-- ``FessClient.java``: Clase base de cliente de crawler
-- ``WebClient.java``: Rastreo de sitios web
+- ``CrawlerClient.java``: Clase base de cliente de crawler
+- ``HcHttpClient.java``: Cliente de rastreo HTTP
 - ``FileSystemClient.java``: Rastreo de sistema de archivos
-- ``DataStoreClient.java``: Rastreo de bases de datos, etc.
-
-Paquete crawler.extractor
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Extrae texto de documentos.
-
-**Clases principales:**
-
 - ``ExtractorFactory.java``: Fábrica de extractores
 - ``TikaExtractor.java``: Extracción usando Apache Tika
+- ``Transformer.java``: Interfaz de procesamiento de transformación
 
-Paquete crawler.transformer
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Paquete crawler (fess main)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Transforma datos rastreados a formato de búsqueda.
+Integración del crawler en la aplicación principal de Fess.
 
 **Clases principales:**
 
-- ``Transformer.java``: Interfaz de procesamiento de transformación
-- ``BasicTransformer.java``: Procesamiento básico de transformación
+- ``FessStandardTransformer.java``: Procesamiento de transformación estándar
+- ``FessXpathTransformer.java``: Procesamiento de transformación basado en XPath
 
-Paquete es
------------
+Paquete opensearch
+-------------------
 
 Implementa integración con OpenSearch.
 
-Paquete es.client
-~~~~~~~~~~~~~~~~~~
+Paquete opensearch.client
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Esta es la implementación del cliente de OpenSearch.
 
 **Clases principales:**
 
-- ``FessEsClient.java``: Cliente de OpenSearch
-- ``SearchEngineClient.java``: Interfaz de cliente de motor de búsqueda
+- ``SearchEngineClient.java``: Cliente de OpenSearch
 
-Paquete es.query
-~~~~~~~~~~~~~~~~~
+Paquete opensearch.query
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Implementa construcción de consultas de búsqueda.
 
 **Clases principales:**
 
-- ``QueryHelper.java``: Helper de construcción de consultas
-- ``FunctionScoreQueryBuilder.java``: Ajuste de puntuación
+- ``QueryCommand.java``: Comando de consulta
+- ``QueryProcessor.java``: Procesamiento de consultas
 
 Paquete helper
 ---------------
@@ -308,13 +296,15 @@ Estas son clases helper usadas en toda la aplicación.
 - ``SearchLogHelper.java``: Helper de registro de búsqueda
 - ``UserInfoHelper.java``: Helper de información de usuario
 - ``ViewHelper.java``: Helper relacionado con vista
+- ``QueryHelper.java``: Helper de construcción de consultas
 
 **Ejemplo:**
 
 .. code-block:: java
 
     public class SystemHelper {
-        public void initializeSystem() {
+        @PostConstruct
+        public void init() {
             // Procesamiento de inicialización del sistema
         }
     }
@@ -334,9 +324,9 @@ Implementa jobs ejecutados según programación.
 
 .. code-block:: java
 
-    public class CrawlJob extends LaJob {
+    public class CrawlJob extends ExecJob {
         @Override
-        public void run() {
+        public void execute() {
             // Implementación de procesamiento de rastreo
         }
     }
@@ -400,16 +390,13 @@ Ejemplo:
 .. code-block:: java
 
     // Controller (Action)
-    public class SearchAction extends FessBaseAction {
+    public class SearchAction extends FessSearchAction {
         @Resource
-        private SearchService searchService;  // Model (Service)
+        private SearchHelper searchHelper;  // Model (Service)
 
         @Execute
         public HtmlResponse index(SearchForm form) {
-            SearchResponse response = searchService.search(form);
-            return asHtml(path_IndexJsp).renderWith(data -> {
-                data.register("response", response);  // Pasar datos a View (JSP)
-            });
+            return search(form);
         }
     }
 
@@ -436,7 +423,7 @@ Se usa para generar diversos componentes.
 .. code-block:: java
 
     public class ExtractorFactory {
-        public Extractor createExtractor(String mimeType) {
+        public Extractor getExtractor(String key) {
             // Generar Extractor según tipo MIME
         }
     }
@@ -449,7 +436,7 @@ Se usa en crawlers y transformers.
 .. code-block:: java
 
     public interface Transformer {
-        Map<String, Object> transform(Map<String, Object> data);
+        ResultData transform(ResponseData responseData);
     }
 
     public class HtmlTransformer implements Transformer {
@@ -468,24 +455,24 @@ Define la configuración principal de la aplicación.
 
 .. code-block:: properties
 
-    # Número de puerto
-    server.port=8080
-
     # Configuración de conexión a OpenSearch
-    opensearch.http.url=http://localhost:9201
+    search_engine.http.url=http://localhost:9201
 
     # Configuración de rastreo
-    crawler.document.max.size=10000000
+    crawler.document.max.site.length=100
+    crawler.document.cache.enabled=true
 
 fess_config.xml
 --------------
 
-Esta es configuración adicional en formato XML.
+Archivo de configuración de componentes LastaDi.
 
 .. code-block:: xml
 
-    <component name="searchService" class="...SearchService">
-        <property name="maxSearchResults">1000</property>
+    <component name="systemProperties" class="org.codelibs.core.misc.DynamicProperties">
+        <arg>
+            org.codelibs.fess.util.ResourceUtil.getConfPath("system.properties")
+        </arg>
     </component>
 
 fess_message_*.properties
@@ -527,7 +514,7 @@ Flujo de Rastreo
        ↓
     2. CrawlingConfigHelper obtiene configuración de rastreo
        ↓
-    3. FessClient accede al sitio objetivo
+    3. CrawlerClient accede al sitio objetivo
        ↓
     4. Extractor extrae texto del contenido
        ↓
@@ -543,7 +530,7 @@ Puntos de Extensión
 Agregar Crawler Personalizado
 --------------------
 
-Puede soportar fuentes de datos propias heredando ``FessClient``.
+Puede soportar fuentes de datos propias implementando la ``CrawlerClient interface``.
 
 Agregar Transformer Personalizado
 ----------------------------
@@ -558,7 +545,7 @@ Puede agregar procesamiento de extracción de contenido propio implementando ``E
 Agregar Plugin Personalizado
 --------------------
 
-Puede crear plugins propios implementando la interfaz ``Plugin``.
+Los plugins se pueden gestionar a través de la pantalla de gestión de plugins en la UI de administración.
 
 Materiales de Referencia
 ======
