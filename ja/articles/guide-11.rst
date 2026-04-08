@@ -31,16 +31,16 @@ Fess が提供する主要な API を整理します。
      - エンドポイント
    * - 検索 API
      - ドキュメントの全文検索
-     - ``/api/v1/search``
+     - ``/api/v1/documents``
    * - ラベル API
      - 利用可能なラベルの取得
-     - ``/api/v1/label``
+     - ``/api/v1/labels``
    * - サジェスト API
      - 入力補完候補の取得
-     - ``/api/v1/suggest``
+     - ``/api/v1/suggest-words``
    * - 人気ワード API
      - 人気の検索キーワードを取得
-     - ``/api/v1/popularword``
+     - ``/api/v1/popular-words``
    * - ヘルス API
      - システムの稼働状態を確認
      - ``/api/v1/health``
@@ -53,7 +53,7 @@ Fess が提供する主要な API を整理します。
 
 API を利用する際は、アクセストークンによる認証が推奨されます。
 
-1. 管理画面の ［全般設定］ > ［API 認証設定］ でアクセストークンを作成
+1. 管理画面の ［システム］ > ［アクセストークン］ でアクセストークンを作成
 2. API リクエストのヘッダーにトークンを含める
 
 ::
@@ -86,7 +86,7 @@ CRM の顧客画面に検索ウィジェットを埋め込みます。
         num: '5',
         'fields.label': 'sales-docs'
       });
-      const url = `https://fess.example.com/api/v1/search?${params}`;
+      const url = `https://fess.example.com/api/v1/documents?${params}`;
       const response = await fetch(url, {
         headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
       });
@@ -119,12 +119,12 @@ CRM の顧客画面に検索ウィジェットを埋め込みます。
     // 入力中のサジェスト
     async function getSuggestions(query) {
       const params = new URLSearchParams({ q: query, num: '5' });
-      const url = `https://fess.example.com/api/v1/suggest?${params}`;
+      const url = `https://fess.example.com/api/v1/suggest-words?${params}`;
       const response = await fetch(url, {
         headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
       });
       const data = await response.json();
-      return data.response.result;
+      return data.data;
     }
 
 サジェスト API は、利用者がキーワードを入力中に候補を表示するために使用します。
@@ -155,12 +155,12 @@ CRM の顧客画面に検索ウィジェットを埋め込みます。
 
     // ラベル一覧の取得
     async function getLabels() {
-      const url = 'https://fess.example.com/api/v1/label';
+      const url = 'https://fess.example.com/api/v1/labels';
       const response = await fetch(url, {
         headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
       });
       const data = await response.json();
-      return data.response.result;
+      return data.data;
     }
 
     // ラベルでフィルタした検索
@@ -171,7 +171,7 @@ CRM の顧客画面に検索ウィジェットを埋め込みます。
         num: '20',
         sort: 'last_modified.desc'
       });
-      const url = `https://fess.example.com/api/v1/search?${params}`;
+      const url = `https://fess.example.com/api/v1/documents?${params}`;
       const response = await fetch(url, {
         headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
       });
