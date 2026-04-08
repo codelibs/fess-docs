@@ -93,12 +93,16 @@ Nginx 설정 예::
 
 **방법 2: Fess 자체에서 HTTPS 설정**
 
-``system.properties`` 에 다음을 추가::
+``tomcat_config.properties`` 에 다음을 추가::
 
-    server.ssl.enabled=true
-    server.ssl.key-store=/path/to/keystore.p12
-    server.ssl.key-store-password=<password>
-    server.ssl.key-store-type=PKCS12
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.SSLEnabled=true
+    tomcat.certificateKeystoreFile=[키스토어 파일 경로]
+    tomcat.certificateKeystorePassword=[키스토어 파일 생성 시 지정한 비밀번호]
+    tomcat.certificateKeyAlias=[인증서 별칭]
+    tomcat.sslProtocol=[SSL 프로토콜 (예: TLS)]
+    tomcat.enabledProtocols=활성화된 프로토콜 목록 (쉼표 구분) (예: TLSv1.2,TLSv1.1,TLSv1)
 
 권장 보안 설정
 ====================

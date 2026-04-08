@@ -93,12 +93,16 @@ Ejemplo de configuración de Nginx::
 
 **Método 2: Configurar HTTPS en Fess Mismo**
 
-Agregue lo siguiente a ``system.properties``::
+Agregue lo siguiente a ``tomcat_config.properties``::
 
-    server.ssl.enabled=true
-    server.ssl.key-store=/path/to/keystore.p12
-    server.ssl.key-store-password=<password>
-    server.ssl.key-store-type=PKCS12
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.SSLEnabled=true
+    tomcat.certificateKeystoreFile=[ruta al archivo keystore]
+    tomcat.certificateKeystorePassword=[contraseña especificada al crear el archivo keystore]
+    tomcat.certificateKeyAlias=[alias del certificado]
+    tomcat.sslProtocol=[protocolo SSL (ej. TLS)]
+    tomcat.enabledProtocols=lista de protocolos habilitados (separados por comas) (ej. TLSv1.2,TLSv1.1,TLSv1)
 
 Configuraciones de Seguridad Recomendadas
 ==========================================

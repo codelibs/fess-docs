@@ -93,12 +93,16 @@ Nginx 配置示例::
 
 **方法 2: 在 Fess 自身配置 HTTPS**
 
-在 ``system.properties`` 中添加以下内容::
+在 ``tomcat_config.properties`` 中添加以下内容::
 
-    server.ssl.enabled=true
-    server.ssl.key-store=/path/to/keystore.p12
-    server.ssl.key-store-password=<password>
-    server.ssl.key-store-type=PKCS12
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.SSLEnabled=true
+    tomcat.certificateKeystoreFile=[密钥库文件路径]
+    tomcat.certificateKeystorePassword=[创建密钥库文件时指定的密码]
+    tomcat.certificateKeyAlias=[证书别名]
+    tomcat.sslProtocol=[SSL 协议（例如：TLS）]
+    tomcat.enabledProtocols=启用的协议列表（逗号分隔）（例如：TLSv1.2,TLSv1.1,TLSv1）
 
 推荐的安全配置
 ====================

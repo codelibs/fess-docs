@@ -186,9 +186,7 @@ Portnummer-Konflikt
 
 2. Stoppen Sie den verwendenden Prozess oder ändern Sie die Fess-Portnummer
 
-   Ändern Sie die Portnummer in der Konfigurationsdatei (``system.properties``)::
-
-       server.port=9080
+    Informationen zur Änderung der Portnummer finden Sie unter :doc:Port- und Netzwerkkonfiguration <../config/setup-port-network.html>.
 
 Verbindungsprobleme
 ===================

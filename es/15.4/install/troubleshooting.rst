@@ -186,9 +186,7 @@ Conflicto de Número de Puerto
 
 2. Detenga el proceso en uso, o cambie el número de puerto de Fess
 
-   Cambie el número de puerto en el archivo de configuración (``system.properties``)::
-
-       server.port=9080
+    ara cambiar el número de puerto, consulte :doc:Configuración de Puerto y Red <../config/setup-port-network.html>.
 
 Problemas de Conexión
 ======================

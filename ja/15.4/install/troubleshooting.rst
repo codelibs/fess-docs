@@ -186,9 +186,7 @@ OpenSearch が起動しない
 
 2. 使用中のプロセスを停止、または Fess のポート番号を変更
 
-   設定ファイル (``system.properties``) でポート番号を変更::
-
-       server.port=9080
+    ポート番号の変更は :doc:`ポートとネットワーク設定 <../config/setup-port-network.html>` を参照してください。
 
 接続の問題
 ========
