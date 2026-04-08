@@ -186,9 +186,7 @@ OpenSearch 无法启动
 
 2. 停止使用中的进程，或更改 Fess 的端口号
 
-   在配置文件 (``system.properties``) 中更改端口号::
-
-       server.port=9080
+    有关更改端口号，请参阅 :doc:端口与网络配置 <../config/setup-port-network.html>。
 
 连接问题
 ========

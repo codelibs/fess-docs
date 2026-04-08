@@ -186,9 +186,7 @@ Port Conflict
 
 2. Stop the process using the port, or change Fess port number
 
-   Change port number in configuration file (``system.properties``)::
-
-       server.port=9080
+    For port number changes, see :doc:Port and Network Settings <../config/setup-port-network.html>.
 
 Connection Issues
 =================
