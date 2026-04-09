@@ -10,41 +10,41 @@ Diese 23-teilige Serie behandelt alles von der Fess-Einfuehrung bis zur KI-Integ
 
 **Grundlagen (Fuer Einsteiger)**
 
-- :doc:`articles/guide-01` - Teil 1: Warum Unternehmen eine Suchinfrastruktur brauchen -- Herausforderungen der Wissensnutzung im Zeitalter der Informationsflut
-- :doc:`articles/guide-02` - Teil 2: Sucherlebnis in 5 Minuten -- Erster Kontakt mit Fess ueber Docker Compose
-- :doc:`articles/guide-03` - Teil 3: Suche in ein internes Portal einbetten -- Suchfunktion zu bestehenden Websites hinzufuegen
-- :doc:`articles/guide-04` - Teil 4: Verstreute Dateien einheitlich durchsuchen -- Quellenuebergreifende Suche aufbauen
-- :doc:`articles/guide-05` - Teil 5: Suche an den Nutzer anpassen -- Abteilungs- und berechtigungsbasierte Suchergebnissteuerung
+- :doc:`articles/guide-01` - Warum Unternehmen Volltextsuche benoetigen und welche Herausforderungen bei verteilten Informationen bestehen
+- :doc:`articles/guide-02` - Schnellstart: Fess mit Docker Compose in wenigen Minuten starten und Suche erleben
+- :doc:`articles/guide-03` - Drei Muster fuer die Einbettung von Such-Widgets in bestehende Websites
+- :doc:`articles/guide-04` - Quellenuebergreifende Suche ueber Dateiserver und Cloud-Speicher aufbauen
+- :doc:`articles/guide-05` - Suchergebnisse nach Rolle, Label, Abteilung und Berechtigungen filtern
 
 **Praxisloesungen (Fuer Fortgeschrittene)**
 
-- :doc:`articles/guide-06` - Teil 6: Knowledge Hub fuer Entwicklungsteams -- Code, Wiki und Tickets einheitlich durchsuchen
-- :doc:`articles/guide-07` - Teil 7: Suchstrategie fuer Cloud-Speicher -- Google Drive, SharePoint und Box uebergreifend durchsuchen
-- :doc:`articles/guide-08` - Teil 8: Suchqualitaet verbessern -- Tuning-Zyklen basierend auf Nutzerverhaltensdaten
-- :doc:`articles/guide-09` - Teil 9: Suchinfrastruktur fuer mehrsprachige Organisationen -- Dokumente in mehreren Sprachen korrekt durchsuchen
-- :doc:`articles/guide-10` - Teil 10: Stabiler Betrieb eines Suchsystems -- Ueberwachung, Backup und Ausfallsicherheit
-- :doc:`articles/guide-11` - Teil 11: Bestehende Systeme mit der Such-API erweitern -- Integrationsmuster fuer CRM und interne Systeme
-- :doc:`articles/guide-12` - Teil 12: SaaS-Daten durchsuchbar machen -- Integrationsszenarien mit Salesforce und Datenbanken
+- :doc:`articles/guide-06` - Einheitliche Suche ueber Git-Repos, Wikis, Tickets und Chat fuer Entwicklungsteams
+- :doc:`articles/guide-07` - Konfiguration und Betrieb der uebergreifenden Suche fuer Google Drive, SharePoint und Box
+- :doc:`articles/guide-08` - Kontinuierliche Suchqualitaetsverbesserung durch Loganalyse und Tuning
+- :doc:`articles/guide-09` - Analyzer-Konfiguration fuer die korrekte Suche in japanischen, englischen und chinesischen Dokumenten
+- :doc:`articles/guide-10` - Best Practices fuer Monitoring, Backup und Ausfallsicherheit im Produktivbetrieb
+- :doc:`articles/guide-11` - REST-API-Integrationsmuster fuer CRM und interne Geschaeftssysteme
+- :doc:`articles/guide-12` - Daten aus Salesforce, Datenbanken und anderen SaaS-Plattformen indexieren
 
 **Architektur und Skalierung (Fuer Experten)**
 
-- :doc:`articles/guide-13` - Teil 13: Multi-Tenant-Suchplattform -- Eine Fess-Instanz fuer mehrere Organisationen
-- :doc:`articles/guide-14` - Teil 14: Skalierungsstrategie fuer Suchsysteme -- Schrittweise Erweiterung von klein zu gross
-- :doc:`articles/guide-15` - Teil 15: Sichere Suchinfrastruktur -- SSO-Integration und Zugriffssteuerung in Zero-Trust-Umgebungen
-- :doc:`articles/guide-16` - Teil 16: Automatisierung der Suchinfrastruktur -- Verwaltung mit CI/CD-Pipelines und Infrastructure as Code
-- :doc:`articles/guide-17` - Teil 17: Suche mit Plugins erweitern -- Eigene Datenquellen und Ingest-Pipelines implementieren
+- :doc:`articles/guide-13` - Multi-Tenant-Design: mehrere Organisationen mit einer Fess-Instanz bedienen
+- :doc:`articles/guide-14` - Schrittweise Skalierung vom Einzelserver zur Cluster-Architektur
+- :doc:`articles/guide-15` - SSO-Integration (OIDC/SAML) und Zugriffssteuerung in Zero-Trust-Umgebungen
+- :doc:`articles/guide-16` - Konfiguration als Code und automatisiertes Deployment ueber CI/CD-Pipelines
+- :doc:`articles/guide-17` - Eigene Datenquellen-Plugins und Ingest-Pipelines implementieren
 
 **KI und Next-Generation-Suche (Fuer Experten)**
 
-- :doc:`articles/guide-18` - Teil 18: Grundlagen der KI-Suche -- Von der Stichwortsuche zur semantischen Suche
-- :doc:`articles/guide-19` - Teil 19: Internen KI-Assistenten aufbauen -- RAG-basiertes Frage-Antwort-System
-- :doc:`articles/guide-20` - Teil 20: KI-Agenten und Suche verbinden -- Fess ueber MCP-Server in externe KI-Tools integrieren
-- :doc:`articles/guide-21` - Teil 21: Bilder und Text uebergreifend durchsuchen -- Multimodale Suche fuer Next-Generation-Wissensmanagement
-- :doc:`articles/guide-22` - Teil 22: Organisationswissen aus Suchdaten kartieren -- Analyse-Dashboard fuer die Informationsnutzung
+- :doc:`articles/guide-18` - Ueberblick ueber die Entwicklung von Stichwortsuche zu Vektor- und semantischer Suche
+- :doc:`articles/guide-19` - Internes Frage-Antwort-System mit RAG auf Basis von Unternehmensdokumenten aufbauen
+- :doc:`articles/guide-20` - Fess als MCP-Server mit Claude und anderen KI-Tools integrieren
+- :doc:`articles/guide-21` - Multimodale Suche ueber Text und Bilder mittels Vektor-Embeddings
+- :doc:`articles/guide-22` - Informationsnutzung mit OpenSearch-Dashboards-Analysen visualisieren
 
 **Zusammenfassung**
 
-- :doc:`articles/guide-23` - Teil 23: Bauplan fuer eine unternehmensweite Wissensplattform -- Gesamtarchitektur mit Fess als Kern
+- :doc:`articles/guide-23` - Referenzarchitektur fuer eine unternehmensweite Wissensplattform auf Fess-Basis
 
 Anwendungsfaelle und Beispiele
 ==============================

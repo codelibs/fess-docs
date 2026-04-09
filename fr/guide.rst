@@ -10,41 +10,41 @@ Cette serie en 23 parties couvre tout, du deploiement de Fess a l'integration de
 
 **Fondamentaux (Pour debutants)**
 
-- :doc:`articles/guide-01` - Partie 1 : Pourquoi les entreprises ont besoin de la recherche -- Les defis de l'exploitation des connaissances a l'ere de la surcharge informationnelle
-- :doc:`articles/guide-02` - Partie 2 : Experience de recherche en 5 minutes -- Premier contact avec Fess via Docker Compose
-- :doc:`articles/guide-03` - Partie 3 : Integrer la recherche dans un portail interne -- Ajouter une fonction de recherche a un site web existant
-- :doc:`articles/guide-04` - Partie 4 : Recherche unifiee de fichiers disperses -- Construction d'une recherche transversale multi-sources
-- :doc:`articles/guide-05` - Partie 5 : Adapter la recherche aux utilisateurs -- Controle des resultats par departement et par permissions
+- :doc:`articles/guide-01` - Pourquoi la recherche est essentielle en entreprise et les defis de l'information dispersee
+- :doc:`articles/guide-02` - Demarrage rapide : lancer Fess avec Docker Compose et decouvrir la recherche en quelques minutes
+- :doc:`articles/guide-03` - Trois modeles d'integration de widgets de recherche dans des sites web existants
+- :doc:`articles/guide-04` - Construire une recherche transversale sur serveurs de fichiers et stockage cloud
+- :doc:`articles/guide-05` - Filtrage des resultats de recherche par role, label, departement et permissions
 
 **Solutions pratiques (Pour niveau intermediaire)**
 
-- :doc:`articles/guide-06` - Partie 6 : Hub de connaissances pour equipes de developpement -- Recherche integree du code, wiki et tickets
-- :doc:`articles/guide-07` - Partie 7 : Strategie de recherche pour le stockage cloud -- Recherche transversale Google Drive, SharePoint et Box
-- :doc:`articles/guide-08` - Partie 8 : Ameliorer la qualite de recherche -- Cycles d'optimisation bases sur les donnees comportementales
-- :doc:`articles/guide-09` - Partie 9 : Infrastructure de recherche pour organisations multilingues -- Recherche correcte de documents en plusieurs langues
-- :doc:`articles/guide-10` - Partie 10 : Exploitation stable d'un systeme de recherche -- Supervision, sauvegarde et reprise apres sinistre
-- :doc:`articles/guide-11` - Partie 11 : Etendre les systemes existants avec l'API de recherche -- Modeles d'integration avec CRM et systemes internes
-- :doc:`articles/guide-12` - Partie 12 : Rendre les donnees SaaS recherchables -- Scenarios d'integration avec Salesforce et bases de donnees
+- :doc:`articles/guide-06` - Recherche unifiee sur Git, wikis, tickets et chat pour les equipes de developpement
+- :doc:`articles/guide-07` - Configuration et exploitation de la recherche transversale Google Drive, SharePoint et Box
+- :doc:`articles/guide-08` - Cycle d'amelioration continue de la qualite de recherche par analyse des logs
+- :doc:`articles/guide-09` - Configuration des analyseurs pour rechercher correctement des documents en japonais, anglais et chinois
+- :doc:`articles/guide-10` - Bonnes pratiques de supervision, sauvegarde et reprise apres sinistre en production
+- :doc:`articles/guide-11` - Modeles d'integration API REST avec CRM et systemes metier internes
+- :doc:`articles/guide-12` - Indexation des donnees Salesforce, bases de donnees et autres plateformes SaaS
 
 **Architecture et mise a l'echelle (Pour niveau avance)**
 
-- :doc:`articles/guide-13` - Partie 13 : Plateforme de recherche multi-tenant -- Concevoir une instance Fess pour plusieurs organisations
-- :doc:`articles/guide-14` - Partie 14 : Strategie de mise a l'echelle des systemes de recherche -- Extension progressive de petite a grande echelle
-- :doc:`articles/guide-15` - Partie 15 : Infrastructure de recherche securisee -- Integration SSO et controle d'acces en environnement Zero Trust
-- :doc:`articles/guide-16` - Partie 16 : Automatisation de l'infrastructure de recherche -- Gestion avec pipelines CI/CD et Infrastructure as Code
-- :doc:`articles/guide-17` - Partie 17 : Etendre la recherche avec des plugins -- Implementation de sources de donnees personnalisees et pipelines d'ingestion
+- :doc:`articles/guide-13` - Conception multi-tenant : servir plusieurs organisations avec une seule instance Fess
+- :doc:`articles/guide-14` - Montee en charge progressive du serveur unique a l'architecture en cluster
+- :doc:`articles/guide-15` - Integration SSO (OIDC/SAML) et controle d'acces en environnement Zero Trust
+- :doc:`articles/guide-16` - Gestion de la configuration en tant que code et deploiement automatise via CI/CD
+- :doc:`articles/guide-17` - Implementation de plugins de sources de donnees personnalisees et pipelines d'ingestion
 
 **IA et recherche de nouvelle generation (Pour niveau avance)**
 
-- :doc:`articles/guide-18` - Partie 18 : Fondements de la recherche IA -- Evolution de la recherche par mots-cles vers la recherche semantique
-- :doc:`articles/guide-19` - Partie 19 : Construction d'un assistant IA interne -- Systeme de questions-reponses base sur RAG
-- :doc:`articles/guide-20` - Partie 20 : Connecter agents IA et recherche -- Integrer Fess dans les outils IA externes via serveur MCP
-- :doc:`articles/guide-21` - Partie 21 : Recherche transversale images et texte -- Gestion des connaissances de nouvelle generation avec recherche multimodale
-- :doc:`articles/guide-22` - Partie 22 : Cartographier les connaissances organisationnelles a partir des donnees de recherche -- Tableau de bord analytique
+- :doc:`articles/guide-18` - Panorama de l'evolution de la recherche par mots-cles vers la recherche vectorielle et semantique
+- :doc:`articles/guide-19` - Construire un systeme de questions-reponses interne base sur RAG et documents d'entreprise
+- :doc:`articles/guide-20` - Integrer Fess comme serveur MCP avec Claude et d'autres outils IA
+- :doc:`articles/guide-21` - Recherche multimodale sur texte et images via embeddings vectoriels
+- :doc:`articles/guide-22` - Visualiser l'utilisation de l'information avec les tableaux de bord OpenSearch Dashboards
 
 **Conclusion**
 
-- :doc:`articles/guide-23` - Partie 23 : Plan directeur d'une plateforme de connaissances d'entreprise -- Architecture globale avec Fess au coeur
+- :doc:`articles/guide-23` - Architecture de reference pour une plateforme de connaissances d'entreprise basee sur Fess
 
 Cas d'utilisation et exemples
 =============================
