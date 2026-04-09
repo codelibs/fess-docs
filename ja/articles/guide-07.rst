@@ -1,0 +1,261 @@
+============================================================
+第7回 クラウドストレージ時代の検索戦略 -- Google Drive・SharePoint・Boxの横断検索
+============================================================
+
+はじめに
+========
+
+多くの企業では、クラウドストレージの利用が当たり前になっています。
+しかし、部門や用途によって異なるクラウドストレージを使い分けているケースも少なくありません。
+「あのファイルは Google Drive か SharePoint か、それとも Box か」と悩む時間は、生産性を低下させます。
+
+本記事では、複数のクラウドストレージを Fess で統合し、一つの検索窓からすべてのクラウド上のファイルを横断検索できる環境を構築します。
+
+対象読者
+========
+
+- 複数のクラウドストレージを利用している組織の管理者
+- クラウドストレージの検索に課題を感じている方
+- OAuth 認証の基本概念を理解している方
+
+シナリオ
+========
+
+ある企業では、以下のクラウドストレージを利用しています。
+
+.. list-table:: クラウドストレージの利用状況
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - サービス
+     - 利用部門
+     - 主な用途
+   * - Google Drive
+     - 営業部・マーケティング部
+     - 提案書、報告書、スプレッドシート
+   * - SharePoint Online
+     - 全社共通
+     - 社内ポータル、共有ドキュメント
+   * - Box
+     - 法務部・経理部
+     - 契約書、請求書、機密文書
+
+クラウドストレージ連携の準備
+=============================
+
+データストアプラグインのインストール
+------------------------------------
+
+クラウドストレージのクロールには、以下のプラグインを使用します。
+
+- ``fess-ds-gsuite``: Google Drive / Google Workspace のクロール
+- ``fess-ds-microsoft365``: SharePoint Online / OneDrive のクロール
+- ``fess-ds-box``: Box のクロール
+
+管理画面の ［システム］ > ［プラグイン］ からインストールします。
+
+OAuth 認証の設定
+----------------
+
+クラウドストレージの API にアクセスするには、OAuth 認証の設定が必要です。
+各サービスの管理コンソールで、アプリケーションを登録し、クライアント ID とシークレットを取得します。
+
+**共通の手順**
+
+1. 各サービスの管理コンソールでアプリケーションを登録
+2. 必要な API スコープ（権限）を設定（読み取り専用で十分）
+3. クライアント ID とクライアントシークレットを取得
+4. Fess のデータストア設定にこれらの情報を設定
+
+各サービスの設定
+=================
+
+Google Drive の設定
+--------------------
+
+Google Drive のファイルを検索対象にします。
+
+**Google Cloud Console での準備**
+
+1. Google Cloud Console でプロジェクトを作成
+2. Google Drive API を有効化
+3. サービスアカウントを作成し、JSON キーファイルをダウンロード
+4. 対象のドライブやフォルダにサービスアカウントを共有設定
+
+**Fess での設定**
+
+1. ［クローラー］ > ［データストア］ > ［新規作成］
+2. ハンドラー名: GoogleDriveDataStore を選択
+3. パラメータとスクリプトの設定
+4. ラベル: ``google-drive`` を設定
+
+**パラメータの設定例**
+
+.. code-block:: properties
+
+    private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n-----END RSA PRIVATE KEY-----
+    private_key_id=your-private-key-id
+    client_email=fess-crawler@your-project.iam.gserviceaccount.com
+    supported_mimetypes=.*
+    include_pattern=
+    exclude_pattern=
+
+**スクリプトの設定例**
+
+.. code-block:: properties
+
+    url=url
+    title=name
+    content=contents
+    mimetype=mimetype
+    content_length=size
+    last_modified=modified_time
+
+サービスアカウントの JSON キーファイルから ``private_key``、``private_key_id``、``client_email`` の値を設定します。Google ドキュメント、スプレッドシート、スライドなどの Google 固有形式も、テキストとして抽出・検索可能です。
+
+SharePoint Online の設定
+-------------------------
+
+SharePoint Online のドキュメントライブラリを検索対象にします。
+
+**Entra ID（Azure AD）での準備**
+
+1. Entra ID でアプリケーションを登録
+2. Microsoft Graph API の権限を設定（Sites.Read.All など）
+3. クライアントシークレットまたは証明書を作成
+
+**Fess での設定**
+
+1. ［クローラー］ > ［データストア］ > ［新規作成］
+2. ハンドラー名: SharePointDocLibDataStore を選択（ドキュメントライブラリの場合。用途に応じて SharePointListDataStore、SharePointPageDataStore、OneDriveDataStore なども利用可能）
+3. パラメータとスクリプトの設定
+4. ラベル: ``sharepoint`` を設定
+
+**パラメータの設定例**
+
+.. code-block:: properties
+
+    tenant=your-tenant-id
+    client_id=your-client-id
+    client_secret=your-client-secret
+    site_id=your-site-id
+
+**スクリプトの設定例**
+
+.. code-block:: properties
+
+    url=url
+    title=name
+    content=content
+    last_modified=modified
+
+``tenant``、``client_id``、``client_secret`` は Entra ID のアプリケーション登録で取得した値を設定します。``site_id`` を指定すると特定のサイトのみをクロールします。省略するとアクセス可能な全サイトが対象になります。
+
+Box の設定
+-----------
+
+Box のファイルを検索対象にします。
+
+**Box Developer Console での準備**
+
+1. Box Developer Console でカスタムアプリケーションを作成
+2. 認証方式として「サーバー認証（クライアント資格情報付き）」を選択
+3. アプリケーションの承認を管理者に依頼
+
+**Fess での設定**
+
+1. ［クローラー］ > ［データストア］ > ［新規作成］
+2. ハンドラー名: BoxDataStore を選択
+3. パラメータとスクリプトの設定
+4. ラベル: ``box`` を設定
+
+**パラメータの設定例**
+
+.. code-block:: properties
+
+    client_id=your-client-id
+    client_secret=your-client-secret
+    enterprise_id=your-enterprise-id
+    public_key_id=your-public-key-id
+    private_key=-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIE...\n-----END ENCRYPTED PRIVATE KEY-----
+    passphrase=your-passphrase
+    supported_mimetypes=.*
+
+**スクリプトの設定例**
+
+.. code-block:: properties
+
+    url=url
+    title=name
+    content=contents
+    mimetype=mimetype
+    content_length=size
+    last_modified=modified_at
+
+Box Developer Console で作成したカスタムアプリケーションの認証情報を設定します。``supported_mimetypes`` でクロール対象のファイル形式を正規表現で絞り込めます。
+
+横断検索の最適化
+=================
+
+差分クロールの活用
+------------------
+
+クラウドストレージのクロールでは、毎回全ファイルを取得するのではなく、前回クロール以降に更新されたファイルのみを取得する差分クロールが効率的です。
+
+各プラグインの設定で、差分クロールのオプションが利用可能かを確認してください。
+差分クロールにより、API 呼び出し回数を削減し、クロール時間を短縮できます。
+
+検索結果の URL
+--------------
+
+クラウドストレージからクロールしたドキュメントの場合、検索結果のリンクをクリックすると各サービスの Web UI でファイルが開きます。
+利用者にとって自然な動作であり、特別な設定は通常不要です。
+
+運用上の注意点
+===============
+
+OAuth トークンの更新
+--------------------
+
+クラウドストレージとの連携では、OAuth トークンの有効期限に注意が必要です。
+
+- **Google Drive**: サービスアカウントの場合、トークンは自動更新されます
+- **SharePoint Online**: クライアントシークレットには有効期限があるため、定期的に更新が必要です
+- **Box**: アプリケーションの再承認が必要になる場合があります
+
+トークンの有効期限をカレンダーに登録し、期限切れによるクロール停止を防ぎましょう。
+
+API 利用量の監視
+----------------
+
+クラウドストレージの API には利用量の制限があります。
+特に大量のファイルをクロールする場合は、API 利用量を監視し、制限に抵触しないようにクロール設定を調整します。
+
+権限とセキュリティ
+------------------
+
+クラウドストレージの Fess 用サービスアカウントには、読み取り専用のアクセス権限を設定してください。
+書き込み権限は不要であり、セキュリティリスクを最小化する原則に従います。
+
+また、第5回で扱ったロールベース検索と組み合わせることで、クラウドストレージの権限体系に沿った検索結果の制御も実現できます。
+
+まとめ
+======
+
+本記事では、Google Drive、SharePoint Online、Box の3つのクラウドストレージを Fess で統合し、横断検索環境を構築しました。
+
+- 各クラウドストレージのデータストアプラグインと OAuth 認証の設定
+- ラベルによる情報源の区別と絞り込み
+- 差分クロールによる検索体験の最適化
+- OAuth トークン管理と API 利用量の監視
+
+「どのクラウドにあるか」を考えずに、必要なファイルを即座に見つけられる環境が実現します。
+
+次回は、検索品質を継続的に改善するチューニングサイクルについて扱います。
+
+参考資料
+========
+
+- `Fess データストア設定 <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__
+
+- `Fess プラグイン一覧 <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
