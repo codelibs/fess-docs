@@ -305,7 +305,7 @@ Scriptプラグイン
    overview
    basic
    documentation
-   tutorial
+   guide
    development
    others
    archives

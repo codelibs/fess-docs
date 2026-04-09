@@ -305,7 +305,7 @@ Script 플러그인
    overview
    basic
    documentation
-   tutorial
+   guide
    development
    others
    archives
