@@ -82,9 +82,12 @@ Aktuell unterstützte Versionen
    * - Fess
      - EOL-Datum
      - Status
+   * - 15.6.x
+     - 2027-10-01
+     - 🟢 Neueste (Empfohlen)
    * - 15.5.x
      - 2027-08-01
-     - 🟢 Neueste (Empfohlen)
+     - 🟢 Unterstützt
    * - 15.4.x
      - 2027-06-01
      - 🟢 Unterstützt
@@ -106,15 +109,6 @@ Aktuell unterstützte Versionen
    * - 14.18.x
      - 2026-05-01
      - 🟡 Support-Ende naht
-   * - 14.17.x
-     - 2026-03-01
-     - 🔴 Support beendet
-   * - 14.16.x
-     - 2026-02-01
-     - 🔴 Support beendet
-   * - 14.15.x
-     - 2026-01-01
-     - 🔴 Support beendet
 
 Nicht mehr unterstützte Versionen
 ---------------------------------
@@ -124,6 +118,12 @@ Nicht mehr unterstützte Versionen
 
    * - Fess
      - EOL-Datum
+   * - 14.17.x
+     - 2026-03-01
+   * - 14.16.x
+     - 2026-02-01
+   * - 14.15.x
+     - 2026-01-01
    * - 14.14.x
      - 2025-11-01
    * - 14.13.x

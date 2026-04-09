@@ -82,9 +82,12 @@ Versiones actualmente soportadas
    * - Fess
      - Fecha de EOL
      - Estado
+   * - 15.6.x
+     - 2027-10-01
+     - 🟢 Ultima (Recomendada)
    * - 15.5.x
      - 2027-08-01
-     - 🟢 Ultima (Recomendada)
+     - 🟢 Con soporte
    * - 15.4.x
      - 2027-06-01
      - 🟢 Con soporte
@@ -106,15 +109,6 @@ Versiones actualmente soportadas
    * - 14.18.x
      - 2026-05-01
      - 🟡 Proximo al fin de soporte
-   * - 14.17.x
-     - 2026-03-01
-     - 🔴 Fin de soporte
-   * - 14.16.x
-     - 2026-02-01
-     - 🔴 Fin de soporte
-   * - 14.15.x
-     - 2026-01-01
-     - 🔴 Fin de soporte
 
 Versiones en fin de vida
 -------------------------
@@ -124,6 +118,12 @@ Versiones en fin de vida
 
    * - Fess
      - Fecha de EOL
+   * - 14.17.x
+     - 2026-03-01
+   * - 14.16.x
+     - 2026-02-01
+   * - 14.15.x
+     - 2026-01-01
    * - 14.14.x
      - 2025-11-01
    * - 14.13.x
