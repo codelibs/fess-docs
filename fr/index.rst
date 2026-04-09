@@ -207,7 +207,7 @@ Projets connexes
    overview
    basic
    documentation
-   tutorial
+   guide
    development
    others
    archives

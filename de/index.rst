@@ -220,7 +220,7 @@ Verwandte Projekte
    overview
    basic
    documentation
-   tutorial
+   guide
    development
    others
    archives

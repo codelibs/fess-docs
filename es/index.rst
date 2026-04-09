@@ -207,7 +207,7 @@ Proyectos Relacionados
    overview
    basic
    documentation
-   tutorial
+   guide
    development
    others
    archives

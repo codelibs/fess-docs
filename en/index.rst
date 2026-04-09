@@ -305,7 +305,7 @@ Media Coverage
    overview
    basic
    documentation
-   tutorial
+   guide
    development
    others
    archives
