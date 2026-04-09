@@ -47,31 +47,83 @@ Fess が収集するデータ
 
 Fess は以下のデータを自動的に収集・蓄積しています。
 
-検索ログ
---------
+検索ログ（``fess_log.search_log``）
+-------------------------------------
 
 管理画面の ［システム情報］ > ［検索ログ］ で確認できます。
+OpenSearch のインデックス ``fess_log.search_log`` に保存されます。
 
-- 検索キーワード
-- 検索日時
-- 検索結果件数
-- レスポンス時間
-- ユーザーエージェント
+主なフィールド:
 
-クリックログ
-------------
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - フィールド名
+     - 型
+     - 説明
+   * - ``searchWord``
+     - keyword
+     - 検索キーワード
+   * - ``requestedAt``
+     - date
+     - 検索日時
+   * - ``hitCount``
+     - long
+     - 検索結果件数（0 の場合がゼロヒット）
+   * - ``queryTime``
+     - long
+     - クエリ実行時間（ミリ秒）
+   * - ``responseTime``
+     - long
+     - 合計レスポンス時間（ミリ秒）
+   * - ``userAgent``
+     - keyword
+     - ユーザーエージェント
+   * - ``clientIp``
+     - keyword
+     - クライアント IP アドレス
+   * - ``accessType``
+     - keyword
+     - アクセス種別（web, json, gsa, admin など）
+   * - ``queryId``
+     - keyword
+     - クエリ ID（クリックログとの紐付けに使用）
+
+クリックログ（``fess_log.click_log``）
+----------------------------------------
 
 検索結果のリンクがクリックされた記録です。
+OpenSearch のインデックス ``fess_log.click_log`` に保存されます。
 
-- クリックされた URL
-- 検索キーワード（どの検索からクリックされたか）
-- クリック日時
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - フィールド名
+     - 型
+     - 説明
+   * - ``url``
+     - keyword
+     - クリックされた URL
+   * - ``queryId``
+     - keyword
+     - 検索ログの queryId（どの検索からクリックされたか）
+   * - ``order``
+     - integer
+     - 検索結果内の表示順位
+   * - ``requestedAt``
+     - date
+     - クリック日時
+   * - ``docId``
+     - keyword
+     - ドキュメント ID
 
 人気ワード
 ----------
 
-検索画面に表示される人気ワードや、検索ログの集計から確認できます。
-一定期間内で検索回数の多いキーワードのランキングです。
+検索画面に表示される人気ワードは、検索ログを基に Fess の suggest インデックスに集計されます。
+一定の検索ヒット数を超えたクエリが、検索回数に基づいてランキングされます。
 
 OpenSearch Dashboards での可視化
 ==================================
@@ -87,7 +139,7 @@ Docker Compose 構成に OpenSearch Dashboards を追加します。
 
     services:
       opensearch-dashboards:
-        image: opensearchproject/opensearch-dashboards:2.19.1
+        image: opensearchproject/opensearch-dashboards:3.6.0
         ports:
           - "5601:5601"
         environment:
@@ -96,10 +148,34 @@ Docker Compose 構成に OpenSearch Dashboards を追加します。
 
 ``http://localhost:5601`` にアクセスして、Dashboards の UI を利用します。
 
+インデックスパターンの作成
+---------------------------
+
+OpenSearch Dashboards で Fess のログデータを可視化するには、まずインデックスパターンを作成します。
+
+1. Dashboards にアクセスし、左メニューから ［Stack Management］ > ［Index Patterns］ を選択
+2. ［Create index pattern］ をクリック
+3. 以下のインデックスパターンを作成
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 25 40
+
+   * - インデックスパターン
+     - 時刻フィールド
+     - 用途
+   * - ``fess_log.search_log``
+     - ``requestedAt``
+     - 検索ログの分析
+   * - ``fess_log.click_log``
+     - ``requestedAt``
+     - クリックログの分析
+
 ダッシュボードの設計
 =====================
 
 以下の分析視点でダッシュボードを設計します。
+左メニューの ［Visualize］ から各ビジュアライゼーションを作成し、［Dashboard］ にまとめます。
 
 検索利用状況の概要
 ------------------
@@ -107,11 +183,22 @@ Docker Compose 構成に OpenSearch Dashboards を追加します。
 **日別検索回数の推移**
 
 検索の利用量がどう変化しているかを把握します。
+
+- インデックスパターン: ``fess_log.search_log``
+- ビジュアライゼーション: Line（折れ線グラフ）
+- X 軸: Date Histogram（フィールド: ``requestedAt``、間隔: 1d）
+- Y 軸: Count
+
 利用が増加していれば検索システムが定着している証拠であり、減少していれば改善が必要です。
 
 **時間帯別検索回数**
 
 検索が多い時間帯を把握します。
+
+- ビジュアライゼーション: Vertical Bar（棒グラフ）
+- X 軸: Date Histogram（フィールド: ``requestedAt``、間隔: 1h）
+- Y 軸: Count
+
 業務開始時や昼食後に検索が多い場合、情報収集が業務の一部として定着していることがわかります。
 
 検索品質の分析
@@ -120,23 +207,48 @@ Docker Compose 構成に OpenSearch Dashboards を追加します。
 **ゼロヒット率の推移**
 
 ゼロヒット率は検索品質の重要な指標です。
+検索ログの ``hitCount`` フィールドが ``0`` のレコードがゼロヒットクエリに該当します。
+
+- インデックスパターン: ``fess_log.search_log``
+- フィルタ: ``hitCount: 0`` を追加してゼロヒットクエリを抽出
+- ビジュアライゼーション: Line（折れ線グラフ）
+- X 軸: Date Histogram（フィールド: ``requestedAt``、間隔: 1d）
+- Y 軸: Count
+
 ゼロヒット率が高い場合、シノニムの追加やクロール範囲の拡大が必要です（第8回参照）。
+
+なお、管理画面の ［システム情報］ > ［検索ログ］ でも、ゼロヒットクエリの一覧を確認できます。
 
 **ゼロヒットクエリのワードクラウド**
 
 ゼロヒットクエリをワードクラウドで表示すると、どのような情報が不足しているかが一目でわかります。
 
+- フィルタ: ``hitCount: 0``
+- ビジュアライゼーション: Tag Cloud
+- フィールド: Terms Aggregation（フィールド: ``searchWord``、サイズ: 50）
+
 コンテンツの価値分析
 --------------------
 
-**クリック率の高い検索結果**
+**クリック数の多い検索結果**
 
 よくクリックされる検索結果は、組織にとって価値の高いコンテンツです。
+
+- インデックスパターン: ``fess_log.click_log``
+- ビジュアライゼーション: Data Table
+- フィールド: Terms Aggregation（フィールド: ``url``、サイズ: 20、並び順: Count 降順）
+
 これらのコンテンツの更新・メンテナンスを優先しましょう。
 
 **クリック位置の分布**
 
 検索結果の何番目がクリックされているかの分布を確認します。
+
+- インデックスパターン: ``fess_log.click_log``
+- ビジュアライゼーション: Vertical Bar（棒グラフ）
+- X 軸: Histogram（フィールド: ``order``、間隔: 1）
+- Y 軸: Count
+
 1〜3位のクリックが多ければ検索品質は良好、10位以降のクリックが多ければランキングの改善が必要です。
 
 情報ニーズの傾向分析
@@ -145,11 +257,12 @@ Docker Compose 構成に OpenSearch Dashboards を追加します。
 **人気キーワードのランキング**
 
 組織全体で何に関心があるかを把握します。
+
+- インデックスパターン: ``fess_log.search_log``
+- ビジュアライゼーション: Data Table
+- フィールド: Terms Aggregation（フィールド: ``searchWord``、サイズ: 20、並び順: Count 降順）
+
 人気キーワードの変化は、組織の課題や関心事の変化を反映します。
-
-**検索キーワードのカテゴリ分析**
-
-検索キーワードをカテゴリ（制度・手続き、技術、プロジェクト、製品など）に分類し、どのカテゴリの検索が多いかを分析します。
 
 分析結果の活用
 ===============
@@ -175,7 +288,7 @@ IT 投資の判断
 
 - **利用量の増加**: サーバーリソースの増強計画
 - **新しい情報ニーズ**: 追加のデータソース連携の検討
-- **AI 機能のニーズ**: RAG チャットの導入判断（第19回参照）
+- **AI 機能のニーズ**: AI 検索モードの導入判断（第19回参照）
 
 定期レポートの作成
 ===================

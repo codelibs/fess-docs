@@ -30,7 +30,7 @@ Fess 環境を「コード」として管理する対象は以下の通りです
      - 管理方法
      - バージョン管理
    * - Docker 構成
-     - docker-compose.yml
+     - compose.yaml
      - Git
    * - Fess 設定
      - バックアップファイル / 管理 API
@@ -56,11 +56,8 @@ Docker Compose による環境定義
       fess:
         image: ghcr.io/codelibs/fess:15.5.1
         environment:
-          - FESS_DICTIONARY_PATH=/opt/fess/dictionary
-          - JAVA_OPTS=-Xmx2g -Xms2g
-        volumes:
-          - fess-data:/var/lib/fess
-          - ./dictionary:/usr/share/opensearch/config/dictionary:ro
+          - SEARCH_ENGINE_HTTP_URL=http://opensearch:9200
+          - FESS_DICTIONARY_PATH=/usr/share/opensearch/config/dictionary/
         ports:
           - "8080:8080"
         depends_on:
@@ -69,23 +66,27 @@ Docker Compose による環境定義
         restart: unless-stopped
 
       opensearch:
-        image: opensearchproject/opensearch:2.19.1
+        image: ghcr.io/codelibs/fess-opensearch:3.6.0
         environment:
           - discovery.type=single-node
           - OPENSEARCH_JAVA_OPTS=-Xmx4g -Xms4g
+          - DISABLE_INSTALL_DEMO_CONFIG=true
           - DISABLE_SECURITY_PLUGIN=true
+          - FESS_DICTIONARY_PATH=/usr/share/opensearch/config/dictionary/
         volumes:
           - opensearch-data:/usr/share/opensearch/data
+          - opensearch-dictionary:/usr/share/opensearch/config/dictionary
         healthcheck:
-          test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'"]
+          test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
           interval: 30s
           timeout: 10s
-          retries: 5
+          retries: 3
+          start_period: 90s
         restart: unless-stopped
 
     volumes:
-      fess-data:
       opensearch-data:
+      opensearch-dictionary:
 
 ポイントは以下の通りです。
 

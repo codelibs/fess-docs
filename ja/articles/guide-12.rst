@@ -70,15 +70,31 @@ Salesforce との連携には、Connected App の設定が必要です。
 
 1. ［クローラー］ > ［データストア］ > ［新規作成］
 2. ハンドラー名: SalesforceDataStore を選択
-3. パラメータの設定
-
-   - Salesforce のログイン URL
-   - コンシューマキー、コンシューマシークレット
-   - 認証用のユーザー名とパスワード
-   - 対象オブジェクト（Account、Opportunity、Case など）
-   - 取得するフィールドの指定
-
+3. パラメータとスクリプトの設定
 4. ラベル: ``salesforce`` を設定
+
+**パラメータの設定例**
+
+.. code-block:: properties
+
+    base_url=https://login.salesforce.com
+    auth_type=oauth_password
+    username=user@example.com
+    password=your-password
+    security_token=your-security-token
+    client_id=your-consumer-key
+    client_secret=your-consumer-secret
+
+**スクリプトの設定例**
+
+.. code-block:: properties
+
+    url=url
+    title=title
+    content=content
+    last_modified=last_modified
+
+``auth_type`` は ``oauth_password``（ユーザー名・パスワード認証）または ``oauth_token``（JWT Bearer トークン認証）を指定します。JWT 認証の場合は ``private_key`` に RSA 秘密鍵を設定します。
 
 対象データの選定
 ----------------
@@ -119,61 +135,39 @@ Salesforce には多数のオブジェクトがありますが、すべてを検
 
 1. ［クローラー］ > ［データストア］ > ［新規作成］
 2. ハンドラー名: DatabaseDataStore を選択
-3. パラメータの設定
-
-   - JDBC ドライバクラス名
-   - 接続 URL
-   - ユーザー名、パスワード
-   - SQL クエリ（検索対象データを取得するクエリ）
-   - フィールドマッピング（DB カラムと Fess フィールドの対応）
-
+3. パラメータとスクリプトの設定
 4. ラベル: ``database`` を設定
+
+**パラメータの設定例**
+
+.. code-block:: properties
+
+    driver=com.mysql.cj.jdbc.Driver
+    url=jdbc:mysql://db-server:3306/mydb?useSSL=true
+    username=fess_reader
+    password=your-password
+    sql=SELECT product_id, product_name, description, price, CONCAT('https://internal-app/products/', product_id) AS url FROM products WHERE status = 'active'
+
+**スクリプトの設定例**
+
+.. code-block:: properties
+
+    url=url
+    title=product_name
+    content=description
+
+``sql`` に指定した SQL クエリの結果がクロールされます。スクリプトでは SQL のカラム名（またはカラムラベル）を使って Fess のインデックスフィールドにマッピングします。
 
 SQL クエリの設計
 ----------------
 
-データベースから取得するデータは、SQL クエリで定義します。
-検索に必要な情報を含むクエリを設計しましょう。
+``sql`` パラメータに指定する SQL クエリを設計する際のポイントは以下の通りです。
 
-.. code-block:: sql
+- 検索結果のリンク先となる ``url`` カラムを含める（例: ``CONCAT('https://.../', id) AS url``）
+- 検索対象の本文となるカラムを含める
+- ``WHERE`` 句で不要なデータを除外する（例: ``status = 'active'``）
 
-    SELECT
-      product_id,
-      product_name,
-      category,
-      description,
-      price,
-      CONCAT('https://internal-app/products/', product_id) AS url
-    FROM products
-    WHERE status = 'active'
-
-ポイントは、``url`` フィールドを含めることです。
-検索結果のリンク先として使用されるため、利用者がクリックしてアクセスできる URL を生成します。
-
-フィールドマッピング
---------------------
-
-SQL クエリのカラムと Fess のインデックスフィールドを対応づけます。
-
-.. list-table:: フィールドマッピング例
-   :header-rows: 1
-   :widths: 25 25 50
-
-   * - DB カラム
-     - Fess フィールド
-     - 説明
-   * - product_name
-     - title
-     - 検索結果のタイトル
-   * - url
-     - url
-     - 検索結果のリンク先
-   * - description
-     - content
-     - 検索対象の本文
-   * - category
-     - label
-     - カテゴリ（ラベル）
+スクリプトでは、SQL のカラム名をそのまま使って Fess のインデックスフィールドにマッピングします。
 
 CSV ファイルの連携
 ===================
@@ -187,15 +181,27 @@ CSV ファイルのデータも検索対象にできます。
 
 1. ［クローラー］ > ［データストア］ > ［新規作成］
 2. ハンドラー名: CsvDataStore を選択
-3. パラメータの設定
-
-   - CSV ファイルのパス
-   - 文字コード（UTF-8、Shift_JIS など）
-   - ヘッダー行の有無
-   - 区切り文字
-   - フィールドマッピング
-
+3. パラメータとスクリプトの設定
 4. ラベル: ``csv-data`` を設定
+
+**パラメータの設定例**
+
+.. code-block:: properties
+
+    directories=/opt/fess/csv-data
+    file_encoding=UTF-8
+    has_header_line=true
+    separator_character=,
+
+**スクリプトの設定例**（ヘッダー行がある場合はカラム名を使用）
+
+.. code-block:: properties
+
+    url="https://internal-app/contacts/" + id
+    title=company_name
+    content=company_name + " " + contact_name + " " + email
+
+``has_header_line=true`` の場合、ヘッダー行のカラム名をスクリプトで使用できます。ヘッダー行がない場合は ``cell1``、``cell2``、``cell3`` のように列番号で参照します。スクリプトには Groovy の式を記述でき、文字列の結合なども可能です。
 
 CSV ファイルが定期的に更新される場合は、ファイルの配置場所を固定し、クロールスケジュールを設定することで、自動的に最新データがインデックスに反映されます。
 
