@@ -186,7 +186,7 @@ OpenSearch가 시작되지 않음
 
 2. 사용 중인 프로세스 중지, 또는 Fess의 포트 번호 변경
 
-    포트 번호 변경은 :doc:포트 및 네트워크 설정 <../config/setup-port-network.html> 을 참조하세요.
+    포트 번호 변경은 :doc:포트 및 네트워크 설정 <../config/setup-port-network> 을 참조하세요.
 
 연결 문제
 ========
