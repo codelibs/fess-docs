@@ -69,7 +69,7 @@ Virtual Host
 ::::::::::::
 
 Specifies the virtual host hostname.
-For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/virtual-host>`.
+For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/security-virtual-host>`.
 
 Display Order
 :::::::::::::

@@ -57,7 +57,7 @@ Virtueller Host
 :::::::::::::::
 
 Konfigurieren Sie den virtuellen Host.
-Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/virtual-host>`.
+Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
 
 Antwort für beliebtes Wort
 ::::::::::::::::::::::::::

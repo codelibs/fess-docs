@@ -54,7 +54,7 @@ Host virtual
 ::::::::::::
 
 Especifique el nombre de host del host virtual.
-Para más detalles, consulte :doc:`Host virtual en la guía de configuración <../config/virtual-host>`.
+Para más detalles, consulte :doc:`Host virtual en la guía de configuración <../config/security-virtual-host>`.
 
 Eliminar configuración
 ----------------------

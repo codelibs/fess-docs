@@ -105,7 +105,7 @@ URL을 크롤링할 때 각 스레드의 시간 간격.
 ::::::::
 
 가상 호스트의 호스트명을 지정합니다.
-자세한 내용은 :doc:`../config/virtual-host` 를 참조하십시오.
+자세한 내용은 :doc:`../config/security-virtual-host` 를 참조하십시오.
 
 상태
 ::::

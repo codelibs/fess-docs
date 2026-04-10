@@ -57,7 +57,7 @@ JSON响应
 ::::::::
 
 设置虚拟主机。
-详情请参考 :doc:`配置指南的虚拟主机 <../config/virtual-host>`。
+详情请参考 :doc:`配置指南的虚拟主机 <../config/security-virtual-host>`。
 
 热门词响应
 :::::::::::::::::

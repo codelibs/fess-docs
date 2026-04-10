@@ -105,7 +105,7 @@ Host virtual
 ::::::::::::
 
 Especifique el nombre de host del host virtual.
-Para más detalles, consulte :doc:`../config/virtual-host`.
+Para más detalles, consulte :doc:`../config/security-virtual-host`.
 
 Estado
 ::::::

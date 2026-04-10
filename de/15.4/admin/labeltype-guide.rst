@@ -70,7 +70,7 @@ Virtueller Host
 :::::::::::::::
 
 Geben Sie den Hostnamen des virtuellen Hosts an.
-Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/virtual-host>`.
+Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
 
 Anzeigereihenfolge
 ::::::::::::::::::

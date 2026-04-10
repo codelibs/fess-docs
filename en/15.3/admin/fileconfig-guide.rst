@@ -100,7 +100,7 @@ Virtual Host
 ::::::::::::
 
 Specifies the virtual host hostname.
-For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/virtual-host>`.
+For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/security-virtual-host>`.
 
 Status
 ::::::
