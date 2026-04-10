@@ -57,7 +57,7 @@ Virtual Host
 ::::::::::::
 
 Configures virtual hosts.
-For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/virtual-host>`.
+For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/security-virtual-host>`.
 
 Popular Word Response
 :::::::::::::::::::::

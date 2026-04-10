@@ -100,7 +100,7 @@
 ::::::::
 
 指定虚拟主机的主机名。
-详细信息请参阅 :doc:`配置指南的虚拟主机 <../config/virtual-host>`。
+详细信息请参阅 :doc:`配置指南的虚拟主机 <../config/security-virtual-host>`。
 
 状态
 ::::

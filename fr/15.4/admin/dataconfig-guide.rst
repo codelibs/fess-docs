@@ -71,7 +71,7 @@ Hôte virtuel
 ::::::::::::
 
 Spécifie le nom d'hôte de l'hôte virtuel.
-Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le guide de configuration <../config/virtual-host>`.
+Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le guide de configuration <../config/security-virtual-host>`.
 
 État
 ::::

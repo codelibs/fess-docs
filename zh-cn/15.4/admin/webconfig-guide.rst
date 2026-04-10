@@ -105,7 +105,7 @@ URL
 ::::::::
 
 指定虚拟主机的主机名。
-详情请参阅 :doc:`../config/virtual-host`。
+详情请参阅 :doc:`../config/security-virtual-host`。
 
 状态
 ::::
