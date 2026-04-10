@@ -186,7 +186,7 @@ Portnummer-Konflikt
 
 2. Stoppen Sie den verwendenden Prozess oder ändern Sie die Fess-Portnummer
 
-    Informationen zur Änderung der Portnummer finden Sie unter :doc:Port- und Netzwerkkonfiguration <../config/setup-port-network.html>.
+    Informationen zur Änderung der Portnummer finden Sie unter :doc:Port- und Netzwerkkonfiguration <../config/setup-port-network>.
 
 Verbindungsprobleme
 ===================

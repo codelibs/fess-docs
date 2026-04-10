@@ -186,7 +186,7 @@ Conflicto de Número de Puerto
 
 2. Detenga el proceso en uso, o cambie el número de puerto de Fess
 
-    ara cambiar el número de puerto, consulte :doc:Configuración de Puerto y Red <../config/setup-port-network.html>.
+    ara cambiar el número de puerto, consulte :doc:Configuración de Puerto y Red <../config/setup-port-network>.
 
 Problemas de Conexión
 ======================

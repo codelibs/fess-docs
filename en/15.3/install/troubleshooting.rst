@@ -186,7 +186,7 @@ Port Conflict
 
 2. Stop the process using the port, or change Fess port number
 
-    For port number changes, see :doc:Port and Network Settings <../config/setup-port-network.html>.
+    For port number changes, see :doc:Port and Network Settings <../config/setup-port-network>.
 
 Connection Issues
 =================
