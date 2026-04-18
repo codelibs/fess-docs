@@ -5,6 +5,9 @@
 新闻列表
 ============
 
+2026-04-18
+    `Fess 15.6.0 发布 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`__
+
 2026-02-14
     `Fess 15.5.0 发布 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`__
 

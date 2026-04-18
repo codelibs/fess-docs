@@ -14,6 +14,7 @@ Dockerイメージは以下を参照してください。
 
 動作確認済の安定版リリースです。
 
+* `Fess 15.6.0 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_)
 * `Fess 15.5.0 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.5.0 <https://opensearch.org/versions/opensearch-3-5-0.html>`_)
 * `Fess 15.4.0 <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.4.0 <https://opensearch.org/versions/opensearch-3-4-0.html>`_)
 * `Fess 15.3.0 <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`_ (`Java 21 <https://adoptium.net/temurin/releases?version=21>`_, `OpenSearch 3.3.0 <https://opensearch.org/versions/opensearch-3-3-0.html>`_)
