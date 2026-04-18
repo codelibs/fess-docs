@@ -2,6 +2,20 @@
 归档文档
 ==========
 
+15.5
+~~~~
+
+.. toctree::
+
+   15.5/install/index
+   15.5/user/index
+   15.5/api/index
+   15.5/admin/index
+   15.5/config/index
+   JavaDocs <https://fess.codelibs.org/15.5/apidocs/index.html>
+   XRef <https://fess.codelibs.org/15.5/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/15.5/lastadoc-fess.html>
+
 15.4
 ~~~~
 
