@@ -35,7 +35,7 @@ La imagen Docker de |Fess| está compuesta por los siguientes componentes:
 - **Fess**: Cuerpo del sistema de búsqueda de texto completo
 - **OpenSearch**: Motor de búsqueda
 
-La imagen Docker oficial está publicada en `Docker Hub <https://hub.docker.com/r/codelibs/fess>`__.
+La imagen Docker oficial está publicada en `GitHub Container Registry <https://github.com/codelibs/docker-fess/pkgs/container/fess>`__.
 
 Paso 1: Obtención del Archivo Docker Compose
 =============================================

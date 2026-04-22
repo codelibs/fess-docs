@@ -35,7 +35,7 @@
 - **Fess**: 全文搜索系统主体
 - **OpenSearch**: 搜索引擎
 
-官方 Docker 镜像发布在 `Docker Hub <https://hub.docker.com/r/codelibs/fess>`__。
+官方 Docker 镜像发布在 `GitHub Container Registry <https://github.com/codelibs/docker-fess/pkgs/container/fess>`__。
 
 步骤 1: 获取 Docker Compose 文件
 =======================================
