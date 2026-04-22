@@ -35,7 +35,7 @@ Docker イメージについて
 - **Fess**: 全文検索システム本体
 - **OpenSearch**: 検索エンジン
 
-公式 Docker イメージは `Docker Hub <https://hub.docker.com/r/codelibs/fess>`__ で公開されています。
+公式 Docker イメージは `GitHub Container Registry <https://github.com/codelibs/docker-fess/pkgs/container/fess>`__ で公開されています。
 
 ステップ 1: Docker Compose ファイルの取得
 =======================================

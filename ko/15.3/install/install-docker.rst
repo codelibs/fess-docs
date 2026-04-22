@@ -35,7 +35,7 @@ Docker 이미지 정보
 - **Fess**: 전문 검색 시스템 본체
 - **OpenSearch**: 검색 엔진
 
-공식 Docker 이미지는 `Docker Hub <https://hub.docker.com/r/codelibs/fess>`__ 에서 공개되고 있습니다.
+공식 Docker 이미지는 `GitHub Container Registry <https://github.com/codelibs/docker-fess/pkgs/container/fess>`__ 에서 공개되고 있습니다.
 
 단계 1: Docker Compose 파일 가져오기
 =======================================
