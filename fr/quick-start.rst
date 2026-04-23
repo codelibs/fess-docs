@@ -70,7 +70,7 @@ Attendez quelques minutes que les services s'initialisent, puis accédez à :
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-Pour plus de détails sur le déploiement Docker, consultez le `Guide d'installation Docker <15.6/install/install-docker>`__.
+Pour plus de détails sur le déploiement Docker, consultez le :doc:`Guide d'installation Docker <15.6/install/install-docker>`.
 
 ----
 
@@ -181,7 +181,7 @@ Pour en savoir plus
 
 Veuillez consulter les documents suivants, etc.
 
-* `Liste des documents <documentation>`__
+* :doc:`Liste des documents <documentation>`
 * `[Série] Introduction facile ! Introduction au serveur de recherche plein texte OSS Fess <https://news.mynavi.jp/techplus/series/_ossfess/>`__
-* `Informations pour les développeurs <development>`__
+* :doc:`Informations pour les développeurs <development>`
 * `Forum de discussion <https://discuss.codelibs.org/c/fessja/>`__

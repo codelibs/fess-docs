@@ -70,7 +70,7 @@ Espere un par de minutos para que los servicios se inicialicen, luego abra su na
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Para configuracion avanzada de Docker (ajustes personalizados, OpenSearch externo, Kubernetes),
-consulte la `Guia de instalacion con Docker <15.6/install/install-docker>`__.
+consulte la :doc:`Guia de instalacion con Docker <15.6/install/install-docker>`.
 
 ----
 
@@ -184,9 +184,9 @@ Visite http://localhost:8080/ e ingrese un termino de busqueda para ver sus resu
 Para saber mas
 ==============
 
-- `Documentacion completa <documentation>`__ - Guia de referencia completa
-- `Guia de instalacion <setup>`__ - Opciones de implementacion en produccion
-- `Guia de administracion <15.6/admin/index>`__ - Configuracion y gestion
-- `Referencia de API <15.6/api/index>`__ - Integre la busqueda en sus aplicaciones
+- :doc:`Documentacion completa <documentation>` - Guia de referencia completa
+- :doc:`Guia de instalacion <setup>` - Opciones de implementacion en produccion
+- :doc:`Guia de administracion <15.6/admin/index>` - Configuracion y gestion
+- :doc:`Referencia de API <15.6/api/index>` - Integre la busqueda en sus aplicaciones
 - `Foro de discusion <https://discuss.codelibs.org/c/fessen/>`__ - Haga preguntas, comparta consejos
 - `GitHub Issues <https://github.com/codelibs/fess/issues>`__ - Reporte errores, solicite funciones

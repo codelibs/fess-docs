@@ -69,7 +69,7 @@ Docker と Docker Compose がインストールされている場合、以下の
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-より詳細な Docker 環境の設定については、`Docker インストールガイド <15.6/install/install-docker>`__ を参照してください。
+より詳細な Docker 環境の設定については、:doc:`Docker インストールガイド <15.6/install/install-docker>` を参照してください。
 
 ----
 
@@ -182,7 +182,7 @@ Ctrl-C や kill コマンド等で fess のプロセスを停止します。
 
 以下のドキュメントなどを参照してください。
 
-* `ドキュメント一覧 <documentation>`__
+* :doc:`ドキュメント一覧 <documentation>`
 * `[連載] 簡単導入！ OSS全文検索サーバーFess入門 <https://news.mynavi.jp/techplus/series/_ossfess/>`__
-* `開発者向け情報 <development>`__
+* :doc:`開発者向け情報 <development>`
 * `ディスカッションフォーラム <https://discuss.codelibs.org/c/fessja/>`__
