@@ -5,6 +5,12 @@ How to Use
 This page describes the basic usage of Fess.
 If you haven't installed Fess yet, please refer to :doc:`setup` or :doc:`quick-start`.
 
+.. note::
+
+   To search with Fess, you must first configure and run a crawl to build the index.
+   Immediately after installation, search results will return 0 results.
+   For crawl configuration, refer to `Administration Screen (For Administrators)`_.
+
 About Fess UI
 ===================
 
@@ -63,7 +69,7 @@ Example: ``Fess -Elasticsearch`` → Documents containing "Fess" but not "Elasti
 
 Enclose keywords in ``""`` to search for an exact phrase match.
 
-Example: ``"full-text search"`` → Documents containing the phrase "full-text search"
+Example: ``"full-text search"`` → Documents containing the exact phrase "full-text search"
 
 Search Options
 ------------
@@ -95,6 +101,7 @@ Default administrator account:
 
    Be sure to change the default password.
    Especially in production environments, we strongly recommend changing the password immediately after the first login.
+   For instructions on changing the password, refer to :doc:`15.6/admin/user-guide`.
 
 .. note::
 
@@ -132,8 +139,8 @@ Next Steps
 
 After understanding the basic usage, you can refer to the following documents to learn more:
 
-- **User Guide**: Details on crawl settings and search settings
-- **API Documentation**: Integration using the REST API
-- **Developer Guide**: Customization and extension development
+- :doc:`15.6/admin/index` — Details on crawl settings and search settings
+- :doc:`15.6/api/index` — Integration using the REST API
+- :doc:`dev/index` — Customization and extension development
 
 .. |Browser search results display| image:: ../resources/images/en/fess_search_result.png

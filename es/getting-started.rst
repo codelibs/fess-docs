@@ -5,6 +5,12 @@ Cómo Usar
 Esta página explica el uso básico de Fess.
 Si aún no ha instalado Fess, consulte :doc:`setup` o :doc:`quick-start`.
 
+.. note::
+
+   Para buscar con Fess, primero debe configurar y ejecutar un rastreo para construir el índice.
+   Inmediatamente después de la instalación, los resultados de búsqueda devolverán 0 resultados.
+   Para la configuración del rastreo, consulte `Pantalla de Administración (Para Administradores)`_.
+
 Acerca de la interfaz de usuario de Fess
 ===================
 
@@ -63,7 +69,7 @@ Ejemplo: ``Fess -Elasticsearch`` → Documentos que contienen "Fess" pero no "El
 
 Si encierra palabras clave entre ``""``, buscará esa frase exacta.
 
-Ejemplo: ``"búsqueda de texto completo"`` → Documentos que contienen la palabra "búsqueda de texto completo"
+Ejemplo: ``"búsqueda de texto completo"`` → Documentos que contienen la frase exacta "búsqueda de texto completo"
 
 Opciones de Búsqueda
 ------------
@@ -95,6 +101,7 @@ Cuenta de administrador predeterminada:
 
    Asegúrese de cambiar la contraseña predeterminada.
    Especialmente en entornos de producción, se recomienda encarecidamente cambiar la contraseña inmediatamente después del primer inicio de sesión.
+   Para instrucciones sobre cómo cambiar la contraseña, consulte :doc:`15.6/admin/user-guide`.
 
 .. note::
 
@@ -132,9 +139,9 @@ Próximos Pasos
 
 Una vez que comprenda el uso básico, puede consultar la siguiente documentación para aprender más:
 
-- **Guía del Usuario**: Detalles sobre la configuración de rastreo y búsqueda
-- **Documentación de API**: Integración de búsqueda mediante REST API
-- **Guía del Desarrollador**: Desarrollo de personalizaciones y extensiones
+- :doc:`15.6/admin/index` — Detalles sobre la configuración de rastreo y búsqueda
+- :doc:`15.6/api/index` — Integración de búsqueda mediante REST API
+- :doc:`dev/index` — Desarrollo de personalizaciones y extensiones
 
 .. |Visualización de resultados de búsqueda en el navegador| image:: ../resources/images/en/fess_search_result.png
 
