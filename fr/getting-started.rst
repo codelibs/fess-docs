@@ -5,6 +5,12 @@ Utilisation
 Cette page explique l'utilisation de base de Fess.
 Si vous n'avez pas encore installé Fess, veuillez consulter :doc:`setup` ou :doc:`quick-start`.
 
+.. note::
+
+   Pour effectuer des recherches avec Fess, vous devez d'abord configurer et exécuter un crawl afin de construire l'index.
+   Immédiatement après l'installation, les résultats de recherche retourneront 0 résultats.
+   Pour la configuration du crawl, consultez `Écran d'administration (pour les administrateurs)`_.
+
 À propos de l'interface utilisateur de Fess
 ===================
 
@@ -63,7 +69,7 @@ Exemple : ``Fess -Elasticsearch`` → Documents contenant « Fess » mais pas «
 
 En entourant les mots-clés de ``""``, vous effectuez une recherche de correspondance exacte de cette phrase.
 
-Exemple : ``"recherche en texte intégral"`` → Documents contenant le mot « recherche en texte intégral »
+Exemple : ``"recherche en texte intégral"`` → Documents contenant l'expression exacte « recherche en texte intégral »
 
 Options de recherche
 ------------
@@ -95,6 +101,7 @@ Compte administrateur par défaut :
 
    Veuillez absolument changer le mot de passe par défaut.
    En particulier en environnement de production, il est fortement recommandé de changer le mot de passe immédiatement après la première connexion.
+   Pour les instructions de changement de mot de passe, consultez :doc:`15.6/admin/user-guide`.
 
 .. note::
 
@@ -132,8 +139,8 @@ Prochaines étapes
 
 Après avoir compris l'utilisation de base, vous pouvez en apprendre davantage en consultant les documents suivants :
 
-- **Guide de l'utilisateur** : Détails sur la configuration de l'exploration et de la recherche
-- **Documentation API** : Intégration de la recherche via l'API REST
-- **Guide du développeur** : Développement de personnalisations et de fonctionnalités d'extension
+- :doc:`15.6/admin/index` — Détails sur la configuration de l'exploration et de la recherche
+- :doc:`15.6/api/index` — Intégration de la recherche via l'API REST
+- :doc:`dev/index` — Développement de personnalisations et de fonctionnalités d'extension
 
 .. |Affichage des résultats de recherche dans le navigateur| image:: ../resources/images/en/fess_search_result.png

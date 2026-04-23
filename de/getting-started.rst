@@ -5,6 +5,12 @@ Nutzung
 Diese Seite erklärt die grundlegende Nutzung von Fess.
 Wenn Sie Fess noch nicht installiert haben, lesen Sie bitte :doc:`setup` oder :doc:`quick-start`.
 
+.. note::
+
+   Um mit Fess zu suchen, müssen Sie zunächst einen Crawl konfigurieren und ausführen, um den Index aufzubauen.
+   Direkt nach der Installation liefert die Suche 0 Ergebnisse.
+   Informationen zur Crawl-Konfiguration finden Sie unter `Verwaltungsoberfläche (für Administratoren)`_.
+
 Über die Benutzeroberfläche von Fess
 =====================================
 
@@ -63,7 +69,7 @@ Beispiel: ``Fess -Elasticsearch`` → Dokumente, die „Fess" enthalten, aber ni
 
 Umschließen Sie Schlüsselwörter mit ``""``, um nach einer exakten Phrase zu suchen.
 
-Beispiel: ``"Volltextsuche"`` → Dokumente, die das Wort „Volltextsuche" enthalten
+Beispiel: ``"Volltextsuche"`` → Dokumente, die den exakten Ausdruck „Volltextsuche" enthalten
 
 Suchoptionen
 ------------
@@ -95,6 +101,7 @@ Standard-Administratorkonto:
 
    Ändern Sie unbedingt das Standardpasswort.
    Besonders in Produktionsumgebungen wird dringend empfohlen, das Passwort sofort nach der ersten Anmeldung zu ändern.
+   Anleitungen zur Passwortänderung finden Sie unter :doc:`15.6/admin/user-guide`.
 
 .. note::
 
@@ -132,8 +139,8 @@ Nächste Schritte
 
 Nachdem Sie die grundlegende Nutzung verstanden haben, können Sie die folgenden Dokumente konsultieren, um mehr zu erfahren:
 
-- **Benutzerhandbuch**: Details zu Crawl-Einstellungen und Sucheinstellungen
-- **API-Dokumentation**: Integration der Suche über REST-API
-- **Entwicklerhandbuch**: Entwicklung von Anpassungen und Erweiterungen
+- :doc:`15.6/admin/index` — Details zu Crawl-Einstellungen und Sucheinstellungen
+- :doc:`15.6/api/index` — Integration der Suche über REST-API
+- :doc:`dev/index` — Entwicklung von Anpassungen und Erweiterungen
 
 .. |Browser-basierte Anzeige von Suchergebnissen| image:: ../resources/images/en/fess_search_result.png

@@ -8,7 +8,13 @@ Installation Methods
 Fess provides distributions in ZIP archives, RPM/DEB packages, and Docker images.
 Using Docker allows you to easily set up Fess on Windows, Mac, and other platforms.
 
-For production environments, be sure to refer to :doc:`15.3/install/index`.
+.. note::
+
+   This page explains setup on **Windows using Docker**. Users on Linux or macOS can follow similar steps, but the Docker Desktop installation differs by platform.
+   For details, refer to the `Docker <https://docs.docker.com/get-docker/>`_ documentation.
+
+For production environments, be sure to refer to :doc:`15.6/install/index`.
+For system requirements, see :doc:`15.6/install/prerequisites`.
 
 .. warning::
 
@@ -17,14 +23,20 @@ For production environments, be sure to refer to :doc:`15.3/install/index`.
    Running with the embedded OpenSearch is not recommended for production environments or load testing.
    Always set up an external OpenSearch server.
 
+Setup Overview
+--------------
+
+Follow these steps in order:
+
+1. Install Docker Desktop
+2. Configure the OS (adjust vm.max_map_count)
+3. Download Fess startup files
+4. Start Fess and verify operation
+
 Installing Docker Desktop
 ==========================
 
-This guide explains the installation procedure for Windows.
 If Docker Desktop is not already installed, please follow these steps.
-
-The files to download and installation procedures differ by OS, so you need to follow the steps appropriate for your environment.
-For details, refer to the `Docker <https://docs.docker.com/get-docker/>`_ documentation.
 
 Download
 --------
@@ -74,9 +86,14 @@ Creating Startup Files
 
 Create a directory and download `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ and `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_.
 
+.. note::
+
+   ``compose-opensearch3.yaml`` is an additional configuration file for using OpenSearch 3.x.
+   It is used in combination with ``compose.yaml``.
+
 You can also download them using the curl command as follows:
 
-::
+.. code-block:: bash
 
     curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
     curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
@@ -88,14 +105,16 @@ Start Fess with the docker compose command.
 
 Open a command prompt, navigate to the folder containing the compose.yaml file, and execute the following command:
 
-::
+.. code-block:: bash
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 .. note::
 
    Startup may take several minutes.
-   You can check the logs with the following command::
+   You can check the logs with the following command:
+
+   .. code-block:: bash
 
        docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f
 
@@ -105,9 +124,13 @@ Open a command prompt, navigate to the folder containing the compose.yaml file, 
 Verification
 ============
 
-Access \http://localhost:8080/ to verify that it has started.
+.. note::
 
-The admin UI is at \http://localhost:8080/admin/.
+   Once startup is complete, access the following URLs in your browser to verify.
+
+   - **Search:** http://localhost:8080/
+   - **Admin UI:** http://localhost:8080/admin/
+
 The default administrator account username/password is admin/admin.
 
 .. warning::
@@ -128,18 +151,22 @@ Stopping Fess
 
 To stop Fess, execute the following command in the folder where you started Fess:
 
-::
+.. code-block:: bash
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml stop
 
-To stop and remove containers::
+To stop and remove containers:
+
+.. code-block:: bash
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 .. warning::
 
    To also remove volumes with the ``down`` command, add the ``-v`` option.
-   Note that this will delete all data::
+   Note that this will delete all data.
+
+   .. code-block:: bash
 
        docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
@@ -147,6 +174,21 @@ Changing Administrator Password
 --------------------------------
 
 You can change the password on the User edit page in the admin UI.
+
+1. Access http://localhost:8080/admin/ and log in.
+2. Select "User" from the top-right menu.
+3. Open the edit page for the admin user and change the password.
+
+Next Steps
+==========
+
+Now that Fess is set up, refer to the following documentation to get started:
+
+- :doc:`15.6/install/run` — Detailed startup, stop, and configuration
+- :doc:`15.6/admin/index` — Administrator guide (crawl settings, user management, etc.)
+- :doc:`15.6/user/index` — User guide (how to search)
+
+If you encounter any issues, refer to :doc:`15.6/install/troubleshooting`.
 
 .. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
