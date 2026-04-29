@@ -392,10 +392,6 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 
 出于安全考虑，建议通过运行时环境（JVM 选项）而非签入文件来配置 API 密钥。
 
-|Fess| **不会**自动映射 ``RAG_CHAT_ENABLED`` 这类简单 shell 环境变量。
-所有 RAG / LLM 设置必须通过 ``FESS_JAVA_OPTS`` 内的 ``-Dfess.config.*``
-（FessConfig 系列）或 ``-Dfess.system.*`` （SystemProperty 系列）JVM 选项传递。
-
 Docker环境
 ----------
 

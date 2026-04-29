@@ -393,11 +393,6 @@ Configuration via JVM Options
 For security reasons, it is recommended to configure API keys via the runtime
 environment (JVM options) rather than checked-in files.
 
-|Fess| does **not** auto-map plain environment variables such as
-``RAG_CHAT_ENABLED``. All RAG / LLM settings must be passed inside
-``FESS_JAVA_OPTS`` as ``-Dfess.config.*`` (FessConfig family) or
-``-Dfess.system.*`` (SystemProperty family) JVM options.
-
 Docker Environment
 ------------------
 

@@ -207,12 +207,6 @@ Ollama を使う例::
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
     $ docker exec -it ollama01 ollama pull gemma4:e4b
 
-.. note::
-
-   |Fess| では ``RAG_CHAT_ENABLED=true`` のような単純な環境変数の自動マッピングは行っていません。
-   AI検索モード関連の設定は必ず ``FESS_JAVA_OPTS`` の中で ``-Dfess.config.*`` または ``-Dfess.system.*`` として指定してください。
-   詳細は :doc:`../config/rag-chat` の「設定経路の早見表」を参照してください。
-
 .. tip::
 
    起動後、管理画面「システム > 全般」の RAG セクションで ``rag.llm.name`` および各プロバイダー固有の設定を編集できます。

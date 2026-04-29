@@ -341,11 +341,6 @@ Konfiguration über JVM-Optionen
 Aus Sicherheitsgründen wird empfohlen, API-Schlüssel über die Laufzeitumgebung
 (JVM-Optionen) statt in eingecheckten Dateien zu konfigurieren.
 
-|Fess| ordnet einfache Shell-Variablen wie ``RAG_CHAT_ENABLED`` **nicht** automatisch zu.
-Alle RAG-/LLM-Einstellungen müssen innerhalb von ``FESS_JAVA_OPTS`` als
-``-Dfess.config.*`` (FessConfig-Familie) oder ``-Dfess.system.*`` (SystemProperty-Familie)
-JVM-Optionen übergeben werden.
-
 Docker-Umgebung
 ---------------
 

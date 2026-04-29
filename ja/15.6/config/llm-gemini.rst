@@ -350,10 +350,6 @@ JVMオプションでの設定
 
 セキュリティ上の理由から、APIキーをファイルではなく環境（JVMオプション）経由で設定することを推奨します。
 
-|Fess| では ``RAG_CHAT_ENABLED`` のような単純な環境変数の自動マッピングは行っていません。
-すべて ``FESS_JAVA_OPTS`` の中で ``-Dfess.config.*`` （ ``fess_config.properties`` 系）または
-``-Dfess.system.*`` （ ``system.properties`` 系）として指定する必要があります。
-
 Docker環境
 ----------
 

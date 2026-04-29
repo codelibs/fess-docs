@@ -110,12 +110,6 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
      - 有
 
-.. important::
-
-   |Fess| **不会**自动映射 ``RAG_CHAT_ENABLED=true`` 或 ``RAG_LLM_GEMINI_API_KEY=...``
-   这类简单环境变量。所有 RAG / LLM 设置必须通过 ``FESS_JAVA_OPTS`` 内的
-   ``-Dfess.config.*`` 或 ``-Dfess.system.*`` JVM 选项传递。
-
 .. note::
 
    ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.6 及以后已改为 ``rag.llm.name``，

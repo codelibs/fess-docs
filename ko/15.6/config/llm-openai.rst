@@ -393,10 +393,6 @@ JVM 옵션 설정
 보안상의 이유로 API 키는 체크인된 파일이 아니라 런타임 환경(JVM 옵션)을 통해
 설정하는 것을 권장합니다.
 
-|Fess| 는 ``RAG_CHAT_ENABLED`` 와 같은 단순 셸 환경 변수를 자동 매핑하지 **않습니다**.
-모든 RAG / LLM 설정은 ``FESS_JAVA_OPTS`` 내에서 ``-Dfess.config.*`` (FessConfig 계열)
-또는 ``-Dfess.system.*`` (SystemProperty 계열) JVM 옵션으로 전달해야 합니다.
-
 Docker 환경
 -----------
 

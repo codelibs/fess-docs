@@ -111,13 +111,6 @@ not mix them up.
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
      - Yes
 
-.. important::
-
-   Plain shell-style environment variables such as ``RAG_CHAT_ENABLED=true``
-   or ``RAG_LLM_GEMINI_API_KEY=...`` are **not** auto-mapped by |Fess|.
-   All RAG / LLM settings must be passed inside ``FESS_JAVA_OPTS`` as
-   ``-Dfess.config.*`` or ``-Dfess.system.*`` JVM options.
-
 .. note::
 
    ``rag.llm.type`` is the legacy property name from |Fess| 15.5 and earlier.

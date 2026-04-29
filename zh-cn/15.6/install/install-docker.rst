@@ -208,13 +208,6 @@
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
     $ docker exec -it ollama01 ollama pull gemma4:e4b
 
-.. note::
-
-   |Fess| 不会自动映射 ``RAG_CHAT_ENABLED=true`` 等简单环境变量。
-   AI 搜索模式相关设置必须通过 ``FESS_JAVA_OPTS`` 中的 ``-Dfess.config.*`` 或
-   ``-Dfess.system.*`` 指定。详情请参阅 :doc:`../config/rag-chat` 中的
-   "配置路径快速参考"。
-
 .. tip::
 
    启动后，可在管理界面"系统 > 全局设置"的 RAG 区段编辑 ``rag.llm.name`` 及各提供商

@@ -393,11 +393,6 @@ Configuration via options JVM
 Pour des raisons de securite, il est recommande de configurer la cle API via
 l'environnement d'execution (options JVM) plutot que via des fichiers versionnes.
 
-|Fess| ne mappe **pas** automatiquement les variables shell simples comme
-``RAG_CHAT_ENABLED``. Tous les parametres RAG / LLM doivent etre passes dans
-``FESS_JAVA_OPTS`` sous forme d'options JVM ``-Dfess.config.*`` (famille FessConfig)
-ou ``-Dfess.system.*`` (famille SystemProperty).
-
 Environnement Docker
 --------------------
 

@@ -108,13 +108,6 @@ in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher ni
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
      - Ja
 
-.. important::
-
-   Einfache Shell-Umgebungsvariablen wie ``RAG_CHAT_ENABLED=true`` oder
-   ``RAG_LLM_GEMINI_API_KEY=...`` werden von |Fess| **nicht** automatisch zugeordnet.
-   Alle RAG-/LLM-Einstellungen müssen innerhalb von ``FESS_JAVA_OPTS`` als
-   ``-Dfess.config.*`` oder ``-Dfess.system.*`` JVM-Optionen übergeben werden.
-
 .. note::
 
    ``rag.llm.type`` ist der frühere Eigenschaftsname aus |Fess| 15.5 und davor.
