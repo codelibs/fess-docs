@@ -168,6 +168,51 @@
    在生产环境中，必须更改管理员密码。
    详情请参阅 :doc:`security`。
 
+启用 AI 搜索模式（LLM 插件）
+============================
+
+|Fess| 15.6 起，AI 搜索模式（RAG Chat）功能由 ``fess-llm-*`` 插件家族提供。
+官方 `docker-fess <https://github.com/codelibs/docker-fess>`__ 仓库附带了主要 LLM
+提供商的 overlay 文件。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Overlay
+     - 用途
+   * - ``compose-ollama.yaml``
+     - Ollama（本地 LLM，启动额外的 ``ollama01`` 服务）
+   * - ``compose-ollama-gpu.yaml``
+     - Ollama + NVIDIA GPU
+   * - ``compose-gemini.yaml``
+     - Google Gemini（云端 API）
+   * - ``compose-openai.yaml``
+     - OpenAI（云端 API）
+
+每个 overlay 都会通过 ``FESS_PLUGINS`` 自动获取相应的插件，并在 ``FESS_JAVA_OPTS`` 中
+设置 ``-Dfess.config.rag.chat.enabled=true`` 与 ``-Dfess.system.rag.llm.name={provider}``。
+
+使用 Gemini 的示例::
+
+    $ export GEMINI_API_KEY="AIzaSy..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+使用 OpenAI 的示例::
+
+    $ export OPENAI_API_KEY="sk-..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
+
+使用 Ollama 的示例::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    $ docker exec -it ollama01 ollama pull gemma4:e4b
+
+.. tip::
+
+   启动后，可在管理界面"系统 > 全局设置"的 RAG 区段编辑 ``rag.llm.name`` 及各提供商
+   的专属设置。这些值将持久化到 OpenSearch 中，重启后会优先于 JVM 选项生效。
+
 数据持久化
 ============
 

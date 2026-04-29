@@ -387,41 +387,50 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
     rag.llm.openai.top.p=0.9
     rag.llm.openai.frequency.penalty=0.5
 
-环境变量配置
-================
+通过 JVM 选项配置
+=================
 
-出于安全考虑，建议使用环境变量设置API密钥。
+出于安全考虑，建议通过运行时环境（JVM 选项）而非签入文件来配置 API 密钥。
 
 Docker环境
 ----------
 
-::
-
-    docker run -e RAG_LLM_OPENAI_API_KEY=sk-xxx... codelibs/fess:15.6.0
-
-docker-compose.yml
-~~~~~~~~~~~~~~~~~~
+官方 `docker-fess <https://github.com/codelibs/docker-fess>`__ 仓库附带了 OpenAI 用的
+overlay 文件 ``compose-openai.yaml``。最小步骤：
 
 ::
+
+    export OPENAI_API_KEY="sk-..."
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
+
+``compose-openai.yaml`` 的内容（自行编写等价配置时的参考）：
+
+.. code-block:: yaml
 
     services:
-      fess:
-        image: codelibs/fess:15.6.0
+      fess01:
         environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=openai
-          - RAG_LLM_OPENAI_API_KEY=${OPENAI_API_KEY}
-          - RAG_LLM_OPENAI_MODEL=gpt-5-mini
+          - "FESS_PLUGINS=fess-llm-openai:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
+
+要点：
+
+- ``FESS_PLUGINS=fess-llm-openai:15.6.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
+- ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
+- ``-Dfess.config.rag.llm.openai.api.key=...`` 设置 API 密钥，``-Dfess.config.rag.llm.openai.model=...`` 选择模型
+- ``-Dfess.system.rag.llm.name=openai`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
+
+如果通过代理访问互联网，请在 ``FESS_JAVA_OPTS`` 中追加
+``-Dhttps.proxyHost=... -Dhttps.proxyPort=...``。
 
 systemd环境
 -----------
 
-``/etc/systemd/system/fess.service.d/override.conf``:
+在 ``/etc/sysconfig/fess`` （或 ``/etc/default/fess`` ）的 ``FESS_JAVA_OPTS`` 中追加：
 
 ::
 
-    [Service]
-    Environment="RAG_LLM_OPENAI_API_KEY=sk-xxx..."
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
 
 使用Azure OpenAI
 ==================

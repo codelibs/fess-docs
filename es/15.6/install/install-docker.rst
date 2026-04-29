@@ -168,6 +168,55 @@ Cuenta de administrador predeterminada:
    Asegúrese de cambiar la contraseña de administrador en entornos de producción.
    Para más detalles, consulte :doc:`security`.
 
+Habilitar el modo IA (plugins LLM)
+==================================
+
+A partir de |Fess| 15.6, el modo IA (RAG Chat) se proporciona a traves de la
+familia de plugins ``fess-llm-*``. El repositorio oficial
+`docker-fess <https://github.com/codelibs/docker-fess>`__ incluye archivos overlay
+para los principales proveedores LLM.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Overlay
+     - Caso de uso
+   * - ``compose-ollama.yaml``
+     - Ollama (LLM local, inicia un servicio ``ollama01`` adicional)
+   * - ``compose-ollama-gpu.yaml``
+     - Ollama con GPU NVIDIA
+   * - ``compose-gemini.yaml``
+     - Google Gemini (API cloud)
+   * - ``compose-openai.yaml``
+     - OpenAI (API cloud)
+
+Cada overlay instala el plugin correspondiente via ``FESS_PLUGINS`` y define
+``-Dfess.config.rag.chat.enabled=true`` junto con
+``-Dfess.system.rag.llm.name={provider}`` en ``FESS_JAVA_OPTS``.
+
+Para usar Gemini::
+
+    $ export GEMINI_API_KEY="AIzaSy..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+Para usar OpenAI::
+
+    $ export OPENAI_API_KEY="sk-..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
+
+Para usar Ollama::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    $ docker exec -it ollama01 ollama pull gemma4:e4b
+
+.. tip::
+
+   Despues del inicio, la seccion RAG bajo Administracion > Sistema > General permite
+   editar ``rag.llm.name`` y los parametros especificos del proveedor. Esos valores
+   se persisten en OpenSearch y tienen precedencia sobre las opciones JVM en los
+   reinicios subsecuentes.
+
 Persistencia de Datos
 ======================
 

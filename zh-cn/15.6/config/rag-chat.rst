@@ -66,6 +66,55 @@ LLM提供商的选择在管理界面或系统属性中进行。
 - :doc:`llm-openai` - OpenAI配置
 - :doc:`llm-gemini` - Google Gemini配置
 
+配置路径快速参考
+================
+
+|Fess| 15.6 中，配置项分为两个系列：FessConfig 系列（ ``fess_config.properties`` ）和
+SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）。两者的配置路径不同，
+请勿混淆。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 18 32 15
+
+   * - 属性
+     - 系列
+     - 通过 Docker / JVM 选项传递的方式
+     - 管理界面
+   * - ``rag.chat.enabled``
+     - FessConfig
+     - ``-Dfess.config.rag.chat.enabled=true``
+     - 无
+   * - ``rag.llm.name``
+     - SystemProperty
+     - ``-Dfess.system.rag.llm.name=gemini`` （仅作为初始默认值）
+     - 有（全局设置）
+   * - ``rag.llm.gemini.api.key``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.gemini.api.key=...``
+     - 有
+   * - ``rag.llm.gemini.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.gemini.model=...``
+     - 有
+   * - ``rag.llm.openai.api.key``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.openai.api.key=...``
+     - 有
+   * - ``rag.llm.openai.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.openai.model=...``
+     - 有
+   * - ``rag.llm.ollama.api.url``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - 有
+
+.. note::
+
+   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.6 及以后已改为 ``rag.llm.name``，
+   写入 ``rag.llm.type`` 的值不会被读取。
+
 核心配置一览
 ============
 
@@ -426,6 +475,52 @@ Web界面
 
 故障排除
 ======================
+
+搜索界面未显示AI模式按钮
+------------------------
+
+**症状**: 搜索结果页面的标题栏未显示 AI 模式按钮，访问 ``/chat`` 会被重定向到首页。
+
+**检查清单**: 按以下顺序逐项确认。
+
+1. 是否设置了 ``rag.chat.enabled=true``
+
+   - Docker: ``FESS_JAVA_OPTS`` 中是否包含 ``-Dfess.config.rag.chat.enabled=true``
+   - 软件包安装: ``app/WEB-INF/conf/fess_config.properties`` 中是否填写
+
+2. 对应的 ``fess-llm-*`` 插件是否已安装
+
+   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama``）
+   - 软件包安装: 对应的 JAR 文件是否放置在 ``app/WEB-INF/plugin/``
+   - 启动日志中是否输出 ``Installing fess-llm-XXX-15.6.0.jar``
+
+3. ``rag.llm.name`` 的值是否与已安装的插件一致
+
+   - 默认值是 ``ollama``。如仅安装 Gemini 插件等情况下，需要显式改为 ``gemini`` （或 ``openai``）
+   - 设置方法 (a)：在管理界面 > 系统 > 全局 的 RAG 区段中编辑 ``rag.llm.name`` 并保存
+   - 设置方法 (b)：在启动时的 ``FESS_JAVA_OPTS`` 中包含 ``-Dfess.system.rag.llm.name=gemini`` （仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效）
+
+4. 启动日志中是否持续出现 ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` 类似的 WARN
+
+   - 这是 ``rag.llm.name`` 仍为 ``ollama`` 但 Ollama 插件未安装时的典型症状
+   - 将 ``rag.llm.name`` 改为实际使用的提供商名即可消除
+   - 同样地，出现 ``componentName=geminiLlmClient`` 的 WARN 表示 ``rag.llm.name=gemini`` 已设置但 ``fess-llm-gemini`` 插件未导入
+
+5. 提供商专属的 API 密钥是否正确配置
+
+   - 当 ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` 为空时，``checkAvailabilityNow`` 返回 ``false``，AI 模式不可用
+   - 在 ``log4j2.xml`` 中将 ``org.codelibs.fess.llm.gemini`` 设为 ``DEBUG`` 后，可以看到 ``[LLM:GEMINI] Gemini is not available. apiKey is blank`` 类似日志
+
+6. 是否能连接到 LLM 提供商
+
+   - 对于云端 API（Gemini / OpenAI），容器需要能访问外网
+   - 如需经代理，请在 ``FESS_JAVA_OPTS`` 中追加 ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...``
+
+.. note::
+
+   管理界面"全局设置"中没有 ``rag.chat.enabled`` 的复选框（设计如此）。
+   该值属于 FessConfig 系列属性，只能通过 ``fess_config.properties`` 或
+   ``-Dfess.config.rag.chat.enabled=true`` 进行设置。
 
 AI搜索模式无法启用
 ------------------------

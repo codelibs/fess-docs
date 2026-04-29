@@ -339,41 +339,51 @@ Gemini에서는 사고 모델(Thinking Model)을 지원합니다.
    사고 버짓을 설정하면 응답 시간이 길어질 수 있습니다.
    용도에 따라 적절한 값을 설정하세요.
 
-환경 변수 설정
-================
+JVM 옵션 설정
+=============
 
-보안상의 이유로 API 키를 환경 변수로 설정하는 것을 권장합니다.
+보안상의 이유로 API 키는 체크인된 파일이 아니라 런타임 환경(JVM 옵션)을 통해
+설정하는 것을 권장합니다.
 
 Docker 환경
-----------
-
-::
-
-    docker run -e RAG_LLM_GEMINI_API_KEY=AIzaSy... codelibs/fess:15.6.0
-
-docker-compose.yml
-~~~~~~~~~~~~~~~~~~
-
-::
-
-    services:
-      fess:
-        image: codelibs/fess:15.6.0
-        environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=gemini
-          - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
-
-systemd 환경
 -----------
 
-``/etc/systemd/system/fess.service.d/override.conf``:
+공식 `docker-fess <https://github.com/codelibs/docker-fess>`__ 리포지토리에는
+Gemini용 오버레이 ``compose-gemini.yaml`` 이 포함되어 있습니다. 최소 절차:
 
 ::
 
-    [Service]
-    Environment="RAG_LLM_GEMINI_API_KEY=AIzaSy..."
+    export GEMINI_API_KEY="AIzaSy..."
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+``compose-gemini.yaml`` 의 내용 (동등 구성을 직접 작성할 때의 참고):
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+
+요점:
+
+- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` 으로 컨테이너의 ``run.sh`` 가 플러그인 JAR을 자동 다운로드하여 ``app/WEB-INF/plugin/`` 에 배치합니다
+- ``-Dfess.config.rag.chat.enabled=true`` 로 AI 검색 모드를 활성화
+- ``-Dfess.config.rag.llm.gemini.api.key=...`` 로 API 키, ``-Dfess.config.rag.llm.gemini.model=...`` 로 모델 지정
+- ``-Dfess.system.rag.llm.name=gemini`` 는 OpenSearch에 값이 아직 기록되지 않은 첫 시작 시에만 기본값으로 적용됩니다. 시작 후에는 관리 화면 "시스템 > 전체 설정" 의 RAG 섹션에서도 변경할 수 있습니다
+
+프록시 경유로 인터넷에 접속하는 경우 ``FESS_JAVA_OPTS`` 에
+``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` 를 추가하세요.
+
+systemd 환경
+------------
+
+``/etc/sysconfig/fess`` (또는 ``/etc/default/fess`` )의 ``FESS_JAVA_OPTS`` 에 추가합니다:
+
+::
+
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
 
 Vertex AI 사용
 ===================

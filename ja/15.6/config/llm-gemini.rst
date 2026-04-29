@@ -345,41 +345,48 @@ Geminiでは思考モデル（Thinking Model）をサポートしています。
    思考バジェットを設定すると、応答時間が長くなる場合があります。
    用途に応じて適切な値を設定してください。
 
-環境変数での設定
-================
+JVMオプションでの設定
+=====================
 
-セキュリティ上の理由から、APIキーを環境変数で設定することを推奨します。
+セキュリティ上の理由から、APIキーをファイルではなく環境（JVMオプション）経由で設定することを推奨します。
 
 Docker環境
 ----------
 
-::
-
-    docker run -e RAG_LLM_GEMINI_API_KEY=AIzaSy... codelibs/fess:15.6.0
-
-docker-compose.yml
-~~~~~~~~~~~~~~~~~~
+|Fess| 公式の `docker-fess <https://github.com/codelibs/docker-fess>`__ には Gemini 用のオーバーレイ ``compose-gemini.yaml`` が同梱されています。最小手順は次の通りです。
 
 ::
+
+    export GEMINI_API_KEY="AIzaSy..."
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+``compose-gemini.yaml`` の内容（同等の構成を自前で書く場合の参考）:
+
+.. code-block:: yaml
 
     services:
-      fess:
-        image: codelibs/fess:15.6.0
+      fess01:
         environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=gemini
-          - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
+          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+
+ポイント:
+
+- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` で ``run.sh`` がプラグイン JAR を自動取得して ``app/WEB-INF/plugin/`` に配置します
+- ``-Dfess.config.rag.chat.enabled=true`` で AI検索モードを有効化
+- ``-Dfess.config.rag.llm.gemini.api.key=...`` で API キー、 ``-Dfess.config.rag.llm.gemini.model=...`` でモデルを指定
+- ``-Dfess.system.rag.llm.name=gemini`` は OpenSearch にまだ値が書き込まれていない初回起動時にデフォルトとして効きます。起動後は管理画面「システム > 全般」の RAG セクションでも変更できます
+
+Proxy 経由でインターネットに接続する場合は ``FESS_JAVA_OPTS`` に ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` を追加してください。
 
 systemd環境
 -----------
 
-``/etc/systemd/system/fess.service.d/override.conf``:
+``/etc/sysconfig/fess`` （または ``/etc/default/fess`` ）の ``FESS_JAVA_OPTS`` に追記します。
 
 ::
 
-    [Service]
-    Environment="RAG_LLM_GEMINI_API_KEY=AIzaSy..."
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
 
 Vertex AI経由の使用
 ===================

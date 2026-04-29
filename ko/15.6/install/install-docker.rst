@@ -168,6 +168,53 @@ Git이 설치되어 있는 경우 리포지토리 전체를 복제할 수도 있
    운영 환경에서는 관리자 비밀번호를 반드시 변경하십시오.
    자세한 내용은 :doc:`security` 를 참조하십시오.
 
+AI 검색 모드 (LLM 플러그인) 활성화
+================================
+
+|Fess| 15.6부터 AI 검색 모드(RAG Chat) 기능은 ``fess-llm-*`` 플러그인 패밀리로 제공됩니다.
+공식 `docker-fess <https://github.com/codelibs/docker-fess>`__ 리포지토리에는 주요
+LLM 프로바이더용 오버레이 파일이 포함되어 있습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 오버레이
+     - 용도
+   * - ``compose-ollama.yaml``
+     - Ollama (로컬 LLM, 추가 ``ollama01`` 서비스를 시작)
+   * - ``compose-ollama-gpu.yaml``
+     - Ollama + NVIDIA GPU
+   * - ``compose-gemini.yaml``
+     - Google Gemini (클라우드 API)
+   * - ``compose-openai.yaml``
+     - OpenAI (클라우드 API)
+
+각 오버레이는 ``FESS_PLUGINS`` 로 해당 플러그인을 자동 취득하고, ``FESS_JAVA_OPTS`` 에
+``-Dfess.config.rag.chat.enabled=true`` 와 ``-Dfess.system.rag.llm.name={provider}`` 를
+설정하도록 만들어져 있습니다.
+
+Gemini 사용 예::
+
+    $ export GEMINI_API_KEY="AIzaSy..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+OpenAI 사용 예::
+
+    $ export OPENAI_API_KEY="sk-..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
+
+Ollama 사용 예::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    $ docker exec -it ollama01 ollama pull gemma4:e4b
+
+.. tip::
+
+   시작 후 관리 화면 "시스템 > 전체 설정" 의 RAG 섹션에서 ``rag.llm.name`` 및 각 프로바이더
+   고유 설정을 편집할 수 있습니다. 이 값들은 OpenSearch에 영속화되므로 다음 시작 시에는
+   JVM 옵션보다 우선됩니다.
+
 데이터 영속화
 ============
 

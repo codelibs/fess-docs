@@ -387,41 +387,51 @@ Exemple de configuration
     rag.llm.openai.top.p=0.9
     rag.llm.openai.frequency.penalty=0.5
 
-Configuration via variables d'environnement
-================
+Configuration via options JVM
+=============================
 
-Pour des raisons de securite, il est recommande de configurer la cle API via des variables d'environnement.
+Pour des raisons de securite, il est recommande de configurer la cle API via
+l'environnement d'execution (options JVM) plutot que via des fichiers versionnes.
 
 Environnement Docker
-----------
+--------------------
+
+Le depot officiel `docker-fess <https://github.com/codelibs/docker-fess>`__
+fournit un overlay OpenAI (``compose-openai.yaml``). Etapes minimales :
 
 ::
 
-    docker run -e RAG_LLM_OPENAI_API_KEY=sk-xxx... codelibs/fess:15.6.0
+    export OPENAI_API_KEY="sk-..."
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
 
-docker-compose.yml
-~~~~~~~~~~~~~~~~~~
+Contenu de ``compose-openai.yaml`` (reference pour un setup equivalent) :
 
-::
+.. code-block:: yaml
 
     services:
-      fess:
-        image: codelibs/fess:15.6.0
+      fess01:
         environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=openai
-          - RAG_LLM_OPENAI_API_KEY=${OPENAI_API_KEY}
-          - RAG_LLM_OPENAI_MODEL=gpt-5-mini
+          - "FESS_PLUGINS=fess-llm-openai:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
+
+Notes :
+
+- ``FESS_PLUGINS=fess-llm-openai:15.6.0`` fait que ``run.sh`` du conteneur telecharge et installe automatiquement le plugin dans ``app/WEB-INF/plugin/``
+- ``-Dfess.config.rag.chat.enabled=true`` active le mode IA
+- ``-Dfess.config.rag.llm.openai.api.key=...`` definit la cle API, ``-Dfess.config.rag.llm.openai.model=...`` choisit le modele
+- ``-Dfess.system.rag.llm.name=openai`` n'agit que comme valeur par defaut initiale avant qu'une valeur ne soit persistee dans OpenSearch. Apres demarrage, le parametre peut aussi etre modifie sous Administration > Systeme > General (section RAG)
+
+Si l'acces Internet passe par un proxy, ajouter
+``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` a ``FESS_JAVA_OPTS``.
 
 Environnement systemd
------------
+---------------------
 
-``/etc/systemd/system/fess.service.d/override.conf`` :
+Ajouter a ``FESS_JAVA_OPTS`` dans ``/etc/sysconfig/fess`` (ou ``/etc/default/fess``) :
 
 ::
 
-    [Service]
-    Environment="RAG_LLM_OPENAI_API_KEY=sk-xxx..."
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
 
 Utilisation d'Azure OpenAI
 ==================

@@ -66,6 +66,56 @@ LLM 프로바이더의 상세 설정은 다음을 참조하세요:
 - :doc:`llm-openai` - OpenAI 설정
 - :doc:`llm-gemini` - Google Gemini 설정
 
+설정 경로 빠른 참조
+================
+
+|Fess| 15.6에서는 설정이 두 가지 계열로 분리되어 있습니다: FessConfig 계열
+( ``fess_config.properties`` )과 SystemProperty 계열( ``system.properties``,
+OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하지 마십시오.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 18 32 15
+
+   * - 프로퍼티
+     - 계열
+     - Docker / JVM 옵션 전달 방법
+     - 관리 화면
+   * - ``rag.chat.enabled``
+     - FessConfig
+     - ``-Dfess.config.rag.chat.enabled=true``
+     - 없음
+   * - ``rag.llm.name``
+     - SystemProperty
+     - ``-Dfess.system.rag.llm.name=gemini`` (초기 기본값으로만 작용)
+     - 있음 (전체 설정)
+   * - ``rag.llm.gemini.api.key``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.gemini.api.key=...``
+     - 있음
+   * - ``rag.llm.gemini.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.gemini.model=...``
+     - 있음
+   * - ``rag.llm.openai.api.key``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.openai.api.key=...``
+     - 있음
+   * - ``rag.llm.openai.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.openai.model=...``
+     - 있음
+   * - ``rag.llm.ollama.api.url``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - 있음
+
+.. note::
+
+   ``rag.llm.type`` 은 |Fess| 15.5 이전의 옛 프로퍼티 이름입니다.
+   15.6 이후에는 ``rag.llm.name`` 으로 변경되었으며, ``rag.llm.type`` 에 작성된 값은
+   읽혀지지 않습니다.
+
 코어 설정 목록
 ============
 
@@ -427,6 +477,53 @@ SSE 이벤트:
 
 문제 해결
 ======================
+
+검색 화면에 AI 모드 버튼이 표시되지 않음
+--------------------------------------
+
+**증상**: 검색 결과 화면 헤더에 AI 모드 버튼이 표시되지 않고, ``/chat`` 에 접근하면
+최상위 페이지로 리다이렉트됩니다.
+
+**체크리스트**: 다음 항목을 위에서부터 순서대로 확인하세요.
+
+1. ``rag.chat.enabled=true`` 가 설정되어 있는가
+
+   - Docker: ``FESS_JAVA_OPTS`` 에 ``-Dfess.config.rag.chat.enabled=true`` 가 포함되어 있는가
+   - 패키지 설치: ``app/WEB-INF/conf/fess_config.properties`` 에 기재되어 있는가
+
+2. 해당 ``fess-llm-*`` 플러그인이 설치되어 있는가
+
+   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` (또는 ``fess-llm-openai`` / ``fess-llm-ollama`` )가 지정되어 있는가
+   - 패키지 설치: JAR 파일이 ``app/WEB-INF/plugin/`` 에 배치되어 있는가
+   - 시작 로그에 ``Installing fess-llm-XXX-15.6.0.jar`` 이 출력되고 있는가
+
+3. ``rag.llm.name`` 의 값이 설치된 플러그인과 일치하는가
+
+   - 기본값은 ``ollama`` 입니다. Gemini 플러그인만 설치한 경우에는 명시적으로 ``gemini`` (또는 ``openai`` )로 변경해야 합니다
+   - 설정 방법 (a): 관리 화면 > 시스템 > 전체의 RAG 섹션에서 ``rag.llm.name`` 을 편집하고 저장
+   - 설정 방법 (b): 시작 시 ``FESS_JAVA_OPTS`` 에 ``-Dfess.system.rag.llm.name=gemini`` 를 포함 (OpenSearch에 값이 아직 저장되지 않은 첫 시작 시에만 기본값으로 적용됨)
+
+4. 시작 로그에 ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` 와 같은 WARN이 계속 출력되는가
+
+   - ``rag.llm.name`` 이 그대로 ``ollama`` 인 채 Ollama 플러그인이 설치되지 않은 경우의 전형적 증상입니다
+   - ``rag.llm.name`` 을 실제로 사용하는 프로바이더 이름으로 변경하면 해결됩니다
+   - 마찬가지로 ``componentName=geminiLlmClient`` 의 WARN이 출력되는 경우는 ``rag.llm.name=gemini`` 로 설정했는데 ``fess-llm-gemini`` 플러그인이 도입되지 않았음을 의미합니다
+
+5. 프로바이더 고유 API 키가 올바르게 설정되어 있는가
+
+   - ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` 등이 비어 있으면 ``checkAvailabilityNow`` 가 ``false`` 를 반환하므로 AI 모드를 이용할 수 없습니다
+   - ``log4j2.xml`` 에서 ``org.codelibs.fess.llm.gemini`` 를 ``DEBUG`` 로 설정하면 ``[LLM:GEMINI] Gemini is not available. apiKey is blank`` 와 같은 로그로 확인할 수 있습니다
+
+6. LLM 프로바이더로의 네트워크 연결이 가능한가
+
+   - 클라우드 API(Gemini / OpenAI)의 경우 컨테이너에서 외부로 도달할 수 있어야 합니다
+   - 프록시 경유가 필요한 경우 ``FESS_JAVA_OPTS`` 에 ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` 를 추가하세요
+
+.. note::
+
+   관리 화면 "전체 설정"에는 ``rag.chat.enabled`` 의 체크박스가 없습니다(사양).
+   이 값은 FessConfig 계열 프로퍼티이므로 ``fess_config.properties`` 또는
+   ``-Dfess.config.rag.chat.enabled=true`` 경유로만 설정할 수 있습니다.
 
 AI 검색 모드가 활성화되지 않음
 ---------------------------
