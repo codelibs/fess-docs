@@ -326,41 +326,56 @@ The thinking budget can be configured per prompt type in ``fess_config.propertie
    Setting a thinking budget may increase response time.
    Set an appropriate value based on your use case.
 
-Environment Variable Configuration
-===================================
+Configuration via JVM Options
+=============================
 
-For security reasons, it is recommended to configure API keys using environment variables.
+For security reasons, it is recommended to configure API keys via the runtime
+environment (JVM options) rather than checked-in files.
+
+|Fess| does **not** auto-map plain environment variables such as
+``RAG_CHAT_ENABLED``. All RAG / LLM settings must be passed inside
+``FESS_JAVA_OPTS`` as ``-Dfess.config.*`` (FessConfig family) or
+``-Dfess.system.*`` (SystemProperty family) JVM options.
 
 Docker Environment
 ------------------
 
-::
-
-    docker run -e RAG_LLM_GEMINI_API_KEY=AIzaSy... codelibs/fess:15.6.0
-
-docker-compose.yml
-~~~~~~~~~~~~~~~~~~
+The official `docker-fess <https://github.com/codelibs/docker-fess>`__ repository
+ships a Gemini overlay (``compose-gemini.yaml``). The minimum steps are:
 
 ::
+
+    export GEMINI_API_KEY="AIzaSy..."
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+The contents of ``compose-gemini.yaml`` (use as a reference if you build your own equivalent):
+
+.. code-block:: yaml
 
     services:
-      fess:
-        image: codelibs/fess:15.6.0
+      fess01:
         environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=gemini
-          - RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY}
-          - RAG_LLM_GEMINI_MODEL=gemini-3-flash-preview
+          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+
+Notes:
+
+- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` makes the container's ``run.sh`` download and install the plugin into ``app/WEB-INF/plugin/`` automatically
+- ``-Dfess.config.rag.chat.enabled=true`` enables AI mode
+- ``-Dfess.config.rag.llm.gemini.api.key=...`` sets the API key, ``-Dfess.config.rag.llm.gemini.model=...`` selects the model
+- ``-Dfess.system.rag.llm.name=gemini`` only acts as the initial default before a value is persisted in OpenSearch. After startup you can also change it from Administration > System > General (RAG section)
+
+If outbound Internet access goes through a proxy, append
+``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` to ``FESS_JAVA_OPTS``.
 
 systemd Environment
 -------------------
 
-``/etc/systemd/system/fess.service.d/override.conf``:
+Append to ``FESS_JAVA_OPTS`` in ``/etc/sysconfig/fess`` (or ``/etc/default/fess``):
 
 ::
 
-    [Service]
-    Environment="RAG_LLM_GEMINI_API_KEY=AIzaSy..."
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
 
 Using via Vertex AI
 ===================

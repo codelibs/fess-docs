@@ -168,6 +168,61 @@ Compte administrateur par défaut :
    En environnement de production, veuillez obligatoirement changer le mot de passe administrateur.
    Pour plus de détails, consultez :doc:`security`.
 
+Activer le mode IA (plugins LLM)
+================================
+
+A partir de |Fess| 15.6, le mode IA (RAG Chat) est fourni via la famille de plugins
+``fess-llm-*``. Le depot officiel `docker-fess <https://github.com/codelibs/docker-fess>`__
+fournit des fichiers overlay pour les principaux fournisseurs LLM.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Overlay
+     - Cas d'usage
+   * - ``compose-ollama.yaml``
+     - Ollama (LLM local, demarre un service ``ollama01`` supplementaire)
+   * - ``compose-ollama-gpu.yaml``
+     - Ollama avec GPU NVIDIA
+   * - ``compose-gemini.yaml``
+     - Google Gemini (API cloud)
+   * - ``compose-openai.yaml``
+     - OpenAI (API cloud)
+
+Chaque overlay installe le plugin correspondant via ``FESS_PLUGINS`` et definit
+``-Dfess.config.rag.chat.enabled=true`` ainsi que
+``-Dfess.system.rag.llm.name={provider}`` dans ``FESS_JAVA_OPTS``.
+
+Pour utiliser Gemini ::
+
+    $ export GEMINI_API_KEY="AIzaSy..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+Pour utiliser OpenAI ::
+
+    $ export OPENAI_API_KEY="sk-..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
+
+Pour utiliser Ollama ::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    $ docker exec -it ollama01 ollama pull gemma4:e4b
+
+.. note::
+
+   |Fess| ne mappe pas automatiquement les variables d'environnement simples comme
+   ``RAG_CHAT_ENABLED=true``. Tous les parametres du mode IA doivent etre passes dans
+   ``FESS_JAVA_OPTS`` sous forme ``-Dfess.config.*`` ou ``-Dfess.system.*``. Voir
+   la "Reference rapide des chemins de configuration" dans :doc:`../config/rag-chat`.
+
+.. tip::
+
+   Apres le demarrage, la section RAG sous Administration > Systeme > General
+   permet de modifier ``rag.llm.name`` et les parametres specifiques au fournisseur.
+   Ces valeurs sont persistees dans OpenSearch et ont preseance sur les options JVM
+   lors des redemarrages suivants.
+
 Persistance des données
 ========================
 

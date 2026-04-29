@@ -168,6 +168,60 @@ Standard-Administratorkonto:
    In Produktionsumgebungen ändern Sie bitte unbedingt das Administratorpasswort.
    Weitere Informationen finden Sie unter :doc:`security`.
 
+AI-Modus aktivieren (LLM-Plugins)
+=================================
+
+Ab |Fess| 15.6 wird der AI-Modus (RAG Chat) über die ``fess-llm-*``-Plugin-Familie bereitgestellt.
+Das offizielle `docker-fess <https://github.com/codelibs/docker-fess>`__ Repository liefert
+Overlay-Dateien für die wichtigsten LLM-Anbieter mit.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Overlay
+     - Verwendung
+   * - ``compose-ollama.yaml``
+     - Ollama (lokales LLM, startet zusätzlichen ``ollama01``-Service)
+   * - ``compose-ollama-gpu.yaml``
+     - Ollama mit NVIDIA-GPU
+   * - ``compose-gemini.yaml``
+     - Google Gemini (Cloud-API)
+   * - ``compose-openai.yaml``
+     - OpenAI (Cloud-API)
+
+Jedes Overlay installiert das passende Plugin via ``FESS_PLUGINS`` und setzt
+``-Dfess.config.rag.chat.enabled=true`` zusammen mit
+``-Dfess.system.rag.llm.name={provider}`` in ``FESS_JAVA_OPTS``.
+
+Gemini verwenden::
+
+    $ export GEMINI_API_KEY="AIzaSy..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
+
+OpenAI verwenden::
+
+    $ export OPENAI_API_KEY="sk-..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
+
+Ollama verwenden::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    $ docker exec -it ollama01 ollama pull gemma4:e4b
+
+.. note::
+
+   |Fess| ordnet einfache Shell-Variablen wie ``RAG_CHAT_ENABLED=true`` nicht automatisch zu.
+   AI-Modus-Einstellungen müssen innerhalb von ``FESS_JAVA_OPTS`` als
+   ``-Dfess.config.*`` oder ``-Dfess.system.*`` übergeben werden. Details
+   in der "Konfigurationspfad-Schnellreferenz" in :doc:`../config/rag-chat`.
+
+.. tip::
+
+   Nach dem Start kann unter Administration > System > Allgemein in der RAG-Sektion
+   ``rag.llm.name`` und anbieterspezifische Einstellungen bearbeitet werden. Diese Werte
+   werden in OpenSearch persistiert und überschreiben bei späteren Neustarts die JVM-Optionen.
+
 Datenpersistenz
 ===============
 

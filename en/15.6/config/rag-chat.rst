@@ -66,6 +66,64 @@ For detailed LLM provider configuration, refer to:
 - :doc:`llm-openai` - OpenAI Configuration
 - :doc:`llm-gemini` - Google Gemini Configuration
 
+Configuration Path Quick Reference
+==================================
+
+In |Fess| 15.6, settings are split into two families: the FessConfig family
+(``fess_config.properties``) and the SystemProperty family (``system.properties``,
+persisted in OpenSearch). The configuration path differs between the two, so do
+not mix them up.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 18 32 15
+
+   * - Property
+     - Family
+     - How to pass via Docker / JVM options
+     - Admin UI
+   * - ``rag.chat.enabled``
+     - FessConfig
+     - ``-Dfess.config.rag.chat.enabled=true``
+     - No
+   * - ``rag.llm.name``
+     - SystemProperty
+     - ``-Dfess.system.rag.llm.name=gemini`` (initial default only)
+     - Yes (General settings)
+   * - ``rag.llm.gemini.api.key``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.gemini.api.key=...``
+     - Yes
+   * - ``rag.llm.gemini.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.gemini.model=...``
+     - Yes
+   * - ``rag.llm.openai.api.key``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.openai.api.key=...``
+     - Yes
+   * - ``rag.llm.openai.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.openai.model=...``
+     - Yes
+   * - ``rag.llm.ollama.api.url``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - Yes
+
+.. important::
+
+   Plain shell-style environment variables such as ``RAG_CHAT_ENABLED=true``
+   or ``RAG_LLM_GEMINI_API_KEY=...`` are **not** auto-mapped by |Fess|.
+   All RAG / LLM settings must be passed inside ``FESS_JAVA_OPTS`` as
+   ``-Dfess.config.*`` or ``-Dfess.system.*`` JVM options.
+
+.. note::
+
+   ``rag.llm.type`` is the legacy property name from |Fess| 15.5 and earlier.
+   In 15.6 and later it has been renamed to ``rag.llm.name``; values written
+   under ``rag.llm.type`` are not read.
+
 Core Settings List
 ==================
 
@@ -425,6 +483,53 @@ Continuing a Conversation
 
 Troubleshooting
 ===============
+
+AI Mode Button Does Not Appear on the Search Screen
+---------------------------------------------------
+
+**Symptom**: The AI mode button is not shown in the search results header,
+and accessing ``/chat`` redirects back to the top page.
+
+**Checklist**: Verify the items below in order.
+
+1. Is ``rag.chat.enabled=true`` set?
+
+   - Docker: confirm that ``-Dfess.config.rag.chat.enabled=true`` is included in ``FESS_JAVA_OPTS``
+   - Package install: confirm it is written in ``app/WEB-INF/conf/fess_config.properties``
+
+2. Is the matching ``fess-llm-*`` plugin installed?
+
+   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` (or ``fess-llm-openai`` / ``fess-llm-ollama``) must be set
+   - Package install: the JAR must be placed in ``app/WEB-INF/plugin/``
+   - Startup logs should include ``Installing fess-llm-XXX-15.6.0.jar``
+
+3. Does ``rag.llm.name`` match an installed plugin?
+
+   - The default value is ``ollama``. If only the Gemini plugin is installed, you must explicitly set ``gemini`` (likewise ``openai`` for the OpenAI plugin)
+   - Method (a): edit ``rag.llm.name`` from Administration > System > General (RAG section) and save
+   - Method (b): include ``-Dfess.system.rag.llm.name=gemini`` in ``FESS_JAVA_OPTS`` at startup. This only acts as the initial default before a value is persisted in OpenSearch
+
+4. Is a WARN like ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` repeating in the startup log?
+
+   - This is the typical symptom when ``rag.llm.name`` is still ``ollama`` but the Ollama plugin is not installed
+   - Setting ``rag.llm.name`` to the actual provider in use clears it
+   - Similarly, ``componentName=geminiLlmClient`` indicates that ``rag.llm.name=gemini`` is set but the ``fess-llm-gemini`` plugin is not installed
+
+5. Is the provider-specific API key configured?
+
+   - When ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` is empty, ``checkAvailabilityNow`` returns ``false`` and AI mode is disabled
+   - Enabling DEBUG on ``org.codelibs.fess.llm.gemini`` in ``log4j2.xml`` surfaces messages such as ``[LLM:GEMINI] Gemini is not available. apiKey is blank``
+
+6. Can the Fess host reach the LLM provider?
+
+   - For cloud APIs (Gemini / OpenAI), the container must have outbound Internet access
+   - When a proxy is required, append ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` to ``FESS_JAVA_OPTS``
+
+.. note::
+
+   The "General" settings page does not expose a checkbox for ``rag.chat.enabled``
+   (by design). It is a FessConfig-family property and can only be set through
+   ``fess_config.properties`` or ``-Dfess.config.rag.chat.enabled=true``.
 
 AI Mode Won't Enable
 --------------------
