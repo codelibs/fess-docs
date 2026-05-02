@@ -347,6 +347,35 @@ Docker配置
    Ollama默认没有认证功能，如果要从外部访问，
    请考虑网络级别的安全措施（防火墙、VPN等）。
 
+通过 HTTP 代理使用
+==================
+
+自 |Fess| 15.6.1 起，Ollama客户端会共享 |Fess| 整体的HTTP代理配置。当连接Ollama服务器需要经过代理时（例如使用远程Ollama服务器时），请在 ``fess_config.properties`` 中指定以下属性。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``http.proxy.host``
+     - 代理主机名（空字符串时不使用代理）
+     - ``""``
+   * - ``http.proxy.port``
+     - 代理端口号
+     - ``8080``
+   * - ``http.proxy.username``
+     - 代理认证的用户名（可选。指定后启用Basic认证）
+     - ``""``
+   * - ``http.proxy.password``
+     - 代理认证的密码
+     - ``""``
+
+.. note::
+   由于Ollama通常运行在本地或内部网络，需要代理配置的情况仅限于特定场景（例如使用仅能通过公司代理到达的远程Ollama服务器等）。
+   此配置同样会影响爬虫等 |Fess| 整体的HTTP访问。
+
 模型选择指南
 ============
 

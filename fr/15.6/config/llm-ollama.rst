@@ -347,6 +347,35 @@ Lorsqu'Ollama s'execute sur un serveur different de Fess :
    Ollama n'a pas de fonctionnalite d'authentification par defaut, donc si vous le rendez accessible de l'exterieur,
    envisagez des mesures de securite au niveau reseau (pare-feu, VPN, etc.).
 
+Utilisation via un proxy HTTP
+=============================
+
+Depuis |Fess| 15.6.1, le client Ollama partage la configuration de proxy HTTP commune a |Fess|. Si une connexion au serveur Ollama doit passer par un proxy (par exemple lors de l'utilisation d'un serveur Ollama distant), specifiez les proprietes suivantes dans ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriete
+     - Description
+     - Valeur par defaut
+   * - ``http.proxy.host``
+     - Nom d'hote du proxy (chaine vide pour ne pas utiliser de proxy)
+     - ``""``
+   * - ``http.proxy.port``
+     - Numero de port du proxy
+     - ``8080``
+   * - ``http.proxy.username``
+     - Nom d'utilisateur pour l'authentification du proxy (facultatif ; lorsqu'il est renseigne, l'authentification Basic est activee)
+     - ``""``
+   * - ``http.proxy.password``
+     - Mot de passe pour l'authentification du proxy
+     - ``""``
+
+.. note::
+   Comme Ollama s'execute generalement en local ou sur un reseau interne, la configuration d'un proxy n'est necessaire que dans des cas limites (par exemple, lors de l'utilisation d'un serveur Ollama distant uniquement accessible via un proxy d'entreprise).
+   Cette configuration s'applique egalement a tous les acces HTTP de |Fess|, notamment ceux du crawler.
+
 Guide de selection des modeles
 ==================
 

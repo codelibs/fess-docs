@@ -517,7 +517,7 @@ SSE 이벤트:
 6. LLM 프로바이더로의 네트워크 연결이 가능한가
 
    - 클라우드 API(Gemini / OpenAI)의 경우 컨테이너에서 외부로 도달할 수 있어야 합니다
-   - 프록시 경유가 필요한 경우 ``FESS_JAVA_OPTS`` 에 ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` 를 추가하세요
+   - 프록시 경유가 필요한 경우, ``fess_config.properties`` 의 ``http.proxy.host`` / ``http.proxy.port`` (필요에 따라 ``http.proxy.username`` / ``http.proxy.password`` )를 설정하세요. Docker 환경에서는 ``FESS_JAVA_OPTS`` 에 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` 를 추가합니다( |Fess| 15.6.1 이후, LLM 클라이언트는 |Fess| 공통의 프록시 설정을 참조합니다)
 
 .. note::
 

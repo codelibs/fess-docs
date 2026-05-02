@@ -512,7 +512,7 @@ und der Aufruf von ``/chat`` leitet zur Startseite zurück.
 6. Kann der Fess-Host den LLM-Anbieter erreichen?
 
    - Bei Cloud-APIs (Gemini / OpenAI) muss der Container Internetzugriff haben
-   - Bei Proxy-Nutzung ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` an ``FESS_JAVA_OPTS`` anhängen
+   - Bei Proxy-Nutzung konfigurieren Sie ``http.proxy.host`` / ``http.proxy.port`` (bei Bedarf ``http.proxy.username`` / ``http.proxy.password``) in ``fess_config.properties``. In Docker-Umgebungen fügen Sie ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` zu ``FESS_JAVA_OPTS`` hinzu (seit |Fess| 15.6.1 verwenden die LLM-Clients die gemeinsame Proxy-Konfiguration von |Fess|)
 
 .. note::
 
