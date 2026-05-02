@@ -5,6 +5,9 @@ Servidor de Búsqueda de Texto Completo de Código Abierto - Lista de Noticias
 Lista de Noticias
 ============
 
+2026-05-02
+    `Lanzamiento de Fess 15.6.1 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`__
+
 2026-04-18
     `Lanzamiento de Fess 15.6.0 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`__
 

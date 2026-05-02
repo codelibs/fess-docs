@@ -140,7 +140,7 @@ Fess 다운로드
 
    예::
 
-       C:\fess-15.6.0
+       C:\fess-15.6.1
 
    .. note::
 
@@ -168,8 +168,8 @@ Fess 설정
 
 명령 프롬프트에서::
 
-    C:\> findstr "fess.search_engine.http_address" C:\fess-15.6.0\bin\fess.in.bat
-    C:\> findstr "fess.dictionary.path" C:\fess-15.6.0\bin\fess.in.bat
+    C:\> findstr "fess.search_engine.http_address" C:\fess-15.6.1\bin\fess.in.bat
+    C:\> findstr "fess.dictionary.path" C:\fess-15.6.1\bin\fess.in.bat
 
 단계 3: 시작
 ==============
@@ -197,7 +197,7 @@ NSSM 사용 예
 
 3. Fess를 서비스로 등록::
 
-       C:\> nssm install Fess C:\fess-15.6.0\bin\fess.bat
+       C:\> nssm install Fess C:\fess-15.6.1\bin\fess.bat
 
 4. 서비스 종속성 설정(Fess는 OpenSearch에 종속)::
 

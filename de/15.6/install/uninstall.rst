@@ -67,7 +67,7 @@ Schritt 1: Löschen von Fess
 
 Löschen Sie das Installationsverzeichnis::
 
-    $ rm -rf /path/to/fess-15.6.0
+    $ rm -rf /path/to/fess-15.6.1
 
 Schritt 2: Löschen von OpenSearch
 ----------------------------------
@@ -269,7 +269,7 @@ Schritt 3: Löschen der Images (Optional)
 Falls Sie Docker-Images löschen und Festplattenplatz freigeben möchten::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.6.0
+    $ docker rmi codelibs/fess:15.6.1
 
     $ docker images | grep opensearch
     $ docker rmi opensearchproject/opensearch:3.6.0
@@ -319,7 +319,7 @@ Wenn nichts angezeigt wird, sind die Prozesse gestoppt.
 
 TAR.GZ/ZIP-Version::
 
-    $ ls /path/to/fess-15.6.0  # Überprüfen, dass Verzeichnis nicht existiert
+    $ ls /path/to/fess-15.6.1  # Überprüfen, dass Verzeichnis nicht existiert
 
 RPM/DEB-Version::
 

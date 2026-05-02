@@ -34,7 +34,7 @@ Démarrage de Fess
 
 ::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess
 
 Pour un démarrage en arrière-plan ::
@@ -68,8 +68,8 @@ Démarrage de Fess
 
 Ou depuis l'invite de commandes ::
 
-    C:\> cd C:\fess-15.6.0
-    C:\fess-15.6.0> bin\fess.bat
+    C:\> cd C:\fess-15.6.1
+    C:\fess-15.6.1> bin\fess.bat
 
 Version RPM/DEB (chkconfig)
 ---------------------------
@@ -148,7 +148,7 @@ Vérifiez les logs de démarrage pour confirmer qu'il n'y a pas d'erreurs.
 
 Version TAR.GZ/ZIP ::
 
-    $ tail -f /path/to/fess-15.6.0/logs/fess.log
+    $ tail -f /path/to/fess-15.6.1/logs/fess.log
 
 Version RPM/DEB ::
 

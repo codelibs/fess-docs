@@ -34,7 +34,7 @@ Start Fess
 
 ::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess
 
 To start in the background::
@@ -68,8 +68,8 @@ Start Fess
 
 Or from Command Prompt::
 
-    C:\> cd C:\fess-15.6.0
-    C:\fess-15.6.0> bin\fess.bat
+    C:\> cd C:\fess-15.6.1
+    C:\fess-15.6.1> bin\fess.bat
 
 RPM/DEB Version (chkconfig)
 ---------------------------
@@ -148,7 +148,7 @@ Check the startup logs to ensure there are no errors.
 
 TAR.GZ/ZIP version::
 
-    $ tail -f /path/to/fess-15.6.0/logs/fess.log
+    $ tail -f /path/to/fess-15.6.1/logs/fess.log
 
 RPM/DEB version::
 

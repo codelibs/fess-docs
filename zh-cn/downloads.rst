@@ -4,7 +4,7 @@
 
 .. tip::
 
-   最新的稳定版本是 **Fess 15.6.0** ( `发行说明 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ )。支持期限请参阅 :doc:`eol`。
+   最新的稳定版本是 **Fess 15.6.1** ( `发行说明 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ )。支持期限请参阅 :doc:`eol`。
 
 Docker
 ======
@@ -25,7 +25,7 @@ Docker 镜像请参考以下内容。
    * - 版本
      - Java
      - 搜索引擎
-   * - `Fess 15.6.0 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_
+   * - `Fess 15.6.1 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_
      - `21 <https://adoptium.net/temurin/releases?version=21>`_
      - `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_
    * - `Fess 15.5.0 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`_
