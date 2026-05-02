@@ -1,0 +1,524 @@
+==================================
+Elasticsearch/OpenSearchコネクタ
+==================================
+
+概要
+====
+
+Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラスタからデータを取得して
+|Fess| のインデックスに登録する機能を提供します。
+
+この機能には ``fess-ds-elasticsearch`` プラグインが必要です。
+
+対応バージョン
+==============
+
+- Elasticsearch 7.x / 8.x
+- OpenSearch 1.x / 2.x
+
+前提条件
+========
+
+1. プラグインのインストールが必要です
+2. Elasticsearch/OpenSearchクラスタへの読み取りアクセスが必要です
+3. クエリを実行できる権限が必要です
+
+プラグインのインストール
+------------------------
+
+方法1: JARファイルを直接配置
+
+::
+
+    # Maven Centralからダウンロード
+    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-elasticsearch/X.X.X/fess-ds-elasticsearch-X.X.X.jar
+
+    # 配置
+    cp fess-ds-elasticsearch-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    # または
+    cp fess-ds-elasticsearch-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+
+方法2: 管理画面からインストール
+
+1. 「システム」→「プラグイン」を開く
+2. JARファイルをアップロード
+3. |Fess| を再起動
+
+設定方法
+========
+
+管理画面から「クローラー」→「データストア」→「新規作成」で設定します。
+
+基本設定
+--------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - 項目
+     - 設定例
+   * - 名前
+     - External Elasticsearch
+   * - ハンドラ名
+     - ElasticsearchDataStore / ElasticsearchListDataStore
+   * - 有効
+     - オン
+
+.. note::
+   ``ElasticsearchListDataStore`` は ``ElasticsearchDataStore`` を拡張したハンドラで、取得したデータをファイルリストとして処理し、マルチスレッドでのインデックス登録をサポートします。
+   ``num_of_threads`` パラメーターでスレッド数を指定できます（デフォルト: 1）。
+
+パラメーター設定
+----------------
+
+基本的な接続:
+
+::
+
+    settings.fesen.http.url=http://localhost:9200
+    index=myindex
+    size=100
+    scroll=1m
+
+認証ありの接続:
+
+::
+
+    settings.fesen.http.url=https://elasticsearch.example.com:9200
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    index=myindex
+    size=100
+    scroll=1m
+
+パラメーター一覧
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15.70
+
+   * - パラメーター
+     - 必須
+     - 説明
+   * - ``settings.fesen.http.url``
+     - いいえ
+     - Elasticsearch/OpenSearchのURL（未指定の場合、接続エラーになります）
+   * - ``settings.fesen.username``
+     - いいえ
+     - 認証用ユーザー名
+   * - ``settings.fesen.password``
+     - いいえ
+     - 認証用パスワード
+   * - ``index``
+     - いいえ
+     - 対象インデックス名（デフォルト: ``_all``）。カンマ区切りで複数指定可能
+   * - ``size``
+     - いいえ
+     - スクロール時の取得件数
+   * - ``scroll``
+     - いいえ
+     - スクロールのタイムアウト（デフォルト: 1m）
+   * - ``timeout``
+     - いいえ
+     - リクエストのタイムアウト（デフォルト: 1m）
+   * - ``query``
+     - いいえ
+     - クエリJSON（デフォルト: match_all）。クエリ本体のみ指定（外側の ``{"query":...}`` は不要）
+   * - ``fields``
+     - いいえ
+     - 取得するフィールド（カンマ区切り）
+   * - ``preference``
+     - いいえ
+     - 検索実行時のシャードレプリカの優先設定（デフォルト: ``_local``）
+   * - ``delete.processed.doc``
+     - いいえ
+     - 処理済みドキュメントをソースインデックスから削除するかどうか（デフォルト: false）
+   * - ``readInterval``
+     - いいえ
+     - 各ドキュメント処理間の待機時間（ミリ秒、デフォルト: 0）
+
+スクリプト設定
+--------------
+
+基本的なマッピング:
+
+::
+
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
+
+ネストしたフィールドへのアクセス:
+
+::
+
+    url=source.metadata.url
+    title=source.title
+    content=source.body.content
+    author=source.author.name
+    created=source.created_at
+    last_modified=source.updated_at
+
+利用可能なフィールド
+~~~~~~~~~~~~~~~~~~~~
+
+- ``source.<field_name>`` - Elasticsearchドキュメントの ``_source`` フィールド
+- ``id`` - ドキュメントID
+- ``index`` - インデックス名
+- ``score`` - 検索スコア
+- ``version`` - ドキュメントバージョン
+- ``seqNo`` - シーケンス番号
+- ``primaryTerm`` - プライマリターム
+- ``clusterAlias`` - クラスタエイリアス（クロスクラスタ検索時）
+- ``hit`` - SearchHitオブジェクト（上級者向け）
+
+クエリの設定
+============
+
+全ドキュメントの取得
+--------------------
+
+デフォルトでは全ドキュメントが取得されます。
+``query`` パラメーターを指定しない場合、``match_all`` が使用されます。
+
+特定の条件でフィルタリング
+--------------------------
+
+::
+
+    query={"term":{"status":"published"}}
+
+範囲指定:
+
+::
+
+    query={"range":{"timestamp":{"gte":"2024-01-01","lte":"2024-12-31"}}}
+
+複数条件:
+
+::
+
+    query={"bool":{"must":[{"term":{"category":"news"}},{"range":{"views":{"gte":100}}}]}}
+
+.. note::
+   ``query`` パラメーターにはクエリ本体のみを指定します。外側の ``{"query":...}`` ラッパーは不要です。
+   また、ソートなどの検索レベルのオプションはこのパラメーターでは指定できません。
+
+特定のフィールドのみ取得
+========================
+
+fieldsパラメーターで取得フィールドを限定
+----------------------------------------
+
+::
+
+    settings.fesen.http.url=http://localhost:9200
+    index=myindex
+    fields=title,content,url,timestamp
+    size=100
+
+すべてのフィールドを取得する場合は ``fields`` を指定しないか、空にします。
+
+使用例
+======
+
+基本的なインデックスのクロール
+------------------------------
+
+パラメーター:
+
+::
+
+    settings.fesen.http.url=http://localhost:9200
+    index=articles
+    size=100
+    scroll=1m
+
+スクリプト:
+
+::
+
+    url=source.url
+    title=source.title
+    content=source.content
+    created=source.created_at
+    last_modified=source.updated_at
+
+認証付きクラスタからのクロール
+------------------------------
+
+パラメーター:
+
+::
+
+    settings.fesen.http.url=https://es.example.com:9200
+    settings.fesen.username=elastic
+    settings.fesen.password=changeme
+    index=products
+    size=200
+    scroll=10m
+
+スクリプト:
+
+::
+
+    url="https://shop.example.com/product/" + source.product_id
+    title=source.name
+    content=source.description + " " + source.specifications
+    digest=source.category
+    last_modified=source.updated_at
+
+複数インデックスからのクロール
+------------------------------
+
+パラメーター:
+
+::
+
+    settings.fesen.http.url=http://localhost:9200
+    index=logs-2024-*
+    query={"term":{"level":"error"}}
+    size=100
+
+スクリプト:
+
+::
+
+    url="https://logs.example.com/view/" + id
+    title=source.message
+    content=source.stack_trace
+    digest=source.service + " - " + source.level
+    last_modified=source.timestamp
+
+OpenSearchクラスタのクロール
+----------------------------
+
+パラメーター:
+
+::
+
+    settings.fesen.http.url=https://opensearch.example.com:9200
+    settings.fesen.username=admin
+    settings.fesen.password=admin
+    index=documents
+    size=100
+    scroll=1m
+
+スクリプト:
+
+::
+
+    url=source.url
+    title=source.title
+    content=source.body
+    last_modified=source.modified_date
+
+フィールドを限定してクロール
+----------------------------
+
+パラメーター:
+
+::
+
+    settings.fesen.http.url=http://localhost:9200
+    index=myindex
+    fields=id,title,content,url,timestamp
+    size=100
+
+スクリプト:
+
+::
+
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
+
+複数ホストでの負荷分散
+----------------------
+
+パラメーター:
+
+::
+
+    settings.fesen.http.url=http://es1.example.com:9200
+    index=articles
+    size=100
+    scroll=1m
+
+スクリプト:
+
+::
+
+    url=source.url
+    title=source.title
+    content=source.content
+    last_modified=source.timestamp
+
+トラブルシューティング
+======================
+
+接続エラー
+----------
+
+**症状**: ``Connection refused`` または ``No route to host``
+
+**確認事項**:
+
+1. ホストURLが正しいか確認（プロトコル、ホスト名、ポート）
+2. Elasticsearch/OpenSearchが起動しているか確認
+3. ファイアウォール設定を確認
+4. HTTPSの場合、証明書が有効か確認
+
+認証エラー
+----------
+
+**症状**: ``401 Unauthorized`` または ``403 Forbidden``
+
+**確認事項**:
+
+1. ユーザー名とパスワードが正しいか確認
+2. ユーザーに適切な権限があるか確認:
+
+   - インデックスへの読み取り権限
+   - スクロールAPIの使用権限
+
+3. Elasticsearch Security（X-Pack）が有効な場合、適切に設定されているか確認
+
+インデックスが見つからない
+--------------------------
+
+**症状**: ``index_not_found_exception``
+
+**確認事項**:
+
+1. インデックス名が正しいか確認（大文字小文字を含む）
+2. インデックスが存在するか確認:
+
+   ::
+
+       GET /_cat/indices
+
+3. ワイルドカードパターンが正しいか確認（例: ``logs-*``）
+
+クエリエラー
+------------
+
+**症状**: ``parsing_exception`` または ``search_phase_execution_exception``
+
+**確認事項**:
+
+1. クエリJSONが正しいか確認
+2. Elasticsearch/OpenSearchのバージョンに対応したクエリか確認
+3. フィールド名が正しいか確認
+4. クエリを直接Elasticsearch/OpenSearchで実行してテスト:
+
+   ::
+
+       POST /myindex/_search
+       {
+         "query": {...}
+       }
+
+スクロールタイムアウト
+----------------------
+
+**症状**: ``No search context found`` または ``Scroll timeout``
+
+**解決方法**:
+
+1. ``scroll`` を長くする:
+
+   ::
+
+       scroll=10m
+
+2. ``size`` を小さくする:
+
+   ::
+
+       size=50
+
+3. クラスタのリソースを確認
+
+大量データのクロール
+--------------------
+
+**症状**: クロールが遅い、またはタイムアウトする
+
+**解決方法**:
+
+1. ``size`` を調整（大きすぎると遅くなる）:
+
+   ::
+
+       size=100
+       size=500  # 大きめ
+
+2. ``fields`` で取得フィールドを限定
+3. ``query`` で必要なドキュメントのみフィルタリング
+4. 複数のデータストアに分割（インデックス単位、時間範囲単位など）
+
+メモリ不足
+----------
+
+**症状**: OutOfMemoryError
+
+**解決方法**:
+
+1. ``size`` を小さくする
+2. ``fields`` で取得フィールドを限定
+3. |Fess| のヒープサイズを増やす
+4. 大きなフィールド（バイナリデータなど）を除外
+
+SSL/TLS接続
+===========
+
+自己署名証明書の場合
+--------------------
+
+.. warning::
+   本番環境では適切に署名された証明書を使用してください。
+
+自己署名証明書を使用する場合、Java keystoreに証明書を追加:
+
+::
+
+    keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
+
+クライアント証明書認証
+----------------------
+
+クライアント証明書が必要な場合、追加のパラメーター設定が必要です。
+詳細はElasticsearchクライアントのドキュメントを参照してください。
+
+高度なクエリ例
+==============
+
+集約を含むクエリ
+----------------
+
+.. note::
+   ``query`` パラメーターはクエリ本体のみを受け付けます。集約（aggs）やソートなどの
+   検索レベルのオプションは指定できません。ドキュメントのみが取得されます。
+
+スクリプトフィールド
+--------------------
+
+.. note::
+   Elasticsearch/OpenSearchのスクリプトフィールドは ``_source`` には含まれないため、
+   ``source.*`` プレフィックスではアクセスできません。スクリプトフィールドを使用する場合は、
+   ``hit`` オブジェクトから ``hit.getFields()`` 経由でアクセスする必要があります。
+
+参考情報
+========
+
+- :doc:`ds-overview` - データストアコネクタ概要
+- :doc:`ds-database` - データベースコネクタ
+- :doc:`../../admin/dataconfig-guide` - データストア設定ガイド
+- `Elasticsearch Documentation <https://www.elastic.co/guide/>`_
+- `OpenSearch Documentation <https://opensearch.org/docs/>`_
+- `Elasticsearch Query DSL <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html>`_
