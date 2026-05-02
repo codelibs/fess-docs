@@ -5,6 +5,9 @@ Open Source Volltextsuchserver - Nachrichtenübersicht
 Nachrichtenübersicht
 ====================
 
+2026-05-02
+    `Fess 15.6.1 Release <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`__
+
 2026-04-18
     `Fess 15.6.0 Release <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`__
 

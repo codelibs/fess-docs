@@ -140,7 +140,7 @@ Fess のダウンロード
 
    例::
 
-       C:\fess-15.6.0
+       C:\fess-15.6.1
 
    .. note::
 
@@ -168,8 +168,8 @@ Fess の設定
 
 コマンドプロンプトで::
 
-    C:\> findstr "fess.search_engine.http_address" C:\fess-15.6.0\bin\fess.in.bat
-    C:\> findstr "fess.dictionary.path" C:\fess-15.6.0\bin\fess.in.bat
+    C:\> findstr "fess.search_engine.http_address" C:\fess-15.6.1\bin\fess.in.bat
+    C:\> findstr "fess.dictionary.path" C:\fess-15.6.1\bin\fess.in.bat
 
 ステップ 3: 起動
 ==============
@@ -197,7 +197,7 @@ NSSM を使用した例
 
 3. Fess をサービスとして登録::
 
-       C:\> nssm install Fess C:\fess-15.6.0\bin\fess.bat
+       C:\> nssm install Fess C:\fess-15.6.1\bin\fess.bat
 
 4. サービスの依存関係を設定（Fess は OpenSearch に依存）::
 

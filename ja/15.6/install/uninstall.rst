@@ -67,7 +67,7 @@ TAR.GZ/ZIP 版のアンインストール
 
 インストールディレクトリを削除します::
 
-    $ rm -rf /path/to/fess-15.6.0
+    $ rm -rf /path/to/fess-15.6.1
 
 ステップ 2: OpenSearch の削除
 --------------------------
@@ -269,7 +269,7 @@ Fess 関連のボリュームを削除::
 Docker イメージを削除してディスクスペースを解放する場合::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.6.0
+    $ docker rmi codelibs/fess:15.6.1
 
     $ docker images | grep opensearch
     $ docker rmi opensearchproject/opensearch:3.6.0
@@ -319,7 +319,7 @@ Docker Compose が作成したネットワークを削除::
 
 TAR.GZ/ZIP 版::
 
-    $ ls /path/to/fess-15.6.0  # ディレクトリが存在しないことを確認
+    $ ls /path/to/fess-15.6.1  # ディレクトリが存在しないことを確認
 
 RPM/DEB 版::
 

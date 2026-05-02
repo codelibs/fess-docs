@@ -51,8 +51,8 @@
 
     $ mkdir fess-docker
     $ cd fess-docker
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose.yaml
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose-opensearch3.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose-opensearch3.yaml
 
 方法 2: 使用 Git 克隆仓库
 --------------------------------
@@ -61,7 +61,7 @@
 
 ::
 
-    $ git clone --depth 1 --branch v15.6.0 https://github.com/codelibs/docker-fess.git
+    $ git clone --depth 1 --branch v15.6.1 https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
 步骤 2: 确认 Docker Compose 文件
@@ -299,7 +299,7 @@
 
 2. 获取配置文件模板（仅首次）::
 
-       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.6.0/src/main/resources/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.6.1/src/main/resources/fess_config.properties
 
 3. 编辑 ``/path/to/fess-config/fess_config.properties`` 并添加所需的设置::
 

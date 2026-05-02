@@ -140,7 +140,7 @@ Download Fess
 
    Example::
 
-       C:\fess-15.6.0
+       C:\fess-15.6.1
 
    .. note::
 
@@ -168,8 +168,8 @@ Verify that the configuration files have been edited correctly.
 
 In Command Prompt::
 
-    C:\> findstr "fess.search_engine.http_address" C:\fess-15.6.0\bin\fess.in.bat
-    C:\> findstr "fess.dictionary.path" C:\fess-15.6.0\bin\fess.in.bat
+    C:\> findstr "fess.search_engine.http_address" C:\fess-15.6.1\bin\fess.in.bat
+    C:\> findstr "fess.dictionary.path" C:\fess-15.6.1\bin\fess.in.bat
 
 Step 3: Startup
 ===============
@@ -197,7 +197,7 @@ Example Using NSSM
 
 3. Register Fess as a service::
 
-       C:\> nssm install Fess C:\fess-15.6.0\bin\fess.bat
+       C:\> nssm install Fess C:\fess-15.6.1\bin\fess.bat
 
 4. Set service dependencies (Fess depends on OpenSearch)::
 

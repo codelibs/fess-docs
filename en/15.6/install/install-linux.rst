@@ -116,9 +116,9 @@ Step 2: Install Fess
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.tar.gz
-       $ tar -xzf fess-15.6.0.tar.gz
-       $ cd fess-15.6.0
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.tar.gz
+       $ tar -xzf fess-15.6.1.tar.gz
+       $ cd fess-15.6.1
 
 2. Configure Fess
 
@@ -209,8 +209,8 @@ Step 2: Install Fess
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.rpm
-       $ sudo rpm -ivh fess-15.6.0.rpm
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.rpm
+       $ sudo rpm -ivh fess-15.6.1.rpm
 
 2. Configure Fess
 
@@ -299,8 +299,8 @@ Step 2: Install Fess
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.deb
-       $ sudo dpkg -i fess-15.6.0.deb
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.deb
+       $ sudo dpkg -i fess-15.6.1.deb
 
 2. Configure Fess
 

@@ -5,6 +5,9 @@ Open Source Full-Text Search Server - News
 News
 ====
 
+2026-05-02
+    `Fess 15.6.1 Released <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`__
+
 2026-04-18
     `Fess 15.6.0 Released <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`__
 

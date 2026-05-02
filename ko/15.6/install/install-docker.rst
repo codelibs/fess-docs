@@ -51,8 +51,8 @@ Docker Compose를 사용한 시작에는 다음 파일이 필요합니다.
 
     $ mkdir fess-docker
     $ cd fess-docker
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose.yaml
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose-opensearch3.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose-opensearch3.yaml
 
 방법 2: Git으로 리포지토리 복제
 --------------------------------
@@ -61,7 +61,7 @@ Git이 설치되어 있는 경우 리포지토리 전체를 복제할 수도 있
 
 ::
 
-    $ git clone --depth 1 --branch v15.6.0 https://github.com/codelibs/docker-fess.git
+    $ git clone --depth 1 --branch v15.6.1 https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
 단계 2: Docker Compose 파일 확인
@@ -301,7 +301,7 @@ Docker 환경에서는 이 파일의 설정을 반영시키기 위해 다음 방
 
 2. 설정 파일 템플릿 가져오기(최초 1회)::
 
-       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.6.0/src/main/resources/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.6.1/src/main/resources/fess_config.properties
 
 3. ``/path/to/fess-config/fess_config.properties`` 를 편집하여 필요한 설정 기술::
 

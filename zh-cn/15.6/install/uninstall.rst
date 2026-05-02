@@ -67,7 +67,7 @@ TAR.GZ/ZIP 版的卸载
 
 删除安装目录::
 
-    $ rm -rf /path/to/fess-15.6.0
+    $ rm -rf /path/to/fess-15.6.1
 
 步骤 2: 删除 OpenSearch
 --------------------------
@@ -269,7 +269,7 @@ Docker 版的卸载
 删除 Docker 镜像以释放磁盘空间::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.6.0
+    $ docker rmi codelibs/fess:15.6.1
 
     $ docker images | grep opensearch
     $ docker rmi opensearchproject/opensearch:3.6.0
@@ -319,7 +319,7 @@ Docker 版的卸载
 
 TAR.GZ/ZIP 版::
 
-    $ ls /path/to/fess-15.6.0  # 确认目录不存在
+    $ ls /path/to/fess-15.6.1  # 确认目录不存在
 
 RPM/DEB 版::
 

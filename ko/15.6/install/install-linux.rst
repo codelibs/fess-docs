@@ -116,9 +116,9 @@ TAR.GZ 버전 설치
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.tar.gz
-       $ tar -xzf fess-15.6.0.tar.gz
-       $ cd fess-15.6.0
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.tar.gz
+       $ tar -xzf fess-15.6.1.tar.gz
+       $ cd fess-15.6.1
 
 2. Fess 설정
 
@@ -210,8 +210,8 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.rpm
-       $ sudo rpm -ivh fess-15.6.0.rpm
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.rpm
+       $ sudo rpm -ivh fess-15.6.1.rpm
 
 2. Fess 설정
 
@@ -300,8 +300,8 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.deb
-       $ sudo dpkg -i fess-15.6.0.deb
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.deb
+       $ sudo dpkg -i fess-15.6.1.deb
 
 2. Fess 설정
 
