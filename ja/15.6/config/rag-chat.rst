@@ -526,7 +526,7 @@ AI検索モードボタンが検索画面に表示されない
 6. LLMプロバイダーへのネットワーク接続が可能か
 
    - クラウドAPI（Gemini / OpenAI）の場合、コンテナから外部に到達できる必要があります
-   - Proxy 経由が必要なら ``FESS_JAVA_OPTS`` に ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` を追加してください
+   - Proxy 経由が必要なら、 ``fess_config.properties`` の ``http.proxy.host`` / ``http.proxy.port`` （必要に応じて ``http.proxy.username`` / ``http.proxy.password`` ）を設定してください。Docker環境では ``FESS_JAVA_OPTS`` に ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` を追加します（ |Fess| 15.6.1 以降、LLMクライアントは |Fess| 共通のプロキシ設定を参照します）
 
 .. note::
 

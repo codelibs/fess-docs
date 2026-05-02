@@ -23,8 +23,9 @@ Supported Models
 
 Main models available with Gemini:
 
-- ``gemini-3-flash-preview`` - Latest fast model (recommended)
-- ``gemini-3.1-pro-preview`` - Latest high reasoning model
+- ``gemini-3.1-flash-lite-preview`` - Lightweight, low-cost fast model (default)
+- ``gemini-3-flash-preview`` - Standard Flash model
+- ``gemini-3.1-pro`` / ``gemini-3-pro`` - High reasoning models
 - ``gemini-2.5-flash`` - Stable fast model
 - ``gemini-2.5-pro`` - Stable high reasoning model
 
@@ -96,7 +97,7 @@ Minimal Configuration (fess_config.properties)
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Model to use
-    rag.llm.gemini.model=gemini-3-flash-preview
+    rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
 Recommended Configuration (Production, fess_config.properties)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,7 +111,7 @@ Recommended Configuration (Production, fess_config.properties)
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Model setting (use fast model)
-    rag.llm.gemini.model=gemini-3-flash-preview
+    rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
     # API endpoint (usually no change needed)
     rag.llm.gemini.api.url=https://generativelanguage.googleapis.com/v1beta
@@ -145,7 +146,7 @@ All configuration options available for the Gemini client. All settings except `
      - ``""``
    * - ``rag.llm.gemini.model``
      - Model name to use
-     - ``gemini-3-flash-preview``
+     - ``gemini-3.1-flash-lite-preview``
    * - ``rag.llm.gemini.api.url``
      - API base URL
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -182,6 +183,31 @@ All configuration options available for the Gemini client. All settings except `
    * - ``rag.llm.gemini.history.assistant.summary.max.chars``
      - Maximum characters for assistant summary history
      - ``1000``
+   * - ``rag.llm.gemini.retry.max``
+     - Maximum number of HTTP retries (on ``429`` and ``5xx`` errors)
+     - ``10``
+   * - ``rag.llm.gemini.retry.base.delay.ms``
+     - Base delay for exponential backoff (in milliseconds)
+     - ``2000``
+
+Authentication
+==============
+
+Since |Fess| 15.6.1, the API key is sent in the ``x-goog-api-key`` HTTP request header (Google's recommended method).
+It is no longer appended to the URL as a ``?key=...`` query parameter, so the API key will not appear in access logs.
+
+Retry Behavior
+==============
+
+Requests to the Gemini API are automatically retried on the following HTTP status codes:
+
+- ``429`` Resource Exhausted (quota exceeded / rate limit)
+- ``500`` Internal Server Error
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+Retries wait using exponential backoff (base ``rag.llm.gemini.retry.base.delay.ms`` milliseconds, up to ``rag.llm.gemini.retry.max`` attempts, with a jitter of +/-20%).
+For streaming requests, only the initial connection is eligible for retry; any error that occurs after the response body has started streaming is propagated immediately.
 
 Per-Prompt-Type Settings
 ========================
@@ -312,7 +338,7 @@ Thinking Model Support
 
 Gemini supports thinking models. Using a thinking model, the model executes an internal reasoning process before generating a response, enabling more accurate answers.
 
-The thinking budget can be configured per prompt type in ``fess_config.properties``.
+The thinking budget is configured per prompt type in ``fess_config.properties``. At request time, |Fess| automatically converts the integer value (token count) of ``rag.llm.gemini.{promptType}.thinking.budget`` into the appropriate API field for the resolved model generation.
 
 ::
 
@@ -322,8 +348,38 @@ The thinking budget can be configured per prompt type in ``fess_config.propertie
     # Thinking budget for summary generation
     rag.llm.gemini.summary.thinking.budget=1024
 
+Mapping by Model Generation
+---------------------------
+
+- **Gemini 2.x** (e.g. ``gemini-2.5-flash``): the configured integer is sent as-is in ``thinkingConfig.thinkingBudget``. Setting ``0`` disables thinking entirely.
+- **Gemini 3.x** (e.g. ``gemini-3.1-flash-lite-preview``): the integer is bucketed into one of the ``thinkingConfig.thinkingLevel`` enum values (``MINIMAL`` / ``LOW`` / ``MEDIUM`` / ``HIGH``).
+
+The bucket mapping for Gemini 3.x is as follows:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 25 40
+
+   * - Budget value
+     - thinkingLevel
+     - Notes
+   * - ``<=0``
+     - ``MINIMAL`` or ``LOW``
+     - ``MINIMAL`` on Flash / Flash-Lite models, ``LOW`` on Pro-class models that do not support ``MINIMAL`` (``gemini-3-pro`` / ``gemini-3.1-pro``)
+   * - ``<=4096``
+     - ``MEDIUM``
+     -
+   * - ``>4096``
+     - ``HIGH``
+     -
+
 .. note::
-   Setting a thinking budget may increase response time.
+   Gemini 3.x always consumes some thinking tokens regardless of the bucket (``thinkingLevel=MINIMAL`` may still consume several hundred tokens).
+   For this reason, |Fess| automatically adds extra headroom (1024 tokens) on top of the default ``maxOutputTokens`` when a Gemini 3.x model is in use, to prevent answer truncation due to ``finishReason=MAX_TOKENS``.
+   With Gemini 2.x, ``thinkingBudget=0`` disables thinking entirely, so no headroom is added.
+
+.. note::
+   Setting a large thinking budget may increase response time.
    Set an appropriate value based on your use case.
 
 Configuration via JVM Options
@@ -351,7 +407,7 @@ The contents of ``compose-gemini.yaml`` (use as a reference if you build your ow
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 Notes:
 
@@ -360,8 +416,7 @@ Notes:
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` sets the API key, ``-Dfess.config.rag.llm.gemini.model=...`` selects the model
 - ``-Dfess.system.rag.llm.name=gemini`` only acts as the initial default before a value is persisted in OpenSearch. After startup you can also change it from Administration > System > General (RAG section)
 
-If outbound Internet access goes through a proxy, append
-``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` to ``FESS_JAVA_OPTS``.
+If outbound Internet access goes through a proxy, configure |Fess|'s ``http.proxy.*`` settings via ``FESS_JAVA_OPTS`` (see "Using HTTP Proxy" below).
 
 systemd Environment
 -------------------
@@ -371,6 +426,40 @@ Append to ``FESS_JAVA_OPTS`` in ``/etc/sysconfig/fess`` (or ``/etc/default/fess`
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
+
+Using HTTP Proxy
+================
+
+Since |Fess| 15.6.1, the Gemini client shares the |Fess|-wide HTTP proxy configuration. Configure the following properties in ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``http.proxy.host``
+     - Proxy hostname (an empty string disables the proxy)
+     - ``""``
+   * - ``http.proxy.port``
+     - Proxy port number
+     - ``8080``
+   * - ``http.proxy.username``
+     - Username for proxy authentication (optional; enables Basic auth when set)
+     - ``""``
+   * - ``http.proxy.password``
+     - Password for proxy authentication
+     - ``""``
+
+In Docker environments, specify them via ``FESS_JAVA_OPTS`` like so::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   This configuration also affects |Fess|-wide HTTP access (such as the crawler).
+   The legacy Java system properties (``-Dhttps.proxyHost`` and friends) are no longer consulted by the Gemini client.
 
 Using via Vertex AI
 ===================
@@ -395,14 +484,18 @@ Guidelines for selecting models based on intended use.
      - Speed
      - Quality
      - Use Case
+   * - ``gemini-3.1-flash-lite-preview``
+     - Fast
+     - High
+     - Lightweight, low cost (default; supports ``thinkingLevel=MINIMAL``)
    * - ``gemini-3-flash-preview``
      - Fast
      - Highest
-     - General use (recommended)
-   * - ``gemini-3.1-pro-preview``
+     - General use (supports ``thinkingLevel=MINIMAL``)
+   * - ``gemini-3.1-pro`` / ``gemini-3-pro``
      - Medium
      - Highest
-     - Complex reasoning
+     - Complex reasoning (does not support ``MINIMAL``; minimum is ``LOW``)
    * - ``gemini-2.5-flash``
      - Fast
      - High

@@ -514,7 +514,7 @@ Web界面
 6. 是否能连接到 LLM 提供商
 
    - 对于云端 API（Gemini / OpenAI），容器需要能访问外网
-   - 如需经代理，请在 ``FESS_JAVA_OPTS`` 中追加 ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...``
+   - 如需经代理，请在 ``fess_config.properties`` 中设置 ``http.proxy.host`` / ``http.proxy.port`` （必要时设置 ``http.proxy.username`` / ``http.proxy.password`` ）。在Docker环境中，于 ``FESS_JAVA_OPTS`` 中追加 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` （自 |Fess| 15.6.1 起，LLM客户端会引用 |Fess| 通用的代理配置）
 
 .. note::
 
