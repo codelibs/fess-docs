@@ -449,6 +449,14 @@ SSEイベント:
      - 処理フェーズの開始/完了（intent, search, evaluate, fetch, answer）
    * - ``chunk``
      - 生成されたテキストの断片
+   * - ``retry``
+     - LLMリクエストがリトライされるときに通知（フェーズ名、現在の試行番号、最大試行回数、次回試行までの待機時間、原因など）
+   * - ``waiting``
+     - 同時実行パーミット取得待ち中に通知（フェーズ名、待機経過時間、待機タイムアウト）
+   * - ``fallback``
+     - 検索結果ゼロ件等によりクエリが再生成されたときに通知（フェーズ、理由 ``no_results`` または ``no_relevant_results`` 、元のクエリ、再生成後のクエリ）
+   * - ``warning``
+     - 内部的なサイレントフォールバック発生時に通知（推論モデルのトークン枯渇など）
    * - ``sources``
      - 参照元ドキュメントの情報
    * - ``done``
@@ -526,7 +534,7 @@ AI検索モードボタンが検索画面に表示されない
 6. LLMプロバイダーへのネットワーク接続が可能か
 
    - クラウドAPI（Gemini / OpenAI）の場合、コンテナから外部に到達できる必要があります
-   - Proxy 経由が必要なら ``FESS_JAVA_OPTS`` に ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` を追加してください
+   - Proxy 経由が必要なら、 ``fess_config.properties`` の ``http.proxy.host`` / ``http.proxy.port`` （必要に応じて ``http.proxy.username`` / ``http.proxy.password`` ）を設定してください。Docker環境では ``FESS_JAVA_OPTS`` に ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` を追加します（ |Fess| 15.7.1 以降、LLMクライアントは |Fess| 共通のプロキシ設定を参照します）
 
 .. note::
 

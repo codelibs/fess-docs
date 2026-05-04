@@ -288,7 +288,7 @@ Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuan
      - thinking.budget
    * - ``intent``
      - ``0.1``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``evaluation``
      - ``0.1``
@@ -304,24 +304,24 @@ Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuan
      - ``0``
    * - ``docnotfound``
      - ``0.7``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``direct``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``faq``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``answer``
      - ``0.5``
-     - ``4096``
-     - ``2048``
+     - ``8192``
+     - ``0``
    * - ``summary``
      - ``0.3``
      - ``4096``
-     - ``2048``
+     - ``0``
    * - ``queryregeneration``
      - ``0.3``
      - ``256``

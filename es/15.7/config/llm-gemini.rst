@@ -23,8 +23,9 @@ Modelos compatibles
 
 Principales modelos disponibles en Gemini:
 
-- ``gemini-3-flash-preview`` - Ultimo modelo rapido (recomendado)
-- ``gemini-3.1-pro-preview`` - Ultimo modelo de alto razonamiento
+- ``gemini-3.1-flash-lite-preview`` - Modelo rapido ligero y de bajo costo (predeterminado)
+- ``gemini-3-flash-preview`` - Modelo Flash estandar
+- ``gemini-3.1-pro`` / ``gemini-3-pro`` - Modelos de alto razonamiento
 - ``gemini-2.5-flash`` - Modelo rapido version estable
 - ``gemini-2.5-pro`` - Modelo de alto razonamiento version estable
 
@@ -59,7 +60,7 @@ Obtencion de clave API
 Instalacion del plugin
 ======================
 
-En |Fess| 15.7, la funcionalidad de integracion con Gemini se proporciona como plugin ``fess-llm-gemini``.
+La funcionalidad de integracion con Gemini se proporciona como plugin ``fess-llm-gemini``.
 Para usar Gemini es necesario instalar el plugin.
 
 1. Descargue `fess-llm-gemini-15.7.0.jar`
@@ -77,7 +78,7 @@ Para usar Gemini es necesario instalar el plugin.
 Configuracion basica
 ====================
 
-En |Fess| 15.7, la habilitacion de la funcionalidad de modo de búsqueda IA y la configuracion especifica de Gemini se realizan en ``fess_config.properties``, y la seleccion del proveedor LLM (``rag.llm.name``) se realiza en la pantalla de administracion o en ``system.properties``.
+La habilitacion de la funcionalidad de modo de búsqueda IA y la configuracion especifica de Gemini se realizan en ``fess_config.properties``, y la seleccion del proveedor LLM (``rag.llm.name``) se realiza en la pantalla de administracion o en ``system.properties``.
 
 Configuracion de fess_config.properties
 ----------------------------------------
@@ -108,7 +109,7 @@ Configuracion minima
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Modelo a usar
-    rag.llm.gemini.model=gemini-3-flash-preview
+    rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
 ``system.properties`` (tambien configurable en Administracion > Sistema > General):
 
@@ -163,7 +164,7 @@ Todos los elementos de configuracion disponibles para el cliente de Gemini. Todo
      - ``""``
    * - ``rag.llm.gemini.model``
      - Nombre del modelo a usar
-     - ``gemini-3-flash-preview``
+     - ``gemini-3.1-flash-lite-preview``
    * - ``rag.llm.gemini.api.url``
      - URL base de la API
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -200,6 +201,31 @@ Todos los elementos de configuracion disponibles para el cliente de Gemini. Todo
    * - ``rag.llm.gemini.history.assistant.summary.max.chars``
      - Numero maximo de caracteres del resumen del historial del asistente
      - ``1000``
+   * - ``rag.llm.gemini.retry.max``
+     - Numero maximo de reintentos HTTP (en errores ``429`` y de la familia ``5xx``)
+     - ``10``
+   * - ``rag.llm.gemini.retry.base.delay.ms``
+     - Retardo base del backoff exponencial (milisegundos)
+     - ``2000``
+
+Metodo de autenticacion
+=======================
+
+La clave API se envia mediante el encabezado HTTP ``x-goog-api-key`` (metodo recomendado por Google).
+Ya no se anade a la URL como parametro de consulta ``?key=...`` como anteriormente, por lo que la clave API no queda registrada en los logs de acceso.
+
+Comportamiento de reintentos
+============================
+
+Las solicitudes a la API de Gemini se reintentan automaticamente para los siguientes codigos de estado HTTP:
+
+- ``429`` Resource Exhausted (cuota superada / limite de tasa)
+- ``500`` Internal Server Error
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+Durante los reintentos se aplica un backoff exponencial (valor base ``rag.llm.gemini.retry.base.delay.ms`` milisegundos, hasta ``rag.llm.gemini.retry.max`` intentos, con jitter de +/-20%).
+En las solicitudes de streaming, solo la conexion inicial es objeto de reintentos; los errores que ocurren despues de comenzar a recibir el cuerpo de la respuesta se propagan inmediatamente.
 
 Configuracion por tipo de prompt
 =================================
@@ -262,7 +288,7 @@ Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuan
      - thinking.budget
    * - ``intent``
      - ``0.1``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``evaluation``
      - ``0.1``
@@ -278,24 +304,24 @@ Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuan
      - ``0``
    * - ``docnotfound``
      - ``0.7``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``direct``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``faq``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``answer``
      - ``0.5``
-     - ``4096``
-     - ``2048``
+     - ``8192``
+     - ``0``
    * - ``summary``
      - ``0.3``
      - ``4096``
-     - ``2048``
+     - ``0``
    * - ``queryregeneration``
      - ``0.3``
      - ``256``
@@ -331,7 +357,7 @@ Soporte de modelo de pensamiento
 Gemini soporta modelos de pensamiento (Thinking Model).
 Al usar un modelo de pensamiento, el modelo ejecuta un proceso de razonamiento interno antes de generar una respuesta, lo que permite generar respuestas con mayor precision.
 
-El presupuesto de pensamiento se puede configurar por tipo de prompt en ``fess_config.properties``.
+El presupuesto de pensamiento se configura por tipo de prompt en ``fess_config.properties``. |Fess| convierte automaticamente el valor entero (numero de tokens) de ``rag.llm.gemini.{promptType}.thinking.budget`` al campo de API apropiado en funcion de la generacion del modelo resuelta en el momento de la solicitud.
 
 ::
 
@@ -341,8 +367,38 @@ El presupuesto de pensamiento se puede configurar por tipo de prompt en ``fess_c
     # Configuracion del presupuesto de pensamiento para generacion de resumenes
     rag.llm.gemini.summary.thinking.budget=1024
 
+Mapeo segun la generacion del modelo
+------------------------------------
+
+- **Gemini 2.x** (por ejemplo, ``gemini-2.5-flash``): el valor entero configurado se envia tal cual como ``thinkingConfig.thinkingBudget``. Si se especifica ``0``, el pensamiento se desactiva por completo.
+- **Gemini 3.x** (por ejemplo, ``gemini-3.1-flash-lite-preview``): el valor entero se agrupa en los valores enumerados de ``thinkingConfig.thinkingLevel`` (``MINIMAL`` / ``LOW`` / ``MEDIUM`` / ``HIGH``) antes de enviarse.
+
+El mapeo de buckets para Gemini 3.x es el siguiente:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 25 40
+
+   * - Valor de presupuesto
+     - thinkingLevel
+     - Notas
+   * - ``<=0``
+     - ``MINIMAL`` o ``LOW``
+     - ``MINIMAL`` para los modelos Flash / Flash-Lite; ``LOW`` para los modelos Pro que no admiten ``MINIMAL`` (``gemini-3-pro`` / ``gemini-3.1-pro``)
+   * - ``<=4096``
+     - ``MEDIUM``
+     -
+   * - ``>4096``
+     - ``HIGH``
+     -
+
 .. note::
-   Al configurar el presupuesto de pensamiento, el tiempo de respuesta puede aumentar.
+   Gemini 3.x siempre consume una cantidad fija de tokens de pensamiento en cualquier bucket (incluso con ``thinkingLevel=MINIMAL`` puede consumir varios cientos de tokens).
+   Por este motivo, |Fess| anade automaticamente un margen adicional (1024 tokens) al ``maxOutputTokens`` predeterminado cuando se utiliza un modelo Gemini 3.x, evitando el truncado de la respuesta por ``finishReason=MAX_TOKENS``.
+   En Gemini 2.x, ``thinkingBudget=0`` desactiva el pensamiento en si, por lo que no se anade margen adicional.
+
+.. note::
+   Al configurar un presupuesto de pensamiento mayor, el tiempo de respuesta puede aumentar.
    Configure un valor apropiado segun el uso.
 
 Configuracion via opciones JVM
@@ -370,7 +426,7 @@ Contenido de ``compose-gemini.yaml`` (referencia para una configuracion equivale
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-gemini:15.7.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 Notas:
 
@@ -379,8 +435,7 @@ Notas:
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` define la clave API, ``-Dfess.config.rag.llm.gemini.model=...`` selecciona el modelo
 - ``-Dfess.system.rag.llm.name=gemini`` solo actua como valor inicial por defecto antes de que se persista un valor en OpenSearch. Despues del inicio el ajuste tambien puede modificarse desde Administracion > Sistema > General (seccion RAG)
 
-Si el acceso a Internet pasa por un proxy, agregue
-``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` a ``FESS_JAVA_OPTS``.
+Si el acceso a Internet pasa por un proxy, especifique la configuracion ``http.proxy.*`` de |Fess| a traves de ``FESS_JAVA_OPTS`` (consulte la seccion "Uso a traves de proxy HTTP" mas adelante).
 
 Entorno systemd
 ---------------
@@ -390,6 +445,40 @@ Agregue a ``FESS_JAVA_OPTS`` en ``/etc/sysconfig/fess`` (o ``/etc/default/fess``
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
+
+Uso a traves de proxy HTTP
+==========================
+
+El cliente de Gemini comparte la configuracion de proxy HTTP comun de |Fess|. Especifique las siguientes propiedades en ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripcion
+     - Predeterminado
+   * - ``http.proxy.host``
+     - Nombre del host del proxy (si esta vacio, no se usa proxy)
+     - ``""``
+   * - ``http.proxy.port``
+     - Numero de puerto del proxy
+     - ``8080``
+   * - ``http.proxy.username``
+     - Nombre de usuario para autenticacion del proxy (opcional; al especificarlo se habilita la autenticacion Basic)
+     - ``""``
+   * - ``http.proxy.password``
+     - Contrasena para autenticacion del proxy
+     - ``""``
+
+En entornos Docker, especifique en ``FESS_JAVA_OPTS`` de la siguiente forma::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   Esta configuracion tambien afecta el acceso HTTP de todo |Fess|, incluido el crawler.
+   Las propiedades de sistema Java tradicionales (como ``-Dhttps.proxyHost``) no son consultadas por el cliente de Gemini.
 
 Uso a traves de Vertex AI
 =========================
@@ -414,14 +503,18 @@ Guia para la seleccion de modelos segun el proposito de uso.
      - Velocidad
      - Calidad
      - Uso
+   * - ``gemini-3.1-flash-lite-preview``
+     - Rapido
+     - Alta
+     - Ligero y de bajo costo (predeterminado, admite ``thinkingLevel=MINIMAL``)
    * - ``gemini-3-flash-preview``
      - Rapido
      - Maxima
-     - Uso general (recomendado)
-   * - ``gemini-3.1-pro-preview``
+     - Uso general (admite ``thinkingLevel=MINIMAL``)
+   * - ``gemini-3.1-pro`` / ``gemini-3-pro``
      - Medio
      - Maxima
-     - Razonamiento complejo
+     - Razonamiento complejo (no admite ``MINIMAL``; minimo ``LOW``)
    * - ``gemini-2.5-flash``
      - Rapido
      - Alta

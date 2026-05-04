@@ -5,10 +5,10 @@ LLM Integration Overview
 Overview
 ========
 
-|Fess| 15.7 supports AI mode (RAG: Retrieval-Augmented Generation) functionality powered by Large Language Models (LLM).
+|Fess| supports AI mode (RAG: Retrieval-Augmented Generation) functionality powered by Large Language Models (LLM).
 This feature allows users to retrieve information through conversational AI assistance based on search results.
 
-In |Fess| 15.7, LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
+LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
 
 Supported Providers
 ===================
@@ -39,7 +39,7 @@ Supported Providers
 Plugin Installation
 ===================
 
-In |Fess| 15.7, LLM functionality is separated as plugins. You must place the JAR file of the ``fess-llm-{provider}`` plugin corresponding to your provider in the plugin directory.
+LLM functionality is provided as plugins. Place the JAR file of the ``fess-llm-{provider}`` plugin corresponding to your provider in the plugin directory.
 
 For example, to use the OpenAI provider, download ``fess-llm-openai-15.7.0.jar`` and place it in the following directory.
 
@@ -126,7 +126,7 @@ Context Settings
 System Prompt
 -------------
 
-In |Fess| 15.7, system prompts are managed in the DI XML files of each plugin rather than in properties files.
+System prompts are managed in the DI XML files of each plugin rather than in properties files.
 
 System prompts are defined in the ``fess_llm++.xml`` file included in each ``fess-llm-*`` plugin. To customize prompts, edit the DI XML file in the plugin directory.
 
@@ -209,7 +209,7 @@ Settings for search result evaluation. Configure in ``fess_config.properties``.
 Per-Prompt-Type Settings
 ========================
 
-In |Fess| 15.7, generation parameters can be configured per prompt type. This allows fine-grained adjustments based on the intended use. Configure in ``fess_config.properties``.
+Generation parameters can be configured per prompt type. This allows fine-grained adjustments based on the intended use. Configure in ``fess_config.properties``.
 
 Prompt Type List
 ----------------

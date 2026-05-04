@@ -9,7 +9,7 @@ AI搜索模式（RAG：检索增强生成）是通过LLM（大型语言模型）
 以对话形式提供信息的功能。用户可以用自然语言提问，
 获得基于搜索结果的详细回答。
 
-|Fess| 15.7中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
+|Fess| 15.6中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
 核心配置及LLM提供商专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）
 在 ``system.properties`` 或管理界面中进行。
 
@@ -69,7 +69,7 @@ LLM提供商的选择在管理界面或系统属性中进行。
 配置路径快速参考
 ================
 
-|Fess| 15.7 中，配置项分为两个系列：FessConfig 系列（ ``fess_config.properties`` ）和
+|Fess| 15.6 中，配置项分为两个系列：FessConfig 系列（ ``fess_config.properties`` ）和
 SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）。两者的配置路径不同，
 请勿混淆。
 
@@ -112,7 +112,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 
 .. note::
 
-   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.7 及以后已改为 ``rag.llm.name``，
+   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.6 及以后已改为 ``rag.llm.name``，
    写入 ``rag.llm.type`` 的值不会被读取。
 
 核心配置一览
@@ -161,7 +161,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 生成参数
 ================
 
-|Fess| 15.7中，生成参数（最大token数、temperature等）按提供商
+|Fess| 15.6中，生成参数（最大token数、temperature等）按提供商
 和提示词类型分别进行设置。这些配置不是核心配置，而是作为各 ``fess-llm-*``
 插件的配置进行管理。
 
@@ -223,7 +223,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 系统提示词
 ==================
 
-|Fess| 15.7中，系统提示词不在属性文件中定义，而是在各 ``fess-llm-*``
+|Fess| 15.6中，系统提示词不在属性文件中定义，而是在各 ``fess-llm-*``
 插件的DI XML（``fess_llm++.xml``）中定义。
 
 自定义提示词
@@ -359,7 +359,7 @@ AI搜索模式功能可通过REST API使用。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - 参数
      - 必需
@@ -405,7 +405,7 @@ AI搜索模式功能可通过REST API使用。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - 参数
      - 必需
@@ -437,6 +437,14 @@ SSE事件:
      - 处理阶段的开始/完成（intent_analysis, search, evaluation, generation）
    * - ``chunk``
      - 生成的文本片段
+   * - ``retry``
+     - 当 LLM 请求被重试时通知（阶段名、当前尝试次数、最大尝试次数、下次尝试前的等待时间、原因等）
+   * - ``waiting``
+     - 在等待并发许可获取期间通知（阶段名、已等待时长、等待超时）
+   * - ``fallback``
+     - 当因搜索结果为零等原因导致查询被再生成时通知（阶段、原因 ``no_results`` 或 ``no_relevant_results`` 、原始查询、再生成后的查询）
+   * - ``warning``
+     - 发生内部静默回退时通知（如推理模型 token 耗尽等）
    * - ``sources``
      - 参考文档信息
    * - ``done``
@@ -490,9 +498,9 @@ Web界面
 
 2. 对应的 ``fess-llm-*`` 插件是否已安装
 
-   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama``）
+   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama``）
    - 软件包安装: 对应的 JAR 文件是否放置在 ``app/WEB-INF/plugin/``
-   - 启动日志中是否输出 ``Installing fess-llm-XXX-15.7.0.jar``
+   - 启动日志中是否输出 ``Installing fess-llm-XXX-15.6.0.jar``
 
 3. ``rag.llm.name`` 的值是否与已安装的插件一致
 
@@ -514,7 +522,7 @@ Web界面
 6. 是否能连接到 LLM 提供商
 
    - 对于云端 API（Gemini / OpenAI），容器需要能访问外网
-   - 如需经代理，请在 ``FESS_JAVA_OPTS`` 中追加 ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...``
+   - 如需经代理，请在 ``fess_config.properties`` 中设置 ``http.proxy.host`` / ``http.proxy.port`` （必要时设置 ``http.proxy.username`` / ``http.proxy.password`` ）。在Docker环境中，于 ``FESS_JAVA_OPTS`` 中追加 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` （自 |Fess| 15.6.1 起，LLM客户端会引用 |Fess| 通用的代理配置）
 
 .. note::
 

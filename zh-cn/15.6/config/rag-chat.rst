@@ -437,6 +437,14 @@ SSE事件:
      - 处理阶段的开始/完成（intent_analysis, search, evaluation, generation）
    * - ``chunk``
      - 生成的文本片段
+   * - ``retry``
+     - 当 LLM 请求被重试时通知（阶段名、当前尝试次数、最大尝试次数、下次尝试前的等待时间、原因等）
+   * - ``waiting``
+     - 在等待并发许可获取期间通知（阶段名、已等待时长、等待超时）
+   * - ``fallback``
+     - 当因搜索结果为零等原因导致查询被再生成时通知（阶段、原因 ``no_results`` 或 ``no_relevant_results`` 、原始查询、再生成后的查询）
+   * - ``warning``
+     - 发生内部静默回退时通知（如推理模型 token 耗尽等）
    * - ``sources``
      - 参考文档信息
    * - ``done``
