@@ -60,17 +60,17 @@ Gemini可用的主要模型:
 插件安装
 ========================
 
-|Fess| 15.6中，Gemini集成功能以 ``fess-llm-gemini`` 插件的形式提供。
+Gemini集成功能以 ``fess-llm-gemini`` 插件的形式提供。
 使用Gemini需要安装插件。
 
-1. 下载 `fess-llm-gemini-15.6.0.jar`
+1. 下载 `fess-llm-gemini-15.7.0.jar`
 2. 将其放置到 |Fess| 的 ``app/WEB-INF/plugin/`` 目录
 3. 重启 |Fess|
 
 ::
 
     # 插件放置示例
-    cp fess-llm-gemini-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-gemini-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 .. note::
    插件版本请与 |Fess| 版本保持一致。
@@ -78,7 +78,7 @@ Gemini可用的主要模型:
 基本配置
 ========
 
-|Fess| 15.6中，AI搜索模式功能的启用及Gemini专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）的选择在管理界面或 ``system.properties`` 中进行。
+AI搜索模式功能的启用及Gemini专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）的选择在管理界面或 ``system.properties`` 中进行。
 
 fess_config.properties配置
 ----------------------------
@@ -211,7 +211,7 @@ Gemini客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 认证方式
 ========
 
-自 |Fess| 15.6.1 起，API密钥通过 ``x-goog-api-key`` HTTP请求头发送（Google推荐方式）。
+API密钥通过 ``x-goog-api-key`` HTTP请求头发送（Google推荐方式）。
 不再像以往那样以 ``?key=...`` 查询参数附加到URL，因此API密钥不会残留在访问日志中。
 
 重试行为
@@ -424,12 +424,12 @@ overlay 文件 ``compose-gemini.yaml``。最小步骤：
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_PLUGINS=fess-llm-gemini:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 要点：
 
-- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` 设置 API 密钥，``-Dfess.config.rag.llm.gemini.model=...`` 选择模型
 - ``-Dfess.system.rag.llm.name=gemini`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
@@ -448,7 +448,7 @@ systemd环境
 通过 HTTP 代理使用
 ==================
 
-自 |Fess| 15.6.1 起，Gemini客户端会共享 |Fess| 整体的HTTP代理配置。请在 ``fess_config.properties`` 中指定以下属性。
+Gemini客户端会共享 |Fess| 整体的HTTP代理配置。请在 ``fess_config.properties`` 中指定以下属性。
 
 .. list-table::
    :header-rows: 1

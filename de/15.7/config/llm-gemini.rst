@@ -60,17 +60,17 @@ API-Schlüssel abrufen
 Plugin-Installation
 ===================
 
-In |Fess| 15.6 wird die Gemini-Integrationsfunktion als Plugin ``fess-llm-gemini`` bereitgestellt.
+Die Gemini-Integrationsfunktion wird als Plugin ``fess-llm-gemini`` bereitgestellt.
 Zur Verwendung von Gemini ist die Installation des Plugins erforderlich.
 
-1. Laden Sie `fess-llm-gemini-15.6.0.jar` herunter
+1. Laden Sie `fess-llm-gemini-15.7.0.jar` herunter
 2. Legen Sie die Datei im Verzeichnis ``app/WEB-INF/plugin/`` von |Fess| ab
 3. Starten Sie |Fess| neu
 
 ::
 
     # Beispiel für die Plugin-Ablage
-    cp fess-llm-gemini-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-gemini-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 .. note::
    Die Plugin-Version muss mit der Version von |Fess| übereinstimmen.
@@ -78,7 +78,7 @@ Zur Verwendung von Gemini ist die Installation des Plugins erforderlich.
 Grundeinstellungen
 ==================
 
-In |Fess| 15.6 wird die Aktivierung der AI-Suchmodus-Funktion und Gemini-spezifische Einstellungen in ``fess_config.properties`` vorgenommen, während die Auswahl des LLM-Anbieters (``rag.llm.name``) über die Administrationsoberfläche oder in ``system.properties`` konfiguriert wird.
+Die Aktivierung der AI-Suchmodus-Funktion und Gemini-spezifische Einstellungen werden in ``fess_config.properties`` vorgenommen, während die Auswahl des LLM-Anbieters (``rag.llm.name``) über die Administrationsoberfläche oder in ``system.properties`` konfiguriert wird.
 
 LLM-Anbieter konfigurieren
 ---------------------------
@@ -201,7 +201,7 @@ Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellunge
 Authentifizierung
 =================
 
-Seit |Fess| 15.6.1 wird der API-Schlüssel über den HTTP-Anfrageheader ``x-goog-api-key`` gesendet (die von Google empfohlene Methode).
+Der API-Schlüssel wird über den HTTP-Anfrageheader ``x-goog-api-key`` gesendet (die von Google empfohlene Methode).
 Er wird nicht mehr wie zuvor über den Query-Parameter ``?key=...`` an die URL angehängt, sodass der API-Schlüssel nicht in den Zugriffslogs erscheint.
 
 Retry-Verhalten
@@ -415,12 +415,12 @@ Inhalt von ``compose-gemini.yaml`` (als Referenz für eigenes Setup):
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_PLUGINS=fess-llm-gemini:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 Hinweise:
 
-- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` lässt das ``run.sh`` des Containers das Plugin automatisch herunterladen und in ``app/WEB-INF/plugin/`` installieren
+- ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` lässt das ``run.sh`` des Containers das Plugin automatisch herunterladen und in ``app/WEB-INF/plugin/`` installieren
 - ``-Dfess.config.rag.chat.enabled=true`` aktiviert den AI-Modus
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` setzt den API-Schlüssel, ``-Dfess.config.rag.llm.gemini.model=...`` wählt das Modell
 - ``-Dfess.system.rag.llm.name=gemini`` wirkt nur als initialer Default, bevor ein Wert in OpenSearch persistiert wurde. Nach dem Start kann der Wert auch unter Administration > System > Allgemein (RAG-Sektion) geändert werden
@@ -439,7 +439,7 @@ In ``/etc/sysconfig/fess`` (oder ``/etc/default/fess``) ``FESS_JAVA_OPTS`` ergä
 HTTP-Proxy verwenden
 ====================
 
-Seit |Fess| 15.6.1 nutzt der Gemini-Client die globale HTTP-Proxy-Konfiguration von |Fess|. Geben Sie die folgenden Eigenschaften in ``fess_config.properties`` an.
+Der Gemini-Client nutzt die globale HTTP-Proxy-Konfiguration von |Fess|. Geben Sie die folgenden Eigenschaften in ``fess_config.properties`` an.
 
 .. list-table::
    :header-rows: 1

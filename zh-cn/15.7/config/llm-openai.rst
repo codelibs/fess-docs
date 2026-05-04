@@ -64,12 +64,12 @@ OpenAI可用的主要模型:
 插件安装
 ========================
 
-|Fess| 15.6中，OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-openai`` 插件。
+OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-openai`` 插件。
 
-1. 下载 `fess-llm-openai-15.6.0.jar`
+1. 下载 `fess-llm-openai-15.7.0.jar`
 2. 将JAR文件放置到 |Fess| 安装目录下的 ``app/WEB-INF/plugin/`` 目录::
 
-    cp fess-llm-openai-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-openai-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. 重启 |Fess|
 
@@ -79,7 +79,7 @@ OpenAI可用的主要模型:
 基本配置
 ========
 
-|Fess| 15.6中，配置项根据用途分别存放在以下两个文件中。
+配置项根据用途分别存放在以下两个文件中。
 
 - ``app/WEB-INF/conf/fess_config.properties`` - |Fess| 本体配置及LLM提供商专属配置
 - ``system.properties`` - 在管理界面（管理界面 > 系统 > 通用）或文件中配置LLM提供商名称（ ``rag.llm.name`` ）
@@ -382,7 +382,7 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 日志输出和异常检测
 ==================
 
-自 |Fess| 15.6.1 起，OpenAI客户端输出以下结构化日志。借此即使不启用 ``DEBUG`` 级别，也可监控token使用情况和响应异常。
+OpenAI客户端输出以下结构化日志。借此即使不启用 ``DEBUG`` 级别，也可监控token使用情况和响应异常。
 
 - ``[LLM:OPENAI] Stream completed.`` （INFO） - 流式响应完成时输出分块数、首个分块的耗时、token使用信息等
 - ``[LLM:OPENAI] Chat response received.`` （INFO） - 非流式响应完成时输出同等信息
@@ -470,12 +470,12 @@ overlay 文件 ``compose-openai.yaml``。最小步骤：
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-openai:15.6.0"
+          - "FESS_PLUGINS=fess-llm-openai:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
 
 要点：
 
-- ``FESS_PLUGINS=fess-llm-openai:15.6.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-openai:15.7.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
 - ``-Dfess.config.rag.llm.openai.api.key=...`` 设置 API 密钥，``-Dfess.config.rag.llm.openai.model=...`` 选择模型
 - ``-Dfess.system.rag.llm.name=openai`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
@@ -494,7 +494,7 @@ systemd环境
 通过 HTTP 代理使用
 ==================
 
-自 |Fess| 15.6.1 起，OpenAI客户端会共享 |Fess| 整体的HTTP代理配置。请在 ``fess_config.properties`` 中指定以下属性。
+OpenAI客户端会共享 |Fess| 整体的HTTP代理配置。请在 ``fess_config.properties`` 中指定以下属性。
 
 .. list-table::
    :header-rows: 1

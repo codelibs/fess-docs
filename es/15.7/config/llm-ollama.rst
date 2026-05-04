@@ -6,7 +6,7 @@ Descripcion general
 ===================
 
 Ollama es una plataforma de codigo abierto para ejecutar modelos de lenguaje grandes (LLM) en entorno local.
-En |Fess| 15.6, la funcionalidad de integracion con Ollama se proporciona como plugin ``fess-llm-ollama`` y es adecuada para uso en entornos privados.
+La funcionalidad de integracion con Ollama de |Fess| se proporciona como plugin ``fess-llm-ollama`` y es adecuada para uso en entornos privados.
 
 Al usar Ollama, puede utilizar la funcionalidad del modo de busqueda IA sin enviar datos al exterior.
 
@@ -80,15 +80,15 @@ Descarga de modelos
 Instalacion del plugin
 ======================
 
-En |Fess| 15.6, la funcionalidad de integracion con Ollama ha sido separada como plugin.
+La funcionalidad de integracion con Ollama se proporciona como plugin.
 Para usar Ollama es necesario instalar el plugin ``fess-llm-ollama``.
 
-1. Descargue `fess-llm-ollama-15.6.0.jar`.
+1. Descargue `fess-llm-ollama-15.7.0.jar`.
 2. Coloquelo en el directorio ``app/WEB-INF/plugin/`` del directorio de instalacion de |Fess|.
 
 ::
 
-    cp fess-llm-ollama-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-ollama-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. Reinicie |Fess|.
 
@@ -98,7 +98,7 @@ Para usar Ollama es necesario instalar el plugin ``fess-llm-ollama``.
 Configuracion basica
 ====================
 
-En |Fess| 15.6, la configuracion relacionada con LLM se divide en multiples archivos de configuracion.
+La configuracion relacionada con LLM se divide en multiples archivos de configuracion.
 
 Configuracion minima
 --------------------
@@ -329,7 +329,7 @@ Contenido de ``compose-ollama.yaml`` (referencia para una configuracion equivale
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_PLUGINS=fess-llm-ollama:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
         depends_on:
           - ollama01
@@ -346,7 +346,7 @@ Contenido de ``compose-ollama.yaml`` (referencia para una configuracion equivale
 
 Notas:
 
-- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` hace que el ``run.sh`` del contenedor descargue e instale automaticamente el plugin JAR en ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` hace que el ``run.sh`` del contenedor descargue e instale automaticamente el plugin JAR en ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` habilita el modo IA
 - ``-Dfess.config.rag.llm.ollama.api.url=...`` define la URL del servidor Ollama (dentro de la red de Docker Compose se resuelve por el nombre del servicio, como ``ollama01``)
 - ``-Dfess.system.rag.llm.name=ollama`` solo actua como valor inicial por defecto antes de que se persista un valor en OpenSearch. Despues del inicio el ajuste tambien puede modificarse desde Administracion > Sistema > General (seccion RAG)
@@ -370,7 +370,7 @@ Cuando se ejecuta Ollama en un servidor diferente a Fess:
 Uso a traves de proxy HTTP
 ==========================
 
-Desde |Fess| 15.6.1, el cliente de Ollama comparte la configuracion de proxy HTTP comun de |Fess|. Si necesita pasar por un proxy para conectarse al servidor Ollama (por ejemplo al usar un servidor Ollama remoto), especifique las siguientes propiedades en ``fess_config.properties``.
+El cliente de Ollama comparte la configuracion de proxy HTTP comun de |Fess|. Si necesita pasar por un proxy para conectarse al servidor Ollama (por ejemplo al usar un servidor Ollama remoto), especifique las siguientes propiedades en ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1

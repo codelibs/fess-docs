@@ -64,7 +64,7 @@ APIキーの取得
 プラグインのインストール
 ========================
 
-|Fess| 15.7では、OpenAI連携機能はプラグインとして提供されています。使用するには ``fess-llm-openai`` プラグインのインストールが必要です。
+OpenAI連携機能はプラグインとして提供されています。使用するには ``fess-llm-openai`` プラグインのインストールが必要です。
 
 1. `fess-llm-openai-15.7.0.jar` をダウンロードします
 2. |Fess| のインストールディレクトリにある ``app/WEB-INF/plugin/`` ディレクトリにJARファイルを配置します::
@@ -79,7 +79,7 @@ APIキーの取得
 基本設定
 ========
 
-|Fess| 15.7では、設定項目は用途に応じて以下の2つのファイルに分かれています。
+設定項目は用途に応じて以下の2つのファイルに分かれています。
 
 - ``app/WEB-INF/conf/fess_config.properties`` - |Fess| 本体の設定およびLLMプロバイダー固有の設定
 - ``system.properties`` / 管理画面（管理画面 > システム > 全般） - ``rag.llm.name`` の設定のみ
@@ -382,7 +382,7 @@ vLLMやAzure OpenAI互換ゲートウェイなど、 ``stream_options.include_us
 ログ出力と異常検出
 ==================
 
-|Fess| 15.7.1 以降、OpenAIクライアントは以下の構造化されたログを出力します。これにより、 ``DEBUG`` レベルを有効化しなくても、トークン使用状況や応答異常を監視できます。
+OpenAIクライアントは以下の構造化されたログを出力します。これにより、 ``DEBUG`` レベルを有効化しなくても、トークン使用状況や応答異常を監視できます。
 
 - ``[LLM:OPENAI] Stream completed.`` （INFO） - ストリーミング応答完了時にチャンク数、初回チャンクまでの時間、トークン使用情報などを出力
 - ``[LLM:OPENAI] Chat response received.`` （INFO） - 非ストリーミング応答完了時に同等の情報を出力
@@ -493,7 +493,7 @@ systemd環境
 HTTPプロキシ経由の利用
 ======================
 
-|Fess| 15.7.1 以降、OpenAIクライアントは |Fess| 全体のHTTPプロキシ設定を共有します。 ``fess_config.properties`` で以下のプロパティを指定してください。
+OpenAIクライアントは |Fess| 全体のHTTPプロキシ設定を共有します。 ``fess_config.properties`` で以下のプロパティを指定してください。
 
 .. list-table::
    :header-rows: 1

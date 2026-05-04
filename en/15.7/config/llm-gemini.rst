@@ -60,17 +60,17 @@ Obtaining an API Key
 Plugin Installation
 ===================
 
-In |Fess| 15.6, Gemini integration is provided as the ``fess-llm-gemini`` plugin.
+Gemini integration is provided as the ``fess-llm-gemini`` plugin.
 To use Gemini, you must install the plugin.
 
-1. Download `fess-llm-gemini-15.6.0.jar`
+1. Download `fess-llm-gemini-15.7.0.jar`
 2. Place it in the ``app/WEB-INF/plugin/`` directory of |Fess|
 3. Restart |Fess|
 
 ::
 
     # Example of placing the plugin
-    cp fess-llm-gemini-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-gemini-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 .. note::
    The plugin version should match the version of |Fess|.
@@ -78,7 +78,7 @@ To use Gemini, you must install the plugin.
 Basic Configuration
 ===================
 
-In |Fess| 15.6, enabling AI mode functionality and Gemini-specific settings are done in ``fess_config.properties``, while selecting the LLM provider is done from the administration screen or in ``system.properties``.
+Enabling AI mode functionality and Gemini-specific settings are done in ``fess_config.properties``, while selecting the LLM provider is done from the administration screen or in ``system.properties``.
 
 fess_config.properties Settings
 --------------------------------
@@ -193,7 +193,7 @@ All configuration options available for the Gemini client. All settings except `
 Authentication
 ==============
 
-Since |Fess| 15.6.1, the API key is sent in the ``x-goog-api-key`` HTTP request header (Google's recommended method).
+The API key is sent in the ``x-goog-api-key`` HTTP request header (Google's recommended method).
 It is no longer appended to the URL as a ``?key=...`` query parameter, so the API key will not appear in access logs.
 
 Retry Behavior
@@ -406,12 +406,12 @@ The contents of ``compose-gemini.yaml`` (use as a reference if you build your ow
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_PLUGINS=fess-llm-gemini:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 Notes:
 
-- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` makes the container's ``run.sh`` download and install the plugin into ``app/WEB-INF/plugin/`` automatically
+- ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` makes the container's ``run.sh`` download and install the plugin into ``app/WEB-INF/plugin/`` automatically
 - ``-Dfess.config.rag.chat.enabled=true`` enables AI mode
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` sets the API key, ``-Dfess.config.rag.llm.gemini.model=...`` selects the model
 - ``-Dfess.system.rag.llm.name=gemini`` only acts as the initial default before a value is persisted in OpenSearch. After startup you can also change it from Administration > System > General (RAG section)
@@ -430,7 +430,7 @@ Append to ``FESS_JAVA_OPTS`` in ``/etc/sysconfig/fess`` (or ``/etc/default/fess`
 Using HTTP Proxy
 ================
 
-Since |Fess| 15.6.1, the Gemini client shares the |Fess|-wide HTTP proxy configuration. Configure the following properties in ``fess_config.properties``.
+The Gemini client shares the |Fess|-wide HTTP proxy configuration. Configure the following properties in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1

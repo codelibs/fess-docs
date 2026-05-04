@@ -64,12 +64,12 @@ Obtaining an API Key
 Plugin Installation
 ===================
 
-In |Fess| 15.6, OpenAI integration is provided as a plugin. To use it, you must install the ``fess-llm-openai`` plugin.
+OpenAI integration is provided as a plugin. To use it, install the ``fess-llm-openai`` plugin.
 
-1. Download `fess-llm-openai-15.6.0.jar`
+1. Download `fess-llm-openai-15.7.0.jar`
 2. Place the JAR file in the ``app/WEB-INF/plugin/`` directory of your |Fess| installation directory::
 
-    cp fess-llm-openai-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-openai-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. Restart |Fess|
 
@@ -79,7 +79,7 @@ In |Fess| 15.6, OpenAI integration is provided as a plugin. To use it, you must 
 Basic Configuration
 ===================
 
-In |Fess| 15.6, configuration items are divided into the following two files based on their purpose.
+Configuration items are divided into the following two files based on their purpose.
 
 - ``app/WEB-INF/conf/fess_config.properties`` - |Fess| core settings and LLM provider-specific settings
 - ``system.properties`` (Administration > System > General) - LLM provider selection (``rag.llm.name`` only)
@@ -382,7 +382,7 @@ If you are using a backend that does not accept the ``stream_options.include_usa
 Logging and Abnormal Detection
 ==============================
 
-Since |Fess| 15.6.1, the OpenAI client emits the following structured log entries. This lets you monitor token usage and response anomalies without enabling ``DEBUG`` level.
+The OpenAI client emits the following structured log entries. This lets you monitor token usage and response anomalies without enabling ``DEBUG`` level.
 
 - ``[LLM:OPENAI] Stream completed.`` (INFO) - emitted when a streaming response finishes; includes chunk count, time-to-first-chunk, and token usage information
 - ``[LLM:OPENAI] Chat response received.`` (INFO) - emitted when a non-streaming response finishes; includes equivalent information
@@ -471,12 +471,12 @@ The contents of ``compose-openai.yaml`` (use as a reference if you build your ow
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-openai:15.6.0"
+          - "FESS_PLUGINS=fess-llm-openai:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
 
 Notes:
 
-- ``FESS_PLUGINS=fess-llm-openai:15.6.0`` makes the container's ``run.sh`` download and install the plugin into ``app/WEB-INF/plugin/`` automatically
+- ``FESS_PLUGINS=fess-llm-openai:15.7.0`` makes the container's ``run.sh`` download and install the plugin into ``app/WEB-INF/plugin/`` automatically
 - ``-Dfess.config.rag.chat.enabled=true`` enables AI mode
 - ``-Dfess.config.rag.llm.openai.api.key=...`` sets the API key, ``-Dfess.config.rag.llm.openai.model=...`` selects the model
 - ``-Dfess.system.rag.llm.name=openai`` only acts as the initial default before a value is persisted in OpenSearch. After startup you can also change it from Administration > System > General (RAG section)
@@ -495,7 +495,7 @@ Append to ``FESS_JAVA_OPTS`` in ``/etc/sysconfig/fess`` (or ``/etc/default/fess`
 Using HTTP Proxy
 ================
 
-Since |Fess| 15.6.1, the OpenAI client shares the |Fess|-wide HTTP proxy configuration. Configure the following properties in ``fess_config.properties``.
+The OpenAI client shares the |Fess|-wide HTTP proxy configuration. Configure the following properties in ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1

@@ -6,7 +6,7 @@ Ollama配置
 ====
 
 Ollama是用于在本地环境运行大型语言模型（LLM）的开源平台。
-|Fess| 15.6中，Ollama集成功能以插件 ``fess-llm-ollama`` 的形式提供，适合在私有环境中使用。
+|Fess| 的Ollama集成功能以插件 ``fess-llm-ollama`` 的形式提供，适合在私有环境中使用。
 
 使用Ollama，可以在不将数据发送到外部的情况下使用AI搜索模式功能。
 
@@ -80,15 +80,15 @@ Docker
 插件安装
 ========================
 
-|Fess| 15.6中，Ollama集成功能已作为插件分离提供。
+Ollama集成功能以插件的形式提供。
 使用Ollama需要安装 ``fess-llm-ollama`` 插件。
 
-1. 下载 `fess-llm-ollama-15.6.0.jar`。
+1. 下载 `fess-llm-ollama-15.7.0.jar`。
 2. 将其放置到 |Fess| 安装目录下的 ``app/WEB-INF/plugin/`` 目录。
 
 ::
 
-    cp fess-llm-ollama-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-ollama-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. 重启 |Fess|。
 
@@ -98,7 +98,7 @@ Docker
 基本配置
 ========
 
-|Fess| 15.6中，LLM相关配置分布在多个配置文件中。
+LLM相关配置分布在多个配置文件中。
 
 最小配置
 --------
@@ -329,7 +329,7 @@ overlay 文件 ``compose-ollama.yaml``。最小步骤：
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_PLUGINS=fess-llm-ollama:15.7.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
         depends_on:
           - ollama01
@@ -346,7 +346,7 @@ overlay 文件 ``compose-ollama.yaml``。最小步骤：
 
 要点：
 
-- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
 - ``-Dfess.config.rag.llm.ollama.api.url=...`` 指定 Ollama 服务器的 URL（在 Docker Compose 网络内可使用 ``ollama01`` 等服务名进行解析）
 - ``-Dfess.system.rag.llm.name=ollama`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
@@ -370,7 +370,7 @@ overlay 文件 ``compose-ollama.yaml``。最小步骤：
 通过 HTTP 代理使用
 ==================
 
-自 |Fess| 15.6.1 起，Ollama客户端会共享 |Fess| 整体的HTTP代理配置。当连接Ollama服务器需要经过代理时（例如使用远程Ollama服务器时），请在 ``fess_config.properties`` 中指定以下属性。
+Ollama客户端会共享 |Fess| 整体的HTTP代理配置。当连接Ollama服务器需要经过代理时（例如使用远程Ollama服务器时），请在 ``fess_config.properties`` 中指定以下属性。
 
 .. list-table::
    :header-rows: 1
