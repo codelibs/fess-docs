@@ -185,6 +185,18 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
    * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
      - 评估最大相关文档数
      - ``3``
+   * - ``rag.llm.ollama.concurrency.wait.timeout``
+     - 并发控制许可获取的等待超时（毫秒）
+     - ``30000``
+   * - ``rag.llm.ollama.connect.timeout``
+     - TCP连接超时（毫秒）。可独立于 ``rag.llm.ollama.timeout`` 单独指定
+     - ``5000``
+   * - ``rag.llm.ollama.retry.max``
+     - HTTP重试的最大尝试次数（``429`` 及 ``5xx`` 系错误时）
+     - ``3``
+   * - ``rag.llm.ollama.retry.base.delay.ms``
+     - 指数退避的基准延迟时间（毫秒）
+     - ``2000``
 
 并发控制
 ------------
@@ -302,37 +314,45 @@ Ollama模型选项
 Docker配置
 --------------
 
-以下是 |Fess| 和Ollama均在Docker中运行时的配置示例。
-
-``docker-compose.yml``:
+官方 `docker-fess <https://github.com/codelibs/docker-fess>`__ 仓库附带了 Ollama 用的
+overlay 文件 ``compose-ollama.yaml``。最小步骤：
 
 ::
 
-    version: '3'
-    services:
-      fess:
-        image: codelibs/fess:15.6.0
-        environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=ollama
-          - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
-        depends_on:
-          - ollama
-        # ... 其他设置
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    docker exec -it ollama01 ollama pull gemma4:e4b
 
-      ollama:
-        image: ollama/ollama
-        volumes:
-          - ollama_data:/root/.ollama
+``compose-ollama.yaml`` 的内容（自行编写等价配置时的参考）：
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+        depends_on:
+          - ollama01
+
+      ollama01:
+        image: ollama/ollama:latest
         ports:
           - "11434:11434"
+        volumes:
+          - ollama-data:/root/.ollama
 
     volumes:
-      ollama_data:
+      ollama-data:
+
+要点：
+
+- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
+- ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` 指定 Ollama 服务器的 URL（在 Docker Compose 网络内可使用 ``ollama01`` 等服务名进行解析）
+- ``-Dfess.system.rag.llm.name=ollama`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
 
 .. note::
-   在Docker Compose环境中，使用 ``ollama`` 作为主机名（而不是 ``localhost``）。
+   ``RAG_CHAT_ENABLED`` 或 ``RAG_LLM_NAME`` 等大写蛇形命名的环境变量不会被 |Fess| 直接识别。配置值必须在 ``FESS_JAVA_OPTS`` 中以 ``-Dfess.config.<key>`` （ ``fess_config.properties`` 系列）或 ``-Dfess.system.<key>`` （ ``system.properties`` 系列）的形式传递。
 
 远程Ollama服务器
 ----------------------

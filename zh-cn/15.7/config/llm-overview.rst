@@ -5,10 +5,10 @@ LLM集成概述
 概述
 ====
 
-|Fess| 15.7支持利用大型语言模型（LLM）的AI搜索模式（RAG：Retrieval-Augmented Generation）功能。
+|Fess| 15.6支持利用大型语言模型（LLM）的AI搜索模式（RAG：Retrieval-Augmented Generation）功能。
 通过此功能，用户可以以与AI助手对话的形式，基于搜索结果获取信息。
 
-|Fess| 15.7中，LLM集成功能以 ``fess-llm-*`` 插件的形式提供。请安装与所用LLM提供商对应的插件。
+|Fess| 15.6中，LLM集成功能以 ``fess-llm-*`` 插件的形式提供。请安装与所用LLM提供商对应的插件。
 
 支持的提供商
 ============
@@ -39,9 +39,9 @@ LLM集成概述
 插件安装
 ==============
 
-|Fess| 15.7中，LLM功能以插件形式分离提供。需要将与所用提供商对应的 ``fess-llm-{provider}`` 插件JAR文件放置到插件目录。
+|Fess| 15.6中，LLM功能以插件形式分离提供。需要将与所用提供商对应的 ``fess-llm-{provider}`` 插件JAR文件放置到插件目录。
 
-以使用OpenAI提供商为例，请下载 ``fess-llm-openai-15.7.0.jar`` 并放置到以下目录。
+以使用OpenAI提供商为例，请下载 ``fess-llm-openai-15.6.0.jar`` 并放置到以下目录。
 
 ::
 
@@ -126,7 +126,7 @@ fess_config.properties
 系统提示词
 ------------------
 
-|Fess| 15.7中，系统提示词不再通过属性文件管理，而是在各插件的DI XML文件中进行管理。
+|Fess| 15.6中，系统提示词不再通过属性文件管理，而是在各插件的DI XML文件中进行管理。
 
 各 ``fess-llm-*`` 插件中包含的 ``fess_llm++.xml`` 文件中定义了系统提示词。如需自定义提示词，请编辑插件目录中的DI XML文件。
 
@@ -209,7 +209,7 @@ fess_config.properties
 提示词类型别配置
 ======================
 
-|Fess| 15.7中，可以按提示词类型分别设置生成参数。这样可以根据用途进行精细调整。配置在 ``fess_config.properties`` 中进行。
+|Fess| 15.6中，可以按提示词类型分别设置生成参数。这样可以根据用途进行精细调整。配置在 ``fess_config.properties`` 中进行。
 
 提示词类型一览
 --------------------

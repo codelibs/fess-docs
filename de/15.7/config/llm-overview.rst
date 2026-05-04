@@ -5,10 +5,10 @@
 Übersicht
 =========
 
-|Fess| 15.7 unterstützt eine AI-Suchmodus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
+|Fess| 15.6 unterstützt eine AI-Suchmodus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
 Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten Format mit einem KI-Assistenten abrufen, der auf Suchergebnissen basiert.
 
-In |Fess| 15.7 wird die LLM-Integrationsfunktion als ``fess-llm-*``-Plugin bereitgestellt. Installieren Sie das Plugin, das dem LLM-Anbieter entspricht, den Sie verwenden möchten.
+In |Fess| 15.6 wird die LLM-Integrationsfunktion als ``fess-llm-*``-Plugin bereitgestellt. Installieren Sie das Plugin, das dem LLM-Anbieter entspricht, den Sie verwenden möchten.
 
 Unterstützte Anbieter
 =====================
@@ -39,9 +39,9 @@ Unterstützte Anbieter
 Plugin-Installation
 ===================
 
-In |Fess| 15.7 ist die LLM-Funktion als Plugin ausgelagert. Die JAR-Datei des ``fess-llm-{provider}``-Plugins für den gewünschten Anbieter muss im Plugin-Verzeichnis abgelegt werden.
+In |Fess| 15.6 ist die LLM-Funktion als Plugin ausgelagert. Die JAR-Datei des ``fess-llm-{provider}``-Plugins für den gewünschten Anbieter muss im Plugin-Verzeichnis abgelegt werden.
 
-Als Beispiel: Wenn Sie den OpenAI-Anbieter verwenden möchten, laden Sie ``fess-llm-openai-15.7.0.jar`` herunter und legen Sie es im folgenden Verzeichnis ab.
+Als Beispiel: Wenn Sie den OpenAI-Anbieter verwenden möchten, laden Sie ``fess-llm-openai-15.6.0.jar`` herunter und legen Sie es im folgenden Verzeichnis ab.
 
 ::
 
@@ -126,7 +126,7 @@ Kontexteinstellungen
 Systemprompt
 ------------
 
-In |Fess| 15.7 werden Systemprompts nicht in Property-Dateien, sondern in den DI-XML-Dateien der jeweiligen Plugins verwaltet.
+In |Fess| 15.6 werden Systemprompts nicht in Property-Dateien, sondern in den DI-XML-Dateien der jeweiligen Plugins verwaltet.
 
 Der Systemprompt wird in der Datei ``fess_llm++.xml`` definiert, die in jedem ``fess-llm-*``-Plugin enthalten ist. Um den Prompt anzupassen, bearbeiten Sie die DI-XML-Datei im Plugin-Verzeichnis.
 
@@ -209,7 +209,7 @@ Einstellungen zur Bewertung der Suchergebnisse. Konfiguration in ``fess_config.p
 Prompttypspezifische Einstellungen
 ===================================
 
-In |Fess| 15.7 können Generierungsparameter für jeden Prompttyp einzeln konfiguriert werden. Dies ermöglicht eine feinere Abstimmung je nach Verwendungszweck. Die Konfiguration erfolgt in ``fess_config.properties``.
+In |Fess| 15.6 können Generierungsparameter für jeden Prompttyp einzeln konfiguriert werden. Dies ermöglicht eine feinere Abstimmung je nach Verwendungszweck. Die Konfiguration erfolgt in ``fess_config.properties``.
 
 Prompttypen-Übersicht
 ---------------------

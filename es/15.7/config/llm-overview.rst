@@ -5,10 +5,10 @@ Descripcion general de integracion LLM
 Descripcion general
 ===================
 
-|Fess| 15.7 soporta la funcionalidad de modo de búsqueda IA (RAG: Retrieval-Augmented Generation) que aprovecha modelos de lenguaje grandes (LLM).
+|Fess| 15.6 soporta la funcionalidad de modo de búsqueda IA (RAG: Retrieval-Augmented Generation) que aprovecha modelos de lenguaje grandes (LLM).
 Esta funcionalidad permite a los usuarios obtener informacion a traves de un dialogo interactivo con un asistente de IA basado en los resultados de busqueda.
 
-En |Fess| 15.7, la funcionalidad de integracion con LLM se proporciona como plugins ``fess-llm-*``. Instale el plugin correspondiente al proveedor LLM que desea utilizar.
+En |Fess| 15.6, la funcionalidad de integracion con LLM se proporciona como plugins ``fess-llm-*``. Instale el plugin correspondiente al proveedor LLM que desea utilizar.
 
 Proveedores compatibles
 =======================
@@ -39,9 +39,9 @@ Proveedores compatibles
 Instalacion de plugin
 =====================
 
-En |Fess| 15.7, la funcionalidad LLM esta separada como plugin. Es necesario colocar el archivo JAR del plugin ``fess-llm-{provider}`` correspondiente al proveedor que desea utilizar en el directorio de plugins.
+En |Fess| 15.6, la funcionalidad LLM esta separada como plugin. Es necesario colocar el archivo JAR del plugin ``fess-llm-{provider}`` correspondiente al proveedor que desea utilizar en el directorio de plugins.
 
-Por ejemplo, para usar el proveedor OpenAI, descargue ``fess-llm-openai-15.7.0.jar`` y coloquelo en el siguiente directorio.
+Por ejemplo, para usar el proveedor OpenAI, descargue ``fess-llm-openai-15.6.0.jar`` y coloquelo en el siguiente directorio.
 
 ::
 
@@ -126,7 +126,7 @@ Configuracion de contexto
 Prompt del sistema
 ------------------
 
-En |Fess| 15.7, los prompts del sistema se gestionan en el archivo DI XML de cada plugin, no en archivos de propiedades.
+En |Fess| 15.6, los prompts del sistema se gestionan en el archivo DI XML de cada plugin, no en archivos de propiedades.
 
 Los prompts del sistema estan definidos en el archivo ``fess_llm++.xml`` incluido en cada plugin ``fess-llm-*``. Para personalizar los prompts, edite el archivo DI XML en el directorio del plugin.
 
@@ -209,7 +209,7 @@ Configuracion relacionada con la evaluacion de resultados de busqueda. Se config
 Configuracion por tipo de prompt
 =================================
 
-En |Fess| 15.7, los parametros de generacion se pueden configurar por tipo de prompt. Esto permite ajustes detallados segun el uso. La configuracion se realiza en ``fess_config.properties``.
+En |Fess| 15.6, los parametros de generacion se pueden configurar por tipo de prompt. Esto permite ajustes detallados segun el uso. La configuracion se realiza en ``fess_config.properties``.
 
 Lista de tipos de prompt
 ------------------------

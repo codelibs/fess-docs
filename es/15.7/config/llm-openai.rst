@@ -64,12 +64,12 @@ Obtencion de clave API
 Instalacion del plugin
 ======================
 
-En |Fess| 15.7, la funcionalidad de integracion con OpenAI se proporciona como plugin. Para usarla es necesario instalar el plugin ``fess-llm-openai``.
+En |Fess| 15.6, la funcionalidad de integracion con OpenAI se proporciona como plugin. Para usarla es necesario instalar el plugin ``fess-llm-openai``.
 
-1. Descargue `fess-llm-openai-15.7.0.jar`
+1. Descargue `fess-llm-openai-15.6.0.jar`
 2. Coloque el archivo JAR en el directorio ``app/WEB-INF/plugin/`` del directorio de instalacion de |Fess|::
 
-    cp fess-llm-openai-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-openai-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. Reinicie |Fess|
 
@@ -79,7 +79,7 @@ En |Fess| 15.7, la funcionalidad de integracion con OpenAI se proporciona como p
 Configuracion basica
 ====================
 
-En |Fess| 15.7, los elementos de configuracion se dividen en los siguientes dos archivos segun su uso.
+En |Fess| 15.6, los elementos de configuracion se dividen en los siguientes dos archivos segun su uso.
 
 - ``app/WEB-INF/conf/fess_config.properties`` - Configuracion del nucleo de |Fess| y configuracion especifica del proveedor LLM
 - ``system.properties`` / Pantalla de administracion (Administracion > Sistema > General) - Seleccion del proveedor LLM (``rag.llm.name``)
@@ -191,6 +191,18 @@ Todos los elementos de configuracion disponibles para el cliente de OpenAI. Exce
    * - ``rag.llm.openai.reasoning.token.multiplier``
      - Multiplicador de max tokens para modelos de inferencia
      - ``4``
+     - fess_config.properties
+   * - ``rag.llm.openai.retry.max``
+     - Numero maximo de reintentos HTTP (en errores ``429`` y de la familia ``5xx``)
+     - ``10``
+     - fess_config.properties
+   * - ``rag.llm.openai.retry.base.delay.ms``
+     - Retardo base del backoff exponencial (milisegundos)
+     - ``2000``
+     - fess_config.properties
+   * - ``rag.llm.openai.stream.include.usage``
+     - Envia ``stream_options.include_usage=true`` durante el streaming para recibir la informacion de tokens utilizados en el chunk final
+     - ``true``
      - fess_config.properties
    * - ``rag.llm.openai.history.max.chars``
      - Maximo de caracteres para historial de conversacion
@@ -338,6 +350,54 @@ Ejemplo de configuracion
     # Configuracion de temperatura del prompt intent (se configura bajo para determinacion de intencion)
     rag.llm.openai.intent.temperature=0.1
 
+Comportamiento de reintentos
+============================
+
+Las solicitudes a la API de OpenAI se reintentan automaticamente para los siguientes codigos de estado HTTP:
+
+- ``429`` Too Many Requests (limite de tasa)
+- ``500`` Internal Server Error
+- ``502`` Bad Gateway (OpenAI puede devolverlo cuando el upstream esta sobrecargado)
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+Durante los reintentos se aplica un backoff exponencial (valor base ``rag.llm.openai.retry.base.delay.ms`` milisegundos, hasta ``rag.llm.openai.retry.max`` intentos, con jitter de +/-20%).
+Si el servidor devuelve un encabezado ``Retry-After`` (segundos enteros, limitado a ``600`` segundos como maximo), ese valor tiene prioridad sobre el backoff exponencial. Esto sigue la guia oficial de OpenAI.
+
+Tenga en cuenta que las ``IOException`` (timeouts de conexion, reset de socket, fallos de DNS) no se reintentan, ya que la solicitud podria haber llegado al servidor y un reintento podria provocar un cobro doble.
+En las solicitudes de streaming, solo la conexion inicial es objeto de reintentos; los errores que ocurren despues de comenzar a recibir el cuerpo de la respuesta se propagan inmediatamente.
+
+.. note::
+   Con la configuracion predeterminada (maximo 10 intentos, base 2 segundos), en el peor caso la suma de los 9 backoffs es ``2 + 4 + 8 + ... + 512 = aproximadamente 1022 segundos (aproximadamente 17 minutos)``. Si ``Retry-After`` (maximo 600 segundos) se devuelve en cada intento, el peor caso puede llegar a ``9 x 600 segundos = 90 minutos``. Si desea controlar la latencia de forma mas estricta, reduzca ``rag.llm.openai.retry.max``.
+
+Streaming e informacion de uso
+==============================
+
+Por defecto, se incluye ``stream_options.include_usage=true`` en las solicitudes y, en el chunk SSE final de la respuesta de streaming, se recibe el objeto ``usage`` (que incluye ``completion_tokens_details.reasoning_tokens`` para los modelos de inferencia y ``prompt_tokens_details.cached_tokens`` cuando se utiliza la cache de prompts).
+
+Si utiliza un backend que no admite el campo ``stream_options.include_usage`` (como vLLM o gateways compatibles con Azure OpenAI), desactivelo de la siguiente forma::
+
+    rag.llm.openai.stream.include.usage=false
+
+Salida de logs y deteccion de anomalias
+=======================================
+
+Desde |Fess| 15.6.1, el cliente de OpenAI emite los siguientes logs estructurados, que permiten supervisar el uso de tokens y las anomalias de respuesta sin necesidad de habilitar el nivel ``DEBUG``.
+
+- ``[LLM:OPENAI] Stream completed.`` (INFO) - Al finalizar la respuesta de streaming, emite el numero de chunks, el tiempo hasta el primer chunk y la informacion de uso de tokens
+- ``[LLM:OPENAI] Chat response received.`` (INFO) - Al finalizar la respuesta no-streaming, emite informacion equivalente
+- ``[LLM:OPENAI] Chat finished abnormally`` / ``Stream finished abnormally`` (WARN) - Cuando ``finish_reason`` es distinto de ``stop`` (``length``: truncado por max_tokens, ``content_filter``: moderacion, ``tool_calls`` / ``function_call``: invocacion de herramientas no esperada por configuracion erronea, etc.)
+- ``[LLM:OPENAI] Stream refusal.`` (WARN) - Cuando se devuelve ``delta.refusal`` con salida estructurada
+
+Estos logs WARN pueden utilizarse para ajustar ``max_tokens``, auditar filtros de contenido y detectar configuraciones incorrectas de ``extra_params``.
+
+Enmascaramiento de credenciales en URLs registradas
+---------------------------------------------------
+
+Las URLs emitidas en los logs se enmascaran automaticamente sustituyendo por ``***`` los parametros de consulta que contienen credenciales (``api_key``, ``apikey``, ``api-key``, ``key``, ``token``, ``access_token``, ``access-token``; sin distinguir mayusculas y minusculas).
+
+El endpoint oficial de OpenAI (``https://api.openai.com``) se autentica mediante el encabezado ``Authorization: Bearer``, por lo que la URL no contiene credenciales. No obstante, este enmascaramiento evita que la clave API se filtre en los logs incluso cuando ``rag.llm.openai.api.url`` apunta a un proxy personalizado que acepta credenciales como parametro de consulta (algunas implementaciones de Azure, gateways vLLM, etc.).
+
 Soporte de modelos de inferencia
 =================================
 
@@ -411,18 +471,17 @@ Contenido de ``compose-openai.yaml`` (referencia para una configuracion equivale
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-openai:15.7.0"
+          - "FESS_PLUGINS=fess-llm-openai:15.6.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
 
 Notas:
 
-- ``FESS_PLUGINS=fess-llm-openai:15.7.0`` hace que el ``run.sh`` del contenedor descargue e instale automaticamente el plugin en ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-openai:15.6.0`` hace que el ``run.sh`` del contenedor descargue e instale automaticamente el plugin en ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` habilita el modo IA
 - ``-Dfess.config.rag.llm.openai.api.key=...`` define la clave API, ``-Dfess.config.rag.llm.openai.model=...`` selecciona el modelo
 - ``-Dfess.system.rag.llm.name=openai`` solo actua como valor inicial por defecto antes de que se persista un valor en OpenSearch. Despues del inicio el ajuste tambien puede modificarse desde Administracion > Sistema > General (seccion RAG)
 
-Si el acceso a Internet pasa por un proxy, agregue
-``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` a ``FESS_JAVA_OPTS``.
+Si el acceso a Internet pasa por un proxy, especifique la configuracion ``http.proxy.*`` de |Fess| a traves de ``FESS_JAVA_OPTS`` (consulte la seccion "Uso a traves de proxy HTTP" mas adelante).
 
 Entorno systemd
 ---------------
@@ -432,6 +491,40 @@ Agregue a ``FESS_JAVA_OPTS`` en ``/etc/sysconfig/fess`` (o ``/etc/default/fess``
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
+
+Uso a traves de proxy HTTP
+==========================
+
+Desde |Fess| 15.6.1, el cliente de OpenAI comparte la configuracion de proxy HTTP comun de |Fess|. Especifique las siguientes propiedades en ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripcion
+     - Predeterminado
+   * - ``http.proxy.host``
+     - Nombre del host del proxy (si esta vacio, no se usa proxy)
+     - ``""``
+   * - ``http.proxy.port``
+     - Numero de puerto del proxy
+     - ``8080``
+   * - ``http.proxy.username``
+     - Nombre de usuario para autenticacion del proxy (opcional; al especificarlo se habilita la autenticacion Basic)
+     - ``""``
+   * - ``http.proxy.password``
+     - Contrasena para autenticacion del proxy
+     - ``""``
+
+En entornos Docker, especifique en ``FESS_JAVA_OPTS`` de la siguiente forma::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   Esta configuracion tambien afecta el acceso HTTP de todo |Fess|, incluido el crawler.
+   Las propiedades de sistema Java tradicionales (como ``-Dhttps.proxyHost``) no son consultadas por el cliente de OpenAI.
 
 Uso de Azure OpenAI
 ===================

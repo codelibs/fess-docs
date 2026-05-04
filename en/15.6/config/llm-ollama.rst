@@ -185,6 +185,18 @@ All configuration options available for the Ollama client. All settings except `
    * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
      - Maximum number of relevant documents during evaluation
      - ``3``
+   * - ``rag.llm.ollama.concurrency.wait.timeout``
+     - Concurrent request wait timeout (milliseconds)
+     - ``30000``
+   * - ``rag.llm.ollama.connect.timeout``
+     - TCP connect timeout (milliseconds). Configurable separately from ``rag.llm.ollama.timeout``
+     - ``5000``
+   * - ``rag.llm.ollama.retry.max``
+     - Maximum number of HTTP retries (on ``429`` and ``5xx`` errors)
+     - ``3``
+   * - ``rag.llm.ollama.retry.base.delay.ms``
+     - Base delay for exponential backoff (in milliseconds)
+     - ``2000``
 
 Concurrency Control
 -------------------
@@ -302,37 +314,45 @@ Network Configuration
 Docker Configuration
 --------------------
 
-Example configuration when running both |Fess| and Ollama in Docker.
-
-``docker-compose.yml``:
+The official `docker-fess <https://github.com/codelibs/docker-fess>`__ repository
+ships an Ollama overlay (``compose-ollama.yaml``). The minimum steps are:
 
 ::
 
-    version: '3'
-    services:
-      fess:
-        image: codelibs/fess:15.6.0
-        environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=ollama
-          - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
-        depends_on:
-          - ollama
-        # ... other settings
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    docker exec -it ollama01 ollama pull gemma4:e4b
 
-      ollama:
-        image: ollama/ollama
-        volumes:
-          - ollama_data:/root/.ollama
+The contents of ``compose-ollama.yaml`` (use as a reference if you build your own equivalent):
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+        depends_on:
+          - ollama01
+
+      ollama01:
+        image: ollama/ollama:latest
         ports:
           - "11434:11434"
+        volumes:
+          - ollama-data:/root/.ollama
 
     volumes:
-      ollama_data:
+      ollama-data:
+
+Notes:
+
+- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` makes the container's ``run.sh`` download and install the plugin JAR into ``app/WEB-INF/plugin/`` automatically
+- ``-Dfess.config.rag.chat.enabled=true`` enables AI mode
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` sets the Ollama server URL (within the Docker Compose network, resolve it by the service name such as ``ollama01``)
+- ``-Dfess.system.rag.llm.name=ollama`` only acts as the initial default before a value is persisted in OpenSearch. After startup you can also change it from Administration > System > General (RAG section)
 
 .. note::
-   In Docker Compose environments, use ``ollama`` as the hostname (not ``localhost``).
+   Uppercase snake-case environment variables such as ``RAG_CHAT_ENABLED`` and ``RAG_LLM_NAME`` are not recognized directly by |Fess|. All values must be passed inside ``FESS_JAVA_OPTS`` as ``-Dfess.config.<key>`` (for ``fess_config.properties`` keys) or ``-Dfess.system.<key>`` (for ``system.properties`` keys).
 
 Remote Ollama Server
 --------------------

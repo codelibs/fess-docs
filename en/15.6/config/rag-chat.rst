@@ -438,6 +438,14 @@ SSE Events:
      - Processing phase start/completion (intent_analysis, search, evaluation, generation)
    * - ``chunk``
      - Generated text fragments
+   * - ``retry``
+     - Sent when an LLM request is being retried (includes phase name, current attempt number, max attempts, sleep time before the next attempt, and cause)
+   * - ``waiting``
+     - Sent while waiting for a concurrency permit (includes phase name, elapsed wait time, wait timeout)
+   * - ``fallback``
+     - Sent when the query is regenerated due to no results or no relevant results (includes phase, reason ``no_results`` or ``no_relevant_results``, original query, regenerated query)
+   * - ``warning``
+     - Sent on internal silent fallbacks (e.g., reasoning-model token exhaustion)
    * - ``sources``
      - Reference document information
    * - ``done``

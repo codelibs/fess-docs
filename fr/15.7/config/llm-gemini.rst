@@ -23,8 +23,9 @@ Modeles pris en charge
 
 Principaux modeles disponibles avec Gemini :
 
-- ``gemini-3-flash-preview`` - Dernier modele rapide (recommande)
-- ``gemini-3.1-pro-preview`` - Dernier modele de raisonnement avance
+- ``gemini-3.1-flash-lite-preview`` - Modele rapide leger et a faible cout (par defaut)
+- ``gemini-3-flash-preview`` - Modele Flash standard
+- ``gemini-3.1-pro`` / ``gemini-3-pro`` - Modeles de raisonnement avance
 - ``gemini-2.5-flash`` - Version stable du modele rapide
 - ``gemini-2.5-pro`` - Version stable du modele de raisonnement
 
@@ -59,17 +60,17 @@ Obtention de la cle API
 Installation du plugin
 ========================
 
-Dans |Fess| 15.7, la fonctionnalite d'integration Gemini est fournie sous forme de plugin ``fess-llm-gemini``.
+Dans |Fess| 15.6, la fonctionnalite d'integration Gemini est fournie sous forme de plugin ``fess-llm-gemini``.
 Pour utiliser Gemini, l'installation du plugin est necessaire.
 
-1. Telechargez `fess-llm-gemini-15.7.0.jar`
+1. Telechargez `fess-llm-gemini-15.6.0.jar`
 2. Placez-le dans le repertoire ``app/WEB-INF/plugin/`` de |Fess|
 3. Redemarrez |Fess|
 
 ::
 
     # Exemple de placement du plugin
-    cp fess-llm-gemini-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-gemini-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 .. note::
    La version du plugin doit correspondre a la version de |Fess|.
@@ -77,7 +78,7 @@ Pour utiliser Gemini, l'installation du plugin est necessaire.
 Configuration de base
 ========
 
-Dans |Fess| 15.7, l'activation de la fonctionnalite de mode de recherche IA et les parametres specifiques a Gemini s'effectuent dans ``fess_config.properties``, et la selection du fournisseur LLM (``rag.llm.name``) s'effectue via l'administration ou dans ``system.properties``.
+Dans |Fess| 15.6, l'activation de la fonctionnalite de mode de recherche IA et les parametres specifiques a Gemini s'effectuent dans ``fess_config.properties``, et la selection du fournisseur LLM (``rag.llm.name``) s'effectue via l'administration ou dans ``system.properties``.
 
 Configuration de fess_config.properties
 ----------------------------
@@ -106,7 +107,7 @@ Configuration minimale (fess_config.properties)
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Modele a utiliser
-    rag.llm.gemini.model=gemini-3-flash-preview
+    rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
 Configuration minimale (system.properties)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,7 +162,7 @@ Tous les elements de configuration disponibles pour le client Gemini. Tous se co
      - ``""``
    * - ``rag.llm.gemini.model``
      - Nom du modele a utiliser
-     - ``gemini-3-flash-preview``
+     - ``gemini-3.1-flash-lite-preview``
    * - ``rag.llm.gemini.api.url``
      - URL de base de l'API
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -198,6 +199,31 @@ Tous les elements de configuration disponibles pour le client Gemini. Tous se co
    * - ``rag.llm.gemini.history.assistant.summary.max.chars``
      - Nombre maximum de caracteres du resume de l'historique de l'assistant
      - ``1000``
+   * - ``rag.llm.gemini.retry.max``
+     - Nombre maximum de tentatives HTTP (lors d'erreurs ``429`` et ``5xx``)
+     - ``10``
+   * - ``rag.llm.gemini.retry.base.delay.ms``
+     - Delai de base du backoff exponentiel (millisecondes)
+     - ``2000``
+
+Methode d'authentification
+==========================
+
+Depuis |Fess| 15.6.1, la cle API est transmise via l'en-tete HTTP ``x-goog-api-key`` (methode recommandee par Google).
+Elle n'est plus ajoutee a l'URL en tant que parametre de requete ``?key=...`` comme auparavant ; la cle API ne reste donc plus dans les journaux d'acces.
+
+Comportement de reessai
+=======================
+
+Les requetes vers l'API Gemini sont automatiquement reessayees pour les codes de statut HTTP suivants :
+
+- ``429`` Resource Exhausted (depassement de quota / limitation de debit)
+- ``500`` Internal Server Error
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+Lors d'un reessai, |Fess| attend selon un backoff exponentiel (valeur de base ``rag.llm.gemini.retry.base.delay.ms`` millisecondes, jusqu'a ``rag.llm.gemini.retry.max`` tentatives, avec une gigue de +/-20%).
+Pour les requetes en streaming, seule la connexion initiale est sujette aux reessais ; les erreurs survenant apres le debut de la reception du corps de la reponse sont propagees immediatement.
 
 Configuration par type de prompt
 ======================
@@ -260,7 +286,7 @@ Valeurs par defaut pour chaque type de prompt. Ces valeurs sont utilisees lorsqu
      - thinking.budget
    * - ``intent``
      - ``0.1``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``evaluation``
      - ``0.1``
@@ -276,24 +302,24 @@ Valeurs par defaut pour chaque type de prompt. Ces valeurs sont utilisees lorsqu
      - ``0``
    * - ``docnotfound``
      - ``0.7``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``direct``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``faq``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``answer``
      - ``0.5``
-     - ``4096``
-     - ``2048``
+     - ``8192``
+     - ``0``
    * - ``summary``
      - ``0.3``
      - ``4096``
-     - ``2048``
+     - ``0``
    * - ``queryregeneration``
      - ``0.3``
      - ``256``
@@ -329,7 +355,7 @@ Prise en charge des modeles de reflexion
 Gemini prend en charge les modeles de reflexion (Thinking Model).
 L'utilisation de modeles de reflexion permet au modele d'executer un processus de raisonnement interne avant de generer une reponse, produisant ainsi des reponses plus precises.
 
-Le budget de reflexion peut etre configure par type de prompt dans ``fess_config.properties``.
+Le budget de reflexion se configure par type de prompt dans ``fess_config.properties``. |Fess| convertit automatiquement la valeur entiere (nombre de tokens) de ``rag.llm.gemini.{promptType}.thinking.budget`` vers le champ d'API approprie en fonction de la generation du modele resolue lors de la requete.
 
 ::
 
@@ -339,8 +365,38 @@ Le budget de reflexion peut etre configure par type de prompt dans ``fess_config
     # Budget de reflexion pour la generation de resume
     rag.llm.gemini.summary.thinking.budget=1024
 
+Mappage selon la generation du modele
+-------------------------------------
+
+- **Gemini 2.x** (par exemple ``gemini-2.5-flash``) : la valeur entiere configuree est envoyee telle quelle en tant que ``thinkingConfig.thinkingBudget``. Specifier ``0`` desactive completement la reflexion.
+- **Gemini 3.x** (par exemple ``gemini-3.1-flash-lite-preview``) : la valeur entiere est regroupee en compartiments et envoyee comme valeur enumeree de ``thinkingConfig.thinkingLevel`` (``MINIMAL`` / ``LOW`` / ``MEDIUM`` / ``HIGH``).
+
+Le mappage des compartiments pour Gemini 3.x est le suivant :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 25 40
+
+   * - Valeur du budget
+     - thinkingLevel
+     - Remarques
+   * - ``<=0``
+     - ``MINIMAL`` ou ``LOW``
+     - ``MINIMAL`` pour les modeles Flash / Flash-Lite ; ``LOW`` pour les modeles de la famille Pro qui ne prennent pas en charge ``MINIMAL`` (``gemini-3-pro`` / ``gemini-3.1-pro``)
+   * - ``<=4096``
+     - ``MEDIUM``
+     -
+   * - ``>4096``
+     - ``HIGH``
+     -
+
 .. note::
-   La configuration d'un budget de reflexion peut allonger le temps de reponse.
+   Gemini 3.x consomme toujours un certain nombre de tokens de reflexion, quel que soit le compartiment (meme avec ``thinkingLevel=MINIMAL``, plusieurs centaines de tokens peuvent etre consommes).
+   Pour cette raison, lors de l'utilisation d'un modele Gemini 3.x, |Fess| ajoute automatiquement une marge supplementaire (1024 tokens) a la valeur ``maxOutputTokens`` par defaut, afin d'eviter une troncature de la reponse due a ``finishReason=MAX_TOKENS``.
+   Avec Gemini 2.x, ``thinkingBudget=0`` desactive la reflexion elle-meme, donc aucune marge supplementaire n'est ajoutee.
+
+.. note::
+   Configurer un budget de reflexion eleve peut allonger le temps de reponse.
    Configurez une valeur appropriee selon l'usage.
 
 Configuration via options JVM
@@ -367,18 +423,17 @@ Contenu de ``compose-gemini.yaml`` (reference pour un setup equivalent) :
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-gemini:15.7.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 Notes :
 
-- ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` fait que ``run.sh`` du conteneur telecharge et installe automatiquement le plugin dans ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` fait que ``run.sh`` du conteneur telecharge et installe automatiquement le plugin dans ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` active le mode IA
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` definit la cle API, ``-Dfess.config.rag.llm.gemini.model=...`` choisit le modele
 - ``-Dfess.system.rag.llm.name=gemini`` n'agit que comme valeur par defaut initiale avant qu'une valeur ne soit persistee dans OpenSearch. Apres demarrage, le parametre peut aussi etre modifie sous Administration > Systeme > General (section RAG)
 
-Si l'acces Internet passe par un proxy, ajouter
-``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` a ``FESS_JAVA_OPTS``.
+Si l'acces Internet passe par un proxy, specifiez la configuration ``http.proxy.*`` de |Fess| via ``FESS_JAVA_OPTS`` (voir la section "Utilisation via un proxy HTTP" ci-dessous).
 
 Environnement systemd
 ---------------------
@@ -388,6 +443,40 @@ Ajouter a ``FESS_JAVA_OPTS`` dans ``/etc/sysconfig/fess`` (ou ``/etc/default/fes
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
+
+Utilisation via un proxy HTTP
+=============================
+
+Depuis |Fess| 15.6.1, le client Gemini partage la configuration de proxy HTTP commune a |Fess|. Specifiez les proprietes suivantes dans ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriete
+     - Description
+     - Valeur par defaut
+   * - ``http.proxy.host``
+     - Nom d'hote du proxy (chaine vide pour ne pas utiliser de proxy)
+     - ``""``
+   * - ``http.proxy.port``
+     - Numero de port du proxy
+     - ``8080``
+   * - ``http.proxy.username``
+     - Nom d'utilisateur pour l'authentification du proxy (facultatif ; lorsqu'il est renseigne, l'authentification Basic est activee)
+     - ``""``
+   * - ``http.proxy.password``
+     - Mot de passe pour l'authentification du proxy
+     - ``""``
+
+Dans un environnement Docker, specifiez ce qui suit dans ``FESS_JAVA_OPTS``::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   Cette configuration s'applique egalement a tous les acces HTTP de |Fess|, notamment ceux du crawler.
+   Les proprietes systeme Java traditionnelles (``-Dhttps.proxyHost``, etc.) ne sont pas prises en compte par le client Gemini.
 
 Utilisation via Vertex AI
 ===================
@@ -412,14 +501,18 @@ Guide pour la selection du modele selon l'usage.
      - Vitesse
      - Qualite
      - Usage
+   * - ``gemini-3.1-flash-lite-preview``
+     - Rapide
+     - Elevee
+     - Leger et a faible cout (par defaut, prend en charge ``thinkingLevel=MINIMAL``)
    * - ``gemini-3-flash-preview``
      - Rapide
      - Maximale
-     - Usage general (recommande)
-   * - ``gemini-3.1-pro-preview``
+     - Usage general (prend en charge ``thinkingLevel=MINIMAL``)
+   * - ``gemini-3.1-pro`` / ``gemini-3-pro``
      - Moyenne
      - Maximale
-     - Raisonnement complexe
+     - Raisonnement complexe (``MINIMAL`` non pris en charge ; au minimum ``LOW``)
    * - ``gemini-2.5-flash``
      - Rapide
      - Elevee

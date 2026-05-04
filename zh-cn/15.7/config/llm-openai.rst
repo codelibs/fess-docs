@@ -64,12 +64,12 @@ OpenAI可用的主要模型:
 插件安装
 ========================
 
-|Fess| 15.7中，OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-openai`` 插件。
+|Fess| 15.6中，OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-openai`` 插件。
 
-1. 下载 `fess-llm-openai-15.7.0.jar`
+1. 下载 `fess-llm-openai-15.6.0.jar`
 2. 将JAR文件放置到 |Fess| 安装目录下的 ``app/WEB-INF/plugin/`` 目录::
 
-    cp fess-llm-openai-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-openai-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. 重启 |Fess|
 
@@ -79,7 +79,7 @@ OpenAI可用的主要模型:
 基本配置
 ========
 
-|Fess| 15.7中，配置项根据用途分别存放在以下两个文件中。
+|Fess| 15.6中，配置项根据用途分别存放在以下两个文件中。
 
 - ``app/WEB-INF/conf/fess_config.properties`` - |Fess| 本体配置及LLM提供商专属配置
 - ``system.properties`` - 在管理界面（管理界面 > 系统 > 通用）或文件中配置LLM提供商名称（ ``rag.llm.name`` ）
@@ -191,6 +191,18 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
    * - ``rag.llm.openai.reasoning.token.multiplier``
      - 推理模型的max_tokens倍率
      - ``4``
+     - fess_config.properties
+   * - ``rag.llm.openai.retry.max``
+     - HTTP重试的最大尝试次数（``429`` 及 ``5xx`` 系错误时）
+     - ``10``
+     - fess_config.properties
+   * - ``rag.llm.openai.retry.base.delay.ms``
+     - 指数退避的基准延迟时间（毫秒）
+     - ``2000``
+     - fess_config.properties
+   * - ``rag.llm.openai.stream.include.usage``
+     - 流式输出时发送 ``stream_options.include_usage=true``，在最终分块中接收使用token信息
+     - ``true``
      - fess_config.properties
    * - ``rag.llm.openai.history.max.chars``
      - 会话历史的最大字符数
@@ -338,6 +350,54 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
     # intent提示词的temperature设置（意图判定设置较低）
     rag.llm.openai.intent.temperature=0.1
 
+重试行为
+========
+
+对OpenAI API的请求会针对以下HTTP状态码自动重试:
+
+- ``429`` Too Many Requests（速率限制）
+- ``500`` Internal Server Error
+- ``502`` Bad Gateway（OpenAI在上游过载时可能返回）
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+重试时采用指数退避（基准值 ``rag.llm.openai.retry.base.delay.ms`` 毫秒、最多 ``rag.llm.openai.retry.max`` 次、带±20%抖动）进行等待。
+当服务器返回 ``Retry-After`` 头（整数秒，最大限制为 ``600`` 秒）时，该值优先于指数退避使用。这遵循OpenAI官方指南。
+
+需要注意， ``IOException`` （连接超时、套接字重置、DNS失败）不会被重试。因为请求可能已到达服务器，重试可能导致重复计费。
+对于流式请求，仅初次连接是重试对象，响应主体接收开始后发生的错误会立即向上传播。
+
+.. note::
+   在默认配置（最多10次、基准2秒）的最坏情况下，9次重试的退避总和为 ``2 + 4 + 8 + ... + 512 ≈ 1022秒（约17分钟）``。在每次都返回 ``Retry-After`` （最大600秒）的场景下，最坏情况会膨胀到 ``9 × 600秒 = 90分钟``。如需更严格地控制延迟，请将 ``rag.llm.openai.retry.max`` 设置得小一些。
+
+流式输出和使用量信息
+====================
+
+默认情况下，请求中会附加 ``stream_options.include_usage=true``，在流式响应的最终SSE分块中接收 ``usage`` 对象（推理模型时包含 ``completion_tokens_details.reasoning_tokens``，使用提示词缓存时包含 ``prompt_tokens_details.cached_tokens``）。
+
+对于vLLM或Azure OpenAI兼容网关等不接受 ``stream_options.include_usage`` 字段的后端，请按如下方式禁用::
+
+    rag.llm.openai.stream.include.usage=false
+
+日志输出和异常检测
+==================
+
+自 |Fess| 15.6.1 起，OpenAI客户端输出以下结构化日志。借此即使不启用 ``DEBUG`` 级别，也可监控token使用情况和响应异常。
+
+- ``[LLM:OPENAI] Stream completed.`` （INFO） - 流式响应完成时输出分块数、首个分块的耗时、token使用信息等
+- ``[LLM:OPENAI] Chat response received.`` （INFO） - 非流式响应完成时输出同等信息
+- ``[LLM:OPENAI] Chat finished abnormally`` / ``Stream finished abnormally`` （WARN） - 当 ``finish_reason`` 不是 ``stop`` 时输出（``length``：因max_tokens被截断、 ``content_filter``：内容审核、 ``tool_calls`` / ``function_call``：意外的工具调用配置等）
+- ``[LLM:OPENAI] Stream refusal.`` （WARN） - 在结构化输出中返回 ``delta.refusal`` 时输出
+
+这些WARN日志可用于调整 ``max_tokens``、审计内容过滤器以及检测 ``extra_params`` 的误配置。
+
+URL日志中的认证信息屏蔽
+-----------------------
+
+输出到日志的URL中，包含认证信息的查询参数（ ``api_key`` 、 ``apikey`` 、 ``api-key`` 、 ``key`` 、 ``token`` 、 ``access_token`` 、 ``access-token``，不区分大小写）会自动用 ``***`` 进行屏蔽。
+
+OpenAI官方端点（ ``https://api.openai.com`` ）通过 ``Authorization: Bearer`` 头进行认证，URL中不包含认证信息。但当将以查询参数接受认证信息的自定义代理（部分Azure部署、vLLM网关等）设置到 ``rag.llm.openai.api.url`` 时，该机制也能防止API密钥泄露到日志中。
+
 推理模型支持
 ==============
 
@@ -410,18 +470,17 @@ overlay 文件 ``compose-openai.yaml``。最小步骤：
     services:
       fess01:
         environment:
-          - "FESS_PLUGINS=fess-llm-openai:15.7.0"
+          - "FESS_PLUGINS=fess-llm-openai:15.6.0"
           - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
 
 要点：
 
-- ``FESS_PLUGINS=fess-llm-openai:15.7.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-openai:15.6.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
 - ``-Dfess.config.rag.llm.openai.api.key=...`` 设置 API 密钥，``-Dfess.config.rag.llm.openai.model=...`` 选择模型
 - ``-Dfess.system.rag.llm.name=openai`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
 
-如果通过代理访问互联网，请在 ``FESS_JAVA_OPTS`` 中追加
-``-Dhttps.proxyHost=... -Dhttps.proxyPort=...``。
+如果通过代理访问互联网，请通过 ``FESS_JAVA_OPTS`` 指定 |Fess| 的 ``http.proxy.*`` 配置（参见后述"通过 HTTP 代理使用"一节）。
 
 systemd环境
 -----------
@@ -431,6 +490,40 @@ systemd环境
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
+
+通过 HTTP 代理使用
+==================
+
+自 |Fess| 15.6.1 起，OpenAI客户端会共享 |Fess| 整体的HTTP代理配置。请在 ``fess_config.properties`` 中指定以下属性。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``http.proxy.host``
+     - 代理主机名（空字符串时不使用代理）
+     - ``""``
+   * - ``http.proxy.port``
+     - 代理端口号
+     - ``8080``
+   * - ``http.proxy.username``
+     - 代理认证的用户名（可选。指定后启用Basic认证）
+     - ``""``
+   * - ``http.proxy.password``
+     - 代理认证的密码
+     - ``""``
+
+在Docker环境中，按如下方式在 ``FESS_JAVA_OPTS`` 中指定::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   此配置同样会影响爬虫等 |Fess| 整体的HTTP访问。
+   传统的Java系统属性（ ``-Dhttps.proxyHost`` 等）不会被OpenAI客户端引用。
 
 使用Azure OpenAI
 ==================

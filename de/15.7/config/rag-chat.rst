@@ -7,7 +7,7 @@ AI-Suchmodus-Funktion konfigurieren
 
 AI-Suchmodus (RAG: Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
 
-In |Fess| 15.7 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
+In |Fess| 15.6 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
 Kerneinstellungen und LLM-anbieterspezifische Einstellungen werden in ``fess_config.properties`` vorgenommen,
 während die LLM-Anbieterauswahl (``rag.llm.name``) in ``system.properties`` oder über die Administrationsoberfläche konfiguriert wird.
 
@@ -67,7 +67,7 @@ Detaillierte Einstellungen für LLM-Anbieter finden Sie unter:
 Konfigurationspfad-Schnellreferenz
 ==================================
 
-In |Fess| 15.7 sind die Einstellungen in zwei Familien aufgeteilt: die FessConfig-Familie
+In |Fess| 15.6 sind die Einstellungen in zwei Familien aufgeteilt: die FessConfig-Familie
 (``fess_config.properties``) und die SystemProperty-Familie (``system.properties``,
 in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher nicht vermischen.
 
@@ -111,7 +111,7 @@ in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher ni
 .. note::
 
    ``rag.llm.type`` ist der frühere Eigenschaftsname aus |Fess| 15.5 und davor.
-   In 15.7 und später wurde er in ``rag.llm.name`` umbenannt; Werte unter
+   In 15.6 und später wurde er in ``rag.llm.name`` umbenannt; Werte unter
    ``rag.llm.type`` werden nicht mehr gelesen.
 
 Kerneinstellungen-Übersicht
@@ -160,7 +160,7 @@ Liste der Kerneinstellungen, die in ``fess_config.properties`` konfiguriert werd
 Generierungsparameter
 =====================
 
-In |Fess| 15.7 werden Generierungsparameter (maximale Token-Anzahl, Temperature usw.) pro Anbieter
+In |Fess| 15.6 werden Generierungsparameter (maximale Token-Anzahl, Temperature usw.) pro Anbieter
 und pro Prompttyp konfiguriert. Diese Einstellungen werden nicht als Kerneinstellungen, sondern als
 Einstellungen der jeweiligen ``fess-llm-*``-Plugins verwaltet.
 
@@ -222,7 +222,7 @@ Mit ``rag.chat.content.fields`` spezifizierbare Felder:
 Systemprompt
 ============
 
-In |Fess| 15.7 werden Systemprompts nicht in Property-Dateien, sondern im DI-XML (``fess_llm++.xml``) der jeweiligen ``fess-llm-*``-Plugins definiert.
+In |Fess| 15.6 werden Systemprompts nicht in Property-Dateien, sondern im DI-XML (``fess_llm++.xml``) der jeweiligen ``fess-llm-*``-Plugins definiert.
 
 Prompt anpassen
 ---------------
@@ -356,7 +356,7 @@ Parameter:
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - Parameter
      - Erforderlich
@@ -402,7 +402,7 @@ Parameter:
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - Parameter
      - Erforderlich
@@ -434,6 +434,14 @@ SSE-Events:
      - Start/Ende der Verarbeitungsphase (intent_analysis, search, evaluation, generation)
    * - ``chunk``
      - Fragment des generierten Textes
+   * - ``retry``
+     - Wird gesendet, wenn eine LLM-Anfrage wiederholt wird (enthält Phasenname, aktuelle Versuchsnummer, maximale Anzahl Versuche, Wartezeit bis zum nächsten Versuch sowie Ursache)
+   * - ``waiting``
+     - Wird während des Wartens auf einen Gleichzeitigkeits-Permit gesendet (enthält Phasenname, vergangene Wartezeit, Warte-Timeout)
+   * - ``fallback``
+     - Wird gesendet, wenn die Abfrage aufgrund fehlender oder nicht relevanter Ergebnisse neu generiert wurde (enthält Phase, Grund ``no_results`` oder ``no_relevant_results``, ursprüngliche Abfrage, neu generierte Abfrage)
+   * - ``warning``
+     - Wird bei internen stillen Fallbacks gesendet (z. B. Token-Erschöpfung bei Reasoning-Modellen)
    * - ``sources``
      - Informationen zu Quelldokumenten
    * - ``done``
@@ -488,9 +496,9 @@ und der Aufruf von ``/chat`` leitet zur Startseite zurück.
 
 2. Ist das passende ``fess-llm-*``-Plugin installiert?
 
-   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` (oder ``fess-llm-openai`` / ``fess-llm-ollama``) gesetzt?
+   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` (oder ``fess-llm-openai`` / ``fess-llm-ollama``) gesetzt?
    - Paketinstallation: JAR liegt in ``app/WEB-INF/plugin/``?
-   - Startup-Log enthält ``Installing fess-llm-XXX-15.7.0.jar``?
+   - Startup-Log enthält ``Installing fess-llm-XXX-15.6.0.jar``?
 
 3. Stimmt ``rag.llm.name`` mit dem installierten Plugin überein?
 
@@ -512,7 +520,7 @@ und der Aufruf von ``/chat`` leitet zur Startseite zurück.
 6. Kann der Fess-Host den LLM-Anbieter erreichen?
 
    - Bei Cloud-APIs (Gemini / OpenAI) muss der Container Internetzugriff haben
-   - Bei Proxy-Nutzung ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` an ``FESS_JAVA_OPTS`` anhängen
+   - Bei Proxy-Nutzung konfigurieren Sie ``http.proxy.host`` / ``http.proxy.port`` (bei Bedarf ``http.proxy.username`` / ``http.proxy.password``) in ``fess_config.properties``. In Docker-Umgebungen fügen Sie ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` zu ``FESS_JAVA_OPTS`` hinzu (seit |Fess| 15.6.1 verwenden die LLM-Clients die gemeinsame Proxy-Konfiguration von |Fess|)
 
 .. note::
 

@@ -6,7 +6,7 @@ Apercu
 ====
 
 Ollama est une plateforme open source permettant d'executer des grands modeles de langage (LLM) en local.
-Dans |Fess| 15.7, la fonctionnalite d'integration Ollama est fournie sous forme de plugin ``fess-llm-ollama``, et convient a une utilisation en environnement prive.
+Dans |Fess| 15.6, la fonctionnalite d'integration Ollama est fournie sous forme de plugin ``fess-llm-ollama``, et convient a une utilisation en environnement prive.
 
 L'utilisation d'Ollama permet d'utiliser la fonctionnalite du mode de recherche IA sans envoyer de donnees a l'exterieur.
 
@@ -80,15 +80,15 @@ Telechargement du modele
 Installation du plugin
 ========================
 
-Dans |Fess| 15.7, la fonctionnalite d'integration Ollama a ete separee en plugin.
+Dans |Fess| 15.6, la fonctionnalite d'integration Ollama a ete separee en plugin.
 Pour utiliser Ollama, l'installation du plugin ``fess-llm-ollama`` est necessaire.
 
-1. Telechargez `fess-llm-ollama-15.7.0.jar`.
+1. Telechargez `fess-llm-ollama-15.6.0.jar`.
 2. Placez-le dans le repertoire ``app/WEB-INF/plugin/`` du repertoire d'installation de |Fess|.
 
 ::
 
-    cp fess-llm-ollama-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
+    cp fess-llm-ollama-15.6.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 3. Redemarrez |Fess|.
 
@@ -98,7 +98,7 @@ Pour utiliser Ollama, l'installation du plugin ``fess-llm-ollama`` est necessair
 Configuration de base
 ========
 
-Dans |Fess| 15.7, les configurations LLM sont reparties dans plusieurs fichiers de configuration.
+Dans |Fess| 15.6, les configurations LLM sont reparties dans plusieurs fichiers de configuration.
 
 Configuration minimale
 --------
@@ -185,6 +185,18 @@ Tous les elements de configuration disponibles pour le client Ollama. Tous se co
    * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
      - Nombre maximum de documents pertinents lors de l'evaluation
      - ``3``
+   * - ``rag.llm.ollama.concurrency.wait.timeout``
+     - Delai d'attente de l'acquisition d'un permis de controle de concurrence (millisecondes)
+     - ``30000``
+   * - ``rag.llm.ollama.connect.timeout``
+     - Timeout de connexion TCP (millisecondes). Peut etre specifie separement de ``rag.llm.ollama.timeout``
+     - ``5000``
+   * - ``rag.llm.ollama.retry.max``
+     - Nombre maximum de tentatives HTTP (lors d'erreurs ``429`` et ``5xx``)
+     - ``3``
+   * - ``rag.llm.ollama.retry.base.delay.ms``
+     - Delai de base du backoff exponentiel (millisecondes)
+     - ``2000``
 
 Controle de la concurrence
 ------------
@@ -302,37 +314,45 @@ Configuration reseau
 Configuration Docker
 --------------
 
-Exemple de configuration lorsque |Fess| et Ollama fonctionnent tous deux dans Docker.
-
-``docker-compose.yml`` :
+Le depot officiel `docker-fess <https://github.com/codelibs/docker-fess>`__
+fournit un overlay Ollama (``compose-ollama.yaml``). Etapes minimales :
 
 ::
 
-    version: '3'
-    services:
-      fess:
-        image: codelibs/fess:15.7.0
-        environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=ollama
-          - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
-        depends_on:
-          - ollama
-        # ... autres configurations
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    docker exec -it ollama01 ollama pull gemma4:e4b
 
-      ollama:
-        image: ollama/ollama
-        volumes:
-          - ollama_data:/root/.ollama
+Contenu de ``compose-ollama.yaml`` (reference pour un setup equivalent) :
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+        depends_on:
+          - ollama01
+
+      ollama01:
+        image: ollama/ollama:latest
         ports:
           - "11434:11434"
+        volumes:
+          - ollama-data:/root/.ollama
 
     volumes:
-      ollama_data:
+      ollama-data:
+
+Notes :
+
+- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` fait que ``run.sh`` du conteneur telecharge et installe automatiquement le plugin JAR dans ``app/WEB-INF/plugin/``
+- ``-Dfess.config.rag.chat.enabled=true`` active le mode IA
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` definit l'URL du serveur Ollama (utilisez le nom de service du reseau Docker Compose, par exemple ``ollama01``)
+- ``-Dfess.system.rag.llm.name=ollama`` n'agit que comme valeur par defaut initiale avant qu'une valeur ne soit persistee dans OpenSearch. Apres demarrage, le parametre peut aussi etre modifie sous Administration > Systeme > General (section RAG)
 
 .. note::
-   Dans l'environnement Docker Compose, utilisez ``ollama`` comme nom d'hote (pas ``localhost``).
+   Les variables d'environnement en majuscules de type ``RAG_CHAT_ENABLED`` ou ``RAG_LLM_NAME`` ne sont pas reconnues directement par |Fess|. Les valeurs de configuration doivent imperativement etre transmises dans ``FESS_JAVA_OPTS`` sous la forme ``-Dfess.config.<key>`` (famille ``fess_config.properties``) ou ``-Dfess.system.<key>`` (famille ``system.properties``).
 
 Serveur Ollama distant
 ----------------------
@@ -346,6 +366,35 @@ Lorsqu'Ollama s'execute sur un serveur different de Fess :
 .. warning::
    Ollama n'a pas de fonctionnalite d'authentification par defaut, donc si vous le rendez accessible de l'exterieur,
    envisagez des mesures de securite au niveau reseau (pare-feu, VPN, etc.).
+
+Utilisation via un proxy HTTP
+=============================
+
+Depuis |Fess| 15.6.1, le client Ollama partage la configuration de proxy HTTP commune a |Fess|. Si une connexion au serveur Ollama doit passer par un proxy (par exemple lors de l'utilisation d'un serveur Ollama distant), specifiez les proprietes suivantes dans ``fess_config.properties``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriete
+     - Description
+     - Valeur par defaut
+   * - ``http.proxy.host``
+     - Nom d'hote du proxy (chaine vide pour ne pas utiliser de proxy)
+     - ``""``
+   * - ``http.proxy.port``
+     - Numero de port du proxy
+     - ``8080``
+   * - ``http.proxy.username``
+     - Nom d'utilisateur pour l'authentification du proxy (facultatif ; lorsqu'il est renseigne, l'authentification Basic est activee)
+     - ``""``
+   * - ``http.proxy.password``
+     - Mot de passe pour l'authentification du proxy
+     - ``""``
+
+.. note::
+   Comme Ollama s'execute generalement en local ou sur un reseau interne, la configuration d'un proxy n'est necessaire que dans des cas limites (par exemple, lors de l'utilisation d'un serveur Ollama distant uniquement accessible via un proxy d'entreprise).
+   Cette configuration s'applique egalement a tous les acces HTTP de |Fess|, notamment ceux du crawler.
 
 Guide de selection des modeles
 ==================

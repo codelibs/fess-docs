@@ -434,6 +434,14 @@ SSE-Events:
      - Start/Ende der Verarbeitungsphase (intent_analysis, search, evaluation, generation)
    * - ``chunk``
      - Fragment des generierten Textes
+   * - ``retry``
+     - Wird gesendet, wenn eine LLM-Anfrage wiederholt wird (enthält Phasenname, aktuelle Versuchsnummer, maximale Anzahl Versuche, Wartezeit bis zum nächsten Versuch sowie Ursache)
+   * - ``waiting``
+     - Wird während des Wartens auf einen Gleichzeitigkeits-Permit gesendet (enthält Phasenname, vergangene Wartezeit, Warte-Timeout)
+   * - ``fallback``
+     - Wird gesendet, wenn die Abfrage aufgrund fehlender oder nicht relevanter Ergebnisse neu generiert wurde (enthält Phase, Grund ``no_results`` oder ``no_relevant_results``, ursprüngliche Abfrage, neu generierte Abfrage)
+   * - ``warning``
+     - Wird bei internen stillen Fallbacks gesendet (z. B. Token-Erschöpfung bei Reasoning-Modellen)
    * - ``sources``
      - Informationen zu Quelldokumenten
    * - ``done``

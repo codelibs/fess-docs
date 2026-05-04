@@ -438,6 +438,14 @@ Evenements SSE :
      - Debut/fin de phase de traitement (intent_analysis, search, evaluation, generation)
    * - ``chunk``
      - Fragment de texte genere
+   * - ``retry``
+     - Notifie lorsqu'une requete LLM est reessayee (nom de phase, numero de tentative en cours, nombre maximum de tentatives, attente avant la prochaine tentative, cause)
+   * - ``waiting``
+     - Notifie pendant l'attente d'un permis de controle de concurrence (nom de phase, temps d'attente ecoule, timeout d'attente)
+   * - ``fallback``
+     - Notifie lorsque la requete est regeneree en raison de l'absence de resultats ou de resultats non pertinents (phase, raison ``no_results`` ou ``no_relevant_results``, requete originale, requete regeneree)
+   * - ``warning``
+     - Notifie lors d'un fallback silencieux interne (par exemple, epuisement des tokens du modele de raisonnement)
    * - ``sources``
      - Information sur les documents sources
    * - ``done``

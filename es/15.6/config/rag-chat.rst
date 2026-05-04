@@ -438,6 +438,14 @@ Eventos SSE:
      - Inicio/fin de fase de procesamiento (intent_analysis, search, evaluation, generation)
    * - ``chunk``
      - Fragmento de texto generado
+   * - ``retry``
+     - Notificado cuando se reintenta una solicitud al LLM (nombre de fase, numero de intento actual, numero maximo de intentos, tiempo de espera hasta el proximo intento, causa)
+   * - ``waiting``
+     - Notificado mientras se espera la obtencion del permiso de control de concurrencia (nombre de fase, tiempo de espera transcurrido, timeout de espera)
+   * - ``fallback``
+     - Notificado cuando la consulta se regenera por cero resultados u otras causas (fase, razon ``no_results`` o ``no_relevant_results``, consulta original, consulta regenerada)
+   * - ``warning``
+     - Notificado al producirse un fallback silencioso interno (por ejemplo, agotamiento de tokens en modelos de razonamiento)
    * - ``sources``
      - Informacion de documentos de referencia
    * - ``done``
