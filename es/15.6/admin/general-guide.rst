@@ -8,13 +8,13 @@ Descripción general
 En esta página de administración, puede gestionar la configuración de |Fess|.
 Puede cambiar varias configuraciones de |Fess| sin necesidad de reiniciarlo.
 
-|image0|
-
 Contenido de la configuración
 ==============================
 
 Sistema
 -------
+
+|image0|
 
 Respuesta JSON
 ::::::::::::::
@@ -40,6 +40,12 @@ Mostrar miniatura
 ::::::::::::::::::
 
 Configure si desea habilitar la visualización de miniaturas.
+
+Propiedades del sistema
+:::::::::::::::::::::::
+
+Configura las propiedades del sistema de |Fess|.
+Especifique en formato ``clave=valor``, una por línea.
 
 Valor de etiqueta por defecto
 :::::::::::::::::::::::::::::
@@ -97,6 +103,8 @@ Especifica el tipo de inicio de sesión único (Single Sign-On).
 
 Rastreador
 ----------
+
+|image1|
 
 Comprobar fecha de última modificación
 :::::::::::::::::::::::::::::::::::::::
@@ -171,26 +179,10 @@ Nivel de registro
 
 Especifique el nivel de registro para fess.log.
 
-Notificacion de registro
-::::::::::::::::::::::::
-
-Especifica si se habilita la funcion de notificacion de registro que captura automaticamente eventos de registro de nivel ERROR y WARN y envia notificaciones.
-Para mas detalles, consulte :doc:`Configuracion de notificaciones de registro <../config/admin-log-notification>`.
-
-Nivel de notificacion de registro
-:::::::::::::::::::::::::::::::::
-
-Especifica el nivel de registro para las notificaciones de registro.
-Los eventos de registro en el nivel seleccionado y superiores seran notificados.
-
-- **ERROR**: Solo notificar errores (predeterminado)
-- **WARN**: Notificar advertencias y superiores
-- **INFO**: Notificar informacion y superiores
-- **DEBUG**: Notificar depuracion y superiores
-- **TRACE**: Notificar todos los registros
-
 Sugerir
 -------
+
+|image2|
 
 Sugerir por término de búsqueda
 ::::::::::::::::::::::::::::::::
@@ -209,6 +201,8 @@ Elimina los datos de sugerencias anteriores al número de días especificado.
 
 LDAP
 ----
+
+|image3|
 
 URL de LDAP
 :::::::::::
@@ -265,6 +259,8 @@ Especifica la clase de fábrica de contexto inicial LDAP (ej.: com.sun.jndi.ldap
 OpenID Connect
 --------------
 
+|image4|
+
 ID de cliente
 :::::::::::::
 
@@ -313,10 +309,56 @@ Especifica los roles por defecto que se asignarán a los usuarios durante la aut
 SAML
 ----
 
+|image5|
+
+ID de entidad del IdP
+:::::::::::::::::::::
+
+Especifica el ID de entidad del IdP (Identity Provider).
+
+URL SSO del IdP
+:::::::::::::::
+
+Especifica la URL del servicio de inicio de sesión único del IdP.
+
+URL SLO del IdP
+:::::::::::::::
+
+Especifica la URL del servicio de cierre de sesión único del IdP.
+
+Certificado X.509 del IdP
+:::::::::::::::::::::::::
+
+Especifica el certificado de clave pública X.509 para la verificación de firma de aserción SAML del IdP.
+Especifique solo el contenido codificado en Base64 sin las líneas ``-----BEGIN CERTIFICATE-----`` y ``-----END CERTIFICATE-----``.
+
 URL base del SP
 :::::::::::::::
 
 Especifica la URL base del proveedor de servicios SAML.
+
+ID de entidad del SP
+::::::::::::::::::::
+
+Especifica el ID de entidad del SP (Service Provider).
+Se configura automáticamente cuando se establece la ``URL base del SP``.
+
+URL ACS del SP
+::::::::::::::
+
+Especifica la URL del Assertion Consumer Service (ACS) que recibe las aserciones SAML.
+Se configura automáticamente cuando se establece la ``URL base del SP``.
+
+URL SLO del SP
+::::::::::::::
+
+Especifica la URL del servicio de cierre de sesión único del SP.
+Se configura automáticamente cuando se establece la ``URL base del SP``.
+
+Formato NameID del SP
+:::::::::::::::::::::
+
+Especifica el formato NameID utilizado en las aserciones SAML.
 
 Nombre de atributo de grupo
 ::::::::::::::::::::::::::::
@@ -340,6 +382,8 @@ Especifica los roles por defecto que se asignarán a los usuarios durante la aut
 
 SPNEGO
 ------
+
+|image6|
 
 Configuración Krb5
 :::::::::::::::::::
@@ -401,8 +445,25 @@ Directorios excluidos
 
 Especifica los directorios que se excluirán de la autenticación SPNEGO.
 
+Nivel de registrador
+::::::::::::::::::::
+
+Especifica el nivel de salida de registro para la autenticación SPNEGO como valor numérico.
+
 Entra ID
 --------
+
+|image7|
+
+Inquilino (ID o dominio)
+::::::::::::::::::::::::
+
+Especifica el ID de inquilino o dominio para Microsoft Entra ID.
+
+Autoridad
+:::::::::
+
+Especifica la URL de autoridad para Microsoft Entra ID.
 
 ID de cliente
 :::::::::::::
@@ -414,16 +475,6 @@ Secreto de cliente
 
 Especifica el secreto de cliente para Microsoft Entra ID.
 
-Inquilino
-:::::::::
-
-Especifica el ID de inquilino para Microsoft Entra ID.
-
-Autoridad
-:::::::::
-
-Especifica la URL de autoridad para Microsoft Entra ID.
-
 URL de respuesta
 ::::::::::::::::
 
@@ -433,6 +484,11 @@ TTL de estado
 :::::::::::::
 
 Especifica el tiempo de vida (TTL) del estado de autenticación.
+
+Campos de permisos
+::::::::::::::::::
+
+Especifica los campos para obtener información de permisos de Entra ID.
 
 Grupos por defecto
 ::::::::::::::::::
@@ -444,11 +500,6 @@ Roles por defecto
 
 Especifica los roles por defecto que se asignarán a los usuarios durante la autenticación Entra ID.
 
-Campos de permisos
-::::::::::::::::::
-
-Especifica los campos para obtener información de permisos de Entra ID.
-
 Usar servicio de dominio
 ::::::::::::::::::::::::
 
@@ -456,6 +507,8 @@ Especifique si desea utilizar el servicio de dominio de Entra ID.
 
 Aviso
 -----
+
+|image8|
 
 Página de inicio de sesión
 :::::::::::::::::::::::::::
@@ -490,6 +543,24 @@ Google Chat Webhook URL
 :::::::::::::::::::::::
 
 Especifica la URL del webhook para las notificaciones de Google Chat.
+
+Notificación de registro
+::::::::::::::::::::::::
+
+Especifica si se habilita la función de notificación de registro que captura automáticamente eventos de registro de nivel ERROR y WARN y envía notificaciones.
+Para más detalles, consulte :doc:`Configuración de notificaciones de registro <../config/admin-log-notification>`.
+
+Nivel de notificación de registro
+:::::::::::::::::::::::::::::::::
+
+Especifica el nivel de registro para las notificaciones de registro.
+Los eventos de registro en el nivel seleccionado y superiores serán notificados.
+
+- **ERROR**: Solo notificar errores (predeterminado)
+- **WARN**: Notificar advertencias y superiores
+- **INFO**: Notificar información y superiores
+- **DEBUG**: Notificar depuración y superiores
+- **TRACE**: Notificar todos los registros
 
 Almacenamiento
 --------------
@@ -583,4 +654,11 @@ Ejemplo de configuración LDAP
 
 
 .. |image0| image:: ../../../resources/images/en/15.6/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.6/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.6/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.6/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.6/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.6/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.6/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.6/admin/general-8.png
 .. pdf            :height: 940 px
