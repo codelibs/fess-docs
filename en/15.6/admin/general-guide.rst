@@ -8,13 +8,13 @@ Overview
 This administration page allows you to manage |Fess| configuration settings.
 You can modify various |Fess| settings without restarting |Fess|.
 
-|image0|
-
 Configuration Options
 =====================
 
 System
 ------
+
+|image0|
 
 JSON Response
 :::::::::::::
@@ -40,6 +40,12 @@ Thumbnail View
 ::::::::::::::
 
 Specify whether to enable thumbnail display.
+
+System Properties
+:::::::::::::::::
+
+Configures the system properties of |Fess|.
+Specify in ``key=value`` format, one per line.
 
 Default Label Value
 :::::::::::::::::::
@@ -97,6 +103,8 @@ Specifies the single sign-on type.
 
 Crawler
 -------
+
+|image1|
 
 Check Last Modified
 :::::::::::::::::::
@@ -171,26 +179,10 @@ Log Level
 
 Specify the log level for fess.log.
 
-Log Notification
-::::::::::::::::
-
-Specifies whether to enable the log notification feature that automatically captures ERROR and WARN level log events and sends notifications.
-For details, see :doc:`Log Notification Configuration <../config/admin-log-notification>`.
-
-Log Notification Level
-::::::::::::::::::::::
-
-Specifies the log level threshold for log notifications.
-Log events at the selected level and above will be notified.
-
-- **ERROR**: Notify errors only (default)
-- **WARN**: Notify warnings and above
-- **INFO**: Notify info and above
-- **DEBUG**: Notify debug and above
-- **TRACE**: Notify all logs
-
 Suggest
 -------
+
+|image2|
 
 Suggest from Search Words
 :::::::::::::::::::::::::
@@ -209,6 +201,8 @@ Deletes suggest data older than the specified number of days.
 
 LDAP
 ----
+
+|image3|
 
 LDAP URL
 ::::::::
@@ -265,6 +259,8 @@ Specifies the LDAP initial context factory class (e.g., com.sun.jndi.ldap.LdapCt
 OpenID Connect
 --------------
 
+|image4|
+
 Client ID
 :::::::::
 
@@ -313,10 +309,56 @@ Specifies the default roles to assign to users during OpenID Connect authenticat
 SAML
 ----
 
+|image5|
+
+IdP Entity ID
+:::::::::::::
+
+Specifies the entity ID of the IdP (Identity Provider).
+
+IdP SSO URL
+:::::::::::
+
+Specifies the Single Sign-On service URL of the IdP.
+
+IdP SLO URL
+:::::::::::
+
+Specifies the Single Logout service URL of the IdP.
+
+IdP X.509 Certificate
+:::::::::::::::::::::
+
+Specifies the X.509 public key certificate used for SAML assertion signature verification of the IdP.
+Specify only the Base64-encoded content without ``-----BEGIN CERTIFICATE-----`` and ``-----END CERTIFICATE-----`` lines.
+
 SP Base URL
 :::::::::::
 
 Specifies the base URL of the SAML Service Provider.
+
+SP Entity ID
+::::::::::::
+
+Specifies the entity ID of the SP (Service Provider).
+Automatically configured when ``SP Base URL`` is set.
+
+SP ACS URL
+::::::::::
+
+Specifies the Assertion Consumer Service (ACS) URL that receives SAML assertions.
+Automatically configured when ``SP Base URL`` is set.
+
+SP SLO URL
+::::::::::
+
+Specifies the Single Logout service URL of the SP.
+Automatically configured when ``SP Base URL`` is set.
+
+SP NameID Format
+::::::::::::::::
+
+Specifies the NameID format used in SAML assertions.
 
 Group Attribute Name
 ::::::::::::::::::::
@@ -340,6 +382,8 @@ Specifies the default roles to assign to users during SAML authentication.
 
 SPNEGO
 ------
+
+|image6|
 
 Krb5 Configuration
 ::::::::::::::::::
@@ -401,8 +445,25 @@ Exclude Dirs
 
 Specifies directories to exclude from SPNEGO authentication.
 
+Logger Level
+::::::::::::
+
+Specifies the log output level for SPNEGO authentication as a numeric value.
+
 Entra ID
 --------
+
+|image7|
+
+Tenant (ID or Domain)
+:::::::::::::::::::::
+
+Specifies the tenant ID or domain for Microsoft Entra ID.
+
+Authority
+:::::::::
+
+Specifies the authority URL for Microsoft Entra ID.
 
 Client ID
 :::::::::
@@ -414,16 +475,6 @@ Client Secret
 
 Specifies the client secret for Microsoft Entra ID.
 
-Tenant
-::::::
-
-Specifies the tenant ID for Microsoft Entra ID.
-
-Authority
-:::::::::
-
-Specifies the authority URL for Microsoft Entra ID.
-
 Reply URL
 :::::::::
 
@@ -433,6 +484,11 @@ State TTL
 :::::::::
 
 Specifies the time-to-live (TTL) for the authentication state.
+
+Permission Fields
+:::::::::::::::::
+
+Specifies the fields to retrieve permission information from Entra ID.
 
 Default Groups
 ::::::::::::::
@@ -444,11 +500,6 @@ Default Roles
 
 Specifies the default roles to assign to users during Entra ID authentication.
 
-Permission Fields
-:::::::::::::::::
-
-Specifies the fields to retrieve permission information from Entra ID.
-
 Use Domain Service
 ::::::::::::::::::
 
@@ -456,6 +507,8 @@ Specify whether to use Entra ID Domain Service.
 
 Notice
 ------
+
+|image8|
 
 Login Page
 ::::::::::
@@ -490,6 +543,24 @@ Google Chat Webhook URL
 :::::::::::::::::::::::
 
 Specifies the webhook URL for Google Chat notifications.
+
+Log Notification
+::::::::::::::::
+
+Specifies whether to enable the log notification feature that automatically captures ERROR and WARN level log events and sends notifications.
+For details, see :doc:`Log Notification Configuration <../config/admin-log-notification>`.
+
+Log Notification Level
+::::::::::::::::::::::
+
+Specifies the log level threshold for log notifications.
+Log events at the selected level and above will be notified.
+
+- **ERROR**: Notify errors only (default)
+- **WARN**: Notify warnings and above
+- **INFO**: Notify info and above
+- **DEBUG**: Notify debug and above
+- **TRACE**: Notify all logs
 
 Storage
 -------
@@ -582,4 +653,11 @@ LDAP Configuration Example
      - memberOf
 
 .. |image0| image:: ../../../resources/images/en/15.6/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.6/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.6/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.6/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.6/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.6/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.6/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.6/admin/general-8.png
 .. pdf            :height: 940 px
