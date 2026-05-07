@@ -8,13 +8,13 @@ Allgemein
 Auf dieser Verwaltungsseite können Sie die Konfiguration von |Fess| verwalten.
 Sie können verschiedene Konfigurationen von |Fess| ändern, ohne |Fess| neu zu starten.
 
-|image0|
-
 Konfigurationsinhalt
 ====================
 
 System
 ------
+
+|image0|
 
 JSON-Antwort
 ::::::::::::
@@ -40,6 +40,12 @@ Miniaturansicht anzeigen
 ::::::::::::::::::::::::
 
 Konfiguriert, ob die Miniaturansicht aktiviert werden soll.
+
+Systemeigenschaften
+:::::::::::::::::::
+
+Konfiguriert die Systemeigenschaften von |Fess|.
+Geben Sie im Format ``key=value`` an, eine pro Zeile.
 
 Standard-Labelwert
 :::::::::::::::::::
@@ -97,6 +103,8 @@ Gibt den Typ der Einmalanmeldung (Single Sign-On) an.
 
 Crawler
 -------
+
+|image1|
 
 Letzte Änderung prüfen
 ::::::::::::::::::::::
@@ -171,24 +179,6 @@ Protokollebene
 
 Geben Sie die Protokollebene für fess.log an.
 
-Protokollbenachrichtigung
-:::::::::::::::::::::::::
-
-Gibt an, ob die Protokollbenachrichtigungsfunktion aktiviert werden soll, die automatisch ERROR- und WARN-Protokollereignisse erfasst und Benachrichtigungen sendet.
-Weitere Informationen finden Sie unter :doc:`Protokollbenachrichtigungskonfiguration <../config/admin-log-notification>`.
-
-Protokollbenachrichtigungsebene
-:::::::::::::::::::::::::::::::
-
-Gibt die Protokollebene für Protokollbenachrichtigungen an.
-Protokollereignisse auf der ausgewählten Ebene und darüber werden benachrichtigt.
-
-- **ERROR**: Nur Fehler benachrichtigen (Standard)
-- **WARN**: Warnungen und höher benachrichtigen
-- **INFO**: Informationen und höher benachrichtigen
-- **DEBUG**: Debug und höher benachrichtigen
-- **TRACE**: Alle Protokolle benachrichtigen
-
 Vorschlagen
 -----------
 
@@ -209,6 +199,8 @@ Löscht Vorschlagsdaten, die älter als die angegebene Anzahl von Tagen sind.
 
 LDAP
 ----
+
+|image2|
 
 LDAP-URL
 ::::::::
@@ -265,6 +257,8 @@ Gibt die LDAP-Klasse der initialen Kontextfabrik an (z.B. com.sun.jndi.ldap.Ldap
 OpenID Connect
 --------------
 
+|image3|
+
 Client-ID
 :::::::::
 
@@ -313,10 +307,56 @@ Gibt die Standardrollen an, die Benutzern bei der OpenID Connect-Authentifizieru
 SAML
 ----
 
+|image4|
+
+IdP-Entitäts-ID
+:::::::::::::::
+
+Gibt die Entitäts-ID des IdP (Identity Provider) an.
+
+IdP SSO URL
+:::::::::::
+
+Gibt die Single Sign-On-Dienst-URL des IdP an.
+
+IdP SLO URL
+:::::::::::
+
+Gibt die Single Logout-Dienst-URL des IdP an.
+
+IdP X.509-Zertifikat
+::::::::::::::::::::
+
+Gibt das öffentliche X.509-Schlüsselzertifikat für die SAML-Assertion-Signaturverifizierung des IdP an.
+Geben Sie nur den Base64-kodierten Inhalt ohne ``-----BEGIN CERTIFICATE-----`` und ``-----END CERTIFICATE-----`` Zeilen an.
+
 SP-Basis-URL
 ::::::::::::
 
 Gibt die Basis-URL des SAML Service Providers an.
+
+SP-Entitäts-ID
+::::::::::::::
+
+Gibt die Entitäts-ID des SP (Service Provider) an.
+Wird automatisch konfiguriert, wenn ``SP-Basis-URL`` gesetzt ist.
+
+SP ACS URL
+::::::::::
+
+Gibt die Assertion Consumer Service (ACS) URL an, die SAML-Assertions empfängt.
+Wird automatisch konfiguriert, wenn ``SP-Basis-URL`` gesetzt ist.
+
+SP SLO URL
+::::::::::
+
+Gibt die Single Logout-Dienst-URL des SP an.
+Wird automatisch konfiguriert, wenn ``SP-Basis-URL`` gesetzt ist.
+
+SP NameID-Format
+::::::::::::::::
+
+Gibt das NameID-Format an, das in SAML-Assertions verwendet wird.
 
 Gruppenattributname
 :::::::::::::::::::
@@ -340,6 +380,8 @@ Gibt die Standardrollen an, die Benutzern bei der SAML-Authentifizierung zugewie
 
 SPNEGO
 ------
+
+|image5|
 
 Krb5-Konfiguration
 ::::::::::::::::::
@@ -401,8 +443,25 @@ Verzeichnisse ausschließen
 
 Gibt Verzeichnisse an, die von der SPNEGO-Authentifizierung ausgeschlossen werden sollen.
 
+Logger-Ebene
+::::::::::::
+
+Gibt die Protokollausgabeebene für die SPNEGO-Authentifizierung als numerischen Wert an.
+
 Entra ID
 --------
+
+|image6|
+
+Mandant (ID oder Domäne)
+::::::::::::::::::::::::
+
+Gibt die Mandanten-ID oder Domäne für Microsoft Entra ID an.
+
+Autorität
+:::::::::
+
+Gibt die Autoritäts-URL für Microsoft Entra ID an.
 
 Client-ID
 :::::::::
@@ -414,16 +473,6 @@ Client-Geheimnis
 
 Gibt das Client-Geheimnis für Microsoft Entra ID an.
 
-Mandant
-:::::::
-
-Gibt die Mandanten-ID für Microsoft Entra ID an.
-
-Autorität
-:::::::::
-
-Gibt die Autoritäts-URL für Microsoft Entra ID an.
-
 Antwort-URL
 :::::::::::
 
@@ -433,6 +482,11 @@ Status-TTL
 ::::::::::
 
 Gibt die Gültigkeitsdauer (TTL) des Authentifizierungsstatus an.
+
+Berechtigungsfelder
+:::::::::::::::::::
+
+Gibt die Felder an, aus denen Berechtigungsinformationen von Entra ID abgerufen werden.
 
 Standardgruppen
 :::::::::::::::
@@ -444,11 +498,6 @@ Standardrollen
 
 Gibt die Standardrollen an, die Benutzern bei der Entra ID-Authentifizierung zugewiesen werden.
 
-Berechtigungsfelder
-:::::::::::::::::::
-
-Gibt die Felder an, aus denen Berechtigungsinformationen von Entra ID abgerufen werden.
-
 Domänendienst verwenden
 :::::::::::::::::::::::
 
@@ -456,6 +505,8 @@ Gibt an, ob der Entra ID-Domänendienst verwendet werden soll.
 
 Hinweis
 -------
+
+|image7|
 
 Anmeldeseite
 ::::::::::::
@@ -481,15 +532,33 @@ Benachrichtigungs-E-Mail
 Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
 Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
 
-Slack Webhook URL
+Slack Webhook URLs
 :::::::::::::::::
 
 Gibt die Webhook-URL für Slack-Benachrichtigungen an.
 
-Google Chat Webhook URL
+Google Chat Webhook URLs
 :::::::::::::::::::::::
 
 Gibt die Webhook-URL für Google Chat-Benachrichtigungen an.
+
+Protokollbenachrichtigung
+:::::::::::::::::::::::::
+
+Gibt an, ob die Protokollbenachrichtigungsfunktion aktiviert werden soll, die automatisch ERROR- und WARN-Protokollereignisse erfasst und Benachrichtigungen sendet.
+Weitere Informationen finden Sie unter :doc:`Protokollbenachrichtigungskonfiguration <../config/admin-log-notification>`.
+
+Protokollbenachrichtigungsebene
+:::::::::::::::::::::::::::::::
+
+Gibt die Protokollebene für Protokollbenachrichtigungen an.
+Protokollereignisse auf der ausgewählten Ebene und darüber werden benachrichtigt.
+
+- **ERROR**: Nur Fehler benachrichtigen (Standard)
+- **WARN**: Warnungen und höher benachrichtigen
+- **INFO**: Informationen und höher benachrichtigen
+- **DEBUG**: Debug und höher benachrichtigen
+- **TRACE**: Alle Protokolle benachrichtigen
 
 Speicher
 --------
@@ -583,4 +652,11 @@ LDAP-Konfigurationsbeispiele
 
 
 .. |image0| image:: ../../../resources/images/en/15.6/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.6/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.6/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.6/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.6/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.6/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.6/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.6/admin/general-8.png
 .. pdf            :height: 940 px

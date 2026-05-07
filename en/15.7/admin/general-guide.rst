@@ -8,13 +8,13 @@ Overview
 This administration page allows you to manage |Fess| configuration settings.
 You can modify various |Fess| settings without restarting |Fess|.
 
-|image0|
-
 Configuration Options
 =====================
 
 System
 ------
+
+|image0|
 
 JSON Response
 :::::::::::::
@@ -40,6 +40,12 @@ Thumbnail View
 ::::::::::::::
 
 Specify whether to enable thumbnail display.
+
+System Property
+:::::::::::::::
+
+Configures the system properties of |Fess|.
+Specify in ``key=value`` format, one per line.
 
 Default Label Value
 :::::::::::::::::::
@@ -98,13 +104,15 @@ Specifies the single sign-on type.
 Crawler
 -------
 
+|image1|
+
 Check Last Modified
 :::::::::::::::::::
 
 Enable to perform differential crawling.
 
-Concurrent Crawler Settings
-:::::::::::::::::::::::::::
+Concurrent Crawler Config
+:::::::::::::::::::::::::
 
 Specifies the number of crawl configurations to execute simultaneously.
 
@@ -113,13 +121,13 @@ User Agent
 
 Specifies the user agent name used by the crawler.
 
-Delete Documents Before
-:::::::::::::::::::::::
+Delete old documents
+::::::::::::::::::::
 
 Specifies the number of days for the retention period after indexing.
 
-Excluded Failure Types
-::::::::::::::::::::::
+Ignore Failure Types
+::::::::::::::::::::
 
 Failure URLs that exceed the threshold are excluded from crawl targets, but exception names specified here will be crawl targets even if they exceed the failure URL threshold.
 
@@ -146,23 +154,23 @@ Favorite Log
 
 Specifies whether to enable recording of favorite logs.
 
-Purge Search Log Before
-:::::::::::::::::::::::
+Delete old search logs
+::::::::::::::::::::::
 
 Deletes search logs older than the specified number of days.
 
-Purge Job Log Before
-::::::::::::::::::::
+Delete old job logs
+:::::::::::::::::::
 
 Deletes job logs older than the specified number of days.
 
-Purge User Log Before
-:::::::::::::::::::::
+Delete old user logs
+::::::::::::::::::::
 
 Deletes user logs older than the specified number of days.
 
-Purge Bot Name for Log
-::::::::::::::::::::::
+Bot names to delete logs
+::::::::::::::::::::::::
 
 Specifies bot names to exclude from search logs.
 
@@ -171,28 +179,10 @@ Log Level
 
 Specify the log level for fess.log.
 
-Log Notification
-::::::::::::::::
-
-Specifies whether to enable the log notification feature that automatically captures ERROR and WARN level log events and sends notifications.
-For details, see :doc:`Log Notification Configuration <../config/admin-log-notification>`.
-
-Log Notification Level
-::::::::::::::::::::::
-
-Specifies the log level threshold for log notifications.
-Log events at the selected level and above will be notified.
-
-- **ERROR**: Notify errors only (default)
-- **WARN**: Notify warnings and above
-- **INFO**: Notify info and above
-- **DEBUG**: Notify debug and above
-- **TRACE**: Notify all logs
-
 Suggest
 -------
 
-Suggest from Search Words
+Suggest from Search Terms
 :::::::::::::::::::::::::
 
 Specifies whether to generate suggest candidates from search logs.
@@ -202,13 +192,15 @@ Suggest from Documents
 
 Specifies whether to generate suggest candidates from indexed documents.
 
-Purge Suggest Documents Before
-::::::::::::::::::::::::::::::
+Delete old suggest info
+:::::::::::::::::::::::
 
 Deletes suggest data older than the specified number of days.
 
 LDAP
 ----
+
+|image2|
 
 LDAP URL
 ::::::::
@@ -265,6 +257,8 @@ Specifies the LDAP initial context factory class (e.g., com.sun.jndi.ldap.LdapCt
 OpenID Connect
 --------------
 
+|image3|
+
 Client ID
 :::::::::
 
@@ -313,10 +307,56 @@ Specifies the default roles to assign to users during OpenID Connect authenticat
 SAML
 ----
 
+|image4|
+
+IdP Entity ID
+:::::::::::::
+
+Specifies the entity ID of the IdP (Identity Provider).
+
+IdP SSO URL
+:::::::::::
+
+Specifies the Single Sign-On service URL of the IdP.
+
+IdP SLO URL
+:::::::::::
+
+Specifies the Single Logout service URL of the IdP.
+
+IdP X.509 Certificate
+:::::::::::::::::::::
+
+Specifies the X.509 public key certificate used for SAML assertion signature verification of the IdP.
+Specify only the Base64-encoded content without ``-----BEGIN CERTIFICATE-----`` and ``-----END CERTIFICATE-----`` lines.
+
 SP Base URL
 :::::::::::
 
 Specifies the base URL of the SAML Service Provider.
+
+SP Entity ID
+::::::::::::
+
+Specifies the entity ID of the SP (Service Provider).
+Automatically configured when ``SP Base URL`` is set.
+
+SP ACS URL
+::::::::::
+
+Specifies the Assertion Consumer Service (ACS) URL that receives SAML assertions.
+Automatically configured when ``SP Base URL`` is set.
+
+SP SLO URL
+::::::::::
+
+Specifies the Single Logout service URL of the SP.
+Automatically configured when ``SP Base URL`` is set.
+
+SP NameID Format
+::::::::::::::::
+
+Specifies the NameID format used in SAML assertions.
 
 Group Attribute Name
 ::::::::::::::::::::
@@ -341,13 +381,15 @@ Specifies the default roles to assign to users during SAML authentication.
 SPNEGO
 ------
 
-Krb5 Configuration
-::::::::::::::::::
+|image5|
+
+Krb5 Config
+:::::::::::
 
 Specifies the path to the Kerberos 5 configuration file.
 
-Login Configuration
-:::::::::::::::::::
+Login Config
+::::::::::::
 
 Specifies the path to the JAAS (Java Authentication and Authorization Service) login configuration file.
 
@@ -371,13 +413,13 @@ Pre-Auth Password
 
 Specifies the password for SPNEGO pre-authentication.
 
-Allow Basic
-:::::::::::
+Allow Basic Auth
+::::::::::::::::
 
 Specify whether to allow Basic authentication fallback.
 
-Allow Unsecure Basic
-::::::::::::::::::::
+Allow Unsecure Basic Auth
+:::::::::::::::::::::::::
 
 Specify whether to allow Basic authentication over unsecure (HTTP) connections.
 
@@ -396,13 +438,30 @@ Allow Delegation
 
 Specify whether to allow Kerberos delegation.
 
-Exclude Dirs
-::::::::::::
+Exclude Directories
+:::::::::::::::::::
 
 Specifies directories to exclude from SPNEGO authentication.
 
+Logger Level
+::::::::::::
+
+Specifies the log output level for SPNEGO authentication as a numeric value.
+
 Entra ID
 --------
+
+|image6|
+
+Tenant (ID or Domain)
+:::::::::::::::::::::
+
+Specifies the tenant ID or domain for Microsoft Entra ID.
+
+Authority
+:::::::::
+
+Specifies the authority URL for Microsoft Entra ID.
 
 Client ID
 :::::::::
@@ -414,16 +473,6 @@ Client Secret
 
 Specifies the client secret for Microsoft Entra ID.
 
-Tenant
-::::::
-
-Specifies the tenant ID for Microsoft Entra ID.
-
-Authority
-:::::::::
-
-Specifies the authority URL for Microsoft Entra ID.
-
 Reply URL
 :::::::::
 
@@ -433,6 +482,11 @@ State TTL
 :::::::::
 
 Specifies the time-to-live (TTL) for the authentication state.
+
+Permission Fields
+:::::::::::::::::
+
+Specifies the fields to retrieve permission information from Entra ID.
 
 Default Groups
 ::::::::::::::
@@ -444,18 +498,15 @@ Default Roles
 
 Specifies the default roles to assign to users during Entra ID authentication.
 
-Permission Fields
-:::::::::::::::::
-
-Specifies the fields to retrieve permission information from Entra ID.
-
-Use Domain Service
-::::::::::::::::::
+Use Domain Services
+:::::::::::::::::::
 
 Specify whether to use Entra ID Domain Service.
 
 Notice
 ------
+
+|image7|
 
 Login Page
 ::::::::::
@@ -475,21 +526,39 @@ Enter the message to display on the advanced search screen.
 Notify
 ------
 
-Notification Email
-::::::::::::::::::
+Notification Mail
+:::::::::::::::::
 
 Specify the email address to notify when crawling is complete.
 Multiple addresses can be specified separated by commas. A mail server is required to use this feature.
 
-Slack Webhook URL
-:::::::::::::::::
+Slack Webhook URLs
+::::::::::::::::::
 
 Specifies the webhook URL for Slack notifications.
 
-Google Chat Webhook URL
-:::::::::::::::::::::::
+Google Chat Webhook URLs
+::::::::::::::::::::::::
 
 Specifies the webhook URL for Google Chat notifications.
+
+Log Notification
+::::::::::::::::
+
+Specifies whether to enable the log notification feature that automatically captures ERROR and WARN level log events and sends notifications.
+For details, see :doc:`Log Notification Configuration <../config/admin-log-notification>`.
+
+Log Notification Level
+::::::::::::::::::::::
+
+Specifies the log level threshold for log notifications.
+Log events at the selected level and above will be notified.
+
+- **ERROR**: Notify errors only (default)
+- **WARN**: Notify warnings and above
+- **INFO**: Notify info and above
+- **DEBUG**: Notify debug and above
+- **TRACE**: Notify all logs
 
 Storage
 -------
@@ -582,4 +651,11 @@ LDAP Configuration Example
      - memberOf
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.7/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.7/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.7/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.7/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.7/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.7/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.7/admin/general-8.png
 .. pdf            :height: 940 px

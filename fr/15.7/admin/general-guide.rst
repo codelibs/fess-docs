@@ -8,13 +8,13 @@ Présentation
 Cette page d'administration vous permet de gérer les paramètres de |Fess|.
 Vous pouvez modifier divers paramètres de |Fess| sans redémarrer |Fess|.
 
-|image0|
-
 Contenu de la configuration
 ===========================
 
 Système
 -------
+
+|image0|
 
 Réponse JSON
 ::::::::::::
@@ -40,6 +40,12 @@ Afficher la miniature
 :::::::::::::::::::::
 
 Configure l'activation de l'affichage des vignettes.
+
+Propriétés système
+::::::::::::::::::
+
+Configure les propriétés système de |Fess|.
+Spécifiez au format ``clé=valeur``, une par ligne.
 
 Valeur d'étiquette par défaut
 ::::::::::::::::::::::::::::::
@@ -97,6 +103,8 @@ Spécifie le type d'authentification unique (Single Sign-On).
 
 Robot d'exploration
 -------------------
+
+|image1|
 
 Vérifier la dernière modification
 ::::::::::::::::::::::::::::::::::
@@ -171,24 +179,6 @@ Niveau de journalisation
 
 Spécifie le niveau de journalisation de fess.log.
 
-Notification des journaux
-:::::::::::::::::::::::::
-
-Spécifie s'il faut activer la fonction de notification des journaux qui capture automatiquement les événements de niveau ERROR et WARN et envoie des notifications.
-Pour plus de détails, consultez :doc:`Configuration des notifications de journaux <../config/admin-log-notification>`.
-
-Niveau de notification des journaux
-::::::::::::::::::::::::::::::::::::
-
-Spécifie le niveau de journalisation pour les notifications.
-Les événements de journalisation au niveau sélectionné et au-dessus seront notifiés.
-
-- **ERROR** : Notifier uniquement les erreurs (par défaut)
-- **WARN** : Notifier les avertissements et au-dessus
-- **INFO** : Notifier les informations et au-dessus
-- **DEBUG** : Notifier le débogage et au-dessus
-- **TRACE** : Notifier tous les journaux
-
 Suggérer
 --------
 
@@ -209,6 +199,8 @@ Supprime les données de suggestion antérieures au nombre de jours spécifié.
 
 LDAP
 ----
+
+|image2|
 
 URL LDAP
 ::::::::
@@ -265,6 +257,8 @@ Spécifie la classe de fabrique de contexte initial LDAP (ex. : com.sun.jndi.lda
 OpenID Connect
 --------------
 
+|image3|
+
 ID client
 :::::::::
 
@@ -313,10 +307,56 @@ Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authent
 SAML
 ----
 
+|image4|
+
+ID d'entité IdP
+:::::::::::::::
+
+Spécifie l'ID d'entité de l'IdP (Identity Provider).
+
+URL SSO IdP
+:::::::::::
+
+Spécifie l'URL du service d'authentification unique de l'IdP.
+
+URL SLO IdP
+:::::::::::
+
+Spécifie l'URL du service de déconnexion unique de l'IdP.
+
+Certificat X.509 IdP
+::::::::::::::::::::
+
+Spécifie le certificat de clé publique X.509 pour la vérification de signature d'assertion SAML de l'IdP.
+Spécifiez uniquement le contenu encodé en Base64 sans les lignes ``-----BEGIN CERTIFICATE-----`` et ``-----END CERTIFICATE-----``.
+
 URL de base du SP
 :::::::::::::::::
 
 Spécifie l'URL de base du fournisseur de services SAML.
+
+ID d'entité SP
+::::::::::::::
+
+Spécifie l'ID d'entité du SP (Service Provider).
+Configuré automatiquement lorsque l'``URL de base du SP`` est définie.
+
+URL ACS du SP
+:::::::::::::
+
+Spécifie l'URL du service consommateur d'assertions (ACS) qui reçoit les assertions SAML.
+Configuré automatiquement lorsque l'``URL de base du SP`` est définie.
+
+URL SLO du SP
+:::::::::::::
+
+Spécifie l'URL du service de déconnexion unique du SP.
+Configuré automatiquement lorsque l'``URL de base du SP`` est définie.
+
+Format NameID du SP
+:::::::::::::::::::
+
+Spécifie le format NameID utilisé dans les assertions SAML.
 
 Nom d'attribut de groupe
 ::::::::::::::::::::::::
@@ -340,6 +380,8 @@ Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authent
 
 SPNEGO
 ------
+
+|image5|
 
 Configuration Krb5
 :::::::::::::::::::
@@ -401,8 +443,25 @@ Répertoires exclus
 
 Spécifie les répertoires à exclure de l'authentification SPNEGO.
 
+Niveau de journalisation
+::::::::::::::::::::::::
+
+Spécifie le niveau de sortie du journal pour l'authentification SPNEGO sous forme de valeur numérique.
+
 Entra ID
 --------
+
+|image6|
+
+Locataire (ID ou domaine)
+:::::::::::::::::::::::::
+
+Spécifie l'ID ou le domaine du locataire pour Microsoft Entra ID.
+
+Autorité
+::::::::
+
+Spécifie l'URL de l'autorité pour Microsoft Entra ID.
 
 ID client
 :::::::::
@@ -414,16 +473,6 @@ Secret client
 
 Spécifie le secret client pour Microsoft Entra ID.
 
-Locataire
-:::::::::
-
-Spécifie l'ID du locataire pour Microsoft Entra ID.
-
-Autorité
-::::::::
-
-Spécifie l'URL de l'autorité pour Microsoft Entra ID.
-
 URL de réponse
 ::::::::::::::
 
@@ -433,6 +482,11 @@ TTL de l'état
 :::::::::::::
 
 Spécifie la durée de vie (TTL) de l'état d'authentification.
+
+Champs de permissions
+:::::::::::::::::::::
+
+Spécifie les champs pour récupérer les informations de permissions depuis Entra ID.
 
 Groupes par défaut
 ::::::::::::::::::
@@ -444,11 +498,6 @@ Rôles par défaut
 
 Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authentification Entra ID.
 
-Champs de permissions
-:::::::::::::::::::::
-
-Spécifie les champs pour récupérer les informations de permissions depuis Entra ID.
-
 Utiliser le service de domaine
 :::::::::::::::::::::::::::::::
 
@@ -456,6 +505,8 @@ Spécifie s'il faut utiliser le service de domaine Entra ID.
 
 Avis
 ----
+
+|image7|
 
 Page de connexion
 :::::::::::::::::
@@ -481,15 +532,33 @@ E-mail de notification
 Spécifie l'adresse e-mail pour la notification à la fin du crawl.
 Plusieurs adresses peuvent être spécifiées séparées par des virgules. Un serveur de messagerie est requis pour l'utilisation.
 
-Slack Webhook URL
+Slack Webhook URLs
 :::::::::::::::::
 
 Spécifie l'URL du webhook pour les notifications Slack.
 
-Google Chat Webhook URL
+Google Chat Webhook URLs
 :::::::::::::::::::::::
 
 Spécifie l'URL du webhook pour les notifications Google Chat.
+
+Notification des journaux
+:::::::::::::::::::::::::
+
+Spécifie s'il faut activer la fonction de notification des journaux qui capture automatiquement les événements de niveau ERROR et WARN et envoie des notifications.
+Pour plus de détails, consultez :doc:`Configuration des notifications de journaux <../config/admin-log-notification>`.
+
+Niveau de notification des journaux
+::::::::::::::::::::::::::::::::::::
+
+Spécifie le niveau de journalisation pour les notifications.
+Les événements de journalisation au niveau sélectionné et au-dessus seront notifiés.
+
+- **ERROR** : Notifier uniquement les erreurs (par défaut)
+- **WARN** : Notifier les avertissements et au-dessus
+- **INFO** : Notifier les informations et au-dessus
+- **DEBUG** : Notifier le débogage et au-dessus
+- **TRACE** : Notifier tous les journaux
 
 Stockage
 --------
@@ -583,4 +652,11 @@ Exemples de configuration LDAP
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.7/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.7/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.7/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.7/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.7/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.7/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.7/admin/general-8.png
 .. pdf            :height: 940 px
