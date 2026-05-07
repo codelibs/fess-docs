@@ -8,13 +8,13 @@
 在此管理页面,可以管理 |Fess| 的配置。
 可以在不重启 |Fess| 的情况下更改各种 |Fess| 配置。
 
-|image0|
-
 配置内容
 ======
 
 系统
 ------
+
+|image0|
 
 JSON响应
 ::::::::::::
@@ -40,6 +40,12 @@ JSON响应
 :::::::::::
 
 设置是否启用缩略图显示。
+
+系统属性
+::::::::
+
+配置 |Fess| 的系统属性。
+以 ``键=值`` 格式指定,每行一个。
 
 默认标签值
 :::::::::::::::
@@ -97,6 +103,8 @@ SSO类型
 
 爬虫
 --------
+
+|image1|
 
 检查上次修改时间
 ::::::::::::::
@@ -171,26 +179,10 @@ SSO类型
 
 指定 fess.log 的日志级别。
 
-日志通知
-::::::
-
-指定是否启用日志通知功能，该功能会自动捕获 ERROR 和 WARN 级别的日志事件并发送通知。
-详情请参阅 :doc:`日志通知配置 <../config/admin-log-notification>` 。
-
-日志通知级别
-:::::::::::
-
-指定日志通知的日志级别。
-所选级别及以上的日志事件将被通知。
-
-- **ERROR**: 仅通知错误（默认）
-- **WARN**: 通知警告及以上
-- **INFO**: 通知信息及以上
-- **DEBUG**: 通知调试及以上
-- **TRACE**: 通知所有日志
-
 建议
 --------
+
+|image2|
 
 按搜索词建议
 ::::::::::::::
@@ -209,6 +201,8 @@ SSO类型
 
 LDAP
 ----
+
+|image3|
 
 LDAP URL
 ::::::::
@@ -265,6 +259,8 @@ memberOf属性
 OpenID Connect
 --------------
 
+|image4|
+
 客户端ID
 :::::::
 
@@ -313,10 +309,56 @@ OpenID Connect
 SAML
 ----
 
+|image5|
+
+IdP实体ID
+:::::::::
+
+指定 IdP（Identity Provider）的实体 ID。
+
+IdP SSO URL
+:::::::::::
+
+指定 IdP 的单点登录服务 URL。
+
+IdP SLO URL
+:::::::::::
+
+指定 IdP 的单点注销服务 URL。
+
+IdP X.509证书
+:::::::::::::
+
+指定用于 IdP 的 SAML 断言签名验证的 X.509 公钥证书。
+仅指定 Base64 编码的内容,不含 ``-----BEGIN CERTIFICATE-----`` 和 ``-----END CERTIFICATE-----`` 行。
+
 SP基础URL
 ::::::::
 
 指定 SAML Service Provider 的基础 URL。
+
+SP实体ID
+::::::::
+
+指定 SP（Service Provider）的实体 ID。
+设置 ``SP基础URL`` 时自动配置。
+
+SP ACS URL
+::::::::::
+
+指定接收 SAML 断言的 Assertion Consumer Service（ACS）URL。
+设置 ``SP基础URL`` 时自动配置。
+
+SP SLO URL
+::::::::::
+
+指定 SP 的单点注销服务 URL。
+设置 ``SP基础URL`` 时自动配置。
+
+SP NameID格式
+:::::::::::::
+
+指定 SAML 断言中使用的 NameID 格式。
 
 组属性名
 ::::::
@@ -340,6 +382,8 @@ SP基础URL
 
 SPNEGO
 ------
+
+|image6|
 
 Krb5配置
 ::::::
@@ -401,8 +445,25 @@ NTLM提示
 
 指定从 SPNEGO 认证中排除的目录。
 
+日志记录级别
+::::::::::
+
+以数值指定 SPNEGO 认证的日志输出级别。
+
 Entra ID
 --------
+
+|image7|
+
+租户（ID或域）
+::::::::::::::
+
+指定 Microsoft Entra ID 的租户 ID 或域。
+
+认证机构
+::::::
+
+指定 Microsoft Entra ID 的认证机构 URL。
 
 客户端ID
 :::::::
@@ -414,16 +475,6 @@ Entra ID
 
 指定 Microsoft Entra ID 的客户端密钥。
 
-租户
-::::
-
-指定 Microsoft Entra ID 的租户 ID。
-
-认证机构
-::::::
-
-指定 Microsoft Entra ID 的认证机构 URL。
-
 回复URL
 :::::
 
@@ -433,6 +484,11 @@ Entra ID
 :::::
 
 指定认证状态的有效期（TTL）。
+
+权限字段
+::::::
+
+指定从 Entra ID 获取权限信息的字段。
 
 默认组
 :::::
@@ -444,11 +500,6 @@ Entra ID
 
 指定 Entra ID 认证时分配给用户的默认角色。
 
-权限字段
-::::::
-
-指定从 Entra ID 获取权限信息的字段。
-
 使用域服务
 ::::::::
 
@@ -456,6 +507,8 @@ Entra ID
 
 公告显示
 ---------
+
+|image8|
 
 登录页面
 :::::::::::
@@ -490,6 +543,24 @@ Google Chat Webhook URL
 :::::::::::::::::::::::
 
 指定用于 Google Chat 通知的 Webhook URL。
+
+日志通知
+::::::
+
+指定是否启用日志通知功能，该功能会自动捕获 ERROR 和 WARN 级别的日志事件并发送通知。
+详情请参阅 :doc:`日志通知配置 <../config/admin-log-notification>` 。
+
+日志通知级别
+:::::::::::
+
+指定日志通知的日志级别。
+所选级别及以上的日志事件将被通知。
+
+- **ERROR**: 仅通知错误（默认）
+- **WARN**: 通知警告及以上
+- **INFO**: 通知信息及以上
+- **DEBUG**: 通知调试及以上
+- **TRACE**: 通知所有日志
 
 存储
 --------
@@ -583,4 +654,11 @@ LDAP配置示例
 
 
 .. |image0| image:: ../../../resources/images/en/15.6/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.6/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.6/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.6/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.6/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.6/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.6/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.6/admin/general-8.png
 .. pdf            :height: 940 px
