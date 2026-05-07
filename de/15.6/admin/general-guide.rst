@@ -182,8 +182,6 @@ Geben Sie die Protokollebene für fess.log an.
 Vorschlagen
 -----------
 
-|image2|
-
 Vorschläge aus Suchbegriffen
 ::::::::::::::::::::::::::::
 
@@ -202,7 +200,7 @@ Löscht Vorschlagsdaten, die älter als die angegebene Anzahl von Tagen sind.
 LDAP
 ----
 
-|image3|
+|image2|
 
 LDAP-URL
 ::::::::
@@ -259,7 +257,7 @@ Gibt die LDAP-Klasse der initialen Kontextfabrik an (z.B. com.sun.jndi.ldap.Ldap
 OpenID Connect
 --------------
 
-|image4|
+|image3|
 
 Client-ID
 :::::::::
@@ -309,7 +307,7 @@ Gibt die Standardrollen an, die Benutzern bei der OpenID Connect-Authentifizieru
 SAML
 ----
 
-|image5|
+|image4|
 
 IdP-Entitäts-ID
 :::::::::::::::
@@ -383,7 +381,7 @@ Gibt die Standardrollen an, die Benutzern bei der SAML-Authentifizierung zugewie
 SPNEGO
 ------
 
-|image6|
+|image5|
 
 Krb5-Konfiguration
 ::::::::::::::::::
@@ -453,7 +451,7 @@ Gibt die Protokollausgabeebene für die SPNEGO-Authentifizierung als numerischen
 Entra ID
 --------
 
-|image7|
+|image6|
 
 Mandant (ID oder Domäne)
 ::::::::::::::::::::::::
@@ -508,7 +506,7 @@ Gibt an, ob der Entra ID-Domänendienst verwendet werden soll.
 Hinweis
 -------
 
-|image8|
+|image7|
 
 Anmeldeseite
 ::::::::::::
@@ -534,12 +532,12 @@ Benachrichtigungs-E-Mail
 Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
 Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
 
-Slack Webhook URL
+Slack Webhook URLs
 :::::::::::::::::
 
 Gibt die Webhook-URL für Slack-Benachrichtigungen an.
 
-Google Chat Webhook URL
+Google Chat Webhook URLs
 :::::::::::::::::::::::
 
 Gibt die Webhook-URL für Google Chat-Benachrichtigungen an.

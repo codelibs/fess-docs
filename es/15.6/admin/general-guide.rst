@@ -182,8 +182,6 @@ Especifique el nivel de registro para fess.log.
 Sugerir
 -------
 
-|image2|
-
 Sugerir por término de búsqueda
 ::::::::::::::::::::::::::::::::
 
@@ -202,7 +200,7 @@ Elimina los datos de sugerencias anteriores al número de días especificado.
 LDAP
 ----
 
-|image3|
+|image2|
 
 URL de LDAP
 :::::::::::
@@ -259,7 +257,7 @@ Especifica la clase de fábrica de contexto inicial LDAP (ej.: com.sun.jndi.ldap
 OpenID Connect
 --------------
 
-|image4|
+|image3|
 
 ID de cliente
 :::::::::::::
@@ -309,7 +307,7 @@ Especifica los roles por defecto que se asignarán a los usuarios durante la aut
 SAML
 ----
 
-|image5|
+|image4|
 
 ID de entidad del IdP
 :::::::::::::::::::::
@@ -383,7 +381,7 @@ Especifica los roles por defecto que se asignarán a los usuarios durante la aut
 SPNEGO
 ------
 
-|image6|
+|image5|
 
 Configuración Krb5
 :::::::::::::::::::
@@ -453,7 +451,7 @@ Especifica el nivel de salida de registro para la autenticación SPNEGO como val
 Entra ID
 --------
 
-|image7|
+|image6|
 
 Inquilino (ID o dominio)
 ::::::::::::::::::::::::
@@ -508,7 +506,7 @@ Especifique si desea utilizar el servicio de dominio de Entra ID.
 Aviso
 -----
 
-|image8|
+|image7|
 
 Página de inicio de sesión
 :::::::::::::::::::::::::::
@@ -534,12 +532,12 @@ Correo de notificación
 Especifique las direcciones de correo electrónico que recibirán notificaciones al completarse el rastreo.
 Se pueden especificar varias direcciones separadas por comas. Se requiere un servidor de correo para su uso.
 
-Slack Webhook URL
+Slack Webhook URLs
 :::::::::::::::::
 
 Especifica la URL del webhook para las notificaciones de Slack.
 
-Google Chat Webhook URL
+Google Chat Webhook URLs
 :::::::::::::::::::::::
 
 Especifica la URL del webhook para las notificaciones de Google Chat.

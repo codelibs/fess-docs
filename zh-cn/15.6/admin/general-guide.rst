@@ -182,8 +182,6 @@ SSO类型
 建议
 --------
 
-|image2|
-
 按搜索词建议
 ::::::::::::::
 
@@ -202,7 +200,7 @@ SSO类型
 LDAP
 ----
 
-|image3|
+|image2|
 
 LDAP URL
 ::::::::
@@ -259,7 +257,7 @@ memberOf属性
 OpenID Connect
 --------------
 
-|image4|
+|image3|
 
 客户端ID
 :::::::
@@ -309,7 +307,7 @@ OpenID Connect
 SAML
 ----
 
-|image5|
+|image4|
 
 IdP实体ID
 :::::::::
@@ -383,7 +381,7 @@ SP NameID格式
 SPNEGO
 ------
 
-|image6|
+|image5|
 
 Krb5配置
 ::::::
@@ -453,7 +451,7 @@ NTLM提示
 Entra ID
 --------
 
-|image7|
+|image6|
 
 租户（ID或域）
 ::::::::::::::
@@ -508,7 +506,7 @@ Entra ID
 公告显示
 ---------
 
-|image8|
+|image7|
 
 登录页面
 :::::::::::
@@ -534,12 +532,12 @@ Entra ID
 指定爬取完成时通知的邮箱地址。
 可以用逗号分隔指定多个地址。使用此功能需要邮件服务器。
 
-Slack Webhook URL
+Slack Webhook URLs
 :::::::::::::::::
 
 指定用于 Slack 通知的 Webhook URL。
 
-Google Chat Webhook URL
+Google Chat Webhook URLs
 :::::::::::::::::::::::
 
 指定用于 Google Chat 通知的 Webhook URL。

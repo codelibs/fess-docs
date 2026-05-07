@@ -182,8 +182,6 @@ Spécifie le niveau de journalisation de fess.log.
 Suggérer
 --------
 
-|image2|
-
 Suggérer à partir des termes de recherche
 ::::::::::::::::::::::::::::::::::::::::::
 
@@ -202,7 +200,7 @@ Supprime les données de suggestion antérieures au nombre de jours spécifié.
 LDAP
 ----
 
-|image3|
+|image2|
 
 URL LDAP
 ::::::::
@@ -259,7 +257,7 @@ Spécifie la classe de fabrique de contexte initial LDAP (ex. : com.sun.jndi.lda
 OpenID Connect
 --------------
 
-|image4|
+|image3|
 
 ID client
 :::::::::
@@ -309,7 +307,7 @@ Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authent
 SAML
 ----
 
-|image5|
+|image4|
 
 ID d'entité IdP
 :::::::::::::::
@@ -383,7 +381,7 @@ Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authent
 SPNEGO
 ------
 
-|image6|
+|image5|
 
 Configuration Krb5
 :::::::::::::::::::
@@ -453,7 +451,7 @@ Spécifie le niveau de sortie du journal pour l'authentification SPNEGO sous for
 Entra ID
 --------
 
-|image7|
+|image6|
 
 Locataire (ID ou domaine)
 :::::::::::::::::::::::::
@@ -508,7 +506,7 @@ Spécifie s'il faut utiliser le service de domaine Entra ID.
 Avis
 ----
 
-|image8|
+|image7|
 
 Page de connexion
 :::::::::::::::::
@@ -534,12 +532,12 @@ E-mail de notification
 Spécifie l'adresse e-mail pour la notification à la fin du crawl.
 Plusieurs adresses peuvent être spécifiées séparées par des virgules. Un serveur de messagerie est requis pour l'utilisation.
 
-Slack Webhook URL
+Slack Webhook URLs
 :::::::::::::::::
 
 Spécifie l'URL du webhook pour les notifications Slack.
 
-Google Chat Webhook URL
+Google Chat Webhook URLs
 :::::::::::::::::::::::
 
 Spécifie l'URL du webhook pour les notifications Google Chat.
