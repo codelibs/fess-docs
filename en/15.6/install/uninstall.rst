@@ -75,7 +75,7 @@ Step 1: Remove Fess
 
 Delete the installation directory::
 
-    $ rm -rf /path/to/fess-15.6.0
+    $ rm -rf /path/to/fess-15.6.1
 
 Step 2: Remove OpenSearch
 --------------------------
@@ -276,7 +276,7 @@ Step 3: Remove Images (Optional)
 To remove Docker images to free up disk space::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.6.0
+    $ docker rmi codelibs/fess:15.6.1
 
     $ docker images | grep opensearch
     $ docker rmi opensearchproject/opensearch:3.6.0
@@ -326,7 +326,7 @@ Verify Files
 
 TAR.GZ/ZIP version::
 
-    $ ls /path/to/fess-15.6.0  # Verify directory does not exist
+    $ ls /path/to/fess-15.6.1  # Verify directory does not exist
 
 RPM/DEB version::
 

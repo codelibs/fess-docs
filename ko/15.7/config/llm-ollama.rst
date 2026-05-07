@@ -1,0 +1,508 @@
+==========================
+Ollama 설정
+==========================
+
+개요
+====
+
+Ollama는 로컬 환경에서 대규모 언어 모델(LLM)을 실행하기 위한 오픈소스 플랫폼입니다.
+|Fess| 의 Ollama 연계 기능은 플러그인 ``fess-llm-ollama`` 로 제공되며, 프라이빗 환경에서의 사용에 적합합니다.
+
+Ollama를 사용하면 데이터를 외부로 전송하지 않고 AI 검색 모드 기능을 이용할 수 있습니다.
+
+주요 특징
+--------
+
+- **로컬 실행**: 데이터가 외부로 전송되지 않아 프라이버시 확보
+- **다양한 모델**: Llama, Mistral, Gemma, CodeLlama 등 다수의 모델 지원
+- **비용 효율**: API 비용 없음(하드웨어 비용만 발생)
+- **커스터마이즈**: 직접 파인튜닝한 모델도 사용 가능
+
+지원 모델
+----------
+
+Ollama에서 이용 가능한 주요 모델:
+
+- ``llama3.3:70b`` - Meta사의 Llama 3.3(70B 파라미터)
+- ``gemma4:e4b`` - Google사의 Gemma 4(E4B 파라미터, 기본값)
+- ``mistral:7b`` - Mistral AI사의 Mistral(7B 파라미터)
+- ``codellama:13b`` - Meta사의 Code Llama(13B 파라미터)
+- ``phi3:3.8b`` - Microsoft사의 Phi-3(3.8B 파라미터)
+
+.. note::
+   이용 가능한 모델의 최신 목록은 `Ollama Library <https://ollama.com/library>`__에서 확인할 수 있습니다.
+
+전제조건
+========
+
+Ollama를 사용하기 전에 다음을 확인하세요.
+
+1. **Ollama 설치**: `https://ollama.com/ <https://ollama.com/>`__에서 다운로드하여 설치
+2. **모델 다운로드**: 사용할 모델을 Ollama에 다운로드
+3. **Ollama 서버 시작**: Ollama가 실행 중인지 확인
+
+Ollama 설치
+--------------------
+
+Linux/macOS
+~~~~~~~~~~~
+
+::
+
+    curl -fsSL https://ollama.com/install.sh | sh
+
+Windows
+~~~~~~~
+
+공식 사이트에서 설치 프로그램을 다운로드하여 실행합니다.
+
+Docker
+~~~~~~
+
+::
+
+    docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+
+모델 다운로드
+--------------------
+
+::
+
+    # 기본 모델(Gemma 4 E4B) 다운로드
+    ollama pull gemma4:e4b
+
+    # Llama 3.3 다운로드
+    ollama pull llama3.3:70b
+
+    # 모델 동작 확인
+    ollama run gemma4:e4b "Hello, how are you?"
+
+플러그인 설치
+========================
+
+Ollama 연계 기능은 플러그인으로 제공됩니다.
+Ollama를 이용하려면 ``fess-llm-ollama`` 플러그인 설치가 필요합니다.
+
+1. `fess-llm-ollama-15.7.0.jar` 를 다운로드합니다.
+2. |Fess| 설치 디렉터리 내의 ``app/WEB-INF/plugin/`` 디렉터리에 배치합니다.
+
+::
+
+    cp fess-llm-ollama-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
+
+3. |Fess| 를 재시작합니다.
+
+.. note::
+   플러그인 버전은 |Fess| 버전과 맞춰주세요.
+
+기본 설정
+========
+
+LLM 관련 설정은 여러 설정 파일로 나뉩니다.
+
+최소 구성
+--------
+
+``app/WEB-INF/conf/fess_config.properties``:
+
+::
+
+    # AI 검색 모드 기능 활성화
+    rag.chat.enabled=true
+
+    # Ollama URL(로컬 환경인 경우)
+    rag.llm.ollama.api.url=http://localhost:11434
+
+    # 사용할 모델
+    rag.llm.ollama.model=gemma4:e4b
+
+``system.properties``(관리 화면 > 시스템 > 전반 에서도 설정 가능):
+
+::
+
+    # LLM 프로바이더를 Ollama로 설정
+    rag.llm.name=ollama
+
+.. note::
+   LLM 프로바이더 설정은 관리 화면(관리 화면 > 시스템 > 전반)에서 ``rag.llm.name`` 을 설정할 수도 있습니다.
+
+권장 구성(프로덕션 환경)
+--------------------
+
+``app/WEB-INF/conf/fess_config.properties``:
+
+::
+
+    # AI 검색 모드 기능 활성화
+    rag.chat.enabled=true
+
+    # Ollama URL
+    rag.llm.ollama.api.url=http://localhost:11434
+
+    # 모델 설정(대규모 모델 사용)
+    rag.llm.ollama.model=llama3.3:70b
+
+    # 타임아웃 설정(대규모 모델용으로 증가)
+    rag.llm.ollama.timeout=120000
+
+    # 동시 요청 수 제어
+    rag.llm.ollama.max.concurrent.requests=5
+
+``system.properties``:
+
+::
+
+    # LLM 프로바이더 설정
+    rag.llm.name=ollama
+
+설정 항목
+========
+
+Ollama 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모두 ``fess_config.properties`` 에 설정합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``rag.llm.ollama.api.url``
+     - Ollama 서버의 기본 URL
+     - ``http://localhost:11434``
+   * - ``rag.llm.ollama.model``
+     - 사용할 모델명(Ollama에 다운로드된 모델)
+     - ``gemma4:e4b``
+   * - ``rag.llm.ollama.timeout``
+     - 요청 타임아웃 시간(밀리초)
+     - ``60000``
+   * - ``rag.llm.ollama.availability.check.interval``
+     - 가용성 체크 간격(초)
+     - ``60``
+   * - ``rag.llm.ollama.max.concurrent.requests``
+     - 최대 동시 요청 수
+     - ``5``
+   * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
+     - 평가 최대 관련 문서 수
+     - ``3``
+   * - ``rag.llm.ollama.concurrency.wait.timeout``
+     - 동시 실행 제어의 퍼밋 취득 대기 타임아웃(밀리초)
+     - ``30000``
+   * - ``rag.llm.ollama.connect.timeout``
+     - TCP 연결 타임아웃(밀리초). ``rag.llm.ollama.timeout`` 과는 별도로 지정 가능
+     - ``5000``
+   * - ``rag.llm.ollama.retry.max``
+     - HTTP 재시도의 최대 시도 횟수( ``429`` 및 ``5xx`` 계열 오류 시)
+     - ``3``
+   * - ``rag.llm.ollama.retry.base.delay.ms``
+     - 지수 백오프의 기준 지연 시간(밀리초)
+     - ``2000``
+
+동시 실행 제어
+------------
+
+``rag.llm.ollama.max.concurrent.requests`` 를 사용하여 Ollama로의 동시 요청 수를 제어할 수 있습니다.
+기본값은 5입니다. Ollama 서버의 리소스에 따라 조정하세요.
+동시 요청 수가 너무 많으면 Ollama 서버에 부하가 걸려 응답 속도가 저하될 수 있습니다.
+
+프롬프트 타입별 설정
+======================
+
+|Fess|에서는 프롬프트 타입별로 LLM 파라미터를 커스터마이즈할 수 있습니다.
+설정은 ``fess_config.properties`` 에 기술합니다.
+
+프롬프트 타입별로 다음 파라미터를 설정할 수 있습니다:
+
+- ``rag.llm.ollama.{promptType}.temperature`` - 생성 시의 temperature
+- ``rag.llm.ollama.{promptType}.max.tokens`` - 최대 토큰 수
+- ``rag.llm.ollama.{promptType}.context.max.chars`` - 컨텍스트의 최대 문자 수
+
+이용 가능한 프롬프트 타입:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - 프롬프트 타입
+     - 설명
+   * - ``intent``
+     - 사용자의 의도를 판정하는 프롬프트
+   * - ``evaluation``
+     - 검색 결과의 평가 프롬프트
+   * - ``unclear``
+     - 불명확한 쿼리에 대한 응답 프롬프트
+   * - ``noresults``
+     - 검색 결과가 없을 경우의 프롬프트
+   * - ``docnotfound``
+     - 문서를 찾을 수 없을 경우의 프롬프트
+   * - ``answer``
+     - 응답 생성 프롬프트
+   * - ``summary``
+     - 요약 생성 프롬프트
+   * - ``faq``
+     - FAQ 생성 프롬프트
+   * - ``direct``
+     - 직접 응답 프롬프트
+
+설정 예::
+
+    # 응답 생성 시의 temperature 설정
+    rag.llm.ollama.answer.temperature=0.7
+
+    # 요약 생성 시의 최대 토큰 수 설정
+    rag.llm.ollama.summary.max.tokens=2048
+
+    # 의도 판정 시의 컨텍스트 최대 문자 수 설정
+    rag.llm.ollama.intent.context.max.chars=4000
+
+Ollama 모델 옵션
+======================
+
+Ollama의 모델 파라미터를 ``fess_config.properties`` 에서 설정할 수 있습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``rag.llm.ollama.top.p``
+     - Top-P 샘플링 값(0.0~1.0)
+     - (미설정)
+   * - ``rag.llm.ollama.top.k``
+     - Top-K 샘플링 값
+     - (미설정)
+   * - ``rag.llm.ollama.num.ctx``
+     - 컨텍스트 윈도우 크기
+     - (미설정)
+   * - ``rag.llm.ollama.default.*``
+     - 기본 폴백 설정
+     - (미설정)
+   * - ``rag.llm.ollama.options.*``
+     - 글로벌 옵션
+     - (미설정)
+
+설정 예::
+
+    # Top-P 샘플링
+    rag.llm.ollama.top.p=0.9
+
+    # Top-K 샘플링
+    rag.llm.ollama.top.k=40
+
+    # 컨텍스트 윈도우 크기
+    rag.llm.ollama.num.ctx=4096
+
+사고 모델 지원
+==============
+
+gemma4나 qwen3.5 등의 사고 모델(thinking model)을 사용하는 경우, |Fess| 는 사고 버짓(thinking budget) 설정을 지원합니다.
+
+``fess_config.properties`` 에 다음을 설정합니다:
+
+::
+
+    # 사고 버짓 설정
+    rag.llm.ollama.thinking.budget=1024
+
+사고 버짓을 설정하면 모델이 응답을 생성하기 전에 "생각하는" 단계에 할당할 토큰 수를 제어할 수 있습니다.
+
+네트워크 구성
+================
+
+Docker 구성
+--------------
+
+공식 `docker-fess <https://github.com/codelibs/docker-fess>`__ 리포지토리에는 Ollama용 오버레이 ``compose-ollama.yaml`` 이 포함되어 있습니다. 최소 절차는 다음과 같습니다.
+
+::
+
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    docker exec -it ollama01 ollama pull gemma4:e4b
+
+``compose-ollama.yaml`` 의 내용(동등 구성을 직접 작성할 때의 참고):
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-ollama:15.7.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+        depends_on:
+          - ollama01
+
+      ollama01:
+        image: ollama/ollama:latest
+        ports:
+          - "11434:11434"
+        volumes:
+          - ollama-data:/root/.ollama
+
+    volumes:
+      ollama-data:
+
+요점:
+
+- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` 으로 컨테이너의 ``run.sh`` 가 플러그인 JAR을 자동 다운로드하여 ``app/WEB-INF/plugin/`` 에 배치합니다
+- ``-Dfess.config.rag.chat.enabled=true`` 로 AI 검색 모드를 활성화
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` 로 Ollama 서버의 URL을 지정(Docker Compose 네트워크 내에서는 ``ollama01`` 등의 서비스 이름으로 해결)
+- ``-Dfess.system.rag.llm.name=ollama`` 는 OpenSearch에 값이 아직 기록되지 않은 첫 시작 시에만 기본값으로 적용됩니다. 시작 후에는 관리 화면 "시스템 > 전체 설정" 의 RAG 섹션에서도 변경할 수 있습니다
+
+.. note::
+   ``RAG_CHAT_ENABLED`` 나 ``RAG_LLM_NAME`` 등의 대문자 스네이크 케이스 환경 변수는 |Fess| 에서 직접 인식되지 않습니다. 설정 값은 반드시 ``FESS_JAVA_OPTS`` 내에서 ``-Dfess.config.<key>`` ( ``fess_config.properties`` 계열) 또는 ``-Dfess.system.<key>`` ( ``system.properties`` 계열)로 전달하세요.
+
+원격 Ollama 서버
+----------------------
+
+Ollama를 Fess와 다른 서버에서 실행하는 경우:
+
+::
+
+    rag.llm.ollama.api.url=http://ollama-server.example.com:11434
+
+.. warning::
+   Ollama는 기본적으로 인증 기능이 없으므로 외부에서 접근 가능하게 하는 경우
+   네트워크 레벨에서의 보안 대책(방화벽, VPN 등)을 검토하세요.
+
+HTTP 프록시 경유 사용
+=====================
+
+Ollama 클라이언트는 |Fess| 전체의 HTTP 프록시 설정을 공유합니다. Ollama 서버로의 연결에 프록시를 경유해야 하는 경우(원격 Ollama 서버 이용 시 등), ``fess_config.properties`` 에서 다음 프로퍼티를 지정하세요.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``http.proxy.host``
+     - 프록시 호스트 이름(빈 문자열이면 프록시를 사용하지 않음)
+     - ``""``
+   * - ``http.proxy.port``
+     - 프록시 포트 번호
+     - ``8080``
+   * - ``http.proxy.username``
+     - 프록시 인증의 사용자 이름(임의. 지정하면 Basic 인증이 활성화됨)
+     - ``""``
+   * - ``http.proxy.password``
+     - 프록시 인증의 비밀번호
+     - ``""``
+
+.. note::
+   Ollama는 일반적으로 로컬 또는 내부 네트워크에서 동작하므로, 프록시 설정이 필요한 경우는 제한적인 케이스(사내 프록시를 통해서만 도달할 수 있는 원격 Ollama 서버를 이용하는 경우 등)에 한정됩니다.
+   이 설정은 크롤러 등 |Fess| 전체의 HTTP 액세스에도 영향을 미칩니다.
+
+모델 선택 가이드
+==================
+
+사용 목적에 맞는 모델 선택 지침입니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 20 35
+
+   * - 모델
+     - 크기
+     - 필요 VRAM
+     - 용도
+   * - ``phi3:3.8b``
+     - 소
+     - 4GB 이상
+     - 경량 환경, 단순한 질문 응답
+   * - ``gemma4:e4b``
+     - 소~중
+     - 8GB 이상
+     - 균형 잡힌 범용 용도, 사고 모드 지원(기본값)
+   * - ``mistral:7b``
+     - 중
+     - 8GB 이상
+     - 고품질 응답이 필요한 경우
+   * - ``llama3.3:70b``
+     - 대
+     - 48GB 이상
+     - 최고 품질의 응답, 복잡한 추론
+
+GPU 지원
+-------
+
+Ollama는 GPU 가속을 지원합니다. NVIDIA GPU를 사용하면
+추론 속도가 크게 향상됩니다.
+
+::
+
+    # GPU 지원 확인
+    ollama run gemma4:e4b --verbose
+
+문제 해결
+======================
+
+연결 오류
+----------
+
+**증상**: 채팅 기능에서 오류 발생, LLM을 사용할 수 없다고 표시됨
+
+**확인 사항**:
+
+1. Ollama가 실행 중인지 확인::
+
+    curl http://localhost:11434/api/tags
+
+2. 모델이 다운로드되었는지 확인::
+
+    ollama list
+
+3. 방화벽 설정 확인
+
+4. ``fess-llm-ollama`` 플러그인이 ``app/WEB-INF/plugin/`` 에 배치되어 있는지 확인
+
+모델을 찾을 수 없음
+--------------------
+
+**증상**: "Configured model not found in Ollama"라는 로그 출력
+
+**해결 방법**:
+
+1. 모델명이 정확한지 확인(``:latest`` 태그를 포함하는 경우 있음)::
+
+    # 모델 목록 확인
+    ollama list
+
+2. 필요한 모델 다운로드::
+
+    ollama pull gemma4:e4b
+
+타임아웃
+------------
+
+**증상**: 요청이 타임아웃됨
+
+**해결 방법**:
+
+1. 타임아웃 시간 연장::
+
+    rag.llm.ollama.timeout=120000
+
+2. 더 작은 모델 사용 또는 GPU 환경 검토
+
+디버그 설정
+------------
+
+문제를 조사할 때는 |Fess|의 로그 레벨을 조정하여 Ollama 관련 상세 로그를 출력할 수 있습니다.
+
+``app/WEB-INF/classes/log4j2.xml``:
+
+::
+
+    <Logger name="org.codelibs.fess.llm.ollama" level="DEBUG"/>
+
+참고 정보
+========
+
+- `Ollama 공식 사이트 <https://ollama.com/>`__
+- `Ollama 모델 라이브러리 <https://ollama.com/library>`__
+- `Ollama GitHub <https://github.com/ollama/ollama>`__
+- :doc:`llm-overview` - LLM 통합 개요
+- :doc:`rag-chat` - AI 검색 모드 기능 상세

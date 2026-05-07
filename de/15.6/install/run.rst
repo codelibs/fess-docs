@@ -34,7 +34,7 @@ Start von Fess
 
 ::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess
 
 Für Hintergrundstart::
@@ -68,8 +68,8 @@ Start von Fess
 
 Oder von der Eingabeaufforderung::
 
-    C:\> cd C:\fess-15.6.0
-    C:\fess-15.6.0> bin\fess.bat
+    C:\> cd C:\fess-15.6.1
+    C:\fess-15.6.1> bin\fess.bat
 
 RPM/DEB-Version (chkconfig)
 ----------------------------
@@ -148,7 +148,7 @@ Wenn ``HTTP/1.1 200 OK`` zurückgegeben wird, ist der Start erfolgreich.
 
 TAR.GZ/ZIP-Version::
 
-    $ tail -f /path/to/fess-15.6.0/logs/fess.log
+    $ tail -f /path/to/fess-15.6.1/logs/fess.log
 
 RPM/DEB-Version::
 

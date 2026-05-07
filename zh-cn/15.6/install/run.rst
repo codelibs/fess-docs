@@ -34,7 +34,7 @@ TAR.GZ 版的情况
 
 ::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess
 
 在后台启动::
@@ -68,8 +68,8 @@ ZIP 版的情况（Windows）
 
 或者，从命令提示符::
 
-    C:\> cd C:\fess-15.6.0
-    C:\fess-15.6.0> bin\fess.bat
+    C:\> cd C:\fess-15.6.1
+    C:\fess-15.6.1> bin\fess.bat
 
 RPM/DEB 版的情况 (chkconfig)
 --------------------------
@@ -148,7 +148,7 @@ Docker 版的情况
 
 TAR.GZ/ZIP 版::
 
-    $ tail -f /path/to/fess-15.6.0/logs/fess.log
+    $ tail -f /path/to/fess-15.6.1/logs/fess.log
 
 RPM/DEB 版::
 

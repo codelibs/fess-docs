@@ -234,7 +234,7 @@ Informations de version
 
 Cette documentation concerne les versions suivantes :
 
-- **Fess** : 15.6.0
+- **Fess** : 15.6.1
 - **OpenSearch** : 3.6.0
 - **Java** : 21 ou ultérieur
 - **Docker** : 20.10 ou ultérieur

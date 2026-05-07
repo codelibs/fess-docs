@@ -192,6 +192,18 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
      - 推論モデル使用時のmax_tokens倍率
      - ``4``
      - fess_config.properties
+   * - ``rag.llm.openai.retry.max``
+     - HTTPリトライの最大試行回数（``429`` および ``5xx`` 系エラー時）
+     - ``10``
+     - fess_config.properties
+   * - ``rag.llm.openai.retry.base.delay.ms``
+     - 指数バックオフの基準遅延時間（ミリ秒）
+     - ``2000``
+     - fess_config.properties
+   * - ``rag.llm.openai.stream.include.usage``
+     - ストリーミング時に ``stream_options.include_usage=true`` を送信し、最終チャンクで使用トークン情報を受け取る
+     - ``true``
+     - fess_config.properties
    * - ``rag.llm.openai.history.max.chars``
      - 会話履歴の最大文字数
      - ``8000``
@@ -338,6 +350,54 @@ OpenAIクライアントで使用可能なすべての設定項目です。 ``ra
     # intentプロンプトの温度設定（意図判定は低めに設定）
     rag.llm.openai.intent.temperature=0.1
 
+リトライ動作
+============
+
+OpenAI APIへのリクエストは以下のHTTPステータスコードに対して自動的にリトライされます:
+
+- ``429`` Too Many Requests（レート制限）
+- ``500`` Internal Server Error
+- ``502`` Bad Gateway（OpenAIが上流過負荷時に返すことがあります）
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+リトライ時は指数バックオフ（基準値 ``rag.llm.openai.retry.base.delay.ms`` ミリ秒、最大 ``rag.llm.openai.retry.max`` 回、±20%のジッター付き）で待機します。
+サーバが ``Retry-After`` ヘッダ（整数秒、最大 ``600`` 秒にクランプ）を返した場合は、その値が指数バックオフより優先されます。これはOpenAIの公式ガイダンスに従ったものです。
+
+なお、 ``IOException`` （接続タイムアウト、ソケットリセット、DNS失敗）はリトライされません。リクエストがサーバに到達した可能性がある場合、リトライは二重課金につながる可能性があるためです。
+ストリーミングリクエストでは、初回接続のみがリトライ対象であり、レスポンス本体の受信開始後に発生したエラーは即座に伝搬します。
+
+.. note::
+   既定設定（最大10回、基準2秒）の最悪ケースでは、9回分のバックオフ合計は ``2 + 4 + 8 + ... + 512 ≈ 1022秒（約17分）`` となります。 ``Retry-After`` （最大600秒）が毎回返るような状況では、最悪 ``9 × 600秒 = 90分`` まで膨らみます。レイテンシをよりタイトに制御したい場合は ``rag.llm.openai.retry.max`` を小さく設定してください。
+
+ストリーミングと使用量情報
+==========================
+
+既定では ``stream_options.include_usage=true`` をリクエストに付与し、ストリーミング応答の最終SSEチャンクで ``usage`` オブジェクト（推論モデルでは ``completion_tokens_details.reasoning_tokens`` 、プロンプトキャッシュ利用時は ``prompt_tokens_details.cached_tokens`` を含む）を受信します。
+
+vLLMやAzure OpenAI互換ゲートウェイなど、 ``stream_options.include_usage`` フィールドを受け付けないバックエンドを利用する場合は、以下のように無効化してください::
+
+    rag.llm.openai.stream.include.usage=false
+
+ログ出力と異常検出
+==================
+
+|Fess| 15.6.1 以降、OpenAIクライアントは以下の構造化されたログを出力します。これにより、 ``DEBUG`` レベルを有効化しなくても、トークン使用状況や応答異常を監視できます。
+
+- ``[LLM:OPENAI] Stream completed.`` （INFO） - ストリーミング応答完了時にチャンク数、初回チャンクまでの時間、トークン使用情報などを出力
+- ``[LLM:OPENAI] Chat response received.`` （INFO） - 非ストリーミング応答完了時に同等の情報を出力
+- ``[LLM:OPENAI] Chat finished abnormally`` / ``Stream finished abnormally`` （WARN） - ``finish_reason`` が ``stop`` 以外（``length`` ：max_tokensによる切り詰め、 ``content_filter`` ：モデレーション、 ``tool_calls`` / ``function_call`` ：意図しないツール呼び出し設定など）の場合に出力
+- ``[LLM:OPENAI] Stream refusal.`` （WARN） - 構造化出力で ``delta.refusal`` が返された場合に出力
+
+これらのWARNログは、 ``max_tokens`` の調整、コンテンツフィルターの監査、 ``extra_params`` の誤設定の検出に活用できます。
+
+URLログ内の認証情報マスキング
+-----------------------------
+
+ログに出力されるURLは、認証情報を含むクエリパラメータ（ ``api_key`` 、 ``apikey`` 、 ``api-key`` 、 ``key`` 、 ``token`` 、 ``access_token`` 、 ``access-token`` 。大文字小文字を区別しません）が自動的に ``***`` でマスクされます。
+
+OpenAI公式エンドポイント（ ``https://api.openai.com`` ）は ``Authorization: Bearer`` ヘッダで認証するためURLには認証情報が含まれませんが、認証情報をクエリパラメータで受け付ける独自プロキシ（一部のAzureデプロイ、vLLMゲートウェイ等）を ``rag.llm.openai.api.url`` に設定する場合でも、APIキーがログに漏洩することを防ぎます。
+
 推論モデル対応
 ==============
 
@@ -419,7 +479,7 @@ Docker環境
 - ``-Dfess.config.rag.llm.openai.api.key=...`` で API キー、 ``-Dfess.config.rag.llm.openai.model=...`` でモデルを指定
 - ``-Dfess.system.rag.llm.name=openai`` は OpenSearch にまだ値が書き込まれていない初回起動時にデフォルトとして効きます。起動後は管理画面「システム > 全般」の RAG セクションでも変更できます
 
-Proxy 経由でインターネットに接続する場合は ``FESS_JAVA_OPTS`` に ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` を追加してください。
+Proxy 経由でインターネットに接続する場合は、 |Fess| の ``http.proxy.*`` 設定を ``FESS_JAVA_OPTS`` 経由で指定してください（後述の「HTTPプロキシ経由の利用」を参照）。
 
 systemd環境
 -----------
@@ -429,6 +489,40 @@ systemd環境
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
+
+HTTPプロキシ経由の利用
+======================
+
+|Fess| 15.6.1 以降、OpenAIクライアントは |Fess| 全体のHTTPプロキシ設定を共有します。 ``fess_config.properties`` で以下のプロパティを指定してください。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``http.proxy.host``
+     - プロキシホスト名（空文字列の場合はプロキシを使用しない）
+     - ``""``
+   * - ``http.proxy.port``
+     - プロキシポート番号
+     - ``8080``
+   * - ``http.proxy.username``
+     - プロキシ認証のユーザー名（任意。指定するとBasic認証が有効化される）
+     - ``""``
+   * - ``http.proxy.password``
+     - プロキシ認証のパスワード
+     - ``""``
+
+Docker環境では ``FESS_JAVA_OPTS`` に以下のように指定します::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   この設定はクローラーなど |Fess| 全体のHTTPアクセスにも影響します。
+   従来のJavaシステムプロパティ（ ``-Dhttps.proxyHost`` 等）はOpenAIクライアントからは参照されません。
 
 Azure OpenAIの使用
 ==================

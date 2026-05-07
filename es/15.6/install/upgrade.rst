@@ -162,13 +162,13 @@ Versión TAR.GZ/ZIP
 
 1. Descargue y extraiga la nueva versión::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.tar.gz
-       $ tar -xzf fess-15.6.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.tar.gz
+       $ tar -xzf fess-15.6.1.tar.gz
 
 2. Copie la configuración de la versión antigua::
 
-       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.6.0/app/WEB-INF/conf/
-       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.6.0/bin/
+       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.6.1/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.6.1/bin/
 
 3. Verifique las diferencias de configuración y ajuste según sea necesario
 
@@ -178,10 +178,10 @@ Versión RPM/DEB
 Instale el paquete de la nueva versión::
 
     # RPM
-    $ sudo rpm -Uvh fess-15.6.0.rpm
+    $ sudo rpm -Uvh fess-15.6.1.rpm
 
     # DEB
-    $ sudo dpkg -i fess-15.6.0.deb
+    $ sudo dpkg -i fess-15.6.1.deb
 
 .. note::
 
@@ -193,8 +193,8 @@ Versión Docker
 
 1. Obtenga el archivo Compose de la nueva versión::
 
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose.yaml
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose-opensearch3.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose-opensearch3.yaml
 
 2. Obtenga la nueva imagen::
 
@@ -228,7 +228,7 @@ Paso 5: Inicio de la Nueva Versión
 
 Versión TAR.GZ/ZIP::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess -d
 
 Versión RPM/DEB::

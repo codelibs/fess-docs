@@ -34,7 +34,7 @@ Fess の起動
 
 ::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess
 
 バックグラウンドで起動する場合::
@@ -68,8 +68,8 @@ Fess の起動
 
 または、コマンドプロンプトから::
 
-    C:\> cd C:\fess-15.6.0
-    C:\fess-15.6.0> bin\fess.bat
+    C:\> cd C:\fess-15.6.1
+    C:\fess-15.6.1> bin\fess.bat
 
 RPM/DEB 版の場合 (chkconfig)
 --------------------------
@@ -148,7 +148,7 @@ Docker Compose を使用して起動::
 
 TAR.GZ/ZIP 版::
 
-    $ tail -f /path/to/fess-15.6.0/logs/fess.log
+    $ tail -f /path/to/fess-15.6.1/logs/fess.log
 
 RPM/DEB 版::
 

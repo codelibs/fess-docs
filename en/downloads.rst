@@ -4,7 +4,7 @@ Downloads
 
 .. tip::
 
-   The latest stable release is **Fess 15.6.0** ( `Release notes <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ ). See :doc:`eol` for the support lifecycle.
+   The latest stable release is **Fess 15.6.1** ( `Release notes <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ ). See :doc:`eol` for the support lifecycle.
 
 Docker
 ======
@@ -25,7 +25,7 @@ Tested stable releases are available from:
    * - Version
      - Java
      - Search Engine
-   * - `Fess 15.6.0 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_
+   * - `Fess 15.6.1 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_
      - `21 <https://adoptium.net/temurin/releases?version=21>`_
      - `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_
    * - `Fess 15.5.0 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`_

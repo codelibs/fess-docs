@@ -4,7 +4,7 @@
 
 .. tip::
 
-   최신 안정 버전은 **Fess 15.6.0** 입니다 ( `릴리스 노트 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ ). 지원 기한은 :doc:`eol` 을 참조하세요.
+   최신 안정 버전은 **Fess 15.6.1** 입니다 ( `릴리스 노트 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ ). 지원 기한은 :doc:`eol` 을 참조하세요.
 
 Docker
 ======
@@ -25,7 +25,7 @@ Docker 이미지는 다음을 참조하세요.
    * - 버전
      - Java
      - 검색 엔진
-   * - `Fess 15.6.0 <https://github.com/codelibs/fess/releases/tag/fess-15.6.0>`_
+   * - `Fess 15.6.1 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_
      - `21 <https://adoptium.net/temurin/releases?version=21>`_
      - `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_
    * - `Fess 15.5.0 <https://github.com/codelibs/fess/releases/tag/fess-15.5.0>`_

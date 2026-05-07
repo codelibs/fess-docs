@@ -23,8 +23,9 @@ Unterstützte Modelle
 
 Hauptsächlich verfügbare Modelle bei Gemini:
 
-- ``gemini-3-flash-preview`` - Neuestes schnelles Modell (empfohlen)
-- ``gemini-3.1-pro-preview`` - Neuestes Modell mit hoher Schlussfolgerungsfähigkeit
+- ``gemini-3.1-flash-lite-preview`` - Schnelles Modell, leichtgewichtig und kostengünstig (Standard)
+- ``gemini-3-flash-preview`` - Standard-Flash-Modell
+- ``gemini-3.1-pro`` / ``gemini-3-pro`` - Modelle mit hoher Schlussfolgerungsfähigkeit
 - ``gemini-2.5-flash`` - Stabile Version des schnellen Modells
 - ``gemini-2.5-pro`` - Stabile Version des Schlussfolgerungsmodells
 
@@ -98,7 +99,7 @@ Minimalkonfiguration
     rag.llm.gemini.api.key=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx
 
     # Zu verwendendes Modell
-    rag.llm.gemini.model=gemini-3-flash-preview
+    rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
 ``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
 
@@ -153,7 +154,7 @@ Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellunge
      - ``""``
    * - ``rag.llm.gemini.model``
      - Name des zu verwendenden Modells
-     - ``gemini-3-flash-preview``
+     - ``gemini-3.1-flash-lite-preview``
    * - ``rag.llm.gemini.api.url``
      - Basis-URL der API
      - ``https://generativelanguage.googleapis.com/v1beta``
@@ -190,6 +191,31 @@ Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellunge
    * - ``rag.llm.gemini.history.assistant.summary.max.chars``
      - Maximale Zeichenzahl für Assistenten-Zusammenfassungsverlauf
      - ``1000``
+   * - ``rag.llm.gemini.retry.max``
+     - Maximale Anzahl von HTTP-Wiederholungsversuchen (bei ``429`` und ``5xx``-Fehlern)
+     - ``10``
+   * - ``rag.llm.gemini.retry.base.delay.ms``
+     - Basisverzögerung des exponentiellen Backoffs (in Millisekunden)
+     - ``2000``
+
+Authentifizierung
+=================
+
+Seit |Fess| 15.6.1 wird der API-Schlüssel über den HTTP-Anfrageheader ``x-goog-api-key`` gesendet (die von Google empfohlene Methode).
+Er wird nicht mehr wie zuvor über den Query-Parameter ``?key=...`` an die URL angehängt, sodass der API-Schlüssel nicht in den Zugriffslogs erscheint.
+
+Retry-Verhalten
+===============
+
+Anfragen an die Gemini API werden bei folgenden HTTP-Statuscodes automatisch wiederholt:
+
+- ``429`` Resource Exhausted (Kontingentüberschreitung / Ratenbegrenzung)
+- ``500`` Internal Server Error
+- ``503`` Service Unavailable
+- ``504`` Gateway Timeout
+
+Bei einem Wiederholungsversuch wird mit exponentiellem Backoff gewartet (Basiswert ``rag.llm.gemini.retry.base.delay.ms`` Millisekunden, maximal ``rag.llm.gemini.retry.max`` Versuche, mit ±20% Jitter).
+Bei Streaming-Anfragen wird nur der initiale Verbindungsaufbau wiederholt; Fehler, die nach Beginn des Empfangs des Antwortkörpers auftreten, werden sofort weitergegeben.
 
 Prompttypspezifische Einstellungen
 ===================================
@@ -252,7 +278,7 @@ Standardwerte für jeden Prompttyp. Diese Werte werden verwendet, wenn keine exp
      - thinking.budget
    * - ``intent``
      - ``0.1``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``evaluation``
      - ``0.1``
@@ -268,24 +294,24 @@ Standardwerte für jeden Prompttyp. Diese Werte werden verwendet, wenn keine exp
      - ``0``
    * - ``docnotfound``
      - ``0.7``
-     - ``256``
+     - ``512``
      - ``0``
    * - ``direct``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``faq``
      - ``0.7``
      - ``2048``
-     - ``1024``
+     - ``0``
    * - ``answer``
      - ``0.5``
-     - ``4096``
-     - ``2048``
+     - ``8192``
+     - ``0``
    * - ``summary``
      - ``0.3``
      - ``4096``
-     - ``2048``
+     - ``0``
    * - ``queryregeneration``
      - ``0.3``
      - ``256``
@@ -321,7 +347,7 @@ Unterstützung für Thinking-Modelle
 Gemini unterstützt Thinking-Modelle.
 Bei Verwendung von Thinking-Modellen führt das Modell vor der Antwortgenerierung einen internen Denkprozess durch und kann so genauere Antworten liefern.
 
-Das Thinking-Budget kann pro Prompttyp in ``fess_config.properties`` konfiguriert werden.
+Das Thinking-Budget wird pro Prompttyp in ``fess_config.properties`` konfiguriert. |Fess| konvertiert den Ganzzahlwert (Anzahl Tokens) aus ``rag.llm.gemini.{promptType}.thinking.budget`` zur Anfragezeit automatisch in das passende API-Feld der erkannten Modellgeneration.
 
 ::
 
@@ -331,8 +357,38 @@ Das Thinking-Budget kann pro Prompttyp in ``fess_config.properties`` konfigurier
     # Thinking-Budget für die Zusammenfassungsgenerierung
     rag.llm.gemini.summary.thinking.budget=1024
 
+Mapping nach Modellgeneration
+-----------------------------
+
+- **Gemini 2.x** (z. B. ``gemini-2.5-flash``): Der konfigurierte Ganzzahlwert wird unverändert als ``thinkingConfig.thinkingBudget`` gesendet. Bei ``0`` wird das Thinking vollständig deaktiviert.
+- **Gemini 3.x** (z. B. ``gemini-3.1-flash-lite-preview``): Der Ganzzahlwert wird in den Aufzählungswert ``thinkingConfig.thinkingLevel`` (``MINIMAL`` / ``LOW`` / ``MEDIUM`` / ``HIGH``) eingruppiert und gesendet.
+
+Das Bucket-Mapping für Gemini 3.x ist wie folgt:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 25 40
+
+   * - Budget-Wert
+     - thinkingLevel
+     - Hinweise
+   * - ``<=0``
+     - ``MINIMAL`` oder ``LOW``
+     - Bei Flash- / Flash-Lite-Modellen ``MINIMAL``; bei Pro-Modellen, die ``MINIMAL`` nicht unterstützen (``gemini-3-pro`` / ``gemini-3.1-pro``), ``LOW``.
+   * - ``<=4096``
+     - ``MEDIUM``
+     -
+   * - ``>4096``
+     - ``HIGH``
+     -
+
 .. note::
-   Die Konfiguration des Thinking-Budgets kann die Antwortzeit verlängern.
+   Gemini 3.x verbraucht in jedem Bucket eine bestimmte Anzahl an Thinking-Tokens (selbst bei ``thinkingLevel=MINIMAL`` können einige hundert Tokens verbraucht werden).
+   Aus diesem Grund fügt |Fess| bei Verwendung von Gemini 3.x-Modellen den standardmäßigen ``maxOutputTokens`` automatisch zusätzlichen Headroom (1024 Tokens) hinzu, um das Abschneiden der Antwort durch ``finishReason=MAX_TOKENS`` zu vermeiden.
+   Bei Gemini 2.x wird mit ``thinkingBudget=0`` das Thinking selbst deaktiviert, daher wird kein zusätzlicher Headroom hinzugefügt.
+
+.. note::
+   Ein hoch konfiguriertes Thinking-Budget kann die Antwortzeit verlängern.
    Setzen Sie einen geeigneten Wert entsprechend dem Verwendungszweck.
 
 Konfiguration über JVM-Optionen
@@ -360,7 +416,7 @@ Inhalt von ``compose-gemini.yaml`` (als Referenz für eigenes Setup):
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-gemini:15.6.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-2.5-flash} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
 
 Hinweise:
 
@@ -369,8 +425,7 @@ Hinweise:
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` setzt den API-Schlüssel, ``-Dfess.config.rag.llm.gemini.model=...`` wählt das Modell
 - ``-Dfess.system.rag.llm.name=gemini`` wirkt nur als initialer Default, bevor ein Wert in OpenSearch persistiert wurde. Nach dem Start kann der Wert auch unter Administration > System > Allgemein (RAG-Sektion) geändert werden
 
-Bei Internetzugang über Proxy ``-Dhttps.proxyHost=... -Dhttps.proxyPort=...`` an
-``FESS_JAVA_OPTS`` anhängen.
+Bei Internetzugang über einen Proxy geben Sie die ``http.proxy.*``-Einstellungen von |Fess| über ``FESS_JAVA_OPTS`` an (siehe Abschnitt "HTTP-Proxy verwenden" weiter unten).
 
 systemd-Umgebung
 ----------------
@@ -380,6 +435,40 @@ In ``/etc/sysconfig/fess`` (oder ``/etc/default/fess``) ``FESS_JAVA_OPTS`` ergä
 ::
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
+
+HTTP-Proxy verwenden
+====================
+
+Seit |Fess| 15.6.1 nutzt der Gemini-Client die globale HTTP-Proxy-Konfiguration von |Fess|. Geben Sie die folgenden Eigenschaften in ``fess_config.properties`` an.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``http.proxy.host``
+     - Proxy-Hostname (bei leerer Zeichenkette wird kein Proxy verwendet)
+     - ``""``
+   * - ``http.proxy.port``
+     - Proxy-Portnummer
+     - ``8080``
+   * - ``http.proxy.username``
+     - Benutzername für die Proxy-Authentifizierung (optional; wenn angegeben, wird Basic-Authentifizierung aktiviert)
+     - ``""``
+   * - ``http.proxy.password``
+     - Passwort für die Proxy-Authentifizierung
+     - ``""``
+
+In Docker-Umgebungen geben Sie die Werte wie folgt über ``FESS_JAVA_OPTS`` an::
+
+    -Dfess.config.http.proxy.host=proxy.example.com
+    -Dfess.config.http.proxy.port=8080
+
+.. note::
+   Diese Einstellung wirkt sich auch auf den HTTP-Zugriff von |Fess| insgesamt (z. B. Crawler) aus.
+   Die bisherigen Java-Systemeigenschaften (``-Dhttps.proxyHost`` usw.) werden vom Gemini-Client nicht mehr ausgewertet.
 
 Verwendung über Vertex AI
 ==========================
@@ -404,14 +493,18 @@ Richtlinien zur Modellauswahl je nach Verwendungszweck.
      - Geschwindigkeit
      - Qualität
      - Anwendungsfall
+   * - ``gemini-3.1-flash-lite-preview``
+     - Schnell
+     - Hoch
+     - Leichtgewichtig und kostengünstig (Standard, unterstützt ``thinkingLevel=MINIMAL``)
    * - ``gemini-3-flash-preview``
      - Schnell
      - Sehr hoch
-     - Allgemeiner Einsatz (empfohlen)
-   * - ``gemini-3.1-pro-preview``
+     - Allgemeiner Einsatz (unterstützt ``thinkingLevel=MINIMAL``)
+   * - ``gemini-3.1-pro`` / ``gemini-3-pro``
      - Mittel
      - Sehr hoch
-     - Komplexe Schlussfolgerungen
+     - Komplexe Schlussfolgerungen (``MINIMAL`` nicht unterstützt; mindestens ``LOW``)
    * - ``gemini-2.5-flash``
      - Schnell
      - Hoch

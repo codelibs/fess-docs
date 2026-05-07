@@ -185,6 +185,18 @@ Ollama 클라이언트에서 사용 가능한 모든 설정 항목입니다. 모
    * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
      - 평가 최대 관련 문서 수
      - ``3``
+   * - ``rag.llm.ollama.concurrency.wait.timeout``
+     - 동시 실행 제어의 퍼밋 취득 대기 타임아웃(밀리초)
+     - ``30000``
+   * - ``rag.llm.ollama.connect.timeout``
+     - TCP 연결 타임아웃(밀리초). ``rag.llm.ollama.timeout`` 과는 별도로 지정 가능
+     - ``5000``
+   * - ``rag.llm.ollama.retry.max``
+     - HTTP 재시도의 최대 시도 횟수( ``429`` 및 ``5xx`` 계열 오류 시)
+     - ``3``
+   * - ``rag.llm.ollama.retry.base.delay.ms``
+     - 지수 백오프의 기준 지연 시간(밀리초)
+     - ``2000``
 
 동시 실행 제어
 ------------
@@ -302,37 +314,44 @@ gemma4나 qwen3.5 등의 사고 모델(thinking model)을 사용하는 경우, |
 Docker 구성
 --------------
 
-|Fess|와 Ollama를 모두 Docker에서 실행하는 경우의 구성 예입니다.
-
-``docker-compose.yml``:
+공식 `docker-fess <https://github.com/codelibs/docker-fess>`__ 리포지토리에는 Ollama용 오버레이 ``compose-ollama.yaml`` 이 포함되어 있습니다. 최소 절차는 다음과 같습니다.
 
 ::
 
-    version: '3'
-    services:
-      fess:
-        image: codelibs/fess:15.6.0
-        environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=ollama
-          - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
-        depends_on:
-          - ollama
-        # ... 기타 설정
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    docker exec -it ollama01 ollama pull gemma4:e4b
 
-      ollama:
-        image: ollama/ollama
-        volumes:
-          - ollama_data:/root/.ollama
+``compose-ollama.yaml`` 의 내용(동등 구성을 직접 작성할 때의 참고):
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+        depends_on:
+          - ollama01
+
+      ollama01:
+        image: ollama/ollama:latest
         ports:
           - "11434:11434"
+        volumes:
+          - ollama-data:/root/.ollama
 
     volumes:
-      ollama_data:
+      ollama-data:
+
+요점:
+
+- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` 으로 컨테이너의 ``run.sh`` 가 플러그인 JAR을 자동 다운로드하여 ``app/WEB-INF/plugin/`` 에 배치합니다
+- ``-Dfess.config.rag.chat.enabled=true`` 로 AI 검색 모드를 활성화
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` 로 Ollama 서버의 URL을 지정(Docker Compose 네트워크 내에서는 ``ollama01`` 등의 서비스 이름으로 해결)
+- ``-Dfess.system.rag.llm.name=ollama`` 는 OpenSearch에 값이 아직 기록되지 않은 첫 시작 시에만 기본값으로 적용됩니다. 시작 후에는 관리 화면 "시스템 > 전체 설정" 의 RAG 섹션에서도 변경할 수 있습니다
 
 .. note::
-   Docker Compose 환경에서는 호스트명으로 ``ollama``를 사용합니다(``localhost``가 아님).
+   ``RAG_CHAT_ENABLED`` 나 ``RAG_LLM_NAME`` 등의 대문자 스네이크 케이스 환경 변수는 |Fess| 에서 직접 인식되지 않습니다. 설정 값은 반드시 ``FESS_JAVA_OPTS`` 내에서 ``-Dfess.config.<key>`` ( ``fess_config.properties`` 계열) 또는 ``-Dfess.system.<key>`` ( ``system.properties`` 계열)로 전달하세요.
 
 원격 Ollama 서버
 ----------------------
@@ -346,6 +365,35 @@ Ollama를 Fess와 다른 서버에서 실행하는 경우:
 .. warning::
    Ollama는 기본적으로 인증 기능이 없으므로 외부에서 접근 가능하게 하는 경우
    네트워크 레벨에서의 보안 대책(방화벽, VPN 등)을 검토하세요.
+
+HTTP 프록시 경유 사용
+=====================
+
+|Fess| 15.6.1 이후, Ollama 클라이언트는 |Fess| 전체의 HTTP 프록시 설정을 공유합니다. Ollama 서버로의 연결에 프록시를 경유해야 하는 경우(원격 Ollama 서버 이용 시 등), ``fess_config.properties`` 에서 다음 프로퍼티를 지정하세요.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``http.proxy.host``
+     - 프록시 호스트 이름(빈 문자열이면 프록시를 사용하지 않음)
+     - ``""``
+   * - ``http.proxy.port``
+     - 프록시 포트 번호
+     - ``8080``
+   * - ``http.proxy.username``
+     - 프록시 인증의 사용자 이름(임의. 지정하면 Basic 인증이 활성화됨)
+     - ``""``
+   * - ``http.proxy.password``
+     - 프록시 인증의 비밀번호
+     - ``""``
+
+.. note::
+   Ollama는 일반적으로 로컬 또는 내부 네트워크에서 동작하므로, 프록시 설정이 필요한 경우는 제한적인 케이스(사내 프록시를 통해서만 도달할 수 있는 원격 Ollama 서버를 이용하는 경우 등)에 한정됩니다.
+   이 설정은 크롤러 등 |Fess| 전체의 HTTP 액세스에도 영향을 미칩니다.
 
 모델 선택 가이드
 ==================

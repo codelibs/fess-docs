@@ -51,8 +51,8 @@ Download the following files:
 
     $ mkdir fess-docker
     $ cd fess-docker
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose.yaml
-    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose-opensearch3.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose.yaml
+    $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose-opensearch3.yaml
 
 Method 2: Clone Repository with Git
 ------------------------------------
@@ -61,7 +61,7 @@ If Git is installed, you can also clone the entire repository:
 
 ::
 
-    $ git clone --depth 1 --branch v15.6.0 https://github.com/codelibs/docker-fess.git
+    $ git clone --depth 1 --branch v15.6.1 https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
 Step 2: Review Docker Compose Files
@@ -303,7 +303,7 @@ you can apply settings edited on the host side to the container.
 
 2. Get the configuration file template (first time only)::
 
-       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.6.0/src/main/resources/fess_config.properties
+       $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.6.1/src/main/resources/fess_config.properties
 
 3. Edit ``/path/to/fess-config/fess_config.properties`` to add required settings::
 

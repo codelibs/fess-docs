@@ -34,7 +34,7 @@ Fess 시작
 
 ::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess
 
 백그라운드에서 시작하는 경우::
@@ -68,8 +68,8 @@ Fess 시작
 
 또는 명령 프롬프트에서::
 
-    C:\> cd C:\fess-15.6.0
-    C:\fess-15.6.0> bin\fess.bat
+    C:\> cd C:\fess-15.6.1
+    C:\fess-15.6.1> bin\fess.bat
 
 RPM/DEB 버전의 경우 (chkconfig)
 --------------------------
@@ -148,7 +148,7 @@ Docker Compose를 사용하여 시작::
 
 TAR.GZ/ZIP 버전::
 
-    $ tail -f /path/to/fess-15.6.0/logs/fess.log
+    $ tail -f /path/to/fess-15.6.1/logs/fess.log
 
 RPM/DEB 버전::
 

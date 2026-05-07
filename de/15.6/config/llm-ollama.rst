@@ -185,6 +185,18 @@ Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellunge
    * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
      - Maximale Anzahl relevanter Dokumente bei der Bewertung
      - ``3``
+   * - ``rag.llm.ollama.concurrency.wait.timeout``
+     - Wartezeit bei gleichzeitigen Anfragen (Millisekunden)
+     - ``30000``
+   * - ``rag.llm.ollama.connect.timeout``
+     - TCP-Verbindungs-Timeout (Millisekunden). Kann unabhängig von ``rag.llm.ollama.timeout`` angegeben werden
+     - ``5000``
+   * - ``rag.llm.ollama.retry.max``
+     - Maximale Anzahl von HTTP-Wiederholungsversuchen (bei ``429`` und ``5xx``-Fehlern)
+     - ``3``
+   * - ``rag.llm.ollama.retry.base.delay.ms``
+     - Basisverzögerung des exponentiellen Backoffs (in Millisekunden)
+     - ``2000``
 
 Gleichzeitigkeitssteuerung
 ---------------------------
@@ -302,37 +314,45 @@ Netzwerkkonfiguration
 Docker-Konfiguration
 --------------------
 
-Beispielkonfiguration, wenn sowohl |Fess| als auch Ollama in Docker laufen.
-
-``docker-compose.yml``:
+Das offizielle `docker-fess <https://github.com/codelibs/docker-fess>`__ Repository
+liefert ein Ollama-Overlay (``compose-ollama.yaml``) mit. Die minimalen Schritte sind:
 
 ::
 
-    version: '3'
-    services:
-      fess:
-        image: codelibs/fess:15.6.0
-        environment:
-          - RAG_CHAT_ENABLED=true
-          - RAG_LLM_NAME=ollama
-          - RAG_LLM_OLLAMA_API_URL=http://ollama:11434
-          - RAG_LLM_OLLAMA_MODEL=gemma4:e4b
-        depends_on:
-          - ollama
-        # ... weitere Einstellungen
+    docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    docker exec -it ollama01 ollama pull gemma4:e4b
 
-      ollama:
-        image: ollama/ollama
-        volumes:
-          - ollama_data:/root/.ollama
+Inhalt von ``compose-ollama.yaml`` (als Referenz für eigenes Setup):
+
+.. code-block:: yaml
+
+    services:
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-ollama:15.6.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+        depends_on:
+          - ollama01
+
+      ollama01:
+        image: ollama/ollama:latest
         ports:
           - "11434:11434"
+        volumes:
+          - ollama-data:/root/.ollama
 
     volumes:
-      ollama_data:
+      ollama-data:
+
+Hinweise:
+
+- ``FESS_PLUGINS=fess-llm-ollama:15.6.0`` lässt das ``run.sh`` des Containers das Plugin automatisch herunterladen und in ``app/WEB-INF/plugin/`` installieren
+- ``-Dfess.config.rag.chat.enabled=true`` aktiviert den AI-Modus
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` setzt die URL des Ollama-Servers (innerhalb des Docker-Compose-Netzwerks wird der Servicename wie ``ollama01`` aufgelöst)
+- ``-Dfess.system.rag.llm.name=ollama`` wirkt nur als initialer Default, bevor ein Wert in OpenSearch persistiert wurde. Nach dem Start kann der Wert auch unter Administration > System > Allgemein (RAG-Sektion) geändert werden
 
 .. note::
-   In Docker Compose-Umgebungen verwenden Sie ``ollama`` als Hostnamen (nicht ``localhost``).
+   Großgeschriebene Snake-Case-Umgebungsvariablen wie ``RAG_CHAT_ENABLED`` oder ``RAG_LLM_NAME`` werden von |Fess| nicht direkt erkannt. Konfigurationswerte müssen stets innerhalb von ``FESS_JAVA_OPTS`` als ``-Dfess.config.<key>`` (für ``fess_config.properties``) oder ``-Dfess.system.<key>`` (für ``system.properties``) übergeben werden.
 
 Remote Ollama-Server
 --------------------
@@ -345,6 +365,35 @@ Wenn Ollama auf einem separaten Server als Fess läuft:
 
 .. warning::
    Ollama hat standardmäßig keine Authentifizierungsfunktion. Bei externem Zugriff sollten Sie Sicherheitsmaßnahmen auf Netzwerkebene (Firewall, VPN usw.) in Betracht ziehen.
+
+HTTP-Proxy verwenden
+====================
+
+Seit |Fess| 15.6.1 nutzt der Ollama-Client die globale HTTP-Proxy-Konfiguration von |Fess|. Wenn die Verbindung zum Ollama-Server über einen Proxy erfolgen muss (z. B. bei Verwendung eines Remote-Ollama-Servers), geben Sie die folgenden Eigenschaften in ``fess_config.properties`` an.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``http.proxy.host``
+     - Proxy-Hostname (bei leerer Zeichenkette wird kein Proxy verwendet)
+     - ``""``
+   * - ``http.proxy.port``
+     - Proxy-Portnummer
+     - ``8080``
+   * - ``http.proxy.username``
+     - Benutzername für die Proxy-Authentifizierung (optional; wenn angegeben, wird Basic-Authentifizierung aktiviert)
+     - ``""``
+   * - ``http.proxy.password``
+     - Passwort für die Proxy-Authentifizierung
+     - ``""``
+
+.. note::
+   Da Ollama in der Regel lokal oder in einem internen Netzwerk betrieben wird, ist eine Proxy-Konfiguration nur in begrenzten Fällen notwendig (z. B. bei Verwendung eines Remote-Ollama-Servers, der nur über einen Unternehmens-Proxy erreichbar ist).
+   Diese Einstellung wirkt sich auch auf den HTTP-Zugriff von |Fess| insgesamt (z. B. Crawler) aus.
 
 Modellauswahl-Leitfaden
 ========================

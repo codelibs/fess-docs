@@ -67,7 +67,7 @@ TAR.GZ/ZIP 버전 제거
 
 설치 디렉터리를 삭제합니다::
 
-    $ rm -rf /path/to/fess-15.6.0
+    $ rm -rf /path/to/fess-15.6.1
 
 단계 2: OpenSearch 삭제
 --------------------------
@@ -269,7 +269,7 @@ Fess 관련 볼륨 삭제::
 Docker 이미지를 삭제하여 디스크 공간을 확보하는 경우::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.6.0
+    $ docker rmi codelibs/fess:15.6.1
 
     $ docker images | grep opensearch
     $ docker rmi opensearchproject/opensearch:3.6.0
@@ -319,7 +319,7 @@ Docker Compose가 생성한 네트워크를 삭제::
 
 TAR.GZ/ZIP 버전::
 
-    $ ls /path/to/fess-15.6.0  # 디렉터리가 존재하지 않는지 확인
+    $ ls /path/to/fess-15.6.1  # 디렉터리가 존재하지 않는지 확인
 
 RPM/DEB 버전::
 

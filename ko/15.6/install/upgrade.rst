@@ -162,13 +162,13 @@ TAR.GZ/ZIP 버전
 
 1. 새 버전 다운로드 및 압축 해제::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.tar.gz
-       $ tar -xzf fess-15.6.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.tar.gz
+       $ tar -xzf fess-15.6.1.tar.gz
 
 2. 이전 버전 설정 복사::
 
-       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.6.0/app/WEB-INF/conf/
-       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.6.0/bin/
+       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.6.1/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.6.1/bin/
 
 3. 설정 차이를 확인하고 필요에 따라 조정합니다
 
@@ -178,10 +178,10 @@ RPM/DEB 버전
 새 버전 패키지를 설치::
 
     # RPM
-    $ sudo rpm -Uvh fess-15.6.0.rpm
+    $ sudo rpm -Uvh fess-15.6.1.rpm
 
     # DEB
-    $ sudo dpkg -i fess-15.6.0.deb
+    $ sudo dpkg -i fess-15.6.1.deb
 
 .. note::
 
@@ -193,8 +193,8 @@ Docker 버전
 
 1. 새 버전의 Compose 파일 가져오기::
 
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose.yaml
-       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.0/compose/compose-opensearch3.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.6.1/compose/compose-opensearch3.yaml
 
 2. 새 이미지 가져오기::
 
@@ -228,7 +228,7 @@ OpenSearch도 업그레이드하는 경우 다음 절차를 따르십시오.
 
 TAR.GZ/ZIP 버전::
 
-    $ cd /path/to/fess-15.6.0
+    $ cd /path/to/fess-15.6.1
     $ ./bin/fess -d
 
 RPM/DEB 버전::

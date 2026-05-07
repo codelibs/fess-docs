@@ -116,9 +116,9 @@ TAR.GZ 版でのインストール
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.tar.gz
-       $ tar -xzf fess-15.6.0.tar.gz
-       $ cd fess-15.6.0
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.tar.gz
+       $ tar -xzf fess-15.6.1.tar.gz
+       $ cd fess-15.6.1
 
 2. Fess の設定
 
@@ -210,8 +210,8 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.rpm
-       $ sudo rpm -ivh fess-15.6.0.rpm
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.rpm
+       $ sudo rpm -ivh fess-15.6.1.rpm
 
 2. Fess の設定
 
@@ -300,8 +300,8 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.0/fess-15.6.0.deb
-       $ sudo dpkg -i fess-15.6.0.deb
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.6.1/fess-15.6.1.deb
+       $ sudo dpkg -i fess-15.6.1.deb
 
 2. Fess の設定
 
