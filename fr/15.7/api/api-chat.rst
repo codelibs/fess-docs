@@ -1,490 +1,459 @@
 ==========================
-API Chat
+Chat API
 ==========================
 
-Apercu
-====
+Vue d'ensemble
+==============
 
-L'API Chat est une API RESTful permettant d'acceder par programmation a la fonctionnalite de mode de recherche IA de |Fess|.
-Vous pouvez obtenir des reponses assistees par IA basees sur les resultats de recherche.
+La Chat API est une API v2 permettant d'accéder par programmation à la fonctionnalité de mode de recherche IA (chat RAG) de |Fess|.
+Vous pouvez obtenir des réponses générées par un LLM basées sur les résultats de recherche (complétion).
 
-Cette API fournit deux endpoints :
+Cette API fournit les trois points de terminaison suivants.
 
-- **API non-streaming** : Obtient la reponse complete en une seule fois
-- **API streaming** : Obtient la reponse en temps reel au format Server-Sent Events (SSE)
+.. tabularcolumns:: |p{6cm}|p{9cm}|
+.. list-table::
+   :header-rows: 1
 
-Prerequis
-========
+   * - Point de terminaison
+     - Description
+   * - ``POST /chat``
+     - Complétion RAG en mode groupé (non-streaming).
+   * - ``POST /chat/stream``
+     - Complétion RAG en mode streaming (Server-Sent Events).
+   * - ``DELETE /chat/sessions/{session_id}``
+     - Effacement de l'historique de conversation d'une session de chat.
 
-Pour utiliser l'API Chat, les configurations suivantes sont necessaires :
-
-1. La fonctionnalite de mode de recherche IA doit etre activee (``rag.chat.enabled=true``)
-2. Un fournisseur LLM doit etre configure
-
-Pour les methodes de configuration detaillees, consultez :doc:`../config/rag-chat`.
-
-API non-streaming
-===================
-
-Endpoint
---------------
+Pour l'URL de base ainsi que l'enveloppe de réponse commune et les codes d'erreur, voir :doc:`api-overview`.
 
 ::
 
-    POST /api/v1/chat
+    http://<Server Name>/api/v2/
 
-Parametres de requete
-----------------------
+Exemple en environnement local :
 
-.. list-table::
+::
+
+    http://localhost:8080/api/v2
+
+Prérequis
+=========
+
+Pour utiliser la Chat API, les conditions suivantes doivent être réunies.
+
+1. La fonctionnalité de mode de recherche IA (chat RAG) doit être activée (``rag.chat.enabled=true``)
+2. Un fournisseur LLM doit être configuré
+
+Si la fonctionnalité est désactivée (``rag.chat.enabled=false``), les requêtes retournent une erreur ``invalid_request``.
+
+Pour les méthodes de configuration détaillées, voir :doc:`../config/rag-chat` et :doc:`../config/llm-overview`.
+
+Authentification et CSRF
+=========================
+
+Tous les points de terminaison de la Chat API étant des requêtes modifiant l'état (``POST`` / ``DELETE``), l'en-tête ``X-Fess-CSRF-Token`` est requis.
+Pour les détails sur l'obtention du jeton CSRF ainsi que sur l'authentification et la session, voir :doc:`api-overview`.
+
+Limite de débit
+===============
+
+``POST /chat`` et ``DELETE /chat/sessions/{session_id}`` sont soumis à une limite de débit par utilisateur.
+
+- Valeur par défaut : 30 requêtes par minute (par utilisateur)
+- Clé de configuration : ``api.v2.chat.rate.limit.per.user.per.minute``
+
+En cas de dépassement, une erreur ``rate_limited`` (HTTP 429) est retournée. L'en-tête ``Retry-After`` indique le nombre de secondes d'attente.
+Cette limite de débit est partagée entre ``POST /chat`` et ``DELETE /chat/sessions/{session_id}``.
+
+POST /chat
+==========
+
+Effectue une complétion de chat synchrone.
+La session est identifiée par ``session_id``. Si ``session_id`` est omis, le serveur crée une session et la retourne dans ``session_id`` de la réponse.
+
+Les valeurs incorrectes transmises dans ``fields.label`` ou ``extra_queries`` sont silencieusement supprimées de la requête résolue et ne se propagent pas dans l'enveloppe de réponse.
+
+Point de terminaison
+--------------------
+
+::
+
+    POST /api/v2/chat
+
+Corps de la requête
+-------------------
+
+Corps JSON avec ``Content-Type: application/json``.
+
+.. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
+.. list-table:: ChatRequest
    :header-rows: 1
-   :widths: 20 15 15.70
 
-   * - Parametre
+   * - Champ
      - Type
-     - Requis
+     - Obligatoire
      - Description
    * - ``message``
-     - String
+     - string
      - Oui
-     - Message de l'utilisateur (question)
-   * - ``sessionId``
-     - String
+     - Message de l'utilisateur (question).
+   * - ``session_id``
+     - string
      - Non
-     - ID de session. A specifier pour continuer une conversation
-   * - ``clear``
-     - String
+     - Identifiant de session. Si omis, le serveur le crée et le retourne dans la réponse.
+   * - ``fields``
+     - object
      - Non
-     - Specifier ``"true"`` pour effacer la session
+     - Champs de filtre optionnels pour l'étape de récupération.
+   * - ``fields.label``
+     - string / string[]
+     - Non
+     - Restreint la récupération aux étiquettes figurant dans la liste d'autorisation.
+   * - ``extra_queries``
+     - string / string[]
+     - Non
+     - Expressions de requêtes de facette figurant dans la liste d'autorisation.
 
-Reponse
-----------
-
-**Succes (HTTP 200)**
+Exemple de requête :
 
 .. code-block:: json
 
     {
-      "status": "ok",
-      "sessionId": "abc123def456",
-      "content": "Fess est un serveur de recherche full-text. Ses principales caracteristiques sont...",
-      "sources": [
-        {
-          "title": "Apercu de Fess",
-          "url": "https://fess.codelibs.org/ja/overview.html"
-        },
-        {
-          "title": "Liste des fonctionnalites",
-          "url": "https://fess.codelibs.org/ja/features.html"
-        }
-      ]
+      "message": "Fessとは何ですか？",
+      "session_id": "abc123def456",
+      "fields": {
+        "label": "news"
+      },
+      "extra_queries": "label:faq"
     }
 
-**Erreur**
+Réponse
+-------
+
+**En cas de succès (HTTP 200, ChatResponse)**
+
+La réponse est encapsulée dans l'enveloppe commune ``response``. ``session_id`` est toujours présent.
+
+.. tabularcolumns:: |p{3cm}|p{2.5cm}|p{9cm}|
+.. list-table:: Éléments de response
+   :header-rows: 1
+
+   * - Champ
+     - Type
+     - Description
+   * - ``session_id``
+     - string
+     - Identifiant de session.
+   * - ``content``
+     - string (nullable)
+     - Texte du message généré. Toujours présent, mais peut valoir ``null`` si le modèle n'a pas produit de contenu.
+   * - ``sources``
+     - array
+     - Tableau des documents sources référencés. Chaque élément est un ChatSource.
+
+**ChatSource**
+
+.. tabularcolumns:: |p{3cm}|p{2.5cm}|p{9cm}|
+.. list-table:: Éléments de ChatSource
+   :header-rows: 1
+
+   * - Champ
+     - Type
+     - Description
+   * - ``rank``
+     - integer
+     - Position à base 1 dans l'ensemble récupéré.
+   * - ``title``
+     - string (nullable)
+     - Titre du document.
+   * - ``url``
+     - string (nullable)
+     - URL du document.
+   * - ``doc_id``
+     - string (nullable)
+     - Identifiant du document.
+   * - ``snippet``
+     - string (nullable)
+     - Extrait du document.
+   * - ``url_link``
+     - string (nullable)
+     - Lien URL d'affichage.
+   * - ``go_url``
+     - string (nullable)
+     - URL de redirection.
+
+Exemple de réponse :
 
 .. code-block:: json
 
     {
-      "status": "error",
-      "message": "Message is required"
+      "response": {
+        "status": 0,
+        "session_id": "abc123def456",
+        "content": "Fessは全文検索サーバーです。主な特徴として...",
+        "sources": [
+          {
+            "rank": 1,
+            "title": "Fessの概要",
+            "url": "https://fess.codelibs.org/ja/overview.html",
+            "doc_id": "abcdef0123456789",
+            "snippet": "Fessは...",
+            "url_link": "https://fess.codelibs.org/ja/overview.html",
+            "go_url": "/go/?docId=abcdef0123456789"
+          }
+        ]
+      }
     }
 
 Codes de statut HTTP
 --------------------
 
+.. tabularcolumns:: |p{2cm}|p{13cm}|
 .. list-table::
    :header-rows: 1
-   :widths: 15 85
 
    * - Code
      - Description
    * - 200
-     - Requete reussie
+     - Requête réussie.
    * - 400
-     - Parametre de requete invalide (message vide, etc.)
+     - Requête incorrecte (``message`` manquant, ``rag.chat.enabled=false``, etc.).
+   * - 403
+     - Jeton CSRF manquant ou expiré, etc.
    * - 404
-     - Endpoint non trouve
+     - Ressource introuvable.
    * - 405
-     - Methode HTTP non autorisee (seul POST est autorise)
+     - La méthode HTTP n'est pas autorisée.
+   * - 413
+     - Le corps de la requête dépasse la limite de taille.
+   * - 415
+     - ``Content-Type`` non pris en charge.
+   * - 429
+     - Limite de débit dépassée.
    * - 500
-     - Erreur interne du serveur
+     - Erreur interne du serveur.
 
-Exemples d'utilisation
-------
-
-cURL
-~~~~
+Exemple cURL
+------------
 
 .. code-block:: bash
 
-    # Demarrer un nouveau chat
-    curl -X POST "http://localhost:8080/api/v1/chat" \
-         -d "message=Qu'est-ce que Fess ?"
+    curl -X POST "http://localhost:8080/api/v2/chat" \
+         -H "Content-Type: application/json" \
+         -H "X-Fess-CSRF-Token: <token>" \
+         -d '{"message":"Fessとは何ですか？","session_id":"abc123def456"}'
 
-    # Continuer la conversation
-    curl -X POST "http://localhost:8080/api/v1/chat" \
-         -d "message=Comment l'installer ?" \
-         -d "sessionId=abc123def456"
-
-    # Effacer la session
-    curl -X POST "http://localhost:8080/api/v1/chat" \
-         -d "sessionId=abc123def456" \
-         -d "clear=true"
-
-JavaScript
-~~~~~~~~~~
-
-.. code-block:: javascript
-
-    async function chat(message, sessionId = null) {
-      const params = new URLSearchParams();
-      params.append('message', message);
-      if (sessionId) {
-        params.append('sessionId', sessionId);
-      }
-
-      const response = await fetch('/api/v1/chat', {
-        method: 'POST',
-        body: params
-      });
-
-      return await response.json();
-    }
-
-    // Exemple d'utilisation
-    const result = await chat('Quelles sont les fonctionnalites de Fess ?');
-    console.log(result.content);
-    console.log('Session ID:', result.sessionId);
-
-Python
-~~~~~~
-
-.. code-block:: python
-
-    import requests
-
-    def chat(message, session_id=None):
-        data = {'message': message}
-        if session_id:
-            data['sessionId'] = session_id
-
-        response = requests.post(
-            'http://localhost:8080/api/v1/chat',
-            data=data
-        )
-        return response.json()
-
-    # Exemple d'utilisation
-    result = chat("Comment installer Fess ?")
-    print(result['content'])
-    print(f"Session ID: {result['sessionId']}")
-
-API streaming
+POST /chat/stream
 =================
 
-Endpoint
---------------
+Effectue une complétion de chat en mode streaming.
+Le corps de la requête est identique à ``POST /chat`` (ChatRequest).
+
+La réponse de succès est une séquence d'événements nommés au format ``text/event-stream`` (Server-Sent Events).
+Chaque événement est composé de ``event: <nom>`` et ``data: <JSON>``.
+
+Les échecs de validation avant le démarrage du stream retournent toujours une enveloppe JSON (mêmes codes d'erreur que ``POST /chat``).
+Les valeurs incorrectes dans ``fields.label`` ou ``extra_queries`` sont silencieusement supprimées et ne se propagent ni dans l'enveloppe de réponse ni dans les événements SSE.
+
+Point de terminaison
+--------------------
 
 ::
 
-    POST /api/v1/chat/stream
-    GET /api/v1/chat/stream
+    POST /api/v2/chat/stream
 
-Parametres de requete
-----------------------
+Événements SSE
+--------------
 
+.. tabularcolumns:: |p{2.5cm}|p{12.5cm}|
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
 
-   * - Parametre
-     - Type
-     - Requis
-     - Description
-   * - ``message``
-     - String
-     - Oui
-     - Message de l'utilisateur (question)
-   * - ``sessionId``
-     - String
-     - Non
-     - ID de session. A specifier pour continuer une conversation
+   * - Événement
+     - Description (charge utile)
+   * - ``phase``
+     - Transition de phase du pipeline (``{ phase, status, message?, keywords?, hit_count?, ... }``). ``message`` et ``keywords`` sont émis lors de onPhaseStart. Les champs optionnels supplémentaires (ex. : ``hit_count``) proviennent de la charge utile de onPhaseComplete.
+   * - ``chunk``
+     - Fragment de texte généré (``{ content }``).
+   * - ``sources``
+     - Sources récupérées (``{ sources: [ChatSource] }``).
+   * - ``retry``
+     - Backoff d'échec temporaire (``{ phase, operation, attempt, max_attempts, sleep_ms, cause? }``).
+   * - ``waiting``
+     - Progression d'une phase longue (``{ phase, reason, elapsed_ms, timeout_ms }``).
+   * - ``fallback``
+     - Réécriture de requête ou repli de stratégie (``{ phase, reason, original_query?, new_query? }``).
+   * - ``warning``
+     - Avertissement récupérable (``{ phase, code, detail? }``).
+   * - ``done``
+     - Fin du stream (``{ session_id, html_content? }``).
+   * - ``error``
+     - Échec terminal en cours de stream (``{ phase?, message, error_code }``). Le champ ``message`` contient la même chaîne que ``error_code``. Les clients doivent localiser en se basant sur ``error_code``.
 
-Format de reponse
---------------
-
-L'API streaming retourne les reponses au format ``text/event-stream`` (Server-Sent Events).
-
-Chaque evenement est dans le format suivant :
+Exemple de stream SSE :
 
 ::
 
-    event: <nom de l'evenement>
-    data: <donnees JSON>
+    event: phase
+    data: {"phase":"retrieval","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
 
-Evenements SSE
------------
+    event: chunk
+    data: {"content":"Fessは"}
 
-**session**
+    event: sources
+    data: {"sources":[{"rank":1,"title":"インストールガイド","url":"https://fess.codelibs.org/ja/install.html"}]}
 
-Notifie les informations de session. Envoye au debut du stream.
+    event: done
+    data: {"session_id":"abc123def456"}
 
-.. code-block:: json
+Codes de statut HTTP
+--------------------
 
-    {
-      "sessionId": "abc123def456"
-    }
+En cas d'échec de validation avant le démarrage du stream, les codes d'erreur suivants sont retournés dans une enveloppe JSON.
 
-**phase**
+.. tabularcolumns:: |p{2cm}|p{13cm}|
+.. list-table::
+   :header-rows: 1
 
-Notifie le debut/fin des phases de traitement.
+   * - Code
+     - Description
+   * - 200
+     - Démarrage du stream SSE (succès).
+   * - 400
+     - Requête incorrecte (``message`` manquant, ``rag.chat.enabled=false``, etc.).
+   * - 403
+     - Jeton CSRF manquant ou expiré, etc.
+   * - 405
+     - La méthode HTTP n'est pas autorisée.
+   * - 413
+     - Le corps de la requête dépasse la limite de taille.
+   * - 415
+     - ``Content-Type`` non pris en charge.
+   * - 429
+     - Limite de débit dépassée.
+   * - 500
+     - Erreur interne du serveur.
 
-.. code-block:: json
-
-    {
-      "phase": "intent_analysis",
-      "status": "start",
-      "message": "Analyzing user intent..."
-    }
-
-.. code-block:: json
-
-    {
-      "phase": "search",
-      "status": "start",
-      "message": "Searching documents...",
-      "keywords": "Fess installation"
-    }
-
-.. code-block:: json
-
-    {
-      "phase": "search",
-      "status": "complete"
-    }
-
-Types de phases :
-
-- ``intent_analysis`` - Analyse d'intention
-- ``search`` - Execution de la recherche
-- ``evaluation`` - Evaluation des resultats
-- ``generation`` - Generation de la reponse
-
-**chunk**
-
-Notifie les fragments de texte genere.
-
-.. code-block:: json
-
-    {
-      "content": "Fess est"
-    }
-
-**sources**
-
-Notifie les informations sur les documents sources.
-
-.. code-block:: json
-
-    {
-      "sources": [
-        {
-          "title": "Guide d'installation",
-          "url": "https://fess.codelibs.org/ja/install.html"
-        }
-      ]
-    }
-
-**done**
-
-Notifie la fin du traitement.
-
-.. code-block:: json
-
-    {
-      "sessionId": "abc123def456",
-      "htmlContent": "<p>Fess est un serveur de recherche full-text...</p>"
-    }
-
-**error**
-
-Notifie une erreur.
-
-.. code-block:: json
-
-    {
-      "phase": "generation",
-      "message": "LLM request failed"
-    }
-
-Exemples d'utilisation
-------
-
-cURL
-~~~~
+Exemple cURL
+------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/v1/chat/stream" \
-         -d "message=Quelles sont les caracteristiques de Fess ?" \
+    curl -X POST "http://localhost:8080/api/v2/chat/stream" \
+         -H "Content-Type: application/json" \
+         -H "X-Fess-CSRF-Token: <token>" \
          -H "Accept: text/event-stream" \
-         --no-buffer
+         --no-buffer \
+         -d '{"message":"Fessの特徴を教えてください"}'
 
-JavaScript (EventSource)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+DELETE /chat/sessions/{session_id}
+===================================
 
-.. code-block:: javascript
+Efface l'historique de conversation de la session de chat spécifiée.
+La session est identifiée par ``session_id`` dans le chemin.
 
-    function streamChat(message, sessionId = null) {
-      const params = new URLSearchParams();
-      params.append('message', message);
-      if (sessionId) {
-        params.append('sessionId', sessionId);
-      }
+En cas de succès, ``cleared: true`` est retourné. Si aucune session active correspondante n'est trouvée, une erreur ``not_found`` (HTTP 404) est retournée.
 
-      // Utiliser fetch pour les requetes POST
-      return fetch('/api/v1/chat/stream', {
-        method: 'POST',
-        body: params
-      }).then(response => {
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
+Point de terminaison
+--------------------
 
-        function read() {
-          return reader.read().then(({ done, value }) => {
-            if (done) return;
+::
 
-            const text = decoder.decode(value);
-            const lines = text.split('\n');
+    DELETE /api/v2/chat/sessions/{session_id}
 
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = JSON.parse(line.slice(6));
-                handleEvent(data);
-              }
-            }
+Paramètres de chemin
+--------------------
 
-            return read();
-          });
-        }
+.. tabularcolumns:: |p{3cm}|p{2cm}|p{10cm}|
+.. list-table::
+   :header-rows: 1
 
-        return read();
-      });
-    }
+   * - Paramètre
+     - Type
+     - Description
+   * - ``session_id``
+     - string
+     - Identifiant de la session à effacer. minLength 1, maxLength 128, motif ``^[A-Za-z0-9._-]+$``.
 
-    function handleEvent(data) {
-      if (data.content) {
-        // Afficher le chunk
-        document.getElementById('output').textContent += data.content;
-      } else if (data.phase) {
-        // Afficher les informations de phase
-        console.log(`Phase: ${data.phase} - ${data.status}`);
-      } else if (data.sources) {
-        // Afficher les informations sources
-        console.log('Sources:', data.sources);
-      }
-    }
+Réponse
+-------
 
-Python
-~~~~~~
+**En cas de succès (HTTP 200, ChatClearResponse)**
 
-.. code-block:: python
+La réponse est encapsulée dans l'enveloppe commune ``response``. ``session_id`` et ``cleared`` sont toujours présents.
 
-    import requests
+.. tabularcolumns:: |p{3cm}|p{2.5cm}|p{9cm}|
+.. list-table:: Éléments de response
+   :header-rows: 1
 
-    def stream_chat(message, session_id=None):
-        data = {'message': message}
-        if session_id:
-            data['sessionId'] = session_id
+   * - Champ
+     - Type
+     - Description
+   * - ``session_id``
+     - string
+     - Identifiant de session.
+   * - ``cleared``
+     - boolean
+     - Toujours ``true`` (lorsque la session a été trouvée et effacée).
 
-        response = requests.post(
-            'http://localhost:8080/api/v1/chat/stream',
-            data=data,
-            stream=True,
-            headers={'Accept': 'text/event-stream'}
-        )
+Exemple de réponse :
 
-        for line in response.iter_lines():
-            if line:
-                line = line.decode('utf-8')
-                if line.startswith('data: '):
-                    import json
-                    data = json.loads(line[6:])
-                    yield data
+.. code-block:: json
 
-    # Exemple d'utilisation
-    for event in stream_chat('Parlez-moi des fonctionnalites de Fess'):
-        if 'content' in event:
-            print(event['content'], end='', flush=True)
-        elif 'phase' in event:
-            print(f"\n[Phase: {event['phase']} - {event['status']}]")
-
-Gestion des erreurs
-==================
-
-Lors de l'utilisation de l'API, implementez une gestion des erreurs appropriee.
-
-.. code-block:: javascript
-
-    async function chatWithErrorHandling(message, sessionId = null) {
-      try {
-        const params = new URLSearchParams();
-        params.append('message', message);
-        if (sessionId) {
-          params.append('sessionId', sessionId);
-        }
-
-        const response = await fetch('/api/v1/chat', {
-          method: 'POST',
-          body: params
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || 'API request failed');
-        }
-
-        const result = await response.json();
-
-        if (result.status === 'error') {
-          throw new Error(result.message);
-        }
-
-        return result;
-
-      } catch (error) {
-        console.error('Chat API error:', error);
-        throw error;
+    {
+      "response": {
+        "status": 0,
+        "session_id": "abc123def456",
+        "cleared": true
       }
     }
 
-Limitation de debit
-==========
+Codes de statut HTTP
+--------------------
 
-L'API Chat est soumise a une limitation de debit.
+.. tabularcolumns:: |p{2cm}|p{13cm}|
+.. list-table::
+   :header-rows: 1
 
-Configuration par defaut :
+   * - Code
+     - Description
+   * - 200
+     - Session effacée avec succès.
+   * - 400
+     - La requête est incorrecte.
+   * - 401
+     - Authentification requise.
+   * - 403
+     - Jeton CSRF manquant ou expiré, etc.
+   * - 404
+     - Aucune session active correspondante trouvée.
+   * - 405
+     - La méthode HTTP n'est pas autorisée.
+   * - 429
+     - Limite de débit dépassée.
+   * - 500
+     - Erreur interne du serveur.
 
-- 10 requetes par minute
+Exemple cURL
+------------
 
-Lorsque la limite de debit est depassee, une erreur HTTP 429 est retournee.
+.. code-block:: bash
 
-Pour la configuration de la limitation de debit, consultez :doc:`../config/rag-chat`.
+    curl -X DELETE "http://localhost:8080/api/v2/chat/sessions/abc123def456" \
+         -H "X-Fess-CSRF-Token: <token>"
 
-Securite
-============
-
-Points de securite a noter lors de l'utilisation de l'API Chat :
-
-1. **Authentification** : La version actuelle ne necessite pas d'authentification pour l'API, mais envisagez un controle d'acces approprie pour les environnements de production
-2. **Limitation de debit** : Activez la limitation de debit pour prevenir les attaques DoS
-3. **Validation des entrees** : Validez egalement les entrees cote client
-4. **CORS** : Verifiez les parametres CORS si necessaire
-
-Informations de reference
+Sécurité
 ========
 
-- :doc:`../config/rag-chat` - Configuration de la fonctionnalite de mode de recherche IA
-- :doc:`../config/llm-overview` - Apercu de l'integration LLM
+Points de sécurité à noter lors de l'utilisation de la Chat API :
+
+1. **Authentification** : L'API v2 utilise une authentification basée sur les sessions. Pour plus de détails, voir :doc:`api-overview`.
+2. **CSRF** : Les requêtes modifiant l'état nécessitent l'en-tête ``X-Fess-CSRF-Token``.
+3. **Limite de débit** : Une limite de débit par utilisateur (30/minute par défaut) est appliquée pour prévenir les attaques DoS. La clé de configuration est ``api.v2.chat.rate.limit.per.user.per.minute``.
+
+Informations de référence
+=========================
+
+- :doc:`../config/rag-chat` - Configuration de la fonctionnalité de mode de recherche IA
+- :doc:`../config/llm-overview` - Vue d'ensemble de l'intégration LLM
 - :doc:`../user/chat-search` - Guide de recherche par chat pour les utilisateurs
-- :doc:`api-overview` - Apercu des API
+- :doc:`api-overview` - Vue d'ensemble de l'API

@@ -1,6 +1,6 @@
-========================
+=========================
 API de palabras populares
-========================
+=========================
 
 Obtención de lista de palabras populares
 =========================================
@@ -10,11 +10,14 @@ Solicitud
 
 ==================  ====================================================
 Método HTTP         GET
-Endpoint            ``/api/v1/popular-words``
+Endpoint            ``/api/v2/popular-words``
 ==================  ====================================================
 
-Al enviar una solicitud como ``http://<Server Name>/api/v1/popular-words?seed=123`` a |Fess|, puede recibir una lista de las palabras populares registradas en |Fess| en formato JSON.
-Para usar la API de palabras populares, debe habilitar la respuesta de palabras populares en Sistema > Configuración general de la consola de administración.
+Al enviar a |Fess| una solicitud como ``http://<Server Name>/api/v2/popular-words?seed=123``, puede recibir en formato JSON una lista de palabras de búsqueda populares.
+
+Cuando ``web.api.popular.word=false``, esta API devuelve ``invalid_request`` (HTTP 400) (comportamiento equivalente a "unsupported operation" de v1).
+
+Para el sobre de respuesta común y el modelo de errores, consulte :doc:`api-overview`.
 
 Parámetros de solicitud
 -----------------------
@@ -25,43 +28,58 @@ Los parámetros de solicitud disponibles son los siguientes:
 .. list-table:: Parámetros de solicitud
 
    * - seed
-     - Semilla para obtener palabras populares (este valor permite obtener diferentes patrones de palabras)
+     - Semilla para obtener palabras populares (cadena de texto). Este valor permite obtener diferentes patrones de palabras. (Ejemplo) ``seed=123``
    * - label
-     - Nombre de etiqueta filtrada
+     - Nombre de etiqueta para filtrar. Se puede repetir para tratarlo como un array. (Ejemplo) ``label=java``
    * - field
-     - Nombre de campo para generar palabras populares
-
+     - Nombre de campo para generar palabras populares. Se puede repetir para tratarlo como un array. (Ejemplo) ``field=label``
 
 Respuesta
 ---------
 
-Se devuelve una respuesta como la siguiente:
+En caso de éxito, se devuelve una respuesta con el formato de sobre común como la siguiente:
 
 ::
 
     {
-      "record_count": 3,
-      "data": [
-        "python",
-        "java",
-        "javascript"
-      ]
+      "response": {
+        "status": 0,
+        "record_count": 3,
+        "popular_words": [
+          "python",
+          "java",
+          "javascript"
+        ]
+      }
     }
 
-Los elementos son los siguientes:
+Los elementos de ``response`` son los siguientes:
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Información de respuesta
 
    * - record_count
-     - Número de palabras populares registradas
-   * - data
-     - Array de palabras populares
+     - Número de palabras populares (entero).
+   * - popular_words
+     - Array de palabras populares (array de cadenas de texto).
+
+.. note::
+
+   En v2, las palabras populares se devuelven como ``popular_words`` (array de cadenas de texto), no como ``data`` como en v1.
+
+Ejemplos de uso
+===============
+
+Ejemplo de solicitud usando el comando curl:
+
+::
+
+    curl "http://localhost:8080/api/v2/popular-words?seed=123"
 
 Respuesta de error
 ==================
 
-Si la API de palabras populares falla, se devuelve una respuesta de error como la siguiente:
+Si la API de palabras populares falla, se devuelve el sobre de error común. Consulte :doc:`api-overview` para detalles del modelo de errores.
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Respuesta de error
@@ -69,6 +87,8 @@ Si la API de palabras populares falla, se devuelve una respuesta de error como l
    * - Código de estado
      - Descripción
    * - 400 Bad Request
-     - Cuando los parámetros de solicitud son incorrectos
+     - Cuando la solicitud no es válida (incluye el caso en que la funcionalidad está deshabilitada con ``web.api.popular.word=false``). El ``error.code`` es ``invalid_request``.
+   * - 405 Method Not Allowed
+     - Cuando se especifica un método HTTP no admitido.
    * - 500 Internal Server Error
-     - Cuando se produce un error interno del servidor
+     - Cuando se produce un error interno del servidor.

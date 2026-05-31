@@ -2,6 +2,11 @@
 Label API
 =========
 
+This document describes the v2 Label API of |Fess|.
+For the common response envelope and error model, see :doc:`api-overview`.
+
+The base URL is ``http://<Server Name>/api/v2/`` (local environment example: ``http://localhost:8080/api/v2``).
+
 Fetching Labels
 ===============
 
@@ -10,10 +15,10 @@ Request
 
 ==================  ====================================================
 HTTP Method         GET
-Endpoint            ``/api/v1/labels``
+Endpoint            ``/api/v2/labels``
 ==================  ====================================================
 
-By sending a request to |Fess| at ``http://<Server Name>/api/v1/labels``, you can receive a list of labels registered in |Fess| in JSON format.
+Retrieves a list of configured labels registered in |Fess| using the common envelope.
 
 Request Parameters
 ------------------
@@ -23,69 +28,65 @@ There are no available request parameters.
 Response
 --------
 
-The following response is returned:
+On success (200), the following fields are returned directly under ``response`` in the common envelope.
 
 ::
 
     {
-      "record_count": 9,
-      "data": [
-        {
-          "label": "AWS",
-          "value": "aws"
-        },
-        {
-          "label": "Azure",
-          "value": "azure"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "record_count": 2,
+        "labels": [
+          {
+            "label": "AWS",
+            "value": "aws"
+          },
+          {
+            "label": "Azure",
+            "value": "azure"
+          }
+        ]
+      }
     }
 
-Each element is as follows:
+Each field is described below.
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
+.. list-table:: Response Fields
 
-.. list-table::
-
-   * - record_count
-     - Number of registered labels.
-   * - data
-     - Parent element of search results.
-   * - label
+   * - ``record_count``
+     - Number of registered labels (integer).
+   * - ``labels``
+     - Array of labels.
+   * - ``label``
      - Label name.
-   * - value
+   * - ``value``
      - Label value.
 
-Table: Response Information
+Table: Response Fields
 
 Usage Examples
 ==============
 
-Request example using curl command:
+Request example using curl:
 
 ::
 
-    curl "http://localhost:8080/api/v1/labels"
-
-Request example using JavaScript:
-
-::
-
-    fetch('http://localhost:8080/api/v1/labels')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Label list:', data.data);
-      });
+    curl "http://localhost:8080/api/v2/labels"
 
 Error Response
 ==============
 
-When the label API fails, the following error response is returned:
+For details on the error model, see :doc:`api-overview`. The HTTP statuses returned by this endpoint are as follows.
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Error Response
 
    * - Status Code
      - Description
+   * - 405 Method Not Allowed
+     - The HTTP method is not allowed.
    * - 500 Internal Server Error
-     - When an internal server error occurs
+     - An internal server error occurred.
+
+Table: Error Response

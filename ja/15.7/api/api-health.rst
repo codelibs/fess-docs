@@ -2,6 +2,11 @@
 Health API
 ==========
 
+このドキュメントでは、 |Fess| の v2 Health API について説明します。
+共通のレスポンスエンベロープ・エラーモデルについては :doc:`api-overview` を参照してください。
+
+ベースURLは ``http://<Server Name>/api/v2/`` です（ローカル環境の例: ``http://localhost:8080/api/v2`` ）。
+
 状態の取得
 ========
 
@@ -10,51 +15,99 @@ Health API
 
 ==================  ====================================================
 HTTPメソッド         GET
-エンドポイント        ``/api/v1/health``
+エンドポイント        ``/api/v2/health``
 ==================  ====================================================
 
-|Fess| に、 ``http://<Server Name>/api/v1/health`` のリクエストを送ることで、 |Fess| のサーバーの状態をJSON形式で受け取ることができます。
+検索エンジンクラスターの状態スナップショットを返します（ ``monitor`` タグ）。
+HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の場合は 200、 ``red`` の場合は 503 になります。
+
+このエンドポイントはエンベロープの不変条件「 ``status >= 1`` ⇔ HTTP ステータス ``>= 400`` 」を守ります。
+
+- ``green`` / ``yellow`` の場合: 成功エンベロープ（ ``status: 0`` ）で ``engine`` を返します。
+- ``red`` の場合: エラーエンベロープ（ ``status: 9`` , ``error.code: service_unavailable`` ）を返し、エンジンスナップショットを ``error.details.engine`` の下に埋め込みます（監視ツールがクラスターメタデータを解析できるようにするため）。
+
+``engine`` の各フィールドは以下の通りです。
+
+.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. list-table:: engine フィールド
+
+   * - ``cluster_name``
+     - クラスター名（str）。
+   * - ``status``
+     - クラスターの状態。 ``green`` / ``yellow`` / ``red`` のいずれか。
+   * - ``ping_status``
+     - ping のステータス（int）。
+
+表: engine フィールド
 
 リクエストパラメーター
 -----------------
 
-指定できるリクエストパラメーターはありません。
+使用できるリクエストパラメーターはありません。
 
 レスポンス
 --------
 
-以下のようなレスポンスが返ります。
+クラスターが ``green`` / ``yellow`` の場合（200）は、成功エンベロープで ``engine`` が返ります。
 
 ::
 
     {
-      "data": {
-        "status": "green",
-        "timed_out": false
+      "response": {
+        "status": 0,
+        "engine": {
+          "cluster_name": "fess-es",
+          "status": "green",
+          "ping_status": 0
+        }
       }
     }
 
-各要素については以下の通りです。
+クラスターが ``red`` の場合（503）は、エラーエンベロープで返り、エンジンスナップショットが ``error.details.engine`` の下に埋め込まれます。
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: レスポンス情報
+::
 
-   * - data
-     - 検索結果の親要素。
-   * - status
-     - システムのステータス。正常な場合は ``green``、警告がある場合は ``yellow``、エラーがある場合は ``red`` が返却されます。
-   * - timed_out
-     - タイムアウトの有無。指定された時間内にレスポンスが返された場合は ``false``、タイムアウトした場合は ``true`` が返却されます。
+    {
+      "response": {
+        "status": 9,
+        "error": {
+          "code": "service_unavailable",
+          "message": "Cluster is unavailable.",
+          "details": {
+            "engine": {
+              "cluster_name": "fess-es",
+              "status": "red",
+              "ping_status": 2
+            }
+          }
+        }
+      }
+    }
 
-エラーレスポンス
-==============
+使用例
+====
 
-Health APIが失敗した場合、以下のようなエラーレスポンスが返されます。
+curl コマンドでのリクエスト例:
+
+::
+
+    curl "http://localhost:8080/api/v2/health"
+
+レスポンス・エラーレスポンス
+========================
+
+エラーモデルの詳細は :doc:`api-overview` を参照してください。このエンドポイントが返す HTTP ステータスは以下の通りです。
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
-.. list-table:: エラーレスポンス
+.. list-table:: レスポンス一覧
 
    * - ステータスコード
      - 説明
-   * - 500 Internal Server Error
-     - サーバー内部エラーが発生した場合
+   * - 200 OK
+     - クラスターが ``green`` / ``yellow`` で到達可能な場合。成功エンベロープに ``engine`` が含まれます。
+   * - 405 Method Not Allowed
+     - HTTP メソッドが許可されていない場合。
+   * - 503 Service Unavailable
+     - クラスターが ``red`` の場合。エラーエンベロープ（ ``error.code: service_unavailable`` ）で ``error.details.engine`` にエンジンスナップショットが含まれます。
+
+表: レスポンス一覧

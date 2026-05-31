@@ -1,93 +1,125 @@
-=========================
+==========================
 Démarrage rapide de l'API
-=========================
+==========================
 
-Cette page fournit un guide pratique pour commencer rapidement à utiliser l'API |Fess|.
+Cette page fournit un guide pratique pour commencer rapidement à utiliser l'API |Fess| (v2).
 
-Démarrez en 5 minutes
-======================
+Commencer en 5 minutes
+=======================
 
 Prérequis
 ---------
 
 - |Fess| est en cours d'exécution (accessible à http://localhost:8080/)
-- La réponse JSON est activée dans Panneau d'administration > Système > Général
 
-Essayez l'API de recherche
---------------------------
+Essayer l'API de recherche
+---------------------------
+
+Le point de terminaison de recherche v2 est ``GET /api/v2/search``.
 
 **Exemples de commandes curl :**
 
 .. code-block:: bash
 
     # Recherche simple
-    curl "http://localhost:8080/api/v1/documents?q=fess"
+    curl "http://localhost:8080/api/v2/search?q=fess"
 
     # Obtenir 20 résultats de recherche
-    curl "http://localhost:8080/api/v1/documents?q=fess&num=20"
+    curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
     # Obtenir la page 2 (à partir du résultat 21)
-    curl "http://localhost:8080/api/v1/documents?q=fess&start=20"
+    curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # Recherche avec filtre par étiquette
-    curl "http://localhost:8080/api/v1/documents?q=fess&fields.label=docs"
+    curl "http://localhost:8080/api/v2/search?q=fess&fields.label=docs"
 
     # Recherche avec facettes (agrégations)
-    curl "http://localhost:8080/api/v1/documents?q=fess&facet.field=label"
+    curl "http://localhost:8080/api/v2/search?q=fess&facet.field=label"
 
-    # Recherche avec caractères spéciaux (encodés en URL)
-    curl "http://localhost:8080/api/v1/documents?q=search%20engine"
+    # Recherche en japonais (encodé en URL)
+    curl "http://localhost:8080/api/v2/search?q=%E6%A4%9C%E7%B4%A2"
+
+**Exemple de réponse (formatée) :**
+
+Les réponses v2 sont encapsulées dans l'enveloppe ``response``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "q": "fess",
+        "record_count": 125,
+        "page_size": 20,
+        "page_number": 1,
+        "data": [
+          {
+            "title": "Fess - オープンソース全文検索サーバー",
+            "url": "https://fess.codelibs.org/ja/",
+            "content_description": "<strong>Fess</strong>は簡単に構築できる...",
+            "host": "fess.codelibs.org",
+            "mimetype": "text/html"
+          }
+        ]
+      }
+    }
+
+Essayer l'API de suggestions
+------------------------------
+
+Le point de terminaison de suggestions est ``GET /api/v2/suggest-words``.
+
+.. code-block:: bash
+
+    # Obtenir des suggestions
+    curl "http://localhost:8080/api/v2/suggest-words?q=fes"
 
 **Exemple de réponse (formatée) :**
 
 .. code-block:: json
 
     {
-      "q": "fess",
-      "exec_time": 0.15,
-      "record_count": 125,
-      "page_size": 20,
-      "page_number": 1,
-      "data": [
-        {
-          "title": "Fess - Open Source Enterprise Search Server",
-          "url": "https://fess.codelibs.org/",
-          "content_description": "<strong>Fess</strong> is an easy to deploy...",
-          "host": "fess.codelibs.org",
-          "mimetype": "text/html"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "q": "fes",
+        "suggest_words": [
+          { "text": "fess", "types": ["document"] }
+        ]
+      }
     }
 
-Essayez l'API de suggestion
-----------------------------
+Essayer l'API des étiquettes
+------------------------------
 
 .. code-block:: bash
 
-    # Obtenir des suggestions
-    curl "http://localhost:8080/api/v1/suggest?q=fes"
+    # Obtenir la liste des étiquettes disponibles
+    curl "http://localhost:8080/api/v2/labels"
 
-    # Exemple de réponse
-    # {"q":"fes","result":[{"text":"fess","kind":"document"}]}
+Essayer l'API de contrôle de santé
+------------------------------------
 
-Essayez l'API d'étiquettes
-----------------------------
-
-.. code-block:: bash
-
-    # Obtenir les étiquettes disponibles
-    curl "http://localhost:8080/api/v1/labels"
-
-Essayez l'API de vérification de santé
-----------------------------------------
+Le point de terminaison de contrôle de santé est ``GET /api/v2/health``.
 
 .. code-block:: bash
 
-    # Vérifier l'état du serveur
-    curl "http://localhost:8080/api/v1/health"
+    # Vérifier l'état du serveur (cluster du moteur de recherche)
+    curl "http://localhost:8080/api/v2/health"
 
-    # Exemple de réponse
-    # {"data":{"status":"green","cluster_name":"fess"}}
+**Exemple de réponse (formatée) :**
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "engine": {
+          "cluster_name": "fess",
+          "status": "green",
+          "ping_status": 200
+        }
+      }
+    }
 
 Utilisation avec Postman
 =========================
@@ -102,36 +134,38 @@ Configuration de la collection
 
 **API de recherche :**
 
-- Méthode : ``GET``
-- URL : ``http://localhost:8080/api/v1/documents``
-- Paramètres de requête :
+- Method: ``GET``
+- URL: ``http://localhost:8080/api/v2/search``
+- Query Parameters:
   - ``q`` : Mot-clé de recherche
   - ``num`` : Nombre de résultats (optionnel)
   - ``start`` : Position de départ (optionnel)
 
-**API de suggestion :**
+**API de suggestions :**
 
-- Méthode : ``GET``
-- URL : ``http://localhost:8080/api/v1/suggest``
-- Paramètres de requête :
+- Method: ``GET``
+- URL: ``http://localhost:8080/api/v2/suggest-words``
+- Query Parameters:
   - ``q`` : Chaîne de caractères saisie
 
-**API d'étiquettes :**
+**API des étiquettes :**
 
-- Méthode : ``GET``
-- URL : ``http://localhost:8080/api/v1/labels``
+- Method: ``GET``
+- URL: ``http://localhost:8080/api/v2/labels``
 
 Variables d'environnement
 --------------------------
 
 Nous recommandons d'utiliser les variables d'environnement Postman pour gérer les URL des serveurs.
 
-1. Créez un nouvel environnement dans « Environnements »
+1. Créez un nouvel environnement dans « Environments »
 2. Ajoutez la variable : ``fess_url`` = ``http://localhost:8080``
-3. Modifiez l'URL de la requête en ``{{fess_url}}/api/v1/documents``
+3. Modifiez l'URL de la requête en ``{{fess_url}}/api/v2/search``
 
 Exemples de code par langage de programmation
 ==============================================
+
+Tous les exemples ci-dessous appellent ``GET /api/v2/search`` et référencent l'enveloppe ``response``.
 
 Python
 ------
@@ -139,27 +173,26 @@ Python
 .. code-block:: python
 
     import requests
-    import urllib.parse
 
-    # URL du serveur Fess
+    # Fess サーバーのURL
     FESS_URL = "http://localhost:8080"
 
     def search(query, num=20, start=0):
-        """Appeler l'API de recherche Fess"""
+        """Fess検索APIを呼び出す"""
         params = {
             "q": query,
             "num": num,
             "start": start
         }
-        response = requests.get(f"{FESS_URL}/api/v1/documents", params=params)
+        response = requests.get(f"{FESS_URL}/api/v2/search", params=params)
         return response.json()
 
-    # Exemple d'utilisation
-    results = search("enterprise search")
-    print(f"Nombre total de résultats : {results['record_count']}")
-    for doc in results['data']:
+    # 使用例
+    results = search("Fess 検索")
+    print(f"ヒット件数: {results['response']['record_count']}")
+    for doc in results["response"]["data"]:
         print(f"- {doc['title']}")
-        print(f"  URL : {doc['url']}")
+        print(f"  URL: {doc['url']}")
 
 JavaScript (Node.js)
 --------------------
@@ -172,39 +205,18 @@ JavaScript (Node.js)
 
     async function search(query, num = 20, start = 0) {
       const params = new URLSearchParams({ q: query, num, start });
-      const response = await fetch(`${FESS_URL}/api/v1/documents?${params}`);
+      const response = await fetch(`${FESS_URL}/api/v2/search?${params}`);
       return response.json();
     }
 
-    // Exemple d'utilisation
-    search('enterprise search').then(results => {
-      console.log(`Nombre total de résultats : ${results.record_count}`);
-      results.data.forEach(doc => {
+    // 使用例
+    search('Fess 検索').then(results => {
+      console.log(`ヒット件数: ${results.response.record_count}`);
+      results.response.data.forEach(doc => {
         console.log(`- ${doc.title}`);
-        console.log(`  URL : ${doc.url}`);
+        console.log(`  URL: ${doc.url}`);
       });
     });
-
-JavaScript (Navigateur)
-------------------------
-
-.. code-block:: javascript
-
-    // Utilisation de JSONP
-    function search(query, callback) {
-      const script = document.createElement('script');
-      const url = `http://localhost:8080/api/v1/documents?q=${encodeURIComponent(query)}&callback=${callback}`;
-      script.src = url;
-      document.body.appendChild(script);
-    }
-
-    // Fonction de rappel
-    function handleResults(results) {
-      console.log(`Nombre total de résultats : ${results.record_count}`);
-    }
-
-    // Exemple d'utilisation
-    search('Fess', 'handleResults');
 
 Java
 ----
@@ -225,7 +237,7 @@ Java
         public String search(String query) throws Exception {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(FESS_URL + "/api/v1/documents?q=" + encodedQuery))
+                .uri(URI.create(FESS_URL + "/api/v2/search?q=" + encodedQuery))
                 .GET()
                 .build();
 
@@ -236,35 +248,36 @@ Java
 
         public static void main(String[] args) throws Exception {
             FessApiClient client = new FessApiClient();
-            String result = client.search("enterprise search");
+            String result = client.search("Fess 検索");
             System.out.println(result);
         }
     }
 
-Compatibilité des versions de l'API
-=====================================
+Tableau de compatibilité des versions d'API
+=============================================
 
 .. list-table::
    :header-rows: 1
    :widths: 20 20 60
 
    * - Version de Fess
-     - Version de l'API
+     - Version d'API
      - Notes
    * - 15.x
-     - v1
-     - Dernière version. Support complet des fonctionnalités
+     - v2
+     - Dernière version. Support de toutes les fonctionnalités
    * - 14.x
      - v1
-     - API similaire. Quelques différences de paramètres possibles
+     - Ancienne API uniquement
    * - 13.x
      - v1
-     - Support basique de l'API
+     - Support des fonctionnalités de base
 
 .. note::
 
-   La compatibilité de l'API est maintenue, mais les nouvelles fonctionnalités ne sont disponibles que dans la dernière version.
-   Pour les différences détaillées entre les versions, consultez les `Notes de version <https://github.com/codelibs/fess/releases>`__.
+   Dans |Fess| 15.7, l'ancienne API de recherche JSON ``/api/v1`` et l'API de chat ont été supprimées.
+   Les clients utilisant ``/api/v1`` doivent migrer vers ``/api/v2``.
+   Pour les différences détaillées entre les versions, consultez les `notes de version <https://github.com/codelibs/fess/releases>`__.
 
 Dépannage
 ==========
@@ -272,33 +285,22 @@ Dépannage
 L'API ne fonctionne pas
 ------------------------
 
-1. **Vérifier que la réponse JSON est activée**
+1. **Vérifier que |Fess| est en cours d'exécution**
 
-   Vérifiez que « Réponse JSON » est activé dans Panneau d'administration > Système > Général.
+   Vérifiez que http://localhost:8080/ est accessible.
 
-2. **Erreurs CORS depuis le navigateur**
+2. **Vérifier que le point de terminaison est en v2**
 
-   Si vous obtenez des erreurs CORS lors de l'accès depuis un navigateur, utilisez JSONP ou
-   configurez les paramètres CORS sur le serveur.
+   Vérifiez que le chemin de la requête commence par ``/api/v2/...``.
+   L'ancien point de terminaison ``/api/v1`` a été supprimé.
 
-   Exemple JSONP :
+3. **Si une authentification est requise**
 
-   .. code-block:: bash
-
-       curl "http://localhost:8080/api/v1/documents?q=fess&callback=myCallback"
-
-3. **Authentification requise**
-
-   Si des jetons d'accès sont configurés, incluez-les dans l'en-tête de la requête :
-
-   .. code-block:: bash
-
-       curl -H "Authorization: Bearer VOTRE_JETON_ACCES" \
-            "http://localhost:8080/api/v1/documents?q=fess"
+   Pour les points de terminaison nécessitant une authentification, voir :doc:`api-auth`.
 
 Prochaines étapes
 ==================
 
 - :doc:`api-search` - Détails de l'API de recherche
-- :doc:`api-suggest` - Détails de l'API de suggestion
+- :doc:`api-suggest` - Détails de l'API de suggestions
 - :doc:`admin/index` - Utilisation de l'API d'administration
