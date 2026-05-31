@@ -19,6 +19,7 @@ Guide de l'administrateur |Fess|
    stemmeroverride-guide
    accesstoken-guide
    plugin-guide
+   theme-guide
    storage-guide
    webconfig-guide
    fileconfig-guide
