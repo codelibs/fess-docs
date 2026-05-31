@@ -2,6 +2,11 @@
 ラベルAPI
 ========
 
+このドキュメントでは、 |Fess| の v2 ラベル API について説明します。
+共通のレスポンスエンベロープ・エラーモデルについては :doc:`api-overview` を参照してください。
+
+ベースURLは ``http://<Server Name>/api/v2/`` です（ローカル環境の例: ``http://localhost:8080/api/v2`` ）。
+
 ラベルの取得
 =========
 
@@ -10,83 +15,78 @@
 
 ==================  ====================================================
 HTTPメソッド         GET
-エンドポイント        ``/api/v1/labels``
+エンドポイント        ``/api/v2/labels``
 ==================  ====================================================
 
-|Fess| に、 ``http://<Server Name>/api/v1/labels`` のリクエストを送ることで、|Fess| に登録されているラベルの一覧をJSON形式で受け取ることができます。
+|Fess| に登録されている設定済みラベルの一覧を、共通エンベロープで取得します。
 
 リクエストパラメーター
 -----------------
 
 使用できるリクエストパラメーターはありません。
 
-
 レスポンス
 --------
 
-以下のようなレスポンスが返ります。
+成功時（200）は、共通エンベロープの ``response`` 直下に以下のフィールドが返ります。
 
 ::
 
     {
-      "record_count": 9,
-      "data": [
-        {
-          "label": "AWS",
-          "value": "aws"
-        },
-        {
-          "label": "Azure",
-          "value": "azure"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "record_count": 2,
+        "labels": [
+          {
+            "label": "AWS",
+            "value": "aws"
+          },
+          {
+            "label": "Azure",
+            "value": "azure"
+          }
+        ]
+      }
     }
 
-各要素については以下の通りです。
+各フィールドについては以下の通りです。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
+.. list-table:: レスポンスフィールド
 
-.. list-table::
-
-   * - record_count
-     - ラベルの登録件数。
-   * - data
-     - 検索結果の親要素。
-   * - label
+   * - ``record_count``
+     - ラベルの登録件数（integer）。
+   * - ``labels``
+     - ラベルの配列。
+   * - ``label``
      - ラベルの名前。
-   * - value
+   * - ``value``
      - ラベルの値。
 
-表: レスポンス情報
+表: レスポンスフィールド
 
 使用例
 ====
 
-curlコマンドでのリクエスト例:
+curl コマンドでのリクエスト例:
 
 ::
 
-    curl "http://localhost:8080/api/v1/labels"
-
-JavaScriptでのリクエスト例:
-
-::
-
-    fetch('http://localhost:8080/api/v1/labels')
-      .then(response => response.json())
-      .then(data => {
-        console.log('ラベル一覧:', data.data);
-      });
+    curl "http://localhost:8080/api/v2/labels"
 
 エラーレスポンス
-==============
+============
 
-ラベルAPIが失敗した場合、以下のようなエラーレスポンスが返されます。
+エラーモデルの詳細は :doc:`api-overview` を参照してください。このエンドポイントが返す HTTP ステータスは以下の通りです。
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: エラーレスポンス
 
    * - ステータスコード
      - 説明
+   * - 405 Method Not Allowed
+     - HTTP メソッドが許可されていない場合。
    * - 500 Internal Server Error
-     - サーバー内部エラーが発生した場合
+     - サーバー内部エラーが発生した場合。
+
+表: エラーレスポンス

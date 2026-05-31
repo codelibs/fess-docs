@@ -1,233 +1,184 @@
-==============
+================
 API de búsqueda
-==============
+================
 
-Obtención de resultados de búsqueda
-====================================
+Este documento describe la API de búsqueda v2 de |Fess|.
+Para el sobre de respuesta común, el modelo de errores y CSRF, consulte :doc:`api-overview`.
+
+La URL base es ``http://<Server Name>/api/v2/`` (ejemplo en entorno local: ``http://localhost:8080/api/v2``).
+
+Búsqueda de documentos
+======================
 
 Solicitud
 ---------
 
 ==================  ====================================================
 Método HTTP         GET
-Endpoint            ``/api/v1/documents``
+Endpoint            ``/api/v2/search``
 ==================  ====================================================
 
-Al enviar una solicitud como
-``http://<Server Name>/api/v1/documents?q=término de búsqueda``
-a |Fess|, puede recibir los resultados de búsqueda de |Fess| en formato JSON.
-Para usar la API de búsqueda, debe habilitar la respuesta JSON en Sistema > Configuración general de la consola de administración.
+Busca documentos que coincidan con la consulta y devuelve los resultados en el sobre común.
+Todos los nombres de campo del payload usan ``snake_case``.
 
 Parámetros de solicitud
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Al especificar parámetros de solicitud como
-``http://<Server Name>/api/v1/documents?q=término de búsqueda&num=50&fields.label=fess``,
-puede realizar búsquedas más avanzadas.
-Los parámetros de solicitud disponibles son los siguientes:
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Parámetros de solicitud
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
-
-   * - q
-     - Término de búsqueda. Se pasa con codificación URL.
-   * - start
-     - Posición inicial del número de resultados. Comienza desde 0.
-   * - num
-     - Número de resultados a mostrar. El valor predeterminado es 20. Se pueden mostrar hasta 100 resultados.
-   * - sort
-     - Ordenar. Se utiliza para ordenar los resultados de búsqueda.
-   * - fields.label
-     - Valor de etiqueta. Se utiliza para especificar una etiqueta.
-   * - facet.field
-     - Especificación de campo de faceta. (Ejemplo) ``facet.field=label``
-   * - facet.query
-     - Especificación de consulta de faceta. (Ejemplo) ``facet.query=timestamp:[now/d-1d TO *]``
-   * - facet.size
-     - Especificación del número máximo de facetas a obtener. Es válido cuando se especifica facet.field.
-   * - facet.minDocCount
-     - Obtiene facetas con un recuento mayor o igual a este valor. Es válido cuando se especifica facet.field.
-   * - geo.location.point
-     - Especificación de latitud y longitud. (Ejemplo) ``geo.location.point=35.0,139.0``
-   * - geo.location.distance
-     - Especificación de la distancia desde el punto central. (Ejemplo) ``geo.location.distance=10km``
-   * - lang
-     - Especificación del idioma de búsqueda. (Ejemplo) ``lang=en``
-   * - preference
-     - Cadena que especifica el shard al realizar la búsqueda. (Ejemplo) ``preference=abc``
-   * - callback
-     - Nombre del callback cuando se utiliza JSONP. No es necesario especificarlo si no se utiliza JSONP.
+   * - ``q``
+     - Término de búsqueda (codificado en URL).
+   * - ``start``
+     - Posición de inicio desde 0 (integer, ``>=0``, valor predeterminado ``0``).
+   * - ``offset``
+     - Desplazamiento desde ``start`` (integer, ``>=0``, valor predeterminado ``0``).
+   * - ``num``
+     - Tamaño de página (integer, ``>=1``, valor predeterminado ``20``). ``<= 0`` resulta en ``invalid_request``. Los valores que superen el máximo configurado se ajustan silenciosamente. El ajuste puede detectarse comparando ``num`` en la solicitud con ``page_size`` en la respuesta.
+   * - ``sort``
+     - Ordenación (ejemplo: ``score``).
+   * - ``lang``
+     - Idioma de búsqueda. Se puede repetir (array). Ejemplo: ``en``.
+   * - ``ex_q``
+     - Expresión de consulta adicional. Se puede repetir.
+   * - ``sdh``
+     - Hash de documentos similares (similar-document hash).
+   * - ``fields.label``
+     - Filtra por nombre de etiqueta. Se puede repetir. Este es el caso más común de la familia genérica ``fields.<name>``: cualquier parámetro de consulta ``fields.<name>`` limita los resultados a documentos donde el campo ``<name>`` coincide con el valor especificado.
+   * - ``as.*``
+     - Condiciones de búsqueda avanzada. Cualquier ``as.<name>`` (ejemplo: ``as.q``, ``as.filetype``) se pasa al constructor de condiciones de búsqueda avanzada. Se puede repetir por nombre.
+   * - ``track_total_hits``
+     - Se reenvía al motor de búsqueda para controlar el recuento exacto de resultados (ejemplo: ``true`` o un umbral entero). Afecta si ``record_count_relation`` es ``eq`` o ``gte``.
+   * - ``facet.field``
+     - Campo de faceta. Se puede repetir (array).
+   * - ``facet.query``
+     - Consulta de faceta. Se puede repetir (array).
+   * - ``facet.size``
+     - Número máximo de términos de faceta a devolver (integer).
+   * - ``facet.minDocCount``
+     - Número mínimo de documentos que debe contener un término de faceta (integer).
+   * - ``facet.sort``
+     - Ordenación de facetas.
+   * - ``facet.missing``
+     - Tratamiento de facetas para documentos sin valor.
+   * - ``geo.location.point``
+     - Punto central de coordenadas geográficas (ejemplo: ``35.0,139.0``).
+   * - ``geo.location.distance``
+     - Distancia desde el punto central (ejemplo: ``10km``).
 
 Tabla: Parámetros de solicitud
-
 
 Respuesta
 ---------
 
-| Se devuelve una respuesta como la siguiente:
-| (Formato embellecido)
+En caso de éxito (200), se devuelven los siguientes campos directamente bajo ``response`` del sobre común.
 
 ::
 
     {
-      "q": "Fess",
-      "query_id": "bd60f9579a494dfd8c03db7c8aa905b0",
-      "exec_time": 0.21,
-      "query_time": 0,
-      "page_size": 20,
-      "page_number": 1,
-      "record_count": 31625,
-      "page_count": 1,
-      "highlight_params": "&hq=n2sm&hq=Fess",
-      "next_page": true,
-      "prev_page": false,
-      "start_record_number": 1,
-      "end_record_number": 20,
-      "page_numbers": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
-      "partial": false,
-      "search_query": "(Fess OR n2sm)",
-      "requested_time": 1507822131845,
-      "related_query": [
-        "aaa"
-      ],
-      "related_contents": [],
-      "data": [
-        {
-          "filetype": "html",
-          "title": "Open Source Enterprise Search Server: Fess — Fess 11.0 documentation",
-          "content_title": "Open Source Enterprise Search Server: Fess — Fe...",
-          "digest": "Docs » Open Source Enterprise Search Server: Fess Commercial Support Open Source Enterprise Search Server: Fess What is Fess ? Fess is very powerful and easily deployable Enterprise Search Server. ...",
-          "host": "fess.codelibs.org",
-          "last_modified": "2017-10-09T22:28:56.000Z",
-          "content_length": "29624",
-          "timestamp": "2017-10-09T22:28:56.000Z",
-          "url_link": "https://fess.codelibs.org/",
-          "created": "2017-10-10T15.70:48.609Z",
-          "site_path": "fess.codelibs.org/",
-          "doc_id": "e79fbfdfb09d4bffb58ec230c68f6f7e",
-          "url": "https://fess.codelibs.org/",
-          "content_description": "Enterprise Search Server: <strong>Fess</strong> Commercial Support Open...Search Server: <strong>Fess</strong> What is <strong>Fess</strong> ? <strong>Fess</strong> is very powerful...You can install and run <strong>Fess</strong> quickly on any platforms...Java runtime environment. <strong>Fess</strong> is provided under Apache...Apache license. Demo <strong>Fess</strong> is OpenSearch-based search",
-          "site": "fess.codelibs.org/",
-          "boost": "10.0",
-          "mimetype": "text/html"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "q": "Fess",
+        "query_id": "f8b1c2d3e4a5",
+        "exec_time": 0.012,
+        "query_time": 8,
+        "page_size": 20,
+        "page_number": 1,
+        "record_count": 42,
+        "record_count_relation": "eq",
+        "page_count": 3,
+        "highlight_params": "&hq=Fess",
+        "next_page": true,
+        "prev_page": false,
+        "start_record_number": 1,
+        "end_record_number": 20,
+        "page_numbers": ["1", "2", "3"],
+        "partial": false,
+        "search_query": "title:Fess OR content:Fess",
+        "requested_time": 1717142400000,
+        "related_query": ["enterprise search"],
+        "related_contents": [],
+        "data": [
+          {
+            "doc_id": "a1b2c3d4e5f6",
+            "url": "https://example.com/",
+            "title": "Example",
+            "content_description": "An example document about Fess.",
+            "score": 1.2345
+          }
+        ],
+        "facet_field": [
+          {
+            "name": "label",
+            "result": [
+              { "value": "news", "count": 12 }
+            ]
+          }
+        ],
+        "facet_query": [
+          { "value": "filetype:html", "count": 30 }
+        ]
+      }
     }
 
-Los elementos son los siguientes:
+Los campos son los siguientes:
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: Información de respuesta
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Campos de respuesta
 
-   * - q
-     - Término de búsqueda
-   * - exec_time
-     - Tiempo de respuesta (en segundos)
-   * - query_time
-     - Tiempo de procesamiento de consulta (en milisegundos)
-   * - page_size
-     - Número de resultados mostrados
-   * - page_number
-     - Número de página
-   * - record_count
-     - Número de resultados encontrados para el término de búsqueda
-   * - page_count
-     - Número de páginas de resultados encontrados para el término de búsqueda
-   * - highlight_params
-     - Parámetros de resaltado
-   * - next_page
-     - true: existe la página siguiente. false: no existe la página siguiente.
-   * - prev_page
-     - true: existe la página anterior. false: no existe la página anterior.
-   * - start_record_number
-     - Posición inicial del número de registro
-   * - end_record_number
-     - Posición final del número de registro
-   * - page_numbers
-     - Array de números de página
-   * - partial
-     - Se establece en true cuando los resultados de búsqueda se truncan debido a un tiempo de espera de búsqueda u otros motivos.
-   * - search_query
-     - Consulta de búsqueda
-   * - requested_time
-     - Hora de la solicitud (en milisegundos epoch)
-   * - related_query
-     - Consulta relacionada
-   * - related_contents
-     - Consulta de contenido relacionado
-   * - facet_field
-     - Información de documentos que coinciden con el campo de faceta dado (solo cuando se proporciona ``facet.field`` en los parámetros de solicitud)
-   * - facet_query
-     - Número de documentos que coinciden con la consulta de faceta dada (solo cuando se proporciona ``facet.query`` en los parámetros de solicitud)
-   * - result
-     - Elemento principal de resultados de búsqueda
-   * - filetype
-     - Tipo de archivo
-   * - created
-     - Fecha y hora de creación del documento
-   * - title
-     - Título del documento
-   * - doc_id
-     - ID del documento
-   * - url
-     - URL del documento
-   * - site
-     - Nombre del sitio
-   * - content_description
-     - Descripción del contenido
-   * - host
-     - Nombre del host
-   * - digest
-     - Cadena de resumen del documento
-   * - boost
-     - Valor de impulso del documento
-   * - mimetype
-     - Tipo MIME
-   * - last_modified
-     - Fecha y hora de última modificación
-   * - content_length
-     - Tamaño del documento
-   * - url_link
-     - URL como resultado de búsqueda
-   * - timestamp
-     - Fecha y hora de actualización del documento
+   * - ``q``
+     - Término de búsqueda (nullable).
+   * - ``query_id``
+     - Identificador de la consulta.
+   * - ``exec_time``
+     - Tiempo de ejecución (double, en segundos).
+   * - ``query_time``
+     - Tiempo de consulta del motor de búsqueda (int64, en milisegundos).
+   * - ``page_size``
+     - Tamaño de página.
+   * - ``page_number``
+     - Número de página actual.
+   * - ``record_count``
+     - Número de resultados encontrados (int64).
+   * - ``record_count_relation``
+     - Cuando es ``eq``, indica un recuento exacto; cuando es ``gte``, indica que solo se conoce el límite inferior.
+   * - ``page_count``
+     - Número total de páginas.
+   * - ``highlight_params``
+     - Cadena de parámetros de consulta para resaltado.
+   * - ``next_page``
+     - Si existe página siguiente (bool).
+   * - ``prev_page``
+     - Si existe página anterior (bool).
+   * - ``start_record_number``
+     - Número de registro de inicio de esta página.
+   * - ``end_record_number``
+     - Número de registro de fin de esta página.
+   * - ``page_numbers``
+     - Array de números de página para mostrar en el paginador (cadenas de texto).
+   * - ``partial``
+     - Si los resultados son parciales (bool).
+   * - ``search_query``
+     - La consulta de búsqueda que se ejecutó realmente.
+   * - ``requested_time``
+     - Hora de la solicitud (int64, epoch en milisegundos).
+   * - ``related_query``
+     - Array de consultas relacionadas (cadenas de texto).
+   * - ``related_contents``
+     - Array de contenidos relacionados (cadenas de texto).
+   * - ``data``
+     - Array de resultados de búsqueda. Un elemento por documento. Solo se incluyen los campos permitidos por ``QueryFieldConfig#isApiResponseField``; se excluyen los nulos y las claves vacías.
+   * - ``facet_field``
+     - Array que solo existe cuando se solicitaron campos de faceta. Cada elemento tiene la forma ``{name, result:[{value, count}]}``.
+   * - ``facet_query``
+     - Array que solo existe cuando se solicitaron consultas de faceta. Cada elemento tiene la forma ``{value, count}``.
 
-
-Búsqueda de todos los documentos
-=================================
-
-Para buscar todos los documentos objetivo, envíe la siguiente solicitud:
-``http://<Server Name>/api/v1/documents/all?q=término de búsqueda``
-
-Para usar esta funcionalidad, debe establecer api.search.scroll en true en fess_config.properties.
-
-Parámetros de solicitud
------------------------
-
-Los parámetros de solicitud disponibles son los siguientes:
-
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
-
-   * - q
-     - Término de búsqueda. Se pasa con codificación URL.
-   * - num
-     - Número de resultados a mostrar. El valor predeterminado es 20. Se pueden mostrar hasta 100 resultados.
-   * - sort
-     - Ordenar. Se utiliza para ordenar los resultados de búsqueda.
-
-Tabla: Parámetros de solicitud
+Tabla: Campos de respuesta
 
 Respuesta de error
-==================
+------------------
 
-Si la API de búsqueda falla, se devuelve una respuesta de error como la siguiente:
+Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HTTP que devuelve este endpoint son:
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Respuesta de error
@@ -235,15 +186,89 @@ Si la API de búsqueda falla, se devuelve una respuesta de error como la siguien
    * - Código de estado
      - Descripción
    * - 400 Bad Request
-     - Cuando los parámetros de solicitud son incorrectos
+     - Cuando la solicitud no es válida.
+   * - 405 Method Not Allowed
+     - Cuando el método HTTP no está permitido.
    * - 500 Internal Server Error
-     - Cuando se produce un error interno del servidor
+     - Cuando se produce un error interno del servidor.
 
-Ejemplo de respuesta de error:
+Tabla: Respuesta de error
+
+Obtención de todos los documentos (búsqueda por scroll - NDJSON)
+================================================================
+
+Solicitud
+---------
+
+==================  ====================================================
+Método HTTP         GET
+Endpoint            ``/api/v2/documents/all``
+==================  ====================================================
+
+Transmite en streaming todos los documentos que coincidan con la consulta en formato NDJSON (``application/x-ndjson``).
+Cada línea es un objeto ``{"data":{...}}`` que contiene los campos permitidos por ``QueryFieldConfig#isApiResponseField``.
+
+Si se produce un fallo a mitad del stream, se envía y vacía la siguiente línea como línea final:
 
 ::
 
-    {
-      "message": "Invalid request parameter",
-      "status": 400
-    }
+    {"error":{"code":"internal_error","message":"stream error"}}
+
+Por este motivo, el cliente debe verificar la primera clave de la última línea para distinguir entre una finalización normal (``data``) y un error del servidor (``error``).
+
+La consulta se construye con el mismo conjunto de parámetros que ``GET /search`` (``q``, ``sort``, ``num``, ``lang``, ``ex_q``, ``sdh``, ``fields.*``, ``as.*``, ``track_total_hits``, ``facet.*``, ``geo.*``).
+Cuando la búsqueda por scroll está deshabilitada con ``api.search.scroll=false``, se devuelve ``invalid_request`` (400).
+
+Parámetros de solicitud
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Los parámetros especificados explícitamente en la especificación son los siguientes:
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Parámetros de solicitud
+
+   * - ``q``
+     - Término de búsqueda.
+   * - ``sort``
+     - Ordenación.
+   * - ``num``
+     - Tamaño de página (lote de scroll) (integer, ``>=1``). ``<= 0`` resulta en ``invalid_request``.
+   * - ``lang``
+     - Idioma de búsqueda. Se puede repetir (array).
+   * - ``ex_q``
+     - Expresión de consulta adicional. Se puede repetir (array).
+   * - ``fields.label``
+     - Filtra por nombre de etiqueta. Se puede repetir (array). Forma parte de la familia genérica ``fields.<name>`` (consulte ``GET /search``).
+   * - ``sdh``
+     - Hash de documentos similares (similar-document hash).
+
+Tabla: Parámetros de solicitud
+
+Respuesta
+---------
+
+En caso de éxito (200), el Content-Type es ``application/x-ndjson`` y se devuelve un documento por línea de la siguiente forma:
+
+::
+
+    {"data":{"url":"https://example.com/","title":"Example"}}
+    {"data":{"url":"https://example.org/","title":"Example Org"}}
+
+Respuesta de error
+------------------
+
+Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HTTP que devuelve este endpoint son:
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Respuesta de error
+
+   * - Código de estado
+     - Descripción
+   * - 400 Bad Request
+     - Consulta inválida, ``num <= 0``, o búsqueda por scroll deshabilitada con ``api.search.scroll=false``.
+   * - 405 Method Not Allowed
+     - Cuando el método HTTP no está permitido.
+   * - 500 Internal Server Error
+     - Cuando se produce un error interno del servidor.
+
+Tabla: Respuesta de error

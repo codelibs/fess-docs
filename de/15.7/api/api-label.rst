@@ -2,91 +2,91 @@
 Label-API
 =========
 
-Abrufen von Labels
-==================
+Dieses Dokument beschreibt die v2-Label-API von |Fess|.
+Informationen zum gemeinsamen Antwort-Envelope und zum Fehlermodell finden Sie unter :doc:`api-overview`.
+
+Die Basis-URL lautet ``http://<Server Name>/api/v2/`` (Beispiel für eine lokale Umgebung: ``http://localhost:8080/api/v2``).
+
+Labels abrufen
+==============
 
 Anfrage
 -------
 
 ==================  ====================================================
-HTTP-Methode        GET
-Endpunkt            ``/api/v1/labels``
+HTTP-Methode         GET
+Endpunkt             ``/api/v2/labels``
 ==================  ====================================================
 
-Durch Senden einer Anfrage wie ``http://<Servername>/api/v1/labels`` an |Fess| können Sie die in |Fess| registrierten Labels als Liste im JSON-Format erhalten.
+Ruft die Liste der in |Fess| konfigurierten Labels im gemeinsamen Envelope ab.
 
 Anfrageparameter
-----------------
+~~~~~~~~~~~~~~~~
 
 Es sind keine Anfrageparameter verfügbar.
-
 
 Antwort
 -------
 
-Es wird folgende Antwort zurückgegeben:
+Bei Erfolg (200) werden die folgenden Felder direkt unter ``response`` im gemeinsamen Envelope zurückgegeben.
 
 ::
 
     {
-      "record_count": 9,
-      "data": [
-        {
-          "label": "AWS",
-          "value": "aws"
-        },
-        {
-          "label": "Azure",
-          "value": "azure"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "record_count": 2,
+        "labels": [
+          {
+            "label": "AWS",
+            "value": "aws"
+          },
+          {
+            "label": "Azure",
+            "value": "azure"
+          }
+        ]
+      }
     }
 
-Die einzelnen Elemente sind wie folgt definiert:
+Die einzelnen Felder sind wie folgt beschrieben:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
+.. list-table:: Antwortfelder
 
-.. list-table::
-
-   * - record_count
-     - Anzahl der registrierten Labels.
-   * - data
-     - Übergeordnetes Element der Suchergebnisse.
-   * - label
+   * - ``record_count``
+     - Anzahl der registrierten Labels (integer).
+   * - ``labels``
+     - Array der Labels.
+   * - ``label``
      - Name des Labels.
-   * - value
+   * - ``value``
      - Wert des Labels.
 
-Tabelle: Antwortinformationen
+Tabelle: Antwortfelder
 
-Verwendungsbeispiele
-====================
+Verwendungsbeispiel
+===================
 
 Beispielanfrage mit curl:
 
 ::
 
-    curl "http://localhost:8080/api/v1/labels"
+    curl "http://localhost:8080/api/v2/labels"
 
-Beispielanfrage mit JavaScript:
+Fehlerantwort
+=============
 
-::
-
-    fetch('http://localhost:8080/api/v1/labels')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Label-Liste:', data.data);
-      });
-
-Fehlerantworten
-===============
-
-Wenn die Label-API fehlschlägt, wird folgende Fehlerantwort zurückgegeben:
+Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Statuscodes können von diesem Endpunkt zurückgegeben werden:
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
-.. list-table:: Fehlerantworten
+.. list-table:: Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 405 Method Not Allowed
+     - Wenn die HTTP-Methode nicht erlaubt ist.
    * - 500 Internal Server Error
-     - Wenn ein interner Serverfehler aufgetreten ist
+     - Wenn ein interner Serverfehler auftritt.
+
+Tabelle: Fehlerantwort

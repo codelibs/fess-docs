@@ -1,233 +1,184 @@
-======
+========
 検索API
-======
+========
 
-検索結果の取得
-===========
+このドキュメントでは、 |Fess| の v2 検索 API について説明します。
+共通のレスポンスエンベロープ・エラーモデル・CSRF については :doc:`api-overview` を参照してください。
+
+ベースURLは ``http://<Server Name>/api/v2/`` です（ローカル環境の例: ``http://localhost:8080/api/v2`` ）。
+
+ドキュメントの検索
+================
 
 リクエスト
 --------
 
 ==================  ====================================================
 HTTPメソッド         GET
-エンドポイント        ``/api/v1/documents``
+エンドポイント        ``/api/v2/search``
 ==================  ====================================================
 
-|Fess| に、
-``http://<Server Name>/api/v1/documents?q=検索語``
-のようなリクエストを送ることで、
-|Fess| の検索結果をJSON形式で受け取ることができます。
-検索APIを利用するには、管理画面のシステム > 全般の設定でJSONレスポンスを有効にしておく必要があります。
+クエリにマッチするドキュメントを検索し、共通エンベロープで結果を返します。
+ペイロード内のフィールド名はすべて ``snake_case`` です。
 
 リクエストパラメーター
 -----------------
 
-``http://<Server Name>/api/v1/documents?q=検索語&num=50&fields.label=fess``
-というようにリクエストパラメーターを指定することで、より高度な検索を行うことができます。
-使用できるリクエストパラメーターは以下の通りです。
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: リクエストパラメーター
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
-
-   * - q
-     - 検索語。URLエンコードして渡します。
-   * - start
-     - 開始する件数位置。0から始まります。
-   * - num
-     - 表示件数。デフォルトは20件です。100件まで表示できます。
-   * - sort
-     - ソート。検索結果をソートする場合に利用します。
-   * - fields.label
-     - ラベル値。ラベルを指定する場合に利用します。
-   * - facet.field
-     - ファセットフィールドの指定。 (例) ``facet.field=label``
-   * - facet.query
-     - ファセットクエリの指定。     (例) ``facet.query=timestamp:[now/d-1d TO *]``
-   * - facet.size
-     - 取得するファセットの最大件数の指定。facet.field が指定されているとき、有効です。
-   * - facet.minDocCount
-     - 件数がこの値以上のファセットを取得します。 facet.field が指定されているとき、有効です。
-   * - geo.location.point
-     - 緯度経度の指定。 (例) ``geo.location.point=35.0,139.0``
-   * - geo.location.distance
-     - 中心点からの距離の指定。 (例) ``geo.location.distance=10km``
-   * - lang
-     - 検索言語の指定。 (例) ``lang=en``
-   * - preference
-     - 検索時のシャードを指定する文字列。 (例) ``preference=abc``
-   * - callback
-     - JSONPを利用する場合のコールバック名。JSONPを利用しない場合は指定する必要はありません。
+   * - ``q``
+     - 検索語（URLエンコード）。
+   * - ``start``
+     - 0始まりの開始位置（integer, ``>=0`` , 既定値 ``0`` ）。
+   * - ``offset``
+     - ``start`` からのオフセット（integer, ``>=0`` , 既定値 ``0`` ）。
+   * - ``num``
+     - ページサイズ（integer, ``>=1`` , 既定値 ``20`` ）。 ``<= 0`` は ``invalid_request`` になります。設定された最大値を超える値は無言でクランプされます。クランプされたかどうかは、リクエストの ``num`` とレスポンスの ``page_size`` を比較することで検出できます。
+   * - ``sort``
+     - ソート（例: ``score`` ）。
+   * - ``lang``
+     - 検索言語。繰り返し指定可能（配列）。例: ``en`` 。
+   * - ``ex_q``
+     - 追加のクエリ式。繰り返し指定可能。
+   * - ``sdh``
+     - 類似ドキュメントハッシュ（similar-document hash）。
+   * - ``fields.label``
+     - ラベル名でフィルターします。繰り返し指定可能。これは汎用的な ``fields.<name>`` ファミリーの最も一般的なケースで、任意の ``fields.<name>`` クエリパラメーターは、ドキュメントフィールド ``<name>`` が指定値に一致する結果に絞り込みます。
+   * - ``as.*``
+     - 高度な検索条件。任意の ``as.<name>`` （例: ``as.q`` , ``as.filetype`` ）が高度な検索条件ビルダーに渡されます。name ごとに繰り返し指定可能です。
+   * - ``track_total_hits``
+     - 検索エンジンに転送され、正確なヒット数カウントを制御します（例: ``true`` または整数しきい値）。 ``record_count_relation`` が ``eq`` か ``gte`` かに影響します。
+   * - ``facet.field``
+     - ファセットフィールド。繰り返し指定可能（配列）。
+   * - ``facet.query``
+     - ファセットクエリ。繰り返し指定可能（配列）。
+   * - ``facet.size``
+     - 返すファセット語の最大数（integer）。
+   * - ``facet.minDocCount``
+     - ファセット語が含まれる最小ドキュメント数（integer）。
+   * - ``facet.sort``
+     - ファセットのソート。
+   * - ``facet.missing``
+     - 値を持たないドキュメントに対するファセットの扱い。
+   * - ``geo.location.point``
+     - 地理座標の中心点（例: ``35.0,139.0`` ）。
+   * - ``geo.location.distance``
+     - 中心点からの距離（例: ``10km`` ）。
 
 表: リクエストパラメーター
-
 
 レスポンス
 --------
 
-| 以下のようなレスポンスが返ります。
-| （整形後のものです）
+成功時（200）は、共通エンベロープの ``response`` 直下に以下のフィールドが返ります。
 
 ::
 
     {
-      "q": "Fess",
-      "query_id": "bd60f9579a494dfd8c03db7c8aa905b0",
-      "exec_time": 0.21,
-      "query_time": 0,
-      "page_size": 20,
-      "page_number": 1,
-      "record_count": 31625,
-      "page_count": 1,
-      "highlight_params": "&hq=n2sm&hq=Fess",
-      "next_page": true,
-      "prev_page": false,
-      "start_record_number": 1,
-      "end_record_number": 20,
-      "page_numbers": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
-      "partial": false,
-      "search_query": "(Fess OR n2sm)",
-      "requested_time": 1507822131845,
-      "related_query": [
-        "aaa"
-      ],
-      "related_contents": [],
-      "data": [
-        {
-          "filetype": "html",
-          "title": "Open Source Enterprise Search Server: Fess — Fess 11.0 documentation",
-          "content_title": "Open Source Enterprise Search Server: Fess — Fe...",
-          "digest": "Docs » Open Source Enterprise Search Server: Fess Commercial Support Open Source Enterprise Search Server: Fess What is Fess ? Fess is very powerful and easily deployable Enterprise Search Server. ...",
-          "host": "fess.codelibs.org",
-          "last_modified": "2017-10-09T22:28:56.000Z",
-          "content_length": "29624",
-          "timestamp": "2017-10-09T22:28:56.000Z",
-          "url_link": "https://fess.codelibs.org/",
-          "created": "2017-10-10T15.70:48.609Z",
-          "site_path": "fess.codelibs.org/",
-          "doc_id": "e79fbfdfb09d4bffb58ec230c68f6f7e",
-          "url": "https://fess.codelibs.org/",
-          "content_description": "Enterprise Search Server: <strong>Fess</strong> Commercial Support Open...Search Server: <strong>Fess</strong> What is <strong>Fess</strong> ? <strong>Fess</strong> is very powerful...You can install and run <strong>Fess</strong> quickly on any platforms...Java runtime environment. <strong>Fess</strong> is provided under Apache...Apache license. Demo <strong>Fess</strong> is OpenSearch-based search",
-          "site": "fess.codelibs.org/",
-          "boost": "10.0",
-          "mimetype": "text/html"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "q": "Fess",
+        "query_id": "f8b1c2d3e4a5",
+        "exec_time": 0.012,
+        "query_time": 8,
+        "page_size": 20,
+        "page_number": 1,
+        "record_count": 42,
+        "record_count_relation": "eq",
+        "page_count": 3,
+        "highlight_params": "&hq=Fess",
+        "next_page": true,
+        "prev_page": false,
+        "start_record_number": 1,
+        "end_record_number": 20,
+        "page_numbers": ["1", "2", "3"],
+        "partial": false,
+        "search_query": "title:Fess OR content:Fess",
+        "requested_time": 1717142400000,
+        "related_query": ["enterprise search"],
+        "related_contents": [],
+        "data": [
+          {
+            "doc_id": "a1b2c3d4e5f6",
+            "url": "https://example.com/",
+            "title": "Example",
+            "content_description": "An example document about Fess.",
+            "score": 1.2345
+          }
+        ],
+        "facet_field": [
+          {
+            "name": "label",
+            "result": [
+              { "value": "news", "count": 12 }
+            ]
+          }
+        ],
+        "facet_query": [
+          { "value": "filetype:html", "count": 30 }
+        ]
+      }
     }
 
-各要素については以下の通りです。
+各フィールドについては以下の通りです。
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: レスポンス情報
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: レスポンスフィールド
 
-   * - q
-     - 検索語
-   * - exec_time
-     - 応答時間(単位は秒)
-   * - query_time
-     - クエリ処理時間(単位はミリ秒)
-   * - page_size
-     - 表示件数
-   * - page_number
-     - ページ番号
-   * - record_count
-     - 検索語に対してヒットした件数
-   * - page_count
-     - 検索語に対してヒットした件数のページ数
-   * - highlight_params
-     - ハイライトのパラメーター
-   * - next_page
-     - true:次のページが存在する。false:次のページが存在しない。
-   * - prev_page
-     - true:前のページが存在する。false:前のページが存在しない。
-   * - start_record_number
-     - レコード番号の開始位置
-   * - end_record_number
-     - レコード番号の終了位置
-   * - page_numbers
-     - ページ番号の配列
-   * - partial
-     - 検索がタイムアウトしたなど検索結果が打ち切られた場合にtrueとなる。
-   * - search_query
-     - 検索クエリ
-   * - requested_time
-     - リクエスト時刻(単位はepochミリ秒)
-   * - related_query
-     - 関連クエリ
-   * - related_contents
-     - 関連コンテンツのクエリ
-   * - facet_field
-     - 与えられたファセットフィールドにヒットするドキュメントの情報 (リクエストパラメーターに ``facet.field`` が与えられた場合のみ)
-   * - facet_query
-     - 与えられたファセットクエリにヒットするドキュメントの数 (リクエストパラメーターに ``facet.query`` が与えられた場合のみ)
-   * - result
-     - 検索結果の親要素
-   * - filetype
-     - ファイルの種別
-   * - created
-     - ドキュメントの生成日時
-   * - title
-     - ドキュメントのタイトル
-   * - doc_id
-     - ドキュメントのID
-   * - url
-     - ドキュメントのURL
-   * - site
-     - サイト名
-   * - content_description
-     - コンテンツの説明
-   * - host
-     - ホスト名
-   * - digest
-     - ドキュメントのダイジェスト文字列
-   * - boost
-     - ドキュメントのブースト値
-   * - mimetype
-     - MIMEタイプ
-   * - last_modified
-     - 最終更新日時
-   * - content_length
-     - ドキュメントのサイズ
-   * - url_link
-     - 検索結果としてのURL
-   * - timestamp
-     - ドキュメントの更新日時
+   * - ``q``
+     - 検索語（nullable）。
+   * - ``query_id``
+     - クエリの識別子。
+   * - ``exec_time``
+     - 実行時間（double, 秒）。
+   * - ``query_time``
+     - 検索エンジンのクエリ時間（int64, ミリ秒）。
+   * - ``page_size``
+     - ページサイズ。
+   * - ``page_number``
+     - 現在のページ番号。
+   * - ``record_count``
+     - ヒット件数（int64）。
+   * - ``record_count_relation``
+     - ``eq`` のときは正確なカウント、 ``gte`` のときは下限のみ判明していることを示します。
+   * - ``page_count``
+     - 総ページ数。
+   * - ``highlight_params``
+     - ハイライト用のクエリパラメーター文字列。
+   * - ``next_page``
+     - 次ページの有無（bool）。
+   * - ``prev_page``
+     - 前ページの有無（bool）。
+   * - ``start_record_number``
+     - このページの開始レコード番号。
+   * - ``end_record_number``
+     - このページの終了レコード番号。
+   * - ``page_numbers``
+     - ページャーに表示するページ番号の配列（文字列）。
+   * - ``partial``
+     - 結果が部分的かどうか（bool）。
+   * - ``search_query``
+     - 実際に実行された検索クエリ。
+   * - ``requested_time``
+     - リクエスト時刻（int64, epoch ミリ秒）。
+   * - ``related_query``
+     - 関連クエリの配列（文字列）。
+   * - ``related_contents``
+     - 関連コンテンツの配列（文字列）。
+   * - ``data``
+     - 検索結果の配列。1ドキュメントにつき1要素。 ``QueryFieldConfig#isApiResponseField`` が許可するフィールドのみが含まれ、null や空キーは除外されます。
+   * - ``facet_field``
+     - ファセットフィールドが要求された場合のみ存在する配列。各要素は ``{name, result:[{value, count}]}`` 。
+   * - ``facet_query``
+     - ファセットクエリが要求された場合のみ存在する配列。各要素は ``{value, count}`` 。
 
-
-全てのドキュメントを検索
-==================
-
-対象のすべてのドキュメントを検索を検索する場合は以下のリクエストを送信します。
-``http://<Server Name>/api/v1/documents/all?q=検索語``
-
-この機能を利用するためには、fess_config.propertiesでapi.search.scrollをtrueに設定する必要があります。
-
-リクエストパラメーター
------------------
-
-使用できるリクエストパラメーターは以下の通りです。
-
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
-
-   * - q
-     - 検索語。URLエンコードして渡します。
-   * - num
-     - 表示件数。デフォルトは20件です。100件まで表示できます。
-   * - sort
-     - ソート。検索結果をソートする場合に利用します。
-
-表: リクエストパラメーター
+表: レスポンスフィールド
 
 エラーレスポンス
-==============
+------------
 
-検索APIが失敗した場合、以下のようなエラーレスポンスが返されます。
+エラーモデルの詳細は :doc:`api-overview` を参照してください。このエンドポイントが返す HTTP ステータスは以下の通りです。
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: エラーレスポンス
@@ -235,15 +186,89 @@ HTTPメソッド         GET
    * - ステータスコード
      - 説明
    * - 400 Bad Request
-     - リクエストパラメーターが不正な場合
+     - リクエストが不正な場合。
+   * - 405 Method Not Allowed
+     - HTTP メソッドが許可されていない場合。
    * - 500 Internal Server Error
-     - サーバー内部エラーが発生した場合
+     - サーバー内部エラーが発生した場合。
 
-エラーレスポンスの例:
+表: エラーレスポンス
+
+全ドキュメントの取得（スクロール検索・NDJSON）
+=========================================
+
+リクエスト
+--------
+
+==================  ====================================================
+HTTPメソッド         GET
+エンドポイント        ``/api/v2/documents/all``
+==================  ====================================================
+
+クエリにマッチするすべてのドキュメントを NDJSON （ ``application/x-ndjson`` ）でストリーム配信します。
+各行は ``{"data":{...}}`` オブジェクトで、 ``QueryFieldConfig#isApiResponseField`` が許可するフィールドを含みます。
+
+ストリームの途中で失敗した場合は、最終行に次の行を出力してフラッシュします。
 
 ::
 
-    {
-      "message": "Invalid request parameter",
-      "status": 400
-    }
+    {"error":{"code":"internal_error","message":"stream error"}}
+
+このため、クライアントは最後の行の最初のキーを確認し、正常完了（ ``data`` ）かサーバー異常（ ``error`` ）かを区別しなければなりません。
+
+クエリは ``GET /search`` と同じパラメーターセット（ ``q`` , ``sort`` , ``num`` , ``lang`` , ``ex_q`` , ``sdh`` , ``fields.*`` , ``as.*`` , ``track_total_hits`` , ``facet.*`` , ``geo.*`` ）で構築されます。
+``api.search.scroll=false`` でスクロール検索が無効な場合は ``invalid_request`` （400）を返します。
+
+リクエストパラメーター
+-----------------
+
+仕様に明示されているパラメーターは以下の通りです。
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: リクエストパラメーター
+
+   * - ``q``
+     - 検索語。
+   * - ``sort``
+     - ソート。
+   * - ``num``
+     - ページ（スクロールバッチ）のサイズ（integer, ``>=1`` ）。 ``<= 0`` は ``invalid_request`` になります。
+   * - ``lang``
+     - 検索言語。繰り返し指定可能（配列）。
+   * - ``ex_q``
+     - 追加のクエリ式。繰り返し指定可能（配列）。
+   * - ``fields.label``
+     - ラベル名でフィルター。繰り返し指定可能（配列）。汎用的な ``fields.<name>`` ファミリーの一部です（ ``GET /search`` を参照）。
+   * - ``sdh``
+     - 類似ドキュメントハッシュ（similar-document hash）。
+
+表: リクエストパラメーター
+
+レスポンス
+--------
+
+成功時（200）の Content-Type は ``application/x-ndjson`` で、以下のように1行1ドキュメントで返ります。
+
+::
+
+    {"data":{"url":"https://example.com/","title":"Example"}}
+    {"data":{"url":"https://example.org/","title":"Example Org"}}
+
+エラーレスポンス
+------------
+
+エラーモデルの詳細は :doc:`api-overview` を参照してください。このエンドポイントが返す HTTP ステータスは以下の通りです。
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: エラーレスポンス
+
+   * - ステータスコード
+     - 説明
+   * - 400 Bad Request
+     - 不正なクエリ、 ``num <= 0`` 、または ``api.search.scroll=false`` でスクロール検索が無効な場合。
+   * - 405 Method Not Allowed
+     - HTTP メソッドが許可されていない場合。
+   * - 500 Internal Server Error
+     - サーバー内部エラーが発生した場合。
+
+表: エラーレスポンス

@@ -2,230 +2,183 @@
 Search API
 ==========
 
-Fetching Search Results
-========================
+This document describes the v2 Search API of |Fess|.
+For the common response envelope, error model, and CSRF, see :doc:`api-overview`.
+
+The base URL is ``http://<Server Name>/api/v2/`` (local environment example: ``http://localhost:8080/api/v2``).
+
+Document Search
+===============
 
 Request
 -------
 
 ==================  ====================================================
 HTTP Method         GET
-Endpoint            ``/api/v1/documents``
+Endpoint            ``/api/v2/search``
 ==================  ====================================================
 
-By sending a request to |Fess| like
-``http://<Server Name>/api/v1/documents?q=search_term``,
-you can receive |Fess| search results in JSON format.
-To use the search API, you need to enable JSON responses in the Administration screen under System > General Settings.
+Searches for documents matching the query and returns the results in a common envelope.
+All field names in the payload use ``snake_case``.
 
 Request Parameters
-------------------
+~~~~~~~~~~~~~~~~~~
 
-You can perform more advanced searches by specifying request parameters such as
-``http://<Server Name>/api/v1/documents?q=search_term&num=50&fields.label=fess``.
-The available request parameters are as follows:
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Request Parameters
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
-
-   * - q
-     - Search term. Pass it after URL encoding.
-   * - start
-     - Starting position of the result count. Starts from 0.
-   * - num
-     - Number of items to display. Default is 20 items. Can display up to 100 items.
-   * - sort
-     - Sort order. Used to sort search results.
-   * - fields.label
-     - Label value. Used to specify a label.
-   * - facet.field
-     - Facet field specification. (Example) ``facet.field=label``
-   * - facet.query
-     - Facet query specification. (Example) ``facet.query=timestamp:[now/d-1d TO *]``
-   * - facet.size
-     - Specification of the maximum number of facets to retrieve. Valid when facet.field is specified.
-   * - facet.minDocCount
-     - Retrieve facets with a count equal to or greater than this value. Valid when facet.field is specified.
-   * - geo.location.point
-     - Latitude and longitude specification. (Example) ``geo.location.point=35.0,139.0``
-   * - geo.location.distance
-     - Distance from the center point specification. (Example) ``geo.location.distance=10km``
-   * - lang
-     - Search language specification. (Example) ``lang=en``
-   * - preference
-     - String to specify the shard during search. (Example) ``preference=abc``
-   * - callback
-     - Callback name when using JSONP. Not necessary to specify if not using JSONP.
+   * - ``q``
+     - Search term (URL-encoded).
+   * - ``start``
+     - Zero-based start position (integer, ``>=0``, default ``0``).
+   * - ``offset``
+     - Offset from ``start`` (integer, ``>=0``, default ``0``).
+   * - ``num``
+     - Page size (integer, ``>=1``, default ``20``). A value of ``<= 0`` results in ``invalid_request``. Values exceeding the configured maximum are silently clamped. Whether clamping occurred can be detected by comparing the request ``num`` with the response ``page_size``.
+   * - ``sort``
+     - Sort order (e.g., ``score``).
+   * - ``lang``
+     - Search language. Can be specified multiple times (array). Example: ``en``.
+   * - ``ex_q``
+     - Additional query expression. Can be specified multiple times.
+   * - ``sdh``
+     - Similar-document hash.
+   * - ``fields.label``
+     - Filter by label name. Can be specified multiple times. This is the most common case of the general ``fields.<name>`` family; any ``fields.<name>`` query parameter narrows results to documents where field ``<name>`` matches the specified value.
+   * - ``as.*``
+     - Advanced search conditions. Any ``as.<name>`` (e.g., ``as.q``, ``as.filetype``) is passed to the advanced search condition builder. Can be specified multiple times per name.
+   * - ``track_total_hits``
+     - Forwarded to the search engine to control accurate hit count (e.g., ``true`` or an integer threshold). Affects whether ``record_count_relation`` is ``eq`` or ``gte``.
+   * - ``facet.field``
+     - Facet field. Can be specified multiple times (array).
+   * - ``facet.query``
+     - Facet query. Can be specified multiple times (array).
+   * - ``facet.size``
+     - Maximum number of facet terms to return (integer).
+   * - ``facet.minDocCount``
+     - Minimum number of documents a facet term must appear in (integer).
+   * - ``facet.sort``
+     - Facet sort order.
+   * - ``facet.missing``
+     - How to handle faceting for documents that do not have a value.
+   * - ``geo.location.point``
+     - Center point for geographic coordinates (e.g., ``35.0,139.0``).
+   * - ``geo.location.distance``
+     - Distance from the center point (e.g., ``10km``).
 
 Table: Request Parameters
 
 Response
 --------
 
-| The following response is returned:
-| (Formatted)
+On success (200), the following fields are returned directly under ``response`` in the common envelope.
 
 ::
 
     {
-      "q": "Fess",
-      "query_id": "bd60f9579a494dfd8c03db7c8aa905b0",
-      "exec_time": 0.21,
-      "query_time": 0,
-      "page_size": 20,
-      "page_number": 1,
-      "record_count": 31625,
-      "page_count": 1,
-      "highlight_params": "&hq=n2sm&hq=Fess",
-      "next_page": true,
-      "prev_page": false,
-      "start_record_number": 1,
-      "end_record_number": 20,
-      "page_numbers": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
-      "partial": false,
-      "search_query": "(Fess OR n2sm)",
-      "requested_time": 1507822131845,
-      "related_query": [
-        "aaa"
-      ],
-      "related_contents": [],
-      "data": [
-        {
-          "filetype": "html",
-          "title": "Open Source Enterprise Search Server: Fess — Fess 11.0 documentation",
-          "content_title": "Open Source Enterprise Search Server: Fess — Fe...",
-          "digest": "Docs » Open Source Enterprise Search Server: Fess Commercial Support Open Source Enterprise Search Server: Fess What is Fess? Fess is a powerful and easily deployable Enterprise Search Server. ...",
-          "host": "fess.codelibs.org",
-          "last_modified": "2017-10-09T22:28:56.000Z",
-          "content_length": "29624",
-          "timestamp": "2017-10-09T22:28:56.000Z",
-          "url_link": "https://fess.codelibs.org/",
-          "created": "2017-10-10T15.70:48.609Z",
-          "site_path": "fess.codelibs.org/",
-          "doc_id": "e79fbfdfb09d4bffb58ec230c68f6f7e",
-          "url": "https://fess.codelibs.org/",
-          "content_description": "Enterprise Search Server: Fess Commercial Support Open...Search Server: Fess What is Fess? Fess is a very powerful...You can quickly install and run Fess on any platform...Fess is provided under the Apache license...Apache license. Demo Fess is an OpenSearch-based search",
-          "site": "fess.codelibs.org/",
-          "boost": "10.0",
-          "mimetype": "text/html"
-        }
-      ]
+      "response": {
+        "status": 0,
+        "q": "Fess",
+        "query_id": "f8b1c2d3e4a5",
+        "exec_time": 0.012,
+        "query_time": 8,
+        "page_size": 20,
+        "page_number": 1,
+        "record_count": 42,
+        "record_count_relation": "eq",
+        "page_count": 3,
+        "highlight_params": "&hq=Fess",
+        "next_page": true,
+        "prev_page": false,
+        "start_record_number": 1,
+        "end_record_number": 20,
+        "page_numbers": ["1", "2", "3"],
+        "partial": false,
+        "search_query": "title:Fess OR content:Fess",
+        "requested_time": 1717142400000,
+        "related_query": ["enterprise search"],
+        "related_contents": [],
+        "data": [
+          {
+            "doc_id": "a1b2c3d4e5f6",
+            "url": "https://example.com/",
+            "title": "Example",
+            "content_description": "An example document about Fess.",
+            "score": 1.2345
+          }
+        ],
+        "facet_field": [
+          {
+            "name": "label",
+            "result": [
+              { "value": "news", "count": 12 }
+            ]
+          }
+        ],
+        "facet_query": [
+          { "value": "filetype:html", "count": 30 }
+        ]
+      }
     }
 
-Each element is as follows:
+Each field is described below.
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table:: Response Information
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Response Fields
 
-   * - q
-     - Search term
-   * - exec_time
-     - Response time (in seconds)
-   * - query_time
-     - Query processing time (in milliseconds)
-   * - page_size
-     - Number of items per page
-   * - page_number
-     - Page number
-   * - record_count
-     - Total number of hits for the search term
-   * - page_count
-     - Number of pages for the search term
-   * - highlight_params
-     - Highlighting parameters
-   * - next_page
-     - true: Next page exists, false: Next page does not exist
-   * - prev_page
-     - true: Previous page exists, false: Previous page does not exist
-   * - start_record_number
-     - Starting record number
-   * - end_record_number
-     - Ending record number
-   * - page_numbers
-     - Array of page numbers
-   * - partial
-     - true if the search was truncated due to a timeout or other reasons
-   * - search_query
-     - Search query
-   * - requested_time
-     - Request time (in epoch milliseconds)
-   * - related_query
-     - Related queries
-   * - related_contents
-     - Queries related to the content
-   * - facet_field
-     - Information about documents that match the given facet field (only if the request parameter "facet.field" is provided)
-   * - facet_query
-     - Number of documents that match the given facet query (only if the request parameter "facet.query" is provided)
-   * - result
-     - Parent element of search results
-   * - filetype
-     - File type
-   * - created
-     - Document creation date and time
-   * - title
-     - Document title
-   * - doc_id
-     - Document ID
-   * - url
-     - Document URL
-   * - site
-     - Site name
-   * - content_description
-     - Description of the content
-   * - host
-     - Host name
-   * - digest
-     - Digest string of the document
-   * - boost
-     - Document boost value
-   * - mimetype
-     - MIME type
-   * - last_modified
-     - Last modified date and time
-   * - content_length
-     - Document size
-   * - url_link
-     - URL as part of the search result
-   * - timestamp
-     - Document update date and time
+   * - ``q``
+     - Search term (nullable).
+   * - ``query_id``
+     - Query identifier.
+   * - ``exec_time``
+     - Execution time (double, seconds).
+   * - ``query_time``
+     - Search engine query time (int64, milliseconds).
+   * - ``page_size``
+     - Page size.
+   * - ``page_number``
+     - Current page number.
+   * - ``record_count``
+     - Number of hits (int64).
+   * - ``record_count_relation``
+     - When ``eq``, the count is exact; when ``gte``, only the lower bound is known.
+   * - ``page_count``
+     - Total number of pages.
+   * - ``highlight_params``
+     - Query parameter string for highlighting.
+   * - ``next_page``
+     - Whether there is a next page (bool).
+   * - ``prev_page``
+     - Whether there is a previous page (bool).
+   * - ``start_record_number``
+     - Starting record number for this page.
+   * - ``end_record_number``
+     - Ending record number for this page.
+   * - ``page_numbers``
+     - Array of page numbers to display in the pager (strings).
+   * - ``partial``
+     - Whether the result is partial (bool).
+   * - ``search_query``
+     - The actual search query that was executed.
+   * - ``requested_time``
+     - Request timestamp (int64, epoch milliseconds).
+   * - ``related_query``
+     - Array of related queries (strings).
+   * - ``related_contents``
+     - Array of related content (strings).
+   * - ``data``
+     - Array of search results; one element per document. Only fields permitted by ``QueryFieldConfig#isApiResponseField`` are included; null values and empty keys are excluded.
+   * - ``facet_field``
+     - Array present only when facet fields were requested. Each element is ``{name, result:[{value, count}]}``.
+   * - ``facet_query``
+     - Array present only when facet queries were requested. Each element is ``{value, count}``.
 
-
-Searching All Documents
-=======================
-
-To search all target documents, send the following request:
-``http://<Server Name>/api/v1/documents/all?q=search_term``
-
-To use this feature, you need to set api.search.scroll to true in fess_config.properties.
-
-Request Parameters
-------------------
-
-The available request parameters are as follows:
-
-.. tabularcolumns:: |p{3cm}|p{12cm}|
-.. list-table::
-
-   * - q
-     - Search term. Pass it after URL encoding.
-   * - num
-     - Number of items to display. Default is 20 items. Can display up to 100 items.
-   * - sort
-     - Sort order. Used to sort search results.
-
-Table: Request Parameters
+Table: Response Fields
 
 Error Response
-==============
+--------------
 
-When the search API fails, the following error response is returned:
+For details on the error model, see :doc:`api-overview`. The HTTP statuses returned by this endpoint are as follows.
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Error Response
@@ -233,15 +186,89 @@ When the search API fails, the following error response is returned:
    * - Status Code
      - Description
    * - 400 Bad Request
-     - When request parameters are invalid
+     - The request is invalid.
+   * - 405 Method Not Allowed
+     - The HTTP method is not allowed.
    * - 500 Internal Server Error
-     - When an internal server error occurs
+     - An internal server error occurred.
 
-Error response example:
+Table: Error Response
+
+Fetching All Documents (Scroll Search / NDJSON)
+===============================================
+
+Request
+-------
+
+==================  ====================================================
+HTTP Method         GET
+Endpoint            ``/api/v2/documents/all``
+==================  ====================================================
+
+Streams all documents matching the query as NDJSON (``application/x-ndjson``).
+Each line is a ``{"data":{...}}`` object containing fields permitted by ``QueryFieldConfig#isApiResponseField``.
+
+If a failure occurs mid-stream, the final line is flushed as follows:
 
 ::
 
-    {
-      "message": "Invalid request parameter",
-      "status": 400
-    }
+    {"error":{"code":"internal_error","message":"stream error"}}
+
+Therefore, clients must check the first key of the last line to distinguish successful completion (``data``) from a server error (``error``).
+
+The query is built using the same parameter set as ``GET /search`` (``q``, ``sort``, ``num``, ``lang``, ``ex_q``, ``sdh``, ``fields.*``, ``as.*``, ``track_total_hits``, ``facet.*``, ``geo.*``).
+If scroll search is disabled with ``api.search.scroll=false``, the endpoint returns ``invalid_request`` (400).
+
+Request Parameters
+~~~~~~~~~~~~~~~~~~
+
+The parameters explicitly specified in the spec are as follows.
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Request Parameters
+
+   * - ``q``
+     - Search term.
+   * - ``sort``
+     - Sort order.
+   * - ``num``
+     - Page (scroll batch) size (integer, ``>=1``). A value of ``<= 0`` results in ``invalid_request``.
+   * - ``lang``
+     - Search language. Can be specified multiple times (array).
+   * - ``ex_q``
+     - Additional query expression. Can be specified multiple times (array).
+   * - ``fields.label``
+     - Filter by label name. Can be specified multiple times (array). Part of the general ``fields.<name>`` family (see ``GET /search``).
+   * - ``sdh``
+     - Similar-document hash.
+
+Table: Request Parameters
+
+Response
+--------
+
+On success (200), the Content-Type is ``application/x-ndjson``, with one document per line as shown below.
+
+::
+
+    {"data":{"url":"https://example.com/","title":"Example"}}
+    {"data":{"url":"https://example.org/","title":"Example Org"}}
+
+Error Response
+--------------
+
+For details on the error model, see :doc:`api-overview`. The HTTP statuses returned by this endpoint are as follows.
+
+.. tabularcolumns:: |p{4cm}|p{11cm}|
+.. list-table:: Error Response
+
+   * - Status Code
+     - Description
+   * - 400 Bad Request
+     - Invalid query, ``num <= 0``, or scroll search disabled with ``api.search.scroll=false``.
+   * - 405 Method Not Allowed
+     - The HTTP method is not allowed.
+   * - 500 Internal Server Error
+     - An internal server error occurred.
+
+Table: Error Response
