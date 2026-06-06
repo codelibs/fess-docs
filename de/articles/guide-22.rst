@@ -139,7 +139,7 @@ Fuegen Sie OpenSearch Dashboards zu Ihrer Docker-Compose-Konfiguration hinzu.
 
     services:
       opensearch-dashboards:
-        image: opensearchproject/opensearch-dashboards:3.6.0
+        image: public.ecr.aws/opensearchproject/opensearch-dashboards:3.6.0
         ports:
           - "5601:5601"
         environment:
