@@ -139,7 +139,7 @@ Docker Compose 構成に OpenSearch Dashboards を追加します。
 
     services:
       opensearch-dashboards:
-        image: opensearchproject/opensearch-dashboards:3.6.0
+        image: public.ecr.aws/opensearchproject/opensearch-dashboards:3.6.0
         ports:
           - "5601:5601"
         environment:
