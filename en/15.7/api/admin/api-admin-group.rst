@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List groups
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 Parameters
 ~~~~~~~~~~
@@ -84,12 +83,16 @@ Response
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Response
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Request Body
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 Field Description
@@ -156,9 +163,9 @@ Field Description
    * - ``name``
      - Yes
      - Group name
-   * - ``gidNumber``
+   * - ``attributes``
      - No
-     - Group ID number
+     - Map of attributes (includes LDAP attributes such as ``gidNumber``). Values are specified as strings
 
 Response
 --------
@@ -192,7 +199,9 @@ Request Body
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Create New Group
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 List Groups

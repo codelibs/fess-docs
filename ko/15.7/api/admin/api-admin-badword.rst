@@ -25,7 +25,7 @@ BadWord API는 |Fess| 의 NG 워드(부적절한 서제스트 워드 제외)를 
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - NG 워드 목록 조회
    * - GET
@@ -40,6 +40,12 @@ BadWord API는 |Fess| 의 NG 워드(부적절한 서제스트 워드 제외)를 
    * - DELETE
      - /setting/{id}
      - NG 워드 삭제
+   * - PUT
+     - /upload
+     - NG 워드 CSV 업로드
+   * - GET
+     - /download
+     - NG 워드 CSV 다운로드
 
 NG 워드 목록 조회
 ================
@@ -50,7 +56,6 @@ NG 워드 목록 조회
 ::
 
     GET /api/admin/badword/settings
-    PUT /api/admin/badword/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -83,9 +88,7 @@ NG 워드 목록 조회
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word",
-            "targetRole": "",
-            "targetLabel": ""
+            "suggestWord": "inappropriate_word"
           }
         ],
         "total": 5
@@ -112,9 +115,7 @@ NG 워드 조회
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word",
-          "targetRole": "",
-          "targetLabel": ""
+          "suggestWord": "inappropriate_word"
         }
       }
     }
@@ -136,9 +137,7 @@ NG 워드 만들기
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": ""
+      "suggestWord": "spam_keyword"
     }
 
 필드 설명
@@ -153,13 +152,7 @@ NG 워드 만들기
      - 설명
    * - ``suggestWord``
      - 예
-     - 제외할 키워드
-   * - ``targetRole``
-     - 아니오
-     - 대상 역할 (비어 있으면 모든 역할)
-   * - ``targetLabel``
-     - 아니오
-     - 대상 라벨 (비어 있으면 모든 라벨)
+     - 제외할 키워드 (공백 문자를 포함할 수 없습니다)
 
 응답
 ----------
@@ -193,8 +186,6 @@ NG 워드 업데이트
     {
       "id": "existing_badword_id",
       "suggestWord": "updated_spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": "",
       "versionNo": 1
     }
 
@@ -234,6 +225,56 @@ NG 워드 삭제
       }
     }
 
+NG 워드 CSV 업로드
+==================
+
+CSV 파일에서 NG 워드를 일괄 등록합니다. 파일은 ``multipart/form-data`` 로 전송합니다. 가져오기는 서버 측에서 비동기로 실행됩니다.
+
+요청
+----------
+
+::
+
+    PUT /api/admin/badword/upload
+    Content-Type: multipart/form-data
+
+파라미터
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - 파라미터
+     - 필수
+     - 설명
+   * - ``badWordFile``
+     - 예
+     - 업로드할 NG 워드 CSV 파일
+
+응답
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+NG 워드 CSV 다운로드
+====================
+
+등록된 NG 워드를 CSV 파일(``badword.csv``)로 다운로드합니다. 응답은 ``application/octet-stream`` 스트림입니다.
+
+요청
+----------
+
+::
+
+    GET /api/admin/badword/download
+
 사용 예
 ======
 
@@ -246,24 +287,26 @@ NG 워드 삭제
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam",
-           "targetRole": "",
-           "targetLabel": ""
+           "suggestWord": "spam"
          }'
 
-특정 역할용 NG 워드
-------------------------
+CSV 파일 업로드
+-------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/badword/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "suggestWord": "internal",
-           "targetRole": "guest",
-           "targetLabel": ""
-         }'
+         -F "badWordFile=@badword.csv"
+
+CSV 파일 다운로드
+-------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o badword.csv
 
 참고 정보
 ========

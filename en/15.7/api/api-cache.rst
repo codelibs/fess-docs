@@ -20,7 +20,7 @@ Endpoint            ``/api/v2/cache/{docId}``
 
 Returns the cached (highlight-applied) HTML of a document.
 
-When ``app.login.required=true`` and the caller is anonymous, it returns ``auth_required`` (401).
+When the login-required setting (System Settings "Login Required") is enabled and the caller is anonymous, it returns ``auth_required`` (401).
 
 Request Parameters
 ------------------
@@ -87,7 +87,7 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
    * - 400 Bad Request
      - The request is invalid.
    * - 401 Unauthorized
-     - Authentication is required (``app.login.required=true`` with an anonymous caller).
+     - Authentication is required (the login-required setting is enabled with an anonymous caller).
    * - 404 Not Found
      - The resource was not found.
    * - 405 Method Not Allowed

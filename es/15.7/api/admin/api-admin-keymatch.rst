@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de coincidencias de claves
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/keymatch/settings
-    PUT /api/admin/keymatch/settings
 
 Parametros
 ~~~~~~~~~~
@@ -161,11 +160,11 @@ Descripcion de Campos
      - Si
      - Consulta de condicion de coincidencia
    * - ``maxSize``
-     - No
-     - Numero maximo de resultados (predeterminado: 10)
+     - Si
+     - Numero maximo de resultados (valor inicial del formulario: 10)
    * - ``boost``
-     - No
-     - Valor de impulso (predeterminado: 1.0)
+     - Si
+     - Valor de impulso (valor inicial del formulario: 100.0)
 
 Respuesta
 ---------
@@ -235,9 +234,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_keymatch_id",
-        "created": false
+        "status": 0
       }
     }
 

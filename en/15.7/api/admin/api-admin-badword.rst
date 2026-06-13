@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List bad words
    * - GET
@@ -40,6 +40,12 @@ Endpoint List
    * - DELETE
      - /setting/{id}
      - Delete bad word
+   * - PUT
+     - /upload
+     - Upload bad word CSV
+   * - GET
+     - /download
+     - Download bad word CSV
 
 List Bad Words
 ==============
@@ -50,7 +56,6 @@ Request
 ::
 
     GET /api/admin/badword/settings
-    PUT /api/admin/badword/settings
 
 Parameters
 ~~~~~~~~~~
@@ -83,9 +88,7 @@ Response
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word",
-            "targetRole": "",
-            "targetLabel": ""
+            "suggestWord": "inappropriate_word"
           }
         ],
         "total": 5
@@ -112,9 +115,7 @@ Response
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word",
-          "targetRole": "",
-          "targetLabel": ""
+          "suggestWord": "inappropriate_word"
         }
       }
     }
@@ -136,9 +137,7 @@ Request Body
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": ""
+      "suggestWord": "spam_keyword"
     }
 
 Field Description
@@ -153,13 +152,7 @@ Field Description
      - Description
    * - ``suggestWord``
      - Yes
-     - Keyword to exclude
-   * - ``targetRole``
-     - No
-     - Target role (empty = all roles)
-   * - ``targetLabel``
-     - No
-     - Target label (empty = all labels)
+     - Keyword to exclude (cannot contain whitespace characters)
 
 Response
 --------
@@ -193,8 +186,6 @@ Request Body
     {
       "id": "existing_badword_id",
       "suggestWord": "updated_spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": "",
       "versionNo": 1
     }
 
@@ -234,6 +225,56 @@ Response
       }
     }
 
+Upload Bad Word CSV
+===================
+
+Bulk-registers bad words from a CSV file. The file is sent as ``multipart/form-data``. The import is executed asynchronously on the server side.
+
+Request
+-------
+
+::
+
+    PUT /api/admin/badword/upload
+    Content-Type: multipart/form-data
+
+Parameters
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parameter
+     - Required
+     - Description
+   * - ``badWordFile``
+     - Yes
+     - Bad word CSV file to upload
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Download Bad Word CSV
+=====================
+
+Downloads the registered bad words as a CSV file (``badword.csv``). The response is an ``application/octet-stream`` stream.
+
+Request
+-------
+
+::
+
+    GET /api/admin/badword/download
+
 Usage Examples
 ==============
 
@@ -246,24 +287,26 @@ Exclude Spam Keyword
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam",
-           "targetRole": "",
-           "targetLabel": ""
+           "suggestWord": "spam"
          }'
 
-Bad Word for Specific Role
---------------------------
+Upload CSV File
+---------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/badword/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "suggestWord": "internal",
-           "targetRole": "guest",
-           "targetLabel": ""
-         }'
+         -F "badWordFile=@badword.csv"
+
+Download CSV File
+-----------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o badword.csv
 
 Reference
 =========

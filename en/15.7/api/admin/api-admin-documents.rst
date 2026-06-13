@@ -5,8 +5,8 @@ Documents API
 Overview
 ========
 
-Documents API is an API for managing documents in the |Fess| index.
-You can perform bulk deletion, update, and search operations on documents.
+Documents API is an API for bulk registration of documents into the |Fess| index.
+It allows multiple documents to be added to the index at once.
 
 Base URL
 ========
@@ -25,227 +25,150 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - DELETE
-     - /
-     - Delete documents (by query)
-   * - DELETE
-     - /{id}
-     - Delete document (by ID)
+   * - PUT
+     - /bulk
+     - Bulk register documents
 
-Delete Documents by Query
-=========================
+Bulk Register Documents
+=======================
 
-Bulk delete documents matching a search query.
+Bulk register multiple documents into the index.
 
 Request
 -------
 
 ::
 
-    DELETE /api/admin/documents
+    PUT /api/admin/documents/bulk
+    Content-Type: application/json
 
-Parameters
-~~~~~~~~~~
+Request Body
+~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "documents": [
+        {
+          "url": "https://example.com/page1",
+          "title": "Sample Page 1",
+          "content": "This is the body text of page 1."
+        },
+        {
+          "url": "https://example.com/page2",
+          "title": "Sample Page 2",
+          "content": "This is the body text of page 2."
+        }
+      ]
+    }
+
+Field Description
+~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 25 15 60
 
-   * - Parameter
-     - Type
+   * - Field
      - Required
      - Description
-   * - ``q``
-     - String
+   * - ``documents``
      - Yes
-     - Search query for documents to delete
+     - Array of documents to register. Each document is specified as a map of field names and values. An empty array cannot be specified.
+
+For each document, you can freely specify index fields such as ``url``, ``title``, and ``content``.
+If fields such as ``content_length``, ``favorite_count``, ``click_count``, ``boost``, ``role``, ``last_modified``, and ``timestamp`` are omitted, default values are automatically filled in.
+In addition, ``doc_id`` and the ID are automatically generated upon registration.
 
 Response
 --------
+
+The response returns the processing result of each registered document in the ``items`` array.
+Successful items include ``result`` and ``id``, while failed items include ``result`` and ``message``.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "deleted": 150
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "CREATED",
+            "id": "0123456789abcdef"
+          }
+        ]
       }
     }
 
-Example
-~~~~~~~
-
-.. code-block:: bash
-
-    # Delete documents from a specific site
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Delete old documents
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO 2023-01-01]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Delete documents by label
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=label:old_label" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Delete Document by ID
-=====================
-
-Delete a document by specifying its ID.
-
-Request
--------
-
-::
-
-    DELETE /api/admin/documents/{id}
-
-Parameters
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - ``id``
-     - String
-     - Yes
-     - Document ID (path parameter)
-
-Response
---------
+If registration fails for any item, ``status`` becomes ``9`` (FAILED), and the corresponding item includes a ``message`` field.
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0
+        "version": "15.7.0",
+        "status": 9,
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "BAD_REQUEST",
+            "message": "failure reason ..."
+          }
+        ]
       }
     }
 
-Example
-~~~~~~~
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/documents/doc_id_12345" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Query Syntax
-============
-
-Delete queries use |Fess|'s standard search syntax.
-
-Basic Queries
--------------
+Response Fields
+~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 30 70
 
-   * - Query Example
+   * - Field
      - Description
-   * - ``url:example.com``
-     - Documents with "example.com" in the URL
-   * - ``url:https://example.com/*``
-     - URLs with a specific prefix
-   * - ``host:example.com``
-     - Documents from a specific host
-   * - ``title:keyword``
-     - Documents with keyword in the title
-   * - ``content:keyword``
-     - Documents with keyword in the content
-   * - ``label:mylabel``
-     - Documents with a specific label
-
-Date Range Queries
-------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Query Example
-     - Description
-   * - ``lastModified:[2023-01-01 TO 2023-12-31]``
-     - Documents updated within the specified period
-   * - ``lastModified:[* TO 2023-01-01]``
-     - Documents updated before the specified date
-   * - ``created:[2024-01-01 TO *]``
-     - Documents created after the specified date
-
-Compound Queries
-----------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Query Example
-     - Description
-   * - ``url:example.com AND label:blog``
-     - AND condition
-   * - ``url:example.com OR url:sample.com``
-     - OR condition
-   * - ``NOT url:example.com``
-     - NOT condition
-   * - ``(url:example.com OR url:sample.com) AND label:news``
-     - Grouping
-
-Cautions
-========
-
-Deletion Warnings
------------------
-
-.. warning::
-   Delete operations cannot be undone. Always verify in a test environment before executing in production.
-
-- Deleting a large number of documents may take time to process
-- Index performance may be affected during deletion
-- It may take some time for deleted documents to be reflected in search results
-
-Recommended Practices
----------------------
-
-1. **Verify before deletion**: Use the search API with the same query to verify targets
-2. **Delete in stages**: Split large deletions into multiple operations
-3. **Backup**: Back up important data beforehand
+   * - ``items``
+     - Array of processing results for each document
+   * - ``items[].result``
+     - Processing result status (e.g., ``CREATED``)
+   * - ``items[].id``
+     - ID of the registered document (on success)
+   * - ``items[].message``
+     - Failure reason message (on failure)
 
 Usage Examples
 ==============
 
-Prepare for Full Site Re-crawl
-------------------------------
+Bulk Register Documents
+-----------------------
 
 .. code-block:: bash
 
-    # Delete old documents from a specific site
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=host:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Start crawl job
-    curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Cleanup Old Documents
----------------------
-
-.. code-block:: bash
-
-    # Delete documents not updated for more than a year
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO now-1y]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/documents/bulk" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "documents": [
+             {
+               "url": "https://example.com/page1",
+               "title": "Sample Page 1",
+               "content": "This is the body text of page 1."
+             }
+           ]
+         }'
 
 Reference
 =========
 
 - :doc:`api-admin-overview` - Admin API Overview
+- :doc:`api-admin-searchlist` - Document Search and Management API
 - :doc:`api-admin-crawlinginfo` - Crawling Info API
 - :doc:`../../admin/searchlist-guide` - Search List Management Guide
-

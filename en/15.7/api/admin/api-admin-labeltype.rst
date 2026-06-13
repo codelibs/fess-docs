@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List label types
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 Parameters
 ~~~~~~~~~~
@@ -87,6 +86,8 @@ Response
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -119,7 +120,7 @@ Response
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
           "sortOrder": 0,
-          "permissions": [],
+          "permissions": "{role}admin",
           "virtualHost": ""
         }
       }
@@ -147,7 +148,7 @@ Request Body
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 Field Description
@@ -177,7 +178,7 @@ Field Description
      - Display order
    * - ``permissions``
      - No
-     - Access permission roles
+     - Access permission roles (newline-separated if multiple)
    * - ``virtualHost``
      - No
      - Virtual host
@@ -218,7 +219,7 @@ Request Body
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
       "excludedPaths": ".*/(archive|old|draft)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"],
+      "permissions": "{role}guest",
       "versionNo": 1
     }
 
@@ -252,9 +253,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_label_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -274,7 +273,7 @@ Create Documentation Label
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 Search with Label

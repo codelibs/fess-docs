@@ -64,7 +64,7 @@ Admin API リファレンス
    api-admin-systeminfo
    api-admin-stats
    api-admin-log
-   api-admin-searchlog
+   api-admin-searchlist
    api-admin-storage
    api-admin-plugin
 

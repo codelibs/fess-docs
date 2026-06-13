@@ -5,8 +5,8 @@ Documents API
 Übersicht
 =========
 
-Die Documents API dient zur Verwaltung von Dokumenten im Index von |Fess|.
-Sie können Operationen wie Massenlöschung, Aktualisierung und Suche von Dokumenten durchführen.
+Die Documents API dient zur gesammelten Registrierung von Dokumenten im Index von |Fess|.
+Sie können mehrere Dokumente auf einmal zum Index hinzufügen.
 
 Basis-URL
 =========
@@ -25,226 +25,150 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - DELETE
-     - /
-     - Dokumente löschen (Query-basiert)
-   * - DELETE
-     - /{id}
-     - Dokument löschen (ID-basiert)
+   * - PUT
+     - /bulk
+     - Dokumente gesammelt registrieren
 
-Dokumente per Query löschen
-===========================
+Dokumente gesammelt registrieren
+================================
 
-Löscht alle Dokumente, die der Suchabfrage entsprechen.
+Registriert mehrere Dokumente gesammelt im Index.
 
 Request
 -------
 
 ::
 
-    DELETE /api/admin/documents
+    PUT /api/admin/documents/bulk
+    Content-Type: application/json
 
-Parameter
-~~~~~~~~~
+Request-Body
+~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "documents": [
+        {
+          "url": "https://example.com/page1",
+          "title": "Beispielseite 1",
+          "content": "Dies ist der Textinhalt von Seite 1."
+        },
+        {
+          "url": "https://example.com/page2",
+          "title": "Beispielseite 2",
+          "content": "Dies ist der Textinhalt von Seite 2."
+        }
+      ]
+    }
+
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 25 15 60
 
-   * - Parameter
-     - Typ
+   * - Feld
      - Erforderlich
      - Beschreibung
-   * - ``q``
-     - String
+   * - ``documents``
      - Ja
-     - Suchabfrage für zu löschende Dokumente
+     - Array der zu registrierenden Dokumente. Jedes Dokument wird als Map aus Feldnamen und Werten angegeben. Ein leeres Array ist nicht zulässig.
+
+Für jedes Dokument können Index-Felder wie ``url``, ``title``, ``content`` usw. frei angegeben werden.
+Werden ``content_length``, ``favorite_count``, ``click_count``, ``boost``, ``role``, ``last_modified``, ``timestamp`` usw. weggelassen, werden die Standardwerte automatisch ergänzt.
+Außerdem werden ``doc_id`` und die ID bei der Registrierung automatisch generiert.
 
 Response
 --------
+
+Die Antwort gibt das Verarbeitungsergebnis jedes registrierten Dokuments im Array ``items`` zurück.
+Erfolgreiche Einträge enthalten ``result`` und ``id``, fehlgeschlagene Einträge enthalten ``result`` und ``message``.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "deleted": 150
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "CREATED",
+            "id": "0123456789abcdef"
+          }
+        ]
       }
     }
 
-Beispiele
-~~~~~~~~~
-
-.. code-block:: bash
-
-    # Dokumente einer bestimmten Website löschen
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Alte Dokumente löschen
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO 2023-01-01]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Dokumente mit bestimmtem Label löschen
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=label:old_label" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Dokument per ID löschen
-=======================
-
-Löscht ein Dokument anhand seiner ID.
-
-Request
--------
-
-::
-
-    DELETE /api/admin/documents/{id}
-
-Parameter
-~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Typ
-     - Erforderlich
-     - Beschreibung
-   * - ``id``
-     - String
-     - Ja
-     - Dokument-ID (Pfadparameter)
-
-Response
---------
+Schlägt die Registrierung bei einem der Einträge fehl, wird ``status`` zu ``9`` (FAILED) und der betreffende Eintrag enthält ein ``message``-Feld.
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0
+        "version": "15.7.0",
+        "status": 9,
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "BAD_REQUEST",
+            "message": "failure reason ..."
+          }
+        ]
       }
     }
 
-Beispiel
-~~~~~~~~
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/documents/doc_id_12345" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Query-Syntax
-============
-
-Für Löschabfragen kann die Standard-Suchsyntax von |Fess| verwendet werden.
-
-Grundlegende Abfragen
----------------------
+Response-Felder
+~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 30 70
 
-   * - Abfragebeispiel
+   * - Feld
      - Beschreibung
-   * - ``url:example.com``
-     - Dokumente mit "example.com" in der URL
-   * - ``url:https://example.com/*``
-     - URLs mit bestimmtem Präfix
-   * - ``host:example.com``
-     - Dokumente eines bestimmten Hosts
-   * - ``title:keyword``
-     - Dokumente mit Schlüsselwort im Titel
-   * - ``content:keyword``
-     - Dokumente mit Schlüsselwort im Inhalt
-   * - ``label:mylabel``
-     - Dokumente mit bestimmtem Label
-
-Datumsbereichsabfragen
-----------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Abfragebeispiel
-     - Beschreibung
-   * - ``lastModified:[2023-01-01 TO 2023-12-31]``
-     - Im angegebenen Zeitraum aktualisierte Dokumente
-   * - ``lastModified:[* TO 2023-01-01]``
-     - Vor dem angegebenen Datum aktualisierte Dokumente
-   * - ``created:[2024-01-01 TO *]``
-     - Nach dem angegebenen Datum erstellte Dokumente
-
-Kombinierte Abfragen
---------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Abfragebeispiel
-     - Beschreibung
-   * - ``url:example.com AND label:blog``
-     - UND-Bedingung
-   * - ``url:example.com OR url:sample.com``
-     - ODER-Bedingung
-   * - ``NOT url:example.com``
-     - NICHT-Bedingung
-   * - ``(url:example.com OR url:sample.com) AND label:news``
-     - Gruppierung
-
-Hinweise
-========
-
-Vorsichtsmaßnahmen bei Löschoperationen
----------------------------------------
-
-.. warning::
-   Löschoperationen können nicht rückgängig gemacht werden. Testen Sie vor der Ausführung in einer Produktionsumgebung unbedingt in einer Testumgebung.
-
-- Bei der Löschung großer Dokumentmengen kann die Verarbeitung einige Zeit in Anspruch nehmen
-- Während der Löschung kann die Index-Performance beeinträchtigt werden
-- Nach der Löschung kann es etwas dauern, bis die Suchergebnisse aktualisiert sind
-
-Empfohlene Praktiken
---------------------
-
-1. **Vor dem Löschen bestätigen**: Verwenden Sie dieselbe Abfrage mit der Such-API, um die Löschziele zu überprüfen
-2. **Schrittweises Löschen**: Führen Sie Massenlöschungen in mehreren Schritten durch
-3. **Backup**: Sichern Sie wichtige Daten vorher
+   * - ``items``
+     - Array der Verarbeitungsergebnisse je Dokument
+   * - ``items[].result``
+     - Status des Verarbeitungsergebnisses (Beispiel: ``CREATED``)
+   * - ``items[].id``
+     - ID des registrierten Dokuments (bei Erfolg)
+   * - ``items[].message``
+     - Meldung mit dem Fehlergrund (bei Fehlschlag)
 
 Verwendungsbeispiele
 ====================
 
-Vorbereitung für Neuindexierung einer Website
----------------------------------------------
+Dokumente gesammelt registrieren
+--------------------------------
 
 .. code-block:: bash
 
-    # Alte Dokumente einer bestimmten Website löschen
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=host:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Crawl-Job starten
-    curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Bereinigung alter Dokumente
----------------------------
-
-.. code-block:: bash
-
-    # Dokumente löschen, die seit über einem Jahr nicht aktualisiert wurden
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO now-1y]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/documents/bulk" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "documents": [
+             {
+               "url": "https://example.com/page1",
+               "title": "Beispielseite 1",
+               "content": "Dies ist der Textinhalt von Seite 1."
+             }
+           ]
+         }'
 
 Referenzinformationen
 =====================
 
 - :doc:`api-admin-overview` - Admin API Übersicht
+- :doc:`api-admin-searchlist` - Dokumentsuche- und -verwaltungs-API
 - :doc:`api-admin-crawlinginfo` - Crawl-Informationen API
 - :doc:`../../admin/searchlist-guide` - Suchlistenverwaltungsanleitung

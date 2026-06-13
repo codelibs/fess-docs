@@ -25,7 +25,7 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - ロール一覧取得
    * - GET
@@ -50,7 +50,6 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
 ::
 
     GET /api/admin/role/settings
-    PUT /api/admin/role/settings
 
 パラメーター
 ~~~~~~~~~~~~

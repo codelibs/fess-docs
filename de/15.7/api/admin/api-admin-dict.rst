@@ -6,7 +6,9 @@ Dict API
 =========
 
 Die Dict API dient zur Verwaltung von Wörterbüchern in |Fess|.
-Sie können Synonyme, Stoppwörter, Mappings und andere Wörterbuchdaten verwalten.
+Über den Stamm-Endpunkt können Sie die Liste der verfügbaren Wörterbücher abrufen.
+Das Anzeigen, Erstellen, Aktualisieren und Löschen einzelner Wörterbucheinträge sowie das Hochladen und Herunterladen von Wörterbuchdateien
+erfolgen über die Sub-Endpunkte je Wörterbuchtyp (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
 
 Basis-URL
 =========
@@ -18,6 +20,9 @@ Basis-URL
 Endpunktliste
 =============
 
+Wörterbuch-Stamm
+----------------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,24 +33,46 @@ Endpunktliste
    * - GET
      - /
      - Wörterbücher auflisten
+
+Endpunkte je Wörterbuchtyp
+--------------------------
+
+Für ``{type}`` wird einer der Werte ``synonym``, ``kuromoji``, ``mapping``, ``protwords``, ``stopwords``, ``stemmerOverride`` angegeben.
+``{dictId}`` ist die ID des Wörterbuchs, die beim Auflisten der Wörterbücher zurückgegeben wird.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - Methode
+     - Pfad
+     - Beschreibung
    * - GET
-     - /{dictId}/settings
+     - /{type}/settings/{dictId}
      - Wörterbucheinträge auflisten
    * - GET
-     - /{dictId}/setting/{id}
+     - /{type}/setting/{dictId}/{id}
      - Wörterbucheintrag abrufen
    * - POST
-     - /{dictId}/setting
+     - /{type}/setting/{dictId}
      - Wörterbucheintrag erstellen
    * - PUT
-     - /{dictId}/setting
+     - /{type}/setting/{dictId}
      - Wörterbucheintrag aktualisieren
    * - DELETE
-     - /{dictId}/setting/{id}
+     - /{type}/setting/{dictId}/{id}
      - Wörterbucheintrag löschen
+   * - PUT
+     - /{type}/upload/{dictId}
+     - Wörterbuchdatei hochladen
+   * - GET
+     - /{type}/download/{dictId}
+     - Wörterbuchdatei herunterladen
 
 Wörterbücher auflisten
 ======================
+
+Ruft die Liste der verfügbaren Wörterbuchdateien ab.
 
 Request
 -------
@@ -61,93 +88,344 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dictionaries": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "Synonym Dictionary",
-            "type": "synonym"
+            "id": "ZjA5...synonym.txt",
+            "type": "synonym",
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "stopwords",
-            "name": "Stop Words",
-            "type": "stopwords"
-          },
-          {
-            "id": "mapping",
-            "name": "Character Mapping",
-            "type": "mapping"
+            "id": "ZjA5...mapping.txt",
+            "type": "mapping",
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
         ]
       }
     }
 
+Response-Felder
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Feld
+     - Beschreibung
+   * - ``settings[].id``
+     - Wörterbuch-ID (wird bei einzelnen Wörterbuchoperationen als ``{dictId}`` verwendet)
+   * - ``settings[].type``
+     - Wörterbuchtyp
+   * - ``settings[].path``
+     - Pfad der Wörterbuchdatei
+   * - ``settings[].timestamp``
+     - Zeitpunkt der Änderung der Wörterbuchdatei
+
 Wörterbucheinträge auflisten
 ============================
+
+Listet die Einträge im angegebenen Wörterbuch auf.
 
 Request
 -------
 
 ::
 
-    GET /api/admin/dict/{dictId}/settings
+    GET /api/admin/dict/{type}/settings/{dictId}
 
-Response (Synonym-Beispiel)
----------------------------
+Parameter
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Typ
+     - Erforderlich
+     - Beschreibung
+   * - ``dictId``
+     - String
+     - Ja
+     - Wörterbuch-ID (Pfadparameter)
+   * - ``size``
+     - Integer
+     - Nein
+     - Anzahl der Einträge pro Seite
+   * - ``page``
+     - Integer
+     - Nein
+     - Seitennummer
+
+Response
+--------
+
+Die Felder der einzelnen Einträge im Array ``settings`` der Antwort unterscheiden sich je nach Wörterbuchtyp (siehe weiter unten „Eintragsfelder je Wörterbuchtyp“).
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
-            "id": "entry_1",
-            "inputs": "auto, car, vehicle",
-            "outputs": "automobile"
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "検索,サーチ",
+            "outputs": "検索,サーチ,リサーチ"
           }
-        ],
-        "total": 100
+        ]
+      }
+    }
+
+Wörterbucheintrag abrufen
+=========================
+
+Ruft einen bestimmten Eintrag im Wörterbuch ab.
+
+Request
+-------
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parameter
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Typ
+     - Erforderlich
+     - Beschreibung
+   * - ``dictId``
+     - String
+     - Ja
+     - Wörterbuch-ID (Pfadparameter)
+   * - ``id``
+     - Long
+     - Ja
+     - Eintrags-ID (Pfadparameter)
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "検索,サーチ",
+          "outputs": "検索,サーチ,リサーチ"
+        }
       }
     }
 
 Wörterbucheintrag erstellen
 ===========================
 
-Request (Synonym)
------------------
+Erstellt einen neuen Eintrag im Wörterbuch.
+
+Request
+-------
 
 ::
 
-    POST /api/admin/dict/synonym/setting
+    POST /api/admin/dict/{type}/setting/{dictId}
     Content-Type: application/json
 
-Request-Body
-~~~~~~~~~~~~
+Request-Body (Synonym-Beispiel)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
-      "inputs": "laptop, notebook",
-      "outputs": "computer"
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ"
     }
 
-Request (Stoppwort)
--------------------
-
-::
-
-    POST /api/admin/dict/stopwords/setting
-    Content-Type: application/json
-
-Request-Body
-~~~~~~~~~~~~
+Response
+--------
 
 .. code-block:: json
 
     {
-      "input": "the"
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": true
+      }
     }
+
+Wörterbucheintrag aktualisieren
+===============================
+
+Aktualisiert einen bestehenden Eintrag im Wörterbuch.
+
+Request
+-------
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+Request-Body (Synonym-Beispiel)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ,search"
+    }
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+Wörterbucheintrag löschen
+=========================
+
+Löscht einen Eintrag im Wörterbuch.
+
+Request
+-------
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parameter
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Typ
+     - Erforderlich
+     - Beschreibung
+   * - ``dictId``
+     - String
+     - Ja
+     - Wörterbuch-ID (Pfadparameter)
+   * - ``id``
+     - Long
+     - Ja
+     - Eintrags-ID (Pfadparameter)
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+Wörterbuchdatei hochladen
+=========================
+
+Lädt die gesamte Wörterbuchdatei hoch und ersetzt sie.
+
+Request
+-------
+
+::
+
+    PUT /api/admin/dict/{type}/upload/{dictId}
+    Content-Type: multipart/form-data
+
+Der Name des Dateifelds unterscheidet sich je Wörterbuchtyp (siehe weiter unten „Eintragsfelder je Wörterbuchtyp“).
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+Wörterbuchdatei herunterladen
+=============================
+
+Lädt die Wörterbuchdatei herunter.
+
+Request
+-------
+
+::
+
+    GET /api/admin/dict/{type}/download/{dictId}
+
+Die Antwort ist die Binärdatei des Wörterbuchs (``application/octet-stream``).
+
+Eintragsfelder je Wörterbuchtyp
+===============================
+
+Die Felder im Request-Body zum Erstellen/Aktualisieren von Wörterbucheinträgen sowie in der Antwort unterscheiden sich je Wörterbuchtyp.
+``id`` (Eintrags-ID) und ``dictId`` (Wörterbuch-ID) sind in der Antwort gemeinsam enthalten.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 42 40
+
+   * - Typ
+     - Eintragsfelder
+     - Upload-Dateifeld
+   * - ``synonym``
+     - ``inputs`` (erforderlich), ``outputs`` (erforderlich)
+     - ``synonymFile``
+   * - ``kuromoji``
+     - ``token`` (erforderlich), ``segmentation`` (erforderlich), ``reading`` (erforderlich), ``pos`` (erforderlich)
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` (erforderlich), ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` (erforderlich)
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` (erforderlich)
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` (erforderlich), ``output`` (erforderlich)
+     - ``stemmerOverrideFile``
 
 Verwendungsbeispiele
 ====================
@@ -160,38 +438,44 @@ Wörterbücher auflisten
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Synonyme auflisten
-------------------
+Einträge des Synonymwörterbuchs auflisten
+-----------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Synonym hinzufügen
-------------------
+Eintrag zum Synonymwörterbuch hinzufügen
+----------------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "big, large, huge",
-           "outputs": "big"
+           "inputs": "検索,サーチ",
+           "outputs": "検索,サーチ,リサーチ"
          }'
 
-Stoppwort hinzufügen
---------------------
+Synonymwörterbuchdatei hochladen
+--------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/dict/stopwords/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "input": "and"
-         }'
+         -F "synonymFile=@synonym.txt"
+
+Synonymwörterbuchdatei herunterladen
+------------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o synonym.txt
 
 Referenzinformationen
 =====================

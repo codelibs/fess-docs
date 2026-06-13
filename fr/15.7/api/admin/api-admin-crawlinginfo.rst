@@ -5,8 +5,8 @@ API CrawlingInfo
 Vue d'ensemble
 ==============
 
-L'API CrawlingInfo permet d'obtenir les informations de crawl de |Fess|.
-Vous pouvez consulter l'etat des sessions de crawl, la progression et les statistiques.
+L'API CrawlingInfo permet de consulter et de gerer les informations de crawl (sessions de crawl) de |Fess|.
+Vous pouvez obtenir la liste des sessions de crawl, les consulter individuellement, les supprimer, etc.
 
 URL de base
 ===========
@@ -26,14 +26,17 @@ Liste des endpoints
      - Chemin
      - Description
    * - GET
-     - /
+     - /logs
      - Obtention de la liste des informations de crawl
    * - GET
-     - /{sessionId}
-     - Obtention des details d'une session de crawl
+     - /log/{id}
+     - Obtention d'une information de crawl
    * - DELETE
-     - /{sessionId}
-     - Suppression d'une session de crawl
+     - /log/{id}
+     - Suppression d'une information de crawl
+   * - DELETE
+     - /all
+     - Suppression groupee des anciennes sessions de crawl
 
 Obtention de la liste des informations de crawl
 ===============================================
@@ -43,14 +46,14 @@ Requete
 
 ::
 
-    GET /api/admin/crawlinginfo
+    GET /api/admin/crawlinginfo/logs
 
 Parametres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -59,11 +62,15 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page
+   * - ``sessionId``
+     - String
+     - Non
+     - Filtre par ID de session
 
 Reponse
 -------
@@ -73,28 +80,20 @@ Reponse
     {
       "response": {
         "status": 0,
-        "sessions": [
+        "logs": [
           {
-            "sessionId": "session_20250129_100000",
+            "id": "crawling_info_id_1",
+            "sessionId": "20250129100000",
             "name": "Default Crawler",
-            "status": "running",
-            "startTime": "2025-01-29T10:00:00Z",
-            "endTime": null,
-            "crawlingInfoCount": 567,
-            "createdDocCount": 234,
-            "updatedDocCount": 123,
-            "deletedDocCount": 12
+            "expiredTime": "1738200000000",
+            "createdTime": 1738108800000
           },
           {
-            "sessionId": "session_20250128_100000",
+            "id": "crawling_info_id_2",
+            "sessionId": "20250128100000",
             "name": "Default Crawler",
-            "status": "completed",
-            "startTime": "2025-01-28T10:00:00Z",
-            "endTime": "2025-01-28T10:45:23Z",
-            "crawlingInfoCount": 1234,
-            "createdDocCount": 456,
-            "updatedDocCount": 678,
-            "deletedDocCount": 23
+            "expiredTime": "1738113600000",
+            "createdTime": 1738022400000
           }
         ],
         "total": 10
@@ -102,7 +101,7 @@ Reponse
     }
 
 Champs de la reponse
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -110,34 +109,26 @@ Champs de la reponse
 
    * - Champ
      - Description
+   * - ``id``
+     - ID de l'information de crawl
    * - ``sessionId``
      - ID de la session
    * - ``name``
-     - Nom du crawler
-   * - ``status``
-     - Statut (running/completed/failed)
-   * - ``startTime``
-     - Heure de debut
-   * - ``endTime``
-     - Heure de fin
-   * - ``crawlingInfoCount``
-     - Nombre d'informations de crawl
-   * - ``createdDocCount``
-     - Nombre de documents crees
-   * - ``updatedDocCount``
-     - Nombre de documents mis a jour
-   * - ``deletedDocCount``
-     - Nombre de documents supprimes
+     - Nom de la session
+   * - ``expiredTime``
+     - Date d'expiration
+   * - ``createdTime``
+     - Heure de creation (millisecondes epoch)
 
-Obtention des details d'une session de crawl
-============================================
+Obtention d'une information de crawl
+====================================
 
 Requete
 -------
 
 ::
 
-    GET /api/admin/crawlinginfo/{sessionId}
+    GET /api/admin/crawlinginfo/log/{id}
 
 Reponse
 -------
@@ -147,40 +138,25 @@ Reponse
     {
       "response": {
         "status": 0,
-        "session": {
-          "sessionId": "session_20250129_100000",
+        "log": {
+          "id": "crawling_info_id_1",
+          "sessionId": "20250129100000",
           "name": "Default Crawler",
-          "status": "running",
-          "startTime": "2025-01-29T10:00:00Z",
-          "endTime": null,
-          "crawlingInfoCount": 567,
-          "createdDocCount": 234,
-          "updatedDocCount": 123,
-          "deletedDocCount": 12,
-          "infos": [
-            {
-              "url": "https://example.com/page1",
-              "status": "OK",
-              "method": "GET",
-              "httpStatusCode": 200,
-              "contentLength": 12345,
-              "executionTime": 123,
-              "lastModified": "2025-01-29T09:55:00Z"
-            }
-          ]
+          "expiredTime": "1738200000000",
+          "createdTime": 1738108800000
         }
       }
     }
 
-Suppression d'une session de crawl
-==================================
+Suppression d'une information de crawl
+======================================
 
 Requete
 -------
 
 ::
 
-    DELETE /api/admin/crawlinginfo/{sessionId}
+    DELETE /api/admin/crawlinginfo/log/{id}
 
 Reponse
 -------
@@ -189,8 +165,30 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "message": "Crawling session deleted successfully"
+        "status": 0
+      }
+    }
+
+Suppression groupee des anciennes sessions de crawl
+===================================================
+
+Supprime en bloc les anciennes sessions de crawl, a l'exception des sessions en cours d'execution.
+
+Requete
+-------
+
+::
+
+    DELETE /api/admin/crawlinginfo/all
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
       }
     }
 
@@ -202,46 +200,40 @@ Obtention de la liste des informations de crawl
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtention des sessions de crawl en cours
-----------------------------------------
+Filtrage par session specifique
+-------------------------------
 
 .. code-block:: bash
 
-    # Recuperer toutes les sessions et filtrer celles en cours
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.sessions[] | select(.status=="running")'
-
-Obtention des details d'une session specifique
-----------------------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/session_20250129_100000" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?sessionId=20250129100000" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Suppression d'une ancienne session
-----------------------------------
+Obtention d'une information de crawl
+------------------------------------
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/session_20250101_100000" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Surveillance de la progression
-------------------------------
+Suppression d'une information de crawl
+--------------------------------------
 
 .. code-block:: bash
 
-    # Verifier periodiquement la progression de la session en cours
-    while true; do
-      curl -s "http://localhost:8080/api/admin/crawlinginfo" \
-           -H "Authorization: Bearer YOUR_TOKEN" | \
-           jq '.response.sessions[] | select(.status=="running") | {sessionId, crawlingInfoCount, createdDocCount}'
-      sleep 10
-    done
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Suppression groupee des anciennes sessions
+------------------------------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
 Informations complementaires
 ============================

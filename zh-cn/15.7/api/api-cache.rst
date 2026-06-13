@@ -20,7 +20,7 @@ HTTP 方法            GET
 
 返回文档的缓存（已应用高亮）HTML。
 
-当 ``app.login.required=true`` 且调用方为匿名时，返回 ``auth_required``\ （401）。
+当登录必需设置（系统设置中的“登录必需”）有效且调用方为匿名时，返回 ``auth_required``\ （401）。
 
 请求参数
 --------
@@ -87,7 +87,7 @@ HTTP 方法            GET
    * - 400 Bad Request
      - 请求不合法时。
    * - 401 Unauthorized
-     - 需要认证时（\ ``app.login.required=true`` 且调用方为匿名）。
+     - 需要认证时（登录必需设置有效且调用方为匿名）。
    * - 404 Not Found
      - 找不到资源时。
    * - 405 Method Not Allowed

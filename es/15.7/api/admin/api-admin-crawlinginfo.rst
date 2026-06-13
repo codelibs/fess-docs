@@ -5,8 +5,8 @@ API de CrawlingInfo
 Vision General
 ==============
 
-La API de CrawlingInfo es para obtener informacion de rastreo de |Fess|.
-Puede consultar el estado de las sesiones de rastreo, progreso e informacion estadistica.
+La API de CrawlingInfo es para consultar y gestionar la informacion de rastreo (sesiones de rastreo) de |Fess|.
+Permite operaciones como obtener la lista de sesiones de rastreo, obtenerlas individualmente y eliminarlas.
 
 URL Base
 ========
@@ -26,14 +26,17 @@ Lista de Endpoints
      - Ruta
      - Descripcion
    * - GET
-     - /
+     - /logs
      - Obtener lista de informacion de rastreo
    * - GET
-     - /{sessionId}
-     - Obtener detalles de sesion de rastreo
+     - /log/{id}
+     - Obtener informacion de rastreo
    * - DELETE
-     - /{sessionId}
-     - Eliminar sesion de rastreo
+     - /log/{id}
+     - Eliminar informacion de rastreo
+   * - DELETE
+     - /all
+     - Eliminar en lote sesiones de rastreo antiguas
 
 Obtener Lista de Informacion de Rastreo
 =======================================
@@ -43,14 +46,14 @@ Solicitud
 
 ::
 
-    GET /api/admin/crawlinginfo
+    GET /api/admin/crawlinginfo/logs
 
 Parametros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametro
      - Tipo
@@ -59,11 +62,15 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Numero de elementos por pagina
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina
+   * - ``sessionId``
+     - String
+     - No
+     - Filtro por ID de sesion
 
 Respuesta
 ---------
@@ -73,28 +80,20 @@ Respuesta
     {
       "response": {
         "status": 0,
-        "sessions": [
+        "logs": [
           {
-            "sessionId": "session_20250129_100000",
+            "id": "crawling_info_id_1",
+            "sessionId": "20250129100000",
             "name": "Default Crawler",
-            "status": "running",
-            "startTime": "2025-01-29T10:00:00Z",
-            "endTime": null,
-            "crawlingInfoCount": 567,
-            "createdDocCount": 234,
-            "updatedDocCount": 123,
-            "deletedDocCount": 12
+            "expiredTime": "1738200000000",
+            "createdTime": 1738108800000
           },
           {
-            "sessionId": "session_20250128_100000",
+            "id": "crawling_info_id_2",
+            "sessionId": "20250128100000",
             "name": "Default Crawler",
-            "status": "completed",
-            "startTime": "2025-01-28T10:00:00Z",
-            "endTime": "2025-01-28T10:45:23Z",
-            "crawlingInfoCount": 1234,
-            "createdDocCount": 456,
-            "updatedDocCount": 678,
-            "deletedDocCount": 23
+            "expiredTime": "1738113600000",
+            "createdTime": 1738022400000
           }
         ],
         "total": 10
@@ -110,34 +109,26 @@ Campos de Respuesta
 
    * - Campo
      - Descripcion
+   * - ``id``
+     - ID de informacion de rastreo
    * - ``sessionId``
      - ID de sesion
    * - ``name``
-     - Nombre del rastreador
-   * - ``status``
-     - Estado (running/completed/failed)
-   * - ``startTime``
-     - Hora de inicio
-   * - ``endTime``
-     - Hora de finalizacion
-   * - ``crawlingInfoCount``
-     - Numero de informacion de rastreo
-   * - ``createdDocCount``
-     - Numero de documentos creados
-   * - ``updatedDocCount``
-     - Numero de documentos actualizados
-   * - ``deletedDocCount``
-     - Numero de documentos eliminados
+     - Nombre de sesion
+   * - ``expiredTime``
+     - Fecha de expiracion
+   * - ``createdTime``
+     - Hora de creacion (milisegundos epoch)
 
-Obtener Detalles de Sesion de Rastreo
-=====================================
+Obtener Informacion de Rastreo
+==============================
 
 Solicitud
 ---------
 
 ::
 
-    GET /api/admin/crawlinginfo/{sessionId}
+    GET /api/admin/crawlinginfo/log/{id}
 
 Respuesta
 ---------
@@ -147,40 +138,25 @@ Respuesta
     {
       "response": {
         "status": 0,
-        "session": {
-          "sessionId": "session_20250129_100000",
+        "log": {
+          "id": "crawling_info_id_1",
+          "sessionId": "20250129100000",
           "name": "Default Crawler",
-          "status": "running",
-          "startTime": "2025-01-29T10:00:00Z",
-          "endTime": null,
-          "crawlingInfoCount": 567,
-          "createdDocCount": 234,
-          "updatedDocCount": 123,
-          "deletedDocCount": 12,
-          "infos": [
-            {
-              "url": "https://example.com/page1",
-              "status": "OK",
-              "method": "GET",
-              "httpStatusCode": 200,
-              "contentLength": 12345,
-              "executionTime": 123,
-              "lastModified": "2025-01-29T09:55:00Z"
-            }
-          ]
+          "expiredTime": "1738200000000",
+          "createdTime": 1738108800000
         }
       }
     }
 
-Eliminar Sesion de Rastreo
-==========================
+Eliminar Informacion de Rastreo
+===============================
 
 Solicitud
 ---------
 
 ::
 
-    DELETE /api/admin/crawlinginfo/{sessionId}
+    DELETE /api/admin/crawlinginfo/log/{id}
 
 Respuesta
 ---------
@@ -189,8 +165,30 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "message": "Crawling session deleted successfully"
+        "status": 0
+      }
+    }
+
+Eliminar en Lote Sesiones de Rastreo Antiguas
+=============================================
+
+Elimina en conjunto las sesiones de rastreo antiguas, excepto las sesiones en ejecucion.
+
+Solicitud
+---------
+
+::
+
+    DELETE /api/admin/crawlinginfo/all
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
       }
     }
 
@@ -202,46 +200,40 @@ Obtener Lista de Informacion de Rastreo
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtener Sesiones de Rastreo en Ejecucion
-----------------------------------------
+Filtrar por Sesion Especifica
+-----------------------------
 
 .. code-block:: bash
 
-    # Obtener todas las sesiones y filtrar por running
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.sessions[] | select(.status=="running")'
-
-Obtener Detalles de Sesion Especifica
--------------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/session_20250129_100000" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?sessionId=20250129100000" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Eliminar Sesion Antigua
------------------------
+Obtener Informacion de Rastreo
+------------------------------
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/session_20250101_100000" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Monitoreo de Progreso
----------------------
+Eliminar Informacion de Rastreo
+-------------------------------
 
 .. code-block:: bash
 
-    # Verificar periodicamente el progreso de sesiones en ejecucion
-    while true; do
-      curl -s "http://localhost:8080/api/admin/crawlinginfo" \
-           -H "Authorization: Bearer YOUR_TOKEN" | \
-           jq '.response.sessions[] | select(.status=="running") | {sessionId, crawlingInfoCount, createdDocCount}'
-      sleep 10
-    done
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Eliminar en Lote Sesiones Antiguas
+----------------------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
 Informacion de Referencia
 =========================

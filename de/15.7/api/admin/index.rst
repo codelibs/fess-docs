@@ -77,4 +77,4 @@ Admin API Referenz
    :maxdepth: 2
    :caption: Protokolle
 
-   api-admin-searchlog
+   api-admin-searchlist

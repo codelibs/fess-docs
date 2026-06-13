@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Geplante Jobs auflisten
    * - GET
@@ -56,14 +56,13 @@ Request
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 Parameter
 ~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Typ
@@ -72,11 +71,11 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer
 
 Response
 --------
@@ -94,9 +93,9 @@ Response
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Response
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` werden als Zeichenketten (``"true"`` / ``"false"``) behandelt. ``running`` ist ein boolescher Wert und gibt den Ausführungsstatus des Jobs an.
 
 Geplanten Job abrufen
 =====================
@@ -130,9 +133,9 @@ Response
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Request-Body
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Feldbeschreibungen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Feld
      - Erforderlich
@@ -184,25 +187,25 @@ Feldbeschreibungen
      - Ja
      - Ausführungsziel ("all" oder ein bestimmtes Ziel)
    * - ``cronExpression``
-     - Ja
+     - Nein
      - Cron-Ausdruck (Sekunden Minuten Stunden Tag Monat Wochentag)
    * - ``scriptType``
      - Ja
      - Skript-Typ ("groovy")
    * - ``scriptData``
-     - Ja
+     - Nein
      - Ausführungsskript
    * - ``jobLogging``
      - Nein
-     - Protokollierung aktivieren (Standard: true)
+     - Protokollierung aktivieren (Zeichenkette ``"true"`` / ``"false"``)
    * - ``crawler``
      - Nein
-     - Ob es ein Crawler-Job ist (Standard: false)
+     - Ob es ein Crawler-Job ist (Zeichenkette ``"true"`` / ``"false"``)
    * - ``available``
      - Nein
-     - Aktiviert/Deaktiviert (Standard: true)
+     - Aktiviert/Deaktiviert (Zeichenkette ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Nein
+     - Ja
      - Anzeigereihenfolge
 
 Response
@@ -259,9 +262,9 @@ Request-Body
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -296,9 +299,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_job_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -321,15 +322,28 @@ Response
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+Response-Felder
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Feld
+     - Beschreibung
+   * - ``jobLogId``
+     - Job-Protokoll-ID des gestarteten Jobs. Wird ausgegeben, wenn die Job-Protokollierung aktiviert ist. Ist die Job-Protokollierung deaktiviert, ist der Wert ``null``.
 
 Hinweise
 --------
 
 - Wenn der Job bereits läuft, wird ein Fehler zurückgegeben
-- Wenn der Job deaktiviert ist (``available: false``), wird ein Fehler zurückgegeben
+- Wenn der Job deaktiviert ist (``available`` ist ``"false"``), wird ein Fehler zurückgegeben
 
 Job stoppen
 ===========
@@ -372,9 +386,9 @@ Crawl-Job erstellen und ausführen
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # Job sofort ausführen

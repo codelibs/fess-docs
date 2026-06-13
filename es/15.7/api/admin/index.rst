@@ -77,4 +77,4 @@ Referencia de Admin API
    :maxdepth: 2
    :caption: Registro de Busqueda
 
-   api-admin-searchlog
+   api-admin-searchlist

@@ -25,7 +25,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - ラベルタイプ一覧取得
    * - GET
@@ -50,7 +50,6 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -87,6 +86,8 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -119,7 +120,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
           "sortOrder": 0,
-          "permissions": [],
+          "permissions": "{role}admin",
           "virtualHost": ""
         }
       }
@@ -147,7 +148,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 フィールド説明
@@ -177,7 +178,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
      - 表示順序
    * - ``permissions``
      - いいえ
-     - アクセス許可ロール
+     - アクセス許可ロール（複数の場合は改行区切り）
    * - ``virtualHost``
      - いいえ
      - 仮想ホスト
@@ -218,7 +219,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
       "excludedPaths": ".*/(archive|old|draft)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"],
+      "permissions": "{role}guest",
       "versionNo": 1
     }
 
@@ -252,9 +253,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_label_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -274,7 +273,7 @@ LabelType APIは、|Fess| のラベルタイプを管理するためのAPIです
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 ラベルを使用した検索

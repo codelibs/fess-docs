@@ -25,7 +25,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取相关查询列表
    * - GET
@@ -50,7 +50,6 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 ::
 
     GET /api/admin/relatedquery/settings
-    PUT /api/admin/relatedquery/settings
 
 参数
 ~~~~
@@ -84,7 +83,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": ["fess tutorial", "fess installation", "fess configuration"]
+            "queries": "fess tutorial\nfess installation\nfess configuration"
           }
         ],
         "total": 5

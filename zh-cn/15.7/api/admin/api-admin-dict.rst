@@ -5,8 +5,10 @@ Dict API
 概述
 ====
 
-Dict API是用于管理 |Fess| 词典文件的API。
-您可以管理同义词词典、映射词典、保护词词典等。
+Dict API是用于管理 |Fess| 词典的API。
+可以通过根端点获取可用词典的列表。
+单个词典项目的查看、创建、更新、删除，以及词典文件的上传、下载，
+通过各词典类型的子端点（synonym、kuromoji、mapping、protwords、stopwords、stemmerOverride）进行操作。
 
 基础URL
 =======
@@ -18,6 +20,9 @@ Dict API是用于管理 |Fess| 词典文件的API。
 端点列表
 ========
 
+词典根
+------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,18 +33,46 @@ Dict API是用于管理 |Fess| 词典文件的API。
    * - GET
      - /
      - 获取词典列表
+
+各词典类型的端点
+----------------
+
+``{type}`` 指定 ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmerOverride`` 中的任意一个。
+``{dictId}`` 是通过获取词典列表得到的词典ID。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - 方法
+     - 路径
+     - 说明
    * - GET
-     - /{id}
-     - 获取词典内容
-   * - PUT
-     - /{id}
-     - 更新词典内容
+     - /{type}/settings/{dictId}
+     - 获取词典项目列表
+   * - GET
+     - /{type}/setting/{dictId}/{id}
+     - 获取词典项目
    * - POST
-     - /upload
+     - /{type}/setting/{dictId}
+     - 创建词典项目
+   * - PUT
+     - /{type}/setting/{dictId}
+     - 更新词典项目
+   * - DELETE
+     - /{type}/setting/{dictId}/{id}
+     - 删除词典项目
+   * - PUT
+     - /{type}/upload/{dictId}
      - 上传词典文件
+   * - GET
+     - /{type}/download/{dictId}
+     - 下载词典文件
 
 获取词典列表
 ============
+
+获取可用词典文件的列表。
 
 请求
 ----
@@ -55,96 +88,132 @@ Dict API是用于管理 |Fess| 词典文件的API。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dicts": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "同义词词典",
-            "path": "/var/lib/fess/dict/synonym.txt",
+            "id": "ZjA5...synonym.txt",
             "type": "synonym",
-            "updatedAt": "2025-01-29T10:00:00Z"
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "mapping",
-            "name": "映射词典",
-            "path": "/var/lib/fess/dict/mapping.txt",
+            "id": "ZjA5...mapping.txt",
             "type": "mapping",
-            "updatedAt": "2025-01-28T15:30:00Z"
-          },
-          {
-            "id": "protwords",
-            "name": "保护词词典",
-            "path": "/var/lib/fess/dict/protwords.txt",
-            "type": "protwords",
-            "updatedAt": "2025-01-27T12:00:00Z"
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ],
-        "total": 3
+        ]
       }
     }
 
-获取词典内容
-============
-
-请求
-----
-
-::
-
-    GET /api/admin/dict/{id}
-
-响应
-----
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "dict": {
-          "id": "synonym",
-          "name": "同义词词典",
-          "path": "/var/lib/fess/dict/synonym.txt",
-          "type": "synonym",
-          "content": "检索,搜索,查找\nFess,フェス\n全文检索,全文搜索",
-          "updatedAt": "2025-01-29T10:00:00Z"
-        }
-      }
-    }
-
-更新词典内容
-============
-
-请求
-----
-
-::
-
-    PUT /api/admin/dict/{id}
-    Content-Type: application/json
-
-请求体
-~~~~~~
-
-.. code-block:: json
-
-    {
-      "content": "检索,搜索,查找,search\nFess,フェス\n全文检索,全文搜索,full-text search"
-    }
-
-字段说明
+响应字段
 ~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 30 70
 
    * - 字段
+     - 说明
+   * - ``settings[].id``
+     - 词典ID（在单个词典操作中作为 ``{dictId}`` 使用）
+   * - ``settings[].type``
+     - 词典类型
+   * - ``settings[].path``
+     - 词典文件的路径
+   * - ``settings[].timestamp``
+     - 词典文件的更新日期时间
+
+获取词典项目列表
+================
+
+获取指定词典内的项目列表。
+
+请求
+----
+
+::
+
+    GET /api/admin/dict/{type}/settings/{dictId}
+
+参数
+~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - 参数
+     - 类型
      - 必需
      - 说明
-   * - ``content``
+   * - ``dictId``
+     - String
      - 是
-     - 词典内容（换行符分隔）
+     - 词典ID（路径参数）
+   * - ``size``
+     - Integer
+     - 否
+     - 每页记录数
+   * - ``page``
+     - Integer
+     - 否
+     - 页码
+
+响应
+----
+
+响应中 ``settings`` 数组各项目的字段因词典类型而异（请参阅后述的“各词典类型的项目字段”）。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "settings": [
+          {
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "検索,サーチ",
+            "outputs": "検索,サーチ,リサーチ"
+          }
+        ]
+      }
+    }
+
+获取词典项目
+============
+
+获取词典内的特定项目。
+
+请求
+----
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+参数
+~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - 参数
+     - 类型
+     - 必需
+     - 说明
+   * - ``dictId``
+     - String
+     - 是
+     - 词典ID（路径参数）
+   * - ``id``
+     - Long
+     - 是
+     - 项目ID（路径参数）
 
 响应
 ----
@@ -153,55 +222,152 @@ Dict API是用于管理 |Fess| 词典文件的API。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Dictionary updated successfully"
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "検索,サーチ",
+          "outputs": "検索,サーチ,リサーチ"
+        }
+      }
+    }
+
+创建词典项目
+============
+
+在词典中创建新的项目。
+
+请求
+----
+
+::
+
+    POST /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+请求体（synonym示例）
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ"
+    }
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": true
+      }
+    }
+
+更新词典项目
+============
+
+更新词典内的现有项目。
+
+请求
+----
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+请求体（synonym示例）
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ,search"
+    }
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+删除词典项目
+============
+
+删除词典内的项目。
+
+请求
+----
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+参数
+~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - 参数
+     - 类型
+     - 必需
+     - 说明
+   * - ``dictId``
+     - String
+     - 是
+     - 词典ID（路径参数）
+   * - ``id``
+     - Long
+     - 是
+     - 项目ID（路径参数）
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
       }
     }
 
 上传词典文件
 ============
 
+上传整个词典文件并进行替换。
+
 请求
 ----
 
 ::
 
-    POST /api/admin/dict/upload
+    PUT /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
-请求体
-~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="type"
-
-    synonym
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="synonym.txt"
-    Content-Type: text/plain
-
-    检索,搜索,查找
-    Fess,フェス
-    --boundary--
-
-字段说明
-~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - 字段
-     - 必需
-     - 说明
-   * - ``type``
-     - 是
-     - 词典类型（synonym/mapping/protwords/stopwords）
-   * - ``file``
-     - 是
-     - 词典文件
+文件字段的名称因词典类型而异（请参阅后述的“各词典类型的项目字段”）。
 
 响应
 ----
@@ -210,63 +376,56 @@ Dict API是用于管理 |Fess| 词典文件的API。
 
     {
       "response": {
-        "status": 0,
-        "message": "Dictionary uploaded successfully"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
-词典类型
-========
+下载词典文件
+============
+
+下载词典文件。
+
+请求
+----
+
+::
+
+    GET /api/admin/dict/{type}/download/{dictId}
+
+响应为词典文件的二进制数据（ ``application/octet-stream`` ）。
+
+各词典类型的项目字段
+====================
+
+词典项目的创建·更新请求体以及响应的字段因词典类型而异。
+``id`` （项目ID）和 ``dictId`` （词典ID）在响应中是共通的。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 80
+   :widths: 18 42 40
 
    * - 类型
-     - 说明
+     - 项目字段
+     - 上传文件字段
    * - ``synonym``
-     - 同义词词典（搜索时展开同义词）
-   * - ``mapping``
-     - 映射词典（字符规范化）
-   * - ``protwords``
-     - 保护词词典（不进行词干提取的单词）
-   * - ``stopwords``
-     - 停用词词典（不建立索引的单词）
+     - ``inputs`` （必需）、 ``outputs`` （必需）
+     - ``synonymFile``
    * - ``kuromoji``
-     - Kuromoji词典（日语形态素分析）
-
-词典格式示例
-============
-
-同义词词典
-----------
-
-::
-
-    # 用逗号分隔指定同义词
-    检索,搜索,查找,search
-    Fess,フェス,fess
-    全文检索,全文搜索,full-text search
-
-映射词典
---------
-
-::
-
-    # 转换前 => 转换后
-    ０ => 0
-    １ => 1
-    ２ => 2
-
-保护词词典
-----------
-
-::
-
-    # 保护不进行词干提取处理的单词
-    running
-    searching
-    indexing
+     - ``token`` （必需）、 ``segmentation`` （必需）、 ``reading`` （必需）、 ``pos`` （必需）
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` （必需）、 ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` （必需）
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` （必需）
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` （必需）、 ``output`` （必需）
+     - ``stemmerOverrideFile``
 
 使用示例
 ========
@@ -279,46 +438,47 @@ Dict API是用于管理 |Fess| 词典文件的API。
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-获取同义词词典内容
+获取同义词词典的项目列表
+------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+向同义词词典添加项目
+--------------------
+
+.. code-block:: bash
+
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "inputs": "検索,サーチ",
+           "outputs": "検索,サーチ,リサーチ"
+         }'
+
+上传同义词词典文件
 ------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "synonymFile=@synonym.txt"
 
-更新同义词词典
---------------
+下载同义词词典文件
+------------------
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "content": "检索,搜索,search\nFess,フェス,fess\n文档,文件,document"
-         }'
-
-上传词典文件
-------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/dict/upload" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "type=synonym" \
-         -F "file=@synonym.txt"
-
-注意事项
-========
-
-- 更新词典后，可能需要重建索引
-- 大型词典文件可能会影响搜索性能
-- 词典的字符编码请使用UTF-8
+         -o synonym.txt
 
 参考信息
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`../../admin/dict-guide` - 词典管理指南
-

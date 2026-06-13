@@ -56,13 +56,13 @@ CSRF 토큰 취득 방법 및 인증·세션의 자세한 내용은 :doc:`api-ov
 속도 제한
 =========
 
-``POST /chat`` 및 ``DELETE /chat/sessions/{session_id}`` 에는 사용자별 속도 제한이 적용됩니다.
+``POST /chat`` , ``POST /chat/stream`` 및 ``DELETE /chat/sessions/{session_id}`` 에는 사용자별 속도 제한이 적용됩니다.
 
 - 기본값: 1분당 30 요청 (사용자별)
 - 설정 키: ``api.v2.chat.rate.limit.per.user.per.minute``
 
 속도 제한을 초과한 경우 ``rate_limited`` 오류 (HTTP 429) 가 반환됩니다. ``Retry-After`` 헤더에 대기해야 할 초 단위 시간이 표시됩니다.
-이 속도 제한은 ``POST /chat`` 와 ``DELETE /chat/sessions/{session_id}`` 에서 공유됩니다.
+이 속도 제한은 ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}`` 에서 공유됩니다.
 
 POST /chat
 ==========
@@ -294,7 +294,7 @@ SSE 스트림 예:
 ::
 
     event: phase
-    data: {"phase":"retrieval","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
+    data: {"phase":"search","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
 
     event: chunk
     data: {"content":"Fessは"}

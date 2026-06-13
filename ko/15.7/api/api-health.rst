@@ -72,7 +72,7 @@ HTTP 상태는 클러스터 상태가 ``green`` / ``yellow`` 인 경우 200, ``r
         "status": 9,
         "error": {
           "code": "service_unavailable",
-          "message": "Cluster is unavailable.",
+          "message": "search engine cluster is red",
           "details": {
             "engine": {
               "cluster_name": "fess-es",

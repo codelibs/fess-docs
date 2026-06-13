@@ -25,7 +25,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取计划任务列表
    * - GET
@@ -56,14 +56,13 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 参数
 ~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -72,11 +71,11 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码
 
 响应
 ----
@@ -94,9 +93,9 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` 作为字符串（``"true"`` / ``"false"``）处理。``running`` 为布尔值，表示任务的运行状态。
 
 获取计划任务
 ============
@@ -130,9 +133,9 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - 字段
      - 必需
@@ -184,25 +187,25 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
      - 是
      - 执行目标（"all"或特定目标）
    * - ``cronExpression``
-     - 是
+     - 否
      - Cron表达式（秒 分 时 日 月 星期）
    * - ``scriptType``
      - 是
      - 脚本类型（"groovy"）
    * - ``scriptData``
-     - 是
+     - 否
      - 执行脚本
    * - ``jobLogging``
      - 否
-     - 启用日志记录（默认：true）
+     - 启用日志记录（字符串 ``"true"`` / ``"false"``）
    * - ``crawler``
      - 否
-     - 是否为爬虫任务（默认：false）
+     - 是否为爬虫任务（字符串 ``"true"`` / ``"false"``）
    * - ``available``
      - 否
-     - 启用/禁用（默认：true）
+     - 启用/禁用（字符串 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - 否
+     - 是
      - 显示顺序
 
 响应
@@ -259,9 +262,9 @@ Cron表达式示例
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -321,15 +324,28 @@ Cron表达式示例
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+响应字段
+~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 字段
+     - 说明
+   * - ``jobLogId``
+     - 已启动任务的任务日志ID。在任务日志启用时发行。任务日志禁用时为 ``null``。
 
 注意事项
 --------
 
 - 如果任务已在运行中，将返回错误
-- 如果任务已禁用（``available: false``），将返回错误
+- 如果任务已禁用（``available`` 为 ``"false"``），将返回错误
 
 停止任务
 ========
@@ -372,9 +388,9 @@ Cron表达式示例
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # 立即执行任务

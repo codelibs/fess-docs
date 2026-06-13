@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List related content
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/relatedcontent/settings
-    PUT /api/admin/relatedcontent/settings
 
 Parameters
 ~~~~~~~~~~
@@ -234,9 +233,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_content_id",
-        "created": false
+        "status": 0
       }
     }
 

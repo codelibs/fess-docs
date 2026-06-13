@@ -5,8 +5,8 @@ API Documents
 Vue d'ensemble
 ==============
 
-L'API Documents permet de gerer les documents dans l'index de |Fess|.
-Vous pouvez effectuer des operations telles que la suppression en masse, la mise a jour et la recherche de documents.
+L'API Documents est une API permettant d'enregistrer en masse des documents dans l'index de |Fess|.
+Vous pouvez ajouter plusieurs documents a l'index en une seule fois.
 
 URL de base
 ===========
@@ -25,226 +25,150 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - DELETE
-     - /
-     - Suppression de documents (par requete)
-   * - DELETE
-     - /{id}
-     - Suppression de documents (par ID)
+   * - PUT
+     - /bulk
+     - Enregistrement en masse de documents
 
-Suppression de documents par requete
+Enregistrement en masse de documents
 ====================================
 
-Supprime en masse les documents correspondant a une requete de recherche.
+Enregistre plusieurs documents dans l'index en une seule fois.
 
 Requete
 -------
 
 ::
 
-    DELETE /api/admin/documents
+    PUT /api/admin/documents/bulk
+    Content-Type: application/json
 
-Parametres
-~~~~~~~~~~
+Corps de la requete
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "documents": [
+        {
+          "url": "https://example.com/page1",
+          "title": "サンプルページ1",
+          "content": "ページ1の本文テキストです。"
+        },
+        {
+          "url": "https://example.com/page2",
+          "title": "サンプルページ2",
+          "content": "ページ2の本文テキストです。"
+        }
+      ]
+    }
+
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 25 15 60
 
-   * - Parametre
-     - Type
+   * - Champ
      - Requis
      - Description
-   * - ``q``
-     - String
+   * - ``documents``
      - Oui
-     - Requete de recherche pour les documents a supprimer
+     - Tableau des documents a enregistrer. Chaque document est specifie sous forme de correspondance entre nom de champ et valeur. Un tableau vide n'est pas autorise.
+
+Chaque document peut specifier librement des champs d'index tels que ``url`` , ``title`` , ``content`` .
+Lorsque ``content_length`` , ``favorite_count`` , ``click_count`` , ``boost`` , ``role`` , ``last_modified`` , ``timestamp`` , etc. sont omis, des valeurs par defaut sont automatiquement renseignees.
+De plus, ``doc_id`` et ID sont generes automatiquement lors de l'enregistrement.
 
 Reponse
 -------
+
+La reponse renvoie le resultat du traitement de chaque document enregistre dans un tableau ``items`` .
+Les elements reussis contiennent ``result`` et ``id`` , les elements en echec contiennent ``result`` et ``message`` .
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "deleted": 150
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "CREATED",
+            "id": "0123456789abcdef"
+          }
+        ]
       }
     }
 
-Exemples d'utilisation
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    # Supprimer les documents d'un site specifique
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Supprimer les anciens documents
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO 2023-01-01]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Supprimer les documents par label
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=label:old_label" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Suppression de documents par ID
-===============================
-
-Supprime un document en specifiant son ID.
-
-Requete
--------
-
-::
-
-    DELETE /api/admin/documents/{id}
-
-Parametres
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametre
-     - Type
-     - Requis
-     - Description
-   * - ``id``
-     - String
-     - Oui
-     - ID du document (parametre de chemin)
-
-Reponse
--------
+Si l'enregistrement echoue pour l'un des elements, ``status`` devient ``9`` (FAILED) et l'element concerne contient un champ ``message`` .
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0
+        "version": "15.7.0",
+        "status": 9,
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "BAD_REQUEST",
+            "message": "failure reason ..."
+          }
+        ]
       }
     }
 
-Exemples d'utilisation
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/documents/doc_id_12345" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Syntaxe des requetes
-====================
-
-Les requetes de suppression peuvent utiliser la syntaxe de recherche standard de |Fess|.
-
-Requetes de base
-----------------
+Champs de la reponse
+~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 30 70
 
-   * - Exemple de requete
+   * - Champ
      - Description
-   * - ``url:example.com``
-     - Documents contenant "example.com" dans l'URL
-   * - ``url:https://example.com/*``
-     - URLs avec un prefixe specifique
-   * - ``host:example.com``
-     - Documents d'un hote specifique
-   * - ``title:keyword``
-     - Documents contenant un mot-cle dans le titre
-   * - ``content:keyword``
-     - Documents contenant un mot-cle dans le contenu
-   * - ``label:mylabel``
-     - Documents avec un label specifique
-
-Requetes sur les plages de dates
---------------------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Exemple de requete
-     - Description
-   * - ``lastModified:[2023-01-01 TO 2023-12-31]``
-     - Documents mis a jour dans la periode specifiee
-   * - ``lastModified:[* TO 2023-01-01]``
-     - Documents mis a jour avant la date specifiee
-   * - ``created:[2024-01-01 TO *]``
-     - Documents crees apres la date specifiee
-
-Requetes composees
-------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Exemple de requete
-     - Description
-   * - ``url:example.com AND label:blog``
-     - Condition AND
-   * - ``url:example.com OR url:sample.com``
-     - Condition OR
-   * - ``NOT url:example.com``
-     - Condition NOT
-   * - ``(url:example.com OR url:sample.com) AND label:news``
-     - Regroupement
-
-Notes importantes
-=================
-
-Precautions concernant les suppressions
----------------------------------------
-
-.. warning::
-   Les operations de suppression sont irreversibles. Testez toujours dans un environnement de test avant de les executer en production.
-
-- La suppression d'un grand nombre de documents peut prendre du temps
-- Les performances de l'index peuvent etre affectees pendant la suppression
-- Les resultats de recherche peuvent prendre un moment pour refleter les suppressions
-
-Bonnes pratiques
-----------------
-
-1. **Verification avant suppression**: Utilisez l'API de recherche avec la meme requete pour verifier les documents cibles
-2. **Suppression par etapes**: Effectuez les suppressions massives en plusieurs operations
-3. **Sauvegarde**: Sauvegardez les donnees importantes avant la suppression
+   * - ``items``
+     - Tableau des resultats de traitement de chaque document
+   * - ``items[].result``
+     - Statut du resultat du traitement (ex. : ``CREATED``)
+   * - ``items[].id``
+     - ID du document enregistre (en cas de succes)
+   * - ``items[].message``
+     - Message indiquant la raison de l'echec (en cas d'echec)
 
 Exemples d'utilisation
 ======================
 
-Preparation pour un nouveau crawl complet d'un site
----------------------------------------------------
+Enregistrement en masse de documents
+------------------------------------
 
 .. code-block:: bash
 
-    # Supprimer les anciens documents du site
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=host:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Demarrer la tache de crawl
-    curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Nettoyage des anciens documents
--------------------------------
-
-.. code-block:: bash
-
-    # Supprimer les documents non mis a jour depuis plus d'un an
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO now-1y]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/documents/bulk" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "documents": [
+             {
+               "url": "https://example.com/page1",
+               "title": "サンプルページ1",
+               "content": "ページ1の本文テキストです。"
+             }
+           ]
+         }'
 
 Informations complementaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
+- :doc:`api-admin-searchlist` - API de recherche et de gestion des documents
 - :doc:`api-admin-crawlinginfo` - API des informations de crawl
 - :doc:`../../admin/searchlist-guide` - Guide de gestion de la liste de recherche

@@ -26,17 +26,14 @@ Endpoint List
      - Path
      - Description
    * - GET
-     - /
+     - /logs
      - List job logs
    * - GET
-     - /{id}
-     - Get job log details
+     - /log/{id}
+     - Get job log
    * - DELETE
-     - /{id}
+     - /log/{id}
      - Delete job log
-   * - DELETE
-     - /delete-all
-     - Delete all job logs
 
 List Job Logs
 =============
@@ -46,14 +43,14 @@ Request
 
 ::
 
-    GET /api/admin/joblog
+    GET /api/admin/joblog/logs
 
 Parameters
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -62,23 +59,11 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
-   * - ``status``
-     - String
-     - No
-     - Status filter (ok/fail/running)
-   * - ``from``
-     - String
-     - No
-     - Start date/time (ISO 8601 format)
-   * - ``to``
-     - String
-     - No
-     - End date/time (ISO 8601 format)
+     - Page number
 
 Response
 --------
@@ -97,9 +82,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": "2025-01-29T02:00:00Z",
-            "endTime": "2025-01-29T02:45:23Z",
-            "executionTime": 2723000
+            "startTime": 1738116000000,
+            "endTime": 1738118723000
           },
           {
             "id": "joblog_id_2",
@@ -109,9 +93,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": "2025-01-28T02:00:00Z",
-            "endTime": "2025-01-28T02:10:15Z",
-            "executionTime": 615000
+            "startTime": 1738029600000,
+            "endTime": 1738030215000
           }
         ],
         "total": 100
@@ -132,7 +115,7 @@ Response Fields
    * - ``jobName``
      - Job name
    * - ``jobStatus``
-     - Job status (ok/fail/running)
+     - Job status
    * - ``target``
      - Execution target
    * - ``scriptType``
@@ -142,21 +125,19 @@ Response Fields
    * - ``scriptResult``
      - Execution result
    * - ``startTime``
-     - Start time
+     - Start time (epoch milliseconds)
    * - ``endTime``
-     - End time
-   * - ``executionTime``
-     - Execution time (milliseconds)
+     - End time (epoch milliseconds)
 
-Get Job Log Details
-===================
+Get Job Log
+===========
 
 Request
 -------
 
 ::
 
-    GET /api/admin/joblog/{id}
+    GET /api/admin/joblog/log/{id}
 
 Response
 --------
@@ -174,9 +155,8 @@ Response
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "2025-01-29T02:00:00Z",
-          "endTime": "2025-01-29T02:45:23Z",
-          "executionTime": 2723000
+          "startTime": 1738116000000,
+          "endTime": 1738118723000
         }
       }
     }
@@ -189,7 +169,7 @@ Request
 
 ::
 
-    DELETE /api/admin/joblog/{id}
+    DELETE /api/admin/joblog/log/{id}
 
 Response
 --------
@@ -198,51 +178,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "message": "Job log deleted successfully"
-      }
-    }
-
-Delete All Job Logs
-===================
-
-Request
--------
-
-::
-
-    DELETE /api/admin/joblog/delete-all
-
-Parameters
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - ``before``
-     - String
-     - No
-     - Delete logs before this date/time (ISO 8601 format)
-   * - ``status``
-     - String
-     - No
-     - Delete only logs with this status
-
-Response
---------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "message": "Job logs deleted successfully",
-        "deletedCount": 50
+        "status": 0
       }
     }
 
@@ -254,66 +190,41 @@ List Job Logs
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Get Failed Jobs Only
---------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog?status=fail" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Get Job Logs for Specific Period
---------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Get Job Log Details
--------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog/joblog_id_1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Delete Old Job Logs
--------------------
-
-.. code-block:: bash
-
-    # Delete logs older than 30 days
-    curl -X DELETE "http://localhost:8080/api/admin/joblog/delete-all?before=2024-12-30T00:00:00Z" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Delete Failed Job Logs Only
----------------------------
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/joblog/delete-all?status=fail" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Detect Long-Running Jobs
+Extract Failed Jobs Only
 ------------------------
 
 .. code-block:: bash
 
-    # Extract jobs that took more than 1 hour
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=1000" \
+    # Filter failed jobs with jq
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.executionTime > 3600000) | {jobName, startTime, executionTime}'
+         jq '.response.logs[] | select(.jobStatus=="fail")'
+
+Get Job Log
+-----------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Delete Job Log
+--------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
 Calculate Job Success Rate
 --------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=1000" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
 
@@ -324,4 +235,3 @@ Reference
 - :doc:`api-admin-scheduler` - Scheduler API
 - :doc:`api-admin-crawlinginfo` - Crawling Info API
 - :doc:`../../admin/joblog-guide` - Job Log Management Guide
-

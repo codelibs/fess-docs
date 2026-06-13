@@ -49,44 +49,49 @@ General APIは、|Fess| の一般設定を管理するためのAPIです。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
-          "crawlerDocumentMaxSize": "10485760",
-          "crawlerDocumentMaxSiteLength": "50",
-          "crawlerDocumentMaxFetcherSize": "3",
-          "crawlerDocumentCrawlerThreadCount": "10",
-          "crawlerDocumentMaxDepth": "-1",
-          "crawlerDocumentMaxAccessCount": "100",
-          "indexerThreadDumpEnabled": "true",
-          "indexerUnprocessedDocumentSize": "1000",
-          "indexerClickCountEnabled": "true",
-          "indexerFavoriteCountEnabled": "true",
-          "indexerWebfsMaxContentLength": "10485760",
-          "indexerWebfsContentEncoding": "UTF-8",
-          "queryReplaceTermWithPrefixQuery": "false",
-          "queryMaxSearchResultOffset": "100000",
-          "queryMaxPageSize": "1000",
-          "queryDefaultPageSize": "20",
-          "queryAdditionalDefaultQuery": "",
-          "queryGeoEnabled": "false",
+          "incrementalCrawling": "true",
+          "dayForCleanup": -1,
+          "crawlingThreadCount": 5,
+          "searchLog": "true",
+          "userInfo": "true",
+          "userFavorite": "false",
+          "webApiJson": "true",
+          "defaultLabelValue": "",
+          "defaultSortValue": "",
+          "appendQueryParameter": "false",
+          "loginRequired": "false",
+          "thumbnail": "true",
+          "failureCountThreshold": -1,
+          "popularWord": "true",
+          "csvFileEncoding": "UTF-8",
+          "purgeSearchLogDay": 30,
+          "purgeJobLogDay": 30,
+          "purgeUserInfoDay": 30,
+          "purgeSuggestSearchLogDay": 30,
+          "notificationTo": "",
           "suggestSearchLog": "true",
           "suggestDocuments": "true",
-          "suggestBadWord": "true",
-          "suggestPopularWordSeedLength": "1",
-          "suggestPopularWordTags": "user",
-          "suggestPopularWordFields": "tags",
-          "suggestPopularWordExcludeWordFields": "",
-          "ldapInitialContextFactory": "com.sun.jndi.ldap.LdapCtxFactory",
-          "ldapSecurityAuthentication": "simple",
-          "ldapProviderUrl": "ldap://localhost:389",
+          "ldapProviderUrl": "ldap://localhost:389/",
           "ldapBaseDn": "dc=example,dc=com",
-          "ldapBindDn": "",
-          "ldapBindPassword": "",
-          "notificationLogin": "true",
-          "notificationSearchTop": "true"
+          "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
+          "ldapAdminSecurityCredentials": null,
+          "logLevel": "",
+          "ssoType": "none",
+          "storageType": "",
+          "notificationLogin": "",
+          "notificationSearchTop": ""
         }
       }
     }
+
+.. note::
+
+   セキュリティ上の理由から、LDAP管理者のパスワードである ``ldapAdminSecurityCredentials``
+   はレスポンスでは常に ``null`` に置き換えられます（ソース:
+   ``ApiAdminGeneralAction.java:71``）。
 
 一般設定更新
 ============
@@ -102,82 +107,202 @@ General APIは、|Fess| の一般設定を管理するためのAPIです。
 リクエストボディ
 ~~~~~~~~~~~~~~~~
 
+更新は部分更新（merge）として処理されます。リクエストに含まれないフィールドは
+既存の値が維持され、``null`` のフィールドは無視されます（ソース:
+``ApiAdminGeneralAction.java:84-90``）。
+
 .. code-block:: json
 
     {
-      "crawlerDocumentMaxSize": "20971520",
-      "crawlerDocumentMaxSiteLength": "100",
-      "crawlerDocumentCrawlerThreadCount": "20",
-      "queryMaxPageSize": "500",
-      "queryDefaultPageSize": "50",
-      "suggestSearchLog": "true",
-      "suggestDocuments": "true",
-      "suggestBadWord": "true",
-      "notificationLogin": "false",
-      "notificationSearchTop": "false"
+      "incrementalCrawling": "true",
+      "dayForCleanup": -1,
+      "crawlingThreadCount": 10,
+      "failureCountThreshold": 100,
+      "csvFileEncoding": "UTF-8",
+      "popularWord": "true"
     }
 
-フィールド説明
+主なフィールド
 ~~~~~~~~~~~~~~
+
+設定項目は多岐にわたります。代表的なフィールドを以下に示します
+（全フィールドは ``EditForm.java`` を参照）。``available`` 系のオン/オフ設定は
+``"true"`` / ``"false"`` の文字列で表現されます。
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 65
+   :widths: 35 15 50
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``incrementalCrawling``
+     - いいえ
+     - 増分クロールの有効/無効
+   * - ``dayForCleanup``
+     - はい
+     - クロール済みドキュメントを保持する日数（-1=クリーンアップ無効）
+   * - ``crawlingThreadCount``
+     - はい
+     - クロールに使用するスレッド数
+   * - ``failureCountThreshold``
+     - はい
+     - URLのクロールを停止する失敗回数のしきい値（-1=無効）
+   * - ``csvFileEncoding``
+     - はい
+     - CSVエクスポートのエンコーディング
+   * - ``searchLog``
+     - いいえ
+     - 検索クエリログの有効/無効
+   * - ``userInfo``
+     - いいえ
+     - ユーザー情報の記録の有効/無効
+   * - ``userFavorite``
+     - いいえ
+     - お気に入り機能の有効/無効
+   * - ``webApiJson``
+     - いいえ
+     - JSON Web APIの有効/無効
+   * - ``popularWord``
+     - いいえ
+     - 人気ワードの集計・表示の有効/無効
+   * - ``defaultLabelValue``
+     - いいえ
+     - 既定のラベル値
+   * - ``defaultSortValue``
+     - いいえ
+     - 既定のソート順
+   * - ``appendQueryParameter``
+     - いいえ
+     - 検索結果URLへのクエリパラメーター付与
+   * - ``loginRequired``
+     - いいえ
+     - 検索にログインを必須とするか
+   * - ``thumbnail``
+     - いいえ
+     - サムネイル生成の有効/無効
+   * - ``ignoreFailureType``
+     - いいえ
+     - 無視するクロール失敗タイプ
+   * - ``purgeSearchLogDay``
+     - いいえ
+     - 検索ログを保持する日数（-1=無効）
+   * - ``purgeJobLogDay``
+     - いいえ
+     - ジョブログを保持する日数（-1=無効）
+   * - ``purgeUserInfoDay``
+     - いいえ
+     - ユーザー情報を保持する日数（-1=無効）
+   * - ``purgeSuggestSearchLogDay``
+     - いいえ
+     - サジェスト検索ログを保持する日数（0=無効）
+   * - ``purgeByBots``
+     - いいえ
+     - 検索ログを破棄する対象のボットUser-Agent
+   * - ``notificationTo``
+     - いいえ
+     - システム通知の送信先メールアドレス
+   * - ``notificationLogin``
+     - いいえ
+     - ログインページに表示する通知メッセージ
+   * - ``notificationSearchTop``
+     - いいえ
+     - 検索トップページに表示する通知メッセージ
+   * - ``notificationAdvanceSearch``
+     - いいえ
+     - 詳細検索ページに表示する通知メッセージ
+   * - ``suggestSearchLog``
+     - いいえ
+     - 検索ログからのサジェストの有効/無効
+   * - ``suggestDocuments``
+     - いいえ
+     - ドキュメントからのサジェストの有効/無効
+   * - ``logLevel``
+     - いいえ
+     - システムログのログレベル
+   * - ``logNotificationEnabled``
+     - いいえ
+     - ERROR/WARNログの通知の有効/無効
+   * - ``logNotificationLevel``
+     - いいえ
+     - ログ通知レベル
+   * - ``slackWebhookUrls``
+     - いいえ
+     - 通知用のSlack Webhook URL
+   * - ``googleChatWebhookUrls``
+     - いいえ
+     - 通知用のGoogle Chat Webhook URL
+
+認証関連フィールド
+~~~~~~~~~~~~~~~~~~
+
+LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設定も
+このAPIで管理します。代表的なフィールドを以下に示します
+（全フィールドは ``EditForm.java`` を参照）。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
 
    * - フィールド
      - 説明
-   * - ``crawlerDocumentMaxSize``
-     - クロール対象ドキュメントの最大サイズ（バイト）
-   * - ``crawlerDocumentMaxSiteLength``
-     - クロール対象サイトの最大長
-   * - ``crawlerDocumentMaxFetcherSize``
-     - 最大フェッチャーサイズ
-   * - ``crawlerDocumentCrawlerThreadCount``
-     - クローラースレッド数
-   * - ``crawlerDocumentMaxDepth``
-     - クロールの最大深度（-1=無制限）
-   * - ``crawlerDocumentMaxAccessCount``
-     - 最大アクセス数
-   * - ``indexerThreadDumpEnabled``
-     - スレッドダンプ有効化
-   * - ``indexerUnprocessedDocumentSize``
-     - 未処理ドキュメント数
-   * - ``indexerClickCountEnabled``
-     - クリック数カウント有効化
-   * - ``indexerFavoriteCountEnabled``
-     - お気に入り数カウント有効化
-   * - ``queryReplaceTermWithPrefixQuery``
-     - 前方一致クエリへの変換
-   * - ``queryMaxSearchResultOffset``
-     - 検索結果の最大オフセット
-   * - ``queryMaxPageSize``
-     - 1ページあたりの最大件数
-   * - ``queryDefaultPageSize``
-     - 1ページあたりのデフォルト件数
-   * - ``queryAdditionalDefaultQuery``
-     - 追加デフォルトクエリ
-   * - ``suggestSearchLog``
-     - 検索ログからのサジェスト有効化
-   * - ``suggestDocuments``
-     - ドキュメントからのサジェスト有効化
-   * - ``suggestBadWord``
-     - NGワードフィルタ有効化
    * - ``ldapProviderUrl``
      - LDAP接続URL
    * - ``ldapBaseDn``
      - LDAPベースDN
-   * - ``notificationLogin``
-     - ログイン通知
-   * - ``notificationSearchTop``
-     - 検索トップ通知
+   * - ``ldapSecurityPrincipal``
+     - LDAPバインド用のセキュリティプリンシパル
+   * - ``ldapAdminSecurityPrincipal``
+     - LDAP管理操作用のセキュリティプリンシパル
+   * - ``ldapAdminSecurityCredentials``
+     - LDAP管理者パスワード（レスポンスでは ``null`` に置換）
+   * - ``ldapAccountFilter`` / ``ldapGroupFilter``
+     - ユーザー/グループ検索フィルター
+   * - ``ssoType``
+     - SSOタイプ（``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``）
+   * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` 他
+     - OpenID Connectの設定
+   * - ``samlIdpEntityid`` / ``samlSpEntityid`` 他
+     - SAMLの設定
+   * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` 他
+     - SPNEGOの設定
+   * - ``entraidClientId`` / ``entraidTenant`` 他
+     - Microsoft Entra IDの設定
+
+ストレージ関連フィールド
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+クラウドストレージ（S3 / GCS）連携の設定も管理できます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - フィールド
+     - 説明
+   * - ``storageType``
+     - ストレージタイプ（``s3`` / ``gcs`` / ``auto``）
+   * - ``storageEndpoint``
+     - ストレージのエンドポイントURL
+   * - ``storageAccessKey`` / ``storageSecretKey``
+     - 認証用のアクセスキー/シークレットキー
+   * - ``storageBucket``
+     - バケット名
+   * - ``storageRegion``
+     - S3のリージョン
+   * - ``storageProjectId`` / ``storageCredentialsPath``
+     - GCSのプロジェクトID / 認証情報ファイルパス
 
 レスポンス
 ----------
+
+更新成功時は ``status`` のみが返されます（``id`` や ``created`` は含まれません）。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
       }
     }
@@ -185,8 +310,8 @@ General APIは、|Fess| の一般設定を管理するためのAPIです。
 使用例
 ======
 
-クローラー設定の更新
---------------------
+クロール設定の更新
+------------------
 
 .. code-block:: bash
 
@@ -194,13 +319,15 @@ General APIは、|Fess| の一般設定を管理するためのAPIです。
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "crawlerDocumentMaxSize": "52428800",
-           "crawlerDocumentCrawlerThreadCount": "15",
-           "crawlerDocumentMaxAccessCount": "1000"
+           "incrementalCrawling": "true",
+           "crawlingThreadCount": 10,
+           "failureCountThreshold": 100,
+           "dayForCleanup": -1,
+           "csvFileEncoding": "UTF-8"
          }'
 
-検索設定の更新
---------------
+ログ保持期間の更新
+------------------
 
 .. code-block:: bash
 
@@ -208,9 +335,9 @@ General APIは、|Fess| の一般設定を管理するためのAPIです。
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "queryMaxPageSize": "1000",
-           "queryDefaultPageSize": "50",
-           "queryMaxSearchResultOffset": "50000"
+           "purgeSearchLogDay": 90,
+           "purgeJobLogDay": 90,
+           "purgeUserInfoDay": 90
          }'
 
 サジェスト設定の更新
@@ -223,8 +350,7 @@ General APIは、|Fess| の一般設定を管理するためのAPIです。
          -H "Content-Type: application/json" \
          -d '{
            "suggestSearchLog": "true",
-           "suggestDocuments": "true",
-           "suggestBadWord": "true"
+           "suggestDocuments": "true"
          }'
 
 参考情報

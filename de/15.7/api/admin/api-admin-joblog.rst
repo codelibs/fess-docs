@@ -26,34 +26,31 @@ Endpunktliste
      - Pfad
      - Beschreibung
    * - GET
-     - /
-     - Job-Protokollliste abrufen
+     - /logs
+     - Job-Protokolle auflisten
    * - GET
-     - /{id}
-     - Job-Protokolldetails abrufen
+     - /log/{id}
+     - Job-Protokoll abrufen
    * - DELETE
-     - /{id}
+     - /log/{id}
      - Job-Protokoll löschen
-   * - DELETE
-     - /delete-all
-     - Alle Job-Protokolle löschen
 
-Job-Protokollliste abrufen
-==========================
+Job-Protokolle auflisten
+========================
 
 Request
 -------
 
 ::
 
-    GET /api/admin/joblog
+    GET /api/admin/joblog/logs
 
 Parameter
 ~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Typ
@@ -62,23 +59,11 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
-   * - ``status``
-     - String
-     - Nein
-     - Status-Filter (ok/fail/running)
-   * - ``from``
-     - String
-     - Nein
-     - Startdatum (ISO 8601 Format)
-   * - ``to``
-     - String
-     - Nein
-     - Enddatum (ISO 8601 Format)
+     - Seitennummer
 
 Response
 --------
@@ -97,9 +82,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": "2025-01-29T02:00:00Z",
-            "endTime": "2025-01-29T02:45:23Z",
-            "executionTime": 2723000
+            "startTime": 1738116000000,
+            "endTime": 1738118723000
           },
           {
             "id": "joblog_id_2",
@@ -109,9 +93,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": "2025-01-28T02:00:00Z",
-            "endTime": "2025-01-28T02:10:15Z",
-            "executionTime": 615000
+            "startTime": 1738029600000,
+            "endTime": 1738030215000
           }
         ],
         "total": 100
@@ -132,7 +115,7 @@ Response-Felder
    * - ``jobName``
      - Job-Name
    * - ``jobStatus``
-     - Job-Status (ok/fail/running)
+     - Job-Status
    * - ``target``
      - Ausführungsziel
    * - ``scriptType``
@@ -142,21 +125,19 @@ Response-Felder
    * - ``scriptResult``
      - Ausführungsergebnis
    * - ``startTime``
-     - Startzeit
+     - Startzeit (Epoch-Millisekunden)
    * - ``endTime``
-     - Endzeit
-   * - ``executionTime``
-     - Ausführungszeit (Millisekunden)
+     - Endzeit (Epoch-Millisekunden)
 
-Job-Protokolldetails abrufen
-============================
+Job-Protokoll abrufen
+=====================
 
 Request
 -------
 
 ::
 
-    GET /api/admin/joblog/{id}
+    GET /api/admin/joblog/log/{id}
 
 Response
 --------
@@ -174,9 +155,8 @@ Response
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "2025-01-29T02:00:00Z",
-          "endTime": "2025-01-29T02:45:23Z",
-          "executionTime": 2723000
+          "startTime": 1738116000000,
+          "endTime": 1738118723000
         }
       }
     }
@@ -189,7 +169,7 @@ Request
 
 ::
 
-    DELETE /api/admin/joblog/{id}
+    DELETE /api/admin/joblog/log/{id}
 
 Response
 --------
@@ -198,122 +178,53 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "message": "Job log deleted successfully"
-      }
-    }
-
-Alle Job-Protokolle löschen
-===========================
-
-Request
--------
-
-::
-
-    DELETE /api/admin/joblog/delete-all
-
-Parameter
-~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Typ
-     - Erforderlich
-     - Beschreibung
-   * - ``before``
-     - String
-     - Nein
-     - Protokolle vor diesem Datum löschen (ISO 8601 Format)
-   * - ``status``
-     - String
-     - Nein
-     - Nur Protokolle mit diesem Status löschen
-
-Response
---------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "message": "Job logs deleted successfully",
-        "deletedCount": 50
+        "status": 0
       }
     }
 
 Verwendungsbeispiele
 ====================
 
-Job-Protokollliste abrufen
---------------------------
+Job-Protokolle auflisten
+------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Nur fehlgeschlagene Jobs abrufen
---------------------------------
+Nur fehlgeschlagene Jobs extrahieren
+------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?status=fail" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Job-Protokolle eines bestimmten Zeitraums
------------------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Job-Protokolldetails abrufen
-----------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog/joblog_id_1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Alte Job-Protokolle löschen
----------------------------
-
-.. code-block:: bash
-
-    # Protokolle älter als 30 Tage löschen
-    curl -X DELETE "http://localhost:8080/api/admin/joblog/delete-all?before=2024-12-30T00:00:00Z" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Nur fehlgeschlagene Job-Protokolle löschen
-------------------------------------------
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/joblog/delete-all?status=fail" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Jobs mit langer Ausführungszeit finden
---------------------------------------
-
-.. code-block:: bash
-
-    # Jobs extrahieren, die länger als 1 Stunde gedauert haben
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=1000" \
+    # Fehlgeschlagene Jobs mit jq filtern
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.executionTime > 3600000) | {jobName, startTime, executionTime}'
+         jq '.response.logs[] | select(.jobStatus=="fail")'
+
+Job-Protokoll abrufen
+---------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Job-Protokoll löschen
+---------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
 Job-Erfolgsrate berechnen
 -------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=1000" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
 

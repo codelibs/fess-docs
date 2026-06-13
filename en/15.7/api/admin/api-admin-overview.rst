@@ -75,8 +75,12 @@ To use the Admin API, the token requires the following permissions:
 Common Patterns
 ===============
 
-List Retrieval (GET/PUT /settings)
-----------------------------------
+Resources that have settings (webconfig, user, role, etc.) follow the common CRUD pattern below.
+However, some resources (systeminfo, stats, storage, plugin, log, backup, documents, suggest, dict root, etc.)
+have their own endpoint structure that differs from this common pattern, so refer to each resource's page.
+
+List Retrieval (GET /settings)
+------------------------------
 
 Retrieves a list of settings.
 
@@ -86,7 +90,6 @@ Request
 ::
 
     GET /api/admin/<resource>/settings
-    PUT /api/admin/<resource>/settings
 
 Parameters (pagination):
 
@@ -111,11 +114,17 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   The ``response`` object of every response always contains ``version`` (e.g., ``"15.7.0"``)
+   indicating the product version. It may be omitted in the following examples for brevity.
 
 Single Setting Retrieval (GET /setting/{id})
 --------------------------------------------
@@ -219,6 +228,20 @@ Request
 Response
 ~~~~~~~~
 
+The format of the delete response differs per resource (action). Many resources return
+only ``status``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+For some resources, the delete result is returned as an ``ApiUpdateResponse``, with the
+``id`` of the deleted setting and ``created`` (``false`` on deletion).
+
 .. code-block:: json
 
     {
@@ -229,8 +252,34 @@ Response
       }
     }
 
+In addition, for resources that return an ``ApiDeleteResponse``, ``count`` (default ``1``)
+indicating the number of deleted items may be added. For the actual format, refer to each
+resource's page.
+
 Response Format
 ===============
+
+Every response is wrapped in a ``response`` object that always contains ``version``
+indicating the product version, and ``status`` indicating the processing result.
+
+The values of ``status`` are as follows.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Value
+     - Description
+   * - ``0``
+     - OK (success)
+   * - ``1``
+     - BAD_REQUEST (invalid request)
+   * - ``2``
+     - SYSTEM_ERROR (system error)
+   * - ``3``
+     - UNAUTHORIZED (authentication error)
+   * - ``9``
+     - FAILED (processing failed)
 
 Success Response
 ----------------
@@ -239,8 +288,9 @@ Success Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +299,16 @@ Success Response
 Error Response
 --------------
 
+On error, a non-zero value is set in ``status``, and ``message`` contains the error
+message.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +354,13 @@ Crawl Configuration
      - File crawl configuration
    * - :doc:`api-admin-dataconfig`
      - Data store configuration
+
+.. note::
+
+   In addition, the following resources related to authentication information and crawl control are also
+   provided as APIs (individual pages are not yet available): ``webauth`` (Web authentication),
+   ``fileauth`` (File authentication), ``reqheader`` (Request headers), ``pathmap`` (Path mapping),
+   ``duplicatehost`` (Duplicate host), ``searchlist`` (search/document list operations).
 
 Index Management
 ----------------
@@ -396,8 +455,8 @@ System
      - System statistics
    * - :doc:`api-admin-log`
      - Log retrieval
-   * - :doc:`api-admin-searchlog`
-     - Search Log Management
+   * - :doc:`api-admin-searchlist`
+     - Document search and management
    * - :doc:`api-admin-storage`
      - Storage management
    * - :doc:`api-admin-plugin`

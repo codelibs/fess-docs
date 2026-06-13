@@ -6,7 +6,7 @@ SystemInfo API
 ====
 
 SystemInfo API是用于获取 |Fess| 系统信息的API。
-您可以查看版本信息、环境变量、JVM信息等。
+您可以查看环境变量、Java系统属性、|Fess| 的配置属性以及用于错误报告的信息。
 
 基础URL
 =======
@@ -42,41 +42,34 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
 响应
 ----
 
+响应包含表示产品版本的 ``version``、表示处理结果的 ``status``，以及
+以下4组属性。每组属性是包含 ``key`` 和 ``value`` 的
+对象数组。
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "systemInfo": {
-          "fessVersion": "15.7.0",
-          "opensearchVersion": "2.11.0",
-          "javaVersion": "21.0.1",
-          "serverName": "Apache Tomcat/10.1.15",
-          "osName": "Linux",
-          "osVersion": "5.15.0-89-generic",
-          "osArchitecture": "amd64",
-          "jvmTotalMemory": "2147483648",
-          "jvmFreeMemory": "1073741824",
-          "jvmMaxMemory": "4294967296",
-          "processorCount": "8",
-          "fileEncoding": "UTF-8",
-          "userLanguage": "ja",
-          "userTimezone": "Asia/Tokyo"
-        },
-        "environmentInfo": {
-          "JAVA_HOME": "/usr/lib/jvm/java-21",
-          "FESS_DICTIONARY_PATH": "/var/lib/fess/dict",
-          "FESS_LOG_PATH": "/var/log/fess"
-        },
-        "systemProperties": {
-          "java.version": "21.0.1",
-          "java.vendor": "Oracle Corporation",
-          "os.name": "Linux",
-          "os.version": "5.15.0-89-generic",
-          "user.dir": "/opt/fess",
-          "user.home": "/home/fess",
-          "user.name": "fess"
-        }
+        "envProps": [
+          {"key": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
+          {"key": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
+        ],
+        "systemProps": [
+          {"key": "java.version", "value": "21.0.1"},
+          {"key": "java.vendor", "value": "Oracle Corporation"},
+          {"key": "os.name", "value": "Linux"},
+          {"key": "user.dir", "value": "/opt/fess"}
+        ],
+        "fessProps": [
+          {"key": "crawler.document.max.site.length", "value": "50"},
+          {"key": "indexer.thread.dump.enabled", "value": "true"}
+        ],
+        "bugReportProps": [
+          {"key": "os.name", "value": "Linux"},
+          {"key": "java.vm.version", "value": "21.0.1+12"}
+        ]
       }
     }
 
@@ -89,34 +82,14 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
 
    * - 字段
      - 说明
-   * - ``fessVersion``
-     - Fess版本
-   * - ``opensearchVersion``
-     - OpenSearch版本
-   * - ``javaVersion``
-     - Java版本
-   * - ``serverName``
-     - 应用服务器名称
-   * - ``osName``
-     - 操作系统名称
-   * - ``osVersion``
-     - 操作系统版本
-   * - ``osArchitecture``
-     - 操作系统架构
-   * - ``jvmTotalMemory``
-     - JVM总内存（字节）
-   * - ``jvmFreeMemory``
-     - JVM空闲内存（字节）
-   * - ``jvmMaxMemory``
-     - JVM最大内存（字节）
-   * - ``processorCount``
-     - 处理器数量
-   * - ``fileEncoding``
-     - 文件编码
-   * - ``userLanguage``
-     - 用户语言
-   * - ``userTimezone``
-     - 用户时区
+   * - ``envProps``
+     - 环境变量列表（``key`` / ``value`` 数组）
+   * - ``systemProps``
+     - Java系统属性列表（``key`` / ``value`` 数组）
+   * - ``fessProps``
+     - |Fess| 的配置属性列表（``key`` / ``value`` 数组）
+   * - ``bugReportProps``
+     - 为错误报告收集的信息列表（``key`` / ``value`` 数组）
 
 使用示例
 ========
@@ -129,29 +102,30 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-检查版本
---------
+提取特定的系统属性
+------------------
 
 .. code-block:: bash
 
-    # 仅提取Fess版本
+    # 仅提取 java.version 的值
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.systemInfo.fessVersion'
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.systemProps[] | select(.key == "java.version") | .value'
 
-检查内存使用情况
-----------------
+列出环境变量
+------------
 
 .. code-block:: bash
 
-    # 提取JVM内存信息
+    # 以 key=value 格式显示环境变量
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.systemInfo | {total: .jvmTotalMemory, free: .jvmFreeMemory, max: .jvmMaxMemory}'
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.envProps[] | "\(.key)=\(.value)"'
 
 参考信息
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`api-admin-stats` - 统计API
-- :doc:`api-admin-general` - 常规设置API
+- :doc:`api-admin-general` - 一般设置API
 - :doc:`../../admin/systeminfo-guide` - 系统信息指南
-

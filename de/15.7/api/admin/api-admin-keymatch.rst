@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - KeyMatch-Liste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/keymatch/settings
-    PUT /api/admin/keymatch/settings
 
 Response
 --------
@@ -113,11 +112,11 @@ Feldbeschreibungen
      - Ja
      - Match-Abfrage
    * - ``maxSize``
-     - Nein
-     - Maximale Anzahl (Standard: 10)
+     - Ja
+     - Maximale Anzahl (Formular-Standardwert: 10)
    * - ``boost``
-     - Nein
-     - Boost-Wert (Standard: 1.0)
+     - Ja
+     - Boost-Wert (Formular-Standardwert: 100.0)
 
 Verwendungsbeispiele
 ====================

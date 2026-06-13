@@ -75,8 +75,12 @@ Para usar Admin API, el token necesita los siguientes permisos:
 Patrones Comunes
 ================
 
-Obtener Lista (GET/PUT /settings)
----------------------------------
+Los recursos que tienen configuraciones (webconfig, user, role, etc.) siguen el siguiente patron CRUD comun.
+Sin embargo, algunos recursos (systeminfo, stats, storage, plugin, log, backup, documents, suggest, la raiz de dict, etc.)
+tienen una estructura de endpoints propia distinta de este patron comun, por lo que debe consultar la pagina de cada recurso.
+
+Obtener Lista (GET /settings)
+-----------------------------
 
 Obtiene una lista de configuraciones.
 
@@ -86,7 +90,6 @@ Solicitud
 ::
 
     GET /api/admin/<recurso>/settings
-    PUT /api/admin/<recurso>/settings
 
 Parametros (paginacion):
 
@@ -111,11 +114,18 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   El objeto ``response`` de todas las respuestas incluye siempre ``version``,
+   que indica la version del producto (por ejemplo, ``"15.7.0"``). En los ejemplos siguientes
+   puede omitirse por brevedad.
 
 Obtener Configuracion Individual (GET /setting/{id})
 ----------------------------------------------------
@@ -219,6 +229,20 @@ Solicitud
 Respuesta
 ~~~~~~~~~
 
+El formato de la respuesta de eliminacion difiere segun el recurso (accion). Muchos recursos
+devuelven solo ``status``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+En algunos recursos, el resultado de la eliminacion se devuelve como ``ApiUpdateResponse``, con
+el ``id`` de la configuracion eliminada y ``created`` (``false`` al eliminar).
+
 .. code-block:: json
 
     {
@@ -229,8 +253,33 @@ Respuesta
       }
     }
 
+Ademas, en los recursos que devuelven ``ApiDeleteResponse`` puede agregarse ``count``,
+que indica el numero de elementos eliminados (valor predeterminado ``1``). Consulte la pagina de cada recurso para conocer el formato real.
+
 Formato de Respuesta
 ====================
+
+Todas las respuestas se envuelven en un objeto ``response`` que incluye siempre
+``version``, que indica la version del producto, y ``status``, que indica el resultado del procesamiento.
+
+Los valores de ``status`` son los siguientes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Valor
+     - Descripcion
+   * - ``0``
+     - OK (exito)
+   * - ``1``
+     - BAD_REQUEST (solicitud invalida)
+   * - ``2``
+     - SYSTEM_ERROR (error del sistema)
+   * - ``3``
+     - UNAUTHORIZED (error de autenticacion)
+   * - ``9``
+     - FAILED (procesamiento fallido)
 
 Respuesta Exitosa
 -----------------
@@ -239,8 +288,9 @@ Respuesta Exitosa
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +299,16 @@ Respuesta Exitosa
 Respuesta de Error
 ------------------
 
+En caso de error, ``status`` se establece en un valor distinto de 0 y ``message``
+contiene el mensaje de error.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +354,13 @@ Configuracion de Rastreo
      - Configuracion de rastreo de archivos
    * - :doc:`api-admin-dataconfig`
      - Configuracion de almacen de datos
+
+.. note::
+
+   Ademas, los siguientes recursos relacionados con credenciales de autenticacion y control de rastreo
+   tambien se ofrecen como API (actualmente no tienen una pagina propia): ``webauth`` (autenticacion web), ``fileauth`` (autenticacion de archivos),
+   ``reqheader`` (encabezados de solicitud), ``pathmap`` (mapeo de rutas),
+   ``duplicatehost`` (hosts duplicados), ``searchlist`` (operaciones de busqueda/lista de documentos).
 
 Gestion de Indices
 ------------------
@@ -396,8 +455,8 @@ Sistema
      - Estadisticas del sistema
    * - :doc:`api-admin-log`
      - Obtencion de registros
-   * - :doc:`api-admin-searchlog`
-     - Gestion de registros de busqueda
+   * - :doc:`api-admin-searchlist`
+     - Busqueda y gestion de documentos
    * - :doc:`api-admin-storage`
      - Gestion de almacenamiento
    * - :doc:`api-admin-plugin`

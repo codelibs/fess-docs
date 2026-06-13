@@ -5,8 +5,8 @@ API de Storage
 Vision General
 ==============
 
-La API de Storage es para gestionar el almacenamiento de |Fess|.
-Puede operar el estado de uso del almacenamiento de indices y la optimizacion.
+La API de Storage es para gestionar el almacenamiento de objetos de |Fess|.
+Puede obtener la lista de archivos y directorios del almacenamiento, y descargar, eliminar y subir archivos.
 
 URL Base
 ========
@@ -26,62 +26,36 @@ Lista de Endpoints
      - Ruta
      - Descripcion
    * - GET
-     - /
-     - Obtener informacion de almacenamiento
-   * - POST
-     - /optimize
-     - Optimizar indice
-   * - POST
-     - /flush
-     - Vaciar indice
+     - /list/{id}
+     - Obtener lista de archivos y directorios
+   * - GET
+     - /download/{id}
+     - Descargar archivo
+   * - DELETE
+     - /delete/{id}
+     - Eliminar archivo
+   * - PUT
+     - /upload/{pathId}
+     - Subir archivo
 
-Obtener Informacion de Almacenamiento
-=====================================
+Obtener Lista de Archivos y Directorios
+=======================================
+
+Devuelve la lista de archivos y directorios bajo el directorio especificado.
+En ``{id}`` se indica la ruta codificada. Si se omite ``{id}``, se obtiene la lista del directorio raiz.
 
 Solicitud
 ---------
 
 ::
 
-    GET /api/admin/storage
+    GET /api/admin/storage/list/{id}
 
 Respuesta
 ---------
 
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "storage": {
-          "indices": [
-            {
-              "name": "fess.20250129",
-              "status": "open",
-              "health": "green",
-              "docsCount": 123456,
-              "docsDeleted": 234,
-              "storeSize": "5.2gb",
-              "primariesStoreSize": "2.6gb",
-              "shards": 5,
-              "replicas": 1
-            }
-          ],
-          "totalStoreSize": "5.2gb",
-          "totalDocsCount": 123456,
-          "clusterHealth": "green",
-          "diskUsage": {
-            "total": "107374182400",
-            "available": "53687091200",
-            "used": "53687091200",
-            "usedPercent": 50.0
-          }
-        }
-      }
-    }
-
-Campos de Respuesta
-~~~~~~~~~~~~~~~~~~~
+En ``items`` se almacena un arreglo de objetos que representan la informacion de archivos y directorios (primero los directorios y despues los archivos).
+Cada objeto tiene los siguientes campos.
 
 .. list-table::
    :header-rows: 1
@@ -89,126 +63,78 @@ Campos de Respuesta
 
    * - Campo
      - Descripcion
-   * - ``indices``
-     - Lista de indices
+   * - ``id``
+     - Identificador codificado (se usa como ``{id}`` al descargar o eliminar)
+   * - ``path``
+     - Ruta del padre
    * - ``name``
-     - Nombre del indice
-   * - ``status``
-     - Estado del indice (open/close)
-   * - ``health``
-     - Estado de salud (green/yellow/red)
-   * - ``docsCount``
-     - Numero de documentos
-   * - ``docsDeleted``
-     - Numero de documentos eliminados
-   * - ``storeSize``
-     - Tamano de almacenamiento
-   * - ``primariesStoreSize``
-     - Tamano de shards primarios
-   * - ``shards``
-     - Numero de shards
-   * - ``replicas``
-     - Numero de replicas
-   * - ``totalStoreSize``
-     - Tamano total de almacenamiento
-   * - ``totalDocsCount``
-     - Numero total de documentos
-   * - ``clusterHealth``
-     - Estado de salud del cluster
-   * - ``diskUsage``
-     - Uso de disco
-
-Optimizar Indice
-================
-
-Solicitud
----------
-
-::
-
-    POST /api/admin/storage/optimize
-    Content-Type: application/json
-
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    {
-      "index": "fess.20250129",
-      "maxNumSegments": 1,
-      "onlyExpungeDeletes": false,
-      "flush": true
-    }
-
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Campo
-     - Requerido
-     - Descripcion
-   * - ``index``
-     - No
-     - Nombre del indice (si no se especifica, todos los indices)
-   * - ``maxNumSegments``
-     - No
-     - Numero maximo de segmentos (predeterminado: 1)
-   * - ``onlyExpungeDeletes``
-     - No
-     - Solo eliminar documentos eliminados (predeterminado: false)
-   * - ``flush``
-     - No
-     - Vaciar despues de optimizar (predeterminado: true)
-
-Respuesta
----------
+     - Nombre del archivo o del directorio
+   * - ``hashCode``
+     - Codigo hash
+   * - ``size``
+     - Tamano (bytes)
+   * - ``directory``
+     - Si es un directorio (boolean)
+   * - ``lastModified``
+     - Fecha/hora de la ultima modificacion (solo archivos)
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Index optimization started"
+        "items": [
+          {
+            "id": "c3ViZGly",
+            "path": "/",
+            "name": "subdir",
+            "hashCode": 12345,
+            "size": 0,
+            "directory": true
+          },
+          {
+            "id": "c2FtcGxlLnR4dA==",
+            "path": "/",
+            "name": "sample.txt",
+            "hashCode": 67890,
+            "size": 1024,
+            "directory": false,
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
+          }
+        ]
       }
     }
 
-Vaciar Indice
-=============
+Descargar Archivo
+=================
+
+Descarga un archivo del almacenamiento. En ``{id}`` se indica el ``id`` obtenido en la lista.
+La respuesta se devuelve como un flujo ``application/octet-stream``.
 
 Solicitud
 ---------
 
 ::
 
-    POST /api/admin/storage/flush
-    Content-Type: application/json
+    GET /api/admin/storage/download/{id}
 
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
+Respuesta
+---------
 
-.. code-block:: json
+Flujo binario del archivo (``Content-Type: application/octet-stream``).
 
-    {
-      "index": "fess.20250129"
-    }
+Eliminar Archivo
+================
 
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
+Elimina un archivo del almacenamiento. En ``{id}`` se indica el ``id`` obtenido en la lista.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
+Solicitud
+---------
 
-   * - Campo
-     - Requerido
-     - Descripcion
-   * - ``index``
-     - No
-     - Nombre del indice (si no se especifica, todos los indices)
+::
+
+    DELETE /api/admin/storage/delete/{id}
 
 Respuesta
 ---------
@@ -217,76 +143,92 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "message": "Index flushed successfully"
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+Subir Archivo
+=============
+
+Sube un archivo al almacenamiento. Se envia en formato ``multipart/form-data``.
+
+Solicitud
+---------
+
+::
+
+    PUT /api/admin/storage/upload/{pathId}
+    Content-Type: multipart/form-data
+
+Descripcion de Campos
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Campo
+     - Requerido
+     - Descripcion
+   * - ``path``
+     - No
+     - Ruta de destino de la subida (si no se especifica, la ubicacion predeterminada)
+   * - ``file``
+     - Si
+     - Archivo a subir
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 Ejemplos de Uso
 ===============
 
-Obtener Informacion de Almacenamiento
--------------------------------------
+Obtener Lista del Directorio Raiz
+---------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/storage" \
+    curl -X GET "http://localhost:8080/api/admin/storage/list/" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Optimizar Todos los Indices
----------------------------
+Descargar Archivo
+-----------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/storage/optimize" \
+    curl -X GET "http://localhost:8080/api/admin/storage/download/c2FtcGxlLnR4dA==" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "maxNumSegments": 1,
-           "flush": true
-         }'
+         -o sample.txt
 
-Optimizar un Indice Especifico
-------------------------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/storage/optimize" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "index": "fess.20250129",
-           "maxNumSegments": 1,
-           "onlyExpungeDeletes": false
-         }'
-
-Eliminar Solo Documentos Eliminados
------------------------------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/storage/optimize" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "onlyExpungeDeletes": true
-         }'
-
-Vaciar un Indice
+Eliminar Archivo
 ----------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/storage/flush" \
+    curl -X DELETE "http://localhost:8080/api/admin/storage/delete/c2FtcGxlLnR4dA==" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Subir Archivo
+-------------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/storage/upload/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "index": "fess.20250129"
-         }'
+         -F "path=/" \
+         -F "file=@sample.txt"
 
 Informacion de Referencia
 =========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-systeminfo` - API de informacion del sistema
-- :doc:`../../admin/storage-guide` - Guia de gestion de almacenamiento

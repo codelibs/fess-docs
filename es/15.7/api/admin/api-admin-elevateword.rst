@@ -5,7 +5,7 @@ API de ElevateWord
 Vision General
 ==============
 
-La API de ElevateWord es para gestionar palabras elevadas (manipulacion del orden de busqueda para palabras clave especificas) de |Fess|.
+La API de ElevateWord es para gestionar las palabras elevadas (manipulacion del orden de busqueda para palabras clave especificas) de |Fess|.
 Puede colocar documentos especificos en posiciones superiores o inferiores para ciertas consultas de busqueda.
 
 URL Base
@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de palabras elevadas
    * - GET
@@ -40,6 +40,12 @@ Lista de Endpoints
    * - DELETE
      - /setting/{id}
      - Eliminar palabra elevada
+   * - PUT
+     - /upload
+     - Subir CSV de palabras elevadas
+   * - GET
+     - /download
+     - Descargar CSV de palabras elevadas
 
 Obtener Lista de Palabras Elevadas
 ==================================
@@ -50,7 +56,6 @@ Solicitud
 ::
 
     GET /api/admin/elevateword/settings
-    PUT /api/admin/elevateword/settings
 
 Parametros
 ~~~~~~~~~~
@@ -84,11 +89,10 @@ Respuesta
           {
             "id": "elevate_id_1",
             "suggestWord": "fess",
-            "reading": "fess",
-            "permissions": [],
-            "boost": 10.0,
-            "targetRole": "",
-            "targetLabel": ""
+            "reading": "フェス",
+            "permissions": "{role}guest",
+            "boost": 100.0,
+            "labelTypeIds": []
           }
         ],
         "total": 5
@@ -116,11 +120,10 @@ Respuesta
         "setting": {
           "id": "elevate_id_1",
           "suggestWord": "fess",
-          "reading": "fess",
-          "permissions": [],
-          "boost": 10.0,
-          "targetRole": "",
-          "targetLabel": ""
+          "reading": "フェス",
+          "permissions": "{role}guest",
+          "boost": 100.0,
+          "labelTypeIds": []
         }
       }
     }
@@ -143,11 +146,10 @@ Cuerpo de la Solicitud
 
     {
       "suggestWord": "documentation",
-      "reading": "documentacion",
-      "permissions": ["guest"],
-      "boost": 15.0,
-      "targetRole": "user",
-      "targetLabel": "docs"
+      "reading": "ドキュメンテーション",
+      "permissions": "{role}guest",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"]
     }
 
 Descripcion de Campos
@@ -168,16 +170,13 @@ Descripcion de Campos
      - Lectura fonetica
    * - ``permissions``
      - No
-     - Roles con permiso de acceso
+     - Permisos de acceso (cadena separada por saltos de linea, uno por linea. Valor inicial del formulario: permisos de visualizacion predeterminados de la busqueda)
    * - ``boost``
+     - Si
+     - Valor de impulso (valor inicial del formulario: 100.0)
+   * - ``labelTypeIds``
      - No
-     - Valor de impulso (predeterminado: 1.0)
-   * - ``targetRole``
-     - No
-     - Rol objetivo
-   * - ``targetLabel``
-     - No
-     - Etiqueta objetivo
+     - IDs de etiqueta objetivo (arreglo de cadenas)
 
 Respuesta
 ---------
@@ -211,11 +210,10 @@ Cuerpo de la Solicitud
     {
       "id": "existing_elevate_id",
       "suggestWord": "documentation",
-      "reading": "documentacion",
-      "permissions": ["guest", "user"],
-      "boost": 20.0,
-      "targetRole": "user",
-      "targetLabel": "docs",
+      "reading": "ドキュメンテーション",
+      "permissions": "{role}guest\n{role}user",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"],
       "versionNo": 1
     }
 
@@ -255,6 +253,56 @@ Respuesta
       }
     }
 
+Subir CSV de Palabras Elevadas
+==============================
+
+Registra palabras elevadas en bloque a partir de un archivo CSV. El archivo se envia como ``multipart/form-data``. La importacion se ejecuta de forma asincrona en el servidor.
+
+Solicitud
+---------
+
+::
+
+    PUT /api/admin/elevateword/upload
+    Content-Type: multipart/form-data
+
+Parametros
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parametro
+     - Requerido
+     - Descripcion
+   * - ``elevateWordFile``
+     - Si
+     - Archivo CSV de palabras elevadas a subir
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Descargar CSV de Palabras Elevadas
+==================================
+
+Descarga las palabras elevadas registradas como archivo CSV (``elevate.csv``). La respuesta es un flujo ``application/octet-stream``.
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/elevateword/download
+
 Ejemplos de Uso
 ===============
 
@@ -268,8 +316,8 @@ Elevar Nombre de Producto
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "Product X",
-           "boost": 20.0,
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "permissions": "{role}guest"
          }'
 
 Elevar a Etiqueta Especifica
@@ -282,10 +330,28 @@ Elevar a Etiqueta Especifica
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "API reference",
-           "boost": 10.0,
-           "targetLabel": "technical_docs",
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "labelTypeIds": ["technical_docs"],
+           "permissions": "{role}guest"
          }'
+
+Subir Archivo CSV
+-----------------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "elevateWordFile=@elevate.csv"
+
+Descargar Archivo CSV
+---------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/elevateword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o elevate.csv
 
 Informacion de Referencia
 =========================

@@ -77,4 +77,4 @@ L'API d'administration |Fess| est une API RESTful permettant d'acceder aux fonct
    :maxdepth: 2
    :caption: Journal de recherche
 
-   api-admin-searchlog
+   api-admin-searchlist

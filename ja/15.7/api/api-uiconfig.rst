@@ -62,12 +62,12 @@ SPA が必要とする初期設定を返します。
         "page_size_default": 20,
         "page_size_max": 100,
         "sort_options": [
-          {"value": "", "label_key": "labels.sort_score"}
+          {"value": "", "label_key": "labels.search_result_sort_score_desc"}
         ],
         "num_options": [10, 20, 30, 40, 50, 100],
         "lang_options": [
-          {"value": "all", "label_key": "labels.search_result_select_lang"},
-          {"value": "ja", "label_key": "labels.search_result_select_lang_ja"}
+          {"value": "all", "label_key": "labels.searchoptions_all_langs"},
+          {"value": "ja", "label_key": "labels.lang_ja"}
         ],
         "label_options": [],
         "notifications": {

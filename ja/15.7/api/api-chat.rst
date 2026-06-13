@@ -56,13 +56,13 @@ CSRF トークンの取得方法および認証・セッションの詳細は :d
 レート制限
 ==========
 
-``POST /chat`` および ``DELETE /chat/sessions/{session_id}`` には、ユーザーごとのレート制限が適用されます。
+``POST /chat`` 、 ``POST /chat/stream`` および ``DELETE /chat/sessions/{session_id}`` には、ユーザーごとのレート制限が適用されます。
 
 - 既定値: 1分あたり30リクエスト（ユーザーごと）
 - 設定キー: ``api.v2.chat.rate.limit.per.user.per.minute``
 
 レート制限を超えた場合、 ``rate_limited`` エラー（HTTP 429）が返されます。 ``Retry-After`` ヘッダーに待機すべき秒数が示されます。
-このレート制限は ``POST /chat`` と ``DELETE /chat/sessions/{session_id}`` で共有されます。
+このレート制限は ``POST /chat`` 、 ``POST /chat/stream`` 、 ``DELETE /chat/sessions/{session_id}`` で共有されます。
 
 POST /chat
 ==========
@@ -294,7 +294,7 @@ SSE ストリーム例:
 ::
 
     event: phase
-    data: {"phase":"retrieval","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
+    data: {"phase":"search","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
 
     event: chunk
     data: {"content":"Fessは"}

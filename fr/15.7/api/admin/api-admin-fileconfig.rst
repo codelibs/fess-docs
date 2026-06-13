@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des configurations de crawl de fichiers
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/fileconfig/settings
-    PUT /api/admin/fileconfig/settings
 
 Parametres
 ~~~~~~~~~~
@@ -84,6 +83,7 @@ Reponse
           {
             "id": "fileconfig_id_1",
             "name": "Shared Documents",
+            "description": "共有ドキュメント",
             "paths": "file://///server/share/documents",
             "includedPaths": ".*\\.pdf$",
             "excludedPaths": ".*/(temp|cache)/.*",
@@ -95,7 +95,9 @@ Reponse
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -124,6 +126,7 @@ Reponse
         "setting": {
           "id": "fileconfig_id_1",
           "name": "Shared Documents",
+          "description": "共有ドキュメント",
           "paths": "file://///server/share/documents",
           "includedPaths": ".*\\.pdf$",
           "excludedPaths": ".*/(temp|cache)/.*",
@@ -135,10 +138,10 @@ Reponse
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -165,13 +168,12 @@ Corps de la requete
       "paths": "file:///data/documents",
       "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
       "excludedPaths": ".*/(temp|backup)/.*",
-      "depth": 5,
-      "maxAccessCount": 5000,
       "numOfThread": 2,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -188,6 +190,9 @@ Description des champs
    * - ``name``
      - Oui
      - Nom de la configuration
+   * - ``description``
+     - Non
+     - Description de la configuration
    * - ``paths``
      - Oui
      - Chemins de depart du crawl (separes par des sauts de ligne si multiples)
@@ -208,34 +213,34 @@ Description des champs
      - Parametres de configuration supplementaires
    * - ``depth``
      - Non
-     - Profondeur du crawl (par defaut : -1=illimite)
+     - Profondeur du crawl
    * - ``maxAccessCount``
      - Non
-     - Nombre maximum d'acces (par defaut : 100)
+     - Nombre maximum d'acces
    * - ``numOfThread``
-     - Non
-     - Nombre de threads paralleles (par defaut : 1)
+     - Oui
+     - Nombre de threads paralleles
    * - ``intervalTime``
-     - Non
-     - Intervalle entre les acces (millisecondes, par defaut : 0)
+     - Oui
+     - Intervalle entre les acces (millisecondes)
    * - ``boost``
-     - Non
-     - Valeur de boost des resultats de recherche (par defaut : 1.0)
+     - Oui
+     - Valeur de boost des resultats de recherche
    * - ``available``
-     - Non
-     - Active/Desactive (par defaut : true)
+     - Oui
+     - Active/Desactive (chaine ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Non
+     - Oui
      - Ordre d'affichage
    * - ``permissions``
      - Non
-     - Roles autorises
+     - Roles autorises (separes par des sauts de ligne si plusieurs)
    * - ``virtualHosts``
      - Non
-     - Hotes virtuels
+     - Hotes virtuels (separes par des sauts de ligne si plusieurs)
    * - ``labelTypeIds``
      - Non
-     - IDs des types de labels
+     - IDs des types de labels (tableau)
 
 Reponse
 -------
@@ -277,7 +282,8 @@ Corps de la requete
       "numOfThread": 3,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -311,9 +317,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_fileconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -351,12 +355,13 @@ Configuration de crawl pour un partage SMB
            "paths": "smb://user:pass@server/documents",
            "includedPaths": ".*\\.(pdf|doc|docx)$",
            "excludedPaths": ".*/(temp|private)/.*",
-           "depth": -1,
            "maxAccessCount": 50000,
            "numOfThread": 3,
            "intervalTime": 200,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 Informations complementaires

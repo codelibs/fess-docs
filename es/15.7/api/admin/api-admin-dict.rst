@@ -5,8 +5,9 @@ API de Dict
 Vision General
 ==============
 
-La API de Dict es para gestionar archivos de diccionario de |Fess|.
-Puede gestionar diccionarios de sinonimos, diccionarios de mapeo, diccionarios de palabras protegidas, etc.
+La API de Dict es para gestionar los diccionarios de |Fess|.
+En el endpoint raiz se puede obtener la lista de diccionarios disponibles.
+La referencia, creacion, actualizacion y eliminacion de elementos de diccionario individuales, asi como la carga y descarga de archivos de diccionario, se operan mediante los subendpoints por tipo de diccionario (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
 
 URL Base
 ========
@@ -18,6 +19,9 @@ URL Base
 Lista de Endpoints
 ==================
 
+Raiz del Diccionario
+--------------------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,18 +32,46 @@ Lista de Endpoints
    * - GET
      - /
      - Obtener lista de diccionarios
+
+Endpoints por Tipo de Diccionario
+----------------------------------
+
+En ``{type}`` se especifica uno de ``synonym`` , ``kuromoji`` , ``mapping`` , ``protwords`` , ``stopwords`` , ``stemmerOverride`` .
+``{dictId}`` es el ID del diccionario obtenido en la lista de diccionarios.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - Metodo
+     - Ruta
+     - Descripcion
    * - GET
-     - /{id}
-     - Obtener contenido del diccionario
-   * - PUT
-     - /{id}
-     - Actualizar contenido del diccionario
+     - /{type}/settings/{dictId}
+     - Obtener lista de elementos del diccionario
+   * - GET
+     - /{type}/setting/{dictId}/{id}
+     - Obtener elemento del diccionario
    * - POST
-     - /upload
+     - /{type}/setting/{dictId}
+     - Crear elemento del diccionario
+   * - PUT
+     - /{type}/setting/{dictId}
+     - Actualizar elemento del diccionario
+   * - DELETE
+     - /{type}/setting/{dictId}/{id}
+     - Eliminar elemento del diccionario
+   * - PUT
+     - /{type}/upload/{dictId}
      - Cargar archivo de diccionario
+   * - GET
+     - /{type}/download/{dictId}
+     - Descargar archivo de diccionario
 
 Obtener Lista de Diccionarios
 =============================
+
+Obtiene la lista de archivos de diccionario disponibles.
 
 Solicitud
 ---------
@@ -55,43 +87,132 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dicts": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "Diccionario de sinonimos",
-            "path": "/var/lib/fess/dict/synonym.txt",
+            "id": "ZjA5...synonym.txt",
             "type": "synonym",
-            "updatedAt": "2025-01-29T10:00:00Z"
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "mapping",
-            "name": "Diccionario de mapeo",
-            "path": "/var/lib/fess/dict/mapping.txt",
+            "id": "ZjA5...mapping.txt",
             "type": "mapping",
-            "updatedAt": "2025-01-28T15:30:00Z"
-          },
-          {
-            "id": "protwords",
-            "name": "Diccionario de palabras protegidas",
-            "path": "/var/lib/fess/dict/protwords.txt",
-            "type": "protwords",
-            "updatedAt": "2025-01-27T12:00:00Z"
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ],
-        "total": 3
+        ]
       }
     }
 
-Obtener Contenido del Diccionario
-=================================
+Campos de Respuesta
+~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Campo
+     - Descripcion
+   * - ``settings[].id``
+     - ID del diccionario (usado como ``{dictId}`` en las operaciones de diccionario individuales)
+   * - ``settings[].type``
+     - Tipo de diccionario
+   * - ``settings[].path``
+     - Ruta del archivo de diccionario
+   * - ``settings[].timestamp``
+     - Fecha y hora de actualizacion del archivo de diccionario
+
+Obtener Lista de Elementos del Diccionario
+==========================================
+
+Obtiene la lista de elementos dentro del diccionario especificado.
 
 Solicitud
 ---------
 
 ::
 
-    GET /api/admin/dict/{id}
+    GET /api/admin/dict/{type}/settings/{dictId}
+
+Parametros
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parametros
+     - Tipo
+     - Requerido
+     - Descripcion
+   * - ``dictId``
+     - String
+     - Si
+     - ID del diccionario (parametro de ruta)
+   * - ``size``
+     - Integer
+     - No
+     - Numero de elementos por pagina
+   * - ``page``
+     - Integer
+     - No
+     - Numero de pagina
+
+Respuesta
+---------
+
+Los campos de cada elemento del arreglo ``settings`` de la respuesta varian segun el tipo de diccionario (consulte "Campos de Elementos por Tipo de Diccionario" mas adelante).
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "settings": [
+          {
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "busqueda,buscar",
+            "outputs": "busqueda,buscar,investigar"
+          }
+        ]
+      }
+    }
+
+Obtener Elemento del Diccionario
+================================
+
+Obtiene un elemento especifico dentro del diccionario.
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parametros
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parametros
+     - Tipo
+     - Requerido
+     - Descripcion
+   * - ``dictId``
+     - String
+     - Si
+     - ID del diccionario (parametro de ruta)
+   * - ``id``
+     - Long
+     - Si
+     - ID del elemento (parametro de ruta)
 
 Respuesta
 ---------
@@ -100,51 +221,39 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dict": {
-          "id": "synonym",
-          "name": "Diccionario de sinonimos",
-          "path": "/var/lib/fess/dict/synonym.txt",
-          "type": "synonym",
-          "content": "busqueda,buscar,search\nFess,fess\nbusqueda de texto completo,full-text search",
-          "updatedAt": "2025-01-29T10:00:00Z"
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "busqueda,buscar",
+          "outputs": "busqueda,buscar,investigar"
         }
       }
     }
 
-Actualizar Contenido del Diccionario
-====================================
+Crear Elemento del Diccionario
+==============================
+
+Crea un nuevo elemento en el diccionario.
 
 Solicitud
 ---------
 
 ::
 
-    PUT /api/admin/dict/{id}
+    POST /api/admin/dict/{type}/setting/{dictId}
     Content-Type: application/json
 
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
+Cuerpo de la Solicitud (ejemplo de synonym)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
-      "content": "busqueda,buscar,search,query\nFess,fess\nbusqueda de texto completo,full-text search"
+      "inputs": "busqueda,buscar",
+      "outputs": "busqueda,buscar,investigar"
     }
-
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Campo
-     - Requerido
-     - Descripcion
-   * - ``content``
-     - Si
-     - Contenido del diccionario (separado por saltos de linea)
 
 Respuesta
 ---------
@@ -153,55 +262,111 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Dictionary updated successfully"
+        "id": "1",
+        "created": true
+      }
+    }
+
+Actualizar Elemento del Diccionario
+===================================
+
+Actualiza un elemento existente dentro del diccionario.
+
+Solicitud
+---------
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+Cuerpo de la Solicitud (ejemplo de synonym)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "busqueda,buscar",
+      "outputs": "busqueda,buscar,investigar,search"
+    }
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+Eliminar Elemento del Diccionario
+=================================
+
+Elimina un elemento dentro del diccionario.
+
+Solicitud
+---------
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parametros
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parametros
+     - Tipo
+     - Requerido
+     - Descripcion
+   * - ``dictId``
+     - String
+     - Si
+     - ID del diccionario (parametro de ruta)
+   * - ``id``
+     - Long
+     - Si
+     - ID del elemento (parametro de ruta)
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
       }
     }
 
 Cargar Archivo de Diccionario
 =============================
 
+Carga y reemplaza el archivo de diccionario completo.
+
 Solicitud
 ---------
 
 ::
 
-    POST /api/admin/dict/upload
+    PUT /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="type"
-
-    synonym
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="synonym.txt"
-    Content-Type: text/plain
-
-    busqueda,buscar,search
-    Fess,fess
-    --boundary--
-
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Campo
-     - Requerido
-     - Descripcion
-   * - ``type``
-     - Si
-     - Tipo de diccionario (synonym/mapping/protwords/stopwords)
-   * - ``file``
-     - Si
-     - Archivo de diccionario
+El nombre del campo de archivo varia segun el tipo de diccionario (consulte "Campos de Elementos por Tipo de Diccionario" mas adelante).
 
 Respuesta
 ---------
@@ -210,63 +375,56 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "message": "Dictionary uploaded successfully"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
-Tipos de Diccionario
-====================
+Descargar Archivo de Diccionario
+================================
+
+Descarga el archivo de diccionario.
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/dict/{type}/download/{dictId}
+
+La respuesta es el binario del archivo de diccionario ( ``application/octet-stream`` ).
+
+Campos de Elementos por Tipo de Diccionario
+===========================================
+
+Los campos del cuerpo de la solicitud de creacion y actualizacion de elementos del diccionario, asi como los de la respuesta, varian segun el tipo de diccionario.
+``id`` (ID del elemento) y ``dictId`` (ID del diccionario) se incluyen en comun en la respuesta.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 80
+   :widths: 18 42 40
 
    * - Tipo
-     - Descripcion
+     - Campos de elemento
+     - Campo de archivo de carga
    * - ``synonym``
-     - Diccionario de sinonimos (expande sinonimos durante la busqueda)
-   * - ``mapping``
-     - Diccionario de mapeo (normalizacion de caracteres)
-   * - ``protwords``
-     - Diccionario de palabras protegidas (palabras excluidas del stemming)
-   * - ``stopwords``
-     - Diccionario de palabras vacias (palabras excluidas del indice)
+     - ``inputs`` (requerido), ``outputs`` (requerido)
+     - ``synonymFile``
    * - ``kuromoji``
-     - Diccionario Kuromoji (analisis morfologico japones)
-
-Ejemplos de Formato de Diccionario
-==================================
-
-Diccionario de Sinonimos
-------------------------
-
-::
-
-    # Especificar sinonimos separados por comas
-    busqueda,buscar,search,query
-    Fess,fess
-    busqueda de texto completo,full-text search
-
-Diccionario de Mapeo
---------------------
-
-::
-
-    # antes de conversion => despues de conversion
-    0 => 0
-    1 => 1
-    2 => 2
-
-Diccionario de Palabras Protegidas
-----------------------------------
-
-::
-
-    # Palabras a proteger del procesamiento de stemming
-    running
-    searching
-    indexing
+     - ``token`` (requerido), ``segmentation`` (requerido), ``reading`` (requerido), ``pos`` (requerido)
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` (requerido), ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` (requerido)
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` (requerido)
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` (requerido), ``output`` (requerido)
+     - ``stemmerOverrideFile``
 
 Ejemplos de Uso
 ===============
@@ -279,42 +437,44 @@ Obtener Lista de Diccionarios
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtener Contenido del Diccionario de Sinonimos
+Obtener Lista de Elementos del Diccionario de Sinonimos
+-------------------------------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Agregar Elemento al Diccionario de Sinonimos
+--------------------------------------------
+
+.. code-block:: bash
+
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "inputs": "busqueda,buscar",
+           "outputs": "busqueda,buscar,investigar"
+         }'
+
+Cargar Archivo del Diccionario de Sinonimos
+-------------------------------------------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "synonymFile=@synonym.txt"
+
+Descargar Archivo del Diccionario de Sinonimos
 ----------------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Actualizar Diccionario de Sinonimos
------------------------------------
-
-.. code-block:: bash
-
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "content": "busqueda,buscar,search\nFess,fess\ndocumento,document"
-         }'
-
-Cargar Archivo de Diccionario
------------------------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/dict/upload" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "type=synonym" \
-         -F "file=@synonym.txt"
-
-Notas Importantes
-=================
-
-- Despues de actualizar un diccionario, puede ser necesario reconstruir el indice
-- Archivos de diccionario grandes pueden afectar el rendimiento de busqueda
-- Use codificacion UTF-8 para los archivos de diccionario
+         -o synonym.txt
 
 Informacion de Referencia
 =========================

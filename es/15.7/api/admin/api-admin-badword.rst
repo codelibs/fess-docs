@@ -5,7 +5,7 @@ API de BadWord
 Vision General
 ==============
 
-La API de BadWord es para gestionar palabras prohibidas (exclusion de palabras de sugerencia inapropiadas) de |Fess|.
+La API de BadWord es para gestionar las palabras prohibidas (exclusion de palabras de sugerencia inapropiadas) de |Fess|.
 Puede configurar palabras clave que no desea mostrar en la funcion de sugerencias.
 
 URL Base
@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de palabras prohibidas
    * - GET
@@ -40,6 +40,12 @@ Lista de Endpoints
    * - DELETE
      - /setting/{id}
      - Eliminar palabra prohibida
+   * - PUT
+     - /upload
+     - Subir CSV de palabras prohibidas
+   * - GET
+     - /download
+     - Descargar CSV de palabras prohibidas
 
 Obtener Lista de Palabras Prohibidas
 ====================================
@@ -50,7 +56,6 @@ Solicitud
 ::
 
     GET /api/admin/badword/settings
-    PUT /api/admin/badword/settings
 
 Parametros
 ~~~~~~~~~~
@@ -83,9 +88,7 @@ Respuesta
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word",
-            "targetRole": "",
-            "targetLabel": ""
+            "suggestWord": "inappropriate_word"
           }
         ],
         "total": 5
@@ -112,9 +115,7 @@ Respuesta
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word",
-          "targetRole": "",
-          "targetLabel": ""
+          "suggestWord": "inappropriate_word"
         }
       }
     }
@@ -136,9 +137,7 @@ Cuerpo de la Solicitud
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": ""
+      "suggestWord": "spam_keyword"
     }
 
 Descripcion de Campos
@@ -153,13 +152,7 @@ Descripcion de Campos
      - Descripcion
    * - ``suggestWord``
      - Si
-     - Palabra clave a excluir
-   * - ``targetRole``
-     - No
-     - Rol objetivo (vacio para todos los roles)
-   * - ``targetLabel``
-     - No
-     - Etiqueta objetivo (vacio para todas las etiquetas)
+     - Palabra clave a excluir (no puede contener espacios en blanco)
 
 Respuesta
 ---------
@@ -193,8 +186,6 @@ Cuerpo de la Solicitud
     {
       "id": "existing_badword_id",
       "suggestWord": "updated_spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": "",
       "versionNo": 1
     }
 
@@ -234,6 +225,56 @@ Respuesta
       }
     }
 
+Subir CSV de Palabras Prohibidas
+================================
+
+Registra palabras prohibidas en bloque a partir de un archivo CSV. El archivo se envia como ``multipart/form-data``. La importacion se ejecuta de forma asincrona en el servidor.
+
+Solicitud
+---------
+
+::
+
+    PUT /api/admin/badword/upload
+    Content-Type: multipart/form-data
+
+Parametros
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parametro
+     - Requerido
+     - Descripcion
+   * - ``badWordFile``
+     - Si
+     - Archivo CSV de palabras prohibidas a subir
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Descargar CSV de Palabras Prohibidas
+====================================
+
+Descarga las palabras prohibidas registradas como archivo CSV (``badword.csv``). La respuesta es un flujo ``application/octet-stream``.
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/badword/download
+
 Ejemplos de Uso
 ===============
 
@@ -246,24 +287,26 @@ Excluir Palabra Clave de Spam
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam",
-           "targetRole": "",
-           "targetLabel": ""
+           "suggestWord": "spam"
          }'
 
-Palabra Prohibida para Rol Especifico
--------------------------------------
+Subir Archivo CSV
+-----------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/badword/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "suggestWord": "internal",
-           "targetRole": "guest",
-           "targetLabel": ""
-         }'
+         -F "badWordFile=@badword.csv"
+
+Descargar Archivo CSV
+---------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o badword.csv
 
 Informacion de Referencia
 =========================

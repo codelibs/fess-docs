@@ -6,7 +6,7 @@ Vue d'ensemble
 ==============
 
 L'API JobLog permet d'obtenir les journaux d'execution des taches de |Fess|.
-Vous pouvez consulter l'historique d'execution des taches planifiees et des taches de crawl, les informations d'erreur, etc.
+Vous pouvez consulter l'historique d'execution des taches planifiees et des taches de crawl, ainsi que les informations d'erreur.
 
 URL de base
 ===========
@@ -26,17 +26,14 @@ Liste des endpoints
      - Chemin
      - Description
    * - GET
-     - /
+     - /logs
      - Obtention de la liste des journaux de taches
    * - GET
-     - /{id}
-     - Obtention des details d'un journal de tache
+     - /log/{id}
+     - Obtention d'un journal de tache
    * - DELETE
-     - /{id}
+     - /log/{id}
      - Suppression d'un journal de tache
-   * - DELETE
-     - /delete-all
-     - Suppression de tous les journaux de taches
 
 Obtention de la liste des journaux de taches
 ============================================
@@ -46,14 +43,14 @@ Requete
 
 ::
 
-    GET /api/admin/joblog
+    GET /api/admin/joblog/logs
 
 Parametres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -62,23 +59,11 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
-   * - ``status``
-     - String
-     - Non
-     - Filtre par statut (ok/fail/running)
-   * - ``from``
-     - String
-     - Non
-     - Date/heure de debut (format ISO 8601)
-   * - ``to``
-     - String
-     - Non
-     - Date/heure de fin (format ISO 8601)
+     - Numero de page
 
 Reponse
 -------
@@ -97,9 +82,8 @@ Reponse
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": "2025-01-29T02:00:00Z",
-            "endTime": "2025-01-29T02:45:23Z",
-            "executionTime": 2723000
+            "startTime": 1738116000000,
+            "endTime": 1738118723000
           },
           {
             "id": "joblog_id_2",
@@ -109,9 +93,8 @@ Reponse
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": "2025-01-28T02:00:00Z",
-            "endTime": "2025-01-28T02:10:15Z",
-            "executionTime": 615000
+            "startTime": 1738029600000,
+            "endTime": 1738030215000
           }
         ],
         "total": 100
@@ -119,7 +102,7 @@ Reponse
     }
 
 Champs de la reponse
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -132,7 +115,7 @@ Champs de la reponse
    * - ``jobName``
      - Nom de la tache
    * - ``jobStatus``
-     - Statut de la tache (ok/fail/running)
+     - Statut de la tache
    * - ``target``
      - Cible d'execution
    * - ``scriptType``
@@ -140,23 +123,21 @@ Champs de la reponse
    * - ``scriptData``
      - Script execute
    * - ``scriptResult``
-     - Resultat de l'execution
+     - Resultat d'execution
    * - ``startTime``
-     - Heure de debut
+     - Heure de debut (millisecondes epoch)
    * - ``endTime``
-     - Heure de fin
-   * - ``executionTime``
-     - Temps d'execution (millisecondes)
+     - Heure de fin (millisecondes epoch)
 
-Obtention des details d'un journal de tache
-===========================================
+Obtention d'un journal de tache
+===============================
 
 Requete
 -------
 
 ::
 
-    GET /api/admin/joblog/{id}
+    GET /api/admin/joblog/log/{id}
 
 Reponse
 -------
@@ -174,9 +155,8 @@ Reponse
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "2025-01-29T02:00:00Z",
-          "endTime": "2025-01-29T02:45:23Z",
-          "executionTime": 2723000
+          "startTime": 1738116000000,
+          "endTime": 1738118723000
         }
       }
     }
@@ -189,7 +169,7 @@ Requete
 
 ::
 
-    DELETE /api/admin/joblog/{id}
+    DELETE /api/admin/joblog/log/{id}
 
 Reponse
 -------
@@ -198,51 +178,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "message": "Job log deleted successfully"
-      }
-    }
-
-Suppression de tous les journaux de taches
-==========================================
-
-Requete
--------
-
-::
-
-    DELETE /api/admin/joblog/delete-all
-
-Parametres
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametre
-     - Type
-     - Requis
-     - Description
-   * - ``before``
-     - String
-     - Non
-     - Supprimer les journaux anterieurs a cette date/heure (format ISO 8601)
-   * - ``status``
-     - String
-     - Non
-     - Supprimer uniquement les journaux avec ce statut
-
-Reponse
--------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "message": "Job logs deleted successfully",
-        "deletedCount": 50
+        "status": 0
       }
     }
 
@@ -254,66 +190,41 @@ Obtention de la liste des journaux de taches
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtention des taches echouees uniquement
-----------------------------------------
+Extraction des taches en echec uniquement
+-----------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?status=fail" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Journaux de taches pour une periode specifique
-----------------------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Obtention des details d'un journal de tache
--------------------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/joblog/joblog_id_1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Suppression des anciens journaux de taches
-------------------------------------------
-
-.. code-block:: bash
-
-    # Supprimer les journaux de plus de 30 jours
-    curl -X DELETE "http://localhost:8080/api/admin/joblog/delete-all?before=2024-12-30T00:00:00Z" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Suppression des journaux de taches echouees uniquement
-------------------------------------------------------
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/joblog/delete-all?status=fail" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Detection des taches longues
-----------------------------
-
-.. code-block:: bash
-
-    # Extraire les taches ayant dure plus d'une heure
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=1000" \
+    # Filtrer les taches en echec avec jq
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.executionTime > 3600000) | {jobName, startTime, executionTime}'
+         jq '.response.logs[] | select(.jobStatus=="fail")'
 
-Calcul du taux de succes des taches
------------------------------------
+Obtention d'un journal de tache
+-------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog?size=1000" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Suppression d'un journal de tache
+---------------------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Calcul du taux de reussite des taches
+-------------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
 

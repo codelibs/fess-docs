@@ -6,7 +6,7 @@ Suggest API
 ====
 
 Suggest API是用于管理 |Fess| 建议功能的API。
-您可以添加、删除、更新建议词等。
+可以获取建议词的统计信息，以及删除建议词。
 
 基础URL
 =======
@@ -25,55 +25,30 @@ Suggest API是用于管理 |Fess| 建议功能的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
-     - /settings
-     - 获取建议词列表
    * - GET
-     - /setting/{id}
-     - 获取建议词
-   * - POST
-     - /setting
-     - 创建建议词
-   * - PUT
-     - /setting
-     - 更新建议词
+     - /
+     - 获取建议词统计信息
    * - DELETE
-     - /setting/{id}
-     - 删除建议词
-   * - DELETE
-     - /delete-all
+     - /all
      - 删除所有建议词
+   * - DELETE
+     - /document
+     - 删除来源于文档的建议词
+   * - DELETE
+     - /query
+     - 删除来源于搜索查询的建议词
 
-获取建议词列表
-==============
+获取建议词统计信息
+==================
+
+获取有关建议词数量的统计信息。
 
 请求
 ----
 
 ::
 
-    GET /api/admin/suggest/settings
-    PUT /api/admin/suggest/settings
-
-参数
-~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - 参数
-     - 类型
-     - 必需
-     - 说明
-   * - ``size``
-     - Integer
-     - 否
-     - 每页记录数（默认：20）
-   * - ``page``
-     - Integer
-     - 否
-     - 页码（从0开始）
+    GET /api/admin/suggest
 
 响应
 ----
@@ -82,198 +57,43 @@ Suggest API是用于管理 |Fess| 建议功能的API。
 
     {
       "response": {
-        "status": 0,
-        "settings": [
-          {
-            "id": "suggest_id_1",
-            "text": "fess",
-            "reading": "",
-            "fields": ["title", "content"],
-            "tags": ["product"],
-            "roles": ["guest"],
-            "lang": "ja",
-            "score": 1.0
-          }
-        ],
-        "total": 100
-      }
-    }
-
-获取建议词
-==========
-
-请求
-----
-
-::
-
-    GET /api/admin/suggest/setting/{id}
-
-响应
-----
-
-.. code-block:: json
-
-    {
-      "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
-          "id": "suggest_id_1",
-          "text": "fess",
-          "reading": "",
-          "fields": ["title", "content"],
-          "tags": ["product"],
-          "roles": ["guest"],
-          "lang": "ja",
-          "score": 1.0
+          "totalWordsNum": 1500,
+          "documentWordsNum": 1200,
+          "queryWordsNum": 300
         }
       }
     }
 
-创建建议词
-==========
-
-请求
-----
-
-::
-
-    POST /api/admin/suggest/setting
-    Content-Type: application/json
-
-请求体
-~~~~~~
-
-.. code-block:: json
-
-    {
-      "text": "search engine",
-      "reading": "",
-      "fields": ["title"],
-      "tags": ["feature"],
-      "roles": ["guest"],
-      "lang": "en",
-      "score": 1.0
-    }
-
-字段说明
+响应字段
 ~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 30 70
 
    * - 字段
-     - 必需
      - 说明
-   * - ``text``
-     - 是
-     - 建议文本
-   * - ``reading``
-     - 否
-     - 读音（日语假名）
-   * - ``fields``
-     - 否
-     - 目标字段
-   * - ``tags``
-     - 否
-     - 标签
-   * - ``roles``
-     - 否
-     - 访问权限角色
-   * - ``lang``
-     - 否
-     - 语言代码
-   * - ``score``
-     - 否
-     - 分数（默认：1.0）
-
-响应
-----
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "id": "new_suggest_id",
-        "created": true
-      }
-    }
-
-更新建议词
-==========
-
-请求
-----
-
-::
-
-    PUT /api/admin/suggest/setting
-    Content-Type: application/json
-
-请求体
-~~~~~~
-
-.. code-block:: json
-
-    {
-      "id": "existing_suggest_id",
-      "text": "search engine",
-      "reading": "",
-      "fields": ["title", "content"],
-      "tags": ["feature", "popular"],
-      "roles": ["guest"],
-      "lang": "en",
-      "score": 2.0,
-      "versionNo": 1
-    }
-
-响应
-----
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "id": "existing_suggest_id",
-        "created": false
-      }
-    }
-
-删除建议词
-==========
-
-请求
-----
-
-::
-
-    DELETE /api/admin/suggest/setting/{id}
-
-响应
-----
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "id": "deleted_suggest_id",
-        "created": false
-      }
-    }
+   * - ``setting.totalWordsNum``
+     - 建议词总数
+   * - ``setting.documentWordsNum``
+     - 来源于文档的建议词数
+   * - ``setting.queryWordsNum``
+     - 来源于搜索查询的建议词数
 
 删除所有建议词
 ==============
 
+删除所有建议词。
+
 请求
 ----
 
 ::
 
-    DELETE /api/admin/suggest/delete-all
+    DELETE /api/admin/suggest/all
 
 响应
 ----
@@ -282,38 +102,84 @@ Suggest API是用于管理 |Fess| 建议功能的API。
 
     {
       "response": {
-        "status": 0,
-        "count": 250
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+删除来源于文档的建议词
+======================
+
+删除从文档生成的建议词。
+
+请求
+----
+
+::
+
+    DELETE /api/admin/suggest/document
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+删除来源于搜索查询的建议词
+==========================
+
+删除从搜索查询生成的建议词。
+
+请求
+----
+
+::
+
+    DELETE /api/admin/suggest/query
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 使用示例
 ========
 
-添加热门关键词
---------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/suggest/setting" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "text": "getting started",
-           "fields": ["title"],
-           "tags": ["tutorial"],
-           "roles": ["guest"],
-           "lang": "en",
-           "score": 5.0
-         }'
-
-批量删除建议
+获取统计信息
 ------------
 
 .. code-block:: bash
 
-    # 删除所有建议
-    curl -X DELETE "http://localhost:8080/api/admin/suggest/delete-all" \
+    curl -X GET "http://localhost:8080/api/admin/suggest" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+删除所有建议词
+--------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/suggest/all" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+删除来源于文档的建议词
+----------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/suggest/document" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 参考信息
@@ -323,4 +189,3 @@ Suggest API是用于管理 |Fess| 建议功能的API。
 - :doc:`api-admin-badword` - 屏蔽词API
 - :doc:`api-admin-elevateword` - 提升词API
 - :doc:`../../admin/suggest-guide` - 建议管理指南
-

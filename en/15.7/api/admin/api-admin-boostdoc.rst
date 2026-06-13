@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List document boosts
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/boostdoc/settings
-    PUT /api/admin/boostdoc/settings
 
 Parameters
 ~~~~~~~~~~
@@ -158,8 +157,8 @@ Field Description
      - Yes
      - Boost expression (number or expression)
    * - ``sortOrder``
-     - No
-     - Application order
+     - Yes
+     - Application order (form default value: 0)
 
 Response
 --------
@@ -228,9 +227,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_boostdoc_id",
-        "created": false
+        "status": 0
       }
     }
 

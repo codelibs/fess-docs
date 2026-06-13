@@ -25,7 +25,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取Web爬虫设置列表
    * - GET
@@ -50,7 +50,6 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 ::
 
     GET /api/admin/webconfig/settings
-    PUT /api/admin/webconfig/settings
 
 参数
 ~~~~
@@ -84,6 +83,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
           {
             "id": "webconfig_id_1",
             "name": "Example Site",
+            "description": "サンプルサイト",
             "urls": "https://example.com/",
             "includedUrls": ".*example\\.com.*",
             "excludedUrls": ".*\\.(pdf|zip)$",
@@ -92,11 +92,13 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
             "configParameter": "",
             "depth": 3,
             "maxAccessCount": 1000,
-            "userAgent": "",
+            "userAgent": "Mozilla/5.0",
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -125,6 +127,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
         "setting": {
           "id": "webconfig_id_1",
           "name": "Example Site",
+          "description": "サンプルサイト",
           "urls": "https://example.com/",
           "includedUrls": ".*example\\.com.*",
           "excludedUrls": ".*\\.(pdf|zip)$",
@@ -133,14 +136,14 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
           "configParameter": "",
           "depth": 3,
           "maxAccessCount": 1000,
-          "userAgent": "",
+          "userAgent": "Mozilla/5.0",
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -167,13 +170,13 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "depth": 5,
-      "maxAccessCount": 5000,
+      "userAgent": "Mozilla/5.0",
       "numOfThread": 3,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -190,6 +193,9 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
    * - ``name``
      - 是
      - 设置名称
+   * - ``description``
+     - 否
+     - 设置的说明
    * - ``urls``
      - 是
      - 爬虫起始URL（多个URL用换行符分隔）
@@ -210,37 +216,37 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
      - 附加配置参数
    * - ``depth``
      - 否
-     - 爬虫深度（默认：-1=无限制）
+     - 爬虫深度
    * - ``maxAccessCount``
      - 否
-     - 最大访问数（默认：100）
+     - 最大访问数
    * - ``userAgent``
-     - 否
-     - 自定义User-Agent
+     - 是
+     - User-Agent字符串
    * - ``numOfThread``
-     - 否
-     - 并行线程数（默认：1）
+     - 是
+     - 并行线程数
    * - ``intervalTime``
-     - 否
-     - 请求间隔（毫秒，默认：0）
+     - 是
+     - 请求间隔（毫秒）
    * - ``boost``
-     - 否
-     - 搜索结果提升值（默认：1.0）
+     - 是
+     - 搜索结果提升值
    * - ``available``
-     - 否
-     - 启用/禁用（默认：true）
+     - 是
+     - 启用/禁用（字符串 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - 否
+     - 是
      - 显示顺序
    * - ``permissions``
      - 否
-     - 访问权限角色
+     - 访问权限角色（多个时用换行符分隔）
    * - ``virtualHosts``
      - 否
-     - 虚拟主机
+     - 虚拟主机（多个时用换行符分隔）
    * - ``labelTypeIds``
      - 否
-     - 标签类型ID
+     - 标签类型ID（数组）
 
 响应
 ----
@@ -277,12 +283,14 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
+      "userAgent": "Mozilla/5.0",
       "depth": 10,
       "maxAccessCount": 10000,
       "numOfThread": 5,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -316,9 +324,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_webconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -361,12 +367,15 @@ includedUrls / excludedUrls
            "urls": "https://www.example.com/",
            "includedUrls": ".*www\\.example\\.com.*",
            "excludedUrls": ".*/(login|admin|api)/.*",
+           "userAgent": "Mozilla/5.0",
            "depth": 5,
            "maxAccessCount": 10000,
            "numOfThread": 3,
            "intervalTime": 500,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 文档网站爬虫设置
@@ -383,12 +392,13 @@ includedUrls / excludedUrls
            "includedUrls": ".*docs\\.example\\.com.*",
            "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
-           "depth": -1,
+           "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
            "numOfThread": 5,
            "intervalTime": 200,
            "boost": 1.5,
-           "available": true,
+           "available": "true",
+           "sortOrder": 0,
            "labelTypeIds": ["documentation_label_id"]
          }'
 

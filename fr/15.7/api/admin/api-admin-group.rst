@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des groupes
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 Parametres
 ~~~~~~~~~~
@@ -84,12 +83,16 @@ Reponse
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Reponse
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Corps de la requete
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 Description des champs
@@ -156,9 +163,9 @@ Description des champs
    * - ``name``
      - Oui
      - Nom du groupe
-   * - ``gidNumber``
+   * - ``attributes``
      - Non
-     - Numero d'ID du groupe
+     - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont specifiees sous forme de chaines de caracteres
 
 Reponse
 -------
@@ -192,7 +199,9 @@ Corps de la requete
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Creation d'un nouveau groupe
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 Obtention de la liste des groupes

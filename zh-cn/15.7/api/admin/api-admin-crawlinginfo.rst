@@ -5,8 +5,8 @@ CrawlingInfo API
 概述
 ====
 
-CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
-您可以查看爬虫会话的状态、进度和统计信息。
+CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）的API。
+可以执行爬虫会话的列表获取、单个获取、删除等操作。
 
 基础URL
 =======
@@ -26,14 +26,17 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
      - 路径
      - 说明
    * - GET
-     - /
+     - /logs
      - 获取爬虫信息列表
    * - GET
-     - /{sessionId}
-     - 获取爬虫会话详情
+     - /log/{id}
+     - 获取爬虫信息
    * - DELETE
-     - /{sessionId}
-     - 删除爬虫会话
+     - /log/{id}
+     - 删除爬虫信息
+   * - DELETE
+     - /all
+     - 批量删除旧爬虫会话
 
 获取爬虫信息列表
 ================
@@ -43,14 +46,14 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
 
 ::
 
-    GET /api/admin/crawlinginfo
+    GET /api/admin/crawlinginfo/logs
 
 参数
 ~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -59,11 +62,15 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码
+   * - ``sessionId``
+     - String
+     - 否
+     - 会话ID过滤
 
 响应
 ----
@@ -73,28 +80,20 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
     {
       "response": {
         "status": 0,
-        "sessions": [
+        "logs": [
           {
-            "sessionId": "session_20250129_100000",
+            "id": "crawling_info_id_1",
+            "sessionId": "20250129100000",
             "name": "Default Crawler",
-            "status": "running",
-            "startTime": "2025-01-29T10:00:00Z",
-            "endTime": null,
-            "crawlingInfoCount": 567,
-            "createdDocCount": 234,
-            "updatedDocCount": 123,
-            "deletedDocCount": 12
+            "expiredTime": "1738200000000",
+            "createdTime": 1738108800000
           },
           {
-            "sessionId": "session_20250128_100000",
+            "id": "crawling_info_id_2",
+            "sessionId": "20250128100000",
             "name": "Default Crawler",
-            "status": "completed",
-            "startTime": "2025-01-28T10:00:00Z",
-            "endTime": "2025-01-28T10:45:23Z",
-            "crawlingInfoCount": 1234,
-            "createdDocCount": 456,
-            "updatedDocCount": 678,
-            "deletedDocCount": 23
+            "expiredTime": "1738113600000",
+            "createdTime": 1738022400000
           }
         ],
         "total": 10
@@ -110,69 +109,18 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
 
    * - 字段
      - 说明
+   * - ``id``
+     - 爬虫信息ID
    * - ``sessionId``
      - 会话ID
    * - ``name``
-     - 爬虫名称
-   * - ``status``
-     - 状态（running/completed/failed）
-   * - ``startTime``
-     - 开始时间
-   * - ``endTime``
-     - 结束时间
-   * - ``crawlingInfoCount``
-     - 爬虫信息数
-   * - ``createdDocCount``
-     - 创建文档数
-   * - ``updatedDocCount``
-     - 更新文档数
-   * - ``deletedDocCount``
-     - 删除文档数
+     - 会话名称
+   * - ``expiredTime``
+     - 有效期限
+   * - ``createdTime``
+     - 创建时刻（epoch毫秒）
 
-获取爬虫会话详情
-================
-
-请求
-----
-
-::
-
-    GET /api/admin/crawlinginfo/{sessionId}
-
-响应
-----
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "session": {
-          "sessionId": "session_20250129_100000",
-          "name": "Default Crawler",
-          "status": "running",
-          "startTime": "2025-01-29T10:00:00Z",
-          "endTime": null,
-          "crawlingInfoCount": 567,
-          "createdDocCount": 234,
-          "updatedDocCount": 123,
-          "deletedDocCount": 12,
-          "infos": [
-            {
-              "url": "https://example.com/page1",
-              "status": "OK",
-              "method": "GET",
-              "httpStatusCode": 200,
-              "contentLength": 12345,
-              "executionTime": 123,
-              "lastModified": "2025-01-29T09:55:00Z"
-            }
-          ]
-        }
-      }
-    }
-
-删除爬虫会话
+获取爬虫信息
 ============
 
 请求
@@ -180,7 +128,7 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
 
 ::
 
-    DELETE /api/admin/crawlinginfo/{sessionId}
+    GET /api/admin/crawlinginfo/log/{id}
 
 响应
 ----
@@ -190,7 +138,57 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
     {
       "response": {
         "status": 0,
-        "message": "Crawling session deleted successfully"
+        "log": {
+          "id": "crawling_info_id_1",
+          "sessionId": "20250129100000",
+          "name": "Default Crawler",
+          "expiredTime": "1738200000000",
+          "createdTime": 1738108800000
+        }
+      }
+    }
+
+删除爬虫信息
+============
+
+请求
+----
+
+::
+
+    DELETE /api/admin/crawlinginfo/log/{id}
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+批量删除旧爬虫会话
+==================
+
+批量删除除正在执行的会话之外的旧爬虫会话。
+
+请求
+----
+
+::
+
+    DELETE /api/admin/crawlinginfo/all
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
       }
     }
 
@@ -202,52 +200,45 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-获取正在运行的爬虫会话
-----------------------
+按特定会话过滤
+--------------
 
 .. code-block:: bash
 
-    # 获取所有会话并过滤running状态
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.sessions[] | select(.status=="running")'
-
-获取特定会话详情
-----------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/session_20250129_100000" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?sessionId=20250129100000" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-删除旧会话
-----------
+获取爬虫信息
+------------
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/session_20250101_100000" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-监控进度
---------
+删除爬虫信息
+------------
 
 .. code-block:: bash
 
-    # 定期检查正在运行会话的进度
-    while true; do
-      curl -s "http://localhost:8080/api/admin/crawlinginfo" \
-           -H "Authorization: Bearer YOUR_TOKEN" | \
-           jq '.response.sessions[] | select(.status=="running") | {sessionId, crawlingInfoCount, createdDocCount}'
-      sleep 10
-    done
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+批量删除旧会话
+--------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
 参考信息
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`api-admin-failureurl` - 失败URL API
-- :doc:`api-admin-joblog` - 任务日志API
+- :doc:`api-admin-joblog` - 作业日志API
 - :doc:`../../admin/crawlinginfo-guide` - 爬虫信息指南
-

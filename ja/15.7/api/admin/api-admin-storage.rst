@@ -5,8 +5,8 @@ Storage API
 概要
 ====
 
-Storage APIは、|Fess| のストレージ管理を行うためのAPIです。
-インデックスのストレージ使用状況や最適化を操作できます。
+Storage APIは、|Fess| のオブジェクトストレージを管理するためのAPIです。
+ストレージ内のファイル・ディレクトリの一覧取得、ファイルのダウンロード・削除・アップロードを操作できます。
 
 ベースURL
 =========
@@ -26,62 +26,36 @@ Storage APIは、|Fess| のストレージ管理を行うためのAPIです。
      - パス
      - 説明
    * - GET
-     - /
-     - ストレージ情報取得
-   * - POST
-     - /optimize
-     - インデックス最適化
-   * - POST
-     - /flush
-     - インデックスフラッシュ
+     - /list/{id}
+     - ファイル・ディレクトリ一覧取得
+   * - GET
+     - /download/{id}
+     - ファイルのダウンロード
+   * - DELETE
+     - /delete/{id}
+     - ファイルの削除
+   * - PUT
+     - /upload/{pathId}
+     - ファイルのアップロード
 
-ストレージ情報取得
-==================
+ファイル・ディレクトリ一覧取得
+==============================
+
+指定したディレクトリ配下のファイルおよびディレクトリの一覧を返します。
+``{id}`` にはエンコードされたパスを指定します。``{id}`` を省略するとルートディレクトリの一覧を取得します。
 
 リクエスト
 ----------
 
 ::
 
-    GET /api/admin/storage
+    GET /api/admin/storage/list/{id}
 
 レスポンス
 ----------
 
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "storage": {
-          "indices": [
-            {
-              "name": "fess.20250129",
-              "status": "open",
-              "health": "green",
-              "docsCount": 123456,
-              "docsDeleted": 234,
-              "storeSize": "5.2gb",
-              "primariesStoreSize": "2.6gb",
-              "shards": 5,
-              "replicas": 1
-            }
-          ],
-          "totalStoreSize": "5.2gb",
-          "totalDocsCount": 123456,
-          "clusterHealth": "green",
-          "diskUsage": {
-            "total": "107374182400",
-            "available": "53687091200",
-            "used": "53687091200",
-            "usedPercent": 50.0
-          }
-        }
-      }
-    }
-
-レスポンスフィールド
-~~~~~~~~~~~~~~~~~~~~
+``items`` にファイル・ディレクトリの情報を表すオブジェクトの配列が格納されます（ディレクトリが先、ファイルが後の順）。
+各オブジェクトは以下のフィールドを持ちます。
 
 .. list-table::
    :header-rows: 1
@@ -89,126 +63,78 @@ Storage APIは、|Fess| のストレージ管理を行うためのAPIです。
 
    * - フィールド
      - 説明
-   * - ``indices``
-     - インデックス一覧
+   * - ``id``
+     - エンコードされた識別子（ダウンロード・削除時の ``{id}`` に使用）
+   * - ``path``
+     - 親パス
    * - ``name``
-     - インデックス名
-   * - ``status``
-     - インデックスステータス（open/close）
-   * - ``health``
-     - ヘルスステータス（green/yellow/red）
-   * - ``docsCount``
-     - ドキュメント数
-   * - ``docsDeleted``
-     - 削除済みドキュメント数
-   * - ``storeSize``
-     - ストレージサイズ
-   * - ``primariesStoreSize``
-     - プライマリシャードのサイズ
-   * - ``shards``
-     - シャード数
-   * - ``replicas``
-     - レプリカ数
-   * - ``totalStoreSize``
-     - 総ストレージサイズ
-   * - ``totalDocsCount``
-     - 総ドキュメント数
-   * - ``clusterHealth``
-     - クラスターヘルス
-   * - ``diskUsage``
-     - ディスク使用状況
-
-インデックス最適化
-==================
-
-リクエスト
-----------
-
-::
-
-    POST /api/admin/storage/optimize
-    Content-Type: application/json
-
-リクエストボディ
-~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    {
-      "index": "fess.20250129",
-      "maxNumSegments": 1,
-      "onlyExpungeDeletes": false,
-      "flush": true
-    }
-
-フィールド説明
-~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - フィールド
-     - 必須
-     - 説明
-   * - ``index``
-     - いいえ
-     - インデックス名（未指定の場合は全インデックス）
-   * - ``maxNumSegments``
-     - いいえ
-     - 最大セグメント数（デフォルト: 1）
-   * - ``onlyExpungeDeletes``
-     - いいえ
-     - 削除済みドキュメントのみ削除（デフォルト: false）
-   * - ``flush``
-     - いいえ
-     - 最適化後にフラッシュ（デフォルト: true）
-
-レスポンス
-----------
+     - ファイル名またはディレクトリ名
+   * - ``hashCode``
+     - ハッシュコード
+   * - ``size``
+     - サイズ（バイト）
+   * - ``directory``
+     - ディレクトリかどうか（boolean）
+   * - ``lastModified``
+     - 最終更新日時（ファイルのみ）
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Index optimization started"
+        "items": [
+          {
+            "id": "c3ViZGly",
+            "path": "/",
+            "name": "subdir",
+            "hashCode": 12345,
+            "size": 0,
+            "directory": true
+          },
+          {
+            "id": "c2FtcGxlLnR4dA==",
+            "path": "/",
+            "name": "sample.txt",
+            "hashCode": 67890,
+            "size": 1024,
+            "directory": false,
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
+          }
+        ]
       }
     }
 
-インデックスフラッシュ
+ファイルのダウンロード
 ======================
+
+ストレージ内のファイルをダウンロードします。``{id}`` には一覧取得で得られた ``id`` を指定します。
+レスポンスは ``application/octet-stream`` のストリームとして返されます。
 
 リクエスト
 ----------
 
 ::
 
-    POST /api/admin/storage/flush
-    Content-Type: application/json
+    GET /api/admin/storage/download/{id}
 
-リクエストボディ
-~~~~~~~~~~~~~~~~
+レスポンス
+----------
 
-.. code-block:: json
+ファイルのバイナリストリーム（``Content-Type: application/octet-stream``）。
 
-    {
-      "index": "fess.20250129"
-    }
+ファイルの削除
+==============
 
-フィールド説明
-~~~~~~~~~~~~~~
+ストレージ内のファイルを削除します。``{id}`` には一覧取得で得られた ``id`` を指定します。
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
+リクエスト
+----------
 
-   * - フィールド
-     - 必須
-     - 説明
-   * - ``index``
-     - いいえ
-     - インデックス名（未指定の場合は全インデックス）
+::
+
+    DELETE /api/admin/storage/delete/{id}
 
 レスポンス
 ----------
@@ -217,76 +143,92 @@ Storage APIは、|Fess| のストレージ管理を行うためのAPIです。
 
     {
       "response": {
-        "status": 0,
-        "message": "Index flushed successfully"
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+ファイルのアップロード
+======================
+
+ストレージにファイルをアップロードします。``multipart/form-data`` 形式で送信します。
+
+リクエスト
+----------
+
+::
+
+    PUT /api/admin/storage/upload/{pathId}
+    Content-Type: multipart/form-data
+
+フィールド説明
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``path``
+     - いいえ
+     - アップロード先のパス（未指定の場合は既定の場所）
+   * - ``file``
+     - はい
+     - アップロードするファイル
+
+レスポンス
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 使用例
 ======
 
-ストレージ情報の取得
---------------------
+ルートディレクトリの一覧取得
+----------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/storage" \
+    curl -X GET "http://localhost:8080/api/admin/storage/list/" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-全インデックスの最適化
+ファイルのダウンロード
 ----------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/storage/optimize" \
+    curl -X GET "http://localhost:8080/api/admin/storage/download/c2FtcGxlLnR4dA==" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "maxNumSegments": 1,
-           "flush": true
-         }'
+         -o sample.txt
 
-特定インデックスの最適化
-------------------------
+ファイルの削除
+--------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/storage/optimize" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "index": "fess.20250129",
-           "maxNumSegments": 1,
-           "onlyExpungeDeletes": false
-         }'
+    curl -X DELETE "http://localhost:8080/api/admin/storage/delete/c2FtcGxlLnR4dA==" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-削除済みドキュメントの削除
---------------------------
+ファイルのアップロード
+----------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/storage/optimize" \
+    curl -X PUT "http://localhost:8080/api/admin/storage/upload/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "onlyExpungeDeletes": true
-         }'
-
-インデックスのフラッシュ
-------------------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/storage/flush" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "index": "fess.20250129"
-         }'
+         -F "path=/" \
+         -F "file=@sample.txt"
 
 参考情報
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
-- :doc:`api-admin-systeminfo` - システム情報API
-- :doc:`../../admin/storage-guide` - ストレージ管理ガイド

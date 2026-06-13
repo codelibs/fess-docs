@@ -25,7 +25,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 관련 쿼리 목록 조회
    * - GET
@@ -50,7 +50,6 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
 ::
 
     GET /api/admin/relatedquery/settings
-    PUT /api/admin/relatedquery/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -84,7 +83,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": ["fess tutorial", "fess installation", "fess configuration"]
+            "queries": "fess tutorial\nfess installation\nfess configuration"
           }
         ],
         "total": 5
@@ -112,7 +111,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
         "setting": {
           "id": "query_id_1",
           "term": "fess",
-          "queries": ["fess tutorial", "fess installation", "fess configuration"],
+          "queries": "fess tutorial\nfess installation\nfess configuration",
           "virtualHost": ""
         }
       }
@@ -136,7 +135,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
 
     {
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search",
       "virtualHost": ""
     }
 
@@ -155,7 +154,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
      - 검색 키워드
    * - ``queries``
      - 예
-     - 관련 쿼리 배열
+     - 관련 쿼리 (한 줄에 한 건의 줄바꿈 구분 문자열)
    * - ``virtualHost``
      - 아니오
      - 가상 호스트
@@ -192,7 +191,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
     {
       "id": "existing_query_id",
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search", "search tips"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
       "virtualHost": "",
       "versionNo": 1
     }
@@ -227,9 +226,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_query_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -246,7 +243,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
          -H "Content-Type: application/json" \
          -d '{
            "term": "product",
-           "queries": ["product features", "product pricing", "product comparison", "product reviews"]
+           "queries": "product features\nproduct pricing\nproduct comparison\nproduct reviews"
          }'
 
 도움말 관련 쿼리
@@ -259,7 +256,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
          -H "Content-Type: application/json" \
          -d '{
            "term": "help",
-           "queries": ["help center", "help documentation", "help contact support"]
+           "queries": "help center\nhelp documentation\nhelp contact support"
          }'
 
 참고 정보

@@ -25,7 +25,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - 関連コンテンツ一覧取得
    * - GET
@@ -50,7 +50,6 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 ::
 
     GET /api/admin/relatedcontent/settings
-    PUT /api/admin/relatedcontent/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -234,9 +233,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_content_id",
-        "created": false
+        "status": 0
       }
     }
 

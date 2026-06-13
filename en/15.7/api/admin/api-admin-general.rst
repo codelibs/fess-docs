@@ -49,44 +49,49 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
-          "crawlerDocumentMaxSize": "10485760",
-          "crawlerDocumentMaxSiteLength": "50",
-          "crawlerDocumentMaxFetcherSize": "3",
-          "crawlerDocumentCrawlerThreadCount": "10",
-          "crawlerDocumentMaxDepth": "-1",
-          "crawlerDocumentMaxAccessCount": "100",
-          "indexerThreadDumpEnabled": "true",
-          "indexerUnprocessedDocumentSize": "1000",
-          "indexerClickCountEnabled": "true",
-          "indexerFavoriteCountEnabled": "true",
-          "indexerWebfsMaxContentLength": "10485760",
-          "indexerWebfsContentEncoding": "UTF-8",
-          "queryReplaceTermWithPrefixQuery": "false",
-          "queryMaxSearchResultOffset": "100000",
-          "queryMaxPageSize": "1000",
-          "queryDefaultPageSize": "20",
-          "queryAdditionalDefaultQuery": "",
-          "queryGeoEnabled": "false",
+          "incrementalCrawling": "true",
+          "dayForCleanup": -1,
+          "crawlingThreadCount": 5,
+          "searchLog": "true",
+          "userInfo": "true",
+          "userFavorite": "false",
+          "webApiJson": "true",
+          "defaultLabelValue": "",
+          "defaultSortValue": "",
+          "appendQueryParameter": "false",
+          "loginRequired": "false",
+          "thumbnail": "true",
+          "failureCountThreshold": -1,
+          "popularWord": "true",
+          "csvFileEncoding": "UTF-8",
+          "purgeSearchLogDay": 30,
+          "purgeJobLogDay": 30,
+          "purgeUserInfoDay": 30,
+          "purgeSuggestSearchLogDay": 30,
+          "notificationTo": "",
           "suggestSearchLog": "true",
           "suggestDocuments": "true",
-          "suggestBadWord": "true",
-          "suggestPopularWordSeedLength": "1",
-          "suggestPopularWordTags": "user",
-          "suggestPopularWordFields": "tags",
-          "suggestPopularWordExcludeWordFields": "",
-          "ldapInitialContextFactory": "com.sun.jndi.ldap.LdapCtxFactory",
-          "ldapSecurityAuthentication": "simple",
-          "ldapProviderUrl": "ldap://localhost:389",
+          "ldapProviderUrl": "ldap://localhost:389/",
           "ldapBaseDn": "dc=example,dc=com",
-          "ldapBindDn": "",
-          "ldapBindPassword": "",
-          "notificationLogin": "true",
-          "notificationSearchTop": "true"
+          "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
+          "ldapAdminSecurityCredentials": null,
+          "logLevel": "",
+          "ssoType": "none",
+          "storageType": "",
+          "notificationLogin": "",
+          "notificationSearchTop": ""
         }
       }
     }
+
+.. note::
+
+   For security reasons, the LDAP administrator password ``ldapAdminSecurityCredentials``
+   is always replaced with ``null`` in the response (source:
+   ``ApiAdminGeneralAction.java:71``).
 
 Update General Settings
 =======================
@@ -102,82 +107,202 @@ Request
 Request Body
 ~~~~~~~~~~~~
 
+Updates are processed as a partial update (merge). Fields not included in the
+request retain their existing values, and fields set to ``null`` are ignored
+(source: ``ApiAdminGeneralAction.java:84-90``).
+
 .. code-block:: json
 
     {
-      "crawlerDocumentMaxSize": "20971520",
-      "crawlerDocumentMaxSiteLength": "100",
-      "crawlerDocumentCrawlerThreadCount": "20",
-      "queryMaxPageSize": "500",
-      "queryDefaultPageSize": "50",
-      "suggestSearchLog": "true",
-      "suggestDocuments": "true",
-      "suggestBadWord": "true",
-      "notificationLogin": "false",
-      "notificationSearchTop": "false"
+      "incrementalCrawling": "true",
+      "dayForCleanup": -1,
+      "crawlingThreadCount": 10,
+      "failureCountThreshold": 100,
+      "csvFileEncoding": "UTF-8",
+      "popularWord": "true"
     }
 
-Field Description
-~~~~~~~~~~~~~~~~~
+Main Fields
+~~~~~~~~~~~
+
+There are a wide variety of setting items. The representative fields are shown
+below (refer to ``EditForm.java`` for all fields). On/off settings of the
+``available`` type are expressed as the strings ``"true"`` / ``"false"``.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 65
+   :widths: 35 15 50
+
+   * - Field
+     - Required
+     - Description
+   * - ``incrementalCrawling``
+     - No
+     - Enable/disable incremental crawling
+   * - ``dayForCleanup``
+     - Yes
+     - Number of days to retain crawled documents (-1 = cleanup disabled)
+   * - ``crawlingThreadCount``
+     - Yes
+     - Number of threads used for crawling
+   * - ``failureCountThreshold``
+     - Yes
+     - Failure count threshold to stop crawling a URL (-1 = disabled)
+   * - ``csvFileEncoding``
+     - Yes
+     - Encoding for CSV export
+   * - ``searchLog``
+     - No
+     - Enable/disable search query logging
+   * - ``userInfo``
+     - No
+     - Enable/disable recording of user information
+   * - ``userFavorite``
+     - No
+     - Enable/disable the favorite feature
+   * - ``webApiJson``
+     - No
+     - Enable/disable the JSON Web API
+   * - ``popularWord``
+     - No
+     - Enable/disable aggregation and display of popular words
+   * - ``defaultLabelValue``
+     - No
+     - Default label value
+   * - ``defaultSortValue``
+     - No
+     - Default sort order
+   * - ``appendQueryParameter``
+     - No
+     - Append query parameters to search result URLs
+   * - ``loginRequired``
+     - No
+     - Whether login is required for search
+   * - ``thumbnail``
+     - No
+     - Enable/disable thumbnail generation
+   * - ``ignoreFailureType``
+     - No
+     - Crawl failure types to ignore
+   * - ``purgeSearchLogDay``
+     - No
+     - Number of days to retain search logs (-1 = disabled)
+   * - ``purgeJobLogDay``
+     - No
+     - Number of days to retain job logs (-1 = disabled)
+   * - ``purgeUserInfoDay``
+     - No
+     - Number of days to retain user information (-1 = disabled)
+   * - ``purgeSuggestSearchLogDay``
+     - No
+     - Number of days to retain suggest search logs (0 = disabled)
+   * - ``purgeByBots``
+     - No
+     - Bot User-Agents whose search logs are discarded
+   * - ``notificationTo``
+     - No
+     - Email address to which system notifications are sent
+   * - ``notificationLogin``
+     - No
+     - Notification message displayed on the login page
+   * - ``notificationSearchTop``
+     - No
+     - Notification message displayed on the search top page
+   * - ``notificationAdvanceSearch``
+     - No
+     - Notification message displayed on the advanced search page
+   * - ``suggestSearchLog``
+     - No
+     - Enable/disable suggest from search logs
+   * - ``suggestDocuments``
+     - No
+     - Enable/disable suggest from documents
+   * - ``logLevel``
+     - No
+     - Log level for system logs
+   * - ``logNotificationEnabled``
+     - No
+     - Enable/disable notifications for ERROR/WARN logs
+   * - ``logNotificationLevel``
+     - No
+     - Log notification level
+   * - ``slackWebhookUrls``
+     - No
+     - Slack Webhook URL for notifications
+   * - ``googleChatWebhookUrls``
+     - No
+     - Google Chat Webhook URL for notifications
+
+Authentication-Related Fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Settings related to LDAP and SSO (OpenID Connect, SAML, SPNEGO, Entra ID) are
+also managed by this API. The representative fields are shown below (refer to
+``EditForm.java`` for all fields).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
 
    * - Field
      - Description
-   * - ``crawlerDocumentMaxSize``
-     - Maximum document size to crawl (bytes)
-   * - ``crawlerDocumentMaxSiteLength``
-     - Maximum crawl site length
-   * - ``crawlerDocumentMaxFetcherSize``
-     - Maximum fetcher size
-   * - ``crawlerDocumentCrawlerThreadCount``
-     - Crawler thread count
-   * - ``crawlerDocumentMaxDepth``
-     - Maximum crawl depth (-1 = unlimited)
-   * - ``crawlerDocumentMaxAccessCount``
-     - Maximum access count
-   * - ``indexerThreadDumpEnabled``
-     - Enable thread dump
-   * - ``indexerUnprocessedDocumentSize``
-     - Unprocessed document count
-   * - ``indexerClickCountEnabled``
-     - Enable click count
-   * - ``indexerFavoriteCountEnabled``
-     - Enable favorite count
-   * - ``queryReplaceTermWithPrefixQuery``
-     - Convert to prefix query
-   * - ``queryMaxSearchResultOffset``
-     - Maximum search result offset
-   * - ``queryMaxPageSize``
-     - Maximum items per page
-   * - ``queryDefaultPageSize``
-     - Default items per page
-   * - ``queryAdditionalDefaultQuery``
-     - Additional default query
-   * - ``suggestSearchLog``
-     - Enable suggest from search log
-   * - ``suggestDocuments``
-     - Enable suggest from documents
-   * - ``suggestBadWord``
-     - Enable bad word filter
    * - ``ldapProviderUrl``
      - LDAP connection URL
    * - ``ldapBaseDn``
      - LDAP base DN
-   * - ``notificationLogin``
-     - Login notification
-   * - ``notificationSearchTop``
-     - Search top notification
+   * - ``ldapSecurityPrincipal``
+     - Security principal for LDAP binding
+   * - ``ldapAdminSecurityPrincipal``
+     - Security principal for LDAP administrative operations
+   * - ``ldapAdminSecurityCredentials``
+     - LDAP administrator password (replaced with ``null`` in the response)
+   * - ``ldapAccountFilter`` / ``ldapGroupFilter``
+     - User/group search filters
+   * - ``ssoType``
+     - SSO type (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
+   * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` etc.
+     - OpenID Connect settings
+   * - ``samlIdpEntityid`` / ``samlSpEntityid`` etc.
+     - SAML settings
+   * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` etc.
+     - SPNEGO settings
+   * - ``entraidClientId`` / ``entraidTenant`` etc.
+     - Microsoft Entra ID settings
+
+Storage-Related Fields
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Cloud storage (S3 / GCS) integration settings can also be managed.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Field
+     - Description
+   * - ``storageType``
+     - Storage type (``s3`` / ``gcs`` / ``auto``)
+   * - ``storageEndpoint``
+     - Storage endpoint URL
+   * - ``storageAccessKey`` / ``storageSecretKey``
+     - Access key / secret key for authentication
+   * - ``storageBucket``
+     - Bucket name
+   * - ``storageRegion``
+     - S3 region
+   * - ``storageProjectId`` / ``storageCredentialsPath``
+     - GCS project ID / credentials file path
 
 Response
 --------
+
+On a successful update, only ``status`` is returned (``id`` and ``created`` are not included).
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
       }
     }
@@ -185,8 +310,8 @@ Response
 Usage Examples
 ==============
 
-Update Crawler Settings
------------------------
+Update Crawl Settings
+---------------------
 
 .. code-block:: bash
 
@@ -194,13 +319,15 @@ Update Crawler Settings
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "crawlerDocumentMaxSize": "52428800",
-           "crawlerDocumentCrawlerThreadCount": "15",
-           "crawlerDocumentMaxAccessCount": "1000"
+           "incrementalCrawling": "true",
+           "crawlingThreadCount": 10,
+           "failureCountThreshold": 100,
+           "dayForCleanup": -1,
+           "csvFileEncoding": "UTF-8"
          }'
 
-Update Search Settings
-----------------------
+Update Log Retention Period
+---------------------------
 
 .. code-block:: bash
 
@@ -208,9 +335,9 @@ Update Search Settings
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "queryMaxPageSize": "1000",
-           "queryDefaultPageSize": "50",
-           "queryMaxSearchResultOffset": "50000"
+           "purgeSearchLogDay": 90,
+           "purgeJobLogDay": 90,
+           "purgeUserInfoDay": 90
          }'
 
 Update Suggest Settings
@@ -223,8 +350,7 @@ Update Suggest Settings
          -H "Content-Type: application/json" \
          -d '{
            "suggestSearchLog": "true",
-           "suggestDocuments": "true",
-           "suggestBadWord": "true"
+           "suggestDocuments": "true"
          }'
 
 Reference
@@ -233,4 +359,3 @@ Reference
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`api-admin-systeminfo` - System Info API
 - :doc:`../../admin/general-guide` - General Settings Guide
-

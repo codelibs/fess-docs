@@ -5,8 +5,8 @@ CrawlingInfo API
 概要
 ====
 
-CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIです。
-クロールセッションの状態、進捗状況、統計情報などを参照できます。
+CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション）を参照・管理するためのAPIです。
+クロールセッションの一覧取得、個別取得、削除などを操作できます。
 
 ベースURL
 =========
@@ -26,14 +26,17 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
      - パス
      - 説明
    * - GET
-     - /
+     - /logs
      - クロール情報一覧取得
    * - GET
-     - /{sessionId}
-     - クロールセッション詳細取得
+     - /log/{id}
+     - クロール情報取得
    * - DELETE
-     - /{sessionId}
-     - クロールセッション削除
+     - /log/{id}
+     - クロール情報削除
+   * - DELETE
+     - /all
+     - 古いクロールセッション一括削除
 
 クロール情報一覧取得
 ====================
@@ -43,14 +46,14 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
 
 ::
 
-    GET /api/admin/crawlinginfo
+    GET /api/admin/crawlinginfo/logs
 
 パラメーター
 ~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -59,11 +62,15 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号
+   * - ``sessionId``
+     - String
+     - いいえ
+     - セッションIDフィルター
 
 レスポンス
 ----------
@@ -73,28 +80,20 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
     {
       "response": {
         "status": 0,
-        "sessions": [
+        "logs": [
           {
-            "sessionId": "session_20250129_100000",
+            "id": "crawling_info_id_1",
+            "sessionId": "20250129100000",
             "name": "Default Crawler",
-            "status": "running",
-            "startTime": "2025-01-29T10:00:00Z",
-            "endTime": null,
-            "crawlingInfoCount": 567,
-            "createdDocCount": 234,
-            "updatedDocCount": 123,
-            "deletedDocCount": 12
+            "expiredTime": "1738200000000",
+            "createdTime": 1738108800000
           },
           {
-            "sessionId": "session_20250128_100000",
+            "id": "crawling_info_id_2",
+            "sessionId": "20250128100000",
             "name": "Default Crawler",
-            "status": "completed",
-            "startTime": "2025-01-28T10:00:00Z",
-            "endTime": "2025-01-28T10:45:23Z",
-            "crawlingInfoCount": 1234,
-            "createdDocCount": 456,
-            "updatedDocCount": 678,
-            "deletedDocCount": 23
+            "expiredTime": "1738113600000",
+            "createdTime": 1738022400000
           }
         ],
         "total": 10
@@ -110,34 +109,26 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
 
    * - フィールド
      - 説明
+   * - ``id``
+     - クロール情報ID
    * - ``sessionId``
      - セッションID
    * - ``name``
-     - クローラー名
-   * - ``status``
-     - ステータス（running/completed/failed）
-   * - ``startTime``
-     - 開始時刻
-   * - ``endTime``
-     - 終了時刻
-   * - ``crawlingInfoCount``
-     - クロール情報数
-   * - ``createdDocCount``
-     - 作成ドキュメント数
-   * - ``updatedDocCount``
-     - 更新ドキュメント数
-   * - ``deletedDocCount``
-     - 削除ドキュメント数
+     - セッション名
+   * - ``expiredTime``
+     - 有効期限
+   * - ``createdTime``
+     - 作成時刻（エポックミリ秒）
 
-クロールセッション詳細取得
-==========================
+クロール情報取得
+================
 
 リクエスト
 ----------
 
 ::
 
-    GET /api/admin/crawlinginfo/{sessionId}
+    GET /api/admin/crawlinginfo/log/{id}
 
 レスポンス
 ----------
@@ -147,40 +138,25 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
     {
       "response": {
         "status": 0,
-        "session": {
-          "sessionId": "session_20250129_100000",
+        "log": {
+          "id": "crawling_info_id_1",
+          "sessionId": "20250129100000",
           "name": "Default Crawler",
-          "status": "running",
-          "startTime": "2025-01-29T10:00:00Z",
-          "endTime": null,
-          "crawlingInfoCount": 567,
-          "createdDocCount": 234,
-          "updatedDocCount": 123,
-          "deletedDocCount": 12,
-          "infos": [
-            {
-              "url": "https://example.com/page1",
-              "status": "OK",
-              "method": "GET",
-              "httpStatusCode": 200,
-              "contentLength": 12345,
-              "executionTime": 123,
-              "lastModified": "2025-01-29T09:55:00Z"
-            }
-          ]
+          "expiredTime": "1738200000000",
+          "createdTime": 1738108800000
         }
       }
     }
 
-クロールセッション削除
-======================
+クロール情報削除
+================
 
 リクエスト
 ----------
 
 ::
 
-    DELETE /api/admin/crawlinginfo/{sessionId}
+    DELETE /api/admin/crawlinginfo/log/{id}
 
 レスポンス
 ----------
@@ -189,8 +165,30 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
 
     {
       "response": {
-        "status": 0,
-        "message": "Crawling session deleted successfully"
+        "status": 0
+      }
+    }
+
+古いクロールセッション一括削除
+==============================
+
+実行中のセッションを除く古いクロールセッションをまとめて削除します。
+
+リクエスト
+----------
+
+::
+
+    DELETE /api/admin/crawlinginfo/all
+
+レスポンス
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
       }
     }
 
@@ -202,46 +200,40 @@ CrawlingInfo APIは、|Fess| のクロール情報を取得するためのAPIで
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-実行中のクロールセッション取得
-------------------------------
+特定セッションでフィルター
+--------------------------
 
 .. code-block:: bash
 
-    # 全セッションを取得してrunningをフィルター
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.sessions[] | select(.status=="running")'
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?sessionId=20250129100000" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-特定セッションの詳細取得
+クロール情報の取得
+------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+クロール情報の削除
+------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+古いセッションの一括削除
 ------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/session_20250129_100000" \
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
-
-古いセッションの削除
---------------------
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/session_20250101_100000" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-進捗状況の監視
---------------
-
-.. code-block:: bash
-
-    # 実行中のセッションの進捗を定期的に確認
-    while true; do
-      curl -s "http://localhost:8080/api/admin/crawlinginfo" \
-           -H "Authorization: Bearer YOUR_TOKEN" | \
-           jq '.response.sessions[] | select(.status=="running") | {sessionId, crawlingInfoCount, createdDocCount}'
-      sleep 10
-    done
 
 参考情報
 ========

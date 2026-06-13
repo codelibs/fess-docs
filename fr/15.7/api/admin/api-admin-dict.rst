@@ -5,8 +5,9 @@ API Dict
 Vue d'ensemble
 ==============
 
-L'API Dict permet de gerer les fichiers de dictionnaire de |Fess|.
-Vous pouvez gerer les dictionnaires de synonymes, de mapping, de mots proteges, etc.
+L'API Dict est une API permettant de gerer les dictionnaires de |Fess|.
+L'endpoint racine permet d'obtenir la liste des dictionnaires disponibles.
+La consultation, la creation, la mise a jour et la suppression des entrees de dictionnaire individuelles, ainsi que le televersement et le telechargement des fichiers de dictionnaire, s'effectuent via les sous-endpoints propres a chaque type de dictionnaire (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
 
 URL de base
 ===========
@@ -18,6 +19,9 @@ URL de base
 Liste des endpoints
 ===================
 
+Racine des dictionnaires
+------------------------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,18 +32,46 @@ Liste des endpoints
    * - GET
      - /
      - Obtention de la liste des dictionnaires
+
+Endpoints propres a chaque type de dictionnaire
+-----------------------------------------------
+
+``{type}`` doit etre l'une des valeurs suivantes : ``synonym`` , ``kuromoji`` , ``mapping`` , ``protwords`` , ``stopwords`` , ``stemmerOverride`` .
+``{dictId}`` est l'ID du dictionnaire obtenu via l'obtention de la liste des dictionnaires.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - Methode
+     - Chemin
+     - Description
    * - GET
-     - /{id}
-     - Obtention du contenu d'un dictionnaire
-   * - PUT
-     - /{id}
-     - Mise a jour du contenu d'un dictionnaire
+     - /{type}/settings/{dictId}
+     - Obtention de la liste des entrees de dictionnaire
+   * - GET
+     - /{type}/setting/{dictId}/{id}
+     - Obtention d'une entree de dictionnaire
    * - POST
-     - /upload
+     - /{type}/setting/{dictId}
+     - Creation d'une entree de dictionnaire
+   * - PUT
+     - /{type}/setting/{dictId}
+     - Mise a jour d'une entree de dictionnaire
+   * - DELETE
+     - /{type}/setting/{dictId}/{id}
+     - Suppression d'une entree de dictionnaire
+   * - PUT
+     - /{type}/upload/{dictId}
+     - Televersement d'un fichier de dictionnaire
+   * - GET
+     - /{type}/download/{dictId}
      - Telechargement d'un fichier de dictionnaire
 
 Obtention de la liste des dictionnaires
 =======================================
+
+Obtient la liste des fichiers de dictionnaire disponibles.
 
 Requete
 -------
@@ -55,43 +87,132 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dicts": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "Dictionnaire de synonymes",
-            "path": "/var/lib/fess/dict/synonym.txt",
+            "id": "ZjA5...synonym.txt",
             "type": "synonym",
-            "updatedAt": "2025-01-29T10:00:00Z"
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "mapping",
-            "name": "Dictionnaire de mapping",
-            "path": "/var/lib/fess/dict/mapping.txt",
+            "id": "ZjA5...mapping.txt",
             "type": "mapping",
-            "updatedAt": "2025-01-28T15:30:00Z"
-          },
-          {
-            "id": "protwords",
-            "name": "Dictionnaire de mots proteges",
-            "path": "/var/lib/fess/dict/protwords.txt",
-            "type": "protwords",
-            "updatedAt": "2025-01-27T12:00:00Z"
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ],
-        "total": 3
+        ]
       }
     }
 
-Obtention du contenu d'un dictionnaire
-======================================
+Champs de la reponse
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Champ
+     - Description
+   * - ``settings[].id``
+     - ID du dictionnaire (utilise comme ``{dictId}`` dans les operations sur les dictionnaires individuels)
+   * - ``settings[].type``
+     - Type de dictionnaire
+   * - ``settings[].path``
+     - Chemin du fichier de dictionnaire
+   * - ``settings[].timestamp``
+     - Date et heure de mise a jour du fichier de dictionnaire
+
+Obtention de la liste des entrees de dictionnaire
+=================================================
+
+Obtient la liste des entrees du dictionnaire specifie.
 
 Requete
 -------
 
 ::
 
-    GET /api/admin/dict/{id}
+    GET /api/admin/dict/{type}/settings/{dictId}
+
+Parametres
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parametre
+     - Type
+     - Requis
+     - Description
+   * - ``dictId``
+     - String
+     - Oui
+     - ID du dictionnaire (parametre de chemin)
+   * - ``size``
+     - Integer
+     - Non
+     - Nombre d'elements par page
+   * - ``page``
+     - Integer
+     - Non
+     - Numero de page
+
+Reponse
+-------
+
+Les champs de chaque element du tableau ``settings`` de la reponse varient selon le type de dictionnaire (voir « Champs des entrees par type de dictionnaire » ci-dessous).
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "settings": [
+          {
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "検索,サーチ",
+            "outputs": "検索,サーチ,リサーチ"
+          }
+        ]
+      }
+    }
+
+Obtention d'une entree de dictionnaire
+======================================
+
+Obtient une entree specifique du dictionnaire.
+
+Requete
+-------
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parametres
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parametre
+     - Type
+     - Requis
+     - Description
+   * - ``dictId``
+     - String
+     - Oui
+     - ID du dictionnaire (parametre de chemin)
+   * - ``id``
+     - Long
+     - Oui
+     - ID de l'entree (parametre de chemin)
 
 Reponse
 -------
@@ -100,51 +221,39 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dict": {
-          "id": "synonym",
-          "name": "Dictionnaire de synonymes",
-          "path": "/var/lib/fess/dict/synonym.txt",
-          "type": "synonym",
-          "content": "recherche,search,query\nFess,fess\nrecherche plein texte,full-text search",
-          "updatedAt": "2025-01-29T10:00:00Z"
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "検索,サーチ",
+          "outputs": "検索,サーチ,リサーチ"
         }
       }
     }
 
-Mise a jour du contenu d'un dictionnaire
-========================================
+Creation d'une entree de dictionnaire
+=====================================
+
+Cree une nouvelle entree dans le dictionnaire.
 
 Requete
 -------
 
 ::
 
-    PUT /api/admin/dict/{id}
+    POST /api/admin/dict/{type}/setting/{dictId}
     Content-Type: application/json
 
-Corps de la requete
-~~~~~~~~~~~~~~~~~~~
+Corps de la requete (exemple synonym)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
-      "content": "recherche,search,query,lookup\nFess,fess\nrecherche plein texte,full-text search"
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ"
     }
-
-Description des champs
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Champ
-     - Requis
-     - Description
-   * - ``content``
-     - Oui
-     - Contenu du dictionnaire (separe par des sauts de ligne)
 
 Reponse
 -------
@@ -153,120 +262,169 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Dictionary updated successfully"
+        "id": "1",
+        "created": true
+      }
+    }
+
+Mise a jour d'une entree de dictionnaire
+========================================
+
+Met a jour une entree existante du dictionnaire.
+
+Requete
+-------
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+Corps de la requete (exemple synonym)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ,search"
+    }
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+Suppression d'une entree de dictionnaire
+========================================
+
+Supprime une entree du dictionnaire.
+
+Requete
+-------
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parametres
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parametre
+     - Type
+     - Requis
+     - Description
+   * - ``dictId``
+     - String
+     - Oui
+     - ID du dictionnaire (parametre de chemin)
+   * - ``id``
+     - Long
+     - Oui
+     - ID de l'entree (parametre de chemin)
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+Televersement d'un fichier de dictionnaire
+==========================================
+
+Televerse et remplace l'integralite du fichier de dictionnaire.
+
+Requete
+-------
+
+::
+
+    PUT /api/admin/dict/{type}/upload/{dictId}
+    Content-Type: multipart/form-data
+
+Le nom du champ de fichier varie selon le type de dictionnaire (voir « Champs des entrees par type de dictionnaire » ci-dessous).
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 Telechargement d'un fichier de dictionnaire
 ===========================================
 
+Telecharge le fichier de dictionnaire.
+
 Requete
 -------
 
 ::
 
-    POST /api/admin/dict/upload
-    Content-Type: multipart/form-data
+    GET /api/admin/dict/{type}/download/{dictId}
 
-Corps de la requete
-~~~~~~~~~~~~~~~~~~~
+La reponse est le binaire du fichier de dictionnaire ( ``application/octet-stream`` ).
 
-.. code-block:: bash
+Champs des entrees par type de dictionnaire
+===========================================
 
-    --boundary
-    Content-Disposition: form-data; name="type"
-
-    synonym
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="synonym.txt"
-    Content-Type: text/plain
-
-    recherche,search,query
-    Fess,fess
-    --boundary--
-
-Description des champs
-~~~~~~~~~~~~~~~~~~~~~~
+Les champs du corps de requete de creation/mise a jour d'une entree de dictionnaire ainsi que ceux de la reponse varient selon le type de dictionnaire.
+``id`` (ID de l'entree) et ``dictId`` (ID du dictionnaire) sont inclus de maniere commune dans la reponse.
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
-
-   * - Champ
-     - Requis
-     - Description
-   * - ``type``
-     - Oui
-     - Type de dictionnaire (synonym/mapping/protwords/stopwords)
-   * - ``file``
-     - Oui
-     - Fichier de dictionnaire
-
-Reponse
--------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "message": "Dictionary uploaded successfully"
-      }
-    }
-
-Types de dictionnaires
-======================
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 80
+   :widths: 18 42 40
 
    * - Type
-     - Description
+     - Champs de l'entree
+     - Champ du fichier televerse
    * - ``synonym``
-     - Dictionnaire de synonymes (expansion des synonymes lors de la recherche)
-   * - ``mapping``
-     - Dictionnaire de mapping (normalisation des caracteres)
-   * - ``protwords``
-     - Dictionnaire de mots proteges (mots exclus du stemming)
-   * - ``stopwords``
-     - Dictionnaire de mots vides (mots exclus de l'indexation)
+     - ``inputs`` (requis), ``outputs`` (requis)
+     - ``synonymFile``
    * - ``kuromoji``
-     - Dictionnaire Kuromoji (analyse morphologique japonaise)
-
-Exemples de format de dictionnaire
-==================================
-
-Dictionnaire de synonymes
--------------------------
-
-::
-
-    # Specifier les synonymes separes par des virgules
-    recherche,search,query
-    Fess,fess
-    recherche plein texte,full-text search
-
-Dictionnaire de mapping
------------------------
-
-::
-
-    # avant => apres
-    0 => 0
-    1 => 1
-    2 => 2
-
-Dictionnaire de mots proteges
------------------------------
-
-::
-
-    # Mots a proteger du traitement de stemming
-    running
-    searching
-    indexing
+     - ``token`` (requis), ``segmentation`` (requis), ``reading`` (requis), ``pos`` (requis)
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` (requis), ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` (requis)
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` (requis)
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` (requis), ``output`` (requis)
+     - ``stemmerOverrideFile``
 
 Exemples d'utilisation
 ======================
@@ -279,42 +437,44 @@ Obtention de la liste des dictionnaires
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtention du contenu du dictionnaire de synonymes
--------------------------------------------------
+Obtention de la liste des entrees du dictionnaire de synonymes
+--------------------------------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Mise a jour du dictionnaire de synonymes
-----------------------------------------
+Ajout d'une entree au dictionnaire de synonymes
+-----------------------------------------------
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "content": "recherche,search,query\nFess,fess\ndocument,fichier,file"
+           "inputs": "検索,サーチ",
+           "outputs": "検索,サーチ,リサーチ"
          }'
 
-Telechargement d'un fichier de dictionnaire
--------------------------------------------
+Televersement du fichier de dictionnaire de synonymes
+-----------------------------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/dict/upload" \
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "type=synonym" \
-         -F "file=@synonym.txt"
+         -F "synonymFile=@synonym.txt"
 
-Notes importantes
-=================
+Telechargement du fichier de dictionnaire de synonymes
+------------------------------------------------------
 
-- Apres la mise a jour d'un dictionnaire, une reconstruction de l'index peut etre necessaire
-- Les fichiers de dictionnaire volumineux peuvent affecter les performances de recherche
-- Utilisez l'encodage UTF-8 pour les fichiers de dictionnaire
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o synonym.txt
 
 Informations complementaires
 ============================

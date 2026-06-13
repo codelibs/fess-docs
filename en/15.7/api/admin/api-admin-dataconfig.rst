@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List data store configurations
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/dataconfig/settings
-    PUT /api/admin/dataconfig/settings
 
 Parameters
 ~~~~~~~~~~
@@ -84,11 +83,14 @@ Response
           {
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
+            "description": "Database crawler",
             "handlerName": "DatabaseDataStore",
             "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
             "handlerScript": "...",
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -117,15 +119,15 @@ Response
         "setting": {
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
+          "description": "Database crawler",
           "handlerName": "DatabaseDataStore",
           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
           "handlerScript": "...",
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
-          "labelTypeIds": []
+          "permissions": "{role}admin",
+          "virtualHosts": ""
         }
       }
     }
@@ -152,9 +154,9 @@ Request Body
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
-      "labelTypeIds": ["label_id_1"]
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user"
     }
 
 Field Description
@@ -170,6 +172,9 @@ Field Description
    * - ``name``
      - Yes
      - Configuration name
+   * - ``description``
+     - No
+     - Configuration description
    * - ``handlerName``
      - Yes
      - Data store handler name
@@ -177,26 +182,23 @@ Field Description
      - No
      - Handler parameters (connection information, etc.)
    * - ``handlerScript``
-     - Yes
+     - No
      - Data transformation script
    * - ``boost``
-     - No
-     - Search result boost value (default: 1.0)
+     - Yes
+     - Search result boost value
    * - ``available``
-     - No
-     - Enable/disable (default: true)
+     - Yes
+     - Enable/disable (string ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - No
+     - Yes
      - Display order
    * - ``permissions``
      - No
-     - Access permission roles
+     - Access permission roles (newline-separated for multiple values)
    * - ``virtualHosts``
      - No
-     - Virtual hosts
-   * - ``labelTypeIds``
-     - No
-     - Label type IDs
+     - Virtual hosts (newline-separated for multiple values)
 
 Response
 --------
@@ -234,7 +236,8 @@ Request Body
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
       "boost": 1.5,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -268,9 +271,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_dataconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -307,7 +308,8 @@ Database Crawl Configuration
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
            "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
            "boost": 1.0,
-           "available": true
+           "available": "true",
+           "sortOrder": 0
          }'
 
 Reference

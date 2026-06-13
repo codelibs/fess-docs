@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Boost-Dokument-Liste abrufen
    * - GET
@@ -80,8 +80,8 @@ Feldbeschreibungen
      - Ja
      - Boost-Ausdruck
    * - ``sortOrder``
-     - Nein
-     - Anzeigereihenfolge
+     - Ja
+     - Anwendungsreihenfolge (Formular-Standardwert: 0)
 
 Verwendungsbeispiele
 ====================

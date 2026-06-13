@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des KeyMatch
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/keymatch/settings
-    PUT /api/admin/keymatch/settings
 
 Parametres
 ~~~~~~~~~~
@@ -161,11 +160,11 @@ Description des champs
      - Oui
      - Requete de correspondance
    * - ``maxSize``
-     - Non
-     - Nombre maximum d'affichages (par defaut : 10)
+     - Oui
+     - Nombre maximum d'affichages (valeur initiale du formulaire : 10)
    * - ``boost``
-     - Non
-     - Valeur de boost (par defaut : 1.0)
+     - Oui
+     - Valeur de boost (valeur initiale du formulaire : 100.0)
 
 Reponse
 -------
@@ -235,9 +234,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_keymatch_id",
-        "created": false
+        "status": 0
       }
     }
 

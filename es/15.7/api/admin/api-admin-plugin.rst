@@ -5,8 +5,8 @@ API de Plugin
 Vision General
 ==============
 
-La API de Plugin es para gestionar plugins de |Fess|.
-Puede operar instalacion, activacion, desactivacion y eliminacion de plugins.
+La API de Plugin es para gestionar los plugins (artefactos) de |Fess|.
+Permite obtener la lista de plugins instalados y de plugins instalables, asi como instalar y eliminar plugins.
 
 URL Base
 ========
@@ -26,86 +26,95 @@ Lista de Endpoints
      - Ruta
      - Descripcion
    * - GET
-     - /
-     - Obtener lista de plugins
+     - /installed
+     - Obtener lista de plugins instalados
+   * - GET
+     - /available
+     - Obtener lista de plugins instalables
    * - POST
-     - /install
+     - /
      - Instalar plugin
    * - DELETE
-     - /{id}
+     - /
      - Eliminar plugin
 
-Obtener Lista de Plugins
-========================
+Obtener Lista de Plugins Instalados
+===================================
+
+Devuelve la lista de plugins instalados.
 
 Solicitud
 ---------
 
 ::
 
-    GET /api/admin/plugin
+    GET /api/admin/plugin/installed
 
 Respuesta
 ---------
+
+En ``plugins`` se almacena un arreglo de objetos que representan la informacion de los plugins.
+Cada objeto es un mapa de claves y valores de tipo cadena que incluye ``name`` (nombre del plugin) y ``version`` (version), entre otros.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "plugins": [
           {
-            "id": "analysis-kuromoji",
-            "name": "Japanese (kuromoji) Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Japanese language analysis plugin",
-            "enabled": true,
-            "installed": true
-          },
-          {
-            "id": "analysis-icu",
-            "name": "ICU Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Unicode normalization and collation",
-            "enabled": true,
-            "installed": true
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
           }
-        ],
-        "total": 2
+        ]
       }
     }
 
-Campos de Respuesta
-~~~~~~~~~~~~~~~~~~~
+Obtener Lista de Plugins Instalables
+====================================
 
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Campo
-     - Descripcion
-   * - ``id``
-     - ID del plugin
-   * - ``name``
-     - Nombre del plugin
-   * - ``version``
-     - Version del plugin
-   * - ``description``
-     - Descripcion del plugin
-   * - ``enabled``
-     - Estado de activacion
-   * - ``installed``
-     - Estado de instalacion
-
-Instalar Plugin
-===============
+Devuelve la lista de plugins instalables.
 
 Solicitud
 ---------
 
 ::
 
-    POST /api/admin/plugin/install
+    GET /api/admin/plugin/available
+
+Respuesta
+---------
+
+En ``plugins`` se almacena un arreglo de objetos que representan la informacion de los plugins instalables.
+Cada objeto es un mapa de claves y valores de tipo cadena, igual que en ``installed``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "plugins": [
+          {
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
+          }
+        ]
+      }
+    }
+
+Instalar Plugin
+===============
+
+Instala el plugin con el nombre y la version especificados.
+
+Solicitud
+---------
+
+::
+
+    POST /api/admin/plugin
     Content-Type: application/json
 
 Cuerpo de la Solicitud
@@ -114,7 +123,8 @@ Cuerpo de la Solicitud
 .. code-block:: json
 
     {
-      "url": "https://example.com/plugins/my-plugin-1.0.0.zip"
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
     }
 
 Descripcion de Campos
@@ -122,37 +132,72 @@ Descripcion de Campos
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Campo
      - Requerido
      - Descripcion
-   * - ``url``
+   * - ``name``
      - Si
-     - URL de descarga del plugin
+     - Nombre del plugin (maximo 100 caracteres)
+   * - ``version``
+     - Si
+     - Version del plugin (maximo 100 caracteres)
 
 Respuesta
 ---------
+
+En caso de exito solo se devuelve ``status``.
+Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` sera ``1`` (BAD_REQUEST) y ``message`` se establecera con ``invalid name or version``.
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin installed successfully. Restart required.",
-        "pluginId": "my-plugin"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 Eliminar Plugin
 ===============
 
+Elimina el plugin con el nombre y la version especificados.
+
 Solicitud
 ---------
 
 ::
 
-    DELETE /api/admin/plugin/{id}
+    DELETE /api/admin/plugin
+    Content-Type: application/json
+
+Cuerpo de la Solicitud
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
+    }
+
+Descripcion de Campos
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Campo
+     - Requerido
+     - Descripcion
+   * - ``name``
+     - Si
+     - Nombre del plugin (maximo 100 caracteres)
+   * - ``version``
+     - No
+     - Version del plugin (maximo 100 caracteres)
 
 Respuesta
 ---------
@@ -161,20 +206,20 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin deleted successfully. Restart required."
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 Ejemplos de Uso
 ===============
 
-Obtener Lista de Plugins
-------------------------
+Obtener Lista de Plugins Instalados
+-----------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/plugin" \
+    curl -X GET "http://localhost:8080/api/admin/plugin/installed" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Instalar un Plugin
@@ -182,11 +227,12 @@ Instalar un Plugin
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/plugin/install" \
+    curl -X POST "http://localhost:8080/api/admin/plugin" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "url": "https://artifacts.opensearch.org/releases/plugins/analysis-icu/2.11.0/analysis-icu-2.11.0.zip"
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
          }'
 
 Eliminar un Plugin
@@ -194,19 +240,15 @@ Eliminar un Plugin
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/plugin/analysis-icu" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Notas Importantes
-=================
-
-- Despues de instalar o eliminar un plugin, es necesario reiniciar Fess
-- Instalar plugins incompatibles puede impedir que Fess se inicie
-- Tenga cuidado al eliminar plugins. Si hay dependencias, puede afectar al sistema
+    curl -X DELETE "http://localhost:8080/api/admin/plugin" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
+         }'
 
 Informacion de Referencia
 =========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-systeminfo` - API de informacion del sistema
-- :doc:`../../admin/plugin-guide` - Guia de gestion de plugins

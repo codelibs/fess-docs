@@ -5,8 +5,8 @@ Log API
 Übersicht
 =========
 
-Die Log API dient zum Abrufen von Systemprotokollen in |Fess|.
-Sie können Anwendungsprotokolle und Crawl-Protokolle einsehen.
+Die Log API dient zum Anzeigen und Herunterladen von Protokolldateien in |Fess|.
+Sie können die auf dem Server ausgegebenen Protokolldateien auflisten und einzelne Protokolldateien herunterladen.
 
 Basis-URL
 =========
@@ -26,75 +26,84 @@ Endpunktliste
      - Pfad
      - Beschreibung
    * - GET
-     - /
+     - /files
      - Protokolldateien auflisten
    * - GET
-     - /{filename}
-     - Protokolldatei-Inhalt abrufen
+     - /file/{id}
+     - Protokolldatei herunterladen
 
 Protokolldateien auflisten
 ==========================
+
+Gibt eine Liste der im Protokollausgabeverzeichnis des Servers vorhandenen Protokolldateien (``.log`` und ``.log.gz``) zurück.
 
 Request
 -------
 
 ::
 
-    GET /api/admin/log
+    GET /api/admin/log/files
 
 Response
 --------
+
+In ``files`` wird ein Array von Objekten gespeichert, die die Informationen der einzelnen Protokolldateien darstellen, und in ``total`` die Anzahl.
+Jedes Objekt hat die folgenden Felder.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Feld
+     - Beschreibung
+   * - ``id``
+     - Base64-URL-codierter Wert des Dateinamens (wird beim Herunterladen als ``{id}`` verwendet)
+   * - ``name``
+     - Name der Protokolldatei
+   * - ``lastModified``
+     - Zeitpunkt der letzten Änderung
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "files": [
           {
+            "id": "ZmVzcy5sb2c=",
             "name": "fess.log",
-            "size": 1048576,
-            "lastModified": "2025-01-29T10:00:00Z"
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
           },
           {
+            "id": "ZmVzcy1jcmF3bGVyLmxvZw==",
             "name": "fess-crawler.log",
-            "size": 524288,
-            "lastModified": "2025-01-29T09:30:00Z"
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
-Protokolldatei-Inhalt abrufen
-=============================
+Protokolldatei herunterladen
+============================
+
+Lädt den Inhalt der angegebenen Protokolldatei herunter.
+Für ``{id}`` wird die beim Auflisten erhaltene ``id`` (Base64-codierter Wert des Dateinamens) angegeben.
+Die Antwort wird als Stream vom Typ ``application/octet-stream`` zurückgegeben.
+Wird ein nicht existierender Dateiname oder ein als Protokolldatei nicht zulässiger Name angegeben, wird eine leere Antwort zurückgegeben.
 
 Request
 -------
 
 ::
 
-    GET /api/admin/log/{filename}
-
-Parameter
-~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Typ
-     - Erforderlich
-     - Beschreibung
-   * - ``lines``
-     - Integer
-     - Nein
-     - Anzahl der letzten Zeilen (Standard: 100)
+    GET /api/admin/log/file/{id}
 
 Response
 --------
 
-Text-Inhalt der Protokolldatei.
+Binärer Stream der Protokolldatei (``Content-Type: application/octet-stream``).
 
 Verwendungsbeispiele
 ====================
@@ -104,19 +113,20 @@ Protokolldateien auflisten
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/log" \
+    curl -X GET "http://localhost:8080/api/admin/log/files" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Protokolldatei lesen
---------------------
+Protokolldatei herunterladen
+----------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/log/fess.log?lines=500" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/log/file/ZmVzcy5sb2c=" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o fess.log
 
 Referenzinformationen
 =====================
 
 - :doc:`api-admin-overview` - Admin API Übersicht
-- :doc:`../../admin/log-guide` - Protokoll Verwaltungsanleitung
+- :doc:`api-admin-backup` - Backup API

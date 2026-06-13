@@ -25,7 +25,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取文档提升列表
    * - GET
@@ -50,7 +50,6 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 ::
 
     GET /api/admin/boostdoc/settings
-    PUT /api/admin/boostdoc/settings
 
 参数
 ~~~~
@@ -158,8 +157,8 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
      - 是
      - 提升表达式（数值或表达式）
    * - ``sortOrder``
-     - 否
-     - 应用顺序
+     - 是
+     - 应用顺序（表单初始值：0）
 
 响应
 ----
@@ -228,9 +227,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_boostdoc_id",
-        "created": false
+        "status": 0
       }
     }
 

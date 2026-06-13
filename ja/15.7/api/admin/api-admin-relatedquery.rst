@@ -25,7 +25,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - 関連クエリ一覧取得
    * - GET
@@ -50,7 +50,6 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 ::
 
     GET /api/admin/relatedquery/settings
-    PUT /api/admin/relatedquery/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -84,7 +83,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": ["fess tutorial", "fess installation", "fess configuration"]
+            "queries": "fess tutorial\nfess installation\nfess configuration"
           }
         ],
         "total": 5
@@ -112,7 +111,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
         "setting": {
           "id": "query_id_1",
           "term": "fess",
-          "queries": ["fess tutorial", "fess installation", "fess configuration"],
+          "queries": "fess tutorial\nfess installation\nfess configuration",
           "virtualHost": ""
         }
       }
@@ -136,7 +135,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search",
       "virtualHost": ""
     }
 
@@ -155,7 +154,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
      - 検索キーワード
    * - ``queries``
      - はい
-     - 関連クエリの配列
+     - 関連クエリ（1行に1件の改行区切り文字列）
    * - ``virtualHost``
      - いいえ
      - 仮想ホスト
@@ -192,7 +191,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
     {
       "id": "existing_query_id",
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search", "search tips"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
       "virtualHost": "",
       "versionNo": 1
     }
@@ -227,9 +226,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_query_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -246,7 +243,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
          -H "Content-Type: application/json" \
          -d '{
            "term": "product",
-           "queries": ["product features", "product pricing", "product comparison", "product reviews"]
+           "queries": "product features\nproduct pricing\nproduct comparison\nproduct reviews"
          }'
 
 ヘルプ関連のクエリ
@@ -259,7 +256,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
          -H "Content-Type: application/json" \
          -d '{
            "term": "help",
-           "queries": ["help center", "help documentation", "help contact support"]
+           "queries": "help center\nhelp documentation\nhelp contact support"
          }'
 
 参考情報

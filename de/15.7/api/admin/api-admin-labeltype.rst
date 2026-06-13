@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Label-Typ-Liste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 Parameter
 ~~~~~~~~~
@@ -87,6 +86,8 @@ Response
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -116,7 +117,7 @@ Request-Body
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 Feldbeschreibungen
@@ -146,7 +147,7 @@ Feldbeschreibungen
      - Anzeigereihenfolge
    * - ``permissions``
      - Nein
-     - Zugriffsberechtigte Rollen
+     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbrüche getrennt)
    * - ``virtualHost``
      - Nein
      - Virtueller Host
@@ -180,7 +181,7 @@ Dokumentations-Label erstellen
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 Suche mit Label

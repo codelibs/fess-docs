@@ -64,6 +64,7 @@ Admin API Reference
    api-admin-systeminfo
    api-admin-stats
    api-admin-log
+   api-admin-searchlist
    api-admin-storage
    api-admin-plugin
 
@@ -72,10 +73,4 @@ Admin API Reference
    :caption: Dictionary
 
    api-admin-dict
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Search Log
-
-   api-admin-searchlog
 

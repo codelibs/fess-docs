@@ -72,7 +72,7 @@ When the cluster is ``red`` (503), an error envelope is returned with the engine
         "status": 9,
         "error": {
           "code": "service_unavailable",
-          "message": "Cluster is unavailable.",
+          "message": "search engine cluster is red",
           "details": {
             "engine": {
               "cluster_name": "fess-es",

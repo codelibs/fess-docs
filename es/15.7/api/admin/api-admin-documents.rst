@@ -5,8 +5,8 @@ API de Documents
 Vision General
 ==============
 
-La API de Documents es para gestionar documentos en el indice de |Fess|.
-Puede realizar operaciones como eliminacion masiva, actualizacion y busqueda de documentos.
+La API de Documents es una API para registrar documentos de forma masiva en el indice de |Fess|.
+Permite agregar varios documentos al indice de una sola vez.
 
 URL Base
 ========
@@ -25,226 +25,150 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - DELETE
-     - /
-     - Eliminar documentos (especificando consulta)
-   * - DELETE
-     - /{id}
-     - Eliminar documento (especificando ID)
+   * - PUT
+     - /bulk
+     - Registro masivo de documentos
 
-Eliminar Documentos por Consulta
-================================
+Registro Masivo de Documentos
+=============================
 
-Elimina masivamente los documentos que coinciden con una consulta de busqueda.
+Registra varios documentos en el indice de forma masiva.
 
 Solicitud
 ---------
 
 ::
 
-    DELETE /api/admin/documents
+    PUT /api/admin/documents/bulk
+    Content-Type: application/json
 
-Parametros
-~~~~~~~~~~
+Cuerpo de la Solicitud
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "documents": [
+        {
+          "url": "https://example.com/page1",
+          "title": "Pagina de Ejemplo 1",
+          "content": "Este es el texto del cuerpo de la pagina 1."
+        },
+        {
+          "url": "https://example.com/page2",
+          "title": "Pagina de Ejemplo 2",
+          "content": "Este es el texto del cuerpo de la pagina 2."
+        }
+      ]
+    }
+
+Descripcion de Campos
+~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 25 15 60
 
-   * - Parametro
-     - Tipo
+   * - Campo
      - Requerido
      - Descripcion
-   * - ``q``
-     - String
+   * - ``documents``
      - Si
-     - Consulta de busqueda para eliminacion
+     - Arreglo de documentos a registrar. Cada documento se especifica como un mapa de nombres de campo y valores. No se puede especificar un arreglo vacio.
+
+En cada documento se pueden especificar libremente campos de indice como ``url``, ``title``, ``content``, etc.
+Si se omiten ``content_length``, ``favorite_count``, ``click_count``, ``boost``, ``role``, ``last_modified``, ``timestamp``, etc., se completan automaticamente con valores predeterminados.
+Ademas, ``doc_id`` y el ID se generan automaticamente al registrar.
 
 Respuesta
 ---------
+
+La respuesta devuelve el resultado de procesamiento de cada documento registrado en el arreglo ``items``.
+Los elementos exitosos incluyen ``result`` e ``id``, y los elementos fallidos incluyen ``result`` y ``message``.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "deleted": 150
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "CREATED",
+            "id": "0123456789abcdef"
+          }
+        ]
       }
     }
 
-Ejemplo de Uso
-~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    # Eliminar documentos de un sitio especifico
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Eliminar documentos antiguos
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO 2023-01-01]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Eliminar documentos por etiqueta
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=label:old_label" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Eliminar Documento por ID
-=========================
-
-Elimina un documento especificando su ID.
-
-Solicitud
----------
-
-::
-
-    DELETE /api/admin/documents/{id}
-
-Parametros
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametro
-     - Tipo
-     - Requerido
-     - Descripcion
-   * - ``id``
-     - String
-     - Si
-     - ID del documento (parametro de ruta)
-
-Respuesta
----------
+Si el registro falla en alguno de los elementos, ``status`` sera ``9`` (FAILED) y el elemento correspondiente incluira el campo ``message``.
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0
+        "version": "15.7.0",
+        "status": 9,
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "BAD_REQUEST",
+            "message": "failure reason ..."
+          }
+        ]
       }
     }
 
-Ejemplo de Uso
-~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/documents/doc_id_12345" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Sintaxis de Consulta
-====================
-
-Las consultas de eliminacion pueden usar la sintaxis de busqueda estandar de |Fess|.
-
-Consultas Basicas
------------------
+Campos de Respuesta
+~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 30 70
 
-   * - Ejemplo de Consulta
+   * - Campo
      - Descripcion
-   * - ``url:example.com``
-     - Documentos con "example.com" en la URL
-   * - ``url:https://example.com/*``
-     - URLs con un prefijo especifico
-   * - ``host:example.com``
-     - Documentos de un host especifico
-   * - ``title:keyword``
-     - Documentos con palabra clave en el titulo
-   * - ``content:keyword``
-     - Documentos con palabra clave en el contenido
-   * - ``label:mylabel``
-     - Documentos con una etiqueta especifica
-
-Consultas de Rango de Fechas
-----------------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Ejemplo de Consulta
-     - Descripcion
-   * - ``lastModified:[2023-01-01 TO 2023-12-31]``
-     - Documentos actualizados dentro del periodo especificado
-   * - ``lastModified:[* TO 2023-01-01]``
-     - Documentos actualizados antes de la fecha especificada
-   * - ``created:[2024-01-01 TO *]``
-     - Documentos creados despues de la fecha especificada
-
-Consultas Compuestas
---------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Ejemplo de Consulta
-     - Descripcion
-   * - ``url:example.com AND label:blog``
-     - Condicion AND
-   * - ``url:example.com OR url:sample.com``
-     - Condicion OR
-   * - ``NOT url:example.com``
-     - Condicion NOT
-   * - ``(url:example.com OR url:sample.com) AND label:news``
-     - Agrupacion
-
-Notas Importantes
-=================
-
-Precaucion al Eliminar
-----------------------
-
-.. warning::
-   Las operaciones de eliminacion no se pueden deshacer. Asegurese de probar en un entorno de prueba antes de ejecutar en produccion.
-
-- La eliminacion de grandes cantidades de documentos puede llevar tiempo
-- El rendimiento del indice puede verse afectado durante la eliminacion
-- Puede haber un ligero retraso antes de que los resultados de busqueda reflejen la eliminacion
-
-Practicas Recomendadas
-----------------------
-
-1. **Confirmar antes de eliminar**: Use la API de busqueda con la misma consulta para verificar los documentos a eliminar
-2. **Eliminacion gradual**: Ejecute eliminaciones masivas en multiples lotes
-3. **Copia de seguridad**: Haga copia de seguridad de datos importantes con anticipacion
+   * - ``items``
+     - Arreglo de resultados de procesamiento de cada documento
+   * - ``items[].result``
+     - Estado del resultado de procesamiento (ej: ``CREATED``)
+   * - ``items[].id``
+     - ID del documento registrado (en caso de exito)
+   * - ``items[].message``
+     - Mensaje del motivo del fallo (en caso de fallo)
 
 Ejemplos de Uso
 ===============
 
-Preparacion para Re-rastreo de Sitio Completo
----------------------------------------------
+Registro Masivo de Documentos
+-----------------------------
 
 .. code-block:: bash
 
-    # Eliminar documentos antiguos de un sitio especifico
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=host:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Iniciar trabajo de rastreo
-    curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Limpieza de Documentos Antiguos
--------------------------------
-
-.. code-block:: bash
-
-    # Eliminar documentos no actualizados en mas de 1 ano
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO now-1y]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/documents/bulk" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "documents": [
+             {
+               "url": "https://example.com/page1",
+               "title": "Pagina de Ejemplo 1",
+               "content": "Este es el texto del cuerpo de la pagina 1."
+             }
+           ]
+         }'
 
 Informacion de Referencia
 =========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-searchlist` - API de busqueda y gestion de documentos
 - :doc:`api-admin-crawlinginfo` - API de informacion de rastreo
 - :doc:`../../admin/searchlist-guide` - Guia de gestion de lista de busqueda

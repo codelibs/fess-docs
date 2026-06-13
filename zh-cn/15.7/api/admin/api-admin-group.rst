@@ -25,7 +25,7 @@ Group API是用于管理 |Fess| 组的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取组列表
    * - GET
@@ -50,7 +50,6 @@ Group API是用于管理 |Fess| 组的API。
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 参数
 ~~~~
@@ -84,12 +83,16 @@ Group API是用于管理 |Fess| 组的API。
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Group API是用于管理 |Fess| 组的API。
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Group API是用于管理 |Fess| 组的API。
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 字段说明
@@ -156,9 +163,9 @@ Group API是用于管理 |Fess| 组的API。
    * - ``name``
      - 是
      - 组名称
-   * - ``gidNumber``
+   * - ``attributes``
      - 否
-     - 组ID编号
+     - 属性的映射（包含 ``gidNumber`` 等LDAP属性）。值以字符串指定
 
 响应
 ----
@@ -192,7 +199,9 @@ Group API是用于管理 |Fess| 组的API。
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Group API是用于管理 |Fess| 组的API。
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 获取组列表

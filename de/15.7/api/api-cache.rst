@@ -20,7 +20,7 @@ Endpunkt             ``/api/v2/cache/{docId}``
 
 Gibt das gecachte (mit Hervorhebung versehene) HTML eines Dokuments zurück.
 
-Wenn ``app.login.required=true`` gesetzt ist und der Aufrufer anonym ist, wird ``auth_required`` (401) zurückgegeben.
+Wenn die Anmeldepflicht-Einstellung (Systemeinstellung „Anmeldung erforderlich“) aktiviert ist und der Aufrufer anonym ist, wird ``auth_required`` (401) zurückgegeben.
 
 Anfrageparameter
 ~~~~~~~~~~~~~~~~
@@ -87,7 +87,7 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
    * - 400 Bad Request
      - Wenn die Anfrage ungültig ist.
    * - 401 Unauthorized
-     - Wenn Authentifizierung erforderlich ist (``app.login.required=true`` und anonymer Aufrufer).
+     - Wenn Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer).
    * - 404 Not Found
      - Wenn die Ressource nicht gefunden wurde.
    * - 405 Method Not Allowed

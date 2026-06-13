@@ -25,7 +25,7 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 역할 목록 조회
    * - GET
@@ -50,7 +50,6 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
 ::
 
     GET /api/admin/role/settings
-    PUT /api/admin/role/settings
 
 파라미터
 ~~~~~~~~~~~~

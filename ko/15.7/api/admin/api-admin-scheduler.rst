@@ -25,7 +25,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 스케줄 작업 목록 조회
    * - GET
@@ -56,14 +56,13 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 파라미터
 ~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입
@@ -72,11 +71,11 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수 (기본값: 20)
+     - 페이지당 건수
    * - ``page``
      - Integer
      - 아니오
-     - 페이지 번호 (0부터 시작)
+     - 페이지 번호
 
 응답
 ----------
@@ -94,9 +93,9 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` 은 문자열 (``"true"`` / ``"false"``) 로 처리됩니다. ``running`` 은 불리언 값으로, 작업의 실행 상태를 나타냅니다.
 
 스케줄 작업 조회
 ======================
@@ -130,9 +133,9 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - 필드
      - 필수
@@ -184,25 +187,25 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
      - 예
      - 실행 대상 ("all" 또는 특정 대상)
    * - ``cronExpression``
-     - 예
+     - 아니오
      - Cron 표현식 (초 분 시 일 월 요일)
    * - ``scriptType``
      - 예
      - 스크립트 타입 ("groovy")
    * - ``scriptData``
-     - 예
+     - 아니오
      - 실행 스크립트
    * - ``jobLogging``
      - 아니오
-     - 로그 기록 활성화 (기본값: true)
+     - 로그 기록 활성화 (문자열 ``"true"`` / ``"false"``)
    * - ``crawler``
      - 아니오
-     - 크롤러 작업인지 여부 (기본값: false)
+     - 크롤러 작업인지 여부 (문자열 ``"true"`` / ``"false"``)
    * - ``available``
      - 아니오
-     - 활성화/비활성화 (기본값: true)
+     - 활성화/비활성화 (문자열 ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - 아니오
+     - 예
      - 표시 순서
 
 응답
@@ -259,9 +262,9 @@ Cron 표현식 예시
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -321,15 +324,28 @@ Cron 표현식 예시
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+응답 필드
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 필드
+     - 설명
+   * - ``jobLogId``
+     - 시작된 작업의 작업 로그 ID. 작업 로그가 활성화된 경우에 발행됩니다. 작업 로그가 비활성화된 경우에는 ``null`` 이 됩니다.
 
 주의 사항
 --------
 
 - 작업이 이미 실행 중인 경우 오류가 반환됩니다
-- 작업이 비활성화 (``available: false``) 된 경우 오류가 반환됩니다
+- 작업이 비활성화 (``available`` 이 ``"false"``) 된 경우 오류가 반환됩니다
 
 작업 중지
 ==========
@@ -372,9 +388,9 @@ Cron 표현식 예시
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # 작업을 즉시 실행

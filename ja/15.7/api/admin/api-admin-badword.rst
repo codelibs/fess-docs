@@ -25,7 +25,7 @@ BadWord APIは、|Fess| のNGワード（不適切なサジェストワードの
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - NGワード一覧取得
    * - GET
@@ -40,6 +40,12 @@ BadWord APIは、|Fess| のNGワード（不適切なサジェストワードの
    * - DELETE
      - /setting/{id}
      - NGワード削除
+   * - PUT
+     - /upload
+     - NGワードCSVアップロード
+   * - GET
+     - /download
+     - NGワードCSVダウンロード
 
 NGワード一覧取得
 ================
@@ -50,7 +56,6 @@ NGワード一覧取得
 ::
 
     GET /api/admin/badword/settings
-    PUT /api/admin/badword/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -83,9 +88,7 @@ NGワード一覧取得
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word",
-            "targetRole": "",
-            "targetLabel": ""
+            "suggestWord": "inappropriate_word"
           }
         ],
         "total": 5
@@ -112,9 +115,7 @@ NGワード取得
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word",
-          "targetRole": "",
-          "targetLabel": ""
+          "suggestWord": "inappropriate_word"
         }
       }
     }
@@ -136,9 +137,7 @@ NGワード作成
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": ""
+      "suggestWord": "spam_keyword"
     }
 
 フィールド説明
@@ -153,13 +152,7 @@ NGワード作成
      - 説明
    * - ``suggestWord``
      - はい
-     - 除外するキーワード
-   * - ``targetRole``
-     - いいえ
-     - 対象ロール（空の場合は全ロール）
-   * - ``targetLabel``
-     - いいえ
-     - 対象ラベル（空の場合は全ラベル）
+     - 除外するキーワード（空白文字を含めることはできません）
 
 レスポンス
 ----------
@@ -193,8 +186,6 @@ NGワード更新
     {
       "id": "existing_badword_id",
       "suggestWord": "updated_spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": "",
       "versionNo": 1
     }
 
@@ -234,6 +225,56 @@ NGワード削除
       }
     }
 
+NGワードCSVアップロード
+=======================
+
+CSVファイルからNGワードを一括登録します。ファイルは ``multipart/form-data`` で送信します。インポートはサーバー側で非同期に実行されます。
+
+リクエスト
+----------
+
+::
+
+    PUT /api/admin/badword/upload
+    Content-Type: multipart/form-data
+
+パラメーター
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - パラメーター
+     - 必須
+     - 説明
+   * - ``badWordFile``
+     - はい
+     - アップロードするNGワードCSVファイル
+
+レスポンス
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+NGワードCSVダウンロード
+=======================
+
+登録済みのNGワードをCSVファイル（``badword.csv``）としてダウンロードします。レスポンスは ``application/octet-stream`` のストリームです。
+
+リクエスト
+----------
+
+::
+
+    GET /api/admin/badword/download
+
 使用例
 ======
 
@@ -246,24 +287,26 @@ NGワード削除
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam",
-           "targetRole": "",
-           "targetLabel": ""
+           "suggestWord": "spam"
          }'
 
-特定ロール向けのNGワード
-------------------------
+CSVファイルのアップロード
+-------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/badword/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "suggestWord": "internal",
-           "targetRole": "guest",
-           "targetLabel": ""
-         }'
+         -F "badWordFile=@badword.csv"
+
+CSVファイルのダウンロード
+-------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o badword.csv
 
 参考情報
 ========

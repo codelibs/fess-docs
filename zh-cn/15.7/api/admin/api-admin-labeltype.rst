@@ -25,7 +25,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取标签类型列表
    * - GET
@@ -50,7 +50,6 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 参数
 ~~~~
@@ -87,6 +86,8 @@ LabelType API是用于管理 |Fess| 标签类型的API。
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -119,7 +120,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
           "sortOrder": 0,
-          "permissions": [],
+          "permissions": "{role}admin",
           "virtualHost": ""
         }
       }
@@ -147,7 +148,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 字段说明
@@ -177,7 +178,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
      - 显示顺序
    * - ``permissions``
      - 否
-     - 访问权限角色
+     - 访问权限角色（多个时用换行符分隔）
    * - ``virtualHost``
      - 否
      - 虚拟主机
@@ -218,7 +219,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
       "excludedPaths": ".*/(archive|old|draft)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"],
+      "permissions": "{role}guest",
       "versionNo": 1
     }
 
@@ -252,9 +253,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_label_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -274,7 +273,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 使用标签搜索

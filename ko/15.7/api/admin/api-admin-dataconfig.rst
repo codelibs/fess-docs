@@ -25,7 +25,7 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 데이터스토어 설정 목록 조회
    * - GET
@@ -50,7 +50,6 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
 ::
 
     GET /api/admin/dataconfig/settings
-    PUT /api/admin/dataconfig/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -84,11 +83,14 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
           {
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
+            "description": "데이터베이스 크롤러",
             "handlerName": "DatabaseDataStore",
             "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
             "handlerScript": "...",
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -117,15 +119,15 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
         "setting": {
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
+          "description": "데이터베이스 크롤러",
           "handlerName": "DatabaseDataStore",
           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
           "handlerScript": "...",
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
-          "labelTypeIds": []
+          "permissions": "{role}admin",
+          "virtualHosts": ""
         }
       }
     }
@@ -152,9 +154,9 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
-      "labelTypeIds": ["label_id_1"]
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user"
     }
 
 필드 설명
@@ -170,6 +172,9 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
    * - ``name``
      - 예
      - 설정 이름
+   * - ``description``
+     - 아니오
+     - 설정 설명
    * - ``handlerName``
      - 예
      - 데이터스토어 핸들러 이름
@@ -177,26 +182,23 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
      - 아니오
      - 핸들러 파라미터 (연결 정보 등)
    * - ``handlerScript``
-     - 예
+     - 아니오
      - 데이터 변환 스크립트
    * - ``boost``
-     - 아니오
-     - 검색 결과 부스트 값 (기본값: 1.0)
+     - 예
+     - 검색 결과 부스트 값
    * - ``available``
-     - 아니오
-     - 활성화/비활성화 (기본값: true)
+     - 예
+     - 활성화/비활성화 (문자열 ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - 아니오
+     - 예
      - 표시 순서
    * - ``permissions``
      - 아니오
-     - 접근 허용 역할
+     - 접근 허용 역할 (여러 개인 경우 줄바꿈으로 구분)
    * - ``virtualHosts``
      - 아니오
-     - 가상 호스트
-   * - ``labelTypeIds``
-     - 아니오
-     - 라벨 타입 ID
+     - 가상 호스트 (여러 개인 경우 줄바꿈으로 구분)
 
 응답
 ----------
@@ -234,7 +236,8 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
       "boost": 1.5,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -268,9 +271,7 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_dataconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -307,7 +308,8 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
            "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
            "boost": 1.0,
-           "available": true
+           "available": "true",
+           "sortOrder": 0
          }'
 
 참고 정보

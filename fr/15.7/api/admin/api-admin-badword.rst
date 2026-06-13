@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des mots interdits
    * - GET
@@ -40,6 +40,12 @@ Liste des endpoints
    * - DELETE
      - /setting/{id}
      - Suppression d'un mot interdit
+   * - PUT
+     - /upload
+     - Televersement CSV des mots interdits
+   * - GET
+     - /download
+     - Telechargement CSV des mots interdits
 
 Obtention de la liste des mots interdits
 ========================================
@@ -50,7 +56,6 @@ Requete
 ::
 
     GET /api/admin/badword/settings
-    PUT /api/admin/badword/settings
 
 Parametres
 ~~~~~~~~~~
@@ -83,9 +88,7 @@ Reponse
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word",
-            "targetRole": "",
-            "targetLabel": ""
+            "suggestWord": "inappropriate_word"
           }
         ],
         "total": 5
@@ -112,9 +115,7 @@ Reponse
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word",
-          "targetRole": "",
-          "targetLabel": ""
+          "suggestWord": "inappropriate_word"
         }
       }
     }
@@ -136,9 +137,7 @@ Corps de la requete
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": ""
+      "suggestWord": "spam_keyword"
     }
 
 Description des champs
@@ -153,13 +152,7 @@ Description des champs
      - Description
    * - ``suggestWord``
      - Oui
-     - Mot-cle a exclure
-   * - ``targetRole``
-     - Non
-     - Role cible (tous les roles si vide)
-   * - ``targetLabel``
-     - Non
-     - Label cible (tous les labels si vide)
+     - Mot-cle a exclure (ne peut pas contenir d'espaces)
 
 Reponse
 -------
@@ -193,8 +186,6 @@ Corps de la requete
     {
       "id": "existing_badword_id",
       "suggestWord": "updated_spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": "",
       "versionNo": 1
     }
 
@@ -234,6 +225,56 @@ Reponse
       }
     }
 
+Televersement CSV des mots interdits
+====================================
+
+Enregistre en masse des mots interdits depuis un fichier CSV. Le fichier est envoye en ``multipart/form-data``. L'import est execute de maniere asynchrone cote serveur.
+
+Requete
+-------
+
+::
+
+    PUT /api/admin/badword/upload
+    Content-Type: multipart/form-data
+
+Parametres
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parametre
+     - Requis
+     - Description
+   * - ``badWordFile``
+     - Oui
+     - Fichier CSV des mots interdits a televerser
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Telechargement CSV des mots interdits
+=====================================
+
+Telecharge les mots interdits enregistres sous forme de fichier CSV (``badword.csv``). La reponse est un flux ``application/octet-stream``.
+
+Requete
+-------
+
+::
+
+    GET /api/admin/badword/download
+
 Exemples d'utilisation
 ======================
 
@@ -246,24 +287,26 @@ Exclusion d'un mot-cle spam
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam",
-           "targetRole": "",
-           "targetLabel": ""
+           "suggestWord": "spam"
          }'
 
-Mot interdit pour un role specifique
-------------------------------------
+Televersement d'un fichier CSV
+------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/badword/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "suggestWord": "internal",
-           "targetRole": "guest",
-           "targetLabel": ""
-         }'
+         -F "badWordFile=@badword.csv"
+
+Telechargement d'un fichier CSV
+-------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o badword.csv
 
 Informations complementaires
 ============================

@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de configuraciones de rastreo de archivos
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/fileconfig/settings
-    PUT /api/admin/fileconfig/settings
 
 Parametros
 ~~~~~~~~~~
@@ -84,6 +83,7 @@ Respuesta
           {
             "id": "fileconfig_id_1",
             "name": "Shared Documents",
+            "description": "Documentos compartidos",
             "paths": "file://///server/share/documents",
             "includedPaths": ".*\\.pdf$",
             "excludedPaths": ".*/(temp|cache)/.*",
@@ -95,7 +95,9 @@ Respuesta
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -124,6 +126,7 @@ Respuesta
         "setting": {
           "id": "fileconfig_id_1",
           "name": "Shared Documents",
+          "description": "Documentos compartidos",
           "paths": "file://///server/share/documents",
           "includedPaths": ".*\\.pdf$",
           "excludedPaths": ".*/(temp|cache)/.*",
@@ -135,10 +138,10 @@ Respuesta
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -165,13 +168,12 @@ Cuerpo de la Solicitud
       "paths": "file:///data/documents",
       "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
       "excludedPaths": ".*/(temp|backup)/.*",
-      "depth": 5,
-      "maxAccessCount": 5000,
       "numOfThread": 2,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -188,6 +190,9 @@ Descripcion de Campos
    * - ``name``
      - Si
      - Nombre de la configuracion
+   * - ``description``
+     - No
+     - Descripcion de la configuracion
    * - ``paths``
      - Si
      - Ruta de inicio de rastreo (separadas por salto de linea si son multiples)
@@ -208,34 +213,34 @@ Descripcion de Campos
      - Parametros de configuracion adicionales
    * - ``depth``
      - No
-     - Profundidad de rastreo (predeterminado: -1=ilimitado)
+     - Profundidad de rastreo
    * - ``maxAccessCount``
      - No
-     - Numero maximo de accesos (predeterminado: 100)
+     - Numero maximo de accesos
    * - ``numOfThread``
-     - No
-     - Numero de hilos paralelos (predeterminado: 1)
+     - Si
+     - Numero de hilos paralelos
    * - ``intervalTime``
-     - No
-     - Intervalo de acceso (milisegundos, predeterminado: 0)
+     - Si
+     - Intervalo de acceso (milisegundos)
    * - ``boost``
-     - No
-     - Valor de impulso en resultados de busqueda (predeterminado: 1.0)
+     - Si
+     - Valor de impulso en resultados de busqueda
    * - ``available``
-     - No
-     - Habilitado/Deshabilitado (predeterminado: true)
+     - Si
+     - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - No
+     - Si
      - Orden de visualizacion
    * - ``permissions``
      - No
-     - Roles con permiso de acceso
+     - Roles con permiso de acceso (separados por saltos de linea si son varios)
    * - ``virtualHosts``
      - No
-     - Hosts virtuales
+     - Hosts virtuales (separados por saltos de linea si son varios)
    * - ``labelTypeIds``
      - No
-     - IDs de tipo de etiqueta
+     - IDs de tipo de etiqueta (arreglo)
 
 Respuesta
 ---------
@@ -277,7 +282,8 @@ Cuerpo de la Solicitud
       "numOfThread": 3,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -311,9 +317,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_fileconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -351,12 +355,13 @@ Configuracion de Rastreo de Recurso Compartido SMB
            "paths": "smb://user:pass@server/documents",
            "includedPaths": ".*\\.(pdf|doc|docx)$",
            "excludedPaths": ".*/(temp|private)/.*",
-           "depth": -1,
            "maxAccessCount": 50000,
            "numOfThread": 3,
            "intervalTime": 200,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 Informacion de Referencia

@@ -25,7 +25,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - データストア設定一覧取得
    * - GET
@@ -50,7 +50,6 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
 ::
 
     GET /api/admin/dataconfig/settings
-    PUT /api/admin/dataconfig/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -84,11 +83,14 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
           {
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
+            "description": "データベースクローラー",
             "handlerName": "DatabaseDataStore",
             "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
             "handlerScript": "...",
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -117,15 +119,15 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
         "setting": {
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
+          "description": "データベースクローラー",
           "handlerName": "DatabaseDataStore",
           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
           "handlerScript": "...",
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
-          "labelTypeIds": []
+          "permissions": "{role}admin",
+          "virtualHosts": ""
         }
       }
     }
@@ -152,9 +154,9 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
-      "labelTypeIds": ["label_id_1"]
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user"
     }
 
 フィールド説明
@@ -170,6 +172,9 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - ``name``
      - はい
      - 設定名
+   * - ``description``
+     - いいえ
+     - 設定の説明
    * - ``handlerName``
      - はい
      - データストアハンドラー名
@@ -177,26 +182,23 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
      - いいえ
      - ハンドラーパラメーター（接続情報など）
    * - ``handlerScript``
-     - はい
+     - いいえ
      - データ変換スクリプト
    * - ``boost``
-     - いいえ
-     - 検索結果のブースト値（デフォルト: 1.0）
+     - はい
+     - 検索結果のブースト値
    * - ``available``
-     - いいえ
-     - 有効/無効（デフォルト: true）
+     - はい
+     - 有効/無効（文字列 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - いいえ
+     - はい
      - 表示順序
    * - ``permissions``
      - いいえ
-     - アクセス許可ロール
+     - アクセス許可ロール（複数の場合は改行区切り）
    * - ``virtualHosts``
      - いいえ
-     - 仮想ホスト
-   * - ``labelTypeIds``
-     - いいえ
-     - ラベルタイプID
+     - 仮想ホスト（複数の場合は改行区切り）
 
 レスポンス
 ----------
@@ -234,7 +236,8 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
       "boost": 1.5,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -268,9 +271,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_dataconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -307,7 +308,8 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
            "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
            "boost": 1.0,
-           "available": true
+           "available": "true",
+           "sortOrder": 0
          }'
 
 参考情報

@@ -75,8 +75,12 @@ Admin API를 사용하려면 토큰에 다음 권한이 필요합니다:
 공통 패턴
 ============
 
-목록 조회 (GET/PUT /settings)
------------------------------
+설정을 가진 리소스(webconfig, user, role 등)는 다음과 같은 공통 CRUD 패턴을 따릅니다.
+다만 일부 리소스(systeminfo, stats, storage, plugin, log, backup, documents, suggest, dict 루트 등)는
+이 공통 패턴과는 다른 독자적인 엔드포인트 구성을 가지므로 각 리소스 페이지를 참조하십시오.
+
+목록 조회 (GET /settings)
+-------------------------
 
 설정 목록을 조회합니다.
 
@@ -86,7 +90,6 @@ Admin API를 사용하려면 토큰에 다음 권한이 필요합니다:
 ::
 
     GET /api/admin/<resource>/settings
-    PUT /api/admin/<resource>/settings
 
 파라미터 (페이지네이션):
 
@@ -111,11 +114,17 @@ Admin API를 사용하려면 토큰에 다음 권한이 필요합니다:
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   모든 응답의 ``response`` 객체에는 제품 버전을 나타내는 ``version``
+   (예: ``"15.7.0"``)이 항상 포함됩니다. 이후 예시에서는 간결함을 위해 생략하는 경우가 있습니다.
 
 단일 설정 조회 (GET /setting/{id})
 ---------------------------------
@@ -219,6 +228,20 @@ ID를 지정하여 단일 설정을 조회합니다.
 응답
 ~~~~~~~~~~
 
+삭제 응답의 형식은 리소스(액션)마다 다릅니다. 많은 리소스는
+``status`` 만 반환합니다.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+일부 리소스에서는 삭제 결과가 ``ApiUpdateResponse`` 로 반환되며, 삭제한 설정의
+``id`` 와 ``created``(삭제 시에는 ``false``)가 부여됩니다.
+
 .. code-block:: json
 
     {
@@ -229,8 +252,33 @@ ID를 지정하여 단일 설정을 조회합니다.
       }
     }
 
+또한 ``ApiDeleteResponse`` 를 반환하는 리소스에서는 삭제 건수를 나타내는 ``count``
+(기본값 ``1``)가 부여되는 경우가 있습니다. 실제 형식은 각 리소스 페이지를 참조하십시오.
+
 응답 형식
 ==============
+
+모든 응답은 ``response`` 객체로 래핑되며, 제품 버전을 나타내는
+``version`` 과 처리 결과를 나타내는 ``status`` 를 항상 포함합니다.
+
+``status`` 의 값은 다음과 같습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - 값
+     - 설명
+   * - ``0``
+     - OK (성공)
+   * - ``1``
+     - BAD_REQUEST (잘못된 요청)
+   * - ``2``
+     - SYSTEM_ERROR (시스템 오류)
+   * - ``3``
+     - UNAUTHORIZED (인증 오류)
+   * - ``9``
+     - FAILED (처리 실패)
 
 성공 응답
 --------------
@@ -239,8 +287,9 @@ ID를 지정하여 단일 설정을 조회합니다.
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +298,16 @@ ID를 지정하여 단일 설정을 조회합니다.
 오류 응답
 ----------------
 
+오류 시에는 ``status`` 에 0 이외의 값이 설정되며, ``message`` 에 오류 메시지가
+포함됩니다.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +353,13 @@ HTTP 상태 코드
      - 파일 크롤링 설정
    * - :doc:`api-admin-dataconfig`
      - 데이터스토어 설정
+
+.. note::
+
+   이 외에 인증 정보나 크롤링 제어에 관한 다음 리소스도 API로 제공됩니다
+   (현재 시점에서는 개별 페이지가 정비되어 있지 않습니다): ``webauth``(Web 인증), ``fileauth``(파일 인증),
+   ``reqheader``(요청 헤더), ``pathmap``(경로 매핑),
+   ``duplicatehost``(중복 호스트), ``searchlist``(검색/문서 목록 조작).
 
 인덱스 관리
 ----------------
@@ -396,8 +454,8 @@ HTTP 상태 코드
      - 시스템 통계
    * - :doc:`api-admin-log`
      - 로그 조회
-   * - :doc:`api-admin-searchlog`
-     - 검색 로그 관리
+   * - :doc:`api-admin-searchlist`
+     - 문서 검색 및 관리
    * - :doc:`api-admin-storage`
      - 스토리지 관리
    * - :doc:`api-admin-plugin`

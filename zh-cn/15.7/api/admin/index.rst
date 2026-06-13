@@ -77,5 +77,5 @@ Admin API 参考手册
    :maxdepth: 2
    :caption: 搜索日志
 
-   api-admin-searchlog
+   api-admin-searchlist
 

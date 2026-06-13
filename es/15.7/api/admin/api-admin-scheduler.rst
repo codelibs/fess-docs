@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de trabajos programados
    * - GET
@@ -56,14 +56,13 @@ Solicitud
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 Parametros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametro
      - Tipo
@@ -72,11 +71,11 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Numero de elementos por pagina
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina
 
 Respuesta
 ---------
@@ -94,9 +93,9 @@ Respuesta
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Respuesta
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` se tratan como cadenas (``"true"`` / ``"false"``). ``running`` es un valor booleano que indica el estado de ejecucion del trabajo.
 
 Obtener Trabajo Programado
 ==========================
@@ -130,9 +133,9 @@ Respuesta
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Cuerpo de la Solicitud
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Descripcion de Campos
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Campo
      - Requerido
@@ -184,25 +187,25 @@ Descripcion de Campos
      - Si
      - Objetivo de ejecucion ("all" u objetivo especifico)
    * - ``cronExpression``
-     - Si
+     - No
      - Expresion Cron (segundos minutos horas dia mes dia-semana)
    * - ``scriptType``
      - Si
      - Tipo de script ("groovy")
    * - ``scriptData``
-     - Si
+     - No
      - Script de ejecucion
    * - ``jobLogging``
      - No
-     - Habilitar registro (predeterminado: true)
+     - Habilitar registro (cadena ``"true"`` / ``"false"``)
    * - ``crawler``
      - No
-     - Es trabajo de rastreo (predeterminado: false)
+     - Es trabajo de rastreo (cadena ``"true"`` / ``"false"``)
    * - ``available``
      - No
-     - Habilitado/Deshabilitado (predeterminado: true)
+     - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - No
+     - Si
      - Orden de visualizacion
 
 Respuesta
@@ -259,9 +262,9 @@ Cuerpo de la Solicitud
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -321,15 +324,28 @@ Respuesta
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+Campos de Respuesta
+~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Campo
+     - Descripcion
+   * - ``jobLogId``
+     - ID del registro del trabajo iniciado. Se emite cuando el registro de trabajos esta habilitado. Es ``null`` cuando el registro de trabajos esta deshabilitado.
 
 Notas
 -----
 
 - Se devuelve un error si el trabajo ya esta en ejecucion
-- Se devuelve un error si el trabajo esta deshabilitado (``available: false``)
+- Se devuelve un error si el trabajo esta deshabilitado (``available`` es ``"false"``)
 
 Detener Trabajo
 ===============
@@ -372,9 +388,9 @@ Crear y Ejecutar Trabajo de Rastreo
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # Ejecutar trabajo inmediatamente
