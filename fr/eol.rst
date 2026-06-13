@@ -82,9 +82,12 @@ Versions actuellement prises en charge
    * - Fess
      - Date EOL
      - Statut
+   * - 15.7.x
+     - 2027-12-01
+     - 🟢 Dernière version (recommandée)
    * - 15.6.x
      - 2027-10-01
-     - 🟢 Dernière version (recommandée)
+     - 🟢 Prise en charge
    * - 15.5.x
      - 2027-08-01
      - 🟢 Prise en charge

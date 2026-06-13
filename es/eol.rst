@@ -82,9 +82,12 @@ Versiones actualmente soportadas
    * - Fess
      - Fecha de EOL
      - Estado
+   * - 15.7.x
+     - 2027-12-01
+     - 🟢 Ultima (Recomendada)
    * - 15.6.x
      - 2027-10-01
-     - 🟢 Ultima (Recomendada)
+     - 🟢 Con soporte
    * - 15.5.x
      - 2027-08-01
      - 🟢 Con soporte
