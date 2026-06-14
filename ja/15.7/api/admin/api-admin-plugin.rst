@@ -5,8 +5,8 @@ Plugin API
 概要
 ====
 
-Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
-プラグインのインストール、有効化、無効化、削除などを操作できます。
+Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理するためのAPIです。
+インストール済みプラグインおよびインストール可能なプラグインの一覧取得、プラグインのインストール・削除を操作できます。
 
 ベースURL
 =========
@@ -26,86 +26,95 @@ Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
      - パス
      - 説明
    * - GET
-     - /
-     - プラグイン一覧取得
+     - /installed
+     - インストール済みプラグイン一覧取得
+   * - GET
+     - /available
+     - インストール可能プラグイン一覧取得
    * - POST
-     - /install
+     - /
      - プラグインインストール
    * - DELETE
-     - /{id}
+     - /
      - プラグイン削除
 
-プラグイン一覧取得
-==================
+インストール済みプラグイン一覧取得
+==================================
+
+インストール済みのプラグインの一覧を返します。
 
 リクエスト
 ----------
 
 ::
 
-    GET /api/admin/plugin
+    GET /api/admin/plugin/installed
 
 レスポンス
 ----------
+
+``plugins`` にプラグイン情報を表すオブジェクトの配列が格納されます。
+各オブジェクトは文字列のキーと値のマップで、``name`` （プラグイン名）や ``version`` （バージョン）などを含みます。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "plugins": [
           {
-            "id": "analysis-kuromoji",
-            "name": "Japanese (kuromoji) Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Japanese language analysis plugin",
-            "enabled": true,
-            "installed": true
-          },
-          {
-            "id": "analysis-icu",
-            "name": "ICU Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Unicode normalization and collation",
-            "enabled": true,
-            "installed": true
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
           }
-        ],
-        "total": 2
+        ]
       }
     }
 
-レスポンスフィールド
-~~~~~~~~~~~~~~~~~~~~
+インストール可能プラグイン一覧取得
+==================================
 
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - フィールド
-     - 説明
-   * - ``id``
-     - プラグインID
-   * - ``name``
-     - プラグイン名
-   * - ``version``
-     - プラグインバージョン
-   * - ``description``
-     - プラグイン説明
-   * - ``enabled``
-     - 有効化状態
-   * - ``installed``
-     - インストール状態
-
-プラグインインストール
-======================
+インストール可能なプラグインの一覧を返します。
 
 リクエスト
 ----------
 
 ::
 
-    POST /api/admin/plugin/install
+    GET /api/admin/plugin/available
+
+レスポンス
+----------
+
+``plugins`` にインストール可能なプラグイン情報を表すオブジェクトの配列が格納されます。
+各オブジェクトは ``installed`` 同様、文字列のキーと値のマップです。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "plugins": [
+          {
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
+          }
+        ]
+      }
+    }
+
+プラグインインストール
+======================
+
+指定した名前とバージョンのプラグインをインストールします。
+
+リクエスト
+----------
+
+::
+
+    POST /api/admin/plugin
     Content-Type: application/json
 
 リクエストボディ
@@ -114,7 +123,8 @@ Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
 .. code-block:: json
 
     {
-      "url": "https://example.com/plugins/my-plugin-1.0.0.zip"
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
     }
 
 フィールド説明
@@ -122,37 +132,72 @@ Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - フィールド
      - 必須
      - 説明
-   * - ``url``
+   * - ``name``
      - はい
-     - プラグインのダウンロードURL
+     - プラグイン名（最大100文字）
+   * - ``version``
+     - はい
+     - プラグインのバージョン（最大100文字）
 
 レスポンス
 ----------
+
+成功時は ``status`` のみを返します。
+``name`` または ``version`` に該当するアーティファクトが存在しない場合は、``status`` が ``1`` （BAD_REQUEST）となり、``message`` に ``invalid name or version`` が設定されます。
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin installed successfully. Restart required.",
-        "pluginId": "my-plugin"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 プラグイン削除
 ==============
 
+指定した名前とバージョンのプラグインを削除します。
+
 リクエスト
 ----------
 
 ::
 
-    DELETE /api/admin/plugin/{id}
+    DELETE /api/admin/plugin
+    Content-Type: application/json
+
+リクエストボディ
+~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
+    }
+
+フィールド説明
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``name``
+     - はい
+     - プラグイン名（最大100文字）
+   * - ``version``
+     - いいえ
+     - プラグインのバージョン（最大100文字）
 
 レスポンス
 ----------
@@ -161,20 +206,20 @@ Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin deleted successfully. Restart required."
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 使用例
 ======
 
-プラグイン一覧の取得
---------------------
+インストール済みプラグイン一覧の取得
+------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/plugin" \
+    curl -X GET "http://localhost:8080/api/admin/plugin/installed" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 プラグインのインストール
@@ -182,11 +227,12 @@ Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/plugin/install" \
+    curl -X POST "http://localhost:8080/api/admin/plugin" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "url": "https://artifacts.opensearch.org/releases/plugins/analysis-icu/2.11.0/analysis-icu-2.11.0.zip"
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
          }'
 
 プラグインの削除
@@ -194,19 +240,15 @@ Plugin APIは、|Fess| のプラグインを管理するためのAPIです。
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/plugin/analysis-icu" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-注意事項
-========
-
-- プラグインのインストールまたは削除後は、Fessの再起動が必要です
-- 互換性のないプラグインをインストールするとFessが起動しなくなる可能性があります
-- プラグインの削除は慎重に行ってください。依存関係がある場合、システムに影響を与える可能性があります
+    curl -X DELETE "http://localhost:8080/api/admin/plugin" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
+         }'
 
 参考情報
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
-- :doc:`api-admin-systeminfo` - システム情報API
-- :doc:`../../admin/plugin-guide` - プラグイン管理ガイド

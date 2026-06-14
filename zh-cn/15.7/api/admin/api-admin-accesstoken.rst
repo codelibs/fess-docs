@@ -25,7 +25,7 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取访问令牌列表
    * - GET
@@ -50,7 +50,6 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
 ::
 
     GET /api/admin/accesstoken/settings
-    PUT /api/admin/accesstoken/settings
 
 参数
 ~~~~
@@ -86,8 +85,8 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
             "parameterName": "token",
-            "expiredTime": 1735689600000,
-            "permissions": ["admin"]
+            "expires": "2025-01-01T00:00:00",
+            "permissions": "{role}admin"
           }
         ],
         "total": 5
@@ -117,8 +116,8 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
           "parameterName": "token",
-          "expiredTime": 1735689600000,
-          "permissions": ["admin"]
+          "expires": "2025-01-01T00:00:00",
+          "permissions": "{role}admin"
         }
       }
     }
@@ -142,7 +141,8 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
     {
       "name": "Integration API Token",
       "parameterName": "token",
-      "permissions": ["user"]
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user"
     }
 
 字段说明
@@ -164,12 +164,12 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
    * - ``parameterName``
      - 否
      - 参数名称（默认："token"）
-   * - ``expiredTime``
+   * - ``expires``
      - 否
-     - 过期时间（Unix时间毫秒）
+     - 过期时间（ISO 8601格式的字符串。例如：``2026-01-01T00:00:00``）
    * - ``permissions``
      - 否
-     - 允许的角色
+     - 允许的权限。使用换行分隔的字符串指定（例如：``{role}admin``）
 
 响应
 ----
@@ -180,7 +180,6 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
       "response": {
         "status": 0,
         "id": "new_token_id",
-        "token": "generated_token_string",
         "created": true
       }
     }
@@ -205,8 +204,8 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
       "id": "existing_token_id",
       "name": "Updated API Token",
       "parameterName": "token",
-      "expiredTime": 1767225600000,
-      "permissions": ["user", "editor"],
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user\n{role}editor",
       "versionNo": 1
     }
 
@@ -240,9 +239,7 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_token_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -260,7 +257,7 @@ AccessToken API是用于管理 |Fess| API访问令牌的API。
          -d '{
            "name": "External App Token",
            "parameterName": "token",
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 使用令牌调用API

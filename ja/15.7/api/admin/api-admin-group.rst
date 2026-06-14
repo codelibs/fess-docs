@@ -25,7 +25,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - グループ一覧取得
    * - GET
@@ -50,7 +50,6 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -84,12 +83,16 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 フィールド説明
@@ -156,9 +163,9 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
    * - ``name``
      - はい
      - グループ名
-   * - ``gidNumber``
+   * - ``attributes``
      - いいえ
-     - グループID番号
+     - 属性のマップ（``gidNumber`` などのLDAP属性を含む）。値は文字列で指定します
 
 レスポンス
 ----------
@@ -192,7 +199,9 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 グループ一覧取得

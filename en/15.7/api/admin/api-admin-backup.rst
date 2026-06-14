@@ -5,8 +5,8 @@ Backup API
 Overview
 ========
 
-Backup API is an API for backing up and restoring |Fess| configuration data.
-You can export and import crawl configurations, users, roles, dictionaries, and other settings.
+The Backup API is an API for referencing and downloading the backup target data of |Fess|.
+It allows you to retrieve a list of backup targets and download individual backup files (system properties, bulk data of each index, and NDJSON data of logs).
 
 Base URL
 ========
@@ -26,254 +26,118 @@ Endpoint List
      - Path
      - Description
    * - GET
-     - /export
-     - Export configuration data
-   * - POST
-     - /import
-     - Import configuration data
+     - /files
+     - Retrieve backup target list
+   * - GET
+     - /file/{id}
+     - Download backup file
 
-Export Configuration Data
-=========================
+Retrieve Backup Target List
+===========================
 
-Request
--------
-
-::
-
-    GET /api/admin/backup/export
-
-Parameters
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - ``types``
-     - String
-     - No
-     - Export targets (comma-separated, default: all)
-
-Export Target Types
-~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Type
-     - Description
-   * - ``webconfig``
-     - Web crawl configurations
-   * - ``fileconfig``
-     - File crawl configurations
-   * - ``dataconfig``
-     - Data store configurations
-   * - ``scheduler``
-     - Schedule configurations
-   * - ``user``
-     - User configurations
-   * - ``role``
-     - Role configurations
-   * - ``group``
-     - Group configurations
-   * - ``labeltype``
-     - Label type configurations
-   * - ``keymatch``
-     - Key match configurations
-   * - ``dict``
-     - Dictionary data
-   * - ``all``
-     - All configurations (default)
-
-Response
---------
-
-Binary data (ZIP format)
-
-Content-Type: ``application/zip``
-Content-Disposition: ``attachment; filename="fess-backup-20250129-100000.zip"``
-
-ZIP File Contents
-~~~~~~~~~~~~~~~~~
-
-::
-
-    fess-backup-20250129-100000.zip
-    ├── webconfig.json
-    ├── fileconfig.json
-    ├── dataconfig.json
-    ├── scheduler.json
-    ├── user.json
-    ├── role.json
-    ├── group.json
-    ├── labeltype.json
-    ├── keymatch.json
-    ├── dict/
-    │   ├── synonym.txt
-    │   ├── mapping.txt
-    │   └── protwords.txt
-    └── metadata.json
-
-Import Configuration Data
-=========================
+Returns a list of backup targets. The targets are based on the ``index.backup.targets`` and ``index.backup.log.targets`` settings.
 
 Request
 -------
 
 ::
 
-    POST /api/admin/backup/import
-    Content-Type: multipart/form-data
-
-Request Body
-~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="fess-backup.zip"
-    Content-Type: application/zip
-
-    [binary data]
-    --boundary
-    Content-Disposition: form-data; name="overwrite"
-
-    true
-    --boundary--
-
-Field Description
-~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Field
-     - Required
-     - Description
-   * - ``file``
-     - Yes
-     - Backup ZIP file
-   * - ``overwrite``
-     - No
-     - Overwrite existing configurations (default: false)
-   * - ``types``
-     - No
-     - Import targets (comma-separated, default: all)
+    GET /api/admin/backup/files
 
 Response
 --------
+
+``files`` contains an array of objects representing the backup targets, and ``total`` contains the count.
+Each object has ``id`` and ``name``, both of which are set to the target name (such as ``fess_config.bulk``, ``system.properties``, or ``search_log.ndjson``).
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Backup imported successfully",
-        "imported": {
-          "webconfig": 5,
-          "fileconfig": 3,
-          "dataconfig": 2,
-          "scheduler": 4,
-          "user": 10,
-          "role": 5,
-          "group": 3,
-          "labeltype": 8,
-          "keymatch": 12,
-          "dict": 3
-        }
+        "files": [
+          {
+            "id": "fess_config.bulk",
+            "name": "fess_config.bulk"
+          },
+          {
+            "id": "system.properties",
+            "name": "system.properties"
+          },
+          {
+            "id": "search_log.ndjson",
+            "name": "search_log.ndjson"
+          }
+        ],
+        "total": 3
       }
     }
+
+Download Backup File
+====================
+
+Downloads the contents of the specified backup file. For ``{id}``, specify the ``id`` (target name) obtained from the target list retrieval.
+Depending on the type of ``{id}``, the response content switches as follows.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - ID
+     - Content
+   * - ``system.properties``
+     - Contents of the system properties
+   * - ``*.bulk`` or an index name without the ``.bulk`` extension
+     - Bulk data generated by scrolling the target index
+   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
+     - NDJSON data of the corresponding log
+
+If you specify an ``{id}`` that does not exist among the backup targets, an error occurs.
+
+Request
+-------
+
+::
+
+    GET /api/admin/backup/file/{id}
+
+Response
+--------
+
+A stream of the backup file. For NDJSON format, it is returned with ``Content-Type: application/x-ndjson``; otherwise, it is returned with ``application/octet-stream``.
 
 Usage Examples
 ==============
 
-Export All Configurations
--------------------------
+Retrieve Backup Target List
+---------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup.zip
+    curl -X GET "http://localhost:8080/api/admin/backup/files" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-Export Specific Configurations
-------------------------------
-
-.. code-block:: bash
-
-    # Export only web crawl configurations and user configurations
-    curl -X GET "http://localhost:8080/api/admin/backup/export?types=webconfig,user" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup-partial.zip
-
-Import Configurations
----------------------
+Download Configuration Index
+----------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=false"
+         -o fess_config.bulk
 
-Import with Overwrite
----------------------
+Download Search Log
+-------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=true"
-
-Import Specific Configurations Only
------------------------------------
-
-.. code-block:: bash
-
-    # Import only users and roles
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "types=user,role" \
-         -F "overwrite=false"
-
-Automate Backups
-----------------
-
-.. code-block:: bash
-
-    #!/bin/bash
-    # Example script for daily backup at 2 AM
-
-    DATE=$(date +%Y%m%d)
-    BACKUP_DIR="/backup/fess"
-
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o "${BACKUP_DIR}/fess-backup-${DATE}.zip"
-
-    # Delete backups older than 30 days
-    find "${BACKUP_DIR}" -name "fess-backup-*.zip" -mtime +30 -delete
-
-Cautions
-========
-
-- Backups include password information, so store them securely
-- Specifying ``overwrite=true`` during import will overwrite existing configurations
-- Large configurations may take time to export/import
-- Importing between different Fess versions may cause compatibility issues
+         -o search_log.ndjson
 
 Reference
 =========
 
 - :doc:`api-admin-overview` - Admin API Overview
-- :doc:`../../admin/backup-guide` - Backup Management Guide
-- :doc:`../../admin/maintenance-guide` - Maintenance Guide
-
+- :doc:`api-admin-log` - Log API

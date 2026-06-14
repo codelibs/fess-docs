@@ -5,8 +5,8 @@ CrawlingInfo API
 개요
 ====
 
-CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니다.
-크롤링 세션의 상태, 진행 상황, 통계 정보 등을 참조할 수 있습니다.
+CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 관리하기 위한 API입니다.
+크롤링 세션의 목록 조회, 개별 조회, 삭제 등을 조작할 수 있습니다.
 
 기본 URL
 =========
@@ -26,14 +26,17 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
      - 경로
      - 설명
    * - GET
-     - /
+     - /logs
      - 크롤링 정보 목록 조회
    * - GET
-     - /{sessionId}
-     - 크롤링 세션 상세 조회
+     - /log/{id}
+     - 크롤링 정보 조회
    * - DELETE
-     - /{sessionId}
-     - 크롤링 세션 삭제
+     - /log/{id}
+     - 크롤링 정보 삭제
+   * - DELETE
+     - /all
+     - 오래된 크롤링 세션 일괄 삭제
 
 크롤링 정보 목록 조회
 ====================
@@ -43,14 +46,14 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
 
 ::
 
-    GET /api/admin/crawlinginfo
+    GET /api/admin/crawlinginfo/logs
 
 파라미터
 ~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입
@@ -59,11 +62,15 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수 (기본값: 20)
+     - 페이지당 건수
    * - ``page``
      - Integer
      - 아니오
-     - 페이지 번호 (0부터 시작)
+     - 페이지 번호
+   * - ``sessionId``
+     - String
+     - 아니오
+     - 세션 ID 필터
 
 응답
 ----------
@@ -73,28 +80,20 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
     {
       "response": {
         "status": 0,
-        "sessions": [
+        "logs": [
           {
-            "sessionId": "session_20250129_100000",
+            "id": "crawling_info_id_1",
+            "sessionId": "20250129100000",
             "name": "Default Crawler",
-            "status": "running",
-            "startTime": "2025-01-29T10:00:00Z",
-            "endTime": null,
-            "crawlingInfoCount": 567,
-            "createdDocCount": 234,
-            "updatedDocCount": 123,
-            "deletedDocCount": 12
+            "expiredTime": "1738200000000",
+            "createdTime": 1738108800000
           },
           {
-            "sessionId": "session_20250128_100000",
+            "id": "crawling_info_id_2",
+            "sessionId": "20250128100000",
             "name": "Default Crawler",
-            "status": "completed",
-            "startTime": "2025-01-28T10:00:00Z",
-            "endTime": "2025-01-28T10:45:23Z",
-            "crawlingInfoCount": 1234,
-            "createdDocCount": 456,
-            "updatedDocCount": 678,
-            "deletedDocCount": 23
+            "expiredTime": "1738113600000",
+            "createdTime": 1738022400000
           }
         ],
         "total": 10
@@ -110,34 +109,26 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
 
    * - 필드
      - 설명
+   * - ``id``
+     - 크롤링 정보 ID
    * - ``sessionId``
      - 세션 ID
    * - ``name``
-     - 크롤러 이름
-   * - ``status``
-     - 상태 (running/completed/failed)
-   * - ``startTime``
-     - 시작 시각
-   * - ``endTime``
-     - 종료 시각
-   * - ``crawlingInfoCount``
-     - 크롤링 정보 수
-   * - ``createdDocCount``
-     - 생성 문서 수
-   * - ``updatedDocCount``
-     - 업데이트 문서 수
-   * - ``deletedDocCount``
-     - 삭제 문서 수
+     - 세션 이름
+   * - ``expiredTime``
+     - 유효 기간
+   * - ``createdTime``
+     - 작성 시각 (에포크 밀리초)
 
-크롤링 세션 상세 조회
-==========================
+크롤링 정보 조회
+================
 
 요청
 ----------
 
 ::
 
-    GET /api/admin/crawlinginfo/{sessionId}
+    GET /api/admin/crawlinginfo/log/{id}
 
 응답
 ----------
@@ -147,40 +138,25 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
     {
       "response": {
         "status": 0,
-        "session": {
-          "sessionId": "session_20250129_100000",
+        "log": {
+          "id": "crawling_info_id_1",
+          "sessionId": "20250129100000",
           "name": "Default Crawler",
-          "status": "running",
-          "startTime": "2025-01-29T10:00:00Z",
-          "endTime": null,
-          "crawlingInfoCount": 567,
-          "createdDocCount": 234,
-          "updatedDocCount": 123,
-          "deletedDocCount": 12,
-          "infos": [
-            {
-              "url": "https://example.com/page1",
-              "status": "OK",
-              "method": "GET",
-              "httpStatusCode": 200,
-              "contentLength": 12345,
-              "executionTime": 123,
-              "lastModified": "2025-01-29T09:55:00Z"
-            }
-          ]
+          "expiredTime": "1738200000000",
+          "createdTime": 1738108800000
         }
       }
     }
 
-크롤링 세션 삭제
-======================
+크롤링 정보 삭제
+================
 
 요청
 ----------
 
 ::
 
-    DELETE /api/admin/crawlinginfo/{sessionId}
+    DELETE /api/admin/crawlinginfo/log/{id}
 
 응답
 ----------
@@ -189,8 +165,30 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
 
     {
       "response": {
-        "status": 0,
-        "message": "Crawling session deleted successfully"
+        "status": 0
+      }
+    }
+
+오래된 크롤링 세션 일괄 삭제
+==============================
+
+실행 중인 세션을 제외한 오래된 크롤링 세션을 한꺼번에 삭제합니다.
+
+요청
+----------
+
+::
+
+    DELETE /api/admin/crawlinginfo/all
+
+응답
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
       }
     }
 
@@ -202,46 +200,40 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보를 조회하기 위한 API입니
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-실행 중인 크롤링 세션 조회
-------------------------------
+특정 세션으로 필터링
+--------------------------
 
 .. code-block:: bash
 
-    # 모든 세션을 조회하여 running 필터링
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.sessions[] | select(.status=="running")'
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?sessionId=20250129100000" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-특정 세션의 상세 조회
+크롤링 정보 조회
+------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+크롤링 정보 삭제
+------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+오래된 세션 일괄 삭제
 ------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/session_20250129_100000" \
+    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
-
-오래된 세션 삭제
---------------------
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/session_20250101_100000" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-진행 상황 모니터링
---------------
-
-.. code-block:: bash
-
-    # 실행 중인 세션의 진행 상황을 정기적으로 확인
-    while true; do
-      curl -s "http://localhost:8080/api/admin/crawlinginfo" \
-           -H "Authorization: Bearer YOUR_TOKEN" | \
-           jq '.response.sessions[] | select(.status=="running") | {sessionId, crawlingInfoCount, createdDocCount}'
-      sleep 10
-    done
 
 참고 정보
 ========

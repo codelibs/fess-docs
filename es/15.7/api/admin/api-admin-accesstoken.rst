@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de tokens de acceso
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/accesstoken/settings
-    PUT /api/admin/accesstoken/settings
 
 Parametros
 ~~~~~~~~~~
@@ -86,8 +85,8 @@ Respuesta
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
             "parameterName": "token",
-            "expiredTime": 1735689600000,
-            "permissions": ["admin"]
+            "expires": "2025-01-01T00:00:00",
+            "permissions": "{role}admin"
           }
         ],
         "total": 5
@@ -117,8 +116,8 @@ Respuesta
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
           "parameterName": "token",
-          "expiredTime": 1735689600000,
-          "permissions": ["admin"]
+          "expires": "2025-01-01T00:00:00",
+          "permissions": "{role}admin"
         }
       }
     }
@@ -142,7 +141,8 @@ Cuerpo de la Solicitud
     {
       "name": "Integration API Token",
       "parameterName": "token",
-      "permissions": ["user"]
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user"
     }
 
 Descripcion de Campos
@@ -164,12 +164,12 @@ Descripcion de Campos
    * - ``parameterName``
      - No
      - Nombre del parametro (predeterminado: "token")
-   * - ``expiredTime``
+   * - ``expires``
      - No
-     - Tiempo de expiracion (milisegundos Unix)
+     - Fecha de expiracion (cadena en formato ISO 8601. Ejemplo: ``2026-01-01T00:00:00``)
    * - ``permissions``
      - No
-     - Roles permitidos
+     - Permisos permitidos. Se especifican como cadena separada por saltos de linea (ejemplo: ``{role}admin``)
 
 Respuesta
 ---------
@@ -180,7 +180,6 @@ Respuesta
       "response": {
         "status": 0,
         "id": "new_token_id",
-        "token": "generated_token_string",
         "created": true
       }
     }
@@ -205,8 +204,8 @@ Cuerpo de la Solicitud
       "id": "existing_token_id",
       "name": "Updated API Token",
       "parameterName": "token",
-      "expiredTime": 1767225600000,
-      "permissions": ["user", "editor"],
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user\n{role}editor",
       "versionNo": 1
     }
 
@@ -240,9 +239,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_token_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -260,7 +257,7 @@ Crear Token API
          -d '{
            "name": "External App Token",
            "parameterName": "token",
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 Llamada API Usando Token

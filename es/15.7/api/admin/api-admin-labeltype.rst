@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de tipos de etiqueta
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 Parametros
 ~~~~~~~~~~
@@ -87,6 +86,8 @@ Respuesta
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -119,7 +120,7 @@ Respuesta
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
           "sortOrder": 0,
-          "permissions": [],
+          "permissions": "{role}admin",
           "virtualHost": ""
         }
       }
@@ -147,7 +148,7 @@ Cuerpo de la Solicitud
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 Descripcion de Campos
@@ -177,7 +178,7 @@ Descripcion de Campos
      - Orden de visualizacion
    * - ``permissions``
      - No
-     - Roles con permiso de acceso
+     - Roles con permiso de acceso (separados por saltos de linea si son varios)
    * - ``virtualHost``
      - No
      - Host virtual
@@ -218,7 +219,7 @@ Cuerpo de la Solicitud
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
       "excludedPaths": ".*/(archive|old|draft)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"],
+      "permissions": "{role}guest",
       "versionNo": 1
     }
 
@@ -252,9 +253,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_label_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -274,7 +273,7 @@ Crear Etiqueta para Documentacion
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 Busqueda Usando Etiqueta

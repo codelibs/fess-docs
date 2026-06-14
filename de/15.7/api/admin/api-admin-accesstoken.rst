@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Access Token Liste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/accesstoken/settings
-    PUT /api/admin/accesstoken/settings
 
 Parameter
 ~~~~~~~~~
@@ -86,8 +85,8 @@ Response
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
             "parameterName": "token",
-            "expiredTime": 1735689600000,
-            "permissions": ["admin"]
+            "expires": "2025-01-01T00:00:00",
+            "permissions": "{role}admin"
           }
         ],
         "total": 5
@@ -117,8 +116,8 @@ Response
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
           "parameterName": "token",
-          "expiredTime": 1735689600000,
-          "permissions": ["admin"]
+          "expires": "2025-01-01T00:00:00",
+          "permissions": "{role}admin"
         }
       }
     }
@@ -142,7 +141,8 @@ Request-Body
     {
       "name": "Integration API Token",
       "parameterName": "token",
-      "permissions": ["user"]
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user"
     }
 
 Feldbeschreibungen
@@ -164,12 +164,12 @@ Feldbeschreibungen
    * - ``parameterName``
      - Nein
      - Parametername (Standard: "token")
-   * - ``expiredTime``
+   * - ``expires``
      - Nein
-     - Ablaufzeit (Unix-Zeit in Millisekunden)
+     - Ablaufzeit (Zeichenkette im ISO-8601-Format. Beispiel: ``2026-01-01T00:00:00``)
    * - ``permissions``
      - Nein
-     - Erlaubte Rollen
+     - Erlaubte Berechtigungen. Als durch Zeilenumbrüche getrennte Zeichenkette angeben (Beispiel: ``{role}admin``)
 
 Response
 --------
@@ -180,7 +180,6 @@ Response
       "response": {
         "status": 0,
         "id": "new_token_id",
-        "token": "generated_token_string",
         "created": true
       }
     }
@@ -205,8 +204,8 @@ Request-Body
       "id": "existing_token_id",
       "name": "Updated API Token",
       "parameterName": "token",
-      "expiredTime": 1767225600000,
-      "permissions": ["user", "editor"],
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user\n{role}editor",
       "versionNo": 1
     }
 
@@ -240,9 +239,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_token_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -260,7 +257,7 @@ API-Token erstellen
          -d '{
            "name": "External App Token",
            "parameterName": "token",
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 API-Aufruf mit Token

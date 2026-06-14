@@ -25,7 +25,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取屏蔽词列表
    * - GET
@@ -40,6 +40,12 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
    * - DELETE
      - /setting/{id}
      - 删除屏蔽词
+   * - PUT
+     - /upload
+     - 上传屏蔽词CSV
+   * - GET
+     - /download
+     - 下载屏蔽词CSV
 
 获取屏蔽词列表
 ==============
@@ -50,7 +56,6 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
 ::
 
     GET /api/admin/badword/settings
-    PUT /api/admin/badword/settings
 
 参数
 ~~~~
@@ -83,9 +88,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word",
-            "targetRole": "",
-            "targetLabel": ""
+            "suggestWord": "inappropriate_word"
           }
         ],
         "total": 5
@@ -112,9 +115,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word",
-          "targetRole": "",
-          "targetLabel": ""
+          "suggestWord": "inappropriate_word"
         }
       }
     }
@@ -136,9 +137,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": ""
+      "suggestWord": "spam_keyword"
     }
 
 字段说明
@@ -153,13 +152,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
      - 说明
    * - ``suggestWord``
      - 是
-     - 要排除的关键词
-   * - ``targetRole``
-     - 否
-     - 目标角色（为空时适用于所有角色）
-   * - ``targetLabel``
-     - 否
-     - 目标标签（为空时适用于所有标签）
+     - 要排除的关键词（不能包含空白字符）
 
 响应
 ----
@@ -193,8 +186,6 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
     {
       "id": "existing_badword_id",
       "suggestWord": "updated_spam_keyword",
-      "targetRole": "guest",
-      "targetLabel": "",
       "versionNo": 1
     }
 
@@ -234,6 +225,56 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
       }
     }
 
+上传屏蔽词CSV
+=============
+
+从CSV文件批量注册屏蔽词。文件以 ``multipart/form-data`` 发送。导入在服务器端异步执行。
+
+请求
+----
+
+::
+
+    PUT /api/admin/badword/upload
+    Content-Type: multipart/form-data
+
+参数
+~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - 参数
+     - 必需
+     - 说明
+   * - ``badWordFile``
+     - 是
+     - 要上传的屏蔽词CSV文件
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+下载屏蔽词CSV
+=============
+
+将已注册的屏蔽词作为CSV文件（``badword.csv``）下载。响应为 ``application/octet-stream`` 流。
+
+请求
+----
+
+::
+
+    GET /api/admin/badword/download
+
 使用示例
 ========
 
@@ -246,24 +287,26 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam",
-           "targetRole": "",
-           "targetLabel": ""
+           "suggestWord": "spam"
          }'
 
-针对特定角色的屏蔽词
---------------------
+上传CSV文件
+-----------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/badword/setting" \
+    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "suggestWord": "internal",
-           "targetRole": "guest",
-           "targetLabel": ""
-         }'
+         -F "badWordFile=@badword.csv"
+
+下载CSV文件
+-----------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o badword.csv
 
 参考信息
 ========

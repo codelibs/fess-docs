@@ -5,8 +5,8 @@ Documents API
 概述
 ====
 
-Documents API是用于管理 |Fess| 索引中文档的API。
-您可以执行文档的批量删除、更新、搜索等操作。
+Documents API是用于将文档批量注册到 |Fess| 索引的API。
+可以将多个文档一起添加到索引中。
 
 基础URL
 =======
@@ -25,227 +25,150 @@ Documents API是用于管理 |Fess| 索引中文档的API。
    * - 方法
      - 路径
      - 说明
-   * - DELETE
-     - /
-     - 删除文档（通过查询指定）
-   * - DELETE
-     - /{id}
-     - 删除文档（通过ID指定）
+   * - PUT
+     - /bulk
+     - 文档批量注册
 
-通过查询删除文档
-================
+文档批量注册
+============
 
-批量删除匹配搜索查询的文档。
+将多个文档批量注册到索引中。
 
 请求
 ----
 
 ::
 
-    DELETE /api/admin/documents
+    PUT /api/admin/documents/bulk
+    Content-Type: application/json
 
-参数
-~~~~
+请求体
+~~~~~~
+
+.. code-block:: json
+
+    {
+      "documents": [
+        {
+          "url": "https://example.com/page1",
+          "title": "サンプルページ1",
+          "content": "ページ1の本文テキストです。"
+        },
+        {
+          "url": "https://example.com/page2",
+          "title": "サンプルページ2",
+          "content": "ページ2の本文テキストです。"
+        }
+      ]
+    }
+
+字段说明
+~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 25 15 60
 
-   * - 参数
-     - 类型
+   * - 字段
      - 必需
      - 说明
-   * - ``q``
-     - String
+   * - ``documents``
      - 是
-     - 删除目标的搜索查询
+     - 要注册的文档数组。每个文档以字段名与值的映射形式指定。不能指定空数组。
+
+每个文档可以自由指定 ``url`` 、 ``title`` 、 ``content`` 等索引字段。
+当省略 ``content_length`` 、 ``favorite_count`` 、 ``click_count`` 、 ``boost`` 、 ``role`` 、 ``last_modified`` 、 ``timestamp`` 等字段时，将自动补充默认值。
+此外， ``doc_id`` 和 ID 会在注册时自动生成。
 
 响应
 ----
+
+响应以 ``items`` 数组返回所注册的各文档的处理结果。
+成功的项目包含 ``result`` 和 ``id`` ，失败的项目包含 ``result`` 和 ``message`` 。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "deleted": 150
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "CREATED",
+            "id": "0123456789abcdef"
+          }
+        ]
       }
     }
 
-使用示例
-~~~~~~~~
-
-.. code-block:: bash
-
-    # 删除特定网站的文档
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # 删除旧文档
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO 2023-01-01]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # 通过标签删除文档
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=label:old_label" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-通过ID删除文档
-==============
-
-指定文档ID进行删除。
-
-请求
-----
-
-::
-
-    DELETE /api/admin/documents/{id}
-
-参数
-~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - 参数
-     - 类型
-     - 必需
-     - 说明
-   * - ``id``
-     - String
-     - 是
-     - 文档ID（路径参数）
-
-响应
-----
+当任一项目注册失败时， ``status`` 将变为 ``9`` （FAILED），相应项目中会包含 ``message`` 字段。
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0
+        "version": "15.7.0",
+        "status": 9,
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "BAD_REQUEST",
+            "message": "failure reason ..."
+          }
+        ]
       }
     }
 
-使用示例
+响应字段
 ~~~~~~~~
 
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/documents/doc_id_12345" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-查询语法
-========
-
-删除查询可以使用 |Fess| 的标准搜索语法。
-
-基本查询
---------
-
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 30 70
 
-   * - 查询示例
+   * - 字段
      - 说明
-   * - ``url:example.com``
-     - URL包含"example.com"的文档
-   * - ``url:https://example.com/*``
-     - 具有特定前缀的URL
-   * - ``host:example.com``
-     - 特定主机的文档
-   * - ``title:keyword``
-     - 标题包含关键词的文档
-   * - ``content:keyword``
-     - 正文包含关键词的文档
-   * - ``label:mylabel``
-     - 具有特定标签的文档
-
-日期范围查询
-------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - 查询示例
-     - 说明
-   * - ``lastModified:[2023-01-01 TO 2023-12-31]``
-     - 在指定期间内更新的文档
-   * - ``lastModified:[* TO 2023-01-01]``
-     - 在指定日期之前更新的文档
-   * - ``created:[2024-01-01 TO *]``
-     - 在指定日期之后创建的文档
-
-复合查询
---------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - 查询示例
-     - 说明
-   * - ``url:example.com AND label:blog``
-     - AND条件
-   * - ``url:example.com OR url:sample.com``
-     - OR条件
-   * - ``NOT url:example.com``
-     - NOT条件
-   * - ``(url:example.com OR url:sample.com) AND label:news``
-     - 分组
-
-注意事项
-========
-
-删除操作注意
-------------
-
-.. warning::
-   删除操作无法撤销。在生产环境执行之前，请务必在测试环境中确认。
-
-- 删除大量文档时，处理可能需要一些时间
-- 删除过程中可能会影响索引性能
-- 删除后，可能需要一些时间才能反映在搜索结果中
-
-推荐做法
---------
-
-1. **删除前确认**: 使用相同的查询调用搜索API，确认删除目标
-2. **分阶段删除**: 大量删除时分多次执行
-3. **备份**: 提前备份重要数据
+   * - ``items``
+     - 各文档处理结果的数组
+   * - ``items[].result``
+     - 处理结果状态（例如： ``CREATED``）
+   * - ``items[].id``
+     - 已注册文档的ID（成功时）
+   * - ``items[].message``
+     - 失败原因的消息（失败时）
 
 使用示例
 ========
 
-准备重新爬取整个网站
---------------------
+文档批量注册
+------------
 
 .. code-block:: bash
 
-    # 删除特定网站的旧文档
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=host:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # 启动爬虫任务
-    curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-清理旧文档
-----------
-
-.. code-block:: bash
-
-    # 删除超过1年未更新的文档
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO now-1y]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/documents/bulk" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "documents": [
+             {
+               "url": "https://example.com/page1",
+               "title": "サンプルページ1",
+               "content": "ページ1の本文テキストです。"
+             }
+           ]
+         }'
 
 参考信息
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
+- :doc:`api-admin-searchlist` - 文档搜索与管理API
 - :doc:`api-admin-crawlinginfo` - 爬虫信息API
 - :doc:`../../admin/searchlist-guide` - 搜索列表管理指南
-

@@ -56,13 +56,13 @@ Para la obtención del token CSRF y los detalles de autenticación y sesión, co
 Límite de velocidad
 ===================
 
-``POST /chat`` y ``DELETE /chat/sessions/{session_id}`` tienen un límite de velocidad por usuario.
+``POST /chat`` , ``POST /chat/stream`` y ``DELETE /chat/sessions/{session_id}`` tienen un límite de velocidad por usuario.
 
 - Valor predeterminado: 30 solicitudes por minuto (por usuario)
 - Clave de configuración: ``api.v2.chat.rate.limit.per.user.per.minute``
 
 Cuando se supera el límite de velocidad, se devuelve el error ``rate_limited`` (HTTP 429). La cabecera ``Retry-After`` indica los segundos que se deben esperar.
-Este límite de velocidad es compartido entre ``POST /chat`` y ``DELETE /chat/sessions/{session_id}``.
+Este límite de velocidad es compartido entre ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}``.
 
 POST /chat
 ==========
@@ -294,7 +294,7 @@ Ejemplo de stream SSE:
 ::
 
     event: phase
-    data: {"phase":"retrieval","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
+    data: {"phase":"search","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
 
     event: chunk
     data: {"content":"Fessは"}

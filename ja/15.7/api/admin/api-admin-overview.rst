@@ -75,8 +75,12 @@ Admin APIを使用するには、トークンに以下の権限が必要です:
 共通パターン
 ============
 
-一覧取得（GET/PUT /settings）
------------------------------
+設定を持つリソース（webconfig、user、role など）は、以下の共通的なCRUDパターンに従います。
+ただし、一部のリソース（systeminfo、stats、storage、plugin、log、backup、documents、suggest、dict ルート等）は
+この共通パターンとは異なる独自のエンドポイント構成を持つため、各リソースのページを参照してください。
+
+一覧取得（GET /settings）
+-------------------------
 
 設定の一覧を取得します。
 
@@ -86,7 +90,6 @@ Admin APIを使用するには、トークンに以下の権限が必要です:
 ::
 
     GET /api/admin/<resource>/settings
-    PUT /api/admin/<resource>/settings
 
 パラメーター（ページネーション）:
 
@@ -111,11 +114,17 @@ Admin APIを使用するには、トークンに以下の権限が必要です:
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   すべてのレスポンスの ``response`` オブジェクトには、製品バージョンを示す ``version``
+   （例: ``"15.7.0"``）が常に含まれます。以降の例では簡潔さのために省略している場合があります。
 
 単一設定取得（GET /setting/{id}）
 ---------------------------------
@@ -219,6 +228,20 @@ IDを指定して単一の設定を取得します。
 レスポンス
 ~~~~~~~~~~
 
+削除レスポンスの形式はリソース（アクション）ごとに異なります。多くのリソースは
+``status`` のみを返します。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+一部のリソースでは、削除結果が ``ApiUpdateResponse`` として返され、削除した設定の
+``id`` と ``created``（削除時は ``false``）が付与されます。
+
 .. code-block:: json
 
     {
@@ -229,8 +252,33 @@ IDを指定して単一の設定を取得します。
       }
     }
 
+また、``ApiDeleteResponse`` を返すリソースでは、削除件数を示す ``count``
+（既定値 ``1``）が付与される場合があります。実際の形式は各リソースのページを参照してください。
+
 レスポンス形式
 ==============
+
+すべてのレスポンスは ``response`` オブジェクトでラップされ、製品バージョンを示す
+``version`` と、処理結果を示す ``status`` を常に含みます。
+
+``status`` の値は以下のとおりです。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - 値
+     - 説明
+   * - ``0``
+     - OK（成功）
+   * - ``1``
+     - BAD_REQUEST（リクエスト不正）
+   * - ``2``
+     - SYSTEM_ERROR（システムエラー）
+   * - ``3``
+     - UNAUTHORIZED（認証エラー）
+   * - ``9``
+     - FAILED（処理失敗）
 
 成功レスポンス
 --------------
@@ -239,8 +287,9 @@ IDを指定して単一の設定を取得します。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +298,16 @@ IDを指定して単一の設定を取得します。
 エラーレスポンス
 ----------------
 
+エラー時は ``status`` に 0 以外の値が設定され、``message`` にエラーメッセージが
+含まれます。
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +353,13 @@ HTTPステータスコード
      - ファイルクロール設定
    * - :doc:`api-admin-dataconfig`
      - データストア設定
+
+.. note::
+
+   このほか、認証情報やクロール制御に関する以下のリソースもAPIとして提供されています
+   （現時点では個別ページは未整備です）: ``webauth``（Web認証）、``fileauth``（ファイル認証）、
+   ``reqheader``（リクエストヘッダー）、``pathmap``（パスマッピング）、
+   ``duplicatehost``（重複ホスト）、``searchlist``（検索/ドキュメント一覧操作）。
 
 インデックス管理
 ----------------
@@ -396,8 +454,8 @@ HTTPステータスコード
      - システム統計
    * - :doc:`api-admin-log`
      - ログ取得
-   * - :doc:`api-admin-searchlog`
-     - 検索ログ管理
+   * - :doc:`api-admin-searchlist`
+     - ドキュメント検索・管理
    * - :doc:`api-admin-storage`
      - ストレージ管理
    * - :doc:`api-admin-plugin`

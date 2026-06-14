@@ -25,7 +25,7 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取相关内容列表
    * - GET
@@ -50,7 +50,6 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
 ::
 
     GET /api/admin/relatedcontent/settings
-    PUT /api/admin/relatedcontent/settings
 
 参数
 ~~~~
@@ -234,9 +233,7 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_content_id",
-        "created": false
+        "status": 0
       }
     }
 

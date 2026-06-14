@@ -20,7 +20,7 @@ Endpoint            ``/api/v2/cache/{docId}``
 
 Devuelve el HTML en caché (con resaltado aplicado) del documento.
 
-Cuando ``app.login.required=true`` y el llamante es anónimo, resulta en ``auth_required`` (401).
+Cuando la configuracion de inicio de sesion obligatorio (la opcion "Inicio de sesion obligatorio" de la configuracion del sistema) esta habilitada y el llamante es anonimo, resulta en ``auth_required`` (401).
 
 Parámetros de solicitud
 -----------------------
@@ -87,7 +87,7 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
    * - 400 Bad Request
      - Cuando la solicitud no es válida.
    * - 401 Unauthorized
-     - Cuando se requiere autenticación (``app.login.required=true`` y llamante anónimo).
+     - Cuando se requiere autenticación (la configuracion de inicio de sesion obligatorio esta habilitada y el llamante es anonimo).
    * - 404 Not Found
      - Cuando no se encuentra el recurso.
    * - 405 Method Not Allowed

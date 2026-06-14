@@ -5,8 +5,8 @@ API FailureUrl
 Vue d'ensemble
 ==============
 
-L'API FailureUrl permet de gerer les URLs en echec de crawl dans |Fess|.
-Vous pouvez consulter et supprimer les URLs qui ont genere des erreurs pendant le crawl.
+L'API FailureUrl permet de gerer les URLs en echec lors du crawl de |Fess|.
+Vous pouvez obtenir la liste des URLs ayant provoque une erreur pendant le crawl, les consulter individuellement, les supprimer, etc.
 
 URL de base
 ===========
@@ -26,13 +26,16 @@ Liste des endpoints
      - Chemin
      - Description
    * - GET
-     - /
+     - /logs
      - Obtention de la liste des URLs en echec
+   * - GET
+     - /log/{id}
+     - Obtention d'une URL en echec
    * - DELETE
-     - /{id}
+     - /log/{id}
      - Suppression d'une URL en echec
    * - DELETE
-     - /delete-all
+     - /all
      - Suppression de toutes les URLs en echec
 
 Obtention de la liste des URLs en echec
@@ -43,14 +46,14 @@ Requete
 
 ::
 
-    GET /api/admin/failureurl
+    GET /api/admin/failureurl/logs
 
 Parametres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -59,19 +62,27 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page
+   * - ``url``
+     - String
+     - Non
+     - Filtre par URL
    * - ``errorCountMin``
      - Integer
      - Non
      - Filtre par nombre minimum d'erreurs
-   * - ``configId``
+   * - ``errorCountMax``
+     - Integer
+     - Non
+     - Filtre par nombre maximum d'erreurs
+   * - ``errorName``
      - String
      - Non
-     - Filtre par ID de configuration
+     - Filtre par nom d'erreur
 
 Reponse
 -------
@@ -81,26 +92,26 @@ Reponse
     {
       "response": {
         "status": 0,
-        "failures": [
+        "logs": [
           {
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
-            "configId": "webconfig_id_1",
+            "threadName": "Crawler-1",
             "errorName": "ConnectException",
             "errorLog": "Connection refused: connect",
             "errorCount": 3,
-            "lastAccessTime": "2025-01-29T10:00:00Z",
-            "threadName": "Crawler-1"
+            "lastAccessTime": 1738144800000,
+            "configId": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
-            "configId": "webconfig_id_1",
+            "threadName": "Crawler-2",
             "errorName": "HttpStatusException",
             "errorLog": "404 Not Found",
             "errorCount": 1,
-            "lastAccessTime": "2025-01-29T09:30:00Z",
-            "threadName": "Crawler-2"
+            "lastAccessTime": 1738143000000,
+            "configId": "webConfig_id_1"
           }
         ],
         "total": 45
@@ -108,7 +119,7 @@ Reponse
     }
 
 Champs de la reponse
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -120,18 +131,49 @@ Champs de la reponse
      - ID de l'URL en echec
    * - ``url``
      - URL en echec
-   * - ``configId``
-     - ID de la configuration de crawl
+   * - ``threadName``
+     - Nom du thread
    * - ``errorName``
      - Nom de l'erreur
    * - ``errorLog``
-     - Journal de l'erreur
+     - Journal d'erreur
    * - ``errorCount``
      - Nombre d'occurrences de l'erreur
    * - ``lastAccessTime``
-     - Dernier temps d'acces
-   * - ``threadName``
-     - Nom du thread
+     - Heure du dernier acces (millisecondes epoch)
+   * - ``configId``
+     - ID de la configuration de crawl
+
+Obtention d'une URL en echec
+============================
+
+Requete
+-------
+
+::
+
+    GET /api/admin/failureurl/log/{id}
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "log": {
+          "id": "failure_id_1",
+          "url": "https://example.com/broken-page",
+          "threadName": "Crawler-1",
+          "errorName": "ConnectException",
+          "errorLog": "Connection refused: connect",
+          "errorCount": 3,
+          "lastAccessTime": 1738144800000,
+          "configId": "webConfig_id_1"
+        }
+      }
+    }
 
 Suppression d'une URL en echec
 ==============================
@@ -141,7 +183,7 @@ Requete
 
 ::
 
-    DELETE /api/admin/failureurl/{id}
+    DELETE /api/admin/failureurl/log/{id}
 
 Reponse
 -------
@@ -150,40 +192,21 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "message": "Failure URL deleted successfully"
+        "status": 0
       }
     }
 
 Suppression de toutes les URLs en echec
 =======================================
 
+Supprime toutes les URLs en echec. Cette operation ne prend aucun parametre.
+
 Requete
 -------
 
 ::
 
-    DELETE /api/admin/failureurl/delete-all
-
-Parametres
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametre
-     - Type
-     - Requis
-     - Description
-   * - ``configId``
-     - String
-     - Non
-     - Supprimer uniquement les URLs en echec de cette configuration
-   * - ``errorCountMin``
-     - Integer
-     - Non
-     - Supprimer uniquement les erreurs avec ce nombre minimum
+    DELETE /api/admin/failureurl/all
 
 Reponse
 -------
@@ -192,9 +215,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "message": "All failure URLs deleted successfully",
-        "deletedCount": 45
+        "status": 0
       }
     }
 
@@ -228,7 +249,7 @@ Obtention de la liste des URLs en echec
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl?size=100&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filtrage par nombre d'erreurs
@@ -236,16 +257,24 @@ Filtrage par nombre d'erreurs
 
 .. code-block:: bash
 
-    # Obtenir uniquement les URLs avec 3 erreurs ou plus
-    curl -X GET "http://localhost:8080/api/admin/failureurl?errorCountMin=3" \
+    # Obtenir uniquement les URLs ayant echoue 3 fois ou plus
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtention des URLs en echec d'une configuration specifique
-----------------------------------------------------------
+Filtrage par nom d'erreur
+-------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl?configId=webconfig_id_1" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=ConnectException" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Obtention d'une URL en echec
+----------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Suppression d'une URL en echec
@@ -253,7 +282,7 @@ Suppression d'une URL en echec
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/failure_id_1" \
+    curl -X DELETE "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Suppression de toutes les URLs en echec
@@ -261,16 +290,7 @@ Suppression de toutes les URLs en echec
 
 .. code-block:: bash
 
-    # Supprimer toutes les URLs en echec
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/delete-all" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Supprimer uniquement les URLs en echec d'une configuration specifique
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/delete-all?configId=webconfig_id_1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Supprimer uniquement les URLs avec 3 erreurs ou plus
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/delete-all?errorCountMin=3" \
+    curl -X DELETE "http://localhost:8080/api/admin/failureurl/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Agregation par type d'erreur
@@ -279,9 +299,9 @@ Agregation par type d'erreur
 .. code-block:: bash
 
     # Compter par type d'erreur
-    curl -X GET "http://localhost:8080/api/admin/failureurl?size=1000" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '[.response.failures[].errorName] | group_by(.) | map({error: .[0], count: length})'
+         jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
 
 Informations complementaires
 ============================

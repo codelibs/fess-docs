@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List related queries
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/relatedquery/settings
-    PUT /api/admin/relatedquery/settings
 
 Parameters
 ~~~~~~~~~~
@@ -84,7 +83,7 @@ Response
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": ["fess tutorial", "fess installation", "fess configuration"]
+            "queries": "fess tutorial\nfess installation\nfess configuration"
           }
         ],
         "total": 5
@@ -112,7 +111,7 @@ Response
         "setting": {
           "id": "query_id_1",
           "term": "fess",
-          "queries": ["fess tutorial", "fess installation", "fess configuration"],
+          "queries": "fess tutorial\nfess installation\nfess configuration",
           "virtualHost": ""
         }
       }
@@ -136,7 +135,7 @@ Request Body
 
     {
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search",
       "virtualHost": ""
     }
 
@@ -155,7 +154,7 @@ Field Description
      - Search keyword
    * - ``queries``
      - Yes
-     - Array of related queries
+     - Related queries (newline-separated string, one per line)
    * - ``virtualHost``
      - No
      - Virtual host
@@ -192,7 +191,7 @@ Request Body
     {
       "id": "existing_query_id",
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search", "search tips"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
       "virtualHost": "",
       "versionNo": 1
     }
@@ -227,9 +226,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_query_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -246,7 +243,7 @@ Product Related Queries
          -H "Content-Type: application/json" \
          -d '{
            "term": "product",
-           "queries": ["product features", "product pricing", "product comparison", "product reviews"]
+           "queries": "product features\nproduct pricing\nproduct comparison\nproduct reviews"
          }'
 
 Help Related Queries
@@ -259,7 +256,7 @@ Help Related Queries
          -H "Content-Type: application/json" \
          -d '{
            "term": "help",
-           "queries": ["help center", "help documentation", "help contact support"]
+           "queries": "help center\nhelp documentation\nhelp contact support"
          }'
 
 Reference

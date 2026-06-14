@@ -5,8 +5,13 @@ Stats API
 개요
 ====
 
-Stats API는 |Fess| 의 통계 정보를 조회하기 위한 API입니다.
-검색 쿼리, 클릭, 즐겨찾기 등의 통계 데이터를 확인할 수 있습니다.
+Stats API는 |Fess| 가 가동되는 서버의 시스템 메트릭을 조회하기 위한 API입니다.
+JVM, OS, 프로세스, 검색 엔진(OpenSearch) 클러스터, 파일 시스템의 각 통계 정보를 확인할 수 있습니다.
+
+.. note::
+
+   이 API는 검색 쿼리나 클릭 등의 검색 분석 데이터를 반환하지 않습니다.
+   인덱스 내 문서의 검색 및 관리에는 :doc:`api-admin-searchlist` 를 참조하십시오.
 
 기본 URL
 =========
@@ -27,10 +32,10 @@ Stats API는 |Fess| 의 통계 정보를 조회하기 위한 API입니다.
      - 설명
    * - GET
      - /
-     - 통계 정보 조회
+     - 시스템 통계 정보 조회
 
-통계 정보 조회
-============
+시스템 통계 정보 조회
+====================
 
 요청
 ----------
@@ -39,69 +44,81 @@ Stats API는 |Fess| 의 통계 정보를 조회하기 위한 API입니다.
 
     GET /api/admin/stats
 
-파라미터
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - 파라미터
-     - 타입
-     - 필수
-     - 설명
-   * - ``from``
-     - String
-     - 아니오
-     - 시작 일시 (ISO 8601 형식)
-   * - ``to``
-     - String
-     - 아니오
-     - 종료 일시 (ISO 8601 형식)
-   * - ``type``
-     - String
-     - 아니오
-     - 통계 타입 (query/click/favorite)
+이 엔드포인트는 쿼리 파라미터를 받지 않습니다.
 
 응답
 ----------
+
+응답은 제품 버전을 나타내는 ``version``, 처리 결과를 나타내는 ``status`` 와,
+시스템 메트릭을 저장하는 ``stats`` 객체를 포함합니다.
+``stats`` 는 ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs`` 의 5개 키를 가집니다.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "stats": {
-          "totalQueries": 12345,
-          "uniqueQueries": 5678,
-          "totalClicks": 9876,
-          "totalFavorites": 543,
-          "averageResponseTime": 123.45,
-          "topQueries": [
-            {
-              "query": "fess",
-              "count": 567
+          "jvm": {
+            "memory": {
+              "heap": {
+                "used": 536870912,
+                "committed": 1073741824,
+                "max": 2147483648,
+                "percent": 25
+              },
+              "nonHeap": {
+                "used": 134217728,
+                "committed": 268435456
+              }
             },
-            {
-              "query": "search",
-              "count": 432
-            }
-          ],
-          "topClickedDocuments": [
-            {
-              "url": "https://example.com/doc1",
-              "title": "Document 1",
-              "count": 234
-            }
-          ],
-          "queryTrends": [
-            {
-              "date": "2025-01-01",
-              "count": 234
+            "pools": [
+              {"key": "mapped", "count": 1, "used": 4096, "capacity": 4096}
+            ],
+            "gc": [
+              {"key": "young", "count": 12, "time": 345}
+            ],
+            "threads": {"count": 80, "peak": 95},
+            "classes": {"loaded": 12000, "total_loaded": 12500, "unloaded": 500},
+            "uptime": 3600000
+          },
+          "os": {
+            "memory": {
+              "physical": {"free": 2147483648, "total": 8589934592},
+              "swapSpace": {"free": 0, "total": 0}
             },
+            "cpu": {"percent": 12},
+            "loadAverages": [0.5, 0.4, 0.3]
+          },
+          "process": {
+            "fileFescriptor": {"open": 256, "max": 65536},
+            "cpu": {"percent": 5, "total": 123456},
+            "virtualMemory": {"total": 4294967296}
+          },
+          "engine": {
+            "clusterName": "fess",
+            "numberOfNodes": 1,
+            "numberOfDataNodes": 1,
+            "activePrimaryShards": 10,
+            "activeShards": 10,
+            "activeShardsPercent": 100.0,
+            "relocatingShards": 0,
+            "initializingShards": 0,
+            "unassignedShards": 0,
+            "delayedUnassignedShards": 0,
+            "numberOfPendingTasks": 0,
+            "numberOfInFlightFetch": 0,
+            "status": "green"
+          },
+          "fs": [
             {
-              "date": "2025-01-02",
-              "count": 267
+              "path": "/",
+              "total": 107374182400,
+              "free": 53687091200,
+              "usable": 53687091200,
+              "used": 53687091200,
+              "percent": 50
             }
           ]
         }
@@ -113,156 +130,57 @@ Stats API는 |Fess| 의 통계 정보를 조회하기 위한 API입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 20 80
 
    * - 필드
      - 설명
-   * - ``totalQueries``
-     - 총 검색 쿼리 수
-   * - ``uniqueQueries``
-     - 고유 검색 쿼리 수
-   * - ``totalClicks``
-     - 총 클릭 수
-   * - ``totalFavorites``
-     - 총 즐겨찾기 수
-   * - ``averageResponseTime``
-     - 평균 응답 시간 (밀리초)
-   * - ``topQueries``
-     - 인기 검색 쿼리
-   * - ``topClickedDocuments``
-     - 인기 문서
-   * - ``queryTrends``
-     - 쿼리 트렌드
+   * - ``jvm``
+     - JVM 통계. ``memory``(``heap`` / ``nonHeap``), ``pools``(버퍼 풀), ``gc``(GC), ``threads``, ``classes``, ``uptime``(밀리초)를 포함합니다.
+   * - ``os``
+     - OS 통계. ``memory``(``physical`` / ``swapSpace``), ``cpu``, ``loadAverages``(로드 애버리지 배열)를 포함합니다.
+   * - ``process``
+     - 프로세스 통계. ``fileFescriptor``(열린/최대 파일 디스크립터 수), ``cpu``, ``virtualMemory`` 를 포함합니다.
+   * - ``engine``
+     - 검색 엔진(OpenSearch) 클러스터의 상태. ``clusterName``, 노드 수, 샤드 수, ``status`` 등을 포함합니다. 클러스터에 연결할 수 없는 경우 ``status`` 가 ``"red"`` 가 되며, ``exception`` 에 오류 메시지가 포함됩니다.
+   * - ``fs``
+     - 파일 시스템 통계의 배열. 각 루트에 대해 ``path``, ``total``, ``free``, ``usable``, ``used``(바이트), ``percent``(사용률)를 포함합니다.
 
-검색 쿼리 통계
-==============
+.. note::
 
-요청
-----------
-
-::
-
-    GET /api/admin/stats?type=query&from=2025-01-01&to=2025-01-31
-
-응답
-----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "stats": {
-          "totalQueries": 5678,
-          "uniqueQueries": 2345,
-          "topQueries": [
-            {
-              "query": "documentation",
-              "count": 234,
-              "avgResponseTime": 98.7
-            }
-          ],
-          "queriesByHour": [
-            {
-              "hour": 0,
-              "count": 45
-            },
-            {
-              "hour": 1,
-              "count": 23
-            }
-          ],
-          "queriesByDay": [
-            {
-              "day": "Monday",
-              "count": 567
-            }
-          ]
-        }
-      }
-    }
-
-클릭 통계
-============
-
-요청
-----------
-
-::
-
-    GET /api/admin/stats?type=click&from=2025-01-01&to=2025-01-31
-
-응답
-----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "stats": {
-          "totalClicks": 3456,
-          "topClickedDocuments": [
-            {
-              "url": "https://example.com/popular-doc",
-              "title": "Popular Document",
-              "count": 234,
-              "clickThroughRate": 0.45
-            }
-          ],
-          "clicksByPosition": [
-            {
-              "position": 1,
-              "count": 1234
-            },
-            {
-              "position": 2,
-              "count": 567
-            }
-          ]
-        }
-      }
-    }
+   ``process.fileFescriptor`` 라는 키 이름은 소스 코드 구현을 따릅니다(``fileDescriptor`` 철자가 아닙니다).
 
 사용 예
 ======
 
-전체 통계 정보 조회
-----------------
+시스템 통계 정보 조회
+----------------------
 
 .. code-block:: bash
 
     curl -X GET "http://localhost:8080/api/admin/stats" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-기간 지정 통계 조회
---------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/stats?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-검색 쿼리 통계 조회
---------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/stats?type=query&from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-인기 쿼리 TOP10 조회
+JVM 힙 사용률 확인
 ---------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/stats?type=query" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.stats.topQueries[:10]'
+    curl -X GET "http://localhost:8080/api/admin/stats" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq '.response.stats.jvm.memory.heap.percent'
+
+검색 엔진 클러스터 상태 확인
+--------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/stats" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq '.response.stats.engine.status'
 
 참고 정보
 ========
 
 - :doc:`api-admin-overview` - Admin API 개요
-- :doc:`api-admin-log` - 로그 API
 - :doc:`api-admin-systeminfo` - 시스템 정보 API
-- :doc:`../../admin/searchlog-guide` - 검색 로그
+- :doc:`api-admin-searchlist` - 문서 검색 및 관리 API

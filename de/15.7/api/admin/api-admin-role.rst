@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Rollenliste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/role/settings
-    PUT /api/admin/role/settings
 
 Parameter
 ~~~~~~~~~

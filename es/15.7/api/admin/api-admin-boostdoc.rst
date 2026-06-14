@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de impulsos de documentos
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/boostdoc/settings
-    PUT /api/admin/boostdoc/settings
 
 Parametros
 ~~~~~~~~~~
@@ -158,8 +157,8 @@ Descripcion de Campos
      - Si
      - Expresion de impulso (numero o expresion)
    * - ``sortOrder``
-     - No
-     - Orden de aplicacion
+     - Si
+     - Orden de aplicacion (valor inicial del formulario: 0)
 
 Respuesta
 ---------
@@ -228,9 +227,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_boostdoc_id",
-        "created": false
+        "status": 0
       }
     }
 

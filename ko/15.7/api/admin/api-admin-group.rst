@@ -25,7 +25,7 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 그룹 목록 조회
    * - GET
@@ -50,7 +50,6 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -84,12 +83,16 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 필드 설명
@@ -156,9 +163,9 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
    * - ``name``
      - 예
      - 그룹 이름
-   * - ``gidNumber``
+   * - ``attributes``
      - 아니오
-     - 그룹 ID 번호
+     - 속성의 맵 (``gidNumber`` 등의 LDAP 속성을 포함). 값은 문자열로 지정합니다
 
 응답
 ----------
@@ -192,7 +199,9 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 그룹 목록 조회

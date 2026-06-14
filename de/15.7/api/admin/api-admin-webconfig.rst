@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Web-Crawl-Konfigurationsliste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/webconfig/settings
-    PUT /api/admin/webconfig/settings
 
 Parameter
 ~~~~~~~~~
@@ -84,6 +83,7 @@ Response
           {
             "id": "webconfig_id_1",
             "name": "Example Site",
+            "description": "Beispielseite",
             "urls": "https://example.com/",
             "includedUrls": ".*example\\.com.*",
             "excludedUrls": ".*\\.(pdf|zip)$",
@@ -92,11 +92,13 @@ Response
             "configParameter": "",
             "depth": 3,
             "maxAccessCount": 1000,
-            "userAgent": "",
+            "userAgent": "Mozilla/5.0",
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -125,6 +127,7 @@ Response
         "setting": {
           "id": "webconfig_id_1",
           "name": "Example Site",
+          "description": "Beispielseite",
           "urls": "https://example.com/",
           "includedUrls": ".*example\\.com.*",
           "excludedUrls": ".*\\.(pdf|zip)$",
@@ -133,14 +136,14 @@ Response
           "configParameter": "",
           "depth": 3,
           "maxAccessCount": 1000,
-          "userAgent": "",
+          "userAgent": "Mozilla/5.0",
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -167,13 +170,13 @@ Request-Body
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "depth": 5,
-      "maxAccessCount": 5000,
+      "userAgent": "Mozilla/5.0",
       "numOfThread": 3,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -190,6 +193,9 @@ Feldbeschreibungen
    * - ``name``
      - Ja
      - Konfigurationsname
+   * - ``description``
+     - Nein
+     - Beschreibung der Konfiguration
    * - ``urls``
      - Ja
      - Crawl-Start-URLs (bei mehreren durch Zeilenumbruch getrennt)
@@ -210,37 +216,37 @@ Feldbeschreibungen
      - Zusätzliche Konfigurationsparameter
    * - ``depth``
      - Nein
-     - Crawl-Tiefe (Standard: -1=unbegrenzt)
+     - Crawl-Tiefe
    * - ``maxAccessCount``
      - Nein
-     - Maximale Zugriffsanzahl (Standard: 100)
+     - Maximale Zugriffsanzahl
    * - ``userAgent``
-     - Nein
-     - Benutzerdefinierter User-Agent
+     - Ja
+     - User-Agent-Zeichenkette
    * - ``numOfThread``
-     - Nein
-     - Anzahl paralleler Threads (Standard: 1)
+     - Ja
+     - Anzahl paralleler Threads
    * - ``intervalTime``
-     - Nein
-     - Anfrage-Intervall (Millisekunden, Standard: 0)
+     - Ja
+     - Anfrage-Intervall (Millisekunden)
    * - ``boost``
-     - Nein
-     - Boost-Wert für Suchergebnisse (Standard: 1.0)
+     - Ja
+     - Boost-Wert für Suchergebnisse
    * - ``available``
-     - Nein
-     - Aktiviert/Deaktiviert (Standard: true)
+     - Ja
+     - Aktiviert/Deaktiviert (Zeichenkette ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Nein
+     - Ja
      - Anzeigereihenfolge
    * - ``permissions``
      - Nein
-     - Zugriffsberechtigte Rollen
+     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbrüche getrennt)
    * - ``virtualHosts``
      - Nein
-     - Virtuelle Hosts
+     - Virtuelle Hosts (bei mehreren durch Zeilenumbrüche getrennt)
    * - ``labelTypeIds``
      - Nein
-     - Label-Typ-IDs
+     - Label-Typ-IDs (Array)
 
 Response
 --------
@@ -277,12 +283,14 @@ Request-Body
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
+      "userAgent": "Mozilla/5.0",
       "depth": 10,
       "maxAccessCount": 10000,
       "numOfThread": 5,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -316,9 +324,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_webconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -361,12 +367,15 @@ Crawl-Konfiguration für Unternehmenswebsite
            "urls": "https://www.example.com/",
            "includedUrls": ".*www\\.example\\.com.*",
            "excludedUrls": ".*/(login|admin|api)/.*",
+           "userAgent": "Mozilla/5.0",
            "depth": 5,
            "maxAccessCount": 10000,
            "numOfThread": 3,
            "intervalTime": 500,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 Crawl-Konfiguration für Dokumentationswebsite
@@ -383,12 +392,13 @@ Crawl-Konfiguration für Dokumentationswebsite
            "includedUrls": ".*docs\\.example\\.com.*",
            "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
-           "depth": -1,
+           "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
            "numOfThread": 5,
            "intervalTime": 200,
            "boost": 1.5,
-           "available": true,
+           "available": "true",
+           "sortOrder": 0,
            "labelTypeIds": ["documentation_label_id"]
          }'
 

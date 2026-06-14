@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des mots eleves
    * - GET
@@ -40,6 +40,12 @@ Liste des endpoints
    * - DELETE
      - /setting/{id}
      - Suppression d'un mot eleve
+   * - PUT
+     - /upload
+     - Televersement CSV des mots eleves
+   * - GET
+     - /download
+     - Telechargement CSV des mots eleves
 
 Obtention de la liste des mots eleves
 =====================================
@@ -50,7 +56,6 @@ Requete
 ::
 
     GET /api/admin/elevateword/settings
-    PUT /api/admin/elevateword/settings
 
 Parametres
 ~~~~~~~~~~
@@ -84,11 +89,10 @@ Reponse
           {
             "id": "elevate_id_1",
             "suggestWord": "fess",
-            "reading": "fess",
-            "permissions": [],
-            "boost": 10.0,
-            "targetRole": "",
-            "targetLabel": ""
+            "reading": "フェス",
+            "permissions": "{role}guest",
+            "boost": 100.0,
+            "labelTypeIds": []
           }
         ],
         "total": 5
@@ -116,11 +120,10 @@ Reponse
         "setting": {
           "id": "elevate_id_1",
           "suggestWord": "fess",
-          "reading": "fess",
-          "permissions": [],
-          "boost": 10.0,
-          "targetRole": "",
-          "targetLabel": ""
+          "reading": "フェス",
+          "permissions": "{role}guest",
+          "boost": 100.0,
+          "labelTypeIds": []
         }
       }
     }
@@ -143,11 +146,10 @@ Corps de la requete
 
     {
       "suggestWord": "documentation",
-      "reading": "documentation",
-      "permissions": ["guest"],
-      "boost": 15.0,
-      "targetRole": "user",
-      "targetLabel": "docs"
+      "reading": "ドキュメンテーション",
+      "permissions": "{role}guest",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"]
     }
 
 Description des champs
@@ -168,16 +170,13 @@ Description des champs
      - Lecture phonetique
    * - ``permissions``
      - Non
-     - Roles autorises
+     - Permissions d'acces (chaine separee par des sauts de ligne, une par ligne. Valeur initiale du formulaire : permissions d'affichage par defaut de la recherche)
    * - ``boost``
+     - Oui
+     - Valeur de boost (valeur initiale du formulaire : 100.0)
+   * - ``labelTypeIds``
      - Non
-     - Valeur de boost (par defaut : 1.0)
-   * - ``targetRole``
-     - Non
-     - Role cible
-   * - ``targetLabel``
-     - Non
-     - Label cible
+     - ID des labels cibles (tableau de chaines)
 
 Reponse
 -------
@@ -211,11 +210,10 @@ Corps de la requete
     {
       "id": "existing_elevate_id",
       "suggestWord": "documentation",
-      "reading": "documentation",
-      "permissions": ["guest", "user"],
-      "boost": 20.0,
-      "targetRole": "user",
-      "targetLabel": "docs",
+      "reading": "ドキュメンテーション",
+      "permissions": "{role}guest\n{role}user",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"],
       "versionNo": 1
     }
 
@@ -255,6 +253,56 @@ Reponse
       }
     }
 
+Televersement CSV des mots eleves
+=================================
+
+Enregistre en masse des mots eleves depuis un fichier CSV. Le fichier est envoye en ``multipart/form-data``. L'import est execute de maniere asynchrone cote serveur.
+
+Requete
+-------
+
+::
+
+    PUT /api/admin/elevateword/upload
+    Content-Type: multipart/form-data
+
+Parametres
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parametre
+     - Requis
+     - Description
+   * - ``elevateWordFile``
+     - Oui
+     - Fichier CSV des mots eleves a televerser
+
+Reponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Telechargement CSV des mots eleves
+==================================
+
+Telecharge les mots eleves enregistres sous forme de fichier CSV (``elevate.csv``). La reponse est un flux ``application/octet-stream``.
+
+Requete
+-------
+
+::
+
+    GET /api/admin/elevateword/download
+
 Exemples d'utilisation
 ======================
 
@@ -268,8 +316,8 @@ Elevation d'un nom de produit
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "Product X",
-           "boost": 20.0,
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "permissions": "{role}guest"
          }'
 
 Elevation vers un label specifique
@@ -282,10 +330,28 @@ Elevation vers un label specifique
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "API reference",
-           "boost": 10.0,
-           "targetLabel": "technical_docs",
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "labelTypeIds": ["technical_docs"],
+           "permissions": "{role}guest"
          }'
+
+Televersement d'un fichier CSV
+------------------------------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "elevateWordFile=@elevate.csv"
+
+Telechargement d'un fichier CSV
+-------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/elevateword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o elevate.csv
 
 Informations complementaires
 ============================

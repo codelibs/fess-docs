@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List users
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/user/settings
-    PUT /api/admin/user/settings
 
 Parameters
 ~~~~~~~~~~
@@ -84,9 +83,11 @@ Response
           {
             "id": "user_id_1",
             "name": "admin",
-            "surname": "Administrator",
-            "givenName": "System",
-            "mail": "admin@example.com",
+            "attributes": {
+              "surname": "Administrator",
+              "givenName": "System",
+              "mail": "admin@example.com"
+            },
             "roles": ["admin"],
             "groups": []
           }
@@ -116,41 +117,15 @@ Response
         "setting": {
           "id": "user_id_1",
           "name": "admin",
-          "surname": "Administrator",
-          "givenName": "System",
-          "mail": "admin@example.com",
-          "telephoneNumber": "",
-          "homePhone": "",
-          "homePostalAddress": "",
-          "labeledUri": "",
-          "roomNumber": "",
-          "description": "",
-          "title": "",
-          "pager": "",
-          "street": "",
-          "postalCode": "",
-          "physicalDeliveryOfficeName": "",
-          "destinationIndicator": "",
-          "internationaliSDNNumber": "",
-          "state": "",
-          "employeeNumber": "",
-          "facsimileTelephoneNumber": "",
-          "postOfficeBox": "",
-          "initials": "",
-          "carLicense": "",
-          "mobile": "",
-          "postalAddress": "",
-          "city": "",
-          "teletexTerminalIdentifier": "",
-          "x121Address": "",
-          "businessCategory": "",
-          "registeredAddress": "",
-          "displayName": "",
-          "preferredLanguage": "",
-          "departmentNumber": "",
-          "uidNumber": "",
-          "gidNumber": "",
-          "homeDirectory": "",
+          "attributes": {
+            "surname": "Administrator",
+            "givenName": "System",
+            "mail": "admin@example.com",
+            "telephoneNumber": "",
+            "uidNumber": "",
+            "gidNumber": "",
+            "homeDirectory": ""
+          },
           "roles": ["admin"],
           "groups": []
         }
@@ -176,9 +151,12 @@ Request Body
     {
       "name": "testuser",
       "password": "securepassword",
-      "surname": "Test",
-      "givenName": "User",
-      "mail": "testuser@example.com",
+      "confirmPassword": "securepassword",
+      "attributes": {
+        "surname": "Test",
+        "givenName": "User",
+        "mail": "testuser@example.com"
+      },
       "roles": ["user"],
       "groups": ["group_id_1"]
     }
@@ -197,20 +175,14 @@ Field Description
      - Yes
      - Username (login ID)
    * - ``password``
-     - Yes
+     - No
      - Password
-   * - ``surname``
+   * - ``confirmPassword``
      - No
-     - Surname
-   * - ``givenName``
+     - Confirmation password (must match ``password``)
+   * - ``attributes``
      - No
-     - Given name
-   * - ``mail``
-     - No
-     - Email address
-   * - ``telephoneNumber``
-     - No
-     - Phone number
+     - Map of attributes (includes LDAP attributes such as ``surname``, ``givenName``, ``mail``, and ``telephoneNumber``)
    * - ``roles``
      - No
      - Role ID array
@@ -251,9 +223,12 @@ Request Body
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "surname": "Test",
-      "givenName": "User Updated",
-      "mail": "testuser.updated@example.com",
+      "confirmPassword": "newpassword",
+      "attributes": {
+        "surname": "Test",
+        "givenName": "User Updated",
+        "mail": "testuser.updated@example.com"
+      },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
       "versionNo": 1
@@ -309,9 +284,12 @@ Create New User
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "surname": "Doe",
-           "givenName": "John",
-           "mail": "john.doe@example.com",
+           "confirmPassword": "SecureP@ss123",
+           "attributes": {
+             "surname": "Doe",
+             "givenName": "John",
+             "mail": "john.doe@example.com"
+           },
            "roles": ["user"],
            "groups": []
          }'

@@ -25,7 +25,7 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 액세스 토큰 목록 조회
    * - GET
@@ -50,7 +50,6 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
 ::
 
     GET /api/admin/accesstoken/settings
-    PUT /api/admin/accesstoken/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -86,8 +85,8 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
             "parameterName": "token",
-            "expiredTime": 1735689600000,
-            "permissions": ["admin"]
+            "expires": "2025-01-01T00:00:00",
+            "permissions": "{role}admin"
           }
         ],
         "total": 5
@@ -117,8 +116,8 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
           "parameterName": "token",
-          "expiredTime": 1735689600000,
-          "permissions": ["admin"]
+          "expires": "2025-01-01T00:00:00",
+          "permissions": "{role}admin"
         }
       }
     }
@@ -142,7 +141,8 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
     {
       "name": "Integration API Token",
       "parameterName": "token",
-      "permissions": ["user"]
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user"
     }
 
 필드 설명
@@ -164,12 +164,12 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
    * - ``parameterName``
      - 아니오
      - 파라미터 이름 (기본값: "token")
-   * - ``expiredTime``
+   * - ``expires``
      - 아니오
-     - 유효 기한 (Unix 시간 밀리초)
+     - 유효 기한 (ISO 8601 형식의 문자열. 예: ``2026-01-01T00:00:00``)
    * - ``permissions``
      - 아니오
-     - 허용 역할
+     - 허용 권한. 줄 바꿈으로 구분된 문자열로 지정합니다 (예: ``{role}admin``)
 
 응답
 ----------
@@ -180,7 +180,6 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
       "response": {
         "status": 0,
         "id": "new_token_id",
-        "token": "generated_token_string",
         "created": true
       }
     }
@@ -205,8 +204,8 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
       "id": "existing_token_id",
       "name": "Updated API Token",
       "parameterName": "token",
-      "expiredTime": 1767225600000,
-      "permissions": ["user", "editor"],
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user\n{role}editor",
       "versionNo": 1
     }
 
@@ -240,9 +239,7 @@ AccessToken API는 |Fess| 의 API 액세스 토큰을 관리하기 위한 API입
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_token_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -260,7 +257,7 @@ API 토큰 만들기
          -d '{
            "name": "External App Token",
            "parameterName": "token",
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 토큰을 사용한 API 호출

@@ -5,8 +5,13 @@ API de Stats
 Vision General
 ==============
 
-La API de Stats es para obtener informacion estadistica de |Fess|.
-Puede verificar datos estadisticos de consultas de busqueda, clics, favoritos, etc.
+La API de Stats es para obtener metricas del sistema del servidor donde se ejecuta |Fess|.
+Puede verificar las estadisticas de JVM, OS, proceso, cluster del motor de busqueda (OpenSearch) y sistema de archivos.
+
+.. note::
+
+   Esta API no devuelve datos de analisis de busqueda como consultas de busqueda o clics.
+   Para buscar y gestionar documentos del indice, consulte :doc:`api-admin-searchlist`.
 
 URL Base
 ========
@@ -27,10 +32,10 @@ Lista de Endpoints
      - Descripcion
    * - GET
      - /
-     - Obtener informacion estadistica
+     - Obtener informacion estadistica del sistema
 
-Obtener Informacion Estadistica
-===============================
+Obtener Informacion Estadistica del Sistema
+===========================================
 
 Solicitud
 ---------
@@ -39,69 +44,80 @@ Solicitud
 
     GET /api/admin/stats
 
-Parametros
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametro
-     - Tipo
-     - Requerido
-     - Descripcion
-   * - ``from``
-     - String
-     - No
-     - Fecha/hora de inicio (formato ISO 8601)
-   * - ``to``
-     - String
-     - No
-     - Fecha/hora de fin (formato ISO 8601)
-   * - ``type``
-     - String
-     - No
-     - Tipo de estadistica (query/click/favorite)
+Este endpoint no acepta parametros de consulta.
 
 Respuesta
 ---------
+
+La respuesta incluye ``version``, que indica la version del producto, ``status``, que indica el resultado del procesamiento, y el objeto ``stats``, que almacena las metricas del sistema.
+``stats`` tiene cinco claves: ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "stats": {
-          "totalQueries": 12345,
-          "uniqueQueries": 5678,
-          "totalClicks": 9876,
-          "totalFavorites": 543,
-          "averageResponseTime": 123.45,
-          "topQueries": [
-            {
-              "query": "fess",
-              "count": 567
+          "jvm": {
+            "memory": {
+              "heap": {
+                "used": 536870912,
+                "committed": 1073741824,
+                "max": 2147483648,
+                "percent": 25
+              },
+              "nonHeap": {
+                "used": 134217728,
+                "committed": 268435456
+              }
             },
-            {
-              "query": "search",
-              "count": 432
-            }
-          ],
-          "topClickedDocuments": [
-            {
-              "url": "https://example.com/doc1",
-              "title": "Document 1",
-              "count": 234
-            }
-          ],
-          "queryTrends": [
-            {
-              "date": "2025-01-01",
-              "count": 234
+            "pools": [
+              {"key": "mapped", "count": 1, "used": 4096, "capacity": 4096}
+            ],
+            "gc": [
+              {"key": "young", "count": 12, "time": 345}
+            ],
+            "threads": {"count": 80, "peak": 95},
+            "classes": {"loaded": 12000, "total_loaded": 12500, "unloaded": 500},
+            "uptime": 3600000
+          },
+          "os": {
+            "memory": {
+              "physical": {"free": 2147483648, "total": 8589934592},
+              "swapSpace": {"free": 0, "total": 0}
             },
+            "cpu": {"percent": 12},
+            "loadAverages": [0.5, 0.4, 0.3]
+          },
+          "process": {
+            "fileFescriptor": {"open": 256, "max": 65536},
+            "cpu": {"percent": 5, "total": 123456},
+            "virtualMemory": {"total": 4294967296}
+          },
+          "engine": {
+            "clusterName": "fess",
+            "numberOfNodes": 1,
+            "numberOfDataNodes": 1,
+            "activePrimaryShards": 10,
+            "activeShards": 10,
+            "activeShardsPercent": 100.0,
+            "relocatingShards": 0,
+            "initializingShards": 0,
+            "unassignedShards": 0,
+            "delayedUnassignedShards": 0,
+            "numberOfPendingTasks": 0,
+            "numberOfInFlightFetch": 0,
+            "status": "green"
+          },
+          "fs": [
             {
-              "date": "2025-01-02",
-              "count": 267
+              "path": "/",
+              "total": 107374182400,
+              "free": 53687091200,
+              "usable": 53687091200,
+              "used": 53687091200,
+              "percent": 50
             }
           ]
         }
@@ -113,155 +129,57 @@ Campos de Respuesta
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 20 80
 
    * - Campo
      - Descripcion
-   * - ``totalQueries``
-     - Numero total de consultas de busqueda
-   * - ``uniqueQueries``
-     - Numero de consultas de busqueda unicas
-   * - ``totalClicks``
-     - Numero total de clics
-   * - ``totalFavorites``
-     - Numero total de favoritos
-   * - ``averageResponseTime``
-     - Tiempo de respuesta promedio (milisegundos)
-   * - ``topQueries``
-     - Consultas de busqueda populares
-   * - ``topClickedDocuments``
-     - Documentos populares
-   * - ``queryTrends``
-     - Tendencias de consultas
+   * - ``jvm``
+     - Estadisticas de la JVM. Incluye ``memory`` (``heap`` / ``nonHeap``), ``pools`` (grupos de buffers), ``gc`` (GC), ``threads``, ``classes`` y ``uptime`` (milisegundos).
+   * - ``os``
+     - Estadisticas del OS. Incluye ``memory`` (``physical`` / ``swapSpace``), ``cpu`` y ``loadAverages`` (arreglo de promedios de carga).
+   * - ``process``
+     - Estadisticas del proceso. Incluye ``fileFescriptor`` (numero de descriptores de archivo abiertos/maximos), ``cpu`` y ``virtualMemory``.
+   * - ``engine``
+     - Estado del cluster del motor de busqueda (OpenSearch). Incluye ``clusterName``, numero de nodos, numero de shards, ``status``, etc. Si no se puede conectar al cluster, ``status`` sera ``"red"`` y ``exception`` contendra el mensaje de error.
+   * - ``fs``
+     - Arreglo de estadisticas del sistema de archivos. Para cada raiz incluye ``path``, ``total``, ``free``, ``usable``, ``used`` (bytes) y ``percent`` (porcentaje de uso).
 
-Estadisticas de Consultas de Busqueda
-=====================================
+.. note::
 
-Solicitud
----------
-
-::
-
-    GET /api/admin/stats?type=query&from=2025-01-01&to=2025-01-31
-
-Respuesta
----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "stats": {
-          "totalQueries": 5678,
-          "uniqueQueries": 2345,
-          "topQueries": [
-            {
-              "query": "documentation",
-              "count": 234,
-              "avgResponseTime": 98.7
-            }
-          ],
-          "queriesByHour": [
-            {
-              "hour": 0,
-              "count": 45
-            },
-            {
-              "hour": 1,
-              "count": 23
-            }
-          ],
-          "queriesByDay": [
-            {
-              "day": "Monday",
-              "count": 567
-            }
-          ]
-        }
-      }
-    }
-
-Estadisticas de Clics
-=====================
-
-Solicitud
----------
-
-::
-
-    GET /api/admin/stats?type=click&from=2025-01-01&to=2025-01-31
-
-Respuesta
----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "stats": {
-          "totalClicks": 3456,
-          "topClickedDocuments": [
-            {
-              "url": "https://example.com/popular-doc",
-              "title": "Popular Document",
-              "count": 234,
-              "clickThroughRate": 0.45
-            }
-          ],
-          "clicksByPosition": [
-            {
-              "position": 1,
-              "count": 1234
-            },
-            {
-              "position": 2,
-              "count": 567
-            }
-          ]
-        }
-      }
-    }
+   El nombre de clave ``process.fileFescriptor`` se ajusta a la implementacion del codigo fuente (no es la grafia ``fileDescriptor``).
 
 Ejemplos de Uso
 ===============
 
-Obtener Todas las Estadisticas
-------------------------------
+Obtener Informacion Estadistica del Sistema
+-------------------------------------------
 
 .. code-block:: bash
 
     curl -X GET "http://localhost:8080/api/admin/stats" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtener Estadisticas de Periodo Especifico
-------------------------------------------
+Verificar el Uso del Heap de la JVM
+-----------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/stats?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/stats" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq '.response.stats.jvm.memory.heap.percent'
 
-Obtener Estadisticas de Consultas de Busqueda
----------------------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/stats?type=query&from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Obtener TOP 10 de Consultas Populares
--------------------------------------
+Verificar el Estado del Cluster del Motor de Busqueda
+-----------------------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/stats?type=query" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.stats.topQueries[:10]'
+    curl -X GET "http://localhost:8080/api/admin/stats" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq '.response.stats.engine.status'
 
 Informacion de Referencia
 =========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-log` - API de registros
 - :doc:`api-admin-systeminfo` - API de informacion del sistema
+- :doc:`api-admin-searchlist` - API de busqueda y gestion de documentos

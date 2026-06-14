@@ -5,8 +5,8 @@ Log API
 개요
 ====
 
-Log API는 |Fess| 의 로그 정보를 조회하기 위한 API입니다.
-검색 로그, 크롤러 로그, 시스템 로그 등을 참조할 수 있습니다.
+Log API는 |Fess| 의 로그 파일을 참조·다운로드하기 위한 API입니다.
+서버에 출력된 로그 파일의 목록 조회와 개별 로그 파일의 다운로드를 수행할 수 있습니다.
 
 기본 URL
 =========
@@ -26,264 +26,107 @@ Log API는 |Fess| 의 로그 정보를 조회하기 위한 API입니다.
      - 경로
      - 설명
    * - GET
-     - /search
-     - 검색 로그 조회
+     - /files
+     - 로그 파일 목록 조회
    * - GET
-     - /click
-     - 클릭 로그 조회
-   * - GET
-     - /favorite
-     - 즐겨찾기 로그 조회
-   * - DELETE
-     - /search/delete
-     - 검색 로그 삭제
+     - /file/{id}
+     - 로그 파일 다운로드
 
-검색 로그 조회
-============
+로그 파일 목록 조회
+====================
+
+서버의 로그 출력 디렉터리에 존재하는 로그 파일(``.log`` 및 ``.log.gz``)의 목록을 반환합니다.
 
 요청
 ----------
 
 ::
 
-    GET /api/admin/log/search
+    GET /api/admin/log/files
 
-파라미터
-~~~~~~~~~~~~
+응답
+----------
+
+``files`` 에 각 로그 파일의 정보를 나타내는 객체의 배열, ``total`` 에 건수가 저장됩니다.
+각 객체는 다음 필드를 가집니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 30 70
 
-   * - 파라미터
-     - 타입
-     - 필수
+   * - 필드
      - 설명
-   * - ``size``
-     - Integer
-     - 아니오
-     - 페이지당 건수 (기본값: 20)
-   * - ``page``
-     - Integer
-     - 아니오
-     - 페이지 번호 (0부터 시작)
-   * - ``from``
-     - String
-     - 아니오
-     - 시작 일시 (ISO 8601 형식)
-   * - ``to``
-     - String
-     - 아니오
-     - 종료 일시 (ISO 8601 형식)
-   * - ``query``
-     - String
-     - 아니오
-     - 검색 쿼리 필터
-
-응답
-----------
+   * - ``id``
+     - 파일명을 Base64 URL 인코딩한 값 (다운로드 시의 ``{id}`` 에 사용)
+   * - ``name``
+     - 로그 파일명
+   * - ``lastModified``
+     - 최종 수정 일시
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "logs": [
+        "files": [
           {
-            "id": "log_id_1",
-            "queryId": "query_id_1",
-            "query": "fess search",
-            "requestedAt": "2025-01-29T10:30:00Z",
-            "responseTime": 123,
-            "hitCount": 567,
-            "user": "guest",
-            "roles": ["guest"],
-            "languages": ["ja"],
-            "clientIp": "192.168.1.100",
-            "userAgent": "Mozilla/5.0..."
+            "id": "ZmVzcy5sb2c=",
+            "name": "fess.log",
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
+          },
+          {
+            "id": "ZmVzcy1jcmF3bGVyLmxvZw==",
+            "name": "fess-crawler.log",
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
           }
         ],
-        "total": 1234
+        "total": 2
       }
     }
 
-클릭 로그 조회
-================
+로그 파일 다운로드
+==========================
+
+지정한 로그 파일의 내용을 다운로드합니다.
+``{id}`` 에는 목록 조회로 얻은 ``id`` (파일명을 Base64 인코딩한 값)를 지정합니다.
+응답은 ``application/octet-stream`` 의 스트림으로 반환됩니다.
+존재하지 않는 파일명이나 로그 파일로 허용되지 않는 이름을 지정한 경우에는 빈 응답이 반환됩니다.
 
 요청
 ----------
 
 ::
 
-    GET /api/admin/log/click
-
-파라미터
-~~~~~~~~~~~~
-
-검색 로그와 동일한 파라미터 외에 다음 항목을 지정 가능:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - 파라미터
-     - 타입
-     - 필수
-     - 설명
-   * - ``url``
-     - String
-     - 아니오
-     - 클릭된 URL 필터
-   * - ``queryId``
-     - String
-     - 아니오
-     - 검색 쿼리 ID 필터
+    GET /api/admin/log/file/{id}
 
 응답
 ----------
 
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "logs": [
-          {
-            "id": "click_log_id_1",
-            "queryId": "query_id_1",
-            "url": "https://example.com/doc1",
-            "docId": "doc_id_1",
-            "order": 1,
-            "clickedAt": "2025-01-29T10:31:00Z",
-            "user": "guest",
-            "clientIp": "192.168.1.100"
-          }
-        ],
-        "total": 567
-      }
-    }
-
-즐겨찾기 로그 조회
-==================
-
-요청
-----------
-
-::
-
-    GET /api/admin/log/favorite
-
-파라미터
-~~~~~~~~~~~~
-
-클릭 로그와 동일한 파라미터
-
-응답
-----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "logs": [
-          {
-            "id": "favorite_log_id_1",
-            "url": "https://example.com/doc1",
-            "docId": "doc_id_1",
-            "createdAt": "2025-01-29T10:32:00Z",
-            "user": "user123"
-          }
-        ],
-        "total": 123
-      }
-    }
-
-검색 로그 삭제
-============
-
-요청
-----------
-
-::
-
-    DELETE /api/admin/log/search/delete
-
-파라미터
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - 파라미터
-     - 타입
-     - 필수
-     - 설명
-   * - ``before``
-     - String
-     - 예
-     - 이 일시 이전의 로그를 삭제 (ISO 8601 형식)
-
-응답
-----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "deletedCount": 5678
-      }
-    }
+로그 파일의 바이너리 스트림(``Content-Type: application/octet-stream``).
 
 사용 예
 ======
 
-최근 검색 로그 조회
-------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/log/search?size=50&page=0" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-특정 기간의 검색 로그
-------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/log/search?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-특정 쿼리의 검색 로그
+로그 파일 목록 조회
 --------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/log/search?query=fess" \
+    curl -X GET "http://localhost:8080/api/admin/log/files" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-클릭 로그 조회
-----------------
+로그 파일 다운로드
+--------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/log/click?size=100" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-오래된 검색 로그 삭제
-------------------
-
-.. code-block:: bash
-
-    # 30일 이전 로그 삭제
-    curl -X DELETE "http://localhost:8080/api/admin/log/search/delete?before=2024-12-30T00:00:00Z" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/log/file/ZmVzcy5sb2c=" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o fess.log
 
 참고 정보
 ========
 
 - :doc:`api-admin-overview` - Admin API 개요
-- :doc:`api-admin-stats` - 통계 API
-- :doc:`../../admin/log-guide` - 로그 관리 가이드
+- :doc:`api-admin-backup` - 백업 API

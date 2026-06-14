@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List key matches
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/keymatch/settings
-    PUT /api/admin/keymatch/settings
 
 Parameters
 ~~~~~~~~~~
@@ -161,11 +160,11 @@ Field Description
      - Yes
      - Match condition query
    * - ``maxSize``
-     - No
-     - Maximum display count (default: 10)
+     - Yes
+     - Maximum display count (form initial value: 10)
    * - ``boost``
-     - No
-     - Boost value (default: 1.0)
+     - Yes
+     - Boost value (form initial value: 100.0)
 
 Response
 --------
@@ -235,9 +234,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_keymatch_id",
-        "created": false
+        "status": 0
       }
     }
 

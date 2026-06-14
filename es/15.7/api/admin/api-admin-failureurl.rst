@@ -5,8 +5,8 @@ API de FailureUrl
 Vision General
 ==============
 
-La API de FailureUrl es para gestionar URLs de rastreo fallidas de |Fess|.
-Puede verificar y eliminar URLs que tuvieron errores durante el rastreo.
+La API de FailureUrl es para gestionar las URLs de rastreo fallidas de |Fess|.
+Permite operaciones como obtener la lista de URLs que tuvieron errores durante el rastreo, obtenerlas individualmente y eliminarlas.
 
 URL Base
 ========
@@ -26,13 +26,16 @@ Lista de Endpoints
      - Ruta
      - Descripcion
    * - GET
-     - /
+     - /logs
      - Obtener lista de URLs fallidas
+   * - GET
+     - /log/{id}
+     - Obtener URL fallida
    * - DELETE
-     - /{id}
+     - /log/{id}
      - Eliminar URL fallida
    * - DELETE
-     - /delete-all
+     - /all
      - Eliminar todas las URLs fallidas
 
 Obtener Lista de URLs Fallidas
@@ -43,14 +46,14 @@ Solicitud
 
 ::
 
-    GET /api/admin/failureurl
+    GET /api/admin/failureurl/logs
 
 Parametros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametro
      - Tipo
@@ -59,19 +62,27 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Numero de elementos por pagina
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina
+   * - ``url``
+     - String
+     - No
+     - Filtro por URL
    * - ``errorCountMin``
      - Integer
      - No
      - Filtro de numero minimo de errores
-   * - ``configId``
+   * - ``errorCountMax``
+     - Integer
+     - No
+     - Filtro de numero maximo de errores
+   * - ``errorName``
      - String
      - No
-     - Filtro de ID de configuracion
+     - Filtro por nombre de error
 
 Respuesta
 ---------
@@ -81,26 +92,26 @@ Respuesta
     {
       "response": {
         "status": 0,
-        "failures": [
+        "logs": [
           {
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
-            "configId": "webconfig_id_1",
+            "threadName": "Crawler-1",
             "errorName": "ConnectException",
             "errorLog": "Connection refused: connect",
             "errorCount": 3,
-            "lastAccessTime": "2025-01-29T10:00:00Z",
-            "threadName": "Crawler-1"
+            "lastAccessTime": 1738144800000,
+            "configId": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
-            "configId": "webconfig_id_1",
+            "threadName": "Crawler-2",
             "errorName": "HttpStatusException",
             "errorLog": "404 Not Found",
             "errorCount": 1,
-            "lastAccessTime": "2025-01-29T09:30:00Z",
-            "threadName": "Crawler-2"
+            "lastAccessTime": 1738143000000,
+            "configId": "webConfig_id_1"
           }
         ],
         "total": 45
@@ -120,8 +131,8 @@ Campos de Respuesta
      - ID de URL fallida
    * - ``url``
      - URL que fallo
-   * - ``configId``
-     - ID de configuracion de rastreo
+   * - ``threadName``
+     - Nombre del hilo
    * - ``errorName``
      - Nombre del error
    * - ``errorLog``
@@ -129,9 +140,40 @@ Campos de Respuesta
    * - ``errorCount``
      - Numero de veces que ocurrio el error
    * - ``lastAccessTime``
-     - Hora del ultimo acceso
-   * - ``threadName``
-     - Nombre del hilo
+     - Hora del ultimo acceso (milisegundos epoch)
+   * - ``configId``
+     - ID de configuracion de rastreo
+
+Obtener URL Fallida
+===================
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/failureurl/log/{id}
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "log": {
+          "id": "failure_id_1",
+          "url": "https://example.com/broken-page",
+          "threadName": "Crawler-1",
+          "errorName": "ConnectException",
+          "errorLog": "Connection refused: connect",
+          "errorCount": 3,
+          "lastAccessTime": 1738144800000,
+          "configId": "webConfig_id_1"
+        }
+      }
+    }
 
 Eliminar URL Fallida
 ====================
@@ -141,7 +183,7 @@ Solicitud
 
 ::
 
-    DELETE /api/admin/failureurl/{id}
+    DELETE /api/admin/failureurl/log/{id}
 
 Respuesta
 ---------
@@ -150,40 +192,21 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "message": "Failure URL deleted successfully"
+        "status": 0
       }
     }
 
 Eliminar Todas las URLs Fallidas
 ================================
 
+Elimina todas las URLs fallidas. No tiene parametros.
+
 Solicitud
 ---------
 
 ::
 
-    DELETE /api/admin/failureurl/delete-all
-
-Parametros
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametro
-     - Tipo
-     - Requerido
-     - Descripcion
-   * - ``configId``
-     - String
-     - No
-     - Eliminar solo URLs fallidas de ID de configuracion especifico
-   * - ``errorCountMin``
-     - Integer
-     - No
-     - Eliminar solo errores con numero de veces especificado o mas
+    DELETE /api/admin/failureurl/all
 
 Respuesta
 ---------
@@ -192,9 +215,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "message": "All failure URLs deleted successfully",
-        "deletedCount": 45
+        "status": 0
       }
     }
 
@@ -228,7 +249,7 @@ Obtener Lista de URLs Fallidas
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl?size=100&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=0" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filtrar por Numero de Errores
@@ -237,15 +258,23 @@ Filtrar por Numero de Errores
 .. code-block:: bash
 
     # Obtener solo URLs con 3 o mas errores
-    curl -X GET "http://localhost:8080/api/admin/failureurl?errorCountMin=3" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtener URLs Fallidas de Configuracion Especifica
--------------------------------------------------
+Filtrar por Nombre de Error
+---------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl?configId=webconfig_id_1" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=ConnectException" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Obtener URL Fallida
+-------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Eliminar URL Fallida
@@ -253,7 +282,7 @@ Eliminar URL Fallida
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/failure_id_1" \
+    curl -X DELETE "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Eliminar Todas las URLs Fallidas
@@ -261,16 +290,7 @@ Eliminar Todas las URLs Fallidas
 
 .. code-block:: bash
 
-    # Eliminar todas las URLs fallidas
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/delete-all" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Eliminar solo URLs fallidas de configuracion especifica
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/delete-all?configId=webconfig_id_1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # Eliminar solo URLs con 3 o mas errores
-    curl -X DELETE "http://localhost:8080/api/admin/failureurl/delete-all?errorCountMin=3" \
+    curl -X DELETE "http://localhost:8080/api/admin/failureurl/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Agregacion por Tipo de Error
@@ -279,9 +299,9 @@ Agregacion por Tipo de Error
 .. code-block:: bash
 
     # Contar por tipo de error
-    curl -X GET "http://localhost:8080/api/admin/failureurl?size=1000" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '[.response.failures[].errorName] | group_by(.) | map({error: .[0], count: length})'
+         jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
 
 Informacion de Referencia
 =========================

@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des utilisateurs
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/user/settings
-    PUT /api/admin/user/settings
 
 Parametres
 ~~~~~~~~~~
@@ -84,9 +83,11 @@ Reponse
           {
             "id": "user_id_1",
             "name": "admin",
-            "surname": "Administrator",
-            "givenName": "System",
-            "mail": "admin@example.com",
+            "attributes": {
+              "surname": "Administrator",
+              "givenName": "System",
+              "mail": "admin@example.com"
+            },
             "roles": ["admin"],
             "groups": []
           }
@@ -116,41 +117,15 @@ Reponse
         "setting": {
           "id": "user_id_1",
           "name": "admin",
-          "surname": "Administrator",
-          "givenName": "System",
-          "mail": "admin@example.com",
-          "telephoneNumber": "",
-          "homePhone": "",
-          "homePostalAddress": "",
-          "labeledUri": "",
-          "roomNumber": "",
-          "description": "",
-          "title": "",
-          "pager": "",
-          "street": "",
-          "postalCode": "",
-          "physicalDeliveryOfficeName": "",
-          "destinationIndicator": "",
-          "internationaliSDNNumber": "",
-          "state": "",
-          "employeeNumber": "",
-          "facsimileTelephoneNumber": "",
-          "postOfficeBox": "",
-          "initials": "",
-          "carLicense": "",
-          "mobile": "",
-          "postalAddress": "",
-          "city": "",
-          "teletexTerminalIdentifier": "",
-          "x121Address": "",
-          "businessCategory": "",
-          "registeredAddress": "",
-          "displayName": "",
-          "preferredLanguage": "",
-          "departmentNumber": "",
-          "uidNumber": "",
-          "gidNumber": "",
-          "homeDirectory": "",
+          "attributes": {
+            "surname": "Administrator",
+            "givenName": "System",
+            "mail": "admin@example.com",
+            "telephoneNumber": "",
+            "uidNumber": "",
+            "gidNumber": "",
+            "homeDirectory": ""
+          },
           "roles": ["admin"],
           "groups": []
         }
@@ -176,9 +151,12 @@ Corps de la requete
     {
       "name": "testuser",
       "password": "securepassword",
-      "surname": "Test",
-      "givenName": "User",
-      "mail": "testuser@example.com",
+      "confirmPassword": "securepassword",
+      "attributes": {
+        "surname": "Test",
+        "givenName": "User",
+        "mail": "testuser@example.com"
+      },
       "roles": ["user"],
       "groups": ["group_id_1"]
     }
@@ -197,20 +175,14 @@ Description des champs
      - Oui
      - Nom d'utilisateur (identifiant de connexion)
    * - ``password``
-     - Oui
+     - Non
      - Mot de passe
-   * - ``surname``
+   * - ``confirmPassword``
      - Non
-     - Nom de famille
-   * - ``givenName``
+     - Mot de passe de confirmation (doit correspondre a ``password``)
+   * - ``attributes``
      - Non
-     - Prenom
-   * - ``mail``
-     - Non
-     - Adresse email
-   * - ``telephoneNumber``
-     - Non
-     - Numero de telephone
+     - Map d'attributs (contient les attributs LDAP tels que ``surname``, ``givenName``, ``mail``, ``telephoneNumber``, etc.)
    * - ``roles``
      - Non
      - Tableau des IDs de roles
@@ -251,9 +223,12 @@ Corps de la requete
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "surname": "Test",
-      "givenName": "User Updated",
-      "mail": "testuser.updated@example.com",
+      "confirmPassword": "newpassword",
+      "attributes": {
+        "surname": "Test",
+        "givenName": "User Updated",
+        "mail": "testuser.updated@example.com"
+      },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
       "versionNo": 1
@@ -309,9 +284,12 @@ Creation d'un nouvel utilisateur
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "surname": "Doe",
-           "givenName": "John",
-           "mail": "john.doe@example.com",
+           "confirmPassword": "SecureP@ss123",
+           "attributes": {
+             "surname": "Doe",
+             "givenName": "John",
+             "mail": "john.doe@example.com"
+           },
            "roles": ["user"],
            "groups": []
          }'

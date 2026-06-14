@@ -6,7 +6,7 @@ Overview
 ========
 
 SystemInfo API is an API for retrieving |Fess| system information.
-You can view version information, environment variables, and JVM information.
+You can view environment variables, Java system properties, |Fess| configuration properties, and bug report information.
 
 Base URL
 ========
@@ -42,41 +42,34 @@ Request
 Response
 --------
 
+The response includes ``version`` indicating the product version, ``status`` indicating the
+processing result, and the following four property groups. Each property group is an array of
+objects that have ``key`` and ``value``.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "systemInfo": {
-          "fessVersion": "15.7.0",
-          "opensearchVersion": "2.11.0",
-          "javaVersion": "21.0.1",
-          "serverName": "Apache Tomcat/10.1.15",
-          "osName": "Linux",
-          "osVersion": "5.15.0-89-generic",
-          "osArchitecture": "amd64",
-          "jvmTotalMemory": "2147483648",
-          "jvmFreeMemory": "1073741824",
-          "jvmMaxMemory": "4294967296",
-          "processorCount": "8",
-          "fileEncoding": "UTF-8",
-          "userLanguage": "en",
-          "userTimezone": "UTC"
-        },
-        "environmentInfo": {
-          "JAVA_HOME": "/usr/lib/jvm/java-21",
-          "FESS_DICTIONARY_PATH": "/var/lib/fess/dict",
-          "FESS_LOG_PATH": "/var/log/fess"
-        },
-        "systemProperties": {
-          "java.version": "21.0.1",
-          "java.vendor": "Oracle Corporation",
-          "os.name": "Linux",
-          "os.version": "5.15.0-89-generic",
-          "user.dir": "/opt/fess",
-          "user.home": "/home/fess",
-          "user.name": "fess"
-        }
+        "envProps": [
+          {"key": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
+          {"key": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
+        ],
+        "systemProps": [
+          {"key": "java.version", "value": "21.0.1"},
+          {"key": "java.vendor", "value": "Oracle Corporation"},
+          {"key": "os.name", "value": "Linux"},
+          {"key": "user.dir", "value": "/opt/fess"}
+        ],
+        "fessProps": [
+          {"key": "crawler.document.max.site.length", "value": "50"},
+          {"key": "indexer.thread.dump.enabled", "value": "true"}
+        ],
+        "bugReportProps": [
+          {"key": "os.name", "value": "Linux"},
+          {"key": "java.vm.version", "value": "21.0.1+12"}
+        ]
       }
     }
 
@@ -89,34 +82,14 @@ Response Fields
 
    * - Field
      - Description
-   * - ``fessVersion``
-     - Fess version
-   * - ``opensearchVersion``
-     - OpenSearch version
-   * - ``javaVersion``
-     - Java version
-   * - ``serverName``
-     - Application server name
-   * - ``osName``
-     - OS name
-   * - ``osVersion``
-     - OS version
-   * - ``osArchitecture``
-     - OS architecture
-   * - ``jvmTotalMemory``
-     - JVM total memory (bytes)
-   * - ``jvmFreeMemory``
-     - JVM free memory (bytes)
-   * - ``jvmMaxMemory``
-     - JVM maximum memory (bytes)
-   * - ``processorCount``
-     - Processor count
-   * - ``fileEncoding``
-     - File encoding
-   * - ``userLanguage``
-     - User language
-   * - ``userTimezone``
-     - User timezone
+   * - ``envProps``
+     - List of environment variables (array of ``key`` / ``value``)
+   * - ``systemProps``
+     - List of Java system properties (array of ``key`` / ``value``)
+   * - ``fessProps``
+     - List of |Fess| configuration properties (array of ``key`` / ``value``)
+   * - ``bugReportProps``
+     - List of information collected for bug reports (array of ``key`` / ``value``)
 
 Usage Examples
 ==============
@@ -129,23 +102,25 @@ Get System Information
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Check Version
--------------
+Extract a Specific System Property
+----------------------------------
 
 .. code-block:: bash
 
-    # Extract Fess version only
+    # Extract only the value of java.version
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.systemInfo.fessVersion'
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.systemProps[] | select(.key == "java.version") | .value'
 
-Check Memory Usage
-------------------
+List Environment Variables
+--------------------------
 
 .. code-block:: bash
 
-    # Extract JVM memory information
+    # Display environment variables in key=value format
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.systemInfo | {total: .jvmTotalMemory, free: .jvmFreeMemory, max: .jvmMaxMemory}'
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.envProps[] | "\(.key)=\(.value)"'
 
 Reference
 =========
@@ -154,4 +129,3 @@ Reference
 - :doc:`api-admin-stats` - Stats API
 - :doc:`api-admin-general` - General Settings API
 - :doc:`../../admin/systeminfo-guide` - System Information Guide
-

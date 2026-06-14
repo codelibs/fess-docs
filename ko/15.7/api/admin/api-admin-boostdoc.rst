@@ -25,7 +25,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 문서 부스트 목록 조회
    * - GET
@@ -50,7 +50,6 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
 ::
 
     GET /api/admin/boostdoc/settings
-    PUT /api/admin/boostdoc/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -158,8 +157,8 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
      - 예
      - 부스트 식 (숫자 또는 표현식)
    * - ``sortOrder``
-     - 아니오
-     - 적용 순서
+     - 예
+     - 적용 순서 (폼 초기값: 0)
 
 응답
 ----------
@@ -228,9 +227,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_boostdoc_id",
-        "created": false
+        "status": 0
       }
     }
 

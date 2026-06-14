@@ -5,8 +5,10 @@ Dict API
 概要
 ====
 
-Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
-同義語辞書、マッピング辞書、保護語辞書などの管理を行えます。
+Dict APIは、|Fess| の辞書を管理するためのAPIです。
+ルートのエンドポイントで利用可能な辞書の一覧を取得できます。
+個々の辞書項目の参照・作成・更新・削除、辞書ファイルのアップロード・ダウンロードは、
+辞書種別ごとのサブエンドポイント（synonym、kuromoji、mapping、protwords、stopwords、stemmerOverride）で操作します。
 
 ベースURL
 =========
@@ -18,6 +20,9 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
 エンドポイント一覧
 ==================
 
+辞書ルート
+----------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,18 +33,46 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
    * - GET
      - /
      - 辞書一覧取得
+
+辞書種別ごとのエンドポイント
+----------------------------
+
+``{type}`` には ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmerOverride`` のいずれかを指定します。
+``{dictId}`` は辞書一覧取得で得られる辞書のIDです。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - メソッド
+     - パス
+     - 説明
    * - GET
-     - /{id}
-     - 辞書内容取得
-   * - PUT
-     - /{id}
-     - 辞書内容更新
+     - /{type}/settings/{dictId}
+     - 辞書項目一覧取得
+   * - GET
+     - /{type}/setting/{dictId}/{id}
+     - 辞書項目取得
    * - POST
-     - /upload
+     - /{type}/setting/{dictId}
+     - 辞書項目作成
+   * - PUT
+     - /{type}/setting/{dictId}
+     - 辞書項目更新
+   * - DELETE
+     - /{type}/setting/{dictId}/{id}
+     - 辞書項目削除
+   * - PUT
+     - /{type}/upload/{dictId}
      - 辞書ファイルアップロード
+   * - GET
+     - /{type}/download/{dictId}
+     - 辞書ファイルダウンロード
 
 辞書一覧取得
 ============
+
+利用可能な辞書ファイルの一覧を取得します。
 
 リクエスト
 ----------
@@ -55,43 +88,132 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dicts": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "同義語辞書",
-            "path": "/var/lib/fess/dict/synonym.txt",
+            "id": "ZjA5...synonym.txt",
             "type": "synonym",
-            "updatedAt": "2025-01-29T10:00:00Z"
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "mapping",
-            "name": "マッピング辞書",
-            "path": "/var/lib/fess/dict/mapping.txt",
+            "id": "ZjA5...mapping.txt",
             "type": "mapping",
-            "updatedAt": "2025-01-28T15:30:00Z"
-          },
-          {
-            "id": "protwords",
-            "name": "保護語辞書",
-            "path": "/var/lib/fess/dict/protwords.txt",
-            "type": "protwords",
-            "updatedAt": "2025-01-27T12:00:00Z"
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ],
-        "total": 3
+        ]
       }
     }
 
-辞書内容取得
-============
+レスポンスフィールド
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - フィールド
+     - 説明
+   * - ``settings[].id``
+     - 辞書ID（個々の辞書操作で ``{dictId}`` として使用）
+   * - ``settings[].type``
+     - 辞書種別
+   * - ``settings[].path``
+     - 辞書ファイルのパス
+   * - ``settings[].timestamp``
+     - 辞書ファイルの更新日時
+
+辞書項目一覧取得
+================
+
+指定した辞書内の項目を一覧取得します。
 
 リクエスト
 ----------
 
 ::
 
-    GET /api/admin/dict/{id}
+    GET /api/admin/dict/{type}/settings/{dictId}
+
+パラメーター
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - パラメーター
+     - 型
+     - 必須
+     - 説明
+   * - ``dictId``
+     - String
+     - はい
+     - 辞書ID（パスパラメーター）
+   * - ``size``
+     - Integer
+     - いいえ
+     - 1ページあたりの件数
+   * - ``page``
+     - Integer
+     - いいえ
+     - ページ番号
+
+レスポンス
+----------
+
+レスポンスの ``settings`` 配列の各項目のフィールドは辞書種別により異なります（後述の「辞書種別ごとの項目フィールド」を参照）。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "settings": [
+          {
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "検索,サーチ",
+            "outputs": "検索,サーチ,リサーチ"
+          }
+        ]
+      }
+    }
+
+辞書項目取得
+============
+
+辞書内の特定の項目を取得します。
+
+リクエスト
+----------
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+パラメーター
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - パラメーター
+     - 型
+     - 必須
+     - 説明
+   * - ``dictId``
+     - String
+     - はい
+     - 辞書ID（パスパラメーター）
+   * - ``id``
+     - Long
+     - はい
+     - 項目ID（パスパラメーター）
 
 レスポンス
 ----------
@@ -100,51 +222,39 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dict": {
-          "id": "synonym",
-          "name": "同義語辞書",
-          "path": "/var/lib/fess/dict/synonym.txt",
-          "type": "synonym",
-          "content": "検索,サーチ,リサーチ\nFess,フェス\n全文検索,フルテキストサーチ",
-          "updatedAt": "2025-01-29T10:00:00Z"
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "検索,サーチ",
+          "outputs": "検索,サーチ,リサーチ"
         }
       }
     }
 
-辞書内容更新
+辞書項目作成
 ============
+
+辞書に新しい項目を作成します。
 
 リクエスト
 ----------
 
 ::
 
-    PUT /api/admin/dict/{id}
+    POST /api/admin/dict/{type}/setting/{dictId}
     Content-Type: application/json
 
-リクエストボディ
-~~~~~~~~~~~~~~~~
+リクエストボディ（synonymの例）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
-      "content": "検索,サーチ,リサーチ,search\nFess,フェス\n全文検索,フルテキストサーチ,full-text search"
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ"
     }
-
-フィールド説明
-~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - フィールド
-     - 必須
-     - 説明
-   * - ``content``
-     - はい
-     - 辞書内容（改行区切り）
 
 レスポンス
 ----------
@@ -153,55 +263,111 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Dictionary updated successfully"
+        "id": "1",
+        "created": true
+      }
+    }
+
+辞書項目更新
+============
+
+辞書内の既存の項目を更新します。
+
+リクエスト
+----------
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+リクエストボディ（synonymの例）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ,search"
+    }
+
+レスポンス
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+辞書項目削除
+============
+
+辞書内の項目を削除します。
+
+リクエスト
+----------
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+パラメーター
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - パラメーター
+     - 型
+     - 必須
+     - 説明
+   * - ``dictId``
+     - String
+     - はい
+     - 辞書ID（パスパラメーター）
+   * - ``id``
+     - Long
+     - はい
+     - 項目ID（パスパラメーター）
+
+レスポンス
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
       }
     }
 
 辞書ファイルアップロード
 ========================
 
+辞書ファイル全体をアップロードして置き換えます。
+
 リクエスト
 ----------
 
 ::
 
-    POST /api/admin/dict/upload
+    PUT /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
-リクエストボディ
-~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="type"
-
-    synonym
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="synonym.txt"
-    Content-Type: text/plain
-
-    検索,サーチ,リサーチ
-    Fess,フェス
-    --boundary--
-
-フィールド説明
-~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - フィールド
-     - 必須
-     - 説明
-   * - ``type``
-     - はい
-     - 辞書タイプ（synonym/mapping/protwords/stopwords）
-   * - ``file``
-     - はい
-     - 辞書ファイル
+ファイルフィールドの名前は辞書種別ごとに異なります（後述の「辞書種別ごとの項目フィールド」を参照）。
 
 レスポンス
 ----------
@@ -210,63 +376,56 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
 
     {
       "response": {
-        "status": 0,
-        "message": "Dictionary uploaded successfully"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
-辞書タイプ
-==========
+辞書ファイルダウンロード
+========================
+
+辞書ファイルをダウンロードします。
+
+リクエスト
+----------
+
+::
+
+    GET /api/admin/dict/{type}/download/{dictId}
+
+レスポンスは辞書ファイルのバイナリ（ ``application/octet-stream`` ）です。
+
+辞書種別ごとの項目フィールド
+============================
+
+辞書項目の作成・更新リクエストボディおよびレスポンスのフィールドは、辞書種別ごとに異なります。
+``id`` （項目ID）と ``dictId`` （辞書ID）はレスポンスに共通して含まれます。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 80
+   :widths: 18 42 40
 
-   * - タイプ
-     - 説明
+   * - 種別
+     - 項目フィールド
+     - アップロードファイルフィールド
    * - ``synonym``
-     - 同義語辞書（検索時に同義語を展開）
-   * - ``mapping``
-     - マッピング辞書（文字の正規化）
-   * - ``protwords``
-     - 保護語辞書（ステミング対象外の単語）
-   * - ``stopwords``
-     - ストップワード辞書（インデックス対象外の単語）
+     - ``inputs`` （必須）、 ``outputs`` （必須）
+     - ``synonymFile``
    * - ``kuromoji``
-     - Kuromoji辞書（日本語形態素解析）
-
-辞書形式の例
-============
-
-同義語辞書
-----------
-
-::
-
-    # カンマ区切りで同義語を指定
-    検索,サーチ,リサーチ,search
-    Fess,フェス,fess
-    全文検索,フルテキストサーチ,full-text search
-
-マッピング辞書
---------------
-
-::
-
-    # 変換前 => 変換後
-    ０ => 0
-    １ => 1
-    ２ => 2
-
-保護語辞書
-----------
-
-::
-
-    # ステミング処理から保護する単語
-    running
-    searching
-    indexing
+     - ``token`` （必須）、 ``segmentation`` （必須）、 ``reading`` （必須）、 ``pos`` （必須）
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` （必須）、 ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` （必須）
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` （必須）
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` （必須）、 ``output`` （必須）
+     - ``stemmerOverrideFile``
 
 使用例
 ======
@@ -279,42 +438,44 @@ Dict APIは、|Fess| の辞書ファイルを管理するためのAPIです。
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-同義語辞書の内容取得
---------------------
+同義語辞書の項目一覧取得
+------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-同義語辞書の更新
-----------------
+同義語辞書への項目追加
+----------------------
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "content": "検索,サーチ,search\nFess,フェス,fess\nドキュメント,文書,document"
+           "inputs": "検索,サーチ",
+           "outputs": "検索,サーチ,リサーチ"
          }'
 
-辞書ファイルのアップロード
---------------------------
+同義語辞書ファイルのアップロード
+--------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/dict/upload" \
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "type=synonym" \
-         -F "file=@synonym.txt"
+         -F "synonymFile=@synonym.txt"
 
-注意事項
-========
+同義語辞書ファイルのダウンロード
+--------------------------------
 
-- 辞書を更新した後は、インデックスの再構築が必要な場合があります
-- 大規模な辞書ファイルは検索パフォーマンスに影響を与える可能性があります
-- 辞書の文字エンコーディングはUTF-8を使用してください
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o synonym.txt
 
 参考情報
 ========

@@ -5,8 +5,8 @@ Documents API
 概要
 ====
 
-Documents APIは、|Fess| のインデックス内のドキュメントを管理するためのAPIです。
-ドキュメントの一括削除、更新、検索などの操作を行えます。
+Documents APIは、|Fess| のインデックスにドキュメントを一括登録するためのAPIです。
+複数のドキュメントをまとめてインデックスに追加できます。
 
 ベースURL
 =========
@@ -25,226 +25,150 @@ Documents APIは、|Fess| のインデックス内のドキュメントを管理
    * - メソッド
      - パス
      - 説明
-   * - DELETE
-     - /
-     - ドキュメント削除（クエリ指定）
-   * - DELETE
-     - /{id}
-     - ドキュメント削除（ID指定）
+   * - PUT
+     - /bulk
+     - ドキュメント一括登録
 
-クエリ指定でのドキュメント削除
-==============================
+ドキュメント一括登録
+====================
 
-検索クエリに一致するドキュメントを一括削除します。
+複数のドキュメントをインデックスに一括で登録します。
 
 リクエスト
 ----------
 
 ::
 
-    DELETE /api/admin/documents
+    PUT /api/admin/documents/bulk
+    Content-Type: application/json
 
-パラメーター
-~~~~~~~~~~~~
+リクエストボディ
+~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "documents": [
+        {
+          "url": "https://example.com/page1",
+          "title": "サンプルページ1",
+          "content": "ページ1の本文テキストです。"
+        },
+        {
+          "url": "https://example.com/page2",
+          "title": "サンプルページ2",
+          "content": "ページ2の本文テキストです。"
+        }
+      ]
+    }
+
+フィールド説明
+~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 25 15 60
 
-   * - パラメーター
-     - 型
+   * - フィールド
      - 必須
      - 説明
-   * - ``q``
-     - String
+   * - ``documents``
      - はい
-     - 削除対象の検索クエリ
+     - 登録するドキュメントの配列。各ドキュメントはフィールド名と値のマップで指定します。空配列は指定できません。
+
+各ドキュメントには ``url`` 、 ``title`` 、 ``content`` などのインデックスフィールドを自由に指定できます。
+``content_length`` 、 ``favorite_count`` 、 ``click_count`` 、 ``boost`` 、 ``role`` 、 ``last_modified`` 、 ``timestamp`` などが省略された場合は既定値が自動的に補完されます。
+また、 ``doc_id`` と ID は登録時に自動生成されます。
 
 レスポンス
 ----------
+
+レスポンスは登録した各ドキュメントの処理結果を ``items`` 配列で返します。
+成功した項目は ``result`` と ``id`` を、失敗した項目は ``result`` と ``message`` を含みます。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "deleted": 150
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "CREATED",
+            "id": "0123456789abcdef"
+          }
+        ]
       }
     }
 
-使用例
-~~~~~~
-
-.. code-block:: bash
-
-    # 特定のサイトのドキュメントを削除
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # 古いドキュメントを削除
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO 2023-01-01]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # ラベル指定でドキュメントを削除
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=label:old_label" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-ID指定でのドキュメント削除
-==========================
-
-ドキュメントIDを指定して削除します。
-
-リクエスト
-----------
-
-::
-
-    DELETE /api/admin/documents/{id}
-
-パラメーター
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - パラメーター
-     - 型
-     - 必須
-     - 説明
-   * - ``id``
-     - String
-     - はい
-     - ドキュメントID（パスパラメーター）
-
-レスポンス
-----------
+いずれかの項目で登録が失敗した場合、 ``status`` は ``9`` （FAILED）となり、該当項目には ``message`` フィールドが含まれます。
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0
+        "version": "15.7.0",
+        "status": 9,
+        "items": [
+          {
+            "result": "CREATED",
+            "id": "abcdef0123456789"
+          },
+          {
+            "result": "BAD_REQUEST",
+            "message": "failure reason ..."
+          }
+        ]
       }
     }
 
-使用例
-~~~~~~
-
-.. code-block:: bash
-
-    curl -X DELETE "http://localhost:8080/api/admin/documents/doc_id_12345" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-クエリ構文
-==========
-
-削除クエリには、|Fess| の標準検索構文が使用できます。
-
-基本的なクエリ
---------------
+レスポンスフィールド
+~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 30 70
 
-   * - クエリ例
+   * - フィールド
      - 説明
-   * - ``url:example.com``
-     - URLに"example.com"を含むドキュメント
-   * - ``url:https://example.com/*``
-     - 特定のプレフィックスを持つURL
-   * - ``host:example.com``
-     - 特定のホストのドキュメント
-   * - ``title:keyword``
-     - タイトルにキーワードを含むドキュメント
-   * - ``content:keyword``
-     - 本文にキーワードを含むドキュメント
-   * - ``label:mylabel``
-     - 特定のラベルを持つドキュメント
-
-日付範囲クエリ
---------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - クエリ例
-     - 説明
-   * - ``lastModified:[2023-01-01 TO 2023-12-31]``
-     - 指定期間内に更新されたドキュメント
-   * - ``lastModified:[* TO 2023-01-01]``
-     - 指定日より前に更新されたドキュメント
-   * - ``created:[2024-01-01 TO *]``
-     - 指定日以降に作成されたドキュメント
-
-複合クエリ
-----------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 60
-
-   * - クエリ例
-     - 説明
-   * - ``url:example.com AND label:blog``
-     - AND条件
-   * - ``url:example.com OR url:sample.com``
-     - OR条件
-   * - ``NOT url:example.com``
-     - NOT条件
-   * - ``(url:example.com OR url:sample.com) AND label:news``
-     - グループ化
-
-注意事項
-========
-
-削除操作の注意
---------------
-
-.. warning::
-   削除操作は取り消せません。本番環境で実行する前に、必ずテスト環境で確認してください。
-
-- 大量のドキュメントを削除する場合、処理に時間がかかることがあります
-- 削除中はインデックスのパフォーマンスに影響が出る可能性があります
-- 削除後、検索結果に反映されるまで少し時間がかかる場合があります
-
-推奨プラクティス
-----------------
-
-1. **削除前の確認**: 同じクエリで検索APIを使用し、削除対象を確認
-2. **段階的な削除**: 大量削除は複数回に分けて実行
-3. **バックアップ**: 重要なデータは事前にバックアップ
+   * - ``items``
+     - 各ドキュメントの処理結果の配列
+   * - ``items[].result``
+     - 処理結果ステータス（例: ``CREATED``）
+   * - ``items[].id``
+     - 登録されたドキュメントのID（成功時）
+   * - ``items[].message``
+     - 失敗理由のメッセージ（失敗時）
 
 使用例
 ======
 
-サイト全体の再クロール準備
---------------------------
+ドキュメントの一括登録
+----------------------
 
 .. code-block:: bash
 
-    # 特定サイトの古いドキュメントを削除
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=host:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-    # クロールジョブを開始
-    curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-古いドキュメントのクリーンアップ
---------------------------------
-
-.. code-block:: bash
-
-    # 1年以上更新されていないドキュメントを削除
-    curl -X DELETE "http://localhost:8080/api/admin/documents?q=lastModified:[* TO now-1y]" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X PUT "http://localhost:8080/api/admin/documents/bulk" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "documents": [
+             {
+               "url": "https://example.com/page1",
+               "title": "サンプルページ1",
+               "content": "ページ1の本文テキストです。"
+             }
+           ]
+         }'
 
 参考情報
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
+- :doc:`api-admin-searchlist` - ドキュメント検索・管理API
 - :doc:`api-admin-crawlinginfo` - クロール情報API
 - :doc:`../../admin/searchlist-guide` - 検索一覧管理ガイド

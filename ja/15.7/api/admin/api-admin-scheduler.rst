@@ -25,7 +25,7 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - スケジュールジョブ一覧取得
    * - GET
@@ -56,14 +56,13 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 パラメーター
 ~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -72,11 +71,11 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号
 
 レスポンス
 ----------
@@ -94,9 +93,9 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` は文字列（``"true"`` / ``"false"``）として扱われます。``running`` はブール値で、ジョブの実行状態を示します。
 
 スケジュールジョブ取得
 ======================
@@ -130,9 +133,9 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - フィールド
      - 必須
@@ -184,25 +187,25 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
      - はい
      - 実行対象（"all" または特定のターゲット）
    * - ``cronExpression``
-     - はい
+     - いいえ
      - Cron式（秒 分 時 日 月 曜日）
    * - ``scriptType``
      - はい
      - スクリプトタイプ（"groovy"）
    * - ``scriptData``
-     - はい
+     - いいえ
      - 実行スクリプト
    * - ``jobLogging``
      - いいえ
-     - ログ記録を有効化（デフォルト: true）
+     - ログ記録を有効化（文字列 ``"true"`` / ``"false"``）
    * - ``crawler``
      - いいえ
-     - クローラージョブかどうか（デフォルト: false）
+     - クローラージョブかどうか（文字列 ``"true"`` / ``"false"``）
    * - ``available``
      - いいえ
-     - 有効/無効（デフォルト: true）
+     - 有効/無効（文字列 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - いいえ
+     - はい
      - 表示順序
 
 レスポンス
@@ -259,9 +262,9 @@ Cron式の例
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -321,15 +324,28 @@ Cron式の例
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+レスポンスフィールド
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - フィールド
+     - 説明
+   * - ``jobLogId``
+     - 起動したジョブのジョブログID。ジョブログが有効な場合に発行されます。ジョブログが無効な場合は ``null`` になります。
 
 注意事項
 --------
 
 - ジョブが既に実行中の場合、エラーが返されます
-- ジョブが無効（``available: false``）の場合、エラーが返されます
+- ジョブが無効（``available`` が ``"false"``）の場合、エラーが返されます
 
 ジョブ停止
 ==========
@@ -372,9 +388,9 @@ Cron式の例
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # ジョブを即座に実行

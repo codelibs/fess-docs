@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List elevate words
    * - GET
@@ -40,6 +40,12 @@ Endpoint List
    * - DELETE
      - /setting/{id}
      - Delete elevate word
+   * - PUT
+     - /upload
+     - Upload elevate word CSV
+   * - GET
+     - /download
+     - Download elevate word CSV
 
 List Elevate Words
 ==================
@@ -50,7 +56,6 @@ Request
 ::
 
     GET /api/admin/elevateword/settings
-    PUT /api/admin/elevateword/settings
 
 Parameters
 ~~~~~~~~~~
@@ -85,10 +90,9 @@ Response
             "id": "elevate_id_1",
             "suggestWord": "fess",
             "reading": "",
-            "permissions": [],
-            "boost": 10.0,
-            "targetRole": "",
-            "targetLabel": ""
+            "permissions": "{role}guest",
+            "boost": 100.0,
+            "labelTypeIds": []
           }
         ],
         "total": 5
@@ -117,10 +121,9 @@ Response
           "id": "elevate_id_1",
           "suggestWord": "fess",
           "reading": "",
-          "permissions": [],
-          "boost": 10.0,
-          "targetRole": "",
-          "targetLabel": ""
+          "permissions": "{role}guest",
+          "boost": 100.0,
+          "labelTypeIds": []
         }
       }
     }
@@ -144,10 +147,9 @@ Request Body
     {
       "suggestWord": "documentation",
       "reading": "",
-      "permissions": ["guest"],
-      "boost": 15.0,
-      "targetRole": "user",
-      "targetLabel": "docs"
+      "permissions": "{role}guest",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"]
     }
 
 Field Description
@@ -168,16 +170,13 @@ Field Description
      - Phonetic reading
    * - ``permissions``
      - No
-     - Access permission roles
+     - Access permissions (one entry per line, newline-separated string. Form default value: default display permissions for search)
    * - ``boost``
+     - Yes
+     - Boost value (form default value: 100.0)
+   * - ``labelTypeIds``
      - No
-     - Boost value (default: 1.0)
-   * - ``targetRole``
-     - No
-     - Target role
-   * - ``targetLabel``
-     - No
-     - Target label
+     - Target label IDs (array of strings)
 
 Response
 --------
@@ -212,10 +211,9 @@ Request Body
       "id": "existing_elevate_id",
       "suggestWord": "documentation",
       "reading": "",
-      "permissions": ["guest", "user"],
-      "boost": 20.0,
-      "targetRole": "user",
-      "targetLabel": "docs",
+      "permissions": "{role}guest\n{role}user",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"],
       "versionNo": 1
     }
 
@@ -255,6 +253,56 @@ Response
       }
     }
 
+Upload Elevate Word CSV
+=======================
+
+Bulk-registers elevate words from a CSV file. The file is sent as ``multipart/form-data``. The import is executed asynchronously on the server side.
+
+Request
+-------
+
+::
+
+    PUT /api/admin/elevateword/upload
+    Content-Type: multipart/form-data
+
+Parameters
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parameter
+     - Required
+     - Description
+   * - ``elevateWordFile``
+     - Yes
+     - Elevate word CSV file to upload
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Download Elevate Word CSV
+=========================
+
+Downloads the registered elevate words as a CSV file (``elevate.csv``). The response is an ``application/octet-stream`` stream.
+
+Request
+-------
+
+::
+
+    GET /api/admin/elevateword/download
+
 Usage Examples
 ==============
 
@@ -268,8 +316,8 @@ Elevate Product Name
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "Product X",
-           "boost": 20.0,
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "permissions": "{role}guest"
          }'
 
 Elevate to Specific Label
@@ -282,10 +330,28 @@ Elevate to Specific Label
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "API reference",
-           "boost": 10.0,
-           "targetLabel": "technical_docs",
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "labelTypeIds": ["technical_docs"],
+           "permissions": "{role}guest"
          }'
+
+Upload CSV File
+---------------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "elevateWordFile=@elevate.csv"
+
+Download CSV File
+-----------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/elevateword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o elevate.csv
 
 Reference
 =========

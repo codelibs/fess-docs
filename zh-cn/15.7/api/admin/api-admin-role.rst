@@ -25,7 +25,7 @@ Role API是用于管理 |Fess| 角色的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取角色列表
    * - GET
@@ -50,7 +50,6 @@ Role API是用于管理 |Fess| 角色的API。
 ::
 
     GET /api/admin/role/settings
-    PUT /api/admin/role/settings
 
 参数
 ~~~~

@@ -5,8 +5,8 @@ Backup API
 概述
 ====
 
-Backup API是用于备份和恢复 |Fess| 配置数据的API。
-您可以导出和导入爬虫设置、用户、角色、词典等配置。
+Backup API是用于参照和下载 |Fess| 备份对象数据的API。
+可以获取备份对象的列表，以及下载单个备份文件（系统属性、各索引的批量数据、日志的NDJSON数据）。
 
 基础URL
 =======
@@ -26,254 +26,118 @@ Backup API是用于备份和恢复 |Fess| 配置数据的API。
      - 路径
      - 说明
    * - GET
-     - /export
-     - 导出配置数据
-   * - POST
-     - /import
-     - 导入配置数据
+     - /files
+     - 获取备份对象列表
+   * - GET
+     - /file/{id}
+     - 下载备份文件
 
-导出配置数据
-============
+获取备份对象列表
+================
 
-请求
-----
-
-::
-
-    GET /api/admin/backup/export
-
-参数
-~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - 参数
-     - 类型
-     - 必需
-     - 说明
-   * - ``types``
-     - String
-     - 否
-     - 导出目标（逗号分隔，默认：all）
-
-导出目标类型
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - 类型
-     - 说明
-   * - ``webconfig``
-     - Web爬虫设置
-   * - ``fileconfig``
-     - 文件爬虫设置
-   * - ``dataconfig``
-     - 数据存储设置
-   * - ``scheduler``
-     - 调度设置
-   * - ``user``
-     - 用户设置
-   * - ``role``
-     - 角色设置
-   * - ``group``
-     - 组设置
-   * - ``labeltype``
-     - 标签类型设置
-   * - ``keymatch``
-     - 关键词匹配设置
-   * - ``dict``
-     - 词典数据
-   * - ``all``
-     - 所有设置（默认）
-
-响应
-----
-
-二进制数据（ZIP格式）
-
-Content-Type: ``application/zip``
-Content-Disposition: ``attachment; filename="fess-backup-20250129-100000.zip"``
-
-ZIP文件内容
-~~~~~~~~~~~
-
-::
-
-    fess-backup-20250129-100000.zip
-    ├── webconfig.json
-    ├── fileconfig.json
-    ├── dataconfig.json
-    ├── scheduler.json
-    ├── user.json
-    ├── role.json
-    ├── group.json
-    ├── labeltype.json
-    ├── keymatch.json
-    ├── dict/
-    │   ├── synonym.txt
-    │   ├── mapping.txt
-    │   └── protwords.txt
-    └── metadata.json
-
-导入配置数据
-============
+返回备份对象的列表。对象基于 ``index.backup.targets`` 和 ``index.backup.log.targets`` 的设置。
 
 请求
 ----
 
 ::
 
-    POST /api/admin/backup/import
-    Content-Type: multipart/form-data
-
-请求体
-~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="fess-backup.zip"
-    Content-Type: application/zip
-
-    [二进制数据]
-    --boundary
-    Content-Disposition: form-data; name="overwrite"
-
-    true
-    --boundary--
-
-字段说明
-~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - 字段
-     - 必需
-     - 说明
-   * - ``file``
-     - 是
-     - 备份ZIP文件
-   * - ``overwrite``
-     - 否
-     - 覆盖现有设置（默认：false）
-   * - ``types``
-     - 否
-     - 导入目标（逗号分隔，默认：all）
+    GET /api/admin/backup/files
 
 响应
 ----
+
+``files`` 中存放表示备份对象的对象数组，``total`` 中存放数量。
+每个对象具有 ``id`` 和 ``name``，二者均设置为对象名（如 ``fess_config.bulk``、``system.properties``、``search_log.ndjson`` 等）。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Backup imported successfully",
-        "imported": {
-          "webconfig": 5,
-          "fileconfig": 3,
-          "dataconfig": 2,
-          "scheduler": 4,
-          "user": 10,
-          "role": 5,
-          "group": 3,
-          "labeltype": 8,
-          "keymatch": 12,
-          "dict": 3
-        }
+        "files": [
+          {
+            "id": "fess_config.bulk",
+            "name": "fess_config.bulk"
+          },
+          {
+            "id": "system.properties",
+            "name": "system.properties"
+          },
+          {
+            "id": "search_log.ndjson",
+            "name": "search_log.ndjson"
+          }
+        ],
+        "total": 3
       }
     }
+
+下载备份文件
+============
+
+下载指定备份文件的内容。``{id}`` 中指定列表获取时得到的 ``id`` （对象名）。
+根据 ``{id}`` 的种类，响应内容会按如下方式切换。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - ID
+     - 内容
+   * - ``system.properties``
+     - 系统属性的内容
+   * - ``*.bulk`` 或不带 ``.bulk`` 扩展名的索引名
+     - 对目标索引进行滚动（scroll）生成的批量数据
+   * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``）
+     - 对应日志的NDJSON数据
+
+如果指定了不存在于备份对象中的 ``{id}``，将会出错。
+
+请求
+----
+
+::
+
+    GET /api/admin/backup/file/{id}
+
+响应
+----
+
+备份文件的流。NDJSON格式时以 ``Content-Type: application/x-ndjson`` 返回，其他情况以 ``application/octet-stream`` 返回。
 
 使用示例
 ========
 
-导出所有设置
-------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup.zip
-
-导出特定设置
-------------
-
-.. code-block:: bash
-
-    # 仅导出Web爬虫设置和用户设置
-    curl -X GET "http://localhost:8080/api/admin/backup/export?types=webconfig,user" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup-partial.zip
-
-导入设置
---------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=false"
-
-覆盖现有设置导入
+获取备份对象列表
 ----------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=true"
+    curl -X GET "http://localhost:8080/api/admin/backup/files" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-仅导入特定设置
---------------
+下载配置索引
+------------
 
 .. code-block:: bash
 
-    # 仅导入用户和角色
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "types=user,role" \
-         -F "overwrite=false"
+         -o fess_config.bulk
 
-自动化备份
-----------
+下载搜索日志
+------------
 
 .. code-block:: bash
 
-    #!/bin/bash
-    # 每天凌晨2点获取备份的脚本示例
-
-    DATE=$(date +%Y%m%d)
-    BACKUP_DIR="/backup/fess"
-
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -o "${BACKUP_DIR}/fess-backup-${DATE}.zip"
-
-    # 删除30天以前的备份
-    find "${BACKUP_DIR}" -name "fess-backup-*.zip" -mtime +30 -delete
-
-注意事项
-========
-
-- 备份包含密码信息，请安全保管
-- 导入时指定 ``overwrite=true`` 会覆盖现有设置
-- 大规模配置的导出/导入可能需要一些时间
-- 不同版本Fess之间的导入可能存在兼容性问题
+         -o search_log.ndjson
 
 参考信息
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
-- :doc:`../../admin/backup-guide` - 备份管理指南
-- :doc:`../../admin/maintenance-guide` - 维护指南
-
+- :doc:`api-admin-log` - 日志API

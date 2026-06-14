@@ -25,7 +25,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 라벨 타입 목록 조회
    * - GET
@@ -50,7 +50,6 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -87,6 +86,8 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -119,7 +120,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
           "sortOrder": 0,
-          "permissions": [],
+          "permissions": "{role}admin",
           "virtualHost": ""
         }
       }
@@ -147,7 +148,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 필드 설명
@@ -177,7 +178,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
      - 표시 순서
    * - ``permissions``
      - 아니오
-     - 접근 허용 역할
+     - 접근 허용 역할 (여러 개인 경우 줄바꿈으로 구분)
    * - ``virtualHost``
      - 아니오
      - 가상 호스트
@@ -218,7 +219,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
       "excludedPaths": ".*/(archive|old|draft)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"],
+      "permissions": "{role}guest",
       "versionNo": 1
     }
 
@@ -252,9 +253,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_label_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -274,7 +273,7 @@ LabelType API는 |Fess| 의 라벨 타입을 관리하기 위한 API입니다.
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 라벨을 사용한 검색

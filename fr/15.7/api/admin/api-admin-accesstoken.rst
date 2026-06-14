@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des jetons d'acces
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/accesstoken/settings
-    PUT /api/admin/accesstoken/settings
 
 Parametres
 ~~~~~~~~~~
@@ -86,8 +85,8 @@ Reponse
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
             "parameterName": "token",
-            "expiredTime": 1735689600000,
-            "permissions": ["admin"]
+            "expires": "2025-01-01T00:00:00",
+            "permissions": "{role}admin"
           }
         ],
         "total": 5
@@ -117,8 +116,8 @@ Reponse
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
           "parameterName": "token",
-          "expiredTime": 1735689600000,
-          "permissions": ["admin"]
+          "expires": "2025-01-01T00:00:00",
+          "permissions": "{role}admin"
         }
       }
     }
@@ -142,7 +141,8 @@ Corps de la requete
     {
       "name": "Integration API Token",
       "parameterName": "token",
-      "permissions": ["user"]
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user"
     }
 
 Description des champs
@@ -164,12 +164,12 @@ Description des champs
    * - ``parameterName``
      - Non
      - Nom du parametre (par defaut : "token")
-   * - ``expiredTime``
+   * - ``expires``
      - Non
-     - Date d'expiration (temps Unix en millisecondes)
+     - Date d'expiration (chaine au format ISO 8601. Exemple : ``2026-01-01T00:00:00``)
    * - ``permissions``
      - Non
-     - Roles autorises
+     - Permissions autorisees. Specifiees sous forme de chaine separee par des sauts de ligne (exemple : ``{role}admin``)
 
 Reponse
 -------
@@ -180,7 +180,6 @@ Reponse
       "response": {
         "status": 0,
         "id": "new_token_id",
-        "token": "generated_token_string",
         "created": true
       }
     }
@@ -205,8 +204,8 @@ Corps de la requete
       "id": "existing_token_id",
       "name": "Updated API Token",
       "parameterName": "token",
-      "expiredTime": 1767225600000,
-      "permissions": ["user", "editor"],
+      "expires": "2026-01-01T00:00:00",
+      "permissions": "{role}user\n{role}editor",
       "versionNo": 1
     }
 
@@ -240,9 +239,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_token_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -260,7 +257,7 @@ Creation d'un jeton API
          -d '{
            "name": "External App Token",
            "parameterName": "token",
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 Appel API utilisant un jeton

@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Gruppenliste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 Parameter
 ~~~~~~~~~
@@ -84,12 +83,16 @@ Response
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Response
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Request-Body
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 Feldbeschreibungen
@@ -156,9 +163,9 @@ Feldbeschreibungen
    * - ``name``
      - Ja
      - Gruppenname
-   * - ``gidNumber``
+   * - ``attributes``
      - Nein
-     - Gruppen-ID-Nummer
+     - Attribut-Map (enthält LDAP-Attribute wie ``gidNumber``). Werte werden als Zeichenketten angegeben
 
 Response
 --------
@@ -192,7 +199,9 @@ Request-Body
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Neue Gruppe erstellen
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 Gruppenliste abrufen

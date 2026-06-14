@@ -25,7 +25,7 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取数据存储设置列表
    * - GET
@@ -50,7 +50,6 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
 ::
 
     GET /api/admin/dataconfig/settings
-    PUT /api/admin/dataconfig/settings
 
 参数
 ~~~~
@@ -84,11 +83,14 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
           {
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
+            "description": "データベースクローラー",
             "handlerName": "DatabaseDataStore",
             "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
             "handlerScript": "...",
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -117,15 +119,15 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
         "setting": {
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
+          "description": "データベースクローラー",
           "handlerName": "DatabaseDataStore",
           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
           "handlerScript": "...",
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
-          "labelTypeIds": []
+          "permissions": "{role}admin",
+          "virtualHosts": ""
         }
       }
     }
@@ -152,9 +154,9 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
-      "labelTypeIds": ["label_id_1"]
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user"
     }
 
 字段说明
@@ -170,6 +172,9 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
    * - ``name``
      - 是
      - 设置名称
+   * - ``description``
+     - 否
+     - 设置的说明
    * - ``handlerName``
      - 是
      - 数据存储处理器名称
@@ -177,26 +182,23 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
      - 否
      - 处理器参数（连接信息等）
    * - ``handlerScript``
-     - 是
+     - 否
      - 数据转换脚本
    * - ``boost``
-     - 否
-     - 搜索结果提升值（默认：1.0）
+     - 是
+     - 搜索结果提升值
    * - ``available``
-     - 否
-     - 启用/禁用（默认：true）
+     - 是
+     - 启用/禁用（字符串 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - 否
+     - 是
      - 显示顺序
    * - ``permissions``
      - 否
-     - 访问权限角色
+     - 访问权限角色（多个时以换行分隔）
    * - ``virtualHosts``
      - 否
-     - 虚拟主机
-   * - ``labelTypeIds``
-     - 否
-     - 标签类型ID
+     - 虚拟主机（多个时以换行分隔）
 
 响应
 ----
@@ -234,7 +236,8 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
       "boost": 1.5,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -268,9 +271,7 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_dataconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -307,7 +308,8 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
            "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
            "boost": 1.0,
-           "available": true
+           "available": "true",
+           "sortOrder": 0
          }'
 
 参考信息

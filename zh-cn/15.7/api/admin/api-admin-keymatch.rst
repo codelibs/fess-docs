@@ -25,7 +25,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取关键词匹配列表
    * - GET
@@ -50,7 +50,6 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
 ::
 
     GET /api/admin/keymatch/settings
-    PUT /api/admin/keymatch/settings
 
 参数
 ~~~~
@@ -161,11 +160,11 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
      - 是
      - 匹配条件查询
    * - ``maxSize``
-     - 否
-     - 最大显示数量（默认：10）
+     - 是
+     - 最大显示数量（表单初始值：10）
    * - ``boost``
-     - 否
-     - 提升值（默认：1.0）
+     - 是
+     - 提升值（表单初始值：100.0）
 
 响应
 ----
@@ -235,9 +234,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_keymatch_id",
-        "created": false
+        "status": 0
       }
     }
 

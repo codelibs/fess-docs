@@ -56,13 +56,13 @@ For information on how to obtain the CSRF token and details about authentication
 Rate Limiting
 =============
 
-``POST /chat`` and ``DELETE /chat/sessions/{session_id}`` have per-user rate limits applied.
+``POST /chat`` , ``POST /chat/stream`` and ``DELETE /chat/sessions/{session_id}`` have per-user rate limits applied.
 
 - Default: 30 requests per minute (per user)
 - Configuration key: ``api.v2.chat.rate.limit.per.user.per.minute``
 
 When the rate limit is exceeded, a ``rate_limited`` error (HTTP 429) is returned. The ``Retry-After`` header indicates the number of seconds to wait.
-This rate limit is shared between ``POST /chat`` and ``DELETE /chat/sessions/{session_id}``.
+This rate limit is shared between ``POST /chat`` , ``POST /chat/stream`` and ``DELETE /chat/sessions/{session_id}``.
 
 POST /chat
 ==========
@@ -294,7 +294,7 @@ SSE stream example:
 ::
 
     event: phase
-    data: {"phase":"retrieval","status":"start","message":"Searching documents...","keywords":"Fess install"}
+    data: {"phase":"search","status":"start","message":"Searching documents...","keywords":"Fess install"}
 
     event: chunk
     data: {"content":"Fess is"}

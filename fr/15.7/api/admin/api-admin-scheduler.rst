@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des taches planifiees
    * - GET
@@ -56,14 +56,13 @@ Requete
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 Parametres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -72,11 +71,11 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page
 
 Reponse
 -------
@@ -94,9 +93,9 @@ Reponse
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Reponse
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` sont traites comme des chaines de caracteres (``"true"`` / ``"false"``). ``running`` est une valeur booleenne indiquant l'etat d'execution de la tache.
 
 Obtention d'une tache planifiee
 ===============================
@@ -130,9 +133,9 @@ Reponse
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Corps de la requete
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Champ
      - Requis
@@ -184,25 +187,25 @@ Description des champs
      - Oui
      - Cible d'execution ("all" ou cible specifique)
    * - ``cronExpression``
-     - Oui
+     - Non
      - Expression Cron (secondes minutes heures jour mois jour-semaine)
    * - ``scriptType``
      - Oui
      - Type de script ("groovy")
    * - ``scriptData``
-     - Oui
+     - Non
      - Script a executer
    * - ``jobLogging``
      - Non
-     - Activer la journalisation (par defaut : true)
+     - Activer la journalisation (chaine ``"true"`` / ``"false"``)
    * - ``crawler``
      - Non
-     - S'il s'agit d'une tache de crawl (par defaut : false)
+     - S'il s'agit d'une tache de crawl (chaine ``"true"`` / ``"false"``)
    * - ``available``
      - Non
-     - Active/Desactive (par defaut : true)
+     - Active/Desactive (chaine ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Non
+     - Oui
      - Ordre d'affichage
 
 Reponse
@@ -259,9 +262,9 @@ Corps de la requete
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -321,15 +324,28 @@ Reponse
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+Champs de la reponse
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Champ
+     - Description
+   * - ``jobLogId``
+     - ID du journal de la tache demarree. Emis lorsque la journalisation des taches est activee. Vaut ``null`` lorsque la journalisation des taches est desactivee.
 
 Notes
 -----
 
 - Une erreur est retournee si la tache est deja en cours d'execution
-- Une erreur est retournee si la tache est desactivee (``available: false``)
+- Une erreur est retournee si la tache est desactivee (``available`` vaut ``"false"``)
 
 Arret d'une tache
 =================
@@ -372,9 +388,9 @@ Creation et execution d'une tache de crawl
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # Executer la tache immediatement

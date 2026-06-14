@@ -5,8 +5,8 @@ API de Backup
 Vision General
 ==============
 
-La API de Backup es para realizar copias de seguridad y restauracion de datos de configuracion de |Fess|.
-Puede exportar e importar configuraciones de rastreo, usuarios, roles, diccionarios y otras configuraciones.
+La API de Backup es una API para consultar y descargar los datos objetivo de copia de seguridad de |Fess|.
+Permite obtener la lista de objetivos de copia de seguridad y descargar archivos de copia de seguridad individuales (propiedades del sistema, datos masivos de cada indice, datos NDJSON de registros).
 
 URL Base
 ========
@@ -26,253 +26,118 @@ Lista de Endpoints
      - Ruta
      - Descripcion
    * - GET
-     - /export
-     - Exportar datos de configuracion
-   * - POST
-     - /import
-     - Importar datos de configuracion
+     - /files
+     - Obtener lista de objetivos de copia de seguridad
+   * - GET
+     - /file/{id}
+     - Descargar archivo de copia de seguridad
 
-Exportar Datos de Configuracion
-===============================
+Obtener Lista de Objetivos de Copia de Seguridad
+================================================
 
-Solicitud
----------
-
-::
-
-    GET /api/admin/backup/export
-
-Parametros
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametro
-     - Tipo
-     - Requerido
-     - Descripcion
-   * - ``types``
-     - String
-     - No
-     - Objetivos de exportacion (separados por coma, predeterminado: all)
-
-Tipos de Exportacion
-~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Tipo
-     - Descripcion
-   * - ``webconfig``
-     - Configuracion de rastreo web
-   * - ``fileconfig``
-     - Configuracion de rastreo de archivos
-   * - ``dataconfig``
-     - Configuracion de almacen de datos
-   * - ``scheduler``
-     - Configuracion de programador
-   * - ``user``
-     - Configuracion de usuarios
-   * - ``role``
-     - Configuracion de roles
-   * - ``group``
-     - Configuracion de grupos
-   * - ``labeltype``
-     - Configuracion de tipos de etiqueta
-   * - ``keymatch``
-     - Configuracion de coincidencia de claves
-   * - ``dict``
-     - Datos de diccionario
-   * - ``all``
-     - Todas las configuraciones (predeterminado)
-
-Respuesta
----------
-
-Datos binarios (formato ZIP)
-
-Content-Type: ``application/zip``
-Content-Disposition: ``attachment; filename="fess-backup-20250129-100000.zip"``
-
-Contenido del Archivo ZIP
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    fess-backup-20250129-100000.zip
-    ├── webconfig.json
-    ├── fileconfig.json
-    ├── dataconfig.json
-    ├── scheduler.json
-    ├── user.json
-    ├── role.json
-    ├── group.json
-    ├── labeltype.json
-    ├── keymatch.json
-    ├── dict/
-    │   ├── synonym.txt
-    │   ├── mapping.txt
-    │   └── protwords.txt
-    └── metadata.json
-
-Importar Datos de Configuracion
-===============================
+Devuelve la lista de objetivos de copia de seguridad. Los objetivos se basan en la configuracion de ``index.backup.targets`` e ``index.backup.log.targets``.
 
 Solicitud
 ---------
 
 ::
 
-    POST /api/admin/backup/import
-    Content-Type: multipart/form-data
-
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="fess-backup.zip"
-    Content-Type: application/zip
-
-    [datos binarios]
-    --boundary
-    Content-Disposition: form-data; name="overwrite"
-
-    true
-    --boundary--
-
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Campo
-     - Requerido
-     - Descripcion
-   * - ``file``
-     - Si
-     - Archivo ZIP de copia de seguridad
-   * - ``overwrite``
-     - No
-     - Sobrescribir configuracion existente (predeterminado: false)
-   * - ``types``
-     - No
-     - Objetivos de importacion (separados por coma, predeterminado: all)
+    GET /api/admin/backup/files
 
 Respuesta
 ---------
+
+En ``files`` se almacena un arreglo de objetos que representan los objetivos de copia de seguridad, y en ``total`` el numero de elementos.
+Cada objeto tiene ``id`` y ``name``, y en ambos se establece el nombre del objetivo (``fess_config.bulk``, ``system.properties``, ``search_log.ndjson``, etc.).
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Backup imported successfully",
-        "imported": {
-          "webconfig": 5,
-          "fileconfig": 3,
-          "dataconfig": 2,
-          "scheduler": 4,
-          "user": 10,
-          "role": 5,
-          "group": 3,
-          "labeltype": 8,
-          "keymatch": 12,
-          "dict": 3
-        }
+        "files": [
+          {
+            "id": "fess_config.bulk",
+            "name": "fess_config.bulk"
+          },
+          {
+            "id": "system.properties",
+            "name": "system.properties"
+          },
+          {
+            "id": "search_log.ndjson",
+            "name": "search_log.ndjson"
+          }
+        ],
+        "total": 3
       }
     }
+
+Descargar Archivo de Copia de Seguridad
+=======================================
+
+Descarga el contenido del archivo de copia de seguridad especificado. En ``{id}`` se especifica el ``id`` (nombre del objetivo) obtenido en la lista.
+Segun el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente manera.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - ID
+     - Contenido
+   * - ``system.properties``
+     - Contenido de las propiedades del sistema
+   * - ``*.bulk`` o nombre de indice sin la extension ``.bulk``
+     - Datos masivos generados al recorrer el indice objetivo
+   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
+     - Datos NDJSON del registro correspondiente
+
+Si se especifica un ``{id}`` que no existe entre los objetivos de copia de seguridad, se produce un error.
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/backup/file/{id}
+
+Respuesta
+---------
+
+El flujo del archivo de copia de seguridad. En formato NDJSON se devuelve con ``Content-Type: application/x-ndjson``, y en los demas casos con ``application/octet-stream``.
 
 Ejemplos de Uso
 ===============
 
-Exportar Todas las Configuraciones
-----------------------------------
+Obtener Lista de Objetivos de Copia de Seguridad
+------------------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup.zip
+    curl -X GET "http://localhost:8080/api/admin/backup/files" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-Exportar Configuraciones Especificas
-------------------------------------
-
-.. code-block:: bash
-
-    # Exportar solo configuracion de rastreo web y usuarios
-    curl -X GET "http://localhost:8080/api/admin/backup/export?types=webconfig,user" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup-partial.zip
-
-Importar Configuraciones
-------------------------
+Descargar Indice de Configuracion
+---------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=false"
+         -o fess_config.bulk
 
-Importar Sobrescribiendo Configuraciones Existentes
----------------------------------------------------
+Descargar Registro de Busqueda
+------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=true"
-
-Importar Solo Configuraciones Especificas
------------------------------------------
-
-.. code-block:: bash
-
-    # Importar solo usuarios y roles
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "types=user,role" \
-         -F "overwrite=false"
-
-Automatizacion de Copias de Seguridad
--------------------------------------
-
-.. code-block:: bash
-
-    #!/bin/bash
-    # Ejemplo de script para copia de seguridad diaria a las 2 AM
-
-    DATE=$(date +%Y%m%d)
-    BACKUP_DIR="/backup/fess"
-
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o "${BACKUP_DIR}/fess-backup-${DATE}.zip"
-
-    # Eliminar copias de seguridad de mas de 30 dias
-    find "${BACKUP_DIR}" -name "fess-backup-*.zip" -mtime +30 -delete
-
-Notas Importantes
-=================
-
-- Las copias de seguridad incluyen informacion de contrasenas, almacenelas de forma segura
-- Al especificar ``overwrite=true`` durante la importacion, las configuraciones existentes seran sobrescritas
-- Para configuraciones de gran escala, la exportacion/importacion puede llevar tiempo
-- Pueden ocurrir problemas de compatibilidad al importar entre diferentes versiones de Fess
+         -o search_log.ndjson
 
 Informacion de Referencia
 =========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`../../admin/backup-guide` - Guia de gestion de copias de seguridad
-- :doc:`../../admin/maintenance-guide` - Guia de mantenimiento
+- :doc:`api-admin-log` - API de registros

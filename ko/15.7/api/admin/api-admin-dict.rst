@@ -5,8 +5,10 @@ Dict API
 개요
 ====
 
-Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
-동의어 사전, 매핑 사전, 보호어 사전 등의 관리를 수행할 수 있습니다.
+Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
+루트 엔드포인트에서 사용 가능한 사전 목록을 조회할 수 있습니다.
+개별 사전 항목의 참조, 생성, 업데이트, 삭제 및 사전 파일의 업로드, 다운로드는
+사전 종류별 서브 엔드포인트(synonym、kuromoji、mapping、protwords、stopwords、stemmerOverride)에서 조작합니다.
 
 기본 URL
 =========
@@ -18,6 +20,9 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
 엔드포인트 목록
 ==================
 
+사전 루트
+----------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,18 +33,46 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
    * - GET
      - /
      - 사전 목록 조회
+
+사전 종류별 엔드포인트
+----------------------
+
+``{type}`` 에는 ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmerOverride`` 중 하나를 지정합니다.
+``{dictId}`` 는 사전 목록 조회에서 얻은 사전의 ID입니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - 메서드
+     - 경로
+     - 설명
    * - GET
-     - /{id}
-     - 사전 내용 조회
-   * - PUT
-     - /{id}
-     - 사전 내용 업데이트
+     - /{type}/settings/{dictId}
+     - 사전 항목 목록 조회
+   * - GET
+     - /{type}/setting/{dictId}/{id}
+     - 사전 항목 조회
    * - POST
-     - /upload
+     - /{type}/setting/{dictId}
+     - 사전 항목 생성
+   * - PUT
+     - /{type}/setting/{dictId}
+     - 사전 항목 업데이트
+   * - DELETE
+     - /{type}/setting/{dictId}/{id}
+     - 사전 항목 삭제
+   * - PUT
+     - /{type}/upload/{dictId}
      - 사전 파일 업로드
+   * - GET
+     - /{type}/download/{dictId}
+     - 사전 파일 다운로드
 
 사전 목록 조회
 ============
+
+사용 가능한 사전 파일의 목록을 조회합니다.
 
 요청
 ----------
@@ -55,43 +88,132 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dicts": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "동의어 사전",
-            "path": "/var/lib/fess/dict/synonym.txt",
+            "id": "ZjA5...synonym.txt",
             "type": "synonym",
-            "updatedAt": "2025-01-29T10:00:00Z"
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "mapping",
-            "name": "매핑 사전",
-            "path": "/var/lib/fess/dict/mapping.txt",
+            "id": "ZjA5...mapping.txt",
             "type": "mapping",
-            "updatedAt": "2025-01-28T15:30:00Z"
-          },
-          {
-            "id": "protwords",
-            "name": "보호어 사전",
-            "path": "/var/lib/fess/dict/protwords.txt",
-            "type": "protwords",
-            "updatedAt": "2025-01-27T12:00:00Z"
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ],
-        "total": 3
+        ]
       }
     }
 
-사전 내용 조회
-============
+응답 필드
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 필드
+     - 설명
+   * - ``settings[].id``
+     - 사전 ID (개별 사전 조작 시 ``{dictId}`` 로 사용)
+   * - ``settings[].type``
+     - 사전 종류
+   * - ``settings[].path``
+     - 사전 파일의 경로
+   * - ``settings[].timestamp``
+     - 사전 파일의 업데이트 일시
+
+사전 항목 목록 조회
+================
+
+지정한 사전 내의 항목을 목록으로 조회합니다.
 
 요청
 ----------
 
 ::
 
-    GET /api/admin/dict/{id}
+    GET /api/admin/dict/{type}/settings/{dictId}
+
+파라미터
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - 파라미터
+     - 타입
+     - 필수
+     - 설명
+   * - ``dictId``
+     - String
+     - 예
+     - 사전 ID (경로 파라미터)
+   * - ``size``
+     - Integer
+     - 아니오
+     - 페이지당 건수
+   * - ``page``
+     - Integer
+     - 아니오
+     - 페이지 번호
+
+응답
+----------
+
+응답의 ``settings`` 배열의 각 항목의 필드는 사전 종류에 따라 다릅니다(후술하는 "사전 종류별 항목 필드" 참조).
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "settings": [
+          {
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "検索,サーチ",
+            "outputs": "検索,サーチ,リサーチ"
+          }
+        ]
+      }
+    }
+
+사전 항목 조회
+============
+
+사전 내의 특정 항목을 조회합니다.
+
+요청
+----------
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+파라미터
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - 파라미터
+     - 타입
+     - 필수
+     - 설명
+   * - ``dictId``
+     - String
+     - 예
+     - 사전 ID (경로 파라미터)
+   * - ``id``
+     - Long
+     - 예
+     - 항목 ID (경로 파라미터)
 
 응답
 ----------
@@ -100,51 +222,39 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dict": {
-          "id": "synonym",
-          "name": "동의어 사전",
-          "path": "/var/lib/fess/dict/synonym.txt",
-          "type": "synonym",
-          "content": "검색,서치,리서치\nFess,페스\n전문검색,풀텍스트서치",
-          "updatedAt": "2025-01-29T10:00:00Z"
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "検索,サーチ",
+          "outputs": "検索,サーチ,リサーチ"
         }
       }
     }
 
-사전 내용 업데이트
+사전 항목 생성
 ============
+
+사전에 새로운 항목을 생성합니다.
 
 요청
 ----------
 
 ::
 
-    PUT /api/admin/dict/{id}
+    POST /api/admin/dict/{type}/setting/{dictId}
     Content-Type: application/json
 
-요청 본문
-~~~~~~~~~~~~~~~~
+요청 본문 (synonym 예시)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
-      "content": "검색,서치,리서치,search\nFess,페스\n전문검색,풀텍스트서치,full-text search"
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ"
     }
-
-필드 설명
-~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - 필드
-     - 필수
-     - 설명
-   * - ``content``
-     - 예
-     - 사전 내용 (줄바꿈 구분)
 
 응답
 ----------
@@ -153,55 +263,111 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Dictionary updated successfully"
+        "id": "1",
+        "created": true
+      }
+    }
+
+사전 항목 업데이트
+============
+
+사전 내의 기존 항목을 업데이트합니다.
+
+요청
+----------
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+요청 본문 (synonym 예시)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ,search"
+    }
+
+응답
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+사전 항목 삭제
+============
+
+사전 내의 항목을 삭제합니다.
+
+요청
+----------
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+파라미터
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - 파라미터
+     - 타입
+     - 필수
+     - 설명
+   * - ``dictId``
+     - String
+     - 예
+     - 사전 ID (경로 파라미터)
+   * - ``id``
+     - Long
+     - 예
+     - 항목 ID (경로 파라미터)
+
+응답
+----------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
       }
     }
 
 사전 파일 업로드
 ========================
 
+사전 파일 전체를 업로드하여 교체합니다.
+
 요청
 ----------
 
 ::
 
-    POST /api/admin/dict/upload
+    PUT /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
-요청 본문
-~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="type"
-
-    synonym
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="synonym.txt"
-    Content-Type: text/plain
-
-    검색,서치,리서치
-    Fess,페스
-    --boundary--
-
-필드 설명
-~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - 필드
-     - 필수
-     - 설명
-   * - ``type``
-     - 예
-     - 사전 타입 (synonym/mapping/protwords/stopwords)
-   * - ``file``
-     - 예
-     - 사전 파일
+파일 필드의 이름은 사전 종류별로 다릅니다(후술하는 "사전 종류별 항목 필드" 참조).
 
 응답
 ----------
@@ -210,63 +376,56 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "status": 0,
-        "message": "Dictionary uploaded successfully"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
-사전 타입
-==========
+사전 파일 다운로드
+========================
+
+사전 파일을 다운로드합니다.
+
+요청
+----------
+
+::
+
+    GET /api/admin/dict/{type}/download/{dictId}
+
+응답은 사전 파일의 바이너리( ``application/octet-stream`` )입니다.
+
+사전 종류별 항목 필드
+============================
+
+사전 항목의 생성, 업데이트 요청 본문 및 응답의 필드는 사전 종류별로 다릅니다.
+``id`` (항목 ID)와 ``dictId`` (사전 ID)는 응답에 공통으로 포함됩니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 80
+   :widths: 18 42 40
 
-   * - 타입
-     - 설명
+   * - 종류
+     - 항목 필드
+     - 업로드 파일 필드
    * - ``synonym``
-     - 동의어 사전 (검색 시 동의어 확장)
-   * - ``mapping``
-     - 매핑 사전 (문자 정규화)
-   * - ``protwords``
-     - 보호어 사전 (스테밍 대상 제외 단어)
-   * - ``stopwords``
-     - 스톱워드 사전 (인덱스 대상 제외 단어)
+     - ``inputs`` (필수)、 ``outputs`` (필수)
+     - ``synonymFile``
    * - ``kuromoji``
-     - Kuromoji 사전 (일본어 형태소 분석)
-
-사전 형식 예시
-============
-
-동의어 사전
-----------
-
-::
-
-    # 쉼표로 동의어 지정
-    검색,서치,리서치,search
-    Fess,페스,fess
-    전문검색,풀텍스트서치,full-text search
-
-매핑 사전
---------------
-
-::
-
-    # 변환 전 => 변환 후
-    ０ => 0
-    １ => 1
-    ２ => 2
-
-보호어 사전
-----------
-
-::
-
-    # 스테밍 처리에서 보호할 단어
-    running
-    searching
-    indexing
+     - ``token`` (필수)、 ``segmentation`` (필수)、 ``reading`` (필수)、 ``pos`` (필수)
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` (필수)、 ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` (필수)
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` (필수)
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` (필수)、 ``output`` (필수)
+     - ``stemmerOverrideFile``
 
 사용 예
 ======
@@ -279,42 +438,44 @@ Dict API는 |Fess| 의 사전 파일을 관리하기 위한 API입니다.
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-동의어 사전 내용 조회
---------------------
+동의어 사전 항목 목록 조회
+------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-동의어 사전 업데이트
-----------------
+동의어 사전에 항목 추가
+----------------------
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "content": "검색,서치,search\nFess,페스,fess\n문서,도큐먼트,document"
+           "inputs": "検索,サーチ",
+           "outputs": "検索,サーチ,リサーチ"
          }'
 
-사전 파일 업로드
---------------------------
+동의어 사전 파일 업로드
+--------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/dict/upload" \
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "type=synonym" \
-         -F "file=@synonym.txt"
+         -F "synonymFile=@synonym.txt"
 
-주의 사항
-========
+동의어 사전 파일 다운로드
+--------------------------------
 
-- 사전을 업데이트한 후에는 인덱스 재구축이 필요할 수 있습니다
-- 대규모 사전 파일은 검색 성능에 영향을 줄 수 있습니다
-- 사전의 문자 인코딩은 UTF-8을 사용하세요
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o synonym.txt
 
 참고 정보
 ========

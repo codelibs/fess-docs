@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des boosts de documents
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/boostdoc/settings
-    PUT /api/admin/boostdoc/settings
 
 Parametres
 ~~~~~~~~~~
@@ -228,9 +227,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_boostdoc_id",
-        "created": false
+        "status": 0
       }
     }
 

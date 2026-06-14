@@ -20,7 +20,7 @@ Point de terminaison  ``/api/v2/cache/{docId}``
 
 Retourne le HTML en cache (avec mise en évidence appliquée) d'un document.
 
-Si ``app.login.required=true`` et que l'appelant est anonyme, une erreur ``auth_required`` (401) est retournée.
+Si le paramètre de connexion obligatoire (« Connexion obligatoire » dans les paramètres système) est activé et que l'appelant est anonyme, une erreur ``auth_required`` (401) est retournée.
 
 Paramètres de requête
 ---------------------
@@ -87,7 +87,7 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
    * - 400 Bad Request
      - La requête est incorrecte.
    * - 401 Unauthorized
-     - Authentification requise (``app.login.required=true`` avec appelant anonyme).
+     - Authentification requise (paramètre de connexion obligatoire activé avec appelant anonyme).
    * - 404 Not Found
      - Ressource introuvable.
    * - 405 Method Not Allowed

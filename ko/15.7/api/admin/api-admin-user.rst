@@ -25,7 +25,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
    * - 메서드
      - 경로
      - 설명
-   * - GET/PUT
+   * - GET
      - /settings
      - 사용자 목록 조회
    * - GET
@@ -50,7 +50,6 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
 ::
 
     GET /api/admin/user/settings
-    PUT /api/admin/user/settings
 
 파라미터
 ~~~~~~~~~~~~
@@ -84,9 +83,11 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
           {
             "id": "user_id_1",
             "name": "admin",
-            "surname": "Administrator",
-            "givenName": "System",
-            "mail": "admin@example.com",
+            "attributes": {
+              "surname": "Administrator",
+              "givenName": "System",
+              "mail": "admin@example.com"
+            },
             "roles": ["admin"],
             "groups": []
           }
@@ -116,41 +117,15 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
         "setting": {
           "id": "user_id_1",
           "name": "admin",
-          "surname": "Administrator",
-          "givenName": "System",
-          "mail": "admin@example.com",
-          "telephoneNumber": "",
-          "homePhone": "",
-          "homePostalAddress": "",
-          "labeledUri": "",
-          "roomNumber": "",
-          "description": "",
-          "title": "",
-          "pager": "",
-          "street": "",
-          "postalCode": "",
-          "physicalDeliveryOfficeName": "",
-          "destinationIndicator": "",
-          "internationaliSDNNumber": "",
-          "state": "",
-          "employeeNumber": "",
-          "facsimileTelephoneNumber": "",
-          "postOfficeBox": "",
-          "initials": "",
-          "carLicense": "",
-          "mobile": "",
-          "postalAddress": "",
-          "city": "",
-          "teletexTerminalIdentifier": "",
-          "x121Address": "",
-          "businessCategory": "",
-          "registeredAddress": "",
-          "displayName": "",
-          "preferredLanguage": "",
-          "departmentNumber": "",
-          "uidNumber": "",
-          "gidNumber": "",
-          "homeDirectory": "",
+          "attributes": {
+            "surname": "Administrator",
+            "givenName": "System",
+            "mail": "admin@example.com",
+            "telephoneNumber": "",
+            "uidNumber": "",
+            "gidNumber": "",
+            "homeDirectory": ""
+          },
           "roles": ["admin"],
           "groups": []
         }
@@ -176,9 +151,12 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
     {
       "name": "testuser",
       "password": "securepassword",
-      "surname": "Test",
-      "givenName": "User",
-      "mail": "testuser@example.com",
+      "confirmPassword": "securepassword",
+      "attributes": {
+        "surname": "Test",
+        "givenName": "User",
+        "mail": "testuser@example.com"
+      },
       "roles": ["user"],
       "groups": ["group_id_1"]
     }
@@ -197,20 +175,14 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
      - 예
      - 사용자명 (로그인 ID)
    * - ``password``
-     - 예
+     - 아니오
      - 비밀번호
-   * - ``surname``
+   * - ``confirmPassword``
      - 아니오
-     - 성
-   * - ``givenName``
+     - 확인용 비밀번호 (``password`` 와 일치시킵니다)
+   * - ``attributes``
      - 아니오
-     - 이름
-   * - ``mail``
-     - 아니오
-     - 이메일 주소
-   * - ``telephoneNumber``
-     - 아니오
-     - 전화번호
+     - 속성 맵 (``surname`` , ``givenName`` , ``mail`` , ``telephoneNumber`` 등의 LDAP 속성을 포함)
    * - ``roles``
      - 아니오
      - 역할 ID 배열
@@ -251,9 +223,12 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "surname": "Test",
-      "givenName": "User Updated",
-      "mail": "testuser.updated@example.com",
+      "confirmPassword": "newpassword",
+      "attributes": {
+        "surname": "Test",
+        "givenName": "User Updated",
+        "mail": "testuser.updated@example.com"
+      },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
       "versionNo": 1
@@ -309,9 +284,12 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "surname": "Doe",
-           "givenName": "John",
-           "mail": "john.doe@example.com",
+           "confirmPassword": "SecureP@ss123",
+           "attributes": {
+             "surname": "Doe",
+             "givenName": "John",
+             "mail": "john.doe@example.com"
+           },
            "roles": ["user"],
            "groups": []
          }'

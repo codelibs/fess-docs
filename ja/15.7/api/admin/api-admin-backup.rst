@@ -5,8 +5,8 @@ Backup API
 概要
 ====
 
-Backup APIは、|Fess| の設定データをバックアップ・リストアするためのAPIです。
-クロール設定、ユーザー、ロール、辞書などの設定をエクスポート・インポートできます。
+Backup APIは、|Fess| のバックアップ対象データを参照・ダウンロードするためのAPIです。
+バックアップ対象の一覧取得と、個別のバックアップファイル（システムプロパティ、各インデックスのバルクデータ、ログのNDJSONデータ）のダウンロードを行えます。
 
 ベースURL
 =========
@@ -26,253 +26,118 @@ Backup APIは、|Fess| の設定データをバックアップ・リストアす
      - パス
      - 説明
    * - GET
-     - /export
-     - 設定データエクスポート
-   * - POST
-     - /import
-     - 設定データインポート
+     - /files
+     - バックアップ対象一覧取得
+   * - GET
+     - /file/{id}
+     - バックアップファイルのダウンロード
 
-設定データエクスポート
-======================
+バックアップ対象一覧取得
+========================
 
-リクエスト
-----------
-
-::
-
-    GET /api/admin/backup/export
-
-パラメーター
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - パラメーター
-     - 型
-     - 必須
-     - 説明
-   * - ``types``
-     - String
-     - いいえ
-     - エクスポート対象（カンマ区切り、デフォルト: all）
-
-エクスポート対象タイプ
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - タイプ
-     - 説明
-   * - ``webconfig``
-     - Webクロール設定
-   * - ``fileconfig``
-     - ファイルクロール設定
-   * - ``dataconfig``
-     - データストア設定
-   * - ``scheduler``
-     - スケジュール設定
-   * - ``user``
-     - ユーザー設定
-   * - ``role``
-     - ロール設定
-   * - ``group``
-     - グループ設定
-   * - ``labeltype``
-     - ラベルタイプ設定
-   * - ``keymatch``
-     - キーマッチ設定
-   * - ``dict``
-     - 辞書データ
-   * - ``all``
-     - 全ての設定（デフォルト）
-
-レスポンス
-----------
-
-バイナリデータ（ZIP形式）
-
-Content-Type: ``application/zip``
-Content-Disposition: ``attachment; filename="fess-backup-20250129-100000.zip"``
-
-ZIPファイル内容
-~~~~~~~~~~~~~~~
-
-::
-
-    fess-backup-20250129-100000.zip
-    ├── webconfig.json
-    ├── fileconfig.json
-    ├── dataconfig.json
-    ├── scheduler.json
-    ├── user.json
-    ├── role.json
-    ├── group.json
-    ├── labeltype.json
-    ├── keymatch.json
-    ├── dict/
-    │   ├── synonym.txt
-    │   ├── mapping.txt
-    │   └── protwords.txt
-    └── metadata.json
-
-設定データインポート
-====================
+バックアップ対象の一覧を返します。対象は ``index.backup.targets`` および ``index.backup.log.targets`` の設定に基づきます。
 
 リクエスト
 ----------
 
 ::
 
-    POST /api/admin/backup/import
-    Content-Type: multipart/form-data
-
-リクエストボディ
-~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="fess-backup.zip"
-    Content-Type: application/zip
-
-    [バイナリデータ]
-    --boundary
-    Content-Disposition: form-data; name="overwrite"
-
-    true
-    --boundary--
-
-フィールド説明
-~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - フィールド
-     - 必須
-     - 説明
-   * - ``file``
-     - はい
-     - バックアップZIPファイル
-   * - ``overwrite``
-     - いいえ
-     - 既存設定を上書き（デフォルト: false）
-   * - ``types``
-     - いいえ
-     - インポート対象（カンマ区切り、デフォルト: all）
+    GET /api/admin/backup/files
 
 レスポンス
 ----------
+
+``files`` にバックアップ対象を表すオブジェクトの配列、``total`` に件数が格納されます。
+各オブジェクトは ``id`` と ``name`` を持ち、いずれも対象名（``fess_config.bulk``、``system.properties``、``search_log.ndjson`` など）が設定されます。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Backup imported successfully",
-        "imported": {
-          "webconfig": 5,
-          "fileconfig": 3,
-          "dataconfig": 2,
-          "scheduler": 4,
-          "user": 10,
-          "role": 5,
-          "group": 3,
-          "labeltype": 8,
-          "keymatch": 12,
-          "dict": 3
-        }
+        "files": [
+          {
+            "id": "fess_config.bulk",
+            "name": "fess_config.bulk"
+          },
+          {
+            "id": "system.properties",
+            "name": "system.properties"
+          },
+          {
+            "id": "search_log.ndjson",
+            "name": "search_log.ndjson"
+          }
+        ],
+        "total": 3
       }
     }
+
+バックアップファイルのダウンロード
+==================================
+
+指定したバックアップファイルの内容をダウンロードします。``{id}`` には一覧取得で得られた ``id`` （対象名）を指定します。
+``{id}`` の種別によって、レスポンス内容が以下のように切り替わります。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - ID
+     - 内容
+   * - ``system.properties``
+     - システムプロパティの内容
+   * - ``*.bulk`` または ``.bulk`` 拡張子なしのインデックス名
+     - 対象インデックスをスクロールして生成したバルクデータ
+   * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``）
+     - 対応するログのNDJSONデータ
+
+バックアップ対象に存在しない ``{id}`` を指定した場合はエラーになります。
+
+リクエスト
+----------
+
+::
+
+    GET /api/admin/backup/file/{id}
+
+レスポンス
+----------
+
+バックアップファイルのストリーム。NDJSON形式の場合は ``Content-Type: application/x-ndjson``、それ以外は ``application/octet-stream`` で返されます。
 
 使用例
 ======
 
-全設定のエクスポート
---------------------
+バックアップ対象一覧の取得
+--------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup.zip
+    curl -X GET "http://localhost:8080/api/admin/backup/files" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-特定設定のエクスポート
-----------------------
-
-.. code-block:: bash
-
-    # Webクロール設定とユーザー設定のみエクスポート
-    curl -X GET "http://localhost:8080/api/admin/backup/export?types=webconfig,user" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o fess-backup-partial.zip
-
-設定のインポート
-----------------
-
-.. code-block:: bash
-
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=false"
-
-既存設定を上書きしてインポート
+設定インデックスのダウンロード
 ------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "overwrite=true"
+         -o fess_config.bulk
 
-特定設定のみインポート
+検索ログのダウンロード
 ----------------------
 
 .. code-block:: bash
 
-    # ユーザーとロールのみインポート
-    curl -X POST "http://localhost:8080/api/admin/backup/import" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "file=@fess-backup.zip" \
-         -F "types=user,role" \
-         -F "overwrite=false"
-
-バックアップの自動化
---------------------
-
-.. code-block:: bash
-
-    #!/bin/bash
-    # 毎日午前2時にバックアップを取得するスクリプト例
-
-    DATE=$(date +%Y%m%d)
-    BACKUP_DIR="/backup/fess"
-
-    curl -X GET "http://localhost:8080/api/admin/backup/export" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -o "${BACKUP_DIR}/fess-backup-${DATE}.zip"
-
-    # 30日より古いバックアップを削除
-    find "${BACKUP_DIR}" -name "fess-backup-*.zip" -mtime +30 -delete
-
-注意事項
-========
-
-- バックアップにはパスワード情報も含まれるため、セキュアに保管してください
-- インポート時に ``overwrite=true`` を指定すると既存設定が上書きされます
-- 大規模な設定の場合、エクスポート/インポートに時間がかかる場合があります
-- バージョンが異なるFess間でのインポートは互換性の問題が発生する可能性があります
+         -o search_log.ndjson
 
 参考情報
 ========
 
 - :doc:`api-admin-overview` - Admin API概要
-- :doc:`../../admin/backup-guide` - バックアップ管理ガイド
-- :doc:`../../admin/maintenance-guide` - メンテナンスガイド
+- :doc:`api-admin-log` - ログAPI

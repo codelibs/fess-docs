@@ -56,13 +56,13 @@ Pour les détails sur l'obtention du jeton CSRF ainsi que sur l'authentification
 Limite de débit
 ===============
 
-``POST /chat`` et ``DELETE /chat/sessions/{session_id}`` sont soumis à une limite de débit par utilisateur.
+``POST /chat`` , ``POST /chat/stream`` et ``DELETE /chat/sessions/{session_id}`` sont soumis à une limite de débit par utilisateur.
 
 - Valeur par défaut : 30 requêtes par minute (par utilisateur)
 - Clé de configuration : ``api.v2.chat.rate.limit.per.user.per.minute``
 
 En cas de dépassement, une erreur ``rate_limited`` (HTTP 429) est retournée. L'en-tête ``Retry-After`` indique le nombre de secondes d'attente.
-Cette limite de débit est partagée entre ``POST /chat`` et ``DELETE /chat/sessions/{session_id}``.
+Cette limite de débit est partagée entre ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}``.
 
 POST /chat
 ==========
@@ -294,7 +294,7 @@ Exemple de stream SSE :
 ::
 
     event: phase
-    data: {"phase":"retrieval","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
+    data: {"phase":"search","status":"start","message":"Searching documents...","keywords":"Fess インストール"}
 
     event: chunk
     data: {"content":"Fessは"}

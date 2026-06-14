@@ -75,8 +75,12 @@ cURL示例
 通用模式
 ========
 
-获取列表（GET/PUT /settings）
------------------------------
+具有设置的资源（如 webconfig、user、role 等）遵循以下通用的CRUD模式。
+但是，部分资源（systeminfo、stats、storage、plugin、log、backup、documents、suggest、dict 根等）
+具有与该通用模式不同的独立端点结构，请参阅各资源的页面。
+
+获取列表（GET /settings）
+-------------------------
 
 获取设置列表。
 
@@ -86,7 +90,6 @@ cURL示例
 ::
 
     GET /api/admin/<resource>/settings
-    PUT /api/admin/<resource>/settings
 
 参数（分页）：
 
@@ -111,11 +114,17 @@ cURL示例
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   所有响应的 ``response`` 对象中始终包含表示产品版本的 ``version``
+   （例如： ``"15.7.0"``）。为简洁起见，后续示例中可能省略该字段。
 
 获取单个设置（GET /setting/{id}）
 ---------------------------------
@@ -219,6 +228,20 @@ cURL示例
 响应
 ~~~~
 
+删除响应的格式因资源（操作）而异。多数资源仅返回
+``status``。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+部分资源会将删除结果作为 ``ApiUpdateResponse`` 返回，并附带已删除设置的
+``id`` 和 ``created``（删除时为 ``false``）。
+
 .. code-block:: json
 
     {
@@ -229,8 +252,33 @@ cURL示例
       }
     }
 
+此外，返回 ``ApiDeleteResponse`` 的资源还可能附带表示删除数量的 ``count``
+（默认值 ``1``）。实际格式请参阅各资源的页面。
+
 响应格式
 ========
+
+所有响应均由 ``response`` 对象包装，并始终包含表示产品版本的
+``version`` 和表示处理结果的 ``status``。
+
+``status`` 的取值如下。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - 值
+     - 说明
+   * - ``0``
+     - OK（成功）
+   * - ``1``
+     - BAD_REQUEST（请求无效）
+   * - ``2``
+     - SYSTEM_ERROR（系统错误）
+   * - ``3``
+     - UNAUTHORIZED（认证错误）
+   * - ``9``
+     - FAILED（处理失败）
 
 成功响应
 --------
@@ -239,8 +287,9 @@ cURL示例
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +298,15 @@ cURL示例
 错误响应
 --------
 
+发生错误时， ``status`` 会被设置为 0 以外的值， ``message`` 中包含错误消息。
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +352,13 @@ HTTP状态码
      - 文件爬虫设置
    * - :doc:`api-admin-dataconfig`
      - 数据存储设置
+
+.. note::
+
+   此外，以下与认证信息和爬取控制相关的资源也作为API提供
+   （目前尚未提供独立页面）： ``webauth``（Web认证）、 ``fileauth``（文件认证）、
+   ``reqheader``（请求头）、 ``pathmap``（路径映射）、
+   ``duplicatehost``（重复主机）、 ``searchlist``（搜索/文档列表操作）。
 
 索引管理
 --------
@@ -396,8 +453,8 @@ HTTP状态码
      - 系统统计
    * - :doc:`api-admin-log`
      - 日志获取
-   * - :doc:`api-admin-searchlog`
-     - 搜索日志管理
+   * - :doc:`api-admin-searchlist`
+     - 文档搜索与管理
    * - :doc:`api-admin-storage`
      - 存储管理
    * - :doc:`api-admin-plugin`

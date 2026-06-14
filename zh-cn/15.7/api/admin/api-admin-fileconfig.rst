@@ -25,7 +25,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取文件爬虫设置列表
    * - GET
@@ -50,7 +50,6 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 ::
 
     GET /api/admin/fileconfig/settings
-    PUT /api/admin/fileconfig/settings
 
 参数
 ~~~~
@@ -84,6 +83,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
           {
             "id": "fileconfig_id_1",
             "name": "Shared Documents",
+            "description": "共有ドキュメント",
             "paths": "file://///server/share/documents",
             "includedPaths": ".*\\.pdf$",
             "excludedPaths": ".*/(temp|cache)/.*",
@@ -95,7 +95,9 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -124,6 +126,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
         "setting": {
           "id": "fileconfig_id_1",
           "name": "Shared Documents",
+          "description": "共有ドキュメント",
           "paths": "file://///server/share/documents",
           "includedPaths": ".*\\.pdf$",
           "excludedPaths": ".*/(temp|cache)/.*",
@@ -135,10 +138,10 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -165,13 +168,12 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
       "paths": "file:///data/documents",
       "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
       "excludedPaths": ".*/(temp|backup)/.*",
-      "depth": 5,
-      "maxAccessCount": 5000,
       "numOfThread": 2,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -188,6 +190,9 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
    * - ``name``
      - 是
      - 设置名称
+   * - ``description``
+     - 否
+     - 设置的说明
    * - ``paths``
      - 是
      - 爬虫起始路径（多个路径用换行符分隔）
@@ -208,34 +213,34 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
      - 附加配置参数
    * - ``depth``
      - 否
-     - 爬虫深度（默认：-1=无限制）
+     - 爬虫深度
    * - ``maxAccessCount``
      - 否
-     - 最大访问数（默认：100）
+     - 最大访问数
    * - ``numOfThread``
-     - 否
-     - 并行线程数（默认：1）
+     - 是
+     - 并行线程数
    * - ``intervalTime``
-     - 否
-     - 访问间隔（毫秒，默认：0）
+     - 是
+     - 访问间隔（毫秒）
    * - ``boost``
-     - 否
-     - 搜索结果提升值（默认：1.0）
+     - 是
+     - 搜索结果提升值
    * - ``available``
-     - 否
-     - 启用/禁用（默认：true）
+     - 是
+     - 启用/禁用（字符串 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - 否
+     - 是
      - 显示顺序
    * - ``permissions``
      - 否
-     - 访问权限角色
+     - 访问权限角色（多个时用换行符分隔）
    * - ``virtualHosts``
      - 否
-     - 虚拟主机
+     - 虚拟主机（多个时用换行符分隔）
    * - ``labelTypeIds``
      - 否
-     - 标签类型ID
+     - 标签类型ID（数组）
 
 响应
 ----
@@ -277,7 +282,8 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
       "numOfThread": 3,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -311,9 +317,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_fileconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -351,12 +355,13 @@ SMB共享爬虫设置
            "paths": "smb://user:pass@server/documents",
            "includedPaths": ".*\\.(pdf|doc|docx)$",
            "excludedPaths": ".*/(temp|private)/.*",
-           "depth": -1,
            "maxAccessCount": 50000,
            "numOfThread": 3,
            "intervalTime": 200,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 参考信息

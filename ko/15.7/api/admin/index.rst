@@ -77,4 +77,4 @@ Admin API 레퍼런스
    :maxdepth: 2
    :caption: 검색 로그
 
-   api-admin-searchlog
+   api-admin-searchlist

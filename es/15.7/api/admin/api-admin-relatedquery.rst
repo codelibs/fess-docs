@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de consultas relacionadas
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/relatedquery/settings
-    PUT /api/admin/relatedquery/settings
 
 Parametros
 ~~~~~~~~~~
@@ -84,7 +83,7 @@ Respuesta
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": ["fess tutorial", "fess installation", "fess configuration"]
+            "queries": "fess tutorial\nfess installation\nfess configuration"
           }
         ],
         "total": 5
@@ -112,7 +111,7 @@ Respuesta
         "setting": {
           "id": "query_id_1",
           "term": "fess",
-          "queries": ["fess tutorial", "fess installation", "fess configuration"],
+          "queries": "fess tutorial\nfess installation\nfess configuration",
           "virtualHost": ""
         }
       }
@@ -136,7 +135,7 @@ Cuerpo de la Solicitud
 
     {
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search",
       "virtualHost": ""
     }
 
@@ -155,7 +154,7 @@ Descripcion de Campos
      - Palabra clave de busqueda
    * - ``queries``
      - Si
-     - Array de consultas relacionadas
+     - Consultas relacionadas (cadena separada por saltos de linea, una por linea)
    * - ``virtualHost``
      - No
      - Host virtual
@@ -192,7 +191,7 @@ Cuerpo de la Solicitud
     {
       "id": "existing_query_id",
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search", "search tips"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
       "virtualHost": "",
       "versionNo": 1
     }
@@ -227,9 +226,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_query_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -246,7 +243,7 @@ Consultas Relacionadas con Productos
          -H "Content-Type: application/json" \
          -d '{
            "term": "product",
-           "queries": ["product features", "product pricing", "product comparison", "product reviews"]
+           "queries": "product features\nproduct pricing\nproduct comparison\nproduct reviews"
          }'
 
 Consultas Relacionadas con Ayuda
@@ -259,7 +256,7 @@ Consultas Relacionadas con Ayuda
          -H "Content-Type: application/json" \
          -d '{
            "term": "help",
-           "queries": ["help center", "help documentation", "help contact support"]
+           "queries": "help center\nhelp documentation\nhelp contact support"
          }'
 
 Informacion de Referencia

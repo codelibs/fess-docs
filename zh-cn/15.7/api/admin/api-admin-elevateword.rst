@@ -25,7 +25,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - 方法
      - 路径
      - 说明
-   * - GET/PUT
+   * - GET
      - /settings
      - 获取提升词列表
    * - GET
@@ -40,6 +40,12 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - DELETE
      - /setting/{id}
      - 删除提升词
+   * - PUT
+     - /upload
+     - 上传提升词CSV
+   * - GET
+     - /download
+     - 下载提升词CSV
 
 获取提升词列表
 ==============
@@ -50,7 +56,6 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 ::
 
     GET /api/admin/elevateword/settings
-    PUT /api/admin/elevateword/settings
 
 参数
 ~~~~
@@ -85,10 +90,9 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
             "id": "elevate_id_1",
             "suggestWord": "fess",
             "reading": "",
-            "permissions": [],
-            "boost": 10.0,
-            "targetRole": "",
-            "targetLabel": ""
+            "permissions": "{role}guest",
+            "boost": 100.0,
+            "labelTypeIds": []
           }
         ],
         "total": 5
@@ -117,10 +121,9 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
           "id": "elevate_id_1",
           "suggestWord": "fess",
           "reading": "",
-          "permissions": [],
-          "boost": 10.0,
-          "targetRole": "",
-          "targetLabel": ""
+          "permissions": "{role}guest",
+          "boost": 100.0,
+          "labelTypeIds": []
         }
       }
     }
@@ -144,10 +147,9 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
     {
       "suggestWord": "documentation",
       "reading": "",
-      "permissions": ["guest"],
-      "boost": 15.0,
-      "targetRole": "user",
-      "targetLabel": "docs"
+      "permissions": "{role}guest",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"]
     }
 
 字段说明
@@ -168,16 +170,13 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
      - 读音（日语假名）
    * - ``permissions``
      - 否
-     - 访问权限角色
+     - 访问权限（每行一项的换行分隔字符串。表单初始值：搜索的默认显示权限）
    * - ``boost``
+     - 是
+     - 提升值（表单初始值：100.0）
+   * - ``labelTypeIds``
      - 否
-     - 提升值（默认：1.0）
-   * - ``targetRole``
-     - 否
-     - 目标角色
-   * - ``targetLabel``
-     - 否
-     - 目标标签
+     - 目标标签ID（字符串数组）
 
 响应
 ----
@@ -212,10 +211,9 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
       "id": "existing_elevate_id",
       "suggestWord": "documentation",
       "reading": "",
-      "permissions": ["guest", "user"],
-      "boost": 20.0,
-      "targetRole": "user",
-      "targetLabel": "docs",
+      "permissions": "{role}guest\n{role}user",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"],
       "versionNo": 1
     }
 
@@ -255,6 +253,56 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
       }
     }
 
+上传提升词CSV
+=============
+
+从CSV文件批量注册提升词。文件以 ``multipart/form-data`` 发送。导入在服务器端异步执行。
+
+请求
+----
+
+::
+
+    PUT /api/admin/elevateword/upload
+    Content-Type: multipart/form-data
+
+参数
+~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - 参数
+     - 必需
+     - 说明
+   * - ``elevateWordFile``
+     - 是
+     - 要上传的提升词CSV文件
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+下载提升词CSV
+=============
+
+将已注册的提升词作为CSV文件（``elevate.csv``）下载。响应为 ``application/octet-stream`` 流。
+
+请求
+----
+
+::
+
+    GET /api/admin/elevateword/download
+
 使用示例
 ========
 
@@ -268,8 +316,8 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "Product X",
-           "boost": 20.0,
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "permissions": "{role}guest"
          }'
 
 针对特定标签提升
@@ -282,10 +330,28 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
          -H "Content-Type: application/json" \
          -d '{
            "suggestWord": "API reference",
-           "boost": 10.0,
-           "targetLabel": "technical_docs",
-           "permissions": ["guest"]
+           "boost": 100.0,
+           "labelTypeIds": ["technical_docs"],
+           "permissions": "{role}guest"
          }'
+
+上传CSV文件
+-----------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "elevateWordFile=@elevate.csv"
+
+下载CSV文件
+-----------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/elevateword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o elevate.csv
 
 参考信息
 ========

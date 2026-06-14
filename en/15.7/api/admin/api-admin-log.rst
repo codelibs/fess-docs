@@ -5,8 +5,8 @@ Log API
 Overview
 ========
 
-Log API is an API for retrieving |Fess| log information.
-You can view search logs, click logs, and favorite logs.
+The Log API is an API for referencing and downloading the log files of |Fess|.
+It allows you to retrieve a list of log files output on the server and download individual log files.
 
 Base URL
 ========
@@ -26,265 +26,107 @@ Endpoint List
      - Path
      - Description
    * - GET
-     - /search
-     - Get search logs
+     - /files
+     - Retrieve log file list
    * - GET
-     - /click
-     - Get click logs
-   * - GET
-     - /favorite
-     - Get favorite logs
-   * - DELETE
-     - /search/delete
-     - Delete search logs
+     - /file/{id}
+     - Download log file
 
-Get Search Logs
-===============
+Retrieve Log File List
+======================
+
+Returns a list of log files (``.log`` and ``.log.gz``) that exist in the server's log output directory.
 
 Request
 -------
 
 ::
 
-    GET /api/admin/log/search
-
-Parameters
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - ``size``
-     - Integer
-     - No
-     - Number of items per page (default: 20)
-   * - ``page``
-     - Integer
-     - No
-     - Page number (starts from 0)
-   * - ``from``
-     - String
-     - No
-     - Start date/time (ISO 8601 format)
-   * - ``to``
-     - String
-     - No
-     - End date/time (ISO 8601 format)
-   * - ``query``
-     - String
-     - No
-     - Search query filter
+    GET /api/admin/log/files
 
 Response
 --------
+
+``files`` contains an array of objects representing the information of each log file, and ``total`` contains the count.
+Each object has the following fields.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - ``id``
+     - The file name encoded with Base64 URL encoding (used for ``{id}`` when downloading)
+   * - ``name``
+     - Log file name
+   * - ``lastModified``
+     - Last modified date and time
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "logs": [
+        "files": [
           {
-            "id": "log_id_1",
-            "queryId": "query_id_1",
-            "query": "fess search",
-            "requestedAt": "2025-01-29T10:30:00Z",
-            "responseTime": 123,
-            "hitCount": 567,
-            "user": "guest",
-            "roles": ["guest"],
-            "languages": ["ja"],
-            "clientIp": "192.168.1.100",
-            "userAgent": "Mozilla/5.0..."
+            "id": "ZmVzcy5sb2c=",
+            "name": "fess.log",
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
+          },
+          {
+            "id": "ZmVzcy1jcmF3bGVyLmxvZw==",
+            "name": "fess-crawler.log",
+            "lastModified": "2025-01-01T00:00:00.000+00:00"
           }
         ],
-        "total": 1234
+        "total": 2
       }
     }
 
-Get Click Logs
-==============
-
-Request
--------
-
-::
-
-    GET /api/admin/log/click
-
-Parameters
-~~~~~~~~~~
-
-In addition to the same parameters as search logs, the following can be specified:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - ``url``
-     - String
-     - No
-     - Clicked URL filter
-   * - ``queryId``
-     - String
-     - No
-     - Search query ID filter
-
-Response
---------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "logs": [
-          {
-            "id": "click_log_id_1",
-            "queryId": "query_id_1",
-            "url": "https://example.com/doc1",
-            "docId": "doc_id_1",
-            "order": 1,
-            "clickedAt": "2025-01-29T10:31:00Z",
-            "user": "guest",
-            "clientIp": "192.168.1.100"
-          }
-        ],
-        "total": 567
-      }
-    }
-
-Get Favorite Logs
+Download Log File
 =================
 
-Request
--------
-
-::
-
-    GET /api/admin/log/favorite
-
-Parameters
-~~~~~~~~~~
-
-Same parameters as click logs.
-
-Response
---------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "logs": [
-          {
-            "id": "favorite_log_id_1",
-            "url": "https://example.com/doc1",
-            "docId": "doc_id_1",
-            "createdAt": "2025-01-29T10:32:00Z",
-            "user": "user123"
-          }
-        ],
-        "total": 123
-      }
-    }
-
-Delete Search Logs
-==================
+Downloads the contents of the specified log file.
+For ``{id}``, specify the ``id`` (the file name encoded with Base64) obtained from the file list retrieval.
+The response is returned as an ``application/octet-stream`` stream.
+If you specify a non-existent file name or a name that is not permitted as a log file, an empty response is returned.
 
 Request
 -------
 
 ::
 
-    DELETE /api/admin/log/search/delete
-
-Parameters
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - ``before``
-     - String
-     - Yes
-     - Delete logs before this date/time (ISO 8601 format)
+    GET /api/admin/log/file/{id}
 
 Response
 --------
 
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "deletedCount": 5678
-      }
-    }
+A binary stream of the log file (``Content-Type: application/octet-stream``).
 
 Usage Examples
 ==============
 
-Get Recent Search Logs
+Retrieve Log File List
 ----------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/log/search?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/log/files" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Get Search Logs for Time Period
--------------------------------
+Download Log File
+-----------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/log/search?from=2025-01-01&to=2025-01-31" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Get Search Logs for Specific Query
-----------------------------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/log/search?query=fess" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Get Click Logs
---------------
-
-.. code-block:: bash
-
-    curl -X GET "http://localhost:8080/api/admin/log/click?size=100" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-Delete Old Search Logs
-----------------------
-
-.. code-block:: bash
-
-    # Delete logs older than 30 days
-    curl -X DELETE "http://localhost:8080/api/admin/log/search/delete?before=2024-12-30T00:00:00Z" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/log/file/ZmVzcy5sb2c=" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o fess.log
 
 Reference
 =========
 
 - :doc:`api-admin-overview` - Admin API Overview
-- :doc:`api-admin-stats` - Stats API
-- :doc:`../../admin/log-guide` - Log Management Guide
-
+- :doc:`api-admin-backup` - Backup API

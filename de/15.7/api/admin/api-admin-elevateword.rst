@@ -5,8 +5,8 @@ ElevateWord API
 Übersicht
 =========
 
-Die ElevateWord API dient zur Verwaltung von Elevate Words (bevorzugten Begriffen) in |Fess|.
-Sie können bestimmte Wörter priorisieren, um entsprechende Dokumente in den Suchergebnissen höher zu ranken.
+Die ElevateWord API dient zur Verwaltung von Elevate Words (Beeinflussung des Suchrangs für bestimmte Schlüsselwörter) in |Fess|.
+Für bestimmte Suchanfragen können Sie bestimmte Dokumente höher oder niedriger platzieren.
 
 Basis-URL
 =========
@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Elevate Word Liste abrufen
    * - GET
@@ -40,6 +40,93 @@ Endpunktliste
    * - DELETE
      - /setting/{id}
      - Elevate Word löschen
+   * - PUT
+     - /upload
+     - Elevate Word CSV hochladen
+   * - GET
+     - /download
+     - Elevate Word CSV herunterladen
+
+Elevate Word Liste abrufen
+==========================
+
+Request
+-------
+
+::
+
+    GET /api/admin/elevateword/settings
+
+Parameter
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15.70
+
+   * - Parameter
+     - Typ
+     - Erforderlich
+     - Beschreibung
+   * - ``size``
+     - Integer
+     - Nein
+     - Anzahl der Einträge pro Seite (Standard: 20)
+   * - ``page``
+     - Integer
+     - Nein
+     - Seitennummer (beginnt bei 0)
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "settings": [
+          {
+            "id": "elevate_id_1",
+            "suggestWord": "fess",
+            "reading": "フェス",
+            "permissions": "{role}guest",
+            "boost": 100.0,
+            "labelTypeIds": []
+          }
+        ],
+        "total": 5
+      }
+    }
+
+Elevate Word abrufen
+====================
+
+Request
+-------
+
+::
+
+    GET /api/admin/elevateword/setting/{id}
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "setting": {
+          "id": "elevate_id_1",
+          "suggestWord": "fess",
+          "reading": "フェス",
+          "permissions": "{role}guest",
+          "boost": 100.0,
+          "labelTypeIds": []
+        }
+      }
+    }
 
 Elevate Word erstellen
 ======================
@@ -58,10 +145,11 @@ Request-Body
 .. code-block:: json
 
     {
-      "suggestWord": "important product",
-      "reading": "",
-      "boost": 10.0,
-      "permissions": ["guest"]
+      "suggestWord": "documentation",
+      "reading": "ドキュメンテーション",
+      "permissions": "{role}guest",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"]
     }
 
 Feldbeschreibungen
@@ -76,19 +164,150 @@ Feldbeschreibungen
      - Beschreibung
    * - ``suggestWord``
      - Ja
-     - Das bevorzugte Wort
+     - Das hervorzuhebende Schlüsselwort
    * - ``reading``
      - Nein
-     - Lesehilfe (für japanische Begriffe)
-   * - ``boost``
-     - Nein
-     - Boost-Wert (Standard: 1.0)
+     - Lesehilfe (Kana)
    * - ``permissions``
      - Nein
-     - Zugriffsberechtigte Rollen
+     - Zugriffsberechtigungen (durch Zeilenumbrüche getrennte Zeichenkette, ein Eintrag pro Zeile. Formular-Standardwert: Standard-Anzeigeberechtigung der Suche)
+   * - ``boost``
+     - Ja
+     - Boost-Wert (Formular-Standardwert: 100.0)
+   * - ``labelTypeIds``
+     - Nein
+     - Ziel-Label-IDs (Array von Zeichenketten)
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "id": "new_elevate_id",
+        "created": true
+      }
+    }
+
+Elevate Word aktualisieren
+==========================
+
+Request
+-------
+
+::
+
+    PUT /api/admin/elevateword/setting
+    Content-Type: application/json
+
+Request-Body
+~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": "existing_elevate_id",
+      "suggestWord": "documentation",
+      "reading": "ドキュメンテーション",
+      "permissions": "{role}guest\n{role}user",
+      "boost": 100.0,
+      "labelTypeIds": ["label1"],
+      "versionNo": 1
+    }
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "id": "existing_elevate_id",
+        "created": false
+      }
+    }
+
+Elevate Word löschen
+====================
+
+Request
+-------
+
+::
+
+    DELETE /api/admin/elevateword/setting/{id}
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "id": "deleted_elevate_id",
+        "created": false
+      }
+    }
+
+Elevate Word CSV hochladen
+==========================
+
+Registriert Elevate Words gesammelt aus einer CSV-Datei. Die Datei wird als ``multipart/form-data`` gesendet. Der Import wird serverseitig asynchron ausgeführt.
+
+Request
+-------
+
+::
+
+    PUT /api/admin/elevateword/upload
+    Content-Type: multipart/form-data
+
+Parameter
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parameter
+     - Erforderlich
+     - Beschreibung
+   * - ``elevateWordFile``
+     - Ja
+     - Hochzuladende Elevate-Word-CSV-Datei
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Elevate Word CSV herunterladen
+==============================
+
+Lädt die registrierten Elevate Words als CSV-Datei (``elevate.csv``) herunter. Die Antwort ist ein Stream vom Typ ``application/octet-stream``.
+
+Request
+-------
+
+::
+
+    GET /api/admin/elevateword/download
 
 Verwendungsbeispiele
 ====================
+
+Produktnamen hervorheben
+------------------------
 
 .. code-block:: bash
 
@@ -96,14 +315,48 @@ Verwendungsbeispiele
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "new feature",
-           "boost": 15.0,
-           "permissions": ["guest"]
+           "suggestWord": "Product X",
+           "boost": 100.0,
+           "permissions": "{role}guest"
          }'
+
+Hervorheben für ein bestimmtes Label
+------------------------------------
+
+.. code-block:: bash
+
+    curl -X POST "http://localhost:8080/api/admin/elevateword/setting" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "suggestWord": "API reference",
+           "boost": 100.0,
+           "labelTypeIds": ["technical_docs"],
+           "permissions": "{role}guest"
+         }'
+
+CSV-Datei hochladen
+-------------------
+
+.. code-block:: bash
+
+    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -F "elevateWordFile=@elevate.csv"
+
+CSV-Datei herunterladen
+-----------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/elevateword/download" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o elevate.csv
 
 Referenzinformationen
 =====================
 
 - :doc:`api-admin-overview` - Admin API Übersicht
 - :doc:`api-admin-keymatch` - KeyMatch API
+- :doc:`api-admin-boostdoc` - BoostDoc API
 - :doc:`../../admin/elevateword-guide` - Elevate Word Verwaltungsanleitung

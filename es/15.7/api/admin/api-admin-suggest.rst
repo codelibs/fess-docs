@@ -5,8 +5,8 @@ API de Suggest
 Vision General
 ==============
 
-La API de Suggest es para gestionar la funcionalidad de sugerencias de |Fess|.
-Puede operar agregar, eliminar y actualizar palabras de sugerencia.
+La API de Suggest es una API para gestionar la funcionalidad de sugerencias de |Fess|.
+Permite obtener informacion estadistica de las palabras de sugerencia y eliminar palabras de sugerencia.
 
 URL Base
 ========
@@ -25,55 +25,30 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
-     - /settings
-     - Obtener lista de palabras de sugerencia
    * - GET
-     - /setting/{id}
-     - Obtener palabra de sugerencia
-   * - POST
-     - /setting
-     - Crear palabra de sugerencia
-   * - PUT
-     - /setting
-     - Actualizar palabra de sugerencia
+     - /
+     - Obtener informacion estadistica de palabras de sugerencia
    * - DELETE
-     - /setting/{id}
-     - Eliminar palabra de sugerencia
-   * - DELETE
-     - /delete-all
+     - /all
      - Eliminar todas las palabras de sugerencia
+   * - DELETE
+     - /document
+     - Eliminar palabras de sugerencia derivadas de documentos
+   * - DELETE
+     - /query
+     - Eliminar palabras de sugerencia derivadas de consultas de busqueda
 
-Obtener Lista de Palabras de Sugerencia
-=======================================
+Obtener Informacion Estadistica de Palabras de Sugerencia
+=========================================================
+
+Obtiene informacion estadistica sobre el numero de palabras de sugerencia.
 
 Solicitud
 ---------
 
 ::
 
-    GET /api/admin/suggest/settings
-    PUT /api/admin/suggest/settings
-
-Parametros
-~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15.70
-
-   * - Parametro
-     - Tipo
-     - Requerido
-     - Descripcion
-   * - ``size``
-     - Integer
-     - No
-     - Numero de elementos por pagina (predeterminado: 20)
-   * - ``page``
-     - Integer
-     - No
-     - Numero de pagina (comienza en 0)
+    GET /api/admin/suggest
 
 Respuesta
 ---------
@@ -82,198 +57,43 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "settings": [
-          {
-            "id": "suggest_id_1",
-            "text": "fess",
-            "reading": "fess",
-            "fields": ["title", "content"],
-            "tags": ["product"],
-            "roles": ["guest"],
-            "lang": "ja",
-            "score": 1.0
-          }
-        ],
-        "total": 100
-      }
-    }
-
-Obtener Palabra de Sugerencia
-=============================
-
-Solicitud
----------
-
-::
-
-    GET /api/admin/suggest/setting/{id}
-
-Respuesta
----------
-
-.. code-block:: json
-
-    {
-      "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
-          "id": "suggest_id_1",
-          "text": "fess",
-          "reading": "fess",
-          "fields": ["title", "content"],
-          "tags": ["product"],
-          "roles": ["guest"],
-          "lang": "ja",
-          "score": 1.0
+          "totalWordsNum": 1500,
+          "documentWordsNum": 1200,
+          "queryWordsNum": 300
         }
       }
     }
 
-Crear Palabra de Sugerencia
-===========================
-
-Solicitud
----------
-
-::
-
-    POST /api/admin/suggest/setting
-    Content-Type: application/json
-
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    {
-      "text": "search engine",
-      "reading": "search engine",
-      "fields": ["title"],
-      "tags": ["feature"],
-      "roles": ["guest"],
-      "lang": "en",
-      "score": 1.0
-    }
-
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
+Campos de Respuesta
+~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 30 70
 
    * - Campo
-     - Requerido
      - Descripcion
-   * - ``text``
-     - Si
-     - Texto de sugerencia
-   * - ``reading``
-     - No
-     - Lectura fonetica
-   * - ``fields``
-     - No
-     - Campos objetivo
-   * - ``tags``
-     - No
-     - Etiquetas
-   * - ``roles``
-     - No
-     - Roles con permiso de acceso
-   * - ``lang``
-     - No
-     - Codigo de idioma
-   * - ``score``
-     - No
-     - Puntuacion (predeterminado: 1.0)
-
-Respuesta
----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "id": "new_suggest_id",
-        "created": true
-      }
-    }
-
-Actualizar Palabra de Sugerencia
-================================
-
-Solicitud
----------
-
-::
-
-    PUT /api/admin/suggest/setting
-    Content-Type: application/json
-
-Cuerpo de la Solicitud
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    {
-      "id": "existing_suggest_id",
-      "text": "search engine",
-      "reading": "search engine",
-      "fields": ["title", "content"],
-      "tags": ["feature", "popular"],
-      "roles": ["guest"],
-      "lang": "en",
-      "score": 2.0,
-      "versionNo": 1
-    }
-
-Respuesta
----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "id": "existing_suggest_id",
-        "created": false
-      }
-    }
-
-Eliminar Palabra de Sugerencia
-==============================
-
-Solicitud
----------
-
-::
-
-    DELETE /api/admin/suggest/setting/{id}
-
-Respuesta
----------
-
-.. code-block:: json
-
-    {
-      "response": {
-        "status": 0,
-        "id": "deleted_suggest_id",
-        "created": false
-      }
-    }
+   * - ``setting.totalWordsNum``
+     - Numero total de palabras de sugerencia
+   * - ``setting.documentWordsNum``
+     - Numero de palabras de sugerencia derivadas de documentos
+   * - ``setting.queryWordsNum``
+     - Numero de palabras de sugerencia derivadas de consultas de busqueda
 
 Eliminar Todas las Palabras de Sugerencia
 =========================================
 
+Elimina todas las palabras de sugerencia.
+
 Solicitud
 ---------
 
 ::
 
-    DELETE /api/admin/suggest/delete-all
+    DELETE /api/admin/suggest/all
 
 Respuesta
 ---------
@@ -282,38 +102,84 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "count": 250
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+Eliminar Palabras de Sugerencia Derivadas de Documentos
+=======================================================
+
+Elimina las palabras de sugerencia generadas a partir de documentos.
+
+Solicitud
+---------
+
+::
+
+    DELETE /api/admin/suggest/document
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
+      }
+    }
+
+Eliminar Palabras de Sugerencia Derivadas de Consultas de Busqueda
+==================================================================
+
+Elimina las palabras de sugerencia generadas a partir de consultas de busqueda.
+
+Solicitud
+---------
+
+::
+
+    DELETE /api/admin/suggest/query
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 Ejemplos de Uso
 ===============
 
-Agregar Palabra Clave Popular
------------------------------
+Obtener Informacion Estadistica
+-------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/suggest/setting" \
-         -H "Authorization: Bearer YOUR_TOKEN" \
-         -H "Content-Type: application/json" \
-         -d '{
-           "text": "getting started",
-           "fields": ["title"],
-           "tags": ["tutorial"],
-           "roles": ["guest"],
-           "lang": "en",
-           "score": 5.0
-         }'
+    curl -X GET "http://localhost:8080/api/admin/suggest" \
+         -H "Authorization: Bearer YOUR_TOKEN"
 
-Eliminacion Masiva de Sugerencias
----------------------------------
+Eliminar Todas las Palabras de Sugerencia
+-----------------------------------------
 
 .. code-block:: bash
 
-    # Eliminar todas las sugerencias
-    curl -X DELETE "http://localhost:8080/api/admin/suggest/delete-all" \
+    curl -X DELETE "http://localhost:8080/api/admin/suggest/all" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Eliminar Palabras de Sugerencia Derivadas de Documentos
+-------------------------------------------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/suggest/document" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Informacion de Referencia

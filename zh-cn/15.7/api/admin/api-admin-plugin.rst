@@ -5,8 +5,8 @@ Plugin API
 概述
 ====
 
-Plugin API是用于管理 |Fess| 插件的API。
-您可以安装、启用、禁用、删除插件等。
+Plugin API是用于管理 |Fess| 插件（构件）的API。
+可以获取已安装插件以及可安装插件的列表，并执行插件的安装与删除操作。
 
 基础URL
 =======
@@ -26,86 +26,95 @@ Plugin API是用于管理 |Fess| 插件的API。
      - 路径
      - 说明
    * - GET
-     - /
-     - 获取插件列表
+     - /installed
+     - 获取已安装插件列表
+   * - GET
+     - /available
+     - 获取可安装插件列表
    * - POST
-     - /install
+     - /
      - 安装插件
    * - DELETE
-     - /{id}
+     - /
      - 删除插件
 
-获取插件列表
-============
+获取已安装插件列表
+==================
+
+返回已安装插件的列表。
 
 请求
 ----
 
 ::
 
-    GET /api/admin/plugin
+    GET /api/admin/plugin/installed
 
 响应
 ----
+
+``plugins`` 中存放表示插件信息的对象数组。
+每个对象是字符串键值的映射，包含 ``name`` （插件名）和 ``version`` （版本）等。
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "plugins": [
           {
-            "id": "analysis-kuromoji",
-            "name": "Japanese (kuromoji) Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Japanese language analysis plugin",
-            "enabled": true,
-            "installed": true
-          },
-          {
-            "id": "analysis-icu",
-            "name": "ICU Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Unicode normalization and collation",
-            "enabled": true,
-            "installed": true
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
           }
-        ],
-        "total": 2
+        ]
       }
     }
 
-响应字段
-~~~~~~~~
+获取可安装插件列表
+==================
 
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - 字段
-     - 说明
-   * - ``id``
-     - 插件ID
-   * - ``name``
-     - 插件名称
-   * - ``version``
-     - 插件版本
-   * - ``description``
-     - 插件描述
-   * - ``enabled``
-     - 启用状态
-   * - ``installed``
-     - 安装状态
-
-安装插件
-========
+返回可安装插件的列表。
 
 请求
 ----
 
 ::
 
-    POST /api/admin/plugin/install
+    GET /api/admin/plugin/available
+
+响应
+----
+
+``plugins`` 中存放表示可安装插件信息的对象数组。
+每个对象与 ``installed`` 相同，是字符串键值的映射。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "plugins": [
+          {
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
+          }
+        ]
+      }
+    }
+
+安装插件
+========
+
+安装指定名称和版本的插件。
+
+请求
+----
+
+::
+
+    POST /api/admin/plugin
     Content-Type: application/json
 
 请求体
@@ -114,7 +123,8 @@ Plugin API是用于管理 |Fess| 插件的API。
 .. code-block:: json
 
     {
-      "url": "https://example.com/plugins/my-plugin-1.0.0.zip"
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
     }
 
 字段说明
@@ -122,37 +132,72 @@ Plugin API是用于管理 |Fess| 插件的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 字段
      - 必需
      - 说明
-   * - ``url``
+   * - ``name``
      - 是
-     - 插件下载URL
+     - 插件名（最多100个字符）
+   * - ``version``
+     - 是
+     - 插件版本（最多100个字符）
 
 响应
 ----
+
+成功时仅返回 ``status``。
+当 ``name`` 或 ``version`` 对应的构件不存在时，``status`` 为 ``1`` （BAD_REQUEST），并在 ``message`` 中设置 ``invalid name or version``。
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin installed successfully. Restart required.",
-        "pluginId": "my-plugin"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 删除插件
 ========
 
+删除指定名称和版本的插件。
+
 请求
 ----
 
 ::
 
-    DELETE /api/admin/plugin/{id}
+    DELETE /api/admin/plugin
+    Content-Type: application/json
+
+请求体
+~~~~~~
+
+.. code-block:: json
+
+    {
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
+    }
+
+字段说明
+~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - 字段
+     - 必需
+     - 说明
+   * - ``name``
+     - 是
+     - 插件名（最多100个字符）
+   * - ``version``
+     - 否
+     - 插件版本（最多100个字符）
 
 响应
 ----
@@ -161,20 +206,20 @@ Plugin API是用于管理 |Fess| 插件的API。
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin deleted successfully. Restart required."
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 使用示例
 ========
 
-获取插件列表
-------------
+获取已安装插件列表
+------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/plugin" \
+    curl -X GET "http://localhost:8080/api/admin/plugin/installed" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 安装插件
@@ -182,11 +227,12 @@ Plugin API是用于管理 |Fess| 插件的API。
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/plugin/install" \
+    curl -X POST "http://localhost:8080/api/admin/plugin" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "url": "https://artifacts.opensearch.org/releases/plugins/analysis-icu/2.11.0/analysis-icu-2.11.0.zip"
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
          }'
 
 删除插件
@@ -194,20 +240,15 @@ Plugin API是用于管理 |Fess| 插件的API。
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/plugin/analysis-icu" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-注意事项
-========
-
-- 安装或删除插件后需要重启Fess
-- 安装不兼容的插件可能导致Fess无法启动
-- 删除插件时请谨慎操作。如果存在依赖关系，可能会影响系统
+    curl -X DELETE "http://localhost:8080/api/admin/plugin" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
+         }'
 
 参考信息
 ========
 
 - :doc:`api-admin-overview` - Admin API概述
-- :doc:`api-admin-systeminfo` - 系统信息API
-- :doc:`../../admin/plugin-guide` - 插件管理指南
-

@@ -20,7 +20,7 @@ HTTP 메서드          GET
 
 문서의 캐시된 (하이라이트 적용된) HTML 을 반환합니다.
 
-``app.login.required=true`` 로 호출자가 익명인 경우 ``auth_required`` (401) 가 됩니다.
+로그인 필수 설정 (시스템 설정의 「로그인 필수」) 이 활성화되어 있고 호출자가 익명인 경우 ``auth_required`` (401) 가 됩니다.
 
 요청 파라미터
 -------------
@@ -87,7 +87,7 @@ HTTP 메서드          GET
    * - 400 Bad Request
      - 요청이 잘못된 경우.
    * - 401 Unauthorized
-     - 인증이 필요한 경우 ( ``app.login.required=true`` 로 익명 호출자).
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자).
    * - 404 Not Found
      - 리소스를 찾을 수 없는 경우.
    * - 405 Method Not Allowed

@@ -75,8 +75,14 @@ Pour utiliser l'API d'administration, le jeton doit avoir les permissions suivan
 Patterns communs
 ================
 
-Obtention de la liste (GET/PUT /settings)
------------------------------------------
+Les ressources possedant des parametres (webconfig, user, role, etc.) suivent le
+pattern CRUD commun ci-dessous. Toutefois, certaines ressources (systeminfo, stats,
+storage, plugin, log, backup, documents, suggest, racine dict, etc.) disposent d'une
+structure d'endpoints propre, differente de ce pattern commun ; reportez-vous a la
+page de chaque ressource.
+
+Obtention de la liste (GET /settings)
+-------------------------------------
 
 Obtient la liste des parametres.
 
@@ -86,7 +92,6 @@ Requete
 ::
 
     GET /api/admin/<resource>/settings
-    PUT /api/admin/<resource>/settings
 
 Parametres (pagination) :
 
@@ -111,11 +116,18 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   L'objet ``response`` de toutes les reponses contient toujours ``version``
+   (par exemple ``"15.7.0"``), indiquant la version du produit. Dans les exemples
+   suivants, il peut etre omis par souci de concision.
 
 Obtention d'un parametre unique (GET /setting/{id})
 ---------------------------------------------------
@@ -219,6 +231,21 @@ Requete
 Reponse
 ~~~~~~~
 
+Le format de la reponse de suppression varie selon la ressource (l'action). De
+nombreuses ressources ne retournent que ``status``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Pour certaines ressources, le resultat de la suppression est retourne sous forme
+de ``ApiUpdateResponse``, avec l'``id`` du parametre supprime et ``created``
+(``false`` lors d'une suppression).
+
 .. code-block:: json
 
     {
@@ -229,8 +256,35 @@ Reponse
       }
     }
 
+De plus, pour les ressources qui retournent un ``ApiDeleteResponse``, un champ
+``count`` indiquant le nombre d'elements supprimes (valeur par defaut ``1``) peut
+etre ajoute. Reportez-vous a la page de chaque ressource pour le format exact.
+
 Format des reponses
 ===================
+
+Toutes les reponses sont encapsulees dans un objet ``response`` et contiennent
+toujours ``version``, indiquant la version du produit, ainsi que ``status``,
+indiquant le resultat du traitement.
+
+Les valeurs de ``status`` sont les suivantes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Valeur
+     - Description
+   * - ``0``
+     - OK (succes)
+   * - ``1``
+     - BAD_REQUEST (requete invalide)
+   * - ``2``
+     - SYSTEM_ERROR (erreur systeme)
+   * - ``3``
+     - UNAUTHORIZED (erreur d'authentification)
+   * - ``9``
+     - FAILED (echec du traitement)
 
 Reponse de succes
 -----------------
@@ -239,8 +293,9 @@ Reponse de succes
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +304,16 @@ Reponse de succes
 Reponse d'erreur
 ----------------
 
+En cas d'erreur, ``status`` est defini sur une valeur differente de 0 et
+``message`` contient le message d'erreur.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +359,16 @@ Configuration du crawl
      - Configuration du crawl de fichiers
    * - :doc:`api-admin-dataconfig`
      - Configuration du datastore
+
+.. note::
+
+   Outre celles-ci, les ressources suivantes relatives aux informations
+   d'authentification et au controle du crawl sont egalement fournies en tant
+   qu'API (pour l'instant, aucune page dediee n'est disponible) : ``webauth``
+   (authentification Web), ``fileauth`` (authentification de fichiers),
+   ``reqheader`` (en-tetes de requete), ``pathmap`` (mappage de chemins),
+   ``duplicatehost`` (hotes en double), ``searchlist`` (operations de
+   recherche/liste de documents).
 
 Gestion de l'index
 ------------------
@@ -396,8 +463,8 @@ Systeme
      - Statistiques systeme
    * - :doc:`api-admin-log`
      - Obtention des journaux
-   * - :doc:`api-admin-searchlog`
-     - Gestion des journaux de recherche
+   * - :doc:`api-admin-searchlist`
+     - Recherche et gestion des documents
    * - :doc:`api-admin-storage`
      - Gestion du stockage
    * - :doc:`api-admin-plugin`

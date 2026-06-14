@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des requetes associees
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/relatedquery/settings
-    PUT /api/admin/relatedquery/settings
 
 Parametres
 ~~~~~~~~~~
@@ -84,7 +83,7 @@ Reponse
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": ["fess tutorial", "fess installation", "fess configuration"]
+            "queries": "fess tutorial\nfess installation\nfess configuration"
           }
         ],
         "total": 5
@@ -112,7 +111,7 @@ Reponse
         "setting": {
           "id": "query_id_1",
           "term": "fess",
-          "queries": ["fess tutorial", "fess installation", "fess configuration"],
+          "queries": "fess tutorial\nfess installation\nfess configuration",
           "virtualHost": ""
         }
       }
@@ -136,7 +135,7 @@ Corps de la requete
 
     {
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search",
       "virtualHost": ""
     }
 
@@ -155,7 +154,7 @@ Description des champs
      - Mot-cle de recherche
    * - ``queries``
      - Oui
-     - Tableau des requetes associees
+     - Requetes associees (chaine separee par des sauts de ligne, une par ligne)
    * - ``virtualHost``
      - Non
      - Hote virtuel
@@ -192,7 +191,7 @@ Corps de la requete
     {
       "id": "existing_query_id",
       "term": "search",
-      "queries": ["search tutorial", "search syntax", "advanced search", "search tips"],
+      "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
       "virtualHost": "",
       "versionNo": 1
     }
@@ -227,9 +226,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_query_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -246,7 +243,7 @@ Requetes associees pour les produits
          -H "Content-Type: application/json" \
          -d '{
            "term": "product",
-           "queries": ["product features", "product pricing", "product comparison", "product reviews"]
+           "queries": "product features\nproduct pricing\nproduct comparison\nproduct reviews"
          }'
 
 Requetes associees pour l'aide
@@ -259,7 +256,7 @@ Requetes associees pour l'aide
          -H "Content-Type: application/json" \
          -d '{
            "term": "help",
-           "queries": ["help center", "help documentation", "help contact support"]
+           "queries": "help center\nhelp documentation\nhelp contact support"
          }'
 
 Informations complementaires

@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de contenido relacionado
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/relatedcontent/settings
-    PUT /api/admin/relatedcontent/settings
 
 Parametros
 ~~~~~~~~~~
@@ -234,9 +233,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_content_id",
-        "created": false
+        "status": 0
       }
     }
 

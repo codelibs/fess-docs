@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List roles
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/role/settings
-    PUT /api/admin/role/settings
 
 Parameters
 ~~~~~~~~~~

@@ -6,7 +6,7 @@ Vision General
 ==============
 
 La API de SystemInfo es para obtener informacion del sistema de |Fess|.
-Puede verificar informacion de version, variables de entorno, informacion de JVM, etc.
+Permite verificar las variables de entorno, las propiedades del sistema de Java, las propiedades de configuracion de |Fess| y la informacion para reportes de errores.
 
 URL Base
 ========
@@ -42,41 +42,32 @@ Solicitud
 Respuesta
 ---------
 
+La respuesta incluye ``version``, que indica la version del producto, ``status``, que indica el resultado del procesamiento, y los siguientes cuatro grupos de propiedades. Cada grupo de propiedades es un arreglo de objetos que tienen ``key`` y ``value``.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "systemInfo": {
-          "fessVersion": "15.7.0",
-          "opensearchVersion": "2.11.0",
-          "javaVersion": "21.0.1",
-          "serverName": "Apache Tomcat/10.1.15",
-          "osName": "Linux",
-          "osVersion": "5.15.0-89-generic",
-          "osArchitecture": "amd64",
-          "jvmTotalMemory": "2147483648",
-          "jvmFreeMemory": "1073741824",
-          "jvmMaxMemory": "4294967296",
-          "processorCount": "8",
-          "fileEncoding": "UTF-8",
-          "userLanguage": "ja",
-          "userTimezone": "Asia/Tokyo"
-        },
-        "environmentInfo": {
-          "JAVA_HOME": "/usr/lib/jvm/java-21",
-          "FESS_DICTIONARY_PATH": "/var/lib/fess/dict",
-          "FESS_LOG_PATH": "/var/log/fess"
-        },
-        "systemProperties": {
-          "java.version": "21.0.1",
-          "java.vendor": "Oracle Corporation",
-          "os.name": "Linux",
-          "os.version": "5.15.0-89-generic",
-          "user.dir": "/opt/fess",
-          "user.home": "/home/fess",
-          "user.name": "fess"
-        }
+        "envProps": [
+          {"key": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
+          {"key": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
+        ],
+        "systemProps": [
+          {"key": "java.version", "value": "21.0.1"},
+          {"key": "java.vendor", "value": "Oracle Corporation"},
+          {"key": "os.name", "value": "Linux"},
+          {"key": "user.dir", "value": "/opt/fess"}
+        ],
+        "fessProps": [
+          {"key": "crawler.document.max.site.length", "value": "50"},
+          {"key": "indexer.thread.dump.enabled", "value": "true"}
+        ],
+        "bugReportProps": [
+          {"key": "os.name", "value": "Linux"},
+          {"key": "java.vm.version", "value": "21.0.1+12"}
+        ]
       }
     }
 
@@ -89,34 +80,14 @@ Campos de Respuesta
 
    * - Campo
      - Descripcion
-   * - ``fessVersion``
-     - Version de Fess
-   * - ``opensearchVersion``
-     - Version de OpenSearch
-   * - ``javaVersion``
-     - Version de Java
-   * - ``serverName``
-     - Nombre del servidor de aplicaciones
-   * - ``osName``
-     - Nombre del SO
-   * - ``osVersion``
-     - Version del SO
-   * - ``osArchitecture``
-     - Arquitectura del SO
-   * - ``jvmTotalMemory``
-     - Memoria total de JVM (bytes)
-   * - ``jvmFreeMemory``
-     - Memoria libre de JVM (bytes)
-   * - ``jvmMaxMemory``
-     - Memoria maxima de JVM (bytes)
-   * - ``processorCount``
-     - Numero de procesadores
-   * - ``fileEncoding``
-     - Codificacion de archivos
-   * - ``userLanguage``
-     - Idioma del usuario
-   * - ``userTimezone``
-     - Zona horaria del usuario
+   * - ``envProps``
+     - Lista de variables de entorno (arreglo de ``key`` / ``value``)
+   * - ``systemProps``
+     - Lista de propiedades del sistema de Java (arreglo de ``key`` / ``value``)
+   * - ``fessProps``
+     - Lista de propiedades de configuracion de |Fess| (arreglo de ``key`` / ``value``)
+   * - ``bugReportProps``
+     - Lista de informacion recopilada para reportes de errores (arreglo de ``key`` / ``value``)
 
 Ejemplos de Uso
 ===============
@@ -129,23 +100,25 @@ Obtener Informacion del Sistema
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Verificar Version
------------------
+Extraer una Propiedad del Sistema Especifica
+--------------------------------------------
 
 .. code-block:: bash
 
-    # Extraer solo la version de Fess
+    # Extraer solo el valor de java.version
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.systemInfo.fessVersion'
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.systemProps[] | select(.key == "java.version") | .value'
 
-Verificar Uso de Memoria
-------------------------
+Mostrar la Lista de Variables de Entorno
+----------------------------------------
 
 .. code-block:: bash
 
-    # Extraer informacion de memoria JVM
+    # Mostrar las variables de entorno en formato key=value
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
-         -H "Authorization: Bearer YOUR_TOKEN" | jq '.response.systemInfo | {total: .jvmTotalMemory, free: .jvmFreeMemory, max: .jvmMaxMemory}'
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.envProps[] | "\(.key)=\(.value)"'
 
 Informacion de Referencia
 =========================

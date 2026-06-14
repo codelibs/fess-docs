@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des configurations de crawl Web
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/webconfig/settings
-    PUT /api/admin/webconfig/settings
 
 Parametres
 ~~~~~~~~~~
@@ -84,6 +83,7 @@ Reponse
           {
             "id": "webconfig_id_1",
             "name": "Example Site",
+            "description": "サンプルサイト",
             "urls": "https://example.com/",
             "includedUrls": ".*example\\.com.*",
             "excludedUrls": ".*\\.(pdf|zip)$",
@@ -92,11 +92,13 @@ Reponse
             "configParameter": "",
             "depth": 3,
             "maxAccessCount": 1000,
-            "userAgent": "",
+            "userAgent": "Mozilla/5.0",
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -125,6 +127,7 @@ Reponse
         "setting": {
           "id": "webconfig_id_1",
           "name": "Example Site",
+          "description": "サンプルサイト",
           "urls": "https://example.com/",
           "includedUrls": ".*example\\.com.*",
           "excludedUrls": ".*\\.(pdf|zip)$",
@@ -133,14 +136,14 @@ Reponse
           "configParameter": "",
           "depth": 3,
           "maxAccessCount": 1000,
-          "userAgent": "",
+          "userAgent": "Mozilla/5.0",
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -167,13 +170,13 @@ Corps de la requete
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "depth": 5,
-      "maxAccessCount": 5000,
+      "userAgent": "Mozilla/5.0",
       "numOfThread": 3,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -190,6 +193,9 @@ Description des champs
    * - ``name``
      - Oui
      - Nom de la configuration
+   * - ``description``
+     - Non
+     - Description de la configuration
    * - ``urls``
      - Oui
      - URLs de depart du crawl (separees par des sauts de ligne si multiples)
@@ -210,37 +216,37 @@ Description des champs
      - Parametres de configuration supplementaires
    * - ``depth``
      - Non
-     - Profondeur du crawl (par defaut : -1=illimite)
+     - Profondeur du crawl
    * - ``maxAccessCount``
      - Non
-     - Nombre maximum d'acces (par defaut : 100)
+     - Nombre maximum d'acces
    * - ``userAgent``
-     - Non
-     - User-Agent personnalise
+     - Oui
+     - Chaine User-Agent
    * - ``numOfThread``
-     - Non
-     - Nombre de threads paralleles (par defaut : 1)
+     - Oui
+     - Nombre de threads paralleles
    * - ``intervalTime``
-     - Non
-     - Intervalle entre les requetes (millisecondes, par defaut : 0)
+     - Oui
+     - Intervalle entre les requetes (millisecondes)
    * - ``boost``
-     - Non
-     - Valeur de boost des resultats de recherche (par defaut : 1.0)
+     - Oui
+     - Valeur de boost des resultats de recherche
    * - ``available``
-     - Non
-     - Active/Desactive (par defaut : true)
+     - Oui
+     - Active/Desactive (chaine ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Non
+     - Oui
      - Ordre d'affichage
    * - ``permissions``
      - Non
-     - Roles autorises
+     - Roles autorises (separes par des sauts de ligne si plusieurs)
    * - ``virtualHosts``
      - Non
-     - Hotes virtuels
+     - Hotes virtuels (separes par des sauts de ligne si plusieurs)
    * - ``labelTypeIds``
      - Non
-     - IDs des types de labels
+     - IDs des types de labels (tableau)
 
 Reponse
 -------
@@ -277,12 +283,14 @@ Corps de la requete
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
+      "userAgent": "Mozilla/5.0",
       "depth": 10,
       "maxAccessCount": 10000,
       "numOfThread": 5,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -316,9 +324,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_webconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -361,12 +367,15 @@ Configuration de crawl pour un site d'entreprise
            "urls": "https://www.example.com/",
            "includedUrls": ".*www\\.example\\.com.*",
            "excludedUrls": ".*/(login|admin|api)/.*",
+           "userAgent": "Mozilla/5.0",
            "depth": 5,
            "maxAccessCount": 10000,
            "numOfThread": 3,
            "intervalTime": 500,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 Configuration de crawl pour un site de documentation
@@ -383,12 +392,13 @@ Configuration de crawl pour un site de documentation
            "includedUrls": ".*docs\\.example\\.com.*",
            "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
-           "depth": -1,
+           "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
            "numOfThread": 5,
            "intervalTime": 200,
            "boost": 1.5,
-           "available": true,
+           "available": "true",
+           "sortOrder": 0,
            "labelTypeIds": ["documentation_label_id"]
          }'
 

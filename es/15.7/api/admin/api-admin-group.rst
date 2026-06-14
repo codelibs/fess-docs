@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de grupos
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/group/settings
-    PUT /api/admin/group/settings
 
 Parametros
 ~~~~~~~~~~
@@ -84,12 +83,16 @@ Respuesta
           {
             "id": "group_id_1",
             "name": "Engineering",
-            "gidNumber": 1000
+            "attributes": {
+              "gidNumber": "1000"
+            }
           },
           {
             "id": "group_id_2",
             "name": "Sales",
-            "gidNumber": 1001
+            "attributes": {
+              "gidNumber": "1001"
+            }
           }
         ],
         "total": 5
@@ -117,7 +120,9 @@ Respuesta
         "setting": {
           "id": "group_id_1",
           "name": "Engineering",
-          "gidNumber": 1000
+          "attributes": {
+            "gidNumber": "1000"
+          }
         }
       }
     }
@@ -140,7 +145,9 @@ Cuerpo de la Solicitud
 
     {
       "name": "Marketing",
-      "gidNumber": 1002
+      "attributes": {
+        "gidNumber": "1002"
+      }
     }
 
 Descripcion de Campos
@@ -156,9 +163,9 @@ Descripcion de Campos
    * - ``name``
      - Si
      - Nombre del grupo
-   * - ``gidNumber``
+   * - ``attributes``
      - No
-     - Numero de ID del grupo
+     - Mapa de atributos (incluye atributos LDAP como ``gidNumber``). Los valores se especifican como cadenas
 
 Respuesta
 ---------
@@ -192,7 +199,9 @@ Cuerpo de la Solicitud
     {
       "id": "existing_group_id",
       "name": "Marketing Team",
-      "gidNumber": 1002,
+      "attributes": {
+        "gidNumber": "1002"
+      },
       "versionNo": 1
     }
 
@@ -245,7 +254,9 @@ Crear Nuevo Grupo
          -H "Content-Type: application/json" \
          -d '{
            "name": "Product Team",
-           "gidNumber": 2000
+           "attributes": {
+             "gidNumber": "2000"
+           }
          }'
 
 Obtener Lista de Grupos

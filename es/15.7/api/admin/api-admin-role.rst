@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de roles
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/role/settings
-    PUT /api/admin/role/settings
 
 Parametros
 ~~~~~~~~~~

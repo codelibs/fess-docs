@@ -75,8 +75,12 @@ Um die Admin API zu verwenden, benötigt der Token folgende Berechtigungen:
 Gemeinsame Muster
 =================
 
-Liste abrufen (GET/PUT /settings)
----------------------------------
+Ressourcen mit Einstellungen (webconfig, user, role usw.) folgen dem unten beschriebenen gemeinsamen CRUD-Muster.
+Einige Ressourcen (systeminfo, stats, storage, plugin, log, backup, documents, suggest, dict-Stamm usw.) haben jedoch
+eine eigene, von diesem gemeinsamen Muster abweichende Endpunktstruktur. Siehe dazu die Seite der jeweiligen Ressource.
+
+Liste abrufen (GET /settings)
+-----------------------------
 
 Ruft eine Liste von Einstellungen ab.
 
@@ -86,7 +90,6 @@ Request
 ::
 
     GET /api/admin/<resource>/settings
-    PUT /api/admin/<resource>/settings
 
 Parameter (Paginierung):
 
@@ -111,11 +114,17 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [...],
         "total": 100
       }
     }
+
+.. note::
+
+   Das ``response``-Objekt aller Antworten enthält stets ``version``, das die Produktversion angibt
+   (Beispiel: ``"15.7.0"``). In den folgenden Beispielen wird es der Übersichtlichkeit halber teilweise weggelassen.
 
 Einzelne Einstellung abrufen (GET /setting/{id})
 ------------------------------------------------
@@ -219,6 +228,20 @@ Request
 Response
 ~~~~~~~~
 
+Das Format der Löschantwort unterscheidet sich je Ressource (Aktion). Viele Ressourcen
+geben nur ``status`` zurück.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Bei einigen Ressourcen wird das Löschergebnis als ``ApiUpdateResponse`` zurückgegeben, wobei
+``id`` der gelöschten Einstellung und ``created`` (beim Löschen ``false``) hinzugefügt werden.
+
 .. code-block:: json
 
     {
@@ -229,8 +252,33 @@ Response
       }
     }
 
+Außerdem kann bei Ressourcen, die ein ``ApiDeleteResponse`` zurückgeben, ``count``
+(Anzahl der Löschungen, Standardwert ``1``) hinzugefügt werden. Das tatsächliche Format siehe auf der Seite der jeweiligen Ressource.
+
 Response-Format
 ===============
+
+Alle Antworten werden in ein ``response``-Objekt verpackt und enthalten stets
+``version`` (die Produktversion) und ``status`` (das Verarbeitungsergebnis).
+
+Die Werte von ``status`` sind wie folgt.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Wert
+     - Beschreibung
+   * - ``0``
+     - OK (Erfolg)
+   * - ``1``
+     - BAD_REQUEST (ungültige Anfrage)
+   * - ``2``
+     - SYSTEM_ERROR (Systemfehler)
+   * - ``3``
+     - UNAUTHORIZED (Authentifizierungsfehler)
+   * - ``9``
+     - FAILED (Verarbeitung fehlgeschlagen)
 
 Erfolgreiche Response
 ---------------------
@@ -239,8 +287,9 @@ Erfolgreiche Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        ...
+        "...": "..."
       }
     }
 
@@ -249,14 +298,16 @@ Erfolgreiche Response
 Fehler-Response
 ---------------
 
+Im Fehlerfall wird in ``status`` ein von 0 verschiedener Wert gesetzt und in ``message`` ist
+eine Fehlermeldung enthalten.
+
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 1,
-        "errors": [
-          {"code": "errors.failed_to_create", "args": ["...", "..."]}
-        ]
+        "message": "Failed to process the request."
       }
     }
 
@@ -302,6 +353,13 @@ Crawl-Konfiguration
      - Datei-Crawl-Konfiguration
    * - :doc:`api-admin-dataconfig`
      - Datenspeicher-Konfiguration
+
+.. note::
+
+   Darüber hinaus werden auch die folgenden Ressourcen zu Anmeldeinformationen und Crawl-Steuerung als API bereitgestellt
+   (derzeit gibt es noch keine eigenen Seiten): ``webauth`` (Web-Authentifizierung), ``fileauth`` (Datei-Authentifizierung),
+   ``reqheader`` (Request-Header), ``pathmap`` (Pfad-Mapping),
+   ``duplicatehost`` (doppelte Hosts), ``searchlist`` (Such-/Dokumentlisten-Operationen).
 
 Index-Verwaltung
 ----------------
@@ -396,8 +454,8 @@ System
      - Systemstatistiken
    * - :doc:`api-admin-log`
      - Protokoll abrufen
-   * - :doc:`api-admin-searchlog`
-     - Suchprotokoll-Verwaltung
+   * - :doc:`api-admin-searchlist`
+     - Dokumentsuche und -verwaltung
    * - :doc:`api-admin-storage`
      - Speicherverwaltung
    * - :doc:`api-admin-plugin`

@@ -25,7 +25,7 @@ WebConfig APIは、|Fess| のWebクロール設定を管理するためのAPIで
    * - メソッド
      - パス
      - 説明
-   * - GET/PUT
+   * - GET
      - /settings
      - Webクロール設定一覧取得
    * - GET
@@ -50,7 +50,6 @@ Webクロール設定一覧取得
 ::
 
     GET /api/admin/webconfig/settings
-    PUT /api/admin/webconfig/settings
 
 パラメーター
 ~~~~~~~~~~~~
@@ -84,6 +83,7 @@ Webクロール設定一覧取得
           {
             "id": "webconfig_id_1",
             "name": "Example Site",
+            "description": "サンプルサイト",
             "urls": "https://example.com/",
             "includedUrls": ".*example\\.com.*",
             "excludedUrls": ".*\\.(pdf|zip)$",
@@ -92,11 +92,13 @@ Webクロール設定一覧取得
             "configParameter": "",
             "depth": 3,
             "maxAccessCount": 1000,
-            "userAgent": "",
+            "userAgent": "Mozilla/5.0",
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -125,6 +127,7 @@ Webクロール設定取得
         "setting": {
           "id": "webconfig_id_1",
           "name": "Example Site",
+          "description": "サンプルサイト",
           "urls": "https://example.com/",
           "includedUrls": ".*example\\.com.*",
           "excludedUrls": ".*\\.(pdf|zip)$",
@@ -133,14 +136,14 @@ Webクロール設定取得
           "configParameter": "",
           "depth": 3,
           "maxAccessCount": 1000,
-          "userAgent": "",
+          "userAgent": "Mozilla/5.0",
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -167,13 +170,13 @@ Webクロール設定作成
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "depth": 5,
-      "maxAccessCount": 5000,
+      "userAgent": "Mozilla/5.0",
       "numOfThread": 3,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -190,6 +193,9 @@ Webクロール設定作成
    * - ``name``
      - はい
      - 設定名
+   * - ``description``
+     - いいえ
+     - 設定の説明
    * - ``urls``
      - はい
      - クロール開始URL（複数の場合は改行区切り）
@@ -210,37 +216,37 @@ Webクロール設定作成
      - 追加設定パラメーター
    * - ``depth``
      - いいえ
-     - クロール深度（デフォルト: -1=無制限）
+     - クロール深度
    * - ``maxAccessCount``
      - いいえ
-     - 最大アクセス数（デフォルト: 100）
+     - 最大アクセス数
    * - ``userAgent``
-     - いいえ
-     - カスタムUser-Agent
+     - はい
+     - User-Agent文字列
    * - ``numOfThread``
-     - いいえ
-     - 並列スレッド数（デフォルト: 1）
+     - はい
+     - 並列スレッド数
    * - ``intervalTime``
-     - いいえ
-     - リクエスト間隔（ミリ秒、デフォルト: 0）
+     - はい
+     - リクエスト間隔（ミリ秒）
    * - ``boost``
-     - いいえ
-     - 検索結果のブースト値（デフォルト: 1.0）
+     - はい
+     - 検索結果のブースト値
    * - ``available``
-     - いいえ
-     - 有効/無効（デフォルト: true）
+     - はい
+     - 有効/無効（文字列 ``"true"`` / ``"false"``）
    * - ``sortOrder``
-     - いいえ
+     - はい
      - 表示順序
    * - ``permissions``
      - いいえ
-     - アクセス許可ロール
+     - アクセス許可ロール（複数の場合は改行区切り）
    * - ``virtualHosts``
      - いいえ
-     - 仮想ホスト
+     - 仮想ホスト（複数の場合は改行区切り）
    * - ``labelTypeIds``
      - いいえ
-     - ラベルタイプID
+     - ラベルタイプID（配列）
 
 レスポンス
 ----------
@@ -277,12 +283,14 @@ Webクロール設定更新
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
+      "userAgent": "Mozilla/5.0",
       "depth": 10,
       "maxAccessCount": 10000,
       "numOfThread": 5,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -316,9 +324,7 @@ Webクロール設定削除
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_webconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -361,12 +367,15 @@ includedUrls / excludedUrls
            "urls": "https://www.example.com/",
            "includedUrls": ".*www\\.example\\.com.*",
            "excludedUrls": ".*/(login|admin|api)/.*",
+           "userAgent": "Mozilla/5.0",
            "depth": 5,
            "maxAccessCount": 10000,
            "numOfThread": 3,
            "intervalTime": 500,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 ドキュメントサイトのクロール設定
@@ -383,12 +392,13 @@ includedUrls / excludedUrls
            "includedUrls": ".*docs\\.example\\.com.*",
            "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
-           "depth": -1,
+           "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
            "numOfThread": 5,
            "intervalTime": 200,
            "boost": 1.5,
-           "available": true,
+           "available": "true",
+           "sortOrder": 0,
            "labelTypeIds": ["documentation_label_id"]
          }'
 

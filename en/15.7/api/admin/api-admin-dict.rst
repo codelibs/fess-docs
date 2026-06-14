@@ -5,8 +5,10 @@ Dict API
 Overview
 ========
 
-Dict API is an API for managing |Fess| dictionary files.
-You can manage synonym dictionaries, mapping dictionaries, protected word dictionaries, and more.
+Dict API is an API for managing |Fess| dictionaries.
+The root endpoint can retrieve the list of available dictionaries.
+Reading, creating, updating, and deleting individual dictionary items, as well as uploading and downloading dictionary files,
+are performed via the sub-endpoints for each dictionary type (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
 
 Base URL
 ========
@@ -18,6 +20,9 @@ Base URL
 Endpoint List
 =============
 
+Dictionary Root
+---------------
+
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
@@ -28,18 +33,46 @@ Endpoint List
    * - GET
      - /
      - List dictionaries
+
+Endpoints per Dictionary Type
+-----------------------------
+
+For ``{type}``, specify one of ``synonym``, ``kuromoji``, ``mapping``, ``protwords``, ``stopwords``, or ``stemmerOverride``.
+``{dictId}`` is the ID of the dictionary obtained from the dictionary list.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50 35
+
+   * - Method
+     - Path
+     - Description
    * - GET
-     - /{id}
-     - Get dictionary content
-   * - PUT
-     - /{id}
-     - Update dictionary content
+     - /{type}/settings/{dictId}
+     - List dictionary items
+   * - GET
+     - /{type}/setting/{dictId}/{id}
+     - Get dictionary item
    * - POST
-     - /upload
+     - /{type}/setting/{dictId}
+     - Create dictionary item
+   * - PUT
+     - /{type}/setting/{dictId}
+     - Update dictionary item
+   * - DELETE
+     - /{type}/setting/{dictId}/{id}
+     - Delete dictionary item
+   * - PUT
+     - /{type}/upload/{dictId}
      - Upload dictionary file
+   * - GET
+     - /{type}/download/{dictId}
+     - Download dictionary file
 
 List Dictionaries
 =================
+
+Retrieve the list of available dictionary files.
 
 Request
 -------
@@ -55,43 +88,132 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dicts": [
+        "settings": [
           {
-            "id": "synonym",
-            "name": "Synonym Dictionary",
-            "path": "/var/lib/fess/dict/synonym.txt",
+            "id": "ZjA5...synonym.txt",
             "type": "synonym",
-            "updatedAt": "2025-01-29T10:00:00Z"
+            "path": "/var/lib/fess/dict/synonym.txt",
+            "timestamp": "2025-01-29T10:00:00.000+0000"
           },
           {
-            "id": "mapping",
-            "name": "Mapping Dictionary",
-            "path": "/var/lib/fess/dict/mapping.txt",
+            "id": "ZjA5...mapping.txt",
             "type": "mapping",
-            "updatedAt": "2025-01-28T15:30:00Z"
-          },
-          {
-            "id": "protwords",
-            "name": "Protected Words Dictionary",
-            "path": "/var/lib/fess/dict/protwords.txt",
-            "type": "protwords",
-            "updatedAt": "2025-01-27T12:00:00Z"
+            "path": "/var/lib/fess/dict/mapping.txt",
+            "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ],
-        "total": 3
+        ]
       }
     }
 
-Get Dictionary Content
-======================
+Response Fields
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - ``settings[].id``
+     - Dictionary ID (used as ``{dictId}`` in individual dictionary operations)
+   * - ``settings[].type``
+     - Dictionary type
+   * - ``settings[].path``
+     - Path of the dictionary file
+   * - ``settings[].timestamp``
+     - Update date/time of the dictionary file
+
+List Dictionary Items
+=====================
+
+List the items in the specified dictionary.
 
 Request
 -------
 
 ::
 
-    GET /api/admin/dict/{id}
+    GET /api/admin/dict/{type}/settings/{dictId}
+
+Parameters
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Type
+     - Required
+     - Description
+   * - ``dictId``
+     - String
+     - Yes
+     - Dictionary ID (path parameter)
+   * - ``size``
+     - Integer
+     - No
+     - Number of items per page
+   * - ``page``
+     - Integer
+     - No
+     - Page number
+
+Response
+--------
+
+The fields of each item in the ``settings`` array of the response differ by dictionary type (see "Item Fields per Dictionary Type" below).
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "settings": [
+          {
+            "id": 1,
+            "dictId": "ZjA5...synonym.txt",
+            "inputs": "検索,サーチ",
+            "outputs": "検索,サーチ,リサーチ"
+          }
+        ]
+      }
+    }
+
+Get Dictionary Item
+===================
+
+Retrieve a specific item in the dictionary.
+
+Request
+-------
+
+::
+
+    GET /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parameters
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Type
+     - Required
+     - Description
+   * - ``dictId``
+     - String
+     - Yes
+     - Dictionary ID (path parameter)
+   * - ``id``
+     - Long
+     - Yes
+     - Item ID (path parameter)
 
 Response
 --------
@@ -100,51 +222,39 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "dict": {
-          "id": "synonym",
-          "name": "Synonym Dictionary",
-          "path": "/var/lib/fess/dict/synonym.txt",
-          "type": "synonym",
-          "content": "search,retrieval,lookup\nFess,fess\nfull-text search,fulltext search",
-          "updatedAt": "2025-01-29T10:00:00Z"
+        "setting": {
+          "id": 1,
+          "dictId": "ZjA5...synonym.txt",
+          "inputs": "検索,サーチ",
+          "outputs": "検索,サーチ,リサーチ"
         }
       }
     }
 
-Update Dictionary Content
-=========================
+Create Dictionary Item
+======================
+
+Create a new item in the dictionary.
 
 Request
 -------
 
 ::
 
-    PUT /api/admin/dict/{id}
+    POST /api/admin/dict/{type}/setting/{dictId}
     Content-Type: application/json
 
-Request Body
-~~~~~~~~~~~~
+Request Body (synonym example)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
-      "content": "search,retrieval,lookup,find\nFess,fess\nfull-text search,fulltext search,text search"
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ"
     }
-
-Field Description
-~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Field
-     - Required
-     - Description
-   * - ``content``
-     - Yes
-     - Dictionary content (newline separated)
 
 Response
 --------
@@ -153,55 +263,111 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
-        "message": "Dictionary updated successfully"
+        "id": "1",
+        "created": true
+      }
+    }
+
+Update Dictionary Item
+======================
+
+Update an existing item in the dictionary.
+
+Request
+-------
+
+::
+
+    PUT /api/admin/dict/{type}/setting/{dictId}
+    Content-Type: application/json
+
+Request Body (synonym example)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": 1,
+      "inputs": "検索,サーチ",
+      "outputs": "検索,サーチ,リサーチ,search"
+    }
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
+      }
+    }
+
+Delete Dictionary Item
+======================
+
+Delete an item in the dictionary.
+
+Request
+-------
+
+::
+
+    DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
+
+Parameters
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Type
+     - Required
+     - Description
+   * - ``dictId``
+     - String
+     - Yes
+     - Dictionary ID (path parameter)
+   * - ``id``
+     - Long
+     - Yes
+     - Item ID (path parameter)
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "id": "1",
+        "created": false
       }
     }
 
 Upload Dictionary File
 ======================
 
+Upload and replace the entire dictionary file.
+
 Request
 -------
 
 ::
 
-    POST /api/admin/dict/upload
+    PUT /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
-Request Body
-~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    --boundary
-    Content-Disposition: form-data; name="type"
-
-    synonym
-    --boundary
-    Content-Disposition: form-data; name="file"; filename="synonym.txt"
-    Content-Type: text/plain
-
-    search,retrieval,lookup
-    Fess,fess
-    --boundary--
-
-Field Description
-~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15.70
-
-   * - Field
-     - Required
-     - Description
-   * - ``type``
-     - Yes
-     - Dictionary type (synonym/mapping/protwords/stopwords)
-   * - ``file``
-     - Yes
-     - Dictionary file
+The name of the file field differs by dictionary type (see "Item Fields per Dictionary Type" below).
 
 Response
 --------
@@ -210,63 +376,56 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "message": "Dictionary uploaded successfully"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
-Dictionary Types
-================
+Download Dictionary File
+========================
+
+Download the dictionary file.
+
+Request
+-------
+
+::
+
+    GET /api/admin/dict/{type}/download/{dictId}
+
+The response is the binary of the dictionary file (``application/octet-stream``).
+
+Item Fields per Dictionary Type
+===============================
+
+The fields of the request body and response for creating and updating dictionary items differ by dictionary type.
+``id`` (item ID) and ``dictId`` (dictionary ID) are commonly included in the response.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 80
+   :widths: 18 42 40
 
    * - Type
-     - Description
+     - Item Fields
+     - Upload File Field
    * - ``synonym``
-     - Synonym dictionary (expands synonyms during search)
-   * - ``mapping``
-     - Mapping dictionary (character normalization)
-   * - ``protwords``
-     - Protected words dictionary (words excluded from stemming)
-   * - ``stopwords``
-     - Stopwords dictionary (words excluded from indexing)
+     - ``inputs`` (required), ``outputs`` (required)
+     - ``synonymFile``
    * - ``kuromoji``
-     - Kuromoji dictionary (Japanese morphological analysis)
-
-Dictionary Format Examples
-==========================
-
-Synonym Dictionary
-------------------
-
-::
-
-    # Specify synonyms with comma separation
-    search,retrieval,lookup,find
-    Fess,fess,FESS
-    full-text search,fulltext search,text search
-
-Mapping Dictionary
-------------------
-
-::
-
-    # before => after
-    0 => 0
-    1 => 1
-    2 => 2
-
-Protected Words Dictionary
---------------------------
-
-::
-
-    # Words to protect from stemming
-    running
-    searching
-    indexing
+     - ``token`` (required), ``segmentation`` (required), ``reading`` (required), ``pos`` (required)
+     - ``kuromojiFile``
+   * - ``mapping``
+     - ``inputs`` (required), ``output``
+     - ``charMappingFile``
+   * - ``protwords``
+     - ``input`` (required)
+     - ``protwordsFile``
+   * - ``stopwords``
+     - ``input`` (required)
+     - ``stopwordsFile``
+   * - ``stemmerOverride``
+     - ``input`` (required), ``output`` (required)
+     - ``stemmerOverrideFile``
 
 Usage Examples
 ==============
@@ -279,46 +438,47 @@ List Dictionaries
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Get Synonym Dictionary Content
-------------------------------
+List Synonym Dictionary Items
+-----------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Update Synonym Dictionary
--------------------------
+Add an Item to the Synonym Dictionary
+-------------------------------------
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/setting/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "content": "search,retrieval,find\nFess,fess\ndocument,doc,file"
+           "inputs": "検索,サーチ",
+           "outputs": "検索,サーチ,リサーチ"
          }'
 
-Upload Dictionary File
-----------------------
+Upload a Synonym Dictionary File
+--------------------------------
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/dict/upload" \
+    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "type=synonym" \
-         -F "file=@synonym.txt"
+         -F "synonymFile=@synonym.txt"
 
-Important Notes
-===============
+Download a Synonym Dictionary File
+----------------------------------
 
-- Index rebuilding may be required after updating dictionaries
-- Large dictionary files may affect search performance
-- Use UTF-8 encoding for dictionary files
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/dict/synonym/download/{dictId}" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -o synonym.txt
 
 Reference
 =========
 
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`../../admin/dict-guide` - Dictionary Management Guide
-

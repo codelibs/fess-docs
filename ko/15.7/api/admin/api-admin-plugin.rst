@@ -5,8 +5,8 @@ Plugin API
 개요
 ====
 
-Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
-플러그인의 설치, 활성화, 비활성화, 삭제 등을 조작할 수 있습니다.
+Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API입니다.
+설치된 플러그인 및 설치 가능한 플러그인의 목록 조회, 플러그인 설치·삭제를 조작할 수 있습니다.
 
 기본 URL
 =========
@@ -26,86 +26,95 @@ Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
      - 경로
      - 설명
    * - GET
-     - /
-     - 플러그인 목록 조회
+     - /installed
+     - 설치된 플러그인 목록 조회
+   * - GET
+     - /available
+     - 설치 가능한 플러그인 목록 조회
    * - POST
-     - /install
+     - /
      - 플러그인 설치
    * - DELETE
-     - /{id}
+     - /
      - 플러그인 삭제
 
-플러그인 목록 조회
-==================
+설치된 플러그인 목록 조회
+==================================
+
+설치된 플러그인의 목록을 반환합니다.
 
 요청
 ----------
 
 ::
 
-    GET /api/admin/plugin
+    GET /api/admin/plugin/installed
 
 응답
 ----------
+
+``plugins`` 에 플러그인 정보를 나타내는 객체의 배열이 저장됩니다.
+각 객체는 문자열 키와 값의 맵으로, ``name`` (플러그인 이름)이나 ``version`` (버전) 등을 포함합니다.
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "plugins": [
           {
-            "id": "analysis-kuromoji",
-            "name": "Japanese (kuromoji) Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Japanese language analysis plugin",
-            "enabled": true,
-            "installed": true
-          },
-          {
-            "id": "analysis-icu",
-            "name": "ICU Analysis Plugin",
-            "version": "2.11.0",
-            "description": "Unicode normalization and collation",
-            "enabled": true,
-            "installed": true
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
           }
-        ],
-        "total": 2
+        ]
       }
     }
 
-응답 필드
-~~~~~~~~~~~~~~~~~~~~
+설치 가능한 플러그인 목록 조회
+==================================
 
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - 필드
-     - 설명
-   * - ``id``
-     - 플러그인 ID
-   * - ``name``
-     - 플러그인 이름
-   * - ``version``
-     - 플러그인 버전
-   * - ``description``
-     - 플러그인 설명
-   * - ``enabled``
-     - 활성화 상태
-   * - ``installed``
-     - 설치 상태
-
-플러그인 설치
-======================
+설치 가능한 플러그인의 목록을 반환합니다.
 
 요청
 ----------
 
 ::
 
-    POST /api/admin/plugin/install
+    GET /api/admin/plugin/available
+
+응답
+----------
+
+``plugins`` 에 설치 가능한 플러그인 정보를 나타내는 객체의 배열이 저장됩니다.
+각 객체는 ``installed`` 와 동일하게 문자열 키와 값의 맵입니다.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 0,
+        "plugins": [
+          {
+            "name": "fess-ds-slack",
+            "version": "15.7.0"
+          }
+        ]
+      }
+    }
+
+플러그인 설치
+======================
+
+지정한 이름과 버전의 플러그인을 설치합니다.
+
+요청
+----------
+
+::
+
+    POST /api/admin/plugin
     Content-Type: application/json
 
 요청 본문
@@ -114,7 +123,8 @@ Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
 .. code-block:: json
 
     {
-      "url": "https://example.com/plugins/my-plugin-1.0.0.zip"
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
     }
 
 필드 설명
@@ -122,37 +132,72 @@ Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 필드
      - 필수
      - 설명
-   * - ``url``
+   * - ``name``
      - 예
-     - 플러그인 다운로드 URL
+     - 플러그인 이름 (최대 100자)
+   * - ``version``
+     - 예
+     - 플러그인 버전 (최대 100자)
 
 응답
 ----------
+
+성공 시 ``status`` 만 반환합니다.
+``name`` 또는 ``version`` 에 해당하는 아티팩트가 존재하지 않는 경우에는 ``status`` 가 ``1`` (BAD_REQUEST)이 되고, ``message`` 에 ``invalid name or version`` 이 설정됩니다.
 
 .. code-block:: json
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin installed successfully. Restart required.",
-        "pluginId": "my-plugin"
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 플러그인 삭제
 ==============
 
+지정한 이름과 버전의 플러그인을 삭제합니다.
+
 요청
 ----------
 
 ::
 
-    DELETE /api/admin/plugin/{id}
+    DELETE /api/admin/plugin
+    Content-Type: application/json
+
+요청 본문
+~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "name": "fess-ds-slack",
+      "version": "15.7.0"
+    }
+
+필드 설명
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - 필드
+     - 필수
+     - 설명
+   * - ``name``
+     - 예
+     - 플러그인 이름 (최대 100자)
+   * - ``version``
+     - 아니오
+     - 플러그인 버전 (최대 100자)
 
 응답
 ----------
@@ -161,20 +206,20 @@ Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "status": 0,
-        "message": "Plugin deleted successfully. Restart required."
+        "version": "15.7.0",
+        "status": 0
       }
     }
 
 사용 예
 ======
 
-플러그인 목록 조회
---------------------
+설치된 플러그인 목록 조회
+------------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/plugin" \
+    curl -X GET "http://localhost:8080/api/admin/plugin/installed" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 플러그인 설치
@@ -182,11 +227,12 @@ Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
 
 .. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/admin/plugin/install" \
+    curl -X POST "http://localhost:8080/api/admin/plugin" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "url": "https://artifacts.opensearch.org/releases/plugins/analysis-icu/2.11.0/analysis-icu-2.11.0.zip"
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
          }'
 
 플러그인 삭제
@@ -194,19 +240,15 @@ Plugin API는 |Fess| 의 플러그인을 관리하기 위한 API입니다.
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/plugin/analysis-icu" \
-         -H "Authorization: Bearer YOUR_TOKEN"
-
-주의 사항
-========
-
-- 플러그인 설치 또는 삭제 후에는 Fess 재시작이 필요합니다
-- 호환되지 않는 플러그인을 설치하면 Fess가 시작되지 않을 수 있습니다
-- 플러그인 삭제는 신중하게 수행하세요. 의존 관계가 있는 경우 시스템에 영향을 줄 수 있습니다
+    curl -X DELETE "http://localhost:8080/api/admin/plugin" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "name": "fess-ds-slack",
+           "version": "15.7.0"
+         }'
 
 참고 정보
 ========
 
 - :doc:`api-admin-overview` - Admin API 개요
-- :doc:`api-admin-systeminfo` - 시스템 정보 API
-- :doc:`../../admin/plugin-guide` - 플러그인 관리 가이드

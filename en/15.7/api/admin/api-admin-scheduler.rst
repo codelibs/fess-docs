@@ -25,7 +25,7 @@ Endpoint List
    * - Method
      - Path
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - List scheduled jobs
    * - GET
@@ -56,14 +56,13 @@ Request
 ::
 
     GET /api/admin/scheduler/settings
-    PUT /api/admin/scheduler/settings
 
 Parameters
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -72,11 +71,11 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number
 
 Response
 --------
@@ -94,9 +93,9 @@ Response
             "cronExpression": "0 0 0 * * ?",
             "scriptType": "groovy",
             "scriptData": "...",
-            "jobLogging": true,
-            "crawler": true,
-            "available": true,
+            "jobLogging": "true",
+            "crawler": "true",
+            "available": "true",
             "sortOrder": 0,
             "running": false
           }
@@ -104,6 +103,10 @@ Response
         "total": 5
       }
     }
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` are treated as strings (``"true"`` / ``"false"``). ``running`` is a boolean value indicating the execution status of the job.
 
 Get Scheduled Job
 =================
@@ -130,9 +133,9 @@ Response
           "cronExpression": "0 0 0 * * ?",
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": true,
-          "crawler": true,
-          "available": true,
+          "jobLogging": "true",
+          "crawler": "true",
+          "available": "true",
           "sortOrder": 0,
           "running": false
         }
@@ -161,9 +164,9 @@ Request Body
       "cronExpression": "0 0 2 * * ?",
       "scriptType": "groovy",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1
     }
 
@@ -172,7 +175,7 @@ Field Description
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Field
      - Required
@@ -184,25 +187,25 @@ Field Description
      - Yes
      - Execution target ("all" or specific target)
    * - ``cronExpression``
-     - Yes
+     - No
      - Cron expression (seconds minutes hours day month weekday)
    * - ``scriptType``
      - Yes
      - Script type ("groovy")
    * - ``scriptData``
-     - Yes
+     - No
      - Execution script
    * - ``jobLogging``
      - No
-     - Enable logging (default: true)
+     - Enable logging (string ``"true"`` / ``"false"``)
    * - ``crawler``
      - No
-     - Whether this is a crawler job (default: false)
+     - Whether this is a crawler job (string ``"true"`` / ``"false"``)
    * - ``available``
      - No
-     - Enable/disable (default: true)
+     - Enable/disable (string ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - No
+     - Yes
      - Display order
 
 Response
@@ -259,9 +262,9 @@ Request Body
       "cronExpression": "0 0 3 * * ?",
       "scriptType": "groovy",
       "scriptData": "...",
-      "jobLogging": true,
-      "crawler": true,
-      "available": true,
+      "jobLogging": "true",
+      "crawler": "true",
+      "available": "true",
       "sortOrder": 1,
       "versionNo": 1
     }
@@ -321,15 +324,28 @@ Response
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
+
+Response Fields
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - ``jobLogId``
+     - Job log ID of the started job. Issued when job logging is enabled. If job logging is disabled, it becomes ``null``.
 
 Notes
 -----
 
 - Returns an error if the job is already running
-- Returns an error if the job is disabled (``available: false``)
+- Returns an error if the job is disabled (``available`` is ``"false"``)
 
 Stop Job
 ========
@@ -372,9 +388,9 @@ Create and Run a Crawl Job
            "cronExpression": "0 0 * * * ?",
            "scriptType": "groovy",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": true,
-           "crawler": true,
-           "available": true
+           "jobLogging": "true",
+           "crawler": "true",
+           "available": "true"
          }'
 
     # Run job immediately

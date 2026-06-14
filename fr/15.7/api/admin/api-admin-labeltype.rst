@@ -25,7 +25,7 @@ Liste des endpoints
    * - Methode
      - Chemin
      - Description
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtention de la liste des types de labels
    * - GET
@@ -50,7 +50,6 @@ Requete
 ::
 
     GET /api/admin/labeltype/settings
-    PUT /api/admin/labeltype/settings
 
 Parametres
 ~~~~~~~~~~
@@ -87,6 +86,8 @@ Reponse
             "value": "docs",
             "includedPaths": ".*docs\\.example\\.com.*",
             "excludedPaths": "",
+            "permissions": "{role}admin",
+            "virtualHost": "",
             "sortOrder": 0
           }
         ],
@@ -119,7 +120,7 @@ Reponse
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
           "sortOrder": 0,
-          "permissions": [],
+          "permissions": "{role}admin",
           "virtualHost": ""
         }
       }
@@ -147,7 +148,7 @@ Corps de la requete
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
       "excludedPaths": ".*/(archive|old)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"]
+      "permissions": "{role}guest"
     }
 
 Description des champs
@@ -177,7 +178,7 @@ Description des champs
      - Ordre d'affichage
    * - ``permissions``
      - Non
-     - Roles autorises
+     - Roles autorises (separes par des sauts de ligne si plusieurs)
    * - ``virtualHost``
      - Non
      - Hote virtuel
@@ -218,7 +219,7 @@ Corps de la requete
       "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
       "excludedPaths": ".*/(archive|old|draft)/.*",
       "sortOrder": 1,
-      "permissions": ["guest"],
+      "permissions": "{role}guest",
       "versionNo": 1
     }
 
@@ -252,9 +253,7 @@ Reponse
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_label_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -274,7 +273,7 @@ Creation d'un label pour la documentation
            "value": "tech_docs",
            "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
            "sortOrder": 0,
-           "permissions": ["guest"]
+           "permissions": "{role}guest"
          }'
 
 Recherche avec un label

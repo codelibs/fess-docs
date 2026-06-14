@@ -25,7 +25,7 @@ Endpunktliste
    * - Methode
      - Pfad
      - Beschreibung
-   * - GET/PUT
+   * - GET
      - /settings
      - Datenspeicher-Konfigurationsliste abrufen
    * - GET
@@ -50,7 +50,6 @@ Request
 ::
 
     GET /api/admin/dataconfig/settings
-    PUT /api/admin/dataconfig/settings
 
 Parameter
 ~~~~~~~~~
@@ -84,11 +83,14 @@ Response
           {
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
+            "description": "Datenbank-Crawler",
             "handlerName": "DatabaseDataStore",
             "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
             "handlerScript": "...",
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -117,15 +119,15 @@ Response
         "setting": {
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
+          "description": "Datenbank-Crawler",
           "handlerName": "DatabaseDataStore",
           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
           "handlerScript": "...",
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
-          "labelTypeIds": []
+          "permissions": "{role}admin",
+          "virtualHosts": ""
         }
       }
     }
@@ -152,9 +154,9 @@ Request-Body
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
-      "labelTypeIds": ["label_id_1"]
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user"
     }
 
 Feldbeschreibungen
@@ -170,6 +172,9 @@ Feldbeschreibungen
    * - ``name``
      - Ja
      - Konfigurationsname
+   * - ``description``
+     - Nein
+     - Beschreibung der Konfiguration
    * - ``handlerName``
      - Ja
      - Name des Datenspeicher-Handlers
@@ -177,26 +182,23 @@ Feldbeschreibungen
      - Nein
      - Handler-Parameter (Verbindungsinformationen usw.)
    * - ``handlerScript``
-     - Ja
+     - Nein
      - Datenkonvertierungsskript
    * - ``boost``
-     - Nein
-     - Boost-Wert für Suchergebnisse (Standard: 1.0)
+     - Ja
+     - Boost-Wert für Suchergebnisse
    * - ``available``
-     - Nein
-     - Aktiviert/Deaktiviert (Standard: true)
+     - Ja
+     - Aktiviert/Deaktiviert (Zeichenkette ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Nein
+     - Ja
      - Anzeigereihenfolge
    * - ``permissions``
      - Nein
-     - Zugriffsberechtigte Rollen
+     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbrüche getrennt)
    * - ``virtualHosts``
      - Nein
-     - Virtuelle Hosts
-   * - ``labelTypeIds``
-     - Nein
-     - Label-Typ-IDs
+     - Virtuelle Hosts (bei mehreren durch Zeilenumbrüche getrennt)
 
 Response
 --------
@@ -234,7 +236,8 @@ Request-Body
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
       "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
       "boost": 1.5,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -268,9 +271,7 @@ Response
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_dataconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -307,7 +308,8 @@ Datenbank-Crawl-Konfiguration
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
            "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
            "boost": 1.0,
-           "available": true
+           "available": "true",
+           "sortOrder": 0
          }'
 
 Referenzinformationen

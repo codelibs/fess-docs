@@ -25,7 +25,7 @@ Lista de Endpoints
    * - Metodo
      - Ruta
      - Descripcion
-   * - GET/PUT
+   * - GET
      - /settings
      - Obtener lista de configuraciones de rastreo web
    * - GET
@@ -50,7 +50,6 @@ Solicitud
 ::
 
     GET /api/admin/webconfig/settings
-    PUT /api/admin/webconfig/settings
 
 Parametros
 ~~~~~~~~~~
@@ -84,6 +83,7 @@ Respuesta
           {
             "id": "webconfig_id_1",
             "name": "Example Site",
+            "description": "Sitio de ejemplo",
             "urls": "https://example.com/",
             "includedUrls": ".*example\\.com.*",
             "excludedUrls": ".*\\.(pdf|zip)$",
@@ -92,11 +92,13 @@ Respuesta
             "configParameter": "",
             "depth": 3,
             "maxAccessCount": 1000,
-            "userAgent": "",
+            "userAgent": "Mozilla/5.0",
             "numOfThread": 1,
             "intervalTime": 1000,
             "boost": 1.0,
-            "available": true,
+            "available": "true",
+            "permissions": "{role}admin",
+            "virtualHosts": "",
             "sortOrder": 0
           }
         ],
@@ -125,6 +127,7 @@ Respuesta
         "setting": {
           "id": "webconfig_id_1",
           "name": "Example Site",
+          "description": "Sitio de ejemplo",
           "urls": "https://example.com/",
           "includedUrls": ".*example\\.com.*",
           "excludedUrls": ".*\\.(pdf|zip)$",
@@ -133,14 +136,14 @@ Respuesta
           "configParameter": "",
           "depth": 3,
           "maxAccessCount": 1000,
-          "userAgent": "",
+          "userAgent": "Mozilla/5.0",
           "numOfThread": 1,
           "intervalTime": 1000,
           "boost": 1.0,
-          "available": true,
+          "available": "true",
           "sortOrder": 0,
-          "permissions": ["admin"],
-          "virtualHosts": [],
+          "permissions": "{role}admin",
+          "virtualHosts": "",
           "labelTypeIds": []
         }
       }
@@ -167,13 +170,13 @@ Cuerpo de la Solicitud
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "depth": 5,
-      "maxAccessCount": 5000,
+      "userAgent": "Mozilla/5.0",
       "numOfThread": 3,
       "intervalTime": 500,
       "boost": 1.0,
-      "available": true,
-      "permissions": ["admin", "user"],
+      "available": "true",
+      "sortOrder": 0,
+      "permissions": "{role}admin\n{role}user",
       "labelTypeIds": ["label_id_1"]
     }
 
@@ -190,6 +193,9 @@ Descripcion de Campos
    * - ``name``
      - Si
      - Nombre de la configuracion
+   * - ``description``
+     - No
+     - Descripcion de la configuracion
    * - ``urls``
      - Si
      - URL de inicio de rastreo (separadas por salto de linea si son multiples)
@@ -210,37 +216,37 @@ Descripcion de Campos
      - Parametros de configuracion adicionales
    * - ``depth``
      - No
-     - Profundidad de rastreo (predeterminado: -1=ilimitado)
+     - Profundidad de rastreo
    * - ``maxAccessCount``
      - No
-     - Numero maximo de accesos (predeterminado: 100)
+     - Numero maximo de accesos
    * - ``userAgent``
-     - No
-     - User-Agent personalizado
+     - Si
+     - Cadena User-Agent
    * - ``numOfThread``
-     - No
-     - Numero de hilos paralelos (predeterminado: 1)
+     - Si
+     - Numero de hilos paralelos
    * - ``intervalTime``
-     - No
-     - Intervalo entre solicitudes (milisegundos, predeterminado: 0)
+     - Si
+     - Intervalo entre solicitudes (milisegundos)
    * - ``boost``
-     - No
-     - Valor de impulso en resultados de busqueda (predeterminado: 1.0)
+     - Si
+     - Valor de impulso en resultados de busqueda
    * - ``available``
-     - No
-     - Habilitado/Deshabilitado (predeterminado: true)
+     - Si
+     - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - No
+     - Si
      - Orden de visualizacion
    * - ``permissions``
      - No
-     - Roles con permiso de acceso
+     - Roles con permiso de acceso (separados por saltos de linea si son varios)
    * - ``virtualHosts``
      - No
-     - Hosts virtuales
+     - Hosts virtuales (separados por saltos de linea si son varios)
    * - ``labelTypeIds``
      - No
-     - IDs de tipo de etiqueta
+     - IDs de tipo de etiqueta (arreglo)
 
 Respuesta
 ---------
@@ -277,12 +283,14 @@ Cuerpo de la Solicitud
       "urls": "https://www.example.com/",
       "includedUrls": ".*www\\.example\\.com.*",
       "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
+      "userAgent": "Mozilla/5.0",
       "depth": 10,
       "maxAccessCount": 10000,
       "numOfThread": 5,
       "intervalTime": 300,
       "boost": 1.2,
-      "available": true,
+      "available": "true",
+      "sortOrder": 0,
       "versionNo": 1
     }
 
@@ -316,9 +324,7 @@ Respuesta
 
     {
       "response": {
-        "status": 0,
-        "id": "deleted_webconfig_id",
-        "created": false
+        "status": 0
       }
     }
 
@@ -361,12 +367,15 @@ Configuracion de Rastreo de Sitio Corporativo
            "urls": "https://www.example.com/",
            "includedUrls": ".*www\\.example\\.com.*",
            "excludedUrls": ".*/(login|admin|api)/.*",
+           "userAgent": "Mozilla/5.0",
            "depth": 5,
            "maxAccessCount": 10000,
            "numOfThread": 3,
            "intervalTime": 500,
-           "available": true,
-           "permissions": ["guest"]
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
          }'
 
 Configuracion de Rastreo de Sitio de Documentacion
@@ -383,12 +392,13 @@ Configuracion de Rastreo de Sitio de Documentacion
            "includedUrls": ".*docs\\.example\\.com.*",
            "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
-           "depth": -1,
+           "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
            "numOfThread": 5,
            "intervalTime": 200,
            "boost": 1.5,
-           "available": true,
+           "available": "true",
+           "sortOrder": 0,
            "labelTypeIds": ["documentation_label_id"]
          }'
 
