@@ -167,7 +167,7 @@ Configuration du proxy par défaut du crawler
 ------------------------------
 
 Pour définir un proxy par défaut lorsque ``client.proxyHost`` n'est pas spécifié dans les configurations de crawl individuelles, configurez dans ``fess_config.properties``.
-Ce paramètre s'applique uniquement aux communications HTTP du crawler. Il ne s'applique pas à l'authentification SSO ni aux connexions d'API externes.
+Ce paramètre s'applique au proxy par défaut du robot d'exploration, ainsi qu'à la communication HTTP de l'intégration LLM et aux téléchargements de plugins. En revanche, il ne s'applique pas à la communication de certaines bibliothèques Java telles que l'authentification SSO. Pour appliquer un proxy à l'ensemble de l'application Fess (y compris l'authentification SSO), utilisez les variables d'environnement décrites ci-dessous (``FESS_PROXY_HOST``, etc.).
 
 ::
 
@@ -180,7 +180,7 @@ Ce paramètre s'applique uniquement aux communications HTTP du crawler. Il ne s'
    Les mots de passe sont stockés sans chiffrement. Configurez les permissions de fichier appropriées.
 
 .. note::
-   Pour utiliser un proxy pour l'ensemble de l'application Fess (y compris SSO, intégration LLM, etc.), utilisez les variables d'environnement ``FESS_PROXY_HOST`` et ``FESS_PROXY_PORT``. Consultez la section « Configuration du proxy via les variables d'environnement » ci-dessous pour plus de détails.
+   Les paramètres ``http.proxy.*`` ne s'appliquent pas à l'authentification SSO, etc. Pour utiliser un proxy pour l'ensemble de l'application Fess, y compris l'authentification SSO (communication HTTP à l'échelle de la JVM), définissez les variables d'environnement ``FESS_PROXY_HOST`` et ``FESS_PROXY_PORT``. Pour plus de détails, voir « Configuration du proxy via les variables d'environnement » ci-dessous.
 
 Configuration du proxy via les variables d'environnement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -197,8 +197,8 @@ Ces variables d'environnement sont converties en propriétés système Java (``h
 Pour les packages RPM, configurez dans ``/etc/sysconfig/fess``. Pour les packages DEB, configurez dans ``/etc/default/fess``.
 
 .. note::
-   Les paramètres ``http.proxy.*`` dans ``fess_config.properties`` sont utilisés comme proxy par défaut du crawler.
-   Pour utiliser un proxy pour l'ensemble de l'application Fess y compris l'authentification SSO et l'intégration LLM, configurez les variables d'environnement ci-dessus.
+   Les paramètres ``http.proxy.*`` de ``fess_config.properties`` sont utilisés pour le proxy par défaut du robot d'exploration, ainsi que pour l'intégration LLM et les téléchargements de plugins.
+   Pour utiliser un proxy pour l'ensemble de l'application Fess, y compris l'authentification SSO (communication HTTP à l'échelle de la JVM), définissez les variables d'environnement ci-dessus.
 
 Configuration de la communication HTTP
 ============
@@ -229,10 +229,10 @@ Exemple de configuration dans ``fess_config.properties`` :
     http.fileupload.threshold.size=524288
     http.fileupload.max.file.count=20
 
-Configuration du délai de connexion
---------------------
+Paramètres de connexion OpenSearch
+-----------------------------------
 
-Vous pouvez configurer le délai de connexion à OpenSearch.
+Vous pouvez configurer l'URL de connexion à OpenSearch et l'intervalle de vérification d'état (heartbeat).
 
 .. list-table::
    :header-rows: 1
@@ -290,11 +290,15 @@ Consultez :doc:`security-virtual-host` pour plus de détails.
 Configuration de base
 --------
 
-Configurez l'en-tête de l'hôte virtuel dans ``fess_config.properties``.
+Configurez les hôtes virtuels depuis l'interface d'administration « Système > Général » (``virtual.host.headers``). Spécifiez un hôte virtuel par ligne au format ``Host:nomdhote[:port]=nomdhotevirtuel``. La valeur par défaut est vide (non définie) et la fonction d'hôte virtuel est désactivée.
 
 ::
 
-    virtual.host.headers=X-Forwarded-Host,Host
+    Host:search1.example.com=site1
+    Host:search2.example.com=site2
+
+.. note::
+   La valeur de ``virtual.host.headers`` n'est PAS une liste de noms d'en-tête tels que ``X-Forwarded-Host,Host``. Chaque ligne décrit une correspondance au format ``NomDEnTête:ValeurDEnTête=nomdhotevirtuel``. Pour le format détaillé et les contraintes, voir :doc:`security-virtual-host`.
 
 Intégration avec un reverse proxy
 ========================
