@@ -161,7 +161,7 @@ Configuración de Proxy Predeterminado del Rastreador
 -----------------------------------------------------
 
 Para establecer un proxy predeterminado cuando ``client.proxyHost`` no se especifica en las configuraciones individuales de rastreo, configure en ``fess_config.properties``.
-Esta configuración se aplica solo a la comunicación HTTP del rastreador. No se aplica a la autenticación SSO ni a las conexiones de API externas.
+Esta configuración se aplica al proxy predeterminado del rastreador, así como a la comunicación HTTP de la integración con LLM y a las descargas de complementos. Sin embargo, no se aplica a la comunicación de algunas bibliotecas de Java, como la autenticación SSO. Para aplicar un proxy a toda la aplicación Fess (incluida la autenticación SSO), utilice las variables de entorno descritas más adelante (``FESS_PROXY_HOST``, etc.).
 
 ::
 
@@ -174,7 +174,7 @@ Esta configuración se aplica solo a la comunicación HTTP del rastreador. No se
    Las contraseñas se almacenan sin cifrar. Configure los permisos de archivo apropiados.
 
 .. note::
-   Para usar un proxy en toda la aplicación Fess (incluyendo SSO, integración LLM, etc.), utilice las variables de entorno ``FESS_PROXY_HOST`` y ``FESS_PROXY_PORT``. Consulte "Configuración de Proxy mediante Variables de Entorno" a continuación para más detalles.
+   Las configuraciones ``http.proxy.*`` no se aplican a la autenticación SSO, etc. Para usar un proxy en toda la aplicación Fess, incluida la autenticación SSO (comunicación HTTP a nivel de toda la JVM), defina las variables de entorno ``FESS_PROXY_HOST`` y ``FESS_PROXY_PORT``. Para más detalles, consulte «Configuración del proxy mediante variables de entorno» más adelante.
 
 Configuración de Proxy mediante Variables de Entorno
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,8 +191,7 @@ Estas variables de entorno se convierten en propiedades del sistema Java (``http
 Para paquetes RPM, configure en ``/etc/sysconfig/fess``. Para paquetes DEB, configure en ``/etc/default/fess``.
 
 .. note::
-   La configuración ``http.proxy.*`` en ``fess_config.properties`` se usa como proxy predeterminado del rastreador.
-   Para usar un proxy en toda la aplicación Fess incluyendo la autenticación SSO y la integración LLM, configure las variables de entorno anteriores.
+   Las configuraciones ``http.proxy.*`` en ``fess_config.properties`` se utilizan para el proxy predeterminado del rastreador, así como para la integración con LLM y las descargas de complementos. Para usar un proxy en toda la aplicación Fess, incluida la autenticación SSO (comunicación HTTP a nivel de toda la JVM), defina las variables de entorno anteriores.
 
 Configuración de Comunicación HTTP
 ===================================
@@ -223,10 +222,10 @@ Ejemplo de configuración en ``fess_config.properties``:
     http.fileupload.threshold.size=524288
     http.fileupload.max.file.count=20
 
-Configuración de Tiempo de Espera de Conexión
-----------------------------------------------
+Configuración de Conexión de OpenSearch
+----------------------------------------
 
-Puede configurar el tiempo de espera de conexión a OpenSearch.
+Puede configurar la URL de conexión de OpenSearch y el intervalo de comprobación de estado (heartbeat).
 
 .. list-table::
    :header-rows: 1
@@ -284,11 +283,15 @@ Consulte :doc:`security-virtual-host` para más detalles.
 Configuración Básica
 --------------------
 
-Configure el encabezado de host virtual en ``fess_config.properties``.
+Configure los hosts virtuales desde la interfaz de administración «Sistema > General» (``virtual.host.headers``). Especifique un host virtual por línea con el formato ``Host:nombredehost[:puerto]=nombredehostvirtual``. El valor predeterminado está vacío (sin definir) y la función de host virtual está deshabilitada.
 
 ::
 
-    virtual.host.headers=X-Forwarded-Host,Host
+    Host:search1.example.com=site1
+    Host:search2.example.com=site2
+
+.. note::
+   El valor de ``virtual.host.headers`` NO es una lista de nombres de encabezado como ``X-Forwarded-Host,Host``. Cada línea describe una correspondencia con el formato ``NombreDeEncabezado:ValorDeEncabezado=nombredehostvirtual``. Para el formato detallado y las restricciones, consulte :doc:`security-virtual-host`.
 
 Integración con Proxy Inverso
 ==============================

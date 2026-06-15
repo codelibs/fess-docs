@@ -162,7 +162,9 @@ Standard-Proxy-Konfiguration für den Crawler
 ------------------------------
 
 Um einen Standard-Proxy festzulegen, wenn ``client.proxyHost`` nicht in den einzelnen Crawl-Konfigurationen angegeben ist, konfigurieren Sie dies in ``fess_config.properties``.
-Diese Einstellung gilt nur für die HTTP-Kommunikation des Crawlers. Sie gilt nicht für SSO-Authentifizierung oder externe API-Verbindungen.
+Diese Einstellung gilt für den Standard-Proxy des Crawlers sowie für die HTTP-Kommunikation der LLM-Integration und für Plugin-Downloads.
+Sie gilt jedoch nicht für die Kommunikation einiger Java-Bibliotheken wie der SSO-Authentifizierung.
+Um einen Proxy für die gesamte Fess-Anwendung (einschließlich SSO-Authentifizierung) anzuwenden, verwenden Sie die weiter unten beschriebenen Umgebungsvariablen (``FESS_PROXY_HOST`` usw.).
 
 ::
 
@@ -175,7 +177,9 @@ Diese Einstellung gilt nur für die HTTP-Kommunikation des Crawlers. Sie gilt ni
    Passwörter werden unverschlüsselt gespeichert. Setzen Sie entsprechende Dateiberechtigungen.
 
 .. note::
-   Um einen Proxy für die gesamte Fess-Anwendung (einschließlich SSO, LLM-Integration usw.) zu verwenden, nutzen Sie die Umgebungsvariablen ``FESS_PROXY_HOST`` und ``FESS_PROXY_PORT``. Weitere Details finden Sie im Abschnitt „Proxy-Konfiguration über Umgebungsvariablen" weiter unten.
+   Die Einstellungen ``http.proxy.*`` gelten nicht für die SSO-Authentifizierung usw.
+   Um einen Proxy für die gesamte Fess-Anwendung einschließlich SSO-Authentifizierung (JVM-weite HTTP-Kommunikation) zu verwenden, setzen Sie die Umgebungsvariablen ``FESS_PROXY_HOST`` und ``FESS_PROXY_PORT``.
+   Einzelheiten siehe „Proxy-Konfiguration über Umgebungsvariablen" weiter unten.
 
 Proxy-Konfiguration über Umgebungsvariablen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -192,8 +196,8 @@ Diese Umgebungsvariablen werden in Java-Systemeigenschaften (``http.proxyHost``,
 Für RPM-Pakete konfigurieren Sie in ``/etc/sysconfig/fess``. Für DEB-Pakete konfigurieren Sie in ``/etc/default/fess``.
 
 .. note::
-   Die ``http.proxy.*``-Einstellungen in ``fess_config.properties`` werden als Standard-Proxy für den Crawler verwendet.
-   Um einen Proxy für die gesamte Fess-Anwendung einschließlich SSO-Authentifizierung und LLM-Integration zu verwenden, konfigurieren Sie die obigen Umgebungsvariablen.
+   Die Einstellungen ``http.proxy.*`` in ``fess_config.properties`` werden für den Standard-Proxy des Crawlers sowie für die LLM-Integration und Plugin-Downloads verwendet.
+   Um einen Proxy für die gesamte Fess-Anwendung einschließlich SSO-Authentifizierung (JVM-weite HTTP-Kommunikation) zu verwenden, setzen Sie die oben genannten Umgebungsvariablen.
 
 HTTP-Kommunikationseinstellungen
 ============
@@ -224,10 +228,10 @@ Konfigurationsbeispiel in ``fess_config.properties``:
     http.fileupload.threshold.size=524288
     http.fileupload.max.file.count=20
 
-Einstellungen für Verbindungs-Timeouts
---------------------
+OpenSearch-Verbindungseinstellungen
+------------------------------------
 
-Sie können Verbindungs-Timeouts für OpenSearch konfigurieren.
+Sie können die OpenSearch-Verbindungs-URL und das Intervall der Integritätsprüfung (Heartbeat) konfigurieren.
 
 .. list-table::
    :header-rows: 1
@@ -283,13 +287,21 @@ Konfiguration virtueller Hosts
 Weitere Informationen finden Sie unter :doc:`security-virtual-host`.
 
 Grundkonfiguration
---------
+------------------
 
-Konfigurieren Sie den Header für virtuelle Hosts in ``fess_config.properties``.
+Konfigurieren Sie virtuelle Hosts über die Verwaltungsoberfläche „System > Allgemein" (``virtual.host.headers``).
+Geben Sie pro Zeile einen virtuellen Host im Format ``Host:Hostname[:Port]=VirtualHostName`` an.
+Der Standardwert ist leer (nicht gesetzt), und die Funktion für virtuelle Hosts ist deaktiviert.
 
 ::
 
-    virtual.host.headers=X-Forwarded-Host,Host
+    Host:search1.example.com=site1
+    Host:search2.example.com=site2
+
+.. note::
+   Der Wert von ``virtual.host.headers`` ist KEINE Liste von Header-Namen wie ``X-Forwarded-Host,Host``.
+   Jede Zeile beschreibt eine Zuordnung in der Form ``Header-Name:Header-Wert=VirtualHostName``.
+   Einzelheiten zum Format und zu den Einschränkungen finden Sie unter :doc:`security-virtual-host`.
 
 Integration mit Reverse-Proxys
 ========================

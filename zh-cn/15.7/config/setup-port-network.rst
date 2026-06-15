@@ -167,7 +167,7 @@ Windows 环境:
 ------------------------------
 
 当爬虫配置中未单独指定 ``client.proxyHost`` 时，可以在 ``fess_config.properties`` 中设置默认代理。
-此设置仅适用于爬虫的 HTTP 通信。不适用于 SSO 认证或外部 API 连接。
+此设置适用于爬虫的默认代理，以及 LLM 集成的 HTTP 通信和插件下载。但不适用于 SSO 认证等部分 Java 库的通信。若要为整个 Fess 应用程序（包括 SSO 认证）应用代理，请使用下文所述的环境变量（``FESS_PROXY_HOST`` 等）。
 
 ::
 
@@ -180,7 +180,7 @@ Windows 环境:
    密码将以未加密形式保存。请设置适当的文件权限。
 
 .. note::
-   如需在整个 Fess 应用程序（包括 SSO、LLM 集成等）中使用代理，请使用环境变量 ``FESS_PROXY_HOST`` 和 ``FESS_PROXY_PORT``。详情请参阅下文的"通过环境变量配置代理"。
+   ``http.proxy.*`` 设置不适用于 SSO 认证等。若要为包括 SSO 认证在内的整个 Fess 应用程序（JVM 范围的 HTTP 通信）使用代理，请设置环境变量 ``FESS_PROXY_HOST`` 和 ``FESS_PROXY_PORT``。详情请参阅下文"通过环境变量配置代理"。
 
 通过环境变量配置代理
 ~~~~~~~~~~~~~~~~~~~~
@@ -197,8 +197,8 @@ Windows 环境:
 对于 RPM 包,在 ``/etc/sysconfig/fess`` 中配置。对于 DEB 包,在 ``/etc/default/fess`` 中配置。
 
 .. note::
-   ``fess_config.properties`` 中的 ``http.proxy.*`` 设置用作爬虫的默认代理。
-   如需在包括 SSO 认证和 LLM 集成在内的整个 Fess 应用程序中使用代理，请配置上述环境变量。
+   ``fess_config.properties`` 中的 ``http.proxy.*`` 设置用于爬虫的默认代理，以及 LLM 集成和插件下载。
+   若要为包括 SSO 认证在内的整个 Fess 应用程序（JVM 范围的 HTTP 通信）使用代理，请设置上述环境变量。
 
 HTTP 通信配置
 ============
@@ -229,10 +229,10 @@ HTTP 通信配置
     http.fileupload.threshold.size=524288
     http.fileupload.max.file.count=20
 
-连接超时配置
+OpenSearch 连接配置
 --------------------
 
-可以配置到 OpenSearch 的连接超时时间。
+您可以配置 OpenSearch 的连接 URL 和健康检查（心跳）间隔。
 
 .. list-table::
    :header-rows: 1
@@ -290,11 +290,15 @@ SSL/TLS 连接配置
 基本配置
 --------
 
-在 ``fess_config.properties`` 中配置虚拟主机头。
+在管理界面的"系统 > 常规"（``virtual.host.headers``）中配置虚拟主机。每行指定一个虚拟主机，格式为 ``Host:主机名[:端口号]=虚拟主机名``。默认值为空（未设置），虚拟主机功能处于禁用状态。
 
 ::
 
-    virtual.host.headers=X-Forwarded-Host,Host
+    Host:search1.example.com=site1
+    Host:search2.example.com=site2
+
+.. note::
+   ``virtual.host.headers`` 的值不是诸如 ``X-Forwarded-Host,Host`` 之类的标头名称列表。每行描述一个 ``标头名称:标头值=虚拟主机名`` 格式的映射。有关详细格式和约束，请参阅 :doc:`security-virtual-host`。
 
 反向代理集成
 ========================

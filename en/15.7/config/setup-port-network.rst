@@ -161,7 +161,9 @@ Crawler Default Proxy Configuration
 -------------------------------------
 
 To set a default proxy for when ``client.proxyHost`` is not specified in individual crawl configurations, configure it in ``fess_config.properties``.
-This setting applies only to crawler HTTP communication. It does not apply to SSO authentication or external API connections.
+This setting applies to the crawler default proxy as well as to LLM integration HTTP communication and plugin downloads.
+However, it does not apply to communication by some Java libraries such as SSO authentication.
+To apply a proxy to the entire Fess application (including SSO authentication), use the environment variables described later (``FESS_PROXY_HOST``, etc.).
 
 ::
 
@@ -174,7 +176,7 @@ This setting applies only to crawler HTTP communication. It does not apply to SS
    Passwords are stored without encryption. Set appropriate file permissions.
 
 .. note::
-   To use a proxy for the entire Fess application (including SSO, LLM integration, etc.), use the environment variables ``FESS_PROXY_HOST`` and ``FESS_PROXY_PORT``. See "Proxy Configuration via Environment Variables" below for details.
+   The ``http.proxy.*`` settings do not apply to SSO authentication, etc. To use a proxy for the entire Fess application including SSO authentication (JVM-wide HTTP communication), set the environment variables ``FESS_PROXY_HOST`` and ``FESS_PROXY_PORT``. See "Proxy Configuration via Environment Variables" below for details.
 
 Proxy Configuration via Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,8 +193,8 @@ These environment variables are converted to Java system properties (``http.prox
 For RPM packages, configure in ``/etc/sysconfig/fess``. For DEB packages, configure in ``/etc/default/fess``.
 
 .. note::
-   The ``http.proxy.*`` settings in ``fess_config.properties`` are used as the crawler default proxy.
-   To use a proxy for the entire Fess application including SSO authentication and LLM integration, configure the environment variables above.
+   The ``http.proxy.*`` settings in ``fess_config.properties`` are used for the crawler default proxy, as well as for LLM integration and plugin downloads.
+   To use a proxy for the entire Fess application including SSO authentication (JVM-wide HTTP communication), configure the environment variables above.
 
 HTTP Communication Settings
 ===========================
@@ -223,10 +225,10 @@ Configuration example in ``fess_config.properties``:
     http.fileupload.threshold.size=524288
     http.fileupload.max.file.count=20
 
-Connection Timeout Settings
-----------------------------
+OpenSearch Connection Settings
+------------------------------
 
-You can configure connection timeouts to OpenSearch.
+You can configure the OpenSearch connection URL and the health-check (heartbeat) interval.
 
 .. list-table::
    :header-rows: 1
@@ -284,11 +286,19 @@ For details, see :doc:`security-virtual-host`.
 Basic Configuration
 -------------------
 
-Configure virtual host headers in ``fess_config.properties``.
+Configure virtual hosts from the admin UI "System > General" (``virtual.host.headers``).
+Specify one virtual host per line in the format ``Host:hostname[:port]=virtualHostName``.
+The default is empty (unset), and the virtual host feature is disabled.
 
 ::
 
-    virtual.host.headers=X-Forwarded-Host,Host
+    Host:search1.example.com=site1
+    Host:search2.example.com=site2
+
+.. note::
+   The value of ``virtual.host.headers`` is NOT a list of header names such as ``X-Forwarded-Host,Host``.
+   Each line describes a mapping in the form ``HeaderName:HeaderValue=virtualHostName``.
+   For the detailed format and constraints, see :doc:`security-virtual-host`.
 
 Reverse Proxy Integration
 ==========================
