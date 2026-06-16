@@ -28,6 +28,8 @@ Les principaux fichiers journaux générés par |Fess| sont les suivants.
      - Journaux lors de l'exécution de l'exploration, URL explorées, informations sur les documents récupérés, erreurs
    * - ``fess-suggest.log``
      - Journaux lors de la génération de suggestions (candidats de recherche), informations de mise à jour d'index
+   * - ``fess-thumbnail.log``
+     - Journal du processus de génération des miniatures
    * - ``fess-llm.log``
      - Journaux liés au chat LLM/RAG
    * - ``searchlog.log``
@@ -161,7 +163,7 @@ Emplacement du fichier de configuration
 ~~~~~~~~~~~~~~~~~~
 
 - **Installation Zip** : ``app/WEB-INF/classes/log4j2.xml``
-- **Paquets RPM/DEB** : ``/usr/share/fess/lib/classes/log4j2.xml``
+- **Paquets RPM/DEB** : ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
 
 Exemples de configuration de base
 ~~~~~~~~~~~~~~
@@ -170,7 +172,12 @@ Exemples de configuration de base
 
 ::
 
-    <Logger name="org.codelibs" level="warn"/>
+    <Logger name="org.codelibs" level="${log.level}"/>
+
+Dans le fichier ``log4j2.xml`` par défaut, le niveau de journalisation est spécifié par la variable ``${log.level}``.
+Cette variable est résolue au démarrage à partir de la valeur de ``-Dfess.log.level`` (``FESS_LOG_LEVEL``, valeur par défaut : ``warn``).
+
+Vous pouvez également spécifier un niveau directement au lieu d'utiliser la variable.
 
 **Exemple : Changement au niveau DEBUG**
 
@@ -194,13 +201,22 @@ Configuration via les variables d'environnement
 ~~~~~~~~~~~~~~~~~~
 
 Vous pouvez également spécifier le niveau de journalisation lors du démarrage du système.
-Configurez ``FESS_LOG_LEVEL`` dans ``fess.in.sh`` (ou ``fess.in.bat`` sous Windows).
+Sous Linux, configurez ``FESS_LOG_LEVEL`` dans ``fess.in.sh``.
 
 ::
 
     FESS_LOG_LEVEL=debug
 
 La valeur par défaut est ``warn``.
+
+.. note::
+   Le fichier ``fess.in.bat`` sous Windows ne lit pas la variable d'environnement ``FESS_LOG_LEVEL``.
+   La valeur étant inscrite directement sous la forme ``-Dfess.log.level=warn``, pour modifier le niveau de journalisation sous Windows,
+   éditez directement cette ligne dans ``fess.in.bat`` :
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 Configuration des journaux d'exploration
 ====================
@@ -553,7 +569,7 @@ Les journaux ne sont pas générés
    ::
 
        # Vérifier la syntaxe du fichier de configuration
-       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
+       xmllint --noout /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 4. **Vérifier SELinux**
 
@@ -576,7 +592,7 @@ Le fichier journal devient trop volumineux
    ::
 
        # Vérifier la configuration de log4j2.xml
-       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 3. **Désactiver les sorties de journaux inutiles**
 
@@ -604,7 +620,7 @@ Impossible de trouver un journal spécifique
 
    ::
 
-       grep "org.codelibs" /usr/share/fess/lib/classes/log4j2.xml
+       grep "org.codelibs" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 2. **Vérifier le chemin du fichier journal**
 

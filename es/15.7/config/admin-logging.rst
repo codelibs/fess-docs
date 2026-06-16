@@ -28,6 +28,8 @@ Los principales archivos de registro generados por |Fess| son los siguientes:
      - Registros de ejecución de rastreo, URLs rastreadas, información de documentos obtenidos y errores
    * - ``fess-suggest.log``
      - Registros de generación de sugerencias (candidatos de búsqueda) e información de actualización de índices
+   * - ``fess-thumbnail.log``
+     - Registro del proceso de generación de miniaturas
    * - ``fess-llm.log``
      - Registros relacionados con chat LLM/RAG
    * - ``searchlog.log``
@@ -161,7 +163,7 @@ Ubicación del Archivo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **Instalación ZIP**: ``app/WEB-INF/classes/log4j2.xml``
-- **Paquetes RPM/DEB**: ``/usr/share/fess/lib/classes/log4j2.xml``
+- **Paquetes RPM/DEB**: ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
 
 Ejemplos de Configuración Básica
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,7 +172,12 @@ Ejemplos de Configuración Básica
 
 ::
 
-    <Logger name="org.codelibs" level="warn"/>
+    <Logger name="org.codelibs" level="${log.level}"/>
+
+En el ``log4j2.xml`` predeterminado, el nivel de registro se especifica mediante la variable ``${log.level}``.
+Esta variable se resuelve al inicio con el valor de ``-Dfess.log.level`` (``FESS_LOG_LEVEL``, por defecto ``warn``).
+
+También puede especificar un nivel directamente en lugar de usar la variable.
 
 **Ejemplo: Cambiar al nivel DEBUG**
 
@@ -194,13 +201,22 @@ Configuración mediante Variables de Entorno
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 También puede especificar el nivel de registro al iniciar el sistema.
-Configure ``FESS_LOG_LEVEL`` en ``fess.in.sh`` (o ``fess.in.bat`` en Windows).
+En Linux, configure ``FESS_LOG_LEVEL`` en ``fess.in.sh``.
 
 ::
 
     FESS_LOG_LEVEL=debug
 
 El valor predeterminado es ``warn``.
+
+.. note::
+   El archivo ``fess.in.bat`` de Windows no lee la variable de entorno ``FESS_LOG_LEVEL``.
+   Dado que el valor se escribe directamente como ``-Dfess.log.level=warn``, para cambiar el nivel
+   de registro en Windows edite esta línea en ``fess.in.bat`` directamente.
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 Configuración de Registros del Rastreador
 ==========================================
@@ -553,7 +569,7 @@ Los Registros no se Generan
    ::
 
        # Verificar sintaxis del archivo de configuración
-       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
+       xmllint --noout /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 4. **Verificación de SELinux**
 
@@ -576,7 +592,7 @@ Los Archivos de Registro se Hacen Demasiado Grandes
    ::
 
        # Verificar configuración de log4j2.xml
-       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 3. **Deshabilitar salida de registros innecesaria**
 
@@ -604,7 +620,7 @@ No se Encuentra un Registro Específico
 
    ::
 
-       grep "org.codelibs.fess" /usr/share/fess/lib/classes/log4j2.xml
+       grep "org.codelibs.fess" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 2. **Verificar la ruta del archivo de registro**
 
