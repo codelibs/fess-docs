@@ -1,6 +1,6 @@
-==========================
+==============================
 Configuracion de Google Gemini
-==========================
+==============================
 
 Descripcion general
 ===================
@@ -98,6 +98,13 @@ La seleccion del proveedor LLM (``rag.llm.name``) se configura en la pantalla de
 Configuracion minima
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+``system.properties`` (tambien configurable en Administracion > Sistema > General):
+
+::
+
+    # Configurar el proveedor LLM como Gemini
+    rag.llm.name=gemini
+
 ``app/WEB-INF/conf/fess_config.properties``:
 
 ::
@@ -111,15 +118,15 @@ Configuracion minima
     # Modelo a usar
     rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
+Configuracion recomendada (entorno de produccion)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ``system.properties`` (tambien configurable en Administracion > Sistema > General):
 
 ::
 
     # Configurar el proveedor LLM como Gemini
     rag.llm.name=gemini
-
-Configuracion recomendada (entorno de produccion)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
@@ -139,13 +146,6 @@ Configuracion recomendada (entorno de produccion)
 
     # Configuracion de timeout
     rag.llm.gemini.timeout=60000
-
-``system.properties`` (tambien configurable en Administracion > Sistema > General):
-
-::
-
-    # Configurar el proveedor LLM como Gemini
-    rag.llm.name=gemini
 
 Elementos de configuracion
 ==========================

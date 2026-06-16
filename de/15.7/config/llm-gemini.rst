@@ -1,6 +1,6 @@
-==========================
+============================
 Google Gemini-Konfiguration
-==========================
+============================
 
 Übersicht
 =========
@@ -78,15 +78,32 @@ Zur Verwendung von Gemini ist die Installation des Plugins erforderlich.
 Grundeinstellungen
 ==================
 
-Die Aktivierung der AI-Suchmodus-Funktion und Gemini-spezifische Einstellungen werden in ``fess_config.properties`` vorgenommen, während die Auswahl des LLM-Anbieters (``rag.llm.name``) über die Administrationsoberfläche oder in ``system.properties`` konfiguriert wird.
+Die Auswahl des LLM-Anbieters (``rag.llm.name``) erfolgt über die Administrationsoberfläche oder in ``system.properties``; die Aktivierung der AI-Suchmodus-Funktion und Gemini-spezifische Einstellungen werden in ``fess_config.properties`` vorgenommen.
+
+fess_config.properties konfigurieren
+-------------------------------------
+
+Fügen Sie die Aktivierungseinstellung für die AI-Suchmodus-Funktion in ``app/WEB-INF/conf/fess_config.properties`` hinzu.
+
+::
+
+    # AI-Suchmodus-Funktion aktivieren
+    rag.chat.enabled=true
 
 LLM-Anbieter konfigurieren
 ---------------------------
 
-Der LLM-Anbieter wird über die Administrationsoberfläche (Administration > System > Allgemein) oder in ``system.properties`` konfiguriert.
+Der LLM-Anbietername (``rag.llm.name``) wird über die Administrationsoberfläche (Administration > System > Allgemein) oder in ``system.properties`` konfiguriert. Gemini-spezifische Einstellungen werden in ``fess_config.properties`` eingetragen.
 
 Minimalkonfiguration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+
+``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
+
+::
+
+    # LLM-Anbieter auf Gemini setzen
+    rag.llm.name=gemini
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
@@ -101,15 +118,15 @@ Minimalkonfiguration
     # Zu verwendendes Modell
     rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
+Empfohlene Konfiguration (Produktionsumgebung)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
 
 ::
 
     # LLM-Anbieter auf Gemini setzen
     rag.llm.name=gemini
-
-Empfohlene Konfiguration (Produktionsumgebung)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
@@ -130,17 +147,10 @@ Empfohlene Konfiguration (Produktionsumgebung)
     # Timeout-Einstellungen
     rag.llm.gemini.timeout=60000
 
-``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
-
-::
-
-    # LLM-Anbieter auf Gemini setzen
-    rag.llm.name=gemini
-
 Einstellungselemente
 ====================
 
-Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellungen werden in ``fess_config.properties`` vorgenommen.
+Alle verfügbaren Einstellungselemente für den Gemini-Client. Alle Einstellungen außer ``rag.llm.name`` werden in ``fess_config.properties`` vorgenommen.
 
 .. list-table::
    :header-rows: 1
@@ -392,16 +402,14 @@ Das Bucket-Mapping für Gemini 3.x ist wie folgt:
    Setzen Sie einen geeigneten Wert entsprechend dem Verwendungszweck.
 
 Konfiguration über JVM-Optionen
-===============================
+================================
 
-Aus Sicherheitsgründen wird empfohlen, API-Schlüssel über die Laufzeitumgebung
-(JVM-Optionen) statt in eingecheckten Dateien zu konfigurieren.
+Aus Sicherheitsgründen wird empfohlen, API-Schlüssel über die Laufzeitumgebung (JVM-Optionen) statt in Dateien zu konfigurieren.
 
 Docker-Umgebung
 ---------------
 
-Das offizielle `docker-fess <https://github.com/codelibs/docker-fess>`__ Repository
-liefert ein Gemini-Overlay (``compose-gemini.yaml``) mit. Die minimalen Schritte sind:
+Das offizielle |Fess|-Image `docker-fess <https://github.com/codelibs/docker-fess>`__ enthält ein Gemini-Overlay (``compose-gemini.yaml``). Die minimalen Schritte sind:
 
 ::
 
@@ -421,7 +429,7 @@ Inhalt von ``compose-gemini.yaml`` (als Referenz für eigenes Setup):
 Hinweise:
 
 - ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` lässt das ``run.sh`` des Containers das Plugin automatisch herunterladen und in ``app/WEB-INF/plugin/`` installieren
-- ``-Dfess.config.rag.chat.enabled=true`` aktiviert den AI-Modus
+- ``-Dfess.config.rag.chat.enabled=true`` aktiviert den AI-Suchmodus
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` setzt den API-Schlüssel, ``-Dfess.config.rag.llm.gemini.model=...`` wählt das Modell
 - ``-Dfess.system.rag.llm.name=gemini`` wirkt nur als initialer Default, bevor ein Wert in OpenSearch persistiert wurde. Nach dem Start kann der Wert auch unter Administration > System > Allgemein (RAG-Sektion) geändert werden
 
