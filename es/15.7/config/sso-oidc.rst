@@ -19,7 +19,12 @@ En la autenticación OpenID Connect, |Fess| opera como Relying Party (RP) y cola
 3. El usuario se autentica en el OP
 4. El OP redirige el código de autorización a |Fess|
 5. |Fess| utiliza el código de autorización para obtener un ID Token del endpoint de token
-6. |Fess| valida el ID Token (JWT) e inicia sesión del usuario
+6. |Fess| obtiene la información del usuario del ID Token (JWT) e inicia sesión del usuario
+
+.. note::
+   |Fess| utiliza el flujo de código de autorización (Authorization Code Flow). El ID Token se obtiene directamente desde el endpoint de token a través de un canal de retaguardia (comunicación servidor a servidor) entre |Fess| y el OP, sin pasar por el navegador.
+   |Fess| decodifica el ID Token y extrae los claims (como ``email`` y ``groups``) para construir la información del usuario, pero no realiza la verificación criptográfica de la firma JWT.
+   Por este motivo, la comunicación con el endpoint de token debe realizarse siempre mediante HTTPS, y asegúrese de que la ruta de comunicación entre |Fess| y el OP sea de confianza.
 
 Para la integración con búsqueda basada en roles, consulte :doc:`security-role`.
 
@@ -54,6 +59,10 @@ Para habilitar la autenticación OpenID Connect, agregue la siguiente configurac
 
     sso.type=oic
 
+.. note::
+   Los ajustes de ``sso.type`` y los de ``oic.*`` descritos a continuación también pueden configurarse y modificarse desde la página "Sistema > General" de la pantalla de administración.
+   Los cambios realizados en la pantalla de administración se guardan en ``system.properties`` y se conservan tras el reinicio.
+
 Configuración del proveedor
 ---------------------------
 
@@ -68,10 +77,10 @@ Configure la información obtenida de su OP.
      - Por defecto
    * - ``oic.auth.server.url``
      - URL del endpoint de autorización
-     - (Requerido)
+     - ``https://accounts.google.com/o/oauth2/auth``
    * - ``oic.token.server.url``
      - URL del endpoint de token
-     - (Requerido)
+     - ``https://accounts.google.com/o/oauth2/token``
 
 .. note::
    Estas URLs se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``).
@@ -90,20 +99,20 @@ Configure la información del cliente registrada con el OP.
      - Por defecto
    * - ``oic.client.id``
      - ID de cliente
-     - (Requerido)
+     - (vacío)
    * - ``oic.client.secret``
      - Secreto del cliente
-     - (Requerido)
+     - (vacío)
    * - ``oic.scope``
      - Scopes solicitados
-     - (Requerido)
+     - (vacío)
 
 .. note::
    El scope debe incluir al menos ``openid``.
    Para recuperar la dirección de correo electrónico del usuario, especifique ``openid email``.
 
 Configuración de URL de redirección
------------------------------------
+------------------------------------
 
 Configure la URL de callback después de la autenticación.
 
@@ -125,8 +134,36 @@ Configure la URL de callback después de la autenticación.
    Si ``oic.redirect.url`` se omite, se construye automáticamente a partir de ``oic.base.url``.
    Para entornos de producción, configure ``oic.base.url`` con una URL HTTPS.
 
+Configuración de atributos de usuario
+--------------------------------------
+
+Configure los grupos y roles por defecto que se asignarán a los usuarios autenticados con OIDC.
+El ID de usuario, los grupos y los roles se determinan de la siguiente manera:
+
+- **ID de usuario**: se obtiene del claim ``email`` del ID Token (JWT). Por este motivo, en la práctica es necesario incluir ``email`` en el scope (si no se puede obtener el claim ``email``, el inicio de sesión no funcionará correctamente).
+- **Grupos**: se obtienen del claim ``groups`` del ID Token. Si el claim ``groups`` no existe, se utiliza el valor de ``oic.default.groups``.
+- **Roles**: siempre se utiliza el valor de ``oic.default.roles`` (no existe mecanismo para obtener roles desde los claims del ID Token).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``oic.default.groups``
+     - Grupos por defecto (separados por comas)
+     - (vacío)
+   * - ``oic.default.roles``
+     - Roles por defecto (separados por comas)
+     - (vacío)
+
+.. note::
+   Si utiliza búsqueda basada en roles, debe asignar los grupos o roles apropiados al usuario.
+   Para más detalles, consulte :doc:`security-role`.
+
 Configuración del lado del OP
-=============================
+==============================
 
 Al registrar |Fess| como cliente (RP) en el lado del OP, configure la siguiente información:
 
@@ -144,7 +181,7 @@ Al registrar |Fess| como cliente (RP) en el lado del OP, configure la siguiente 
      - ``openid`` y scopes requeridos (``email``, ``profile``, etc.)
 
 Información a obtener del OP
-----------------------------
+-----------------------------
 
 Obtenga la siguiente información de la pantalla de configuración o endpoint Discovery del OP para usar en la configuración de |Fess|:
 
@@ -161,7 +198,7 @@ Ejemplos de configuración
 =========================
 
 Configuración mínima (para pruebas)
------------------------------------
+-------------------------------------
 
 El siguiente es un ejemplo de configuración mínima para verificación en un entorno de pruebas.
 
@@ -183,7 +220,7 @@ El siguiente es un ejemplo de configuración mínima para verificación en un en
     oic.redirect.url=http://localhost:8080/sso/
 
 Configuración recomendada (para producción)
--------------------------------------------
+--------------------------------------------
 
 El siguiente es un ejemplo de configuración recomendada para entornos de producción.
 
@@ -208,17 +245,17 @@ Solución de problemas
 =====================
 
 Problemas comunes y soluciones
-------------------------------
+--------------------------------
 
-No se puede regresar a Fess después de la autenticación
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+No se puede regresar a |Fess| después de la autenticación
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Verifique que la URI de redirección esté configurada correctamente en el lado del OP
 - Asegúrese de que el valor de ``oic.redirect.url`` o ``oic.base.url`` coincida con la configuración del OP
 - Verifique que el protocolo (HTTP/HTTPS) coincida
 
 Ocurren errores de autenticación
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Verifique que el ID de cliente y el secreto del cliente estén configurados correctamente
 - Asegúrese de que el scope incluya ``openid``
@@ -231,7 +268,7 @@ No se puede recuperar información del usuario
 - Verifique que los scopes requeridos estén permitidos para el cliente en el lado del OP
 
 Configuración de depuración
----------------------------
+-----------------------------
 
 Para investigar problemas, puede mostrar logs detallados relacionados con OpenID Connect ajustando el nivel de log de |Fess|.
 
@@ -246,3 +283,4 @@ Referencia
 
 - :doc:`security-role` - Configuración de búsqueda basada en roles
 - :doc:`sso-saml` - Configuración de SSO con autenticación SAML
+- :doc:`sso-entraid` - Configuración de SSO específica para Microsoft Entra ID (si utiliza Entra ID, también puede usar la configuración dedicada en lugar de la configuración genérica de OpenID Connect)
