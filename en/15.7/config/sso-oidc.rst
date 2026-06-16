@@ -19,7 +19,12 @@ In OpenID Connect authentication, |Fess| operates as a Relying Party (RP) and co
 3. User authenticates at the OP
 4. OP redirects the authorization code to |Fess|
 5. |Fess| uses the authorization code to obtain an ID Token from the token endpoint
-6. |Fess| validates the ID Token (JWT) and logs in the user
+6. |Fess| decodes the ID Token (JWT) to extract user information and logs in the user
+
+.. note::
+   |Fess| uses the Authorization Code Flow. The ID Token is obtained directly from the token endpoint via a back-channel (server-to-server communication) between |Fess| and the OP, without passing through the browser.
+   |Fess| decodes the ID Token and extracts claims (such as ``email`` and ``groups``) to construct user information, but does NOT cryptographically verify the JWT signature.
+   For this reason, ensure that all communication with the token endpoint uses HTTPS and that the communication path between |Fess| and the OP is trusted.
 
 For integration with role-based search, see :doc:`security-role`.
 
@@ -48,11 +53,15 @@ Basic Configuration
 Enabling SSO
 ------------
 
-To enable OpenID Connect authentication, add the following setting in ``app/WEB-INF/conf/system.properties``:
+To enable OpenID Connect authentication, add the following setting to ``app/WEB-INF/conf/system.properties``:
 
 ::
 
     sso.type=oic
+
+.. note::
+   The ``sso.type`` setting and all ``oic.*`` settings described below can also be configured and changed from the admin "System > General" page.
+   Settings changed through the admin page are saved to ``system.properties`` and persist after restart.
 
 Provider Configuration
 ----------------------
@@ -68,10 +77,10 @@ Configure the information obtained from your OP.
      - Default
    * - ``oic.auth.server.url``
      - Authorization endpoint URL
-     - (Required)
+     - ``https://accounts.google.com/o/oauth2/auth``
    * - ``oic.token.server.url``
      - Token endpoint URL
-     - (Required)
+     - ``https://accounts.google.com/o/oauth2/token``
 
 .. note::
    These URLs can be obtained from the OP's Discovery endpoint (``/.well-known/openid-configuration``).
@@ -90,13 +99,13 @@ Configure the client information registered with the OP.
      - Default
    * - ``oic.client.id``
      - Client ID
-     - (Required)
+     - (empty)
    * - ``oic.client.secret``
      - Client secret
-     - (Required)
+     - (empty)
    * - ``oic.scope``
      - Requested scopes
-     - (Required)
+     - (empty)
 
 .. note::
    The scope must include at least ``openid``.
@@ -125,6 +134,34 @@ Configure the callback URL after authentication.
    If ``oic.redirect.url`` is omitted, it is automatically constructed from ``oic.base.url``.
    For production environments, set ``oic.base.url`` to an HTTPS URL.
 
+User Attribute Configuration
+-----------------------------
+
+Configure the default groups and roles to assign to users authenticated via OIDC.
+The user ID, groups, and roles are determined as follows:
+
+- **User ID**: Obtained from the ``email`` claim of the ID Token (JWT). For this reason, the ``email`` scope is effectively required (if the ``email`` claim cannot be obtained, login will not work correctly).
+- **Groups**: Obtained from the ``groups`` claim of the ID Token. If the ``groups`` claim is not present, the value of ``oic.default.groups`` is used.
+- **Roles**: Always taken from the value of ``oic.default.roles`` (there is no mechanism to obtain roles from ID Token claims).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``oic.default.groups``
+     - Default groups (comma-separated)
+     - (empty)
+   * - ``oic.default.roles``
+     - Default roles (comma-separated)
+     - (empty)
+
+.. note::
+   When using role-based search, you must assign appropriate groups or roles to users.
+   See :doc:`security-role` for details.
+
 OP-Side Configuration
 =====================
 
@@ -144,7 +181,7 @@ When registering |Fess| as a client (RP) on the OP side, configure the following
      - ``openid`` and required scopes (``email``, ``profile``, etc.)
 
 Information to Obtain from OP
------------------------------
+------------------------------
 
 Obtain the following information from the OP's configuration screen or Discovery endpoint for use in |Fess| configuration:
 
@@ -161,7 +198,7 @@ Configuration Examples
 ======================
 
 Minimal Configuration (for Testing)
------------------------------------
+-------------------------------------
 
 The following is a minimal configuration example for verification in a test environment.
 
@@ -183,7 +220,7 @@ The following is a minimal configuration example for verification in a test envi
     oic.redirect.url=http://localhost:8080/sso/
 
 Recommended Configuration (for Production)
-------------------------------------------
+-------------------------------------------
 
 The following is a recommended configuration example for production environments.
 
@@ -208,7 +245,7 @@ Troubleshooting
 ===============
 
 Common Problems and Solutions
------------------------------
+------------------------------
 
 Cannot Return to Fess After Authentication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,17 +262,17 @@ Authentication Errors Occur
 - Verify that the authorization endpoint URL and token endpoint URL are correct
 
 Cannot Retrieve User Information
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Ensure that the scope includes the required permissions (``email``, ``profile``, etc.)
 - Verify that the required scopes are allowed for the client on the OP side
 
-Debugging
----------
+Debug Configuration
+--------------------
 
 To investigate problems, you can output detailed OpenID Connect-related logs by adjusting the |Fess| log level.
 
-In ``app/WEB-INF/classes/log4j2.xml``, you can add the following logger to change the log level:
+In ``app/WEB-INF/classes/log4j2.xml``, add the following logger to change the log level:
 
 ::
 
@@ -246,3 +283,4 @@ Reference
 
 - :doc:`security-role` - Role-based search configuration
 - :doc:`sso-saml` - SSO configuration with SAML authentication
+- :doc:`sso-entraid` - SSO configuration for Microsoft Entra ID (if you are using Entra ID, you may use this dedicated configuration instead of the generic OpenID Connect settings)
