@@ -28,6 +28,8 @@
      - 크롤 실행 시의 로그, 크롤 대상 URL, 취득한 문서 정보, 오류
    * - ``fess-suggest.log``
      - 제안(검색 후보) 생성 시의 로그, 인덱스 업데이트 정보
+   * - ``fess-thumbnail.log``
+     - 썸네일 생성 프로세스의 로그
    * - ``fess-llm.log``
      - LLM/RAG 채팅 관련 로그
    * - ``searchlog.log``
@@ -161,7 +163,7 @@
 ~~~~~~~~~~~~~~~~~~
 
 - **Zip 설치**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEB 패키지**: ``/usr/share/fess/lib/classes/log4j2.xml``
+- **RPM/DEB 패키지**: ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
 
 기본 설정 예
 ~~~~~~~~~~~~~~
@@ -170,7 +172,12 @@
 
 ::
 
-    <Logger name="org.codelibs" level="warn"/>
+    <Logger name="org.codelibs" level="${log.level}"/>
+
+기본 log4j2.xml 에서는 로그 레벨을 변수 ``${log.level}`` 로 지정합니다.
+이 변수는 시작 시 ``-Dfess.log.level`` (``FESS_LOG_LEVEL``, 기본값: ``warn``) 의 값으로 해석됩니다.
+
+변수를 사용하는 대신 레벨을 직접 지정할 수도 있습니다.
 
 **예: DEBUG 레벨로 변경**
 
@@ -193,14 +200,22 @@
 환경 변수를 통한 설정
 ~~~~~~~~~~~~~~~~~~
 
-시스템 시작 시 로그 레벨을 지정할 수도 있습니다.
-``fess.in.sh`` (Windows의 경우 ``fess.in.bat``)에서 ``FESS_LOG_LEVEL`` 을 설정합니다.
+Linux 환경에서는 시스템 시작 시 ``fess.in.sh`` 의 ``FESS_LOG_LEVEL`` 을 설정하여 로그 레벨을 지정할 수 있습니다.
 
 ::
 
     FESS_LOG_LEVEL=debug
 
 기본값은 ``warn`` 입니다.
+
+.. note::
+   Windows 의 ``fess.in.bat`` 은 ``FESS_LOG_LEVEL`` 환경 변수를 읽지 않습니다.
+   로그 레벨이 ``-Dfess.log.level=warn`` 으로 직접 기재되어 있기 때문에,
+   Windows 에서 로그 레벨을 변경하려면 ``fess.in.bat`` 의 해당 줄을 직접 편집하십시오.
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 크롤러 로그 설정
 ====================
@@ -552,7 +567,7 @@ JSON 형식으로 로그 출력
    ::
 
        # 설정 파일 구문 검사
-       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
+       xmllint --noout /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 4. **SELinux 확인**
 
@@ -575,7 +590,7 @@ JSON 형식으로 로그 출력
    ::
 
        # log4j2.xml 설정 확인
-       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 3. **불필요한 로그 출력 비활성화**
 
@@ -603,7 +618,7 @@ JSON 형식으로 로그 출력
 
    ::
 
-       grep "org.codelibs" /usr/share/fess/lib/classes/log4j2.xml
+       grep "org.codelibs" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 2. **로그 파일 경로 확인**
 

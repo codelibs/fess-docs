@@ -28,6 +28,8 @@
      - 爬取执行时的日志、爬取目标URL、获取的文档信息、错误
    * - ``fess-suggest.log``
      - 建议(搜索候选)生成时的日志、索引更新信息
+   * - ``fess-thumbnail.log``
+     - 缩略图生成过程的日志
    * - ``fess-llm.log``
      - LLM/RAG聊天相关日志
    * - ``searchlog.log``
@@ -161,7 +163,7 @@
 ~~~~~~~~~~~~~~~~~~
 
 - **Zip安装**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEB软件包**: ``/usr/share/fess/lib/classes/log4j2.xml``
+- **RPM/DEB软件包**: ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
 
 基本配置示例
 ~~~~~~~~~~~~~~
@@ -170,7 +172,11 @@
 
 ::
 
-    <Logger name="org.codelibs" level="warn"/>
+    <Logger name="org.codelibs" level="${log.level}"/>
+
+在默认的 log4j2.xml 中,日志级别由变量 ``${log.level}`` 指定。该变量在启动时解析为 ``-Dfess.log.level`` 的值(``FESS_LOG_LEVEL``,默认为 ``warn``)。
+
+也可以不使用变量,而是直接指定级别。
 
 **示例: 更改为DEBUG级别**
 
@@ -194,13 +200,22 @@
 ~~~~~~~~~~~~~~~~~~
 
 系统启动时也可以指定日志级别。
-在 ``fess.in.sh`` (Windows下为 ``fess.in.bat``)中设置 ``FESS_LOG_LEVEL``。
+在 Linux 环境下,请在 ``fess.in.sh`` 中设置 ``FESS_LOG_LEVEL``。
 
 ::
 
     FESS_LOG_LEVEL=debug
 
 默认值为 ``warn``。
+
+.. note::
+   Windows 的 ``fess.in.bat`` 不读取 ``FESS_LOG_LEVEL`` 环境变量。
+   由于日志级别以 ``-Dfess.log.level=warn`` 的形式直接写入文件,
+   如需在 Windows 上更改日志级别,请直接编辑 ``fess.in.bat`` 中的该行。
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 爬虫日志配置
 ====================
@@ -553,7 +568,7 @@ JSON格式输出日志
    ::
 
        # 配置文件语法检查
-       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
+       xmllint --noout /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 4. **SELinux确认**
 
@@ -576,7 +591,7 @@ JSON格式输出日志
    ::
 
        # 确认log4j2.xml配置
-       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 3. **禁用不必要的日志输出**
 
@@ -604,7 +619,7 @@ JSON格式输出日志
 
    ::
 
-       grep "org.codelibs" /usr/share/fess/lib/classes/log4j2.xml
+       grep "org.codelibs" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 2. **确认日志文件路径**
 

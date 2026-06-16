@@ -28,6 +28,8 @@
      - クロール実行時のログ、クロール対象URL、取得したドキュメント情報、エラー
    * - ``fess-suggest.log``
      - サジェスト(検索候補)生成時のログ、インデックス更新情報
+   * - ``fess-thumbnail.log``
+     - サムネイル生成プロセスのログ
    * - ``fess-llm.log``
      - LLM/RAGチャット関連のログ
    * - ``searchlog.log``
@@ -161,18 +163,23 @@
 ~~~~~~~~~~~~~~~~~~
 
 - **Zipインストール**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEBパッケージ**: ``/usr/share/fess/lib/classes/log4j2.xml``
+- **RPM/DEBパッケージ**: ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
 
 基本的な設定例
 ~~~~~~~~~~~~~~
 
 **デフォルトのログレベル:**
 
+デフォルトの ``log4j2.xml`` では、ログレベルは変数 ``${log.level}`` で指定されています。
+この変数は起動時に ``-Dfess.log.level`` （ ``FESS_LOG_LEVEL`` 、デフォルト ``warn`` ）の値に解決されます。
+
 ::
 
-    <Logger name="org.codelibs" level="warn"/>
+    <Logger name="org.codelibs" level="${log.level}"/>
 
 **例: DEBUGレベルに変更**
+
+変数を使わず、特定のレベルを直接指定することもできます。
 
 ::
 
@@ -194,13 +201,22 @@
 ~~~~~~~~~~~~~~~~~~
 
 システム起動時にログレベルを指定することもできます。
-``fess.in.sh`` （Windowsの場合は ``fess.in.bat`` ）で ``FESS_LOG_LEVEL`` を設定します。
+Linux環境では ``fess.in.sh`` で ``FESS_LOG_LEVEL`` を設定します。
 
 ::
 
     FESS_LOG_LEVEL=debug
 
 デフォルト値は ``warn`` です。
+
+.. note::
+   Windowsの ``fess.in.bat`` は ``FESS_LOG_LEVEL`` 環境変数を参照しません。
+   ``-Dfess.log.level=warn`` の値が直接記述されているため、Windowsでログレベルを変更するには
+   ``fess.in.bat`` 内のこの行を直接編集してください。
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 クローラーログの設定
 ====================
@@ -552,7 +568,7 @@ JSON形式でログ出力
    ::
 
        # 設定ファイルの構文チェック
-       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
+       xmllint --noout /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 4. **SELinuxの確認**
 
@@ -575,7 +591,7 @@ JSON形式でログ出力
    ::
 
        # log4j2.xmlの設定確認
-       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 3. **不要なログ出力の無効化**
 
@@ -603,7 +619,7 @@ JSON形式でログ出力
 
    ::
 
-       grep "org.codelibs.fess" /usr/share/fess/lib/classes/log4j2.xml
+       grep "org.codelibs.fess" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 2. **ログファイルパスの確認**
 

@@ -30,6 +30,8 @@ Hauptprotokolldateien, die |Fess| ausgibt:
      - Protokolle bei Crawler-Ausführung, Ziel-URLs, abgerufene Dokumentinformationen, Fehler
    * - ``fess-suggest.log``
      - Protokolle bei Vorschlags-Generierung, Index-Aktualisierungsinformationen
+   * - ``fess-thumbnail.log``
+     - Protokolle des Thumbnail-Generierungsprozesses
    * - ``fess-llm.log``
      - LLM/RAG-Chat-bezogene Protokolle
    * - ``searchlog.log``
@@ -130,6 +132,70 @@ Empfohlene Protokollebenen
    * - Bei Problemuntersuchung
      - ``DEBUG`` oder ``TRACE``
      - Temporär detaillierte Protokolle aktivieren
+
+Änderung über Konfigurationsdatei
+----------------------------------
+
+Für eine detailliertere Protokollkonfiguration bearbeiten Sie die Log4j2-Konfigurationsdatei.
+
+Speicherort der Konfigurationsdatei
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **ZIP-Installation**: ``app/WEB-INF/classes/log4j2.xml``
+- **RPM/DEB-Pakete**: ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
+
+Grundlegende Konfigurationsbeispiele
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Standard-Protokollebene:**
+
+In der Standard-Datei ``log4j2.xml`` wird die Protokollebene über die Variable ``${log.level}`` angegeben.
+Diese Variable wird beim Start mit dem Wert von ``-Dfess.log.level`` (``FESS_LOG_LEVEL``, Standard: ``warn``) aufgelöst.
+
+::
+
+    <Logger name="org.codelibs" level="${log.level}"/>
+
+Sie können anstelle der Variable auch direkt eine Ebene angeben.
+
+**Beispiel: Auf DEBUG-Ebene ändern**
+
+::
+
+    <Logger name="org.codelibs" level="debug"/>
+
+**Beispiel: Protokollebene für bestimmtes Paket ändern**
+
+::
+
+    <Logger name="org.codelibs.fess.crawler" level="info"/>
+    <Logger name="org.codelibs.fess.ds" level="debug"/>
+    <Logger name="org.codelibs.fess.app.web" level="warn"/>
+
+.. warning::
+   Die Ebenen ``DEBUG`` und ``TRACE`` geben große Mengen an Protokollen aus.
+   Verwenden Sie diese nicht in Produktionsumgebungen, da sie Festplattenspeicher und Leistung beeinträchtigen.
+
+Konfiguration über Umgebungsvariablen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Die Protokollebene kann auch beim Systemstart festgelegt werden.
+Setzen Sie ``FESS_LOG_LEVEL`` in ``fess.in.sh`` (Linux).
+
+::
+
+    FESS_LOG_LEVEL=debug
+
+Der Standardwert ist ``warn``.
+
+.. note::
+   Die Windows-Datei ``fess.in.bat`` liest die Umgebungsvariable ``FESS_LOG_LEVEL`` nicht aus.
+   Da der Wert dort direkt als ``-Dfess.log.level=warn`` eingetragen ist, muss diese Zeile in
+   ``fess.in.bat`` direkt bearbeitet werden, um die Protokollebene unter Windows zu ändern.
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 Protokollrotation
 ==================

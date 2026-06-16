@@ -28,6 +28,8 @@ The main log files output by |Fess| are as follows:
      - Crawl execution logs, crawl target URLs, retrieved document information, errors
    * - ``fess-suggest.log``
      - Suggest (search suggestions) generation logs, index update information
+   * - ``fess-thumbnail.log``
+     - Log of the thumbnail generation process
    * - ``fess-llm.log``
      - LLM/RAG chat related logs
    * - ``searchlog.log``
@@ -161,18 +163,22 @@ Configuration File Location
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **ZIP installation**: ``app/WEB-INF/classes/log4j2.xml``
-- **RPM/DEB packages**: ``/usr/share/fess/lib/classes/log4j2.xml``
+- **RPM/DEB packages**: ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
 
 Basic Configuration Examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Default log level:**
 
+In the default ``log4j2.xml``, the log level is specified by the variable ``${log.level}``. This variable resolves at startup to the value of ``-Dfess.log.level`` (``FESS_LOG_LEVEL``, default ``warn``).
+
 ::
 
-    <Logger name="org.codelibs" level="warn"/>
+    <Logger name="org.codelibs" level="${log.level}"/>
 
 **Example: Change to DEBUG level**
+
+You can also specify a level directly instead of using the variable.
 
 ::
 
@@ -193,14 +199,21 @@ Basic Configuration Examples
 Configuration via Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also specify log level at system startup.
-Set ``FESS_LOG_LEVEL`` in ``fess.in.sh`` (or ``fess.in.bat`` on Windows).
+You can also specify the log level at system startup.
+On Linux, set ``FESS_LOG_LEVEL`` in ``fess.in.sh``.
 
 ::
 
     FESS_LOG_LEVEL=debug
 
 The default value is ``warn``.
+
+.. note::
+   The Windows ``fess.in.bat`` does not read the ``FESS_LOG_LEVEL`` environment variable. Because the value is written directly as ``-Dfess.log.level=warn``, to change the log level on Windows, edit this line in ``fess.in.bat`` directly.
+
+   ::
+
+       set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.log.level=debug
 
 Crawler Log Configuration
 ==========================
@@ -552,7 +565,7 @@ Logs Not Being Output
    ::
 
        # Check configuration file syntax
-       xmllint --noout /usr/share/fess/lib/classes/log4j2.xml
+       xmllint --noout /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 4. **Check SELinux**
 
@@ -575,7 +588,7 @@ Log Files Become Too Large
    ::
 
        # Check log4j2.xml configuration
-       grep -A 5 "RollingFile" /usr/share/fess/lib/classes/log4j2.xml
+       grep -A 5 "RollingFile" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 3. **Disable Unnecessary Log Output**
 
@@ -603,7 +616,7 @@ Cannot Find Specific Logs
 
    ::
 
-       grep "org.codelibs.fess" /usr/share/fess/lib/classes/log4j2.xml
+       grep "org.codelibs.fess" /usr/share/fess/app/WEB-INF/classes/log4j2.xml
 
 2. **Check Log File Path**
 
