@@ -88,7 +88,7 @@ Rastreo de Sitio de Intranet Corporativa
     URL: http://intranet.example.com/
     Intervalo de Rastreo: 1 vez al día
     Número de Hilos: 10
-    Profundidad: Ilimitada (-1)
+    Profundidad: en blanco (ilimitada)
     Máximo Número de Accesos: 10000
 
 Rastreo de Sitio Web Público
@@ -115,7 +115,7 @@ Sistema de Archivos Local
     URL: file:///home/share/documents/
     Intervalo de Rastreo: 1 vez al día
     Número de Hilos: 3
-    Profundidad: Ilimitada (-1)
+    Profundidad: en blanco (ilimitada)
 
 SMB/CIFS (Compartición de Archivos Windows)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,14 +126,14 @@ SMB/CIFS (Compartición de Archivos Windows)
     URL: smb://fileserver.example.com/share/
     Intervalo de Rastreo: 1 vez al día
     Número de Hilos: 5
-    Profundidad: Ilimitada (-1)
+    Profundidad: en blanco (ilimitada)
 
 Configuración de Información de Autenticación
 ----------------------------------------------
 
 Para acceder a sitios o servidores de archivos que requieren autenticación, configure la información de autenticación.
 
-1. Seleccione "Rastreador" → "Autenticación" en la pantalla de administración
+1. Seleccione "Rastreador" → "Autenticación web" (o "Autenticación de archivos" para servidores de archivos) en la pantalla de administración
 2. Haga clic en "Nuevo"
 3. Ingrese la información de autenticación:
 
@@ -141,9 +141,15 @@ Para acceder a sitios o servidores de archivos que requieren autenticación, con
 
        Nombre de Host: wiki.example.com
        Puerto: 443
-       Método de Autenticación: Autenticación Basic
+       Esquema: Basic
        Nombre de Usuario: crawler_user
        Contraseña: ********
+
+   .. note::
+      "Esquema" se selecciona entre Basic / Digest / NTLM / Form.
+      Asimismo, asegúrese de seleccionar la configuración de rastreo objetivo en el campo "Web Config"
+      (o la configuración del sistema de archivos en caso de autenticación de archivos).
+      Las credenciales están vinculadas a una configuración de rastreo.
 
 4. Haga clic en "Crear"
 
@@ -153,11 +159,17 @@ Ejecución del Rastreo
 Ejecución Manual
 ----------------
 
-Para ejecutar inmediatamente el rastreo configurado:
+Para ejecutar un rastreo de forma inmediata, inicie el trabajo del rastreador desde el menú "Programador":
 
-1. Seleccione la configuración objetivo en la lista de configuraciones de rastreo
-2. Haga clic en el botón "Iniciar"
-3. Verifique el estado de ejecución del trabajo en el menú "Programador"
+1. Abra el menú "Programador"
+2. Seleccione el trabajo "Default Crawler"
+3. Haga clic en el botón "Iniciar ahora"
+4. Verifique el estado de ejecución del trabajo
+
+.. note::
+   Las páginas de lista de configuración de rastreo (Web / Sistema de archivos) no tienen un botón de inicio individual.
+   Los rastreos se ejecutan por unidad de trabajo del programador.
+   El trabajo "Default Crawler" se ejecuta contra todas las configuraciones de rastreo habilitadas.
 
 Ejecución Programada
 --------------------
@@ -171,15 +183,20 @@ Para ejecutar el rastreo periódicamente:
    ::
 
        # Ejecutar todos los días a las 2 AM
-       0 0 2 * * ?
+       0 2 * * *
 
        # Ejecutar cada hora a los 0 minutos
-       0 0 * * * ?
+       0 * * * *
 
        # Ejecutar de lunes a viernes a las 6 PM
-       0 0 18 ? * MON-FRI
+       0 18 * * 1-5
 
 4. Haga clic en "Actualizar"
+
+.. note::
+   El programador de |Fess| utiliza expresiones de programación en formato cron4j con 5 campos
+   (minuto hora día mes día-de-semana). No existe campo de segundos ni se utiliza ``?``
+   (a diferencia de Quartz). El día de la semana se indica con ``0`` (domingo) a ``6`` (sábado).
 
 Verificación del Estado del Rastreo
 ------------------------------------
@@ -233,7 +250,12 @@ Limitar la profundidad de niveles de enlaces a seguir:
 
 - **0**: Solo la URL de inicio
 - **1**: URL de inicio y páginas enlazadas desde ella
-- **-1**: Ilimitada (seguir todos los enlaces)
+- **en blanco (sin definir)**: Ilimitada (seguir todos los enlaces)
+
+.. note::
+   El campo de profundidad en la interfaz de administración acepta únicamente enteros mayores o iguales a 0.
+   Para una profundidad ilimitada, deje el campo en blanco
+   (internamente se trata como ``-1``, que significa ilimitado).
 
 Máximo Número de Accesos
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -244,7 +266,7 @@ Límite superior del número de páginas a rastrear:
 
     Máximo Número de Accesos: 1000
 
-Detenerse después de rastrear hasta 1000 páginas.
+Detenerse después de rastrear hasta 1000 páginas. Dejar el campo en blanco significa ilimitado (sin tope).
 
 Número de Rastreos Paralelos (Número de Hilos)
 -----------------------------------------------
@@ -275,6 +297,11 @@ Especifique el número de URLs a rastrear simultáneamente.
    Aumentar demasiado el número de hilos causará carga excesiva en el servidor objetivo.
    Configure un valor apropiado.
 
+.. note::
+   El número de hilos predeterminado al crear una nueva configuración es ``1`` para el rastreador Web
+   y ``5`` para el rastreador de archivos. El intervalo de solicitudes (intervalo) predeterminado es
+   ``10000`` milisegundos para el rastreador Web y ``1000`` milisegundos para el rastreador de archivos.
+
 Intervalo de Rastreo
 --------------------
 
@@ -286,7 +313,7 @@ Especifique la frecuencia de ejecución del rastreo.
     Intervalo de Rastreo: 3600000  # milisegundos (1 hora)
 
     # O configure en el programador
-    0 0 2 * * ?  # Todos los días a las 2 AM
+    0 2 * * *  # Todos los días a las 2 AM
 
 Configuración de Tamaño de Archivo
 ===================================
@@ -438,16 +465,39 @@ Configure la variable de entorno ``FESS_NON_PROXY_HOSTS`` en ``fess.in.sh`` (Lin
 
     export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
-Configuración de Proxy para Todo el Sistema
---------------------------------------------
+Proxy Común a Todas las Configuraciones de Rastreo
+---------------------------------------------------
 
-Si usa el mismo proxy para todas las configuraciones de rastreo, puede configurar mediante variables de entorno.
+Si desea aplicar un proxy común a todas las configuraciones de rastreo que no hayan definido su propio proxy,
+configúrelo en ``fess_config.properties``:
 
 ::
 
-    export http_proxy=http://proxy.example.com:8080
-    export https_proxy=http://proxy.example.com:8080
-    export no_proxy=localhost,127.0.0.1,.example.com
+    http.proxy.host=proxy.example.com
+    http.proxy.port=8080
+    http.proxy.username=proxyuser
+    http.proxy.password=proxypass
+
+Esta configuración se aplica a todas las configuraciones de rastreo que no especifiquen
+``client.proxyHost`` / ``client.proxyPort`` de forma individual (la configuración por rastreo tiene prioridad).
+
+Proxy de Sistema Completo (JVM)
+--------------------------------
+
+Para enrutar todo el tráfico HTTP de |Fess| a través de un proxy —incluyendo el rastreador, SSO y la integración con LLM—,
+configure las siguientes variables de entorno en ``fess.in.sh`` (Linux/Mac) o ``fess.in.bat`` (Windows).
+Estas se convierten en propiedades del sistema JVM (``-Dhttp.proxyHost``, etc.):
+
+::
+
+    export FESS_PROXY_HOST=proxy.example.com
+    export FESS_PROXY_PORT=8080
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
+
+.. note::
+   ``FESS_PROXY_HOST`` / ``FESS_PROXY_PORT`` se aplican tanto a HTTP como a HTTPS.
+   Las variables de entorno de shell ``http_proxy`` / ``https_proxy`` / ``no_proxy``
+   no son leídas por la JVM, por lo que configurarlas no tiene efecto.
 
 Configuración de robots.txt
 ============================
@@ -467,6 +517,16 @@ Para ignorar robots.txt, edite ``fess_config.properties``.
 
     crawler.ignore.robots.txt=true
 
+El valor predeterminado de esta propiedad es ``false``, por lo que |Fess| respeta robots.txt.
+Establézcala en ``true`` para ignorarlo.
+
+Para ignorar las metaetiquetas robots de HTML (``noindex``, ``nofollow``, etc.),
+utilice la siguiente propiedad (el valor predeterminado es ``false``):
+
+::
+
+    crawler.ignore.robots.tags=true
+
 .. warning::
    Al rastrear sitios externos, respete robots.txt.
    Ignorarlo puede causar carga excesiva en el servidor o violar términos de uso.
@@ -476,10 +536,24 @@ Configuración de User-Agent
 
 Puede cambiar el User-Agent del rastreador.
 
-Configuración en la Pantalla de Administración
------------------------------------------------
+Para el Rastreador Web
+-----------------------
 
-Agregue a "Parámetros de Configuración" en la configuración de rastreo:
+El rastreador Web dispone de un campo dedicado "User Agent" en la pantalla de edición de la configuración de rastreo.
+Introduzca el valor directamente en ese campo:
+
+::
+
+    User Agent: MyCompanyCrawler/1.0
+
+.. note::
+   En las configuraciones de rastreo Web, si se especifica ``client.userAgent`` en "Parámetros de Configuración",
+   el valor del campo dedicado "User Agent" lo sobreescribirá. Para el rastreador Web, utilice siempre el campo dedicado.
+
+Para el Rastreador de Archivos y Otros
+---------------------------------------
+
+Los rastreadores sin campo de User Agent dedicado utilizan "Parámetros de Configuración" en la configuración de rastreo:
 
 ::
 
@@ -541,8 +615,15 @@ El Rastreo se Detiene a Mitad
 
 2. **Error de red**
 
-   - Ajustar configuración de timeout
-   - Verificar configuración de reintento
+   - Ajuste los tiempos de espera mediante los "Parámetros de Configuración" del rastreo:
+
+     ::
+
+         client.connectionTimeout=5000
+         client.soTimeout=30000
+
+     ``client.connectionTimeout`` es el tiempo de espera para establecer la conexión y
+     ``client.soTimeout`` es el tiempo de espera para la recepción de datos; ambos en milisegundos.
 
 3. **Error en objetivo de rastreo**
 
@@ -613,7 +694,7 @@ Recomendaciones para Configuración de Rastreo
 3. **Configuración de limitación de profundidad**
 
    Configure una profundidad apropiada según la estructura del sitio.
-   Use ilimitada (-1) solo al rastrear todo el sitio.
+   Deje el campo en blanco (ilimitada) solo cuando necesite rastrear todo el sitio.
 
 4. **Configuración de máximo número de accesos**
 

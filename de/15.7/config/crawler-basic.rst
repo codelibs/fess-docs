@@ -88,7 +88,7 @@ Crawlen von Firmen-Intranet-Sites
     URL: http://intranet.example.com/
     Crawl-Intervall: Einmal täglich
     Thread-Anzahl: 10
-    Tiefe: Unbegrenzt (-1)
+    Tiefe: leer (unbegrenzt)
     Maximale Zugriffszahl: 10000
 
 Crawlen öffentlicher Websites
@@ -115,7 +115,7 @@ Lokales Dateisystem
     URL: file:///home/share/documents/
     Crawl-Intervall: Einmal täglich
     Thread-Anzahl: 3
-    Tiefe: Unbegrenzt (-1)
+    Tiefe: leer (unbegrenzt)
 
 SMB/CIFS (Windows-Dateifreigabe)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,14 +126,14 @@ SMB/CIFS (Windows-Dateifreigabe)
     URL: smb://fileserver.example.com/share/
     Crawl-Intervall: Einmal täglich
     Thread-Anzahl: 5
-    Tiefe: Unbegrenzt (-1)
+    Tiefe: leer (unbegrenzt)
 
 Konfiguration von Authentifizierungsinformationen
 --------------
 
 Für Sites oder Dateiserver, die Authentifizierung erfordern, konfigurieren Sie Authentifizierungsinformationen.
 
-1. Wählen Sie in der Verwaltungsoberfläche „Crawler" → „Authentifizierung"
+1. Wählen Sie in der Verwaltungsoberfläche „Crawler" → „Web-Authentifizierung" (für Dateiserver: „Datei-Authentifizierung")
 2. Klicken Sie auf „Neu erstellen"
 3. Geben Sie Authentifizierungsinformationen ein:
 
@@ -141,9 +141,15 @@ Für Sites oder Dateiserver, die Authentifizierung erfordern, konfigurieren Sie 
 
        Hostname: wiki.example.com
        Port: 443
-       Authentifizierungsmethode: Basic-Authentifizierung
+       Schema: Basic
        Benutzername: crawler_user
        Passwort: ********
+
+   .. note::
+      „Schema" wird aus Basic / Digest / NTLM / Form ausgewählt.
+      Wählen Sie außerdem im Feld „Web Config" (bei Datei-Authentifizierung: „Dateisystem-Konfiguration")
+      die zugehörige Crawl-Konfiguration aus. Die Authentifizierungsdaten sind
+      an eine Crawl-Konfiguration gebunden.
 
 4. Klicken Sie auf „Erstellen"
 
@@ -153,11 +159,17 @@ Ausführung des Crawlings
 Manuelle Ausführung
 --------
 
-Um einen konfigurierten Crawl sofort auszuführen:
+Um einen konfigurierten Crawl sofort auszuführen, starten Sie den Crawler-Job über das Menü „Scheduler".
 
-1. Wählen Sie die Zielkonfiguration in der Crawl-Konfigurationsliste
-2. Klicken Sie auf die Schaltfläche „Starten"
-3. Überprüfen Sie den Job-Ausführungsstatus im Menü „Scheduler"
+1. Öffnen Sie das Menü „Scheduler"
+2. Wählen Sie den Job „Default Crawler"
+3. Klicken Sie auf die Schaltfläche „Jetzt starten"
+4. Überprüfen Sie den Job-Ausführungsstatus
+
+.. note::
+   Die Listenansicht der Crawl-Konfigurationen (Web / Dateisystem) enthält keinen individuellen
+   „Starten"-Button. Crawls werden als Scheduler-Job ausgeführt.
+   Der Job „Default Crawler" verarbeitet alle aktivierten Crawl-Konfigurationen.
 
 Geplante Ausführung
 ----------------
@@ -171,15 +183,20 @@ Um Crawls regelmäßig auszuführen:
    ::
 
        # Täglich um 2 Uhr morgens ausführen
-       0 0 2 * * ?
+       0 2 * * *
 
        # Jede Stunde zur vollen Stunde ausführen
-       0 0 * * * ?
+       0 * * * *
 
        # Montag bis Freitag um 18 Uhr ausführen
-       0 0 18 ? * MON-FRI
+       0 18 * * 1-5
 
 4. Klicken Sie auf „Aktualisieren"
+
+.. note::
+   Der |Fess|-Scheduler verwendet cron4j-Ausdrücke mit 5 Feldern (Minute Stunde Tag Monat Wochentag).
+   Es gibt kein Sekundenfeld und kein ``?`` (anders als bei Quartz).
+   Der Wochentag wird als ``0`` (Sonntag) bis ``6`` (Samstag) angegeben.
 
 Überprüfung des Crawl-Status
 ------------------
@@ -233,7 +250,11 @@ Beschränkung der Hierarchietiefe für das Folgen von Links:
 
 - **0**: Nur Start-URL
 - **1**: Start-URL und von dort verlinkte Seiten
-- **-1**: Unbegrenzt (allen Links folgen)
+- **leer (nicht gesetzt)**: Unbegrenzt (allen Links folgen)
+
+.. note::
+   Das Tiefe-Feld der Verwaltungsoberfläche akzeptiert nur ganze Zahlen >= 0.
+   Für unbegrenztes Crawling lassen Sie das Feld leer (intern als ``-1`` behandelt, was unbegrenzt bedeutet).
 
 Maximale Zugriffszahl
 ~~~~~~~~~~~~~~
@@ -244,7 +265,7 @@ Obergrenze für die Anzahl zu crawlender Seiten:
 
     Maximale Zugriffszahl: 1000
 
-Stoppt nach dem Crawlen von 1000 Seiten.
+Stoppt nach dem Crawlen von 1000 Seiten. Wird das Feld leer gelassen, ist die Anzahl unbegrenzt (keine Obergrenze).
 
 Anzahl paralleler Crawls (Thread-Anzahl)
 --------------------------
@@ -275,6 +296,10 @@ Gibt die Anzahl gleichzeitig zu crawlender URLs an.
    Zu hohe Thread-Anzahlen belasten den Zielserver übermäßig.
    Konfigurieren Sie angemessene Werte.
 
+.. note::
+   Der Standard-Thread-Wert bei Neuerstellung beträgt ``1`` (Web-Crawler) bzw. ``5`` (Datei-Crawler).
+   Das Standard-Anforderungsintervall (Intervall) beträgt ``10000`` ms (Web-Crawler) bzw. ``1000`` ms (Datei-Crawler).
+
 Crawl-Intervall
 ------------
 
@@ -286,7 +311,7 @@ Gibt die Häufigkeit der Crawl-Ausführung an.
     Crawl-Intervall: 3600000  # Millisekunden (1 Stunde)
 
     # Oder im Scheduler konfigurieren
-    0 0 2 * * ?  # Täglich um 2 Uhr morgens
+    0 2 * * *  # Täglich um 2 Uhr morgens
 
 Konfiguration der Dateigröße
 ====================
@@ -440,16 +465,41 @@ Setzen Sie die Umgebungsvariable ``FESS_NON_PROXY_HOSTS`` in ``fess.in.sh`` (Lin
 
     export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
-Systemweite Proxy-Konfiguration
---------------------------
+Proxy gemeinsam für alle Crawl-Konfigurationen
+----------------------------------------------
 
-Wenn alle Crawl-Konfigurationen denselben Proxy verwenden, können Sie dies über Umgebungsvariablen konfigurieren.
+Wenn kein Proxy in einer einzelnen Crawl-Konfiguration angegeben ist, wird ein gemeinsamer
+Crawler-Proxy aus ``fess_config.properties`` verwendet:
 
 ::
 
-    export http_proxy=http://proxy.example.com:8080
-    export https_proxy=http://proxy.example.com:8080
-    export no_proxy=localhost,127.0.0.1,.example.com
+    http.proxy.host=proxy.example.com
+    http.proxy.port=8080
+    http.proxy.username=proxyuser
+    http.proxy.password=proxypass
+
+Diese Einstellung gilt für alle Crawl-Konfigurationen, die keinen eigenen Proxy festlegen
+(wenn ``client.proxyHost`` / ``client.proxyPort`` in einer Crawl-Konfiguration gesetzt sind,
+haben diese Werte Vorrang).
+
+Systemweite Proxy-Konfiguration (JVM)
+--------------------------------------
+
+Um nicht nur den Crawler, sondern den gesamten HTTP-Verkehr von |Fess|
+(Crawler, SSO, LLM-Integration usw.) über einen Proxy zu leiten,
+setzen Sie folgende Umgebungsvariablen in ``fess.in.sh`` (Linux/Mac) bzw. ``fess.in.bat`` (Windows).
+Diese werden in JVM-Systemeigenschaften (``-Dhttp.proxyHost`` usw.) umgewandelt:
+
+::
+
+    export FESS_PROXY_HOST=proxy.example.com
+    export FESS_PROXY_PORT=8080
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
+
+.. note::
+   ``FESS_PROXY_HOST`` / ``FESS_PROXY_PORT`` gelten sowohl für HTTP als auch für HTTPS.
+   Die Shell-Umgebungsvariablen ``http_proxy`` / ``https_proxy`` / ``no_proxy`` werden von der JVM
+   nicht ausgewertet und haben daher keine Wirkung.
 
 Konfiguration von robots.txt
 =================
@@ -469,6 +519,15 @@ Um robots.txt zu ignorieren, bearbeiten Sie ``fess_config.properties``.
 
     crawler.ignore.robots.txt=true
 
+Der Standardwert dieses Eintrags ist ``false``: |Fess| hält sich an robots.txt.
+Mit ``true`` wird robots.txt ignoriert.
+
+Um auch HTML-Robots-Meta-Tags (``noindex``, ``nofollow`` usw.) zu ignorieren, verwenden Sie folgenden Eintrag (Standard: ``false``):
+
+::
+
+    crawler.ignore.robots.tags=true
+
 .. warning::
    Beim Crawlen externer Sites befolgen Sie robots.txt.
    Das Ignorieren kann übermäßige Last auf Server ausüben oder gegen Nutzungsbedingungen verstoßen.
@@ -478,10 +537,26 @@ Konfiguration des User-Agent
 
 Sie können den User-Agent des Crawlers ändern.
 
-Konfiguration in der Verwaltungsoberfläche
-----------------
+Für den Web-Crawler
+-------------------
 
-Fügen Sie zu den „Konfigurationsparametern" der Crawl-Konfiguration hinzu:
+Der Web-Crawler verfügt über ein dediziertes Feld „User Agent" in der Bearbeitungsmaske der Crawl-Konfiguration.
+Tragen Sie dort den gewünschten User-Agent-String ein:
+
+::
+
+    User Agent: MyCompanyCrawler/1.0
+
+.. note::
+   Bei Web-Crawl-Konfigurationen wird der Wert von ``client.userAgent`` in den Konfigurationsparametern
+   durch das dedizierte Feld „User Agent" überschrieben.
+   Verwenden Sie für den Web-Crawler stets das dedizierte Feld.
+
+Für den Datei-Crawler und andere
+---------------------------------
+
+Crawler ohne dediziertes User-Agent-Feld konfigurieren Sie über die „Konfigurationsparameter"
+der Crawl-Konfiguration:
 
 ::
 
@@ -543,8 +618,15 @@ Crawling stoppt mittendrin
 
 2. **Netzwerkfehler**
 
-   - Passen Sie Timeout-Einstellungen an
-   - Überprüfen Sie Retry-Einstellungen
+   - Passen Sie Timeouts über die Konfigurationsparameter an:
+
+     ::
+
+         client.connectionTimeout=5000
+         client.soTimeout=30000
+
+     ``client.connectionTimeout`` ist der Timeout für den Verbindungsaufbau,
+     ``client.soTimeout`` der Timeout für den Datenempfang; beide Angaben in Millisekunden.
 
 3. **Fehler im Crawl-Ziel**
 
@@ -615,7 +697,7 @@ Empfehlungen für Crawl-Konfiguration
 3. **Tiefenbeschränkung konfigurieren**
 
    Konfigurieren Sie angemessene Tiefe entsprechend der Site-Struktur.
-   Unbegrenzt (-1) nur zum Crawlen der gesamten Site verwenden.
+   Das leere Feld (unbegrenzt) nur zum Crawlen der gesamten Site verwenden.
 
 4. **Maximale Zugriffszahl konfigurieren**
 
