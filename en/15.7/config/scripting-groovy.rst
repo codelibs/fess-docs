@@ -112,6 +112,12 @@ Data Store Scripts
 
 Examples of scripts for data store configuration.
 
+.. note::
+   In data store scripts, each ``field=expression`` line is evaluated independently as a single expression.
+   Therefore, ``import`` statements, multi-line ``def`` variable declarations, and multi-line control structures that set several fields at once (such as ``if`` blocks) cannot be used.
+   When using Java classes, write them as a single expression with a fully qualified class name (FQCN), and use a per-field ternary operator for conditional values (for example, ``url=data.published ? data.url : null`` ).
+   Also, the variable name ``data`` used here is only an example; the actual variable name depends on the data store connector you use. See :doc:`../admin/dataconfig-guide` for details.
+
 Basic Mapping
 -------------
 
@@ -175,13 +181,19 @@ The objects available in scripts vary depending on the execution context.
      - Description
    * - All contexts
      - ``container``
-     - DI container. Used to access components
+     - DI container. Used to access components via ``container.getComponent("...")``
    * - Scheduled jobs
      - ``executor``
      - Job execution control ( ``JobExecutor`` ). Required for job stop support
    * - Data store
      - (connector-specific)
-     - Data record variables provided by each data store
+     - Data record variables provided by each data store. The variable name depends on the connector
+   * - Path mapping
+     - ``url`` , ``matcher``
+     - The URL string to convert and the regular-expression match result ( ``Matcher`` ). Available in replacement settings with the ``groovy:`` prefix
+   * - Document boost
+     - (document fields)
+     - Each field of the target document is available as a variable (used in condition and boost-value expressions)
 
 Scheduled Job Scripts
 =====================
@@ -189,6 +201,11 @@ Scheduled Job Scripts
 Examples of Groovy scripts used in scheduled jobs.
 In scheduled jobs, ``container`` and ``executor`` are available.
 Passing ``executor`` to the job's ``execute()`` method enables job stop control.
+
+.. note::
+   A scheduled job script is evaluated as a single, complete Groovy script.
+   Therefore, unlike data store scripts, you can use ``import`` statements, multi-line ``def`` declarations, and multi-line control structures.
+   The "Using Java Classes", "Accessing Fess Components", "Error Handling", and "Debugging and Log Output" examples below also assume this complete-script context.
 
 Execute Crawl Job
 -----------------
@@ -220,7 +237,7 @@ Execute Multiple Jobs Sequentially
 
     def results = []
 
-    // Index optimization
+    // Update suggest
     results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Execute crawl
@@ -300,15 +317,19 @@ Executing Searches
 Error Handling
 ==============
 
+``import`` statements must be placed at the top of the script (they cannot be placed inside blocks such as ``try-catch`` ).
+You can catch exceptions with ``try-catch`` to control job errors.
+
 ::
 
+    import org.apache.logging.log4j.LogManager
+
+    def logger = LogManager.getLogger("script")
+
     try {
-        def result = processData(data)
-        return result
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     } catch (Exception e) {
-        import org.apache.logging.log4j.LogManager
-        def logger = LogManager.getLogger("script")
-        logger.error("Error processing data: {}", e.message, e)
+        logger.error("Failed to execute crawl job: {}", e.message, e)
         return "Error: " + e.message
     }
 
@@ -321,12 +342,13 @@ Log Output
 ::
 
     import org.apache.logging.log4j.LogManager
+
     def logger = LogManager.getLogger("script")
 
-    logger.debug("Debug message: {}", data.id)
-    logger.info("Processing document: {}", data.title)
+    logger.debug("Debug message: {}", value)
+    logger.info("Processing: {}", title)
     logger.warn("Warning: {}", message)
-    logger.error("Error: {}", e.message)
+    logger.error("Error: {}", e.message, e)
 
 Debug Output
 ------------
