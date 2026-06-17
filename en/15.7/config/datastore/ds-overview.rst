@@ -39,7 +39,7 @@ Cloud Storage
      - Crawl files and folders from Dropbox
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - Crawl Google Drive, Gmail, etc.
+     - Crawl Google Drive
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - Crawl OneDrive, SharePoint, etc.
@@ -110,10 +110,11 @@ Installing Plugins
 Data Store Connector plugins can be installed from the admin UI.
 
 1. Log in to the admin console
-2. Navigate to "System" -> "Plugins"
-3. Search for the target plugin in the "Available" tab
-4. Click "Install"
-5. Restart |Fess|
+2. Go to "System" -> "Plugin"
+3. Click the "Install" button
+4. Select the plugin from the "Remote" tab (or upload a JAR file from the "Local" tab)
+5. Click "Install"
+6. Restart |Fess|
 
 Data Store Configuration Basics
 ===============================
@@ -134,7 +135,7 @@ Configuration items common to all Data Store Connectors:
    * - Name
      - Identifier name for the configuration
    * - Handler Name
-     - Handler name for the connector (e.g., ``BoxDataStore``)
+     - Handler name for the connector (e.g., ``CsvDataStore``)
    * - Description
      - A free-text description of the configuration
    * - Parameters
@@ -167,22 +168,27 @@ Script Configuration
 --------------------
 
 Scripts map retrieved data to |Fess| index fields.
-The example below uses the ``data.*`` prefix, which is used by CSV and JSON connectors.
-Other connectors use their own prefix: ``file.*`` for Box/Dropbox/Google Drive/OneDrive,
-``message.*`` for Slack, ``issue.*`` for Jira, etc.
-See each connector's documentation for the available fields.
+The left side of each line is a |Fess| index field; the right side is the field obtained from the connector.
+
+The following example is for a CSV connector whose header columns are ``link``, ``subject``, and ``body``:
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
+
+.. note::
+
+   Field names referenced in scripts differ per connector.
+   Box/Dropbox/Google Drive/OneDrive reference the fetched object with a prefix: ``file.*``; Slack uses ``message.*``; Jira uses ``issue.*``.
+   CSV, JSON, and Database connectors do NOT use a prefix; fields are referenced directly:
+
+   - CSV: header column names (when ``has_header_line=true``), or ``cell1``, ``cell2``, ... (1-based column index); plus ``csvfile`` and ``csvfilename``.
+   - JSON: JSON object field names.
+   - Database: column names (aliases) from the SELECT result.
+
+   Refer to each connector's individual documentation for details.
 
 Authentication Configuration
 ============================
@@ -198,7 +204,7 @@ The following parameter is inherited from ``AbstractDataStore`` and available in
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Parameter
      - Default
@@ -207,6 +213,9 @@ The following parameter is inherited from ``AbstractDataStore`` and available in
      - ``0``
      - Delay in milliseconds between processing each record. Increase this value to
        reduce load on the external service.
+   * - ``script_type``
+     - ``groovy``
+     - Type of script engine used for index field mapping. Only ``groovy`` is available by default.
 
 Troubleshooting
 ===============
@@ -237,9 +246,9 @@ Cannot Retrieve Data
 Debug Configuration
 -------------------
 
-When investigating issues, adjust the log level:
+When investigating issues, adjust the log level. Datastore crawling runs in the crawler process, so you must edit the crawler's log configuration file:
 
-``app/WEB-INF/classes/log4j2.xml``:
+``app/WEB-INF/env/crawler/resources/log4j2.xml``:
 
 ::
 

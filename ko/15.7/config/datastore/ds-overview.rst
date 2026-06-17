@@ -39,7 +39,7 @@
      - Dropbox의 파일 및 폴더를 크롤링
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - Google Drive, Gmail 등을 크롤링
+     - Google Drive를 크롤링
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - OneDrive, SharePoint 등을 크롤링
@@ -111,9 +111,10 @@
 
 1. 관리 화면에 로그인
 2. "시스템" → "플러그인"으로 이동
-3. "Available" 탭에서 대상 플러그인 검색
-4. "설치"를 클릭
-5. |Fess| 재시작
+3. "설치" 버튼 클릭
+4. "원격" 탭에서 설치할 플러그인 선택 (또는 "로컬" 탭에서 JAR 파일 업로드)
+5. "설치" 클릭
+6. |Fess| 재시작
 
 데이터스토어 설정 기본
 ======================
@@ -134,7 +135,7 @@
    * - 이름
      - 설정의 식별명
    * - 핸들러 이름
-     - 사용할 커넥터의 핸들러 이름 (예: ``BoxDataStore``)
+     - 사용할 커넥터의 핸들러 이름 (예: ``CsvDataStore``)
    * - 설명
      - 이 데이터스토어 설정에 대한 메모
    * - 파라미터
@@ -166,30 +167,29 @@
 스크립트 설정
 --------------
 
-스크립트에서는 가져온 데이터를 |Fess| 의 인덱스 필드에 매핑합니다:
+스크립트에서는 가져온 데이터를 |Fess| 의 인덱스 필드에 매핑합니다.
+각 행의 왼쪽이 |Fess| 의 인덱스 필드, 오른쪽이 커넥터에서 가져온 필드입니다.
+
+이하는 CSV 커넥터 (헤더 행에 ``link``, ``subject``, ``body`` 열이 있는 경우)의 예입니다:
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
 
 .. note::
 
-   위의 예에서 사용하는 ``data.*`` 프리픽스는 CSV/JSON 커넥터용입니다.
-   각 커넥터에는 고유의 프리픽스가 있습니다:
+   스크립트에서 참조할 수 있는 필드 이름은 커넥터마다 다릅니다.
+   Box/Dropbox/Google Drive/OneDrive에서는 ``file.*``, Slack에서는 ``message.*``,
+   Jira에서는 ``issue.*`` 와 같이 가져온 오브젝트를 프리픽스를 붙여 참조합니다.
+   한편, CSV·JSON·데이터베이스 커넥터는 프리픽스를 사용하지 않고 필드 이름을 직접 참조합니다:
 
-   - ``file.*`` — Box, Dropbox, Google Drive, OneDrive
-   - ``message.*`` — Slack
-   - ``issue.*`` — Jira
+   - CSV: 헤더 행의 열 이름 (``has_header_line=true`` 인 경우), 또는 ``cell1``, ``cell2`` ... (1 시작 열 인덱스). 추가로 ``csvfile``, ``csvfilename`` 을 사용할 수 있습니다.
+   - JSON: JSON 오브젝트의 필드 이름
+   - 데이터베이스: SELECT 결과의 열 이름 (별칭)
 
-   자세한 내용은 각 커넥터의 문서를 참조하십시오.
+   각 커넥터의 자세한 내용은 개별 문서를 참조하십시오.
 
 인증 설정
 ========
@@ -204,14 +204,17 @@
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 파라미터
      - 기본값
      - 설명
    * - ``readInterval``
      - ``0``
-     - 레코드 처리 사이의 대기 시간 (밀리초). ``AbstractDataStore`` 에서 상속됩니다.
+     - 레코드 처리 사이의 대기 시간 (밀리초). 대량 데이터 처리 시 서버 부하를 줄이기 위해 사용합니다.
+   * - ``script_type``
+     - ``groovy``
+     - 인덱스 필드 매핑에 사용하는 스크립트 엔진 종류. 기본적으로 ``groovy`` 만 사용할 수 있습니다.
 
 문제 해결
 ======================
@@ -242,9 +245,10 @@
 디버그 설정
 ------------
 
-문제를 조사할 때는 로그 레벨을 조정합니다:
+문제를 조사할 때는 로그 레벨을 조정합니다. 데이터스토어 크롤링은 크롤러 프로세스에서
+실행되므로, 크롤러용 로그 설정 파일을 편집합니다:
 
-``app/WEB-INF/classes/log4j2.xml``:
+``app/WEB-INF/env/crawler/resources/log4j2.xml``:
 
 ::
 

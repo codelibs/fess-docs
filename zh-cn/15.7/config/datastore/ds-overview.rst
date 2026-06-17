@@ -39,7 +39,7 @@
      - 抓取Dropbox的文件和文件夹
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - 抓取Google Drive、Gmail等
+     - 爬取 Google Drive
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - 抓取OneDrive、SharePoint等
@@ -114,9 +114,10 @@
 
 1. 登录管理界面
 2. 进入"系统"→"插件"
-3. 在"Available"标签页搜索目标插件
-4. 点击"安装"
-5. 重启 |Fess|
+3. 点击"安装"按钮
+4. 在"远程"选项卡中选择要安装的插件（或在"本地"选项卡上传 JAR 文件）
+5. 点击"安装"
+6. 重启 |Fess|
 
 数据存储设置基础
 ======================
@@ -139,7 +140,7 @@
    * - 描述
      - 设置的说明文本
    * - 处理器名
-     - 使用的连接器处理器名（例如：``BoxDataStore``）
+     - 使用的连接器处理器名（例如：``CsvDataStore``）
    * - 参数
      - 连接器特定的设置参数（key=value格式）
    * - 脚本
@@ -170,26 +171,26 @@
 --------------
 
 脚本将获取的数据映射到 |Fess| 的索引字段。
+左侧为 |Fess| 的索引字段，右侧为从连接器获取的字段。
 
-以下是CSV/JSON连接器使用 ``data.*`` 前缀的示例：
+以下是 CSV 连接器（头部列名为 ``link`` 、 ``subject`` 、 ``body`` ）的示例：
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
 
 .. note::
 
-   脚本中使用的字段前缀因连接器而异。
-   例如，Box/Dropbox/Google Drive/OneDrive使用 ``file.*`` ，Slack使用 ``message.*`` ，
-   Jira使用 ``issue.*`` 。
+   脚本中可引用的字段名因连接器而异。
+   Box/Dropbox/Google Drive/OneDrive 使用 ``file.*`` 前缀引用获取的对象；Slack 使用 ``message.*`` ；Jira 使用 ``issue.*`` 。
+   而 CSV、JSON 和数据库连接器不使用前缀，直接引用字段名：
+
+   - CSV：头部行的列名（ ``has_header_line=true`` 时），或 ``cell1`` 、 ``cell2`` ...（从 1 开始的列索引）；此外还可使用 ``csvfile`` 和 ``csvfilename`` 。
+   - JSON：JSON 对象的字段名。
+   - 数据库：SELECT 结果的列名（别名）。
+
    各连接器的详细信息请参阅各自的文档。
 
 认证设置
@@ -207,7 +208,7 @@
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 参数
      - 默认值
@@ -215,6 +216,9 @@
    * - ``readInterval``
      - ``0``
      - 各记录处理间的等待时间（毫秒）。在处理大量数据时，用于减轻服务器负载。
+   * - ``script_type``
+     - ``groovy``
+     - 用于索引字段映射的脚本引擎类型。默认仅提供 ``groovy`` 。
 
 故障排除
 ======================
@@ -245,9 +249,9 @@
 调试设置
 ------------
 
-调查问题时，调整日志级别：
+调查问题时，调整日志级别。数据存储的抓取在爬虫进程中执行，因此需要编辑爬虫用的日志配置文件：
 
-``app/WEB-INF/classes/log4j2.xml``：
+``app/WEB-INF/env/crawler/resources/log4j2.xml``：
 
 ::
 

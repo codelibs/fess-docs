@@ -39,7 +39,7 @@ Almacenamiento en la Nube
      - Rastrea archivos y carpetas de Dropbox
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - Rastrea Google Drive, Gmail, etc.
+     - Rastrea Google Drive
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - Rastrea OneDrive, SharePoint, etc.
@@ -113,10 +113,11 @@ Desde la Consola de Administracion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Inicie sesion en la consola de administracion
-2. Navegue a "Sistema" -> "Plugins"
-3. Busque el plugin deseado en la pestana "Disponible"
-4. Haga clic en "Instalar"
-5. Reinicie |Fess|
+2. Vaya a "Sistema" -> "Plugin"
+3. Haga clic en el boton "Instalar"
+4. Seleccione el plugin en la pestana "Remoto" (o suba un archivo JAR desde la pestana "Local")
+5. Haga clic en "Instalar"
+6. Reinicie |Fess|
 
 Conceptos Basicos de Configuracion del Almacen de Datos
 =======================================================
@@ -139,7 +140,7 @@ Elementos de configuracion comunes a todos los conectores de almacen de datos:
    * - Descripcion
      - Texto descriptivo de la configuracion
    * - Nombre del Manejador
-     - Nombre del manejador del conector a utilizar (ej., ``BoxDataStore``)
+     - Nombre del manejador del conector a utilizar (ej., ``CsvDataStore``)
    * - Parametros
      - Parametros de configuracion especificos del conector (formato key=value)
    * - Script
@@ -170,26 +171,26 @@ Configuracion de Script
 -----------------------
 
 Los scripts mapean los datos obtenidos a los campos del indice de |Fess|.
+El lado izquierdo de cada linea es el campo del indice de |Fess|; el lado derecho es el campo obtenido del conector.
 
-El siguiente es un ejemplo utilizando el prefijo ``data.*`` para conectores CSV/JSON:
+El siguiente es un ejemplo para el conector CSV con columnas de encabezado ``link``, ``subject`` y ``body``:
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
 
 .. note::
 
-   El prefijo de los campos en el script varia segun el conector.
-   Por ejemplo, Box/Dropbox/Google Drive/OneDrive utilizan ``file.*``, Slack utiliza ``message.*``,
-   Jira utiliza ``issue.*``.
+   Los nombres de campo utilizables en los scripts difieren segun el conector.
+   Box/Dropbox/Google Drive/OneDrive referencian el objeto obtenido con el prefijo ``file.*``; Slack utiliza ``message.*``; Jira utiliza ``issue.*``.
+   Los conectores CSV, JSON y de base de datos NO utilizan prefijo; los campos se referencian directamente:
+
+   - CSV: nombres de columna del encabezado (si ``has_header_line=true``), o ``cell1``, ``cell2``, ... (indice basado en 1); ademas de ``csvfile`` y ``csvfilename``.
+   - JSON: nombres de campo del objeto JSON.
+   - Base de datos: nombres de columna (alias) del resultado del SELECT.
+
    Consulte la documentacion individual de cada conector para mas detalles.
 
 Configuracion de Autenticacion
@@ -207,7 +208,7 @@ Parametros comunes disponibles para todos los conectores de almacen de datos:
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Parametro
      - Valor por defecto
@@ -215,6 +216,9 @@ Parametros comunes disponibles para todos los conectores de almacen de datos:
    * - ``readInterval``
      - ``0``
      - Tiempo de espera entre el procesamiento de cada registro (milisegundos). Se utiliza para reducir la carga del servidor al procesar grandes cantidades de datos.
+   * - ``script_type``
+     - ``groovy``
+     - Tipo de motor de scripts usado para el mapeo de campos del indice. De forma predeterminada solo esta disponible ``groovy``.
 
 Solucion de Problemas
 =====================
@@ -245,9 +249,9 @@ No Se Pueden Obtener Datos
 Configuracion de Depuracion
 ---------------------------
 
-Al investigar problemas, ajuste el nivel de log:
+Al investigar problemas, ajuste el nivel de log. El rastreo de almacenes de datos se ejecuta en el proceso del rastreador, por lo que debe editar el archivo de configuracion de log del rastreador:
 
-``app/WEB-INF/classes/log4j2.xml``:
+``app/WEB-INF/env/crawler/resources/log4j2.xml``:
 
 ::
 
