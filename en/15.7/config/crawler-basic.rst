@@ -88,7 +88,7 @@ Crawling Internal Intranet Site
     URL: http://intranet.example.com/
     Crawl Interval: Once per day
     Thread Count: 10
-    Depth: Unlimited (-1)
+    Depth: blank (unlimited)
     Maximum Access Count: 10000
 
 Crawling Public Website
@@ -115,7 +115,7 @@ Local File System
     URL: file:///home/share/documents/
     Crawl Interval: Once per day
     Thread Count: 3
-    Depth: Unlimited (-1)
+    Depth: blank (unlimited)
 
 SMB/CIFS (Windows File Share)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,14 +126,14 @@ SMB/CIFS (Windows File Share)
     URL: smb://fileserver.example.com/share/
     Crawl Interval: Once per day
     Thread Count: 5
-    Depth: Unlimited (-1)
+    Depth: blank (unlimited)
 
 Authentication Configuration
 -----------------------------
 
 To access sites or file servers that require authentication, configure authentication credentials.
 
-1. Select "Crawler" → "Authentication" in the administration screen
+1. Select "Crawler" → "Web Authentication" (or "File Authentication" for file servers) in the administration screen
 2. Click "New"
 3. Enter authentication information:
 
@@ -141,9 +141,14 @@ To access sites or file servers that require authentication, configure authentic
 
        Hostname: wiki.example.com
        Port: 443
-       Authentication Method: Basic Authentication
+       Scheme: Basic
        Username: crawler_user
        Password: ********
+
+   .. note::
+      The Scheme is selected from Basic / Digest / NTLM / Form. You must also select the target crawl
+      configuration in the "Web Config" field (or "File System Config" for file authentication);
+      credentials are tied to a crawl configuration.
 
 4. Click "Create"
 
@@ -153,11 +158,17 @@ Running Crawls
 Manual Execution
 ----------------
 
-To run a configured crawl immediately:
+To run a configured crawl immediately, start the crawler job from the Scheduler menu.
 
-1. Select the target configuration in the crawl configuration list
-2. Click the "Start" button
-3. Check job execution status in the "Scheduler" menu
+1. Open the "Scheduler" menu
+2. Select the "Default Crawler" job
+3. Click the "Start Now" button
+4. Check the job execution status
+
+.. note::
+   The crawl config (Web / File System) list pages do NOT have an individual "Start" button;
+   crawls run per scheduler job. The "Default Crawler" job runs against all enabled crawl
+   configurations.
 
 Scheduled Execution
 -------------------
@@ -171,15 +182,20 @@ To run crawls periodically:
    ::
 
        # Run daily at 2 AM
-       0 0 2 * * ?
+       0 2 * * *
 
        # Run every hour at 0 minutes
-       0 0 * * * ?
+       0 * * * *
 
        # Run at 6 PM Monday through Friday
-       0 0 18 ? * MON-FRI
+       0 18 * * 1-5
 
 4. Click "Update"
+
+.. note::
+   The |Fess| scheduler uses cron4j-style expressions with 5 fields (minute hour day-of-month month
+   day-of-week). There is no seconds field and no ``?`` character (unlike Quartz). Day-of-week is
+   0 (Sunday) to 6 (Saturday).
 
 Checking Crawl Status
 ----------------------
@@ -233,7 +249,11 @@ Restrict the depth of link traversal:
 
 - **0**: Start URL only
 - **1**: Start URL and pages linked from it
-- **-1**: Unlimited (follow all links)
+- **blank (unset)**: Unlimited (follow all links)
+
+.. note::
+   The admin UI "Depth" field accepts only integers >= 0; to crawl with unlimited depth, leave the
+   field blank (internally treated as -1, meaning unlimited).
 
 Maximum Access Count
 ~~~~~~~~~~~~~~~~~~~~
@@ -244,7 +264,7 @@ Upper limit on the number of pages to crawl:
 
     Maximum Access Count: 1000
 
-Stops after crawling 1000 pages.
+Stops after crawling 1000 pages. Leaving the field blank means unlimited (no cap).
 
 Parallel Crawl Count (Thread Count)
 ------------------------------------
@@ -275,6 +295,10 @@ Specifies the number of URLs to crawl simultaneously.
    Increasing thread count too much places excessive load on the crawl target server.
    Set an appropriate value.
 
+.. note::
+   The default thread count for new configs is 1 for the Web crawler and 5 for the File crawler.
+   The default request interval is 10000 ms for the Web crawler and 1000 ms for the File crawler.
+
 Crawl Interval
 --------------
 
@@ -286,7 +310,7 @@ Specifies the frequency of crawl execution.
     Crawl Interval: 3600000  # Milliseconds (1 hour)
 
     # Or set in scheduler
-    0 0 2 * * ?  # Daily at 2 AM
+    0 2 * * *  # Daily at 2 AM
 
 File Size Configuration
 =======================
@@ -438,16 +462,36 @@ Set the ``FESS_NON_PROXY_HOSTS`` environment variable in ``fess.in.sh`` (Linux/M
 
     export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
-System-Wide Proxy Configuration
---------------------------------
+Proxy common to all crawl configurations
+-----------------------------------------
 
-To use the same proxy for all crawl configurations, configure via environment variables.
+To apply a proxy to all crawl configurations that do not set their own ``client.proxyHost`` /
+``client.proxyPort``, configure the following in ``fess_config.properties``
+(per-config values take precedence):
 
 ::
 
-    export http_proxy=http://proxy.example.com:8080
-    export https_proxy=http://proxy.example.com:8080
-    export no_proxy=localhost,127.0.0.1,.example.com
+    http.proxy.host=proxy.example.com
+    http.proxy.port=8080
+    http.proxy.username=proxyuser
+    http.proxy.password=proxypass
+
+System-wide (JVM) proxy
+-------------------------
+
+To route ALL |Fess| HTTP traffic (crawler, SSO, LLM) through a proxy, set environment variables
+in ``fess.in.sh`` (Linux/Mac) or ``fess.in.bat`` (Windows). These become JVM system properties
+(``-Dhttp.proxyHost`` etc.):
+
+::
+
+    export FESS_PROXY_HOST=proxy.example.com
+    export FESS_PROXY_PORT=8080
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
+
+.. note::
+   FESS_PROXY_HOST / FESS_PROXY_PORT apply to both HTTP and HTTPS. The shell ``http_proxy`` /
+   ``https_proxy`` / ``no_proxy`` environment variables are NOT read by the JVM and have no effect.
 
 robots.txt Configuration
 =========================
@@ -467,6 +511,16 @@ To ignore robots.txt, edit ``fess_config.properties``.
 
     crawler.ignore.robots.txt=true
 
+The default value of ``crawler.ignore.robots.txt`` is ``false`` (|Fess| obeys robots.txt). Set it
+to ``true`` to ignore robots.txt.
+
+To also ignore HTML robots meta tags (``noindex`` / ``nofollow``), use the following property
+(default ``false``):
+
+::
+
+    crawler.ignore.robots.tags=true
+
 .. warning::
    When crawling external sites, respect robots.txt.
    Ignoring it may place excessive load on servers or violate terms of service.
@@ -476,22 +530,28 @@ User-Agent Configuration
 
 You can change the crawler's User-Agent.
 
-Configuration in Administration Screen
----------------------------------------
+For the Web crawler
+--------------------
 
-Add to "Configuration Parameters" in crawl configuration:
+The Web crawler has a dedicated "User Agent" field in the crawl config edit screen. Enter the
+desired user-agent string in that field:
+
+::
+
+    User Agent: MyCompanyCrawler/1.0
+
+.. note::
+   In Web crawl configs, specifying ``client.userAgent`` in Config Parameters is overridden by the
+   dedicated User Agent field. Always use the dedicated field for the Web crawler.
+
+For the file crawler and others
+--------------------------------
+
+Crawlers without a dedicated user-agent field use ``client.userAgent`` in Config Parameters:
 
 ::
 
     client.userAgent=MyCompanyCrawler/1.0
-
-System-Wide Configuration
---------------------------
-
-Configure in ``fess_config.properties``:
-
-::
-
 
 Encoding Configuration
 ======================
@@ -549,8 +609,15 @@ Crawl Stops Midway
 
 2. **Network errors**
 
-   - Adjust timeout settings
-   - Check retry settings
+   - Adjust timeouts via Config Parameters:
+
+     ::
+
+         client.connectionTimeout=5000
+         client.soTimeout=30000
+
+     ``client.connectionTimeout`` is the connection-establishment timeout and ``client.soTimeout``
+     is the data-receive timeout, both in milliseconds.
 
 3. **Crawl target errors**
 
@@ -621,7 +688,7 @@ Crawl Configuration Recommendations
 3. **Set depth restrictions**
 
    Set appropriate depth based on site structure.
-   Use unlimited (-1) only when crawling the entire site.
+   Leave the Depth field blank (unlimited) only when crawling the entire site.
 
 4. **Set maximum access count**
 

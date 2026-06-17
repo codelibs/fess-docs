@@ -58,7 +58,7 @@ Ajout d'une configuration d'indexation de base
 
 2. **Ouvrir l'écran de configuration du robot d'indexation**
 
-   Dans le menu de gauche, sélectionnez « Crawler » → « Web » ou « File System ».
+   Dans le menu de gauche, sélectionnez « Robot d'exploration » → « Web » ou « Système de fichiers ».
 
 3. **Créer une nouvelle configuration**
 
@@ -88,7 +88,7 @@ Indexation d'un site intranet d'entreprise
     URL : http://intranet.example.com/
     Intervalle d'indexation : 1 fois par jour
     Nombre de threads : 10
-    Profondeur : Illimitée (-1)
+    Profondeur : vide (illimitée)
     Nombre maximum d'accès : 10000
 
 Indexation d'un site Web public
@@ -115,7 +115,7 @@ Système de fichiers local
     URL : file:///home/share/documents/
     Intervalle d'indexation : 1 fois par jour
     Nombre de threads : 3
-    Profondeur : Illimitée (-1)
+    Profondeur : vide (illimitée)
 
 SMB/CIFS (Partage de fichiers Windows)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,14 +126,14 @@ SMB/CIFS (Partage de fichiers Windows)
     URL : smb://fileserver.example.com/share/
     Intervalle d'indexation : 1 fois par jour
     Nombre de threads : 5
-    Profondeur : Illimitée (-1)
+    Profondeur : vide (illimitée)
 
 Configuration des informations d'authentification
 --------------
 
 Pour accéder à des sites ou des serveurs de fichiers nécessitant une authentification, configurez les informations d'authentification.
 
-1. Dans l'interface d'administration, sélectionnez « Crawler » → « Authentication »
+1. Dans l'interface d'administration, sélectionnez « Robot d'exploration » → « Authentification Web » (ou « Authentification de fichier » pour les serveurs de fichiers)
 2. Cliquez sur « Nouveau »
 3. Saisissez les informations d'authentification :
 
@@ -141,9 +141,15 @@ Pour accéder à des sites ou des serveurs de fichiers nécessitant une authenti
 
        Nom d'hôte : wiki.example.com
        Port : 443
-       Méthode d'authentification : Basic Authentication
+       Schéma : Basic
        Nom d'utilisateur : crawler_user
        Mot de passe : ********
+
+   .. note::
+      Le champ « Schéma » permet de choisir parmi Basic / Digest / NTLM / Form.
+      Vous devez également sélectionner la configuration d'indexation cible dans le champ « Web Config »
+      (ou la configuration de système de fichiers pour l'authentification de fichier).
+      Les informations d'authentification sont associées à une configuration d'indexation.
 
 4. Cliquez sur « Créer »
 
@@ -153,33 +159,44 @@ Exécution de l'indexation
 Exécution manuelle
 --------
 
-Pour exécuter immédiatement une indexation configurée :
+Pour exécuter immédiatement une indexation configurée, démarrez le travail d'indexation depuis le menu « Planificateur » :
 
-1. Dans la liste des configurations d'indexation, sélectionnez la configuration cible
-2. Cliquez sur le bouton « Démarrer »
-3. Vérifiez l'état d'exécution du travail dans le menu « Scheduler »
+1. Ouvrez le menu « Planificateur »
+2. Sélectionnez le travail « Default Crawler »
+3. Cliquez sur le bouton « Démarrer maintenant »
+4. Vérifiez l'état d'exécution du travail
+
+.. note::
+   Les pages de liste des configurations d'indexation (Web / Système de fichiers) ne comportent pas
+   de bouton « Démarrer » individuel. Les indexations s'exécutent au niveau du travail planificateur.
+   Le travail « Default Crawler » s'exécute sur toutes les configurations d'indexation activées.
 
 Exécution planifiée
 ----------------
 
 Pour exécuter l'indexation périodiquement :
 
-1. Ouvrez le menu « Scheduler »
+1. Ouvrez le menu « Planificateur »
 2. Sélectionnez le travail « Default Crawler »
 3. Configurez l'expression de planification (format Cron)
 
    ::
 
        # Exécution quotidienne à 2h du matin
-       0 0 2 * * ?
+       0 2 * * *
 
        # Exécution chaque heure à 0 minute
-       0 0 * * * ?
+       0 * * * *
 
        # Exécution du lundi au vendredi à 18h
-       0 0 18 ? * MON-FRI
+       0 18 * * 1-5
 
 4. Cliquez sur « Mettre à jour »
+
+.. note::
+   Le planificateur de |Fess| utilise des expressions cron4j à 5 champs (minute heure jour mois jour-de-semaine).
+   Il n'y a pas de champ « secondes » et le caractère ``?`` n'est pas supporté (contrairement à Quartz).
+   Le jour de la semaine est exprimé de ``0`` (dimanche) à ``6`` (samedi).
 
 Vérification de l'état de l'indexation
 ------------------
@@ -233,7 +250,12 @@ Limiter la profondeur des niveaux de liens à suivre :
 
 - **0** : URL de départ uniquement
 - **1** : URL de départ et pages liées à partir de celle-ci
-- **-1** : Illimitée (suivre tous les liens)
+- **vide (non défini)** : Illimitée (suivre tous les liens)
+
+.. note::
+   Le champ « Profondeur » de l'interface d'administration n'accepte que des entiers supérieurs ou
+   égaux à 0. Pour une profondeur illimitée, laissez le champ vide
+   (traité en interne comme ``-1``, ce qui signifie illimité).
 
 Nombre maximum d'accès
 ~~~~~~~~~~~~~~
@@ -244,7 +266,7 @@ Limite supérieure du nombre de pages à indexer :
 
     Nombre maximum d'accès : 1000
 
-L'indexation s'arrête après 1000 pages.
+L'indexation s'arrête après 1000 pages. Laisser le champ vide signifie illimité (aucune limite supérieure).
 
 Nombre d'indexations parallèles (nombre de threads)
 --------------------------
@@ -275,6 +297,11 @@ Spécifie le nombre d'URLs à indexer simultanément.
    L'augmentation excessive du nombre de threads impose une charge excessive sur le serveur cible.
    Veuillez définir une valeur appropriée.
 
+.. note::
+   Le nombre de threads par défaut à la création est de ``1`` pour le robot Web et de ``5`` pour le robot
+   de fichiers. L'intervalle entre les requêtes (intervalle) est par défaut de ``10000`` millisecondes
+   pour le robot Web et de ``1000`` millisecondes pour le robot de fichiers.
+
 Intervalle d'indexation
 ------------
 
@@ -286,7 +313,7 @@ Spécifie la fréquence d'exécution de l'indexation.
     Intervalle d'indexation : 3600000  # millisecondes (1 heure)
 
     # Ou configuré dans le planificateur
-    0 0 2 * * ?  # Tous les jours à 2h du matin
+    0 2 * * *  # Tous les jours à 2h du matin
 
 Configuration de la taille des fichiers
 ====================
@@ -438,16 +465,41 @@ Définissez la variable d'environnement ``FESS_NON_PROXY_HOSTS`` dans ``fess.in.
 
     export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
 
-Configuration proxy à l'échelle du système
---------------------------
+Proxy commun à toutes les configurations d'indexation
+------------------------------------------------------
 
-Si vous utilisez le même proxy pour toutes les configurations d'indexation, vous pouvez le configurer avec des variables d'environnement.
+Si vous souhaitez appliquer un proxy à toutes les configurations d'indexation qui ne définissent pas
+leur propre ``client.proxyHost`` / ``client.proxyPort``, configurez-le dans ``fess_config.properties`` :
 
 ::
 
-    export http_proxy=http://proxy.example.com:8080
-    export https_proxy=http://proxy.example.com:8080
-    export no_proxy=localhost,127.0.0.1,.example.com
+    http.proxy.host=proxy.example.com
+    http.proxy.port=8080
+    http.proxy.username=proxyuser
+    http.proxy.password=proxypass
+
+Cette configuration s'applique à toutes les configurations d'indexation. Si une configuration
+d'indexation définit ``client.proxyHost`` / ``client.proxyPort``, c'est cette valeur qui est
+prioritaire.
+
+Proxy système global (JVM)
+---------------------------
+
+Pour que l'ensemble du trafic HTTP de |Fess| (robot d'indexation, SSO, LLM, etc.) passe par un
+proxy, définissez les variables d'environnement dans ``fess.in.sh`` (Linux/Mac) ou
+``fess.in.bat`` (Windows). Ces variables sont converties en propriétés système JVM
+(``-Dhttp.proxyHost``, etc.).
+
+::
+
+    export FESS_PROXY_HOST=proxy.example.com
+    export FESS_PROXY_PORT=8080
+    export FESS_NON_PROXY_HOSTS="localhost|127.0.0.1|*.example.com"
+
+.. note::
+   ``FESS_PROXY_HOST`` / ``FESS_PROXY_PORT`` s'appliquent à la fois à HTTP et à HTTPS.
+   Les variables d'environnement shell ``http_proxy`` / ``https_proxy`` / ``no_proxy`` ne sont
+   pas lues par la JVM et n'ont donc aucun effet.
 
 Configuration de robots.txt
 =================
@@ -467,6 +519,16 @@ Pour ignorer robots.txt, modifiez ``fess_config.properties``.
 
     crawler.ignore.robots.txt=true
 
+La valeur par défaut de cette propriété est ``false`` : |Fess| respecte robots.txt.
+Définissez-la à ``true`` pour l'ignorer.
+
+Pour ignorer également les balises meta robots HTML (``noindex``, ``nofollow``, etc.),
+utilisez la propriété suivante (valeur par défaut : ``false``) :
+
+::
+
+    crawler.ignore.robots.tags=true
+
 .. warning::
    Lors de l'indexation de sites externes, respectez robots.txt.
    L'ignorer peut imposer une charge excessive sur le serveur ou violer les conditions d'utilisation.
@@ -476,10 +538,26 @@ Configuration du User-Agent
 
 Vous pouvez modifier le User-Agent du robot d'indexation.
 
-Configuration dans l'interface d'administration
-----------------
+Pour le robot Web
+-----------------
 
-Ajoutez aux « Paramètres de configuration » de la configuration d'indexation :
+Le robot Web dispose d'un champ dédié « User Agent » dans l'écran de modification de la configuration
+d'indexation. Saisissez la valeur souhaitée dans ce champ.
+
+::
+
+    User Agent : MyCompanyCrawler/1.0
+
+.. note::
+   Pour les configurations d'indexation Web, spécifier ``client.userAgent`` dans les
+   « Paramètres de configuration » sera écrasé par la valeur du champ dédié « User Agent ».
+   Utilisez toujours le champ dédié pour le robot Web.
+
+Pour le robot de fichiers et autres
+-------------------------------------
+
+Pour les robots qui ne disposent pas d'un champ User Agent dédié, ajoutez le paramètre suivant
+aux « Paramètres de configuration » de la configuration d'indexation :
 
 ::
 
@@ -542,8 +620,15 @@ L'indexation s'arrête en cours de route
 
 2. **Erreur réseau**
 
-   - Ajuster les paramètres de timeout
-   - Vérifier les paramètres de nouvelle tentative
+   - Ajustez les délais d'attente via les « Paramètres de configuration » de la configuration d'indexation :
+
+     ::
+
+         client.connectionTimeout=5000
+         client.soTimeout=30000
+
+     ``client.connectionTimeout`` est le délai d'établissement de la connexion et
+     ``client.soTimeout`` est le délai de réception des données, tous deux en millisecondes.
 
 3. **Erreur de la cible d'indexation**
 
@@ -614,7 +699,7 @@ Recommandations pour la configuration d'indexation
 3. **Configuration de la limitation de profondeur**
 
    Définissez une profondeur appropriée en fonction de la structure du site.
-   Utilisez illimitée (-1) uniquement pour indexer l'ensemble du site.
+   Laissez le champ Profondeur vide (illimitée) uniquement pour indexer l'ensemble du site.
 
 4. **Configuration du nombre maximum d'accès**
 
