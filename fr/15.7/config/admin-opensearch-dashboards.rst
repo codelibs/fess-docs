@@ -1,39 +1,41 @@
-===================================
+===========================================================
 Configuration de la visualisation des journaux de recherche
-===================================
+===========================================================
 
 À propos de la visualisation des journaux de recherche
-========================
+======================================================
 
 |Fess| collecte les journaux de recherche et de clics des utilisateurs.
 Les journaux de recherche collectés peuvent être analysés et visualisés à l'aide d'`OpenSearch Dashboards <https://opensearch.org/docs/latest/dashboards/index/>`__.
 
+|Fess| inclut un fichier de définition de tableau de bord ``extension/kibana/fess_log.ndjson`` pour visualiser les journaux de recherche.
+En important ce fichier dans OpenSearch Dashboards, vous pouvez utiliser immédiatement les tableaux de bord prédéfinis.
+
 Informations pouvant être visualisées
-----------------
+--------------------------------------
 
-Avec la configuration par défaut, les informations suivantes peuvent être visualisées.
+En important la définition de tableau de bord incluse (``fess_log.ndjson``), le tableau de bord ``fess_log`` ainsi que les 6 visualisations suivantes sont enregistrés.
 
--  Temps moyen pour afficher les résultats de recherche
--  Nombre de recherches par seconde
--  Classement des User Agent des utilisateurs accédant
--  Classement des mots-clés de recherche
--  Classement des mots-clés de recherche avec 0 résultat
--  Nombre total de résultats de recherche
--  Tendances de recherche dans le temps
+-  Temps de réponse moyen pour afficher les résultats de recherche (``average-response-time``)
+-  Nombre de requêtes de recherche par unité de temps (``search-query-counts-per-sec``)
+-  Classement des User Agent des utilisateurs accédant (``rank-of-UserAgent``)
+-  Classement des mots-clés de recherche (``search-term-rank``)
+-  Classement des mots-clés de recherche avec 0 résultat (``search-term-rank-of-no-results``)
+-  Nombre moyen de résultats de recherche (``hit-counts``)
 
-En utilisant la fonction Visualize pour créer de nouveaux graphiques et les ajouter au Dashboard, vous pouvez construire votre propre tableau de bord de surveillance.
+En plus de cela, vous pouvez créer de nouveaux graphiques à l'aide de la fonction Visualize et les ajouter au tableau de bord pour construire votre propre tableau de bord de surveillance.
 
 Configuration de la visualisation des données avec OpenSearch Dashboards
-==============================================
+========================================================================
 
 Installation d'OpenSearch Dashboards
-------------------------------------
+-------------------------------------
 
 OpenSearch Dashboards est un outil de visualisation des données d'OpenSearch utilisé par |Fess|.
 Installez OpenSearch Dashboards en suivant la `documentation officielle d'OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-dashboards/index/>`__.
 
 Modification du fichier de configuration
-------------------
+-----------------------------------------
 
 Pour permettre à OpenSearch Dashboards de reconnaître OpenSearch utilisé par |Fess|, modifiez le fichier de configuration ``config/opensearch_dashboards.yml``.
 
@@ -48,7 +50,7 @@ Dans la configuration par défaut de |Fess|, OpenSearch démarre sur le port 920
    Si le numéro de port d'OpenSearch est différent, modifiez-le avec le numéro de port approprié.
 
 Démarrage d'OpenSearch Dashboards
------------------------------
+-----------------------------------
 
 Après avoir modifié le fichier de configuration, démarrez OpenSearch Dashboards.
 
@@ -60,9 +62,11 @@ Après avoir modifié le fichier de configuration, démarrez OpenSearch Dashboar
 Après le démarrage, accédez à ``http://localhost:5601`` dans votre navigateur.
 
 Configuration du modèle d'index
---------------------------
+---------------------------------
 
-1. Sélectionnez le menu « Management » depuis l'écran d'accueil d'OpenSearch Dashboards.
+Créez un modèle d'index pour visualiser les journaux de recherche.
+
+1. Sélectionnez « Management » (ou « Dashboards Management » selon la version d'OpenSearch Dashboards) dans le menu de gauche.
 2. Sélectionnez « Index Patterns ».
 3. Cliquez sur le bouton « Create index pattern ».
 4. Entrez ``fess_log*`` dans Index pattern name.
@@ -70,13 +74,38 @@ Configuration du modèle d'index
 6. Sélectionnez ``requestedAt`` dans Time field.
 7. Cliquez sur le bouton « Create index pattern ».
 
-Vous êtes maintenant prêt à visualiser les journaux de recherche de |Fess|.
+.. note::
+   Les journaux de recherche de |Fess| sont enregistrés dans plusieurs index commençant par ``fess_log``, tels que ``fess_log.search_log`` pour les journaux de recherche et ``fess_log.click_log`` pour les journaux de clics.
+   En spécifiant le modèle d'index ``fess_log*``, vous pouvez cibler tous ces index en même temps.
 
-Création de visualisations et de tableaux de bord
-----------------------------
+Import de la définition de tableau de bord
+-------------------------------------------
 
-Création de visualisations de base
-~~~~~~~~~~~~~~~~~~~~
+En important la définition de tableau de bord incluse avec |Fess|, vous pouvez utiliser les visualisations et tableaux de bord prédéfinis.
+
+1. Sélectionnez « Management » (ou « Dashboards Management » selon la version d'OpenSearch Dashboards) dans le menu de gauche.
+2. Sélectionnez « Saved Objects ».
+3. Cliquez sur « Import ».
+4. Sélectionnez ``extension/kibana/fess_log.ndjson`` dans le répertoire d'installation de |Fess|.
+5. Cliquez sur « Import » pour exécuter l'importation.
+
+Une fois l'importation terminée, 6 visualisations et le tableau de bord ``fess_log`` sont enregistrés.
+
+Affichage du tableau de bord
+------------------------------
+
+1. Sélectionnez « Dashboard » dans le menu de gauche.
+2. Sélectionnez le tableau de bord ``fess_log``.
+3. Les résultats de visualisation des journaux de recherche s'affichent.
+4. Vous pouvez spécifier la période à afficher avec la sélection de plage de temps en haut à droite.
+
+Création de visualisations personnalisées
+------------------------------------------
+
+En plus des tableaux de bord inclus, vous pouvez également créer vos propres visualisations et tableaux de bord.
+
+Création de visualisations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Sélectionnez « Visualize » dans le menu de gauche.
 2. Cliquez sur le bouton « Create visualization ».
@@ -86,7 +115,7 @@ Création de visualisations de base
 6. Cliquez sur le bouton « Save » pour enregistrer la visualisation.
 
 Création de tableaux de bord
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Sélectionnez « Dashboard » dans le menu de gauche.
 2. Cliquez sur le bouton « Create dashboard ».
@@ -94,18 +123,18 @@ Création de tableaux de bord
 4. Ajustez la mise en page et cliquez sur le bouton « Save » pour enregistrer.
 
 Configuration du fuseau horaire
-------------------
+---------------------------------
 
 Si l'affichage de l'heure n'est pas correct, configurez le fuseau horaire.
 
-1. Sélectionnez « Management » dans le menu de gauche.
+1. Sélectionnez « Management » (ou « Dashboards Management » selon la version d'OpenSearch Dashboards) dans le menu de gauche.
 2. Sélectionnez « Advanced Settings ».
 3. Recherchez ``dateFormat:tz``.
 4. Définissez le fuseau horaire sur une valeur appropriée (par exemple : ``Asia/Tokyo`` ou ``UTC``).
 5. Cliquez sur le bouton « Save ».
 
 Vérification des données de journal
-----------------
+-------------------------------------
 
 1. Sélectionnez « Discover » dans le menu de gauche.
 2. Sélectionnez le modèle d'index ``fess_log*``.
@@ -113,9 +142,9 @@ Vérification des données de journal
 4. Vous pouvez spécifier la période à afficher avec la sélection de plage de temps en haut à droite.
 
 Principaux champs de journal de recherche
-----------------------
+------------------------------------------
 
-Les journaux de recherche de |Fess| contiennent les informations suivantes.
+Les journaux de recherche de |Fess| (``fess_log.search_log``) contiennent les informations suivantes.
 
 .. list-table::
    :header-rows: 1
@@ -130,37 +159,50 @@ Les journaux de recherche de |Fess| contiennent les informations suivantes.
    * - ``requestedAt``
      - Date et heure d'exécution de la recherche
    * - ``responseTime``
-     - Temps de réponse des résultats de recherche (millisecondes)
+     - Temps de réponse total du traitement de la recherche (millisecondes)
    * - ``queryTime``
-     - Temps d'exécution de la requête (millisecondes)
+     - Temps d'exécution de la requête vers le moteur de recherche (millisecondes)
    * - ``hitCount``
-     - Nombre de résultats trouvés
+     - Nombre de résultats de recherche trouvés
+   * - ``hitCountRelation``
+     - Relation indiquant si le nombre de résultats est une valeur exacte ou une valeur minimale (``eq`` : nombre exact, ``gte`` : valeur spécifiée ou plus)
+   * - ``queryOffset``
+     - Position de départ pour la récupération des résultats de recherche
+   * - ``queryPageSize``
+     - Nombre de résultats affichés par page
    * - ``userAgent``
      - Informations du navigateur de l'utilisateur
+   * - ``referer``
+     - URL de la page référente depuis laquelle la recherche a été effectuée
    * - ``clientIp``
      - Adresse IP du client
    * - ``languages``
-     - Langue utilisée
+     - Langue utilisée dans la requête
+   * - ``accessType``
+     - Type d'accès (``web``, ``json``, ``gsa``, ``admin``, ``other``)
    * - ``roles``
      - Informations de rôle de l'utilisateur
    * - ``user``
      - Nom d'utilisateur (lors de la connexion)
+   * - ``virtualHost``
+     - Nom d'hôte virtuel (si configuré)
 
 En utilisant ces champs, vous pouvez analyser les journaux de recherche sous différents angles.
 
 Dépannage
-----------------------
+----------
 
 Si les données ne s'affichent pas
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Vérifiez qu'OpenSearch fonctionne correctement.
 - Vérifiez que la configuration ``opensearch.hosts`` dans ``opensearch_dashboards.yml`` est correcte.
 - Vérifiez que des recherches ont été effectuées dans |Fess| et que les journaux sont enregistrés.
-- Vérifiez que la plage de temps du modèle d'index est configurée de manière appropriée.
+- Vérifiez que la plage de temps en haut à droite est configurée pour inclure la période pendant laquelle les journaux ont été enregistrés.
+- Si l'affichage de l'heure est décalé, vérifiez la configuration de ``dateFormat:tz``.
 
 En cas d'erreur de connexion
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Vérifiez que le numéro de port d'OpenSearch est correct.
 - Vérifiez la configuration du pare-feu ou des groupes de sécurité.
