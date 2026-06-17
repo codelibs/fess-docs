@@ -112,6 +112,12 @@ Scripts de Data Store
 
 Ejemplos de scripts en configuracion de data store.
 
+.. note::
+   En los scripts de data store, cada linea ``campo=expresion`` se evalua de forma independiente como una unica expresion.
+   Por lo tanto, no se pueden usar sentencias ``import``, declaraciones ``def`` multilinea ni estructuras de control multilinea que establezcan varios campos a la vez (como bloques ``if``).
+   Al usar clases Java, escribalas como una unica expresion con el nombre de clase completamente calificado (FQCN), y use el operador ternario por campo para los valores condicionales (por ejemplo, ``url=data.published ? data.url : null`` ).
+   Ademas, el nombre de variable ``data`` usado aqui es solo un ejemplo; el nombre de variable real depende del conector de data store utilizado. Consulte :doc:`../admin/dataconfig-guide` para mas detalles.
+
 Mapeo basico
 ------------
 
@@ -175,13 +181,19 @@ Los objetos disponibles en los scripts varian segun el contexto de ejecucion.
      - Descripcion
    * - Todos los contextos
      - ``container``
-     - Contenedor DI. Se usa para acceder a los componentes
+     - Contenedor DI. Se usa para acceder a los componentes mediante ``container.getComponent("...")``
    * - Trabajos programados
      - ``executor``
      - Control de ejecucion de trabajos ( ``JobExecutor`` ). Necesario para el soporte de detencion de trabajos
    * - Data Store
      - (especifico del conector)
-     - Variables de registro de datos proporcionadas por cada data store
+     - Variables de registro de datos proporcionadas por cada data store. El nombre de la variable depende del conector
+   * - Mapeo de rutas
+     - ``url`` , ``matcher``
+     - La cadena de URL a convertir y el resultado de coincidencia de expresion regular ( ``Matcher`` ). Disponible en configuraciones de reemplazo con el prefijo ``groovy:``
+   * - Boost de documento
+     - (campos del documento)
+     - Cada campo del documento objetivo esta disponible como variable (se usa en expresiones de condicion y de valor de boost)
 
 Scripts de trabajos programados
 ===============================
@@ -189,6 +201,11 @@ Scripts de trabajos programados
 Ejemplos de scripts Groovy para trabajos programados.
 En los trabajos programados, ``container`` y ``executor`` estan disponibles.
 Pasar ``executor`` al metodo ``execute()`` del trabajo habilita el control de detencion del trabajo.
+
+.. note::
+   Un script de trabajo programado se evalua como un unico script Groovy completo.
+   Por lo tanto, a diferencia de los scripts de data store, puede usar sentencias ``import``, declaraciones ``def`` multilinea y estructuras de control multilinea.
+   Los ejemplos de "Uso de clases Java", "Acceso a componentes de Fess", "Manejo de errores" y "Depuracion y salida de logs" que aparecen a continuacion tambien asumen este contexto de script completo.
 
 Ejecucion de trabajo de crawl
 -----------------------------
@@ -220,7 +237,7 @@ Ejecucion secuencial de multiples trabajos
 
     def results = []
 
-    // Optimizacion de indice
+    // Actualizacion de suggest
     results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Ejecucion de crawl
@@ -300,15 +317,19 @@ Ejecucion de busqueda
 Manejo de errores
 =================
 
+Las sentencias ``import`` deben colocarse al principio del script (no pueden colocarse dentro de bloques como ``try-catch`` ).
+Puede capturar excepciones con ``try-catch`` para controlar los errores del trabajo.
+
 ::
 
+    import org.apache.logging.log4j.LogManager
+
+    def logger = LogManager.getLogger("script")
+
     try {
-        def result = processData(data)
-        return result
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     } catch (Exception e) {
-        import org.apache.logging.log4j.LogManager
-        def logger = LogManager.getLogger("script")
-        logger.error("Error processing data: {}", e.message, e)
+        logger.error("Failed to execute crawl job: {}", e.message, e)
         return "Error: " + e.message
     }
 
@@ -321,12 +342,13 @@ Salida de logs
 ::
 
     import org.apache.logging.log4j.LogManager
+
     def logger = LogManager.getLogger("script")
 
-    logger.debug("Debug message: {}", data.id)
-    logger.info("Processing document: {}", data.title)
+    logger.debug("Debug message: {}", value)
+    logger.info("Processing: {}", title)
     logger.warn("Warning: {}", message)
-    logger.error("Error: {}", e.message)
+    logger.error("Error: {}", e.message, e)
 
 Salida de depuracion
 --------------------

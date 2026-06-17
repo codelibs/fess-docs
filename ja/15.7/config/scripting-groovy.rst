@@ -112,6 +112,12 @@ Java仮想マシン（JVM）上で動作し、Javaとの高い互換性を持ち
 
 データストア設定でのスクリプト例です。
 
+.. note::
+   データストアスクリプトでは、 ``フィールド名=式`` の各行がそれぞれ独立した1つの式として評価されます。
+   そのため、 ``import`` 文・複数行にわたる ``def`` 変数宣言・複数フィールドをまとめて設定する複数行の制御構文（ ``if`` ブロックなど）は使用できません。
+   Javaクラスを利用する場合は完全修飾クラス名（FQCN）を用いて1つの式で記述し、条件分岐はフィールドごとに三項演算子で記述します（例: ``url=data.published ? data.url : null`` ）。
+   また、ここで使用している変数名 ``data`` は説明用の例であり、実際の変数名は利用するデータストアコネクタによって異なります。詳細は :doc:`../admin/dataconfig-guide` を参照してください。
+
 基本的なマッピング
 ------------------
 
@@ -175,13 +181,19 @@ URLの生成
      - 説明
    * - 全コンテキスト
      - ``container``
-     - DIコンテナ。コンポーネントへのアクセスに使用
+     - DIコンテナ。 ``container.getComponent("...")`` でコンポーネントにアクセスする際に使用
    * - スケジュールジョブ
      - ``executor``
      - ジョブ実行制御（ ``JobExecutor`` ）。ジョブの停止サポートに必要
    * - データストア
      - （コネクタ固有）
-     - 各データストアが提供するデータレコード変数
+     - 各データストアが提供するデータレコード変数。変数名はコネクタによって異なる
+   * - パスマッピング
+     - ``url`` , ``matcher``
+     - 変換対象のURL文字列と正規表現のマッチ結果（ ``Matcher`` ）。 ``groovy:`` 接頭辞付きの置換設定で利用可能
+   * - ドキュメントブースト
+     - （ドキュメントフィールド）
+     - 対象ドキュメントの各フィールドが変数として利用可能（条件式・ブースト値式で使用）
 
 スケジュールジョブスクリプト
 ============================
@@ -189,6 +201,11 @@ URLの生成
 スケジュールジョブで使用するGroovyスクリプトの例です。
 スケジュールジョブでは ``container`` と ``executor`` が利用可能です。
 ``executor`` をジョブの ``execute()`` メソッドに渡すことで、ジョブの停止制御が有効になります。
+
+.. note::
+   スケジュールジョブスクリプトは、スクリプト全体が1つのGroovyスクリプトとして評価されます。
+   このため、データストアスクリプトとは異なり、 ``import`` 文・複数行の ``def`` 宣言・複数行の制御構文を使用できます。
+   以降の「Javaクラスの使用」「Fessコンポーネントへのアクセス」「エラーハンドリング」「デバッグとログ出力」の例も、この完全なスクリプトのコンテキストを前提としています。
 
 クロールジョブの実行
 --------------------
@@ -300,15 +317,19 @@ Fessコンポーネントへのアクセス
 エラーハンドリング
 ==================
 
+``import`` 文はスクリプトの先頭に記述する必要があります（ ``try-catch`` などのブロック内には記述できません）。
+``try-catch`` で例外を捕捉し、ジョブのエラーを制御できます。
+
 ::
 
+    import org.apache.logging.log4j.LogManager
+
+    def logger = LogManager.getLogger("script")
+
     try {
-        def result = processData(data)
-        return result
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     } catch (Exception e) {
-        import org.apache.logging.log4j.LogManager
-        def logger = LogManager.getLogger("script")
-        logger.error("Error processing data: {}", e.message, e)
+        logger.error("Failed to execute crawl job: {}", e.message, e)
         return "Error: " + e.message
     }
 
@@ -321,12 +342,13 @@ Fessコンポーネントへのアクセス
 ::
 
     import org.apache.logging.log4j.LogManager
+
     def logger = LogManager.getLogger("script")
 
-    logger.debug("Debug message: {}", data.id)
-    logger.info("Processing document: {}", data.title)
+    logger.debug("Debug message: {}", value)
+    logger.info("Processing: {}", title)
     logger.warn("Warning: {}", message)
-    logger.error("Error: {}", e.message)
+    logger.error("Error: {}", e.message, e)
 
 デバッグ用の出力
 ----------------

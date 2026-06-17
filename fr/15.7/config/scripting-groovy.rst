@@ -112,6 +112,12 @@ Scripts de Data Store
 
 Exemples de scripts pour la configuration Data Store.
 
+.. note::
+   Dans les scripts de data store, chaque ligne ``champ=expression`` est evaluee independamment en tant qu'expression unique.
+   Par consequent, les instructions ``import``, les declarations ``def`` multi-lignes et les structures de controle multi-lignes qui definissent plusieurs champs a la fois (comme les blocs ``if``) ne peuvent pas etre utilisees.
+   Lorsque vous utilisez des classes Java, ecrivez-les en tant qu'expression unique avec le nom de classe complet (FQCN), et utilisez un operateur ternaire par champ pour les valeurs conditionnelles (par exemple, ``url=data.published ? data.url : null`` ).
+   Par ailleurs, le nom de variable ``data`` utilise ici n'est qu'un exemple ; le nom de variable reel depend du connecteur de data store utilise. Consultez :doc:`../admin/dataconfig-guide` pour plus de details.
+
 Mapping de base
 ------------------
 
@@ -175,13 +181,19 @@ Les objets disponibles dans les scripts varient en fonction du contexte d'execut
      - Description
    * - Tous les contextes
      - ``container``
-     - Conteneur DI. Utilise pour acceder aux composants
+     - Conteneur DI. Utilise pour acceder aux composants via ``container.getComponent("...")``
    * - Taches planifiees
      - ``executor``
      - Controle d'execution des jobs ( ``JobExecutor`` ). Necessaire pour le support de l'arret des jobs
    * - Data Store
      - (specifique au connecteur)
-     - Variables d'enregistrement de donnees fournies par chaque data store
+     - Variables d'enregistrement de donnees fournies par chaque data store. Le nom de la variable depend du connecteur
+   * - Mappage de chemins
+     - ``url`` , ``matcher``
+     - La chaine URL a convertir et le resultat de la correspondance par expression reguliere ( ``Matcher`` ). Disponible dans les parametres de remplacement avec le prefixe ``groovy:``
+   * - Boost de document
+     - (champs du document)
+     - Chaque champ du document cible est disponible en tant que variable (utilise dans les expressions de condition et de valeur de boost)
 
 Scripts de taches planifiees
 ============================
@@ -189,6 +201,11 @@ Scripts de taches planifiees
 Exemples de scripts Groovy pour les taches planifiees.
 Dans les taches planifiees, ``container`` et ``executor`` sont disponibles.
 Passer ``executor`` a la methode ``execute()`` du job active le controle d'arret du job.
+
+.. note::
+   Un script de tache planifiee est evalue en tant que script Groovy unique et complet.
+   Par consequent, contrairement aux scripts de data store, vous pouvez utiliser des instructions ``import``, des declarations ``def`` multi-lignes et des structures de controle multi-lignes.
+   Les exemples ci-dessous « Utilisation des classes Java », « Acces aux composants Fess », « Gestion des erreurs » et « Debogage et journalisation » supposent egalement ce contexte de script complet.
 
 Execution d'un job de crawl
 --------------------
@@ -220,7 +237,7 @@ Execution sequentielle de plusieurs jobs
 
     def results = []
 
-    // Optimisation de l'index
+    // Mise a jour des suggestions
     results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Execution du crawl
@@ -300,15 +317,19 @@ Execution de recherche
 Gestion des erreurs
 ==================
 
+Les instructions ``import`` doivent etre placees en haut du script (elles ne peuvent pas etre placees dans des blocs tels que ``try-catch`` ).
+Vous pouvez intercepter les exceptions avec ``try-catch`` pour controler les erreurs de job.
+
 ::
 
+    import org.apache.logging.log4j.LogManager
+
+    def logger = LogManager.getLogger("script")
+
     try {
-        def result = processData(data)
-        return result
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     } catch (Exception e) {
-        import org.apache.logging.log4j.LogManager
-        def logger = LogManager.getLogger("script")
-        logger.error("Error processing data: {}", e.message, e)
+        logger.error("Failed to execute crawl job: {}", e.message, e)
         return "Error: " + e.message
     }
 
@@ -321,12 +342,13 @@ Sortie de logs
 ::
 
     import org.apache.logging.log4j.LogManager
+
     def logger = LogManager.getLogger("script")
 
-    logger.debug("Debug message: {}", data.id)
-    logger.info("Processing document: {}", data.title)
+    logger.debug("Debug message: {}", value)
+    logger.info("Processing: {}", title)
     logger.warn("Warning: {}", message)
-    logger.error("Error: {}", e.message)
+    logger.error("Error: {}", e.message, e)
 
 Sortie de debogage
 ----------------

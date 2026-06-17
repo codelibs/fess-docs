@@ -112,6 +112,12 @@ Datenspeicher-Skripte
 
 Beispiele fuer Skripte zur Datenspeicher-Konfiguration.
 
+.. note::
+   In Datenspeicher-Skripten wird jede ``Feldname=Ausdruck``-Zeile unabhaengig als einzelner Ausdruck ausgewertet.
+   Daher koennen ``import``-Anweisungen, mehrzeilige ``def``-Deklarationen und mehrzeilige Kontrollstrukturen, die mehrere Felder gleichzeitig setzen (z. B. ``if``-Bloecke), nicht verwendet werden.
+   Wenn Sie Java-Klassen verwenden, schreiben Sie diese als einzelnen Ausdruck mit vollstaendig qualifiziertem Klassennamen (FQCN), und verwenden Sie fuer bedingte Werte den Ternaeroperator pro Feld (zum Beispiel ``url=data.published ? data.url : null`` ).
+   Der hier verwendete Variablenname ``data`` ist nur ein Beispiel; der tatsaechliche Variablenname haengt vom verwendeten Datenspeicher-Konnektor ab. Details finden Sie unter :doc:`../admin/dataconfig-guide`.
+
 Grundlegendes Mapping
 ---------------------
 
@@ -175,13 +181,19 @@ Die in Skripten verfuegbaren Objekte variieren je nach Ausfuehrungskontext.
      - Beschreibung
    * - Alle Kontexte
      - ``container``
-     - DI-Container. Wird fuer den Zugriff auf Komponenten verwendet
+     - DI-Container. Wird fuer den Zugriff auf Komponenten ueber ``container.getComponent("...")`` verwendet
    * - Geplante Aufgaben
      - ``executor``
      - Job-Ausfuehrungssteuerung ( ``JobExecutor`` ). Erforderlich fuer die Unterstuetzung des Jobstopps
    * - Datenspeicher
      - (Connector-spezifisch)
-     - Von jedem Datenspeicher bereitgestellte Datensatzvariablen
+     - Von jedem Datenspeicher bereitgestellte Datensatzvariablen. Der Variablenname haengt vom Konnektor ab
+   * - Pfad-Mapping
+     - ``url`` , ``matcher``
+     - Die zu konvertierende URL-Zeichenkette und das Ergebnis des Regulaerausdruck-Abgleichs ( ``Matcher`` ). Verfuegbar in Ersetzungseinstellungen mit dem Praefix ``groovy:``
+   * - Dokument-Boost
+     - (Dokumentfelder)
+     - Jedes Feld des Zieldokuments ist als Variable verfuegbar (wird in Bedingungs- und Boost-Wert-Ausdruecken verwendet)
 
 Geplante Aufgaben-Skripte
 =========================
@@ -189,6 +201,11 @@ Geplante Aufgaben-Skripte
 Beispiele fuer Groovy-Skripte in geplanten Aufgaben.
 In geplanten Aufgaben sind ``container`` und ``executor`` verfuegbar.
 Durch Uebergabe von ``executor`` an die ``execute()``-Methode des Jobs wird die Jobstoppsteuerung aktiviert.
+
+.. note::
+   Ein geplantes Aufgaben-Skript wird als vollstaendiges Groovy-Skript in einem einzigen Durchlauf ausgewertet.
+   Daher koennen Sie im Gegensatz zu Datenspeicher-Skripten ``import``-Anweisungen, mehrzeilige ``def``-Deklarationen und mehrzeilige Kontrollstrukturen verwenden.
+   Die nachfolgenden Beispiele unter „Java-Klassen verwenden", „Zugriff auf Fess-Komponenten", „Fehlerbehandlung" und „Debugging und Protokollausgabe" setzen ebenfalls diesen vollstaendigen Skript-Kontext voraus.
 
 Crawl-Aufgabe ausfuehren
 ------------------------
@@ -220,7 +237,7 @@ Mehrere Aufgaben nacheinander ausfuehren
 
     def results = []
 
-    // Indexoptimierung
+    // Suggest aktualisieren
     results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // Crawl ausfuehren
@@ -300,16 +317,20 @@ Suchen ausfuehren
 Fehlerbehandlung
 ================
 
+``import``-Anweisungen muessen am Anfang des Skripts stehen (sie koennen nicht innerhalb von Bloecken wie ``try-catch`` platziert werden).
+Mit ``try-catch`` koennen Ausnahmen abgefangen und Job-Fehler gesteuert werden.
+
 ::
 
+    import org.apache.logging.log4j.LogManager
+
+    def logger = LogManager.getLogger("script")
+
     try {
-        def result = processData(data)
-        return result
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     } catch (Exception e) {
-        import org.apache.logging.log4j.LogManager
-        def logger = LogManager.getLogger("script")
-        logger.error("Fehler bei der Datenverarbeitung: {}", e.message, e)
-        return "Fehler: " + e.message
+        logger.error("Failed to execute crawl job: {}", e.message, e)
+        return "Error: " + e.message
     }
 
 Debugging und Protokollausgabe
@@ -321,12 +342,13 @@ Protokollausgabe
 ::
 
     import org.apache.logging.log4j.LogManager
+
     def logger = LogManager.getLogger("script")
 
-    logger.debug("Debug-Nachricht: {}", data.id)
-    logger.info("Dokument verarbeiten: {}", data.title)
-    logger.warn("Warnung: {}", message)
-    logger.error("Fehler: {}", e.message)
+    logger.debug("Debug message: {}", value)
+    logger.info("Processing: {}", title)
+    logger.warn("Warning: {}", message)
+    logger.error("Error: {}", e.message, e)
 
 Debug-Ausgabe
 -------------

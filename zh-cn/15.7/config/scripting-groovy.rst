@@ -112,6 +112,12 @@ Groovy是 |Fess| 的默认脚本语言。
 
 数据存储设置中的脚本示例。
 
+.. note::
+   在数据存储脚本中，每行 ``字段名=表达式`` 均作为独立的单一表达式求值。
+   因此，不能使用 ``import`` 语句、跨多行的 ``def`` 变量声明，以及一次性设置多个字段的多行控制结构（如 ``if`` 块）。
+   使用Java类时，请以完全限定类名（FQCN）写成单一表达式，条件分支则在各字段中使用三元运算符（例如： ``url=data.published ? data.url : null`` ）。
+   此外，这里使用的变量名 ``data`` 仅为示例，实际变量名取决于所使用的数据存储连接器。详情请参阅 :doc:`../admin/dataconfig-guide` 。
+
 基本映射
 ------------------
 
@@ -175,13 +181,19 @@ URL生成
      - 说明
    * - 所有上下文
      - ``container``
-     - DI容器。用于访问组件
+     - DI容器。通过 ``container.getComponent("...")`` 访问组件
    * - 计划任务
      - ``executor``
      - 任务执行控制（ ``JobExecutor`` ）。任务停止支持所必需
    * - 数据存储
      - （连接器特定）
-     - 各数据存储提供的数据记录变量
+     - 各数据存储提供的数据记录变量。变量名取决于连接器
+   * - 路径映射
+     - ``url`` , ``matcher``
+     - 待转换的URL字符串及正则表达式匹配结果（ ``Matcher`` ）。可在带 ``groovy:`` 前缀的替换设置中使用
+   * - 文档权重
+     - （文档字段）
+     - 目标文档的各字段均可作为变量使用（用于条件表达式和权重值表达式）
 
 计划任务脚本
 ============================
@@ -189,6 +201,11 @@ URL生成
 计划任务中使用的Groovy脚本示例。
 在计划任务中，``container`` 和 ``executor`` 可用。
 将 ``executor`` 传递给任务的 ``execute()`` 方法可启用任务停止控制。
+
+.. note::
+   计划任务脚本作为一个完整的Groovy脚本整体求值。
+   因此，与数据存储脚本不同，可以使用 ``import`` 语句、多行的 ``def`` 声明及多行控制结构。
+   以下「使用Java类」「访问Fess组件」「错误处理」「调试与日志输出」的示例均基于此完整脚本的上下文。
 
 执行爬取任务
 --------------------
@@ -220,7 +237,7 @@ URL生成
 
     def results = []
 
-    // 索引优化
+    // 更新建议词
     results << container.getComponent("suggestJob").logLevel("info").sessionId("SUGGEST").execute(executor)
 
     // 执行爬取
@@ -300,15 +317,19 @@ HTTP通信
 错误处理
 ==================
 
+``import`` 语句必须放在脚本顶部（不能放在 ``try-catch`` 等块内部）。
+可以使用 ``try-catch`` 捕获异常，控制任务的错误行为。
+
 ::
 
+    import org.apache.logging.log4j.LogManager
+
+    def logger = LogManager.getLogger("script")
+
     try {
-        def result = processData(data)
-        return result
+        return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor)
     } catch (Exception e) {
-        import org.apache.logging.log4j.LogManager
-        def logger = LogManager.getLogger("script")
-        logger.error("Error processing data: {}", e.message, e)
+        logger.error("Failed to execute crawl job: {}", e.message, e)
         return "Error: " + e.message
     }
 
@@ -321,12 +342,13 @@ HTTP通信
 ::
 
     import org.apache.logging.log4j.LogManager
+
     def logger = LogManager.getLogger("script")
 
-    logger.debug("Debug message: {}", data.id)
-    logger.info("Processing document: {}", data.title)
+    logger.debug("Debug message: {}", value)
+    logger.info("Processing: {}", title)
     logger.warn("Warning: {}", message)
-    logger.error("Error: {}", e.message)
+    logger.error("Error: {}", e.message, e)
 
 调试输出
 ----------------
