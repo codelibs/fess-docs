@@ -438,14 +438,14 @@ OpenAI官方端点（ ``https://api.openai.com`` ）通过 ``Authorization: Bear
 
 ::
 
-    # 对o3-mini将推理effort设置为high
+    # 对o3-mini在生成回答时将推理effort设置为high
     rag.llm.openai.model=o3-mini
-    rag.llm.openai.reasoning.effort=high
+    rag.llm.openai.answer.reasoning.effort=high
 
-    # 对gpt-5设置top_p和惩罚
+    # 对gpt-5在生成回答时设置top_p和惩罚
     rag.llm.openai.model=gpt-5
-    rag.llm.openai.top.p=0.9
-    rag.llm.openai.frequency.penalty=0.5
+    rag.llm.openai.answer.top.p=0.9
+    rag.llm.openai.answer.frequency.penalty=0.5
 
 通过 JVM 选项配置
 =================

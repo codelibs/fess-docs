@@ -438,14 +438,14 @@ Konfigurationsbeispiel
 
 ::
 
-    # Reasoning-Effort für o3-mini auf high setzen
+    # Reasoning-Effort für die Antwortgenerierung mit o3-mini auf high setzen
     rag.llm.openai.model=o3-mini
-    rag.llm.openai.reasoning.effort=high
+    rag.llm.openai.answer.reasoning.effort=high
 
-    # top_p und Strafen für gpt-5 konfigurieren
+    # top_p und Strafen für die Antwortgenerierung mit gpt-5 konfigurieren
     rag.llm.openai.model=gpt-5
-    rag.llm.openai.top.p=0.9
-    rag.llm.openai.frequency.penalty=0.5
+    rag.llm.openai.answer.top.p=0.9
+    rag.llm.openai.answer.frequency.penalty=0.5
 
 Konfiguration über JVM-Optionen
 ===============================

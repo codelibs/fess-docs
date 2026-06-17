@@ -438,14 +438,14 @@ Ejemplo de configuracion
 
 ::
 
-    # Configurar reasoning effort en high para o3-mini
+    # Configurar reasoning effort en high para la generación de respuestas con o3-mini
     rag.llm.openai.model=o3-mini
-    rag.llm.openai.reasoning.effort=high
+    rag.llm.openai.answer.reasoning.effort=high
 
-    # Configurar top_p y penalizaciones para gpt-5
+    # Configurar top_p y penalizaciones para la generación de respuestas con gpt-5
     rag.llm.openai.model=gpt-5
-    rag.llm.openai.top.p=0.9
-    rag.llm.openai.frequency.penalty=0.5
+    rag.llm.openai.answer.top.p=0.9
+    rag.llm.openai.answer.frequency.penalty=0.5
 
 Configuracion via opciones JVM
 ==============================
