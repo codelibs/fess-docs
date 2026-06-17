@@ -13,7 +13,7 @@ Unterstützte Objekte
 ====================
 
 - **Standardobjekte**: Vordefinierte Standardobjekte (Account, Contact, Lead, Opportunity, Case, Solution usw.). Die Menge der Standardobjekte ist fest vorgegeben; bei jedem Crawl werden alle davon abgerufen.
-- **Benutzerdefinierte Objekte**: Selbst definierte Objekte, die über den Parameter ``custom`` angegeben werden.
+- **Benutzerdefinierte Objekte**: Selbst definierte Objekte, die über den Parameter ``custom`` angegeben werden (Objekte, deren API-Namen auf ``__c`` enden).
 
 .. note::
 

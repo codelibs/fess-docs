@@ -14,7 +14,7 @@ Supported Objects
 =================
 
 - **Standard Objects**: Predefined standard objects (Account, Contact, Lead, Opportunity, Case, Solution, etc.). The set of standard objects is fixed and ALL of them are retrieved on every crawl.
-- **Custom Objects**: User-defined objects specified via the ``custom`` parameter.
+- **Custom Objects**: User-defined objects specified via the ``custom`` parameter (objects whose API names end with ``__c``).
 
 .. note::
 
