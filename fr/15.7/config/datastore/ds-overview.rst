@@ -39,7 +39,7 @@ Stockage cloud
      - Exploration des fichiers et dossiers Dropbox
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - Exploration de Google Drive, Gmail, etc.
+     - Exploration de Google Drive
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - Exploration de OneDrive, SharePoint, etc.
@@ -113,10 +113,11 @@ Depuis l'interface d'administration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Connectez-vous a l'interface d'administration
-2. Naviguez vers "Systeme" -> "Plugins"
-3. Dans l'onglet "Disponibles", recherchez le plugin souhaite
-4. Cliquez sur "Installer"
-5. Redemarrez |Fess|
+2. Naviguez vers "Systeme" -> "Plugin"
+3. Cliquez sur le bouton "Installer"
+4. Selectionnez le plugin dans l'onglet "Distant" (ou telechargez un fichier JAR depuis l'onglet "Local")
+5. Cliquez sur "Installer"
+6. Redemarrez |Fess|
 
 Configuration de base des DataStores
 ====================================
@@ -139,7 +140,7 @@ Elements de configuration communs a tous les connecteurs DataStore :
    * - Description
      - Description de la configuration
    * - Nom du handler
-     - Nom du handler du connecteur a utiliser (ex: ``BoxDataStore``)
+     - Nom du handler du connecteur a utiliser (ex: ``CsvDataStore``)
    * - Parametres
      - Parametres de configuration specifiques au connecteur (format key=value)
    * - Script
@@ -170,27 +171,27 @@ Configuration du script
 -----------------------
 
 Le script permet de mapper les donnees recuperees vers les champs d'index de |Fess|.
+Chaque ligne du script associe un champ d'index |Fess| (membre gauche) au champ fourni par le connecteur (membre droit).
 
-Voici un exemple utilisant le prefixe ``data.*`` pour les connecteurs CSV/JSON :
+Voici un exemple pour le connecteur CSV avec les colonnes d'en-tete ``link``, ``subject`` et ``body`` :
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
 
 .. note::
 
-   Le prefixe des champs dans le script varie selon le connecteur.
-   Par exemple, Box/Dropbox/Google Drive/OneDrive utilisent ``file.*``, Slack utilise ``message.*``,
-   Jira utilise ``issue.*``.
-   Consultez la documentation de chaque connecteur pour plus de details.
+   Les noms de champs utilisables dans le script varient selon le connecteur.
+   Box/Dropbox/Google Drive/OneDrive referencent l'objet recupere avec le prefixe ``file.*`` ; Slack utilise ``message.*`` ; Jira utilise ``issue.*``.
+   En revanche, les connecteurs CSV, JSON et Base de donnees n'utilisent aucun prefixe ; les champs sont references directement :
+
+   - CSV : noms des colonnes d'en-tete (si ``has_header_line=true``), ou ``cell1``, ``cell2``, ... (index base 1) ; ainsi que ``csvfile`` et ``csvfilename``.
+   - JSON : noms des champs de l'objet JSON.
+   - Base de donnees : noms des colonnes (alias) du resultat SELECT.
+
+   Consultez la documentation individuelle de chaque connecteur pour plus de details.
 
 Configuration de l'authentification
 ===================================
@@ -207,7 +208,7 @@ Parametres communs a tous les connecteurs DataStore :
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Parametre
      - Defaut
@@ -215,6 +216,9 @@ Parametres communs a tous les connecteurs DataStore :
    * - ``readInterval``
      - ``0``
      - Delai d'attente entre le traitement de chaque enregistrement (en millisecondes). Utilisez ce parametre pour reduire la charge du serveur lors du traitement de grandes quantites de donnees.
+   * - ``script_type``
+     - ``groovy``
+     - Type de moteur de script utilise pour le mappage des champs d'index. Par defaut, seul ``groovy`` est disponible.
 
 Depannage
 =========
@@ -245,9 +249,9 @@ Impossible de recuperer les donnees
 Configuration de debogage
 -------------------------
 
-Pour investiguer les problemes, ajustez le niveau de log :
+Pour investiguer les problemes, ajustez le niveau de log. Le crawling des datastores s'execute dans le processus crawler ; c'est donc le fichier de configuration des logs du crawler qu'il faut modifier :
 
-``app/WEB-INF/classes/log4j2.xml`` :
+``app/WEB-INF/env/crawler/resources/log4j2.xml`` :
 
 ::
 

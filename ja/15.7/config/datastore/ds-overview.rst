@@ -39,7 +39,7 @@
      - Dropboxのファイルとフォルダをクロール
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - Google Drive、Gmailなどをクロール
+     - Google Driveをクロール
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - OneDrive、SharePointなどをクロール
@@ -133,9 +133,10 @@
 
 1. 管理画面にログイン
 2. 「システム」→「プラグイン」に移動
-3. 「Available」タブで対象のプラグインを検索
-4. 「インストール」をクリック
-5. |Fess| を再起動
+3. 「インストール」ボタンをクリック
+4. 「リモート」タブからインストールするプラグインを選択（または「ローカル」タブでJARファイルをアップロード）
+5. 「インストール」をクリック
+6. |Fess| を再起動
 
 
 データストア設定の基本
@@ -159,7 +160,7 @@
    * - 説明
      - 設定の説明文
    * - ハンドラ名
-     - 使用するコネクタのハンドラ名（例: ``BoxDataStore``）
+     - 使用するコネクタのハンドラ名（例: ``CsvDataStore``）
    * - パラメーター
      - コネクタ固有の設定パラメーター（key=value形式）
    * - スクリプト
@@ -190,26 +191,27 @@
 --------------
 
 スクリプトでは、取得したデータを |Fess| のインデックスフィールドにマッピングします。
+各行の左辺が |Fess| のインデックスフィールド、右辺がコネクタから取得したフィールドです。
 
-以下はCSV/JSONコネクタでの ``data.*`` プレフィックスを使用した例です:
+以下はCSVコネクタ（ヘッダー行に ``link`` 、 ``subject`` 、 ``body`` の列がある場合）の例です:
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
 
 .. note::
 
-   スクリプトで使用するフィールドのプレフィックスはコネクタごとに異なります。
-   例えば、Box/Dropbox/Google Drive/OneDriveでは ``file.*`` 、Slackでは ``message.*`` 、
-   Jiraでは ``issue.*`` を使用します。
+   スクリプトで参照できるフィールド名はコネクタごとに異なります。
+   Box/Dropbox/Google Drive/OneDriveでは ``file.*`` 、Slackでは ``message.*`` 、
+   Jiraでは ``issue.*`` のように、取得したオブジェクトをプレフィックス付きで参照します。
+   一方、CSV・JSON・データベースの各コネクタはプレフィックスを使用せず、フィールド名を直接参照します:
+
+   - CSV: ヘッダー行の列名（ ``has_header_line=true`` の場合）、または ``cell1`` 、 ``cell2`` ...（1始まりの列インデックス）。加えて ``csvfile`` 、 ``csvfilename`` が利用できます。
+   - JSON: JSONオブジェクトのフィールド名
+   - データベース: SELECT結果の列名（エイリアス）
+
    各コネクタの詳細は個別のドキュメントを参照してください。
 
 認証設定
@@ -227,7 +229,7 @@
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - パラメーター
      - デフォルト
@@ -235,6 +237,9 @@
    * - ``readInterval``
      - ``0``
      - 各レコードの処理間の待機時間（ミリ秒）。大量データ処理時にサーバー負荷を軽減するために使用します。
+   * - ``script_type``
+     - ``groovy``
+     - インデックスフィールドのマッピングに使用するスクリプトエンジンの種類。標準では ``groovy`` のみ利用可能です。
 
 トラブルシューティング
 ======================
@@ -265,9 +270,10 @@
 デバッグ設定
 ------------
 
-問題を調査する際は、ログレベルを調整します:
+問題を調査する際は、ログレベルを調整します。データストアのクロールはクローラープロセスで
+実行されるため、クローラー用のログ設定ファイルを編集します:
 
-``app/WEB-INF/classes/log4j2.xml``:
+``app/WEB-INF/env/crawler/resources/log4j2.xml``:
 
 ::
 

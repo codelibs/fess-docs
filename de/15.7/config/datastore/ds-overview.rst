@@ -38,7 +38,7 @@ Cloud-Speicher
      - Crawlt Dateien und Ordner von Dropbox
    * - :doc:`ds-gsuite`
      - fess-ds-gsuite
-     - Crawlt Google Drive, Gmail usw.
+     - Crawlt Google Drive
    * - :doc:`ds-microsoft365`
      - fess-ds-microsoft365
      - Crawlt OneDrive, SharePoint usw.
@@ -111,11 +111,12 @@ Datenspeicher-Konnektor-Plugins können über die Administrationsoberfläche ins
 Über die Administrationsoberfläche
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Melden Sie sich bei der Administrationsoberfläche an
-2. Navigieren Sie zu "System" -> "Plugins"
-3. Suchen Sie auf der Registerkarte "Available" nach dem gewünschten Plugin
-4. Klicken Sie auf "Installieren"
-5. Starten Sie |Fess| neu
+1. Bei der Administrationsoberfläche anmelden
+2. Zu "System" → "Plugin" navigieren
+3. Auf die Schaltfläche "Installieren" klicken
+4. Das Plugin im Tab "Remote" auswählen (oder im Tab "Lokal" eine JAR-Datei hochladen)
+5. Auf "Installieren" klicken
+6. |Fess| neu starten
 
 
 Grundlagen der Datenspeicher-Konfiguration
@@ -137,7 +138,7 @@ Einstellungen, die allen Datenspeicher-Konnektoren gemeinsam sind:
    * - Name
      - Identifikationsname der Konfiguration
    * - Handler-Name
-     - Name des zu verwendenden Konnektor-Handlers (z.B. ``BoxDataStore``)
+     - Name des zu verwendenden Konnektor-Handlers (z.B. ``CsvDataStore``)
    * - Parameter
      - Konnektor-spezifische Konfigurationsparameter (Schlüssel=Wert-Format)
    * - Skript
@@ -169,31 +170,29 @@ Parameter werden im Format ``Schlüssel=Wert`` mit Zeilenumbrüchen als Trennzei
 Skript-Einstellungen
 --------------------
 
-Im Skript werden die abgerufenen Daten auf die Index-Felder von |Fess| abgebildet:
+Im Skript werden die abgerufenen Daten auf die Index-Felder von |Fess| abgebildet.
+Die linke Seite jeder Zeile ist das |Fess|-Indexfeld, die rechte Seite das vom Konnektor gelieferte Feld.
+
+Das folgende Beispiel gilt für den CSV-Konnektor mit den Spaltenüberschriften ``link``, ``subject`` und ``body``:
 
 ::
 
-    url=data.url
-    title=data.name
-    content=data.content
-    mimetype=data.mimetype
-    filetype=data.filetype
-    filename=data.filename
-    created=data.created
-    lastModified=data.lastModified
-    contentLength=data.contentLength
+    url=link
+    title=subject
+    content=body
 
 .. note::
 
-   Das Präfix ``data.*`` wird hier als Beispiel gezeigt und gilt für CSV- und JSON-Konnektoren.
-   Jeder Konnektor verwendet sein eigenes Präfix für die abgerufenen Daten, z.B.:
+   Die im Skript referenzierbaren Feldnamen unterscheiden sich je nach Konnektor.
+   Box/Dropbox/Google Drive/OneDrive referenzieren das abgerufene Objekt über das Präfix ``file.*``;
+   Slack verwendet ``message.*``; Jira verwendet ``issue.*``.
+   CSV-, JSON- und Datenbank-Konnektoren verwenden kein Präfix — die Felder werden direkt referenziert:
 
-   - ``file.*`` -- Box, Dropbox, Google Drive, OneDrive
-   - ``message.*`` -- Slack
-   - ``issue.*`` -- Jira
-   - ``page.*`` -- Confluence
+   - CSV: Spaltenüberschriften (bei ``has_header_line=true``), oder ``cell1``, ``cell2``, ... (1-basierter Spaltenindex); zusätzlich stehen ``csvfile`` und ``csvfilename`` zur Verfügung.
+   - JSON: Feldnamen des JSON-Objekts.
+   - Datenbank: Spaltennamen (Aliasse) aus dem SELECT-Ergebnis.
 
-   Weitere Informationen finden Sie in der Dokumentation des jeweiligen Konnektors.
+   Weitere Details finden Sie in der Dokumentation des jeweiligen Konnektors.
 
 Authentifizierung
 =================
@@ -209,7 +208,7 @@ Der folgende Parameter wird von ``AbstractDataStore`` vererbt und steht in allen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Parameter
      - Standardwert
@@ -217,6 +216,9 @@ Der folgende Parameter wird von ``AbstractDataStore`` vererbt und steht in allen
    * - ``readInterval``
      - ``0``
      - Wartezeit in Millisekunden zwischen der Verarbeitung einzelner Datensätze. Kann verwendet werden, um die Last auf die Datenquelle zu begrenzen.
+   * - ``script_type``
+     - ``groovy``
+     - Typ der Skript-Engine für das Mapping der Indexfelder. Standardmäßig ist nur ``groovy`` verfügbar.
 
 Fehlerbehebung
 ==============
@@ -247,9 +249,10 @@ Keine Daten abrufbar
 Debug-Einstellungen
 -------------------
 
-Bei der Untersuchung von Problemen passen Sie das Log-Level an:
+Bei der Untersuchung von Problemen passen Sie das Log-Level an.
+Das Crawlen von Datenspeichern läuft im Crawler-Prozess, daher muss die Log-Konfigurationsdatei des Crawlers bearbeitet werden:
 
-``app/WEB-INF/classes/log4j2.xml``:
+``app/WEB-INF/env/crawler/resources/log4j2.xml``:
 
 ::
 
