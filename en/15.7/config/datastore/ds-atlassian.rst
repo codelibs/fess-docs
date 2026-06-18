@@ -95,7 +95,7 @@ Parameter List
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Required
@@ -104,8 +104,8 @@ Parameter List
      - Yes
      - Atlassian instance URL
    * - ``is_cloud``
-     - Yes
-     - ``true`` for Cloud version, ``false`` for Server version
+     - No
+     - ``true`` for Cloud, ``false`` for Server (default: ``true``). Used only for endpoint selection during OAuth 2.0 authentication; ignored for Basic and OAuth 1.0a authentication.
    * - ``auth_type``
      - Yes
      - Authentication type: ``oauth``, ``oauth2``, ``basic``
@@ -144,7 +144,7 @@ Parameter List
      - Password
    * - ``issue.jql``
      - No
-     - JQL (Jira only, advanced search conditions)
+     - JQL (Jira only, advanced search conditions). If not specified, all issues (``created is not empty``) are targeted.
    * - ``issue_max_results``
      - No
      - Maximum results per Jira API request (default: ``50``, Jira only)
@@ -175,6 +175,9 @@ Parameter List
    * - ``read_timeout``
      - No
      - HTTP read timeout (milliseconds)
+   * - ``readInterval``
+     - No
+     - Interval between processing each document (in milliseconds, default: ``0``)
 
 Script Configuration
 --------------------
@@ -214,6 +217,9 @@ Available fields:
 - ``content.body`` - Page body
 - ``content.comments`` - Page comments
 - ``content.last_modified`` - Last modified date
+
+.. note::
+   The Confluence connector retrieves both regular pages (page) and blog posts (blogpost).
 
 OAuth 2.0 Authentication Setup
 ==============================
@@ -388,6 +394,8 @@ OAuth 2.0 access tokens have an expiration time. Setting a refresh token enables
 ::
 
     oauth2.refresh_token=your_refresh_token
+
+When tokens are refreshed, the new access token and refresh token are automatically saved back into the data store configuration parameters, so subsequent crawls use the updated tokens (no manual update is required).
 
 Reference Information
 =====================

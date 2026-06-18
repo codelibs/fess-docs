@@ -95,7 +95,7 @@ Server版（OAuth 1.0a）の例:
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - パラメーター
      - 必須
@@ -104,8 +104,8 @@ Server版（OAuth 1.0a）の例:
      - はい
      - AtlassianインスタンスのURL
    * - ``is_cloud``
-     - はい
-     - Cloud版の場合は ``true``、Server版の場合は ``false``
+     - いいえ
+     - Cloud版の場合は ``true``、Server版の場合は ``false``（デフォルト: ``true``）。OAuth 2.0認証時のエンドポイント選択にのみ使用され、Basic認証・OAuth 1.0a認証では無視されます
    * - ``auth_type``
      - はい
      - 認証タイプ: ``oauth``、``oauth2``、``basic``
@@ -144,7 +144,7 @@ Server版（OAuth 1.0a）の例:
      - パスワード
    * - ``issue.jql``
      - いいえ
-     - JQL（Jiraのみ、高度な検索条件）
+     - JQL（Jiraのみ、高度な検索条件）。未指定の場合はすべての課題（``created is not empty``）が対象になります
    * - ``issue_max_results``
      - いいえ
      - Jira APIの1リクエストあたりの最大取得件数（デフォルト: ``50``、Jiraのみ）
@@ -175,6 +175,9 @@ Server版（OAuth 1.0a）の例:
    * - ``read_timeout``
      - いいえ
      - HTTP読み取りタイムアウト（ミリ秒）
+   * - ``readInterval``
+     - いいえ
+     - 各ドキュメントの処理間隔（ミリ秒、デフォルト: ``0``）
 
 スクリプト設定
 --------------
@@ -214,6 +217,9 @@ Confluenceの場合
 - ``content.body`` - ページの本文
 - ``content.comments`` - ページのコメント
 - ``content.last_modified`` - 最終更新日時
+
+.. note::
+   Confluenceコネクタは、通常のページ（page）とブログ投稿（blogpost）の両方を取得対象とします。
 
 OAuth 2.0認証の設定
 ===================
@@ -383,11 +389,13 @@ OAuth 2.0トークンの更新
 
 **解決方法**:
 
-OAuth 2.0のアクセストークンは有効期限があります。リフレッシュトークンを設定することで自動更新が可能です:
+OAuth 2.0のアクセストークンには有効期限があります。リフレッシュトークンを設定することで自動更新が可能です:
 
 ::
 
     oauth2.refresh_token=your_refresh_token
+
+トークンが更新されると、新しいアクセストークンとリフレッシュトークンはデータストア設定のパラメーターに自動的に保存されます。そのため、次回以降のクロールでは更新後のトークンが使用されます（手動での更新は不要です）。
 
 参考情報
 ========

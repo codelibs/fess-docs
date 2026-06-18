@@ -95,7 +95,7 @@ Server 버전(OAuth 1.0a) 예:
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - 파라미터
      - 필수
@@ -104,8 +104,8 @@ Server 버전(OAuth 1.0a) 예:
      - 예
      - Atlassian 인스턴스의 URL
    * - ``is_cloud``
-     - 예
-     - Cloud 버전인 경우 ``true``, Server 버전인 경우 ``false``
+     - 아니요
+     - Cloud의 경우 ``true``, Server의 경우 ``false`` (기본값: ``true``). OAuth 2.0 인증 시 엔드포인트 선택에만 사용되며, Basic 인증 및 OAuth 1.0a 인증에서는 무시됩니다.
    * - ``auth_type``
      - 예
      - 인증 유형: ``oauth``, ``oauth2``, ``basic``
@@ -144,7 +144,7 @@ Server 버전(OAuth 1.0a) 예:
      - 비밀번호
    * - ``issue.jql``
      - 아니요
-     - JQL (Jira만, 고급 검색 조건)
+     - JQL (Jira만, 고급 검색 조건). 지정하지 않으면 모든 이슈 (``created is not empty``) 가 대상이 됩니다.
    * - ``issue_max_results``
      - 아니요
      - Jira API 요청당 최대 결과 수 (기본값: ``50``, Jira만)
@@ -175,6 +175,9 @@ Server 버전(OAuth 1.0a) 예:
    * - ``read_timeout``
      - 아니요
      - HTTP 읽기 타임아웃 (밀리초)
+   * - ``readInterval``
+     - 아니요
+     - 각 문서 처리 사이의 대기 시간 (밀리초, 기본값: ``0``)
 
 스크립트 설정
 --------------
@@ -214,6 +217,9 @@ Confluence의 경우
 - ``content.body`` - 페이지 본문
 - ``content.comments`` - 페이지 코멘트
 - ``content.last_modified`` - 최종 업데이트 일시
+
+.. note::
+   Confluence 커넥터는 일반 페이지(page)와 블로그 게시물(blogpost) 모두를 가져옵니다.
 
 OAuth 2.0 인증 설정
 ===================
@@ -388,6 +394,8 @@ OAuth 2.0의 액세스 토큰은 유효 기간이 있습니다. 리프레시 토
 ::
 
     oauth2.refresh_token=your_refresh_token
+
+토큰이 갱신되면 새로운 액세스 토큰과 리프레시 토큰이 자동으로 데이터스토어 설정에 저장되므로, 이후 크롤링에서는 갱신된 토큰이 사용됩니다 (수동 업데이트 불필요).
 
 참고 정보
 ========
