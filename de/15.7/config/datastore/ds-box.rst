@@ -7,6 +7,8 @@ Box-Konnektor
 
 Der Box-Konnektor bietet die Funktionalität, Dateien aus dem Box.com-Cloud-Speicher abzurufen und im |Fess|-Index zu registrieren.
 
+Dieser Konnektor verbindet sich mit dem Unternehmen mittels JWT (Server Authentication) und crawlt rekursiv die Dateien, auf die jeder Benutzer im Unternehmen zugreifen kann, indem er den jeweiligen Benutzer impersoniert. Die zu crawlenden Benutzer können mit dem Parameter ``filter_term`` eingeschränkt werden.
+
 Für diese Funktion ist das Plugin ``fess-ds-box`` erforderlich.
 
 Voraussetzungen
@@ -14,7 +16,7 @@ Voraussetzungen
 
 1. Die Installation des Plugins ist erforderlich
 2. Ein Box-Entwicklerkonto und eine Anwendung müssen erstellt werden
-3. JWT-Authentifizierung (JSON Web Token) oder OAuth 2.0-Authentifizierung muss konfiguriert werden
+3. Die Konfiguration der JWT-Authentifizierung (JSON Web Token) ist erforderlich
 
 Plugin-Installation
 -------------------
@@ -61,7 +63,7 @@ Grundeinstellungen
 Parameter-Einstellungen
 -----------------------
 
-Beispiel für JWT-Authentifizierung (empfohlen):
+Beispiel für JWT-Authentifizierung:
 
 ::
 
@@ -74,6 +76,9 @@ Beispiel für JWT-Authentifizierung (empfohlen):
 
 Parameterliste
 ~~~~~~~~~~~~~~
+
+Authentifizierungsparameter (erforderlich)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
@@ -101,6 +106,70 @@ Parameterliste
      - Ja
      - Box Enterprise-ID
 
+Crawl-Parameter (optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 55
+
+   * - Parameter
+     - Standardwert
+     - Beschreibung
+   * - ``max_size``
+     - ``10000000``
+     - Maximale Dateigröße für das Crawling (Bytes). Standard ist 10 MB.
+   * - ``supported_mimetypes``
+     - ``.*``
+     - MIME-Typen für das Crawling (regulärer Ausdruck). Mehrere Werte können durch Komma getrennt angegeben werden.
+   * - ``include_pattern``
+     - (keine)
+     - URL-Muster, die in das Crawling eingeschlossen werden sollen
+   * - ``exclude_pattern``
+     - (keine)
+     - URL-Muster, die vom Crawling ausgeschlossen werden sollen
+   * - ``number_of_threads``
+     - ``1``
+     - Anzahl der Threads für die Crawl-Verarbeitung
+   * - ``ignore_folder``
+     - ``true``
+     - Gibt an, ob Ordner von der Indexierung ausgeschlossen werden sollen. In der aktuellen Implementierung werden Ordner selbst nicht indexiert (nur Dateien werden erfasst), daher hat dieser Parameter keine Auswirkung.
+   * - ``ignore_error``
+     - ``true``
+     - Gibt an, ob die Verarbeitung bei einem Fehler fortgesetzt werden soll
+   * - ``filter_term``
+     - (keine)
+     - Filterbedingung zur Einschränkung der zu crawlenden Unternehmensbenutzer. Wenn nicht angegeben, werden alle Unternehmensbenutzer erfasst.
+   * - ``fields``
+     - (alle Felder)
+     - Angabe der Felder, die über die Box API abgerufen werden sollen
+
+Verbindungsparameter (optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 55
+
+   * - Parameter
+     - Standardwert
+     - Beschreibung
+   * - ``base_url``
+     - ``https://app.box.com``
+     - Basis-URL zur Konstruktion der URL zum Öffnen einer Datei im Browser (``file.url``). Die vom Box SDK verwendeten API-Endpunkte werden dadurch nicht beeinflusst.
+   * - ``max_retry_count``
+     - ``10``
+     - Maximale Anzahl von Wiederholungsversuchen für API-Aufrufe
+   * - ``proxy_host``
+     - (keine)
+     - Hostname des HTTP-Proxys
+   * - ``proxy_port``
+     - (keine)
+     - Portnummer des HTTP-Proxys
+   * - ``refresh_token_interval``
+     - ``3540``
+     - Intervall für die Token-Aktualisierung (Sekunden). Standard ist 59 Minuten.
+
 Skript-Einstellungen
 --------------------
 
@@ -118,6 +187,9 @@ Skript-Einstellungen
 
 Verfügbare Felder
 ~~~~~~~~~~~~~~~~~
+
+Hauptfelder
+^^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
@@ -141,14 +213,84 @@ Verfügbare Felder
      - Erstellungsdatum
    * - ``file.modified_at``
      - Datum der letzten Änderung
+   * - ``file.download_url``
+     - Direkter Box-Download-URL
+   * - ``file.id``
+     - Box-Element-ID
+   * - ``file.description``
+     - Dateibeschreibung
+   * - ``file.extension``
+     - Dateiendung
+   * - ``file.sha1``
+     - SHA1-Hash der Datei
+   * - ``file.path_collection``
+     - Liste der Ordnerpfade
+
+Metadatenfelder
+^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Feld
+     - Beschreibung
+   * - ``file.type``
+     - Elementtyp ("file" oder "folder")
+   * - ``file.file_version``
+     - Dateiversion-Informationen
+   * - ``file.sequence_id``
+     - Sequenz-ID
+   * - ``file.etag``
+     - ETag-Hash
+   * - ``file.trashed_at``
+     - Datum der Verschiebung in den Papierkorb
+   * - ``file.purged_at``
+     - Datum der endgültigen Löschung
+   * - ``file.content_created_at``
+     - Erstellungsdatum des Inhalts
+   * - ``file.content_modified_at``
+     - Änderungsdatum des Inhalts
+   * - ``file.created_by``
+     - Informationen zum Ersteller
+   * - ``file.modified_by``
+     - Informationen zum letzten Bearbeiter
+   * - ``file.owned_by``
+     - Informationen zum Eigentümer
+   * - ``file.shared_link``
+     - Freigegebene Link-Informationen
+   * - ``file.parent``
+     - Informationen zum übergeordneten Ordner
+   * - ``file.item_status``
+     - Elementstatus
+   * - ``file.version_number``
+     - Versionsnummer
+   * - ``file.comment_count``
+     - Anzahl der Kommentare
+   * - ``file.permissions``
+     - Berechtigungsinformationen
+   * - ``file.tags``
+     - Tag-Informationen
+   * - ``file.lock``
+     - Sperrinformationen
+   * - ``file.is_package``
+     - Paket-Flag
+   * - ``file.is_watermark``
+     - Wasserzeichen-Flag
+   * - ``file.collections``
+     - Sammlungsinformationen
+   * - ``file.representations``
+     - Darstellungsformat-Informationen
+   * - ``file.api``
+     - Box-Datei-API-Objekt (für den Abruf von Kollaborations- und Berechtigungsinformationen)
 
 Weitere Details finden Sie unter `Box File Object <https://developer.box.com/reference#file-object>`_.
 
 Box-Authentifizierung konfigurieren
-===================================
+====================================
 
 Schritte zur JWT-Authentifizierung
-----------------------------------
+-----------------------------------
 
 1. Anwendung in der Box Developer Console erstellen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -249,7 +391,21 @@ Skript:
 Nur bestimmte Ordner crawlen
 ----------------------------
 
-Im Skript kann auch nach Ordnerpfaden gefiltert werden:
+Mit dem Parameter ``include_pattern`` ist eine Filterung nach Ordnerpfaden möglich.
+
+Parameter:
+
+::
+
+    client_id=abc123def456ghi789jkl012mno345
+    client_secret=pqr678stu901vwx234yz567abc890
+    public_key_id=a1b2c3d4
+    private_key=-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIFDjBABgkqhkiG9w0BBQ0wOzAbBgkqhkiG9w0BBQwwDgQI...=\n-----END ENCRYPTED PRIVATE KEY-----\n
+    passphrase=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
+    enterprise_id=123456789
+    include_pattern=.*Documents/Projects/.*
+
+Skript:
 
 ::
 
@@ -266,19 +422,33 @@ Im Skript kann auch nach Ordnerpfaden gefiltert werden:
 Nur PDF-Dateien crawlen
 -----------------------
 
-Filterung nach MIME-Typ im Skript:
+Mit dem Parameter ``supported_mimetypes`` ist eine Filterung nach MIME-Typ möglich.
+
+Parameter:
 
 ::
 
-    if (file.mimetype == "application/pdf") {
-        url=file.url
-        title=file.name
-        content=file.contents
-        mimetype=file.mimetype
-        filename=file.name
-        created=file.created_at
-        last_modified=file.modified_at
-    }
+    client_id=abc123def456ghi789jkl012mno345
+    client_secret=pqr678stu901vwx234yz567abc890
+    public_key_id=a1b2c3d4
+    private_key=-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIFDjBABgkqhkiG9w0BBQ0wOzAbBgkqhkiG9w0BBQwwDgQI...=\n-----END ENCRYPTED PRIVATE KEY-----\n
+    passphrase=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
+    enterprise_id=123456789
+    supported_mimetypes=application/pdf
+
+Skript:
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filetype=file.filetype
+    filename=file.name
+    content_length=file.size
+    created=file.created_at
+    last_modified=file.modified_at
 
 Fehlerbehebung
 ==============
@@ -297,7 +467,7 @@ Authentifizierungsfehler
 5. Überprüfen Sie, ob die ``enterprise_id`` korrekt ist
 
 Formatfehler beim privaten Schlüssel
-------------------------------------
+-------------------------------------
 
 **Symptom**: ``Invalid private key format``
 
@@ -338,24 +508,16 @@ Teilen Sie die Verarbeitung in den Datenspeicher-Einstellungen auf:
 
 1. Passen Sie das Crawl-Intervall an
 2. Teilen Sie in mehrere Datenspeicher auf (z.B. nach Ordner)
-3. Verteilen Sie die Last über die Zeitplaneinstellungen
+3. Erhöhen Sie die Anzahl der Threads mit dem Parameter ``number_of_threads``
+4. Verteilen Sie die Last über die Zeitplaneinstellungen
 
 Berechtigungen und Zugriffskontrolle
-====================================
+=====================================
 
-Box-Dateiberechtigungen abbilden
---------------------------------
+Box-Kollaborationsberechtigungen abbilden
+------------------------------------------
 
-.. note::
-   In der aktuellen Implementierung werden keine detaillierten Box-Berechtigungsinformationen abgerufen.
-   Bei Bedarf können Sie das ``role``-Feld verwenden, um die Zugriffskontrolle zu konfigurieren.
-
-Standardberechtigungen festlegen:
-
-::
-
-    # Parameter
-    default_permissions={role}box-users
+Über das ``BoxFileAPI``-Objekt, das vom Feld ``file.api`` bereitgestellt wird, können Box-Kollaborationsinformationen auf |Fess|-Suchrollen abgebildet werden. ``file.api.collaborationRoles`` gibt eine Liste von Suchrollen zurück, die den Benutzern und Gruppen entsprechen, die auf die Datei zugreifen können.
 
 Berechtigungen im Skript setzen:
 
@@ -364,11 +526,20 @@ Berechtigungen im Skript setzen:
     url=file.url
     title=file.name
     content=file.contents
-    role=["box-users"]
+    role=file.api.collaborationRoles
     mimetype=file.mimetype
     filename=file.name
     created=file.created_at
     last_modified=file.modified_at
+
+.. note::
+   ``file.api.collaborationRoles`` ruft für jede Datei Kollaborationsinformationen ab, was die Anzahl der Box-API-Aufrufe erhöht und das Crawling verlangsamen kann.
+
+Um allen Dateien eine feste Rolle zuzuweisen, geben Sie diese wie folgt an:
+
+::
+
+    role="{role}box-users"
 
 Weiterführende Informationen
 ============================
