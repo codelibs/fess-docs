@@ -1,6 +1,6 @@
-========================================
+==========================================
 Obtención Masiva de Resultados de Búsqueda
-========================================
+==========================================
 
 Descripción General
 ===================
@@ -28,10 +28,11 @@ Método de Configuración
 =======================
 
 Habilitación de la Búsqueda Scroll
-----------------------------------
+------------------------------------
 
 Por defecto, la búsqueda scroll está deshabilitada por motivos de seguridad y rendimiento.
-Para habilitarla, modifique la siguiente configuración en ``app/WEB-INF/classes/fess_config.properties`` o ``/etc/fess/fess_config.properties``.
+Para habilitarla, modifique la siguiente configuración en ``app/WEB-INF/classes/fess_config.properties`` (en paquetes RPM/DEB,
+``/etc/fess/fess_config.properties``).
 
 ::
 
@@ -40,8 +41,17 @@ Para habilitarla, modifique la siguiente configuración en ``app/WEB-INF/classes
 .. note::
    Después de cambiar la configuración, es necesario reiniciar |Fess|.
 
+Duración del Contexto de Scroll
+---------------------------------
+
+La duración del contexto de scroll de la búsqueda scroll está fijada internamente en |Fess| en ``1m`` (1 minuto).
+Este valor no se puede cambiar desde ``fess_config.properties``.
+
+.. note::
+   Existe una configuración llamada ``index.scroll.search.timeout``, pero esta se utiliza para operaciones internas que implican actualización o eliminación del índice (update by query / delete by query) y no afecta al tiempo de espera de esta función (scroll de búsqueda).
+
 Configuración de Campos de Respuesta
--------------------------------------
+--------------------------------------
 
 Puede personalizar los campos que se incluyen en la respuesta de los resultados de búsqueda.
 Por defecto, se devuelven muchos campos, pero puede especificar campos adicionales.
@@ -50,10 +60,11 @@ Por defecto, se devuelven muchos campos, pero puede especificar campos adicional
 
     query.additional.scroll.response.fields=content
 
-.. note::
-   El campo ``content`` no está incluido en la respuesta predeterminada. Si necesita el contenido del documento, agréguelo explícitamente como se muestra arriba.
-
 Al especificar múltiples campos, enumérelos separados por comas.
+
+.. note::
+   El campo ``content`` no está incluido en la respuesta predeterminada.
+   Si necesita el texto completo, agréguelo mediante la configuración indicada anteriormente.
 
 Método de Uso
 =============
@@ -65,7 +76,7 @@ Para acceder a la búsqueda scroll, utilice la siguiente URL.
 
 ::
 
-    http://localhost:8080/api/v1/documents/all?q=palabra_clave_búsqueda
+    http://localhost:8080/api/v2/documents/all?q=palabra_clave_búsqueda
 
 Los resultados de búsqueda se devuelven en formato NDJSON (Newline Delimited JSON).
 Cada línea representa un documento en formato JSON.
@@ -74,15 +85,16 @@ Cada línea representa un documento en formato JSON.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess"
 
 Parámetros de Solicitud
------------------------
+------------------------
 
 En la búsqueda scroll, puede utilizar los siguientes parámetros.
 
 .. note::
-   La búsqueda scroll solo admite el método GET.
+   La búsqueda scroll solo admite el método GET. Si se accede con un método distinto a GET,
+   se devuelve ``405 Method Not Allowed``.
 
 .. list-table::
    :header-rows: 1
@@ -98,7 +110,10 @@ En la búsqueda scroll, puede utilizar los siguientes parámetros.
      - Filtrado por etiqueta
 
 .. note::
-   El valor máximo de ``num`` se puede cambiar con la propiedad ``paging.search.page.max.size`` en ``fess_config.properties``.
+   El valor máximo de ``num`` se controla mediante ``paging.search.page.max.size`` (predeterminado: 100).
+   Si se especifica un valor superior al máximo, se recortará automáticamente al valor máximo.
+   El valor predeterminado se toma de ``paging.search.page.size`` (predeterminado: 10).
+   Si se especifica un valor de 0 o inferior en ``num``, se devuelve un error (``INVALID_REQUEST``).
 
 Especificación de Consulta de Búsqueda
 ---------------------------------------
@@ -109,49 +124,56 @@ Puede especificar consultas de búsqueda de la misma manera que en las búsqueda
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=motor_búsqueda"
+    curl "http://localhost:8080/api/v2/documents/all?q=motor_búsqueda"
 
 **Ejemplo: Búsqueda con campo especificado**
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
+    curl "http://localhost:8080/api/v2/documents/all?q=title:Fess"
 
 **Ejemplo: Obtención completa (sin condiciones de búsqueda)**
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*"
 
 Especificación del Número de Registros a Obtener
--------------------------------------------------
+--------------------------------------------------
 
 Puede cambiar el número de registros a obtener en cada scroll.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess&num=100"
 
 .. note::
    Si el parámetro ``num`` es demasiado grande, aumentará el uso de memoria.
-   El valor máximo predeterminado es 100, configurable mediante ``paging.search.page.max.size``.
+   El valor máximo predeterminado es 100. Si necesita un valor mayor,
+   modifique la configuración ``paging.search.page.max.size``.
 
 Filtrado por Etiqueta
----------------------
+----------------------
 
 Puede obtener solo los documentos que pertenecen a una etiqueta específica.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*&fields.label=public"
 
-Acerca de la Autenticación
----------------------------
+Acerca del Control de Acceso
+------------------------------
+
+.. note::
+   En la búsqueda scroll, al igual que en las búsquedas normales, se aplica el control de acceso basado en roles (RBAC).
+   Solo se devuelven los documentos a los que se puede acceder según la información de roles de la solicitud,
+   por lo que los documentos sin permiso de visualización no se incluyen en los resultados.
 
 .. warning::
-   La búsqueda scroll no aplica el control de acceso basado en roles (RBAC) de |Fess|.
-   Todos los documentos que coincidan con los criterios de búsqueda se devuelven independientemente de los permisos del usuario.
-   Si se necesitan restricciones de acceso, configure restricciones de dirección IP o autenticación a través de un proxy inverso.
+   El endpoint de la búsqueda scroll no requiere autenticación de forma predeterminada (cualquiera puede acceder a él).
+   Sin embargo, los documentos devueltos son filtrados por el control de acceso basado en roles descrito anteriormente.
+   Si desea restringir el acceso al propio endpoint, configure restricciones de dirección IP o
+   autenticación mediante un proxy inverso u otro mecanismo.
 
 Formato de Respuesta
 ====================
@@ -160,52 +182,81 @@ Formato NDJSON
 --------------
 
 La respuesta de la búsqueda scroll se devuelve en formato NDJSON (Newline Delimited JSON).
-Cada línea representa un documento.
+El Content-Type es ``application/x-ndjson; charset=UTF-8``.
+Cada línea representa un documento envuelto en el formato ``{"data": {...}}``.
 
 **Ejemplo:**
 
 ::
 
-    {"url":"http://example.com/page1","title":"Page 1","content":"..."}
-    {"url":"http://example.com/page2","title":"Page 2","content":"..."}
-    {"url":"http://example.com/page3","title":"Page 3","content":"..."}
+    {"data":{"url":"http://example.com/page1","title":"Page 1","digest":"..."}}
+    {"data":{"url":"http://example.com/page2","title":"Page 2","digest":"..."}}
+    {"data":{"url":"http://example.com/page3","title":"Page 3","digest":"..."}}
+
+.. note::
+   Cada documento se almacena bajo la clave ``data``. En el lado del cliente, tras parsear cada línea,
+   acceda al valor de la clave ``data``.
+
+Comportamiento ante Errores
+-----------------------------
+
+Si se produce un error en el servidor después de que ha comenzado el envío del stream, se emite
+en la última línea de la respuesta la siguiente línea terminadora de error:
+
+::
+
+    {"error":{"code":"internal_error","message":"stream error"}}
+
+.. note::
+   En el lado del cliente, puede determinar si el stream se completó correctamente o si se produjo
+   un error intermedio en el servidor verificando si la última línea contiene la clave ``error``.
+   Tenga en cuenta que si la escritura de la propia línea terminadora de error falla, no se emite
+   dicha línea y el stream finaliza de forma incompleta, por lo que trate también las desconexiones
+   inesperadas como errores.
 
 Campos de Respuesta
--------------------
+--------------------
 
 Campos incluidos por defecto:
 
-- ``url``: URL del documento
-- ``title``: Título
 - ``score``: Puntuación de búsqueda
+- ``_id``: ID del documento (ID de documento de OpenSearch)
+- ``doc_id``: ID del documento (interno de |Fess|)
 - ``boost``: Valor de boost
-- ``created``: Fecha de creación
-- ``last_modified``: Fecha de última modificación
 - ``content_length``: Longitud del contenido
-- ``doc_id``: ID del documento
-- ``host``: Host
+- ``host``: Nombre del host
 - ``site``: Sitio
-- ``content_title``: Título del contenido
-- ``content_description``: Descripción del contenido
-- ``digest``: Resumen
+- ``last_modified``: Fecha y hora de la última modificación
 - ``timestamp``: Marca de tiempo
-- ``label``: Etiqueta
-- ``segment``: Segmento
-- ``click_count``: Número de clics
-- ``favorite_count``: Número de favoritos
-- ``config_id``: ID de configuración
+- ``mimetype``: Tipo MIME
 - ``filetype``: Tipo de archivo
 - ``filename``: Nombre de archivo
+- ``created``: Fecha y hora de creación
+- ``title``: Título
+- ``digest``: Extracto del contenido
+- ``url``: URL del documento
 - ``thumbnail``: Miniatura
+- ``click_count``: Número de clics
+- ``favorite_count``: Número de favoritos
+- ``has_cache``: Disponibilidad de caché
+- ``content_title``: Título para visualización
+- ``content_description``: Extracto del contenido para visualización
+- ``url_link``: URL de enlace para visualización
+- ``site_path``: Ruta del sitio
 
 .. note::
-   El campo ``content`` no está incluido en la respuesta predeterminada. Para incluirlo, configure ``query.additional.scroll.response.fields=content`` en ``fess_config.properties``.
+   Los campos efectivamente emitidos se limitan a los campos permitidos como respuesta de la API.
+   Los campos sin valor no se emiten.
+
+.. note::
+   ``content`` (texto completo) no está incluido por defecto.
+   Puede agregarse mediante ``query.additional.scroll.response.fields``.
 
 Ejemplos de Procesamiento de Datos
-===================================
+====================================
 
 Ejemplo de Procesamiento en Python
------------------------------------
+-------------------------------------
 
 .. code-block:: python
 
@@ -213,7 +264,7 @@ Ejemplo de Procesamiento en Python
     import json
 
     # Ejecutar búsqueda scroll
-    url = "http://localhost:8080/api/v1/documents/all"
+    url = "http://localhost:8080/api/v2/documents/all"
     params = {
         "q": "Fess",
         "num": 100
@@ -224,7 +275,12 @@ Ejemplo de Procesamiento en Python
     # Procesar respuesta NDJSON línea por línea
     for line in response.iter_lines():
         if line:
-            doc = json.loads(line)
+            record = json.loads(line)
+            if "error" in record:
+                # Se produjo un error durante el stream
+                print("stream error:", record["error"])
+                break
+            doc = record["data"]
             print(f"Title: {doc.get('title')}")
             print(f"URL: {doc.get('url')}")
             print("---")
@@ -236,7 +292,7 @@ Ejemplo de cómo guardar los resultados de búsqueda en un archivo:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*" > all_documents.ndjson
 
 Conversión a CSV
 ----------------
@@ -245,8 +301,8 @@ Ejemplo de conversión a CSV utilizando el comando jq:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
-        jq -r '[.url, .title, .score] | @csv' > results.csv
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess" | \
+        jq -r '.data | [.url, .title, .score] | @csv' > results.csv
 
 Análisis de Datos
 -----------------
@@ -257,13 +313,14 @@ Ejemplo de análisis de datos obtenidos:
 
     import json
     import pandas as pd
-    from collections import Counter
 
-    # Leer archivo NDJSON
+    # Leer archivo NDJSON (extrayendo la clave data de cada línea)
     documents = []
     with open('all_documents.ndjson', 'r') as f:
         for line in f:
-            documents.append(json.loads(line))
+            record = json.loads(line)
+            if "data" in record:
+                documents.append(record["data"])
 
     # Convertir a DataFrame
     df = pd.DataFrame(documents)
@@ -277,7 +334,7 @@ Ejemplo de análisis de datos obtenidos:
     print(df['domain'].value_counts())
 
 Rendimiento y Mejores Prácticas
-================================
+=================================
 
 Uso Eficiente
 -------------
@@ -302,7 +359,7 @@ Uso Eficiente
    - Ejecute sincronizaciones de datos periódicas como trabajos por lotes
 
 Optimización del Uso de Memoria
---------------------------------
+---------------------------------
 
 Al procesar grandes volúmenes de datos, utilice procesamiento en streaming para reducir el uso de memoria.
 
@@ -311,24 +368,28 @@ Al procesar grandes volúmenes de datos, utilice procesamiento en streaming para
     import requests
     import json
 
-    url = "http://localhost:8080/api/v1/documents/all"
+    url = "http://localhost:8080/api/v2/documents/all"
     params = {"q": "*:*", "num": 100}
 
     # Procesar en streaming
     with requests.get(url, params=params, stream=True) as response:
         for line in response.iter_lines(decode_unicode=True):
             if line:
-                doc = json.loads(line)
+                record = json.loads(line)
+                if "error" in record:
+                    break
                 # Procesar documento
-                process_document(doc)
+                process_document(record["data"])
 
 Consideraciones de Seguridad
-=============================
+==============================
 
 Restricciones de Acceso
------------------------
+------------------------
 
 Dado que la búsqueda scroll devuelve grandes volúmenes de datos, configure restricciones de acceso apropiadas.
+El endpoint en sí no requiere autenticación de forma predeterminada, por lo que considere las siguientes
+medidas según sea necesario.
 
 1. **Restricción por Dirección IP**
 
@@ -336,32 +397,32 @@ Dado que la búsqueda scroll devuelve grandes volúmenes de datos, configure res
 
 2. **Autenticación de API**
 
-   Utilizar tokens de API o autenticación básica
+   Utilizar tokens de API o autenticación básica mediante un proxy inverso u otro mecanismo
 
-3. **Restricción Basada en Roles**
+3. **Control de Acceso Basado en Roles**
 
-   Permitir acceso solo a usuarios con roles específicos
+   Los documentos devueltos son filtrados por el control de acceso basado en roles de |Fess|
 
 Limitación de Tasa
-------------------
+-------------------
 
 Se recomienda configurar limitación de tasa en el proxy inverso para evitar accesos excesivos.
 
 Solución de Problemas
-=====================
+======================
 
 La Búsqueda Scroll No Está Disponible
---------------------------------------
+---------------------------------------
 
 1. Verifique que ``api.search.scroll`` esté configurado como ``true``.
 2. Verifique que haya reiniciado |Fess|.
 3. Revise los registros de errores.
 
 Se Produce un Error de Tiempo de Espera
-----------------------------------------
+-----------------------------------------
 
 1. Reduzca el parámetro ``num`` para distribuir el procesamiento.
-3. Refine las condiciones de búsqueda para reducir la cantidad de datos obtenidos.
+2. Refine las condiciones de búsqueda para reducir la cantidad de datos obtenidos.
 
 Error de Memoria Insuficiente
 ------------------------------
@@ -375,7 +436,7 @@ La Respuesta Está Vacía
 
 1. Verifique que la consulta de búsqueda sea correcta.
 2. Verifique que las etiquetas o condiciones de filtro especificadas sean correctas.
-3. Verifique la configuración de permisos de búsqueda basada en roles.
+3. Los documentos sin permiso de visualización no se incluyen en los resultados debido al control de acceso basado en roles. Verifique la configuración de roles de la solicitud.
 
 Información de Referencia
 ==========================

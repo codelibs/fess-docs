@@ -33,8 +33,8 @@
 ----------------------
 
 デフォルトでは、セキュリティとパフォーマンスの観点からスクロール検索は無効になっています。
-有効にするには、 ``app/WEB-INF/classes/fess_config.properties`` または ``/etc/fess/fess_config.properties`` で
-以下の設定を変更します。
+有効にするには、 ``app/WEB-INF/classes/fess_config.properties`` (RPM/DEB パッケージの場合は
+``/etc/fess/fess_config.properties`` )で以下の設定を変更します。
 
 ::
 
@@ -43,15 +43,16 @@
 .. note::
    設定変更後は、|Fess| を再起動する必要があります。
 
-スクロールタイムアウトの設定
-----------------------------
+スクロールコンテキストの有効期間
+--------------------------------
 
-スクロールコンテキストの有効時間はサーバー側の設定で制御されます。
-デフォルトは ``3m`` (3分)です。
+スクロール検索のスクロールコンテキストの有効期間は、|Fess| 内部で ``1m`` (1分)に固定されています。
+この値は ``fess_config.properties`` から変更することはできません。
 
-::
-
-    index.scroll.search.timeout=3m
+.. note::
+   ``index.scroll.search.timeout`` という設定がありますが、これはインデックスの更新・削除を
+   伴う内部処理(update by query / delete by query)で使用されるものであり、本機能(検索の
+   スクロール)のタイムアウトには影響しません。
 
 レスポンスフィールドの設定
 --------------------------
@@ -79,7 +80,7 @@
 
 ::
 
-    http://localhost:8080/api/v1/documents/all?q=検索キーワード
+    http://localhost:8080/api/v2/documents/all?q=検索キーワード
 
 検索結果は NDJSON(Newline Delimited JSON)形式で返却されます。
 1行ごとに1つのドキュメントがJSON形式で出力されます。
@@ -88,7 +89,7 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess"
 
 リクエストパラメータ
 --------------------
@@ -96,7 +97,8 @@
 スクロール検索では、以下のパラメータを使用できます。
 
 .. note::
-   スクロール検索は GET メソッドのみ対応しています。
+   スクロール検索は GET メソッドのみ対応しています。GET 以外のメソッドでアクセスした場合は
+   ``405 Method Not Allowed`` が返されます。
 
 .. list-table::
    :header-rows: 1
@@ -114,6 +116,8 @@
 .. note::
    ``num`` の最大値は ``paging.search.page.max.size`` (デフォルト: 100)で制御されます。
    最大値を超える値を指定した場合、自動的に最大値に切り詰められます。
+   デフォルト値は ``paging.search.page.size`` (デフォルト: 10)が使用されます。
+   ``num`` に 0 以下の値を指定した場合は、エラー(``INVALID_REQUEST``)が返されます。
 
 検索クエリの指定
 ----------------
@@ -124,19 +128,19 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=検索エンジン"
+    curl "http://localhost:8080/api/v2/documents/all?q=検索エンジン"
 
 **例: フィールド指定検索**
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
+    curl "http://localhost:8080/api/v2/documents/all?q=title:Fess"
 
 **例: 全件取得(検索条件なし)**
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*"
 
 取得件数の指定
 --------------
@@ -145,7 +149,7 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess&num=100"
 
 .. note::
    ``num`` パラメータを大きくしすぎると、メモリ使用量が増加します。
@@ -159,15 +163,21 @@
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*&fields.label=public"
 
-認証について
-------------
+アクセス制御について
+--------------------
+
+.. note::
+   スクロール検索でも、通常の検索と同様にロールベースのアクセス制御(RBAC)が適用されます。
+   リクエストのロール情報に基づいてアクセス可能なドキュメントのみが返されるため、
+   閲覧権限のないドキュメントは結果に含まれません。
 
 .. warning::
-   スクロール検索では、|Fess| のロールベースアクセス制御(RBAC)は適用されません。
-   検索条件に一致するすべてのドキュメントがユーザーの権限に関係なく返されます。
-   アクセス制限が必要な場合は、リバースプロキシ等でIPアドレス制限や認証を設定してください。
+   スクロール検索のエンドポイントは、デフォルトでは認証を要求しません(誰でもアクセスできます)。
+   ただし、返されるドキュメントは上記のロールベースのアクセス制御によってフィルタリングされます。
+   エンドポイント自体へのアクセスを制限したい場合は、リバースプロキシ等でIPアドレス制限や
+   認証を設定してください。
 
 レスポンス形式
 ==============
@@ -176,15 +186,36 @@ NDJSON形式
 ----------
 
 スクロール検索のレスポンスは、NDJSON(Newline Delimited JSON)形式で返されます。
-各行が1つのドキュメントを表します。
+Content-Type は ``application/x-ndjson; charset=UTF-8`` です。
+各行は ``{"data": {...}}`` の形式でラップされた1つのドキュメントを表します。
 
 **例:**
 
 ::
 
-    {"url":"http://example.com/page1","title":"Page 1","content":"..."}
-    {"url":"http://example.com/page2","title":"Page 2","content":"..."}
-    {"url":"http://example.com/page3","title":"Page 3","content":"..."}
+    {"data":{"url":"http://example.com/page1","title":"Page 1","digest":"..."}}
+    {"data":{"url":"http://example.com/page2","title":"Page 2","digest":"..."}}
+    {"data":{"url":"http://example.com/page3","title":"Page 3","digest":"..."}}
+
+.. note::
+   各ドキュメントは ``data`` キーの下に格納されます。クライアント側では各行をパースした後、
+   ``data`` キーの値を参照してください。
+
+エラー時の動作
+--------------
+
+ストリームの送信開始後にサーバー側でエラーが発生した場合、レスポンスの最終行に
+以下のようなエラー終端行が出力されます。
+
+::
+
+    {"error":{"code":"internal_error","message":"stream error"}}
+
+.. note::
+   クライアント側では、最終行に ``error`` キーが含まれているかを確認することで、
+   「ストリームが正常に完了した」のか「サーバー側で途中エラーが発生した」のかを
+   判別できます。なお、エラー終端行の書き込み自体に失敗した場合は終端行が出力されず
+   ストリームが途中で終了するため、予期しない切断もエラーとして扱ってください。
 
 レスポンスフィールド
 --------------------
@@ -192,8 +223,8 @@ NDJSON形式
 デフォルトで含まれるフィールド:
 
 - ``score``: 検索スコア
-- ``id``: ドキュメントID
-- ``doc_id``: ドキュメントID(内部)
+- ``_id``: ドキュメントID(OpenSearch のドキュメントID)
+- ``doc_id``: ドキュメントID(|Fess| 内部)
 - ``boost``: ブースト値
 - ``content_length``: コンテンツ長
 - ``host``: ホスト名
@@ -210,9 +241,15 @@ NDJSON形式
 - ``thumbnail``: サムネイル
 - ``click_count``: クリック数
 - ``favorite_count``: お気に入り数
-- ``config_id``: 設定ID
-- ``lang``: 言語
 - ``has_cache``: キャッシュ有無
+- ``content_title``: 表示用タイトル
+- ``content_description``: 表示用の本文抜粋
+- ``url_link``: 表示用リンクURL
+- ``site_path``: サイトパス
+
+.. note::
+   実際に出力されるフィールドは、API レスポンスとして許可されたフィールドに限定されます。
+   値が存在しないフィールドは出力されません。
 
 .. note::
    ``content`` (全文)はデフォルトでは含まれません。
@@ -230,7 +267,7 @@ Pythonでの処理例
     import json
 
     # スクロール検索の実行
-    url = "http://localhost:8080/api/v1/documents/all"
+    url = "http://localhost:8080/api/v2/documents/all"
     params = {
         "q": "Fess",
         "num": 100
@@ -241,7 +278,12 @@ Pythonでの処理例
     # NDJSON形式のレスポンスを1行ずつ処理
     for line in response.iter_lines():
         if line:
-            doc = json.loads(line)
+            record = json.loads(line)
+            if "error" in record:
+                # ストリーム途中でエラーが発生
+                print("stream error:", record["error"])
+                break
+            doc = record["data"]
             print(f"Title: {doc.get('title')}")
             print(f"URL: {doc.get('url')}")
             print("---")
@@ -253,7 +295,7 @@ Pythonでの処理例
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*" > all_documents.ndjson
 
 CSVへの変換
 -----------
@@ -262,8 +304,8 @@ jqコマンドを使用してCSVに変換する例:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
-        jq -r '[.url, .title, .score] | @csv' > results.csv
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess" | \
+        jq -r '.data | [.url, .title, .score] | @csv' > results.csv
 
 データ分析
 ----------
@@ -274,13 +316,14 @@ jqコマンドを使用してCSVに変換する例:
 
     import json
     import pandas as pd
-    from collections import Counter
 
-    # NDJSONファイルの読み込み
+    # NDJSONファイルの読み込み(各行の data キーを取り出す)
     documents = []
     with open('all_documents.ndjson', 'r') as f:
         for line in f:
-            documents.append(json.loads(line))
+            record = json.loads(line)
+            if "data" in record:
+                documents.append(record["data"])
 
     # DataFrameに変換
     df = pd.DataFrame(documents)
@@ -328,16 +371,18 @@ jqコマンドを使用してCSVに変換する例:
     import requests
     import json
 
-    url = "http://localhost:8080/api/v1/documents/all"
+    url = "http://localhost:8080/api/v2/documents/all"
     params = {"q": "*:*", "num": 100}
 
     # ストリーミングで処理
     with requests.get(url, params=params, stream=True) as response:
         for line in response.iter_lines(decode_unicode=True):
             if line:
-                doc = json.loads(line)
+                record = json.loads(line)
+                if "error" in record:
+                    break
                 # ドキュメントの処理
-                process_document(doc)
+                process_document(record["data"])
 
 セキュリティ考慮事項
 ====================
@@ -346,6 +391,8 @@ jqコマンドを使用してCSVに変換する例:
 ------------
 
 スクロール検索は大量のデータを返すため、適切なアクセス制限を設定してください。
+エンドポイント自体はデフォルトで認証を要求しないため、必要に応じて以下のような対策を
+検討してください。
 
 1. **IPアドレス制限**
 
@@ -353,11 +400,11 @@ jqコマンドを使用してCSVに変換する例:
 
 2. **API認証**
 
-   APIトークンやBasic認証を使用
+   リバースプロキシ等でAPIトークンやBasic認証を使用
 
-3. **ロールベース制限**
+3. **ロールベースのアクセス制御**
 
-   特定のロールを持つユーザーのみアクセスを許可
+   返されるドキュメントは |Fess| のロールベースのアクセス制御によりフィルタリングされます
 
 レート制限
 ----------
@@ -392,7 +439,7 @@ jqコマンドを使用してCSVに変換する例:
 
 1. 検索クエリが正しいか確認してください。
 2. 指定したラベルやフィルタ条件が正しいか確認してください。
-3. ロールベース検索の権限設定を確認してください。
+3. ロールベースのアクセス制御により、閲覧権限のないドキュメントは結果に含まれません。リクエストのロール設定を確認してください。
 
 参考情報
 ========
