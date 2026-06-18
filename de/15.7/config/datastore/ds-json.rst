@@ -1,20 +1,21 @@
-==================================
+==============
 JSON-Konnektor
-==================================
+==============
 
-Übersicht
+Ubersicht
 =========
 
-Der JSON-Konnektor bietet die Funktionalität, Daten aus lokalen JSON- oder JSONL-Dateien abzurufen und im |Fess|-Index zu registrieren.
+Der JSON-Konnektor bietet die Funktionalitat, Daten aus lokalen JSONL-Dateien
+(JSON-Lines-Format) abzurufen und im |Fess|-Index zu registrieren.
 
-Für diese Funktion ist das Plugin ``fess-ds-json`` erforderlich.
+Fur diese Funktion ist das Plugin ``fess-ds-json`` erforderlich.
 
 Voraussetzungen
 ===============
 
 1. Die Installation des Plugins ist erforderlich
-2. Zugriff auf die JSON-Dateien ist erforderlich
-3. Die JSON-Struktur muss bekannt sein
+2. Lesezugriff auf die JSON-Dateien ist erforderlich
+3. Die Struktur der JSON-Daten muss bekannt sein
 
 Plugin-Installation
 -------------------
@@ -31,16 +32,16 @@ Methode 1: JAR-Datei direkt platzieren
     # oder
     cp fess-ds-json-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
 
-Methode 2: Über die Administrationsoberfläche installieren
+Methode 2: Uber die Administrationsoberflache installieren
 
-1. Öffnen Sie "System" -> "Plugins"
+1. Offnen Sie "System" -> "Plugins"
 2. Laden Sie die JAR-Datei hoch
 3. Starten Sie |Fess| neu
 
 Konfiguration
 =============
 
-Konfigurieren Sie über die Administrationsoberfläche unter "Crawler" -> "Datenspeicher" -> "Neu erstellen".
+Konfigurieren Sie uber die Administrationsoberflache unter "Crawler" -> "Datenspeicher" -> "Neu erstellen".
 
 Grundeinstellungen
 ------------------
@@ -87,69 +88,90 @@ Parameterliste
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Parameter
      - Erforderlich
      - Beschreibung
    * - ``files``
      - Nein
-     - Pfad zur JSON-Datei (mehrere kommagetrennt)
+     - Pfad zur zu verarbeitenden JSON-Datei (mehrere Angaben moglich: kommagetrennt). Nur Dateien mit der Erweiterung ``.json`` oder ``.jsonl`` werden verarbeitet.
    * - ``directories``
      - Nein
-     - Pfad zum Verzeichnis mit JSON-Dateien
+     - Pfad zum Verzeichnis mit JSON-Dateien (mehrere Angaben moglich: kommagetrennt)
    * - ``fileEncoding``
      - Nein
      - Zeichenkodierung (Standard: UTF-8)
 
 .. warning::
    Es muss entweder ``files`` oder ``directories`` angegeben werden.
-   Wenn keiner von beiden angegeben ist, wird eine ``DataStoreException`` ausgelöst.
+   Wenn keiner der beiden Parameter angegeben ist (leer), wird eine ``DataStoreException`` ausgelost.
    Wenn beide angegeben sind, hat ``files`` Vorrang und ``directories`` wird ignoriert.
 
 .. note::
-   Dieser Konnektor unterstützt ausschließlich JSON-Dateien im lokalen Dateisystem. HTTP-Zugriff oder API-Authentifizierung werden nicht unterstützt.
+   Der Parametername lautet im camelCase ``fileEncoding`` (nicht ``file_encoding`` in snake_case).
+
+Verhalten bei Verzeichnisangabe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Wenn ``directories`` angegeben ist, werden die Dateien direkt im jeweiligen Verzeichnis nach folgenden Regeln verarbeitet:
+
+- **Unterverzeichnisse werden nicht durchsucht** (keine rekursive Suche).
+- Nur Dateien mit der Erweiterung ``.json`` oder ``.jsonl`` werden berucksichtigt (Gro-/Kleinschreibung wird nicht unterschieden).
+- Die Dateien werden in aufsteigender Reihenfolge nach Anderungsdatum (letzter Anderungszeitpunkt) verarbeitet.
+
+.. note::
+   Dieser Konnektor unterstutzt ausschlie?lich JSON-Dateien im lokalen Dateisystem. HTTP-Zugriff und API-Authentifizierung werden nicht unterstutzt.
 
 Skript-Einstellungen
 --------------------
+
+Die Werte der einzelnen Felder werden aus den Feldern des jeweiligen JSON-Objekts zusammengesetzt.
+Felder auf der obersten Ebene des JSON-Objekts konnen im Skript als **Variablen ohne Prafix**
+direkt referenziert werden (kein Prafix wie ``data.``).
 
 Einfaches JSON-Objekt:
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=data.price
-    category=data.category
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=price
+    category=category
 
-Verschachteltes JSON-Objekt:
+Verschachteltes JSON-Objekt (verschachtelte Objekte werden als Map referenziert):
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.product.name
-    content=data.product.description
-    price=data.product.pricing.amount
-    author=data.product.author.name
+    url="https://example.com/product/" + id
+    title=product.name
+    content=product.description
+    price=product.pricing.amount
+    author=product.author.name
 
 Verarbeitung von Array-Elementen:
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    tags=data.tags.join(", ")
-    categories=data.categories[0].name
+    url="https://example.com/article/" + id
+    title=title
+    content=body
+    tags=tags.join(", ")
+    categories=categories[0].name
 
-Verfügbare Felder
+Verfugbare Felder
 ~~~~~~~~~~~~~~~~~
 
-- ``data.<Feldname>`` - Felder des JSON-Objekts
-- ``data.<Eltern>.<Kind>`` - Verschachtelte Objekte
-- ``data.<Array>[<Index>]`` - Array-Elemente
-- ``data.<Array>.<Methode>`` - Array-Methoden (join, length usw.)
+- ``<Feldname>`` - Felder auf der obersten Ebene des JSON-Objekts werden direkt beim Namen referenziert
+- ``<Elternteil>.<Kind>`` - Felder eines verschachtelten Objekts
+- ``<Array>[<Index>]`` - Array-Element
+- ``<Array>.<Methode>`` - Array-Methoden (``join``, ``collect``, ``size`` usw.)
+
+.. note::
+
+   Enthalt ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Groovy-Bezeichner
+   ungultig sind, kann dieses Feld nicht direkt als Variablenname referenziert werden.
 
 JSON-Format-Details
 ===================
@@ -158,11 +180,15 @@ JSON-Dateiformat
 ----------------
 
 Der JSON-Konnektor liest Dateien im JSONL-Format (JSON Lines).
-Dabei wird pro Zeile ein JSON-Objekt geschrieben.
+Dabei wird pro Zeile ein JSON-Objekt geschrieben. Die Datei wird zeilenweise eingelesen,
+und jede Zeile wird als eigenstandiges JSON-Objekt verarbeitet.
 
 .. note::
-   JSON-Dateien im Array-Format ( ``[{...}, {...}]`` ) können nicht direkt gelesen werden.
-   Bitte konvertieren Sie diese in das JSONL-Format.
+   Dateien mit der Erweiterung ``.json`` werden ebenfalls verarbeitet, der Inhalt muss jedoch
+   im JSONL-Format vorliegen (ein Objekt pro Zeile).
+   JSON-Dateien im Array-Format (``[{...}, {...}]``) oder mehrzeilig formatierte
+   (pretty-printed) JSON-Dateien konnen nicht direkt eingelesen werden. Bitte konvertieren Sie
+   diese in das JSONL-Format.
 
 JSONL-Datei:
 
@@ -188,14 +214,14 @@ Skript:
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " Preis: " + data.price + " EUR"
-    digest=data.category
-    price=data.price
+    url="https://shop.example.com/product/" + product_id
+    title=name
+    content=description + " Preis: " + price + " Yen"
+    digest=category
+    price=price
 
 Integration mehrerer JSON-Dateien
----------------------------------
+----------------------------------
 
 Parameter:
 
@@ -208,9 +234,9 @@ Skript:
 
 ::
 
-    url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.content
+    url="https://example.com/item/" + id
+    title=title
+    content=content
 
 Fehlerbehebung
 ==============
@@ -218,53 +244,61 @@ Fehlerbehebung
 Datei nicht gefunden
 --------------------
 
-**Symptom**: ``FileNotFoundException``
+**Symptom**: Im Protokoll wird ``... is not found.`` oder ``Source file ... does not exist.`` ausgegeben
 
-**Prüfpunkte**:
+**Prufpunkte**:
 
-1. Überprüfen Sie, ob der Dateipfad korrekt ist
-2. Überprüfen Sie, ob die Datei existiert
-3. Überprüfen Sie, ob Leserechte vorhanden sind
+1. Uberprfen Sie, ob der Dateipfad korrekt ist
+2. Uberprfen Sie, ob die Datei vorhanden ist
+3. Uberprfen Sie, ob die Dateiendung ``.json`` oder ``.jsonl`` ist
+4. Uberprfen Sie, ob Leserechte fur die Datei vorhanden sind
 
 JSON-Analysefehler
 ------------------
 
-**Symptom**: ``JsonParseException`` oder ``Unexpected character``
+**Symptom**: Im Protokoll wird ``Crawling Access Exception`` zusammen mit ``JsonParseException`` o. a. ausgegeben
 
-**Prüfpunkte**:
+Enthalt eine Zeile ungultige Daten, wird nur diese Zeile ubersprungen und als fehlgeschlagene URL
+erfasst; das Crawling selbst wird ab der nachsten Zeile fortgesetzt.
 
-1. Überprüfen Sie, ob die JSON-Datei im korrekten Format ist:
+**Prufpunkte**:
+
+1. Uberprfen Sie, ob die JSON-Datei im korrekten Format vorliegt (JSONL: ein Objekt pro Zeile):
 
    ::
 
-       # JSON-Validierung
-       cat data.json | jq .
+       # Jede Zeile auf gultige JSON-Objekte prfen
+       cat data.json | jq -c .
 
-2. Überprüfen Sie die Zeichenkodierung
-3. Überprüfen Sie, ob ungültige Zeichen oder Zeilenumbrüche vorhanden sind
-4. Überprüfen Sie, ob Kommentare enthalten sind (im JSON-Standard sind Kommentare nicht erlaubt)
+2. Uberprfen Sie die Zeichenkodierung
+3. Uberprfen Sie, ob ein einzelnes Objekt uber mehrere Zeilen verteilt ist
+4. Uberprfen Sie, ob Kommentare enthalten sind (Kommentare sind im JSON-Standard nicht erlaubt)
 
 Keine Daten abgerufen
 ---------------------
 
-**Symptom**: Der Crawl ist erfolgreich, aber die Anzahl der Ergebnisse ist 0
+**Symptom**: Das Crawling ist erfolgreich, aber die Trefferanzahl betragt 0
 
-**Prüfpunkte**:
+**Prufpunkte**:
 
-1. Überprüfen Sie die JSON-Struktur
-2. Überprüfen Sie die Skript-Einstellungen
-3. Überprüfen Sie die Feldnamen (einschließlich Groß-/Kleinschreibung)
-4. Überprüfen Sie die Protokolldateien auf Fehlermeldungen
+1. Uberprfen Sie die JSON-Struktur
+2. Uberprfen Sie die Skript-Einstellungen (Felder werden ohne ``data.``-Prafix referenziert)
+3. Uberprfen Sie die Feldnamen (einschlie?lich Gro-/Kleinschreibung)
+4. Uberprfen Sie die Protokolldateien auf Fehlermeldungen
 
-Große JSON-Dateien
+Gro?e JSON-Dateien
 ------------------
 
-**Symptom**: Speichermangel oder Zeitüberschreitung
+**Symptom**: Speichermangel oder Zeituberschreitung
 
-**Lösung**:
+Da die Datei zeilenweise eingelesen wird, wirkt sich die Gesamtgro?e der Datei nicht direkt auf
+den Speicherverbrauch aus. Probleme konnen jedoch auftreten, wenn eine einzelne Zeile
+(ein einzelnes Objekt) extrem gro? ist oder die Last beim Indexieren sehr hoch ist.
+
+**Losung**:
 
 1. Teilen Sie die JSON-Datei in mehrere Dateien auf
-2. Erhöhen Sie die Heap-Größe von |Fess|
+2. Erhohen Sie die Heap-Gro?e von |Fess|
 
 Erweiterte Skript-Beispiele
 ============================
@@ -272,65 +306,66 @@ Erweiterte Skript-Beispiele
 Bedingte Verarbeitung
 ---------------------
 
-Jedes Feld wird als eigenständiger Ausdruck ausgewertet. Für bedingte Werte verwenden Sie den ternären Operator:
+Jedes Feld wird als eigenstandiger Ausdruck ausgewertet. Fur bedingte Werte verwenden Sie den
+ternaren Operator:
 
 ::
 
-    url=data.status == "published" ? "https://example.com/product/" + data.id : null
-    title=data.status == "published" ? data.name : null
-    content=data.status == "published" ? data.description : null
-    price=data.status == "published" ? data.price : null
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
 
-Array-Verknüpfung
+Array-Verknupfung
 -----------------
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    tags=data.tags ? data.tags.join(", ") : ""
-    categories=data.categories.collect { it.name }.join(", ")
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags ? tags.join(", ") : ""
+    categories=categories.collect { it.name }.join(", ")
 
 Standardwerte festlegen
 -----------------------
 
 ::
 
-    url="https://example.com/item/" + data.id
-    title=data.title ?: "Ohne Titel"
-    content=data.description ?: (data.summary ?: "Keine Beschreibung")
-    price=data.price ?: 0
+    url="https://example.com/item/" + id
+    title=title ?: "Ohne Titel"
+    content=description ?: (summary ?: "Keine Beschreibung")
+    price=price ?: 0
 
 Datumsformatierung
 ------------------
 
 ::
 
-    url="https://example.com/post/" + data.id
-    title=data.title
-    content=data.body
-    created=data.created_at
-    last_modified=data.updated_at
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
 
 Numerische Verarbeitung
 -----------------------
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=data.price as Float
-    stock=data.stock_quantity as Integer
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=price as Float
+    stock=stock_quantity as Integer
 
 Referenzen
 ==========
 
-- :doc:`ds-overview` - Übersicht der Datenspeicher-Konnektoren
+- :doc:`ds-overview` - Ubersicht der Datenspeicher-Konnektoren
 - :doc:`ds-csv` - CSV-Konnektor
 - :doc:`ds-database` - Datenbank-Konnektor
 - :doc:`../../admin/dataconfig-guide` - Datenspeicher-Konfigurationsleitfaden
 - `JSON (JavaScript Object Notation) <https://www.json.org/>`_
-- `JSONPath <https://goessner.net/articles/JsonPath/>`_
+- `JSON Lines <https://jsonlines.org/>`_
 - `jq - JSON processor <https://stedolan.github.io/jq/>`_

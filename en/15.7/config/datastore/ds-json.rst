@@ -1,12 +1,12 @@
-==================================
+==============
 JSON Connector
-==================================
+==============
 
 Overview
 ========
 
-The JSON Connector provides functionality to retrieve data from local JSON files
-and JSONL files and register them in the |Fess| index.
+The JSON Connector provides functionality to retrieve data from local JSONL files
+(JSON Lines format) and register them in the |Fess| index.
 
 This feature requires the ``fess-ds-json`` plugin.
 
@@ -88,69 +88,90 @@ Parameter List
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Parameter
      - Required
      - Description
    * - ``files``
      - No
-     - JSON file path (multiple allowed: comma-separated)
+     - Path to the JSON file(s) to process (multiple paths allowed: comma-separated). Only files with a ``.json`` or ``.jsonl`` extension are processed.
    * - ``directories``
      - No
-     - Directory path containing JSON files
+     - Path to the directory containing JSON files (multiple paths allowed: comma-separated)
    * - ``fileEncoding``
      - No
      - Character encoding (default: UTF-8)
 
 .. warning::
    Either ``files`` or ``directories`` must be specified.
-   If neither is specified, a ``DataStoreException`` will be thrown.
+   If neither is specified (both are empty), a ``DataStoreException`` will be thrown.
    If both are specified, ``files`` takes precedence and ``directories`` is ignored.
 
 .. note::
-   This connector only supports JSON files on the local filesystem. HTTP access and API authentication are not supported.
+   The parameter name uses camelCase: ``fileEncoding`` (not the snake_case form ``file_encoding``).
+
+Directory Behavior
+~~~~~~~~~~~~~~~~~~
+
+When ``directories`` is specified, files directly inside each directory are processed according to the following rules.
+
+- **Subdirectories are not traversed** (no recursive search is performed).
+- Only files with a ``.json`` or ``.jsonl`` extension are targeted (case-insensitive).
+- Files are processed in ascending order of their last-modified timestamp.
+
+.. note::
+   This connector targets only JSON files on the local filesystem. HTTP access and API authentication are not supported.
 
 Script Configuration
 --------------------
+
+The value of each field is assembled by referencing the fields of the JSON object.
+Top-level fields of a JSON object can be referenced directly inside scripts as
+**variables without a prefix** (no ``data.`` prefix is used).
 
 Simple JSON object:
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=data.price
-    category=data.category
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=price
+    category=category
 
-Nested JSON object:
+Nested JSON object (nested objects are referenced as maps):
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.product.name
-    content=data.product.description
-    price=data.product.pricing.amount
-    author=data.product.author.name
+    url="https://example.com/product/" + id
+    title=product.name
+    content=product.description
+    price=product.pricing.amount
+    author=product.author.name
 
 Array element processing:
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.body
-    tags=data.tags.join(", ")
-    categories=data.categories[0].name
+    url="https://example.com/article/" + id
+    title=title
+    content=body
+    tags=tags.join(", ")
+    categories=categories[0].name
 
 Available Fields
 ~~~~~~~~~~~~~~~~
 
-- ``data.<field_name>`` - JSON object field
-- ``data.<parent>.<child>`` - Nested object
-- ``data.<array>[<index>]`` - Array element
-- ``data.<array>.<method>`` - Array methods (join, length, etc.)
+- ``<field_name>`` - Reference a top-level field of the JSON object directly by name
+- ``<parent>.<child>`` - Field of a nested object
+- ``<array>[<index>]`` - Array element
+- ``<array>.<method>`` - Array methods (``join``, ``collect``, ``size``, etc.)
+
+.. note::
+
+   If a field name contains characters that are invalid as a Groovy identifier,
+   such as spaces or hyphens, that field cannot be referenced directly as a variable name.
 
 JSON Format Details
 ===================
@@ -159,11 +180,14 @@ JSON File Format
 ----------------
 
 The JSON Connector reads files in JSONL (JSON Lines) format.
-This format has one JSON object per line.
+This format places one JSON object per line. Files are read line by line,
+and each line is parsed as an independent JSON object.
 
 .. note::
-   JSON array format files ( ``[{...}, {...}]`` ) cannot be read directly.
-   Please convert them to JSONL format.
+   Files with a ``.json`` extension are also processed, but their content must be in
+   JSONL format (one object per line).
+   Array-format JSON files (``[{...}, {...}]``) and pretty-printed JSON spanning
+   multiple lines cannot be read directly. Please convert them to JSONL format.
 
 JSONL format file:
 
@@ -189,14 +213,14 @@ Script:
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " Price: " + data.price + " USD"
-    digest=data.category
-    price=data.price
+    url="https://shop.example.com/product/" + product_id
+    title=name
+    content=description + " Price: " + price + " yen"
+    digest=category
+    price=price
 
 Merging Multiple JSON Files
-----------------------------
+---------------------------
 
 Parameters:
 
@@ -209,9 +233,9 @@ Script:
 
 ::
 
-    url="https://example.com/item/" + data.id
-    title=data.title
-    content=data.content
+    url="https://example.com/item/" + id
+    title=title
+    content=content
 
 Troubleshooting
 ===============
@@ -219,30 +243,34 @@ Troubleshooting
 File Not Found
 --------------
 
-**Symptom**: ``FileNotFoundException``
+**Symptom**: The log outputs ``... is not found.`` or ``Source file ... does not exist.``
 
 **Checklist**:
 
 1. Verify the file path is correct
 2. Verify the file exists
-3. Verify read permissions on the file
+3. Verify the file extension is ``.json`` or ``.jsonl``
+4. Verify read permissions on the file
 
 JSON Parse Error
 ----------------
 
-**Symptom**: ``JsonParseException`` or ``Unexpected character``
+**Symptom**: The log outputs ``Crawling Access Exception`` and ``JsonParseException`` or similar messages
+
+When a line contains invalid content, only that line is skipped and recorded as a
+failed URL; the crawl itself continues from the next line.
 
 **Checklist**:
 
-1. Verify the JSON file is in correct format:
+1. Verify the JSON file is in the correct format (JSONL: one object per line):
 
    ::
 
-       # Validate JSON
-       cat data.json | jq .
+       # Validate that each line is a valid JSON object
+       cat data.json | jq -c .
 
 2. Verify the character encoding is correct
-3. Check for invalid characters or line breaks
+3. Check that a single object is not split across multiple lines
 4. Check for comments (comments are not allowed in standard JSON)
 
 No Data Retrieved
@@ -253,7 +281,7 @@ No Data Retrieved
 **Checklist**:
 
 1. Verify the JSON structure
-2. Verify the script configuration is correct
+2. Verify the script configuration is correct (check that field references do not use the ``data.`` prefix)
 3. Verify field names are correct (including case sensitivity)
 4. Check log messages for errors
 
@@ -261,6 +289,10 @@ Large JSON Files
 ----------------
 
 **Symptom**: Out of memory or timeout
+
+Files are read line by line, so the total file size does not directly affect memory usage.
+However, problems may occur when a single line (object) is extremely large or when the
+indexing load is high.
 
 **Solution**:
 
@@ -277,53 +309,53 @@ Each field is evaluated as an independent expression. Use ternary operators for 
 
 ::
 
-    url=data.status == "published" ? "https://example.com/product/" + data.id : null
-    title=data.status == "published" ? data.name : null
-    content=data.status == "published" ? data.description : null
-    price=data.status == "published" ? data.price : null
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
 
 Joining Arrays
 --------------
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    tags=data.tags ? data.tags.join(", ") : ""
-    categories=data.categories.collect { it.name }.join(", ")
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags ? tags.join(", ") : ""
+    categories=categories.collect { it.name }.join(", ")
 
 Setting Default Values
 ----------------------
 
 ::
 
-    url="https://example.com/item/" + data.id
-    title=data.title ?: "Untitled"
-    content=data.description ?: (data.summary ?: "No description")
-    price=data.price ?: 0
+    url="https://example.com/item/" + id
+    title=title ?: "Untitled"
+    content=description ?: (summary ?: "No description")
+    price=price ?: 0
 
 Date Formatting
 ---------------
 
 ::
 
-    url="https://example.com/post/" + data.id
-    title=data.title
-    content=data.body
-    created=data.created_at
-    last_modified=data.updated_at
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
 
 Numeric Processing
 ------------------
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=data.price as Float
-    stock=data.stock_quantity as Integer
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=price as Float
+    stock=stock_quantity as Integer
 
 Reference
 =========
@@ -333,5 +365,5 @@ Reference
 - :doc:`ds-database` - Database Connector
 - :doc:`../../admin/dataconfig-guide` - Data Store Configuration Guide
 - `JSON (JavaScript Object Notation) <https://www.json.org/>`_
-- `JSONPath <https://goessner.net/articles/JsonPath/>`_
+- `JSON Lines <https://jsonlines.org/>`_
 - `jq - JSON processor <https://stedolan.github.io/jq/>`_
