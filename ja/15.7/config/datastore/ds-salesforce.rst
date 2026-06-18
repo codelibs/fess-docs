@@ -13,9 +13,97 @@ Salesforceコネクタは、Salesforceのオブジェクト（標準オブジェ
 対応オブジェクト
 ================
 
-- **標準オブジェクト**: Account、Contact、Lead、Opportunity、Case、Solution等
-- **カスタムオブジェクト**: 独自に作成したオブジェクト
-- **Knowledge記事**: Salesforce Knowledge
+- **標準オブジェクト**: あらかじめ定義された標準オブジェクト（取引先、取引先責任者、リード、商談、ケース、ソリューションなど）。対象となる標準オブジェクトは固定されており、クロール実行時にすべて取得されます。
+- **カスタムオブジェクト**: ``custom`` パラメーターで指定した独自オブジェクト。
+
+.. note::
+
+   標準オブジェクトは常にすべてクロールされます（クロール対象とする標準オブジェクトを個別に選択することはできません）。
+   不要なオブジェクトを除外したい場合は、``include_pattern`` / ``exclude_pattern`` によるURLフィルターを使用してください。
+
+標準オブジェクト一覧
+--------------------
+
+クロール対象となる標準オブジェクトは以下のとおりです。
+「オブジェクト名」はフィールドマッピング（``<オブジェクト名>.title`` など）で使用する識別子、
+``object.type`` はスクリプト内で参照できるオブジェクト種別の値です。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - オブジェクト名
+     - ``object.type``
+     - 説明
+   * - ``ACCOUNT``
+     - ``Account``
+     - 取引先
+   * - ``CONTACT``
+     - ``Contact``
+     - 取引先責任者
+   * - ``LEAD``
+     - ``Lead``
+     - リード
+   * - ``OPPORTUNITY``
+     - ``Opportunity``
+     - 商談
+   * - ``CASE``
+     - ``Case``
+     - ケース
+   * - ``SOLUTION``
+     - ``Solution``
+     - ソリューション
+   * - ``CONTRACT``
+     - ``Contract``
+     - 契約
+   * - ``ORDER``
+     - ``Order``
+     - 注文
+   * - ``CAMPAIGN``
+     - ``Campaign``
+     - キャンペーン
+   * - ``PRODUCT2``
+     - ``Product2``
+     - 商品
+   * - ``PRICEBOOK2``
+     - ``Pricebook2``
+     - 価格表
+   * - ``ASSET``
+     - ``Asset``
+     - 納入商品
+   * - ``ASSET_RELATIONSHIP``
+     - ``AssetRelationship``
+     - 納入商品リレーション
+   * - ``TASK``
+     - ``Task``
+     - ToDo
+   * - ``USER``
+     - ``User``
+     - ユーザ
+   * - ``COLLABORATION_GROUP``
+     - ``CollaborationGroup``
+     - グループ
+   * - ``IDEA``
+     - ``Idea``
+     - アイデア
+   * - ``RECOMMENDATION``
+     - ``Recommendation``
+     - おすすめ
+   * - ``QUICK_TEXT``
+     - ``QuickText``
+     - クイックテキスト
+   * - ``MACRO``
+     - ``Macro``
+     - マクロ
+   * - ``LIST_EMAIL``
+     - ``ListEmail``
+     - リストメール
+   * - ``IMAGE``
+     - ``Image``
+     - 画像
+   * - ``DAND_B_COMPANY``
+     - ``DandBCompany``
+     - D&B 企業
 
 前提条件
 ========
@@ -92,7 +180,7 @@ OAuth Password認証:
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - パラメーター
      - 必須
@@ -145,9 +233,6 @@ OAuth Password認証:
    * - ``proxy_port``
      - proxy_hostが設定されている場合
      - HTTPプロキシポート番号
-   * - ``readInterval``
-     - いいえ
-     - レコード処理間の待機時間（ミリ秒）
    * - ``<オブジェクト>.title``
      - いいえ
      - タイトルに使用するフィールド名
@@ -317,7 +402,8 @@ OAuth設定で:
 
 .. note::
 
-   標準オブジェクトのフィールドマッピングでは、オブジェクト名に大文字のスネークケースを使用します
+   標準オブジェクトのフィールドマッピングでは、オブジェクト名に大文字のスネークケース
+   （`標準オブジェクト一覧`_ の「オブジェクト名」列の値）を使用します
    （例: ``ACCOUNT.title=Name``、``DAND_B_COMPANY.title=Name``）。
    カスタムオブジェクトの場合は、API参照名をそのまま使用します（例: ``Product__c.title=Name``）。
 
