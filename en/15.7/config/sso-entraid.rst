@@ -98,10 +98,10 @@ The following settings can be added as needed.
      - Default roles (comma-separated)
      - (None)
    * - ``entraid.permission.fields``
-     - Permission fields (comma-separated)
+     - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added.
      - ``mail``
    * - ``entraid.use.ds``
-     - Use Domain Services
+     - Domain service integration. When ``true``, for permission values in the ``name@domain`` format, the local part (``name``) with the domain part removed is also added as a permission.
      - ``true``
 
 Entra ID Side Configuration
@@ -172,6 +172,9 @@ Configuring API Permissions
 .. note::
    Admin consent requires tenant administrator privileges.
 
+.. note::
+   |Fess| requests the ``https://graph.microsoft.com/.default`` scope when acquiring a token. This means that all access permissions configured and consented to on the app registration are used. Therefore, to retrieve group information, you must add the ``Group.Read.All`` permission above to the app registration and grant administrator consent.
+
 Information to Obtain
 ---------------------
 
@@ -192,6 +195,8 @@ Nested Groups
 
 |Fess| retrieves not only groups that users directly belong to, but also parent groups (nested groups) recursively.
 This processing is executed asynchronously after login to minimize impact on login time.
+The parent group lookup targets up to a certain number of levels, and the retrieved results are cached for a certain period.
+When the parent group retrieval completes, the user's permissions are recalculated.
 
 Default Group Settings
 ----------------------
@@ -244,10 +249,12 @@ Legacy Configuration (Backward Compatibility)
 ---------------------------------------------
 
 For compatibility with previous versions, the ``aad.*`` prefix can also be used.
+When each ``entraid.*`` property is not set, the value of the corresponding ``aad.*`` property is used.
+In addition, ``sso.type=aad`` is treated the same as ``sso.type=entraid``.
 
 ::
 
-    # Enable SSO
+    # Enable SSO (sso.type=aad can also be used)
     sso.type=entraid
 
     # Legacy configuration keys
