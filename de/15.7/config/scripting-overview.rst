@@ -1,18 +1,18 @@
-==================================
+=====================================
 Skripting-Übersicht
-==================================
+=====================================
 
 Übersicht
-==========
+=========
 
-|Fess| ermoeglicht es Ihnen, in verschiedenen Szenarien benutzerdefinierte Logik mithilfe von Skripten zu implementieren.
-Durch die Nutzung von Skripten koennen Sie die Datenverarbeitung waehrend des Crawlings,
-die Anpassung von Suchergebnissen und die Ausfuehrung geplanter Aufgaben flexibel steuern.
+|Fess| ermöglicht es, in verschiedenen Situationen benutzerdefinierte Logik mithilfe von Skripten zu implementieren.
+Durch den Einsatz von Skripten lassen sich Datenverarbeitung beim Crawling, URL-Transformationen
+und die Ausführung geplanter Aufgaben flexibel steuern.
 
-Unterstuetzte Skriptsprachen
+Unterstützte Skriptsprachen
 ============================
 
-|Fess| unterstuetzt die folgenden Skriptsprachen:
+|Fess| unterstützt die folgenden Skriptsprachen:
 
 .. list-table::
    :header-rows: 1
@@ -23,71 +23,110 @@ Unterstuetzte Skriptsprachen
      - Beschreibung
    * - Groovy
      - ``groovy``
-     - Die Standard-Skriptsprache. Java-kompatibel mit leistungsstarken Funktionen
+     - Die standardmäßig registrierte Skriptsprache. Java-kompatibel mit leistungsstarken Funktionen
 
 .. note::
-   Groovy wird am haeufigsten verwendet, und die Beispiele in dieser Dokumentation sind in Groovy geschrieben.
+   Das einzige standardmäßig in |Fess| registrierte Skript-Engine ist Groovy.
+   Die Standardskriptsprache ist ``groovy`` (``Constants.DEFAULT_SCRIPT``).
+   Alle Skriptbeispiele in dieser Dokumentation sind in Groovy-Syntax verfasst.
 
-Anwendungsfaelle fuer Skripte
-=============================
+Anwendungsfälle für Skripte
+============================
 
 Datenspeicher-Konfiguration
----------------------------
+----------------------------
 
 Datenspeicher-Konnektoren verwenden Skripte, um abgerufene Daten auf Indexfelder abzubilden.
+Die Konfiguration wird im Format ``Feldname=Ausdruck`` zeilenweise angegeben;
+jede Zeile wird als eigenständiger Groovy-Ausdruck ausgewertet.
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.name
-    content=data.description
-    lastModified=data.updated_at
+    url=site_url
+    title=name
+    content=description
+    last_modified=updated_at
+
+Die im Datenspeicher-Skript verfügbaren Variablennamen hängen vom jeweiligen Konnektor ab.
+Bei CSV- und JSON-Datenspeichern sind die Spalten- bzw. Feldnamen direkt als Variablen
+verfügbar (es wird kein gemeinsames Präfix wie ``data`` vorangestellt).
+Bei dateibasierten Konnektoren (Box, Google Drive, OneDrive usw.) lautet das Präfix ``file.*``,
+bei Slack ``message.*`` — das Präfix variiert je nach Konnektor.
+Details zu den verfügbaren Variablen entnehmen Sie bitte der Dokumentation des jeweiligen
+Datenspeicher-Konnektors.
+
+.. note::
+   Da jede Zeile eines Datenspeicher-Skripts als einzelner Ausdruck ausgewertet wird, sind
+   mehrzeilige ``if``-Blöcke, ``import``-Anweisungen und ``def``-Variablendeklarationen
+   nicht zulässig.
+   Für wertabhängige Felder verwenden Sie den ternären Operator
+   (z. B. ``title=enabled == "true" ? name : null``). Klassen werden über ihren
+   vollständig qualifizierten Namen (FQCN) inline referenziert.
 
 Pfad-Mapping
 ------------
 
-Skripte koennen fuer URL-Normalisierung und Pfadkonvertierung verwendet werden.
+Pfad-Mapping dient zur Normalisierung und Transformation von Crawling-URLs.
+Standardmäßig wird es als Paar aus „Regulärem Ausdruck" und „Ersetzungszeichenkette"
+konfiguriert — dies ist kein Groovy-Skript.
+Beispielsweise ersetzt der reguläre Ausdruck ``http://`` mit der Ersetzungszeichenkette
+``https://`` das URL-Schema.
+
+Nur wenn der Ersetzungszeichenkette das Präfix ``groovy:`` vorangestellt wird, wird der
+nachfolgende Teil als Groovy-Skript ausgewertet. In diesem Skript stehen ``url``
+(die zu transformierende URL-Zeichenkette) und ``matcher``
+(der ``java.util.regex.Matcher`` des regulären Ausdrucks) zur Verfügung.
 
 ::
 
-    # URL transformieren
-    url.replaceAll("http://", "https://")
+    groovy:url.replaceAll("http://", "https://")
 
 Geplante Aufgaben
 -----------------
 
-Geplante Aufgaben ermoeglichen es Ihnen, benutzerdefinierte Verarbeitungslogik in Groovy-Skripten zu schreiben.
+Bei geplanten Aufgaben kann benutzerdefinierte Verarbeitungslogik als Groovy-Skript verfasst
+werden. Das gesamte Skript wird als ein einziges Groovy-Skript ausgewertet, sodass
+mehrzeilige Anweisungen, ``import``-Anweisungen und ``def``-Variablendeklarationen
+verwendet werden können.
 
 ::
 
-    return container.getComponent("crawlJob").execute();
+    return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
+
+Methoden wie ``logLevel("info")`` gehören zur Job-Klasse (``ExecJob`` und deren
+Unterklassen) und können per Method-Chaining aufgerufen werden. Informationen zur
+``executor``-Variablen finden Sie im Abschnitt „Ausführungskontext und verfügbare Objekte".
 
 Grundlegende Syntax
 ===================
+
+Im Folgenden finden Sie grundlegende Groovy-Syntaxbeispiele. Kommentare werden mit ``//``
+(Zeilenkommentar) oder ``/* */`` (Blockkommentar) angegeben. Beachten Sie, dass Kommentare
+mit ``#`` in Groovy nicht verwendet werden können.
 
 Variablenzugriff
 ----------------
 
 ::
 
-    # Auf Datenspeicherdaten zugreifen
-    data.fieldName
+    // Datenspeicher-Feld (bei CSV/JSON über Spalten- bzw. Feldnamen zugreifen)
+    title
 
-    # Auf Systemkomponenten zugreifen
-    container.getComponent("componentName")
+    // Komponente aus dem DI-Container abrufen
+    container.getComponent("systemHelper")
 
 Zeichenkettenoperationen
 ------------------------
 
 ::
 
-    # Verkettung
+    // Verkettung
     title + " - " + category
 
-    # Ersetzung
+    // Ersetzung
     content.replaceAll("old", "new")
 
-    # Aufteilung
+    // Aufteilung
     tags.split(",")
 
 Bedingte Verzweigung
@@ -95,80 +134,111 @@ Bedingte Verzweigung
 
 ::
 
-    # Ternaerer Operator
-    data.status == "active" ? "Aktiv" : "Inaktiv"
+    // Ternärer Operator
+    status == "active" ? "Aktiv" : "Inaktiv"
 
-    # Null-Pruefung
-    data.description ?: "Keine Beschreibung"
+    // Standardwert bei null/leer (Elvis-Operator)
+    description ?: "Keine Beschreibung"
 
 Datumsoperationen
 -----------------
 
 ::
 
-    # Aktuelles Datum/Uhrzeit
+    // Aktuelles Datum/Uhrzeit
     new Date()
 
-    # Formatierung
-    new java.text.SimpleDateFormat("yyyy-MM-dd").format(data.date)
+    // Formatierung
+    new java.text.SimpleDateFormat("yyyy-MM-dd").format(updated_at)
 
-Verfuegbare Objekte
-===================
+Ausführungskontext und verfügbare Objekte
+==========================================
 
-Hauptobjekte, die innerhalb von Skripten verfuegbar sind:
+Die in einem Skript verfügbaren Objekte hängen vom jeweiligen Ausführungskontext ab.
+Nur ``container`` ist in allen Kontexten verfügbar.
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 75
+   :widths: 30 25 45
 
-   * - Objekt
+   * - Ausführungskontext
+     - Verfügbare Objekte
      - Beschreibung
-   * - ``data``
-     - Aus dem Datenspeicher abgerufene Daten
-   * - ``container``
-     - DI-Container (Zugriff auf Komponenten)
-   * - ``container.getComponent("systemHelper")``
-     - System-Helfer (Zugriff ueber Container)
-   * - ``container.getComponent("fessConfig")``
-     - |Fess| Konfiguration (Zugriff ueber Container)
+   * - Alle Kontexte
+     - ``container``
+     - DI-Container. Zugriff auf einzelne Komponenten über
+       ``container.getComponent("systemHelper")`` oder
+       ``container.getComponent("fessConfig")``
+   * - Datenspeicher-Skript
+     - Konnektor-spezifische Feldvariablen
+     - Die vom Datenspeicher abgerufenen Felder stehen als Variablen zur Verfügung
+       (Variablennamen und Präfixe variieren je nach Konnektor; bei CSV/JSON werden
+       Feldnamen direkt als Variablen verwendet)
+   * - Pfad-Mapping
+     - ``url`` ``matcher``
+     - Die zu transformierende URL-Zeichenkette und der ``Matcher`` des regulären Ausdrucks
+       (nur bei Ersetzungen mit dem Präfix ``groovy:``)
+   * - Geplante Aufgaben
+     - ``executor``
+     - Job-Ausführungsinstanz (``JobExecutor``). Wird zur Steuerung des Job-Shutdowns verwendet
+
+.. note::
+   Andere Objekte als ``container`` werden nur in bestimmten Kontexten injiziert.
+   Beispielsweise ist ``executor`` ausschließlich in geplanten Aufgaben verfügbar und
+   steht in Datenspeicher-Skripten oder beim Pfad-Mapping nicht zur Verfügung.
 
 Sicherheit
 ==========
 
 .. warning::
-   Skripte haben leistungsstarke Faehigkeiten, verwenden Sie sie daher nur aus vertrauenswuerdigen Quellen.
+   Skripte besitzen weitreichende Fähigkeiten — verwenden Sie sie daher ausschließlich
+   aus vertrauenswürdigen Quellen.
 
-- Skripte werden auf dem Server ausgefuehrt
-- Zugriff auf das Dateisystem und Netzwerk ist moeglich
-- Stellen Sie sicher, dass nur Benutzer mit Administratorrechten Skripte bearbeiten koennen
+- Skripte werden auf dem Server ausgeführt
+- Zugriff auf das Dateisystem und Netzwerk ist möglich
+- Stellen Sie sicher, dass nur Benutzer mit Administratorrechten Skripte bearbeiten können
+- Die Skriptausführung wird im Audit-Log (``audit.log``) protokolliert.
+  Die Protokollierung wird über ``script.audit.log.enabled`` gesteuert; der Standardwert
+  ist ``true``. Die maximale Länge der protokollierten Skriptzeichenkette wird über
+  ``script.audit.log.max.length`` gesteuert; der Standardwert beträgt ``100`` Zeichen.
 
 Leistung
 ========
 
-Tipps zur Optimierung der Skriptleistung:
+Hinweise zur Optimierung der Skript-Leistung:
 
-1. **Komplexe Verarbeitung vermeiden**: Skripte werden fuer jedes Dokument ausgefuehrt
-2. **Zugriff auf externe Ressourcen minimieren**: Netzwerkaufrufe verursachen Verzoegerungen
-3. **Caching verwenden**: Erwaegen Sie das Caching von Werten, die wiederholt verwendet werden
+1. **Komplexe Verarbeitung vermeiden**: Datenspeicher-Skripte werden für jedes Dokument ausgeführt
+2. **Zugriff auf externe Ressourcen minimieren**: Netzwerkaufrufe verursachen Verzögerungen
+3. **Caching nutzen**: Erwägen Sie das Zwischenspeichern von wiederholt verwendeten Werten
 
 Debugging
 =========
 
-Verwenden Sie Protokollausgaben zum Debuggen von Skripten:
+Da Skripte für geplante Aufgaben als ein einziges Groovy-Skript ausgewertet werden, können
+Protokollausgaben zum Debugging eingesetzt werden.
+(Datenspeicher-Skripte werden zeilenweise als einzelne Ausdrücke ausgewertet, daher sind
+``import``-Anweisungen und mehrzeilige Verarbeitungslogik dort nicht möglich.)
 
 ::
 
     import org.apache.logging.log4j.LogManager
-    def logger = LogManager.getLogger("script")
-    logger.info("data.id = {}", data.id)
+    def logger = LogManager.getLogger("fess.script")
+    logger.info("executor = {}", executor)
 
-Protokollebenen-Konfiguration:
-
-``app/WEB-INF/classes/log4j2.xml``:
+Das obige Beispiel verwendet einen Logger mit dem Namen ``fess.script``.
+Um diese Protokollausgabe zu aktivieren, fügen Sie die entsprechende Logger-Konfiguration
+in ``app/WEB-INF/classes/log4j2.xml`` ein.
 
 ::
 
-    <Logger name="script" level="DEBUG"/>
+    <Logger name="fess.script" level="DEBUG"/>
+
+Um Debug-Protokolle der Skript-Engine selbst zu aktivieren, setzen Sie den Protokolllevel
+des Pakets ``org.codelibs.fess.script`` auf ``DEBUG``.
+
+::
+
+    <Logger name="org.codelibs.fess.script" level="DEBUG"/>
 
 Referenzinformationen
 =====================
