@@ -9,7 +9,7 @@ AI搜索模式（RAG：检索增强生成）是通过LLM（大型语言模型）
 以对话形式提供信息的功能。用户可以用自然语言提问，
 获得基于搜索结果的详细回答。
 
-|Fess| 15.6中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
+|Fess| 15.7 中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
 核心配置及LLM提供商专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）
 在 ``system.properties`` 或管理界面中进行。
 
@@ -69,7 +69,7 @@ LLM提供商的选择在管理界面或系统属性中进行。
 配置路径快速参考
 ================
 
-|Fess| 15.6 中，配置项分为两个系列：FessConfig 系列（ ``fess_config.properties`` ）和
+|Fess| 15.7 中，配置项分为两个系列：FessConfig 系列（ ``fess_config.properties`` ）和
 SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）。两者的配置路径不同，
 请勿混淆。
 
@@ -112,7 +112,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 
 .. note::
 
-   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.6 及以后已改为 ``rag.llm.name``，
+   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.7 及以后已改为 ``rag.llm.name``，
    写入 ``rag.llm.type`` 的值不会被读取。
 
 核心配置一览
@@ -149,19 +149,31 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
      - 用户消息的最大字符数
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
-     - 高亮显示的片段大小
+     - 搜索高亮的片段大小
      - ``500``
    * - ``rag.chat.highlight.number.of.fragments``
-     - 高亮显示的片段数
+     - 搜索高亮的片段数
      - ``3``
+   * - ``rag.chat.content.fulltext.max.length``
+     - ``content_length`` 超过此值的文档，在回答上下文中使用高亮摘要而非全文的阈值
+     - ``3000``
+   * - ``rag.chat.answer.highlight.fragment.size``
+     - 从大型文档提取回答上下文摘要时的高亮片段大小
+     - ``1000``
+   * - ``rag.chat.answer.highlight.number.of.fragments``
+     - 从大型文档提取回答上下文摘要时的高亮片段数
+     - ``5``
    * - ``rag.chat.history.assistant.content``
      - 助手历史中包含的内容类型（ ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` ）
      - ``smart_summary``
+   * - ``rag.chat.history.titles.max.count``
+     - ``smart_summary`` 模式下每轮保留的参照文档标题最大数
+     - ``5``
 
 生成参数
 ================
 
-|Fess| 15.6中，生成参数（最大token数、temperature等）按提供商
+|Fess| 15.7 中，生成参数（最大token数、temperature等）按提供商
 和提示词类型分别进行设置。这些配置不是核心配置，而是作为各 ``fess-llm-*``
 插件的配置进行管理。
 
@@ -204,7 +216,9 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - 评估阶段选择的最大相关文档数
 
 ``{provider}`` 处填入 ``ollama``、``openai``、``gemini`` 等提供商名称。
-``{promptType}`` 处填入 ``chat``、``intent_analysis``、``evaluation`` 等提示词类型。
+``{promptType}`` 处填入 ``intent``、``evaluation``、``answer``、``summary``、``faq``、``queryregeneration``、
+``unclear``、``noresults``、``docnotfound``、``direct`` 等提示词类型。
+支持的提示词类型列表在各插件的 ``*LlmClient`` 实现中定义。
 
 详情请参阅各提供商的文档。
 
@@ -223,7 +237,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 系统提示词
 ==================
 
-|Fess| 15.6中，系统提示词不在属性文件中定义，而是在各 ``fess-llm-*``
+|Fess| 15.7 中，系统提示词不在属性文件中定义，而是在各 ``fess-llm-*``
 插件的DI XML（``fess_llm++.xml``）中定义。
 
 自定义提示词
@@ -281,10 +295,13 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 
 ::
 
-    # 各提供商的最大并发请求数
+    # 各提供商的最大并发请求数（默认: 5）
     rag.llm.ollama.max.concurrent.requests=5
-    rag.llm.openai.max.concurrent.requests=10
-    rag.llm.gemini.max.concurrent.requests=10
+    rag.llm.openai.max.concurrent.requests=5
+    rag.llm.gemini.max.concurrent.requests=5
+
+    # 获取并发许可的等待超时（毫秒，默认: 30000）
+    rag.llm.ollama.concurrency.wait.timeout=30000
 
 并发控制的注意事项
 -----------------------
@@ -292,6 +309,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 - 请同时考虑LLM提供商端的速率限制进行设置
 - 高负载环境中建议设置更小的值
 - 达到并发数上限时，请求将进入队列依次处理
+- 等待获取许可超过 ``concurrency.wait.timeout`` 时，请求将以超时错误失败
 
 对话历史模式
 ============
@@ -305,7 +323,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
    * - 模式
      - 说明
    * - ``smart_summary``
-     - （默认）保留响应的开头部分（60%）和结尾部分（40%），中间部分用省略标记替换。同时附加来源标题
+     - （默认）省略助手响应的正文，每轮仅保留过去的搜索查询和参照文档的标题（最多 ``rag.chat.history.titles.max.count`` 条）
    * - ``full``
      - 完整保留响应原文
    * - ``source_titles``
@@ -319,7 +337,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 
 .. note::
 
-   在 ``smart_summary`` 模式下，可以高效保留长响应的上下文，同时减少token使用量。
+   ``smart_summary`` 模式通过将响应正文替换为搜索查询和参照标题，可在高效保留上下文的同时减少 token 使用量。
    用户和助手的消息对按轮次分组，在字符预算内进行最优打包。
    历史的最大字符数和摘要的最大字符数由各 ``fess-llm-*`` 插件的 ``LlmClient`` 实现控制。
 
@@ -348,82 +366,111 @@ AI搜索模式的响应以Markdown格式渲染。
 API使用
 =========
 
-AI搜索模式功能可通过REST API使用。
+AI搜索模式功能可通过REST API（v2 API）使用。
+基础URL为 ``http://<服务器名称>/api/v2/``。
 
-非流式API
--------------------
-
-端点: ``POST /api/v1/chat``
-
-参数:
+Chat API 提供以下3个端点。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 65
+   :widths: 45 55
 
-   * - 参数
+   * - 端点
+     - 说明
+   * - ``POST /api/v2/chat``
+     - 批量（非流式）RAG 聊天补全
+   * - ``POST /api/v2/chat/stream``
+     - 流式 RAG 聊天补全（Server-Sent Events）
+   * - ``DELETE /api/v2/chat/sessions/{session_id}``
+     - 清除聊天会话的对话历史
+
+请求以 ``Content-Type: application/json`` 的 JSON 请求体发送。
+状态变更请求（ ``POST`` / ``DELETE`` ）需要 CSRF 令牌（ ``X-Fess-CSRF-Token`` 头）。
+响应存储在公共信封 ``response`` 中。
+
+.. note::
+
+   |Fess| 15.5 及以前提供的 ``/api/v1/chat`` 系列表单参数形式的端点已废弃。
+   15.7 中请使用 ``/api/v2/`` 下基于 JSON 的 API。
+
+非流式API
+---------
+
+端点: ``POST /api/v2/chat``
+
+请求体（JSON）:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - 字段
      - 必需
      - 说明
    * - ``message``
      - 是
      - 用户消息
-   * - ``sessionId``
+   * - ``session_id``
      - 否
-     - 会话ID（继续对话时）
-   * - ``clear``
+     - 会话 ID（继续对话时）。省略时由服务器创建并在响应中返回
+   * - ``fields``
      - 否
-     - ``true`` 时清除会话
+     - 检索步骤用的任意过滤字段（object）
+   * - ``fields.label``
+     - 否
+     - 按标签过滤搜索
+   * - ``extra_queries``
+     - 否
+     - 分面过滤用的附加查询表达式
 
 请求示例:
 
-::
+.. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/v1/chat" \
-         -d "message=请告诉我Fess的安装方法"
+    curl -X POST "http://localhost:8080/api/v2/chat" \
+         -H "Content-Type: application/json" \
+         -H "X-Fess-CSRF-Token: <token>" \
+         -d '{"message":"请告诉我Fess的安装方法"}'
 
 响应示例:
 
-::
+.. code-block:: json
 
     {
-      "status": "ok",
-      "sessionId": "abc123",
-      "content": "Fess的安装方法是...",
-      "sources": [
-        {"title": "安装指南", "url": "https://..."}
-      ]
+      "response": {
+        "status": 0,
+        "session_id": "abc123",
+        "content": "Fess的安装方法是...",
+        "sources": [
+          {
+            "rank": 1,
+            "title": "安装指南",
+            "url": "https://...",
+            "doc_id": "...",
+            "snippet": "..."
+          }
+        ]
+      }
     }
 
 流式API
------------------
+-------
 
-端点: ``POST /api/v1/chat/stream``
+端点: ``POST /api/v2/chat/stream``
 
-以Server-Sent Events（SSE）格式流式返回响应。
-
-参数:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 65
-
-   * - 参数
-     - 必需
-     - 说明
-   * - ``message``
-     - 是
-     - 用户消息
-   * - ``sessionId``
-     - 否
-     - 会话ID（继续对话时）
+请求体与 ``POST /api/v2/chat`` 相同（JSON）。
+响应以 Server-Sent Events（SSE）格式流式返回。
 
 请求示例:
 
-::
+.. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/v1/chat/stream" \
-         -d "message=请告诉我Fess的特点" \
-         -H "Accept: text/event-stream"
+    curl -X POST "http://localhost:8080/api/v2/chat/stream" \
+         -H "Content-Type: application/json" \
+         -H "X-Fess-CSRF-Token: <token>" \
+         -H "Accept: text/event-stream" \
+         --no-buffer \
+         -d '{"message":"请告诉我Fess的特点"}'
 
 SSE事件:
 
@@ -432,27 +479,34 @@ SSE事件:
    :widths: 20 80
 
    * - 事件
-     - 说明
+     - 说明（载荷）
    * - ``phase``
-     - 处理阶段的开始/完成（intent_analysis, search, evaluation, generation）
+     - 处理阶段的开始/完成（ ``intent`` , ``search`` , ``evaluate`` , ``fetch`` , ``answer`` ）。 ``{ phase, status, message?, keywords?, hit_count?, ... }``
    * - ``chunk``
-     - 生成的文本片段
+     - 生成的文本片段（ ``{ content }`` ）
    * - ``retry``
-     - 当 LLM 请求被重试时通知（阶段名、当前尝试次数、最大尝试次数、下次尝试前的等待时间、原因等）
+     - LLM 请求被重试时通知（ ``{ phase, operation, attempt, max_attempts, sleep_ms, cause? }`` ）
    * - ``waiting``
-     - 在等待并发许可获取期间通知（阶段名、已等待时长、等待超时）
+     - 等待并发许可获取等长时间阶段的进度（ ``{ phase, reason, elapsed_ms, timeout_ms }`` ）
    * - ``fallback``
-     - 当因搜索结果为零等原因导致查询被再生成时通知（阶段、原因 ``no_results`` 或 ``no_relevant_results`` 、原始查询、再生成后的查询）
+     - 因搜索结果为零等原因导致查询被再生成时通知（ ``{ phase, reason, original_query?, new_query? }`` ，原因为 ``no_results`` 或 ``no_relevant_results`` ）
    * - ``warning``
-     - 发生内部静默回退时通知（如推理模型 token 耗尽等）
+     - 发生可恢复警告时通知（ ``{ phase, code, detail? }`` 。如推理模型 token 耗尽等）
    * - ``sources``
-     - 参考文档信息
+     - 参照来源文档信息（ ``{ sources: [...] }`` ）
    * - ``done``
-     - 处理完成（sessionId, htmlContent）。htmlContent包含Markdown渲染后的HTML字符串
+     - 处理完成（ ``{ session_id, html_content? }`` ）。 ``html_content`` 包含 Markdown 渲染后的 HTML 字符串
    * - ``error``
-     - 错误信息。提供超时、上下文长度超出、模型未找到、无效响应、连接错误等类型的具体消息
+     - 流终止的中途失败（ ``{ phase?, message, error_code }`` ）。超时、上下文长度超出、模型未找到、无效响应、连接错误等
 
-详细的API文档请参阅 :doc:`../api/api-chat`。
+清除会话
+--------
+
+端点: ``DELETE /api/v2/chat/sessions/{session_id}``
+
+清除指定会话的对话历史。成功时返回 ``cleared: true``。
+
+详细的API文档（认证、CSRF、速率限制、HTTP状态码）请参阅 :doc:`../api/api-chat`。
 
 Web界面
 ===================
@@ -498,9 +552,9 @@ Web界面
 
 2. 对应的 ``fess-llm-*`` 插件是否已安装
 
-   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama``）
+   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama``）
    - 软件包安装: 对应的 JAR 文件是否放置在 ``app/WEB-INF/plugin/``
-   - 启动日志中是否输出 ``Installing fess-llm-XXX-15.6.0.jar``
+   - 启动日志中是否输出 ``Installing fess-llm-XXX-15.7.0.jar``
 
 3. ``rag.llm.name`` 的值是否与已安装的插件一致
 
@@ -522,7 +576,7 @@ Web界面
 6. 是否能连接到 LLM 提供商
 
    - 对于云端 API（Gemini / OpenAI），容器需要能访问外网
-   - 如需经代理，请在 ``fess_config.properties`` 中设置 ``http.proxy.host`` / ``http.proxy.port`` （必要时设置 ``http.proxy.username`` / ``http.proxy.password`` ）。在Docker环境中，于 ``FESS_JAVA_OPTS`` 中追加 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` （自 |Fess| 15.6.1 起，LLM客户端会引用 |Fess| 通用的代理配置）
+   - 如需经代理，请在 ``fess_config.properties`` 中设置 ``http.proxy.host`` / ``http.proxy.port`` （必要时设置 ``http.proxy.username`` / ``http.proxy.password`` ）。在Docker环境中，于 ``FESS_JAVA_OPTS`` 中追加 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` （自 |Fess| 15.7 起，LLM客户端会引用 |Fess| 通用的代理配置）
 
 .. note::
 
@@ -564,7 +618,7 @@ AI搜索模式无法启用
 
 **确认事项**:
 
-1. 客户端是否正确发送sessionId
+1. 客户端是否正确发送 ``session_id``
 2. ``rag.chat.session.timeout.minutes`` 的设置
 3. 会话存储的容量
 
@@ -578,7 +632,7 @@ AI搜索模式无法启用
 ::
 
     <Logger name="org.codelibs.fess.llm" level="DEBUG"/>
-    <Logger name="org.codelibs.fess.api.chat" level="DEBUG"/>
+    <Logger name="org.codelibs.fess.api.v2.handlers" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
 
 主要日志消息带有 ``[RAG]`` 前缀，
