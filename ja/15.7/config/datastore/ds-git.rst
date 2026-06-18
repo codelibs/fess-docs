@@ -127,6 +127,9 @@ Gitコネクタは、Gitリポジトリのファイルを取得して
    * - ``cache_threshold``
      - いいえ
      - メモリとディスクバッファリングの切り替え閾値（バイト単位、デフォルト: ``1000000``）
+   * - ``readInterval``
+     - いいえ
+     - 各ファイルの処理間隔（ミリ秒単位、デフォルト: ``0``）
 
 スクリプト設定
 --------------
@@ -219,17 +222,23 @@ GitLabのUser Settings → Access Tokens:
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-SSH認証
--------
+ユーザー名とパスワードによる認証
+--------------------------------
 
-SSH鍵を使用する場合:
+URIに認証情報を埋め込む代わりに、``username`` と ``password`` パラメーターを使用して
+認証情報を指定することもできます:
 
 ::
 
-    uri=git@github.com:company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
+
+``username`` と ``password`` の両方を指定した場合にのみ、認証情報が使用されます。
 
 .. note::
-   SSH認証を使用する場合、|Fess| を実行しているユーザーのSSH鍵を設定する必要があります。
+   Gitコネクタは HTTP/HTTPS 経由の認証（ユーザー名とパスワード、またはアクセストークン）のみをサポートします。
+   SSH鍵による認証（``git@...`` 形式のURI）はサポートされていません。HTTPS形式のURIを使用してください。
 
 抽出器の設定
 ============
@@ -295,7 +304,12 @@ MIMEタイプ別の抽出器
 ------------------------
 
 ``base_url`` が設定されている場合、GitのDiffEntryで検出された削除ファイル（``ChangeType.DELETE``）は
-自動的にインデックスから削除されます。
+自動的にインデックスから削除されます。ファイルがリネームされた場合（``ChangeType.RENAME``）は、
+旧パスのドキュメントが削除され、新パスのファイルが改めてインデックスに登録されます。
+
+.. note::
+   削除ファイルの自動削除は ``base_url`` が設定されている場合にのみ有効です。
+   ``base_url`` が未設定の場合、ドキュメントのURLが空になるため、削除処理は行われません。
 
 使用例
 ======
@@ -518,7 +532,8 @@ base_urlの設定パターン
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-``base_url`` とファイルパスが結合されてURLが生成されます。
+``base_url`` とファイルパスが単純に連結されて（区切り文字は挿入されません）URLが生成されます。
+そのため、``base_url`` は末尾を ``/`` で終わらせる必要があります。
 
 スクリプトでのURL生成
 ---------------------

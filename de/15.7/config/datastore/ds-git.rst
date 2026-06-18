@@ -126,6 +126,9 @@ Parameterliste
    * - ``cache_threshold``
      - Nein
      - Schwellenwert in Bytes für den Wechsel zwischen Speicher- und Festplattenpufferung (Standard: ``1000000``)
+   * - ``readInterval``
+     - Nein
+     - Verarbeitungsintervall zwischen den einzelnen Dateien (in Millisekunden, Standard: ``0``)
 
 Skript-Einstellungen
 --------------------
@@ -218,17 +221,21 @@ Unter GitLab User Settings -> Access Tokens:
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-SSH-Authentifizierung
----------------------
+Authentifizierung mit Benutzername und Passwort
+-----------------------------------------------
 
-Bei Verwendung von SSH-Schlüsseln:
+Anstatt Anmeldedaten in der URI einzubetten, können Sie diese auch über die Parameter ``username`` und ``password`` angeben:
 
 ::
 
-    uri=git@github.com:company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
+
+Anmeldedaten werden nur verwendet, wenn sowohl ``username`` als auch ``password`` angegeben sind.
 
 .. note::
-   Bei SSH-Authentifizierung müssen die SSH-Schlüssel des Benutzers konfiguriert werden, der |Fess| ausführt.
+   Der Git-Konnektor unterstützt ausschließlich HTTP/HTTPS-Authentifizierung (Benutzername und Passwort oder ein Zugriffstoken). SSH-Schlüssel-Authentifizierung (URIs im Stil ``git@...``) wird nicht unterstützt. Verwenden Sie eine URI im HTTPS-Format.
 
 Extraktoren konfigurieren
 =========================
@@ -294,6 +301,11 @@ Verarbeitung gelöschter Dateien
 -------------------------------
 
 Wenn ``base_url`` gesetzt ist, werden über Git DiffEntry (``ChangeType.DELETE``) erkannte gelöschte Dateien automatisch aus dem Index entfernt.
+
+Wenn eine Datei umbenannt wird (``ChangeType.RENAME``), wird das Dokument unter dem alten Pfad gelöscht und die Datei unter dem neuen Pfad neu indiziert.
+
+.. note::
+   Die automatische Löschung entfernter Dateien ist nur wirksam, wenn ``base_url`` gesetzt ist. Wenn ``base_url`` nicht gesetzt ist, ist die Dokument-URL leer, sodass keine Löschung durchgeführt wird.
 
 Anwendungsbeispiele
 ===================
@@ -516,7 +528,7 @@ base_url-Muster
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-``base_url`` und Dateipfad werden kombiniert, um die URL zu generieren.
+Die URL wird durch einfache Verkettung von ``base_url`` und dem Dateipfad generiert (ohne eingefügtes Trennzeichen). Daher muss ``base_url`` mit einem abschließenden ``/`` enden.
 
 URL-Generierung im Skript
 -------------------------
