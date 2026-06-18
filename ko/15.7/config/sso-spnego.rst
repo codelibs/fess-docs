@@ -117,6 +117,10 @@ Kerberos 설정 파일
         isInitiator=false;
     };
 
+.. note::
+   ``krb5.conf`` 와 ``auth_login.conf`` 는 ``spnego.krb5.conf`` / ``spnego.login.conf`` 로 기본 파일명이 설정되어 있지만, 파일 자체는 반드시 생성해 두어야 합니다.
+   이 파일들이 클래스패스 상에 존재하지 않으면 SPNEGO 초기화에 실패하여 |Fess| 가 시작되지 않습니다.
+
 필수 설정
 ----------
 
@@ -167,7 +171,7 @@ Kerberos 설정 파일
      - 비보안 Basic 인증 허용
      - ``true``
    * - ``spnego.prompt.ntlm``
-     - NTLM 프롬프트 표시
+     - NTLM 토큰 수신 시 Basic 인증으로 폴백
      - ``true``
    * - ``spnego.allow.localhost``
      - localhost에서의 접근 허용
@@ -179,12 +183,21 @@ Kerberos 설정 파일
      - 인증 제외 디렉터리(쉼표 구분)
      - (없음)
    * - ``spnego.logger.level``
-     - 로그 레벨(0-7)
+     - SPNEGO 라이브러리 내부 로그 레벨( ``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE. 이 외의 값( ``0``, ``5`` 포함)은 INFO로 처리)
      - (자동)
 
 .. warning::
    ``spnego.allow.unsecure.basic=true`` 는 Base64로 인코딩된 인증 정보를 암호화되지 않은 연결로 송신할 가능성이 있습니다.
    프로덕션 환경에서는 ``false`` 로 설정하고 HTTPS를 사용할 것을 강력히 권장합니다.
+
+.. note::
+   ``spnego.prompt.ntlm=true`` (기본값)인 경우, ``spnego.allow.basic`` 도 ``true`` 이어야 합니다.
+   ``spnego.allow.basic=false`` 로 설정하는 경우에는 ``spnego.prompt.ntlm=false`` 도 함께 설정하십시오.
+   이 조건을 충족하지 않으면 SPNEGO 초기화 시 오류가 발생합니다.
+
+.. note::
+   ``spnego.logger.level`` 은 SPNEGO 라이브러리 내부의 로거( ``java.util.logging`` 의 ``Spnego`` 라는 이름의 로거)의 로그 레벨을 제어합니다.
+   미설정 시에는 |Fess| 의 로그 레벨에 따라 자동으로 결정됩니다.
 
 LDAP 설정
 =========
@@ -316,7 +329,12 @@ Mozilla Firefox
     # 보안 설정(프로덕션 환경)
     spnego.allow.basic=false
     spnego.allow.unsecure.basic=false
+    spnego.prompt.ntlm=false
     spnego.allow.localhost=false
+
+.. note::
+   ``spnego.allow.basic=false`` 로 설정하는 경우에는 ``spnego.prompt.ntlm=false`` 도 반드시 설정하십시오.
+   ``spnego.prompt.ntlm`` 은 기본값이 ``true`` 이므로, 이 설정을 생략하면 초기화 시 오류가 발생합니다.
 
 문제 해결
 =========
@@ -348,20 +366,24 @@ Mozilla Firefox
 디버그 설정
 -----------
 
-문제를 조사하기 위해 |Fess| 의 로그 레벨을 조정하여 SPNEGO 관련 상세 로그를 출력할 수 있습니다.
+문제를 조사하기 위해 SPNEGO 관련 상세 로그를 출력할 수 있습니다.
 
-``app/WEB-INF/conf/system.properties`` 에 다음을 추가:
+SPNEGO 라이브러리 내부의 상세 로그를 출력하려면 ``app/WEB-INF/conf/system.properties`` 에 다음을 추가합니다.
+``spnego.logger.level=1`` 은 가장 상세한 로그(FINEST)를 출력합니다.
 
 ::
 
     spnego.logger.level=1
 
-또는 ``app/WEB-INF/classes/log4j2.xml`` 에 다음 로거를 추가:
+|Fess| 측의 SPNEGO 연계 처리( ``org.codelibs.fess.sso.spnego`` 패키지)의 상세 로그를 출력하려면 ``app/WEB-INF/classes/log4j2.xml`` 에 다음 로거를 추가합니다.
 
 ::
 
     <Logger name="org.codelibs.fess.sso.spnego" level="DEBUG"/>
-    <Logger name="org.codelibs.spnego" level="DEBUG"/>
+
+.. note::
+   SPNEGO 라이브러리 자체의 로그는 ``java.util.logging`` 으로 출력되므로 ``log4j2.xml`` 이 아닌 ``spnego.logger.level`` 로 제어합니다.
+   |Fess| 측의 연계 처리 로그는 ``log4j2.xml`` 의 로거로 제어합니다.
 
 참고 정보
 =========

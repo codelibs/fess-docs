@@ -117,6 +117,10 @@ Kerberos配置文件
         isInitiator=false;
     };
 
+.. note::
+   ``krb5.conf`` 和 ``auth_login.conf`` 的默认文件名分别由 ``spnego.krb5.conf`` / ``spnego.login.conf`` 指定，但这两个文件本身必须事先创建好。
+   如果这些文件不存在于类路径上，SPNEGO初始化将失败，|Fess| 将无法启动。
+
 必需设置
 --------
 
@@ -167,7 +171,7 @@ Kerberos配置文件
      - 允许非安全Basic认证
      - ``true``
    * - ``spnego.prompt.ntlm``
-     - 显示NTLM提示
+     - 收到NTLM令牌时回退到Basic认证
      - ``true``
    * - ``spnego.allow.localhost``
      - 允许localhost访问
@@ -179,12 +183,21 @@ Kerberos配置文件
      - 排除认证的目录（逗号分隔）
      - （无）
    * - ``spnego.logger.level``
-     - 日志级别（0-7）
+     - SPNEGO库内部日志级别（``1`` =FINEST、``2`` =FINER、``3`` =FINE、``4`` =CONFIG、``6`` =WARNING、``7`` =SEVERE。这些值以外的值（包括 ``0`` 和 ``5``）均视为INFO）
      - （自动）
 
 .. warning::
    ``spnego.allow.unsecure.basic=true`` 可能通过未加密的连接发送Base64编码的凭据。
    对于生产环境，强烈建议将此设置为 ``false`` 并使用HTTPS。
+
+.. note::
+   ``spnego.prompt.ntlm=true``（默认值）时，``spnego.allow.basic`` 也必须为 ``true``。
+   若要将 ``spnego.allow.basic`` 设为 ``false``，则必须同时将 ``spnego.prompt.ntlm`` 设为 ``false``。
+   不满足此条件时，SPNEGO初始化时将发生错误。
+
+.. note::
+   ``spnego.logger.level`` 控制SPNEGO库内部日志记录器（``java.util.logging`` 中名为 ``Spnego`` 的日志记录器）的日志级别。
+   未设置时，将根据 |Fess| 的日志级别自动确定。
 
 LDAP配置
 ========
@@ -316,7 +329,12 @@ Mozilla Firefox
     # 安全设置（生产环境）
     spnego.allow.basic=false
     spnego.allow.unsecure.basic=false
+    spnego.prompt.ntlm=false
     spnego.allow.localhost=false
+
+.. note::
+   设置 ``spnego.allow.basic=false`` 时，必须同时设置 ``spnego.prompt.ntlm=false``。
+   由于 ``spnego.prompt.ntlm`` 默认为 ``true``，省略此设置将导致初始化时发生错误。
 
 故障排除
 ========
@@ -348,26 +366,29 @@ Mozilla Firefox
 调试设置
 --------
 
-要调查问题，您可以通过调整 |Fess| 的日志级别来输出详细的SPNEGO相关日志。
+要调查问题，可以输出SPNEGO相关的详细日志。
 
-在 ``app/WEB-INF/conf/system.properties`` 中添加以下内容：
+要输出SPNEGO库内部的详细日志，请在 ``app/WEB-INF/conf/system.properties`` 中添加以下内容。
+``spnego.logger.level=1`` 将输出最详细的日志（FINEST）。
 
 ::
 
     spnego.logger.level=1
 
-或在 ``app/WEB-INF/classes/log4j2.xml`` 中添加以下日志记录器：
+要输出 |Fess| 侧SPNEGO联动处理（``org.codelibs.fess.sso.spnego`` 包）的详细日志，请在 ``app/WEB-INF/classes/log4j2.xml`` 中添加以下日志记录器。
 
 ::
 
     <Logger name="org.codelibs.fess.sso.spnego" level="DEBUG"/>
-    <Logger name="org.codelibs.spnego" level="DEBUG"/>
 
-参考
-====
+.. note::
+   SPNEGO库本身的日志通过 ``java.util.logging`` 输出，因此通过 ``spnego.logger.level`` 而非 ``log4j2.xml`` 进行控制。
+   |Fess| 侧联动处理的日志通过 ``log4j2.xml`` 中的日志记录器进行控制。
+
+参考信息
+========
 
 - :doc:`security-role` - 基于角色的搜索配置
 - :doc:`sso-saml` - SAML认证SSO配置
 - :doc:`sso-oidc` - OpenID Connect认证SSO配置
 - :doc:`sso-entraid` - Microsoft Entra ID SSO配置
-

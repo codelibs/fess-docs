@@ -117,6 +117,10 @@ Créez ``app/WEB-INF/classes/auth_login.conf`` avec la configuration de connexio
         isInitiator=false;
     };
 
+.. note::
+   Les noms de fichier par défaut de ``krb5.conf`` et ``auth_login.conf`` sont définis respectivement par ``spnego.krb5.conf`` et ``spnego.login.conf``, mais ces fichiers doivent impérativement être créés.
+   Si ces fichiers sont absents du classpath, l'initialisation de SPNEGO échoue et |Fess| ne peut pas démarrer.
+
 Paramètres requis
 -----------------
 
@@ -167,10 +171,10 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Autoriser l'authentification Basic non sécurisée
      - ``true``
    * - ``spnego.prompt.ntlm``
-     - Afficher l'invite NTLM
+     - Revenir à l'authentification Basic lors de la réception d'un jeton NTLM
      - ``true``
    * - ``spnego.allow.localhost``
-     - Autoriser l'accès localhost
+     - Autoriser l'accès depuis localhost
      - ``true``
    * - ``spnego.allow.delegation``
      - Autoriser la délégation
@@ -179,12 +183,21 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Répertoires exclus de l'authentification (séparés par des virgules)
      - (Aucun)
    * - ``spnego.logger.level``
-     - Niveau de log (0-7)
-     - (Auto)
+     - Niveau de log interne de la bibliothèque SPNEGO (``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE ; toute autre valeur, y compris ``0`` et ``5``, est traitée comme INFO)
+     - (Automatique)
 
 .. warning::
    ``spnego.allow.unsecure.basic=true`` peut envoyer des identifiants encodés en Base64 sur des connexions non chiffrées.
    Pour les environnements de production, il est fortement recommandé de définir cette valeur sur ``false`` et d'utiliser HTTPS.
+
+.. note::
+   Lorsque ``spnego.prompt.ntlm=true`` (valeur par défaut), ``spnego.allow.basic`` doit également être ``true``.
+   Si vous définissez ``spnego.allow.basic=false``, vous devez également définir ``spnego.prompt.ntlm=false``.
+   Si cette condition n'est pas respectée, une erreur se produit lors de l'initialisation de SPNEGO.
+
+.. note::
+   ``spnego.logger.level`` contrôle le niveau de log du logger interne de la bibliothèque SPNEGO (le logger ``java.util.logging`` nommé ``Spnego``).
+   Si ce paramètre n'est pas défini, le niveau est déterminé automatiquement en fonction du niveau de log de |Fess|.
 
 Configuration LDAP
 ==================
@@ -240,7 +253,7 @@ Mozilla Firefox
 
 1. Entrer ``about:config`` dans la barre d'adresse
 2. Rechercher ``network.negotiate-auth.trusted-uris``
-3. Définir l'URL ou le domaine du serveur Fess (ex: ``https://fess-server.example.local``)
+3. Définir l'URL ou le domaine du serveur Fess (ex : ``https://fess-server.example.local``)
 
 Exemples de configuration
 =========================
@@ -316,7 +329,12 @@ Voici un exemple de configuration recommandée pour les environnements de produc
     # Paramètres de sécurité (production)
     spnego.allow.basic=false
     spnego.allow.unsecure.basic=false
+    spnego.prompt.ntlm=false
     spnego.allow.localhost=false
+
+.. note::
+   Si vous définissez ``spnego.allow.basic=false``, vous devez également définir ``spnego.prompt.ntlm=false``.
+   La valeur par défaut de ``spnego.prompt.ntlm`` est ``true`` ; omettre ce paramètre provoque une erreur lors de l'initialisation.
 
 Dépannage
 =========
@@ -348,20 +366,24 @@ Impossible de récupérer les informations de groupe
 Paramètres de débogage
 ----------------------
 
-Pour investiguer les problèmes, vous pouvez afficher des logs détaillés liés à SPNEGO en ajustant le niveau de log de |Fess|.
+Pour investiguer les problèmes, vous pouvez afficher des logs détaillés liés à SPNEGO.
 
-Ajoutez ce qui suit à ``app/WEB-INF/conf/system.properties`` :
+Pour afficher les logs détaillés internes de la bibliothèque SPNEGO, ajoutez ce qui suit à ``app/WEB-INF/conf/system.properties``.
+``spnego.logger.level=1`` produit les logs les plus détaillés (FINEST).
 
 ::
 
     spnego.logger.level=1
 
-Ou ajoutez les loggers suivants à ``app/WEB-INF/classes/log4j2.xml`` :
+Pour afficher les logs détaillés du traitement SPNEGO côté |Fess| (package ``org.codelibs.fess.sso.spnego``), ajoutez le logger suivant à ``app/WEB-INF/classes/log4j2.xml`` :
 
 ::
 
     <Logger name="org.codelibs.fess.sso.spnego" level="DEBUG"/>
-    <Logger name="org.codelibs.spnego" level="DEBUG"/>
+
+.. note::
+   Les logs de la bibliothèque SPNEGO elle-même sont émis via ``java.util.logging`` et se contrôlent avec ``spnego.logger.level``, non via ``log4j2.xml``.
+   Les logs du traitement d'intégration côté |Fess| se contrôlent via le logger ``log4j2.xml``.
 
 Référence
 =========
@@ -370,4 +392,3 @@ Référence
 - :doc:`sso-saml` - Configuration SSO avec authentification SAML
 - :doc:`sso-oidc` - Configuration SSO avec authentification OpenID Connect
 - :doc:`sso-entraid` - Configuration SSO avec Microsoft Entra ID
-

@@ -1,6 +1,6 @@
-====================================================
-SSO-Konfiguration mit Windows-Integrierte Auth
-====================================================
+=============================================
+SSO-Konfiguration mit Windows-integrierter Authentifizierung
+=============================================
 
 Übersicht
 =========
@@ -34,8 +34,8 @@ Bevor Sie die Windows-integrierte Authentifizierung konfigurieren, überprüfen 
 - Sie haben die Berechtigung, Dienstprinzipalnamen (SPN) in AD zu konfigurieren
 - Ein Konto zum Abrufen von Benutzerinformationen über LDAP ist verfügbar
 
-Active Directory-Seitige Konfiguration
-======================================
+Active Directory-seitige Konfiguration
+=======================================
 
 Registrieren des Dienstprinzipalnamens (SPN)
 --------------------------------------------
@@ -117,6 +117,10 @@ Erstellen Sie ``app/WEB-INF/classes/auth_login.conf`` mit der JAAS-Login-Konfigu
         isInitiator=false;
     };
 
+.. note::
+   Die Standarddateinamen für ``krb5.conf`` und ``auth_login.conf`` werden über ``spnego.krb5.conf`` bzw. ``spnego.login.conf`` festgelegt, die Dateien selbst müssen jedoch zwingend erstellt werden.
+   Sind diese Dateien nicht im Classpath vorhanden, schlägt die SPNEGO-Initialisierung fehl und |Fess| kann nicht gestartet werden.
+
 Erforderliche Einstellungen
 ---------------------------
 
@@ -167,7 +171,7 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Unsichere Basic-Authentifizierung erlauben
      - ``true``
    * - ``spnego.prompt.ntlm``
-     - NTLM-Aufforderung anzeigen
+     - Bei Empfang eines NTLM-Tokens auf Basic-Authentifizierung zurückfallen
      - ``true``
    * - ``spnego.allow.localhost``
      - Localhost-Zugriff erlauben
@@ -179,12 +183,21 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Von der Authentifizierung ausgeschlossene Verzeichnisse (kommagetrennt)
      - (Keine)
    * - ``spnego.logger.level``
-     - Protokollebene (0-7)
-     - (Auto)
+     - Interner Protokollierungsgrad der SPNEGO-Bibliothek (``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE; alle anderen Werte einschließlich ``0`` und ``5`` werden als INFO behandelt)
+     - (Automatisch)
 
 .. warning::
    ``spnego.allow.unsecure.basic=true`` kann Base64-kodierte Anmeldeinformationen über unverschlüsselte Verbindungen senden.
    Für Produktionsumgebungen wird dringend empfohlen, dies auf ``false`` zu setzen und HTTPS zu verwenden.
+
+.. note::
+   Wenn ``spnego.prompt.ntlm=true`` (Standard), muss auch ``spnego.allow.basic`` auf ``true`` gesetzt sein.
+   Wenn Sie ``spnego.allow.basic=false`` setzen, müssen Sie gleichzeitig ``spnego.prompt.ntlm=false`` setzen.
+   Wird diese Bedingung nicht erfüllt, tritt bei der SPNEGO-Initialisierung ein Fehler auf.
+
+.. note::
+   ``spnego.logger.level`` steuert den Protokollierungsgrad des internen Loggers der SPNEGO-Bibliothek (``java.util.logging``-Logger mit dem Namen ``Spnego``).
+   Wenn nicht gesetzt, wird er automatisch entsprechend dem Protokollierungsgrad von |Fess| bestimmt.
 
 LDAP-Konfiguration
 ==================
@@ -246,7 +259,7 @@ Konfigurationsbeispiele
 =======================
 
 Minimale Konfiguration (zum Testen)
------------------------------------
+------------------------------------
 
 Das Folgende ist ein minimales Konfigurationsbeispiel für eine Testumgebung.
 
@@ -296,7 +309,7 @@ Das Folgende ist ein minimales Konfigurationsbeispiel für eine Testumgebung.
     };
 
 Empfohlene Konfiguration (für Produktion)
------------------------------------------
+------------------------------------------
 
 Das Folgende ist ein empfohlenes Konfigurationsbeispiel für Produktionsumgebungen.
 
@@ -316,52 +329,61 @@ Das Folgende ist ein empfohlenes Konfigurationsbeispiel für Produktionsumgebung
     # Sicherheitseinstellungen (Produktion)
     spnego.allow.basic=false
     spnego.allow.unsecure.basic=false
+    spnego.prompt.ntlm=false
     spnego.allow.localhost=false
+
+.. note::
+   Wenn Sie ``spnego.allow.basic=false`` setzen, müssen Sie auch ``spnego.prompt.ntlm=false`` zwingend setzen.
+   Da ``spnego.prompt.ntlm`` standardmäßig ``true`` ist, tritt bei der Initialisierung ein Fehler auf, wenn diese Einstellung weggelassen wird.
 
 Fehlerbehebung
 ==============
 
 Häufige Probleme und Lösungen
------------------------------
+------------------------------
 
 Authentifizierungsdialog erscheint
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Überprüfen Sie, ob der Fess-Server in den Browser-Einstellungen zur Zone "Lokales Intranet" hinzugefügt wurde
 - Überprüfen Sie, ob "Integrierte Windows-Authentifizierung aktivieren" aktiviert ist
 - Überprüfen Sie, ob der SPN korrekt registriert ist (``setspn -L <Benutzername>``)
 
 Authentifizierungsfehler treten auf
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Überprüfen Sie, ob der Domänenname (Großbuchstaben) und der AD-Servername in ``krb5.conf`` korrekt sind
 - Überprüfen Sie, ob ``spnego.preauth.username`` und ``spnego.preauth.password`` korrekt sind
 - Überprüfen Sie die Netzwerkverbindung zum AD-Server
 
 Gruppeninformationen können nicht abgerufen werden
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Überprüfen Sie, ob die LDAP-Einstellungen korrekt sind
 - Überprüfen Sie, ob Bind-DN und Passwort korrekt sind
 - Überprüfen Sie, ob der Benutzer in AD zu Gruppen gehört
 
 Debug-Einstellungen
--------------------
+--------------------
 
-Um Probleme zu untersuchen, können Sie detaillierte SPNEGO-bezogene Protokolle ausgeben, indem Sie die |Fess|-Protokollebene anpassen.
+Um Probleme zu untersuchen, können Sie detaillierte SPNEGO-bezogene Protokolle ausgeben.
 
-Fügen Sie Folgendes zu ``app/WEB-INF/conf/system.properties`` hinzu:
+Um detaillierte interne Protokolle der SPNEGO-Bibliothek auszugeben, fügen Sie Folgendes zu ``app/WEB-INF/conf/system.properties`` hinzu.
+``spnego.logger.level=1`` gibt die ausführlichsten Protokolle (FINEST) aus.
 
 ::
 
     spnego.logger.level=1
 
-Oder fügen Sie die folgenden Logger zu ``app/WEB-INF/classes/log4j2.xml`` hinzu:
+Um detaillierte Protokolle der SPNEGO-Integrations-Verarbeitung auf der |Fess|-Seite (Paket ``org.codelibs.fess.sso.spnego``) auszugeben, fügen Sie den folgenden Logger zu ``app/WEB-INF/classes/log4j2.xml`` hinzu.
 
 ::
 
     <Logger name="org.codelibs.fess.sso.spnego" level="DEBUG"/>
-    <Logger name="org.codelibs.spnego" level="DEBUG"/>
+
+.. note::
+   Die Protokolle der SPNEGO-Bibliothek selbst werden über ``java.util.logging`` ausgegeben und daher über ``spnego.logger.level`` und nicht über ``log4j2.xml`` gesteuert.
+   Die Protokolle der Integrations-Verarbeitung auf der |Fess|-Seite werden über den Logger in ``log4j2.xml`` gesteuert.
 
 Referenz
 ========
@@ -370,4 +392,3 @@ Referenz
 - :doc:`sso-saml` - SSO-Konfiguration mit SAML-Authentifizierung
 - :doc:`sso-oidc` - SSO-Konfiguration mit OpenID Connect-Authentifizierung
 - :doc:`sso-entraid` - SSO-Konfiguration mit Microsoft Entra ID
-
