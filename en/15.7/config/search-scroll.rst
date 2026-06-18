@@ -1,6 +1,6 @@
-==========================
+================================
 Bulk Retrieval of Search Results
-==========================
+================================
 
 Overview
 ========
@@ -17,7 +17,7 @@ Use Cases
 Scroll search is suitable for purposes such as:
 
 - Exporting all search results
-- Retrieving large amounts of data for analysis
+- Retrieving large amounts of data for data analysis
 - Data retrieval in batch processing
 - Data synchronization to external systems
 - Data collection for report generation
@@ -33,7 +33,8 @@ Enabling Scroll Search
 ----------------------
 
 By default, scroll search is disabled from security and performance perspectives.
-To enable it, change the following setting in ``app/WEB-INF/classes/fess_config.properties`` or ``/etc/fess/fess_config.properties``.
+To enable it, change the following setting in ``app/WEB-INF/classes/fess_config.properties`` (or
+``/etc/fess/fess_config.properties`` for RPM/DEB packages).
 
 ::
 
@@ -42,11 +43,22 @@ To enable it, change the following setting in ``app/WEB-INF/classes/fess_config.
 .. note::
    After changing settings, you must restart |Fess|.
 
+Scroll Context Lifetime
+-----------------------
+
+The scroll context lifetime for scroll search is fixed internally in |Fess| at ``1m`` (1 minute).
+This value cannot be changed from ``fess_config.properties``.
+
+.. note::
+   There is a setting called ``index.scroll.search.timeout``, but it is used for internal operations
+   involving index updates or deletions (update by query / delete by query) and does not affect
+   the timeout for this feature (search scrolling).
+
 Response Field Configuration
 -----------------------------
 
-You can customize fields included in search result responses.
-By default, many fields are returned, but you can specify additional fields.
+You can customize the fields included in search result responses.
+By default, many fields are returned, but you can also specify additional fields.
 
 ::
 
@@ -55,7 +67,8 @@ By default, many fields are returned, but you can specify additional fields.
 When specifying multiple fields, list them separated by commas.
 
 .. note::
-   ``content`` is not included in default response fields.
+   The ``content`` field is not included in the default response.
+   To retrieve full text, add it using the setting above.
 
 Usage
 =====
@@ -67,7 +80,7 @@ Access scroll search using the following URL:
 
 ::
 
-    http://localhost:8080/api/v1/documents/all?q=search keyword
+    http://localhost:8080/api/v2/documents/all?q=search keyword
 
 Search results are returned in NDJSON (Newline Delimited JSON) format.
 Each line outputs one document in JSON format.
@@ -76,7 +89,7 @@ Each line outputs one document in JSON format.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess"
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess"
 
 Request Parameters
 ------------------
@@ -84,7 +97,8 @@ Request Parameters
 The following parameters can be used with scroll search:
 
 .. note::
-   Scroll search only supports the GET method.
+   Scroll search only supports the GET method. Accessing with any method other than GET returns
+   ``405 Method Not Allowed``.
 
 .. list-table::
    :header-rows: 1
@@ -100,7 +114,10 @@ The following parameters can be used with scroll search:
      - Filtering by label
 
 .. note::
-   The maximum value of ``num`` is controlled by ``paging.search.page.max.size`` (default: 100). Values exceeding the maximum are automatically capped.
+   The maximum value of ``num`` is controlled by ``paging.search.page.max.size`` (default: 100).
+   Values exceeding the maximum are automatically capped.
+   The default value uses ``paging.search.page.size`` (default: 10).
+   If a value of 0 or less is specified for ``num``, an error (``INVALID_REQUEST``) is returned.
 
 Specifying Search Queries
 --------------------------
@@ -111,19 +128,19 @@ You can specify search queries just like normal searches.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=search engine"
+    curl "http://localhost:8080/api/v2/documents/all?q=search engine"
 
 **Example: Field-specific search**
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=title:Fess"
+    curl "http://localhost:8080/api/v2/documents/all?q=title:Fess"
 
 **Example: Retrieve all (no search conditions)**
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*"
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*"
 
 Specifying Retrieval Count
 ---------------------------
@@ -132,11 +149,12 @@ You can change the number of items retrieved per scroll.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess&num=100"
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess&num=100"
 
 .. note::
-   The ``num`` parameter has a default maximum of 100.
-   To allow larger values, change ``paging.search.page.max.size``.
+   Increasing the ``num`` parameter too much will increase memory usage.
+   The default maximum is 100. If a larger value is needed, change the
+   ``paging.search.page.max.size`` setting.
 
 Filtering by Label
 ------------------
@@ -145,15 +163,21 @@ You can retrieve only documents belonging to a specific label.
 
 ::
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*&fields.label=public"
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*&fields.label=public"
 
-About Authentication
+About Access Control
 --------------------
 
+.. note::
+   Scroll search applies role-based access control (RBAC) just like normal search.
+   Only documents accessible based on the role information in the request are returned;
+   documents for which the user does not have view permissions are not included in the results.
+
 .. warning::
-   Scroll search does not apply |Fess| role-based access control (RBAC).
-   All documents matching the search criteria are returned regardless of user permissions.
-   If access restrictions are needed, configure IP address restrictions or authentication via a reverse proxy.
+   The scroll search endpoint does not require authentication by default (anyone can access it).
+   However, the documents returned are filtered by the role-based access control described above.
+   If you wish to restrict access to the endpoint itself, configure IP address restrictions or
+   authentication via a reverse proxy or similar mechanism.
 
 Response Format
 ===============
@@ -162,15 +186,37 @@ NDJSON Format
 -------------
 
 Scroll search responses are returned in NDJSON (Newline Delimited JSON) format.
-Each line represents one document.
+The Content-Type is ``application/x-ndjson; charset=UTF-8``.
+Each line represents one document wrapped in the ``{"data": {...}}`` format.
 
 **Example:**
 
 ::
 
-    {"url":"http://example.com/page1","title":"Page 1","content":"..."}
-    {"url":"http://example.com/page2","title":"Page 2","content":"..."}
-    {"url":"http://example.com/page3","title":"Page 3","content":"..."}
+    {"data":{"url":"http://example.com/page1","title":"Page 1","digest":"..."}}
+    {"data":{"url":"http://example.com/page2","title":"Page 2","digest":"..."}}
+    {"data":{"url":"http://example.com/page3","title":"Page 3","digest":"..."}}
+
+.. note::
+   Each document is stored under the ``data`` key. On the client side, parse each line and
+   then refer to the value of the ``data`` key.
+
+Error Behavior
+--------------
+
+If an error occurs on the server side after the stream has started being sent, the following
+error terminator line is output as the final line of the response.
+
+::
+
+    {"error":{"code":"internal_error","message":"stream error"}}
+
+.. note::
+   On the client side, you can determine whether the stream completed successfully or whether
+   a server-side error occurred mid-stream by checking whether the final line contains the
+   ``error`` key. Note that if writing the error terminator line itself fails, the terminator
+   line will not be output and the stream will end mid-way; treat unexpected disconnections
+   as errors as well.
 
 Response Fields
 ---------------
@@ -178,8 +224,8 @@ Response Fields
 Fields included by default:
 
 - ``score``: Search score
-- ``id``: Document ID
-- ``doc_id``: Document ID (internal)
+- ``_id``: Document ID (OpenSearch document ID)
+- ``doc_id``: Document ID (internal to |Fess|)
 - ``boost``: Boost value
 - ``content_length``: Content length
 - ``host``: Hostname
@@ -196,9 +242,15 @@ Fields included by default:
 - ``thumbnail``: Thumbnail
 - ``click_count``: Click count
 - ``favorite_count``: Favorite count
-- ``config_id``: Config ID
-- ``lang``: Language
 - ``has_cache``: Cache availability
+- ``content_title``: Display title
+- ``content_description``: Display body excerpt
+- ``url_link``: Display link URL
+- ``site_path``: Site path
+
+.. note::
+   The fields actually output are limited to those permitted as API response fields.
+   Fields with no value are not output.
 
 .. note::
    ``content`` (full text) is not included by default.
@@ -216,7 +268,7 @@ Python Processing Example
     import json
 
     # Execute scroll search
-    url = "http://localhost:8080/api/v1/documents/all"
+    url = "http://localhost:8080/api/v2/documents/all"
     params = {
         "q": "Fess",
         "num": 100
@@ -227,7 +279,12 @@ Python Processing Example
     # Process NDJSON response line by line
     for line in response.iter_lines():
         if line:
-            doc = json.loads(line)
+            record = json.loads(line)
+            if "error" in record:
+                # An error occurred mid-stream
+                print("stream error:", record["error"])
+                break
+            doc = record["data"]
             print(f"Title: {doc.get('title')}")
             print(f"URL: {doc.get('url')}")
             print("---")
@@ -239,17 +296,17 @@ Example of saving search results to a file:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/v1/documents/all?q=*:*" > all_documents.ndjson
+    curl "http://localhost:8080/api/v2/documents/all?q=*:*" > all_documents.ndjson
 
 Converting to CSV
 -----------------
 
-Example of converting to CSV using jq command:
+Example of converting to CSV using the jq command:
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/v1/documents/all?q=Fess" | \
-        jq -r '[.url, .title, .score] | @csv' > results.csv
+    curl "http://localhost:8080/api/v2/documents/all?q=Fess" | \
+        jq -r '.data | [.url, .title, .score] | @csv' > results.csv
 
 Data Analysis
 -------------
@@ -260,13 +317,14 @@ Example of analyzing retrieved data:
 
     import json
     import pandas as pd
-    from collections import Counter
 
-    # Read NDJSON file
+    # Read NDJSON file (extract the data key from each line)
     documents = []
     with open('all_documents.ndjson', 'r') as f:
         for line in f:
-            documents.append(json.loads(line))
+            record = json.loads(line)
+            if "data" in record:
+                documents.append(record["data"])
 
     # Convert to DataFrame
     df = pd.DataFrame(documents)
@@ -280,12 +338,12 @@ Example of analyzing retrieved data:
     print(df['domain'].value_counts())
 
 Performance and Best Practices
-===============================
+================================
 
 Efficient Usage
 ---------------
 
-1. **Set appropriate num parameter**
+1. **Set an appropriate num parameter**
 
    - Too small increases communication overhead
    - Too large increases memory usage
@@ -298,7 +356,7 @@ Efficient Usage
 
 3. **Use off-peak hours**
 
-   - Retrieve large amounts of data during low system load periods
+   - Retrieve large amounts of data during periods of low system load
 
 4. **Use in batch processing**
 
@@ -314,16 +372,18 @@ When processing large amounts of data, use streaming processing to reduce memory
     import requests
     import json
 
-    url = "http://localhost:8080/api/v1/documents/all"
+    url = "http://localhost:8080/api/v2/documents/all"
     params = {"q": "*:*", "num": 100}
 
     # Process with streaming
     with requests.get(url, params=params, stream=True) as response:
         for line in response.iter_lines(decode_unicode=True):
             if line:
-                doc = json.loads(line)
+                record = json.loads(line)
+                if "error" in record:
+                    break
                 # Process document
-                process_document(doc)
+                process_document(record["data"])
 
 Security Considerations
 =======================
@@ -331,7 +391,8 @@ Security Considerations
 Access Restrictions
 -------------------
 
-Since scroll search returns large amounts of data, set appropriate access restrictions.
+Since scroll search returns large amounts of data, configure appropriate access restrictions.
+The endpoint does not require authentication by default, so consider the following measures as needed.
 
 1. **IP Address Restriction**
 
@@ -339,11 +400,11 @@ Since scroll search returns large amounts of data, set appropriate access restri
 
 2. **API Authentication**
 
-   Use API tokens or Basic authentication
+   Use API tokens or Basic authentication via a reverse proxy or similar mechanism
 
-3. **Role-Based Restrictions**
+3. **Role-Based Access Control**
 
-   Allow access only to users with specific roles
+   Documents returned are filtered by |Fess| role-based access control
 
 Rate Limiting
 -------------
@@ -364,21 +425,21 @@ Timeout Errors Occur
 --------------------
 
 1. Reduce the ``num`` parameter to distribute processing.
-2. Narrow search conditions to reduce amount of retrieved data.
+2. Narrow search conditions to reduce the amount of retrieved data.
 
 Out of Memory Errors
 --------------------
 
 1. Reduce the ``num`` parameter.
-2. Increase |Fess| heap memory size.
-3. Check OpenSearch heap memory size.
+2. Increase the |Fess| heap memory size.
+3. Check the OpenSearch heap memory size.
 
 Response is Empty
 -----------------
 
 1. Verify that the search query is correct.
 2. Verify that specified labels or filter conditions are correct.
-3. Verify role-based search permission settings.
+3. Role-based access control means documents for which the user does not have view permissions are not included in the results. Verify the role settings on the request.
 
 References
 ==========
