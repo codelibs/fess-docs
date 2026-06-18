@@ -12,9 +12,94 @@ Für diese Funktion ist das Plugin ``fess-ds-salesforce`` erforderlich.
 Unterstützte Objekte
 ====================
 
-- **Standardobjekte**: Account, Contact, Lead, Opportunity, Case, Solution usw.
-- **Benutzerdefinierte Objekte**: Selbst erstellte Objekte
-- **Knowledge-Artikel**: Salesforce Knowledge
+- **Standardobjekte**: Vordefinierte Standardobjekte (Account, Contact, Lead, Opportunity, Case, Solution usw.). Die Menge der Standardobjekte ist fest vorgegeben; bei jedem Crawl werden alle davon abgerufen.
+- **Benutzerdefinierte Objekte**: Selbst definierte Objekte, die über den Parameter ``custom`` angegeben werden.
+
+.. note::
+
+   Standardobjekte werden immer vollständig gecrawlt (es ist nicht möglich, einzelne Standardobjekte gezielt auszuwählen). Um unerwünschte Objekte auszuschließen, verwenden Sie das URL-Filtering über ``include_pattern`` / ``exclude_pattern``.
+
+Liste der Standardobjekte
+--------------------------
+
+Die folgenden Standardobjekte werden gecrawlt. "Objektname" ist der Bezeichner, der im Feldmapping verwendet wird (z.B. ``<Objektname>.title``); ``object.type`` ist der Objekttyp-Wert, den Sie in Skripten referenzieren können.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Objektname
+     - ``object.type``
+     - Beschreibung
+   * - ``ACCOUNT``
+     - ``Account``
+     - Account
+   * - ``CONTACT``
+     - ``Contact``
+     - Contact
+   * - ``LEAD``
+     - ``Lead``
+     - Lead
+   * - ``OPPORTUNITY``
+     - ``Opportunity``
+     - Opportunity
+   * - ``CASE``
+     - ``Case``
+     - Case
+   * - ``SOLUTION``
+     - ``Solution``
+     - Solution
+   * - ``CONTRACT``
+     - ``Contract``
+     - Contract
+   * - ``ORDER``
+     - ``Order``
+     - Order
+   * - ``CAMPAIGN``
+     - ``Campaign``
+     - Campaign
+   * - ``PRODUCT2``
+     - ``Product2``
+     - Product
+   * - ``PRICEBOOK2``
+     - ``Pricebook2``
+     - Price Book
+   * - ``ASSET``
+     - ``Asset``
+     - Asset
+   * - ``ASSET_RELATIONSHIP``
+     - ``AssetRelationship``
+     - Asset Relationship
+   * - ``TASK``
+     - ``Task``
+     - Task
+   * - ``USER``
+     - ``User``
+     - User
+   * - ``COLLABORATION_GROUP``
+     - ``CollaborationGroup``
+     - Chatter Group
+   * - ``IDEA``
+     - ``Idea``
+     - Idea
+   * - ``RECOMMENDATION``
+     - ``Recommendation``
+     - Recommendation
+   * - ``QUICK_TEXT``
+     - ``QuickText``
+     - Quick Text
+   * - ``MACRO``
+     - ``Macro``
+     - Macro
+   * - ``LIST_EMAIL``
+     - ``ListEmail``
+     - List Email
+   * - ``IMAGE``
+     - ``Image``
+     - Image
+   * - ``DAND_B_COMPANY``
+     - ``DandBCompany``
+     - D&B Company
 
 Voraussetzungen
 ===============
@@ -91,7 +176,7 @@ Parameterliste
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Erforderlich
@@ -156,9 +241,6 @@ Parameterliste
    * - ``proxy_port``
      - Wenn proxy_host gesetzt
      - HTTP-Proxy-Port
-   * - ``readInterval``
-     - Nein
-     - Wartezeit zwischen Datensatzverarbeitung (Millisekunden)
 
 Skript-Einstellungen
 --------------------
@@ -315,7 +397,10 @@ Feldmapping-Regeln
 
 .. note::
 
-   Standardobjekte verwenden UPPER_UNDERSCORE-Namen (z.B. ``ACCOUNT.title=Name``).
+   Beim Feldmapping für Standardobjekte wird der UPPER_SNAKE_CASE-Objektname verwendet
+   (der Wert aus der Spalte "Objektname" in der `Liste der Standardobjekte`_)
+   (z.B. ``ACCOUNT.title=Name``, ``DAND_B_COMPANY.title=Name``).
+   Bei benutzerdefinierten Objekten wird der API-Referenzname direkt verwendet (z.B. ``Product__c.title=Name``).
 
 Anwendungsbeispiele
 ===================

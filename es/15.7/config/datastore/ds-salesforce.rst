@@ -13,9 +13,94 @@ Esta funcionalidad requiere el plugin ``fess-ds-salesforce``.
 Objetos compatibles
 ===================
 
-- **Objetos estandar**: Account, Contact, Lead, Opportunity, Case, Solution, etc.
-- **Objetos personalizados**: Objetos creados por el usuario
-- **Articulos de Knowledge**: Salesforce Knowledge
+- **Objetos estandar**: objetos estandar predefinidos (Account, Contact, Lead, Opportunity, Case, Solution, etc.). El conjunto de objetos estandar es fijo y todos ellos se recuperan en cada crawl.
+- **Objetos personalizados**: objetos definidos por el usuario y especificados mediante el parametro ``custom``.
+
+.. note::
+
+   Los objetos estandar se crawlean siempre en su totalidad (no es posible seleccionar individualmente cuales se crawlean). Para excluir objetos no deseados, utilice el filtrado por URL mediante ``include_pattern`` / ``exclude_pattern``.
+
+Lista de objetos estandar
+-------------------------
+
+Los siguientes objetos estandar son crawleados. El "Nombre de objeto" es el identificador que se usa en el mapeo de campos (p. ej. ``<NombreObjeto>.title``); ``object.type`` es el valor del tipo de objeto al que puede hacer referencia en los scripts.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Nombre de objeto
+     - ``object.type``
+     - Descripcion
+   * - ``ACCOUNT``
+     - ``Account``
+     - Account
+   * - ``CONTACT``
+     - ``Contact``
+     - Contact
+   * - ``LEAD``
+     - ``Lead``
+     - Lead
+   * - ``OPPORTUNITY``
+     - ``Opportunity``
+     - Opportunity
+   * - ``CASE``
+     - ``Case``
+     - Case
+   * - ``SOLUTION``
+     - ``Solution``
+     - Solution
+   * - ``CONTRACT``
+     - ``Contract``
+     - Contract
+   * - ``ORDER``
+     - ``Order``
+     - Order
+   * - ``CAMPAIGN``
+     - ``Campaign``
+     - Campaign
+   * - ``PRODUCT2``
+     - ``Product2``
+     - Product
+   * - ``PRICEBOOK2``
+     - ``Pricebook2``
+     - Price Book
+   * - ``ASSET``
+     - ``Asset``
+     - Asset
+   * - ``ASSET_RELATIONSHIP``
+     - ``AssetRelationship``
+     - Asset Relationship
+   * - ``TASK``
+     - ``Task``
+     - Task
+   * - ``USER``
+     - ``User``
+     - User
+   * - ``COLLABORATION_GROUP``
+     - ``CollaborationGroup``
+     - Chatter Group
+   * - ``IDEA``
+     - ``Idea``
+     - Idea
+   * - ``RECOMMENDATION``
+     - ``Recommendation``
+     - Recommendation
+   * - ``QUICK_TEXT``
+     - ``QuickText``
+     - Quick Text
+   * - ``MACRO``
+     - ``Macro``
+     - Macro
+   * - ``LIST_EMAIL``
+     - ``ListEmail``
+     - List Email
+   * - ``IMAGE``
+     - ``Image``
+     - Image
+   * - ``DAND_B_COMPANY``
+     - ``DandBCompany``
+     - D&B Company
 
 Requisitos previos
 ==================
@@ -92,7 +177,7 @@ Lista de parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parametro
      - Requerido
@@ -157,9 +242,6 @@ Lista de parametros
    * - ``proxy_port``
      - Si proxy_host esta configurado
      - Numero de puerto del proxy HTTP
-   * - ``readInterval``
-     - No
-     - Tiempo de espera entre procesamiento de registros (milisegundos)
 
 Configuracion de scripts
 ------------------------
@@ -317,7 +399,10 @@ Reglas de mapeo de campos
 
 .. note::
 
-   Los objetos estandar utilizan nombres en formato UPPER_UNDERSCORE. Por ejemplo: ``ACCOUNT.title=Name``, ``CONTACT.title=Name``.
+   En el mapeo de campos de objetos estandar, el nombre de objeto usa UPPER_SNAKE_CASE
+   (el valor de la columna "Nombre de objeto" de la seccion `Lista de objetos estandar`_)
+   (p. ej. ``ACCOUNT.title=Name``, ``DAND_B_COMPANY.title=Name``).
+   Para objetos personalizados, se usa el nombre de referencia de la API tal cual (p. ej. ``Product__c.title=Name``).
 
 Ejemplos de uso
 ===============

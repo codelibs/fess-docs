@@ -13,9 +13,94 @@ This feature requires the ``fess-ds-salesforce`` plugin.
 Supported Objects
 =================
 
-- **Standard Objects**: Account, Contact, Lead, Opportunity, Case, Solution, etc.
-- **Custom Objects**: User-created custom objects
-- **Knowledge Articles**: Salesforce Knowledge
+- **Standard Objects**: Predefined standard objects (Account, Contact, Lead, Opportunity, Case, Solution, etc.). The set of standard objects is fixed and ALL of them are retrieved on every crawl.
+- **Custom Objects**: User-defined objects specified via the ``custom`` parameter.
+
+.. note::
+
+   Standard objects are always crawled in full (you cannot individually select which standard objects to crawl). To exclude unwanted objects, use URL filtering via ``include_pattern`` / ``exclude_pattern``.
+
+Standard Object List
+--------------------
+
+The following standard objects are crawled. The "Object Name" is the identifier used in field mapping (e.g. ``<ObjectName>.title``); ``object.type`` is the object-type value you can reference in scripts.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Object Name
+     - ``object.type``
+     - Description
+   * - ``ACCOUNT``
+     - ``Account``
+     - Account
+   * - ``CONTACT``
+     - ``Contact``
+     - Contact
+   * - ``LEAD``
+     - ``Lead``
+     - Lead
+   * - ``OPPORTUNITY``
+     - ``Opportunity``
+     - Opportunity
+   * - ``CASE``
+     - ``Case``
+     - Case
+   * - ``SOLUTION``
+     - ``Solution``
+     - Solution
+   * - ``CONTRACT``
+     - ``Contract``
+     - Contract
+   * - ``ORDER``
+     - ``Order``
+     - Order
+   * - ``CAMPAIGN``
+     - ``Campaign``
+     - Campaign
+   * - ``PRODUCT2``
+     - ``Product2``
+     - Product
+   * - ``PRICEBOOK2``
+     - ``Pricebook2``
+     - Price Book
+   * - ``ASSET``
+     - ``Asset``
+     - Asset
+   * - ``ASSET_RELATIONSHIP``
+     - ``AssetRelationship``
+     - Asset Relationship
+   * - ``TASK``
+     - ``Task``
+     - Task
+   * - ``USER``
+     - ``User``
+     - User
+   * - ``COLLABORATION_GROUP``
+     - ``CollaborationGroup``
+     - Chatter Group
+   * - ``IDEA``
+     - ``Idea``
+     - Idea
+   * - ``RECOMMENDATION``
+     - ``Recommendation``
+     - Recommendation
+   * - ``QUICK_TEXT``
+     - ``QuickText``
+     - Quick Text
+   * - ``MACRO``
+     - ``Macro``
+     - Macro
+   * - ``LIST_EMAIL``
+     - ``ListEmail``
+     - List Email
+   * - ``IMAGE``
+     - ``Image``
+     - Image
+   * - ``DAND_B_COMPANY``
+     - ``DandBCompany``
+     - D&B Company
 
 Prerequisites
 =============
@@ -92,7 +177,7 @@ Parameter List
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Required
@@ -157,9 +242,6 @@ Parameter List
    * - ``proxy_port``
      - Required if proxy_host is set
      - HTTP proxy port number
-   * - ``readInterval``
-     - No
-     - Wait time between record processing (milliseconds)
 
 Script Configuration
 --------------------
@@ -317,7 +399,9 @@ Field Mapping Rules
 
 .. note::
 
-   Standard objects use UPPER_UNDERSCORE names (e.g., ``ACCOUNT.title=Name``).
+   For standard object field mapping, use the UPPER_SNAKE_CASE object name from the "Object Name" column in the `Standard Object List`_ section
+   (e.g. ``ACCOUNT.title=Name``, ``DAND_B_COMPANY.title=Name``).
+   For custom objects, use the API name directly (e.g. ``Product__c.title=Name``).
 
 Usage Examples
 ==============

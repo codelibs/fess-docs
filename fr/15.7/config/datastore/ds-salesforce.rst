@@ -13,9 +13,94 @@ Cette fonctionnalite necessite le plugin ``fess-ds-salesforce``.
 Objets pris en charge
 ================
 
-- **Objets standard** : Account, Contact, Lead, Opportunity, Case, Solution, etc.
-- **Objets personnalises** : Objets crees par l'utilisateur
-- **Articles Knowledge** : Salesforce Knowledge
+- **Objets standard** : objets standard predefinis (Account, Contact, Lead, Opportunity, Case, Solution, etc.). L'ensemble des objets standard est fixe et la totalite d'entre eux est recuperee a chaque crawl.
+- **Objets personnalises** : objets definis par l'utilisateur, specifies via le parametre ``custom``.
+
+.. note::
+
+   Les objets standard sont toujours crawles integralement (il n'est pas possible de selectionner individuellement les objets standard a crawler). Pour exclure des objets indesirables, utilisez le filtrage par URL via ``include_pattern`` / ``exclude_pattern``.
+
+Liste des objets standard
+-------------------------
+
+Les objets standard suivants sont crawles. La colonne "Nom de l'objet" est l'identifiant utilise dans le mapping des champs (par exemple ``<NomObjet>.title``) ; ``object.type`` est la valeur du type d'objet que vous pouvez referencer dans les scripts.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Nom de l'objet
+     - ``object.type``
+     - Description
+   * - ``ACCOUNT``
+     - ``Account``
+     - Account
+   * - ``CONTACT``
+     - ``Contact``
+     - Contact
+   * - ``LEAD``
+     - ``Lead``
+     - Lead
+   * - ``OPPORTUNITY``
+     - ``Opportunity``
+     - Opportunity
+   * - ``CASE``
+     - ``Case``
+     - Case
+   * - ``SOLUTION``
+     - ``Solution``
+     - Solution
+   * - ``CONTRACT``
+     - ``Contract``
+     - Contract
+   * - ``ORDER``
+     - ``Order``
+     - Order
+   * - ``CAMPAIGN``
+     - ``Campaign``
+     - Campaign
+   * - ``PRODUCT2``
+     - ``Product2``
+     - Product
+   * - ``PRICEBOOK2``
+     - ``Pricebook2``
+     - Price Book
+   * - ``ASSET``
+     - ``Asset``
+     - Asset
+   * - ``ASSET_RELATIONSHIP``
+     - ``AssetRelationship``
+     - Asset Relationship
+   * - ``TASK``
+     - ``Task``
+     - Task
+   * - ``USER``
+     - ``User``
+     - User
+   * - ``COLLABORATION_GROUP``
+     - ``CollaborationGroup``
+     - Chatter Group
+   * - ``IDEA``
+     - ``Idea``
+     - Idea
+   * - ``RECOMMENDATION``
+     - ``Recommendation``
+     - Recommendation
+   * - ``QUICK_TEXT``
+     - ``QuickText``
+     - Quick Text
+   * - ``MACRO``
+     - ``Macro``
+     - Macro
+   * - ``LIST_EMAIL``
+     - ``ListEmail``
+     - List Email
+   * - ``IMAGE``
+     - ``Image``
+     - Image
+   * - ``DAND_B_COMPANY``
+     - ``DandBCompany``
+     - D&B Company
 
 Prerequis
 ========
@@ -92,7 +177,7 @@ Liste des parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parametre
      - Requis
@@ -157,9 +242,6 @@ Liste des parametres
    * - ``proxy_port``
      - Si proxy_host est defini
      - Numero de port du proxy HTTP
-   * - ``readInterval``
-     - Non
-     - Temps d'attente entre le traitement des enregistrements (millisecondes)
 
 Configuration du script
 --------------
@@ -317,8 +399,10 @@ Regles de mapping des champs
 
 .. note::
 
-   Les objets standard utilisent des noms en MAJUSCULES_SEPAREES_PAR_DES_UNDERSCORES.
-   Par exemple : ``ACCOUNT.title=Name``, ``CONTACT.title=LastName``.
+   Pour le mapping des champs des objets standard, le nom de l'objet utilise la notation UPPER_SNAKE_CASE
+   (la valeur de la colonne "Nom de l'objet" dans la section `Liste des objets standard`_)
+   (ex. : ``ACCOUNT.title=Name``, ``DAND_B_COMPANY.title=Name``).
+   Pour les objets personnalises, le nom de reference API est utilise tel quel (ex. : ``Product__c.title=Name``).
 
 Exemples d'utilisation
 ======

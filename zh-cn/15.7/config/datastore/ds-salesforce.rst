@@ -13,9 +13,95 @@ Salesforce连接器提供从Salesforce对象（标准对象、自定义对象）
 支持的对象
 ================
 
-- **标准对象**: Account、Contact、Lead、Opportunity、Case、Solution等
-- **自定义对象**: 自己创建的对象
-- **Knowledge文章**: Salesforce Knowledge
+- **标准对象**: 预定义的标准对象（Account、Contact、Lead、Opportunity、Case、Solution等）。标准对象的集合是固定的，每次爬取时会全部获取。
+- **自定义对象**: 通过 ``custom`` 参数指定的用户自定义对象。
+
+.. note::
+
+   标准对象始终进行全量爬取（无法单独选择要爬取的标准对象）。
+   若要排除不需要的对象，请使用 ``include_pattern`` / ``exclude_pattern`` 进行URL过滤。
+
+标准对象列表
+--------------------
+
+以下为爬取对象的标准对象。「对象名称」是字段映射中使用的标识符（例如 ``<对象名称>.title``）；``object.type`` 是可在脚本中引用的对象类型值。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - 对象名称
+     - ``object.type``
+     - 说明
+   * - ``ACCOUNT``
+     - ``Account``
+     - 客户
+   * - ``CONTACT``
+     - ``Contact``
+     - 联系人
+   * - ``LEAD``
+     - ``Lead``
+     - 潜在客户
+   * - ``OPPORTUNITY``
+     - ``Opportunity``
+     - 商机
+   * - ``CASE``
+     - ``Case``
+     - 案例
+   * - ``SOLUTION``
+     - ``Solution``
+     - 解决方案
+   * - ``CONTRACT``
+     - ``Contract``
+     - 合同
+   * - ``ORDER``
+     - ``Order``
+     - 订单
+   * - ``CAMPAIGN``
+     - ``Campaign``
+     - 营销活动
+   * - ``PRODUCT2``
+     - ``Product2``
+     - 产品
+   * - ``PRICEBOOK2``
+     - ``Pricebook2``
+     - 价格手册
+   * - ``ASSET``
+     - ``Asset``
+     - 资产
+   * - ``ASSET_RELATIONSHIP``
+     - ``AssetRelationship``
+     - 资产关系
+   * - ``TASK``
+     - ``Task``
+     - 任务
+   * - ``USER``
+     - ``User``
+     - 用户
+   * - ``COLLABORATION_GROUP``
+     - ``CollaborationGroup``
+     - Chatter群组
+   * - ``IDEA``
+     - ``Idea``
+     - 创意
+   * - ``RECOMMENDATION``
+     - ``Recommendation``
+     - 推荐
+   * - ``QUICK_TEXT``
+     - ``QuickText``
+     - 快捷文本
+   * - ``MACRO``
+     - ``Macro``
+     - 宏
+   * - ``LIST_EMAIL``
+     - ``ListEmail``
+     - 列表邮件
+   * - ``IMAGE``
+     - ``Image``
+     - 图像
+   * - ``DAND_B_COMPANY``
+     - ``DandBCompany``
+     - D&B公司
 
 前提条件
 ========
@@ -92,7 +178,7 @@ OAuth Password认证:
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - 参数
      - 必需
@@ -157,9 +243,6 @@ OAuth Password认证:
    * - ``proxy_port``
      - 设置了proxy_host时
      - HTTP代理端口号
-   * - ``readInterval``
-     - 否
-     - 记录处理间等待时间（毫秒）
 
 脚本设置
 --------------
@@ -317,7 +400,10 @@ Salesforce Connected App设置
 
 .. note::
 
-   标准对象使用大写下划线命名（UPPER_UNDERSCORE）。例如: ``ACCOUNT.title=Name``
+   标准对象的字段映射中，对象名称使用大写下划线命名（UPPER_SNAKE_CASE）
+   （即 `标准对象列表`_ 中「对象名称」列的值）
+   （例如: ``ACCOUNT.title=Name``、``DAND_B_COMPANY.title=Name``）。
+   自定义对象则直接使用API名称（例如: ``Product__c.title=Name``）。
 
 使用示例
 ======
