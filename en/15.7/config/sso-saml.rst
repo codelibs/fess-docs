@@ -52,6 +52,11 @@ To enable SAML authentication, add the following setting to ``app/WEB-INF/conf/s
 
     sso.type=saml
 
+.. note::
+   ``sso.type`` and the basic SAML settings (IdP info, SP info, user attribute mapping) can also be configured from the admin "System > General" page.
+   Settings changed in the admin UI are saved to ``system.properties`` and persist after restart.
+   However, security settings such as signing/encryption and the SP certificate/private key cannot be configured in the admin UI, so write them directly in ``system.properties``.
+
 SP (Service Provider) Configuration
 ------------------------------------
 
@@ -66,13 +71,17 @@ To configure |Fess| as an SP, specify the SP Base URL.
      - Default
    * - ``saml.sp.base.url``
      - SP base URL
-     - (Required)
+     - ``http://localhost:8080``
+
+.. note::
+   The default of ``saml.sp.base.url`` is ``http://localhost:8080``.
+   Outside of test environments, always set the URL used to access |Fess| externally (HTTPS in production).
 
 This setting automatically configures the following endpoints:
 
-- **Entity ID**: ``{base_url}/sso/metadata``
-- **ACS URL**: ``{base_url}/sso/``
-- **SLO URL**: ``{base_url}/sso/logout``
+- **Entity ID**: ``{saml.sp.base.url}/sso/metadata``
+- **ACS URL**: ``{saml.sp.base.url}/sso/``
+- **SLO URL**: ``{saml.sp.base.url}/sso/logout``
 
 Example::
 
@@ -81,7 +90,7 @@ Example::
 Individual URL Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also specify URLs individually instead of using the Base URL.
+Normally, setting ``saml.sp.base.url`` automatically configures each endpoint URL, but you can override individual URLs explicitly with the following properties if needed.
 
 .. list-table::
    :header-rows: 1
@@ -92,13 +101,13 @@ You can also specify URLs individually instead of using the Base URL.
      - Default
    * - ``saml.sp.entityid``
      - SP Entity ID
-     - (Required for individual config)
+     - ``{saml.sp.base.url}/sso/metadata``
    * - ``saml.sp.assertion_consumer_service.url``
      - Assertion Consumer Service URL
-     - (Required for individual config)
+     - ``{saml.sp.base.url}/sso/``
    * - ``saml.sp.single_logout_service.url``
      - Single Logout Service URL
-     - (Optional)
+     - ``{saml.sp.base.url}/sso/logout``
 
 IdP (Identity Provider) Configuration
 -------------------------------------
@@ -275,6 +284,29 @@ Encryption Settings
      - Require NameID encryption
      - ``false``
 
+SP Certificate and Private Key Configuration
+--------------------------------------------
+
+When the SP signs authentication requests or logout messages (e.g., ``saml.security.authnrequest_signed``), or requests encryption of assertions or NameID (e.g., ``saml.security.want_assertions_encrypted``), you must configure the SP's private key and X.509 certificate.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``saml.sp.x509cert``
+     - SP X.509 certificate (Base64-encoded, no line breaks)
+     - (empty)
+   * - ``saml.sp.privatekey``
+     - SP private key (Base64-encoded, no line breaks)
+     - (empty)
+
+.. note::
+   For ``saml.sp.x509cert`` and ``saml.sp.privatekey``, as with ``saml.idp.x509cert``, specify the Base64-encoded content as a single line without line breaks (do not include the ``-----BEGIN ...-----`` and ``-----END ...-----`` lines).
+   When enabling signing/encryption, also register the SP certificate on the IdP side. The SP certificate is published in the SP metadata at ``/sso/metadata``.
+
 Other Security Settings
 -----------------------
 
@@ -288,12 +320,22 @@ Other Security Settings
    * - ``saml.strict``
      - Strict mode (perform strict validation)
      - ``true``
+   * - ``saml.security.want_xml_validation``
+     - Validate the XML schema of messages
+     - ``true``
    * - ``saml.security.signature_algorithm``
      - Signature algorithm
      - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
+   * - ``saml.security.requested_authncontext``
+     - Requested authentication context
+     - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
    * - ``saml.sp.nameidformat``
      - NameID format
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   |Fess| internally uses a SAML library (java-saml), and properties starting with ``saml.`` are mapped to the library's corresponding settings (the ``onelogin.saml2.`` prefix).
+   Therefore, in addition to those listed here, you can specify detailed settings in ``system.properties`` such as bindings (e.g., ``saml.sp.assertion_consumer_service.binding``), organization information (``saml.organization.*``), and contact information (``saml.contacts.*``).
 
 Configuration Examples
 ======================
@@ -382,9 +424,17 @@ To investigate issues, you can enable debug mode with the following setting:
 
     saml.debug=true
 
-You can also adjust |Fess| log levels to output detailed SAML-related logs.
+Setting ``saml.debug=true`` outputs the detailed reason to the log when SAML authentication fails.
+
+You can also output detailed SAML-related logs by adding the following logger to ``app/WEB-INF/classes/log4j2.xml``:
+
+::
+
+    <Logger name="org.codelibs.fess.sso.saml" level="DEBUG"/>
 
 Reference
 =========
 
 - :doc:`security-role` - Role-based search configuration
+- :doc:`sso-oidc` - About SSO configuration with OpenID Connect
+- :doc:`sso-entraid` - About SSO configuration dedicated to Microsoft Entra ID
