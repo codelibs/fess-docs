@@ -1,16 +1,16 @@
-===============
+==============
 缩略图配置
-===============
+==============
 
 概述
 ====
 
 |Fess| 可以在搜索结果中显示缩略图。
 缩略图根据搜索结果的 MIME 类型生成。
-对于支持的 MIME 类型,在显示搜索结果时会生成缩略图。
+对于支持的 MIME 类型，在显示搜索结果时会生成缩略图。
 可以为每种 MIME 类型配置并添加缩略图生成处理。
 
-要显示缩略图,请以管理员身份登录,在常规设置中启用缩略图显示并保存。
+要显示缩略图，请以管理员身份登录，在常规设置中启用缩略图显示并保存。
 
 支持的文件格式
 ==============
@@ -19,7 +19,7 @@
 --------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - 格式
@@ -51,7 +51,7 @@
 --------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - 格式
@@ -64,7 +64,7 @@
      - ``application/msword``, ``application/vnd.openxmlformats-officedocument.wordprocessingml.document``
      - Word 文档
    * - Excel
-     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``
+     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``, ``application/vnd.ms-excel.sheet.2``, ``application/vnd.ms-excel.sheet.3``, ``application/vnd.ms-excel.sheet.4``, ``application/vnd.ms-excel.workspace.3``, ``application/vnd.ms-excel.workspace.4``
      - Excel 电子表格
    * - PowerPoint
      - ``application/vnd.ms-powerpoint``, ``application/vnd.openxmlformats-officedocument.presentationml.presentation``
@@ -167,7 +167,7 @@ MS Office 支持
      - ``apt install poppler-utils``
      - ``brew install poppler``
 
-对于 Redhat 系列 OS,请安装以下软件包:
+对于 Redhat 系列 OS，请安装以下软件包：
 
 ::
 
@@ -197,7 +197,7 @@ HTML 文件缩略图
 ===============
 
 HTML 的缩略图使用 HTML 中指定的图片或包含的图片。
-按以下顺序查找缩略图并在指定时显示:
+按以下顺序查找缩略图并在指定时显示：
 
 1. name 属性为 "thumbnail" 的 meta 标签的 content 值
 2. property 属性为 "og:image" 的 meta 标签的 content 值
@@ -216,7 +216,7 @@ HTML 的缩略图使用 HTML 中指定的图片或包含的图片。
     app/WEB-INF/classes/fess_thumbnail.xml
 
 主要配置项（fess_config.properties）
-------------------------------------
+-------------------------------------
 
 以下选项可以在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 中配置。
 
@@ -273,7 +273,7 @@ generate-thumbnail 脚本
 ----
 
 ``generate-thumbnail`` 是执行实际缩略图生成的 shell 脚本。
-使用 RPM/Deb 软件包安装时,它会安装在 ``/usr/share/fess/bin/generate-thumbnail``。
+使用 RPM/Deb 软件包安装时，它会安装在 ``/usr/share/fess/bin/generate-thumbnail``。
 
 用法
 ----
@@ -286,7 +286,7 @@ generate-thumbnail 脚本
 ----
 
 .. list-table::
-   :widths: 15.70 30
+   :widths: 15 50 30
    :header-rows: 1
 
    * - 参数
@@ -304,6 +304,13 @@ generate-thumbnail 脚本
    * - ``mimetype``
      - MIME 类型（可选）
      - ``image/gif``
+
+.. note::
+
+   ``mimetype`` 参数仅在 ``image`` 类型中使用，用于确定传递给 ImageMagick 的格式提示。
+   格式提示生效的 MIME 类型为 ``image/gif``、``image/tiff``、``image/png``、``image/jpeg``、
+   ``image/bmp``（及其别名）以及 Photoshop（PSD）系列的 MIME 类型。
+   对于 ``pdf``、``msoffice``、``ps`` 类型，``mimetype`` 参数将被忽略。
 
 支持的类型
 ----------
@@ -368,26 +375,23 @@ generate-thumbnail 脚本
 --------
 
 缩略图以基于哈希的目录结构存储。
+将文档 ID 每 10 个字符分割一次，每次分割创建一个 ``_<0-9>`` 格式（哈希值）的子目录。
+因此，目录的层级数取决于文档 ID 的长度。最底层的文件名为 ``<文档 ID>.png``。
 
 ::
 
     thumbnails/
-    ├── _0/
-    │   ├── _1/
-    │   │   ├── _2/
-    │   │   │   └── _3/
-    │   │   │       └── abcdef123456.png
-    │   │   └── ...
-    │   └── ...
-    └── ...
+    └── _3/
+        └── _7/
+            └── <文档 ID>.png
 
 禁用缩略图任务
 ==============
 
-要禁用缩略图任务,请进行以下设置:
+要禁用缩略图任务，请进行以下设置：
 
-1. 在管理页面的"系统">"常规"中取消勾选"缩略图显示",然后点击"更新"按钮。
-2. 在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 的 ``thumbnail.crawler.enabled`` 中设置 ``false`` （默认值为 ``true`` ）。
+1. 在管理页面的"系统">"常规"中取消勾选"缩略图显示"，然后点击"更新"按钮。
+2. 在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 的 ``thumbnail.crawler.enabled`` 中设置 ``false``（默认值为 ``true``）。
 
 ::
 
@@ -429,13 +433,13 @@ generate-thumbnail 脚本
 GIF/TIFF 文件出错
 -----------------
 
-使用 ImageMagick 6 时,指定 MIME 类型以启用格式提示。如果 Fess 配置正确,这将自动完成。
+使用 ImageMagick 6 时，指定 MIME 类型以启用格式提示。如果 Fess 配置正确，这将自动完成。
 
 错误示例::
 
     convert-im6.q16: corrupt image `/tmp/thumbnail_xxx' @ error/gif.c/DecodeImage/512
 
-解决方案:
+解决方案：
 
 - 升级到 ImageMagick 7
 - 或验证 MIME 类型是否正确传递
@@ -464,7 +468,7 @@ SVG 缩略图未生成
 
     ls -la /var/lib/fess/thumbnails/
 
-如有必要,修复权限。
+如有必要，修复权限。
 
 ::
 

@@ -19,7 +19,7 @@ Archivos de Imagen
 ------------------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Formato
@@ -51,7 +51,7 @@ Archivos de Documento
 ---------------------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Formato
@@ -64,7 +64,7 @@ Archivos de Documento
      - ``application/msword``, ``application/vnd.openxmlformats-officedocument.wordprocessingml.document``
      - Documentos Word
    * - Excel
-     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``
+     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``, ``application/vnd.ms-excel.sheet.2``, ``application/vnd.ms-excel.sheet.3``, ``application/vnd.ms-excel.sheet.4``, ``application/vnd.ms-excel.workspace.3``, ``application/vnd.ms-excel.workspace.4``
      - Hojas de cálculo Excel
    * - PowerPoint
      - ``application/vnd.ms-powerpoint``, ``application/vnd.openxmlformats-officedocument.presentationml.presentation``
@@ -286,7 +286,7 @@ Argumentos
 ----------
 
 .. list-table::
-   :widths: 15.70 30
+   :widths: 15 50 30
    :header-rows: 1
 
    * - Argumento
@@ -304,6 +304,13 @@ Argumentos
    * - ``mimetype``
      - Tipo MIME (opcional)
      - ``image/gif``
+
+.. note::
+
+   El argumento ``mimetype`` solo se usa con el tipo ``image`` y determina el indicador de formato que se pasa a ImageMagick.
+   Los tipos MIME para los que el indicador tiene efecto son ``image/gif``, ``image/tiff``, ``image/png``, ``image/jpeg``,
+   ``image/bmp`` (y sus alias), y los tipos MIME de Photoshop (PSD).
+   Con los tipos ``pdf``, ``msoffice`` y ``ps``, el argumento ``mimetype`` es ignorado.
 
 Tipos Soportados
 ----------------
@@ -368,18 +375,15 @@ Estructura de Directorios
 -------------------------
 
 Las miniaturas se almacenan en una estructura de directorios basada en hash.
+El ID del documento se divide en fragmentos de 10 caracteres y por cada fragmento se crea un subdirectorio con formato ``_<0-9>`` (valor de hash).
+Por tanto, el número de niveles del directorio depende de la longitud del ID del documento. El nombre del archivo en el nivel más profundo es ``<ID del documento>.png``.
 
 ::
 
     thumbnails/
-    ├── _0/
-    │   ├── _1/
-    │   │   ├── _2/
-    │   │   │   └── _3/
-    │   │   │       └── abcdef123456.png
-    │   │   └── ...
-    │   └── ...
-    └── ...
+    └── _3/
+        └── _7/
+            └── <ID del documento>.png
 
 Desactivación del Trabajo de Miniaturas
 =======================================
