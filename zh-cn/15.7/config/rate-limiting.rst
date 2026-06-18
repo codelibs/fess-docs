@@ -92,6 +92,14 @@ Web爬取设置
     User-agent: *
     Crawl-delay: 10
 
+robots.txt的处理由 ``app/WEB-INF/classes/fess_config.properties`` 中的 ``crawler.ignore.robots.txt`` 控制（默认值: ``false``）。
+将其设置为 ``true`` 可禁用robots.txt的处理，包括Crawl-delay的遵守。
+
+::
+
+    # 忽略robots.txt（默认: false）
+    crawler.ignore.robots.txt=false
+
 速率限制的全部配置项
 ======================
 
@@ -129,8 +137,12 @@ Web爬取设置
      - 信任的代理IP（从X-Forwarded-For/X-Real-IP获取客户端IP）
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
-     - 防止内存泄漏的清理间隔（请求数）
+     - 清理间隔（请求数，预留）
      - ``1000``
+
+.. note::
+   ``rate.limit.cleanup.interval`` 是为将来使用而预留的设置项。
+   在当前实现中，请求计数器和被阻止的IP信息会根据内部缓存过期时间（``rate.limit.window.ms`` 和 ``rate.limit.block.duration.ms``）自动清理，因此该值不会被使用。
 
 高级速率限制设置
 ====================

@@ -92,6 +92,15 @@ robots.txt 준수
     User-agent: *
     Crawl-delay: 10
 
+robots.txt 처리는 ``app/WEB-INF/classes/fess_config.properties`` 의
+``crawler.ignore.robots.txt`` 로 제어합니다(기본값: ``false``).
+``true`` 로 설정하면 Crawl-delay 를 포함한 robots.txt 처리가 비활성화됩니다.
+
+::
+
+    # robots.txt를 무시한다(기본값: false)
+    crawler.ignore.robots.txt=false
+
 속도 제한 전체 설정 항목
 =========================
 
@@ -129,8 +138,14 @@ robots.txt 준수
      - 신뢰하는 프록시 IP(X-Forwarded-For/X-Real-IP 취득원)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
-     - 메모리 누수 방지를 위한 클린업 간격(요청 수)
+     - 클린업 간격(요청 수, 예약됨)
      - ``1000``
+
+.. note::
+   ``rate.limit.cleanup.interval`` 은 미래 확장을 위해 예약된 설정 항목입니다.
+   현재 구현에서는 요청 카운터 및 블록 IP 정보가 내부 캐시의
+   유효 기간(``rate.limit.window.ms`` 및 ``rate.limit.block.duration.ms``)에
+   따라 자동으로 클린업되므로, 이 설정값은 사용되지 않습니다.
 
 고급 속도 제한 설정
 ====================

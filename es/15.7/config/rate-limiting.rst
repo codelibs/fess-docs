@@ -92,6 +92,15 @@ Respeto de robots.txt
     User-agent: *
     Crawl-delay: 10
 
+El manejo de robots.txt se controla mediante ``crawler.ignore.robots.txt`` en
+``app/WEB-INF/classes/fess_config.properties`` (predeterminado: ``false``).
+Al establecerlo en ``true``, se deshabilita el manejo de robots.txt, incluyendo Crawl-delay.
+
+::
+
+    # Ignorar robots.txt (predeterminado: false)
+    crawler.ignore.robots.txt=false
+
 Todas las opciones de configuracion de limite de tasa
 =====================================================
 
@@ -129,8 +138,15 @@ Todas las propiedades configurables en ``app/WEB-INF/classes/fess_config.propert
      - IPs de proxies confiables (para obtener X-Forwarded-For/X-Real-IP)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
-     - Intervalo de limpieza para prevenir fugas de memoria (numero de solicitudes)
+     - Intervalo de limpieza (numero de solicitudes, reservado)
      - ``1000``
+
+.. note::
+   ``rate.limit.cleanup.interval`` es una configuracion reservada para uso futuro.
+   En la implementacion actual, los contadores de solicitudes y la informacion de IPs bloqueadas
+   se limpian automaticamente en funcion de la expiracion de la cache interna
+   (``rate.limit.window.ms`` y ``rate.limit.block.duration.ms``),
+   por lo que este valor no se utiliza.
 
 Configuracion avanzada de limite de tasa
 ========================================
