@@ -1,6 +1,6 @@
-==================================
+=====================================
 Configuracion de multitenencia
-==================================
+=====================================
 
 Descripcion general
 ===================
@@ -14,8 +14,11 @@ Al usar la funcionalidad de host virtual, puede proporcionar para cada inquilino
 - Contenido separado
 - Diseno personalizado
 
+El host virtual actual se refleja en las funciones de filtrado de resultados de busqueda, etiquetas, contenido relacionado,
+consultas relacionadas y diseno (tema), entre otras funciones de |Fess|.
+
 Funcionalidad de host virtual
-=============================
+==============================
 
 El host virtual es una funcionalidad que proporciona diferentes entornos de busqueda basados en el nombre de host de la solicitud HTTP.
 
@@ -30,8 +33,15 @@ Mecanismo
 Configuracion de encabezados de host virtual
 =============================================
 
-Para habilitar la funcionalidad de host virtual, configure la propiedad ``virtual.host.headers``.
-Esta propiedad se define en ``fess_config.properties``.
+Para habilitar la funcionalidad de host virtual, configure la correspondencia entre los encabezados de la solicitud HTTP
+y las claves de host virtual. Existen dos metodos de configuracion:
+
+- **Pantalla de administracion (recomendado)**: Configure el campo "Host Virtual" en "Sistema" -> "General".
+  Este valor se guarda como configuracion del sistema y se conserva tras el reinicio. Tiene prioridad sobre
+  ``virtual.host.headers`` en ``fess_config.properties``.
+- **Archivo de configuracion**: Configure la propiedad ``virtual.host.headers`` en ``fess_config.properties``.
+
+Ambos metodos utilizan el mismo formato de valor de configuracion.
 
 Formato de configuracion
 ------------------------
@@ -45,6 +55,17 @@ Especifique cada entrada en el formato ``NombreEncabezado:ValorEncabezado=ClaveH
     Host:tenant2.example.com=tenant2
 
 Para multiples hosts virtuales, separe las entradas con saltos de linea.
+
+Comportamiento de coincidencia
+------------------------------
+
+Cada vez que |Fess| recibe una solicitud, compara el valor del encabezado de solicitud correspondiente al
+"NombreEncabezado" de cada linea configurada con el "ValorEncabezado" configurado.
+
+- La comparacion de valores de encabezado no distingue entre mayusculas y minusculas.
+- Las lineas configuradas se evaluan en orden de arriba a abajo; se aplica la clave de host virtual de la primera linea que coincida.
+- Si no hay coincidencia, la solicitud se trata sin host virtual (entorno comun).
+- El resultado de la evaluacion se almacena en cache por solicitud.
 
 Restricciones de claves de host virtual
 ----------------------------------------
@@ -64,17 +85,22 @@ Puede separar el contenido especificando el host virtual en la configuracion de 
 
 1. Iniciar sesion en la pantalla de administracion
 2. Crear configuracion de crawl en "Crawler" -> "Web"
-3. Seleccionar una clave de host virtual definida en ``virtual.host.headers`` en el campo "Host Virtual"
+3. Seleccionar la clave de host virtual configurada en el campo "Host Virtual" (se admite seleccion multiple)
 4. El contenido crawleado con esta configuracion solo sera buscable en el host virtual especificado
+
+.. note::
+   El campo "Host Virtual" esta disponible en las configuraciones de crawl de web, sistema de archivos y almacen de datos.
+   La clave de host virtual seleccionada aqui se asigna a cada documento crawleado y se usa para filtrar
+   por el host virtual actual en el momento de la busqueda.
 
 Control de acceso
 =================
 
 Combinacion de host virtual y roles
------------------------------------
+-------------------------------------
 
 Al combinar hosts virtuales con control de acceso basado en roles,
-es posible un control de acceso mas detallado:
+es posible un control de acceso mas detallado.
 
 Configure el host virtual y los permisos juntos en la configuracion de crawl:
 
@@ -117,26 +143,35 @@ Limitar etiquetas mostradas para cada host virtual:
 1. Especificar host virtual en la configuracion del tipo de etiqueta
 2. La etiqueta solo se muestra en el host virtual especificado
 
-Autenticacion API
-=================
+Acceso mediante API
+===================
 
-Controlar el acceso a la API para cada host virtual:
-
-Token de acceso
----------------
-
-Emitir tokens de acceso vinculados al host virtual:
-
-1. Crear token en "Sistema" -> "Tokens de Acceso"
-2. Asociar host virtual con el token
+Las solicitudes a la API de busqueda tambien determinan el host virtual por el nombre de host de la solicitud
+(el encabezado configurado, normalmente el encabezado ``Host``), igual que la UI. Por ejemplo,
+una solicitud dirigida a ``tenant1.example.com`` se limita automaticamente al host virtual ``tenant1``
+y solo se busca en el contenido de ese host virtual.
 
 Solicitud de API
 ----------------
 
 ::
 
-    curl -H "Authorization: Bearer TENANT_TOKEN" \
-         "https://tenant1.example.com/api/v1/search?q=keyword"
+    curl "https://tenant1.example.com/api/v2/search?q=keyword"
+
+Para autenticarse con un token de acceso, especifiquelo en el encabezado ``Authorization``
+en formato ``Bearer``:
+
+::
+
+    curl -H "Authorization: Bearer YOUR_TOKEN" \
+         "https://tenant1.example.com/api/v2/search?q=keyword"
+
+.. note::
+   Los tokens de acceso no estan vinculados a un host virtual especifico. Un token es valido para
+   cualquier host virtual; el host virtual de destino se determina por el nombre de host al que se
+   envia la solicitud. Si se envia el mismo token a un nombre de host diferente, se aplica al
+   host virtual correspondiente. Si desea controlar el alcance del acceso independientemente del
+   host virtual, combinen con el control de acceso basado en roles (:doc:`security-role`).
 
 Configuracion de DNS
 ====================
@@ -144,7 +179,7 @@ Configuracion de DNS
 Ejemplo de configuracion de DNS para implementar multitenencia:
 
 Subdominios al mismo servidor
------------------------------
+------------------------------
 
 ::
 
@@ -156,7 +191,7 @@ Subdominios al mismo servidor
     *.example.com          A    192.168.1.100
 
 Configuracion de proxy inverso
-------------------------------
+--------------------------------
 
 Ejemplo de configuracion de proxy inverso con Nginx:
 
@@ -188,7 +223,7 @@ Separacion de datos
 Si se requiere separacion completa de datos, considere los siguientes enfoques:
 
 Separacion a nivel de indice
-----------------------------
+------------------------------
 
 Usar instancias e indices separados de |Fess| para cada inquilino:
 
