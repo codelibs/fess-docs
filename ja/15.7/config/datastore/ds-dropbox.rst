@@ -68,7 +68,7 @@ Dropboxコネクタは、Dropboxのクラウドストレージからファイル
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - パラメーター
      - 必須
@@ -105,7 +105,10 @@ Dropboxコネクタは、Dropboxのクラウドストレージからファイル
      - インデックスされたドキュメントのデフォルト権限（カンマ区切り）
    * - ``max_cached_content_size``
      - いいえ
-     - メモリにキャッシュするコンテンツの最大サイズ（バイト）（デフォルト: ``1048576``）
+     - メモリにキャッシュするコンテンツの最大サイズ（バイト）。これを超えるコンテンツは一時ファイルに書き出されます（デフォルト: ``1048576``）
+   * - ``readInterval``
+     - いいえ
+     - 各レコードを処理する間に挿入する待機時間（ミリ秒）（デフォルト: ``0``）
 
 スクリプト設定
 --------------
@@ -204,6 +207,30 @@ Dropbox Paperの場合
 Dropbox認証の設定
 =================
 
+アカウント種別とアクセストークン
+--------------------------------
+
+このコネクタは ``basic_plan`` パラメーターによって2つの動作モードを切り替えます。
+作成すべきアプリとアクセストークンの種類が異なるため、最初に確認してください。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - モード
+     - ``basic_plan``
+     - 説明
+   * - チームアカウント（デフォルト）
+     - ``false``
+     - Dropbox Business（チーム）アカウント向けです。チーム管理者の権限を持つアクセストークンが必要で、チームメンバーのファイルとチームフォルダを横断的にクロールします。
+   * - 個人アカウント
+     - ``true``
+     - 個人（非チーム）アカウント向けです。通常のスコープ付きアクセストークンを使用し、そのアカウント内のファイルを直接クロールします。
+
+.. note::
+   デフォルト（``basic_plan=false``）ではチーム管理用のAPI（チームメンバー一覧、メンバー単位のファイルアクセス、チームフォルダ）を使用するため、
+   Dropbox Businessアカウントとチーム管理者権限を持つトークンが必須です。個人アカウントを利用する場合は必ず ``basic_plan=true`` を設定してください。
+
 アクセストークンの取得手順
 --------------------------
 
@@ -214,7 +241,7 @@ https://www.dropbox.com/developers/apps にアクセス:
 
 1. 「Create app」をクリック
 2. APIタイプで「Scoped access」を選択
-3. アクセスタイプで「Full Dropbox」または「App folder」を選択
+3. アクセスタイプを選択（チームアカウントを横断的にクロールする場合は「Full Dropbox」を推奨）
 4. アプリ名を入力して作成
 
 2. 権限の設定
@@ -222,15 +249,20 @@ https://www.dropbox.com/developers/apps にアクセス:
 
 「Permissions」タブで必要な権限を選択:
 
-**ファイルのクロールに必要な権限**:
+**ファイル・Paperのクロールに必要な権限**:
 
 - ``files.metadata.read`` - ファイルのメタデータ読み取り
-- ``files.content.read`` - ファイルのコンテンツ読み取り
+- ``files.content.read`` - ファイルおよびPaperドキュメントのコンテンツ読み取り
 - ``sharing.read`` - 共有情報の読み取り
 
-**Paperのクロールに追加で必要な権限**:
+**チームアカウント（``basic_plan=false``）で追加で必要な権限**:
 
-- ``files.content.read`` - Paperドキュメントの読み取り
+- ``members.read`` - チームメンバー一覧の読み取り
+- チームデータ／チームスペースへのアクセス権限（メンバー単位のファイルおよびチームフォルダのクロールに必要）
+
+.. note::
+   チームアカウントモードでは、チーム管理者として各メンバーやチームフォルダにアクセスします。
+   Permissionsタブで上記のチーム関連権限を有効にし、チーム管理者のトークンを生成してください。
 
 3. アクセストークンの生成
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,19 +387,32 @@ Dropbox Paperドキュメントのクロール
 特定のファイルタイプのみクロール
 --------------------------------
 
-スクリプトでフィルタリング:
+特定のMIMEタイプのみをインデックス対象にするには、``supported_mimetypes`` パラメーターに
+許可するMIMEタイプの正規表現をカンマ区切りで指定します。
+
+.. note::
+   データストアのスクリプトは1行ごとに ``フィールド名=式`` の独立した式として評価されます。
+   そのため、複数行にまたがる ``if`` ブロックで複数のフィールドをまとめて代入することはできません。
+   MIMEタイプによる絞り込みは、スクリプトではなく ``supported_mimetypes`` パラメーターで行ってください。
+
+パラメーター（PDFとWordファイルのみ）:
 
 ::
 
-    # PDFとWordファイルのみ
-    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-        url=file.url
-        title=file.name
-        content=file.contents
-        mimetype=file.mimetype
-        filename=file.name
-        last_modified=file.client_modified
-    }
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    supported_mimetypes=application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+スクリプト:
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
 
 トラブルシューティング
 ======================
@@ -411,9 +456,13 @@ APIレート制限エラー
 
 **解決方法**:
 
-1. Basicプランの場合、``basic_plan=true`` を設定
-2. クロール間隔を長くする
-3. 複数のアクセストークンを使用して負荷分散
+1. ``readInterval`` を設定して各ファイルの処理間隔を空ける
+2. ``number_of_threads`` を小さくして同時リクエスト数を減らす
+3. データストアをフォルダ単位などで複数に分割し、スケジュールをずらして実行する
+
+.. note::
+   ``basic_plan`` はアカウントの種別（チーム／個人）を切り替えるパラメーターであり、
+   レート制限の調整には影響しません。アカウントに合わせて正しく設定してください。
 
 Paperドキュメントが取得できない
 -------------------------------

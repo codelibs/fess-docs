@@ -2,12 +2,13 @@
 Connecteur Dropbox
 ==================================
 
-Apercu
+Aperçu
 ======
 
-Le connecteur Dropbox fournit une fonctionnalite pour recuperer des fichiers depuis le stockage cloud Dropbox et les enregistrer dans l'index de |Fess|.
+Le connecteur Dropbox fournit une fonctionnalité pour récupérer des fichiers depuis le
+stockage cloud Dropbox et les enregistrer dans l'index de |Fess|.
 
-Cette fonctionnalite necessite le plugin ``fess-ds-dropbox``.
+Cette fonctionnalité nécessite le plugin ``fess-ds-dropbox``.
 
 Services pris en charge
 =======================
@@ -15,28 +16,28 @@ Services pris en charge
 - Dropbox (stockage de fichiers)
 - Dropbox Paper (documents)
 
-Prerequis
+Prérequis
 =========
 
 1. L'installation du plugin est requise
-2. Un compte developpeur Dropbox et la creation d'une application sont necessaires
-3. L'obtention d'un token d'acces est requise
+2. Un compte développeur Dropbox et la création d'une application sont nécessaires
+3. L'obtention d'un token d'accès est requise
 
 Installation du plugin
 ----------------------
 
-Installez depuis l'interface d'administration sous "Systeme" -> "Plugins" :
+Installez depuis l'interface d'administration sous « Système » → « Plugins » :
 
-1. Telechargez ``fess-ds-dropbox-X.X.X.jar`` depuis Maven Central
+1. Téléchargez ``fess-ds-dropbox-X.X.X.jar`` depuis Maven Central
 2. Uploadez et installez depuis l'interface de gestion des plugins
-3. Redemarrez |Fess|
+3. Redémarrez |Fess|
 
-Ou consultez :doc:`../../admin/plugin-guide` pour plus de details.
+Ou consultez :doc:`../../admin/plugin-guide` pour plus de détails.
 
-Methode de configuration
+Méthode de configuration
 ========================
 
-Configurez depuis l'interface d'administration : "Crawler" -> "DataStore" -> "Nouveau".
+Configurez depuis l'interface d'administration : « Crawler » → « DataStore » → « Nouveau ».
 
 Configuration de base
 ---------------------
@@ -45,7 +46,7 @@ Configuration de base
    :header-rows: 1
    :widths: 25 75
 
-   * - Element
+   * - Élément
      - Exemple de configuration
    * - Nom
      - Company Dropbox
@@ -54,57 +55,60 @@ Configuration de base
    * - Actif
      - Oui
 
-Configuration des parametres
-----------------------------
+Configuration des paramètres
+-----------------------------
 
 ::
 
     access_token=sl.your-dropbox-token-here
     basic_plan=false
 
-Liste des parametres
+Liste des paramètres
 ~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
-   * - Parametre
+   * - Paramètre
      - Requis
      - Description
    * - ``access_token``
      - Oui
-     - Token d'acces Dropbox (genere dans App Console)
+     - Token d'accès Dropbox (généré dans App Console)
    * - ``basic_plan``
      - Non
-     - ``true`` pour les comptes individuels, ``false`` pour les comptes d'equipe (defaut : ``false``)
+     - ``true`` pour les comptes individuels, ``false`` pour les comptes d'équipe (défaut : ``false``)
    * - ``max_size``
      - Non
-     - Taille maximale des fichiers pour l'indexation en octets (defaut : ``10000000``)
+     - Taille maximale des fichiers pour l'indexation en octets (défaut : ``10000000``)
    * - ``number_of_threads``
      - Non
-     - Nombre de threads pour l'exploration (defaut : ``1``)
+     - Nombre de threads pour l'exploration (défaut : ``1``)
    * - ``ignore_folder``
      - Non
-     - Ignorer les metadonnees des dossiers (defaut : ``true``)
+     - Ignorer les métadonnées des dossiers (défaut : ``true``)
    * - ``ignore_error``
      - Non
-     - Ignorer les erreurs lors de l'extraction de contenu (defaut : ``true``)
+     - Ignorer les erreurs lors de l'extraction de contenu (défaut : ``true``)
    * - ``supported_mimetypes``
      - Non
-     - Motifs regex pour les types MIME autorises, separes par des virgules (defaut : ``.*``)
+     - Motifs regex pour les types MIME autorisés, séparés par des virgules (défaut : ``.*``)
    * - ``include_pattern``
      - Non
-     - Motif d'URL a inclure dans l'exploration
+     - Motif d'URL à inclure dans l'exploration
    * - ``exclude_pattern``
      - Non
-     - Motif d'URL a exclure de l'exploration
+     - Motif d'URL à exclure de l'exploration
    * - ``default_permissions``
      - Non
-     - Permissions par defaut pour les documents indexes, separees par des virgules
+     - Permissions par défaut pour les documents indexés, séparées par des virgules
    * - ``max_cached_content_size``
      - Non
-     - Taille maximale du contenu en cache en memoire en octets (defaut : ``1048576``)
+     - Taille maximale du contenu mis en cache en mémoire en octets. Le contenu dépassant cette taille est écrit dans un fichier temporaire (défaut : ``1048576``)
+   * - ``readInterval``
+     - Non
+     - Temps d'attente inséré entre le traitement de chaque enregistrement (en millisecondes) (défaut : ``0``)
 
 Configuration du script
 -----------------------
@@ -133,7 +137,7 @@ Champs disponibles :
    * - Champ
      - Description
    * - ``file.url``
-     - Lien de previsualisation du fichier
+     - Lien de prévisualisation du fichier
    * - ``file.contents``
      - Contenu texte du fichier
    * - ``file.mimetype``
@@ -147,21 +151,21 @@ Champs disponibles :
    * - ``file.size``
      - Taille du fichier (octets)
    * - ``file.client_modified``
-     - Date de derniere modification cote client
+     - Date de dernière modification côté client
    * - ``file.server_modified``
-     - Date de derniere modification cote serveur
+     - Date de dernière modification côté serveur
    * - ``file.roles``
-     - Autorisations d'acces au fichier
+     - Autorisations d'accès au fichier
    * - ``file.id``
      - Identifiant du fichier Dropbox
    * - ``file.path_lower``
      - Chemin du fichier en minuscules
    * - ``file.parent_shared_folder_id``
-     - ID du dossier partage parent
+     - ID du dossier partagé parent
    * - ``file.content_hash``
      - Hash du contenu
    * - ``file.rev``
-     - Revision du fichier
+     - Révision du fichier
 
 Pour Dropbox Paper
 ~~~~~~~~~~~~~~~~~~
@@ -184,7 +188,7 @@ Champs disponibles :
    * - Champ
      - Description
    * - ``paper.url``
-     - Lien de previsualisation du document Paper
+     - Lien de prévisualisation du document Paper
    * - ``paper.contents``
      - Contenu texte du document Paper
    * - ``paper.mimetype``
@@ -194,88 +198,117 @@ Champs disponibles :
    * - ``paper.title``
      - Titre du document Paper
    * - ``paper.owner``
-     - Proprietaire du document Paper
+     - Propriétaire du document Paper
    * - ``paper.roles``
-     - Autorisations d'acces au document
+     - Autorisations d'accès au document
    * - ``paper.revision``
-     - Revision du document Paper
+     - Révision du document Paper
 
 Configuration de l'authentification Dropbox
-===========================================
+============================================
 
-Procedure d'obtention du token d'acces
---------------------------------------
+Type de compte et token d'accès
+---------------------------------
 
-1. Creer une application dans Dropbox App Console
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ce connecteur bascule entre deux modes de fonctionnement via le paramètre ``basic_plan``.
+Le type d'application et de token d'accès à créer diffère selon le mode ; vérifiez ce point en premier.
 
-Accedez a https://www.dropbox.com/developers/apps :
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
 
-1. Cliquez sur "Create app"
-2. Selectionnez "Scoped access" pour le type d'API
-3. Selectionnez "Full Dropbox" ou "App folder" pour le type d'acces
-4. Entrez le nom de l'application et creez
+   * - Mode
+     - ``basic_plan``
+     - Description
+   * - Compte d'équipe (défaut)
+     - ``false``
+     - Pour les comptes Dropbox Business (équipe). Un token d'accès disposant des droits d'administrateur d'équipe est requis ; il explore les fichiers des membres de l'équipe et les dossiers d'équipe de manière transversale.
+   * - Compte individuel
+     - ``true``
+     - Pour les comptes personnels (hors équipe). Utilise un token d'accès étendu standard et explore directement les fichiers du compte.
+
+.. note::
+   Par défaut (``basic_plan=false``), le connecteur utilise les API de gestion d'équipe (liste des membres, accès aux fichiers par membre, dossiers d'équipe) ;
+   un compte Dropbox Business et un token disposant des droits d'administrateur d'équipe sont donc obligatoires. Si vous utilisez un compte individuel, définissez impérativement ``basic_plan=true``.
+
+Procédure d'obtention du token d'accès
+---------------------------------------
+
+1. Créer une application dans Dropbox App Console
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Accédez à https://www.dropbox.com/developers/apps :
+
+1. Cliquez sur « Create app »
+2. Sélectionnez « Scoped access » pour le type d'API
+3. Sélectionnez le type d'accès (« Full Dropbox » recommandé pour explorer l'intégralité d'un compte d'équipe)
+4. Saisissez le nom de l'application et créez-la
 
 2. Configuration des permissions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dans l'onglet "Permissions", selectionnez les permissions necessaires :
+Dans l'onglet « Permissions », sélectionnez les permissions nécessaires :
 
-**Permissions requises pour l'exploration des fichiers** :
+**Permissions requises pour l'exploration des fichiers et de Paper** :
 
-- ``files.metadata.read`` - Lecture des metadonnees des fichiers
-- ``files.content.read`` - Lecture du contenu des fichiers
+- ``files.metadata.read`` - Lecture des métadonnées des fichiers
+- ``files.content.read`` - Lecture du contenu des fichiers et des documents Paper
 - ``sharing.read`` - Lecture des informations de partage
 
-**Permissions supplementaires requises pour l'exploration Paper** :
+**Permissions supplémentaires requises pour les comptes d'équipe (``basic_plan=false``)** :
 
-- ``files.content.read`` - Lecture des documents Paper
+- ``members.read`` - Lecture de la liste des membres de l'équipe
+- Permissions d'accès aux données d'équipe / espaces d'équipe (nécessaires pour explorer les fichiers par membre et les dossiers d'équipe)
 
-3. Generation du token d'acces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. note::
+   En mode compte d'équipe, le connecteur accède à chaque membre et dossier d'équipe en tant qu'administrateur d'équipe.
+   Activez les permissions liées à l'équipe ci-dessus dans l'onglet Permissions, puis générez un token d'administrateur d'équipe.
 
-Dans l'onglet "Settings" :
+3. Génération du token d'accès
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Faites defiler jusqu'a la section "Generated access token"
-2. Cliquez sur le bouton "Generate"
-3. Copiez le token genere (ce token ne s'affiche qu'une seule fois)
+Dans l'onglet « Settings » :
+
+1. Faites défiler jusqu'à la section « Generated access token »
+2. Cliquez sur le bouton « Generate »
+3. Copiez le token généré (ce token ne s'affiche qu'une seule fois)
 
 .. warning::
-   Conservez le token d'acces en securite. Ce token permet d'acceder a votre compte Dropbox.
+   Conservez le token d'accès en sécurité. Ce token permet d'accéder à votre compte Dropbox.
 
 4. Configuration du token
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Configurez le token obtenu dans les parametres :
+Configurez le token obtenu dans les paramètres :
 
 ::
 
     access_token=sl.your-dropbox-token-here
 
 Configuration pour compte individuel
-=====================================
+======================================
 
 Utilisation avec un compte individuel
--------------------------------------
+---------------------------------------
 
-Pour les comptes individuels (pas les comptes d'equipe),
-definissez le parametre ``basic_plan`` sur ``true`` :
+Pour les comptes individuels (pas les comptes d'équipe),
+définissez le paramètre ``basic_plan`` sur ``true`` :
 
 ::
 
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-Quand ``false`` (defaut), il fonctionne comme un compte d'equipe et explore les fichiers des membres et des dossiers d'equipe.
-Quand ``true``, il fonctionne comme un compte individuel et explore les fichiers directement depuis le compte.
+Quand ``false`` (défaut), le connecteur fonctionne comme un compte d'équipe et explore les fichiers des membres et des dossiers d'équipe.
+Quand ``true``, il fonctionne comme un compte individuel et explore directement les fichiers du compte.
 
 Exemples d'utilisation
-======================
+=======================
 
 Explorer l'ensemble des fichiers Dropbox
-----------------------------------------
+-----------------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -296,9 +329,9 @@ Script :
     last_modified=file.client_modified
 
 Explorer les documents Dropbox Paper
-------------------------------------
+--------------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -315,27 +348,10 @@ Script :
     mimetype=paper.mimetype
     filetype=paper.filetype
 
-Explorer uniquement certains types de fichiers
-----------------------------------------------
-
-Filtrage dans le script :
-
-::
-
-    # Uniquement PDF et fichiers Word
-    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-        url=file.url
-        title=file.name
-        content=file.contents
-        mimetype=file.mimetype
-        filename=file.name
-        last_modified=file.client_modified
-    }
-
 Exploration avec permissions
-----------------------------
+------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -367,83 +383,116 @@ Script (Dropbox Paper) :
     filetype=paper.filetype
     role=paper.roles
 
-Depannage
-=========
+Explorer uniquement certains types de fichiers
+-----------------------------------------------
+
+Pour n'indexer que certains types MIME, spécifiez dans le paramètre ``supported_mimetypes``
+les expressions régulières des types MIME autorisés, séparées par des virgules.
+
+.. note::
+   Les scripts de datastore évaluent chaque ligne comme une expression indépendante sous la forme ``champ=expression``.
+   Il n'est donc pas possible d'affecter plusieurs champs à l'intérieur d'un bloc ``if`` multiligne.
+   Le filtrage par type MIME doit être réalisé via le paramètre ``supported_mimetypes``, et non dans le script.
+
+Paramètres (PDF et fichiers Word uniquement) :
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    supported_mimetypes=application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+Script :
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
+
+Dépannage
+==========
 
 Erreur d'authentification
--------------------------
+--------------------------
 
-**Symptome** : ``Invalid access token`` ou ``401 Unauthorized``
+**Symptôme** : ``Invalid access token`` ou ``401 Unauthorized``
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifiez que le token d'acces est correctement copie
-2. Verifiez que le token n'a pas expire (utilisez un token longue duree)
-3. Verifiez que les permissions necessaires sont accordees dans Dropbox App Console
-4. Verifiez que l'application n'est pas desactivee
+1. Vérifiez que le token d'accès est correctement copié
+2. Vérifiez que le token n'a pas expiré (utilisez un token longue durée)
+3. Vérifiez que les permissions nécessaires sont accordées dans Dropbox App Console
+4. Vérifiez que l'application n'est pas désactivée
 
-Impossible de recuperer les fichiers
-------------------------------------
+Impossible de récupérer les fichiers
+--------------------------------------
 
-**Symptome** : L'exploration reussit mais 0 fichier
+**Symptôme** : L'exploration réussit mais 0 fichier
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifiez le "Access type" de l'application :
+1. Vérifiez le « Access type » de l'application :
 
-   - "Full Dropbox" : Acces a l'ensemble de Dropbox
-   - "App folder" : Acces a un dossier specifique uniquement
+   - « Full Dropbox » : Accès à l'ensemble de Dropbox
+   - « App folder » : Accès à un dossier spécifique uniquement
 
-2. Verifiez que les permissions necessaires sont accordees :
+2. Vérifiez que les permissions nécessaires sont accordées :
 
    - ``files.metadata.read``
    - ``files.content.read``
    - ``sharing.read``
 
-3. Verifiez que des fichiers existent dans le compte Dropbox
+3. Vérifiez que des fichiers existent dans le compte Dropbox
 
-Erreur de limitation de debit API
----------------------------------
+Erreur de limitation de débit API
+-----------------------------------
 
-**Symptome** : Erreur ``429 Too Many Requests``
+**Symptôme** : Erreur ``429 Too Many Requests``
 
 **Solution** :
 
-1. Pour le plan Basic, configurez ``basic_plan=true``
-2. Augmentez l'intervalle d'exploration
-3. Utilisez plusieurs tokens d'acces pour repartir la charge
+1. Configurez ``readInterval`` pour espacer le traitement de chaque fichier
+2. Réduisez ``number_of_threads`` pour diminuer le nombre de requêtes simultanées
+3. Divisez le datastore en plusieurs parties (par dossier, etc.) et décalez les horaires d'exécution
 
-Impossible de recuperer les documents Paper
--------------------------------------------
+.. note::
+   ``basic_plan`` est un paramètre qui bascule entre le type de compte (équipe/individuel) et n'a pas d'effet sur la gestion des limites de débit. Configurez-le correctement selon votre compte.
 
-**Symptome** : Les documents Paper ne sont pas explores
+Impossible de récupérer les documents Paper
+--------------------------------------------
 
-**Points a verifier** :
+**Symptôme** : Les documents Paper ne sont pas explorés
 
-1. Verifiez que le nom du handler est ``DropboxPaperDataStore``
-2. Verifiez que ``files.content.read`` est inclus dans les permissions
-3. Verifiez que des documents Paper existent reellement
+**Points à vérifier** :
+
+1. Vérifiez que le nom du handler est ``DropboxPaperDataStore``
+2. Vérifiez que ``files.content.read`` est inclus dans les permissions
+3. Vérifiez que des documents Paper existent réellement
 
 En cas de grand nombre de fichiers
-----------------------------------
+------------------------------------
 
-**Symptome** : L'exploration prend du temps ou timeout
+**Symptôme** : L'exploration prend du temps ou expire
 
 **Solution** :
 
-1. Divisez les datastores en plusieurs (par dossier, etc.)
-2. Repartissez la charge avec les parametres de planification
-3. Pour le plan Basic, attention aux limites de debit API
+1. Divisez les datastores en plusieurs parties (par dossier, etc.)
+2. Répartissez la charge avec les paramètres de planification
+3. Pour le plan Basic, faites attention aux limites de débit API
 
-Permissions et controle d'acces
-===============================
+Permissions et contrôle d'accès
+=================================
 
 Reflet des permissions de partage Dropbox
------------------------------------------
+------------------------------------------
 
-Les parametres de partage Dropbox peuvent etre refletes dans les permissions Fess :
+Les paramètres de partage Dropbox peuvent être reflétés dans les permissions Fess :
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -464,10 +513,10 @@ Script :
 
 ``file.roles`` ou ``paper.roles`` contiennent les informations de partage Dropbox.
 
-Informations de reference
-=========================
+Informations de référence
+==========================
 
-- :doc:`ds-overview` - Apercu des connecteurs DataStore
+- :doc:`ds-overview` - Aperçu des connecteurs DataStore
 - :doc:`ds-box` - Connecteur Box
 - :doc:`ds-gsuite` - Connecteur Google Workspace
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration DataStore

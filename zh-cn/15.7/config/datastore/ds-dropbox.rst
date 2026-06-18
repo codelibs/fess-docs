@@ -11,7 +11,7 @@ Dropbox连接器提供从Dropbox云存储获取文件并
 此功能需要 ``fess-ds-dropbox`` 插件。
 
 支持的服务
-============
+==========
 
 - Dropbox（文件存储）
 - Dropbox Paper（文档）
@@ -24,7 +24,7 @@ Dropbox连接器提供从Dropbox云存储获取文件并
 3. 需要获取访问令牌
 
 插件安装
-------------------------
+--------
 
 从管理界面的"系统"→"插件"安装：
 
@@ -56,7 +56,7 @@ Dropbox连接器提供从Dropbox云存储获取文件并
      - 开
 
 参数设置
-----------------
+--------
 
 ::
 
@@ -64,11 +64,11 @@ Dropbox连接器提供从Dropbox云存储获取文件并
     basic_plan=false
 
 参数列表
-~~~~~~~~~~~~~~~~
+~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - 参数
      - 必须
@@ -105,13 +105,16 @@ Dropbox连接器提供从Dropbox云存储获取文件并
      - 索引文档的默认权限（逗号分隔）
    * - ``max_cached_content_size``
      - 否
-     - 内存中缓存的最大内容大小（字节）（默认：``1048576``）
+     - 内存中缓存的最大内容大小（字节）。超出此大小的内容将写入临时文件（默认：``1048576``）
+   * - ``readInterval``
+     - 否
+     - 处理每条记录之间插入的等待时间（毫秒）（默认：``0``）
 
 脚本设置
---------------
+--------
 
 Dropbox文件的情况
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -148,9 +151,9 @@ Dropbox文件的情况
    * - ``file.size``
      - 文件大小（字节）
    * - ``file.client_modified``
-     - 客户端最后更新日期
+     - 客户端最后更新日期时间
    * - ``file.server_modified``
-     - 服务器端最后更新日期
+     - 服务器端最后更新日期时间
    * - ``file.roles``
      - 文件访问权限
    * - ``file.id``
@@ -202,38 +205,67 @@ Dropbox Paper的情况
      - Paper文档修订版本
 
 Dropbox认证设置
-=================
+===============
+
+账户类型与访问令牌
+------------------
+
+此连接器通过 ``basic_plan`` 参数切换两种运行模式。
+由于需要创建的应用和访问令牌类型不同，请先确认以下内容。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - 模式
+     - ``basic_plan``
+     - 说明
+   * - 团队账户（默认）
+     - ``false``
+     - 适用于Dropbox Business（团队）账户。需要具有团队管理员权限的访问令牌，可跨团队成员文件和团队文件夹进行抓取。
+   * - 个人账户
+     - ``true``
+     - 适用于个人（非团队）账户。使用普通的带范围访问令牌，直接抓取该账户内的文件。
+
+.. note::
+   默认模式（``basic_plan=false``）使用团队管理API（团队成员列表、按成员访问文件、团队文件夹），
+   因此必须使用Dropbox Business账户和具有团队管理员权限的令牌。如果使用个人账户，请务必设置 ``basic_plan=true``。
 
 访问令牌获取步骤
---------------------------
+----------------
 
 1. 在Dropbox App Console创建应用
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 访问 https://www.dropbox.com/developers/apps：
 
 1. 点击"Create app"
 2. 在API类型中选择"Scoped access"
-3. 在访问类型中选择"Full Dropbox"或"App folder"
+3. 选择访问类型（跨团队账户抓取时推荐选择"Full Dropbox"）
 4. 输入应用名称并创建
 
 2. 权限设置
-~~~~~~~~~~~~~
+~~~~~~~~~~~
 
 在"Permissions"标签页选择所需权限：
 
-**抓取文件所需的权限**：
+**抓取文件和Paper所需的权限**：
 
 - ``files.metadata.read`` - 读取文件元数据
-- ``files.content.read`` - 读取文件内容
+- ``files.content.read`` - 读取文件及Paper文档的内容
 - ``sharing.read`` - 读取共享信息
 
-**抓取Paper额外所需的权限**：
+**团队账户（``basic_plan=false``）额外所需的权限**：
 
-- ``files.content.read`` - 读取Paper文档
+- ``members.read`` - 读取团队成员列表
+- 团队数据/团队空间的访问权限（按成员抓取文件和团队文件夹所需）
+
+.. note::
+   在团队账户模式下，将以团队管理员身份访问各成员和团队文件夹。
+   请在Permissions标签页启用上述团队相关权限，并生成团队管理员令牌。
 
 3. 生成访问令牌
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 在"Settings"标签页：
 
@@ -242,10 +274,11 @@ Dropbox认证设置
 3. 复制生成的令牌（此令牌只显示一次）
 
 .. warning::
-   请安全保管访问令牌。有了此令牌就可以访问Dropbox账户。
+   请安全保管访问令牌。有了此令牌就可以访问
+   Dropbox账户。
 
 4. 设置令牌
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
 
 将获取的令牌设置到参数中：
 
@@ -254,10 +287,10 @@ Dropbox认证设置
     access_token=sl.your-dropbox-token-here
 
 个人账户设置
-=================
+============
 
 个人账户的使用
--------------------------
+--------------
 
 对于个人账户（非团队账户），
 请将 ``basic_plan`` 参数设置为 ``true``：
@@ -271,10 +304,10 @@ Dropbox认证设置
 ``true`` 时作为个人账户运行，直接抓取账户中的文件。
 
 使用示例
-======
+========
 
 抓取整个Dropbox文件
-------------------------------
+-------------------
 
 参数：
 
@@ -297,7 +330,7 @@ Dropbox认证设置
     last_modified=file.client_modified
 
 抓取Dropbox Paper文档
------------------------------------
+---------------------
 
 参数：
 
@@ -317,7 +350,7 @@ Dropbox认证设置
     filetype=paper.filetype
 
 带权限抓取
-----------------
+----------
 
 参数：
 
@@ -352,27 +385,40 @@ Dropbox认证设置
     role=paper.roles
 
 仅抓取特定文件类型
---------------------------------
+------------------
 
-脚本中进行过滤：
+若要仅对特定MIME类型建立索引，请在 ``supported_mimetypes`` 参数中
+以逗号分隔指定允许的MIME类型正则表达式。
+
+.. note::
+   数据存储脚本中每一行均作为 ``字段名=表达式`` 的独立表达式进行求值。
+   因此，无法在跨多行的 ``if`` 块中同时赋值多个字段。
+   按MIME类型筛选请使用 ``supported_mimetypes`` 参数，而非脚本。
+
+参数（仅PDF和Word文件）：
 
 ::
 
-    # 仅PDF和Word文件
-    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-        url=file.url
-        title=file.name
-        content=file.contents
-        mimetype=file.mimetype
-        filename=file.name
-        last_modified=file.client_modified
-    }
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    supported_mimetypes=application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+脚本：
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
 
 故障排除
-======================
+========
 
 认证错误
-----------
+--------
 
 **症状**：``Invalid access token`` 或 ``401 Unauthorized``
 
@@ -384,7 +430,7 @@ Dropbox认证设置
 4. 确认应用是否被禁用
 
 无法获取文件
-----------------------
+------------
 
 **症状**：抓取成功但文件数为0
 
@@ -404,18 +450,22 @@ Dropbox认证设置
 3. 确认Dropbox账户中是否存在文件
 
 API速率限制错误
--------------------
+---------------
 
 **症状**：``429 Too Many Requests`` 错误
 
 **解决方法**：
 
-1. Basic计划时，设置 ``basic_plan=true``
-2. 增加抓取间隔
-3. 使用多个访问令牌进行负载均衡
+1. 设置 ``readInterval`` 以在各文件处理之间留出间隔
+2. 减小 ``number_of_threads`` 以降低并发请求数
+3. 将数据存储按文件夹等单位拆分为多个，并错开调度时间执行
+
+.. note::
+   ``basic_plan`` 是切换账户类型（团队/个人）的参数，
+   不影响速率限制的调整。请根据账户类型正确设置。
 
 无法获取Paper文档
--------------------------------
+-----------------
 
 **症状**：Paper文档未被抓取
 
@@ -425,22 +475,22 @@ API速率限制错误
 2. 确认权限中包含 ``files.content.read``
 3. 确认Paper文档确实存在
 
-大量文件时
-------------------------
+文件数量较多时
+--------------
 
 **症状**：抓取耗时很长或超时
 
 **解决方法**：
 
-1. 将数据存储分成多个（按文件夹等）
+1. 将数据存储拆分为多个（按文件夹等）
 2. 通过计划设置分散负载
 3. Basic计划时注意API速率限制
 
 权限和访问控制
-==================
+==============
 
 反映Dropbox共享权限
------------------------
+-------------------
 
 可以将Dropbox的共享设置反映到Fess的权限中：
 
@@ -463,7 +513,7 @@ API速率限制错误
     filename=file.name
     last_modified=file.client_modified
 
-``file.roles`` 或 ``paper.roles`` 包含Dropbox的共享信息。
+``file.roles`` 或 ``paper.roles`` 中包含Dropbox的共享信息。
 
 参考信息
 ========

@@ -5,7 +5,8 @@ Dropbox-Konnektor
 Übersicht
 =========
 
-Der Dropbox-Konnektor bietet die Funktionalität, Dateien aus dem Dropbox-Cloud-Speicher abzurufen und im |Fess|-Index zu registrieren.
+Der Dropbox-Konnektor bietet die Funktionalität, Dateien aus dem Dropbox-Cloud-Speicher abzurufen
+und im |Fess|-Index zu registrieren.
 
 Für diese Funktion ist das Plugin ``fess-ds-dropbox`` erforderlich.
 
@@ -31,7 +32,7 @@ Installieren Sie über die Administrationsoberfläche unter "System" -> "Plugins
 2. Laden Sie es über die Plugin-Verwaltungsoberfläche hoch und installieren Sie es
 3. Starten Sie |Fess| neu
 
-Oder weitere Details finden Sie unter :doc:`../../admin/plugin-guide`.
+Weitere Details finden Sie unter :doc:`../../admin/plugin-guide`.
 
 Konfiguration
 =============
@@ -67,7 +68,7 @@ Parameterliste
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Erforderlich
@@ -104,7 +105,10 @@ Parameterliste
      - Standardberechtigungen für indizierte Dokumente, kommagetrennt
    * - ``max_cached_content_size``
      - Nein
-     - Maximale im Speicher gecachte Inhaltsgröße in Bytes (Standard: ``1048576``)
+     - Maximale im Speicher gecachte Inhaltsgröße in Bytes. Inhalte, die diesen Wert überschreiten, werden in eine temporäre Datei geschrieben (Standard: ``1048576``)
+   * - ``readInterval``
+     - Nein
+     - Wartezeit in Millisekunden zwischen der Verarbeitung einzelner Datensätze (Standard: ``0``)
 
 Skript-Einstellungen
 --------------------
@@ -203,8 +207,32 @@ Verfügbare Felder:
 Dropbox-Authentifizierung konfigurieren
 =======================================
 
+Kontotyp und Zugriffstoken
+---------------------------
+
+Dieser Konnektor schaltet über den Parameter ``basic_plan`` zwischen zwei Betriebsmodi um.
+Da die Art der zu erstellenden App und des Zugriffstokens unterschiedlich ist, überprüfen Sie dies zuerst.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Modus
+     - ``basic_plan``
+     - Beschreibung
+   * - Teamkonto (Standard)
+     - ``false``
+     - Für Dropbox Business (Team)-Konten. Erfordert ein Zugriffstoken mit Teamadministrator-Rechten und crawlt kontoübergreifend Dateien von Teammitgliedern und Teamordnern.
+   * - Einzelkonto
+     - ``true``
+     - Für persönliche (Nicht-Team)-Konten. Verwendet ein reguläres Zugriffstoken mit Bereichseinschränkung und crawlt Dateien direkt aus diesem Konto.
+
+.. note::
+   Im Standardmodus (``basic_plan=false``) werden Team-Verwaltungs-APIs verwendet (Teammitglieder-Liste, dateizugriff pro Mitglied, Teamordner).
+   Daher sind ein Dropbox Business-Konto und ein Token mit Teamadministrator-Rechten zwingend erforderlich. Wenn Sie ein Einzelkonto verwenden, setzen Sie unbedingt ``basic_plan=true``.
+
 Schritte zum Abrufen des Zugriffstokens
----------------------------------------
+----------------------------------------
 
 1. App in der Dropbox App Console erstellen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,26 +241,31 @@ Besuchen Sie https://www.dropbox.com/developers/apps:
 
 1. Klicken Sie auf "Create app"
 2. Wählen Sie als API-Typ "Scoped access"
-3. Wählen Sie als Zugriffstyp "Full Dropbox" oder "App folder"
+3. Wählen Sie den Zugriffstyp (bei kontoübergreifendem Crawling wird "Full Dropbox" empfohlen)
 4. Geben Sie den App-Namen ein und erstellen Sie sie
 
 2. Berechtigungen konfigurieren
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Wählen Sie im Tab "Permissions" die erforderlichen Berechtigungen aus:
 
-**Erforderliche Berechtigungen für das Crawlen von Dateien**:
+**Erforderliche Berechtigungen für das Crawlen von Dateien und Paper**:
 
 - ``files.metadata.read`` - Lesen von Datei-Metadaten
-- ``files.content.read`` - Lesen von Dateiinhalten
+- ``files.content.read`` - Lesen von Datei- und Paper-Dokumentinhalten
 - ``sharing.read`` - Lesen von Freigabeinformationen
 
-**Zusätzlich erforderliche Berechtigungen für das Crawlen von Paper**:
+**Zusätzlich erforderliche Berechtigungen für Teamkonten (``basic_plan=false``)**:
 
-- ``files.content.read`` - Lesen von Paper-Dokumenten
+- ``members.read`` - Lesen der Teammitgliederliste
+- Zugriffsberechtigungen für Teamdaten/Teamspaces (erforderlich für das Crawling von Dateien einzelner Mitglieder und Teamordnern)
+
+.. note::
+   Im Teamkontomodus erfolgt der Zugriff auf einzelne Mitglieder und Teamordner als Teamadministrator.
+   Aktivieren Sie die oben genannten teambezogenen Berechtigungen im Tab "Permissions" und generieren Sie ein Token mit Teamadministrator-Rechten.
 
 3. Zugriffstoken generieren
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Im Tab "Settings":
 
@@ -244,7 +277,7 @@ Im Tab "Settings":
    Bewahren Sie das Zugriffstoken sicher auf. Mit diesem Token kann auf das Dropbox-Konto zugegriffen werden.
 
 4. Token konfigurieren
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Setzen Sie das abgerufene Token in den Parametern:
 
@@ -296,7 +329,7 @@ Skript:
     last_modified=file.client_modified
 
 Dropbox Paper-Dokumente crawlen
--------------------------------
+--------------------------------
 
 Parameter:
 
@@ -351,21 +384,34 @@ Skript (Dropbox Paper):
     role=paper.roles
 
 Nur bestimmte Dateitypen crawlen
---------------------------------
+---------------------------------
 
-Filterung im Skript:
+Um nur bestimmte MIME-Typen zu indizieren, geben Sie im Parameter ``supported_mimetypes``
+die zulässigen MIME-Typen als kommagetrennte Regex-Ausdrücke an.
+
+.. note::
+   Skripte im Datenspeicher werden zeilenweise als eigenständige Ausdrücke der Form ``Feldname=Ausdruck`` ausgewertet.
+   Daher ist es nicht möglich, mit einem mehrzeiligen ``if``-Block mehrere Felder gemeinsam zuzuweisen.
+   Die Einschränkung nach MIME-Typ sollte über den Parameter ``supported_mimetypes`` und nicht über das Skript erfolgen.
+
+Parameter (nur PDF- und Word-Dateien):
 
 ::
 
-    # Nur PDF und Word-Dateien
-    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-        url=file.url
-        title=file.name
-        content=file.contents
-        mimetype=file.mimetype
-        filename=file.name
-        last_modified=file.client_modified
-    }
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    supported_mimetypes=application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+Skript:
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
 
 Fehlerbehebung
 ==============
@@ -409,9 +455,12 @@ API-Ratenbegrenzungsfehler
 
 **Lösung**:
 
-1. Bei Basic-Plan ``basic_plan=true`` setzen
-2. Crawl-Intervall verlängern
-3. Mehrere Zugriffstokens zur Lastverteilung verwenden
+1. ``readInterval`` setzen, um die Verarbeitungspause zwischen Dateien zu verlängern
+2. ``number_of_threads`` verringern, um die Anzahl gleichzeitiger Anfragen zu reduzieren
+3. Datenspeicher in mehrere aufteilen (z.B. nach Ordner) und die Ausführungszeiten versetzt planen
+
+.. note::
+   ``basic_plan`` ist ein Parameter zur Auswahl des Kontotyps (Team/Einzelkonto) und hat keinen Einfluss auf die Ratenbegrenzung. Setzen Sie ihn entsprechend Ihrem Konto korrekt.
 
 Paper-Dokumente werden nicht abgerufen
 --------------------------------------
@@ -436,10 +485,10 @@ Bei großen Dateimengen
 3. Bei Basic-Plan auf API-Ratenbegrenzung achten
 
 Berechtigungen und Zugriffskontrolle
-====================================
+=====================================
 
 Dropbox-Freigabeberechtigungen abbilden
----------------------------------------
+-----------------------------------------
 
 Dropbox-Freigabeeinstellungen können auf Fess-Berechtigungen abgebildet werden:
 
