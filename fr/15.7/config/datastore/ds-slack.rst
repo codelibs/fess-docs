@@ -114,7 +114,7 @@ Liste des parametres
      - Port du proxy HTTP (requis lorsque ``proxy_host`` est spécifié)
    * - ``file_types``
      - Non
-     - Filtre de type de fichier pour l'API Slack
+     - Filtre de type de fichier pour l'API Slack (par défaut : ``all``)
    * - ``channel_count``
      - Non
      - Nombre de canaux par page API (par défaut : ``100``)
@@ -124,6 +124,18 @@ Liste des parametres
    * - ``file_count``
      - Non
      - Nombre de fichiers par page API (par défaut : ``20``)
+   * - ``user_count``
+     - Non
+     - Nombre d'utilisateurs par page API (par défaut : ``100``)
+   * - ``user_cache_size``
+     - Non
+     - Nombre maximum d'entrées dans le cache des informations utilisateur (par défaut : ``10000``)
+   * - ``bot_cache_size``
+     - Non
+     - Nombre maximum d'entrées dans le cache des informations bot (par défaut : ``10000``)
+   * - ``channel_cache_size``
+     - Non
+     - Nombre maximum d'entrées dans le cache des informations de canal (par défaut : ``10000``)
 
 Configuration du script
 --------------
@@ -149,9 +161,9 @@ Champs disponibles
    * - ``message.title``
      - Titre (chaîne vide pour les messages, nom et titre du fichier pour les entrées de fichier)
    * - ``message.text``
-     - Contenu textuel du message
+     - Contenu textuel du message (pour les entrées de fichier, le nom du fichier et le corps du fichier extrait)
    * - ``message.user``
-     - Nom d'affichage de l'expediteur
+     - Nom d'affichage de l'expéditeur du message (si non défini, résolu dans l'ordre du nom réel, du nom d'utilisateur, puis de l'identifiant utilisateur)
    * - ``message.channel``
      - Nom du canal ou le message a ete envoye
    * - ``message.timestamp``
