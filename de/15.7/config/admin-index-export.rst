@@ -1,34 +1,38 @@
-======================
+============================
 Index-Export-Funktion
-======================
+============================
 
 Übersicht
 =========
 
-Die Index-Export-Funktion ermöglicht den Export von in OpenSearch indizierten Suchdokumenten als HTML-Dateien in das lokale Dateisystem. Diese Funktionalität ist nützlich für:
+Die Index-Export-Funktion exportiert in OpenSearch indizierte Suchdokumente als HTML- oder JSON-Dateien in das lokale Dateisystem. Diese Funktionalität ist nützlich für:
 
 - Erstellung statischer Backups von indizierten Inhalten
 - Generierung von Offline-Kopien von Dokumenten für Archivierungszwecke
 - Erstellung statischer Suchergebnisseiten
 - Migration von Inhalten zu anderen Systemen
 
-Die exportierten Dateien behalten die ursprüngliche URL-Pfadstruktur der Quelldokumente bei, was die Navigation und Verwaltung der exportierten Inhalte erleichtert.
+Die exportierten Dateien behalten die ursprüngliche URL-Pfadstruktur der Quelldokumente bei, was die Verwaltung der exportierten Inhalte erleichtert.
 
 Funktionsweise
 ==============
 
 Wenn der Index-Export-Job ausgeführt wird, erfolgt folgender Prozess:
 
-1. **Dokumente abfragen**: Abrufen von Dokumenten aus OpenSearch mittels Scroll-API für effiziente Stapelverarbeitung
-2. **Inhalt verarbeiten**: Extrahieren von Dokumentfeldern (Titel, Inhalt, URL usw.)
-3. **Verzeichnisstruktur erstellen**: Replizieren der URL-Pfadstruktur im Export-Verzeichnis
-4. **HTML-Dateien generieren**: Erstellen von HTML-Dateien mit dem Dokumentinhalt
-5. **Bis zur Fertigstellung fortfahren**: Verarbeitung aller Dokumente in Stapeln bis der Index vollständig exportiert ist
+1. **Dokumente abrufen**: Abrufen von Dokumenten aus OpenSearch mittels Scroll-API für effiziente Stapelverarbeitung
+2. **Inhalt verarbeiten**: Extrahieren von Dokumentfeldern (Titel, Inhalt, URL usw.) und Entfernen ausgeschlossener Felder
+3. **Verzeichnisstruktur erstellen**: Replizieren der URL-Pfadstruktur im Export-Verzeichnis basierend auf dem ``url``-Feld des Dokuments
+4. **Dateien generieren**: Erstellen von Dateien (HTML oder JSON) mit dem Dokumentinhalt
+5. **Bis zur Fertigstellung fortfahren**: Stapelverarbeitung fortsetzen, bis der Index vollständig exportiert ist
 
 Die Scroll-API gewährleistet eine effiziente Verarbeitung großer Dokumentenmengen ohne Speicherprobleme.
 
+.. note::
+
+   Exportiert werden Dokumente aus dem Suchindex (``fess.search``). Dokumente ohne ``url``-Feld werden übersprungen.
+
 Konfigurationseigenschaften
-===========================
+============================
 
 Konfigurieren Sie die Index-Export-Funktion in ``fess_config.properties``:
 
@@ -41,10 +45,10 @@ Konfigurieren Sie die Index-Export-Funktion in ``fess_config.properties``:
      - Beschreibung
    * - ``index.export.path``
      - ``/var/lib/fess/export``
-     - Verzeichnis für exportierte Dateien
+     - Verzeichnis zum Speichern der exportierten Dateien
    * - ``index.export.exclude.fields``
      - ``cache``
-     - Kommagetrennte Liste der auszuschließenden Felder
+     - Kommagetrennte Liste der vom Export auszuschließenden Felder
    * - ``index.export.scroll.size``
      - ``100``
      - Anzahl der pro Stapel verarbeiteten Dokumente
@@ -81,9 +85,17 @@ Beispiele für Cron-Ausdrücke:
 - ``0 0 0 1 * ?`` - Am ersten Tag jedes Monats um Mitternacht ausführen
 
 Benutzerdefinierte Abfragefilterung
-===================================
+====================================
 
-Sie können den Export-Job anpassen, um nur bestimmte Dokumente zu exportieren, indem Sie das Job-Skript ändern.
+Durch Anpassen des Job-Skripts kann der Export auf bestimmte Dokumente eingeschränkt werden.
+
+Das Standardskript des **Index Exporter**-Jobs exportiert alle Dokumente:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.matchAllQuery())
+        .execute()
 
 So fügen Sie einen benutzerdefinierten Abfragefilter hinzu:
 
@@ -91,7 +103,7 @@ So fügen Sie einen benutzerdefinierten Abfragefilter hinzu:
 2. Bearbeiten Sie den **Index Exporter**
 3. Ändern Sie das Job-Skript, um einen Abfragefilter hinzuzufügen
 
-Beispielskript mit Datumsfilter (Dokumente der letzten 7 Tage exportieren):
+Beispiel mit Datumsfilter (nur Dokumente der letzten 7 Tage exportieren):
 
 ::
 
@@ -99,7 +111,7 @@ Beispielskript mit Datumsfilter (Dokumente der letzten 7 Tage exportieren):
         .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
         .execute()
 
-Beispielskript mit Website-Filter (Dokumente einer bestimmten Website exportieren):
+Beispiel mit Website-Filter (nur Dokumente einer bestimmten Website exportieren):
 
 ::
 
@@ -107,7 +119,7 @@ Beispielskript mit Website-Filter (Dokumente einer bestimmten Website exportiere
         .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
         .execute()
 
-Beispielskript für Export im JSON-Format:
+Beispiel für Export im JSON-Format:
 
 ::
 
@@ -116,11 +128,11 @@ Beispielskript für Export im JSON-Format:
         .execute()
 
 Exportierte Dateistruktur
-=========================
+==========================
 
 Exportierte Dateien sind so organisiert, dass sie die ursprüngliche URL-Struktur widerspiegeln.
 
-Beispielsweise würde ein Dokument mit der URL ``https://example.com/docs/guide/intro.html`` exportiert nach:
+Beispielsweise wird ein Dokument mit der URL ``https://example.com/docs/guide/intro.html`` exportiert nach:
 
 ::
 
@@ -130,12 +142,48 @@ Beispielsweise würde ein Dokument mit der URL ``https://example.com/docs/guide/
             └── guide/
                 └── intro.html
 
-Jede exportierte HTML-Datei enthält:
+Der Dateipfad wird aus dem ``url``-Feld des Dokuments nach folgenden Regeln ermittelt:
 
-- Dokumenttitel
-- Hauptinhaltstext
-- Metadaten (Datum der letzten Änderung, Inhaltstyp usw.)
-- Referenz zur ursprünglichen URL
+- Der Hostname wird zum Verzeichnis der obersten Ebene. Enthält die URL keinen Hostnamen, wird ``_local`` verwendet.
+- Endet der Pfad mit einem Schrägstrich oder besitzt er keinen Pfad, wird eine Indexdatei (``index.html`` oder ``index.json``) erstellt.
+- Enthält der Pfad keine Dateiendung, wird die dem Format entsprechende Endung (``.html`` oder ``.json``) angehängt.
+- Im Dateinamen unzulässige Zeichen (``< > : " | ? * \``) werden durch ``_`` ersetzt; jede Pfadkomponente wird auf maximal 200 Zeichen gekürzt.
+- Kann die URL nicht geparst werden oder wird ein Pfad-Traversal-Angriff erkannt, wird ein Hash-Wert der URL als Dateiname im Verzeichnis ``_invalid`` gespeichert.
+
+Im HTML-Format wird jede Datei nach folgender Struktur erzeugt:
+
+- Feld ``title`` → ``<title>``-Element
+- Feld ``lang`` → ``lang``-Attribut des ``<html>``-Elements
+- Feld ``content`` → Hauptinhalt des ``<body>``-Elements
+- Alle übrigen nicht ausgeschlossenen Felder → ``<meta name="fess:Feldname" content="Wert">``-Tags im ``<head>``
+
+::
+
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <title>Beispieldokument</title>
+    <meta name="fess:url" content="https://example.com/docs/guide/intro.html">
+    <meta name="fess:last_modified" content="2024-01-01T00:00:00.000Z">
+    <meta name="fess:content_type" content="text/html">
+    </head>
+    <body>
+    Hauptinhalt des Dokuments
+    </body>
+    </html>
+
+Im JSON-Format enthält jede Datei ein JSON-Objekt mit allen nicht ausgeschlossenen Feldern:
+
+::
+
+    {
+      "url": "https://example.com/docs/guide/intro.html",
+      "title": "Beispieldokument",
+      "content": "Hauptinhalt des Dokuments",
+      "last_modified": "2024-01-01T00:00:00.000Z",
+      "content_type": "text/html"
+    }
 
 Best Practices
 ==============
@@ -145,45 +193,45 @@ Speicherüberlegungen
 
 - Stellen Sie ausreichend Speicherplatz im Export-Verzeichnis sicher
 - Erwägen Sie dedizierten Speicher für große Dokumentenmengen
-- Implementieren Sie regelmäßige Bereinigung alter Exporte bei periodischen Exporten
+- Implementieren Sie bei regelmäßigen Exporten eine periodische Bereinigung alter Exporte
 
 Leistungstipps
 --------------
 
-- Passen Sie ``index.export.scroll.size`` basierend auf der Dokumentgröße an:
+- Passen Sie ``index.export.scroll.size`` je nach Dokumentgröße an:
   - Kleinere Dokumente: größere Stapelgröße (200-500)
   - Größere Dokumente: kleinere Stapelgröße (50-100)
-- Planen Sie Exporte während Zeiten geringer Nutzung
-- Überwachen Sie Festplatten-I/O während Export-Operationen
+- Planen Sie Exporte in Zeiten geringer Auslastung
+- Überwachen Sie die Festplatten-E/A während Export-Vorgängen
 
 Sicherheitsempfehlungen
------------------------
+------------------------
 
 - Legen Sie angemessene Dateiberechtigungen für das Export-Verzeichnis fest
 - Stellen Sie das Export-Verzeichnis nicht direkt im Web bereit
-- Erwägen Sie die Verschlüsselung exportierter Inhalte bei sensiblen Informationen
+- Erwägen Sie die Verschlüsselung exportierter Inhalte bei sensiblen Daten
 - Überprüfen Sie regelmäßig den Zugriff auf exportierte Dateien
 
 Fehlerbehebung
 ==============
 
 Export-Job wird nicht ausgeführt
---------------------------------
+---------------------------------
 
 1. Überprüfen Sie, ob der Job im Scheduler aktiviert ist
 2. Prüfen Sie die Syntax des Cron-Ausdrucks
-3. Überprüfen Sie |Fess|-Protokolle auf Fehlermeldungen:
+3. Überprüfen Sie die |Fess|-Protokolle auf Fehlermeldungen:
 
 ::
 
     tail -f /var/log/fess/fess.log | grep IndexExport
 
 Leeres Export-Verzeichnis
--------------------------
+--------------------------
 
-1. Bestätigen Sie, dass Dokumente im Index vorhanden sind
+1. Stellen Sie sicher, dass Dokumente im Index vorhanden sind
 2. Prüfen Sie die Berechtigungen des Export-Pfads
-3. Überprüfen Sie, ob der Abfragefilter (falls benutzerdefiniert) mit Dokumenten übereinstimmt
+3. Überprüfen Sie, ob der Abfragefilter (bei benutzerdefinierter Konfiguration) mit Dokumenten übereinstimmt
 
 ::
 
@@ -191,19 +239,19 @@ Leeres Export-Verzeichnis
     curl -X GET "localhost:9201/fess.search/_count?pretty"
 
 Export schlägt mittendrin fehl
-------------------------------
+--------------------------------
 
 1. Prüfen Sie den verfügbaren Speicherplatz
-2. Überprüfen Sie Protokolle auf Speicher- oder Timeout-Fehler
-3. Erwägen Sie die Reduzierung von ``scroll.size`` für große Dokumente
+2. Überprüfen Sie die Protokolle auf Speicher- oder Timeout-Fehler
+3. Erwägen Sie die Reduzierung von ``scroll.size`` bei großen Dokumenten
 4. Prüfen Sie die Timeout-Einstellungen des OpenSearch-Scroll-Kontexts
 
 Dateien nicht zugänglich
-------------------------
+-------------------------
 
-1. Überprüfen Sie Dateiberechtigungen: ``ls -la /var/lib/fess/export``
+1. Überprüfen Sie die Dateiberechtigungen: ``ls -la /var/lib/fess/export``
 2. Prüfen Sie, ob der Verzeichnisbesitzer mit dem |Fess|-Prozessbenutzer übereinstimmt
-3. Bestätigen Sie, dass SELinux- oder AppArmor-Richtlinien den Zugriff erlauben
+3. Stellen Sie sicher, dass SELinux- oder AppArmor-Richtlinien den Zugriff erlauben
 
 Verwandte Themen
 ================

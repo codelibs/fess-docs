@@ -1,31 +1,35 @@
-======================
+====================
 Index Export Feature
-======================
+====================
 
 Overview
 ========
 
-The Index Export feature allows you to export search documents indexed in OpenSearch to HTML files on the local filesystem. This functionality is useful for:
+The Index Export feature exports search documents indexed in OpenSearch to HTML or JSON files on the local filesystem. This functionality is useful for:
 
 - Creating static backups of indexed content
 - Generating offline copies of documents for archival purposes
 - Building static search result pages
 - Content migration to other systems
 
-The exported files maintain the original URL path structure from the source documents, making it easy to navigate and manage the exported content.
+The exported files maintain the original URL path structure from the source documents, making it easy to manage the exported content.
 
 How It Works
 ============
 
-When the Index Export job runs, it performs the following process:
+When the Index Export job runs, it performs the following steps:
 
-1. **Query Documents**: Retrieves documents from OpenSearch using scroll API for efficient batch processing
-2. **Process Content**: Extracts document fields (title, content, URL, etc.)
-3. **Create Directory Structure**: Replicates the URL path structure in the export directory
-4. **Generate HTML Files**: Creates HTML files containing the document content
-5. **Continue Until Complete**: Processes all documents in batches until the index is fully exported
+1. **Document Retrieval**: Fetches documents from OpenSearch in efficient batches using the Scroll API
+2. **Content Processing**: Extracts document fields (title, content, URL, etc.) and removes any excluded fields
+3. **Directory Structure Creation**: Replicates the URL path structure in the export directory based on each document's ``url`` field
+4. **File Generation**: Creates files (HTML or JSON) containing the document content
+5. **Continue Until Complete**: Continues batch processing until the index is fully exported
 
-The scroll API ensures efficient handling of large document sets without memory issues.
+The Scroll API enables efficient handling of large document sets without memory issues.
+
+.. note::
+
+   Only documents in the search index (``fess.search``) are eligible for export. Documents that do not have a ``url`` field are skipped.
 
 Configuration Properties
 ========================
@@ -83,7 +87,15 @@ Example cron expressions:
 Custom Query Filtering
 ======================
 
-You can customize the export job to export only specific documents by modifying the job script.
+You can customize the export to target only specific documents by modifying the job script.
+
+The default script for the **Index Exporter** job exports all documents:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob()
+        .query(org.opensearch.index.query.QueryBuilders.matchAllQuery())
+        .execute()
 
 To add a custom query filter:
 
@@ -91,7 +103,7 @@ To add a custom query filter:
 2. Edit the **Index Exporter**
 3. Modify the job script to include a query filter
 
-Example script with date filter (export documents from the last 7 days):
+Example date filter (export only documents from the last 7 days):
 
 ::
 
@@ -99,7 +111,7 @@ Example script with date filter (export documents from the last 7 days):
         .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
         .execute()
 
-Example script with site filter (export documents from a specific site):
+Example site filter (export only documents from a specific site):
 
 ::
 
@@ -107,7 +119,7 @@ Example script with site filter (export documents from a specific site):
         .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
         .execute()
 
-Example script to export in JSON format:
+Example to export in JSON format:
 
 ::
 
@@ -130,12 +142,48 @@ For example, a document with URL ``https://example.com/docs/guide/intro.html`` w
             └── guide/
                 └── intro.html
 
-Each exported HTML file contains:
+The file path is determined from the document's ``url`` field according to the following rules:
 
-- Document title
-- Main content body
-- Metadata (last modified date, content type, etc.)
-- Original URL reference
+- The hostname becomes the top-level directory. If the URL contains no hostname, ``_local`` is used.
+- If the path ends with a slash or has no path component, an index file (``index.html`` or ``index.json``) is created.
+- If the path contains no file extension, an extension matching the format (``.html`` or ``.json``) is appended.
+- Characters that are invalid in file names (``< > : " | ? * \``) are replaced with ``_``, and each path component is truncated to a maximum of 200 characters.
+- If the URL cannot be parsed or a path traversal is detected, the document is saved under the ``_invalid`` directory using a hash of the URL as the filename.
+
+For HTML format, each file is generated with the following structure:
+
+- ``title`` field → ``<title>`` element
+- ``lang`` field → ``lang`` attribute of the ``<html>`` element
+- ``content`` field → body of the ``<body>`` element
+- All other non-excluded fields → ``<meta name="fess:fieldname" content="value">`` tags inside ``<head>``
+
+::
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Sample Document</title>
+    <meta name="fess:url" content="https://example.com/docs/guide/intro.html">
+    <meta name="fess:last_modified" content="2024-01-01T00:00:00.000Z">
+    <meta name="fess:content_type" content="text/html">
+    </head>
+    <body>
+    Main content body of the document
+    </body>
+    </html>
+
+For JSON format, each file is a JSON object containing all non-excluded fields:
+
+::
+
+    {
+      "url": "https://example.com/docs/guide/intro.html",
+      "title": "Sample Document",
+      "content": "Main content body of the document",
+      "last_modified": "2024-01-01T00:00:00.000Z",
+      "content_type": "text/html"
+    }
 
 Best Practices
 ==============
