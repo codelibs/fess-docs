@@ -61,9 +61,13 @@ Configuracion basica
    * - Nombre
      - External Elasticsearch
    * - Handler
-     - ElasticsearchDataStore
+     - ElasticsearchDataStore / ElasticsearchListDataStore
    * - Habilitado
      - Activado
+
+.. note::
+   ``ElasticsearchListDataStore`` es una extension de ``ElasticsearchDataStore`` que procesa los datos obtenidos como una lista de archivos y soporta el registro en el indice con multiples hilos.
+   El numero de hilos se puede especificar con el parametro ``numOfThreads`` (predeterminado: 1).
 
 Configuracion de parametros
 ---------------------------
@@ -72,30 +76,21 @@ Conexion basica:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Conexion con autenticacion:
 
 ::
 
-    settings.fesen.http.url=https://elasticsearch.example.com:9200
-    index=myindex
+    settings.http.hosts=https://elasticsearch.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
-    size=100
-    scroll=5m
-
-Configuracion de multiples hosts:
-
-::
-
-    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Lista de parametros
 ~~~~~~~~~~~~~~~~~~~
@@ -107,33 +102,33 @@ Lista de parametros
    * - Parametro
      - Requerido
      - Descripcion
-   * - ``settings.fesen.http.url``
+   * - ``settings.http.hosts``
      - No
-     - Host(s) de Elasticsearch/OpenSearch (multiples separados por comas). Error de conexion si no se especifica
-   * - ``index``
-     - No
-     - Nombre del indice objetivo (predeterminado: ``_all``). Se pueden especificar multiples indices separados por comas
+     - URL del host de Elasticsearch/OpenSearch. Se pueden especificar multiples hosts separados por comas (ej: ``http://host1:9200,http://host2:9200``). Si no se especifica, se produce un error de conexion
    * - ``settings.fesen.username``
      - No
      - Nombre de usuario para autenticacion
    * - ``settings.fesen.password``
      - No
      - Contrasena para autenticacion
+   * - ``index``
+     - No
+     - Nombre del indice objetivo (predeterminado: ``_all``). Se pueden especificar multiples indices separados por comas
    * - ``size``
      - No
-     - Cantidad de registros por scroll (predeterminado: 100)
+     - Cantidad de registros obtenidos por scroll (si no se especifica, se usa el valor predeterminado del servidor Elasticsearch/OpenSearch)
    * - ``scroll``
      - No
      - Timeout del scroll (predeterminado: 1m)
+   * - ``timeout``
+     - No
+     - Timeout de la solicitud (predeterminado: 1m)
    * - ``query``
      - No
      - Query en JSON (predeterminado: match_all). Especificar solo el cuerpo de la query (el wrapper externo ``{"query":...}`` no es necesario)
    * - ``fields``
      - No
      - Campos a obtener (separados por comas)
-   * - ``timeout``
-     - No
-     - Timeout de la solicitud (predeterminado: 1m)
    * - ``preference``
      - No
      - Preferencia de replica de shard para la ejecucion de busqueda (predeterminado: ``_local``)
@@ -143,6 +138,34 @@ Lista de parametros
    * - ``readInterval``
      - No
      - Tiempo de espera entre el procesamiento de cada documento en milisegundos (predeterminado: 0)
+   * - ``numOfThreads``
+     - No
+     - Numero de hilos para el registro en el indice (valido solo para ``ElasticsearchListDataStore``, predeterminado: 1)
+
+Parametros adicionales de conexion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Los parametros con el prefijo ``settings.`` se pasan como configuracion del cliente interno de Elasticsearch/OpenSearch (cliente HTTP de fesen).
+Las principales configuraciones adicionales son las siguientes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Parametro
+     - Descripcion
+   * - ``settings.http.ssl.certificate_authorities``
+     - Ruta al archivo de certificado CA de confianza (formato X.509) para conexiones HTTPS
+   * - ``settings.http.compression``
+     - Si se habilita la compresion HTTP (predeterminado: true)
+   * - ``settings.http.proxy_host``
+     - Nombre de host del servidor proxy (tambien se puede especificar ``settings.https.proxy_host``)
+   * - ``settings.http.proxy_port``
+     - Numero de puerto del servidor proxy (tambien se puede especificar ``settings.https.proxy_port``)
+   * - ``settings.http.proxy_username``
+     - Nombre de usuario para autenticacion del proxy (tambien se puede especificar ``settings.https.proxy_username``)
+   * - ``settings.http.proxy_password``
+     - Contrasena para autenticacion del proxy (tambien se puede especificar ``settings.https.proxy_password``)
 
 Configuracion de scripts
 ------------------------
@@ -216,11 +239,11 @@ Obtener solo campos especificos
 ===============================
 
 Limitar campos a obtener con el parametro fields
-------------------------------------------------
+-------------------------------------------------
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
     size=100
@@ -237,10 +260,10 @@ Parametros:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Script:
 
@@ -253,16 +276,16 @@ Script:
     last_modified=source.updated_at
 
 Crawl desde cluster con autenticacion
--------------------------------------
+--------------------------------------
 
 Parametros:
 
 ::
 
-    settings.fesen.http.url=https://es.example.com:9200
-    index=products
+    settings.http.hosts=https://es.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
+    index=products
     size=200
     scroll=10m
 
@@ -277,13 +300,13 @@ Script:
     last_modified=source.updated_at
 
 Crawl desde multiples indices
------------------------------
+------------------------------
 
 Parametros:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=logs-2024-*
     query={"term":{"level":"error"}}
     size=100
@@ -299,18 +322,18 @@ Script:
     last_modified=source.timestamp
 
 Crawl de cluster OpenSearch
----------------------------
+----------------------------
 
 Parametros:
 
 ::
 
-    settings.fesen.http.url=https://opensearch.example.com:9200
-    index=documents
+    settings.http.hosts=https://opensearch.example.com:9200
     settings.fesen.username=admin
     settings.fesen.password=admin
+    index=documents
     size=100
-    scroll=5m
+    scroll=1m
 
 Script:
 
@@ -322,13 +345,13 @@ Script:
     last_modified=source.modified_date
 
 Crawl con campos limitados
---------------------------
+---------------------------
 
 Parametros:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
     size=100
@@ -343,16 +366,18 @@ Script:
     last_modified=source.timestamp
 
 Balanceo de carga con multiples hosts
--------------------------------------
+--------------------------------------
+
+Al especificar multiples hosts separados por comas en ``settings.http.hosts``, las solicitudes se distribuyen entre cada host.
 
 Parametros:
 
 ::
 
-    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.http.hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Script:
 
@@ -450,7 +475,7 @@ Timeout de scroll
 3. Verificar los recursos del cluster
 
 Crawl de grandes volumenes de datos
------------------------------------
+------------------------------------
 
 **Sintoma**: El crawl es lento o tiene timeout
 
@@ -460,7 +485,7 @@ Crawl de grandes volumenes de datos
 
    ::
 
-       size=100  # predeterminado
+       size=100
        size=500  # mas grande
 
 2. Limitar los campos a obtener con ``fields``
@@ -483,35 +508,53 @@ Conexion SSL/TLS
 ================
 
 En caso de certificado autofirmado
-----------------------------------
+------------------------------------
 
 .. warning::
    Use certificados firmados adecuadamente en entornos de produccion.
 
-Si usa certificados autofirmados, agregue el certificado al keystore de Java:
+Metodo 1: Especificar el certificado CA con el parametro ``settings.http.ssl.certificate_authorities`` (recomendado)
+
+Especifique la ruta al archivo de certificado CA de confianza (formato X.509). Este metodo no afecta al keystore global de |Fess|.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.ssl.certificate_authorities=/path/to/es-cert.crt
+    index=myindex
+
+Metodo 2: Agregar el certificado al keystore de Java
+
+Agregue el certificado al almacen de confianza de la JVM que inicia |Fess|.
 
 ::
 
     keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
 
-Autenticacion con certificado de cliente
-----------------------------------------
+Conexion a traves de proxy
+---------------------------
 
-Si se requiere certificado de cliente, se necesitan configuraciones de parametros adicionales.
-Consulte la documentacion del cliente de Elasticsearch para mas detalles.
+Para conectarse a traves de un servidor proxy, especifique ``settings.http.proxy_host`` y ``settings.http.proxy_port``.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.proxy_host=proxy.example.com
+    settings.http.proxy_port=8080
+    index=myindex
 
 Ejemplos de consultas avanzadas
-===============================
+================================
 
 Consulta con agregacion
------------------------
+------------------------
 
 .. note::
    El parametro ``query`` solo acepta el cuerpo de la query. Agregaciones (aggs), ordenamiento y otras
    opciones a nivel de busqueda no pueden especificarse. Solo se obtienen los documentos.
 
 Campos de script
-----------------
+-----------------
 
 .. note::
    Los campos de script de Elasticsearch/OpenSearch no estan incluidos en ``_source``, por lo que no se
@@ -519,7 +562,7 @@ Campos de script
    mediante el objeto ``hit`` usando ``hit.getFields()``.
 
 Informacion de referencia
-=========================
+==========================
 
 - :doc:`ds-overview` - Descripcion general de conectores de Data Store
 - :doc:`ds-database` - Conector de base de datos

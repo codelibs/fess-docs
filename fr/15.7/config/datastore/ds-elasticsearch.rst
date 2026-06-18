@@ -1,9 +1,9 @@
-==================================
+=====================================
 Connecteur Elasticsearch/OpenSearch
-==================================
+=====================================
 
 Apercu
-====
+======
 
 Le connecteur Elasticsearch/OpenSearch fournit la fonctionnalite permettant de recuperer des donnees
 a partir d'un cluster Elasticsearch ou OpenSearch et de les enregistrer dans l'index |Fess|.
@@ -11,20 +11,20 @@ a partir d'un cluster Elasticsearch ou OpenSearch et de les enregistrer dans l'i
 Cette fonctionnalite necessite le plugin ``fess-ds-elasticsearch``.
 
 Versions prises en charge
-==============
+=========================
 
 - Elasticsearch 7.x / 8.x
 - OpenSearch 1.x / 2.x
 
 Prerequis
-========
+=========
 
 1. L'installation du plugin est requise
 2. L'acces en lecture au cluster Elasticsearch/OpenSearch est necessaire
 3. Les droits d'execution de requetes sont necessaires
 
 Installation du plugin
-------------------------
+----------------------
 
 Methode 1 : Placement direct du fichier JAR
 
@@ -45,12 +45,12 @@ Methode 2 : Installation depuis l'interface d'administration
 3. Redemarrer |Fess|
 
 Configuration
-========
+=============
 
 Configurez depuis l'interface d'administration via "Crawler" -> "Data Store" -> "Nouveau".
 
 Configuration de base
---------
+---------------------
 
 .. list-table::
    :header-rows: 1
@@ -61,44 +61,39 @@ Configuration de base
    * - Nom
      - External Elasticsearch
    * - Nom du gestionnaire
-     - ElasticsearchDataStore
+     - ElasticsearchDataStore / ElasticsearchListDataStore
    * - Active
      - Oui
 
+.. note::
+   ``ElasticsearchListDataStore`` est un gestionnaire qui etend ``ElasticsearchDataStore``. Il traite les donnees recuperees sous forme de liste de fichiers et prend en charge l'indexation multi-thread.
+   Le nombre de threads peut etre specifie avec le parametre ``numOfThreads`` (par defaut : 1).
+
 Configuration des parametres
-----------------
+-----------------------------
 
 Connexion de base :
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Connexion avec authentification :
 
 ::
 
-    settings.fesen.http.url=https://elasticsearch.example.com:9200
-    index=myindex
+    settings.http.hosts=https://elasticsearch.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
-    size=100
-    scroll=5m
-
-Configuration multi-hotes :
-
-::
-
-    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Liste des parametres
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -107,33 +102,33 @@ Liste des parametres
    * - Parametre
      - Requis
      - Description
-   * - ``settings.fesen.http.url``
+   * - ``settings.http.hosts``
      - Non
-     - Hotes Elasticsearch/OpenSearch (plusieurs hotes separes par des virgules). Erreur de connexion si non specifie
-   * - ``index``
-     - Non
-     - Nom de l'index cible (par defaut : ``_all``). Plusieurs index peuvent etre specifies en les separant par des virgules
+     - URL des hotes Elasticsearch/OpenSearch. Plusieurs hotes peuvent etre specifies en les separant par des virgules (ex : ``http://host1:9200,http://host2:9200``). Une erreur de connexion se produit si non specifie
    * - ``settings.fesen.username``
      - Non
      - Nom d'utilisateur pour l'authentification
    * - ``settings.fesen.password``
      - Non
      - Mot de passe pour l'authentification
+   * - ``index``
+     - Non
+     - Nom de l'index cible (par defaut : ``_all``). Plusieurs index peuvent etre specifies en les separant par des virgules
    * - ``size``
      - Non
-     - Nombre d'elements recuperes lors du scroll (par defaut : 100)
+     - Nombre d'elements recuperes lors du scroll (si non specifie, la valeur par defaut du serveur Elasticsearch/OpenSearch est utilisee)
    * - ``scroll``
      - Non
      - Timeout du scroll (par defaut : 1m)
+   * - ``timeout``
+     - Non
+     - Timeout de la requete (par defaut : 1m)
    * - ``query``
      - Non
      - JSON de requete (par defaut : match_all). Specifier uniquement le corps de la requete (le wrapper externe ``{"query":...}`` n'est pas necessaire)
    * - ``fields``
      - Non
      - Champs a recuperer (separes par des virgules)
-   * - ``timeout``
-     - Non
-     - Timeout de la requete (par defaut : 1m)
    * - ``preference``
      - Non
      - Preference de replique de shard pour l'execution de la recherche (par defaut : ``_local``)
@@ -143,9 +138,37 @@ Liste des parametres
    * - ``readInterval``
      - Non
      - Temps d'attente entre le traitement de chaque document en millisecondes (par defaut : 0)
+   * - ``numOfThreads``
+     - Non
+     - Nombre de threads pour l'indexation (valide uniquement pour ``ElasticsearchListDataStore``, par defaut : 1)
+
+Parametres de connexion supplementaires
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les parametres prefixes par ``settings.`` sont transmis comme configuration du client HTTP Elasticsearch/OpenSearch interne (client HTTP fesen).
+Les principaux parametres supplementaires sont les suivants.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Parametre
+     - Description
+   * - ``settings.http.ssl.certificate_authorities``
+     - Chemin du fichier de certificat CA de confiance (format X.509) pour les connexions HTTPS
+   * - ``settings.http.compression``
+     - Activer la compression HTTP (par defaut : true)
+   * - ``settings.http.proxy_host``
+     - Nom d'hote du serveur proxy (``settings.https.proxy_host`` est egalement accepte)
+   * - ``settings.http.proxy_port``
+     - Numero de port du serveur proxy (``settings.https.proxy_port`` est egalement accepte)
+   * - ``settings.http.proxy_username``
+     - Nom d'utilisateur pour l'authentification proxy (``settings.https.proxy_username`` est egalement accepte)
+   * - ``settings.http.proxy_password``
+     - Mot de passe pour l'authentification proxy (``settings.https.proxy_password`` est egalement accepte)
 
 Configuration du script
---------------
+-----------------------
 
 Mapping de base :
 
@@ -168,7 +191,7 @@ Acces aux champs imbriques :
     last_modified=source.updated_at
 
 Champs disponibles
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 - ``source.<field_name>`` - Champ ``_source`` du document Elasticsearch
 - ``id`` - ID du document
@@ -181,16 +204,16 @@ Champs disponibles
 - ``hit`` - Objet SearchHit (utilisation avancee)
 
 Configuration des requetes
-============
+==========================
 
 Recuperation de tous les documents
---------------------
+------------------------------------
 
 Par defaut, tous les documents sont recuperes.
 Si le parametre ``query`` n'est pas specifie, ``match_all`` est utilise.
 
 Filtrage par conditions specifiques
---------------------------
+------------------------------------
 
 ::
 
@@ -213,14 +236,14 @@ Conditions multiples :
    Les options de niveau recherche telles que le tri ne peuvent pas etre specifiees dans ce parametre.
 
 Recuperation de champs specifiques uniquement
-========================
+=============================================
 
 Limitation des champs avec le parametre fields
-----------------------------------------
+-----------------------------------------------
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
     size=100
@@ -228,19 +251,19 @@ Limitation des champs avec le parametre fields
 Pour recuperer tous les champs, ne specifiez pas ``fields`` ou laissez-le vide.
 
 Exemples d'utilisation
-======
+======================
 
 Crawl d'un index de base
-------------------------------
+-------------------------
 
 Parametres :
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Script :
 
@@ -253,16 +276,16 @@ Script :
     last_modified=source.updated_at
 
 Crawl d'un cluster avec authentification
-------------------------------
+-----------------------------------------
 
 Parametres :
 
 ::
 
-    settings.fesen.http.url=https://es.example.com:9200
-    index=products
+    settings.http.hosts=https://es.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
+    index=products
     size=200
     scroll=10m
 
@@ -277,13 +300,13 @@ Script :
     last_modified=source.updated_at
 
 Crawl de plusieurs index
-------------------------------
+--------------------------
 
 Parametres :
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=logs-2024-*
     query={"term":{"level":"error"}}
     size=100
@@ -299,18 +322,18 @@ Script :
     last_modified=source.timestamp
 
 Crawl d'un cluster OpenSearch
-----------------------------
+-------------------------------
 
 Parametres :
 
 ::
 
-    settings.fesen.http.url=https://opensearch.example.com:9200
-    index=documents
+    settings.http.hosts=https://opensearch.example.com:9200
     settings.fesen.username=admin
     settings.fesen.password=admin
+    index=documents
     size=100
-    scroll=5m
+    scroll=1m
 
 Script :
 
@@ -322,13 +345,13 @@ Script :
     last_modified=source.modified_date
 
 Crawl avec limitation de champs
-----------------------------
+---------------------------------
 
 Parametres :
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
     size=100
@@ -343,16 +366,18 @@ Script :
     last_modified=source.timestamp
 
 Repartition de charge multi-hotes
-----------------------
+-----------------------------------
+
+En specifiant plusieurs hotes separes par des virgules dans ``settings.http.hosts``, les requetes sont distribuees entre chaque hote.
 
 Parametres :
 
 ::
 
-    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.http.hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Script :
 
@@ -364,10 +389,10 @@ Script :
     last_modified=source.timestamp
 
 Depannage
-======================
+=========
 
 Erreur de connexion
-----------
+--------------------
 
 **Symptome** : ``Connection refused`` ou ``No route to host``
 
@@ -379,7 +404,7 @@ Erreur de connexion
 4. Pour HTTPS, verifier si le certificat est valide
 
 Erreur d'authentification
-----------
+--------------------------
 
 **Symptome** : ``401 Unauthorized`` ou ``403 Forbidden``
 
@@ -391,10 +416,10 @@ Erreur d'authentification
    - Droits de lecture sur l'index
    - Droits d'utilisation de l'API scroll
 
-3. Si Elasticsearch Security (X-Pack) est active, verifier la configuration
+3. Si Elasticsearch Security (X-Pack) est active, verifier si la configuration est correcte
 
 Index introuvable
---------------------------
+------------------
 
 **Symptome** : ``index_not_found_exception``
 
@@ -407,10 +432,10 @@ Index introuvable
 
        GET /_cat/indices
 
-3. Verifier si le pattern wildcard est correct (ex: ``logs-*``)
+3. Verifier si le pattern wildcard est correct (ex : ``logs-*``)
 
 Erreur de requete
-------------
+------------------
 
 **Symptome** : ``parsing_exception`` ou ``search_phase_execution_exception``
 
@@ -429,7 +454,7 @@ Erreur de requete
        }
 
 Timeout du scroll
-----------------------
+------------------
 
 **Symptome** : ``No search context found`` ou ``Scroll timeout``
 
@@ -450,7 +475,7 @@ Timeout du scroll
 3. Verifier les ressources du cluster
 
 Crawl de donnees volumineuses
---------------------
+------------------------------
 
 **Symptome** : Le crawl est lent ou expire
 
@@ -460,7 +485,7 @@ Crawl de donnees volumineuses
 
    ::
 
-       size=100  # Par defaut
+       size=100
        size=500  # Plus grand
 
 2. Limiter les champs recuperes avec ``fields``
@@ -468,7 +493,7 @@ Crawl de donnees volumineuses
 4. Diviser en plusieurs data stores (par index, par periode, etc.)
 
 Memoire insuffisante
-----------
+---------------------
 
 **Symptome** : OutOfMemoryError
 
@@ -480,38 +505,56 @@ Memoire insuffisante
 4. Exclure les champs volumineux (donnees binaires, etc.)
 
 Connexion SSL/TLS
-===========
+=================
 
 Cas de certificat auto-signe
---------------------
+------------------------------
 
 .. warning::
    Utilisez des certificats signes de maniere appropriee en environnement de production.
 
-Pour utiliser des certificats auto-signes, ajoutez le certificat au keystore Java :
+Methode 1 : Specifier le certificat CA avec le parametre ``settings.http.ssl.certificate_authorities`` (recommande)
+
+Indiquez le chemin du fichier de certificat CA de confiance (format X.509). Cette methode n'affecte pas le keystore global de |Fess|.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.ssl.certificate_authorities=/path/to/es-cert.crt
+    index=myindex
+
+Methode 2 : Ajouter le certificat au keystore Java
+
+Ajoutez le certificat au trust store de la JVM qui demarre |Fess|.
 
 ::
 
     keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
 
-Authentification par certificat client
-----------------------
+Connexion via un proxy
+-----------------------
 
-Si un certificat client est necessaire, des parametres supplementaires sont requis.
-Consultez la documentation du client Elasticsearch pour plus de details.
+Pour se connecter via un serveur proxy, specifiez ``settings.http.proxy_host`` et ``settings.http.proxy_port``.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.proxy_host=proxy.example.com
+    settings.http.proxy_port=8080
+    index=myindex
 
 Exemples de requetes avancees
-==============
+==============================
 
 Requete avec agregation
-----------------
+------------------------
 
 .. note::
    Le parametre ``query`` n'accepte que le corps de la requete. Les agregations (aggs), le tri et autres
    options de niveau recherche ne peuvent pas etre specifies. Seuls les documents sont recuperes.
 
 Champs de script
---------------------
+-----------------
 
 .. note::
    Les champs de script Elasticsearch/OpenSearch ne sont pas inclus dans ``_source`` et ne peuvent donc pas
@@ -519,7 +562,7 @@ Champs de script
    ``hit`` en utilisant ``hit.getFields()``.
 
 Informations de reference
-========
+==========================
 
 - :doc:`ds-overview` - Apercu des connecteurs Data Store
 - :doc:`ds-database` - Connecteur de base de donnees

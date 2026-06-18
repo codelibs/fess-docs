@@ -61,9 +61,14 @@ Basic Settings
    * - Name
      - External Elasticsearch
    * - Handler Name
-     - ElasticsearchDataStore
+     - ElasticsearchDataStore / ElasticsearchListDataStore
    * - Enabled
      - On
+
+.. note::
+   ``ElasticsearchListDataStore`` is an extension of ``ElasticsearchDataStore`` that processes
+   retrieved data as a file list and supports multi-threaded index registration.
+   The number of threads can be specified with the ``numOfThreads`` parameter (default: 1).
 
 Parameter Settings
 ------------------
@@ -72,30 +77,21 @@ Basic connection:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Authenticated connection:
 
 ::
 
-    settings.fesen.http.url=https://elasticsearch.example.com:9200
-    index=myindex
+    settings.http.hosts=https://elasticsearch.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
-    size=100
-    scroll=5m
-
-Multiple hosts:
-
-::
-
-    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Parameter List
 ~~~~~~~~~~~~~~
@@ -107,27 +103,33 @@ Parameter List
    * - Parameter
      - Required
      - Description
-   * - ``settings.fesen.http.url``
+   * - ``settings.http.hosts``
      - No
-     - Elasticsearch/OpenSearch hosts (comma-separated for multiple). Connection error occurs if not specified
-   * - ``index``
-     - No
-     - Target index name (default: ``_all``). Multiple indices can be specified with comma separation
+     - Host URL of Elasticsearch/OpenSearch. Multiple hosts can be specified with comma separation (e.g., ``http://host1:9200,http://host2:9200``). A connection error will occur if not specified
    * - ``settings.fesen.username``
      - No
      - Authentication username
    * - ``settings.fesen.password``
      - No
      - Authentication password
+   * - ``index``
+     - No
+     - Target index name (default: ``_all``). Multiple indices can be specified with comma separation
    * - ``size``
      - No
-     - Number of documents per scroll (default: 100)
+     - Number of documents to retrieve per scroll (if unspecified, the Elasticsearch/OpenSearch server default is used)
    * - ``scroll``
      - No
      - Scroll timeout (default: 1m)
    * - ``timeout``
      - No
      - Request timeout (default: 1m)
+   * - ``query``
+     - No
+     - Query JSON (default: match_all). Specify query body only (outer ``{"query":...}`` wrapper is not needed)
+   * - ``fields``
+     - No
+     - Fields to retrieve (comma-separated)
    * - ``preference``
      - No
      - Shard replica preference for search execution (default: ``_local``)
@@ -137,12 +139,34 @@ Parameter List
    * - ``readInterval``
      - No
      - Wait time between processing each document in milliseconds (default: 0)
-   * - ``query``
+   * - ``numOfThreads``
      - No
-     - Query JSON (default: match_all). Specify query body only (outer ``{"query":...}`` wrapper is not needed)
-   * - ``fields``
-     - No
-     - Fields to retrieve (comma-separated)
+     - Number of threads for index registration (valid for ``ElasticsearchListDataStore`` only, default: 1)
+
+Additional Connection Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Parameters with the ``settings.`` prefix are passed as configuration to the internal
+Elasticsearch/OpenSearch client (fesen HTTP client). The main additional settings are as follows.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Parameter
+     - Description
+   * - ``settings.http.ssl.certificate_authorities``
+     - Path to the CA certificate file (X.509 format) to trust for HTTPS connections
+   * - ``settings.http.compression``
+     - Whether to enable HTTP compression (default: true)
+   * - ``settings.http.proxy_host``
+     - Proxy server hostname (``settings.https.proxy_host`` also works)
+   * - ``settings.http.proxy_port``
+     - Proxy server port number (``settings.https.proxy_port`` also works)
+   * - ``settings.http.proxy_username``
+     - Proxy authentication username (``settings.https.proxy_username`` also works)
+   * - ``settings.http.proxy_password``
+     - Proxy authentication password (``settings.https.proxy_password`` also works)
 
 Script Settings
 ---------------
@@ -190,7 +214,7 @@ By default, all documents are retrieved.
 If the ``query`` parameter is not specified, ``match_all`` is used.
 
 Filtering with Specific Conditions
-----------------------------------
+-----------------------------------
 
 ::
 
@@ -213,14 +237,14 @@ Multiple conditions:
    Search-level options such as sort cannot be specified in this parameter.
 
 Retrieving Specific Fields Only
-===============================
+================================
 
-Limiting fields with fields parameter
--------------------------------------
+Limiting fields with the fields parameter
+------------------------------------------
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
     size=100
@@ -237,10 +261,10 @@ Parameters:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Script:
 
@@ -253,16 +277,16 @@ Script:
     last_modified=source.updated_at
 
 Authenticated Cluster Crawl
----------------------------
+----------------------------
 
 Parameters:
 
 ::
 
-    settings.fesen.http.url=https://es.example.com:9200
-    index=products
+    settings.http.hosts=https://es.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
+    index=products
     size=200
     scroll=10m
 
@@ -277,13 +301,13 @@ Script:
     last_modified=source.updated_at
 
 Multiple Indices Crawl
-----------------------
+-----------------------
 
 Parameters:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=logs-2024-*
     query={"term":{"level":"error"}}
     size=100
@@ -299,18 +323,18 @@ Script:
     last_modified=source.timestamp
 
 OpenSearch Cluster Crawl
-------------------------
+-------------------------
 
 Parameters:
 
 ::
 
-    settings.fesen.http.url=https://opensearch.example.com:9200
-    index=documents
+    settings.http.hosts=https://opensearch.example.com:9200
     settings.fesen.username=admin
     settings.fesen.password=admin
+    index=documents
     size=100
-    scroll=5m
+    scroll=1m
 
 Script:
 
@@ -322,13 +346,13 @@ Script:
     last_modified=source.modified_date
 
 Crawl with Limited Fields
--------------------------
+--------------------------
 
 Parameters:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
     size=100
@@ -342,17 +366,20 @@ Script:
     content=source.content
     last_modified=source.timestamp
 
-Load Balancing with Multiple Hosts
-----------------------------------
+Load Balancing Across Multiple Hosts
+--------------------------------------
+
+Specifying multiple hosts in ``settings.http.hosts`` with comma separation distributes
+requests across each host.
 
 Parameters:
 
 ::
 
-    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.http.hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Script:
 
@@ -379,7 +406,7 @@ Connection Error
 4. For HTTPS, verify certificate is valid
 
 Authentication Error
---------------------
+---------------------
 
 **Symptom**: ``401 Unauthorized`` or ``403 Forbidden``
 
@@ -460,7 +487,7 @@ Large Data Crawl
 
    ::
 
-       size=100  # Default
+       size=100
        size=500  # Larger
 
 2. Limit fields with ``fields``
@@ -483,28 +510,46 @@ SSL/TLS Connection
 ==================
 
 Self-Signed Certificate
------------------------
+------------------------
 
 .. warning::
    Use properly signed certificates in production environments.
 
-For self-signed certificates, add certificate to Java keystore:
+Method 1: Specify the CA certificate with the ``settings.http.ssl.certificate_authorities`` parameter (recommended)
+
+Specify the path to the CA certificate file (X.509 format) to trust. This method does not affect the |Fess|-wide keystore.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.ssl.certificate_authorities=/path/to/es-cert.crt
+    index=myindex
+
+Method 2: Add certificate to Java keystore
+
+Add the certificate to the trust store of the JVM that starts |Fess|.
 
 ::
 
     keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
 
-Client Certificate Authentication
----------------------------------
+Connecting via Proxy
+---------------------
 
-For client certificate authentication, additional parameter configuration is required.
-Refer to Elasticsearch client documentation for details.
+To connect through a proxy server, specify ``settings.http.proxy_host`` and ``settings.http.proxy_port``.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.proxy_host=proxy.example.com
+    settings.http.proxy_port=8080
+    index=myindex
 
 Advanced Query Examples
 =======================
 
 Query with Aggregation
-----------------------
+-----------------------
 
 .. note::
    The ``query`` parameter accepts only the query body. Aggregations (aggs), sort, and other
@@ -527,4 +572,3 @@ Reference
 - `Elasticsearch Documentation <https://www.elastic.co/guide/>`_
 - `OpenSearch Documentation <https://opensearch.org/docs/>`_
 - `Elasticsearch Query DSL <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html>`_
-
