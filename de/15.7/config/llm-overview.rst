@@ -1,11 +1,11 @@
-==========================
-Übersicht LLM-Integration
-==========================
+==============================
+Übersicht der LLM-Integration
+==============================
 
 Übersicht
 =========
 
-|Fess| unterstützt eine AI-Suchmodus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
+|Fess| unterstützt eine KI-Suchmodus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
 Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten Format mit einem KI-Assistenten abrufen, der auf Suchergebnissen basiert.
 
 Die LLM-Integrationsfunktion wird als ``fess-llm-*``-Plugin bereitgestellt. Installieren Sie das Plugin, das dem LLM-Anbieter entspricht, den Sie verwenden möchten.
@@ -26,7 +26,7 @@ Unterstützte Anbieter
    * - Ollama
      - ``ollama``
      - ``fess-llm-ollama``
-     - Open-Source-LLM-Server, der in lokalen Umgebungen läuft. Kann Modelle wie Llama, Mistral, Gemma ausführen. Standardeinstellung.
+     - Open-Source-LLM-Server, der in lokalen Umgebungen läuft. Kann Modelle wie Llama, Mistral und Gemma ausführen. Standardeinstellung.
    * - OpenAI
      - ``openai``
      - ``fess-llm-openai``
@@ -52,20 +52,25 @@ Nach der Ablage wird das Plugin beim nächsten Neustart von |Fess| geladen.
 Architektur
 ===========
 
-Die AI-Suchmodus-Funktion arbeitet mit dem folgenden Ablauf.
+Die KI-Suchmodus-Funktion arbeitet mit dem folgenden Ablauf.
 
-1. **Benutzereingabe**: Benutzer gibt eine Frage in der Chat-Oberfläche ein
-2. **Absichtsanalyse**: LLM analysiert die Benutzerfrage und extrahiert Suchbegriffe
-3. **Suchausführung**: Suche nach relevanten Dokumenten mit der |Fess|-Suchmaschine
-4. **Query-Regenerierung**: Wenn keine Suchergebnisse gefunden werden, regeneriert das LLM die Abfrage und versucht es erneut
-5. **Ergebnisbewertung**: LLM bewertet die Relevanz der Suchergebnisse und wählt optimale Dokumente aus
-6. **Antwortgenerierung**: LLM generiert eine Antwort basierend auf den ausgewählten Dokumenten (mit Markdown-Rendering)
-7. **Quellenangabe**: Die Antwort enthält Links zu den Quelldokumenten
+1. **Benutzereingabe**: Der Benutzer gibt eine Frage in der Chat-Oberfläche ein
+2. **Absichtsanalyse (intent)**: Das LLM analysiert die Benutzerfrage und extrahiert Suchbegriffe
+3. **Suchausführung (search)**: Die |Fess|-Suchmaschine sucht nach relevanten Dokumenten
+4. **Ergebnisbewertung (evaluate)**: Das LLM bewertet die Relevanz der Suchergebnisse und wählt die optimalen Dokumente aus
+5. **Query-Regenerierung (bei Bedarf)**: Werden keine Suchergebnisse gefunden oder keine relevanten Dokumente in der Bewertung ermittelt, regeneriert das LLM die Abfrage und führt eine erneute Suche durch
+6. **Inhaltsabruf (fetch)**: Der Volltext der ausgewählten Dokumente wird abgerufen
+7. **Antwortgenerierung (answer)**: Das LLM generiert eine Antwort auf Basis der abgerufenen Dokumente (mit Markdown-Rendering)
+8. **Quellenangabe**: Die Antwort enthält Links zu den referenzierten Quelldokumenten
+
+.. note::
+
+   Die interne Verarbeitung besteht aus fünf Phasen: ``intent``, ``search``, ``evaluate``, ``fetch`` und ``answer``. Der Fortschritt jeder Phase wird dem Client per Streaming (SSE) mitgeteilt.
 
 Grundeinstellungen
 ==================
 
-Die LLM-Funktion wird an folgenden zwei Stellen konfiguriert.
+Die LLM-Funktion wird an den folgenden zwei Stellen konfiguriert.
 
 Allgemeine Einstellungen in der Administrationsoberfläche / system.properties
 ------------------------------------------------------------------------------
@@ -78,13 +83,13 @@ Konfiguration über die allgemeinen Einstellungen der Administrationsoberfläche
     rag.llm.name=ollama
 
 fess_config.properties
-----------------------
+-----------------------
 
-Konfiguration in ``app/WEB-INF/conf/fess_config.properties``. Diese Einstellungen werden beim Start geladen und dienen der Aktivierung des AI-Suchmodus, der Sitzungs- und Verlaufskonfiguration sowie der anbieterspezifischen LLM-Einstellungen (Verbindungs-URLs, API-Schlüssel, Generierungsparameter).
+Konfiguration in ``app/WEB-INF/conf/fess_config.properties``. Diese Datei dient der Aktivierung des KI-Suchmodus, der Sitzungs- und Verlaufskonfiguration sowie anbieterspezifischer Einstellungen (Verbindungs-URLs, API-Schlüssel, Generierungsparameter usw.).
 
 ::
 
-    # AI-Suchmodus-Funktion aktivieren
+    # KI-Suchmodus-Funktion aktivieren
     rag.chat.enabled=true
 
     # Beispiel für anbieterspezifische Einstellungen (OpenAI)
@@ -100,7 +105,7 @@ Detaillierte Einstellungen für jeden Anbieter finden Sie in den folgenden Dokum
 Gemeinsame Einstellungen
 ========================
 
-Einstellungselemente, die für alle LLM-Anbieter gemeinsam sind. Diese werden in ``fess_config.properties`` konfiguriert.
+Einstellungselemente, die für alle LLM-Anbieter gemeinsam gelten. Diese werden in ``fess_config.properties`` konfiguriert.
 
 Kontexteinstellungen
 --------------------
@@ -117,18 +122,18 @@ Kontexteinstellungen
      - ``5``
    * - ``rag.chat.content.fields``
      - Aus Dokumenten abzurufende Felder
-     - ``title,url,content,...``
+     - ``title,url,content,doc_id,content_title,content_description``
 
 .. note::
 
-   Die maximale Zeichenzahl des Kontexts (``context.max.chars``) wurde auf eine anbieterspezifische und prompttypspezifische Einstellung umgestellt. Konfigurieren Sie diese in ``fess_config.properties`` als ``rag.llm.{provider}.{promptType}.context.max.chars``.
+   Die maximale Zeichenzahl des Kontexts (``context.max.chars``) wurde auf eine anbieter- und prompttypspezifische Einstellung umgestellt. Konfigurieren Sie diese in ``fess_config.properties`` als ``rag.llm.{provider}.{promptType}.context.max.chars``.
 
 Systemprompt
 ------------
 
 Systemprompts werden nicht in Property-Dateien, sondern in den DI-XML-Dateien der jeweiligen Plugins verwaltet.
 
-Der Systemprompt wird in der Datei ``fess_llm++.xml`` definiert, die in jedem ``fess-llm-*``-Plugin enthalten ist. Um den Prompt anzupassen, bearbeiten Sie die DI-XML-Datei im Plugin-Verzeichnis.
+Der Systemprompt wird in der Datei ``fess_llm++.xml`` definiert, die in der JAR-Datei jedes ``fess-llm-*``-Plugins enthalten ist. Da diese Datei eine im Plugin-JAR gebündelte Classpath-Ressource ist, muss die DI-XML-Datei innerhalb des JARs bearbeitet werden, um den Prompt anzupassen.
 
 Verfügbarkeitsprüfung
 ---------------------
@@ -183,6 +188,9 @@ Einstellungen zur Steuerung der gleichzeitigen Anfragen an das LLM. Konfiguratio
    * - ``rag.llm.{provider}.max.concurrent.requests``
      - Maximale Anzahl gleichzeitiger Anfragen an den Anbieter
      - ``5``
+   * - ``rag.llm.{provider}.concurrency.wait.timeout``
+     - Maximale Wartezeit (Millisekunden) bis eine freie Kapazität verfügbar ist, wenn die Gleichzeitigkeitsgrenze erreicht wurde. Wird innerhalb dieser Zeit keine Kapazität frei, wird ein Ratenlimitierungsfehler zurückgegeben
+     - ``30000``
 
 Um beispielsweise die Gleichzeitigkeitssteuerung für den OpenAI-Anbieter zu konfigurieren:
 
@@ -207,7 +215,7 @@ Einstellungen zur Bewertung der Suchergebnisse. Konfiguration in ``fess_config.p
      - ``3``
 
 Prompttypspezifische Einstellungen
-===================================
+====================================
 
 Generierungsparameter können für jeden Prompttyp einzeln konfiguriert werden. Dies ermöglicht eine feinere Abstimmung je nach Verwendungszweck. Die Konfiguration erfolgt in ``fess_config.properties``.
 
@@ -229,7 +237,7 @@ Prompttypen-Übersicht
      - Bewertet die Relevanz der Suchergebnisse
    * - Unklare Anfrage
      - ``unclear``
-     - Generiert eine Antwort bei unklarer Frage
+     - Generiert eine Antwort, wenn die Frage unklar ist
    * - Keine Ergebnisse
      - ``noresults``
      - Generiert eine Antwort, wenn keine Suchergebnisse gefunden werden
@@ -238,7 +246,7 @@ Prompttypen-Übersicht
      - Generiert eine Antwort, wenn kein passendes Dokument existiert
    * - Antwortgenerierung
      - ``answer``
-     - Generiert eine Antwort basierend auf den Suchergebnissen
+     - Generiert eine Antwort auf Basis der Suchergebnisse
    * - Zusammenfassung
      - ``summary``
      - Generiert eine Zusammenfassung des Dokuments
@@ -276,11 +284,15 @@ Konfigurationsbeispiel (OpenAI-Anbieter):
     # Maximale Zeichenzahl des Kontexts für die Zusammenfassung
     rag.llm.openai.summary.context.max.chars=8000
 
+.. note::
+
+   ``temperature``, ``max.tokens`` und ``context.max.chars`` sind bei allen Anbietern gemeinsam verfügbar. Darüber hinaus unterstützt jeder Anbieter eigene Parameter wie ``thinking.budget``, ``top.p`` oder ``reasoning.effort``. Details entnehmen Sie bitte der jeweiligen Anbieterdokumentation.
+
 Nächste Schritte
 ================
 
 - :doc:`llm-ollama` - Detaillierte Ollama-Konfiguration
 - :doc:`llm-openai` - Detaillierte OpenAI-Konfiguration
 - :doc:`llm-gemini` - Detaillierte Google Gemini-Konfiguration
-- :doc:`rag-chat` - Detaillierte Konfiguration der AI-Suchmodus-Funktion
-- :doc:`rank-fusion` - Rank Fusion Konfiguration (Hybride Suchergebnis-Zusammenführung)
+- :doc:`rag-chat` - Detaillierte Konfiguration der KI-Suchmodus-Funktion
+- :doc:`rank-fusion` - Rank Fusion Konfiguration (Zusammenführung hybrider Suchergebnisse)

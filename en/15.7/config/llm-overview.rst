@@ -5,7 +5,7 @@ LLM Integration Overview
 Overview
 ========
 
-|Fess| supports AI mode (RAG: Retrieval-Augmented Generation) functionality powered by Large Language Models (LLM).
+|Fess| supports AI search mode (RAG: Retrieval-Augmented Generation) functionality powered by Large Language Models (LLM).
 This feature allows users to retrieve information through conversational AI assistance based on search results.
 
 LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
@@ -26,11 +26,11 @@ Supported Providers
    * - Ollama
      - ``ollama``
      - ``fess-llm-ollama``
-     - An open-source LLM server that runs in local environments. Supports models like Llama, Mistral, and Gemma. Default setting.
+     - An open-source LLM server that runs in local environments. Supports models such as Llama, Mistral, and Gemma. Default setting.
    * - OpenAI
      - ``openai``
      - ``fess-llm-openai``
-     - OpenAI's cloud API. Enables use of models like GPT-4.
+     - OpenAI's cloud API. Enables use of models such as GPT-4.
    * - Google Gemini
      - ``gemini``
      - ``fess-llm-gemini``
@@ -39,7 +39,7 @@ Supported Providers
 Plugin Installation
 ===================
 
-LLM functionality is provided as plugins. Place the JAR file of the ``fess-llm-{provider}`` plugin corresponding to your provider in the plugin directory.
+LLM functionality is provided as plugins. You must place the JAR file of the ``fess-llm-{provider}`` plugin corresponding to your provider in the plugin directory.
 
 For example, to use the OpenAI provider, download ``fess-llm-openai-15.7.0.jar`` and place it in the following directory.
 
@@ -52,15 +52,20 @@ After placement, restart |Fess| to load the plugin.
 Architecture
 ============
 
-The AI mode feature operates with the following flow.
+The AI search mode feature operates with the following flow.
 
 1. **User Input**: User enters a question in the chat interface
-2. **Intent Analysis**: LLM analyzes the user's question and extracts search keywords
-3. **Search Execution**: |Fess| search engine retrieves relevant documents
-4. **Query Regeneration**: When no search results are found, LLM regenerates the query and retries
-5. **Result Evaluation**: LLM evaluates the relevance of search results and selects optimal documents
-6. **Response Generation**: LLM generates a response based on the selected documents (with Markdown rendering)
-7. **Source Citation**: The response includes links to referenced source documents
+2. **Intent Analysis (intent)**: LLM analyzes the user's question and extracts search keywords
+3. **Search Execution (search)**: |Fess| search engine retrieves relevant documents
+4. **Result Evaluation (evaluate)**: LLM evaluates the relevance of search results and selects the most suitable documents
+5. **Query Regeneration (when needed)**: If no search results are found, or if no relevant documents are identified during evaluation, the LLM regenerates the query and retries the search
+6. **Content Fetching (fetch)**: Retrieves the body text of the selected documents
+7. **Answer Generation (answer)**: LLM generates a response based on the retrieved documents (Markdown rendering supported)
+8. **Source Citation**: The response includes links to the referenced source documents
+
+.. note::
+
+   The internal processing consists of five phases — ``intent``, ``search``, ``evaluate``, ``fetch``, and ``answer`` — and the progress of each phase is reported to the client via streaming (SSE).
 
 Basic Configuration
 ===================
@@ -80,11 +85,11 @@ Configure in the administration screen general settings or in ``system.propertie
 fess_config.properties
 ----------------------
 
-Configure in ``app/WEB-INF/conf/fess_config.properties``. These settings are loaded at startup and are used to enable AI mode, configure session and history-related settings, and set provider-specific parameters such as connection URL, API key, and generation parameters.
+Configure in ``app/WEB-INF/conf/fess_config.properties``. In addition to enabling AI search mode and configuring session and history-related settings, provider-specific settings such as the connection URL, API key, and generation parameters are also specified in this file.
 
 ::
 
-    # Enable AI mode functionality
+    # Enable AI search mode functionality
     rag.chat.enabled=true
 
     # Example of provider-specific settings (for OpenAI)
@@ -93,9 +98,9 @@ Configure in ``app/WEB-INF/conf/fess_config.properties``. These settings are loa
 
 For detailed configuration of each provider, please refer to the following documentation.
 
-- :doc:`llm-ollama` - Ollama Configuration
-- :doc:`llm-openai` - OpenAI Configuration
-- :doc:`llm-gemini` - Google Gemini Configuration
+- :doc:`llm-ollama` - Ollama configuration
+- :doc:`llm-openai` - OpenAI configuration
+- :doc:`llm-gemini` - Google Gemini configuration
 
 Common Settings
 ===============
@@ -117,7 +122,7 @@ Context Settings
      - ``5``
    * - ``rag.chat.content.fields``
      - Fields to retrieve from documents
-     - ``title,url,content,...``
+     - ``title,url,content,doc_id,content_title,content_description``
 
 .. note::
 
@@ -128,7 +133,7 @@ System Prompt
 
 System prompts are managed in the DI XML files of each plugin rather than in properties files.
 
-System prompts are defined in the ``fess_llm++.xml`` file included in each ``fess-llm-*`` plugin. To customize prompts, edit the DI XML file in the plugin directory.
+The system prompt is defined in the ``fess_llm++.xml`` file bundled inside the JAR of each ``fess-llm-*`` plugin. Because this file is a classpath resource bundled within the plugin JAR, customizing a prompt requires editing the DI XML file inside the JAR.
 
 Availability Check
 ------------------
@@ -141,7 +146,7 @@ Availability Check
      - Description
      - Default
    * - ``rag.llm.{provider}.availability.check.interval``
-     - Interval (in seconds) to check LLM availability. Set to 0 to disable
+     - Interval (in seconds) at which LLM availability is checked. Set to 0 to disable.
      - ``60``
 
 This setting is configured in ``fess_config.properties``. |Fess| periodically verifies the connection status with the LLM provider.
@@ -183,6 +188,9 @@ Settings for controlling the number of concurrent requests to the LLM. Configure
    * - ``rag.llm.{provider}.max.concurrent.requests``
      - Maximum number of concurrent requests to the provider
      - ``5``
+   * - ``rag.llm.{provider}.concurrency.wait.timeout``
+     - Maximum time (in milliseconds) to wait for an available slot when the concurrency limit is reached. If no slot becomes available within this time, a rate-limit error is returned.
+     - ``30000``
 
 For example, to configure the concurrency for the OpenAI provider:
 
@@ -209,7 +217,7 @@ Settings for search result evaluation. Configure in ``fess_config.properties``.
 Per-Prompt-Type Settings
 ========================
 
-Generation parameters can be configured per prompt type. This allows fine-grained adjustments based on the intended use. Configure in ``fess_config.properties``.
+Generation parameters can be configured per prompt type, allowing fine-grained tuning for each use case. Configure in ``fess_config.properties``.
 
 Prompt Type List
 ----------------
@@ -263,7 +271,7 @@ Per-prompt-type settings are specified using the following pattern.
     rag.llm.{provider}.{promptType}.max.tokens
     rag.llm.{provider}.{promptType}.context.max.chars
 
-Configuration Examples (for OpenAI provider):
+Configuration examples (for the OpenAI provider):
 
 ::
 
@@ -276,11 +284,15 @@ Configuration Examples (for OpenAI provider):
     # Maximum context characters for summary
     rag.llm.openai.summary.context.max.chars=8000
 
+.. note::
+
+   ``temperature``, ``max.tokens``, and ``context.max.chars`` are available across all providers. In addition, each provider supports provider-specific parameters such as ``thinking.budget``, ``top.p``, and ``reasoning.effort``. Refer to the documentation for each provider for details.
+
 Next Steps
 ==========
 
-- :doc:`llm-ollama` - Detailed Ollama Configuration
-- :doc:`llm-openai` - Detailed OpenAI Configuration
-- :doc:`llm-gemini` - Detailed Google Gemini Configuration
-- :doc:`rag-chat` - Detailed AI Mode Configuration
-- :doc:`rank-fusion` - Rank Fusion Settings (Hybrid Search Result Merging)
+- :doc:`llm-ollama` - Detailed Ollama configuration
+- :doc:`llm-openai` - Detailed OpenAI configuration
+- :doc:`llm-gemini` - Detailed Google Gemini configuration
+- :doc:`rag-chat` - Detailed AI search mode configuration
+- :doc:`rank-fusion` - Rank Fusion settings (hybrid search result merging)

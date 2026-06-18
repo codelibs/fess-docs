@@ -1,14 +1,14 @@
-==========================
-Descripcion general de integracion LLM
-==========================
+========================================
+Descripción general de la integración LLM
+========================================
 
-Descripcion general
+Descripción general
 ===================
 
-|Fess| soporta la funcionalidad de modo de búsqueda IA (RAG: Retrieval-Augmented Generation) que aprovecha modelos de lenguaje grandes (LLM).
-Esta funcionalidad permite a los usuarios obtener informacion a traves de un dialogo interactivo con un asistente de IA basado en los resultados de busqueda.
+|Fess| soporta la funcionalidad de modo de búsqueda IA (RAG: Retrieval-Augmented Generation) que aprovecha los modelos de lenguaje de gran escala (LLM).
+Esta funcionalidad permite a los usuarios obtener información mediante un diálogo interactivo con un asistente de IA basado en los resultados de búsqueda.
 
-La funcionalidad de integracion con LLM se proporciona como plugins ``fess-llm-*``. Instale el plugin correspondiente al proveedor LLM que desea utilizar.
+La funcionalidad de integración con LLM se proporciona como plugins ``fess-llm-*``. Instale el plugin correspondiente al proveedor LLM que desea utilizar.
 
 Proveedores compatibles
 =======================
@@ -20,13 +20,13 @@ Proveedores compatibles
    :widths: 20 20 30 30
 
    * - Proveedor
-     - Valor de configuracion
+     - Valor de configuración
      - Plugin
-     - Descripcion
+     - Descripción
    * - Ollama
      - ``ollama``
      - ``fess-llm-ollama``
-     - Servidor LLM de codigo abierto que se ejecuta en entorno local. Puede ejecutar modelos como Llama, Mistral, Gemma. Configuracion predeterminada.
+     - Servidor LLM de código abierto que se ejecuta en entorno local. Puede ejecutar modelos como Llama, Mistral, Gemma. Configuración predeterminada.
    * - OpenAI
      - ``openai``
      - ``fess-llm-openai``
@@ -36,18 +36,18 @@ Proveedores compatibles
      - ``fess-llm-gemini``
      - API en la nube de Google. Disponible para modelos Gemini.
 
-Instalacion de plugin
-=====================
+Instalación del plugin
+======================
 
 La funcionalidad LLM se proporciona como plugin. Es necesario colocar el archivo JAR del plugin ``fess-llm-{provider}`` correspondiente al proveedor que desea utilizar en el directorio de plugins.
 
-Por ejemplo, para usar el proveedor OpenAI, descargue ``fess-llm-openai-15.7.0.jar`` y coloquelo en el siguiente directorio.
+Por ejemplo, para usar el proveedor OpenAI, descargue ``fess-llm-openai-15.7.0.jar`` y colóquelo en el siguiente directorio.
 
 ::
 
     app/WEB-INF/plugin/
 
-Despues de colocarlo, reinicie |Fess| para que el plugin sea cargado.
+Después de colocarlo, reinicie |Fess| para que el plugin sea cargado.
 
 Arquitectura
 ============
@@ -55,22 +55,27 @@ Arquitectura
 La funcionalidad de modo de búsqueda IA opera con el siguiente flujo.
 
 1. **Entrada del usuario**: El usuario ingresa una pregunta en la interfaz de chat
-2. **Analisis de intencion**: El LLM analiza la pregunta del usuario y extrae palabras clave de busqueda
-3. **Ejecucion de busqueda**: Busca documentos relacionados usando el motor de busqueda de |Fess|
-4. **Regeneracion de consulta**: Cuando no se encuentran resultados, el LLM regenera la consulta y reintenta
-5. **Evaluacion de resultados**: El LLM evalua la relevancia de los resultados de busqueda y selecciona los documentos mas apropiados
-6. **Generacion de respuesta**: El LLM genera una respuesta basada en los documentos seleccionados (con renderizado Markdown)
-7. **Cita de fuentes**: La respuesta incluye enlaces a los documentos de referencia
+2. **Análisis de intención (intent)**: El LLM analiza la pregunta del usuario y extrae palabras clave de búsqueda
+3. **Ejecución de búsqueda (search)**: Busca documentos relacionados usando el motor de búsqueda de |Fess|
+4. **Evaluación de resultados (evaluate)**: El LLM evalúa la relevancia de los resultados de búsqueda y selecciona los documentos más apropiados
+5. **Regeneración de consulta (si es necesario)**: Si no se obtienen resultados de búsqueda o no se encuentran documentos relevantes en la evaluación, el LLM regenera la consulta y realiza una nueva búsqueda
+6. **Obtención de contenido (fetch)**: Se obtiene el cuerpo de texto de los documentos seleccionados
+7. **Generación de respuesta (answer)**: El LLM genera una respuesta basada en los documentos obtenidos (con renderizado Markdown)
+8. **Cita de fuentes**: La respuesta incluye enlaces a los documentos de referencia
 
-Configuracion basica
+.. note::
+
+   El procesamiento interno se compone de cinco fases: ``intent``, ``search``, ``evaluate``, ``fetch`` y ``answer``. El progreso de cada fase se notifica al cliente mediante streaming (SSE).
+
+Configuración básica
 ====================
 
-La configuracion de la funcionalidad LLM se realiza en los siguientes dos lugares.
+La configuración de la funcionalidad LLM se realiza en los siguientes dos lugares.
 
-Configuracion general de la pantalla de administracion / system.properties
+Configuración general de la pantalla de administración / system.properties
 ---------------------------------------------------------------------------
 
-Se configura en la configuracion general de la pantalla de administracion o en ``system.properties``. Se usa para la seleccion del proveedor LLM.
+Se configura en la configuración general de la pantalla de administración o en ``system.properties``. Se usa para la selección del proveedor LLM.
 
 ::
 
@@ -80,29 +85,29 @@ Se configura en la configuracion general de la pantalla de administracion o en `
 fess_config.properties
 -----------------------
 
-Se configura en ``app/WEB-INF/conf/fess_config.properties``. Son configuraciones que se cargan al inicio, y se usa para habilitar el modo de búsqueda IA, configurar sesiones e historial, y la configuracion especifica del proveedor (URL de conexion, clave API, parametros de generacion, etc.).
+Se configura en ``app/WEB-INF/conf/fess_config.properties``. Además de habilitar el modo de búsqueda IA y configurar sesiones e historial, también se describen en este archivo la configuración específica del proveedor (URL de conexión, clave API, parámetros de generación, etc.).
 
 ::
 
     # Habilitar la funcionalidad de modo de búsqueda IA
     rag.chat.enabled=true
 
-    # Ejemplo de configuracion especifica del proveedor (en el caso de OpenAI)
+    # Ejemplo de configuración específica del proveedor (en el caso de OpenAI)
     rag.llm.openai.api.key=sk-...
     rag.llm.openai.answer.temperature=0.7
 
-Para la configuracion detallada de cada proveedor, consulte los siguientes documentos.
+Para la configuración detallada de cada proveedor, consulte los siguientes documentos.
 
-- :doc:`llm-ollama` - Configuracion de Ollama
-- :doc:`llm-openai` - Configuracion de OpenAI
-- :doc:`llm-gemini` - Configuracion de Google Gemini
+- :doc:`llm-ollama` - Configuración de Ollama
+- :doc:`llm-openai` - Configuración de OpenAI
+- :doc:`llm-gemini` - Configuración de Google Gemini
 
-Configuracion comun
+Configuración común
 ===================
 
-Configuraciones utilizadas en comun por todos los proveedores LLM. Estas se configuran en ``fess_config.properties``.
+Elementos de configuración utilizados en común por todos los proveedores LLM. Estos se configuran en ``fess_config.properties``.
 
-Configuracion de contexto
+Configuración de contexto
 -------------------------
 
 .. list-table::
@@ -110,27 +115,27 @@ Configuracion de contexto
    :widths: 35 45 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``rag.chat.context.max.documents``
-     - Numero maximo de documentos a incluir en el contexto
+     - Número máximo de documentos a incluir en el contexto
      - ``5``
    * - ``rag.chat.content.fields``
      - Campos a obtener de los documentos
-     - ``title,url,content,...``
+     - ``title,url,content,doc_id,content_title,content_description``
 
 .. note::
 
-   El numero maximo de caracteres del contexto ( ``context.max.chars`` ) se ha cambiado a una configuracion por proveedor y por tipo de prompt. Configurelo en ``fess_config.properties`` como ``rag.llm.{provider}.{promptType}.context.max.chars``.
+   El número máximo de caracteres del contexto (``context.max.chars``) ha sido modificado a una configuración por proveedor y por tipo de prompt. Configúrelo en ``fess_config.properties`` como ``rag.llm.{provider}.{promptType}.context.max.chars``.
 
 Prompt del sistema
 ------------------
 
 Los prompts del sistema se gestionan en el archivo DI XML de cada plugin, no en archivos de propiedades.
 
-Los prompts del sistema estan definidos en el archivo ``fess_llm++.xml`` incluido en cada plugin ``fess-llm-*``. Para personalizar los prompts, edite el archivo DI XML en el directorio del plugin.
+Los prompts del sistema están definidos en el archivo ``fess_llm++.xml`` incluido dentro del archivo JAR de cada plugin ``fess-llm-*``. Dado que este archivo es un recurso de classpath incluido en el JAR del plugin, para personalizar los prompts es necesario editar el archivo DI XML dentro del JAR.
 
-Verificacion de disponibilidad
+Verificación de disponibilidad
 -------------------------------
 
 .. list-table::
@@ -138,78 +143,81 @@ Verificacion de disponibilidad
    :widths: 40 40 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``rag.llm.{provider}.availability.check.interval``
      - Intervalo para verificar la disponibilidad del LLM (segundos). 0 para deshabilitar
      - ``60``
 
-Esta configuracion se realiza en ``fess_config.properties``. |Fess| verifica periodicamente el estado de conexion del proveedor LLM.
+Esta configuración se realiza en ``fess_config.properties``. |Fess| verifica periódicamente el estado de conexión del proveedor LLM.
 
-Gestion de sesiones
+Gestión de sesiones
 ===================
 
-Configuracion relacionada con las sesiones de chat. Estas se configuran en ``fess_config.properties``.
+Configuración relacionada con las sesiones de chat. Estas se configuran en ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``rag.chat.session.timeout.minutes``
-     - Tiempo de timeout de sesion (minutos)
+     - Tiempo de espera de la sesión (minutos)
      - ``30``
    * - ``rag.chat.session.max.size``
-     - Numero maximo de sesiones
+     - Número máximo de sesiones
      - ``10000``
    * - ``rag.chat.history.max.messages``
-     - Numero maximo de mensajes a mantener en el historial de conversacion
+     - Número máximo de mensajes a mantener en el historial de conversación
      - ``30``
 
 Control de concurrencia
 =======================
 
-Configuracion que controla el numero de solicitudes simultaneas al LLM. Se configura en ``fess_config.properties``.
+Configuración que controla el número de solicitudes simultáneas al LLM. Se configura en ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 40 40 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``rag.llm.{provider}.max.concurrent.requests``
-     - Numero maximo de solicitudes simultaneas al proveedor
+     - Número máximo de solicitudes simultáneas al proveedor
      - ``5``
+   * - ``rag.llm.{provider}.concurrency.wait.timeout``
+     - Tiempo máximo de espera (en milisegundos) cuando se alcanza el límite de concurrencia. Si no se obtiene disponibilidad dentro de este tiempo, se produce un error de límite de tasa
+     - ``30000``
 
-Por ejemplo, para configurar el numero de solicitudes simultaneas del proveedor OpenAI, se hace de la siguiente manera.
+Por ejemplo, para configurar el número de solicitudes simultáneas del proveedor OpenAI, se hace de la siguiente manera.
 
 ::
 
     rag.llm.openai.max.concurrent.requests=10
 
-Configuracion de evaluacion
+Configuración de evaluación
 ============================
 
-Configuracion relacionada con la evaluacion de resultados de busqueda. Se configura en ``fess_config.properties``.
+Configuración relacionada con la evaluación de los resultados de búsqueda. Se configura en ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 40 40 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs``
-     - Numero maximo de documentos relevantes a seleccionar en la fase de evaluacion
+     - Número máximo de documentos relevantes a seleccionar en la fase de evaluación
      - ``3``
 
-Configuracion por tipo de prompt
+Configuración por tipo de prompt
 =================================
 
-Los parametros de generacion se pueden configurar por tipo de prompt. Esto permite ajustes detallados segun el uso. La configuracion se realiza en ``fess_config.properties``.
+Los parámetros de generación se pueden configurar por tipo de prompt. Esto permite ajustes detallados según el uso. La configuración se realiza en ``fess_config.properties``.
 
 Lista de tipos de prompt
 ------------------------
@@ -219,26 +227,26 @@ Lista de tipos de prompt
    :widths: 20 20 60
 
    * - Tipo de prompt
-     - Valor de configuracion
-     - Descripcion
-   * - Analisis de intencion
+     - Valor de configuración
+     - Descripción
+   * - Análisis de intención
      - ``intent``
-     - Analiza la pregunta del usuario y extrae palabras clave de busqueda
-   * - Evaluacion
+     - Analiza la pregunta del usuario y extrae palabras clave de búsqueda
+   * - Evaluación
      - ``evaluation``
-     - Evalua la relevancia de los resultados de busqueda
+     - Evalúa la relevancia de los resultados de búsqueda
    * - Pregunta ambigua
      - ``unclear``
-     - Genera una respuesta cuando la pregunta no esta clara
-   * - Sin resultados de busqueda
+     - Genera una respuesta cuando la pregunta no está clara
+   * - Sin resultados de búsqueda
      - ``noresults``
-     - Genera una respuesta cuando no se encuentran resultados de busqueda
+     - Genera una respuesta cuando no se encuentran resultados de búsqueda
    * - Documento no encontrado
      - ``docnotfound``
      - Genera una respuesta cuando no existe el documento correspondiente
-   * - Generacion de respuesta
+   * - Generación de respuesta
      - ``answer``
-     - Genera una respuesta basada en los resultados de busqueda
+     - Genera una respuesta basada en los resultados de búsqueda
    * - Resumen
      - ``summary``
      - Genera un resumen del documento
@@ -247,15 +255,15 @@ Lista de tipos de prompt
      - Genera una respuesta en formato FAQ
    * - Respuesta directa
      - ``direct``
-     - Genera una respuesta directa sin pasar por la busqueda
-   * - Regeneracion de consulta
+     - Genera una respuesta directa sin pasar por la búsqueda
+   * - Regeneración de consulta
      - ``queryregeneration``
-     - Regenera la consulta cuando no se encuentran resultados de busqueda
+     - Regenera la consulta cuando no se obtienen resultados de búsqueda
 
-Patron de configuracion
+Patrón de configuración
 -----------------------
 
-La configuracion por tipo de prompt se especifica con el siguiente patron.
+La configuración por tipo de prompt se especifica con el siguiente patrón.
 
 ::
 
@@ -263,24 +271,28 @@ La configuracion por tipo de prompt se especifica con el siguiente patron.
     rag.llm.{provider}.{promptType}.max.tokens
     rag.llm.{provider}.{promptType}.context.max.chars
 
-Ejemplo de configuracion (en el caso del proveedor OpenAI):
+Ejemplo de configuración (en el caso del proveedor OpenAI):
 
 ::
 
-    # Configurar la temperatura de generacion de respuestas a un valor bajo
+    # Configurar la temperatura de generación de respuestas a un valor bajo
     rag.llm.openai.answer.temperature=0.5
-    # Numero maximo de tokens para generacion de respuestas
+    # Número máximo de tokens para generación de respuestas
     rag.llm.openai.answer.max.tokens=4096
-    # El analisis de intencion es suficiente con respuestas cortas, por lo que se configura bajo
+    # El análisis de intención es suficiente con respuestas cortas, por lo que se configura bajo
     rag.llm.openai.intent.max.tokens=256
-    # Numero maximo de caracteres de contexto para resumen
+    # Número máximo de caracteres de contexto para resumen
     rag.llm.openai.summary.context.max.chars=8000
+
+.. note::
+
+   ``temperature``, ``max.tokens`` y ``context.max.chars`` son parámetros comunes a todos los proveedores. Además, cada proveedor soporta parámetros específicos como ``thinking.budget``, ``top.p`` y ``reasoning.effort``. Consulte la documentación de cada proveedor para más detalles.
 
 Siguientes pasos
 ================
 
-- :doc:`llm-ollama` - Configuracion detallada de Ollama
-- :doc:`llm-openai` - Configuracion detallada de OpenAI
-- :doc:`llm-gemini` - Configuracion detallada de Google Gemini
-- :doc:`rag-chat` - Configuracion detallada de la funcionalidad de modo de búsqueda IA
-- :doc:`rank-fusion` - Configuracion de Rank Fusion (Fusion de resultados de busqueda hibrida)
+- :doc:`llm-ollama` - Configuración detallada de Ollama
+- :doc:`llm-openai` - Configuración detallada de OpenAI
+- :doc:`llm-gemini` - Configuración detallada de Google Gemini
+- :doc:`rag-chat` - Configuración detallada de la funcionalidad de modo de búsqueda IA
+- :doc:`rank-fusion` - Configuración de Rank Fusion (fusión de resultados de búsqueda híbrida)
