@@ -94,7 +94,7 @@ Parameterliste
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Erforderlich
@@ -103,8 +103,8 @@ Parameterliste
      - Ja
      - URL der Atlassian-Instanz
    * - ``is_cloud``
-     - Ja
-     - ``true`` für Cloud-Version, ``false`` für Server-Version
+     - Nein
+     - ``true`` für Cloud, ``false`` für Server (Standard: ``true``). Wird nur zur Endpunkt-Auswahl bei der OAuth 2.0-Authentifizierung verwendet; bei Basic- und OAuth 1.0a-Authentifizierung wird dieser Parameter ignoriert.
    * - ``auth_type``
      - Ja
      - Authentifizierungstyp: ``oauth``, ``oauth2``, ``basic``
@@ -143,7 +143,7 @@ Parameterliste
      - Passwort
    * - ``issue.jql``
      - Nein
-     - JQL (nur Jira, erweiterte Suchbedingungen)
+     - JQL (nur Jira, erweiterte Suchbedingungen). Wenn nicht angegeben, werden alle Issues (``created is not empty``) berücksichtigt.
    * - ``issue_max_results``
      - Nein
      - Maximale Ergebnisse pro Jira-API-Anfrage (Standard: ``50``, nur Jira)
@@ -174,6 +174,9 @@ Parameterliste
    * - ``read_timeout``
      - Nein
      - HTTP-Lese-Timeout (Millisekunden)
+   * - ``readInterval``
+     - Nein
+     - Wartezeit zwischen der Verarbeitung einzelner Dokumente (in Millisekunden, Standard: ``0``)
 
 Skript-Einstellungen
 --------------------
@@ -213,6 +216,9 @@ Verfügbare Felder:
 - ``content.body`` - Seiteninhalt
 - ``content.comments`` - Seitenkommentare
 - ``content.last_modified`` - Letztes Änderungsdatum
+
+.. note::
+   Der Confluence-Konnektor ruft sowohl reguläre Seiten (page) als auch Blog-Beiträge (blogpost) ab.
 
 OAuth 2.0-Authentifizierung einrichten
 ======================================
@@ -387,6 +393,8 @@ OAuth 2.0-Access-Tokens haben ein Ablaufdatum. Durch Konfiguration des Refresh T
 ::
 
     oauth2.refresh_token=your_refresh_token
+
+Bei einer Token-Aktualisierung werden das neue Access Token und das neue Refresh Token automatisch in der Datenspeicher-Konfiguration gespeichert, sodass nachfolgende Crawling-Vorgänge die aktualisierten Tokens verwenden (eine manuelle Aktualisierung ist nicht erforderlich).
 
 Weiterführende Informationen
 ============================

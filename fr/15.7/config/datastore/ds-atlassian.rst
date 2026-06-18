@@ -94,7 +94,7 @@ Liste des parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parametre
      - Requis
@@ -103,8 +103,8 @@ Liste des parametres
      - Oui
      - URL de l'instance Atlassian
    * - ``is_cloud``
-     - Oui
-     - ``true`` pour la version Cloud, ``false`` pour la version Server
+     - Non
+     - ``true`` pour la version Cloud, ``false`` pour la version Server (defaut : ``true``). Utilise uniquement pour la selection du point de terminaison lors de l'authentification OAuth 2.0 ; ignore pour les authentifications basique et OAuth 1.0a.
    * - ``auth_type``
      - Oui
      - Type d'authentification : ``oauth``, ``oauth2``, ``basic``
@@ -143,7 +143,7 @@ Liste des parametres
      - Mot de passe
    * - ``issue.jql``
      - Non
-     - JQL (Jira uniquement, conditions de recherche avancees)
+     - JQL (Jira uniquement, conditions de recherche avancees). Si non specifie, tous les tickets (``created is not empty``) sont cibles.
    * - ``issue_max_results``
      - Non
      - Nombre maximum de resultats par requete API Jira (defaut : ``50``, Jira uniquement)
@@ -174,6 +174,9 @@ Liste des parametres
    * - ``read_timeout``
      - Non
      - Delai de lecture HTTP (millisecondes)
+   * - ``readInterval``
+     - Non
+     - Intervalle entre le traitement de chaque document (en millisecondes, defaut : ``0``)
 
 Configuration du script
 -----------------------
@@ -213,6 +216,9 @@ Champs disponibles :
 - ``content.body`` - Corps de la page
 - ``content.comments`` - Commentaires de la page
 - ``content.last_modified`` - Date de derniere modification
+
+.. note::
+   Le connecteur Confluence recupere a la fois les pages normales (page) et les articles de blog (blogpost).
 
 Configuration de l'authentification OAuth 2.0
 =============================================
@@ -387,6 +393,8 @@ Les tokens d'acces OAuth 2.0 ont une date d'expiration. Configurez le token de r
 ::
 
     oauth2.refresh_token=your_refresh_token
+
+Lors du renouvellement des tokens, le nouveau token d'acces et le nouveau token de rafraichissement sont automatiquement enregistres dans la configuration du data store, de sorte que les explorations suivantes utilisent les tokens mis a jour (aucune mise a jour manuelle n'est necessaire).
 
 Informations de reference
 =========================

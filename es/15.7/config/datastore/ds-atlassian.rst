@@ -95,7 +95,7 @@ Lista de Parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parametro
      - Requerido
@@ -104,8 +104,8 @@ Lista de Parametros
      - Si
      - URL de la instancia de Atlassian
    * - ``is_cloud``
-     - Si
-     - ``true`` para version Cloud, ``false`` para Server
+     - No
+     - ``true`` para Cloud, ``false`` para Server (predeterminado: ``true``). Solo se utiliza para la seleccion del endpoint durante la autenticacion OAuth 2.0; se ignora en la autenticacion Basica y OAuth 1.0a.
    * - ``auth_type``
      - Si
      - Tipo de autenticacion: ``oauth``, ``oauth2``, ``basic``
@@ -144,7 +144,7 @@ Lista de Parametros
      - Contrasena
    * - ``issue.jql``
      - No
-     - JQL (solo Jira, condiciones de busqueda avanzadas)
+     - JQL (solo Jira, condiciones de busqueda avanzadas). Si no se especifica, se procesan todas las incidencias (``created is not empty``).
    * - ``issue_max_results``
      - No
      - Resultados maximos por solicitud de API de Jira (predeterminado: ``50``, solo Jira)
@@ -175,6 +175,9 @@ Lista de Parametros
    * - ``read_timeout``
      - No
      - Tiempo de espera de lectura HTTP (milisegundos)
+   * - ``readInterval``
+     - No
+     - Intervalo entre el procesamiento de cada documento (en milisegundos, predeterminado: ``0``)
 
 Configuracion de Script
 -----------------------
@@ -214,6 +217,9 @@ Campos disponibles:
 - ``content.body`` - Cuerpo de la pagina
 - ``content.comments`` - Comentarios de la pagina
 - ``content.last_modified`` - Fecha de ultima modificacion
+
+.. note::
+   El conector de Confluence recupera tanto paginas regulares (page) como entradas de blog (blogpost).
 
 Configuracion de Autenticacion OAuth 2.0
 ========================================
@@ -388,6 +394,8 @@ Los tokens de acceso OAuth 2.0 tienen fechas de expiracion. Configure el token d
 ::
 
     oauth2.refresh_token=your_refresh_token
+
+Cuando los tokens se renuevan, el nuevo token de acceso y el token de actualizacion se guardan automaticamente en la configuracion del almacen de datos, por lo que los rastreos posteriores utilizan los tokens actualizados sin necesidad de actualizarlos manualmente.
 
 Informacion de Referencia
 =========================
