@@ -94,6 +94,60 @@ Parameter List
    * - ``client_email``
      - Yes
      - Service account email address
+   * - ``max_size``
+     - No
+     - Maximum file size to index (bytes). Default: ``10000000`` (approx. 10MB)
+   * - ``ignore_folder``
+     - No
+     - Whether to skip folders. Default: ``true``
+   * - ``ignore_error``
+     - No
+     - Whether to continue processing on errors. Default: ``true``
+   * - ``supported_mimetypes``
+     - No
+     - MIME types to index (regex, comma-separated). Default: ``.*`` (all types)
+   * - ``include_pattern``
+     - No
+     - Regex pattern for URLs to include in the index
+   * - ``exclude_pattern``
+     - No
+     - Regex pattern for URLs to exclude
+   * - ``default_permissions``
+     - No
+     - Default permissions (comma-separated, e.g. ``{role}drive-users``)
+   * - ``number_of_threads``
+     - No
+     - Number of parallel processing threads. Default: ``1``
+   * - ``query``
+     - No
+     - Google Drive API search query string
+   * - ``corpora``
+     - No
+     - Corpora to search. Default: ``allDrives``
+   * - ``spaces``
+     - No
+     - Spaces to search (Google Drive API ``spaces`` parameter, e.g. ``drive``, ``appDataFolder``). Default: unset (API default).
+   * - ``fields``
+     - No
+     - File fields to request from the Google Drive API. Default: ``*`` (all fields).
+   * - ``read_timeout``
+     - No
+     - HTTP read timeout (milliseconds). Default: ``20000``
+   * - ``connect_timeout``
+     - No
+     - HTTP connection timeout (milliseconds). Default: ``20000``
+   * - ``refresh_token_interval``
+     - No
+     - Interval (in seconds) for refreshing the OAuth access token. Default: ``3540`` (59 minutes).
+   * - ``max_cached_content_size``
+     - No
+     - Maximum size (in bytes) of content kept in memory; content larger than this is spooled to a temporary file. Default: ``1048576`` (1MB).
+   * - ``proxy_host``
+     - No
+     - Proxy server hostname
+   * - ``proxy_port``
+     - No
+     - Proxy server port number
 
 Script Configuration
 --------------------

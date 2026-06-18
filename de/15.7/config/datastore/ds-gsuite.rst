@@ -93,6 +93,60 @@ Parameterliste
    * - ``client_email``
      - Ja
      - E-Mail-Adresse des Dienstkontos
+   * - ``max_size``
+     - Nein
+     - Maximale Dateigröße (in Bytes) für die Indizierung. Standard: ``10000000`` (ca. 10MB)
+   * - ``ignore_folder``
+     - Nein
+     - Ob Ordner übersprungen werden sollen. Standard: ``true``
+   * - ``ignore_error``
+     - Nein
+     - Ob die Verarbeitung bei Fehlern fortgesetzt werden soll. Standard: ``true``
+   * - ``supported_mimetypes``
+     - Nein
+     - Zu indizierende MIME-Typen (regulärer Ausdruck, kommagetrennt). Standard: ``.*`` (alle Typen)
+   * - ``include_pattern``
+     - Nein
+     - Regulärer Ausdruck für zu indizierende URLs
+   * - ``exclude_pattern``
+     - Nein
+     - Regulärer Ausdruck für auszuschließende URLs
+   * - ``default_permissions``
+     - Nein
+     - Standardberechtigungen (kommagetrennt, z.B. ``{role}drive-users``)
+   * - ``number_of_threads``
+     - Nein
+     - Anzahl der parallelen Verarbeitungs-Threads. Standard: ``1``
+   * - ``query``
+     - Nein
+     - Google Drive API-Suchabfragezeichenfolge
+   * - ``corpora``
+     - Nein
+     - Zu durchsuchende Korpora. Standard: ``allDrives``
+   * - ``spaces``
+     - Nein
+     - Zu durchsuchende Bereiche (Google Drive API ``spaces``-Parameter, z.B. ``drive``, ``appDataFolder``). Standard: nicht gesetzt (API-Standard).
+   * - ``fields``
+     - Nein
+     - Von der Google Drive API anzufordernde Dateifelder. Standard: ``*`` (alle Felder).
+   * - ``read_timeout``
+     - Nein
+     - HTTP-Lese-Timeout (in Millisekunden). Standard: ``20000``
+   * - ``connect_timeout``
+     - Nein
+     - HTTP-Verbindungs-Timeout (in Millisekunden). Standard: ``20000``
+   * - ``refresh_token_interval``
+     - Nein
+     - Intervall (in Sekunden) zum Erneuern des OAuth-Zugriffstokens. Standard: ``3540`` (59 Minuten).
+   * - ``max_cached_content_size``
+     - Nein
+     - Maximale Größe (in Bytes) des im Speicher gehaltenen Inhalts; größerer Inhalt wird in eine temporäre Datei ausgelagert. Standard: ``1048576`` (1MB).
+   * - ``proxy_host``
+     - Nein
+     - Hostname des Proxyservers
+   * - ``proxy_port``
+     - Nein
+     - Portnummer des Proxyservers
 
 Skript-Einstellungen
 --------------------
