@@ -7,7 +7,7 @@ AI-Suchmodus-Funktion konfigurieren
 
 AI-Suchmodus (RAG: Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
 
-In |Fess| 15.6 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
+In |Fess| 15.7 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
 Kerneinstellungen und LLM-anbieterspezifische Einstellungen werden in ``fess_config.properties`` vorgenommen,
 während die LLM-Anbieterauswahl (``rag.llm.name``) in ``system.properties`` oder über die Administrationsoberfläche konfiguriert wird.
 
@@ -67,7 +67,7 @@ Detaillierte Einstellungen für LLM-Anbieter finden Sie unter:
 Konfigurationspfad-Schnellreferenz
 ==================================
 
-In |Fess| 15.6 sind die Einstellungen in zwei Familien aufgeteilt: die FessConfig-Familie
+In |Fess| 15.7 sind die Einstellungen in zwei Familien aufgeteilt: die FessConfig-Familie
 (``fess_config.properties``) und die SystemProperty-Familie (``system.properties``,
 in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher nicht vermischen.
 
@@ -111,7 +111,7 @@ in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher ni
 .. note::
 
    ``rag.llm.type`` ist der frühere Eigenschaftsname aus |Fess| 15.5 und davor.
-   In 15.6 und später wurde er in ``rag.llm.name`` umbenannt; Werte unter
+   In 15.7 und später wurde er in ``rag.llm.name`` umbenannt; Werte unter
    ``rag.llm.type`` werden nicht mehr gelesen.
 
 Kerneinstellungen-Übersicht
@@ -148,19 +148,31 @@ Liste der Kerneinstellungen, die in ``fess_config.properties`` konfiguriert werd
      - Maximale Zeichenzahl von Benutzernachrichten
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
-     - Fragmentgröße für die Hervorhebungsanzeige
+     - Fragmentgröße für Such-Hervorhebungen
      - ``500``
    * - ``rag.chat.highlight.number.of.fragments``
-     - Anzahl der Fragmente für die Hervorhebungsanzeige
+     - Anzahl der Fragmente für Such-Hervorhebungen
      - ``3``
+   * - ``rag.chat.content.fulltext.max.length``
+     - Schwellenwert, ab dem Dokumente (anhand von ``content_length``) im Antwort-Kontext Hervorhebungsauszüge statt des vollständigen Inhalts verwenden
+     - ``3000``
+   * - ``rag.chat.answer.highlight.fragment.size``
+     - Hervorhebungs-Fragmentgröße beim Extrahieren von Auszügen aus großen Dokumenten für den Antwort-Kontext
+     - ``1000``
+   * - ``rag.chat.answer.highlight.number.of.fragments``
+     - Anzahl der Hervorhebungs-Fragmente beim Extrahieren von Auszügen aus großen Dokumenten für den Antwort-Kontext
+     - ``5``
    * - ``rag.chat.history.assistant.content``
      - Art des im Assistentenverlauf enthaltenen Inhalts ( ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` )
      - ``smart_summary``
+   * - ``rag.chat.history.titles.max.count``
+     - Maximale Anzahl referenzierter Dokumenttitel, die im ``smart_summary``-Modus pro Turn gespeichert werden
+     - ``5``
 
 Generierungsparameter
 =====================
 
-In |Fess| 15.6 werden Generierungsparameter (maximale Token-Anzahl, Temperature usw.) pro Anbieter
+In |Fess| 15.7 werden Generierungsparameter (maximale Token-Anzahl, Temperature usw.) pro Anbieter
 und pro Prompttyp konfiguriert. Diese Einstellungen werden nicht als Kerneinstellungen, sondern als
 Einstellungen der jeweiligen ``fess-llm-*``-Plugins verwaltet.
 
@@ -203,7 +215,9 @@ Folgende Einstellungen werden pro Anbieter in ``fess_config.properties`` vorgeno
 - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - Maximale Anzahl relevanter Dokumente in der Bewertungsphase
 
 Für ``{provider}`` wird der Anbietername wie ``ollama``, ``openai`` oder ``gemini`` eingesetzt.
-Für ``{promptType}`` wird der Prompttyp wie ``chat``, ``intent_analysis`` oder ``evaluation`` eingesetzt.
+Für ``{promptType}`` wird der Prompttyp wie ``intent``, ``evaluation``, ``answer``, ``summary``, ``faq``, ``queryregeneration``,
+``unclear``, ``noresults``, ``docnotfound``, ``direct`` eingesetzt.
+Die unterstützten Prompttypen sind in der jeweiligen ``*LlmClient``-Implementierung jedes Plugins definiert.
 
 Detaillierte Informationen finden Sie in der Dokumentation des jeweiligen Anbieters.
 
@@ -222,7 +236,7 @@ Mit ``rag.chat.content.fields`` spezifizierbare Felder:
 Systemprompt
 ============
 
-In |Fess| 15.6 werden Systemprompts nicht in Property-Dateien, sondern im DI-XML (``fess_llm++.xml``) der jeweiligen ``fess-llm-*``-Plugins definiert.
+In |Fess| 15.7 werden Systemprompts nicht in Property-Dateien, sondern im DI-XML (``fess_llm++.xml``) der jeweiligen ``fess-llm-*``-Plugins definiert.
 
 Prompt anpassen
 ---------------
@@ -278,10 +292,13 @@ Die Anzahl gleichzeitiger LLM-Anfragen wird pro Anbieter in ``fess_config.proper
 
 ::
 
-    # Maximale Anzahl gleichzeitiger Anfragen pro Anbieter
+    # Maximale Anzahl gleichzeitiger Anfragen pro Anbieter (Standard: 5)
     rag.llm.ollama.max.concurrent.requests=5
-    rag.llm.openai.max.concurrent.requests=10
-    rag.llm.gemini.max.concurrent.requests=10
+    rag.llm.openai.max.concurrent.requests=5
+    rag.llm.gemini.max.concurrent.requests=5
+
+    # Timeout für das Warten auf einen Gleichzeitigkeits-Permit (Millisekunden, Standard: 30000)
+    rag.llm.ollama.concurrency.wait.timeout=30000
 
 Überlegungen zur Gleichzeitigkeitssteuerung
 --------------------------------------------
@@ -289,6 +306,7 @@ Die Anzahl gleichzeitiger LLM-Anfragen wird pro Anbieter in ``fess_config.proper
 - Berücksichtigen Sie auch die Ratenbegrenzung des LLM-Anbieters
 - In Hochlastumgebungen wird ein niedrigerer Wert empfohlen
 - Bei Erreichen der maximalen gleichzeitigen Anfragen werden weitere Anfragen in die Warteschlange gestellt und der Reihe nach verarbeitet
+- Wenn das Warten auf einen Permit die ``concurrency.wait.timeout``-Grenze überschreitet, schlägt die Anfrage mit einem Timeout-Fehler fehl
 
 Gesprächsverlaufsmodus
 ======================
@@ -302,7 +320,7 @@ Gesprächsverlaufsmodus
    * - Modus
      - Beschreibung
    * - ``smart_summary``
-     - (Standard) Behält den Anfang (60%) und das Ende (40%) der Antwort bei und ersetzt die Mitte durch einen Auslassungsmarker. Quelltitel werden ebenfalls angehängt
+     - (Standard) Der Antwortkörper wird aus dem Verlauf weggelassen; pro Turn werden nur die vergangene Suchabfrage und die referenzierten Dokumenttitel (maximal ``rag.chat.history.titles.max.count`` Einträge) gespeichert
    * - ``full``
      - Behält die gesamte Antwort unverändert bei
    * - ``source_titles``
@@ -316,7 +334,7 @@ Gesprächsverlaufsmodus
 
 .. note::
 
-   Im ``smart_summary``-Modus wird der Kontext langer Antworten effizient beibehalten und gleichzeitig der Tokenverbrauch reduziert.
+   Im ``smart_summary``-Modus wird der Antwortkörper durch die Suchabfrage und die referenzierten Titel ersetzt, um den Kontext effizient zu bewahren und den Tokenverbrauch zu reduzieren.
    Benutzer- und Assistentennachrichtenpaare werden als Turns gruppiert und innerhalb eines Zeichenbudgets optimal gepackt.
    Die maximale Zeichenzahl für Verlauf und Zusammenfassung wird durch die ``LlmClient``-Implementierung jedes ``fess-llm-*``-Plugins gesteuert.
 
@@ -345,111 +363,148 @@ Antworten des AI-Suchmodus werden im Markdown-Format gerendert.
 API-Verwendung
 ==============
 
-Die AI-Suchmodus-Funktion ist über REST-API verfügbar.
+Die AI-Suchmodus-Funktion ist über die REST-API (v2-API) verfügbar.
+Die Basis-URL lautet ``http://<Servername>/api/v2/``.
+
+Die Chat-API stellt die folgenden drei Endpunkte bereit.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - Endpunkt
+     - Beschreibung
+   * - ``POST /api/v2/chat``
+     - Batch- (nicht-streaming) RAG-Chat-Completion
+   * - ``POST /api/v2/chat/stream``
+     - Streaming-RAG-Chat-Completion (Server-Sent Events)
+   * - ``DELETE /api/v2/chat/sessions/{session_id}``
+     - Konversationsverlauf einer Chat-Sitzung löschen
+
+Anfragen werden als JSON-Body mit ``Content-Type: application/json`` gesendet.
+Zustandsändernde Anfragen (``POST`` / ``DELETE``) erfordern den CSRF-Token (``X-Fess-CSRF-Token``-Header).
+Antworten sind im gemeinsamen ``response``-Envelope enthalten.
+
+.. note::
+
+   Die ``/api/v1/chat``-Endpunkte mit Formularparametern, die bis |Fess| 15.5 bereitgestellt wurden, wurden entfernt.
+   Verwenden Sie in 15.7 die JSON-basierte API unter ``/api/v2/``.
 
 Nicht-Streaming-API
 -------------------
 
-Endpunkt: ``POST /api/v1/chat``
+Endpunkt: ``POST /api/v2/chat``
 
-Parameter:
+Anfrage-Body (JSON):
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 65
+   :widths: 25 15 60
 
-   * - Parameter
+   * - Feld
      - Erforderlich
      - Beschreibung
    * - ``message``
      - Ja
      - Benutzernachricht
-   * - ``sessionId``
+   * - ``session_id``
      - Nein
-     - Sitzungs-ID (bei Fortsetzung des Gesprächs)
-   * - ``clear``
+     - Sitzungs-ID (zur Fortsetzung eines Gesprächs). Wird weggelassen, erstellt der Server eine Sitzung und gibt sie in der Antwort zurück
+   * - ``fields``
      - Nein
-     - ``true`` zum Löschen der Sitzung
+     - Optionale Filterfelder für den Abrufschritt (object)
+   * - ``fields.label``
+     - Nein
+     - Suchfilter nach Label
+   * - ``extra_queries``
+     - Nein
+     - Zusätzliche Abfrageausdrücke für Facettenfilter
 
 Anfrage-Beispiel:
 
-::
+.. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/v1/chat" \
-         -d "message=Wie installiere ich Fess?"
+    curl -X POST "http://localhost:8080/api/v2/chat" \
+         -H "Content-Type: application/json" \
+         -H "X-Fess-CSRF-Token: <token>" \
+         -d '{"message":"Wie installiere ich Fess?"}'
 
 Antwort-Beispiel:
 
-::
+.. code-block:: json
 
     {
-      "status": "ok",
-      "sessionId": "abc123",
-      "content": "Die Installation von Fess erfolgt...",
-      "sources": [
-        {"title": "Installationsanleitung", "url": "https://..."}
-      ]
+      "response": {
+        "status": 0,
+        "session_id": "abc123",
+        "content": "Die Installation von Fess erfolgt...",
+        "sources": [
+          {
+            "rank": 1,
+            "title": "Installationsanleitung",
+            "url": "https://...",
+            "doc_id": "...",
+            "snippet": "..."
+          }
+        ]
+      }
     }
 
 Streaming-API
 -------------
 
-Endpunkt: ``POST /api/v1/chat/stream``
+Endpunkt: ``POST /api/v2/chat/stream``
 
-Streamt die Antwort im Server-Sent Events (SSE)-Format.
-
-Parameter:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 65
-
-   * - Parameter
-     - Erforderlich
-     - Beschreibung
-   * - ``message``
-     - Ja
-     - Benutzernachricht
-   * - ``sessionId``
-     - Nein
-     - Sitzungs-ID (bei Fortsetzung des Gesprächs)
+Der Anfrage-Body entspricht dem von ``POST /api/v2/chat`` (JSON).
+Die Antwort wird im Server-Sent Events (SSE)-Format gestreamt.
 
 Anfrage-Beispiel:
 
-::
+.. code-block:: bash
 
-    curl -X POST "http://localhost:8080/api/v1/chat/stream" \
-         -d "message=Was sind die Funktionen von Fess?" \
-         -H "Accept: text/event-stream"
+    curl -X POST "http://localhost:8080/api/v2/chat/stream" \
+         -H "Content-Type: application/json" \
+         -H "X-Fess-CSRF-Token: <token>" \
+         -H "Accept: text/event-stream" \
+         --no-buffer \
+         -d '{"message":"Was sind die Funktionen von Fess?"}'
 
-SSE-Events:
+SSE-Ereignisse:
 
 .. list-table::
    :header-rows: 1
    :widths: 20 80
 
-   * - Event
-     - Beschreibung
+   * - Ereignis
+     - Beschreibung (Payload)
    * - ``phase``
-     - Start/Ende der Verarbeitungsphase (intent_analysis, search, evaluation, generation)
+     - Phasenübergang der Verarbeitungs-Pipeline (``intent``, ``search``, ``evaluate``, ``fetch``, ``answer``). ``{ phase, status, message?, keywords?, hit_count?, ... }``
    * - ``chunk``
-     - Fragment des generierten Textes
+     - Fragment des generierten Textes (``{ content }``)
    * - ``retry``
-     - Wird gesendet, wenn eine LLM-Anfrage wiederholt wird (enthält Phasenname, aktuelle Versuchsnummer, maximale Anzahl Versuche, Wartezeit bis zum nächsten Versuch sowie Ursache)
+     - Wird gesendet, wenn eine LLM-Anfrage wiederholt wird (``{ phase, operation, attempt, max_attempts, sleep_ms, cause? }``)
    * - ``waiting``
-     - Wird während des Wartens auf einen Gleichzeitigkeits-Permit gesendet (enthält Phasenname, vergangene Wartezeit, Warte-Timeout)
+     - Fortschritt bei lang andauernden Phasen wie dem Warten auf einen Gleichzeitigkeits-Permit (``{ phase, reason, elapsed_ms, timeout_ms }``)
    * - ``fallback``
-     - Wird gesendet, wenn die Abfrage aufgrund fehlender oder nicht relevanter Ergebnisse neu generiert wurde (enthält Phase, Grund ``no_results`` oder ``no_relevant_results``, ursprüngliche Abfrage, neu generierte Abfrage)
+     - Wird gesendet, wenn die Abfrage neu generiert wurde, z. B. bei fehlenden oder nicht relevanten Ergebnissen (``{ phase, reason, original_query?, new_query? }``, Grund: ``no_results`` oder ``no_relevant_results``)
    * - ``warning``
-     - Wird bei internen stillen Fallbacks gesendet (z. B. Token-Erschöpfung bei Reasoning-Modellen)
+     - Behebbarer Warnhinweis (``{ phase, code, detail? }``, z. B. Token-Erschöpfung bei Reasoning-Modellen)
    * - ``sources``
-     - Informationen zu Quelldokumenten
+     - Informationen zu Quelldokumenten (``{ sources: [...] }``)
    * - ``done``
-     - Verarbeitung abgeschlossen (sessionId, htmlContent). htmlContent enthält den Markdown-gerenderten HTML-String
+     - Verarbeitung abgeschlossen (``{ session_id, html_content? }``). ``html_content`` enthält den als Markdown gerenderten HTML-String
    * - ``error``
-     - Fehlerinformationen. Liefert spezifische Meldungen für Timeout, Kontextlängenüberschreitung, Modell nicht gefunden, ungültige Antwort und Verbindungsfehler
+     - Terminaler Stream-Fehler mitten im Stream (``{ phase?, message, error_code }``). Liefert spezifische Meldungen für Timeout, Kontextlängenüberschreitung, Modell nicht gefunden, ungültige Antwort und Verbindungsfehler
 
-Detaillierte API-Dokumentation finden Sie unter :doc:`../api/api-chat`.
+Sitzung löschen
+---------------
+
+Endpunkt: ``DELETE /api/v2/chat/sessions/{session_id}``
+
+Löscht den Konversationsverlauf der angegebenen Chat-Sitzung.
+Bei Erfolg wird ``cleared: true`` zurückgegeben.
+
+Detaillierte API-Dokumentation (Authentifizierung, CSRF, Rate-Limits, HTTP-Statuscodes) finden Sie unter :doc:`../api/api-chat`.
 
 Weboberfläche
 =============
@@ -496,9 +551,9 @@ und der Aufruf von ``/chat`` leitet zur Startseite zurück.
 
 2. Ist das passende ``fess-llm-*``-Plugin installiert?
 
-   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.6.0`` (oder ``fess-llm-openai`` / ``fess-llm-ollama``) gesetzt?
+   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.7.0`` (oder ``fess-llm-openai`` / ``fess-llm-ollama``) gesetzt?
    - Paketinstallation: JAR liegt in ``app/WEB-INF/plugin/``?
-   - Startup-Log enthält ``Installing fess-llm-XXX-15.6.0.jar``?
+   - Startup-Log enthält ``Installing fess-llm-XXX-15.7.0.jar``?
 
 3. Stimmt ``rag.llm.name`` mit dem installierten Plugin überein?
 
@@ -520,7 +575,7 @@ und der Aufruf von ``/chat`` leitet zur Startseite zurück.
 6. Kann der Fess-Host den LLM-Anbieter erreichen?
 
    - Bei Cloud-APIs (Gemini / OpenAI) muss der Container Internetzugriff haben
-   - Bei Proxy-Nutzung konfigurieren Sie ``http.proxy.host`` / ``http.proxy.port`` (bei Bedarf ``http.proxy.username`` / ``http.proxy.password``) in ``fess_config.properties``. In Docker-Umgebungen fügen Sie ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` zu ``FESS_JAVA_OPTS`` hinzu (seit |Fess| 15.6.1 verwenden die LLM-Clients die gemeinsame Proxy-Konfiguration von |Fess|)
+   - Bei Proxy-Nutzung konfigurieren Sie ``http.proxy.host`` / ``http.proxy.port`` (bei Bedarf ``http.proxy.username`` / ``http.proxy.password``) in ``fess_config.properties``. In Docker-Umgebungen fügen Sie ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` zu ``FESS_JAVA_OPTS`` hinzu (seit |Fess| 15.7 verwenden die LLM-Clients die gemeinsame Proxy-Konfiguration von |Fess|)
 
 .. note::
 
@@ -576,7 +631,7 @@ Zur Untersuchung von Problemen können Sie den Log-Level anpassen, um detaillier
 ::
 
     <Logger name="org.codelibs.fess.llm" level="DEBUG"/>
-    <Logger name="org.codelibs.fess.api.chat" level="DEBUG"/>
+    <Logger name="org.codelibs.fess.api.v2.handlers" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
 
 Die Log-Meldungen verwenden das Präfix ``[RAG]``, mit Unterpräfixen wie ``[RAG:INTENT]``, ``[RAG:EVAL]`` und ``[RAG:ANSWER]`` für jede Phase.
