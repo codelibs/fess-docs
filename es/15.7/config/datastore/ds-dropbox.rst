@@ -56,7 +56,7 @@ Configuracion Basica
      - Activado
 
 Configuracion de Parametros
----------------------------
+----------------------------
 
 ::
 
@@ -68,7 +68,7 @@ Lista de Parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parametro
      - Requerido
@@ -87,10 +87,10 @@ Lista de Parametros
      - Numero de hilos para rastreo (predeterminado: ``1``)
    * - ``ignore_folder``
      - No
-     - Omitir metadatos de carpetas (predeterminado: ``true``)
+     - Indica si se omiten los metadatos de carpetas (predeterminado: ``true``)
    * - ``ignore_error``
      - No
-     - Ignorar errores durante la extraccion de contenido (predeterminado: ``true``)
+     - Indica si se ignoran los errores durante la extraccion de contenido (predeterminado: ``true``)
    * - ``supported_mimetypes``
      - No
      - Patrones regex para tipos MIME permitidos, separados por comas (predeterminado: ``.*``)
@@ -105,7 +105,10 @@ Lista de Parametros
      - Permisos predeterminados para documentos indexados, separados por comas
    * - ``max_cached_content_size``
      - No
-     - Tamano maximo de contenido en cache en memoria en bytes (predeterminado: ``1048576``)
+     - Tamano maximo de contenido almacenado en cache en memoria en bytes. El contenido que supere este limite se escribe en un archivo temporal (predeterminado: ``1048576``)
+   * - ``readInterval``
+     - No
+     - Tiempo de espera en milisegundos entre el procesamiento de cada registro (predeterminado: ``0``)
 
 Configuracion de Script
 -----------------------
@@ -202,35 +205,66 @@ Campos disponibles:
      - Revision del documento Paper
 
 Configuracion de Autenticacion de Dropbox
-=========================================
+==========================================
 
-Pasos para Obtener Token de Acceso
-----------------------------------
+Tipo de Cuenta y Token de Acceso
+---------------------------------
+
+Este conector alterna entre dos modos de operacion segun el parametro ``basic_plan``.
+Dado que el tipo de aplicacion y de token de acceso que se debe crear difiere, verifiquelo primero.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Modo
+     - ``basic_plan``
+     - Descripcion
+   * - Cuenta de equipo (predeterminado)
+     - ``false``
+     - Destinado a cuentas Dropbox Business (equipo). Requiere un token de acceso con permisos de administrador del equipo, y rastrea archivos de los miembros del equipo y carpetas de equipo de forma transversal.
+   * - Cuenta individual
+     - ``true``
+     - Destinado a cuentas individuales (no de equipo). Utiliza un token de acceso con alcance estandar y rastrea directamente los archivos dentro de esa cuenta.
+
+.. note::
+   Con la configuracion predeterminada (``basic_plan=false``), se utilizan las API de administracion de equipos
+   (lista de miembros, acceso a archivos por miembro, carpetas de equipo), por lo que es obligatorio
+   disponer de una cuenta Dropbox Business y un token con permisos de administrador del equipo.
+   Si utiliza una cuenta individual, asegurese de configurar ``basic_plan=true``.
+
+Pasos para Obtener el Token de Acceso
+--------------------------------------
 
 1. Crear una aplicacion en Dropbox App Console
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Acceda a https://www.dropbox.com/developers/apps:
 
 1. Haga clic en "Create app"
 2. Seleccione "Scoped access" para el tipo de API
-3. Seleccione "Full Dropbox" o "App folder" para el tipo de acceso
+3. Seleccione el tipo de acceso (se recomienda "Full Dropbox" para rastrear cuentas de equipo de forma transversal)
 4. Ingrese el nombre de la aplicacion y cree
 
 2. Configuracion de Permisos
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 En la pestana "Permissions", seleccione los permisos requeridos:
 
-**Permisos requeridos para rastreo de archivos**:
+**Permisos necesarios para el rastreo de archivos y Paper**:
 
 - ``files.metadata.read`` - Lectura de metadatos de archivos
-- ``files.content.read`` - Lectura de contenido de archivos
+- ``files.content.read`` - Lectura de contenido de archivos y documentos Paper
 - ``sharing.read`` - Lectura de informacion de uso compartido
 
-**Permisos adicionales requeridos para rastreo de Paper**:
+**Permisos adicionales requeridos para cuentas de equipo (``basic_plan=false``)**:
 
-- ``files.content.read`` - Lectura de documentos Paper
+- ``members.read`` - Lectura de la lista de miembros del equipo
+- Permisos de acceso a datos de equipo y espacios de equipo (necesarios para rastrear archivos por miembro y carpetas de equipo)
+
+.. note::
+   En el modo de cuenta de equipo, se accede a cada miembro y carpeta de equipo como administrador del equipo.
+   Habilite los permisos de equipo mencionados en la pestana Permissions y genere un token de administrador del equipo.
 
 3. Generar Token de Acceso
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,7 +309,7 @@ Ejemplos de Uso
 ===============
 
 Rastrear Todos los Archivos de Dropbox
---------------------------------------
+---------------------------------------
 
 Parametros:
 
@@ -298,7 +332,7 @@ Script:
     last_modified=file.client_modified
 
 Rastrear Documentos de Dropbox Paper
-------------------------------------
+--------------------------------------
 
 Parametros:
 
@@ -317,28 +351,76 @@ Script:
     mimetype=paper.mimetype
     filetype=paper.filetype
 
-Rastrear Solo Tipos de Archivo Especificos
-------------------------------------------
+Rastrear con Permisos
+----------------------
 
-Filtrado en el script:
+Parametros:
 
 ::
 
-    # Solo PDF y archivos Word
-    if (file.mimetype == "application/pdf" || file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-        url=file.url
-        title=file.name
-        content=file.contents
-        mimetype=file.mimetype
-        filename=file.name
-        last_modified=file.client_modified
-    }
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    default_permissions={role}admin
+
+Script (archivos de Dropbox):
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    content_length=file.size
+    last_modified=file.client_modified
+    role=file.roles
+
+Script (Dropbox Paper):
+
+::
+
+    title=paper.title
+    content=paper.contents
+    url=paper.url
+    mimetype=paper.mimetype
+    filetype=paper.filetype
+    role=paper.roles
+
+Rastrear Solo Tipos de Archivo Especificos
+-------------------------------------------
+
+Para indexar unicamente tipos MIME especificos, especifique en el parametro ``supported_mimetypes``
+las expresiones regulares de los tipos MIME permitidos, separadas por comas.
+
+.. note::
+   Los scripts del almacen de datos evaluan cada linea como una expresion independiente con el formato ``campo=expresion``.
+   Por ello, no es posible asignar multiples campos en un bloque ``if`` de varias lineas.
+   El filtrado por tipo MIME debe realizarse mediante el parametro ``supported_mimetypes``, no con scripts.
+
+Parametros (solo PDF y archivos Word):
+
+::
+
+    access_token=sl.your-dropbox-token-here
+    basic_plan=false
+    supported_mimetypes=application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+Script:
+
+::
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filename=file.name
+    last_modified=file.client_modified
 
 Solucion de Problemas
-=====================
+======================
 
 Errores de Autenticacion
-------------------------
+-------------------------
 
 **Sintoma**: ``Invalid access token`` o ``401 Unauthorized``
 
@@ -350,7 +432,7 @@ Errores de Autenticacion
 4. Verifique que la aplicacion no este desactivada
 
 No Se Pueden Obtener Archivos
------------------------------
+------------------------------
 
 **Sintoma**: El rastreo tiene exito pero hay 0 archivos
 
@@ -370,18 +452,22 @@ No Se Pueden Obtener Archivos
 3. Verifique que existan archivos en la cuenta de Dropbox
 
 Errores de Limite de Tasa de API
---------------------------------
+----------------------------------
 
 **Sintoma**: Error ``429 Too Many Requests``
 
 **Solucion**:
 
-1. Para el plan Basic, configure ``basic_plan=true``
-2. Aumente el intervalo de rastreo
-3. Distribuya la carga usando multiples tokens de acceso
+1. Configure ``readInterval`` para aumentar el intervalo de procesamiento entre archivos
+2. Reduzca ``number_of_threads`` para disminuir el numero de solicitudes simultaneas
+3. Divida el almacen de datos en varios (por carpeta u otro criterio) y escalone los horarios de ejecucion
+
+.. note::
+   ``basic_plan`` es un parametro que alterna el tipo de cuenta (equipo/individual)
+   y no afecta al ajuste de los limites de tasa. Configurelo correctamente segun su cuenta.
 
 No Se Pueden Obtener Documentos Paper
--------------------------------------
+---------------------------------------
 
 **Sintoma**: Los documentos Paper no se rastrean
 
@@ -392,7 +478,7 @@ No Se Pueden Obtener Documentos Paper
 3. Verifique que realmente existan documentos Paper
 
 Cuando Hay un Gran Numero de Archivos
--------------------------------------
+---------------------------------------
 
 **Sintoma**: El rastreo toma mucho tiempo o se agota el tiempo
 
@@ -400,13 +486,13 @@ Cuando Hay un Gran Numero de Archivos
 
 1. Divida los almacenes de datos en multiples (por unidad de carpeta, etc.)
 2. Distribuya la carga con configuracion de programacion
-3. Para el plan Basic, tenga en cuenta los limites de tasa de API
+3. En el plan Basic, tenga en cuenta los limites de tasa de API
 
 Permisos y Control de Acceso
-============================
+==============================
 
 Reflejar Permisos de Uso Compartido de Dropbox
-----------------------------------------------
+------------------------------------------------
 
 Puede reflejar la configuracion de uso compartido de Dropbox en los permisos de Fess:
 
@@ -432,7 +518,7 @@ Script:
 ``file.roles`` o ``paper.roles`` contienen informacion de uso compartido de Dropbox.
 
 Informacion de Referencia
-=========================
+==========================
 
 - :doc:`ds-overview` - Descripcion General de Conectores de Almacen de Datos
 - :doc:`ds-box` - Conector de Box
