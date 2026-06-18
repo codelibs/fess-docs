@@ -1,6 +1,6 @@
-==========================================
+============================================
 Configuration SSO avec authentification SAML
-==========================================
+============================================
 
 Aperçu
 ======
@@ -52,6 +52,11 @@ Pour activer l'authentification SAML, ajoutez le paramètre suivant dans ``app/W
 
     sso.type=saml
 
+.. note::
+   ``sso.type`` ainsi que les paramètres SAML de base (informations IdP, informations SP, mappage des attributs utilisateur) peuvent également être configurés depuis la page « Système > Général » de l'interface d'administration.
+   Les paramètres modifiés dans l'interface d'administration sont enregistrés dans ``system.properties`` et persistent après redémarrage.
+   Cependant, les paramètres de sécurité tels que la signature/le chiffrement ainsi que le certificat SP et la clé privée ne peuvent pas être configurés dans l'interface d'administration ; écrivez-les directement dans ``system.properties``.
+
 Configuration du SP (Service Provider)
 --------------------------------------
 
@@ -66,13 +71,17 @@ Pour configurer |Fess| comme SP, spécifiez l'URL de base du SP.
      - Par défaut
    * - ``saml.sp.base.url``
      - URL de base du SP
-     - (Requis)
+     - ``http://localhost:8080``
+
+.. note::
+   La valeur par défaut de ``saml.sp.base.url`` est ``http://localhost:8080``.
+   En dehors des environnements de test, définissez toujours l'URL utilisée pour accéder à |Fess| depuis l'extérieur (HTTPS en production).
 
 Ce paramètre configure automatiquement les points d'accès suivants :
 
-- **Entity ID** : ``{base_url}/sso/metadata``
-- **ACS URL** : ``{base_url}/sso/``
-- **SLO URL** : ``{base_url}/sso/logout``
+- **Entity ID** : ``{saml.sp.base.url}/sso/metadata``
+- **ACS URL** : ``{saml.sp.base.url}/sso/``
+- **SLO URL** : ``{saml.sp.base.url}/sso/logout``
 
 Exemple ::
 
@@ -81,7 +90,7 @@ Exemple ::
 Configuration d'URL individuelle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Vous pouvez également spécifier les URL individuellement au lieu d'utiliser l'URL de base.
+En principe, la configuration de ``saml.sp.base.url`` permet de configurer automatiquement chaque URL de point d'accès, mais vous pouvez si nécessaire surcharger les URL individuelles explicitement avec les propriétés suivantes.
 
 .. list-table::
    :header-rows: 1
@@ -92,13 +101,13 @@ Vous pouvez également spécifier les URL individuellement au lieu d'utiliser l'
      - Par défaut
    * - ``saml.sp.entityid``
      - Entity ID du SP
-     - (Requis pour config individuelle)
+     - ``{saml.sp.base.url}/sso/metadata``
    * - ``saml.sp.assertion_consumer_service.url``
      - URL du service Assertion Consumer
-     - (Requis pour config individuelle)
+     - ``{saml.sp.base.url}/sso/``
    * - ``saml.sp.single_logout_service.url``
      - URL du service Single Logout
-     - (Optionnel)
+     - ``{saml.sp.base.url}/sso/logout``
 
 Configuration de l'IdP (Identity Provider)
 ------------------------------------------
@@ -275,6 +284,29 @@ Paramètres de chiffrement
      - Exiger le chiffrement du NameID
      - ``false``
 
+Configuration du certificat SP et de la clé privée
+---------------------------------------------------
+
+Lorsque le SP signe les demandes d'authentification ou les messages de déconnexion (par ex. ``saml.security.authnrequest_signed``), ou demande le chiffrement des assertions ou du NameID (par ex. ``saml.security.want_assertions_encrypted``), vous devez configurer la clé privée et le certificat X.509 du SP.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``saml.sp.x509cert``
+     - Certificat X.509 du SP (encodé en Base64, sans sauts de ligne)
+     -
+   * - ``saml.sp.privatekey``
+     - Clé privée du SP (encodée en Base64, sans sauts de ligne)
+     -
+
+.. note::
+   Pour ``saml.sp.x509cert`` et ``saml.sp.privatekey``, comme pour ``saml.idp.x509cert``, spécifiez le contenu encodé en Base64 sur une seule ligne sans sauts de ligne (n'incluez pas les lignes ``-----BEGIN ...-----`` et ``-----END ...-----``).
+   Lorsque vous activez la signature/le chiffrement, enregistrez également le certificat SP côté IdP. Le certificat SP est publié dans les métadonnées SP à l'adresse ``/sso/metadata``.
+
 Autres paramètres de sécurité
 -----------------------------
 
@@ -288,12 +320,22 @@ Autres paramètres de sécurité
    * - ``saml.strict``
      - Mode strict (effectuer une validation stricte)
      - ``true``
+   * - ``saml.security.want_xml_validation``
+     - Valider le schéma XML des messages
+     - ``true``
    * - ``saml.security.signature_algorithm``
      - Algorithme de signature
      - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
+   * - ``saml.security.requested_authncontext``
+     - Contexte d'authentification demandé
+     - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
    * - ``saml.sp.nameidformat``
      - Format du NameID
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   |Fess| utilise en interne une bibliothèque SAML (java-saml), et les propriétés commençant par ``saml.`` sont mappées aux paramètres correspondants de la bibliothèque (préfixe ``onelogin.saml2.``).
+   Ainsi, en plus de celles répertoriées ici, vous pouvez spécifier des paramètres détaillés dans ``system.properties`` tels que les liaisons (par ex. ``saml.sp.assertion_consumer_service.binding``), les informations d'organisation (``saml.organization.*``) et les informations de contact (``saml.contacts.*``).
 
 Exemples de configuration
 =========================
@@ -382,9 +424,17 @@ Pour investiguer les problèmes, vous pouvez activer le mode débogage avec le p
 
     saml.debug=true
 
-Vous pouvez également ajuster les niveaux de journalisation de |Fess| pour afficher des logs SAML détaillés.
+La configuration ``saml.debug=true`` enregistre dans le journal la raison détaillée lorsque l'authentification SAML échoue.
+
+Vous pouvez également afficher des journaux détaillés liés à SAML en ajoutant le logger suivant dans ``app/WEB-INF/classes/log4j2.xml`` :
+
+::
+
+    <Logger name="org.codelibs.fess.sso.saml" level="DEBUG"/>
 
 Référence
 =========
 
 - :doc:`security-role` - Configuration de la recherche basée sur les rôles
+- :doc:`sso-oidc` - À propos de la configuration SSO avec OpenID Connect
+- :doc:`sso-entraid` - À propos de la configuration SSO dédiée à Microsoft Entra ID

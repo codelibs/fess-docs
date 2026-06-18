@@ -52,6 +52,11 @@ SAML认证的工作原理
 
     sso.type=saml
 
+.. note::
+   ``sso.type`` 及基本SAML设置（IdP信息、SP信息、用户属性映射）也可以从管理界面的"系统 > 全局"页面进行配置和更改。
+   在管理界面中更改的设置将保存到 ``system.properties`` 中，重启后也会保留。
+   但是，签名/加密等安全设置以及SP证书/私钥无法在管理界面中配置，因此请直接写入 ``system.properties``。
+
 SP（服务提供者）配置
 --------------------
 
@@ -66,13 +71,17 @@ SP（服务提供者）配置
      - 默认值
    * - ``saml.sp.base.url``
      - SP基础URL
-     - （必需）
+     - ``http://localhost:8080``
+
+.. note::
+   ``saml.sp.base.url`` 的默认值为 ``http://localhost:8080``。
+   在测试环境以外，请务必设置从外部访问 |Fess| 时使用的URL（生产环境中使用HTTPS）。
 
 此设置会自动配置以下端点：
 
-- **Entity ID**：``{base_url}/sso/metadata``
-- **ACS URL**：``{base_url}/sso/``
-- **SLO URL**：``{base_url}/sso/logout``
+- **Entity ID**：``{saml.sp.base.url}/sso/metadata``
+- **ACS URL**：``{saml.sp.base.url}/sso/``
+- **SLO URL**：``{saml.sp.base.url}/sso/logout``
 
 示例::
 
@@ -81,7 +90,7 @@ SP（服务提供者）配置
 单独URL配置
 ~~~~~~~~~~~
 
-您也可以单独指定URL，而不使用基础URL。
+通常情况下，设置 ``saml.sp.base.url`` 即可自动配置各端点URL，但如有需要，也可以使用以下属性明确指定各URL并进行覆盖。
 
 .. list-table::
    :header-rows: 1
@@ -92,13 +101,13 @@ SP（服务提供者）配置
      - 默认值
    * - ``saml.sp.entityid``
      - SP Entity ID
-     - （单独配置时必需）
+     - ``{saml.sp.base.url}/sso/metadata``
    * - ``saml.sp.assertion_consumer_service.url``
      - 断言消费者服务URL
-     - （单独配置时必需）
+     - ``{saml.sp.base.url}/sso/``
    * - ``saml.sp.single_logout_service.url``
      - 单点登出服务URL
-     - （可选）
+     - ``{saml.sp.base.url}/sso/logout``
 
 IdP（身份提供者）配置
 ---------------------
@@ -275,6 +284,29 @@ IdP侧配置
      - 要求NameID加密
      - ``false``
 
+SP证书与私钥配置
+----------------
+
+当SP对认证请求或登出消息进行签名时（例如 ``saml.security.authnrequest_signed``），或请求对断言或NameID进行加密时（例如 ``saml.security.want_assertions_encrypted``），需要配置SP的私钥和X.509证书。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 属性
+     - 描述
+     - 默认值
+   * - ``saml.sp.x509cert``
+     - SP的X.509证书（Base64编码，无换行）
+     - （空）
+   * - ``saml.sp.privatekey``
+     - SP的私钥（Base64编码，无换行）
+     - （空）
+
+.. note::
+   对于 ``saml.sp.x509cert`` 和 ``saml.sp.privatekey``，与 ``saml.idp.x509cert`` 相同，请将Base64编码的内容以单行无换行的形式指定（不包含 ``-----BEGIN ...-----`` 和 ``-----END ...-----`` 行）。
+   启用签名/加密时，还需要在IdP侧注册SP证书。SP证书将包含在 ``/sso/metadata`` 的SP元数据中进行公开。
+
 其他安全设置
 ------------
 
@@ -288,12 +320,22 @@ IdP侧配置
    * - ``saml.strict``
      - 严格模式（执行严格验证）
      - ``true``
+   * - ``saml.security.want_xml_validation``
+     - 验证消息的XML模式
+     - ``true``
    * - ``saml.security.signature_algorithm``
      - 签名算法
      - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
+   * - ``saml.security.requested_authncontext``
+     - 请求的认证上下文
+     - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
    * - ``saml.sp.nameidformat``
      - NameID格式
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   |Fess| 内部使用SAML库（java-saml），以 ``saml.`` 开头的属性将映射到该库对应的设置（``onelogin.saml2.`` 前缀）。
+   因此，除此处列出的设置外，还可以在 ``system.properties`` 中指定绑定（例如 ``saml.sp.assertion_consumer_service.binding``）、组织信息（``saml.organization.*``）、联系人信息（``saml.contacts.*``）等详细设置。
 
 配置示例
 ========
@@ -382,9 +424,17 @@ IdP侧配置
 
     saml.debug=true
 
-您还可以调整|Fess|的日志级别以输出详细的SAML相关日志。
+设置 ``saml.debug=true`` 后，当SAML认证失败时，详细原因将输出到日志中。
+
+此外，通过在 ``app/WEB-INF/classes/log4j2.xml`` 中添加以下logger，可以输出详细的SAML相关日志：
+
+::
+
+    <Logger name="org.codelibs.fess.sso.saml" level="DEBUG"/>
 
 参考
 ====
 
 - :doc:`security-role` - 基于角色的搜索配置
+- :doc:`sso-oidc` - 关于使用OpenID Connect进行SSO配置
+- :doc:`sso-entraid` - 关于Microsoft Entra ID专用的SSO配置
