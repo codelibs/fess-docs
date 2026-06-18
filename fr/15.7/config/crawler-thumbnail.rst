@@ -19,7 +19,7 @@ Fichiers image
 --------------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -51,7 +51,7 @@ Fichiers document
 -----------------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -64,7 +64,7 @@ Fichiers document
      - ``application/msword``, ``application/vnd.openxmlformats-officedocument.wordprocessingml.document``
      - Documents Word
    * - Excel
-     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``
+     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``, ``application/vnd.ms-excel.sheet.2``, ``application/vnd.ms-excel.sheet.3``, ``application/vnd.ms-excel.sheet.4``, ``application/vnd.ms-excel.workspace.3``, ``application/vnd.ms-excel.workspace.4``
      - Feuilles de calcul Excel
    * - PowerPoint
      - ``application/vnd.ms-powerpoint``, ``application/vnd.openxmlformats-officedocument.presentationml.presentation``
@@ -286,7 +286,7 @@ Arguments
 ---------
 
 .. list-table::
-   :widths: 15.70 30
+   :widths: 15 50 30
    :header-rows: 1
 
    * - Argument
@@ -304,6 +304,13 @@ Arguments
    * - ``mimetype``
      - Type MIME (optionnel)
      - ``image/gif``
+
+.. note::
+
+   L'argument ``mimetype`` est utilisé uniquement par le type ``image`` et détermine l'indication de format transmise à ImageMagick.
+   Les types MIME pour lesquels l'indication est activée sont ``image/gif``, ``image/tiff``, ``image/png``, ``image/jpeg``,
+   ``image/bmp`` (ainsi que leurs alias) et les types MIME Photoshop (PSD).
+   Pour les types ``pdf``, ``msoffice`` et ``ps``, l'argument ``mimetype`` est ignoré.
 
 Types pris en charge
 --------------------
@@ -368,25 +375,22 @@ Structure des répertoires
 -------------------------
 
 Les vignettes sont stockées dans une structure de répertoires basée sur le hachage.
+L'identifiant du document est découpé tous les 10 caractères ; chaque segment crée un sous-répertoire au format ``_<0-9>``.
+La profondeur de l'arborescence dépend donc de la longueur de l'identifiant du document. Le nom du fichier feuille est ``<identifiant du document>.png``.
 
 ::
 
     thumbnails/
-    ├── _0/
-    │   ├── _1/
-    │   │   ├── _2/
-    │   │   │   └── _3/
-    │   │   │       └── abcdef123456.png
-    │   │   └── ...
-    │   └── ...
-    └── ...
+    └── _3/
+        └── _7/
+            └── <identifiant du document>.png
 
 Désactivation du travail de vignettes
 =====================================
 
 Pour désactiver le travail de vignettes, configurez ce qui suit :
 
-1. Dans l'interface d'administration, allez dans Système > Général, décochez "Affichage des vignettes", et cliquez sur le bouton "Mettre à jour".
+1. Dans l'interface d'administration, allez dans Système > Général, décochez « Affichage des vignettes », et cliquez sur le bouton « Mettre à jour ».
 2. Définissez ``thumbnail.crawler.enabled`` sur ``false`` dans ``app/WEB-INF/classes/fess_config.properties`` ou ``/etc/fess/fess_config.properties`` (la valeur par défaut est ``true``).
 
 ::
@@ -399,7 +403,7 @@ Dépannage
 =========
 
 Les vignettes ne sont pas générées
-----------------------------------
+-----------------------------------
 
 1. **Vérifier les outils externes**
 
@@ -427,7 +431,7 @@ Les vignettes ne sont pas générées
     /usr/share/fess/bin/generate-thumbnail image file:/path/to/test.jpg /tmp/test_thumbnail.png image/jpeg
 
 Erreurs avec les fichiers GIF/TIFF
-----------------------------------
+-----------------------------------
 
 Lors de l'utilisation d'ImageMagick 6, spécifiez le type MIME pour activer les indications de format. Cela se fait automatiquement si Fess est correctement configuré.
 
@@ -441,7 +445,7 @@ Solutions :
 - Ou vérifier que le type MIME est correctement transmis
 
 Les vignettes SVG ne sont pas générées
---------------------------------------
+---------------------------------------
 
 1. Vérifier si ``rsvg-convert`` est installé
 

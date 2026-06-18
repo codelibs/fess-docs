@@ -19,7 +19,7 @@ Bilddateien
 -----------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -51,7 +51,7 @@ Dokumentdateien
 ---------------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -64,7 +64,7 @@ Dokumentdateien
      - ``application/msword``, ``application/vnd.openxmlformats-officedocument.wordprocessingml.document``
      - Word-Dokumente
    * - Excel
-     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``
+     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``, ``application/vnd.ms-excel.sheet.2``, ``application/vnd.ms-excel.sheet.3``, ``application/vnd.ms-excel.sheet.4``, ``application/vnd.ms-excel.workspace.3``, ``application/vnd.ms-excel.workspace.4``
      - Excel-Tabellen
    * - PowerPoint
      - ``application/vnd.ms-powerpoint``, ``application/vnd.openxmlformats-officedocument.presentationml.presentation``
@@ -194,7 +194,7 @@ PostScript-Unterstützung
      - ``brew install poppler``
 
 Thumbnail-Bilder für HTML-Dateien
-=================================
+==================================
 
 Für HTML-Thumbnails werden im HTML angegebene oder enthaltene Bilder verwendet.
 Thumbnail-Bilder werden in folgender Reihenfolge gesucht und angezeigt:
@@ -216,7 +216,7 @@ Der Thumbnail-Generator wird in ``fess_thumbnail.xml`` konfiguriert.
     app/WEB-INF/classes/fess_thumbnail.xml
 
 Hauptkonfigurationsoptionen (fess_config.properties)
-----------------------------------------------------
+-----------------------------------------------------
 
 Die folgenden Optionen können in ``app/WEB-INF/classes/fess_config.properties`` oder ``/etc/fess/fess_config.properties`` konfiguriert werden.
 
@@ -286,7 +286,7 @@ Argumente
 ---------
 
 .. list-table::
-   :widths: 15.70 30
+   :widths: 15 50 30
    :header-rows: 1
 
    * - Argument
@@ -304,6 +304,13 @@ Argumente
    * - ``mimetype``
      - MIME-Typ (optional)
      - ``image/gif``
+
+.. note::
+
+   Das Argument ``mimetype`` wird ausschließlich beim Typ ``image`` verwendet und legt den an ImageMagick übergebenen Format-Hinweis fest.
+   Der Hinweis wird bei folgenden MIME-Typen aktiviert: ``image/gif``, ``image/tiff``, ``image/png``, ``image/jpeg``,
+   ``image/bmp`` (sowie deren Aliase) und Photoshop (PSD)-MIME-Typen.
+   Beim Typ ``pdf``, ``msoffice`` und ``ps`` wird das Argument ``mimetype`` ignoriert.
 
 Unterstützte Typen
 ------------------
@@ -368,21 +375,18 @@ Verzeichnisstruktur
 -------------------
 
 Thumbnails werden in einer hash-basierten Verzeichnisstruktur gespeichert.
+Die Dokument-ID wird in Abschnitte von je 10 Zeichen unterteilt; jeder Abschnitt erzeugt ein Unterverzeichnis im Format ``_<0-9>`` (Hash-Wert).
+Die Tiefe der Verzeichnishierarchie hängt daher von der Länge der Dokument-ID ab. Der Dateiname auf der untersten Ebene lautet ``<Dokument-ID>.png``.
 
 ::
 
     thumbnails/
-    ├── _0/
-    │   ├── _1/
-    │   │   ├── _2/
-    │   │   │   └── _3/
-    │   │   │       └── abcdef123456.png
-    │   │   └── ...
-    │   └── ...
-    └── ...
+    └── _3/
+        └── _7/
+            └── <Dokument-ID>.png
 
 Deaktivierung des Thumbnail-Jobs
-================================
+=================================
 
 Um den Thumbnail-Job zu deaktivieren, konfigurieren Sie Folgendes:
 
@@ -399,7 +403,7 @@ Fehlerbehebung
 ==============
 
 Thumbnails werden nicht generiert
----------------------------------
+----------------------------------
 
 1. **Externe Tools überprüfen**
 
@@ -427,7 +431,7 @@ Thumbnails werden nicht generiert
     /usr/share/fess/bin/generate-thumbnail image file:/path/to/test.jpg /tmp/test_thumbnail.png image/jpeg
 
 Fehler bei GIF/TIFF-Dateien
----------------------------
+----------------------------
 
 Bei Verwendung von ImageMagick 6 geben Sie den MIME-Typ an, um Format-Hinweise zu aktivieren. Dies geschieht automatisch, wenn Fess korrekt konfiguriert ist.
 
@@ -441,7 +445,7 @@ Lösungen:
 - Oder überprüfen, dass der MIME-Typ korrekt übergeben wird
 
 SVG-Thumbnails werden nicht generiert
--------------------------------------
+--------------------------------------
 
 1. Prüfen Sie, ob ``rsvg-convert`` installiert ist
 

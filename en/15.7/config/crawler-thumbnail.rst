@@ -1,6 +1,6 @@
-======================
+=======================
 Thumbnail Configuration
-======================
+=======================
 
 Overview
 ========
@@ -19,7 +19,7 @@ Image Files
 -----------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -51,7 +51,7 @@ Document Files
 --------------
 
 .. list-table::
-   :widths: 15.70 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -64,7 +64,7 @@ Document Files
      - ``application/msword``, ``application/vnd.openxmlformats-officedocument.wordprocessingml.document``
      - Word documents
    * - Excel
-     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``
+     - ``application/vnd.ms-excel``, ``application/vnd.openxmlformats-officedocument.spreadsheetml.sheet``, ``application/vnd.ms-excel.sheet.2``, ``application/vnd.ms-excel.sheet.3``, ``application/vnd.ms-excel.sheet.4``, ``application/vnd.ms-excel.workspace.3``, ``application/vnd.ms-excel.workspace.4``
      - Excel spreadsheets
    * - PowerPoint
      - ``application/vnd.ms-powerpoint``, ``application/vnd.openxmlformats-officedocument.presentationml.presentation``
@@ -216,7 +216,7 @@ The thumbnail generator is configured in ``fess_thumbnail.xml``.
     app/WEB-INF/classes/fess_thumbnail.xml
 
 Main Configuration Items (fess_config.properties)
--------------------------------------------------
+--------------------------------------------------
 
 The following items can be configured in ``app/WEB-INF/classes/fess_config.properties`` or ``/etc/fess/fess_config.properties``.
 
@@ -286,7 +286,7 @@ Arguments
 ---------
 
 .. list-table::
-   :widths: 15.70 30
+   :widths: 15 50 30
    :header-rows: 1
 
    * - Argument
@@ -304,6 +304,13 @@ Arguments
    * - ``mimetype``
      - MIME type (optional)
      - ``image/gif``
+
+.. note::
+
+   The ``mimetype`` argument is used only by the ``image`` type, and determines the format hint passed to ImageMagick.
+   The MIME types for which the hint is enabled are ``image/gif``, ``image/tiff``, ``image/png``, ``image/jpeg``,
+   ``image/bmp`` (and their aliases), and Photoshop (PSD) MIME types.
+   The ``mimetype`` argument is ignored for the ``pdf``, ``msoffice``, and ``ps`` types.
 
 Supported Types
 ---------------
@@ -368,18 +375,15 @@ Directory Structure
 -------------------
 
 Thumbnails are stored in a hash-based directory structure.
+The document ID is split every 10 characters, and each split creates a ``_<0-9>`` subdirectory (hash value).
+The directory depth therefore depends on the length of the document ID. The leaf filename is ``<document ID>.png``.
 
 ::
 
     thumbnails/
-    ├── _0/
-    │   ├── _1/
-    │   │   ├── _2/
-    │   │   │   └── _3/
-    │   │   │       └── abcdef123456.png
-    │   │   └── ...
-    │   └── ...
-    └── ...
+    └── _3/
+        └── _7/
+            └── <document ID>.png
 
 Disabling Thumbnail Job
 =======================
@@ -441,7 +445,7 @@ Solutions:
 - Or verify that MIME type is being passed correctly
 
 SVG Thumbnails Not Being Generated
-----------------------------------
+-----------------------------------
 
 1. Check if ``rsvg-convert`` is installed
 
