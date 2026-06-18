@@ -14,8 +14,9 @@ Search Result Count Display
 Default Behavior
 ----------------
 
-When search results exceed 10,000 items, the search results screen displays "Approximately 10,000 or more results."
-This is the default setting considering OpenSearch performance.
+The default value of ``query.track.total.hits`` is ``10000``.
+Therefore, when search results exceed 10,000 items, the search results screen displays "Approximately 10,000 or more results."
+This is the default setting where OpenSearch limits the upper bound for counting exact total hits to the value of ``query.track.total.hits``, in order to reduce the performance impact of large-scale searches.
 
 Search Example
 
@@ -26,14 +27,15 @@ Search Example
 Displaying Accurate Hit Counts
 -------------------------------
 
-To display accurate hit counts for more than 10,000 items, change the following setting in ``fess_config.properties``.
+To display accurate hit counts beyond the default limit, change the value of ``query.track.total.hits`` in ``fess_config.properties``.
 
 ::
 
     query.track.total.hits=100000
 
-This setting allows you to retrieve accurate hit counts up to 100,000 items.
-However, setting too large a value may impact performance.
+In the above example, you can retrieve accurate hit counts up to 100,000 items.
+The threshold at which the count is displayed as "Approximately N or more" also changes in line with this configured value.
+However, setting a large value may impact performance.
 
 .. warning::
    Setting the value too high may degrade search performance.
@@ -98,6 +100,13 @@ Main fields:
 - ``url``: Document URL
 - ``filetype``: File type (e.g., pdf, html, doc)
 - ``label``: Label (classification)
+- ``mimetype``: MIME type (e.g., text/html, application/pdf)
+- ``filename``: File name
+- ``host``: Host name
+- ``site``: Site (combination of host name and path)
+- ``lang``: Language
+
+Additional fields to search can be added via ``query.additional.search.fields`` in ``fess_config.properties``.
 
 Wildcard Search
 ---------------
@@ -130,10 +139,15 @@ Search Result Sorting
 Search results are sorted by relevance by default.
 You can specify the following sort orders via administration screen settings or API parameters:
 
-- Relevance order (default)
-- Last modified date order
-- Creation date order
-- File size order
+- Relevance order (``score``, default)
+- Last modified date order (``last_modified``)
+- Creation date order (``created``)
+- File size order (``content_length``)
+- File name order (``filename``)
+- Click count order (``click_count``)
+- Favorite count order (``favorite_count``)
+
+Additional sort fields can be added via ``query.additional.sort.fields`` in ``fess_config.properties``.
 
 Faceted Search
 ==============
@@ -156,6 +170,12 @@ Highlight settings can be customized in ``fess_config.properties``.
     query.highlight.fragment.size=60
     query.highlight.number.of.fragments=2
 
+- ``query.highlight.tag.pre`` / ``query.highlight.tag.post``: Tags surrounding highlighted text (default: ``<strong>`` / ``</strong>``)
+- ``query.highlight.fragment.size``: Number of characters per highlight fragment (default: ``60``)
+- ``query.highlight.number.of.fragments``: Maximum number of fragments to display (default: ``2``)
+
+The fields used as highlight targets for the summary (snippet) are specified by ``query.highlight.content.description.fields`` (default: ``hl_content,digest``).
+
 Suggest Feature
 ===============
 
@@ -175,9 +195,10 @@ These logs can be used for:
 - Understanding popular search keywords
 - Identifying keywords with zero search results
 
-Search logs are stored in OpenSearch's ``fess_log`` index and
-can be visualized and analyzed in OpenSearch Dashboards.
-See :doc:`admin-opensearch-dashboards` for details.
+Search logs and click logs are stored in OpenSearch indexes with the ``fess_log`` prefix
+(search queries in the ``fess_log.search_log`` index, click logs in the ``fess_log.click_log`` index).
+These logs can be visualized and analyzed using OpenSearch Dashboards.
+|Fess| includes a bundled dashboard definition file for visualization. See :doc:`admin-opensearch-dashboards` for details.
 
 Performance Tuning
 ==================
@@ -200,11 +221,12 @@ For security and performance, you can limit the maximum query length.
 
     query.max.length=1000
 
-Using Cache
+Cache Usage
 -----------
 
-By enabling search result caching, you can reduce response time for the same search queries.
-Adjust cache settings according to system requirements.
+|Fess| itself does not have a feature for caching search results (search responses).
+However, the backend OpenSearch provides shard request cache and query cache at the engine level, which help reduce response time for repeated searches with the same conditions.
+Since these are OpenSearch-level features, adjust them through OpenSearch configuration as needed.
 
 Troubleshooting
 ===============
@@ -214,7 +236,7 @@ No Search Results Displayed
 
 1. Verify that the index is created correctly.
 2. Verify that crawling completed successfully.
-3. Verify that access permissions are not set on search target documents.
+3. Verify that the target documents are not being excluded for the current user (including guests) by role/permission-based search filtering.
 4. Verify that OpenSearch is operating normally.
 
 Slow Search Speed
