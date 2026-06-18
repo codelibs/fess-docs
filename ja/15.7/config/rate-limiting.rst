@@ -92,6 +92,15 @@ robots.txtの尊重
     User-agent: *
     Crawl-delay: 10
 
+robots.txtの処理は ``app/WEB-INF/classes/fess_config.properties`` の
+``crawler.ignore.robots.txt`` で制御します（デフォルト: ``false``）。
+``true`` に設定すると、Crawl-delay を含む robots.txt の処理が無効になります。
+
+::
+
+    # robots.txtを無視する（デフォルト: false）
+    crawler.ignore.robots.txt=false
+
 レート制限の全設定項目
 ======================
 
@@ -129,8 +138,14 @@ robots.txtの尊重
      - 信頼するプロキシIP（X-Forwarded-For/X-Real-IPの取得元）
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
-     - メモリリーク防止のためのクリーンアップ間隔（リクエスト数）
+     - クリーンアップ間隔（リクエスト数、予約済み）
      - ``1000``
+
+.. note::
+   ``rate.limit.cleanup.interval`` は将来の拡張のために予約されている設定項目です。
+   現在の実装では、リクエストカウンターおよびブロックIPの情報は内部キャッシュの
+   有効期限（``rate.limit.window.ms`` および ``rate.limit.block.duration.ms``）に
+   基づいて自動的にクリーンアップされるため、この設定値は使用されません。
 
 高度なレート制限設定
 ====================

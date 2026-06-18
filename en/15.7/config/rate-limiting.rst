@@ -92,6 +92,15 @@ Respecting robots.txt
     User-agent: *
     Crawl-delay: 10
 
+robots.txt handling is controlled by ``crawler.ignore.robots.txt`` in
+``app/WEB-INF/classes/fess_config.properties`` (default: ``false``).
+Setting it to ``true`` disables robots.txt handling, including Crawl-delay.
+
+::
+
+    # Ignore robots.txt (default: false)
+    crawler.ignore.robots.txt=false
+
 All Rate Limiting Properties
 ============================
 
@@ -129,8 +138,15 @@ All properties configurable in ``app/WEB-INF/classes/fess_config.properties``.
      - Trusted proxy IPs (for X-Forwarded-For/X-Real-IP resolution)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
-     - Cleanup interval to prevent memory leaks (number of requests)
+     - Cleanup interval (number of requests, reserved)
      - ``1000``
+
+.. note::
+   ``rate.limit.cleanup.interval`` is a setting reserved for future use.
+   In the current implementation, the request counters and blocked IP information
+   are cleaned up automatically based on the internal cache expiration
+   (``rate.limit.window.ms`` and ``rate.limit.block.duration.ms``),
+   so this value is not used.
 
 Advanced Rate Limiting Configuration
 =====================================
