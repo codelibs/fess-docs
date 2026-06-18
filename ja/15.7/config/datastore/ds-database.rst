@@ -25,21 +25,45 @@ JDBC対応のすべてのデータベースに対応しています。主な例:
 前提条件
 ========
 
-1. JDBCドライバーが必要です
-2. データベースへの読み取りアクセス権が必要です
-3. 大量のデータを取得する場合、適切なクエリ設計が重要です
+1. ``fess-ds-db`` プラグインのインストールが必要です
+2. 接続先データベースに対応したJDBCドライバーが必要です
+3. データベースへの読み取りアクセス権が必要です
+4. 大量のデータを取得する場合、適切なクエリ設計が重要です
+
+プラグインのインストール
+------------------------
+
+方法1: JARファイルを直接配置
+
+::
+
+    # Maven Centralからダウンロード
+    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # 配置
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    # または
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+
+方法2: 管理画面からインストール
+
+1. 「システム」→「プラグイン」を開く
+2. JARファイルをアップロード
+3. |Fess| を再起動
 
 JDBCドライバーのインストール
 ----------------------------
 
-JDBCドライバーを ``lib/`` ディレクトリに配置します:
+接続先データベースに対応したJDBCドライバーを |Fess| のクラスパス（ ``app/WEB-INF/lib/`` ディレクトリ）に配置します:
 
 ::
 
     # 例: MySQLドライバー
-    cp mysql-connector-java-8.0.33.jar /path/to/fess/lib/
+    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    # または
+    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
-|Fess| を再起動してドライバーを読み込みます。
+JDBCドライバーを配置したら |Fess| を再起動して読み込みます。
 
 設定方法
 ========
@@ -90,41 +114,44 @@ PostgreSQLの例:
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - パラメーター
      - 必須
      - 説明
    * - ``driver``
      - はい
-     - JDBCドライバーのクラス名
-   * - ``fetch_size``
-     - いいえ
-     - JDBCフェッチサイズ。MySQLのストリーミング結果セットには ``MIN_VALUE`` を指定
+     - JDBCドライバーのクラス名（未指定の場合 ``DataStoreException`` が発生）
    * - ``url``
      - はい
-     - JDBC接続URL
+     - JDBC接続URL（接続に必須）
+   * - ``sql``
+     - はい
+     - データ取得用のSQLクエリ（未指定の場合 ``DataStoreException`` が発生）
    * - ``username``
      - いいえ
      - データベースユーザー名
    * - ``password``
      - いいえ
      - データベースパスワード
-   * - ``sql``
-     - はい
-     - データ取得用のSQLクエリ
+   * - ``fetch_size``
+     - いいえ
+     - JDBCフェッチサイズ。MySQLのストリーミング結果セットには ``MIN_VALUE`` を指定
    * - ``default_mimetype``
      - いいえ
-     - BLOB抽出時のデフォルトMIMEタイプ
+     - BLOB・バイナリ列のコンテンツ抽出時に使用するデフォルトMIMEタイプ
+   * - ``column_label.mimetype``
+     - いいえ
+     - BLOB・バイナリ列の抽出に使用するMIMEタイプを格納した列名を指定（例: ``column_label.mimetype=content_type``）
+   * - ``column_label.filename``
+     - いいえ
+     - BLOB・バイナリ列の抽出に使用するファイル名を格納した列名を指定（拡張子からMIMEタイプを推定）
    * - ``info.*``
      - いいえ
-     - 追加のJDBC接続プロパティ（例: ``info.ssl=true``）
-   * - ``column_label.*``
-     - いいえ
-     - BLOB抽出時のカラムメタデータマッピング（例: ``column_label.mimetype=content_type`` でMIMEタイプ列を指定）
+     - 追加のJDBC接続プロパティ（例: ``info.ssl=true``）。``info.`` を除いたキーがJDBCドライバーへ渡されます
    * - ``readInterval``
      - いいえ
-     - 行間の処理遅延（ミリ秒）。デフォルト: 0
+     - 各行の処理間の遅延（ミリ秒）。デフォルト: 0
    * - ``script_type``
      - いいえ
      - スクリプトエンジンの種類。デフォルト: groovy
@@ -143,7 +170,34 @@ SQLの列名をインデックスフィールドにマッピングします:
 
 利用可能なフィールド:
 
-- ``<column_name>`` - SQLクエリの結果列（カラムラベル名でアクセス）
+- ``<column_name>`` - SQLクエリの結果列（カラムラベル名で直接アクセスします。``data.`` のような接頭辞は付きません）
+
+.. note::
+   列名は ``SELECT`` 句のカラムラベル（別名）と一致させる必要があります。
+   集計関数や式を使用する場合は ``AS`` で明示的に別名を付けてください
+   （例: ``COUNT(*) AS total``）。
+
+BLOB・バイナリデータの取り込み
+==============================
+
+BLOB、CLOB、NCLOB、バイト配列、バイナリストリームなどの列は、自動的に
+コンテンツ抽出処理（ファイルクロールと同じ抽出器）にかけられ、テキストとして
+取り込まれます。配列型の列はスペース区切りの文字列に変換されます。NULL値は
+空文字列になります。
+
+BLOBやバイナリストリームから正しくテキストを抽出するには、データの種類（MIMEタイプ）を
+判定する必要があります。判定には次の優先順位が使われます:
+
+1. ``column_label.mimetype=<列名>`` - 指定した列の値をMIMEタイプとして使用
+2. ``column_label.filename=<列名>`` - 指定した列の値をファイル名として扱い、拡張子からMIMEタイプを推定
+3. ``default_mimetype`` - 上記で判定できない場合に使用するデフォルトMIMEタイプ
+
+例（``file_data`` 列のBLOBを、``content_type`` 列のMIMEタイプを使って抽出）:
+
+::
+
+    sql=SELECT id, title, file_data, content_type FROM documents
+    column_label.mimetype=content_type
 
 SQLクエリの設計
 ===============

@@ -1,19 +1,19 @@
-==================================
-Connecteur base de donnees
-==================================
+==============================
+Connecteur de base de données
+==============================
 
-Apercu
+Aperçu
 ======
 
-Le connecteur de base de donnees fournit une fonctionnalite pour recuperer des donnees depuis
-des bases de donnees relationnelles compatibles JDBC et les enregistrer dans l'index de |Fess|.
+Le connecteur de base de données fournit une fonctionnalité pour récupérer des données depuis
+des bases de données relationnelles compatibles JDBC et les enregistrer dans l'index de |Fess|.
 
-Cette fonctionnalite necessite le plugin ``fess-ds-db``.
+Cette fonctionnalité nécessite le plugin ``fess-ds-db``.
 
-Bases de donnees prises en charge
-=================================
+Bases de données prises en charge
+==================================
 
-Toutes les bases de donnees compatibles JDBC sont prises en charge. Exemples principaux :
+Toutes les bases de données compatibles JDBC sont prises en charge. Exemples principaux :
 
 - MySQL / MariaDB
 - PostgreSQL
@@ -22,29 +22,53 @@ Toutes les bases de donnees compatibles JDBC sont prises en charge. Exemples pri
 - SQLite
 - H2 Database
 
-Prerequis
+Prérequis
 =========
 
-1. Un pilote JDBC est necessaire
-2. Un acces en lecture a la base de donnees est requis
-3. Pour les grands volumes de donnees, une conception de requete appropriee est importante
+1. L'installation du plugin ``fess-ds-db`` est nécessaire
+2. Un pilote JDBC adapté à la base de données cible est requis
+3. Un accès en lecture à la base de données est requis
+4. Pour les grands volumes de données, une conception de requête appropriée est importante
+
+Installation du plugin
+----------------------
+
+Méthode 1 : Déposer le fichier JAR directement
+
+::
+
+    # Téléchargement depuis Maven Central
+    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # Déploiement
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    # ou
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+
+Méthode 2 : Installer depuis l'interface d'administration
+
+1. Ouvrir « Système » → « Plugins »
+2. Téléverser le fichier JAR
+3. Redémarrer |Fess|
 
 Installation du pilote JDBC
----------------------------
+----------------------------
 
-Placez le pilote JDBC dans le repertoire ``lib/`` :
+Placez le pilote JDBC adapté à la base de données cible dans le répertoire ``app/WEB-INF/lib/`` du classpath de |Fess| :
 
 ::
 
     # Exemple : pilote MySQL
-    cp mysql-connector-java-8.0.33.jar /path/to/fess/lib/
+    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    # ou
+    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
-Redemarrez |Fess| pour charger le pilote.
+Une fois le pilote JDBC déposé, redémarrez |Fess| pour le charger.
 
-Methode de configuration
+Méthode de configuration
 ========================
 
-Configurez depuis l'interface d'administration : "Crawler" -> "DataStore" -> "Nouveau".
+Configurez depuis l'interface d'administration : « Crawler » → « DataStore » → « Nouveau ».
 
 Configuration de base
 ---------------------
@@ -53,7 +77,7 @@ Configuration de base
    :header-rows: 1
    :widths: 25 75
 
-   * - Element
+   * - Élément
      - Exemple de configuration
    * - Nom
      - Products Database
@@ -62,8 +86,8 @@ Configuration de base
    * - Actif
      - Oui
 
-Configuration des parametres
-----------------------------
+Configuration des paramètres
+-----------------------------
 
 Exemple MySQL/MariaDB :
 
@@ -85,43 +109,52 @@ Exemple PostgreSQL :
     password=your_password
     sql=SELECT id, title, content, url, updated_at FROM articles WHERE deleted = false
 
-Liste des parametres
+Liste des paramètres
 ~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
-   * - Parametre
+   * - Paramètre
      - Requis
      - Description
    * - ``driver``
      - Oui
-     - Nom de classe du pilote JDBC
+     - Nom de classe du pilote JDBC (si absent, une ``DataStoreException`` est levée)
    * - ``url``
      - Oui
-     - URL de connexion JDBC
-   * - ``username``
-     - Non
-     - Nom d'utilisateur de la base de donnees
-   * - ``password``
-     - Non
-     - Mot de passe de la base de donnees
+     - URL de connexion JDBC (obligatoire pour la connexion)
    * - ``sql``
      - Oui
-     - Requete SQL pour la recuperation des donnees
+     - Requête SQL pour la récupération des données (si absente, une ``DataStoreException`` est levée)
+   * - ``username``
+     - Non
+     - Nom d'utilisateur de la base de données
+   * - ``password``
+     - Non
+     - Mot de passe de la base de données
    * - ``fetch_size``
      - Non
-     - Taille de fetch (defaut : 100). Pour le streaming MySQL, specifiez la chaine ``MIN_VALUE``.
+     - Taille de fetch JDBC. Pour le streaming de résultats MySQL, spécifiez ``MIN_VALUE``
+   * - ``default_mimetype``
+     - Non
+     - Type MIME par défaut utilisé lors de l'extraction du contenu des colonnes BLOB/binaires
+   * - ``column_label.mimetype``
+     - Non
+     - Nom de la colonne contenant le type MIME à utiliser pour l'extraction d'une colonne BLOB/binaire (ex. : ``column_label.mimetype=content_type``)
+   * - ``column_label.filename``
+     - Non
+     - Nom de la colonne contenant le nom de fichier à utiliser pour l'extraction d'une colonne BLOB/binaire (le type MIME est déduit de l'extension)
+   * - ``info.*``
+     - Non
+     - Propriétés de connexion JDBC supplémentaires (ex. : ``info.ssl=true``). La clé sans le préfixe ``info.`` est transmise au pilote JDBC
    * - ``readInterval``
      - Non
-     - Delai en millisecondes entre chaque lecture de ligne (defaut : 0)
+     - Délai en millisecondes entre le traitement de chaque ligne. Par défaut : 0
    * - ``script_type``
      - Non
-     - Type du moteur de script (defaut : groovy)
-   * - ``column_label.*``
-     - Non
-     - Mappage de type MIME pour l'extraction de colonnes BLOB (ex: ``column_label.content=application/pdf``)
+     - Type du moteur de script. Par défaut : groovy
 
 Configuration du script
 -----------------------
@@ -137,58 +170,84 @@ Mappez les noms de colonnes SQL vers les champs d'index :
 
 Champs disponibles :
 
-- ``<column_name>`` - Colonnes du resultat de la requete SQL, accessibles directement par le nom de colonne
+- ``<column_name>`` - Colonnes du résultat de la requête SQL (accès direct par le nom de colonne. Aucun préfixe tel que ``data.`` n'est ajouté)
 
-Conception des requetes SQL
-===========================
+.. note::
+   Le nom de colonne doit correspondre au libellé de colonne (alias) de la clause ``SELECT``.
+   Pour les fonctions d'agrégation ou les expressions, utilisez explicitement ``AS`` pour définir un alias
+   (ex. : ``COUNT(*) AS total``).
 
-Requetes efficaces
-------------------
+Chargement de données BLOB/binaires
+=====================================
 
-Pour les grands volumes de donnees, les performances de requete sont importantes :
+Les colonnes de type BLOB, CLOB, NCLOB, tableau d'octets ou flux binaire sont automatiquement
+soumises au traitement d'extraction de contenu (le même extracteur que pour le crawl de fichiers)
+et intégrées sous forme de texte. Les colonnes de type tableau sont converties en chaîne séparée
+par des espaces. Les valeurs NULL deviennent des chaînes vides.
+
+Pour extraire correctement du texte depuis des BLOB ou des flux binaires, il est nécessaire de
+déterminer le type de données (type MIME). La priorité de détermination est la suivante :
+
+1. ``column_label.mimetype=<nom_de_colonne>`` - Utilise la valeur de la colonne spécifiée comme type MIME
+2. ``column_label.filename=<nom_de_colonne>`` - Traite la valeur de la colonne spécifiée comme un nom de fichier et déduit le type MIME à partir de l'extension
+3. ``default_mimetype`` - Type MIME par défaut utilisé si aucune des méthodes ci-dessus ne permet de déterminer le type
+
+Exemple (extraction du BLOB de la colonne ``file_data`` en utilisant le type MIME de la colonne ``content_type``) :
 
 ::
 
-    # Requete efficace utilisant un index
-    # La requete SQL est envoyee telle quelle a la base de donnees
+    sql=SELECT id, title, file_data, content_type FROM documents
+    column_label.mimetype=content_type
+
+Conception des requêtes SQL
+============================
+
+Requêtes efficaces
+------------------
+
+Pour les grands volumes de données, les performances de requête sont importantes.
+La requête SQL est envoyée telle quelle à la base de données (aucune liaison de paramètres n'est effectuée) :
+
+::
+
     SELECT id, title, content, url, updated_at
     FROM articles
     WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
 
-Exploration incrementale
+Exploration incrémentale
 ------------------------
 
-Methode pour recuperer uniquement les enregistrements mis a jour :
+Méthode pour récupérer uniquement les enregistrements mis à jour :
 
 ::
 
-    # Filtrage par date de mise a jour
+    # Filtrage par date de mise à jour
     sql=SELECT * FROM articles WHERE updated_at >= '2024-01-01 00:00:00'
 
-    # Specification de plage par ID
+    # Spécification de plage par ID
     sql=SELECT * FROM articles WHERE id > 10000
 
-Generation d'URL
+Génération d'URL
 ----------------
 
-L'URL du document est generee par le script :
+L'URL du document est générée par le script :
 
 ::
 
-    # Motif fixe
+    # Modèle fixe
     url="https://example.com/article/" + id
 
     # Combinaison de plusieurs champs
     url="https://example.com/" + category + "/" + slug
 
-    # Utilisation de l'URL stockee dans la base de donnees
+    # Utilisation de l'URL stockée dans la base de données
     url=url
 
-Prise en charge des caracteres multi-octets
-===========================================
+Prise en charge des caractères multi-octets
+============================================
 
-Pour traiter des donnees contenant des caracteres multi-octets comme le francais :
+Pour traiter des données contenant des caractères multi-octets tels que le japonais :
 
 MySQL
 -----
@@ -200,31 +259,31 @@ MySQL
 PostgreSQL
 ----------
 
-PostgreSQL utilise generalement UTF-8 par defaut. Si necessaire :
+PostgreSQL utilise généralement UTF-8 par défaut. Si nécessaire :
 
 ::
 
     url=jdbc:postgresql://localhost:5432/mydb?charSet=UTF-8
 
-Securite
+Sécurité
 ========
 
-Protection des identifiants de base de donnees
-----------------------------------------------
+Protection des identifiants de base de données
+-----------------------------------------------
 
 .. warning::
-   Ecrire les mots de passe directement dans les fichiers de configuration presente un risque de securite.
+   Écrire les mots de passe directement dans les fichiers de configuration présente un risque de sécurité.
 
-Methodes recommandees :
+Méthodes recommandées :
 
 1. Utiliser des variables d'environnement
-2. Utiliser la fonctionnalite de chiffrement de |Fess|
+2. Utiliser la fonctionnalité de chiffrement de |Fess|
 3. Utiliser un utilisateur en lecture seule
 
-Principe du moindre privilege
------------------------------
+Principe du moindre privilège
+------------------------------
 
-Accordez uniquement les privileges minimum necessaires a l'utilisateur de la base de donnees :
+Accordez uniquement les privilèges minimum nécessaires à l'utilisateur de la base de données :
 
 ::
 
@@ -233,12 +292,12 @@ Accordez uniquement les privileges minimum necessaires a l'utilisateur de la bas
     GRANT SELECT ON mydb.articles TO 'fess_user'@'localhost';
 
 Exemples d'utilisation
-======================
+=======================
 
 Recherche de catalogue de produits
-----------------------------------
+------------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -254,13 +313,13 @@ Script :
 
     url="https://shop.example.com/product/" + id
     title=name
-    content=description + " Categorie: " + category + " Prix: " + price + " EUR"
+    content=description + " Catégorie: " + category + " Prix: " + price + " EUR"
     lastModified=updated_at
 
 Articles de base de connaissances
----------------------------------
+-----------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -282,47 +341,47 @@ Script :
     created=created_at
     lastModified=updated_at
 
-Depannage
+Dépannage
 =========
 
 Pilote JDBC introuvable
 -----------------------
 
-**Symptome** : ``ClassNotFoundException`` ou ``No suitable driver``
+**Symptôme** : ``ClassNotFoundException`` ou ``No suitable driver``
 
 **Solution** :
 
-1. Verifiez que le pilote JDBC est place dans ``lib/``
-2. Verifiez que le nom de classe du pilote est correct
-3. Redemarrez |Fess|
+1. Vérifiez que le pilote JDBC est placé dans ``lib/``
+2. Vérifiez que le nom de classe du pilote est correct
+3. Redémarrez |Fess|
 
 Erreur de connexion
--------------------
+--------------------
 
-**Symptome** : ``Connection refused`` ou erreur d'authentification
+**Symptôme** : ``Connection refused`` ou erreur d'authentification
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. La base de donnees est-elle demarree ?
-2. Le nom d'hote et le numero de port sont-ils corrects ?
+1. La base de données est-elle démarrée ?
+2. Le nom d'hôte et le numéro de port sont-ils corrects ?
 3. Le nom d'utilisateur et le mot de passe sont-ils corrects ?
 4. Configuration du pare-feu
 
-Erreur de requete
+Erreur de requête
 -----------------
 
-**Symptome** : ``SQLException`` ou erreur de syntaxe SQL
+**Symptôme** : ``SQLException`` ou erreur de syntaxe SQL
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Testez la requete SQL directement sur la base de donnees
-2. Verifiez que les noms de colonnes sont corrects
-3. Verifiez que les noms de tables sont corrects
+1. Testez la requête SQL directement sur la base de données
+2. Vérifiez que les noms de colonnes sont corrects
+3. Vérifiez que les noms de tables sont corrects
 
-Informations de reference
-=========================
+Informations de référence
+==========================
 
-- :doc:`ds-overview` - Apercu des connecteurs DataStore
+- :doc:`ds-overview` - Aperçu des connecteurs DataStore
 - :doc:`ds-csv` - Connecteur CSV
 - :doc:`ds-json` - Connecteur JSON
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration DataStore

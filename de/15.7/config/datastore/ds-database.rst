@@ -24,19 +24,43 @@ Alle JDBC-kompatiblen Datenbanken werden unterstützt. Wichtige Beispiele:
 Voraussetzungen
 ===============
 
-1. Ein JDBC-Treiber ist erforderlich
-2. Lesezugriff auf die Datenbank ist erforderlich
-3. Bei großen Datenmengen ist ein geeignetes Query-Design wichtig
+1. Das Plugin ``fess-ds-db`` muss installiert sein
+2. Ein JDBC-Treiber für die Zieldatenbank ist erforderlich
+3. Lesezugriff auf die Datenbank ist erforderlich
+4. Bei großen Datenmengen ist ein geeignetes Query-Design wichtig
 
-Installation des JDBC-Treibers
-------------------------------
+Plugin-Installation
+-------------------
 
-Platzieren Sie den JDBC-Treiber im ``lib/``-Verzeichnis:
+Methode 1: JAR-Datei direkt platzieren
+
+::
+
+    # Herunterladen von Maven Central
+    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # Platzieren
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    # oder
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+
+Methode 2: Installation über die Administrationsoberfläche
+
+1. "System" -> "Plugins" öffnen
+2. JAR-Datei hochladen
+3. |Fess| neu starten
+
+JDBC-Treiber-Installation
+--------------------------
+
+Platzieren Sie den JDBC-Treiber für die Zieldatenbank im Classpath von |Fess| (Verzeichnis ``app/WEB-INF/lib/``):
 
 ::
 
     # Beispiel: MySQL-Treiber
-    cp mysql-connector-java-8.0.33.jar /path/to/fess/lib/
+    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    # oder
+    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
 Starten Sie |Fess| neu, um den Treiber zu laden.
 
@@ -89,32 +113,41 @@ Parameterliste
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Parameter
      - Erforderlich
      - Beschreibung
    * - ``driver``
      - Ja
-     - Klassenname des JDBC-Treibers
+     - Klassenname des JDBC-Treibers (ohne Angabe wird eine ``DataStoreException`` ausgelöst)
    * - ``url``
      - Ja
-     - JDBC-Verbindungs-URL
+     - JDBC-Verbindungs-URL (erforderlich für die Verbindung)
+   * - ``sql``
+     - Ja
+     - SQL-Query zum Abrufen der Daten (ohne Angabe wird eine ``DataStoreException`` ausgelöst)
    * - ``username``
      - Nein
      - Datenbank-Benutzername
    * - ``password``
      - Nein
      - Datenbank-Passwort
-   * - ``sql``
-     - Ja
-     - SQL-Query zum Abrufen der Daten
    * - ``fetch_size``
      - Nein
-     - Fetch-Größe (Standard: 100). Für MySQL-Streaming kann der Wert ``MIN_VALUE`` als String angegeben werden.
-   * - ``column_label.*``
+     - JDBC-Fetch-Größe. Für MySQL-Streaming-Resultsets kann ``MIN_VALUE`` angegeben werden
+   * - ``default_mimetype``
      - Nein
-     - Spaltenbezeichnung-Zuordnung. Bei BLOB-Spalten wird der MIME-Typ über die Dateierweiterung ermittelt und für die Inhaltsextraktion verwendet.
+     - Standard-MIME-Typ für die Inhaltsextraktion aus BLOB- und Binärspalten
+   * - ``column_label.mimetype``
+     - Nein
+     - Gibt den Spaltennamen an, der den MIME-Typ für die Extraktion aus BLOB- und Binärspalten enthält (Beispiel: ``column_label.mimetype=content_type``)
+   * - ``column_label.filename``
+     - Nein
+     - Gibt den Spaltennamen an, der den Dateinamen für die Extraktion aus BLOB- und Binärspalten enthält (MIME-Typ wird aus der Dateiendung abgeleitet)
+   * - ``info.*``
+     - Nein
+     - Zusätzliche JDBC-Verbindungseigenschaften (Beispiel: ``info.ssl=true``). Der Schlüssel ohne ``info.`` wird an den JDBC-Treiber übergeben
    * - ``readInterval``
      - Nein
      - Verzögerung in Millisekunden zwischen der Verarbeitung jeder Zeile. Standard: 0
@@ -136,7 +169,34 @@ Ordnen Sie die SQL-Spaltennamen den Index-Feldern zu:
 
 Verfügbare Felder:
 
-- ``<column_name>`` - Ergebnisspalten der SQL-Query (direkt über den Spaltennamen zugänglich)
+- ``<column_name>`` - Ergebnisspalten der SQL-Query (direkt über den Spaltenbezeichner zugänglich, ohne Präfix wie ``data.``)
+
+.. note::
+   Die Spaltennamen müssen mit den Spaltenbezeichnern (Aliasnamen) in der ``SELECT``-Klausel übereinstimmen.
+   Bei Aggregatfunktionen oder Ausdrücken vergeben Sie mit ``AS`` einen expliziten Aliasnamen
+   (Beispiel: ``COUNT(*) AS total``).
+
+Laden von BLOB- und Binärdaten
+==============================
+
+Spalten vom Typ BLOB, CLOB, NCLOB, Byte-Array oder Binär-Stream werden automatisch
+einer Inhaltsextraktion unterzogen (derselbe Extraktor wie beim Datei-Crawling) und als
+Text indiziert. Spalten vom Array-Typ werden in leerzeichengetrennte Zeichenketten
+umgewandelt. NULL-Werte werden zu leeren Zeichenketten.
+
+Damit Text aus BLOB- und Binär-Streams korrekt extrahiert werden kann, muss der Datentyp
+(MIME-Typ) bestimmt werden. Die folgende Prioritätsreihenfolge wird verwendet:
+
+1. ``column_label.mimetype=<Spaltenname>`` - Der Wert der angegebenen Spalte wird als MIME-Typ verwendet
+2. ``column_label.filename=<Spaltenname>`` - Der Wert der angegebenen Spalte wird als Dateiname behandelt, der MIME-Typ wird aus der Dateiendung abgeleitet
+3. ``default_mimetype`` - Standard-MIME-Typ, der verwendet wird, wenn die obigen Methoden keinen Typ ergeben
+
+Beispiel (BLOB der Spalte ``file_data`` wird mit dem MIME-Typ aus Spalte ``content_type`` extrahiert):
+
+::
+
+    sql=SELECT id, title, file_data, content_type FROM documents
+    column_label.mimetype=content_type
 
 SQL-Query-Design
 ================
@@ -144,11 +204,11 @@ SQL-Query-Design
 Effiziente Queries
 ------------------
 
-Bei großen Datenmengen ist die Query-Performance wichtig:
+Bei großen Datenmengen ist die Query-Performance wichtig.
+SQL-Abfragen werden unverändert an die Datenbank gesendet (kein Parameter-Binding):
 
 ::
 
-    # Effiziente Query mit Index-Nutzung
     SELECT id, title, content, url, updated_at
     FROM articles
     WHERE updated_at >= '2024-01-01 00:00:00'
@@ -186,7 +246,7 @@ Die Dokument-URL wird im Skript generiert:
 Multibyte-Zeichenunterstützung
 ==============================
 
-Bei der Verarbeitung von Daten mit Multibyte-Zeichen wie Deutsch oder Japanisch:
+Bei der Verarbeitung von Daten mit Multibyte-Zeichen wie Japanisch:
 
 MySQL
 -----
@@ -208,7 +268,7 @@ Sicherheit
 ==========
 
 Schutz der Datenbank-Anmeldedaten
----------------------------------
+----------------------------------
 
 .. warning::
    Das direkte Speichern von Passwörtern in Konfigurationsdateien stellt ein Sicherheitsrisiko dar.
@@ -220,7 +280,7 @@ Empfohlene Methoden:
 3. Nur-Lese-Benutzer verwenden
 
 Prinzip der minimalen Rechte
-----------------------------
+-----------------------------
 
 Gewähren Sie dem Datenbankbenutzer nur die minimal erforderlichen Berechtigungen:
 
@@ -284,7 +344,7 @@ Fehlerbehebung
 ==============
 
 JDBC-Treiber nicht gefunden
----------------------------
+----------------------------
 
 **Symptom**: ``ClassNotFoundException`` oder ``No suitable driver``
 
