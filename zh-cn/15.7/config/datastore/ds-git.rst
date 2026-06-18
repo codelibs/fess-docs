@@ -127,6 +127,9 @@ Git连接器提供从Git仓库获取文件并注册到
    * - ``cache_threshold``
      - 否
      - 内存和磁盘缓冲切换阈值（字节，默认：``1000000``）
+   * - ``readInterval``
+     - 否
+     - 每个文件处理之间的间隔时间（毫秒，默认：``0``）
 
 脚本设置
 --------------
@@ -219,17 +222,21 @@ GitLab的User Settings → Access Tokens:
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-SSH认证
--------
+使用用户名和密码进行认证
+------------------------
 
-使用SSH密钥的情况:
+除了在URI中嵌入凭据外，也可以使用 ``username`` 和 ``password`` 参数指定认证信息：
 
 ::
 
-    uri=git@github.com:company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
+
+仅当同时指定 ``username`` 和 ``password`` 时，凭据才会生效。
 
 .. note::
-   使用SSH认证时，需要设置运行 |Fess| 的用户的SSH密钥。
+   Git连接器仅支持HTTP/HTTPS认证（用户名和密码，或访问令牌）。不支持SSH密钥认证（``git@...`` 形式的URI）。请使用HTTPS形式的URI。
 
 提取器设置
 ============
@@ -295,6 +302,11 @@ SSH认证
 ------------------------
 
 当设置了 ``base_url`` 时，通过Git DiffEntry检测到的已删除文件（``ChangeType.DELETE``）将自动从索引中删除。
+
+当文件被重命名（``ChangeType.RENAME``）时，旧路径的文档将被删除，新路径的文件将重新建立索引。
+
+.. note::
+   已删除文件的自动删除仅在设置了 ``base_url`` 时有效。如果未设置 ``base_url``，文档URL为空，因此不会执行删除操作。
 
 使用示例
 ======
@@ -517,7 +529,7 @@ base_url设置模式
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-``base_url`` 和文件路径组合生成URL。
+URL通过直接拼接 ``base_url`` 和文件路径生成（不插入分隔符）。因此，``base_url`` 必须以 ``/`` 结尾。
 
 在脚本中生成URL
 ---------------------

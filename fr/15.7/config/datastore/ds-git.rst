@@ -127,6 +127,9 @@ Liste des parametres
    * - ``cache_threshold``
      - Non
      - Seuil en octets pour le basculement entre la mise en memoire tampon et le disque (par defaut : ``1000000``)
+   * - ``readInterval``
+     - Non
+     - Intervalle de traitement entre chaque fichier (en millisecondes, par defaut : ``0``)
 
 Configuration du script
 --------------
@@ -219,17 +222,21 @@ Dans GitLab User Settings -> Access Tokens :
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-Authentification SSH
--------
+Authentification avec nom d'utilisateur et mot de passe
+-------------------------------------------------------
 
-Pour utiliser une cle SSH :
+Au lieu d'incorporer les identifiants dans l'URI, vous pouvez egalement specifier les identifiants via les parametres ``username`` et ``password`` :
 
 ::
 
-    uri=git@github.com:company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
+
+Les identifiants sont utilises uniquement lorsque ``username`` et ``password`` sont tous les deux specifies.
 
 .. note::
-   Lors de l'utilisation de l'authentification SSH, vous devez configurer la cle SSH de l'utilisateur executant |Fess|.
+   Le connecteur Git prend en charge uniquement l'authentification HTTP/HTTPS (nom d'utilisateur et mot de passe, ou un token d'acces). L'authentification par cle SSH (URI de style ``git@...``) n'est pas prise en charge. Utilisez une URI de style HTTPS.
 
 Configuration des extracteurs
 ============
@@ -295,6 +302,11 @@ Traitement des fichiers supprimes
 ------------------------
 
 Lorsque ``base_url`` est défini, les fichiers détectés comme supprimés via Git DiffEntry (``ChangeType.DELETE``) sont automatiquement supprimés de l'index.
+
+Lorsqu'un fichier est renommé (``ChangeType.RENAME``), le document a l'ancien chemin est supprime et le fichier au nouveau chemin est reindexe.
+
+.. note::
+   La suppression automatique des fichiers supprimes n'est effective que lorsque ``base_url`` est defini. Si ``base_url`` n'est pas defini, l'URL du document est vide et la suppression n'est pas effectuee.
 
 Exemples d'utilisation
 ======
@@ -517,7 +529,7 @@ Patterns de configuration base_url
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-L'URL est generee en concatenant ``base_url`` et le chemin du fichier.
+L'URL est generee en concatenant simplement ``base_url`` et le chemin du fichier (aucun separateur n'est insere). Par consequent, ``base_url`` doit se terminer par un ``/`` final.
 
 Generation d'URL dans le script
 ---------------------

@@ -127,6 +127,9 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
    * - ``cache_threshold``
      - 아니오
      - 메모리와 디스크 버퍼링 전환 임계값(바이트 단위, 기본값: ``1000000``)
+   * - ``readInterval``
+     - 아니오
+     - 각 파일 처리 간격(밀리초 단위, 기본값: ``0``)
 
 스크립트 설정
 --------------
@@ -219,17 +222,21 @@ GitLab의 User Settings → Access Tokens:
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-SSH 인증
--------
+사용자 이름 및 비밀번호 인증
+------------------------------
 
-SSH 키를 사용하는 경우:
+URI에 인증 정보를 포함하는 대신, ``username`` 및 ``password`` 파라미터를 사용하여 인증 정보를 지정할 수도 있습니다:
 
 ::
 
-    uri=git@github.com:company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
+
+``username``과 ``password`` 모두 지정된 경우에만 인증 정보가 사용됩니다.
 
 .. note::
-   SSH 인증을 사용하는 경우, |Fess|를 실행하는 사용자의 SSH 키를 설정해야 합니다.
+   Git 커넥터는 HTTP/HTTPS 인증(사용자 이름 및 비밀번호, 또는 액세스 토큰)만 지원합니다. SSH 키 인증(``git@...`` 형식의 URI)은 지원되지 않습니다. HTTPS 형식의 URI를 사용하세요.
 
 추출기 설정
 ============
@@ -295,6 +302,11 @@ MIME 타입별 추출기
 ------------------------
 
 ``base_url``이 설정된 경우, Git DiffEntry에서 감지된 삭제 파일(``ChangeType.DELETE``)은 자동으로 인덱스에서 제거됩니다.
+
+파일이 이름 변경된 경우(``ChangeType.RENAME``), 이전 경로의 문서는 삭제되고 새 경로의 파일이 재인덱싱됩니다.
+
+.. note::
+   삭제된 파일의 자동 제거는 ``base_url``이 설정된 경우에만 유효합니다. ``base_url``이 설정되지 않은 경우 문서 URL이 비어 있으므로 삭제가 수행되지 않습니다.
 
 사용 예
 ======
@@ -517,7 +529,7 @@ base_url 설정 패턴
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-``base_url``과 파일 경로가 결합되어 URL이 생성됩니다.
+URL은 ``base_url``과 파일 경로를 단순 연결하여 생성됩니다(구분자는 삽입되지 않습니다). 따라서 ``base_url``은 반드시 끝에 ``/``를 포함해야 합니다.
 
 스크립트에서 URL 생성
 ---------------------

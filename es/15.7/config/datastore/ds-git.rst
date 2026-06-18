@@ -127,6 +127,9 @@ Lista de parametros
    * - ``cache_threshold``
      - No
      - Umbral en bytes para cambiar entre buffering en memoria y disco (predeterminado: ``1000000``)
+   * - ``readInterval``
+     - No
+     - Intervalo de procesamiento entre cada archivo (en milisegundos, predeterminado: ``0``)
 
 Configuracion de scripts
 ------------------------
@@ -219,17 +222,21 @@ En GitLab User Settings -> Access Tokens:
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-Autenticacion SSH
------------------
+Autenticacion con nombre de usuario y contrasena
+-------------------------------------------------
 
-Al usar claves SSH:
+En lugar de incluir credenciales en la URI, tambien puede especificar credenciales usando los parametros ``username`` y ``password``:
 
 ::
 
-    uri=git@github.com:company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
+
+Las credenciales se usan solo cuando tanto ``username`` como ``password`` estan especificados.
 
 .. note::
-   Al usar autenticacion SSH, es necesario configurar las claves SSH del usuario que ejecuta |Fess|.
+   El conector Git admite unicamente autenticacion HTTP/HTTPS (nombre de usuario y contrasena, o un token de acceso). La autenticacion con clave SSH (URI con formato ``git@...``) no esta soportada. Utilice una URI con formato HTTPS.
 
 Configuracion de extractores
 ============================
@@ -295,6 +302,11 @@ Procesamiento de archivos eliminados
 ------------------------------------
 
 Cuando ``base_url`` está configurado, los archivos detectados como eliminados a través de Git DiffEntry (``ChangeType.DELETE``) se eliminan automáticamente del índice.
+
+Cuando un archivo es renombrado (``ChangeType.RENAME``), el documento en la ruta antigua se elimina del indice y el archivo en la nueva ruta se reindexiza.
+
+.. note::
+   La eliminacion automatica de archivos eliminados solo es efectiva cuando ``base_url`` esta configurado. Si ``base_url`` no esta configurado, la URL del documento estara vacia y la eliminacion no se realizara.
 
 Ejemplos de uso
 ===============
@@ -517,7 +529,7 @@ Patrones de configuracion de base_url
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-La URL se genera combinando ``base_url`` con la ruta del archivo.
+La URL se genera concatenando directamente ``base_url`` con la ruta del archivo (sin insertar ningun separador). Por lo tanto, ``base_url`` debe terminar con una barra diagonal ``/``.
 
 Generacion de URL en script
 ---------------------------
