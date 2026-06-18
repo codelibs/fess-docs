@@ -9,7 +9,7 @@ Descripción general
 Al utilizar la Autenticación Integrada de Windows, los usuarios que han iniciado sesión en una computadora unida al dominio Windows pueden acceder a |Fess| sin operaciones de inicio de sesión adicionales.
 
 Cómo funciona la Autenticación Integrada de Windows
----------------------------------------------------
+----------------------------------------------------
 
 En la Autenticación Integrada de Windows, |Fess| utiliza el protocolo SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) para la autenticación Kerberos.
 
@@ -35,10 +35,10 @@ Antes de configurar la Autenticación Integrada de Windows, verifique los siguie
 - Una cuenta para recuperar información de usuario vía LDAP está disponible
 
 Configuración del lado de Active Directory
-===========================================
+==========================================
 
 Registro del Nombre de Principal de Servicio (SPN)
---------------------------------------------------
+---------------------------------------------------
 
 Necesita registrar un SPN para |Fess| en Active Directory.
 Abra un símbolo del sistema en una computadora Windows unida al dominio AD y ejecute el comando ``setspn``.
@@ -75,7 +75,7 @@ Para habilitar la Autenticación Integrada de Windows, agregue la siguiente conf
     sso.type=spnego
 
 Archivo de configuración de Kerberos
-------------------------------------
+-------------------------------------
 
 Cree ``app/WEB-INF/classes/krb5.conf`` con la configuración de Kerberos.
 
@@ -101,7 +101,7 @@ Cree ``app/WEB-INF/classes/krb5.conf`` con la configuración de Kerberos.
    Reemplace ``EXAMPLE.LOCAL`` con su nombre de dominio AD (en mayúsculas) y ``AD-SERVER.EXAMPLE.LOCAL`` con el nombre de host de su servidor AD.
 
 Archivo de configuración de inicio de sesión
---------------------------------------------
+---------------------------------------------
 
 Cree ``app/WEB-INF/classes/auth_login.conf`` con la configuración de inicio de sesión JAAS.
 
@@ -116,6 +116,10 @@ Cree ``app/WEB-INF/classes/auth_login.conf`` con la configuración de inicio de 
         storeKey=true
         isInitiator=false;
     };
+
+.. note::
+   Los nombres de archivo predeterminados para ``krb5.conf`` y ``auth_login.conf`` están definidos en ``spnego.krb5.conf`` y ``spnego.login.conf`` respectivamente, pero los archivos en sí deben crearse obligatoriamente.
+   Si estos archivos no están presentes en el classpath, la inicialización de SPNEGO fallará y |Fess| no podrá iniciarse.
 
 Configuración requerida
 -----------------------
@@ -167,10 +171,10 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Permitir autenticación Basic no segura
      - ``true``
    * - ``spnego.prompt.ntlm``
-     - Mostrar solicitud NTLM
+     - Retroceder a autenticación Basic cuando se recibe un token NTLM
      - ``true``
    * - ``spnego.allow.localhost``
-     - Permitir acceso localhost
+     - Permitir acceso desde localhost
      - ``true``
    * - ``spnego.allow.delegation``
      - Permitir delegación
@@ -179,12 +183,21 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Directorios excluidos de autenticación (separados por comas)
      - (Ninguno)
    * - ``spnego.logger.level``
-     - Nivel de log (0-7)
-     - (Auto)
+     - Nivel de log interno de la biblioteca SPNEGO (``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE; cualquier otro valor, incluidos ``0`` y ``5``, se trata como INFO)
+     - (Automático)
 
 .. warning::
    ``spnego.allow.unsecure.basic=true`` puede enviar credenciales codificadas en Base64 sobre conexiones no cifradas.
    Para entornos de producción, se recomienda encarecidamente establecer esto en ``false`` y usar HTTPS.
+
+.. note::
+   Cuando ``spnego.prompt.ntlm=true`` (valor predeterminado), ``spnego.allow.basic`` también debe ser ``true``.
+   Si establece ``spnego.allow.basic=false``, debe establecer también ``spnego.prompt.ntlm=false``.
+   Si no se cumple esta condición, se producirá un error durante la inicialización de SPNEGO.
+
+.. note::
+   ``spnego.logger.level`` controla el nivel de log del logger interno de la biblioteca SPNEGO (el logger llamado ``Spnego`` de ``java.util.logging``).
+   Si no se especifica, el nivel se determina automáticamente en función del nivel de log de |Fess|.
 
 Configuración LDAP
 ==================
@@ -214,12 +227,12 @@ Configure los ajustes LDAP en el panel de administración de |Fess| bajo "Sistem
      - ``memberOf``
 
 Configuración del navegador
-===========================
+============================
 
 Se requieren configuraciones del navegador del cliente para usar la Autenticación Integrada de Windows.
 
 Internet Explorer / Microsoft Edge
-----------------------------------
+-----------------------------------
 
 1. Abrir Opciones de Internet
 2. Seleccionar la pestaña "Seguridad"
@@ -243,10 +256,10 @@ Mozilla Firefox
 3. Establecer la URL o dominio del servidor Fess (ej: ``https://fess-server.example.local``)
 
 Ejemplos de configuración
-=========================
+==========================
 
 Configuración mínima (para pruebas)
------------------------------------
+------------------------------------
 
 El siguiente es un ejemplo de configuración mínima para un entorno de pruebas.
 
@@ -296,7 +309,7 @@ El siguiente es un ejemplo de configuración mínima para un entorno de pruebas.
     };
 
 Configuración recomendada (para producción)
--------------------------------------------
+--------------------------------------------
 
 El siguiente es un ejemplo de configuración recomendada para entornos de producción.
 
@@ -316,52 +329,61 @@ El siguiente es un ejemplo de configuración recomendada para entornos de produc
     # Configuración de seguridad (producción)
     spnego.allow.basic=false
     spnego.allow.unsecure.basic=false
+    spnego.prompt.ntlm=false
     spnego.allow.localhost=false
+
+.. note::
+   Al establecer ``spnego.allow.basic=false``, también debe establecer ``spnego.prompt.ntlm=false``.
+   Como ``spnego.prompt.ntlm`` es ``true`` de forma predeterminada, omitir esta configuración provocará un error durante la inicialización.
 
 Solución de problemas
 =====================
 
 Problemas comunes y soluciones
-------------------------------
+-------------------------------
 
 Aparece el diálogo de autenticación
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Verifique que el servidor Fess está agregado a la zona Intranet local en la configuración del navegador
 - Verifique que "Habilitar autenticación integrada de Windows" está habilitado
 - Verifique que el SPN está correctamente registrado (``setspn -L <nombre de usuario>``)
 
 Ocurren errores de autenticación
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Verifique que el nombre de dominio (mayúsculas) y el nombre del servidor AD en ``krb5.conf`` son correctos
 - Verifique que ``spnego.preauth.username`` y ``spnego.preauth.password`` son correctos
 - Verifique la conectividad de red al servidor AD
 
 No se puede recuperar la información de grupo
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Verifique que la configuración LDAP es correcta
 - Verifique que el Bind DN y la contraseña son correctos
 - Verifique que el usuario pertenece a grupos en AD
 
 Configuración de depuración
----------------------------
+-----------------------------
 
-Para investigar problemas, puede mostrar logs detallados relacionados con SPNEGO ajustando el nivel de log de |Fess|.
+Para investigar problemas, puede mostrar logs detallados relacionados con SPNEGO.
 
-Agregue lo siguiente a ``app/WEB-INF/conf/system.properties``:
+Para obtener el log detallado interno de la biblioteca SPNEGO, agregue lo siguiente a ``app/WEB-INF/conf/system.properties``.
+``spnego.logger.level=1`` produce el log más detallado (FINEST).
 
 ::
 
     spnego.logger.level=1
 
-O agregue los siguientes loggers a ``app/WEB-INF/classes/log4j2.xml``:
+Para obtener el log detallado del procesamiento de integración SPNEGO del lado de |Fess| (paquete ``org.codelibs.fess.sso.spnego``), agregue el siguiente logger a ``app/WEB-INF/classes/log4j2.xml``:
 
 ::
 
     <Logger name="org.codelibs.fess.sso.spnego" level="DEBUG"/>
-    <Logger name="org.codelibs.spnego" level="DEBUG"/>
+
+.. note::
+   Los logs de la propia biblioteca SPNEGO se emiten mediante ``java.util.logging`` y se controlan con ``spnego.logger.level``, no a través de ``log4j2.xml``.
+   Los logs del procesamiento de integración del lado de |Fess| se controlan con el logger de ``log4j2.xml``.
 
 Referencia
 ==========
@@ -370,4 +392,3 @@ Referencia
 - :doc:`sso-saml` - Configuración de SSO con autenticación SAML
 - :doc:`sso-oidc` - Configuración de SSO con autenticación OpenID Connect
 - :doc:`sso-entraid` - Configuración de SSO con Microsoft Entra ID
-
