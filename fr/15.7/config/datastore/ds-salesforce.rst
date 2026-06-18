@@ -14,7 +14,7 @@ Objets pris en charge
 ================
 
 - **Objets standard** : objets standard predefinis (Account, Contact, Lead, Opportunity, Case, Solution, etc.). L'ensemble des objets standard est fixe et la totalite d'entre eux est recuperee a chaque crawl.
-- **Objets personnalises** : objets definis par l'utilisateur, specifies via le parametre ``custom``.
+- **Objets personnalises** : objets definis par l'utilisateur, specifies via le parametre ``custom`` (objets dont le nom API se termine par ``__c``).
 
 .. note::
 

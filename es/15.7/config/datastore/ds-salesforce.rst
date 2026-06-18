@@ -14,7 +14,7 @@ Objetos compatibles
 ===================
 
 - **Objetos estandar**: objetos estandar predefinidos (Account, Contact, Lead, Opportunity, Case, Solution, etc.). El conjunto de objetos estandar es fijo y todos ellos se recuperan en cada crawl.
-- **Objetos personalizados**: objetos definidos por el usuario y especificados mediante el parametro ``custom``.
+- **Objetos personalizados**: objetos definidos por el usuario y especificados mediante el parametro ``custom`` (objetos cuyos nombres de API terminan en ``__c``).
 
 .. note::
 

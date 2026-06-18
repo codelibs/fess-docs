@@ -14,7 +14,7 @@ Salesforce连接器提供从Salesforce对象（标准对象、自定义对象）
 ================
 
 - **标准对象**: 预定义的标准对象（Account、Contact、Lead、Opportunity、Case、Solution等）。标准对象的集合是固定的，每次爬取时会全部获取。
-- **自定义对象**: 通过 ``custom`` 参数指定的用户自定义对象。
+- **自定义对象**: 通过 ``custom`` 参数指定的用户自定义对象（API 名称以 ``__c`` 结尾的对象）。
 
 .. note::
 
