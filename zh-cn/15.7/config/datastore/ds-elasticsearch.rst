@@ -11,7 +11,7 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 此功能需要 ``fess-ds-elasticsearch`` 插件。
 
 支持版本
-==============
+========
 
 - Elasticsearch 7.x / 8.x
 - OpenSearch 1.x / 2.x
@@ -24,7 +24,7 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 3. 需要执行查询的权限
 
 插件安装
-------------------------
+--------
 
 方法1: 直接放置JAR文件
 
@@ -61,44 +61,39 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
    * - 名称
      - External Elasticsearch
    * - 处理器名称
-     - ElasticsearchDataStore
+     - ElasticsearchDataStore / ElasticsearchListDataStore
    * - 启用
      - 开
 
+.. note::
+   ``ElasticsearchListDataStore`` 是 ``ElasticsearchDataStore`` 的扩展处理器，将获取的数据作为文件列表处理，支持多线程索引注册。
+   可使用 ``numOfThreads`` 参数指定线程数（默认: 1）。
+
 参数设置
-----------------
+--------
 
 基本连接:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 带认证的连接:
 
 ::
 
-    settings.fesen.http.url=https://elasticsearch.example.com:9200
-    index=myindex
+    settings.http.hosts=https://elasticsearch.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
-    size=100
-    scroll=5m
-
-多主机设置:
-
-::
-
-    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 参数列表
-~~~~~~~~~~~~~~~~
+~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -107,33 +102,33 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
    * - 参数
      - 必需
      - 说明
-   * - ``settings.fesen.http.url``
+   * - ``settings.http.hosts``
      - 否
-     - Elasticsearch/OpenSearch主机（可用逗号分隔指定多个）。未指定时会发生连接错误
-   * - ``index``
-     - 否
-     - 目标索引名（默认: ``_all``）。可用逗号分隔指定多个
+     - Elasticsearch/OpenSearch的主机URL。可用逗号分隔指定多个（例: ``http://host1:9200,http://host2:9200``）。未指定时会发生连接错误
    * - ``settings.fesen.username``
      - 否
      - 认证用户名
    * - ``settings.fesen.password``
      - 否
      - 认证密码
+   * - ``index``
+     - 否
+     - 目标索引名（默认: ``_all``）。可用逗号分隔指定多个
    * - ``size``
      - 否
-     - 滚动时的获取数量（默认: 100）
+     - 滚动时每次的获取数量（未指定时，使用Elasticsearch/OpenSearch服务端默认值）
    * - ``scroll``
      - 否
      - 滚动超时时间（默认: 1m）
+   * - ``timeout``
+     - 否
+     - 请求超时时间（默认: 1m）
    * - ``query``
      - 否
      - 查询JSON（默认: match_all）。仅指定查询主体（外部 ``{"query":...}`` 包装不需要）
    * - ``fields``
      - 否
      - 要获取的字段（逗号分隔）
-   * - ``timeout``
-     - 否
-     - 请求超时时间（默认: 1m）
    * - ``preference``
      - 否
      - 搜索执行时的分片副本优先设置（默认: ``_local``）
@@ -143,9 +138,37 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
    * - ``readInterval``
      - 否
      - 每个文档处理之间的等待时间（毫秒，默认: 0）
+   * - ``numOfThreads``
+     - 否
+     - 索引注册的线程数（仅 ``ElasticsearchListDataStore`` 有效，默认: 1）
+
+连接追加参数
+~~~~~~~~~~~~
+
+带有 ``settings.`` 前缀的参数将作为内部Elasticsearch/OpenSearch客户端（fesen HTTP客户端）的配置传递。
+主要的追加配置如下。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - 参数
+     - 说明
+   * - ``settings.http.ssl.certificate_authorities``
+     - HTTPS连接时信任的CA证书文件（X.509格式）的路径
+   * - ``settings.http.compression``
+     - 是否启用HTTP压缩（默认: true）
+   * - ``settings.http.proxy_host``
+     - 代理服务器的主机名（也可指定 ``settings.https.proxy_host``）
+   * - ``settings.http.proxy_port``
+     - 代理服务器的端口号（也可指定 ``settings.https.proxy_port``）
+   * - ``settings.http.proxy_username``
+     - 代理认证用户名（也可指定 ``settings.https.proxy_username``）
+   * - ``settings.http.proxy_password``
+     - 代理认证密码（也可指定 ``settings.https.proxy_password``）
 
 脚本设置
---------------
+--------
 
 基本映射:
 
@@ -168,7 +191,7 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
     last_modified=source.updated_at
 
 可用字段
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
 
 - ``source.<field_name>`` - Elasticsearch文档的 ``_source`` 字段
 - ``id`` - 文档ID
@@ -181,16 +204,16 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 - ``hit`` - SearchHit对象（高级用法）
 
 查询设置
-============
+========
 
 获取所有文档
---------------------
+------------
 
 默认获取所有文档。
 如果不指定 ``query`` 参数，将使用 ``match_all``。
 
 特定条件过滤
---------------------------
+------------
 
 ::
 
@@ -213,14 +236,14 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
    排序等搜索级别的选项不能在此参数中指定。
 
 只获取特定字段
-========================
+==============
 
 使用fields参数限制获取字段
-----------------------------------------
+--------------------------
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
     size=100
@@ -228,19 +251,19 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 要获取所有字段，请不指定 ``fields`` 或留空。
 
 使用示例
-======
+========
 
 基本索引爬取
-------------------------------
+------------
 
 参数:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 脚本:
 
@@ -253,16 +276,16 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
     last_modified=source.updated_at
 
 从带认证的集群爬取
-------------------------------
+------------------
 
 参数:
 
 ::
 
-    settings.fesen.http.url=https://es.example.com:9200
-    index=products
+    settings.http.hosts=https://es.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
+    index=products
     size=200
     scroll=10m
 
@@ -277,13 +300,13 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
     last_modified=source.updated_at
 
 从多个索引爬取
-------------------------------
+--------------
 
 参数:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=logs-2024-*
     query={"term":{"level":"error"}}
     size=100
@@ -299,18 +322,18 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
     last_modified=source.timestamp
 
 OpenSearch集群爬取
-----------------------------
+------------------
 
 参数:
 
 ::
 
-    settings.fesen.http.url=https://opensearch.example.com:9200
-    index=documents
+    settings.http.hosts=https://opensearch.example.com:9200
     settings.fesen.username=admin
     settings.fesen.password=admin
+    index=documents
     size=100
-    scroll=5m
+    scroll=1m
 
 脚本:
 
@@ -322,13 +345,13 @@ OpenSearch集群爬取
     last_modified=source.modified_date
 
 限制字段爬取
-----------------------------
+------------
 
 参数:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
     size=100
@@ -343,16 +366,18 @@ OpenSearch集群爬取
     last_modified=source.timestamp
 
 多主机负载均衡
-----------------------
+--------------
+
+在 ``settings.http.hosts`` 中以逗号分隔指定多个主机，请求将分散到各主机。
 
 参数:
 
 ::
 
-    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.http.hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 脚本:
 
@@ -364,10 +389,10 @@ OpenSearch集群爬取
     last_modified=source.timestamp
 
 故障排除
-======================
+========
 
 连接错误
-----------
+--------
 
 **症状**: ``Connection refused`` 或 ``No route to host``
 
@@ -379,7 +404,7 @@ OpenSearch集群爬取
 4. 如果是HTTPS，确认证书是否有效
 
 认证错误
-----------
+--------
 
 **症状**: ``401 Unauthorized`` 或 ``403 Forbidden``
 
@@ -394,7 +419,7 @@ OpenSearch集群爬取
 3. 如果启用了Elasticsearch Security（X-Pack），确认是否正确配置
 
 找不到索引
---------------------------
+----------
 
 **症状**: ``index_not_found_exception``
 
@@ -410,7 +435,7 @@ OpenSearch集群爬取
 3. 确认通配符模式是否正确（例: ``logs-*``）
 
 查询错误
-------------
+--------
 
 **症状**: ``parsing_exception`` 或 ``search_phase_execution_exception``
 
@@ -429,7 +454,7 @@ OpenSearch集群爬取
        }
 
 滚动超时
-----------------------
+--------
 
 **症状**: ``No search context found`` 或 ``Scroll timeout``
 
@@ -450,7 +475,7 @@ OpenSearch集群爬取
 3. 确认集群资源
 
 大量数据爬取
---------------------
+------------
 
 **症状**: 爬取速度慢或超时
 
@@ -460,7 +485,7 @@ OpenSearch集群爬取
 
    ::
 
-       size=100  # 默认
+       size=100
        size=500  # 较大
 
 2. 使用 ``fields`` 限制获取字段
@@ -468,7 +493,7 @@ OpenSearch集群爬取
 4. 分割成多个数据存储（按索引、时间范围等）
 
 内存不足
-----------
+--------
 
 **症状**: OutOfMemoryError
 
@@ -483,35 +508,53 @@ SSL/TLS连接
 ===========
 
 自签名证书的情况
---------------------
+----------------
 
 .. warning::
    在生产环境中请使用正确签名的证书。
 
-使用自签名证书时，将证书添加到Java keystore:
+方法1: 使用 ``settings.http.ssl.certificate_authorities`` 参数指定CA证书（推荐）
+
+指定信任的CA证书文件（X.509格式）的路径。此方法不会影响 |Fess| 整体的密钥库。
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.ssl.certificate_authorities=/path/to/es-cert.crt
+    index=myindex
+
+方法2: 将证书添加到Java keystore
+
+将证书添加到启动 |Fess| 的JVM信任库。
 
 ::
 
     keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
 
-客户端证书认证
-----------------------
+通过代理连接
+------------
 
-如果需要客户端证书，需要额外的参数设置。
-详情请参考Elasticsearch客户端文档。
+通过代理服务器连接时，请指定 ``settings.http.proxy_host`` 和 ``settings.http.proxy_port``。
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.proxy_host=proxy.example.com
+    settings.http.proxy_port=8080
+    index=myindex
 
 高级查询示例
-==============
+============
 
 包含聚合的查询
-----------------
+--------------
 
 .. note::
    ``query`` 参数仅接受查询主体。聚合（aggs）、排序等搜索级别的
    选项不能指定。只获取文档。
 
 脚本字段
---------------------
+--------
 
 .. note::
    Elasticsearch/OpenSearch的脚本字段不包含在 ``_source`` 中，因此无法

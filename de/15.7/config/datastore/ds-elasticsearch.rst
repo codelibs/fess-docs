@@ -60,9 +60,13 @@ Grundeinstellungen
    * - Name
      - External Elasticsearch
    * - Handler-Name
-     - ElasticsearchDataStore
+     - ElasticsearchDataStore / ElasticsearchListDataStore
    * - Aktiviert
      - Ein
+
+.. note::
+   ``ElasticsearchListDataStore`` ist ein erweiterter Handler von ``ElasticsearchDataStore``, der die abgerufenen Daten als Dateiliste verarbeitet und die Indexregistrierung in mehreren Threads unterstützt.
+   Die Anzahl der Threads kann mit dem Parameter ``numOfThreads`` angegeben werden (Standard: 1).
 
 Parameter-Einstellungen
 -----------------------
@@ -71,30 +75,21 @@ Einfache Verbindung:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Verbindung mit Authentifizierung:
 
 ::
 
-    settings.fesen.http.url=https://elasticsearch.example.com:9200
-    index=myindex
+    settings.http.hosts=https://elasticsearch.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
-    size=100
-    scroll=5m
-
-Mehrere Hosts konfigurieren:
-
-::
-
-    settings.fesen.http.url=http://es-node1:9200,http://es-node2:9200,http://es-node3:9200
     index=myindex
     size=100
-    scroll=5m
+    scroll=1m
 
 Parameterliste
 ~~~~~~~~~~~~~~
@@ -106,33 +101,33 @@ Parameterliste
    * - Parameter
      - Erforderlich
      - Beschreibung
-   * - ``settings.fesen.http.url``
+   * - ``settings.http.hosts``
      - Nein
-     - Elasticsearch/OpenSearch-Hosts (mehrere kommagetrennt). Verbindungsfehler bei fehlender Angabe
-   * - ``index``
-     - Nein
-     - Name des Zielindexes (Standard: ``_all``). Mehrere Indizes können kommagetrennt angegeben werden
+     - Host-URL von Elasticsearch/OpenSearch. Mehrere Hosts können kommagetrennt angegeben werden (Beispiel: ``http://host1:9200,http://host2:9200``). Bei fehlender Angabe kommt es zu einem Verbindungsfehler
    * - ``settings.fesen.username``
      - Nein
      - Benutzername für Authentifizierung
    * - ``settings.fesen.password``
      - Nein
      - Passwort für Authentifizierung
+   * - ``index``
+     - Nein
+     - Name des Zielindexes (Standard: ``_all``). Mehrere Indizes können kommagetrennt angegeben werden
    * - ``size``
      - Nein
-     - Abrufgröße beim Scrollen (Standard: 100)
+     - Anzahl der Dokumente pro Scroll-Abruf (ohne Angabe wird der Standardwert von Elasticsearch/OpenSearch verwendet)
    * - ``scroll``
      - Nein
      - Scroll-Timeout (Standard: 1m)
+   * - ``timeout``
+     - Nein
+     - Timeout für die Anfrage (Standard: 1m)
    * - ``query``
      - Nein
      - Query-JSON (Standard: match_all). Nur den Query-Body angeben (äußerer ``{"query":...}``-Wrapper nicht erforderlich)
    * - ``fields``
      - Nein
      - Abzurufende Felder (kommagetrennt)
-   * - ``timeout``
-     - Nein
-     - Timeout für die Anfrage (Standard: 1m)
    * - ``preference``
      - Nein
      - Shard-Replikat-Präferenz für die Suchausführung (Standard: ``_local``)
@@ -142,6 +137,34 @@ Parameterliste
    * - ``readInterval``
      - Nein
      - Wartezeit zwischen der Verarbeitung jedes Dokuments in Millisekunden (Standard: 0)
+   * - ``numOfThreads``
+     - Nein
+     - Anzahl der Threads für die Indexregistrierung (nur für ``ElasticsearchListDataStore`` wirksam, Standard: 1)
+
+Zusätzliche Verbindungsparameter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Parameter mit dem Präfix ``settings.`` werden als Einstellungen des internen Elasticsearch/OpenSearch-Clients (fesen HTTP-Client) weitergegeben.
+Die wichtigsten zusätzlichen Einstellungen sind folgende:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Parameter
+     - Beschreibung
+   * - ``settings.http.ssl.certificate_authorities``
+     - Pfad zur vertrauenswürdigen CA-Zertifikatsdatei (X.509-Format) für HTTPS-Verbindungen
+   * - ``settings.http.compression``
+     - Ob HTTP-Komprimierung aktiviert werden soll (Standard: true)
+   * - ``settings.http.proxy_host``
+     - Hostname des Proxyservers (``settings.https.proxy_host`` ist ebenfalls möglich)
+   * - ``settings.http.proxy_port``
+     - Portnummer des Proxyservers (``settings.https.proxy_port`` ist ebenfalls möglich)
+   * - ``settings.http.proxy_username``
+     - Benutzername für Proxy-Authentifizierung (``settings.https.proxy_username`` ist ebenfalls möglich)
+   * - ``settings.http.proxy_password``
+     - Passwort für Proxy-Authentifizierung (``settings.https.proxy_password`` ist ebenfalls möglich)
 
 Skript-Einstellungen
 --------------------
@@ -189,7 +212,7 @@ Standardmäßig werden alle Dokumente abgerufen.
 Wenn der ``query``-Parameter nicht angegeben wird, wird ``match_all`` verwendet.
 
 Nach bestimmten Bedingungen filtern
------------------------------------
+------------------------------------
 
 ::
 
@@ -219,7 +242,7 @@ Abruffelder mit fields-Parameter einschränken
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
     size=100
@@ -236,10 +259,10 @@ Parameter:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Skript:
 
@@ -258,10 +281,10 @@ Parameter:
 
 ::
 
-    settings.fesen.http.url=https://es.example.com:9200
-    index=products
+    settings.http.hosts=https://es.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
+    index=products
     size=200
     scroll=10m
 
@@ -282,7 +305,7 @@ Parameter:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=logs-2024-*
     query={"term":{"level":"error"}}
     size=100
@@ -304,12 +327,12 @@ Parameter:
 
 ::
 
-    settings.fesen.http.url=https://opensearch.example.com:9200
-    index=documents
+    settings.http.hosts=https://opensearch.example.com:9200
     settings.fesen.username=admin
     settings.fesen.password=admin
+    index=documents
     size=100
-    scroll=5m
+    scroll=1m
 
 Skript:
 
@@ -327,7 +350,7 @@ Parameter:
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
     size=100
@@ -342,16 +365,18 @@ Skript:
     last_modified=source.timestamp
 
 Lastverteilung über mehrere Hosts
----------------------------------
+----------------------------------
+
+Durch Angabe mehrerer Hosts kommagetrennt in ``settings.http.hosts`` werden Anfragen auf die einzelnen Hosts verteilt.
 
 Parameter:
 
 ::
 
-    settings.fesen.http.url=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
+    settings.http.hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
     size=100
-    scroll=5m
+    scroll=1m
 
 Skript:
 
@@ -459,7 +484,7 @@ Crawling großer Datenmengen
 
    ::
 
-       size=100  # Standard
+       size=100
        size=500  # Größer
 
 2. Schränken Sie abzurufende Felder mit ``fields`` ein
@@ -482,22 +507,40 @@ SSL/TLS-Verbindung
 ==================
 
 Bei selbstsignierten Zertifikaten
----------------------------------
+----------------------------------
 
 .. warning::
    Verwenden Sie in Produktionsumgebungen ordnungsgemäß signierte Zertifikate.
 
-Bei selbstsignierten Zertifikaten fügen Sie das Zertifikat zum Java Keystore hinzu:
+Methode 1: CA-Zertifikat über den Parameter ``settings.http.ssl.certificate_authorities`` angeben (empfohlen)
+
+Geben Sie den Pfad zur vertrauenswürdigen CA-Zertifikatsdatei (X.509-Format) an. Diese Methode hat keinen Einfluss auf den globalen Keystore von |Fess|.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.ssl.certificate_authorities=/path/to/es-cert.crt
+    index=myindex
+
+Methode 2: Zertifikat zum Java Keystore hinzufügen
+
+Fügen Sie das Zertifikat zum Truststore der JVM hinzu, die |Fess| startet.
 
 ::
 
     keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
 
-Client-Zertifikatauthentifizierung
-----------------------------------
+Verbindung über Proxy
+----------------------
 
-Wenn ein Client-Zertifikat erforderlich ist, sind zusätzliche Parameter-Einstellungen erforderlich.
-Details finden Sie in der Elasticsearch-Client-Dokumentation.
+Wenn die Verbindung über einen Proxyserver erfolgt, geben Sie ``settings.http.proxy_host`` und ``settings.http.proxy_port`` an.
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.proxy_host=proxy.example.com
+    settings.http.proxy_port=8080
+    index=myindex
 
 Erweiterte Query-Beispiele
 ==========================

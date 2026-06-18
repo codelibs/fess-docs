@@ -67,7 +67,7 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 .. note::
    ``ElasticsearchListDataStore`` は ``ElasticsearchDataStore`` を拡張したハンドラで、取得したデータをファイルリストとして処理し、マルチスレッドでのインデックス登録をサポートします。
-   ``num_of_threads`` パラメーターでスレッド数を指定できます（デフォルト: 1）。
+   ``numOfThreads`` パラメーターでスレッド数を指定できます（デフォルト: 1）。
 
 パラメーター設定
 ----------------
@@ -76,7 +76,7 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     size=100
     scroll=1m
@@ -85,7 +85,7 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
 
 ::
 
-    settings.fesen.http.url=https://elasticsearch.example.com:9200
+    settings.http.hosts=https://elasticsearch.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
     index=myindex
@@ -102,9 +102,9 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
    * - パラメーター
      - 必須
      - 説明
-   * - ``settings.fesen.http.url``
+   * - ``settings.http.hosts``
      - いいえ
-     - Elasticsearch/OpenSearchのURL（未指定の場合、接続エラーになります）
+     - Elasticsearch/OpenSearchのホストURL。カンマ区切りで複数指定可能（例: ``http://host1:9200,http://host2:9200``）。未指定の場合、接続エラーになります
    * - ``settings.fesen.username``
      - いいえ
      - 認証用ユーザー名
@@ -116,7 +116,7 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
      - 対象インデックス名（デフォルト: ``_all``）。カンマ区切りで複数指定可能
    * - ``size``
      - いいえ
-     - スクロール時の取得件数
+     - スクロール時の1回あたりの取得件数（未指定の場合、Elasticsearch/OpenSearch側のデフォルト値が使用されます）
    * - ``scroll``
      - いいえ
      - スクロールのタイムアウト（デフォルト: 1m）
@@ -138,6 +138,34 @@ Elasticsearch/OpenSearchコネクタは、ElasticsearchまたはOpenSearchクラ
    * - ``readInterval``
      - いいえ
      - 各ドキュメント処理間の待機時間（ミリ秒、デフォルト: 0）
+   * - ``numOfThreads``
+     - いいえ
+     - インデックス登録のスレッド数（``ElasticsearchListDataStore`` のみ有効、デフォルト: 1）
+
+接続に関する追加パラメーター
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``settings.`` プレフィックスを付けたパラメーターは、内部のElasticsearch/OpenSearchクライアント（fesen HTTPクライアント）の設定として渡されます。
+主な追加設定は次のとおりです。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - パラメーター
+     - 説明
+   * - ``settings.http.ssl.certificate_authorities``
+     - HTTPS接続時に信頼するCA証明書ファイル（X.509形式）のパス
+   * - ``settings.http.compression``
+     - HTTP圧縮を有効にするかどうか（デフォルト: true）
+   * - ``settings.http.proxy_host``
+     - プロキシサーバーのホスト名（``settings.https.proxy_host`` も指定可能）
+   * - ``settings.http.proxy_port``
+     - プロキシサーバーのポート番号（``settings.https.proxy_port`` も指定可能）
+   * - ``settings.http.proxy_username``
+     - プロキシ認証用ユーザー名（``settings.https.proxy_username`` も指定可能）
+   * - ``settings.http.proxy_password``
+     - プロキシ認証用パスワード（``settings.https.proxy_password`` も指定可能）
 
 スクリプト設定
 --------------
@@ -215,7 +243,7 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=title,content,url,timestamp
     size=100
@@ -232,7 +260,7 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=articles
     size=100
     scroll=1m
@@ -254,7 +282,7 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    settings.fesen.http.url=https://es.example.com:9200
+    settings.http.hosts=https://es.example.com:9200
     settings.fesen.username=elastic
     settings.fesen.password=changeme
     index=products
@@ -278,7 +306,7 @@ fieldsパラメーターで取得フィールドを限定
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=logs-2024-*
     query={"term":{"level":"error"}}
     size=100
@@ -300,7 +328,7 @@ OpenSearchクラスタのクロール
 
 ::
 
-    settings.fesen.http.url=https://opensearch.example.com:9200
+    settings.http.hosts=https://opensearch.example.com:9200
     settings.fesen.username=admin
     settings.fesen.password=admin
     index=documents
@@ -323,7 +351,7 @@ OpenSearchクラスタのクロール
 
 ::
 
-    settings.fesen.http.url=http://localhost:9200
+    settings.http.hosts=http://localhost:9200
     index=myindex
     fields=id,title,content,url,timestamp
     size=100
@@ -340,11 +368,13 @@ OpenSearchクラスタのクロール
 複数ホストでの負荷分散
 ----------------------
 
+``settings.http.hosts`` にカンマ区切りで複数のホストを指定すると、リクエストが各ホストに分散されます。
+
 パラメーター:
 
 ::
 
-    settings.fesen.http.url=http://es1.example.com:9200
+    settings.http.hosts=http://es1.example.com:9200,http://es2.example.com:9200,http://es3.example.com:9200
     index=articles
     size=100
     scroll=1m
@@ -483,17 +513,35 @@ SSL/TLS接続
 .. warning::
    本番環境では適切に署名された証明書を使用してください。
 
-自己署名証明書を使用する場合、Java keystoreに証明書を追加:
+方法1: ``settings.http.ssl.certificate_authorities`` パラメーターでCA証明書を指定（推奨）
+
+信頼するCA証明書ファイル（X.509形式）のパスを指定します。この方法は |Fess| 全体のキーストアに影響を与えません。
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.ssl.certificate_authorities=/path/to/es-cert.crt
+    index=myindex
+
+方法2: Java keystoreに証明書を追加
+
+|Fess| を起動するJVMの信頼ストアに証明書を追加します。
 
 ::
 
     keytool -import -alias es-cert -file es-cert.crt -keystore $JAVA_HOME/lib/security/cacerts
 
-クライアント証明書認証
-----------------------
+プロキシ経由の接続
+------------------
 
-クライアント証明書が必要な場合、追加のパラメーター設定が必要です。
-詳細はElasticsearchクライアントのドキュメントを参照してください。
+プロキシサーバーを経由して接続する場合、``settings.http.proxy_host`` と ``settings.http.proxy_port`` を指定します。
+
+::
+
+    settings.http.hosts=https://es.example.com:9200
+    settings.http.proxy_host=proxy.example.com
+    settings.http.proxy_port=8080
+    index=myindex
 
 高度なクエリ例
 ==============
