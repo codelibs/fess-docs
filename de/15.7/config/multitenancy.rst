@@ -1,42 +1,50 @@
-==================================
+============================
 Multitenancy-Konfiguration
-==================================
+============================
 
 Übersicht
-==========
+=========
 
-Die Multitenancy-Funktion von |Fess| ermoeglicht es Ihnen, mehrere Mandanten
+Die Multitenancy-Funktion von |Fess| ermöglicht es, mehrere Mandanten
 (Organisationen, Abteilungen, Kunden usw.) separat innerhalb einer einzigen |Fess|-Instanz zu betreiben.
 
-Mit der Virtual-Host-Funktion koennen Sie jedem Mandanten Folgendes bereitstellen:
+Mit der Virtueller-Host-Funktion können Sie jedem Mandanten Folgendes bereitstellen:
 
-- Unabhaengige Such-UI
+- Unabhängige Such-Oberfläche
 - Getrennte Inhalte
 - Angepasstes Design
 
-Virtual-Host-Funktion
-=====================
+Der aktuelle virtuelle Host wird neben der Filterung von Suchergebnissen auch in anderen |Fess|-Funktionen wie Labels, verwandten Inhalten, verwandten Abfragen und Design (Themes) berücksichtigt.
 
-Virtual Host ist eine Funktion, die basierend auf dem HTTP-Anfrage-Hostnamen verschiedene Suchumgebungen bereitstellt.
+Virtueller-Host-Funktion
+========================
+
+Ein virtueller Host ist eine Funktion, die basierend auf dem Hostnamen einer HTTP-Anfrage verschiedene Suchumgebungen bereitstellt.
 
 Funktionsweise
 --------------
 
 1. Benutzer greift auf ``tenant1.example.com`` zu
 2. |Fess| identifiziert den Hostnamen
-3. Wendet die entsprechende Virtual-Host-Konfiguration an
-4. Zeigt mandantenspezifische Inhalte und UI an
+3. Wendet die entsprechende Konfiguration des virtuellen Hosts an
+4. Zeigt mandantenspezifische Inhalte und Oberfläche an
 
-Virtual-Host-Header-Konfiguration
-==================================
+Konfiguration des Virtueller-Host-Headers
+==========================================
 
-Um die Virtual-Host-Funktion zu aktivieren, konfigurieren Sie die Eigenschaft ``virtual.host.headers``.
-Diese Eigenschaft wird in ``fess_config.properties`` definiert.
+Um die Virtueller-Host-Funktion zu aktivieren, konfigurieren Sie die Zuordnung zwischen den HTTP-Anfrage-Headern und den virtuellen Host-Keys. Es gibt zwei Konfigurationsmethoden:
+
+- **Verwaltungsoberfläche (empfohlen)**: Geben Sie den Wert im Feld „Virtueller Host" unter „System" → „Allgemein" ein.
+  Dieser Wert wird als Systemeinstellung gespeichert und bleibt auch nach einem Neustart erhalten. Er hat Vorrang vor
+  ``virtual.host.headers`` in ``fess_config.properties``.
+- **Konfigurationsdatei**: Geben Sie den Wert in der Eigenschaft ``virtual.host.headers`` in ``fess_config.properties`` an.
+
+Unabhängig von der gewählten Methode ist das Format der Konfigurationswerte identisch.
 
 Konfigurationsformat
 --------------------
 
-Geben Sie jeden Eintrag im Format ``HeaderName:HeaderWert=VirtualHostKey`` an, einen pro Zeile:
+Geben Sie jeden Eintrag im Format ``Headername:Headerwert=VirtuellerHostKey`` an, einen pro Zeile:
 
 ::
 
@@ -44,43 +52,55 @@ Geben Sie jeden Eintrag im Format ``HeaderName:HeaderWert=VirtualHostKey`` an, e
     virtual.host.headers=Host:tenant1.example.com=tenant1\n\
     Host:tenant2.example.com=tenant2
 
-Fuer mehrere Virtual Hosts trennen Sie die Eintraege durch Zeilenumbrueche.
+Für mehrere virtuelle Hosts trennen Sie die Einträge durch Zeilenumbrüche.
 
-Einschraenkungen fuer Virtual-Host-Keys
+Matching-Verhalten
+------------------
+
+Bei jeder eingehenden Anfrage vergleicht |Fess| den Wert des in der jeweiligen Zeile angegebenen Header-Namens mit dem konfigurierten Headerwert.
+
+- Beim Vergleich von Headerwerten wird nicht zwischen Groß- und Kleinschreibung unterschieden.
+- Die konfigurierten Zeilen werden von oben nach unten ausgewertet; der virtuelle Host-Key der ersten übereinstimmenden Zeile wird angewendet.
+- Wenn keine Zeile übereinstimmt, wird die Anfrage ohne virtuellen Host (gemeinsame Umgebung) behandelt.
+- Das Auswertungsergebnis wird pro Anfrage zwischengespeichert.
+
+Einschränkungen für virtuelle Host-Keys
 ----------------------------------------
 
-Virtual-Host-Keys unterliegen folgenden Einschraenkungen:
+Für virtuelle Host-Keys gelten folgende Einschränkungen:
 
 - Nur alphanumerische Zeichen und Unterstriche (``a-zA-Z0-9_``) sind erlaubt. Andere Zeichen werden automatisch entfernt.
-- Folgende Key-Namen sind reserviert und koennen nicht verwendet werden: ``admin``, ``common``, ``error``, ``login``, ``profile``
+- Folgende Key-Namen sind reserviert und können nicht verwendet werden: ``admin``, ``common``, ``error``, ``login``, ``profile``
 
-Admin-Panel-Konfiguration
-==========================
+Konfiguration über die Verwaltungsoberfläche
+=============================================
 
 Crawl-Konfiguration
 --------------------
 
-Durch Angabe eines Virtual Hosts in den Web-Crawl-Einstellungen koennen Sie Inhalte trennen:
+Durch Angabe eines virtuellen Hosts in den Web-Crawl-Einstellungen können Sie Inhalte trennen:
 
-1. Melden Sie sich im Admin-Panel an
-2. Erstellen Sie eine Crawl-Konfiguration unter "Crawler" -> "Web"
-3. Waehlen Sie einen in ``virtual.host.headers`` definierten Virtual-Host-Key im Feld "Virtual Host"
-4. Mit dieser Konfiguration gecrawlte Inhalte sind nur vom angegebenen Virtual Host durchsuchbar
+1. Melden Sie sich in der Verwaltungsoberfläche an
+2. Erstellen Sie eine Crawl-Konfiguration unter „Crawler" → „Web"
+3. Wählen Sie im Feld „Virtueller Host" einen oder mehrere bereits konfigurierte virtuelle Host-Keys aus
+4. Mit dieser Konfiguration gecrawlte Inhalte sind nur über den angegebenen virtuellen Host durchsuchbar
+
+.. note::
+   Das Feld „Virtueller Host" ist in den Crawl-Konfigurationen für Web, Dateisystem und Datenspeicher verfügbar. Der hier ausgewählte virtuelle Host-Key wird jedem gecrawlten Dokument zugewiesen und bei der Suche nach dem aktuellen virtuellen Host gefiltert.
 
 Zugriffskontrolle
 =================
 
-Kombination von Virtual Hosts und Rollen
-----------------------------------------
+Kombination von virtuellem Host und Rollen
+------------------------------------------
 
-Durch die Kombination von Virtual Hosts mit rollenbasierter Zugriffskontrolle
-ist eine feinere Zugriffskontrolle moeglich:
+Durch die Kombination von virtuellem Host mit rollenbasierter Zugriffskontrolle ist eine detailliertere Zugriffskontrolle möglich.
 
-Konfigurieren Sie Virtual Host und Berechtigungen gemeinsam in der Crawl-Konfiguration:
+Konfigurieren Sie virtuellen Host und Berechtigungen gemeinsam in der Crawl-Konfiguration:
 
 ::
 
-    # Virtual Host in der Crawl-Konfiguration
+    # Virtueller Host in der Crawl-Konfiguration
     tenant1
 
     # Berechtigungen in der Crawl-Konfiguration
@@ -94,49 +114,50 @@ Details finden Sie unter :doc:`security-role`.
 UI-Anpassung
 ============
 
-Sie koennen die UI fuer jeden Virtual Host anpassen.
+Sie können die Oberfläche für jeden virtuellen Host anpassen.
 
 Themes anwenden
 ---------------
 
-Wenden Sie verschiedene Themes fuer jeden Virtual Host an:
+Wenden Sie verschiedene Themes für jeden virtuellen Host an:
 
-1. Richten Sie Themes unter "System" -> "Design" ein
-2. Geben Sie das Theme in der Virtual-Host-Konfiguration an
+1. Richten Sie Themes unter „System" → „Design" ein
+2. Geben Sie das Theme in der Konfiguration des virtuellen Hosts an
 
 Benutzerdefiniertes CSS
 -----------------------
 
-Um benutzerdefiniertes CSS pro Virtual Host anzuwenden, bearbeiten Sie CSS-Dateien im Admin-Panel unter "System" -> "Design". Sie koennen auch benutzerdefinierte Templates im View-Verzeichnis des entsprechenden Virtual-Host-Keys ablegen.
+Um benutzerdefiniertes CSS pro virtuellem Host anzuwenden, bearbeiten Sie CSS-Dateien in der Verwaltungsoberfläche unter „System" → „Design". Sie können auch benutzerdefinierte Templates im View-Verzeichnis des entsprechenden virtuellen Host-Keys ablegen.
 
 Label-Einstellungen
 -------------------
 
-Beschraenken Sie angezeigte Labels fuer jeden Virtual Host:
+Schränken Sie die angezeigten Labels für jeden virtuellen Host ein:
 
-1. Geben Sie den Virtual Host in den Label-Typ-Einstellungen an
-2. Labels werden nur auf dem angegebenen Virtual Host angezeigt
+1. Geben Sie den virtuellen Host in den Label-Typ-Einstellungen an
+2. Labels werden nur für den angegebenen virtuellen Host angezeigt
 
-API-Authentifizierung
-=====================
+API-Zugriff
+===========
 
-Steuern Sie den API-Zugriff fuer jeden Virtual Host:
-
-Zugriffstokens
---------------
-
-Stellen Sie Zugriffstokens aus, die mit Virtual Hosts verknuepft sind:
-
-1. Erstellen Sie ein Token unter "System" -> "Zugriffstoken"
-2. Verknuepfen Sie das Token mit einem Virtual Host
+Auch API-Anfragen an die Such-API werden – ebenso wie bei der Oberfläche – anhand des Hostnamens der Anfrage (dem konfigurierten Header, in der Regel dem ``Host``-Header) dem virtuellen Host zugeordnet. Eine Anfrage an ``tenant1.example.com`` wird beispielsweise automatisch dem virtuellen Host ``tenant1`` zugeordnet, sodass nur Inhalte dieses virtuellen Hosts durchsucht werden.
 
 API-Anfrage
 -----------
 
 ::
 
-    curl -H "Authorization: Bearer TENANT_TOKEN" \
-         "https://tenant1.example.com/api/v1/search?q=keyword"
+    curl "https://tenant1.example.com/api/v2/search?q=keyword"
+
+Bei der Authentifizierung mit einem Zugriffstoken wird dieses im ``Authorization``-Header im ``Bearer``-Format angegeben:
+
+::
+
+    curl -H "Authorization: Bearer YOUR_TOKEN" \
+         "https://tenant1.example.com/api/v2/search?q=keyword"
+
+.. note::
+   Zugriffstokens sind nicht an einen bestimmten virtuellen Host gebunden. Ein Token ist für alle virtuellen Hosts gültig; der Ziel-virtuelle-Host wird durch den Hostnamen des Anfragziels bestimmt. Wird dasselbe Token an einen anderen Hostnamen gesendet, wird es einem anderen virtuellen Host zugeordnet. Wenn Sie den Zugriffsbereich unabhängig vom virtuellen Host steuern möchten, kombinieren Sie dies mit der rollenbasierten Zugriffskontrolle (:doc:`security-role`).
 
 DNS-Konfiguration
 =================
@@ -144,7 +165,7 @@ DNS-Konfiguration
 Beispiel-DNS-Konfiguration zur Umsetzung von Multitenancy:
 
 Subdomains zum selben Server
-----------------------------
+-----------------------------
 
 ::
 
@@ -156,9 +177,9 @@ Subdomains zum selben Server
     *.example.com          A    192.168.1.100
 
 Reverse-Proxy-Konfiguration
----------------------------
+----------------------------
 
-Beispiel fuer Reverse-Proxy-Konfiguration mit Nginx:
+Beispiel für eine Reverse-Proxy-Konfiguration mit Nginx:
 
 ::
 
@@ -185,44 +206,43 @@ Beispiel fuer Reverse-Proxy-Konfiguration mit Nginx:
 Datentrennung
 =============
 
-Wenn vollstaendige Datentrennung erforderlich ist, erwaegen Sie folgende Ansaetze:
+Wenn eine vollständige Datentrennung erforderlich ist, erwägen Sie folgende Ansätze:
 
-Index-Level-Trennung
---------------------
+Trennung auf Index-Ebene
+------------------------
 
-Verwenden Sie separate |Fess|-Instanzen und Indizes fuer jeden Mandanten:
+Verwenden Sie für jeden Mandanten separate |Fess|-Instanzen und Indizes:
 
 ::
 
-    # Mandant-1-Fess-Instanz (fess_config.properties)
+    # Fess-Instanz für Mandant 1 (fess_config.properties)
     index.document.search.index=fess_tenant1.search
 
-    # Mandant-2-Fess-Instanz (fess_config.properties)
+    # Fess-Instanz für Mandant 2 (fess_config.properties)
     index.document.search.index=fess_tenant2.search
 
 .. note::
-   ``index.document.search.index`` kann nur auf einen Wert pro Instanz gesetzt werden.
-   Fuer eine vollstaendige Trennung auf Index-Ebene muessen Sie separate |Fess|-Instanzen pro Mandant betreiben
-   oder benutzerdefinierten Code implementieren. Fuer typische Multitenancy reicht die logische Trennung ueber die Virtual-Host-Funktion aus.
+   ``index.document.search.index`` kann pro Instanz nur auf einen Wert gesetzt werden.
+   Für eine vollständige Trennung auf Index-Ebene müssen Sie für jeden Mandanten eine separate |Fess|-Instanz betreiben oder eine benutzerdefinierte Implementierung vornehmen. Für typisches Multitenancy ist die logische Trennung über die Virtueller-Host-Funktion ausreichend.
 
 Best Practices
 ==============
 
-1. **Klare Namenskonventionen**: Verwenden Sie konsistente Namenskonventionen fuer Virtual Hosts und Rollen
-2. **Testen**: Testen Sie die Operationen auf jedem Mandanten gruendlich
-3. **Ueberwachung**: Ueberwachen Sie die Ressourcennutzung fuer jeden Mandanten
-4. **Dokumentation**: Dokumentieren Sie Mandantenkonfigurationen
+1. **Klare Namenskonventionen**: Verwenden Sie konsistente Namenskonventionen für virtuelle Hosts und Rollen
+2. **Tests**: Testen Sie das Verhalten für jeden Mandanten gründlich
+3. **Überwachung**: Überwachen Sie die Ressourcennutzung pro Mandant
+4. **Dokumentation**: Dokumentieren Sie die Mandantenkonfigurationen
 
-Einschraenkungen
-================
+Einschränkungen
+===============
 
-- Das Admin-Panel wird von allen Mandanten gemeinsam genutzt
+- Die Verwaltungsoberfläche wird von allen Mandanten gemeinsam genutzt
 - Systemeinstellungen betreffen alle Mandanten
-- Einige Funktionen unterstuetzen moeglicherweise keine Virtual Hosts
+- Einige Funktionen unterstützen möglicherweise keine virtuellen Hosts
 
 Referenzinformationen
 =====================
 
 - :doc:`security-role` - Rollenbasierte Zugriffskontrolle
-- :doc:`security-virtual-host` - Virtual-Host-Konfigurationsdetails
+- :doc:`security-virtual-host` - Details zur Konfiguration virtueller Hosts
 - :doc:`../admin/design-guide` - Design-Anpassung
