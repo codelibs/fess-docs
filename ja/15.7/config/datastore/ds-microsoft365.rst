@@ -91,7 +91,7 @@ Microsoft 365コネクタは、Microsoft 365サービス（OneDrive、OneNote、
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - パラメーター
      - 必須
@@ -257,8 +257,18 @@ OneDrive
 - ``file.web_url`` - ブラウザで開くURL
 - ``file.url`` - ファイルURL
 - ``file.id`` - ドライブアイテムID
+- ``file.ctag`` - 変更タグ（cTag）
+- ``file.etag`` - エンティティタグ（eTag）
+- ``file.webdav_url`` - WebDAV URL
+- ``file.parent_id`` - 親フォルダのID
+- ``file.parent_name`` - 親フォルダ名
 - ``file.parent_path`` - 親フォルダのパス
 - ``file.roles`` - アクセス権限
+
+.. note::
+
+   上記以外にも ``file.createdby_user`` 、 ``file.last_modifiedby_user`` 、 ``file.image`` 、
+   ``file.video`` 、 ``file.special_folder`` などのMicrosoft Graphのメタデータフィールドが利用可能です。
 
 OneNote
 -------
@@ -299,15 +309,33 @@ Teams
 
 - ``message.title`` - メッセージタイトル
 - ``message.content`` - メッセージコンテンツ
+- ``message.body`` - メッセージ本文（HTMLを含む生データ）
+- ``message.subject`` - メッセージ件名
+- ``message.summary`` - メッセージの要約
+- ``message.importance`` - 重要度
+- ``message.from`` - 送信者情報
 - ``message.created_date_time`` - 作成日時
 - ``message.last_modified_date_time`` - 最終更新日時
+- ``message.last_edited_date_time`` - 最終編集日時
+- ``message.deleted_date_time`` - 削除日時
 - ``message.web_url`` - ブラウザで開くURL
+- ``message.id`` - メッセージID
+- ``message.etag`` - エンティティタグ
+- ``message.locale`` - ロケール
+- ``message.chat_id`` - チャットID
+- ``message.reply_to_id`` - 返信元メッセージID
+- ``message.channel_identity`` - チャネル識別情報（チームID・チャネルID）
+- ``message.mentions`` - メンション情報
+- ``message.attachments`` - 添付ファイル情報
+- ``message.replies`` - 返信メッセージ
+- ``message.hosted_contents`` - インラインコンテンツ（画像など）
 - ``message.roles`` - アクセス権限
-- ``message.from`` - 送信者情報
-- ``message.subject`` - メッセージ件名
-- ``message.importance`` - 重要度
-- ``message.team`` - チーム情報
-- ``message.channel`` - チャネル情報
+
+トップレベルフィールド（チャネルメッセージの場合のみ設定されます）:
+
+- ``team`` - チーム（Microsoft Graphの ``Group`` オブジェクト）
+- ``channel`` - チャネル（Microsoft Graphの ``Channel`` オブジェクト）
+- ``parent`` - 親メッセージ（返信メッセージの場合に設定）
 
 SharePoint Document Libraries
 ------------------------------
@@ -359,7 +387,6 @@ SharePoint Lists
 - ``item.id`` - リストアイテムID
 - ``item.content_type`` - コンテンツタイプ
 - ``item.fields`` - すべてのフィールドのマップ
-- ``item.attachments`` - 添付ファイル
 - ``item.roles`` - アクセス権限
 
 SharePoint Pages
@@ -509,7 +536,7 @@ OneDrive全ドライブのクロール
     role=file.roles
 
 特定チームのTeamsメッセージをクロール
-------------------------------------
+--------------------------------------
 
 パラメーター:
 

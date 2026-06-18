@@ -76,7 +76,7 @@ Basic Settings
      - On
 
 Common Parameter Configuration
-------------------------------
+-------------------------------
 
 ::
 
@@ -91,7 +91,7 @@ Common Parameter List
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Required
@@ -111,18 +111,27 @@ Common Parameter List
    * - ``ignore_error``
      - No
      - Continue processing on errors (default: false)
-   * - ``include_pattern``
+   * - ``max_content_length``
      - No
-     - Regex pattern for content to include
-   * - ``exclude_pattern``
+     - Maximum size of content to retrieve (default: -1, unlimited)
+   * - ``cache_size``
      - No
-     - Regex pattern for content to exclude
-   * - ``default_permissions``
+     - Cache size for user/group information (default: 10000)
+   * - ``proxy_host``
      - No
-     - Default role assignment
+     - HTTP proxy host
+   * - ``proxy_port``
+     - No
+     - HTTP proxy port
+   * - ``proxy_username``
+     - No
+     - Proxy authentication username
+   * - ``proxy_password``
+     - No
+     - Proxy authentication password
 
 Azure AD Application Registration
-=================================
+==================================
 
 1. Register an Application in Azure Portal
 ------------------------------------------
@@ -130,8 +139,8 @@ Azure AD Application Registration
 Open Azure Active Directory at https://portal.azure.com:
 
 1. Click "App registrations" -> "New registration"
-2. Enter application name
-3. Select supported account types
+2. Enter the application name
+3. Select the supported account types
 4. Click "Register"
 
 2. Create Client Secret
@@ -140,8 +149,8 @@ Open Azure Active Directory at https://portal.azure.com:
 In "Certificates & secrets":
 
 1. Click "New client secret"
-2. Set description and expiration
-3. Copy the secret value (cannot be viewed later)
+2. Set the description and expiration
+3. Copy the secret value (it cannot be viewed later)
 
 3. Add API Permissions
 ----------------------
@@ -151,11 +160,11 @@ In "API permissions":
 1. Click "Add a permission"
 2. Select "Microsoft Graph"
 3. Select "Application permissions"
-4. Add required permissions (see below)
+4. Add the required permissions (see below)
 5. Click "Grant admin consent"
 
 Required Permissions by Data Store
-==================================
+====================================
 
 OneDriveDataStore
 -----------------
@@ -208,7 +217,7 @@ Required permissions:
 - ``Files.Read.All``
 - ``Sites.Read.All``
 
-Or ``Sites.Selected`` (when site_id specified, configuration needed per site)
+Or ``Sites.Selected`` (when site_id is specified, configuration is required per site)
 
 SharePointListDataStore / SharePointPageDataStore
 -------------------------------------------------
@@ -217,7 +226,7 @@ Required permissions:
 
 - ``Sites.Read.All``
 
-Or ``Sites.Selected`` (when site_id specified, configuration needed per site)
+Or ``Sites.Selected`` (when site_id is specified, configuration is required per site)
 
 Script Configuration
 ====================
@@ -242,11 +251,25 @@ Available fields:
 - ``file.contents`` - Text content
 - ``file.mimetype`` - MIME type
 - ``file.filetype`` - File type
-- ``file.created`` - Creation date
-- ``file.last_modified`` - Last modified date
+- ``file.created`` - Creation date and time
+- ``file.last_modified`` - Last modified date and time
 - ``file.size`` - File size
 - ``file.web_url`` - URL to open in browser
+- ``file.url`` - File URL
+- ``file.id`` - Drive item ID
+- ``file.ctag`` - Change tag (cTag)
+- ``file.etag`` - Entity tag (eTag)
+- ``file.webdav_url`` - WebDAV URL
+- ``file.parent_id`` - Parent folder ID
+- ``file.parent_name`` - Parent folder name
+- ``file.parent_path`` - Parent folder path
 - ``file.roles`` - Access permissions
+
+.. note::
+
+   In addition to the above, Microsoft Graph metadata fields such as ``file.createdby_user``,
+   ``file.last_modifiedby_user``, ``file.image``, ``file.video``, and ``file.special_folder``
+   are also available.
 
 OneNote
 -------
@@ -261,6 +284,16 @@ OneNote
     role=notebook.roles
     size=notebook.size
 
+Available fields:
+
+- ``notebook.name`` - Notebook name
+- ``notebook.contents`` - Integrated content of sections and pages
+- ``notebook.size`` - Content size (character count)
+- ``notebook.created`` - Creation date and time
+- ``notebook.last_modified`` - Last modified date and time
+- ``notebook.web_url`` - URL to open in browser
+- ``notebook.roles`` - Access permissions
+
 Teams
 -----
 
@@ -273,8 +306,40 @@ Teams
     url=message.web_url
     role=message.roles
 
+Available fields:
+
+- ``message.title`` - Message title
+- ``message.content`` - Message content
+- ``message.body`` - Message body (raw data including HTML)
+- ``message.subject`` - Message subject
+- ``message.summary`` - Message summary
+- ``message.importance`` - Importance
+- ``message.from`` - Sender information
+- ``message.created_date_time`` - Creation date and time
+- ``message.last_modified_date_time`` - Last modified date and time
+- ``message.last_edited_date_time`` - Last edited date and time
+- ``message.deleted_date_time`` - Deletion date and time
+- ``message.web_url`` - URL to open in browser
+- ``message.id`` - Message ID
+- ``message.etag`` - Entity tag
+- ``message.locale`` - Locale
+- ``message.chat_id`` - Chat ID
+- ``message.reply_to_id`` - Reply-to message ID
+- ``message.channel_identity`` - Channel identity information (team ID and channel ID)
+- ``message.mentions`` - Mention information
+- ``message.attachments`` - Attachment information
+- ``message.replies`` - Reply messages
+- ``message.hosted_contents`` - Inline content (images, etc.)
+- ``message.roles`` - Access permissions
+
+Top-level fields (set only for channel messages):
+
+- ``team`` - Team (Microsoft Graph ``Group`` object)
+- ``channel`` - Channel (Microsoft Graph ``Channel`` object)
+- ``parent`` - Parent message (set when the message is a reply)
+
 SharePoint Document Libraries
------------------------------
+------------------------------
 
 ::
 
@@ -284,6 +349,21 @@ SharePoint Document Libraries
     last_modified=doclib.modified
     url=doclib.url
     role=doclib.roles
+
+Available fields:
+
+- ``doclib.name`` - Document library name
+- ``doclib.description`` - Library description
+- ``doclib.content`` - Integrated content for search
+- ``doclib.created`` - Creation date and time
+- ``doclib.modified`` - Last modified date and time
+- ``doclib.url`` - SharePoint URL
+- ``doclib.web_url`` - URL to open in browser
+- ``doclib.id`` - Document library ID
+- ``doclib.type`` - Document type
+- ``doclib.site_name`` - Site name
+- ``doclib.site_url`` - Site URL
+- ``doclib.roles`` - Access permissions
 
 SharePoint Lists
 ----------------
@@ -297,6 +377,19 @@ SharePoint Lists
     url=item.url
     role=item.roles
 
+Available fields:
+
+- ``item.title`` - List item title
+- ``item.content`` - Text content
+- ``item.created`` - Creation date and time
+- ``item.modified`` - Last modified date and time
+- ``item.url`` - SharePoint URL
+- ``item.web_url`` - URL to open in browser
+- ``item.id`` - List item ID
+- ``item.content_type`` - Content type
+- ``item.fields`` - Map of all fields
+- ``item.roles`` - Access permissions
+
 SharePoint Pages
 ----------------
 
@@ -309,11 +402,116 @@ SharePoint Pages
     url=page.url
     role=page.roles
 
+Available fields:
+
+- ``page.title`` - Page title
+- ``page.content`` - Page content
+- ``page.created`` - Creation date and time
+- ``page.modified`` - Last modified date and time
+- ``page.url`` - SharePoint URL
+- ``page.web_url`` - URL to open in browser
+- ``page.id`` - Page ID
+- ``page.description`` - Page description
+- ``page.author`` - Author
+- ``page.type`` - Page type (news/article/page)
+- ``page.site_name`` - Site name
+- ``page.site_url`` - Site URL
+- ``page.promotion_state`` - Promotion state
+- ``page.roles`` - Access permissions
+
+Additional Parameters by Data Store
+=====================================
+
+OneDrive
+--------
+
+::
+
+    max_content_length=-1
+    ignore_folder=true
+    supported_mimetypes=.*
+    include_pattern=
+    exclude_pattern=
+    url_filter=
+    default_permissions=
+    drive_id=
+    shared_documents_drive_crawler=true
+    user_drive_crawler=true
+    group_drive_crawler=true
+
+OneNote
+-------
+
+::
+
+    site_note_crawler=true
+    user_note_crawler=true
+    group_note_crawler=true
+
+Teams
+-----
+
+::
+
+    team_id=
+    exclude_team_ids=
+    include_visibility=
+    channel_id=
+    chat_id=
+    default_permissions=
+    ignore_replies=false
+    append_attachment=true
+    ignore_system_events=true
+    title_dateformat=yyyy/MM/dd'T'HH:mm:ss
+    title_timezone_offset=Z
+
+SharePoint Document Libraries
+------------------------------
+
+::
+
+    site_id=
+    exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
+    ignore_system_libraries=true
+
+SharePoint Lists
+----------------
+
+::
+
+    site_id=hostname,siteCollectionId,siteId
+    list_id=
+    exclude_list_id=
+    list_template_filter=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
+    ignore_system_lists=true
+
+SharePoint Pages
+----------------
+
+::
+
+    site_id=
+    exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
+    ignore_system_pages=true
+    page_type_filter=
+
 Usage Examples
 ==============
 
 Crawling All OneDrive Drives
-----------------------------
+-----------------------------
 
 Parameters:
 
@@ -338,8 +536,8 @@ Script:
     url=file.web_url
     role=file.roles
 
-Crawling Teams Messages from Specific Team
-------------------------------------------
+Crawling Teams Messages from a Specific Team
+---------------------------------------------
 
 Parameters:
 
@@ -363,6 +561,31 @@ Script:
     url=message.web_url
     role=message.roles
 
+Crawling a SharePoint List
+---------------------------
+
+Parameters:
+
+::
+
+    tenant=12345678-1234-1234-1234-123456789abc
+    client_id=87654321-4321-4321-4321-123456789abc
+    client_secret=your_client_secret
+    site_id=contoso.sharepoint.com,686d3f1a-a383-4367-b5f5-93b99baabcf3,12048306-4e53-420e-bd7c-31af611f6d8a
+    list_template_filter=100,101
+    ignore_system_lists=true
+
+Script:
+
+::
+
+    title=item.title
+    content=item.content
+    created=item.created
+    last_modified=item.modified
+    url=item.url
+    role=item.roles
+
 Troubleshooting
 ===============
 
@@ -373,10 +596,10 @@ Authentication Errors
 
 **Check**:
 
-1. Verify tenant ID, client ID, and client secret are correct
-2. Verify required API permissions are granted in Azure Portal
-3. Verify admin consent has been granted
-4. Check client secret expiration
+1. Verify that the tenant ID, client ID, and client secret are correct
+2. Verify that the required API permissions are granted in Azure Portal
+3. Verify that admin consent has been granted
+4. Check the client secret expiration
 
 API Rate Limit Errors
 ---------------------
@@ -386,8 +609,8 @@ API Rate Limit Errors
 **Resolution**:
 
 1. Reduce ``number_of_threads`` (set to 1 or 2)
-2. Increase crawl interval
-3. Set ``ignore_error=true`` for continued processing
+2. Increase the crawl interval
+3. Set ``ignore_error=true`` to continue processing
 
 Cannot Retrieve Data
 --------------------
@@ -396,10 +619,36 @@ Cannot Retrieve Data
 
 **Check**:
 
-1. Verify target data exists
-2. Verify API permissions are correctly configured
-3. Check user/group drive crawler settings
-4. Check logs for error messages
+1. Verify that the target data exists
+2. Verify that the API permissions are correctly configured
+3. Check the user/group drive crawler settings
+4. Check the logs for error messages
+
+How to Find the SharePoint Site ID
+------------------------------------
+
+Using PowerShell:
+
+::
+
+    Connect-PnPOnline -Url "https://contoso.sharepoint.com/sites/yoursite" -Interactive
+    Get-PnPSite | Select Id
+
+Or using the Microsoft Graph API:
+
+::
+
+    GET https://graph.microsoft.com/v1.0/sites/contoso.sharepoint.com:/sites/yoursite
+
+Crawling Large Volumes of Data
+-------------------------------
+
+**Resolution**:
+
+1. Split into multiple data stores (per site, per drive, etc.)
+2. Use scheduled settings to distribute the load
+3. Adjust ``number_of_threads`` for parallel processing
+4. Crawl only specific folders/sites
 
 Reference Information
 =====================

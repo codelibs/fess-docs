@@ -2,40 +2,40 @@
 Connecteur Microsoft 365
 ==================================
 
-Apercu
-====
+Aperçu
+======
 
-Le connecteur Microsoft 365 fournit la fonctionnalite permettant de recuperer des donnees
+Le connecteur Microsoft 365 fournit la fonctionnalité permettant de récupérer des données
 depuis les services Microsoft 365 (OneDrive, OneNote, Teams, SharePoint) et de les enregistrer dans l'index |Fess|.
 
-Cette fonctionnalite necessite le plugin ``fess-ds-microsoft365``.
+Cette fonctionnalité nécessite le plugin ``fess-ds-microsoft365``.
 
 Services pris en charge
-============
+=======================
 
-- **OneDrive** : Drives utilisateurs, drives de groupe, documents partages
+- **OneDrive** : Drives utilisateurs, drives de groupe, documents partagés
 - **OneNote** : Carnets (sites, utilisateurs, groupes)
 - **Teams** : Canaux, messages, chats
-- **SharePoint Document Libraries** : Metadonnees des bibliotheques de documents
-- **SharePoint Lists** : Listes et elements de liste
-- **SharePoint Pages** : Pages de site, articles d'actualites
+- **SharePoint Document Libraries** : Métadonnées des bibliothèques de documents
+- **SharePoint Lists** : Listes et éléments de liste
+- **SharePoint Pages** : Pages de site, articles d'actualités
 
-Prerequis
-========
+Prérequis
+=========
 
 1. L'installation du plugin est requise
-2. L'enregistrement de l'application Azure AD est necessaire
+2. L'enregistrement de l'application Azure AD est nécessaire
 3. La configuration des permissions de l'API Microsoft Graph et le consentement administrateur sont requis
-4. Java 21 ou superieur, Fess 15.2.0 ou superieur
+4. Java 21 ou supérieur, Fess 15.2.0 ou supérieur
 
 Installation du plugin
-------------------------
+----------------------
 
-Methode 1 : Placement direct du fichier JAR
+Méthode 1 : Placement direct du fichier JAR
 
 ::
 
-    # Telecharger depuis Maven Central
+    # Télécharger depuis Maven Central
     wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
 
     # Placement
@@ -43,7 +43,7 @@ Methode 1 : Placement direct du fichier JAR
     # ou
     sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
 
-Methode 2 : Build depuis les sources
+Méthode 2 : Build depuis les sources
 
 ::
 
@@ -52,31 +52,31 @@ Methode 2 : Build depuis les sources
     mvn clean package
     cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/lib/
 
-Apres l'installation, redemarrez |Fess|.
+Après l'installation, redémarrez |Fess|.
 
 Configuration
-========
+=============
 
-Configurez depuis l'interface d'administration via "Crawler" -> "Data Store" -> "Nouveau".
+Configurez depuis l'interface d'administration via « Crawler » → « Data Store » → « Nouveau ».
 
 Configuration de base
---------
+---------------------
 
 .. list-table::
    :header-rows: 1
    :widths: 25 75
 
-   * - Element
-     - Exemple
+   * - Élément
+     - Exemple de configuration
    * - Nom
      - Microsoft 365 OneDrive
    * - Nom du gestionnaire
      - OneDriveDataStore / OneNoteDataStore / TeamsDataStore / SharePointDocLibDataStore / SharePointListDataStore / SharePointPageDataStore
-   * - Active
+   * - Activé
      - Oui
 
-Configuration des parametres (communs)
-------------------------
+Configuration des paramètres (communs)
+--------------------------------------
 
 ::
 
@@ -86,14 +86,14 @@ Configuration des parametres (communs)
     number_of_threads=1
     ignore_error=false
 
-Liste des parametres communs
-~~~~~~~~~~~~~~~~~~~~
+Liste des paramètres communs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
-   * - Parametre
+   * - Paramètre
      - Requis
      - Description
    * - ``tenant``
@@ -107,55 +107,64 @@ Liste des parametres communs
      - Secret client de l'enregistrement d'application
    * - ``number_of_threads``
      - Non
-     - Nombre de threads de traitement parallele (par defaut : 1)
+     - Nombre de threads de traitement parallèle (par défaut : 1)
    * - ``ignore_error``
      - Non
-     - Continuer le traitement en cas d'erreur (par defaut : false)
-   * - ``include_pattern``
+     - Continuer le traitement en cas d'erreur (par défaut : false)
+   * - ``max_content_length``
      - Non
-     - Pattern regex pour le contenu a inclure
-   * - ``exclude_pattern``
+     - Taille maximale du contenu récupéré (par défaut : -1, illimité)
+   * - ``cache_size``
      - Non
-     - Pattern regex pour le contenu a exclure
-   * - ``default_permissions``
+     - Taille du cache des informations utilisateur/groupe (par défaut : 10000)
+   * - ``proxy_host``
      - Non
-     - Attribution de role par defaut
+     - Hôte du proxy HTTP
+   * - ``proxy_port``
+     - Non
+     - Port du proxy HTTP
+   * - ``proxy_username``
+     - Non
+     - Nom d'utilisateur pour l'authentification proxy
+   * - ``proxy_password``
+     - Non
+     - Mot de passe pour l'authentification proxy
 
 Enregistrement d'application Azure AD
-============================
+======================================
 
 1. Enregistrer une application dans le portail Azure
----------------------------------------
+-----------------------------------------------------
 
 Ouvrez Azure Active Directory dans https://portal.azure.com :
 
-1. Cliquez sur "Inscriptions d'applications" -> "Nouvelle inscription"
+1. Cliquez sur « Inscriptions d'applications » → « Nouvelle inscription »
 2. Entrez le nom de l'application
-3. Selectionnez les types de comptes pris en charge
-4. Cliquez sur "Inscrire"
+3. Sélectionnez les types de comptes pris en charge
+4. Cliquez sur « Inscrire »
 
-2. Creation du secret client
----------------------------------
+2. Création du secret client
+-----------------------------
 
-Dans "Certificats et secrets" :
+Dans « Certificats et secrets » :
 
-1. Cliquez sur "Nouveau secret client"
-2. Definissez une description et une date d'expiration
-3. Copiez la valeur du secret (attention : elle ne sera plus visible apres)
+1. Cliquez sur « Nouveau secret client »
+2. Définissez une description et une date d'expiration
+3. Copiez la valeur du secret (attention : elle ne sera plus visible après)
 
 3. Ajout des permissions API
-----------------
+-----------------------------
 
-Dans "Permissions de l'API" :
+Dans « Autorisations des API » :
 
-1. Cliquez sur "Ajouter une autorisation"
-2. Selectionnez "Microsoft Graph"
-3. Selectionnez "Autorisations d'application"
-4. Ajoutez les permissions necessaires (voir ci-dessous)
-5. Cliquez sur "Accorder un consentement d'administrateur"
+1. Cliquez sur « Ajouter une autorisation »
+2. Sélectionnez « Microsoft Graph »
+3. Sélectionnez « Autorisations d'application »
+4. Ajoutez les permissions nécessaires (voir ci-dessous)
+5. Cliquez sur « Accorder un consentement d'administrateur »
 
 Permissions requises par Data Store
-==========================
+=====================================
 
 OneDriveDataStore
 -----------------
@@ -197,7 +206,7 @@ Permissions requises :
 
 Permissions conditionnelles :
 
-- ``Chat.Read.All`` - si chat_id est specifie
+- ``Chat.Read.All`` - si chat_id est spécifié
 - ``Files.Read.All`` - si append_attachment=true
 
 SharePointDocLibDataStore
@@ -208,7 +217,7 @@ Permissions requises :
 - ``Files.Read.All``
 - ``Sites.Read.All``
 
-Ou ``Sites.Selected`` (lorsque site_id est specifie, configuration requise par site)
+Ou ``Sites.Selected`` (lorsque site_id est spécifié, configuration requise par site)
 
 SharePointListDataStore / SharePointPageDataStore
 -------------------------------------------------
@@ -217,10 +226,10 @@ Permissions requises :
 
 - ``Sites.Read.All``
 
-Ou ``Sites.Selected`` (lorsque site_id est specifie, configuration requise par site)
+Ou ``Sites.Selected`` (lorsque site_id est spécifié, configuration requise par site)
 
 Configuration du script
-==============
+========================
 
 OneDrive
 --------
@@ -242,11 +251,24 @@ Champs disponibles :
 - ``file.contents`` - Contenu textuel
 - ``file.mimetype`` - Type MIME
 - ``file.filetype`` - Type de fichier
-- ``file.created`` - Date de creation
-- ``file.last_modified`` - Date de derniere modification
+- ``file.created`` - Date de création
+- ``file.last_modified`` - Date de dernière modification
 - ``file.size`` - Taille du fichier
 - ``file.web_url`` - URL pour ouvrir dans le navigateur
-- ``file.roles`` - Permissions d'acces
+- ``file.url`` - URL du fichier
+- ``file.id`` - ID de l'élément du drive
+- ``file.ctag`` - Tag de modification (cTag)
+- ``file.etag`` - Tag d'entité (eTag)
+- ``file.webdav_url`` - URL WebDAV
+- ``file.parent_id`` - ID du dossier parent
+- ``file.parent_name`` - Nom du dossier parent
+- ``file.parent_path`` - Chemin du dossier parent
+- ``file.roles`` - Permissions d'accès
+
+.. note::
+
+   En plus des champs ci-dessus, d'autres champs de métadonnées Microsoft Graph sont disponibles, notamment ``file.createdby_user``, ``file.last_modifiedby_user``, ``file.image``,
+   ``file.video``, ``file.special_folder``, etc.
 
 OneNote
 -------
@@ -264,12 +286,12 @@ OneNote
 Champs disponibles :
 
 - ``notebook.name`` - Nom du carnet
-- ``notebook.contents`` - Contenu integre des sections et pages
-- ``notebook.size`` - Taille du contenu (caracteres)
-- ``notebook.created`` - Date de creation
-- ``notebook.last_modified`` - Date de derniere modification
+- ``notebook.contents`` - Contenu intégré des sections et pages
+- ``notebook.size`` - Taille du contenu (nombre de caractères)
+- ``notebook.created`` - Date de création
+- ``notebook.last_modified`` - Date de dernière modification
 - ``notebook.web_url`` - URL pour ouvrir dans le navigateur
-- ``notebook.roles`` - Permissions d'acces
+- ``notebook.roles`` - Permissions d'accès
 
 Teams
 -----
@@ -287,11 +309,33 @@ Champs disponibles :
 
 - ``message.title`` - Titre du message
 - ``message.content`` - Contenu du message
-- ``message.created_date_time`` - Date de creation
-- ``message.last_modified_date_time`` - Date de derniere modification
+- ``message.body`` - Corps du message (données brutes incluant le HTML)
+- ``message.subject`` - Objet du message
+- ``message.summary`` - Résumé du message
+- ``message.importance`` - Importance
+- ``message.from`` - Informations sur l'expéditeur
+- ``message.created_date_time`` - Date de création
+- ``message.last_modified_date_time`` - Date de dernière modification
+- ``message.last_edited_date_time`` - Date de dernière édition
+- ``message.deleted_date_time`` - Date de suppression
 - ``message.web_url`` - URL pour ouvrir dans le navigateur
-- ``message.roles`` - Permissions d'acces
-- ``message.from`` - Informations sur l'expediteur
+- ``message.id`` - ID du message
+- ``message.etag`` - Tag d'entité
+- ``message.locale`` - Paramètre régional
+- ``message.chat_id`` - ID du chat
+- ``message.reply_to_id`` - ID du message d'origine de la réponse
+- ``message.channel_identity`` - Identité du canal (ID d'équipe et ID de canal)
+- ``message.mentions`` - Informations sur les mentions
+- ``message.attachments`` - Informations sur les pièces jointes
+- ``message.replies`` - Messages de réponse
+- ``message.hosted_contents`` - Contenu inline (images, etc.)
+- ``message.roles`` - Permissions d'accès
+
+Champs de premier niveau (définis uniquement pour les messages de canal) :
+
+- ``team`` - Équipe (objet ``Group`` de Microsoft Graph)
+- ``channel`` - Canal (objet ``Channel`` de Microsoft Graph)
+- ``parent`` - Message parent (défini pour les messages de réponse)
 
 SharePoint Document Libraries
 ------------------------------
@@ -307,13 +351,18 @@ SharePoint Document Libraries
 
 Champs disponibles :
 
-- ``doclib.name`` - Nom de la bibliotheque de documents
-- ``doclib.description`` - Description de la bibliotheque
-- ``doclib.content`` - Contenu integre pour la recherche
-- ``doclib.created`` - Date de creation
-- ``doclib.modified`` - Date de derniere modification
+- ``doclib.name`` - Nom de la bibliothèque de documents
+- ``doclib.description`` - Description de la bibliothèque
+- ``doclib.content`` - Contenu intégré pour la recherche
+- ``doclib.created`` - Date de création
+- ``doclib.modified`` - Date de dernière modification
 - ``doclib.url`` - URL SharePoint
+- ``doclib.web_url`` - URL pour ouvrir dans le navigateur
+- ``doclib.id`` - ID de la bibliothèque de documents
+- ``doclib.type`` - Type de document
 - ``doclib.site_name`` - Nom du site
+- ``doclib.site_url`` - URL du site
+- ``doclib.roles`` - Permissions d'accès
 
 SharePoint Lists
 ----------------
@@ -329,13 +378,16 @@ SharePoint Lists
 
 Champs disponibles :
 
-- ``item.title`` - Titre de l'element de liste
+- ``item.title`` - Titre de l'élément de liste
 - ``item.content`` - Contenu textuel
-- ``item.created`` - Date de creation
-- ``item.modified`` - Date de derniere modification
+- ``item.created`` - Date de création
+- ``item.modified`` - Date de dernière modification
 - ``item.url`` - URL SharePoint
+- ``item.web_url`` - URL pour ouvrir dans le navigateur
+- ``item.id`` - ID de l'élément de liste
+- ``item.content_type`` - Type de contenu
 - ``item.fields`` - Map de tous les champs
-- ``item.roles`` - Permissions d'acces
+- ``item.roles`` - Permissions d'accès
 
 SharePoint Pages
 ----------------
@@ -353,14 +405,21 @@ Champs disponibles :
 
 - ``page.title`` - Titre de la page
 - ``page.content`` - Contenu de la page
-- ``page.created`` - Date de creation
-- ``page.modified`` - Date de derniere modification
+- ``page.created`` - Date de création
+- ``page.modified`` - Date de dernière modification
 - ``page.url`` - URL SharePoint
+- ``page.web_url`` - URL pour ouvrir dans le navigateur
+- ``page.id`` - ID de la page
+- ``page.description`` - Description de la page
+- ``page.author`` - Auteur
 - ``page.type`` - Type de page (news/article/page)
-- ``page.roles`` - Permissions d'acces
+- ``page.site_name`` - Nom du site
+- ``page.site_url`` - URL du site
+- ``page.promotion_state`` - État de promotion
+- ``page.roles`` - Permissions d'accès
 
-Parametres supplementaires par Data Store
-================================
+Paramètres supplémentaires par Data Store
+==========================================
 
 OneDrive
 --------
@@ -370,6 +429,10 @@ OneDrive
     max_content_length=-1
     ignore_folder=true
     supported_mimetypes=.*
+    include_pattern=
+    exclude_pattern=
+    url_filter=
+    default_permissions=
     drive_id=
     shared_documents_drive_crawler=true
     user_drive_crawler=true
@@ -394,6 +457,7 @@ Teams
     include_visibility=
     channel_id=
     chat_id=
+    default_permissions=
     ignore_replies=false
     append_attachment=true
     ignore_system_events=true
@@ -407,6 +471,10 @@ SharePoint Document Libraries
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_libraries=true
 
 SharePoint Lists
@@ -418,6 +486,10 @@ SharePoint Lists
     list_id=
     exclude_list_id=
     list_template_filter=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_lists=true
 
 SharePoint Pages
@@ -427,16 +499,20 @@ SharePoint Pages
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_pages=true
     page_type_filter=
 
 Exemples d'utilisation
-======
+=======================
 
 Crawl de tous les drives OneDrive
-----------------------------
+----------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -459,10 +535,10 @@ Script :
     url=file.web_url
     role=file.roles
 
-Crawl des messages Teams d'une equipe specifique
-------------------------------------
+Crawl des messages Teams d'une équipe spécifique
+-------------------------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -472,7 +548,7 @@ Parametres :
     team_id=19:abc123def456@thread.tacv2
     ignore_replies=false
     append_attachment=true
-    title_timezone_offset=+01:00
+    title_timezone_offset=+09:00
 
 Script :
 
@@ -485,9 +561,9 @@ Script :
     role=message.roles
 
 Crawl des listes SharePoint
---------------------------
+----------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -509,48 +585,48 @@ Script :
     url=item.url
     role=item.roles
 
-Depannage
-======================
+Dépannage
+==========
 
 Erreur d'authentification
-----------
+--------------------------
 
-**Symptome** : ``Authentication failed`` ou ``Insufficient privileges``
+**Symptôme** : ``Authentication failed`` ou ``Insufficient privileges``
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si l'ID de locataire, l'ID client et le secret client sont corrects
-2. Verifier si les permissions API necessaires sont accordees dans le portail Azure
-3. Verifier si le consentement administrateur a ete donne
-4. Verifier la date d'expiration du secret client
+1. Vérifier si l'ID de locataire, l'ID client et le secret client sont corrects
+2. Vérifier si les permissions API nécessaires sont accordées dans le portail Azure
+3. Vérifier si le consentement administrateur a été accordé
+4. Vérifier la date d'expiration du secret client
 
-Erreur de limitation de debit API
--------------------
+Erreur de limitation de débit API
+-----------------------------------
 
-**Symptome** : ``429 Too Many Requests``
+**Symptôme** : ``429 Too Many Requests``
 
 **Solution** :
 
-1. Reduire ``number_of_threads`` (definir a 1 ou 2)
+1. Réduire ``number_of_threads`` (définir à 1 ou 2)
 2. Augmenter l'intervalle de crawl
-3. Definir ``ignore_error=true`` pour continuer le traitement
+3. Définir ``ignore_error=true`` pour continuer le traitement
 
-Impossible de recuperer les donnees
---------------------
+Impossible de récupérer les données
+-------------------------------------
 
-**Symptome** : Le crawl reussit mais 0 documents
+**Symptôme** : Le crawl réussit mais 0 documents
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si les donnees cibles existent
-2. Verifier si les permissions API sont correctement configurees
-3. Verifier les parametres du crawler de drive utilisateur/groupe
-4. Verifier les messages d'erreur dans les logs
+1. Vérifier si les données cibles existent
+2. Vérifier si les permissions API sont correctement configurées
+3. Vérifier les paramètres du crawler de drive utilisateur/groupe
+4. Vérifier les messages d'erreur dans les logs
 
-Comment verifier l'ID de site SharePoint
-----------------------------
+Comment vérifier l'ID de site SharePoint
+------------------------------------------
 
-Verifier avec PowerShell :
+Vérifier avec PowerShell :
 
 ::
 
@@ -563,20 +639,20 @@ Ou avec l'API Microsoft Graph :
 
     GET https://graph.microsoft.com/v1.0/sites/contoso.sharepoint.com:/sites/yoursite
 
-Crawl de donnees volumineuses
---------------------
+Crawl de données volumineuses
+-------------------------------
 
 **Solution** :
 
 1. Diviser en plusieurs data stores (par site, par drive, etc.)
-2. Repartir la charge avec les parametres de planification
-3. Ajuster ``number_of_threads`` pour le traitement parallele
-4. Crawler uniquement des dossiers/sites specifiques
+2. Répartir la charge avec les paramètres de planification
+3. Ajuster ``number_of_threads`` pour le traitement parallèle
+4. Crawler uniquement des dossiers/sites spécifiques
 
-Informations de reference
-========
+Informations de référence
+===========================
 
-- :doc:`ds-overview` - Apercu des connecteurs Data Store
+- :doc:`ds-overview` - Aperçu des connecteurs Data Store
 - :doc:`ds-gsuite` - Connecteur Google Workspace
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration Data Store
 - `Microsoft Graph API <https://docs.microsoft.com/en-us/graph/>`_

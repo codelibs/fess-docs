@@ -90,7 +90,7 @@ Gemeinsame Parameterliste
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Erforderlich
@@ -110,15 +110,24 @@ Gemeinsame Parameterliste
    * - ``ignore_error``
      - Nein
      - Bei Fehler Verarbeitung fortsetzen (Standard: false)
-   * - ``include_pattern``
+   * - ``max_content_length``
      - Nein
-     - Regex-Muster für einzuschließende Inhalte
-   * - ``exclude_pattern``
+     - Maximale Größe des abgerufenen Inhalts (Standard: -1, unbegrenzt)
+   * - ``cache_size``
      - Nein
-     - Regex-Muster für auszuschließende Inhalte
-   * - ``default_permissions``
+     - Cache-Größe für Benutzer- und Gruppeninformationen (Standard: 10000)
+   * - ``proxy_host``
      - Nein
-     - Standard-Rollenzuweisung
+     - HTTP-Proxy-Host
+   * - ``proxy_port``
+     - Nein
+     - HTTP-Proxy-Port
+   * - ``proxy_username``
+     - Nein
+     - Proxy-Authentifizierungsbenutzername
+   * - ``proxy_password``
+     - Nein
+     - Proxy-Authentifizierungspasswort
 
 Azure AD-Anwendungsregistrierung
 ================================
@@ -245,7 +254,20 @@ Verfügbare Felder:
 - ``file.last_modified`` - Letztes Änderungsdatum
 - ``file.size`` - Dateigröße
 - ``file.web_url`` - URL zum Öffnen im Browser
+- ``file.url`` - Datei-URL
+- ``file.id`` - Drive-Element-ID
+- ``file.ctag`` - Änderungs-Tag (cTag)
+- ``file.etag`` - Entitäts-Tag (eTag)
+- ``file.webdav_url`` - WebDAV-URL
+- ``file.parent_id`` - ID des übergeordneten Ordners
+- ``file.parent_name`` - Name des übergeordneten Ordners
+- ``file.parent_path`` - Pfad des übergeordneten Ordners
 - ``file.roles`` - Zugriffsberechtigungen
+
+.. note::
+
+   Neben den oben genannten Feldern stehen weitere Microsoft Graph-Metadatenfelder zur Verfügung, wie ``file.createdby_user``, ``file.last_modifiedby_user``, ``file.image``,
+   ``file.video`` und ``file.special_folder``.
 
 OneNote
 -------
@@ -286,14 +308,36 @@ Verfügbare Felder:
 
 - ``message.title`` - Nachrichtentitel
 - ``message.content`` - Nachrichteninhalt
+- ``message.body`` - Nachrichtentext (Rohdaten einschließlich HTML)
+- ``message.subject`` - Betreff der Nachricht
+- ``message.summary`` - Zusammenfassung der Nachricht
+- ``message.importance`` - Wichtigkeit
+- ``message.from`` - Absenderinformationen
 - ``message.created_date_time`` - Erstellungsdatum
 - ``message.last_modified_date_time`` - Letztes Änderungsdatum
+- ``message.last_edited_date_time`` - Zuletzt bearbeitetes Datum
+- ``message.deleted_date_time`` - Löschdatum
 - ``message.web_url`` - URL zum Öffnen im Browser
+- ``message.id`` - Nachrichten-ID
+- ``message.etag`` - Entitäts-Tag
+- ``message.locale`` - Gebietsschema
+- ``message.chat_id`` - Chat-ID
+- ``message.reply_to_id`` - ID der übergeordneten Nachricht
+- ``message.channel_identity`` - Kanalidentifikation (Team-ID und Kanal-ID)
+- ``message.mentions`` - Erwähnungsinformationen
+- ``message.attachments`` - Anhangsinformationen
+- ``message.replies`` - Antwortnachrichten
+- ``message.hosted_contents`` - Inline-Inhalte (z. B. Bilder)
 - ``message.roles`` - Zugriffsberechtigungen
-- ``message.from`` - Absenderinformationen
+
+Felder der obersten Ebene (nur bei Kanalnachrichten gesetzt):
+
+- ``team`` - Team (``Group``-Objekt aus Microsoft Graph)
+- ``channel`` - Kanal (``Channel``-Objekt aus Microsoft Graph)
+- ``parent`` - Übergeordnete Nachricht (bei Antwortnachrichten gesetzt)
 
 SharePoint Document Libraries
------------------------------
+------------------------------
 
 ::
 
@@ -312,7 +356,12 @@ Verfügbare Felder:
 - ``doclib.created`` - Erstellungsdatum
 - ``doclib.modified`` - Letztes Änderungsdatum
 - ``doclib.url`` - SharePoint-URL
+- ``doclib.web_url`` - URL zum Öffnen im Browser
+- ``doclib.id`` - Dokumentbibliothek-ID
+- ``doclib.type`` - Dokumenttyp
 - ``doclib.site_name`` - Site-Name
+- ``doclib.site_url`` - Site-URL
+- ``doclib.roles`` - Zugriffsberechtigungen
 
 SharePoint Lists
 ----------------
@@ -333,6 +382,9 @@ Verfügbare Felder:
 - ``item.created`` - Erstellungsdatum
 - ``item.modified`` - Letztes Änderungsdatum
 - ``item.url`` - SharePoint-URL
+- ``item.web_url`` - URL zum Öffnen im Browser
+- ``item.id`` - Listenelement-ID
+- ``item.content_type`` - Inhaltstyp
 - ``item.fields`` - Map aller Felder
 - ``item.roles`` - Zugriffsberechtigungen
 
@@ -355,7 +407,14 @@ Verfügbare Felder:
 - ``page.created`` - Erstellungsdatum
 - ``page.modified`` - Letztes Änderungsdatum
 - ``page.url`` - SharePoint-URL
+- ``page.web_url`` - URL zum Öffnen im Browser
+- ``page.id`` - Seiten-ID
+- ``page.description`` - Seitenbeschreibung
+- ``page.author`` - Ersteller
 - ``page.type`` - Seitentyp (news/article/page)
+- ``page.site_name`` - Site-Name
+- ``page.site_url`` - Site-URL
+- ``page.promotion_state`` - Promotionsstatus
 - ``page.roles`` - Zugriffsberechtigungen
 
 Zusätzliche Parameter nach Datenspeicher
@@ -369,6 +428,10 @@ OneDrive
     max_content_length=-1
     ignore_folder=true
     supported_mimetypes=.*
+    include_pattern=
+    exclude_pattern=
+    url_filter=
+    default_permissions=
     drive_id=
     shared_documents_drive_crawler=true
     user_drive_crawler=true
@@ -393,6 +456,7 @@ Teams
     include_visibility=
     channel_id=
     chat_id=
+    default_permissions=
     ignore_replies=false
     append_attachment=true
     ignore_system_events=true
@@ -406,6 +470,10 @@ SharePoint Document Libraries
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_libraries=true
 
 SharePoint Lists
@@ -417,6 +485,10 @@ SharePoint Lists
     list_id=
     exclude_list_id=
     list_template_filter=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_lists=true
 
 SharePoint Pages
@@ -426,6 +498,10 @@ SharePoint Pages
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_pages=true
     page_type_filter=
 
@@ -471,7 +547,7 @@ Parameter:
     team_id=19:abc123def456@thread.tacv2
     ignore_replies=false
     append_attachment=true
-    title_timezone_offset=+01:00
+    title_timezone_offset=+09:00
 
 Skript:
 

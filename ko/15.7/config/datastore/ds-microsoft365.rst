@@ -5,7 +5,7 @@ Microsoft 365 커넥터
 개요
 ====
 
-Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, SharePoint)에서 데이터를 가져와서
+Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, SharePoint)에서 데이터를 가져와
 |Fess| 인덱스에 등록하는 기능을 제공합니다.
 
 이 기능을 사용하려면 ``fess-ds-microsoft365`` 플러그인이 필요합니다.
@@ -20,8 +20,8 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
 - **SharePoint Lists**: 목록과 목록 항목
 - **SharePoint Pages**: 사이트 페이지, 뉴스 기사
 
-전제조건
-========
+전제 조건
+=========
 
 1. 플러그인 설치가 필요합니다
 2. Azure AD 애플리케이션 등록이 필요합니다
@@ -55,12 +55,12 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
 설치 후 |Fess|를 재시작하세요.
 
 설정 방법
-========
+=========
 
 관리 화면에서 "크롤러" → "데이터 스토어" → "새로 만들기"에서 설정합니다.
 
 기본 설정
---------
+---------
 
 .. list-table::
    :header-rows: 1
@@ -76,7 +76,7 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
      - 켬
 
 파라미터 설정(공통)
-------------------------
+-------------------
 
 ::
 
@@ -87,11 +87,11 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
     ignore_error=false
 
 공통 파라미터 목록
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - 파라미터
      - 필수
@@ -111,18 +111,27 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
    * - ``ignore_error``
      - 아니오
      - 오류 시에도 처리 계속(기본값: false)
-   * - ``include_pattern``
+   * - ``max_content_length``
      - 아니오
-     - 포함할 콘텐츠의 정규표현식 패턴
-   * - ``exclude_pattern``
+     - 가져올 콘텐츠의 최대 크기(기본값: -1, 무제한)
+   * - ``cache_size``
      - 아니오
-     - 제외할 콘텐츠의 정규표현식 패턴
-   * - ``default_permissions``
+     - 사용자·그룹 정보의 캐시 크기(기본값: 10000)
+   * - ``proxy_host``
      - 아니오
-     - 기본 역할 할당
+     - HTTP 프록시 호스트
+   * - ``proxy_port``
+     - 아니오
+     - HTTP 프록시 포트
+   * - ``proxy_username``
+     - 아니오
+     - 프록시 인증 사용자명
+   * - ``proxy_password``
+     - 아니오
+     - 프록시 인증 비밀번호
 
 Azure AD 애플리케이션 등록
-============================
+==========================
 
 1. Azure Portal에서 애플리케이션 등록
 ---------------------------------------
@@ -135,13 +144,13 @@ https://portal.azure.com 에서 Azure Active Directory를 열기:
 4. "등록" 클릭
 
 2. 클라이언트 시크릿 생성
----------------------------------
+--------------------------
 
 "인증서 및 비밀"에서:
 
 1. "새 클라이언트 시크릿" 클릭
 2. 설명과 유효기간 설정
-3. 시크릿 값 복사(나중에 확인 불가하므로 주의)
+3. 시크릿 값 복사(나중에 확인할 수 없으므로 주의)
 
 3. API 권한 추가
 ----------------
@@ -155,7 +164,7 @@ https://portal.azure.com 에서 Azure Active Directory를 열기:
 5. "관리자 동의 부여" 클릭
 
 데이터 스토어별 필요 권한
-==========================
+============================
 
 OneDriveDataStore
 -----------------
@@ -220,7 +229,7 @@ SharePointListDataStore / SharePointPageDataStore
 또는 ``Sites.Selected`` (site_id 지정 시, 사이트마다 설정 필요)
 
 스크립트 설정
-==============
+=============
 
 OneDrive
 --------
@@ -246,7 +255,20 @@ OneDrive
 - ``file.last_modified`` - 최종 수정 일시
 - ``file.size`` - 파일 크기
 - ``file.web_url`` - 브라우저에서 열 URL
+- ``file.url`` - 파일 URL
+- ``file.id`` - 드라이브 항목 ID
+- ``file.ctag`` - 변경 태그(cTag)
+- ``file.etag`` - 엔티티 태그(eTag)
+- ``file.webdav_url`` - WebDAV URL
+- ``file.parent_id`` - 상위 폴더 ID
+- ``file.parent_name`` - 상위 폴더 이름
+- ``file.parent_path`` - 상위 폴더 경로
 - ``file.roles`` - 액세스 권한
+
+.. note::
+
+   위 항목 외에도 ``file.createdby_user`` , ``file.last_modifiedby_user`` , ``file.image`` ,
+   ``file.video`` , ``file.special_folder`` 등의 Microsoft Graph 메타데이터 필드를 사용할 수 있습니다.
 
 OneNote
 -------
@@ -287,11 +309,33 @@ Teams
 
 - ``message.title`` - 메시지 제목
 - ``message.content`` - 메시지 콘텐츠
+- ``message.body`` - 메시지 본문(HTML 포함 원시 데이터)
+- ``message.subject`` - 메시지 제목(subject)
+- ``message.summary`` - 메시지 요약
+- ``message.importance`` - 중요도
+- ``message.from`` - 발신자 정보
 - ``message.created_date_time`` - 생성 일시
 - ``message.last_modified_date_time`` - 최종 수정 일시
+- ``message.last_edited_date_time`` - 최종 편집 일시
+- ``message.deleted_date_time`` - 삭제 일시
 - ``message.web_url`` - 브라우저에서 열 URL
+- ``message.id`` - 메시지 ID
+- ``message.etag`` - 엔티티 태그
+- ``message.locale`` - 로케일
+- ``message.chat_id`` - 채팅 ID
+- ``message.reply_to_id`` - 답장 대상 메시지 ID
+- ``message.channel_identity`` - 채널 식별 정보(팀 ID·채널 ID)
+- ``message.mentions`` - 멘션 정보
+- ``message.attachments`` - 첨부 파일 정보
+- ``message.replies`` - 답장 메시지
+- ``message.hosted_contents`` - 인라인 콘텐츠(이미지 등)
 - ``message.roles`` - 액세스 권한
-- ``message.from`` - 발신자 정보
+
+최상위 레벨 필드(채널 메시지의 경우에만 설정됩니다):
+
+- ``team`` - 팀(Microsoft Graph의 ``Group`` 오브젝트)
+- ``channel`` - 채널(Microsoft Graph의 ``Channel`` 오브젝트)
+- ``parent`` - 상위 메시지(답장 메시지인 경우에 설정)
 
 SharePoint Document Libraries
 ------------------------------
@@ -313,7 +357,12 @@ SharePoint Document Libraries
 - ``doclib.created`` - 생성 일시
 - ``doclib.modified`` - 최종 수정 일시
 - ``doclib.url`` - SharePoint URL
+- ``doclib.web_url`` - 브라우저에서 열 URL
+- ``doclib.id`` - 문서 라이브러리 ID
+- ``doclib.type`` - 문서 타입
 - ``doclib.site_name`` - 사이트 이름
+- ``doclib.site_url`` - 사이트 URL
+- ``doclib.roles`` - 액세스 권한
 
 SharePoint Lists
 ----------------
@@ -334,6 +383,9 @@ SharePoint Lists
 - ``item.created`` - 생성 일시
 - ``item.modified`` - 최종 수정 일시
 - ``item.url`` - SharePoint URL
+- ``item.web_url`` - 브라우저에서 열 URL
+- ``item.id`` - 목록 항목 ID
+- ``item.content_type`` - 콘텐츠 타입
 - ``item.fields`` - 모든 필드의 맵
 - ``item.roles`` - 액세스 권한
 
@@ -356,11 +408,18 @@ SharePoint Pages
 - ``page.created`` - 생성 일시
 - ``page.modified`` - 최종 수정 일시
 - ``page.url`` - SharePoint URL
+- ``page.web_url`` - 브라우저에서 열 URL
+- ``page.id`` - 페이지 ID
+- ``page.description`` - 페이지 설명
+- ``page.author`` - 작성자
 - ``page.type`` - 페이지 타입(news/article/page)
+- ``page.site_name`` - 사이트 이름
+- ``page.site_url`` - 사이트 URL
+- ``page.promotion_state`` - 프로모션 상태
 - ``page.roles`` - 액세스 권한
 
 데이터 스토어별 추가 파라미터
-================================
+==============================
 
 OneDrive
 --------
@@ -370,6 +429,10 @@ OneDrive
     max_content_length=-1
     ignore_folder=true
     supported_mimetypes=.*
+    include_pattern=
+    exclude_pattern=
+    url_filter=
+    default_permissions=
     drive_id=
     shared_documents_drive_crawler=true
     user_drive_crawler=true
@@ -394,6 +457,7 @@ Teams
     include_visibility=
     channel_id=
     chat_id=
+    default_permissions=
     ignore_replies=false
     append_attachment=true
     ignore_system_events=true
@@ -407,6 +471,10 @@ SharePoint Document Libraries
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_libraries=true
 
 SharePoint Lists
@@ -418,6 +486,10 @@ SharePoint Lists
     list_id=
     exclude_list_id=
     list_template_filter=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_lists=true
 
 SharePoint Pages
@@ -427,14 +499,18 @@ SharePoint Pages
 
     site_id=
     exclude_site_id=
+    include_pattern=
+    exclude_pattern=
+    default_permissions=
+    ignore_error=false
     ignore_system_pages=true
     page_type_filter=
 
 사용 예
-======
+=======
 
 OneDrive 전체 드라이브 크롤링
-----------------------------
+------------------------------
 
 파라미터:
 
@@ -460,7 +536,7 @@ OneDrive 전체 드라이브 크롤링
     role=file.roles
 
 특정 팀의 Teams 메시지 크롤링
-------------------------------------
+------------------------------
 
 파라미터:
 
@@ -485,7 +561,7 @@ OneDrive 전체 드라이브 크롤링
     role=message.roles
 
 SharePoint 목록 크롤링
---------------------------
+-----------------------
 
 파라미터:
 
@@ -510,10 +586,10 @@ SharePoint 목록 크롤링
     role=item.roles
 
 문제 해결
-======================
+=========
 
 인증 오류
-----------
+---------
 
 **증상**: ``Authentication failed`` 또는 ``Insufficient privileges``
 
@@ -525,7 +601,7 @@ SharePoint 목록 크롤링
 4. 클라이언트 시크릿 유효기간 확인
 
 API 속도 제한 오류
--------------------
+------------------
 
 **증상**: ``429 Too Many Requests``
 
@@ -536,7 +612,7 @@ API 속도 제한 오류
 3. ``ignore_error=true``를 설정하여 계속 처리
 
 데이터를 가져올 수 없음
---------------------
+------------------------
 
 **증상**: 크롤링은 성공하지만 문서가 0개
 
@@ -548,7 +624,7 @@ API 속도 제한 오류
 4. 로그에서 오류 메시지 확인
 
 SharePoint 사이트 ID 확인 방법
-----------------------------
+------------------------------
 
 PowerShell로 확인:
 
@@ -564,7 +640,7 @@ PowerShell로 확인:
     GET https://graph.microsoft.com/v1.0/sites/contoso.sharepoint.com:/sites/yoursite
 
 대량 데이터 크롤링
---------------------
+------------------
 
 **해결 방법**:
 
@@ -574,7 +650,7 @@ PowerShell로 확인:
 4. 특정 폴더/사이트만 크롤링
 
 참고 정보
-========
+=========
 
 - :doc:`ds-overview` - 데이터 스토어 커넥터 개요
 - :doc:`ds-gsuite` - Google Workspace 커넥터
