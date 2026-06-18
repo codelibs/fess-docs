@@ -41,7 +41,7 @@ Method 2: Install from admin console
 Configuration
 =============
 
-Configure from admin console via "Crawler" -> "Data Store" -> "Create New".
+Configure from the admin console via "Crawler" -> "Data Store" -> "Create New".
 
 Basic Settings
 --------------
@@ -71,80 +71,135 @@ Local file:
     has_header_line=true
     separator_character=,
     quote_character="
-
-HTTP file:
-
-::
-
-    files=https://example.com/data/products.csv
-    file_encoding=UTF-8
-    has_header_line=true
-    separator_character=,
-    quote_character="
+    quote_disabled=false
 
 Multiple files:
 
 ::
 
-    files=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
+    files=/path/to/data1.csv,/path/to/data2.csv
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
     quote_character="
+    quote_disabled=false
+
+.. note::
+
+   Quote processing and escape processing are **disabled** by default.
+   If you need to handle CSV files where fields enclosed in quotes contain
+   delimiters or line breaks (RFC 4180 compliant), explicitly set
+   ``quote_disabled=false`` to enable quote processing.
+   See "Enabling Quote and Escape Processing" below for details.
 
 Parameter List
 ~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Parameter
      - Required
      - Description
    * - ``files``
-     - Yes
-     - CSV file path (local, HTTP, multiple separated by comma)
+     - No
+     - CSV file path (local path; multiple paths can be specified separated by commas). Either ``files`` or ``directories`` must be specified. If both are specified, ``files`` takes precedence. Files must have a ``.csv`` or ``.tsv`` extension; files with any other extension are skipped.
+   * - ``directories``
+     - No
+     - Path to a directory containing CSV files (multiple paths can be specified separated by commas). Only ``.csv`` and ``.tsv`` files within the directory are processed. Used when ``files`` is not specified.
    * - ``file_encoding``
      - No
      - Character encoding (default: UTF-8)
    * - ``has_header_line``
      - No
-     - Whether header row exists (default: false)
+     - Whether a header row exists (default: false)
    * - ``separator_character``
      - No
-     - Separator character (default: comma ``,``)
+     - Separator character (default: comma ``,``). Escape sequences such as ``\t`` can be specified (for tab-separated files).
    * - ``quote_character``
      - No
-     - Quote character (default: double quote ``"``)
+     - Quote character (default: double quote ``"``). Note that quote processing is disabled by default (see ``quote_disabled``).
+   * - ``escape_character``
+     - No
+     - Escape character (default: backslash ``\``). Note that escape processing is disabled by default (see ``escape_disabled``).
+
+.. note::
+
+   If both ``files`` and ``directories`` are empty, an error (``DataStoreException``) is raised.
+   At least one of them must be specified.
+
+Advanced Parameters
+~~~~~~~~~~~~~~~~~~~
+
+The following parameters provide fine-grained control over CSV parsing behaviour:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Parameter
+     - Description
+   * - ``quote_disabled``
+     - Whether to disable quote processing (default: true). Set to ``false`` to handle RFC 4180 quoted fields.
+   * - ``escape_disabled``
+     - Whether to disable escape processing (default: true). Set to ``false`` to enable escaping via ``escape_character``.
+   * - ``skip_lines``
+     - Number of leading lines to skip (default: 0)
+   * - ``ignore_line_patterns``
+     - Regular expression pattern for lines to ignore (e.g., ``^#.*`` to ignore comment lines)
+   * - ``ignore_empty_lines``
+     - Whether to ignore empty lines (default: false)
+   * - ``ignore_trailing_whitespaces``
+     - Whether to ignore trailing whitespace (default: false)
+   * - ``ignore_leading_whitespaces``
+     - Whether to ignore leading whitespace (default: false)
+   * - ``null_string``
+     - String value to treat as null
+   * - ``break_string``
+     - String used to replace line breaks within field values
+   * - ``readInterval``
+     - Wait time in milliseconds between processing each record (default: 0)
 
 Script Settings
 ---------------
 
-With header row:
+Field values are assembled by referencing the values of each CSV column.
+CSV columns are referenced directly in scripts as **variables without any prefix**
+(there is no ``data.`` prefix).
+
+With header row (reference by column name):
 
 ::
 
-    url="https://example.com/product/" + data.product_id
-    title=data.product_name
-    content=data.description
-    digest=data.category
-    price=data.price
+    url="https://example.com/product/" + product_id
+    title=product_name
+    content=description
+    digest=category
+    price=price
 
-Without header row (column index):
+Without header row (reference by column index):
 
 ::
 
-    url="https://example.com/product/" + data.cell1
-    title=data.cell2
-    content=data.cell3
-    price=data.cell4
+    url="https://example.com/product/" + cell1
+    title=cell2
+    content=cell3
+    price=cell4
 
 Available Fields
 ~~~~~~~~~~~~~~~~
 
-- ``data.<column_name>`` - Header row column name (when has_header_line=true)
-- ``data.cell<N>`` - Column index (when has_header_line=false, 1-based: ``cell1``, ``cell2``...)
+- ``<column_name>`` - Reference by header row column name (only when ``has_header_line=true`` and the column name is not blank)
+- ``cell<N>`` - Reference by column index (1-based: ``cell1``, ``cell2``, ...; available regardless of whether a header row is present)
+- ``csvfile`` - Full path of the CSV file being processed
+- ``csvfilename`` - File name of the CSV file being processed
+
+.. note::
+
+   If a column name contains characters that are invalid as a Groovy identifier,
+   such as spaces or hyphens, the column cannot be referenced by name.
+   Use ``cell<N>`` instead.
 
 CSV Format Details
 ==================
@@ -158,6 +213,36 @@ Standard CSV (RFC 4180 compliant)
     1,Laptop,High-performance laptop,150000,Electronics
     2,Mouse,Wireless mouse,3000,Electronics
     3,"Book, Programming","Learn to code",2800,Books
+
+.. note::
+
+   To include a delimiter inside a field by enclosing it in quotes, as in
+   ``"Book, Programming"`` above, you must set ``quote_disabled=false`` to
+   enable quote processing.
+   When quote processing is disabled (the default), quotes are treated as
+   ordinary characters and fields are split on the delimiter character.
+
+Enabling Quote and Escape Processing
+-------------------------------------
+
+Quote processing and escape processing are disabled by default.
+Enable them explicitly as follows.
+
+To enable quote processing:
+
+::
+
+    # Parameter
+    quote_disabled=false
+    quote_character="
+
+To enable escape processing:
+
+::
+
+    # Parameter
+    escape_disabled=false
+    escape_character=\
 
 Changing Separator
 ------------------
@@ -179,23 +264,24 @@ Semicolon-separated:
 Custom Quote Character
 ----------------------
 
-Single quote:
+Single quote (quote processing must be enabled):
 
 ::
 
     # Parameter
+    quote_disabled=false
     quote_character='
 
 Encoding
 --------
 
-Japanese file (Shift_JIS):
+Non-ASCII file (Shift_JIS):
 
 ::
 
     file_encoding=Shift_JIS
 
-Japanese file (EUC-JP):
+Non-ASCII file (EUC-JP):
 
 ::
 
@@ -224,26 +310,25 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 Script:
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " Category: " + data.category + " Price: $" + data.price
-    digest=data.category
-    price=data.price
+    url="https://shop.example.com/product/" + product_id
+    title=name
+    content=description + " Category: " + category + " Price: $" + price
+    digest=category
+    price=price
 
 Filtering by stock status:
 
 ::
 
-    url=data.in_stock == "true" ? "https://shop.example.com/product/" + data.product_id : null
-    title=data.in_stock == "true" ? data.name : null
-    content=data.in_stock == "true" ? data.description : null
-    price=data.in_stock == "true" ? data.price : null
+    url=in_stock == "true" ? "https://shop.example.com/product/" + product_id : null
+    title=in_stock == "true" ? name : null
+    content=in_stock == "true" ? description : null
+    price=in_stock == "true" ? price : null
 
 Employee Directory CSV
 ----------------------
@@ -253,9 +338,9 @@ CSV file (employees.csv):
 ::
 
     emp_id,name,department,email,phone,position
-    E001,John Smith,Sales,john@example.com,555-1234,Manager
-    E002,Jane Doe,Development,jane@example.com,555-2345,Senior Developer
-    E003,Bob Wilson,HR,bob@example.com,555-3456,Coordinator
+    E001,Taro Yamada,Sales Dept.,yamada@example.com,03-1234-5678,General Manager
+    E002,Hanako Sato,Engineering Dept.,sato@example.com,03-2345-6789,Manager
+    E003,Ichiro Suzuki,Administration Dept.,suzuki@example.com,03-3456-7890,Staff
 
 Parameters:
 
@@ -265,16 +350,15 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 Script:
 
 ::
 
-    url="https://intranet.example.com/employee/" + data.emp_id
-    title=data.name + " (" + data.department + ")"
-    content="Department: " + data.department + "\nPosition: " + data.position + "\nEmail: " + data.email + "\nPhone: " + data.phone
-    digest=data.department
+    url="https://intranet.example.com/employee/" + emp_id
+    title=name + " (" + department + ")"
+    content="Department: " + department + "\nPosition: " + position + "\nEmail: " + email + "\nPhone: " + phone
+    digest=department
 
 CSV Without Header
 ------------------
@@ -295,16 +379,15 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=false
     separator_character=,
-    quote_character="
 
 Script:
 
 ::
 
-    url="https://example.com/item/" + data.cell1
-    title=data.cell2
-    content=data.cell3
-    price=data.cell4
+    url="https://example.com/item/" + cell1
+    title=cell2
+    content=cell3
+    price=cell4
 
 Multiple CSV Files Integration
 ------------------------------
@@ -317,48 +400,26 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 Script:
 
 ::
 
-    url="https://example.com/report/" + data.id
-    title=data.title
-    content=data.content
-    timestamp=data.date
-
-Fetch CSV from HTTP
--------------------
-
-Parameters:
-
-::
-
-    files=https://example.com/data/products.csv
-    file_encoding=UTF-8
-    has_header_line=true
-    separator_character=,
-    quote_character="
-
-Script:
-
-::
-
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
+    url="https://example.com/report/" + id
+    title=title
+    content=content
+    timestamp=date
 
 Tab-Separated (TSV) File
-------------------------
+-------------------------
 
 TSV file (data.tsv):
 
 ::
 
     id	title	content	category
-    1	Article 1	This is article 1 content	News
-    2	Article 2	This is article 2 content	Blog
+    1	Article 1	This is the content of article 1	News
+    2	Article 2	This is the content of article 2	Blog
 
 Parameters:
 
@@ -368,16 +429,15 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=\t
-    quote_character="
 
 Script:
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    digest=data.category
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    digest=category
 
 Troubleshooting
 ===============
@@ -385,19 +445,20 @@ Troubleshooting
 File Not Found
 --------------
 
-**Symptom**: ``FileNotFoundException`` or ``No such file``
+**Symptom**: The crawl runs but no files are processed; ``is not found`` appears in the log
 
 **Check**:
 
 1. Verify the file path is correct (absolute path recommended)
 2. Verify the file exists
-3. Verify read permissions on the file
-4. Verify |Fess| user can access the file
+3. Verify the file extension is ``.csv`` or ``.tsv`` (files with other extensions are skipped)
+4. Verify the file has read permissions
+5. Verify the file is accessible by the |Fess| process user
 
 Character Encoding Issues
 -------------------------
 
-**Symptom**: Japanese or other characters not displayed correctly
+**Symptom**: Non-ASCII characters are not displayed correctly
 
 **Solution**:
 
@@ -426,42 +487,47 @@ Check file encoding:
     nkf -g data.csv
 
 Columns Not Recognized Correctly
---------------------------------
+---------------------------------
 
-**Symptom**: Column separation not recognized correctly
+**Symptom**: Column separation is not recognized correctly, or a quoted field is split
 
 **Check**:
 
-1. Verify separator is correct:
+1. Verify the separator is correct:
 
    ::
 
        # Comma
-       separator=,
+       separator_character=,
 
        # Tab
-       separator=\t
+       separator_character=\t
 
        # Semicolon
-       separator=;
+       separator_character=;
 
-2. Verify quote character setting
-3. Verify CSV file format (RFC 4180 compliant)
+2. To handle quoted fields (fields that contain the delimiter character), enable quote processing:
+
+   ::
+
+       quote_disabled=false
+
+3. Verify the CSV file format (RFC 4180 compliant)
 
 Header Row Handling
 -------------------
 
-**Symptom**: First row is recognized as data
+**Symptom**: The first row is recognized as data
 
 **Solution**:
 
-When header row exists:
+When a header row is present:
 
 ::
 
     has_header_line=true
 
-When header row does not exist:
+When no header row is present:
 
 ::
 
@@ -470,14 +536,14 @@ When header row does not exist:
 No Data Retrieved
 -----------------
 
-**Symptom**: Crawl succeeds but count is 0
+**Symptom**: Crawl succeeds but the document count is 0
 
 **Check**:
 
-1. Verify CSV file is not empty
-2. Verify script settings are correct
-3. Verify column names are correct (when has_header_line=true)
-4. Check logs for error messages
+1. Verify the CSV file is not empty
+2. Verify the script settings are correct (column names and ``cell<N>`` references must be used without a ``data.`` prefix)
+3. Verify the column names are correct (when has_header_line=true)
+4. Check the log for error messages
 
 Large CSV Files
 ---------------
@@ -486,15 +552,16 @@ Large CSV Files
 
 **Solution**:
 
-1. Split CSV file into multiple files
-2. Use only necessary columns in script
-3. Increase |Fess| heap size
-4. Filter unnecessary rows
+1. Split the CSV file into multiple smaller files
+2. Use only the necessary columns in the script
+3. Increase the |Fess| heap size
+4. Filter out unnecessary rows
 
 Fields with Line Breaks
 -----------------------
 
-RFC 4180 format allows handling fields with line breaks by enclosing in quotes:
+In RFC 4180 format, fields containing line breaks can be handled by enclosing them in quotes.
+Since quote processing is disabled by default, ``quote_disabled=false`` must be specified:
 
 ::
 
@@ -512,7 +579,54 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
+    quote_disabled=false
     quote_character="
+
+CsvListDataStore
+================
+
+The ``fess-ds-csv`` plugin also includes the ``CsvListDataStore`` handler in addition to ``CsvDataStore``.
+
+``CsvListDataStore`` extends ``CsvDataStore`` and provides the following additional features:
+
+- Multi-threaded processing (controlled by the ``numOfThreads`` parameter)
+- Automatic deletion of processed CSV files
+- Timestamp-based file filtering (skips files that may still be written to)
+
+All parameters and script settings of ``CsvDataStore`` are available as-is.
+
+Basic Settings
+--------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Item
+     - Example
+   * - Handler Name
+     - CsvListDataStore
+
+Additional Parameters
+---------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Parameter
+     - Required
+     - Description
+   * - ``timestamp_margin``
+     - No
+     - Elapsed time in milliseconds since the file's last modification time. Files that have not yet exceeded this threshold are considered to still be written to and are skipped (default: 10000).
+   * - ``numOfThreads``
+     - No
+     - Number of processing threads (default: 1)
+
+.. note::
+
+   ``CsvListDataStore`` automatically deletes CSV files after processing is complete. If an error occurs during processing, the file is renamed to ``.txt`` (if renaming fails, the file is deleted).
 
 Advanced Script Examples
 ========================
@@ -522,43 +636,43 @@ Data Processing
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=Integer.parseInt(data.price)
-    category=data.category.toLowerCase()
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=Integer.parseInt(price)
+    category=category.toLowerCase()
 
 Conditional Indexing
 --------------------
 
 ::
 
-    # Only products with price >= 10000
-    url=Integer.parseInt(data.price) >= 10000 ? "https://example.com/product/" + data.id : null
-    title=Integer.parseInt(data.price) >= 10000 ? data.name : null
-    content=Integer.parseInt(data.price) >= 10000 ? data.description : null
-    price=Integer.parseInt(data.price) >= 10000 ? data.price : null
+    // Only index products with a price of 10000 or more
+    url=Integer.parseInt(price) >= 10000 ? "https://example.com/product/" + id : null
+    title=Integer.parseInt(price) >= 10000 ? name : null
+    content=Integer.parseInt(price) >= 10000 ? description : null
+    price=Integer.parseInt(price) >= 10000 ? price : null
 
 Combining Multiple Columns
 --------------------------
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description + "\n\nSpecifications:\n" + data.specs + "\n\nNotes:\n" + data.notes
-    category=data.category
+    url="https://example.com/product/" + id
+    title=name
+    content=description + "\n\nSpecifications:\n" + specs + "\n\nNotes:\n" + notes
+    category=category
 
 Date Formatting
 ---------------
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    created=data.created_date
-    # Additional processing if date format conversion is needed
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    created=created_date
+    // Add further processing here if date format conversion is required
 
 Reference
 =========
@@ -568,4 +682,3 @@ Reference
 - :doc:`ds-database` - Database Connector
 - :doc:`../../admin/dataconfig-guide` - Data Store Configuration Guide
 - `RFC 4180 - CSV Format <https://datatracker.ietf.org/doc/html/rfc4180>`_
-

@@ -2,29 +2,29 @@
 Connecteur CSV
 ==================================
 
-Apercu
-====
+Aperçu
+======
 
-Le connecteur CSV fournit la fonctionnalite permettant de recuperer des donnees
-a partir de fichiers CSV et de les enregistrer dans l'index |Fess|.
+Le connecteur CSV fournit la fonctionnalité permettant de récupérer des données
+à partir de fichiers CSV et de les enregistrer dans l'index |Fess|.
 
-Cette fonctionnalite necessite le plugin ``fess-ds-csv``.
+Cette fonctionnalité nécessite le plugin ``fess-ds-csv``.
 
-Prerequis
-========
+Prérequis
+=========
 
 1. L'installation du plugin est requise
-2. L'acces au fichier CSV est necessaire
-3. L'encodage des caracteres du fichier CSV doit etre connu
+2. L'accès au fichier CSV est nécessaire
+3. L'encodage des caractères du fichier CSV doit être connu
 
 Installation du plugin
-------------------------
+----------------------
 
-Methode 1 : Placement direct du fichier JAR
+Méthode 1 : Placement direct du fichier JAR
 
 ::
 
-    # Telecharger depuis Maven Central
+    # Télécharger depuis Maven Central
     wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-csv/X.X.X/fess-ds-csv-X.X.X.jar
 
     # Placement
@@ -32,35 +32,35 @@ Methode 1 : Placement direct du fichier JAR
     # ou
     cp fess-ds-csv-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
 
-Methode 2 : Installation depuis l'interface d'administration
+Méthode 2 : Installation depuis l'interface d'administration
 
-1. Ouvrir "Systeme" -> "Plugins"
-2. Telecharger le fichier JAR
-3. Redemarrer |Fess|
+1. Ouvrir « Système » → « Plugins »
+2. Téléverser le fichier JAR
+3. Redémarrer |Fess|
 
 Configuration
-========
+=============
 
-Configurez depuis l'interface d'administration via "Crawler" -> "Data Store" -> "Nouveau".
+Configurez depuis l'interface d'administration via « Crawler » → « Data Store » → « Nouveau ».
 
 Configuration de base
---------
+---------------------
 
 .. list-table::
    :header-rows: 1
    :widths: 25 75
 
-   * - Element
+   * - Élément
      - Exemple
    * - Nom
      - Products CSV
    * - Nom du gestionnaire
      - CsvDataStore
-   * - Active
+   * - Activé
      - Oui
 
-Configuration des parametres
-----------------
+Configuration des paramètres
+-----------------------------
 
 Fichier local :
 
@@ -71,86 +71,141 @@ Fichier local :
     has_header_line=true
     separator_character=,
     quote_character="
-
-Fichier HTTP :
-
-::
-
-    files=https://example.com/data/products.csv
-    file_encoding=UTF-8
-    has_header_line=true
-    separator_character=,
-    quote_character="
+    quote_disabled=false
 
 Fichiers multiples :
 
 ::
 
-    files=/path/to/data1.csv,/path/to/data2.csv,https://example.com/data3.csv
+    files=/path/to/data1.csv,/path/to/data2.csv
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
     quote_character="
+    quote_disabled=false
 
-Liste des parametres
-~~~~~~~~~~~~~~~~
+.. note::
+
+   Le traitement des guillemets (quotes) et le traitement des échappements sont **désactivés** par
+   défaut. Pour traiter des CSV conformes à la RFC 4180 (champs entre guillemets pouvant contenir des
+   délimiteurs ou des sauts de ligne), spécifiez explicitement ``quote_disabled=false`` pour activer
+   le traitement des guillemets. Reportez-vous à la section « Activation du traitement des guillemets
+   et des échappements » ci-dessous pour plus de détails.
+
+Liste des paramètres
+~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
-   * - Parametre
+   * - Paramètre
      - Requis
      - Description
    * - ``files``
-     - Oui
-     - Chemin du fichier CSV (local, HTTP, plusieurs fichiers separes par des virgules)
+     - Non
+     - Chemin du fichier CSV (chemin local, plusieurs fichiers séparés par des virgules). ``files`` ou ``directories`` doit être spécifié. Si les deux sont indiqués, ``files`` est prioritaire. Les fichiers spécifiés doivent avoir l'extension ``.csv`` ou ``.tsv`` ; les fichiers ayant une autre extension sont ignorés.
+   * - ``directories``
+     - Non
+     - Chemin du répertoire contenant les fichiers CSV (plusieurs répertoires séparés par des virgules). Seuls les fichiers ``.csv`` et ``.tsv`` présents dans le répertoire sont traités. Utilisé si ``files`` n'est pas spécifié.
    * - ``file_encoding``
      - Non
-     - Encodage des caracteres (par defaut : UTF-8)
+     - Encodage des caractères (par défaut : UTF-8)
    * - ``has_header_line``
      - Non
-     - Presence d'une ligne d'en-tete (par defaut : false)
+     - Présence d'une ligne d'en-tête (par défaut : false)
    * - ``separator_character``
      - Non
-     - Caractere de separation (par defaut : virgule ``,``)
+     - Caractère de séparation (par défaut : virgule ``,``). Les séquences d'échappement telles que ``\t`` peuvent être spécifiées (séparation par tabulation).
    * - ``quote_character``
      - Non
-     - Caractere de citation (par defaut : guillemet double ``"``)
+     - Caractère de guillemet (par défaut : guillemet double ``"``). Notez que le traitement des guillemets est désactivé par défaut (voir ``quote_disabled``).
+   * - ``escape_character``
+     - Non
+     - Caractère d'échappement (par défaut : barre oblique inverse ``\``). Notez que le traitement des échappements est désactivé par défaut (voir ``escape_disabled``).
+
+.. note::
+
+   Si ``files`` et ``directories`` sont tous les deux vides, une erreur (``DataStoreException``) est
+   générée. L'un ou l'autre doit obligatoirement être spécifié.
+
+Paramètres avancés
+~~~~~~~~~~~~~~~~~~
+
+Les paramètres suivants permettent de contrôler finement le comportement d'analyse du CSV :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Paramètre
+     - Description
+   * - ``quote_disabled``
+     - Désactive le traitement des guillemets (par défaut : true). Spécifiez ``false`` pour traiter des champs entre guillemets conformes à la RFC 4180.
+   * - ``escape_disabled``
+     - Désactive le traitement des échappements (par défaut : true). Spécifiez ``false`` pour activer l'échappement via ``escape_character``.
+   * - ``skip_lines``
+     - Nombre de lignes à ignorer en début de fichier (par défaut : 0)
+   * - ``ignore_line_patterns``
+     - Expression régulière pour ignorer certaines lignes (ex. : ``^#.*`` pour ignorer les lignes de commentaire)
+   * - ``ignore_empty_lines``
+     - Ignorer les lignes vides (par défaut : false)
+   * - ``ignore_trailing_whitespaces``
+     - Ignorer les espaces en fin de champ (par défaut : false)
+   * - ``ignore_leading_whitespaces``
+     - Ignorer les espaces en début de champ (par défaut : false)
+   * - ``null_string``
+     - Chaîne de caractères traitée comme valeur nulle
+   * - ``break_string``
+     - Chaîne de remplacement des sauts de ligne dans les valeurs de champ
+   * - ``readInterval``
+     - Temps d'attente après le traitement de chaque enregistrement (en millisecondes) (par défaut : 0)
 
 Configuration du script
---------------
+------------------------
 
-Avec en-tete :
+Les valeurs de chaque champ sont construites en référençant les valeurs des colonnes du CSV. Les
+colonnes CSV sont accessibles directement dans le script en tant que **variables sans préfixe** (sans
+préfixe ``data.`` ni autre).
 
-::
-
-    url="https://example.com/product/" + data.product_id
-    title=data.product_name
-    content=data.description
-    digest=data.category
-    price=data.price
-
-Sans en-tete (index de colonne) :
+Avec en-tête (référence par nom de colonne) :
 
 ::
 
-    url="https://example.com/product/" + data.cell1
-    title=data.cell2
-    content=data.cell3
-    price=data.cell4
+    url="https://example.com/product/" + product_id
+    title=product_name
+    content=description
+    digest=category
+    price=price
+
+Sans en-tête (référence par index de colonne) :
+
+::
+
+    url="https://example.com/product/" + cell1
+    title=cell2
+    content=cell3
+    price=cell4
 
 Champs disponibles
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
-- ``data.<nom_colonne>`` - Nom de colonne de la ligne d'en-tete (si has_header_line=true)
-- ``data.cell<N>`` - Index de colonne (si has_header_line=false, commence a 1 : ``cell1``, ``cell2``...)
+- ``<nom_colonne>`` — Référence directe par le nom de la colonne de la ligne d'en-tête (uniquement si ``has_header_line=true`` et si le nom de colonne n'est pas vide)
+- ``cell<N>`` — Référence par index de colonne (``cell1``, ``cell2``... en commençant à 1 ; disponible que l'en-tête soit présent ou non)
+- ``csvfile`` — Chemin complet du fichier CSV en cours de traitement
+- ``csvfilename`` — Nom du fichier CSV en cours de traitement
 
-Details du format CSV
-=============
+.. note::
+
+   Si un nom de colonne contient des caractères non valides comme identifiant Groovy (espaces,
+   tirets, etc.), la référence par nom de colonne n'est pas possible. Dans ce cas, utilisez
+   ``cell<N>``.
+
+Détails du format CSV
+=====================
 
 CSV standard (conforme RFC 4180)
------------------------
+---------------------------------
 
 ::
 
@@ -159,64 +214,95 @@ CSV standard (conforme RFC 4180)
     2,Mouse,Wireless mouse,3000,Electronics
     3,"Book, Programming","Learn to code",2800,Books
 
-Modification du separateur
-------------------
+.. note::
 
-Tabulation (TSV) :
+   Pour inclure un délimiteur dans un champ en l'entourant de guillemets (comme ``"Book, Programming"``
+   ci-dessus), il est nécessaire de spécifier ``quote_disabled=false`` afin d'activer le traitement
+   des guillemets. Lorsque le traitement des guillemets est désactivé (comportement par défaut), les
+   guillemets sont traités comme des caractères ordinaires et les champs sont découpés au niveau du
+   délimiteur.
+
+Activation du traitement des guillemets et des échappements
+------------------------------------------------------------
+
+Le traitement des guillemets et des échappements est désactivé par défaut. Activez-les explicitement
+comme suit.
+
+Activer le traitement des guillemets :
 
 ::
 
-    # Parametre
+    # Paramètre
+    quote_disabled=false
+    quote_character="
+
+Activer le traitement des échappements :
+
+::
+
+    # Paramètre
+    escape_disabled=false
+    escape_character=\
+
+Modification du séparateur
+---------------------------
+
+Séparation par tabulation (TSV) :
+
+::
+
+    # Paramètre
     separator_character=\t
 
-Point-virgule :
+Séparation par point-virgule :
 
 ::
 
-    # Parametre
+    # Paramètre
     separator_character=;
 
-Caractere de citation personnalise
---------------
+Guillemet personnalisé
+-----------------------
 
-Guillemet simple :
+Guillemet simple (l'activation du traitement des guillemets est requise) :
 
 ::
 
-    # Parametre
+    # Paramètre
+    quote_disabled=false
     quote_character='
 
 Encodage
-----------------
+--------
 
-Fichier japonais (Shift_JIS) :
+Fichier en Shift_JIS :
 
 ::
 
     file_encoding=Shift_JIS
 
-Fichier japonais (EUC-JP) :
+Fichier en EUC-JP :
 
 ::
 
     file_encoding=EUC-JP
 
 Exemples d'utilisation
-======
+=======================
 
 Catalogue de produits CSV
------------------
+--------------------------
 
 Fichier CSV (products.csv) :
 
 ::
 
     product_id,name,description,price,category,in_stock
-    1001,Laptop,High-performance laptop,120000,Computer,true
-    1002,Mouse,Wireless mouse,2500,Peripherals,true
-    1003,Keyboard,Mechanical keyboard,8500,Peripherals,false
+    1001,Ordinateur portable,Ordinateur portable haute performance,120000,Informatique,true
+    1002,Souris,Souris sans fil,2500,Périphériques,true
+    1003,Clavier,Clavier mécanique,8500,Périphériques,false
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -224,29 +310,28 @@ Parametres :
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 Script :
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " Categorie: " + data.category + " Prix: " + data.price + " EUR"
-    digest=data.category
-    price=data.price
+    url="https://shop.example.com/product/" + product_id
+    title=name
+    content=description + " Catégorie : " + category + " Prix : " + price + " EUR"
+    digest=category
+    price=price
 
 Filtrage des informations de stock :
 
 ::
 
-    url=data.in_stock == "true" ? "https://shop.example.com/product/" + data.product_id : null
-    title=data.in_stock == "true" ? data.name : null
-    content=data.in_stock == "true" ? data.description : null
-    price=data.in_stock == "true" ? data.price : null
+    url=in_stock == "true" ? "https://shop.example.com/product/" + product_id : null
+    title=in_stock == "true" ? name : null
+    content=in_stock == "true" ? description : null
+    price=in_stock == "true" ? price : null
 
-Annuaire des employes CSV
--------------
+Annuaire des employés CSV
+--------------------------
 
 Fichier CSV (employees.csv) :
 
@@ -254,10 +339,10 @@ Fichier CSV (employees.csv) :
 
     emp_id,name,department,email,phone,position
     E001,Jean Dupont,Ventes,dupont@example.com,01-23-45-67-89,Directeur
-    E002,Marie Martin,Developpement,martin@example.com,01-34-56-78-90,Manager
+    E002,Marie Martin,Développement,martin@example.com,01-34-56-78-90,Manager
     E003,Pierre Durand,Administration,durand@example.com,01-45-67-89-01,Responsable
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -265,18 +350,17 @@ Parametres :
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 Script :
 
 ::
 
-    url="https://intranet.example.com/employee/" + data.emp_id
-    title=data.name + " (" + data.department + ")"
-    content="Departement: " + data.department + "\nPoste: " + data.position + "\nEmail: " + data.email + "\nTelephone: " + data.phone
-    digest=data.department
+    url="https://intranet.example.com/employee/" + emp_id
+    title=name + " (" + department + ")"
+    content="Département : " + department + "\nPoste : " + position + "\nEmail : " + email + "\nTéléphone : " + phone
+    digest=department
 
-CSV sans en-tete
+CSV sans en-tête
 -----------------
 
 Fichier CSV (data.csv) :
@@ -287,7 +371,7 @@ Fichier CSV (data.csv) :
     2,Produit B,Ceci est le produit B,2000
     3,Produit C,Ceci est le produit C,3000
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -295,21 +379,20 @@ Parametres :
     file_encoding=UTF-8
     has_header_line=false
     separator_character=,
-    quote_character="
 
 Script :
 
 ::
 
-    url="https://example.com/item/" + data.cell1
-    title=data.cell2
-    content=data.cell3
-    price=data.cell4
+    url="https://example.com/item/" + cell1
+    title=cell2
+    content=cell3
+    price=cell4
 
-Integration de plusieurs fichiers CSV
----------------------
+Intégration de plusieurs fichiers CSV
+--------------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -317,50 +400,28 @@ Parametres :
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 Script :
 
 ::
 
-    url="https://example.com/report/" + data.id
-    title=data.title
-    content=data.content
-    timestamp=data.date
+    url="https://example.com/report/" + id
+    title=title
+    content=content
+    timestamp=date
 
-Recuperation de CSV depuis HTTP
------------------
-
-Parametres :
-
-::
-
-    files=https://example.com/data/products.csv
-    file_encoding=UTF-8
-    has_header_line=true
-    separator_character=,
-    quote_character="
-
-Script :
-
-::
-
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-
-Fichier separe par tabulation (TSV)
--------------------------
+Fichier séparé par tabulation (TSV)
+-------------------------------------
 
 Fichier TSV (data.tsv) :
 
 ::
 
     id	title	content	category
-    1	Article1	Contenu de l'article 1	Actualites
-    2	Article2	Contenu de l'article 2	Blog
+    1	Article 1	Contenu de l'article 1	Actualités
+    2	Article 2	Contenu de l'article 2	Blog
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -368,128 +429,143 @@ Parametres :
     file_encoding=UTF-8
     has_header_line=true
     separator_character=\t
-    quote_character="
 
 Script :
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    digest=data.category
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    digest=category
 
-Depannage
-======================
+Dépannage
+==========
 
 Fichier introuvable
+--------------------
+
+**Symptôme** : Le crawl s'exécute mais le fichier n'est pas traité ; le log affiche ``is not found``
+
+**Points à vérifier** :
+
+1. Vérifier si le chemin du fichier est correct (chemin absolu recommandé)
+2. Vérifier si le fichier existe
+3. Vérifier si l'extension du fichier est ``.csv`` ou ``.tsv`` (les autres extensions sont ignorées)
+4. Vérifier si les droits de lecture sont accordés
+5. Vérifier si l'utilisateur exécutant |Fess| peut y accéder
+
+Caractères illisibles
 ----------------------
 
-**Symptome** : ``FileNotFoundException`` ou ``No such file``
-
-**Points a verifier** :
-
-1. Verifier si le chemin du fichier est correct (chemin absolu recommande)
-2. Verifier si le fichier existe
-3. Verifier si les droits de lecture sont accordes
-4. Verifier si l'utilisateur executant |Fess| peut y acceder
-
-Caracteres illisibles
-------------------
-
-**Symptome** : Les caracteres speciaux ne s'affichent pas correctement
+**Symptôme** : Les caractères ne s'affichent pas correctement
 
 **Solution** :
 
-Specifier le bon encodage :
+Spécifier le bon encodage :
 
 ::
 
     # UTF-8
     file_encoding=UTF-8
 
-    # Windows (CP1252)
-    file_encoding=Windows-1252
+    # Shift_JIS
+    file_encoding=Shift_JIS
 
-    # ISO-8859-1
-    file_encoding=ISO-8859-1
+    # EUC-JP
+    file_encoding=EUC-JP
 
-Verifier l'encodage du fichier :
+    # Windows standard (CP932)
+    file_encoding=Windows-31J
+
+Vérifier l'encodage du fichier :
 
 ::
 
     file -i data.csv
+    # ou
+    nkf -g data.csv
 
 Les colonnes ne sont pas reconnues correctement
-----------------------
+------------------------------------------------
 
-**Symptome** : Les delimiteurs de colonnes ne sont pas reconnus correctement
+**Symptôme** : Les délimiteurs de colonnes ne sont pas reconnus correctement, ou les champs entre
+guillemets sont découpés
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si le caractere de separation est correct :
+1. Vérifier si le caractère de séparation est correct :
 
    ::
 
        # Virgule
-       separator=,
+       separator_character=,
 
        # Tabulation
-       separator=\t
+       separator_character=\t
 
        # Point-virgule
-       separator=;
+       separator_character=;
 
-2. Verifier le parametre de citation
-3. Verifier le format du fichier CSV (conformite RFC 4180)
+2. Pour traiter des champs entre guillemets (champs contenant le délimiteur), activer le traitement
+   des guillemets :
 
-Gestion de la ligne d'en-tete
-----------------
+   ::
 
-**Symptome** : La premiere ligne est reconnue comme donnees
+       quote_disabled=false
+
+3. Vérifier le format du fichier CSV (conformité RFC 4180)
+
+Gestion de la ligne d'en-tête
+-------------------------------
+
+**Symptôme** : La première ligne est reconnue comme données
 
 **Solution** :
 
-Si une ligne d'en-tete existe :
+Si une ligne d'en-tête existe :
 
 ::
 
     has_header_line=true
 
-Si aucune ligne d'en-tete n'existe :
+Si aucune ligne d'en-tête n'existe :
 
 ::
 
     has_header_line=false
 
-Impossible de recuperer les donnees
---------------------
+Impossible de récupérer les données
+-------------------------------------
 
-**Symptome** : Le crawl reussit mais le nombre d'elements est 0
+**Symptôme** : Le crawl réussit mais le nombre d'éléments est 0
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si le fichier CSV n'est pas vide
-2. Verifier si la configuration du script est correcte
-3. Verifier si les noms de colonnes sont corrects (si has_header_line=true)
-4. Verifier les messages d'erreur dans les logs
+1. Vérifier si le fichier CSV n'est pas vide
+2. Vérifier si la configuration du script est correcte (les noms de colonnes et ``cell<N>`` sont
+   référencés sans préfixe ``data.``)
+3. Vérifier si les noms de colonnes sont corrects (si has_header_line=true)
+4. Vérifier les messages d'erreur dans les logs
 
 Fichiers CSV volumineux
------------------
+------------------------
 
-**Symptome** : Memoire insuffisante ou timeout
+**Symptôme** : Mémoire insuffisante ou timeout
 
 **Solution** :
 
 1. Diviser le fichier CSV en plusieurs parties
-2. Utiliser uniquement les colonnes necessaires dans le script
+2. Utiliser uniquement les colonnes nécessaires dans le script
 3. Augmenter la taille du tas de |Fess|
 4. Filtrer les lignes inutiles
 
 Champs contenant des sauts de ligne
---------------------
+-------------------------------------
 
-Le format RFC 4180 permet de gerer les champs contenant des sauts de ligne en les entourant de guillemets :
+Le format RFC 4180 permet de gérer les champs contenant des sauts de ligne en les entourant de
+guillemets. Le traitement des guillemets étant désactivé par défaut, il est nécessaire de spécifier
+``quote_disabled=false`` :
 
 ::
 
@@ -499,7 +575,7 @@ Le format RFC 4180 permet de gerer les champs contenant des sauts de ligne en le
     description"
     2,"Product B","Single line"
 
-Parametres :
+Paramètres :
 
 ::
 
@@ -507,59 +583,108 @@ Parametres :
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
+    quote_disabled=false
     quote_character="
 
-Exemples d'utilisation avancee des scripts
-========================
+CsvListDataStore
+================
 
-Traitement des donnees
-------------
+Le plugin ``fess-ds-csv`` inclut, en plus de ``CsvDataStore``, le gestionnaire ``CsvListDataStore``.
+
+``CsvListDataStore`` étend ``CsvDataStore`` et fournit les fonctionnalités supplémentaires suivantes :
+
+- Traitement multi-thread (contrôlé par le paramètre ``numOfThreads``)
+- Suppression automatique des fichiers CSV traités
+- Filtrage des fichiers par horodatage (les fichiers en cours d'écriture sont ignorés)
+
+Tous les paramètres et configurations de script de ``CsvDataStore`` sont utilisables tels quels.
+
+Configuration de base
+----------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Élément
+     - Exemple
+   * - Nom du gestionnaire
+     - CsvListDataStore
+
+Paramètres supplémentaires
+---------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Paramètre
+     - Requis
+     - Description
+   * - ``timestamp_margin``
+     - Non
+     - Délai écoulé depuis la dernière modification du fichier (en millisecondes). Les fichiers dont ce délai n'est pas écoulé sont considérés comme en cours d'écriture et sont ignorés (par défaut : 10000)
+   * - ``numOfThreads``
+     - Non
+     - Nombre de threads de traitement (par défaut : 1)
+
+.. note::
+
+   ``CsvListDataStore`` supprime automatiquement les fichiers CSV après leur traitement. En cas
+   d'erreur pendant le traitement, le fichier est renommé avec l'extension ``.txt`` (s'il est
+   impossible de le renommer, il est supprimé).
+
+Exemples d'utilisation avancée des scripts
+==========================================
+
+Traitement des données
+-----------------------
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=Integer.parseInt(data.price)
-    category=data.category.toLowerCase()
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=Integer.parseInt(price)
+    category=category.toLowerCase()
 
 Indexation conditionnelle
---------------------
+--------------------------
 
 ::
 
-    # Uniquement les produits dont le prix est superieur ou egal a 10000
-    url=Integer.parseInt(data.price) >= 10000 ? "https://example.com/product/" + data.id : null
-    title=Integer.parseInt(data.price) >= 10000 ? data.name : null
-    content=Integer.parseInt(data.price) >= 10000 ? data.description : null
-    price=Integer.parseInt(data.price) >= 10000 ? data.price : null
+    // Indexer uniquement les produits dont le prix est supérieur ou égal à 10000
+    url=Integer.parseInt(price) >= 10000 ? "https://example.com/product/" + id : null
+    title=Integer.parseInt(price) >= 10000 ? name : null
+    content=Integer.parseInt(price) >= 10000 ? description : null
+    price=Integer.parseInt(price) >= 10000 ? price : null
 
-Concatenation de plusieurs colonnes
-------------
+Concaténation de plusieurs colonnes
+-------------------------------------
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description + "\n\nSpecifications:\n" + data.specs + "\n\nRemarques:\n" + data.notes
-    category=data.category
+    url="https://example.com/product/" + id
+    title=name
+    content=description + "\n\nSpécifications :\n" + specs + "\n\nRemarques :\n" + notes
+    category=category
 
 Format de date
-------------------
+---------------
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    created=data.created_date
-    # Si une conversion de format de date est necessaire, un traitement supplementaire est requis
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    created=created_date
+    // Si une conversion de format de date est nécessaire, un traitement supplémentaire est requis
 
-Informations de reference
-========
+Informations de référence
+==========================
 
-- :doc:`ds-overview` - Apercu des connecteurs Data Store
+- :doc:`ds-overview` - Aperçu des connecteurs Data Store
 - :doc:`ds-json` - Connecteur JSON
-- :doc:`ds-database` - Connecteur de base de donnees
+- :doc:`ds-database` - Connecteur de base de données
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration Data Store
 - `RFC 4180 - Format CSV <https://datatracker.ietf.org/doc/html/rfc4180>`_

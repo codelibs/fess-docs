@@ -71,6 +71,7 @@ CSVコネクタは、CSVファイルからデータを取得して
     has_header_line=true
     separator_character=,
     quote_character="
+    quote_disabled=false
 
 複数ファイル:
 
@@ -81,20 +82,31 @@ CSVコネクタは、CSVファイルからデータを取得して
     has_header_line=true
     separator_character=,
     quote_character="
+    quote_disabled=false
+
+.. note::
+
+   引用符（クォート）処理とエスケープ処理は、デフォルトでは **無効** になっています。
+   引用符で囲まれたフィールド内に区切り文字や改行を含むCSV（RFC 4180準拠）を扱う場合は、
+   ``quote_disabled=false`` を明示的に指定して引用符処理を有効にしてください。
+   詳細は後述の「引用符・エスケープ処理の有効化」を参照してください。
 
 パラメーター一覧
 ~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - パラメーター
      - 必須
      - 説明
    * - ``files``
      - いいえ
-     - CSVファイルのパス（ローカル、複数指定可：カンマ区切り）。 ``files`` または ``directories`` のいずれかの指定が必要です。両方指定した場合は ``files`` が優先されます。
+     - CSVファイルのパス（ローカルパス、複数指定可：カンマ区切り）。 ``files`` または ``directories`` のいずれかの指定が必要です。両方指定した場合は ``files`` が優先されます。指定するファイルは拡張子が ``.csv`` または ``.tsv`` である必要があり、それ以外の拡張子のファイルはスキップされます。
+   * - ``directories``
+     - いいえ
+     - CSVファイルを含むディレクトリのパス（複数指定可：カンマ区切り）。ディレクトリ内の ``.csv`` および ``.tsv`` ファイルのみが対象となります。 ``files`` が指定されていない場合に使用されます。
    * - ``file_encoding``
      - いいえ
      - 文字エンコーディング（デフォルト: UTF-8）
@@ -103,16 +115,18 @@ CSVコネクタは、CSVファイルからデータを取得して
      - ヘッダー行の有無（デフォルト: false）
    * - ``separator_character``
      - いいえ
-     - 区切り文字（デフォルト: カンマ ``,``）
+     - 区切り文字（デフォルト: カンマ ``,``）。 ``\t`` のようなエスケープシーケンスを指定できます（タブ区切り）。
    * - ``quote_character``
      - いいえ
-     - 引用符（デフォルト: ダブルクォート ``"``）
-   * - ``directories``
-     - いいえ
-     - CSVファイルを含むディレクトリのパス（複数指定可：カンマ区切り）。ディレクトリ内の ``.csv`` および ``.tsv`` ファイルのみが対象となります。 ``files`` が指定されていない場合に使用されます。
+     - 引用符（デフォルト: ダブルクォート ``"``）。ただし引用符処理はデフォルトで無効です（ ``quote_disabled`` を参照）。
    * - ``escape_character``
      - いいえ
-     - エスケープ文字（デフォルト: バックスラッシュ ``\``）
+     - エスケープ文字（デフォルト: バックスラッシュ ``\``）。ただしエスケープ処理はデフォルトで無効です（ ``escape_disabled`` を参照）。
+
+.. note::
+
+   ``files`` および ``directories`` の両方が空の場合はエラー（ ``DataStoreException`` ）となります。
+   どちらか一方を必ず指定してください。
 
 高度なパラメーター
 ~~~~~~~~~~~~~~~~~~
@@ -125,10 +139,14 @@ CSVコネクタは、CSVファイルからデータを取得して
 
    * - パラメーター
      - 説明
+   * - ``quote_disabled``
+     - 引用符（クォート）処理を無効にするか（デフォルト: true）。RFC 4180準拠の引用符付きフィールドを扱う場合は ``false`` を指定します。
+   * - ``escape_disabled``
+     - エスケープ処理を無効にするか（デフォルト: true）。 ``escape_character`` によるエスケープを有効にする場合は ``false`` を指定します。
    * - ``skip_lines``
-     - スキップする先頭行数
+     - スキップする先頭行数（デフォルト: 0）
    * - ``ignore_line_patterns``
-     - 無視する行の正規表現パターン
+     - 無視する行の正規表現パターン（例: ``^#.*`` でコメント行を無視）
    * - ``ignore_empty_lines``
      - 空行を無視するか（デフォルト: false）
    * - ``ignore_trailing_whitespaces``
@@ -138,41 +156,47 @@ CSVコネクタは、CSVファイルからデータを取得して
    * - ``null_string``
      - null値として扱う文字列
    * - ``break_string``
-     - 改行の置換文字列
-   * - ``escape_disabled``
-     - エスケープ処理を無効にするか（デフォルト: false）
-   * - ``quote_disabled``
-     - 引用符処理を無効にするか（デフォルト: false）
+     - フィールド値中の改行を置換する文字列
+   * - ``readInterval``
+     - 1レコードを処理するごとの待機時間（ミリ秒）（デフォルト: 0）
 
 スクリプト設定
 --------------
 
-ヘッダーありの場合:
+各フィールドの値は、CSVの各列の値を参照して組み立てます。CSVの列はスクリプト内で
+**接頭辞なしの変数** として直接参照できます（ ``data.`` のような接頭辞は付きません）。
+
+ヘッダーありの場合（列名で参照）:
 
 ::
 
-    url="https://example.com/product/" + data.product_id
-    title=data.product_name
-    content=data.description
-    digest=data.category
-    price=data.price
+    url="https://example.com/product/" + product_id
+    title=product_name
+    content=description
+    digest=category
+    price=price
 
-ヘッダーなしの場合（列インデックス指定）:
+ヘッダーなしの場合（列インデックスで参照）:
 
 ::
 
-    url="https://example.com/product/" + data.cell1
-    title=data.cell2
-    content=data.cell3
-    price=data.cell4
+    url="https://example.com/product/" + cell1
+    title=cell2
+    content=cell3
+    price=cell4
 
 利用可能なフィールド
 ~~~~~~~~~~~~~~~~~~~~
 
-- ``data.<列名>`` - ヘッダー行の列名（has_header_line=true の場合）
-- ``data.cell<N>`` - 列インデックス（has_header_line=false の場合、``cell1``、``cell2``...のように1始まり）
-- ``data.csvfile`` - 処理中のCSVファイルのフルパス
-- ``data.csvfilename`` - 処理中のCSVファイル名
+- ``<列名>`` - ヘッダー行の列名で直接参照します（ ``has_header_line=true`` の場合のみ。列名が空白でない場合に有効）
+- ``cell<N>`` - 列インデックスで参照します（ ``cell1``、``cell2``...のように1始まり。ヘッダーの有無に関わらず利用可能）
+- ``csvfile`` - 処理中のCSVファイルのフルパス
+- ``csvfilename`` - 処理中のCSVファイル名
+
+.. note::
+
+   列名にスペースやハイフンなど、Groovyの識別子として無効な文字が含まれる場合は、
+   列名での参照ができません。その場合は ``cell<N>`` を使用してください。
 
 CSV形式の詳細
 =============
@@ -186,6 +210,34 @@ CSV形式の詳細
     1,Laptop,High-performance laptop,150000,Electronics
     2,Mouse,Wireless mouse,3000,Electronics
     3,"Book, Programming","Learn to code",2800,Books
+
+.. note::
+
+   上記の ``"Book, Programming"`` のように、引用符で囲んでフィールド内に区切り文字を
+   含めるには ``quote_disabled=false`` を指定して引用符処理を有効にする必要があります。
+   引用符処理が無効（デフォルト）の場合、引用符は通常の文字として扱われ、
+   フィールドは区切り文字で分割されます。
+
+引用符・エスケープ処理の有効化
+------------------------------
+
+引用符処理とエスケープ処理はデフォルトで無効です。以下のように明示的に有効化します。
+
+引用符処理を有効にする:
+
+::
+
+    # パラメーター
+    quote_disabled=false
+    quote_character="
+
+エスケープ処理を有効にする:
+
+::
+
+    # パラメーター
+    escape_disabled=false
+    escape_character=\
 
 セパレーターの変更
 ------------------
@@ -207,11 +259,12 @@ CSV形式の詳細
 カスタム引用符
 --------------
 
-シングルクォート:
+シングルクォート（引用符処理の有効化が必要）:
 
 ::
 
     # パラメーター
+    quote_disabled=false
     quote_character='
 
 エンコーディング
@@ -252,26 +305,25 @@ CSVファイル（products.csv）:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 スクリプト:
 
 ::
 
-    url="https://shop.example.com/product/" + data.product_id
-    title=data.name
-    content=data.description + " カテゴリ: " + data.category + " 価格: " + data.price + "円"
-    digest=data.category
-    price=data.price
+    url="https://shop.example.com/product/" + product_id
+    title=name
+    content=description + " カテゴリ: " + category + " 価格: " + price + "円"
+    digest=category
+    price=price
 
 在庫情報のフィルタリング:
 
 ::
 
-    url=data.in_stock == "true" ? "https://shop.example.com/product/" + data.product_id : null
-    title=data.in_stock == "true" ? data.name : null
-    content=data.in_stock == "true" ? data.description : null
-    price=data.in_stock == "true" ? data.price : null
+    url=in_stock == "true" ? "https://shop.example.com/product/" + product_id : null
+    title=in_stock == "true" ? name : null
+    content=in_stock == "true" ? description : null
+    price=in_stock == "true" ? price : null
 
 社員名簿のCSV
 -------------
@@ -293,16 +345,15 @@ CSVファイル（employees.csv）:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 スクリプト:
 
 ::
 
-    url="https://intranet.example.com/employee/" + data.emp_id
-    title=data.name + " (" + data.department + ")"
-    content="部署: " + data.department + "\n役職: " + data.position + "\nメール: " + data.email + "\n電話: " + data.phone
-    digest=data.department
+    url="https://intranet.example.com/employee/" + emp_id
+    title=name + " (" + department + ")"
+    content="部署: " + department + "\n役職: " + position + "\nメール: " + email + "\n電話: " + phone
+    digest=department
 
 ヘッダーなしのCSV
 -----------------
@@ -323,16 +374,15 @@ CSVファイル（data.csv）:
     file_encoding=UTF-8
     has_header_line=false
     separator_character=,
-    quote_character="
 
 スクリプト:
 
 ::
 
-    url="https://example.com/item/" + data.cell1
-    title=data.cell2
-    content=data.cell3
-    price=data.cell4
+    url="https://example.com/item/" + cell1
+    title=cell2
+    content=cell3
+    price=cell4
 
 複数CSVファイルの統合
 ---------------------
@@ -345,16 +395,15 @@ CSVファイル（data.csv）:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_character="
 
 スクリプト:
 
 ::
 
-    url="https://example.com/report/" + data.id
-    title=data.title
-    content=data.content
-    timestamp=data.date
+    url="https://example.com/report/" + id
+    title=title
+    content=content
+    timestamp=date
 
 タブ区切り（TSV）ファイル
 -------------------------
@@ -375,16 +424,15 @@ TSVファイル（data.tsv）:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=\t
-    quote_character="
 
 スクリプト:
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    digest=data.category
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    digest=category
 
 トラブルシューティング
 ======================
@@ -392,14 +440,15 @@ TSVファイル（data.tsv）:
 ファイルが見つからない
 ----------------------
 
-**症状**: ``FileNotFoundException`` または ``No such file``
+**症状**: クロールが実行されるがファイルが処理されない、ログに ``is not found`` が出力される
 
 **確認事項**:
 
 1. ファイルパスが正しいか確認（絶対パス推奨）
 2. ファイルが存在するか確認
-3. ファイルの読み取り権限があるか確認
-4. |Fess| 実行ユーザーからアクセス可能か確認
+3. ファイルの拡張子が ``.csv`` または ``.tsv`` であるか確認（それ以外の拡張子はスキップされます）
+4. ファイルの読み取り権限があるか確認
+5. |Fess| 実行ユーザーからアクセス可能か確認
 
 文字化けが発生する
 ------------------
@@ -435,7 +484,7 @@ TSVファイル（data.tsv）:
 列が正しく認識されない
 ----------------------
 
-**症状**: 列の区切りが正しく認識されない
+**症状**: 列の区切りが正しく認識されない、または引用符で囲んだフィールドが分割される
 
 **確認事項**:
 
@@ -452,7 +501,12 @@ TSVファイル（data.tsv）:
        # セミコロン
        separator_character=;
 
-2. 引用符の設定を確認
+2. 引用符付きフィールド（フィールド内に区切り文字を含む）を扱う場合は、引用符処理を有効にする:
+
+   ::
+
+       quote_disabled=false
+
 3. CSVファイルの形式を確認（RFC 4180準拠か）
 
 ヘッダー行の扱い
@@ -482,7 +536,7 @@ TSVファイル（data.tsv）:
 **確認事項**:
 
 1. CSVファイルが空でないか確認
-2. スクリプト設定が正しいか確認
+2. スクリプト設定が正しいか確認（列名・ ``cell<N>`` の参照が ``data.`` 接頭辞なしになっているか）
 3. 列名が正しいか確認（has_header_line=true の場合）
 4. ログでエラーメッセージを確認
 
@@ -501,7 +555,8 @@ TSVファイル（data.tsv）:
 改行を含むフィールド
 --------------------
 
-RFC 4180形式では、引用符で囲むことで改行を含むフィールドを扱えます:
+RFC 4180形式では、引用符で囲むことで改行を含むフィールドを扱えます。
+引用符処理はデフォルトで無効のため、 ``quote_disabled=false`` の指定が必要です:
 
 ::
 
@@ -519,6 +574,7 @@ RFC 4180形式では、引用符で囲むことで改行を含むフィールド
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
+    quote_disabled=false
     quote_character="
 
 CsvListDataStore
@@ -528,9 +584,11 @@ CsvListDataStore
 
 ``CsvListDataStore`` は ``CsvDataStore`` を拡張し、以下の追加機能を提供します:
 
-- マルチスレッド処理（ ``num_of_threads`` パラメーターで制御）
+- マルチスレッド処理（ ``numOfThreads`` パラメーターで制御）
 - 処理済みCSVファイルの自動削除
 - タイムスタンプベースのファイルフィルタリング（書き込み中のファイルをスキップ）
+
+``CsvDataStore`` のすべてのパラメーターおよびスクリプト設定がそのまま利用できます。
 
 基本設定
 --------
@@ -549,21 +607,21 @@ CsvListDataStore
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - パラメーター
      - 必須
      - 説明
    * - ``timestamp_margin``
      - いいえ
-     - ファイルの最終更新時刻からの経過時間（ミリ秒）。この時間が経過していないファイルはスキップされます（デフォルト: 10000）
-   * - ``num_of_threads``
+     - ファイルの最終更新時刻からの経過時間（ミリ秒）。この時間が経過していないファイルは、書き込み中とみなしてスキップされます（デフォルト: 10000）
+   * - ``numOfThreads``
      - いいえ
      - 処理スレッド数（デフォルト: 1）
 
 .. note::
 
-   ``CsvListDataStore`` は処理完了後にCSVファイルを自動的に削除します。処理中にエラーが発生した場合、ファイルは ``.txt`` にリネームされます。
+   ``CsvListDataStore`` は処理完了後にCSVファイルを自動的に削除します。処理中にエラーが発生した場合、ファイルは ``.txt`` にリネームされます（リネームに失敗した場合は削除されます）。
 
 スクリプトの高度な使用例
 ========================
@@ -573,43 +631,43 @@ CsvListDataStore
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description
-    price=Integer.parseInt(data.price)
-    category=data.category.toLowerCase()
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=Integer.parseInt(price)
+    category=category.toLowerCase()
 
 条件付きインデックス
 --------------------
 
 ::
 
-    # 価格が10000以上の商品のみインデックス
-    url=Integer.parseInt(data.price) >= 10000 ? "https://example.com/product/" + data.id : null
-    title=Integer.parseInt(data.price) >= 10000 ? data.name : null
-    content=Integer.parseInt(data.price) >= 10000 ? data.description : null
-    price=Integer.parseInt(data.price) >= 10000 ? data.price : null
+    // 価格が10000以上の商品のみインデックス
+    url=Integer.parseInt(price) >= 10000 ? "https://example.com/product/" + id : null
+    title=Integer.parseInt(price) >= 10000 ? name : null
+    content=Integer.parseInt(price) >= 10000 ? description : null
+    price=Integer.parseInt(price) >= 10000 ? price : null
 
 複数列の結合
 ------------
 
 ::
 
-    url="https://example.com/product/" + data.id
-    title=data.name
-    content=data.description + "\n\n仕様:\n" + data.specs + "\n\n注意事項:\n" + data.notes
-    category=data.category
+    url="https://example.com/product/" + id
+    title=name
+    content=description + "\n\n仕様:\n" + specs + "\n\n注意事項:\n" + notes
+    category=category
 
 日付のフォーマット
 ------------------
 
 ::
 
-    url="https://example.com/article/" + data.id
-    title=data.title
-    content=data.content
-    created=data.created_date
-    # 日付形式の変換が必要な場合は追加処理
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    created=created_date
+    // 日付形式の変換が必要な場合は追加処理
 
 参考情報
 ========
