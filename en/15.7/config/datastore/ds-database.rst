@@ -25,21 +25,45 @@ All JDBC-compatible databases are supported. Main examples:
 Prerequisites
 =============
 
-1. JDBC driver is required
-2. Read access to the database is required
-3. Proper query design is important when retrieving large amounts of data
+1. Installation of the ``fess-ds-db`` plugin is required
+2. A JDBC driver compatible with the target database is required
+3. Read access to the database is required
+4. Proper query design is important when retrieving large amounts of data
+
+Plugin Installation
+-------------------
+
+Method 1: Place the JAR file directly
+
+::
+
+    # Download from Maven Central
+    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # Place the file
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    # or
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+
+Method 2: Install from the admin console
+
+1. Open "System" -> "Plugin"
+2. Upload the JAR file
+3. Restart |Fess|
 
 Installing JDBC Drivers
 -----------------------
 
-Place the JDBC driver in the ``lib/`` directory:
+Place the JDBC driver compatible with your target database in the |Fess| classpath (``app/WEB-INF/lib/`` directory):
 
 ::
 
     # Example: MySQL driver
-    cp mysql-connector-java-8.0.33.jar /path/to/fess/lib/
+    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    # or
+    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
-Restart |Fess| to load the driver.
+After placing the JDBC driver, restart |Fess| to load it.
 
 Configuration
 =============
@@ -90,38 +114,47 @@ Parameter List
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Parameter
      - Required
      - Description
    * - ``driver``
      - Yes
-     - JDBC driver class name
+     - JDBC driver class name (if not specified, a ``DataStoreException`` is raised)
    * - ``url``
      - Yes
-     - JDBC connection URL
+     - JDBC connection URL (required for connection)
+   * - ``sql``
+     - Yes
+     - SQL query for data retrieval (if not specified, a ``DataStoreException`` is raised)
    * - ``username``
      - No
      - Database username
    * - ``password``
      - No
      - Database password
-   * - ``sql``
-     - Yes
-     - SQL query for data retrieval
    * - ``fetch_size``
      - No
-     - Fetch size (default: 100). For MySQL streaming result sets, set to ``MIN_VALUE``.
+     - JDBC fetch size. Set to ``MIN_VALUE`` for MySQL streaming result sets
+   * - ``default_mimetype``
+     - No
+     - Default MIME type used when extracting content from BLOB or binary columns
+   * - ``column_label.mimetype``
+     - No
+     - Column name that contains the MIME type used for extracting BLOB or binary columns (e.g., ``column_label.mimetype=content_type``)
+   * - ``column_label.filename``
+     - No
+     - Column name that contains the filename used for extracting BLOB or binary columns (MIME type is inferred from the file extension)
+   * - ``info.*``
+     - No
+     - Additional JDBC connection properties (e.g., ``info.ssl=true``). The key with ``info.`` removed is passed to the JDBC driver
    * - ``readInterval``
      - No
      - Delay in milliseconds between processing each row. Default: 0
    * - ``script_type``
      - No
      - Script engine type. Default: groovy
-   * - ``column_label.*``
-     - No
-     - BLOB extraction MIME type mapping (e.g., ``column_label.mimetype=content_type``)
 
 Script Configuration
 --------------------
@@ -137,7 +170,33 @@ Map SQL column names to index fields:
 
 Available fields:
 
-- ``<column_name>`` - SQL query result columns, accessed by their label name in the SELECT clause
+- ``<column_name>`` - SQL query result columns (accessed directly by the column label name; no prefix such as ``data.`` is used)
+
+.. note::
+   Column names must match the column labels (aliases) in the ``SELECT`` clause.
+   When using aggregate functions or expressions, assign an explicit alias with ``AS``
+   (e.g., ``COUNT(*) AS total``).
+
+Loading BLOB/Binary Data
+========================
+
+Columns of type BLOB, CLOB, NCLOB, byte array, or binary stream are automatically passed through the
+content extraction process (the same extractor used for file crawling) and ingested as text.
+Array-type columns are converted to space-separated strings. NULL values become empty strings.
+
+To correctly extract text from BLOB or binary streams, the data type (MIME type) must be determined.
+The following priority order is used:
+
+1. ``column_label.mimetype=<column name>`` - Use the value of the specified column as the MIME type
+2. ``column_label.filename=<column name>`` - Treat the value of the specified column as a filename and infer the MIME type from the file extension
+3. ``default_mimetype`` - Default MIME type used when the above methods cannot determine the type
+
+Example (extract BLOB in the ``file_data`` column using the MIME type from the ``content_type`` column):
+
+::
+
+    sql=SELECT id, title, file_data, content_type FROM documents
+    column_label.mimetype=content_type
 
 SQL Query Design
 ================
@@ -145,18 +204,15 @@ SQL Query Design
 Efficient Queries
 -----------------
 
-Query performance is important when handling large amounts of data:
+Query performance is important when handling large amounts of data.
+SQL is sent to the database as-is (parameter binding is not performed):
 
 ::
 
-    # Efficient query using indexes
     SELECT id, title, content, url, updated_at
     FROM articles
     WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
-
-.. note::
-   SQL is sent to the database as-is. Parameter binding (e.g., named parameters) is not supported.
 
 Incremental Crawling
 --------------------
@@ -188,7 +244,7 @@ Generate document URLs in the script:
     url=url
 
 Multi-byte Character Support
-============================
+=============================
 
 When handling data with multi-byte characters such as Japanese:
 
@@ -212,7 +268,7 @@ Security
 ========
 
 Protecting Database Credentials
--------------------------------
+--------------------------------
 
 .. warning::
    Writing passwords directly in configuration files poses a security risk.
@@ -224,9 +280,9 @@ Recommended methods:
 3. Use read-only users
 
 Principle of Least Privilege
-----------------------------
+-----------------------------
 
-Grant only minimum necessary permissions to database users:
+Grant only the minimum necessary permissions to database users:
 
 ::
 
@@ -256,7 +312,7 @@ Script:
 
     url="https://shop.example.com/product/" + id
     title=name
-    content=description + " Category: " + category + " Price: $" + price
+    content=description + " Category: " + category + " Price: " + price
     lastModified=updated_at
 
 Knowledge Base Articles
@@ -294,8 +350,8 @@ JDBC Driver Not Found
 
 **Resolution**:
 
-1. Verify that JDBC driver is placed in ``lib/``
-2. Verify driver class name is correct
+1. Verify that the JDBC driver is placed in ``lib/``
+2. Verify that the driver class name is correct
 3. Restart |Fess|
 
 Connection Errors
@@ -318,8 +374,8 @@ Query Errors
 **Check**:
 
 1. Test the SQL query directly on the database
-2. Verify column names are correct
-3. Verify table names are correct
+2. Verify that column names are correct
+3. Verify that table names are correct
 
 Reference Information
 =====================

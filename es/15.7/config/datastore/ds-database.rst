@@ -25,21 +25,45 @@ Compatible con todas las bases de datos que soporten JDBC. Ejemplos principales:
 Requisitos Previos
 ==================
 
-1. Se requiere el controlador JDBC
-2. Se requiere acceso de lectura a la base de datos
-3. Para grandes volumenes de datos, es importante un diseno de consultas apropiado
+1. Se requiere instalar el plugin ``fess-ds-db``
+2. Se requiere el controlador JDBC correspondiente a la base de datos de destino
+3. Se requiere acceso de lectura a la base de datos
+4. Para grandes volumenes de datos, es importante un diseno de consultas apropiado
+
+Instalacion del Plugin
+----------------------
+
+Metodo 1: Colocar el archivo JAR directamente
+
+::
+
+    # Descargar desde Maven Central
+    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # Colocar el archivo
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    # o bien
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+
+Metodo 2: Instalar desde la consola de administracion
+
+1. Abrir "Sistema" -> "Plugins"
+2. Subir el archivo JAR
+3. Reiniciar |Fess|
 
 Instalacion del Controlador JDBC
---------------------------------
+---------------------------------
 
-Coloque el controlador JDBC en el directorio ``lib/``:
+Coloque el controlador JDBC correspondiente a la base de datos de destino en el classpath de |Fess| (directorio ``app/WEB-INF/lib/``):
 
 ::
 
     # Ejemplo: Controlador MySQL
-    cp mysql-connector-java-8.0.33.jar /path/to/fess/lib/
+    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    # o bien
+    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
-Reinicie |Fess| para cargar el controlador.
+Despues de colocar el controlador JDBC, reinicie |Fess| para cargarlo.
 
 Metodo de Configuracion
 =======================
@@ -63,7 +87,7 @@ Configuracion Basica
      - Activado
 
 Configuracion de Parametros
----------------------------
+----------------------------
 
 Ejemplo MySQL/MariaDB:
 
@@ -90,41 +114,50 @@ Lista de Parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Parametro
      - Requerido
      - Descripcion
    * - ``driver``
      - Si
-     - Nombre de la clase del controlador JDBC
+     - Nombre de la clase del controlador JDBC (si no se especifica, se produce ``DataStoreException``)
    * - ``url``
      - Si
-     - URL de conexion JDBC
+     - URL de conexion JDBC (obligatorio para la conexion)
+   * - ``sql``
+     - Si
+     - Consulta SQL para obtener datos (si no se especifica, se produce ``DataStoreException``)
    * - ``username``
      - No
      - Nombre de usuario de la base de datos
    * - ``password``
      - No
      - Contrasena de la base de datos
-   * - ``sql``
-     - Si
-     - Consulta SQL para obtener datos
    * - ``fetch_size``
      - No
-     - Tamano de obtencion (predeterminado: 100). Para streaming en MySQL, especifique ``MIN_VALUE``.
-   * - ``column_label.*``
+     - Tamano de recuperacion JDBC. Para resultados en streaming con MySQL, especifique ``MIN_VALUE``
+   * - ``default_mimetype``
      - No
-     - Mapeo de tipo MIME para extraccion de datos BLOB (ej. ``column_label.content=application/pdf``).
+     - Tipo MIME predeterminado utilizado al extraer contenido de columnas BLOB o binarias
+   * - ``column_label.mimetype``
+     - No
+     - Nombre de la columna que contiene el tipo MIME utilizado para la extraccion de columnas BLOB o binarias (ej. ``column_label.mimetype=content_type``)
+   * - ``column_label.filename``
+     - No
+     - Nombre de la columna que contiene el nombre de archivo utilizado para la extraccion de columnas BLOB o binarias (el tipo MIME se infiere a partir de la extension)
+   * - ``info.*``
+     - No
+     - Propiedades adicionales de conexion JDBC (ej. ``info.ssl=true``). La clave sin el prefijo ``info.`` se pasa al controlador JDBC
    * - ``readInterval``
      - No
-     - Retardo en milisegundos entre la lectura de cada fila (predeterminado: 0).
+     - Retardo en milisegundos entre el procesamiento de cada fila. Predeterminado: 0
    * - ``script_type``
      - No
-     - Tipo de lenguaje de script (predeterminado: groovy).
+     - Tipo de motor de scripts. Predeterminado: groovy
 
 Configuracion de Script
------------------------
+------------------------
 
 Mapee los nombres de columnas SQL a campos del indice:
 
@@ -137,27 +170,54 @@ Mapee los nombres de columnas SQL a campos del indice:
 
 Campos disponibles:
 
-- ``<nombre_columna>`` - Columnas de resultado de la consulta SQL, accesibles directamente por el nombre de la columna
+- ``<nombre_columna>`` - Columnas de resultado de la consulta SQL (se accede directamente por el nombre de la etiqueta de columna; no se usa prefijo como ``data.``)
 
-Diseno de Consultas SQL
-=======================
+.. note::
+   Los nombres de columna deben coincidir con la etiqueta de columna (alias) de la clausula ``SELECT``.
+   Cuando se usen funciones de agregacion o expresiones, asigne un alias explicito con ``AS``
+   (ej. ``COUNT(*) AS total``).
 
-Consultas Eficientes
---------------------
+Carga de Datos BLOB o Binarios
+================================
 
-Al manejar grandes cantidades de datos, el rendimiento de la consulta es importante:
+Las columnas de tipo BLOB, CLOB, NCLOB, arrays de bytes y flujos binarios se procesan
+automaticamente mediante el extractor de contenido (el mismo que se usa en el rastreo de
+archivos) y se incorporan como texto. Las columnas de tipo array se convierten en cadenas
+separadas por espacios. Los valores NULL se convierten en cadenas vacias.
+
+Para extraer correctamente el texto de datos BLOB o flujos binarios, es necesario
+determinar el tipo de dato (tipo MIME). La determinacion sigue el siguiente orden de
+prioridad:
+
+1. ``column_label.mimetype=<nombre_columna>`` - Usa el valor de la columna indicada como tipo MIME
+2. ``column_label.filename=<nombre_columna>`` - Trata el valor de la columna indicada como nombre de archivo e infiere el tipo MIME a partir de la extension
+3. ``default_mimetype`` - Tipo MIME predeterminado usado cuando no se puede determinar con los metodos anteriores
+
+Ejemplo (extraccion del BLOB de la columna ``file_data`` usando el tipo MIME de la columna ``content_type``):
 
 ::
 
-    # Consulta eficiente usando indices
-    # Nota: La consulta SQL se envia tal cual a la base de datos.
+    sql=SELECT id, title, file_data, content_type FROM documents
+    column_label.mimetype=content_type
+
+Diseno de Consultas SQL
+========================
+
+Consultas Eficientes
+---------------------
+
+Al manejar grandes cantidades de datos, el rendimiento de la consulta es importante.
+La consulta SQL se envia tal cual a la base de datos (no se realiza enlace de parametros):
+
+::
+
     SELECT id, title, content, url, updated_at
     FROM articles
     WHERE updated_at >= '2024-01-01 00:00:00'
     ORDER BY id
 
 Rastreo Incremental
--------------------
+--------------------
 
 Metodo para obtener solo registros actualizados:
 
@@ -170,7 +230,7 @@ Metodo para obtener solo registros actualizados:
     sql=SELECT * FROM articles WHERE id > 10000
 
 Generacion de URLs
-------------------
+-------------------
 
 Las URLs de documentos se generan en el script:
 
@@ -186,9 +246,9 @@ Las URLs de documentos se generan en el script:
     url=url
 
 Soporte de Caracteres Multibyte
-===============================
+================================
 
-Al manejar datos con caracteres multibyte como espanol o japones:
+Al manejar datos con caracteres multibyte como japones u otros idiomas:
 
 MySQL
 -----
@@ -210,7 +270,7 @@ Seguridad
 =========
 
 Proteccion de Credenciales de Base de Datos
--------------------------------------------
+--------------------------------------------
 
 .. warning::
    Escribir contrasenas directamente en archivos de configuracion es un riesgo de seguridad.
@@ -222,7 +282,7 @@ Metodos recomendados:
 3. Usar usuarios de solo lectura
 
 Principio de Minimo Privilegio
-------------------------------
+--------------------------------
 
 Otorgue solo los permisos minimos necesarios al usuario de la base de datos:
 
@@ -236,7 +296,7 @@ Ejemplos de Uso
 ===============
 
 Busqueda de Catalogo de Productos
----------------------------------
+-----------------------------------
 
 Parametros:
 
@@ -258,7 +318,7 @@ Script:
     lastModified=updated_at
 
 Articulos de Base de Conocimientos
-----------------------------------
+-------------------------------------
 
 Parametros:
 
@@ -283,10 +343,10 @@ Script:
     lastModified=updated_at
 
 Solucion de Problemas
-=====================
+======================
 
 Controlador JDBC No Encontrado
-------------------------------
+--------------------------------
 
 **Sintoma**: ``ClassNotFoundException`` o ``No suitable driver``
 
@@ -297,7 +357,7 @@ Controlador JDBC No Encontrado
 3. Reinicie |Fess|
 
 Error de Conexion
------------------
+------------------
 
 **Sintoma**: ``Connection refused`` o error de autenticacion
 
@@ -309,7 +369,7 @@ Error de Conexion
 4. Configuracion del firewall
 
 Error de Consulta
------------------
+------------------
 
 **Sintoma**: ``SQLException`` o error de sintaxis SQL
 
@@ -320,7 +380,7 @@ Error de Consulta
 3. Verifique que los nombres de tabla sean correctos
 
 Informacion de Referencia
-=========================
+==========================
 
 - :doc:`ds-overview` - Descripcion General de Conectores de Almacen de Datos
 - :doc:`ds-csv` - Conector CSV
