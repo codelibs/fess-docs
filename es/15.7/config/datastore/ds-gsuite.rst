@@ -94,6 +94,60 @@ Lista de Parametros
    * - ``client_email``
      - Si
      - Direccion de correo de la cuenta de servicio
+   * - ``max_size``
+     - No
+     - Tamano maximo de archivo a indexar (en bytes). Predeterminado: ``10000000`` (aprox. 10MB)
+   * - ``ignore_folder``
+     - No
+     - Si se deben omitir las carpetas. Predeterminado: ``true``
+   * - ``ignore_error``
+     - No
+     - Si se debe continuar el procesamiento cuando ocurre un error. Predeterminado: ``true``
+   * - ``supported_mimetypes``
+     - No
+     - Tipos MIME a indexar (expresion regular, separados por comas). Predeterminado: ``.*`` (todos los tipos)
+   * - ``include_pattern``
+     - No
+     - Patron de expresion regular para las URL que se incluyen en el indice
+   * - ``exclude_pattern``
+     - No
+     - Patron de expresion regular para las URL que se excluyen
+   * - ``default_permissions``
+     - No
+     - Permisos predeterminados (separados por comas, p. ej. ``{role}drive-users``)
+   * - ``number_of_threads``
+     - No
+     - Numero de hilos de procesamiento en paralelo. Predeterminado: ``1``
+   * - ``query``
+     - No
+     - Cadena de consulta de busqueda de la API de Google Drive
+   * - ``corpora``
+     - No
+     - Corpora a buscar. Predeterminado: ``allDrives``
+   * - ``spaces``
+     - No
+     - Espacios a buscar (parametro ``spaces`` de la API de Google Drive, p. ej. ``drive``, ``appDataFolder``). Predeterminado: sin especificar (valor predeterminado de la API).
+   * - ``fields``
+     - No
+     - Campos de archivo que se solicitan a la API de Google Drive. Predeterminado: ``*`` (todos los campos).
+   * - ``read_timeout``
+     - No
+     - Tiempo de espera de lectura HTTP (en milisegundos). Predeterminado: ``20000``
+   * - ``connect_timeout``
+     - No
+     - Tiempo de espera de conexion HTTP (en milisegundos). Predeterminado: ``20000``
+   * - ``refresh_token_interval``
+     - No
+     - Intervalo (en segundos) para renovar el token de acceso OAuth. Predeterminado: ``3540`` (59 minutos).
+   * - ``max_cached_content_size``
+     - No
+     - Tamano maximo (en bytes) del contenido mantenido en memoria; el contenido mayor se vuelca a un archivo temporal. Predeterminado: ``1048576`` (1MB).
+   * - ``proxy_host``
+     - No
+     - Nombre de host del servidor proxy
+   * - ``proxy_port``
+     - No
+     - Numero de puerto del servidor proxy
 
 Configuracion de Script
 -----------------------

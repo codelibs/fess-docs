@@ -94,6 +94,60 @@ Liste des parametres
    * - ``client_email``
      - Oui
      - Adresse email du compte de service
+   * - ``max_size``
+     - Non
+     - Taille maximale des fichiers a indexer (en octets). Par defaut : ``10000000`` (environ 10 Mo)
+   * - ``ignore_folder``
+     - Non
+     - Ignorer les dossiers ou non. Par defaut : ``true``
+   * - ``ignore_error``
+     - Non
+     - Continuer le traitement en cas d'erreur. Par defaut : ``true``
+   * - ``supported_mimetypes``
+     - Non
+     - Types MIME a indexer (expression reguliere, separes par des virgules). Par defaut : ``.*`` (tous les types)
+   * - ``include_pattern``
+     - Non
+     - Expression reguliere des URL a inclure dans l'indexation
+   * - ``exclude_pattern``
+     - Non
+     - Expression reguliere des URL a exclure de l'indexation
+   * - ``default_permissions``
+     - Non
+     - Permissions par defaut (separees par des virgules, ex : ``{role}drive-users``)
+   * - ``number_of_threads``
+     - Non
+     - Nombre de threads de traitement parallele. Par defaut : ``1``
+   * - ``query``
+     - Non
+     - Chaine de requete de recherche de l'API Google Drive
+   * - ``corpora``
+     - Non
+     - Corpus a rechercher. Par defaut : ``allDrives``
+   * - ``spaces``
+     - Non
+     - Espaces a rechercher (parametre ``spaces`` de l'API Google Drive, par ex. ``drive``, ``appDataFolder``). Par defaut : non defini (valeur par defaut de l'API).
+   * - ``fields``
+     - Non
+     - Champs de fichier a demander a l'API Google Drive. Par defaut : ``*`` (tous les champs).
+   * - ``read_timeout``
+     - Non
+     - Delai de lecture HTTP (en millisecondes). Par defaut : ``20000``
+   * - ``connect_timeout``
+     - Non
+     - Delai de connexion HTTP (en millisecondes). Par defaut : ``20000``
+   * - ``refresh_token_interval``
+     - Non
+     - Intervalle (en secondes) pour renouveler le jeton d'acces OAuth. Par defaut : ``3540`` (59 minutes).
+   * - ``max_cached_content_size``
+     - Non
+     - Taille maximale (en octets) du contenu conserve en memoire ; un contenu plus volumineux est decharge dans un fichier temporaire. Par defaut : ``1048576`` (1 Mo).
+   * - ``proxy_host``
+     - Non
+     - Nom d'hote du serveur proxy
+   * - ``proxy_port``
+     - Non
+     - Numero de port du serveur proxy
 
 Configuration du script
 --------------
