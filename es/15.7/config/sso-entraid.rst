@@ -98,10 +98,10 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Roles por defecto (separados por comas)
      - (Ninguno)
    * - ``entraid.permission.fields``
-     - Campos de permisos (separados por comas)
+     - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan.
      - ``mail``
    * - ``entraid.use.ds``
-     - Usar servicios de dominio
+     - Integración con el servicio de dominio. Cuando es ``true``, para los valores de permiso en formato ``name@domain``, la parte local (``name``) con la parte del dominio eliminada también se agrega como permiso.
      - ``true``
 
 Configuración del lado de Entra ID
@@ -172,6 +172,11 @@ Configurar permisos de API
 .. note::
    El consentimiento del administrador requiere privilegios de administrador del tenant.
 
+.. note::
+   |Fess| solicita el ámbito ``https://graph.microsoft.com/.default`` al adquirir un token.
+   Esto significa que se utilizan todos los permisos de acceso configurados y para los que se ha dado consentimiento en el registro de la aplicación.
+   Por lo tanto, para recuperar información de grupos, debe agregar el permiso ``Group.Read.All`` indicado anteriormente al registro de la aplicación y otorgar el consentimiento del administrador.
+
 Información a obtener
 ---------------------
 
@@ -192,6 +197,8 @@ Grupos anidados
 
 |Fess| recupera no solo los grupos a los que los usuarios pertenecen directamente, sino también los grupos padre (grupos anidados) de forma recursiva.
 Este procesamiento se ejecuta de forma asíncrona después del inicio de sesión para minimizar el impacto en el tiempo de inicio de sesión.
+La búsqueda de grupos padre abarca hasta un número determinado de niveles, y los resultados obtenidos se almacenan en caché durante un período determinado.
+Cuando la recuperación de los grupos padre finaliza, los permisos del usuario se recalculan.
 
 Configuración de grupos por defecto
 -----------------------------------
@@ -244,10 +251,12 @@ Configuración legacy (compatibilidad con versiones anteriores)
 --------------------------------------------------------------
 
 Para compatibilidad con versiones anteriores, también se puede usar el prefijo ``aad.*``.
+Cuando cada propiedad ``entraid.*`` no está configurada, se utiliza el valor de la propiedad ``aad.*`` correspondiente.
+Además, ``sso.type=aad`` se trata de la misma forma que ``sso.type=entraid``.
 
 ::
 
-    # Habilitar SSO
+    # Habilitar SSO (también se puede usar sso.type=aad)
     sso.type=entraid
 
     # Claves de configuración legacy

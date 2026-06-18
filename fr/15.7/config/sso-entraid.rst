@@ -98,10 +98,10 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Rôles par défaut (séparés par des virgules)
      - (Aucun)
    * - ``entraid.permission.fields``
-     - Champs de permissions (séparés par des virgules)
+     - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées.
      - ``mail``
    * - ``entraid.use.ds``
-     - Utiliser les services de domaine
+     - Intégration avec le service de domaine. Quand ``true``, pour les valeurs de permission au format ``name@domain``, la partie locale (``name``) sans la partie domaine est également ajoutée comme permission.
      - ``true``
 
 Configuration côté Entra ID
@@ -172,6 +172,11 @@ Configuration des autorisations d'API
 .. note::
    Le consentement administrateur nécessite des privilèges d'administrateur de tenant.
 
+.. note::
+   |Fess| demande le scope ``https://graph.microsoft.com/.default`` lors de l'acquisition d'un jeton.
+   Cela signifie que toutes les autorisations d'accès configurées et consenties sur l'inscription d'application sont utilisées.
+   Par conséquent, pour récupérer les informations de groupe, vous devez ajouter l'autorisation ``Group.Read.All`` ci-dessus à l'inscription d'application et accorder le consentement administrateur.
+
 Informations à obtenir
 ----------------------
 
@@ -192,6 +197,7 @@ Groupes imbriqués
 
 |Fess| récupère non seulement les groupes auxquels les utilisateurs appartiennent directement, mais aussi les groupes parents (groupes imbriqués) de manière récursive.
 Ce traitement est exécuté de manière asynchrone après la connexion pour minimiser l'impact sur le temps de connexion.
+La recherche des groupes parents cible un certain nombre de niveaux hiérarchiques, et les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque la récupération des groupes parents est terminée, les permissions de l'utilisateur sont recalculées.
 
 Paramètres de groupe par défaut
 -------------------------------
@@ -244,10 +250,11 @@ Configuration legacy (rétrocompatibilité)
 -----------------------------------------
 
 Pour la compatibilité avec les versions antérieures, le préfixe ``aad.*`` peut également être utilisé.
+Quand une propriété ``entraid.*`` n'est pas définie, la valeur de la propriété ``aad.*`` correspondante est utilisée. De plus, ``sso.type=aad`` est traité de la même manière que ``sso.type=entraid``.
 
 ::
 
-    # Activer SSO
+    # Activer SSO (sso.type=aad peut également être utilisé)
     sso.type=entraid
 
     # Clés de configuration legacy

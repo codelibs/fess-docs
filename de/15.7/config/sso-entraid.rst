@@ -98,10 +98,10 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Standardrollen (kommagetrennt)
      - (Keine)
    * - ``entraid.permission.fields``
-     - Berechtigungsfelder (kommagetrennt)
+     - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt.
      - ``mail``
    * - ``entraid.use.ds``
-     - Domänendienste verwenden
+     - Domänendienst-Integration. Bei ``true`` wird für Berechtigungswerte im Format ``name@domain`` auch der lokale Teil (``name``) ohne den Domänenanteil als Berechtigung hinzugefügt.
      - ``true``
 
 Konfiguration auf der Entra ID-Seite
@@ -172,6 +172,11 @@ Konfigurieren der API-Berechtigungen
 .. note::
    Die Administratorzustimmung erfordert Mandantenadministratorrechte.
 
+.. note::
+   |Fess| fordert beim Token-Abruf den Scope ``https://graph.microsoft.com/.default`` an.
+   Das bedeutet, dass alle in der App-Registrierung konfigurierten und genehmigten Zugriffsberechtigungen verwendet werden.
+   Um Gruppeninformationen abzurufen, muss daher die oben genannte Berechtigung ``Group.Read.All`` zur App-Registrierung hinzugefügt und die Administratorzustimmung erteilt werden.
+
 Zu erhaltende Informationen
 ---------------------------
 
@@ -192,6 +197,8 @@ Verschachtelte Gruppen
 
 |Fess| ruft nicht nur Gruppen ab, zu denen Benutzer direkt gehören, sondern auch übergeordnete Gruppen (verschachtelte Gruppen) rekursiv.
 Diese Verarbeitung wird nach der Anmeldung asynchron ausgeführt, um die Auswirkungen auf die Anmeldezeit zu minimieren.
+Die übergeordneten Gruppen werden bis zu einer bestimmten Hierarchietiefe ermittelt, und die abgerufenen Ergebnisse werden für einen bestimmten Zeitraum zwischengespeichert.
+Sobald die Ermittlung der übergeordneten Gruppen abgeschlossen ist, werden die Berechtigungen des Benutzers neu berechnet.
 
 Standardgruppeneinstellungen
 ----------------------------
@@ -244,10 +251,12 @@ Legacy-Konfiguration (Abwärtskompatibilität)
 --------------------------------------------
 
 Für die Kompatibilität mit früheren Versionen kann auch das Präfix ``aad.*`` verwendet werden.
+Wenn eine ``entraid.*``-Eigenschaft nicht gesetzt ist, wird der Wert der entsprechenden ``aad.*``-Eigenschaft verwendet.
+Außerdem wird ``sso.type=aad`` genauso behandelt wie ``sso.type=entraid``.
 
 ::
 
-    # SSO aktivieren
+    # SSO aktivieren (sso.type=aad kann ebenfalls verwendet werden)
     sso.type=entraid
 
     # Legacy-Konfigurationsschlüssel
