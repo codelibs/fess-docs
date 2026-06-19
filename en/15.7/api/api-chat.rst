@@ -60,9 +60,14 @@ Rate Limiting
 
 - Default: 30 requests per minute (per user)
 - Configuration key: ``api.v2.chat.rate.limit.per.user.per.minute``
+- Setting the value to ``0`` or less disables the rate limit.
 
-When the rate limit is exceeded, a ``rate_limited`` error (HTTP 429) is returned. The ``Retry-After`` header indicates the number of seconds to wait.
+When the rate limit is exceeded, a ``rate_limited`` error (HTTP 429) is returned. The ``Retry-After`` header is set to a fixed value of ``60`` (seconds).
 This rate limit is shared between ``POST /chat`` , ``POST /chat/stream`` and ``DELETE /chat/sessions/{session_id}``.
+
+.. note::
+
+   The rate limit applies only when the user can be identified. For anonymous calls where no session is established and the user ID cannot be resolved, the rate limit is skipped.
 
 POST /chat
 ==========
@@ -84,6 +89,8 @@ Request Body
 
 A JSON body with ``Content-Type: application/json``.
 
+The request body size limit is 32 KiB. Exceeding it results in a ``payload_too_large`` error (HTTP 413).
+
 .. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
 .. list-table:: ChatRequest
    :header-rows: 1
@@ -95,7 +102,7 @@ A JSON body with ``Content-Type: application/json``.
    * - ``message``
      - string
      - Yes
-     - User's message (question).
+     - User's message (question). The maximum length is limited by ``rag.chat.message.max.length`` (default 4000). Exceeding it results in an ``invalid_request`` error (HTTP 400).
    * - ``session_id``
      - string
      - No
@@ -216,17 +223,15 @@ HTTP Status Codes
    * - 200
      - Request successful.
    * - 400
-     - Invalid request (missing ``message``, ``rag.chat.enabled=false``, etc.).
+     - Invalid request (missing ``message``, message exceeding the maximum length, ``rag.chat.enabled=false``, etc.).
    * - 403
      - Missing or expired CSRF token.
-   * - 404
-     - Resource not found.
    * - 405
      - HTTP method not allowed.
    * - 413
-     - Request body exceeds size limit.
+     - The request body exceeds the size limit (32 KiB).
    * - 415
-     - Unsupported ``Content-Type``.
+     - The ``Content-Type`` is not ``application/json``, is missing, or the ``charset`` is not UTF-8.
    * - 429
      - Rate limit exceeded.
    * - 500
@@ -325,9 +330,9 @@ When pre-stream validation fails, the following error codes are returned in a JS
    * - 405
      - HTTP method not allowed.
    * - 413
-     - Request body exceeds size limit.
+     - The request body exceeds the size limit (32 KiB).
    * - 415
-     - Unsupported ``Content-Type``.
+     - The ``Content-Type`` is not ``application/json``, is missing, or the ``charset`` is not UTF-8.
    * - 429
      - Rate limit exceeded.
    * - 500
@@ -419,9 +424,7 @@ HTTP Status Codes
    * - 200
      - Session cleared.
    * - 400
-     - Invalid request.
-   * - 401
-     - Authentication required.
+     - Invalid request (e.g., ``session_id`` does not match the pattern ``^[A-Za-z0-9._-]+$`` or the length limit of 1–128 characters, or ``rag.chat.enabled=false``).
    * - 403
      - Missing or expired CSRF token.
    * - 404

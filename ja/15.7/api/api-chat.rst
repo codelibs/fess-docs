@@ -60,9 +60,14 @@ CSRF トークンの取得方法および認証・セッションの詳細は :d
 
 - 既定値: 1分あたり30リクエスト（ユーザーごと）
 - 設定キー: ``api.v2.chat.rate.limit.per.user.per.minute``
+- 値を ``0`` 以下に設定するとレート制限は無効になります。
 
-レート制限を超えた場合、 ``rate_limited`` エラー（HTTP 429）が返されます。 ``Retry-After`` ヘッダーに待機すべき秒数が示されます。
+レート制限を超えた場合、 ``rate_limited`` エラー（HTTP 429）が返されます。 ``Retry-After`` ヘッダーには固定値 ``60`` （秒）が設定されます。
 このレート制限は ``POST /chat`` 、 ``POST /chat/stream`` 、 ``DELETE /chat/sessions/{session_id}`` で共有されます。
+
+.. note::
+
+   レート制限はユーザーを識別できる場合にのみ適用されます。セッションが確立されておらずユーザーIDを解決できない匿名呼び出しでは、レート制限はスキップされます。
 
 POST /chat
 ==========
@@ -84,6 +89,8 @@ POST /chat
 
 ``Content-Type: application/json`` の JSON ボディです。
 
+リクエストボディのサイズ上限は 32 KiB です。これを超えると ``payload_too_large`` エラー（HTTP 413）になります。
+
 .. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
 .. list-table:: ChatRequest
    :header-rows: 1
@@ -95,7 +102,7 @@ POST /chat
    * - ``message``
      - string
      - はい
-     - ユーザーのメッセージ（質問）。
+     - ユーザーのメッセージ（質問）。最大文字数は ``rag.chat.message.max.length`` （既定値 4000）で制限されます。超過した場合は ``invalid_request`` エラー（HTTP 400）になります。
    * - ``session_id``
      - string
      - いいえ
@@ -216,17 +223,15 @@ HTTPステータスコード
    * - 200
      - リクエスト成功。
    * - 400
-     - リクエストが不正（ ``message`` の欠落、 ``rag.chat.enabled=false`` など）。
+     - リクエストが不正（ ``message`` の欠落、 ``message`` の最大長超過、 ``rag.chat.enabled=false`` など）。
    * - 403
      - CSRF トークンの欠落・失効など。
-   * - 404
-     - リソースが見つかりません。
    * - 405
      - HTTP メソッドが許可されていません。
    * - 413
-     - リクエストボディがサイズ上限を超えています。
+     - リクエストボディがサイズ上限（32 KiB）を超えています。
    * - 415
-     - サポートされていない ``Content-Type`` です。
+     - ``Content-Type`` が ``application/json`` でない、欠落している、または ``charset`` が UTF-8 以外です。
    * - 429
      - レート制限を超えました。
    * - 500
@@ -325,9 +330,9 @@ HTTPステータスコード
    * - 405
      - HTTP メソッドが許可されていません。
    * - 413
-     - リクエストボディがサイズ上限を超えています。
+     - リクエストボディがサイズ上限（32 KiB）を超えています。
    * - 415
-     - サポートされていない ``Content-Type`` です。
+     - ``Content-Type`` が ``application/json`` でない、欠落している、または ``charset`` が UTF-8 以外です。
    * - 429
      - レート制限を超えました。
    * - 500
@@ -419,9 +424,7 @@ HTTPステータスコード
    * - 200
      - セッションをクリアしました。
    * - 400
-     - リクエストが不正です。
-   * - 401
-     - 認証が必要です。
+     - リクエストが不正です（ ``session_id`` がパターン ``^[A-Za-z0-9._-]+$`` または長さ制限（1〜128文字）に一致しない、 ``rag.chat.enabled=false`` など）。
    * - 403
      - CSRF トークンの欠落・失効など。
    * - 404

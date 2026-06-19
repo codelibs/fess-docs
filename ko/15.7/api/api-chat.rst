@@ -60,9 +60,14 @@ CSRF 토큰 취득 방법 및 인증·세션의 자세한 내용은 :doc:`api-ov
 
 - 기본값: 1분당 30 요청 (사용자별)
 - 설정 키: ``api.v2.chat.rate.limit.per.user.per.minute``
+- 값을 ``0`` 이하로 설정하면 속도 제한이 비활성화됩니다.
 
-속도 제한을 초과한 경우 ``rate_limited`` 오류 (HTTP 429) 가 반환됩니다. ``Retry-After`` 헤더에 대기해야 할 초 단위 시간이 표시됩니다.
+속도 제한을 초과한 경우 ``rate_limited`` 오류 (HTTP 429) 가 반환됩니다. ``Retry-After`` 헤더에는 고정값 ``60`` (초) 가 설정됩니다.
 이 속도 제한은 ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}`` 에서 공유됩니다.
+
+.. note::
+
+   속도 제한은 사용자를 식별할 수 있는 경우에만 적용됩니다. 세션이 확립되지 않아 사용자 ID를 확인할 수 없는 익명 호출에서는 속도 제한이 건너뜁니다.
 
 POST /chat
 ==========
@@ -84,6 +89,8 @@ POST /chat
 
 ``Content-Type: application/json`` 의 JSON 본문입니다.
 
+요청 본문의 크기 제한은 32 KiB 입니다. 이를 초과하면 ``payload_too_large`` 오류 (HTTP 413) 가 됩니다.
+
 .. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
 .. list-table:: ChatRequest
    :header-rows: 1
@@ -95,7 +102,7 @@ POST /chat
    * - ``message``
      - string
      - 예
-     - 사용자의 메시지 (질문).
+     - 사용자의 메시지 (질문). 최대 문자 수는 ``rag.chat.message.max.length`` (기본값 4000) 로 제한됩니다. 초과한 경우 ``invalid_request`` 오류 (HTTP 400) 가 됩니다.
    * - ``session_id``
      - string
      - 아니오
@@ -216,17 +223,15 @@ HTTP 상태 코드
    * - 200
      - 요청 성공.
    * - 400
-     - 요청이 잘못됨 ( ``message`` 누락, ``rag.chat.enabled=false`` 등).
+     - 요청이 잘못됨 ( ``message`` 누락, ``message`` 최대 길이 초과, ``rag.chat.enabled=false`` 등).
    * - 403
      - CSRF 토큰 누락·만료 등.
-   * - 404
-     - 리소스를 찾을 수 없습니다.
    * - 405
      - HTTP 메서드가 허용되지 않습니다.
    * - 413
-     - 요청 본문이 크기 제한을 초과했습니다.
+     - 요청 본문이 크기 제한 (32 KiB) 을 초과했습니다.
    * - 415
-     - 지원되지 않는 ``Content-Type`` 입니다.
+     - ``Content-Type`` 이 ``application/json`` 이 아니거나, 누락되어 있거나, ``charset`` 이 UTF-8 이 아닙니다.
    * - 429
      - 속도 제한을 초과했습니다.
    * - 500
@@ -325,9 +330,9 @@ HTTP 상태 코드
    * - 405
      - HTTP 메서드가 허용되지 않습니다.
    * - 413
-     - 요청 본문이 크기 제한을 초과했습니다.
+     - 요청 본문이 크기 제한 (32 KiB) 을 초과했습니다.
    * - 415
-     - 지원되지 않는 ``Content-Type`` 입니다.
+     - ``Content-Type`` 이 ``application/json`` 이 아니거나, 누락되어 있거나, ``charset`` 이 UTF-8 이 아닙니다.
    * - 429
      - 속도 제한을 초과했습니다.
    * - 500
@@ -419,9 +424,7 @@ HTTP 상태 코드
    * - 200
      - 세션을 삭제했습니다.
    * - 400
-     - 요청이 잘못되었습니다.
-   * - 401
-     - 인증이 필요합니다.
+     - 요청이 잘못되었습니다 ( ``session_id`` 가 패턴 ``^[A-Za-z0-9._-]+$`` 또는 길이 제한 (1〜128문자) 에 일치하지 않거나, ``rag.chat.enabled=false`` 등).
    * - 403
      - CSRF 토큰 누락·만료 등.
    * - 404

@@ -60,9 +60,14 @@ Límite de velocidad
 
 - Valor predeterminado: 30 solicitudes por minuto (por usuario)
 - Clave de configuración: ``api.v2.chat.rate.limit.per.user.per.minute``
+- Establecer el valor en ``0`` o menos desactiva el límite de velocidad.
 
-Cuando se supera el límite de velocidad, se devuelve el error ``rate_limited`` (HTTP 429). La cabecera ``Retry-After`` indica los segundos que se deben esperar.
+Cuando se supera el límite de velocidad, se devuelve el error ``rate_limited`` (HTTP 429). La cabecera ``Retry-After`` se establece con un valor fijo de ``60`` (segundos).
 Este límite de velocidad es compartido entre ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}``.
+
+.. note::
+
+   El límite de velocidad se aplica únicamente cuando es posible identificar al usuario. En llamadas anónimas en las que no se ha establecido sesión y no se puede resolver el ID de usuario, el límite de velocidad se omite.
 
 POST /chat
 ==========
@@ -84,6 +89,8 @@ Cuerpo de la solicitud
 
 Cuerpo JSON con ``Content-Type: application/json``.
 
+El tamaño máximo del cuerpo de la solicitud es de 32 KiB. Si se supera, se produce un error ``payload_too_large`` (HTTP 413).
+
 .. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
 .. list-table:: ChatRequest
    :header-rows: 1
@@ -95,7 +102,7 @@ Cuerpo JSON con ``Content-Type: application/json``.
    * - ``message``
      - string
      - Sí
-     - Mensaje del usuario (pregunta).
+     - Mensaje del usuario (pregunta). La longitud máxima está limitada por ``rag.chat.message.max.length`` (valor predeterminado: 4000). Si se supera, se produce un error ``invalid_request`` (HTTP 400).
    * - ``session_id``
      - string
      - No
@@ -216,17 +223,15 @@ Códigos de estado HTTP
    * - 200
      - Solicitud exitosa.
    * - 400
-     - Solicitud inválida (ausencia de ``message``, ``rag.chat.enabled=false``, etc.).
+     - Solicitud inválida (ausencia de ``message``, longitud de ``message`` que supera el máximo permitido, ``rag.chat.enabled=false``, etc.).
    * - 403
      - Token CSRF ausente o expirado, entre otros motivos.
-   * - 404
-     - No se encontró el recurso.
    * - 405
      - El método HTTP no está permitido.
    * - 413
-     - El cuerpo de la solicitud supera el límite de tamaño.
+     - El cuerpo de la solicitud supera el límite de tamaño (32 KiB).
    * - 415
-     - ``Content-Type`` no admitido.
+     - ``Content-Type`` no es ``application/json``, está ausente, o el ``charset`` no es UTF-8.
    * - 429
      - Se superó el límite de velocidad.
    * - 500
@@ -325,9 +330,9 @@ Cuando la validación previa al stream falla, se devuelven los siguientes códig
    * - 405
      - El método HTTP no está permitido.
    * - 413
-     - El cuerpo de la solicitud supera el límite de tamaño.
+     - El cuerpo de la solicitud supera el límite de tamaño (32 KiB).
    * - 415
-     - ``Content-Type`` no admitido.
+     - ``Content-Type`` no es ``application/json``, está ausente, o el ``charset`` no es UTF-8.
    * - 429
      - Se superó el límite de velocidad.
    * - 500
@@ -419,9 +424,7 @@ Códigos de estado HTTP
    * - 200
      - La sesión fue borrada.
    * - 400
-     - La solicitud no es válida.
-   * - 401
-     - Se requiere autenticación.
+     - La solicitud no es válida (por ejemplo, ``session_id`` no coincide con el patrón ``^[A-Za-z0-9._-]+$`` o con el límite de longitud de 1–128 caracteres, o ``rag.chat.enabled=false``).
    * - 403
      - Token CSRF ausente o expirado, entre otros motivos.
    * - 404
