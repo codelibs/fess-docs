@@ -36,7 +36,7 @@ Die einzelnen Felder von ``engine`` sind wie folgt:
    * - ``status``
      - Clusterstatus. Einer der Werte ``green`` / ``yellow`` / ``red``.
    * - ``ping_status``
-     - Ping-Statuscode (int).
+     - Ping-Statuscode (int). Der Wert ist ``1``, wenn der Cluster ``red`` ist, und ``0`` andernfalls (``green`` / ``yellow``).
 
 Tabelle: engine-Felder
 
@@ -77,7 +77,7 @@ Wenn der Cluster ``red`` ist (503), wird ein Fehler-Envelope zurückgegeben, und
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }

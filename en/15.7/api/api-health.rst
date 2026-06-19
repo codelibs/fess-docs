@@ -36,7 +36,7 @@ The fields of ``engine`` are as follows:
    * - ``status``
      - Cluster status. One of ``green``, ``yellow``, or ``red``.
    * - ``ping_status``
-     - Ping status (int).
+     - Ping status (int). It is ``1`` when the cluster status is ``red``, and ``0`` otherwise (``green`` or ``yellow``).
 
 Table: engine Fields
 
@@ -77,7 +77,7 @@ When the cluster is ``red`` (503), an error envelope is returned with the engine
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }

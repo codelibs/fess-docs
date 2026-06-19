@@ -36,7 +36,7 @@ Les champs de ``engine`` sont les suivants.
    * - ``status``
      - État du cluster. L'une des valeurs ``green`` / ``yellow`` / ``red``.
    * - ``ping_status``
-     - Statut du ping (int).
+     - Statut du ping (int). La valeur est ``1`` lorsque le cluster est ``red``, et ``0`` dans les autres cas (``green`` / ``yellow``).
 
 Tableau : Champs de engine
 
@@ -77,7 +77,7 @@ Lorsque le cluster est ``red`` (503), l'enveloppe d'erreur est retournée, avec 
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }

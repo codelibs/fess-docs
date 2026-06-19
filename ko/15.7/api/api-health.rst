@@ -36,7 +36,7 @@ HTTP 상태는 클러스터 상태가 ``green`` / ``yellow`` 인 경우 200, ``r
    * - ``status``
      - 클러스터 상태. ``green`` / ``yellow`` / ``red`` 중 하나.
    * - ``ping_status``
-     - ping 상태 (int).
+     - ping 상태 (int). 클러스터가 ``red`` 인 경우 ``1`` , 그 외 ( ``green`` / ``yellow`` ) 인 경우 ``0`` 이 됩니다.
 
 표: engine 필드
 
@@ -77,7 +77,7 @@ HTTP 상태는 클러스터 상태가 ``green`` / ``yellow`` 인 경우 200, ``r
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }

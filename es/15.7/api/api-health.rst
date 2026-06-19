@@ -36,7 +36,7 @@ Los campos de ``engine`` son los siguientes:
    * - ``status``
      - Estado del clúster. Uno de ``green`` / ``yellow`` / ``red``.
    * - ``ping_status``
-     - Estado del ping (int).
+     - Estado del ping (int). Es ``1`` cuando el clúster está en ``red``, y ``0`` en caso contrario (``green`` / ``yellow``).
 
 Tabla: Campos de engine
 
@@ -77,7 +77,7 @@ Cuando el clúster está en estado ``red`` (503), se devuelve el sobre de error 
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }
