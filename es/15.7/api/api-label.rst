@@ -20,10 +20,16 @@ Endpoint            ``/api/v2/labels``
 
 Obtiene la lista de etiquetas configuradas registradas en |Fess| a través del sobre común.
 
+La lista de etiquetas devuelta se filtra en función del usuario que realiza la solicitud y el contenido de la misma, de la siguiente manera:
+
+- **Filtrado por permisos**: Las etiquetas se filtran en función de los permisos de acceso configurados en cada etiqueta y los roles del usuario. Dado que v2 utiliza autenticación basada en sesión, los usuarios que han iniciado sesión solo pueden obtener las etiquetas accesibles con sus propios roles. Las etiquetas cuyos permisos de acceso no coincidan no se incluyen en la lista.
+- **Filtrado por configuración regional**: Las etiquetas pueden registrarse por configuración regional. Se devuelven las etiquetas registradas con una configuración regional que coincida con la cabecera de solicitud ``Accept-Language``, así como las etiquetas registradas sin una configuración regional específica.
+- **Filtrado por host virtual**: Cuando se utilizan hosts virtuales, solo se devuelven las etiquetas asignadas al host virtual correspondiente.
+
 Parámetros de solicitud
 -----------------------
 
-No hay parámetros de solicitud disponibles.
+No hay parámetros de consulta. El filtrado de las etiquetas devueltas se realiza en función de los permisos del usuario autenticado y la cabecera de solicitud ``Accept-Language``, tal como se describe anteriormente.
 
 Respuesta
 ---------
@@ -55,13 +61,13 @@ Los campos son los siguientes:
 .. list-table:: Campos de respuesta
 
    * - ``record_count``
-     - Número de etiquetas registradas (integer).
+     - Número de etiquetas devueltas (integer).
    * - ``labels``
      - Array de etiquetas.
    * - ``label``
-     - Nombre de la etiqueta.
+     - Nombre para mostrar de la etiqueta (nombre de la etiqueta).
    * - ``value``
-     - Valor de la etiqueta.
+     - Valor de la etiqueta. Al especificar este valor en el parámetro ``fields.label`` de :doc:`api-search`, es posible filtrar los resultados de búsqueda por esa etiqueta.
 
 Tabla: Campos de respuesta
 
@@ -77,7 +83,7 @@ Ejemplo de solicitud usando el comando curl:
 Respuesta de error
 ==================
 
-Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HTTP que devuelve este endpoint son:
+Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HTTP que devuelve este endpoint son los siguientes:
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Respuesta de error
@@ -85,8 +91,8 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
    * - Código de estado
      - Descripción
    * - 405 Method Not Allowed
-     - Cuando el método HTTP no está permitido.
+     - Se especificó un método HTTP distinto de GET. El ``error.code`` es ``method_not_allowed`` y la respuesta incluye la cabecera ``Allow: GET``.
    * - 500 Internal Server Error
-     - Cuando se produce un error interno del servidor.
+     - Se produjo un error interno del servidor. El ``error.code`` es ``internal_error``.
 
 Tabla: Respuesta de error

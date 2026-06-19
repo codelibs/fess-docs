@@ -20,10 +20,16 @@ Endpunkt             ``/api/v2/labels``
 
 Ruft die Liste der in |Fess| konfigurierten Labels im gemeinsamen Envelope ab.
 
-Anfrageparameter
-~~~~~~~~~~~~~~~~
+Die zurückgegebene Label-Liste wird abhängig vom anfragenden Benutzer und dem Anfrageinhalt wie folgt gefiltert:
 
-Es sind keine Anfrageparameter verfügbar.
+- **Filterung nach Berechtigungen**: Die Liste wird anhand der dem Label zugewiesenen Zugriffsrechte und der Rollen des Benutzers gefiltert. Da v2 sitzungsbasierte Authentifizierung verwendet, erhalten angemeldete Benutzer nur die Labels, auf die ihre Rollen Zugriff haben. Labels, deren Zugriffsrechte nicht übereinstimmen, werden nicht in der Liste zurückgegeben.
+- **Filterung nach Gebietsschema**: Labels können je nach Gebietsschema registriert werden. Es werden Labels zurückgegeben, die dem im ``Accept-Language``-Anfrage-Header angegebenen Gebietsschema entsprechen, sowie Labels, die ohne Gebietsschemaangabe registriert wurden.
+- **Filterung nach virtuellem Host**: Wenn virtuelle Hosts verwendet werden, werden nur die dem jeweiligen virtuellen Host zugewiesenen Labels zurückgegeben.
+
+Anfrageparameter
+----------------
+
+Es sind keine Anfrageparameter verfügbar. Die Filterung der zurückgegebenen Labels erfolgt wie oben beschrieben anhand der Berechtigungen des authentifizierten Benutzers und des ``Accept-Language``-Anfrage-Headers.
 
 Antwort
 -------
@@ -55,13 +61,13 @@ Die einzelnen Felder sind wie folgt beschrieben:
 .. list-table:: Antwortfelder
 
    * - ``record_count``
-     - Anzahl der registrierten Labels (integer).
+     - Anzahl der zurückgegebenen Labels (integer).
    * - ``labels``
      - Array der Labels.
    * - ``label``
-     - Name des Labels.
+     - Anzeigename des Labels (Label-Name).
    * - ``value``
-     - Wert des Labels.
+     - Wert des Labels. Durch Angabe dieses Werts als ``fields.label``-Parameter in der :doc:`api-search` können Suchergebnisse nach dem betreffenden Label gefiltert werden.
 
 Tabelle: Antwortfelder
 
@@ -85,8 +91,8 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
    * - Statuscode
      - Beschreibung
    * - 405 Method Not Allowed
-     - Wenn die HTTP-Methode nicht erlaubt ist.
+     - Wenn eine andere HTTP-Methode als GET angegeben wurde. ``error.code`` ist ``method_not_allowed`` und der ``Allow: GET``-Header wird beigefügt.
    * - 500 Internal Server Error
-     - Wenn ein interner Serverfehler auftritt.
+     - Wenn ein interner Serverfehler auftritt. ``error.code`` ist ``internal_error``.
 
 Tabelle: Fehlerantwort
