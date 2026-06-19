@@ -30,12 +30,12 @@ Set the following properties in ``fess_config.properties``:
 ::
 
     # CPU usage threshold for web requests (%)
-    # Requests are rejected when CPU usage is at or above this value
+    # Requests are rejected when OpenSearch CPU usage is at or above this value
     # Set to 100 to disable (default: 100)
     web.load.control=100
 
     # CPU usage threshold for API requests (%)
-    # Requests are rejected when CPU usage is at or above this value
+    # Requests are rejected when OpenSearch CPU usage is at or above this value
     # Set to 100 to disable (default: 100)
     api.load.control=100
 
@@ -46,7 +46,7 @@ Set the following properties in ``fess_config.properties``:
 
 .. note::
    When both ``web.load.control`` and ``api.load.control`` are set to 100 (default),
-   the load control feature is completely disabled and monitoring does not start.
+   OpenSearch CPU monitoring does not start.
 
 How It Works
 ============
@@ -63,7 +63,9 @@ When load control is enabled (any threshold is below 100), LoadControlMonitorTar
 
 .. note::
    If monitoring information retrieval fails, CPU usage is reset to 0.
-   After 3 consecutive failures, the log level changes from WARNING to DEBUG.
+   Failures up to the 3rd consecutive occurrence are logged at WARNING level; from the 4th failure onward,
+   the log level changes to DEBUG to prevent log bloat from continuous failures.
+   The failure count is reset whenever monitoring succeeds.
 
 Request Control
 ---------------
@@ -92,6 +94,7 @@ When a request arrives, LoadControlFilter processes it in the following order:
 **For API requests:**
 
 - Returns HTTP 429 status code
+- Adds the ``Retry-After: 60`` HTTP response header
 - Returns a JSON response:
 
 ::
@@ -103,6 +106,11 @@ When a request arrives, LoadControlFilter processes it in the following order:
             "retry_after": 60
         }
     }
+
+.. note::
+   When a request is rejected, the server logs an INFO-level message:
+   ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
+   This allows you to identify which paths were rejected and at which threshold.
 
 Configuration Examples
 ======================
@@ -145,7 +153,7 @@ Example with different thresholds for web and API:
    when the load increases further.
 
 Difference from Rate Limiting
-=============================
+==============================
 
 |Fess| has a :doc:`rate-limiting` feature separate from load control.
 These protect the system using different approaches.

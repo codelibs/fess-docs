@@ -1,6 +1,6 @@
-==================================
+====================================
 Configuracion de control de carga
-==================================
+====================================
 
 Descripcion general
 ===================
@@ -30,12 +30,12 @@ Configure las siguientes propiedades en ``fess_config.properties``:
 ::
 
     # Umbral de uso de CPU para solicitudes web (%)
-    # Las solicitudes se rechazan cuando el uso de CPU alcanza o supera este valor
+    # Las solicitudes se rechazan cuando el uso de CPU de OpenSearch alcanza o supera este valor
     # Establecer en 100 para deshabilitar (predeterminado: 100)
     web.load.control=100
 
     # Umbral de uso de CPU para solicitudes API (%)
-    # Las solicitudes se rechazan cuando el uso de CPU alcanza o supera este valor
+    # Las solicitudes se rechazan cuando el uso de CPU de OpenSearch alcanza o supera este valor
     # Establecer en 100 para deshabilitar (predeterminado: 100)
     api.load.control=100
 
@@ -46,7 +46,7 @@ Configure las siguientes propiedades en ``fess_config.properties``:
 
 .. note::
    Cuando tanto ``web.load.control`` como ``api.load.control`` estan establecidos en 100 (predeterminado),
-   la funcion de control de carga esta completamente deshabilitada y el monitoreo no se inicia.
+   el monitoreo de CPU de OpenSearch no se inicia.
 
 Como funciona
 =============
@@ -63,7 +63,8 @@ Cuando el control de carga esta habilitado (algun umbral es inferior a 100), Loa
 
 .. note::
    Si falla la obtencion de informacion de monitoreo, el uso de CPU se restablece a 0.
-   Despues de 3 fallos consecutivos, el nivel de log cambia de WARNING a DEBUG.
+   Hasta el tercer fallo consecutivo, el nivel de log es WARNING; a partir del cuarto fallo, cambia a DEBUG
+   (para evitar que los fallos continuos hinchen los logs). El contador de fallos se reinicia cuando el monitoreo tiene exito al menos una vez.
 
 Control de solicitudes
 ----------------------
@@ -92,6 +93,7 @@ Cuando llega una solicitud, LoadControlFilter la procesa en el siguiente orden:
 **Para solicitudes API:**
 
 - Devuelve el codigo de estado HTTP 429
+- Adjunta el encabezado de respuesta HTTP ``Retry-After: 60``
 - Devuelve una respuesta JSON:
 
 ::
@@ -103,6 +105,11 @@ Cuando llega una solicitud, LoadControlFilter la procesa en el siguiente orden:
             "retry_after": 60
         }
     }
+
+.. note::
+   Cuando una solicitud es rechazada, el servidor registra a nivel INFO el mensaje
+   ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``.
+   Esto permite verificar que rutas fueron rechazadas y con que umbral.
 
 Ejemplos de configuracion
 =========================
@@ -145,7 +152,7 @@ Ejemplo con diferentes umbrales para web y API:
    se restringen cuando la carga aumenta aun mas.
 
 Diferencia con el limite de tasa
-================================
+=================================
 
 |Fess| tiene una funcion de :doc:`rate-limiting` separada del control de carga.
 Estas protegen el sistema usando enfoques diferentes.
