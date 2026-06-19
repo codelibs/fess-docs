@@ -271,8 +271,8 @@ robots.txt 설정
     # robots.txt 무시(권장하지 않음)
     crawler.ignore.robots.txt=false
 
-    # 특정 robots 태그 무시
-    crawler.ignore.robots.tags=
+    # robots 메타 태그(X-Robots-Tag 포함)를 무시
+    crawler.ignore.robots.tags=false
 
     # 콘텐츠 예외 무시
     crawler.ignore.content.exception=true
@@ -292,16 +292,16 @@ robots.txt 설정
      - 설명
      - 기본값
    * - ``crawler.failure.url.status.codes``
-     - 실패로 간주할 HTTP 상태 코드
-     - ``404``
+     - 실패로 간주할 HTTP 상태 코드(쉼표로 구분)
+     - ``404,403,410``
 
 설정 예
 ~~~~~~
 
 ::
 
-    # 404에 더해 403도 오류로 처리
-    crawler.failure.url.status.codes=404,403
+    # 기본값(404,403,410)에 더해 500도 오류로 처리
+    crawler.failure.url.status.codes=404,403,410,500
 
 시스템 모니터링 설정
 ================
@@ -741,7 +741,7 @@ JVM 옵션
         -XX:-HeapDumpOnOutOfMemoryError
 
 .. note::
-   위의 내용은 주요 옵션만 발췌한 것입니다. 실제 기본값에는 jcifs SMB 타임아웃, Netty 설정, Log4j 설정, 상세 G1GC 설정, PDFBox 설정 등 약 30개의 옵션이 포함되어 있습니다.
+   위의 내용은 주요 옵션만 발췌한 것입니다. 실제 기본값에는 jcifs SMB 타임아웃, Netty 설정, Log4j 설정, 상세 G1GC 설정, PDFBox 설정 등 약 40개의 옵션이 포함되어 있습니다.
    전체 기본값은 ``fess_config.properties`` 를 참조하십시오.
    사용자 지정 시 필요한 옵션만 변경하고 나머지 기본값은 유지하십시오.
 
@@ -816,7 +816,7 @@ JVM 옵션
 
     # 크롤 설정의 "설정 파라미터"에 추가
     client.connectionTimeout=10000
-    client.socketTimeout=30000
+    client.soTimeout=30000
 
 **3. 불필요한 콘텐츠 제외**
 
@@ -829,13 +829,8 @@ JVM 옵션
 
 **4. 재시도 설정**
 
-오류 시 재시도 횟수와 간격을 조정합니다.
-
-::
-
-    # 크롤 설정의 "설정 파라미터"에 추가
-    client.maxRetry=3
-    client.retryInterval=1000
+HTTP 크롤의 재시도 횟수(기본값 5회)와 재시도 간격(기본값 500ms)은 내장된 고정값이며, 크롤 설정의 "설정 파라미터"에서 변경할 수 없습니다.
+응답하지 않는 URL에서의 대기 시간을 줄이려면 위에서 설명한 타임아웃 조정 또는 불필요한 URL 제외를 수행하십시오.
 
 메모리 사용량 최적화
 --------------------
@@ -930,7 +925,7 @@ JVM 옵션
    ::
 
        client.connectionTimeout=5000
-       client.socketTimeout=10000
+       client.soTimeout=10000
 
 3. 불필요한 URL을 제외함
 
