@@ -340,7 +340,7 @@ Si les symptômes suivants apparaissent, il peut y avoir un manque de mémoire.
 **Crawler :**
 
 - Le crawl s'arrête en cours d'exécution
-- ``OutOfMemoryError`` enregistré dans ``fess_crawler.log``
+- ``OutOfMemoryError`` enregistré dans ``fess-crawler.log``
 - Échec du crawl de fichiers volumineux
 
 **OpenSearch :**

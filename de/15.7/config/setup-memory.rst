@@ -343,7 +343,7 @@ Bei folgenden Symptomen besteht möglicherweise Speichermangel.
 **Crawler:**
 
 - Crawling stoppt mittendrin
-- ``OutOfMemoryError`` in ``fess_crawler.log`` aufgezeichnet
+- ``OutOfMemoryError`` in ``fess-crawler.log`` aufgezeichnet
 - Crawlen großer Dateien schlägt fehl
 
 **OpenSearch:**

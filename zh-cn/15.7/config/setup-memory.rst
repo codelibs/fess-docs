@@ -340,7 +340,7 @@ OpenSearch 的内存使用情况
 **爬虫:**
 
 - 爬取中途停止
-- ``fess_crawler.log`` 中记录了 ``OutOfMemoryError``
+- ``fess-crawler.log`` 中记录了 ``OutOfMemoryError``
 - 大型文件爬取失败
 
 **OpenSearch:**
