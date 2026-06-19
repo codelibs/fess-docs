@@ -36,7 +36,7 @@ HTTP 方法            GET
    * - ``status``
      - 集群状态。为 ``green`` / ``yellow`` / ``red`` 之一。
    * - ``ping_status``
-     - ping 的状态码（int）。
+     - ping 的状态码（int）。集群为 ``red`` 时值为 ``1``\ ，其他情况（\ ``green`` / ``yellow``\ ）值为 ``0``\ 。
 
 表: engine 字段
 
@@ -77,7 +77,7 @@ HTTP 方法            GET
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }

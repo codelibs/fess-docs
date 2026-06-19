@@ -36,7 +36,7 @@ HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の
    * - ``status``
      - クラスターの状態。 ``green`` / ``yellow`` / ``red`` のいずれか。
    * - ``ping_status``
-     - ping のステータス（int）。
+     - ping のステータス（int）。クラスターが ``red`` の場合は ``1`` 、それ以外（ ``green`` / ``yellow`` ）の場合は ``0`` になります。
 
 表: engine フィールド
 
@@ -77,7 +77,7 @@ HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の
             "engine": {
               "cluster_name": "fess-es",
               "status": "red",
-              "ping_status": 2
+              "ping_status": 1
             }
           }
         }
