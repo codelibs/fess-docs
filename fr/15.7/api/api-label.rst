@@ -20,10 +20,16 @@ Point de terminaison  ``/api/v2/labels``
 
 Récupère la liste des étiquettes configurées dans |Fess|, encapsulée dans l'enveloppe commune.
 
+La liste des étiquettes retournées est filtrée en fonction de l'utilisateur et du contenu de la requête, comme suit.
+
+- **Filtrage par permissions** : les étiquettes sont filtrées selon les droits d'accès qui leur sont associés et les rôles de l'utilisateur. L'API v2 utilisant une authentification basée sur les sessions, les utilisateurs connectés ne récupèrent que les étiquettes auxquelles leurs rôles donnent accès. Les étiquettes dont les droits d'accès ne correspondent pas sont exclues de la liste.
+- **Filtrage par locale** : les étiquettes peuvent être enregistrées par locale. Les étiquettes enregistrées avec une locale correspondant à l'en-tête de requête ``Accept-Language``, ainsi que les étiquettes enregistrées sans locale spécifique, sont retournées.
+- **Filtrage par hôte virtuel** : lorsque des hôtes virtuels sont utilisés, seules les étiquettes assignées à l'hôte virtuel concerné sont retournées.
+
 Paramètres de requête
 ---------------------
 
-Aucun paramètre de requête n'est disponible.
+Aucun paramètre de requête n'est disponible. Le filtrage des étiquettes retournées s'effectue, comme indiqué ci-dessus, en fonction des permissions de l'utilisateur authentifié et de l'en-tête de requête ``Accept-Language``.
 
 Réponse
 -------
@@ -55,13 +61,13 @@ Les détails de chaque champ sont les suivants.
 .. list-table:: Champs de réponse
 
    * - ``record_count``
-     - Nombre d'étiquettes enregistrées (entier).
+     - Nombre d'étiquettes retournées (entier).
    * - ``labels``
      - Tableau des étiquettes.
    * - ``label``
-     - Nom de l'étiquette.
+     - Nom d'affichage de l'étiquette (nom de l'étiquette).
    * - ``value``
-     - Valeur de l'étiquette.
+     - Valeur de l'étiquette. En spécifiant cette valeur dans le paramètre ``fields.label`` de l'API :doc:`api-search`, il est possible de filtrer les résultats de recherche par l'étiquette concernée.
 
 Tableau : Champs de réponse
 
@@ -85,8 +91,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
    * - Code de statut
      - Description
    * - 405 Method Not Allowed
-     - La méthode HTTP n'est pas autorisée.
+     - Une méthode HTTP autre que GET a été spécifiée. ``error.code`` vaut ``method_not_allowed`` et l'en-tête ``Allow: GET`` est ajouté à la réponse.
    * - 500 Internal Server Error
-     - Une erreur interne s'est produite sur le serveur.
+     - Une erreur interne s'est produite sur le serveur. ``error.code`` vaut ``internal_error``.
 
 Tableau : Réponses d'erreur
