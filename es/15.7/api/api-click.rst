@@ -41,13 +41,13 @@ Envíe un JSON (ClickRequest) con ``Content-Type: application/json`` con los sig
 .. list-table:: Cuerpo de la solicitud
 
    * - ``doc_id``
-     - ID del documento (str, obligatorio, patrón ``^[A-Za-z0-9_-]+$``).
+     - ID del documento (str, obligatorio, patrón ``^[A-Za-z0-9_-]+$``). Identifica el documento cuyo clic se registra.
    * - ``query_id``
-     - ``query_id`` devuelto por la API de búsqueda (str).
+     - El ``query_id`` devuelto por la API de búsqueda (``/search``) (str, opcional). Asocia el clic con la consulta de búsqueda de origen.
    * - ``rank``
-     - Posición en la lista de resultados desde 1 (int, ``>=1``).
+     - Posición en la lista de resultados (base 1, int, opcional).
    * - ``rt``
-     - Epoch en milisegundos de la solicitud de búsqueda original (int64). Cuando no se especifica, se usa la hora actual del servidor como valor predeterminado.
+     - Epoch en milisegundos de la solicitud de búsqueda original (int64, opcional). Cuando no se especifica, se usa la hora actual del servidor como valor predeterminado.
 
 Tabla: Cuerpo de la solicitud
 
@@ -78,6 +78,10 @@ Los campos son los siguientes:
 
 Tabla: Campos de respuesta
 
+.. note::
+
+   ``logged: true`` indica que el clic fue aceptado en la cola de registro de búsqueda. La persistencia se realiza de forma asíncrona.
+
 Respuesta de error
 ------------------
 
@@ -89,17 +93,17 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
    * - Código de estado
      - Descripción
    * - 400 Bad Request
-     - Cuando la solicitud no es válida.
+     - El cuerpo de la solicitud no es JSON válido, o ``doc_id`` está ausente o no coincide con el patrón.
    * - 403 Forbidden
      - Cuando no está permitido por ausencia o expiración del token CSRF, entre otros motivos.
    * - 404 Not Found
-     - Cuando no se encuentra el recurso.
+     - No se encontró ningún documento correspondiente al ``doc_id`` especificado.
    * - 405 Method Not Allowed
-     - Cuando el método HTTP no está permitido.
+     - Se utilizó un método HTTP distinto de ``POST`` (se devuelve una cabecera ``Allow: POST``).
    * - 413 Payload Too Large
-     - Cuando el cuerpo de la solicitud supera el límite de tamaño.
+     - El cuerpo de la solicitud supera el límite de tamaño (2 KiB).
    * - 415 Unsupported Media Type
-     - Cuando el ``Content-Type`` no es admitido.
+     - El ``Content-Type`` no es ``application/json`` (se requiere UTF-8).
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.
 

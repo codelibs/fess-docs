@@ -41,13 +41,13 @@ Send a JSON (ClickRequest) with ``Content-Type: application/json`` containing th
 .. list-table:: Request Body
 
    * - ``doc_id``
-     - Document ID (str, required, pattern ``^[A-Za-z0-9_-]+$``).
+     - Document ID (str, required, pattern ``^[A-Za-z0-9_-]+$``). Identifies the document whose click is recorded.
    * - ``query_id``
-     - The ``query_id`` returned by the search API (str).
+     - The ``query_id`` returned by the search API (``/search``) (str, optional). Associates the click with the originating search query.
    * - ``rank``
-     - 1-based position in the result list (int, ``>=1``).
+     - Position in the result list (1-based, int, optional).
    * - ``rt``
-     - Epoch milliseconds of the original search request (int64). Defaults to the server's current time when not specified.
+     - Epoch milliseconds of the original search request (int64, optional). Defaults to the server's current time when not specified.
 
 Table: Request Body
 
@@ -78,6 +78,10 @@ Each field is described below.
 
 Table: Response Fields
 
+.. note::
+
+   ``logged: true`` indicates that the click was accepted into the search log queue. Persistence is performed asynchronously.
+
 Error Response
 --------------
 
@@ -89,17 +93,17 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
    * - Status Code
      - Description
    * - 400 Bad Request
-     - The request is invalid.
+     - The request body is not valid JSON, or ``doc_id`` is missing or does not match the pattern.
    * - 403 Forbidden
      - Not permitted due to missing or expired CSRF token.
    * - 404 Not Found
-     - The resource was not found.
+     - No document corresponding to the specified ``doc_id`` was found.
    * - 405 Method Not Allowed
-     - The HTTP method is not allowed.
+     - An HTTP method other than ``POST`` was used (an ``Allow: POST`` header is returned).
    * - 413 Payload Too Large
-     - The request body exceeds the size limit.
+     - The request body exceeds the size limit (2 KiB).
    * - 415 Unsupported Media Type
-     - The ``Content-Type`` is not supported.
+     - The ``Content-Type`` is not ``application/json`` (UTF-8 is required).
    * - 500 Internal Server Error
      - An internal server error occurred.
 
