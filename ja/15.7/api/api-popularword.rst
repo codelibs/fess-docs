@@ -15,7 +15,7 @@ HTTPメソッド         GET
 
 |Fess| に、 ``http://<Server Name>/api/v2/popular-words?seed=123`` のようなリクエストを送ることで、人気検索ワードの一覧をJSON形式で受け取ることができます。
 
-``web.api.popular.word=false`` の場合、このAPIは ``invalid_request`` （HTTP 400）を返します（v1 の「unsupported operation」相当の挙動です）。
+``web.api.popularword=false`` の場合、このAPIは ``invalid_request`` （HTTP 400）を返します（v1 の「unsupported operation」相当の挙動です）。
 
 レスポンスの共通エンベロープおよびエラーモデルについては :doc:`api-overview` を参照してください。
 
@@ -87,7 +87,7 @@ curlコマンドでのリクエスト例:
    * - ステータスコード
      - 説明
    * - 400 Bad Request
-     - リクエストが不正な場合（ ``web.api.popular.word=false`` で機能が無効な場合を含む）。 ``error.code`` は ``invalid_request`` です。
+     - リクエストが不正な場合（ ``web.api.popularword=false`` で機能が無効な場合を含む）。 ``error.code`` は ``invalid_request`` です。
    * - 405 Method Not Allowed
      - サポートされていない HTTP メソッドが指定された場合。
    * - 500 Internal Server Error

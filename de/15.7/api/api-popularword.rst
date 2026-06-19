@@ -15,7 +15,7 @@ Endpunkt             ``/api/v2/popular-words``
 
 Durch Senden einer Anfrage wie ``http://<Server Name>/api/v2/popular-words?seed=123`` an |Fess| können Sie eine Liste beliebter Suchbegriffe im JSON-Format erhalten.
 
-Wenn ``web.api.popular.word=false`` gesetzt ist, gibt diese API ``invalid_request`` (HTTP 400) zurück (entspricht dem Verhalten „unsupported operation" in v1).
+Wenn ``web.api.popularword=false`` gesetzt ist, gibt diese API ``invalid_request`` (HTTP 400) zurück (entspricht dem Verhalten „unsupported operation" in v1).
 
 Informationen zum gemeinsamen Antwort-Envelope und zum Fehlermodell finden Sie unter :doc:`api-overview`.
 
@@ -87,7 +87,7 @@ Wenn die Beliebte-Wörter-API fehlschlägt, wird der gemeinsame Fehler-Envelope 
    * - Statuscode
      - Beschreibung
    * - 400 Bad Request
-     - Wenn die Anfrage ungültig ist (einschließlich des Falls, dass die Funktion durch ``web.api.popular.word=false`` deaktiviert ist). ``error.code`` ist ``invalid_request``.
+     - Wenn die Anfrage ungültig ist (einschließlich des Falls, dass die Funktion durch ``web.api.popularword=false`` deaktiviert ist). ``error.code`` ist ``invalid_request``.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
    * - 500 Internal Server Error
