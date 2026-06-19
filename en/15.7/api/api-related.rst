@@ -7,6 +7,8 @@ This page describes two endpoints for retrieving related information for a query
 - ``GET /related-queries`` — Retrieves related query suggestions for a query.
 - ``GET /related-content`` — Retrieves related HTML content for a query.
 
+Both results are based on the related-query and related-content settings registered in advance by the administrator. An empty result is returned when no matching setting exists.
+
 For the common response envelope and error model, see :doc:`api-overview`.
 
 Fetching Related Queries
@@ -22,6 +24,7 @@ Endpoint            ``/api/v2/related-queries``
 
 By sending a request to |Fess| such as ``http://<Server Name>/api/v2/related-queries?q=fess``, you can receive a list of related query terms for the specified query in JSON format.
 
+The requested search term is matched case-insensitively against the registered related-query settings.
 If ``q`` is empty or not specified, no error is returned; instead, an empty ``queries`` array is returned. The response is always a success envelope.
 
 Request Parameters
@@ -56,10 +59,19 @@ Each element of ``response`` is as follows:
 .. list-table:: Response Information
 
    * - queries
-     - Array of related query terms (array of strings). Returns an empty array when ``q`` is empty or not specified.
+     - Array of related query terms (array of strings). Returns an empty array when ``q`` is empty or not specified, or when there is no matching setting.
+
+Usage Example
+-------------
+
+Request example using curl:
+
+::
+
+    curl "http://localhost:8080/api/v2/related-queries?q=fess"
 
 Error Response
-~~~~~~~~~~~~~~
+--------------
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Error Response
@@ -67,7 +79,7 @@ Error Response
    * - Status Code
      - Description
    * - 405 Method Not Allowed
-     - An unsupported HTTP method was specified.
+     - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error
      - An internal server error occurred.
 
@@ -84,7 +96,7 @@ Endpoint            ``/api/v2/related-content``
 
 By sending a request to |Fess| such as ``http://<Server Name>/api/v2/related-content?q=fess``, you can receive related HTML content for the specified query in JSON format.
 
-If multiple content items match, they are concatenated with newlines.
+The requested search term is matched against the registered related-content settings. When multiple content items match, they are concatenated with newlines.
 If ``q`` is empty or not specified, no error is returned; instead, an empty string ``content`` is returned. The response is always a success envelope.
 
 Request Parameters
@@ -117,12 +129,21 @@ Each element of ``response`` is as follows:
 .. list-table:: Response Information
 
    * - content
-     - Related HTML content (string). When multiple items match, they are concatenated with newlines. Returns an empty string when ``q`` is empty or not specified.
+     - Related HTML content (string). When multiple items match, they are concatenated with newlines. Returns an empty string when ``q`` is empty or not specified, or when there is no matching setting.
    * - content_type
      - Content type. The value is always ``html``.
 
+Usage Example
+-------------
+
+Request example using curl:
+
+::
+
+    curl "http://localhost:8080/api/v2/related-content?q=fess"
+
 Error Response
-~~~~~~~~~~~~~~
+--------------
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Error Response
@@ -130,6 +151,6 @@ Error Response
    * - Status Code
      - Description
    * - 405 Method Not Allowed
-     - An unsupported HTTP method was specified.
+     - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error
      - An internal server error occurred.
