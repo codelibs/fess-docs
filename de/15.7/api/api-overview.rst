@@ -90,6 +90,8 @@ Im Fehlerfall wird dem Envelope ein ``error``-Objekt hinzugefügt.
      - Stabiler Fehlercode (``snake_case``). Clients sollten diesen Wert als Basis für die Lokalisierung verwenden.
    * - message
      - Für Menschen lesbarer Fehlermeldungstext (englisch). Bei der Anzeige sollte der Client den ``code`` zur Lokalisierung nutzen.
+   * - details
+     - Optionales Objekt mit zusätzlichen strukturierten Informationen (kann fehlen). Nur einige Endpunkte liefern dieses Feld. Beispielsweise bettet :doc:`api-health` einen Snapshot des Suchmaschinenclusters unter ``error.details.engine`` ein.
 
 Tabelle: Elemente von error
 
@@ -155,7 +157,7 @@ Die v2-API verwendet sitzungsbasierte Authentifizierung.
 Die Anmeldung erfolgt über ``POST /auth/login``. Bei Erfolg wird eine Sitzung aufgebaut und ein CSRF-Token ausgestellt.
 Den aktuellen Authentifizierungsstatus kann man mit ``GET /auth/me`` abfragen. Details siehe :doc:`api-auth`.
 
-Endpunkte wie die Suche, für die keine Anmeldung erforderlich ist, können anonym genutzt werden (abhängig von Einstellungen wie ``app.login.required``).
+Endpunkte wie die Suche, für die keine Anmeldung erforderlich ist, können anonym genutzt werden (abhängig von der Option „Anmeldung erforderlich" in den Systemeinstellungen).
 
 CSRF-Token
 ----------
@@ -201,30 +203,47 @@ API-Typen
 
 |Fess| stellt folgende v2-APIs bereit:
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{3cm}|p{4cm}|p{8cm}|
 .. list-table::
 
-   * - search
-     - API zum Suchen von Dokumenten, Abrufen von Label-Listen und vollständigem Abruf (Scroll).
-   * - suggest
+   * - Typ
+     - Hauptendpunkte
+     - Beschreibung
+   * - :doc:`search <api-search>`
+     - ``/search`` , ``/documents/all``
+     - API zum Suchen von Dokumenten und zum vollständigen Abruf aller Dokumente (Scroll).
+   * - :doc:`label <api-label>`
+     - ``/labels``
+     - API zum Abrufen der Liste der konfigurierten Labels.
+   * - :doc:`suggest <api-suggest>`
+     - ``/suggest-words``
      - API zum Abrufen von Vorschlagswörtern.
-   * - popularword
+   * - :doc:`popularword <api-popularword>`
+     - ``/popular-words``
      - API zum Abrufen beliebter Suchbegriffe.
-   * - related
+   * - :doc:`related <api-related>`
+     - ``/related-queries`` , ``/related-content``
      - API zum Abrufen verwandter Abfragen und verwandter Inhalte.
-   * - monitor
-     - API zum Abrufen des Status des Servers (Suchmaschinenclusters).
-   * - auth
+   * - :doc:`health <api-health>`
+     - ``/health``
+     - API zum Abrufen des Zustands des Suchmaschinenclusters.
+   * - :doc:`auth <api-auth>`
+     - ``/auth/login`` , ``/auth/logout`` , ``/auth/me`` , ``/auth/password``
      - API für Authentifizierungs- und Sitzungsoperationen (Anmelden, Abmelden, Authentifizierungsstatus abrufen, Passwort ändern).
-   * - ui
-     - API zum Abrufen von Anfangskonfigurationen (UI-Einstellungen) für SPAs.
-   * - favorite
+   * - :doc:`ui <api-uiconfig>`
+     - ``/ui/config``
+     - API zum Abrufen der Anfangskonfiguration (UI-Einstellungen) für SPAs.
+   * - :doc:`favorite <api-favorite>`
+     - ``/favorites`` , ``/documents/{docId}/favorite``
      - API zum Verwalten von favorisierten Dokumenten.
-   * - click
+   * - :doc:`click <api-click>`
+     - ``/click``
      - API zum Protokollieren von Klicks auf Suchergebnisse.
-   * - cache
-     - API zum Abrufen des gecachten Dokument-Texts.
-   * - chat
+   * - :doc:`cache <api-cache>`
+     - ``/cache/{docId}``
+     - API zum Abrufen des gecachten Dokumentinhalts.
+   * - :doc:`chat <api-chat>`
+     - ``/chat`` , ``/chat/stream``
      - API zur Nutzung des KI-Suchmodus (RAG-Chat).
 
 Tabelle: API-Typen

@@ -89,6 +89,8 @@ v2 의 모든 JSON 응답은 공통 엔벨로프 구조로 반환됩니다.
      - 안정적인 오류 코드 ( ``snake_case`` ). 클라이언트는 이 값을 기반으로 현지화하는 것을 권장합니다.
    * - message
      - 사람이 읽을 수 있는 오류 메시지 (영어). 표시 시에는 클라이언트 측에서 ``code`` 를 기반으로 현지화하십시오.
+   * - details
+     - 추가적인 구조화 정보를 담은 선택적 객체 (생략될 수 있습니다). 일부 엔드포인트에서만 포함됩니다. 예를 들어 :doc:`api-health` 는 ``error.details.engine`` 아래에 검색 엔진 클러스터의 스냅샷을 포함합니다.
 
 표: error 요소
 
@@ -154,7 +156,7 @@ v2 API 는 세션 기반 인증을 채택하고 있습니다.
 로그인은 ``POST /auth/login`` 으로 수행하며, 성공하면 세션이 확립되고 CSRF 토큰이 발급됩니다.
 현재 인증 상태는 ``GET /auth/me`` 로 확인할 수 있습니다. 자세한 내용은 :doc:`api-auth` 를 참조하십시오.
 
-로그인이 불필요한 검색 등의 엔드포인트는 익명으로도 사용할 수 있습니다 ( ``app.login.required`` 등의 설정에 따라 다릅니다).
+로그인이 불필요한 검색 등의 엔드포인트는 익명으로도 사용할 수 있습니다 (시스템 설정의 "로그인 필수" 옵션에 따라 다릅니다).
 
 CSRF 토큰
 ---------
@@ -199,30 +201,47 @@ API 종류
 
 |Fess| 는 다음 v2 API 를 제공합니다.
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{3cm}|p{4cm}|p{8cm}|
 .. list-table::
 
-   * - search
-     - 문서 검색, 레이블 목록, 전체 취득 (스크롤) 을 수행하는 API.
-   * - suggest
+   * - 종류
+     - 주요 엔드포인트
+     - 설명
+   * - :doc:`search <api-search>`
+     - ``/search`` , ``/documents/all``
+     - 문서 검색 및 전체 문서 취득 (스크롤) 을 수행하는 API.
+   * - :doc:`label <api-label>`
+     - ``/labels``
+     - 설정된 레이블 목록을 취득하는 API.
+   * - :doc:`suggest <api-suggest>`
+     - ``/suggest-words``
      - 자동완성 단어를 취득하는 API.
-   * - popularword
+   * - :doc:`popularword <api-popularword>`
+     - ``/popular-words``
      - 인기 검색어를 취득하는 API.
-   * - related
+   * - :doc:`related <api-related>`
+     - ``/related-queries`` , ``/related-content``
      - 관련 쿼리 및 관련 콘텐츠를 취득하는 API.
-   * - monitor
-     - 서버 (검색 엔진 클러스터) 의 상태를 취득하는 API.
-   * - auth
+   * - :doc:`health <api-health>`
+     - ``/health``
+     - 검색 엔진 클러스터의 상태를 취득하는 API.
+   * - :doc:`auth <api-auth>`
+     - ``/auth/login`` , ``/auth/logout`` , ``/auth/me`` , ``/auth/password``
      - 인증·세션 조작 (로그인, 로그아웃, 인증 상태 취득, 비밀번호 변경) 을 수행하는 API.
-   * - ui
+   * - :doc:`ui <api-uiconfig>`
+     - ``/ui/config``
      - SPA 용 초기 설정 (UI 설정) 을 취득하는 API.
-   * - favorite
+   * - :doc:`favorite <api-favorite>`
+     - ``/favorites`` , ``/documents/{docId}/favorite``
      - 즐겨찾기 문서를 조작하는 API.
-   * - click
+   * - :doc:`click <api-click>`
+     - ``/click``
      - 검색 결과 클릭을 기록하는 API.
-   * - cache
+   * - :doc:`cache <api-cache>`
+     - ``/cache/{docId}``
      - 캐시된 문서 본문을 취득하는 API.
-   * - chat
+   * - :doc:`chat <api-chat>`
+     - ``/chat`` , ``/chat/stream``
      - AI 검색 모드 (RAG 채팅) 기능을 사용하는 API.
 
 표: API 종류

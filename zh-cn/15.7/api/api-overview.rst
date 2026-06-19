@@ -89,6 +89,8 @@ v2 的所有 JSON 响应均以公共信封结构返回。
      - 稳定的错误码（\ ``snake_case``\ ）。建议客户端基于此值进行本地化处理。
    * - message
      - 人类可读的错误消息（英语）。显示时请由客户端根据 ``code`` 进行本地化。
+   * - details
+     - 包含附加结构化信息的可选对象（可能省略）。仅部分端点包含此字段。例如，:doc:`api-health` 会在 ``error.details.engine`` 下嵌入搜索引擎集群快照。
 
 表: error 的元素
 
@@ -154,7 +156,7 @@ v2 API 采用基于会话的认证方式。
 登录通过 ``POST /auth/login`` 完成，成功后将建立会话并颁发 CSRF 令牌。
 当前认证状态可通过 ``GET /auth/me`` 查询。详情请参阅 :doc:`api-auth`。
 
-无需登录的搜索等端点可以匿名使用（取决于 ``app.login.required`` 等配置）。
+无需登录的搜索等端点可以匿名使用（取决于系统设置中的"需要登录"选项）。
 
 CSRF 令牌
 ---------
@@ -198,30 +200,47 @@ API 种类
 
 |Fess| 提供以下 v2 API。
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{3cm}|p{4cm}|p{8cm}|
 .. list-table::
 
-   * - search
-     - 用于搜索文档、获取标签列表及全量获取（滚动）的 API。
-   * - suggest
+   * - 种类
+     - 主要端点
+     - 说明
+   * - :doc:`search <api-search>`
+     - ``/search`` , ``/documents/all``
+     - 用于搜索文档及全量获取（滚动）的 API。
+   * - :doc:`label <api-label>`
+     - ``/labels``
+     - 用于获取已配置标签列表的 API。
+   * - :doc:`suggest <api-suggest>`
+     - ``/suggest-words``
      - 用于获取建议词的 API。
-   * - popularword
+   * - :doc:`popularword <api-popularword>`
+     - ``/popular-words``
      - 用于获取热门词的 API。
-   * - related
+   * - :doc:`related <api-related>`
+     - ``/related-queries`` , ``/related-content``
      - 用于获取相关查询及相关内容的 API。
-   * - monitor
-     - 用于获取服务器（搜索引擎集群）状态的 API。
-   * - auth
+   * - :doc:`health <api-health>`
+     - ``/health``
+     - 用于获取搜索引擎集群状态的 API。
+   * - :doc:`auth <api-auth>`
+     - ``/auth/login`` , ``/auth/logout`` , ``/auth/me`` , ``/auth/password``
      - 用于认证与会话操作（登录、注销、获取认证状态、修改密码）的 API。
-   * - ui
+   * - :doc:`ui <api-uiconfig>`
+     - ``/ui/config``
      - 用于获取 SPA 所需初始配置（UI 配置）的 API。
-   * - favorite
+   * - :doc:`favorite <api-favorite>`
+     - ``/favorites`` , ``/documents/{docId}/favorite``
      - 用于操作收藏文档的 API。
-   * - click
+   * - :doc:`click <api-click>`
+     - ``/click``
      - 用于记录搜索结果点击的 API。
-   * - cache
+   * - :doc:`cache <api-cache>`
+     - ``/cache/{docId}``
      - 用于获取缓存文档正文的 API。
-   * - chat
+   * - :doc:`chat <api-chat>`
+     - ``/chat`` , ``/chat/stream``
      - 用于使用 AI 搜索模式（RAG 聊天）功能的 API。
 
 表: API 种类
