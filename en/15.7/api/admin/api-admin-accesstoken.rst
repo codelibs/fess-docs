@@ -5,8 +5,17 @@ AccessToken API
 Overview
 ========
 
-AccessToken API is an API for managing |Fess| API access tokens.
-You can create, update, and delete tokens.
+The AccessToken API is an API for managing |Fess| API access tokens.
+You can create, retrieve, update, and delete tokens.
+
+Access tokens are used for authentication when calling the |Fess| Search API or Admin API programmatically.
+For common specifications of the Admin API including this API (authentication methods, response format, ``status`` values, error responses,
+and HTTP status codes), refer to :doc:`api-admin-overview`.
+
+.. note::
+
+   To access this API, the access token used in the request must have a permission matching ``api.admin.access.permissions``
+   (default value: ``{role}admin-api`` ).
 
 Base URL
 ========
@@ -56,7 +65,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -65,11 +74,15 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page (default: 25; configurable via ``paging.page.size``)
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1; default: 1)
+   * - ``id``
+     - String
+     - No
+     - Filter to retrieve only the token with the specified ID
 
 Response
 --------
@@ -78,20 +91,34 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "token_id_1",
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
-            "parameterName": "token",
-            "expires": "2025-01-01T00:00:00",
-            "permissions": "{role}admin"
+            "parameterName": "permission",
+            "permissions": "{role}admin-api",
+            "expires": "2026-01-01T00:00:00",
+            "createdBy": "admin",
+            "createdTime": 1735689600000,
+            "updatedBy": "admin",
+            "updatedTime": 1735689600000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   Each token object also includes audit and version information such as ``createdBy`` , ``createdTime`` , ``updatedBy`` ,
+   ``updatedTime`` , and ``versionNo`` .
+   ``createdTime`` and ``updatedTime`` are milliseconds since epoch (numeric).
+   Fields with a value of ``null`` are excluded from the response.
+   ``permissions`` is returned as a newline ( ``\n`` ) separated string.
 
 Get Access Token
 ================
@@ -115,9 +142,14 @@ Response
           "id": "token_id_1",
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
-          "parameterName": "token",
-          "expires": "2025-01-01T00:00:00",
-          "permissions": "{role}admin"
+          "parameterName": "permission",
+          "permissions": "{role}admin-api",
+          "expires": "2026-01-01T00:00:00",
+          "createdBy": "admin",
+          "createdTime": 1735689600000,
+          "updatedBy": "admin",
+          "updatedTime": 1735689600000,
+          "versionNo": 1
         }
       }
     }
@@ -140,36 +172,38 @@ Request Body
 
     {
       "name": "Integration API Token",
-      "parameterName": "token",
-      "expires": "2026-01-01T00:00:00",
-      "permissions": "{role}user"
+      "permissions": "{role}admin-api",
+      "expires": "2026-01-01T00:00:00"
     }
 
-Field Description
-~~~~~~~~~~~~~~~~~
+Field Descriptions
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Field
      - Required
      - Description
    * - ``name``
      - Yes
-     - Token name
-   * - ``token``
-     - No
-     - Token string (auto-generated if not specified)
-   * - ``parameterName``
-     - No
-     - Parameter name (default: "token")
-   * - ``expires``
-     - No
-     - Expiration time (ISO 8601 format string. Example: ``2026-01-01T00:00:00``)
+     - Token name (maximum 1000 characters)
    * - ``permissions``
      - No
-     - Permitted permissions. Specify as a newline-separated string (example: ``{role}admin``)
+     - Permissions granted to this token. Multiple permissions can be specified separated by newlines ( ``\n`` ) (example: ``{role}admin-api`` ). Tokens that call the Admin API require a permission matching ``api.admin.access.permissions`` (default value: ``{role}admin-api`` ).
+   * - ``parameterName``
+     - No
+     - Request parameter name for passing additional permissions. If a request authenticated with this token contains a parameter with the name specified here, its value will be added to ``permissions`` . If omitted, this is not configured.
+   * - ``expires``
+     - No
+     - Expiration time. Specified as a string in ``YYYY-MM-DDTHH:MM:SS`` format (example: ``2026-01-01T00:00:00`` ). If omitted, the token does not expire.
+
+.. note::
+
+   The token string ( ``token`` ) is automatically generated on the server side. Even if ``token``
+   is specified in the request body, it will be ignored. Since the creation response does not include the token string,
+   retrieve the generated token string using "Get Access Token" ( ``GET /setting/{id}`` ).
 
 Response
 --------
@@ -203,11 +237,34 @@ Request Body
     {
       "id": "existing_token_id",
       "name": "Updated API Token",
-      "parameterName": "token",
+      "permissions": "{role}admin-api\n{role}user",
       "expires": "2026-01-01T00:00:00",
-      "permissions": "{role}user\n{role}editor",
       "versionNo": 1
     }
+
+Field Descriptions
+~~~~~~~~~~~~~~~~~~
+
+For updates, the following fields are used in addition to the fields used at creation time.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Field
+     - Required
+     - Description
+   * - ``id``
+     - Yes
+     - ID of the token to update
+   * - ``versionNo``
+     - Yes
+     - Version number for optimistic locking. Specify the ``versionNo`` of the token retrieved beforehand.
+
+.. note::
+
+   The token string ( ``token`` ) cannot be updated. Even if ``token`` is specified in the request body,
+   it will be ignored and the existing value will be retained.
 
 Response
 --------
@@ -255,27 +312,27 @@ Create API Token
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "name": "External App Token",
-           "parameterName": "token",
+           "name": "Search API Token",
            "permissions": "{role}guest"
          }'
 
-API Call Using Token
---------------------
+API Call Using a Token
+----------------------
+
+The created token is used for authentication when calling the Search API and other APIs.
 
 .. code-block:: bash
 
-    # Use token as parameter
-    curl "http://localhost:8080/json/?q=test&token=your_token_here"
-
     # Use token as Authorization header
-    curl "http://localhost:8080/json/?q=test" \
+    curl "http://localhost:8080/api/v2/search?q=test" \
          -H "Authorization: Bearer your_token_here"
 
-Reference
-=========
+    # Use token as query parameter (requires configuration of api.access.token.request.parameter)
+    curl "http://localhost:8080/api/v2/search?q=test&token=your_token_here"
 
-- :doc:`api-admin-overview` - Admin API Overview
+References
+==========
+
+- :doc:`api-admin-overview` - Admin API Overview (authentication, response format, errors)
 - :doc:`../api-search` - Search API
 - :doc:`../../admin/accesstoken-guide` - Access Token Management Guide
-
