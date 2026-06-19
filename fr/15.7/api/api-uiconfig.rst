@@ -96,7 +96,7 @@ Les détails de chaque élément de ``response`` sont les suivants. Tous les cha
      - Description
    * - ``site_name``
      - string
-     - Nom du site.
+     - Nom du site. Lorsque le thème actif inclut un manifeste, il s'agit de son nom d'affichage (``display_name``) ; sinon ``Fess``.
    * - ``login_required``
      - boolean
      - Indique si la connexion est requise.

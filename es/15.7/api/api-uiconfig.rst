@@ -96,7 +96,7 @@ Los elementos de ``response`` son los siguientes. Todos los campos son obligator
      - Descripción
    * - ``site_name``
      - string
-     - Nombre del sitio.
+     - Nombre del sitio. Cuando el tema activo incluye un manifiesto, es su nombre para mostrar (``display_name``); de lo contrario, ``Fess``.
    * - ``login_required``
      - boolean
      - Si se requiere inicio de sesión.

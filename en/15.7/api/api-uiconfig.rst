@@ -96,7 +96,7 @@ Each element of ``response`` is as follows. All fields are required.
      - Description
    * - ``site_name``
      - string
-     - Site name.
+     - Site name. When the active theme includes a manifest, this is its display name (``display_name``); otherwise ``Fess``.
    * - ``login_required``
      - boolean
      - Whether login is required.
