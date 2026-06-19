@@ -89,6 +89,8 @@ En caso de error, se añade un objeto ``error`` al sobre.
      - Código de error estable (``snake_case``). Se recomienda que los clientes realicen la localización basándose en este valor.
    * - message
      - Mensaje de error legible por humanos (en inglés). Al mostrarlo, localice en el lado del cliente basándose en ``code``.
+   * - details
+     - Objeto opcional que contiene información estructurada adicional (puede omitirse). Solo algunos endpoints lo incluyen. Por ejemplo, :doc:`api-health` incorpora una instantánea del clúster del motor de búsqueda en ``error.details.engine``.
 
 Tabla: Elementos de error
 
@@ -154,7 +156,7 @@ La API v2 utiliza autenticación basada en sesión.
 El inicio de sesión se realiza mediante ``POST /auth/login``; si tiene éxito, se establece una sesión y se emite un token CSRF.
 El estado de autenticación actual puede verificarse con ``GET /auth/me``. Consulte :doc:`api-auth` para más detalles.
 
-Los endpoints que no requieren inicio de sesión, como la búsqueda, pueden utilizarse de forma anónima (depende de la configuración como ``app.login.required``).
+Los endpoints que no requieren inicio de sesión, como la búsqueda, pueden utilizarse de forma anónima (dependiendo de la opción "Inicio de sesión obligatorio" en la Configuración del sistema).
 
 Token CSRF
 ----------
@@ -199,30 +201,47 @@ Tipos de API
 
 |Fess| proporciona las siguientes API v2:
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{3cm}|p{4cm}|p{8cm}|
 .. list-table::
 
-   * - search
-     - API para buscar documentos, obtener la lista de etiquetas y obtener todos los resultados (scroll).
-   * - suggest
+   * - Tipo
+     - Endpoints principales
+     - Descripción
+   * - :doc:`search <api-search>`
+     - ``/search`` , ``/documents/all``
+     - API para buscar documentos y obtener todos los documentos (scroll).
+   * - :doc:`label <api-label>`
+     - ``/labels``
+     - API para obtener la lista de etiquetas configuradas.
+   * - :doc:`suggest <api-suggest>`
+     - ``/suggest-words``
      - API para obtener palabras sugeridas.
-   * - popularword
+   * - :doc:`popularword <api-popularword>`
+     - ``/popular-words``
      - API para obtener palabras populares.
-   * - related
+   * - :doc:`related <api-related>`
+     - ``/related-queries`` , ``/related-content``
      - API para obtener consultas relacionadas y contenido relacionado.
-   * - monitor
-     - API para obtener el estado del servidor (clúster del motor de búsqueda).
-   * - auth
+   * - :doc:`health <api-health>`
+     - ``/health``
+     - API para obtener el estado del clúster del motor de búsqueda.
+   * - :doc:`auth <api-auth>`
+     - ``/auth/login`` , ``/auth/logout`` , ``/auth/me`` , ``/auth/password``
      - API para operaciones de autenticación y sesión (inicio de sesión, cierre de sesión, obtención del estado de autenticación, cambio de contraseña).
-   * - ui
+   * - :doc:`ui <api-uiconfig>`
+     - ``/ui/config``
      - API para obtener la configuración inicial (configuración de interfaz de usuario) para SPA.
-   * - favorite
+   * - :doc:`favorite <api-favorite>`
+     - ``/favorites`` , ``/documents/{docId}/favorite``
      - API para gestionar documentos favoritos.
-   * - click
+   * - :doc:`click <api-click>`
+     - ``/click``
      - API para registrar clics en resultados de búsqueda.
-   * - cache
+   * - :doc:`cache <api-cache>`
+     - ``/cache/{docId}``
      - API para obtener el contenido en caché de documentos.
-   * - chat
+   * - :doc:`chat <api-chat>`
+     - ``/chat`` , ``/chat/stream``
      - API para utilizar la función de modo de búsqueda con IA (chat RAG).
 
 Tabla: Tipos de API

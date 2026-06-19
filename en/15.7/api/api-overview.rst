@@ -89,6 +89,8 @@ On error, an ``error`` object is added to the envelope.
      - A stable error code (``snake_case``). Clients are recommended to use this value for localization.
    * - message
      - A human-readable error message (in English). When displaying messages, clients should localize based on ``code``.
+   * - details
+     - An optional object containing additional structured information (may be omitted). Only some endpoints include it. For example, :doc:`api-health` embeds a search engine cluster snapshot under ``error.details.engine``.
 
 Table: Elements of error
 
@@ -154,7 +156,7 @@ The v2 API uses session-based authentication.
 Log in via ``POST /auth/login``; on success, a session is established and a CSRF token is issued.
 The current authentication state can be checked with ``GET /auth/me``. See :doc:`api-auth` for details.
 
-Endpoints such as search that do not require login can be used anonymously (depending on settings such as ``app.login.required``).
+Endpoints such as search that do not require login can be used anonymously (depending on the System Settings "Login Required" option).
 
 CSRF Token
 ----------
@@ -199,30 +201,47 @@ Types of APIs
 
 |Fess| provides the following v2 APIs.
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{3cm}|p{4cm}|p{8cm}|
 .. list-table::
 
-   * - search
-     - API for searching documents, retrieving label lists, and fetching all documents (scroll).
-   * - suggest
+   * - Type
+     - Main endpoints
+     - Description
+   * - :doc:`search <api-search>`
+     - ``/search`` , ``/documents/all``
+     - API for searching documents and fetching all documents (scroll).
+   * - :doc:`label <api-label>`
+     - ``/labels``
+     - API for retrieving the list of configured labels.
+   * - :doc:`suggest <api-suggest>`
+     - ``/suggest-words``
      - API for retrieving suggest words.
-   * - popularword
+   * - :doc:`popularword <api-popularword>`
+     - ``/popular-words``
      - API for retrieving popular words.
-   * - related
+   * - :doc:`related <api-related>`
+     - ``/related-queries`` , ``/related-content``
      - API for retrieving related queries and related content.
-   * - monitor
-     - API for retrieving the state of the server (search engine cluster).
-   * - auth
+   * - :doc:`health <api-health>`
+     - ``/health``
+     - API for retrieving the state of the search engine cluster.
+   * - :doc:`auth <api-auth>`
+     - ``/auth/login`` , ``/auth/logout`` , ``/auth/me`` , ``/auth/password``
      - API for authentication and session operations (login, logout, authentication state retrieval, password change).
-   * - ui
+   * - :doc:`ui <api-uiconfig>`
+     - ``/ui/config``
      - API for retrieving initial configuration (UI settings) for SPAs.
-   * - favorite
+   * - :doc:`favorite <api-favorite>`
+     - ``/favorites`` , ``/documents/{docId}/favorite``
      - API for managing favorite documents.
-   * - click
+   * - :doc:`click <api-click>`
+     - ``/click``
      - API for recording search result clicks.
-   * - cache
+   * - :doc:`cache <api-cache>`
+     - ``/cache/{docId}``
      - API for retrieving cached document content.
-   * - chat
+   * - :doc:`chat <api-chat>`
+     - ``/chat`` , ``/chat/stream``
      - API for using the AI search mode (RAG chat) feature.
 
 Table: Types of APIs

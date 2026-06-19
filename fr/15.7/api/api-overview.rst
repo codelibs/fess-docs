@@ -89,6 +89,8 @@ En cas d'erreur, un objet ``error`` est ajouté à l'enveloppe.
      - Code d'erreur stable (``snake_case``). Il est recommandé que les clients localisent les messages en se basant sur cette valeur.
    * - message
      - Message d'erreur lisible par l'utilisateur (en anglais). Pour l'affichage, veuillez localiser côté client en vous basant sur ``code``.
+   * - details
+     - Objet facultatif contenant des informations structurées supplémentaires (peut être absent). Seuls certains points de terminaison l'incluent. Par exemple, :doc:`api-health` intègre un instantané du cluster du moteur de recherche sous ``error.details.engine``.
 
 Tableau : Éléments de error
 
@@ -154,7 +156,7 @@ L'API v2 utilise une authentification basée sur les sessions.
 La connexion s'effectue via ``POST /auth/login`` ; en cas de succès, une session est établie et un jeton CSRF est émis.
 L'état d'authentification actuel peut être consulté via ``GET /auth/me``. Pour plus de détails, voir :doc:`api-auth`.
 
-Les points de terminaison qui ne nécessitent pas de connexion, comme la recherche, peuvent être utilisés de manière anonyme (selon la configuration ``app.login.required``, etc.).
+Les points de terminaison qui ne nécessitent pas de connexion, comme la recherche, peuvent être utilisés de manière anonyme (selon l'option « Connexion requise » des Paramètres système).
 
 Jeton CSRF
 ----------
@@ -199,30 +201,47 @@ Types d'API
 
 |Fess| fournit les API v2 suivantes.
 
-.. tabularcolumns:: |p{3cm}|p{12cm}|
+.. tabularcolumns:: |p{3cm}|p{4cm}|p{8cm}|
 .. list-table::
 
-   * - search
-     - API de recherche de documents, de liste d'étiquettes et de récupération complète (défilement).
-   * - suggest
+   * - Type
+     - Points de terminaison principaux
+     - Description
+   * - :doc:`search <api-search>`
+     - ``/search`` , ``/documents/all``
+     - API de recherche de documents et de récupération complète (défilement).
+   * - :doc:`label <api-label>`
+     - ``/labels``
+     - API de récupération de la liste des étiquettes configurées.
+   * - :doc:`suggest <api-suggest>`
+     - ``/suggest-words``
      - API de récupération des mots suggérés.
-   * - popularword
+   * - :doc:`popularword <api-popularword>`
+     - ``/popular-words``
      - API de récupération des mots populaires.
-   * - related
+   * - :doc:`related <api-related>`
+     - ``/related-queries`` , ``/related-content``
      - API de récupération des requêtes associées et du contenu associé.
-   * - monitor
-     - API de récupération de l'état du serveur (cluster du moteur de recherche).
-   * - auth
+   * - :doc:`health <api-health>`
+     - ``/health``
+     - API de récupération de l'état du cluster du moteur de recherche.
+   * - :doc:`auth <api-auth>`
+     - ``/auth/login`` , ``/auth/logout`` , ``/auth/me`` , ``/auth/password``
      - API d'authentification et de gestion de session (connexion, déconnexion, récupération de l'état d'authentification, changement de mot de passe).
-   * - ui
+   * - :doc:`ui <api-uiconfig>`
+     - ``/ui/config``
      - API de récupération de la configuration initiale (paramètres d'interface) pour les SPA.
-   * - favorite
+   * - :doc:`favorite <api-favorite>`
+     - ``/favorites`` , ``/documents/{docId}/favorite``
      - API de gestion des documents favoris.
-   * - click
+   * - :doc:`click <api-click>`
+     - ``/click``
      - API d'enregistrement des clics sur les résultats de recherche.
-   * - cache
+   * - :doc:`cache <api-cache>`
+     - ``/cache/{docId}``
      - API de récupération du contenu en cache d'un document.
-   * - chat
+   * - :doc:`chat <api-chat>`
+     - ``/chat`` , ``/chat/stream``
      - API d'accès à la fonctionnalité de mode de recherche IA (chat RAG).
 
 Tableau : Types d'API
