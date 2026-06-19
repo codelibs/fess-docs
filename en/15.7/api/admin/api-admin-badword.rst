@@ -75,7 +75,11 @@ Parameters
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1, default: 1)
+   * - ``id``
+     - String
+     - No
+     - Filter to only the bad word with the specified ID
 
 Response
 --------
@@ -252,6 +256,20 @@ Parameters
      - Yes
      - Bad word CSV file to upload
 
+CSV Format
+~~~~~~~~~~
+
+- The first line is skipped as a header row (the column name is arbitrary; ``BadWord`` is written on download).
+- From the second line onward, write one bad word per line as the ``suggestWord``.
+- Lines whose value is blank are ignored.
+- Prefix a word with ``--`` to delete it (e.g., ``--spam`` deletes ``spam``).
+- Specifying an already-registered word is treated as an update (the updater and update time are reset).
+
+.. note::
+
+   Because the import runs asynchronously on the server side, a ``status: 0`` response
+   indicates that the request was accepted, not that the import has completed.
+
 Response
 --------
 
@@ -267,6 +285,7 @@ Download Bad Word CSV
 =====================
 
 Downloads the registered bad words as a CSV file (``badword.csv``). The response is an ``application/octet-stream`` stream.
+The CSV has a ``BadWord`` header row on the first line, followed by one registered bad word per line.
 
 Request
 -------

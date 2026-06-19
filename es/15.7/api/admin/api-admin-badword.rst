@@ -75,7 +75,11 @@ Parametros
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina (comienza en 1, predeterminado: 1)
+   * - ``id``
+     - String
+     - No
+     - Filtrar solo la palabra prohibida con el ID especificado
 
 Respuesta
 ---------
@@ -252,6 +256,20 @@ Parametros
      - Si
      - Archivo CSV de palabras prohibidas a subir
 
+Formato CSV
+~~~~~~~~~~~
+
+- La primera linea se omite como fila de encabezado (el nombre de la columna es arbitrario; al descargar se escribe ``BadWord``).
+- A partir de la segunda linea, escriba una palabra prohibida por linea como ``suggestWord``.
+- Las lineas cuyo valor esta en blanco se ignoran.
+- Anteponga ``--`` a una palabra para eliminarla (por ejemplo, ``--spam`` elimina ``spam``).
+- Especificar una palabra ya registrada se trata como una actualizacion (se restablecen el usuario y la fecha de actualizacion).
+
+.. note::
+
+   Dado que la importacion se ejecuta de forma asincrona en el servidor, una respuesta ``status: 0``
+   indica que la solicitud fue aceptada, no que la importacion se haya completado.
+
 Respuesta
 ---------
 
@@ -267,6 +285,7 @@ Descargar CSV de Palabras Prohibidas
 ====================================
 
 Descarga las palabras prohibidas registradas como archivo CSV (``badword.csv``). La respuesta es un flujo ``application/octet-stream``.
+El CSV tiene una fila de encabezado ``BadWord`` en la primera linea, seguida de una palabra prohibida registrada por linea.
 
 Solicitud
 ---------

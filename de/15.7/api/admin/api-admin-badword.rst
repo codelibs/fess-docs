@@ -75,7 +75,11 @@ Parameter
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1, Standard: 1)
+   * - ``id``
+     - String
+     - Nein
+     - Auf das Bad Word mit der angegebenen ID einschränken
 
 Response
 --------
@@ -252,6 +256,20 @@ Parameter
      - Ja
      - Hochzuladende Bad-Word-CSV-Datei
 
+CSV-Format
+~~~~~~~~~~
+
+- Die erste Zeile wird als Kopfzeile übersprungen (der Spaltenname ist beliebig; beim Herunterladen wird ``BadWord`` ausgegeben).
+- Ab der zweiten Zeile wird pro Zeile ein Bad Word als ``suggestWord`` angegeben.
+- Zeilen, deren Wert nur aus Leerzeichen besteht, werden ignoriert.
+- Stellen Sie einem Wort ``--`` voran, um es zu löschen (z. B. löscht ``--spam`` das Wort ``spam``).
+- Die Angabe eines bereits registrierten Worts wird als Aktualisierung behandelt (der Bearbeiter und der Aktualisierungszeitpunkt werden zurückgesetzt).
+
+.. note::
+
+   Da der Import serverseitig asynchron ausgeführt wird, zeigt eine Antwort mit ``status: 0``
+   an, dass die Anfrage angenommen wurde, nicht dass der Import abgeschlossen ist.
+
 Response
 --------
 
@@ -267,6 +285,7 @@ Bad Word CSV herunterladen
 ==========================
 
 Lädt die registrierten Bad Words als CSV-Datei (``badword.csv``) herunter. Die Antwort ist ein Stream vom Typ ``application/octet-stream``.
+Die CSV-Datei enthält in der ersten Zeile eine ``BadWord``-Kopfzeile, gefolgt von einem registrierten Bad Word pro Zeile.
 
 Request
 -------
