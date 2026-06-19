@@ -15,7 +15,7 @@ HTTP 方法            GET
 
 向 |Fess| 发送 ``http://<Server Name>/api/v2/popular-words?seed=123`` 等形式的请求，可以获取热门搜索词列表（JSON 格式）。
 
-若 ``web.api.popular.word=false``\ ，则此 API 返回 ``invalid_request``\ （HTTP 400）（相当于 v1 中"unsupported operation"的行为）。
+若 ``web.api.popularword=false``\ ，则此 API 返回 ``invalid_request``\ （HTTP 400）（相当于 v1 中"unsupported operation"的行为）。
 
 有关公共响应信封及错误模型，请参阅 :doc:`api-overview`。
 
@@ -87,7 +87,7 @@ HTTP 方法            GET
    * - 状态码
      - 说明
    * - 400 Bad Request
-     - 请求不合法时（包括 ``web.api.popular.word=false`` 导致功能禁用的情形）。\ ``error.code`` 为 ``invalid_request``\ 。
+     - 请求不合法时（包括 ``web.api.popularword=false`` 导致功能禁用的情形）。\ ``error.code`` 为 ``invalid_request``\ 。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。
    * - 500 Internal Server Error
