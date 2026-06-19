@@ -342,7 +342,7 @@ OpenSearchのメモリ使用状況
 **クローラー:**
 
 - クロールが途中で停止する
-- ``OutOfMemoryError`` が ``fess_crawler.log`` に記録される
+- ``OutOfMemoryError`` が ``fess-crawler.log`` に記録される
 - 大きなファイルのクロールに失敗する
 
 **OpenSearch:**

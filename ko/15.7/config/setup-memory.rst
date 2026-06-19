@@ -336,7 +336,7 @@ OpenSearch의 메모리 사용 상황
 **크롤러:**
 
 - 크롤이 중간에 중지됨
-- ``OutOfMemoryError`` 가 ``fess_crawler.log`` 에 기록됨
+- ``OutOfMemoryError`` 가 ``fess-crawler.log`` 에 기록됨
 - 큰 파일의 크롤링에 실패함
 
 **OpenSearch:**

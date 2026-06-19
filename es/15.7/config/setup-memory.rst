@@ -341,7 +341,7 @@ Si aparecen los siguientes síntomas, es posible que haya falta de memoria.
 **Rastreador:**
 
 - El rastreo se detiene a mitad
-- ``OutOfMemoryError`` registrado en ``fess_crawler.log``
+- ``OutOfMemoryError`` registrado en ``fess-crawler.log``
 - Falla el rastreo de archivos grandes
 
 **OpenSearch:**

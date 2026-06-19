@@ -342,7 +342,7 @@ If the following symptoms appear, there may be a memory shortage.
 **Crawler:**
 
 - Crawling stops midway
-- ``OutOfMemoryError`` recorded in ``fess_crawler.log``
+- ``OutOfMemoryError`` recorded in ``fess-crawler.log``
 - Large file crawling fails
 
 **OpenSearch:**
