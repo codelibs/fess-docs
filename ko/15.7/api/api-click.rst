@@ -41,13 +41,13 @@ HTTP 메서드          POST
 .. list-table:: 요청 본문
 
    * - ``doc_id``
-     - 문서 ID (str, 필수, 패턴 ``^[A-Za-z0-9_-]+$`` ).
+     - 문서 ID (str, 필수, 패턴 ``^[A-Za-z0-9_-]+$`` ). 클릭을 기록할 대상 문서를 식별합니다.
    * - ``query_id``
-     - 검색 API 가 반환하는 ``query_id`` (str).
+     - 검색 API ( ``/search`` ) 가 반환하는 ``query_id`` (str, 선택). 클릭을 원래 검색 쿼리와 연결합니다.
    * - ``rank``
-     - 결과 목록 내의 1 시작 위치 (int, ``>=1`` ).
+     - 결과 목록 내의 위치 (1 시작, int, 선택).
    * - ``rt``
-     - 원래 검색 요청의 epoch 밀리초 (int64). 미지정 시 서버의 현재 시각이 기본값이 됩니다.
+     - 원래 검색 요청의 epoch 밀리초 (int64, 선택). 미지정 시 서버의 현재 시각이 기본값이 됩니다.
 
 표: 요청 본문
 
@@ -78,6 +78,10 @@ HTTP 메서드          POST
 
 표: 응답 필드
 
+.. note::
+
+   ``logged: true`` 는 클릭이 검색 로그 기록 큐에 수락되었음을 나타냅니다. 영속화는 비동기적으로 수행됩니다.
+
 오류 응답
 ---------
 
@@ -89,17 +93,17 @@ HTTP 메서드          POST
    * - 상태 코드
      - 설명
    * - 400 Bad Request
-     - 요청이 잘못된 경우.
+     - 요청 본문이 유효하지 않은 JSON이거나, ``doc_id`` 가 누락되었거나 패턴과 일치하지 않는 경우.
    * - 403 Forbidden
      - CSRF 토큰 누락·만료 등으로 허가되지 않는 경우.
    * - 404 Not Found
-     - 리소스를 찾을 수 없는 경우.
+     - 지정한 ``doc_id`` 에 해당하는 문서를 찾을 수 없는 경우.
    * - 405 Method Not Allowed
-     - HTTP 메서드가 허용되지 않는 경우.
+     - ``POST`` 이외의 HTTP 메서드가 사용된 경우 ( ``Allow: POST`` 헤더를 반환합니다).
    * - 413 Payload Too Large
-     - 요청 본문이 크기 제한을 초과한 경우.
+     - 요청 본문이 크기 제한 (2 KiB) 을 초과한 경우.
    * - 415 Unsupported Media Type
-     - 지원되지 않는 ``Content-Type`` 인 경우.
+     - ``Content-Type`` 이 ``application/json`` 이 아닌 경우 (UTF-8 이 필요합니다).
    * - 500 Internal Server Error
      - 서버 내부 오류가 발생한 경우.
 

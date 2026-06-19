@@ -41,13 +41,13 @@ HTTP 方法            POST
 .. list-table:: 请求体
 
    * - ``doc_id``
-     - 文档 ID（str，必填，格式 ``^[A-Za-z0-9_-]+$``\ ）。
+     - 文档 ID（str，必填，格式 ``^[A-Za-z0-9_-]+$``\ ）。标识要记录点击的文档。
    * - ``query_id``
-     - 搜索 API 返回的 ``query_id``\ （str）。
+     - 搜索 API（\ ``/search``\ ）返回的 ``query_id``\ （str，可选）。将点击与来源搜索查询相关联。
    * - ``rank``
-     - 结果列表中从 1 开始的位置（int，\ ``>=1``\ ）。
+     - 结果列表中的位置（从 1 开始，int，可选）。
    * - ``rt``
-     - 原始搜索请求的 epoch 毫秒（int64）。未指定时，服务器当前时间为默认值。
+     - 原始搜索请求的 epoch 毫秒（int64，可选）。未指定时，以服务器当前时间为默认值。
 
 表: 请求体
 
@@ -78,6 +78,10 @@ HTTP 方法            POST
 
 表: 响应字段
 
+.. note::
+
+   ``logged: true`` 表示点击已被接受进入搜索日志队列。持久化操作以异步方式执行。
+
 错误响应
 --------
 
@@ -89,17 +93,17 @@ HTTP 方法            POST
    * - 状态码
      - 说明
    * - 400 Bad Request
-     - 请求不合法时。
+     - 请求体不是合法的 JSON，或 ``doc_id`` 缺失或不符合格式要求。
    * - 403 Forbidden
      - 因 CSRF 令牌缺失或过期等原因被拒绝时。
    * - 404 Not Found
-     - 找不到资源时。
+     - 未找到与指定 ``doc_id`` 对应的文档。
    * - 405 Method Not Allowed
-     - 不允许使用该 HTTP 方法时。
+     - 使用了 ``POST`` 以外的 HTTP 方法（将返回 ``Allow: POST`` 头）。
    * - 413 Payload Too Large
-     - 请求体超过大小限制时。
+     - 请求体超过大小限制（2 KiB）。
    * - 415 Unsupported Media Type
-     - 不支持的 ``Content-Type`` 时。
+     - ``Content-Type`` 不是 ``application/json``\ （需使用 UTF-8）。
    * - 500 Internal Server Error
      - 发生服务器内部错误时。
 

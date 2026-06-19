@@ -41,13 +41,13 @@ Envoyez un JSON (ClickRequest) avec ``Content-Type: application/json`` contenant
 .. list-table:: Corps de la requête
 
    * - ``doc_id``
-     - Identifiant du document (str, obligatoire, motif ``^[A-Za-z0-9_-]+$``).
+     - Identifiant du document (str, obligatoire, motif ``^[A-Za-z0-9_-]+$``). Identifie le document dont le clic est enregistré.
    * - ``query_id``
-     - ``query_id`` retourné par l'API de recherche (str).
+     - Le ``query_id`` retourné par l'API de recherche (``/search``) (str, facultatif). Associe le clic à la requête de recherche d'origine.
    * - ``rank``
-     - Position dans la liste de résultats, à base 1 (int, ``>=1``).
+     - Position dans la liste de résultats (à base 1, int, facultatif).
    * - ``rt``
-     - Epoch en millisecondes de la requête de recherche d'origine (int64). Si non spécifié, l'heure courante du serveur est utilisée par défaut.
+     - Epoch en millisecondes de la requête de recherche d'origine (int64, facultatif). Si non spécifié, l'heure courante du serveur est utilisée par défaut.
 
 Tableau : Corps de la requête
 
@@ -78,6 +78,10 @@ Les détails de chaque champ sont les suivants.
 
 Tableau : Champs de réponse
 
+.. note::
+
+   ``logged: true`` indique que le clic a été accepté dans la file d'attente du journal de recherche. La persistance est effectuée de manière asynchrone.
+
 Réponse d'erreur
 ~~~~~~~~~~~~~~~~
 
@@ -89,17 +93,17 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
    * - Code de statut
      - Description
    * - 400 Bad Request
-     - La requête est incorrecte.
+     - Le corps de la requête n'est pas un JSON valide, ou ``doc_id`` est absent ou ne correspond pas au motif.
    * - 403 Forbidden
      - Non autorisé (jeton CSRF manquant ou expiré, etc.).
    * - 404 Not Found
-     - Ressource introuvable.
+     - Aucun document correspondant au ``doc_id`` spécifié n'a été trouvé.
    * - 405 Method Not Allowed
-     - La méthode HTTP n'est pas autorisée.
+     - Une méthode HTTP autre que ``POST`` a été utilisée (un en-tête ``Allow: POST`` est retourné).
    * - 413 Payload Too Large
-     - Le corps de la requête dépasse la limite de taille.
+     - Le corps de la requête dépasse la limite de taille (2 Kio).
    * - 415 Unsupported Media Type
-     - ``Content-Type`` non pris en charge.
+     - Le ``Content-Type`` n'est pas ``application/json`` (UTF-8 est requis).
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
 

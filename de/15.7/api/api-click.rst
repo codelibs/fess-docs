@@ -41,13 +41,13 @@ Sendet ein JSON (ClickRequest) mit ``Content-Type: application/json`` und den fo
 .. list-table:: Anfrage-Body
 
    * - ``doc_id``
-     - Dokument-ID (str, Pflicht, Muster ``^[A-Za-z0-9_-]+$``).
+     - Dokument-ID (str, Pflicht, Muster ``^[A-Za-z0-9_-]+$``). Gibt das Dokument an, dessen Klick protokolliert wird.
    * - ``query_id``
-     - Von der Such-API zurückgegebener ``query_id`` (str).
+     - Die von der Such-API (``/search``) zurückgegebene ``query_id`` (str, optional). Verknüpft den Klick mit der zugehörigen Suchanfrage.
    * - ``rank``
-     - 1-basierte Position in der Ergebnisliste (int, ``>=1``).
+     - Position in der Ergebnisliste (1-basiert, int, optional).
    * - ``rt``
-     - Epoch-Millisekunden der ursprünglichen Suchanfrage (int64). Wenn nicht angegeben, wird die aktuelle Serverzeit als Standardwert verwendet.
+     - Epoch-Millisekunden der ursprünglichen Suchanfrage (int64, optional). Wenn nicht angegeben, wird die aktuelle Serverzeit als Standardwert verwendet.
 
 Tabelle: Anfrage-Body
 
@@ -78,6 +78,10 @@ Die einzelnen Felder sind wie folgt beschrieben:
 
 Tabelle: Antwortfelder
 
+.. note::
+
+   ``logged: true`` zeigt an, dass der Klick in die Warteschlange des Suchprotokolls aufgenommen wurde. Die Persistierung erfolgt asynchron.
+
 Fehlerantwort
 ~~~~~~~~~~~~~
 
@@ -89,17 +93,17 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
    * - Statuscode
      - Beschreibung
    * - 400 Bad Request
-     - Wenn die Anfrage ungültig ist.
+     - Der Anfrage-Body ist kein gültiges JSON, oder ``doc_id`` fehlt bzw. entspricht nicht dem Muster.
    * - 403 Forbidden
      - Wenn die Anfrage aufgrund eines fehlenden oder abgelaufenen CSRF-Tokens nicht erlaubt ist.
    * - 404 Not Found
-     - Wenn die Ressource nicht gefunden wurde.
+     - Es wurde kein Dokument gefunden, das der angegebenen ``doc_id`` entspricht.
    * - 405 Method Not Allowed
-     - Wenn die HTTP-Methode nicht erlaubt ist.
+     - Es wurde eine andere HTTP-Methode als ``POST`` verwendet (es wird ein ``Allow: POST``-Header zurückgegeben).
    * - 413 Payload Too Large
-     - Wenn der Request-Body die Größenbegrenzung überschreitet.
+     - Der Anfrage-Body überschreitet die Größenbegrenzung (2 KiB).
    * - 415 Unsupported Media Type
-     - Wenn ein nicht unterstützter ``Content-Type`` angegeben wurde.
+     - Der ``Content-Type`` ist nicht ``application/json`` (UTF-8 ist erforderlich).
    * - 500 Internal Server Error
      - Wenn ein interner Serverfehler auftritt.
 
