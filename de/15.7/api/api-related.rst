@@ -7,6 +7,8 @@ Diese Seite beschreibt zwei Endpunkte zum Abrufen verwandter Informationen zu ei
 - ``GET /related-queries`` — Ruft verwandte Abfragevorschläge zu einer Abfrage ab.
 - ``GET /related-content`` — Ruft verwandten HTML-Inhalt zu einer Abfrage ab.
 
+Beide Ergebnisse basieren auf den verwandten Abfrage- und Inhaltseinstellungen, die der Administrator im Voraus registriert hat. Wenn keine übereinstimmende Einstellung gefunden wird, wird ein leeres Ergebnis zurückgegeben.
+
 Informationen zum gemeinsamen Antwort-Envelope und zum Fehlermodell finden Sie unter :doc:`api-overview`.
 
 Verwandte Abfragen abrufen
@@ -22,10 +24,11 @@ Endpunkt             ``/api/v2/related-queries``
 
 Durch Senden einer Anfrage wie ``http://<Server Name>/api/v2/related-queries?q=fess`` an |Fess| können Sie eine Liste verwandter Abfrageausdrücke zur angegebenen Abfrage im JSON-Format erhalten.
 
+Der angeforderte Suchbegriff wird ohne Berücksichtigung von Groß- und Kleinschreibung mit den registrierten Einstellungen für verwandte Abfragen abgeglichen.
 Wenn ``q`` leer oder nicht angegeben ist, wird kein Fehler zurückgegeben, sondern ein leeres Array ``queries``. Die Antwort ist stets ein Erfolgs-Envelope.
 
 Anfrageparameter
-~~~~~~~~~~~~~~~~
+----------------
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: Anfrageparameter
@@ -56,10 +59,19 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben:
 .. list-table:: Antwortinformationen
 
    * - queries
-     - Array verwandter Abfrageausdrücke (Array von Zeichenketten). Wenn ``q`` leer oder nicht angegeben ist, wird ein leeres Array zurückgegeben.
+     - Array verwandter Abfrageausdrücke (Array von Zeichenketten). Wenn ``q`` leer oder nicht angegeben ist oder keine übereinstimmende Einstellung vorhanden ist, wird ein leeres Array zurückgegeben.
+
+Verwendungsbeispiel
+-------------------
+
+Beispielanfrage mit curl:
+
+::
+
+    curl "http://localhost:8080/api/v2/related-queries?q=fess"
 
 Fehlerantwort
-~~~~~~~~~~~~~
+-------------
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Fehlerantwort
@@ -67,7 +79,7 @@ Fehlerantwort
    * - Statuscode
      - Beschreibung
    * - 405 Method Not Allowed
-     - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
+     - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde. Der ``Allow``-Header gibt ``GET`` an.
    * - 500 Internal Server Error
      - Wenn ein interner Serverfehler auftritt.
 
@@ -84,11 +96,11 @@ Endpunkt             ``/api/v2/related-content``
 
 Durch Senden einer Anfrage wie ``http://<Server Name>/api/v2/related-content?q=fess`` an |Fess| können Sie verwandten HTML-Inhalt zur angegebenen Abfrage im JSON-Format erhalten.
 
-Wenn mehrere Inhaltselemente übereinstimmen, werden diese durch Zeilenumbrüche verbunden.
-Wenn ``q`` leer oder nicht angegeben ist, wird kein Fehler zurückgegeben, sondern ein leerer Zeichenkette als ``content``. Die Antwort ist stets ein Erfolgs-Envelope.
+Der angeforderte Suchbegriff wird mit den registrierten Einstellungen für verwandte Inhalte abgeglichen. Wenn mehrere Inhaltselemente übereinstimmen, werden diese durch Zeilenumbrüche verbunden.
+Wenn ``q`` leer oder nicht angegeben ist, wird kein Fehler zurückgegeben, sondern eine leere Zeichenkette als ``content``. Die Antwort ist stets ein Erfolgs-Envelope.
 
 Anfrageparameter
-~~~~~~~~~~~~~~~~
+----------------
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: Anfrageparameter
@@ -117,12 +129,21 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben:
 .. list-table:: Antwortinformationen
 
    * - content
-     - Verwandter HTML-Inhalt (Zeichenkette). Wenn mehrere Elemente übereinstimmen, werden sie durch Zeilenumbrüche verbunden. Wenn ``q`` leer oder nicht angegeben ist, wird eine leere Zeichenkette zurückgegeben.
+     - Verwandter HTML-Inhalt (Zeichenkette). Wenn mehrere Elemente übereinstimmen, werden sie durch Zeilenumbrüche verbunden. Wenn ``q`` leer oder nicht angegeben ist oder keine übereinstimmende Einstellung vorhanden ist, wird eine leere Zeichenkette zurückgegeben.
    * - content_type
      - Typ des Inhalts. Der Wert ist stets ``html``.
 
+Verwendungsbeispiel
+-------------------
+
+Beispielanfrage mit curl:
+
+::
+
+    curl "http://localhost:8080/api/v2/related-content?q=fess"
+
 Fehlerantwort
-~~~~~~~~~~~~~
+-------------
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Fehlerantwort
@@ -130,6 +151,6 @@ Fehlerantwort
    * - Statuscode
      - Beschreibung
    * - 405 Method Not Allowed
-     - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
+     - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde. Der ``Allow``-Header gibt ``GET`` an.
    * - 500 Internal Server Error
      - Wenn ein interner Serverfehler auftritt.
