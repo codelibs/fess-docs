@@ -60,9 +60,14 @@ Limite de débit
 
 - Valeur par défaut : 30 requêtes par minute (par utilisateur)
 - Clé de configuration : ``api.v2.chat.rate.limit.per.user.per.minute``
+- Définir la valeur à ``0`` ou moins désactive la limite de débit.
 
-En cas de dépassement, une erreur ``rate_limited`` (HTTP 429) est retournée. L'en-tête ``Retry-After`` indique le nombre de secondes d'attente.
+En cas de dépassement, une erreur ``rate_limited`` (HTTP 429) est retournée. L'en-tête ``Retry-After`` est défini à une valeur fixe de ``60`` (secondes).
 Cette limite de débit est partagée entre ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}``.
+
+.. note::
+
+   La limite de débit s'applique uniquement lorsque l'utilisateur peut être identifié. Pour les appels anonymes où aucune session n'est établie et où l'identifiant de l'utilisateur ne peut pas être résolu, la limite de débit est ignorée.
 
 POST /chat
 ==========
@@ -84,6 +89,8 @@ Corps de la requête
 
 Corps JSON avec ``Content-Type: application/json``.
 
+La taille du corps de la requête est limitée à 32 KiB. La dépasser entraîne une erreur ``payload_too_large`` (HTTP 413).
+
 .. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
 .. list-table:: ChatRequest
    :header-rows: 1
@@ -95,7 +102,7 @@ Corps JSON avec ``Content-Type: application/json``.
    * - ``message``
      - string
      - Oui
-     - Message de l'utilisateur (question).
+     - Message de l'utilisateur (question). La longueur maximale est limitée par ``rag.chat.message.max.length`` (valeur par défaut 4000). La dépasser entraîne une erreur ``invalid_request`` (HTTP 400).
    * - ``session_id``
      - string
      - Non
@@ -216,17 +223,15 @@ Codes de statut HTTP
    * - 200
      - Requête réussie.
    * - 400
-     - Requête incorrecte (``message`` manquant, ``rag.chat.enabled=false``, etc.).
+     - Requête incorrecte (``message`` manquant, longueur maximale de ``message`` dépassée, ``rag.chat.enabled=false``, etc.).
    * - 403
      - Jeton CSRF manquant ou expiré, etc.
-   * - 404
-     - Ressource introuvable.
    * - 405
      - La méthode HTTP n'est pas autorisée.
    * - 413
-     - Le corps de la requête dépasse la limite de taille.
+     - Le corps de la requête dépasse la limite de taille (32 KiB).
    * - 415
-     - ``Content-Type`` non pris en charge.
+     - ``Content-Type`` n'est pas ``application/json``, est absent, ou le ``charset`` n'est pas UTF-8.
    * - 429
      - Limite de débit dépassée.
    * - 500
@@ -325,9 +330,9 @@ En cas d'échec de validation avant le démarrage du stream, les codes d'erreur 
    * - 405
      - La méthode HTTP n'est pas autorisée.
    * - 413
-     - Le corps de la requête dépasse la limite de taille.
+     - Le corps de la requête dépasse la limite de taille (32 KiB).
    * - 415
-     - ``Content-Type`` non pris en charge.
+     - ``Content-Type`` n'est pas ``application/json``, est absent, ou le ``charset`` n'est pas UTF-8.
    * - 429
      - Limite de débit dépassée.
    * - 500
@@ -419,9 +424,7 @@ Codes de statut HTTP
    * - 200
      - Session effacée avec succès.
    * - 400
-     - La requête est incorrecte.
-   * - 401
-     - Authentification requise.
+     - La requête est incorrecte (par exemple, ``session_id`` ne correspond pas au motif ``^[A-Za-z0-9._-]+$`` ou à la limite de longueur de 1 à 128 caractères, ou ``rag.chat.enabled=false``).
    * - 403
      - Jeton CSRF manquant ou expiré, etc.
    * - 404

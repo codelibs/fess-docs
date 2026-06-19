@@ -60,9 +60,14 @@ Für ``POST /chat`` , ``POST /chat/stream`` und ``DELETE /chat/sessions/{session
 
 - Standardwert: 30 Anfragen pro Minute (pro Benutzer)
 - Konfigurationsschlüssel: ``api.v2.chat.rate.limit.per.user.per.minute``
+- Bei einem Wert von ``0`` oder kleiner ist das Rate-Limit deaktiviert.
 
-Bei Überschreitung des Rate-Limits wird der Fehler ``rate_limited`` (HTTP 429) zurückgegeben. Der ``Retry-After``-Header gibt die Wartezeit in Sekunden an.
+Bei Überschreitung des Rate-Limits wird der Fehler ``rate_limited`` (HTTP 429) zurückgegeben. Der ``Retry-After``-Header ist auf den festen Wert ``60`` (Sekunden) gesetzt.
 Dieses Rate-Limit wird zwischen ``POST /chat`` , ``POST /chat/stream`` , ``DELETE /chat/sessions/{session_id}`` geteilt.
+
+.. note::
+
+   Das Rate-Limit wird nur angewendet, wenn der Benutzer identifiziert werden kann. Bei anonymen Aufrufen, bei denen keine Sitzung aufgebaut wurde und die Benutzer-ID nicht aufgelöst werden kann, wird das Rate-Limit übersprungen.
 
 POST /chat
 ==========
@@ -84,6 +89,8 @@ Anfrage-Body
 
 JSON-Body mit ``Content-Type: application/json``.
 
+Die Größenbegrenzung des Anfrage-Bodys beträgt 32 KiB. Bei Überschreitung wird ein ``payload_too_large``-Fehler (HTTP 413) zurückgegeben.
+
 .. tabularcolumns:: |p{3.5cm}|p{2.5cm}|p{1.5cm}|p{7cm}|
 .. list-table:: ChatRequest
    :header-rows: 1
@@ -95,7 +102,7 @@ JSON-Body mit ``Content-Type: application/json``.
    * - ``message``
      - string
      - Ja
-     - Benutzernachricht (Frage).
+     - Benutzernachricht (Frage). Die maximale Länge wird durch ``rag.chat.message.max.length`` (Standardwert 4000) begrenzt. Bei Überschreitung wird ein ``invalid_request``-Fehler (HTTP 400) zurückgegeben.
    * - ``session_id``
      - string
      - Nein
@@ -216,17 +223,15 @@ HTTP-Statuscodes
    * - 200
      - Anfrage erfolgreich.
    * - 400
-     - Ungültige Anfrage (z. B. fehlendes ``message``-Feld, ``rag.chat.enabled=false``).
+     - Ungültige Anfrage (z. B. fehlendes ``message``-Feld, Überschreitung der maximalen Nachrichtenlänge, ``rag.chat.enabled=false``).
    * - 403
      - Fehlender oder abgelaufener CSRF-Token.
-   * - 404
-     - Ressource nicht gefunden.
    * - 405
      - HTTP-Methode nicht erlaubt.
    * - 413
-     - Request-Body überschreitet die Größenbegrenzung.
+     - Der Anfrage-Body überschreitet die Größenbegrenzung (32 KiB).
    * - 415
-     - Nicht unterstützter ``Content-Type``.
+     - ``Content-Type`` ist nicht ``application/json``, fehlt oder ``charset`` ist nicht UTF-8.
    * - 429
      - Rate-Limit überschritten.
    * - 500
@@ -325,9 +330,9 @@ Wenn die Validierung vor dem Stream fehlschlägt, werden folgende Fehlercodes al
    * - 405
      - HTTP-Methode nicht erlaubt.
    * - 413
-     - Request-Body überschreitet die Größenbegrenzung.
+     - Der Anfrage-Body überschreitet die Größenbegrenzung (32 KiB).
    * - 415
-     - Nicht unterstützter ``Content-Type``.
+     - ``Content-Type`` ist nicht ``application/json``, fehlt oder ``charset`` ist nicht UTF-8.
    * - 429
      - Rate-Limit überschritten.
    * - 500
@@ -419,9 +424,7 @@ HTTP-Statuscodes
    * - 200
      - Sitzung wurde gelöscht.
    * - 400
-     - Ungültige Anfrage.
-   * - 401
-     - Authentifizierung erforderlich.
+     - Ungültige Anfrage (z. B. ``session_id`` entspricht nicht dem Muster ``^[A-Za-z0-9._-]+$`` oder der Längenbegrenzung von 1–128 Zeichen, oder ``rag.chat.enabled=false``).
    * - 403
      - Fehlender oder abgelaufener CSRF-Token.
    * - 404
