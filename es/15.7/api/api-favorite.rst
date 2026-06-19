@@ -9,7 +9,7 @@ La URL base es ``http://<Server Name>/api/v2/`` (ejemplo en entorno local: ``htt
 
 .. note::
 
-   Para utilizar la función de favoritos, la configuración ``user.favorite`` debe estar habilitada.
+   Para utilizar la función de favoritos, la configuración ``user.favorite`` debe estar habilitada (deshabilitada por defecto).
 
 Obtención de lista de documentos favoritos
 ==========================================
@@ -104,6 +104,10 @@ Endpoint            ``/api/v2/documents/{docId}/favorite``
 
 Obtiene el estado de favorito del documento especificado.
 
+Los llamantes anónimos (no autenticados) también pueden utilizar este endpoint. En ese caso, ``favorite`` devuelve ``false``, pero ``count`` sigue reflejando el número de favoritos almacenado (por este motivo, este endpoint no devuelve ``401``).
+
+Cuando la función de favoritos (``user.favorite``) está deshabilitada, el endpoint responde con ``invalid_request`` (400).
+
 Parámetros de solicitud
 -----------------------
 
@@ -179,6 +183,9 @@ Endpoint            ``/api/v2/documents/{docId}/favorite``
 
 Registra el documento especificado como favorito.
 Al ser una solicitud que modifica el estado, se requiere la cabecera ``X-Fess-CSRF-Token`` (consulte :doc:`api-overview`).
+Además, el usuario que realiza la llamada debe estar autenticado; los llamantes anónimos reciben ``auth_required`` (401).
+
+El ``query_id`` se utiliza para confirmar que el documento de destino pertenece a un resultado de búsqueda reciente. Cuando ``query_id`` no coincide con ningún conjunto de resultados en caché en la sesión, el endpoint responde con ``invalid_request`` (400); cuando ``docId`` no está contenido en ese conjunto de resultados, responde con ``not_found`` (404).
 
 Parámetros de solicitud
 -----------------------
@@ -194,7 +201,7 @@ Tabla: Parámetros de solicitud
 Cuerpo de la solicitud
 ----------------------
 
-Envíe un JSON (FavoritePostRequest) con ``Content-Type: application/json`` con los siguientes campos:
+Envíe un JSON (FavoritePostRequest) con ``Content-Type: application/json`` (charset UTF-8) con los siguientes campos. El tamaño máximo del cuerpo de la solicitud es de 1 KiB (1024 bytes); superarlo resulta en ``payload_too_large`` (413).
 
 ::
 
@@ -223,12 +230,11 @@ En caso de éxito (200), se devuelven los siguientes campos directamente bajo ``
         "doc_id": "a1b2c3d4e5f6",
         "ok": true,
         "favorite": true,
-        "count": 6,
-        "already_existed": false
+        "count": 6
       }
     }
 
-Los campos son los siguientes:
+Los campos son los siguientes. El ejemplo anterior corresponde a un nuevo registro; si el favorito ya estaba registrado (un re-POST idempotente), la respuesta incluye adicionalmente el campo ``already_existed`` (establecido en ``true``).
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Campos de respuesta

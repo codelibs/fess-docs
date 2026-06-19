@@ -9,7 +9,7 @@
 
 .. note::
 
-   要使用收藏功能，需要启用 ``user.favorite`` 配置。
+   要使用收藏功能，需要启用 ``user.favorite`` 配置（默认禁用）。
 
 获取收藏文档列表
 ================
@@ -104,6 +104,10 @@ HTTP 方法            GET
 
 获取指定文档的收藏状态。
 
+匿名（未认证）的调用方同样可以使用本端点。此时，\ ``favorite`` 返回 ``false``\ ，但 ``count`` 仍会反映已保存的收藏数量（因此，本端点不会返回 ``401``\ ）。
+
+收藏功能（\ ``user.favorite``\ ）未启用时，端点返回 ``invalid_request``\ （400）。
+
 请求参数
 --------
 
@@ -178,7 +182,9 @@ HTTP 方法            POST
 ==================  ====================================================
 
 将指定文档添加至收藏。
-由于是修改状态的请求，需要携带 ``X-Fess-CSRF-Token`` 头（参见 :doc:`api-overview`）。
+由于是修改状态的请求，需要携带 ``X-Fess-CSRF-Token`` 头（参见 :doc:`api-overview`）。此外，调用用户必须已完成认证；匿名调用方会收到 ``auth_required``\ （401）。
+
+``query_id`` 用于确认目标文档属于近期的某次搜索结果。当 ``query_id`` 与会话中缓存的结果集不匹配时，端点返回 ``invalid_request``\ （400）；当 ``docId`` 不包含在该结果集中时，返回 ``not_found``\ （404）。
 
 请求参数
 --------
@@ -194,7 +200,7 @@ HTTP 方法            POST
 请求体
 ------
 
-以 ``Content-Type: application/json`` 发送包含以下字段的 JSON（FavoritePostRequest）。
+以 ``Content-Type: application/json``\ （字符集 UTF-8）发送包含以下字段的 JSON（FavoritePostRequest）。请求体的最大大小为 1 KiB（1024 字节），超过此限制将返回 ``payload_too_large``\ （413）。
 
 ::
 
@@ -223,12 +229,11 @@ HTTP 方法            POST
         "doc_id": "a1b2c3d4e5f6",
         "ok": true,
         "favorite": true,
-        "count": 6,
-        "already_existed": false
+        "count": 6
       }
     }
 
-各字段说明如下。
+各字段说明如下。上述示例为新注册时的响应；若收藏之前已存在（幂等的重复 POST），响应中还会附带 ``already_existed`` 字段（值为 ``true``\ ）。
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: 响应字段

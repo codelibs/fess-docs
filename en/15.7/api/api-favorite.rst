@@ -9,7 +9,7 @@ The base URL is ``http://<Server Name>/api/v2/`` (local environment example: ``h
 
 .. note::
 
-   To use the favorites feature, the ``user.favorite`` setting must be enabled.
+   To use the favorites feature, the ``user.favorite`` setting must be enabled (disabled by default).
 
 Fetching Favorite Documents List
 ==================================
@@ -104,6 +104,10 @@ Endpoint            ``/api/v2/documents/{docId}/favorite``
 
 Retrieves the favorite status of the specified document.
 
+Anonymous (unauthenticated) callers may also use this endpoint. In that case, ``favorite`` returns ``false``, but ``count`` still reflects the stored favorite count (for this reason, this endpoint does not return ``401``).
+
+When the favorites feature (``user.favorite``) is disabled, the endpoint responds with ``invalid_request`` (400).
+
 Request Parameters
 ------------------
 
@@ -178,7 +182,9 @@ Endpoint            ``/api/v2/documents/{docId}/favorite``
 ==================  ====================================================
 
 Adds the specified document to favorites.
-Since this is a state-changing request, the ``X-Fess-CSRF-Token`` header is required (see :doc:`api-overview`).
+Since this is a state-changing request, the ``X-Fess-CSRF-Token`` header is required (see :doc:`api-overview`). In addition, the calling user must be authenticated; anonymous callers receive ``auth_required`` (401).
+
+The ``query_id`` is used to confirm that the target document belongs to a recent search result. When ``query_id`` matches no cached result set in the session, the endpoint responds with ``invalid_request`` (400); when ``docId`` is not contained in that result set, it responds with ``not_found`` (404).
 
 Request Parameters
 ------------------
@@ -194,7 +200,7 @@ Table: Request Parameters
 Request Body
 ------------
 
-Send a JSON (FavoritePostRequest) with ``Content-Type: application/json`` containing the following fields.
+Send a JSON (FavoritePostRequest) with ``Content-Type: application/json`` (charset UTF-8) containing the following fields. The maximum request body size is 1 KiB (1024 bytes); exceeding this results in ``payload_too_large`` (413).
 
 ::
 
@@ -223,12 +229,11 @@ On success (200), the following fields are returned directly under ``response`` 
         "doc_id": "a1b2c3d4e5f6",
         "ok": true,
         "favorite": true,
-        "count": 6,
-        "already_existed": false
+        "count": 6
       }
     }
 
-Each field is described below.
+Each field is described below. The example above is for a new registration; if the favorite was already recorded (an idempotent re-POST), the response additionally includes the ``already_existed`` field (set to ``true``).
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Response Fields
