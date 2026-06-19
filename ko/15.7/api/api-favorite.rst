@@ -9,7 +9,7 @@
 
 .. note::
 
-   즐겨찾기 기능을 사용하려면 ``user.favorite`` 설정이 활성화되어 있어야 합니다.
+   즐겨찾기 기능을 사용하려면 ``user.favorite`` 설정이 활성화되어 있어야 합니다 (기본값은 비활성화).
 
 즐겨찾기 문서 목록 취득
 =======================
@@ -104,6 +104,10 @@ HTTP 메서드          GET
 
 지정한 문서의 즐겨찾기 상태를 취득합니다.
 
+익명 (미인증) 호출자도 이 엔드포인트를 이용할 수 있습니다. 이 경우 ``favorite`` 는 ``false`` 를 반환하지만, ``count`` 에는 저장된 즐겨찾기 수가 그대로 반환됩니다 (이 때문에 이 엔드포인트는 ``401`` 을 반환하지 않습니다).
+
+즐겨찾기 기능 (``user.favorite``) 이 비활성화된 경우 엔드포인트는 ``invalid_request`` (400) 로 응답합니다.
+
 요청 파라미터
 -------------
 
@@ -178,7 +182,9 @@ HTTP 메서드          POST
 ==================  ====================================================
 
 지정한 문서를 즐겨찾기에 등록합니다.
-상태를 변경하는 요청이므로 ``X-Fess-CSRF-Token`` 헤더가 필요합니다 ( :doc:`api-overview` 참조).
+상태를 변경하는 요청이므로 ``X-Fess-CSRF-Token`` 헤더가 필요합니다 ( :doc:`api-overview` 참조). 또한 호출 사용자가 인증되어 있어야 합니다. 익명 호출자는 ``auth_required`` (401) 가 됩니다.
+
+``query_id`` 는 대상 문서가 직근 검색 결과에 포함되어 있는지 확인하기 위해 사용됩니다. ``query_id`` 가 세션 내 캐시된 결과 세트에 일치하지 않는 경우 ``invalid_request`` (400) 로, ``docId`` 가 해당 결과 세트에 포함되지 않는 경우 ``not_found`` (404) 로 응답합니다.
 
 요청 파라미터
 -------------
@@ -194,7 +200,7 @@ HTTP 메서드          POST
 요청 본문
 ---------
 
-``Content-Type: application/json`` 으로, 다음 필드를 가지는 JSON (FavoritePostRequest) 을 전송합니다.
+``Content-Type: application/json`` (문자 인코딩 UTF-8) 으로, 다음 필드를 가지는 JSON (FavoritePostRequest) 을 전송합니다. 요청 본문의 최대 크기는 1 KiB (1024 바이트) 입니다. 이를 초과하는 경우 ``payload_too_large`` (413) 가 됩니다.
 
 ::
 
@@ -223,12 +229,11 @@ HTTP 메서드          POST
         "doc_id": "a1b2c3d4e5f6",
         "ok": true,
         "favorite": true,
-        "count": 6,
-        "already_existed": false
+        "count": 6
       }
     }
 
-각 필드에 대해서는 다음과 같습니다.
+각 필드에 대해서는 다음과 같습니다. 위 예시는 신규 등록 시의 예입니다. 즐겨찾기가 이미 등록된 상태에서 멱등하게 재 POST 한 경우에는 이에 더하여 ``already_existed`` 필드 ( ``true`` 로 설정) 가 응답에 포함됩니다.
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: 응답 필드

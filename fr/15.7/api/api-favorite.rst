@@ -9,7 +9,7 @@ L'URL de base est ``http://<Server Name>/api/v2/`` (exemple en environnement loc
 
 .. note::
 
-   Pour utiliser la fonctionnalité de favoris, le paramètre ``user.favorite`` doit être activé.
+   Pour utiliser la fonctionnalité de favoris, le paramètre ``user.favorite`` doit être activé (désactivé par défaut).
 
 Liste des documents favoris
 ============================
@@ -104,6 +104,10 @@ Point de terminaison  ``/api/v2/documents/{docId}/favorite``
 
 Récupère l'état favori du document spécifié.
 
+Les appelants anonymes (non authentifiés) peuvent également utiliser ce point de terminaison. Dans ce cas, ``favorite`` retourne ``false``, mais ``count`` reflète néanmoins le nombre de favoris enregistré (pour cette raison, ce point de terminaison ne retourne pas ``401``).
+
+Lorsque la fonctionnalité de favoris (``user.favorite``) est désactivée, le point de terminaison répond avec ``invalid_request`` (400).
+
 Paramètres de requête
 ---------------------
 
@@ -178,7 +182,9 @@ Point de terminaison  ``/api/v2/documents/{docId}/favorite``
 ====================  ====================================================
 
 Ajoute le document spécifié aux favoris.
-Cette requête modifiant l'état, l'en-tête ``X-Fess-CSRF-Token`` est requis (voir :doc:`api-overview`).
+Cette requête modifiant l'état, l'en-tête ``X-Fess-CSRF-Token`` est requis (voir :doc:`api-overview`). De plus, l'utilisateur appelant doit être authentifié ; les appelants anonymes reçoivent ``auth_required`` (401).
+
+Le ``query_id`` est utilisé pour confirmer que le document cible appartient à un résultat de recherche récent. Lorsque ``query_id`` ne correspond à aucun ensemble de résultats mis en cache dans la session, le point de terminaison répond avec ``invalid_request`` (400) ; lorsque ``docId`` n'est pas contenu dans cet ensemble de résultats, il répond avec ``not_found`` (404).
 
 Paramètres de requête
 ---------------------
@@ -194,7 +200,7 @@ Tableau : Paramètres de requête
 Corps de la requête
 -------------------
 
-Envoyez un JSON (FavoritePostRequest) avec ``Content-Type: application/json`` contenant les champs suivants.
+Envoyez un JSON (FavoritePostRequest) avec ``Content-Type: application/json`` (charset UTF-8) contenant les champs suivants. La taille maximale du corps de la requête est de 1 Kio (1024 octets) ; la dépasser entraîne une réponse ``payload_too_large`` (413).
 
 ::
 
@@ -223,12 +229,11 @@ En cas de succès (200), les champs suivants sont retournés directement sous ``
         "doc_id": "a1b2c3d4e5f6",
         "ok": true,
         "favorite": true,
-        "count": 6,
-        "already_existed": false
+        "count": 6
       }
     }
 
-Les détails de chaque champ sont les suivants.
+Les détails de chaque champ sont les suivants. L'exemple ci-dessus correspond à un nouvel enregistrement ; si le favori était déjà présent (un re-POST idempotent), la réponse inclut en outre le champ ``already_existed`` (positionné à ``true``).
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Champs de réponse

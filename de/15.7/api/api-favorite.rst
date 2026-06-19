@@ -9,7 +9,7 @@ Die Basis-URL lautet ``http://<Server Name>/api/v2/`` (Beispiel für eine lokale
 
 .. note::
 
-   Um die Favoriten-Funktion zu nutzen, muss die Einstellung ``user.favorite`` aktiviert sein.
+   Um die Favoriten-Funktion zu nutzen, muss die Einstellung ``user.favorite`` aktiviert sein (standardmäßig deaktiviert).
 
 Favoritendokumente auflisten
 ============================
@@ -104,6 +104,10 @@ Endpunkt             ``/api/v2/documents/{docId}/favorite``
 
 Ruft den Favoritenstatus des angegebenen Dokuments ab.
 
+Anonyme (nicht authentifizierte) Aufrufer können diesen Endpunkt ebenfalls verwenden. In diesem Fall gibt ``favorite`` den Wert ``false`` zurück, jedoch spiegelt ``count`` weiterhin die gespeicherte Favoritenanzahl wider (aus diesem Grund gibt dieser Endpunkt kein ``401`` zurück).
+
+Wenn die Favoriten-Funktion (``user.favorite``) deaktiviert ist, antwortet der Endpunkt mit ``invalid_request`` (400).
+
 Anfrageparameter
 ~~~~~~~~~~~~~~~~
 
@@ -179,6 +183,9 @@ Endpunkt             ``/api/v2/documents/{docId}/favorite``
 
 Speichert das angegebene Dokument als Favoriten.
 Da es sich um eine zustandsändernde Anfrage handelt, ist der ``X-Fess-CSRF-Token``-Header erforderlich (siehe :doc:`api-overview`).
+Außerdem muss der aufrufende Benutzer authentifiziert sein; anonyme Aufrufer erhalten ``auth_required`` (401).
+
+``query_id`` wird verwendet, um zu bestätigen, dass das Zieldokument zu einem aktuellen Suchergebnis gehört. Wenn ``query_id`` mit keinem gecachten Ergebnissatz in der Sitzung übereinstimmt, antwortet der Endpunkt mit ``invalid_request`` (400); wenn ``docId`` nicht in diesem Ergebnissatz enthalten ist, wird ``not_found`` (404) zurückgegeben.
 
 Anfrageparameter
 ~~~~~~~~~~~~~~~~
@@ -194,7 +201,7 @@ Tabelle: Anfrageparameter
 Anfrage-Body
 ~~~~~~~~~~~~
 
-Sendet ein JSON (FavoritePostRequest) mit ``Content-Type: application/json`` und den folgenden Feldern:
+Sendet ein JSON (FavoritePostRequest) mit ``Content-Type: application/json`` (Zeichensatz UTF-8) und den folgenden Feldern. Die maximale Größe des Anfrage-Bodys beträgt 1 KiB (1024 Byte); wird diese überschritten, wird ``payload_too_large`` (413) zurückgegeben.
 
 ::
 
@@ -223,12 +230,11 @@ Bei Erfolg (200) werden die folgenden Felder direkt unter ``response`` im gemein
         "doc_id": "a1b2c3d4e5f6",
         "ok": true,
         "favorite": true,
-        "count": 6,
-        "already_existed": false
+        "count": 6
       }
     }
 
-Die einzelnen Felder sind wie folgt beschrieben:
+Die einzelnen Felder sind wie folgt beschrieben. Das obige Beispiel gilt für eine Neuregistrierung; wenn der Favorit bereits zuvor gespeichert wurde (idempotenter erneuter POST), enthält die Antwort zusätzlich das Feld ``already_existed`` (mit dem Wert ``true``).
 
 .. tabularcolumns:: |p{4cm}|p{11cm}|
 .. list-table:: Antwortfelder
