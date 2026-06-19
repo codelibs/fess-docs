@@ -14,7 +14,15 @@ Endpoint            ``/api/v2/suggest-words``
 ==================  ====================================================
 
 By sending a request to |Fess| such as ``http://<Server Name>/api/v2/suggest-words?q=fes``, you can receive a list of suggest words for the given prefix in JSON format.
-To use the Suggest Words API, you need to enable "Suggest by Document" or "Suggest by Search Word" in the Administration screen under System > General Settings.
+
+Suggest words come from three sources:
+
+- **Documents** — Generated from crawled documents. To obtain them, enable "Suggest from Documents" in the Administration screen under System > General.
+- **Search terms (search log)** — Generated from users' search logs. To obtain them, enable "Suggest from Search Terms" in the Administration screen under System > General.
+- **User dictionary** — Suggest words registered by administrators. These are always returned regardless of the settings above.
+
+Even when "Suggest from Documents" and "Suggest from Search Terms" are disabled, the API does not return an error; the corresponding suggest words are simply omitted from the results.
+Suggest words are also automatically filtered based on the roles of the requesting user.
 
 For the common response envelope and error model, see :doc:`api-overview`.
 
@@ -27,20 +35,20 @@ The available request parameters are as follows:
 .. list-table:: Request Parameters
 
    * - q
-     - Search term (prefix) for suggestion. (Example) ``q=fes``
+     - Search term (prefix) for suggestion. If omitted, suggest words are returned without prefix filtering. (Example) ``q=fes``
    * - num
-     - Number of suggested words (integer, >= 0). Default ``10``. (Example) ``num=20``
+     - Number of suggested words (integer, >= 0). Default ``10``. If a non-numeric value is specified, the default is used. (Example) ``num=20``
    * - fn
      - Field name to narrow down suggestion targets. Can be specified multiple times (array). (Example) ``fn=content&fn=title``
    * - lang
      - Search language. Can be specified multiple times (array). (Example) ``lang=en``
    * - label
-     - Label name to filter by. Can be specified multiple times (array). (Example) ``label=java``
+     - Label (tag) name to filter by. Can be specified multiple times (array). The specified values are matched against the ``types`` of each suggest word. (Example) ``label=java``
 
 .. note::
 
    In v2, field names are specified with the ``fn`` parameter (not ``fields`` as in v1).
-   Also, labels are specified with the ``label`` parameter (different from the v1 ``labels`` parameter).
+   Instead of listing values as a comma-separated string, ``fn`` is repeated to pass multiple values.
 
 Response
 --------
@@ -60,8 +68,7 @@ On success, the following response is returned in the common envelope format.
           {
             "text": "fess",
             "types": [
-              "document",
-              "query"
+              "label1"
             ]
           }
         ]
@@ -74,11 +81,11 @@ Each element of ``response`` is as follows:
 .. list-table:: Response Information
 
    * - q
-     - The requested search term (string).
+     - The requested search term (string). Returns an empty string when ``q`` is omitted.
    * - page_size
-     - Page size (integer).
+     - Requested number of suggest words (the value of ``num``, integer).
    * - record_count
-     - Number of matching suggest words (64-bit integer).
+     - Total number of matching suggest words (64-bit integer).
    * - query_time
      - Query processing time in milliseconds (64-bit integer).
    * - suggest_words
@@ -86,11 +93,12 @@ Each element of ``response`` is as follows:
    * - text
      - Suggest word (string).
    * - types
-     - Array of suggest word types (array of strings).
+     - Array of tags associated with the suggest word (array of strings). Each tag is derived from the ``label`` or ``virtual_host`` field of a document, or from filter conditions extracted from the search log. Returns an empty array when there are no tags.
 
 .. note::
 
-   In v2, suggest item fields are ``text`` and ``types`` (not ``labels`` as in v1).
+   ``types`` contains tag values, not the kind of the suggest word (such as ``document`` or ``query``). This array corresponds to the ``labels`` field of suggest items in v1.
+   The ``label`` request parameter filters against these ``types`` values.
 
 Usage Examples
 ==============
@@ -112,6 +120,6 @@ When the Suggest API fails, a common error envelope is returned. For details on 
    * - Status Code
      - Description
    * - 405 Method Not Allowed
-     - An unsupported HTTP method was specified.
+     - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error
      - An internal server error occurred.
