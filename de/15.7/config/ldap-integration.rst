@@ -1,188 +1,324 @@
-==================================
+=====================================
 LDAP-Integrationsleitfaden
-==================================
+=====================================
 
 Übersicht
-==========
+=========
 
-|Fess| unterstuetzt die Integration mit LDAP-Servern (Lightweight Directory Access Protocol),
-was Authentifizierung und Benutzerverwaltung in Unternehmensumgebungen ermoeglicht.
+|Fess| unterstützt die Integration mit LDAP-Servern (Lightweight Directory Access Protocol)
+und ermöglicht damit Authentifizierung und Benutzerverwaltung in Unternehmensumgebungen.
 
-Die LDAP-Integration ermoeglicht:
+Die LDAP-Integration ermöglicht:
 
-- Benutzerauthentifizierung mit Active Directory oder OpenLDAP
-- Gruppenbasierte Zugriffskontrolle
-- Automatische Benutzerinformations-Synchronisation
+- Benutzerauthentifizierung (Anmeldung) über Active Directory oder OpenLDAP
+- Gruppen- und rollenbasierte Zugriffskontrolle
+- Verwaltung von LDAP-Benutzern, -Rollen und -Gruppen über die Verwaltungsoberfläche (optional)
 
-Unterstuetzte LDAP-Server
-=========================
+Unterstützte LDAP-Server
+========================
 
-|Fess| unterstuetzt die Integration mit den folgenden LDAP-Servern:
+|Fess| unterstützt die Integration mit folgenden LDAP-Servern:
 
 - Microsoft Active Directory
 - OpenLDAP
 - 389 Directory Server
 - Apache Directory Server
-- Andere LDAP v3-kompatible Server
+- Andere LDAP-v3-kompatible Server
 
 Voraussetzungen
 ===============
 
 - Netzwerkzugriff auf den LDAP-Server
-- Dienstkonto fuer LDAP-Suchen (Bind DN)
-- Verstaendnis der LDAP-Struktur (Base DN, Attributnamen usw.)
+- Dienstkonto für LDAP-Suchen (Bind-DN)
+- Kenntnisse der LDAP-Struktur (Base-DN, Attributnamen usw.)
 
-Grundkonfiguration
-==================
+Übersicht der Konfigurationsmethoden
+=====================================
 
-Fuegen Sie die folgende Konfiguration zu ``app/WEB-INF/conf/system.properties`` hinzu.
+Die LDAP-Konfiguration von |Fess| wird je nach Verwendungszweck an zwei Stellen verwaltet.
 
-LDAP-Verbindungseinstellungen
------------------------------
+Verbindungs- und Authentifizierungseinstellungen (Verwaltungsoberfläche / ``system.properties``)
+   Dies sind Einstellungen für die Verbindung zum LDAP-Server und die Anmeldeauthentifizierung.
+   Sie können im Abschnitt „LDAP" auf der Seite **„System > Allgemein"** der Verwaltungsoberfläche
+   konfiguriert werden und werden in ``app/WEB-INF/conf/system.properties`` gespeichert.
 
-::
-
-    # LDAP-Authentifizierung aktivieren
-    ldap.admin.enabled=true
-
-    # LDAP-Server-URL
-    ldap.provider.url=ldap://ldap.example.com:389
-
-    # Fuer sichere Verbindung (LDAPS)
-    # ldap.provider.url=ldaps://ldap.example.com:636
-
-    # Base DN
-    ldap.base.dn=dc=example,dc=com
-
-    # Bind-DN-Vorlage fuer Benutzerauthentifizierung (%s wird durch den Benutzernamen ersetzt)
-    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
-
-    # Admin-Bind-DN (Dienstkonto fuer LDAP-Suche)
-    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
-
-    # Admin-Bind-Passwort
-    ldap.admin.security.credentials=your_password
-
-Benutzersuche-Einstellungen
----------------------------
-
-::
-
-    # Benutzersuche Base DN
-    ldap.user.search.base=ou=users,dc=example,dc=com
-
-    # Benutzersuche-Filter
-    ldap.account.filter=(uid=%s)
-
-    # Benutzername-Attribut
-    ldap.user.name.attribute=uid
-
-    # Admin-Benutzersuchfilter fuer die LDAP-Verwaltungskonsole
-    ldap.admin.user.filter=uid=%s
+LDAP-Verwaltungsfunktionen und Verhaltenseinstellungen (``fess_config.properties``)
+   Dies sind Einstellungen für die Funktion zur Verwaltung von LDAP-Benutzern, -Rollen und
+   -Gruppen über die Verwaltungsoberfläche sowie für das Verhalten bei der Rollenauflösung.
+   Diese sind in ``app/WEB-INF/classes/fess_config.properties`` definiert.
+   Zum Ändern von Werten bearbeiten Sie diese Datei direkt.
 
 .. note::
 
-   ``ldap.account.filter`` ist der Suchfilter fuer die Benutzerauthentifizierung,
-   ``ldap.admin.user.filter`` ist der Benutzersuchfilter fuer die LDAP-Verwaltungskonsole.
-   Konfigurieren Sie beide entsprechend, da sie unterschiedliche Zwecke erfuellen.
+   Wenn Sie ausschließlich die Anmeldeauthentifizierung verwenden möchten, genügen die
+   „Verbindungs- und Authentifizierungseinstellungen". Die „LDAP-Verwaltungsfunktion"
+   (``ldap.admin.enabled``) ist nur erforderlich, wenn Sie LDAP-Benutzer, -Rollen oder
+   -Gruppen über die Verwaltungsoberfläche erstellen, aktualisieren oder löschen möchten.
 
-LDAP-Admin-Basis-DN-Einstellungen
-----------------------------------
+Verbindungs- und Authentifizierungseinstellungen
+================================================
+
+Diese Einstellungen können im Abschnitt „LDAP" unter „System > Allgemein" der
+Verwaltungsoberfläche konfiguriert werden und werden in
+``app/WEB-INF/conf/system.properties`` gespeichert. Sie können die Datei auch direkt
+bearbeiten.
+
+.. list-table:: Verbindungs- und Authentifizierungseigenschaften
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - Eigenschaft
+     - Standardwert
+     - Beschreibung
+   * - ``ldap.provider.url``
+     - (keiner)
+     - URL des LDAP-Servers. Beispiel: ``ldap://ldap.example.com:389``. Für LDAPS: ``ldaps://ldap.example.com:636``. Mehrere URLs durch Leerzeichen getrennt ermöglichen Failover.
+   * - ``ldap.base.dn``
+     - (keiner)
+     - Basis-DN für die LDAP-Suche. Beispiel: ``dc=example,dc=com``
+   * - ``ldap.security.principal``
+     - (keiner)
+     - DN-Vorlage für die Benutzerauthentifizierung (Bind). ``%s`` wird durch den Benutzernamen ersetzt. Beispiel: ``uid=%s,ou=People,dc=example,dc=com``
+   * - ``ldap.security.authentication``
+     - ``simple``
+     - LDAP-Authentifizierungsmethode (JNDI ``java.naming.security.authentication``). In der Regel wird ``simple`` verwendet.
+   * - ``ldap.initial.context.factory``
+     - ``com.sun.jndi.ldap.LdapCtxFactory``
+     - JNDI-Klasse für die initiale Kontextfabrik. In der Regel ist keine Änderung erforderlich.
+   * - ``ldap.admin.security.principal``
+     - (keiner)
+     - Bind-DN des Dienstkontos für LDAP-Suchen. Beispiel: ``cn=fess,ou=services,dc=example,dc=com``
+   * - ``ldap.admin.security.credentials``
+     - (keiner)
+     - Passwort des oben genannten Dienstkontos.
+   * - ``ldap.account.filter``
+     - (keiner)
+     - Filter zur Suche nach Benutzereinträgen bei der Rollenauflösung. ``%s`` wird durch den Benutzernamen ersetzt. Beispiel: ``uid=%s``
+   * - ``ldap.group.filter``
+     - (leer)
+     - Suchfilter für die Gruppenauflösung. ``%s`` wird durch den DN des Benutzers o. Ä. ersetzt. Beispiel: ``(member=%s)``
+   * - ``ldap.memberof.attribute``
+     - ``memberOf``
+     - Attributname für die Gruppenmitgliedschaft. Wird zur Rollenauflösung bei Active Directory und Servern mit diesem Attribut verwendet.
+
+Konfigurationsbeispiel (bei direkter Bearbeitung von ``system.properties``):
 
 ::
 
-    # Benutzer-Suche-Basis-DN
-    ldap.admin.user.base.dn=ou=People,dc=example,dc=com
+    # URL des LDAP-Servers
+    ldap.provider.url=ldap://ldap.example.com:389
 
-    # Rollen-Suche-Basis-DN
-    ldap.admin.role.base.dn=ou=Roles,dc=example,dc=com
+    # Basis-DN
+    ldap.base.dn=dc=example,dc=com
 
-    # Gruppen-Suche-Basis-DN
-    ldap.admin.group.base.dn=ou=Groups,dc=example,dc=com
+    # Bind-DN-Vorlage fuer die Benutzerauthentifizierung (%s wird durch den Benutzernamen ersetzt)
+    ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-Gruppensuche-Einstellungen
---------------------------
+    # Bind-DN und Passwort des Dienstkontos fuer Suchen
+    ldap.admin.security.principal=cn=fess,ou=services,dc=example,dc=com
+    ldap.admin.security.credentials=your_password
 
-::
-
-    # Gruppensuche Base DN
-    ldap.group.search.base=ou=groups,dc=example,dc=com
-
-    # Gruppensuche-Filter
+    # Filter fuer die Rollenaufloesung
+    ldap.account.filter=uid=%s
     ldap.group.filter=(member=%s)
 
-    # Gruppenname-Attribut
-    ldap.group.name.attribute=cn
+.. note::
+
+   Der ``%s``-Platzhalter wird durch Javas ``String.format()`` verarbeitet.
+   ``ldap.security.principal``, ``ldap.account.filter``, ``ldap.group.filter`` und
+   alle administrativen Filter verwenden das ``%s``-Format (nicht das ``{0}``-Format).
+   Der an die Filter übergebene Benutzername wird in |Fess| intern automatisch
+   gegen LDAP-Injection-Angriffe escapet.
+
+LDAP-Verwaltungsfunktionen und Verhaltenseinstellungen
+======================================================
+
+Die folgenden Eigenschaften sind in ``app/WEB-INF/classes/fess_config.properties``
+definiert. Zum Ändern von Werten bearbeiten Sie diese Datei.
+
+Aktivierung der Verwaltungsfunktion
+------------------------------------
+
+.. list-table:: Eigenschaften der Verwaltungsfunktion
+   :header-rows: 1
+   :widths: 35 15 50
+
+   * - Eigenschaft
+     - Standardwert
+     - Beschreibung
+   * - ``ldap.admin.enabled``
+     - ``false``
+     - Aktiviert die Funktion zum Erstellen, Aktualisieren und Löschen von LDAP-Benutzern, -Rollen und -Gruppen über die Verwaltungsoberfläche. **Nicht erforderlich für die Anmeldeauthentifizierung** — die LDAP-Anmeldung funktioniert auch ohne Aktivierung.
+   * - ``ldap.admin.sync.password``
+     - ``true``
+     - Synchronisiert das |Fess|-Passwort mit LDAP, wenn ein Benutzer über die Verwaltungsoberfläche aktualisiert wird.
+   * - ``ldap.auth.validation``
+     - ``true``
+     - Überprüft die LDAP-Authentifizierung beim Anmelden.
+
+Filter und Basis-DNs für die Benutzer-/Rollen-/Gruppenverwaltung
+-----------------------------------------------------------------
+
+Wird verwendet, um LDAP-Einträge über die Verwaltungsoberfläche zu bearbeiten, wenn ``ldap.admin.enabled=true`` gesetzt ist.
+
+.. list-table:: Administrative Filter und Basis-DNs
+   :header-rows: 1
+   :widths: 38 47 15
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standardwert
+   * - ``ldap.admin.user.filter``
+     - Benutzer-Suchfilter (``%s`` wird durch den Benutzernamen ersetzt)
+     - ``uid=%s``
+   * - ``ldap.admin.user.base.dn``
+     - Basis-DN für die Benutzersuche
+     - ``ou=People,dc=fess,dc=codelibs,dc=org``
+   * - ``ldap.admin.user.object.classes``
+     - objectClass bei der Benutzererstellung
+     - ``organizationalPerson,top,person,inetOrgPerson``
+   * - ``ldap.admin.role.filter``
+     - Rollen-Suchfilter
+     - ``cn=%s``
+   * - ``ldap.admin.role.base.dn``
+     - Basis-DN für die Rollensuche
+     - ``ou=Role,dc=fess,dc=codelibs,dc=org``
+   * - ``ldap.admin.role.object.classes``
+     - objectClass bei der Rollenerstellung
+     - ``groupOfNames``
+   * - ``ldap.admin.group.filter``
+     - Gruppen-Suchfilter
+     - ``cn=%s``
+   * - ``ldap.admin.group.base.dn``
+     - Basis-DN für die Gruppensuche
+     - ``ou=Group,dc=fess,dc=codelibs,dc=org``
+   * - ``ldap.admin.group.object.classes``
+     - objectClass bei der Gruppenerstellung
+     - ``groupOfNames``
+
+Steuerung der Rollenauflösung und des Verhaltens
+-------------------------------------------------
+
+Steuert das Verhalten bei der Rollen- und Gruppenauflösung nach der Anmeldung.
+
+.. list-table:: Verhaltenssteuerungseigenschaften
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Eigenschaft
+     - Standardwert
+     - Beschreibung
+   * - ``ldap.role.search.user.enabled``
+     - ``true``
+     - Weist Rollen basierend auf dem Benutzernamen zu.
+   * - ``ldap.role.search.group.enabled``
+     - ``true``
+     - Weist Rollen basierend auf Gruppen zu.
+   * - ``ldap.role.search.role.enabled``
+     - ``true``
+     - Weist Rollen basierend auf Rollen zu.
+   * - ``ldap.allow.empty.permission``
+     - ``true``
+     - Erlaubt die Anmeldung für Benutzer ohne Gruppen oder Rollen.
+   * - ``ldap.ignore.netbios.name``
+     - ``true``
+     - Entfernt NetBIOS-Präfixe (Format ``DOMAIN\``) aus Gruppennamen u. Ä.
+   * - ``ldap.group.name.with.underscores``
+     - ``false``
+     - Erlaubt Unterstriche in Gruppennamen.
+   * - ``ldap.lowercase.permission.name``
+     - ``false``
+     - Konvertiert Berechtigungsnamen in Kleinbuchstaben.
+   * - ``ldap.samaccountname.group``
+     - ``false``
+     - Verwendet das Attribut ``sAMAccountName`` als Gruppenname (für Active Directory).
+   * - ``ldap.max.username.length``
+     - ``-1``
+     - Maximale Länge des Benutzernamens. ``-1`` bedeutet keine Einschränkung.
+
+Attributzuordnung
+-----------------
+
+Die Zuordnung von LDAP-Attributen zu |Fess|-Benutzerattributen wird über
+``ldap.attr.*``-Eigenschaften definiert. In der Regel ist keine Änderung erforderlich,
+sie kann jedoch bei abweichendem Schema angepasst werden. Typische Beispiele:
+
+::
+
+    ldap.attr.surname=sn
+    ldap.attr.givenName=givenName
+    ldap.attr.mail=mail
+    ldap.attr.displayName=displayName
+    ldap.attr.telephoneNumber=telephoneNumber
+
+.. note::
+
+   Einige Eigenschaften stimmen nicht mit dem LDAP-Attributnamen überein, z. B. wird
+   ``ldap.attr.state`` auf ``st`` und ``ldap.attr.city`` auf ``l`` gemappt.
+   Die vollständige Liste finden Sie in ``fess_config.properties`` in den Zeilen,
+   die mit ``ldap.attr.`` beginnen.
 
 Active-Directory-Konfiguration
 ==============================
 
-Konfigurationsbeispiel fuer Microsoft Active Directory.
-
-Grundkonfiguration
-------------------
+Konfigurationsbeispiel für Microsoft Active Directory (``system.properties`` oder Verwaltungsoberfläche).
 
 ::
 
-    ldap.admin.enabled=true
     ldap.provider.url=ldap://ad.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Bind-DN-Vorlage fuer Benutzerauthentifizierung (UPN-Format)
+    # Bind-DN-Vorlage fuer die Benutzerauthentifizierung (UPN-Format)
     ldap.security.principal=%s@example.com
 
-    # Admin-Bind-DN (Dienstkonto)
+    # Dienstkonto fuer Suchen
     ldap.admin.security.principal=cn=fess,cn=Users,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
-    # Benutzersuche
-    ldap.user.search.base=ou=Users,dc=example,dc=com
-    ldap.account.filter=(sAMAccountName=%s)
-    ldap.user.name.attribute=sAMAccountName
+    # Kontofilter
+    ldap.account.filter=sAMAccountName=%s
 
-    # Gruppensuche
-    ldap.group.search.base=ou=Groups,dc=example,dc=com
+    # memberOf-Attribut verwenden
+    ldap.memberof.attribute=memberOf
+
+    # Gruppenfilter
     ldap.group.filter=(member=%s)
-    ldap.group.name.attribute=cn
 
-Active-Directory-spezifische Einstellungen
-------------------------------------------
+Zur Auflösung verschachtelter Gruppen (Nested Groups) kann die Active-Directory-spezifische
+``LDAP_MATCHING_RULE_IN_CHAIN``-Regel verwendet werden.
 
 ::
 
-    # Verschachtelte Gruppenaufloesung
-    ldap.memberof.enabled=true
-
-    # memberOf-Attribut verwenden
     ldap.group.filter=(member:1.2.840.113556.1.4.1941:=%s)
 
 OpenLDAP-Konfiguration
 ======================
 
-Konfigurationsbeispiel fuer OpenLDAP.
+Konfigurationsbeispiel für OpenLDAP.
 
 ::
 
-    ldap.admin.enabled=true
     ldap.provider.url=ldap://openldap.example.com:389
     ldap.base.dn=dc=example,dc=com
 
-    # Bind-DN-Vorlage fuer Benutzerauthentifizierung
+    # Bind-DN-Vorlage fuer die Benutzerauthentifizierung
     ldap.security.principal=uid=%s,ou=People,dc=example,dc=com
 
-    # Admin-Bind-DN (Dienstkonto)
+    # Dienstkonto fuer Suchen
     ldap.admin.security.principal=cn=admin,dc=example,dc=com
     ldap.admin.security.credentials=your_password
 
-    # Benutzersuche
-    ldap.user.search.base=ou=people,dc=example,dc=com
-    ldap.account.filter=(uid=%s)
-    ldap.user.name.attribute=uid
+    # Kontofilter
+    ldap.account.filter=uid=%s
 
-    # Gruppensuche
-    ldap.group.search.base=ou=groups,dc=example,dc=com
+    # Gruppenfilter (fuer posixGroup)
     ldap.group.filter=(memberUid=%s)
-    ldap.group.name.attribute=cn
+
+.. note::
+
+   Standard-OpenLDAP verfügt nicht über das Attribut ``memberOf``, daher werden
+   Gruppen über ``ldap.group.filter`` aufgelöst. Wenn das ``memberof``-Overlay
+   aktiviert ist, kann auch ``ldap.memberof.attribute`` verwendet werden.
 
 Sicherheitseinstellungen
 ========================
@@ -190,17 +326,14 @@ Sicherheitseinstellungen
 LDAPS (SSL/TLS)
 ---------------
 
-Verschluesselte Verbindungen verwenden:
+Verschlüsselte Verbindung verwenden:
 
 ::
 
     # LDAPS verwenden
     ldap.provider.url=ldaps://ldap.example.com:636
 
-    # StartTLS verwenden
-    ldap.start.tls=true
-
-Fuer selbstsignierte Zertifikate importieren Sie das Zertifikat in den Java-Truststore:
+Bei selbstsignierten Zertifikaten importieren Sie das Zertifikat in den Java-Truststore.
 
 ::
 
@@ -210,89 +343,19 @@ Fuer selbstsignierte Zertifikate importieren Sie das Zertifikat in den Java-Trus
 Passwortschutz
 --------------
 
-Passwoerter ueber Umgebungsvariablen festlegen:
-
-::
-
-    ldap.admin.security.credentials=${LDAP_PASSWORD}
-
-Rollenzuordnung
-===============
-
-Sie koennen LDAP-Gruppen zu |Fess|-Rollen zuordnen.
-
-Automatische Zuordnung
-----------------------
-
-Gruppennamen werden direkt als Rollennamen verwendet:
-
-::
-
-    # LDAP-Gruppe "fess-users" -> Fess-Rolle "fess-users"
-    ldap.group.role.mapping.enabled=true
-
-Benutzerdefinierte Zuordnung
-----------------------------
-
-::
-
-    # Gruppennamen zu Rollen zuordnen
-    ldap.group.role.mapping.Administrators=admin
-    ldap.group.role.mapping.PowerUsers=editor
-    ldap.group.role.mapping.Users=guest
-
-Benutzerinformations-Synchronisation
-====================================
-
-Sie koennen Benutzerinformationen von LDAP zu |Fess| synchronisieren.
-
-Automatische Synchronisation
-----------------------------
-
-Benutzerinformationen bei Anmeldung automatisch synchronisieren:
-
-::
-
-    ldap.user.sync.enabled=true
-
-Zu synchronisierende Attribute
-------------------------------
-
-::
-
-    # E-Mail-Adresse
-    ldap.user.email.attribute=mail
-
-    # Anzeigename
-    ldap.user.displayname.attribute=displayName
-
-Verbindungs-Pooling
-===================
-
-Verbindungspool-Einstellungen zur Leistungsverbesserung:
-
-::
-
-    # Verbindungspool aktivieren
-    ldap.connection.pool.enabled=true
-
-    # Minimale Verbindungen
-    ldap.connection.pool.min=1
-
-    # Maximale Verbindungen
-    ldap.connection.pool.max=10
-
-    # Verbindungs-Timeout (Millisekunden)
-    ldap.connection.timeout=5000
+``ldap.admin.security.credentials`` wird in ``system.properties`` gespeichert.
+Die über die Verwaltungsoberfläche eingegebenen Anmeldedaten werden intern
+verschlüsselt abgelegt. Beschränken Sie die Dateizugriffsberechtigungen
+entsprechend.
 
 Failover
 ========
 
-Failover zu mehreren LDAP-Servern:
+Um ein Failover auf mehrere LDAP-Server zu konfigurieren, geben Sie in
+``ldap.provider.url`` mehrere URLs durch Leerzeichen getrennt an.
 
 ::
 
-    # Mehrere URLs durch Leerzeichen getrennt angeben
     ldap.provider.url=ldap://ldap1.example.com:389 ldap://ldap2.example.com:389
 
 Fehlerbehebung
@@ -301,43 +364,54 @@ Fehlerbehebung
 Verbindungsfehler
 -----------------
 
-**Symptom**: LDAP-Verbindung schlaegt fehl
+**Symptom**: LDAP-Verbindung schlägt fehl
 
-**Pruefen**:
+**Zu prüfen**:
 
 1. Ist der LDAP-Server gestartet?
-2. Ist der Port in der Firewall geoeffnet (389 oder 636)?
-3. Ist die URL korrekt (``ldap://`` oder ``ldaps://``)?
-4. Sind Bind DN und Passwort korrekt?
+2. Ist der Port in der Firewall geöffnet (389 oder 636)?
+3. Ist ``ldap.provider.url`` korrekt (``ldap://`` oder ``ldaps://``)?
+4. Sind ``ldap.admin.security.principal`` und das Passwort korrekt?
 
 Authentifizierungsfehler
 ------------------------
 
-**Symptom**: Benutzerauthentifizierung schlaegt fehl
+**Symptom**: Benutzerauthentifizierung schlägt fehl
 
-**Pruefen**:
+**Zu prüfen**:
 
-1. Ist der Benutzersuche-Filter korrekt?
-2. Existiert der Benutzer innerhalb des Suche-Base DN?
-3. Ist das Benutzername-Attribut korrekt?
+1. Ist die Vorlage in ``ldap.security.principal`` korrekt (enthält sie ``%s``)?
+2. Existiert der Benutzer innerhalb des angegebenen Basis-DN?
+3. Ist ``ldap.account.filter`` korrekt?
 
-Gruppen koennen nicht abgerufen werden
---------------------------------------
+Gruppen/Rollen können nicht abgerufen werden
+--------------------------------------------
 
-**Symptom**: Benutzergruppen koennen nicht abgerufen werden
+**Symptom**: Gruppen oder Rollen des Benutzers können nicht abgerufen werden
 
-**Pruefen**:
+**Zu prüfen**:
 
-1. Ist der Gruppensuche-Filter korrekt?
-2. Ist das Gruppenmitgliedschafts-Attribut korrekt?
-3. Existieren die Gruppen innerhalb des Suche-Base DN?
+1. Ist ``ldap.group.filter`` korrekt?
+2. Ist ``ldap.memberof.attribute`` korrekt (bei Active Directory)?
+3. Befinden sich die Gruppen innerhalb des Suche-Basis-DN?
+4. Sind die ``ldap.role.search.*.enabled``-Einstellungen aktiviert?
+
+Benutzerverwaltung über die Verwaltungsoberfläche nicht möglich
+---------------------------------------------------------------
+
+**Symptom**: LDAP-Benutzer können über die Verwaltungsoberfläche nicht erstellt, bearbeitet oder gelöscht werden
+
+**Zu prüfen**:
+
+1. Ist ``ldap.admin.enabled`` auf ``true`` gesetzt?
+2. Sind die administrativen Basis-DNs wie ``ldap.admin.user.base.dn`` korrekt?
+3. Hat das Dienstkonto von ``ldap.admin.security.principal`` Schreibrechte?
 
 Debug-Einstellungen
 -------------------
 
-Detaillierte Protokolle ausgeben:
-
-``app/WEB-INF/classes/log4j2.xml``:
+Um detaillierte Protokolle auszugeben, fügen Sie einen Logger in
+``app/WEB-INF/classes/log4j2.xml`` hinzu.
 
 ::
 
@@ -347,5 +421,5 @@ Referenzinformationen
 =====================
 
 - :doc:`security-role` - Rollenbasierte Zugriffskontrolle
-- :doc:`sso-spnego` - SPNEGO (Kerberos) Authentifizierung
+- :doc:`sso-spnego` - SPNEGO (Kerberos)-Authentifizierung
 - :doc:`../admin/user-guide` - Benutzerverwaltungsleitfaden
