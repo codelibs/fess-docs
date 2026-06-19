@@ -1,9 +1,9 @@
-========================
+==========================
 Funcionalidad de búsqueda
-========================
+==========================
 
 Resumen
-========
+=======
 
 |Fess| proporciona una potente funcionalidad de búsqueda de texto completo.
 Esta sección explica la configuración detallada y los métodos de uso de la funcionalidad de búsqueda.
@@ -14,26 +14,28 @@ Visualización del número de resultados de búsqueda
 Comportamiento predeterminado
 ------------------------------
 
-Cuando los resultados de búsqueda superan los 10,000 elementos, la pantalla de resultados de búsqueda muestra "Aproximadamente 10,000 o más resultados".
-Esta es la configuración predeterminada que considera el rendimiento de OpenSearch.
+El valor predeterminado de ``query.track.total.hits`` es ``10000``.
+Por ello, cuando los resultados de búsqueda superan los 10,000 elementos, la pantalla de resultados muestra "Aproximadamente 10,000 o más resultados".
+Esta es la configuración predeterminada que limita a ``query.track.total.hits`` el umbral hasta el que OpenSearch cuenta el total exacto de coincidencias, con el fin de reducir el impacto en el rendimiento en búsquedas de gran escala.
 
 Ejemplo de búsqueda
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/en/15.7/config/search-result.png
+.. |image0| image:: ../../../resources/images/es/15.7/config/search-result.png
 
 Visualización del número exacto de coincidencias
 -------------------------------------------------
 
-Para mostrar el número exacto de coincidencias superior a 10,000, cambie la siguiente configuración en ``fess_config.properties``.
+Para mostrar el número exacto de coincidencias hasta un valor superior, cambie la siguiente configuración en ``fess_config.properties``.
 
 ::
 
     query.track.total.hits=100000
 
-Esta configuración permite obtener el número exacto de coincidencias hasta un máximo de 100,000.
-Sin embargo, configurar un valor grande puede afectar al rendimiento.
+Con el ejemplo anterior se pueden obtener hasta 100,000 coincidencias exactas.
+El umbral a partir del cual la visualización pasa a mostrar "Aproximadamente N o más" también cambia de forma acorde al valor configurado.
+Sin embargo, configurar un valor demasiado grande puede afectar al rendimiento.
 
 .. warning::
    Si el valor es demasiado grande, el rendimiento de búsqueda puede verse afectado.
@@ -98,6 +100,13 @@ Campos principales:
 - ``url``: URL del documento
 - ``filetype``: Tipo de archivo (ejemplo: pdf, html, doc)
 - ``label``: Etiqueta (clasificación)
+- ``mimetype``: Tipo MIME (ejemplo: text/html, application/pdf)
+- ``filename``: Nombre de archivo
+- ``host``: Nombre de host
+- ``site``: Sitio (combinación de nombre de host y ruta)
+- ``lang``: Idioma
+
+Los campos de búsqueda adicionales se pueden añadir mediante ``query.additional.search.fields`` en ``fess_config.properties``.
 
 Búsqueda con comodines
 ----------------------
@@ -130,10 +139,15 @@ Ordenamiento de resultados de búsqueda
 Por defecto, los resultados de búsqueda se ordenan por relevancia.
 Puede especificar los siguientes criterios de ordenamiento en la configuración de la pantalla de administración o mediante parámetros de API.
 
-- Por relevancia (predeterminado)
-- Por fecha de actualización
-- Por fecha de creación
-- Por tamaño de archivo
+- Por relevancia (``score``, predeterminado)
+- Por fecha de actualización (``last_modified``)
+- Por fecha de creación (``created``)
+- Por tamaño de archivo (``content_length``)
+- Por nombre de archivo (``filename``)
+- Por número de clics (``click_count``)
+- Por número de favoritos (``favorite_count``)
+
+Los campos de ordenamiento adicionales se pueden añadir mediante ``query.additional.sort.fields`` en ``fess_config.properties``.
 
 Búsqueda por facetas
 ====================
@@ -156,6 +170,12 @@ La configuración de resaltado se puede personalizar en ``fess_config.properties
     query.highlight.fragment.size=60
     query.highlight.number.of.fragments=2
 
+- ``query.highlight.tag.pre`` / ``query.highlight.tag.post``: Etiquetas que rodean las secciones resaltadas (predeterminado: ``<strong>`` / ``</strong>``)
+- ``query.highlight.fragment.size``: Número de caracteres de cada fragmento resaltado (predeterminado: ``60``)
+- ``query.highlight.number.of.fragments``: Número máximo de fragmentos a mostrar (predeterminado: ``2``)
+
+Los campos que se utilizan como objetivo del resaltado en el resumen (snippet) se especifican mediante ``query.highlight.content.description.fields`` (predeterminado: ``hl_content,digest``).
+
 Función de sugerencias
 =======================
 
@@ -175,9 +195,10 @@ Estos registros se pueden utilizar para los siguientes propósitos:
 - Identificación de palabras clave de búsqueda populares
 - Identificación de palabras clave con cero resultados de búsqueda
 
-Los registros de búsqueda se almacenan en el índice ``fess_log`` de OpenSearch y
-se pueden visualizar y analizar con OpenSearch Dashboards.
-Para más detalles, consulte :doc:`admin-opensearch-dashboards`.
+Los registros de búsqueda y de clics se almacenan en los índices de OpenSearch con el prefijo ``fess_log``
+(las consultas de búsqueda en el índice ``fess_log.search_log`` y los registros de clics en ``fess_log.click_log``).
+Estos registros se pueden visualizar y analizar con OpenSearch Dashboards.
+|Fess| incluye un archivo de definición de dashboard para su visualización. Para más detalles, consulte :doc:`admin-opensearch-dashboards`.
 
 Ajuste de rendimiento
 ======================
@@ -203,8 +224,9 @@ Por razones de seguridad y rendimiento, puede limitar el número máximo de cara
 Uso de caché
 ------------
 
-Al habilitar el caché de resultados de búsqueda, puede reducir el tiempo de respuesta para las mismas consultas de búsqueda.
-La configuración de caché debe ajustarse según los requisitos de su sistema.
+|Fess| en sí no dispone de funcionalidad para almacenar en caché los resultados de búsqueda (respuestas de búsqueda).
+No obstante, el backend OpenSearch proporciona a nivel de motor una caché de solicitudes de shard y una caché de consultas, lo que contribuye a reducir el tiempo de respuesta para búsquedas con las mismas condiciones.
+Dado que estas son funciones propias de OpenSearch, ajústelas en la configuración de OpenSearch según sea necesario.
 
 Solución de problemas
 ======================
@@ -214,7 +236,7 @@ No se muestran resultados de búsqueda
 
 1. Verifique que el índice se haya creado correctamente.
 2. Verifique que el rastreo se haya completado correctamente.
-3. Verifique que no se hayan configurado permisos de acceso en los documentos objetivo de búsqueda.
+3. Verifique que el filtrado de búsqueda basado en roles y permisos no esté excluyendo los documentos objetivo para el usuario actual (incluidos los usuarios invitados).
 4. Verifique que OpenSearch esté funcionando correctamente.
 
 La búsqueda es lenta
