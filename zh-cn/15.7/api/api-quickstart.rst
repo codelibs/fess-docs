@@ -24,10 +24,10 @@ v2 的搜索端点为 ``GET /api/v2/search``\ 。
     # 基本搜索
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # 获取 20 条搜索结果
+    # 获取 20 条搜索结果（num 为每页条数，默认值为 10）
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # 获取第 2 页（从第 21 条开始）
+    # 跳过前 20 条结果（start 为从 0 开始的起始位置）
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # 使用标签过滤搜索
@@ -50,7 +50,7 @@ v2 的响应以 ``response`` 信封返回。
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,12 @@ v2 的响应以 ``response`` 信封返回。
         ]
       }
     }
+
+.. note::
+
+   上述示例仅供参考。``data`` 中包含的文档字段取决于服务器配置（响应字段白名单）。
+   完整的请求参数和响应字段列表，请参阅 :doc:`api-search`。
+   公共响应信封、错误模型及 CSRF 的说明，请参阅 :doc:`api-overview`。
 
 尝试建议词 API
 --------------
@@ -301,6 +307,9 @@ API 无法正常工作
 下一步
 ======
 
+- :doc:`api-overview` - 通用 API 规范（响应信封、错误模型、认证/CSRF）
 - :doc:`api-search` - 搜索 API 详细说明
 - :doc:`api-suggest` - 建议词 API 详细说明
+- :doc:`api-label` - 标签 API 详细说明
+- :doc:`api-health` - 健康检查 API 详细说明
 - :doc:`admin/index` - 管理 API 的使用方法

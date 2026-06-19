@@ -24,10 +24,10 @@ Der v2-Such-Endpunkt ist ``GET /api/v2/search``.
     # Einfache Suche
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # 20 Suchergebnisse abrufen
+    # 20 Suchergebnisse abrufen (num ist die Seitengröße; Standard ist 10)
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # Seite 2 abrufen (ab Ergebnis 21)
+    # Die ersten 20 Ergebnisse überspringen (start ist die 0-basierte Startposition)
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # Suche mit Label-Filter
@@ -50,7 +50,7 @@ v2-Antworten werden im ``response``-Envelope zurückgegeben.
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,13 @@ v2-Antworten werden im ``response``-Envelope zurückgegeben.
         ]
       }
     }
+
+.. note::
+
+   Das obige Beispiel ist repräsentativ. Die in ``data`` enthaltenen Dokumentfelder hängen von
+   der Serverkonfiguration ab (der Allowlist für Antwortfelder). Eine vollständige Liste der
+   verfügbaren Anfrageparameter und Antwortfelder finden Sie unter :doc:`api-search`. Für den
+   gemeinsamen Antwort-Envelope, das Fehlermodell und CSRF siehe :doc:`api-overview`.
 
 Die Vorschlags-API ausprobieren
 ---------------------------------
@@ -301,6 +308,9 @@ API funktioniert nicht
 Nächste Schritte
 ================
 
+- :doc:`api-overview` - Allgemeine API-Spezifikationen (Antwort-Envelope, Fehlermodell, Authentifizierung/CSRF)
 - :doc:`api-search` - Details zur Such-API
 - :doc:`api-suggest` - Details zur Vorschlags-API
+- :doc:`api-label` - Details zur Label-API
+- :doc:`api-health` - Details zur Health-Check-API
 - :doc:`admin/index` - Verwendung der Verwaltungs-API
