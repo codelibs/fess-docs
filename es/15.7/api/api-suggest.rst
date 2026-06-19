@@ -14,7 +14,15 @@ Endpoint            ``/api/v2/suggest-words``
 ==================  ====================================================
 
 Al enviar a |Fess| una solicitud como ``http://<Server Name>/api/v2/suggest-words?q=fes``, puede recibir en formato JSON una lista de palabras sugeridas para el prefijo introducido.
-Para utilizar la API de sugerencias, debe habilitar "Sugerir desde documentos" o "Sugerir desde palabras de búsqueda" en Sistema > Configuración general de la consola de administración.
+
+Las palabras sugeridas provienen de tres fuentes:
+
+- **Documentos** — Generadas a partir de documentos rastreados. Para obtenerlas, habilite "Sugerir por documentos" en la consola de administración en Sistema > General.
+- **Términos de búsqueda (registro de búsqueda)** — Generadas a partir de los registros de búsqueda de los usuarios. Para obtenerlas, habilite "Sugerir por término de búsqueda" en la consola de administración en Sistema > General.
+- **Diccionario de usuario** — Palabras sugeridas registradas por los administradores. Siempre se devuelven independientemente de la configuración anterior.
+
+Incluso cuando "Sugerir por documentos" y "Sugerir por término de búsqueda" están deshabilitados, la API no devuelve un error; simplemente se omiten las palabras sugeridas correspondientes de los resultados.
+Las palabras sugeridas también se filtran automáticamente según los roles del usuario solicitante.
 
 Para el sobre de respuesta común y el modelo de errores, consulte :doc:`api-overview`.
 
@@ -27,20 +35,20 @@ Los parámetros de solicitud disponibles son los siguientes:
 .. list-table:: Parámetros de solicitud
 
    * - q
-     - Término de búsqueda (prefijo) para realizar sugerencias. (Ejemplo) ``q=fes``
+     - Término de búsqueda (prefijo) para realizar sugerencias. Si se omite, se devuelven palabras sugeridas sin filtrado por prefijo. (Ejemplo) ``q=fes``
    * - num
-     - Número de palabras sugeridas (entero mayor o igual a 0). Predeterminado ``10``. (Ejemplo) ``num=20``
+     - Número de palabras sugeridas (entero mayor o igual a 0). Predeterminado ``10``. Si se especifica un valor no numérico, se utiliza el valor predeterminado. (Ejemplo) ``num=20``
    * - fn
-     - Nombre de campo para filtrar el objetivo de sugerencia. Se puede repetir para tratarlo como un array. (Ejemplo) ``fn=content&fn=title``
+     - Nombre de campo para filtrar el objetivo de sugerencia. Se puede especificar varias veces (array). (Ejemplo) ``fn=content&fn=title``
    * - lang
-     - Idioma de búsqueda. Se puede repetir para tratarlo como un array. (Ejemplo) ``lang=en``
+     - Idioma de búsqueda. Se puede especificar varias veces (array). (Ejemplo) ``lang=en``
    * - label
-     - Nombre de etiqueta para filtrar. Se puede repetir para tratarlo como un array. (Ejemplo) ``label=java``
+     - Nombre de etiqueta (tag) para filtrar. Se puede especificar varias veces (array). Los valores especificados se comparan contra los ``types`` de cada palabra sugerida. (Ejemplo) ``label=java``
 
 .. note::
 
    En v2, el parámetro para especificar nombres de campo es ``fn`` (no ``fields`` como en v1).
-   Asimismo, el parámetro para especificar etiquetas es ``label`` (distinto del parámetro ``labels`` de v1).
+   En lugar de enumerar valores como una cadena separada por comas, ``fn`` se repite para pasar múltiples valores.
 
 Respuesta
 ---------
@@ -60,8 +68,7 @@ En caso de éxito, se devuelve una respuesta con el formato de sobre común como
           {
             "text": "fess",
             "types": [
-              "document",
-              "query"
+              "label1"
             ]
           }
         ]
@@ -74,23 +81,24 @@ Los elementos de ``response`` son los siguientes:
 .. list-table:: Información de respuesta
 
    * - q
-     - Término de búsqueda solicitado (cadena de texto).
+     - Término de búsqueda solicitado (cadena de texto). Devuelve una cadena vacía cuando se omite ``q``.
    * - page_size
-     - Tamaño de página (entero).
+     - Número de palabras sugeridas solicitado (el valor de ``num``, entero).
    * - record_count
-     - Número de palabras sugeridas encontradas (entero de 64 bits).
+     - Número total de palabras sugeridas coincidentes (entero de 64 bits).
    * - query_time
-     - Tiempo de procesamiento de consulta. Unidad: milisegundos (entero de 64 bits).
+     - Tiempo de procesamiento de la consulta en milisegundos (entero de 64 bits).
    * - suggest_words
      - Array de palabras sugeridas. Cada elemento tiene ``text`` y ``types``.
    * - text
      - Palabra sugerida (cadena de texto).
    * - types
-     - Array de tipos de la palabra sugerida (array de cadenas de texto).
+     - Array de etiquetas (tags) asociadas a la palabra sugerida (array de cadenas de texto). Cada etiqueta se deriva del campo ``label`` o ``virtual_host`` de un documento, o de las condiciones de filtro extraídas del registro de búsqueda. Devuelve un array vacío cuando no hay etiquetas.
 
 .. note::
 
-   En v2, los campos del elemento de sugerencia son ``text`` y ``types`` (no ``labels`` como en v1).
+   ``types`` contiene valores de etiquetas (tags), no el tipo de la palabra sugerida (como ``document`` o ``query``). Este array corresponde al campo ``labels`` de los elementos de sugerencia en v1.
+   El parámetro de solicitud ``label`` filtra por estos valores de ``types``.
 
 Ejemplos de uso
 ===============
@@ -112,6 +120,6 @@ Si la API de sugerencias falla, se devuelve el sobre de error común. Consulte :
    * - Código de estado
      - Descripción
    * - 405 Method Not Allowed
-     - Cuando se especifica un método HTTP no admitido.
+     - Cuando se especifica un método HTTP no admitido. La cabecera ``Allow`` indica ``GET``.
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.

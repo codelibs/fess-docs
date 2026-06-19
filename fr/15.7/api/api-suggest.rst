@@ -3,7 +3,7 @@ API de suggestions
 ==================
 
 Obtention de la liste des mots suggérés
-========================================
+=========================================
 
 Requête
 -------
@@ -14,7 +14,15 @@ Point de terminaison  ``/api/v2/suggest-words``
 ====================  ====================================================
 
 En envoyant une requête à |Fess| de type ``http://<Server Name>/api/v2/suggest-words?q=fes``, vous pouvez recevoir au format JSON la liste des mots suggérés pour le préfixe saisi.
-Pour utiliser l'API de suggestions, vous devez activer « Suggérer à partir des documents » ou « Suggérer à partir des mots de recherche » dans les paramètres généraux du système dans l'interface d'administration.
+
+Les mots suggérés proviennent de trois sources :
+
+- **Documents** — Générés à partir des documents explorés. Pour les obtenir, activez « Suggérer à partir des documents » dans l'interface d'administration sous Système > Général.
+- **Termes de recherche (journal de recherche)** — Générés à partir des journaux de recherche des utilisateurs. Pour les obtenir, activez « Suggérer à partir des termes de recherche » dans l'interface d'administration sous Système > Général.
+- **Dictionnaire utilisateur** — Mots suggérés enregistrés par les administrateurs. Ils sont toujours retournés indépendamment des paramètres ci-dessus.
+
+Même lorsque « Suggérer à partir des documents » et « Suggérer à partir des termes de recherche » sont désactivés, l'API ne retourne pas d'erreur ; les mots suggérés correspondants sont simplement omis des résultats.
+Les mots suggérés sont également filtrés automatiquement en fonction des rôles de l'utilisateur effectuant la requête.
 
 Pour l'enveloppe de réponse commune et le modèle d'erreur, voir :doc:`api-overview`.
 
@@ -27,20 +35,20 @@ Les paramètres de requête disponibles sont les suivants.
 .. list-table:: Paramètres de requête
 
    * - q
-     - Terme de recherche (préfixe) pour la suggestion. (Ex.) ``q=fes``
+     - Terme de recherche (préfixe) pour la suggestion. Si omis, les mots suggérés sont retournés sans filtrage par préfixe. (Ex.) ``q=fes``
    * - num
-     - Nombre de mots suggérés (entier >= 0). Valeur par défaut ``10``. (Ex.) ``num=20``
+     - Nombre de mots suggérés (entier >= 0). Valeur par défaut ``10``. Si une valeur non numérique est spécifiée, la valeur par défaut est utilisée. (Ex.) ``num=20``
    * - fn
      - Nom de champ pour affiner les cibles de suggestion. Peut être répété pour être traité comme un tableau. (Ex.) ``fn=content&fn=title``
    * - lang
      - Langue de recherche. Peut être répété pour être traité comme un tableau. (Ex.) ``lang=en``
    * - label
-     - Nom d'étiquette à filtrer. Peut être répété pour être traité comme un tableau. (Ex.) ``label=java``
+     - Nom d'étiquette (tag) pour filtrer. Peut être répété pour être traité comme un tableau. Les valeurs spécifiées sont comparées aux ``types`` de chaque mot suggéré. (Ex.) ``label=java``
 
 .. note::
 
    En v2, le paramètre de nom de champ est ``fn`` (et non ``fields`` comme en v1).
-   De même, le paramètre d'étiquette est ``label`` (différent du paramètre ``labels`` de v1).
+   De même, au lieu de transmettre les valeurs sous forme de chaîne séparée par des virgules, ``fn`` est répété pour passer plusieurs valeurs.
 
 Réponse
 -------
@@ -60,8 +68,7 @@ En cas de succès, une réponse au format d'enveloppe commune est retournée.
           {
             "text": "fess",
             "types": [
-              "document",
-              "query"
+              "label1"
             ]
           }
         ]
@@ -74,26 +81,27 @@ Les détails de chaque élément de ``response`` sont les suivants.
 .. list-table:: Informations de réponse
 
    * - q
-     - Terme de recherche demandé (chaîne de caractères).
+     - Terme de recherche demandé (chaîne de caractères). Retourne une chaîne vide lorsque ``q`` est omis.
    * - page_size
-     - Taille de la page (entier).
+     - Nombre de mots suggérés demandés (valeur de ``num``, entier).
    * - record_count
-     - Nombre de mots suggérés correspondants (entier 64 bits).
+     - Nombre total de mots suggérés correspondants (entier 64 bits).
    * - query_time
-     - Temps de traitement de la requête. Unité : millisecondes (entier 64 bits).
+     - Temps de traitement de la requête en millisecondes (entier 64 bits).
    * - suggest_words
      - Tableau des mots suggérés. Chaque élément possède ``text`` et ``types``.
    * - text
      - Mot suggéré (chaîne de caractères).
    * - types
-     - Tableau des types du mot suggéré (tableau de chaînes de caractères).
+     - Tableau des étiquettes (tags) associées au mot suggéré (tableau de chaînes de caractères). Chaque étiquette est dérivée du champ ``label`` ou ``virtual_host`` d'un document, ou des conditions de filtre extraites du journal de recherche. Retourne un tableau vide lorsqu'il n'y a pas d'étiquettes.
 
 .. note::
 
-   En v2, les champs d'un élément de suggestion sont ``text`` et ``types`` (et non ``labels`` comme en v1).
+   ``types`` contient des valeurs d'étiquettes (tags), et non le type du mot suggéré (tel que ``document`` ou ``query``). Ce tableau correspond au champ ``labels`` des éléments de suggestion en v1.
+   Le paramètre de requête ``label`` filtre sur ces valeurs ``types``.
 
-Exemple d'utilisation
-=====================
+Exemples d'utilisation
+=======================
 
 Exemple de requête avec la commande curl :
 
@@ -112,6 +120,6 @@ En cas d'échec de l'API de suggestions, l'enveloppe d'erreur commune est retour
    * - Code de statut
      - Description
    * - 405 Method Not Allowed
-     - Une méthode HTTP non prise en charge a été spécifiée.
+     - Une méthode HTTP non prise en charge a été spécifiée. L'en-tête ``Allow`` indique ``GET``.
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
