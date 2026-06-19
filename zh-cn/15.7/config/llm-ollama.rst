@@ -30,7 +30,7 @@ Ollama可用的主要模型:
 - ``phi3:3.8b`` - Microsoft公司的Phi-3（38亿参数）
 
 .. note::
-   可用模型的最新列表请查阅 `Ollama Library <https://ollama.com/library>`__
+   可用模型的最新列表请查阅 `Ollama Library <https://ollama.com/library>`__。
 
 前提条件
 ========
@@ -78,7 +78,7 @@ Docker
     ollama run gemma4:e4b "Hello, how are you?"
 
 插件安装
-========================
+========
 
 Ollama集成功能以插件的形式提供。
 使用Ollama需要安装 ``fess-llm-ollama`` 插件。
@@ -103,6 +103,13 @@ LLM相关配置分布在多个配置文件中。
 最小配置
 --------
 
+``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+
+::
+
+    # 将LLM提供商设置为Ollama
+    rag.llm.name=ollama
+
 ``app/WEB-INF/conf/fess_config.properties``:
 
 ::
@@ -116,18 +123,18 @@ LLM相关配置分布在多个配置文件中。
     # 使用的模型
     rag.llm.ollama.model=gemma4:e4b
 
-``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
-
-::
-
-    # 将LLM提供商设置为Ollama
-    rag.llm.name=ollama
-
 .. note::
    LLM提供商的配置也可以通过管理界面（管理界面 > 系统 > 通用）设置 ``rag.llm.name``。
 
 推荐配置（生产环境）
 --------------------
+
+``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+
+::
+
+    # LLM提供商设置
+    rag.llm.name=ollama
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
@@ -148,17 +155,10 @@ LLM相关配置分布在多个配置文件中。
     # 并发请求数控制
     rag.llm.ollama.max.concurrent.requests=5
 
-``system.properties``:
-
-::
-
-    # LLM提供商设置
-    rag.llm.name=ollama
-
 配置项
 ======
 
-Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.properties`` 或管理界面中进行设置，其他配置均在 ``fess_config.properties`` 中进行。
+Ollama客户端可用的所有配置项。 ``rag.llm.name`` 以外的所有配置均在 ``fess_config.properties`` 中设置。
 
 .. list-table::
    :header-rows: 1
@@ -177,7 +177,7 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 请求超时时间（毫秒）
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
-     - 可用性检查间隔（秒）
+     - 可用性检查间隔（秒）。指定 ``0`` 或以下时禁用定期可用性检查
      - ``60``
    * - ``rag.llm.ollama.max.concurrent.requests``
      - 最大并发请求数
@@ -192,21 +192,52 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - TCP连接超时（毫秒）。可独立于 ``rag.llm.ollama.timeout`` 单独指定
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
-     - HTTP重试的最大尝试次数（``429`` 及 ``5xx`` 系错误时）
+     - HTTP重试的最大尝试次数（ ``429`` 及 ``5xx`` 系错误时）
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
      - 指数退避的基准延迟时间（毫秒）
      - ``2000``
 
+详细配置
+--------
+
+与历史记录及上下文大小相关的详细配置项。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 35 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``rag.llm.ollama.chat.evaluation.description.max.chars``
+     - 评估时说明的最大字符数
+     - ``500``
+   * - ``rag.llm.ollama.history.max.chars``
+     - 对话历史的最大字符数
+     - ``4000``
+   * - ``rag.llm.ollama.intent.history.max.messages``
+     - 意图判定时历史的最大消息数
+     - ``6``
+   * - ``rag.llm.ollama.intent.history.max.chars``
+     - 意图判定时历史的最大字符数
+     - ``3000``
+   * - ``rag.llm.ollama.history.assistant.max.chars``
+     - 助手响应历史的最大字符数
+     - ``500``
+   * - ``rag.llm.ollama.history.assistant.summary.max.chars``
+     - 助手摘要历史的最大字符数
+     - ``500``
+
 并发控制
-------------
+--------
 
 使用 ``rag.llm.ollama.max.concurrent.requests`` 可以控制对Ollama的并发请求数。
 默认值为5。请根据Ollama服务器的资源进行调整。
 并发请求数过多时，会给Ollama服务器增加负担，导致响应速度下降。
 
-提示词类型别配置
-======================
+按提示词类型配置
+================
 
 |Fess| 中可以按提示词类型自定义LLM参数。
 配置在 ``fess_config.properties`` 中记述。
@@ -214,8 +245,15 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 按提示词类型可设置以下参数:
 
 - ``rag.llm.ollama.{promptType}.temperature`` - 生成时的temperature
-- ``rag.llm.ollama.{promptType}.max.tokens`` - 最大token数
+- ``rag.llm.ollama.{promptType}.max.tokens`` - 最大token数（映射到Ollama API的 ``num_predict``）
 - ``rag.llm.ollama.{promptType}.context.max.chars`` - 上下文最大字符数
+- ``rag.llm.ollama.{promptType}.thinking.budget`` - 思考预算（布尔形式的思考控制。详见"思考模型支持"）
+- ``rag.llm.ollama.{promptType}.thinking.level`` - 思考级别（ ``high`` / ``medium`` / ``low`` 字符串形式。详见"思考模型支持"）
+- ``rag.llm.ollama.{promptType}.top.p`` - Top-P采样的值
+- ``rag.llm.ollama.{promptType}.top.k`` - Top-K采样的值
+- ``rag.llm.ollama.{promptType}.num.ctx`` - 上下文窗口大小
+
+各参数按以下顺序解析: ``rag.llm.ollama.{promptType}.<param>`` （按提示词类型的配置）→ ``rag.llm.ollama.default.<param>`` （所有提示词类型通用的回退值）→ 各提示词类型硬编码的默认值。在请求中显式指定的值始终优先。
 
 可用的提示词类型:
 
@@ -243,6 +281,70 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
      - 生成FAQ的提示词
    * - ``direct``
      - 直接响应的提示词
+   * - ``queryregeneration``
+     - 查询重新生成的提示词
+
+各提示词类型在省略配置时适用硬编码的默认值。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 15 15 30
+
+   * - 提示词类型
+     - temperature
+     - max.tokens
+     - thinking.budget
+     - context.max.chars
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+     - ``6000``
+   * - ``evaluation``
+     - ``0.1``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``answer``
+     - ``0.5``
+     - ``8192``
+     - (未设置)
+     - ``10000``
+   * - ``summary``
+     - ``0.3``
+     - ``8192``
+     - (未设置)
+     - ``10000``
+   * - ``faq``
+     - ``0.7``
+     - ``4096``
+     - (未设置)
+     - ``6000``
+   * - ``direct``
+     - ``0.7``
+     - ``4096``
+     - (未设置)
+     - ``6000``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
+     - ``6000``
 
 配置示例::
 
@@ -256,73 +358,114 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
     rag.llm.ollama.intent.context.max.chars=4000
 
 Ollama模型选项
-======================
+==============
 
 可在 ``fess_config.properties`` 中设置Ollama的模型参数。
+以 ``rag.llm.ollama.default.<param>`` 的形式指定时，作为所有提示词类型通用的回退值使用。
+``default`` 的回退不仅适用于 ``top.p`` / ``top.k`` / ``num.ctx``，也适用于 ``temperature`` / ``max.tokens`` / ``thinking.budget`` / ``thinking.level``。
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - 属性
      - 说明
      - 默认值
-   * - ``rag.llm.ollama.top.p``
-     - Top-P采样的值（0.0〜1.0）
+   * - ``rag.llm.ollama.default.top.p``
+     - Top-P采样的值（0.0〜1.0）。可通过 ``rag.llm.ollama.{promptType}.top.p`` 按提示词类型覆盖
      - (未设置)
-   * - ``rag.llm.ollama.top.k``
-     - Top-K采样的值
+   * - ``rag.llm.ollama.default.top.k``
+     - Top-K采样的值。可通过 ``rag.llm.ollama.{promptType}.top.k`` 按提示词类型覆盖
      - (未设置)
-   * - ``rag.llm.ollama.num.ctx``
-     - 上下文窗口大小
+   * - ``rag.llm.ollama.default.num.ctx``
+     - 上下文窗口大小。可通过 ``rag.llm.ollama.{promptType}.num.ctx`` 按提示词类型覆盖
      - (未设置)
-   * - ``rag.llm.ollama.default.*``
-     - 默认回退配置
+   * - ``rag.llm.ollama.default.temperature``
+     - 生成时temperature的回退值。可通过 ``rag.llm.ollama.{promptType}.temperature`` 按提示词类型覆盖
+     - (未设置)
+   * - ``rag.llm.ollama.default.max.tokens``
+     - 最大token数的回退值。可通过 ``rag.llm.ollama.{promptType}.max.tokens`` 按提示词类型覆盖
+     - (未设置)
+   * - ``rag.llm.ollama.default.thinking.budget``
+     - 思考预算的回退值。可通过 ``rag.llm.ollama.{promptType}.thinking.budget`` 按提示词类型覆盖
+     - (未设置)
+   * - ``rag.llm.ollama.default.thinking.level``
+     - 思考级别（ ``high`` / ``medium`` / ``low`` ）的回退值。可通过 ``rag.llm.ollama.{promptType}.thinking.level`` 按提示词类型覆盖
      - (未设置)
    * - ``rag.llm.ollama.options.*``
-     - 全局选项
+     - 直接传递给Ollama API的全局选项。后缀作为选项名使用（例: ``rag.llm.ollama.options.repeat_penalty=1.1``）。值会自动转换为Integer、Double、Boolean、String类型
      - (未设置)
 
 配置示例::
 
-    # Top-P采样
-    rag.llm.ollama.top.p=0.9
+    # 默认Top-P采样（所有提示词类型通用）
+    rag.llm.ollama.default.top.p=0.9
 
-    # Top-K采样
-    rag.llm.ollama.top.k=40
+    # 默认Top-K采样
+    rag.llm.ollama.default.top.k=40
 
-    # 上下文窗口大小
-    rag.llm.ollama.num.ctx=4096
+    # 默认上下文窗口大小
+    rag.llm.ollama.default.num.ctx=4096
+
+    # 仅在生成回答时更改Top-P
+    rag.llm.ollama.answer.top.p=0.95
+
+    # 全局选项（直接传递给Ollama API）
+    rag.llm.ollama.options.repeat_penalty=1.1
 
 思考模型支持
-==============
+============
 
-使用gemma4或qwen3.5等思考模型（thinking model）时，|Fess| 支持设置思考预算（thinking budget）。
+使用gemma4或qwen3等思考模型（thinking model）时， |Fess| 支持设置思考预算（thinking budget）。
 
-在 ``fess_config.properties`` 中进行如下设置:
+思考预算按提示词类型在 ``fess_config.properties`` 中设置:
 
 ::
 
-    # 设置思考预算
-    rag.llm.ollama.thinking.budget=1024
+    # 设置生成回答时的思考预算
+    rag.llm.ollama.answer.thinking.budget=1024
+
+    # 设置生成摘要时的思考预算
+    rag.llm.ollama.summary.thinking.budget=1024
 
 通过设置思考预算，可以控制模型在生成回答前用于"思考"步骤的token数。
 
+.. note::
+   在Ollama中，思考预算会被转换为布尔标志（值大于0时为 ``think: true``，等于0时为 ``think: false``）。由于Ollama API的限制，无法按token数进行精细控制。
+
+思考级别（thinking level）
+--------------------------
+
+gpt-oss等部分模型会忽略布尔形式的 ``think`` 标志，需要使用 ``high`` / ``medium`` / ``low`` 字符串形式来指定思考级别。
+此类模型请使用 ``rag.llm.ollama.{promptType}.thinking.level``。
+
+::
+
+    # 设置生成回答时的思考级别
+    rag.llm.ollama.answer.thinking.level=high
+
+    # 设置生成摘要时的思考级别
+    rag.llm.ollama.summary.thinking.level=medium
+
+``thinking.level`` 可设置的值为 ``high`` / ``medium`` / ``low`` 之一（不区分大小写）。指定无效值时将被忽略并输出警告日志。
+
+.. note::
+   同时设置了 ``thinking.level`` （字符串形式）和 ``thinking.budget`` （布尔形式）时， ``thinking.level`` 优先。GPT-OSS系模型请使用 ``thinking.level``，其他思考模型请使用 ``thinking.budget``。
+
 网络配置
-================
+========
 
 Docker配置
---------------
+----------
 
-官方 `docker-fess <https://github.com/codelibs/docker-fess>`__ 仓库附带了 Ollama 用的
-overlay 文件 ``compose-ollama.yaml``。最小步骤：
+|Fess| 官方的 `docker-fess <https://github.com/codelibs/docker-fess>`__ 中附带了Ollama用的overlay文件 ``compose-ollama.yaml``。最小步骤如下。
 
 ::
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
     docker exec -it ollama01 ollama pull gemma4:e4b
 
-``compose-ollama.yaml`` 的内容（自行编写等价配置时的参考）：
+``compose-ollama.yaml`` 配置为使用NVIDIA GPU（需要NVIDIA Container Toolkit）。内容如下。
 
 .. code-block:: yaml
 
@@ -330,32 +473,45 @@ overlay 文件 ``compose-ollama.yaml``。最小步骤：
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-ollama:15.7.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434"
         depends_on:
           - ollama01
 
       ollama01:
         image: ollama/ollama:latest
+        container_name: ollama01
         ports:
           - "11434:11434"
         volumes:
           - ollama-data:/root/.ollama
+        networks:
+          - search_net
+        restart: unless-stopped
+        deploy:
+          resources:
+            reservations:
+              devices:
+                - driver: nvidia
+                  count: 1
+                  capabilities: [gpu]
 
     volumes:
       ollama-data:
+        driver: local
 
-要点：
+要点:
 
-- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` 让容器的 ``run.sh`` 自动下载并安装插件到 ``app/WEB-INF/plugin/``
-- ``-Dfess.config.rag.chat.enabled=true`` 启用 AI 搜索模式
-- ``-Dfess.config.rag.llm.ollama.api.url=...`` 指定 Ollama 服务器的 URL（在 Docker Compose 网络内可使用 ``ollama01`` 等服务名进行解析）
-- ``-Dfess.system.rag.llm.name=ollama`` 仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效。启动后也可在管理界面"系统 > 全局设置"的 RAG 区段进行修改
+- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` 使启动脚本自动获取插件JAR并放置到 ``app/WEB-INF/plugin/``（版本请与您使用的 |Fess| 保持一致）
+- ``-Dfess.config.rag.chat.enabled=true`` 启用AI搜索模式
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` 指定Ollama服务器的URL（在Docker Compose网络内可使用 ``ollama01`` 等服务名进行解析）
+- LLM提供商（ ``rag.llm.name`` ）的默认值为 ``ollama``，因此仅使用Ollama时无需显式指定。从其他提供商切换时，可在 ``FESS_JAVA_OPTS`` 中添加 ``-Dfess.system.rag.llm.name=ollama``，或在启动后通过管理界面"系统 > 通用"的RAG区段进行设置
+- ``deploy.resources.reservations.devices`` 块是使用GPU的配置。不使用GPU（仅CPU运行）时，请删除此块
 
 .. note::
    ``RAG_CHAT_ENABLED`` 或 ``RAG_LLM_NAME`` 等大写蛇形命名的环境变量不会被 |Fess| 直接识别。配置值必须在 ``FESS_JAVA_OPTS`` 中以 ``-Dfess.config.<key>`` （ ``fess_config.properties`` 系列）或 ``-Dfess.system.<key>`` （ ``system.properties`` 系列）的形式传递。
 
 远程Ollama服务器
-----------------------
+----------------
 
 在与Fess不同的服务器上运行Ollama时:
 
@@ -367,8 +523,8 @@ overlay 文件 ``compose-ollama.yaml``。最小步骤：
    Ollama默认没有认证功能，如果要从外部访问，
    请考虑网络级别的安全措施（防火墙、VPN等）。
 
-通过 HTTP 代理使用
-==================
+通过HTTP代理使用
+================
 
 Ollama客户端会共享 |Fess| 整体的HTTP代理配置。当连接Ollama服务器需要经过代理时（例如使用远程Ollama服务器时），请在 ``fess_config.properties`` 中指定以下属性。
 
@@ -437,7 +593,7 @@ Ollama支持GPU加速。使用NVIDIA GPU可显著提高推理速度。
     ollama run gemma4:e4b --verbose
 
 故障排除
-======================
+========
 
 连接错误
 --------
@@ -459,9 +615,9 @@ Ollama支持GPU加速。使用NVIDIA GPU可显著提高推理速度。
 4. 确认 ``fess-llm-ollama`` 插件已放置到 ``app/WEB-INF/plugin/``
 
 模型未找到
---------------------
+----------
 
-**症状**: 日志输出"Configured model not found in Ollama"
+**症状**: 日志输出"Configured model not found"
 
 **解决方法**:
 
@@ -475,7 +631,7 @@ Ollama支持GPU加速。使用NVIDIA GPU可显著提高推理速度。
     ollama pull gemma4:e4b
 
 超时
-------------
+----
 
 **症状**: 请求超时
 
@@ -488,7 +644,7 @@ Ollama支持GPU加速。使用NVIDIA GPU可显著提高推理速度。
 2. 考虑使用更小的模型或GPU环境
 
 调试设置
-------------
+--------
 
 调查问题时，可调整 |Fess| 日志级别输出Ollama相关的详细日志。
 

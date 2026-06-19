@@ -103,6 +103,13 @@ Die LLM-bezogenen Einstellungen sind auf mehrere Konfigurationsdateien aufgeteil
 Minimalkonfiguration
 --------------------
 
+``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
+
+::
+
+    # LLM-Anbieter auf Ollama setzen
+    rag.llm.name=ollama
+
 ``app/WEB-INF/conf/fess_config.properties``:
 
 ::
@@ -116,18 +123,18 @@ Minimalkonfiguration
     # Zu verwendendes Modell
     rag.llm.ollama.model=gemma4:e4b
 
-``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
-
-::
-
-    # LLM-Anbieter auf Ollama setzen
-    rag.llm.name=ollama
-
 .. note::
    Die LLM-Anbietereinstellung kann auch über die Administrationsoberfläche (Administration > System > Allgemein) durch Setzen von ``rag.llm.name`` konfiguriert werden.
 
 Empfohlene Konfiguration (Produktionsumgebung)
 ----------------------------------------------
+
+``system.properties`` (auch über Administration > System > Allgemein konfigurierbar):
+
+::
+
+    # LLM-Anbieter-Einstellungen
+    rag.llm.name=ollama
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
@@ -148,17 +155,10 @@ Empfohlene Konfiguration (Produktionsumgebung)
     # Steuerung gleichzeitiger Anfragen
     rag.llm.ollama.max.concurrent.requests=5
 
-``system.properties``:
-
-::
-
-    # LLM-Anbieter-Einstellungen
-    rag.llm.name=ollama
-
 Einstellungselemente
 ====================
 
-Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellungen werden in ``fess_config.properties`` vorgenommen.
+Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellungen außer ``rag.llm.name`` werden in ``fess_config.properties`` vorgenommen.
 
 .. list-table::
    :header-rows: 1
@@ -177,7 +177,7 @@ Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellunge
      - Anfrage-Timeout (Millisekunden)
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
-     - Intervall der Verfügbarkeitsprüfung (Sekunden)
+     - Intervall der Verfügbarkeitsprüfung (Sekunden). Bei einem Wert von ``0`` oder kleiner wird die regelmäßige Verfügbarkeitsprüfung deaktiviert
      - ``60``
    * - ``rag.llm.ollama.max.concurrent.requests``
      - Maximale Anzahl gleichzeitiger Anfragen
@@ -186,17 +186,48 @@ Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellunge
      - Maximale Anzahl relevanter Dokumente bei der Bewertung
      - ``3``
    * - ``rag.llm.ollama.concurrency.wait.timeout``
-     - Wartezeit bei gleichzeitigen Anfragen (Millisekunden)
+     - Timeout beim Warten auf eine Semaphore für die Gleichzeitigkeitssteuerung (Millisekunden)
      - ``30000``
    * - ``rag.llm.ollama.connect.timeout``
      - TCP-Verbindungs-Timeout (Millisekunden). Kann unabhängig von ``rag.llm.ollama.timeout`` angegeben werden
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
-     - Maximale Anzahl von HTTP-Wiederholungsversuchen (bei ``429`` und ``5xx``-Fehlern)
+     - Maximale Anzahl von HTTP-Wiederholungsversuchen (bei ``429``- und ``5xx``-Fehlern)
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
-     - Basisverzögerung des exponentiellen Backoffs (in Millisekunden)
+     - Basisverzögerung des exponentiellen Backoffs (Millisekunden)
      - ``2000``
+
+Detaileinstellungen
+-------------------
+
+Detaillierte Einstellungselemente zu Verlauf und Kontextgröße.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 35 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``rag.llm.ollama.chat.evaluation.description.max.chars``
+     - Maximale Zeichenzahl der Beschreibung bei der Bewertung
+     - ``500``
+   * - ``rag.llm.ollama.history.max.chars``
+     - Maximale Zeichenzahl des Gesprächsverlaufs
+     - ``4000``
+   * - ``rag.llm.ollama.intent.history.max.messages``
+     - Maximale Nachrichtenanzahl im Verlauf bei der Absichtserkennung
+     - ``6``
+   * - ``rag.llm.ollama.intent.history.max.chars``
+     - Maximale Zeichenzahl im Verlauf bei der Absichtserkennung
+     - ``3000``
+   * - ``rag.llm.ollama.history.assistant.max.chars``
+     - Maximale Zeichenzahl der Assistentenantwort im Verlauf
+     - ``500``
+   * - ``rag.llm.ollama.history.assistant.summary.max.chars``
+     - Maximale Zeichenzahl der Assistentenzusammenfassung im Verlauf
+     - ``500``
 
 Gleichzeitigkeitssteuerung
 ---------------------------
@@ -214,8 +245,15 @@ Die Konfiguration erfolgt in ``fess_config.properties``.
 Für jeden Prompttyp können folgende Parameter konfiguriert werden:
 
 - ``rag.llm.ollama.{promptType}.temperature`` - Temperature bei der Generierung
-- ``rag.llm.ollama.{promptType}.max.tokens`` - Maximale Token-Anzahl
+- ``rag.llm.ollama.{promptType}.max.tokens`` - Maximale Token-Anzahl (wird auf ``num_predict`` der Ollama-API abgebildet)
 - ``rag.llm.ollama.{promptType}.context.max.chars`` - Maximale Zeichenzahl des Kontexts
+- ``rag.llm.ollama.{promptType}.thinking.budget`` - Thinking-Budget (boolesche Steuerung des Denkens; Details siehe „Unterstützung für Thinking-Modelle")
+- ``rag.llm.ollama.{promptType}.thinking.level`` - Thinking-Level (Zeichenfolgenformat ``high`` / ``medium`` / ``low``; Details siehe „Unterstützung für Thinking-Modelle")
+- ``rag.llm.ollama.{promptType}.top.p`` - Wert für Top-P-Sampling
+- ``rag.llm.ollama.{promptType}.top.k`` - Wert für Top-K-Sampling
+- ``rag.llm.ollama.{promptType}.num.ctx`` - Kontextfenstergröße
+
+Die Parameter werden in folgender Reihenfolge aufgelöst: ``rag.llm.ollama.{promptType}.<param>`` (prompttypspezifische Einstellung) → ``rag.llm.ollama.default.<param>`` (gemeinsamer Fallback für alle Prompttypen) → hartcodierter Standardwert je Prompttyp. Explizit in der Anfrage angegebene Werte haben stets Vorrang.
 
 Verfügbare Prompttypen:
 
@@ -243,6 +281,70 @@ Verfügbare Prompttypen:
      - Prompt zur FAQ-Generierung
    * - ``direct``
      - Prompt für direkte Antworten
+   * - ``queryregeneration``
+     - Prompt zur Abfrage-Neugenerierung
+
+Für jeden Prompttyp gelten hartcodierte Standardwerte, die angewendet werden, wenn keine Einstellung vorgenommen wurde.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 15 15 30
+
+   * - Prompttyp
+     - temperature
+     - max.tokens
+     - thinking.budget
+     - context.max.chars
+   * - ``intent``
+     - ``0.1``
+     - ``256``
+     - ``0``
+     - ``6000``
+   * - ``evaluation``
+     - ``0.1``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``unclear``
+     - ``0.7``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``noresults``
+     - ``0.7``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``docnotfound``
+     - ``0.7``
+     - ``512``
+     - ``0``
+     - ``6000``
+   * - ``answer``
+     - ``0.5``
+     - ``8192``
+     - (nicht gesetzt)
+     - ``10000``
+   * - ``summary``
+     - ``0.3``
+     - ``8192``
+     - (nicht gesetzt)
+     - ``10000``
+   * - ``faq``
+     - ``0.7``
+     - ``4096``
+     - (nicht gesetzt)
+     - ``6000``
+   * - ``direct``
+     - ``0.7``
+     - ``4096``
+     - (nicht gesetzt)
+     - ``6000``
+   * - ``queryregeneration``
+     - ``0.3``
+     - ``256``
+     - ``0``
+     - ``6000``
 
 Konfigurationsbeispiel::
 
@@ -259,54 +361,96 @@ Ollama-Modelloptionen
 ======================
 
 Modellparameter für Ollama können in ``fess_config.properties`` konfiguriert werden.
+Durch Angabe im Format ``rag.llm.ollama.default.<param>`` wird der Wert als gemeinsamer Fallback für alle Prompttypen verwendet.
+Der Fallback über ``default`` gilt nicht nur für ``top.p`` / ``top.k`` / ``num.ctx``, sondern auch für ``temperature`` / ``max.tokens`` / ``thinking.budget`` / ``thinking.level``.
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 45 20
+   :widths: 40 40 20
 
    * - Eigenschaft
      - Beschreibung
      - Standard
-   * - ``rag.llm.ollama.top.p``
-     - Wert für Top-P-Sampling (0.0-1.0)
+   * - ``rag.llm.ollama.default.top.p``
+     - Wert für Top-P-Sampling (0,0–1,0). Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.top.p`` überschrieben werden
      - (nicht gesetzt)
-   * - ``rag.llm.ollama.top.k``
-     - Wert für Top-K-Sampling
+   * - ``rag.llm.ollama.default.top.k``
+     - Wert für Top-K-Sampling. Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.top.k`` überschrieben werden
      - (nicht gesetzt)
-   * - ``rag.llm.ollama.num.ctx``
-     - Kontextfenstergröße
+   * - ``rag.llm.ollama.default.num.ctx``
+     - Kontextfenstergröße. Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.num.ctx`` überschrieben werden
      - (nicht gesetzt)
-   * - ``rag.llm.ollama.default.*``
-     - Standard-Fallback-Einstellungen
+   * - ``rag.llm.ollama.default.temperature``
+     - Fallback-Wert für die Temperature bei der Generierung. Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.temperature`` überschrieben werden
+     - (nicht gesetzt)
+   * - ``rag.llm.ollama.default.max.tokens``
+     - Fallback-Wert für die maximale Token-Anzahl. Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.max.tokens`` überschrieben werden
+     - (nicht gesetzt)
+   * - ``rag.llm.ollama.default.thinking.budget``
+     - Fallback-Wert für das Thinking-Budget. Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.thinking.budget`` überschrieben werden
+     - (nicht gesetzt)
+   * - ``rag.llm.ollama.default.thinking.level``
+     - Fallback-Wert für den Thinking-Level (``high`` / ``medium`` / ``low``). Kann je Prompttyp mit ``rag.llm.ollama.{promptType}.thinking.level`` überschrieben werden
      - (nicht gesetzt)
    * - ``rag.llm.ollama.options.*``
-     - Globale Optionen
+     - Globale Optionen, die direkt an die Ollama-API weitergegeben werden. Das Suffix wird als Optionsname verwendet (Beispiel: ``rag.llm.ollama.options.repeat_penalty=1.1``). Werte werden automatisch in Integer, Double, Boolean oder String konvertiert
      - (nicht gesetzt)
 
 Konfigurationsbeispiel::
 
-    # Top-P-Sampling
-    rag.llm.ollama.top.p=0.9
+    # Standard-Top-P-Sampling (gemeinsam für alle Prompttypen)
+    rag.llm.ollama.default.top.p=0.9
 
-    # Top-K-Sampling
-    rag.llm.ollama.top.k=40
+    # Standard-Top-K-Sampling
+    rag.llm.ollama.default.top.k=40
 
-    # Kontextfenstergröße
-    rag.llm.ollama.num.ctx=4096
+    # Standard-Kontextfenstergröße
+    rag.llm.ollama.default.num.ctx=4096
+
+    # Top-P nur bei der Antwortgenerierung ändern
+    rag.llm.ollama.answer.top.p=0.95
+
+    # Globale Option (wird direkt an die Ollama-API weitergegeben)
+    rag.llm.ollama.options.repeat_penalty=1.1
 
 Unterstützung für Thinking-Modelle
 ====================================
 
-Bei Verwendung von Thinking-Modellen wie gemma4 oder qwen3.5 unterstützt |Fess| die Konfiguration des Thinking-Budgets.
+Bei Verwendung von Thinking-Modellen wie gemma4 oder qwen3 unterstützt |Fess| die Konfiguration des Thinking-Budgets.
 
-Folgendes in ``fess_config.properties`` eintragen:
+Das Thinking-Budget wird je Prompttyp in ``fess_config.properties`` konfiguriert:
 
 ::
 
-    # Thinking-Budget konfigurieren
-    rag.llm.ollama.thinking.budget=1024
+    # Thinking-Budget bei der Antwortgenerierung konfigurieren
+    rag.llm.ollama.answer.thinking.budget=1024
 
-Durch Konfiguration des Thinking-Budgets kann die Anzahl der Token gesteuert werden, die dem Modell für den "Denkschritt" vor der Antwortgenerierung zur Verfügung stehen.
+    # Thinking-Budget bei der Zusammenfassungsgenerierung konfigurieren
+    rag.llm.ollama.summary.thinking.budget=1024
+
+Durch Konfiguration des Thinking-Budgets kann die Anzahl der Token gesteuert werden, die dem Modell für den „Denkschritt" vor der Antwortgenerierung zur Verfügung stehen.
+
+.. note::
+   Bei Ollama wird das Thinking-Budget in ein boolesches Flag umgewandelt (bei einem Wert größer als 0: ``think: true``, bei 0: ``think: false``). Eine feingranulare Steuerung über die Token-Anzahl ist aufgrund von Einschränkungen der Ollama-API nicht verfügbar.
+
+Thinking-Level
+--------------
+
+Einige Modelle wie gpt-oss ignorieren das boolesche ``think``-Flag und erfordern stattdessen die Angabe des Thinking-Levels im Zeichenfolgenformat ``high`` / ``medium`` / ``low``.
+Für solche Modelle wird ``rag.llm.ollama.{promptType}.thinking.level`` verwendet.
+
+::
+
+    # Thinking-Level bei der Antwortgenerierung konfigurieren
+    rag.llm.ollama.answer.thinking.level=high
+
+    # Thinking-Level bei der Zusammenfassungsgenerierung konfigurieren
+    rag.llm.ollama.summary.thinking.level=medium
+
+Gültige Werte für ``thinking.level`` sind ``high`` / ``medium`` / ``low`` (Groß-/Kleinschreibung wird nicht beachtet). Ungültige Werte werden ignoriert und eine Warnung wird protokolliert.
+
+.. note::
+   Wenn sowohl ``thinking.level`` (Zeichenfolgenformat) als auch ``thinking.budget`` (boolesches Format) konfiguriert sind, hat ``thinking.level`` Vorrang. Verwenden Sie ``thinking.level`` für GPT-OSS-Modelle und ``thinking.budget`` für andere Thinking-Modelle.
 
 Netzwerkkonfiguration
 =====================
@@ -314,15 +458,14 @@ Netzwerkkonfiguration
 Docker-Konfiguration
 --------------------
 
-Das offizielle `docker-fess <https://github.com/codelibs/docker-fess>`__ Repository
-liefert ein Ollama-Overlay (``compose-ollama.yaml``) mit. Die minimalen Schritte sind:
+Das offizielle `docker-fess <https://github.com/codelibs/docker-fess>`__ von |Fess| enthält das Ollama-Overlay ``compose-ollama.yaml``. Die minimalen Schritte sind:
 
 ::
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
     docker exec -it ollama01 ollama pull gemma4:e4b
 
-Inhalt von ``compose-ollama.yaml`` (als Referenz für eigenes Setup):
+``compose-ollama.yaml`` ist für den Einsatz mit NVIDIA-GPUs konfiguriert (NVIDIA Container Toolkit erforderlich). Der Inhalt lautet wie folgt:
 
 .. code-block:: yaml
 
@@ -330,31 +473,44 @@ Inhalt von ``compose-ollama.yaml`` (als Referenz für eigenes Setup):
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-ollama:15.7.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434 -Dfess.system.rag.llm.name=ollama"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434"
         depends_on:
           - ollama01
 
       ollama01:
         image: ollama/ollama:latest
+        container_name: ollama01
         ports:
           - "11434:11434"
         volumes:
           - ollama-data:/root/.ollama
+        networks:
+          - search_net
+        restart: unless-stopped
+        deploy:
+          resources:
+            reservations:
+              devices:
+                - driver: nvidia
+                  count: 1
+                  capabilities: [gpu]
 
     volumes:
       ollama-data:
+        driver: local
 
 Hinweise:
 
-- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` lässt das ``run.sh`` des Containers das Plugin automatisch herunterladen und in ``app/WEB-INF/plugin/`` installieren
-- ``-Dfess.config.rag.chat.enabled=true`` aktiviert den AI-Modus
-- ``-Dfess.config.rag.llm.ollama.api.url=...`` setzt die URL des Ollama-Servers (innerhalb des Docker-Compose-Netzwerks wird der Servicename wie ``ollama01`` aufgelöst)
-- ``-Dfess.system.rag.llm.name=ollama`` wirkt nur als initialer Default, bevor ein Wert in OpenSearch persistiert wurde. Nach dem Start kann der Wert auch unter Administration > System > Allgemein (RAG-Sektion) geändert werden
+- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` bewirkt, dass das Startskript die Plugin-JAR automatisch herunterlädt und in ``app/WEB-INF/plugin/`` ablegt (passen Sie die Version an Ihre |Fess|-Version an)
+- ``-Dfess.config.rag.chat.enabled=true`` aktiviert den KI-Suchmodus
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` legt die URL des Ollama-Servers fest (innerhalb des Docker-Compose-Netzwerks wird der Servicename wie ``ollama01`` aufgelöst)
+- Da der Standard-LLM-Anbieter (``rag.llm.name``) bereits ``ollama`` ist, ist bei ausschließlicher Verwendung von Ollama keine explizite Angabe erforderlich. Beim Wechsel von einem anderen Anbieter fügen Sie ``-Dfess.system.rag.llm.name=ollama`` zu ``FESS_JAVA_OPTS`` hinzu oder konfigurieren Sie den Wert nach dem Start unter Administration > System > Allgemein im RAG-Abschnitt
+- Der Block ``deploy.resources.reservations.devices`` dient der GPU-Nutzung. Wenn Sie keine GPU verwenden (nur CPU), entfernen Sie diesen Block
 
 .. note::
    Großgeschriebene Snake-Case-Umgebungsvariablen wie ``RAG_CHAT_ENABLED`` oder ``RAG_LLM_NAME`` werden von |Fess| nicht direkt erkannt. Konfigurationswerte müssen stets innerhalb von ``FESS_JAVA_OPTS`` als ``-Dfess.config.<key>`` (für ``fess_config.properties``) oder ``-Dfess.system.<key>`` (für ``system.properties``) übergeben werden.
 
-Remote Ollama-Server
+Remote-Ollama-Server
 --------------------
 
 Wenn Ollama auf einem separaten Server als Fess läuft:
@@ -460,7 +616,7 @@ Verbindungsfehler
 Modell nicht gefunden
 ---------------------
 
-**Symptom**: Log zeigt "Configured model not found in Ollama"
+**Symptom**: Log gibt „Configured model not found" aus
 
 **Lösung**:
 
@@ -489,7 +645,7 @@ Timeout
 Debug-Einstellungen
 -------------------
 
-Zur Untersuchung von Problemen können Sie den Log-Level anpassen, um detaillierte Logs zu Ollama auszugeben.
+Zur Untersuchung von Problemen können Sie den Log-Level von |Fess| anpassen, um detaillierte Logs zu Ollama auszugeben.
 
 ``app/WEB-INF/classes/log4j2.xml``:
 
@@ -504,4 +660,4 @@ Weiterführende Informationen
 - `Ollama Modellbibliothek <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - Übersicht LLM-Integration
-- :doc:`rag-chat` - Details zur AI-Suchmodus-Funktion
+- :doc:`rag-chat` - Details zur KI-Suchmodus-Funktion
