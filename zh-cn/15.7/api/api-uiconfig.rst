@@ -96,7 +96,7 @@ HTTP 方法            GET
      - 说明
    * - ``site_name``
      - string
-     - 站点名称。
+     - 站点名称。当活动主题包含清单时为其显示名称（\ ``display_name``\ ），否则为 ``Fess``\ 。
    * - ``login_required``
      - boolean
      - 是否需要登录。

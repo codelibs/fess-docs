@@ -96,7 +96,7 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben. Alle Felder 
      - Beschreibung
    * - ``site_name``
      - string
-     - Seitenname.
+     - Seitenname. Wenn das aktive Theme ein Manifest enthält, ist dies dessen Anzeigename (``display_name``); andernfalls ``Fess``.
    * - ``login_required``
      - boolean
      - Gibt an, ob eine Anmeldung erforderlich ist.
