@@ -1,6 +1,6 @@
-==================================
+=====================================
 Configuration du controle de charge
-==================================
+=====================================
 
 Apercu
 ======
@@ -10,7 +10,7 @@ Apercu
 **Controle de charge des requetes HTTP** (``web.load.control`` / ``api.load.control``) :
 
 - Surveillance en temps reel de l'utilisation CPU du cluster OpenSearch
-- Seuils independants pour les requetes web et les requetes API
+- Seuils independants configurables pour les requetes web et les requetes API
 - Retourne HTTP 429 (Too Many Requests) lorsque les seuils sont depasses
 - Le panneau d'administration, la connexion et les ressources statiques sont exclus du controle
 - Desactive par defaut (seuil=100)
@@ -30,12 +30,12 @@ Definissez les proprietes suivantes dans ``fess_config.properties`` :
 ::
 
     # Seuil d'utilisation CPU pour les requetes web (%)
-    # Les requetes sont rejetees lorsque l'utilisation CPU atteint ou depasse cette valeur
+    # Les requetes sont rejetees lorsque l'utilisation CPU d'OpenSearch atteint ou depasse cette valeur
     # Definir a 100 pour desactiver (defaut : 100)
     web.load.control=100
 
     # Seuil d'utilisation CPU pour les requetes API (%)
-    # Les requetes sont rejetees lorsque l'utilisation CPU atteint ou depasse cette valeur
+    # Les requetes sont rejetees lorsque l'utilisation CPU d'OpenSearch atteint ou depasse cette valeur
     # Definir a 100 pour desactiver (defaut : 100)
     api.load.control=100
 
@@ -46,7 +46,7 @@ Definissez les proprietes suivantes dans ``fess_config.properties`` :
 
 .. note::
    Lorsque ``web.load.control`` et ``api.load.control`` sont tous deux definis a 100 (defaut),
-   la fonctionnalite de controle de charge est completement desactivee et la surveillance ne demarre pas.
+   la surveillance CPU d'OpenSearch ne demarre pas.
 
 Fonctionnement
 ==============
@@ -54,7 +54,7 @@ Fonctionnement
 Mecanisme de surveillance
 -------------------------
 
-Lorsque le controle de charge est active (un seuil est inferieur a 100), LoadControlMonitorTarget surveille periodiquement l'utilisation CPU du cluster OpenSearch.
+Lorsque le controle de charge est active (l'un ou l'autre des seuils est inferieur a 100), LoadControlMonitorTarget surveille periodiquement l'utilisation CPU du cluster OpenSearch.
 
 - Recupere les statistiques OS de tous les noeuds du cluster OpenSearch
 - Enregistre l'utilisation CPU la plus elevee parmi tous les noeuds
@@ -63,7 +63,9 @@ Lorsque le controle de charge est active (un seuil est inferieur a 100), LoadCon
 
 .. note::
    Si la recuperation des informations de surveillance echoue, l'utilisation CPU est reinitialisee a 0.
-   Apres 3 echecs consecutifs, le niveau de log passe de WARNING a DEBUG.
+   Les trois premiers echecs consecutifs sont enregistres au niveau WARNING dans les logs ; a partir
+   du quatrieme echec, le niveau passe a DEBUG (afin d'eviter une inflation des logs en cas d'echecs
+   persistants). Le compteur d'echecs est reinitialise des qu'une surveillance reussit.
 
 Controle des requetes
 ---------------------
@@ -92,6 +94,7 @@ Lorsqu'une requete arrive, LoadControlFilter la traite dans l'ordre suivant :
 **Pour les requetes API :**
 
 - Retourne le code de statut HTTP 429
+- Ajoute l'en-tete de reponse HTTP ``Retry-After: 60``
 - Retourne une reponse JSON :
 
 ::
@@ -103,6 +106,11 @@ Lorsqu'une requete arrive, LoadControlFilter la traite dans l'ordre suivant :
             "retry_after": 60
         }
     }
+
+.. note::
+   Lorsqu'une requete est rejetee, le message suivant est enregistre au niveau INFO dans les logs du serveur :
+   ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
+   Cela permet de verifier quel chemin a ete rejete et pour quel seuil.
 
 Exemples de configuration
 =========================
@@ -141,14 +149,14 @@ Exemple avec des seuils differents pour le web et l'API :
 
 .. note::
    En definissant le seuil API plus haut que le seuil web, vous pouvez realiser un controle progressif
-   ou les requetes web sont restreintes en premier lors d'une charge elevee, et les requetes API sont egalement
-   restreintes lorsque la charge augmente davantage.
+   ou les requetes web sont restreintes en premier lors d'une charge elevee, et les requetes API sont
+   egalement restreintes lorsque la charge augmente davantage.
 
 Difference avec la limitation de debit
 =======================================
 
 |Fess| dispose d'une fonctionnalite de :doc:`rate-limiting` separee du controle de charge.
-Celles-ci protegent le systeme avec des approches differentes.
+Ces deux mecanismes protegent le systeme avec des approches differentes.
 
 .. list-table::
    :header-rows: 1
@@ -162,7 +170,7 @@ Celles-ci protegent le systeme avec des approches differentes.
      - Utilisation CPU d'OpenSearch
    * - Objectif
      - Prevention des requetes excessives
-     - Protection du moteur de recherche contre la charge elevee
+     - Protection du moteur de recherche contre la surcharge
    * - Unite de limite
      - Par adresse IP
      - Ensemble du systeme

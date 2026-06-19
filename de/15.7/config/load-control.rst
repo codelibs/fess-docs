@@ -1,81 +1,82 @@
-==================================
+============================
 Laststeuerung-Konfiguration
-==================================
+============================
 
-Uebersicht
-==========
+Übersicht
+=========
 
-|Fess| enthaelt zwei Arten von Laststeuerungsfunktionen, die die Systemstabilitaet basierend auf der CPU-Auslastung schuetzen.
+|Fess| enthält zwei Arten von Laststeuerungsfunktionen, die die Systemstabilität basierend auf der CPU-Auslastung schützen.
 
 **HTTP-Anfragen-Laststeuerung** (``web.load.control`` / ``api.load.control``):
 
-- Echtzeitueberwachung der OpenSearch-Cluster-CPU-Auslastung
-- Unabhaengige Schwellenwerte fuer Web-Anfragen und API-Anfragen
-- Gibt HTTP 429 (Too Many Requests) zurueck, wenn Schwellenwerte ueberschritten werden
+- Echtzeitüberwachung der CPU-Auslastung des OpenSearch-Clusters
+- Unabhängige Schwellenwerte für Web-Anfragen und API-Anfragen konfigurierbar
+- Gibt HTTP 429 (Too Many Requests) zurück, wenn Schwellenwerte überschritten werden
 - Admin-Panel, Login und statische Ressourcen sind von der Steuerung ausgenommen
-- Standardmaessig deaktiviert (Schwellenwert=100)
+- Standardmäßig deaktiviert (Schwellenwert=100)
 
 **Adaptive Laststeuerung** (``adaptive.load.control``):
 
-- Ueberwacht die System-CPU-Auslastung des Fess-Servers selbst
+- Überwacht die System-CPU-Auslastung des Fess-Servers selbst
 - Drosselt automatisch Hintergrundaufgaben wie Crawling, Indexierung, Suggest-Aktualisierungen und Thumbnail-Generierung
-- Wenn die CPU-Auslastung den Schwellenwert erreicht oder ueberschreitet, werden Verarbeitungsthreads angehalten und bei Unterschreitung fortgesetzt
-- Standardmaessig aktiviert (Schwellenwert=50)
+- Wenn die CPU-Auslastung den Schwellenwert erreicht oder überschreitet, werden Verarbeitungsthreads angehalten und bei Unterschreitung fortgesetzt
+- Standardmäßig aktiviert (Schwellenwert=50)
 
-HTTP-Anfragen-Laststeuerung-Konfiguration
-==========================================
+Konfiguration der HTTP-Anfragen-Laststeuerung
+=============================================
 
 Setzen Sie die folgenden Eigenschaften in ``fess_config.properties``:
 
 ::
 
-    # CPU-Auslastungs-Schwellenwert fuer Web-Anfragen (%)
-    # Anfragen werden abgelehnt, wenn die CPU-Auslastung diesen Wert erreicht oder ueberschreitet
+    # CPU-Auslastungs-Schwellenwert für Web-Anfragen (%)
+    # Anfragen werden abgelehnt, wenn die OpenSearch-CPU-Auslastung diesen Wert erreicht oder überschreitet
     # Auf 100 setzen zum Deaktivieren (Standard: 100)
     web.load.control=100
 
-    # CPU-Auslastungs-Schwellenwert fuer API-Anfragen (%)
-    # Anfragen werden abgelehnt, wenn die CPU-Auslastung diesen Wert erreicht oder ueberschreitet
+    # CPU-Auslastungs-Schwellenwert für API-Anfragen (%)
+    # Anfragen werden abgelehnt, wenn die OpenSearch-CPU-Auslastung diesen Wert erreicht oder überschreitet
     # Auf 100 setzen zum Deaktivieren (Standard: 100)
     api.load.control=100
 
-    # CPU-Auslastungs-Ueberwachungsintervall (Sekunden)
-    # Intervall zum Abrufen der OpenSearch-Cluster-CPU-Auslastung
+    # Überwachungsintervall der CPU-Auslastung (Sekunden)
+    # Intervall zum Abrufen der CPU-Auslastung des OpenSearch-Clusters
     # Standard: 1
     load.control.monitor.interval=1
 
 .. note::
    Wenn sowohl ``web.load.control`` als auch ``api.load.control`` auf 100 (Standard) gesetzt sind,
-   ist die Laststeuerungsfunktion vollstaendig deaktiviert und die Ueberwachung wird nicht gestartet.
+   wird die OpenSearch-CPU-Überwachung nicht gestartet.
 
 Funktionsweise
 ==============
 
-Ueberwachungsmechanismus
-------------------------
+Überwachungsmechanismus
+-----------------------
 
-Wenn die Laststeuerung aktiviert ist (ein Schwellenwert unter 100), ueberwacht LoadControlMonitorTarget regelmaessig die CPU-Auslastung des OpenSearch-Clusters.
+Wenn die Laststeuerung aktiviert ist (ein Schwellenwert unter 100), überwacht LoadControlMonitorTarget regelmäßig die CPU-Auslastung des OpenSearch-Clusters.
 
 - Ruft OS-Statistiken von allen Knoten im OpenSearch-Cluster ab
-- Zeichnet die hoechste CPU-Auslastung aller Knoten auf
-- Ueberwacht im durch ``load.control.monitor.interval`` angegebenen Intervall (Standard: 1 Sekunde)
-- Die Ueberwachung wird verzoegert beim ersten Request gestartet
+- Zeichnet die höchste CPU-Auslastung aller Knoten auf
+- Überwacht im durch ``load.control.monitor.interval`` angegebenen Intervall (Standard: 1 Sekunde)
+- Die Überwachung wird verzögert initialisiert und beim ersten Request gestartet
 
 .. note::
-   Wenn das Abrufen der Ueberwachungsinformationen fehlschlaegt, wird die CPU-Auslastung auf 0 zurueckgesetzt.
-   Nach 3 aufeinanderfolgenden Fehlern aendert sich das Loglevel von WARNING zu DEBUG.
+   Wenn das Abrufen der Überwachungsinformationen fehlschlägt, wird die CPU-Auslastung auf 0 zurückgesetzt.
+   Bei den ersten drei aufeinanderfolgenden Fehlern wird dies auf WARNING-Ebene protokolliert, ab dem vierten Fehler wird auf DEBUG-Ebene gewechselt
+   (um eine übermäßige Protokollvergrößerung durch anhaltende Fehler zu verhindern). Sobald die Überwachung einmal erfolgreich ist, wird der Fehlerzähler zurückgesetzt.
 
 Anfragesteuerung
 ----------------
 
 Wenn eine Anfrage eintrifft, verarbeitet LoadControlFilter sie in folgender Reihenfolge:
 
-1. Pruefen, ob der Pfad ausgenommen ist (wenn ausgenommen, durchlassen)
+1. Prüfen, ob der Pfad ausgenommen ist (wenn ausgenommen, durchlassen)
 2. Art der Anfrage bestimmen (Web / API)
 3. Entsprechenden Schwellenwert abrufen
-4. Wenn der Schwellenwert 100 oder hoeher ist, nicht steuern (durchlassen)
+4. Wenn der Schwellenwert 100 oder höher ist, nicht steuern (durchlassen)
 5. Aktuelle CPU-Auslastung mit dem Schwellenwert vergleichen
-6. Wenn CPU-Auslastung >= Schwellenwert, HTTP 429 zurueckgeben
+6. Wenn CPU-Auslastung >= Schwellenwert, HTTP 429 zurückgeben
 
 **Ausgenommene Anfragen:**
 
@@ -84,15 +85,16 @@ Wenn eine Anfrage eintrifft, verarbeitet LoadControlFilter sie in folgender Reih
 - Pfade, die mit ``/login`` beginnen (Login-Seiten)
 - Statische Ressourcen (``.css``, ``.js``, ``.png``, ``.jpg``, ``.gif``, ``.ico``, ``.svg``, ``.woff``, ``.woff2``, ``.ttf``, ``.eot``)
 
-**Fuer Web-Anfragen:**
+**Für Web-Anfragen:**
 
-- Gibt HTTP 429-Statuscode zurueck
+- Gibt HTTP 429-Statuscode zurück
 - Zeigt die Fehlerseite (``busy.jsp``) an
 
-**Fuer API-Anfragen:**
+**Für API-Anfragen:**
 
-- Gibt HTTP 429-Statuscode zurueck
-- Gibt eine JSON-Antwort zurueck:
+- Gibt HTTP 429-Statuscode zurück
+- Fügt den HTTP-Antwort-Header ``Retry-After: 60`` hinzu
+- Gibt eine JSON-Antwort zurück:
 
 ::
 
@@ -104,51 +106,56 @@ Wenn eine Anfrage eintrifft, verarbeitet LoadControlFilter sie in folgender Reih
         }
     }
 
+.. note::
+   Wenn eine Anfrage abgelehnt wird, wird auf INFO-Ebene im Server-Log
+   ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
+   ausgegeben. Damit lässt sich nachvollziehen, welcher Pfad mit welchem Schwellenwert abgelehnt wurde.
+
 Konfigurationsbeispiele
 =======================
 
 Nur Web-Anfragen begrenzen
----------------------------
+--------------------------
 
-Konfiguration, die nur Web-Suchanfragen begrenzt und API nicht einschraenkt:
+Konfiguration, die nur Web-Suchanfragen begrenzt und API nicht einschränkt:
 
 ::
 
-    # Web: Anfragen bei CPU-Auslastung von 80% oder mehr ablehnen
+    # Web: Anfragen bei CPU-Auslastung von 80 % oder mehr ablehnen
     web.load.control=80
 
-    # API: Keine Einschraenkung
+    # API: Keine Einschränkung
     api.load.control=100
 
-    # Ueberwachungsintervall: 1 Sekunde
+    # Überwachungsintervall: 1 Sekunde
     load.control.monitor.interval=1
 
 Web und API begrenzen
 ---------------------
 
-Beispiel mit unterschiedlichen Schwellenwerten fuer Web und API:
+Beispiel mit unterschiedlichen Schwellenwerten für Web und API:
 
 ::
 
-    # Web: Anfragen bei CPU-Auslastung von 70% oder mehr ablehnen
+    # Web: Anfragen bei CPU-Auslastung von 70 % oder mehr ablehnen
     web.load.control=70
 
-    # API: Anfragen bei CPU-Auslastung von 80% oder mehr ablehnen
+    # API: Anfragen bei CPU-Auslastung von 80 % oder mehr ablehnen
     api.load.control=80
 
-    # Ueberwachungsintervall: 2 Sekunden
+    # Überwachungsintervall: 2 Sekunden
     load.control.monitor.interval=2
 
 .. note::
-   Wenn Sie den API-Schwellenwert hoeher als den Web-Schwellenwert setzen, koennen Sie eine gestufte Steuerung erreichen,
-   bei der zuerst Web-Anfragen bei hoher Last eingeschraenkt werden und API-Anfragen erst bei weiter steigender Last
-   ebenfalls eingeschraenkt werden.
+   Wenn Sie den API-Schwellenwert höher als den Web-Schwellenwert setzen, können Sie eine gestufte Steuerung erreichen,
+   bei der zuerst Web-Anfragen bei hoher Last eingeschränkt werden und API-Anfragen erst bei weiter steigender Last
+   ebenfalls eingeschränkt werden.
 
 Unterschied zur Rate-Limitierung
-================================
+=================================
 
-|Fess| verfuegt ueber eine :doc:`rate-limiting`-Funktion, die von der Laststeuerung getrennt ist.
-Diese schuetzen das System mit unterschiedlichen Ansaetzen.
+|Fess| verfügt über eine :doc:`rate-limiting`-Funktion, die von der Laststeuerung getrennt ist.
+Diese schützen das System mit unterschiedlichen Ansätzen.
 
 .. list-table::
    :header-rows: 1
@@ -161,7 +168,7 @@ Diese schuetzen das System mit unterschiedlichen Ansaetzen.
      - Anzahl der Anfragen (pro Zeiteinheit)
      - OpenSearch CPU-Auslastung
    * - Zweck
-     - Verhinderung uebermaeessiger Anfragen
+     - Verhinderung übermäßiger Anfragen
      - Schutz der Suchmaschine vor hoher Last
    * - Begrenzungseinheit
      - Pro IP-Adresse
@@ -173,7 +180,7 @@ Diese schuetzen das System mit unterschiedlichen Ansaetzen.
      - Alle HTTP-Anfragen
      - Web-Anfragen / API-Anfragen (Admin-Panel usw. ausgenommen)
 
-Die Kombination beider Funktionen ermoeglicht einen robusteren Systemschutz.
+Die Kombination beider Funktionen ermöglicht einen robusteren Systemschutz.
 
 Adaptive Laststeuerung
 ======================
@@ -188,17 +195,17 @@ Konfiguration
 
 ::
 
-    # Adaptive Laststeuerung CPU-Auslastungs-Schwellenwert (%)
-    # Haelt Hintergrundaufgaben an, wenn die System-CPU-Auslastung diesen Wert erreicht oder ueberschreitet
+    # CPU-Auslastungs-Schwellenwert für die adaptive Laststeuerung (%)
+    # Hält Hintergrundaufgaben an, wenn die System-CPU-Auslastung diesen Wert erreicht oder überschreitet
     # Auf 0 oder darunter setzen zum Deaktivieren (Standard: 50)
     adaptive.load.control=50
 
 Verhalten
 ---------
 
-- Ueberwacht die System-CPU-Auslastung des Servers, auf dem Fess laeuft
-- Wenn die CPU-Auslastung den Schwellenwert erreicht oder ueberschreitet, warten die betroffenen Verarbeitungsthreads, bis die CPU-Auslastung unter den Schwellenwert faellt
-- Wenn die CPU-Auslastung unter den Schwellenwert faellt, wird die Verarbeitung automatisch fortgesetzt
+- Überwacht die System-CPU-Auslastung des Servers, auf dem Fess läuft
+- Wenn die CPU-Auslastung den Schwellenwert erreicht oder überschreitet, warten die betroffenen Verarbeitungsthreads, bis die CPU-Auslastung unter den Schwellenwert fällt
+- Wenn die CPU-Auslastung unter den Schwellenwert fällt, wird die Verarbeitung automatisch fortgesetzt
 
 **Betroffene Hintergrundaufgaben:**
 
@@ -210,8 +217,8 @@ Verhalten
 - Sicherung und Wiederherstellung
 
 .. note::
-   Die adaptive Laststeuerung ist standardmaessig aktiviert (Schwellenwert=50).
-   Sie arbeitet unabhaengig von der HTTP-Anfragen-Laststeuerung (``web.load.control`` / ``api.load.control``).
+   Die adaptive Laststeuerung ist standardmäßig aktiviert (Schwellenwert=50).
+   Sie arbeitet unabhängig von der HTTP-Anfragen-Laststeuerung (``web.load.control`` / ``api.load.control``).
 
 .. list-table::
    :header-rows: 1
@@ -220,15 +227,15 @@ Verhalten
    * - Aspekt
      - HTTP-Anfragen-Laststeuerung
      - Adaptive Laststeuerung
-   * - Ueberwachungsziel
+   * - Überwachungsziel
      - OpenSearch CPU-Auslastung
-     - Fess-Server System-CPU-Auslastung
+     - System-CPU-Auslastung des Fess-Servers
    * - Steuerungsziel
      - HTTP-Anfragen (Web / API)
      - Hintergrundaufgaben
    * - Steuerungsmethode
      - Lehnt Anfragen mit HTTP 429 ab
-     - Haelt Verarbeitungsthreads voruebergehend an
+     - Hält Verarbeitungsthreads vorübergehend an
    * - Standard
      - Deaktiviert (Schwellenwert=100)
      - Aktiviert (Schwellenwert=50)
@@ -237,44 +244,44 @@ Fehlerbehebung
 ==============
 
 Laststeuerung wird nicht aktiviert
-----------------------------------
+-----------------------------------
 
 **Ursache**: Konfiguration wird nicht richtig angewendet
 
-**Pruefen**:
+**Prüfen**:
 
 1. Ist ``web.load.control`` oder ``api.load.control`` unter 100 gesetzt?
 2. Wird die Konfigurationsdatei korrekt gelesen?
 3. Wurde |Fess| neu gestartet?
 
 Legitime Anfragen werden abgelehnt
------------------------------------
+------------------------------------
 
 **Ursache**: Schwellenwerte sind zu niedrig
 
-**Loesungen**:
+**Lösungen**:
 
-1. Die Werte von ``web.load.control`` oder ``api.load.control`` erhoehen
-2. ``load.control.monitor.interval`` anpassen, um die Ueberwachungshaeufigkeit zu aendern
+1. Die Werte von ``web.load.control`` oder ``api.load.control`` erhöhen
+2. ``load.control.monitor.interval`` anpassen, um die Überwachungshäufigkeit zu ändern
 3. Ressourcen des OpenSearch-Clusters erweitern
 
 .. warning::
-   Wenn Schwellenwerte zu niedrig gesetzt werden, koennen Anfragen auch bei normaler Last abgelehnt werden.
-   Ueberpruefen Sie die normale CPU-Auslastung Ihres OpenSearch-Clusters, bevor Sie geeignete Schwellenwerte festlegen.
+   Wenn Schwellenwerte zu niedrig gesetzt werden, können Anfragen auch bei normaler Last abgelehnt werden.
+   Überprüfen Sie die normale CPU-Auslastung Ihres OpenSearch-Clusters, bevor Sie geeignete Schwellenwerte festlegen.
 
 Crawling ist langsam
 --------------------
 
 **Ursache**: Threads befinden sich aufgrund der adaptiven Laststeuerung im Wartezustand
 
-**Pruefen**:
+**Prüfen**:
 
 1. Ob ``Cpu Load XX% is greater than YY%`` in den Logs erscheint
 2. Ob der ``adaptive.load.control``-Schwellenwert zu niedrig ist
 
-**Loesungen**:
+**Lösungen**:
 
-1. Den Wert von ``adaptive.load.control`` erhoehen (z.B. 70)
+1. Den Wert von ``adaptive.load.control`` erhöhen (z. B. 70)
 2. CPU-Ressourcen des Fess-Servers erweitern
 3. Auf 0 setzen, um die adaptive Laststeuerung zu deaktivieren (nicht empfohlen)
 
