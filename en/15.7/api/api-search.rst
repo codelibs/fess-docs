@@ -34,7 +34,7 @@ Request Parameters
    * - ``offset``
      - Offset from ``start`` (integer, ``>=0``, default ``0``).
    * - ``num``
-     - Page size (integer, ``>=1``, default ``20``). A value of ``<= 0`` results in ``invalid_request``. Values exceeding the configured maximum are silently clamped. Whether clamping occurred can be detected by comparing the request ``num`` with the response ``page_size``.
+     - Page size (integer, ``>=1``, default ``10``). A value of ``<= 0`` results in ``invalid_request``. Values exceeding the configured maximum are silently clamped. Whether clamping occurred can be detected by comparing the request ``num`` with the response ``page_size``.
    * - ``sort``
      - Sort order (e.g., ``score``).
    * - ``lang``

@@ -34,7 +34,7 @@ Anfrageparameter
    * - ``offset``
      - Offset von ``start`` (integer, ``>=0``, Standardwert ``0``).
    * - ``num``
-     - Seitengröße (integer, ``>=1``, Standardwert ``20``). ``<= 0`` ergibt ``invalid_request``. Werte über dem konfigurierten Maximum werden stillschweigend begrenzt. Ob eine Begrenzung stattfand, lässt sich durch Vergleich von ``num`` im Request und ``page_size`` im Response feststellen.
+     - Seitengröße (integer, ``>=1``, Standardwert ``10``). ``<= 0`` ergibt ``invalid_request``. Werte über dem konfigurierten Maximum werden stillschweigend begrenzt. Ob eine Begrenzung stattfand, lässt sich durch Vergleich von ``num`` im Request und ``page_size`` im Response feststellen.
    * - ``sort``
      - Sortierung (z. B. ``score``).
    * - ``lang``

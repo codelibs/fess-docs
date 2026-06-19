@@ -34,7 +34,7 @@ Parámetros de solicitud
    * - ``offset``
      - Desplazamiento desde ``start`` (integer, ``>=0``, valor predeterminado ``0``).
    * - ``num``
-     - Tamaño de página (integer, ``>=1``, valor predeterminado ``20``). ``<= 0`` resulta en ``invalid_request``. Los valores que superen el máximo configurado se ajustan silenciosamente. El ajuste puede detectarse comparando ``num`` en la solicitud con ``page_size`` en la respuesta.
+     - Tamaño de página (integer, ``>=1``, valor predeterminado ``10``). ``<= 0`` resulta en ``invalid_request``. Los valores que superen el máximo configurado se ajustan silenciosamente. El ajuste puede detectarse comparando ``num`` en la solicitud con ``page_size`` en la respuesta.
    * - ``sort``
      - Ordenación (ejemplo: ``score``).
    * - ``lang``

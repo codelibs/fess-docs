@@ -34,7 +34,7 @@ Paramètres de requête
    * - ``offset``
      - Décalage depuis ``start`` (entier, ``>=0``, valeur par défaut ``0``).
    * - ``num``
-     - Taille de la page (entier, ``>=1``, valeur par défaut ``20``). Une valeur ``<= 0`` provoque une erreur ``invalid_request``. Les valeurs dépassant la limite maximale configurée sont réduites silencieusement. Vous pouvez détecter ce rognage en comparant ``num`` dans la requête avec ``page_size`` dans la réponse.
+     - Taille de la page (entier, ``>=1``, valeur par défaut ``10``). Une valeur ``<= 0`` provoque une erreur ``invalid_request``. Les valeurs dépassant la limite maximale configurée sont réduites silencieusement. Vous pouvez détecter ce rognage en comparant ``num`` dans la requête avec ``page_size`` dans la réponse.
    * - ``sort``
      - Critère de tri (ex. : ``score``).
    * - ``lang``
