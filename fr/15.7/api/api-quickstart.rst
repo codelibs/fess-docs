@@ -24,10 +24,10 @@ Le point de terminaison de recherche v2 est ``GET /api/v2/search``.
     # Recherche simple
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # Obtenir 20 résultats de recherche
+    # Obtenir 20 résultats de recherche (num est la taille de page ; la valeur par défaut est 10)
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # Obtenir la page 2 (à partir du résultat 21)
+    # Ignorer les 20 premiers résultats (start est la position de départ, indexée à partir de 0)
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # Recherche avec filtre par étiquette
@@ -50,7 +50,7 @@ Les réponses v2 sont encapsulées dans l'enveloppe ``response``.
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,13 @@ Les réponses v2 sont encapsulées dans l'enveloppe ``response``.
         ]
       }
     }
+
+.. note::
+
+   L'exemple ci-dessus est représentatif. Les champs de document inclus dans ``data`` dépendent
+   de la configuration du serveur (la liste d'autorisation des champs de réponse). Pour la liste
+   complète des paramètres de requête et des champs de réponse disponibles, voir :doc:`api-search`.
+   Pour l'enveloppe de réponse commune, le modèle d'erreur et le CSRF, voir :doc:`api-overview`.
 
 Essayer l'API de suggestions
 ------------------------------
@@ -301,6 +308,9 @@ L'API ne fonctionne pas
 Prochaines étapes
 ==================
 
+- :doc:`api-overview` - Spécifications communes de l'API (enveloppe de réponse, modèle d'erreur, authentification/CSRF)
 - :doc:`api-search` - Détails de l'API de recherche
 - :doc:`api-suggest` - Détails de l'API de suggestions
+- :doc:`api-label` - Détails de l'API des étiquettes
+- :doc:`api-health` - Détails de l'API de contrôle de santé
 - :doc:`admin/index` - Utilisation de l'API d'administration

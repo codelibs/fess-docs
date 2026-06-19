@@ -24,10 +24,10 @@ El endpoint de búsqueda v2 es ``GET /api/v2/search``.
     # Búsqueda básica
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # Obtener 20 resultados de búsqueda
+    # Obtener 20 resultados de búsqueda (num es el tamaño de página; el valor predeterminado es 10)
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # Obtener la página 2 (comenzando desde el resultado 21)
+    # Omitir los primeros 20 resultados (start es la posición inicial basada en 0)
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # Búsqueda con filtro de etiquetas
@@ -50,7 +50,7 @@ La respuesta de v2 se devuelve en el sobre ``response``.
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,13 @@ La respuesta de v2 se devuelve en el sobre ``response``.
         ]
       }
     }
+
+.. note::
+
+   El ejemplo anterior es representativo. Los campos de documento incluidos en ``data`` dependen
+   de la configuración del servidor (la lista de campos de respuesta permitidos). Para la lista
+   completa de parámetros de solicitud y campos de respuesta disponibles, consulte :doc:`api-search`.
+   Para el sobre de respuesta común, el modelo de error y CSRF, consulte :doc:`api-overview`.
 
 Pruebe la API de sugerencias
 -----------------------------
@@ -301,6 +308,9 @@ La API no funciona
 Próximos pasos
 ==============
 
+- :doc:`api-overview` - Especificaciones comunes de la API (sobre de respuesta, modelo de error, autenticación/CSRF)
 - :doc:`api-search` - Detalles de la API de búsqueda
 - :doc:`api-suggest` - Detalles de la API de sugerencias
+- :doc:`api-label` - Detalles de la API de etiquetas
+- :doc:`api-health` - Detalles de la API de verificación de estado
 - :doc:`admin/index` - Uso de la API de administración

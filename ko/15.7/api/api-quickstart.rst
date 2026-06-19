@@ -24,10 +24,10 @@ v2 의 검색 엔드포인트는 ``GET /api/v2/search`` 입니다.
     # 기본 검색
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # 검색 결과를 20건 취득
+    # 검색 결과를 20건 취득 (num 은 페이지 크기; 기본값은 10)
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # 2페이지 취득 (21번째부터)
+    # 처음 20건을 건너뜀 (start 는 0부터 시작하는 시작 위치)
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # 레이블을 지정하여 검색
@@ -50,7 +50,7 @@ v2 의 응답은 ``response`` 엔벨로프로 반환됩니다.
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,10 @@ v2 의 응답은 ``response`` 엔벨로프로 반환됩니다.
         ]
       }
     }
+
+.. note::
+
+   위의 예는 대표적인 예시입니다. ``data`` 에 포함되는 문서 필드는 서버 설정 (응답 필드 허용 목록) 에 따라 다릅니다. 사용 가능한 요청 파라미터 및 응답 필드의 전체 목록은 :doc:`api-search` 를 참조하십시오. 공통 응답 엔벨로프, 오류 모델, CSRF 에 대해서는 :doc:`api-overview` 를 참조하십시오.
 
 자동완성 API 시험하기
 ---------------------
@@ -301,6 +305,9 @@ API 가 동작하지 않는 경우
 다음 단계
 =========
 
+- :doc:`api-overview` - 공통 API 사양 (응답 엔벨로프, 오류 모델, 인증/CSRF)
 - :doc:`api-search` - 검색 API 상세
 - :doc:`api-suggest` - 자동완성 API 상세
+- :doc:`api-label` - 레이블 API 상세
+- :doc:`api-health` - 헬스 체크 API 상세
 - :doc:`admin/index` - 관리 API 사용법

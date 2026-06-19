@@ -24,10 +24,10 @@ The v2 search endpoint is ``GET /api/v2/search``.
     # Basic search
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # Get 20 search results
+    # Get 20 search results (num is the page size; default is 10)
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # Get page 2 (starting from result 21)
+    # Skip the first 20 results (start is the 0-based start position)
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # Search with label filter
@@ -50,7 +50,7 @@ v2 responses are returned in the ``response`` envelope.
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,13 @@ v2 responses are returned in the ``response`` envelope.
         ]
       }
     }
+
+.. note::
+
+   The example above is representative. The document fields included in ``data`` depend on
+   the server configuration (the response-field allowlist). For the full list of available
+   request parameters and response fields, see :doc:`api-search`. For the common response
+   envelope, error model, and CSRF, see :doc:`api-overview`.
 
 Try the Suggest API
 -------------------
@@ -301,6 +308,9 @@ API Not Working
 Next Steps
 ==========
 
+- :doc:`api-overview` - Common API specifications (response envelope, error model, authentication/CSRF)
 - :doc:`api-search` - Search API details
 - :doc:`api-suggest` - Suggest API details
+- :doc:`api-label` - Label API details
+- :doc:`api-health` - Health Check API details
 - :doc:`admin/index` - Admin API usage

@@ -24,10 +24,10 @@ v2 の検索エンドポイントは ``GET /api/v2/search`` です。
     # 基本的な検索
     curl "http://localhost:8080/api/v2/search?q=fess"
 
-    # 検索結果を20件取得
+    # 検索結果を20件取得（num はページサイズ。既定値は 10）
     curl "http://localhost:8080/api/v2/search?q=fess&num=20"
 
-    # 2ページ目を取得（21件目から）
+    # 先頭20件をスキップして取得（start は0始まりの開始位置）
     curl "http://localhost:8080/api/v2/search?q=fess&start=20"
 
     # ラベルを指定して検索
@@ -50,7 +50,7 @@ v2 のレスポンスは ``response`` エンベロープで返されます。
         "status": 0,
         "q": "fess",
         "record_count": 125,
-        "page_size": 20,
+        "page_size": 10,
         "page_number": 1,
         "data": [
           {
@@ -63,6 +63,13 @@ v2 のレスポンスは ``response`` エンベロープで返されます。
         ]
       }
     }
+
+.. note::
+
+   上記は代表的な例です。 ``data`` に含まれるドキュメントのフィールドは、サーバーの設定
+   （応答フィールドの許可リスト）に依存します。利用可能なリクエストパラメーターと
+   レスポンスフィールドの全一覧は :doc:`api-search` を、共通のレスポンスエンベロープ・
+   エラーモデル・CSRF については :doc:`api-overview` を参照してください。
 
 サジェストAPIを試す
 ----------------
@@ -301,6 +308,9 @@ APIが動作しない場合
 次のステップ
 ==========
 
+- :doc:`api-overview` - APIの共通仕様（レスポンスエンベロープ、エラーモデル、認証/CSRF）
 - :doc:`api-search` - 検索APIの詳細
 - :doc:`api-suggest` - サジェストAPIの詳細
+- :doc:`api-label` - ラベルAPIの詳細
+- :doc:`api-health` - ヘルスチェックAPIの詳細
 - :doc:`admin/index` - 管理APIの利用方法
