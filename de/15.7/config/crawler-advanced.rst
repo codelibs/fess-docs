@@ -270,8 +270,8 @@ Konfigurationsbeispiel
     # robots.txt ignorieren (nicht empfohlen)
     crawler.ignore.robots.txt=false
 
-    # Bestimmte Robots-Tags ignorieren
-    crawler.ignore.robots.tags=
+    # Robots-Meta-Tags (einschließlich X-Robots-Tag) ignorieren
+    crawler.ignore.robots.tags=false
 
     # Inhaltsausnahmen ignorieren
     crawler.ignore.content.exception=true
@@ -290,16 +290,16 @@ Fehlerbehandlungs-Konfiguration
      - Beschreibung
      - Standard
    * - ``crawler.failure.url.status.codes``
-     - Als Fehler behandelte HTTP-Statuscodes
-     - ``404``
+     - Als Fehler behandelte HTTP-Statuscodes (kommagetrennt)
+     - ``404,403,410``
 
 Konfigurationsbeispiel
 ~~~~~~
 
 ::
 
-    # Zusätzlich zu 404 auch 403 als Fehler behandeln
-    crawler.failure.url.status.codes=404,403
+    # Zusätzlich zu den Standardwerten (404,403,410) auch 500 als Fehler behandeln
+    crawler.failure.url.status.codes=404,403,410,500
 
 Systemüberwachungs-Konfiguration
 ================
@@ -739,7 +739,7 @@ Standardkonfiguration
         -XX:-HeapDumpOnOutOfMemoryError
 
 .. note::
-   Oben sind nur die wichtigsten Optionen aufgeführt. Die tatsächlichen Standardwerte umfassen etwa 30 Optionen, darunter jcifs-SMB-Timeouts, Netty-Einstellungen, Log4j-Konfiguration, detaillierte G1GC-Einstellungen, PDFBox-Einstellungen usw.
+   Oben sind nur die wichtigsten Optionen aufgeführt. Die tatsächlichen Standardwerte umfassen etwa 40 Optionen, darunter jcifs-SMB-Timeouts, Netty-Einstellungen, Log4j-Konfiguration, detaillierte G1GC-Einstellungen, PDFBox-Einstellungen usw.
    Die vollständigen Standardwerte finden Sie in ``fess_config.properties``.
    Ändern Sie bei der Anpassung nur die erforderlichen Optionen und behalten Sie die anderen Standardwerte bei.
 
@@ -814,7 +814,7 @@ Bei langsamen Sites passen Sie Timeouts an.
 
     # Zu „Konfigurationsparametern" der Crawl-Konfiguration hinzufügen
     client.connectionTimeout=10000
-    client.socketTimeout=30000
+    client.soTimeout=30000
 
 **3. Unnötige Inhalte ausschließen**
 
@@ -827,13 +827,7 @@ Durch Ausschluss von Bildern, CSS, JavaScript-Dateien usw. wird die Crawl-Geschw
 
 **4. Retry-Einstellungen**
 
-Passen Sie Anzahl und Intervall von Wiederholungsversuchen bei Fehlern an.
-
-::
-
-    # Zu „Konfigurationsparametern" der Crawl-Konfiguration hinzufügen
-    client.maxRetry=3
-    client.retryInterval=1000
+Die Anzahl der HTTP-Crawl-Wiederholungsversuche (Standard: 5) und das Wiederholungsintervall (Standard: 500 ms) sind fest eingebaut und können nicht über das Feld „Konfigurationsparameter" einer Crawl-Konfiguration geändert werden. Um die Wartezeit bei nicht reagierenden URLs zu verkürzen, passen Sie die oben beschriebenen Timeouts an oder schließen Sie nicht benötigte URLs aus.
 
 Optimierung der Speichernutzung
 --------------------
@@ -928,7 +922,7 @@ Crawling ist langsam
    ::
 
        client.connectionTimeout=5000
-       client.socketTimeout=10000
+       client.soTimeout=10000
 
 3. Unnötige URLs ausschließen
 
@@ -1044,12 +1038,15 @@ Fügen Sie Folgendes zu „Konfigurationsparameter" in den Datei-Crawl-Einstellu
    * - ``client.region``
      - AWS-Region
      - ``us-east-1``
-   * - ``client.connectTimeout``
-     - Verbindungs-Timeout (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Lese-Timeout (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Maximale Größe (Bytes) der abzurufenden Objekte; größere Objekte werden übersprungen
+     - (unbegrenzt)
+   * - ``client.maxCachedContentSize``
+     - Maximale Größe (Bytes), die im Arbeitsspeicher gecacht wird; größere Inhalte werden in einer temporären Datei gespeichert
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Zugriffs-Timeout (Sekunden). Deaktiviert, wenn nicht gesetzt
+     - (unbegrenzt)
 
 Konfigurationsbeispiel
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -1083,15 +1080,15 @@ Fügen Sie Folgendes zu „Konfigurationsparameter" in den Datei-Crawl-Einstellu
    * - ``client.endpoint``
      - Benutzerdefinierter Endpunkt
      - (Optional)
-   * - ``client.connectTimeout``
-     - Verbindungs-Timeout (ms)
-     - ``10000``
-   * - ``client.writeTimeout``
-     - Schreib-Timeout (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Lese-Timeout (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Maximale Größe (Bytes) der abzurufenden Objekte; größere Objekte werden übersprungen
+     - (unbegrenzt)
+   * - ``client.maxCachedContentSize``
+     - Maximale Größe (Bytes), die im Arbeitsspeicher gecacht wird; größere Inhalte werden in einer temporären Datei gespeichert
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Zugriffs-Timeout (Sekunden). Deaktiviert, wenn nicht gesetzt
+     - (unbegrenzt)
 
 Konfigurationsbeispiel
 ~~~~~~~~~~~~~~~~~~~~~~

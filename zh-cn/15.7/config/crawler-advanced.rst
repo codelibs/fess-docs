@@ -271,8 +271,8 @@ robots.txt 配置
     # 忽略 robots.txt(不推荐)
     crawler.ignore.robots.txt=false
 
-    # 忽略特定的 robots 标签
-    crawler.ignore.robots.tags=
+    # 忽略 robots 元标签（包括 X-Robots-Tag）
+    crawler.ignore.robots.tags=false
 
     # 忽略内容异常
     crawler.ignore.content.exception=true
@@ -292,16 +292,16 @@ robots.txt 配置
      - 说明
      - 默认值
    * - ``crawler.failure.url.status.codes``
-     - 视为失败的 HTTP 状态码
-     - ``404``
+     - 视为失败的 HTTP 状态码（逗号分隔）
+     - ``404,403,410``
 
 配置示例
 ~~~~~~
 
 ::
 
-    # 除404外,也将403视为错误
-    crawler.failure.url.status.codes=404,403
+    # 在默认值（404,403,410）的基础上，也将500视为错误
+    crawler.failure.url.status.codes=404,403,410,500
 
 系统监控配置
 ================
@@ -740,7 +740,7 @@ JVM 选项
         -XX:-HeapDumpOnOutOfMemoryError
 
 .. note::
-   以上仅为主要选项的摘录。实际默认值包含约30个选项，涵盖jcifs SMB超时、Netty设置、Log4j配置、详细G1GC设置、PDFBox设置等。
+   以上仅为主要选项的摘录。实际默认值包含约40个选项，涵盖jcifs SMB超时、Netty设置、Log4j配置、详细G1GC设置、PDFBox设置等。
    完整的默认值请参阅 ``fess_config.properties``。
    自定义时，仅更改需要的选项，其他默认值请保持不变。
 
@@ -815,7 +815,7 @@ JVM 选项
 
     # 在爬取配置的"配置参数"中添加
     client.connectionTimeout=10000
-    client.socketTimeout=30000
+    client.soTimeout=30000
 
 **3. 排除不需要的内容**
 
@@ -828,13 +828,7 @@ JVM 选项
 
 **4. 重试配置**
 
-调整错误时的重试次数和间隔。
-
-::
-
-    # 在爬取配置的"配置参数"中添加
-    client.maxRetry=3
-    client.retryInterval=1000
+HTTP 爬取的重试次数（默认5次）和重试间隔（默认500毫秒）是内置固定值，无法通过爬取配置的"配置参数"进行更改。若要减少在无响应URL上的等待时间，请调整上述超时设置或排除不必要的URL。
 
 内存使用量优化
 --------------------
@@ -929,7 +923,7 @@ JVM 选项
    ::
 
        client.connectionTimeout=5000
-       client.socketTimeout=10000
+       client.soTimeout=10000
 
 3. 排除不需要的 URL
 
@@ -1044,12 +1038,15 @@ S3 爬虫
    * - ``client.region``
      - AWS 区域
      - ``us-east-1``
-   * - ``client.connectTimeout``
-     - 连接超时(ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - 读取超时(ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - 取得对象的最大大小（字节）；超过此大小的对象将被跳过
+     - (无限制)
+   * - ``client.maxCachedContentSize``
+     - 在内存中缓存的最大大小（字节）；超过此大小的内容将使用临时文件
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - 访问超时（秒）。未设置时禁用
+     - (无限制)
 
 配置示例
 ~~~~~~
@@ -1084,15 +1081,15 @@ GCS 爬虫
    * - ``client.endpoint``
      - 自定义端点
      - (可选)
-   * - ``client.connectTimeout``
-     - 连接超时(ms)
-     - ``10000``
-   * - ``client.writeTimeout``
-     - 写入超时(ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - 读取超时(ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - 取得对象的最大大小（字节）；超过此大小的对象将被跳过
+     - (无限制)
+   * - ``client.maxCachedContentSize``
+     - 在内存中缓存的最大大小（字节）；超过此大小的内容将使用临时文件
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - 访问超时（秒）。未设置时禁用
+     - (无限制)
 
 配置示例
 ~~~~~~

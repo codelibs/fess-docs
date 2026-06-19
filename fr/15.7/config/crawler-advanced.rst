@@ -271,8 +271,8 @@ Exemple de configuration
     # Ignorer robots.txt (non recommandé)
     crawler.ignore.robots.txt=false
 
-    # Ignorer des balises robots spécifiques
-    crawler.ignore.robots.tags=
+    # Ignorer les balises meta robots (y compris X-Robots-Tag)
+    crawler.ignore.robots.tags=false
 
     # Ignorer les exceptions de contenu
     crawler.ignore.content.exception=true
@@ -292,16 +292,16 @@ Configuration de la gestion des erreurs
      - Description
      - Par défaut
    * - ``crawler.failure.url.status.codes``
-     - Codes d'état HTTP considérés comme des échecs
-     - ``404``
+     - Codes d'état HTTP considérés comme des échecs (séparés par des virgules)
+     - ``404,403,410``
 
 Exemple de configuration
 ~~~~~~
 
 ::
 
-    # Traiter également 403 comme une erreur en plus de 404
-    crawler.failure.url.status.codes=404,403
+    # En plus des valeurs par défaut (404,403,410), traiter également 500 comme une erreur
+    crawler.failure.url.status.codes=404,403,410,500
 
 Configuration de la surveillance système
 ================
@@ -741,7 +741,7 @@ Configuration par défaut
         -XX:-HeapDumpOnOutOfMemoryError
 
 .. note::
-   Ce qui précède ne montre que les options principales. Les valeurs par défaut réelles comprennent environ 30 options couvrant les délais jcifs SMB, les paramètres Netty, la configuration Log4j, les paramètres détaillés G1GC, les paramètres PDFBox, etc.
+   Ce qui précède ne montre que les options principales. Les valeurs par défaut réelles comprennent environ 40 options couvrant les délais jcifs SMB, les paramètres Netty, la configuration Log4j, les paramètres détaillés G1GC, les paramètres PDFBox, etc.
    Consultez ``fess_config.properties`` pour les valeurs par défaut complètes.
    Lors de la personnalisation, ne modifiez que les options nécessaires et conservez les autres valeurs par défaut.
 
@@ -816,7 +816,7 @@ Pour les sites à réponse lente, ajustez les timeouts.
 
     # Ajouter aux « Paramètres de configuration » de la configuration d'indexation
     client.connectionTimeout=10000
-    client.socketTimeout=30000
+    client.soTimeout=30000
 
 **3. Exclusion du contenu inutile**
 
@@ -829,13 +829,7 @@ La vitesse d'indexation s'améliore en excluant les images, CSS, fichiers JavaSc
 
 **4. Configuration de nouvelle tentative**
 
-Ajustez le nombre de nouvelles tentatives et l'intervalle en cas d'erreur.
-
-::
-
-    # Ajouter aux « Paramètres de configuration » de la configuration d'indexation
-    client.maxRetry=3
-    client.retryInterval=1000
+Le nombre de nouvelles tentatives de crawl HTTP (par défaut 5) et l'intervalle entre les tentatives (par défaut 500 ms) sont des valeurs fixes intégrées et ne peuvent pas être modifiés via le champ « Paramètres de configuration » d'une configuration de crawl. Pour réduire le temps d'attente sur les URLs qui ne répondent pas, ajustez les délais d'expiration décrits ci-dessus ou excluez les URLs inutiles.
 
 Optimisation de l'utilisation de la mémoire
 --------------------
@@ -930,7 +924,7 @@ L'indexation est lente
    ::
 
        client.connectionTimeout=5000
-       client.socketTimeout=10000
+       client.soTimeout=10000
 
 3. Exclure les URLs inutiles
 
@@ -1046,12 +1040,15 @@ Ajoutez ce qui suit aux « Paramètres de configuration » dans les paramètres 
    * - ``client.region``
      - Région AWS
      - ``us-east-1``
-   * - ``client.connectTimeout``
-     - Délai de connexion (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Délai de lecture (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Taille maximale (octets) des objets à récupérer ; les objets plus volumineux sont ignorés
+     - (illimité)
+   * - ``client.maxCachedContentSize``
+     - Taille maximale (octets) mise en cache en mémoire ; le contenu plus volumineux utilise un fichier temporaire
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Délai d'accès (secondes). Désactivé si non défini
+     - (illimité)
 
 Exemple de configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1085,15 +1082,15 @@ Ajoutez ce qui suit aux « Paramètres de configuration » dans les paramètres 
    * - ``client.endpoint``
      - Point de terminaison personnalisé
      - (Optionnel)
-   * - ``client.connectTimeout``
-     - Délai de connexion (ms)
-     - ``10000``
-   * - ``client.writeTimeout``
-     - Délai d'écriture (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Délai de lecture (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Taille maximale (octets) des objets à récupérer ; les objets plus volumineux sont ignorés
+     - (illimité)
+   * - ``client.maxCachedContentSize``
+     - Taille maximale (octets) mise en cache en mémoire ; le contenu plus volumineux utilise un fichier temporaire
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Délai d'accès (secondes). Désactivé si non défini
+     - (illimité)
 
 Exemple de configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~

@@ -271,8 +271,8 @@ Configuration Example
     # Ignore robots.txt (not recommended)
     crawler.ignore.robots.txt=false
 
-    # Ignore specific robots tags
-    crawler.ignore.robots.tags=
+    # Ignore robots meta tags (including X-Robots-Tag)
+    crawler.ignore.robots.tags=false
 
     # Ignore content exceptions
     crawler.ignore.content.exception=true
@@ -292,16 +292,16 @@ Error Handling Settings
      - Description
      - Default
    * - ``crawler.failure.url.status.codes``
-     - HTTP status codes considered failures
-     - ``404``
+     - HTTP status codes considered failures (comma-separated)
+     - ``404,403,410``
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # Treat 403 as error in addition to 404
-    crawler.failure.url.status.codes=404,403
+    # In addition to the defaults (404,403,410), also treat 500 as an error
+    crawler.failure.url.status.codes=404,403,410,500
 
 System Monitoring Settings
 ===========================
@@ -741,7 +741,7 @@ Default Settings
         -XX:-HeapDumpOnOutOfMemoryError
 
 .. note::
-   The above shows only the main options. The actual defaults include approximately 30 options covering jcifs SMB timeouts, Netty settings, Log4j configuration, detailed G1GC settings, PDFBox settings, etc.
+   The above shows only the main options. The actual defaults include approximately 40 options covering jcifs SMB timeouts, Netty settings, Log4j configuration, detailed G1GC settings, PDFBox settings, etc.
    See ``fess_config.properties`` for the complete default values.
    When customizing, change only the required options and keep the other defaults.
 
@@ -816,7 +816,7 @@ For slow-responding sites, adjust timeouts.
 
     # Add to "Configuration Parameters" in crawl configuration
     client.connectionTimeout=10000
-    client.socketTimeout=30000
+    client.soTimeout=30000
 
 **3. Exclude Unnecessary Content**
 
@@ -829,13 +829,7 @@ Excluding images, CSS, JavaScript files, etc. improves crawl speed.
 
 **4. Retry Settings**
 
-Adjust retry count and interval on errors.
-
-::
-
-    # Add to "Configuration Parameters" in crawl configuration
-    client.maxRetry=3
-    client.retryInterval=1000
+The HTTP crawl retry count (default 5) and retry interval (default 500 ms) are built-in fixed values and cannot be changed via the "Config Parameters" field of a crawl configuration. To reduce time spent waiting on unresponsive URLs, adjust the timeouts described above or exclude unnecessary URLs.
 
 Optimizing Memory Usage
 ------------------------
@@ -930,7 +924,7 @@ Slow Crawling
    ::
 
        client.connectionTimeout=5000
-       client.socketTimeout=10000
+       client.soTimeout=10000
 
 3. Exclude unnecessary URLs
 
@@ -1046,12 +1040,15 @@ Add the following to "Configuration Parameters" in the file crawl settings.
    * - ``client.region``
      - AWS region
      - ``us-east-1``
-   * - ``client.connectTimeout``
-     - Connection timeout (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Read timeout (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Maximum size (bytes) of objects to fetch. Objects exceeding this are skipped
+     - (unlimited)
+   * - ``client.maxCachedContentSize``
+     - Maximum size (bytes) cached in memory; larger content uses a temporary file
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Access timeout (seconds). Disabled when not set
+     - (unlimited)
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
@@ -1085,15 +1082,15 @@ Add the following to "Configuration Parameters" in the file crawl settings.
    * - ``client.endpoint``
      - Custom endpoint
      - (Optional)
-   * - ``client.connectTimeout``
-     - Connection timeout (ms)
-     - ``10000``
-   * - ``client.writeTimeout``
-     - Write timeout (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Read timeout (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Maximum size (bytes) of objects to fetch. Objects exceeding this are skipped
+     - (unlimited)
+   * - ``client.maxCachedContentSize``
+     - Maximum size (bytes) cached in memory; larger content uses a temporary file
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Access timeout (seconds). Disabled when not set
+     - (unlimited)
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~

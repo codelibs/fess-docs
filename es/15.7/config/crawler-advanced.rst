@@ -271,8 +271,8 @@ Ejemplo de Configuración
     # Ignorar robots.txt (no recomendado)
     crawler.ignore.robots.txt=false
 
-    # Ignorar etiquetas robots específicas
-    crawler.ignore.robots.tags=
+    # Ignorar etiquetas meta robots (incluyendo X-Robots-Tag)
+    crawler.ignore.robots.tags=false
 
     # Ignorar excepciones de contenido
     crawler.ignore.content.exception=true
@@ -292,16 +292,16 @@ Configuración de Manejo de Errores
      - Descripción
      - Valor Predeterminado
    * - ``crawler.failure.url.status.codes``
-     - Códigos de estado HTTP considerados como fallo
-     - ``404``
+     - Códigos de estado HTTP considerados como fallo (separados por comas)
+     - ``404,403,410``
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # Tratar también 403 como error además de 404
-    crawler.failure.url.status.codes=404,403
+    # Además de los valores predeterminados (404,403,410), tratar también 500 como error
+    crawler.failure.url.status.codes=404,403,410,500
 
 Configuración de Monitoreo del Sistema
 =======================================
@@ -741,7 +741,7 @@ Configuración Predeterminada
         -XX:-HeapDumpOnOutOfMemoryError
 
 .. note::
-   Lo anterior muestra solo las opciones principales. Los valores predeterminados reales incluyen aproximadamente 30 opciones que cubren tiempos de espera jcifs SMB, configuración de Netty, configuración de Log4j, configuración detallada de G1GC, configuración de PDFBox, etc.
+   Lo anterior muestra solo las opciones principales. Los valores predeterminados reales incluyen aproximadamente 40 opciones que cubren tiempos de espera jcifs SMB, configuración de Netty, configuración de Log4j, configuración detallada de G1GC, configuración de PDFBox, etc.
    Consulte ``fess_config.properties`` para los valores predeterminados completos.
    Al personalizar, cambie solo las opciones necesarias y mantenga los demás valores predeterminados.
 
@@ -816,7 +816,7 @@ Para sitios con respuesta lenta, ajuste los tiempos de espera.
 
     # Agregar a "Parámetros de configuración" en la configuración de rastreo
     client.connectionTimeout=10000
-    client.socketTimeout=30000
+    client.soTimeout=30000
 
 **3. Exclusión de Contenido Innecesario**
 
@@ -829,13 +829,7 @@ Excluir imágenes, CSS, archivos JavaScript, etc. puede mejorar la velocidad de 
 
 **4. Configuración de Reintentos**
 
-Ajuste el número de reintentos y el intervalo en caso de error.
-
-::
-
-    # Agregar a "Parámetros de configuración" en la configuración de rastreo
-    client.maxRetry=3
-    client.retryInterval=1000
+El número de reintentos del rastreo HTTP (predeterminado 5) y el intervalo de reintento (predeterminado 500 ms) son valores fijos integrados y no pueden modificarse desde el campo "Parámetros de configuración" de una configuración de rastreo. Para reducir el tiempo de espera ante URLs que no responden, ajuste los tiempos de espera descritos anteriormente o excluya las URLs innecesarias.
 
 Optimización del Uso de Memoria
 --------------------------------
@@ -930,7 +924,7 @@ Rastreo Lento
    ::
 
        client.connectionTimeout=5000
-       client.socketTimeout=10000
+       client.soTimeout=10000
 
 3. Excluir URLs innecesarias
 
@@ -1045,12 +1039,15 @@ Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO
    * - ``client.region``
      - Región de AWS
      - ``us-east-1``
-   * - ``client.connectTimeout``
-     - Tiempo de espera de conexión (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Tiempo de espera de lectura (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Tamaño máximo (bytes) de los objetos a obtener; los objetos más grandes se omiten
+     - (ilimitado)
+   * - ``client.maxCachedContentSize``
+     - Tamaño máximo (bytes) almacenado en memoria caché; el contenido mayor utiliza un archivo temporal
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Tiempo de espera de acceso (segundos). Se deshabilita cuando no está configurado
+     - (ilimitado)
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1085,15 +1082,15 @@ Configuración para rastrear Google Cloud Storage.
    * - ``client.endpoint``
      - Endpoint personalizado
      - (opcional)
-   * - ``client.connectTimeout``
-     - Tiempo de espera de conexión (ms)
-     - ``10000``
-   * - ``client.writeTimeout``
-     - Tiempo de espera de escritura (ms)
-     - ``10000``
-   * - ``client.readTimeout``
-     - Tiempo de espera de lectura (ms)
-     - ``10000``
+   * - ``client.maxContentLength``
+     - Tamaño máximo (bytes) de los objetos a obtener; los objetos más grandes se omiten
+     - (ilimitado)
+   * - ``client.maxCachedContentSize``
+     - Tamaño máximo (bytes) almacenado en memoria caché; el contenido mayor utiliza un archivo temporal
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - Tiempo de espera de acceso (segundos). Se deshabilita cuando no está configurado
+     - (ilimitado)
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
