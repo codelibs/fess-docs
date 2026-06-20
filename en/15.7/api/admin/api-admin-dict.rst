@@ -8,7 +8,7 @@ Overview
 Dict API is an API for managing |Fess| dictionaries.
 The root endpoint can retrieve the list of available dictionaries.
 Reading, creating, updating, and deleting individual dictionary items, as well as uploading and downloading dictionary files,
-are performed via the sub-endpoints for each dictionary type (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
+are performed via the sub-endpoints for each dictionary type (synonym, kuromoji, mapping, protwords, stopwords, stemmeroverride).
 
 Base URL
 ========
@@ -37,7 +37,8 @@ Dictionary Root
 Endpoints per Dictionary Type
 -----------------------------
 
-For ``{type}``, specify one of ``synonym``, ``kuromoji``, ``mapping``, ``protwords``, ``stopwords``, or ``stemmerOverride``.
+For ``{type}``, specify one of ``synonym``, ``kuromoji``, ``mapping``, ``protwords``, ``stopwords``, or ``stemmeroverride``.
+These values match the value of the ``type`` field included in the dictionary list response.
 ``{dictId}`` is the ID of the dictionary obtained from the dictionary list.
 
 .. list-table::
@@ -103,7 +104,8 @@ Response
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -124,6 +126,8 @@ Response Fields
      - Path of the dictionary file
    * - ``settings[].timestamp``
      - Update date/time of the dictionary file
+   * - ``total``
+     - Total number of dictionary files
 
 List Dictionary Items
 =====================
@@ -155,11 +159,11 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page
+     - Number of items per page (default: 25)
    * - ``page``
      - Integer
      - No
-     - Page number
+     - Page number (starts at 1, default: 1)
 
 Response
 --------
@@ -179,9 +183,12 @@ The fields of each item in the ``settings`` array of the response differ by dict
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+The above is an example of the ``synonym`` dictionary.
 
 Get Dictionary Item
 ===================
@@ -423,7 +430,7 @@ The fields of the request body and response for creating and updating dictionary
    * - ``stopwords``
      - ``input`` (required)
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` (required), ``output`` (required)
      - ``stemmerOverrideFile``
 

@@ -8,7 +8,7 @@ Dict API
 Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 루트 엔드포인트에서 사용 가능한 사전 목록을 조회할 수 있습니다.
 개별 사전 항목의 참조, 생성, 업데이트, 삭제 및 사전 파일의 업로드, 다운로드는
-사전 종류별 서브 엔드포인트(synonym、kuromoji、mapping、protwords、stopwords、stemmerOverride)에서 조작합니다.
+사전 종류별 서브 엔드포인트(synonym、kuromoji、mapping、protwords、stopwords、stemmeroverride)에서 조작합니다.
 
 기본 URL
 =========
@@ -37,7 +37,8 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 사전 종류별 엔드포인트
 ----------------------
 
-``{type}`` 에는 ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmerOverride`` 중 하나를 지정합니다.
+``{type}`` 에는 ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmeroverride`` 중 하나를 지정합니다.
+이 값은 사전 목록 응답에 포함된 ``type`` 필드의 값과 일치합니다.
 ``{dictId}`` 는 사전 목록 조회에서 얻은 사전의 ID입니다.
 
 .. list-table::
@@ -103,7 +104,8 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -124,6 +126,8 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
      - 사전 파일의 경로
    * - ``settings[].timestamp``
      - 사전 파일의 업데이트 일시
+   * - ``total``
+     - 사전 파일의 총 건수
 
 사전 항목 목록 조회
 ================
@@ -155,11 +159,11 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수
+     - 페이지당 건수 (기본값: 25)
    * - ``page``
      - Integer
      - 아니오
-     - 페이지 번호
+     - 페이지 번호 (1부터 시작, 기본값: 1)
 
 응답
 ----------
@@ -179,9 +183,12 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+위의 예는 ``synonym`` 사전의 경우입니다.
 
 사전 항목 조회
 ============
@@ -423,7 +430,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
    * - ``stopwords``
      - ``input`` (필수)
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` (필수)、 ``output`` (필수)
      - ``stemmerOverrideFile``
 

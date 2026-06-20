@@ -8,7 +8,7 @@ Dict API
 Die Dict API dient zur Verwaltung von Wörterbüchern in |Fess|.
 Über den Stamm-Endpunkt können Sie die Liste der verfügbaren Wörterbücher abrufen.
 Das Anzeigen, Erstellen, Aktualisieren und Löschen einzelner Wörterbucheinträge sowie das Hochladen und Herunterladen von Wörterbuchdateien
-erfolgen über die Sub-Endpunkte je Wörterbuchtyp (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
+erfolgen über die Sub-Endpunkte je Wörterbuchtyp (synonym, kuromoji, mapping, protwords, stopwords, stemmeroverride).
 
 Basis-URL
 =========
@@ -37,7 +37,8 @@ Wörterbuch-Stamm
 Endpunkte je Wörterbuchtyp
 --------------------------
 
-Für ``{type}`` wird einer der Werte ``synonym``, ``kuromoji``, ``mapping``, ``protwords``, ``stopwords``, ``stemmerOverride`` angegeben.
+Für ``{type}`` wird einer der Werte ``synonym``, ``kuromoji``, ``mapping``, ``protwords``, ``stopwords``, ``stemmeroverride`` angegeben.
+Diese Werte entsprechen dem Wert des Felds ``type``, das in der Antwort der Wörterbuchliste enthalten ist.
 ``{dictId}`` ist die ID des Wörterbuchs, die beim Auflisten der Wörterbücher zurückgegeben wird.
 
 .. list-table::
@@ -103,7 +104,8 @@ Response
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -124,6 +126,8 @@ Response-Felder
      - Pfad der Wörterbuchdatei
    * - ``settings[].timestamp``
      - Zeitpunkt der Änderung der Wörterbuchdatei
+   * - ``total``
+     - Gesamtanzahl der Wörterbuchdateien
 
 Wörterbucheinträge auflisten
 ============================
@@ -155,11 +159,11 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite
+     - Anzahl der Einträge pro Seite (Standard: 25)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer
+     - Seitennummer (beginnt bei 1, Standard: 1)
 
 Response
 --------
@@ -179,9 +183,12 @@ Die Felder der einzelnen Einträge im Array ``settings`` der Antwort unterscheid
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+Das obige Beispiel zeigt das ``synonym``-Wörterbuch.
 
 Wörterbucheintrag abrufen
 =========================
@@ -423,7 +430,7 @@ Die Felder im Request-Body zum Erstellen/Aktualisieren von Wörterbucheinträgen
    * - ``stopwords``
      - ``input`` (erforderlich)
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` (erforderlich), ``output`` (erforderlich)
      - ``stemmerOverrideFile``
 
