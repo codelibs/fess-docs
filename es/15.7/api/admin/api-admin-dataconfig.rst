@@ -56,7 +56,7 @@ Parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametro
      - Tipo
@@ -65,11 +65,23 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Numero de elementos por pagina (predeterminado: 25)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina (comienza en 1, predeterminado: 1)
+   * - ``name``
+     - String
+     - No
+     - Filtrar por nombre de configuracion
+   * - ``handlerName``
+     - String
+     - No
+     - Filtrar por nombre de manejador
+   * - ``description``
+     - String
+     - No
+     - Filtrar por descripcion
 
 Respuesta
 ---------
@@ -152,7 +164,7 @@ Cuerpo de la Solicitud
       "name": "Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
@@ -164,7 +176,7 @@ Descripcion de Campos
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Campo
      - Requerido
@@ -234,12 +246,28 @@ Cuerpo de la Solicitud
       "name": "Updated Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
       "sortOrder": 0,
       "versionNo": 1
     }
+
+Las solicitudes de actualizacion requieren los mismos campos obligatorios que la creacion (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), ademas de los siguientes campos:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Campo
+     - Requerido
+     - Descripcion
+   * - ``id``
+     - Si
+     - ID de la configuracion a actualizar
+   * - ``versionNo``
+     - Si
+     - Numero de version para el bloqueo optimista (especifique el valor obtenido al recuperar la configuracion)
 
 Respuesta
 ---------
@@ -287,9 +315,18 @@ Tipos de Manejador
    * - ``DatabaseDataStore``
      - Conecta a base de datos via JDBC
    * - ``CsvDataStore``
-     - Lee datos de archivos CSV
+     - Lee datos de un archivo CSV (procesa cada fila como un documento)
+   * - ``CsvListDataStore``
+     - Lee archivos CSV y elimina automaticamente los archivos procesados (una extension de ``CsvDataStore`` con filtrado basado en marcas de tiempo)
    * - ``JsonDataStore``
      - Lee datos de archivos JSON o API JSON
+
+.. note::
+
+   Los tipos de manejador disponibles dependen de los plugins de almacen de datos instalados.
+   Los manejadores indicados arriba se incluyen de forma predeterminada. Al instalar plugins de
+   almacen de datos como SharePoint, Slack o Salesforce, los nombres de manejador correspondientes
+   quedan disponibles.
 
 Ejemplos de Uso
 ===============
@@ -306,7 +343,7 @@ Configuracion de Rastreo de Base de Datos
            "name": "User Database",
            "handlerName": "DatabaseDataStore",
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
+           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
            "sortOrder": 0
