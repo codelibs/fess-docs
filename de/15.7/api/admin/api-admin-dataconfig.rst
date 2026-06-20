@@ -56,7 +56,7 @@ Parameter
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Typ
@@ -65,11 +65,23 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite (Standard: 25)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1, Standard: 1)
+   * - ``name``
+     - String
+     - Nein
+     - Filtern nach Konfigurationsname
+   * - ``handlerName``
+     - String
+     - Nein
+     - Filtern nach Handler-Name
+   * - ``description``
+     - String
+     - Nein
+     - Filtern nach Beschreibung
 
 Response
 --------
@@ -152,7 +164,7 @@ Request-Body
       "name": "Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
@@ -164,7 +176,7 @@ Feldbeschreibungen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Feld
      - Erforderlich
@@ -234,12 +246,28 @@ Request-Body
       "name": "Updated Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
       "sortOrder": 0,
       "versionNo": 1
     }
+
+Aktualisierungsanfragen erfordern dieselben Pflichtfelder wie beim Erstellen (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``) sowie zusätzlich die folgenden Felder:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``id``
+     - Ja
+     - ID der zu aktualisierenden Konfiguration
+   * - ``versionNo``
+     - Ja
+     - Versionsnummer für optimistisches Sperren (den beim Abrufen erhaltenen Wert angeben)
 
 Response
 --------
@@ -287,9 +315,18 @@ Handler-Typen
    * - ``DatabaseDataStore``
      - Verbindung zur Datenbank über JDBC
    * - ``CsvDataStore``
-     - Daten aus CSV-Dateien lesen
+     - Daten aus CSV-Dateien lesen (jede Zeile wird als ein Dokument verarbeitet)
+   * - ``CsvListDataStore``
+     - CSV-Dateien lesen und verarbeitete Dateien automatisch löschen (eine Erweiterung von ``CsvDataStore`` mit zeitstempelbasierter Filterung)
    * - ``JsonDataStore``
      - Daten aus JSON-Dateien oder JSON-APIs lesen
+
+.. note::
+
+   Die verfügbaren Handler-Typen hängen von den installierten Datenspeicher-Plugins ab.
+   Die oben genannten Handler sind standardmäßig enthalten. Durch die Installation von
+   Datenspeicher-Plugins wie SharePoint, Slack oder Salesforce werden die entsprechenden
+   Handler-Namen verfügbar.
 
 Verwendungsbeispiele
 ====================
@@ -306,7 +343,7 @@ Datenbank-Crawl-Konfiguration
            "name": "User Database",
            "handlerName": "DatabaseDataStore",
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
+           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
            "sortOrder": 0

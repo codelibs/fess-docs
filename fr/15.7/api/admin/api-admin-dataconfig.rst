@@ -56,7 +56,7 @@ Parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -65,11 +65,23 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page (par defaut : 25)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1, par defaut : 1)
+   * - ``name``
+     - String
+     - Non
+     - Filtrer par nom de configuration
+   * - ``handlerName``
+     - String
+     - Non
+     - Filtrer par nom de gestionnaire
+   * - ``description``
+     - String
+     - Non
+     - Filtrer par description
 
 Reponse
 -------
@@ -83,7 +95,7 @@ Reponse
           {
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
-            "description": "データベースクローラー",
+            "description": "Crawler de base de donnees",
             "handlerName": "DatabaseDataStore",
             "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
             "handlerScript": "...",
@@ -119,7 +131,7 @@ Reponse
         "setting": {
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
-          "description": "データベースクローラー",
+          "description": "Crawler de base de donnees",
           "handlerName": "DatabaseDataStore",
           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
           "handlerScript": "...",
@@ -152,7 +164,7 @@ Corps de la requete
       "name": "Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
@@ -164,7 +176,7 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - Champ
      - Requis
@@ -234,12 +246,28 @@ Corps de la requete
       "name": "Updated Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
       "sortOrder": 0,
       "versionNo": 1
     }
+
+Les requetes de mise a jour necessitent les memes champs obligatoires que la creation (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), ainsi que les champs suivants :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Champ
+     - Requis
+     - Description
+   * - ``id``
+     - Oui
+     - ID de la configuration a mettre a jour
+   * - ``versionNo``
+     - Oui
+     - Numero de version pour le verrouillage optimiste (indiquer la valeur obtenue lors de la recuperation du parametre)
 
 Reponse
 -------
@@ -287,9 +315,17 @@ Types de gestionnaires
    * - ``DatabaseDataStore``
      - Connexion a une base de donnees via JDBC
    * - ``CsvDataStore``
-     - Lecture des donnees depuis un fichier CSV
+     - Lecture des donnees depuis un fichier CSV (traitement de chaque ligne comme un document)
+   * - ``CsvListDataStore``
+     - Lecture des fichiers CSV avec suppression automatique des fichiers traites (extension de ``CsvDataStore`` avec filtrage par horodatage)
    * - ``JsonDataStore``
      - Lecture des donnees depuis un fichier JSON ou une API JSON
+
+.. note::
+
+   Les types de gestionnaires disponibles dependent des plugins de datastore installes.
+   Les gestionnaires ci-dessus sont inclus par defaut. L'installation de plugins de datastore
+   tels que SharePoint, Slack ou Salesforce rend disponibles leurs noms de gestionnaire respectifs.
 
 Exemples d'utilisation
 ======================
@@ -306,7 +342,7 @@ Configuration de crawl de base de donnees
            "name": "User Database",
            "handlerName": "DatabaseDataStore",
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
+           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
            "sortOrder": 0

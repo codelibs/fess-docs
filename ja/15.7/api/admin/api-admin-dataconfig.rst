@@ -56,7 +56,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -65,11 +65,23 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数（デフォルト: 25）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号（1から開始、デフォルト: 1）
+   * - ``name``
+     - String
+     - いいえ
+     - 設定名による絞り込み
+   * - ``handlerName``
+     - String
+     - いいえ
+     - ハンドラー名による絞り込み
+   * - ``description``
+     - String
+     - いいえ
+     - 説明による絞り込み
 
 レスポンス
 ----------
@@ -152,7 +164,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
       "name": "Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
@@ -164,7 +176,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 25 15 60
 
    * - フィールド
      - 必須
@@ -234,12 +246,29 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
       "name": "Updated Product Database",
       "handlerName": "DatabaseDataStore",
       "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + data.product_id\ntitle=data.product_name\ncontent=data.description + \" \" + data.features",
+      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
       "sortOrder": 0,
       "versionNo": 1
     }
+
+更新リクエストでは、作成時と同じ必須フィールド（``name`` 、 ``handlerName`` 、 ``boost`` 、
+``available`` 、 ``sortOrder`` ）に加えて、以下のフィールドが必須です。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``id``
+     - はい
+     - 更新対象の設定ID
+   * - ``versionNo``
+     - はい
+     - 楽観ロック用のバージョン番号（取得時の値を指定）
 
 レスポンス
 ----------
@@ -287,9 +316,17 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - ``DatabaseDataStore``
      - JDBC経由でデータベースに接続
    * - ``CsvDataStore``
-     - CSVファイルからデータを読み込み
+     - CSVファイルからデータを読み込み（1行を1ドキュメントとして処理）
+   * - ``CsvListDataStore``
+     - CSVファイルを読み込み、処理済みファイルを自動削除（タイムスタンプによるフィルタリングに対応した ``CsvDataStore`` の拡張）
    * - ``JsonDataStore``
      - JSONファイルまたはJSON APIからデータを読み込み
+
+.. note::
+
+   利用可能なハンドラータイプは、インストールされているデータストアプラグインによって異なります。
+   上記は標準で含まれるハンドラーです。SharePoint、Slack、Salesforce などのデータストア
+   プラグインを追加すると、それぞれに対応するハンドラー名が利用可能になります。
 
 使用例
 ======
@@ -306,7 +343,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
            "name": "User Database",
            "handlerName": "DatabaseDataStore",
            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + data.user_id\ntitle=data.username\ncontent=data.profile",
+           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
            "sortOrder": 0
