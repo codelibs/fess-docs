@@ -36,7 +36,7 @@ Endpunktliste
      - Crawl-Information löschen
    * - DELETE
      - /all
-     - Alte Crawl-Sitzungen gesammelt löschen
+     - Crawl-Sitzungen gesammelt löschen (laufende ausgenommen)
 
 Crawl-Informationen auflisten
 =============================
@@ -62,15 +62,15 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite
+     - Anzahl der Einträge pro Seite (Standard: 20)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer
+     - Seitennummer (1-basiert, Standard: 1)
    * - ``sessionId``
      - String
      - Nein
-     - Filter nach Sitzungs-ID
+     - Filter nach Sitzungs-ID (Teilübereinstimmung)
 
 Response
 --------
@@ -116,9 +116,15 @@ Response-Felder
    * - ``name``
      - Sitzungsname
    * - ``expiredTime``
-     - Ablaufzeit
+     - Ablaufzeit (Epoch-Millisekunden; wird als Zeichenkette zurückgegeben)
    * - ``createdTime``
-     - Erstellungszeit (Epoch-Millisekunden)
+     - Erstellungszeit (Epoch-Millisekunden; wird als Zahl zurückgegeben)
+
+.. note::
+
+   Jedes Log-Objekt in der Antwort enthält außerdem ein internes ``crudMode``-Feld
+   (eine Ganzzahl, die den CRUD-Operationsmodus angibt; bei Leseoperationen immer ``0``).
+   Clients können dieses Feld gefahrlos ignorieren.
 
 Crawl-Information abrufen
 =========================
@@ -169,10 +175,12 @@ Response
       }
     }
 
-Alte Crawl-Sitzungen gesammelt löschen
+Crawl-Sitzungen gesammelt löschen
 ======================================
 
-Löscht gesammelt alte Crawl-Sitzungen, mit Ausnahme der gerade laufenden Sitzungen.
+Löscht alle Crawl-Sitzungen (einschließlich ihrer Parameterdaten), mit Ausnahme der gerade
+laufenden Sitzungen. Es gibt keine Zeit- oder Altersgrenze; jede Sitzung, die nicht aktiv
+läuft, wird gelöscht.
 
 Request
 -------
@@ -200,7 +208,7 @@ Crawl-Informationen auflisten
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Nach einer bestimmten Sitzung filtern
@@ -227,8 +235,8 @@ Crawl-Information löschen
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Alte Sitzungen gesammelt löschen
---------------------------------
+Sitzungen gesammelt löschen
+---------------------------
 
 .. code-block:: bash
 

@@ -36,7 +36,7 @@ Endpoint List
      - Delete crawl information
    * - DELETE
      - /all
-     - Bulk delete old crawl sessions
+     - Bulk delete crawl sessions (excluding running)
 
 List Crawl Information
 ======================
@@ -62,15 +62,15 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page
+     - Number of items per page (default: 20)
    * - ``page``
      - Integer
      - No
-     - Page number
+     - Page number (1-based, default: 1)
    * - ``sessionId``
      - String
      - No
-     - Session ID filter
+     - Session ID filter (partial match)
 
 Response
 --------
@@ -116,9 +116,15 @@ Response Fields
    * - ``name``
      - Session name
    * - ``expiredTime``
-     - Expiration time
+     - Expiration time (epoch milliseconds; returned as a string)
    * - ``createdTime``
-     - Created time (epoch milliseconds)
+     - Created time (epoch milliseconds; returned as a number)
+
+.. note::
+
+   Each log object in the response also includes an internal ``crudMode`` field
+   (an integer indicating the CRUD operation mode, always ``0`` for read operations).
+   Clients can safely ignore it.
 
 Get Crawl Information
 =====================
@@ -169,10 +175,12 @@ Response
       }
     }
 
-Bulk Delete Old Crawl Sessions
-==============================
+Bulk Delete Crawl Sessions
+==========================
 
-Bulk deletes old crawl sessions, excluding sessions that are currently running.
+Deletes all crawl sessions (and their parameter data) except those that are currently
+running. There is no age or time threshold; every session that is not currently running
+is deleted.
 
 Request
 -------
@@ -200,7 +208,7 @@ List Crawl Information
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filter by Specific Session
@@ -227,8 +235,8 @@ Delete Crawl Information
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Bulk Delete Old Sessions
-------------------------
+Bulk Delete Sessions
+--------------------
 
 .. code-block:: bash
 

@@ -36,7 +36,7 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
      - 크롤링 정보 삭제
    * - DELETE
      - /all
-     - 오래된 크롤링 세션 일괄 삭제
+     - 크롤링 세션 일괄 삭제 (실행 중 제외)
 
 크롤링 정보 목록 조회
 ====================
@@ -62,15 +62,15 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수
+     - 페이지당 건수 (기본값: 20)
    * - ``page``
      - Integer
      - 아니오
-     - 페이지 번호
+     - 페이지 번호 (1부터 시작, 기본값: 1)
    * - ``sessionId``
      - String
      - 아니오
-     - 세션 ID 필터
+     - 세션 ID 필터 (부분 일치)
 
 응답
 ----------
@@ -116,9 +116,15 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
    * - ``name``
      - 세션 이름
    * - ``expiredTime``
-     - 유효 기간
+     - 유효 기간 (에포크 밀리초; 문자열로 반환됨)
    * - ``createdTime``
-     - 작성 시각 (에포크 밀리초)
+     - 작성 시각 (에포크 밀리초; 숫자로 반환됨)
+
+.. note::
+
+   응답의 각 로그 오브젝트에는 내부적으로 사용되는 ``crudMode`` 필드
+   (CRUD 작업 모드를 나타내는 정수값으로, 읽기 작업 시 항상 ``0``)가 포함됩니다.
+   클라이언트 측에서는 무시해도 됩니다.
 
 크롤링 정보 조회
 ================
@@ -169,10 +175,11 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
       }
     }
 
-오래된 크롤링 세션 일괄 삭제
+크롤링 세션 일괄 삭제
 ==============================
 
-실행 중인 세션을 제외한 오래된 크롤링 세션을 한꺼번에 삭제합니다.
+현재 실행 중인 세션을 제외한 모든 크롤링 세션(및 해당 파라미터 데이터)을 삭제합니다.
+경과 시간에 의한 판정은 수행하지 않으며, 실행 중이지 않은 세션은 모두 삭제됩니다.
 
 요청
 ----------
@@ -200,7 +207,7 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 특정 세션으로 필터링
@@ -227,7 +234,7 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-오래된 세션 일괄 삭제
+세션 일괄 삭제
 ------------------------
 
 .. code-block:: bash

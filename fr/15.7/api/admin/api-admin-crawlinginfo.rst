@@ -36,7 +36,7 @@ Liste des endpoints
      - Suppression d'une information de crawl
    * - DELETE
      - /all
-     - Suppression groupee des anciennes sessions de crawl
+     - Suppression groupee des sessions de crawl (hors sessions en cours)
 
 Obtention de la liste des informations de crawl
 ===============================================
@@ -62,15 +62,15 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page
+     - Nombre d'elements par page (defaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page
+     - Numero de page (base 1, defaut : 1)
    * - ``sessionId``
      - String
      - Non
-     - Filtre par ID de session
+     - Filtre par ID de session (correspondance partielle)
 
 Reponse
 -------
@@ -116,9 +116,15 @@ Champs de la reponse
    * - ``name``
      - Nom de la session
    * - ``expiredTime``
-     - Date d'expiration
+     - Date d'expiration (millisecondes epoch ; retournee sous forme de chaine)
    * - ``createdTime``
-     - Heure de creation (millisecondes epoch)
+     - Heure de creation (millisecondes epoch ; retournee sous forme de nombre)
+
+.. note::
+
+   Chaque objet de journal dans la reponse inclut egalement un champ interne ``crudMode``
+   (un entier indiquant le mode d'operation CRUD, toujours ``0`` pour les operations de lecture).
+   Les clients peuvent l'ignorer en toute securite.
 
 Obtention d'une information de crawl
 ====================================
@@ -169,10 +175,10 @@ Reponse
       }
     }
 
-Suppression groupee des anciennes sessions de crawl
-===================================================
+Suppression groupee des sessions de crawl
+==========================================
 
-Supprime en bloc les anciennes sessions de crawl, a l'exception des sessions en cours d'execution.
+Supprime toutes les sessions de crawl (ainsi que leurs donnees de parametres), a l'exception de celles qui sont actuellement en cours d'execution. Il n'y a pas de seuil d'age ou de duree ; toute session qui n'est pas en cours d'execution est supprimee.
 
 Requete
 -------
@@ -200,7 +206,7 @@ Obtention de la liste des informations de crawl
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filtrage par session specifique
@@ -227,8 +233,8 @@ Suppression d'une information de crawl
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Suppression groupee des anciennes sessions
-------------------------------------------
+Suppression groupee des sessions
+--------------------------------
 
 .. code-block:: bash
 
