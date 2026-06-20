@@ -7,7 +7,7 @@ Vue d'ensemble
 
 L'API Dict est une API permettant de gerer les dictionnaires de |Fess|.
 L'endpoint racine permet d'obtenir la liste des dictionnaires disponibles.
-La consultation, la creation, la mise a jour et la suppression des entrees de dictionnaire individuelles, ainsi que le televersement et le telechargement des fichiers de dictionnaire, s'effectuent via les sous-endpoints propres a chaque type de dictionnaire (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
+La consultation, la creation, la mise a jour et la suppression des entrees de dictionnaire individuelles, ainsi que le televersement et le telechargement des fichiers de dictionnaire, s'effectuent via les sous-endpoints propres a chaque type de dictionnaire (synonym, kuromoji, mapping, protwords, stopwords, stemmeroverride).
 
 URL de base
 ===========
@@ -36,7 +36,8 @@ Racine des dictionnaires
 Endpoints propres a chaque type de dictionnaire
 -----------------------------------------------
 
-``{type}`` doit etre l'une des valeurs suivantes : ``synonym`` , ``kuromoji`` , ``mapping`` , ``protwords`` , ``stopwords`` , ``stemmerOverride`` .
+``{type}`` doit etre l'une des valeurs suivantes : ``synonym`` , ``kuromoji`` , ``mapping`` , ``protwords`` , ``stopwords`` , ``stemmeroverride`` .
+Ces valeurs correspondent a la valeur du champ ``type`` inclus dans la reponse de la liste des dictionnaires.
 ``{dictId}`` est l'ID du dictionnaire obtenu via l'obtention de la liste des dictionnaires.
 
 .. list-table::
@@ -102,7 +103,8 @@ Reponse
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -123,6 +125,8 @@ Champs de la reponse
      - Chemin du fichier de dictionnaire
    * - ``settings[].timestamp``
      - Date et heure de mise a jour du fichier de dictionnaire
+   * - ``total``
+     - Nombre total de fichiers de dictionnaire
 
 Obtention de la liste des entrees de dictionnaire
 =================================================
@@ -154,11 +158,11 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page
+     - Nombre d'elements par page (defaut : 25)
    * - ``page``
      - Integer
      - Non
-     - Numero de page
+     - Numero de page (commence a 1, defaut : 1)
 
 Reponse
 -------
@@ -178,9 +182,12 @@ Les champs de chaque element du tableau ``settings`` de la reponse varient selon
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+L'exemple ci-dessus correspond au dictionnaire ``synonym``.
 
 Obtention d'une entree de dictionnaire
 ======================================
@@ -422,7 +429,7 @@ Les champs du corps de requete de creation/mise a jour d'une entree de dictionna
    * - ``stopwords``
      - ``input`` (requis)
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` (requis), ``output`` (requis)
      - ``stemmerOverrideFile``
 

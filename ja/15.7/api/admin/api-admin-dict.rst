@@ -8,7 +8,7 @@ Dict API
 Dict APIは、|Fess| の辞書を管理するためのAPIです。
 ルートのエンドポイントで利用可能な辞書の一覧を取得できます。
 個々の辞書項目の参照・作成・更新・削除、辞書ファイルのアップロード・ダウンロードは、
-辞書種別ごとのサブエンドポイント（synonym、kuromoji、mapping、protwords、stopwords、stemmerOverride）で操作します。
+辞書種別ごとのサブエンドポイント（synonym、kuromoji、mapping、protwords、stopwords、stemmeroverride）で操作します。
 
 ベースURL
 =========
@@ -37,7 +37,8 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 辞書種別ごとのエンドポイント
 ----------------------------
 
-``{type}`` には ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmerOverride`` のいずれかを指定します。
+``{type}`` には ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmeroverride`` のいずれかを指定します。
+これらの値は、辞書一覧取得のレスポンスに含まれる ``type`` フィールドの値と一致します。
 ``{dictId}`` は辞書一覧取得で得られる辞書のIDです。
 
 .. list-table::
@@ -103,7 +104,8 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -124,6 +126,8 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
      - 辞書ファイルのパス
    * - ``settings[].timestamp``
      - 辞書ファイルの更新日時
+   * - ``total``
+     - 辞書ファイルの総数
 
 辞書項目一覧取得
 ================
@@ -155,11 +159,11 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数
+     - 1ページあたりの件数（デフォルト: 25）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号
+     - ページ番号（1から開始、デフォルト: 1）
 
 レスポンス
 ----------
@@ -179,9 +183,12 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+上記は ``synonym`` 辞書の例です。
 
 辞書項目取得
 ============
@@ -423,7 +430,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
    * - ``stopwords``
      - ``input`` （必須）
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` （必須）、 ``output`` （必須）
      - ``stemmerOverrideFile``
 

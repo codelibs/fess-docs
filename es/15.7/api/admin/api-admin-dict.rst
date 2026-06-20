@@ -7,7 +7,7 @@ Vision General
 
 La API de Dict es para gestionar los diccionarios de |Fess|.
 En el endpoint raiz se puede obtener la lista de diccionarios disponibles.
-La referencia, creacion, actualizacion y eliminacion de elementos de diccionario individuales, asi como la carga y descarga de archivos de diccionario, se operan mediante los subendpoints por tipo de diccionario (synonym, kuromoji, mapping, protwords, stopwords, stemmerOverride).
+La referencia, creacion, actualizacion y eliminacion de elementos de diccionario individuales, asi como la carga y descarga de archivos de diccionario, se operan mediante los subendpoints por tipo de diccionario (synonym, kuromoji, mapping, protwords, stopwords, stemmeroverride).
 
 URL Base
 ========
@@ -36,7 +36,8 @@ Raiz del Diccionario
 Endpoints por Tipo de Diccionario
 ----------------------------------
 
-En ``{type}`` se especifica uno de ``synonym`` , ``kuromoji`` , ``mapping`` , ``protwords`` , ``stopwords`` , ``stemmerOverride`` .
+En ``{type}`` se especifica uno de ``synonym`` , ``kuromoji`` , ``mapping`` , ``protwords`` , ``stopwords`` , ``stemmeroverride`` .
+Estos valores coinciden con el valor del campo ``type`` incluido en la respuesta de la lista de diccionarios.
 ``{dictId}`` es el ID del diccionario obtenido en la lista de diccionarios.
 
 .. list-table::
@@ -102,7 +103,8 @@ Respuesta
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -123,6 +125,8 @@ Campos de Respuesta
      - Ruta del archivo de diccionario
    * - ``settings[].timestamp``
      - Fecha y hora de actualizacion del archivo de diccionario
+   * - ``total``
+     - Numero total de archivos de diccionario
 
 Obtener Lista de Elementos del Diccionario
 ==========================================
@@ -154,11 +158,11 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina
+     - Numero de elementos por pagina (por defecto: 25)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina
+     - Numero de pagina (comienza en 1, por defecto: 1)
 
 Respuesta
 ---------
@@ -178,9 +182,12 @@ Los campos de cada elemento del arreglo ``settings`` de la respuesta varian segu
             "inputs": "busqueda,buscar",
             "outputs": "busqueda,buscar,investigar"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+El ejemplo anterior corresponde al diccionario ``synonym``.
 
 Obtener Elemento del Diccionario
 ================================
@@ -422,7 +429,7 @@ Los campos del cuerpo de la solicitud de creacion y actualizacion de elementos d
    * - ``stopwords``
      - ``input`` (requerido)
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` (requerido), ``output`` (requerido)
      - ``stemmerOverrideFile``
 

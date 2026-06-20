@@ -8,7 +8,7 @@ Dict API
 Dict API是用于管理 |Fess| 词典的API。
 可以通过根端点获取可用词典的列表。
 单个词典项目的查看、创建、更新、删除，以及词典文件的上传、下载，
-通过各词典类型的子端点（synonym、kuromoji、mapping、protwords、stopwords、stemmerOverride）进行操作。
+通过各词典类型的子端点（synonym、kuromoji、mapping、protwords、stopwords、stemmeroverride）进行操作。
 
 基础URL
 =======
@@ -37,7 +37,8 @@ Dict API是用于管理 |Fess| 词典的API。
 各词典类型的端点
 ----------------
 
-``{type}`` 指定 ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmerOverride`` 中的任意一个。
+``{type}`` 指定 ``synonym`` 、 ``kuromoji`` 、 ``mapping`` 、 ``protwords`` 、 ``stopwords`` 、 ``stemmeroverride`` 中的任意一个。
+这些值与词典列表响应中所包含的 ``type`` 字段的值相对应。
 ``{dictId}`` 是通过获取词典列表得到的词典ID。
 
 .. list-table::
@@ -103,7 +104,8 @@ Dict API是用于管理 |Fess| 词典的API。
             "path": "/var/lib/fess/dict/mapping.txt",
             "timestamp": "2025-01-28T15:30:00.000+0000"
           }
-        ]
+        ],
+        "total": 2
       }
     }
 
@@ -124,6 +126,8 @@ Dict API是用于管理 |Fess| 词典的API。
      - 词典文件的路径
    * - ``settings[].timestamp``
      - 词典文件的更新日期时间
+   * - ``total``
+     - 词典文件的总数
 
 获取词典项目列表
 ================
@@ -155,11 +159,11 @@ Dict API是用于管理 |Fess| 词典的API。
    * - ``size``
      - Integer
      - 否
-     - 每页记录数
+     - 每页记录数（默认值：25）
    * - ``page``
      - Integer
      - 否
-     - 页码
+     - 页码（从1开始，默认值：1）
 
 响应
 ----
@@ -179,9 +183,12 @@ Dict API是用于管理 |Fess| 词典的API。
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
-        ]
+        ],
+        "total": 1
       }
     }
+
+以上为 ``synonym`` 词典的示例。
 
 获取词典项目
 ============
@@ -423,7 +430,7 @@ Dict API是用于管理 |Fess| 词典的API。
    * - ``stopwords``
      - ``input`` （必需）
      - ``stopwordsFile``
-   * - ``stemmerOverride``
+   * - ``stemmeroverride``
      - ``input`` （必需）、 ``output`` （必需）
      - ``stemmerOverrideFile``
 
