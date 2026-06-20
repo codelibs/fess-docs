@@ -5,8 +5,9 @@ JobLog API
 Overview
 ========
 
-JobLog API is an API for retrieving |Fess| job execution logs.
-You can view execution history and error information for scheduled jobs and crawl jobs.
+JobLog API is an API for viewing and managing |Fess| job execution logs.
+You can retrieve and delete the execution history, execution results, and error information
+for scheduled jobs and crawl jobs.
 
 Base URL
 ========
@@ -59,11 +60,15 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page
+     - Number of items per page (default: 20)
    * - ``page``
      - Integer
      - No
-     - Page number
+     - Page number (1-based, default: 1)
+   * - ``id``
+     - String
+     - No
+     - Filter by job log ID (exact match)
 
 Response
 --------
@@ -82,8 +87,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": 1738116000000,
-            "endTime": 1738118723000
+            "startTime": "1738116000000",
+            "endTime": "1738118723000"
           },
           {
             "id": "joblog_id_2",
@@ -93,8 +98,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": 1738029600000,
-            "endTime": 1738030215000
+            "startTime": "1738029600000",
+            "endTime": "1738030215000"
           }
         ],
         "total": 100
@@ -115,19 +120,25 @@ Response Fields
    * - ``jobName``
      - Job name
    * - ``jobStatus``
-     - Job status
+     - Job status (``ok``: success, ``fail``: failure, ``running``: in progress)
    * - ``target``
-     - Execution target
+     - Execution target (scheduler target name; default is ``all``)
    * - ``scriptType``
-     - Script type
+     - Script type (e.g., ``groovy``)
    * - ``scriptData``
      - Execution script
    * - ``scriptResult``
      - Execution result
    * - ``startTime``
-     - Start time (epoch milliseconds)
+     - Start time (epoch milliseconds; returned as a string)
    * - ``endTime``
-     - End time (epoch milliseconds)
+     - End time (epoch milliseconds; returned as a string). Not returned for running jobs.
+
+.. note::
+
+   Each log object in the response also includes an internal ``crudMode`` field
+   (an integer indicating the CRUD operation mode, always ``0`` for read operations).
+   Clients can safely ignore it.
 
 Get Job Log
 ===========
@@ -155,11 +166,14 @@ Response
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": 1738116000000,
-          "endTime": 1738118723000
+          "startTime": "1738116000000",
+          "endTime": "1738118723000"
         }
       }
     }
+
+If no job log exists for the specified ID, an error response is returned with a non-zero
+value in ``status``.
 
 Delete Job Log
 ==============
@@ -182,6 +196,9 @@ Response
       }
     }
 
+If no job log exists for the specified ID, an error response is returned with a non-zero
+value in ``status``.
+
 Usage Examples
 ==============
 
@@ -190,7 +207,7 @@ List Job Logs
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Extract Failed Jobs Only
@@ -233,5 +250,5 @@ Reference
 
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`api-admin-scheduler` - Scheduler API
-- :doc:`api-admin-crawlinginfo` - Crawling Info API
+- :doc:`api-admin-crawlinginfo` - Crawl Information API
 - :doc:`../../admin/joblog-guide` - Job Log Management Guide

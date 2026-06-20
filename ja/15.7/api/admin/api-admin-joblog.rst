@@ -5,8 +5,8 @@ JobLog API
 概要
 ====
 
-JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです。
-スケジュールジョブやクロールジョブの実行履歴、エラー情報などを確認できます。
+JobLog APIは、|Fess| のジョブ実行ログを参照・管理するためのAPIです。
+スケジュールジョブやクロールジョブの実行履歴、実行結果、エラー情報などを取得・削除できます。
 
 ベースURL
 =========
@@ -59,11 +59,15 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数
+     - 1ページあたりの件数（デフォルト: 20）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号
+     - ページ番号（1から開始、デフォルト: 1）
+   * - ``id``
+     - String
+     - いいえ
+     - ジョブログIDによる絞り込み（完全一致）
 
 レスポンス
 ----------
@@ -82,8 +86,8 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": 1738116000000,
-            "endTime": 1738118723000
+            "startTime": "1738116000000",
+            "endTime": "1738118723000"
           },
           {
             "id": "joblog_id_2",
@@ -93,8 +97,8 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": 1738029600000,
-            "endTime": 1738030215000
+            "startTime": "1738029600000",
+            "endTime": "1738030215000"
           }
         ],
         "total": 100
@@ -115,19 +119,25 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
    * - ``jobName``
      - ジョブ名
    * - ``jobStatus``
-     - ジョブステータス
+     - ジョブステータス（``ok``: 成功、``fail``: 失敗、``running``: 実行中）
    * - ``target``
-     - 実行対象
+     - 実行対象（スケジューラーのターゲット名。既定値は ``all``）
    * - ``scriptType``
-     - スクリプトタイプ
+     - スクリプトタイプ（例: ``groovy``）
    * - ``scriptData``
      - 実行スクリプト
    * - ``scriptResult``
      - 実行結果
    * - ``startTime``
-     - 開始時刻（エポックミリ秒）
+     - 開始時刻（エポックミリ秒。文字列として返されます）
    * - ``endTime``
-     - 終了時刻（エポックミリ秒）
+     - 終了時刻（エポックミリ秒。文字列として返されます）。実行中のジョブでは返されません。
+
+.. note::
+
+   レスポンスの各ログオブジェクトには、内部的に使用される ``crudMode`` フィールド
+   （CRUD操作モードを示す整数値で、参照時は常に ``0``）が含まれます。
+   クライアント側では無視して問題ありません。
 
 ジョブログ取得
 ==============
@@ -155,11 +165,14 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": 1738116000000,
-          "endTime": 1738118723000
+          "startTime": "1738116000000",
+          "endTime": "1738118723000"
         }
       }
     }
+
+指定したIDのジョブログが存在しない場合は、``status`` に 0 以外の値が設定された
+エラーレスポンスが返されます。
 
 ジョブログ削除
 ==============
@@ -182,6 +195,9 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
       }
     }
 
+指定したIDのジョブログが存在しない場合は、``status`` に 0 以外の値が設定された
+エラーレスポンスが返されます。
+
 使用例
 ======
 
@@ -190,7 +206,7 @@ JobLog APIは、|Fess| のジョブ実行ログを取得するためのAPIです
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 失敗したジョブのみ抽出

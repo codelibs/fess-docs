@@ -5,8 +5,8 @@ API JobLog
 Vue d'ensemble
 ==============
 
-L'API JobLog permet d'obtenir les journaux d'execution des taches de |Fess|.
-Vous pouvez consulter l'historique d'execution des taches planifiees et des taches de crawl, ainsi que les informations d'erreur.
+L'API JobLog permet de consulter et de gerer les journaux d'execution des taches de |Fess|.
+Vous pouvez obtenir l'historique d'execution des taches planifiees et des taches de crawl, les resultats d'execution, les informations d'erreur, et les supprimer.
 
 URL de base
 ===========
@@ -59,11 +59,15 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page
+     - Nombre d'elements par page (defaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page
+     - Numero de page (base 1, defaut : 1)
+   * - ``id``
+     - String
+     - Non
+     - Filtre par ID de journal de tache (correspondance exacte)
 
 Reponse
 -------
@@ -82,8 +86,8 @@ Reponse
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": 1738116000000,
-            "endTime": 1738118723000
+            "startTime": "1738116000000",
+            "endTime": "1738118723000"
           },
           {
             "id": "joblog_id_2",
@@ -93,8 +97,8 @@ Reponse
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": 1738029600000,
-            "endTime": 1738030215000
+            "startTime": "1738029600000",
+            "endTime": "1738030215000"
           }
         ],
         "total": 100
@@ -115,22 +119,28 @@ Champs de la reponse
    * - ``jobName``
      - Nom de la tache
    * - ``jobStatus``
-     - Statut de la tache
+     - Statut de la tache (``ok`` : succes, ``fail`` : echec, ``running`` : en cours d'execution)
    * - ``target``
-     - Cible d'execution
+     - Cible d'execution (nom de la cible du planificateur ; valeur par defaut : ``all``)
    * - ``scriptType``
-     - Type de script
+     - Type de script (ex. : ``groovy``)
    * - ``scriptData``
      - Script execute
    * - ``scriptResult``
      - Resultat d'execution
    * - ``startTime``
-     - Heure de debut (millisecondes epoch)
+     - Heure de debut (millisecondes epoch ; retournee sous forme de chaine)
    * - ``endTime``
-     - Heure de fin (millisecondes epoch)
+     - Heure de fin (millisecondes epoch ; retournee sous forme de chaine). Non retournee pour les taches en cours d'execution.
+
+.. note::
+
+   Chaque objet de journal dans la reponse inclut egalement un champ interne ``crudMode``
+   (un entier indiquant le mode d'operation CRUD, toujours ``0`` pour les operations de lecture).
+   Les clients peuvent l'ignorer en toute securite.
 
 Obtention d'un journal de tache
-===============================
+================================
 
 Requete
 -------
@@ -155,14 +165,17 @@ Reponse
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": 1738116000000,
-          "endTime": 1738118723000
+          "startTime": "1738116000000",
+          "endTime": "1738118723000"
         }
       }
     }
 
+Si le journal de tache correspondant a l'ID specifie n'existe pas, une reponse d'erreur
+est retournee avec une valeur differente de 0 dans ``status``.
+
 Suppression d'un journal de tache
-=================================
+==================================
 
 Requete
 -------
@@ -182,6 +195,9 @@ Reponse
       }
     }
 
+Si le journal de tache correspondant a l'ID specifie n'existe pas, une reponse d'erreur
+est retournee avec une valeur differente de 0 dans ``status``.
+
 Exemples d'utilisation
 ======================
 
@@ -190,7 +206,7 @@ Obtention de la liste des journaux de taches
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Extraction des taches en echec uniquement
@@ -204,7 +220,7 @@ Extraction des taches en echec uniquement
          jq '.response.logs[] | select(.jobStatus=="fail")'
 
 Obtention d'un journal de tache
--------------------------------
+--------------------------------
 
 .. code-block:: bash
 
@@ -212,7 +228,7 @@ Obtention d'un journal de tache
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Suppression d'un journal de tache
----------------------------------
+----------------------------------
 
 .. code-block:: bash
 
@@ -220,7 +236,7 @@ Suppression d'un journal de tache
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Calcul du taux de reussite des taches
--------------------------------------
+--------------------------------------
 
 .. code-block:: bash
 

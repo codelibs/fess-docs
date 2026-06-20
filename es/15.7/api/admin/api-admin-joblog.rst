@@ -5,8 +5,9 @@ API de JobLog
 Vision General
 ==============
 
-La API de JobLog es para obtener los registros de ejecucion de trabajos de |Fess|.
-Puede verificar el historial de ejecucion e informacion de errores de trabajos programados y de rastreo.
+La API de JobLog es para consultar y gestionar los registros de ejecucion de trabajos de |Fess|.
+Permite obtener y eliminar el historial de ejecucion, los resultados y la informacion de errores
+de trabajos programados y de rastreo.
 
 URL Base
 ========
@@ -36,7 +37,7 @@ Lista de Endpoints
      - Eliminar registro de trabajo
 
 Obtener Lista de Registros de Trabajos
-======================================
+=======================================
 
 Solicitud
 ---------
@@ -59,11 +60,15 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina
+     - Numero de elementos por pagina (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina
+     - Numero de pagina (basado en 1, predeterminado: 1)
+   * - ``id``
+     - String
+     - No
+     - Filtro por ID de registro de trabajo (coincidencia exacta)
 
 Respuesta
 ---------
@@ -82,8 +87,8 @@ Respuesta
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": 1738116000000,
-            "endTime": 1738118723000
+            "startTime": "1738116000000",
+            "endTime": "1738118723000"
           },
           {
             "id": "joblog_id_2",
@@ -93,8 +98,8 @@ Respuesta
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": 1738029600000,
-            "endTime": 1738030215000
+            "startTime": "1738029600000",
+            "endTime": "1738030215000"
           }
         ],
         "total": 100
@@ -115,22 +120,28 @@ Campos de Respuesta
    * - ``jobName``
      - Nombre del trabajo
    * - ``jobStatus``
-     - Estado del trabajo
+     - Estado del trabajo (``ok``: exitoso, ``fail``: fallido, ``running``: en ejecucion)
    * - ``target``
-     - Objetivo de ejecucion
+     - Objetivo de ejecucion (nombre del objetivo del programador; el valor predeterminado es ``all``)
    * - ``scriptType``
-     - Tipo de script
+     - Tipo de script (ejemplo: ``groovy``)
    * - ``scriptData``
      - Script ejecutado
    * - ``scriptResult``
-     - Resultado de ejecucion
+     - Resultado de la ejecucion
    * - ``startTime``
-     - Hora de inicio (milisegundos epoch)
+     - Hora de inicio (milisegundos epoch; devuelto como cadena de texto)
    * - ``endTime``
-     - Hora de finalizacion (milisegundos epoch)
+     - Hora de finalizacion (milisegundos epoch; devuelto como cadena de texto). No se devuelve para trabajos en ejecucion.
+
+.. note::
+
+   Cada objeto de registro en la respuesta incluye tambien un campo interno ``crudMode``
+   (un entero que indica el modo de operacion CRUD, siempre ``0`` para operaciones de lectura).
+   Los clientes pueden ignorarlo sin problema.
 
 Obtener Registro de Trabajo
-===========================
+============================
 
 Solicitud
 ---------
@@ -155,14 +166,17 @@ Respuesta
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": 1738116000000,
-          "endTime": 1738118723000
+          "startTime": "1738116000000",
+          "endTime": "1738118723000"
         }
       }
     }
 
+Si el registro de trabajo con el ID especificado no existe, se devuelve una respuesta de error
+con ``status`` establecido en un valor distinto de 0.
+
 Eliminar Registro de Trabajo
-============================
+=============================
 
 Solicitud
 ---------
@@ -182,6 +196,9 @@ Respuesta
       }
     }
 
+Si el registro de trabajo con el ID especificado no existe, se devuelve una respuesta de error
+con ``status`` establecido en un valor distinto de 0.
+
 Ejemplos de Uso
 ===============
 
@@ -190,7 +207,7 @@ Obtener Lista de Registros de Trabajos
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Extraer Solo Trabajos Fallidos
@@ -204,7 +221,7 @@ Extraer Solo Trabajos Fallidos
          jq '.response.logs[] | select(.jobStatus=="fail")'
 
 Obtener Registro de Trabajo
----------------------------
+----------------------------
 
 .. code-block:: bash
 
@@ -212,7 +229,7 @@ Obtener Registro de Trabajo
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Eliminar Registro de Trabajo
-----------------------------
+-----------------------------
 
 .. code-block:: bash
 
@@ -220,7 +237,7 @@ Eliminar Registro de Trabajo
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Calcular Tasa de Exito de Trabajos
-----------------------------------
+------------------------------------
 
 .. code-block:: bash
 
