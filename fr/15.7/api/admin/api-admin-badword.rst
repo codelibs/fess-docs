@@ -75,7 +75,11 @@ Parametres
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1, par defaut : 1)
+   * - ``id``
+     - String
+     - Non
+     - Filtrer uniquement sur le mot interdit ayant l'ID specifie
 
 Reponse
 -------
@@ -252,6 +256,20 @@ Parametres
      - Oui
      - Fichier CSV des mots interdits a televerser
 
+Format CSV
+~~~~~~~~~~
+
+- La premiere ligne est ignoree en tant que ligne d'en-tete (le nom de colonne est arbitraire ; ``BadWord`` est ecrit lors du telechargement).
+- A partir de la deuxieme ligne, ecrivez un mot interdit par ligne en tant que ``suggestWord``.
+- Les lignes dont la valeur est vide sont ignorees.
+- Prefixez un mot par ``--`` pour le supprimer (par exemple, ``--spam`` supprime ``spam``).
+- Specifier un mot deja enregistre est traite comme une mise a jour (l'auteur et la date de mise a jour sont reinitialises).
+
+.. note::
+
+   Comme l'import s'execute de maniere asynchrone cote serveur, une reponse ``status: 0``
+   indique que la requete a ete acceptee, et non que l'import est termine.
+
 Reponse
 -------
 
@@ -267,6 +285,7 @@ Telechargement CSV des mots interdits
 =====================================
 
 Telecharge les mots interdits enregistres sous forme de fichier CSV (``badword.csv``). La reponse est un flux ``application/octet-stream``.
+Le CSV comporte une ligne d'en-tete ``BadWord`` sur la premiere ligne, suivie d'un mot interdit enregistre par ligne.
 
 Requete
 -------
