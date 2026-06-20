@@ -159,7 +159,8 @@ HTTPメソッド         POST
 
 ユーザー名とパスワードでログインします。
 ログイン成功時には、サーブレットのセッションIDがローテーションされ、新しい CSRF トークンが発行され、呼び出し元 IP と対象ユーザーのレート制限バケットがクリアされます。
-レート制限を超えた場合は、 ``Retry-After`` ヘッダー（秒）が付与されます。
+
+レート制限は、呼び出し元 IP 単位とユーザー単位の2系統で行われます。IP 単位の上限を超えた場合は ``429 Too Many Requests`` を返し、 ``Retry-After`` ヘッダー（秒）を付与します。ユーザー単位の上限を超えた場合は、カウンターの状態が外部から推測されることを防ぐため、認証情報が不正な場合と同じ ``401 Unauthorized`` を（ ``Retry-After`` なしで）返します。
 
 既に認証済みのセッションでもショートサーキットせず、渡された資格情報は常に検証されます。
 
@@ -174,10 +175,18 @@ HTTPメソッド         POST
 
    他の状態変更エンドポイントと異なり、このエンドポイントは過大なリクエストボディや非対応の ``Content-Type`` を ``400 invalid_request`` にまとめます（他のエンドポイントは ``413`` / ``415`` を返します）。
 
+.. note::
+
+   ログインとパスワード変更のレート制限は、以下のプロパティで設定できます（かっこ内は既定値）。
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` （ ``10`` ）: IP アドレス単位の毎分あたりの試行回数上限。 ``/auth/login`` のみに適用されます。
+   - ``theme.api.login.rate.limit.per.user.per.minute`` （ ``5`` ）: ユーザー単位の毎分あたりの試行回数上限。 ``/auth/login`` と ``/auth/password`` の両方に適用されます。
+   - ``theme.api.login.lockout.seconds`` （ ``900`` ）: 上限を超えた後のロックアウト時間（秒）。 ``Retry-After`` ヘッダーの値として返されます。
+
 リクエストボディ (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type は ``application/json`` です。
+Content-Type は ``application/json`` （文字コードは UTF-8）です。リクエストボディの上限は 4 KiB です。
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ HTTPメソッド         POST
      - CSRF トークンが欠落・失効している場合。
    * - 405 Method Not Allowed
      - POST 以外のメソッドが指定された場合。 ``Allow: POST`` ヘッダーが付与されます。
+   * - 500 Internal Server Error
+     - サーバー内部エラーが発生した場合。
 
 パスワード変更
 ============
@@ -353,10 +364,12 @@ HTTPメソッド         POST
 
 ``X-Fess-CSRF-Token`` ヘッダーが必要です。
 
+このエンドポイントにはユーザー単位のレート制限が適用され、上限を超えた場合は ``Retry-After`` ヘッダー付きで ``429 Too Many Requests`` を返します（設定はログインと共通です）。
+
 リクエストボディ (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type は ``application/json`` です。
+Content-Type は ``application/json`` （文字コードは UTF-8）です。リクエストボディの上限は 4 KiB です。
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ Content-Type は ``application/json`` です。
    * - ``new_password``
      - string
      - はい
-     - 新しいパスワード。設定済みのパスワードポリシーを満たす必要があります。 ``minLength`` は1です。
+     - 新しいパスワード。設定済みのパスワードポリシー（既定では最小8文字）を満たす必要があります。 ``minLength`` は1です。
    * - ``confirm_password``
      - string
      - はい
