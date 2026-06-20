@@ -18,7 +18,9 @@ HTTP Method         GET
 Endpoint            ``/api/v2/cache/{docId}``
 ==================  ====================================================
 
-Returns the cached (highlight-applied) HTML of a document.
+Returns the cached HTML of a document that was stored at crawl time. When ``hq`` is specified, the matching terms are highlighted.
+
+This endpoint applies the same permission (role) filtering as search. A document that the caller's roles cannot access returns ``not_found`` (404), just as if it did not exist.
 
 When the login-required setting (System Settings "Login Required") is enabled and the caller is anonymous, it returns ``auth_required`` (401).
 
@@ -31,7 +33,7 @@ Request Parameters
    * - ``docId``
      - Document identifier (path, required, pattern ``^[A-Za-z0-9_-]+$``).
    * - ``hq``
-     - Highlight query term (query). Can be specified multiple times (array).
+     - Term to highlight (query). When specified, the matching terms in the cached HTML are wrapped with highlight tags. Can be specified multiple times to pass multiple terms (array).
 
 Table: Request Parameters
 
@@ -62,13 +64,13 @@ Each field is described below.
    * - ``doc_id``
      - Document ID (str).
    * - ``mimetype``
-     - MIME type (enum: ``text/html``).
+     - MIME type of the response body (str). Always fixed to ``text/html``.
    * - ``content``
-     - Cached HTML body (str).
+     - Cached HTML body (str). When ``hq`` is specified, the matching terms are highlighted.
    * - ``url``
-     - Document URL (str). Uses the ``url_link`` field from the index if present, otherwise the raw index URL. Omitted when neither is available.
+     - Document URL (str). Returns the ``url_link`` field value if present, otherwise the ``url`` field value from the index. Omitted when neither is available.
    * - ``created``
-     - Document creation timestamp from the index (str). Omitted when not present.
+     - Document creation timestamp (str, ISO 8601 format, e.g. ``2024-05-31T12:00:00.000Z``). Omitted when the index has no value.
    * - ``charset``
      - Character set parsed from the document's mimetype (str). Defaults to ``UTF-8`` when not available.
 
@@ -89,7 +91,7 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
    * - 401 Unauthorized
      - Authentication is required (the login-required setting is enabled with an anonymous caller).
    * - 404 Not Found
-     - The resource was not found.
+     - The document does not exist, has no cached body, or is not accessible with the caller's permissions.
    * - 405 Method Not Allowed
      - The HTTP method is not allowed.
    * - 500 Internal Server Error

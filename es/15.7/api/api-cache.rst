@@ -18,7 +18,9 @@ Método HTTP         GET
 Endpoint            ``/api/v2/cache/{docId}``
 ==================  ====================================================
 
-Devuelve el HTML en caché (con resaltado aplicado) del documento.
+Devuelve el HTML en caché de un documento tal como fue almacenado en el momento del rastreo. Cuando se especifica ``hq``, los términos coincidentes se resaltan.
+
+Este endpoint aplica el mismo filtrado de permisos (roles) que la búsqueda. Un documento al que los roles del llamante no tienen acceso devuelve ``not_found`` (404), como si no existiera.
 
 Cuando la configuracion de inicio de sesion obligatorio (la opcion "Inicio de sesion obligatorio" de la configuracion del sistema) esta habilitada y el llamante es anonimo, resulta en ``auth_required`` (401).
 
@@ -31,7 +33,7 @@ Parámetros de solicitud
    * - ``docId``
      - Identificador del documento (path, obligatorio, patrón ``^[A-Za-z0-9_-]+$``).
    * - ``hq``
-     - Término de consulta para resaltado (query). Se puede repetir (array).
+     - Término a resaltar (query). Cuando se especifica, los términos coincidentes en el HTML en caché se envuelven con etiquetas de resaltado. Se puede especificar varias veces para pasar múltiples términos (array).
 
 Tabla: Parámetros de solicitud
 
@@ -62,13 +64,13 @@ Los campos son los siguientes:
    * - ``doc_id``
      - ID del documento (str).
    * - ``mimetype``
-     - Tipo MIME (enum: ``text/html``).
+     - Tipo MIME del cuerpo de la respuesta (str). Siempre fijo a ``text/html``.
    * - ``content``
-     - Contenido HTML en caché (str).
+     - Contenido HTML en caché (str). Cuando se especifica ``hq``, los términos coincidentes se resaltan.
    * - ``url``
-     - URL del documento (str). Si existe el campo ``url_link``, se usa ese; de lo contrario, la URL sin procesar del índice. Se omite cuando no hay ninguno.
+     - URL del documento (str). Devuelve el valor del campo ``url_link`` si está presente; de lo contrario, el valor del campo ``url`` del índice. Se omite cuando no hay ninguno.
    * - ``created``
-     - Marca de tiempo de creación del documento en el índice (str). Se omite cuando no existe.
+     - Marca de tiempo de creación del documento (str, formato ISO 8601, p. ej. ``2024-05-31T12:00:00.000Z``). Se omite cuando el índice no tiene valor.
    * - ``charset``
      - Juego de caracteres analizado del mimetype del documento (str). Cuando no está disponible, el valor predeterminado es ``UTF-8``.
 
@@ -89,7 +91,7 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
    * - 401 Unauthorized
      - Cuando se requiere autenticación (la configuracion de inicio de sesion obligatorio esta habilitada y el llamante es anonimo).
    * - 404 Not Found
-     - Cuando no se encuentra el recurso.
+     - El documento no existe, no tiene contenido en caché, o no es accesible con los permisos del llamante.
    * - 405 Method Not Allowed
      - Cuando el método HTTP no está permitido.
    * - 500 Internal Server Error
