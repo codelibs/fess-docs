@@ -18,7 +18,9 @@ HTTP-Methode         GET
 Endpunkt             ``/api/v2/cache/{docId}``
 ==================  ====================================================
 
-Gibt das gecachte (mit Hervorhebung versehene) HTML eines Dokuments zurück.
+Gibt das zur Crawl-Zeit gespeicherte gecachte HTML eines Dokuments zurück. Wenn ``hq`` angegeben ist, werden die übereinstimmenden Begriffe hervorgehoben.
+
+Dieser Endpunkt wendet dieselbe Berechtigungs- (Rollen-) Filterung wie die Suche an. Ein Dokument, auf das die Rollen des Aufrufers keinen Zugriff haben, gibt ``not_found`` (404) zurück, als ob es nicht existieren würde.
 
 Wenn die Anmeldepflicht-Einstellung (Systemeinstellung „Anmeldung erforderlich“) aktiviert ist und der Aufrufer anonym ist, wird ``auth_required`` (401) zurückgegeben.
 
@@ -31,7 +33,7 @@ Anfrageparameter
    * - ``docId``
      - Dokumentbezeichner (path, Pflicht, Muster ``^[A-Za-z0-9_-]+$``).
    * - ``hq``
-     - Hervorhebungs-Suchbegriff (query). Kann mehrfach angegeben werden (Array).
+     - Hervorhebungsbegriff (query). Wenn angegeben, werden die übereinstimmenden Begriffe im gecachten HTML mit Hervorhebungs-Tags umschlossen. Kann mehrfach angegeben werden, um mehrere Begriffe zu übergeben (Array).
 
 Tabelle: Anfrageparameter
 
@@ -62,13 +64,13 @@ Die einzelnen Felder sind wie folgt beschrieben:
    * - ``doc_id``
      - Dokument-ID (str).
    * - ``mimetype``
-     - MIME-Typ (enum: ``text/html``).
+     - MIME-Typ des Antworttexts (str). Immer fest auf ``text/html``.
    * - ``content``
-     - Gecachter HTML-Text (str).
+     - Gecachter HTML-Text (str). Wenn ``hq`` angegeben ist, werden die übereinstimmenden Begriffe hervorgehoben.
    * - ``url``
-     - Dokument-URL (str). Falls vorhanden das Feld ``url_link``, andernfalls die Roh-URL aus dem Index. Wird weggelassen, wenn keines von beidem vorhanden ist.
+     - Dokument-URL (str). Gibt den Wert des Felds ``url_link`` zurück, falls vorhanden, andernfalls den Wert des Felds ``url`` aus dem Index. Wird weggelassen, wenn keines von beidem vorhanden ist.
    * - ``created``
-     - Erstellungszeitstempel des Dokuments im Index (str). Wird weggelassen, wenn nicht vorhanden.
+     - Erstellungszeitstempel des Dokuments (str, ISO 8601-Format, z. B. ``2024-05-31T12:00:00.000Z``). Wird weggelassen, wenn der Index keinen Wert enthält.
    * - ``charset``
      - Zeichensatz, der aus dem Mimetype des Dokuments ermittelt wurde (str). Wenn nicht vorhanden, ist ``UTF-8`` der Standardwert.
 
@@ -89,7 +91,7 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
    * - 401 Unauthorized
      - Wenn Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer).
    * - 404 Not Found
-     - Wenn die Ressource nicht gefunden wurde.
+     - Das Dokument existiert nicht, hat keinen gecachten Text oder ist mit den Berechtigungen des Aufrufers nicht zugänglich.
    * - 405 Method Not Allowed
      - Wenn die HTTP-Methode nicht erlaubt ist.
    * - 500 Internal Server Error
