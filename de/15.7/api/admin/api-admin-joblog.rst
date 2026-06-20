@@ -5,8 +5,8 @@ JobLog API
 Übersicht
 =========
 
-Die JobLog API dient zum Abrufen von Job-Ausführungsprotokollen in |Fess|.
-Sie können die Ausführungshistorie von geplanten Jobs und Crawl-Jobs sowie Fehlerinformationen einsehen.
+Die JobLog API dient zum Anzeigen und Verwalten von Job-Ausführungsprotokollen in |Fess|.
+Sie können die Ausführungshistorie von geplanten Jobs und Crawl-Jobs, Ausführungsergebnisse und Fehlerinformationen abrufen und löschen.
 
 Basis-URL
 =========
@@ -59,11 +59,15 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite
+     - Anzahl der Einträge pro Seite (Standard: 20)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer
+     - Seitennummer (1-basiert, Standard: 1)
+   * - ``id``
+     - String
+     - Nein
+     - Filter nach Job-Protokoll-ID (vollständige Übereinstimmung)
 
 Response
 --------
@@ -82,8 +86,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
-            "startTime": 1738116000000,
-            "endTime": 1738118723000
+            "startTime": "1738116000000",
+            "endTime": "1738118723000"
           },
           {
             "id": "joblog_id_2",
@@ -93,8 +97,8 @@ Response
             "scriptType": "groovy",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
-            "startTime": 1738029600000,
-            "endTime": 1738030215000
+            "startTime": "1738029600000",
+            "endTime": "1738030215000"
           }
         ],
         "total": 100
@@ -115,19 +119,25 @@ Response-Felder
    * - ``jobName``
      - Job-Name
    * - ``jobStatus``
-     - Job-Status
+     - Job-Status (``ok``: Erfolg, ``fail``: Fehlgeschlagen, ``running``: Wird ausgeführt)
    * - ``target``
-     - Ausführungsziel
+     - Ausführungsziel (Zielname des Schedulers; Standardwert ist ``all``)
    * - ``scriptType``
-     - Skript-Typ
+     - Skript-Typ (z. B. ``groovy``)
    * - ``scriptData``
      - Ausführungsskript
    * - ``scriptResult``
      - Ausführungsergebnis
    * - ``startTime``
-     - Startzeit (Epoch-Millisekunden)
+     - Startzeit (Epoch-Millisekunden; wird als Zeichenkette zurückgegeben)
    * - ``endTime``
-     - Endzeit (Epoch-Millisekunden)
+     - Endzeit (Epoch-Millisekunden; wird als Zeichenkette zurückgegeben). Bei laufenden Jobs nicht vorhanden.
+
+.. note::
+
+   Jedes Log-Objekt in der Antwort enthält außerdem ein internes ``crudMode``-Feld
+   (eine Ganzzahl, die den CRUD-Operationsmodus angibt; bei Leseoperationen immer ``0``).
+   Clients können dieses Feld gefahrlos ignorieren.
 
 Job-Protokoll abrufen
 =====================
@@ -155,11 +165,14 @@ Response
           "scriptType": "groovy",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": 1738116000000,
-          "endTime": 1738118723000
+          "startTime": "1738116000000",
+          "endTime": "1738118723000"
         }
       }
     }
+
+Wenn das Job-Protokoll mit der angegebenen ID nicht vorhanden ist, wird eine Fehler-Response
+zurückgegeben, bei der ``status`` einen von 0 verschiedenen Wert enthält.
 
 Job-Protokoll löschen
 =====================
@@ -182,6 +195,9 @@ Response
       }
     }
 
+Wenn das Job-Protokoll mit der angegebenen ID nicht vorhanden ist, wird eine Fehler-Response
+zurückgegeben, bei der ``status`` einen von 0 verschiedenen Wert enthält.
+
 Verwendungsbeispiele
 ====================
 
@@ -190,11 +206,11 @@ Job-Protokolle auflisten
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Nur fehlgeschlagene Jobs extrahieren
-------------------------------------
+Nur fehlgeschlagene Jobs filtern
+---------------------------------
 
 .. code-block:: bash
 
