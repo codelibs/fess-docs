@@ -1,12 +1,12 @@
 ==========================
-API KeyMatch
+KeyMatch API
 ==========================
 
 Vue d'ensemble
 ==============
 
-L'API KeyMatch permet de gerer les correspondances de mots-cles (association entre mots-cles de recherche et resultats) dans |Fess|.
-Vous pouvez faire apparaitre des documents specifiques en haut des resultats pour certains mots-cles.
+L'API KeyMatch permet de gérer les correspondances de mots-clés (association entre mots-clés de recherche et résultats) dans |Fess|.
+Vous pouvez faire apparaître des documents spécifiques en haut des résultats pour certains mots-clés.
 
 URL de base
 ===========
@@ -22,7 +22,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -33,45 +33,53 @@ Liste des endpoints
      - Obtention d'un KeyMatch
    * - POST
      - /setting
-     - Creation d'un KeyMatch
+     - Création d'un KeyMatch
    * - PUT
      - /setting
-     - Mise a jour d'un KeyMatch
+     - Mise à jour d'un KeyMatch
    * - DELETE
      - /setting/{id}
      - Suppression d'un KeyMatch
 
 Obtention de la liste des KeyMatch
-==================================
+===================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/keymatch/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'éléments par page (par défaut : 25, valeur du paramètre ``paging.page.size``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numéro de page (commence à 1, par défaut : 1)
+   * - ``term``
+     - String
+     - Non
+     - Filtrage par mot-clé de recherche (correspondance avec caractères génériques)
+   * - ``query``
+     - String
+     - Non
+     - Filtrage par requête de correspondance (correspondance avec caractères génériques)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -85,24 +93,31 @@ Reponse
             "term": "download",
             "query": "title:download OR content:download",
             "maxSize": 10,
-            "boost": 10.0
+            "boost": 10.0,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
 
+.. note::
+
+   ``total`` contient le nombre total d'éléments correspondant aux critères de filtrage (et non le nombre d'éléments de la page courante).
+   En plus des champs ci-dessus, chaque objet de configuration peut inclure ``virtualHost``,
+   ``createdBy``, ``createdTime``, ``updatedBy`` et ``updatedTime`` lorsque des valeurs sont définies.
+
 Obtention d'un KeyMatch
 =======================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/keymatch/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -115,15 +130,26 @@ Reponse
           "term": "download",
           "query": "title:download OR content:download",
           "maxSize": 10,
-          "boost": 10.0
+          "boost": 10.0,
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
 
-Creation d'un KeyMatch
+.. note::
+
+   ``versionNo`` est le numéro de version utilisé pour le verrouillage optimiste. Lors de la mise à jour d'un KeyMatch,
+   spécifiez la valeur de ``versionNo`` obtenue lors de la récupération dans le corps de la requête.
+   Si l'identifiant spécifié n'existe pas, une erreur est renvoyée.
+
+Création d'un KeyMatch
 ======================
 
-Requete
+Requête
 -------
 
 ::
@@ -131,7 +157,7 @@ Requete
     POST /api/admin/keymatch/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -148,25 +174,40 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 15 50
 
    * - Champ
+     - Type
      - Requis
      - Description
    * - ``term``
+     - String
      - Oui
-     - Mot-cle de recherche
+     - Mot-clé de recherche (100 caractères maximum)
    * - ``query``
+     - String
      - Oui
-     - Requete de correspondance
+     - Requête de correspondance (longueur maximale définie par le paramètre ``form.admin.max.input.size``)
    * - ``maxSize``
+     - Integer
      - Oui
-     - Nombre maximum d'affichages (valeur initiale du formulaire : 10)
+     - Nombre maximum d'affichages (entier supérieur ou égal à 0 ; valeur initiale dans l'interface d'administration : 10)
    * - ``boost``
+     - Float
      - Oui
-     - Valeur de boost (valeur initiale du formulaire : 100.0)
+     - Valeur de boost (valeur initiale dans l'interface d'administration : 100.0)
+   * - ``virtualHost``
+     - String
+     - Non
+     - Nom d'hôte virtuel (1000 caractères maximum ; à spécifier pour basculer les KeyMatch par hôte virtuel)
 
-Reponse
+.. note::
+
+   ``maxSize`` et ``boost`` sont obligatoires via l'API. Les valeurs initiales affichées dans le formulaire de l'interface d'administration
+   ne s'appliquent pas via l'API. En cas d'omission, une erreur de validation est renvoyée.
+   Par ailleurs, ``createdBy`` et ``createdTime`` sont écrasés côté serveur même s'ils sont spécifiés dans la requête.
+
+Réponse
 -------
 
 .. code-block:: json
@@ -179,10 +220,10 @@ Reponse
       }
     }
 
-Mise a jour d'un KeyMatch
-=========================
+Mise à jour d'un KeyMatch
+==========================
 
-Requete
+Requête
 -------
 
 ::
@@ -190,7 +231,7 @@ Requete
     PUT /api/admin/keymatch/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -204,7 +245,30 @@ Corps de la requete
       "versionNo": 1
     }
 
-Reponse
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
+
+En plus des champs de création (``term``, ``query``, ``maxSize``, ``boost``, ``virtualHost``),
+les champs suivants doivent être spécifiés.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Champ
+     - Type
+     - Requis
+     - Description
+   * - ``id``
+     - String
+     - Oui
+     - Identifiant du KeyMatch à mettre à jour (1000 caractères maximum)
+   * - ``versionNo``
+     - Integer
+     - Oui
+     - Numéro de version pour le verrouillage optimiste ; spécifier la valeur obtenue lors de la récupération
+
+Réponse
 -------
 
 .. code-block:: json
@@ -218,16 +282,16 @@ Reponse
     }
 
 Suppression d'un KeyMatch
-=========================
+==========================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/keymatch/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -241,7 +305,7 @@ Reponse
 Exemples d'utilisation
 ======================
 
-Creation d'un KeyMatch pour une page produit
+Création d'un KeyMatch pour une page produit
 --------------------------------------------
 
 .. code-block:: bash
@@ -257,7 +321,7 @@ Creation d'un KeyMatch pour une page produit
          }'
 
 KeyMatch pour les pages de support
-----------------------------------
+-----------------------------------
 
 .. code-block:: bash
 
@@ -271,7 +335,7 @@ KeyMatch pour les pages de support
            "boost": 20.0
          }'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
