@@ -159,7 +159,8 @@ Endpoint            ``/api/v2/auth/login``
 
 Logs in with a username and password.
 On successful login, the servlet session ID is rotated, a new CSRF token is issued, and the rate-limit buckets for the caller's IP and the target user are cleared.
-If the rate limit is exceeded, a ``Retry-After`` header (in seconds) is included.
+
+Rate limiting is applied along two axes: per caller IP and per user. When the per-IP limit is exceeded, ``429 Too Many Requests`` is returned together with a ``Retry-After`` header (in seconds). When the per-user limit is exceeded, the same ``401 Unauthorized`` as for invalid credentials is returned (without a ``Retry-After`` header), so that the state of the counter cannot be inferred from outside.
 
 Even if a session is already authenticated, no short-circuit occurs; the provided credentials are always validated.
 
@@ -174,10 +175,18 @@ Additionally, protocol-relative paths (starting with ``//``) and paths containin
 
    Unlike other state-changing endpoints, this endpoint consolidates oversized request bodies and unsupported ``Content-Type`` into ``400 invalid_request`` (other endpoints return ``413`` / ``415``).
 
+.. note::
+
+   The rate limits for login and password change can be configured with the following properties (defaults in parentheses):
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximum number of attempts per minute per IP address. Applies only to ``/auth/login``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximum number of attempts per minute per user. Applies to both ``/auth/login`` and ``/auth/password``.
+   - ``theme.api.login.lockout.seconds`` (``900``): Lockout duration (in seconds) after the limit is exceeded. Returned as the value of the ``Retry-After`` header.
+
 Request Body (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type is ``application/json``.
+Content-Type is ``application/json`` (charset UTF-8). The maximum request body size is 4 KiB.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ Error Response
      - The CSRF token is missing or expired.
    * - 405 Method Not Allowed
      - A method other than POST was specified. The ``Allow: POST`` header is included.
+   * - 500 Internal Server Error
+     - An internal server error occurred.
 
 Password Change
 ===============
@@ -353,10 +364,12 @@ Since the session is destroyed server-side, ``csrf_token`` is not returned. The 
 
 The ``X-Fess-CSRF-Token`` header is required.
 
+A per-user rate limit is applied to this endpoint; when the limit is exceeded, ``429 Too Many Requests`` is returned together with a ``Retry-After`` header (the settings are shared with login).
+
 Request Body (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type is ``application/json``.
+Content-Type is ``application/json`` (charset UTF-8). The maximum request body size is 4 KiB.
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ Content-Type is ``application/json``.
    * - ``new_password``
      - string
      - Yes
-     - New password. Must satisfy the configured password policy. ``minLength`` is 1.
+     - New password. Must satisfy the configured password policy (minimum 8 characters by default). ``minLength`` is 1.
    * - ``confirm_password``
      - string
      - Yes

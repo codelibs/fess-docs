@@ -159,7 +159,8 @@ HTTP 方法            POST
 
 使用用户名和密码登录。
 登录成功时，Servlet 会话 ID 将轮换，颁发新的 CSRF 令牌，并清除调用方 IP 和目标用户的速率限制桶。
-超过速率限制时，响应中会附带 ``Retry-After`` 头（单位秒）。
+
+速率限制分为两个维度：调用方 IP 单位和用户单位。超过 IP 单位限制时，返回 ``429 Too Many Requests`` 并附带 ``Retry-After`` 头（单位秒）。超过用户单位限制时，为防止外部推测计数器状态，返回与凭据不正确相同的 ``401 Unauthorized``\ （不附带 ``Retry-After`` 头）。
 
 即使已有认证会话，也不会短路，传入的凭据始终会被验证。
 
@@ -174,10 +175,18 @@ HTTP 方法            POST
 
    与其他状态变更端点不同，本端点会将过大的请求体或不支持的 ``Content-Type`` 统一归为 ``400 invalid_request``\ （其他端点会返回 ``413`` / ``415``\ ）。
 
+.. note::
+
+   登录和密码修改的速率限制可通过以下属性进行配置（括号内为默认值）：
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): 每个 IP 地址每分钟的最大尝试次数。仅适用于 ``/auth/login``\ 。
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 每个用户每分钟的最大尝试次数。适用于 ``/auth/login`` 和 ``/auth/password``\ 。
+   - ``theme.api.login.lockout.seconds`` (``900``): 超过限制后的锁定时长（秒）。作为 ``Retry-After`` 头的值返回。
+
 请求体 (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type 为 ``application/json``\ 。
+Content-Type 为 ``application/json``\ （字符集 UTF-8）。请求体大小上限为 4 KiB。
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ HTTP 方法            POST
      - CSRF 令牌缺失或过期时。
    * - 405 Method Not Allowed
      - 指定了 POST 以外的方法时。响应中附带 ``Allow: POST`` 头。
+   * - 500 Internal Server Error
+     - 发生服务器内部错误时。
 
 修改密码
 ========
@@ -353,10 +364,12 @@ HTTP 方法            POST
 
 需要携带 ``X-Fess-CSRF-Token`` 头。
 
+本端点应用用户单位速率限制；超过限制时，返回 ``429 Too Many Requests`` 并附带 ``Retry-After`` 头（设置与登录共用）。
+
 请求体 (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type 为 ``application/json``\ 。
+Content-Type 为 ``application/json``\ （字符集 UTF-8）。请求体大小上限为 4 KiB。
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ Content-Type 为 ``application/json``\ 。
    * - ``new_password``
      - string
      - 是
-     - 新密码。须满足已配置的密码策略。\ ``minLength`` 为 1。
+     - 新密码。须满足已配置的密码策略（默认最少 8 个字符）。\ ``minLength`` 为 1。
    * - ``confirm_password``
      - string
      - 是

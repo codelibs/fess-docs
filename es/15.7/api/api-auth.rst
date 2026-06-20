@@ -159,7 +159,8 @@ Endpoint            ``/api/v2/auth/login``
 
 Inicia sesión con nombre de usuario y contraseña.
 Cuando el inicio de sesión es exitoso, se rota el ID de sesión del servlet, se emite un nuevo token CSRF y se borran los cubos de límite de velocidad para la IP del cliente y el usuario objetivo.
-Cuando se supera el límite de velocidad, se añade la cabecera ``Retry-After`` (en segundos).
+
+El límite de velocidad se aplica en dos ejes: por IP del cliente y por usuario. Cuando se supera el límite por IP, se devuelve ``429 Too Many Requests`` junto con una cabecera ``Retry-After`` (en segundos). Cuando se supera el límite por usuario, se devuelve el mismo ``401 Unauthorized`` que para credenciales inválidas (sin cabecera ``Retry-After``), de modo que el estado del contador no pueda inferirse desde el exterior.
 
 Incluso con una sesión ya autenticada, no se realiza un cortocircuito; las credenciales proporcionadas se verifican siempre.
 
@@ -174,10 +175,18 @@ Además, las rutas relativas al protocolo (que comienzan con ``//``) y las que c
 
    A diferencia de otros endpoints que modifican el estado, este endpoint agrupa los cuerpos de solicitud excesivos y los ``Content-Type`` no admitidos como ``400 invalid_request`` (otros endpoints devuelven ``413`` / ``415``).
 
+.. note::
+
+   Los límites de velocidad para el inicio de sesión y el cambio de contraseña pueden configurarse con las siguientes propiedades (valor predeterminado entre paréntesis):
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Número máximo de intentos por minuto por dirección IP. Se aplica únicamente a ``/auth/login``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Número máximo de intentos por minuto por usuario. Se aplica tanto a ``/auth/login`` como a ``/auth/password``.
+   - ``theme.api.login.lockout.seconds`` (``900``): Duración del bloqueo (en segundos) una vez superado el límite. Se devuelve como valor de la cabecera ``Retry-After``.
+
 Cuerpo de la solicitud (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-El Content-Type es ``application/json``.
+El Content-Type es ``application/json`` (charset ``UTF-8``). El tamaño máximo del cuerpo de la solicitud es de ``4 KiB``.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ Respuesta de error
      - Cuando el token CSRF está ausente o ha expirado.
    * - 405 Method Not Allowed
      - Cuando se especifica un método distinto a POST. Se añade la cabecera ``Allow: POST``.
+   * - 500 Internal Server Error
+     - Cuando se produce un error interno del servidor.
 
 Cambio de contraseña
 ====================
@@ -353,10 +364,12 @@ Dado que la sesión se destruye en el servidor, no se devuelve ``csrf_token``. L
 
 Se requiere la cabecera ``X-Fess-CSRF-Token``.
 
+Este endpoint tiene un límite de velocidad por usuario; cuando se supera, se devuelve ``429 Too Many Requests`` junto con una cabecera ``Retry-After`` (la configuración es compartida con el inicio de sesión).
+
 Cuerpo de la solicitud (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-El Content-Type es ``application/json``.
+El Content-Type es ``application/json`` (charset ``UTF-8``). El tamaño máximo del cuerpo de la solicitud es de ``4 KiB``.
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ El Content-Type es ``application/json``.
    * - ``new_password``
      - string
      - Sí
-     - Nueva contraseña. Debe cumplir con la política de contraseñas configurada. ``minLength`` es 1.
+     - Nueva contraseña. Debe cumplir con la política de contraseñas configurada (mínimo 8 caracteres de forma predeterminada). ``minLength`` es 1.
    * - ``confirm_password``
      - string
      - Sí

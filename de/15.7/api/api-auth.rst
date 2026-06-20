@@ -159,7 +159,8 @@ Endpunkt             ``/api/v2/auth/login``
 
 Meldet den Benutzer mit Benutzername und Passwort an.
 Bei erfolgreicher Anmeldung wird die Servlet-Sitzungs-ID rotiert, ein neues CSRF-Token ausgestellt und die Rate-Limit-Buckets der aufrufenden IP und des Zielbenutzers geleert.
-Bei Überschreitung des Rate-Limits wird ein ``Retry-After``-Header (in Sekunden) beigefügt.
+
+Das Rate-Limiting erfolgt nach zwei Dimensionen: pro aufrufender IP und pro Benutzer. Bei Überschreitung des IP-seitigen Limits wird ``429 Too Many Requests`` zusammen mit einem ``Retry-After``-Header (in Sekunden) zurückgegeben. Bei Überschreitung des benutzerseitigen Limits wird – um den Zählerzustand von außen nicht erkennbar zu machen – dieselbe ``401 Unauthorized``-Antwort wie bei ungültigen Anmeldedaten zurückgegeben (ohne ``Retry-After``-Header).
 
 Auch bei bereits authentifizierten Sitzungen wird kein Kurzschluss durchgeführt; die übermittelten Anmeldedaten werden stets überprüft.
 
@@ -174,10 +175,18 @@ Außerdem werden protokollrelative Pfade (führendes ``//``) und Pfade mit ASCII
 
    Anders als bei anderen zustandsändernden Endpunkten fasst dieser Endpunkt übermäßig große Request-Bodys und nicht unterstützte ``Content-Type``-Werte zu ``400 invalid_request`` zusammen (andere Endpunkte geben ``413`` bzw. ``415`` zurück).
 
+.. note::
+
+   Die Rate-Limits für Anmeldung und Passwortänderung können mit folgenden Eigenschaften konfiguriert werden (Standardwerte in Klammern):
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximale Anzahl von Versuchen pro Minute und IP-Adresse. Gilt nur für ``/auth/login``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt sowohl für ``/auth/login`` als auch für ``/auth/password``.
+   - ``theme.api.login.lockout.seconds`` (``900``): Sperrungsdauer (in Sekunden) nach Überschreitung des Limits. Wird als Wert des ``Retry-After``-Headers zurückgegeben.
+
 Anfrage-Body (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type ist ``application/json``.
+Content-Type ist ``application/json`` (Zeichensatz UTF-8). Die maximale Größe des Anfrage-Bodys beträgt 4 KiB.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ Fehlerantwort
      - Wenn der CSRF-Token fehlt oder abgelaufen ist.
    * - 405 Method Not Allowed
      - Wenn eine andere Methode als POST angegeben wurde. Es wird ein ``Allow: POST``-Header beigefügt.
+   * - 500 Internal Server Error
+     - Wenn ein interner Serverfehler auftritt.
 
 Passwort ändern
 ===============
@@ -353,10 +364,12 @@ Da die Sitzung serverseitig zerstört wird, wird kein ``csrf_token`` zurückgege
 
 Der ``X-Fess-CSRF-Token``-Header ist erforderlich.
 
+Für diesen Endpunkt gilt ein benutzerseitiges Rate-Limit; bei Überschreitung wird ``429 Too Many Requests`` zusammen mit einem ``Retry-After``-Header zurückgegeben (die Einstellungen sind gemeinsam mit der Anmeldung).
+
 Anfrage-Body (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type ist ``application/json``.
+Content-Type ist ``application/json`` (Zeichensatz UTF-8). Die maximale Größe des Anfrage-Bodys beträgt 4 KiB.
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ Content-Type ist ``application/json``.
    * - ``new_password``
      - string
      - Ja
-     - Neues Passwort. Muss die konfigurierte Passwortrichtlinie erfüllen. ``minLength`` ist 1.
+     - Neues Passwort. Muss die konfigurierte Passwortrichtlinie erfüllen (standardmäßig mindestens 8 Zeichen). ``minLength`` ist 1.
    * - ``confirm_password``
      - string
      - Ja

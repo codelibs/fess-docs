@@ -159,7 +159,8 @@ Point de terminaison  ``/api/v2/auth/login``
 
 Se connecte avec un nom d'utilisateur et un mot de passe.
 En cas de succès, l'identifiant de session du servlet est renouvelé, un nouveau jeton CSRF est émis, et les buckets de limite de débit de l'IP appelante et de l'utilisateur cible sont réinitialisés.
-En cas de dépassement de la limite de débit, un en-tête ``Retry-After`` (en secondes) est ajouté.
+
+La limitation de débit est appliquée selon deux axes : par IP appelante et par utilisateur. Lorsque la limite par IP est dépassée, ``429 Too Many Requests`` est retourné accompagné d'un en-tête ``Retry-After`` (en secondes). Lorsque la limite par utilisateur est dépassée, le même ``401 Unauthorized`` que pour des informations d'identification invalides est retourné (sans en-tête ``Retry-After``), afin que l'état du compteur ne puisse pas être déduit de l'extérieur.
 
 Même pour une session déjà authentifiée, aucun court-circuit n'est appliqué : les informations d'authentification transmises sont toujours vérifiées.
 
@@ -174,10 +175,18 @@ De plus, les chemins relatifs aux protocoles (commençant par ``//``) et les che
 
    Contrairement aux autres points de terminaison de modification d'état, ce point de terminaison regroupe les corps de requête trop grands et les ``Content-Type`` non pris en charge dans ``400 invalid_request`` (les autres points de terminaison retournent ``413`` / ``415``).
 
+.. note::
+
+   Les limites de débit pour la connexion et le changement de mot de passe peuvent être configurées avec les propriétés suivantes (valeurs par défaut entre parenthèses) :
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : Nombre maximal de tentatives par minute par adresse IP. S'applique uniquement à ``/auth/login``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à la fois à ``/auth/login`` et à ``/auth/password``.
+   - ``theme.api.login.lockout.seconds`` (``900``) : Durée de verrouillage (en secondes) après dépassement de la limite. Retournée comme valeur de l'en-tête ``Retry-After``.
+
 Corps de la requête (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Le Content-Type est ``application/json``.
+Le Content-Type est ``application/json`` (charset UTF-8). La taille maximale du corps de la requête est de 4 KiB.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ Réponse d'erreur
      - Jeton CSRF manquant ou expiré.
    * - 405 Method Not Allowed
      - Une méthode autre que POST a été spécifiée. Un en-tête ``Allow: POST`` est ajouté.
+   * - 500 Internal Server Error
+     - Une erreur interne s'est produite sur le serveur.
 
 Changement de mot de passe
 ===========================
@@ -353,10 +364,12 @@ Comme la session est détruite côté serveur, ``csrf_token`` n'est pas retourn�
 
 L'en-tête ``X-Fess-CSRF-Token`` est requis.
 
+Une limite de débit par utilisateur est appliquée à ce point de terminaison ; lorsque la limite est dépassée, ``429 Too Many Requests`` est retourné accompagné d'un en-tête ``Retry-After`` (les paramètres sont partagés avec la connexion).
+
 Corps de la requête (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Le Content-Type est ``application/json``.
+Le Content-Type est ``application/json`` (charset UTF-8). La taille maximale du corps de la requête est de 4 KiB.
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ Le Content-Type est ``application/json``.
    * - ``new_password``
      - string
      - Oui
-     - Nouveau mot de passe. Doit satisfaire la politique de mot de passe configurée. ``minLength`` : 1.
+     - Nouveau mot de passe. Doit satisfaire la politique de mot de passe configurée (minimum 8 caractères par défaut). ``minLength`` : 1.
    * - ``confirm_password``
      - string
      - Oui

@@ -159,7 +159,8 @@ HTTP 메서드          POST
 
 사용자 이름과 비밀번호로 로그인합니다.
 로그인 성공 시에는 서블릿의 세션 ID 가 교체되고, 새 CSRF 토큰이 발급되며, 호출 원 IP 와 대상 사용자의 속도 제한 버킷이 초기화됩니다.
-속도 제한을 초과한 경우 ``Retry-After`` 헤더 (초) 가 부여됩니다.
+
+속도 제한은 호출 원 IP 단위와 사용자 단위의 2계통으로 적용됩니다. IP 단위의 상한을 초과한 경우 ``429 Too Many Requests`` 를 반환하고 ``Retry-After`` 헤더 (초) 가 부여됩니다. 사용자 단위의 상한을 초과한 경우 카운터 상태가 외부에서 추측되지 않도록, 자격증명이 올바르지 않은 경우와 동일한 ``401 Unauthorized`` 가 ( ``Retry-After`` 헤더 없이) 반환됩니다.
 
 이미 인증된 세션에서도 단락 없이, 전달된 자격증명은 항상 검증됩니다.
 
@@ -174,10 +175,18 @@ HTTP 메서드          POST
 
    다른 상태 변경 엔드포인트와 달리, 이 엔드포인트는 과도한 요청 본문이나 비지원 ``Content-Type`` 을 ``400 invalid_request`` 로 통합합니다 (다른 엔드포인트는 ``413`` / ``415`` 를 반환합니다).
 
+.. note::
+
+   로그인 및 비밀번호 변경의 속도 제한은 다음 프로퍼티로 설정할 수 있습니다 (괄호 안은 기본값).
+
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): IP 주소 단위의 분당 최대 시도 횟수. ``/auth/login`` 에만 적용됩니다.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 사용자 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 ``/auth/password`` 양쪽에 적용됩니다.
+   - ``theme.api.login.lockout.seconds`` (``900``): 상한 초과 후의 잠금 시간 (초). ``Retry-After`` 헤더의 값으로 반환됩니다.
+
 요청 본문 (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type 은 ``application/json`` 입니다.
+Content-Type 은 ``application/json`` (문자 인코딩 UTF-8) 입니다. 요청 본문의 최대 크기는 4 KiB 입니다.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{2cm}|p{7cm}|
 .. list-table:: LoginRequest
@@ -334,6 +343,8 @@ HTTP 메서드          POST
      - CSRF 토큰이 누락·만료된 경우.
    * - 405 Method Not Allowed
      - POST 이외의 메서드가 지정된 경우. ``Allow: POST`` 헤더가 부여됩니다.
+   * - 500 Internal Server Error
+     - 서버 내부 오류가 발생한 경우.
 
 비밀번호 변경
 =============
@@ -353,10 +364,12 @@ HTTP 메서드          POST
 
 ``X-Fess-CSRF-Token`` 헤더가 필요합니다.
 
+이 엔드포인트에는 사용자 단위의 속도 제한이 적용되며, 상한을 초과한 경우 ``429 Too Many Requests`` 와 함께 ``Retry-After`` 헤더가 반환됩니다 (설정은 로그인과 공유됩니다).
+
 요청 본문 (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Content-Type 은 ``application/json`` 입니다.
+Content-Type 은 ``application/json`` (문자 인코딩 UTF-8) 입니다. 요청 본문의 최대 크기는 4 KiB 입니다.
 
 .. tabularcolumns:: |p{3.5cm}|p{2cm}|p{2cm}|p{6.5cm}|
 .. list-table:: PasswordChangeRequest
@@ -374,7 +387,7 @@ Content-Type 은 ``application/json`` 입니다.
    * - ``new_password``
      - string
      - 예
-     - 새 비밀번호. 설정된 비밀번호 정책을 충족해야 합니다. ``minLength`` 는 1입니다.
+     - 새 비밀번호. 설정된 비밀번호 정책 (기본값은 최소 8자) 을 충족해야 합니다. ``minLength`` 는 1입니다.
    * - ``confirm_password``
      - string
      - 예
