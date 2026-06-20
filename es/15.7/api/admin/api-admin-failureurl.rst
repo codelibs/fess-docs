@@ -62,27 +62,27 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina
+     - Numero de elementos por pagina (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina
+     - Numero de pagina (comienza en 1, predeterminado: 1)
    * - ``url``
      - String
      - No
-     - Filtro por URL
+     - Filtro por URL (se admiten comodines ``*`` ``?``)
    * - ``errorCountMin``
      - Integer
      - No
-     - Filtro de numero minimo de errores
+     - Limite inferior del numero de errores (mayor o igual al valor especificado)
    * - ``errorCountMax``
      - Integer
      - No
-     - Filtro de numero maximo de errores
+     - Limite superior del numero de errores (menor o igual al valor especificado)
    * - ``errorName``
      - String
      - No
-     - Filtro por nombre de error
+     - Filtro por nombre de error (coincidencia con comodin sobre el nombre de clase completamente calificado almacenado; se admiten ``*`` ``?``)
 
 Respuesta
 ---------
@@ -97,20 +97,20 @@ Respuesta
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
             "threadName": "Crawler-1",
-            "errorName": "ConnectException",
+            "errorName": "java.net.ConnectException",
             "errorLog": "Connection refused: connect",
-            "errorCount": 3,
-            "lastAccessTime": 1738144800000,
+            "errorCount": "3",
+            "lastAccessTime": "1738144800000",
             "configId": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
             "threadName": "Crawler-2",
-            "errorName": "HttpStatusException",
-            "errorLog": "404 Not Found",
-            "errorCount": 1,
-            "lastAccessTime": 1738143000000,
+            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
+            "errorLog": "Not found: https://example.com/not-found",
+            "errorCount": "1",
+            "lastAccessTime": "1738143000000",
             "configId": "webConfig_id_1"
           }
         ],
@@ -134,15 +134,19 @@ Campos de Respuesta
    * - ``threadName``
      - Nombre del hilo
    * - ``errorName``
-     - Nombre del error
+     - Nombre del error (nombre de clase completamente calificado de la excepcion ocurrida; por ejemplo, ``java.net.ConnectException``)
    * - ``errorLog``
-     - Registro de error
+     - Registro de error (mensaje de la excepcion o traza de pila)
    * - ``errorCount``
-     - Numero de veces que ocurrio el error
+     - Numero de ocurrencias del error (valor numerico representado como cadena)
    * - ``lastAccessTime``
-     - Hora del ultimo acceso (milisegundos epoch)
+     - Hora del ultimo acceso (milisegundos epoch representados como cadena)
    * - ``configId``
      - ID de configuracion de rastreo
+
+.. note::
+
+   Todos los campos de respuesta se devuelven como cadenas (JSON string). ``errorCount`` es un valor numerico representado como cadena y ``lastAccessTime`` son milisegundos epoch representados como cadena.
 
 Obtener URL Fallida
 ===================
@@ -166,10 +170,10 @@ Respuesta
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
           "threadName": "Crawler-1",
-          "errorName": "ConnectException",
+          "errorName": "java.net.ConnectException",
           "errorLog": "Connection refused: connect",
-          "errorCount": 3,
-          "lastAccessTime": 1738144800000,
+          "errorCount": "3",
+          "lastAccessTime": "1738144800000",
           "configId": "webConfig_id_1"
         }
       }
@@ -222,24 +226,28 @@ Respuesta
 Tipos de Error
 ==============
 
+``errorName`` almacena el nombre de clase completamente calificado de la excepcion ocurrida durante el rastreo, tal como fue capturado. No es una enumeracion fija; puede aparecer cualquier nombre de clase dependiendo de la excepcion que se haya producido. A continuacion se muestran ejemplos representativos.
+
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 50 50
 
-   * - Nombre de Error
+   * - Nombre de Error (ejemplo)
      - Descripcion
-   * - ``ConnectException``
-     - Error de conexion
-   * - ``HttpStatusException``
-     - Error de estado HTTP (404, 500, etc.)
-   * - ``SocketTimeoutException``
-     - Error de tiempo de espera agotado
-   * - ``UnknownHostException``
-     - Error de resolucion de nombre de host
-   * - ``SSLException``
-     - Error de certificado SSL
-   * - ``IOException``
+   * - ``java.net.ConnectException``
+     - Conexion rechazada (no se puede conectar al servidor)
+   * - ``java.net.UnknownHostException``
+     - No se pudo resolver el nombre de host (error de DNS)
+   * - ``java.net.SocketTimeoutException``
+     - Tiempo de espera de conexion o lectura agotado
+   * - ``javax.net.ssl.SSLException``
+     - Error en el protocolo de enlace SSL/TLS o en el certificado
+   * - ``java.io.IOException``
      - Error de entrada/salida
+   * - ``org.codelibs.fess.exception.ContentNotFoundException``
+     - URL que devolvio un codigo de estado HTTP configurado en ``crawler.failure.url.status.codes`` (predeterminado: 403, 404, 410)
+   * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
+     - El contenido supero la longitud maxima
 
 Ejemplos de Uso
 ===============
@@ -249,7 +257,7 @@ Obtener Lista de URLs Fallidas
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filtrar por Numero de Errores
@@ -266,7 +274,8 @@ Filtrar por Nombre de Error
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=ConnectException" \
+    # errorName almacena el nombre de clase completamente calificado, por lo que debe especificarse con un comodin
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Obtener URL Fallida

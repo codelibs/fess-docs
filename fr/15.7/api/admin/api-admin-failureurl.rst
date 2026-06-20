@@ -62,27 +62,27 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page
+     - Nombre d'elements par page (defaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page
+     - Numero de page (commence a 1, defaut : 1)
    * - ``url``
      - String
      - Non
-     - Filtre par URL
+     - Filtre par URL (les caracteres generiques ``*`` ``?`` sont supportes)
    * - ``errorCountMin``
      - Integer
      - Non
-     - Filtre par nombre minimum d'erreurs
+     - Borne inferieure du nombre d'erreurs (superieur ou egal a la valeur specifiee)
    * - ``errorCountMax``
      - Integer
      - Non
-     - Filtre par nombre maximum d'erreurs
+     - Borne superieure du nombre d'erreurs (inferieur ou egal a la valeur specifiee)
    * - ``errorName``
      - String
      - Non
-     - Filtre par nom d'erreur
+     - Filtre par nom d'erreur (correspondance avec caracteres generiques sur le nom de classe complet stocke ; ``*`` ``?`` supportes)
 
 Reponse
 -------
@@ -97,20 +97,20 @@ Reponse
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
             "threadName": "Crawler-1",
-            "errorName": "ConnectException",
+            "errorName": "java.net.ConnectException",
             "errorLog": "Connection refused: connect",
-            "errorCount": 3,
-            "lastAccessTime": 1738144800000,
+            "errorCount": "3",
+            "lastAccessTime": "1738144800000",
             "configId": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
             "threadName": "Crawler-2",
-            "errorName": "HttpStatusException",
-            "errorLog": "404 Not Found",
-            "errorCount": 1,
-            "lastAccessTime": 1738143000000,
+            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
+            "errorLog": "Not found: https://example.com/not-found",
+            "errorCount": "1",
+            "lastAccessTime": "1738143000000",
             "configId": "webConfig_id_1"
           }
         ],
@@ -134,15 +134,19 @@ Champs de la reponse
    * - ``threadName``
      - Nom du thread
    * - ``errorName``
-     - Nom de l'erreur
+     - Nom de l'erreur (nom de classe complet de l'exception survenue ; ex. ``java.net.ConnectException``)
    * - ``errorLog``
-     - Journal d'erreur
+     - Journal d'erreur (message de l'exception ou trace de la pile)
    * - ``errorCount``
-     - Nombre d'occurrences de l'erreur
+     - Nombre d'occurrences de l'erreur (valeur numerique sous forme de chaine)
    * - ``lastAccessTime``
-     - Heure du dernier acces (millisecondes epoch)
+     - Heure du dernier acces (millisecondes epoch sous forme de chaine)
    * - ``configId``
      - ID de la configuration de crawl
+
+.. note::
+
+   Tous les champs de la reponse sont retournes sous forme de chaines (JSON string). ``errorCount`` est une valeur numerique representee sous forme de chaine, et ``lastAccessTime`` est le nombre de millisecondes epoch represente sous forme de chaine.
 
 Obtention d'une URL en echec
 ============================
@@ -166,10 +170,10 @@ Reponse
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
           "threadName": "Crawler-1",
-          "errorName": "ConnectException",
+          "errorName": "java.net.ConnectException",
           "errorLog": "Connection refused: connect",
-          "errorCount": 3,
-          "lastAccessTime": 1738144800000,
+          "errorCount": "3",
+          "lastAccessTime": "1738144800000",
           "configId": "webConfig_id_1"
         }
       }
@@ -222,24 +226,28 @@ Reponse
 Types d'erreurs
 ===============
 
+``errorName`` contient le nom de classe complet de l'exception survenue pendant le crawl, tel qu'il a ete capture. Il ne s'agit pas d'une enumeration fixe ; tout nom de classe peut apparaitre selon l'exception levee. Voici quelques exemples representatifs.
+
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 50 50
 
-   * - Nom de l'erreur
+   * - Nom de l'erreur (exemple)
      - Description
-   * - ``ConnectException``
-     - Erreur de connexion
-   * - ``HttpStatusException``
-     - Erreur de statut HTTP (404, 500, etc.)
-   * - ``SocketTimeoutException``
-     - Erreur de delai d'attente
-   * - ``UnknownHostException``
-     - Erreur de resolution du nom d'hote
-   * - ``SSLException``
-     - Erreur de certificat SSL
-   * - ``IOException``
+   * - ``java.net.ConnectException``
+     - Connexion refusee (impossible de se connecter au serveur)
+   * - ``java.net.UnknownHostException``
+     - Nom d'hote impossible a resoudre (erreur DNS)
+   * - ``java.net.SocketTimeoutException``
+     - Delai de connexion ou de lecture depasse
+   * - ``javax.net.ssl.SSLException``
+     - Erreur de negociation SSL/TLS ou de certificat
+   * - ``java.io.IOException``
      - Erreur d'entree/sortie
+   * - ``org.codelibs.fess.exception.ContentNotFoundException``
+     - URL ayant retourne un code de statut HTTP configure dans ``crawler.failure.url.status.codes`` (defaut : 403, 404, 410)
+   * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
+     - Le contenu a depasse la longueur maximale autorisee
 
 Exemples d'utilisation
 ======================
@@ -249,7 +257,7 @@ Obtention de la liste des URLs en echec
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filtrage par nombre d'erreurs
@@ -266,7 +274,8 @@ Filtrage par nom d'erreur
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=ConnectException" \
+    # errorName contient le nom de classe complet ; specifier avec un caractere generique
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Obtention d'une URL en echec

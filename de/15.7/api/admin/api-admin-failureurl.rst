@@ -62,27 +62,27 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite
+     - Anzahl der Einträge pro Seite (Standard: 20)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer
+     - Seitennummer (beginnt bei 1, Standard: 1)
    * - ``url``
      - String
      - Nein
-     - Filter nach URL
+     - URL-Filter (Wildcards ``*`` ``?`` werden unterstützt)
    * - ``errorCountMin``
      - Integer
      - Nein
-     - Filter nach Mindestanzahl der Fehler
+     - Untergrenze für die Fehleranzahl (größer als oder gleich dem angegebenen Wert)
    * - ``errorCountMax``
      - Integer
      - Nein
-     - Filter nach maximaler Anzahl der Fehler
+     - Obergrenze für die Fehleranzahl (kleiner als oder gleich dem angegebenen Wert)
    * - ``errorName``
      - String
      - Nein
-     - Filter nach Fehlername
+     - Fehlername-Filter (Wildcard-Abgleich mit dem gespeicherten vollständig qualifizierten Klassennamen; ``*`` ``?`` werden unterstützt)
 
 Response
 --------
@@ -97,20 +97,20 @@ Response
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
             "threadName": "Crawler-1",
-            "errorName": "ConnectException",
+            "errorName": "java.net.ConnectException",
             "errorLog": "Connection refused: connect",
-            "errorCount": 3,
-            "lastAccessTime": 1738144800000,
+            "errorCount": "3",
+            "lastAccessTime": "1738144800000",
             "configId": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
             "threadName": "Crawler-2",
-            "errorName": "HttpStatusException",
-            "errorLog": "404 Not Found",
-            "errorCount": 1,
-            "lastAccessTime": 1738143000000,
+            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
+            "errorLog": "Not found: https://example.com/not-found",
+            "errorCount": "1",
+            "lastAccessTime": "1738143000000",
             "configId": "webConfig_id_1"
           }
         ],
@@ -134,15 +134,19 @@ Response-Felder
    * - ``threadName``
      - Thread-Name
    * - ``errorName``
-     - Fehlername
+     - Fehlername (vollständig qualifizierter Klassenname der aufgetretenen Ausnahme; z. B. ``java.net.ConnectException``)
    * - ``errorLog``
-     - Fehlerprotokoll
+     - Fehlerprotokoll (Ausnahme-Meldung oder Stack-Trace)
    * - ``errorCount``
-     - Anzahl der aufgetretenen Fehler
+     - Anzahl der aufgetretenen Fehler (numerischer Wert als Zeichenkette)
    * - ``lastAccessTime``
-     - Letzte Zugriffszeit (Epoch-Millisekunden)
+     - Letzte Zugriffszeit (Epoch-Millisekunden als Zeichenkette)
    * - ``configId``
      - Crawl-Konfigurations-ID
+
+.. note::
+
+   Alle Antwortfelder werden als Zeichenketten (JSON string) zurückgegeben. ``errorCount`` ist ein numerischer Wert, der als Zeichenkette dargestellt wird, und ``lastAccessTime`` sind Epoch-Millisekunden, die als Zeichenkette dargestellt werden.
 
 Fehlgeschlagene URL abrufen
 ===========================
@@ -166,10 +170,10 @@ Response
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
           "threadName": "Crawler-1",
-          "errorName": "ConnectException",
+          "errorName": "java.net.ConnectException",
           "errorLog": "Connection refused: connect",
-          "errorCount": 3,
-          "lastAccessTime": 1738144800000,
+          "errorCount": "3",
+          "lastAccessTime": "1738144800000",
           "configId": "webConfig_id_1"
         }
       }
@@ -222,24 +226,28 @@ Response
 Fehlertypen
 ===========
 
+``errorName`` speichert den vollständig qualifizierten Klassennamen der Ausnahme, die während des Crawlings aufgetreten ist, genau so wie er erfasst wurde. Es handelt sich nicht um eine feste Aufzählung; je nach ausgelöster Ausnahme kann ein beliebiger Klassenname erscheinen. Im Folgenden sind repräsentative Beispiele aufgeführt.
+
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 50 50
 
-   * - Fehlername
+   * - Fehlername (Beispiel)
      - Beschreibung
-   * - ``ConnectException``
-     - Verbindungsfehler
-   * - ``HttpStatusException``
-     - HTTP-Statusfehler (404, 500 usw.)
-   * - ``SocketTimeoutException``
-     - Timeout-Fehler
-   * - ``UnknownHostException``
-     - Host-Auflösungsfehler
-   * - ``SSLException``
-     - SSL-Zertifikatsfehler
-   * - ``IOException``
+   * - ``java.net.ConnectException``
+     - Verbindung verweigert (keine Verbindung zum Server möglich)
+   * - ``java.net.UnknownHostException``
+     - Hostname konnte nicht aufgelöst werden (DNS-Fehler)
+   * - ``java.net.SocketTimeoutException``
+     - Verbindungs- oder Lese-Timeout
+   * - ``javax.net.ssl.SSLException``
+     - SSL/TLS-Handshake- oder Zertifikatsfehler
+   * - ``java.io.IOException``
      - Ein-/Ausgabefehler
+   * - ``org.codelibs.fess.exception.ContentNotFoundException``
+     - URL, die einen HTTP-Statuscode zurückgegeben hat, der in ``crawler.failure.url.status.codes`` konfiguriert ist (Standard: 403, 404, 410)
+   * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
+     - Inhalt hat die maximale Länge überschritten
 
 Verwendungsbeispiele
 ====================
@@ -249,7 +257,7 @@ Fehlgeschlagene URLs auflisten
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Nach Fehleranzahl filtern
@@ -266,7 +274,8 @@ Nach Fehlername filtern
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=ConnectException" \
+    # errorName speichert den vollständig qualifizierten Klassennamen, daher mit Wildcard angeben
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Fehlgeschlagene URL abrufen

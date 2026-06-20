@@ -62,27 +62,27 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page
+     - Number of items per page (default: 20)
    * - ``page``
      - Integer
      - No
-     - Page number
+     - Page number (starts at 1, default: 1)
    * - ``url``
      - String
      - No
-     - URL filter
+     - URL filter (wildcards ``*`` ``?`` supported)
    * - ``errorCountMin``
      - Integer
      - No
-     - Minimum error count filter
+     - Lower bound for the error count (greater than or equal to the specified value)
    * - ``errorCountMax``
      - Integer
      - No
-     - Maximum error count filter
+     - Upper bound for the error count (less than or equal to the specified value)
    * - ``errorName``
      - String
      - No
-     - Error name filter
+     - Error name filter (wildcard match against the stored fully-qualified class name; ``*`` ``?`` supported)
 
 Response
 --------
@@ -97,20 +97,20 @@ Response
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
             "threadName": "Crawler-1",
-            "errorName": "ConnectException",
+            "errorName": "java.net.ConnectException",
             "errorLog": "Connection refused: connect",
-            "errorCount": 3,
-            "lastAccessTime": 1738144800000,
+            "errorCount": "3",
+            "lastAccessTime": "1738144800000",
             "configId": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
             "threadName": "Crawler-2",
-            "errorName": "HttpStatusException",
-            "errorLog": "404 Not Found",
-            "errorCount": 1,
-            "lastAccessTime": 1738143000000,
+            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
+            "errorLog": "Not found: https://example.com/not-found",
+            "errorCount": "1",
+            "lastAccessTime": "1738143000000",
             "configId": "webConfig_id_1"
           }
         ],
@@ -134,15 +134,20 @@ Response Fields
    * - ``threadName``
      - Thread name
    * - ``errorName``
-     - Error name
+     - Error name (fully-qualified class name of the exception that occurred; e.g. ``java.net.ConnectException``)
    * - ``errorLog``
-     - Error log
+     - Error log (exception message or stack trace)
    * - ``errorCount``
-     - Number of error occurrences
+     - Number of error occurrences (a numeric value as a string)
    * - ``lastAccessTime``
-     - Last access time (epoch milliseconds)
+     - Last access time (epoch milliseconds as a string)
    * - ``configId``
      - Crawl configuration ID
+
+.. note::
+
+   All response fields are returned as strings (JSON string).
+   ``errorCount`` is a numeric value represented as a string, and ``lastAccessTime`` is epoch milliseconds represented as a string.
 
 Get Failure URL
 ===============
@@ -166,10 +171,10 @@ Response
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
           "threadName": "Crawler-1",
-          "errorName": "ConnectException",
+          "errorName": "java.net.ConnectException",
           "errorLog": "Connection refused: connect",
-          "errorCount": 3,
-          "lastAccessTime": 1738144800000,
+          "errorCount": "3",
+          "lastAccessTime": "1738144800000",
           "configId": "webConfig_id_1"
         }
       }
@@ -222,24 +227,30 @@ Response
 Error Types
 ===========
 
+``errorName`` stores the fully-qualified class name of the exception that occurred during
+crawling, exactly as captured. It is not a fixed enumeration; any class name may appear
+depending on the exception that was raised. The following are representative examples.
+
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 50 50
 
-   * - Error Name
+   * - Error Name (example)
      - Description
-   * - ``ConnectException``
-     - Connection error
-   * - ``HttpStatusException``
-     - HTTP status error (404, 500, etc.)
-   * - ``SocketTimeoutException``
-     - Timeout error
-   * - ``UnknownHostException``
-     - Host name resolution error
-   * - ``SSLException``
-     - SSL certificate error
-   * - ``IOException``
+   * - ``java.net.ConnectException``
+     - Connection refused (cannot connect to the server)
+   * - ``java.net.UnknownHostException``
+     - Host name could not be resolved (DNS error)
+   * - ``java.net.SocketTimeoutException``
+     - Connection or read timeout
+   * - ``javax.net.ssl.SSLException``
+     - SSL/TLS handshake or certificate error
+   * - ``java.io.IOException``
      - I/O error
+   * - ``org.codelibs.fess.exception.ContentNotFoundException``
+     - URL that returned an HTTP status code configured in ``crawler.failure.url.status.codes`` (default: 403, 404, 410)
+   * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
+     - Content exceeded the maximum length
 
 Usage Examples
 ==============
@@ -249,7 +260,7 @@ List Failure URLs
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filter by Error Count
@@ -266,7 +277,8 @@ Filter by Error Name
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=ConnectException" \
+    # errorName stores the fully-qualified class name, so specify it with a wildcard
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Get Failure URL
