@@ -62,7 +62,7 @@ Parameter
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Typ
@@ -75,7 +75,11 @@ Parameter
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1, Standard: 1)
+   * - ``id``
+     - String
+     - Nein
+     - Exact-Match-Filter nach Elevate-Word-ID
 
 Response
 --------
@@ -216,6 +220,13 @@ Request-Body
       "labelTypeIds": ["label1"],
       "versionNo": 1
     }
+
+.. note::
+
+   Bei einer Aktualisierung sind zusätzlich zu den Feldern, die bei der Erstellung verwendet werden, folgende Felder erforderlich:
+
+   - ``id`` - ID des zu aktualisierenden Elevate Words
+   - ``versionNo`` - Versionsnummer für optimistisches Sperren. Geben Sie den Wert an, der über ``GET /setting/{id}`` abgerufen wurde.
 
 Response
 --------

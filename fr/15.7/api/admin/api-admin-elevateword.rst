@@ -62,7 +62,7 @@ Parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -75,7 +75,11 @@ Parametres
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1, par defaut : 1)
+   * - ``id``
+     - String
+     - Non
+     - Filtre par correspondance exacte sur l'ID du mot eleve
 
 Reponse
 -------
@@ -216,6 +220,13 @@ Corps de la requete
       "labelTypeIds": ["label1"],
       "versionNo": 1
     }
+
+.. note::
+
+   Lors de la mise a jour, les champs suivants sont requis en plus des champs utilises pour la creation :
+
+   - ``id`` - ID du mot eleve a mettre a jour
+   - ``versionNo`` - Numero de version pour le verrouillage optimiste. Indiquez la valeur obtenue via ``GET /setting/{id}``.
 
 Reponse
 -------

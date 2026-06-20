@@ -62,7 +62,7 @@ Parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametro
      - Tipo
@@ -75,7 +75,11 @@ Parametros
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina (comienza en 1, predeterminado: 1)
+   * - ``id``
+     - String
+     - No
+     - Filtro de coincidencia exacta por ID de palabra elevada
 
 Respuesta
 ---------
@@ -216,6 +220,13 @@ Cuerpo de la Solicitud
       "labelTypeIds": ["label1"],
       "versionNo": 1
     }
+
+.. note::
+
+   Al actualizar, los siguientes campos son obligatorios ademas de los campos utilizados para la creacion:
+
+   - ``id`` - ID de la palabra elevada a actualizar
+   - ``versionNo`` - Numero de version para el bloqueo optimista. Especifique el valor obtenido de ``GET /setting/{id}``.
 
 Respuesta
 ---------
