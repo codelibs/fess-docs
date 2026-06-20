@@ -62,7 +62,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -75,7 +75,11 @@ Parameters
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1, default: 1)
+   * - ``id``
+     - String
+     - No
+     - Exact-match filter by elevate word ID
 
 Response
 --------
@@ -216,6 +220,13 @@ Request Body
       "labelTypeIds": ["label1"],
       "versionNo": 1
     }
+
+.. note::
+
+   When updating, the following fields are required in addition to the fields used for creation:
+
+   - ``id`` - ID of the elevate word to update
+   - ``versionNo`` - Version number for optimistic locking. Specify the value obtained from ``GET /setting/{id}``.
 
 Response
 --------

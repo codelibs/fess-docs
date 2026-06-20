@@ -62,7 +62,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -75,7 +75,11 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码（从1开始，默认：1）
+   * - ``id``
+     - String
+     - 否
+     - 按提升词ID进行精确匹配过滤
 
 响应
 ----
@@ -216,6 +220,13 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
       "labelTypeIds": ["label1"],
       "versionNo": 1
     }
+
+.. note::
+
+   更新时，除创建时所需的字段外，还需要以下字段。
+
+   - ``id`` - 要更新的提升词ID
+   - ``versionNo`` - 用于乐观锁的版本号。请指定通过 ``GET /setting/{id}`` 获取的值。
 
 响应
 ----
