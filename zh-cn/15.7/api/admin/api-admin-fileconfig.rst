@@ -6,7 +6,7 @@ FileConfig API
 ====
 
 FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
-您可以操作文件系统和SMB/CIFS共享文件夹等的爬虫设置。
+可以操作本地文件系统、SMB/CIFS共享文件夹、FTP、各类对象存储等的爬虫设置。
 
 基础URL
 =======
@@ -14,6 +14,11 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 ::
 
     /api/admin/fileconfig
+
+.. note::
+
+   所有端点均需要管理员权限及有效的访问令牌。
+   有关认证方式，请参阅 :doc:`api-admin-overview` 。
 
 端点列表
 ========
@@ -51,25 +56,41 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 
     GET /api/admin/fileconfig/settings
 
+.. note::
+
+   列表获取端点除 ``GET`` 外，也可使用 ``PUT`` 访问。
+
 参数
 ~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 10 55
 
    * - 参数
      - 类型
      - 必需
      - 说明
-   * - ``size``
-     - Integer
-     - 否
-     - 每页记录数（默认：20）
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码（从1开始，默认：1）
+   * - ``size``
+     - Integer
+     - 否
+     - 每页记录数（默认：25。遵循 ``paging.page.size`` 设置）
+   * - ``name``
+     - String
+     - 否
+     - 按设置名称筛选
+   * - ``paths``
+     - String
+     - 否
+     - 按爬虫路径筛选
+   * - ``description``
+     - String
+     - 否
+     - 按说明筛选
 
 响应
 ----
@@ -83,8 +104,8 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
           {
             "id": "fileconfig_id_1",
             "name": "Shared Documents",
-            "description": "共有ドキュメント",
-            "paths": "file://///server/share/documents",
+            "description": "共享文档",
+            "paths": "smb://server/share/documents",
             "includedPaths": ".*\\.pdf$",
             "excludedPaths": ".*/(temp|cache)/.*",
             "includedDocPaths": "",
@@ -104,6 +125,8 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
         "total": 5
       }
     }
+
+``total`` 表示符合条件的设置总数。
 
 获取文件爬虫设置
 ================
@@ -126,8 +149,8 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
         "setting": {
           "id": "fileconfig_id_1",
           "name": "Shared Documents",
-          "description": "共有ドキュメント",
-          "paths": "file://///server/share/documents",
+          "description": "共享文档",
+          "paths": "smb://server/share/documents",
           "includedPaths": ".*\\.pdf$",
           "excludedPaths": ".*/(temp|cache)/.*",
           "includedDocPaths": "",
@@ -142,10 +165,20 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
           "sortOrder": 0,
           "permissions": "{role}admin",
           "virtualHosts": "",
-          "labelTypeIds": []
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
+
+.. note::
+
+   响应中包含在注册和更新时由服务器自动设置的 ``createdBy`` 、 ``createdTime`` 、
+   ``updatedBy`` 、 ``updatedTime`` 、 ``versionNo`` 字段。
+   ``versionNo`` 在更新时为必填项（请参阅后述的"更新文件爬虫设置"）。
 
 创建文件爬虫设置
 ================
@@ -173,8 +206,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
-      "permissions": "{role}admin\n{role}user",
-      "labelTypeIds": ["label_id_1"]
+      "permissions": "{role}admin\n{role}user"
     }
 
 字段说明
@@ -182,20 +214,20 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - 字段
      - 必需
      - 说明
    * - ``name``
      - 是
-     - 设置名称
+     - 设置名称（最多200个字符）
    * - ``description``
      - 否
-     - 设置的说明
+     - 设置说明（最多1000个字符）
    * - ``paths``
      - 是
-     - 爬虫起始路径（多个路径用换行符分隔）
+     - 爬虫起始路径（多个路径用换行符分隔）。使用 ``file:`` 、 ``smb:`` 、 ``smb1:`` 、 ``ftp:`` 、 ``storage:`` 、 ``s3:`` 、 ``gcs:`` 中的一种协议指定
    * - ``includedPaths``
      - 否
      - 爬虫目标路径的正则表达式模式
@@ -210,19 +242,19 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
      - 排除索引路径的正则表达式模式
    * - ``configParameter``
      - 否
-     - 附加配置参数
+     - 附加配置参数（ ``key=value`` 格式，每行一项）
    * - ``depth``
      - 否
-     - 爬虫深度
+     - 爬虫深度（0以上）
    * - ``maxAccessCount``
      - 否
-     - 最大访问数
+     - 最大访问数（0以上）
    * - ``numOfThread``
      - 是
-     - 并行线程数
+     - 并行线程数（1以上）
    * - ``intervalTime``
      - 是
-     - 访问间隔（毫秒）
+     - 访问间隔（毫秒，0以上）
    * - ``boost``
      - 是
      - 搜索结果提升值
@@ -231,16 +263,18 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
      - 启用/禁用（字符串 ``"true"`` / ``"false"``）
    * - ``sortOrder``
      - 是
-     - 显示顺序
+     - 显示顺序（0以上）
    * - ``permissions``
      - 否
      - 访问权限角色（多个时用换行符分隔）
    * - ``virtualHosts``
      - 否
      - 虚拟主机（多个时用换行符分隔）
-   * - ``labelTypeIds``
-     - 否
-     - 标签类型ID（数组）
+
+.. note::
+
+   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` 等审计字段
+   由服务器自动设置，无需在请求体中指定。
 
 响应
 ----
@@ -269,6 +303,9 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 请求体
 ~~~~~~
 
+更新时，除创建时的字段外，还需要指定用于确定更新目标的 ``id`` 和版本号 ``versionNo`` 。
+``versionNo`` 需填写获取API（GET）响应中包含的当前值。
+
 .. code-block:: json
 
     {
@@ -286,6 +323,23 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
       "sortOrder": 0,
       "versionNo": 1
     }
+
+更新时的附加字段
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - 字段
+     - 必需
+     - 说明
+   * - ``id``
+     - 是
+     - 更新目标的设置ID（最多1000个字符）
+   * - ``versionNo``
+     - 是
+     - 更新目标的当前版本号。填写获取API（GET）响应中包含的 ``versionNo`` 值
 
 响应
 ----
@@ -324,23 +378,57 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 路径格式
 ========
 
+``paths`` 可使用以下协议（支持的协议可通过 ``crawler.file.protocols`` 设置更改）。
+
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 35 65
 
    * - 协议
      - 路径格式
    * - 本地文件
      - ``file:///path/to/directory``
-   * - Windows共享 (SMB)
-     - ``file://///server/share/path``
-   * - SMB带认证
-     - ``smb://username:password@server/share/path``
-   * - NFS
-     - ``file://///nfs-server/export/path``
+   * - SMB/CIFS共享
+     - ``smb://server/share/path``
+   * - SMB/CIFS共享（SMB1）
+     - ``smb1://server/share/path``
+   * - FTP
+     - ``ftp://server/path``
+   * - S3兼容对象存储（MinIO等）
+     - ``storage://bucket/path``
+   * - Amazon S3
+     - ``s3://bucket/path``
+   * - Google Cloud Storage
+     - ``gcs://bucket/path``
+
+.. note::
+
+   SMB/CIFS及FTP的认证信息（用户名和密码）请勿嵌入路径中，
+   应通过"文件认证"设置进行配置。详情请参阅 :doc:`../../admin/fileauth-guide` 。
 
 使用示例
 ========
+
+本地文件爬虫设置
+----------------
+
+.. code-block:: bash
+
+    curl -X POST "http://localhost:8080/api/admin/fileconfig/setting" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "name": "Local Files",
+           "paths": "file:///data/documents",
+           "includedPaths": ".*\\.(pdf|doc|docx)$",
+           "excludedPaths": ".*/(temp|backup)/.*",
+           "numOfThread": 2,
+           "intervalTime": 500,
+           "boost": 1.0,
+           "available": "true",
+           "sortOrder": 0,
+           "permissions": "{role}guest"
+         }'
 
 SMB共享爬虫设置
 ---------------
@@ -352,7 +440,7 @@ SMB共享爬虫设置
          -H "Content-Type: application/json" \
          -d '{
            "name": "SMB Share",
-           "paths": "smb://user:pass@server/documents",
+           "paths": "smb://server/documents",
            "includedPaths": ".*\\.(pdf|doc|docx)$",
            "excludedPaths": ".*/(temp|private)/.*",
            "maxAccessCount": 50000,
@@ -364,6 +452,10 @@ SMB共享爬虫设置
            "permissions": "{role}guest"
          }'
 
+.. note::
+
+   如果访问SMB共享需要认证，请事先在"文件认证"设置中注册目标主机的认证信息。
+
 参考信息
 ========
 
@@ -371,4 +463,4 @@ SMB共享爬虫设置
 - :doc:`api-admin-webconfig` - Web爬虫设置API
 - :doc:`api-admin-dataconfig` - 数据存储设置API
 - :doc:`../../admin/fileconfig-guide` - 文件爬虫设置指南
-
+- :doc:`../../admin/fileauth-guide` - 文件认证设置指南
