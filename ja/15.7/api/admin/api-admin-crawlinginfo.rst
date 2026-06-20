@@ -36,7 +36,7 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
      - クロール情報削除
    * - DELETE
      - /all
-     - 古いクロールセッション一括削除
+     - クロールセッションの一括削除（実行中を除く）
 
 クロール情報一覧取得
 ====================
@@ -62,15 +62,15 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数
+     - 1ページあたりの件数（デフォルト: 20）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号
+     - ページ番号（1から開始、デフォルト: 1）
    * - ``sessionId``
      - String
      - いいえ
-     - セッションIDフィルター
+     - セッションIDフィルター（部分一致）
 
 レスポンス
 ----------
@@ -116,9 +116,15 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
    * - ``name``
      - セッション名
    * - ``expiredTime``
-     - 有効期限
+     - 有効期限（エポックミリ秒。文字列として返されます）
    * - ``createdTime``
-     - 作成時刻（エポックミリ秒）
+     - 作成時刻（エポックミリ秒。数値として返されます）
+
+.. note::
+
+   レスポンスの各ログオブジェクトには、内部的に使用される ``crudMode`` フィールド
+   （CRUD操作モードを示す整数値で、参照時は常に ``0``）が含まれます。
+   クライアント側では無視して問題ありません。
 
 クロール情報取得
 ================
@@ -169,10 +175,11 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
       }
     }
 
-古いクロールセッション一括削除
+クロールセッションの一括削除
 ==============================
 
-実行中のセッションを除く古いクロールセッションをまとめて削除します。
+現在実行中のセッションを除く、すべてのクロールセッション（およびそのパラメーター情報）を
+削除します。経過時間による判定は行われず、実行中でないセッションがすべて削除対象となります。
 
 リクエスト
 ----------
@@ -200,7 +207,7 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 特定セッションでフィルター
@@ -227,8 +234,8 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-古いセッションの一括削除
-------------------------
+セッションの一括削除
+--------------------
 
 .. code-block:: bash
 

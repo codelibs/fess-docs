@@ -36,7 +36,7 @@ Lista de Endpoints
      - Eliminar informacion de rastreo
    * - DELETE
      - /all
-     - Eliminar en lote sesiones de rastreo antiguas
+     - Eliminar en lote sesiones de rastreo (excepto las activas)
 
 Obtener Lista de Informacion de Rastreo
 =======================================
@@ -62,15 +62,15 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina
+     - Numero de elementos por pagina (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina
+     - Numero de pagina (basado en 1, predeterminado: 1)
    * - ``sessionId``
      - String
      - No
-     - Filtro por ID de sesion
+     - Filtro por ID de sesion (coincidencia parcial)
 
 Respuesta
 ---------
@@ -116,9 +116,15 @@ Campos de Respuesta
    * - ``name``
      - Nombre de sesion
    * - ``expiredTime``
-     - Fecha de expiracion
+     - Fecha de expiracion (milisegundos epoch; devuelto como cadena de texto)
    * - ``createdTime``
-     - Hora de creacion (milisegundos epoch)
+     - Hora de creacion (milisegundos epoch; devuelto como numero)
+
+.. note::
+
+   Cada objeto de registro en la respuesta incluye tambien un campo interno ``crudMode``
+   (un entero que indica el modo de operacion CRUD, siempre ``0`` para operaciones de lectura).
+   Los clientes pueden ignorarlo sin problema.
 
 Obtener Informacion de Rastreo
 ==============================
@@ -169,10 +175,10 @@ Respuesta
       }
     }
 
-Eliminar en Lote Sesiones de Rastreo Antiguas
-=============================================
+Eliminar en Lote Sesiones de Rastreo
+=====================================
 
-Elimina en conjunto las sesiones de rastreo antiguas, excepto las sesiones en ejecucion.
+Elimina todas las sesiones de rastreo (y sus datos de parametros), excepto las que estan en ejecucion en ese momento. No existe umbral de antiguedad ni de tiempo; se eliminan todas las sesiones que no esten en ejecucion.
 
 Solicitud
 ---------
@@ -200,7 +206,7 @@ Obtener Lista de Informacion de Rastreo
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=0" \
+    curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Filtrar por Sesion Especifica
@@ -227,8 +233,8 @@ Eliminar Informacion de Rastreo
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Eliminar en Lote Sesiones Antiguas
-----------------------------------
+Eliminar en Lote Sesiones
+-------------------------
 
 .. code-block:: bash
 
