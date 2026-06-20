@@ -15,6 +15,18 @@ Base URL
 
     /api/admin/log
 
+Authentication
+==============
+
+As with other Admin APIs, authentication using an access token is required. The access token must have the ``Radmin-api`` permission (configured via ``api.admin.access.permissions``; the default value is ``Radmin-api``).
+Specify the access token in the request header.
+
+::
+
+    Authorization: Bearer <access token>
+
+For details on authentication and how to obtain an access token, see :doc:`api-admin-overview`.
+
 Endpoint List
 =============
 
@@ -36,6 +48,7 @@ Retrieve Log File List
 ======================
 
 Returns a list of log files (``.log`` and ``.log.gz``) that exist in the server's log output directory.
+The files are returned sorted in ascending order by file name.
 
 Request
 -------
@@ -85,12 +98,18 @@ Each object has the following fields.
       }
     }
 
+.. note::
+
+   ``version`` is set to the product version of the running |Fess|. The contents and count of ``files``
+   vary depending on the log files on the server, so the above is just an example.
+
 Download Log File
 =================
 
 Downloads the contents of the specified log file.
-For ``{id}``, specify the ``id`` (the file name encoded with Base64) obtained from the file list retrieval.
+For ``{id}``, specify the ``id`` (the file name encoded with Base64 URL encoding) returned by the file list retrieval as-is.
 The response is returned as an ``application/octet-stream`` stream.
+For security, only names ending with ``.log`` or ``.log.gz`` are accepted, and names containing path manipulation sequences such as ``..`` are rejected.
 If you specify a non-existent file name or a name that is not permitted as a log file, an empty response is returned.
 
 Request

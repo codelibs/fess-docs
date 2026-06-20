@@ -15,6 +15,18 @@ Basis-URL
 
     /api/admin/log
 
+Authentifizierung
+=================
+
+Wie bei anderen Admin-APIs ist eine Authentifizierung über ein Zugriffstoken erforderlich. Das Zugriffstoken benötigt die Berechtigung ``Radmin-api`` (konfiguriert über ``api.admin.access.permissions``, Standardwert: ``Radmin-api``).
+Das Zugriffstoken wird im Anfrage-Header angegeben.
+
+::
+
+    Authorization: Bearer <Zugriffstoken>
+
+Weitere Informationen zur Authentifizierung und zum Abrufen von Zugriffstoken finden Sie unter :doc:`api-admin-overview`.
+
 Endpunktliste
 =============
 
@@ -36,6 +48,7 @@ Protokolldateien auflisten
 ==========================
 
 Gibt eine Liste der im Protokollausgabeverzeichnis des Servers vorhandenen Protokolldateien (``.log`` und ``.log.gz``) zurück.
+Die Dateien werden in aufsteigender Reihenfolge nach Dateinamen sortiert zurückgegeben.
 
 Request
 -------
@@ -85,12 +98,18 @@ Jedes Objekt hat die folgenden Felder.
       }
     }
 
+.. note::
+
+   ``version`` enthält die Produktversion der laufenden |Fess|-Instanz. Der Inhalt und die Anzahl von ``files``
+   hängen von den auf dem Server vorhandenen Protokolldateien ab; das obige ist daher nur ein Beispiel.
+
 Protokolldatei herunterladen
 ============================
 
 Lädt den Inhalt der angegebenen Protokolldatei herunter.
-Für ``{id}`` wird die beim Auflisten erhaltene ``id`` (Base64-codierter Wert des Dateinamens) angegeben.
+Für ``{id}`` wird die beim Auflisten erhaltene ``id`` (der mit Base64-URL-Kodierung codierte Dateiname) unverändert angegeben.
 Die Antwort wird als Stream vom Typ ``application/octet-stream`` zurückgegeben.
+Aus Sicherheitsgründen werden nur Namen akzeptiert, die auf ``.log`` oder ``.log.gz`` enden; Namen mit Pfadmanipulationssequenzen wie ``..`` werden abgelehnt.
 Wird ein nicht existierender Dateiname oder ein als Protokolldatei nicht zulässiger Name angegeben, wird eine leere Antwort zurückgegeben.
 
 Request

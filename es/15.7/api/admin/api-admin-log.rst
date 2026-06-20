@@ -15,6 +15,18 @@ URL Base
 
     /api/admin/log
 
+Autenticacion
+=============
+
+Al igual que con el resto de Admin APIs, se requiere autenticacion mediante token de acceso. El token de acceso debe tener el permiso ``Radmin-api`` (configurado en ``api.admin.access.permissions``; el valor predeterminado es ``Radmin-api``).
+El token de acceso se especifica en el encabezado de la solicitud.
+
+::
+
+    Authorization: Bearer <token de acceso>
+
+Para mas detalles sobre la autenticacion y como obtener el token de acceso, consulte :doc:`api-admin-overview`.
+
 Lista de Endpoints
 ==================
 
@@ -36,6 +48,7 @@ Obtener Lista de Archivos de Registro
 =====================================
 
 Devuelve la lista de los archivos de registro (``.log`` y ``.log.gz``) presentes en el directorio de salida de registros del servidor.
+Los archivos se devuelven ordenados de forma ascendente por nombre de archivo.
 
 Solicitud
 ---------
@@ -85,12 +98,17 @@ Cada objeto tiene los siguientes campos.
       }
     }
 
+.. note::
+
+   En ``version`` se establece la version del producto de |Fess| en ejecucion. El contenido y la cantidad de elementos en ``files`` dependen de los archivos de registro presentes en el servidor, por lo que el ejemplo anterior es solo una muestra.
+
 Descargar Archivo de Registro
 =============================
 
 Descarga el contenido del archivo de registro especificado.
-En ``{id}`` se indica el ``id`` obtenido en la lista (el nombre de archivo codificado en Base64).
+En ``{id}`` se especifica el ``id`` devuelto en la lista (el valor del nombre de archivo codificado en Base64 URL) tal cual.
 La respuesta se devuelve como un flujo ``application/octet-stream``.
+Por razones de seguridad, solo se aceptan nombres que terminen en ``.log`` o ``.log.gz``; los nombres que contienen operaciones de ruta como ``..`` no son aceptados.
 Si se especifica un nombre de archivo inexistente o un nombre no permitido como archivo de registro, se devuelve una respuesta vacia.
 
 Solicitud
