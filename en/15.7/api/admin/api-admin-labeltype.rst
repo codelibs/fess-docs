@@ -5,8 +5,14 @@ LabelType API
 Overview
 ========
 
-LabelType API is an API for managing |Fess| label types.
-You can configure label types for search result classification and filtering.
+LabelType API is an API for managing label types in |Fess|.
+Label types allow you to classify search results based on crawled paths or virtual hosts,
+and can be used for label-based filtering on the search screen.
+
+For common specifications regarding authentication, responses (``status`` codes, ``version`` field,
+error format, HTTP status codes, etc.), refer to :doc:`api-admin-overview`.
+To access this API, you must provide an access token with admin API permission (``admin-api``)
+in the ``Authorization: Bearer <access_token>`` header.
 
 Base URL
 ========
@@ -56,7 +62,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -65,11 +71,19 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page. Default is the ``paging.page.size`` setting value (``25`` by default).
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1). Default is ``1``.
+   * - ``name``
+     - String
+     - No
+     - Filter by display name (wildcard search).
+   * - ``value``
+     - String
+     - No
+     - Filter by label value (wildcard search).
 
 Response
 --------
@@ -78,6 +92,7 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -88,12 +103,24 @@ Response
             "excludedPaths": "",
             "permissions": "{role}admin",
             "virtualHost": "",
-            "sortOrder": 0
+            "sortOrder": 0,
+            "createdBy": "admin",
+            "createdTime": 1700000000000,
+            "updatedBy": "admin",
+            "updatedTime": 1700000000000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   Each settings object also includes ``createdBy`` / ``createdTime`` / ``updatedBy`` /
+   ``updatedTime`` for auditing, and ``versionNo`` for optimistic locking (fields with a
+   ``null`` value are omitted). The ``response`` object always includes ``version``
+   indicating the product version, but it may be omitted in subsequent examples for brevity.
 
 Get Label Type
 ==============
@@ -119,9 +146,14 @@ Response
           "value": "docs",
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
-          "sortOrder": 0,
           "permissions": "{role}admin",
-          "virtualHost": ""
+          "virtualHost": "",
+          "sortOrder": 0,
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
@@ -151,37 +183,50 @@ Request Body
       "permissions": "{role}guest"
     }
 
-Field Description
-~~~~~~~~~~~~~~~~~
+Field Descriptions
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 12 12 56
 
    * - Field
+     - Type
      - Required
      - Description
    * - ``name``
+     - String
      - Yes
-     - Label display name
+     - Label display name (max 100 characters).
    * - ``value``
+     - String
      - Yes
-     - Label value (used in search)
+     - Label value (used with the ``label`` parameter in searches). Only alphanumeric characters and underscores (``_``) are allowed; must match the regex ``^[a-zA-Z0-9_]+$`` (max 100 characters).
    * - ``includedPaths``
+     - String
      - No
-     - Regex patterns for paths to label (newline-separated for multiple)
+     - Regular expressions for paths to be labelled. Separate multiple entries with a newline (``\n``).
    * - ``excludedPaths``
+     - String
      - No
-     - Regex patterns for paths to exclude from labeling (newline-separated for multiple)
-   * - ``sortOrder``
-     - No
-     - Display order
+     - Regular expressions for paths to exclude from labelling. Separate multiple entries with a newline (``\n``).
    * - ``permissions``
+     - String
      - No
-     - Access permission roles (newline-separated if multiple)
+     - Roles/groups/users permitted to access (e.g. ``{role}admin``). Separate multiple entries with a newline (``\n``).
+   * - ``sortOrder``
+     - Integer
+     - No
+     - Display order (non-negative integer). Defaults to ``0`` if not specified.
    * - ``virtualHost``
+     - String
      - No
-     - Virtual host
+     - Virtual host (max 1000 characters).
+
+.. note::
+
+   Audit fields such as ``createdBy`` / ``createdTime`` are set automatically on the server side
+   and do not need to be specified in the request.
 
 Response
 --------
@@ -195,6 +240,8 @@ Response
         "created": true
       }
     }
+
+On successful creation, ``created`` is ``true``.
 
 Update Label Type
 =================
@@ -223,6 +270,25 @@ Request Body
       "versionNo": 1
     }
 
+When updating, the following fields are required in addition to the fields used at creation time.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 12 12 56
+
+   * - Field
+     - Type
+     - Required
+     - Description
+   * - ``id``
+     - String
+     - Yes
+     - The ID of the label type to update.
+   * - ``versionNo``
+     - Integer
+     - Yes
+     - Version number for optimistic locking. Specify the ``versionNo`` included in the response when the setting was retrieved. If the specified version does not match the current one, the update will fail.
+
 Response
 --------
 
@@ -235,6 +301,8 @@ Response
         "created": false
       }
     }
+
+On update, ``created`` is ``false``.
 
 Delete Label Type
 =================
@@ -276,6 +344,14 @@ Create Documentation Label
            "permissions": "{role}guest"
          }'
 
+List Label Types
+----------------
+
+.. code-block:: bash
+
+    curl "http://localhost:8080/api/admin/labeltype/settings?size=50&page=1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
 Search with Label
 -----------------
 
@@ -284,10 +360,9 @@ Search with Label
     # Filter by label
     curl "http://localhost:8080/json/?q=search&label=tech_docs"
 
-Reference
-=========
+See Also
+========
 
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`../api-search` - Search API
 - :doc:`../../admin/labeltype-guide` - Label Type Management Guide
-

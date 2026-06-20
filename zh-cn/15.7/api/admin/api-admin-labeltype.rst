@@ -6,10 +6,16 @@ LabelType API
 ====
 
 LabelType API是用于管理 |Fess| 标签类型的API。
-您可以操作用于搜索结果标签分类和过滤的标签类型。
+使用标签类型，可以根据爬取目标的路径或虚拟主机对搜索结果进行分类，
+并在搜索界面中通过标签进行筛选（过滤）。
 
-基础URL
-=======
+关于认证方式及响应的通用规范（``status`` 状态码、``version`` 字段、错误格式、
+HTTP状态码等），请参阅 :doc:`api-admin-overview`。
+访问本API需要使用具有管理API权限（``admin-api``）的访问令牌，
+并通过 ``Authorization: Bearer <访问令牌>`` 请求头指定。
+
+基础 URL
+========
 
 ::
 
@@ -56,20 +62,28 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
-     - 必需
+     - 必填
      - 说明
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数。默认值为 ``paging.page.size`` 的设置值（标准为 ``25``）。
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码（从1开始）。默认值为 ``1``。
+   * - ``name``
+     - String
+     - 否
+     - 按显示名称筛选（通配符搜索）。
+   * - ``value``
+     - String
+     - 否
+     - 按标签值筛选（通配符搜索）。
 
 响应
 ----
@@ -78,6 +92,7 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -88,12 +103,24 @@ LabelType API是用于管理 |Fess| 标签类型的API。
             "excludedPaths": "",
             "permissions": "{role}admin",
             "virtualHost": "",
-            "sortOrder": 0
+            "sortOrder": 0,
+            "createdBy": "admin",
+            "createdTime": 1700000000000,
+            "updatedBy": "admin",
+            "updatedTime": 1700000000000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   每个设置对象中还包含用于审计的 ``createdBy`` / ``createdTime`` / ``updatedBy`` /
+   ``updatedTime``，以及用于乐观锁的 ``versionNo``（值为 ``null`` 的
+   字段将被省略）。``response`` 对象中始终包含表示产品版本的
+   ``version``，但为简洁起见，后续示例中可能省略该字段。
 
 获取标签类型
 ============
@@ -119,9 +146,14 @@ LabelType API是用于管理 |Fess| 标签类型的API。
           "value": "docs",
           "includedPaths": ".*docs\\.example\\.com.*",
           "excludedPaths": "",
-          "sortOrder": 0,
           "permissions": "{role}admin",
-          "virtualHost": ""
+          "virtualHost": "",
+          "sortOrder": 0,
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
@@ -156,32 +188,45 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 12 12 56
 
    * - 字段
-     - 必需
+     - 类型
+     - 必填
      - 说明
    * - ``name``
+     - String
      - 是
-     - 标签显示名称
+     - 标签显示名称（最多100个字符）。
    * - ``value``
+     - String
      - 是
-     - 标签值（搜索时使用）
+     - 标签值（搜索时通过 ``label`` 参数使用）。只能使用半角英数字和下划线（``_``），且须符合正则表达式 ``^[a-zA-Z0-9_]+$``（最多100个字符）。
    * - ``includedPaths``
+     - String
      - 否
-     - 标签目标路径的正则表达式（多个用换行符分隔）
+     - 作为标签目标的路径正则表达式。指定多个时用换行符（``\n``）分隔。
    * - ``excludedPaths``
+     - String
      - 否
-     - 标签排除路径的正则表达式（多个用换行符分隔）
-   * - ``sortOrder``
-     - 否
-     - 显示顺序
+     - 从标签目标中排除的路径正则表达式。指定多个时用换行符（``\n``）分隔。
    * - ``permissions``
+     - String
      - 否
-     - 访问权限角色（多个时用换行符分隔）
+     - 允许访问的角色/组/用户（例如：``{role}admin``）。指定多个时用换行符（``\n``）分隔。
+   * - ``sortOrder``
+     - Integer
+     - 否
+     - 显示顺序（0以上的整数）。未指定时默认为 ``0``。
    * - ``virtualHost``
+     - String
      - 否
-     - 虚拟主机
+     - 虚拟主机（最多1000个字符）。
+
+.. note::
+
+   ``createdBy`` / ``createdTime`` 等审计字段由服务器端自动设置，
+   无需在请求中指定。
 
 响应
 ----
@@ -195,6 +240,8 @@ LabelType API是用于管理 |Fess| 标签类型的API。
         "created": true
       }
     }
+
+创建成功时，``created`` 的值为 ``true``。
 
 更新标签类型
 ============
@@ -223,6 +270,25 @@ LabelType API是用于管理 |Fess| 标签类型的API。
       "versionNo": 1
     }
 
+更新时，除创建时的字段外，还需要以下必填字段。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 12 12 56
+
+   * - 字段
+     - 类型
+     - 必填
+     - 说明
+   * - ``id``
+     - String
+     - 是
+     - 要更新的标签类型ID。
+   * - ``versionNo``
+     - Integer
+     - 是
+     - 用于乐观锁的版本号。请指定获取时响应中包含的 ``versionNo``。若指定的版本与当前版本不一致，更新将失败。
+
 响应
 ----
 
@@ -235,6 +301,8 @@ LabelType API是用于管理 |Fess| 标签类型的API。
         "created": false
       }
     }
+
+更新时，``created`` 的值为 ``false``。
 
 删除标签类型
 ============
@@ -276,8 +344,16 @@ LabelType API是用于管理 |Fess| 标签类型的API。
            "permissions": "{role}guest"
          }'
 
-使用标签搜索
-------------
+获取标签类型列表
+----------------
+
+.. code-block:: bash
+
+    curl "http://localhost:8080/api/admin/labeltype/settings?size=50&page=1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+使用标签进行搜索
+----------------
 
 .. code-block:: bash
 
@@ -290,4 +366,3 @@ LabelType API是用于管理 |Fess| 标签类型的API。
 - :doc:`api-admin-overview` - Admin API概述
 - :doc:`../api-search` - 搜索API
 - :doc:`../../admin/labeltype-guide` - 标签类型管理指南
-
