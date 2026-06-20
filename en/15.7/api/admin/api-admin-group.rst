@@ -56,7 +56,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -65,11 +65,15 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page (default: 25)
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1, default: 1)
+   * - ``id``
+     - String
+     - No
+     - Filters by exact match on the specified group ID
 
 Response
 --------
@@ -85,14 +89,16 @@ Response
             "name": "Engineering",
             "attributes": {
               "gidNumber": "1000"
-            }
+            },
+            "versionNo": 1
           },
           {
             "id": "group_id_2",
             "name": "Sales",
             "attributes": {
               "gidNumber": "1001"
-            }
+            },
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -122,7 +128,8 @@ Response
           "name": "Engineering",
           "attributes": {
             "gidNumber": "1000"
-          }
+          },
+          "versionNo": 1
         }
       }
     }
@@ -155,14 +162,14 @@ Field Description
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Field
      - Required
      - Description
    * - ``name``
      - Yes
-     - Group name
+     - Group name (max 100 characters)
    * - ``attributes``
      - No
      - Map of attributes (includes LDAP attributes such as ``gidNumber``). Values are specified as strings
@@ -204,6 +211,29 @@ Request Body
       },
       "versionNo": 1
     }
+
+Field Description
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Field
+     - Required
+     - Description
+   * - ``id``
+     - Yes
+     - Group ID to update
+   * - ``name``
+     - Yes
+     - Group name (max 100 characters)
+   * - ``attributes``
+     - No
+     - Map of attributes (includes LDAP attributes such as ``gidNumber``). Values are specified as strings
+   * - ``versionNo``
+     - Yes
+     - Version number for optimistic locking. Specify the ``versionNo`` value obtained from Get Group
 
 Response
 --------

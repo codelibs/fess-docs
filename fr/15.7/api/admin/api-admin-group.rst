@@ -56,7 +56,7 @@ Parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -65,11 +65,15 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page (par defaut : 25)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1, par defaut : 1)
+   * - ``id``
+     - String
+     - Non
+     - Filtre par correspondance exacte sur l'ID de groupe specifie
 
 Reponse
 -------
@@ -85,14 +89,16 @@ Reponse
             "name": "Engineering",
             "attributes": {
               "gidNumber": "1000"
-            }
+            },
+            "versionNo": 1
           },
           {
             "id": "group_id_2",
             "name": "Sales",
             "attributes": {
               "gidNumber": "1001"
-            }
+            },
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -122,7 +128,8 @@ Reponse
           "name": "Engineering",
           "attributes": {
             "gidNumber": "1000"
-          }
+          },
+          "versionNo": 1
         }
       }
     }
@@ -155,14 +162,14 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Champ
      - Requis
      - Description
    * - ``name``
      - Oui
-     - Nom du groupe
+     - Nom du groupe (maximum 100 caracteres)
    * - ``attributes``
      - Non
      - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont specifiees sous forme de chaines de caracteres
@@ -204,6 +211,29 @@ Corps de la requete
       },
       "versionNo": 1
     }
+
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Champ
+     - Requis
+     - Description
+   * - ``id``
+     - Oui
+     - ID du groupe a mettre a jour
+   * - ``name``
+     - Oui
+     - Nom du groupe (maximum 100 caracteres)
+   * - ``attributes``
+     - Non
+     - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont specifiees sous forme de chaines de caracteres
+   * - ``versionNo``
+     - Oui
+     - Numero de version pour le verrouillage optimiste. Specifiez la valeur de ``versionNo`` obtenue lors de l'obtention du groupe
 
 Reponse
 -------

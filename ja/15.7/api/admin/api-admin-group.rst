@@ -56,7 +56,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -65,11 +65,15 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数（デフォルト: 25）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号（1から開始、デフォルト: 1）
+   * - ``id``
+     - String
+     - いいえ
+     - 指定したグループIDで完全一致フィルタリングします
 
 レスポンス
 ----------
@@ -85,14 +89,16 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
             "name": "Engineering",
             "attributes": {
               "gidNumber": "1000"
-            }
+            },
+            "versionNo": 1
           },
           {
             "id": "group_id_2",
             "name": "Sales",
             "attributes": {
               "gidNumber": "1001"
-            }
+            },
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -122,7 +128,8 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
           "name": "Engineering",
           "attributes": {
             "gidNumber": "1000"
-          }
+          },
+          "versionNo": 1
         }
       }
     }
@@ -155,14 +162,14 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - フィールド
      - 必須
      - 説明
    * - ``name``
      - はい
-     - グループ名
+     - グループ名（最大100文字）
    * - ``attributes``
      - いいえ
      - 属性のマップ（``gidNumber`` などのLDAP属性を含む）。値は文字列で指定します
@@ -204,6 +211,29 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
       },
       "versionNo": 1
     }
+
+フィールド説明
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``id``
+     - はい
+     - 更新対象のグループID
+   * - ``name``
+     - はい
+     - グループ名（最大100文字）
+   * - ``attributes``
+     - いいえ
+     - 属性のマップ（``gidNumber`` などのLDAP属性を含む）。値は文字列で指定します
+   * - ``versionNo``
+     - はい
+     - 楽観的ロック用のバージョン番号。グループ取得で得た ``versionNo`` の値を指定します
 
 レスポンス
 ----------
