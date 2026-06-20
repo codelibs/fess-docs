@@ -15,6 +15,18 @@ URL de base
 
     /api/admin/log
 
+Authentification
+================
+
+Comme pour les autres API Admin, une authentification par jeton d'acces est requise. Le jeton d'acces doit disposer de la permission ``Radmin-api`` (configuree via ``api.admin.access.permissions``, valeur par defaut : ``Radmin-api``).
+Indiquez le jeton d'acces dans l'en-tete de la requete.
+
+::
+
+    Authorization: Bearer <jeton d'acces>
+
+Pour plus de details sur l'authentification et l'obtention d'un jeton d'acces, consultez :doc:`api-admin-overview`.
+
 Liste des endpoints
 ===================
 
@@ -36,6 +48,7 @@ Obtention de la liste des fichiers journaux
 ===========================================
 
 Renvoie la liste des fichiers journaux (``.log`` et ``.log.gz``) presents dans le repertoire de sortie des journaux du serveur.
+Les fichiers sont retournes tries par ordre croissant de nom de fichier.
 
 Requete
 -------
@@ -85,12 +98,19 @@ Chaque objet possede les champs suivants.
       }
     }
 
+.. note::
+
+   ``version`` contient la version du produit |Fess| en cours d'execution. Le contenu de ``files``
+   et le nombre d'elements varient selon les fichiers journaux presents sur le serveur ;
+   l'exemple ci-dessus est fourni a titre indicatif.
+
 Telechargement d'un fichier journal
 ===================================
 
 Telecharge le contenu du fichier journal specifie.
-Pour ``{id}``, indiquez l'``id`` obtenu lors de l'obtention de la liste (la valeur du nom de fichier encode en Base64).
+Pour ``{id}``, indiquez tel quel l'``id`` retourne lors de l'obtention de la liste (la valeur du nom de fichier encodee en Base64 URL).
 La reponse est renvoyee sous forme de flux ``application/octet-stream``.
+Pour des raisons de securite, seuls les noms se terminant par ``.log`` ou ``.log.gz`` sont acceptes ; les noms contenant des sequences de manipulation de chemin telles que ``..`` sont rejetes.
 Si vous specifiez un nom de fichier inexistant ou un nom non autorise en tant que fichier journal, une reponse vide est renvoyee.
 
 Requete
