@@ -56,7 +56,7 @@ Group API是用于管理 |Fess| 组的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -65,11 +65,15 @@ Group API是用于管理 |Fess| 组的API。
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数（默认：25）
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码（从1开始，默认：1）
+   * - ``id``
+     - String
+     - 否
+     - 按指定的组ID进行完全匹配过滤
 
 响应
 ----
@@ -85,14 +89,16 @@ Group API是用于管理 |Fess| 组的API。
             "name": "Engineering",
             "attributes": {
               "gidNumber": "1000"
-            }
+            },
+            "versionNo": 1
           },
           {
             "id": "group_id_2",
             "name": "Sales",
             "attributes": {
               "gidNumber": "1001"
-            }
+            },
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -122,7 +128,8 @@ Group API是用于管理 |Fess| 组的API。
           "name": "Engineering",
           "attributes": {
             "gidNumber": "1000"
-          }
+          },
+          "versionNo": 1
         }
       }
     }
@@ -155,14 +162,14 @@ Group API是用于管理 |Fess| 组的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 字段
      - 必需
      - 说明
    * - ``name``
      - 是
-     - 组名称
+     - 组名称（最大100个字符）
    * - ``attributes``
      - 否
      - 属性的映射（包含 ``gidNumber`` 等LDAP属性）。值以字符串指定
@@ -204,6 +211,29 @@ Group API是用于管理 |Fess| 组的API。
       },
       "versionNo": 1
     }
+
+字段说明
+~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - 字段
+     - 必需
+     - 说明
+   * - ``id``
+     - 是
+     - 要更新的组ID
+   * - ``name``
+     - 是
+     - 组名称（最大100个字符）
+   * - ``attributes``
+     - 否
+     - 属性的映射（包含 ``gidNumber`` 等LDAP属性）。值以字符串指定
+   * - ``versionNo``
+     - 是
+     - 乐观锁的版本号。指定从获取组获得的 ``versionNo`` 值
 
 响应
 ----

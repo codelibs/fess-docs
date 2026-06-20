@@ -56,7 +56,7 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입
@@ -65,11 +65,15 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수 (기본값: 20)
+     - 페이지당 건수 (기본값: 25)
    * - ``page``
      - Integer
      - 아니오
-     - 페이지 번호 (0부터 시작)
+     - 페이지 번호 (1부터 시작, 기본값: 1)
+   * - ``id``
+     - String
+     - 아니오
+     - 지정한 그룹 ID로 완전 일치 필터링합니다
 
 응답
 ----------
@@ -85,14 +89,16 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
             "name": "Engineering",
             "attributes": {
               "gidNumber": "1000"
-            }
+            },
+            "versionNo": 1
           },
           {
             "id": "group_id_2",
             "name": "Sales",
             "attributes": {
               "gidNumber": "1001"
-            }
+            },
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -122,7 +128,8 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
           "name": "Engineering",
           "attributes": {
             "gidNumber": "1000"
-          }
+          },
+          "versionNo": 1
         }
       }
     }
@@ -155,14 +162,14 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 필드
      - 필수
      - 설명
    * - ``name``
      - 예
-     - 그룹 이름
+     - 그룹 이름 (최대 100자)
    * - ``attributes``
      - 아니오
      - 속성의 맵 (``gidNumber`` 등의 LDAP 속성을 포함). 값은 문자열로 지정합니다
@@ -204,6 +211,29 @@ Group API는 |Fess| 의 그룹을 관리하기 위한 API입니다.
       },
       "versionNo": 1
     }
+
+필드 설명
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - 필드
+     - 필수
+     - 설명
+   * - ``id``
+     - 예
+     - 업데이트 대상 그룹 ID
+   * - ``name``
+     - 예
+     - 그룹 이름 (최대 100자)
+   * - ``attributes``
+     - 아니오
+     - 속성의 맵 (``gidNumber`` 등의 LDAP 속성을 포함). 값은 문자열로 지정합니다
+   * - ``versionNo``
+     - 예
+     - 낙관적 잠금을 위한 버전 번호. 그룹 조회에서 얻은 ``versionNo`` 값을 지정합니다
 
 응답
 ----------

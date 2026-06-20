@@ -56,7 +56,7 @@ Parameter
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Typ
@@ -65,11 +65,15 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite (Standard: 25)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1, Standard: 1)
+   * - ``id``
+     - String
+     - Nein
+     - Filtert anhand der exakten Übereinstimmung mit der angegebenen Gruppen-ID
 
 Response
 --------
@@ -85,14 +89,16 @@ Response
             "name": "Engineering",
             "attributes": {
               "gidNumber": "1000"
-            }
+            },
+            "versionNo": 1
           },
           {
             "id": "group_id_2",
             "name": "Sales",
             "attributes": {
               "gidNumber": "1001"
-            }
+            },
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -122,7 +128,8 @@ Response
           "name": "Engineering",
           "attributes": {
             "gidNumber": "1000"
-          }
+          },
+          "versionNo": 1
         }
       }
     }
@@ -155,14 +162,14 @@ Feldbeschreibungen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Feld
      - Erforderlich
      - Beschreibung
    * - ``name``
      - Ja
-     - Gruppenname
+     - Gruppenname (maximal 100 Zeichen)
    * - ``attributes``
      - Nein
      - Attribut-Map (enthält LDAP-Attribute wie ``gidNumber``). Werte werden als Zeichenketten angegeben
@@ -204,6 +211,29 @@ Request-Body
       },
       "versionNo": 1
     }
+
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``id``
+     - Ja
+     - Zu aktualisierende Gruppen-ID
+   * - ``name``
+     - Ja
+     - Gruppenname (maximal 100 Zeichen)
+   * - ``attributes``
+     - Nein
+     - Attribut-Map (enthält LDAP-Attribute wie ``gidNumber``). Werte werden als Zeichenketten angegeben
+   * - ``versionNo``
+     - Ja
+     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``versionNo`` an, der beim Abrufen der Gruppe ermittelt wurde
 
 Response
 --------
