@@ -2,11 +2,11 @@
 API de KeyMatch
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de KeyMatch es para gestionar coincidencias de claves (vinculacion de palabras clave de busqueda con resultados) de |Fess|.
-Puede hacer que documentos especificos aparezcan en los primeros lugares para ciertas palabras clave.
+La API de KeyMatch es para gestionar las coincidencias de claves (vinculación de palabras clave de búsqueda con resultados) de |Fess|.
+Permite que documentos específicos aparezcan en los primeros lugares para determinadas palabras clave.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de coincidencias de claves
@@ -51,25 +51,33 @@ Solicitud
 
     GET /api/admin/keymatch/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 25; valor de configuración de ``paging.page.size``)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Número de página (comienza en 1, predeterminado: 1)
+   * - ``term``
+     - String
+     - No
+     - Filtrado por palabra clave de búsqueda (coincidencia con comodín)
+   * - ``query``
+     - String
+     - No
+     - Filtrado por consulta de condición de coincidencia (coincidencia con comodín)
 
 Respuesta
 ---------
@@ -85,12 +93,19 @@ Respuesta
             "term": "download",
             "query": "title:download OR content:download",
             "maxSize": 10,
-            "boost": 10.0
+            "boost": 10.0,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   En ``total`` se establece el número total de elementos que coinciden con los criterios de filtrado (no el número de elementos de la página actual).
+   Además de los campos indicados, cada objeto de configuración puede incluir ``virtualHost``,
+   ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime`` cuando dichos valores estén definidos.
 
 Obtener Coincidencia de Clave
 =============================
@@ -115,10 +130,21 @@ Respuesta
           "term": "download",
           "query": "title:download OR content:download",
           "maxSize": 10,
-          "boost": 10.0
+          "boost": 10.0,
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
+
+.. note::
+
+   ``versionNo`` es el número de versión para el bloqueo optimista. Al actualizar una coincidencia de clave,
+   especifique el ``versionNo`` obtenido en la solicitud de obtención en el cuerpo de la solicitud.
+   Si el ID especificado no existe, se devuelve un error.
 
 Crear Coincidencia de Clave
 ===========================
@@ -143,28 +169,43 @@ Cuerpo de la Solicitud
       "boost": 20.0
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 15 50
 
    * - Campo
+     - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``term``
-     - Si
-     - Palabra clave de busqueda
+     - String
+     - Sí
+     - Palabra clave de búsqueda (máximo 100 caracteres)
    * - ``query``
-     - Si
-     - Consulta de condicion de coincidencia
+     - String
+     - Sí
+     - Consulta de condición de coincidencia (la longitud máxima sigue el valor de configuración de ``form.admin.max.input.size``)
    * - ``maxSize``
-     - Si
-     - Numero maximo de resultados (valor inicial del formulario: 10)
+     - Integer
+     - Sí
+     - Número máximo de resultados mostrados (entero mayor o igual a 0; valor inicial en la pantalla de administración: 10)
    * - ``boost``
-     - Si
-     - Valor de impulso (valor inicial del formulario: 100.0)
+     - Float
+     - Sí
+     - Valor de impulso (valor inicial en la pantalla de administración: 100.0)
+   * - ``virtualHost``
+     - String
+     - No
+     - Nombre del host virtual (máximo 1000 caracteres; especifíquelo cuando desee alternar las coincidencias de claves por host virtual)
+
+.. note::
+
+   ``maxSize`` y ``boost`` son obligatorios a través de la API. Los valores iniciales son los que se muestran en el formulario
+   de la pantalla de administración y no se aplican en la API. Si se omiten, se producirá un error de validación.
+   Tenga en cuenta que ``createdBy`` y ``createdTime``, aunque se especifiquen en la solicitud, serán sobrescritos por el servidor.
 
 Respuesta
 ---------
@@ -204,6 +245,29 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
+Descripción de Campos
+~~~~~~~~~~~~~~~~~~~~~
+
+Además de los campos de creación (``term``, ``query``, ``maxSize``, ``boost``, ``virtualHost``),
+se deben especificar los siguientes campos.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Campo
+     - Tipo
+     - Requerido
+     - Descripción
+   * - ``id``
+     - String
+     - Sí
+     - ID de la coincidencia de clave a actualizar (máximo 1000 caracteres)
+   * - ``versionNo``
+     - Integer
+     - Sí
+     - Número de versión para el bloqueo optimista; especifique el valor obtenido en la solicitud de obtención
+
 Respuesta
 ---------
 
@@ -241,8 +305,8 @@ Respuesta
 Ejemplos de Uso
 ===============
 
-Crear Coincidencia de Clave para Pagina de Producto
----------------------------------------------------
+Crear Coincidencia de Clave para Página de Producto
+----------------------------------------------------
 
 .. code-block:: bash
 
@@ -256,7 +320,7 @@ Crear Coincidencia de Clave para Pagina de Producto
            "boost": 15.0
          }'
 
-Coincidencia de Clave para Pagina de Soporte
+Coincidencia de Clave para Página de Soporte
 --------------------------------------------
 
 .. code-block:: bash
@@ -271,9 +335,9 @@ Coincidencia de Clave para Pagina de Soporte
            "boost": 20.0
          }'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-elevateword` - API de palabras elevadas
-- :doc:`../../admin/keymatch-guide` - Guia de gestion de coincidencias de claves
+- :doc:`../../admin/keymatch-guide` - Guía de gestión de coincidencias de claves
