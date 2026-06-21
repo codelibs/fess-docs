@@ -5,8 +5,13 @@ API RelatedQuery
 Vue d'ensemble
 ==============
 
-L'API RelatedQuery permet de gerer les requetes associees dans |Fess|.
-Vous pouvez suggerer des mots-cles de recherche associes pour des requetes de recherche specifiques.
+L'API RelatedQuery est une API permettant de gerer les requetes associees dans |Fess|.
+Pour un mot-cle de recherche saisi par l'utilisateur (``term``), vous pouvez enregistrer et
+gerer des suggestions de mots-cles de recherche associes (``queries``). Les requetes associees
+enregistrees sont affichees comme suggestions de recherche associees sur l'ecran de recherche.
+
+Pour les details sur l'authentification, le format de reponse commun (champ ``version`` et
+codes ``status``), la pagination et les reponses d'erreur, consultez :doc:`api-admin-overview`.
 
 URL de base
 ===========
@@ -56,7 +61,7 @@ Parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -65,11 +70,11 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1 ; par defaut : 1)
 
 Reponse
 -------
@@ -78,20 +83,29 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": "fess tutorial\nfess installation\nfess configuration"
+            "queries": "fess tutorial\nfess installation\nfess configuration",
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
 
+.. note::
+
+   Chaque parametre contient ``versionNo`` (numero de version utilise pour le verrouillage
+   optimiste). ``virtualHost`` et les champs d'audit (``createdBy``, ``createdTime``,
+   ``updatedBy``, ``updatedTime``) ne sont inclus que lorsqu'une valeur est definie.
+   Un ``virtualHost`` vide n'est pas inclus dans la reponse.
+
 Obtention d'une requete associee
-================================
+=================================
 
 Requete
 -------
@@ -107,18 +121,20 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": ""
+          "virtualHost": "site1.example.com",
+          "versionNo": 1
         }
       }
     }
 
 Creation d'une requete associee
-===============================
+================================
 
 Requete
 -------
@@ -144,20 +160,24 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Champ
      - Requis
      - Description
    * - ``term``
      - Oui
-     - Mot-cle de recherche
+     - Mot-cle de recherche (10 000 caracteres maximum)
    * - ``queries``
      - Oui
-     - Requetes associees (chaine separee par des sauts de ligne, une par ligne)
+     - Requetes associees. Chaine separee par des sauts de ligne, une par ligne (les lignes vides sont ignorees ; 10 000 caracteres maximum)
    * - ``virtualHost``
      - Non
-     - Hote virtuel
+     - Hote virtuel (1 000 caracteres maximum)
+
+.. note::
+
+   ``crudMode`` etant defini automatiquement cote API, il n'est pas necessaire de l'inclure dans le corps de la requete.
 
 Reponse
 -------
@@ -166,6 +186,7 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_query_id",
         "created": true
@@ -173,7 +194,7 @@ Reponse
     }
 
 Mise a jour d'une requete associee
-==================================
+===================================
 
 Requete
 -------
@@ -196,6 +217,32 @@ Corps de la requete
       "versionNo": 1
     }
 
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Champ
+     - Requis
+     - Description
+   * - ``id``
+     - Oui
+     - ID de la requete associee a mettre a jour (1 000 caracteres maximum)
+   * - ``term``
+     - Oui
+     - Mot-cle de recherche (10 000 caracteres maximum)
+   * - ``queries``
+     - Oui
+     - Requetes associees. Chaine separee par des sauts de ligne, une par ligne (les lignes vides sont ignorees ; 10 000 caracteres maximum)
+   * - ``virtualHost``
+     - Non
+     - Hote virtuel (1 000 caracteres maximum)
+   * - ``versionNo``
+     - Oui
+     - Numero de version utilise pour le verrouillage optimiste. Specifiez la valeur incluse dans la reponse lors de l'obtention du parametre
+
 Reponse
 -------
 
@@ -203,6 +250,7 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_query_id",
         "created": false
@@ -210,7 +258,7 @@ Reponse
     }
 
 Suppression d'une requete associee
-==================================
+====================================
 
 Requete
 -------
@@ -226,7 +274,26 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
+      }
+    }
+
+Reponse d'erreur
+================
+
+En cas d'echec de la requete, ``status`` est defini sur une valeur differente de 0 et
+``message`` contient le detail de l'erreur. Par exemple, pour une erreur de validation
+telle qu'un champ obligatoire manquant, ``status`` vaut ``1``. Pour la liste des codes
+de statut, consultez :doc:`api-admin-overview`.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 1,
+        "message": "..."
       }
     }
 
@@ -234,7 +301,7 @@ Exemples d'utilisation
 ======================
 
 Requetes associees pour les produits
-------------------------------------
+-------------------------------------
 
 .. code-block:: bash
 
@@ -247,7 +314,7 @@ Requetes associees pour les produits
          }'
 
 Requetes associees pour l'aide
-------------------------------
+-------------------------------
 
 .. code-block:: bash
 

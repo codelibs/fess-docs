@@ -6,7 +6,12 @@ RelatedQuery API
 ====
 
 RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです。
-特定の検索クエリに対して関連する検索キーワードを提案できます。
+ユーザーが入力する検索キーワード（``term``）に対して、関連する検索キーワードの候補
+（``queries``）を登録・管理できます。登録した関連クエリは、検索画面で関連する検索候補として
+表示されます。
+
+認証方法、共通のレスポンス形式（``version`` フィールドや ``status`` コード）、
+ページネーション、エラーレスポンスの詳細は :doc:`api-admin-overview` を参照してください。
 
 ベースURL
 =========
@@ -56,7 +61,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -65,11 +70,11 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数（デフォルト: 25。``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号（1から開始。デフォルト: 1）
 
 レスポンス
 ----------
@@ -78,17 +83,25 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "query_id_1",
             "term": "fess",
-            "queries": "fess tutorial\nfess installation\nfess configuration"
+            "queries": "fess tutorial\nfess installation\nfess configuration",
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   各設定には ``versionNo``（楽観的ロック用のバージョン番号）が含まれます。``virtualHost``
+   や監査用フィールド（``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）は、
+   値が設定されている場合に限り含まれます。値が空の ``virtualHost`` はレスポンスに含まれません。
 
 関連クエリ取得
 ==============
@@ -107,12 +120,14 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": ""
+          "virtualHost": "site1.example.com",
+          "versionNo": 1
         }
       }
     }
@@ -144,20 +159,24 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - フィールド
      - 必須
      - 説明
    * - ``term``
      - はい
-     - 検索キーワード
+     - 検索キーワード（最大10000文字）
    * - ``queries``
      - はい
-     - 関連クエリ（1行に1件の改行区切り文字列）
+     - 関連クエリ。1行に1件を記述した改行区切りの文字列です（空行は無視されます。最大10000文字）
    * - ``virtualHost``
      - いいえ
-     - 仮想ホスト
+     - 仮想ホスト（最大1000文字）
+
+.. note::
+
+   ``crudMode`` はAPI側で自動的に設定されるため、リクエストボディに含める必要はありません。
 
 レスポンス
 ----------
@@ -166,6 +185,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_query_id",
         "created": true
@@ -196,6 +216,32 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
       "versionNo": 1
     }
 
+フィールド説明
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``id``
+     - はい
+     - 更新対象の関連クエリID（最大1000文字）
+   * - ``term``
+     - はい
+     - 検索キーワード（最大10000文字）
+   * - ``queries``
+     - はい
+     - 関連クエリ。1行に1件を記述した改行区切りの文字列です（空行は無視されます。最大10000文字）
+   * - ``virtualHost``
+     - いいえ
+     - 仮想ホスト（最大1000文字）
+   * - ``versionNo``
+     - はい
+     - 楽観的ロック用のバージョン番号。取得時のレスポンスに含まれる値を指定します
+
 レスポンス
 ----------
 
@@ -203,6 +249,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_query_id",
         "created": false
@@ -226,7 +273,25 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
+      }
+    }
+
+エラーレスポンス
+================
+
+リクエストが失敗した場合、``status`` に 0 以外の値が設定され、``message`` にエラー内容が
+含まれます。たとえば、必須フィールドの不足などの検証エラーでは ``status`` が ``1`` になります。
+ステータスコードの一覧は :doc:`api-admin-overview` を参照してください。
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 1,
+        "message": "..."
       }
     }
 
