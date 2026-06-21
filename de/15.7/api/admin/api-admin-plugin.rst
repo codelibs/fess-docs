@@ -38,10 +38,42 @@ Endpunktliste
      - /
      - Plugin löschen
 
+Felder der Plugin-Informationen
+================================
+
+Jedes Element des ``plugins``-Arrays, das von den Auflistungs-Endpunkten (``/installed`` und ``/available``) zurückgegeben wird, ist ein Objekt mit den folgenden Feldern.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Feld
+     - Beschreibung
+   * - ``type``
+     - Typ-ID des Artefakts. Einer der folgenden Werte: ``fess-ds`` (Datenspeicher), ``fess-theme`` (Theme),
+       ``fess-ingest`` (Ingest), ``fess-script`` (Skript), ``fess-webapp`` (Web-App),
+       ``fess-thumbnail`` (Thumbnail), ``fess-crawler`` (Crawler), ``fess-llm`` (LLM),
+       ``jar`` (allgemeine JAR-Datei für alle anderen Fälle).
+   * - ``id``
+     - Bezeichner im Format ``{name}:{version}``.
+   * - ``name``
+     - Plugin-Name.
+   * - ``version``
+     - Plugin-Version.
+   * - ``url``
+     - URL der Download-Quelle. Nur in der Antwort von ``/available`` enthalten. Bei ``/installed``
+       ist kein Wert vorhanden, daher wird das Feld weggelassen.
+
+.. note::
+
+   In den API-Antworten von |Fess| werden Felder mit dem Wert ``null`` nicht ausgegeben. Daher
+   enthält jedes Element der installierten Plugins kein ``url``-Feld.
+
 Installierte Plugins auflisten
 ==============================
 
-Gibt die Liste der installierten Plugins zurück.
+Gibt die Liste der installierten Plugins zurück. Die Artefakte im Plugin-Verzeichnis werden
+nach Typ durchsucht, alphabetisch nach Namen sortiert und zurückgegeben.
 
 Request
 -------
@@ -54,7 +86,8 @@ Response
 --------
 
 In ``plugins`` wird ein Array von Objekten gespeichert, die die Plugin-Informationen darstellen.
-Jedes Objekt ist eine Map aus Zeichenketten-Schlüsseln und -Werten und enthält ``name`` (Plugin-Name), ``version`` (Version) usw.
+Die Felder jedes Objekts sind unter `Felder der Plugin-Informationen`_ beschrieben.
+Bei installierten Plugins wird ``url`` nicht ausgegeben.
 
 .. code-block:: json
 
@@ -64,6 +97,8 @@ Jedes Objekt ist eine Map aus Zeichenketten-Schlüsseln und -Werten und enthält
         "status": 0,
         "plugins": [
           {
+            "type": "fess-ds",
+            "id": "fess-ds-slack:15.7.0",
             "name": "fess-ds-slack",
             "version": "15.7.0"
           }
@@ -74,7 +109,9 @@ Jedes Objekt ist eine Map aus Zeichenketten-Schlüsseln und -Werten und enthält
 Installierbare Plugins auflisten
 ================================
 
-Gibt die Liste der installierbaren Plugins zurück.
+Gibt die Liste der installierbaren Plugins zurück. Die Artefakte aller Typen werden aus den
+Repositorys abgerufen, die in ``plugin.repositories`` der ``fess_config.properties`` konfiguriert sind.
+Das Ergebnis wird für eine bestimmte Zeit (standardmäßig 5 Minuten) zwischengespeichert.
 
 Request
 -------
@@ -87,7 +124,8 @@ Response
 --------
 
 In ``plugins`` wird ein Array von Objekten gespeichert, die die Informationen der installierbaren Plugins darstellen.
-Wie bei ``installed`` ist jedes Objekt eine Map aus Zeichenketten-Schlüsseln und -Werten.
+Die Felder jedes Objekts sind unter `Felder der Plugin-Informationen`_ beschrieben.
+Bei installierbaren Plugins ist die Download-Quelle ``url`` enthalten.
 
 .. code-block:: json
 
@@ -97,8 +135,11 @@ Wie bei ``installed`` ist jedes Objekt eine Map aus Zeichenketten-Schlüsseln un
         "status": 0,
         "plugins": [
           {
+            "type": "fess-ds",
+            "id": "fess-ds-slack:15.7.0",
             "name": "fess-ds-slack",
-            "version": "15.7.0"
+            "version": "15.7.0",
+            "url": "https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-slack/15.7.0/fess-ds-slack-15.7.0.jar"
           }
         ]
       }
@@ -144,11 +185,16 @@ Feldbeschreibungen
      - Ja
      - Plugin-Version (maximal 100 Zeichen)
 
+.. note::
+
+   ``name`` und ``version`` müssen mit einem der installierbaren Plugins übereinstimmen, die über
+   ``/available`` abgerufen werden können. Wenn kein passendes Artefakt vorhanden ist,
+   wird ein Fehler zurückgegeben.
+
 Response
 --------
 
-Bei Erfolg wird nur ``status`` zurückgegeben.
-Existiert kein Artefakt, das auf ``name`` oder ``version`` passt, wird ``status`` zu ``1`` (BAD_REQUEST) und in ``message`` wird ``invalid name or version`` gesetzt.
+Wenn die Anfrage akzeptiert wird, wird eine Antwort mit ``status`` ``0`` (OK) zurückgegeben.
 
 .. code-block:: json
 
@@ -158,6 +204,28 @@ Existiert kein Artefakt, das auf ``name`` oder ``version`` passt, wird ``status`
         "status": 0
       }
     }
+
+Wenn kein Artefakt zu ``name`` oder ``version`` gefunden wird, wird ``status`` auf
+``1`` (BAD_REQUEST) gesetzt und ``message`` enthält ``invalid name or version``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 1,
+        "message": "invalid name or version"
+      }
+    }
+
+.. note::
+
+   Die Installation wird asynchron im Hintergrund ausgeführt. Die Antwort mit ``status: 0``
+   zeigt lediglich an, dass die Anfrage akzeptiert wurde, und garantiert nicht den Abschluss
+   der Installation. Nach dem Abschluss der Installation werden Plugins mit demselben Namen,
+   aber einer anderen Version, die bereits installiert sind, automatisch entfernt. Wenn der
+   Download oder die Installation fehlschlägt, wird dies im Serverprotokoll aufgezeichnet,
+   aber nicht in der API-Antwort widergespiegelt.
 
 Plugin löschen
 ==============
@@ -197,10 +265,12 @@ Feldbeschreibungen
      - Plugin-Name (maximal 100 Zeichen)
    * - ``version``
      - Nein
-     - Plugin-Version (maximal 100 Zeichen)
+     - Plugin-Version (maximal 100 Zeichen). Es wird empfohlen, diese Angabe zu machen, um das zu löschende Plugin eindeutig zu identifizieren.
 
 Response
 --------
+
+Wenn die Anfrage akzeptiert wird, wird eine Antwort mit ``status`` ``0`` (OK) zurückgegeben.
 
 .. code-block:: json
 
@@ -210,6 +280,14 @@ Response
         "status": 0
       }
     }
+
+.. note::
+
+   Die Löschung wird asynchron im Hintergrund ausgeführt. Die Antwort mit ``status: 0``
+   zeigt lediglich an, dass die Anfrage akzeptiert wurde, und prüft weder, ob das entsprechende
+   Plugin vorhanden ist, noch ob die Löschung erfolgreich war. Wenn die Löschung fehlschlägt
+   (z. B. wenn die Zieldatei nicht vorhanden ist), wird dies im Serverprotokoll aufgezeichnet,
+   aber nicht in der API-Antwort widergespiegelt.
 
 Verwendungsbeispiele
 ====================

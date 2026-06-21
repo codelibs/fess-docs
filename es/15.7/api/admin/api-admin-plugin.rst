@@ -38,10 +38,43 @@ Lista de Endpoints
      - /
      - Eliminar plugin
 
-Obtener Lista de Plugins Instalados
-===================================
+Campos de Informacion del Plugin
+=================================
 
-Devuelve la lista de plugins instalados.
+Los endpoints de listado (``/installed`` y ``/available``) devuelven un arreglo ``plugins``
+cuyos elementos son objetos con los siguientes campos.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Campo
+     - Descripcion
+   * - ``type``
+     - ID de tipo del artefacto. Puede ser uno de: ``fess-ds`` (almacen de datos), ``fess-theme`` (tema),
+       ``fess-ingest`` (Ingest), ``fess-script`` (script), ``fess-webapp`` (aplicacion web),
+       ``fess-thumbnail`` (miniatura), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
+       ``jar`` (JAR de proposito general no incluido en los anteriores).
+   * - ``id``
+     - Identificador con formato ``{name}:{version}``.
+   * - ``name``
+     - Nombre del plugin.
+   * - ``version``
+     - Version del plugin.
+   * - ``url``
+     - URL de descarga del artefacto. Solo se incluye en la respuesta de ``/available``. En ``/installed``
+       el valor no existe, por lo que el campo se omite por completo.
+
+.. note::
+
+   En las respuestas de la API de |Fess|, los campos con valor ``null`` no se incluyen en la salida. Por ello,
+   los elementos de plugins instalados no contienen el campo ``url``.
+
+Obtener Lista de Plugins Instalados
+====================================
+
+Devuelve la lista de plugins instalados. Recorre los artefactos del directorio de plugins
+por tipo y los devuelve ordenados por nombre.
 
 Solicitud
 ---------
@@ -54,7 +87,8 @@ Respuesta
 ---------
 
 En ``plugins`` se almacena un arreglo de objetos que representan la informacion de los plugins.
-Cada objeto es un mapa de claves y valores de tipo cadena que incluye ``name`` (nombre del plugin) y ``version`` (version), entre otros.
+Consulte `Campos de Informacion del Plugin`_ para conocer los campos de cada objeto.
+En los plugins instalados, ``url`` no se incluye en la salida.
 
 .. code-block:: json
 
@@ -64,6 +98,8 @@ Cada objeto es un mapa de claves y valores de tipo cadena que incluye ``name`` (
         "status": 0,
         "plugins": [
           {
+            "type": "fess-ds",
+            "id": "fess-ds-slack:15.7.0",
             "name": "fess-ds-slack",
             "version": "15.7.0"
           }
@@ -72,9 +108,11 @@ Cada objeto es un mapa de claves y valores de tipo cadena que incluye ``name`` (
     }
 
 Obtener Lista de Plugins Instalables
-====================================
+=====================================
 
-Devuelve la lista de plugins instalables.
+Devuelve la lista de plugins instalables. Obtiene artefactos de todos los tipos desde los repositorios
+configurados en ``plugin.repositories`` de ``fess_config.properties``.
+Los resultados se almacenan en cache durante un tiempo determinado (5 minutos por defecto).
 
 Solicitud
 ---------
@@ -87,7 +125,8 @@ Respuesta
 ---------
 
 En ``plugins`` se almacena un arreglo de objetos que representan la informacion de los plugins instalables.
-Cada objeto es un mapa de claves y valores de tipo cadena, igual que en ``installed``.
+Consulte `Campos de Informacion del Plugin`_ para conocer los campos de cada objeto.
+Los plugins instalables incluyen el campo ``url`` con la URL de descarga.
 
 .. code-block:: json
 
@@ -97,8 +136,11 @@ Cada objeto es un mapa de claves y valores de tipo cadena, igual que en ``instal
         "status": 0,
         "plugins": [
           {
+            "type": "fess-ds",
+            "id": "fess-ds-slack:15.7.0",
             "name": "fess-ds-slack",
-            "version": "15.7.0"
+            "version": "15.7.0",
+            "url": "https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-slack/15.7.0/fess-ds-slack-15.7.0.jar"
           }
         ]
       }
@@ -144,11 +186,15 @@ Descripcion de Campos
      - Si
      - Version del plugin (maximo 100 caracteres)
 
+.. note::
+
+   ``name`` y ``version`` deben coincidir con alguno de los plugins instalables obtenidos mediante ``/available``.
+   Si no existe un artefacto que coincida, se devolvera un error.
+
 Respuesta
 ---------
 
-En caso de exito solo se devuelve ``status``.
-Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` sera ``1`` (BAD_REQUEST) y ``message`` se establecera con ``invalid name or version``.
+Cuando la solicitud es aceptada, se devuelve una respuesta con ``status`` igual a ``0`` (OK).
 
 .. code-block:: json
 
@@ -158,6 +204,27 @@ Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` s
         "status": 0
       }
     }
+
+Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` sera
+``1`` (BAD_REQUEST) y ``message`` se establecera con ``invalid name or version``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 1,
+        "message": "invalid name or version"
+      }
+    }
+
+.. note::
+
+   El proceso de instalacion se ejecuta de forma asincrona en segundo plano. La respuesta con ``status: 0``
+   indica que la solicitud fue aceptada, pero no garantiza que la instalacion haya finalizado.
+   Una vez completada la instalacion, si ya existian plugins con el mismo nombre pero distinta version,
+   estos se eliminan automaticamente. Si la descarga o la instalacion fallan, el error se registra
+   en el log del servidor, pero no se refleja en la respuesta de la API.
 
 Eliminar Plugin
 ===============
@@ -197,10 +264,12 @@ Descripcion de Campos
      - Nombre del plugin (maximo 100 caracteres)
    * - ``version``
      - No
-     - Version del plugin (maximo 100 caracteres)
+     - Version del plugin (maximo 100 caracteres). Se recomienda especificarlo para identificar de forma unica el artefacto a eliminar.
 
 Respuesta
 ---------
+
+Cuando la solicitud es aceptada, se devuelve una respuesta con ``status`` igual a ``0`` (OK).
 
 .. code-block:: json
 
@@ -211,11 +280,18 @@ Respuesta
       }
     }
 
+.. note::
+
+   El proceso de eliminacion se ejecuta de forma asincrona en segundo plano. La respuesta con ``status: 0``
+   indica que la solicitud fue aceptada, pero no determina si el plugin existe ni si la eliminacion fue exitosa.
+   Si la eliminacion falla (por ejemplo, si el archivo no existe), el error se registra en el log del servidor,
+   pero no se refleja en la respuesta de la API.
+
 Ejemplos de Uso
 ===============
 
 Obtener Lista de Plugins Instalados
------------------------------------
+------------------------------------
 
 .. code-block:: bash
 
