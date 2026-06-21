@@ -56,7 +56,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -65,11 +65,15 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page (default: 25, configurable via ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1, default: 1; values of 0 or less are treated as 1)
+   * - ``id``
+     - String
+     - No
+     - Filters by exact match on the specified role ID
 
 Response
 --------
@@ -82,11 +86,13 @@ Response
         "settings": [
           {
             "id": "role_id_1",
-            "name": "admin"
+            "name": "admin",
+            "versionNo": 1
           },
           {
             "id": "role_id_2",
-            "name": "user"
+            "name": "user",
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -113,7 +119,8 @@ Response
         "status": 0,
         "setting": {
           "id": "role_id_1",
-          "name": "admin"
+          "name": "admin",
+          "versionNo": 1
         }
       }
     }
@@ -143,14 +150,17 @@ Field Description
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Field
      - Required
      - Description
    * - ``name``
      - Yes
-     - Role name
+     - Role name (max 100 characters)
+   * - ``attributes``
+     - No
+     - Map of attributes. Values are specified as strings
 
 Response
 --------
@@ -186,6 +196,29 @@ Request Body
       "name": "editor_updated",
       "versionNo": 1
     }
+
+Field Description
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Field
+     - Required
+     - Description
+   * - ``id``
+     - Yes
+     - Role ID to update
+   * - ``name``
+     - Yes
+     - Role name (max 100 characters)
+   * - ``attributes``
+     - No
+     - Map of attributes. Values are specified as strings
+   * - ``versionNo``
+     - Yes
+     - Version number for optimistic locking. Specify the ``versionNo`` value obtained from Get Role
 
 Response
 --------
@@ -243,7 +276,7 @@ List Roles
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50" \
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Reference
@@ -253,4 +286,3 @@ Reference
 - :doc:`api-admin-user` - User Management API
 - :doc:`api-admin-group` - Group Management API
 - :doc:`../../admin/role-guide` - Role Management Guide
-
