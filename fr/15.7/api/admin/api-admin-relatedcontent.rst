@@ -1,11 +1,11 @@
 ==========================
-API RelatedContent
+RelatedContent API
 ==========================
 
 Vue d'ensemble
 ==============
 
-L'API RelatedContent permet de gerer les contenus associes dans |Fess|.
+L'API RelatedContent est une API permettant de gerer les contenus associes dans |Fess|.
 Vous pouvez afficher des contenus personnalises associes a des mots-cles specifiques.
 
 URL de base
@@ -27,22 +27,22 @@ Liste des endpoints
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des contenus associes
+     - Lister les contenus associes
    * - GET
      - /setting/{id}
-     - Obtention d'un contenu associe
+     - Obtenir un contenu associe
    * - POST
      - /setting
-     - Creation d'un contenu associe
+     - Creer un contenu associe
    * - PUT
      - /setting
-     - Mise a jour d'un contenu associe
+     - Mettre a jour un contenu associe
    * - DELETE
      - /setting/{id}
-     - Suppression d'un contenu associe
+     - Supprimer un contenu associe
 
-Obtention de la liste des contenus associes
-===========================================
+Lister les contenus associes
+============================
 
 Requete
 -------
@@ -56,7 +56,7 @@ Parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -65,11 +65,19 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1 ; par defaut : 1 ; une valeur inferieure ou egale a 0 est traitee comme 1)
+   * - ``term``
+     - String
+     - Non
+     - Filtrer par mot-cle de recherche (recherche avec caracteres generiques)
+   * - ``content``
+     - String
+     - Non
+     - Filtrer par contenu (recherche avec caracteres generiques)
 
 Reponse
 -------
@@ -78,21 +86,40 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "sortOrder": 0
+            "virtualHost": "",
+            "sortOrder": 0,
+            "createdBy": "admin",
+            "createdTime": 1700000000000,
+            "updatedBy": "admin",
+            "updatedTime": 1700000000000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
 
-Obtention d'un contenu associe
-==============================
+.. note::
+
+   Chaque element de ``settings`` ainsi que l'objet ``setting`` retourne par
+   l'endpoint d'obtention contiennent les champs de l'entite stockee tels quels.
+   En plus de ``term``, ``content``, ``sortOrder`` et ``virtualHost``, les champs
+   d'audit ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` ainsi que
+   le champ de verrouillage optimiste ``versionNo`` sont egalement retournes.
+   ``createdTime`` et ``updatedTime`` sont exprimes en millisecondes depuis l'epoque
+   (nombres). Les champs non renseignes (null) sont omis de la reponse. De plus,
+   l'objet ``response`` de toutes les reponses contient toujours ``version``, qui
+   indique la version du produit (voir :doc:`api-admin-overview` pour les details).
+
+Obtenir un contenu associe
+==========================
 
 Requete
 -------
@@ -108,19 +135,30 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
+          "virtualHost": "",
           "sortOrder": 0,
-          "virtualHost": ""
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
 
-Creation d'un contenu associe
-=============================
+.. note::
+
+   La valeur de ``versionNo`` requise lors d'une mise a jour (PUT) est celle
+   incluse dans cette reponse d'obtention.
+
+Creer un contenu associe
+========================
 
 Requete
 -------
@@ -147,23 +185,23 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Champ
      - Requis
      - Description
    * - ``term``
-     - Oui
-     - Mot-cle de recherche
+     - **Oui**
+     - Mot-cle de recherche (maximum 10000 caracteres)
    * - ``content``
-     - Oui
-     - Contenu HTML a afficher
+     - **Oui**
+     - Contenu HTML a afficher (maximum 10000 caracteres)
    * - ``sortOrder``
-     - Non
-     - Ordre d'affichage
+     - **Non**
+     - Ordre d'affichage (entier compris entre 0 et 2147483647)
    * - ``virtualHost``
-     - Non
-     - Hote virtuel
+     - **Non**
+     - Hote virtuel (maximum 1000 caracteres)
 
 Reponse
 -------
@@ -172,14 +210,15 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_content_id",
         "created": true
       }
     }
 
-Mise a jour d'un contenu associe
-================================
+Mettre a jour un contenu associe
+=================================
 
 Requete
 -------
@@ -203,6 +242,35 @@ Corps de la requete
       "versionNo": 1
     }
 
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Champ
+     - Requis
+     - Description
+   * - ``id``
+     - **Oui**
+     - Identifiant du contenu associe a mettre a jour (maximum 1000 caracteres)
+   * - ``term``
+     - **Oui**
+     - Mot-cle de recherche (maximum 10000 caracteres)
+   * - ``content``
+     - **Oui**
+     - Contenu HTML a afficher (maximum 10000 caracteres)
+   * - ``sortOrder``
+     - **Non**
+     - Ordre d'affichage (entier compris entre 0 et 2147483647)
+   * - ``virtualHost``
+     - **Non**
+     - Hote virtuel (maximum 1000 caracteres)
+   * - ``versionNo``
+     - **Oui**
+     - Numero de version pour le verrouillage optimiste. Specifier la valeur incluse dans la reponse de ``setting/{id}``.
+
 Reponse
 -------
 
@@ -210,14 +278,22 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_content_id",
         "created": false
       }
     }
 
-Suppression d'un contenu associe
-================================
+.. note::
+
+   Les champs d'audit tels que ``createdBy``, ``createdTime``, ``updatedBy``,
+   ``updatedTime`` et ``crudMode`` sont ignores meme s'ils sont inclus dans le
+   corps de la requete, car ils sont definis automatiquement cote serveur. Il
+   n'est pas necessaire de les specifier lors de la creation ou de la mise a jour.
+
+Supprimer un contenu associe
+============================
 
 Requete
 -------
@@ -233,6 +309,7 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
       }
     }
