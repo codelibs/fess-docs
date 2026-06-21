@@ -56,7 +56,7 @@ Parameter
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Typ
@@ -65,11 +65,15 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite (Standard: 25, konfigurierbar über ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1, Standard: 1; Werte von 0 oder kleiner werden als 1 behandelt)
+   * - ``id``
+     - String
+     - Nein
+     - Filtert anhand der exakten Übereinstimmung mit der angegebenen Rollen-ID
 
 Response
 --------
@@ -82,11 +86,13 @@ Response
         "settings": [
           {
             "id": "role_id_1",
-            "name": "admin"
+            "name": "admin",
+            "versionNo": 1
           },
           {
             "id": "role_id_2",
-            "name": "user"
+            "name": "user",
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -113,7 +119,8 @@ Response
         "status": 0,
         "setting": {
           "id": "role_id_1",
-          "name": "admin"
+          "name": "admin",
+          "versionNo": 1
         }
       }
     }
@@ -143,14 +150,17 @@ Feldbeschreibungen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Feld
      - Erforderlich
      - Beschreibung
    * - ``name``
      - Ja
-     - Rollenname
+     - Rollenname (maximal 100 Zeichen)
+   * - ``attributes``
+     - Nein
+     - Attribut-Map. Werte werden als Zeichenketten angegeben
 
 Response
 --------
@@ -186,6 +196,29 @@ Request-Body
       "name": "editor_updated",
       "versionNo": 1
     }
+
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``id``
+     - Ja
+     - Zu aktualisierende Rollen-ID
+   * - ``name``
+     - Ja
+     - Rollenname (maximal 100 Zeichen)
+   * - ``attributes``
+     - Nein
+     - Attribut-Map. Werte werden als Zeichenketten angegeben
+   * - ``versionNo``
+     - Ja
+     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``versionNo`` an, der beim Abrufen der Rolle ermittelt wurde
 
 Response
 --------
@@ -243,7 +276,7 @@ Rollenliste abrufen
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50" \
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Referenzinformationen

@@ -56,7 +56,7 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -65,11 +65,15 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数（デフォルト: 25。``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号（1から開始、デフォルト: 1。0以下を指定した場合は1として扱われます）
+   * - ``id``
+     - String
+     - いいえ
+     - 指定したロールIDで完全一致フィルタリングします
 
 レスポンス
 ----------
@@ -82,11 +86,13 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
         "settings": [
           {
             "id": "role_id_1",
-            "name": "admin"
+            "name": "admin",
+            "versionNo": 1
           },
           {
             "id": "role_id_2",
-            "name": "user"
+            "name": "user",
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -113,7 +119,8 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
         "status": 0,
         "setting": {
           "id": "role_id_1",
-          "name": "admin"
+          "name": "admin",
+          "versionNo": 1
         }
       }
     }
@@ -143,14 +150,17 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - フィールド
      - 必須
      - 説明
    * - ``name``
      - はい
-     - ロール名
+     - ロール名（最大100文字）
+   * - ``attributes``
+     - いいえ
+     - 属性のマップ。値は文字列で指定します
 
 レスポンス
 ----------
@@ -186,6 +196,29 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
       "name": "editor_updated",
       "versionNo": 1
     }
+
+フィールド説明
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``id``
+     - はい
+     - 更新対象のロールID
+   * - ``name``
+     - はい
+     - ロール名（最大100文字）
+   * - ``attributes``
+     - いいえ
+     - 属性のマップ。値は文字列で指定します
+   * - ``versionNo``
+     - はい
+     - 楽観的ロック用のバージョン番号。ロール取得で得た ``versionNo`` の値を指定します
 
 レスポンス
 ----------
@@ -243,7 +276,7 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50" \
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 参考情報

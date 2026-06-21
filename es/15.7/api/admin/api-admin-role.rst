@@ -56,7 +56,7 @@ Parametros
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametro
      - Tipo
@@ -65,11 +65,15 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Numero de elementos por pagina (predeterminado: 25. Configurable mediante ``paging.page.size`` en ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina (comienza en 1, predeterminado: 1. Los valores de 0 o menos se tratan como 1)
+   * - ``id``
+     - String
+     - No
+     - Filtra por coincidencia exacta con el ID de rol especificado
 
 Respuesta
 ---------
@@ -82,11 +86,13 @@ Respuesta
         "settings": [
           {
             "id": "role_id_1",
-            "name": "admin"
+            "name": "admin",
+            "versionNo": 1
           },
           {
             "id": "role_id_2",
-            "name": "user"
+            "name": "user",
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -113,7 +119,8 @@ Respuesta
         "status": 0,
         "setting": {
           "id": "role_id_1",
-          "name": "admin"
+          "name": "admin",
+          "versionNo": 1
         }
       }
     }
@@ -143,14 +150,17 @@ Descripcion de Campos
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Campo
      - Requerido
      - Descripcion
    * - ``name``
      - Si
-     - Nombre del rol
+     - Nombre del rol (maximo 100 caracteres)
+   * - ``attributes``
+     - No
+     - Mapa de atributos. Los valores se especifican como cadenas
 
 Respuesta
 ---------
@@ -186,6 +196,29 @@ Cuerpo de la Solicitud
       "name": "editor_updated",
       "versionNo": 1
     }
+
+Descripcion de Campos
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Campo
+     - Requerido
+     - Descripcion
+   * - ``id``
+     - Si
+     - ID del rol a actualizar
+   * - ``name``
+     - Si
+     - Nombre del rol (maximo 100 caracteres)
+   * - ``attributes``
+     - No
+     - Mapa de atributos. Los valores se especifican como cadenas
+   * - ``versionNo``
+     - Si
+     - Numero de version para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el rol
 
 Respuesta
 ---------
@@ -243,7 +276,7 @@ Obtener Lista de Roles
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50" \
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Informacion de Referencia

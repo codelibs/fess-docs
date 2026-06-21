@@ -56,7 +56,7 @@ Role API是用于管理 |Fess| 角色的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -65,11 +65,15 @@ Role API是用于管理 |Fess| 角色的API。
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数（默认：25。可通过 ``fess_config.properties`` 的 ``paging.page.size`` 修改）
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码（从1开始，默认：1。指定0或以下时视为1）
+   * - ``id``
+     - String
+     - 否
+     - 按指定的角色ID进行完全匹配过滤
 
 响应
 ----
@@ -82,11 +86,13 @@ Role API是用于管理 |Fess| 角色的API。
         "settings": [
           {
             "id": "role_id_1",
-            "name": "admin"
+            "name": "admin",
+            "versionNo": 1
           },
           {
             "id": "role_id_2",
-            "name": "user"
+            "name": "user",
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -113,7 +119,8 @@ Role API是用于管理 |Fess| 角色的API。
         "status": 0,
         "setting": {
           "id": "role_id_1",
-          "name": "admin"
+          "name": "admin",
+          "versionNo": 1
         }
       }
     }
@@ -143,14 +150,17 @@ Role API是用于管理 |Fess| 角色的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - 字段
      - 必需
      - 说明
    * - ``name``
      - 是
-     - 角色名称
+     - 角色名称（最大100个字符）
+   * - ``attributes``
+     - 否
+     - 属性的映射。值以字符串指定
 
 响应
 ----
@@ -186,6 +196,29 @@ Role API是用于管理 |Fess| 角色的API。
       "name": "editor_updated",
       "versionNo": 1
     }
+
+字段说明
+~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - 字段
+     - 必需
+     - 说明
+   * - ``id``
+     - 是
+     - 要更新的角色ID
+   * - ``name``
+     - 是
+     - 角色名称（最大100个字符）
+   * - ``attributes``
+     - 否
+     - 属性的映射。值以字符串指定
+   * - ``versionNo``
+     - 是
+     - 乐观锁的版本号。指定从获取角色获得的 ``versionNo`` 值
 
 响应
 ----
@@ -243,7 +276,7 @@ Role API是用于管理 |Fess| 角色的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50" \
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 参考信息
@@ -253,4 +286,3 @@ Role API是用于管理 |Fess| 角色的API。
 - :doc:`api-admin-user` - 用户管理API
 - :doc:`api-admin-group` - 组管理API
 - :doc:`../../admin/role-guide` - 角色管理指南
-

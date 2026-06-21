@@ -42,7 +42,7 @@ Liste des endpoints
      - Suppression d'un role
 
 Obtention de la liste des roles
-===============================
+================================
 
 Requete
 -------
@@ -56,7 +56,7 @@ Parametres
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parametre
      - Type
@@ -65,11 +65,15 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page (par defaut : 25. Modifiable via la propriete ``paging.page.size`` dans ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1, par defaut : 1. Les valeurs de 0 ou moins sont traitees comme 1)
+   * - ``id``
+     - String
+     - Non
+     - Filtre par correspondance exacte sur l'ID de role specifie
 
 Reponse
 -------
@@ -82,11 +86,13 @@ Reponse
         "settings": [
           {
             "id": "role_id_1",
-            "name": "admin"
+            "name": "admin",
+            "versionNo": 1
           },
           {
             "id": "role_id_2",
-            "name": "user"
+            "name": "user",
+            "versionNo": 1
           }
         ],
         "total": 5
@@ -113,7 +119,8 @@ Reponse
         "status": 0,
         "setting": {
           "id": "role_id_1",
-          "name": "admin"
+          "name": "admin",
+          "versionNo": 1
         }
       }
     }
@@ -143,14 +150,17 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Champ
      - Requis
      - Description
    * - ``name``
      - Oui
-     - Nom du role
+     - Nom du role (maximum 100 caracteres)
+   * - ``attributes``
+     - Non
+     - Map d'attributs. Les valeurs sont specifiees sous forme de chaines de caracteres
 
 Reponse
 -------
@@ -186,6 +196,29 @@ Corps de la requete
       "name": "editor_updated",
       "versionNo": 1
     }
+
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Champ
+     - Requis
+     - Description
+   * - ``id``
+     - Oui
+     - ID du role a mettre a jour
+   * - ``name``
+     - Oui
+     - Nom du role (maximum 100 caracteres)
+   * - ``attributes``
+     - Non
+     - Map d'attributs. Les valeurs sont specifiees sous forme de chaines de caracteres
+   * - ``versionNo``
+     - Oui
+     - Numero de version pour le verrouillage optimiste. Specifiez la valeur de ``versionNo`` obtenue lors de l'obtention du role
 
 Reponse
 -------
@@ -239,11 +272,11 @@ Creation d'un nouveau role
          }'
 
 Obtention de la liste des roles
--------------------------------
+--------------------------------
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50" \
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Informations complementaires
