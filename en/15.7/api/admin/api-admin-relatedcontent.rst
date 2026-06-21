@@ -56,7 +56,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -65,11 +65,19 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page (default: 25; configurable via ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (starts from 1, default: 1; values of 0 or less are treated as 1)
+   * - ``term``
+     - String
+     - No
+     - Filter by search keyword (wildcard search)
+   * - ``content``
+     - String
+     - No
+     - Filter by content body (wildcard search)
 
 Response
 --------
@@ -78,18 +86,37 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "sortOrder": 0
+            "virtualHost": "",
+            "sortOrder": 0,
+            "createdBy": "admin",
+            "createdTime": 1700000000000,
+            "updatedBy": "admin",
+            "updatedTime": 1700000000000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   Each element of ``settings`` and the ``setting`` object returned by the get
+   endpoint contain the fields of the stored entity as-is. In addition to
+   ``term``, ``content``, ``sortOrder``, and ``virtualHost``, the audit fields
+   ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` and the
+   optimistic-locking field ``versionNo`` are also returned. ``createdTime`` and
+   ``updatedTime`` are expressed as milliseconds since the epoch (numbers). Fields
+   that are not set (null) are omitted from the response. In addition, the
+   ``response`` object of every response always includes ``version``, which
+   indicates the product version (see :doc:`api-admin-overview` for details).
 
 Get Related Content
 ===================
@@ -108,16 +135,27 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
+          "virtualHost": "",
           "sortOrder": 0,
-          "virtualHost": ""
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
+
+.. note::
+
+   The ``versionNo`` required when updating (PUT) is the value included in this
+   get response.
 
 Create Related Content
 ======================
@@ -147,23 +185,23 @@ Field Description
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Field
      - Required
      - Description
    * - ``term``
      - Yes
-     - Search keyword
+     - Search keyword (max 10000 characters)
    * - ``content``
      - Yes
-     - HTML content to display
+     - HTML content to display (max 10000 characters)
    * - ``sortOrder``
      - No
-     - Display order
+     - Display order (integer between 0 and 2147483647)
    * - ``virtualHost``
      - No
-     - Virtual host
+     - Virtual host (max 1000 characters)
 
 Response
 --------
@@ -172,6 +210,7 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_content_id",
         "created": true
@@ -203,6 +242,35 @@ Request Body
       "versionNo": 1
     }
 
+Field Description
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Field
+     - Required
+     - Description
+   * - ``id``
+     - Yes
+     - ID of the related content to update (max 1000 characters)
+   * - ``term``
+     - Yes
+     - Search keyword (max 10000 characters)
+   * - ``content``
+     - Yes
+     - HTML content to display (max 10000 characters)
+   * - ``sortOrder``
+     - No
+     - Display order (integer between 0 and 2147483647)
+   * - ``virtualHost``
+     - No
+     - Virtual host (max 1000 characters)
+   * - ``versionNo``
+     - Yes
+     - Version number for optimistic locking. Specify the value included in the response of ``setting/{id}``.
+
 Response
 --------
 
@@ -210,11 +278,19 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_content_id",
         "created": false
       }
     }
+
+.. note::
+
+   Audit fields such as ``createdBy``, ``createdTime``, ``updatedBy``,
+   ``updatedTime`` and ``crudMode`` are ignored even if included in the request
+   body, because they are set automatically on the server side. You do not need
+   to specify them when creating or updating.
 
 Delete Related Content
 ======================
@@ -233,6 +309,7 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
       }
     }
@@ -274,4 +351,3 @@ Reference
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`api-admin-relatedquery` - Related Query API
 - :doc:`../../admin/relatedcontent-guide` - Related Content Management Guide
-

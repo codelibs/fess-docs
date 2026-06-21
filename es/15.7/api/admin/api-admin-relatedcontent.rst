@@ -1,12 +1,12 @@
 ==========================
-API de RelatedContent
+RelatedContent API
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de RelatedContent es para gestionar contenido relacionado de |Fess|.
-Puede mostrar contenido personalizado relacionado con palabras clave especificas.
+La API de RelatedContent es una API para gestionar el contenido relacionado de |Fess|.
+Permite mostrar contenido personalizado relacionado con palabras clave específicas.
 
 URL Base
 ========
@@ -22,12 +22,12 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
-     - Obtener lista de contenido relacionado
+     - Listar contenido relacionado
    * - GET
      - /setting/{id}
      - Obtener contenido relacionado
@@ -41,8 +41,8 @@ Lista de Endpoints
      - /setting/{id}
      - Eliminar contenido relacionado
 
-Obtener Lista de Contenido Relacionado
-======================================
+Listar Contenido Relacionado
+============================
 
 Solicitud
 ---------
@@ -51,25 +51,33 @@ Solicitud
 
     GET /api/admin/relatedcontent/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 25; configurable mediante ``paging.page.size`` en ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Número de página (comienza en 1, predeterminado: 1; los valores de 0 o menos se tratan como 1)
+   * - ``term``
+     - String
+     - No
+     - Filtrar por palabra clave de búsqueda (búsqueda con comodines)
+   * - ``content``
+     - String
+     - No
+     - Filtrar por cuerpo del contenido (búsqueda con comodines)
 
 Respuesta
 ---------
@@ -78,18 +86,37 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "sortOrder": 0
+            "virtualHost": "",
+            "sortOrder": 0,
+            "createdBy": "admin",
+            "createdTime": 1700000000000,
+            "updatedBy": "admin",
+            "updatedTime": 1700000000000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   Cada elemento de ``settings`` y el objeto ``setting`` devuelto por el endpoint de
+   obtención contienen los campos de la entidad almacenada tal como están. Además de
+   ``term``, ``content``, ``sortOrder`` y ``virtualHost``, también se devuelven los campos
+   de auditoría ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` y el campo
+   de bloqueo optimista ``versionNo``. ``createdTime`` y ``updatedTime`` se expresan como
+   milisegundos desde el epoch (números). Los campos que no están establecidos (null) se
+   omiten de la respuesta. Además, el objeto ``response`` de todas las respuestas incluye
+   siempre ``version``, que indica la versión del producto (consulte :doc:`api-admin-overview`
+   para más detalles).
 
 Obtener Contenido Relacionado
 =============================
@@ -108,16 +135,27 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
+          "virtualHost": "",
           "sortOrder": 0,
-          "virtualHost": ""
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
+
+.. note::
+
+   El valor de ``versionNo`` necesario al actualizar (PUT) es el valor incluido en
+   esta respuesta de obtención.
 
 Crear Contenido Relacionado
 ===========================
@@ -142,28 +180,28 @@ Cuerpo de la Solicitud
       "virtualHost": ""
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``term``
-     - Si
-     - Palabra clave de busqueda
+     - Sí
+     - Palabra clave de búsqueda (máx. 10000 caracteres)
    * - ``content``
-     - Si
-     - Contenido HTML a mostrar
+     - Sí
+     - Contenido HTML a mostrar (máx. 10000 caracteres)
    * - ``sortOrder``
      - No
-     - Orden de visualizacion
+     - Orden de visualización (entero entre 0 y 2147483647)
    * - ``virtualHost``
      - No
-     - Host virtual
+     - Host virtual (máx. 1000 caracteres)
 
 Respuesta
 ---------
@@ -172,6 +210,7 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_content_id",
         "created": true
@@ -203,6 +242,35 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
+Descripción de Campos
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Campo
+     - Requerido
+     - Descripción
+   * - ``id``
+     - Sí
+     - ID del contenido relacionado a actualizar (máx. 1000 caracteres)
+   * - ``term``
+     - Sí
+     - Palabra clave de búsqueda (máx. 10000 caracteres)
+   * - ``content``
+     - Sí
+     - Contenido HTML a mostrar (máx. 10000 caracteres)
+   * - ``sortOrder``
+     - No
+     - Orden de visualización (entero entre 0 y 2147483647)
+   * - ``virtualHost``
+     - No
+     - Host virtual (máx. 1000 caracteres)
+   * - ``versionNo``
+     - Sí
+     - Número de versión para el bloqueo optimista. Especifique el valor incluido en la respuesta de ``setting/{id}``.
+
 Respuesta
 ---------
 
@@ -210,11 +278,19 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_content_id",
         "created": false
       }
     }
+
+.. note::
+
+   Los campos de auditoría como ``createdBy``, ``createdTime``, ``updatedBy``,
+   ``updatedTime`` y ``crudMode`` se ignoran aunque se incluyan en el cuerpo de la
+   solicitud, ya que son establecidos automáticamente en el lado del servidor. No es
+   necesario especificarlos al crear o actualizar.
 
 Eliminar Contenido Relacionado
 ==============================
@@ -233,6 +309,7 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
       }
     }
@@ -240,8 +317,8 @@ Respuesta
 Ejemplos de Uso
 ===============
 
-Contenido Relacionado de Informacion del Producto
--------------------------------------------------
+Contenido Relacionado de Información de Producto
+------------------------------------------------
 
 .. code-block:: bash
 
@@ -254,7 +331,7 @@ Contenido Relacionado de Informacion del Producto
            "sortOrder": 0
          }'
 
-Contenido Relacionado de Informacion de Soporte
+Contenido Relacionado de Información de Soporte
 -----------------------------------------------
 
 .. code-block:: bash
@@ -268,9 +345,9 @@ Contenido Relacionado de Informacion de Soporte
            "sortOrder": 0
          }'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-relatedquery` - API de consultas relacionadas
-- :doc:`../../admin/relatedcontent-guide` - Guia de gestion de contenido relacionado
+- :doc:`api-admin-overview` - Visión General de Admin API
+- :doc:`api-admin-relatedquery` - API de Consultas Relacionadas
+- :doc:`../../admin/relatedcontent-guide` - Guía de Gestión de Contenido Relacionado

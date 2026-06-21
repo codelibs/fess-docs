@@ -56,7 +56,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -65,11 +65,19 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数（デフォルト: 25。``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ
-     - ページ番号（0から開始）
+     - ページ番号（1から開始、デフォルト: 1。0以下を指定した場合は1として扱われます）
+   * - ``term``
+     - String
+     - いいえ
+     - 検索キーワードによる絞り込み（ワイルドカード検索）
+   * - ``content``
+     - String
+     - いいえ
+     - コンテンツ本文による絞り込み（ワイルドカード検索）
 
 レスポンス
 ----------
@@ -78,18 +86,35 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "sortOrder": 0
+            "virtualHost": "",
+            "sortOrder": 0,
+            "createdBy": "admin",
+            "createdTime": 1700000000000,
+            "updatedBy": "admin",
+            "updatedTime": 1700000000000,
+            "versionNo": 1
           }
         ],
         "total": 5
       }
     }
+
+.. note::
+
+   ``settings`` の各要素および単一取得の ``setting`` には、保存されているエンティティの
+   フィールドがそのまま含まれます。``term``、``content``、``sortOrder``、``virtualHost`` に
+   加えて、監査用の ``createdBy``・``createdTime``・``updatedBy``・``updatedTime`` と、
+   楽観的ロック用の ``versionNo`` も返されます。``createdTime``・``updatedTime`` は
+   エポックからのミリ秒（数値）です。値が未設定（null）のフィールドはレスポンスには
+   含まれません。また、すべてのレスポンスの ``response`` オブジェクトには、製品バージョンを
+   示す ``version`` が常に含まれます（詳細は :doc:`api-admin-overview` を参照）。
 
 関連コンテンツ取得
 ==================
@@ -108,16 +133,26 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
+          "virtualHost": "",
           "sortOrder": 0,
-          "virtualHost": ""
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
+
+.. note::
+
+   更新（PUT）の際に必要となる ``versionNo`` は、この取得結果に含まれる値を指定します。
 
 関連コンテンツ作成
 ==================
@@ -147,23 +182,23 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 15 65
 
    * - フィールド
      - 必須
      - 説明
    * - ``term``
      - はい
-     - 検索キーワード
+     - 検索キーワード（最大10000文字）
    * - ``content``
      - はい
-     - 表示するHTMLコンテンツ
+     - 表示するHTMLコンテンツ（最大10000文字）
    * - ``sortOrder``
      - いいえ
-     - 表示順序
+     - 表示順序（0以上2147483647以下の整数）
    * - ``virtualHost``
      - いいえ
-     - 仮想ホスト
+     - 仮想ホスト（最大1000文字）
 
 レスポンス
 ----------
@@ -172,6 +207,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_content_id",
         "created": true
@@ -203,6 +239,35 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
       "versionNo": 1
     }
 
+フィールド説明
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - フィールド
+     - 必須
+     - 説明
+   * - ``id``
+     - はい
+     - 更新対象の関連コンテンツID（最大1000文字）
+   * - ``term``
+     - はい
+     - 検索キーワード（最大10000文字）
+   * - ``content``
+     - はい
+     - 表示するHTMLコンテンツ（最大10000文字）
+   * - ``sortOrder``
+     - いいえ
+     - 表示順序（0以上2147483647以下の整数）
+   * - ``virtualHost``
+     - いいえ
+     - 仮想ホスト（最大1000文字）
+   * - ``versionNo``
+     - はい
+     - 楽観的ロック用のバージョン番号。``setting/{id}`` の取得結果に含まれる値を指定します。
+
 レスポンス
 ----------
 
@@ -210,11 +275,18 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_content_id",
         "created": false
       }
     }
+
+.. note::
+
+   ``createdBy``・``createdTime``・``updatedBy``・``updatedTime`` などの監査フィールドや
+   ``crudMode`` をリクエストボディに含めても、サーバー側で自動的に設定されるため無視されます。
+   作成・更新時に指定する必要はありません。
 
 関連コンテンツ削除
 ==================
@@ -233,6 +305,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0
       }
     }
