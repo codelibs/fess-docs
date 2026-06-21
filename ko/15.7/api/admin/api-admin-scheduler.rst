@@ -71,11 +71,11 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수
+     - 페이지당 건수（기본값: 25。``fess_config.properties`` 의 ``paging.page.size`` 로 변경 가능）
    * - ``page``
      - Integer
      - 아니오
-     - 페이지 번호
+     - 페이지 번호（1부터 시작。기본값: 1）
 
 응답
 ----------
@@ -84,6 +84,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -97,6 +98,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
             "crawler": "true",
             "available": "true",
             "sortOrder": 0,
+            "versionNo": 1,
             "running": false
           }
         ],
@@ -106,7 +108,11 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` 은 문자열 (``"true"`` / ``"false"``) 로 처리됩니다. ``running`` 은 불리언 값으로, 작업의 실행 상태를 나타냅니다.
+   ``response`` 오브젝트에는 제품 버전을 나타내는 ``version`` 과 처리 결과를 나타내는 ``status`` 가 항상 포함됩니다（공통 사양은 :doc:`api-admin-overview` 를 참조）。이후 예시에서는 간결함을 위해 ``version`` 을 생략하는 경우가 있습니다.
+
+.. note::
+
+   응답의 ``jobLogging`` / ``crawler`` / ``available`` 은 문자열（``"true"`` / ``"false"``）로 반환됩니다. ``running`` 은 불리언 값으로, 작업이 현재 실행 중인지 여부를 나타내는 응답 전용 필드입니다（요청에서는 지정할 수 없습니다）。``total`` 은 조건에 일치하는 전체 작업 수입니다.
 
 스케줄 작업 조회
 ======================
@@ -137,6 +143,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
           "crawler": "true",
           "available": "true",
           "sortOrder": 0,
+          "versionNo": 1,
           "running": false
         }
       }
@@ -182,31 +189,39 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
      - 설명
    * - ``name``
      - 예
-     - 작업 이름
+     - 작업 이름（최대 100자）
    * - ``target``
      - 예
-     - 실행 대상 ("all" 또는 특정 대상)
+     - 실행 대상（최대 100자）。``all`` 또는 특정 대상 이름을 지정합니다
    * - ``cronExpression``
      - 아니오
-     - Cron 표현식 (초 분 시 일 월 요일)
+     - Cron 표현식（초 분 시 일 월 요일）。최대 100자이며 Cron 표현식으로 검증됩니다. 비어 있으면 스케줄 실행되지 않고 수동으로만 시작할 수 있습니다
    * - ``scriptType``
      - 예
-     - 스크립트 타입 ("groovy")
+     - 스크립트 타입（최대 100자）。현재는 ``groovy`` 만 지원됩니다
    * - ``scriptData``
      - 아니오
-     - 실행 스크립트
+     - 실행 스크립트。최대 크기는 ``fess_config.properties`` 의 ``form.admin.max.input.size`` 에 따릅니다
    * - ``jobLogging``
      - 아니오
-     - 로그 기록 활성화 (문자열 ``"true"`` / ``"false"``)
+     - 작업 로그 기록 활성화（문자열）
    * - ``crawler``
      - 아니오
-     - 크롤러 작업인지 여부 (문자열 ``"true"`` / ``"false"``)
+     - 크롤러 작업인지 여부（문자열）
    * - ``available``
      - 아니오
-     - 활성화/비활성화 (문자열 ``"true"`` / ``"false"``)
+     - 활성화/비활성화（문자열）
    * - ``sortOrder``
      - 예
-     - 표시 순서
+     - 표시 순서（0〜2147483647의 정수）
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` 은 문자열 필드입니다. 요청에서 ``"on"`` 또는 ``"true"``（대소문자 구분 없음）를 지정하면 활성화되며, 그 외의 값（``"false"``, 빈 문자열, 미지정 등）은 비활성화로 처리됩니다. 응답에서는 ``"true"`` / ``"false"`` 로 반환됩니다.
+
+.. note::
+
+   ``crudMode`` 는 서버 측에서 자동으로 설정되므로 요청에서 지정할 필요가 없습니다. ``createdBy`` / ``createdTime`` 등의 감사 필드도 서버 측에서 설정됩니다.
 
 응답
 ----------
@@ -268,6 +283,10 @@ Cron 표현식 예시
       "sortOrder": 1,
       "versionNo": 1
     }
+
+.. note::
+
+   업데이트 시 ``id``（최대 1000자）와 ``versionNo`` 는 필수입니다. ``versionNo`` 는 낙관적 잠금에 사용되며, 조회 시 응답에 포함된 값을 지정합니다. 값이 일치하지 않으면 업데이트가 실패합니다. 그 밖의 필수 필드（``name`` / ``target`` / ``scriptType`` / ``sortOrder``）는 작성 시와 동일합니다.
 
 응답
 ----------
@@ -344,8 +363,9 @@ Cron 표현식 예시
 주의 사항
 --------
 
-- 작업이 이미 실행 중인 경우 오류가 반환됩니다
-- 작업이 비활성화 (``available`` 이 ``"false"``) 된 경우 오류가 반환됩니다
+- 작업이 이미 실행 중인 경우 시작에 실패하고 오류（``status`` 가 ``0`` 이 아닌 값）가 반환됩니다
+- 작업이 비활성화（``available`` 이 활성화되지 않은）된 경우에도 마찬가지로 시작에 실패하고 오류가 반환됩니다
+- ``jobLogId`` 는 작업 로그가 활성화（``jobLogging`` 이 활성화）된 경우에만 발행됩니다
 
 작업 중지
 ==========
@@ -390,7 +410,8 @@ Cron 표현식 예시
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",
-           "available": "true"
+           "available": "true",
+           "sortOrder": 1
          }'
 
     # 작업을 즉시 실행

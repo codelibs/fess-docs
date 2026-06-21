@@ -71,11 +71,11 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite
+     - Anzahl der Einträge pro Seite (Standard: 25; konfigurierbar über ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer
+     - Seitennummer (1-basiert; Standard: 1)
 
 Response
 --------
@@ -84,6 +84,7 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -97,6 +98,7 @@ Response
             "crawler": "true",
             "available": "true",
             "sortOrder": 0,
+            "versionNo": 1,
             "running": false
           }
         ],
@@ -106,7 +108,11 @@ Response
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` werden als Zeichenketten (``"true"`` / ``"false"``) behandelt. ``running`` ist ein boolescher Wert und gibt den Ausführungsstatus des Jobs an.
+   Das ``response``-Objekt enthält stets ``version`` (Produktversion) und ``status`` (Ergebniscode). Die gemeinsame Antwortstruktur ist in :doc:`api-admin-overview` beschrieben. In späteren Beispielen kann ``version`` der Übersichtlichkeit halber weggelassen werden.
+
+.. note::
+
+   Im Response werden ``jobLogging`` / ``crawler`` / ``available`` als Zeichenketten (``"true"`` / ``"false"``) zurückgegeben. ``running`` ist ein boolescher Wert und ein reines Response-Feld, das anzeigt, ob der Job gerade ausgeführt wird (kann im Request nicht gesetzt werden). ``total`` ist die Gesamtanzahl der zur Abfrage passenden Jobs.
 
 Geplanten Job abrufen
 =====================
@@ -137,6 +143,7 @@ Response
           "crawler": "true",
           "available": "true",
           "sortOrder": 0,
+          "versionNo": 1,
           "running": false
         }
       }
@@ -182,31 +189,39 @@ Feldbeschreibungen
      - Beschreibung
    * - ``name``
      - Ja
-     - Job-Name
+     - Job-Name (max. 100 Zeichen)
    * - ``target``
      - Ja
-     - Ausführungsziel ("all" oder ein bestimmtes Ziel)
+     - Ausführungsziel (max. 100 Zeichen). ``all`` oder einen bestimmten Zielnamen angeben
    * - ``cronExpression``
      - Nein
-     - Cron-Ausdruck (Sekunden Minuten Stunden Tag Monat Wochentag)
+     - Cron-Ausdruck (Sekunde Minute Stunde Tag Monat Wochentag). Max. 100 Zeichen, wird als Cron-Ausdruck validiert. Ist das Feld leer, wird der Job nicht geplant und kann nur manuell gestartet werden
    * - ``scriptType``
      - Ja
-     - Skript-Typ ("groovy")
+     - Skript-Typ (max. 100 Zeichen). Derzeit wird nur ``groovy`` unterstützt
    * - ``scriptData``
      - Nein
-     - Ausführungsskript
+     - Ausführungsskript. Die maximale Größe richtet sich nach ``form.admin.max.input.size`` in ``fess_config.properties``
    * - ``jobLogging``
      - Nein
-     - Protokollierung aktivieren (Zeichenkette ``"true"`` / ``"false"``)
+     - Job-Protokollierung aktivieren (Zeichenkette)
    * - ``crawler``
      - Nein
-     - Ob es ein Crawler-Job ist (Zeichenkette ``"true"`` / ``"false"``)
+     - Ob es ein Crawler-Job ist (Zeichenkette)
    * - ``available``
      - Nein
-     - Aktiviert/Deaktiviert (Zeichenkette ``"true"`` / ``"false"``)
+     - Aktiviert/Deaktiviert (Zeichenkette)
    * - ``sortOrder``
      - Ja
-     - Anzeigereihenfolge
+     - Anzeigereihenfolge (Ganzzahl zwischen 0 und 2147483647)
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` sind Zeichenkettenfelder. Im Request aktiviert die Angabe von ``"on"`` oder ``"true"`` (Groß-/Kleinschreibung wird nicht berücksichtigt) das jeweilige Feld; jeder andere Wert (``"false"``, leere Zeichenkette oder nicht angegeben) wird als deaktiviert behandelt. Im Response werden die Werte als ``"true"`` / ``"false"`` zurückgegeben.
+
+.. note::
+
+   ``crudMode`` wird serverseitig automatisch gesetzt und muss im Request nicht angegeben werden. Audit-Felder wie ``createdBy`` / ``createdTime`` werden ebenfalls serverseitig gesetzt.
 
 Response
 --------
@@ -268,6 +283,10 @@ Request-Body
       "sortOrder": 1,
       "versionNo": 1
     }
+
+.. note::
+
+   Für Aktualisierungen sind ``id`` (max. 1000 Zeichen) und ``versionNo`` Pflichtfelder. ``versionNo`` wird für optimistisches Sperren verwendet; geben Sie den Wert an, der im GET-Response zurückgegeben wurde. Stimmt der Wert nicht überein, schlägt die Aktualisierung fehl. Die weiteren Pflichtfelder (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) sind dieselben wie beim Erstellen.
 
 Response
 --------
@@ -342,8 +361,9 @@ Response-Felder
 Hinweise
 --------
 
-- Wenn der Job bereits läuft, wird ein Fehler zurückgegeben
-- Wenn der Job deaktiviert ist (``available`` ist ``"false"``), wird ein Fehler zurückgegeben
+- Wenn der Job bereits läuft, schlägt der Start fehl und es wird ein Fehler zurückgegeben (``status`` ungleich ``0``).
+- Wenn der Job deaktiviert ist (``available`` ist nicht aktiviert), schlägt der Start ebenfalls fehl und es wird ein Fehler zurückgegeben.
+- ``jobLogId`` wird nur ausgegeben, wenn die Job-Protokollierung aktiviert ist (``jobLogging`` ist aktiviert).
 
 Job stoppen
 ===========
@@ -388,7 +408,8 @@ Crawl-Job erstellen und ausführen
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",
-           "available": "true"
+           "available": "true",
+           "sortOrder": 1
          }'
 
     # Job sofort ausführen

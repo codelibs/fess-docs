@@ -71,11 +71,11 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page
+     - Number of items per page (default: 25; configurable via ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Page number
+     - Page number (1-based; default: 1)
 
 Response
 --------
@@ -84,6 +84,7 @@ Response
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -97,6 +98,7 @@ Response
             "crawler": "true",
             "available": "true",
             "sortOrder": 0,
+            "versionNo": 1,
             "running": false
           }
         ],
@@ -106,7 +108,11 @@ Response
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` are treated as strings (``"true"`` / ``"false"``). ``running`` is a boolean value indicating the execution status of the job.
+   The ``response`` object always includes ``version`` (product version) and ``status`` (result code). See :doc:`api-admin-overview` for the common response format. Later examples may omit ``version`` for brevity.
+
+.. note::
+
+   In responses, ``jobLogging`` / ``crawler`` / ``available`` are returned as strings (``"true"`` / ``"false"``). ``running`` is a boolean, response-only field indicating whether the job is currently running (it cannot be set in requests). ``total`` is the total number of jobs matching the query.
 
 Get Scheduled Job
 =================
@@ -137,6 +143,7 @@ Response
           "crawler": "true",
           "available": "true",
           "sortOrder": 0,
+          "versionNo": 1,
           "running": false
         }
       }
@@ -182,31 +189,39 @@ Field Description
      - Description
    * - ``name``
      - Yes
-     - Job name
+     - Job name (max 100 characters)
    * - ``target``
      - Yes
-     - Execution target ("all" or specific target)
+     - Execution target (max 100 characters). Specify ``all`` or a specific target name
    * - ``cronExpression``
      - No
-     - Cron expression (seconds minutes hours day month weekday)
+     - Cron expression (second minute hour day month day-of-week). Max 100 characters, validated as a cron expression. If empty, the job is not scheduled and can only be started manually
    * - ``scriptType``
      - Yes
-     - Script type ("groovy")
+     - Script type (max 100 characters). Currently only ``groovy`` is supported
    * - ``scriptData``
      - No
-     - Execution script
+     - Execution script. The maximum size follows ``form.admin.max.input.size`` in ``fess_config.properties``
    * - ``jobLogging``
      - No
-     - Enable logging (string ``"true"`` / ``"false"``)
+     - Enable job logging (string)
    * - ``crawler``
      - No
-     - Whether this is a crawler job (string ``"true"`` / ``"false"``)
+     - Whether this is a crawler job (string)
    * - ``available``
      - No
-     - Enable/disable (string ``"true"`` / ``"false"``)
+     - Enabled/disabled (string)
    * - ``sortOrder``
      - Yes
-     - Display order
+     - Display order (integer between 0 and 2147483647)
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` are string fields. In requests, specifying ``"on"`` or ``"true"`` (case-insensitive) enables them; any other value (``"false"``, empty string, or unset) is treated as disabled. In responses they are returned as ``"true"`` / ``"false"``.
+
+.. note::
+
+   ``crudMode`` is set automatically on the server side and does not need to be specified in requests. Audit fields such as ``createdBy`` / ``createdTime`` are also set on the server side.
 
 Response
 --------
@@ -268,6 +283,10 @@ Request Body
       "sortOrder": 1,
       "versionNo": 1
     }
+
+.. note::
+
+   For updates, ``id`` (max 1000 characters) and ``versionNo`` are required. ``versionNo`` is used for optimistic locking; specify the value returned in the get response. If the value does not match, the update fails. Other required fields (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) are the same as for creation.
 
 Response
 --------
@@ -344,8 +363,9 @@ Response Fields
 Notes
 -----
 
-- Returns an error if the job is already running
-- Returns an error if the job is disabled (``available`` is ``"false"``)
+- If the job is already running, the start fails and an error is returned (``status`` other than ``0``).
+- If the job is disabled (``available`` is not enabled), the start likewise fails with an error.
+- ``jobLogId`` is issued only when job logging is enabled (``jobLogging`` is enabled).
 
 Stop Job
 ========
@@ -390,7 +410,8 @@ Create and Run a Crawl Job
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",
-           "available": "true"
+           "available": "true",
+           "sortOrder": 1
          }'
 
     # Run job immediately
