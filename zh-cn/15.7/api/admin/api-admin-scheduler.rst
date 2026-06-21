@@ -71,11 +71,11 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
    * - ``size``
      - Integer
      - 否
-     - 每页记录数
+     - 每页记录数（默认：25；可通过 ``fess_config.properties`` 中的 ``paging.page.size`` 修改）
    * - ``page``
      - Integer
      - 否
-     - 页码
+     - 页码（从1开始；默认：1）
 
 响应
 ----
@@ -84,6 +84,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -97,6 +98,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
             "crawler": "true",
             "available": "true",
             "sortOrder": 0,
+            "versionNo": 1,
             "running": false
           }
         ],
@@ -106,7 +108,11 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` 作为字符串（``"true"`` / ``"false"``）处理。``running`` 为布尔值，表示任务的运行状态。
+   响应的 ``response`` 对象中始终包含表示产品版本的 ``version`` 和表示处理结果的 ``status``（公共规范请参阅 :doc:`api-admin-overview`）。后续示例中可能省略 ``version`` 以保持简洁。
+
+.. note::
+
+   响应中的 ``jobLogging`` / ``crawler`` / ``available`` 以字符串（``"true"`` / ``"false"``）形式返回。``running`` 为布尔值，是仅响应中包含的字段，表示任务当前是否正在运行（不可在请求中指定）。``total`` 为符合查询条件的任务总数。
 
 获取计划任务
 ============
@@ -137,6 +143,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
           "crawler": "true",
           "available": "true",
           "sortOrder": 0,
+          "versionNo": 1,
           "running": false
         }
       }
@@ -182,31 +189,39 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
      - 说明
    * - ``name``
      - 是
-     - 任务名称
+     - 任务名称（最大100字符）
    * - ``target``
      - 是
-     - 执行目标（"all"或特定目标）
+     - 执行目标（最大100字符）。指定 ``all`` 或特定目标名称
    * - ``cronExpression``
      - 否
-     - Cron表达式（秒 分 时 日 月 星期）
+     - Cron表达式（秒 分 时 日 月 星期）。最大100字符，将作为Cron表达式进行验证。若为空，则不进行定时执行，只能手动启动
    * - ``scriptType``
      - 是
-     - 脚本类型（"groovy"）
+     - 脚本类型（最大100字符）。目前仅支持 ``groovy``
    * - ``scriptData``
      - 否
-     - 执行脚本
+     - 执行脚本。最大大小遵循 ``fess_config.properties`` 中的 ``form.admin.max.input.size``
    * - ``jobLogging``
      - 否
-     - 启用日志记录（字符串 ``"true"`` / ``"false"``）
+     - 启用任务日志记录（字符串）
    * - ``crawler``
      - 否
-     - 是否为爬虫任务（字符串 ``"true"`` / ``"false"``）
+     - 是否为爬虫任务（字符串）
    * - ``available``
      - 否
-     - 启用/禁用（字符串 ``"true"`` / ``"false"``）
+     - 启用/禁用（字符串）
    * - ``sortOrder``
      - 是
-     - 显示顺序
+     - 显示顺序（0～2147483647之间的整数）
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` 为字符串字段。在请求中，指定 ``"on"`` 或 ``"true"``（不区分大小写）时启用；其他值（``"false"``、空字符串或未指定）均视为禁用。在响应中以 ``"true"`` / ``"false"`` 形式返回。
+
+.. note::
+
+   ``crudMode`` 由服务器端自动设置，无需在请求中指定。``createdBy`` / ``createdTime`` 等审计字段也由服务器端设置。
 
 响应
 ----
@@ -268,6 +283,10 @@ Cron表达式示例
       "sortOrder": 1,
       "versionNo": 1
     }
+
+.. note::
+
+   更新时，``id``（最大1000字符）和 ``versionNo`` 为必填项。``versionNo`` 用于乐观锁，需指定获取响应中返回的值。若值不匹配，更新将失败。其他必填字段（``name`` / ``target`` / ``scriptType`` / ``sortOrder``）与创建时相同。
 
 响应
 ----
@@ -344,8 +363,9 @@ Cron表达式示例
 注意事项
 --------
 
-- 如果任务已在运行中，将返回错误
-- 如果任务已禁用（``available`` 为 ``"false"``），将返回错误
+- 如果任务已在运行中，启动将失败并返回错误（``status`` 非 ``0``）。
+- 如果任务已禁用（``available`` 未启用），同样将启动失败并返回错误。
+- ``jobLogId`` 仅在任务日志已启用（``jobLogging`` 已启用）时才会发行。
 
 停止任务
 ========
@@ -390,7 +410,8 @@ Cron表达式示例
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",
-           "available": "true"
+           "available": "true",
+           "sortOrder": 1
          }'
 
     # 立即执行任务

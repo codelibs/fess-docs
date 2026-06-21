@@ -71,11 +71,11 @@ Parametros
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina
+     - Numero de elementos por pagina (por defecto: 25; configurable mediante ``paging.page.size`` en ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina
+     - Numero de pagina (a partir de 1; por defecto: 1)
 
 Respuesta
 ---------
@@ -84,6 +84,7 @@ Respuesta
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -97,6 +98,7 @@ Respuesta
             "crawler": "true",
             "available": "true",
             "sortOrder": 0,
+            "versionNo": 1,
             "running": false
           }
         ],
@@ -106,7 +108,11 @@ Respuesta
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` se tratan como cadenas (``"true"`` / ``"false"``). ``running`` es un valor booleano que indica el estado de ejecucion del trabajo.
+   El objeto ``response`` siempre incluye ``version`` (version del producto) y ``status`` (codigo de resultado). Consulte la descripcion general de Admin API (:doc:`api-admin-overview`) para conocer el formato de respuesta comun. Los ejemplos posteriores pueden omitir ``version`` por brevedad.
+
+.. note::
+
+   En las respuestas, ``jobLogging`` / ``crawler`` / ``available`` se devuelven como cadenas (``"true"`` / ``"false"``). ``running`` es un campo booleano exclusivo de respuesta que indica si el trabajo se esta ejecutando en ese momento (no puede especificarse en las solicitudes). ``total`` es el numero total de trabajos que coinciden con la consulta.
 
 Obtener Trabajo Programado
 ==========================
@@ -137,6 +143,7 @@ Respuesta
           "crawler": "true",
           "available": "true",
           "sortOrder": 0,
+          "versionNo": 1,
           "running": false
         }
       }
@@ -182,31 +189,39 @@ Descripcion de Campos
      - Descripcion
    * - ``name``
      - Si
-     - Nombre del trabajo
+     - Nombre del trabajo (max. 100 caracteres)
    * - ``target``
      - Si
-     - Objetivo de ejecucion ("all" u objetivo especifico)
+     - Objetivo de ejecucion (max. 100 caracteres). Especifique ``all`` o un nombre de objetivo especifico
    * - ``cronExpression``
      - No
-     - Expresion Cron (segundos minutos horas dia mes dia-semana)
+     - Expresion Cron (segundo minuto hora dia mes dia-semana). Max. 100 caracteres, validada como expresion cron. Si esta vacia, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
    * - ``scriptType``
      - Si
-     - Tipo de script ("groovy")
+     - Tipo de script (max. 100 caracteres). Actualmente solo se admite ``groovy``
    * - ``scriptData``
      - No
-     - Script de ejecucion
+     - Script de ejecucion. El tamano maximo sigue ``form.admin.max.input.size`` en ``fess_config.properties``
    * - ``jobLogging``
      - No
-     - Habilitar registro (cadena ``"true"`` / ``"false"``)
+     - Habilitar registro de trabajos (cadena)
    * - ``crawler``
      - No
-     - Es trabajo de rastreo (cadena ``"true"`` / ``"false"``)
+     - Si es un trabajo de rastreo (cadena)
    * - ``available``
      - No
-     - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
+     - Habilitado/Deshabilitado (cadena)
    * - ``sortOrder``
      - Si
-     - Orden de visualizacion
+     - Orden de visualizacion (entero entre 0 y 2147483647)
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` son campos de cadena. En las solicitudes, especificar ``"on"`` o ``"true"`` (sin distincion de mayusculas y minusculas) los habilita; cualquier otro valor (``"false"``, cadena vacia o no especificado) se trata como deshabilitado. En las respuestas se devuelven como ``"true"`` / ``"false"``.
+
+.. note::
+
+   ``crudMode`` se establece automaticamente en el servidor y no es necesario especificarlo en las solicitudes. Los campos de auditoria como ``createdBy`` / ``createdTime`` tambien se establecen en el servidor.
 
 Respuesta
 ---------
@@ -268,6 +283,10 @@ Cuerpo de la Solicitud
       "sortOrder": 1,
       "versionNo": 1
     }
+
+.. note::
+
+   Para las actualizaciones, ``id`` (max. 1000 caracteres) y ``versionNo`` son obligatorios. ``versionNo`` se utiliza para el bloqueo optimista; especifique el valor devuelto en la respuesta de obtencion. Si el valor no coincide, la actualizacion falla. Los demas campos obligatorios (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) son los mismos que para la creacion.
 
 Respuesta
 ---------
@@ -344,8 +363,9 @@ Campos de Respuesta
 Notas
 -----
 
-- Se devuelve un error si el trabajo ya esta en ejecucion
-- Se devuelve un error si el trabajo esta deshabilitado (``available`` es ``"false"``)
+- Si el trabajo ya esta en ejecucion, el inicio falla y se devuelve un error (``status`` distinto de ``0``).
+- Si el trabajo esta deshabilitado (``available`` no esta habilitado), el inicio tambien falla con un error.
+- ``jobLogId`` solo se emite cuando el registro de trabajos esta habilitado (``jobLogging`` esta habilitado).
 
 Detener Trabajo
 ===============
@@ -390,7 +410,8 @@ Crear y Ejecutar Trabajo de Rastreo
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",
-           "available": "true"
+           "available": "true",
+           "sortOrder": 1
          }'
 
     # Ejecutar trabajo inmediatamente

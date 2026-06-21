@@ -71,11 +71,11 @@ Parametres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page
+     - Nombre d'elements par page (defaut : 25 ; configurable via ``paging.page.size`` dans ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page
+     - Numero de page (base 1 ; defaut : 1)
 
 Reponse
 -------
@@ -84,6 +84,7 @@ Reponse
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
@@ -97,6 +98,7 @@ Reponse
             "crawler": "true",
             "available": "true",
             "sortOrder": 0,
+            "versionNo": 1,
             "running": false
           }
         ],
@@ -106,7 +108,11 @@ Reponse
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` sont traites comme des chaines de caracteres (``"true"`` / ``"false"``). ``running`` est une valeur booleenne indiquant l'etat d'execution de la tache.
+   L'objet ``response`` contient toujours ``version`` (version du produit) et ``status`` (code de resultat). Consultez :doc:`api-admin-overview` pour le format de reponse commun. Les exemples suivants peuvent omettre ``version`` par souci de concision.
+
+.. note::
+
+   Dans les reponses, ``jobLogging`` / ``crawler`` / ``available`` sont retournes sous forme de chaines de caracteres (``"true"`` / ``"false"``). ``running`` est un champ booleen, specifique aux reponses, indiquant si la tache est en cours d'execution (ne peut pas etre specifie dans les requetes). ``total`` est le nombre total de taches correspondant a la requete.
 
 Obtention d'une tache planifiee
 ===============================
@@ -137,6 +143,7 @@ Reponse
           "crawler": "true",
           "available": "true",
           "sortOrder": 0,
+          "versionNo": 1,
           "running": false
         }
       }
@@ -182,31 +189,39 @@ Description des champs
      - Description
    * - ``name``
      - Oui
-     - Nom de la tache
+     - Nom de la tache (max 100 caracteres)
    * - ``target``
      - Oui
-     - Cible d'execution ("all" ou cible specifique)
+     - Cible d'execution (max 100 caracteres). Specifier ``all`` ou un nom de cible specifique
    * - ``cronExpression``
      - Non
-     - Expression Cron (secondes minutes heures jour mois jour-semaine)
+     - Expression Cron (seconde minute heure jour mois jour-semaine). Max 100 caracteres, validee en tant qu'expression cron. Si vide, la tache n'est pas planifiee et ne peut etre demarree que manuellement
    * - ``scriptType``
      - Oui
-     - Type de script ("groovy")
+     - Type de script (max 100 caracteres). Actuellement seul ``groovy`` est supporte
    * - ``scriptData``
      - Non
-     - Script a executer
+     - Script a executer. La taille maximale est definie par ``form.admin.max.input.size`` dans ``fess_config.properties``
    * - ``jobLogging``
      - Non
-     - Activer la journalisation (chaine ``"true"`` / ``"false"``)
+     - Activer la journalisation des taches (chaine)
    * - ``crawler``
      - Non
-     - S'il s'agit d'une tache de crawl (chaine ``"true"`` / ``"false"``)
+     - S'il s'agit d'une tache de crawl (chaine)
    * - ``available``
      - Non
-     - Active/Desactive (chaine ``"true"`` / ``"false"``)
+     - Active/Desactive (chaine)
    * - ``sortOrder``
      - Oui
-     - Ordre d'affichage
+     - Ordre d'affichage (entier entre 0 et 2147483647)
+
+.. note::
+
+   ``jobLogging`` / ``crawler`` / ``available`` sont des champs de type chaine. Dans les requetes, specifier ``"on"`` ou ``"true"`` (insensible a la casse) les active ; toute autre valeur (``"false"``, chaine vide ou non specifie) est traitee comme desactivee. Dans les reponses, ils sont retournes sous la forme ``"true"`` / ``"false"``.
+
+.. note::
+
+   ``crudMode`` est defini automatiquement cote serveur et n'a pas besoin d'etre specifie dans les requetes. Les champs d'audit tels que ``createdBy`` / ``createdTime`` sont egalement definis cote serveur.
 
 Reponse
 -------
@@ -268,6 +283,10 @@ Corps de la requete
       "sortOrder": 1,
       "versionNo": 1
     }
+
+.. note::
+
+   Pour les mises a jour, ``id`` (max 1000 caracteres) et ``versionNo`` sont obligatoires. ``versionNo`` est utilise pour le verrouillage optimiste ; specifier la valeur retournee dans la reponse de recuperation. Si la valeur ne correspond pas, la mise a jour echoue. Les autres champs obligatoires (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) sont identiques a ceux de la creation.
 
 Reponse
 -------
@@ -344,8 +363,9 @@ Champs de la reponse
 Notes
 -----
 
-- Une erreur est retournee si la tache est deja en cours d'execution
-- Une erreur est retournee si la tache est desactivee (``available`` vaut ``"false"``)
+- Si la tache est deja en cours d'execution, le demarrage echoue et une erreur est retournee (``status`` different de ``0``).
+- Si la tache est desactivee (``available`` n'est pas active), le demarrage echoue egalement avec une erreur.
+- ``jobLogId`` est emis uniquement lorsque la journalisation des taches est activee (``jobLogging`` est active).
 
 Arret d'une tache
 =================
@@ -390,7 +410,8 @@ Creation et execution d'une tache de crawl
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",
-           "available": "true"
+           "available": "true",
+           "sortOrder": 1
          }'
 
     # Executer la tache immediatement
