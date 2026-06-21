@@ -1,6 +1,6 @@
-==========================
+==================
 Admin API Overview
-==========================
+==================
 
 Overview
 ========
@@ -36,7 +36,7 @@ Obtaining an Access Token
 1. Log in to the admin console
 2. Navigate to "System" -> "Access Token"
 3. Click "Create New"
-4. Enter a token name and select required permissions
+4. Enter a token name and set the permissions to grant to the token in the "Permissions" field (to use the Admin API, enter ``{role}admin-api``)
 5. Click "Create" to obtain the token
 
 Using the Token
@@ -48,7 +48,16 @@ Include the access token in the request header:
 
     Authorization: Bearer <access_token>
 
-Or specify it as a query parameter:
+You can also omit ``Bearer`` and specify only the token:
+
+::
+
+    Authorization: <access_token>
+
+Specifying the token as a query parameter is also possible, but it is disabled by default.
+If you set a parameter name in ``api.access.token.request.parameter`` in ``fess_config.properties``,
+you can pass the token using that name (the default value is empty, so only specification via the
+header is enabled). For example, if you set ``api.access.token.request.parameter=token``:
 
 ::
 
@@ -65,12 +74,20 @@ cURL Example
 Required Permissions
 --------------------
 
-To use the Admin API, the token requires the following permissions:
+Access to the Admin API is controlled by a single permission set, not per function. To use any
+endpoint of the Admin API, the access token must be granted one of the permissions configured in
+``api.admin.access.permissions`` in ``fess_config.properties``.
 
-- ``admin-*`` - Access to all administrative functions
-- ``admin-scheduler`` - Scheduler management only
-- ``admin-user`` - User management only
-- Other function-specific permissions
+The default value is ``Radmin-api``, which is the encoded form of the role ``admin-api``
+(the leading ``R`` is the value of ``role.search.role.prefix``). When creating an access token,
+if you enter ``{role}admin-api`` in the permissions field, it is stored internally as ``Radmin-api``.
+
+.. note::
+
+   There are no per-resource permissions (such as ``admin-scheduler`` or ``admin-user``) and no
+   wildcard (``admin-*``). A token that has the configured permission can access all Admin API
+   endpoints. If you want to change the permissions that grant access, change the value of
+   ``api.admin.access.permissions``.
 
 Common Patterns
 ===============
@@ -95,17 +112,17 @@ Parameters (pagination):
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - Parameter
      - Type
      - Description
    * - ``size``
      - Integer
-     - Number of items per page (default: 20)
+     - Number of items per page (default: 25. Configurable via ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
-     - Page number (starts from 0)
+     - Page number (starts from 1. Default: 1. Values of 0 or less are treated as 1)
 
 Response
 ~~~~~~~~
@@ -315,6 +332,12 @@ message.
 HTTP Status Codes
 -----------------
 
+In most cases, the Admin API returns HTTP status ``200``, and the processing result is
+expressed by the ``status`` field in the response body. Therefore, determine success or
+failure by the value of ``status`` in the body, not by the HTTP status code.
+
+The HTTP status codes that are actually returned are as follows.
+
 .. list-table::
    :header-rows: 1
    :widths: 15 85
@@ -322,17 +345,23 @@ HTTP Status Codes
    * - Code
      - Description
    * - 200
-     - Request successful
+     - Normal response. In addition to success (``status: 0``), most errors are also returned
+       with this code. For example, when the access token is missing or invalid, or when
+       permissions are insufficient, ``status: 3`` is returned, and a system error returns
+       ``status: 2``; both are returned with HTTP ``200``.
    * - 400
-     - Invalid request parameters
+     - A request parameter validation error. The ``status`` in the response body is ``1``.
+       Attempting to retrieve a non-existent resource is also returned with this code.
    * - 401
-     - Authentication required (token missing or invalid)
-   * - 403
-     - Access denied
-   * - 404
-     - Resource not found
-   * - 500
-     - Internal server error
+     - When an exception related to login authentication occurs. The ``status`` in the response
+       body is ``3``. Note that when the access token is missing or invalid, ``status: 3`` is
+       returned with HTTP ``200``, not this code.
+
+.. note::
+
+   The Admin API does not return HTTP status codes such as ``403``, ``404``, or ``500``.
+   Insufficient permissions and the non-existence of a resource are also indicated by the
+   ``status`` contained in the response body of an HTTP ``200`` or ``400`` response.
 
 Available APIs
 ==============
@@ -430,7 +459,7 @@ Search Tuning
    * - :doc:`api-admin-elevateword`
      - Elevate word
    * - :doc:`api-admin-badword`
-     - Bad word (excluded suggestions)
+     - Bad words
    * - :doc:`api-admin-relatedcontent`
      - Related content
    * - :doc:`api-admin-relatedquery`
@@ -490,10 +519,22 @@ Create Web Crawl Configuration
            "urls": "https://example.com/",
            "includedUrls": ".*example.com.*",
            "excludedUrls": "",
+           "userAgent": "Mozilla/5.0 (compatible; Fess)",
+           "numOfThread": 1,
+           "intervalTime": 1000,
+           "boost": 1.0,
            "maxAccessCount": 1000,
            "depth": 3,
-           "available": true
+           "sortOrder": 1,
+           "available": "true"
          }'
+
+.. note::
+
+   When creating a Web crawl configuration, ``name``, ``urls``, ``userAgent``, ``numOfThread``,
+   ``intervalTime``, ``boost``, ``available``, and ``sortOrder`` are required. Omitting any of
+   these results in a validation error (``status: 1``). Specify ``available`` as a string, setting
+   it to ``"true"`` or ``"false"``.
 
 Start a Scheduled Job
 ---------------------
@@ -508,7 +549,7 @@ List Users
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=0" \
+    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Reference
@@ -516,4 +557,3 @@ Reference
 
 - :doc:`../api-overview` - API Overview
 - :doc:`../../admin/accesstoken-guide` - Access Token Management Guide
-

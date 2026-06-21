@@ -1,6 +1,6 @@
-==========================
+=============================
 Vue d'ensemble de l'API Admin
-==========================
+=============================
 
 Vue d'ensemble
 ==============
@@ -36,7 +36,7 @@ Obtention d'un jeton d'acces
 1. Connectez-vous a l'interface d'administration
 2. Allez dans "Systeme" -> "Jetons d'acces"
 3. Cliquez sur "Nouveau"
-4. Entrez un nom de jeton et selectionnez les permissions necessaires
+4. Entrez un nom de jeton et definissez, dans le champ "Permissions", les permissions a accorder au jeton (pour utiliser l'API d'administration, saisissez ``{role}admin-api``)
 5. Cliquez sur "Creer" pour obtenir le jeton
 
 Utilisation du jeton
@@ -48,7 +48,13 @@ Incluez le jeton d'acces dans l'en-tete de la requete :
 
     Authorization: Bearer <jeton d'acces>
 
-Ou specifiez-le comme parametre de requete :
+Vous pouvez aussi omettre ``Bearer`` et ne specifier que le jeton :
+
+::
+
+    Authorization: <jeton d'acces>
+
+La specification via un parametre de requete est egalement possible, mais elle est desactivee par defaut. Si vous definissez un nom de parametre dans ``api.access.token.request.parameter`` du fichier ``fess_config.properties``, vous pourrez transmettre le jeton sous ce nom (la valeur par defaut etant vide, seule la specification par en-tete est active). Par exemple, si vous definissez ``api.access.token.request.parameter=token`` :
 
 ::
 
@@ -65,12 +71,13 @@ Exemple cURL
 Permissions requises
 --------------------
 
-Pour utiliser l'API d'administration, le jeton doit avoir les permissions suivantes :
+L'acces a l'API d'administration n'est pas controle par fonction, mais par un unique jeu de permissions. Pour utiliser l'un quelconque des endpoints de l'API d'administration, le jeton d'acces doit s'etre vu accorder l'une des permissions definies dans ``api.admin.access.permissions`` du fichier ``fess_config.properties``.
 
-- ``admin-*`` - Acces a toutes les fonctions d'administration
-- ``admin-scheduler`` - Gestion du planificateur uniquement
-- ``admin-user`` - Gestion des utilisateurs uniquement
-- Autres permissions specifiques a chaque fonction
+La valeur par defaut est ``Radmin-api``, qui est la forme encodee du role ``admin-api`` (le ``R`` initial est la valeur de ``role.search.role.prefix``). Lors de la creation du jeton d'acces, si vous saisissez ``{role}admin-api`` dans le champ des permissions, il est enregistre en interne sous la forme ``Radmin-api``.
+
+.. note::
+
+   Il n'existe pas de permissions distinctes par ressource (telles que ``admin-scheduler`` ou ``admin-user``), ni de caractere generique (``admin-*``). Un jeton disposant de la permission configuree peut acceder a tous les endpoints de l'API d'administration. Si vous souhaitez modifier les permissions qui autorisent l'acces, changez la valeur de ``api.admin.access.permissions``.
 
 Patterns communs
 ================
@@ -97,17 +104,17 @@ Parametres (pagination) :
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - Parametre
      - Type
      - Description
    * - ``size``
      - Integer
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
    * - ``page``
      - Integer
-     - Numero de page (commence a 0)
+     - Numero de page (commence a 1 ; par defaut : 1 ; une valeur inferieure ou egale a 0 est traitee comme 1)
 
 Reponse
 ~~~~~~~
@@ -320,6 +327,13 @@ En cas d'erreur, ``status`` est defini sur une valeur differente de 0 et
 Codes de statut HTTP
 --------------------
 
+L'API d'administration retourne dans la plupart des cas le statut HTTP ``200``, et
+le resultat du traitement est exprime par le champ ``status`` du corps de la reponse.
+Par consequent, determinez le succes ou l'echec non pas a partir du code de statut HTTP,
+mais a partir de la valeur de ``status`` dans le corps.
+
+Les codes de statut HTTP reellement retournes sont les suivants.
+
 .. list-table::
    :header-rows: 1
    :widths: 15 85
@@ -327,17 +341,26 @@ Codes de statut HTTP
    * - Code
      - Description
    * - 200
-     - Requete reussie
+     - Reponse normale. Outre les cas de succes (``status: 0``), la plupart des erreurs
+       sont egalement retournees avec ce code. Par exemple, si le jeton d'acces est absent
+       ou invalide, ou si les permissions sont insuffisantes, ``status: 3`` est retourne ;
+       une erreur systeme renvoie ``status: 2`` ; dans tous ces cas avec le statut HTTP ``200``.
    * - 400
-     - Parametres de requete invalides
+     - Erreur de validation des parametres de requete. Le ``status`` du corps de la reponse
+       est ``1``. Ce code est egalement retourne lorsque l'on tente d'obtenir une ressource
+       inexistante.
    * - 401
-     - Authentification requise (jeton manquant ou invalide)
-   * - 403
-     - Permission refusee
-   * - 404
-     - Ressource non trouvee
-   * - 500
-     - Erreur interne du serveur
+     - Lorsqu'une exception liee a l'authentification de connexion se produit. Le ``status``
+       du corps de la reponse est ``3``. A noter que si le jeton d'acces est absent ou
+       invalide, ce n'est pas ce code qui est retourne, mais le statut HTTP ``200`` avec
+       ``status: 3``.
+
+.. note::
+
+   L'API d'administration ne retourne pas de codes de statut HTTP tels que ``403``,
+   ``404`` ou ``500``. L'insuffisance de permissions et l'inexistence d'une ressource
+   sont egalement indiquees par le ``status`` contenu dans le corps de la reponse HTTP
+   ``200`` ou ``400``.
 
 APIs disponibles
 ================
@@ -498,10 +521,23 @@ Creation d'une configuration de crawl Web
            "urls": "https://example.com/",
            "includedUrls": ".*example.com.*",
            "excludedUrls": "",
+           "userAgent": "Mozilla/5.0 (compatible; Fess)",
+           "numOfThread": 1,
+           "intervalTime": 1000,
+           "boost": 1.0,
            "maxAccessCount": 1000,
            "depth": 3,
-           "available": true
+           "sortOrder": 1,
+           "available": "true"
          }'
+
+.. note::
+
+   Pour la creation d'une configuration de crawl Web, les champs ``name``, ``urls``,
+   ``userAgent``, ``numOfThread``, ``intervalTime``, ``boost``, ``available`` et
+   ``sortOrder`` sont obligatoires. Les omettre provoque une erreur de validation
+   (``status: 1``). ``available`` se specifie sous forme de chaine de caracteres,
+   en y placant ``"true"`` ou ``"false"``.
 
 Demarrage d'une tache planifiee
 -------------------------------
@@ -516,7 +552,7 @@ Obtention de la liste des utilisateurs
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=0" \
+    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Informations complementaires

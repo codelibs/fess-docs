@@ -36,7 +36,7 @@ Access Token erhalten
 1. Melden Sie sich in der Administrationsoberfläche an
 2. Navigieren Sie zu "System" -> "Access Token"
 3. Klicken Sie auf "Neu erstellen"
-4. Geben Sie einen Token-Namen ein und wählen Sie die erforderlichen Berechtigungen
+4. Geben Sie einen Token-Namen ein und legen Sie im Feld "Berechtigungen" die dem Token zu erteilenden Berechtigungen fest (für die Nutzung der Admin API geben Sie ``{role}admin-api`` ein)
 5. Klicken Sie auf "Erstellen", um den Token zu erhalten
 
 Token verwenden
@@ -48,7 +48,16 @@ Fügen Sie den Access Token in den Request-Header ein:
 
     Authorization: Bearer <Access Token>
 
-Oder geben Sie ihn als Query-Parameter an:
+Sie können ``Bearer`` auch weglassen und nur den Token angeben:
+
+::
+
+    Authorization: <Access Token>
+
+Eine Angabe als Query-Parameter ist ebenfalls möglich, ist aber standardmäßig deaktiviert. Wenn Sie in
+``fess_config.properties`` unter ``api.access.token.request.parameter`` einen Parameternamen festlegen, können Sie den
+Token unter diesem Namen übergeben (da der Standardwert leer ist, ist nur die Angabe über den Header wirksam).
+Wenn Sie zum Beispiel ``api.access.token.request.parameter=token`` festlegen:
 
 ::
 
@@ -65,12 +74,20 @@ cURL-Beispiel
 Erforderliche Berechtigungen
 ----------------------------
 
-Um die Admin API zu verwenden, benötigt der Token folgende Berechtigungen:
+Der Zugriff auf die Admin API wird nicht pro Funktion, sondern über ein einziges Berechtigungsset gesteuert. Um einen
+beliebigen Endpunkt der Admin API zu nutzen, muss dem Access Token eine der Berechtigungen erteilt sein, die in
+``fess_config.properties`` unter ``api.admin.access.permissions`` festgelegt sind.
 
-- ``admin-*`` - Zugriff auf alle Verwaltungsfunktionen
-- ``admin-scheduler`` - Nur Scheduler-Verwaltung
-- ``admin-user`` - Nur Benutzerverwaltung
-- Andere funktionsspezifische Berechtigungen
+Der Standardwert ist ``Radmin-api``, was die kodierte Form der Rolle ``admin-api`` ist
+(das vorangestellte ``R`` ist der Wert von ``role.search.role.prefix``). Wenn Sie beim Erstellen des Access Tokens
+im Berechtigungsfeld ``{role}admin-api`` eingeben, wird dies intern als ``Radmin-api`` gespeichert.
+
+.. note::
+
+   Es gibt keine pro Ressource unterschiedlichen Berechtigungen (wie ``admin-scheduler`` oder ``admin-user``) und auch
+   keine Platzhalter (``admin-*``). Ein Token mit der festgelegten Berechtigung kann auf
+   alle Admin-API-Endpunkte zugreifen. Wenn Sie die Berechtigungen ändern möchten, die den Zugriff erlauben,
+   ändern Sie den Wert von ``api.admin.access.permissions``.
 
 Gemeinsame Muster
 =================
@@ -95,17 +112,17 @@ Parameter (Paginierung):
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15.75
+   :widths: 20 15 65
 
    * - Parameter
      - Typ
      - Beschreibung
    * - ``size``
      - Integer
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite (Standard: 25; änderbar über ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1; Standard: 1; Werte <= 0 werden als 1 behandelt)
 
 Response
 ~~~~~~~~
@@ -314,6 +331,12 @@ eine Fehlermeldung enthalten.
 HTTP-Statuscodes
 ----------------
 
+Die Admin API gibt in den meisten Fällen den HTTP-Status ``200`` zurück und stellt das Verarbeitungsergebnis im
+Feld ``status`` des Antwortkörpers dar. Treffen Sie die Entscheidung über Erfolg oder Misserfolg daher nicht anhand des
+HTTP-Statuscodes, sondern anhand des Werts von ``status`` im Antwortkörper.
+
+Die tatsächlich zurückgegebenen HTTP-Statuscodes sind wie folgt.
+
 .. list-table::
    :header-rows: 1
    :widths: 15 85
@@ -321,17 +344,22 @@ HTTP-Statuscodes
    * - Code
      - Beschreibung
    * - 200
-     - Request erfolgreich
+     - Normale Antwort. Neben dem Erfolgsfall (``status: 0``) werden auch die meisten Fehler mit diesem Code
+       zurückgegeben. Wenn beispielsweise der Access Token nicht angegeben oder ungültig ist oder die Berechtigung
+       fehlt, wird ``status: 3``, bei einem Systemfehler ``status: 2`` zurückgegeben, jeweils mit HTTP ``200``.
    * - 400
-     - Ungültige Request-Parameter
+     - Validierungsfehler der Request-Parameter. Das Feld ``status`` im Antwortkörper ist ``1``.
+       Auch beim Versuch, eine nicht vorhandene Ressource abzurufen, wird dieser Code zurückgegeben.
    * - 401
-     - Authentifizierung erforderlich (kein oder ungültiger Token)
-   * - 403
-     - Keine Zugriffsberechtigung
-   * - 404
-     - Ressource nicht gefunden
-   * - 500
-     - Interner Serverfehler
+     - Wenn eine Ausnahme im Zusammenhang mit der Login-Authentifizierung auftritt. Das Feld ``status`` im Antwortkörper ist ``3``.
+       Hinweis: Wenn der Access Token nicht angegeben oder ungültig ist, wird nicht dieser Code, sondern HTTP ``200`` mit
+       ``status: 3`` zurückgegeben.
+
+.. note::
+
+   Die Admin API gibt keine HTTP-Statuscodes wie ``403``, ``404`` oder ``500`` zurück.
+   Fehlende Berechtigungen oder nicht vorhandene Ressourcen werden ebenfalls durch das im Antwortkörper der
+   HTTP-``200``- oder ``400``-Antwort enthaltene ``status`` angezeigt.
 
 Verfügbare APIs
 ===============
@@ -489,10 +517,22 @@ Web-Crawl-Konfiguration erstellen
            "urls": "https://example.com/",
            "includedUrls": ".*example.com.*",
            "excludedUrls": "",
+           "userAgent": "Mozilla/5.0 (compatible; Fess)",
+           "numOfThread": 1,
+           "intervalTime": 1000,
+           "boost": 1.0,
            "maxAccessCount": 1000,
            "depth": 3,
-           "available": true
+           "sortOrder": 1,
+           "available": "true"
          }'
+
+.. note::
+
+   Beim Erstellen einer Web-Crawl-Konfiguration sind ``name``, ``urls``, ``userAgent``, ``numOfThread``,
+   ``intervalTime``, ``boost``, ``available`` und ``sortOrder`` erforderlich. Werden diese
+   weggelassen, kommt es zu einem Validierungsfehler (``status: 1``). ``available`` wird als Zeichenkette angegeben;
+   setzen Sie ``"true"`` oder ``"false"``.
 
 Scheduler-Job starten
 ---------------------
@@ -507,7 +547,7 @@ Benutzerliste abrufen
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=0" \
+    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Referenzinformationen
