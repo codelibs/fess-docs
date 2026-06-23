@@ -70,7 +70,7 @@ Docker-Version
 
 - Docker-Kenntnisse erforderlich
 
-**Empfohlene Umgebung:** Entwicklungsumgebung, Evaluierungsumgebung, POC, Produktionsumgebung
+**Empfohlene Umgebung:** Entwicklungsumgebung, Evaluierungsumgebung, POC (für den Produktionseinsatz konfigurieren Sie bitte einen externen OpenSearch-Server anstelle des eingebetteten OpenSearch)
 
 Details: :doc:`install-docker`
 
@@ -88,7 +88,7 @@ Linux-Paketversion (TAR.GZ/RPM/DEB)
 - Manuelle Installation von Java und OpenSearch erforderlich
 - Konfigurationsaufwand
 
-**Empfohlene Umgebung:** Produktionsumgebung, Umgebungen mit Anpassungsbedarf
+**Empfohlene Umgebung:** Produktionsumgebung (für die Verwaltung als Systemdienst wird RPM/DEB empfohlen), Umgebungen mit Anpassungsbedarf
 
 Details: :doc:`install-linux`
 
