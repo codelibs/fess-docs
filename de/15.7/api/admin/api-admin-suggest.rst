@@ -5,8 +5,22 @@ Suggest API
 Übersicht
 =========
 
-Die Suggest API dient zur Verwaltung der Suggest-Funktion (Suchvorschläge) in |Fess|.
-Sie können statistische Informationen zu Suggest-Wörtern abrufen und Suggest-Wörter löschen.
+Die Suggest API dient zur Verwaltung der Suggest-Wörter (Suchvorschläge), die von der Suggest-Funktion in |Fess| verwendet werden.
+Sie können statistische Informationen zur Anzahl der Suggest-Wörter abrufen und Suggest-Wörter löschen.
+
+Suggest-Wörter werden entweder aus gecrawlten Dokumenten generiert (Dokument-Herkunft) oder aus den Suchanfragen der Benutzer (Suchanfrage-Herkunft). Über diese API können Sie Suggest-Wörter nach Herkunftstyp oder alle zusammen löschen.
+
+Authentifizierung
+=================
+
+Für den Zugriff auf diese API ist eine Authentifizierung mittels Zugriffstoken erforderlich. Geben Sie das Zugriffstoken im Request-Header an.
+
+::
+
+    Authorization: Bearer <Zugriffstoken>
+
+Das Zugriffstoken muss die Berechtigung für die Admin API (standardmäßig ``Radmin-api``) besitzen.
+Informationen zur Beschaffung von Zugriffstokens und zu den Berechtigungen finden Sie unter :doc:`api-admin-overview`.
 
 Basis-URL
 =========
@@ -62,7 +76,7 @@ Response
         "setting": {
           "totalWordsNum": 1500,
           "documentWordsNum": 1200,
-          "queryWordsNum": 300
+          "queryWordsNum": 450
         }
       }
     }
@@ -77,16 +91,20 @@ Response-Felder
    * - Feld
      - Beschreibung
    * - ``setting.totalWordsNum``
-     - Gesamtzahl der Suggest-Wörter
+     - Gesamtzahl der Suggest-Wörter (Anzahl der im Suggest-Index registrierten Suggest-Wörter)
    * - ``setting.documentWordsNum``
-     - Anzahl der aus Dokumenten abgeleiteten Suggest-Wörter
+     - Anzahl der aus Dokumenten abgeleiteten Suggest-Wörter (Suggest-Wörter mit einer Dokumenthäufigkeit von 1 oder mehr)
    * - ``setting.queryWordsNum``
-     - Anzahl der aus Suchanfragen abgeleiteten Suggest-Wörter
+     - Anzahl der aus Suchanfragen abgeleiteten Suggest-Wörter (Suggest-Wörter mit einer Anfragehäufigkeit von 1 oder mehr)
+
+.. note::
+
+   ``documentWordsNum`` und ``queryWordsNum`` schließen sich nicht gegenseitig aus. Wenn ein Suggest-Wort sowohl aus Dokumenten als auch aus Suchanfragen stammt, wird es in beiden Zählungen berücksichtigt. Daher kann die Summe von ``documentWordsNum`` und ``queryWordsNum`` von ``totalWordsNum`` abweichen.
 
 Alle Suggest-Wörter löschen
-===========================
+============================
 
-Löscht alle Suggest-Wörter.
+Löscht alle Suggest-Wörter. Es werden alle Suggest-Wörter im Suggest-Index gelöscht, unabhängig davon, ob sie aus Dokumenten oder Suchanfragen stammen.
 
 Request
 -------
@@ -108,9 +126,9 @@ Response
     }
 
 Aus Dokumenten abgeleitete Suggest-Wörter löschen
-=================================================
+==================================================
 
-Löscht die aus Dokumenten generierten Suggest-Wörter.
+Löscht die aus Dokumenten generierten Suggest-Wörter (Suggest-Wörter mit Dokument-Herkunft).
 
 Request
 -------
@@ -132,9 +150,9 @@ Response
     }
 
 Aus Suchanfragen abgeleitete Suggest-Wörter löschen
-===================================================
+====================================================
 
-Löscht die aus Suchanfragen generierten Suggest-Wörter.
+Löscht die aus Suchanfragen generierten Suggest-Wörter (Suggest-Wörter mit Suchanfrage-Herkunft).
 
 Request
 -------
@@ -155,11 +173,28 @@ Response
       }
     }
 
+Fehlerantwort
+=============
+
+Wenn die Löschoperation fehlschlägt, wird der HTTP-Status ``400`` zurückgegeben, ``status`` im Response-Body wird auf ``1`` (BAD_REQUEST) gesetzt und ``message`` enthält eine Fehlermeldung.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.7.0",
+        "status": 1,
+        "message": "Failed to delete a document."
+      }
+    }
+
+Wenn das Zugriffstoken fehlt, ungültig ist oder keine ausreichenden Berechtigungen vorliegen, wird ``status`` im Response-Body auf ``3`` (UNAUTHORIZED) gesetzt. Eine Liste der ``status``-Werte und HTTP-Statuscodes finden Sie unter :doc:`api-admin-overview`.
+
 Verwendungsbeispiele
 ====================
 
 Statistische Informationen abrufen
-----------------------------------
+------------------------------------
 
 .. code-block:: bash
 
@@ -167,7 +202,7 @@ Statistische Informationen abrufen
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Alle Suggest-Wörter löschen
----------------------------
+----------------------------
 
 .. code-block:: bash
 
@@ -175,11 +210,19 @@ Alle Suggest-Wörter löschen
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Aus Dokumenten abgeleitete Suggest-Wörter löschen
--------------------------------------------------
+--------------------------------------------------
 
 .. code-block:: bash
 
     curl -X DELETE "http://localhost:8080/api/admin/suggest/document" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Aus Suchanfragen abgeleitete Suggest-Wörter löschen
+----------------------------------------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/suggest/query" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
 Referenzinformationen
