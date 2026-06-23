@@ -6,7 +6,7 @@ WebConfig API
 ====
 
 WebConfig API是用于管理 |Fess| Web爬虫设置的API。
-您可以操作爬虫目标URL、爬虫深度、排除模式等设置。
+可以操作爬虫目标URL、爬虫深度、排除模式等设置。
 
 基础URL
 =======
@@ -14,6 +14,11 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 ::
 
     /api/admin/webconfig
+
+.. note::
+
+   所有端点均需要管理员权限及有效的访问令牌。
+   有关认证方式，请参阅 :doc:`api-admin-overview` 。
 
 端点列表
 ========
@@ -42,7 +47,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
      - 删除Web爬虫设置
 
 获取Web爬虫设置列表
-==================
+====================
 
 请求
 ----
@@ -51,25 +56,41 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 
     GET /api/admin/webconfig/settings
 
+.. note::
+
+   列表获取端点除 ``GET`` 外，也可使用 ``PUT`` 访问。
+
 参数
 ~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 10 55
 
    * - 参数
      - 类型
      - 必需
      - 说明
-   * - ``size``
-     - Integer
-     - 否
-     - 每页记录数（默认：20）
    * - ``page``
      - Integer
      - 否
-     - 页码（从0开始）
+     - 页码（从1开始，默认：1）
+   * - ``size``
+     - Integer
+     - 否
+     - 每页记录数（默认：25。遵循 ``paging.page.size`` 设置）
+   * - ``name``
+     - String
+     - 否
+     - 按设置名称筛选
+   * - ``urls``
+     - String
+     - 否
+     - 按爬虫URL筛选
+   * - ``description``
+     - String
+     - 否
+     - 按说明筛选
 
 响应
 ----
@@ -83,7 +104,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
           {
             "id": "webconfig_id_1",
             "name": "Example Site",
-            "description": "サンプルサイト",
+            "description": "示例站点",
             "urls": "https://example.com/",
             "includedUrls": ".*example\\.com.*",
             "excludedUrls": ".*\\.(pdf|zip)$",
@@ -106,8 +127,10 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
       }
     }
 
+``total`` 表示符合条件的设置总数。
+
 获取Web爬虫设置
-==============
+===============
 
 请求
 ----
@@ -127,7 +150,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
         "setting": {
           "id": "webconfig_id_1",
           "name": "Example Site",
-          "description": "サンプルサイト",
+          "description": "示例站点",
           "urls": "https://example.com/",
           "includedUrls": ".*example\\.com.*",
           "excludedUrls": ".*\\.(pdf|zip)$",
@@ -144,13 +167,23 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
           "sortOrder": 0,
           "permissions": "{role}admin",
           "virtualHosts": "",
-          "labelTypeIds": []
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
 
+.. note::
+
+   响应中包含在注册和更新时由服务器自动设置的 ``createdBy`` 、 ``createdTime`` 、
+   ``updatedBy`` 、 ``updatedTime`` 、 ``versionNo`` 字段。
+   ``versionNo`` 在更新时为必填项（请参阅后述的"更新Web爬虫设置"）。
+
 创建Web爬虫设置
-==============
+===============
 
 请求
 ----
@@ -176,8 +209,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
-      "permissions": "{role}admin\n{role}user",
-      "labelTypeIds": ["label_id_1"]
+      "permissions": "{role}admin\n{role}user"
     }
 
 字段说明
@@ -185,20 +217,20 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - 字段
      - 必需
      - 说明
    * - ``name``
      - 是
-     - 设置名称
+     - 设置名称（最多200个字符）
    * - ``description``
      - 否
-     - 设置的说明
+     - 设置说明（最多1000个字符）
    * - ``urls``
      - 是
-     - 爬虫起始URL（多个URL用换行符分隔）
+     - 爬虫起始URL（多个URL用换行符分隔）。使用 ``http:`` 或 ``https:`` 协议指定
    * - ``includedUrls``
      - 否
      - 爬虫目标URL的正则表达式模式
@@ -213,22 +245,22 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
      - 排除索引URL的正则表达式模式
    * - ``configParameter``
      - 否
-     - 附加配置参数
+     - 附加配置参数（ ``key=value`` 格式，每行一项）
    * - ``depth``
      - 否
-     - 爬虫深度
+     - 爬虫深度（0以上）
    * - ``maxAccessCount``
      - 否
-     - 最大访问数
+     - 最大访问数（0以上）
    * - ``userAgent``
      - 是
-     - User-Agent字符串
+     - User-Agent字符串（最多200个字符）
    * - ``numOfThread``
      - 是
-     - 并行线程数
+     - 并行线程数（1以上）
    * - ``intervalTime``
      - 是
-     - 请求间隔（毫秒）
+     - 访问间隔（毫秒，0以上）
    * - ``boost``
      - 是
      - 搜索结果提升值
@@ -237,16 +269,18 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
      - 启用/禁用（字符串 ``"true"`` / ``"false"``）
    * - ``sortOrder``
      - 是
-     - 显示顺序
+     - 显示顺序（0以上）
    * - ``permissions``
      - 否
      - 访问权限角色（多个时用换行符分隔）
    * - ``virtualHosts``
      - 否
      - 虚拟主机（多个时用换行符分隔）
-   * - ``labelTypeIds``
-     - 否
-     - 标签类型ID（数组）
+
+.. note::
+
+   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` 等审计字段
+   由服务器自动设置，无需在请求体中指定。
 
 响应
 ----
@@ -262,7 +296,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
     }
 
 更新Web爬虫设置
-==============
+===============
 
 请求
 ----
@@ -274,6 +308,9 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 
 请求体
 ~~~~~~
+
+更新时，除创建时的字段外，还需要指定用于确定更新目标的 ``id`` 和版本号 ``versionNo`` 。
+``versionNo`` 需填写获取API（GET）响应中包含的当前值。
 
 .. code-block:: json
 
@@ -294,6 +331,23 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
       "versionNo": 1
     }
 
+更新时的附加字段
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - 字段
+     - 必需
+     - 说明
+   * - ``id``
+     - 是
+     - 更新目标的设置ID（最多1000个字符）
+   * - ``versionNo``
+     - 是
+     - 更新目标的当前版本号。填写获取API（GET）响应中包含的 ``versionNo`` 值
+
 响应
 ----
 
@@ -308,7 +362,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
     }
 
 删除Web爬虫设置
-==============
+===============
 
 请求
 ----
@@ -331,8 +385,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 URL模式示例
 ===========
 
-includedUrls / excludedUrls
----------------------------
+``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` 中可使用正则表达式。
 
 .. list-table::
    :header-rows: 1
@@ -390,7 +443,6 @@ includedUrls / excludedUrls
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
            "includedUrls": ".*docs\\.example\\.com.*",
-           "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
            "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
@@ -398,8 +450,7 @@ includedUrls / excludedUrls
            "intervalTime": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0,
-           "labelTypeIds": ["documentation_label_id"]
+           "sortOrder": 0
          }'
 
 参考信息
@@ -409,4 +460,3 @@ includedUrls / excludedUrls
 - :doc:`api-admin-fileconfig` - 文件爬虫设置API
 - :doc:`api-admin-dataconfig` - 数据存储设置API
 - :doc:`../../admin/webconfig-guide` - Web爬虫设置指南
-

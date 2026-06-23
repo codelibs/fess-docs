@@ -15,6 +15,11 @@ Base URL
 
     /api/admin/webconfig
 
+.. note::
+
+   All endpoints require administrator privileges and a valid access token.
+   Refer to :doc:`api-admin-overview` for authentication details.
+
 Endpoint List
 =============
 
@@ -51,25 +56,41 @@ Request
 
     GET /api/admin/webconfig/settings
 
+.. note::
+
+   The list endpoint is also accessible via ``PUT`` in addition to ``GET``.
+
 Parameters
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 10 55
 
    * - Parameter
      - Type
      - Required
      - Description
-   * - ``size``
-     - Integer
-     - No
-     - Number of items per page (default: 20)
    * - ``page``
      - Integer
      - No
-     - Page number (starts from 0)
+     - Page number (1-based, default: 1)
+   * - ``size``
+     - Integer
+     - No
+     - Number of items per page (default: 25, follows the ``paging.page.size`` setting)
+   * - ``name``
+     - String
+     - No
+     - Filter by configuration name
+   * - ``urls``
+     - String
+     - No
+     - Filter by crawl URL
+   * - ``description``
+     - String
+     - No
+     - Filter by description
 
 Response
 --------
@@ -106,8 +127,10 @@ Response
       }
     }
 
+``total`` represents the total number of configurations matching the filter conditions.
+
 Get Web Crawl Configuration
-===========================
+============================
 
 Request
 -------
@@ -144,13 +167,23 @@ Response
           "sortOrder": 0,
           "permissions": "{role}admin",
           "virtualHosts": "",
-          "labelTypeIds": []
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
 
+.. note::
+
+   The response includes ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``, and ``versionNo``,
+   which are automatically populated by the server when a configuration is created or updated.
+   ``versionNo`` is required when updating a configuration (see "Update Web Crawl Configuration" below).
+
 Create Web Crawl Configuration
-==============================
+===============================
 
 Request
 -------
@@ -176,8 +209,7 @@ Request Body
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
-      "permissions": "{role}admin\n{role}user",
-      "labelTypeIds": ["label_id_1"]
+      "permissions": "{role}admin\n{role}user"
     }
 
 Field Description
@@ -185,50 +217,50 @@ Field Description
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Field
      - Required
      - Description
    * - ``name``
      - Yes
-     - Configuration name
+     - Configuration name (up to 200 characters)
    * - ``description``
      - No
-     - Configuration description
+     - Configuration description (up to 1000 characters)
    * - ``urls``
      - Yes
-     - Crawl start URLs (newline-separated for multiple URLs)
+     - Crawl start URLs (newline-separated for multiple URLs). Specify using ``http:`` or ``https:``
    * - ``includedUrls``
      - No
-     - Regex pattern for URLs to crawl
+     - Regex pattern for URLs to include in crawling
    * - ``excludedUrls``
      - No
      - Regex pattern for URLs to exclude from crawling
    * - ``includedDocUrls``
      - No
-     - Regex pattern for URLs to index
+     - Regex pattern for URLs to include in indexing
    * - ``excludedDocUrls``
      - No
      - Regex pattern for URLs to exclude from indexing
    * - ``configParameter``
      - No
-     - Additional configuration parameters
+     - Additional configuration parameters (``key=value`` format, one entry per line)
    * - ``depth``
      - No
-     - Crawl depth
+     - Crawl depth (0 or greater)
    * - ``maxAccessCount``
      - No
-     - Maximum access count
+     - Maximum access count (0 or greater)
    * - ``userAgent``
      - Yes
-     - User-Agent string
+     - User-Agent string (up to 200 characters)
    * - ``numOfThread``
      - Yes
-     - Number of parallel threads
+     - Number of parallel threads (1 or greater)
    * - ``intervalTime``
      - Yes
-     - Request interval in milliseconds
+     - Access interval in milliseconds (0 or greater)
    * - ``boost``
      - Yes
      - Search result boost value
@@ -237,16 +269,18 @@ Field Description
      - Enable/disable (string ``"true"`` / ``"false"``)
    * - ``sortOrder``
      - Yes
-     - Display order
+     - Display order (0 or greater)
    * - ``permissions``
      - No
-     - Access permission roles (newline-separated if multiple)
+     - Access permission roles (newline-separated for multiple values)
    * - ``virtualHosts``
      - No
-     - Virtual hosts (newline-separated if multiple)
-   * - ``labelTypeIds``
-     - No
-     - Label type IDs (array)
+     - Virtual hosts (newline-separated for multiple values)
+
+.. note::
+
+   Audit fields such as ``createdBy``, ``createdTime``, ``updatedBy``, and ``updatedTime`` are
+   automatically set by the server and do not need to be included in the request body.
 
 Response
 --------
@@ -262,7 +296,7 @@ Response
     }
 
 Update Web Crawl Configuration
-==============================
+===============================
 
 Request
 -------
@@ -274,6 +308,9 @@ Request
 
 Request Body
 ~~~~~~~~~~~~
+
+When updating, ``id`` to identify the target configuration and ``versionNo`` are required in addition to the fields used at creation time.
+Specify the current value of ``versionNo`` as returned in the GET response.
 
 .. code-block:: json
 
@@ -294,6 +331,23 @@ Request Body
       "versionNo": 1
     }
 
+Additional Fields for Update
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Field
+     - Required
+     - Description
+   * - ``id``
+     - Yes
+     - ID of the configuration to update (up to 1000 characters)
+   * - ``versionNo``
+     - Yes
+     - Current version number of the configuration to update. Use the ``versionNo`` value from the GET response.
+
 Response
 --------
 
@@ -308,7 +362,7 @@ Response
     }
 
 Delete Web Crawl Configuration
-==============================
+===============================
 
 Request
 -------
@@ -331,8 +385,7 @@ Response
 URL Pattern Examples
 ====================
 
-includedUrls / excludedUrls
----------------------------
+``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` accept regular expressions.
 
 .. list-table::
    :header-rows: 1
@@ -355,7 +408,7 @@ Usage Examples
 ==============
 
 Corporate Site Crawl Configuration
-----------------------------------
+------------------------------------
 
 .. code-block:: bash
 
@@ -379,7 +432,7 @@ Corporate Site Crawl Configuration
          }'
 
 Documentation Site Crawl Configuration
---------------------------------------
+----------------------------------------
 
 .. code-block:: bash
 
@@ -390,7 +443,6 @@ Documentation Site Crawl Configuration
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
            "includedUrls": ".*docs\\.example\\.com.*",
-           "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
            "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
@@ -398,8 +450,7 @@ Documentation Site Crawl Configuration
            "intervalTime": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0,
-           "labelTypeIds": ["documentation_label_id"]
+           "sortOrder": 0
          }'
 
 Reference
@@ -409,4 +460,3 @@ Reference
 - :doc:`api-admin-fileconfig` - File Crawl Configuration API
 - :doc:`api-admin-dataconfig` - Data Store Configuration API
 - :doc:`../../admin/webconfig-guide` - Web Crawl Configuration Guide
-
