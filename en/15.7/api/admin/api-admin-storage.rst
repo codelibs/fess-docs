@@ -5,8 +5,8 @@ Storage API
 Overview
 ========
 
-Storage API is an API for managing |Fess| object storage.
-You can list files and directories in storage and download, delete, and upload files.
+The Storage API is an API for managing |Fess| object storage.
+You can list files and directories in storage, and download, delete, and upload files.
 
 Base URL
 ========
@@ -14,6 +14,19 @@ Base URL
 ::
 
     /api/admin/storage
+
+Authentication
+==============
+
+All endpoints of the Admin API, including the Storage API, require authentication using an access token.
+Specify the access token in the ``Authorization`` header of the request.
+
+::
+
+    Authorization: Bearer <access_token>
+
+For details on how to obtain an access token and the required permissions (``admin-api`` role by default),
+see :doc:`api-admin-overview`.
 
 Endpoint List
 =============
@@ -35,14 +48,14 @@ Endpoint List
      - /delete/{id}
      - Delete a file
    * - PUT
-     - /upload/{pathId}
+     - /upload
      - Upload a file
 
 List Files and Directories
 ==========================
 
 Returns a list of files and directories under the specified directory.
-Specify an encoded path for ``{id}``. If ``{id}`` is omitted, the list of the root directory is retrieved.
+Specify the ``id`` of a directory obtained from a previous list response for ``{id}``. If ``{id}`` is omitted, the list of the root directory is retrieved.
 
 Request
 -------
@@ -64,19 +77,19 @@ Each object has the following fields.
    * - Field
      - Description
    * - ``id``
-     - Encoded identifier (used as ``{id}`` for download and delete)
+     - Encoded identifier. A URL-safe Base64 encoding of the object path, used as ``{id}`` for download and delete operations.
    * - ``path``
-     - Parent path
+     - Path of the parent directory
    * - ``name``
      - File name or directory name
    * - ``hashCode``
-     - Hash code
+     - A hash value used internally (not a stable value representing the content of the object)
    * - ``size``
      - Size (bytes)
    * - ``directory``
-     - Whether it is a directory (boolean)
+     - Whether the entry is a directory (boolean)
    * - ``lastModified``
-     - Last modified date/time (files only)
+     - Last modified date and time (ISO 8601 format; included only for files)
 
 .. code-block:: json
 
@@ -109,7 +122,7 @@ Each object has the following fields.
 Download a File
 ===============
 
-Downloads a file from storage. For ``{id}``, specify the ``id`` obtained from the list.
+Downloads a file from storage. Specify the ``id`` obtained from the list for ``{id}``.
 The response is returned as an ``application/octet-stream`` stream.
 
 Request
@@ -124,10 +137,15 @@ Response
 
 A binary stream of the file (``Content-Type: application/octet-stream``).
 
+.. note::
+
+   The response of this API does not include a ``Content-Disposition`` header.
+   Specify the filename to save on the client side (use the ``-o`` option with cURL).
+
 Delete a File
 =============
 
-Deletes a file from storage. For ``{id}``, specify the ``id`` obtained from the list.
+Deletes a file from storage. Specify the ``id`` obtained from the list for ``{id}``.
 
 Request
 -------
@@ -151,14 +169,15 @@ Response
 Upload a File
 =============
 
-Uploads a file to storage. Send it in ``multipart/form-data`` format.
+Uploads a file to storage. Send the request in ``multipart/form-data`` format.
+The upload destination directory is specified via the form field ``path``, not as a URL path parameter.
 
 Request
 -------
 
 ::
 
-    PUT /api/admin/storage/upload/{pathId}
+    PUT /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 Field Description
@@ -173,7 +192,7 @@ Field Description
      - Description
    * - ``path``
      - No
-     - Upload destination path (default location if not specified)
+     - Directory path for the upload destination (no leading or trailing slashes). If omitted, the file is stored at the root (directly under the bucket).
    * - ``file``
      - Yes
      - File to upload
@@ -189,6 +208,29 @@ Response
         "status": 0
       }
     }
+
+Errors
+======
+
+Each endpoint returns a response with a ``status`` value other than 0 (``1`` for validation errors) when processing fails.
+The ``message`` field in the response body contains the error details. For information on status values and HTTP status codes, see :doc:`api-admin-overview`.
+
+The main error cases are as follows.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Endpoint
+     - Main cases where an error occurs
+   * - List Files and Directories
+     - When the number of retrieved items exceeds the limit
+   * - Download a File
+     - When ``id`` is invalid, or when the download fails
+   * - Delete a File
+     - When ``id`` is invalid, or when the deletion fails
+   * - Upload a File
+     - When ``file`` is not specified, or when the upload fails
 
 Usage Examples
 ==============
@@ -223,9 +265,9 @@ Upload a File
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload/" \
+    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "path=/" \
+         -F "path=subdir" \
          -F "file=@sample.txt"
 
 Reference

@@ -15,6 +15,19 @@ Basis-URL
 
     /api/admin/storage
 
+Authentifizierung
+=================
+
+Alle Endpunkte der Admin API einschließlich der Storage API erfordern eine Authentifizierung mit einem Access Token.
+Geben Sie den Access Token im ``Authorization``-Header des Requests an.
+
+::
+
+    Authorization: Bearer <Access Token>
+
+Einzelheiten zur Beschaffung des Access Tokens und zu den erforderlichen Berechtigungen (standardmäßig die Rolle ``admin-api``) finden Sie unter
+:doc:`api-admin-overview`.
+
 Endpunktliste
 =============
 
@@ -35,14 +48,14 @@ Endpunktliste
      - /delete/{id}
      - Datei löschen
    * - PUT
-     - /upload/{pathId}
+     - /upload
      - Datei hochladen
 
 Dateien und Verzeichnisse auflisten
-===================================
+====================================
 
 Gibt die Liste der Dateien und Verzeichnisse unterhalb des angegebenen Verzeichnisses zurück.
-Für ``{id}`` wird ein codierter Pfad angegeben. Wird ``{id}`` weggelassen, wird die Liste des Wurzelverzeichnisses abgerufen.
+Für ``{id}`` wird die beim Auflisten erhaltene ``id`` eines Verzeichnisses angegeben. Wird ``{id}`` weggelassen, wird die Liste des Wurzelverzeichnisses abgerufen.
 
 Request
 -------
@@ -64,19 +77,19 @@ Jedes Objekt hat die folgenden Felder.
    * - Feld
      - Beschreibung
    * - ``id``
-     - Codierter Bezeichner (wird beim Herunterladen und Löschen als ``{id}`` verwendet)
+     - Codierter Bezeichner. Eine URL-sichere Base64-Kodierung des Objektpfads, die beim Herunterladen und Löschen als ``{id}`` verwendet wird.
    * - ``path``
-     - Übergeordneter Pfad
+     - Pfad des übergeordneten Verzeichnisses
    * - ``name``
      - Datei- oder Verzeichnisname
    * - ``hashCode``
-     - Hash-Code
+     - Intern verwendeter Hash-Wert (kein stabiler Wert, der den Inhalt des Objekts repräsentiert)
    * - ``size``
      - Größe (Byte)
    * - ``directory``
      - Ob es ein Verzeichnis ist (boolean)
    * - ``lastModified``
-     - Zeitpunkt der letzten Änderung (nur Dateien)
+     - Zeitpunkt der letzten Änderung (ISO-8601-Format; nur bei Dateien enthalten)
 
 .. code-block:: json
 
@@ -124,6 +137,11 @@ Response
 
 Binärer Stream der Datei (``Content-Type: application/octet-stream``).
 
+.. note::
+
+   Die Antwort dieser API enthält keinen ``Content-Disposition``-Header.
+   Der zu speichernde Dateiname muss clientseitig angegeben werden (bei cURL über die Option ``-o``).
+
 Datei löschen
 =============
 
@@ -152,13 +170,14 @@ Datei hochladen
 ===============
 
 Lädt eine Datei in den Speicher hoch. Die Übertragung erfolgt im Format ``multipart/form-data``.
+Das Zielverzeichnis wird nicht im URL-Pfad, sondern über das Formularfeld ``path`` angegeben.
 
 Request
 -------
 
 ::
 
-    PUT /api/admin/storage/upload/{pathId}
+    PUT /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 Feldbeschreibungen
@@ -173,7 +192,7 @@ Feldbeschreibungen
      - Beschreibung
    * - ``path``
      - Nein
-     - Zielpfad des Uploads (bei fehlender Angabe der Standardort)
+     - Verzeichnispfad des Upload-Ziels (ohne führende und abschließende Schrägstriche). Wird kein Pfad angegeben, wird die Datei im Wurzelverzeichnis (direkt im Bucket) gespeichert.
    * - ``file``
      - Ja
      - Hochzuladende Datei
@@ -190,11 +209,34 @@ Response
       }
     }
 
+Fehler
+======
+
+Schlägt die Verarbeitung an einem Endpunkt fehl, wird eine Antwort mit einem ``status``-Wert ungleich 0 zurückgegeben (bei Validierungsfehlern ``1``).
+Das Feld ``message`` im Antwortkörper enthält die Fehlerbeschreibung. Einzelheiten zu Statuswerten und HTTP-Statuscodes finden Sie unter :doc:`api-admin-overview`.
+
+Die häufigsten Fehlerfälle sind wie folgt.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Endpunkt
+     - Häufige Fehlerursachen
+   * - Dateien und Verzeichnisse auflisten
+     - Wenn die Anzahl der abgerufenen Einträge das Limit überschreitet
+   * - Datei herunterladen
+     - Wenn ``id`` ungültig ist oder der Download fehlschlägt
+   * - Datei löschen
+     - Wenn ``id`` ungültig ist oder das Löschen fehlschlägt
+   * - Datei hochladen
+     - Wenn ``file`` nicht angegeben ist oder der Upload fehlschlägt
+
 Verwendungsbeispiele
 ====================
 
 Wurzelverzeichnis auflisten
----------------------------
+----------------------------
 
 .. code-block:: bash
 
@@ -223,9 +265,9 @@ Datei hochladen
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload/" \
+    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "path=/" \
+         -F "path=subdir" \
          -F "file=@sample.txt"
 
 Referenzinformationen
