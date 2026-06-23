@@ -5,7 +5,7 @@ WebConfig API
 Übersicht
 =========
 
-Die WebConfig API dient zur Verwaltung der Web-Crawl-Konfiguration in |Fess|.
+Die WebConfig API dient zur Verwaltung der Web-Crawl-Konfigurationen in |Fess|.
 Sie können Einstellungen wie Crawl-Ziel-URLs, Crawl-Tiefe und Ausschlussmuster verwalten.
 
 Basis-URL
@@ -14,6 +14,11 @@ Basis-URL
 ::
 
     /api/admin/webconfig
+
+.. note::
+
+   Alle Endpunkte erfordern Administratorrechte und ein gültiges Zugriffstoken.
+   Informationen zur Authentifizierung finden Sie unter :doc:`api-admin-overview`.
 
 Endpunktliste
 =============
@@ -42,7 +47,7 @@ Endpunktliste
      - Web-Crawl-Konfiguration löschen
 
 Web-Crawl-Konfigurationsliste abrufen
-=====================================
+======================================
 
 Request
 -------
@@ -51,25 +56,41 @@ Request
 
     GET /api/admin/webconfig/settings
 
+.. note::
+
+   Der Listen-Endpunkt ist neben ``GET`` auch über ``PUT`` erreichbar.
+
 Parameter
 ~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 10 55
 
    * - Parameter
      - Typ
      - Erforderlich
      - Beschreibung
-   * - ``size``
-     - Integer
-     - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1, Standard: 1)
+   * - ``size``
+     - Integer
+     - Nein
+     - Anzahl der Einträge pro Seite (Standard: 25; richtet sich nach der Einstellung ``paging.page.size``)
+   * - ``name``
+     - String
+     - Nein
+     - Filterung nach Konfigurationsname
+   * - ``urls``
+     - String
+     - Nein
+     - Filterung nach Crawl-URL
+   * - ``description``
+     - String
+     - Nein
+     - Filterung nach Beschreibung
 
 Response
 --------
@@ -106,8 +127,10 @@ Response
       }
     }
 
+``total`` gibt die Gesamtanzahl der Konfigurationen an, die den Suchkriterien entsprechen.
+
 Web-Crawl-Konfiguration abrufen
-===============================
+================================
 
 Request
 -------
@@ -144,13 +167,23 @@ Response
           "sortOrder": 0,
           "permissions": "{role}admin",
           "virtualHosts": "",
-          "labelTypeIds": []
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
 
+.. note::
+
+   Die Response enthält die vom Server automatisch gesetzten Felder ``createdBy``, ``createdTime``,
+   ``updatedBy``, ``updatedTime`` und ``versionNo``.
+   ``versionNo`` wird bei der Aktualisierung benötigt (siehe „Web-Crawl-Konfiguration aktualisieren" weiter unten).
+
 Web-Crawl-Konfiguration erstellen
-=================================
+===================================
 
 Request
 -------
@@ -176,8 +209,7 @@ Request-Body
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
-      "permissions": "{role}admin\n{role}user",
-      "labelTypeIds": ["label_id_1"]
+      "permissions": "{role}admin\n{role}user"
     }
 
 Feldbeschreibungen
@@ -185,20 +217,20 @@ Feldbeschreibungen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Feld
      - Erforderlich
      - Beschreibung
    * - ``name``
      - Ja
-     - Konfigurationsname
+     - Konfigurationsname (max. 200 Zeichen)
    * - ``description``
      - Nein
-     - Beschreibung der Konfiguration
+     - Beschreibung der Konfiguration (max. 1000 Zeichen)
    * - ``urls``
      - Ja
-     - Crawl-Start-URLs (bei mehreren durch Zeilenumbruch getrennt)
+     - Crawl-Start-URLs (bei mehreren durch Zeilenumbruch getrennt). Anzugeben mit ``http:`` oder ``https:``
    * - ``includedUrls``
      - Nein
      - Regex-Muster für zu crawlende URLs
@@ -213,22 +245,22 @@ Feldbeschreibungen
      - Regex-Muster für vom Index auszuschließende URLs
    * - ``configParameter``
      - Nein
-     - Zusätzliche Konfigurationsparameter
+     - Zusätzliche Konfigurationsparameter (Format ``key=value``, ein Eintrag pro Zeile)
    * - ``depth``
      - Nein
-     - Crawl-Tiefe
+     - Crawl-Tiefe (0 oder größer)
    * - ``maxAccessCount``
      - Nein
-     - Maximale Zugriffsanzahl
+     - Maximale Zugriffsanzahl (0 oder größer)
    * - ``userAgent``
      - Ja
-     - User-Agent-Zeichenkette
+     - User-Agent-Zeichenkette (max. 200 Zeichen)
    * - ``numOfThread``
      - Ja
-     - Anzahl paralleler Threads
+     - Anzahl paralleler Threads (1 oder größer)
    * - ``intervalTime``
      - Ja
-     - Anfrage-Intervall (Millisekunden)
+     - Zugriffsintervall (Millisekunden, 0 oder größer)
    * - ``boost``
      - Ja
      - Boost-Wert für Suchergebnisse
@@ -237,16 +269,18 @@ Feldbeschreibungen
      - Aktiviert/Deaktiviert (Zeichenkette ``"true"`` / ``"false"``)
    * - ``sortOrder``
      - Ja
-     - Anzeigereihenfolge
+     - Anzeigereihenfolge (0 oder größer)
    * - ``permissions``
      - Nein
-     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbrüche getrennt)
+     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbruch getrennt)
    * - ``virtualHosts``
      - Nein
-     - Virtuelle Hosts (bei mehreren durch Zeilenumbrüche getrennt)
-   * - ``labelTypeIds``
-     - Nein
-     - Label-Typ-IDs (Array)
+     - Virtuelle Hosts (bei mehreren durch Zeilenumbruch getrennt)
+
+.. note::
+
+   Audit-Felder wie ``createdBy``, ``createdTime``, ``updatedBy`` und ``updatedTime`` werden
+   serverseitig automatisch gesetzt und müssen nicht im Request-Body angegeben werden.
 
 Response
 --------
@@ -262,7 +296,7 @@ Response
     }
 
 Web-Crawl-Konfiguration aktualisieren
-=====================================
+=======================================
 
 Request
 -------
@@ -274,6 +308,9 @@ Request
 
 Request-Body
 ~~~~~~~~~~~~
+
+Bei der Aktualisierung sind neben den Feldern aus der Erstellung zusätzlich ``id`` zur Identifikation der Zielkonfiguration und ``versionNo`` als Versionsnummer erforderlich.
+Für ``versionNo`` ist der aktuelle Wert aus der Response der Abruf-API (GET) anzugeben.
 
 .. code-block:: json
 
@@ -294,6 +331,23 @@ Request-Body
       "versionNo": 1
     }
 
+Zusätzliche Felder bei der Aktualisierung
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``id``
+     - Ja
+     - Konfigurations-ID der zu aktualisierenden Konfiguration (max. 1000 Zeichen)
+   * - ``versionNo``
+     - Ja
+     - Aktuelle Versionsnummer der zu aktualisierenden Konfiguration. Anzugeben ist der ``versionNo``-Wert aus der Response der Abruf-API (GET)
+
 Response
 --------
 
@@ -308,7 +362,7 @@ Response
     }
 
 Web-Crawl-Konfiguration löschen
-===============================
+=================================
 
 Request
 -------
@@ -331,8 +385,7 @@ Response
 URL-Muster-Beispiele
 ====================
 
-includedUrls / excludedUrls
----------------------------
+Für ``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` werden reguläre Ausdrücke angegeben.
 
 .. list-table::
    :header-rows: 1
@@ -355,7 +408,7 @@ Verwendungsbeispiele
 ====================
 
 Crawl-Konfiguration für Unternehmenswebsite
--------------------------------------------
+--------------------------------------------
 
 .. code-block:: bash
 
@@ -379,7 +432,7 @@ Crawl-Konfiguration für Unternehmenswebsite
          }'
 
 Crawl-Konfiguration für Dokumentationswebsite
----------------------------------------------
+----------------------------------------------
 
 .. code-block:: bash
 
@@ -390,7 +443,6 @@ Crawl-Konfiguration für Dokumentationswebsite
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
            "includedUrls": ".*docs\\.example\\.com.*",
-           "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
            "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
@@ -398,8 +450,7 @@ Crawl-Konfiguration für Dokumentationswebsite
            "intervalTime": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0,
-           "labelTypeIds": ["documentation_label_id"]
+           "sortOrder": 0
          }'
 
 Referenzinformationen

@@ -15,6 +15,11 @@ URL Base
 
     /api/admin/webconfig
 
+.. note::
+
+   Todos los endpoints requieren privilegios de administrador y un token de acceso valido.
+   Consulte :doc:`api-admin-overview` para obtener informacion sobre la autenticacion.
+
 Lista de Endpoints
 ==================
 
@@ -51,25 +56,41 @@ Solicitud
 
     GET /api/admin/webconfig/settings
 
+.. note::
+
+   El endpoint de lista tambien acepta ``PUT`` ademas de ``GET``.
+
 Parametros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 20 15 10 55
 
    * - Parametro
      - Tipo
      - Requerido
      - Descripcion
-   * - ``size``
-     - Integer
-     - No
-     - Numero de elementos por pagina (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 0)
+     - Numero de pagina (comienza en 1, predeterminado: 1)
+   * - ``size``
+     - Integer
+     - No
+     - Numero de elementos por pagina (predeterminado: 25, segun la configuracion ``paging.page.size``)
+   * - ``name``
+     - String
+     - No
+     - Filtrar por nombre de configuracion
+   * - ``urls``
+     - String
+     - No
+     - Filtrar por URL de rastreo
+   * - ``description``
+     - String
+     - No
+     - Filtrar por descripcion
 
 Respuesta
 ---------
@@ -106,8 +127,10 @@ Respuesta
       }
     }
 
+``total`` indica el numero total de configuraciones que coinciden con los criterios de busqueda.
+
 Obtener Configuracion de Rastreo Web
-====================================
+=====================================
 
 Solicitud
 ---------
@@ -144,13 +167,24 @@ Respuesta
           "sortOrder": 0,
           "permissions": "{role}admin",
           "virtualHosts": "",
-          "labelTypeIds": []
+          "createdBy": "admin",
+          "createdTime": 1700000000000,
+          "updatedBy": "admin",
+          "updatedTime": 1700000000000,
+          "versionNo": 1
         }
       }
     }
 
+.. note::
+
+   La respuesta incluye los campos de auditoria ``createdBy``, ``createdTime``,
+   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automaticamente
+   en el momento del registro o la actualizacion.
+   ``versionNo`` es obligatorio al actualizar (consulte la seccion "Actualizar configuracion de rastreo web" a continuacion).
+
 Crear Configuracion de Rastreo Web
-==================================
+===================================
 
 Solicitud
 ---------
@@ -176,8 +210,7 @@ Cuerpo de la Solicitud
       "boost": 1.0,
       "available": "true",
       "sortOrder": 0,
-      "permissions": "{role}admin\n{role}user",
-      "labelTypeIds": ["label_id_1"]
+      "permissions": "{role}admin\n{role}user"
     }
 
 Descripcion de Campos
@@ -185,20 +218,20 @@ Descripcion de Campos
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Campo
      - Requerido
      - Descripcion
    * - ``name``
      - Si
-     - Nombre de la configuracion
+     - Nombre de la configuracion (maximo 200 caracteres)
    * - ``description``
      - No
-     - Descripcion de la configuracion
+     - Descripcion de la configuracion (maximo 1000 caracteres)
    * - ``urls``
      - Si
-     - URL de inicio de rastreo (separadas por salto de linea si son multiples)
+     - URL de inicio de rastreo (separadas por salto de linea si son multiples). Se especifica con ``http:`` o ``https:``
    * - ``includedUrls``
      - No
      - Patron de expresion regular para URLs a rastrear
@@ -213,22 +246,22 @@ Descripcion de Campos
      - Patron de expresion regular para URLs a excluir del indice
    * - ``configParameter``
      - No
-     - Parametros de configuracion adicionales
+     - Parametros de configuracion adicionales (formato ``key=value``, un elemento por linea)
    * - ``depth``
      - No
-     - Profundidad de rastreo
+     - Profundidad de rastreo (0 o mas)
    * - ``maxAccessCount``
      - No
-     - Numero maximo de accesos
+     - Numero maximo de accesos (0 o mas)
    * - ``userAgent``
      - Si
-     - Cadena User-Agent
+     - Cadena User-Agent (maximo 200 caracteres)
    * - ``numOfThread``
      - Si
-     - Numero de hilos paralelos
+     - Numero de hilos paralelos (1 o mas)
    * - ``intervalTime``
      - Si
-     - Intervalo entre solicitudes (milisegundos)
+     - Intervalo de acceso (milisegundos, 0 o mas)
    * - ``boost``
      - Si
      - Valor de impulso en resultados de busqueda
@@ -237,16 +270,18 @@ Descripcion de Campos
      - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
      - Si
-     - Orden de visualizacion
+     - Orden de visualizacion (0 o mas)
    * - ``permissions``
      - No
      - Roles con permiso de acceso (separados por saltos de linea si son varios)
    * - ``virtualHosts``
      - No
      - Hosts virtuales (separados por saltos de linea si son varios)
-   * - ``labelTypeIds``
-     - No
-     - IDs de tipo de etiqueta (arreglo)
+
+.. note::
+
+   Los campos de auditoria como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
+   son asignados automaticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
 
 Respuesta
 ---------
@@ -262,7 +297,7 @@ Respuesta
     }
 
 Actualizar Configuracion de Rastreo Web
-=======================================
+=========================================
 
 Solicitud
 ---------
@@ -274,6 +309,10 @@ Solicitud
 
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
+
+Al actualizar, ademas de los campos de creacion, son obligatorios ``id`` para identificar
+el registro a actualizar y ``versionNo`` como numero de version.
+En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
 
 .. code-block:: json
 
@@ -294,6 +333,23 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
+Campos Adicionales para la Actualizacion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Campo
+     - Requerido
+     - Descripcion
+   * - ``id``
+     - Si
+     - ID de la configuracion a actualizar (maximo 1000 caracteres)
+   * - ``versionNo``
+     - Si
+     - Numero de version actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
+
 Respuesta
 ---------
 
@@ -308,7 +364,7 @@ Respuesta
     }
 
 Eliminar Configuracion de Rastreo Web
-=====================================
+=======================================
 
 Solicitud
 ---------
@@ -329,10 +385,9 @@ Respuesta
     }
 
 Ejemplos de Patrones de URL
-===========================
+============================
 
-includedUrls / excludedUrls
----------------------------
+En ``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` se utilizan expresiones regulares.
 
 .. list-table::
    :header-rows: 1
@@ -379,7 +434,7 @@ Configuracion de Rastreo de Sitio Corporativo
          }'
 
 Configuracion de Rastreo de Sitio de Documentacion
---------------------------------------------------
+----------------------------------------------------
 
 .. code-block:: bash
 
@@ -390,7 +445,6 @@ Configuracion de Rastreo de Sitio de Documentacion
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
            "includedUrls": ".*docs\\.example\\.com.*",
-           "excludedUrls": "",
            "includedDocUrls": ".*\\.(html|htm)$",
            "userAgent": "Mozilla/5.0",
            "maxAccessCount": 50000,
@@ -398,8 +452,7 @@ Configuracion de Rastreo de Sitio de Documentacion
            "intervalTime": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0,
-           "labelTypeIds": ["documentation_label_id"]
+           "sortOrder": 0
          }'
 
 Informacion de Referencia
