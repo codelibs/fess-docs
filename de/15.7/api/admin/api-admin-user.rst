@@ -5,8 +5,16 @@ User API
 Übersicht
 =========
 
-Die User API dient zur Verwaltung von Benutzerkonten in |Fess|.
-Sie können Benutzer erstellen, aktualisieren, löschen und Berechtigungen konfigurieren.
+Die User API ist eine REST API zur Verwaltung von |Fess|-Benutzerkonten.
+Sie können Benutzer erstellen, abrufen, aktualisieren und löschen sowie Rollen und Gruppen zuweisen.
+
+Dies ist eine Admin-API; der Zugriff erfordert eine Authentifizierung mit einem Admin-Zugriffstoken.
+Informationen zur Authentifizierungsmethode und zu den gemeinsamen Spezifikationen finden Sie unter :doc:`api-admin-overview`.
+
+Jede Antwort ist in ein ``response``-Objekt eingebettet und enthält die folgenden gemeinsamen Felder:
+
+- ``version`` : Der |Fess|-Produktversionsstring.
+- ``status`` : Der Ergebnisstatuscode (``0`` =Erfolg, ``1`` =Ungültige Anfrage, ``2`` =Systemfehler, ``3`` =Nicht autorisiert, ``9`` =Fehlgeschlagen).
 
 Basis-URL
 =========
@@ -44,7 +52,7 @@ Endpunktliste
 Benutzerliste abrufen
 =====================
 
-Request
+Anfrage
 -------
 
 ::
@@ -56,7 +64,7 @@ Parameter
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 15 10 10 65
 
    * - Parameter
      - Typ
@@ -65,23 +73,30 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite. Der Standardwert ist der konfigurierte Wert ``paging.page.size`` (Standard: 25).
    * - ``page``
      - Integer
      - Nein
-     - Seitennummer (beginnt bei 0)
+     - Seitennummer (beginnt bei 1). Der Standardwert ist 1.
 
-Response
---------
+.. note::
+
+   In der aktuellen Implementierung berücksichtigt der Endpunkt für die Benutzerliste die Parameter ``size`` und ``page`` nicht.
+   Es wird immer die erste Seite zurückgegeben, mit der durch die Servereinstellung ``paging.page.size`` (Standard: 25) festgelegten Anzahl von Einträgen, sortiert nach Benutzername (``name``) in aufsteigender Reihenfolge.
+   Die Gesamtanzahl der übereinstimmenden Benutzer ist in ``response.total`` verfügbar.
+
+Antwort
+-------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
-            "id": "user_id_1",
+            "id": "YWRtaW4=",
             "name": "admin",
             "attributes": {
               "surname": "Administrator",
@@ -89,33 +104,40 @@ Response
               "mail": "admin@example.com"
             },
             "roles": ["admin"],
-            "groups": []
+            "groups": [],
+            "versionNo": 1
           }
         ],
         "total": 10
       }
     }
 
+- ``settings`` : Das Array der Benutzer auf der aktuellen Seite.
+- ``total`` : Die Gesamtanzahl der übereinstimmenden Benutzer.
+
 Benutzer abrufen
 ================
 
-Request
+Anfrage
 -------
 
 ::
 
     GET /api/admin/user/setting/{id}
 
-Response
---------
+Geben Sie in ``{id}`` die Dokument-ID des Zielbenutzers an.
+
+Antwort
+-------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
-          "id": "user_id_1",
+          "id": "YWRtaW4=",
           "name": "admin",
           "attributes": {
             "surname": "Administrator",
@@ -127,15 +149,21 @@ Response
             "homeDirectory": ""
           },
           "roles": ["admin"],
-          "groups": []
+          "groups": [],
+          "versionNo": 1
         }
       }
     }
 
+.. note::
+
+   ``attributes`` enthält alle für den Benutzer gespeicherten Attribute, mit Ausnahme von ``name``, ``password``, ``roles`` und ``groups``.
+   ``password`` ist nicht in der Antwort enthalten.
+
 Benutzer erstellen
 ==================
 
-Request
+Anfrage
 -------
 
 ::
@@ -143,7 +171,7 @@ Request
     POST /api/admin/user/setting
     Content-Type: application/json
 
-Request-Body
+Anfrage-Body
 ~~~~~~~~~~~~
 
 .. code-block:: json
@@ -166,7 +194,7 @@ Feldbeschreibungen
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Feld
      - Erforderlich
@@ -179,10 +207,10 @@ Feldbeschreibungen
      - Passwort
    * - ``confirmPassword``
      - Nein
-     - Bestätigungspasswort (muss mit ``password`` übereinstimmen)
+     - Bestätigungspasswort
    * - ``attributes``
      - Nein
-     - Attribut-Map (enthält LDAP-Attribute wie ``surname``, ``givenName``, ``mail``, ``telephoneNumber`` usw.)
+     - Attribut-Map (siehe unten)
    * - ``roles``
      - Nein
      - Array von Rollen-IDs
@@ -190,23 +218,48 @@ Feldbeschreibungen
      - Nein
      - Array von Gruppen-IDs
 
-Response
---------
+.. note::
+
+   Die REST API führt keine Pflichtprüfung für das Passwort, keinen Abgleich zwischen ``password`` und ``confirmPassword`` und keine Passwortrichtlinienvalidierung durch (diese werden nur in der Admin-Oberfläche angewendet).
+   In der Praxis wird empfohlen, ein gültiges ``password`` anzugeben, dessen Wert mit ``confirmPassword`` übereinstimmt.
+
+Die Schlüssel von ``attributes`` sind die Attributnamen der Benutzerentität (die aus LDAP abgeleiteten Schemaelementnamen).
+Die häufigsten Schlüssel sind:
+
+- ``surname``, ``givenName``, ``displayName``, ``mail``
+- ``telephoneNumber``, ``mobile``, ``homePhone``
+- ``employeeNumber``, ``title``, ``description``, ``homeDirectory``
+- ``uidNumber``, ``gidNumber``
+
+``uidNumber`` und ``gidNumber`` müssen numerische Werte sein (der Typ wird bei der Aktualisierung validiert).
+Viele weitere LDAP-Attributschlüssel können ebenfalls angegeben werden.
+
+.. note::
+
+   Bei der Erstellung wird die Benutzer-ID (Dokument-ID) automatisch als Base64-URL-kodierter Wert des Benutzernamens generiert
+   (zum Beispiel wird der Benutzername ``admin`` zu ``YWRtaW4=``).
+
+Antwort
+-------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_user_id",
         "created": true
       }
     }
 
+- ``id`` : Die Dokument-ID des erstellten Benutzers.
+- ``created`` : ``true`` bei erfolgreicher Erstellung.
+
 Benutzer aktualisieren
 ======================
 
-Request
+Anfrage
 -------
 
 ::
@@ -214,7 +267,7 @@ Request
     PUT /api/admin/user/setting
     Content-Type: application/json
 
-Request-Body
+Anfrage-Body
 ~~~~~~~~~~~~
 
 .. code-block:: json
@@ -234,41 +287,94 @@ Request-Body
       "versionNo": 1
     }
 
-Response
---------
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``id``
+     - Ja
+     - Die Dokument-ID des zu aktualisierenden Benutzers.
+   * - ``name``
+     - Ja
+     - Benutzername (Login-ID)
+   * - ``versionNo``
+     - Ja
+     - Versionsnummer (für optimistisches Sperren)
+   * - ``password``
+     - Nein
+     - Neues Passwort (wird nur aktualisiert, wenn angegeben)
+   * - ``confirmPassword``
+     - Nein
+     - Bestätigungspasswort
+   * - ``attributes``
+     - Nein
+     - Attribut-Map (siehe „Benutzer erstellen")
+   * - ``roles``
+     - Nein
+     - Array von Rollen-IDs
+   * - ``groups``
+     - Nein
+     - Array von Gruppen-IDs
+
+.. note::
+
+   Bei der Aktualisierung sind ``id``, ``name`` und ``versionNo`` erforderlich.
+   ``versionNo`` ist der Wert, der beim Abrufen des Zielbenutzers (GET) zurückgegeben wird, und entspricht der OpenSearch-Dokumentversion.
+   Stimmt er nicht mit der aktuellen Version überein, wird die Anfrage als Konflikt behandelt und die Aktualisierung abgelehnt.
+
+Antwort
+-------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_user_id",
         "created": false
       }
     }
 
+- ``created`` : ``false`` bei einer Aktualisierung.
+
 Benutzer löschen
 ================
 
-Request
+Anfrage
 -------
 
 ::
 
     DELETE /api/admin/user/setting/{id}
 
-Response
---------
+Geben Sie in ``{id}`` die Dokument-ID des zu löschenden Benutzers an.
+
+.. note::
+
+   Der aktuell angemeldete Benutzer kann nicht gelöscht werden.
+
+Antwort
+-------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
       }
     }
+
+- ``id`` : Die Dokument-ID des gelöschten Benutzers.
 
 Verwendungsbeispiele
 ====================

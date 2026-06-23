@@ -1,12 +1,20 @@
 ==========================
-API User
+User API
 ==========================
 
 Vue d'ensemble
 ==============
 
-L'API User permet de gerer les comptes utilisateurs de |Fess|.
-Vous pouvez creer, mettre a jour, supprimer des utilisateurs et configurer leurs permissions.
+L'API User est une API REST pour gérer les comptes utilisateurs de |Fess|.
+Vous pouvez créer, récupérer, mettre à jour et supprimer des utilisateurs, et leur attribuer des rôles et des groupes.
+
+Il s'agit d'une API d'administration ; son accès requiert une authentification par jeton d'accès administrateur.
+Consultez :doc:`api-admin-overview` pour la méthode d'authentification et les spécifications communes.
+
+Chaque réponse est encapsulée dans un objet ``response`` et contient les champs communs suivants :
+
+- ``version`` : La chaîne de version du produit |Fess|.
+- ``status`` : Le code de statut du résultat (``0`` = succès, ``1`` = requête invalide, ``2`` = erreur système, ``3`` = non autorisé, ``9`` = échec).
 
 URL de base
 ===========
@@ -22,66 +30,73 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des utilisateurs
+     - Lister les utilisateurs
    * - GET
      - /setting/{id}
-     - Obtention d'un utilisateur
+     - Récupérer un utilisateur
    * - POST
      - /setting
-     - Creation d'un utilisateur
+     - Créer un utilisateur
    * - PUT
      - /setting
-     - Mise a jour d'un utilisateur
+     - Mettre à jour un utilisateur
    * - DELETE
      - /setting/{id}
-     - Suppression d'un utilisateur
+     - Supprimer un utilisateur
 
-Obtention de la liste des utilisateurs
-======================================
+Lister les utilisateurs
+=======================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/user/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.70
+   :widths: 15 10 10 65
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'éléments par page. La valeur par défaut est la valeur configurée ``paging.page.size`` (par défaut : 25).
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 0)
+     - Numéro de page (commence à 1). La valeur par défaut est 1.
 
-Reponse
+.. note::
+
+   Dans l'implémentation actuelle, l'endpoint de liste des utilisateurs n'applique pas les paramètres ``size`` et ``page``.
+   Il retourne toujours la première page, avec le nombre d'éléments défini par le paramètre serveur ``paging.page.size`` (par défaut : 25), trié par nom d'utilisateur (``name``) en ordre croissant.
+   Le nombre total d'utilisateurs correspondants est disponible dans ``response.total``.
+
+Réponse
 -------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "settings": [
           {
-            "id": "user_id_1",
+            "id": "YWRtaW4=",
             "name": "admin",
             "attributes": {
               "surname": "Administrator",
@@ -89,33 +104,40 @@ Reponse
               "mail": "admin@example.com"
             },
             "roles": ["admin"],
-            "groups": []
+            "groups": [],
+            "versionNo": 1
           }
         ],
         "total": 10
       }
     }
 
-Obtention d'un utilisateur
-==========================
+- ``settings`` : Le tableau des utilisateurs de la page courante.
+- ``total`` : Le nombre total d'utilisateurs correspondants.
 
-Requete
+Récupérer un utilisateur
+========================
+
+Requête
 -------
 
 ::
 
     GET /api/admin/user/setting/{id}
 
-Reponse
+Spécifiez l'identifiant de document de l'utilisateur cible dans ``{id}``.
+
+Réponse
 -------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "setting": {
-          "id": "user_id_1",
+          "id": "YWRtaW4=",
           "name": "admin",
           "attributes": {
             "surname": "Administrator",
@@ -127,15 +149,21 @@ Reponse
             "homeDirectory": ""
           },
           "roles": ["admin"],
-          "groups": []
+          "groups": [],
+          "versionNo": 1
         }
       }
     }
 
-Creation d'un utilisateur
-=========================
+.. note::
 
-Requete
+   ``attributes`` contient tous les attributs enregistrés pour l'utilisateur, à l'exception de ``name``, ``password``, ``roles`` et ``groups``.
+   ``password`` n'est pas inclus dans la réponse.
+
+Créer un utilisateur
+====================
+
+Requête
 -------
 
 ::
@@ -143,7 +171,7 @@ Requete
     POST /api/admin/user/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -166,7 +194,7 @@ Description des champs
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 15.70
+   :widths: 20 10 70
 
    * - Champ
      - Requis
@@ -179,34 +207,59 @@ Description des champs
      - Mot de passe
    * - ``confirmPassword``
      - Non
-     - Mot de passe de confirmation (doit correspondre a ``password``)
+     - Mot de passe de confirmation
    * - ``attributes``
      - Non
-     - Map d'attributs (contient les attributs LDAP tels que ``surname``, ``givenName``, ``mail``, ``telephoneNumber``, etc.)
+     - Map d'attributs (voir ci-dessous)
    * - ``roles``
      - Non
-     - Tableau des IDs de roles
+     - Tableau des identifiants de rôles
    * - ``groups``
      - Non
-     - Tableau des IDs de groupes
+     - Tableau des identifiants de groupes
 
-Reponse
+.. note::
+
+   L'API REST n'effectue pas de vérification d'obligation du mot de passe, de vérification de correspondance entre ``password`` et ``confirmPassword``, ni de validation de politique de mot de passe (celles-ci ne s'appliquent que dans l'interface d'administration).
+   En pratique, il est recommandé de spécifier un ``password`` valide dont la valeur correspond à ``confirmPassword``.
+
+Les clés de ``attributes`` sont les noms d'attributs de l'entité utilisateur (les noms d'éléments dérivés du schéma LDAP).
+Les clés les plus courantes sont :
+
+- ``surname``, ``givenName``, ``displayName``, ``mail``
+- ``telephoneNumber``, ``mobile``, ``homePhone``
+- ``employeeNumber``, ``title``, ``description``, ``homeDirectory``
+- ``uidNumber``, ``gidNumber``
+
+``uidNumber`` et ``gidNumber`` doivent être numériques (leur type est validé lors de la mise à jour).
+De nombreuses autres clés d'attributs LDAP peuvent également être spécifiées.
+
+.. note::
+
+   Lors de la création, l'identifiant de l'utilisateur (identifiant de document) est automatiquement généré comme la valeur encodée en Base64 URL du nom d'utilisateur
+   (par exemple, le nom d'utilisateur ``admin`` devient ``YWRtaW4=``).
+
+Réponse
 -------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "new_user_id",
         "created": true
       }
     }
 
-Mise a jour d'un utilisateur
+- ``id`` : L'identifiant de document de l'utilisateur créé.
+- ``created`` : ``true`` lors de la création.
+
+Mettre à jour un utilisateur
 ============================
 
-Requete
+Requête
 -------
 
 ::
@@ -214,7 +267,7 @@ Requete
     PUT /api/admin/user/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -234,47 +287,100 @@ Corps de la requete
       "versionNo": 1
     }
 
-Reponse
+Description des champs
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Champ
+     - Requis
+     - Description
+   * - ``id``
+     - Oui
+     - L'identifiant de document de l'utilisateur à mettre à jour.
+   * - ``name``
+     - Oui
+     - Nom d'utilisateur (identifiant de connexion)
+   * - ``versionNo``
+     - Oui
+     - Numéro de version (pour le verrouillage optimiste)
+   * - ``password``
+     - Non
+     - Nouveau mot de passe (mis à jour uniquement si spécifié)
+   * - ``confirmPassword``
+     - Non
+     - Mot de passe de confirmation
+   * - ``attributes``
+     - Non
+     - Map d'attributs (voir « Créer un utilisateur »)
+   * - ``roles``
+     - Non
+     - Tableau des identifiants de rôles
+   * - ``groups``
+     - Non
+     - Tableau des identifiants de groupes
+
+.. note::
+
+   Lors de la mise à jour, ``id``, ``name`` et ``versionNo`` sont obligatoires.
+   ``versionNo`` est la valeur retournée lors de la récupération de l'utilisateur cible (GET), et correspond à la version du document OpenSearch.
+   Si elle ne correspond pas à la version actuelle, la requête est traitée comme un conflit et la mise à jour est rejetée.
+
+Réponse
 -------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "existing_user_id",
         "created": false
       }
     }
 
-Suppression d'un utilisateur
-============================
+- ``created`` : ``false`` pour une mise à jour.
 
-Requete
+Supprimer un utilisateur
+========================
+
+Requête
 -------
 
 ::
 
     DELETE /api/admin/user/setting/{id}
 
-Reponse
+Spécifiez l'identifiant de document de l'utilisateur à supprimer dans ``{id}``.
+
+.. note::
+
+   Vous ne pouvez pas supprimer l'utilisateur actuellement connecté.
+
+Réponse
 -------
 
 .. code-block:: json
 
     {
       "response": {
+        "version": "15.7.0",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
       }
     }
 
+- ``id`` : L'identifiant de document de l'utilisateur supprimé.
+
 Exemples d'utilisation
 ======================
 
-Creation d'un nouvel utilisateur
---------------------------------
+Créer un nouvel utilisateur
+---------------------------
 
 .. code-block:: bash
 
@@ -294,8 +400,8 @@ Creation d'un nouvel utilisateur
            "groups": []
          }'
 
-Modification des roles d'un utilisateur
----------------------------------------
+Modifier les rôles d'un utilisateur
+------------------------------------
 
 .. code-block:: bash
 
@@ -309,10 +415,10 @@ Modification des roles d'un utilisateur
            "versionNo": 1
          }'
 
-Informations complementaires
-============================
+Références
+==========
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-role` - API de gestion des roles
+- :doc:`api-admin-role` - API de gestion des rôles
 - :doc:`api-admin-group` - API de gestion des groupes
 - :doc:`../../admin/user-guide` - Guide de gestion des utilisateurs
