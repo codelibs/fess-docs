@@ -1,12 +1,12 @@
-==========================
-API de Storage
-==========================
+===========
+Storage API
+===========
 
 Vision General
 ==============
 
-La API de Storage es para gestionar el almacenamiento de objetos de |Fess|.
-Puede obtener la lista de archivos y directorios del almacenamiento, y descargar, eliminar y subir archivos.
+Storage API es una API para gestionar el almacenamiento de objetos de |Fess|.
+Permite obtener el listado de archivos y directorios en el almacenamiento, asi como descargar, eliminar y subir archivos.
 
 URL Base
 ========
@@ -14,6 +14,19 @@ URL Base
 ::
 
     /api/admin/storage
+
+Autenticacion
+=============
+
+Todos los endpoints de Admin API, incluida Storage API, requieren autenticacion mediante un token de acceso.
+Especifique el token de acceso en el encabezado ``Authorization`` de la solicitud.
+
+::
+
+    Authorization: Bearer <token de acceso>
+
+Para obtener informacion sobre como obtener el token de acceso y los permisos necesarios (de forma predeterminada, el rol ``admin-api``),
+consulte :doc:`api-admin-overview`.
 
 Lista de Endpoints
 ==================
@@ -27,22 +40,22 @@ Lista de Endpoints
      - Descripcion
    * - GET
      - /list/{id}
-     - Obtener lista de archivos y directorios
+     - Obtener listado de archivos y directorios
    * - GET
      - /download/{id}
-     - Descargar archivo
+     - Descargar un archivo
    * - DELETE
      - /delete/{id}
-     - Eliminar archivo
+     - Eliminar un archivo
    * - PUT
-     - /upload/{pathId}
-     - Subir archivo
+     - /upload
+     - Subir un archivo
 
-Obtener Lista de Archivos y Directorios
-=======================================
+Obtener Listado de Archivos y Directorios
+=========================================
 
-Devuelve la lista de archivos y directorios bajo el directorio especificado.
-En ``{id}`` se indica la ruta codificada. Si se omite ``{id}``, se obtiene la lista del directorio raiz.
+Devuelve el listado de archivos y directorios ubicados bajo el directorio especificado.
+En ``{id}`` especifique el ``id`` del directorio obtenido en el listado. Si se omite ``{id}``, se obtiene el listado del directorio raiz.
 
 Solicitud
 ---------
@@ -54,7 +67,7 @@ Solicitud
 Respuesta
 ---------
 
-En ``items`` se almacena un arreglo de objetos que representan la informacion de archivos y directorios (primero los directorios y despues los archivos).
+En ``items`` se almacena un array de objetos que representan la informacion de archivos y directorios (primero los directorios, luego los archivos).
 Cada objeto tiene los siguientes campos.
 
 .. list-table::
@@ -64,19 +77,19 @@ Cada objeto tiene los siguientes campos.
    * - Campo
      - Descripcion
    * - ``id``
-     - Identificador codificado (se usa como ``{id}`` al descargar o eliminar)
+     - Identificador codificado. Cadena que representa la ruta del objeto codificada en Base64 seguro para URL, utilizada como ``{id}`` al descargar o eliminar.
    * - ``path``
-     - Ruta del padre
+     - Ruta del directorio padre
    * - ``name``
-     - Nombre del archivo o del directorio
+     - Nombre del archivo o directorio
    * - ``hashCode``
-     - Codigo hash
+     - Valor de hash utilizado en el procesamiento interno (no es un valor estable que represente el contenido del objeto)
    * - ``size``
-     - Tamano (bytes)
+     - Tamano (en bytes)
    * - ``directory``
-     - Si es un directorio (boolean)
+     - Indica si es un directorio (boolean)
    * - ``lastModified``
-     - Fecha/hora de la ultima modificacion (solo archivos)
+     - Fecha y hora de la ultima modificacion (formato ISO 8601; incluido solo para archivos)
 
 .. code-block:: json
 
@@ -106,11 +119,11 @@ Cada objeto tiene los siguientes campos.
       }
     }
 
-Descargar Archivo
-=================
+Descargar un Archivo
+====================
 
-Descarga un archivo del almacenamiento. En ``{id}`` se indica el ``id`` obtenido en la lista.
-La respuesta se devuelve como un flujo ``application/octet-stream``.
+Descarga un archivo del almacenamiento. En ``{id}`` especifique el ``id`` obtenido en el listado.
+La respuesta se devuelve como un flujo de datos de tipo ``application/octet-stream``.
 
 Solicitud
 ---------
@@ -124,10 +137,15 @@ Respuesta
 
 Flujo binario del archivo (``Content-Type: application/octet-stream``).
 
-Eliminar Archivo
-================
+.. note::
 
-Elimina un archivo del almacenamiento. En ``{id}`` se indica el ``id`` obtenido en la lista.
+   La respuesta de esta API no incluye el encabezado ``Content-Disposition``.
+   El nombre del archivo con el que se guarda debe especificarse en el lado del cliente (en cURL, utilice la opcion ``-o``).
+
+Eliminar un Archivo
+===================
+
+Elimina un archivo del almacenamiento. En ``{id}`` especifique el ``id`` obtenido en el listado.
 
 Solicitud
 ---------
@@ -148,21 +166,22 @@ Respuesta
       }
     }
 
-Subir Archivo
-=============
+Subir un Archivo
+================
 
-Sube un archivo al almacenamiento. Se envia en formato ``multipart/form-data``.
+Sube un archivo al almacenamiento. El envio se realiza en formato ``multipart/form-data``.
+El directorio de destino se especifica mediante el campo de formulario ``path``, no como parte de la ruta URL.
 
 Solicitud
 ---------
 
 ::
 
-    PUT /api/admin/storage/upload/{pathId}
+    PUT /api/admin/storage/upload
     Content-Type: multipart/form-data
 
-Descripcion de Campos
-~~~~~~~~~~~~~~~~~~~~~
+Descripcion de los Campos
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -173,7 +192,7 @@ Descripcion de Campos
      - Descripcion
    * - ``path``
      - No
-     - Ruta de destino de la subida (si no se especifica, la ubicacion predeterminada)
+     - Ruta del directorio de destino (sin barras al inicio ni al final). Si se omite, el archivo se guarda en el raiz (directamente bajo el bucket).
    * - ``file``
      - Si
      - Archivo a subir
@@ -190,19 +209,42 @@ Respuesta
       }
     }
 
+Errores
+=======
+
+Cada endpoint devuelve una respuesta con ``status`` distinto de 0 (``1`` en caso de error de validacion) cuando el procesamiento falla.
+El campo ``message`` del cuerpo de la respuesta contiene el detalle del error. Para obtener informacion sobre los valores de status y los codigos de estado HTTP, consulte :doc:`api-admin-overview`.
+
+Los principales casos de error son los siguientes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Endpoint
+     - Principales casos en que se produce un error
+   * - Obtener listado de archivos y directorios
+     - Cuando el numero de elementos supera el limite
+   * - Descargar un archivo
+     - Cuando el ``id`` es invalido o la descarga falla
+   * - Eliminar un archivo
+     - Cuando el ``id`` es invalido o la eliminacion falla
+   * - Subir un archivo
+     - Cuando no se especifica ``file`` o la subida falla
+
 Ejemplos de Uso
 ===============
 
-Obtener Lista del Directorio Raiz
----------------------------------
+Obtener Listado del Directorio Raiz
+------------------------------------
 
 .. code-block:: bash
 
     curl -X GET "http://localhost:8080/api/admin/storage/list/" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Descargar Archivo
------------------
+Descargar un Archivo
+--------------------
 
 .. code-block:: bash
 
@@ -210,22 +252,22 @@ Descargar Archivo
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o sample.txt
 
-Eliminar Archivo
-----------------
+Eliminar un Archivo
+-------------------
 
 .. code-block:: bash
 
     curl -X DELETE "http://localhost:8080/api/admin/storage/delete/c2FtcGxlLnR4dA==" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Subir Archivo
--------------
+Subir un Archivo
+----------------
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload/" \
+    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         -F "path=/" \
+         -F "path=subdir" \
          -F "file=@sample.txt"
 
 Informacion de Referencia
