@@ -31,14 +31,15 @@ Ce guide d'installation est organisé selon les sections suivantes :
 - **Configuration requise** : Configuration matérielle et logicielle nécessaire pour exécuter |Fess|
 - **Installation** : Procédures d'installation par plateforme
 
+  - Choix d'une méthode d'installation (aperçu et comparaison)
   - Installation pour Linux (TAR.GZ/RPM/DEB)
   - Installation pour Windows (ZIP)
   - Installation pour Docker
 
-- **Démarrage et arrêt** : Démarrage, arrêt et configuration initiale du serveur |Fess|
+- **Démarrage, arrêt et configuration initiale** : Démarrage, arrêt et configuration initiale du serveur |Fess|
+- **Configuration de la sécurité** : Configuration de sécurité recommandée pour les environnements de production
 - **Mise à niveau** : Procédure de mise à niveau d'une version antérieure vers la dernière version
 - **Désinstallation** : Procédure de désinstallation complète de |Fess|
-- **Configuration de la sécurité** : Configuration de sécurité recommandée pour les environnements de production
 - **Dépannage** : Problèmes courants et solutions
 
 Accès en ligne

@@ -31,14 +31,15 @@ This installation guide consists of the following sections:
 - **System Requirements**: Hardware and software requirements for running |Fess|
 - **Installation**: Platform-specific installation procedures
 
+  - Choosing an installation method (overview and comparison)
   - Linux (TAR.GZ/RPM/DEB) installation
   - Windows (ZIP) installation
   - Docker installation
 
-- **Startup and Shutdown**: Starting, stopping, and initial setup of the |Fess| server
+- **Startup, Shutdown, and Initial Setup**: Starting, stopping, and initial setup of the |Fess| server
+- **Security Settings**: Recommended security configurations for production environments
 - **Upgrade**: Procedures for upgrading from previous versions to the latest release
 - **Uninstall**: Complete uninstallation procedures for |Fess|
-- **Security Settings**: Recommended security configurations for production environments
 - **Troubleshooting**: Common issues and solutions
 
 Online Access
