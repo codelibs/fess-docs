@@ -96,7 +96,6 @@ hilos se expresan como numeros.
           "ldapBaseDn": "dc=example,dc=com",
           "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
           "ldapAdminSecurityCredentials": null,
-          "storageAccessKey": "**********",
           "logLevel": "",
           "ssoType": "none",
           "storageType": "",
@@ -108,14 +107,23 @@ hilos se expresan como numeros.
 
 .. note::
 
-   Por razones de seguridad, las contrasenas y los valores secretos no se
-   devuelven tal cual. La contrasena del administrador LDAP
-   ``ldapAdminSecurityCredentials`` siempre se devuelve como ``null``. Los
-   demas campos secretos (``storageAccessKey``, ``storageSecretKey``,
-   ``oicClientId``, ``oicClientSecret``, ``spnegoPreauthPassword``,
-   ``entraidClientId``, ``entraidClientSecret``) se devuelven como el valor
-   enmascarado ``"**********"`` cuando estan configurados, o como una cadena
-   vacia cuando no lo estan.
+   Lo anterior muestra solo campos representativos a modo de ejemplo. El objeto ``setting``
+   real en la respuesta contiene todos los campos de configuracion general (rastreo, busqueda,
+   notificaciones, LDAP, SSO, almacenamiento, etc.). Consulte la pagina de ajustes "General"
+   en la interfaz de administracion para la lista completa.
+
+.. note::
+
+   Por razones de seguridad, los campos que contienen credenciales no se devuelven con sus
+   valores reales.
+
+   - La contrasena del administrador LDAP ``ldapAdminSecurityCredentials`` siempre se
+     devuelve como ``null``.
+   - Otros secretos (``storageAccessKey`` / ``storageSecretKey`` /
+     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
+     ``entraidClientId`` / ``entraidClientSecret``) se devuelven enmascarados como
+     ``"**********"`` cuando estan configurados, o como una cadena vacia (``""``) cuando
+     no lo estan.
 
 Actualizar Configuracion General
 =================================
@@ -137,25 +145,37 @@ campos no nulos (no ``null``) incluidos en la solicitud. Los campos no
 incluidos en la solicitud, y los campos establecidos como ``null``, conservan
 sus valores existentes.
 
-.. important::
+.. warning::
 
-   El cuerpo de la solicitud es validado antes de aplicar la sobreescritura.
-   Por lo tanto, los campos requeridos (``dayForCleanup``,
-   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``)
-   **deben incluirse siempre en la solicitud**, independientemente de lo que
-   se desee cambiar. Si falta alguno de ellos, la solicitud falla la
-   validacion y se devuelve ``status: 1``. Para cambiar solo algunos campos,
-   primero recupere la configuracion actual con ``GET`` y luego envie la
-   solicitud ``PUT`` incluyendo los valores actuales de los campos requeridos.
+   Los siguientes cuatro campos son requeridos y DEBEN incluirse en CADA solicitud PUT,
+   incluso en una actualizacion parcial:
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   Si falta alguno de ellos, la solicitud falla la validacion y la API devuelve HTTP 400
+   con ``status: 1`` y un ``message`` de error. Dado que el valor enviado sobreescribe la
+   configuracion existente, para mantener un valor sin cambios primero recuperelo con
+   ``GET`` y envielo tal cual. Todos los demas campos son opcionales; los campos omitidos
+   conservan sus valores existentes.
 
 .. note::
 
-   Los campos de contrasena y secretos (``ldapAdminSecurityCredentials``,
-   ``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
-   ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
-   ``entraidClientSecret``) se ignoran cuando se envia una cadena vacia o el
-   valor enmascarado (``**********``), y el valor existente se conserva. Estos
-   campos se actualizan unicamente cuando se envia un valor real.
+   Los campos numericos tienen validacion de tipo y rango. Enviar un valor que no pueda
+   interpretarse como un entero, o un valor fuera del rango permitido, falla la validacion
+   (HTTP 400 con ``status: 1``). El rango valido de cada campo numerico se indica en la
+   tabla de campos a continuacion.
+
+.. note::
+
+   Para los campos de activacion/desactivacion (tipo ``available``), solo ``"true"`` o
+   ``"on"`` (ambos sin distincion de mayusculas y minusculas) significan habilitado.
+   Cualquier otro valor (como ``"false"`` o una cadena vacia) se trata como deshabilitado
+   (``false``). El valor existente se mantiene unicamente cuando el campo se omite (no se
+   envia). En la respuesta GET, estos campos se devuelven como las cadenas ``"true"`` /
+   ``"false"``.
 
 .. code-block:: json
 
@@ -211,6 +231,12 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
    * - ``webApiJson``
      - No
      - Habilitar/deshabilitar la Web API JSON
+   * - ``appValue``
+     - No
+     - Valor de configuracion adicional especifico de la aplicacion
+   * - ``virtualHostValue``
+     - No
+     - Configuracion de host virtual (para entornos multi-tenant)
    * - ``popularWord``
      - No
      - Habilitar/deshabilitar la agregacion y visualizacion de palabras populares
@@ -226,12 +252,21 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
    * - ``loginRequired``
      - No
      - Si se requiere inicio de sesion para buscar
+   * - ``loginLink``
+     - No
+     - Habilitar o deshabilitar la visualizacion del enlace de inicio de sesion en la pantalla de busqueda
    * - ``thumbnail``
      - No
      - Habilitar/deshabilitar la generacion de miniaturas
+   * - ``resultCollapsed``
+     - No
+     - Habilitar o deshabilitar el colapso de documentos similares en los resultados de busqueda
    * - ``ignoreFailureType``
      - No
      - Tipos de fallo de rastreo a ignorar
+   * - ``crawlingUserAgent``
+     - No
+     - Cadena User-Agent enviada durante el rastreo
    * - ``purgeSearchLogDay``
      - No
      - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado; rango: -1 a 100000)
@@ -280,6 +315,15 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
    * - ``googleChatWebhookUrls``
      - No
      - URL de Google Chat Webhook para notificaciones
+   * - ``searchUseBrowserLocale``
+     - No
+     - Si se utiliza el idioma del navegador para la busqueda
+   * - ``ragLlmName``
+     - No
+     - Nombre del proveedor LLM utilizado para RAG
+   * - ``llmLogLevel``
+     - No
+     - Nivel de registro para los paquetes relacionados con LLM
 
 Campos Relacionados con Autenticacion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -307,6 +351,8 @@ ajustes "General" en la interfaz de administracion).
      - Contrasena del administrador LDAP (se reemplaza por ``null`` en la respuesta)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - Filtros de busqueda de usuarios/grupos
+   * - ``ldapMemberofAttribute``
+     - Nombre del atributo LDAP que indica la pertenencia a un grupo
    * - ``ssoType``
      - Tipo de SSO (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` y otros
@@ -343,6 +389,19 @@ en la nube (S3 / GCS).
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - ID de proyecto de GCS / ruta del archivo de credenciales
 
+.. note::
+
+   Los campos de tipo secreto como ``ldapAdminSecurityCredentials``,
+   ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
+   ``entraidClientId`` / ``entraidClientSecret`` y ``spnegoPreauthPassword`` conservan su
+   valor almacenado (no se actualizan) cuando se envia el valor enmascarado ``"**********"``
+   tal cual. Envie el valor real solo cuando desee cambiarlo.
+
+   Dado que esta comprobacion se basa en si la cadena queda vacia tras eliminar los
+   asteriscos, enviar una cadena vacia (``""``) o un valor compuesto unicamente de
+   asteriscos tampoco actualiza el valor. Por lo tanto, estos campos de tipo secreto no
+   pueden borrarse a un valor vacio mediante la API.
+
 Respuesta
 ---------
 
@@ -358,21 +417,21 @@ En caso de actualizacion exitosa, solo se devuelven ``version`` y ``status``
       }
     }
 
-Si la actualizacion falla (por ejemplo, debido a un error de validacion),
-``status`` se establece en un valor distinto de cero (``1`` para un error de
-validacion), y ``message`` contiene los detalles del error. Consulte
-:doc:`api-admin-overview` para la lista de valores de ``status``.
+Si la actualizacion falla (por ejemplo, debido a un error de validacion), la API
+devuelve HTTP 400 y ``status`` se establece en un valor distinto de cero (``1``
+para un error de validacion), y ``message`` contiene los detalles del error.
+Consulte :doc:`api-admin-overview` para la lista de valores de ``status``.
 
 Ejemplos de Uso
 ===============
 
 .. note::
 
-   Los ejemplos a continuacion incluyen los campos requeridos
-   (``dayForCleanup``, ``crawlingThreadCount``, ``failureCountThreshold``,
-   ``csvFileEncoding``). Como estos deben especificarse siempre
-   independientemente de lo que se desee cambiar, utilice los valores actuales
-   obtenidos mediante ``GET`` en la operacion real.
+   Los ejemplos a continuacion incluyen los campos requeridos (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Como estos
+   deben enviarse siempre independientemente de lo que se desee cambiar, recupere los
+   valores actuales con ``GET`` e incluyalos en la operacion real (los ejemplos a
+   continuacion usan los valores predeterminados).
 
 Actualizar la Configuracion de Rastreo
 ---------------------------------------

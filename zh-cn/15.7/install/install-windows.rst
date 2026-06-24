@@ -15,11 +15,11 @@
 
 - 满足 :doc:`prerequisites` 中描述的系统要求
 - 已安装 Java 21
-- OpenSearch 3.6.0 可用（或新安装）
+- OpenSearch 3.7.0 可用（或新安装）
 - 已适当设置 Windows 环境变量 ``JAVA_HOME``
 
 确认 Java 安装
-====================
+==============
 
 打开命令提示符或 PowerShell，使用以下命令确认 Java 版本。
 
@@ -58,10 +58,10 @@ PowerShell 的情况::
    4. 在「系统环境变量」或「用户环境变量」中设置
 
 步骤 1: 安装 OpenSearch
-===================================
+=======================
 
 下载 OpenSearch
------------------------
+---------------
 
 1. 从 `Download OpenSearch <https://opensearch.org/downloads.html>`__ 下载 Windows 用的 ZIP 包。
 
@@ -69,29 +69,29 @@ PowerShell 的情况::
 
    例::
 
-       C:\opensearch-3.6.0
+       C:\opensearch-3.7.0
 
    .. note::
 
       建议选择路径中不包含日文或空格的目录。
 
 安装 OpenSearch 插件
----------------------------------
+--------------------
 
 以**管理员权限**打开命令提示符，执行以下命令。
 
 ::
 
-    C:\> cd C:\opensearch-3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+    C:\> cd C:\opensearch-3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
 
 .. important::
 
    插件版本必须与 OpenSearch 版本一致。
-   在上述示例中，所有版本都指定为 3.6.0。
+   在上述示例中，所有版本都指定为 3.7.0。
 
 配置 OpenSearch
 ---------------
@@ -101,7 +101,7 @@ PowerShell 的情况::
 ::
 
     # 配置同步路径（使用绝对路径指定）
-    configsync.config_path: C:/opensearch-3.6.0/data/config/
+    configsync.config_path: C:/opensearch-3.7.0/data/config/
 
     # 禁用安全插件（仅限开发环境）
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ PowerShell 的情况::
 .. note::
 
    在 Windows 中，路径分隔符请使用 ``/`` 而不是 ``\``。
-   应写为 ``C:/opensearch-3.6.0/data/config/`` 而不是 ``C:\opensearch-3.6.0\data\config\``。
+   应写为 ``C:/opensearch-3.7.0/data/config/`` 而不是 ``C:\opensearch-3.7.0\data\config\``。
 
 .. tip::
 
@@ -128,11 +128,16 @@ PowerShell 的情况::
        network.host: 0.0.0.0
        discovery.type: single-node
 
+.. tip::
+
+   OpenSearch 的堆大小通过 ``config\jvm.options`` 中的 ``-Xms`` / ``-Xmx`` 进行设置。
+   建议将 ``-Xms`` 和 ``-Xmx`` 设置为相同的值，以不超过可用物理内存的一半且低于 32GB 为宜。
+
 步骤 2: 安装 Fess
-=============================
+=================
 
 下载 Fess
------------------
+---------
 
 1. 从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 Windows 用的 ZIP 包。
 
@@ -147,22 +152,38 @@ PowerShell 的情况::
       建议选择路径中不包含日文或空格的目录。
 
 配置 Fess
-----------
+---------
 
-使用文本编辑器打开 ``bin\fess.in.bat``，添加或更改以下配置。
+使用文本编辑器打开 ``bin\fess.in.bat``。
+该文件末尾附近已预先以注释状态提供了用于连接外部 OpenSearch 集群的配置。
 
-::
+修改前（默认状态）::
 
+    REM External opensearch cluster
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=%SEARCH_ENGINE_HOME%/config/
+
+删除下面两行行首的 ``REM `` 以取消注释，并将 ``fess.dictionary.path`` 的值更改为 OpenSearch 配置同步路径。
+
+修改后::
+
+    REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.6.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.7.0/data/config/
 
 .. note::
 
-   - 如果 OpenSearch 在其他主机上运行，请将 ``fess.search_engine.http_address`` 更改为适当的主机名或 IP 地址。
+   - ``fess.dictionary.path`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。
+   - 如果 OpenSearch 在其他主机上运行，请将 ``fess.search_engine.http_address`` 中的主机名或 IP 地址更改为适当的值。
    - 路径分隔符请使用 ``/``。
+   - 请勿新增 ``set FESS_JAVA_OPTS=...`` 行，而应取消注释已有的注释行并进行编辑。重复指定相同选项可能导致意外行为。
+
+.. tip::
+
+   要更改 |Fess| 的堆大小，请编辑 ``bin\fess.in.bat`` 中的 ``FESS_MIN_MEM``（默认值：``256m``）和 ``FESS_MAX_MEM``（默认值：``1g``），或设置环境变量 ``FESS_HEAP_SIZE``。
 
 确认安装
-----------------
+--------
 
 确认配置文件已正确编辑。
 
@@ -172,44 +193,56 @@ PowerShell 的情况::
     C:\> findstr "fess.dictionary.path" C:\fess-15.7.0\bin\fess.in.bat
 
 步骤 3: 启动
-==============
+============
 
 关于启动步骤，请参阅 :doc:`run`。
 
 注册为 Windows 服务（可选）
-=======================================
+===========================
 
-通过将 |Fess| 和 OpenSearch 注册为 Windows 服务，可以设置为系统启动时自动启动。
+通过将 |Fess| 注册为 Windows 服务，可以设置为系统启动时自动启动。
+
+|Fess| 内置了用于注册 Windows 服务的 ``bin\service.bat``。
+该脚本使用 Apache Commons Daemon (procrun)，无需另行准备 NSSM 等第三方工具。
 
 .. note::
 
-   要注册为 Windows 服务，需要使用第三方工具（如 NSSM）。
-   详细步骤请参阅各工具的文档。
+   在运行 ``service.bat`` 之前，请确认环境变量 ``JAVA_HOME`` 已正确设置。
 
-使用 NSSM 的示例
+注册 |Fess| 服务
 ----------------
 
-1. 下载并解压 `NSSM (Non-Sucking Service Manager) <https://nssm.cc/download>`__。
+以**管理员权限**打开命令提示符，执行以下命令。
 
-2. 将 OpenSearch 注册为服务::
+1. 注册服务::
 
-       C:\> nssm install OpenSearch C:\opensearch-3.6.0\bin\opensearch.bat
+       C:\> cd C:\fess-15.7.0
+       C:\fess-15.7.0> bin\service.bat install
 
-3. 将 Fess 注册为服务::
+   默认情况下，64 位环境下服务 ID 为 ``fess-service-x64``，32 位环境下为 ``fess-service-x86``。
+   如需显式指定服务 ID，请以 ``bin\service.bat install <服务ID>`` 的形式通过参数指定。
 
-       C:\> nssm install Fess C:\fess-15.7.0\bin\fess.bat
+2. 启动和停止服务::
 
-4. 设置服务依赖关系（Fess 依赖于 OpenSearch）::
+       C:\fess-15.7.0> bin\service.bat start
+       C:\fess-15.7.0> bin\service.bat stop
 
-       C:\> sc config Fess depend= OpenSearch
+3. 确认和更改服务配置（GUI）::
 
-5. 启动服务::
+       C:\fess-15.7.0> bin\service.bat manager
 
-       C:\> net start OpenSearch
-       C:\> net start Fess
+4. 删除服务::
+
+       C:\fess-15.7.0> bin\service.bat remove
+
+.. note::
+
+   - ``service.bat`` 内部会读取 ``bin\fess.in.bat``，因此在「配置 Fess」中设置的外部 OpenSearch 连接配置也会反映到服务中。
+   - 默认启动类型为「手动」。要在系统启动时自动启动，请在注册服务前将环境变量 ``FESS_START_TYPE`` 设置为 ``auto``，或在注册后通过服务管理工具（``services.msc``）将启动类型更改为「自动」。
+   - ``service.bat`` 仅能注册 |Fess| 服务。如需将 OpenSearch 注册为服务，请参阅 OpenSearch 提供的相关说明。
 
 防火墙设置
-==================
+==========
 
 在 Windows Defender 防火墙中开放必要的端口。
 
@@ -227,10 +260,10 @@ PowerShell 的情况::
     PS C:\> New-NetFirewallRule -DisplayName "Fess Web Interface" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
 
 故障排除
-====================
+========
 
 端口号冲突
---------------
+----------
 
 如果端口 8080 或 9200 已被使用，可以使用以下命令确认::
 
@@ -247,10 +280,10 @@ Windows 对路径长度有限制。建议安装到尽可能短的路径。
 例::
 
     C:\opensearch  (推荐)
-    C:\Program Files\opensearch-3.6.0  (不推荐 - 路径过长)
+    C:\Program Files\opensearch-3.7.0  (不推荐 - 路径过长)
 
 Java 未被识别
------------------
+-------------
 
 如果 ``java -version`` 命令显示错误：
 
@@ -259,7 +292,7 @@ Java 未被识别
 3. 重启命令提示符以反映设置
 
 下一步
-==========
+======
 
 安装完成后，请参阅以下文档：
 
@@ -268,22 +301,22 @@ Java 未被识别
 - :doc:`troubleshooting` - 故障排除
 
 常见问题
-==========
+========
 
 Q: 推荐在 Windows Server 上运行吗？
-------------------------------------------
+------------------------------------
 
 A: 可以在 Windows Server 上运行。
 在 Windows Server 上运行时，请注册为 Windows 服务并设置适当的监控。
 
 Q: 64 位版和 32 位版有什么区别？
-------------------------------------
+----------------------------------
 
 A: |Fess| 和 OpenSearch 仅支持 64 位版。
 无法在 32 位版的 Windows 上运行。
 
 Q: 路径包含日文时的处理方法？
---------------------------------------
+------------------------------
 
 A: 请尽可能安装到不包含日文或空格的路径。
 如果必须使用日文路径，需要在配置文件中适当转义路径。

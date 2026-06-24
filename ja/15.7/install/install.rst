@@ -70,7 +70,7 @@ Docker 版
 
 - Docker の知識が必要
 
-**推奨環境:** 開発環境、評価環境、POC、本番環境
+**推奨環境:** 開発環境、評価環境、POC（本番環境で利用する場合は、組み込み OpenSearch ではなく外部の OpenSearch サーバーを構成してください）
 
 詳細: :doc:`install-docker`
 
@@ -88,7 +88,7 @@ Linux パッケージ版 (TAR.GZ/RPM/DEB)
 - Java と OpenSearch の手動インストールが必要
 - 設定の手間がかかる
 
-**推奨環境:** 本番環境、カスタマイズが必要な環境
+**推奨環境:** 本番環境（システムサービスとして管理できる RPM/DEB を推奨）、カスタマイズが必要な環境
 
 詳細: :doc:`install-linux`
 
@@ -128,7 +128,7 @@ Windows 版 (ZIP)
 
    Docker 版以外の場合、OpenSearch を個別にセットアップする必要があります。
 
-   - OpenSearch 3.6.0 のインストール
+   - OpenSearch 3.7.0 のインストール
    - 必須プラグインのインストール
    - 設定ファイルの編集
 
@@ -159,7 +159,7 @@ OpenSearch
 
 検索エンジンとして OpenSearch を使用します。
 
-- **対応バージョン**: OpenSearch 3.6.0
+- **対応バージョン**: OpenSearch 3.7.0
 - **必須プラグイン**:
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ A: はい、可能です。Fess と OpenSearch を別々のサーバーで実行
 このドキュメントは、以下のバージョンを対象としています：
 
 - **Fess**: 15.7.0
-- **OpenSearch**: 3.6.0
+- **OpenSearch**: 3.7.0
 - **Java**: 21 以降
 - **Docker**: 20.10 以降
 - **Docker Compose**: 2.0 以降

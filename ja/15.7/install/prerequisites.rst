@@ -74,9 +74,9 @@ TAR.GZ/ZIP/RPM/DEB 版
   - OpenJDK 21 以降
   - Eclipse Temurin 21 以降
 
-- **OpenSearch 3.6.0**: 本番環境では必須（組み込み版は非推奨）
+- **OpenSearch 3.7.0**: 本番環境では必須（組み込み版は非推奨）
 
-  - 対応バージョン: OpenSearch 3.6.0
+  - 対応バージョン: OpenSearch 3.7.0
   - その他のバージョンではプラグインの互換性に注意が必要
 
 Docker 版
@@ -95,7 +95,7 @@ Docker 版
 
 .. list-table::
    :header-rows: 1
-   :widths: 15 15.70
+   :widths: 15 15 70
 
    * - ポート
      - プロトコル

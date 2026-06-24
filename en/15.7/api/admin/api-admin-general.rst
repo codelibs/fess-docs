@@ -92,7 +92,6 @@ values such as retention days and thread counts are expressed as numbers.
           "ldapBaseDn": "dc=example,dc=com",
           "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
           "ldapAdminSecurityCredentials": null,
-          "storageAccessKey": "**********",
           "logLevel": "",
           "ssoType": "none",
           "storageType": "",
@@ -104,12 +103,22 @@ values such as retention days and thread counts are expressed as numbers.
 
 .. note::
 
-   For security reasons, passwords and secret values are not returned as-is. The
-   LDAP administrator password ``ldapAdminSecurityCredentials`` is always returned
-   as ``null``. Other secret fields (``storageAccessKey``, ``storageSecretKey``,
-   ``oicClientId``, ``oicClientSecret``, ``spnegoPreauthPassword``,
-   ``entraidClientId``, ``entraidClientSecret``) are returned as the masked value
-   ``"**********"`` when set, or as an empty string when not set.
+   The above shows only representative fields. The actual ``setting`` object in the
+   response contains all general-settings fields (crawling, search, notification,
+   LDAP, SSO, storage, etc.). See the admin "General" settings page for the full
+   list.
+
+.. note::
+
+   For security reasons, fields that contain credentials are not returned with their
+   actual values.
+
+   - ``ldapAdminSecurityCredentials`` (LDAP admin password) is always returned as
+     ``null``.
+   - Other secrets (``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
+     ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
+     ``entraidClientSecret``) are returned masked as ``"**********"`` when they are
+     set, or as an empty string (``""``) when they are not set.
 
 Update General Settings
 =======================
@@ -130,24 +139,36 @@ settings and then overwrites only the non-``null`` fields included in the reques
 Fields not included in the request, and fields set to ``null``, retain their
 existing values.
 
-.. important::
+.. warning::
 
-   The request body is validated before the overwrite is applied. Therefore, the
-   required fields (``dayForCleanup``, ``crawlingThreadCount``,
-   ``failureCountThreshold``, ``csvFileEncoding``) **must always be included in the
-   request**, regardless of what you are changing. If any of them is missing, the
-   request fails validation and ``status: 1`` is returned. To change only some
-   fields, first retrieve the current settings with ``GET``, then ``PUT`` the
-   request with the current values of the required fields included.
+   The following four fields are required and MUST be included in EVERY PUT request,
+   even for a partial update:
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   If any of them is missing, the request fails validation and the API returns
+   HTTP 400 with ``status: 1`` and an error ``message``. Because the value you send
+   overwrites the existing setting, to keep a value unchanged first retrieve it with
+   ``GET`` and send it back as-is. All other fields are optional; omitted fields keep
+   their existing values.
 
 .. note::
 
-   Password and secret fields (``ldapAdminSecurityCredentials``,
-   ``storageAccessKey``, ``storageSecretKey``, ``oicClientId``, ``oicClientSecret``,
-   ``spnegoPreauthPassword``, ``entraidClientId``, ``entraidClientSecret``) are
-   ignored when an empty string or the masked value (``**********``) is sent, and
-   the existing value is retained. These fields are updated only when an actual
-   value is sent.
+   Numeric fields are type- and range-validated. Sending a value that cannot be
+   parsed as an integer, or a value outside the allowed range, fails validation
+   (HTTP 400 with ``status: 1``). The valid range for each numeric field is listed
+   in the field table below.
+
+.. note::
+
+   For on/off (``available``-type) fields, only ``"true"`` or ``"on"`` (both
+   case-insensitive) mean enabled. Any other value (such as ``"false"`` or an empty
+   string) is treated as disabled (``false``). The existing value is kept only when
+   the field is omitted (not sent). In the GET response, these fields are returned
+   as the strings ``"true"`` / ``"false"``.
 
 .. code-block:: json
 
@@ -201,6 +222,12 @@ settings are specified as the strings ``"true"`` / ``"false"``.
    * - ``webApiJson``
      - No
      - Enable/disable the JSON Web API
+   * - ``appValue``
+     - No
+     - Application-specific additional configuration value
+   * - ``virtualHostValue``
+     - No
+     - Virtual host configuration (for multi-tenant setups)
    * - ``popularWord``
      - No
      - Enable/disable aggregation and display of popular words
@@ -216,12 +243,21 @@ settings are specified as the strings ``"true"`` / ``"false"``.
    * - ``loginRequired``
      - No
      - Whether login is required for search
+   * - ``loginLink``
+     - No
+     - Enable or disable display of the login link on the search screen
    * - ``thumbnail``
      - No
      - Enable/disable thumbnail generation
+   * - ``resultCollapsed``
+     - No
+     - Enable or disable collapsing of similar documents in search results
    * - ``ignoreFailureType``
      - No
      - Crawl failure types to ignore
+   * - ``crawlingUserAgent``
+     - No
+     - User-Agent string sent during crawling
    * - ``purgeSearchLogDay``
      - No
      - Number of days to retain search logs (-1 = disabled; range: -1 to 100000)
@@ -270,6 +306,15 @@ settings are specified as the strings ``"true"`` / ``"false"``.
    * - ``googleChatWebhookUrls``
      - No
      - Google Chat Webhook URL for notifications
+   * - ``searchUseBrowserLocale``
+     - No
+     - Whether to use the browser locale for search
+   * - ``ragLlmName``
+     - No
+     - LLM provider name used for RAG
+   * - ``llmLogLevel``
+     - No
+     - Log level for LLM-related packages
 
 Authentication-Related Fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -296,6 +341,8 @@ correspond to the "General" settings in the admin UI).
      - LDAP administrator password (replaced with ``null`` in the response)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - User/group search filters
+   * - ``ldapMemberofAttribute``
+     - LDAP attribute name indicating group membership
    * - ``ssoType``
      - SSO type (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` etc.
@@ -331,6 +378,19 @@ Cloud storage (S3 / GCS) integration settings can also be managed.
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - GCS project ID / credentials file path
 
+.. note::
+
+   Secret fields such as ``ldapAdminSecurityCredentials``,
+   ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
+   ``entraidClientId`` / ``entraidClientSecret``, and ``spnegoPreauthPassword`` keep
+   their stored value (are not updated) when the mask value ``"**********"`` is sent
+   as-is. Send the actual value only when you want to change it.
+
+   Because this check is based on whether the string is blank after removing
+   asterisks, sending an empty string (``""``) or a value consisting only of
+   asterisks also leaves the value unchanged. Therefore, these secret fields cannot
+   be cleared to an empty value via the API.
+
 Response
 --------
 
@@ -346,9 +406,10 @@ On a successful update, only ``version`` and ``status`` are returned (``id`` and
       }
     }
 
-If the update fails (for example, due to a validation error), ``status`` is set
-to a non-zero value (``1`` for a validation error), and ``message`` contains the
-error details. See :doc:`api-admin-overview` for the list of ``status`` values.
+If the update fails (for example, due to a validation error), the API returns
+HTTP 400 and the response ``status`` is set to a non-zero value (``1`` for a
+validation error), with ``message`` containing the error details. See
+:doc:`api-admin-overview` for the list of ``status`` values.
 
 Usage Examples
 ==============
@@ -357,8 +418,9 @@ Usage Examples
 
    The examples below include the required fields (``dayForCleanup``,
    ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Because
-   these must always be specified regardless of what you are changing, use the
-   current values retrieved via ``GET`` in actual operation.
+   these must always be sent regardless of what you are changing, retrieve the
+   current values with ``GET`` and include them in actual operation (the examples
+   below use default values).
 
 Update Crawl Settings
 ---------------------
@@ -411,8 +473,8 @@ Update Suggest Settings
            "suggestDocuments": "true"
          }'
 
-Reference
-=========
+See Also
+========
 
 - :doc:`api-admin-overview` - Admin API Overview
 - :doc:`api-admin-systeminfo` - System Info API

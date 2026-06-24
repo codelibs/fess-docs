@@ -22,7 +22,7 @@ Démarrage d'OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.6.0
+    $ cd /path/to/opensearch-3.7.0
     $ ./bin/opensearch
 
 Pour un démarrage en arrière-plan ::
@@ -57,8 +57,8 @@ Démarrage d'OpenSearch
 
 Ou depuis l'invite de commandes ::
 
-    C:\> cd C:\opensearch-3.6.0
-    C:\opensearch-3.6.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.7.0
+    C:\opensearch-3.7.0> bin\opensearch.bat
 
 Démarrage de Fess
 ~~~~~~~~~~~~~~~~~
@@ -109,6 +109,10 @@ Activation du démarrage automatique du service ::
 Version Docker
 --------------
 
+.. note::
+
+   ``compose.yaml`` et ``compose-opensearch3.yaml`` ne sont pas inclus dans |Fess| lui-même. Ils sont fournis par le projet docker-fess (https://github.com/codelibs/docker-fess) ; récupérez le dépôt et exécutez les commandes suivantes dans le répertoire ``compose``.
+
 Démarrage avec Docker Compose ::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
@@ -119,7 +123,7 @@ Vérification de l'état de démarrage ::
 
 Vérification des logs ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 Vérification du démarrage
 ==========================
@@ -160,13 +164,17 @@ Ou en utilisant journalctl ::
 
 Version Docker ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 .. tip::
 
-   En cas de démarrage normal, un message comme celui-ci s'affiche dans les logs ::
+   Lorsque le démarrage se termine avec succès, un message de fin de démarrage comme celui-ci s'affiche sur la console et dans les logs :
 
-       INFO  Boot - Fess is ready.
+   ::
+
+       ...Booting the Tomcat: port=8080 contextPath=/
+       ...
+       Boot successful: url -> http://localhost:8080
 
 Accès via un navigateur
 ========================
@@ -208,17 +216,19 @@ Après vous être connecté à l'écran d'administration, effectuez les configur
 1. Connexion à l'écran d'administration (http://localhost:8080/admin)
 2. Cliquez sur « Système » → « Utilisateur » dans le menu de gauche
 3. Cliquez sur l'utilisateur ``admin``
-4. Saisissez un nouveau mot de passe dans le champ « Mot de passe »
-5. Cliquez sur le bouton « Confirmer »
-6. Cliquez sur le bouton « Mettre à jour »
+4. Saisissez un nouveau mot de passe dans le champ [Mot de passe]
+5. Saisissez à nouveau le même mot de passe dans le champ [Mot de passe (confirmer)]
+6. Cliquez sur le bouton [Mettre à jour]
 
 .. important::
 
    Nous recommandons que le mot de passe satisfasse les conditions suivantes :
 
-   - 8 caractères ou plus
+   - 8 caractères ou plus (longueur minimale requise définie par ``password.min.length``)
    - Combinaison de majuscules, minuscules, chiffres et symboles
    - Difficile à deviner
+
+   Par défaut, seule la longueur minimale (8 caractères) est requise ; aucune combinaison de types de caractères n'est imposée. Les exigences relatives aux types de caractères peuvent être activées avec des paramètres tels que ``password.require.uppercase``.
 
 Étape 2 : Création de la configuration d'exploration
 -----------------------------------------------------
@@ -230,17 +240,21 @@ Créez une configuration pour explorer les sites ou systèmes de fichiers à rec
 3. Saisissez les informations nécessaires :
 
    - **Nom** : Nom de la configuration d'exploration (exemple : Site Web de l'entreprise)
-   - **URL** : URL de la cible d'exploration (exemple : https://www.example.com/)
-   - **Nombre d'accès maximum** : Limite supérieure du nombre de pages à explorer
-   - **Intervalle** : Intervalle d'exploration (en millisecondes)
+   - **URL** : URL cible de l'exploration (exemple : https://www.example.com/). Pour spécifier plusieurs URL, saisissez une URL par ligne
+   - **Nombre d'accès maximum** : Nombre maximum de documents à explorer (facultatif)
+   - **Intervalle** : Temps d'attente entre les accès (en millisecondes ; valeur par défaut : ``10000``)
+
+   .. note::
+
+      Les autres éléments (tels que l'agent utilisateur, le nombre de threads et la profondeur) utilisent leurs valeurs par défaut lorsqu'ils sont laissés vides.
 
 4. Cliquez sur le bouton « Créer »
 
 Étape 3 : Exécution de l'exploration
 -------------------------------------
 
-1. Cliquez sur « Système » → « Planificateur » dans le menu de gauche
-2. Cliquez sur le bouton « Démarrer maintenant » du job « Default Crawler »
+1. Cliquez sur [Système] → [Planificateur] dans le menu de gauche
+2. Ouvrez le job [Default Crawler] et cliquez sur le bouton « Démarrer maintenant »
 3. Attendez la fin de l'exploration (la progression peut être vérifiée sur le tableau de bord)
 
 Étape 4 : Vérification de la recherche
@@ -260,31 +274,59 @@ Autres configurations recommandées
 
 Pour une exploitation en environnement de production, veuillez également envisager les configurations suivantes.
 
+Principaux paramètres via les variables d'environnement
+--------------------------------------------------------
+
+Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de connexion à OpenSearch peuvent être modifiés via des variables d'environnement. Modifiez ``bin/fess.in.sh`` pour l'édition TAR.GZ, ``/etc/sysconfig/fess`` pour l'édition RPM, et ``/etc/default/fess`` pour l'édition DEB. Un redémarrage de |Fess| est requis après toute modification.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Variable d'environnement
+     - Valeur par défaut
+     - Description
+   * - ``FESS_PORT``
+     - ``8080``
+     - Port HTTP sur lequel |Fess| écoute.
+   * - ``FESS_HEAP_SIZE``
+     - (non défini)
+     - Taille du tas JVM. Définit la même valeur pour le minimum et le maximum. Lorsqu'elle n'est pas définie, un minimum de ``256m`` et un maximum de ``2g`` sont utilisés (l'édition ZIP Windows utilise un maximum de ``1g``) ; l'édition RPM/DEB utilise ``512m``.
+   * - ``SEARCH_ENGINE_HTTP_URL``
+     - (non défini)
+     - URL de l'OpenSearch auquel se connecter. Lorsqu'elle n'est pas définie, la valeur par défaut intégrée ``http://localhost:9201`` est utilisée. À modifier lorsqu'OpenSearch s'exécute sur un port ou un hôte différent (la procédure :doc:`install-linux` la définit à ``http://localhost:9200`` pour correspondre au port d'écoute d'OpenSearch). L'édition RPM/DEB définit ``http://localhost:9200`` par défaut via le fichier d'environnement du paquet.
+   * - ``FESS_LOG_LEVEL``
+     - ``warn``
+     - Niveau de log de |Fess|.
+
+.. note::
+
+   L'édition ZIP Windows (``bin\fess.in.bat``) ne lit pas ces variables d'environnement (à l'exception de celles liées au proxy). Les valeurs sont écrites directement dans le fichier ; modifiez ``bin\fess.in.bat`` directement pour les changer.
+
 Configuration du serveur de messagerie
 ---------------------------------------
 
-Pour recevoir des notifications d'incidents et des rapports par e-mail, configurez le serveur de messagerie.
+Pour recevoir des notifications d'échec et autres messages par e-mail, configurez le serveur SMTP et l'adresse du destinataire des notifications.
 
-1. Cliquez sur « Système » → « Général » dans le menu de gauche
-2. Cliquez sur l'onglet « E-mail »
-3. Saisissez les informations du serveur SMTP
-4. Cliquez sur le bouton « Mettre à jour »
+1. Dans le fichier de configuration ``app/WEB-INF/classes/fess_env.properties``, spécifiez l'hôte et le port du serveur SMTP dans ``mail.smtp.server.main.host.and.port`` (valeur par défaut : ``localhost:25``). Un redémarrage de |Fess| est requis après la modification.
+2. Dans l'interface d'administration, cliquez sur [Système] → [Général] dans le menu de gauche.
+3. Saisissez l'adresse e-mail du destinataire dans le champ [E-mail de notification].
+4. Cliquez sur le bouton [Mettre à jour].
+5. Vous pouvez vérifier que l'envoi d'e-mail fonctionne correctement avec le bouton [Envoyer un e-mail de test].
 
 Configuration du fuseau horaire
 --------------------------------
 
-1. Cliquez sur « Système » → « Général » dans le menu de gauche
-2. Définissez le « Fuseau horaire » sur la valeur appropriée (exemple : Europe/Paris)
-3. Cliquez sur le bouton « Mettre à jour »
+|Fess| utilise le fuseau horaire du serveur (OS / JVM). Il n'existe pas de paramètre permettant de modifier le fuseau horaire dans l'interface d'administration. Pour le modifier, changez le paramètre de fuseau horaire de l'OS, ou ajoutez l'option JVM ``-Duser.timezone=Asia/Tokyo`` à ``FESS_JAVA_OPTS`` dans ``bin/fess.in.sh`` (sous Windows, ``bin\fess.in.bat``).
 
 Ajustement du niveau de log
 ----------------------------
 
-Dans les environnements de production, vous pouvez ajuster le niveau de log pour réduire l'utilisation du disque.
+En production, vous pouvez ajuster le niveau de log pour réduire l'utilisation du disque.
 
-Modifiez le fichier de configuration (``app/WEB-INF/classes/log4j2.xml``).
+Le niveau de log global de |Fess| peut être modifié avec la variable d'environnement ``FESS_LOG_LEVEL`` (valeur par défaut : ``warn``). Pour contrôler les journaliseurs individuels en détail, modifiez le fichier de configuration ``app/WEB-INF/classes/log4j2.xml``. L'exploration, les suggestions et la génération de miniatures s'exécutent comme des processus séparés ; configurez donc leurs niveaux de log individuellement dans ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
-Pour plus de détails, consultez le guide de l'administrateur.
+Pour plus de détails, consultez :doc:`../admin/index`.
 
 Méthodes d'arrêt
 ================
@@ -391,7 +433,12 @@ En cas de non-démarrage
 
        $ sudo netstat -tuln | grep 8080
 
-   Si le port 8080 est déjà utilisé, modifiez le numéro de port dans le fichier de configuration.
+   Si le port 8080 est déjà utilisé, modifiez le numéro de port.
+
+   - Édition TAR.GZ : modifiez ``FESS_PORT`` dans ``bin/fess.in.sh``
+   - Édition ZIP (Windows) : modifiez ``-Dfess.port=8080`` directement dans ``bin\fess.in.bat``
+   - Édition RPM : modifiez ``FESS_PORT`` dans ``/etc/sysconfig/fess``
+   - Édition DEB : modifiez ``FESS_PORT`` dans ``/etc/default/fess``
 
 3. **Vérifiez les logs**
 
@@ -412,7 +459,7 @@ Pour un dépannage détaillé, consultez :doc:`troubleshooting`.
 
 Une fois |Fess| démarré normalement, consultez les documents suivants pour commencer l'exploitation :
 
-- **Guide de l'administrateur** : Détails sur la configuration de l'exploration, la configuration de la recherche et la configuration du système
+- :doc:`../admin/index` - Détails sur la configuration de l'exploration, la configuration de la recherche et la configuration du système
 - :doc:`security` - Configuration de la sécurité pour les environnements de production
 - :doc:`troubleshooting` - Problèmes courants et solutions
 - :doc:`upgrade` - Procédure de mise à niveau de version

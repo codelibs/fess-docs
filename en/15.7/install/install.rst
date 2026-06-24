@@ -70,7 +70,7 @@ Docker Version
 
 - Requires Docker knowledge
 
-**Recommended Environments:** Development environments, evaluation environments, POC, production environments
+**Recommended Environments:** Development environments, evaluation environments, PoC (for production use, configure an external OpenSearch server instead of the embedded OpenSearch)
 
 Details: :doc:`install-docker`
 
@@ -88,7 +88,7 @@ Linux Package Versions (TAR.GZ/RPM/DEB)
 - Requires manual installation of Java and OpenSearch
 - Configuration requires more effort
 
-**Recommended Environments:** Production environments, environments requiring customization
+**Recommended Environments:** Production environments (RPM/DEB, which can be managed as a system service, are recommended), environments requiring customization
 
 Details: :doc:`install-linux`
 
@@ -128,7 +128,7 @@ The basic flow is the same for all installation methods.
 
    For non-Docker versions, OpenSearch must be set up separately.
 
-   - Install OpenSearch 3.6.0
+   - Install OpenSearch 3.7.0
    - Install required plugins
    - Edit configuration files
 
@@ -159,7 +159,7 @@ OpenSearch
 
 OpenSearch is used as the search engine.
 
-- **Supported Version**: OpenSearch 3.6.0
+- **Supported Version**: OpenSearch 3.7.0
 - **Required Plugins**:
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ Version Information
 This document covers the following versions:
 
 - **Fess**: 15.7.0
-- **OpenSearch**: 3.6.0
+- **OpenSearch**: 3.7.0
 - **Java**: 21 or later
 - **Docker**: 20.10 or later
 - **Docker Compose**: 2.0 or later

@@ -95,7 +95,6 @@ Zahlen ausgedrückt werden.
           "ldapBaseDn": "dc=example,dc=com",
           "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
           "ldapAdminSecurityCredentials": null,
-          "storageAccessKey": "**********",
           "logLevel": "",
           "ssoType": "none",
           "storageType": "",
@@ -107,14 +106,23 @@ Zahlen ausgedrückt werden.
 
 .. note::
 
-   Aus Sicherheitsgründen werden Passwörter und geheime Werte nicht unverändert
-   zurückgegeben. Das LDAP-Administratorpasswort ``ldapAdminSecurityCredentials``
-   wird stets als ``null`` zurückgegeben. Andere geheime Felder
-   (``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
-   ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
-   ``entraidClientSecret``) werden als maskierter Wert ``"**********"``
-   zurückgegeben, wenn sie gesetzt sind, bzw. als leere Zeichenkette, wenn sie
-   nicht gesetzt sind.
+   Das obige Beispiel zeigt nur repräsentative Felder. Das ``setting``-Objekt in der
+   tatsächlichen Antwort enthält alle Felder der allgemeinen Einstellungen (Crawling,
+   Suche, Benachrichtigungen, LDAP, SSO, Speicher usw.). Die vollständige Feldliste
+   finden Sie auf der Admin-Seite „Allgemein".
+
+.. note::
+
+   Aus Sicherheitsgründen werden Felder mit Anmeldeinformationen nicht mit ihren
+   tatsächlichen Werten in der Antwort zurückgegeben.
+
+   - Das LDAP-Administratorpasswort ``ldapAdminSecurityCredentials`` wird stets als
+     ``null`` zurückgegeben.
+   - Andere Secrets (``storageAccessKey`` / ``storageSecretKey`` /
+     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
+     ``entraidClientId`` / ``entraidClientSecret``) werden bei gesetztem Wert als
+     Maskierungswert ``"**********"`` zurückgegeben, bzw. als leere Zeichenkette
+     (``""``), wenn sie nicht gesetzt sind.
 
 Allgemeine Einstellungen aktualisieren
 ======================================
@@ -136,26 +144,39 @@ Nicht-``null``-Felder, die in der Anfrage enthalten sind. Felder, die nicht in
 der Anfrage enthalten sind, sowie Felder, die auf ``null`` gesetzt sind, behalten
 ihre vorhandenen Werte.
 
-.. important::
+.. warning::
 
-   Der Request-Body wird vor der Anwendung der Überschreibung validiert. Daher
-   müssen die Pflichtfelder (``dayForCleanup``, ``crawlingThreadCount``,
-   ``failureCountThreshold``, ``csvFileEncoding``) **immer in der Anfrage
-   enthalten sein**, unabhängig davon, was geändert wird. Fehlt eines dieser
-   Felder, schlägt die Validierung fehl und ``status: 1`` wird zurückgegeben.
-   Um nur einige Felder zu ändern, rufen Sie zunächst die aktuellen Einstellungen
-   mit ``GET`` ab und senden Sie dann den ``PUT``-Request mit den aktuellen
-   Werten der Pflichtfelder.
+   Die folgenden vier Felder sind erforderlich und MÜSSEN in **jedem** PUT-Request
+   enthalten sein, auch bei einer partiellen Aktualisierung:
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   Fehlt eines dieser Felder, schlägt die Validierung fehl und die API gibt
+   HTTP 400 mit ``status: 1`` und einer Fehlermeldung ``message`` zurück. Da der
+   gesendete Wert die bestehende Einstellung überschreibt, sollte für Felder, die
+   nicht geändert werden sollen, zunächst der aktuelle Wert per ``GET`` abgerufen
+   und unverändert übermittelt werden. Alle anderen Felder sind optional;
+   weggelassene Felder behalten ihren bestehenden Wert.
 
 .. note::
 
-   Passwort- und Geheimfelder (``ldapAdminSecurityCredentials``,
-   ``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
-   ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
-   ``entraidClientSecret``) werden ignoriert, wenn eine leere Zeichenkette oder
-   der maskierte Wert (``**********``) gesendet wird, und der vorhandene Wert
-   wird beibehalten. Diese Felder werden nur aktualisiert, wenn ein tatsächlicher
-   Wert gesendet wird.
+   Numerische Felder unterliegen einer Typ- und Bereichsvalidierung. Das Senden eines
+   Werts, der nicht als Ganzzahl interpretiert werden kann, oder eines Werts außerhalb
+   des zulässigen Bereichs führt zu einem Validierungsfehler (HTTP 400 mit
+   ``status: 1``). Der zulässige Bereich für jedes numerische Feld ist in der
+   nachstehenden Feldtabelle aufgeführt.
+
+.. note::
+
+   Bei Ein-/Aus-Feldern (``available``-Typ) bedeutet ausschließlich ``"true"`` oder
+   ``"on"`` (jeweils unabhängig von Groß-/Kleinschreibung) eine Aktivierung. Jeder
+   andere Wert (z. B. ``"false"`` oder eine leere Zeichenkette) wird als deaktiviert
+   (``false``) behandelt. Der bestehende Wert bleibt nur dann erhalten, wenn das Feld
+   weggelassen (nicht gesendet) wird. Im GET-Response werden diese Felder als
+   Zeichenketten ``"true"`` / ``"false"`` zurückgegeben.
 
 .. code-block:: json
 
@@ -210,6 +231,12 @@ Admin-Oberfläche). Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
    * - ``webApiJson``
      - Nein
      - JSON-Web-API aktivieren/deaktivieren
+   * - ``appValue``
+     - Nein
+     - Anwendungsspezifischer zusätzlicher Konfigurationswert
+   * - ``virtualHostValue``
+     - Nein
+     - Virtuelle-Host-Konfiguration (für Mehrmandanten-Setups)
    * - ``popularWord``
      - Nein
      - Aggregation/Anzeige beliebter Wörter aktivieren/deaktivieren
@@ -225,12 +252,21 @@ Admin-Oberfläche). Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
    * - ``loginRequired``
      - Nein
      - Ob für die Suche eine Anmeldung erforderlich ist
+   * - ``loginLink``
+     - Nein
+     - Anzeige des Anmeldelinks auf der Suchseite aktivieren/deaktivieren
    * - ``thumbnail``
      - Nein
      - Generierung von Vorschaubildern aktivieren/deaktivieren
+   * - ``resultCollapsed``
+     - Nein
+     - Einklappen ähnlicher Dokumente in den Suchergebnissen aktivieren/deaktivieren
    * - ``ignoreFailureType``
      - Nein
      - Zu ignorierende Crawl-Fehlertypen
+   * - ``crawlingUserAgent``
+     - Nein
+     - User-Agent-Zeichenkette, die beim Crawling gesendet wird
    * - ``purgeSearchLogDay``
      - Nein
      - Anzahl der Tage, die das Suchprotokoll aufbewahrt wird (-1 = deaktiviert; Bereich: -1 bis 100000)
@@ -279,6 +315,15 @@ Admin-Oberfläche). Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
    * - ``googleChatWebhookUrls``
      - Nein
      - Google-Chat-Webhook-URL für Benachrichtigungen
+   * - ``searchUseBrowserLocale``
+     - Nein
+     - Ob der Browser-Locale bei der Suche verwendet werden soll
+   * - ``ragLlmName``
+     - Nein
+     - Name des LLM-Providers für RAG
+   * - ``llmLogLevel``
+     - Nein
+     - Log-Level für LLM-bezogene Pakete
 
 Authentifizierungsbezogene Felder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,6 +351,8 @@ Admin-Oberfläche).
      - LDAP-Administratorpasswort (in der Antwort durch ``null`` ersetzt)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - Suchfilter für Benutzer/Gruppen
+   * - ``ldapMemberofAttribute``
+     - LDAP-Attributname, der die Gruppenzugehörigkeit angibt
    * - ``ssoType``
      - SSO-Typ (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` usw.
@@ -342,6 +389,21 @@ verwaltet werden.
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - GCS-Projekt-ID / Pfad zur Anmeldeinformationsdatei
 
+.. note::
+
+   Secret-Felder wie ``ldapAdminSecurityCredentials``, ``storageAccessKey`` /
+   ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
+   ``entraidClientId`` / ``entraidClientSecret`` sowie ``spnegoPreauthPassword``
+   behalten ihren gespeicherten Wert (werden nicht aktualisiert), wenn der Maskierungswert
+   ``"**********"`` unverändert gesendet wird. Senden Sie den tatsächlichen Wert nur dann,
+   wenn Sie ihn ändern möchten.
+
+   Da diese Prüfung darauf basiert, ob die Zeichenkette nach dem Entfernen aller
+   Sternzeichen leer ist, führt auch das Senden einer leeren Zeichenkette (``""``) oder
+   eines ausschließlich aus Sternzeichen bestehenden Werts dazu, dass der Wert unverändert
+   bleibt. Daher können diese Secret-Felder über die API nicht auf einen leeren Wert
+   zurückgesetzt werden.
+
 Response
 --------
 
@@ -357,10 +419,10 @@ zurückgegeben (``id`` und ``created`` sind nicht enthalten).
       }
     }
 
-Schlägt die Aktualisierung fehl (z. B. aufgrund eines Validierungsfehlers), wird
-``status`` auf einen Wert ungleich null gesetzt (``1`` bei einem
-Validierungsfehler), und ``message`` enthält die Fehlerdetails. Die Liste der
-``status``-Werte finden Sie unter :doc:`api-admin-overview`.
+Schlägt die Aktualisierung fehl (z. B. aufgrund eines Validierungsfehlers), gibt
+die API HTTP 400 zurück, und ``status`` wird auf einen Wert ungleich null gesetzt
+(``1`` bei einem Validierungsfehler), wobei ``message`` die Fehlerdetails enthält.
+Die Liste der ``status``-Werte finden Sie unter :doc:`api-admin-overview`.
 
 Verwendungsbeispiele
 ====================
@@ -370,7 +432,8 @@ Verwendungsbeispiele
    Die nachstehenden Beispiele enthalten die Pflichtfelder (``dayForCleanup``,
    ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Da
    diese unabhängig von der jeweiligen Änderung stets angegeben werden müssen,
-   verwenden Sie im realen Betrieb die über ``GET`` abgerufenen aktuellen Werte.
+   rufen Sie im realen Betrieb die aktuellen Werte über ``GET`` ab und geben Sie
+   sie an (die folgenden Beispiele verwenden Standardwerte).
 
 Crawl-Einstellungen aktualisieren
 ----------------------------------

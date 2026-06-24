@@ -70,7 +70,7 @@ Docker 版
 
 - 需要 Docker 知识
 
-**推荐环境:** 开发环境、评估环境、POC、生产环境
+**推荐环境:** 开发环境、评估环境、POC（在生产环境中使用时，请配置外部的 OpenSearch 服务器，而非内嵌 OpenSearch）
 
 详情: :doc:`install-docker`
 
@@ -88,7 +88,7 @@ Linux 包版 (TAR.GZ/RPM/DEB)
 - 需要手动安装 Java 和 OpenSearch
 - 配置较为繁琐
 
-**推荐环境:** 生产环境、需要定制化的环境
+**推荐环境:** 生产环境（推荐使用可作为系统服务管理的 RPM/DEB）、需要定制化的环境
 
 详情: :doc:`install-linux`
 
@@ -128,7 +128,7 @@ Windows 版 (ZIP)
 
    Docker 版以外的情况下，需要单独设置 OpenSearch。
 
-   - 安装 OpenSearch 3.6.0
+   - 安装 OpenSearch 3.7.0
    - 安装必需插件
    - 编辑配置文件
 
@@ -159,7 +159,7 @@ OpenSearch
 
 使用 OpenSearch 作为搜索引擎。
 
-- **支持版本**: OpenSearch 3.6.0
+- **支持版本**: OpenSearch 3.7.0
 - **必需插件**:
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ A: 可以。Fess 和 OpenSearch 可以在不同的服务器上运行。
 本文档适用于以下版本：
 
 - **Fess**: 15.7.0
-- **OpenSearch**: 3.6.0
+- **OpenSearch**: 3.7.0
 - **Java**: 21 或更高版本
 - **Docker**: 20.10 或更高版本
 - **Docker Compose**: 2.0 或更高版本
