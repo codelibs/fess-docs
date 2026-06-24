@@ -74,9 +74,9 @@ TAR.GZ/ZIP/RPM/DEB Versions
   - OpenJDK 21 or later
   - Eclipse Temurin 21 or later
 
-- **OpenSearch 3.6.0**: Required for production environments (embedded version not recommended)
+- **OpenSearch 3.7.0**: Required for production environments (embedded version not recommended)
 
-  - Supported Version: OpenSearch 3.6.0
+  - Supported Version: OpenSearch 3.7.0
   - Compatibility with plugins must be considered for other versions
 
 Docker Version
@@ -95,7 +95,7 @@ The main ports used by |Fess| are as follows:
 
 .. list-table::
    :header-rows: 1
-   :widths: 15 15.70
+   :widths: 15 15 70
 
    * - Port
      - Protocol

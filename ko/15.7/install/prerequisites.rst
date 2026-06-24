@@ -74,9 +74,9 @@ TAR.GZ/ZIP/RPM/DEB 버전
   - OpenJDK 21 이상
   - Eclipse Temurin 21 이상
 
-- **OpenSearch 3.6.0**: 운영 환경에서는 필수(내장 버전은 비권장)
+- **OpenSearch 3.7.0**: 운영 환경에서는 필수(내장 버전은 비권장)
 
-  - 지원 버전: OpenSearch 3.6.0
+  - 지원 버전: OpenSearch 3.7.0
   - 기타 버전에서는 플러그인 호환성에 주의 필요
 
 Docker 버전
@@ -95,7 +95,7 @@ Docker 버전
 
 .. list-table::
    :header-rows: 1
-   :widths: 15 15.70
+   :widths: 15 15 70
 
    * - 포트
      - 프로토콜
