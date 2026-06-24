@@ -1,6 +1,6 @@
-=========================================
+==============================================
 Installation sur Windows (Procédure détaillée)
-=========================================
+==============================================
 
 Cette page décrit la procédure d'installation de |Fess| sur un environnement Windows.
 Elle documente la méthode d'installation à l'aide du package ZIP.
@@ -15,7 +15,7 @@ Prérequis
 
 - La configuration requise décrite dans :doc:`prerequisites` doit être satisfaite
 - Java 21 doit être installé
-- OpenSearch 3.6.0 doit être disponible (ou nouvelle installation)
+- OpenSearch 3.7.0 doit être disponible (ou nouvelle installation)
 - La variable d'environnement Windows ``JAVA_HOME`` doit être configurée de manière appropriée
 
 Vérification de l'installation de Java
@@ -69,7 +69,7 @@ Téléchargement d'OpenSearch
 
    Exemple ::
 
-       C:\opensearch-3.6.0
+       C:\opensearch-3.7.0
 
    .. note::
 
@@ -82,16 +82,16 @@ Ouvrez l'invite de commandes **avec des privilèges d'administrateur** et exécu
 
 ::
 
-    C:\> cd C:\opensearch-3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-    C:\opensearch-3.6.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+    C:\> cd C:\opensearch-3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
 
 .. important::
 
    Les versions des plugins doivent correspondre à la version d'OpenSearch.
-   Dans l'exemple ci-dessus, toutes sont spécifiées en 3.6.0.
+   Dans l'exemple ci-dessus, toutes sont spécifiées en 3.7.0.
 
 Configuration d'OpenSearch
 ---------------------------
@@ -101,7 +101,7 @@ Ouvrez ``config\opensearch.yml`` avec un éditeur de texte et ajoutez les param�
 ::
 
     # Chemin pour la synchronisation de configuration (spécifier en chemin absolu)
-    configsync.config_path: C:/opensearch-3.6.0/data/config/
+    configsync.config_path: C:/opensearch-3.7.0/data/config/
 
     # Désactivation du plugin de sécurité (environnement de développement uniquement)
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ Ouvrez ``config\opensearch.yml`` avec un éditeur de texte et ajoutez les param�
 .. note::
 
    Sous Windows, utilisez ``/`` plutôt que ``\`` comme séparateur de chemin.
-   Écrivez ``C:/opensearch-3.6.0/data/config/`` plutôt que ``C:\opensearch-3.6.0\data\config\``.
+   Écrivez ``C:/opensearch-3.7.0/data/config/`` plutôt que ``C:\opensearch-3.7.0\data\config\``.
 
 .. tip::
 
@@ -127,6 +127,11 @@ Ouvrez ``config\opensearch.yml`` avec un éditeur de texte et ajoutez les param�
        node.name: fess-node-1
        network.host: 0.0.0.0
        discovery.type: single-node
+
+.. tip::
+
+   La taille du tas mémoire d'OpenSearch se configure via ``-Xms`` / ``-Xmx`` dans ``config\jvm.options``.
+   Il est recommandé de spécifier la même valeur pour ``-Xms`` et ``-Xmx``, inférieure à la moitié de la mémoire physique disponible et inférieure à 32 Go.
 
 Étape 2 : Installation de Fess
 ===============================
@@ -149,17 +154,33 @@ Téléchargement de Fess
 Configuration de Fess
 ----------------------
 
-Ouvrez ``bin\fess.in.bat`` avec un éditeur de texte et ajoutez ou modifiez les paramètres suivants.
+Ouvrez ``bin\fess.in.bat`` avec un éditeur de texte.
+Vers la fin de ce fichier, les paramètres de connexion à un cluster OpenSearch externe sont préparés à l'avance sous forme de lignes commentées.
 
-::
+Avant modification (état par défaut) ::
 
+    REM External opensearch cluster
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=%SEARCH_ENGINE_HOME%/config/
+
+Supprimez le préfixe ``REM `` en début des 2 dernières lignes pour décommenter, puis modifiez la valeur de ``fess.dictionary.path`` avec le chemin de synchronisation de configuration d'OpenSearch.
+
+Après modification ::
+
+    REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.6.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.7.0/data/config/
 
 .. note::
 
-   - Si vous exécutez OpenSearch sur un autre hôte, modifiez ``fess.search_engine.http_address`` avec le nom d'hôte ou l'adresse IP appropriés.
+   - Pour ``fess.dictionary.path``, spécifiez le même chemin que ``configsync.config_path`` défini dans le fichier ``opensearch.yml`` d'OpenSearch.
+   - Si vous exécutez OpenSearch sur un autre hôte, modifiez le nom d'hôte ou l'adresse IP de ``fess.search_engine.http_address`` avec la valeur appropriée.
    - Utilisez ``/`` comme séparateur de chemin.
+   - Ne pas ajouter de nouvelles lignes ``set FESS_JAVA_OPTS=...`` ; décommentez et éditez les lignes existantes. La spécification dupliquée d'une même option peut provoquer un comportement inattendu.
+
+.. tip::
+
+   Pour modifier la taille du tas mémoire de |Fess|, éditez ``FESS_MIN_MEM`` (valeur par défaut : ``256m``) et ``FESS_MAX_MEM`` (valeur par défaut : ``1g``) dans ``bin\fess.in.bat``, ou définissez la variable d'environnement ``FESS_HEAP_SIZE``.
 
 Vérification de l'installation
 -------------------------------
@@ -179,34 +200,46 @@ Pour la procédure de démarrage, consultez :doc:`run`.
 Enregistrement en tant que service Windows (optionnel)
 =======================================================
 
-En enregistrant |Fess| et OpenSearch en tant que services Windows, vous pouvez les configurer pour qu'ils démarrent automatiquement au démarrage du système.
+En enregistrant |Fess| en tant que service Windows, vous pouvez le configurer pour qu'il démarre automatiquement au démarrage du système.
+
+|Fess| est livré avec ``bin\service.bat`` pour l'enregistrement en tant que service Windows.
+Ce script utilise Apache Commons Daemon (procrun), il n'est donc pas nécessaire de prévoir séparément un outil tiers tel que NSSM.
 
 .. note::
 
-   Pour l'enregistrement en tant que service Windows, vous devez utiliser un outil tiers (tel que NSSM).
-   Pour les procédures détaillées, consultez la documentation de chaque outil.
+   Avant d'exécuter ``service.bat``, vérifiez que la variable d'environnement ``JAVA_HOME`` est correctement configurée.
 
-Exemple d'utilisation de NSSM
-------------------------------
+Enregistrement du service |Fess|
+---------------------------------
 
-1. Téléchargez et décompressez `NSSM (Non-Sucking Service Manager) <https://nssm.cc/download>`__.
+Ouvrez l'invite de commandes **avec des privilèges d'administrateur** et exécutez les commandes suivantes.
 
-2. Enregistrement d'OpenSearch en tant que service ::
+1. Enregistrement du service ::
 
-       C:\> nssm install OpenSearch C:\opensearch-3.6.0\bin\opensearch.bat
+       C:\> cd C:\fess-15.7.0
+       C:\fess-15.7.0> bin\service.bat install
 
-3. Enregistrement de Fess en tant que service ::
+   Par défaut, le service est enregistré avec l'identifiant ``fess-service-x64`` pour les environnements 64 bits et ``fess-service-x86`` pour les environnements 32 bits.
+   Pour spécifier explicitement l'identifiant du service, passez-le en argument : ``bin\service.bat install <identifiant-du-service>``.
 
-       C:\> nssm install Fess C:\fess-15.7.0\bin\fess.bat
+2. Démarrage et arrêt du service ::
 
-4. Configuration des dépendances de service (Fess dépend d'OpenSearch) ::
+       C:\fess-15.7.0> bin\service.bat start
+       C:\fess-15.7.0> bin\service.bat stop
 
-       C:\> sc config Fess depend= OpenSearch
+3. Consultation et modification de la configuration du service (GUI) ::
 
-5. Démarrage des services ::
+       C:\fess-15.7.0> bin\service.bat manager
 
-       C:\> net start OpenSearch
-       C:\> net start Fess
+4. Suppression du service ::
+
+       C:\fess-15.7.0> bin\service.bat remove
+
+.. note::
+
+   - ``service.bat`` charge ``bin\fess.in.bat`` en interne, de sorte que les paramètres de connexion à OpenSearch externe définis dans la section « Configuration de Fess » sont également appliqués au service.
+   - Le type de démarrage par défaut est « Manuel ». Pour que le service démarre automatiquement au lancement du système, définissez la variable d'environnement ``FESS_START_TYPE`` à ``auto`` avant l'enregistrement du service, ou modifiez le type de démarrage en « Automatique » via l'outil de gestion des services (``services.msc``) après l'enregistrement.
+   - ``service.bat`` ne permet d'enregistrer que le service |Fess|. Pour enregistrer OpenSearch en tant que service, consultez la procédure fournie par OpenSearch.
 
 Configuration du pare-feu
 ==========================
@@ -247,7 +280,7 @@ Sous Windows, il existe une limitation de la longueur des chemins. Nous recomman
 Exemple ::
 
     C:\opensearch  (recommandé)
-    C:\Program Files\opensearch-3.6.0  (non recommandé - chemin trop long)
+    C:\Program Files\opensearch-3.7.0  (non recommandé - chemin trop long)
 
 Java n'est pas reconnu
 -----------------------
