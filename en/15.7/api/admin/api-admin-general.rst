@@ -5,8 +5,12 @@ General API
 Overview
 ========
 
-General API is an API for managing |Fess| general settings.
-You can retrieve and update system-wide configuration settings.
+General API is an API for managing the |Fess| general settings (system-wide
+configuration). You can retrieve and update settings for crawling, logging,
+search result display, suggest, log retention periods, notifications,
+authentication (LDAP / SSO), and cloud storage integration. These settings
+correspond to the "General" settings in the admin UI
+(:doc:`../../admin/general-guide`).
 
 Base URL
 ========
@@ -14,6 +18,9 @@ Base URL
 ::
 
     /api/admin/general
+
+Accessing this API requires an access token with the ``Radmin-api`` permission.
+See :doc:`api-admin-overview` for authentication details.
 
 Endpoint List
 =============
@@ -42,8 +49,15 @@ Request
 
     GET /api/admin/general
 
+This endpoint does not accept query parameters.
+
 Response
 --------
+
+``response.setting`` contains the current general settings. The response includes
+all updatable setting fields; the example below shows only representative fields.
+On/off settings are expressed as the strings ``"true"`` / ``"false"``, while
+values such as retention days and thread counts are expressed as numbers.
 
 .. code-block:: json
 
@@ -78,6 +92,7 @@ Response
           "ldapBaseDn": "dc=example,dc=com",
           "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
           "ldapAdminSecurityCredentials": null,
+          "storageAccessKey": "**********",
           "logLevel": "",
           "ssoType": "none",
           "storageType": "",
@@ -89,9 +104,12 @@ Response
 
 .. note::
 
-   For security reasons, the LDAP administrator password ``ldapAdminSecurityCredentials``
-   is always replaced with ``null`` in the response (source:
-   ``ApiAdminGeneralAction.java:71``).
+   For security reasons, passwords and secret values are not returned as-is. The
+   LDAP administrator password ``ldapAdminSecurityCredentials`` is always returned
+   as ``null``. Other secret fields (``storageAccessKey``, ``storageSecretKey``,
+   ``oicClientId``, ``oicClientSecret``, ``spnegoPreauthPassword``,
+   ``entraidClientId``, ``entraidClientSecret``) are returned as the masked value
+   ``"**********"`` when set, or as an empty string when not set.
 
 Update General Settings
 =======================
@@ -107,9 +125,29 @@ Request
 Request Body
 ~~~~~~~~~~~~
 
-Updates are processed as a partial update (merge). Fields not included in the
-request retain their existing values, and fields set to ``null`` are ignored
-(source: ``ApiAdminGeneralAction.java:84-90``).
+Updates are processed as a partial update (merge). The server loads the current
+settings and then overwrites only the non-``null`` fields included in the request.
+Fields not included in the request, and fields set to ``null``, retain their
+existing values.
+
+.. important::
+
+   The request body is validated before the overwrite is applied. Therefore, the
+   required fields (``dayForCleanup``, ``crawlingThreadCount``,
+   ``failureCountThreshold``, ``csvFileEncoding``) **must always be included in the
+   request**, regardless of what you are changing. If any of them is missing, the
+   request fails validation and ``status: 1`` is returned. To change only some
+   fields, first retrieve the current settings with ``GET``, then ``PUT`` the
+   request with the current values of the required fields included.
+
+.. note::
+
+   Password and secret fields (``ldapAdminSecurityCredentials``,
+   ``storageAccessKey``, ``storageSecretKey``, ``oicClientId``, ``oicClientSecret``,
+   ``spnegoPreauthPassword``, ``entraidClientId``, ``entraidClientSecret``) are
+   ignored when an empty string or the masked value (``**********``) is sent, and
+   the existing value is retained. These fields are updated only when an actual
+   value is sent.
 
 .. code-block:: json
 
@@ -126,8 +164,8 @@ Main Fields
 ~~~~~~~~~~~
 
 There are a wide variety of setting items. The representative fields are shown
-below (refer to ``EditForm.java`` for all fields). On/off settings of the
-``available`` type are expressed as the strings ``"true"`` / ``"false"``.
+below (all fields correspond to the "General" settings in the admin UI). On/off
+settings are specified as the strings ``"true"`` / ``"false"``.
 
 .. list-table::
    :header-rows: 1
@@ -141,13 +179,13 @@ below (refer to ``EditForm.java`` for all fields). On/off settings of the
      - Enable/disable incremental crawling
    * - ``dayForCleanup``
      - Yes
-     - Number of days to retain crawled documents (-1 = cleanup disabled)
+     - Number of days to retain crawled documents (-1 = cleanup disabled; range: -1 to 1000)
    * - ``crawlingThreadCount``
      - Yes
-     - Number of threads used for crawling
+     - Number of threads used for crawling (range: 0 to 100)
    * - ``failureCountThreshold``
      - Yes
-     - Failure count threshold to stop crawling a URL (-1 = disabled)
+     - Failure count threshold to stop crawling a URL (-1 = disabled; range: -1 to 10000)
    * - ``csvFileEncoding``
      - Yes
      - Encoding for CSV export
@@ -186,16 +224,16 @@ below (refer to ``EditForm.java`` for all fields). On/off settings of the
      - Crawl failure types to ignore
    * - ``purgeSearchLogDay``
      - No
-     - Number of days to retain search logs (-1 = disabled)
+     - Number of days to retain search logs (-1 = disabled; range: -1 to 100000)
    * - ``purgeJobLogDay``
      - No
-     - Number of days to retain job logs (-1 = disabled)
+     - Number of days to retain job logs (-1 = disabled; range: -1 to 100000)
    * - ``purgeUserInfoDay``
      - No
-     - Number of days to retain user information (-1 = disabled)
+     - Number of days to retain user information (-1 = disabled; range: -1 to 100000)
    * - ``purgeSuggestSearchLogDay``
      - No
-     - Number of days to retain suggest search logs (0 = disabled)
+     - Number of days to retain suggest search logs (0 = disabled; range: 0 to 100000)
    * - ``purgeByBots``
      - No
      - Bot User-Agents whose search logs are discarded
@@ -237,8 +275,8 @@ Authentication-Related Fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Settings related to LDAP and SSO (OpenID Connect, SAML, SPNEGO, Entra ID) are
-also managed by this API. The representative fields are shown below (refer to
-``EditForm.java`` for all fields).
+also managed by this API. The representative fields are shown below (all fields
+correspond to the "General" settings in the admin UI).
 
 .. list-table::
    :header-rows: 1
@@ -281,7 +319,7 @@ Cloud storage (S3 / GCS) integration settings can also be managed.
    * - Field
      - Description
    * - ``storageType``
-     - Storage type (``s3`` / ``gcs`` / ``auto``)
+     - Storage type (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - Storage endpoint URL
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -296,7 +334,8 @@ Cloud storage (S3 / GCS) integration settings can also be managed.
 Response
 --------
 
-On a successful update, only ``status`` is returned (``id`` and ``created`` are not included).
+On a successful update, only ``version`` and ``status`` are returned (``id`` and
+``created`` are not included).
 
 .. code-block:: json
 
@@ -307,8 +346,19 @@ On a successful update, only ``status`` is returned (``id`` and ``created`` are 
       }
     }
 
+If the update fails (for example, due to a validation error), ``status`` is set
+to a non-zero value (``1`` for a validation error), and ``message`` contains the
+error details. See :doc:`api-admin-overview` for the list of ``status`` values.
+
 Usage Examples
 ==============
+
+.. note::
+
+   The examples below include the required fields (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Because
+   these must always be specified regardless of what you are changing, use the
+   current values retrieved via ``GET`` in actual operation.
 
 Update Crawl Settings
 ---------------------
@@ -335,6 +385,10 @@ Update Log Retention Period
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
@@ -349,6 +403,10 @@ Update Suggest Settings
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'

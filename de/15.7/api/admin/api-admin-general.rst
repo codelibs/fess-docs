@@ -5,8 +5,13 @@ General API
 Übersicht
 =========
 
-Die General API dient zur Verwaltung der allgemeinen Einstellungen in |Fess|.
-Sie können systemweite Konfigurationen abrufen und aktualisieren.
+Die General API dient zur Verwaltung der allgemeinen Einstellungen (systemweite
+Konfiguration) von |Fess|. Sie können Einstellungen für Crawling, Protokollierung,
+Anzeige von Suchergebnissen, Suggest, Protokoll-Aufbewahrungszeiträume,
+Benachrichtigungen, Authentifizierung (LDAP / SSO) und Cloud-Speicher-Anbindung
+abrufen und aktualisieren. Diese Einstellungen entsprechen den
+„Allgemein"-Einstellungen in der Admin-Oberfläche
+(:doc:`../../admin/general-guide`).
 
 Basis-URL
 =========
@@ -14,6 +19,10 @@ Basis-URL
 ::
 
     /api/admin/general
+
+Für den Zugriff auf diese API ist ein Zugriffstoken mit der Berechtigung ``Radmin-api``
+erforderlich. Weitere Informationen zur Authentifizierung finden Sie unter
+:doc:`api-admin-overview`.
 
 Endpunktliste
 =============
@@ -42,8 +51,16 @@ Request
 
     GET /api/admin/general
 
+Dieser Endpunkt akzeptiert keine Abfrageparameter.
+
 Response
 --------
+
+``response.setting`` enthält die aktuellen allgemeinen Einstellungen. Die Antwort
+enthält alle aktualisierbaren Einstellungsfelder; das nachstehende Beispiel zeigt nur
+repräsentative Felder. Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
+``"false"`` ausgedrückt, während Werte wie Aufbewahrungstage und Thread-Anzahl als
+Zahlen ausgedrückt werden.
 
 .. code-block:: json
 
@@ -78,6 +95,7 @@ Response
           "ldapBaseDn": "dc=example,dc=com",
           "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
           "ldapAdminSecurityCredentials": null,
+          "storageAccessKey": "**********",
           "logLevel": "",
           "ssoType": "none",
           "storageType": "",
@@ -89,9 +107,14 @@ Response
 
 .. note::
 
-   Aus Sicherheitsgründen wird ``ldapAdminSecurityCredentials``, das Passwort
-   des LDAP-Administrators, in der Antwort stets durch ``null`` ersetzt (Quelle:
-   ``ApiAdminGeneralAction.java:71``).
+   Aus Sicherheitsgründen werden Passwörter und geheime Werte nicht unverändert
+   zurückgegeben. Das LDAP-Administratorpasswort ``ldapAdminSecurityCredentials``
+   wird stets als ``null`` zurückgegeben. Andere geheime Felder
+   (``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
+   ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
+   ``entraidClientSecret``) werden als maskierter Wert ``"**********"``
+   zurückgegeben, wenn sie gesetzt sind, bzw. als leere Zeichenkette, wenn sie
+   nicht gesetzt sind.
 
 Allgemeine Einstellungen aktualisieren
 ======================================
@@ -107,9 +130,32 @@ Request
 Request-Body
 ~~~~~~~~~~~~
 
-Die Aktualisierung wird als partielle Aktualisierung (merge) verarbeitet. Felder, die nicht
-in der Anfrage enthalten sind, behalten ihren bestehenden Wert, und Felder mit ``null`` werden
-ignoriert (Quelle: ``ApiAdminGeneralAction.java:84-90``).
+Aktualisierungen werden als partielle Aktualisierung (merge) verarbeitet. Der
+Server lädt die aktuellen Einstellungen und überschreibt dann nur die
+Nicht-``null``-Felder, die in der Anfrage enthalten sind. Felder, die nicht in
+der Anfrage enthalten sind, sowie Felder, die auf ``null`` gesetzt sind, behalten
+ihre vorhandenen Werte.
+
+.. important::
+
+   Der Request-Body wird vor der Anwendung der Überschreibung validiert. Daher
+   müssen die Pflichtfelder (``dayForCleanup``, ``crawlingThreadCount``,
+   ``failureCountThreshold``, ``csvFileEncoding``) **immer in der Anfrage
+   enthalten sein**, unabhängig davon, was geändert wird. Fehlt eines dieser
+   Felder, schlägt die Validierung fehl und ``status: 1`` wird zurückgegeben.
+   Um nur einige Felder zu ändern, rufen Sie zunächst die aktuellen Einstellungen
+   mit ``GET`` ab und senden Sie dann den ``PUT``-Request mit den aktuellen
+   Werten der Pflichtfelder.
+
+.. note::
+
+   Passwort- und Geheimfelder (``ldapAdminSecurityCredentials``,
+   ``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
+   ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
+   ``entraidClientSecret``) werden ignoriert, wenn eine leere Zeichenkette oder
+   der maskierte Wert (``**********``) gesendet wird, und der vorhandene Wert
+   wird beibehalten. Diese Felder werden nur aktualisiert, wenn ein tatsächlicher
+   Wert gesendet wird.
 
 .. code-block:: json
 
@@ -125,9 +171,10 @@ ignoriert (Quelle: ``ApiAdminGeneralAction.java:84-90``).
 Wichtigste Felder
 ~~~~~~~~~~~~~~~~~
 
-Es gibt zahlreiche Konfigurationselemente. Im Folgenden sind die wichtigsten Felder aufgeführt
-(alle Felder siehe ``EditForm.java``). Die Ein-/Aus-Einstellungen vom Typ ``available`` werden
-als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
+Es gibt zahlreiche Konfigurationselemente. Im Folgenden sind die wichtigsten
+Felder aufgeführt (alle Felder entsprechen den „Allgemein"-Einstellungen in der
+Admin-Oberfläche). Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
+``"false"`` angegeben.
 
 .. list-table::
    :header-rows: 1
@@ -141,13 +188,13 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
      - Inkrementelles Crawling aktivieren/deaktivieren
    * - ``dayForCleanup``
      - Ja
-     - Anzahl der Tage, die gecrawlte Dokumente aufbewahrt werden (-1=Cleanup deaktiviert)
+     - Anzahl der Tage, die gecrawlte Dokumente aufbewahrt werden (-1 = Cleanup deaktiviert; Bereich: -1 bis 1000)
    * - ``crawlingThreadCount``
      - Ja
-     - Anzahl der für das Crawling verwendeten Threads
+     - Anzahl der für das Crawling verwendeten Threads (Bereich: 0 bis 100)
    * - ``failureCountThreshold``
      - Ja
-     - Schwellenwert der Fehleranzahl, ab der das Crawling einer URL gestoppt wird (-1=deaktiviert)
+     - Schwellenwert der Fehleranzahl, ab der das Crawling einer URL gestoppt wird (-1 = deaktiviert; Bereich: -1 bis 10000)
    * - ``csvFileEncoding``
      - Ja
      - Kodierung des CSV-Exports
@@ -174,7 +221,7 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
      - Standard-Sortierreihenfolge
    * - ``appendQueryParameter``
      - Nein
-     - Anfügen von Query-Parametern an die Suchergebnis-URL
+     - Anfügen von Abfrageparametern an die Suchergebnis-URL
    * - ``loginRequired``
      - Nein
      - Ob für die Suche eine Anmeldung erforderlich ist
@@ -186,16 +233,16 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
      - Zu ignorierende Crawl-Fehlertypen
    * - ``purgeSearchLogDay``
      - Nein
-     - Anzahl der Tage, die das Suchprotokoll aufbewahrt wird (-1=deaktiviert)
+     - Anzahl der Tage, die das Suchprotokoll aufbewahrt wird (-1 = deaktiviert; Bereich: -1 bis 100000)
    * - ``purgeJobLogDay``
      - Nein
-     - Anzahl der Tage, die das Job-Protokoll aufbewahrt wird (-1=deaktiviert)
+     - Anzahl der Tage, die das Job-Protokoll aufbewahrt wird (-1 = deaktiviert; Bereich: -1 bis 100000)
    * - ``purgeUserInfoDay``
      - Nein
-     - Anzahl der Tage, die Benutzerinformationen aufbewahrt werden (-1=deaktiviert)
+     - Anzahl der Tage, die Benutzerinformationen aufbewahrt werden (-1 = deaktiviert; Bereich: -1 bis 100000)
    * - ``purgeSuggestSearchLogDay``
      - Nein
-     - Anzahl der Tage, die das Suggest-Suchprotokoll aufbewahrt wird (0=deaktiviert)
+     - Anzahl der Tage, die das Suggest-Suchprotokoll aufbewahrt wird (0 = deaktiviert; Bereich: 0 bis 100000)
    * - ``purgeByBots``
      - Nein
      - Bot-User-Agents, deren Suchprotokolle verworfen werden
@@ -236,9 +283,10 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
 Authentifizierungsbezogene Felder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID) werden
-über diese API verwaltet. Im Folgenden sind die wichtigsten Felder aufgeführt
-(alle Felder siehe ``EditForm.java``).
+Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID)
+werden über diese API verwaltet. Im Folgenden sind die wichtigsten Felder
+aufgeführt (alle Felder entsprechen den „Allgemein"-Einstellungen in der
+Admin-Oberfläche).
 
 .. list-table::
    :header-rows: 1
@@ -272,7 +320,8 @@ Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID) 
 Speicherbezogene Felder
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verwaltet werden.
+Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können
+verwaltet werden.
 
 .. list-table::
    :header-rows: 1
@@ -281,7 +330,7 @@ Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verw
    * - Feld
      - Beschreibung
    * - ``storageType``
-     - Speichertyp (``s3`` / ``gcs`` / ``auto``)
+     - Speichertyp (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - Endpunkt-URL des Speichers
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -296,7 +345,8 @@ Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verw
 Response
 --------
 
-Bei erfolgreicher Aktualisierung wird nur ``status`` zurückgegeben (``id`` oder ``created`` sind nicht enthalten).
+Bei erfolgreicher Aktualisierung werden nur ``version`` und ``status``
+zurückgegeben (``id`` und ``created`` sind nicht enthalten).
 
 .. code-block:: json
 
@@ -307,11 +357,23 @@ Bei erfolgreicher Aktualisierung wird nur ``status`` zurückgegeben (``id`` oder
       }
     }
 
+Schlägt die Aktualisierung fehl (z. B. aufgrund eines Validierungsfehlers), wird
+``status`` auf einen Wert ungleich null gesetzt (``1`` bei einem
+Validierungsfehler), und ``message`` enthält die Fehlerdetails. Die Liste der
+``status``-Werte finden Sie unter :doc:`api-admin-overview`.
+
 Verwendungsbeispiele
 ====================
 
+.. note::
+
+   Die nachstehenden Beispiele enthalten die Pflichtfelder (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Da
+   diese unabhängig von der jeweiligen Änderung stets angegeben werden müssen,
+   verwenden Sie im realen Betrieb die über ``GET`` abgerufenen aktuellen Werte.
+
 Crawl-Einstellungen aktualisieren
----------------------------------
+----------------------------------
 
 .. code-block:: bash
 
@@ -335,13 +397,17 @@ Protokoll-Aufbewahrungsdauer aktualisieren
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
          }'
 
 Suggest-Einstellungen aktualisieren
------------------------------------
+------------------------------------
 
 .. code-block:: bash
 
@@ -349,6 +415,10 @@ Suggest-Einstellungen aktualisieren
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'

@@ -2,11 +2,16 @@
 API de General
 ==========================
 
-Vision General
-==============
+Descripcion General
+===================
 
-La API de General es para gestionar la configuracion general de |Fess|.
-Puede obtener y actualizar configuraciones relacionadas con todo el sistema.
+La API de General es una API para gestionar la configuracion general de |Fess|
+(configuracion de todo el sistema). Puede obtener y actualizar configuraciones
+relacionadas con el rastreo, el registro, la visualizacion de resultados de
+busqueda, las sugerencias, los periodos de retencion de registros, las
+notificaciones, la autenticacion (LDAP / SSO) y la integracion con
+almacenamiento en la nube. Estas configuraciones corresponden a los ajustes
+"General" en la interfaz de administracion (:doc:`../../admin/general-guide`).
 
 URL Base
 ========
@@ -14,6 +19,10 @@ URL Base
 ::
 
     /api/admin/general
+
+Para acceder a esta API se requiere un token de acceso con el permiso
+``Radmin-api``. Consulte :doc:`api-admin-overview` para obtener detalles sobre
+la autenticacion.
 
 Lista de Endpoints
 ==================
@@ -33,7 +42,7 @@ Lista de Endpoints
      - Actualizar configuracion general
 
 Obtener Configuracion General
-=============================
+==============================
 
 Solicitud
 ---------
@@ -42,8 +51,17 @@ Solicitud
 
     GET /api/admin/general
 
+Este endpoint no acepta parametros de consulta.
+
 Respuesta
 ---------
+
+``response.setting`` contiene la configuracion general actual. La respuesta
+incluye todos los campos de configuracion actualizables; el ejemplo a
+continuacion muestra solo los campos representativos. Los ajustes de
+activacion/desactivacion se expresan como las cadenas ``"true"`` /
+``"false"``, mientras que valores como los dias de retencion y el numero de
+hilos se expresan como numeros.
 
 .. code-block:: json
 
@@ -78,6 +96,7 @@ Respuesta
           "ldapBaseDn": "dc=example,dc=com",
           "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
           "ldapAdminSecurityCredentials": null,
+          "storageAccessKey": "**********",
           "logLevel": "",
           "ssoType": "none",
           "storageType": "",
@@ -89,12 +108,17 @@ Respuesta
 
 .. note::
 
-   Por razones de seguridad, ``ldapAdminSecurityCredentials``, que es la contrasena del administrador LDAP,
-   siempre se reemplaza por ``null`` en la respuesta (fuente:
-   ``ApiAdminGeneralAction.java:71``).
+   Por razones de seguridad, las contrasenas y los valores secretos no se
+   devuelven tal cual. La contrasena del administrador LDAP
+   ``ldapAdminSecurityCredentials`` siempre se devuelve como ``null``. Los
+   demas campos secretos (``storageAccessKey``, ``storageSecretKey``,
+   ``oicClientId``, ``oicClientSecret``, ``spnegoPreauthPassword``,
+   ``entraidClientId``, ``entraidClientSecret``) se devuelven como el valor
+   enmascarado ``"**********"`` cuando estan configurados, o como una cadena
+   vacia cuando no lo estan.
 
 Actualizar Configuracion General
-================================
+=================================
 
 Solicitud
 ---------
@@ -107,9 +131,31 @@ Solicitud
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
-La actualizacion se procesa como una actualizacion parcial (merge). Los campos no incluidos en la solicitud
-conservan su valor existente, y los campos con valor ``null`` se ignoran (fuente:
-``ApiAdminGeneralAction.java:84-90``).
+Las actualizaciones se procesan como una actualizacion parcial (merge). El
+servidor carga la configuracion actual y luego sobreescribe unicamente los
+campos no nulos (no ``null``) incluidos en la solicitud. Los campos no
+incluidos en la solicitud, y los campos establecidos como ``null``, conservan
+sus valores existentes.
+
+.. important::
+
+   El cuerpo de la solicitud es validado antes de aplicar la sobreescritura.
+   Por lo tanto, los campos requeridos (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``)
+   **deben incluirse siempre en la solicitud**, independientemente de lo que
+   se desee cambiar. Si falta alguno de ellos, la solicitud falla la
+   validacion y se devuelve ``status: 1``. Para cambiar solo algunos campos,
+   primero recupere la configuracion actual con ``GET`` y luego envie la
+   solicitud ``PUT`` incluyendo los valores actuales de los campos requeridos.
+
+.. note::
+
+   Los campos de contrasena y secretos (``ldapAdminSecurityCredentials``,
+   ``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
+   ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
+   ``entraidClientSecret``) se ignoran cuando se envia una cadena vacia o el
+   valor enmascarado (``**********``), y el valor existente se conserva. Estos
+   campos se actualizan unicamente cuando se envia un valor real.
 
 .. code-block:: json
 
@@ -125,9 +171,11 @@ conservan su valor existente, y los campos con valor ``null`` se ignoran (fuente
 Campos Principales
 ~~~~~~~~~~~~~~~~~~
 
-Los elementos de configuracion son muy variados. A continuacion se muestran los campos representativos
-(para todos los campos consulte ``EditForm.java``). Las configuraciones de activacion/desactivacion del tipo ``available``
-se expresan como cadenas ``"true"`` / ``"false"``.
+Los elementos de configuracion son muy variados. A continuacion se muestran
+los campos representativos (todos los campos corresponden a los ajustes
+"General" en la interfaz de administracion). Los ajustes de
+activacion/desactivacion se especifican como las cadenas ``"true"`` /
+``"false"``.
 
 .. list-table::
    :header-rows: 1
@@ -141,13 +189,13 @@ se expresan como cadenas ``"true"`` / ``"false"``.
      - Habilitar/deshabilitar el rastreo incremental
    * - ``dayForCleanup``
      - Si
-     - Numero de dias que se conservan los documentos rastreados (-1=limpieza deshabilitada)
+     - Numero de dias que se conservan los documentos rastreados (-1=limpieza deshabilitada; rango: -1 a 1000)
    * - ``crawlingThreadCount``
      - Si
-     - Numero de hilos usados para el rastreo
+     - Numero de hilos usados para el rastreo (rango: 0 a 100)
    * - ``failureCountThreshold``
      - Si
-     - Umbral del numero de fallos para detener el rastreo de una URL (-1=deshabilitado)
+     - Umbral del numero de fallos para detener el rastreo de una URL (-1=deshabilitado; rango: -1 a 10000)
    * - ``csvFileEncoding``
      - Si
      - Codificacion de la exportacion CSV
@@ -186,16 +234,16 @@ se expresan como cadenas ``"true"`` / ``"false"``.
      - Tipos de fallo de rastreo a ignorar
    * - ``purgeSearchLogDay``
      - No
-     - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado)
+     - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeJobLogDay``
      - No
-     - Numero de dias que se conservan los registros de trabajos (-1=deshabilitado)
+     - Numero de dias que se conservan los registros de trabajos (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeUserInfoDay``
      - No
-     - Numero de dias que se conserva la informacion de usuario (-1=deshabilitado)
+     - Numero de dias que se conserva la informacion de usuario (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeSuggestSearchLogDay``
      - No
-     - Numero de dias que se conservan los registros de busqueda de sugerencias (0=deshabilitado)
+     - Numero de dias que se conservan los registros de busqueda de sugerencias (0=deshabilitado; rango: 0 a 100000)
    * - ``purgeByBots``
      - No
      - User-Agent de bots cuyos registros de busqueda se descartan
@@ -236,9 +284,10 @@ se expresan como cadenas ``"true"`` / ``"false"``.
 Campos Relacionados con Autenticacion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Las configuraciones relacionadas con LDAP y SSO (OpenID Connect, SAML, SPNEGO, Entra ID) tambien
-se gestionan con esta API. A continuacion se muestran los campos representativos
-(para todos los campos consulte ``EditForm.java``).
+Las configuraciones relacionadas con LDAP y SSO (OpenID Connect, SAML,
+SPNEGO, Entra ID) tambien se gestionan con esta API. A continuacion se
+muestran los campos representativos (todos los campos corresponden a los
+ajustes "General" en la interfaz de administracion).
 
 .. list-table::
    :header-rows: 1
@@ -272,7 +321,8 @@ se gestionan con esta API. A continuacion se muestran los campos representativos
 Campos Relacionados con Almacenamiento
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Tambien se puede gestionar la configuracion de integracion con almacenamiento en la nube (S3 / GCS).
+Tambien se puede gestionar la configuracion de integracion con almacenamiento
+en la nube (S3 / GCS).
 
 .. list-table::
    :header-rows: 1
@@ -281,7 +331,7 @@ Tambien se puede gestionar la configuracion de integracion con almacenamiento en
    * - Campo
      - Descripcion
    * - ``storageType``
-     - Tipo de almacenamiento (``s3`` / ``gcs`` / ``auto``)
+     - Tipo de almacenamiento (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - URL del endpoint del almacenamiento
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -296,7 +346,8 @@ Tambien se puede gestionar la configuracion de integracion con almacenamiento en
 Respuesta
 ---------
 
-En caso de actualizacion exitosa solo se devuelve ``status`` (no se incluyen ``id`` ni ``created``).
+En caso de actualizacion exitosa, solo se devuelven ``version`` y ``status``
+(no se incluyen ``id`` ni ``created``).
 
 .. code-block:: json
 
@@ -307,11 +358,24 @@ En caso de actualizacion exitosa solo se devuelve ``status`` (no se incluyen ``i
       }
     }
 
+Si la actualizacion falla (por ejemplo, debido a un error de validacion),
+``status`` se establece en un valor distinto de cero (``1`` para un error de
+validacion), y ``message`` contiene los detalles del error. Consulte
+:doc:`api-admin-overview` para la lista de valores de ``status``.
+
 Ejemplos de Uso
 ===============
 
+.. note::
+
+   Los ejemplos a continuacion incluyen los campos requeridos
+   (``dayForCleanup``, ``crawlingThreadCount``, ``failureCountThreshold``,
+   ``csvFileEncoding``). Como estos deben especificarse siempre
+   independientemente de lo que se desee cambiar, utilice los valores actuales
+   obtenidos mediante ``GET`` en la operacion real.
+
 Actualizar la Configuracion de Rastreo
---------------------------------------
+---------------------------------------
 
 .. code-block:: bash
 
@@ -327,7 +391,7 @@ Actualizar la Configuracion de Rastreo
          }'
 
 Actualizar el Periodo de Retencion de Registros
------------------------------------------------
+-------------------------------------------------
 
 .. code-block:: bash
 
@@ -335,13 +399,17 @@ Actualizar el Periodo de Retencion de Registros
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
          }'
 
 Actualizar la Configuracion de Sugerencias
-------------------------------------------
+-------------------------------------------
 
 .. code-block:: bash
 
@@ -349,12 +417,16 @@ Actualizar la Configuracion de Sugerencias
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'
 
 Informacion de Referencia
-=========================
+==========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
 - :doc:`api-admin-systeminfo` - API de informacion del sistema
