@@ -123,7 +123,7 @@ Start mit Docker Compose::
 
 Überprüfung der Protokolle::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 Überprüfung des Starts
 ======================
@@ -164,7 +164,7 @@ Oder mit journalctl::
 
 Docker-Version::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 .. tip::
 
@@ -172,8 +172,9 @@ Docker-Version::
 
    ::
 
-       ...Booting the Tomcat: port=8080
-       Boot successful
+       ...Booting the Tomcat: port=8080 contextPath=/
+       ...
+       Boot successful: url -> http://localhost:8080
 
 Zugriff über den Browser
 =========================
@@ -239,9 +240,14 @@ Erstellen Sie eine Konfiguration zum Crawlen der zu durchsuchenden Websites oder
 3. Geben Sie die erforderlichen Informationen ein:
 
    - **Name**: Name der Crawl-Konfiguration (z.B.: Firmen-Website)
-   - **URL**: URL des Crawl-Ziels (z.B.: https://www.example.com/)
-   - **Maximale Zugriffe**: Obergrenze der zu crawlenden Seiten
-   - **Intervall**: Crawl-Intervall (Millisekunden)
+   - **URL**: Ziel-URL für das Crawling (z.B.: https://www.example.com/). Um mehrere URLs anzugeben, geben Sie eine URL pro Zeile ein
+   - **Maximale Zugriffe**: Maximale Anzahl der zu crawlenden Dokumente (optional)
+   - **Intervall**: Wartezeit zwischen den Zugriffen (Millisekunden; Standard: ``10000``)
+
+   .. note::
+
+      Andere Felder (wie Benutzeragent, Anzahl der Threads und Tiefe) verwenden
+      ihre Standardwerte, wenn sie leer gelassen werden.
 
 4. Klicken Sie auf die Schaltfläche „Erstellen"
 
@@ -286,10 +292,10 @@ Einstellungen wie Portnummer, JVM-Heap-Größe und die OpenSearch-Verbindungs-UR
      - Der HTTP-Port, auf dem |Fess| lauscht.
    * - ``FESS_HEAP_SIZE``
      - (nicht gesetzt)
-     - JVM-Heap-Größe. Setzt denselben Wert für Minimum und Maximum. Wenn nicht gesetzt, werden mindestens ``256m`` und maximal ``2g`` verwendet; die RPM/DEB-Version verwendet ``512m``.
+     - JVM-Heap-Größe. Setzt denselben Wert für Minimum und Maximum. Wenn nicht gesetzt, werden mindestens ``256m`` und maximal ``2g`` verwendet (die Windows-ZIP-Version verwendet maximal ``1g``); die RPM/DEB-Version verwendet ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - ``http://localhost:9200``
-     - URL des OpenSearch, zu dem eine Verbindung hergestellt wird. Ändern Sie dies bei Verwendung eines externen OpenSearch.
+     - (nicht gesetzt)
+     - URL des OpenSearch, zu dem eine Verbindung hergestellt wird. Wenn nicht gesetzt, wird der eingebaute Standardwert ``http://localhost:9201`` verwendet. Ändern Sie dies, wenn OpenSearch auf einem anderen Port oder Host läuft (das Verfahren :doc:`install-linux` setzt diesen Wert auf ``http://localhost:9200``, um dem OpenSearch-Lauschport zu entsprechen). Die RPM/DEB-Version setzt ``http://localhost:9200`` standardmäßig über die Paketumgebungsdatei.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Protokollniveau von |Fess|.
@@ -321,7 +327,7 @@ In Produktionsumgebungen kann das Protokollniveau angepasst werden, um die Festp
 
 Das Gesamtprotokollniveau von |Fess| kann mit der Umgebungsvariable ``FESS_LOG_LEVEL`` geändert werden (Standard: ``warn``). Zur detaillierten Steuerung einzelner Logger bearbeiten Sie die Konfigurationsdatei ``app/WEB-INF/classes/log4j2.xml``. Crawling, Vorschläge und die Thumbnail-Generierung laufen als separate Prozesse; konfigurieren Sie deren Protokollniveaus daher separat in ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
-Weitere Informationen finden Sie im Administratorhandbuch.
+Weitere Informationen finden Sie unter :doc:`../admin/index`.
 
 Stoppmethoden
 =============
@@ -454,7 +460,7 @@ Nächste Schritte
 
 Nach erfolgreichem Start von |Fess| beginnen Sie den Betrieb unter Bezugnahme auf folgende Dokumentation:
 
-- **Administratorhandbuch**: Details zu Crawl-Konfiguration, Such-Konfiguration und Systemeinstellungen
+- :doc:`../admin/index` - Details zu Crawl-Konfiguration, Such-Konfiguration und Systemeinstellungen
 - :doc:`security` - Sicherheitseinstellungen für Produktionsumgebungen
 - :doc:`troubleshooting` - Häufige Probleme und Lösungen
 - :doc:`upgrade` - Upgrade-Verfahren

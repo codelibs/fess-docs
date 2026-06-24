@@ -126,7 +126,7 @@ Check startup status::
 
 Check logs::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 Verify Startup
 ==============
@@ -167,15 +167,16 @@ Or use journalctl::
 
 Docker version::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 .. tip::
 
    When startup completes successfully, a startup-completion message like the
    following is shown on the console and in the log::
 
-       ...Booting the Tomcat: port=8080
-       Boot successful
+       ...Booting the Tomcat: port=8080 contextPath=/
+       ...
+       Boot successful: url -> http://localhost:8080
 
 Access via Browser
 ==================
@@ -243,9 +244,14 @@ Create a configuration to crawl target sites or file systems.
 3. Enter required information:
 
    - **Name**: Name of the crawl configuration (e.g., Company Website)
-   - **URL**: Target URL for crawling (e.g., https://www.example.com/)
-   - **Max Access Count**: Maximum number of pages to crawl
-   - **Interval**: Crawl interval (milliseconds)
+   - **URL**: Target URL for crawling (e.g., https://www.example.com/). To specify multiple URLs, enter one URL per line
+   - **Max Access Count**: Maximum number of documents to crawl (optional)
+   - **Interval**: Wait time between accesses (milliseconds; default: ``10000``)
+
+   .. note::
+
+      Other items (such as user agent, number of threads, and depth) use their
+      default values when left blank.
 
 4. Click the "Create" button
 
@@ -294,10 +300,10 @@ making changes.
      - The HTTP port that |Fess| listens on.
    * - ``FESS_HEAP_SIZE``
      - (unset)
-     - JVM heap size. Sets the same value for the minimum and maximum. When unset, a minimum of ``256m`` and a maximum of ``2g`` are used; the RPM/DEB edition uses ``512m``.
+     - JVM heap size. Sets the same value for the minimum and maximum. When unset, a minimum of ``256m`` and a maximum of ``2g`` are used (the Windows ZIP edition uses a maximum of ``1g``); the RPM/DEB edition uses ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - ``http://localhost:9200``
-     - URL of the OpenSearch to connect to. Change this when using an external OpenSearch.
+     - (unset)
+     - URL of the OpenSearch to connect to. When unset, the built-in default ``http://localhost:9201`` is used. Change this when OpenSearch runs on a different port or host (the :doc:`install-linux` procedure sets it to ``http://localhost:9200`` to match the OpenSearch listening port). The RPM/DEB edition sets ``http://localhost:9200`` by default via the package environment file.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Log level of |Fess|.
@@ -342,7 +348,7 @@ suggest, and thumbnail generation run as separate processes, so configure their
 log levels individually in
 ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
-See the administrator guide for details.
+See :doc:`../admin/index` for details.
 
 Shutdown Methods
 ================
@@ -475,7 +481,7 @@ Next Steps
 
 After |Fess| has started successfully, refer to the following documentation to begin operation:
 
-- **Administrator Guide**: Details on crawl configuration, search settings, and system settings
+- :doc:`../admin/index` - Details on crawl configuration, search settings, and system settings
 - :doc:`security` - Security configuration for production environments
 - :doc:`troubleshooting` - Common problems and solutions
 - :doc:`upgrade` - Version upgrade procedures

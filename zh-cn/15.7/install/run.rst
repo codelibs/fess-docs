@@ -125,7 +125,7 @@ Docker 版的情况
 
 确认日志::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 确认启动
 ==========
@@ -166,14 +166,15 @@ RPM/DEB 版::
 
 Docker 版::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 .. tip::
 
    启动成功完成后，控制台及日志中会显示如下启动完成消息::
 
-       ...Booting the Tomcat: port=8080
-       Boot successful
+       ...Booting the Tomcat: port=8080 contextPath=/
+       ...
+       Boot successful: url -> http://localhost:8080
 
 在浏览器中访问
 ====================
@@ -240,9 +241,13 @@ Docker 版::
 3. 输入必要信息：
 
    - **名称**: 爬取配置的名称（例：公司网站）
-   - **URL**: 要爬取的 URL（例：https://www.example.com/）
-   - **最大访问数**: 爬取页面数的上限
-   - **间隔**: 爬取间隔（毫秒）
+   - **URL**: 要爬取的目标 URL（例：https://www.example.com/）。如需指定多个 URL，请每行输入一个 URL
+   - **最大访问数**: 爬取文档数的上限（可选）
+   - **间隔**: 各次访问之间的等待时间（毫秒；默认值：``10000``）
+
+   .. note::
+
+      其他项目（如用户代理、线程数、深度等）留空时将使用默认值。
 
 4. 点击「创建」按钮
 
@@ -289,10 +294,10 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
      - |Fess| 监听的 HTTP 端口。
    * - ``FESS_HEAP_SIZE``
      - （未设置）
-     - JVM 堆大小。最小值和最大值设置为相同的值。未设置时，最小值为 ``256m``，最大值为 ``2g``；RPM/DEB 版使用 ``512m``。
+     - JVM 堆大小。最小值和最大值设置为相同的值。未设置时，最小值为 ``256m``，最大值为 ``2g``（ZIP 版（Windows）最大值为 ``1g``）；RPM/DEB 版使用 ``512m``。
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - ``http://localhost:9200``
-     - 连接的 OpenSearch 的 URL。使用外部 OpenSearch 时请更改此项。
+     - （未设置）
+     - 连接的 OpenSearch 的 URL。未设置时，使用内部默认值 ``http://localhost:9201``。当 OpenSearch 在不同端口或主机上运行时请更改此项（:doc:`install-linux` 的安装步骤会将其设置为 ``http://localhost:9200`` 以匹配 OpenSearch 的监听端口）。RPM/DEB 版通过软件包环境配置文件默认设置为 ``http://localhost:9200``。
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 的日志级别。
@@ -328,7 +333,7 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
 如需对各个日志记录器进行精细控制，请编辑配置文件 ``app/WEB-INF/classes/log4j2.xml``。
 爬取、suggest 和缩略图生成作为独立进程运行，因此请分别在 ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml`` 中配置各自的日志级别。
 
-详情请参阅管理员指南。
+详情请参阅 :doc:`../admin/index`。
 
 停止方法
 ========
@@ -461,7 +466,7 @@ Docker 版的情况
 
 |Fess| 正常启动后，请参阅以下文档开始运维：
 
-- **管理员指南**: 爬取配置、搜索配置、系统配置的详情
+- :doc:`../admin/index` - 爬取配置、搜索配置、系统配置的详情
 - :doc:`security` - 生产环境的安全配置
 - :doc:`troubleshooting` - 常见问题和解决方法
 - :doc:`upgrade` - 版本升级步骤

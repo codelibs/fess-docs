@@ -123,7 +123,7 @@ Vérification de l'état de démarrage ::
 
 Vérification des logs ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 Vérification du démarrage
 ==========================
@@ -164,7 +164,7 @@ Ou en utilisant journalctl ::
 
 Version Docker ::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 .. tip::
 
@@ -172,8 +172,9 @@ Version Docker ::
 
    ::
 
-       ...Booting the Tomcat: port=8080
-       Boot successful
+       ...Booting the Tomcat: port=8080 contextPath=/
+       ...
+       Boot successful: url -> http://localhost:8080
 
 Accès via un navigateur
 ========================
@@ -239,9 +240,13 @@ Créez une configuration pour explorer les sites ou systèmes de fichiers à rec
 3. Saisissez les informations nécessaires :
 
    - **Nom** : Nom de la configuration d'exploration (exemple : Site Web de l'entreprise)
-   - **URL** : URL de la cible d'exploration (exemple : https://www.example.com/)
-   - **Nombre d'accès maximum** : Limite supérieure du nombre de pages à explorer
-   - **Intervalle** : Intervalle d'exploration (en millisecondes)
+   - **URL** : URL cible de l'exploration (exemple : https://www.example.com/). Pour spécifier plusieurs URL, saisissez une URL par ligne
+   - **Nombre d'accès maximum** : Nombre maximum de documents à explorer (facultatif)
+   - **Intervalle** : Temps d'attente entre les accès (en millisecondes ; valeur par défaut : ``10000``)
+
+   .. note::
+
+      Les autres éléments (tels que l'agent utilisateur, le nombre de threads et la profondeur) utilisent leurs valeurs par défaut lorsqu'ils sont laissés vides.
 
 4. Cliquez sur le bouton « Créer »
 
@@ -286,10 +291,10 @@ Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de co
      - Port HTTP sur lequel |Fess| écoute.
    * - ``FESS_HEAP_SIZE``
      - (non défini)
-     - Taille du tas JVM. Définit la même valeur pour le minimum et le maximum. Lorsqu'elle n'est pas définie, un minimum de ``256m`` et un maximum de ``2g`` sont utilisés ; l'édition RPM/DEB utilise ``512m``.
+     - Taille du tas JVM. Définit la même valeur pour le minimum et le maximum. Lorsqu'elle n'est pas définie, un minimum de ``256m`` et un maximum de ``2g`` sont utilisés (l'édition ZIP Windows utilise un maximum de ``1g``) ; l'édition RPM/DEB utilise ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - ``http://localhost:9200``
-     - URL de l'OpenSearch auquel se connecter. À modifier lors de l'utilisation d'un OpenSearch externe.
+     - (non défini)
+     - URL de l'OpenSearch auquel se connecter. Lorsqu'elle n'est pas définie, la valeur par défaut intégrée ``http://localhost:9201`` est utilisée. À modifier lorsqu'OpenSearch s'exécute sur un port ou un hôte différent (la procédure :doc:`install-linux` la définit à ``http://localhost:9200`` pour correspondre au port d'écoute d'OpenSearch). L'édition RPM/DEB définit ``http://localhost:9200`` par défaut via le fichier d'environnement du paquet.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Niveau de log de |Fess|.
@@ -321,7 +326,7 @@ En production, vous pouvez ajuster le niveau de log pour réduire l'utilisation 
 
 Le niveau de log global de |Fess| peut être modifié avec la variable d'environnement ``FESS_LOG_LEVEL`` (valeur par défaut : ``warn``). Pour contrôler les journaliseurs individuels en détail, modifiez le fichier de configuration ``app/WEB-INF/classes/log4j2.xml``. L'exploration, les suggestions et la génération de miniatures s'exécutent comme des processus séparés ; configurez donc leurs niveaux de log individuellement dans ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
-Pour plus de détails, consultez le guide de l'administrateur.
+Pour plus de détails, consultez :doc:`../admin/index`.
 
 Méthodes d'arrêt
 ================
@@ -454,7 +459,7 @@ Pour un dépannage détaillé, consultez :doc:`troubleshooting`.
 
 Une fois |Fess| démarré normalement, consultez les documents suivants pour commencer l'exploitation :
 
-- **Guide de l'administrateur** : Détails sur la configuration de l'exploration, la configuration de la recherche et la configuration du système
+- :doc:`../admin/index` - Détails sur la configuration de l'exploration, la configuration de la recherche et la configuration du système
 - :doc:`security` - Configuration de la sécurité pour les environnements de production
 - :doc:`troubleshooting` - Problèmes courants et solutions
 - :doc:`upgrade` - Procédure de mise à niveau de version

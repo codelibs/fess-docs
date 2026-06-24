@@ -123,7 +123,7 @@ Verificación del estado de inicio::
 
 Verificación de registros::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 Verificación del Inicio
 ========================
@@ -164,14 +164,15 @@ O usando journalctl::
 
 Para versión Docker::
 
-    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
 
 .. tip::
 
    Cuando el inicio se completa correctamente, aparece un mensaje de finalización de inicio como el siguiente en la consola y en el registro::
 
-       ...Booting the Tomcat: port=8080
-       Boot successful
+       ...Booting the Tomcat: port=8080 contextPath=/
+       ...
+       Boot successful: url -> http://localhost:8080
 
 Acceso desde el Navegador
 ==========================
@@ -237,9 +238,13 @@ Cree una configuración para rastrear sitios o sistemas de archivos que desee bu
 3. Ingrese la información necesaria:
 
    - **Nombre**: Nombre de la configuración de rastreo (ejemplo: Sitio web de la empresa)
-   - **URL**: URL del objetivo de rastreo (ejemplo: https://www.example.com/)
-   - **Número máximo de accesos**: Límite superior del número de páginas a rastrear
-   - **Intervalo**: Intervalo de rastreo (milisegundos)
+   - **URL**: URL del objetivo de rastreo (ejemplo: https://www.example.com/). Para especificar varias URL, introduzca una URL por línea
+   - **Número máximo de accesos**: Número máximo de documentos a rastrear (opcional)
+   - **Intervalo**: Tiempo de espera entre accesos (milisegundos; valor predeterminado: ``10000``)
+
+   .. note::
+
+      Los demás elementos (como el agente de usuario, el número de hilos y la profundidad) utilizan sus valores predeterminados cuando se dejan en blanco.
 
 4. Haga clic en el botón "Crear"
 
@@ -284,10 +289,10 @@ La configuración del número de puerto, el tamaño del montón JVM y la URL de 
      - Puerto HTTP en el que |Fess| escucha.
    * - ``FESS_HEAP_SIZE``
      - (sin definir)
-     - Tamaño del montón JVM. Establece el mismo valor para el mínimo y el máximo. Cuando no está definido, se utiliza un mínimo de ``256m`` y un máximo de ``2g``; la edición RPM/DEB utiliza ``512m``.
+     - Tamaño del montón JVM. Establece el mismo valor para el mínimo y el máximo. Cuando no está definido, se utiliza un mínimo de ``256m`` y un máximo de ``2g`` (la edición ZIP para Windows utiliza un máximo de ``1g``); la edición RPM/DEB utiliza ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - ``http://localhost:9200``
-     - URL del OpenSearch al que conectarse. Cambie este valor cuando use un OpenSearch externo.
+     - (sin definir)
+     - URL del OpenSearch al que conectarse. Cuando no está definido, se utiliza el valor predeterminado integrado ``http://localhost:9201``. Cambie este valor cuando OpenSearch se ejecute en un puerto o host diferente (el procedimiento de :doc:`install-linux` lo establece en ``http://localhost:9200`` para coincidir con el puerto de escucha de OpenSearch). La edición RPM/DEB establece ``http://localhost:9200`` de forma predeterminada mediante el archivo de entorno del paquete.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Nivel de registro de |Fess|.
@@ -319,7 +324,7 @@ En producción, puede ajustar el nivel de registro para reducir el uso de disco.
 
 El nivel de registro global de |Fess| puede modificarse con la variable de entorno ``FESS_LOG_LEVEL`` (predeterminado: ``warn``). Para controlar los registradores individuales con mayor detalle, edite el archivo de configuración ``app/WEB-INF/classes/log4j2.xml``. El rastreo, las sugerencias y la generación de miniaturas se ejecutan como procesos independientes, por lo que configure sus niveles de registro individualmente en ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
-Para más detalles, consulte la guía del administrador.
+Para más detalles, consulte :doc:`../admin/index`.
 
 Métodos de Detención
 =====================
@@ -452,7 +457,7 @@ Próximos Pasos
 
 Una vez que |Fess| se haya iniciado normalmente, consulte la siguiente documentación para comenzar la operación:
 
-- **Guía del Administrador**: Detalles sobre configuración de rastreo, configuración de búsqueda y configuración del sistema
+- :doc:`../admin/index` - Detalles sobre configuración de rastreo, configuración de búsqueda y configuración del sistema
 - :doc:`security` - Configuración de seguridad para entornos de producción
 - :doc:`troubleshooting` - Problemas comunes y soluciones
 - :doc:`upgrade` - Procedimientos de actualización de versión
