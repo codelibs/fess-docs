@@ -31,14 +31,15 @@ Diese Installationsanleitung besteht aus folgenden Abschnitten:
 - **Systemanforderungen**: Hardware- und Softwareanforderungen für den Betrieb von |Fess|
 - **Installation**: Installationsanweisungen für verschiedene Plattformen
 
+  - Auswahl der Installationsmethode (Übersicht und Vergleich)
   - Installation für Linux (TAR.GZ/RPM/DEB)
   - Installation für Windows (ZIP)
   - Installation für Docker
 
-- **Start und Stopp**: Start, Stopp und Ersteinrichtung des |Fess|-Servers
+- **Start, Stopp und Ersteinrichtung**: Start, Stopp und Ersteinrichtung des |Fess|-Servers
+- **Sicherheitseinstellungen**: Empfohlene Sicherheitseinstellungen für Produktionsumgebungen
 - **Upgrade**: Upgrade-Verfahren von früheren Versionen auf die neueste Version
 - **Deinstallation**: Vollständige Deinstallation von |Fess|
-- **Sicherheitseinstellungen**: Empfohlene Sicherheitseinstellungen für Produktionsumgebungen
 - **Fehlerbehebung**: Häufige Probleme und Lösungen
 
 Online-Zugang
