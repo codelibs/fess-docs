@@ -59,12 +59,22 @@
 
 1. **从管理页面备份**
 
-   登录管理页面，点击「系统」→「备份」。
+   登录管理页面，点击「系统信息」→「备份」。
 
-   下载以下文件：
+   备份页面按条目列出以下配置数据。
+   点击各链接下载（不是单个 ZIP 文件，而是按条目分别下载的独立文件）。
 
-   - ``fess_basic_config.bulk``
-   - ``fess_user.bulk``
+   - ``fess_basic_config.bulk`` - 基本设置（常规设置）
+   - ``fess_config.bulk`` - 爬取设置、调度器、标签、关键词匹配等配置信息
+   - ``fess_user.bulk`` - 用户、角色、群组
+   - ``system.properties`` - 系统设置
+   - ``fess.json`` / ``doc.json`` - 索引设置（映射）
+
+   .. note::
+
+      搜索日志、点击日志等日志数据（``search_log.ndjson``、``click_log.ndjson``、
+      ``favorite_log.ndjson``、``user_info.ndjson``）也可从同一页面下载。
+      如果仅备份配置，则不需要下载这些文件。
 
 2. **备份配置文件**
 
@@ -93,6 +103,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 使用 OpenSearch 的快照功能备份索引。
+
+.. note::
+
+   要注册文件系统仓库（``fs``），需要事先在 OpenSearch 的 ``opensearch.yml`` 的
+   ``path.repo`` 中指定备份目标目录，并重启 OpenSearch。
 
 1. 配置仓库::
 
@@ -126,11 +141,22 @@
 Docker 版的备份
 ---------------------
 
-备份 Docker 卷::
+OpenSearch 的数据保存在 Docker 卷中。``compose-opensearch3.yaml`` 中定义了
+用于索引数据的 ``search01_data`` 和用于词典文件的 ``search01_dictionary``
+共 2 个卷。
+
+.. note::
+
+   实际的卷名会附加 Compose 项目名称（默认为放置 Compose 文件的目录名）作为前缀。
+   请使用以下命令确认准确的卷名::
+
+       $ docker volume ls
+
+停止容器后，备份卷::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
-    $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
+    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 步骤 2: 停止当前版本
@@ -158,7 +184,7 @@ Docker 版::
 根据安装方法，步骤有所不同。
 
 TAR.GZ/ZIP 版
------------
+------------
 
 1. 下载并解压新版本::
 
@@ -173,7 +199,7 @@ TAR.GZ/ZIP 版
 3. 确认配置差异，根据需要进行调整
 
 RPM/DEB 版
---------
+---------
 
 安装新版本的包::
 
@@ -189,7 +215,7 @@ RPM/DEB 版
    但是，如果添加了新的配置选项，需要手动调整。
 
 Docker 版
--------
+--------
 
 1. 获取新版本的 Compose 文件::
 
@@ -205,6 +231,12 @@ Docker 版
 
 如果要升级 OpenSearch，请按照以下步骤操作。
 
+.. note::
+
+   本步骤适用于 TAR.GZ/ZIP 版及 RPM/DEB 版中手动运维 OpenSearch 的情况。
+   对于 Docker 版，在步骤 3 中获取新镜像时，OpenSearch 和插件也会一并更新，
+   因此无需执行本步骤。
+
 .. warning::
 
    OpenSearch 的主版本升级需要谨慎进行。
@@ -214,10 +246,16 @@ Docker 版
 
 2. 重新安装插件::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+
+   .. note::
+
+      这些插件的版本必须与所使用的 OpenSearch 版本一致。
+      Fess 15.7 对应 OpenSearch 3.7.0。如果版本不一致，
+      插件安装将会失败。
 
 3. 启动 OpenSearch::
 
@@ -257,9 +295,10 @@ Docker 版::
 
    访问 http://localhost:8080/admin 并使用管理员账号登录。
 
-4. **确认系统信息**
+4. **确认版本**
 
-   在管理页面点击「系统」→「系统信息」，确认版本已更新。
+   在管理页面点击「系统信息」→「配置信息」，确认「系统属性」中显示的
+   ``fess.version`` 已更新为新版本。
 
 5. **确认搜索运行**
 
@@ -315,6 +354,11 @@ RPM/DEB 版的情况::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+.. note::
+
+   从管理页面下载的配置数据（``*.bulk`` 文件），可在 Fess 启动后，
+   通过「系统信息」→「备份」页面的上传功能重新导入并恢复。
+
 步骤 4: 启动和确认服务
 ----------------------------
 
@@ -340,8 +384,10 @@ A: Fess 的升级需要停止服务。要最小化停机时间，请考虑以下
 Q: 需要升级 OpenSearch 吗？
 -------------------------------------------------
 
-A: 根据 Fess 版本，可能需要特定版本的 OpenSearch。
-请在发布说明中确认推荐的 OpenSearch 版本。
+A: 每个 Fess 版本对应特定的 OpenSearch 版本。
+Fess 15.7 对应 OpenSearch 3.7.0。
+由于 ``opensearch-analysis-fess`` 等 Fess 专用 OpenSearch 插件必须与 OpenSearch 版本完全一致，
+因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.7.0）。
 
 Q: 需要重建索引吗？
 ------------------------------------------

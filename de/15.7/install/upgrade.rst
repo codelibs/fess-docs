@@ -27,7 +27,7 @@ Dieses Upgrade-Verfahren unterstützt Upgrades zwischen folgenden Versionen:
    Details finden Sie in den Release Notes.
 
 Vorbereitung vor dem Upgrade
-=============================
+==============================
 
 Überprüfung der Versionskompatibilität
 ---------------------------------------
@@ -59,12 +59,22 @@ Backup der Konfigurationsdaten
 
 1. **Backup über die Verwaltungsseite**
 
-   Melden Sie sich in der Verwaltungsseite an und klicken Sie auf „System" → „Backup".
+   Melden Sie sich in der Verwaltungsseite an und klicken Sie auf „Systeminformationen" → „Sicherung".
 
-   Laden Sie folgende Dateien herunter:
+   Auf der Sicherungsseite werden die folgenden Konfigurationsdaten als einzelne Einträge aufgelistet.
+   Klicken Sie auf jeden Link, um die jeweilige Datei herunterzuladen (keine einzelne ZIP-Datei, sondern eine individuelle Datei pro Eintrag).
 
-   - ``fess_basic_config.bulk``
-   - ``fess_user.bulk``
+   - ``fess_basic_config.bulk`` - Grundkonfiguration (allgemeine Einstellungen)
+   - ``fess_config.bulk`` - Crawl-Einstellungen, Scheduler, Labels, Key-Matches und weitere Konfigurationsdaten
+   - ``fess_user.bulk`` - Benutzer, Rollen und Gruppen
+   - ``system.properties`` - Systemeinstellungen
+   - ``fess.json`` / ``doc.json`` - Indexeinstellungen (Mappings)
+
+   .. note::
+
+      Protokolldaten wie Suchanfragenprotokolle und Klickprotokolle (``search_log.ndjson``, ``click_log.ndjson``,
+      ``favorite_log.ndjson``, ``user_info.ndjson``) können ebenfalls von derselben Seite heruntergeladen werden.
+      Falls nur die Konfiguration gesichert wird, ist dies nicht erforderlich.
 
 2. **Backup der Konfigurationsdateien**
 
@@ -93,6 +103,11 @@ Methode 1: Verwendung der Snapshot-Funktion (empfohlen)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Verwenden Sie die Snapshot-Funktion von OpenSearch für das Backup der Indizes.
+
+.. note::
+
+   Um ein Dateisystem-Repository (``fs``) zu registrieren, müssen Sie zuvor in der ``opensearch.yml`` von OpenSearch
+   das Zielverzeichnis für das Backup unter ``path.repo`` angeben und OpenSearch neu starten.
 
 1. Repository-Konfiguration::
 
@@ -126,11 +141,21 @@ Stoppen Sie OpenSearch und erstellen Sie ein Backup des Datenverzeichnisses.
 Backup der Docker-Version
 --------------------------
 
-Erstellen Sie ein Backup der Docker-Volumes::
+Die OpenSearch-Daten werden in Docker-Volumes gespeichert. ``compose-opensearch3.yaml`` definiert zwei Volumes:
+``search01_data`` für Indexdaten und ``search01_dictionary`` für Wörterbuchdateien.
+
+.. note::
+
+   Die tatsächlichen Volume-Namen werden mit dem Compose-Projektnamen als Präfix versehen (standardmäßig der Name des
+   Verzeichnisses, das die Compose-Dateien enthält). Überprüfen Sie die genauen Namen mit folgendem Befehl::
+
+       $ docker volume ls
+
+Stoppen Sie die Container und erstellen Sie dann ein Backup der Volumes::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
-    $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
+    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 Schritt 2: Stopp der aktuellen Version
@@ -205,6 +230,12 @@ Schritt 4: Upgrade von OpenSearch (falls erforderlich)
 
 Bei Upgrade von OpenSearch befolgen Sie bitte folgende Schritte.
 
+.. note::
+
+   Diese Anleitung gilt für die manuelle Verwaltung von OpenSearch bei der TAR.GZ/ZIP-Version und der RPM/DEB-Version.
+   Bei der Docker-Version werden OpenSearch und die Plugins durch das Herunterladen der neuen Images in Schritt 3
+   gemeinsam aktualisiert, sodass dieser Schritt nicht erforderlich ist.
+
 .. warning::
 
    Führen Sie Major-Version-Upgrades von OpenSearch vorsichtig durch.
@@ -214,17 +245,22 @@ Bei Upgrade von OpenSearch befolgen Sie bitte folgende Schritte.
 
 2. Plugins neu installieren::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+
+   .. note::
+
+      Die Versionen dieser Plugins müssen mit der verwendeten OpenSearch-Version übereinstimmen.
+      Fess 15.7 ist kompatibel mit OpenSearch 3.7.0. Bei Versionsabweichungen schlägt die Plugin-Installation fehl.
 
 3. OpenSearch starten::
 
        $ sudo systemctl start opensearch.service
 
 Schritt 5: Start der neuen Version
-===================================
+====================================
 
 TAR.GZ/ZIP-Version::
 
@@ -257,9 +293,10 @@ Schritt 6: Funktionsprüfung
 
    Greifen Sie auf http://localhost:8080/admin zu und melden Sie sich mit dem Administratorkonto an.
 
-4. **Überprüfung der Systeminformationen**
+4. **Versionsüberprüfung**
 
-   Klicken Sie in der Verwaltungsseite auf „System" → „Systeminformationen" und überprüfen Sie, dass die Version aktualisiert wurde.
+   Klicken Sie in der Verwaltungsseite auf „Systeminformationen" → „Konfigurationsinformationen" und überprüfen Sie,
+   dass ``fess.version`` unter „Systemeigenschaften" die neue Version anzeigt.
 
 5. **Funktionsprüfung der Suche**
 
@@ -315,6 +352,12 @@ Oder Wiederherstellung des Verzeichnisses aus dem Backup::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+.. note::
+
+   Die über die Verwaltungsseite heruntergeladenen Konfigurationsdaten (``*.bulk``-Dateien) können nach dem Start von
+   Fess über die Upload-Funktion auf der Seite „Systeminformationen" → „Sicherung" erneut importiert und
+   wiederhergestellt werden.
+
 Schritt 4: Start und Überprüfung des Dienstes
 ----------------------------------------------
 
@@ -341,7 +384,10 @@ F: Muss auch OpenSearch aktualisiert werden?
 ---------------------------------------------
 
 A: Je nach Fess-Version ist eine bestimmte Version von OpenSearch erforderlich.
-Überprüfen Sie in den Release Notes die empfohlene OpenSearch-Version.
+Fess 15.7 ist kompatibel mit OpenSearch 3.7.0.
+Da Fess-spezifische OpenSearch-Plugins wie ``opensearch-analysis-fess`` exakt mit der OpenSearch-Version
+übereinstimmen müssen, aktualisieren Sie beim Upgrade von OpenSearch die Plugins auf die entsprechende
+Version (3.7.0).
 
 F: Muss der Index neu erstellt werden?
 ---------------------------------------

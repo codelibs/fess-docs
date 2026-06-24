@@ -35,7 +35,7 @@ Verify Version Compatibility
 Verify the compatibility between the upgrade target version and the current version.
 
 - `Release Notes <https://github.com/codelibs/fess/releases>`__
-- `Upgrade Guide <https://fess.codelibs.org/>`__
+- `Upgrade Guide <https://fess.codelibs.org/ja/>`__
 
 Plan Downtime
 -------------
@@ -59,12 +59,22 @@ Configuration Data Backup
 
 1. **Backup from Admin Screen**
 
-   Log in to the admin screen and click "System" → "Backup".
+   Log in to the admin screen and click "System Info" → "Backup".
 
-   Download the following files:
+   The backup page lists the following configuration data as individual items.
+   Click each link to download it (these are individual files per item, not a single ZIP):
 
-   - ``fess_basic_config.bulk``
-   - ``fess_user.bulk``
+   - ``fess_basic_config.bulk`` - Basic configuration (general settings)
+   - ``fess_config.bulk`` - Crawl settings, scheduler, labels, key matches, and other configuration
+   - ``fess_user.bulk`` - Users, roles, and groups
+   - ``system.properties`` - System settings
+   - ``fess.json`` / ``doc.json`` - Index settings (mappings)
+
+   .. note::
+
+      Log data such as search logs and click logs (``search_log.ndjson``, ``click_log.ndjson``,
+      ``favorite_log.ndjson``, ``user_info.ndjson``) can also be downloaded from the same page.
+      They are not needed if you only want to back up the configuration.
 
 2. **Configuration File Backup**
 
@@ -93,6 +103,11 @@ Method 1: Use Snapshot Feature (Recommended)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Back up the index using OpenSearch snapshot feature.
+
+.. note::
+
+   To register a filesystem (``fs``) repository, you must first specify the backup destination
+   directory in ``path.repo`` in OpenSearch's ``opensearch.yml`` and restart OpenSearch.
 
 1. Configure repository::
 
@@ -126,11 +141,21 @@ Stop OpenSearch and back up the data directory.
 Docker Version Backup
 ---------------------
 
-Back up Docker volumes::
+OpenSearch data is stored in Docker volumes. ``compose-opensearch3.yaml`` defines two volumes:
+``search01_data`` for index data and ``search01_dictionary`` for dictionary files.
+
+.. note::
+
+   The actual volume names are prefixed with the Compose project name (by default, the name of
+   the directory containing the Compose files). Check the exact names with::
+
+       $ docker volume ls
+
+Stop the containers, then back up the volumes::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
-    $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
+    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 Step 2: Stop Current Version
@@ -205,6 +230,12 @@ Step 4: Upgrade OpenSearch (If Necessary)
 
 If you are also upgrading OpenSearch, follow these procedures.
 
+.. note::
+
+   This procedure applies when you are managing OpenSearch manually on a TAR.GZ/ZIP or RPM/DEB
+   installation. For the Docker version, pulling the new image in Step 3 updates OpenSearch and
+   its plugins together, so this step is not required.
+
 .. warning::
 
    Be careful when performing major version upgrades of OpenSearch.
@@ -214,10 +245,15 @@ If you are also upgrading OpenSearch, follow these procedures.
 
 2. Reinstall plugins::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+
+   .. note::
+
+      The version of these plugins must match the version of OpenSearch you use. Fess 15.7 supports
+      OpenSearch 3.7.0. Installation fails if the versions do not match.
 
 3. Start OpenSearch::
 
@@ -257,9 +293,10 @@ Step 6: Verify Operation
 
    Access http://localhost:8080/admin and log in with the administrator account.
 
-4. **Verify System Information**
+4. **Check the Version**
 
-   Click "System" → "System Info" in the admin screen and verify the version has been updated.
+   In the admin UI, click "System Info" → "Config Info" and confirm that ``fess.version``
+   shown under "System Properties" reflects the new version.
 
 5. **Verify Search Operation**
 
@@ -315,6 +352,11 @@ Or restore directory from backup::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+.. note::
+
+   Configuration data downloaded from the admin screen (``*.bulk`` files) can be re-imported
+   after starting Fess via the upload feature on the "System Info" → "Backup" page.
+
 Step 4: Start and Verify Service
 ---------------------------------
 
@@ -340,8 +382,9 @@ A: Upgrading Fess requires service shutdown. To minimize downtime, consider the 
 Q: Do I need to upgrade OpenSearch too?
 ----------------------------------------
 
-A: Depending on the Fess version, a specific version of OpenSearch may be required.
-Check the recommended OpenSearch version in the release notes.
+A: Each version of Fess requires a specific version of OpenSearch. Fess 15.7 requires OpenSearch 3.7.0.
+The Fess OpenSearch plugins such as ``opensearch-analysis-fess`` must exactly match the OpenSearch version,
+so if you upgrade OpenSearch, also update the plugins to the corresponding version (3.7.0).
 
 Q: Do I need to recreate the index?
 ------------------------------------

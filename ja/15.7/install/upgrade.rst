@@ -59,12 +59,22 @@
 
 1. **管理画面からのバックアップ**
 
-   管理画面にログインし、「システム」→「バックアップ」をクリックします。
+   管理画面にログインし、「システム情報」→「バックアップ」をクリックします。
 
-   以下のファイルをダウンロード：
+   バックアップページには、以下の設定データが項目ごとに一覧表示されます。
+   各リンクをクリックしてダウンロードします（単一の ZIP ファイルではなく、項目ごとの個別ファイルです）。
 
-   - ``fess_basic_config.bulk``
-   - ``fess_user.bulk``
+   - ``fess_basic_config.bulk`` - 基本設定（全般設定）
+   - ``fess_config.bulk`` - クロール設定、スケジューラー、ラベル、キーマッチなどの構成情報
+   - ``fess_user.bulk`` - ユーザー、ロール、グループ
+   - ``system.properties`` - システム設定
+   - ``fess.json`` / ``doc.json`` - インデックスの設定（マッピング）
+
+   .. note::
+
+      検索ログやクリックログなどのログデータ（``search_log.ndjson``、``click_log.ndjson``、
+      ``favorite_log.ndjson``、``user_info.ndjson``）も同じページからダウンロードできます。
+      設定のみをバックアップする場合は不要です。
 
 2. **設定ファイルのバックアップ**
 
@@ -93,6 +103,11 @@ OpenSearch のインデックスデータをバックアップします。
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OpenSearch のスナップショット機能を使用して、インデックスをバックアップします。
+
+.. note::
+
+   ファイルシステムリポジトリ（``fs``）を登録するには、事前に OpenSearch の ``opensearch.yml`` の
+   ``path.repo`` にバックアップ先ディレクトリを指定し、OpenSearch を再起動しておく必要があります。
 
 1. リポジトリの設定::
 
@@ -126,11 +141,22 @@ OpenSearch を停止してから、データディレクトリをバックアッ
 Docker 版のバックアップ
 ---------------------
 
-Docker ボリュームをバックアップします::
+OpenSearch のデータは Docker ボリュームに保存されます。``compose-opensearch3.yaml`` では、
+インデックスデータ用の ``search01_data`` と、辞書ファイル用の ``search01_dictionary`` の
+2 つのボリュームが定義されています。
+
+.. note::
+
+   実際のボリューム名には、Compose のプロジェクト名（既定では Compose ファイルを配置した
+   ディレクトリ名）が接頭辞として付与されます。正確な名前は次のコマンドで確認してください::
+
+       $ docker volume ls
+
+コンテナーを停止してから、ボリュームをバックアップします::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
-    $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
+    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 ステップ 2: 現在のバージョンの停止
@@ -158,7 +184,7 @@ Docker 版::
 インストール方法により、手順が異なります。
 
 TAR.GZ/ZIP 版
------------
+------------
 
 1. 新しいバージョンをダウンロードして展開::
 
@@ -173,7 +199,7 @@ TAR.GZ/ZIP 版
 3. 設定差分を確認し、必要に応じて調整します
 
 RPM/DEB 版
---------
+---------
 
 新しいバージョンのパッケージをインストール::
 
@@ -189,7 +215,7 @@ RPM/DEB 版
    ただし、新しい設定オプションが追加されている場合は、手動で調整が必要です。
 
 Docker 版
--------
+--------
 
 1. 新しいバージョンの Compose ファイルを取得::
 
@@ -205,6 +231,12 @@ Docker 版
 
 OpenSearch もアップグレードする場合は、以下の手順に従ってください。
 
+.. note::
+
+   この手順は TAR.GZ/ZIP 版および RPM/DEB 版で OpenSearch を手動運用している場合の手順です。
+   Docker 版では、ステップ 3 で新しいイメージを取得すると OpenSearch とプラグインも
+   まとめて更新されるため、本ステップは不要です。
+
 .. warning::
 
    OpenSearch のメジャーバージョンアップグレードは慎重に行ってください。
@@ -214,10 +246,16 @@ OpenSearch もアップグレードする場合は、以下の手順に従って
 
 2. プラグインを再インストール::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+
+   .. note::
+
+      これらのプラグインのバージョンは、使用する OpenSearch のバージョンと一致させる必要があります。
+      Fess 15.7 は OpenSearch 3.7.0 に対応しています。バージョンが一致しない場合、
+      プラグインのインストールに失敗します。
 
 3. OpenSearch を起動::
 
@@ -257,9 +295,10 @@ Docker 版::
 
    http://localhost:8080/admin にアクセスし、管理者アカウントでログインします。
 
-4. **システム情報の確認**
+4. **バージョンの確認**
 
-   管理画面で「システム」→「システム情報」をクリックし、バージョンが更新されていることを確認します。
+   管理画面で「システム情報」→「設定情報」をクリックし、「システムのプロパティ」に表示される
+   ``fess.version`` が新しいバージョンになっていることを確認します。
 
 5. **検索の動作確認**
 
@@ -271,7 +310,7 @@ Docker 版::
 メジャーバージョンアップの場合、インデックスを再作成することを推奨します。
 
 1. 既存のクロールスケジュールを確認
-2. 「システム」→「スケジューラー」から「Default Crawler」を実行
+2. 「システム」→「スケジューラ」から「Default Crawler」を実行
 3. クロールが完了するまで待機
 4. 検索結果を確認
 
@@ -315,6 +354,11 @@ RPM/DEB 版の場合::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+.. note::
+
+   管理画面からダウンロードした設定データ（``*.bulk`` ファイル）は、Fess の起動後に
+   「システム情報」→「バックアップ」ページのアップロード機能から再度インポートして復元できます。
+
 ステップ 4: サービスの起動と確認
 ----------------------------
 
@@ -340,8 +384,11 @@ A: Fess のアップグレードには、サービスの停止が必要です。
 Q: OpenSearch もアップグレードする必要がありますか？
 -------------------------------------------------
 
-A: Fess のバージョンによっては、特定のバージョンの OpenSearch が必要です。
-リリースノートで推奨される OpenSearch のバージョンを確認してください。
+A: Fess のバージョンごとに対応する OpenSearch のバージョンが決まっています。
+Fess 15.7 は OpenSearch 3.7.0 に対応しています。
+``opensearch-analysis-fess`` などの Fess 用 OpenSearch プラグインは OpenSearch のバージョンと
+完全に一致している必要があるため、OpenSearch をアップグレードする場合は、
+対応するバージョン（3.7.0）のプラグインに更新してください。
 
 Q: インデックスを再作成する必要がありますか？
 ------------------------------------------
