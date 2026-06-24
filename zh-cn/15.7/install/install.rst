@@ -70,7 +70,7 @@ Docker 版
 
 - 需要 Docker 知识
 
-**推荐环境:** 开发环境、评估环境、POC、生产环境
+**推荐环境:** 开发环境、评估环境、POC（在生产环境中使用时，请配置外部的 OpenSearch 服务器，而非内嵌 OpenSearch）
 
 详情: :doc:`install-docker`
 
@@ -88,7 +88,7 @@ Linux 包版 (TAR.GZ/RPM/DEB)
 - 需要手动安装 Java 和 OpenSearch
 - 配置较为繁琐
 
-**推荐环境:** 生产环境、需要定制化的环境
+**推荐环境:** 生产环境（推荐使用可作为系统服务管理的 RPM/DEB）、需要定制化的环境
 
 详情: :doc:`install-linux`
 

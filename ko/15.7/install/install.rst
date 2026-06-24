@@ -70,7 +70,7 @@ Docker 버전
 
 - Docker 지식 필요
 
-**권장 환경:** 개발 환경, 평가 환경, POC, 운영 환경
+**권장 환경:** 개발 환경, 평가 환경, POC (운영 환경에서 사용하는 경우에는 내장 OpenSearch가 아닌 외부 OpenSearch 서버를 구성하십시오)
 
 상세: :doc:`install-docker`
 
@@ -88,7 +88,7 @@ Linux 패키지 버전 (TAR.GZ/RPM/DEB)
 - Java 및 OpenSearch 수동 설치 필요
 - 설정에 시간이 소요됨
 
-**권장 환경:** 운영 환경, 커스터마이징이 필요한 환경
+**권장 환경:** 운영 환경 (시스템 서비스로 관리할 수 있는 RPM/DEB 권장), 커스터마이징이 필요한 환경
 
 상세: :doc:`install-linux`
 
