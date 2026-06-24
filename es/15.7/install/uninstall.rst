@@ -1,6 +1,6 @@
-==========================
+================================
 Procedimientos de Desinstalación
-==========================
+================================
 
 Esta página describe los procedimientos para desinstalar completamente |Fess|.
 
@@ -13,22 +13,19 @@ Esta página describe los procedimientos para desinstalar completamente |Fess|.
    - Para los procedimientos de respaldo, consulte :doc:`upgrade`
 
 Preparación Antes de la Desinstalación
-=======================================
+======================================
 
 Obtención de Respaldo
-----------------------
+---------------------
 
 Haga un respaldo de los datos necesarios:
 
 1. **Datos de configuración**
 
-   Descargue desde la pantalla de administración en "Sistema" → "Respaldo"
+   Descargue desde la pantalla de administración en "Sistema" → "Copia de seguridad".
+   Con esta operación puede exportar de forma conjunta las distintas configuraciones (incluida la configuración de rastreo) y los registros de búsqueda, entre otros.
 
-2. **Configuración de rastreo**
-
-   Exporte la configuración de rastreo según sea necesario
-
-3. **Archivos de configuración personalizados**
+2. **Archivos de configuración personalizados**
 
    Versión TAR.GZ/ZIP::
 
@@ -39,14 +36,20 @@ Haga un respaldo de los datos necesarios:
 
        $ sudo cp -r /etc/fess /backup/
 
+.. note::
+
+   La mayor parte del índice y de la configuración de |Fess| se almacena en OpenSearch.
+   Para hacer un respaldo de los datos del índice, utilice la función de instantáneas (snapshot) de OpenSearch.
+   Para conocer el procedimiento detallado, consulte :doc:`upgrade`.
+
 Detención del Servicio
------------------------
+----------------------
 
 Antes de desinstalar, detenga todos los servicios.
 
 Versión TAR.GZ/ZIP::
 
-    $ ps aux | grep fess
+    $ ps aux | grep -E 'fess|opensearch'
     $ kill <fess_pid>
     $ kill <opensearch_pid>
 
@@ -60,62 +63,67 @@ Versión Docker::
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Desinstalación de Versión TAR.GZ/ZIP
-=====================================
+====================================
 
 Paso 1: Eliminación de Fess
-----------------------------
+---------------------------
 
 Elimine el directorio de instalación::
 
     $ rm -rf /path/to/fess-15.7.0
 
 Paso 2: Eliminación de OpenSearch
-----------------------------------
+---------------------------------
 
 Elimine el directorio de instalación de OpenSearch::
 
-    $ rm -rf /path/to/opensearch-3.6.0
+    $ rm -rf /path/to/opensearch-3.7.0
 
 Paso 3: Eliminación del Directorio de Datos (Opcional)
--------------------------------------------------------
+------------------------------------------------------
 
-Por defecto, el directorio de datos está dentro del directorio de instalación de Fess,
-pero si especificó otra ubicación, elimine también ese directorio::
+Los datos del índice de |Fess| se almacenan en OpenSearch.
+Por defecto se guardan dentro del directorio de instalación de OpenSearch (por ejemplo, ``opensearch-3.7.0/data``),
+pero si ha especificado otra ubicación con ``path.data``, elimine también ese directorio::
 
     $ rm -rf /path/to/data
 
 Paso 4: Eliminación del Directorio de Registros (Opcional)
------------------------------------------------------------
+----------------------------------------------------------
 
 Elimine los archivos de registro::
 
-    $ rm -rf /path/to/fess/logs
-    $ rm -rf /path/to/opensearch/logs
+    $ rm -rf /path/to/fess-15.7.0/logs
+    $ rm -rf /path/to/opensearch-3.7.0/logs
 
 Desinstalación de Versión RPM
-==============================
+=============================
 
 Paso 1: Desinstalación de Fess
--------------------------------
+------------------------------
 
 Desinstale el paquete RPM::
 
     $ sudo rpm -e fess
 
+.. note::
+
+   Durante la desinstalación del paquete de |Fess|, el script de eliminación del paquete
+   detiene y deshabilita automáticamente el servicio ``fess`` y elimina el usuario y el grupo ``fess``.
+   Los pasos siguientes se realizan para confirmar que estos se hayan eliminado correctamente o para
+   eliminar manualmente los datos y los archivos de configuración.
+
 Paso 2: Desinstalación de OpenSearch
--------------------------------------
+------------------------------------
 
 ::
 
     $ sudo rpm -e opensearch
 
-Paso 3: Deshabilitación y Eliminación del Servicio
----------------------------------------------------
+Paso 3: Confirmación de la Deshabilitación del Servicio
+-------------------------------------------------------
 
-En caso de chkconfig::
-
-    $ sudo /sbin/chkconfig --del fess
-    $ sudo /sbin/chkconfig --del opensearch
+Normalmente el servicio se deshabilita al eliminar el paquete, pero, por si acaso, para confirmar o deshabilitar ejecute lo siguiente.
 
 En caso de systemd::
 
@@ -123,38 +131,57 @@ En caso de systemd::
     $ sudo systemctl disable opensearch.service
     $ sudo systemctl daemon-reload
 
+En el caso de un entorno antiguo con SysV init (chkconfig)::
+
+    $ sudo /sbin/chkconfig --del fess
+    $ sudo /sbin/chkconfig --del opensearch
+
 Paso 4: Eliminación del Directorio de Datos
---------------------------------------------
+-------------------------------------------
 
 .. warning::
 
-   Ejecutar esta operación eliminará completamente todos los datos de índice y configuración.
+   Al ejecutar esta operación se eliminarán por completo todos los datos del índice.
 
-::
+Dado que el directorio de datos no se elimina al desinstalar el paquete, elimínelo manualmente::
 
     $ sudo rm -rf /var/lib/fess
     $ sudo rm -rf /var/lib/opensearch
 
 Paso 5: Eliminación de Archivos de Configuración
--------------------------------------------------
+------------------------------------------------
 
-::
+Elimine los archivos de configuración y los archivos de configuración de entorno::
 
     $ sudo rm -rf /etc/fess
+    $ sudo rm -rf /etc/sysconfig/fess
     $ sudo rm -rf /etc/opensearch
 
+.. note::
+
+   En RPM, los archivos de configuración dentro de ``/etc/fess`` pueden quedar con el nombre ``.rpmsave``.
+   Para eliminarlos por completo, elimínelos manualmente como se indica arriba.
+
 Paso 6: Eliminación de Archivos de Registro
---------------------------------------------
+-------------------------------------------
 
 ::
 
     $ sudo rm -rf /var/log/fess
     $ sudo rm -rf /var/log/opensearch
 
-Paso 7: Eliminación de Usuario y Grupo (Opcional)
---------------------------------------------------
+Paso 7: Eliminación del Directorio Temporal (Opcional)
+------------------------------------------------------
 
-Si desea eliminar el usuario y grupo del sistema::
+::
+
+    $ sudo rm -rf /var/tmp/fess
+
+Paso 8: Eliminación de Usuario y Grupo (Opcional)
+-------------------------------------------------
+
+Normalmente, el usuario y el grupo ``fess`` se eliminan al eliminar el paquete.
+Si permanecen, o si desea eliminar el usuario y el grupo de OpenSearch, ejecute lo siguiente::
 
     $ sudo userdel fess
     $ sudo groupdel fess
@@ -162,45 +189,50 @@ Si desea eliminar el usuario y grupo del sistema::
     $ sudo groupdel opensearch
 
 Desinstalación de Versión DEB
-==============================
+=============================
 
 Paso 1: Desinstalación de Fess
--------------------------------
+------------------------------
 
 Desinstale el paquete DEB::
 
     $ sudo dpkg -r fess
 
-Para eliminar completamente incluyendo archivos de configuración::
+Para eliminar completamente incluyendo los archivos de configuración y los archivos de configuración de entorno, utilice purge::
 
     $ sudo dpkg -P fess
 
+.. note::
+
+   Con ``dpkg -r`` (remove), los archivos de configuración (conffile) como ``/etc/default/fess`` permanecen.
+   Si utiliza ``dpkg -P`` (purge), se eliminan estos archivos de configuración junto con el usuario y el grupo ``fess``.
+
 Paso 2: Desinstalación de OpenSearch
--------------------------------------
+------------------------------------
 
 ::
 
     $ sudo dpkg -r opensearch
 
-O para eliminar incluyendo archivos de configuración::
+O bien, para eliminar incluyendo los archivos de configuración::
 
     $ sudo dpkg -P opensearch
 
-Paso 3: Deshabilitación del Servicio
--------------------------------------
+Paso 3: Confirmación de la Deshabilitación del Servicio
+-------------------------------------------------------
 
-::
+Normalmente el servicio se deshabilita al eliminar el paquete. Por si acaso, para confirmar o deshabilitar ejecute lo siguiente::
 
     $ sudo systemctl disable fess.service
     $ sudo systemctl disable opensearch.service
     $ sudo systemctl daemon-reload
 
 Paso 4: Eliminación del Directorio de Datos
---------------------------------------------
+-------------------------------------------
 
 .. warning::
 
-   Ejecutar esta operación eliminará completamente todos los datos de índice y configuración.
+   Al ejecutar esta operación se eliminarán por completo todos los datos del índice.
 
 ::
 
@@ -208,15 +240,16 @@ Paso 4: Eliminación del Directorio de Datos
     $ sudo rm -rf /var/lib/opensearch
 
 Paso 5: Eliminación de Archivos de Configuración (Si no usó dpkg -P)
----------------------------------------------------------------------
+--------------------------------------------------------------------
 
 ::
 
     $ sudo rm -rf /etc/fess
+    $ sudo rm -rf /etc/default/fess
     $ sudo rm -rf /etc/opensearch
 
 Paso 6: Eliminación de Archivos de Registro
---------------------------------------------
+-------------------------------------------
 
 ::
 
@@ -224,9 +257,10 @@ Paso 6: Eliminación de Archivos de Registro
     $ sudo rm -rf /var/log/opensearch
 
 Paso 7: Eliminación de Usuario y Grupo (Opcional)
---------------------------------------------------
+-------------------------------------------------
 
-Si desea eliminar el usuario y grupo del sistema::
+Si no utilizó ``dpkg -P``, el usuario y el grupo ``fess`` permanecen.
+Si desea eliminarlos, ejecute lo siguiente::
 
     $ sudo userdel fess
     $ sudo groupdel fess
@@ -234,68 +268,64 @@ Si desea eliminar el usuario y grupo del sistema::
     $ sudo groupdel opensearch
 
 Desinstalación de Versión Docker
-=================================
+================================
 
 Paso 1: Eliminación de Contenedores y Red
-------------------------------------------
+-----------------------------------------
 
-::
+Elimine los contenedores y la red creada por Docker Compose (``search_net``)::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Paso 2: Eliminación de Volúmenes
----------------------------------
+--------------------------------
 
 .. warning::
 
-   Ejecutar esta operación eliminará completamente todos los datos.
+   Al ejecutar esta operación se eliminarán por completo todos los datos.
 
-Verificar lista de volúmenes::
+Los datos de |Fess| (índices, diccionarios, etc.) se almacenan en los volúmenes de OpenSearch.
+Primero, verifique la lista de volúmenes::
 
     $ docker volume ls
 
-Eliminar volúmenes relacionados con Fess::
+Elimine los volúmenes relacionados con OpenSearch::
 
-    $ docker volume rm fess-es-data
-    $ docker volume rm fess-data
+    $ docker volume rm <project>_search01_data
+    $ docker volume rm <project>_search01_dictionary
 
-O eliminar todos los volúmenes en lote::
+.. note::
+
+   Los nombres de los volúmenes llevan como prefijo el nombre del proyecto de Docker Compose (normalmente el nombre
+   del directorio en el que se ubicó el archivo Compose). Verifique el nombre real con ``docker volume ls``.
+
+Para eliminar los contenedores y los volúmenes de una sola vez, añada la opción ``-v`` a ``down``::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
 Paso 3: Eliminación de Imágenes (Opcional)
--------------------------------------------
+------------------------------------------
 
 Si desea eliminar las imágenes Docker para liberar espacio en disco::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.7.0
+    $ docker rmi ghcr.io/codelibs/fess:15.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
 
-    $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.6.0
-
-Paso 4: Eliminación de Red (Opcional)
---------------------------------------
-
-Elimine la red creada por Docker Compose::
-
-    $ docker network ls
-    $ docker network rm <network_name>
-
-Paso 5: Eliminación de Archivos Compose
-----------------------------------------
+Paso 4: Eliminación de Archivos Compose
+---------------------------------------
 
 ::
 
     $ rm compose.yaml compose-opensearch3.yaml
 
 Verificación de la Desinstalación
-==================================
+=================================
 
 Verifique que se hayan eliminado todos los componentes.
 
 Verificación de Procesos
--------------------------
+------------------------
 
 ::
 
@@ -305,7 +335,7 @@ Verificación de Procesos
 Si no se muestra nada, los procesos están detenidos.
 
 Verificación de Puertos
-------------------------
+-----------------------
 
 ::
 
@@ -315,7 +345,7 @@ Verificación de Puertos
 Verifique que los puertos no estén en uso.
 
 Verificación de Archivos
--------------------------
+------------------------
 
 Versión TAR.GZ/ZIP::
 
@@ -328,11 +358,11 @@ Versión RPM/DEB::
 
 Versión Docker::
 
-    $ docker ps -a | grep fess  # Verifique que no existan contenedores
-    $ docker volume ls | grep fess  # Verifique que no existan volúmenes
+    $ docker ps -a | grep -E 'fess01|search01'  # Verifique que no existan contenedores
+    $ docker volume ls | grep search01           # Verifique que no existan volúmenes
 
 Verificación de Paquetes
--------------------------
+------------------------
 
 Versión RPM::
 
@@ -347,20 +377,21 @@ Versión DEB::
 Si no se muestra nada, los paquetes están eliminados.
 
 Desinstalación Parcial
-=======================
+======================
 
 Eliminar Solo Fess y Mantener OpenSearch
------------------------------------------
+----------------------------------------
 
 Si OpenSearch se utiliza también en otras aplicaciones, puede eliminar solo Fess.
 
 1. Detenga Fess
-2. Elimine el paquete o directorio de Fess
+2. Elimine el paquete o el directorio de Fess
 3. Elimine el directorio de datos de Fess (``/var/lib/fess``, etc.)
-4. No elimine OpenSearch
+4. Elimine los índices de |Fess| creados dentro de OpenSearch (``fess.*``, ``.fess_*``, etc.)
+5. No elimine OpenSearch
 
 Eliminar Solo OpenSearch y Mantener Fess
------------------------------------------
+----------------------------------------
 
 .. warning::
 
@@ -368,15 +399,15 @@ Eliminar Solo OpenSearch y Mantener Fess
    Cambie la configuración para conectarse a otro clúster de OpenSearch.
 
 1. Detenga OpenSearch
-2. Elimine el paquete o directorio de OpenSearch
+2. Elimine el paquete o el directorio de OpenSearch
 3. Elimine el directorio de datos de OpenSearch (``/var/lib/opensearch``, etc.)
 4. Actualice la configuración de Fess para especificar otro clúster de OpenSearch
 
 Solución de Problemas
-======================
+=====================
 
 No se Puede Eliminar el Paquete
---------------------------------
+-------------------------------
 
 **Síntoma:**
 
@@ -388,7 +419,7 @@ Se produce un error con ``rpm -e`` o ``dpkg -r``.
 
        $ sudo systemctl stop fess.service
 
-2. Verifique dependencias::
+2. Verifique las dependencias::
 
        $ rpm -qa | grep fess
        $ dpkg -l | grep fess
@@ -399,7 +430,7 @@ Se produce un error con ``rpm -e`` o ``dpkg -r``.
        $ sudo dpkg -r --force-all fess
 
 No se Puede Eliminar el Directorio
------------------------------------
+----------------------------------
 
 **Síntoma:**
 
@@ -407,20 +438,20 @@ No se puede eliminar el directorio con ``rm -rf``.
 
 **Solución:**
 
-1. Verificar permisos::
+1. Verifique los permisos::
 
        $ ls -ld /path/to/directory
 
-2. Eliminar con sudo::
+2. Elimine con sudo::
 
        $ sudo rm -rf /path/to/directory
 
-3. Verificar que ningún proceso esté usando archivos::
+3. Verifique que ningún proceso esté usando archivos::
 
        $ sudo lsof | grep /path/to/directory
 
-Preparación para Reinstalación
-===============================
+Preparación para la Reinstalación
+=================================
 
 Si va a reinstalar después de desinstalar, verifique lo siguiente:
 

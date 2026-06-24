@@ -22,13 +22,10 @@
 
 1. **設定データ**
 
-   管理画面から「システム」→「バックアップ」でダウンロード
+   管理画面の「システム」→「バックアップ」からダウンロードします。
+   この操作で、各種設定（クロール設定を含む）や検索ログなどをまとめてエクスポートできます。
 
-2. **クロール設定**
-
-   必要に応じて、クロール設定をエクスポート
-
-3. **カスタマイズした設定ファイル**
+2. **カスタマイズした設定ファイル**
 
    TAR.GZ/ZIP 版::
 
@@ -39,6 +36,12 @@
 
        $ sudo cp -r /etc/fess /backup/
 
+.. note::
+
+   |Fess| のインデックスや設定の大部分は OpenSearch に保存されます。
+   インデックスデータをバックアップする場合は、OpenSearch のスナップショット機能を使用します。
+   詳細な手順は :doc:`upgrade` を参照してください。
+
 サービスの停止
 ------------
 
@@ -46,7 +49,7 @@
 
 TAR.GZ/ZIP 版::
 
-    $ ps aux | grep fess
+    $ ps aux | grep -E 'fess|opensearch'
     $ kill <fess_pid>
     $ kill <opensearch_pid>
 
@@ -74,13 +77,14 @@ TAR.GZ/ZIP 版のアンインストール
 
 OpenSearch のインストールディレクトリを削除します::
 
-    $ rm -rf /path/to/opensearch-3.6.0
+    $ rm -rf /path/to/opensearch-3.7.0
 
 ステップ 3: データディレクトリの削除（オプション）
 -------------------------------------------
 
-デフォルトでは、データディレクトリは Fess のインストールディレクトリ内にありますが、
-別の場所を指定している場合は、そのディレクトリも削除してください::
+|Fess| のインデックスデータは OpenSearch に保存されます。
+デフォルトでは OpenSearch のインストールディレクトリ内（``opensearch-3.7.0/data`` など）に保存されますが、
+``path.data`` で別の場所を指定している場合は、そのディレクトリも削除してください::
 
     $ rm -rf /path/to/data
 
@@ -89,8 +93,8 @@ OpenSearch のインストールディレクトリを削除します::
 
 ログファイルを削除します::
 
-    $ rm -rf /path/to/fess/logs
-    $ rm -rf /path/to/opensearch/logs
+    $ rm -rf /path/to/fess-15.7.0/logs
+    $ rm -rf /path/to/opensearch-3.7.0/logs
 
 RPM 版のアンインストール
 ======================
@@ -102,6 +106,13 @@ RPM パッケージをアンインストールします::
 
     $ sudo rpm -e fess
 
+.. note::
+
+   |Fess| パッケージのアンインストール時には、パッケージの削除スクリプトによって
+   ``fess`` サービスの停止・無効化と、``fess`` ユーザーおよびグループの削除が自動的に実行されます。
+   以降のステップは、これらが確実に削除されたことを確認するため、または
+   データや設定ファイルを手動で削除するために実施します。
+
 ステップ 2: OpenSearch のアンインストール
 --------------------------------------
 
@@ -109,13 +120,10 @@ RPM パッケージをアンインストールします::
 
     $ sudo rpm -e opensearch
 
-ステップ 3: サービスの無効化と削除
---------------------------------
+ステップ 3: サービスの無効化の確認
+-------------------------------
 
-chkconfig の場合::
-
-    $ sudo /sbin/chkconfig --del fess
-    $ sudo /sbin/chkconfig --del opensearch
+通常はパッケージ削除時にサービスが無効化されますが、念のため確認・無効化する場合は以下を実行します。
 
 systemd の場合::
 
@@ -123,14 +131,19 @@ systemd の場合::
     $ sudo systemctl disable opensearch.service
     $ sudo systemctl daemon-reload
 
+古い SysV init（chkconfig）環境の場合::
+
+    $ sudo /sbin/chkconfig --del fess
+    $ sudo /sbin/chkconfig --del opensearch
+
 ステップ 4: データディレクトリの削除
 ----------------------------------
 
 .. warning::
 
-   この操作を実行すると、すべてのインデックスデータと設定が完全に削除されます。
+   この操作を実行すると、すべてのインデックスデータが完全に削除されます。
 
-::
+データディレクトリはパッケージのアンインストールでは削除されないため、手動で削除します::
 
     $ sudo rm -rf /var/lib/fess
     $ sudo rm -rf /var/lib/opensearch
@@ -138,10 +151,16 @@ systemd の場合::
 ステップ 5: 設定ファイルの削除
 ----------------------------
 
-::
+設定ファイルと環境設定ファイルを削除します::
 
     $ sudo rm -rf /etc/fess
+    $ sudo rm -rf /etc/sysconfig/fess
     $ sudo rm -rf /etc/opensearch
+
+.. note::
+
+   RPM では ``/etc/fess`` 内の設定ファイルが ``.rpmsave`` という名前で残る場合があります。
+   完全に削除するには、上記のように手動で削除してください。
 
 ステップ 6: ログファイルの削除
 ----------------------------
@@ -151,10 +170,18 @@ systemd の場合::
     $ sudo rm -rf /var/log/fess
     $ sudo rm -rf /var/log/opensearch
 
-ステップ 7: ユーザーとグループの削除（オプション）
+ステップ 7: 一時ディレクトリの削除（オプション）
+-----------------------------------------
+
+::
+
+    $ sudo rm -rf /var/tmp/fess
+
+ステップ 8: ユーザーとグループの削除（オプション）
 -------------------------------------------
 
-システムユーザーとグループを削除する場合::
+通常はパッケージ削除時に ``fess`` ユーザー・グループは削除されます。
+残っている場合や、OpenSearch 用のユーザー・グループを削除する場合は、以下を実行します::
 
     $ sudo userdel fess
     $ sudo groupdel fess
@@ -171,9 +198,14 @@ DEB パッケージをアンインストールします::
 
     $ sudo dpkg -r fess
 
-設定ファイルも含めて完全に削除する場合::
+設定ファイルや環境設定ファイルも含めて完全に削除する場合は、purge を使用します::
 
     $ sudo dpkg -P fess
+
+.. note::
+
+   ``dpkg -r``（remove）では、設定ファイル（conffile）である ``/etc/default/fess`` などは残ります。
+   ``dpkg -P``（purge）を使用すると、これらの設定ファイルと ``fess`` ユーザー・グループも削除されます。
 
 ステップ 2: OpenSearch のアンインストール
 --------------------------------------
@@ -186,10 +218,10 @@ DEB パッケージをアンインストールします::
 
     $ sudo dpkg -P opensearch
 
-ステップ 3: サービスの無効化
---------------------------
+ステップ 3: サービスの無効化の確認
+-------------------------------
 
-::
+通常はパッケージ削除時にサービスが無効化されます。念のため確認・無効化する場合は以下を実行します::
 
     $ sudo systemctl disable fess.service
     $ sudo systemctl disable opensearch.service
@@ -200,7 +232,7 @@ DEB パッケージをアンインストールします::
 
 .. warning::
 
-   この操作を実行すると、すべてのインデックスデータと設定が完全に削除されます。
+   この操作を実行すると、すべてのインデックスデータが完全に削除されます。
 
 ::
 
@@ -213,6 +245,7 @@ DEB パッケージをアンインストールします::
 ::
 
     $ sudo rm -rf /etc/fess
+    $ sudo rm -rf /etc/default/fess
     $ sudo rm -rf /etc/opensearch
 
 ステップ 6: ログファイルの削除
@@ -226,7 +259,8 @@ DEB パッケージをアンインストールします::
 ステップ 7: ユーザーとグループの削除（オプション）
 -------------------------------------------
 
-システムユーザーとグループを削除する場合::
+``dpkg -P`` を使用しなかった場合、``fess`` ユーザー・グループが残ります。
+削除する場合は以下を実行します::
 
     $ sudo userdel fess
     $ sudo groupdel fess
@@ -239,7 +273,7 @@ Docker 版のアンインストール
 ステップ 1: コンテナとネットワークの削除
 ------------------------------------
 
-::
+コンテナ、および Docker Compose が作成したネットワーク（``search_net``）を削除します::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
@@ -250,16 +284,22 @@ Docker 版のアンインストール
 
    この操作を実行すると、すべてのデータが完全に削除されます。
 
-ボリューム一覧を確認::
+|Fess| のデータ（インデックスや辞書など）は OpenSearch のボリュームに保存されます。
+まず、ボリューム一覧を確認します::
 
     $ docker volume ls
 
-Fess 関連のボリュームを削除::
+OpenSearch 関連のボリュームを削除します::
 
-    $ docker volume rm fess-es-data
-    $ docker volume rm fess-data
+    $ docker volume rm <project>_search01_data
+    $ docker volume rm <project>_search01_dictionary
 
-または、すべてのボリュームを一括削除::
+.. note::
+
+   ボリューム名には、Docker Compose のプロジェクト名（通常は Compose ファイルを配置した
+   ディレクトリ名）が接頭辞として付きます。``docker volume ls`` で実際の名前を確認してください。
+
+コンテナとボリュームを一括で削除する場合は、``down`` に ``-v`` オプションを付けます::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
@@ -269,20 +309,10 @@ Fess 関連のボリュームを削除::
 Docker イメージを削除してディスクスペースを解放する場合::
 
     $ docker images | grep fess
-    $ docker rmi codelibs/fess:15.7.0
+    $ docker rmi ghcr.io/codelibs/fess:15.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
 
-    $ docker images | grep opensearch
-    $ docker rmi opensearchproject/opensearch:3.6.0
-
-ステップ 4: ネットワークの削除（オプション）
-----------------------------------------
-
-Docker Compose が作成したネットワークを削除::
-
-    $ docker network ls
-    $ docker network rm <network_name>
-
-ステップ 5: Compose ファイルの削除
+ステップ 4: Compose ファイルの削除
 --------------------------------
 
 ::
@@ -328,8 +358,8 @@ RPM/DEB 版::
 
 Docker 版::
 
-    $ docker ps -a | grep fess  # コンテナが存在しないことを確認
-    $ docker volume ls | grep fess  # ボリュームが存在しないことを確認
+    $ docker ps -a | grep -E 'fess01|search01'  # コンテナが存在しないことを確認
+    $ docker volume ls | grep search01           # ボリュームが存在しないことを確認
 
 パッケージの確認
 --------------
@@ -357,7 +387,8 @@ OpenSearch を他のアプリケーションでも使用している場合、Fes
 1. Fess を停止
 2. Fess のパッケージまたはディレクトリを削除
 3. Fess のデータディレクトリを削除（``/var/lib/fess`` など）
-4. OpenSearch は削除しない
+4. OpenSearch 内に作成された |Fess| のインデックス（``fess.*``、``.fess_*`` など）を削除
+5. OpenSearch は削除しない
 
 OpenSearch のみを削除して Fess を残す
 -----------------------------------
@@ -439,4 +470,3 @@ OpenSearch のみを削除して Fess を残す
 - 新しいバージョンをインストールする場合は :doc:`install` を参照
 - データを移行する場合は :doc:`upgrade` を参照
 - 代替の検索ソリューションを検討する場合は、Fess の公式サイトを参照
-
