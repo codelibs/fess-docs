@@ -5,8 +5,10 @@ General API
 概述
 ====
 
-General API是用于管理 |Fess| 常规设置的API。
-可以获取和更新与系统整体相关的设置。
+General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
+可以获取和更新与爬取、日志、搜索结果显示、建议、日志保留期限、通知、
+认证（LDAP / SSO）以及云存储集成相关的设置。这些设置对应管理界面中的
+"常规"设置（:doc:`../../admin/general-guide`）。
 
 基础URL
 =======
@@ -14,6 +16,9 @@ General API是用于管理 |Fess| 常规设置的API。
 ::
 
     /api/admin/general
+
+访问此API需要具有 ``Radmin-api`` 权限的访问令牌。
+有关认证方式的详细信息，请参阅 :doc:`api-admin-overview`。
 
 端点列表
 ========
@@ -42,8 +47,15 @@ General API是用于管理 |Fess| 常规设置的API。
 
     GET /api/admin/general
 
+此端点不接受查询参数。
+
 响应
 ----
+
+``response.setting`` 中包含当前的常规设置。响应中包含所有可更新的设置字段；
+以下示例仅展示具有代表性的字段。
+开/关设置以 ``"true"`` / ``"false"`` 字符串表示，
+而保留天数和线程数等值则以数字表示。
 
 .. code-block:: json
 
@@ -90,17 +102,17 @@ General API是用于管理 |Fess| 常规设置的API。
 .. note::
 
    上述仅为代表性字段示例。实际响应的 ``setting`` 对象中包含所有常规设置字段
-   （爬取、搜索、通知、LDAP、SSO、存储等）。全部字段请参阅 ``EditForm.java``。
+   （爬取、搜索、通知、LDAP、SSO、存储等）。全部字段请参阅管理界面的"常规"设置页面。
 
 .. note::
 
    出于安全原因，包含凭据的字段不会以实际值返回。
 
-   - LDAP管理员密码 ``ldapAdminSecurityCredentials`` 始终被替换为 ``null``。
+   - LDAP管理员密码 ``ldapAdminSecurityCredentials`` 始终以 ``null`` 返回。
    - 其他机密字段（``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
      ``entraidClientId`` / ``entraidClientSecret``）在已设置的情况下
-     以掩码值 ``"**********"`` 返回。
+     以掩码值 ``"**********"`` 返回，未设置时以空字符串（``""``）返回。
 
 更新常规设置
 ============
@@ -116,34 +128,29 @@ General API是用于管理 |Fess| 常规设置的API。
 请求体
 ~~~~~~
 
-更新作为部分合并（merge）处理。请求中的值将合并到当前设置值上，
-请求中未包含的字段（``null`` 的字段）将被忽略，现有值得以保留。
+更新作为部分更新（merge）处理。服务器读取当前设置值后，仅覆盖请求中包含的
+非 ``null`` 字段。请求中未包含的字段以及设置为 ``null`` 的字段将保留其现有值。
 
 .. warning::
 
-   以下四个字段具有 ``@Required`` 约束，**每次** PUT请求中都必须包含这些字段。
-   省略其中任何一个将导致验证错误（HTTP 400）。
+   以下四个字段为必需字段，**每次** PUT请求中都必须包含这些字段，
+   即使是部分更新也是如此。
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   即使是部分更新，这些字段也不能省略。由于发送的值会覆盖现有设置，
+   如果缺少其中任何一个，请求将验证失败，API将返回 HTTP 400，
+   并附带 ``status: 1`` 和错误 ``message``。由于发送的值会覆盖现有设置，
    如果不想更改某个值，请先通过 ``GET`` 获取当前值并原样发送。
    上述字段以外的字段均为可选项，省略时将保留现有值。
 
 .. note::
 
    数值字段具有类型和范围验证。发送无法解析为整数的值或超出允许范围的值
-   将导致验证错误（HTTP 400）。
-
-   - ``dayForCleanup``: ``-1`` 至 ``1000``
-   - ``crawlingThreadCount``: ``0`` 至 ``100``
-   - ``failureCountThreshold``: ``-1`` 至 ``10000``
-   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
-     ``-1`` 至 ``100000``
-   - ``purgeSuggestSearchLogDay``: ``0`` 至 ``100000``
+   将导致验证错误（HTTP 400，并附带 ``status: 1``）。
+   各数值字段的有效取值范围请参阅下方的字段表。
 
 .. note::
 
@@ -167,9 +174,8 @@ General API是用于管理 |Fess| 常规设置的API。
 ~~~~~~~~
 
 设置项种类繁多。以下列出代表性字段
-（全部字段请参阅 ``EditForm.java``。API的请求/响应体类型为继承自 ``EditForm`` 的
-``EditBody``，但字段定义位于 ``EditForm`` 中）。``available`` 类的开/关设置
-以 ``"true"`` / ``"false"`` 字符串表示。
+（所有字段均对应管理界面的"常规"设置）。开/关设置以
+``"true"`` / ``"false"`` 字符串指定。
 
 .. list-table::
    :header-rows: 1
@@ -183,13 +189,13 @@ General API是用于管理 |Fess| 常规设置的API。
      - 增量爬取的启用/禁用
    * - ``dayForCleanup``
      - 是
-     - 保留已爬取文档的天数（-1=禁用清理）
+     - 保留已爬取文档的天数（-1=禁用清理；取值范围：-1 至 1000）
    * - ``crawlingThreadCount``
      - 是
-     - 爬取使用的线程数
+     - 爬取使用的线程数（取值范围：0 至 100）
    * - ``failureCountThreshold``
      - 是
-     - 停止URL爬取的失败次数阈值（-1=禁用）
+     - 停止URL爬取的失败次数阈值（-1=禁用；取值范围：-1 至 10000）
    * - ``csvFileEncoding``
      - 是
      - CSV导出的编码
@@ -243,16 +249,16 @@ General API是用于管理 |Fess| 常规设置的API。
      - 爬取时发送的User-Agent字符串
    * - ``purgeSearchLogDay``
      - 否
-     - 保留搜索日志的天数（-1=禁用）
+     - 保留搜索日志的天数（-1=禁用；取值范围：-1 至 100000）
    * - ``purgeJobLogDay``
      - 否
-     - 保留作业日志的天数（-1=禁用）
+     - 保留作业日志的天数（-1=禁用；取值范围：-1 至 100000）
    * - ``purgeUserInfoDay``
      - 否
-     - 保留用户信息的天数（-1=禁用）
+     - 保留用户信息的天数（-1=禁用；取值范围：-1 至 100000）
    * - ``purgeSuggestSearchLogDay``
      - 否
-     - 保留建议搜索日志的天数（0=禁用）
+     - 保留建议搜索日志的天数（0=禁用；取值范围：0 至 100000）
    * - ``purgeByBots``
      - 否
      - 要丢弃搜索日志的机器人User-Agent
@@ -302,9 +308,8 @@ General API是用于管理 |Fess| 常规设置的API。
 认证相关字段
 ~~~~~~~~~~~~
 
-LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
-通过此API管理。以下列出代表性字段
-（全部字段请参阅 ``EditForm.java``）。
+LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也通过此API管理。
+以下列出代表性字段（所有字段均对应管理界面的"常规"设置）。
 
 .. list-table::
    :header-rows: 1
@@ -349,7 +354,7 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
    * - 字段
      - 说明
    * - ``storageType``
-     - 存储类型（``s3`` / ``gcs`` / ``auto``）
+     - 存储类型（``auto`` / ``s3`` / ``gcs``）
    * - ``storageEndpoint``
      - 存储的端点URL
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -374,7 +379,7 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
 响应
 ----
 
-更新成功时仅返回 ``status`` （不包含 ``id`` 或 ``created``）。
+更新成功时，仅返回 ``version`` 和 ``status``（不包含 ``id`` 或 ``created``）。
 
 .. code-block:: json
 
@@ -385,15 +390,18 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
       }
     }
 
+如果更新失败（例如由于验证错误），API将返回 HTTP 400，响应的 ``status`` 将设置为
+非零值（验证错误为 ``1``），``message`` 中包含错误详情。
+有关 ``status`` 值的列表，请参阅 :doc:`api-admin-overview`。
+
 使用示例
 ========
 
 .. note::
 
-   由于PUT请求中 ``dayForCleanup``、``crawlingThreadCount``、
-   ``failureCountThreshold``、``csvFileEncoding`` 这四个字段为必填项，
-   以下所有示例均包含这些字段。这些字段的值会覆盖现有设置，
-   因此在实际使用中请通过 ``GET`` 获取当前值后再发送
+   以下示例包含必需字段（``dayForCleanup``、``crawlingThreadCount``、
+   ``failureCountThreshold``、``csvFileEncoding``）。由于这些字段无论修改内容如何
+   都必须始终发送，实际操作中请通过 ``GET`` 获取当前值后再包含这些字段
    （以下示例使用默认值）。
 
 更新爬取设置

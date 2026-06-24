@@ -5,8 +5,13 @@ API General
 Vue d'ensemble
 ==============
 
-L'API General permet de gerer les parametres generaux de |Fess|.
-Vous pouvez obtenir et mettre a jour les parametres relatifs a l'ensemble du systeme.
+L'API General est une API permettant de gerer les parametres generaux de |Fess|
+(configuration a l'echelle du systeme). Vous pouvez obtenir et mettre a jour les
+parametres relatifs au crawl, aux journaux, a l'affichage des resultats de
+recherche, aux suggestions, aux periodes de conservation des journaux, aux
+notifications, a l'authentification (LDAP / SSO) et a l'integration du stockage
+cloud. Ces parametres correspondent aux reglages « General » de l'interface
+d'administration (:doc:`../../admin/general-guide`).
 
 URL de base
 ===========
@@ -14,6 +19,9 @@ URL de base
 ::
 
     /api/admin/general
+
+L'acces a cette API requiert un jeton d'acces disposant de la permission ``Radmin-api``.
+Consultez :doc:`api-admin-overview` pour les details d'authentification.
 
 Liste des endpoints
 ===================
@@ -33,7 +41,7 @@ Liste des endpoints
      - Mise a jour des parametres generaux
 
 Obtention des parametres generaux
-=================================
+==================================
 
 Requete
 -------
@@ -42,8 +50,17 @@ Requete
 
     GET /api/admin/general
 
+Cet endpoint n'accepte pas de parametres de requete.
+
 Reponse
 -------
+
+``response.setting`` contient les parametres generaux actuels. La reponse inclut
+tous les champs de parametres modifiables ; l'exemple ci-dessous ne presente que
+les champs representatifs. Les parametres d'activation/desactivation sont exprimes
+sous forme de chaines ``"true"`` / ``"false"``, tandis que les valeurs telles que
+les jours de conservation et les nombres de threads sont exprimes sous forme de
+nombres.
 
 .. code-block:: json
 
@@ -91,8 +108,8 @@ Reponse
 
    Ce qui precede ne montre que les champs representatifs a titre d'exemple. L'objet
    ``setting`` reel dans la reponse contient tous les champs des parametres generaux
-   (crawl, recherche, notification, LDAP, SSO, stockage, etc.). Consultez
-   ``EditForm.java`` pour la liste complete des champs.
+   (crawl, recherche, notification, LDAP, SSO, stockage, etc.). Consultez la page des
+   reglages « General » de l'interface d'administration pour la liste complete des champs.
 
 .. note::
 
@@ -100,14 +117,15 @@ Reponse
    d'authentification ne sont pas retournes avec leur valeur reelle.
 
    - Le mot de passe de l'administrateur LDAP ``ldapAdminSecurityCredentials`` est
-     toujours remplace par ``null``.
+     toujours retourne sous la forme ``null``.
    - Les autres secrets (``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
      ``entraidClientId`` / ``entraidClientSecret``) sont retournes masques sous la
-     forme ``"**********"`` lorsqu'ils sont definis.
+     forme ``"**********"`` lorsqu'ils sont definis, ou sous forme de chaine vide
+     (``""``) lorsqu'ils ne sont pas definis.
 
 Mise a jour des parametres generaux
-===================================
+=====================================
 
 Requete
 -------
@@ -120,39 +138,34 @@ Requete
 Corps de la requete
 ~~~~~~~~~~~~~~~~~~~
 
-La mise a jour est traitee comme une fusion partielle (merge) : les valeurs de la
-requete sont fusionnees avec les parametres actuels, et les champs non inclus dans
-la requete (champs ``null``) sont ignores et conservent leur valeur existante.
+La mise a jour est traitee comme une mise a jour partielle (merge). Le serveur
+charge les parametres actuels, puis ecrase uniquement les champs non ``null``
+inclus dans la requete. Les champs non inclus dans la requete, et les champs
+definis a ``null``, conservent leur valeur existante.
 
 .. warning::
 
-   Les quatre champs suivants ont une contrainte ``@Required`` et **doivent** etre
-   inclus dans **chaque** requete PUT. Leur omission entraine une erreur de
-   validation (HTTP 400).
+   Les quatre champs suivants sont obligatoires et **doivent** etre inclus dans
+   **chaque** requete PUT, meme lors d'une mise a jour partielle :
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   Ces champs ne peuvent pas etre omis, meme lors d'une mise a jour partielle. La
-   valeur envoyee ecrase le parametre existant ; si vous ne souhaitez pas modifier
-   une valeur, recuperez d'abord la valeur actuelle avec ``GET`` et renvoyez-la
-   telle quelle. Tous les autres champs sont optionnels ; les champs omis conservent
-   leur valeur existante.
+   Si l'un d'eux est absent, la requete echoue a la validation et l'API retourne
+   HTTP 400 avec ``status: 1`` et un ``message`` d'erreur. La valeur envoyee ecrase
+   le parametre existant ; si vous ne souhaitez pas modifier une valeur, recuperez
+   d'abord la valeur actuelle avec ``GET`` et renvoyez-la telle quelle. Tous les
+   autres champs sont optionnels ; les champs omis conservent leur valeur existante.
 
 .. note::
 
    Les champs numeriques font l'objet d'une validation de type et de plage. L'envoi
    d'une valeur qui ne peut pas etre interpretee comme un entier, ou d'une valeur
-   hors de la plage autorisee, provoque une erreur de validation (HTTP 400).
-
-   - ``dayForCleanup``: ``-1`` a ``1000``
-   - ``crawlingThreadCount``: ``0`` a ``100``
-   - ``failureCountThreshold``: ``-1`` a ``10000``
-   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
-     ``-1`` a ``100000``
-   - ``purgeSuggestSearchLogDay``: ``0`` a ``100000``
+   hors de la plage autorisee, provoque une erreur de validation (HTTP 400 avec
+   ``status: 1``). La plage valide de chaque champ numerique est indiquee dans le
+   tableau des champs ci-dessous.
 
 .. note::
 
@@ -160,8 +173,8 @@ la requete (champs ``null``) sont ignores et conservent leur valeur existante.
    ou ``"on"`` (les deux sans distinction de casse) signifient l'activation. Toute
    autre valeur (comme ``"false"`` ou une chaine vide) est traitee comme une
    desactivation (``false``). La valeur existante n'est conservee que lorsque le
-   champ est omis (non envoye). Notez que dans la reponse GET, ces champs sont
-   retournes sous forme de chaines ``"true"`` / ``"false"``.
+   champ est omis (non envoye). Dans la reponse GET, ces champs sont retournes sous
+   forme de chaines ``"true"`` / ``"false"``.
 
 .. code-block:: json
 
@@ -178,11 +191,9 @@ Principaux champs
 ~~~~~~~~~~~~~~~~~
 
 Les options de configuration sont nombreuses. Les champs representatifs sont
-indiques ci-dessous (pour tous les champs, voir ``EditForm.java``). Le type du
-corps de la requete/reponse de l'API est ``EditBody``, qui etend ``EditForm``,
-mais les definitions de champs se trouvent dans ``EditForm`` (``EditForm.java``
-est donc la reference). Les options d'activation/desactivation de type
-``available`` sont exprimees sous forme de chaines ``"true"`` / ``"false"``.
+indiques ci-dessous (tous les champs correspondent aux reglages « General » de
+l'interface d'administration). Les parametres d'activation/desactivation sont
+specifies sous forme de chaines ``"true"`` / ``"false"``.
 
 .. list-table::
    :header-rows: 1
@@ -196,13 +207,13 @@ est donc la reference). Les options d'activation/desactivation de type
      - Activer/desactiver le crawl incremental
    * - ``dayForCleanup``
      - Oui
-     - Nombre de jours de conservation des documents crawles (-1=nettoyage desactive)
+     - Nombre de jours de conservation des documents crawles (-1 = nettoyage desactive ; plage : -1 a 1000)
    * - ``crawlingThreadCount``
      - Oui
-     - Nombre de threads utilises pour le crawl
+     - Nombre de threads utilises pour le crawl (plage : 0 a 100)
    * - ``failureCountThreshold``
      - Oui
-     - Seuil du nombre d'echecs pour arreter le crawl d'une URL (-1=desactive)
+     - Seuil du nombre d'echecs pour arreter le crawl d'une URL (-1 = desactive ; plage : -1 a 10000)
    * - ``csvFileEncoding``
      - Oui
      - Encodage de l'export CSV
@@ -256,16 +267,16 @@ est donc la reference). Les options d'activation/desactivation de type
      - Chaine User-Agent envoyee lors du crawl
    * - ``purgeSearchLogDay``
      - Non
-     - Nombre de jours de conservation des journaux de recherche (-1=desactive)
+     - Nombre de jours de conservation des journaux de recherche (-1 = desactive ; plage : -1 a 100000)
    * - ``purgeJobLogDay``
      - Non
-     - Nombre de jours de conservation des journaux de taches (-1=desactive)
+     - Nombre de jours de conservation des journaux de taches (-1 = desactive ; plage : -1 a 100000)
    * - ``purgeUserInfoDay``
      - Non
-     - Nombre de jours de conservation des informations utilisateur (-1=desactive)
+     - Nombre de jours de conservation des informations utilisateur (-1 = desactive ; plage : -1 a 100000)
    * - ``purgeSuggestSearchLogDay``
      - Non
-     - Nombre de jours de conservation des journaux de recherche de suggestion (0=desactive)
+     - Nombre de jours de conservation des journaux de recherche de suggestion (0 = desactive ; plage : 0 a 100000)
    * - ``purgeByBots``
      - Non
      - User-Agents de bots dont les journaux de recherche doivent etre supprimes
@@ -313,11 +324,12 @@ est donc la reference). Les options d'activation/desactivation de type
      - Niveau de journalisation des paquets lies au LLM
 
 Champs relatifs a l'authentification
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Les parametres relatifs a LDAP et au SSO (OpenID Connect, SAML, SPNEGO, Entra ID)
 sont egalement geres par cette API. Les champs representatifs sont indiques
-ci-dessous (pour tous les champs, voir ``EditForm.java``).
+ci-dessous (tous les champs correspondent aux reglages « General » de l'interface
+d'administration).
 
 .. list-table::
    :header-rows: 1
@@ -351,7 +363,7 @@ ci-dessous (pour tous les champs, voir ``EditForm.java``).
      - Configuration Microsoft Entra ID
 
 Champs relatifs au stockage
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Les parametres d'integration du stockage cloud (S3 / GCS) peuvent egalement etre geres.
 
@@ -362,7 +374,7 @@ Les parametres d'integration du stockage cloud (S3 / GCS) peuvent egalement etre
    * - Champ
      - Description
    * - ``storageType``
-     - Type de stockage (``s3`` / ``gcs`` / ``auto``)
+     - Type de stockage (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - URL du point de terminaison du stockage
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -391,8 +403,8 @@ Les parametres d'integration du stockage cloud (S3 / GCS) peuvent egalement etre
 Reponse
 -------
 
-En cas de succes de la mise a jour, seul ``status`` est retourne (``id`` et
-``created`` ne sont pas inclus).
+En cas de succes de la mise a jour, seuls ``version`` et ``status`` sont retournes
+(``id`` et ``created`` ne sont pas inclus).
 
 .. code-block:: json
 
@@ -403,20 +415,24 @@ En cas de succes de la mise a jour, seul ``status`` est retourne (``id`` et
       }
     }
 
+Si la mise a jour echoue (par exemple en raison d'une erreur de validation), l'API
+retourne HTTP 400 et ``status`` est defini a une valeur non nulle (``1`` pour une
+erreur de validation), et ``message`` contient les details de l'erreur. Consultez
+:doc:`api-admin-overview` pour la liste des valeurs de ``status``.
+
 Exemples d'utilisation
 ======================
 
 .. note::
 
-   Les quatre champs ``dayForCleanup``, ``crawlingThreadCount``,
-   ``failureCountThreshold`` et ``csvFileEncoding`` etant obligatoires dans les
-   requetes PUT, tous les exemples ci-dessous les incluent. Ces valeurs ecrasant
-   les parametres existants, utilisez en production les valeurs actuelles
-   recuperees avec ``GET`` (les exemples ci-dessous utilisent les valeurs par
-   defaut).
+   Les exemples ci-dessous incluent les champs obligatoires (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Etant
+   donne que ceux-ci doivent toujours etre envoyes quelle que soit la modification
+   effectuee, recuperez les valeurs actuelles avec ``GET`` et incluez-les en
+   situation reelle (les exemples ci-dessous utilisent les valeurs par defaut).
 
 Mise a jour des parametres de crawl
------------------------------------
+-------------------------------------
 
 .. code-block:: bash
 
@@ -432,7 +448,7 @@ Mise a jour des parametres de crawl
          }'
 
 Mise a jour des periodes de conservation des journaux
------------------------------------------------------
+-------------------------------------------------------
 
 .. code-block:: bash
 
@@ -450,7 +466,7 @@ Mise a jour des periodes de conservation des journaux
          }'
 
 Mise a jour des parametres de suggestion
-----------------------------------------
+------------------------------------------
 
 .. code-block:: bash
 
@@ -467,7 +483,7 @@ Mise a jour des parametres de suggestion
          }'
 
 Informations complementaires
-============================
+=============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-systeminfo` - API des informations systeme

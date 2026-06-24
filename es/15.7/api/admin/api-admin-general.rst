@@ -2,11 +2,16 @@
 API de General
 ==========================
 
-Vision General
-==============
+Descripcion General
+===================
 
-La API de General es para gestionar la configuracion general de |Fess|.
-Puede obtener y actualizar configuraciones relacionadas con todo el sistema.
+La API de General es una API para gestionar la configuracion general de |Fess|
+(configuracion de todo el sistema). Puede obtener y actualizar configuraciones
+relacionadas con el rastreo, el registro, la visualizacion de resultados de
+busqueda, las sugerencias, los periodos de retencion de registros, las
+notificaciones, la autenticacion (LDAP / SSO) y la integracion con
+almacenamiento en la nube. Estas configuraciones corresponden a los ajustes
+"General" en la interfaz de administracion (:doc:`../../admin/general-guide`).
 
 URL Base
 ========
@@ -14,6 +19,10 @@ URL Base
 ::
 
     /api/admin/general
+
+Para acceder a esta API se requiere un token de acceso con el permiso
+``Radmin-api``. Consulte :doc:`api-admin-overview` para obtener detalles sobre
+la autenticacion.
 
 Lista de Endpoints
 ==================
@@ -33,7 +42,7 @@ Lista de Endpoints
      - Actualizar configuracion general
 
 Obtener Configuracion General
-=============================
+==============================
 
 Solicitud
 ---------
@@ -42,8 +51,17 @@ Solicitud
 
     GET /api/admin/general
 
+Este endpoint no acepta parametros de consulta.
+
 Respuesta
 ---------
+
+``response.setting`` contiene la configuracion general actual. La respuesta
+incluye todos los campos de configuracion actualizables; el ejemplo a
+continuacion muestra solo los campos representativos. Los ajustes de
+activacion/desactivacion se expresan como las cadenas ``"true"`` /
+``"false"``, mientras que valores como los dias de retencion y el numero de
+hilos se expresan como numeros.
 
 .. code-block:: json
 
@@ -91,8 +109,8 @@ Respuesta
 
    Lo anterior muestra solo campos representativos a modo de ejemplo. El objeto ``setting``
    real en la respuesta contiene todos los campos de configuracion general (rastreo, busqueda,
-   notificaciones, LDAP, SSO, almacenamiento, etc.). Consulte ``EditForm.java`` para la lista
-   completa.
+   notificaciones, LDAP, SSO, almacenamiento, etc.). Consulte la pagina de ajustes "General"
+   en la interfaz de administracion para la lista completa.
 
 .. note::
 
@@ -100,14 +118,15 @@ Respuesta
    valores reales.
 
    - La contrasena del administrador LDAP ``ldapAdminSecurityCredentials`` siempre se
-     reemplaza por ``null``.
+     devuelve como ``null``.
    - Otros secretos (``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
      ``entraidClientId`` / ``entraidClientSecret``) se devuelven enmascarados como
-     ``"**********"`` cuando estan configurados.
+     ``"**********"`` cuando estan configurados, o como una cadena vacia (``""``) cuando
+     no lo estan.
 
 Actualizar Configuracion General
-================================
+=================================
 
 Solicitud
 ---------
@@ -120,36 +139,34 @@ Solicitud
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Las actualizaciones se procesan como una combinacion parcial (merge): los valores del
-request se fusionan con la configuracion actual; los campos no incluidos (campos con
-valor ``null``) se ignoran y los valores existentes se mantienen.
+Las actualizaciones se procesan como una actualizacion parcial (merge). El
+servidor carga la configuracion actual y luego sobreescribe unicamente los
+campos no nulos (no ``null``) incluidos en la solicitud. Los campos no
+incluidos en la solicitud, y los campos establecidos como ``null``, conservan
+sus valores existentes.
 
 .. warning::
 
-   Los siguientes cuatro campos tienen la restriccion ``@Required`` y DEBEN incluirse en
-   CADA solicitud PUT. Omitirlos resulta en un error de validacion (HTTP 400).
+   Los siguientes cuatro campos son requeridos y DEBEN incluirse en CADA solicitud PUT,
+   incluso en una actualizacion parcial:
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   No pueden omitirse ni siquiera en una actualizacion parcial. Dado que el valor enviado
-   sobreescribe la configuracion existente, si no desea cambiar un valor, primero recupere
-   el valor actual con ``GET`` y envielo tal cual. Todos los demas campos son opcionales;
-   los campos omitidos conservan sus valores existentes.
+   Si falta alguno de ellos, la solicitud falla la validacion y la API devuelve HTTP 400
+   con ``status: 1`` y un ``message`` de error. Dado que el valor enviado sobreescribe la
+   configuracion existente, para mantener un valor sin cambios primero recuperelo con
+   ``GET`` y envielo tal cual. Todos los demas campos son opcionales; los campos omitidos
+   conservan sus valores existentes.
 
 .. note::
 
    Los campos numericos tienen validacion de tipo y rango. Enviar un valor que no pueda
-   interpretarse como un entero, o un valor fuera del rango permitido, resulta en un error
-   de validacion (HTTP 400).
-
-   - ``dayForCleanup``: ``-1`` a ``1000``
-   - ``crawlingThreadCount``: ``0`` a ``100``
-   - ``failureCountThreshold``: ``-1`` a ``10000``
-   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``: ``-1`` a ``100000``
-   - ``purgeSuggestSearchLogDay``: ``0`` a ``100000``
+   interpretarse como un entero, o un valor fuera del rango permitido, falla la validacion
+   (HTTP 400 con ``status: 1``). El rango valido de cada campo numerico se indica en la
+   tabla de campos a continuacion.
 
 .. note::
 
@@ -157,8 +174,8 @@ valor ``null``) se ignoran y los valores existentes se mantienen.
    ``"on"`` (ambos sin distincion de mayusculas y minusculas) significan habilitado.
    Cualquier otro valor (como ``"false"`` o una cadena vacia) se trata como deshabilitado
    (``false``). El valor existente se mantiene unicamente cuando el campo se omite (no se
-   envia). Tenga en cuenta que en la respuesta GET, estos campos se devuelven como las
-   cadenas ``"true"`` / ``"false"``.
+   envia). En la respuesta GET, estos campos se devuelven como las cadenas ``"true"`` /
+   ``"false"``.
 
 .. code-block:: json
 
@@ -174,11 +191,11 @@ valor ``null``) se ignoran y los valores existentes se mantienen.
 Campos Principales
 ~~~~~~~~~~~~~~~~~~
 
-Los elementos de configuracion son muy variados. A continuacion se muestran los campos representativos
-(para todos los campos consulte ``EditForm.java``). El cuerpo de la solicitud/respuesta de la API es
-``EditBody``, que extiende ``EditForm``, pero las definiciones de campos se encuentran en ``EditForm``.
-Las configuraciones de activacion/desactivacion del tipo ``available``
-se expresan como cadenas ``"true"`` / ``"false"``.
+Los elementos de configuracion son muy variados. A continuacion se muestran
+los campos representativos (todos los campos corresponden a los ajustes
+"General" en la interfaz de administracion). Los ajustes de
+activacion/desactivacion se especifican como las cadenas ``"true"`` /
+``"false"``.
 
 .. list-table::
    :header-rows: 1
@@ -192,13 +209,13 @@ se expresan como cadenas ``"true"`` / ``"false"``.
      - Habilitar/deshabilitar el rastreo incremental
    * - ``dayForCleanup``
      - Si
-     - Numero de dias que se conservan los documentos rastreados (-1=limpieza deshabilitada)
+     - Numero de dias que se conservan los documentos rastreados (-1=limpieza deshabilitada; rango: -1 a 1000)
    * - ``crawlingThreadCount``
      - Si
-     - Numero de hilos usados para el rastreo
+     - Numero de hilos usados para el rastreo (rango: 0 a 100)
    * - ``failureCountThreshold``
      - Si
-     - Umbral del numero de fallos para detener el rastreo de una URL (-1=deshabilitado)
+     - Umbral del numero de fallos para detener el rastreo de una URL (-1=deshabilitado; rango: -1 a 10000)
    * - ``csvFileEncoding``
      - Si
      - Codificacion de la exportacion CSV
@@ -252,16 +269,16 @@ se expresan como cadenas ``"true"`` / ``"false"``.
      - Cadena User-Agent enviada durante el rastreo
    * - ``purgeSearchLogDay``
      - No
-     - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado)
+     - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeJobLogDay``
      - No
-     - Numero de dias que se conservan los registros de trabajos (-1=deshabilitado)
+     - Numero de dias que se conservan los registros de trabajos (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeUserInfoDay``
      - No
-     - Numero de dias que se conserva la informacion de usuario (-1=deshabilitado)
+     - Numero de dias que se conserva la informacion de usuario (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeSuggestSearchLogDay``
      - No
-     - Numero de dias que se conservan los registros de busqueda de sugerencias (0=deshabilitado)
+     - Numero de dias que se conservan los registros de busqueda de sugerencias (0=deshabilitado; rango: 0 a 100000)
    * - ``purgeByBots``
      - No
      - User-Agent de bots cuyos registros de busqueda se descartan
@@ -311,9 +328,10 @@ se expresan como cadenas ``"true"`` / ``"false"``.
 Campos Relacionados con Autenticacion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Las configuraciones relacionadas con LDAP y SSO (OpenID Connect, SAML, SPNEGO, Entra ID) tambien
-se gestionan con esta API. A continuacion se muestran los campos representativos
-(para todos los campos consulte ``EditForm.java``).
+Las configuraciones relacionadas con LDAP y SSO (OpenID Connect, SAML,
+SPNEGO, Entra ID) tambien se gestionan con esta API. A continuacion se
+muestran los campos representativos (todos los campos corresponden a los
+ajustes "General" en la interfaz de administracion).
 
 .. list-table::
    :header-rows: 1
@@ -349,7 +367,8 @@ se gestionan con esta API. A continuacion se muestran los campos representativos
 Campos Relacionados con Almacenamiento
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Tambien se puede gestionar la configuracion de integracion con almacenamiento en la nube (S3 / GCS).
+Tambien se puede gestionar la configuracion de integracion con almacenamiento
+en la nube (S3 / GCS).
 
 .. list-table::
    :header-rows: 1
@@ -358,7 +377,7 @@ Tambien se puede gestionar la configuracion de integracion con almacenamiento en
    * - Campo
      - Descripcion
    * - ``storageType``
-     - Tipo de almacenamiento (``s3`` / ``gcs`` / ``auto``)
+     - Tipo de almacenamiento (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - URL del endpoint del almacenamiento
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -386,7 +405,8 @@ Tambien se puede gestionar la configuracion de integracion con almacenamiento en
 Respuesta
 ---------
 
-En caso de actualizacion exitosa solo se devuelve ``status`` (no se incluyen ``id`` ni ``created``).
+En caso de actualizacion exitosa, solo se devuelven ``version`` y ``status``
+(no se incluyen ``id`` ni ``created``).
 
 .. code-block:: json
 
@@ -397,19 +417,24 @@ En caso de actualizacion exitosa solo se devuelve ``status`` (no se incluyen ``i
       }
     }
 
+Si la actualizacion falla (por ejemplo, debido a un error de validacion), la API
+devuelve HTTP 400 y ``status`` se establece en un valor distinto de cero (``1``
+para un error de validacion), y ``message`` contiene los detalles del error.
+Consulte :doc:`api-admin-overview` para la lista de valores de ``status``.
+
 Ejemplos de Uso
 ===============
 
 .. note::
 
-   Dado que los cuatro campos ``dayForCleanup``, ``crawlingThreadCount``,
-   ``failureCountThreshold`` y ``csvFileEncoding`` son obligatorios en las solicitudes PUT,
-   todos los ejemplos a continuacion los incluyen. Como los valores enviados sobreescriben
-   la configuracion existente, en un uso real envie los valores actuales obtenidos con
-   ``GET`` (los ejemplos a continuacion usan los valores predeterminados).
+   Los ejemplos a continuacion incluyen los campos requeridos (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Como estos
+   deben enviarse siempre independientemente de lo que se desee cambiar, recupere los
+   valores actuales con ``GET`` e incluyalos en la operacion real (los ejemplos a
+   continuacion usan los valores predeterminados).
 
 Actualizar la Configuracion de Rastreo
---------------------------------------
+---------------------------------------
 
 .. code-block:: bash
 
@@ -425,7 +450,7 @@ Actualizar la Configuracion de Rastreo
          }'
 
 Actualizar el Periodo de Retencion de Registros
------------------------------------------------
+-------------------------------------------------
 
 .. code-block:: bash
 
@@ -443,7 +468,7 @@ Actualizar el Periodo de Retencion de Registros
          }'
 
 Actualizar la Configuracion de Sugerencias
-------------------------------------------
+-------------------------------------------
 
 .. code-block:: bash
 
@@ -460,7 +485,7 @@ Actualizar la Configuracion de Sugerencias
          }'
 
 Informacion de Referencia
-=========================
+==========================
 
 - :doc:`api-admin-overview` - Vision general de Admin API
 - :doc:`api-admin-systeminfo` - API de informacion del sistema

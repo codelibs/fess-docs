@@ -5,8 +5,10 @@ General API
 개요
 ====
 
-General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
-시스템 전반에 관련된 설정의 조회와 업데이트를 수행할 수 있습니다.
+General API는 |Fess| 의 일반 설정（시스템 전반에 관한 설정）을 관리하기 위한 API입니다.
+크롤링, 로그, 검색 결과 표시, 서제스트, 로그 보존 기간, 알림, 인증（LDAP / SSO）,
+클라우드 스토리지 연동 등의 설정을 조회·업데이트할 수 있습니다. 이러한 설정은 관리
+화면의 「일반」 설정（:doc:`../../admin/general-guide`）에 대응합니다.
 
 기본 URL
 =========
@@ -14,6 +16,9 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 ::
 
     /api/admin/general
+
+이 API에 접근하려면 ``Radmin-api`` 권한을 가진 액세스 토큰이 필요합니다.
+인증 방법의 자세한 내용은 :doc:`api-admin-overview` 를 참조하십시오.
 
 엔드포인트 목록
 ==================
@@ -42,8 +47,15 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 
     GET /api/admin/general
 
+이 엔드포인트는 쿼리 파라미터를 받지 않습니다.
+
 응답
 ----------
+
+``response.setting`` 에 현재 일반 설정이 포함됩니다. 응답에는 업데이트 가능한 모든
+설정 필드가 포함되지만, 아래 예시에서는 대표적인 필드만 발췌하여 보여줍니다.
+켜기/끄기 설정은 ``"true"`` / ``"false"`` 문자열로, 보존 일수나 스레드 수 등은
+숫자로 표현됩니다.
 
 .. code-block:: json
 
@@ -91,7 +103,7 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 
    위는 대표적인 필드만을 예시로 나타낸 것입니다. 실제 응답의 ``setting`` 에는
    일반 설정의 모든 필드（크롤링·검색·알림·LDAP·SSO·스토리지 관련 등）가
-   포함됩니다. 전체 필드는 ``EditForm.java`` 를 참조하십시오.
+   포함됩니다. 전체 필드 목록은 관리 화면의 「일반」 설정 페이지를 참조하십시오.
 
 .. note::
 
@@ -103,7 +115,8 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
    - 그 외 시크릿（``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
      ``entraidClientId`` / ``entraidClientSecret``）은 설정되어 있는 경우
-     마스크 값 ``"**********"`` 으로 대체되어 반환됩니다.
+     마스크 값 ``"**********"`` 으로, 설정되어 있지 않은 경우 빈 문자열（``""``）
+     로 반환됩니다.
 
 일반 설정 업데이트
 ==================
@@ -119,36 +132,31 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 요청 본문
 ~~~~~~~~~~~~~~~~
 
-업데이트는 부분 업데이트（merge）로 처리됩니다. 현재 설정 값에 대해 요청 값이
-머지되며, 요청에 포함되지 않은 필드（``null`` 인 필드）는 무시되어 기존 값이
-유지됩니다.
+업데이트는 부분 업데이트（merge）로 처리됩니다. 서버는 현재 설정 값을 읽어들인 후,
+요청에 포함된 ``null`` 이 아닌 필드만 덮어씁니다. 요청에 포함되지 않은 필드나
+``null`` 인 필드는 기존 값이 유지됩니다.
 
 .. warning::
 
-   다음 4개의 필드에는 ``@Required`` 제약이 있으며, **모든** PUT 요청에 반드시
-   포함해야 합니다. 생략하면 유효성 검사 오류（HTTP 400）가 발생합니다.
+   다음 4개의 필드는 필수이며, **모든** PUT 요청에 반드시 포함해야 합니다（부분
+   업데이트의 경우에도 마찬가지입니다）.
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   이 필드들은 부분 업데이트 대상이더라도 생략할 수 없습니다. 전송한 값으로 기존
-   설정이 덮어쓰이므로, 값을 변경하지 않으려는 경우에는 사전에 ``GET`` 으로 조회한
-   현재 값을 그대로 지정하십시오. 위 필드 외의 필드는 생략 가능하며, 생략한 경우
-   기존 값이 유지됩니다.
+   그 중 하나라도 누락되면 유효성 검사 오류가 발생하여 API는 ``status: 1`` 과 오류
+   ``message`` 를 포함한 HTTP 400 을 반환합니다. 전송한 값으로 기존 설정이
+   덮어쓰이므로, 값을 변경하지 않으려는 경우에는 사전에 ``GET`` 으로 조회한 현재
+   값을 그대로 지정하십시오. 위 필드 외의 필드는 생략 가능하며, 생략한 경우 기존
+   값이 유지됩니다.
 
 .. note::
 
-   수치 필드에는 타입 및 범위 유효성 검사가 있으며, 정수로 해석할 수 없는 값이나
-   범위를 벗어난 값을 전송하면 유효성 검사 오류（HTTP 400）가 발생합니다.
-
-   - ``dayForCleanup``: ``-1`` ~ ``1000``
-   - ``crawlingThreadCount``: ``0`` ~ ``100``
-   - ``failureCountThreshold``: ``-1`` ~ ``10000``
-   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
-     ``-1`` ~ ``100000``
-   - ``purgeSuggestSearchLogDay``: ``0`` ~ ``100000``
+   수치 필드에는 타입 및 범위 유효성 검사가 있습니다. 정수로 해석할 수 없는 값이나
+   범위를 벗어난 값을 전송하면 유효성 검사 오류（HTTP 400, ``status: 1``）가
+   발생합니다. 각 수치 필드의 유효 범위는 아래의 필드 표에 기재되어 있습니다.
 
 .. note::
 
@@ -173,11 +181,9 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 주요 필드
 ~~~~~~~~~~~~~~
 
-설정 항목은 매우 다양합니다. 대표적인 필드를 아래에 나타냅니다
-（전체 필드는 ``EditForm.java`` 를 참조하십시오. API의 요청/응답
-본문 타입은 ``EditForm`` 을 상속한 ``EditBody`` 이지만, 필드 정의는 ``EditForm``
-에 있습니다）. ``available`` 계열의 켜기/끄기 설정은
-``"true"`` / ``"false"`` 문자열로 표현됩니다.
+설정 항목은 매우 다양합니다. 대표적인 필드를 아래에 나타냅니다（모든 필드는 관리
+화면의 「일반」 설정에 대응합니다）. 켜기/끄기 설정은 ``"true"`` / ``"false"``
+문자열로 지정합니다.
 
 .. list-table::
    :header-rows: 1
@@ -191,13 +197,13 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
      - 증분 크롤링 활성화/비활성화
    * - ``dayForCleanup``
      - 예
-     - 크롤링된 문서를 보존하는 일수 (-1=클린업 비활성화)
+     - 크롤링된 문서를 보존하는 일수 (-1=클린업 비활성화; 지정 범위: -1~1000)
    * - ``crawlingThreadCount``
      - 예
-     - 크롤링에 사용하는 스레드 수
+     - 크롤링에 사용하는 스레드 수 (지정 범위: 0~100)
    * - ``failureCountThreshold``
      - 예
-     - URL 크롤링을 중지하는 실패 횟수 임계값 (-1=비활성화)
+     - URL 크롤링을 중지하는 실패 횟수 임계값 (-1=비활성화; 지정 범위: -1~10000)
    * - ``csvFileEncoding``
      - 예
      - CSV 내보내기 인코딩
@@ -251,16 +257,16 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
      - 크롤링 시 전송하는 User-Agent 문자열
    * - ``purgeSearchLogDay``
      - 아니오
-     - 검색 로그를 보존하는 일수 (-1=비활성화)
+     - 검색 로그를 보존하는 일수 (-1=비활성화; 지정 범위: -1~100000)
    * - ``purgeJobLogDay``
      - 아니오
-     - 잡 로그를 보존하는 일수 (-1=비활성화)
+     - 잡 로그를 보존하는 일수 (-1=비활성화; 지정 범위: -1~100000)
    * - ``purgeUserInfoDay``
      - 아니오
-     - 사용자 정보를 보존하는 일수 (-1=비활성화)
+     - 사용자 정보를 보존하는 일수 (-1=비활성화; 지정 범위: -1~100000)
    * - ``purgeSuggestSearchLogDay``
      - 아니오
-     - 서제스트 검색 로그를 보존하는 일수 (0=비활성화)
+     - 서제스트 검색 로그를 보존하는 일수 (0=비활성화; 지정 범위: 0~100000)
    * - ``purgeByBots``
      - 아니오
      - 검색 로그를 폐기할 대상 봇 User-Agent
@@ -310,9 +316,9 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 인증 관련 필드
 ~~~~~~~~~~~~~~~~~~
 
-LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
-이 API로 관리합니다. 대표적인 필드를 아래에 나타냅니다
-（전체 필드는 ``EditForm.java`` 를 참조）.
+LDAP 및 SSO（OpenID Connect, SAML, SPNEGO, Entra ID）에 관한 설정도 이 API로
+관리합니다. 대표적인 필드를 아래에 나타냅니다（모든 필드는 관리 화면의 「일반」
+설정에 대응합니다）.
 
 .. list-table::
    :header-rows: 1
@@ -348,7 +354,7 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
 스토리지 관련 필드
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-클라우드 스토리지(S3 / GCS) 연동 설정도 관리할 수 있습니다.
+클라우드 스토리지（S3 / GCS） 연동 설정도 관리할 수 있습니다.
 
 .. list-table::
    :header-rows: 1
@@ -357,7 +363,7 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
    * - 필드
      - 설명
    * - ``storageType``
-     - 스토리지 타입 (``s3`` / ``gcs`` / ``auto``)
+     - 스토리지 타입 (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - 스토리지 엔드포인트 URL
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -385,7 +391,8 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
 응답
 ----------
 
-업데이트 성공 시 ``status`` 만 반환됩니다 (``id`` 나 ``created`` 는 포함되지 않습니다).
+업데이트 성공 시 ``version`` 과 ``status`` 만 반환됩니다（``id`` 나 ``created`` 는
+포함되지 않습니다）.
 
 .. code-block:: json
 
@@ -396,19 +403,22 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
       }
     }
 
+검증 오류 등으로 업데이트에 실패한 경우, API는 HTTP 400 을 반환하며 응답의
+``status`` 에 0 이외의 값（검증 오류는 ``1``）이 설정되고 ``message`` 에 오류
+내용이 포함됩니다. ``status`` 값의 목록은 :doc:`api-admin-overview` 를 참조하십시오.
+
 사용 예
-======
+=======
 
 .. note::
 
-   PUT 요청에서는 ``dayForCleanup``、``crawlingThreadCount``、
-   ``failureCountThreshold``、``csvFileEncoding`` 의 4개 필드가 필수이므로,
-   아래의 모든 예시에 이 필드들을 포함하고 있습니다. 이 필드들은 전송한 값으로
-   기존 설정을 덮어쓰므로, 실제 운용에서는 ``GET`` 으로 조회한 현재 값을 지정하십시오
-   （아래 예시에서는 기본값을 사용합니다）.
+   아래 예시에서는 필수 필드（``dayForCleanup``, ``crawlingThreadCount``,
+   ``failureCountThreshold``, ``csvFileEncoding``）를 포함하고 있습니다. 이 필드들은
+   변경 내용에 관계없이 항상 전송해야 하므로, 실제 운용 시에는 ``GET`` 으로 조회한
+   현재 값을 지정하십시오（아래 예시에서는 기본값을 사용합니다）.
 
 크롤링 설정 업데이트
-------------------
+--------------------
 
 .. code-block:: bash
 
@@ -424,7 +434,7 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
          }'
 
 로그 보존 기간 업데이트
-------------------
+-----------------------
 
 .. code-block:: bash
 
@@ -442,7 +452,7 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
          }'
 
 서제스트 설정 업데이트
---------------------
+----------------------
 
 .. code-block:: bash
 
@@ -459,7 +469,7 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
          }'
 
 참고 정보
-========
+=========
 
 - :doc:`api-admin-overview` - Admin API 개요
 - :doc:`api-admin-systeminfo` - 시스템 정보 API

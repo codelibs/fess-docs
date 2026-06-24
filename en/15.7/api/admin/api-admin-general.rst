@@ -5,8 +5,12 @@ General API
 Overview
 ========
 
-General API is an API for managing |Fess| general settings.
-You can retrieve and update system-wide configuration settings.
+General API is an API for managing the |Fess| general settings (system-wide
+configuration). You can retrieve and update settings for crawling, logging,
+search result display, suggest, log retention periods, notifications,
+authentication (LDAP / SSO), and cloud storage integration. These settings
+correspond to the "General" settings in the admin UI
+(:doc:`../../admin/general-guide`).
 
 Base URL
 ========
@@ -14,6 +18,9 @@ Base URL
 ::
 
     /api/admin/general
+
+Accessing this API requires an access token with the ``Radmin-api`` permission.
+See :doc:`api-admin-overview` for authentication details.
 
 Endpoint List
 =============
@@ -42,8 +49,15 @@ Request
 
     GET /api/admin/general
 
+This endpoint does not accept query parameters.
+
 Response
 --------
+
+``response.setting`` contains the current general settings. The response includes
+all updatable setting fields; the example below shows only representative fields.
+On/off settings are expressed as the strings ``"true"`` / ``"false"``, while
+values such as retention days and thread counts are expressed as numbers.
 
 .. code-block:: json
 
@@ -89,21 +103,22 @@ Response
 
 .. note::
 
-   The above shows only representative fields as an example. The actual ``setting``
-   object in the response contains all general-settings fields (crawling, search,
-   notification, LDAP, SSO, storage, etc.). See ``EditForm.java`` for the full list.
+   The above shows only representative fields. The actual ``setting`` object in the
+   response contains all general-settings fields (crawling, search, notification,
+   LDAP, SSO, storage, etc.). See the admin "General" settings page for the full
+   list.
 
 .. note::
 
    For security reasons, fields that contain credentials are not returned with their
    actual values.
 
-   - ``ldapAdminSecurityCredentials`` (LDAP admin password) is always replaced with
+   - ``ldapAdminSecurityCredentials`` (LDAP admin password) is always returned as
      ``null``.
    - Other secrets (``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
      ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
      ``entraidClientSecret``) are returned masked as ``"**********"`` when they are
-     set.
+     set, or as an empty string (``""``) when they are not set.
 
 Update General Settings
 =======================
@@ -119,44 +134,41 @@ Request
 Request Body
 ~~~~~~~~~~~~
 
-Updates are processed as a partial merge — request values are merged onto the
-current settings, and fields not included in the request (null fields) are ignored
-so existing values are kept.
+Updates are processed as a partial update (merge). The server loads the current
+settings and then overwrites only the non-``null`` fields included in the request.
+Fields not included in the request, and fields set to ``null``, retain their
+existing values.
 
 .. warning::
 
-   The following four fields have a ``@Required`` constraint and MUST be included in
-   EVERY PUT request. Omitting them results in a validation error (HTTP 400).
+   The following four fields are required and MUST be included in EVERY PUT request,
+   even for a partial update:
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   They cannot be omitted even during a partial update. Because the value you send
-   overwrites the existing setting, if you do not want to change a value, first
-   retrieve the current value with ``GET`` and send it as-is. All other fields are
-   optional; omitted fields keep their existing values.
+   If any of them is missing, the request fails validation and the API returns
+   HTTP 400 with ``status: 1`` and an error ``message``. Because the value you send
+   overwrites the existing setting, to keep a value unchanged first retrieve it with
+   ``GET`` and send it back as-is. All other fields are optional; omitted fields keep
+   their existing values.
 
 .. note::
 
-   Numeric fields have type and range validation. Sending a value that cannot be
-   parsed as an integer, or a value outside the allowed range, results in a
-   validation error (HTTP 400).
-
-   - ``dayForCleanup``: ``-1`` to ``1000``
-   - ``crawlingThreadCount``: ``0`` to ``100``
-   - ``failureCountThreshold``: ``-1`` to ``10000``
-   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``: ``-1`` to ``100000``
-   - ``purgeSuggestSearchLogDay``: ``0`` to ``100000``
+   Numeric fields are type- and range-validated. Sending a value that cannot be
+   parsed as an integer, or a value outside the allowed range, fails validation
+   (HTTP 400 with ``status: 1``). The valid range for each numeric field is listed
+   in the field table below.
 
 .. note::
 
    For on/off (``available``-type) fields, only ``"true"`` or ``"on"`` (both
    case-insensitive) mean enabled. Any other value (such as ``"false"`` or an empty
    string) is treated as disabled (``false``). The existing value is kept only when
-   the field is omitted (not sent). Note that in the GET response, these fields are
-   returned as the strings ``"true"`` / ``"false"``.
+   the field is omitted (not sent). In the GET response, these fields are returned
+   as the strings ``"true"`` / ``"false"``.
 
 .. code-block:: json
 
@@ -173,10 +185,8 @@ Main Fields
 ~~~~~~~~~~~
 
 There are a wide variety of setting items. The representative fields are shown
-below (refer to ``EditForm.java`` for all fields). The API request/response body
-type is ``EditBody``, which extends ``EditForm``, but the field definitions live in
-``EditForm``. On/off settings of the ``available`` type are expressed as the strings
-``"true"`` / ``"false"``.
+below (all fields correspond to the "General" settings in the admin UI). On/off
+settings are specified as the strings ``"true"`` / ``"false"``.
 
 .. list-table::
    :header-rows: 1
@@ -190,13 +200,13 @@ type is ``EditBody``, which extends ``EditForm``, but the field definitions live
      - Enable/disable incremental crawling
    * - ``dayForCleanup``
      - Yes
-     - Number of days to retain crawled documents (-1 = cleanup disabled)
+     - Number of days to retain crawled documents (-1 = cleanup disabled; range: -1 to 1000)
    * - ``crawlingThreadCount``
      - Yes
-     - Number of threads used for crawling
+     - Number of threads used for crawling (range: 0 to 100)
    * - ``failureCountThreshold``
      - Yes
-     - Failure count threshold to stop crawling a URL (-1 = disabled)
+     - Failure count threshold to stop crawling a URL (-1 = disabled; range: -1 to 10000)
    * - ``csvFileEncoding``
      - Yes
      - Encoding for CSV export
@@ -250,16 +260,16 @@ type is ``EditBody``, which extends ``EditForm``, but the field definitions live
      - User-Agent string sent during crawling
    * - ``purgeSearchLogDay``
      - No
-     - Number of days to retain search logs (-1 = disabled)
+     - Number of days to retain search logs (-1 = disabled; range: -1 to 100000)
    * - ``purgeJobLogDay``
      - No
-     - Number of days to retain job logs (-1 = disabled)
+     - Number of days to retain job logs (-1 = disabled; range: -1 to 100000)
    * - ``purgeUserInfoDay``
      - No
-     - Number of days to retain user information (-1 = disabled)
+     - Number of days to retain user information (-1 = disabled; range: -1 to 100000)
    * - ``purgeSuggestSearchLogDay``
      - No
-     - Number of days to retain suggest search logs (0 = disabled)
+     - Number of days to retain suggest search logs (0 = disabled; range: 0 to 100000)
    * - ``purgeByBots``
      - No
      - Bot User-Agents whose search logs are discarded
@@ -310,8 +320,8 @@ Authentication-Related Fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Settings related to LDAP and SSO (OpenID Connect, SAML, SPNEGO, Entra ID) are
-also managed by this API. The representative fields are shown below (refer to
-``EditForm.java`` for all fields).
+also managed by this API. The representative fields are shown below (all fields
+correspond to the "General" settings in the admin UI).
 
 .. list-table::
    :header-rows: 1
@@ -356,7 +366,7 @@ Cloud storage (S3 / GCS) integration settings can also be managed.
    * - Field
      - Description
    * - ``storageType``
-     - Storage type (``s3`` / ``gcs`` / ``auto``)
+     - Storage type (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - Storage endpoint URL
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -384,7 +394,8 @@ Cloud storage (S3 / GCS) integration settings can also be managed.
 Response
 --------
 
-On a successful update, only ``status`` is returned (``id`` and ``created`` are not included).
+On a successful update, only ``version`` and ``status`` are returned (``id`` and
+``created`` are not included).
 
 .. code-block:: json
 
@@ -395,16 +406,21 @@ On a successful update, only ``status`` is returned (``id`` and ``created`` are 
       }
     }
 
+If the update fails (for example, due to a validation error), the API returns
+HTTP 400 and the response ``status`` is set to a non-zero value (``1`` for a
+validation error), with ``message`` containing the error details. See
+:doc:`api-admin-overview` for the list of ``status`` values.
+
 Usage Examples
 ==============
 
 .. note::
 
-   Because the four fields ``dayForCleanup``, ``crawlingThreadCount``,
-   ``failureCountThreshold``, and ``csvFileEncoding`` are required in PUT requests,
-   all examples below include them. Since the values you send overwrite the existing
-   settings, in real usage you should send the current values retrieved with ``GET``
-   (the examples below use default values).
+   The examples below include the required fields (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Because
+   these must always be sent regardless of what you are changing, retrieve the
+   current values with ``GET`` and include them in actual operation (the examples
+   below use default values).
 
 Update Crawl Settings
 ---------------------

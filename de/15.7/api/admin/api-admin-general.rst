@@ -5,8 +5,13 @@ General API
 Übersicht
 =========
 
-Die General API dient zur Verwaltung der allgemeinen Einstellungen in |Fess|.
-Sie können systemweite Konfigurationen abrufen und aktualisieren.
+Die General API dient zur Verwaltung der allgemeinen Einstellungen (systemweite
+Konfiguration) von |Fess|. Sie können Einstellungen für Crawling, Protokollierung,
+Anzeige von Suchergebnissen, Suggest, Protokoll-Aufbewahrungszeiträume,
+Benachrichtigungen, Authentifizierung (LDAP / SSO) und Cloud-Speicher-Anbindung
+abrufen und aktualisieren. Diese Einstellungen entsprechen den
+„Allgemein"-Einstellungen in der Admin-Oberfläche
+(:doc:`../../admin/general-guide`).
 
 Basis-URL
 =========
@@ -14,6 +19,10 @@ Basis-URL
 ::
 
     /api/admin/general
+
+Für den Zugriff auf diese API ist ein Zugriffstoken mit der Berechtigung ``Radmin-api``
+erforderlich. Weitere Informationen zur Authentifizierung finden Sie unter
+:doc:`api-admin-overview`.
 
 Endpunktliste
 =============
@@ -42,8 +51,16 @@ Request
 
     GET /api/admin/general
 
+Dieser Endpunkt akzeptiert keine Abfrageparameter.
+
 Response
 --------
+
+``response.setting`` enthält die aktuellen allgemeinen Einstellungen. Die Antwort
+enthält alle aktualisierbaren Einstellungsfelder; das nachstehende Beispiel zeigt nur
+repräsentative Felder. Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
+``"false"`` ausgedrückt, während Werte wie Aufbewahrungstage und Thread-Anzahl als
+Zahlen ausgedrückt werden.
 
 .. code-block:: json
 
@@ -92,19 +109,20 @@ Response
    Das obige Beispiel zeigt nur repräsentative Felder. Das ``setting``-Objekt in der
    tatsächlichen Antwort enthält alle Felder der allgemeinen Einstellungen (Crawling,
    Suche, Benachrichtigungen, LDAP, SSO, Speicher usw.). Die vollständige Feldliste
-   ist in ``EditForm.java`` zu finden.
+   finden Sie auf der Admin-Seite „Allgemein".
 
 .. note::
 
    Aus Sicherheitsgründen werden Felder mit Anmeldeinformationen nicht mit ihren
    tatsächlichen Werten in der Antwort zurückgegeben.
 
-   - Das LDAP-Administratorpasswort ``ldapAdminSecurityCredentials`` wird stets durch
-     ``null`` ersetzt.
+   - Das LDAP-Administratorpasswort ``ldapAdminSecurityCredentials`` wird stets als
+     ``null`` zurückgegeben.
    - Andere Secrets (``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
      ``entraidClientId`` / ``entraidClientSecret``) werden bei gesetztem Wert als
-     Maskierungswert ``"**********"`` zurückgegeben.
+     Maskierungswert ``"**********"`` zurückgegeben, bzw. als leere Zeichenkette
+     (``""``), wenn sie nicht gesetzt sind.
 
 Allgemeine Einstellungen aktualisieren
 ======================================
@@ -120,40 +138,36 @@ Request
 Request-Body
 ~~~~~~~~~~~~
 
-Die Aktualisierung wird als partielle Zusammenführung (merge) verarbeitet. Die
-Anfragewerte werden mit den aktuellen Einstellungen zusammengeführt; Felder, die
-nicht in der Anfrage enthalten sind (``null``-Felder), werden ignoriert und behalten
-ihren bestehenden Wert.
+Aktualisierungen werden als partielle Aktualisierung (merge) verarbeitet. Der
+Server lädt die aktuellen Einstellungen und überschreibt dann nur die
+Nicht-``null``-Felder, die in der Anfrage enthalten sind. Felder, die nicht in
+der Anfrage enthalten sind, sowie Felder, die auf ``null`` gesetzt sind, behalten
+ihre vorhandenen Werte.
 
 .. warning::
 
-   Die folgenden vier Felder haben eine ``@Required``-Einschränkung und MÜSSEN in
-   **jedem** PUT-Request enthalten sein. Werden sie weggelassen, tritt ein
-   Validierungsfehler (HTTP 400) auf.
+   Die folgenden vier Felder sind erforderlich und MÜSSEN in **jedem** PUT-Request
+   enthalten sein, auch bei einer partiellen Aktualisierung:
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   Diese Felder können auch bei einer partiellen Aktualisierung nicht weggelassen
-   werden. Da der gesendete Wert die bestehende Einstellung überschreibt, sollte für
-   Felder, die nicht geändert werden sollen, zunächst der aktuelle Wert per ``GET``
-   abgerufen und unverändert übermittelt werden. Alle anderen Felder sind optional;
+   Fehlt eines dieser Felder, schlägt die Validierung fehl und die API gibt
+   HTTP 400 mit ``status: 1`` und einer Fehlermeldung ``message`` zurück. Da der
+   gesendete Wert die bestehende Einstellung überschreibt, sollte für Felder, die
+   nicht geändert werden sollen, zunächst der aktuelle Wert per ``GET`` abgerufen
+   und unverändert übermittelt werden. Alle anderen Felder sind optional;
    weggelassene Felder behalten ihren bestehenden Wert.
 
 .. note::
 
    Numerische Felder unterliegen einer Typ- und Bereichsvalidierung. Das Senden eines
    Werts, der nicht als Ganzzahl interpretiert werden kann, oder eines Werts außerhalb
-   des zulässigen Bereichs führt zu einem Validierungsfehler (HTTP 400).
-
-   - ``dayForCleanup``: ``-1`` bis ``1000``
-   - ``crawlingThreadCount``: ``0`` bis ``100``
-   - ``failureCountThreshold``: ``-1`` bis ``10000``
-   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
-     ``-1`` bis ``100000``
-   - ``purgeSuggestSearchLogDay``: ``0`` bis ``100000``
+   des zulässigen Bereichs führt zu einem Validierungsfehler (HTTP 400 mit
+   ``status: 1``). Der zulässige Bereich für jedes numerische Feld ist in der
+   nachstehenden Feldtabelle aufgeführt.
 
 .. note::
 
@@ -178,11 +192,10 @@ ihren bestehenden Wert.
 Wichtigste Felder
 ~~~~~~~~~~~~~~~~~
 
-Es gibt zahlreiche Konfigurationselemente. Im Folgenden sind die wichtigsten Felder
-aufgeführt (alle Felder siehe ``EditForm.java``; der Typ des API-Request-/Response-Body
-ist ``EditBody``, der ``EditForm`` erweitert, jedoch liegen die Felddefinitionen in
-``EditForm``). Die Ein-/Aus-Einstellungen vom Typ ``available`` werden als
-Zeichenketten ``"true"`` / ``"false"`` dargestellt.
+Es gibt zahlreiche Konfigurationselemente. Im Folgenden sind die wichtigsten
+Felder aufgeführt (alle Felder entsprechen den „Allgemein"-Einstellungen in der
+Admin-Oberfläche). Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
+``"false"`` angegeben.
 
 .. list-table::
    :header-rows: 1
@@ -196,13 +209,13 @@ Zeichenketten ``"true"`` / ``"false"`` dargestellt.
      - Inkrementelles Crawling aktivieren/deaktivieren
    * - ``dayForCleanup``
      - Ja
-     - Anzahl der Tage, die gecrawlte Dokumente aufbewahrt werden (-1=Cleanup deaktiviert)
+     - Anzahl der Tage, die gecrawlte Dokumente aufbewahrt werden (-1 = Cleanup deaktiviert; Bereich: -1 bis 1000)
    * - ``crawlingThreadCount``
      - Ja
-     - Anzahl der für das Crawling verwendeten Threads
+     - Anzahl der für das Crawling verwendeten Threads (Bereich: 0 bis 100)
    * - ``failureCountThreshold``
      - Ja
-     - Schwellenwert der Fehleranzahl, ab der das Crawling einer URL gestoppt wird (-1=deaktiviert)
+     - Schwellenwert der Fehleranzahl, ab der das Crawling einer URL gestoppt wird (-1 = deaktiviert; Bereich: -1 bis 10000)
    * - ``csvFileEncoding``
      - Ja
      - Kodierung des CSV-Exports
@@ -235,7 +248,7 @@ Zeichenketten ``"true"`` / ``"false"`` dargestellt.
      - Standard-Sortierreihenfolge
    * - ``appendQueryParameter``
      - Nein
-     - Anfügen von Query-Parametern an die Suchergebnis-URL
+     - Anfügen von Abfrageparametern an die Suchergebnis-URL
    * - ``loginRequired``
      - Nein
      - Ob für die Suche eine Anmeldung erforderlich ist
@@ -256,16 +269,16 @@ Zeichenketten ``"true"`` / ``"false"`` dargestellt.
      - User-Agent-Zeichenkette, die beim Crawling gesendet wird
    * - ``purgeSearchLogDay``
      - Nein
-     - Anzahl der Tage, die das Suchprotokoll aufbewahrt wird (-1=deaktiviert)
+     - Anzahl der Tage, die das Suchprotokoll aufbewahrt wird (-1 = deaktiviert; Bereich: -1 bis 100000)
    * - ``purgeJobLogDay``
      - Nein
-     - Anzahl der Tage, die das Job-Protokoll aufbewahrt wird (-1=deaktiviert)
+     - Anzahl der Tage, die das Job-Protokoll aufbewahrt wird (-1 = deaktiviert; Bereich: -1 bis 100000)
    * - ``purgeUserInfoDay``
      - Nein
-     - Anzahl der Tage, die Benutzerinformationen aufbewahrt werden (-1=deaktiviert)
+     - Anzahl der Tage, die Benutzerinformationen aufbewahrt werden (-1 = deaktiviert; Bereich: -1 bis 100000)
    * - ``purgeSuggestSearchLogDay``
      - Nein
-     - Anzahl der Tage, die das Suggest-Suchprotokoll aufbewahrt wird (0=deaktiviert)
+     - Anzahl der Tage, die das Suggest-Suchprotokoll aufbewahrt wird (0 = deaktiviert; Bereich: 0 bis 100000)
    * - ``purgeByBots``
      - Nein
      - Bot-User-Agents, deren Suchprotokolle verworfen werden
@@ -315,9 +328,10 @@ Zeichenketten ``"true"`` / ``"false"`` dargestellt.
 Authentifizierungsbezogene Felder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID) werden
-über diese API verwaltet. Im Folgenden sind die wichtigsten Felder aufgeführt
-(alle Felder siehe ``EditForm.java``).
+Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID)
+werden über diese API verwaltet. Im Folgenden sind die wichtigsten Felder
+aufgeführt (alle Felder entsprechen den „Allgemein"-Einstellungen in der
+Admin-Oberfläche).
 
 .. list-table::
    :header-rows: 1
@@ -353,7 +367,8 @@ Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID) 
 Speicherbezogene Felder
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verwaltet werden.
+Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können
+verwaltet werden.
 
 .. list-table::
    :header-rows: 1
@@ -362,7 +377,7 @@ Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verw
    * - Feld
      - Beschreibung
    * - ``storageType``
-     - Speichertyp (``s3`` / ``gcs`` / ``auto``)
+     - Speichertyp (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - Endpunkt-URL des Speichers
    * - ``storageAccessKey`` / ``storageSecretKey``
@@ -392,7 +407,8 @@ Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verw
 Response
 --------
 
-Bei erfolgreicher Aktualisierung wird nur ``status`` zurückgegeben (``id`` oder ``created`` sind nicht enthalten).
+Bei erfolgreicher Aktualisierung werden nur ``version`` und ``status``
+zurückgegeben (``id`` und ``created`` sind nicht enthalten).
 
 .. code-block:: json
 
@@ -403,20 +419,24 @@ Bei erfolgreicher Aktualisierung wird nur ``status`` zurückgegeben (``id`` oder
       }
     }
 
+Schlägt die Aktualisierung fehl (z. B. aufgrund eines Validierungsfehlers), gibt
+die API HTTP 400 zurück, und ``status`` wird auf einen Wert ungleich null gesetzt
+(``1`` bei einem Validierungsfehler), wobei ``message`` die Fehlerdetails enthält.
+Die Liste der ``status``-Werte finden Sie unter :doc:`api-admin-overview`.
+
 Verwendungsbeispiele
 ====================
 
 .. note::
 
-   Da die vier Felder ``dayForCleanup``, ``crawlingThreadCount``,
-   ``failureCountThreshold`` und ``csvFileEncoding`` in PUT-Requests erforderlich sind,
-   enthalten alle folgenden Beispiele diese Felder. Da die gesendeten Werte die
-   bestehenden Einstellungen überschreiben, sollten in der realen Nutzung die per
-   ``GET`` abgerufenen aktuellen Werte angegeben werden (die folgenden Beispiele
-   verwenden Standardwerte).
+   Die nachstehenden Beispiele enthalten die Pflichtfelder (``dayForCleanup``,
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Da
+   diese unabhängig von der jeweiligen Änderung stets angegeben werden müssen,
+   rufen Sie im realen Betrieb die aktuellen Werte über ``GET`` ab und geben Sie
+   sie an (die folgenden Beispiele verwenden Standardwerte).
 
 Crawl-Einstellungen aktualisieren
----------------------------------
+----------------------------------
 
 .. code-block:: bash
 
@@ -450,7 +470,7 @@ Protokoll-Aufbewahrungsdauer aktualisieren
          }'
 
 Suggest-Einstellungen aktualisieren
------------------------------------
+------------------------------------
 
 .. code-block:: bash
 
