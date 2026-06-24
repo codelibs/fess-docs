@@ -89,9 +89,22 @@ Response
 
 .. note::
 
-   Aus Sicherheitsgründen wird ``ldapAdminSecurityCredentials``, das Passwort
-   des LDAP-Administrators, in der Antwort stets durch ``null`` ersetzt (Quelle:
-   ``ApiAdminGeneralAction.java:71``).
+   Das obige Beispiel zeigt nur repräsentative Felder. Das ``setting``-Objekt in der
+   tatsächlichen Antwort enthält alle Felder der allgemeinen Einstellungen (Crawling,
+   Suche, Benachrichtigungen, LDAP, SSO, Speicher usw.). Die vollständige Feldliste
+   ist in ``EditForm.java`` zu finden.
+
+.. note::
+
+   Aus Sicherheitsgründen werden Felder mit Anmeldeinformationen nicht mit ihren
+   tatsächlichen Werten in der Antwort zurückgegeben.
+
+   - Das LDAP-Administratorpasswort ``ldapAdminSecurityCredentials`` wird stets durch
+     ``null`` ersetzt.
+   - Andere Secrets (``storageAccessKey`` / ``storageSecretKey`` /
+     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
+     ``entraidClientId`` / ``entraidClientSecret``) werden bei gesetztem Wert als
+     Maskierungswert ``"**********"`` zurückgegeben.
 
 Allgemeine Einstellungen aktualisieren
 ======================================
@@ -107,9 +120,49 @@ Request
 Request-Body
 ~~~~~~~~~~~~
 
-Die Aktualisierung wird als partielle Aktualisierung (merge) verarbeitet. Felder, die nicht
-in der Anfrage enthalten sind, behalten ihren bestehenden Wert, und Felder mit ``null`` werden
-ignoriert (Quelle: ``ApiAdminGeneralAction.java:84-90``).
+Die Aktualisierung wird als partielle Zusammenführung (merge) verarbeitet. Die
+Anfragewerte werden mit den aktuellen Einstellungen zusammengeführt; Felder, die
+nicht in der Anfrage enthalten sind (``null``-Felder), werden ignoriert und behalten
+ihren bestehenden Wert.
+
+.. warning::
+
+   Die folgenden vier Felder haben eine ``@Required``-Einschränkung und MÜSSEN in
+   **jedem** PUT-Request enthalten sein. Werden sie weggelassen, tritt ein
+   Validierungsfehler (HTTP 400) auf.
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   Diese Felder können auch bei einer partiellen Aktualisierung nicht weggelassen
+   werden. Da der gesendete Wert die bestehende Einstellung überschreibt, sollte für
+   Felder, die nicht geändert werden sollen, zunächst der aktuelle Wert per ``GET``
+   abgerufen und unverändert übermittelt werden. Alle anderen Felder sind optional;
+   weggelassene Felder behalten ihren bestehenden Wert.
+
+.. note::
+
+   Numerische Felder unterliegen einer Typ- und Bereichsvalidierung. Das Senden eines
+   Werts, der nicht als Ganzzahl interpretiert werden kann, oder eines Werts außerhalb
+   des zulässigen Bereichs führt zu einem Validierungsfehler (HTTP 400).
+
+   - ``dayForCleanup``: ``-1`` bis ``1000``
+   - ``crawlingThreadCount``: ``0`` bis ``100``
+   - ``failureCountThreshold``: ``-1`` bis ``10000``
+   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
+     ``-1`` bis ``100000``
+   - ``purgeSuggestSearchLogDay``: ``0`` bis ``100000``
+
+.. note::
+
+   Bei Ein-/Aus-Feldern (``available``-Typ) bedeutet ausschließlich ``"true"`` oder
+   ``"on"`` (jeweils unabhängig von Groß-/Kleinschreibung) eine Aktivierung. Jeder
+   andere Wert (z. B. ``"false"`` oder eine leere Zeichenkette) wird als deaktiviert
+   (``false``) behandelt. Der bestehende Wert bleibt nur dann erhalten, wenn das Feld
+   weggelassen (nicht gesendet) wird. Im GET-Response werden diese Felder als
+   Zeichenketten ``"true"`` / ``"false"`` zurückgegeben.
 
 .. code-block:: json
 
@@ -125,9 +178,11 @@ ignoriert (Quelle: ``ApiAdminGeneralAction.java:84-90``).
 Wichtigste Felder
 ~~~~~~~~~~~~~~~~~
 
-Es gibt zahlreiche Konfigurationselemente. Im Folgenden sind die wichtigsten Felder aufgeführt
-(alle Felder siehe ``EditForm.java``). Die Ein-/Aus-Einstellungen vom Typ ``available`` werden
-als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
+Es gibt zahlreiche Konfigurationselemente. Im Folgenden sind die wichtigsten Felder
+aufgeführt (alle Felder siehe ``EditForm.java``; der Typ des API-Request-/Response-Body
+ist ``EditBody``, der ``EditForm`` erweitert, jedoch liegen die Felddefinitionen in
+``EditForm``). Die Ein-/Aus-Einstellungen vom Typ ``available`` werden als
+Zeichenketten ``"true"`` / ``"false"`` dargestellt.
 
 .. list-table::
    :header-rows: 1
@@ -163,6 +218,12 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
    * - ``webApiJson``
      - Nein
      - JSON-Web-API aktivieren/deaktivieren
+   * - ``appValue``
+     - Nein
+     - Anwendungsspezifischer zusätzlicher Konfigurationswert
+   * - ``virtualHostValue``
+     - Nein
+     - Virtuelle-Host-Konfiguration (für Mehrmandanten-Setups)
    * - ``popularWord``
      - Nein
      - Aggregation/Anzeige beliebter Wörter aktivieren/deaktivieren
@@ -178,12 +239,21 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
    * - ``loginRequired``
      - Nein
      - Ob für die Suche eine Anmeldung erforderlich ist
+   * - ``loginLink``
+     - Nein
+     - Anzeige des Anmeldelinks auf der Suchseite aktivieren/deaktivieren
    * - ``thumbnail``
      - Nein
      - Generierung von Vorschaubildern aktivieren/deaktivieren
+   * - ``resultCollapsed``
+     - Nein
+     - Einklappen ähnlicher Dokumente in den Suchergebnissen aktivieren/deaktivieren
    * - ``ignoreFailureType``
      - Nein
      - Zu ignorierende Crawl-Fehlertypen
+   * - ``crawlingUserAgent``
+     - Nein
+     - User-Agent-Zeichenkette, die beim Crawling gesendet wird
    * - ``purgeSearchLogDay``
      - Nein
      - Anzahl der Tage, die das Suchprotokoll aufbewahrt wird (-1=deaktiviert)
@@ -232,6 +302,15 @@ als Zeichenketten ``"true"`` / ``"false"`` dargestellt.
    * - ``googleChatWebhookUrls``
      - Nein
      - Google-Chat-Webhook-URL für Benachrichtigungen
+   * - ``searchUseBrowserLocale``
+     - Nein
+     - Ob der Browser-Locale bei der Suche verwendet werden soll
+   * - ``ragLlmName``
+     - Nein
+     - Name des LLM-Providers für RAG
+   * - ``llmLogLevel``
+     - Nein
+     - Log-Level für LLM-bezogene Pakete
 
 Authentifizierungsbezogene Felder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,6 +337,8 @@ Auch die Einstellungen zu LDAP und SSO (OpenID Connect, SAML, SPNEGO, Entra ID) 
      - LDAP-Administratorpasswort (in der Antwort durch ``null`` ersetzt)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - Suchfilter für Benutzer/Gruppen
+   * - ``ldapMemberofAttribute``
+     - LDAP-Attributname, der die Gruppenzugehörigkeit angibt
    * - ``ssoType``
      - SSO-Typ (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` usw.
@@ -293,6 +374,21 @@ Auch die Einstellungen für die Cloud-Speicher-Anbindung (S3 / GCS) können verw
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - GCS-Projekt-ID / Pfad zur Anmeldeinformationsdatei
 
+.. note::
+
+   Secret-Felder wie ``ldapAdminSecurityCredentials``, ``storageAccessKey`` /
+   ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
+   ``entraidClientId`` / ``entraidClientSecret`` sowie ``spnegoPreauthPassword``
+   behalten ihren gespeicherten Wert (werden nicht aktualisiert), wenn der Maskierungswert
+   ``"**********"`` unverändert gesendet wird. Senden Sie den tatsächlichen Wert nur dann,
+   wenn Sie ihn ändern möchten.
+
+   Da diese Prüfung darauf basiert, ob die Zeichenkette nach dem Entfernen aller
+   Sternzeichen leer ist, führt auch das Senden einer leeren Zeichenkette (``""``) oder
+   eines ausschließlich aus Sternzeichen bestehenden Werts dazu, dass der Wert unverändert
+   bleibt. Daher können diese Secret-Felder über die API nicht auf einen leeren Wert
+   zurückgesetzt werden.
+
 Response
 --------
 
@@ -309,6 +405,15 @@ Bei erfolgreicher Aktualisierung wird nur ``status`` zurückgegeben (``id`` oder
 
 Verwendungsbeispiele
 ====================
+
+.. note::
+
+   Da die vier Felder ``dayForCleanup``, ``crawlingThreadCount``,
+   ``failureCountThreshold`` und ``csvFileEncoding`` in PUT-Requests erforderlich sind,
+   enthalten alle folgenden Beispiele diese Felder. Da die gesendeten Werte die
+   bestehenden Einstellungen überschreiben, sollten in der realen Nutzung die per
+   ``GET`` abgerufenen aktuellen Werte angegeben werden (die folgenden Beispiele
+   verwenden Standardwerte).
 
 Crawl-Einstellungen aktualisieren
 ---------------------------------
@@ -335,6 +440,10 @@ Protokoll-Aufbewahrungsdauer aktualisieren
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
@@ -349,6 +458,10 @@ Suggest-Einstellungen aktualisieren
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'

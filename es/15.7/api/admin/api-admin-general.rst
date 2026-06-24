@@ -89,9 +89,22 @@ Respuesta
 
 .. note::
 
-   Por razones de seguridad, ``ldapAdminSecurityCredentials``, que es la contrasena del administrador LDAP,
-   siempre se reemplaza por ``null`` en la respuesta (fuente:
-   ``ApiAdminGeneralAction.java:71``).
+   Lo anterior muestra solo campos representativos a modo de ejemplo. El objeto ``setting``
+   real en la respuesta contiene todos los campos de configuracion general (rastreo, busqueda,
+   notificaciones, LDAP, SSO, almacenamiento, etc.). Consulte ``EditForm.java`` para la lista
+   completa.
+
+.. note::
+
+   Por razones de seguridad, los campos que contienen credenciales no se devuelven con sus
+   valores reales.
+
+   - La contrasena del administrador LDAP ``ldapAdminSecurityCredentials`` siempre se
+     reemplaza por ``null``.
+   - Otros secretos (``storageAccessKey`` / ``storageSecretKey`` /
+     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
+     ``entraidClientId`` / ``entraidClientSecret``) se devuelven enmascarados como
+     ``"**********"`` cuando estan configurados.
 
 Actualizar Configuracion General
 ================================
@@ -107,9 +120,45 @@ Solicitud
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
-La actualizacion se procesa como una actualizacion parcial (merge). Los campos no incluidos en la solicitud
-conservan su valor existente, y los campos con valor ``null`` se ignoran (fuente:
-``ApiAdminGeneralAction.java:84-90``).
+Las actualizaciones se procesan como una combinacion parcial (merge): los valores del
+request se fusionan con la configuracion actual; los campos no incluidos (campos con
+valor ``null``) se ignoran y los valores existentes se mantienen.
+
+.. warning::
+
+   Los siguientes cuatro campos tienen la restriccion ``@Required`` y DEBEN incluirse en
+   CADA solicitud PUT. Omitirlos resulta en un error de validacion (HTTP 400).
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   No pueden omitirse ni siquiera en una actualizacion parcial. Dado que el valor enviado
+   sobreescribe la configuracion existente, si no desea cambiar un valor, primero recupere
+   el valor actual con ``GET`` y envielo tal cual. Todos los demas campos son opcionales;
+   los campos omitidos conservan sus valores existentes.
+
+.. note::
+
+   Los campos numericos tienen validacion de tipo y rango. Enviar un valor que no pueda
+   interpretarse como un entero, o un valor fuera del rango permitido, resulta en un error
+   de validacion (HTTP 400).
+
+   - ``dayForCleanup``: ``-1`` a ``1000``
+   - ``crawlingThreadCount``: ``0`` a ``100``
+   - ``failureCountThreshold``: ``-1`` a ``10000``
+   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``: ``-1`` a ``100000``
+   - ``purgeSuggestSearchLogDay``: ``0`` a ``100000``
+
+.. note::
+
+   Para los campos de activacion/desactivacion (tipo ``available``), solo ``"true"`` o
+   ``"on"`` (ambos sin distincion de mayusculas y minusculas) significan habilitado.
+   Cualquier otro valor (como ``"false"`` o una cadena vacia) se trata como deshabilitado
+   (``false``). El valor existente se mantiene unicamente cuando el campo se omite (no se
+   envia). Tenga en cuenta que en la respuesta GET, estos campos se devuelven como las
+   cadenas ``"true"`` / ``"false"``.
 
 .. code-block:: json
 
@@ -126,7 +175,9 @@ Campos Principales
 ~~~~~~~~~~~~~~~~~~
 
 Los elementos de configuracion son muy variados. A continuacion se muestran los campos representativos
-(para todos los campos consulte ``EditForm.java``). Las configuraciones de activacion/desactivacion del tipo ``available``
+(para todos los campos consulte ``EditForm.java``). El cuerpo de la solicitud/respuesta de la API es
+``EditBody``, que extiende ``EditForm``, pero las definiciones de campos se encuentran en ``EditForm``.
+Las configuraciones de activacion/desactivacion del tipo ``available``
 se expresan como cadenas ``"true"`` / ``"false"``.
 
 .. list-table::
@@ -163,6 +214,12 @@ se expresan como cadenas ``"true"`` / ``"false"``.
    * - ``webApiJson``
      - No
      - Habilitar/deshabilitar la Web API JSON
+   * - ``appValue``
+     - No
+     - Valor de configuracion adicional especifico de la aplicacion
+   * - ``virtualHostValue``
+     - No
+     - Configuracion de host virtual (para entornos multi-tenant)
    * - ``popularWord``
      - No
      - Habilitar/deshabilitar la agregacion y visualizacion de palabras populares
@@ -178,12 +235,21 @@ se expresan como cadenas ``"true"`` / ``"false"``.
    * - ``loginRequired``
      - No
      - Si se requiere inicio de sesion para buscar
+   * - ``loginLink``
+     - No
+     - Habilitar o deshabilitar la visualizacion del enlace de inicio de sesion en la pantalla de busqueda
    * - ``thumbnail``
      - No
      - Habilitar/deshabilitar la generacion de miniaturas
+   * - ``resultCollapsed``
+     - No
+     - Habilitar o deshabilitar el colapso de documentos similares en los resultados de busqueda
    * - ``ignoreFailureType``
      - No
      - Tipos de fallo de rastreo a ignorar
+   * - ``crawlingUserAgent``
+     - No
+     - Cadena User-Agent enviada durante el rastreo
    * - ``purgeSearchLogDay``
      - No
      - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado)
@@ -232,6 +298,15 @@ se expresan como cadenas ``"true"`` / ``"false"``.
    * - ``googleChatWebhookUrls``
      - No
      - URL de Google Chat Webhook para notificaciones
+   * - ``searchUseBrowserLocale``
+     - No
+     - Si se utiliza el idioma del navegador para la busqueda
+   * - ``ragLlmName``
+     - No
+     - Nombre del proveedor LLM utilizado para RAG
+   * - ``llmLogLevel``
+     - No
+     - Nivel de registro para los paquetes relacionados con LLM
 
 Campos Relacionados con Autenticacion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,6 +333,8 @@ se gestionan con esta API. A continuacion se muestran los campos representativos
      - Contrasena del administrador LDAP (se reemplaza por ``null`` en la respuesta)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - Filtros de busqueda de usuarios/grupos
+   * - ``ldapMemberofAttribute``
+     - Nombre del atributo LDAP que indica la pertenencia a un grupo
    * - ``ssoType``
      - Tipo de SSO (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` y otros
@@ -293,6 +370,19 @@ Tambien se puede gestionar la configuracion de integracion con almacenamiento en
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - ID de proyecto de GCS / ruta del archivo de credenciales
 
+.. note::
+
+   Los campos de tipo secreto como ``ldapAdminSecurityCredentials``,
+   ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
+   ``entraidClientId`` / ``entraidClientSecret`` y ``spnegoPreauthPassword`` conservan su
+   valor almacenado (no se actualizan) cuando se envia el valor enmascarado ``"**********"``
+   tal cual. Envie el valor real solo cuando desee cambiarlo.
+
+   Dado que esta comprobacion se basa en si la cadena queda vacia tras eliminar los
+   asteriscos, enviar una cadena vacia (``""``) o un valor compuesto unicamente de
+   asteriscos tampoco actualiza el valor. Por lo tanto, estos campos de tipo secreto no
+   pueden borrarse a un valor vacio mediante la API.
+
 Respuesta
 ---------
 
@@ -309,6 +399,14 @@ En caso de actualizacion exitosa solo se devuelve ``status`` (no se incluyen ``i
 
 Ejemplos de Uso
 ===============
+
+.. note::
+
+   Dado que los cuatro campos ``dayForCleanup``, ``crawlingThreadCount``,
+   ``failureCountThreshold`` y ``csvFileEncoding`` son obligatorios en las solicitudes PUT,
+   todos los ejemplos a continuacion los incluyen. Como los valores enviados sobreescriben
+   la configuracion existente, en un uso real envie los valores actuales obtenidos con
+   ``GET`` (los ejemplos a continuacion usan los valores predeterminados).
 
 Actualizar la Configuracion de Rastreo
 --------------------------------------
@@ -335,6 +433,10 @@ Actualizar el Periodo de Retencion de Registros
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
@@ -349,6 +451,10 @@ Actualizar la Configuracion de Sugerencias
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'

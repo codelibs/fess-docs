@@ -89,9 +89,18 @@ General API是用于管理 |Fess| 常规设置的API。
 
 .. note::
 
-   出于安全原因，作为LDAP管理员密码的 ``ldapAdminSecurityCredentials``
-   在响应中始终被替换为 ``null`` （源代码:
-   ``ApiAdminGeneralAction.java:71``）。
+   上述仅为代表性字段示例。实际响应的 ``setting`` 对象中包含所有常规设置字段
+   （爬取、搜索、通知、LDAP、SSO、存储等）。全部字段请参阅 ``EditForm.java``。
+
+.. note::
+
+   出于安全原因，包含凭据的字段不会以实际值返回。
+
+   - LDAP管理员密码 ``ldapAdminSecurityCredentials`` 始终被替换为 ``null``。
+   - 其他机密字段（``storageAccessKey`` / ``storageSecretKey`` /
+     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
+     ``entraidClientId`` / ``entraidClientSecret``）在已设置的情况下
+     以掩码值 ``"**********"`` 返回。
 
 更新常规设置
 ============
@@ -107,9 +116,41 @@ General API是用于管理 |Fess| 常规设置的API。
 请求体
 ~~~~~~
 
-更新作为部分更新（merge）处理。请求中未包含的字段将保留其现有值，
-``null`` 的字段会被忽略（源代码:
-``ApiAdminGeneralAction.java:84-90``）。
+更新作为部分合并（merge）处理。请求中的值将合并到当前设置值上，
+请求中未包含的字段（``null`` 的字段）将被忽略，现有值得以保留。
+
+.. warning::
+
+   以下四个字段具有 ``@Required`` 约束，**每次** PUT请求中都必须包含这些字段。
+   省略其中任何一个将导致验证错误（HTTP 400）。
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   即使是部分更新，这些字段也不能省略。由于发送的值会覆盖现有设置，
+   如果不想更改某个值，请先通过 ``GET`` 获取当前值并原样发送。
+   上述字段以外的字段均为可选项，省略时将保留现有值。
+
+.. note::
+
+   数值字段具有类型和范围验证。发送无法解析为整数的值或超出允许范围的值
+   将导致验证错误（HTTP 400）。
+
+   - ``dayForCleanup``: ``-1`` 至 ``1000``
+   - ``crawlingThreadCount``: ``0`` 至 ``100``
+   - ``failureCountThreshold``: ``-1`` 至 ``10000``
+   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
+     ``-1`` 至 ``100000``
+   - ``purgeSuggestSearchLogDay``: ``0`` 至 ``100000``
+
+.. note::
+
+   对于开/关（``available`` 类）字段，只有 ``"true"`` 或 ``"on"``
+   （均不区分大小写）表示启用。发送其他任何值（如 ``"false"`` 或空字符串）
+   均视为禁用（``false``）。只有省略该字段（不发送）时，才会保留现有值。
+   另外，在 GET 响应中，这些字段以 ``"true"`` / ``"false"`` 字符串形式返回。
 
 .. code-block:: json
 
@@ -126,7 +167,8 @@ General API是用于管理 |Fess| 常规设置的API。
 ~~~~~~~~
 
 设置项种类繁多。以下列出代表性字段
-（全部字段请参阅 ``EditForm.java``）。``available`` 类的开/关设置
+（全部字段请参阅 ``EditForm.java``。API的请求/响应体类型为继承自 ``EditForm`` 的
+``EditBody``，但字段定义位于 ``EditForm`` 中）。``available`` 类的开/关设置
 以 ``"true"`` / ``"false"`` 字符串表示。
 
 .. list-table::
@@ -163,6 +205,12 @@ General API是用于管理 |Fess| 常规设置的API。
    * - ``webApiJson``
      - 否
      - JSON Web API的启用/禁用
+   * - ``appValue``
+     - 否
+     - 应用程序专用的附加配置值
+   * - ``virtualHostValue``
+     - 否
+     - 虚拟主机配置（用于多租户环境）
    * - ``popularWord``
      - 否
      - 热门词汇的统计与显示的启用/禁用
@@ -178,12 +226,21 @@ General API是用于管理 |Fess| 常规设置的API。
    * - ``loginRequired``
      - 否
      - 搜索是否需要登录
+   * - ``loginLink``
+     - 否
+     - 搜索页面上登录链接显示的启用/禁用
    * - ``thumbnail``
      - 否
      - 缩略图生成的启用/禁用
+   * - ``resultCollapsed``
+     - 否
+     - 搜索结果中折叠相似文档的启用/禁用
    * - ``ignoreFailureType``
      - 否
      - 要忽略的爬取失败类型
+   * - ``crawlingUserAgent``
+     - 否
+     - 爬取时发送的User-Agent字符串
    * - ``purgeSearchLogDay``
      - 否
      - 保留搜索日志的天数（-1=禁用）
@@ -232,6 +289,15 @@ General API是用于管理 |Fess| 常规设置的API。
    * - ``googleChatWebhookUrls``
      - 否
      - 用于通知的Google Chat Webhook URL
+   * - ``searchUseBrowserLocale``
+     - 否
+     - 搜索时是否使用浏览器语言区域设置
+   * - ``ragLlmName``
+     - 否
+     - RAG所使用的LLM提供商名称
+   * - ``llmLogLevel``
+     - 否
+     - LLM相关包的日志级别
 
 认证相关字段
 ~~~~~~~~~~~~
@@ -258,6 +324,8 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
      - LDAP管理员密码（在响应中替换为 ``null``）
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - 用户/组搜索过滤器
+   * - ``ldapMemberofAttribute``
+     - 表示组成员关系的LDAP属性名
    * - ``ssoType``
      - SSO类型（``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``）
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` 等
@@ -293,6 +361,16 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - GCS的项目ID / 凭据文件路径
 
+.. note::
+
+   ``ldapAdminSecurityCredentials``、``storageAccessKey`` / ``storageSecretKey``、
+   ``oicClientId`` / ``oicClientSecret``、``entraidClientId`` / ``entraidClientSecret``、
+   ``spnegoPreauthPassword`` 等机密字段，如果将掩码值 ``"**********"`` 原样发送，
+   该值不会被更新，已保存的值将继续保留。只有在需要更改时，才发送实际值。
+
+   由于此判断基于去除星号后的字符串是否为空，发送空字符串（``""``）或仅由星号
+   组成的值同样不会更新。因此，这些机密字段无法通过API清空为空值。
+
 响应
 ----
 
@@ -309,6 +387,14 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
 
 使用示例
 ========
+
+.. note::
+
+   由于PUT请求中 ``dayForCleanup``、``crawlingThreadCount``、
+   ``failureCountThreshold``、``csvFileEncoding`` 这四个字段为必填项，
+   以下所有示例均包含这些字段。这些字段的值会覆盖现有设置，
+   因此在实际使用中请通过 ``GET`` 获取当前值后再发送
+   （以下示例使用默认值）。
 
 更新爬取设置
 ------------
@@ -335,6 +421,10 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
@@ -349,6 +439,10 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'

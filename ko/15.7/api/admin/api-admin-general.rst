@@ -89,9 +89,21 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 
 .. note::
 
-   보안상의 이유로 LDAP 관리자 비밀번호인 ``ldapAdminSecurityCredentials``
-   는 응답에서 항상 ``null`` 로 대체됩니다（소스:
-   ``ApiAdminGeneralAction.java:71``）.
+   위는 대표적인 필드만을 예시로 나타낸 것입니다. 실제 응답의 ``setting`` 에는
+   일반 설정의 모든 필드（크롤링·검색·알림·LDAP·SSO·스토리지 관련 등）가
+   포함됩니다. 전체 필드는 ``EditForm.java`` 를 참조하십시오.
+
+.. note::
+
+   보안상의 이유로 인증 정보를 포함하는 필드는 응답에 실제 값이 그대로 포함되지
+   않습니다.
+
+   - LDAP 관리자 비밀번호 ``ldapAdminSecurityCredentials`` 는 항상 ``null`` 로
+     대체됩니다.
+   - 그 외 시크릿（``storageAccessKey`` / ``storageSecretKey`` /
+     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
+     ``entraidClientId`` / ``entraidClientSecret``）은 설정되어 있는 경우
+     마스크 값 ``"**********"`` 으로 대체되어 반환됩니다.
 
 일반 설정 업데이트
 ==================
@@ -107,9 +119,45 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 요청 본문
 ~~~~~~~~~~~~~~~~
 
-업데이트는 부분 업데이트(merge)로 처리됩니다. 요청에 포함되지 않은 필드는
-기존 값이 유지되며, ``null`` 인 필드는 무시됩니다（소스:
-``ApiAdminGeneralAction.java:84-90``）.
+업데이트는 부분 업데이트（merge）로 처리됩니다. 현재 설정 값에 대해 요청 값이
+머지되며, 요청에 포함되지 않은 필드（``null`` 인 필드）는 무시되어 기존 값이
+유지됩니다.
+
+.. warning::
+
+   다음 4개의 필드에는 ``@Required`` 제약이 있으며, **모든** PUT 요청에 반드시
+   포함해야 합니다. 생략하면 유효성 검사 오류（HTTP 400）가 발생합니다.
+
+   - ``dayForCleanup``
+   - ``crawlingThreadCount``
+   - ``failureCountThreshold``
+   - ``csvFileEncoding``
+
+   이 필드들은 부분 업데이트 대상이더라도 생략할 수 없습니다. 전송한 값으로 기존
+   설정이 덮어쓰이므로, 값을 변경하지 않으려는 경우에는 사전에 ``GET`` 으로 조회한
+   현재 값을 그대로 지정하십시오. 위 필드 외의 필드는 생략 가능하며, 생략한 경우
+   기존 값이 유지됩니다.
+
+.. note::
+
+   수치 필드에는 타입 및 범위 유효성 검사가 있으며, 정수로 해석할 수 없는 값이나
+   범위를 벗어난 값을 전송하면 유효성 검사 오류（HTTP 400）가 발생합니다.
+
+   - ``dayForCleanup``: ``-1`` ~ ``1000``
+   - ``crawlingThreadCount``: ``0`` ~ ``100``
+   - ``failureCountThreshold``: ``-1`` ~ ``10000``
+   - ``purgeSearchLogDay`` / ``purgeJobLogDay`` / ``purgeUserInfoDay``:
+     ``-1`` ~ ``100000``
+   - ``purgeSuggestSearchLogDay``: ``0`` ~ ``100000``
+
+.. note::
+
+   켜기/끄기（``available`` 계열）필드에서는 ``"true"`` 또는 ``"on"``
+   （모두 대소문자 구분 없음）만이 활성화를 의미합니다. 그 외의 값
+   （``"false"`` 나 빈 문자열 등）을 전송한 경우 비활성화（``false``）로
+   처리됩니다. 필드를 생략（전송하지 않음）한 경우에만 기존 값이 유지됩니다.
+   또한 ``GET`` 응답에서 이들 필드는 ``"true"`` / ``"false"`` 문자열로
+   반환됩니다.
 
 .. code-block:: json
 
@@ -126,7 +174,9 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
 ~~~~~~~~~~~~~~
 
 설정 항목은 매우 다양합니다. 대표적인 필드를 아래에 나타냅니다
-（전체 필드는 ``EditForm.java`` 를 참조）. ``available`` 계열의 켜기/끄기 설정은
+（전체 필드는 ``EditForm.java`` 를 참조하십시오. API의 요청/응답
+본문 타입은 ``EditForm`` 을 상속한 ``EditBody`` 이지만, 필드 정의는 ``EditForm``
+에 있습니다）. ``available`` 계열의 켜기/끄기 설정은
 ``"true"`` / ``"false"`` 문자열로 표현됩니다.
 
 .. list-table::
@@ -163,6 +213,12 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
    * - ``webApiJson``
      - 아니오
      - JSON Web API 활성화/비활성화
+   * - ``appValue``
+     - 아니오
+     - 애플리케이션 고유의 추가 설정값
+   * - ``virtualHostValue``
+     - 아니오
+     - 가상 호스트 설정（멀티 테넌트 구성용）
    * - ``popularWord``
      - 아니오
      - 인기 워드 집계·표시 활성화/비활성화
@@ -178,12 +234,21 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
    * - ``loginRequired``
      - 아니오
      - 검색에 로그인을 필수로 할지 여부
+   * - ``loginLink``
+     - 아니오
+     - 검색 화면의 로그인 링크 표시 활성화/비활성화
    * - ``thumbnail``
      - 아니오
      - 썸네일 생성 활성화/비활성화
+   * - ``resultCollapsed``
+     - 아니오
+     - 검색 결과의 유사 문서 접기 표시 활성화/비활성화
    * - ``ignoreFailureType``
      - 아니오
      - 무시할 크롤링 실패 타입
+   * - ``crawlingUserAgent``
+     - 아니오
+     - 크롤링 시 전송하는 User-Agent 문자열
    * - ``purgeSearchLogDay``
      - 아니오
      - 검색 로그를 보존하는 일수 (-1=비활성화)
@@ -232,6 +297,15 @@ General API는 |Fess| 의 일반 설정을 관리하기 위한 API입니다.
    * - ``googleChatWebhookUrls``
      - 아니오
      - 알림용 Google Chat Webhook URL
+   * - ``searchUseBrowserLocale``
+     - 아니오
+     - 검색 시 브라우저 로케일 사용 여부
+   * - ``ragLlmName``
+     - 아니오
+     - RAG에서 사용하는 LLM 프로바이더 이름
+   * - ``llmLogLevel``
+     - 아니오
+     - LLM 관련 패키지의 로그 레벨
 
 인증 관련 필드
 ~~~~~~~~~~~~~~~~~~
@@ -258,6 +332,8 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
      - LDAP 관리자 비밀번호 (응답에서 ``null`` 로 대체)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - 사용자/그룹 검색 필터
+   * - ``ldapMemberofAttribute``
+     - 그룹 소속을 나타내는 LDAP 속성 이름
    * - ``ssoType``
      - SSO 타입 (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` 외
@@ -293,6 +369,19 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - GCS 프로젝트 ID / 인증 정보 파일 경로
 
+.. note::
+
+   ``ldapAdminSecurityCredentials``、``storageAccessKey`` / ``storageSecretKey``、
+   ``oicClientId`` / ``oicClientSecret``、``entraidClientId`` / ``entraidClientSecret``、
+   ``spnegoPreauthPassword`` 등의 시크릿 계열 필드에 마스크 값 ``"**********"`` 을
+   그대로 전송한 경우, 해당 값은 업데이트되지 않으며 저장된 값이 유지됩니다.
+   값을 변경하는 경우에만 실제 값을 전송하십시오.
+
+   이 판정은 아스테리스크를 제거한 문자열이 공백인지 여부에 따라 이루어지므로,
+   빈 문자열（``""``）이나 아스테리스크만으로 이루어진 값을 전송한 경우도 마찬가지로
+   업데이트되지 않습니다. 따라서 이러한 시크릿 계열 필드를 API를 통해 빈 값으로
+   초기화하는 것은 불가능합니다.
+
 응답
 ----------
 
@@ -309,6 +398,14 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
 
 사용 예
 ======
+
+.. note::
+
+   PUT 요청에서는 ``dayForCleanup``、``crawlingThreadCount``、
+   ``failureCountThreshold``、``csvFileEncoding`` 의 4개 필드가 필수이므로,
+   아래의 모든 예시에 이 필드들을 포함하고 있습니다. 이 필드들은 전송한 값으로
+   기존 설정을 덮어쓰므로, 실제 운용에서는 ``GET`` 으로 조회한 현재 값을 지정하십시오
+   （아래 예시에서는 기본값을 사용합니다）.
 
 크롤링 설정 업데이트
 ------------------
@@ -335,6 +432,10 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "purgeSearchLogDay": 90,
            "purgeJobLogDay": 90,
            "purgeUserInfoDay": 90
@@ -349,6 +450,10 @@ LDAP 및 SSO(OpenID Connect, SAML, SPNEGO, Entra ID)에 관한 설정도
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
+           "dayForCleanup": -1,
+           "crawlingThreadCount": 5,
+           "failureCountThreshold": -1,
+           "csvFileEncoding": "UTF-8",
            "suggestSearchLog": "true",
            "suggestDocuments": "true"
          }'
