@@ -22,7 +22,7 @@ Start von OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.6.0
+    $ cd /path/to/opensearch-3.7.0
     $ ./bin/opensearch
 
 Für Hintergrundstart::
@@ -57,8 +57,8 @@ Start von OpenSearch
 
 Oder von der Eingabeaufforderung::
 
-    C:\> cd C:\opensearch-3.6.0
-    C:\opensearch-3.6.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.7.0
+    C:\opensearch-3.7.0> bin\opensearch.bat
 
 Start von Fess
 ~~~~~~~~~~~~~~
@@ -108,6 +108,10 @@ Aktivierung des automatischen Starts::
 
 Docker-Version
 --------------
+
+.. note::
+
+   ``compose.yaml`` und ``compose-opensearch3.yaml`` sind nicht im Lieferumfang von |Fess| selbst enthalten. Sie werden vom docker-fess-Projekt (https://github.com/codelibs/docker-fess) bereitgestellt. Laden Sie das Repository herunter und führen Sie die folgenden Befehle im Verzeichnis ``compose`` aus.
 
 Start mit Docker Compose::
 
@@ -164,9 +168,12 @@ Docker-Version::
 
 .. tip::
 
-   Bei erfolgreichem Start wird folgende Meldung im Protokoll angezeigt::
+   Wenn der Start erfolgreich abgeschlossen wurde, wird auf der Konsole und in der Protokolldatei eine Startabschlussmeldung wie die folgende angezeigt:
 
-       INFO  Boot - Fess is ready.
+   ::
+
+       ...Booting the Tomcat: port=8080
+       Boot successful
 
 Zugriff über den Browser
 =========================
@@ -208,17 +215,19 @@ Schritt 1: Änderung des Administratorpassworts
 1. Anmeldung in der Verwaltungsseite (http://localhost:8080/admin)
 2. Klicken Sie im linken Menü auf „System" → „Benutzer"
 3. Klicken Sie auf den Benutzer ``admin``
-4. Geben Sie ein neues Passwort in das Feld „Passwort" ein
-5. Klicken Sie auf die Schaltfläche „Bestätigen"
-6. Klicken Sie auf die Schaltfläche „Aktualisieren"
+4. Geben Sie ein neues Passwort in das Feld [Passwort] ein
+5. Geben Sie dasselbe Passwort erneut in das Feld [Passwort (bestätigen)] ein
+6. Klicken Sie auf die Schaltfläche [Aktualisieren]
 
 .. important::
 
    Es wird empfohlen, dass Passwörter folgende Bedingungen erfüllen:
 
-   - 8 Zeichen oder mehr
+   - 8 Zeichen oder mehr (die erforderliche Mindestlänge, festgelegt durch ``password.min.length``)
    - Kombination aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen
    - Nicht leicht zu erraten
+
+   Standardmäßig wird nur die Mindestlänge (8 Zeichen) geprüft; eine Kombination aus verschiedenen Zeichentypen wird nicht erzwungen. Anforderungen an Zeichentypen können mit Einstellungen wie ``password.require.uppercase`` aktiviert werden.
 
 Schritt 2: Erstellung der Crawl-Konfiguration
 ----------------------------------------------
@@ -239,8 +248,8 @@ Erstellen Sie eine Konfiguration zum Crawlen der zu durchsuchenden Websites oder
 Schritt 3: Ausführung des Crawls
 ---------------------------------
 
-1. Klicken Sie im linken Menü auf „System" → „Scheduler"
-2. Klicken Sie auf die Schaltfläche „Jetzt starten" beim Job „Default Crawler"
+1. Klicken Sie im linken Menü auf [System] → [Scheduler]
+2. Öffnen Sie den Job [Default Crawler] und klicken Sie auf die Schaltfläche „Jetzt starten"
 3. Warten Sie, bis der Crawl abgeschlossen ist (Fortschritt kann im Dashboard überprüft werden)
 
 Schritt 4: Überprüfung der Suche
@@ -260,29 +269,57 @@ Weitere empfohlene Einstellungen
 
 Bei Betrieb in Produktionsumgebungen sollten Sie auch folgende Einstellungen in Betracht ziehen.
 
+Haupteinstellungen über Umgebungsvariablen
+------------------------------------------
+
+Einstellungen wie Portnummer, JVM-Heap-Größe und die OpenSearch-Verbindungs-URL können über Umgebungsvariablen geändert werden. Bearbeiten Sie ``bin/fess.in.sh`` für die TAR.GZ-Version, ``/etc/sysconfig/fess`` für die RPM-Version und ``/etc/default/fess`` für die DEB-Version. Nach Änderungen ist ein Neustart von |Fess| erforderlich.
+
+.. list-table::
+   :widths: 30 25 45
+   :header-rows: 1
+
+   * - Umgebungsvariable
+     - Standardwert
+     - Beschreibung
+   * - ``FESS_PORT``
+     - ``8080``
+     - Der HTTP-Port, auf dem |Fess| lauscht.
+   * - ``FESS_HEAP_SIZE``
+     - (nicht gesetzt)
+     - JVM-Heap-Größe. Setzt denselben Wert für Minimum und Maximum. Wenn nicht gesetzt, werden mindestens ``256m`` und maximal ``2g`` verwendet; die RPM/DEB-Version verwendet ``512m``.
+   * - ``SEARCH_ENGINE_HTTP_URL``
+     - ``http://localhost:9200``
+     - URL des OpenSearch, zu dem eine Verbindung hergestellt wird. Ändern Sie dies bei Verwendung eines externen OpenSearch.
+   * - ``FESS_LOG_LEVEL``
+     - ``warn``
+     - Protokollniveau von |Fess|.
+
+.. note::
+
+   Die Datei ``bin\fess.in.bat`` der Windows-ZIP-Version liest diese Umgebungsvariablen nicht (außer den Proxy-bezogenen). Die Werte werden direkt in der Datei eingetragen; bearbeiten Sie daher ``bin\fess.in.bat`` direkt, um sie zu ändern.
+
 Konfiguration des Mail-Servers
 -------------------------------
 
-Konfigurieren Sie einen Mail-Server, um Störungsmeldungen und Berichte per E-Mail zu erhalten.
+Um Fehlermeldungen und ähnliche Nachrichten per E-Mail zu erhalten, konfigurieren Sie den SMTP-Server und die Empfängeradresse für Benachrichtigungen.
 
-1. Klicken Sie im linken Menü auf „System" → „Allgemein"
-2. Klicken Sie auf den Tab „E-Mail"
-3. Geben Sie die SMTP-Serverinformationen ein
-4. Klicken Sie auf die Schaltfläche „Aktualisieren"
+1. Geben Sie in der Konfigurationsdatei ``app/WEB-INF/classes/fess_env.properties`` den SMTP-Serverhost und -port in ``mail.smtp.server.main.host.and.port`` an (Standard: ``localhost:25``). Nach der Änderung ist ein Neustart von |Fess| erforderlich.
+2. Klicken Sie in der Administrator-Oberfläche im linken Menü auf [System] → [Allgemein].
+3. Geben Sie die Empfänger-E-Mail-Adresse in das Feld [Benachrichtigungs-E-Mail] ein.
+4. Klicken Sie auf die Schaltfläche [Aktualisieren].
+5. Mit der Schaltfläche [Test-E-Mail senden] können Sie überprüfen, ob E-Mails korrekt versendet werden.
 
 Zeitzoneneinstellung
 --------------------
 
-1. Klicken Sie im linken Menü auf „System" → „Allgemein"
-2. Setzen Sie „Zeitzone" auf einen geeigneten Wert (z.B.: Europe/Berlin)
-3. Klicken Sie auf die Schaltfläche „Aktualisieren"
+|Fess| verwendet die Zeitzone des Servers (Betriebssystem / JVM). Es gibt keine Einstellung zur Änderung der Zeitzone in der Administrator-Oberfläche. Um sie zu ändern, passen Sie die Zeitzoneneinstellung des Betriebssystems an oder fügen Sie die JVM-Option ``-Duser.timezone=Asia/Tokyo`` zu ``FESS_JAVA_OPTS`` in ``bin/fess.in.sh`` hinzu (unter Windows: ``bin\fess.in.bat``).
 
 Anpassung des Protokollniveaus
 -------------------------------
 
 In Produktionsumgebungen kann das Protokollniveau angepasst werden, um die Festplattennutzung zu reduzieren.
 
-Bearbeiten Sie die Konfigurationsdatei (``app/WEB-INF/classes/log4j2.xml``).
+Das Gesamtprotokollniveau von |Fess| kann mit der Umgebungsvariable ``FESS_LOG_LEVEL`` geändert werden (Standard: ``warn``). Zur detaillierten Steuerung einzelner Logger bearbeiten Sie die Konfigurationsdatei ``app/WEB-INF/classes/log4j2.xml``. Crawling, Vorschläge und die Thumbnail-Generierung laufen als separate Prozesse; konfigurieren Sie deren Protokollniveaus daher separat in ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
 Weitere Informationen finden Sie im Administratorhandbuch.
 
@@ -391,7 +428,12 @@ Wenn es nicht startet
 
        $ sudo netstat -tuln | grep 8080
 
-   Wenn Port 8080 bereits verwendet wird, ändern Sie die Portnummer in der Konfigurationsdatei.
+   Wenn Port 8080 bereits verwendet wird, ändern Sie die Portnummer:
+
+   - TAR.GZ-Version: Ändern Sie ``FESS_PORT`` in ``bin/fess.in.sh``
+   - ZIP-Version (Windows): Bearbeiten Sie ``-Dfess.port=8080`` direkt in ``bin\fess.in.bat``
+   - RPM-Version: Ändern Sie ``FESS_PORT`` in ``/etc/sysconfig/fess``
+   - DEB-Version: Ändern Sie ``FESS_PORT`` in ``/etc/default/fess``
 
 3. **Überprüfen Sie die Protokolle**
 

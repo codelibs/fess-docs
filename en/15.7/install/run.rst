@@ -22,7 +22,7 @@ Start OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.6.0
+    $ cd /path/to/opensearch-3.7.0
     $ ./bin/opensearch
 
 To start in the background::
@@ -57,8 +57,8 @@ Start OpenSearch
 
 Or from Command Prompt::
 
-    C:\> cd C:\opensearch-3.6.0
-    C:\opensearch-3.6.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.7.0
+    C:\opensearch-3.7.0> bin\opensearch.bat
 
 Start Fess
 ~~~~~~~~~~
@@ -108,6 +108,13 @@ Enable automatic startup::
 
 Docker Version
 --------------
+
+.. note::
+
+   ``compose.yaml`` and ``compose-opensearch3.yaml`` are not included with
+   |Fess| itself. They are provided by the docker-fess project
+   (https://github.com/codelibs/docker-fess); obtain the repository and run the
+   following commands inside the ``compose`` directory.
 
 Start using Docker Compose::
 
@@ -164,9 +171,11 @@ Docker version::
 
 .. tip::
 
-   When started successfully, a message like the following will be displayed in the logs::
+   When startup completes successfully, a startup-completion message like the
+   following is shown on the console and in the log::
 
-       INFO  Boot - Fess is ready.
+       ...Booting the Tomcat: port=8080
+       Boot successful
 
 Access via Browser
 ==================
@@ -208,17 +217,21 @@ Step 1: Change Administrator Password
 1. Log in to the admin screen (http://localhost:8080/admin)
 2. Click "System" → "User" from the left menu
 3. Click the ``admin`` user
-4. Enter a new password in the "Password" field
-5. Click the "Confirm" button
-6. Click the "Update" button
+4. Enter a new password in the [Password] field
+5. Re-enter the same password in the [Password (Confirm)] field
+6. Click the [Update] button
 
 .. important::
 
    Passwords should meet the following criteria:
 
-   - 8 characters or more
+   - 8 characters or more (the required minimum length set by ``password.min.length``)
    - Combination of uppercase letters, lowercase letters, numbers, and symbols
    - Not easily guessed
+
+   By default, only the minimum length (8 characters) is required; a combination
+   of character types is not enforced. Character-type requirements can be enabled
+   with settings such as ``password.require.uppercase``.
 
 Step 2: Create Crawl Configuration
 -----------------------------------
@@ -240,7 +253,7 @@ Step 3: Execute Crawl
 ---------------------
 
 1. Click "System" → "Scheduler" from the left menu
-2. Click the "Start Now" button for the "Default Crawler" job
+2. Open the [Default Crawler] job and click the "Start Now" button
 3. Wait for the crawl to complete (progress can be checked on the dashboard)
 
 Step 4: Verify Search
@@ -260,31 +273,76 @@ Other Recommended Settings
 
 For production environments, consider the following settings.
 
+Main Settings via Environment Variables
+---------------------------------------
+
+Settings such as the port number, JVM heap size, and the OpenSearch connection
+URL can be changed via environment variables. Edit ``bin/fess.in.sh`` for the
+TAR.GZ edition, ``/etc/sysconfig/fess`` for the RPM edition, and
+``/etc/default/fess`` for the DEB edition. A restart of |Fess| is required after
+making changes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Environment Variable
+     - Default
+     - Description
+   * - ``FESS_PORT``
+     - ``8080``
+     - The HTTP port that |Fess| listens on.
+   * - ``FESS_HEAP_SIZE``
+     - (unset)
+     - JVM heap size. Sets the same value for the minimum and maximum. When unset, a minimum of ``256m`` and a maximum of ``2g`` are used; the RPM/DEB edition uses ``512m``.
+   * - ``SEARCH_ENGINE_HTTP_URL``
+     - ``http://localhost:9200``
+     - URL of the OpenSearch to connect to. Change this when using an external OpenSearch.
+   * - ``FESS_LOG_LEVEL``
+     - ``warn``
+     - Log level of |Fess|.
+
+.. note::
+
+   The Windows ZIP edition's ``bin\fess.in.bat`` does not read these environment
+   variables (except the proxy-related ones). The values are written directly in
+   the file, so edit ``bin\fess.in.bat`` directly to change them.
+
 Configure Mail Server
 ---------------------
 
-Configure the mail server to receive failure notifications and reports via email.
+To receive failure notifications and similar messages by email, configure the
+SMTP server and the notification recipient address.
 
-1. Click "System" → "General" from the left menu
-2. Click the "Mail" tab
-3. Enter SMTP server information
-4. Click the "Update" button
+1. In the config file ``app/WEB-INF/classes/fess_env.properties``, specify the
+   SMTP server host and port in ``mail.smtp.server.main.host.and.port``
+   (default: ``localhost:25``). A restart of |Fess| is required after the change.
+2. In the admin UI, click [System] → [General] in the left menu.
+3. Enter the recipient email address in the [Notification Mail] field.
+4. Click the [Update] button.
+5. You can verify that mail is sent correctly with the [Send Test Mail] button.
 
 Configure Time Zone
 -------------------
 
-1. Click "System" → "General" from the left menu
-2. Set "Time Zone" to an appropriate value (e.g., Asia/Tokyo)
-3. Click the "Update" button
+|Fess| uses the server's (OS / JVM) time zone. There is no setting to change the
+time zone in the admin UI. To change it, change the OS time zone setting, or add
+the JVM option ``-Duser.timezone=Asia/Tokyo`` to ``FESS_JAVA_OPTS`` in
+``bin/fess.in.sh`` (on Windows, ``bin\fess.in.bat``).
 
 Adjust Log Level
 ----------------
 
-In production environments, you can adjust the log level to reduce disk usage.
+In production, you can adjust the log level to reduce disk usage.
 
-Edit the configuration file (``app/WEB-INF/classes/log4j2.xml``).
+The overall log level of |Fess| can be changed with the ``FESS_LOG_LEVEL``
+environment variable (default: ``warn``). To control individual loggers in
+detail, edit the config file ``app/WEB-INF/classes/log4j2.xml``. Crawling,
+suggest, and thumbnail generation run as separate processes, so configure their
+log levels individually in
+``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
 
-For details, refer to the administrator guide.
+See the administrator guide for details.
 
 Shutdown Methods
 ================
@@ -391,7 +449,12 @@ Won't Start
 
        $ sudo netstat -tuln | grep 8080
 
-   If port 8080 is already in use, change the port number in the configuration file.
+   If port 8080 is already in use, change the port number.
+
+   - TAR.GZ edition: change ``FESS_PORT`` in ``bin/fess.in.sh``
+   - ZIP edition (Windows): edit ``-Dfess.port=8080`` directly in ``bin\fess.in.bat``
+   - RPM edition: change ``FESS_PORT`` in ``/etc/sysconfig/fess``
+   - DEB edition: change ``FESS_PORT`` in ``/etc/default/fess``
 
 3. **Check logs**
 

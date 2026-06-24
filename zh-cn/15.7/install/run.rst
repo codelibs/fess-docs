@@ -22,7 +22,7 @@ TAR.GZ 版的情况
 
 ::
 
-    $ cd /path/to/opensearch-3.6.0
+    $ cd /path/to/opensearch-3.7.0
     $ ./bin/opensearch
 
 在后台启动::
@@ -57,8 +57,8 @@ ZIP 版的情况（Windows）
 
 或者，从命令提示符::
 
-    C:\> cd C:\opensearch-3.6.0
-    C:\opensearch-3.6.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.7.0
+    C:\opensearch-3.7.0> bin\opensearch.bat
 
 启动 Fess
 ~~~~~~~~~~
@@ -108,6 +108,12 @@ RPM/DEB 版的情况 (systemd)
 
 Docker 版的情况
 -------------
+
+.. note::
+
+   ``compose.yaml`` 和 ``compose-opensearch3.yaml`` 并不包含在 |Fess| 本体中。
+   这些文件由 docker-fess 项目（https://github.com/codelibs/docker-fess）提供；
+   请获取该仓库，并在 ``compose`` 目录中执行以下命令。
 
 使用 Docker Compose 启动::
 
@@ -164,9 +170,10 @@ Docker 版::
 
 .. tip::
 
-   如果正常启动，日志中会显示以下消息::
+   启动成功完成后，控制台及日志中会显示如下启动完成消息::
 
-       INFO  Boot - Fess is ready.
+       ...Booting the Tomcat: port=8080
+       Boot successful
 
 在浏览器中访问
 ====================
@@ -208,17 +215,20 @@ Docker 版::
 1. 登录管理页面（http://localhost:8080/admin）
 2. 点击左侧菜单的「系统」→「用户」
 3. 点击 ``admin`` 用户
-4. 在「密码」字段输入新密码
-5. 点击「确认」按钮
-6. 点击「更新」按钮
+4. 在 [密码] 字段输入新密码
+5. 在 [密码 (确认)] 字段再次输入相同密码
+6. 点击 [更新] 按钮
 
 .. important::
 
    推荐密码满足以下条件：
 
-   - 8个字符或以上
+   - 8个字符或以上（``password.min.length`` 所设置的最低长度要求）
    - 组合使用大写字母、小写字母、数字、符号
    - 不易被猜测
+
+   默认情况下，仅要求满足最低长度（8个字符），不强制要求字符类型组合。
+   可通过 ``password.require.uppercase`` 等设置启用字符类型要求。
 
 步骤 2: 创建爬取配置
 ---------------------------
@@ -239,8 +249,8 @@ Docker 版::
 步骤 3: 执行爬取
 -----------------------
 
-1. 点击左侧菜单的「系统」→「调度器」
-2. 点击「Default Crawler」作业的「立即开始」按钮
+1. 点击左侧菜单的 [系统] → [调度器]
+2. 打开 [Default Crawler] 作业，点击「立即开始」按钮
 3. 等待爬取完成（可在仪表板查看进度）
 
 步骤 4: 确认搜索
@@ -260,29 +270,63 @@ Docker 版::
 
 在生产环境运行时，还需要考虑以下设置。
 
+通过环境变量进行主要设置
+--------------------------
+
+端口号、JVM 堆大小、OpenSearch 连接 URL 等设置可通过环境变量更改。
+TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``，DEB 版请编辑 ``/etc/default/fess``。
+更改后需要重启 |Fess|。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - 环境变量
+     - 默认值
+     - 说明
+   * - ``FESS_PORT``
+     - ``8080``
+     - |Fess| 监听的 HTTP 端口。
+   * - ``FESS_HEAP_SIZE``
+     - （未设置）
+     - JVM 堆大小。最小值和最大值设置为相同的值。未设置时，最小值为 ``256m``，最大值为 ``2g``；RPM/DEB 版使用 ``512m``。
+   * - ``SEARCH_ENGINE_HTTP_URL``
+     - ``http://localhost:9200``
+     - 连接的 OpenSearch 的 URL。使用外部 OpenSearch 时请更改此项。
+   * - ``FESS_LOG_LEVEL``
+     - ``warn``
+     - |Fess| 的日志级别。
+
+.. note::
+
+   Windows ZIP 版的 ``bin\fess.in.bat`` 不读取这些环境变量（与代理相关的变量除外）。
+   各项值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``。
+
 邮件服务器设置
 ------------------
 
-为了通过邮件接收故障通知和报告，请设置邮件服务器。
+为了通过邮件接收故障通知等消息，请配置 SMTP 服务器和通知收件人地址。
 
-1. 点击左侧菜单的「系统」→「常规」
-2. 点击「邮件」选项卡
-3. 输入 SMTP 服务器信息
-4. 点击「更新」按钮
+1. 在配置文件 ``app/WEB-INF/classes/fess_env.properties`` 中，通过 ``mail.smtp.server.main.host.and.port``（默认值：``localhost:25``）指定 SMTP 服务器的主机名和端口。更改后需要重启 |Fess|。
+2. 在管理界面中，点击左侧菜单的 [系统] → [通用]。
+3. 在 [通知邮件] 字段输入收件人邮件地址。
+4. 点击 [更新] 按钮。
+5. 可使用 [发送测试邮件] 按钮验证邮件是否正常发送。
 
 时区设置
 ----------------
 
-1. 点击左侧菜单的「系统」→「常规」
-2. 将「时区」设置为适当的值（例：Asia/Shanghai）
-3. 点击「更新」按钮
+|Fess| 使用服务器（操作系统 / JVM）的时区。管理界面中没有更改时区的设置项。
+如需更改时区，请修改操作系统的时区设置，或在 ``bin/fess.in.sh`` 的 ``FESS_JAVA_OPTS`` 中添加 JVM 选项 ``-Duser.timezone=Asia/Tokyo``（Windows 系统请编辑 ``bin\fess.in.bat``）。
 
 调整日志级别
 --------------
 
-在生产环境中，可以调整日志级别以控制磁盘使用量。
+在生产环境中，可以调整日志级别以减少磁盘使用量。
 
-编辑配置文件（``app/WEB-INF/classes/log4j2.xml``）。
+|Fess| 的整体日志级别可通过 ``FESS_LOG_LEVEL`` 环境变量更改（默认值：``warn``）。
+如需对各个日志记录器进行精细控制，请编辑配置文件 ``app/WEB-INF/classes/log4j2.xml``。
+爬取、suggest 和缩略图生成作为独立进程运行，因此请分别在 ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml`` 中配置各自的日志级别。
 
 详情请参阅管理员指南。
 
@@ -391,7 +435,12 @@ Docker 版的情况
 
        $ sudo netstat -tuln | grep 8080
 
-   如果端口 8080 已被使用，请在配置文件中更改端口号。
+   如果端口 8080 已被使用，请更改端口号。
+
+   - TAR.GZ 版：在 ``bin/fess.in.sh`` 中更改 ``FESS_PORT``
+   - ZIP 版（Windows）：直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.port=8080``
+   - RPM 版：在 ``/etc/sysconfig/fess`` 中更改 ``FESS_PORT``
+   - DEB 版：在 ``/etc/default/fess`` 中更改 ``FESS_PORT``
 
 3. **确认日志**
 
