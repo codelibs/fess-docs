@@ -4,7 +4,7 @@
 
 .. tip::
 
-   最新的稳定版本是 **Fess 15.6.1** ( `发行说明 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_ )。支持期限请参阅 :doc:`eol`。
+   最新的稳定版本是 **Fess 15.7.0** ( `发行说明 <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.7.0 <https://opensearch.org/versions/opensearch-3-7-0.html>`_ )。支持期限请参阅 :doc:`eol`。
 
 Docker
 ======
@@ -25,6 +25,9 @@ Docker 镜像请参考以下内容。
    * - 版本
      - Java
      - 搜索引擎
+   * - `Fess 15.7.0 <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`_
+     - `21 <https://adoptium.net/temurin/releases?version=21>`_
+     - `OpenSearch 3.7.0 <https://opensearch.org/versions/opensearch-3-7-0.html>`_
    * - `Fess 15.6.1 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`_
      - `21 <https://adoptium.net/temurin/releases?version=21>`_
      - `OpenSearch 3.6.0 <https://opensearch.org/versions/opensearch-3-6-0.html>`_
@@ -49,9 +52,6 @@ Docker 镜像请参考以下内容。
    * - `Fess 14.19.2 <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`_
      - `17 <https://adoptium.net/temurin/releases?version=17>`_
      - `OpenSearch 2.19.1 <https://opensearch.org/versions/opensearch-2-19-1.html>`_
-   * - `Fess 14.18.0 <https://github.com/codelibs/fess/releases/tag/fess-14.18.0>`_
-     - `17 <https://adoptium.net/temurin/releases?version=17>`_
-     - `OpenSearch 2.18.0 <https://opensearch.org/versions/opensearch-2-18-0.html>`_
 
 关于安装方法,请参考安装指南。
 
@@ -68,6 +68,9 @@ Docker 镜像请参考以下内容。
    * - 版本
      - Java
      - 搜索引擎
+   * - `Fess 14.18.0 <https://github.com/codelibs/fess/releases/tag/fess-14.18.0>`_
+     - `17 <https://adoptium.net/temurin/releases?version=17>`_
+     - `OpenSearch 2.18.0 <https://opensearch.org/versions/opensearch-2-18-0.html>`_
    * - `Fess 14.17.0 <https://github.com/codelibs/fess/releases/tag/fess-14.17.0>`_
      - `17 <https://adoptium.net/temurin/releases?version=17>`_
      - `OpenSearch 2.17.0 <https://opensearch.org/versions/opensearch-2-17-0.html>`_

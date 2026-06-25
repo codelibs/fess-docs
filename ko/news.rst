@@ -5,6 +5,9 @@
 뉴스 목록
 ============
 
+2026-06-25
+    `Fess 15.7.0 릴리스 <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`__
+
 2026-05-02
     `Fess 15.6.1 릴리스 <https://github.com/codelibs/fess/releases/tag/fess-15.6.1>`__
 
