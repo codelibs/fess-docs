@@ -1,6 +1,6 @@
-==========================
+================================
 Procedimientos de Actualización
-==========================
+================================
 
 Esta página describe los procedimientos para actualizar |Fess| de versiones anteriores a la versión más reciente.
 
@@ -14,7 +14,7 @@ Esta página describe los procedimientos para actualizar |Fess| de versiones ant
    - Dependiendo de la versión, el formato del archivo de configuración puede haber cambiado
 
 Versiones Compatibles
-======================
+=====================
 
 Estos procedimientos de actualización son compatibles con actualizaciones entre las siguientes versiones:
 
@@ -55,16 +55,26 @@ Paso 1: Respaldo de Datos
 Antes de la actualización, haga un respaldo de todos los datos.
 
 Respaldo de Datos de Configuración
------------------------------------
+------------------------------------
 
 1. **Respaldo desde la pantalla de administración**
 
-   Inicie sesión en la pantalla de administración y haga clic en "Sistema" → "Respaldo".
+   Inicie sesión en la pantalla de administración y haga clic en "Información del sistema" → "Copia de seguridad".
 
-   Descargue los siguientes archivos:
+   En la página de Copia de seguridad se listan los siguientes datos de configuración como elementos individuales.
+   Haga clic en cada enlace para descargarlos (son archivos individuales por elemento, no un único archivo ZIP).
 
-   - ``fess_basic_config.bulk``
-   - ``fess_user.bulk``
+   - ``fess_basic_config.bulk`` - Configuración básica (ajustes generales)
+   - ``fess_config.bulk`` - Ajustes de rastreo, programador, etiquetas, coincidencias de clave y otra configuración
+   - ``fess_user.bulk`` - Usuarios, roles y grupos
+   - ``system.properties`` - Configuración del sistema
+   - ``fess.json`` / ``doc.json`` - Configuración del índice (mappings)
+
+   .. note::
+
+      Los datos de registro como los registros de búsqueda y clics (``search_log.ndjson``, ``click_log.ndjson``,
+      ``favorite_log.ndjson``, ``user_info.ndjson``) también pueden descargarse desde la misma página.
+      No son necesarios si solo desea hacer un respaldo de la configuración.
 
 2. **Respaldo de archivos de configuración**
 
@@ -85,7 +95,7 @@ Respaldo de Datos de Configuración
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
 
 Respaldo de Datos de Índice
-----------------------------
+-----------------------------
 
 Haga un respaldo de los datos de índice de OpenSearch.
 
@@ -93,6 +103,12 @@ Método 1: Usar Función de Instantánea (Recomendado)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use la función de instantánea de OpenSearch para hacer un respaldo del índice.
+
+.. note::
+
+   Para registrar un repositorio del sistema de archivos (``fs``), es necesario especificar previamente el
+   directorio de destino del respaldo en ``path.repo`` del archivo ``opensearch.yml`` de OpenSearch
+   y reiniciar OpenSearch.
 
 1. Configuración del repositorio::
 
@@ -126,15 +142,26 @@ Después de detener OpenSearch, haga un respaldo del directorio de datos.
 Respaldo de Versión Docker
 ---------------------------
 
-Haga un respaldo de los volúmenes Docker::
+Los datos de OpenSearch se almacenan en volúmenes Docker. En ``compose-opensearch3.yaml`` se definen
+dos volúmenes: ``search01_data`` para los datos del índice y ``search01_dictionary`` para los archivos
+de diccionario.
+
+.. note::
+
+   El nombre real del volumen lleva como prefijo el nombre del proyecto Compose (por defecto, el nombre
+   del directorio donde se encuentra el archivo Compose). Para obtener el nombre exacto, ejecute::
+
+       $ docker volume ls
+
+Detenga los contenedores y luego haga un respaldo de los volúmenes::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v fess-es-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-es-data-backup.tar.gz /data
-    $ docker run --rm -v fess-data:/data -v $(pwd):/backup ubuntu tar czf /backup/fess-data-backup.tar.gz /data
+    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
 
 Paso 2: Detención de la Versión Actual
-=======================================
+========================================
 
 Detenga Fess y OpenSearch.
 
@@ -153,12 +180,12 @@ Versión Docker::
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Paso 3: Instalación de la Nueva Versión
-========================================
+=========================================
 
 Los procedimientos varían según el método de instalación.
 
 Versión TAR.GZ/ZIP
-------------------
+-------------------
 
 1. Descargue y extraiga la nueva versión::
 
@@ -205,6 +232,12 @@ Paso 4: Actualización de OpenSearch (Si es Necesario)
 
 Si también actualiza OpenSearch, siga estos procedimientos.
 
+.. note::
+
+   Este procedimiento corresponde a los casos en que OpenSearch se gestiona manualmente en las versiones
+   TAR.GZ/ZIP y RPM/DEB. En la versión Docker, al obtener las nuevas imágenes en el Paso 3, OpenSearch
+   y los plugins se actualizan conjuntamente, por lo que este paso no es necesario.
+
 .. warning::
 
    Realice con cuidado las actualizaciones de versión principal de OpenSearch.
@@ -214,17 +247,23 @@ Si también actualiza OpenSearch, siga estos procedimientos.
 
 2. Reinstale los plugins::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+
+   .. note::
+
+      La versión de estos plugins debe coincidir con la versión de OpenSearch que se utiliza.
+      Fess 15.7 es compatible con OpenSearch 3.7.0. Si las versiones no coinciden,
+      la instalación de los plugins fallará.
 
 3. Inicie OpenSearch::
 
        $ sudo systemctl start opensearch.service
 
 Paso 5: Inicio de la Nueva Versión
-===================================
+====================================
 
 Versión TAR.GZ/ZIP::
 
@@ -241,7 +280,7 @@ Versión Docker::
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 Paso 6: Verificación de Funcionamiento
-=======================================
+========================================
 
 1. **Verificación de registros**
 
@@ -257,16 +296,17 @@ Paso 6: Verificación de Funcionamiento
 
    Acceda a http://localhost:8080/admin e inicie sesión con la cuenta de administrador.
 
-4. **Verificación de información del sistema**
+4. **Verificación de la versión**
 
-   Haga clic en "Sistema" → "Información del Sistema" en la pantalla de administración y verifique que la versión se haya actualizado.
+   En la pantalla de administración, haga clic en "Información del sistema" → "Información de configuración"
+   y verifique que ``fess.version`` que se muestra en "Propiedades del sistema" corresponda a la nueva versión.
 
 5. **Verificación de funcionamiento de búsqueda**
 
    Ejecute una búsqueda en la pantalla de búsqueda y verifique que se devuelvan resultados normalmente.
 
 Paso 7: Recreación del Índice (Recomendado)
-============================================
+=============================================
 
 Para actualizaciones de versión principal, se recomienda recrear el índice.
 
@@ -276,7 +316,7 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 4. Verifique los resultados de búsqueda
 
 Procedimientos de Reversión
-============================
+=============================
 
 Si la actualización falla, puede revertir con los siguientes procedimientos.
 
@@ -315,6 +355,12 @@ O restaure el directorio desde el respaldo::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+.. note::
+
+   Los datos de configuración descargados desde la pantalla de administración (archivos ``*.bulk``) pueden
+   reimportarse desde la función de carga en la página "Información del sistema" → "Copia de seguridad"
+   después de iniciar Fess.
+
 Paso 4: Inicio y Verificación del Servicio
 -------------------------------------------
 
@@ -340,8 +386,11 @@ R: La actualización de Fess requiere la detención del servicio. Para minimizar
 P: ¿Es necesario actualizar también OpenSearch?
 ------------------------------------------------
 
-R: Dependiendo de la versión de Fess, se requiere una versión específica de OpenSearch.
-Verifique la versión recomendada de OpenSearch en las notas de lanzamiento.
+R: Cada versión de Fess requiere una versión específica de OpenSearch.
+Fess 15.7 es compatible con OpenSearch 3.7.0.
+Los plugins de OpenSearch para Fess, como ``opensearch-analysis-fess``, deben coincidir exactamente con
+la versión de OpenSearch; por lo tanto, si actualiza OpenSearch, actualice también los plugins a la
+versión correspondiente (3.7.0).
 
 P: ¿Es necesario recrear el índice?
 ------------------------------------
