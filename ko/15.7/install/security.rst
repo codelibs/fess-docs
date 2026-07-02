@@ -22,17 +22,29 @@
 **절차:**
 
 1. 관리 화면에 로그인: http://localhost:8080/admin
-2. "시스템"→"사용자" 클릭
+2. "사용자"→"사용자" 클릭
 3. ``admin`` 사용자 선택
 4. 강력한 비밀번호 설정
 5. "업데이트" 버튼 클릭
 
+.. note::
+
+   한 번 ``admin`` 에서 변경한 비밀번호는 ``admin`` 과 같은 단순한 문자열로는 다시 설정할 수 없습니다(``password.invalid.admin.passwords`` 에 의해 관리자 비밀번호의 블랙리스트가 설정되어 있습니다). 또한 최초 시작 전이라면 ``fess_config.properties`` 의 ``index.user.initial_password`` 로 ``admin`` 사용자의 초기 비밀번호를 변경할 수 있습니다.
+
 **권장 비밀번호 정책:**
 
-- 최소 12자 이상
-- 영문 대문자, 영문 소문자, 숫자, 기호 포함
-- 사전에 있는 단어 회피
-- 정기적으로 변경(90일마다 권장)
+|Fess| 는 비밀번호의 최소·최대 문자 수와 문자 종류 요건을 강제하는 기능을 제공합니다. ``fess_config.properties`` 에서 다음 속성을 설정하십시오(괄호 안은 기본값입니다).
+
+- ``password.min.length`` (기본값: ``8``): 최소 문자 수. 12자 이상을 권장합니다.
+- ``password.max.length`` (기본값: ``100``): 최대 문자 수.
+- ``password.require.uppercase`` (기본값: ``false``): 영문 대문자를 필수로 설정합니다.
+- ``password.require.lowercase`` (기본값: ``false``): 영문 소문자를 필수로 설정합니다.
+- ``password.require.digit`` (기본값: ``false``): 숫자를 필수로 설정합니다.
+- ``password.require.special.char`` (기본값: ``false``): 기호를 필수로 설정합니다.
+
+.. note::
+
+   기본값에서는 최소 문자 수가 ``8`` 이며 문자 종류 요건은 모두 비활성화되어 있습니다. 비밀번호 강도를 높이려면 위의 속성을 명시적으로 설정하십시오. 또한 |Fess| 에는 비밀번호 유효기간(정기 변경 강제) 기능이 없습니다. 정기적인 비밀번호 변경을 운영 규칙으로 정하고자 하는 경우에는 수동으로 대응하십시오.
 
 OpenSearch 보안 플러그인 활성화
 --------------------------------------
@@ -53,11 +65,16 @@ OpenSearch 보안 플러그인 활성화
 
 4. OpenSearch 재시작
 
-5. |Fess| 설정을 업데이트하여 OpenSearch 인증 정보 추가::
+5. |Fess| 측에서 OpenSearch로의 연결 정보를 설정합니다.
+
+   연결 URL은 환경 변수 ``SEARCH_ENGINE_HTTP_URL`` 로 지정합니다(``bin/fess.in.sh`` 또는 서비스의 환경 설정 파일을 편집합니다. 기본값은 ``fess_config.properties`` 의 ``search_engine.http.url`` 입니다)::
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
-       SEARCH_ENGINE_USERNAME=admin
-       SEARCH_ENGINE_PASSWORD=<strong_password>
+
+   인증 정보는 ``fess_config.properties`` 의 다음 속성으로 지정합니다(``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` 라는 환경 변수는 존재하지 않습니다)::
+
+       search_engine.username=admin
+       search_engine.password=<strong_password>
 
 자세한 내용은 `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__ 을 참조하십시오.
 
@@ -147,32 +164,32 @@ Nginx에서 액세스 제한 예::
         proxy_set_header Host $host;
     }
 
-역할 기반 액세스 제어 (RBAC)
------------------------------
+역할과 액세스 제어
+--------------------
 
-|Fess| 는 여러 사용자 역할을 지원합니다. 최소 권한 원칙에 따라 사용자에게 필요 최소한의 권한만 부여하십시오.
+|Fess| 에는 미리 2개의 역할이 준비되어 있습니다.
 
-**역할 유형:**
+- ``admin``: 관리 화면을 포함한 모든 작업이 가능한 관리자 역할
+- ``guest``: 로그인하지 않은(익명) 사용자에게 할당되는 역할
 
-- **관리자**: 모든 권한
-- **일반 사용자**: 검색만
-- **크롤러 관리자**: 크롤 설정 관리
-- **검색 결과 편집자**: 검색 결과 편집
+이 외의 역할은 관리 화면에서 자유롭게 생성할 수 있습니다. |Fess| 의 역할은 이름만을 가진 태그이며, 주로 검색 결과에 대한 액세스 제어(어떤 문서를 표시할 수 있는지)에 사용됩니다. 역할 자체에 "크롤 설정 관리", "검색 결과 편집"과 같은 개별 관리 권한이 연결되어 있는 것은 아닙니다.
+
+최소 권한 원칙에 따라 관리자 역할(``admin``)은 관리 업무를 수행하는 사용자에게만 부여하고, 일반 검색 사용자에게는 부여하지 마십시오.
 
 **절차:**
 
-1. 관리 화면에서 "시스템"→"역할" 클릭
+1. 관리 화면에서 "사용자"→"역할" 클릭
 2. 필요한 역할 생성
-3. "시스템"→"사용자"에서 사용자에게 역할 할당
+3. "사용자"→"사용자"에서 사용자에게 역할 할당
 
-감사 로그 활성화
---------------
+감사 로그
+------------
 
-시스템 작업 이력을 기록하기 위해 감사 로그가 기본적으로 활성화되어 있습니다.
+인증이나 관리 작업 등 시스템의 작업 이력은 기본적으로 감사 로그로 기록됩니다. 감사 로그는 ``log4j2.xml`` 에 정의된 ``fess.log.audit`` 로거에 의해 출력되며, 기본 출력 대상은 ``audit.log`` 입니다.
 
-설정 파일(``log4j2.xml``)에서 감사 로그 활성화::
+기본적으로 활성화되어 있으므로 추가 설정은 필요하지 않습니다. 출력 대상이나 로그 레벨을 커스터마이즈하려면 ``log4j2.xml`` 의 다음 정의를 편집하십시오::
 
-    <Logger name="org.codelibs.fess.audit" level="info" additivity="false">
+    <Logger name="fess.log.audit" additivity="false" level="info">
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
@@ -236,7 +253,7 @@ Nginx에서 액세스 제한 예::
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=315.7000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Content-Security-Policy "default-src 'self'" always;
 
 보안 체크리스트
@@ -261,14 +278,14 @@ Nginx에서 액세스 제한 예::
 액세스 제어
 ----------
 
-- [ ] 역할 기반 액세스 제어 설정 완료
+- [ ] 역할과 액세스 권한을 적절히 설정 완료(관리자 역할을 필요한 사용자에게만 부여)
 - [ ] 불필요한 사용자 계정 삭제 완료
 - [ ] 비밀번호 정책 설정 완료
 
 모니터링 및 로그
 --------
 
-- [ ] 감사 로그 활성화 완료
+- [ ] 감사 로그가 활성화되어 있음을 확인 완료
 - [ ] 로그 보존 기간 설정 완료
 - [ ] 로그 모니터링 체계 구축 완료(가능한 경우)
 

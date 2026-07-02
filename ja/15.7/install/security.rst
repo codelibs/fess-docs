@@ -22,17 +22,29 @@
 **手順:**
 
 1. 管理画面にログイン: http://localhost:8080/admin
-2. 「システム」→「ユーザー」をクリック
+2. 「ユーザー」→「ユーザー」をクリック
 3. ``admin`` ユーザーを選択
 4. 強力なパスワードを設定
 5. 「更新」ボタンをクリック
 
+.. note::
+
+   一度 ``admin`` から変更したパスワードは、``admin`` のような単純な文字列には戻せません（``password.invalid.admin.passwords`` により管理者パスワードのブラックリストが設定されています）。また、初回起動前であれば ``fess_config.properties`` の ``index.user.initial_password`` で ``admin`` ユーザーの初期パスワードを変更できます。
+
 **推奨パスワードポリシー:**
 
-- 最低 12 文字以上
-- 英大文字、英小文字、数字、記号を含む
-- 辞書にある単語を避ける
-- 定期的に変更する（90日ごとを推奨）
+|Fess| はパスワードの最小・最大文字数と文字種の要件を強制する機能を備えています。``fess_config.properties`` で以下のプロパティを設定してください（括弧内は既定値）。
+
+- ``password.min.length`` （既定値: ``8``）: 最小文字数。12 以上を推奨します。
+- ``password.max.length`` （既定値: ``100``）: 最大文字数。
+- ``password.require.uppercase`` （既定値: ``false``）: 英大文字を必須にする。
+- ``password.require.lowercase`` （既定値: ``false``）: 英小文字を必須にする。
+- ``password.require.digit`` （既定値: ``false``）: 数字を必須にする。
+- ``password.require.special.char`` （既定値: ``false``）: 記号を必須にする。
+
+.. note::
+
+   既定では最小文字数は ``8`` で、文字種の要件はすべて無効です。パスワード強度を高めるには、上記のプロパティを明示的に設定してください。なお、|Fess| にはパスワードの有効期限（定期変更の強制）機能はありません。定期的なパスワード変更を運用ルールとする場合は、手動で対応してください。
 
 OpenSearch のセキュリティプラグイン有効化
 --------------------------------------
@@ -53,11 +65,16 @@ OpenSearch のセキュリティプラグイン有効化
 
 4. OpenSearch を再起動
 
-5. |Fess| の設定を更新して、OpenSearch の認証情報を追加::
+5. |Fess| 側で OpenSearch への接続情報を設定します。
+
+   接続先 URL は環境変数 ``SEARCH_ENGINE_HTTP_URL`` で指定します（``bin/fess.in.sh`` またはサービスの環境設定ファイルを編集します。既定値は ``fess_config.properties`` の ``search_engine.http.url``）::
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
-       SEARCH_ENGINE_USERNAME=admin
-       SEARCH_ENGINE_PASSWORD=<strong_password>
+
+   認証情報は ``fess_config.properties`` の以下のプロパティで指定します（``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` という環境変数は存在しません）::
+
+       search_engine.username=admin
+       search_engine.password=<strong_password>
 
 詳細は `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__ を参照してください。
 
@@ -147,32 +164,32 @@ Nginx でのアクセス制限例::
         proxy_set_header Host $host;
     }
 
-ロールベースアクセス制御 (RBAC)
------------------------------
+ロールとアクセス制御
+------------------
 
-|Fess| は複数のユーザーロールをサポートしています。最小権限の原則に従って、ユーザーに必要最小限の権限のみを付与してください。
+|Fess| には、あらかじめ 2 つのロールが用意されています。
 
-**ロールの種類:**
+- ``admin``: 管理画面を含むすべての操作が可能な管理者ロール
+- ``guest``: 未ログイン（匿名）ユーザーに割り当てられるロール
 
-- **管理者**: すべての権限
-- **一般ユーザー**: 検索のみ
-- **クローラー管理者**: クロール設定の管理
-- **検索結果編集者**: 検索結果の編集
+これら以外のロールは、管理画面から自由に作成できます。|Fess| のロールは名前のみを持つタグであり、主に検索結果へのアクセス制御（どのドキュメントを表示できるか）に使用されます。ロール自体に「クロール設定の管理」「検索結果の編集」といった個別の管理権限が紐づくわけではありません。
+
+最小権限の原則に従い、管理者ロール（``admin``）は管理業務を行うユーザーにのみ付与し、一般の検索ユーザーには付与しないでください。
 
 **手順:**
 
-1. 管理画面で「システム」→「ロール」をクリック
+1. 管理画面で「ユーザー」→「ロール」をクリック
 2. 必要なロールを作成
-3. 「システム」→「ユーザー」でユーザーにロールを割り当て
+3. 「ユーザー」→「ユーザー」でユーザーにロールを割り当て
 
-監査ログの有効化
---------------
+監査ログ
+------
 
-システムの操作履歴を記録するために、監査ログがデフォルトで有効になっています。
+認証や管理操作などのシステムの操作履歴は、監査ログとしてデフォルトで記録されます。監査ログは ``log4j2.xml`` に定義された ``fess.log.audit`` ロガーによって出力され、既定の出力先は ``audit.log`` です。
 
-設定ファイル（``log4j2.xml``）で監査ログを有効化::
+デフォルトで有効になっているため、追加の設定は不要です。出力先やログレベルをカスタマイズする場合は、``log4j2.xml`` の以下の定義を編集してください::
 
-    <Logger name="org.codelibs.fess.audit" level="info" additivity="false">
+    <Logger name="fess.log.audit" additivity="false" level="info">
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
@@ -236,7 +253,7 @@ Nginx でのアクセス制限例::
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=315.7000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Content-Security-Policy "default-src 'self'" always;
 
 セキュリティチェックリスト
@@ -261,14 +278,14 @@ Nginx でのアクセス制限例::
 アクセス制御
 ----------
 
-- [ ] ロールベースアクセス制御を設定済み
+- [ ] ロールとアクセス権限を適切に設定済み（管理者ロールを必要なユーザーのみに付与）
 - [ ] 不要なユーザーアカウントを削除済み
 - [ ] パスワードポリシーを設定済み
 
 監視とログ
 --------
 
-- [ ] 監査ログを有効化済み
+- [ ] 監査ログが有効になっていることを確認済み
 - [ ] ログの保存期間を設定済み
 - [ ] ログ監視の仕組みを構築済み（可能な場合）
 

@@ -22,17 +22,27 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 **Procedimiento:**
 
 1. Inicie sesión en la pantalla de administración: http://localhost:8080/admin
-2. Haga clic en "Sistema" → "Usuario"
+2. Haga clic en "Usuario" → "Usuario"
 3. Seleccione el usuario ``admin``
 4. Configure una contraseña fuerte
 5. Haga clic en el botón "Actualizar"
 
-**Política de Contraseñas Recomendada:**
+.. note::
 
-- Mínimo de 12 caracteres o más
-- Incluir letras mayúsculas, minúsculas, números y símbolos
-- Evitar palabras del diccionario
-- Cambiar periódicamente (se recomienda cada 90 días)
+   Una vez que haya cambiado la contraseña desde ``admin``, no podrá volver a establecerla en un valor simple como ``admin`` (una lista negra de contraseñas de administrador está configurada mediante ``password.invalid.admin.passwords``). También puede cambiar la contraseña inicial del usuario ``admin`` antes del primer inicio estableciendo ``index.user.initial_password`` en ``fess_config.properties``.
+
+|Fess| ofrece una función integrada que aplica los requisitos de longitud mínima/máxima y de tipos de caracteres de la contraseña. Configure las siguientes propiedades en ``fess_config.properties`` (los valores predeterminados se indican entre paréntesis):
+
+- ``password.min.length`` (valor predeterminado: ``8``): Longitud mínima. Se recomienda 12 o más.
+- ``password.max.length`` (valor predeterminado: ``100``): Longitud máxima.
+- ``password.require.uppercase`` (valor predeterminado: ``false``): Requerir letras mayúsculas.
+- ``password.require.lowercase`` (valor predeterminado: ``false``): Requerir letras minúsculas.
+- ``password.require.digit`` (valor predeterminado: ``false``): Requerir dígitos.
+- ``password.require.special.char`` (valor predeterminado: ``false``): Requerir símbolos.
+
+.. note::
+
+   De forma predeterminada, la longitud mínima es ``8`` y todos los requisitos de tipo de carácter están deshabilitados. Para reforzar las contraseñas, configure explícitamente las propiedades anteriores. Tenga en cuenta que |Fess| no cuenta con una función de expiración de contraseñas (cambio periódico forzado); si desea aplicar cambios periódicos de contraseña como regla operativa, hágalo manualmente.
 
 Habilitación del Plugin de Seguridad de OpenSearch
 ---------------------------------------------------
@@ -53,11 +63,16 @@ Habilitación del Plugin de Seguridad de OpenSearch
 
 4. Reinicie OpenSearch
 
-5. Actualice la configuración de |Fess| para agregar credenciales de autenticación de OpenSearch::
+5. Configure la conexión con OpenSearch en el lado de |Fess|.
+
+   Especifique la URL de conexión mediante la variable de entorno ``SEARCH_ENGINE_HTTP_URL`` (edite ``bin/fess.in.sh`` o el archivo de entorno del servicio; el valor predeterminado proviene de ``search_engine.http.url`` en ``fess_config.properties``)::
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
-       SEARCH_ENGINE_USERNAME=admin
-       SEARCH_ENGINE_PASSWORD=<strong_password>
+
+   Especifique las credenciales mediante las siguientes propiedades en ``fess_config.properties`` (no existen las variables de entorno ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``)::
+
+       search_engine.username=admin
+       search_engine.password=<strong_password>
 
 Para más detalles, consulte `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__.
 
@@ -147,32 +162,32 @@ Ejemplo de restricción de acceso con Nginx::
         proxy_set_header Host $host;
     }
 
-Control de Acceso Basado en Roles (RBAC)
------------------------------------------
+Roles y Control de Acceso
+--------------------------
 
-|Fess| admite múltiples roles de usuario. Siga el principio de mínimo privilegio otorgando a los usuarios solo los privilegios mínimos necesarios.
+|Fess| proporciona dos roles integrados:
 
-**Tipos de Roles:**
+- ``admin``: Rol de administrador que puede realizar todas las operaciones, incluida la pantalla de administración.
+- ``guest``: Rol asignado a los usuarios no autenticados (anónimos).
 
-- **Administrador**: Todos los privilegios
-- **Usuario General**: Solo búsqueda
-- **Administrador de Rastreador**: Gestión de configuración de rastreo
-- **Editor de Resultados de Búsqueda**: Edición de resultados de búsqueda
+Cualquier otro rol se puede crear libremente desde la pantalla de administración. En |Fess|, un rol es una etiqueta que solo tiene un nombre y se utiliza principalmente para el control de acceso a los resultados de búsqueda (qué documentos puede ver un usuario). Un rol en sí no está vinculado a permisos administrativos concretos, como "gestionar configuraciones de rastreo" o "editar resultados de búsqueda".
+
+Siguiendo el principio de mínimo privilegio, otorgue el rol de administrador (``admin``) únicamente a los usuarios que realizan tareas administrativas y no lo otorgue a los usuarios de búsqueda en general.
 
 **Procedimiento:**
 
-1. Haga clic en "Sistema" → "Rol" en la pantalla de administración
+1. Haga clic en "Usuario" → "Rol" en la pantalla de administración
 2. Cree los roles necesarios
-3. Asigne roles a usuarios en "Sistema" → "Usuario"
+3. Asigne roles a usuarios en "Usuario" → "Usuario"
 
-Habilitación de Registros de Auditoría
----------------------------------------
+Registro de Auditoría
+----------------------
 
-Los registros de auditoría están habilitados por defecto para registrar el historial de operaciones del sistema.
+El historial de operaciones del sistema, como la autenticación y las operaciones administrativas, se registra de forma predeterminada como registro de auditoría. El registro de auditoría se genera mediante el logger ``fess.log.audit`` definido en ``log4j2.xml``, y su destino de salida predeterminado es ``audit.log``.
 
-Habilite el registro de auditoría en el archivo de configuración (``log4j2.xml``)::
+Dado que está habilitado de forma predeterminada, no se requiere configuración adicional. Para personalizar el destino de salida o el nivel de registro, edite la siguiente definición en ``log4j2.xml``::
 
-    <Logger name="org.codelibs.fess.audit" level="info" additivity="false">
+    <Logger name="fess.log.audit" additivity="false" level="info">
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
@@ -236,7 +251,7 @@ Según sea necesario, configure encabezados de seguridad en Nginx o Apache::
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=315.7000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Content-Security-Policy "default-src 'self'" always;
 
 Lista de Verificación de Seguridad
@@ -261,14 +276,14 @@ Seguridad de Red
 Control de Acceso
 -----------------
 
-- [ ] Control de acceso basado en roles configurado
+- [ ] Roles y permisos de acceso configurados adecuadamente (otorgar el rol de administrador solo a los usuarios necesarios)
 - [ ] Cuentas de usuario innecesarias eliminadas
 - [ ] Política de contraseñas configurada
 
 Monitoreo y Registros
 ----------------------
 
-- [ ] Registros de auditoría habilitados
+- [ ] Se ha confirmado que el registro de auditoría está habilitado
 - [ ] Período de retención de registros configurado
 - [ ] Sistema de monitoreo de registros implementado (si es posible)
 

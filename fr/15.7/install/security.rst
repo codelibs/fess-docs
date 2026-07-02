@@ -22,17 +22,29 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 **Procédure :**
 
 1. Connexion à l'écran d'administration : http://localhost:8080/admin
-2. Cliquez sur « Système » → « Utilisateur »
+2. Cliquez sur « Utilisateur » → « Utilisateur »
 3. Sélectionnez l'utilisateur ``admin``
 4. Définissez un mot de passe fort
 5. Cliquez sur le bouton « Mettre à jour »
 
+.. note::
+
+   Une fois le mot de passe modifié à partir de ``admin``, il n'est plus possible de le redéfinir avec une valeur aussi simple que ``admin`` (une liste noire de mots de passe administrateur est configurée via ``password.invalid.admin.passwords``). Vous pouvez également modifier le mot de passe initial de l'utilisateur ``admin`` avant le premier démarrage en définissant ``index.user.initial_password`` dans ``fess_config.properties``.
+
 **Politique de mot de passe recommandée :**
 
-- Minimum 12 caractères
-- Inclure des majuscules, des minuscules, des chiffres et des symboles
-- Éviter les mots du dictionnaire
-- Modifier régulièrement (tous les 90 jours recommandés)
+|Fess| dispose d'une fonctionnalité intégrée qui impose des exigences de longueur minimale/maximale et de types de caractères pour le mot de passe. Configurez les propriétés suivantes dans ``fess_config.properties`` (les valeurs par défaut sont indiquées entre parenthèses) :
+
+- ``password.min.length`` (par défaut : ``8``) : Longueur minimale. Une valeur de 12 caractères ou plus est recommandée.
+- ``password.max.length`` (par défaut : ``100``) : Longueur maximale.
+- ``password.require.uppercase`` (par défaut : ``false``) : Exiger des lettres majuscules.
+- ``password.require.lowercase`` (par défaut : ``false``) : Exiger des lettres minuscules.
+- ``password.require.digit`` (par défaut : ``false``) : Exiger des chiffres.
+- ``password.require.special.char`` (par défaut : ``false``) : Exiger des symboles.
+
+.. note::
+
+   Par défaut, la longueur minimale est de ``8`` caractères et toutes les exigences de type de caractères sont désactivées. Pour renforcer la sécurité des mots de passe, définissez explicitement les propriétés ci-dessus. Notez que |Fess| ne dispose pas de fonctionnalité d'expiration des mots de passe (changement périodique forcé) ; si vous souhaitez imposer un changement périodique du mot de passe comme règle opérationnelle, faites-le manuellement.
 
 Activation du plugin de sécurité OpenSearch
 --------------------------------------------
@@ -53,11 +65,16 @@ Activation du plugin de sécurité OpenSearch
 
 4. Redémarrage d'OpenSearch
 
-5. Mise à jour de la configuration de |Fess| pour ajouter les informations d'authentification OpenSearch ::
+5. Configurez la connexion à OpenSearch du côté |Fess|.
+
+   Spécifiez l'URL de connexion via la variable d'environnement ``SEARCH_ENGINE_HTTP_URL`` (modifiez ``bin/fess.in.sh`` ou le fichier d'environnement du service ; la valeur par défaut provient de ``search_engine.http.url`` dans ``fess_config.properties``) ::
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
-       SEARCH_ENGINE_USERNAME=admin
-       SEARCH_ENGINE_PASSWORD=<mot_de_passe_fort>
+
+   Spécifiez les informations d'authentification via les propriétés suivantes dans ``fess_config.properties`` (il n'existe pas de variables d'environnement ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``) ::
+
+       search_engine.username=admin
+       search_engine.password=<mot_de_passe_fort>
 
 Pour plus de détails, consultez `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__.
 
@@ -147,32 +164,32 @@ Exemple de restriction d'accès avec Nginx ::
         proxy_set_header Host $host;
     }
 
-Contrôle d'accès basé sur les rôles (RBAC)
--------------------------------------------
+Rôles et contrôle d'accès
+--------------------------
 
-|Fess| prend en charge plusieurs rôles d'utilisateur. Conformément au principe du moindre privilège, accordez uniquement les privilèges minimums nécessaires aux utilisateurs.
+|Fess| fournit deux rôles intégrés :
 
-**Types de rôles :**
+- ``admin`` : Rôle administrateur pouvant effectuer toutes les opérations, y compris sur l'écran d'administration.
+- ``guest`` : Rôle attribué aux utilisateurs non authentifiés (anonymes).
 
-- **Administrateur** : Tous les privilèges
-- **Utilisateur général** : Recherche uniquement
-- **Administrateur explorateur** : Gestion de la configuration d'exploration
-- **Éditeur de résultats de recherche** : Modification des résultats de recherche
+Tous les autres rôles peuvent être librement créés depuis l'écran d'administration. Dans |Fess|, un rôle est une étiquette ne comportant qu'un nom, principalement utilisée pour le contrôle d'accès aux résultats de recherche (quels documents un utilisateur peut consulter). Un rôle en lui-même n'est pas lié à des permissions administratives spécifiques telles que « gérer les configurations d'exploration » ou « modifier les résultats de recherche ».
+
+Conformément au principe du moindre privilège, accordez le rôle administrateur (``admin``) uniquement aux utilisateurs effectuant des tâches d'administration, et ne l'accordez pas aux utilisateurs de recherche généraux.
 
 **Procédure :**
 
-1. Cliquez sur « Système » → « Rôle » dans l'écran d'administration
+1. Cliquez sur « Utilisateur » → « Rôle » dans l'écran d'administration
 2. Créez les rôles nécessaires
-3. Attribuez des rôles aux utilisateurs dans « Système » → « Utilisateur »
+3. Attribuez des rôles aux utilisateurs dans « Utilisateur » → « Utilisateur »
 
-Activation des journaux d'audit
---------------------------------
+Journalisation d'audit
+------------------------
 
-Les journaux d'audit sont activés par défaut pour enregistrer l'historique des opérations du système.
+L'historique des opérations du système, telles que l'authentification et les opérations d'administration, est enregistré par défaut sous forme de journal d'audit. Le journal d'audit est généré par le logger ``fess.log.audit`` défini dans ``log4j2.xml``, et sa destination de sortie par défaut est ``audit.log``.
 
-Activation des journaux d'audit dans le fichier de configuration (``log4j2.xml``) ::
+Étant activé par défaut, aucune configuration supplémentaire n'est nécessaire. Pour personnaliser la destination de sortie ou le niveau de journalisation, modifiez la définition suivante dans ``log4j2.xml`` ::
 
-    <Logger name="org.codelibs.fess.audit" level="info" additivity="false">
+    <Logger name="fess.log.audit" additivity="false" level="info">
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
@@ -236,7 +253,7 @@ Si nécessaire, configurez les en-têtes de sécurité dans Nginx ou Apache ::
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=315.7000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Content-Security-Policy "default-src 'self'" always;
 
 Liste de vérification de sécurité
@@ -261,14 +278,14 @@ Sécurité réseau
 Contrôle d'accès
 ----------------
 
-- [ ] Contrôle d'accès basé sur les rôles configuré
+- [ ] Rôles et permissions d'accès configurés de manière appropriée (rôle administrateur accordé uniquement aux utilisateurs nécessaires)
 - [ ] Comptes utilisateurs inutiles supprimés
 - [ ] Politique de mot de passe configurée
 
 Surveillance et journalisation
 -------------------------------
 
-- [ ] Journaux d'audit activés
+- [ ] Vérifié que les journaux d'audit sont activés
 - [ ] Période de conservation des journaux configurée
 - [ ] Mécanisme de surveillance des journaux établi (si possible)
 
