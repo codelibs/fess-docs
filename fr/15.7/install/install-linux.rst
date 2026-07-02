@@ -1,21 +1,21 @@
-=======================================
+================================================
 Installation sur Linux (Procédure détaillée)
-=======================================
+================================================
 
 Cette page décrit la procédure d'installation de |Fess| sur un environnement Linux.
-Elle couvre les formats de packages TAR.GZ, RPM et DEB.
+Elle prend en charge les formats de packages TAR.GZ, RPM et DEB.
 
 .. warning::
 
-   Pour les environnements de production, nous ne recommandons pas l'utilisation d'OpenSearch intégré.
-   Veuillez obligatoirement configurer un serveur OpenSearch externe.
+   Pour les environnements de production, l'utilisation d'OpenSearch intégré n'est pas recommandée.
+   Veillez impérativement à mettre en place un serveur OpenSearch externe.
 
 Prérequis
 =========
 
 - La configuration requise décrite dans :doc:`prerequisites` doit être satisfaite
 - Java 21 doit être installé
-- OpenSearch 3.6.0 doit être disponible (ou nouvelle installation)
+- OpenSearch 3.7.0 doit être disponible (ou nouvelle installation)
 
 Choix de la méthode d'installation
 ===================================
@@ -39,11 +39,45 @@ Pour les environnements Linux, vous pouvez choisir parmi les méthodes d'install
      - Systèmes Debian, Ubuntu
      - Gestion des services possible avec systemd
 
+Configuration système pour l'exécution d'OpenSearch
+=====================================================
+
+Pour qu'OpenSearch fonctionne de manière stable sous Linux, configurez les paramètres du noyau et les limites de ressources suivants.
+Ces réglages sont principalement nécessaires pour la version TAR.GZ (lorsque OpenSearch est installé manuellement).
+Avec les versions RPM / DEB, les packages OpenSearch et |Fess| configurent notamment le nombre de descripteurs de fichiers via systemd, mais comme ``vm.max_map_count`` est un paramètre du noyau côté hôte, vérifiez-le quelle que soit la méthode utilisée.
+
+Nombre maximal de mappages de mémoire virtuelle
+------------------------------------------------
+
+OpenSearch utilise un grand nombre de mappages mémoire ; définissez donc ``vm.max_map_count`` à ``262144`` ou plus.
+
+Pour une configuration temporaire ::
+
+    $ sudo sysctl -w vm.max_map_count=262144
+
+Pour une configuration permanente ::
+
+    $ echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+    $ sudo sysctl -p
+
+Nombre de descripteurs de fichiers
+------------------------------------
+
+Lorsque vous exécutez OpenSearch manuellement (version TAR.GZ), définissez la limite du nombre de descripteurs de fichiers de l'utilisateur exécutant OpenSearch à ``65535`` ou plus.
+
+Ajoutez ce qui suit dans ``/etc/security/limits.conf`` (remplacez ``opensearch`` par le nom de l'utilisateur exécutant OpenSearch) ::
+
+    opensearch  -  nofile  65535
+
+.. note::
+
+   Avec les versions RPM / DEB, cette configuration n'est pas nécessaire, car la limite du nombre de descripteurs de fichiers est définie dans la définition du service systemd.
+
 Installation avec la version TAR.GZ
-===================================
+=====================================
 
 Étape 1 : Installation d'OpenSearch
-------------------------------------
+--------------------------------------
 
 1. Téléchargement d'OpenSearch
 
@@ -51,14 +85,14 @@ Installation avec la version TAR.GZ
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.6.0/opensearch-3.6.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.6.0-linux-x64.tar.gz
-       $ cd opensearch-3.6.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.7.0-linux-x64.tar.gz
+       $ cd opensearch-3.7.0
 
    .. note::
 
-      Cet exemple utilise OpenSearch 3.6.0.
-      Veuillez vérifier la version compatible avec |Fess|.
+      Cet exemple utilise OpenSearch 3.7.0.
+      |Fess| 15.7 est compatible avec OpenSearch 3.7.0.
 
 2. Installation des plugins OpenSearch
 
@@ -66,16 +100,16 @@ Installation avec la version TAR.GZ
 
    ::
 
-       $ cd /path/to/opensearch-3.6.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ cd /path/to/opensearch-3.7.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
 
    .. important::
 
       Les versions des plugins doivent correspondre à la version d'OpenSearch.
-      Dans l'exemple ci-dessus, toutes sont spécifiées en 3.6.0.
+      Dans l'exemple ci-dessus, toutes sont spécifiées en 3.7.0.
 
 3. Configuration d'OpenSearch
 
@@ -84,17 +118,18 @@ Installation avec la version TAR.GZ
    ::
 
        # Chemin pour la synchronisation de configuration (spécifier en chemin absolu)
-       configsync.config_path: /path/to/opensearch-3.6.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.7.0/data/config/
 
        # Désactivation du plugin de sécurité (environnement de développement uniquement)
        plugins.security.disabled: true
 
    .. warning::
 
-      **Note importante sur la sécurité**
+      **Remarque importante concernant la sécurité**
 
       ``plugins.security.disabled: true`` ne doit être utilisé que dans les environnements de développement ou de test.
-      Pour les environnements de production, veuillez activer le plugin de sécurité d'OpenSearch et configurer une authentification et une autorisation appropriées.
+      Pour les environnements de production, activez le plugin de sécurité d'OpenSearch et configurez une authentification et une autorisation appropriées.
+      Si vous activez le plugin de sécurité avec OpenSearch 2.12 ou une version ultérieure, vous devez définir un mot de passe administrateur (variable d'environnement ``OPENSEARCH_INITIAL_ADMIN_PASSWORD``) lors du premier démarrage.
       Pour plus de détails, consultez :doc:`security`.
 
    .. tip::
@@ -107,12 +142,17 @@ Installation avec la version TAR.GZ
           network.host: 0.0.0.0
           discovery.type: single-node
 
+   .. tip::
+
+      La taille du tas (heap) d'OpenSearch se configure via ``-Xms`` / ``-Xmx`` dans ``config/jvm.options``.
+      Il est recommandé d'utiliser une valeur inférieure ou égale à la moitié de la mémoire physique disponible, et inférieure à 32 Go, en indiquant la même valeur pour ``-Xms`` et ``-Xmx``.
+
 Étape 2 : Installation de Fess
--------------------------------
+---------------------------------
 
 1. Téléchargement et décompression de Fess
 
-   Téléchargez la version TAR.GZ depuis le `site de téléchargement <https://fess.codelibs.org/ja/downloads.html>`__.
+   Téléchargez la version TAR.GZ depuis le `site de téléchargement <https://fess.codelibs.org/fr/downloads.html>`__.
 
    ::
 
@@ -123,44 +163,55 @@ Installation avec la version TAR.GZ
 2. Configuration de Fess
 
    Modifiez ``bin/fess.in.sh`` pour configurer les informations de connexion à OpenSearch.
+   Ce fichier contient, à l'état commenté, les paramètres permettant de se connecter à un cluster OpenSearch externe.
 
    ::
 
        $ vi bin/fess.in.sh
 
-   Ajoutez ou modifiez les paramètres suivants ::
+   Décommentez (supprimez le ``#`` en début de ligne) les deux lignes suivantes, situées près du début du fichier.
 
-       # Point de terminaison HTTP d'OpenSearch
+   Avant modification (état par défaut) ::
+
+       # External opensearch cluster
+       #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+
+   Après modification ::
+
+       # External opensearch cluster
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-
-       # Chemin de placement des fichiers de dictionnaire (identique à configsync.config_path d'OpenSearch)
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.6.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.7.0/data/config/
 
    .. note::
 
-      Si vous exécutez OpenSearch sur un autre hôte,
-      modifiez ``SEARCH_ENGINE_HTTP_URL`` avec le nom d'hôte ou l'adresse IP appropriés.
-      Exemple : ``SEARCH_ENGINE_HTTP_URL=http://192.168.1.100:9200``
+      - Définissez pour ``FESS_DICTIONARY_PATH`` le même chemin que celui indiqué dans ``configsync.config_path`` du fichier ``opensearch.yml`` d'OpenSearch.
+      - Si OpenSearch s'exécute sur un autre hôte, remplacez ``SEARCH_ENGINE_HTTP_URL`` par le nom d'hôte ou l'adresse IP appropriés. Exemple : ``SEARCH_ENGINE_HTTP_URL=http://192.168.1.100:9200``
+      - N'ajoutez pas une nouvelle ligne ``SEARCH_ENGINE_HTTP_URL=...`` ; décommentez et modifiez plutôt la ligne existante.
+
+   .. tip::
+
+      Pour modifier la taille du tas (heap) de |Fess|, modifiez ``FESS_MIN_MEM`` (par défaut : ``256m``) et ``FESS_MAX_MEM`` (par défaut : ``2g``) dans ``bin/fess.in.sh``, ou définissez la variable d'environnement ``FESS_HEAP_SIZE``.
 
 3. Vérification de l'installation
 
-   Vérifiez que les fichiers de configuration ont été correctement modifiés ::
+   Vérifiez que le fichier de configuration a été correctement modifié ::
 
        $ grep "SEARCH_ENGINE_HTTP_URL" bin/fess.in.sh
        $ grep "FESS_DICTIONARY_PATH" bin/fess.in.sh
 
 Étape 3 : Démarrage
--------------------
+----------------------
 
 Pour la procédure de démarrage, consultez :doc:`run`.
 
 Installation avec la version RPM
-=================================
+===================================
 
 La version RPM est utilisée sur les distributions Linux basées sur RPM telles que Red Hat Enterprise Linux, CentOS, Fedora, etc.
 
 Étape 1 : Installation d'OpenSearch
-------------------------------------
+--------------------------------------
 
 1. Téléchargement et installation du RPM OpenSearch
 
@@ -168,8 +219,8 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.6.0/opensearch-3.6.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.6.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.7.0-linux-x64.rpm
 
    Vous pouvez également ajouter un dépôt pour l'installation.
    Pour plus de détails, consultez `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
@@ -178,10 +229,10 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
 
 3. Configuration d'OpenSearch
 
@@ -193,7 +244,7 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    Paramètres à ajouter ::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /var/lib/opensearch/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -202,11 +253,11 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
       Consultez :doc:`security` pour configurer une sécurité appropriée.
 
 Étape 2 : Installation de Fess
--------------------------------
+---------------------------------
 
 1. Installation du RPM Fess
 
-   Téléchargez et installez le package RPM depuis le `site de téléchargement <https://fess.codelibs.org/ja/downloads.html>`__.
+   Téléchargez et installez le package RPM depuis le `site de téléchargement <https://fess.codelibs.org/fr/downloads.html>`__.
 
    ::
 
@@ -215,42 +266,52 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
 2. Configuration de Fess
 
-   Modifiez ``/usr/share/fess/bin/fess.in.sh``.
+   Pour la version RPM, modifiez le fichier de configuration des variables d'environnement ``/etc/sysconfig/fess``.
+   Ce fichier est conservé lors des mises à niveau du package (ne modifiez pas directement ``/usr/share/fess/bin/fess.in.sh``, car il est écrasé lors des mises à niveau).
 
    ::
 
-       $ sudo vi /usr/share/fess/bin/fess.in.sh
+       $ sudo vi /etc/sysconfig/fess
 
-   Ajoutez ou modifiez les paramètres suivants ::
+   Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
-3. Enregistrement du service
+   .. note::
 
-   **Si vous utilisez chkconfig** ::
+      Indiquez pour ``FESS_DICTIONARY_PATH`` le même chemin que celui défini dans ``configsync.config_path`` du fichier ``opensearch.yml``.
 
-       $ sudo /sbin/chkconfig --add opensearch
-       $ sudo /sbin/chkconfig --add fess
+3. Enregistrement et activation du service
 
-   **Si vous utilisez systemd** (recommandé) ::
+   Activez les services à l'aide de systemd (systemd est standard à partir de RHEL 8 et CentOS 8) ::
 
        $ sudo systemctl daemon-reload
        $ sudo systemctl enable opensearch.service
        $ sudo systemctl enable fess.service
 
+   .. note::
+
+      Le service |Fess| dépend du service OpenSearch ; OpenSearch doit donc être démarré en premier.
+
+   .. note::
+
+      Dans les environnements traditionnels n'utilisant pas systemd, vous pouvez enregistrer |Fess| avec ``chkconfig`` ::
+
+          $ sudo /sbin/chkconfig --add fess
+
 Étape 3 : Démarrage
--------------------
+----------------------
 
 Pour la procédure de démarrage, consultez :doc:`run`.
 
 Installation avec la version DEB
-=================================
+===================================
 
 La version DEB est utilisée sur les distributions Linux basées sur DEB telles que Debian, Ubuntu, etc.
 
 Étape 1 : Installation d'OpenSearch
-------------------------------------
+--------------------------------------
 
 1. Téléchargement et installation du DEB OpenSearch
 
@@ -258,8 +319,8 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.6.0/opensearch-3.6.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.6.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.7.0-linux-x64.deb
 
    Vous pouvez également ajouter un dépôt pour l'installation.
    Pour plus de détails, consultez `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.
@@ -268,10 +329,10 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.6.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.6.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
 
 3. Configuration d'OpenSearch
 
@@ -283,7 +344,7 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    Paramètres à ajouter ::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /var/lib/opensearch/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -292,11 +353,11 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
       Consultez :doc:`security` pour configurer une sécurité appropriée.
 
 Étape 2 : Installation de Fess
--------------------------------
+---------------------------------
 
 1. Installation du DEB Fess
 
-   Téléchargez et installez le package DEB depuis le `site de téléchargement <https://fess.codelibs.org/ja/downloads.html>`__.
+   Téléchargez et installez le package DEB depuis le `site de téléchargement <https://fess.codelibs.org/fr/downloads.html>`__.
 
    ::
 
@@ -305,59 +366,80 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
 2. Configuration de Fess
 
-   Modifiez ``/usr/share/fess/bin/fess.in.sh``.
+   Pour la version DEB, modifiez le fichier de configuration des variables d'environnement ``/etc/default/fess``.
+   Ce fichier est conservé lors des mises à niveau du package (ne modifiez pas directement ``/usr/share/fess/bin/fess.in.sh``, car il est écrasé lors des mises à niveau).
 
    ::
 
-       $ sudo vi /usr/share/fess/bin/fess.in.sh
+       $ sudo vi /etc/default/fess
 
-   Ajoutez ou modifiez les paramètres suivants ::
+   Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
-3. Enregistrement du service
+   .. note::
 
-   Activez le service avec systemd ::
+      Indiquez pour ``FESS_DICTIONARY_PATH`` le même chemin que celui défini dans ``configsync.config_path`` du fichier ``opensearch.yml``.
+
+3. Enregistrement et activation du service
+
+   Activez le service à l'aide de systemd ::
 
        $ sudo systemctl daemon-reload
        $ sudo systemctl enable opensearch.service
        $ sudo systemctl enable fess.service
 
+   .. note::
+
+      Le service |Fess| dépend du service OpenSearch ; OpenSearch doit donc être démarré en premier.
+
 Étape 3 : Démarrage
--------------------
+----------------------
 
 Pour la procédure de démarrage, consultez :doc:`run`.
 
 Vérification après l'installation
-==================================
+====================================
 
 Une fois l'installation terminée, veuillez vérifier les éléments suivants :
 
 1. **Vérification des fichiers de configuration**
 
    - Fichier de configuration d'OpenSearch (opensearch.yml)
-   - Fichier de configuration de Fess (fess.in.sh)
+   - Fichier de configuration de |Fess|
+
+     - Version TAR.GZ : ``bin/fess.in.sh``
+     - Version RPM : ``/etc/sysconfig/fess``
+     - Version DEB : ``/etc/default/fess``
 
 2. **Permissions des répertoires**
 
-   Vérifiez que les répertoires spécifiés dans la configuration existent et ont les permissions appropriées.
+   Vérifiez que le répertoire spécifié dans la configuration (``configsync.config_path`` / ``FESS_DICTIONARY_PATH``) existe et dispose des permissions appropriées.
 
    Pour la version TAR.GZ ::
 
-       $ ls -ld /path/to/opensearch-3.6.0/data/config/
+       $ ls -ld /path/to/opensearch-3.7.0/data/config/
 
    Pour les versions RPM/DEB ::
 
-       $ sudo ls -ld /var/lib/opensearch/data/config/
+       $ sudo ls -ld /var/lib/opensearch/config/
 
-3. **Vérification de la version de Java**
+3. **Vérification des paramètres du noyau**
+
+   ::
+
+       $ sysctl vm.max_map_count
+
+   Vérifiez que la valeur est ``262144`` ou plus.
+
+4. **Vérification de la version de Java**
 
    ::
 
        $ java -version
 
-   Vérifiez que Java 21 ou ultérieur est installé.
+   Vérifiez que Java 21 ou une version ultérieure est installé.
 
 Étapes suivantes
 ================
@@ -372,10 +454,10 @@ Questions fréquemment posées
 =============================
 
 Q : D'autres versions d'OpenSearch fonctionnent-elles ?
---------------------------------------------------------
+------------------------------------------------------------------
 
 R : |Fess| dépend d'une version spécifique d'OpenSearch.
-Pour garantir la compatibilité des plugins, il est fortement recommandé d'utiliser la version recommandée (3.6.0).
+Pour garantir la compatibilité des plugins, il est fortement recommandé d'utiliser la version recommandée (3.7.0).
 Si vous utilisez une autre version, vous devrez également ajuster les versions des plugins de manière appropriée.
 
 Q : Peut-on partager le même OpenSearch avec plusieurs instances Fess ?
