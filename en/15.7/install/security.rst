@@ -22,17 +22,29 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 **Procedure:**
 
 1. Log in to the admin screen: http://localhost:8080/admin
-2. Click "System" → "User"
+2. Click "User" → "User"
 3. Select the ``admin`` user
 4. Set a strong password
 5. Click the "Update" button
 
+.. note::
+
+   Once you have changed the password from ``admin``, you cannot set it back to a simple value such as ``admin`` (a blacklist of administrator passwords is configured via ``password.invalid.admin.passwords``). You can also change the initial password of the ``admin`` user before the first startup by setting ``index.user.initial_password`` in ``fess_config.properties``.
+
 **Recommended Password Policy:**
 
-- Minimum 12 characters
-- Include uppercase letters, lowercase letters, numbers, and symbols
-- Avoid dictionary words
-- Change regularly (recommended every 90 days)
+|Fess| provides a built-in feature that enforces the minimum/maximum password length and character-type requirements. Configure the following properties in ``fess_config.properties`` (defaults in parentheses):
+
+- ``password.min.length`` (default: ``8``): Minimum length. 12 or more is recommended.
+- ``password.max.length`` (default: ``100``): Maximum length.
+- ``password.require.uppercase`` (default: ``false``): Require uppercase letters.
+- ``password.require.lowercase`` (default: ``false``): Require lowercase letters.
+- ``password.require.digit`` (default: ``false``): Require digits.
+- ``password.require.special.char`` (default: ``false``): Require symbols.
+
+.. note::
+
+   By default, the minimum length is ``8`` and all character-type requirements are disabled. To strengthen passwords, set the properties above explicitly. Note that |Fess| has no password expiration (forced periodic change) feature; if you want to enforce periodic password changes as an operational rule, do so manually.
 
 Enable OpenSearch Security Plugin
 ----------------------------------
@@ -53,11 +65,16 @@ Enable OpenSearch Security Plugin
 
 4. Restart OpenSearch
 
-5. Update |Fess| configuration to add OpenSearch authentication credentials::
+5. Configure the connection to OpenSearch on the |Fess| side.
+
+   Specify the connection URL with the ``SEARCH_ENGINE_HTTP_URL`` environment variable (edit ``bin/fess.in.sh`` or the service environment file; the default value comes from ``search_engine.http.url`` in ``fess_config.properties``)::
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
-       SEARCH_ENGINE_USERNAME=admin
-       SEARCH_ENGINE_PASSWORD=<strong_password>
+
+   Specify the credentials with the following properties in ``fess_config.properties`` (there are no ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` environment variables)::
+
+       search_engine.username=admin
+       search_engine.password=<strong_password>
 
 For details, refer to the `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__.
 
@@ -147,32 +164,32 @@ Nginx access restriction example::
         proxy_set_header Host $host;
     }
 
-Role-Based Access Control (RBAC)
----------------------------------
+Roles and Access Control
+------------------------
 
-|Fess| supports multiple user roles. Following the principle of least privilege, grant users only the minimum necessary permissions.
+|Fess| provides two built-in roles:
 
-**Role Types:**
+- ``admin``: Administrator role that can perform all operations, including the admin screen.
+- ``guest``: Role assigned to unauthenticated (anonymous) users.
 
-- **Administrator**: All permissions
-- **General User**: Search only
-- **Crawler Administrator**: Manage crawl configurations
-- **Search Result Editor**: Edit search results
+Any other roles can be freely created from the admin screen. In |Fess|, a role is a tag that has only a name and is used mainly for access control of search results (which documents a user can view). A role itself is not tied to specific administrative permissions such as "manage crawl configurations" or "edit search results".
+
+Following the principle of least privilege, grant the administrator role (``admin``) only to users who perform administrative tasks, and do not grant it to general search users.
 
 **Procedure:**
 
-1. Click "System" → "Role" in the admin screen
-2. Create necessary roles
-3. Assign roles to users in "System" → "User"
+1. Click "User" → "Role" in the admin screen
+2. Create the necessary roles
+3. Assign roles to users in "User" → "User"
 
-Enable Audit Logging
----------------------
+Audit Logging
+-------------
 
-Audit logging is enabled by default to record system operation history.
+System operation history, such as authentication and administrative operations, is recorded as an audit log by default. The audit log is output by the ``fess.log.audit`` logger defined in ``log4j2.xml``, and its default output destination is ``audit.log``.
 
-Enable audit logging in the configuration file (``log4j2.xml``)::
+Because it is enabled by default, no additional configuration is required. To customize the output destination or log level, edit the following definition in ``log4j2.xml``::
 
-    <Logger name="org.codelibs.fess.audit" level="info" additivity="false">
+    <Logger name="fess.log.audit" additivity="false" level="info">
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
@@ -236,7 +253,7 @@ Configure security headers in Nginx or Apache as needed::
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=315.7000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Content-Security-Policy "default-src 'self'" always;
 
 Security Checklist
@@ -261,14 +278,14 @@ Network Security
 Access Control
 --------------
 
-- [ ] Role-based access control configured
+- [ ] Configured roles and access permissions appropriately (grant the administrator role only to necessary users)
 - [ ] Unnecessary user accounts removed
 - [ ] Password policy configured
 
 Monitoring and Logging
 ----------------------
 
-- [ ] Audit logging enabled
+- [ ] Confirmed that audit logging is enabled
 - [ ] Log retention period configured
 - [ ] Log monitoring mechanism established (if possible)
 

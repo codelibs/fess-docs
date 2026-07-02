@@ -22,17 +22,29 @@
 **步骤:**
 
 1. 登录管理页面: http://localhost:8080/admin
-2. 点击「系统」→「用户」
+2. 点击「用户」→「用户」
 3. 选择 ``admin`` 用户
 4. 设置强密码
 5. 点击「更新」按钮
 
+.. note::
+
+   一旦将密码从 ``admin`` 更改后，就不能再设置回 ``admin`` 这样的简单字符串（``password.invalid.admin.passwords`` 中配置了管理员密码黑名单）。此外，在首次启动前，可以通过在 ``fess_config.properties`` 中设置 ``index.user.initial_password`` 来更改 ``admin`` 用户的初始密码。
+
 **推荐密码策略:**
 
-- 至少 12 个字符
-- 包含大写字母、小写字母、数字、符号
-- 避免使用字典中的单词
-- 定期更改（建议每 90 天）
+|Fess| 具备强制密码最小/最大长度及字符类型要求的内置功能。请在 ``fess_config.properties`` 中设置以下属性（括号内为默认值）。
+
+- ``password.min.length`` （默认值: ``8``）：最小长度。建议设置为 12 以上。
+- ``password.max.length`` （默认值: ``100``）：最大长度。
+- ``password.require.uppercase`` （默认值: ``false``）：要求包含大写字母。
+- ``password.require.lowercase`` （默认值: ``false``）：要求包含小写字母。
+- ``password.require.digit`` （默认值: ``false``）：要求包含数字。
+- ``password.require.special.char`` （默认值: ``false``）：要求包含符号。
+
+.. note::
+
+   默认情况下，最小长度为 ``8``，且所有字符类型要求均处于禁用状态。若要增强密码强度，请显式设置上述属性。另外，|Fess| 没有密码过期（强制定期更改）功能。如果希望将定期更改密码作为运维规则强制执行，请手动进行。
 
 启用 OpenSearch 安全插件
 --------------------------------------
@@ -53,11 +65,16 @@
 
 4. 重启 OpenSearch
 
-5. 更新 |Fess| 的配置，添加 OpenSearch 的认证信息::
+5. 在 |Fess| 一侧配置连接到 OpenSearch 的信息。
+
+   请通过环境变量 ``SEARCH_ENGINE_HTTP_URL`` 指定连接 URL（可编辑 ``bin/fess.in.sh`` 或服务的环境配置文件；默认值来自 ``fess_config.properties`` 中的 ``search_engine.http.url``）::
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
-       SEARCH_ENGINE_USERNAME=admin
-       SEARCH_ENGINE_PASSWORD=<strong_password>
+
+   请通过 ``fess_config.properties`` 中的以下属性指定认证信息（不存在 ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` 这样的环境变量）::
+
+       search_engine.username=admin
+       search_engine.password=<strong_password>
 
 详情请参阅 `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__。
 
@@ -147,32 +164,32 @@ Nginx 访问限制示例::
         proxy_set_header Host $host;
     }
 
-基于角色的访问控制 (RBAC)
------------------------------
+角色与访问控制
+--------------------
 
-|Fess| 支持多个用户角色。遵循最小权限原则，仅授予用户必要的最小权限。
+|Fess| 预置了两个角色。
 
-**角色类型:**
+- ``admin``: 可执行包括管理页面在内的所有操作的管理员角色
+- ``guest``: 分配给未登录（匿名）用户的角色
 
-- **管理员**: 所有权限
-- **普通用户**: 仅限搜索
-- **爬虫管理员**: 爬取配置管理
-- **搜索结果编辑者**: 搜索结果编辑
+除此之外的角色可以在管理页面中自由创建。|Fess| 中的角色只是一个仅有名称的标签，主要用于搜索结果的访问控制（决定用户可以查看哪些文档）。角色本身并不与「管理爬取配置」「编辑搜索结果」等具体的管理权限绑定。
+
+遵循最小权限原则，管理员角色（``admin``）仅应授予执行管理业务的用户，不要授予普通搜索用户。
 
 **步骤:**
 
-1. 在管理页面点击「系统」→「角色」
+1. 在管理页面点击「用户」→「角色」
 2. 创建必要的角色
-3. 在「系统」→「用户」中为用户分配角色
+3. 在「用户」→「用户」中为用户分配角色
 
-启用审计日志
---------------
+审计日志
+--------
 
-为了记录系统操作历史，审计日志默认启用。
+认证、管理操作等系统操作历史，默认会作为审计日志被记录。审计日志由 ``log4j2.xml`` 中定义的 ``fess.log.audit`` 记录器输出，默认输出目标为 ``audit.log``。
 
-在配置文件（``log4j2.xml``）中启用审计日志::
+由于默认已启用，无需额外配置。如需自定义输出目标或日志级别，请编辑 ``log4j2.xml`` 中的以下定义::
 
-    <Logger name="org.codelibs.fess.audit" level="info" additivity="false">
+    <Logger name="fess.log.audit" additivity="false" level="info">
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
@@ -236,7 +253,7 @@ Nginx 访问限制示例::
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=315.7000; includeSubDomains" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Content-Security-Policy "default-src 'self'" always;
 
 安全检查清单
@@ -261,14 +278,14 @@ Nginx 访问限制示例::
 访问控制
 ----------
 
-- [ ] 已配置基于角色的访问控制
+- [ ] 已适当配置角色和访问权限（仅将管理员角色授予必要的用户）
 - [ ] 已删除不必要的用户账号
 - [ ] 已配置密码策略
 
 监控和日志
 --------
 
-- [ ] 已启用审计日志
+- [ ] 已确认审计日志已启用
 - [ ] 已配置日志保存期限
 - [ ] 已构建日志监控机制（如可能）
 
