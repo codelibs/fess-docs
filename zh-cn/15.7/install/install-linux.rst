@@ -175,7 +175,7 @@
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    修改后::
 
@@ -244,7 +244,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
    要添加的配置::
 
-       configsync.config_path: /var/lib/opensearch/config/
+       configsync.config_path: /var/lib/opensearch/data/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -276,7 +276,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
    设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    .. note::
 
@@ -344,7 +344,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    要添加的配置::
 
-       configsync.config_path: /var/lib/opensearch/config/
+       configsync.config_path: /var/lib/opensearch/data/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -376,7 +376,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
    设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    .. note::
 
@@ -423,7 +423,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    RPM/DEB 版的情况::
 
-       $ sudo ls -ld /var/lib/opensearch/config/
+       $ sudo ls -ld /var/lib/opensearch/data/config/
 
 3. **确认内核参数**
 

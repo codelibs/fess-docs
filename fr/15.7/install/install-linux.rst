@@ -175,7 +175,7 @@ Installation avec la version TAR.GZ
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    Après modification ::
 
@@ -244,7 +244,7 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    Paramètres à ajouter ::
 
-       configsync.config_path: /var/lib/opensearch/config/
+       configsync.config_path: /var/lib/opensearch/data/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -276,7 +276,7 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
    Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    .. note::
 
@@ -344,7 +344,7 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    Paramètres à ajouter ::
 
-       configsync.config_path: /var/lib/opensearch/config/
+       configsync.config_path: /var/lib/opensearch/data/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -376,7 +376,7 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
    Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    .. note::
 
@@ -423,7 +423,7 @@ Une fois l'installation terminée, veuillez vérifier les éléments suivants :
 
    Pour les versions RPM/DEB ::
 
-       $ sudo ls -ld /var/lib/opensearch/config/
+       $ sudo ls -ld /var/lib/opensearch/data/config/
 
 3. **Vérification des paramètres du noyau**
 

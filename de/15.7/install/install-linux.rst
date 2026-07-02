@@ -175,7 +175,7 @@ Schritt 2: Installation von Fess
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    Nach der Änderung::
 
@@ -244,7 +244,7 @@ Schritt 1: Installation von OpenSearch
 
    Hinzuzufügende Einstellungen::
 
-       configsync.config_path: /var/lib/opensearch/config/
+       configsync.config_path: /var/lib/opensearch/data/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -276,7 +276,7 @@ Schritt 2: Installation von Fess
    Konfigurieren Sie die Verbindungsinformationen zu OpenSearch. Die Standardwerte sind wie folgt. Ändern Sie diese bei Bedarf::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    .. note::
 
@@ -344,7 +344,7 @@ Schritt 1: Installation von OpenSearch
 
    Hinzuzufügende Einstellungen::
 
-       configsync.config_path: /var/lib/opensearch/config/
+       configsync.config_path: /var/lib/opensearch/data/config/
        plugins.security.disabled: true
 
    .. warning::
@@ -376,7 +376,7 @@ Schritt 2: Installation von Fess
    Konfigurieren Sie die Verbindungsinformationen zu OpenSearch. Die Standardwerte sind wie folgt. Ändern Sie diese bei Bedarf::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
 
    .. note::
 
@@ -423,7 +423,7 @@ Die Startanleitung finden Sie unter :doc:`run`.
 
    Bei der RPM-/DEB-Version::
 
-       $ sudo ls -ld /var/lib/opensearch/config/
+       $ sudo ls -ld /var/lib/opensearch/data/config/
 
 3. **Überprüfung der Kernel-Parameter**
 
