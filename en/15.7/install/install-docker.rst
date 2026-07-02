@@ -1,6 +1,6 @@
-===================================
+====================================
 Docker Installation (Detailed Guide)
-===================================
+====================================
 
 This page describes the installation procedure for |Fess| using Docker and Docker Compose.
 Using Docker allows you to set up a |Fess| environment easily and quickly.
@@ -13,7 +13,7 @@ Prerequisites
 - Docker Compose 2.0 or later is installed
 
 Verify Docker Installation
-===========================
+==========================
 
 Verify the Docker and Docker Compose versions with the following commands.
 
@@ -30,20 +30,21 @@ Verify the Docker and Docker Compose versions with the following commands.
 About Docker Images
 ===================
 
-The |Fess| Docker image consists of the following components:
+When you start |Fess| with Docker Compose, the following two containers run.
 
-- **Fess**: Full-text search system
-- **OpenSearch**: Search engine
+- **Fess** (``fess01``): The full-text search system itself
+- **OpenSearch** (``search01``): The search engine
 
-Official Docker images are published on `GitHub Container Registry <https://github.com/codelibs/docker-fess/pkgs/container/fess>`__.
+The official Docker image is published on `GitHub Container Registry <https://github.com/codelibs/docker-fess/pkgs/container/fess>`__.
+The Compose files and startup instructions are maintained in the `docker-fess <https://github.com/codelibs/docker-fess>`__ repository.
 
 Step 1: Obtain Docker Compose Files
-====================================
+===================================
 
 The following files are required to start using Docker Compose.
 
 Method 1: Download Files Individually
---------------------------------------
+-------------------------------------
 
 Download the following files:
 
@@ -55,7 +56,7 @@ Download the following files:
     $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.7.0/compose/compose-opensearch3.yaml
 
 Method 2: Clone Repository with Git
-------------------------------------
+-----------------------------------
 
 If Git is installed, you can also clone the entire repository:
 
@@ -65,51 +66,51 @@ If Git is installed, you can also clone the entire repository:
     $ cd docker-fess/compose
 
 Step 2: Review Docker Compose Files
-====================================
+===================================
 
 Contents of ``compose.yaml``
------------------------------
+----------------------------
 
-``compose.yaml`` contains the basic Fess configuration.
+``compose.yaml`` contains the configuration for Fess itself (the ``fess01`` service).
 
 Main configuration items:
 
-- **Port number**: Fess web interface port (default: 8080)
-- **Environment variables**: Settings such as Java heap size
-- **Volumes**: Data persistence settings
+- **Port number**: The Fess web interface port (default: 8080)
+- **Environment variables**: Settings such as the OpenSearch connection endpoint (``SEARCH_ENGINE_HTTP_URL``) and the dictionary file path (``FESS_DICTIONARY_PATH``)
+- **Startup order**: ``depends_on`` is configured so that the service starts only after OpenSearch (``search01``) becomes healthy
 
 Contents of ``compose-opensearch3.yaml``
------------------------------------------
+----------------------------------------
 
-``compose-opensearch3.yaml`` contains the OpenSearch configuration.
+``compose-opensearch3.yaml`` contains the configuration for the search engine (the ``search01`` service, OpenSearch).
 
 Main configuration items:
 
-- **OpenSearch version**: OpenSearch version to use
+- **OpenSearch image**: The OpenSearch image used (``ghcr.io/codelibs/fess-opensearch``)
 - **Memory settings**: JVM heap size
-- **Volumes**: Index data persistence settings
+- **Volumes**: Volumes for data persistence (``search01_data``: index data, ``search01_dictionary``: dictionary files)
 
 Customize Configuration (Optional)
------------------------------------
+----------------------------------
 
 To change the default settings, edit ``compose.yaml``.
 
-Example: Change port number::
+Example: Changing the port number::
 
     services:
-      fess:
+      fess01:
         ports:
-          - "9080:8080"  # Map to port 9080 on host
+          - "9080:8080"  # Map to port 9080 on the host
 
-Example: Change memory settings::
+Example: Changing memory settings::
 
     services:
-      fess:
+      fess01:
         environment:
-          - "FESS_HEAP_SIZE=2g"  # Set Fess heap size to 2GB
+          - "FESS_HEAP_SIZE=2g"  # Set the Fess heap size to 2GB
 
 Step 3: Start Docker Containers
-================================
+===============================
 
 Basic Startup
 -------------
@@ -123,13 +124,13 @@ Start Fess and OpenSearch with the following command:
 .. note::
 
    - The ``-f`` option specifies multiple Compose files
-   - The ``-d`` option runs in the background
+   - The ``-d`` option runs it in the background
 
-View startup logs::
+Check the startup logs::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f
 
-Press ``Ctrl+C`` to exit the log view.
+You can exit the log view with ``Ctrl+C``.
 
 Verify Startup
 --------------
@@ -140,21 +141,21 @@ Check the container status::
 
 Verify that the following containers are running:
 
-- ``fess``
-- ``opensearch``
+- ``fess01``
+- ``search01``
 
 .. tip::
 
-   Startup may take several minutes.
-   Wait until you see "Fess is ready" or a similar message in the logs.
+   Startup may take several minutes. OpenSearch (``search01``) becomes healthy first, and then Fess (``fess01``) starts.
+   Check the status of each container with ``docker compose ... ps``; once ``fess01`` is up, you can access http://localhost:8080/ in your browser.
 
 Step 4: Access via Browser
-===========================
+==========================
 
 Once startup is complete, access the following URLs:
 
-- **Search Screen**: http://localhost:8080/
-- **Admin Screen**: http://localhost:8080/admin
+- **Search screen**: http://localhost:8080/
+- **Admin screen**: http://localhost:8080/admin
 
 Default administrator account:
 
@@ -165,159 +166,190 @@ Default administrator account:
 
    **Important Security Notice**
 
-   In production environments, always change the administrator password.
+   In production environments, be sure to change the administrator password.
    For details, refer to :doc:`security`.
 
-Enabling AI Mode (LLM Plugins)
-==============================
+Enabling AI Search Mode (LLM Plugin)
+====================================
 
-Starting with |Fess| 15.7, AI mode (RAG Chat) is provided through the
-``fess-llm-*`` plugin family. The official `docker-fess
-<https://github.com/codelibs/docker-fess>`__ repository ships overlay files
-for the major LLM providers.
+Starting with |Fess| 15.7, the AI Search Mode (RAG Chat) feature has been separated into ``fess-llm-*`` plugins.
+The official `docker-fess <https://github.com/codelibs/docker-fess>`__ repository includes overlay files for the major LLM providers.
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
    * - Overlay
-     - Use case
+     - Purpose
    * - ``compose-ollama.yaml``
-     - Ollama (local LLM, runs an additional ``ollama01`` service)
-   * - ``compose-ollama-gpu.yaml``
-     - Ollama with NVIDIA GPU
+     - Ollama (local LLM, starts an additional ``ollama01`` service)
    * - ``compose-gemini.yaml``
      - Google Gemini (cloud API)
    * - ``compose-openai.yaml``
      - OpenAI (cloud API)
 
-Each overlay installs the matching plugin via ``FESS_PLUGINS`` and sets
-``-Dfess.config.rag.chat.enabled=true`` together with
-``-Dfess.system.rag.llm.name={provider}`` in ``FESS_JAVA_OPTS``.
+Each overlay automatically retrieves the matching plugin via ``FESS_PLUGINS`` and enables RAG Chat by setting
+``-Dfess.config.rag.chat.enabled=true`` in ``FESS_JAVA_OPTS``.
+For Gemini and OpenAI, which use cloud APIs, the provider to use is additionally specified with ``-Dfess.system.rag.llm.name``,
+and the API key (``rag.llm.<provider>.api.key``) and model (``rag.llm.<provider>.model``) are configured.
+For Ollama, since the default value of ``rag.llm.name`` (``ollama``) is used as is, no explicit setting is required,
+and only the connection endpoint (``rag.llm.ollama.api.url``) is configured.
 
-To use Gemini::
+Example using Gemini::
 
     $ export GEMINI_API_KEY="AIzaSy..."
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
 
-To use OpenAI::
+Example using OpenAI::
 
     $ export OPENAI_API_KEY="sk-..."
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
 
-To use Ollama::
+.. note::
+
+   The model to use can be changed with the ``GEMINI_MODEL`` and ``OPENAI_MODEL`` environment variables
+   (the defaults are ``gemini-2.5-flash`` and ``gpt-5-mini``, respectively).
+
+Example using Ollama::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
-    $ docker exec -it ollama01 ollama pull gemma4:e4b
+    $ docker exec -it ollama01 ollama pull gpt-oss:20b
+
+.. warning::
+
+   The ``ollama01`` service in ``compose-ollama.yaml`` is defined to use an NVIDIA GPU by default
+   (the `NVIDIA Container Toolkit <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>`__ is required).
+   If you are running in an environment without a GPU, remove or comment out the ``deploy:`` block (the GPU specification under ``reservations``) in ``compose-ollama.yaml``.
 
 .. tip::
 
-   After startup, the RAG section under Administration > System > General
-   lets you edit ``rag.llm.name`` and provider-specific settings. Those
-   values are persisted in OpenSearch and take precedence over JVM options
-   on subsequent restarts.
+   After startup, you can change the LLM provider to use (``rag.llm.name``) and provider-specific settings
+   from the "System > General" settings screen in the administration screen. However, since these changes are saved to
+   the configuration file inside the container, they are lost when the container is re-created (``up`` after ``docker compose down``).
+   To persist the settings, specify them in ``FESS_JAVA_OPTS`` in the Compose file, as in the examples above.
 
 Data Persistence
 ================
 
-Volumes are automatically created to retain data even after deleting Docker containers.
+All |Fess| data (index, crawled documents, user information, settings, etc.) is stored entirely in OpenSearch.
+Since this data is persisted in OpenSearch's volumes, it is retained even if the container is removed.
+The Fess service itself (``fess01``) is stateless and has no dedicated volume.
 
-Check volumes::
+Check the volumes::
 
     $ docker volume ls
 
-|Fess| related volumes:
+Main volumes defined in ``compose-opensearch3.yaml``:
 
-- ``fess-es-data``: OpenSearch index data
-- ``fess-data``: Fess configuration data
+- ``search01_data``: OpenSearch index data (includes all Fess data)
+- ``search01_dictionary``: Dictionary files
+
+.. note::
+
+   Docker Compose volume names are prefixed with the project name (by default, the name of the directory containing the Compose file).
+   For example, if started from the ``compose`` directory, the actual volume name would be something like ``compose_search01_data``.
 
 .. important::
 
    Volumes are not deleted when containers are removed.
-   To delete volumes, explicitly run the ``docker volume rm`` command.
+   To delete a volume, you must explicitly run the ``docker volume rm`` command.
 
 Stop Docker Containers
-=======================
+======================
 
-Stop containers::
+Stop the containers::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
 
-Stop and remove containers::
+Stop and remove the containers::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 .. warning::
 
-   The ``down`` command removes containers but not volumes.
-   To also delete volumes, add the ``-v`` option::
+   The ``down`` command removes containers but does not delete volumes.
+   To also delete volumes (such as ``search01_data``), add the ``-v`` option::
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
 
-   **Note**: This command will delete all data.
+   **Note**: Running this command deletes all data stored in OpenSearch.
 
 Advanced Configuration
 ======================
 
 Customize Environment Variables
---------------------------------
+-------------------------------
 
-You can add or modify environment variables in ``compose.yaml`` for detailed configuration.
+You can perform detailed configuration by adding or changing environment variables in ``compose.yaml``.
 
 Main environment variables:
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 50
+   :widths: 35 65
 
    * - Environment Variable
      - Description
    * - ``FESS_HEAP_SIZE``
-     - Fess JVM heap size (default: 1g)
+     - Fess JVM heap size (default in the Docker image: 512m)
+   * - ``FESS_JAVA_OPTS``
+     - Specify additional JVM options (such as overriding settings with ``-Dfess.config.*``)
+   * - ``FESS_PLUGINS``
+     - Plugins to automatically install at startup (space-separated ``name:version`` format; e.g., ``fess-ds-wikipedia:15.7.0``)
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - OpenSearch HTTP endpoint
-   * - ``TZ``
-     - Time zone (e.g., Asia/Tokyo)
+     - OpenSearch HTTP endpoint (default in ``compose.yaml``: ``http://search01:9200``)
+   * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
+     - Credentials for connecting to an OpenSearch instance with authentication enabled
+   * - ``FESS_DICTIONARY_PATH``
+     - Path to the dictionary files (a directory shared with OpenSearch)
+   * - ``FESS_PORT``
+     - Port on which Fess listens inside the container (default: 8080)
 
 Example::
 
-    environment:
-      - "FESS_HEAP_SIZE=4g"
-      - "TZ=Asia/Tokyo"
+    services:
+      fess01:
+        environment:
+          - "FESS_HEAP_SIZE=4g"
+
+.. note::
+
+   To change the time zone, specify something like ``-Duser.timezone=Asia/Tokyo`` in ``FESS_JAVA_OPTS``.
 
 How to Apply Configuration Files
----------------------------------
+--------------------------------
 
 Detailed |Fess| settings are written in the ``fess_config.properties`` file.
-In Docker environments, there are the following methods to apply these file settings.
+In the Docker image, ``fess_config.properties`` is located at ``/etc/fess`` inside the container.
+The following methods are available for applying settings in a Docker environment.
 
 Method 1: Mount Configuration File
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By mounting a directory containing ``fess_config.properties`` and other configuration files,
-you can apply settings edited on the host side to the container.
+Since ``/etc/fess`` also contains other configuration files required for Fess to run, replacing this entire directory with a mount will cause startup to fail.
+Instead, use the override directory ``/opt/fess``, which is added to the front of the classpath (it is empty by default).
 
-1. Create a configuration directory on the host::
+1. Create a directory on the host to hold the configuration file::
 
        $ mkdir -p /path/to/fess-config
 
-2. Get the configuration file template (first time only)::
+2. Obtain the configuration file template (first time only)::
 
        $ curl -o /path/to/fess-config/fess_config.properties https://raw.githubusercontent.com/codelibs/fess/refs/tags/fess-15.7.0/src/main/resources/fess_config.properties
 
-3. Edit ``/path/to/fess-config/fess_config.properties`` to add required settings::
+3. Edit ``/path/to/fess-config/fess_config.properties`` to write the required settings::
 
        # Example
        crawler.document.cache.enabled=false
        adaptive.load.control=20
        query.facet.fields=label,host
 
-4. Add volume mount to ``compose.yaml``::
+4. Add a volume mount to the ``fess01`` service in ``compose.yaml``::
 
        services:
-         fess:
+         fess01:
            volumes:
-             - /path/to/fess-config:/opt/fess/app/WEB-INF/conf
+             - /path/to/fess-config/fess_config.properties:/opt/fess/fess_config.properties
 
 5. Start the container::
 
@@ -325,45 +357,74 @@ you can apply settings edited on the host side to the container.
 
 .. note::
 
-   ``fess_config.properties`` contains search settings, crawler settings,
-   mail settings, and other system configurations.
-   Even if you delete containers with ``docker compose down``, files on the host side are preserved.
+   Since ``/opt/fess`` is added to the front of the classpath, the ``fess_config.properties`` placed here
+   takes precedence over the ``/etc/fess/fess_config.properties`` bundled with the image.
+   Property files are loaded as whole files and are not merged item by item.
+   Therefore, you must place a **complete file containing all configuration items**, not just the items you want to override.
+   If you only want to change some items, use "Method 2" below instead.
 
 Method 2: Configuration via System Properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can override configuration items in ``fess_config.properties`` via environment variables using system properties.
+You can override configuration items in ``fess_config.properties`` as system properties via environment variables.
 
 Configuration items written in ``fess_config.properties`` (e.g., ``crawler.document.cache.enabled=false``)
-can be specified in the format ``-Dfess.config.setting_name=value``.
+are specified in the form ``-Dfess.config.setting_name=value``.
 
-Add ``FESS_JAVA_OPTS`` to environment variables in ``compose.yaml``::
+Add ``FESS_JAVA_OPTS`` to the environment variables of the ``fess01`` service in ``compose.yaml``::
 
     services:
-      fess:
+      fess01:
         environment:
           - "FESS_JAVA_OPTS=-Dfess.config.crawler.document.cache.enabled=false -Dfess.config.adaptive.load.control=20 -Dfess.config.query.facet.fields=label,host"
 
 .. note::
 
    The part following ``-Dfess.config.`` corresponds to the configuration item name in ``fess_config.properties``.
+   This method is simpler when you only want to override a few items.
 
 Connect to External OpenSearch
--------------------------------
+------------------------------
 
-To use an existing OpenSearch cluster, edit ``compose.yaml`` to change the connection destination.
+To use an existing OpenSearch cluster, start with only ``compose.yaml`` (without ``compose-opensearch3.yaml``) and change the connection destination.
 
-1. Do not use ``compose-opensearch3.yaml``::
+1. Start without specifying ``compose-opensearch3.yaml``::
 
        $ docker compose -f compose.yaml up -d
 
-2. Set ``SEARCH_ENGINE_HTTP_URL``::
+2. Set the connection destination in the ``fess01`` service of ``compose.yaml``::
 
        environment:
          - "SEARCH_ENGINE_HTTP_URL=http://your-opensearch-host:9200"
 
+.. note::
+
+   If connecting to an OpenSearch instance with authentication enabled, also specify ``SEARCH_ENGINE_USERNAME`` and ``SEARCH_ENGINE_PASSWORD``.
+
+Other Overlays and Configurations
+---------------------------------
+
+The ``docker-fess`` repository also includes Compose files and directories for other purposes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - File / Directory
+     - Purpose
+   * - ``compose-dashboards3.yaml``
+     - Adds OpenSearch Dashboards (port 5601, for data visualization)
+   * - ``compose-minio.yaml``
+     - Adds MinIO (object storage) and uses it as the storage destination for Fess's storage feature
+   * - ``vanilla/``
+     - A configuration that combines Fess with a plain OpenSearch that does not include the Fess plugin (some features, such as dictionary management, are unavailable)
+   * - ``snapshot/``
+     - A configuration that uses development (snapshot) images (including cluster configurations and combinations with Elasticsearch 8)
+   * - ``multi-instance/``
+     - A configuration that starts multiple Fess instances sharing a single OpenSearch
+
 Docker Network Configuration
------------------------------
+----------------------------
 
 When integrating with multiple services, you can use a custom network.
 
@@ -374,14 +435,14 @@ Example::
         driver: bridge
 
     services:
-      fess:
+      fess01:
         networks:
           - fess-network
 
 Production Operation with Docker Compose
-=========================================
+========================================
 
-Recommended settings when using Docker Compose in production:
+Recommended settings when using Docker Compose in a production environment:
 
 1. **Set resource limits**::
 
@@ -394,7 +455,7 @@ Recommended settings when using Docker Compose in production:
              cpus: '1.0'
              memory: 2G
 
-2. **Set restart policy**::
+2. **Set the restart policy**::
 
        restart: unless-stopped
 
@@ -408,7 +469,7 @@ Recommended settings when using Docker Compose in production:
 
 4. **Enable security settings**
 
-   Enable OpenSearch security plugin and configure appropriate authentication.
+   Enable the OpenSearch security plugin and configure appropriate authentication.
    For details, refer to :doc:`security`.
 
 Troubleshooting
@@ -417,7 +478,7 @@ Troubleshooting
 Container Won't Start
 ---------------------
 
-1. Check logs::
+1. Check the logs::
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs
 
@@ -439,7 +500,7 @@ On Linux::
 
     $ sudo sysctl -w vm.max_map_count=262144
 
-For persistent configuration::
+To make the setting persistent::
 
     $ echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
     $ sudo sysctl -p
@@ -454,51 +515,53 @@ To delete all data and return to the initial state::
 
 .. warning::
 
-   This command will completely delete all data.
+   Running this command completely deletes all data.
 
 Next Steps
 ==========
 
-After installation is complete, refer to the following documentation:
+After installation is complete, refer to the following documents:
 
 - :doc:`run` - Starting |Fess| and initial setup
 - :doc:`security` - Security configuration for production environments
 - :doc:`troubleshooting` - Troubleshooting
 
 Frequently Asked Questions
-===========================
+==========================
 
-Q: How large are the Docker images?
-------------------------------------
+Q: How much disk space is required to download the images?
+----------------------------------------------------------
 
-A: The Fess image is approximately 1GB, and the OpenSearch image is approximately 800MB.
-The initial startup may take time to download.
+A: The Fess and OpenSearch images are downloaded on first startup and together require several GB of disk space.
+Depending on your network environment, the download may take some time.
 
-Q: Can I operate on Kubernetes?
+Q: Can I run this on Kubernetes?
 --------------------------------
 
-A: Yes, you can. You can operate on Kubernetes by converting Docker Compose files to Kubernetes manifests or using Helm charts.
-For details, refer to the official Fess documentation.
+A: Yes, it is possible. You can convert the Docker Compose files into Kubernetes manifests using a tool such as ``kompose``,
+or create your own manifests to operate on Kubernetes (an official Helm chart is not provided).
 
-Q: How do I update containers?
--------------------------------
+Q: How do I update the containers?
+----------------------------------
 
-A: Update with the following procedure:
+A: Update using the following procedure:
 
 1. Obtain the latest Compose files
-2. Stop containers::
+2. Stop the containers::
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-3. Pull new images::
+3. Pull the new images::
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
-4. Start containers::
+4. Start the containers::
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 Q: Is a multi-node configuration possible?
--------------------------------------------
+------------------------------------------
 
-A: Yes, it is possible. By editing ``compose-opensearch3.yaml`` to define multiple OpenSearch nodes, you can create a cluster configuration. However, for production environments, we recommend using orchestration tools such as Kubernetes.
+A: Yes, it is possible. You can configure OpenSearch with multiple nodes by referring to ``snapshot/compose-cluster.yaml`` in the ``docker-fess`` repository,
+or configure multiple Fess instances sharing a single OpenSearch by referring to ``multi-instance/``.
+However, for production environments, we recommend using an orchestration tool such as Kubernetes.
