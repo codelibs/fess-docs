@@ -383,6 +383,9 @@ SPNEGO
 
 |image5|
 
+.. note::
+   Les paramètres SPNEGO sont partagés au niveau du processus au sein de la bibliothèque sous-jacente ; un redémarrage de |Fess| est donc nécessaire pour appliquer les modifications qui leur sont apportées.
+
 Configuration Krb5
 :::::::::::::::::::
 
@@ -407,6 +410,7 @@ Nom d'utilisateur de pré-authentification
 ::::::::::::::::::::::::::::::::::::::::::
 
 Spécifie le nom d'utilisateur pour la pré-authentification SPNEGO.
+Laisser le nom d'utilisateur et le mot de passe vides active la connexion du serveur basée sur un keytab.
 
 Mot de passe de pré-authentification
 :::::::::::::::::::::::::::::::::::::
@@ -422,6 +426,7 @@ Autoriser l'authentification Basic non sécurisée
 :::::::::::::::::::::::::::::::::::::::::::::::::
 
 Spécifie s'il faut autoriser l'authentification Basic sur les connexions non sécurisées (HTTP).
+Ceci est désactivé par défaut afin d'éviter que les identifiants ne soient transmis en clair (l'authentification Basic reste proposée sur les connexions HTTPS).
 
 Invite NTLM
 ::::::::::::
@@ -432,21 +437,18 @@ Autoriser localhost
 :::::::::::::::::::
 
 Spécifie s'il faut autoriser l'accès depuis localhost.
+Ceci est désactivé par défaut pour des raisons de sécurité, car lorsqu'il est activé, les requêtes provenant du même hôte sont authentifiées en tant qu'utilisateur du système d'exploitation du serveur sans vérification Kerberos.
 
 Autoriser la délégation
 :::::::::::::::::::::::
 
 Spécifie s'il faut autoriser la délégation Kerberos.
 
-Répertoires exclus
-::::::::::::::::::
-
-Spécifie les répertoires à exclure de l'authentification SPNEGO.
-
 Niveau de journalisation
 ::::::::::::::::::::::::
 
-Spécifie le niveau de sortie du journal pour l'authentification SPNEGO sous forme de valeur numérique.
+Spécifie le niveau de sortie du journal pour l'authentification SPNEGO sous forme de valeur numérique de 0 à 7.
+Si ce champ est laissé vide ou défini sur une valeur non numérique, le niveau de journalisation est détecté automatiquement.
 
 Entra ID
 --------
