@@ -383,6 +383,9 @@ SPNEGO
 
 |image5|
 
+.. note::
+   SPNEGO-bezogene Einstellungen werden prozessweit innerhalb der zugrunde liegenden Bibliothek gemeinsam genutzt. Damit Änderungen daran wirksam werden, ist ein Neustart von |Fess| erforderlich.
+
 Krb5-Konfiguration
 ::::::::::::::::::
 
@@ -407,6 +410,7 @@ Vorab-Authentifizierung Benutzername
 ::::::::::::::::::::::::::::::::::::
 
 Gibt den Benutzernamen für die SPNEGO-Vorab-Authentifizierung an.
+Werden Benutzername und Passwort leer gelassen, wird die keytab-basierte Serveranmeldung verwendet.
 
 Vorab-Authentifizierung Passwort
 ::::::::::::::::::::::::::::::::
@@ -422,6 +426,7 @@ Unsichere Basic-Authentifizierung erlauben
 ::::::::::::::::::::::::::::::::::::::::::
 
 Gibt an, ob Basic-Authentifizierung über unsichere (HTTP) Verbindungen erlaubt werden soll.
+Dies ist standardmäßig deaktiviert, damit Anmeldedaten nicht im Klartext übertragen werden (über HTTPS-Verbindungen wird Basic-Authentifizierung weiterhin angeboten).
 
 NTLM-Aufforderung
 ::::::::::::::::::
@@ -432,21 +437,18 @@ Localhost erlauben
 ::::::::::::::::::
 
 Gibt an, ob der Zugriff vom Localhost erlaubt werden soll.
+Dies ist aus Sicherheitsgründen standardmäßig deaktiviert, da bei Aktivierung Anfragen vom selben Host ohne Kerberos-Prüfung als Server-Betriebssystembenutzer authentifiziert werden.
 
 Delegation erlauben
 :::::::::::::::::::
 
 Gibt an, ob Kerberos-Delegation erlaubt werden soll.
 
-Verzeichnisse ausschließen
-::::::::::::::::::::::::::
-
-Gibt Verzeichnisse an, die von der SPNEGO-Authentifizierung ausgeschlossen werden sollen.
-
 Logger-Ebene
 ::::::::::::
 
-Gibt die Protokollausgabeebene für die SPNEGO-Authentifizierung als numerischen Wert an.
+Gibt die Protokollausgabeebene für die SPNEGO-Authentifizierung als numerischen Wert von 0 bis 7 an.
+Wird das Feld leer gelassen oder ein nicht-numerischer Wert angegeben, wird die Protokollebene automatisch ermittelt.
 
 Entra ID
 --------

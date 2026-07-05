@@ -383,6 +383,9 @@ SPNEGO
 
 |image5|
 
+.. note::
+   La configuración de SPNEGO se comparte a nivel de proceso dentro de la biblioteca subyacente, por lo que es necesario reiniciar |Fess| para aplicar los cambios.
+
 Configuración Krb5
 :::::::::::::::::::
 
@@ -407,6 +410,7 @@ Nombre de usuario de preautenticación
 ::::::::::::::::::::::::::::::::::::::
 
 Especifica el nombre de usuario para la preautenticación SPNEGO.
+Si el nombre de usuario y la contraseña se dejan vacíos, se habilita el inicio de sesión del servidor basado en keytab.
 
 Contraseña de preautenticación
 :::::::::::::::::::::::::::::::
@@ -422,6 +426,7 @@ Permitir autenticación básica no segura
 ::::::::::::::::::::::::::::::::::::::::
 
 Especifique si desea permitir la autenticación básica a través de conexiones no seguras (HTTP).
+Esto está deshabilitado de forma predeterminada para evitar que las credenciales se envíen en texto claro (la autenticación básica sigue estando disponible en las conexiones HTTPS).
 
 Solicitud NTLM
 :::::::::::::::
@@ -432,21 +437,18 @@ Permitir localhost
 ::::::::::::::::::
 
 Especifique si desea permitir el acceso desde localhost.
+Esto está deshabilitado de forma predeterminada por motivos de seguridad, ya que si se habilita, las solicitudes desde el mismo host se autentican como el usuario del sistema operativo del servidor sin verificación Kerberos.
 
 Permitir delegación
 :::::::::::::::::::
 
 Especifique si desea permitir la delegación Kerberos.
 
-Directorios excluidos
-:::::::::::::::::::::
-
-Especifica los directorios que se excluirán de la autenticación SPNEGO.
-
 Nivel de registrador
 ::::::::::::::::::::
 
-Especifica el nivel de salida de registro para la autenticación SPNEGO como valor numérico.
+Especifica el nivel de salida de registro para la autenticación SPNEGO como valor numérico de 0 a 7.
+Si se deja vacío o se establece un valor no numérico, el nivel de registro se detecta automáticamente.
 
 Entra ID
 --------

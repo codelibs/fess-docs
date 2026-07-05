@@ -383,6 +383,9 @@ SPNEGO
 
 |image5|
 
+.. note::
+   SPNEGO settings are shared process-wide inside the underlying library, so a |Fess| restart is required to apply changes to them.
+
 Krb5 Config
 :::::::::::
 
@@ -407,6 +410,7 @@ Pre-Auth Username
 :::::::::::::::::
 
 Specifies the username for SPNEGO pre-authentication.
+Leaving the username and password empty enables keytab-based server login.
 
 Pre-Auth Password
 :::::::::::::::::
@@ -422,6 +426,7 @@ Allow Unsecure Basic Auth
 :::::::::::::::::::::::::
 
 Specify whether to allow Basic authentication over unsecure (HTTP) connections.
+This is disabled by default to prevent credentials from being sent in clear text (Basic authentication is still offered over HTTPS connections).
 
 Prompt NTLM
 ::::::::::::
@@ -432,21 +437,18 @@ Allow Localhost
 :::::::::::::::
 
 Specify whether to allow access from localhost.
+This is disabled by default for security reasons, because when enabled, same-host requests are authenticated as the server OS user without Kerberos verification.
 
 Allow Delegation
 ::::::::::::::::
 
 Specify whether to allow Kerberos delegation.
 
-Exclude Directories
-:::::::::::::::::::
-
-Specifies directories to exclude from SPNEGO authentication.
-
 Logger Level
 ::::::::::::
 
-Specifies the log output level for SPNEGO authentication as a numeric value.
+Specifies the log output level for SPNEGO authentication as a numeric value from 0 to 7.
+If left empty or set to a non-numeric value, the log level is detected automatically.
 
 Entra ID
 --------
