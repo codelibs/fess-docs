@@ -57,7 +57,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 API입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입

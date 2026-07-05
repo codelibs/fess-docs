@@ -19,7 +19,7 @@ Image Files
 -----------
 
 .. list-table::
-   :widths: 15.60 20
+   :widths: 15 40 20
    :header-rows: 1
 
    * - Format
@@ -51,7 +51,7 @@ Document Files
 --------------
 
 .. list-table::
-   :widths: 15.60 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - Format
@@ -286,7 +286,7 @@ Arguments
 ---------
 
 .. list-table::
-   :widths: 15.60 30
+   :widths: 15 40 30
    :header-rows: 1
 
    * - Argument

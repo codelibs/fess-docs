@@ -57,7 +57,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

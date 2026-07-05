@@ -53,7 +53,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -124,7 +124,7 @@ In addition to the same parameters as search logs, the following can be specifie
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -214,7 +214,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type

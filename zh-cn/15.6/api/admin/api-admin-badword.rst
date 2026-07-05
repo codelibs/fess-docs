@@ -57,7 +57,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

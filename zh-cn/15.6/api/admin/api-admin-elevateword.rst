@@ -57,7 +57,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

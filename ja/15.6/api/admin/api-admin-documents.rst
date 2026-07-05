@@ -49,7 +49,7 @@ Documents APIは、|Fess| のインデックス内のドキュメントを管理
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -106,7 +106,7 @@ ID指定でのドキュメント削除
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型

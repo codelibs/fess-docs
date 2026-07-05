@@ -57,7 +57,7 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

@@ -56,7 +56,7 @@ SearchLog API是用于获取和管理 |Fess| 搜索日志的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -253,7 +253,7 @@ SearchLog API是用于获取和管理 |Fess| 搜索日志的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -296,7 +296,7 @@ SearchLog API是用于获取和管理 |Fess| 搜索日志的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

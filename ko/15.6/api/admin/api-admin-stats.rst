@@ -44,7 +44,7 @@ Stats API는 |Fess| 의 통계 정보를 조회하기 위한 API입니다.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입

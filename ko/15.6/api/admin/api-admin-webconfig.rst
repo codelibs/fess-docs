@@ -57,7 +57,7 @@ Web 크롤링 설정 목록 조회
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입

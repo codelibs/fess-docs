@@ -19,7 +19,7 @@
 --------
 
 .. list-table::
-   :widths: 15.60 20
+   :widths: 15 40 20
    :header-rows: 1
 
    * - 格式
@@ -51,7 +51,7 @@
 --------
 
 .. list-table::
-   :widths: 15.60 20
+   :widths: 15 50 20
    :header-rows: 1
 
    * - 格式
@@ -286,7 +286,7 @@ generate-thumbnail 脚本
 ----
 
 .. list-table::
-   :widths: 15.60 30
+   :widths: 15 40 30
    :header-rows: 1
 
    * - 参数
