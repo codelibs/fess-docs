@@ -19,7 +19,7 @@ Fichiers image
 --------------
 
 .. list-table::
-   :widths: 15.50 20
+   :widths: 15 40 20
    :header-rows: 1
 
    * - Format
@@ -275,7 +275,7 @@ Arguments
 ---------
 
 .. list-table::
-   :widths: 15.50 30
+   :widths: 15 40 30
    :header-rows: 1
 
    * - Argument

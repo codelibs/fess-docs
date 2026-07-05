@@ -50,7 +50,7 @@ CrawlingInfo API是用于获取 |Fess| 爬虫信息的API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

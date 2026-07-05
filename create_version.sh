@@ -69,6 +69,20 @@ run_sed_inplace() {
     fi
 }
 
+# Run sed with extended regular expressions (-E) and proper in-place flag based on OS
+run_sed_inplace_ere() {
+    local pattern="$1"
+    local file="$2"
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        sed -E -i '' "$pattern" "$file"
+    else
+        # Linux
+        sed -E -i "$pattern" "$file"
+    fi
+}
+
 # Find the latest version with a given major number
 # Arguments: $1 = major version number, $2 = search directory
 find_latest_minor_version() {
@@ -207,10 +221,19 @@ for lang in "${LANGUAGES[@]}"; do
     print_info "Copying $prev_dir to $new_dir"
     cp -r "$prev_dir" "$new_dir"
 
-    # Replace version numbers in RST files
+    # Replace version numbers in RST files.
+    #
+    # The previous version is used as a regular expression, so its dots must be
+    # escaped ('.' would otherwise match any character, including a space). In
+    # addition, the version is only replaced when it is NOT surrounded by other
+    # digits, so version-like substrings embedded in unrelated numbers are left
+    # untouched. Without these guards, values such as table ":widths: 25 15 60"
+    # (where "15 6" matches "15.6") or example numbers like "31556926" get
+    # corrupted, and the damage compounds on every subsequent version bump.
     print_info "Replacing version numbers in $new_dir/*.rst files"
+    prev_version_re="${PREV_VERSION//./\\.}"
     find "$new_dir" -name "*.rst" -type f | while read -r rst_file; do
-        run_sed_inplace "s/$PREV_VERSION/$NEW_VERSION/g" "$rst_file"
+        run_sed_inplace_ere "s/(^|[^0-9])$prev_version_re([^0-9]|\$)/\\1$NEW_VERSION\\2/g" "$rst_file"
     done
 
     processed_langs+=("$lang")

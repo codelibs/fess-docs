@@ -19,7 +19,7 @@
 ----------
 
 .. list-table::
-   :widths: 15.50 20
+   :widths: 15 40 20
    :header-rows: 1
 
    * - 形式
@@ -275,7 +275,7 @@ RPM/Debパッケージでインストールすると、 ``/usr/share/fess/bin/ge
 ----
 
 .. list-table::
-   :widths: 15.50 30
+   :widths: 15 40 30
    :header-rows: 1
 
    * - 引数

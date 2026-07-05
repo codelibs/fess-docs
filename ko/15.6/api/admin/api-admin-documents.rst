@@ -49,7 +49,7 @@ Documents API는 |Fess| 인덱스 내의 문서를 관리하기 위한 API입니
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입
@@ -106,7 +106,7 @@ ID 지정 문서 삭제
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 파라미터
      - 타입

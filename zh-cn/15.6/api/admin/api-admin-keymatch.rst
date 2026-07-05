@@ -57,7 +57,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

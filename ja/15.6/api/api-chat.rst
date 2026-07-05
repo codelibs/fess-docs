@@ -38,7 +38,7 @@ Chat APIを使用するには、以下の設定が必要です:
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -195,7 +195,7 @@ Python
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型

@@ -57,7 +57,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型

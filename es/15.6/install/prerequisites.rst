@@ -95,7 +95,7 @@ Los puertos principales utilizados por |Fess| son los siguientes:
 
 .. list-table::
    :header-rows: 1
-   :widths: 15 15.60
+   :widths: 15 15 50
 
    * - Puerto
      - Protocolo

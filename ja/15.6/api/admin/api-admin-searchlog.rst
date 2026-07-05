@@ -56,7 +56,7 @@ SearchLog APIは、|Fess| の検索ログを取得・管理するためのAPIで
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -253,7 +253,7 @@ SearchLog APIは、|Fess| の検索ログを取得・管理するためのAPIで
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型
@@ -296,7 +296,7 @@ SearchLog APIは、|Fess| の検索ログを取得・管理するためのAPIで
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - パラメーター
      - 型

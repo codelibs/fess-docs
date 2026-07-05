@@ -95,7 +95,7 @@ Les ports principaux utilisés par |Fess| sont les suivants :
 
 .. list-table::
    :header-rows: 1
-   :widths: 15 15.60
+   :widths: 15 15 50
 
    * - Port
      - Protocole

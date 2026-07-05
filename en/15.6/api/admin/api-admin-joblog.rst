@@ -53,7 +53,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type
@@ -218,7 +218,7 @@ Parameters
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - Parameter
      - Type

@@ -38,7 +38,7 @@ Chat API是用于从程序访问 |Fess| AI搜索模式功能的RESTful API。
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型
@@ -195,7 +195,7 @@ Python
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 15 15.60
+   :widths: 20 15 15 50
 
    * - 参数
      - 类型

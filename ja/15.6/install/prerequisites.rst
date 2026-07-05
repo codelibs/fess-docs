@@ -95,7 +95,7 @@ Docker 版
 
 .. list-table::
    :header-rows: 1
-   :widths: 15 15.60
+   :widths: 15 15 50
 
    * - ポート
      - プロトコル
