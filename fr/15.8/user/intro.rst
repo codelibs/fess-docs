@@ -5,12 +5,14 @@ Introduction
 Public visé
 ===========
 
+|Fess| est un serveur de recherche d'entreprise permettant d'effectuer une recherche en texte intégral sur des documents provenant de sites Web, de fichiers, de bases de données, etc.
+
 Ce document est destiné aux utilisateurs de |Fess|.
 
 Avant de commencer
 ==================
 
-Ce document présente les méthodes de recherche dans |Fess|. Des connaissances de base en informatique sont requises.
+Ce document explique comment effectuer une recherche avec |Fess|. En plus de la recherche par mots-clés de base, il explique aussi comment affiner votre recherche grâce à l'écran de recherche avancée et au mode de recherche IA, qui permet de rechercher des informations sous forme de conversation naturelle. Des connaissances de base en informatique sont requises.
 
 Accès en ligne
 ==============
