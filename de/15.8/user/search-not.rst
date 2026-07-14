@@ -15,3 +15,19 @@ Wenn Sie beispielsweise nach Dokumenten suchen möchten, die "Suchbegriff1" enth
 ::
 
     Suchbegriff1 NOT Suchbegriff2
+
+.. note::
+
+    NOT muss in Großbuchstaben geschrieben werden. Wenn es wie ``not`` in Kleinbuchstaben geschrieben wird, wird es nicht als Operator behandelt, sondern als gewöhnliches Suchwort "not" gesucht. Wird zudem direkt vor dem auszuschließenden Wort ein ``-`` vorangestellt, wie in ``Suchbegriff1 -Suchbegriff2``, hat dies dieselbe Bedeutung wie NOT.
+
+Mit runden Klammern ``( )`` können Sie die NOT-Suche mit anderen Suchbedingungen kombinieren. Wenn Sie beispielsweise nach Dokumenten suchen möchten, die entweder "Suchbegriff1" oder "Suchbegriff2" enthalten, aber "Suchbegriff3" nicht enthalten, geben Sie Folgendes ein:
+
+::
+
+    (Suchbegriff1 OR Suchbegriff2) NOT Suchbegriff3
+
+Sie können die NOT-Suche auch für ein bestimmtes Feld durchführen. Im folgenden Beispiel werden Dokumente gesucht, die im Feld title "Suchbegriff1" enthalten, aber im Feld title "Suchbegriff2" nicht enthalten.
+
+::
+
+    title:Suchbegriff1 NOT title:Suchbegriff2
