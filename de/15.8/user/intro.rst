@@ -5,12 +5,14 @@ Einführung
 Zielgruppe
 ============
 
+|Fess| ist ein unternehmensweiter Suchserver, der die Volltextsuche über Dokumente in Websites, Dateien, Datenbanken und weiteren Quellen ermöglicht.
+
 Diese Dokumentation richtet sich an Benutzer, die |Fess| verwenden.
 
 Bevor Sie beginnen
 ===================
 
-Diese Dokumentation beschreibt die Suchmethoden in |Fess|. Grundlegende Kenntnisse im Umgang mit Computern werden vorausgesetzt.
+Diese Dokumentation beschreibt die Suchmethoden in |Fess|. Neben der grundlegenden Stichwortsuche behandelt sie auch die Verfeinerung der Suche über den erweiterten Suchbildschirm sowie den KI-Suchmodus, mit dem Sie in natürlicher Gesprächsform nach Informationen suchen können. Grundlegende Kenntnisse im Umgang mit Computern werden vorausgesetzt.
 
 Online-Zugriff
 ===============

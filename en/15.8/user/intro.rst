@@ -5,12 +5,14 @@ Introduction
 Intended Audience
 =================
 
+|Fess| is an enterprise search server that provides full-text search over documents in web sites, files, databases, and more.
+
 This document is intended for |Fess| users.
 
 Before You Read This Document
 ==============================
 
-This document demonstrates how to search with |Fess|. Basic knowledge of computer operation is required.
+This document explains how to search with |Fess|. In addition to basic keyword search, it also covers refining your search using the Advanced Search page and the AI search mode, which lets you look for information in a natural, conversational way. Basic knowledge of computer operation is required.
 
 Online Access
 =============
