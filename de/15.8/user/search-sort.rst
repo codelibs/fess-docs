@@ -34,7 +34,7 @@ Standardmäßig können die folgenden Felder zum Sortieren angegeben werden.
 Tabelle: Liste der sortierbaren Felder
 
 
-Durch Anpassung können Sie auch eigene Felder als Sortierziel hinzufügen.
+Sie können auch eigene Felder als Sortierziel hinzufügen. Geben Sie dazu in ``query.additional.sort.fields`` in ``fess_config.properties`` die gewünschten Feldnamen durch Kommas getrennt an (der Standardwert ist leer). Die hier angegebenen Felder werden zu den oben genannten Standardfeldern hinzugefügt und stehen dann zur Sortierung zur Verfügung. Zu beachten ist, dass die als Sortierziel vorgesehenen Felder zuvor im Index registriert sein müssen.
 
 Verwendung
 -----------
@@ -51,17 +51,22 @@ Das Folgende sucht nach fess und sortiert nach Dokumentgröße in aufsteigender 
 
     fess sort:content_length
 
-Um in absteigender Reihenfolge zu sortieren, geben Sie Folgendes ein:
+Um in absteigender Reihenfolge zu sortieren, fügen Sie ``.desc`` hinter dem Feldnamen an.
 
 ::
 
     fess sort:content_length.desc
 
-Um nach mehreren Feldern zu sortieren, geben Sie diese durch Kommas getrennt an:
+Als Suffix nach dem Feldnamen kann ``.asc`` (aufsteigend) oder ``.desc`` (absteigend) angegeben werden; wird es weggelassen, wird aufsteigend sortiert.
+
+Um nach mehreren Feldern zu sortieren, geben Sie diese wie folgt durch Kommas (,) getrennt an. Das zuerst angegebene Feld hat Vorrang, und Dokumente mit demselben Wert für dieses Feld werden anhand des nächsten Feldes sortiert.
 
 ::
 
     fess sort:content_length.desc,last_modified
+
+.. note::
+   Wenn Sie einen Feldnamen angeben, der nicht in der Liste der sortierbaren Felder enthalten ist, oder eine andere Sortierreihenfolge als ``asc`` oder ``desc``, führt die Suche zu einem Fehler.
 
 .. |image0| image:: ../../../resources/images/en/15.8/user/search-sort-1.png
 .. pdf            :width: 300 px

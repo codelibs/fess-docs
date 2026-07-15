@@ -34,7 +34,7 @@ Por defecto, puede ordenar especificando los siguientes campos:
 Tabla: Lista de campos de ordenamiento
 
 
-También puede personalizar y agregar sus propios campos como objetivos de ordenamiento.
+También puede agregar sus propios campos como objetivos de ordenamiento. Para hacerlo, especifique en ``query.additional.sort.fields`` de ``fess_config.properties`` los nombres de los campos que desea usar como objetivos de ordenamiento, separados por comas (el valor inicial está vacío). Los campos especificados aquí se agregan a los campos estándar mencionados anteriormente y quedan disponibles para el ordenamiento. Tenga en cuenta que el campo que se utilice como objetivo de ordenamiento debe estar registrado previamente en el índice.
 
 Cómo utilizar
 -------------
@@ -51,17 +51,22 @@ Lo siguiente busca fess como término de búsqueda y ordena el tamaño del docum
 
     fess sort:content_length
 
-Para ordenar en orden descendente, haga lo siguiente:
+Para ordenar en orden descendente, agregue ``.desc`` después del nombre del campo.
 
 ::
 
     fess sort:content_length.desc
 
-Para ordenar por múltiples campos, especifíquelos separados por comas como se muestra a continuación:
+El sufijo que se puede especificar después del nombre del campo es ``.asc`` (ascendente) o ``.desc`` (descendente); si se omite, se utilizará el orden ascendente.
+
+Para ordenar por múltiples campos, especifíquelos separados por comas como se muestra a continuación. El campo especificado primero tiene prioridad, y los documentos que tengan el mismo valor en ese campo se ordenan a continuación según el siguiente campo.
 
 ::
 
     fess sort:content_length.desc,last_modified
+
+.. note::
+   Si especifica un nombre de campo que no está en la lista de campos de ordenamiento, o un orden de ordenamiento distinto de ``asc`` o ``desc``, la búsqueda producirá un error.
 
 .. |image0| image:: ../../../resources/images/en/15.8/user/search-sort-1.png
 .. pdf            :width: 300 px

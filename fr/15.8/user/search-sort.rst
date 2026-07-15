@@ -34,7 +34,7 @@ Par défaut, vous pouvez trier en spécifiant les champs suivants.
 Table : Liste des champs de tri
 
 
-Vous pouvez également ajouter vos propres champs personnalisés comme cibles de tri.
+Vous pouvez également ajouter vos propres champs personnalisés comme cibles de tri. Pour cela, indiquez dans ``query.additional.sort.fields`` du fichier ``fess_config.properties`` les noms des champs que vous souhaitez utiliser comme cibles de tri, séparés par des virgules (la valeur par défaut est vide). Les champs indiqués ici sont ajoutés aux champs standards ci-dessus et deviennent disponibles pour le tri. Notez que le champ à trier doit être préalablement enregistré (indexé) dans l'index.
 
 Utilisation
 -----------
@@ -51,17 +51,22 @@ Voici un exemple de recherche de fess avec un tri croissant par taille de docume
 
     fess sort:content_length
 
-Pour trier par ordre décroissant, procédez comme suit.
+Pour trier par ordre décroissant, ajoutez ``.desc`` après le nom du champ.
 
 ::
 
     fess sort:content_length.desc
 
-Pour trier sur plusieurs champs, spécifiez-les séparés par des virgules comme suit.
+Le suffixe pouvant être ajouté après le nom du champ est ``.asc`` (ordre croissant) ou ``.desc`` (ordre décroissant) ; si vous l'omettez, l'ordre croissant est utilisé.
+
+Pour trier sur plusieurs champs, spécifiez-les séparés par des virgules (,) comme suit. Le champ indiqué en premier est prioritaire, et les documents ayant la même valeur pour ce champ sont ensuite triés selon le champ suivant.
 
 ::
 
     fess sort:content_length.desc,last_modified
+
+.. note::
+   Si vous indiquez un nom de champ absent de la liste des champs de tri disponibles, ou un ordre de tri autre que ``asc`` ou ``desc``, la recherche se soldera par une erreur.
 
 .. |image0| image:: ../../../resources/images/en/15.8/user/search-sort-1.png
 .. pdf            :width: 300 px
