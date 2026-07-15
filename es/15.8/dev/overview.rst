@@ -1,27 +1,28 @@
-==================================
-Vision General de Documentacion para Desarrolladores
-==================================
+=======================================================
+Visión General de la Documentación para Desarrolladores
+=======================================================
 
-Vision General
+Visión General
 ==============
 
-Esta seccion explica el desarrollo de extensiones de |Fess|.
-Proporciona informacion para extender |Fess|, incluyendo desarrollo de plugins,
-creacion de conectores personalizados y personalizacion de temas.
+Esta sección explica el desarrollo de extensiones para |Fess|.
+Proporciona información para extender |Fess|, incluyendo el desarrollo de plugins,
+la creación de conectores personalizados y la personalización de temas.
 
 Audiencia Objetivo
 ==================
 
 - Desarrolladores que desean crear funciones personalizadas para |Fess|
 - Desarrolladores que desean crear plugins
-- Desarrolladores que desean entender el codigo fuente de |Fess|
+- Desarrolladores que desean comprender el código fuente de |Fess|
 
 Conocimientos Previos
 ---------------------
 
-- Conocimientos basicos de Java 21
-- Conceptos basicos de Maven (sistema de construccion)
+- Conocimientos básicos de Java 21
+- Conceptos básicos de Maven (sistema de compilación)
 - Experiencia en desarrollo de aplicaciones web
+- Conocimientos básicos de OpenSearch (|Fess| utiliza OpenSearch como motor de búsqueda)
 
 Entorno de Desarrollo
 =====================
@@ -31,35 +32,68 @@ Entorno Recomendado
 
 - **JDK**: OpenJDK 21 o superior
 - **IDE**: IntelliJ IDEA / Eclipse / VS Code
-- **Herramienta de construccion**: Maven 3.9 o superior
+- **Herramienta de compilación**: Maven (no se exige una versión mínima para la compilación, pero se recomienda una versión 3.x reciente compatible con Java 21)
 - **Git**: Control de versiones
+- **OpenSearch**: Backend del motor de búsqueda (si se inicia desde el IDE, los módulos y plugins necesarios se descargan durante la compilación)
 
-Configuracion
--------------
+Configuración Inicial
+---------------------
 
-1. Obtener el codigo fuente:
+|Fess| se compila como un proyecto Maven. Durante el desarrollo, lo más sencillo es iniciarlo desde el IDE.
 
-::
+1. Obtención del código fuente:
 
-    git clone https://github.com/codelibs/fess.git
-    cd fess
+   ::
 
-2. Construir:
+       git clone https://github.com/codelibs/fess.git
 
-::
+2. Importación al IDE:
 
-    mvn package -DskipTests
+   Importe el directorio obtenido al IDE como un proyecto Maven.
 
-3. Iniciar el servidor de desarrollo:
+3. Descarga de los módulos y plugins de OpenSearch:
 
-::
+   Solo la primera vez, utilice el siguiente comando para obtener en el directorio ``plugins``
+   los módulos y plugins del motor de búsqueda.
 
-    ./bin/fess
+   ::
 
-Vision General de la Arquitectura
+       mvn antrun:run
+
+4. Inicio del servidor de desarrollo (desde el IDE):
+
+   Ejecute o depure ``org.codelibs.fess.FessBoot`` en el IDE y abra
+   http://localhost:8080/ en el navegador.
+   La pantalla de administración está en http://localhost:8080/admin/ (cuenta inicial: ``admin`` / ``admin``).
+
+5. Compilación del paquete (creación de la distribución):
+
+   Si necesita un paquete de distribución, ejecute el objetivo ``package``.
+   Los artefactos se generan en ``target/releases`` (agregue ``-DskipTests`` para omitir las pruebas unitarias).
+
+   ::
+
+       mvn package
+
+   Al descomprimir la distribución generada, dispondrá del script de inicio ``bin/fess``.
+
+   ::
+
+       unzip target/releases/fess-*.zip
+       ./fess-*/bin/fess
+
+.. note::
+
+    El script de inicio ``bin/fess`` se incluye en el paquete de distribución (zip/rpm/deb).
+    Con solo ejecutar ``mvn package`` en el árbol del código fuente, no se genera ``bin/fess``
+    directamente en la raíz del repositorio.
+    Para desarrollar desde el código fuente, ejecute ``FessBoot`` en el IDE como se indicó
+    anteriormente, o utilice el ``bin/fess`` de la distribución descomprimida.
+
+Visión General de la Arquitectura
 =================================
 
-|Fess| esta compuesto por los siguientes componentes principales:
+|Fess| está compuesto por los siguientes componentes principales:
 
 Estructura de Componentes
 -------------------------
@@ -69,24 +103,26 @@ Estructura de Componentes
    :widths: 25 75
 
    * - Componente
-     - Descripcion
+     - Descripción
    * - Capa Web
-     - Implementacion MVC con el framework LastaFlute
+     - Implementación MVC mediante el framework LastaFlute
    * - Capa de Servicios
-     - Logica de negocio
+     - Lógica de negocio
    * - Capa de Acceso a Datos
-     - Integracion con OpenSearch mediante DBFlute
+     - Acceso a OpenSearch con seguridad de tipos mediante DBFlute (ESFlute/FreeGen)
    * - Rastreador
-     - Recoleccion de contenido con la biblioteca fess-crawler
-   * - Motor de Busqueda
-     - Busqueda de texto completo con OpenSearch
+     - Recopilación de contenido mediante la biblioteca fess-crawler
+   * - Motor de Búsqueda
+     - Búsqueda de texto completo mediante OpenSearch
 
 Frameworks Principales
 ----------------------
 
-- **LastaFlute**: Framework web (Acciones, Formularios, Validacion)
-- **DBFlute**: Framework de acceso a datos (integracion con OpenSearch)
-- **Lasta Di**: Contenedor de inyeccion de dependencias
+- **LastaFlute**: Framework web (acciones, formularios, validación)
+- **DBFlute**: Framework de acceso a datos. Las clases de acceso con seguridad de tipos para
+  OpenSearch (``Bhv`` / ``ConditionBean``) se generan mediante la función FreeGen de DBFlute
+  y las plantillas de ESFlute (para regenerarlas, ejecute ``mvn dbflute:freegen``)
+- **Lasta Di**: Contenedor de inyección de dependencias
 
 Estructura de Directorios
 =========================
@@ -98,92 +134,105 @@ Estructura de Directorios
     │   ├── app/
     │   │   ├── web/         # Controladores (Action)
     │   │   ├── service/     # Servicios
-    │   │   └── pager/       # Paginacion
-    │   ├── api/             # REST API
+    │   │   ├── logic/       # Lógica
+    │   │   └── pager/       # Paginación
+    │   ├── api/             # REST API (api/v2, etc.)
     │   ├── helper/          # Clases auxiliares
     │   ├── crawler/         # Relacionado con el rastreador
-    │   ├── opensearch/      # Integracion con OpenSearch (generado por DBFlute)
-    │   ├── llm/             # Integracion con LLM
-    │   └── ds/              # Conectores de almacen de datos
+    │   ├── indexer/         # Procesamiento de indexación
+    │   ├── opensearch/      # Acceso a OpenSearch (generado por ESFlute/FreeGen)
+    │   ├── llm/             # Integración con LLM
+    │   ├── ds/              # Conectores de almacén de datos
+    │   ├── ingest/          # Ingest (procesamiento de datos durante la indexación)
+    │   ├── script/          # Motor de scripts
+    │   ├── entity/          # Entidades
+    │   └── mylasta/         # Configuración de LastaFlute (DI, mensajes, configuración con seguridad de tipos)
     ├── src/main/resources/
-    │   ├── fess_config.properties  # Configuracion
-    │   └── fess_*.xml              # Configuracion DI
+    │   ├── fess_config.properties  # Configuración
+    │   └── fess_*.xml              # Configuración DI (app.xml, fess_ds.xml, etc.)
     └── src/main/webapp/
         └── WEB-INF/view/    # Plantillas JSP
 
-Puntos de Extension
+Puntos de Extensión
 ===================
 
-|Fess| proporciona los siguientes puntos de extension:
+|Fess| ofrece los siguientes puntos de extensión:
 
 Plugins
 -------
 
-Puede agregar funcionalidad utilizando plugins.
+Puede agregar funciones utilizando plugins.
 
-- **Plugin de almacen de datos**: Rastreo desde nuevas fuentes de datos
-- **Plugin de motor de scripts**: Soporte para nuevos lenguajes de script
-- **Plugin de aplicacion web**: Extension de la interfaz web
-- **Plugin Ingest**: Procesamiento de datos durante la indexacion
+- **Plugin de almacén de datos**: Rastreo desde nuevas fuentes de datos (extiende ``AbstractDataStore``)
+- **Plugin de motor de scripts**: Compatibilidad con nuevos lenguajes de script (implementa ``ScriptEngine``)
+- **Plugin de aplicación web**: Extensión de la interfaz web (sobrescritura de componentes de Lasta Di y fusión de recursos)
+- **Plugin Ingest**: Procesamiento de datos durante la indexación (extiende ``Ingester``)
 
 Detalles: :doc:`plugin-architecture`
+
+.. note::
+
+    El propio |Fess| se empaqueta como ``war``. Al compilar plugins localmente, si no se puede
+    resolver |Fess| como dependencia, cambie temporalmente ``<packaging>`` en ``pom.xml`` a ``jar``,
+    ejecute ``mvn clean install -DskipTests`` y luego vuelva a cambiarlo a ``war``.
 
 Temas
 -----
 
-Puede personalizar el diseno de la pantalla de busqueda.
+Puede personalizar el diseño de la pantalla de búsqueda.
 
 Detalles: :doc:`theme-development`
 
-Configuracion
+Configuración
 -------------
 
-Puede personalizar muchos comportamientos en ``fess_config.properties``.
+Puede personalizar muchos comportamientos mediante ``fess_config.properties``.
 
 Detalles: :doc:`../config/intro`
 
 Desarrollo de Plugins
 =====================
 
-Para detalles sobre el desarrollo de plugins, consulte lo siguiente:
+Para obtener más detalles sobre el desarrollo de plugins, consulte lo siguiente:
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`datastore-plugin` - Desarrollo de plugins de almacen de datos
-- :doc:`script-engine-plugin` - Plugins de motor de scripts
-- :doc:`webapp-plugin` - Plugins de aplicacion web
-- :doc:`ingest-plugin` - Plugins Ingest
+- :doc:`datastore-plugin` - Desarrollo de plugins de almacén de datos
+- :doc:`script-engine-plugin` - Plugin de motor de scripts
+- :doc:`webapp-plugin` - Plugin de aplicación web
+- :doc:`ingest-plugin` - Plugin Ingest
 
 Desarrollo de Temas
 ===================
 
-- :doc:`theme-development` - Personalizacion de temas
+- :doc:`theme-development` - Personalización de temas
 
-Mejores Practicas
+Mejores Prácticas
 =================
 
-Convenciones de Codificacion
+Convenciones de Codificación
 ----------------------------
 
-- Seguir el estilo de codigo existente de |Fess|
-- Formatear codigo con ``mvn formatter:format``
+- Seguir el estilo de código existente de |Fess|
+- Formatear el código con ``mvn formatter:format``
 - Agregar encabezados de licencia con ``mvn license:format``
 
 Pruebas
 -------
 
-- Escribir pruebas unitarias (``*Test.java``)
-- Las pruebas de integracion son ``*Tests.java``
+- Pruebas unitarias (``*Test.java``): se ejecutan con ``mvn test`` en el perfil ``build`` predeterminado
+- Pruebas de integración (``*Tests.java``): se ejecutan con ``mvn test -P integrationTests``.
+  Para ejecutar las pruebas de integración se necesita un servidor |Fess| en ejecución y OpenSearch
 
 Registro
 --------
 
-- Usar Log4j2
+- Utiliza Log4j2
 - ``logger.debug()`` / ``logger.info()`` / ``logger.warn()`` / ``logger.error()``
-- No registrar informacion sensible
+- No registrar información sensible en los registros
 
 Recursos
 ========
 
-- `Repositorio GitHub <https://github.com/codelibs/fess>`__
-- `Rastreador de Problemas <https://github.com/codelibs/fess/issues>`__
+- `Repositorio de GitHub <https://github.com/codelibs/fess>`__
+- `Seguimiento de problemas <https://github.com/codelibs/fess/issues>`__
 - `Discusiones <https://github.com/codelibs/fess/discussions>`__
