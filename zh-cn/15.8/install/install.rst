@@ -120,7 +120,7 @@ Windows 版 (ZIP)
 
 2. **下载软件**
 
-   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 |Fess|。
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 |Fess|\ 。
 
    Docker 版的情况下，获取 Docker Compose 文件。
 
@@ -205,7 +205,7 @@ TAR.GZ/ZIP/RPM/DEB 版需要 Java 21 或更高版本。
 Q: OpenSearch 是必需的吗？
 --------------------------
 
-A: 是的，是必需的。|Fess| 使用 OpenSearch 作为搜索引擎。
+A: 是的，是必需的。\ |Fess| 使用 OpenSearch 作为搜索引擎。
 Docker 版会自动设置，但其他方法需要手动安装。
 
 Q: 可以从旧版本升级吗？

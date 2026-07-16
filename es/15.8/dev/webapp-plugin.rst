@@ -162,8 +162,8 @@ Sustitución de Componentes del Núcleo (fess+componentName.xml)
 ------------------------------------------------------------------
 
 Si desea modificar el comportamiento de un componente del propio
-|Fess|, cree una subclase de la clase de destino y **vuelva a
-registrarla con el mismo nombre de componente** en un archivo de
+|Fess|, cree una subclase de la clase de destino y \*\*vuelva a
+registrarla con el mismo nombre de componente\*\* en un archivo de
 configuración DI denominado ``<baseDicon>+<componentName>.xml``. Por
 ejemplo, dado que ``systemHelper`` está declarado en ``fess.xml`` del
 propio |Fess|, el archivo de sustitución será ``fess+systemHelper.xml``

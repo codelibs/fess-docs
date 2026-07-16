@@ -194,7 +194,7 @@ SMB/CIFS(Windows文件共享)
 
 .. note::
    |Fess| 的调度器使用 cron4j 格式的计划表达式。
-   字段为"分 时 日 月 星期"共5个字段,不使用 Quartz 那样的秒字段或 ``?``。
+   字段为"分 时 日 月 星期"共5个字段,不使用 Quartz 那样的秒字段或 ``?``\ 。
    星期以 ``0`` (周日) 到 ``6`` (周六) 表示。
 
 确认爬取状态
@@ -297,7 +297,7 @@ URL模式限制
    请设置适当的值。
 
 .. note::
-   新建时的默认线程数为:Web爬虫 ``1``、文件爬虫 ``5``。
+   新建时的默认线程数为:Web爬虫 ``1``、文件爬虫 ``5``\ 。
    请求间隔(间隔)的默认值为:Web爬虫 ``10000`` 毫秒、文件爬虫 ``1000`` 毫秒。
 
 爬取间隔
@@ -396,7 +396,7 @@ URL模式限制
 ----
 
 仅包含英数字的长字符串或连续符号会导致索引大小增加和性能下降。
-因此,|Fess| 默认设置了以下限制:
+因此,\ |Fess| 默认设置了以下限制:
 
 - **连续英数字**: 最多20个字符
 - **连续符号**: 最多10个字符
@@ -404,7 +404,7 @@ URL模式限制
 配置方法
 --------
 
-编辑 ``fess_config.properties``。
+编辑 ``fess_config.properties``\ 。
 
 **默认配置:**
 
@@ -457,7 +457,7 @@ URL模式限制
 **从代理服务器排除特定主机:**
 
 从代理排除的主机不在爬取配置的配置参数中设置，而是通过JVM系统属性配置。
-请在 ``fess.in.sh`` (Linux/Mac) 或 ``fess.in.bat`` (Windows) 中设置环境变量 ``FESS_NON_PROXY_HOSTS``。
+请在 ``fess.in.sh`` (Linux/Mac) 或 ``fess.in.bat`` (Windows) 中设置环境变量 ``FESS_NON_PROXY_HOSTS``\ 。
 
 ::
 
@@ -509,13 +509,13 @@ robots.txt 是向爬虫指示是否允许爬取的文件。
 配置方法
 --------
 
-忽略 robots.txt 时,请编辑 ``fess_config.properties``。
+忽略 robots.txt 时,请编辑 ``fess_config.properties``\ 。
 
 ::
 
     crawler.ignore.robots.txt=true
 
-此属性的默认值为 ``false``,|Fess| 遵守 robots.txt。
+此属性的默认值为 ``false``,\ |Fess| 遵守 robots.txt。
 设置为 ``true`` 则忽略 robots.txt。
 
 如需忽略HTML的robots元标签(``noindex``、``nofollow`` 等),

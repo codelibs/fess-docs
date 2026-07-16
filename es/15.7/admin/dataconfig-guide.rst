@@ -305,7 +305,7 @@ Los parámetros están en formato "clave=valor". La descripción de las claves e
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - Información de configuración de elasticsearch
    * - hosts
      - elasticsearch de destino de conexión
@@ -338,7 +338,7 @@ Un ejemplo de configuración de script sería el siguiente.
 
 Los parámetros están en formato "clave=valor".
 Las claves son las mismas que en el caso del rastreo de bases de datos.
-Puede obtener y configurar valores mediante source.*.
+Puede obtener y configurar valores mediante source.\*.
 
 CsvListDataStore
 ----------------

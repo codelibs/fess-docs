@@ -65,7 +65,7 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수 (기본값: 25。``fess_config.properties`` 의 ``paging.page.size`` 로 변경 가능)
+     - 페이지당 건수 (기본값: 25。\ ``fess_config.properties`` 의 ``paging.page.size`` 로 변경 가능)
    * - ``page``
      - Integer
      - 아니오

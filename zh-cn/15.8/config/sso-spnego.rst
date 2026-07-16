@@ -6,7 +6,7 @@ Windows集成认证SSO配置
 ====
 
 |Fess| 支持使用Windows集成认证（SPNEGO/Kerberos）进行单点登录（SSO）认证。
-通过使用Windows集成认证，登录到Windows域计算机的用户可以无需额外的登录操作即可访问 |Fess|。
+通过使用Windows集成认证，登录到Windows域计算机的用户可以无需额外的登录操作即可访问 |Fess|\ 。
 
 Windows集成认证的工作原理
 -------------------------
@@ -124,7 +124,7 @@ Kerberos配置文件
 必需设置
 --------
 
-将以下设置添加到 ``app/WEB-INF/conf/system.properties``。
+将以下设置添加到 ``app/WEB-INF/conf/system.properties``\ 。
 
 .. list-table::
    :header-rows: 1
@@ -191,8 +191,8 @@ Kerberos配置文件
    对于生产环境，强烈建议将此设置为 ``false`` 并使用HTTPS。
 
 .. note::
-   ``spnego.prompt.ntlm=true``（默认值）时，``spnego.allow.basic`` 也必须为 ``true``。
-   若要将 ``spnego.allow.basic`` 设为 ``false``，则必须同时将 ``spnego.prompt.ntlm`` 设为 ``false``。
+   ``spnego.prompt.ntlm=true``\ （默认值）时，``spnego.allow.basic`` 也必须为 ``true``\ 。
+   若要将 ``spnego.allow.basic`` 设为 ``false``，则必须同时将 ``spnego.prompt.ntlm`` 设为 ``false``\ 。
    不满足此条件时，SPNEGO初始化时将发生错误。
 
 .. note::
@@ -246,7 +246,7 @@ Google Chrome
 -------------
 
 Chrome通常使用Windows Internet选项设置。
-如果需要额外配置，通过组策略或注册表设置 ``AuthServerAllowlist``。
+如果需要额外配置，通过组策略或注册表设置 ``AuthServerAllowlist``\ 。
 
 Mozilla Firefox
 ---------------
@@ -333,7 +333,7 @@ Mozilla Firefox
     spnego.allow.localhost=false
 
 .. note::
-   设置 ``spnego.allow.basic=false`` 时，必须同时设置 ``spnego.prompt.ntlm=false``。
+   设置 ``spnego.allow.basic=false`` 时，必须同时设置 ``spnego.prompt.ntlm=false``\ 。
    由于 ``spnego.prompt.ntlm`` 默认为 ``true``，省略此设置将导致初始化时发生错误。
 
 故障排除

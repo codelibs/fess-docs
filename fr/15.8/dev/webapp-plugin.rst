@@ -162,8 +162,8 @@ Remplacement d'un composant du cœur (fess+componentName.xml)
 --------------------------------------------------------------
 
 Si vous souhaitez modifier le comportement d'un composant du cœur de
-|Fess|, sous-classez la classe cible et **réenregistrez-la sous le même nom
-de composant** dans un fichier de configuration DI nommé
+|Fess|, sous-classez la classe cible et \*\*réenregistrez-la sous le même nom
+de composant\*\* dans un fichier de configuration DI nommé
 ``<baseDicon>+<componentName>.xml``. Par exemple, ``systemHelper`` étant
 déclaré dans le fichier ``fess.xml`` de |Fess| lui-même, le fichier de
 remplacement sera ``fess+systemHelper.xml`` (et non

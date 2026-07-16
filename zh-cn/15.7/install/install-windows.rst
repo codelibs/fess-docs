@@ -38,7 +38,7 @@ PowerShell 的情况::
 
 1. 设置 ``JAVA_HOME`` 环境变量
 
-   将 Java 的安装目录设置为 ``JAVA_HOME``。
+   将 Java 的安装目录设置为 ``JAVA_HOME``\ 。
 
    例::
 
@@ -78,7 +78,7 @@ PowerShell 的情况::
 安装 OpenSearch 插件
 --------------------
 
-以**管理员权限**打开命令提示符，执行以下命令。
+以\ **管理员权限**\ 打开命令提示符，执行以下命令。
 
 ::
 
@@ -116,8 +116,8 @@ PowerShell 的情况::
 
 .. note::
 
-   在 Windows 中，路径分隔符请使用 ``/`` 而不是 ``\``。
-   应写为 ``C:/opensearch-3.7.0/data/config/`` 而不是 ``C:\opensearch-3.7.0\data\config\``。
+   在 Windows 中，路径分隔符请使用 ``/`` 而不是 ``\``\ 。
+   应写为 ``C:/opensearch-3.7.0/data/config/`` 而不是 ``C:\opensearch-3.7.0\data\config\``\ 。
 
 .. tip::
 
@@ -154,7 +154,7 @@ PowerShell 的情况::
 配置 Fess
 ---------
 
-使用文本编辑器打开 ``bin\fess.in.bat``。
+使用文本编辑器打开 ``bin\fess.in.bat``\ 。
 该文件末尾附近已预先以注释状态提供了用于连接外部 OpenSearch 集群的配置。
 
 修改前（默认状态）::
@@ -175,12 +175,12 @@ PowerShell 的情况::
 
    - ``fess.dictionary.path`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。
    - 如果 OpenSearch 在其他主机上运行，请将 ``fess.search_engine.http_address`` 中的主机名或 IP 地址更改为适当的值。
-   - 路径分隔符请使用 ``/``。
+   - 路径分隔符请使用 ``/``\ 。
    - 请勿新增 ``set FESS_JAVA_OPTS=...`` 行，而应取消注释已有的注释行并进行编辑。重复指定相同选项可能导致意外行为。
 
 .. tip::
 
-   要更改 |Fess| 的堆大小，请编辑 ``bin\fess.in.bat`` 中的 ``FESS_MIN_MEM``（默认值：``256m``）和 ``FESS_MAX_MEM``（默认值：``1g``），或设置环境变量 ``FESS_HEAP_SIZE``。
+   要更改 |Fess| 的堆大小，请编辑 ``bin\fess.in.bat`` 中的 ``FESS_MIN_MEM``\ （默认值：``256m``）和 ``FESS_MAX_MEM``\ （默认值：``1g``），或设置环境变量 ``FESS_HEAP_SIZE``\ 。
 
 确认安装
 --------
@@ -202,7 +202,7 @@ PowerShell 的情况::
 
 通过将 |Fess| 注册为 Windows 服务，可以设置为系统启动时自动启动。
 
-|Fess| 内置了用于注册 Windows 服务的 ``bin\service.bat``。
+|Fess| 内置了用于注册 Windows 服务的 ``bin\service.bat``\ 。
 该脚本使用 Apache Commons Daemon (procrun)，无需另行准备 NSSM 等第三方工具。
 
 .. note::
@@ -212,7 +212,7 @@ PowerShell 的情况::
 注册 |Fess| 服务
 ----------------
 
-以**管理员权限**打开命令提示符，执行以下命令。
+以\ **管理员权限**\ 打开命令提示符，执行以下命令。
 
 1. 注册服务::
 

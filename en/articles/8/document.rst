@@ -111,8 +111,8 @@ This time, make the following settings. Leave the other settings at their defaul
      - `https://www.n2sm.net/`
      - `https://fess.codelibs.org/`
    * - URL to be crawled
-     - `https://www.n2sm.net/.*`
-     - `https://fess.codelibs.org/.*`
+     - `https://www.n2sm.net/.\*`
+     - `https://fess.codelibs.org/.\*`
    * - Maximum number of accesses
      - 10
      - 10

@@ -141,7 +141,7 @@ OpenSearch を停止してから、データディレクトリをバックアッ
 Docker 版のバックアップ
 ---------------------
 
-OpenSearch のデータは Docker ボリュームに保存されます。``compose-opensearch3.yaml`` では、
+OpenSearch のデータは Docker ボリュームに保存されます。\ ``compose-opensearch3.yaml`` では、
 インデックスデータ用の ``search01_data`` と、辞書ファイル用の ``search01_dictionary`` の
 2 つのボリュームが定義されています。
 

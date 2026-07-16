@@ -70,7 +70,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 25。``fess_config.properties`` の ``paging.page.size`` で変更可能）
+     - 1ページあたりの件数（デフォルト: 25。\ ``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ
@@ -99,7 +99,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
 .. note::
 
-   各設定には ``versionNo``（楽観的ロック用のバージョン番号）が含まれます。``virtualHost``
+   各設定には ``versionNo``\ （楽観的ロック用のバージョン番号）が含まれます。\ ``virtualHost``
    や監査用フィールド（``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）は、
    値が設定されている場合に限り含まれます。値が空の ``virtualHost`` はレスポンスに含まれません。
 

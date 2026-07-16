@@ -111,10 +111,10 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
    ``settings`` 的各元素以及单个获取端点返回的 ``setting`` 对象中，包含所存储实体的字段原始值。除
    ``term``、``content``、``sortOrder``、``virtualHost`` 之外，审计字段
    ``createdBy``、``createdTime``、``updatedBy``、``updatedTime`` 以及
-   乐观锁字段 ``versionNo`` 也会一并返回。``createdTime`` 和
+   乐观锁字段 ``versionNo`` 也会一并返回。\ ``createdTime`` 和
    ``updatedTime`` 以自纪元以来的毫秒数（数值）表示。未设置（null）的字段
    将从响应中省略。此外，所有响应的 ``response`` 对象中始终包含表示
-   产品版本的 ``version``（详情请参阅 :doc:`api-admin-overview`）。
+   产品版本的 ``version``\ （详情请参阅 :doc:`api-admin-overview`）。
 
 获取相关内容
 ============

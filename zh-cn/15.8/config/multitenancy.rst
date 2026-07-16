@@ -34,7 +34,7 @@
 
 - **管理界面（推荐）**: 在「系统」→「常规」的「虚拟主机」栏中进行设置。
   该值将作为系统设置保存，重启后仍会保留。优先级高于 ``fess_config.properties``
-  中的 ``virtual.host.headers``。
+  中的 ``virtual.host.headers``\ 。
 - **配置文件**: 在 ``fess_config.properties`` 的 ``virtual.host.headers``
   属性中进行设置。
 

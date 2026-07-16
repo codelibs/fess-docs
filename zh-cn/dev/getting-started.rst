@@ -398,7 +398,7 @@ LastaFlute 可以在不重启的情况下反映部分更改。
 OpenSearch 的操作
 ----------------
 
-内置的 OpenSearch 放置在 ``target/fess/es/``。
+内置的 OpenSearch 放置在 ``target/fess/es/``\ 。
 也可以直接调用 OpenSearch API 进行调试：
 
 .. code-block:: bash

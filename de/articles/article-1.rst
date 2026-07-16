@@ -238,7 +238,7 @@ Im Ausgangszustand ist nichts registriert, wählen Sie daher [Neu erstellen].
 |image4|
 
 Als Web-Crawl-Konfiguration crawlen wir diesmal die Seiten unter https://fess.codelibs.org/ja/ mit 2 Threads in 10-Sekunden-Intervallen (etwa 2 Seiten in 10 Sekunden) und durchsuchen etwa 100 Seiten.
-Die Konfigurationseinträge sind URL: \https://fess.codelibs.org/ja/, URLs zum Crawlen: \https://fess.codelibs.org/ja/.*, Maximale Zugriffe: 100, Threads: 2, Intervall: 10000 Millisekunden. Der Rest ist Standard.
+Die Konfigurationseinträge sind URL: \https://fess.codelibs.org/ja/, URLs zum Crawlen: \https://fess.codelibs.org/ja/.\*, Maximale Zugriffe: 100, Threads: 2, Intervall: 10000 Millisekunden. Der Rest ist Standard.
 
 Web-Crawl-Konfiguration
 |image5|

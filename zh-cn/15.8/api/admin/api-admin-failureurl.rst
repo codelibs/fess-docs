@@ -146,7 +146,7 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
 
 .. note::
 
-   所有响应字段均以字符串形式返回（JSON string）。``errorCount`` 是以字符串表示的数值，``lastAccessTime`` 是以字符串表示的epoch毫秒值。
+   所有响应字段均以字符串形式返回（JSON string）。\ ``errorCount`` 是以字符串表示的数值，``lastAccessTime`` 是以字符串表示的epoch毫秒值。
 
 获取失败URL
 ===========

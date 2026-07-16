@@ -38,7 +38,7 @@ Permission
 ::::::::::
 
 Configure la permission du jeton d'accès.
-Décrivez au format « {user|group|role}nom ».
+Décrivez au format « {user\ |group|\ role}nom ».
 Par exemple, pour qu'un utilisateur appartenant au groupe developer affiche les résultats de recherche, configurez la permission « {group}developer ».
 
 Nom du paramètre

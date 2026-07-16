@@ -108,8 +108,8 @@ OpenID Connect认证的工作原理
      - (空字符串)
 
 .. note::
-   范围必须至少包含 ``openid``。
-   要获取用户的电子邮件地址，请指定 ``openid email``。
+   范围必须至少包含 ``openid``\ 。
+   要获取用户的电子邮件地址，请指定 ``openid email``\ 。
 
 重定向URL配置
 -------------
@@ -140,7 +140,7 @@ OpenID Connect认证的工作原理
 配置分配给通过OIDC认证的用户的默认组和角色。
 用户ID、组和角色分别按如下方式确定：
 
-- **用户ID**：从ID Token（JWT）的 ``email`` 声明中获取。因此，范围中实际上必须包含 ``email``（如果无法获取 ``email`` 声明，登录将无法正常完成）。
+- **用户ID**：从ID Token（JWT）的 ``email`` 声明中获取。因此，范围中实际上必须包含 ``email``\ （如果无法获取 ``email`` 声明，登录将无法正常完成）。
 - **组**：从ID Token的 ``groups`` 声明中获取。如果 ``groups`` 声明不存在，则使用 ``oic.default.groups`` 的值。
 - **角色**：始终使用 ``oic.default.roles`` 的值（不存在从ID Token声明中获取角色的机制）。
 

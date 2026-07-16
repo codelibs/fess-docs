@@ -254,7 +254,7 @@ FessConfigから取得
      - Confluence/Jiraコネクタ
    * - fess-ds-git
      - Gitリポジトリコネクタ
-   * - fess-theme-*
+   * - fess-theme-\*
      - カスタムテーマ
 
 これらのプラグインは、開発の参考として

@@ -286,7 +286,7 @@ JWT认证示例：
    * - ``file.api``
      - Box文件API对象（用于获取协作及权限信息）
 
-详细信息请参阅 `Box File Object <https://developer.box.com/reference#file-object>`_。
+详细信息请参阅 `Box File Object <https://developer.box.com/reference#file-object>`_\ 。
 
 Box认证设置
 =============

@@ -141,7 +141,7 @@ Um eine Web-Crawl-Konfiguration zu erstellen, die Seiten unter https://fess.code
    * - URL
      - https://fess.codelibs.org/
    * - Zu crawlende URL
-     - https://fess.codelibs.org/.*
+     - https://fess.codelibs.org/.\*
 
 Andere Konfigurationswerte verwenden Standardwerte.
 
@@ -167,7 +167,7 @@ Um eine Web-Crawl-Konfiguration zu erstellen, die passwortgeschützte Redmine-Se
    * - URL
      - https://<server>/my/page
    * - Zu crawlende URL
-     - https://<server>/.*
+     - https://<server>/.\*
    * - Konfigurationsparameter
      - client.robotsTxtEnabled=false (Optional)
 
@@ -214,7 +214,7 @@ Um eine Web-Crawl-Konfiguration zu erstellen, die XWiki-Seiten (z. B. https://<s
    * - URL
      - https://<server>/xwiki/bin/view/Main/
    * - Zu crawlende URL
-     - https://<server>/.*
+     - https://<server>/.\*
    * - Konfigurationsparameter
      - client.robotsTxtEnabled=false (Optional)
 

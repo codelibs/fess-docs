@@ -98,7 +98,7 @@ AI 搜索模式的设置
 
 在 Fess 的设置中启用 AI 搜索模式。
 
-在管理界面的设置或配置文件中设置 ``rag.chat.enabled=true``。
+在管理界面的设置或配置文件中设置 ``rag.chat.enabled=true``\ 。
 
 LLM 连接设置
 -------------

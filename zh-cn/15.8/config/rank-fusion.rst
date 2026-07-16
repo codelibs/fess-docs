@@ -70,13 +70,13 @@ fess_config.properties
      - 说明
    * - ``rank.fusion.window_size``
      - ``200``
-     - 从各搜索器中获取用于融合的最大结果数量。必须 >= ``paging.search.page.max.size × 2``（默认为 ``200``）；若设定值低于此最小值，将自动提升至该最小值。
+     - 从各搜索器中获取用于融合的最大结果数量。必须 >= ``paging.search.page.max.size × 2``\ （默认为 ``200``）；若设定值低于此最小值，将自动提升至该最小值。
    * - ``rank.fusion.rank_constant``
      - ``20``
-     - RRF 计算公式中的常数 ``k``。值越大，高排名与低排名结果之间的分数差越小。
+     - RRF 计算公式中的常数 ``k``\ 。值越大，高排名与低排名结果之间的分数差越小。
    * - ``rank.fusion.threads``
      - ``-1``
-     - 并行运行多个搜索器时的线程数。指定 ``0`` 或以下时，将自动使用 ``可用 CPU 核心数 × 1.5 + 1``。
+     - 并行运行多个搜索器时的线程数。指定 ``0`` 或以下时，将自动使用 ``可用 CPU 核心数 × 1.5 + 1``\ 。
    * - ``rank.fusion.score_field``
      - ``rf_score``
      - 用于存储融合后分数的结果文档字段名。
@@ -85,7 +85,7 @@ JVM 系统属性
 ------------
 
 使用的搜索器通过 JVM 系统属性指定。
-在 ``fess.in.sh``（或 ``fess.in.bat``）中添加如下内容::
+在 ``fess.in.sh``\ （或 ``fess.in.bat``）中添加如下内容::
 
     # 指定使用的搜索器（逗号分隔）
     -Drank.fusion.searchers=default,semantic
@@ -104,7 +104,7 @@ JVM 系统属性
 Rank Fusion 在结合关键词搜索与语义搜索的
 混合搜索中尤为有效。
 要使用语义搜索，需安装 Semantic Search 插件（``fess-webapp-semantic-search``），
-并在 ``-Drank.fusion.searchers`` 中添加 ``semantic``。
+并在 ``-Drank.fusion.searchers`` 中添加 ``semantic``\ 。
 
 使用示例
 ========
@@ -171,7 +171,7 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 1. 分别确认各搜索类型的结果
 2. 调整 ``rank.fusion.rank_constant`` 的值
 3. 调整 ``rank.fusion.window_size`` 的值
-4. 在翻页较深的页面（``起始位置 × 2`` 大于等于 ``rank.fusion.window_size`` 的位置），不会执行融合，仅使用主搜索器进行搜索。若希望在更多页面上获得融合结果，请增大 ``rank.fusion.window_size``。
+4. 在翻页较深的页面（``起始位置 × 2`` 大于等于 ``rank.fusion.window_size`` 的位置），不会执行融合，仅使用主搜索器进行搜索。若希望在更多页面上获得融合结果，请增大 ``rank.fusion.window_size``\ 。
 
 搜索缓慢
 --------

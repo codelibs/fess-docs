@@ -75,7 +75,7 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
    * - ``page``
      - Integer
      - 否
-     - 页码（从1开始）。默认值为 ``1``。
+     - 页码（从1开始）。默认值为 ``1``\ 。
    * - ``name``
      - String
      - 否
@@ -118,8 +118,8 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
 .. note::
 
    每个设置对象中还包含用于审计的 ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime``，以及用于乐观锁的 ``versionNo``（值为 ``null`` 的
-   字段将被省略）。``response`` 对象中始终包含表示产品版本的
+   ``updatedTime``，以及用于乐观锁的 ``versionNo``\ （值为 ``null`` 的
+   字段将被省略）。\ ``response`` 对象中始终包含表示产品版本的
    ``version``，但为简洁起见，后续示例中可能省略该字段。
 
 获取标签类型
@@ -201,7 +201,7 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
    * - ``value``
      - String
      - 是
-     - 标签值（搜索时通过 ``label`` 参数使用）。只能使用半角英数字和下划线（``_``），且须符合正则表达式 ``^[a-zA-Z0-9_]+$``（最多100个字符）。
+     - 标签值（搜索时通过 ``label`` 参数使用）。只能使用半角英数字和下划线（``_``），且须符合正则表达式 ``^[a-zA-Z0-9_]+$``\ （最多100个字符）。
    * - ``includedPaths``
      - String
      - 否
@@ -217,7 +217,7 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
    * - ``sortOrder``
      - Integer
      - 否
-     - 显示顺序（0以上的整数）。未指定时默认为 ``0``。
+     - 显示顺序（0以上的整数）。未指定时默认为 ``0``\ 。
    * - ``virtualHost``
      - String
      - 否
@@ -241,7 +241,7 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
       }
     }
 
-创建成功时，``created`` 的值为 ``true``。
+创建成功时，``created`` 的值为 ``true``\ 。
 
 更新标签类型
 ============
@@ -287,7 +287,7 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
    * - ``versionNo``
      - Integer
      - 是
-     - 用于乐观锁的版本号。请指定获取时响应中包含的 ``versionNo``。若指定的版本与当前版本不一致，更新将失败。
+     - 用于乐观锁的版本号。请指定获取时响应中包含的 ``versionNo``\ 。若指定的版本与当前版本不一致，更新将失败。
 
 响应
 ----
@@ -302,7 +302,7 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
       }
     }
 
-更新时，``created`` 的值为 ``false``。
+更新时，``created`` 的值为 ``false``\ 。
 
 删除标签类型
 ============

@@ -145,8 +145,8 @@ Cette fois, nous utilisons les paramètres suivants. Les autres sont par défaut
      - \https://www.n2sm.net/
      - \https://fess.codelibs.org/
    * - URL à explorer
-     - \https://www.n2sm.net/.*
-     - \https://fess.codelibs.org/.*
+     - \https://www.n2sm.net/.\*
+     - \https://fess.codelibs.org/.\*
    * - Nombre maximum d'accès
      - 10
      - 10

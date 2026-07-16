@@ -238,7 +238,7 @@ OpenSearch のディレクトリ構成
 |image4|
 
 ウェブクロールの設定として、今回は、 https://fess.codelibs.org/ja/ 以下のページ群を10秒間隔の2スレッドでクロールして(10秒に2ページ程度をクロール)、100ページ程度を検索対象にします。
-設定項目は URL : \https://fess.codelibs.org/ja/ 、クロール対象とするURL : \https://fess.codelibs.org/ja/.*、最大アクセス数 : 100 、スレッド数 : 2 、間隔 : 10000 ミリ秒 とし、他はデフォルトにします。
+設定項目は URL : \https://fess.codelibs.org/ja/ 、クロール対象とするURL : \https://fess.codelibs.org/ja/.\*、最大アクセス数 : 100 、スレッド数 : 2 、間隔 : 10000 ミリ秒 とし、他はデフォルトにします。
 
 ウェブクロールの設定
 |image5|

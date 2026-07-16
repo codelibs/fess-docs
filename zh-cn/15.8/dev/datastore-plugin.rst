@@ -150,9 +150,9 @@ storeData 的参数
 
 .. warning::
 
-   ``paramMap`` 的类型不是 ``Map<String, String>``，而是 ``DataStoreParams``。由于
+   ``paramMap`` 的类型不是 ``Map<String, String>``，而是 ``DataStoreParams``\ 。由于
    ``DataStoreParams`` 并未实现 ``Map`` 接口，获取值时请使用返回字符串的
-   ``getAsString()``，而不是 ``get()``。
+   ``getAsString()``，而不是 ``get()``\ 。
 
 数据处理流程
 ----------------
@@ -163,7 +163,7 @@ storeData 的参数
 #. 将源记录的字段合并到 ``paramMap.asMap()`` 中，构建 ``resultMap``
    （脚本将针对该 ``resultMap`` 进行求值）。
 #. 使用 ``convertValue(scriptType, template, resultMap)`` 对 ``scriptMap`` 中的每个
-   条目求值，并将结果存入 ``dataMap``。需要注意的是，映射关系并非硬编码在代码中，而是由
+   条目求值，并将结果存入 ``dataMap``\ 。需要注意的是，映射关系并非硬编码在代码中，而是由
    管理员在"脚本"栏中定义。
 #. 调用 ``callback.store(paramMap, dataMap)``，将其作为文档注册到索引中。
 
@@ -304,7 +304,7 @@ API密钥认证
 错误处理
 ==================
 
-对于应中断处理的致命错误，请抛出 ``DataStoreException``。
+对于应中断处理的致命错误，请抛出 ``DataStoreException``\ 。
 
 .. code-block:: java
 
@@ -411,7 +411,7 @@ API密钥认证
 .. note::
 
    由于基类中的 ``setUp`` 已附加了 ``@BeforeEach``，因此重写时无需在其上重新附加生命
-   周期注解。请为每个测试方法附加 ``@Test``（``org.junit.jupiter.api.Test``）。
+   周期注解。请为每个测试方法附加 ``@Test``\ （``org.junit.jupiter.api.Test``）。
 
 构建与安装
 ====================
@@ -420,7 +420,7 @@ pom.xml
 -------
 
 插件以 ``fess-parent`` 作为父 POM，构建为 jar。对 ``fess`` 和 ``opensearch`` 的依赖，
-由于在运行时由 |Fess| 本体提供，因此设置为 ``provided``。
+由于在运行时由 |Fess| 本体提供，因此设置为 ``provided``\ 。
 
 .. code-block:: xml
 
@@ -452,7 +452,7 @@ pom.xml
         </dependencies>
     </project>
 
-测试使用 JUnit 5 和 ``org.dbflute.utflute:utflute-lastaflute``。
+测试使用 JUnit 5 和 ``org.dbflute.utflute:utflute-lastaflute``\ 。
 
 构建
 ------
@@ -461,12 +461,12 @@ pom.xml
 
     mvn clean package
 
-会在 ``target/`` 目录下生成 ``fess-ds-example-15.8.0.jar``。
+会在 ``target/`` 目录下生成 ``fess-ds-example-15.8.0.jar``\ 。
 
 安装
 ------------
 
-将生成的 JAR 安装到 |Fess| 中，并重启 |Fess|。安装步骤的详细信息请参考
+将生成的 JAR 安装到 |Fess| 中，并重启 |Fess|\ 。安装步骤的详细信息请参考
 :doc:`../admin/plugin-guide`。安装后，从管理界面的"爬虫 > 数据存储"创建新设置，并在
 "处理器名"中指定 ``getName()`` 返回的名称（本例中为 ``ExampleDataStore``）。
 

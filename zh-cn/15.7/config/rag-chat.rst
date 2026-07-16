@@ -243,7 +243,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 自定义提示词
 -------------------------
 
-如需自定义系统提示词，请覆盖插件JAR中的 ``fess_llm++.xml``。
+如需自定义系统提示词，请覆盖插件JAR中的 ``fess_llm++.xml``\ 。
 
 1. 从正在使用的插件JAR文件中获取 ``fess_llm++.xml``
 2. 进行必要的修改
@@ -367,7 +367,7 @@ API使用
 =========
 
 AI搜索模式功能可通过REST API（v2 API）使用。
-基础URL为 ``http://<服务器名称>/api/v2/``。
+基础URL为 ``http://<服务器名称>/api/v2/``\ 。
 
 Chat API 提供以下3个端点。
 
@@ -504,7 +504,7 @@ SSE事件:
 
 端点: ``DELETE /api/v2/chat/sessions/{session_id}``
 
-清除指定会话的对话历史。成功时返回 ``cleared: true``。
+清除指定会话的对话历史。成功时返回 ``cleared: true``\ 。
 
 详细的API文档（认证、CSRF、速率限制、HTTP状态码）请参阅 :doc:`../api/api-chat`。
 
@@ -558,7 +558,7 @@ Web界面
 
 3. ``rag.llm.name`` 的值是否与已安装的插件一致
 
-   - 默认值是 ``ollama``。如仅安装 Gemini 插件等情况下，需要显式改为 ``gemini`` （或 ``openai``）
+   - 默认值是 ``ollama``\ 。如仅安装 Gemini 插件等情况下，需要显式改为 ``gemini`` （或 ``openai``）
    - 设置方法 (a)：在管理界面 > 系统 > 全局 的 RAG 区段中编辑 ``rag.llm.name`` 并保存
    - 设置方法 (b)：在启动时的 ``FESS_JAVA_OPTS`` 中包含 ``-Dfess.system.rag.llm.name=gemini`` （仅在 OpenSearch 尚未保存值的首次启动时作为默认值生效）
 

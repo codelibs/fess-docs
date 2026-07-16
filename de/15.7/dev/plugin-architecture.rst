@@ -254,7 +254,7 @@ Wichtige vom |Fess|-Projekt veroffentlichte Plugins:
      - Confluence/Jira-Konnektor
    * - fess-ds-git
      - Git-Repository-Konnektor
-   * - fess-theme-*
+   * - fess-theme-\*
      - Benutzerdefinierte Themes
 
 Diese Plugins sind als Entwicklungsreferenz auf

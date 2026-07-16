@@ -529,7 +529,7 @@ NSSM 등의 타사 도구를 사용하여 Windows 서비스로 등록합니다.
 
        $ tar czf fess-logs.tar.gz /path/to/fess/logs/
 
-4. **설정 파일**(기밀 정보를 삭제한 후)::
+4. **설정 파일**\ (기밀 정보를 삭제한 후)::
 
        $ tar czf fess-config.tar.gz /path/to/fess/app/WEB-INF/conf/
 

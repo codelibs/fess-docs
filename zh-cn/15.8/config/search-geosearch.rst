@@ -31,7 +31,7 @@
 位置信息字段定义
 ~~~~~~~~~~~~~~~~
 
-在 |Fess| 中,``location`` 作为存储位置信息的字段已标准定义。
+在 |Fess| 中,\ ``location`` 作为存储位置信息的字段已标准定义。
 此字段被配置为 OpenSearch 的 ``geo_point`` 类型。
 
 位置信息注册格式
@@ -99,7 +99,7 @@
 请求参数
 ~~~~~~~~
 
-位置信息搜索的参数名格式为 ``geo.<字段名>.point`` 和 ``geo.<字段名>.distance``。
+位置信息搜索的参数名格式为 ``geo.<字段名>.point`` 和 ``geo.<字段名>.distance``\ 。
 ``<字段名>`` 处填写通过 ``query.geo.fields`` 配置的字段名
 （默认为 ``location``）。
 
@@ -211,7 +211,7 @@ v2 JSON 搜索 API（ ``/api/v2/search`` ）同样支持位置信息搜索。
 .. note::
    - 请求参数名与所配置的字段名联动。例如,设置
      ``query.geo.fields=coordinates`` 时,需指定 ``geo.coordinates.point`` 和
-     ``geo.coordinates.distance``。
+     ``geo.coordinates.distance``\ 。
    - 此处指定的各字段必须在索引映射中定义为 ``geo_point`` 类型。
 
 实现示例
@@ -305,7 +305,7 @@ Google 地图集成
 1. 请确认 ``location`` 字段中是否正确存储了数据。
 2. 请确认纬度经度格式是否正确（ ``纬度,经度`` 逗号分隔。值不为两个时将报错）。
 3. 请确认 OpenSearch 的索引映射中 ``location`` 是否定义为 ``geo_point`` 类型。
-4. 请确认是否同时指定了 ``point`` 和 ``distance``（未指定 ``distance`` 的 ``point`` 将被忽略）。
+4. 请确认是否同时指定了 ``point`` 和 ``distance``\ （未指定 ``distance`` 的 ``point`` 将被忽略）。
 
 搜索结果未返回
 --------------
@@ -319,7 +319,7 @@ API 响应中不包含位置信息
 
 ``location`` 字段默认不包含在 API 响应中。
 如需在搜索结果中包含经纬度,请在 ``fess_config.properties`` 中
-设置 ``query.additional.api.response.fields=location``。
+设置 ``query.additional.api.response.fields=location``\ 。
 
 位置信息未正确注册
 ------------------

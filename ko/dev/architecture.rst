@@ -476,7 +476,7 @@ LastaDi component configuration file.
         </arg>
     </component>
 
-fess_message_*.properties
+fess_message_\*.properties
 ------------------------
 
 다국어 대응 메시지 파일입니다.

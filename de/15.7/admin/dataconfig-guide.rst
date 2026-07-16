@@ -305,7 +305,7 @@ Parameter haben das Format „Schlüssel=Wert". Die Schlüsselerklärungen sind 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - Elasticsearch-Einstellungsinformationen
    * - hosts
      - Elasticsearch-Verbindungsziel
@@ -338,7 +338,7 @@ Ein Beispiel für die Skriptkonfiguration ist wie folgt:
 
 Parameter haben das Format „Schlüssel=Wert".
 Die Schlüssel sind dieselben wie beim Datenbank-Crawling.
-Sie können Werte mit source.* abrufen und festlegen.
+Sie können Werte mit source.\* abrufen und festlegen.
 
 CsvListDataStore
 ----------------

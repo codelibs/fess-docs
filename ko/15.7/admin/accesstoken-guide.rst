@@ -38,7 +38,7 @@
 :::::::::::
 
 액세스 토큰의 권한을 설정합니다.
-"{user|group|role}name" 형식으로 기술합니다.
+"{user\ |group|\ role}name" 형식으로 기술합니다.
 예를 들어 developer 그룹에 속한 사용자가 검색 결과를 표시하려면 권한을 "{group}developer"로 설정합니다.
 
 매개변수명

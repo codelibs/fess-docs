@@ -7,8 +7,8 @@ Webアプリプラグイン
 
 Web アプリプラグイン(``fess-webapp-*``)は、|Fess| の Web アプリケーションを
 拡張するプラグインです。他の種類のプラグインと異なり、Action クラスや JSP を
-直接追加するのではなく、DI コンテナ(Lasta Di)に対して **コンポーネントを追加
-または置き換える** ことで機能を拡張します。代表的な用途は次のとおりです:
+直接追加するのではなく、DI コンテナ(Lasta Di)に対して \*\*コンポーネントを追加
+または置き換える\*\* ことで機能を拡張します。代表的な用途は次のとおりです:
 
 - 新しいコンポーネント(ヘルパー・サービスなど)の追加
 - |Fess| 本体のコンポーネントの置き換え(サブクラス化)
@@ -148,8 +148,8 @@ Lasta Di は、クラスパス上の ``app++.xml`` を |Fess| 本体の ``app.xm
 -----------------------------------------------------
 
 |Fess| 本体のコンポーネントの挙動を変更したい場合は、対象クラスをサブクラス化し、
-``<baseDicon>+<componentName>.xml`` という名前の DI 設定ファイルで **同じ
-コンポーネント名で再登録** します。例えば ``systemHelper`` は |Fess| 本体の
+``<baseDicon>+<componentName>.xml`` という名前の DI 設定ファイルで \*\*同じ
+コンポーネント名で再登録\*\* します。例えば ``systemHelper`` は |Fess| 本体の
 ``fess.xml`` で宣言されているため、置き換えファイルは ``fess+systemHelper.xml``
 になります(``app+systemHelper.xml`` ではありません)。
 
@@ -190,7 +190,7 @@ REST APIの追加(fess_api++.xml)
 新しい REST API エンドポイントを追加するには、``WebApiManager`` を実装します。
 ``BaseApiManager`` を継承し、``@PostConstruct`` で ``WebApiManagerFactory`` に
 自身を登録します。登録された API マネージャーは、リクエストごとに ``WebApiFilter``
-から呼び出されます。``fess_api++.xml`` でコンポーネントを登録します:
+から呼び出されます。\ ``fess_api++.xml`` でコンポーネントを登録します:
 
 .. code-block:: xml
 

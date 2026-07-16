@@ -100,7 +100,7 @@
 
 4. **运行**
 
-   从 IDE 运行 ``org.codelibs.fess.FessBoot``。
+   从 IDE 运行 ``org.codelibs.fess.FessBoot``\ 。
 
 详情请参阅 :doc:`setup`。
 

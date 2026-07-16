@@ -41,7 +41,7 @@
     api.search.scroll=true
 
 .. note::
-   配置变更后，需要重启 |Fess|。
+   配置变更后，需要重启 |Fess|\ 。
 
 滚动上下文有效期
 ----------------
@@ -97,7 +97,7 @@
 
 .. note::
    滚动搜索仅支持 GET 方法。使用 GET 以外的方法访问时，将返回
-   ``405 Method Not Allowed``。
+   ``405 Method Not Allowed``\ 。
 
 .. list-table::
    :header-rows: 1
@@ -185,7 +185,7 @@ NDJSON 格式
 -----------
 
 滚动搜索的响应以 NDJSON（Newline Delimited JSON）格式返回。
-Content-Type 为 ``application/x-ndjson; charset=UTF-8``。
+Content-Type 为 ``application/x-ndjson; charset=UTF-8``\ 。
 每行表示以 ``{"data": {...}}`` 形式包装的一个文档。
 
 **示例:**
@@ -415,8 +415,8 @@ Python 处理示例
 无法使用滚动搜索
 ----------------
 
-1. 请确认 ``api.search.scroll`` 是否设置为 ``true``。
-2. 请确认是否已重启 |Fess|。
+1. 请确认 ``api.search.scroll`` 是否设置为 ``true``\ 。
+2. 请确认是否已重启 |Fess|\ 。
 3. 请确认错误日志。
 
 发生超时错误

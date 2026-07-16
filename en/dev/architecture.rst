@@ -475,7 +475,7 @@ LastaDi component configuration file.
         </arg>
     </component>
 
-fess_message_*.properties
+fess_message_\*.properties
 ------------------------
 
 Message files for internationalization.

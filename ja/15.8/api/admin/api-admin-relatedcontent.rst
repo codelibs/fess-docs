@@ -65,7 +65,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 25。``fess_config.properties`` の ``paging.page.size`` で変更可能）
+     - 1ページあたりの件数（デフォルト: 25。\ ``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ
@@ -109,9 +109,9 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 .. note::
 
    ``settings`` の各要素および単一取得の ``setting`` には、保存されているエンティティの
-   フィールドがそのまま含まれます。``term``、``content``、``sortOrder``、``virtualHost`` に
+   フィールドがそのまま含まれます。\ ``term``、``content``、``sortOrder``、``virtualHost`` に
    加えて、監査用の ``createdBy``・``createdTime``・``updatedBy``・``updatedTime`` と、
-   楽観的ロック用の ``versionNo`` も返されます。``createdTime``・``updatedTime`` は
+   楽観的ロック用の ``versionNo`` も返されます。\ ``createdTime``・``updatedTime`` は
    エポックからのミリ秒（数値）です。値が未設定（null）のフィールドはレスポンスには
    含まれません。また、すべてのレスポンスの ``response`` オブジェクトには、製品バージョンを
    示す ``version`` が常に含まれます（詳細は :doc:`api-admin-overview` を参照）。
@@ -266,7 +266,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
      - 仮想ホスト（最大1000文字）
    * - ``versionNo``
      - はい
-     - 楽観的ロック用のバージョン番号。``setting/{id}`` の取得結果に含まれる値を指定します。
+     - 楽観的ロック用のバージョン番号。\ ``setting/{id}`` の取得結果に含まれる値を指定します。
 
 レスポンス
 ----------

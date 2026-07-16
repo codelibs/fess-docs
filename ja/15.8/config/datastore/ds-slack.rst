@@ -192,7 +192,7 @@ https://api.slack.com/apps にアクセス:
 
 「OAuth & Permissions」メニューで:
 
-**Bot Token Scopes**に以下を追加:
+**Bot Token Scopes**\ に以下を追加:
 
 パブリックチャンネルのみの場合:
 

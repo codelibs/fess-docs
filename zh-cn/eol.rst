@@ -7,7 +7,7 @@ CodeLibs Project 强烈建议迁移到支持的发布版本。
 这样可以避免无法使用必要的服务和支持的情况。
 最新发布可以从 `下载页面 <downloads.html>`__ 下载。
 
-对于超过产品支持期限的产品，如需支持，请咨询 `商业支持 <https://www.n2sm.net/products/n2search.html>`__。
+对于超过产品支持期限的产品，如需支持，请咨询 `商业支持 <https://www.n2sm.net/products/n2search.html>`__\ 。
 
 .. warning::
 
@@ -47,8 +47,8 @@ CodeLibs Project 强烈建议迁移到支持的发布版本。
 
 .. note::
 
-   详细的升级步骤请参阅 `升级指南 <15.5/install/upgrade.html>`__。
-   对于大规模环境或复杂配置，建议咨询 `商业支持 <support-services.html>`__。
+   详细的升级步骤请参阅 `升级指南 <15.5/install/upgrade.html>`__\ 。
+   对于大规模环境或复杂配置，建议咨询 `商业支持 <support-services.html>`__\ 。
 
 迁移资源
 ======================
@@ -265,7 +265,7 @@ Q: 升级需要多长时间？
 
 A: 根据环境规模而定，通常需要 2 到 4 小时。
 对于大规模环境或复杂配置，建议先在预发布环境中进行测试。
-详情请参阅 `升级指南 <15.5/install/upgrade.html>`__。
+详情请参阅 `升级指南 <15.5/install/upgrade.html>`__\ 。
 
 Q: 如果在已终止支持的版本中遇到问题该怎么办？
 --------------------------------------------------------------------------
@@ -290,4 +290,4 @@ Q: Docker 环境下的升级需要特殊步骤吗？
 -----------------------------------------------------------------
 
 A: 需要备份 Docker 卷并获取新的 Docker Compose 文件。
-详情请参阅 `Docker 安装指南 <15.5/install/install-docker.html>`__。
+详情请参阅 `Docker 安装指南 <15.5/install/install-docker.html>`__\ 。

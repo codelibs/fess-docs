@@ -210,7 +210,7 @@ Elasticsearch/OpenSearch连接器提供从Elasticsearch或OpenSearch集群获取
 ------------
 
 默认获取所有文档。
-如果不指定 ``query`` 参数，将使用 ``match_all``。
+如果不指定 ``query`` 参数，将使用 ``match_all``\ 。
 
 特定条件过滤
 ------------
@@ -481,7 +481,7 @@ OpenSearch集群爬取
 
 **解决方法**:
 
-1. 调整 ``size``（太大会变慢）:
+1. 调整 ``size``\ （太大会变慢）:
 
    ::
 
@@ -534,7 +534,7 @@ SSL/TLS连接
 通过代理连接
 ------------
 
-通过代理服务器连接时，请指定 ``settings.http.proxy_host`` 和 ``settings.http.proxy_port``。
+通过代理服务器连接时，请指定 ``settings.http.proxy_host`` 和 ``settings.http.proxy_port``\ 。
 
 ::
 

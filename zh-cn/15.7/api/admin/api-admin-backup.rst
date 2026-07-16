@@ -90,14 +90,14 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. note::
 
-   ``version`` 中设置的是当前运行的 |Fess| 的产品版本。``files`` 的内容会根据
+   ``version`` 中设置的是当前运行的 |Fess| 的产品版本。\ ``files`` 的内容会根据
    ``index.backup.targets`` / ``index.backup.log.targets`` 的设置而变化，
    上述内容为默认值时的示例。
 
 下载备份文件
 ============
 
-下载指定备份文件的内容。``{id}`` 中指定获取列表时得到的 ``id``（对象名）。
+下载指定备份文件的内容。\ ``{id}`` 中指定获取列表时得到的 ``id``\ （对象名）。
 根据 ``{id}`` 的种类，响应内容会按如下方式切换。
 
 .. list-table::
@@ -135,7 +135,7 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. note::
 
-   日志（``*.ndjson``）的导出受 ``index.backup.log.load.timeout``（默认值 ``60000`` 毫秒）的限制。
+   日志（``*.ndjson``）的导出受 ``index.backup.log.load.timeout``\ （默认值 ``60000`` 毫秒）的限制。
    如果输出耗时较长，日志数据可能会被中途截断。
 
 使用示例

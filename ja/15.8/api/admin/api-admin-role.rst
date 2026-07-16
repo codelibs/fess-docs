@@ -65,7 +65,7 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 25。``fess_config.properties`` の ``paging.page.size`` で変更可能）
+     - 1ページあたりの件数（デフォルト: 25。\ ``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ

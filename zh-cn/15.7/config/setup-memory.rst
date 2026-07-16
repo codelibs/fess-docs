@@ -31,7 +31,7 @@ Fess Web 应用程序的内存配置
 环境变量配置
 ------------------
 
-设置环境变量 ``FESS_HEAP_SIZE``。
+设置环境变量 ``FESS_HEAP_SIZE``\ 。
 
 ::
 
@@ -72,13 +72,13 @@ Fess Web 应用程序的内存配置
 RPM/DEB 软件包配置
 ------------------------
 
-使用 RPM 软件包安装时,请编辑 ``/etc/sysconfig/fess``。
+使用 RPM 软件包安装时,请编辑 ``/etc/sysconfig/fess``\ 。
 
 ::
 
     FESS_HEAP_SIZE=2g
 
-使用 DEB 软件包时,请编辑 ``/etc/default/fess``。
+使用 DEB 软件包时,请编辑 ``/etc/default/fess``\ 。
 
 ::
 
@@ -125,7 +125,7 @@ RPM/DEB 软件包配置
 配置方法
 --------
 
-编辑 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties``。
+编辑 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties``\ 。
 
 ::
 
@@ -399,13 +399,13 @@ OpenSearch 的内存使用情况
 
 **Fess Web 应用程序:**
 
-1. 增加 ``FESS_HEAP_SIZE``。
+1. 增加 ``FESS_HEAP_SIZE``\ 。
 2. 限制并发访问数。
 3. 降低日志级别,减少日志输出的内存使用。
 
 **爬虫:**
 
-1. 增加 ``jvm.crawler.options`` 中的 ``-Xmx``。
+1. 增加 ``jvm.crawler.options`` 中的 ``-Xmx``\ 。
 2. 减少并行爬取数量。
 3. 调整爬取配置以排除大型文件。
 

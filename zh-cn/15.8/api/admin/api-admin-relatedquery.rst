@@ -98,7 +98,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
 .. note::
 
-   每条设置均包含 ``versionNo``（用于乐观锁的版本号）。``virtualHost``
+   每条设置均包含 ``versionNo``\ （用于乐观锁的版本号）。\ ``virtualHost``
    以及审计字段（``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）
    仅在有值时才会包含在响应中。值为空的 ``virtualHost`` 不会包含在响应中。
 
@@ -281,7 +281,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 ========
 
 当请求失败时，``status`` 将被设置为非 0 的值，``message`` 中包含错误内容。
-例如，缺少必填字段等验证错误时，``status`` 为 ``1``。
+例如，缺少必填字段等验证错误时，``status`` 为 ``1``\ 。
 有关状态码的列表，请参阅 :doc:`api-admin-overview`。
 
 .. code-block:: json

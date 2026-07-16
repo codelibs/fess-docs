@@ -100,7 +100,7 @@ OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-opena
     # 使用的模型
     rag.llm.openai.model=gpt-5-mini
 
-``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+``system.properties``\ （也可在管理界面 > 系统 > 通用中配置）:
 
 ::
 
@@ -132,7 +132,7 @@ OpenAI集成功能以插件形式提供。使用前需要安装 ``fess-llm-opena
     # 并发请求数限制
     rag.llm.openai.max.concurrent.requests=5
 
-``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+``system.properties``\ （也可在管理界面 > 系统 > 通用中配置）:
 
 ::
 
@@ -368,7 +368,7 @@ OpenAI客户端可用的所有配置项。 ``rag.llm.name`` 在 ``system.propert
 对于流式请求，仅初次连接是重试对象，响应主体接收开始后发生的错误会立即向上传播。
 
 .. note::
-   在默认配置（最多10次、基准2秒）的最坏情况下，9次重试的退避总和为 ``2 + 4 + 8 + ... + 512 ≈ 1022秒（约17分钟）``。在每次都返回 ``Retry-After`` （最大600秒）的场景下，最坏情况会膨胀到 ``9 × 600秒 = 90分钟``。如需更严格地控制延迟，请将 ``rag.llm.openai.retry.max`` 设置得小一些。
+   在默认配置（最多10次、基准2秒）的最坏情况下，9次重试的退避总和为 ``2 + 4 + 8 + ... + 512 ≈ 1022秒（约17分钟）``\ 。在每次都返回 ``Retry-After`` （最大600秒）的场景下，最坏情况会膨胀到 ``9 × 600秒 = 90分钟``\ 。如需更严格地控制延迟，请将 ``rag.llm.openai.retry.max`` 设置得小一些。
 
 流式输出和使用量信息
 ====================
@@ -401,10 +401,10 @@ OpenAI官方端点（ ``https://api.openai.com`` ）通过 ``Authorization: Bear
 推理模型支持
 ==============
 
-使用o1/o3/o4系列或gpt-5系列推理模型时，|Fess| 会自动使用OpenAI API的 ``max_completion_tokens`` 参数代替 ``max_tokens``。无需额外更改配置。
+使用o1/o3/o4系列或gpt-5系列推理模型时，|Fess| 会自动使用OpenAI API的 ``max_completion_tokens`` 参数代替 ``max_tokens``\ 。无需额外更改配置。
 
 .. note::
-   推理模型（o1/o3/o4/gpt-5系列）会忽略 ``temperature`` 设置，使用固定值（1）。此外，使用推理模型时，默认的 ``max_tokens`` 会乘以 ``reasoning.token.multiplier``（默认值: 4）。
+   推理模型（o1/o3/o4/gpt-5系列）会忽略 ``temperature`` 设置，使用固定值（1）。此外，使用推理模型时，默认的 ``max_tokens`` 会乘以 ``reasoning.token.multiplier``\ （默认值: 4）。
 
 推理模型的附加参数
 ----------------------------
@@ -420,7 +420,7 @@ OpenAI官方端点（ ``https://api.openai.com`` ）通过 ``Authorization: Bear
      - 默认值
    * - ``rag.llm.openai.{promptType}.reasoning.effort``
      - o系列模型的推理effort设置（``low``、``medium``、``high``）
-     - ``low``（intent/evaluation/docnotfound/unclear/noresults/queryregeneration），未设置（其他）
+     - ``low``\ （intent/evaluation/docnotfound/unclear/noresults/queryregeneration），未设置（其他）
    * - ``rag.llm.openai.{promptType}.top.p``
      - token选择的概率阈值（0.0〜1.0）
      - （未设置）
@@ -456,7 +456,7 @@ Docker环境
 ----------
 
 官方 `docker-fess <https://github.com/codelibs/docker-fess>`__ 仓库附带了 OpenAI 用的
-overlay 文件 ``compose-openai.yaml``。最小步骤：
+overlay 文件 ``compose-openai.yaml``\ 。最小步骤：
 
 ::
 
@@ -590,7 +590,7 @@ OpenAI API按使用量计费。
 并发请求控制
 ==================
 
-|Fess| 中可通过 ``fess_config.properties`` 的 ``rag.llm.openai.max.concurrent.requests`` 控制对OpenAI API的并发请求数。默认值为 ``5``。
+|Fess| 中可通过 ``fess_config.properties`` 的 ``rag.llm.openai.max.concurrent.requests`` 控制对OpenAI API的并发请求数。默认值为 ``5``\ 。
 
 ::
 
@@ -609,7 +609,7 @@ OpenAI API端的限制因账户Tier而异:
 - **Tier 2**: 5,000 RPM
 - **Tier 3+**: 更高限制
 
-请根据OpenAI账户Tier适当调整 ``rag.llm.openai.max.concurrent.requests``。
+请根据OpenAI账户Tier适当调整 ``rag.llm.openai.max.concurrent.requests``\ 。
 
 故障排除
 ======================

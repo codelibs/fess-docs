@@ -34,7 +34,7 @@ Condition
 :::::::::
 
 Spécifie la condition des documents que vous souhaitez positionner en haut.
-Par exemple, pour afficher en haut les URL contenant https://www.n2sm.net/, décrivez url.matches("https://www.n2sm.net/.*").
+Par exemple, pour afficher en haut les URL contenant https://www.n2sm.net/, décrivez url.matches("https://www.n2sm.net/.\*").
 Les conditions peuvent être écrites en Groovy.
 
 Expression de boost

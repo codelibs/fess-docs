@@ -94,7 +94,7 @@ Salesforce との連携には、Connected App の設定が必要です。
     content=content
     last_modified=last_modified
 
-``auth_type`` は ``oauth_password``（ユーザー名・パスワード認証）または ``oauth_token``（JWT Bearer トークン認証）を指定します。JWT 認証の場合は ``private_key`` に RSA 秘密鍵を設定します。
+``auth_type`` は ``oauth_password``\ （ユーザー名・パスワード認証）または ``oauth_token``\ （JWT Bearer トークン認証）を指定します。JWT 認証の場合は ``private_key`` に RSA 秘密鍵を設定します。
 
 対象データの選定
 ----------------
@@ -193,7 +193,7 @@ CSV ファイルのデータも検索対象にできます。
     has_header_line=true
     separator_character=,
 
-**スクリプトの設定例**（ヘッダー行がある場合はカラム名を使用）
+**スクリプトの設定例**\ （ヘッダー行がある場合はカラム名を使用）
 
 .. code-block:: properties
 

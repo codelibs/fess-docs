@@ -254,7 +254,7 @@ DI容器注册
      - Confluence/Jira连接器
    * - fess-ds-git
      - Git仓库连接器
-   * - fess-theme-*
+   * - fess-theme-\*
      - 自定义主题
 
 这些插件在

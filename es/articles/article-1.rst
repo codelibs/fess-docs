@@ -238,7 +238,7 @@ Seleccionar [Crear nuevo]
 |image4|
 
 Como configuración de rastreo web, esta vez rastrearemos el grupo de páginas bajo https://fess.codelibs.org/ja/ con 2 hilos a intervalos de 10 segundos (aproximadamente 2 páginas cada 10 segundos), y haremos que aproximadamente 100 páginas sean objeto de búsqueda.
-Los elementos de configuración son URL: \https://fess.codelibs.org/ja/, URL a rastrear: \https://fess.codelibs.org/ja/.*, Número máximo de accesos: 100, Número de hilos: 2, Intervalo: 10000 milisegundos, y los demás valores predeterminados.
+Los elementos de configuración son URL: \https://fess.codelibs.org/ja/, URL a rastrear: \https://fess.codelibs.org/ja/.\*, Número máximo de accesos: 100, Número de hilos: 2, Intervalo: 10000 milisegundos, y los demás valores predeterminados.
 
 Configuración de rastreo web
 |image5|

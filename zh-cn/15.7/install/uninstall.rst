@@ -203,8 +203,8 @@ DEB 版的卸载
 
 .. note::
 
-   使用 ``dpkg -r``（remove）时，作为配置文件（conffile）的 ``/etc/default/fess`` 等会保留。
-   使用 ``dpkg -P``（purge）时，这些配置文件以及 ``fess`` 用户和组也会被删除。
+   使用 ``dpkg -r``\ （remove）时，作为配置文件（conffile）的 ``/etc/default/fess`` 等会保留。
+   使用 ``dpkg -P``\ （purge）时，这些配置文件以及 ``fess`` 用户和组也会被删除。
 
 步骤 2: 卸载 OpenSearch
 -----------------------

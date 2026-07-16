@@ -373,8 +373,8 @@ En su lugar, se utiliza el directorio de anulación ``/opt/fess``, que se añade
    ``/opt/fess`` se añade al principio del classpath, por lo que el archivo ``fess_config.properties``
    colocado aquí tiene prioridad sobre el ``/etc/fess/fess_config.properties`` incluido en la imagen.
    Los archivos de propiedades se cargan como un todo y no se combinan elemento por elemento.
-   Por lo tanto, es necesario colocar no solo los elementos que se desean sobrescribir, sino **un archivo
-   completo que contenga todos los elementos de configuración**.
+   Por lo tanto, es necesario colocar no solo los elementos que se desean sobrescribir, sino \*\*un archivo
+   completo que contenga todos los elementos de configuración\*\*.
    Si solo desea cambiar algunos elementos, utilice el "Método 2" a continuación.
 
 Método 2: Configuración mediante Propiedades del Sistema

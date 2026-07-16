@@ -657,7 +657,7 @@ MIME 类型检测覆盖
     .pls=text/x-plsql
 
 每行包含一个 ``.扩展名=MIME类型`` 格式的映射。
-多个映射使用 ``\n``（换行符）分隔。
+多个映射使用 ``\n``\ （换行符）分隔。
 扩展名匹配不区分大小写（``.SQL`` 和 ``.sql`` 被视为相同）。
 
 .. note::
@@ -741,7 +741,7 @@ JVM 选项
 
 .. note::
    以上仅为主要选项的摘录。实际默认值包含约40个选项，涵盖jcifs SMB超时、Netty设置、Log4j配置、详细G1GC设置、PDFBox设置等。
-   完整的默认值请参阅 ``fess_config.properties``。
+   完整的默认值请参阅 ``fess_config.properties``\ 。
    自定义时，仅更改需要的选项，其他默认值请保持不变。
 
 主要选项说明
@@ -1102,7 +1102,7 @@ GCS 爬虫
     client.credentialsFile=/etc/fess/gcs-credentials.json
 
 .. note::
-   省略 ``credentialsFile`` 时，将使用环境变量 ``GOOGLE_APPLICATION_CREDENTIALS``。
+   省略 ``credentialsFile`` 时，将使用环境变量 ``GOOGLE_APPLICATION_CREDENTIALS``\ 。
 
 参考信息
 ========

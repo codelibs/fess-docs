@@ -238,7 +238,7 @@ OpenSearch 디렉터리 구성
 |image4|
 
 웹 크롤 설정으로, 이번에는 https://fess.codelibs.org/ja/ 이하의 페이지 그룹을 10초 간격의 2 스레드로 크롤하여(10초에 2페이지 정도를 크롤), 100페이지 정도를 검색 대상으로 합니다.
-설정 항목은 URL : \https://fess.codelibs.org/ja/ , 크롤 대상 URL : \https://fess.codelibs.org/ja/.* , 최대 접속 수 : 100 , 스레드 수 : 2 , 간격 : 10000 밀리초로 하고, 그 외는 기본값으로 합니다.
+설정 항목은 URL : \https://fess.codelibs.org/ja/ , 크롤 대상 URL : \https://fess.codelibs.org/ja/.\* , 최대 접속 수 : 100 , 스레드 수 : 2 , 간격 : 10000 밀리초로 하고, 그 외는 기본값으로 합니다.
 
 웹 크롤 설정
 |image5|

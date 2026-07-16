@@ -46,7 +46,7 @@
      - ドキュメントの MIME タイプ（例: ``text/html``）
      - キーワード
    * - filetype
-     - MIME タイプから決まるファイル種別（例: ``html``、``word``、``pdf``。該当しない場合は ``others``）
+     - MIME タイプから決まるファイル種別（例: ``html``、``word``、``pdf``\ 。該当しない場合は ``others``）
      - キーワード
    * - filename
      - URL のパス末尾のファイル名

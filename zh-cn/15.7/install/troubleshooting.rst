@@ -529,7 +529,7 @@ Windows 特有的问题
 
        $ tar czf fess-logs.tar.gz /path/to/fess/logs/
 
-4. **配置文件**（删除机密信息后）::
+4. **配置文件**\ （删除机密信息后）::
 
        $ tar czf fess-config.tar.gz /path/to/fess/app/WEB-INF/conf/
 

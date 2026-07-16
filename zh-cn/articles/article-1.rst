@@ -238,7 +238,7 @@ OpenSearch 的目录结构
 |image4|
 
 作为网络爬取的设置,本次将以 10 秒间隔用 2 个线程爬取 https://fess.codelibs.org/ja/ 以下的页面组(每 10 秒爬取约 2 个页面),并将约 100 个页面作为搜索对象。
-设置项目为 URL: \https://fess.codelibs.org/ja/、作为爬取对象的 URL: \https://fess.codelibs.org/ja/.*、最大访问数: 100、线程数: 2、间隔: 10000 毫秒,其他保持默认值。
+设置项目为 URL: \https://fess.codelibs.org/ja/、作为爬取对象的 URL: \https://fess.codelibs.org/ja/.\*、最大访问数: 100、线程数: 2、间隔: 10000 毫秒,其他保持默认值。
 
 网络爬取的设置
 |image5|

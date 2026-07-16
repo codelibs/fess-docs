@@ -145,8 +145,8 @@ Diesmal verwenden wir die folgenden Konfigurationen. Der Rest ist Standard.
      - \https://www.n2sm.net/
      - \https://fess.codelibs.org/
    * - URLs zum Crawlen
-     - \https://www.n2sm.net/.*
-     - \https://fess.codelibs.org/.*
+     - \https://www.n2sm.net/.\*
+     - \https://fess.codelibs.org/.\*
    * - Maximale Zugriffe
      - 10
      - 10

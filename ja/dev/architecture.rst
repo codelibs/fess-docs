@@ -480,7 +480,7 @@ LastaDi コンポーネント設定ファイルです。
         </arg>
     </component>
 
-fess_message_*.properties
+fess_message_\*.properties
 ------------------------
 
 多言語対応のメッセージファイルです。

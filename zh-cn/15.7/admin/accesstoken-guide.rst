@@ -38,7 +38,7 @@
 :::::::::::
 
 设置访问令牌的权限。
-以"{user|group|role}name"格式描述。
+以"{user\ |group|\ role}name"格式描述。
 例如,要让属于 developer 组的用户显示搜索结果,请将权限设置为"{group}developer"。
 
 参数名称

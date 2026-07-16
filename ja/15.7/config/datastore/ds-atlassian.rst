@@ -105,7 +105,7 @@ Server版（OAuth 1.0a）の例:
      - AtlassianインスタンスのURL
    * - ``is_cloud``
      - いいえ
-     - Cloud版の場合は ``true``、Server版の場合は ``false``（デフォルト: ``true``）。OAuth 2.0認証時のエンドポイント選択にのみ使用され、Basic認証・OAuth 1.0a認証では無視されます
+     - Cloud版の場合は ``true``、Server版の場合は ``false``\ （デフォルト: ``true``）。OAuth 2.0認証時のエンドポイント選択にのみ使用され、Basic認証・OAuth 1.0a認証では無視されます
    * - ``auth_type``
      - はい
      - 認証タイプ: ``oauth``、``oauth2``、``basic``

@@ -28,19 +28,19 @@ Fess 提供以下类型的插件。
    * - 类型
      - 作用
      - 示例
-   * - 数据存储 (fess-ds-*)
+   * - 数据存储 (fess-ds-\*)
      - 从外部数据源获取数据
      - Slack、Salesforce、DB
-   * - Ingest (fess-ingest-*)
+   * - Ingest (fess-ingest-\*)
      - 对爬取数据进行加工和转换
      - Example
-   * - 主题 (fess-theme-*)
+   * - 主题 (fess-theme-\*)
      - 搜索界面设计
      - Simple、Code Search
-   * - 脚本 (fess-script-*)
+   * - 脚本 (fess-script-\*)
      - 脚本语言支持
      - OGNL
-   * - Web 应用 (fess-webapp-*)
+   * - Web 应用 (fess-webapp-\*)
      - Web 应用程序扩展
      - MCP Server
 

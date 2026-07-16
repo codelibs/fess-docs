@@ -305,7 +305,7 @@ EsDataStore
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - elasticsearch的Settings信息
    * - hosts
      - 连接目标elasticsearch
@@ -338,7 +338,7 @@ EsDataStore
 
 参数采用"键=值"格式。
 键与数据库爬取的情况相同。
-可以通过source.*获取值并进行设置。
+可以通过source.\*获取值并进行设置。
 
 CsvListDataStore
 ----------------

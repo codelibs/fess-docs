@@ -191,7 +191,7 @@
 
    .. tip::
 
-      要更改 |Fess| 的堆大小，请编辑 ``bin/fess.in.sh`` 中的 ``FESS_MIN_MEM``（默认：``256m``）和 ``FESS_MAX_MEM``（默认：``2g``），或设置环境变量 ``FESS_HEAP_SIZE``。
+      要更改 |Fess| 的堆大小，请编辑 ``bin/fess.in.sh`` 中的 ``FESS_MIN_MEM``\ （默认：``256m``）和 ``FESS_MAX_MEM``\ （默认：``2g``），或设置环境变量 ``FESS_HEAP_SIZE``\ 。
 
 3. 确认安装
 
@@ -223,7 +223,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
        $ sudo rpm -ivh opensearch-3.7.0-linux-x64.rpm
 
    或者，也可以添加仓库后进行安装。
-   详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__。
+   详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__\ 。
 
 2. 安装 OpenSearch 插件
 
@@ -249,7 +249,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
    .. warning::
 
-      在生产环境中不要使用 ``plugins.security.disabled: true``。
+      在生产环境中不要使用 ``plugins.security.disabled: true``\ 。
       请参阅 :doc:`security` 进行适当的安全配置。
 
 步骤 2: 安装 Fess
@@ -266,7 +266,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
 2. 配置 Fess
 
-   在 RPM 版中，需要编辑环境变量配置文件 ``/etc/sysconfig/fess``。
+   在 RPM 版中，需要编辑环境变量配置文件 ``/etc/sysconfig/fess``\ 。
    该文件在软件包升级时也会被保留（由于 ``/usr/share/fess/bin/fess.in.sh`` 在升级时会被覆盖，因此请勿直接编辑该文件）。
 
    ::
@@ -323,7 +323,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
        $ sudo dpkg -i opensearch-3.7.0-linux-x64.deb
 
    或者，也可以添加仓库后进行安装。
-   详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__。
+   详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__\ 。
 
 2. 安装 OpenSearch 插件
 
@@ -349,7 +349,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    .. warning::
 
-      在生产环境中不要使用 ``plugins.security.disabled: true``。
+      在生产环境中不要使用 ``plugins.security.disabled: true``\ 。
       请参阅 :doc:`security` 进行适当的安全配置。
 
 步骤 2: 安装 Fess
@@ -366,7 +366,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
 2. 配置 Fess
 
-   在 DEB 版中，需要编辑环境变量配置文件 ``/etc/default/fess``。
+   在 DEB 版中，需要编辑环境变量配置文件 ``/etc/default/fess``\ 。
    该文件在软件包升级时也会被保留（由于 ``/usr/share/fess/bin/fess.in.sh`` 在升级时会被覆盖，因此请勿直接编辑该文件）。
 
    ::
@@ -469,5 +469,5 @@ A: 可以，但不推荐。建议为每个 Fess 实例准备专用的 OpenSearch
 Q: 如何将 OpenSearch 配置为集群？
 -------------------------------------
 
-A: 请参阅 OpenSearch 官方文档 `Cluster formation <https://opensearch.org/docs/latest/tuning-your-cluster/cluster/>`__。
+A: 请参阅 OpenSearch 官方文档 `Cluster formation <https://opensearch.org/docs/latest/tuning-your-cluster/cluster/>`__\ 。
 配置为集群时，需要删除 ``discovery.type: single-node`` 设置并添加适当的集群配置。

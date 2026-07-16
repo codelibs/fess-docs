@@ -78,7 +78,7 @@ Dropbox连接器提供从Dropbox云存储获取文件并
      - Dropbox的访问令牌（在App Console中生成）
    * - ``basic_plan``
      - 否
-     - 个人账户时为 ``true``，团队账户时为 ``false``（默认：``false``）
+     - 个人账户时为 ``true``，团队账户时为 ``false``\ （默认：``false``）
    * - ``max_size``
      - 否
      - 索引对象的最大文件大小（字节）（默认：``10000000``）
@@ -229,7 +229,7 @@ Dropbox认证设置
 
 .. note::
    默认模式（``basic_plan=false``）使用团队管理API（团队成员列表、按成员访问文件、团队文件夹），
-   因此必须使用Dropbox Business账户和具有团队管理员权限的令牌。如果使用个人账户，请务必设置 ``basic_plan=true``。
+   因此必须使用Dropbox Business账户和具有团队管理员权限的令牌。如果使用个人账户，请务必设置 ``basic_plan=true``\ 。
 
 访问令牌获取步骤
 ----------------
@@ -300,7 +300,7 @@ Dropbox认证设置
     access_token=sl.your-dropbox-token-here
     basic_plan=true
 
-``false``（默认）时作为团队账户运行，抓取团队成员和团队文件夹的文件。
+``false``\ （默认）时作为团队账户运行，抓取团队成员和团队文件夹的文件。
 ``true`` 时作为个人账户运行，直接抓取账户中的文件。
 
 使用示例

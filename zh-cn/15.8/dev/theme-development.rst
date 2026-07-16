@@ -76,13 +76,13 @@ JAR 主题插件（旧版）
      - 说明
    * - ``apiVersion``
      - 必需
-     - 固定值 ``fess.codelibs.org/v1``。
+     - 固定值 ``fess.codelibs.org/v1``\ 。
    * - ``kind``
      - 必需
-     - 固定值 ``StaticTheme``。
+     - 固定值 ``StaticTheme``\ 。
    * - ``name``
      - 必需
-     - 主题名称。必须匹配 ``^[a-z0-9][a-z0-9_-]{0,63}$``。
+     - 主题名称。必须匹配 ``^[a-z0-9][a-z0-9_-]{0,63}$``\ 。
        用作展开到 ``themes/`` 下的主题目录名（上传时该名称会根据
        ``name`` 自动确定），以及分发 URL（``/themes/<name>/``）。
    * - ``displayName``
@@ -111,10 +111,10 @@ JAR 主题插件（旧版）
      - 支持的区域设置列表（例如：``[en, ja, de]``）。
    * - ``entry``
      - 可选
-     - SPA 的入口 HTML。默认值为 ``index.html``。
+     - SPA 的入口 HTML。默认值为 ``index.html``\ 。
    * - ``spaFallback``
      - 可选
-     - 是否启用 SPA 回退。默认值为 ``true``。
+     - 是否启用 SPA 回退。默认值为 ``true``\ 。
 
 .. note::
 
@@ -151,7 +151,7 @@ JAR 主题插件（旧版）
 
     ./scripts/package.sh example
 
-会生成 ``dist/example-<version>.zip``（``<version>`` 为 ``theme.yml`` 中的
+会生成 ``dist/example-<version>.zip``\ （``<version>`` 为 ``theme.yml`` 中的
 ``version``）。
 
 .. note::

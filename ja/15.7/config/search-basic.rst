@@ -174,7 +174,7 @@ NOT検索
 - ``query.highlight.fragment.size``: ハイライトする断片(フラグメント)の文字数(デフォルト: ``60``)
 - ``query.highlight.number.of.fragments``: 表示するフラグメントの最大数(デフォルト: ``2``)
 
-要約(スニペット)としてハイライトの対象となるフィールドは、``query.highlight.content.description.fields``(デフォルト: ``hl_content,digest``)で指定します。
+要約(スニペット)としてハイライトの対象となるフィールドは、``query.highlight.content.description.fields``\ (デフォルト: ``hl_content,digest``)で指定します。
 
 サジェスト機能
 ==============
@@ -250,7 +250,7 @@ NOT検索
 関連性の低い結果が表示される
 ----------------------------
 
-1. ブースト設定を調整してください(``query.boost.title``, ``query.boost.content``など)。
+1. ブースト設定を調整してください(``query.boost.title``, ``query.boost.content``\ など)。
 2. ファジー検索の設定を見直してください。
 3. Analyzer の設定を確認してください。
 4. 必要に応じて、商用サポートにご相談ください。
