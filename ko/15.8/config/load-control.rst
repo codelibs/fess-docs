@@ -5,7 +5,7 @@
 개요
 ====
 
-|Fess|에는 CPU 사용률에 기반하여 시스템 안정성을 보호하는 두 가지 유형의 부하 제어 기능이 있습니다.
+|Fess|\ 에는 CPU 사용률에 기반하여 시스템 안정성을 보호하는 두 가지 유형의 부하 제어 기능이 있습니다.
 
 **HTTP 요청 부하 제어** (``web.load.control`` / ``api.load.control``):
 
@@ -25,7 +25,7 @@
 HTTP 요청 부하 제어 설정
 ========================
 
-``fess_config.properties``에 다음 속성을 설정합니다:
+``fess_config.properties``\ 에 다음 속성을 설정합니다:
 
 ::
 
@@ -45,7 +45,7 @@ HTTP 요청 부하 제어 설정
     load.control.monitor.interval=1
 
 .. note::
-   ``web.load.control``과 ``api.load.control`` 모두 100(기본값)인 경우,
+   ``web.load.control``\ 과 ``api.load.control`` 모두 100(기본값)인 경우,
    OpenSearch CPU 모니터링은 시작되지 않습니다.
 
 동작 원리
@@ -58,7 +58,7 @@ HTTP 요청 부하 제어 설정
 
 - OpenSearch 클러스터의 모든 노드에서 OS 통계 정보를 가져옴
 - 모든 노드 중 가장 높은 CPU 사용률을 기록
-- ``load.control.monitor.interval``에서 지정한 간격(기본값 1초)마다 모니터링
+- ``load.control.monitor.interval``\ 에서 지정한 간격(기본값 1초)마다 모니터링
 - 모니터링은 지연 초기화로 첫 번째 요청 시 시작
 
 .. note::
@@ -80,9 +80,9 @@ HTTP 요청 부하 제어 설정
 
 **제어 대상 제외 요청:**
 
-- ``/admin``으로 시작하는 경로 (관리 화면)
-- ``/error``로 시작하는 경로 (오류 페이지)
-- ``/login``으로 시작하는 경로 (로그인 페이지)
+- ``/admin``\ 으로 시작하는 경로 (관리 화면)
+- ``/error``\ 로 시작하는 경로 (오류 페이지)
+- ``/login``\ 으로 시작하는 경로 (로그인 페이지)
 - 정적 리소스 (``.css``, ``.js``, ``.png``, ``.jpg``, ``.gif``, ``.ico``, ``.svg``, ``.woff``, ``.woff2``, ``.ttf``, ``.eot``)
 
 **웹 요청의 경우:**
@@ -153,7 +153,7 @@ HTTP 요청 부하 제어 설정
 속도 제한과의 차이
 ==================
 
-|Fess|에는 부하 제어와 별도로 :doc:`rate-limiting` 기능이 있습니다.
+|Fess|\ 에는 부하 제어와 별도로 :doc:`rate-limiting` 기능이 있습니다.
 이 두 기능은 서로 다른 접근 방식으로 시스템을 보호합니다.
 
 .. list-table::
@@ -249,9 +249,9 @@ HTTP 요청 부하 제어 설정
 
 **확인 사항**:
 
-1. ``web.load.control`` 또는 ``api.load.control``이 100 미만으로 설정되어 있는지
+1. ``web.load.control`` 또는 ``api.load.control``\ 이 100 미만으로 설정되어 있는지
 2. 설정 파일이 올바르게 읽혀지고 있는지
-3. |Fess|를 재시작했는지
+3. |Fess|\ 를 재시작했는지
 
 정상적인 요청이 거부됨
 -----------------------
@@ -260,8 +260,8 @@ HTTP 요청 부하 제어 설정
 
 **해결 방법**:
 
-1. ``web.load.control``이나 ``api.load.control`` 값을 올리기
-2. ``load.control.monitor.interval``을 조정하여 모니터링 빈도 변경
+1. ``web.load.control``\ 이나 ``api.load.control`` 값을 올리기
+2. ``load.control.monitor.interval``\ 을 조정하여 모니터링 빈도 변경
 3. OpenSearch 클러스터의 리소스 증강
 
 .. warning::
@@ -275,7 +275,7 @@ HTTP 요청 부하 제어 설정
 
 **확인 사항**:
 
-1. 로그에 ``Cpu Load XX% is greater than YY%``가 출력되고 있는지
+1. 로그에 ``Cpu Load XX% is greater than YY%``\ 가 출력되고 있는지
 2. ``adaptive.load.control`` 임계값이 너무 낮지 않은지
 
 **해결 방법**:

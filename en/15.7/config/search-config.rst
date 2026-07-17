@@ -65,7 +65,7 @@ Specify the parameter name for language selection in request parameters. For exa
 Prefix Query for Prefix Search
 ==============================
 
-When specified with `〜*` during an exact match search, it performs a prefix search. The default value is `true (enabled)`.
+When specified with `〜\*` during an exact match search, it performs a prefix search. The default value is `true (enabled)`.
 ::
 
     query.replace.term.with.prefix.query=true

@@ -34,7 +34,7 @@ Condition
 :::::::::
 
 Specifies the condition for documents to position at the top.
-For example, to display URLs containing https://www.n2sm.net/ at the top, write url.matches("https://www.n2sm.net/.*").
+For example, to display URLs containing https://www.n2sm.net/ at the top, write url.matches("https://www.n2sm.net/.\*").
 Conditions can be written in Groovy.
 
 Boost Value Expression

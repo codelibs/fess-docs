@@ -254,7 +254,7 @@ FessConfig에서 취득
      - Confluence/Jira 커넥터
    * - fess-ds-git
      - Git 리포지토리 커넥터
-   * - fess-theme-*
+   * - fess-theme-\*
      - 커스텀 테마
 
 이러한 플러그인은 개발 참고로

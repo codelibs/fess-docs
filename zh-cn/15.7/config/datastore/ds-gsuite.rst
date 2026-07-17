@@ -96,7 +96,7 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
      - 服务账号的邮箱地址
    * - ``max_size``
      - 否
-     - 索引对象的最大文件大小（字节）。默认值：``10000000``（约 10MB）
+     - 索引对象的最大文件大小（字节）。默认值：``10000000``\ （约 10MB）
    * - ``ignore_folder``
      - 否
      - 是否跳过文件夹。默认值：``true``
@@ -105,7 +105,7 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
      - 发生错误时是否继续处理。默认值：``true``
    * - ``supported_mimetypes``
      - 否
-     - 索引对象的MIME类型（正则表达式，逗号分隔）。默认值：``.*``（所有类型）
+     - 索引对象的MIME类型（正则表达式，逗号分隔）。默认值：``.*``\ （所有类型）
    * - ``include_pattern``
      - 否
      - 索引对象URL的正则表达式模式
@@ -129,7 +129,7 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
      - 要搜索的空间（Google Drive API 的 ``spaces`` 参数，例如 ``drive``、``appDataFolder``）。默认值：未指定（API 默认值）。
    * - ``fields``
      - 否
-     - 从 Google Drive API 请求的文件字段。默认值：``*``（所有字段）。
+     - 从 Google Drive API 请求的文件字段。默认值：``*``\ （所有字段）。
    * - ``read_timeout``
      - 否
      - HTTP读取超时时间（毫秒）。默认值：``20000``
@@ -138,10 +138,10 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
      - HTTP连接超时时间（毫秒）。默认值：``20000``
    * - ``refresh_token_interval``
      - 否
-     - 刷新 OAuth 访问令牌的间隔（秒）。默认值：``3540``（59 分钟）。
+     - 刷新 OAuth 访问令牌的间隔（秒）。默认值：``3540``\ （59 分钟）。
    * - ``max_cached_content_size``
      - 否
-     - 在内存中保留的内容的最大大小（字节）；超过此大小的内容将转存到临时文件。默认值：``1048576``（1MB）。
+     - 在内存中保留的内容的最大大小（字节）；超过此大小的内容将转存到临时文件。默认值：``1048576``\ （1MB）。
    * - ``proxy_host``
      - 否
      - 代理服务器的主机名
@@ -200,7 +200,7 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
    * - ``file.roles``
      - 访问权限
 
-详情请参阅 `Google Drive Files API <https://developers.google.com/drive/api/v3/reference/files>`_。
+详情请参阅 `Google Drive Files API <https://developers.google.com/drive/api/v3/reference/files>`_\ 。
 
 Google Cloud Platform设置
 =========================

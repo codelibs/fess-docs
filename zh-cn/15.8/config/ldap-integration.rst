@@ -40,7 +40,7 @@ LDAP集成指南
 连接与认证设置（管理界面 / ``system.properties``）
    与LDAP服务器的连接及登录认证相关的设置。
    可通过管理界面 **"系统 > 通用"** 页面中的"LDAP"部分进行设置，
-   保存至 ``app/WEB-INF/conf/system.properties``。
+   保存至 ``app/WEB-INF/conf/system.properties``\ 。
 
 LDAP管理功能与行为设置（``fess_config.properties``）
    通过管理界面管理LDAP用户/角色/组的功能，
@@ -58,7 +58,7 @@ LDAP管理功能与行为设置（``fess_config.properties``）
 ==============
 
 这些设置可通过管理界面"系统 > 通用"的LDAP部分进行配置，
-保存至 ``app/WEB-INF/conf/system.properties``。也可以直接编辑该文件。
+保存至 ``app/WEB-INF/conf/system.properties``\ 。也可以直接编辑该文件。
 
 .. list-table:: 连接与认证属性
    :header-rows: 1
@@ -69,16 +69,16 @@ LDAP管理功能与行为设置（``fess_config.properties``）
      - 说明
    * - ``ldap.provider.url``
      - （无）
-     - LDAP服务器的URL。例: ``ldap://ldap.example.com:389``。使用LDAPS时为 ``ldaps://ldap.example.com:636``。用空格分隔指定多个URL时可实现故障转移。
+     - LDAP服务器的URL。例: ``ldap://ldap.example.com:389``\ 。使用LDAPS时为 ``ldaps://ldap.example.com:636``\ 。用空格分隔指定多个URL时可实现故障转移。
    * - ``ldap.base.dn``
      - （无）
      - LDAP搜索的基础DN。例: ``dc=example,dc=com``
    * - ``ldap.security.principal``
      - （无）
-     - 用户认证（绑定）所使用的DN模板。``%s`` 将被替换为用户名。例: ``uid=%s,ou=People,dc=example,dc=com``
+     - 用户认证（绑定）所使用的DN模板。\ ``%s`` 将被替换为用户名。例: ``uid=%s,ou=People,dc=example,dc=com``
    * - ``ldap.security.authentication``
      - ``simple``
-     - LDAP认证方式（JNDI的 ``java.naming.security.authentication``）。通常使用 ``simple``。
+     - LDAP认证方式（JNDI的 ``java.naming.security.authentication``）。通常使用 ``simple``\ 。
    * - ``ldap.initial.context.factory``
      - ``com.sun.jndi.ldap.LdapCtxFactory``
      - JNDI初始上下文工厂类。通常无需更改。
@@ -90,10 +90,10 @@ LDAP管理功能与行为设置（``fess_config.properties``）
      - 上述服务账号的密码。
    * - ``ldap.account.filter``
      - （无）
-     - 解析用户角色时，用于搜索用户条目的过滤器。``%s`` 将被替换为用户名。例: ``uid=%s``
+     - 解析用户角色时，用于搜索用户条目的过滤器。\ ``%s`` 将被替换为用户名。例: ``uid=%s``
    * - ``ldap.group.filter``
      - （空）
-     - 解析组时使用的搜索过滤器。``%s`` 将被替换为用户的DN等。例: ``(member=%s)``
+     - 解析组时使用的搜索过滤器。\ ``%s`` 将被替换为用户的DN等。例: ``(member=%s)``
    * - ``ldap.memberof.attribute``
      - ``memberOf``
      - 表示组成员关系的属性名。用于在Active Directory或具有该属性的服务器上解析角色。
@@ -144,7 +144,7 @@ LDAP管理功能与行为设置
      - 说明
    * - ``ldap.admin.enabled``
      - ``false``
-     - 启用通过管理界面对LDAP用户/角色/组进行创建、更新、删除的功能。**登录认证不需要此功能**，不启用也可通过LDAP进行登录。
+     - 启用通过管理界面对LDAP用户/角色/组进行创建、更新、删除的功能。\ **登录认证不需要此功能**，不启用也可通过LDAP进行登录。
    * - ``ldap.admin.sync.password``
      - ``true``
      - 在管理界面更新用户时，将 |Fess| 端的密码与LDAP同步。
@@ -230,7 +230,7 @@ LDAP管理功能与行为设置
      - 使用 ``sAMAccountName`` 属性作为组名（适用于Active Directory）。
    * - ``ldap.max.username.length``
      - ``-1``
-     - 用户名的最大长度。``-1`` 表示无限制。
+     - 用户名的最大长度。\ ``-1`` 表示无限制。
 
 属性映射
 --------
@@ -279,7 +279,7 @@ Active Directory设置
     ldap.group.filter=(member=%s)
 
 如需解析嵌套组（嵌套组），可使用Active Directory特有的
-``LDAP_MATCHING_RULE_IN_CHAIN``。
+``LDAP_MATCHING_RULE_IN_CHAIN``\ 。
 
 ::
 
@@ -312,7 +312,7 @@ OpenLDAP设置
 
    标准OpenLDAP不具有 ``memberOf`` 属性，
    因此使用 ``ldap.group.filter`` 解析组。
-   若已启用 ``memberof`` overlay，也可使用 ``ldap.memberof.attribute``。
+   若已启用 ``memberof`` overlay，也可使用 ``ldap.memberof.attribute``\ 。
 
 安全设置
 ========

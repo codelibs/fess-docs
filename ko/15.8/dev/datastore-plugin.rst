@@ -415,7 +415,7 @@ JUnit 5(Jupiter)로 작성합니다. ``IndexUpdateCallback`` 을, 등록된 ``da
 
    ``setUp`` 은 기반 클래스에서 ``@BeforeEach`` 가 부여되어 있으므로, 오버라이드하는 쪽에
    라이프사이클 애너테이션을 다시 붙일 필요가 없습니다. 각 테스트 메서드에는
-   ``@Test``(``org.junit.jupiter.api.Test``)를 부여합니다.
+   ``@Test``\ (``org.junit.jupiter.api.Test``)를 부여합니다.
 
 빌드와 설치
 ====================

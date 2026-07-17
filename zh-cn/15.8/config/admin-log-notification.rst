@@ -52,7 +52,7 @@
 
 .. note::
    默认情况下仅 ``ERROR`` 级别为通知对象。
-   选择 ``WARN`` 时,``WARN`` 和 ``ERROR`` 都会被通知。
+   选择 ``WARN`` 时,\ ``WARN`` 和 ``ERROR`` 都会被通知。
 
 通过系统属性启用
 ~~~~~~~~~~~~~~~~
@@ -187,7 +187,7 @@ Google Chat 通知
 
 .. note::
    当显示的事件数超过 ``log.notification.max.display.events`` 时,详细部分的开头将变为
-   ``Total: N event(s) (showing M)``,并在末尾附加 ``... and X more``。
+   ``Total: N event(s) (showing M)``,并在末尾附加 ``... and X more``\ 。
    每条日志消息超过 ``log.notification.max.message.length`` 时,末尾将以 ``...`` 截断;
    整个详细部分超过 ``log.notification.max.details.length`` 时,后续内容将被截断。
 
@@ -228,10 +228,10 @@ OpenSearch 索引
 由于通知发送后事件会被删除,通常索引大小不会变大。
 
 .. note::
-   单次任务执行处理的事件数以 ``log.notification.search.size``(默认 1,000 条)为上限。
+   单次任务执行处理的事件数以 ``log.notification.search.size``\ (默认 1,000 条)为上限。
    超过此上限累积的事件,将在通知发送后被一并丢弃,不会延续到此后的执行中。
    在短时间内产生大量日志的环境中,请根据需要提高
-   ``log.notification.search.size``。
+   ``log.notification.search.size``\ 。
 
 故障排除
 ========
@@ -271,7 +271,7 @@ OpenSearch 索引
 
 1. **提高日志级别**
 
-   将通知级别从 ``WARN`` 更改为 ``ERROR``。
+   将通知级别从 ``WARN`` 更改为 ``ERROR``\ 。
 
 2. **处理根本原因**
 

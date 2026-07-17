@@ -28,19 +28,19 @@ Fess에는 다음과 같은 종류의 플러그인이 있습니다.
    * - 종류
      - 역할
      - 예시
-   * - 데이터 스토어 (fess-ds-*)
+   * - 데이터 스토어 (fess-ds-\*)
      - 외부 데이터 소스에서 데이터 가져오기
      - Slack, Salesforce, DB
-   * - Ingest (fess-ingest-*)
+   * - Ingest (fess-ingest-\*)
      - 크롤링 데이터의 가공 및 변환
      - Example
-   * - 테마 (fess-theme-*)
+   * - 테마 (fess-theme-\*)
      - 검색 화면 디자인
      - Simple, Code Search
-   * - 스크립트 (fess-script-*)
+   * - 스크립트 (fess-script-\*)
      - 스크립트 언어 지원
      - OGNL
-   * - 웹 앱 (fess-webapp-*)
+   * - 웹 앱 (fess-webapp-\*)
      - 웹 애플리케이션 확장
      - MCP Server
 

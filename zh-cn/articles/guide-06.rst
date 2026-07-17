@@ -100,7 +100,7 @@ Git 仓库的配置
     content_length=contentLength
     last_modified=timestamp
 
-在 ``uri`` 中指定仓库的 URL，在 ``username`` / ``password`` 中指定认证信息。对于私有仓库，请将访问令牌设置到 ``password`` 中。``include_pattern`` 可以使用正则表达式来筛选需要爬取的文件扩展名。
+在 ``uri`` 中指定仓库的 URL，在 ``username`` / ``password`` 中指定认证信息。对于私有仓库，请将访问令牌设置到 ``password`` 中。\ ``include_pattern`` 可以使用正则表达式来筛选需要爬取的文件扩展名。
 
 Confluence 的配置
 ------------------
@@ -191,7 +191,7 @@ Slack 的配置
     content=message.text
     last_modified=message.timestamp
 
-在 ``token`` 中指定 Slack Bot 的 OAuth 令牌。通过 ``channels`` 指定需要爬取的频道，如果要爬取所有频道，请设置为 ``*all``。如果要爬取私有频道，需要设置 ``include_private=true``，并且需要提前将 Bot 邀请到该频道。
+在 ``token`` 中指定 Slack Bot 的 OAuth 令牌。通过 ``channels`` 指定需要爬取的频道，如果要爬取所有频道，请设置为 ``*all``\ 。如果要爬取私有频道，需要设置 ``include_private=true``，并且需要提前将 Bot 邀请到该频道。
 
 标签的使用
 ============

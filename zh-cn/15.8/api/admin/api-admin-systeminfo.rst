@@ -91,7 +91,7 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
    * - ``version``
      - |Fess| 的产品版本（例如：``15.8.0``）。
    * - ``status``
-     - 表示处理结果的状态码。``0`` 表示正常结束。
+     - 表示处理结果的状态码。\ ``0`` 表示正常结束。
    * - ``envProps``
      - 环境变量列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getenv()`` 获取的值，不做任何修改。
    * - ``systemProps``
@@ -105,11 +105,11 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
 
    ``fessProps`` 中，以下敏感配置值将被屏蔽，以 ``XXXXXXXX`` 返回：
    ``http.proxy.password``、``ldap.admin.security.credentials``、``spnego.preauth.password``、
-   ``app.cipher.key``、``oic.client.id``、``oic.client.secret``。
+   ``app.cipher.key``、``oic.client.id``、``oic.client.secret``\ 。
 
 .. warning::
 
-   ``envProps``（环境变量）和 ``systemProps``（Java系统属性）不会被屏蔽，
+   ``envProps``\ （环境变量）和 ``systemProps``\ （Java系统属性）不会被屏蔽，
    其值将原样返回。如果环境变量或系统属性中包含认证信息等敏感数据，
    这些信息将出现在响应中，请注意。
 

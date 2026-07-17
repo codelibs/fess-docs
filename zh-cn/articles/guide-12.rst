@@ -94,7 +94,7 @@ Salesforce 数据集成
     content=content
     last_modified=last_modified
 
-``auth_type`` 指定 ``oauth_password``（用户名/密码认证）或 ``oauth_token``（JWT Bearer 令牌认证）。使用 JWT 认证时，在 ``private_key`` 中设置 RSA 私钥。
+``auth_type`` 指定 ``oauth_password``\ （用户名/密码认证）或 ``oauth_token``\ （JWT Bearer 令牌认证）。使用 JWT 认证时，在 ``private_key`` 中设置 RSA 私钥。
 
 目标数据选定
 ------------

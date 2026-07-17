@@ -152,7 +152,7 @@
 .. note::
    管理页面的日志级别变更仅适用于正在运行的实例。
    重启后将恢复为 ``fess.in.sh`` 中的 ``FESS_LOG_LEVEL`` 设定值。
-   要永久变更,请编辑 ``fess.in.sh`` 中的 ``FESS_LOG_LEVEL``。
+   要永久变更,请编辑 ``fess.in.sh`` 中的 ``FESS_LOG_LEVEL``\ 。
 
 通过配置文件变更
 ----------------------
@@ -200,13 +200,13 @@
 ~~~~~~~~~~~~~~~~~~
 
 系统启动时也可以指定日志级别。
-在 Linux 环境下,请在 ``fess.in.sh`` 中设置 ``FESS_LOG_LEVEL``。
+在 Linux 环境下,请在 ``fess.in.sh`` 中设置 ``FESS_LOG_LEVEL``\ 。
 
 ::
 
     FESS_LOG_LEVEL=debug
 
-默认值为 ``warn``。
+默认值为 ``warn``\ 。
 
 .. note::
    Windows 的 ``fess.in.bat`` 不读取 ``FESS_LOG_LEVEL`` 环境变量。

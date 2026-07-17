@@ -6,18 +6,18 @@ SAML认证SSO配置
 ====
 
 |Fess| 支持使用SAML（安全断言标记语言）2.0进行单点登录（SSO）认证。
-通过使用SAML认证，由IdP（身份提供者）认证的用户信息可以与|Fess|集成，结合基于角色的搜索功能，可以根据用户权限显示不同的搜索结果。
+通过使用SAML认证，由IdP（身份提供者）认证的用户信息可以与\ |Fess|\ 集成，结合基于角色的搜索功能，可以根据用户权限显示不同的搜索结果。
 
 SAML认证的工作原理
 ------------------
 
-在SAML认证中，|Fess|作为SP（服务提供者）运行，并与外部IdP协作进行认证。
+在SAML认证中，|Fess|\ 作为SP（服务提供者）运行，并与外部IdP协作进行认证。
 
-1. 用户访问|Fess|的SSO端点（``/sso/``）
-2. |Fess|将认证请求重定向到IdP
+1. 用户访问\ |Fess|\ 的SSO端点（``/sso/``）
+2. |Fess|\ 将认证请求重定向到IdP
 3. 用户在IdP进行认证
-4. IdP将SAML断言发送给|Fess|
-5. |Fess|验证断言并登录用户
+4. IdP将SAML断言发送给\ |Fess|
+5. |Fess|\ 验证断言并登录用户
 
 有关基于角色的搜索集成，请参阅:doc:`security-role`。
 
@@ -26,10 +26,10 @@ SAML认证的工作原理
 
 在配置SAML认证之前，请验证以下前提条件：
 
-- 已安装|Fess| 15.7或更高版本
+- 已安装\ |Fess| 15.7或更高版本
 - 有可用的SAML 2.0兼容IdP（身份提供者）
-- |Fess|可通过HTTPS访问（生产环境必需）
-- 您有权在IdP侧将|Fess|注册为SP
+- |Fess|\ 可通过HTTPS访问（生产环境必需）
+- 您有权在IdP侧将\ |Fess|\ 注册为SP
 
 支持的IdP示例：
 
@@ -46,7 +46,7 @@ SAML认证的工作原理
 启用SSO
 -------
 
-要启用SAML认证，请在``app/WEB-INF/conf/system.properties``中添加以下设置：
+要启用SAML认证，请在\ ``app/WEB-INF/conf/system.properties``\ 中添加以下设置：
 
 ::
 
@@ -55,12 +55,12 @@ SAML认证的工作原理
 .. note::
    ``sso.type`` 及基本SAML设置（IdP信息、SP信息、用户属性映射）也可以从管理界面的"系统 > 全局"页面进行配置和更改。
    在管理界面中更改的设置将保存到 ``system.properties`` 中，重启后也会保留。
-   但是，签名/加密等安全设置以及SP证书/私钥无法在管理界面中配置，因此请直接写入 ``system.properties``。
+   但是，签名/加密等安全设置以及SP证书/私钥无法在管理界面中配置，因此请直接写入 ``system.properties``\ 。
 
 SP（服务提供者）配置
 --------------------
 
-要将|Fess|配置为SP，请指定SP基础URL。
+要将\ |Fess|\ 配置为SP，请指定SP基础URL。
 
 .. list-table::
    :header-rows: 1
@@ -74,7 +74,7 @@ SP（服务提供者）配置
      - ``http://localhost:8080``
 
 .. note::
-   ``saml.sp.base.url`` 的默认值为 ``http://localhost:8080``。
+   ``saml.sp.base.url`` 的默认值为 ``http://localhost:8080``\ 。
    在测试环境以外，请务必设置从外部访问 |Fess| 时使用的URL（生产环境中使用HTTPS）。
 
 此设置会自动配置以下端点：
@@ -135,13 +135,13 @@ IdP（身份提供者）配置
      - （可选）
 
 .. note::
-   对于``saml.idp.x509cert``，仅指定证书的Base64编码内容，单行无换行。
-   不要包含``-----BEGIN CERTIFICATE-----``和``-----END CERTIFICATE-----``行。
+   对于\ ``saml.idp.x509cert``，仅指定证书的Base64编码内容，单行无换行。
+   不要包含\ ``-----BEGIN CERTIFICATE-----``\ 和\ ``-----END CERTIFICATE-----``\ 行。
 
 获取SP元数据
 ------------
 
-启动|Fess|后，您可以从``/sso/metadata``端点获取XML格式的SP元数据。
+启动\ |Fess|\ 后，您可以从\ ``/sso/metadata``\ 端点获取XML格式的SP元数据。
 
 ::
 
@@ -150,12 +150,12 @@ IdP（身份提供者）配置
 将此元数据导入到您的IdP，或使用元数据内容在IdP侧手动注册SP。
 
 .. note::
-   要获取元数据，您必须先完成基本SAML配置（``sso.type=saml``和``saml.sp.base.url``）并启动|Fess|。
+   要获取元数据，您必须先完成基本SAML配置（``sso.type=saml``\ 和\ ``saml.sp.base.url``）并启动\ |Fess|\ 。
 
 IdP侧配置
 =========
 
-在IdP侧将|Fess|注册为SP时，配置以下信息：
+在IdP侧将\ |Fess|\ 注册为SP时，配置以下信息：
 
 .. list-table::
    :header-rows: 1
@@ -168,12 +168,12 @@ IdP侧配置
    * - Entity ID / Audience URI
      - ``https://<Fess主机>/sso/metadata``
    * - Name ID Format
-     - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``（推荐）
+     - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``\ （推荐）
 
 从IdP获取的信息
 ---------------
 
-从您的IdP配置界面或元数据获取以下信息，用于|Fess|配置：
+从您的IdP配置界面或元数据获取以下信息，用于\ |Fess|\ 配置：
 
 - **IdP Entity ID**：标识IdP的URI
 - **SSO URL（HTTP-Redirect）**：单点登录端点URL
@@ -182,7 +182,7 @@ IdP侧配置
 用户属性映射
 ============
 
-您可以将从SAML断言获取的用户属性映射到|Fess|的组和角色。
+您可以将从SAML断言获取的用户属性映射到\ |Fess|\ 的组和角色。
 
 组属性配置
 ----------
@@ -265,7 +265,7 @@ IdP侧配置
 
 .. warning::
    安全功能默认是禁用的。
-   对于生产环境，强烈建议至少设置``saml.security.want_assertions_signed=true``。
+   对于生产环境，强烈建议至少设置\ ``saml.security.want_assertions_signed=true``\ 。
 
 加密设置
 --------
@@ -399,7 +399,7 @@ SP证书与私钥配置
 ~~~~~~~~~~~~~~~~~~
 
 - 验证ACS URL是否在IdP侧正确配置
-- 确保``saml.sp.base.url``的值与IdP配置匹配
+- 确保\ ``saml.sp.base.url``\ 的值与IdP配置匹配
 
 签名验证错误
 ~~~~~~~~~~~~
@@ -412,7 +412,7 @@ SP证书与私钥配置
 ~~~~~~~~~~~~~~~~~
 
 - 验证属性是否在IdP侧正确配置
-- 确保``saml.attribute.group.name``的值与IdP发送的属性名匹配
+- 确保\ ``saml.attribute.group.name``\ 的值与IdP发送的属性名匹配
 - 启用调试模式以检查SAML断言内容
 
 调试设置

@@ -14,7 +14,7 @@
 默认行为
 --------
 
-``query.track.total.hits`` 的默认值为 ``10000``。
+``query.track.total.hits`` 的默认值为 ``10000``\ 。
 因此，当搜索结果超过 10,000 条时，搜索结果页面会显示"约 10,000 条以上"。
 这是 OpenSearch 将统计精确总命中数的上限限制为 ``query.track.total.hits`` 的值，以降低大规模搜索对性能影响的默认配置。
 
@@ -59,7 +59,7 @@
 OR 搜索
 -------
 
-要执行 OR 搜索，请在关键词之间插入 ``OR``。
+要执行 OR 搜索，请在关键词之间插入 ``OR``\ 。
 
 ::
 
@@ -174,7 +174,7 @@ NOT 搜索
 - ``query.highlight.fragment.size``: 高亮片段（Fragment）的字符数（默认：``60``）
 - ``query.highlight.number.of.fragments``: 显示的最大片段数（默认：``2``）
 
-作为摘要（Snippet）高亮的目标字段，可通过 ``query.highlight.content.description.fields``（默认：``hl_content,digest``）指定。
+作为摘要（Snippet）高亮的目标字段，可通过 ``query.highlight.content.description.fields``\ （默认：``hl_content,digest``）指定。
 
 建议功能
 ========
@@ -250,7 +250,7 @@ NOT 搜索
 显示不相关结果
 --------------
 
-1. 请调整提升设置（``query.boost.title``, ``query.boost.content``等）。
+1. 请调整提升设置（``query.boost.title``, ``query.boost.content``\ 等）。
 2. 请重新评估模糊搜索配置。
 3. 请确认 Analyzer 配置。
 4. 如有需要，请咨询商业支持。

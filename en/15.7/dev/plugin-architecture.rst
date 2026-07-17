@@ -254,7 +254,7 @@ Main plugins published by the |Fess| project:
      - Confluence/Jira connector
    * - fess-ds-git
      - Git repository connector
-   * - fess-theme-*
+   * - fess-theme-\*
      - Custom themes
 
 These plugins are available on

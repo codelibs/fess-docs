@@ -145,8 +145,8 @@ Fess 15.3.0 がインストールしてあるものとします。
      - \https://www.n2sm.net/
      - \https://fess.codelibs.org/
    * - クロール対象とするURL
-     - \https://www.n2sm.net/.*
-     - \https://fess.codelibs.org/.*
+     - \https://www.n2sm.net/.\*
+     - \https://fess.codelibs.org/.\*
    * - 最大アクセス数
      - 10
      - 10

@@ -60,12 +60,12 @@ Linux 环境配置
     export FESS_PORT=8080
 
 .. warning::
-   ``FESS_PORT`` 环境变量仅在 Linux 环境中可用。在 Windows 环境中，请直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.port``。
+   ``FESS_PORT`` 环境变量仅在 Linux 环境中可用。在 Windows 环境中，请直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.port``\ 。
 
 RPM/DEB 软件包配置
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-RPM 软件包请编辑 ``/etc/sysconfig/fess``,DEB 软件包请编辑 ``/etc/default/fess``。
+RPM 软件包请编辑 ``/etc/sysconfig/fess``,DEB 软件包请编辑 ``/etc/default/fess``\ 。
 
 ::
 
@@ -112,7 +112,7 @@ Windows 环境:
 此配置将使您可以通过 ``http://localhost:8080/search/`` 访问。
 
 .. warning::
-   ``FESS_CONTEXT_PATH`` 环境变量仅在 Linux 环境中可用。在 Windows 环境中，请直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.context.path``。
+   ``FESS_CONTEXT_PATH`` 环境变量仅在 Linux 环境中可用。在 Windows 环境中，请直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.context.path``\ 。
 
 .. warning::
    变更上下文路径后,还需要正确配置静态文件的路径。
@@ -156,7 +156,7 @@ Windows 环境:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 爬虫的代理设置不支持 nonProxyHosts。
-要从代理中排除特定主机,请使用环境变量 ``FESS_NON_PROXY_HOSTS``。
+要从代理中排除特定主机,请使用环境变量 ``FESS_NON_PROXY_HOSTS``\ 。
 此设置会被转换为 Java 系统属性 ``http.nonProxyHosts``，并应用于 Fess 的所有 HTTP 通信。
 
 ::
@@ -180,7 +180,7 @@ Windows 环境:
    密码将以未加密形式保存。请设置适当的文件权限。
 
 .. note::
-   ``http.proxy.*`` 设置不适用于 SSO 认证等。若要为包括 SSO 认证在内的整个 Fess 应用程序（JVM 范围的 HTTP 通信）使用代理，请设置环境变量 ``FESS_PROXY_HOST`` 和 ``FESS_PROXY_PORT``。详情请参阅下文"通过环境变量配置代理"。
+   ``http.proxy.*`` 设置不适用于 SSO 认证等。若要为包括 SSO 认证在内的整个 Fess 应用程序（JVM 范围的 HTTP 通信）使用代理，请设置环境变量 ``FESS_PROXY_HOST`` 和 ``FESS_PROXY_PORT``\ 。详情请参阅下文"通过环境变量配置代理"。
 
 通过环境变量配置代理
 ~~~~~~~~~~~~~~~~~~~~
@@ -290,7 +290,7 @@ SSL/TLS 连接配置
 基本配置
 --------
 
-在管理界面的"系统 > 常规"（``virtual.host.headers``）中配置虚拟主机。每行指定一个虚拟主机，格式为 ``Host:主机名[:端口号]=虚拟主机名``。默认值为空（未设置），虚拟主机功能处于禁用状态。
+在管理界面的"系统 > 常规"（``virtual.host.headers``）中配置虚拟主机。每行指定一个虚拟主机，格式为 ``Host:主机名[:端口号]=虚拟主机名``\ 。默认值为空（未设置），虚拟主机功能处于禁用状态。
 
 ::
 
@@ -405,7 +405,7 @@ SSL/TLS 终止
 变更端口后无法访问
 ------------------------------
 
-1. 请确认是否已重启 |Fess|。
+1. 请确认是否已重启 |Fess|\ 。
 2. 请确认防火墙是否已开放相应端口。
 3. 请在日志文件(``fess.log``)中确认错误信息。
 

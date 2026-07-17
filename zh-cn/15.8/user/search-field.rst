@@ -46,7 +46,7 @@
      - 文档的 MIME 类型(例如: ``text/html``)
      - 关键字
    * - filetype
-     - 由 MIME 类型决定的文件类型(例如: ``html``、``word``、``pdf``。不属于以上情况时为 ``others``)
+     - 由 MIME 类型决定的文件类型(例如: ``html``、``word``、``pdf``\ 。不属于以上情况时为 ``others``)
      - 关键字
    * - filename
      - URL 路径末尾的文件名

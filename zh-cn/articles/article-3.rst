@@ -30,7 +30,7 @@ Fess 除了通常的 HTML 搜索表现形式外,还可以通过 API 以 JSON 形
 通过使用 API,可以轻松实现构建 Fess 服务器,然后从现有系统仅查询搜索结果。
 由于搜索结果以不依赖于开发语言的格式处理,因此也易于将 Fess 集成到 Java 以外的系统中。
 
-关于 Fess 提供的 API 返回何种响应,请参考 `JSON 响应 <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__。
+关于 Fess 提供的 API 返回何种响应,请参考 `JSON 响应 <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__\ 。
 
 Fess 使用 OpenSearch 作为内部搜索引擎。
 OpenSearch 也提供 JSON API,但与 Fess 的 API 不同。
@@ -355,7 +355,7 @@ Fess 的 JSON 响应详细信息请参考\ `Fess 网站 <https://fess.codelibs.o
 通过使用 JSON API,不仅限于基于浏览器的应用程序,还可以构建从其他应用程序调用并使用 Fess 的系统。
 
 此外,本文的示例代码展示了传统的 API 端点格式,但在 Fess 15.3 中推荐使用 ``/api/v1/documents`` 端点。
-详情请参考 `API 规格 <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__。
+详情请参考 `API 规格 <https://fess.codelibs.org/ja/15.3/api/api-search.html>`__\ 。
 
 参考资料
 ========

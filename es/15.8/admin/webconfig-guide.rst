@@ -141,7 +141,7 @@ Para crear una configuración de rastreo web que rastree páginas debajo de http
    * - URL
      - https://fess.codelibs.org/
    * - URL a rastrear
-     - https://fess.codelibs.org/.*
+     - https://fess.codelibs.org/.\*
 
 Use los valores predeterminados para los otros valores de configuración.
 
@@ -167,7 +167,7 @@ Para crear una configuración de rastreo web que rastree páginas de Redmine pro
    * - URL
      - https://<server>/my/page
    * - URL a rastrear
-     - https://<server>/.*
+     - https://<server>/.\*
    * - Parámetros de configuración
      - client.robotsTxtEnabled=false (Opcional)
 
@@ -214,7 +214,7 @@ Para crear una configuración de rastreo web que rastree páginas de XWiki (ej. 
    * - URL
      - https://<server>/xwiki/bin/view/Main/
    * - URL a rastrear
-     - https://<server>/.*
+     - https://<server>/.\*
    * - Parámetros de configuración
      - client.robotsTxtEnabled=false (Opcional)
 

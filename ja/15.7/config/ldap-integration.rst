@@ -71,13 +71,13 @@ LDAP管理機能・動作設定（``fess_config.properties``）
      - 説明
    * - ``ldap.provider.url``
      - （なし）
-     - LDAPサーバーのURL。例: ``ldap://ldap.example.com:389``。LDAPSの場合は ``ldaps://ldap.example.com:636``。スペース区切りで複数指定するとフェイルオーバーになります。
+     - LDAPサーバーのURL。例: ``ldap://ldap.example.com:389``\ 。LDAPSの場合は ``ldaps://ldap.example.com:636``\ 。スペース区切りで複数指定するとフェイルオーバーになります。
    * - ``ldap.base.dn``
      - （なし）
      - LDAP検索のベースDN。例: ``dc=example,dc=com``
    * - ``ldap.security.principal``
      - （なし）
-     - ユーザー認証（バインド）に使用するDNテンプレート。``%s`` がユーザー名に置換されます。例: ``uid=%s,ou=People,dc=example,dc=com``
+     - ユーザー認証（バインド）に使用するDNテンプレート。\ ``%s`` がユーザー名に置換されます。例: ``uid=%s,ou=People,dc=example,dc=com``
    * - ``ldap.security.authentication``
      - ``simple``
      - LDAP認証方式（JNDIの ``java.naming.security.authentication``）。通常は ``simple`` を使用します。
@@ -92,10 +92,10 @@ LDAP管理機能・動作設定（``fess_config.properties``）
      - 上記サービスアカウントのパスワード。
    * - ``ldap.account.filter``
      - （なし）
-     - ユーザーのロール解決時に、ユーザーエントリを検索するためのフィルター。``%s`` がユーザー名に置換されます。例: ``uid=%s``
+     - ユーザーのロール解決時に、ユーザーエントリを検索するためのフィルター。\ ``%s`` がユーザー名に置換されます。例: ``uid=%s``
    * - ``ldap.group.filter``
      - （空）
-     - グループ解決時に使用する検索フィルター。``%s`` がユーザーのDNなどに置換されます。例: ``(member=%s)``
+     - グループ解決時に使用する検索フィルター。\ ``%s`` がユーザーのDNなどに置換されます。例: ``(member=%s)``
    * - ``ldap.memberof.attribute``
      - ``memberOf``
      - グループメンバーシップを表す属性名。Active Directoryやこの属性を持つサーバーでロールを解決する際に使用します。
@@ -147,7 +147,7 @@ LDAP管理機能・動作設定
      - 説明
    * - ``ldap.admin.enabled``
      - ``false``
-     - 管理画面からLDAPのユーザー／ロール／グループを作成・更新・削除する機能を有効にします。**ログイン認証には不要**で、有効にしなくてもLDAPによるログインは機能します。
+     - 管理画面からLDAPのユーザー／ロール／グループを作成・更新・削除する機能を有効にします。\ **ログイン認証には不要**\ で、有効にしなくてもLDAPによるログインは機能します。
    * - ``ldap.admin.sync.password``
      - ``true``
      - 管理画面でユーザーを更新した際に、|Fess| 側のパスワードをLDAPと同期します。
@@ -233,7 +233,7 @@ LDAP管理機能・動作設定
      - グループ名に ``sAMAccountName`` 属性を使用します（Active Directory向け）。
    * - ``ldap.max.username.length``
      - ``-1``
-     - ユーザー名の最大長。``-1`` は制限なしを意味します。
+     - ユーザー名の最大長。\ ``-1`` は制限なしを意味します。
 
 属性マッピング
 --------------

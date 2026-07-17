@@ -135,7 +135,7 @@ fess_japanese_iteration_mark is a built-in CharFilter provided by the analysis-f
 For example, convert "days" to "days".
 Internally, it provides the same function as kuromoji_iteration_mark.
 
-There are some that are defined in fess_[lang]_*, but the functions applied to them change depending on the installation status of Elasticsearch plugin.
+There are some that are defined in fess_[lang]_\*, but the functions applied to them change depending on the installation status of Elasticsearch plugin.
 In the case of Japanese, if the analysis-kuromoji-neologd plug-in is installed, Kuromoji with the NEologd dictionary applied will be used, otherwise, normal Kuromoji will be applied.
 
 Tokenizer: japanese_tokenizer

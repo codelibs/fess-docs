@@ -7,8 +7,8 @@ Overview
 
 Web App plugins (``fess-webapp-*``) extend the |Fess| web application.
 Unlike other plugin types, they do not add Action classes or JSPs
-directly; instead, they extend functionality by **adding or replacing
-components** in the DI container (Lasta Di). Typical use cases
+directly; instead, they extend functionality by \*\*adding or replacing
+components\*\* in the DI container (Lasta Di). Typical use cases
 include:
 
 - Adding new components (helpers, services, etc.)
@@ -157,8 +157,8 @@ Replacing Core Components (fess+componentName.xml)
 ----------------------------------------------------
 
 If you want to change the behavior of a |Fess| core component,
-subclass the target class and **re-register it under the same
-component name** in a DI configuration file named
+subclass the target class and \*\*re-register it under the same
+component name\*\* in a DI configuration file named
 ``<baseDicon>+<componentName>.xml``. For example, since ``systemHelper``
 is declared in the |Fess| core's ``fess.xml``, the replacement file is
 ``fess+systemHelper.xml`` (not ``app+systemHelper.xml``).

@@ -30,7 +30,7 @@ Ollama可用的主要模型:
 - ``phi3:3.8b`` - Microsoft公司的Phi-3（38亿参数）
 
 .. note::
-   可用模型的最新列表请查阅 `Ollama Library <https://ollama.com/library>`__。
+   可用模型的最新列表请查阅 `Ollama Library <https://ollama.com/library>`__\ 。
 
 前提条件
 ========
@@ -90,7 +90,7 @@ Ollama集成功能以插件的形式提供。
 
     cp fess-llm-ollama-15.8.0.jar /path/to/fess/app/WEB-INF/plugin/
 
-3. 重启 |Fess|。
+3. 重启 |Fess|\ 。
 
 .. note::
    插件版本请与 |Fess| 版本保持一致。
@@ -103,7 +103,7 @@ LLM相关配置分布在多个配置文件中。
 最小配置
 --------
 
-``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+``system.properties``\ （也可在管理界面 > 系统 > 通用中配置）:
 
 ::
 
@@ -124,12 +124,12 @@ LLM相关配置分布在多个配置文件中。
     rag.llm.ollama.model=gemma4:e4b
 
 .. note::
-   LLM提供商的配置也可以通过管理界面（管理界面 > 系统 > 通用）设置 ``rag.llm.name``。
+   LLM提供商的配置也可以通过管理界面（管理界面 > 系统 > 通用）设置 ``rag.llm.name``\ 。
 
 推荐配置（生产环境）
 --------------------
 
-``system.properties``（也可在管理界面 > 系统 > 通用中配置）:
+``system.properties``\ （也可在管理界面 > 系统 > 通用中配置）:
 
 ::
 
@@ -362,7 +362,7 @@ Ollama模型选项
 
 可在 ``fess_config.properties`` 中设置Ollama的模型参数。
 以 ``rag.llm.ollama.default.<param>`` 的形式指定时，作为所有提示词类型通用的回退值使用。
-``default`` 的回退不仅适用于 ``top.p`` / ``top.k`` / ``num.ctx``，也适用于 ``temperature`` / ``max.tokens`` / ``thinking.budget`` / ``thinking.level``。
+``default`` 的回退不仅适用于 ``top.p`` / ``top.k`` / ``num.ctx``，也适用于 ``temperature`` / ``max.tokens`` / ``thinking.budget`` / ``thinking.level``\ 。
 
 .. list-table::
    :header-rows: 1
@@ -437,7 +437,7 @@ Ollama模型选项
 --------------------------
 
 gpt-oss等部分模型会忽略布尔形式的 ``think`` 标志，需要使用 ``high`` / ``medium`` / ``low`` 字符串形式来指定思考级别。
-此类模型请使用 ``rag.llm.ollama.{promptType}.thinking.level``。
+此类模型请使用 ``rag.llm.ollama.{promptType}.thinking.level``\ 。
 
 ::
 
@@ -450,7 +450,7 @@ gpt-oss等部分模型会忽略布尔形式的 ``think`` 标志，需要使用 `
 ``thinking.level`` 可设置的值为 ``high`` / ``medium`` / ``low`` 之一（不区分大小写）。指定无效值时将被忽略并输出警告日志。
 
 .. note::
-   同时设置了 ``thinking.level`` （字符串形式）和 ``thinking.budget`` （布尔形式）时， ``thinking.level`` 优先。GPT-OSS系模型请使用 ``thinking.level``，其他思考模型请使用 ``thinking.budget``。
+   同时设置了 ``thinking.level`` （字符串形式）和 ``thinking.budget`` （布尔形式）时， ``thinking.level`` 优先。GPT-OSS系模型请使用 ``thinking.level``，其他思考模型请使用 ``thinking.budget``\ 。
 
 网络配置
 ========
@@ -458,7 +458,7 @@ gpt-oss等部分模型会忽略布尔形式的 ``think`` 标志，需要使用 `
 Docker配置
 ----------
 
-|Fess| 官方的 `docker-fess <https://github.com/codelibs/docker-fess>`__ 中附带了Ollama用的overlay文件 ``compose-ollama.yaml``。最小步骤如下。
+|Fess| 官方的 `docker-fess <https://github.com/codelibs/docker-fess>`__ 中附带了Ollama用的overlay文件 ``compose-ollama.yaml``\ 。最小步骤如下。
 
 ::
 
@@ -501,7 +501,7 @@ Docker配置
 
 要点:
 
-- ``FESS_PLUGINS=fess-llm-ollama:15.8.0`` 使启动脚本自动获取插件JAR并放置到 ``app/WEB-INF/plugin/``（版本请与您使用的 |Fess| 保持一致）
+- ``FESS_PLUGINS=fess-llm-ollama:15.8.0`` 使启动脚本自动获取插件JAR并放置到 ``app/WEB-INF/plugin/``\ （版本请与您使用的 |Fess| 保持一致）
 - ``-Dfess.config.rag.chat.enabled=true`` 启用AI搜索模式
 - ``-Dfess.config.rag.llm.ollama.api.url=...`` 指定Ollama服务器的URL（在Docker Compose网络内可使用 ``ollama01`` 等服务名进行解析）
 - LLM提供商（ ``rag.llm.name`` ）的默认值为 ``ollama``，因此仅使用Ollama时无需显式指定。从其他提供商切换时，可在 ``FESS_JAVA_OPTS`` 中添加 ``-Dfess.system.rag.llm.name=ollama``，或在启动后通过管理界面"系统 > 通用"的RAG区段进行设置

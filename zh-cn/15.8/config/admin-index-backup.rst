@@ -166,7 +166,7 @@
 恢复特定索引
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-搜索文档索引的名称格式为 ``fess.{yyyyMMddHHmmssSSS}``。请通过 ``_cat/indices`` 等方式确认实际索引名后再执行恢复。
+搜索文档索引的名称格式为 ``fess.{yyyyMMddHHmmssSSS}``\ 。请通过 ``_cat/indices`` 等方式确认实际索引名后再执行恢复。
 
 ::
 
@@ -262,7 +262,7 @@
      - 缩略图（按需备份）
 
 .. note::
-   RPM/DEB 软件包版中，``/etc/fess/`` 目录除 ``fess_config.properties`` 外，还存放有 ``fess_env_crawler.properties`` 等 ``fess_env_*.properties`` 文件以及 ``tika.xml`` 等配置文件。建议备份整个 ``/etc/fess/`` 目录。``system.properties`` 在管理界面的"系统 > 通用"中保存设置时，将以 ``/etc/fess/system.properties`` 的形式创建或更新。
+   RPM/DEB 软件包版中，``/etc/fess/`` 目录除 ``fess_config.properties`` 外，还存放有 ``fess_env_crawler.properties`` 等 ``fess_env_*.properties`` 文件以及 ``tika.xml`` 等配置文件。建议备份整个 ``/etc/fess/`` 目录。\ ``system.properties`` 在管理界面的"系统 > 通用"中保存设置时，将以 ``/etc/fess/system.properties`` 的形式创建或更新。
 
 配置文件备份示例
 ----------------------------
@@ -300,7 +300,7 @@
 
 2. **准备迁移目标**
 
-   - 在新环境安装 |Fess|。
+   - 在新环境安装 |Fess|\ 。
    - 启动 OpenSearch。
 
 3. **恢复配置文件**
@@ -316,7 +316,7 @@
 
 5. **运行确认**
 
-   - 启动 |Fess|。
+   - 启动 |Fess|\ 。
    - 访问管理界面，确认配置。
    - 确认搜索功能是否正常运行。
 
@@ -351,7 +351,7 @@
 ------------------------
 
 1. 请确认索引是否正常恢复：``curl -X GET "localhost:9201/_cat/indices?v"``
-2. 请确认 ``fess.search`` 和 ``fess.update`` 别名是否指向已恢复的索引：``curl -X GET "localhost:9201/_cat/aliases?v"``。若别名未设置，请通过 ``_aliases`` API 重新配置。
+2. 请确认 ``fess.search`` 和 ``fess.update`` 别名是否指向已恢复的索引：``curl -X GET "localhost:9201/_cat/aliases?v"``\ 。若别名未设置，请通过 ``_aliases`` API 重新配置。
 3. 请在 |Fess| 日志文件中确认是否有错误。
 4. 请确认配置文件是否已正确恢复。
 

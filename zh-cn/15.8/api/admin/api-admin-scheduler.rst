@@ -108,11 +108,11 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 
 .. note::
 
-   响应的 ``response`` 对象中始终包含表示产品版本的 ``version`` 和表示处理结果的 ``status``（公共规范请参阅 :doc:`api-admin-overview`）。后续示例中可能省略 ``version`` 以保持简洁。
+   响应的 ``response`` 对象中始终包含表示产品版本的 ``version`` 和表示处理结果的 ``status``\ （公共规范请参阅 :doc:`api-admin-overview`）。后续示例中可能省略 ``version`` 以保持简洁。
 
 .. note::
 
-   响应中的 ``jobLogging`` / ``crawler`` / ``available`` 以字符串（``"true"`` / ``"false"``）形式返回。``running`` 为布尔值，是仅响应中包含的字段，表示任务当前是否正在运行（不可在请求中指定）。``total`` 为符合查询条件的任务总数。
+   响应中的 ``jobLogging`` / ``crawler`` / ``available`` 以字符串（``"true"`` / ``"false"``）形式返回。\ ``running`` 为布尔值，是仅响应中包含的字段，表示任务当前是否正在运行（不可在请求中指定）。\ ``total`` 为符合查询条件的任务总数。
 
 获取计划任务
 ============
@@ -217,11 +217,11 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` 为字符串字段。在请求中，指定 ``"on"`` 或 ``"true"``（不区分大小写）时启用；其他值（``"false"``、空字符串或未指定）均视为禁用。在响应中以 ``"true"`` / ``"false"`` 形式返回。
+   ``jobLogging`` / ``crawler`` / ``available`` 为字符串字段。在请求中，指定 ``"on"`` 或 ``"true"``\ （不区分大小写）时启用；其他值（``"false"``、空字符串或未指定）均视为禁用。在响应中以 ``"true"`` / ``"false"`` 形式返回。
 
 .. note::
 
-   ``crudMode`` 由服务器端自动设置，无需在请求中指定。``createdBy`` / ``createdTime`` 等审计字段也由服务器端设置。
+   ``crudMode`` 由服务器端自动设置，无需在请求中指定。\ ``createdBy`` / ``createdTime`` 等审计字段也由服务器端设置。
 
 响应
 ----
@@ -286,7 +286,7 @@ Cron表达式示例
 
 .. note::
 
-   更新时，``id``（最大1000字符）和 ``versionNo`` 为必填项。``versionNo`` 用于乐观锁，需指定获取响应中返回的值。若值不匹配，更新将失败。其他必填字段（``name`` / ``target`` / ``scriptType`` / ``sortOrder``）与创建时相同。
+   更新时，``id``\ （最大1000字符）和 ``versionNo`` 为必填项。\ ``versionNo`` 用于乐观锁，需指定获取响应中返回的值。若值不匹配，更新将失败。其他必填字段（``name`` / ``target`` / ``scriptType`` / ``sortOrder``）与创建时相同。
 
 响应
 ----
@@ -358,7 +358,7 @@ Cron表达式示例
    * - 字段
      - 说明
    * - ``jobLogId``
-     - 已启动任务的任务日志ID。在任务日志启用时发行。任务日志禁用时为 ``null``。
+     - 已启动任务的任务日志ID。在任务日志启用时发行。任务日志禁用时为 ``null``\ 。
 
 注意事项
 --------

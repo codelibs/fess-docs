@@ -238,7 +238,7 @@ Select [New]
 |image4|
 
 As a web crawl configuration, this time we will crawl the pages under https://fess.codelibs.org/ja/ at 10-second intervals with 2 threads (crawling about 2 pages every 10 seconds), targeting about 100 pages for search.
-Set the configuration items as follows: URL: \https://fess.codelibs.org/ja/, URL to crawl: \https://fess.codelibs.org/ja/.*, Max Access Count: 100, Number of Threads: 2, Interval: 10000 milliseconds, and leave the rest as default.
+Set the configuration items as follows: URL: \https://fess.codelibs.org/ja/, URL to crawl: \https://fess.codelibs.org/ja/.\*, Max Access Count: 100, Number of Threads: 2, Interval: 10000 milliseconds, and leave the rest as default.
 
 Web Crawl Configuration
 |image5|

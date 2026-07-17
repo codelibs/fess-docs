@@ -51,7 +51,7 @@
 
     * ``query.fuzzy.prefix_length`` (기본값: ``0``): 앞에서부터 완전히 일치시킬 문자 수입니다. 값을 크게 하면 오류를 허용하는 범위가 좁아집니다.
     * ``query.fuzzy.expansions`` (기본값: ``50``): 일치 후보로 전개할 단어의 최대 수입니다.
-    * ``query.fuzzy.transpositions`` (기본값: ``true``): 인접한 2 문자의 교체를 1 회의 편집으로 계산할지 여부를 지정합니다. ``true``인 경우에는 다메라우-레벤슈타인 거리 (optimal string alignment), ``false``인 경우에는 고전적인 레벤슈타인 거리가 됩니다.
+    * ``query.fuzzy.transpositions`` (기본값: ``true``): 인접한 2 문자의 교체를 1 회의 편집으로 계산할지 여부를 지정합니다. ``true``\ 인 경우에는 다메라우-레벤슈타인 거리 (optimal string alignment), ``false``\ 인 경우에는 고전적인 레벤슈타인 거리가 됩니다.
 
 .. note::
 

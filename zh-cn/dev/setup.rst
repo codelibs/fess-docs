@@ -489,7 +489,7 @@ VS Code 的情况
 
 LastaFlute 可以在不重启的情况下反映部分更改。
 
-在 ``src/main/resources/fess_env.properties`` 中，``development.here`` 默认为 ``true``。
+在 ``src/main/resources/fess_env.properties`` 中，``development.here`` 默认为 ``true``\ 。
 确认该设置已启用即可：
 
 .. code-block:: properties
@@ -576,7 +576,7 @@ OpenSearch 的位置：
 
     [ERROR] Failed to execute goal ... requires at least Java 21
 
-解决方法：安装 Java 21 及以上，并适当设置 ``JAVA_HOME``。
+解决方法：安装 Java 21 及以上，并适当设置 ``JAVA_HOME``\ 。
 
 **错误: 依赖库下载失败**
 
@@ -607,7 +607,7 @@ OpenSearch 的位置：
 
 **错误: OpenSearch 未启动**
 
-请确认日志文件 ``target/fess/es/logs/``。
+请确认日志文件 ``target/fess/es/logs/``\ 。
 
 常见原因：
 

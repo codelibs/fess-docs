@@ -145,8 +145,8 @@ Fess 的基于角色的搜索默认情况下可以根据 Fess 管理的用户信
      - \https://www.n2sm.net/
      - \https://fess.codelibs.org/
    * - 作为爬取对象的 URL
-     - \https://www.n2sm.net/.*
-     - \https://fess.codelibs.org/.*
+     - \https://www.n2sm.net/.\*
+     - \https://fess.codelibs.org/.\*
    * - 最大访问数
      - 10
      - 10

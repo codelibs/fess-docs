@@ -475,7 +475,7 @@ LastaDi-Komponentenkonfigurationsdatei.
         </arg>
     </component>
 
-fess_message_*.properties
+fess_message_\*.properties
 ------------------------
 
 Nachrichtendateien für mehrsprachige Unterstützung.

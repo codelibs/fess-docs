@@ -141,7 +141,7 @@ Pour créer une configuration de crawl Web qui crawle les pages sous https://fes
    * - URL
      - https://fess.codelibs.org/
    * - URL à crawler
-     - https://fess.codelibs.org/.*
+     - https://fess.codelibs.org/.\*
 
 Les autres valeurs de configuration utilisent les valeurs par défaut.
 
@@ -167,7 +167,7 @@ Pour créer une configuration de crawl Web qui crawle les pages de Redmine prot�
    * - URL
      - https://<serveur>/my/page
    * - URL à crawler
-     - https://<serveur>/.*
+     - https://<serveur>/.\*
    * - Paramètres de configuration
      - client.robotsTxtEnabled=false (Optionnel)
 
@@ -214,7 +214,7 @@ Pour créer une configuration de crawl Web qui crawle les pages de XWiki (ex. ht
    * - URL
      - https://<serveur>/xwiki/bin/view/Main/
    * - URL à crawler
-     - https://<serveur>/.*
+     - https://<serveur>/.\*
    * - Paramètres de configuration
      - client.robotsTxtEnabled=false (Optionnel)
 

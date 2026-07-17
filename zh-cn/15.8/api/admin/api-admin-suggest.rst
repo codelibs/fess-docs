@@ -180,7 +180,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 ========
 
 删除处理失败时，将返回HTTP状态码 ``400``，响应体中的 ``status`` 将被设置为
-``1``（BAD_REQUEST），``message`` 中包含错误消息。
+``1``\ （BAD_REQUEST），``message`` 中包含错误消息。
 
 .. code-block:: json
 
@@ -193,7 +193,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
     }
 
 若访问令牌未指定或无效，或权限不足，响应体中的 ``status`` 将被设置为
-``3``（UNAUTHORIZED）。有关 ``status`` 的值及HTTP状态码的列表，请参阅
+``3``\ （UNAUTHORIZED）。有关 ``status`` 的值及HTTP状态码的列表，请参阅
 :doc:`api-admin-overview`。
 
 使用示例

@@ -229,7 +229,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
       "versionNo": 1
     }
 
-更新时，除创建时的字段外，还需提供 ``id``（目标规则的ID，最多1000个字符）和 ``versionNo``（用于乐观锁的版本号）。
+更新时，除创建时的字段外，还需提供 ``id``\ （目标规则的ID，最多1000个字符）和 ``versionNo``\ （用于乐观锁的版本号）。
 ``versionNo`` 请通过获取单条或列表API的响应取得当前值后再指定。
 若版本号不匹配，更新将会失败。
 
@@ -270,7 +270,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 关于条件表达式与提升值表达式
 ============================
 
-``urlExpr``（条件）和 ``boostExpr``（提升值表达式）均作为Groovy表达式进行求值。
+``urlExpr``\ （条件）和 ``boostExpr``\ （提升值表达式）均作为Groovy表达式进行求值。
 在表达式中，可以通过字段名变量引用索引目标文档的字段值。
 
 - ``urlExpr`` 必须返回 ``Boolean`` 值（例：``url.startsWith("https://docs.example.com/")``）。单纯的正则表达式字符串（例：``.*docs\.example\.com.*``）作为Groovy表达式不返回 ``Boolean``，因此无法作为条件使用。若需使用正则表达式，请使用Groovy的 ``String#matches`` 方法。
@@ -280,7 +280,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 
    表达式中可引用的主要字段变量：``url``、``title``、``content``、``content_length``、``last_modified`` 等。
    ``click_count`` 和 ``favorite_count`` 分别在 ``indexer.click.count.enabled`` /
-   ``indexer.favorite.count.enabled``（均默认启用）的情况下可引用。
+   ``indexer.favorite.count.enabled``\ （均默认启用）的情况下可引用。
    OpenSearch的日期计算语法（如 ``now - 7d``）无法在Groovy中使用。
 
 条件表达式（``urlExpr``）示例

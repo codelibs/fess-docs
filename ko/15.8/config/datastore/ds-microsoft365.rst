@@ -52,7 +52,7 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
     mvn clean package
     cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/lib/
 
-설치 후 |Fess|를 재시작하세요.
+설치 후 |Fess|\ 를 재시작하세요.
 
 설정 방법
 =========
@@ -607,9 +607,9 @@ API 속도 제한 오류
 
 **해결 방법**:
 
-1. ``number_of_threads``를 줄임(1 또는 2로 설정)
+1. ``number_of_threads``\ 를 줄임(1 또는 2로 설정)
 2. 크롤링 간격을 늘림
-3. ``ignore_error=true``를 설정하여 계속 처리
+3. ``ignore_error=true``\ 를 설정하여 계속 처리
 
 데이터를 가져올 수 없음
 ------------------------
@@ -646,7 +646,7 @@ PowerShell로 확인:
 
 1. 여러 데이터 스토어로 분할(사이트 단위, 드라이브 단위 등)
 2. 스케줄 설정으로 부하 분산
-3. ``number_of_threads``를 조정하여 병렬 처리
+3. ``number_of_threads``\ 를 조정하여 병렬 처리
 4. 특정 폴더/사이트만 크롤링
 
 참고 정보

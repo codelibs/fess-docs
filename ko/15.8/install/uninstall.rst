@@ -204,8 +204,8 @@ DEB 패키지를 제거합니다::
 
 .. note::
 
-   ``dpkg -r``(remove)에서는 설정 파일(conffile)인 ``/etc/default/fess`` 등은 남습니다.
-   ``dpkg -P``(purge)를 사용하면 이러한 설정 파일과 ``fess`` 사용자·그룹도 삭제됩니다.
+   ``dpkg -r``\ (remove)에서는 설정 파일(conffile)인 ``/etc/default/fess`` 등은 남습니다.
+   ``dpkg -P``\ (purge)를 사용하면 이러한 설정 파일과 ``fess`` 사용자·그룹도 삭제됩니다.
 
 단계 2: OpenSearch 제거
 --------------------------------------

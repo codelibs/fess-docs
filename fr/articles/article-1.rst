@@ -238,7 +238,7 @@ Sélection de [Nouveau]
 |image4|
 
 Pour la configuration de l'exploration web, cette fois nous allons explorer les pages sous https://fess.codelibs.org/ja/ avec un intervalle de 10 secondes sur 2 threads (environ 2 pages toutes les 10 secondes), pour indexer environ 100 pages.
-Les paramètres de configuration sont : URL : \https://fess.codelibs.org/ja/, URL à explorer : \https://fess.codelibs.org/ja/.*, Nombre maximum d'accès : 100, Nombre de threads : 2, Intervalle : 10000 millisecondes, et les autres paramètres par défaut.
+Les paramètres de configuration sont : URL : \https://fess.codelibs.org/ja/, URL à explorer : \https://fess.codelibs.org/ja/.\*, Nombre maximum d'accès : 100, Nombre de threads : 2, Intervalle : 10000 millisecondes, et les autres paramètres par défaut.
 
 Configuration de l'exploration web
 |image5|

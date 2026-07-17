@@ -108,7 +108,7 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
    * - ``lang``
      - String[]
      - 否
-     - 搜索语言。可重复指定（数组）。例：``en``。
+     - 搜索语言。可重复指定（数组）。例：``en``\ 。
    * - ``ex_q``
      - String[]
      - 否
@@ -116,11 +116,11 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
    * - ``fields.<name>``
      - String[]
      - 否
-     - 按字段值过滤。最常见的用例是 ``fields.label``（按标签名过滤）；任意 ``fields.<name>`` 均会将结果限定为文档字段 ``<name>`` 与指定值匹配的文档。可重复指定。
+     - 按字段值过滤。最常见的用例是 ``fields.label``\ （按标签名过滤）；任意 ``fields.<name>`` 均会将结果限定为文档字段 ``<name>`` 与指定值匹配的文档。可重复指定。
    * - ``as.<name>``
      - String[]
      - 否
-     - 高级搜索条件。任意 ``as.<name>``（例：``as.q``）均会传递给高级搜索条件构建器。每个 name 可重复指定。
+     - 高级搜索条件。任意 ``as.<name>``\ （例：``as.q``）均会传递给高级搜索条件构建器。每个 name 可重复指定。
    * - ``sdh``
      - String
      - 否
@@ -194,7 +194,7 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
    * - ``record_count``
      - 命中条数。
    * - ``record_count_relation``
-     - 命中数的关系。``eq`` 表示精确计数，``gte`` 表示仅知下限。
+     - 命中数的关系。\ ``eq`` 表示精确计数，``gte`` 表示仅知下限。
    * - ``page_count``
      - 总页数。
    * - ``next_page``
@@ -351,9 +351,9 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
    * - 字段
      - 说明
    * - ``id``
-     - 已注册文档的 ``doc_id``。
+     - 已注册文档的 ``doc_id``\ 。
    * - ``created``
-     - 创建时为 ``true``。
+     - 创建时为 ``true``\ 。
 
 更新文档
 ========
@@ -422,9 +422,9 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
    * - 字段
      - 说明
    * - ``id``
-     - 已更新文档的 ``doc_id``。
+     - 已更新文档的 ``doc_id``\ 。
    * - ``created``
-     - 更新时为 ``false``。
+     - 更新时为 ``false``\ 。
 
 按ID删除文档
 ============

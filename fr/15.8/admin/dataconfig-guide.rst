@@ -305,7 +305,7 @@ Les paramètres sont au format « clé=valeur ». La description des clés est l
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - Informations de paramètres d'elasticsearch
    * - hosts
      - Elasticsearch de destination de connexion
@@ -338,7 +338,7 @@ Un exemple de configuration du script est le suivant.
 
 Les paramètres sont au format « clé=valeur ».
 Les clés sont les mêmes que pour le crawl de base de données.
-Vous pouvez obtenir et configurer les valeurs avec source.*.
+Vous pouvez obtenir et configurer les valeurs avec source.\*.
 
 CsvListDataStore
 ----------------

@@ -28,19 +28,19 @@ Fess のプラグインは、以下の種類があります。
    * - 種類
      - 役割
      - 例
-   * - データストア (fess-ds-*)
+   * - データストア (fess-ds-\*)
      - 外部データソースからデータを取得
      - Slack、Salesforce、DB
-   * - Ingest (fess-ingest-*)
+   * - Ingest (fess-ingest-\*)
      - クロールデータの加工・変換
      - Example
-   * - テーマ (fess-theme-*)
+   * - テーマ (fess-theme-\*)
      - 検索画面のデザイン
      - Simple、Code Search
-   * - スクリプト (fess-script-*)
+   * - スクリプト (fess-script-\*)
      - スクリプト言語のサポート
      - OGNL
-   * - Web アプリ (fess-webapp-*)
+   * - Web アプリ (fess-webapp-\*)
      - Web アプリケーション拡張
      - MCP サーバー
 

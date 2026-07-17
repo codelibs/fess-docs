@@ -141,7 +141,7 @@ URL
    * - URL
      - https://fess.codelibs.org/
    * - 爬取对象URL
-     - https://fess.codelibs.org/.*
+     - https://fess.codelibs.org/.\*
 
 其他配置值使用默认值。
 
@@ -167,7 +167,7 @@ Redmine
    * - URL
      - https://<server>/my/page
    * - 爬取对象URL
-     - https://<server>/.*
+     - https://<server>/.\*
    * - 配置参数
      - client.robotsTxtEnabled=false (可选)
 
@@ -214,7 +214,7 @@ XWiki
    * - URL
      - https://<server>/xwiki/bin/view/Main/
    * - 爬取对象URL
-     - https://<server>/.*
+     - https://<server>/.\*
    * - 配置参数
      - client.robotsTxtEnabled=false (可选)
 

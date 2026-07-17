@@ -28,19 +28,19 @@ Fess propose les types de plugins suivants.
    * - Type
      - Role
      - Exemples
-   * - Data Store (fess-ds-*)
+   * - Data Store (fess-ds-\*)
      - Recuperation de donnees depuis des sources externes
      - Slack, Salesforce, DB
-   * - Ingest (fess-ingest-*)
+   * - Ingest (fess-ingest-\*)
      - Traitement et transformation des donnees collectees
      - Example
-   * - Theme (fess-theme-*)
+   * - Theme (fess-theme-\*)
      - Design de l'interface de recherche
      - Simple, Code Search
-   * - Script (fess-script-*)
+   * - Script (fess-script-\*)
      - Prise en charge des langages de script
      - OGNL
-   * - Web App (fess-webapp-*)
+   * - Web App (fess-webapp-\*)
      - Extensions d'applications web
      - MCP Server
 

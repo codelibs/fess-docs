@@ -10,7 +10,7 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
 
 .. note::
 
-   本页面说明在 **Windows 上使用 Docker 的安装步骤**。Linux 或 macOS 用户也可以按照类似步骤进行安装，但 Docker Desktop 的安装方式因平台而异。
+   本页面说明在 **Windows 上使用 Docker 的安装步骤**\ 。Linux 或 macOS 用户也可以按照类似步骤进行安装，但 Docker Desktop 的安装方式因平台而异。
    详情请参考 `Docker <https://docs.docker.com/get-docker/>`_ 的文档。
 
 构建运营环境时，请务必参考 :doc:`15.6/install/index`。
@@ -84,7 +84,7 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
 创建启动文件
 ------------------
 
-创建一个合适的文件夹，下载 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ 和 `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_。
+创建一个合适的文件夹，下载 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ 和 `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_\ 。
 
 .. note::
 

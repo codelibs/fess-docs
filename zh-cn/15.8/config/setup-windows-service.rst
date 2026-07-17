@@ -5,9 +5,9 @@
 注册为 Windows 服务
 ====================
 
-可以将 |Fess| 注册为 Windows 服务。注册为服务后，可以在系统启动时自动启动 |Fess|。
+可以将 |Fess| 注册为 Windows 服务。注册为服务后，可以在系统启动时自动启动 |Fess|\ 。
 要运行 |Fess|，需要先启动 OpenSearch。
-本文档假设已将 |Fess| 安装在 ``c:\opt\fess``，OpenSearch 安装在 ``c:\opt\opensearch``（请根据实际环境替换路径）。
+本文档假设已将 |Fess| 安装在 ``c:\opt\fess``，OpenSearch 安装在 ``c:\opt\opensearch``\ （请根据实际环境替换路径）。
 
 .. note::
    |Fess| 和 OpenSearch 仅支持 64 位版本。
@@ -20,7 +20,7 @@
 将 OpenSearch 注册为服务
 ------------------------
 
-以管理员权限启动命令提示符，执行 ``c:\opt\opensearch\bin\opensearch-service.bat``。
+以管理员权限启动命令提示符，执行 ``c:\opt\opensearch\bin\opensearch-service.bat``\ 。
 
 ::
 
@@ -29,12 +29,12 @@
     ...
     The service 'opensearch-service-x64' has been installed.
 
-详情请参阅 `OpenSearch 文档 <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/windows/>`_。
+详情请参阅 `OpenSearch 文档 <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/windows/>`_\ 。
 
 |Fess| 的配置
 -------------
 
-服务通过 ``c:\opt\fess\bin\service.bat`` 进行注册。``service.bat`` 在注册时会读取 ``bin\fess.in.bat``，并将其内容反映到 |Fess| 的启动选项中。
+服务通过 ``c:\opt\fess\bin\service.bat`` 进行注册。\ ``service.bat`` 在注册时会读取 ``bin\fess.in.bat``，并将其内容反映到 |Fess| 的启动选项中。
 请在 ``c:\opt\fess\bin\fess.in.bat`` 中添加连接 OpenSearch 的配置。
 
 ::
@@ -45,16 +45,16 @@
 .. note::
    - ``fess.search_engine.http_address`` 用于指定已注册的 OpenSearch 服务的连接地址。若不进行此配置，|Fess| 将无法找到连接目标，并会启动不推荐在生产环境中使用的内嵌版 OpenSearch。
    - 若 OpenSearch 运行在其他主机上，请将主机名或 IP 地址修改为适当的值。
-   - 路径分隔符请使用 ``/``。
+   - 路径分隔符请使用 ``/``\ 。
 
-|Fess| 搜索页面和管理页面的默认端口号为 ``8080``。如需更改为其他端口，请编辑 ``c:\opt\fess\bin\fess.in.bat`` 中的 ``-Dfess.port``。
+|Fess| 搜索页面和管理页面的默认端口号为 ``8080``\ 。如需更改为其他端口，请编辑 ``c:\opt\fess\bin\fess.in.bat`` 中的 ``-Dfess.port``\ 。
 
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.port=80
 
 .. note::
-   注册为服务时，``bin\service.bat`` 中的 ``FESS_PARAMS`` 也硬编码了 ``-Dfess.port=8080``。由于该值优先于 ``fess.in.bat`` 的配置，更改端口时请同样编辑 ``service.bat`` 中的 ``FESS_PARAMS``。
+   注册为服务时，``bin\service.bat`` 中的 ``FESS_PARAMS`` 也硬编码了 ``-Dfess.port=8080``\ 。由于该值优先于 ``fess.in.bat`` 的配置，更改端口时请同样编辑 ``service.bat`` 中的 ``FESS_PARAMS``\ 。
 
 服务自定义（可选）
 ------------------
@@ -67,9 +67,9 @@
    * - 环境变量
      - 说明
    * - ``FESS_START_TYPE``
-     - 启动类型（``auto`` 或 ``manual``）。默认为 ``manual``。
+     - 启动类型（``auto`` 或 ``manual``）。默认为 ``manual``\ 。
    * - ``FESS_HEAP_SIZE``
-     - 堆大小（例如：``1g``）。如需分别指定最小和最大堆大小，请使用 ``FESS_MIN_MEM``（默认 ``256m``）和 ``FESS_MAX_MEM``（默认 ``1g``）。
+     - 堆大小（例如：``1g``）。如需分别指定最小和最大堆大小，请使用 ``FESS_MIN_MEM``\ （默认 ``256m``）和 ``FESS_MAX_MEM``\ （默认 ``1g``）。
    * - ``SERVICE_USERNAME`` / ``SERVICE_PASSWORD``
      - 运行服务的 Windows 账户。
    * - ``SERVICE_DISPLAY_NAME``
@@ -80,7 +80,7 @@
 注册方法
 --------
 
-以管理员权限启动命令提示符，执行 ``c:\opt\fess\bin\service.bat``。
+以管理员权限启动命令提示符，执行 ``c:\opt\fess\bin\service.bat``\ 。
 
 ::
 

@@ -34,7 +34,7 @@
 ::::
 
 상위에 배치하려는 문서의 조건을 지정합니다.
-예를 들어, https://www.n2sm.net/를 포함하는 URL을 상위에 표시하려는 경우 url.matches("https://www.n2sm.net/.*")를 기술합니다.
+예를 들어, https://www.n2sm.net/를 포함하는 URL을 상위에 표시하려는 경우 url.matches("https://www.n2sm.net/.\*")를 기술합니다.
 조건은 Groovy로 작성할 수 있습니다.
 
 부스트 값 식

@@ -34,7 +34,7 @@
 ::::
 
 指定要置于上方的文档的条件。
-例如,如果要将包含 https://www.n2sm.net/ 的 URL 显示在上方,请写入 url.matches("https://www.n2sm.net/.*")。
+例如,如果要将包含 https://www.n2sm.net/ 的 URL 显示在上方,请写入 url.matches("https://www.n2sm.net/.\*")。
 条件可以使用 Groovy 编写。
 
 提升值表达式

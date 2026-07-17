@@ -273,7 +273,7 @@ generate-thumbnail 脚本
 ----
 
 ``generate-thumbnail`` 是执行实际缩略图生成的 shell 脚本。
-使用 RPM/Deb 软件包安装时，它会安装在 ``/usr/share/fess/bin/generate-thumbnail``。
+使用 RPM/Deb 软件包安装时，它会安装在 ``/usr/share/fess/bin/generate-thumbnail``\ 。
 
 用法
 ----
@@ -309,7 +309,7 @@ generate-thumbnail 脚本
 
    ``mimetype`` 参数仅在 ``image`` 类型中使用，用于确定传递给 ImageMagick 的格式提示。
    格式提示生效的 MIME 类型为 ``image/gif``、``image/tiff``、``image/png``、``image/jpeg``、
-   ``image/bmp``（及其别名）以及 Photoshop（PSD）系列的 MIME 类型。
+   ``image/bmp``\ （及其别名）以及 Photoshop（PSD）系列的 MIME 类型。
    对于 ``pdf``、``msoffice``、``ps`` 类型，``mimetype`` 参数将被忽略。
 
 支持的类型
@@ -376,7 +376,7 @@ generate-thumbnail 脚本
 
 缩略图以基于哈希的目录结构存储。
 将文档 ID 每 10 个字符分割一次，每次分割创建一个 ``_<0-9>`` 格式（哈希值）的子目录。
-因此，目录的层级数取决于文档 ID 的长度。最底层的文件名为 ``<文档 ID>.png``。
+因此，目录的层级数取决于文档 ID 的长度。最底层的文件名为 ``<文档 ID>.png``\ 。
 
 ::
 
@@ -391,7 +391,7 @@ generate-thumbnail 脚本
 要禁用缩略图任务，请进行以下设置：
 
 1. 在管理页面的"系统">"常规"中取消勾选"缩略图显示"，然后点击"更新"按钮。
-2. 在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 的 ``thumbnail.crawler.enabled`` 中设置 ``false``（默认值为 ``true``）。
+2. 在 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties`` 的 ``thumbnail.crawler.enabled`` 中设置 ``false``\ （默认值为 ``true``）。
 
 ::
 

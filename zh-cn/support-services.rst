@@ -81,7 +81,7 @@ N2 Search
 支持服务
 ================
 
-如需以下服务，请考虑 `商业支持（搜索解决方案支持） <https://www.n2sm.net/products/n2search/support.html>`__。
+如需以下服务，请考虑 `商业支持（搜索解决方案支持） <https://www.n2sm.net/products/n2search/support.html>`__\ 。
 
 - 导入和运营咨询
 
@@ -173,4 +173,4 @@ Q: Fess 可以在云环境中使用吗？
 -------------------------------------------
 
 A: 可以，Fess 支持在 AWS、Azure、GCP 等主要云平台上运行。
-关于 Docker 部署方式，请参阅 `Docker 安装指南 <15.5/install/install-docker.html>`__。
+关于 Docker 部署方式，请参阅 `Docker 安装指南 <15.5/install/install-docker.html>`__\ 。

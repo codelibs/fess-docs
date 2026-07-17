@@ -38,7 +38,7 @@ Berechtigung
 ::::::::::::
 
 Legen Sie die Berechtigung für das Zugriffstoken fest.
-Geben Sie diese im Format „{user|group|role}name" an.
+Geben Sie diese im Format „{user\ |group|\ role}name" an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, legen Sie die Berechtigung auf „{group}developer" fest.
 
 Parametername

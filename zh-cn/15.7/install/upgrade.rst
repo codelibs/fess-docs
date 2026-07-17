@@ -141,7 +141,7 @@
 Docker 版的备份
 ---------------------
 
-OpenSearch 的数据保存在 Docker 卷中。``compose-opensearch3.yaml`` 中定义了
+OpenSearch 的数据保存在 Docker 卷中。\ ``compose-opensearch3.yaml`` 中定义了
 用于索引数据的 ``search01_data`` 和用于词典文件的 ``search01_dictionary``
 共 2 个卷。
 

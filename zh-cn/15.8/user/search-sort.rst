@@ -51,7 +51,7 @@
 
     fess sort:content_length
 
-降序排序时,在字段名后添加 ``.desc``。
+降序排序时,在字段名后添加 ``.desc``\ 。
 
 ::
 
@@ -66,7 +66,7 @@
     fess sort:content_length.desc,last_modified
 
 .. note::
-   如果指定了排序对象字段列表中不存在的字段名,或指定了 ``asc``,``desc`` 以外的排序顺序,则搜索会出现错误。
+   如果指定了排序对象字段列表中不存在的字段名,或指定了 ``asc``,\ ``desc`` 以外的排序顺序,则搜索会出现错误。
 
 .. |image0| image:: ../../../resources/images/en/15.8/user/search-sort-1.png
 .. pdf            :width: 300 px

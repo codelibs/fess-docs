@@ -15,7 +15,7 @@ Windowsサービスとしての登録
 事前準備
 --------
 
-システムの環境変数として ``JAVA_HOME`` を設定してください。``service.bat`` は ``JAVA_HOME`` が設定されていない場合、エラーで終了します。
+システムの環境変数として ``JAVA_HOME`` を設定してください。\ ``service.bat`` は ``JAVA_HOME`` が設定されていない場合、エラーで終了します。
 
 OpenSearchをサービスとして登録
 ------------------------------
@@ -34,7 +34,7 @@ OpenSearchをサービスとして登録
 |Fess| の設定
 -------------
 
-サービスは ``c:\opt\fess\bin\service.bat`` から登録します。``service.bat`` は登録時に ``bin\fess.in.bat`` を読み込み、その内容を |Fess| の起動オプションに反映します。
+サービスは ``c:\opt\fess\bin\service.bat`` から登録します。\ ``service.bat`` は登録時に ``bin\fess.in.bat`` を読み込み、その内容を |Fess| の起動オプションに反映します。
 OpenSearch へ接続するための設定を ``c:\opt\fess\bin\fess.in.bat`` に追加してください。
 
 ::
@@ -69,7 +69,7 @@ OpenSearch へ接続するための設定を ``c:\opt\fess\bin\fess.in.bat`` に
    * - ``FESS_START_TYPE``
      - スタートアップの種類（``auto`` または ``manual``）。デフォルトは ``manual`` です。
    * - ``FESS_HEAP_SIZE``
-     - ヒープサイズ（例: ``1g``）。最小・最大ヒープサイズを個別に指定する場合は ``FESS_MIN_MEM``（デフォルト ``256m``）と ``FESS_MAX_MEM``（デフォルト ``1g``）を使用します。
+     - ヒープサイズ（例: ``1g``）。最小・最大ヒープサイズを個別に指定する場合は ``FESS_MIN_MEM``\ （デフォルト ``256m``）と ``FESS_MAX_MEM``\ （デフォルト ``1g``）を使用します。
    * - ``SERVICE_USERNAME`` / ``SERVICE_PASSWORD``
      - サービスを実行する Windows アカウント。
    * - ``SERVICE_DISPLAY_NAME``

@@ -52,7 +52,7 @@
 
 .. note::
     LDAP이나 싱글 사인온과 연계하는 경우 사용자의 역할·그룹 정보는 인증 원본에서 취득되어 동일하게 권한으로 처리됩니다.
-    LDAP 연계 시의 동작은 ``fess_config.properties`` 의 ``ldap.role.search.user.enabled``, ``ldap.role.search.group.enabled``, ``ldap.role.search.role.enabled``(초기값은 모두 ``true``)로 제어할 수 있습니다.
+    LDAP 연계 시의 동작은 ``fess_config.properties`` 의 ``ldap.role.search.user.enabled``, ``ldap.role.search.group.enabled``, ``ldap.role.search.role.enabled``\ (초기값은 모두 ``true``)로 제어할 수 있습니다.
 
 로그인
 ------

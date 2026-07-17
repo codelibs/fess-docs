@@ -290,7 +290,7 @@ Core
     - (empty)
   * - api.cors.allow.origin
     - The allowed origins for CORS.
-    - *
+    - \*
   * - api.cors.allow.methods
     - The allowed methods for CORS.
     - GET, POST, OPTIONS, DELETE, PUT
@@ -443,7 +443,7 @@ Index
     - cpu
   * - crawler.metadata.content.excludes
     - The metadata content to exclude.
-    - resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*
+    - resourceName,X-Parsed-By,Content-Encoding.\ *,Content-Type.*,X-TIKA.\ *,X-FESS.*
   * - crawler.metadata.name.mapping
     - The name mapping for metadata.
     - | title=title:string
@@ -1288,16 +1288,16 @@ Index
   * - query.facet.queries
     - The custom facet queries.
     - | labels.facet_timestamp_title:\
-      | labels.facet_timestamp_1day=timestamp:[now/d-1d TO *]\t\
-      | labels.facet_timestamp_1week=timestamp:[now/d-7d TO *]\t\
-      | labels.facet_timestamp_1month=timestamp:[now/d-1M TO *]\t\
-      | labels.facet_timestamp_1year=timestamp:[now/d-1y TO *]\n\
+      | labels.facet_timestamp_1day=timestamp:[now/d-1d TO \*]\t\
+      | labels.facet_timestamp_1week=timestamp:[now/d-7d TO \*]\t\
+      | labels.facet_timestamp_1month=timestamp:[now/d-1M TO \*]\t\
+      | labels.facet_timestamp_1year=timestamp:[now/d-1y TO \*]\n\
       | labels.facet_contentLength_title:\
       | labels.facet_contentLength_10k=content_length:[0 TO 9999]\t\
       | labels.facet_contentLength_10kto100k=content_length:[10000 TO 99999]\t\
       | labels.facet_contentLength_100kto500k=content_length:[100000 TO 499999]\t\
       | labels.facet_contentLength_500kto1m=content_length:[500000 TO 999999]\t\
-      | labels.facet_contentLength_1m=content_length:[1000000 TO *]\n\
+      | labels.facet_contentLength_1m=content_length:[1000000 TO \*]\n\
       | labels.facet_filetype_title:\
       | labels.facet_filetype_html=filetype:html\t\
       | labels.facet_filetype_word=filetype:word\t\

@@ -145,8 +145,8 @@ Esta vez use la siguiente configuración. Los demás valores son predeterminados
      - \https://www.n2sm.net/
      - \https://fess.codelibs.org/
    * - URL a rastrear
-     - \https://www.n2sm.net/.*
-     - \https://fess.codelibs.org/.*
+     - \https://www.n2sm.net/.\*
+     - \https://fess.codelibs.org/.\*
    * - Número máximo de accesos
      - 10
      - 10

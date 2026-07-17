@@ -273,7 +273,7 @@ Maven 的配置文件。位于项目的根目录。
 
     mvn clean test jacoco:report
 
-报告生成在 ``target/site/jacoco/index.html``。
+报告生成在 ``target/site/jacoco/index.html``\ 。
 
 代码格式化
 ================

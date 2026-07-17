@@ -69,7 +69,7 @@ OpenSearch에 연결하기 위한 설정을 ``c:\opt\fess\bin\fess.in.bat`` 에 
    * - ``FESS_START_TYPE``
      - 시작 유형（``auto`` 또는 ``manual``）. 기본값은 ``manual`` 입니다.
    * - ``FESS_HEAP_SIZE``
-     - 힙 크기（예: ``1g``）. 최소·최대 힙 크기를 개별로 지정하는 경우 ``FESS_MIN_MEM``（기본값 ``256m``）과 ``FESS_MAX_MEM``（기본값 ``1g``）을 사용합니다.
+     - 힙 크기（예: ``1g``）. 최소·최대 힙 크기를 개별로 지정하는 경우 ``FESS_MIN_MEM``\ （기본값 ``256m``）과 ``FESS_MAX_MEM``\ （기본값 ``1g``）을 사용합니다.
    * - ``SERVICE_USERNAME`` / ``SERVICE_PASSWORD``
      - 서비스를 실행할 Windows 계정.
    * - ``SERVICE_DISPLAY_NAME``

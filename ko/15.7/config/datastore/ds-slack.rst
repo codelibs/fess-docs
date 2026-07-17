@@ -29,7 +29,7 @@ Slack 커넥터는 Slack 워크스페이스의 채널 메시지를 가져와서
 
 관리 화면의 "시스템" → "플러그인"에서 설치합니다:
 
-1. Maven Central에서 ``fess-ds-slack-X.X.X.jar``를 다운로드
+1. Maven Central에서 ``fess-ds-slack-X.X.X.jar``\ 를 다운로드
 2. 플러그인 관리 화면에서 업로드하여 설치
 3. |Fess| 재시작
 
@@ -192,7 +192,7 @@ https://api.slack.com/apps 에 접속:
 
 "OAuth & Permissions" 메뉴에서:
 
-**Bot Token Scopes**에 다음을 추가:
+**Bot Token Scopes**\ 에 다음을 추가:
 
 퍼블릭 채널만의 경우:
 
@@ -219,11 +219,11 @@ https://api.slack.com/apps 에 접속:
 
 1. "Install to Workspace" 클릭
 2. 권한 확인 후 "허용" 클릭
-3. "Bot User OAuth Token" 복사(``xoxb-``로 시작)
+3. "Bot User OAuth Token" 복사(``xoxb-``\ 로 시작)
 
 .. note::
-   보통은 ``xoxb-``로 시작하는 Bot User OAuth Token을 사용하지만,
-   파라미터에서는 ``xoxp-``로 시작하는 User OAuth Token도 사용 가능합니다.
+   보통은 ``xoxb-``\ 로 시작하는 Bot User OAuth Token을 사용하지만,
+   파라미터에서는 ``xoxp-``\ 로 시작하는 User OAuth Token도 사용 가능합니다.
 
 4. 채널에 추가
 ---------------------
@@ -353,8 +353,8 @@ https://api.slack.com/apps 에 접속:
 1. 토큰이 올바르게 복사되었는지 확인
 2. 토큰 형식 확인:
 
-   - Bot User OAuth Token: ``xoxb-``로 시작
-   - User OAuth Token: ``xoxp-``로 시작
+   - Bot User OAuth Token: ``xoxb-``\ 로 시작
+   - User OAuth Token: ``xoxp-``\ 로 시작
 
 3. 앱이 워크스페이스에 설치되어 있는지 확인
 4. 필요한 권한이 부여되어 있는지 확인
@@ -417,7 +417,7 @@ https://api.slack.com/apps 에 접속:
 파일을 크롤링할 수 없음
 --------------------------
 
-**증상**: ``file_crawl=true``인데도 파일이 가져와지지 않음
+**증상**: ``file_crawl=true``\ 인데도 파일이 가져와지지 않음
 
 **확인 사항**:
 

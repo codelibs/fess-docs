@@ -38,7 +38,7 @@ Permisos
 ::::::::
 
 Configure los permisos del token de acceso.
-Descríbalo en el formato "{user|group|role}nombre".
+Descríbalo en el formato "{user\ |group|\ role}nombre".
 Por ejemplo, para que los usuarios que pertenecen al grupo developer vean los resultados de búsqueda, configure el permiso como "{group}developer".
 
 Nombre del parámetro

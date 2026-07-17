@@ -307,7 +307,7 @@ EsDataStore
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - elasticsearchのSettings情報
    * - hosts
      - 接続先のelasticsearch
@@ -340,7 +340,7 @@ EsDataStore
 
 パラメーターは「キー=値」形式になります。
 キーはデータベースクロールの場合と同様です。
-source.*により値を取得して、設定することができます。
+source.\*により値を取得して、設定することができます。
 
 CsvListDataStore
 ----------------

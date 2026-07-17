@@ -105,7 +105,7 @@ Server版（OAuth 1.0a）示例：
      - Atlassian实例的URL
    * - ``is_cloud``
      - 否
-     - Cloud版设为 ``true``，Server版设为 ``false``（默认值：``true``）。仅在OAuth 2.0认证时用于选择端点；Basic认证和OAuth 1.0a认证时忽略此参数。
+     - Cloud版设为 ``true``，Server版设为 ``false``\ （默认值：``true``）。仅在OAuth 2.0认证时用于选择端点；Basic认证和OAuth 1.0a认证时忽略此参数。
    * - ``auth_type``
      - 是
      - 认证类型：``oauth``、``oauth2``、``basic``
@@ -290,7 +290,7 @@ JQL高级搜索
     # 组合多个条件
     issue.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
 
-有关JQL的详细信息，请参阅 `Atlassian JQL文档 <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_。
+有关JQL的详细信息，请参阅 `Atlassian JQL文档 <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_\ 。
 
 使用示例
 ======

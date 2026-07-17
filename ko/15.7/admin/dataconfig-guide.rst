@@ -307,7 +307,7 @@ EsDataStore
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - elasticsearch의 Settings 정보
    * - hosts
      - 접속할 elasticsearch
@@ -340,7 +340,7 @@ EsDataStore
 
 매개변수는 "키=값" 형식입니다.
 키는 데이터베이스 크롤링의 경우와 동일합니다.
-source.*를 통해 값을 가져와서 설정할 수 있습니다.
+source.\*를 통해 값을 가져와서 설정할 수 있습니다.
 
 CsvListDataStore
 ----------------

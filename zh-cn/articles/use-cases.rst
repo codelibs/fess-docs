@@ -11,7 +11,7 @@ Fess 被各行各业不同规模的组织所采用。
 .. note::
 
    以下示例展示了 Fess 的常见部署模式。
-   如需了解实际案例，请联系 `商业支持 <../support-services.html>`__。
+   如需了解实际案例，请联系 `商业支持 <../support-services.html>`__\ 。
 
 ----
 
@@ -190,7 +190,7 @@ IT 和软件行业
 
 .. note::
 
-   对于大规模部署，建议使用 `商业支持 <../support-services.html>`__。
+   对于大规模部署，建议使用 `商业支持 <../support-services.html>`__\ 。
 
 ----
 

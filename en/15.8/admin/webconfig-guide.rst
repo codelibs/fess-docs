@@ -141,7 +141,7 @@ To create a Web Crawling configuration to crawl pages under https://fess.codelib
    * - URL
      - https://fess.codelibs.org/
    * - Included URLs for Crawling
-     - https://fess.codelibs.org/.*
+     - https://fess.codelibs.org/.\*
 
 Other configuration values can use default settings.
 
@@ -167,7 +167,7 @@ To crawl Redmine pages (ex. https://<server>/) with password protection, create 
    * - URL
      - https://<server>/my/page
    * - Included URLs for Crawling
-     - https://<server>/.*
+     - https://<server>/.\*
    * - Configuration Parameters
      - client.robotsTxtEnabled=false (Optional)
 
@@ -213,7 +213,7 @@ To crawl XWiki pages (ex. https://<server>/xwiki/), Web Crawling setting is:
    * - URL
      - https://<server>/xwiki/bin/view/Main/
    * - Included URLs for Crawling
-     - https://<server>/.*
+     - https://<server>/.\*
    * - Configuration Parameters
      - client.robotsTxtEnabled=false (Optional)
 

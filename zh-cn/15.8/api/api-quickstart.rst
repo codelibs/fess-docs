@@ -66,7 +66,7 @@ v2 的响应以 ``response`` 信封返回。
 
 .. note::
 
-   上述示例仅供参考。``data`` 中包含的文档字段取决于服务器配置（响应字段白名单）。
+   上述示例仅供参考。\ ``data`` 中包含的文档字段取决于服务器配置（响应字段白名单）。
    完整的请求参数和响应字段列表，请参阅 :doc:`api-search`。
    公共响应信封、错误模型及 CSRF 的说明，请参阅 :doc:`api-overview`。
 
@@ -283,7 +283,7 @@ API 版本对应表
 
    |Fess| 15.8 中，原有的 ``/api/v1`` JSON 搜索 API 和聊天 API 已废弃。
    使用 ``/api/v1`` 的客户端请迁移至 ``/api/v2``\ 。
-   各版本间的详细差异，请参阅 `发布说明 <https://github.com/codelibs/fess/releases>`__。
+   各版本间的详细差异，请参阅 `发布说明 <https://github.com/codelibs/fess/releases>`__\ 。
 
 故障排除
 ========

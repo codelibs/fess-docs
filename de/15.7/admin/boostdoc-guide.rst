@@ -34,7 +34,7 @@ Bedingung
 :::::::::
 
 Geben Sie die Bedingung für Dokumente an, die höher positioniert werden sollen.
-Wenn Sie beispielsweise URLs mit https://www.n2sm.net/ höher anzeigen möchten, schreiben Sie url.matches("https://www.n2sm.net/.*").
+Wenn Sie beispielsweise URLs mit https://www.n2sm.net/ höher anzeigen möchten, schreiben Sie url.matches("https://www.n2sm.net/.\*").
 Bedingungen können in Groovy geschrieben werden.
 
 Boost-Ausdruck

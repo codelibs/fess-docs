@@ -279,8 +279,8 @@ Docker 版::
 --------------------------
 
 端口号、JVM 堆大小、OpenSearch 连接 URL 等设置可通过环境变量更改。
-TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``，DEB 版请编辑 ``/etc/default/fess``。
-更改后需要重启 |Fess|。
+TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``，DEB 版请编辑 ``/etc/default/fess``\ 。
+更改后需要重启 |Fess|\ 。
 
 .. list-table::
    :header-rows: 1
@@ -294,10 +294,10 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
      - |Fess| 监听的 HTTP 端口。
    * - ``FESS_HEAP_SIZE``
      - （未设置）
-     - JVM 堆大小。最小值和最大值设置为相同的值。未设置时，最小值为 ``256m``，最大值为 ``2g``（ZIP 版（Windows）最大值为 ``1g``）；RPM/DEB 版使用 ``512m``。
+     - JVM 堆大小。最小值和最大值设置为相同的值。未设置时，最小值为 ``256m``，最大值为 ``2g``\ （ZIP 版（Windows）最大值为 ``1g``）；RPM/DEB 版使用 ``512m``\ 。
    * - ``SEARCH_ENGINE_HTTP_URL``
      - （未设置）
-     - 连接的 OpenSearch 的 URL。未设置时，使用内部默认值 ``http://localhost:9201``。当 OpenSearch 在不同端口或主机上运行时请更改此项（:doc:`install-linux` 的安装步骤会将其设置为 ``http://localhost:9200`` 以匹配 OpenSearch 的监听端口）。RPM/DEB 版通过软件包环境配置文件默认设置为 ``http://localhost:9200``。
+     - 连接的 OpenSearch 的 URL。未设置时，使用内部默认值 ``http://localhost:9201``\ 。当 OpenSearch 在不同端口或主机上运行时请更改此项（:doc:`install-linux` 的安装步骤会将其设置为 ``http://localhost:9200`` 以匹配 OpenSearch 的监听端口）。RPM/DEB 版通过软件包环境配置文件默认设置为 ``http://localhost:9200``\ 。
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 的日志级别。
@@ -305,14 +305,14 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
 .. note::
 
    Windows ZIP 版的 ``bin\fess.in.bat`` 不读取这些环境变量（与代理相关的变量除外）。
-   各项值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``。
+   各项值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``\ 。
 
 邮件服务器设置
 ------------------
 
 为了通过邮件接收故障通知等消息，请配置 SMTP 服务器和通知收件人地址。
 
-1. 在配置文件 ``app/WEB-INF/classes/fess_env.properties`` 中，通过 ``mail.smtp.server.main.host.and.port``（默认值：``localhost:25``）指定 SMTP 服务器的主机名和端口。更改后需要重启 |Fess|。
+1. 在配置文件 ``app/WEB-INF/classes/fess_env.properties`` 中，通过 ``mail.smtp.server.main.host.and.port``\ （默认值：``localhost:25``）指定 SMTP 服务器的主机名和端口。更改后需要重启 |Fess|\ 。
 2. 在管理界面中，点击左侧菜单的 [系统] → [通用]。
 3. 在 [通知邮件] 字段输入收件人邮件地址。
 4. 点击 [更新] 按钮。
@@ -322,7 +322,7 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
 ----------------
 
 |Fess| 使用服务器（操作系统 / JVM）的时区。管理界面中没有更改时区的设置项。
-如需更改时区，请修改操作系统的时区设置，或在 ``bin/fess.in.sh`` 的 ``FESS_JAVA_OPTS`` 中添加 JVM 选项 ``-Duser.timezone=Asia/Tokyo``（Windows 系统请编辑 ``bin\fess.in.bat``）。
+如需更改时区，请修改操作系统的时区设置，或在 ``bin/fess.in.sh`` 的 ``FESS_JAVA_OPTS`` 中添加 JVM 选项 ``-Duser.timezone=Asia/Tokyo``\ （Windows 系统请编辑 ``bin\fess.in.bat``）。
 
 调整日志级别
 --------------
@@ -330,7 +330,7 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
 在生产环境中，可以调整日志级别以减少磁盘使用量。
 
 |Fess| 的整体日志级别可通过 ``FESS_LOG_LEVEL`` 环境变量更改（默认值：``warn``）。
-如需对各个日志记录器进行精细控制，请编辑配置文件 ``app/WEB-INF/classes/log4j2.xml``。
+如需对各个日志记录器进行精细控制，请编辑配置文件 ``app/WEB-INF/classes/log4j2.xml``\ 。
 爬取、suggest 和缩略图生成作为独立进程运行，因此请分别在 ``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml`` 中配置各自的日志级别。
 
 详情请参阅 :doc:`../admin/index`。

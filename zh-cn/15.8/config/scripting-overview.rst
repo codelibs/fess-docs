@@ -71,7 +71,7 @@ Slack 使用 ``message.*``，不同连接器的前缀各不相同。
 
 仅当替换字符串以 ``groovy:`` 开头时，后续字符串才会作为 Groovy 脚本求值。
 在该脚本中，可使用表示转换目标 URL 字符串的 ``url``，
-以及表示正则表达式 ``java.util.regex.Matcher`` 的 ``matcher``。
+以及表示正则表达式 ``java.util.regex.Matcher`` 的 ``matcher``\ 。
 
 ::
 
@@ -169,7 +169,7 @@ Slack 使用 ``message.*``，不同连接器的前缀各不相同。
        （变量名、前缀因连接器而异。CSV/JSON 中字段名直接成为变量名）
    * - 路径映射
      - ``url`` ``matcher``
-     - 转换目标 URL 字符串及正则表达式 ``Matcher``（仅在带 ``groovy:`` 前缀的替换时）
+     - 转换目标 URL 字符串及正则表达式 ``Matcher``\ （仅在带 ``groovy:`` 前缀的替换时）
    * - 计划任务
      - ``executor``
      - 任务执行实例（ ``JobExecutor`` ）。用于控制任务的关闭
@@ -189,7 +189,7 @@ Slack 使用 ``message.*``，不同连接器的前缀各不相同。
 - 可访问文件系统和网络
 - 请确保只有具有管理员权限的用户才能编辑脚本
 - 脚本执行会记录在审计日志（ ``audit.log`` ）中。
-  是否记录由 ``script.audit.log.enabled`` 控制，默认值为 ``true``。
+  是否记录由 ``script.audit.log.enabled`` 控制，默认值为 ``true``\ 。
   记录的脚本字符串的最大长度由 ``script.audit.log.max.length`` 控制，
   默认值为 ``100`` 个字符。
 
@@ -225,7 +225,7 @@ Slack 使用 ``message.*``，不同连接器的前缀各不相同。
     <Logger name="fess.script" level="DEBUG"/>
 
 此外，要启用脚本引擎本身的调试日志，需将 ``org.codelibs.fess.script``
-包的日志级别设为 ``DEBUG``。
+包的日志级别设为 ``DEBUG``\ 。
 
 ::
 

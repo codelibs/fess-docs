@@ -302,7 +302,7 @@ Parameters are in "key=value" format. Key descriptions are as follows:
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
-   * - settings.*
+   * - settings.\*
      - Elasticsearch Settings information
    * - hosts
      - Elasticsearch connection destination
@@ -335,7 +335,7 @@ An example script configuration is as follows:
 
 Parameters are in "key=value" format.
 Keys are the same as for database crawling.
-Values can be retrieved and set using source.*.
+Values can be retrieved and set using source.\*.
 
 CsvListDataStore
 ----------------

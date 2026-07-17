@@ -145,8 +145,8 @@ Fess 15.3.0이 설치되어 있는 것으로 합니다.
      - \https://www.n2sm.net/
      - \https://fess.codelibs.org/
    * - 크롤 대상 URL
-     - \https://www.n2sm.net/.*
-     - \https://fess.codelibs.org/.*
+     - \https://www.n2sm.net/.\*
+     - \https://fess.codelibs.org/.\*
    * - 최대 접속 수
      - 10
      - 10

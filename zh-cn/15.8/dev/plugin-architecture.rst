@@ -70,7 +70,7 @@
 pom.xml示例
 -----------
 
-插件以 ``fess-parent`` 作为父 POM，构建为 jar。``fess``、``opensearch``
+插件以 ``fess-parent`` 作为父 POM，构建为 jar。\ ``fess``、``opensearch``
 等在运行时由 |Fess| 本体提供的库，需以 ``provided`` 作用域声明。版本号
 及构建配置（格式化工具、许可证头等）均从父 POM 继承。
 
@@ -112,7 +112,7 @@ pom.xml示例
 .. note::
 
    在开发中的分支上，版本号会带有 ``-SNAPSHOT`` 后缀，例如
-   ``15.8.0-SNAPSHOT``。插件特有的依赖库以普通的 Maven 依赖关系声明。
+   ``15.8.0-SNAPSHOT``\ 。插件特有的依赖库以普通的 Maven 依赖关系声明。
    由于这些库不包含在 |Fess| 本体中，因此需要与插件一起分发。
 
 插件注册
@@ -139,7 +139,7 @@ DI容器注册
 
 不同类型的插件，合并目标文件也不同。例如脚本引擎使用
 ``fess_se++.xml``、Ingest 使用 ``fess_ingest++.xml``、LLM 提供方使用
-``fess_llm++.xml``、Web应用使用 ``app++.xml``。
+``fess_llm++.xml``、Web应用使用 ``app++.xml``\ 。
 
 组件初始化
 ----------
@@ -223,7 +223,7 @@ DI容器注册
 --------------------
 
 在数据存储的 ``storeData()`` 中，可从 ``DataStoreParams`` 获取在管理
-界面中设置的参数。获取值时请使用 ``getAsString()``（由于
+界面中设置的参数。获取值时请使用 ``getAsString()``\ （由于
 ``DataStoreParams`` 并未实现 ``Map`` 接口，``get()`` 不会返回字符
 串）。此外，|Fess| 的配置值可通过 ``ComponentUtil.getFessConfig()``
 获取：

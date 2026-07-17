@@ -38,7 +38,7 @@ Permission
 ::::::::::
 
 Sets the permission for the access token.
-Described in "{user|group|role}name" format.
+Described in "{user\ |group|\ role}name" format.
 For example, to allow users belonging to the developer group to view search results, set the permission to "{group}developer".
 
 Parameter Name

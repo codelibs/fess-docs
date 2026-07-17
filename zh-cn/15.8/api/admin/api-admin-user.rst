@@ -157,7 +157,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
 .. note::
 
-   ``attributes`` 包含用户存储的所有属性，但不包含 ``name``、``password``、``roles`` 和 ``groups``。
+   ``attributes`` 包含用户存储的所有属性，但不包含 ``name``、``password``、``roles`` 和 ``groups``\ 。
    ``password`` 不包含在响应中。
 
 创建用户
@@ -254,7 +254,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
     }
 
 - ``id`` ：创建的用户的文档ID。
-- ``created`` ：创建成功时为 ``true``。
+- ``created`` ：创建成功时为 ``true``\ 。
 
 更新用户
 ========
@@ -342,7 +342,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
       }
     }
 
-- ``created`` ：更新时为 ``false``。
+- ``created`` ：更新时为 ``false``\ 。
 
 删除用户
 ========

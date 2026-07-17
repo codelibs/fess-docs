@@ -84,9 +84,9 @@
 .. note::
 
     ``bin/fess`` 启动脚本包含在分发包（zip/rpm/deb）中。
-    仅在源代码目录中执行 ``mvn package``，并不会在仓库根目录下生成 ``bin/fess``。
+    仅在源代码目录中执行 ``mvn package``，并不会在仓库根目录下生成 ``bin/fess``\ 。
     在基于源代码进行开发时，请按照上文所述在IDE中运行 ``FessBoot``，
-    或使用展开后的分发包中的 ``bin/fess``。
+    或使用展开后的分发包中的 ``bin/fess``\ 。
 
 架构概述
 ========
@@ -172,7 +172,7 @@
 
     |Fess| 本体以 ``war`` 形式打包。在本地构建插件时，
     如果无法将 |Fess| 解析为依赖项，请将 ``pom.xml`` 中的 ``<packaging>`` 临时改为 ``jar``，
-    执行 ``mvn clean install -DskipTests``，然后再改回 ``war``。
+    执行 ``mvn clean install -DskipTests``，然后再改回 ``war``\ 。
 
 主题
 ----
