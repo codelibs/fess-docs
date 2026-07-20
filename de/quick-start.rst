@@ -70,7 +70,7 @@ Warten Sie einige Minuten, bis die Dienste initialisiert sind, und öffnen Sie d
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 Für erweiterte Docker-Konfiguration (benutzerdefinierte Einstellungen, externes OpenSearch, Kubernetes)
-siehe die :doc:`Docker-Installationsanleitung <15.6/install/install-docker>`.
+siehe die :doc:`Docker-Installationsanleitung <15.7/install/install-docker>`.
 
 ----
 
@@ -186,7 +186,7 @@ Was kommt als Nächstes?
 
 - :doc:`Vollständige Dokumentation <documentation>` - Umfassendes Referenzhandbuch
 - :doc:`Installationsanleitung <setup>` - Optionen für Produktionsbereitstellung
-- :doc:`Admin-Handbuch <15.6/admin/index>` - Konfiguration und Verwaltung
-- :doc:`API-Referenz <15.6/api/index>` - Integration der Suche in Ihre Anwendungen
+- :doc:`Admin-Handbuch <15.7/admin/index>` - Konfiguration und Verwaltung
+- :doc:`API-Referenz <15.7/api/index>` - Integration der Suche in Ihre Anwendungen
 - `Diskussionsforum <https://discuss.codelibs.org/c/fessen/>`__ - Fragen stellen, Tipps teilen
 - `GitHub Issues <https://github.com/codelibs/fess/issues>`__ - Fehler melden, Features anfordern

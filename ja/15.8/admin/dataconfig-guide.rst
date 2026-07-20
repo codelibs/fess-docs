@@ -1,12 +1,18 @@
-===============
-データストアクロール
-===============
+========================================
+データストアクロール（データベース検索）
+========================================
 
 概要
 ====
 
+データストアクロールは、リレーショナルデータベース（MySQL・PostgreSQL・Oracle など）や CSV ファイルといった、Web サイトやファイル以外のデータソースを |Fess| のインデックスに登録し、全文検索できるようにする機能です。データベース検索を実現したい場合はこの機能を使用します。
+
 |Fess| ではデータベースやCSVなどのデータソースをクロール対象とすることができます。
 ここでは、そのために必要なデータストアの設定について説明します。
+
+.. note::
+
+   ``DatabaseDataStore`` はデータベースコネクタプラグイン（ ``fess-ds-db`` ）、``CsvDataStore`` / ``CsvListDataStore`` は CSV コネクタプラグイン（ ``fess-ds-csv`` ）により提供されます。利用可能なコネクタの一覧は :doc:`../config/datastore/ds-overview` を参照してください。
 
 管理方法
 ======
@@ -427,6 +433,14 @@ CsvListDataStore
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+関連ページ
+==========
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/ja/15.8/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/ja/15.8/admin/dataconfig-2.png

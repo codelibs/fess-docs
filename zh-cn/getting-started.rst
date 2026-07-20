@@ -101,7 +101,7 @@ Fess 提供以下 UI。
 
    请务必更改默认密码。
    特别是在生产环境中,强烈建议在首次登录后立即更改密码。
-   有关更改密码的方法,请参考 :doc:`15.6/admin/user-guide`。
+   有关更改密码的方法,请参考 :doc:`15.7/admin/user-guide`。
 
 .. note::
 
@@ -139,8 +139,8 @@ Fess 提供以下 UI。
 
 理解了基本使用方法后,可以参考以下文档进一步深入学习:
 
-- :doc:`15.6/admin/index` — 爬取设置、搜索设置的详情
-- :doc:`15.6/api/index` — 使用 REST API 集成搜索
+- :doc:`15.7/admin/index` — 爬取设置、搜索设置的详情
+- :doc:`15.7/api/index` — 使用 REST API 集成搜索
 - :doc:`dev/index` — 自定义和扩展功能的开发
 
 .. |基于浏览器的搜索结果显示| image:: ../resources/images/en/fess_search_result.png

@@ -1,9 +1,11 @@
-==============================
-Connecteur de base de données
-==============================
+============================================================
+Connecteur de base de données (recherche de base de données)
+============================================================
 
 Aperçu
 ======
+
+Le connecteur de base de données permet d'enregistrer dans l'index de |Fess| les enregistrements de bases de données relationnelles compatibles JDBC (MySQL, PostgreSQL, Oracle, SQL Server, etc.), afin de réaliser une recherche de base de données (recherche en texte intégral sur une base de données). Chaque colonne récupérée par une instruction SELECT est mappée à un champ de recherche lors de l'enregistrement.
 
 Le connecteur de base de données fournit une fonctionnalité pour récupérer des données depuis
 des bases de données relationnelles compatibles JDBC et les enregistrer dans l'index de |Fess|.
@@ -385,3 +387,5 @@ Informations de référence
 - :doc:`ds-csv` - Connecteur CSV
 - :doc:`ds-json` - Connecteur JSON
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration DataStore
+- :doc:`../crawler-basic` - Configuration de base du robot d'indexation
+- :doc:`../search-basic` - Fonction de recherche

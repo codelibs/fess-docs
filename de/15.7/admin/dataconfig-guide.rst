@@ -1,9 +1,11 @@
-====================
-Datenspeicher-Crawl
-====================
+=======================================
+Datenspeicher-Crawl (Datenbank-Suche)
+=======================================
 
 Übersicht
 =========
+
+Datenspeicher-Crawl ist eine Funktion, mit der Datenquellen jenseits von Websites und Dateien – etwa relationale Datenbanken (MySQL, PostgreSQL, Oracle usw.) oder CSV-Dateien – in den Index von |Fess| aufgenommen und damit volltextsuchbar gemacht werden. Wenn Sie eine Datenbank-Suche realisieren möchten, verwenden Sie diese Funktion.
 
 Mit |Fess| können Sie Datenquellen wie Datenbanken oder CSV als Crawl-Ziele festlegen.
 Hier wird die erforderliche Datenspeicherkonfiguration dafür erläutert.
@@ -43,6 +45,10 @@ Der Handler-Name zur Verarbeitung des Datenspeichers.
 * DatabaseDataStore: Crawlt eine Datenbank
 * CsvDataStore: Crawlt CSV/TSV-Dateien
 * CsvListDataStore: Crawlt eine CSV-Datei, die Dateipfade zu indizierenden Dateien beschreibt
+
+.. note::
+
+   ``DatabaseDataStore`` wird durch das Datenbank-Konnektor-Plugin (``fess-ds-db``) bereitgestellt, ``CsvDataStore`` / ``CsvListDataStore`` durch das CSV-Konnektor-Plugin (``fess-ds-csv``). Eine Übersicht der verfügbaren Konnektoren finden Sie unter :doc:`../config/datastore/ds-overview`.
 
 Parameter
 :::::::::
@@ -425,6 +431,14 @@ Wenn für das Crawl-Ziel eine Authentifizierung erforderlich ist, müssen auch f
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+Verwandte Seiten
+================
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.7/admin/dataconfig-2.png

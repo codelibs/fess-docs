@@ -101,7 +101,7 @@ Cuenta de administrador predeterminada:
 
    Asegúrese de cambiar la contraseña predeterminada.
    Especialmente en entornos de producción, se recomienda encarecidamente cambiar la contraseña inmediatamente después del primer inicio de sesión.
-   Para instrucciones sobre cómo cambiar la contraseña, consulte :doc:`15.6/admin/user-guide`.
+   Para instrucciones sobre cómo cambiar la contraseña, consulte :doc:`15.7/admin/user-guide`.
 
 .. note::
 
@@ -139,8 +139,8 @@ Próximos Pasos
 
 Una vez que comprenda el uso básico, puede consultar la siguiente documentación para aprender más:
 
-- :doc:`15.6/admin/index` — Detalles sobre la configuración de rastreo y búsqueda
-- :doc:`15.6/api/index` — Integración de búsqueda mediante REST API
+- :doc:`15.7/admin/index` — Detalles sobre la configuración de rastreo y búsqueda
+- :doc:`15.7/api/index` — Integración de búsqueda mediante REST API
 - :doc:`dev/index` — Desarrollo de personalizaciones y extensiones
 
 .. |Visualización de resultados de búsqueda en el navegador| image:: ../resources/images/en/fess_search_result.png

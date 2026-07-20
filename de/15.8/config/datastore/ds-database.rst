@@ -1,9 +1,11 @@
-==================================
-Datenbank-Konnektor
-==================================
+=======================================
+Datenbank-Konnektor (Datenbank-Suche)
+=======================================
 
 Übersicht
 =========
+
+Der Datenbank-Konnektor ist eine Funktion, mit der Datensätze aus JDBC-kompatiblen relationalen Datenbanken (MySQL, PostgreSQL, Oracle, SQL Server usw.) in den Index von |Fess| aufgenommen werden und damit eine Datenbank-Suche (Volltextsuche über Datenbankinhalte) realisiert wird. Die per SELECT-Anweisung abgerufenen Spalten werden dabei auf Suchfelder gemappt.
 
 Der Datenbank-Konnektor bietet die Funktionalität, Daten aus JDBC-kompatiblen relationalen Datenbanken abzurufen und im |Fess|-Index zu registrieren.
 
@@ -384,3 +386,5 @@ Weiterführende Informationen
 - :doc:`ds-csv` - CSV-Konnektor
 - :doc:`ds-json` - JSON-Konnektor
 - :doc:`../../admin/dataconfig-guide` - Leitfaden zur Datenspeicher-Konfiguration
+- :doc:`../crawler-basic` - Grundlegende Crawler-Konfiguration
+- :doc:`../search-basic` - Suchfunktionen

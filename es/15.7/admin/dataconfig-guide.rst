@@ -1,9 +1,11 @@
-=======================
-Rastreo de Almacén de Datos
-=======================
+========================================================
+Rastreo de Almacén de Datos (Búsqueda en Bases de Datos)
+========================================================
 
 Descripción general
 ===================
+
+El rastreo del almacén de datos permite registrar en el índice de |Fess| fuentes de datos distintas de sitios web o archivos, como bases de datos relacionales (MySQL, PostgreSQL, Oracle, etc.) o archivos CSV, para que puedan localizarse mediante búsqueda de texto completo. Utilice esta función cuando desee implementar la búsqueda en bases de datos.
 
 |Fess| puede rastrear fuentes de datos como bases de datos y CSV.
 Aquí se explica la configuración del almacén de datos necesaria para ello.
@@ -43,6 +45,10 @@ Es el nombre del manejador que procesa el almacén de datos.
 * DatabaseDataStore: Rastrea bases de datos
 * CsvDataStore: Rastrea archivos CSV/TSV
 * CsvListDataStore: Rastrea archivos CSV que describen rutas de archivos a indexar
+
+.. note::
+
+   ``DatabaseDataStore`` es proporcionado por el complemento conector de base de datos ( ``fess-ds-db`` ), y ``CsvDataStore`` / ``CsvListDataStore`` son proporcionados por el complemento conector de CSV ( ``fess-ds-csv`` ). Para ver la lista completa de conectores disponibles, consulte :doc:`../config/datastore/ds-overview`.
 
 Parámetros
 ::::::::::
@@ -425,6 +431,14 @@ Si se requiere autenticación en el destino del rastreo, también es necesario c
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+Páginas Relacionadas
+====================
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.7/admin/dataconfig-2.png

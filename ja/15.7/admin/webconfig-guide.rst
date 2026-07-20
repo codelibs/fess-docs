@@ -1,9 +1,11 @@
-===========
-ウェブクロール
-===========
+===============================
+ウェブクロール（Webサイト検索）
+===============================
 
 概要
 ====
+
+ウェブクロールは、公開 Web サイトやイントラネット内の Web サイトを Web クローラーで巡回し、収集したページを |Fess| のインデックスに登録して全文検索（Webサイト検索）できるようにする機能です。BASIC／DIGEST／NTLM／フォーム認証で保護されたサイトのクロールにも対応しています。
 
 ウェブクロール設定ページではウェブクロールの設定を行います。
 
@@ -243,6 +245,14 @@ XWiki(例. https://<server>/xwiki/)のページをクロールするウェブク
        | login_parameters=j_username=${username}&j_password=${password}
    * - ウェブ認証
      - XWiki
+
+関連ページ
+==========
+
+- :doc:`../config/crawler-basic`
+- :doc:`webauth-guide`
+- :doc:`fileconfig-guide`
+- :doc:`../config/search-basic`
 
 
 .. |image0| image:: ../../../resources/images/ja/15.7/admin/webconfig-1.png

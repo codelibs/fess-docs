@@ -1,12 +1,18 @@
-=======================
-Crawl de magasin de données
-===========================
+==========================================================
+Crawl de magasin de données (recherche de base de données)
+==========================================================
 
 Présentation
 ============
 
+Le crawl de magasin de données permet d'enregistrer dans l'index de |Fess| des sources de données autres que les sites Web ou les fichiers, telles que les bases de données relationnelles (MySQL, PostgreSQL, Oracle, etc.) ou les fichiers CSV, afin de les rendre disponibles pour la recherche en texte intégral. Utilisez cette fonctionnalité pour mettre en œuvre une recherche de base de données.
+
 Dans |Fess|, vous pouvez cibler des sources de données telles que des bases de données ou des fichiers CSV pour le crawl.
 Cette section explique la configuration du magasin de données nécessaire à cet effet.
+
+.. note::
+
+   ``DatabaseDataStore`` est fourni par le plugin connecteur de base de données (``fess-ds-db``), et ``CsvDataStore`` / ``CsvListDataStore`` par le plugin connecteur CSV (``fess-ds-csv``). Pour la liste des connecteurs disponibles, consultez :doc:`../config/datastore/ds-overview`.
 
 Gestion
 =======
@@ -425,6 +431,14 @@ Si une authentification est requise à la destination du crawl, vous devez égal
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+Pages associées
+===============
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.7/admin/dataconfig-2.png

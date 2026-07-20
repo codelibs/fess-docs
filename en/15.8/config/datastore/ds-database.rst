@@ -1,9 +1,11 @@
-==================================
-Database Connector
-==================================
+====================================
+Database Connector (Database Search)
+====================================
 
 Overview
 ========
+
+The Database Connector registers records from JDBC-compatible relational databases (MySQL, PostgreSQL, Oracle, SQL Server, and others) into the |Fess| index, enabling database search (full-text search of database content). Each column retrieved by a ``SELECT`` statement is mapped to a search field and registered.
 
 The Database Connector provides functionality to retrieve data from JDBC-compatible relational databases
 and register it in the |Fess| index.
@@ -384,3 +386,5 @@ Reference Information
 - :doc:`ds-csv` - CSV Connector
 - :doc:`ds-json` - JSON Connector
 - :doc:`../../admin/dataconfig-guide` - Data Store Configuration Guide
+- :doc:`../crawler-basic` - Basic Crawler Configuration
+- :doc:`../search-basic` - Search Features

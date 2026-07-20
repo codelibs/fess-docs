@@ -1,12 +1,18 @@
-===============
-数据存储爬取
-===============
+==============================
+数据存储爬取（数据库搜索）
+==============================
 
 概述
 ====
 
+数据存储爬取是将关系型数据库(MySQL、PostgreSQL、Oracle等)或CSV文件等网站和文件以外的数据源注册到 |Fess| 索引,实现全文搜索的功能。如需实现数据库搜索,请使用此功能。
+
 |Fess| 可以将数据库和CSV等数据源作为爬取对象。
 本文档将说明配置数据存储所需的设置。
+
+.. note::
+
+   ``DatabaseDataStore`` 由数据库连接器插件( ``fess-ds-db`` )提供,``CsvDataStore`` / ``CsvListDataStore`` 由CSV连接器插件( ``fess-ds-csv`` )提供。可用连接器列表请参考 :doc:`../config/datastore/ds-overview`。
 
 管理方法
 ======
@@ -425,6 +431,14 @@ CsvListDataStore
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+相关页面
+========
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.7/admin/dataconfig-2.png

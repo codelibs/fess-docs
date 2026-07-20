@@ -6,6 +6,7 @@ Descripción General
 ===================
 
 El rastreador de |Fess| es una función que recopila automáticamente contenido de sitios web, sistemas de archivos y otros, y lo registra en el índice de búsqueda.
+Desde la búsqueda en sitios web mediante el rastreador web, pasando por la búsqueda en servidores de archivos mediante el rastreador de archivos, hasta la búsqueda en bases de datos mediante el rastreador de almacén de datos, es posible construir con un único |Fess| una búsqueda de texto completo transversal a todas sus fuentes.
 Esta guía describe los conceptos básicos del rastreador y los métodos de configuración.
 
 Conceptos Básicos del Rastreador
@@ -728,3 +729,8 @@ Información de Referencia
 - :doc:`crawler-thumbnail` - Configuración de Miniaturas
 - :doc:`setup-memory` - Configuración de Memoria
 - :doc:`admin-logging` - Configuración de Logs
+- :doc:`../admin/webconfig-guide`
+- :doc:`../admin/fileconfig-guide`
+- :doc:`../admin/dataconfig-guide`
+- :doc:`datastore/index`
+- :doc:`search-basic`

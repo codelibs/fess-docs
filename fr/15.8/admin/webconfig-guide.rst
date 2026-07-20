@@ -1,9 +1,11 @@
-==============
-Crawl Web
-=========
+=================================
+Crawl Web (recherche de site Web)
+=================================
 
 Présentation
 ============
+
+Le crawl Web permet de parcourir les sites Web publics ou les sites Web de l'intranet à l'aide du crawler Web, puis d'enregistrer les pages collectées dans l'index de |Fess| afin de les rendre disponibles pour une recherche en texte intégral (recherche de site Web). Le crawl de sites protégés par une authentification BASIC, DIGEST, NTLM ou par formulaire est également pris en charge.
 
 La page de configuration de crawl Web configure le crawl Web.
 
@@ -243,6 +245,14 @@ Ensuite, créez la configuration d'authentification Web avec les valeurs suivant
        | login_parameters=j_username=${username}&j_password=${password}
    * - Authentification Web
      - XWiki
+
+Pages associées
+===============
+
+- :doc:`../config/crawler-basic`
+- :doc:`webauth-guide`
+- :doc:`fileconfig-guide`
+- :doc:`../config/search-basic`
 
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/webconfig-1.png

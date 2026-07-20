@@ -1,9 +1,11 @@
-===========
-Web Crawling
-===========
+=============================
+Web Crawling (Website Search)
+=============================
 
 Overview
 ========
+
+Web Crawling uses a web crawler to traverse public websites and websites on your intranet, registering the collected pages in the |Fess| index so they can be found with full-text search (website search). It also supports crawling sites protected by BASIC, DIGEST, NTLM, or form authentication.
 
 The Web Crawling configuration page allows you to configure web crawling settings.
 
@@ -242,6 +244,14 @@ and the authentication setting is:
        | login_parameters=j_username=${username}&j_password=${password}
    * - Web Configuration
      - XWiki
+
+Related Pages
+=============
+
+- :doc:`../config/crawler-basic`
+- :doc:`webauth-guide`
+- :doc:`fileconfig-guide`
+- :doc:`../config/search-basic`
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/webconfig-1.png
