@@ -1,6 +1,6 @@
-==================
+========================
 Sicherheitseinstellungen
-==================
+========================
 
 Diese Seite beschreibt die empfohlenen Sicherheitseinstellungen für den sicheren Betrieb von |Fess| in Produktionsumgebungen.
 
@@ -91,7 +91,7 @@ Nginx-Konfigurationsbeispiel::
 
     server {
         listen 443 ssl http2;
-        server_name ihre-fess-domain.com;
+        server_name your-fess-domain.com;
 
         ssl_certificate /path/to/cert.pem;
         ssl_certificate_key /path/to/key.pem;

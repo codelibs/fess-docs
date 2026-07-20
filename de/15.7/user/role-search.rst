@@ -1,6 +1,6 @@
-==================
+====================
 Rollenbasierte Suche
-==================
+====================
 
 |Fess| bietet Benutzerverwaltungsfunktionen, die es Benutzern ermöglichen, die rollenbasierte Suche durch Anmeldung zu nutzen. Von |Fess| verwaltete Benutzer können nach der Anmeldung die rollenbasierte Suche nutzen und ihr Passwort ändern.
 

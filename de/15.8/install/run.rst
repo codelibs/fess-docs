@@ -1,6 +1,6 @@
-====================
+================================
 Start, Stopp, Erstkonfiguration
-====================
+================================
 
 Diese Seite beschreibt die Verfahren zum Starten, Stoppen und zur Ersteinrichtung des |Fess|-Servers.
 

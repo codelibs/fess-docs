@@ -1,6 +1,6 @@
-====================
+================================
 Start, Stopp, Erstkonfiguration
-====================
+================================
 
 Diese Seite beschreibt die Verfahren zum Starten, Stoppen und zur Ersteinrichtung des |Fess|-Servers.
 
@@ -216,9 +216,9 @@ Schritt 1: Änderung des Administratorpassworts
 1. Anmeldung in der Verwaltungsseite (http://localhost:8080/admin)
 2. Klicken Sie im linken Menü auf „System" → „Benutzer"
 3. Klicken Sie auf den Benutzer ``admin``
-4. Geben Sie ein neues Passwort in das Feld [Passwort] ein
-5. Geben Sie dasselbe Passwort erneut in das Feld [Passwort (bestätigen)] ein
-6. Klicken Sie auf die Schaltfläche [Aktualisieren]
+4. Geben Sie ein neues Passwort in das Feld „Passwort" ein
+5. Geben Sie dasselbe Passwort erneut in das Feld „Passwort (bestätigen)" ein
+6. Klicken Sie auf die Schaltfläche „Aktualisieren"
 
 .. important::
 
@@ -254,8 +254,8 @@ Erstellen Sie eine Konfiguration zum Crawlen der zu durchsuchenden Websites oder
 Schritt 3: Ausführung des Crawls
 ---------------------------------
 
-1. Klicken Sie im linken Menü auf [System] → [Scheduler]
-2. Öffnen Sie den Job [Default Crawler] und klicken Sie auf die Schaltfläche „Jetzt starten"
+1. Klicken Sie im linken Menü auf „System" → „Scheduler"
+2. Öffnen Sie den Job „Default Crawler" und klicken Sie auf die Schaltfläche „Jetzt starten"
 3. Warten Sie, bis der Crawl abgeschlossen ist (Fortschritt kann im Dashboard überprüft werden)
 
 Schritt 4: Überprüfung der Suche
@@ -310,10 +310,10 @@ Konfiguration des Mail-Servers
 Um Fehlermeldungen und ähnliche Nachrichten per E-Mail zu erhalten, konfigurieren Sie den SMTP-Server und die Empfängeradresse für Benachrichtigungen.
 
 1. Geben Sie in der Konfigurationsdatei ``app/WEB-INF/classes/fess_env.properties`` den SMTP-Serverhost und -port in ``mail.smtp.server.main.host.and.port`` an (Standard: ``localhost:25``). Nach der Änderung ist ein Neustart von |Fess| erforderlich.
-2. Klicken Sie in der Administrator-Oberfläche im linken Menü auf [System] → [Allgemein].
-3. Geben Sie die Empfänger-E-Mail-Adresse in das Feld [Benachrichtigungs-E-Mail] ein.
-4. Klicken Sie auf die Schaltfläche [Aktualisieren].
-5. Mit der Schaltfläche [Test-E-Mail senden] können Sie überprüfen, ob E-Mails korrekt versendet werden.
+2. Klicken Sie in der Administrator-Oberfläche im linken Menü auf „System" → „Allgemein".
+3. Geben Sie die Empfänger-E-Mail-Adresse in das Feld „Benachrichtigungs-E-Mail" ein.
+4. Klicken Sie auf die Schaltfläche „Aktualisieren".
+5. Mit der Schaltfläche „Test-E-Mail senden" können Sie überprüfen, ob E-Mails korrekt versendet werden.
 
 Zeitzoneneinstellung
 --------------------

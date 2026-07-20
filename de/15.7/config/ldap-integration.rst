@@ -71,13 +71,13 @@ bearbeiten.
      - Standardwert
      - Beschreibung
    * - ``ldap.provider.url``
-     - (keiner)
+     - (nicht gesetzt)
      - URL des LDAP-Servers. Beispiel: ``ldap://ldap.example.com:389``. Für LDAPS: ``ldaps://ldap.example.com:636``. Mehrere URLs durch Leerzeichen getrennt ermöglichen Failover.
    * - ``ldap.base.dn``
-     - (keiner)
+     - (nicht gesetzt)
      - Basis-DN für die LDAP-Suche. Beispiel: ``dc=example,dc=com``
    * - ``ldap.security.principal``
-     - (keiner)
+     - (nicht gesetzt)
      - DN-Vorlage für die Benutzerauthentifizierung (Bind). ``%s`` wird durch den Benutzernamen ersetzt. Beispiel: ``uid=%s,ou=People,dc=example,dc=com``
    * - ``ldap.security.authentication``
      - ``simple``
@@ -86,13 +86,13 @@ bearbeiten.
      - ``com.sun.jndi.ldap.LdapCtxFactory``
      - JNDI-Klasse für die initiale Kontextfabrik. In der Regel ist keine Änderung erforderlich.
    * - ``ldap.admin.security.principal``
-     - (keiner)
+     - (nicht gesetzt)
      - Bind-DN des Dienstkontos für LDAP-Suchen. Beispiel: ``cn=fess,ou=services,dc=example,dc=com``
    * - ``ldap.admin.security.credentials``
-     - (keiner)
+     - (nicht gesetzt)
      - Passwort des oben genannten Dienstkontos.
    * - ``ldap.account.filter``
-     - (keiner)
+     - (nicht gesetzt)
      - Filter zur Suche nach Benutzereinträgen bei der Rollenauflösung. ``%s`` wird durch den Benutzernamen ersetzt. Beispiel: ``uid=%s``
    * - ``ldap.group.filter``
      - (leer)

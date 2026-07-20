@@ -2,13 +2,13 @@
 JSON-Konnektor
 ==============
 
-Ubersicht
+Übersicht
 =========
 
-Der JSON-Konnektor bietet die Funktionalitat, Daten aus lokalen JSONL-Dateien
+Der JSON-Konnektor bietet die Funktionalität, Daten aus lokalen JSONL-Dateien
 (JSON-Lines-Format) abzurufen und im |Fess|-Index zu registrieren.
 
-Fur diese Funktion ist das Plugin ``fess-ds-json`` erforderlich.
+Für diese Funktion ist das Plugin ``fess-ds-json`` erforderlich.
 
 Voraussetzungen
 ===============
@@ -32,16 +32,16 @@ Methode 1: JAR-Datei direkt platzieren
     # oder
     cp fess-ds-json-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
 
-Methode 2: Uber die Administrationsoberflache installieren
+Methode 2: Über die Administrationsoberfläche installieren
 
-1. Offnen Sie "System" -> "Plugins"
+1. Öffnen Sie "System" -> "Plugins"
 2. Laden Sie die JAR-Datei hoch
 3. Starten Sie |Fess| neu
 
 Konfiguration
 =============
 
-Konfigurieren Sie uber die Administrationsoberflache unter "Crawler" -> "Datenspeicher" -> "Neu erstellen".
+Konfigurieren Sie über die Administrationsoberfläche unter "Crawler" -> "Datenspeicher" -> "Neu erstellen".
 
 Grundeinstellungen
 ------------------
@@ -95,17 +95,17 @@ Parameterliste
      - Beschreibung
    * - ``files``
      - Nein
-     - Pfad zur zu verarbeitenden JSON-Datei (mehrere Angaben moglich: kommagetrennt). Nur Dateien mit der Erweiterung ``.json`` oder ``.jsonl`` werden verarbeitet.
+     - Pfad zur zu verarbeitenden JSON-Datei (mehrere Angaben möglich: kommagetrennt). Nur Dateien mit der Erweiterung ``.json`` oder ``.jsonl`` werden verarbeitet.
    * - ``directories``
      - Nein
-     - Pfad zum Verzeichnis mit JSON-Dateien (mehrere Angaben moglich: kommagetrennt)
+     - Pfad zum Verzeichnis mit JSON-Dateien (mehrere Angaben möglich: kommagetrennt)
    * - ``fileEncoding``
      - Nein
      - Zeichenkodierung (Standard: UTF-8)
 
 .. warning::
    Es muss entweder ``files`` oder ``directories`` angegeben werden.
-   Wenn keiner der beiden Parameter angegeben ist (leer), wird eine ``DataStoreException`` ausgelost.
+   Wenn keiner der beiden Parameter angegeben ist (leer), wird eine ``DataStoreException`` ausgelöst.
    Wenn beide angegeben sind, hat ``files`` Vorrang und ``directories`` wird ignoriert.
 
 .. note::
@@ -117,18 +117,18 @@ Verhalten bei Verzeichnisangabe
 Wenn ``directories`` angegeben ist, werden die Dateien direkt im jeweiligen Verzeichnis nach folgenden Regeln verarbeitet:
 
 - **Unterverzeichnisse werden nicht durchsucht** (keine rekursive Suche).
-- Nur Dateien mit der Erweiterung ``.json`` oder ``.jsonl`` werden berucksichtigt (Gro-/Kleinschreibung wird nicht unterschieden).
-- Die Dateien werden in aufsteigender Reihenfolge nach Anderungsdatum (letzter Anderungszeitpunkt) verarbeitet.
+- Nur Dateien mit der Erweiterung ``.json`` oder ``.jsonl`` werden berücksichtigt (Groß-/Kleinschreibung wird nicht unterschieden).
+- Die Dateien werden in aufsteigender Reihenfolge nach Änderungsdatum (letzter Änderungszeitpunkt) verarbeitet.
 
 .. note::
-   Dieser Konnektor unterstutzt ausschlie?lich JSON-Dateien im lokalen Dateisystem. HTTP-Zugriff und API-Authentifizierung werden nicht unterstutzt.
+   Dieser Konnektor unterstützt ausschließlich JSON-Dateien im lokalen Dateisystem. HTTP-Zugriff und API-Authentifizierung werden nicht unterstützt.
 
 Skript-Einstellungen
 --------------------
 
 Die Werte der einzelnen Felder werden aus den Feldern des jeweiligen JSON-Objekts zusammengesetzt.
-Felder auf der obersten Ebene des JSON-Objekts konnen im Skript als **Variablen ohne Prafix**
-direkt referenziert werden (kein Prafix wie ``data.``).
+Felder auf der obersten Ebene des JSON-Objekts können im Skript als **Variablen ohne Präfix**
+direkt referenziert werden (kein Präfix wie ``data.``).
 
 Einfaches JSON-Objekt:
 
@@ -160,7 +160,7 @@ Verarbeitung von Array-Elementen:
     tags=tags.join(", ")
     categories=categories[0].name
 
-Verfugbare Felder
+Verfügbare Felder
 ~~~~~~~~~~~~~~~~~
 
 - ``<Feldname>`` - Felder auf der obersten Ebene des JSON-Objekts werden direkt beim Namen referenziert
@@ -170,8 +170,8 @@ Verfugbare Felder
 
 .. note::
 
-   Enthalt ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Groovy-Bezeichner
-   ungultig sind, kann dieses Feld nicht direkt als Variablenname referenziert werden.
+   Enthält ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Groovy-Bezeichner
+   ungültig sind, kann dieses Feld nicht direkt als Variablenname referenziert werden.
 
 JSON-Format-Details
 ===================
@@ -181,13 +181,13 @@ JSON-Dateiformat
 
 Der JSON-Konnektor liest Dateien im JSONL-Format (JSON Lines).
 Dabei wird pro Zeile ein JSON-Objekt geschrieben. Die Datei wird zeilenweise eingelesen,
-und jede Zeile wird als eigenstandiges JSON-Objekt verarbeitet.
+und jede Zeile wird als eigenständiges JSON-Objekt verarbeitet.
 
 .. note::
    Dateien mit der Erweiterung ``.json`` werden ebenfalls verarbeitet, der Inhalt muss jedoch
    im JSONL-Format vorliegen (ein Objekt pro Zeile).
    JSON-Dateien im Array-Format (``[{...}, {...}]``) oder mehrzeilig formatierte
-   (pretty-printed) JSON-Dateien konnen nicht direkt eingelesen werden. Bitte konvertieren Sie
+   (pretty-printed) JSON-Dateien können nicht direkt eingelesen werden. Bitte konvertieren Sie
    diese in das JSONL-Format.
 
 JSONL-Datei:
@@ -246,59 +246,59 @@ Datei nicht gefunden
 
 **Symptom**: Im Protokoll wird ``... is not found.`` oder ``Source file ... does not exist.`` ausgegeben
 
-**Prufpunkte**:
+**Prüfpunkte**:
 
-1. Uberprfen Sie, ob der Dateipfad korrekt ist
-2. Uberprfen Sie, ob die Datei vorhanden ist
-3. Uberprfen Sie, ob die Dateiendung ``.json`` oder ``.jsonl`` ist
-4. Uberprfen Sie, ob Leserechte fur die Datei vorhanden sind
+1. Überprüfen Sie, ob der Dateipfad korrekt ist
+2. Überprüfen Sie, ob die Datei vorhanden ist
+3. Überprüfen Sie, ob die Dateiendung ``.json`` oder ``.jsonl`` ist
+4. Überprüfen Sie, ob Leserechte für die Datei vorhanden sind
 
 JSON-Analysefehler
 ------------------
 
 **Symptom**: Im Protokoll wird ``Crawling Access Exception`` zusammen mit ``JsonParseException`` o. a. ausgegeben
 
-Enthalt eine Zeile ungultige Daten, wird nur diese Zeile ubersprungen und als fehlgeschlagene URL
-erfasst; das Crawling selbst wird ab der nachsten Zeile fortgesetzt.
+Enthält eine Zeile ungültige Daten, wird nur diese Zeile übersprungen und als fehlgeschlagene URL
+erfasst; das Crawling selbst wird ab der nächsten Zeile fortgesetzt.
 
-**Prufpunkte**:
+**Prüfpunkte**:
 
-1. Uberprfen Sie, ob die JSON-Datei im korrekten Format vorliegt (JSONL: ein Objekt pro Zeile):
+1. Überprüfen Sie, ob die JSON-Datei im korrekten Format vorliegt (JSONL: ein Objekt pro Zeile):
 
    ::
 
-       # Jede Zeile auf gultige JSON-Objekte prfen
+       # Jede Zeile auf gültige JSON-Objekte prfen
        cat data.json | jq -c .
 
-2. Uberprfen Sie die Zeichenkodierung
-3. Uberprfen Sie, ob ein einzelnes Objekt uber mehrere Zeilen verteilt ist
-4. Uberprfen Sie, ob Kommentare enthalten sind (Kommentare sind im JSON-Standard nicht erlaubt)
+2. Überprüfen Sie die Zeichenkodierung
+3. Überprüfen Sie, ob ein einzelnes Objekt über mehrere Zeilen verteilt ist
+4. Überprüfen Sie, ob Kommentare enthalten sind (Kommentare sind im JSON-Standard nicht erlaubt)
 
 Keine Daten abgerufen
 ---------------------
 
-**Symptom**: Das Crawling ist erfolgreich, aber die Trefferanzahl betragt 0
+**Symptom**: Das Crawling ist erfolgreich, aber die Trefferanzahl beträgt 0
 
-**Prufpunkte**:
+**Prüfpunkte**:
 
-1. Uberprfen Sie die JSON-Struktur
-2. Uberprfen Sie die Skript-Einstellungen (Felder werden ohne ``data.``-Prafix referenziert)
-3. Uberprfen Sie die Feldnamen (einschlie?lich Gro-/Kleinschreibung)
-4. Uberprfen Sie die Protokolldateien auf Fehlermeldungen
+1. Überprüfen Sie die JSON-Struktur
+2. Überprüfen Sie die Skript-Einstellungen (Felder werden ohne ``data.``-Präfix referenziert)
+3. Überprüfen Sie die Feldnamen (einschließlich Groß-/Kleinschreibung)
+4. Überprüfen Sie die Protokolldateien auf Fehlermeldungen
 
-Gro?e JSON-Dateien
+Große JSON-Dateien
 ------------------
 
-**Symptom**: Speichermangel oder Zeituberschreitung
+**Symptom**: Speichermangel oder Zeitüberschreitung
 
-Da die Datei zeilenweise eingelesen wird, wirkt sich die Gesamtgro?e der Datei nicht direkt auf
-den Speicherverbrauch aus. Probleme konnen jedoch auftreten, wenn eine einzelne Zeile
-(ein einzelnes Objekt) extrem gro? ist oder die Last beim Indexieren sehr hoch ist.
+Da die Datei zeilenweise eingelesen wird, wirkt sich die Gesamtgröße der Datei nicht direkt auf
+den Speicherverbrauch aus. Probleme können jedoch auftreten, wenn eine einzelne Zeile
+(ein einzelnes Objekt) extrem groß ist oder die Last beim Indexieren sehr hoch ist.
 
-**Losung**:
+**Lösung**:
 
 1. Teilen Sie die JSON-Datei in mehrere Dateien auf
-2. Erhohen Sie die Heap-Gro?e von |Fess|
+2. Erhöhen Sie die Heap-Größe von |Fess|
 
 Erweiterte Skript-Beispiele
 ============================
@@ -306,8 +306,8 @@ Erweiterte Skript-Beispiele
 Bedingte Verarbeitung
 ---------------------
 
-Jedes Feld wird als eigenstandiger Ausdruck ausgewertet. Fur bedingte Werte verwenden Sie den
-ternaren Operator:
+Jedes Feld wird als eigenständiger Ausdruck ausgewertet. Für bedingte Werte verwenden Sie den
+ternären Operator:
 
 ::
 
@@ -316,7 +316,7 @@ ternaren Operator:
     content=status == "published" ? description : null
     price=status == "published" ? price : null
 
-Array-Verknupfung
+Array-Verknüpfung
 -----------------
 
 ::
@@ -362,7 +362,7 @@ Numerische Verarbeitung
 Referenzen
 ==========
 
-- :doc:`ds-overview` - Ubersicht der Datenspeicher-Konnektoren
+- :doc:`ds-overview` - Übersicht der Datenspeicher-Konnektoren
 - :doc:`ds-csv` - CSV-Konnektor
 - :doc:`ds-database` - Datenbank-Konnektor
 - :doc:`../../admin/dataconfig-guide` - Datenspeicher-Konfigurationsleitfaden
