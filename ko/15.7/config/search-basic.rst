@@ -22,7 +22,7 @@
 
 |image0|
 
-.. |image0| image:: ../../../resources/images/ko/15.7/config/search-result.png
+.. |image0| image:: ../../../resources/images/ja/15.7/config/search-result.png
 
 정확한 히트 건수 표시
 ---------------------

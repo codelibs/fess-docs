@@ -300,7 +300,7 @@ JAR 테마는 가상 호스트 기능을 사용하여 활성화합니다. 가상
 - `fess-theme-classic <https://github.com/codelibs/fess-theme-classic>`__ - JAR 테마
 
 참고 정보
-========
+=========
 
 - :doc:`plugin-architecture` - 플러그인 아키텍처
 - :doc:`../admin/design-guide` - 페이지 디자인(JSP·CSS·이미지 직접 편집)
