@@ -2,16 +2,16 @@
 API de General
 ==========================
 
-Descripcion General
+Descripción General
 ===================
 
-La API de General es una API para gestionar la configuracion general de |Fess|
-(configuracion de todo el sistema). Puede obtener y actualizar configuraciones
-relacionadas con el rastreo, el registro, la visualizacion de resultados de
-busqueda, las sugerencias, los periodos de retencion de registros, las
-notificaciones, la autenticacion (LDAP / SSO) y la integracion con
+La API de General es una API para gestionar la configuración general de |Fess|
+(configuración de todo el sistema). Puede obtener y actualizar configuraciones
+relacionadas con el rastreo, el registro, la visualización de resultados de
+búsqueda, las sugerencias, los periodos de retención de registros, las
+notificaciones, la autenticación (LDAP / SSO) y la integración con
 almacenamiento en la nube. Estas configuraciones corresponden a los ajustes
-"General" en la interfaz de administracion (:doc:`../../admin/general-guide`).
+"General" en la interfaz de administración (:doc:`../../admin/general-guide`).
 
 URL Base
 ========
@@ -22,7 +22,7 @@ URL Base
 
 Para acceder a esta API se requiere un token de acceso con el permiso
 ``Radmin-api``. Consulte :doc:`api-admin-overview` para obtener detalles sobre
-la autenticacion.
+la autenticación.
 
 Lista de Endpoints
 ==================
@@ -31,17 +31,17 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /
-     - Obtener configuracion general
+     - Obtener configuración general
    * - PUT
      - /
-     - Actualizar configuracion general
+     - Actualizar configuración general
 
-Obtener Configuracion General
+Obtener Configuración General
 ==============================
 
 Solicitud
@@ -51,17 +51,17 @@ Solicitud
 
     GET /api/admin/general
 
-Este endpoint no acepta parametros de consulta.
+Este endpoint no acepta parámetros de consulta.
 
 Respuesta
 ---------
 
-``response.setting`` contiene la configuracion general actual. La respuesta
-incluye todos los campos de configuracion actualizables; el ejemplo a
-continuacion muestra solo los campos representativos. Los ajustes de
-activacion/desactivacion se expresan como las cadenas ``"true"`` /
-``"false"``, mientras que valores como los dias de retencion y el numero de
-hilos se expresan como numeros.
+``response.setting`` contiene la configuración general actual. La respuesta
+incluye todos los campos de configuración actualizables; el ejemplo a
+continuación muestra solo los campos representativos. Los ajustes de
+activación/desactivación se expresan como las cadenas ``"true"`` /
+``"false"``, mientras que valores como los días de retención y el número de
+hilos se expresan como números.
 
 .. code-block:: json
 
@@ -108,24 +108,24 @@ hilos se expresan como numeros.
 .. note::
 
    Lo anterior muestra solo campos representativos a modo de ejemplo. El objeto ``setting``
-   real en la respuesta contiene todos los campos de configuracion general (rastreo, busqueda,
-   notificaciones, LDAP, SSO, almacenamiento, etc.). Consulte la pagina de ajustes "General"
-   en la interfaz de administracion para la lista completa.
+   real en la respuesta contiene todos los campos de configuración general (rastreo, búsqueda,
+   notificaciones, LDAP, SSO, almacenamiento, etc.). Consulte la página de ajustes "General"
+   en la interfaz de administración para la lista completa.
 
 .. note::
 
    Por razones de seguridad, los campos que contienen credenciales no se devuelven con sus
    valores reales.
 
-   - La contrasena del administrador LDAP ``ldapAdminSecurityCredentials`` siempre se
+   - La contraseña del administrador LDAP ``ldapAdminSecurityCredentials`` siempre se
      devuelve como ``null``.
    - Otros secretos (``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
      ``entraidClientId`` / ``entraidClientSecret``) se devuelven enmascarados como
-     ``"**********"`` cuando estan configurados, o como una cadena vacia (``""``) cuando
-     no lo estan.
+     ``"**********"`` cuando están configurados, o como una cadena vacía (``""``) cuando
+     no lo están.
 
-Actualizar Configuracion General
+Actualizar Configuración General
 =================================
 
 Solicitud
@@ -139,8 +139,8 @@ Solicitud
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Las actualizaciones se procesan como una actualizacion parcial (merge). El
-servidor carga la configuracion actual y luego sobreescribe unicamente los
+Las actualizaciones se procesan como una actualización parcial (merge). El
+servidor carga la configuración actual y luego sobreescribe únicamente los
 campos no nulos (no ``null``) incluidos en la solicitud. Los campos no
 incluidos en la solicitud, y los campos establecidos como ``null``, conservan
 sus valores existentes.
@@ -148,33 +148,33 @@ sus valores existentes.
 .. warning::
 
    Los siguientes cuatro campos son requeridos y DEBEN incluirse en CADA solicitud PUT,
-   incluso en una actualizacion parcial:
+   incluso en una actualización parcial:
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   Si falta alguno de ellos, la solicitud falla la validacion y la API devuelve HTTP 400
+   Si falta alguno de ellos, la solicitud falla la validación y la API devuelve HTTP 400
    con ``status: 1`` y un ``message`` de error. Dado que el valor enviado sobreescribe la
-   configuracion existente, para mantener un valor sin cambios primero recuperelo con
-   ``GET`` y envielo tal cual. Todos los demas campos son opcionales; los campos omitidos
+   configuración existente, para mantener un valor sin cambios primero recupérelo con
+   ``GET`` y envíelo tal cual. Todos los demás campos son opcionales; los campos omitidos
    conservan sus valores existentes.
 
 .. note::
 
-   Los campos numericos tienen validacion de tipo y rango. Enviar un valor que no pueda
-   interpretarse como un entero, o un valor fuera del rango permitido, falla la validacion
-   (HTTP 400 con ``status: 1``). El rango valido de cada campo numerico se indica en la
-   tabla de campos a continuacion.
+   Los campos numéricos tienen validación de tipo y rango. Enviar un valor que no pueda
+   interpretarse como un entero, o un valor fuera del rango permitido, falla la validación
+   (HTTP 400 con ``status: 1``). El rango válido de cada campo numérico se indica en la
+   tabla de campos a continuación.
 
 .. note::
 
-   Para los campos de activacion/desactivacion (tipo ``available``), solo ``"true"`` o
-   ``"on"`` (ambos sin distincion de mayusculas y minusculas) significan habilitado.
-   Cualquier otro valor (como ``"false"`` o una cadena vacia) se trata como deshabilitado
-   (``false``). El valor existente se mantiene unicamente cuando el campo se omite (no se
-   envia). En la respuesta GET, estos campos se devuelven como las cadenas ``"true"`` /
+   Para los campos de activación/desactivación (tipo ``available``), solo ``"true"`` o
+   ``"on"`` (ambos sin distinción de mayúsculas y minúsculas) significan habilitado.
+   Cualquier otro valor (como ``"false"`` o una cadena vacía) se trata como deshabilitado
+   (``false``). El valor existente se mantiene únicamente cuando el campo se omite (no se
+   envía). En la respuesta GET, estos campos se devuelven como las cadenas ``"true"`` /
    ``"false"``.
 
 .. code-block:: json
@@ -191,10 +191,10 @@ sus valores existentes.
 Campos Principales
 ~~~~~~~~~~~~~~~~~~
 
-Los elementos de configuracion son muy variados. A continuacion se muestran
+Los elementos de configuración son muy variados. A continuación se muestran
 los campos representativos (todos los campos corresponden a los ajustes
-"General" en la interfaz de administracion). Los ajustes de
-activacion/desactivacion se especifican como las cadenas ``"true"`` /
+"General" en la interfaz de administración). Los ajustes de
+activación/desactivación se especifican como las cadenas ``"true"`` /
 ``"false"``.
 
 .. list-table::
@@ -203,64 +203,64 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``incrementalCrawling``
      - No
      - Habilitar/deshabilitar el rastreo incremental
    * - ``dayForCleanup``
-     - Si
-     - Numero de dias que se conservan los documentos rastreados (-1=limpieza deshabilitada; rango: -1 a 1000)
+     - Sí
+     - Número de días que se conservan los documentos rastreados (-1=limpieza deshabilitada; rango: -1 a 1000)
    * - ``crawlingThreadCount``
-     - Si
-     - Numero de hilos usados para el rastreo (rango: 0 a 100)
+     - Sí
+     - Número de hilos usados para el rastreo (rango: 0 a 100)
    * - ``failureCountThreshold``
-     - Si
-     - Umbral del numero de fallos para detener el rastreo de una URL (-1=deshabilitado; rango: -1 a 10000)
+     - Sí
+     - Umbral del número de fallos para detener el rastreo de una URL (-1=deshabilitado; rango: -1 a 10000)
    * - ``csvFileEncoding``
-     - Si
-     - Codificacion de la exportacion CSV
+     - Sí
+     - Codificación de la exportación CSV
    * - ``searchLog``
      - No
-     - Habilitar/deshabilitar el registro de consultas de busqueda
+     - Habilitar/deshabilitar el registro de consultas de búsqueda
    * - ``userInfo``
      - No
-     - Habilitar/deshabilitar el registro de informacion de usuario
+     - Habilitar/deshabilitar el registro de información de usuario
    * - ``userFavorite``
      - No
-     - Habilitar/deshabilitar la funcion de favoritos
+     - Habilitar/deshabilitar la función de favoritos
    * - ``webApiJson``
      - No
      - Habilitar/deshabilitar la Web API JSON
    * - ``appValue``
      - No
-     - Valor de configuracion adicional especifico de la aplicacion
+     - Valor de configuración adicional específico de la aplicación
    * - ``virtualHostValue``
      - No
-     - Configuracion de host virtual (para entornos multi-tenant)
+     - Configuración de host virtual (para entornos multi-tenant)
    * - ``popularWord``
      - No
-     - Habilitar/deshabilitar la agregacion y visualizacion de palabras populares
+     - Habilitar/deshabilitar la agregación y visualización de palabras populares
    * - ``defaultLabelValue``
      - No
      - Valor de etiqueta predeterminado
    * - ``defaultSortValue``
      - No
-     - Orden de clasificacion predeterminado
+     - Orden de clasificación predeterminado
    * - ``appendQueryParameter``
      - No
-     - Agregar parametros de consulta a la URL de los resultados de busqueda
+     - Agregar parámetros de consulta a la URL de los resultados de búsqueda
    * - ``loginRequired``
      - No
-     - Si se requiere inicio de sesion para buscar
+     - Si se requiere inicio de sesión para buscar
    * - ``loginLink``
      - No
-     - Habilitar o deshabilitar la visualizacion del enlace de inicio de sesion en la pantalla de busqueda
+     - Habilitar o deshabilitar la visualización del enlace de inicio de sesión en la pantalla de búsqueda
    * - ``thumbnail``
      - No
-     - Habilitar/deshabilitar la generacion de miniaturas
+     - Habilitar/deshabilitar la generación de miniaturas
    * - ``resultCollapsed``
      - No
-     - Habilitar o deshabilitar el colapso de documentos similares en los resultados de busqueda
+     - Habilitar o deshabilitar el colapso de documentos similares en los resultados de búsqueda
    * - ``ignoreFailureType``
      - No
      - Tipos de fallo de rastreo a ignorar
@@ -269,34 +269,34 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
      - Cadena User-Agent enviada durante el rastreo
    * - ``purgeSearchLogDay``
      - No
-     - Numero de dias que se conservan los registros de busqueda (-1=deshabilitado; rango: -1 a 100000)
+     - Número de días que se conservan los registros de búsqueda (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeJobLogDay``
      - No
-     - Numero de dias que se conservan los registros de trabajos (-1=deshabilitado; rango: -1 a 100000)
+     - Número de días que se conservan los registros de trabajos (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeUserInfoDay``
      - No
-     - Numero de dias que se conserva la informacion de usuario (-1=deshabilitado; rango: -1 a 100000)
+     - Número de días que se conserva la información de usuario (-1=deshabilitado; rango: -1 a 100000)
    * - ``purgeSuggestSearchLogDay``
      - No
-     - Numero de dias que se conservan los registros de busqueda de sugerencias (0=deshabilitado; rango: 0 a 100000)
+     - Número de días que se conservan los registros de búsqueda de sugerencias (0=deshabilitado; rango: 0 a 100000)
    * - ``purgeByBots``
      - No
-     - User-Agent de bots cuyos registros de busqueda se descartan
+     - User-Agent de bots cuyos registros de búsqueda se descartan
    * - ``notificationTo``
      - No
-     - Direccion de correo electronico de destino de las notificaciones del sistema
+     - Dirección de correo electrónico de destino de las notificaciones del sistema
    * - ``notificationLogin``
      - No
-     - Mensaje de notificacion que se muestra en la pagina de inicio de sesion
+     - Mensaje de notificación que se muestra en la página de inicio de sesión
    * - ``notificationSearchTop``
      - No
-     - Mensaje de notificacion que se muestra en la pagina principal de busqueda
+     - Mensaje de notificación que se muestra en la página principal de búsqueda
    * - ``notificationAdvanceSearch``
      - No
-     - Mensaje de notificacion que se muestra en la pagina de busqueda avanzada
+     - Mensaje de notificación que se muestra en la página de búsqueda avanzada
    * - ``suggestSearchLog``
      - No
-     - Habilitar/deshabilitar las sugerencias a partir de los registros de busqueda
+     - Habilitar/deshabilitar las sugerencias a partir de los registros de búsqueda
    * - ``suggestDocuments``
      - No
      - Habilitar/deshabilitar las sugerencias a partir de los documentos
@@ -305,10 +305,10 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
      - Nivel de registro del log del sistema
    * - ``logNotificationEnabled``
      - No
-     - Habilitar/deshabilitar la notificacion de logs ERROR/WARN
+     - Habilitar/deshabilitar la notificación de logs ERROR/WARN
    * - ``logNotificationLevel``
      - No
-     - Nivel de notificacion de logs
+     - Nivel de notificación de logs
    * - ``slackWebhookUrls``
      - No
      - URL de Slack Webhook para notificaciones
@@ -317,7 +317,7 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
      - URL de Google Chat Webhook para notificaciones
    * - ``searchUseBrowserLocale``
      - No
-     - Si se utiliza el idioma del navegador para la busqueda
+     - Si se utiliza el idioma del navegador para la búsqueda
    * - ``ragLlmName``
      - No
      - Nombre del proveedor LLM utilizado para RAG
@@ -325,22 +325,22 @@ activacion/desactivacion se especifican como las cadenas ``"true"`` /
      - No
      - Nivel de registro para los paquetes relacionados con LLM
 
-Campos Relacionados con Autenticacion
+Campos Relacionados con Autenticación
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Las configuraciones relacionadas con LDAP y SSO (OpenID Connect, SAML,
-SPNEGO, Entra ID) tambien se gestionan con esta API. A continuacion se
+SPNEGO, Entra ID) también se gestionan con esta API. A continuación se
 muestran los campos representativos (todos los campos corresponden a los
-ajustes "General" en la interfaz de administracion).
+ajustes "General" en la interfaz de administración).
 
 .. list-table::
    :header-rows: 1
    :widths: 40 60
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``ldapProviderUrl``
-     - URL de conexion LDAP
+     - URL de conexión LDAP
    * - ``ldapBaseDn``
      - DN base de LDAP
    * - ``ldapSecurityPrincipal``
@@ -348,26 +348,26 @@ ajustes "General" en la interfaz de administracion).
    * - ``ldapAdminSecurityPrincipal``
      - Principal de seguridad para operaciones administrativas LDAP
    * - ``ldapAdminSecurityCredentials``
-     - Contrasena del administrador LDAP (se reemplaza por ``null`` en la respuesta)
+     - Contraseña del administrador LDAP (se reemplaza por ``null`` en la respuesta)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
-     - Filtros de busqueda de usuarios/grupos
+     - Filtros de búsqueda de usuarios/grupos
    * - ``ldapMemberofAttribute``
      - Nombre del atributo LDAP que indica la pertenencia a un grupo
    * - ``ssoType``
      - Tipo de SSO (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` y otros
-     - Configuracion de OpenID Connect
+     - Configuración de OpenID Connect
    * - ``samlIdpEntityid`` / ``samlSpEntityid`` y otros
-     - Configuracion de SAML
+     - Configuración de SAML
    * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` y otros
-     - Configuracion de SPNEGO
+     - Configuración de SPNEGO
    * - ``entraidClientId`` / ``entraidTenant`` y otros
-     - Configuracion de Microsoft Entra ID
+     - Configuración de Microsoft Entra ID
 
 Campos Relacionados con Almacenamiento
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Tambien se puede gestionar la configuracion de integracion con almacenamiento
+También se puede gestionar la configuración de integración con almacenamiento
 en la nube (S3 / GCS).
 
 .. list-table::
@@ -375,17 +375,17 @@ en la nube (S3 / GCS).
    :widths: 40 60
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``storageType``
      - Tipo de almacenamiento (``auto`` / ``s3`` / ``gcs``)
    * - ``storageEndpoint``
      - URL del endpoint del almacenamiento
    * - ``storageAccessKey`` / ``storageSecretKey``
-     - Clave de acceso/clave secreta para la autenticacion
+     - Clave de acceso/clave secreta para la autenticación
    * - ``storageBucket``
      - Nombre del bucket
    * - ``storageRegion``
-     - Region de S3
+     - Región de S3
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - ID de proyecto de GCS / ruta del archivo de credenciales
 
@@ -394,18 +394,18 @@ en la nube (S3 / GCS).
    Los campos de tipo secreto como ``ldapAdminSecurityCredentials``,
    ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
    ``entraidClientId`` / ``entraidClientSecret`` y ``spnegoPreauthPassword`` conservan su
-   valor almacenado (no se actualizan) cuando se envia el valor enmascarado ``"**********"``
-   tal cual. Envie el valor real solo cuando desee cambiarlo.
+   valor almacenado (no se actualizan) cuando se envía el valor enmascarado ``"**********"``
+   tal cual. Envíe el valor real solo cuando desee cambiarlo.
 
-   Dado que esta comprobacion se basa en si la cadena queda vacia tras eliminar los
-   asteriscos, enviar una cadena vacia (``""``) o un valor compuesto unicamente de
+   Dado que esta comprobación se basa en si la cadena queda vacía tras eliminar los
+   asteriscos, enviar una cadena vacía (``""``) o un valor compuesto únicamente de
    asteriscos tampoco actualiza el valor. Por lo tanto, estos campos de tipo secreto no
-   pueden borrarse a un valor vacio mediante la API.
+   pueden borrarse a un valor vacío mediante la API.
 
 Respuesta
 ---------
 
-En caso de actualizacion exitosa, solo se devuelven ``version`` y ``status``
+En caso de actualización exitosa, solo se devuelven ``version`` y ``status``
 (no se incluyen ``id`` ni ``created``).
 
 .. code-block:: json
@@ -417,9 +417,9 @@ En caso de actualizacion exitosa, solo se devuelven ``version`` y ``status``
       }
     }
 
-Si la actualizacion falla (por ejemplo, debido a un error de validacion), la API
+Si la actualización falla (por ejemplo, debido a un error de validación), la API
 devuelve HTTP 400 y ``status`` se establece en un valor distinto de cero (``1``
-para un error de validacion), y ``message`` contiene los detalles del error.
+para un error de validación), y ``message`` contiene los detalles del error.
 Consulte :doc:`api-admin-overview` para la lista de valores de ``status``.
 
 Ejemplos de Uso
@@ -427,13 +427,13 @@ Ejemplos de Uso
 
 .. note::
 
-   Los ejemplos a continuacion incluyen los campos requeridos (``dayForCleanup``,
+   Los ejemplos a continuación incluyen los campos requeridos (``dayForCleanup``,
    ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Como estos
    deben enviarse siempre independientemente de lo que se desee cambiar, recupere los
-   valores actuales con ``GET`` e incluyalos en la operacion real (los ejemplos a
-   continuacion usan los valores predeterminados).
+   valores actuales con ``GET`` e inclúyalos en la operación real (los ejemplos a
+   continuación usan los valores predeterminados).
 
-Actualizar la Configuracion de Rastreo
+Actualizar la Configuración de Rastreo
 ---------------------------------------
 
 .. code-block:: bash
@@ -449,7 +449,7 @@ Actualizar la Configuracion de Rastreo
            "csvFileEncoding": "UTF-8"
          }'
 
-Actualizar el Periodo de Retencion de Registros
+Actualizar el Periodo de Retención de Registros
 -------------------------------------------------
 
 .. code-block:: bash
@@ -467,7 +467,7 @@ Actualizar el Periodo de Retencion de Registros
            "purgeUserInfoDay": 90
          }'
 
-Actualizar la Configuracion de Sugerencias
+Actualizar la Configuración de Sugerencias
 -------------------------------------------
 
 .. code-block:: bash
@@ -484,9 +484,9 @@ Actualizar la Configuracion de Sugerencias
            "suggestDocuments": "true"
          }'
 
-Informacion de Referencia
+Información de Referencia
 ==========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-systeminfo` - API de informacion del sistema
-- :doc:`../../admin/general-guide` - Guia de configuracion general
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-systeminfo` - API de información del sistema
+- :doc:`../../admin/general-guide` - Guía de configuración general

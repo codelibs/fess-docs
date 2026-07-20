@@ -2,10 +2,10 @@
 API de FileConfig
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de FileConfig es para gestionar la configuracion de rastreo de archivos de |Fess|.
+La API de FileConfig es para gestionar la configuración de rastreo de archivos de |Fess|.
 Puede operar configuraciones de rastreo para sistemas de archivos locales, carpetas compartidas SMB/CIFS, FTP y diversos almacenes de objetos.
 
 URL Base
@@ -17,8 +17,8 @@ URL Base
 
 .. note::
 
-   Todos los endpoints requieren privilegios de administrador y un token de acceso valido.
-   Consulte :doc:`api-admin-overview` para obtener informacion sobre la autenticacion.
+   Todos los endpoints requieren privilegios de administrador y un token de acceso válido.
+   Consulte :doc:`api-admin-overview` para obtener información sobre la autenticación.
 
 Lista de Endpoints
 ==================
@@ -27,24 +27,24 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de configuraciones de rastreo de archivos
    * - GET
      - /setting/{id}
-     - Obtener configuracion de rastreo de archivos
+     - Obtener configuración de rastreo de archivos
    * - POST
      - /setting
-     - Crear configuracion de rastreo de archivos
+     - Crear configuración de rastreo de archivos
    * - PUT
      - /setting
-     - Actualizar configuracion de rastreo de archivos
+     - Actualizar configuración de rastreo de archivos
    * - DELETE
      - /setting/{id}
-     - Eliminar configuracion de rastreo de archivos
+     - Eliminar configuración de rastreo de archivos
 
 Obtener Lista de Configuraciones de Rastreo de Archivos
 ========================================================
@@ -58,31 +58,31 @@ Solicitud
 
 .. note::
 
-   El endpoint de lista tambien acepta ``PUT`` ademas de ``GET``.
+   El endpoint de lista también acepta ``PUT`` además de ``GET``.
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 10 55
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 25, segun la configuracion ``paging.page.size``)
+     - Número de elementos por página (predeterminado: 25, según la configuración ``paging.page.size``)
    * - ``name``
      - String
      - No
-     - Filtrar por nombre de configuracion
+     - Filtrar por nombre de configuración
    * - ``paths``
      - String
      - No
@@ -90,7 +90,7 @@ Parametros
    * - ``description``
      - String
      - No
-     - Filtrar por descripcion
+     - Filtrar por descripción
 
 Respuesta
 ---------
@@ -126,9 +126,9 @@ Respuesta
       }
     }
 
-``total`` indica el numero total de configuraciones que coinciden con los criterios de busqueda.
+``total`` indica el número total de configuraciones que coinciden con los criterios de búsqueda.
 
-Obtener Configuracion de Rastreo de Archivos
+Obtener Configuración de Rastreo de Archivos
 ============================================
 
 Solicitud
@@ -176,12 +176,12 @@ Respuesta
 
 .. note::
 
-   La respuesta incluye los campos de auditoria ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automaticamente
-   en el momento del registro o la actualizacion.
-   ``versionNo`` es obligatorio al actualizar (consulte la seccion "Actualizar configuracion de rastreo de archivos" a continuacion).
+   La respuesta incluye los campos de auditoría ``createdBy``, ``createdTime``,
+   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automáticamente
+   en el momento del registro o la actualización.
+   ``versionNo`` es obligatorio al actualizar (consulte la sección "Actualizar configuración de rastreo de archivos" a continuación).
 
-Crear Configuracion de Rastreo de Archivos
+Crear Configuración de Rastreo de Archivos
 ==========================================
 
 Solicitud
@@ -210,7 +210,7 @@ Cuerpo de la Solicitud
       "permissions": "{role}admin\n{role}user"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -219,63 +219,63 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre de la configuracion (maximo 200 caracteres)
+     - Sí
+     - Nombre de la configuración (máximo 200 caracteres)
    * - ``description``
      - No
-     - Descripcion de la configuracion (maximo 1000 caracteres)
+     - Descripción de la configuración (máximo 1000 caracteres)
    * - ``paths``
-     - Si
-     - Ruta de inicio de rastreo (separadas por salto de linea si son multiples). Se especifica con uno de los protocolos: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``storage:``, ``s3:`` o ``gcs:``
+     - Sí
+     - Ruta de inicio de rastreo (separadas por salto de línea si son múltiples). Se especifica con uno de los protocolos: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``storage:``, ``s3:`` o ``gcs:``
    * - ``includedPaths``
      - No
-     - Patron de expresion regular para rutas a rastrear
+     - Patrón de expresión regular para rutas a rastrear
    * - ``excludedPaths``
      - No
-     - Patron de expresion regular para rutas a excluir del rastreo
+     - Patrón de expresión regular para rutas a excluir del rastreo
    * - ``includedDocPaths``
      - No
-     - Patron de expresion regular para rutas a indexar
+     - Patrón de expresión regular para rutas a indexar
    * - ``excludedDocPaths``
      - No
-     - Patron de expresion regular para rutas a excluir del indice
+     - Patrón de expresión regular para rutas a excluir del índice
    * - ``configParameter``
      - No
-     - Parametros de configuracion adicionales (formato ``key=value``, un elemento por linea)
+     - Parámetros de configuración adicionales (formato ``key=value``, un elemento por línea)
    * - ``depth``
      - No
-     - Profundidad de rastreo (0 o mas)
+     - Profundidad de rastreo (0 o más)
    * - ``maxAccessCount``
      - No
-     - Numero maximo de accesos (0 o mas)
+     - Número máximo de accesos (0 o más)
    * - ``numOfThread``
-     - Si
-     - Numero de hilos paralelos (1 o mas)
+     - Sí
+     - Número de hilos paralelos (1 o más)
    * - ``intervalTime``
-     - Si
-     - Intervalo de acceso (milisegundos, 0 o mas)
+     - Sí
+     - Intervalo de acceso (milisegundos, 0 o más)
    * - ``boost``
-     - Si
-     - Valor de impulso en resultados de busqueda
+     - Sí
+     - Valor de impulso en resultados de búsqueda
    * - ``available``
-     - Si
+     - Sí
      - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Si
-     - Orden de visualizacion (0 o mas)
+     - Sí
+     - Orden de visualización (0 o más)
    * - ``permissions``
      - No
-     - Roles con permiso de acceso (separados por saltos de linea si son varios)
+     - Roles con permiso de acceso (separados por saltos de línea si son varios)
    * - ``virtualHosts``
      - No
-     - Hosts virtuales (separados por saltos de linea si son varios)
+     - Hosts virtuales (separados por saltos de línea si son varios)
 
 .. note::
 
-   Los campos de auditoria como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
-   son asignados automaticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
+   Los campos de auditoría como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
+   son asignados automáticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
 
 Respuesta
 ---------
@@ -290,7 +290,7 @@ Respuesta
       }
     }
 
-Actualizar Configuracion de Rastreo de Archivos
+Actualizar Configuración de Rastreo de Archivos
 ===============================================
 
 Solicitud
@@ -304,8 +304,8 @@ Solicitud
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Al actualizar, ademas de los campos de creacion, son obligatorios ``id`` para identificar
-el registro a actualizar y ``versionNo`` como numero de version.
+Al actualizar, además de los campos de creación, son obligatorios ``id`` para identificar
+el registro a actualizar y ``versionNo`` como número de versión.
 En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
 
 .. code-block:: json
@@ -326,7 +326,7 @@ En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de
       "versionNo": 1
     }
 
-Campos Adicionales para la Actualizacion
+Campos Adicionales para la Actualización
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -335,13 +335,13 @@ Campos Adicionales para la Actualizacion
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``id``
-     - Si
-     - ID de la configuracion a actualizar (maximo 1000 caracteres)
+     - Sí
+     - ID de la configuración a actualizar (máximo 1000 caracteres)
    * - ``versionNo``
-     - Si
-     - Numero de version actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
+     - Sí
+     - Número de versión actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
 
 Respuesta
 ---------
@@ -356,7 +356,7 @@ Respuesta
       }
     }
 
-Eliminar Configuracion de Rastreo de Archivos
+Eliminar Configuración de Rastreo de Archivos
 =============================================
 
 Solicitud
@@ -380,7 +380,7 @@ Respuesta
 Formato de Rutas
 ================
 
-En ``paths`` se pueden utilizar los siguientes protocolos (los protocolos disponibles pueden modificarse mediante la configuracion ``crawler.file.protocols``).
+En ``paths`` se pueden utilizar los siguientes protocolos (los protocolos disponibles pueden modificarse mediante la configuración ``crawler.file.protocols``).
 
 .. list-table::
    :header-rows: 1
@@ -405,14 +405,14 @@ En ``paths`` se pueden utilizar los siguientes protocolos (los protocolos dispon
 
 .. note::
 
-   Las credenciales de autenticacion (nombre de usuario y contrasena) para SMB/CIFS y FTP
-   no se incluyen en la ruta, sino que se configuran en la seccion "Autenticacion de archivos".
-   Consulte :doc:`../../admin/fileauth-guide` para mas informacion.
+   Las credenciales de autenticación (nombre de usuario y contraseña) para SMB/CIFS y FTP
+   no se incluyen en la ruta, sino que se configuran en la sección "Autenticación de archivos".
+   Consulte :doc:`../../admin/fileauth-guide` para más información.
 
 Ejemplos de Uso
 ===============
 
-Configuracion de Rastreo de Archivos Locales
+Configuración de Rastreo de Archivos Locales
 --------------------------------------------
 
 .. code-block:: bash
@@ -433,7 +433,7 @@ Configuracion de Rastreo de Archivos Locales
            "permissions": "{role}guest"
          }'
 
-Configuracion de Rastreo de Recurso Compartido SMB
+Configuración de Rastreo de Recurso Compartido SMB
 --------------------------------------------------
 
 .. code-block:: bash
@@ -457,14 +457,14 @@ Configuracion de Rastreo de Recurso Compartido SMB
 
 .. note::
 
-   Si el acceso al recurso compartido SMB requiere autenticacion, registre previamente
-   las credenciales del host de destino en la configuracion de "Autenticacion de archivos".
+   Si el acceso al recurso compartido SMB requiere autenticación, registre previamente
+   las credenciales del host de destino en la configuración de "Autenticación de archivos".
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-webconfig` - API de configuracion de rastreo web
-- :doc:`api-admin-dataconfig` - API de configuracion de almacen de datos
-- :doc:`../../admin/fileconfig-guide` - Guia de configuracion de rastreo de archivos
-- :doc:`../../admin/fileauth-guide` - Guia de configuracion de autenticacion de archivos
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-webconfig` - API de configuración de rastreo web
+- :doc:`api-admin-dataconfig` - API de configuración de almacén de datos
+- :doc:`../../admin/fileconfig-guide` - Guía de configuración de rastreo de archivos
+- :doc:`../../admin/fileauth-guide` - Guía de configuración de autenticación de archivos

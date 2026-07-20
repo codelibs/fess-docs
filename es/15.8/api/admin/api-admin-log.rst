@@ -2,7 +2,7 @@
 API de Log
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Log es para consultar y descargar los archivos de registro de |Fess|.
@@ -15,17 +15,17 @@ URL Base
 
     /api/admin/log
 
-Autenticacion
+Autenticación
 =============
 
-Al igual que con el resto de Admin APIs, se requiere autenticacion mediante token de acceso. El token de acceso debe tener el permiso ``Radmin-api`` (configurado en ``api.admin.access.permissions``; el valor predeterminado es ``Radmin-api``).
+Al igual que con el resto de Admin APIs, se requiere autenticación mediante token de acceso. El token de acceso debe tener el permiso ``Radmin-api`` (configurado en ``api.admin.access.permissions``; el valor predeterminado es ``Radmin-api``).
 El token de acceso se especifica en el encabezado de la solicitud.
 
 ::
 
     Authorization: Bearer <token de acceso>
 
-Para mas detalles sobre la autenticacion y como obtener el token de acceso, consulte :doc:`api-admin-overview`.
+Para más detalles sobre la autenticación y cómo obtener el token de acceso, consulte :doc:`api-admin-overview`.
 
 Lista de Endpoints
 ==================
@@ -34,9 +34,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /files
      - Obtener lista de archivos de registro
@@ -60,7 +60,7 @@ Solicitud
 Respuesta
 ---------
 
-En ``files`` se almacena un arreglo de objetos que representan la informacion de cada archivo de registro, y en ``total`` el numero de elementos.
+En ``files`` se almacena un arreglo de objetos que representan la información de cada archivo de registro, y en ``total`` el número de elementos.
 Cada objeto tiene los siguientes campos.
 
 .. list-table::
@@ -68,13 +68,13 @@ Cada objeto tiene los siguientes campos.
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``id``
      - Valor del nombre de archivo codificado en Base64 URL (se usa como ``{id}`` al descargar)
    * - ``name``
      - Nombre del archivo de registro
    * - ``lastModified``
-     - Fecha/hora de la ultima modificacion
+     - Fecha/hora de la última modificación
 
 .. code-block:: json
 
@@ -100,7 +100,7 @@ Cada objeto tiene los siguientes campos.
 
 .. note::
 
-   En ``version`` se establece la version del producto de |Fess| en ejecucion. El contenido y la cantidad de elementos en ``files`` dependen de los archivos de registro presentes en el servidor, por lo que el ejemplo anterior es solo una muestra.
+   En ``version`` se establece la versión del producto de |Fess| en ejecución. El contenido y la cantidad de elementos en ``files`` dependen de los archivos de registro presentes en el servidor, por lo que el ejemplo anterior es solo una muestra.
 
 Descargar Archivo de Registro
 =============================
@@ -109,7 +109,7 @@ Descarga el contenido del archivo de registro especificado.
 En ``{id}`` se especifica el ``id`` devuelto en la lista (el valor del nombre de archivo codificado en Base64 URL) tal cual.
 La respuesta se devuelve como un flujo ``application/octet-stream``.
 Por razones de seguridad, solo se aceptan nombres que terminen en ``.log`` o ``.log.gz``; los nombres que contienen operaciones de ruta como ``..`` no son aceptados.
-Si se especifica un nombre de archivo inexistente o un nombre no permitido como archivo de registro, se devuelve una respuesta vacia.
+Si se especifica un nombre de archivo inexistente o un nombre no permitido como archivo de registro, se devuelve una respuesta vacía.
 
 Solicitud
 ---------
@@ -143,8 +143,8 @@ Descargar Archivo de Registro
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess.log
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-backup` - API de respaldo

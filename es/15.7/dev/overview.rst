@@ -1,26 +1,26 @@
 ==================================
-Vision General de Documentacion para Desarrolladores
+Visión General de Documentación para Desarrolladores
 ==================================
 
-Vision General
+Visión General
 ==============
 
-Esta seccion explica el desarrollo de extensiones de |Fess|.
-Proporciona informacion para extender |Fess|, incluyendo desarrollo de plugins,
-creacion de conectores personalizados y personalizacion de temas.
+Esta sección explica el desarrollo de extensiones de |Fess|.
+Proporciona información para extender |Fess|, incluyendo desarrollo de plugins,
+creación de conectores personalizados y personalización de temas.
 
 Audiencia Objetivo
 ==================
 
 - Desarrolladores que desean crear funciones personalizadas para |Fess|
 - Desarrolladores que desean crear plugins
-- Desarrolladores que desean entender el codigo fuente de |Fess|
+- Desarrolladores que desean entender el código fuente de |Fess|
 
 Conocimientos Previos
 ---------------------
 
-- Conocimientos basicos de Java 21
-- Conceptos basicos de Maven (sistema de construccion)
+- Conocimientos básicos de Java 21
+- Conceptos básicos de Maven (sistema de construcción)
 - Experiencia en desarrollo de aplicaciones web
 
 Entorno de Desarrollo
@@ -31,13 +31,13 @@ Entorno Recomendado
 
 - **JDK**: OpenJDK 21 o superior
 - **IDE**: IntelliJ IDEA / Eclipse / VS Code
-- **Herramienta de construccion**: Maven 3.9 o superior
+- **Herramienta de construcción**: Maven 3.9 o superior
 - **Git**: Control de versiones
 
-Configuracion
+Configuración
 -------------
 
-1. Obtener el codigo fuente:
+1. Obtener el código fuente:
 
 ::
 
@@ -56,10 +56,10 @@ Configuracion
 
     ./bin/fess
 
-Vision General de la Arquitectura
+Visión General de la Arquitectura
 =================================
 
-|Fess| esta compuesto por los siguientes componentes principales:
+|Fess| está compuesto por los siguientes componentes principales:
 
 Estructura de Componentes
 -------------------------
@@ -69,24 +69,24 @@ Estructura de Componentes
    :widths: 25 75
 
    * - Componente
-     - Descripcion
+     - Descripción
    * - Capa Web
-     - Implementacion MVC con el framework LastaFlute
+     - Implementación MVC con el framework LastaFlute
    * - Capa de Servicios
-     - Logica de negocio
+     - Lógica de negocio
    * - Capa de Acceso a Datos
-     - Integracion con OpenSearch mediante DBFlute
+     - Integración con OpenSearch mediante DBFlute
    * - Rastreador
-     - Recoleccion de contenido con la biblioteca fess-crawler
-   * - Motor de Busqueda
-     - Busqueda de texto completo con OpenSearch
+     - Recolección de contenido con la biblioteca fess-crawler
+   * - Motor de Búsqueda
+     - Búsqueda de texto completo con OpenSearch
 
 Frameworks Principales
 ----------------------
 
-- **LastaFlute**: Framework web (Acciones, Formularios, Validacion)
-- **DBFlute**: Framework de acceso a datos (integracion con OpenSearch)
-- **Lasta Di**: Contenedor de inyeccion de dependencias
+- **LastaFlute**: Framework web (Acciones, Formularios, Validación)
+- **DBFlute**: Framework de acceso a datos (integración con OpenSearch)
+- **Lasta Di**: Contenedor de inyección de dependencias
 
 Estructura de Directorios
 =========================
@@ -111,31 +111,31 @@ Estructura de Directorios
     └── src/main/webapp/
         └── WEB-INF/view/    # Plantillas JSP
 
-Puntos de Extension
+Puntos de Extensión
 ===================
 
-|Fess| proporciona los siguientes puntos de extension:
+|Fess| proporciona los siguientes puntos de extensión:
 
 Plugins
 -------
 
 Puede agregar funcionalidad utilizando plugins.
 
-- **Plugin de almacen de datos**: Rastreo desde nuevas fuentes de datos
+- **Plugin de almacén de datos**: Rastreo desde nuevas fuentes de datos
 - **Plugin de motor de scripts**: Soporte para nuevos lenguajes de script
-- **Plugin de aplicacion web**: Extension de la interfaz web
-- **Plugin Ingest**: Procesamiento de datos durante la indexacion
+- **Plugin de aplicación web**: Extensión de la interfaz web
+- **Plugin Ingest**: Procesamiento de datos durante la indexación
 
 Detalles: :doc:`plugin-architecture`
 
 Temas
 -----
 
-Puede personalizar el diseno de la pantalla de busqueda.
+Puede personalizar el diseño de la pantalla de búsqueda.
 
 Detalles: :doc:`theme-development`
 
-Configuracion
+Configuración
 -------------
 
 Puede personalizar muchos comportamientos en ``fess_config.properties``.
@@ -148,38 +148,38 @@ Desarrollo de Plugins
 Para detalles sobre el desarrollo de plugins, consulte lo siguiente:
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`datastore-plugin` - Desarrollo de plugins de almacen de datos
+- :doc:`datastore-plugin` - Desarrollo de plugins de almacén de datos
 - :doc:`script-engine-plugin` - Plugins de motor de scripts
-- :doc:`webapp-plugin` - Plugins de aplicacion web
+- :doc:`webapp-plugin` - Plugins de aplicación web
 - :doc:`ingest-plugin` - Plugins Ingest
 
 Desarrollo de Temas
 ===================
 
-- :doc:`theme-development` - Personalizacion de temas
+- :doc:`theme-development` - Personalización de temas
 
-Mejores Practicas
+Mejores Prácticas
 =================
 
-Convenciones de Codificacion
+Convenciones de Codificación
 ----------------------------
 
-- Seguir el estilo de codigo existente de |Fess|
-- Formatear codigo con ``mvn formatter:format``
+- Seguir el estilo de código existente de |Fess|
+- Formatear código con ``mvn formatter:format``
 - Agregar encabezados de licencia con ``mvn license:format``
 
 Pruebas
 -------
 
 - Escribir pruebas unitarias (``*Test.java``)
-- Las pruebas de integracion son ``*Tests.java``
+- Las pruebas de integración son ``*Tests.java``
 
 Registro
 --------
 
 - Usar Log4j2
 - ``logger.debug()`` / ``logger.info()`` / ``logger.warn()`` / ``logger.error()``
-- No registrar informacion sensible
+- No registrar información sensible
 
 Recursos
 ========

@@ -2,16 +2,16 @@
 API de Stats
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de Stats es una API para obtener metricas del sistema del servidor donde se ejecuta |Fess|.
-Puede ver informacion estadistica de la JVM, el sistema operativo, el proceso, el cluster del motor de busqueda (OpenSearch) y el sistema de archivos.
+La API de Stats es una API para obtener métricas del sistema del servidor donde se ejecuta |Fess|.
+Puede ver información estadística de la JVM, el sistema operativo, el proceso, el cluster del motor de búsqueda (OpenSearch) y el sistema de archivos.
 
 .. note::
 
-   Esta API no devuelve datos de analisis de busqueda como consultas de busqueda o clics.
-   Para buscar y gestionar documentos del indice, consulte :doc:`api-admin-searchlist`.
+   Esta API no devuelve datos de análisis de búsqueda como consultas de búsqueda o clics.
+   Para buscar y gestionar documentos del índice, consulte :doc:`api-admin-searchlist`.
 
 URL Base
 ========
@@ -21,7 +21,7 @@ URL Base
     /api/admin/stats
 
 El acceso a esta API requiere un token de acceso con el permiso ``Radmin-api``.
-Para obtener detalles sobre la autenticacion, consulte :doc:`api-admin-overview`.
+Para obtener detalles sobre la autenticación, consulte :doc:`api-admin-overview`.
 
 Lista de Endpoints
 ==================
@@ -30,14 +30,14 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /
-     - Obtener informacion estadistica del sistema
+     - Obtener información estadística del sistema
 
-Obtener Informacion Estadistica del Sistema
+Obtener Información Estadística del Sistema
 ===========================================
 
 Solicitud
@@ -47,18 +47,18 @@ Solicitud
 
     GET /api/admin/stats
 
-Este endpoint no acepta parametros de consulta.
+Este endpoint no acepta parámetros de consulta.
 
 Respuesta
 ---------
 
-La respuesta incluye ``version``, que indica la version del producto, ``status``, que indica
-el resultado del procesamiento, y un objeto ``stats`` que almacena las metricas del sistema.
+La respuesta incluye ``version``, que indica la versión del producto, ``status``, que indica
+el resultado del procesamiento, y un objeto ``stats`` que almacena las métricas del sistema.
 ``stats`` tiene cinco claves: ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
 
 .. note::
 
-   Los nombres de campo de los objetos bajo ``stats`` se presentan en snake_case (palabras en minusculas separadas por guiones bajos, por ejemplo ``non_heap``).
+   Los nombres de campo de los objetos bajo ``stats`` se presentan en snake_case (palabras en minúsculas separadas por guiones bajos, por ejemplo ``non_heap``).
    Los campos cuyo valor es ``null`` se omiten de la respuesta.
 
 .. code-block:: json
@@ -143,15 +143,15 @@ Campos de Respuesta (Nivel Superior)
    :widths: 20 80
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``version``
-     - La version del producto de |Fess| (por ejemplo, ``15.8.0``).
+     - La versión del producto de |Fess| (por ejemplo, ``15.8.0``).
    * - ``status``
-     - Codigo que indica el resultado del procesamiento. ``0`` indica que se completo correctamente.
+     - Código que indica el resultado del procesamiento. ``0`` indica que se completó correctamente.
    * - ``stats``
-     - Objeto que almacena las metricas del sistema. Tiene cinco claves: ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
+     - Objeto que almacena las métricas del sistema. Tiene cinco claves: ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
 
-``jvm``: Estadisticas de la JVM
+``jvm``: Estadísticas de la JVM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -159,13 +159,13 @@ Campos de Respuesta (Nivel Superior)
    :widths: 35 65
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``memory.heap.used``
      - Memoria heap utilizada (bytes).
    * - ``memory.heap.committed``
      - Memoria heap comprometida (bytes).
    * - ``memory.heap.max``
-     - Memoria heap maxima (bytes).
+     - Memoria heap máxima (bytes).
    * - ``memory.heap.percent``
      - Porcentaje de uso de la memoria heap (%).
    * - ``memory.non_heap.used``
@@ -173,27 +173,27 @@ Campos de Respuesta (Nivel Superior)
    * - ``memory.non_heap.committed``
      - Memoria no-heap comprometida (bytes).
    * - ``memory.non_heap.max``
-     - Memoria no-heap maxima (bytes). En la implementacion actual este valor no se establece y siempre devuelve ``0``.
+     - Memoria no-heap máxima (bytes). En la implementación actual este valor no se establece y siempre devuelve ``0``.
    * - ``memory.non_heap.percent``
-     - Porcentaje de uso de la memoria no-heap (%). En la implementacion actual este valor no se establece y siempre devuelve ``0``.
+     - Porcentaje de uso de la memoria no-heap (%). En la implementación actual este valor no se establece y siempre devuelve ``0``.
    * - ``pools``
-     - Arreglo de grupos de buffers. Cada elemento incluye ``key`` (nombre del grupo), ``count`` (numero de buffers), ``used`` (memoria utilizada, bytes) y ``capacity`` (capacidad total, bytes).
+     - Arreglo de grupos de buffers. Cada elemento incluye ``key`` (nombre del grupo), ``count`` (número de buffers), ``used`` (memoria utilizada, bytes) y ``capacity`` (capacidad total, bytes).
    * - ``gc``
-     - Arreglo de recolectores de basura. Cada elemento incluye ``key`` (nombre del recolector), ``count`` (numero de recolecciones) y ``time`` (tiempo acumulado de recoleccion, milisegundos).
+     - Arreglo de recolectores de basura. Cada elemento incluye ``key`` (nombre del recolector), ``count`` (número de recolecciones) y ``time`` (tiempo acumulado de recolección, milisegundos).
    * - ``threads.count``
-     - Numero actual de hilos.
+     - Número actual de hilos.
    * - ``threads.peak``
-     - Numero maximo de hilos alcanzado.
+     - Número máximo de hilos alcanzado.
    * - ``classes.loaded``
-     - Numero de clases cargadas actualmente.
+     - Número de clases cargadas actualmente.
    * - ``classes.total_loaded``
-     - Numero total de clases cargadas desde que se inicio la JVM.
+     - Número total de clases cargadas desde que se inició la JVM.
    * - ``classes.unloaded``
-     - Numero total de clases descargadas.
+     - Número total de clases descargadas.
    * - ``uptime``
      - Tiempo de actividad de la JVM (milisegundos).
 
-``os``: Estadisticas del Sistema Operativo
+``os``: Estadísticas del Sistema Operativo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -201,11 +201,11 @@ Campos de Respuesta (Nivel Superior)
    :widths: 35 65
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``memory.physical.free``
-     - Memoria fisica libre (bytes).
+     - Memoria física libre (bytes).
    * - ``memory.physical.total``
-     - Memoria fisica total (bytes).
+     - Memoria física total (bytes).
    * - ``memory.swap_space.free``
      - Espacio de intercambio libre (bytes).
    * - ``memory.swap_space.total``
@@ -215,7 +215,7 @@ Campos de Respuesta (Nivel Superior)
    * - ``load_averages``
      - Arreglo de promedios de carga (1, 5 y 15 minutos). Los valores que no se pueden obtener pueden ser ``-1``.
 
-``process``: Estadisticas del Proceso
+``process``: Estadísticas del Proceso
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -223,77 +223,77 @@ Campos de Respuesta (Nivel Superior)
    :widths: 35 65
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``file_fescriptor.open``
-     - Numero de descriptores de archivo abiertos actualmente.
+     - Número de descriptores de archivo abiertos actualmente.
    * - ``file_fescriptor.max``
-     - Numero maximo de descriptores de archivo que se pueden abrir.
+     - Número máximo de descriptores de archivo que se pueden abrir.
    * - ``cpu.percent``
      - Porcentaje de uso de CPU del proceso (%).
    * - ``cpu.total``
      - Tiempo de CPU acumulado utilizado por el proceso (milisegundos).
    * - ``virtual_memory.total``
-     - Tamano total de la memoria virtual del proceso (bytes).
+     - Tamaño total de la memoria virtual del proceso (bytes).
 
 .. note::
 
-   El nombre de clave ``process.file_fescriptor`` es la conversion a snake_case del nombre de campo del codigo fuente
-   ``fileFescriptor`` (que se origina de una falta de ortografia de ``fileDescriptor``). Coincide con
-   la implementacion y no es un error tipografico en este documento.
+   El nombre de clave ``process.file_fescriptor`` es la conversión a snake_case del nombre de campo del código fuente
+   ``fileFescriptor`` (que se origina de una falta de ortografía de ``fileDescriptor``). Coincide con
+   la implementación y no es un error tipográfico en este documento.
 
-``engine``: Estadisticas del Cluster del Motor de Busqueda
+``engine``: Estadísticas del Cluster del Motor de Búsqueda
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Informacion de salud del cluster del motor de busqueda (OpenSearch).
+Información de salud del cluster del motor de búsqueda (OpenSearch).
 
 .. list-table::
    :header-rows: 1
    :widths: 35 65
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``cluster_name``
      - Nombre del cluster.
    * - ``number_of_nodes``
-     - Numero total de nodos en el cluster.
+     - Número total de nodos en el cluster.
    * - ``number_of_data_nodes``
-     - Numero de nodos de datos.
+     - Número de nodos de datos.
    * - ``active_primary_shards``
-     - Numero de shards primarios activos.
+     - Número de shards primarios activos.
    * - ``active_shards``
-     - Numero de shards activos.
+     - Número de shards activos.
    * - ``active_shards_percent``
      - Porcentaje de shards activos (%).
    * - ``relocating_shards``
-     - Numero de shards en reubicacion.
+     - Número de shards en reubicación.
    * - ``initializing_shards``
-     - Numero de shards en inicializacion.
+     - Número de shards en inicialización.
    * - ``unassigned_shards``
-     - Numero de shards sin asignar.
+     - Número de shards sin asignar.
    * - ``delayed_unassigned_shards``
-     - Numero de shards sin asignar con retraso.
+     - Número de shards sin asignar con retraso.
    * - ``number_of_pending_tasks``
-     - Numero de tareas pendientes.
+     - Número de tareas pendientes.
    * - ``number_of_in_flight_fetch``
-     - Numero de operaciones de recuperacion en curso.
+     - Número de operaciones de recuperación en curso.
    * - ``status``
      - Estado de salud del cluster (``green`` / ``yellow`` / ``red``).
    * - ``exception``
      - Mensaje de error que se incluye solo cuando ocurre un error, como cuando no se puede alcanzar el cluster. En este caso, ``status`` se vuelve ``red``.
 
-``fs``: Estadisticas del Sistema de Archivos
+``fs``: Estadísticas del Sistema de Archivos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Arreglo de estadisticas para cada raiz (las raices obtenidas de ``File.listRoots()``).
+Arreglo de estadísticas para cada raíz (las raíces obtenidas de ``File.listRoots()``).
 
 .. list-table::
    :header-rows: 1
    :widths: 35 65
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``path``
-     - Ruta absoluta de la raiz.
+     - Ruta absoluta de la raíz.
    * - ``total``
      - Capacidad total (bytes).
    * - ``free``
@@ -308,7 +308,7 @@ Arreglo de estadisticas para cada raiz (las raices obtenidas de ``File.listRoots
 Ejemplos de Uso
 ===============
 
-Obtener Informacion Estadistica del Sistema
+Obtener Información Estadística del Sistema
 -------------------------------------------
 
 .. code-block:: bash
@@ -325,7 +325,7 @@ Verificar el Uso del Heap de la JVM
          -H "Authorization: Bearer YOUR_TOKEN" \
          | jq '.response.stats.jvm.memory.heap.percent'
 
-Verificar el Estado del Cluster del Motor de Busqueda
+Verificar el Estado del Cluster del Motor de Búsqueda
 ------------------------------------------------------
 
 .. code-block:: bash
@@ -334,9 +334,9 @@ Verificar el Estado del Cluster del Motor de Busqueda
          -H "Authorization: Bearer YOUR_TOKEN" \
          | jq '.response.stats.engine.status'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-systeminfo` - API de informacion del sistema
-- :doc:`api-admin-searchlist` - API de busqueda y gestion de documentos
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-systeminfo` - API de información del sistema
+- :doc:`api-admin-searchlist` - API de búsqueda y gestión de documentos

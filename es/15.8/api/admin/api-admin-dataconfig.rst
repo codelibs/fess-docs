@@ -2,10 +2,10 @@
 API de DataConfig
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de DataConfig es para gestionar la configuracion de almacen de datos de |Fess|.
+La API de DataConfig es para gestionar la configuración de almacén de datos de |Fess|.
 Puede operar configuraciones de rastreo para fuentes de datos como bases de datos, CSV y JSON.
 
 URL Base
@@ -22,26 +22,26 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
-     - Obtener lista de configuraciones de almacen de datos
+     - Obtener lista de configuraciones de almacén de datos
    * - GET
      - /setting/{id}
-     - Obtener configuracion de almacen de datos
+     - Obtener configuración de almacén de datos
    * - POST
      - /setting
-     - Crear configuracion de almacen de datos
+     - Crear configuración de almacén de datos
    * - PUT
      - /setting
-     - Actualizar configuracion de almacen de datos
+     - Actualizar configuración de almacén de datos
    * - DELETE
      - /setting/{id}
-     - Eliminar configuracion de almacen de datos
+     - Eliminar configuración de almacén de datos
 
-Obtener Lista de Configuraciones de Almacen de Datos
+Obtener Lista de Configuraciones de Almacén de Datos
 ====================================================
 
 Solicitud
@@ -51,29 +51,29 @@ Solicitud
 
     GET /api/admin/dataconfig/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 25)
+     - Número de elementos por página (predeterminado: 25)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``name``
      - String
      - No
-     - Filtrar por nombre de configuracion
+     - Filtrar por nombre de configuración
    * - ``handlerName``
      - String
      - No
@@ -81,7 +81,7 @@ Parametros
    * - ``description``
      - String
      - No
-     - Filtrar por descripcion
+     - Filtrar por descripción
 
 Respuesta
 ---------
@@ -110,7 +110,7 @@ Respuesta
       }
     }
 
-Obtener Configuracion de Almacen de Datos
+Obtener Configuración de Almacén de Datos
 =========================================
 
 Solicitud
@@ -144,7 +144,7 @@ Respuesta
       }
     }
 
-Crear Configuracion de Almacen de Datos
+Crear Configuración de Almacén de Datos
 =======================================
 
 Solicitud
@@ -171,7 +171,7 @@ Cuerpo de la Solicitud
       "permissions": "{role}admin\n{role}user"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -180,37 +180,37 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre de la configuracion
+     - Sí
+     - Nombre de la configuración
    * - ``description``
      - No
-     - Descripcion de la configuracion
+     - Descripción de la configuración
    * - ``handlerName``
-     - Si
-     - Nombre del manejador de almacen de datos
+     - Sí
+     - Nombre del manejador de almacén de datos
    * - ``handlerParameter``
      - No
-     - Parametros del manejador (informacion de conexion, etc.)
+     - Parámetros del manejador (información de conexión, etc.)
    * - ``handlerScript``
      - No
-     - Script de transformacion de datos
+     - Script de transformación de datos
    * - ``boost``
-     - Si
-     - Valor de impulso en resultados de busqueda
+     - Sí
+     - Valor de impulso en resultados de búsqueda
    * - ``available``
-     - Si
+     - Sí
      - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Si
-     - Orden de visualizacion
+     - Sí
+     - Orden de visualización
    * - ``permissions``
      - No
-     - Roles con permiso de acceso (separados por saltos de linea si son varios)
+     - Roles con permiso de acceso (separados por saltos de línea si son varios)
    * - ``virtualHosts``
      - No
-     - Hosts virtuales (separados por saltos de linea si son varios)
+     - Hosts virtuales (separados por saltos de línea si son varios)
 
 Respuesta
 ---------
@@ -225,7 +225,7 @@ Respuesta
       }
     }
 
-Actualizar Configuracion de Almacen de Datos
+Actualizar Configuración de Almacén de Datos
 ============================================
 
 Solicitud
@@ -253,7 +253,7 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
-Las solicitudes de actualizacion requieren los mismos campos obligatorios que la creacion (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), ademas de los siguientes campos:
+Las solicitudes de actualización requieren los mismos campos obligatorios que la creación (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), además de los siguientes campos:
 
 .. list-table::
    :header-rows: 1
@@ -261,13 +261,13 @@ Las solicitudes de actualizacion requieren los mismos campos obligatorios que la
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``id``
-     - Si
-     - ID de la configuracion a actualizar
+     - Sí
+     - ID de la configuración a actualizar
    * - ``versionNo``
-     - Si
-     - Numero de version para el bloqueo optimista (especifique el valor obtenido al recuperar la configuracion)
+     - Sí
+     - Número de versión para el bloqueo optimista (especifique el valor obtenido al recuperar la configuración)
 
 Respuesta
 ---------
@@ -282,7 +282,7 @@ Respuesta
       }
     }
 
-Eliminar Configuracion de Almacen de Datos
+Eliminar Configuración de Almacén de Datos
 ==========================================
 
 Solicitud
@@ -311,27 +311,27 @@ Tipos de Manejador
    :widths: 30 70
 
    * - Nombre del Manejador
-     - Descripcion
+     - Descripción
    * - ``DatabaseDataStore``
-     - Conecta a base de datos via JDBC
+     - Conecta a base de datos vía JDBC
    * - ``CsvDataStore``
      - Lee datos de un archivo CSV (procesa cada fila como un documento)
    * - ``CsvListDataStore``
-     - Lee archivos CSV y elimina automaticamente los archivos procesados (una extension de ``CsvDataStore`` con filtrado basado en marcas de tiempo)
+     - Lee archivos CSV y elimina automáticamente los archivos procesados (una extensión de ``CsvDataStore`` con filtrado basado en marcas de tiempo)
    * - ``JsonDataStore``
      - Lee datos de archivos JSON o API JSON
 
 .. note::
 
-   Los tipos de manejador disponibles dependen de los plugins de almacen de datos instalados.
+   Los tipos de manejador disponibles dependen de los plugins de almacén de datos instalados.
    Los manejadores indicados arriba se incluyen de forma predeterminada. Al instalar plugins de
-   almacen de datos como SharePoint, Slack o Salesforce, los nombres de manejador correspondientes
+   almacén de datos como SharePoint, Slack o Salesforce, los nombres de manejador correspondientes
    quedan disponibles.
 
 Ejemplos de Uso
 ===============
 
-Configuracion de Rastreo de Base de Datos
+Configuración de Rastreo de Base de Datos
 -----------------------------------------
 
 .. code-block:: bash
@@ -349,10 +349,10 @@ Configuracion de Rastreo de Base de Datos
            "sortOrder": 0
          }'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-webconfig` - API de configuracion de rastreo web
-- :doc:`api-admin-fileconfig` - API de configuracion de rastreo de archivos
-- :doc:`../../admin/dataconfig-guide` - Guia de configuracion de almacen de datos
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-webconfig` - API de configuración de rastreo web
+- :doc:`api-admin-fileconfig` - API de configuración de rastreo de archivos
+- :doc:`../../admin/dataconfig-guide` - Guía de configuración de almacén de datos

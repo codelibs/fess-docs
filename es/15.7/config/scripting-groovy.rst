@@ -1,18 +1,18 @@
 ==================================
-Guia de scripting Groovy
+Guía de scripting Groovy
 ==================================
 
-Descripcion general
+Descripción general
 ===================
 
 Groovy es el lenguaje de scripting predeterminado de |Fess|.
-Se ejecuta en la maquina virtual Java (JVM) y permite escribir scripts con una sintaxis mas concisa
+Se ejecuta en la máquina virtual Java (JVM) y permite escribir scripts con una sintaxis más concisa
 mientras mantiene alta compatibilidad con Java.
 
-Sintaxis basica
+Sintaxis básica
 ===============
 
-Declaracion de variables
+Declaración de variables
 ------------------------
 
 ::
@@ -110,15 +110,15 @@ Bucles
 Scripts de Data Store
 =====================
 
-Ejemplos de scripts en configuracion de data store.
+Ejemplos de scripts en configuración de data store.
 
 .. note::
-   En los scripts de data store, cada linea ``campo=expresion`` se evalua de forma independiente como una unica expresion.
-   Por lo tanto, no se pueden usar sentencias ``import``, declaraciones ``def`` multilinea ni estructuras de control multilinea que establezcan varios campos a la vez (como bloques ``if``).
-   Al usar clases Java, escribalas como una unica expresion con el nombre de clase completamente calificado (FQCN), y use el operador ternario por campo para los valores condicionales (por ejemplo, ``url=data.published ? data.url : null`` ).
-   Ademas, el nombre de variable ``data`` usado aqui es solo un ejemplo; el nombre de variable real depende del conector de data store utilizado. Consulte :doc:`../admin/dataconfig-guide` para mas detalles.
+   En los scripts de data store, cada línea ``campo=expresion`` se evalúa de forma independiente como una única expresión.
+   Por lo tanto, no se pueden usar sentencias ``import``, declaraciones ``def`` multilínea ni estructuras de control multilínea que establezcan varios campos a la vez (como bloques ``if``).
+   Al usar clases Java, escríbalas como una única expresión con el nombre de clase completamente calificado (FQCN), y use el operador ternario por campo para los valores condicionales (por ejemplo, ``url=data.published ? data.url : null`` ).
+   Además, el nombre de variable ``data`` usado aquí es solo un ejemplo; el nombre de variable real depende del conector de data store utilizado. Consulte :doc:`../admin/dataconfig-guide` para más detalles.
 
-Mapeo basico
+Mapeo básico
 ------------
 
 ::
@@ -128,7 +128,7 @@ Mapeo basico
     content=data.content
     lastModified=data.updated_at
 
-Generacion de URL
+Generación de URL
 -----------------
 
 ::
@@ -170,7 +170,7 @@ Procesamiento de fechas
 Objetos disponibles
 ===================
 
-Los objetos disponibles en los scripts varian segun el contexto de ejecucion.
+Los objetos disponibles en los scripts varían según el contexto de ejecución.
 
 .. list-table::
    :header-rows: 1
@@ -178,36 +178,36 @@ Los objetos disponibles en los scripts varian segun el contexto de ejecucion.
 
    * - Contexto
      - Objeto
-     - Descripcion
+     - Descripción
    * - Todos los contextos
      - ``container``
      - Contenedor DI. Se usa para acceder a los componentes mediante ``container.getComponent("...")``
    * - Trabajos programados
      - ``executor``
-     - Control de ejecucion de trabajos ( ``JobExecutor`` ). Necesario para el soporte de detencion de trabajos
+     - Control de ejecución de trabajos ( ``JobExecutor`` ). Necesario para el soporte de detención de trabajos
    * - Data Store
-     - (especifico del conector)
+     - (específico del conector)
      - Variables de registro de datos proporcionadas por cada data store. El nombre de la variable depende del conector
    * - Mapeo de rutas
      - ``url`` , ``matcher``
-     - La cadena de URL a convertir y el resultado de coincidencia de expresion regular ( ``Matcher`` ). Disponible en configuraciones de reemplazo con el prefijo ``groovy:``
+     - La cadena de URL a convertir y el resultado de coincidencia de expresión regular ( ``Matcher`` ). Disponible en configuraciones de reemplazo con el prefijo ``groovy:``
    * - Boost de documento
      - (campos del documento)
-     - Cada campo del documento objetivo esta disponible como variable (se usa en expresiones de condicion y de valor de boost)
+     - Cada campo del documento objetivo está disponible como variable (se usa en expresiones de condición y de valor de boost)
 
 Scripts de trabajos programados
 ===============================
 
 Ejemplos de scripts Groovy para trabajos programados.
-En los trabajos programados, ``container`` y ``executor`` estan disponibles.
-Pasar ``executor`` al metodo ``execute()`` del trabajo habilita el control de detencion del trabajo.
+En los trabajos programados, ``container`` y ``executor`` están disponibles.
+Pasar ``executor`` al método ``execute()`` del trabajo habilita el control de detención del trabajo.
 
 .. note::
-   Un script de trabajo programado se evalua como un unico script Groovy completo.
-   Por lo tanto, a diferencia de los scripts de data store, puede usar sentencias ``import``, declaraciones ``def`` multilinea y estructuras de control multilinea.
-   Los ejemplos de "Uso de clases Java", "Acceso a componentes de Fess", "Manejo de errores" y "Depuracion y salida de logs" que aparecen a continuacion tambien asumen este contexto de script completo.
+   Un script de trabajo programado se evalúa como un único script Groovy completo.
+   Por lo tanto, a diferencia de los scripts de data store, puede usar sentencias ``import``, declaraciones ``def`` multilínea y estructuras de control multilínea.
+   Los ejemplos de "Uso de clases Java", "Acceso a componentes de Fess", "Manejo de errores" y "Depuración y salida de logs" que aparecen a continuación también asumen este contexto de script completo.
 
-Ejecucion de trabajo de crawl
+Ejecución de trabajo de crawl
 -----------------------------
 
 ::
@@ -230,7 +230,7 @@ Crawl condicional
     }
     return "Skipped during business hours"
 
-Ejecucion secuencial de multiples trabajos
+Ejecución secuencial de múltiples trabajos
 ------------------------------------------
 
 ::
@@ -248,7 +248,7 @@ Ejecucion secuencial de multiples trabajos
 Uso de clases Java
 ==================
 
-Dentro de los scripts Groovy, puede usar la biblioteca estandar de Java y las clases de Fess.
+Dentro de los scripts Groovy, puede usar la biblioteca estándar de Java y las clases de Fess.
 
 Fecha y hora
 ------------
@@ -271,7 +271,7 @@ Operaciones de archivo
 
     def content = new String(Files.readAllBytes(Paths.get("/path/to/file.txt")))
 
-Comunicacion HTTP
+Comunicación HTTP
 -----------------
 
 ::
@@ -283,7 +283,7 @@ Comunicacion HTTP
 
 .. warning::
    El acceso a recursos externos afecta el rendimiento,
-   mantengalo al minimo necesario.
+   manténgalo al mínimo necesario.
 
 Acceso a componentes de Fess
 ============================
@@ -298,7 +298,7 @@ System Helper
     def systemHelper = container.getComponent("systemHelper")
     def currentTime = systemHelper.getCurrentTimeAsLong()
 
-Obtencion de valores de configuracion
+Obtención de valores de configuración
 -------------------------------------
 
 ::
@@ -306,7 +306,7 @@ Obtencion de valores de configuracion
     def fessConfig = container.getComponent("fessConfig")
     def indexName = fessConfig.getIndexDocumentUpdateIndex()
 
-Ejecucion de busqueda
+Ejecución de búsqueda
 ---------------------
 
 ::
@@ -333,7 +333,7 @@ Puede capturar excepciones con ``try-catch`` para controlar los errores del trab
         return "Error: " + e.message
     }
 
-Depuracion y salida de logs
+Depuración y salida de logs
 ===========================
 
 Salida de logs
@@ -350,7 +350,7 @@ Salida de logs
     logger.warn("Warning: {}", message)
     logger.error("Error: {}", e.message, e)
 
-Salida de depuracion
+Salida de depuración
 --------------------
 
 ::
@@ -359,19 +359,19 @@ Salida de depuracion
     println "data.id = ${data.id}"
     println "data.title = ${data.title}"
 
-Mejores practicas
+Mejores prácticas
 =================
 
-1. **Mantenerlo simple**: Evitar logica compleja, escribir codigo legible
-2. **Verificacion de null**: Usar operadores ``?.`` y ``?:``
+1. **Mantenerlo simple**: Evitar lógica compleja, escribir código legible
+2. **Verificación de null**: Usar operadores ``?.`` y ``?:``
 3. **Manejo de excepciones**: Manejar errores inesperados con try-catch apropiado
-4. **Salida de logs**: Registrar logs para facilitar la depuracion
+4. **Salida de logs**: Registrar logs para facilitar la depuración
 5. **Rendimiento**: Minimizar acceso a recursos externos
 
-Informacion de referencia
+Información de referencia
 =========================
 
-- `Documentacion oficial de Groovy <https://groovy-lang.org/documentation.html>`__
-- :doc:`scripting-overview` - Descripcion general de scripting
-- :doc:`../admin/dataconfig-guide` - Guia de configuracion de Data Store
-- :doc:`../admin/scheduler-guide` - Guia de configuracion del programador
+- `Documentación oficial de Groovy <https://groovy-lang.org/documentation.html>`__
+- :doc:`scripting-overview` - Descripción general de scripting
+- :doc:`../admin/dataconfig-guide` - Guía de configuración de Data Store
+- :doc:`../admin/scheduler-guide` - Guía de configuración del programador

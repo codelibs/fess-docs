@@ -2,17 +2,17 @@
 Referencia de Admin API
 ==========================
 
-|Fess| Admin API es una API RESTful para acceder programaticamente a las funciones de administracion.
+|Fess| Admin API es una API RESTful para acceder programáticamente a las funciones de administración.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Vision General
+   :caption: Visión General
 
    api-admin-overview
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion de Rastreo
+   :caption: Configuración de Rastreo
 
    api-admin-webconfig
    api-admin-fileconfig
@@ -20,7 +20,7 @@ Referencia de Admin API
 
 .. toctree::
    :maxdepth: 2
-   :caption: Gestion de Indices
+   :caption: Gestión de Índices
 
    api-admin-documents
    api-admin-crawlinginfo
@@ -36,7 +36,7 @@ Referencia de Admin API
 
 .. toctree::
    :maxdepth: 2
-   :caption: Gestion de Usuarios y Permisos
+   :caption: Gestión de Usuarios y Permisos
 
    api-admin-user
    api-admin-role
@@ -45,7 +45,7 @@ Referencia de Admin API
 
 .. toctree::
    :maxdepth: 2
-   :caption: Ajuste de Busqueda
+   :caption: Ajuste de Búsqueda
 
    api-admin-labeltype
    api-admin-keymatch
@@ -75,6 +75,6 @@ Referencia de Admin API
 
 .. toctree::
    :maxdepth: 2
-   :caption: Registro de Busqueda
+   :caption: Registro de Búsqueda
 
    api-admin-searchlist

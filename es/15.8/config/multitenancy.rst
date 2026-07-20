@@ -1,52 +1,52 @@
 =====================================
-Configuracion de multitenencia
+Configuración de multitenencia
 =====================================
 
-Descripcion general
+Descripción general
 ===================
 
 La funcionalidad de multitenencia de |Fess| permite operar
-multiples inquilinos (organizaciones, departamentos, clientes, etc.) de forma separada con una sola instancia de |Fess|.
+múltiples inquilinos (organizaciones, departamentos, clientes, etc.) de forma separada con una sola instancia de |Fess|.
 
 Al usar la funcionalidad de host virtual, puede proporcionar para cada inquilino:
 
-- Interfaz de busqueda independiente
+- Interfaz de búsqueda independiente
 - Contenido separado
-- Diseno personalizado
+- Diseño personalizado
 
-El host virtual actual se refleja en las funciones de filtrado de resultados de busqueda, etiquetas, contenido relacionado,
-consultas relacionadas y diseno (tema), entre otras funciones de |Fess|.
+El host virtual actual se refleja en las funciones de filtrado de resultados de búsqueda, etiquetas, contenido relacionado,
+consultas relacionadas y diseño (tema), entre otras funciones de |Fess|.
 
 Funcionalidad de host virtual
 ==============================
 
-El host virtual es una funcionalidad que proporciona diferentes entornos de busqueda basados en el nombre de host de la solicitud HTTP.
+El host virtual es una funcionalidad que proporciona diferentes entornos de búsqueda basados en el nombre de host de la solicitud HTTP.
 
 Mecanismo
 ---------
 
 1. El usuario accede a ``tenant1.example.com``
 2. |Fess| identifica el nombre de host
-3. Se aplica la configuracion de host virtual correspondiente
-4. Se muestra el contenido y la UI especificos del inquilino
+3. Se aplica la configuración de host virtual correspondiente
+4. Se muestra el contenido y la UI específicos del inquilino
 
-Configuracion de encabezados de host virtual
+Configuración de encabezados de host virtual
 =============================================
 
 Para habilitar la funcionalidad de host virtual, configure la correspondencia entre los encabezados de la solicitud HTTP
-y las claves de host virtual. Existen dos metodos de configuracion:
+y las claves de host virtual. Existen dos métodos de configuración:
 
-- **Pantalla de administracion (recomendado)**: Configure el campo "Host Virtual" en "Sistema" -> "General".
-  Este valor se guarda como configuracion del sistema y se conserva tras el reinicio. Tiene prioridad sobre
+- **Pantalla de administración (recomendado)**: Configure el campo "Host Virtual" en "Sistema" -> "General".
+  Este valor se guarda como configuración del sistema y se conserva tras el reinicio. Tiene prioridad sobre
   ``virtual.host.headers`` en ``fess_config.properties``.
-- **Archivo de configuracion**: Configure la propiedad ``virtual.host.headers`` en ``fess_config.properties``.
+- **Archivo de configuración**: Configure la propiedad ``virtual.host.headers`` en ``fess_config.properties``.
 
-Ambos metodos utilizan el mismo formato de valor de configuracion.
+Ambos métodos utilizan el mismo formato de valor de configuración.
 
-Formato de configuracion
+Formato de configuración
 ------------------------
 
-Especifique cada entrada en el formato ``NombreEncabezado:ValorEncabezado=ClaveHostVirtual``, una por linea:
+Especifique cada entrada en el formato ``NombreEncabezado:ValorEncabezado=ClaveHostVirtual``, una por línea:
 
 ::
 
@@ -54,101 +54,101 @@ Especifique cada entrada en el formato ``NombreEncabezado:ValorEncabezado=ClaveH
     virtual.host.headers=Host:tenant1.example.com=tenant1\n\
     Host:tenant2.example.com=tenant2
 
-Para multiples hosts virtuales, separe las entradas con saltos de linea.
+Para múltiples hosts virtuales, separe las entradas con saltos de línea.
 
 Comportamiento de coincidencia
 ------------------------------
 
 Cada vez que |Fess| recibe una solicitud, compara el valor del encabezado de solicitud correspondiente al
-"NombreEncabezado" de cada linea configurada con el "ValorEncabezado" configurado.
+"NombreEncabezado" de cada línea configurada con el "ValorEncabezado" configurado.
 
-- La comparacion de valores de encabezado no distingue entre mayusculas y minusculas.
-- Las lineas configuradas se evaluan en orden de arriba a abajo; se aplica la clave de host virtual de la primera linea que coincida.
-- Si no hay coincidencia, la solicitud se trata sin host virtual (entorno comun).
-- El resultado de la evaluacion se almacena en cache por solicitud.
+- La comparación de valores de encabezado no distingue entre mayúsculas y minúsculas.
+- Las líneas configuradas se evalúan en orden de arriba a abajo; se aplica la clave de host virtual de la primera línea que coincida.
+- Si no hay coincidencia, la solicitud se trata sin host virtual (entorno común).
+- El resultado de la evaluación se almacena en caché por solicitud.
 
 Restricciones de claves de host virtual
 ----------------------------------------
 
 Las claves de host virtual tienen las siguientes restricciones:
 
-- Solo se permiten caracteres alfanumericos y guiones bajos (``a-zA-Z0-9_``). Otros caracteres se eliminan automaticamente.
-- Los siguientes nombres de clave estan reservados y no se pueden usar: ``admin``, ``common``, ``error``, ``login``, ``profile``
+- Solo se permiten caracteres alfanuméricos y guiones bajos (``a-zA-Z0-9_``). Otros caracteres se eliminan automáticamente.
+- Los siguientes nombres de clave están reservados y no se pueden usar: ``admin``, ``common``, ``error``, ``login``, ``profile``
 
-Configuracion desde la pantalla de administracion
+Configuración desde la pantalla de administración
 ==================================================
 
-Configuracion de crawl
+Configuración de crawl
 ----------------------
 
-Puede separar el contenido especificando el host virtual en la configuracion de crawl web:
+Puede separar el contenido especificando el host virtual en la configuración de crawl web:
 
-1. Iniciar sesion en la pantalla de administracion
-2. Crear configuracion de crawl en "Crawler" -> "Web"
-3. Seleccionar la clave de host virtual configurada en el campo "Host Virtual" (se admite seleccion multiple)
-4. El contenido crawleado con esta configuracion solo sera buscable en el host virtual especificado
+1. Iniciar sesión en la pantalla de administración
+2. Crear configuración de crawl en "Crawler" -> "Web"
+3. Seleccionar la clave de host virtual configurada en el campo "Host Virtual" (se admite selección múltiple)
+4. El contenido crawleado con esta configuración solo será buscable en el host virtual especificado
 
 .. note::
-   El campo "Host Virtual" esta disponible en las configuraciones de crawl de web, sistema de archivos y almacen de datos.
-   La clave de host virtual seleccionada aqui se asigna a cada documento crawleado y se usa para filtrar
-   por el host virtual actual en el momento de la busqueda.
+   El campo "Host Virtual" está disponible en las configuraciones de crawl de web, sistema de archivos y almacén de datos.
+   La clave de host virtual seleccionada aquí se asigna a cada documento crawleado y se usa para filtrar
+   por el host virtual actual en el momento de la búsqueda.
 
 Control de acceso
 =================
 
-Combinacion de host virtual y roles
+Combinación de host virtual y roles
 -------------------------------------
 
 Al combinar hosts virtuales con control de acceso basado en roles,
-es posible un control de acceso mas detallado.
+es posible un control de acceso más detallado.
 
-Configure el host virtual y los permisos juntos en la configuracion de crawl:
+Configure el host virtual y los permisos juntos en la configuración de crawl:
 
 ::
 
-    # Host virtual en la configuracion de crawl
+    # Host virtual en la configuración de crawl
     tenant1
 
-    # Permisos en la configuracion de crawl
+    # Permisos en la configuración de crawl
     {role}tenant1_user
 
-Busqueda basada en roles
+Búsqueda basada en roles
 ------------------------
 
-Para mas detalles, consulte :doc:`security-role`.
+Para más detalles, consulte :doc:`security-role`.
 
-Personalizacion de UI
+Personalización de UI
 =====================
 
 Puede personalizar la UI para cada host virtual.
 
-Aplicacion de tema
+Aplicación de tema
 ------------------
 
 Aplicar un tema diferente para cada host virtual:
 
-1. Configurar tema en "Sistema" -> "Diseno"
-2. Especificar tema en la configuracion del host virtual
+1. Configurar tema en "Sistema" -> "Diseño"
+2. Especificar tema en la configuración del host virtual
 
 CSS personalizado
 -----------------
 
-Para aplicar CSS personalizado por host virtual, edite los archivos CSS en la pantalla de administracion en "Sistema" -> "Diseno". Tambien puede colocar plantillas personalizadas en el directorio de vista correspondiente a la clave del host virtual.
+Para aplicar CSS personalizado por host virtual, edite los archivos CSS en la pantalla de administración en "Sistema" -> "Diseño". También puede colocar plantillas personalizadas en el directorio de vista correspondiente a la clave del host virtual.
 
-Configuracion de etiquetas
+Configuración de etiquetas
 --------------------------
 
 Limitar etiquetas mostradas para cada host virtual:
 
-1. Especificar host virtual en la configuracion del tipo de etiqueta
+1. Especificar host virtual en la configuración del tipo de etiqueta
 2. La etiqueta solo se muestra en el host virtual especificado
 
 Acceso mediante API
 ===================
 
-Las solicitudes a la API de busqueda tambien determinan el host virtual por el nombre de host de la solicitud
+Las solicitudes a la API de búsqueda también determinan el host virtual por el nombre de host de la solicitud
 (el encabezado configurado, normalmente el encabezado ``Host``), igual que la UI. Por ejemplo,
-una solicitud dirigida a ``tenant1.example.com`` se limita automaticamente al host virtual ``tenant1``
+una solicitud dirigida a ``tenant1.example.com`` se limita automáticamente al host virtual ``tenant1``
 y solo se busca en el contenido de ese host virtual.
 
 Solicitud de API
@@ -158,7 +158,7 @@ Solicitud de API
 
     curl "https://tenant1.example.com/api/v2/search?q=keyword"
 
-Para autenticarse con un token de acceso, especifiquelo en el encabezado ``Authorization``
+Para autenticarse con un token de acceso, especifíquelo en el encabezado ``Authorization``
 en formato ``Bearer``:
 
 ::
@@ -167,33 +167,33 @@ en formato ``Bearer``:
          "https://tenant1.example.com/api/v2/search?q=keyword"
 
 .. note::
-   Los tokens de acceso no estan vinculados a un host virtual especifico. Un token es valido para
+   Los tokens de acceso no están vinculados a un host virtual específico. Un token es válido para
    cualquier host virtual; el host virtual de destino se determina por el nombre de host al que se
-   envia la solicitud. Si se envia el mismo token a un nombre de host diferente, se aplica al
+   envía la solicitud. Si se envía el mismo token a un nombre de host diferente, se aplica al
    host virtual correspondiente. Si desea controlar el alcance del acceso independientemente del
    host virtual, combinen con el control de acceso basado en roles (:doc:`security-role`).
 
-Configuracion de DNS
+Configuración de DNS
 ====================
 
-Ejemplo de configuracion de DNS para implementar multitenencia:
+Ejemplo de configuración de DNS para implementar multitenencia:
 
 Subdominios al mismo servidor
 ------------------------------
 
 ::
 
-    # Configuracion de DNS
+    # Configuración de DNS
     tenant1.example.com    A    192.168.1.100
     tenant2.example.com    A    192.168.1.100
 
     # O comodin
     *.example.com          A    192.168.1.100
 
-Configuracion de proxy inverso
+Configuración de proxy inverso
 --------------------------------
 
-Ejemplo de configuracion de proxy inverso con Nginx:
+Ejemplo de configuración de proxy inverso con Nginx:
 
 ::
 
@@ -217,15 +217,15 @@ Ejemplo de configuracion de proxy inverso con Nginx:
         }
     }
 
-Separacion de datos
+Separación de datos
 ===================
 
-Si se requiere separacion completa de datos, considere los siguientes enfoques:
+Si se requiere separación completa de datos, considere los siguientes enfoques:
 
-Separacion a nivel de indice
+Separación a nivel de índice
 ------------------------------
 
-Usar instancias e indices separados de |Fess| para cada inquilino:
+Usar instancias e índices separados de |Fess| para cada inquilino:
 
 ::
 
@@ -237,27 +237,27 @@ Usar instancias e indices separados de |Fess| para cada inquilino:
 
 .. note::
    ``index.document.search.index`` solo puede establecerse en un valor por instancia.
-   Para una separacion completa a nivel de indice, necesita ejecutar instancias separadas de |Fess| por inquilino
-   o implementar codigo personalizado. Para multitenencia tipica, la separacion logica mediante la funcionalidad de host virtual es suficiente.
+   Para una separación completa a nivel de índice, necesita ejecutar instancias separadas de |Fess| por inquilino
+   o implementar código personalizado. Para multitenencia típica, la separación lógica mediante la funcionalidad de host virtual es suficiente.
 
-Mejores practicas
+Mejores prácticas
 =================
 
-1. **Convencion de nombres clara**: Usar una convencion de nombres consistente para hosts virtuales y roles
+1. **Convención de nombres clara**: Usar una convención de nombres consistente para hosts virtuales y roles
 2. **Pruebas**: Probar exhaustivamente el funcionamiento en cada inquilino
 3. **Monitoreo**: Monitorear el uso de recursos por inquilino
-4. **Documentacion**: Documentar la configuracion de inquilinos
+4. **Documentación**: Documentar la configuración de inquilinos
 
 Limitaciones
 ============
 
-- La pantalla de administracion es compartida por todos los inquilinos
-- La configuracion del sistema afecta a todos los inquilinos
+- La pantalla de administración es compartida por todos los inquilinos
+- La configuración del sistema afecta a todos los inquilinos
 - Algunas funcionalidades pueden no ser compatibles con hosts virtuales
 
-Informacion de referencia
+Información de referencia
 =========================
 
 - :doc:`security-role` - Control de acceso basado en roles
-- :doc:`security-virtual-host` - Detalles de configuracion de host virtual
-- :doc:`../admin/design-guide` - Personalizacion de diseno
+- :doc:`security-virtual-host` - Detalles de configuración de host virtual
+- :doc:`../admin/design-guide` - Personalización de diseño

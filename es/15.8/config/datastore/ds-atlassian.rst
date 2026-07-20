@@ -2,11 +2,11 @@
 Conector de Atlassian
 ==================================
 
-Descripcion General
+Descripción General
 ===================
 
 El conector de Atlassian proporciona funcionalidad para obtener datos de productos Atlassian
-(Jira, Confluence) y registrarlos en el indice de |Fess|.
+(Jira, Confluence) y registrarlos en el índice de |Fess|.
 
 Esta funcionalidad requiere el plugin ``fess-ds-atlassian``.
 
@@ -19,25 +19,25 @@ Productos Compatibles
 Requisitos Previos
 ==================
 
-1. Se requiere instalacion del plugin
-2. Se requieren credenciales de autenticacion apropiadas para productos Atlassian
-3. Para la version Cloud, se puede usar OAuth 2.0; para Server, OAuth 1.0a o autenticacion basica
+1. Se requiere instalación del plugin
+2. Se requieren credenciales de autenticación apropiadas para productos Atlassian
+3. Para la versión Cloud, se puede usar OAuth 2.0; para Server, OAuth 1.0a o autenticación básica
 
-Instalacion del Plugin
+Instalación del Plugin
 ----------------------
 
-Instale desde la consola de administracion en "Sistema" -> "Plugins":
+Instale desde la consola de administración en "Sistema" -> "Plugins":
 
 1. Descargue ``fess-ds-atlassian-X.X.X.jar`` de Maven Central
-2. Cargue e instale desde la pantalla de administracion de plugins
+2. Cargue e instale desde la pantalla de administración de plugins
 3. Reinicie |Fess|
 
-Metodo de Configuracion
+Método de Configuración
 =======================
 
-Configure desde la consola de administracion en "Rastreador" -> "Almacen de Datos" -> "Crear Nuevo".
+Configure desde la consola de administración en "Rastreador" -> "Almacén de Datos" -> "Crear Nuevo".
 
-Configuracion Basica
+Configuración Básica
 --------------------
 
 .. list-table::
@@ -45,7 +45,7 @@ Configuracion Basica
    :widths: 25 75
 
    * - Elemento
-     - Ejemplo de Configuracion
+     - Ejemplo de Configuración
    * - Nombre
      - Company Jira/Confluence
    * - Nombre del Manejador
@@ -53,10 +53,10 @@ Configuracion Basica
    * - Habilitado
      - Activado
 
-Configuracion de Parametros
+Configuración de Parámetros
 ---------------------------
 
-Ejemplo version Cloud (OAuth 2.0):
+Ejemplo versión Cloud (OAuth 2.0):
 
 ::
 
@@ -68,7 +68,7 @@ Ejemplo version Cloud (OAuth 2.0):
     oauth2.access_token=your_access_token
     oauth2.refresh_token=your_refresh_token
 
-Ejemplo version Server (Autenticacion Basica):
+Ejemplo versión Server (Autenticación Básica):
 
 ::
 
@@ -78,7 +78,7 @@ Ejemplo version Server (Autenticacion Basica):
     basic.username=admin
     basic.password=your_password
 
-Ejemplo version Server (OAuth 1.0a):
+Ejemplo versión Server (OAuth 1.0a):
 
 ::
 
@@ -90,25 +90,25 @@ Ejemplo version Server (OAuth 1.0a):
     oauth.secret=verification_code
     oauth.access_token=your_access_token
 
-Lista de Parametros
+Lista de Parámetros
 ~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``home``
-     - Si
+     - Sí
      - URL de la instancia de Atlassian
    * - ``is_cloud``
      - No
-     - ``true`` para Cloud, ``false`` para Server (predeterminado: ``true``). Solo se utiliza para la seleccion del endpoint durante la autenticacion OAuth 2.0; se ignora en la autenticacion Basica y OAuth 1.0a.
+     - ``true`` para Cloud, ``false`` para Server (predeterminado: ``true``). Solo se utiliza para la selección del endpoint durante la autenticación OAuth 2.0; se ignora en la autenticación Básica y OAuth 1.0a.
    * - ``auth_type``
-     - Si
-     - Tipo de autenticacion: ``oauth``, ``oauth2``, ``basic``
+     - Sí
+     - Tipo de autenticación: ``oauth``, ``oauth2``, ``basic``
    * - ``oauth.consumer_key``
      - Para OAuth 1.0a
      - Clave del consumidor (normalmente ``OauthKey``)
@@ -117,7 +117,7 @@ Lista de Parametros
      - Clave privada RSA (formato PEM)
    * - ``oauth.secret``
      - Para OAuth 1.0a
-     - Codigo de verificacion
+     - Código de verificación
    * - ``oauth.access_token``
      - Para OAuth 1.0a
      - Token de acceso
@@ -132,46 +132,46 @@ Lista de Parametros
      - Token de acceso
    * - ``oauth2.refresh_token``
      - No
-     - Token de actualizacion (OAuth 2.0)
+     - Token de actualización (OAuth 2.0)
    * - ``oauth2.token_url``
      - No
      - URL del token (OAuth 2.0, predeterminado: ``https://auth.atlassian.com/oauth/token``)
    * - ``basic.username``
-     - Para autenticacion basica
+     - Para autenticación básica
      - Nombre de usuario
    * - ``basic.password``
-     - Para autenticacion basica
-     - Contrasena
+     - Para autenticación básica
+     - Contraseña
    * - ``issue.jql``
      - No
-     - JQL (solo Jira, condiciones de busqueda avanzadas). Si no se especifica, se procesan todas las incidencias (``created is not empty``).
+     - JQL (solo Jira, condiciones de búsqueda avanzadas). Si no se especifica, se procesan todas las incidencias (``created is not empty``).
    * - ``issue_max_results``
      - No
-     - Resultados maximos por solicitud de API de Jira (predeterminado: ``50``, solo Jira)
+     - Resultados máximos por solicitud de API de Jira (predeterminado: ``50``, solo Jira)
    * - ``content_limit``
      - No
-     - Elementos maximos por solicitud de API de Confluence (predeterminado: ``25``, solo Confluence)
+     - Elementos máximos por solicitud de API de Confluence (predeterminado: ``25``, solo Confluence)
    * - ``ignore_error``
      - No
      - Continuar procesamiento en caso de error (predeterminado: ``true``)
    * - ``include_pattern``
      - No
-     - Patron de inclusion de URL (regex)
+     - Patrón de inclusión de URL (regex)
    * - ``exclude_pattern``
      - No
-     - Patron de exclusion de URL (regex)
+     - Patrón de exclusión de URL (regex)
    * - ``number_of_threads``
      - No
-     - Numero de hilos para procesamiento paralelo (predeterminado: ``1``)
+     - Número de hilos para procesamiento paralelo (predeterminado: ``1``)
    * - ``proxy_host``
      - No
      - Nombre de host del proxy HTTP
    * - ``proxy_port``
      - No
-     - Numero de puerto del proxy HTTP
+     - Número de puerto del proxy HTTP
    * - ``connection_timeout``
      - No
-     - Tiempo de espera de conexion HTTP (milisegundos)
+     - Tiempo de espera de conexión HTTP (milisegundos)
    * - ``read_timeout``
      - No
      - Tiempo de espera de lectura HTTP (milisegundos)
@@ -179,7 +179,7 @@ Lista de Parametros
      - No
      - Intervalo entre el procesamiento de cada documento (en milisegundos, predeterminado: ``0``)
 
-Configuracion de Script
+Configuración de Script
 -----------------------
 
 Para Jira
@@ -196,9 +196,9 @@ Campos disponibles:
 
 - ``issue.view_url`` - URL de la incidencia
 - ``issue.summary`` - Resumen de la incidencia
-- ``issue.description`` - Descripcion de la incidencia
+- ``issue.description`` - Descripción de la incidencia
 - ``issue.comments`` - Comentarios de la incidencia
-- ``issue.last_modified`` - Fecha de ultima modificacion
+- ``issue.last_modified`` - Fecha de última modificación
 
 Para Confluence
 ~~~~~~~~~~~~~~~
@@ -212,34 +212,34 @@ Para Confluence
 
 Campos disponibles:
 
-- ``content.view_url`` - URL de la pagina
-- ``content.title`` - Titulo de la pagina
-- ``content.body`` - Cuerpo de la pagina
-- ``content.comments`` - Comentarios de la pagina
-- ``content.last_modified`` - Fecha de ultima modificacion
+- ``content.view_url`` - URL de la página
+- ``content.title`` - Título de la página
+- ``content.body`` - Cuerpo de la página
+- ``content.comments`` - Comentarios de la página
+- ``content.last_modified`` - Fecha de última modificación
 
 .. note::
-   El conector de Confluence recupera tanto paginas regulares (page) como entradas de blog (blogpost).
+   El conector de Confluence recupera tanto páginas regulares (page) como entradas de blog (blogpost).
 
-Configuracion de Autenticacion OAuth 2.0
+Configuración de Autenticación OAuth 2.0
 ========================================
 
-Para la Version Cloud (Recomendado)
+Para la Versión Cloud (Recomendado)
 -----------------------------------
 
-1. Cree una aplicacion en Atlassian Developer Console
+1. Cree una aplicación en Atlassian Developer Console
 2. Obtenga credenciales de OAuth 2.0
 3. Configure los alcances requeridos:
 
    - Jira: ``read:jira-work``, ``read:jira-user``
    - Confluence: ``read:confluence-content.all``, ``read:confluence-user``
 
-4. Obtenga tokens de acceso y actualizacion
+4. Obtenga tokens de acceso y actualización
 
-Configuracion de Autenticacion OAuth 1.0a
+Configuración de Autenticación OAuth 1.0a
 =========================================
 
-Para la Version Server
+Para la Versión Server
 ----------------------
 
 1. Cree un Application Link en Jira o Confluence
@@ -250,31 +250,31 @@ Para la Version Server
        openssl genrsa -out private_key.pem 2048
        openssl rsa -in private_key.pem -pubout -out public_key.pem
 
-3. Registre la clave publica en el Application Link
-4. Configure la clave privada en los parametros
+3. Registre la clave pública en el Application Link
+4. Configure la clave privada en los parámetros
 
-Configuracion de Autenticacion Basica
+Configuración de Autenticación Básica
 =====================================
 
-Configuracion Simple para Version Server
+Configuración Simple para Versión Server
 ----------------------------------------
 
 .. warning::
-   La autenticacion basica no se recomienda por razones de seguridad. Use autenticacion OAuth siempre que sea posible.
+   La autenticación básica no se recomienda por razones de seguridad. Use autenticación OAuth siempre que sea posible.
 
-Al usar autenticacion basica:
+Al usar autenticación básica:
 
 1. Prepare una cuenta de usuario con permisos de administrador
-2. Configure el nombre de usuario y contrasena en los parametros
-3. Asegure una conexion segura usando HTTPS
+2. Configure el nombre de usuario y contraseña en los parámetros
+3. Asegure una conexión segura usando HTTPS
 
-Busqueda Avanzada con JQL
+Búsqueda Avanzada con JQL
 =========================
 
 Filtrar Incidencias de Jira con JQL
 -----------------------------------
 
-Rastree solo incidencias que coincidan con condiciones especificas:
+Rastree solo incidencias que coincidan con condiciones específicas:
 
 ::
 
@@ -290,7 +290,7 @@ Rastree solo incidencias que coincidan con condiciones especificas:
     # Combinacion de multiples condiciones
     issue.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
 
-Para mas detalles sobre JQL, consulte la `Documentacion JQL de Atlassian <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_.
+Para más detalles sobre JQL, consulte la `Documentación JQL de Atlassian <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_.
 
 Ejemplos de Uso
 ===============
@@ -298,7 +298,7 @@ Ejemplos de Uso
 Rastreo de Jira Cloud
 ---------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -323,7 +323,7 @@ Script:
 Rastreo de Confluence Server
 ----------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -343,64 +343,64 @@ Script:
     last_modified=content.last_modified
     digest=content.title
 
-Solucion de Problemas
+Solución de Problemas
 =====================
 
-Errores de Autenticacion
+Errores de Autenticación
 ------------------------
 
-**Sintoma**: ``401 Unauthorized`` o ``403 Forbidden``
+**Síntoma**: ``401 Unauthorized`` o ``403 Forbidden``
 
 **Verifique**:
 
-1. Verifique que las credenciales de autenticacion sean correctas
-2. Para la version Cloud, verifique que los alcances apropiados esten configurados
-3. Para la version Server, verifique que el usuario tenga los permisos apropiados
-4. Para OAuth 2.0, verifique la expiracion del token
+1. Verifique que las credenciales de autenticación sean correctas
+2. Para la versión Cloud, verifique que los alcances apropiados estén configurados
+3. Para la versión Server, verifique que el usuario tenga los permisos apropiados
+4. Para OAuth 2.0, verifique la expiración del token
 
-Errores de Conexion
+Errores de Conexión
 -------------------
 
-**Sintoma**: ``Connection refused`` o tiempo de espera de conexion
+**Síntoma**: ``Connection refused`` o tiempo de espera de conexión
 
 **Verifique**:
 
 1. Verifique que la URL ``home`` sea correcta
-2. Verifique la configuracion del firewall
-3. Verifique que la instancia de Atlassian este en ejecucion
-4. Verifique que el parametro ``is_cloud`` este configurado correctamente
+2. Verifique la configuración del firewall
+3. Verifique que la instancia de Atlassian esté en ejecución
+4. Verifique que el parámetro ``is_cloud`` esté configurado correctamente
 
 No Se Pueden Obtener Datos
 --------------------------
 
-**Sintoma**: El rastreo tiene exito pero hay 0 documentos
+**Síntoma**: El rastreo tiene éxito pero hay 0 documentos
 
 **Verifique**:
 
-1. Verifique que JQL no este filtrando demasiado
+1. Verifique que JQL no esté filtrando demasiado
 2. Verifique que el usuario tenga permisos de lectura en los proyectos/espacios
-3. Verifique la configuracion del script
+3. Verifique la configuración del script
 4. Revise los logs en busca de errores
 
-Actualizacion de Token OAuth 2.0
+Actualización de Token OAuth 2.0
 --------------------------------
 
-**Sintoma**: Ocurren errores de autenticacion despues de un tiempo
+**Síntoma**: Ocurren errores de autenticación después de un tiempo
 
-**Solucion**:
+**Solución**:
 
-Los tokens de acceso OAuth 2.0 tienen fechas de expiracion. Configure el token de actualizacion para permitir la renovacion automatica:
+Los tokens de acceso OAuth 2.0 tienen fechas de expiración. Configure el token de actualización para permitir la renovación automática:
 
 ::
 
     oauth2.refresh_token=your_refresh_token
 
-Cuando los tokens se renuevan, el nuevo token de acceso y el token de actualizacion se guardan automaticamente en la configuracion del almacen de datos, por lo que los rastreos posteriores utilizan los tokens actualizados sin necesidad de actualizarlos manualmente.
+Cuando los tokens se renuevan, el nuevo token de acceso y el token de actualización se guardan automáticamente en la configuración del almacén de datos, por lo que los rastreos posteriores utilizan los tokens actualizados sin necesidad de actualizarlos manualmente.
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`ds-overview` - Descripcion General de Conectores de Almacen de Datos
+- :doc:`ds-overview` - Descripción General de Conectores de Almacén de Datos
 - :doc:`ds-database` - Conector de Base de Datos
-- :doc:`../../admin/dataconfig-guide` - Guia de Configuracion de Almacen de Datos
+- :doc:`../../admin/dataconfig-guide` - Guía de Configuración de Almacén de Datos
 - `Atlassian Developer <https://developer.atlassian.com/>`_

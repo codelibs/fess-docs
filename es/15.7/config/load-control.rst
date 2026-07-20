@@ -1,28 +1,28 @@
 ====================================
-Configuracion de control de carga
+Configuración de control de carga
 ====================================
 
-Descripcion general
+Descripción general
 ===================
 
-|Fess| incluye dos tipos de funciones de control de carga que protegen la estabilidad del sistema en funcion del uso de CPU.
+|Fess| incluye dos tipos de funciones de control de carga que protegen la estabilidad del sistema en función del uso de CPU.
 
 **Control de carga de solicitudes HTTP** (``web.load.control`` / ``api.load.control``):
 
 - Monitoreo en tiempo real del uso de CPU del cluster de OpenSearch
 - Umbrales independientes para solicitudes web y solicitudes API
 - Devuelve HTTP 429 (Too Many Requests) cuando se superan los umbrales
-- El panel de administracion, el inicio de sesion y los recursos estaticos estan excluidos del control
+- El panel de administración, el inicio de sesión y los recursos estáticos están excluidos del control
 - Deshabilitado por defecto (umbral=100)
 
 **Control de carga adaptativo** (``adaptive.load.control``):
 
 - Monitorea el uso de CPU del sistema del propio servidor Fess
-- Regula automaticamente las tareas en segundo plano como rastreo, indexacion, actualizaciones de sugerencias y generacion de miniaturas
+- Regula automáticamente las tareas en segundo plano como rastreo, indexación, actualizaciones de sugerencias y generación de miniaturas
 - Cuando el uso de CPU alcanza o supera el umbral, los hilos de procesamiento se pausan y se reanudan cuando desciende por debajo del umbral
 - Habilitado por defecto (umbral=50)
 
-Configuracion del control de carga de solicitudes HTTP
+Configuración del control de carga de solicitudes HTTP
 ======================================================
 
 Configure las siguientes propiedades en ``fess_config.properties``:
@@ -45,7 +45,7 @@ Configure las siguientes propiedades en ``fess_config.properties``:
     load.control.monitor.interval=1
 
 .. note::
-   Cuando tanto ``web.load.control`` como ``api.load.control`` estan establecidos en 100 (predeterminado),
+   Cuando tanto ``web.load.control`` como ``api.load.control`` están establecidos en 100 (predeterminado),
    el monitoreo de CPU de OpenSearch no se inicia.
 
 Como funciona
@@ -54,24 +54,24 @@ Como funciona
 Mecanismo de monitoreo
 ----------------------
 
-Cuando el control de carga esta habilitado (algun umbral es inferior a 100), LoadControlMonitorTarget monitorea periodicamente el uso de CPU del cluster de OpenSearch.
+Cuando el control de carga está habilitado (algún umbral es inferior a 100), LoadControlMonitorTarget monitorea periódicamente el uso de CPU del cluster de OpenSearch.
 
-- Obtiene estadisticas del SO de todos los nodos del cluster de OpenSearch
-- Registra el uso de CPU mas alto entre todos los nodos
+- Obtiene estadísticas del SO de todos los nodos del cluster de OpenSearch
+- Registra el uso de CPU más alto entre todos los nodos
 - Monitorea en el intervalo especificado por ``load.control.monitor.interval`` (predeterminado: 1 segundo)
 - El monitoreo se inicia de forma diferida en la primera solicitud
 
 .. note::
-   Si falla la obtencion de informacion de monitoreo, el uso de CPU se restablece a 0.
+   Si falla la obtención de información de monitoreo, el uso de CPU se restablece a 0.
    Hasta el tercer fallo consecutivo, el nivel de log es WARNING; a partir del cuarto fallo, cambia a DEBUG
-   (para evitar que los fallos continuos hinchen los logs). El contador de fallos se reinicia cuando el monitoreo tiene exito al menos una vez.
+   (para evitar que los fallos continuos hinchen los logs). El contador de fallos se reinicia cuando el monitoreo tiene éxito al menos una vez.
 
 Control de solicitudes
 ----------------------
 
 Cuando llega una solicitud, LoadControlFilter la procesa en el siguiente orden:
 
-1. Verificar si la ruta esta excluida (si esta excluida, dejar pasar)
+1. Verificar si la ruta está excluida (si está excluida, dejar pasar)
 2. Determinar el tipo de solicitud (Web / API)
 3. Obtener el umbral correspondiente
 4. Si el umbral es 100 o superior, no controlar (dejar pasar)
@@ -80,19 +80,19 @@ Cuando llega una solicitud, LoadControlFilter la procesa en el siguiente orden:
 
 **Solicitudes excluidas:**
 
-- Rutas que comienzan con ``/admin`` (panel de administracion)
-- Rutas que comienzan con ``/error`` (paginas de error)
-- Rutas que comienzan con ``/login`` (paginas de inicio de sesion)
-- Recursos estaticos (``.css``, ``.js``, ``.png``, ``.jpg``, ``.gif``, ``.ico``, ``.svg``, ``.woff``, ``.woff2``, ``.ttf``, ``.eot``)
+- Rutas que comienzan con ``/admin`` (panel de administración)
+- Rutas que comienzan con ``/error`` (páginas de error)
+- Rutas que comienzan con ``/login`` (páginas de inicio de sesión)
+- Recursos estáticos (``.css``, ``.js``, ``.png``, ``.jpg``, ``.gif``, ``.ico``, ``.svg``, ``.woff``, ``.woff2``, ``.ttf``, ``.eot``)
 
 **Para solicitudes web:**
 
-- Devuelve el codigo de estado HTTP 429
-- Muestra la pagina de error (``busy.jsp``)
+- Devuelve el código de estado HTTP 429
+- Muestra la página de error (``busy.jsp``)
 
 **Para solicitudes API:**
 
-- Devuelve el codigo de estado HTTP 429
+- Devuelve el código de estado HTTP 429
 - Adjunta el encabezado de respuesta HTTP ``Retry-After: 60``
 - Devuelve una respuesta JSON:
 
@@ -111,13 +111,13 @@ Cuando llega una solicitud, LoadControlFilter la procesa en el siguiente orden:
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``.
    Esto permite verificar que rutas fueron rechazadas y con que umbral.
 
-Ejemplos de configuracion
+Ejemplos de configuración
 =========================
 
 Limitar solo solicitudes web
 -----------------------------
 
-Configuracion que limita solo las solicitudes de busqueda web sin restringir la API:
+Configuración que limita solo las solicitudes de búsqueda web sin restringir la API:
 
 ::
 
@@ -147,14 +147,14 @@ Ejemplo con diferentes umbrales para web y API:
     load.control.monitor.interval=2
 
 .. note::
-   Al establecer el umbral de API mas alto que el de web, puede lograr un control escalonado
-   donde las solicitudes web se restringen primero durante alta carga, y las solicitudes API tambien
-   se restringen cuando la carga aumenta aun mas.
+   Al establecer el umbral de API más alto que el de web, puede lograr un control escalonado
+   donde las solicitudes web se restringen primero durante alta carga, y las solicitudes API también
+   se restringen cuando la carga aumenta aún más.
 
-Diferencia con el limite de tasa
+Diferencia con el límite de tasa
 =================================
 
-|Fess| tiene una funcion de :doc:`rate-limiting` separada del control de carga.
+|Fess| tiene una función de :doc:`rate-limiting` separada del control de carga.
 Estas protegen el sistema usando enfoques diferentes.
 
 .. list-table::
@@ -162,33 +162,33 @@ Estas protegen el sistema usando enfoques diferentes.
    :widths: 20 40 40
 
    * - Aspecto
-     - Limite de tasa
+     - Límite de tasa
      - Control de carga
    * - Base de control
-     - Numero de solicitudes (por unidad de tiempo)
+     - Número de solicitudes (por unidad de tiempo)
      - Uso de CPU de OpenSearch
-   * - Proposito
-     - Prevencion de solicitudes excesivas
-     - Proteccion del motor de busqueda contra alta carga
-   * - Unidad de limite
-     - Por direccion IP
+   * - Propósito
+     - Prevención de solicitudes excesivas
+     - Protección del motor de búsqueda contra alta carga
+   * - Unidad de límite
+     - Por dirección IP
      - Todo el sistema
    * - Respuesta
      - HTTP 429
      - HTTP 429
    * - Alcance
      - Todas las solicitudes HTTP
-     - Solicitudes web / Solicitudes API (panel de administracion etc. excluido)
+     - Solicitudes web / Solicitudes API (panel de administración etc. excluido)
 
-Combinar ambas funciones permite una proteccion del sistema mas robusta.
+Combinar ambas funciones permite una protección del sistema más robusta.
 
 Control de carga adaptativo
 ===========================
 
-El control de carga adaptativo ajusta automaticamente la velocidad de procesamiento de las tareas
-en segundo plano en funcion del uso de CPU del sistema del servidor Fess.
+El control de carga adaptativo ajusta automáticamente la velocidad de procesamiento de las tareas
+en segundo plano en función del uso de CPU del sistema del servidor Fess.
 
-Configuracion
+Configuración
 -------------
 
 ``fess_config.properties``:
@@ -205,19 +205,19 @@ Comportamiento
 
 - Monitorea el uso de CPU del sistema del servidor donde se ejecuta Fess
 - Cuando el uso de CPU alcanza o supera el umbral, los hilos de procesamiento afectados esperan hasta que el uso de CPU descienda por debajo del umbral
-- Cuando el uso de CPU desciende por debajo del umbral, el procesamiento se reanuda automaticamente
+- Cuando el uso de CPU desciende por debajo del umbral, el procesamiento se reanuda automáticamente
 
 **Tareas en segundo plano afectadas:**
 
 - Rastreo (Web / Sistema de archivos)
-- Indexacion (registro de documentos)
-- Procesamiento de almacen de datos
+- Indexación (registro de documentos)
+- Procesamiento de almacén de datos
 - Actualizaciones de sugerencias
-- Generacion de miniaturas
-- Respaldo y restauracion
+- Generación de miniaturas
+- Respaldo y restauración
 
 .. note::
-   El control de carga adaptativo esta habilitado por defecto (umbral=50).
+   El control de carga adaptativo está habilitado por defecto (umbral=50).
    Opera de forma independiente del control de carga de solicitudes HTTP (``web.load.control`` / ``api.load.control``).
 
 .. list-table::
@@ -233,33 +233,33 @@ Comportamiento
    * - Objetivo de control
      - Solicitudes HTTP (Web / API)
      - Tareas en segundo plano
-   * - Metodo de control
+   * - Método de control
      - Rechaza solicitudes devolviendo HTTP 429
      - Pausa temporalmente los hilos de procesamiento
    * - Predeterminado
      - Deshabilitado (umbral=100)
      - Habilitado (umbral=50)
 
-Solucion de problemas
+Solución de problemas
 =====================
 
 El control de carga no se activa
 ---------------------------------
 
-**Causa**: La configuracion no se refleja correctamente
+**Causa**: La configuración no se refleja correctamente
 
 **Verificaciones**:
 
-1. Si ``web.load.control`` o ``api.load.control`` esta establecido por debajo de 100
-2. Si el archivo de configuracion se esta leyendo correctamente
+1. Si ``web.load.control`` o ``api.load.control`` está establecido por debajo de 100
+2. Si el archivo de configuración se está leyendo correctamente
 3. Si |Fess| fue reiniciado
 
-Solicitudes legitimas son rechazadas
+Solicitudes legítimas son rechazadas
 --------------------------------------
 
 **Causa**: Los umbrales son demasiado bajos
 
-**Solucion**:
+**Solución**:
 
 1. Aumentar los valores de ``web.load.control`` o ``api.load.control``
 2. Ajustar ``load.control.monitor.interval`` para cambiar la frecuencia de monitoreo
@@ -272,20 +272,20 @@ Solicitudes legitimas son rechazadas
 El rastreo es lento
 -------------------
 
-**Causa**: Los hilos estan en estado de espera debido al control de carga adaptativo
+**Causa**: Los hilos están en estado de espera debido al control de carga adaptativo
 
 **Verificaciones**:
 
 1. Si ``Cpu Load XX% is greater than YY%`` aparece en los logs
 2. Si el umbral de ``adaptive.load.control`` es demasiado bajo
 
-**Solucion**:
+**Solución**:
 
 1. Aumentar el valor de ``adaptive.load.control`` (ej: 70)
 2. Aumentar los recursos de CPU del servidor Fess
 3. Establecer en 0 para deshabilitar el control de carga adaptativo (no recomendado)
 
-Informacion de referencia
+Información de referencia
 =========================
 
-- :doc:`rate-limiting` - Configuracion de limite de tasa
+- :doc:`rate-limiting` - Configuración de límite de tasa

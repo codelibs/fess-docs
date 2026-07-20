@@ -2,19 +2,19 @@
 API de User
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de User es una API REST para gestionar cuentas de usuario de |Fess|.
-Permite crear, obtener, actualizar y eliminar usuarios, ademas de asignar roles y grupos.
+Permite crear, obtener, actualizar y eliminar usuarios, además de asignar roles y grupos.
 
-Esta es una API de administracion, y el acceso requiere autenticacion con un token de acceso de administrador.
-Consulte :doc:`api-admin-overview` para conocer el metodo de autenticacion y las especificaciones comunes.
+Esta es una API de administración, y el acceso requiere autenticación con un token de acceso de administrador.
+Consulte :doc:`api-admin-overview` para conocer el método de autenticación y las especificaciones comunes.
 
-Cada respuesta esta envuelta en un objeto ``response`` e incluye los siguientes campos comunes:
+Cada respuesta está envuelta en un objeto ``response`` e incluye los siguientes campos comunes:
 
-- ``version`` : La cadena de version del producto |Fess|.
-- ``status`` : El codigo de estado del resultado (``0`` =exito, ``1`` =solicitud incorrecta, ``2`` =error del sistema, ``3`` =no autorizado, ``9`` =fallo).
+- ``version`` : La cadena de versión del producto |Fess|.
+- ``status`` : El código de estado del resultado (``0`` =éxito, ``1`` =solicitud incorrecta, ``2`` =error del sistema, ``3`` =no autorizado, ``9`` =fallo).
 
 URL Base
 ========
@@ -30,9 +30,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Listar usuarios
@@ -59,31 +59,31 @@ Solicitud
 
     GET /api/admin/user/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 15 10 10 65
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina. El valor predeterminado es el valor configurado ``paging.page.size`` (predeterminado: 25).
+     - Número de elementos por página. El valor predeterminado es el valor configurado ``paging.page.size`` (predeterminado: 25).
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1). El valor predeterminado es 1.
+     - Número de página (comienza en 1). El valor predeterminado es 1.
 
 .. note::
 
-   En la implementacion actual, el endpoint de lista de usuarios no aplica los parametros ``size`` y ``page``.
-   Siempre devuelve la primera pagina, con el numero de elementos definido por la configuracion del servidor ``paging.page.size`` (predeterminado: 25), ordenado por nombre de usuario (``name``) en orden ascendente.
-   El numero total de usuarios coincidentes esta disponible en ``response.total``.
+   En la implementación actual, el endpoint de lista de usuarios no aplica los parámetros ``size`` y ``page``.
+   Siempre devuelve la primera página, con el número de elementos definido por la configuración del servidor ``paging.page.size`` (predeterminado: 25), ordenado por nombre de usuario (``name``) en orden ascendente.
+   El número total de usuarios coincidentes está disponible en ``response.total``.
 
 Respuesta
 ---------
@@ -112,8 +112,8 @@ Respuesta
       }
     }
 
-- ``settings`` : El array de usuarios en la pagina actual.
-- ``total`` : El numero total de usuarios coincidentes.
+- ``settings`` : El array de usuarios en la página actual.
+- ``total`` : El número total de usuarios coincidentes.
 
 Obtener Usuario
 ===============
@@ -189,7 +189,7 @@ Cuerpo de la Solicitud
       "groups": ["group_id_1"]
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -198,19 +198,19 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre de usuario (ID de inicio de sesion)
+     - Sí
+     - Nombre de usuario (ID de inicio de sesión)
    * - ``password``
      - No
-     - Contrasena
+     - Contraseña
    * - ``confirmPassword``
      - No
-     - Contrasena de confirmacion
+     - Contraseña de confirmación
    * - ``attributes``
      - No
-     - Mapa de atributos (vease mas adelante)
+     - Mapa de atributos (véase más adelante)
    * - ``roles``
      - No
      - Array de IDs de roles
@@ -220,23 +220,23 @@ Descripcion de Campos
 
 .. note::
 
-   La API REST no realiza la verificacion de contrasena obligatoria, la verificacion de coincidencia entre ``password`` y ``confirmPassword``, ni la validacion de politica de contrasenas (estas se aplican unicamente en la interfaz de administracion).
-   En la practica, se recomienda especificar una ``password`` valida cuyo valor coincida con ``confirmPassword``.
+   La API REST no realiza la verificación de contraseña obligatoria, la verificación de coincidencia entre ``password`` y ``confirmPassword``, ni la validación de política de contraseñas (estas se aplican únicamente en la interfaz de administración).
+   En la práctica, se recomienda especificar una ``password`` válida cuyo valor coincida con ``confirmPassword``.
 
 Las claves de ``attributes`` son los nombres de atributos de la entidad de usuario (los nombres de elementos derivados del esquema LDAP).
-Las claves mas comunes son:
+Las claves más comunes son:
 
 - ``surname``, ``givenName``, ``displayName``, ``mail``
 - ``telephoneNumber``, ``mobile``, ``homePhone``
 - ``employeeNumber``, ``title``, ``description``, ``homeDirectory``
 - ``uidNumber``, ``gidNumber``
 
-``uidNumber`` y ``gidNumber`` deben ser numericos (su tipo se valida en la actualizacion).
-Tambien se pueden especificar muchas otras claves de atributos LDAP.
+``uidNumber`` y ``gidNumber`` deben ser numéricos (su tipo se valida en la actualización).
+También se pueden especificar muchas otras claves de atributos LDAP.
 
 .. note::
 
-   En la creacion, el ID de usuario (ID de documento) se genera automaticamente como el valor codificado en Base64 URL del nombre de usuario
+   En la creación, el ID de usuario (ID de documento) se genera automáticamente como el valor codificado en Base64 URL del nombre de usuario
    (por ejemplo, el nombre de usuario ``admin`` se convierte en ``YWRtaW4=``).
 
 Respuesta
@@ -287,7 +287,7 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -296,25 +296,25 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``id``
-     - Si
+     - Sí
      - El ID de documento del usuario a actualizar.
    * - ``name``
-     - Si
-     - Nombre de usuario (ID de inicio de sesion)
+     - Sí
+     - Nombre de usuario (ID de inicio de sesión)
    * - ``versionNo``
-     - Si
-     - Numero de version (para bloqueo optimista)
+     - Sí
+     - Número de versión (para bloqueo optimista)
    * - ``password``
      - No
-     - Nueva contrasena (se actualiza solo cuando se especifica)
+     - Nueva contraseña (se actualiza solo cuando se especifica)
    * - ``confirmPassword``
      - No
-     - Contrasena de confirmacion
+     - Contraseña de confirmación
    * - ``attributes``
      - No
-     - Mapa de atributos (vease "Crear Usuario")
+     - Mapa de atributos (véase "Crear Usuario")
    * - ``roles``
      - No
      - Array de IDs de roles
@@ -324,9 +324,9 @@ Descripcion de Campos
 
 .. note::
 
-   En la actualizacion, ``id``, ``name`` y ``versionNo`` son obligatorios.
-   ``versionNo`` es el valor devuelto al obtener el usuario objetivo (GET), y corresponde a la version del documento de OpenSearch.
-   Si no coincide con la version actual, la solicitud se trata como un conflicto y la actualizacion es rechazada.
+   En la actualización, ``id``, ``name`` y ``versionNo`` son obligatorios.
+   ``versionNo`` es el valor devuelto al obtener el usuario objetivo (GET), y corresponde a la versión del documento de OpenSearch.
+   Si no coincide con la versión actual, la solicitud se trata como un conflicto y la actualización es rechazada.
 
 Respuesta
 ---------
@@ -342,7 +342,7 @@ Respuesta
       }
     }
 
-- ``created`` : ``false`` para una actualizacion.
+- ``created`` : ``false`` para una actualización.
 
 Eliminar Usuario
 ================
@@ -358,7 +358,7 @@ Especifique el ID de documento del usuario a eliminar en ``{id}``.
 
 .. note::
 
-   No es posible eliminar el usuario que tiene la sesion actualmente iniciada.
+   No es posible eliminar el usuario que tiene la sesión actualmente iniciada.
 
 Respuesta
 ---------
@@ -418,7 +418,7 @@ Cambiar Roles de Usuario
 Referencia
 ==========
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-role` - API de gestion de roles
-- :doc:`api-admin-group` - API de gestion de grupos
-- :doc:`../../admin/user-guide` - Guia de gestion de usuarios
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-role` - API de gestión de roles
+- :doc:`api-admin-group` - API de gestión de grupos
+- :doc:`../../admin/user-guide` - Guía de gestión de usuarios

@@ -1,12 +1,12 @@
 ==================================
-Guia de Desarrollo de Temas
+Guía de Desarrollo de Temas
 ==================================
 
-Vision General
+Visión General
 ==============
 
-Usando el sistema de temas de |Fess|, puede personalizar el diseno de la pantalla de busqueda.
-Los temas se pueden distribuir como plugins y puede alternar entre multiples temas.
+Usando el sistema de temas de |Fess|, puede personalizar el diseño de la pantalla de búsqueda.
+Los temas se pueden distribuir como plugins y puede alternar entre múltiples temas.
 
 Estructura del Tema
 ===================
@@ -27,10 +27,10 @@ Estructura del Tema
             └── templates/
                 └── search.html
 
-Creacion Basica de Temas
+Creación Básica de Temas
 ========================
 
-Personalizacion de CSS
+Personalización de CSS
 ----------------------
 
 ``css/style.css``:
@@ -67,10 +67,10 @@ Cambio de Logo
         max-height: 40px;
     }
 
-Personalizacion de Plantillas
+Personalización de Plantillas
 -----------------------------
 
-Las plantillas estan en formato JSP.
+Las plantillas están en formato JSP.
 
 ``templates/search.html`` (parcial):
 
@@ -94,7 +94,7 @@ pom.xml
     <version>15.7.0</version>
     <packaging>jar</packaging>
 
-Archivo de Configuracion
+Archivo de Configuración
 ------------------------
 
 ``src/main/resources/theme.properties``:
@@ -105,16 +105,16 @@ Archivo de Configuracion
     theme.display.name=Example Theme
     theme.version=1.0.0
 
-Instalacion
+Instalación
 ===========
 
 ::
 
     ./bin/fess-plugin install fess-theme-example
 
-Seleccione el tema desde la pantalla de administracion:
+Seleccione el tema desde la pantalla de administración:
 
-1. "Sistema" -> "Diseno"
+1. "Sistema" -> "Diseño"
 2. Seleccione el tema
 3. Guarde y aplique
 
@@ -124,8 +124,8 @@ Ejemplos de Temas Existentes
 - `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__
 - `fess-theme-minimal <https://github.com/codelibs/fess-theme-minimal>`__
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`../admin/design-guide` - Guia de configuracion de diseno
+- :doc:`../admin/design-guide` - Guía de configuración de diseño

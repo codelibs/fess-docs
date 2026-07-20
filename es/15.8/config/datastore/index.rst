@@ -1,12 +1,12 @@
 ===================================
-Guia de Conectores de Almacen de Datos
+Guía de Conectores de Almacén de Datos
 ===================================
 
-Los conectores de almacen de datos de |Fess| permiten obtener contenido de diversas fuentes de datos y hacerlo buscable.
+Los conectores de almacén de datos de |Fess| permiten obtener contenido de diversas fuentes de datos y hacerlo buscable.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Descripcion General
+   :caption: Descripción General
 
    ds-overview
 
@@ -21,7 +21,7 @@ Los conectores de almacen de datos de |Fess| permiten obtener contenido de diver
 
 .. toctree::
    :maxdepth: 2
-   :caption: Herramientas de Colaboracion
+   :caption: Herramientas de Colaboración
 
    ds-atlassian
    ds-slack

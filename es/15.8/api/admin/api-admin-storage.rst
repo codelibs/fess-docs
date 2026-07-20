@@ -2,11 +2,11 @@
 Storage API
 ===========
 
-Vision General
+Visión General
 ==============
 
 Storage API es una API para gestionar el almacenamiento de objetos de |Fess|.
-Permite obtener el listado de archivos y directorios en el almacenamiento, asi como descargar, eliminar y subir archivos.
+Permite obtener el listado de archivos y directorios en el almacenamiento, así como descargar, eliminar y subir archivos.
 
 URL Base
 ========
@@ -15,17 +15,17 @@ URL Base
 
     /api/admin/storage
 
-Autenticacion
+Autenticación
 =============
 
-Todos los endpoints de Admin API, incluida Storage API, requieren autenticacion mediante un token de acceso.
+Todos los endpoints de Admin API, incluida Storage API, requieren autenticación mediante un token de acceso.
 Especifique el token de acceso en el encabezado ``Authorization`` de la solicitud.
 
 ::
 
     Authorization: Bearer <token de acceso>
 
-Para obtener informacion sobre como obtener el token de acceso y los permisos necesarios (de forma predeterminada, el rol ``admin-api``),
+Para obtener información sobre cómo obtener el token de acceso y los permisos necesarios (de forma predeterminada, el rol ``admin-api``),
 consulte :doc:`api-admin-overview`.
 
 Lista de Endpoints
@@ -35,9 +35,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /list/{id}
      - Obtener listado de archivos y directorios
@@ -55,7 +55,7 @@ Obtener Listado de Archivos y Directorios
 =========================================
 
 Devuelve el listado de archivos y directorios ubicados bajo el directorio especificado.
-En ``{id}`` especifique el ``id`` del directorio obtenido en el listado. Si se omite ``{id}``, se obtiene el listado del directorio raiz.
+En ``{id}`` especifique el ``id`` del directorio obtenido en el listado. Si se omite ``{id}``, se obtiene el listado del directorio raíz.
 
 Solicitud
 ---------
@@ -67,7 +67,7 @@ Solicitud
 Respuesta
 ---------
 
-En ``items`` se almacena un array de objetos que representan la informacion de archivos y directorios (primero los directorios, luego los archivos).
+En ``items`` se almacena un array de objetos que representan la información de archivos y directorios (primero los directorios, luego los archivos).
 Cada objeto tiene los siguientes campos.
 
 .. list-table::
@@ -75,7 +75,7 @@ Cada objeto tiene los siguientes campos.
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``id``
      - Identificador codificado. Cadena que representa la ruta del objeto codificada en Base64 seguro para URL, utilizada como ``{id}`` al descargar o eliminar.
    * - ``path``
@@ -85,11 +85,11 @@ Cada objeto tiene los siguientes campos.
    * - ``hashCode``
      - Valor de hash utilizado en el procesamiento interno (no es un valor estable que represente el contenido del objeto)
    * - ``size``
-     - Tamano (en bytes)
+     - Tamaño (en bytes)
    * - ``directory``
      - Indica si es un directorio (boolean)
    * - ``lastModified``
-     - Fecha y hora de la ultima modificacion (formato ISO 8601; incluido solo para archivos)
+     - Fecha y hora de la última modificación (formato ISO 8601; incluido solo para archivos)
 
 .. code-block:: json
 
@@ -140,7 +140,7 @@ Flujo binario del archivo (``Content-Type: application/octet-stream``).
 .. note::
 
    La respuesta de esta API no incluye el encabezado ``Content-Disposition``.
-   El nombre del archivo con el que se guarda debe especificarse en el lado del cliente (en cURL, utilice la opcion ``-o``).
+   El nombre del archivo con el que se guarda debe especificarse en el lado del cliente (en cURL, utilice la opción ``-o``).
 
 Eliminar un Archivo
 ===================
@@ -169,7 +169,7 @@ Respuesta
 Subir un Archivo
 ================
 
-Sube un archivo al almacenamiento. El envio se realiza en formato ``multipart/form-data``.
+Sube un archivo al almacenamiento. El envío se realiza en formato ``multipart/form-data``.
 El directorio de destino se especifica mediante el campo de formulario ``path``, no como parte de la ruta URL.
 
 Solicitud
@@ -180,7 +180,7 @@ Solicitud
     PUT /api/admin/storage/upload
     Content-Type: multipart/form-data
 
-Descripcion de los Campos
+Descripción de los Campos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -189,12 +189,12 @@ Descripcion de los Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``path``
      - No
-     - Ruta del directorio de destino (sin barras al inicio ni al final). Si se omite, el archivo se guarda en el raiz (directamente bajo el bucket).
+     - Ruta del directorio de destino (sin barras al inicio ni al final). Si se omite, el archivo se guarda en el raíz (directamente bajo el bucket).
    * - ``file``
-     - Si
+     - Sí
      - Archivo a subir
 
 Respuesta
@@ -212,8 +212,8 @@ Respuesta
 Errores
 =======
 
-Cada endpoint devuelve una respuesta con ``status`` distinto de 0 (``1`` en caso de error de validacion) cuando el procesamiento falla.
-El campo ``message`` del cuerpo de la respuesta contiene el detalle del error. Para obtener informacion sobre los valores de status y los codigos de estado HTTP, consulte :doc:`api-admin-overview`.
+Cada endpoint devuelve una respuesta con ``status`` distinto de 0 (``1`` en caso de error de validación) cuando el procesamiento falla.
+El campo ``message`` del cuerpo de la respuesta contiene el detalle del error. Para obtener información sobre los valores de status y los códigos de estado HTTP, consulte :doc:`api-admin-overview`.
 
 Los principales casos de error son los siguientes.
 
@@ -224,18 +224,18 @@ Los principales casos de error son los siguientes.
    * - Endpoint
      - Principales casos en que se produce un error
    * - Obtener listado de archivos y directorios
-     - Cuando el numero de elementos supera el limite
+     - Cuando el número de elementos supera el límite
    * - Descargar un archivo
-     - Cuando el ``id`` es invalido o la descarga falla
+     - Cuando el ``id`` es inválido o la descarga falla
    * - Eliminar un archivo
-     - Cuando el ``id`` es invalido o la eliminacion falla
+     - Cuando el ``id`` es inválido o la eliminación falla
    * - Subir un archivo
      - Cuando no se especifica ``file`` o la subida falla
 
 Ejemplos de Uso
 ===============
 
-Obtener Listado del Directorio Raiz
+Obtener Listado del Directorio Raíz
 ------------------------------------
 
 .. code-block:: bash
@@ -270,7 +270,7 @@ Subir un Archivo
          -F "path=subdir" \
          -F "file=@sample.txt"
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API

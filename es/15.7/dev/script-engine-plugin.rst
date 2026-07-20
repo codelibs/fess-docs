@@ -2,13 +2,13 @@
 Plugin de Motor de Scripts
 ==================================
 
-Vision General
+Visión General
 ==============
 
 Al desarrollar un plugin de motor de scripts, puede agregar soporte para
 nuevos lenguajes de script a |Fess|.
 
-Implementacion Basica
+Implementación Básica
 =====================
 
 Implemente la interfaz ``ScriptEngine``:
@@ -47,15 +47,15 @@ Registro
 Ejemplo de Uso
 ==============
 
-Seleccione como tipo de script en la pantalla de administracion:
+Seleccione como tipo de script en la pantalla de administración:
 
 ::
 
     scriptType=example
     scriptData=your script here
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`../config/scripting-overview` - Vision general de scripting
+- :doc:`../config/scripting-overview` - Visión general de scripting

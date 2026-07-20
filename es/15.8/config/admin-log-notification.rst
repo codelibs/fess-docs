@@ -1,163 +1,163 @@
 ==========================
-Notificacion de Registros
+Notificación de Registros
 ==========================
 
-Descripcion General
+Descripción General
 ===================
 
-|Fess| dispone de una funcionalidad que captura automaticamente los eventos de registro de nivel ERROR o WARN y notifica a los administradores.
-Esta funcionalidad permite detectar rapidamente anomalias en el sistema e iniciar la respuesta ante incidencias de forma temprana.
+|Fess| dispone de una funcionalidad que captura automáticamente los eventos de registro de nivel ERROR o WARN y notifica a los administradores.
+Esta funcionalidad permite detectar rápidamente anomalías en el sistema e iniciar la respuesta ante incidencias de forma temprana.
 
-Caracteristicas principales:
+Características principales:
 
-- **Canales de notificacion compatibles**: Correo electronico, Slack, Google Chat
-- **Procesos objetivo**: Aplicacion principal, rastreador, generacion de sugerencias, generacion de miniaturas
-- **Deshabilitado por defecto**: Al ser un sistema de activacion voluntaria (opt-in), es necesario habilitarlo explicitamente
+- **Canales de notificación compatibles**: Correo electrónico, Slack, Google Chat
+- **Procesos objetivo**: Aplicación principal, rastreador, generación de sugerencias, generación de miniaturas
+- **Deshabilitado por defecto**: Al ser un sistema de activación voluntaria (opt-in), es necesario habilitarlo explícitamente
 
 Funcionamiento
 ==============
 
-La notificacion de registros funciona segun el siguiente flujo.
+La notificación de registros funciona según el siguiente flujo.
 
 1. El ``LogNotificationAppender`` de Log4j2 captura los eventos de registro que igualan o superan el nivel configurado.
-2. Los eventos capturados se acumulan en un bufer en memoria (maximo 1,000 eventos por defecto). Si el bufer supera su limite, los eventos se descartan empezando por el mas antiguo.
-3. Un temporizador escribe los eventos del bufer en un indice de OpenSearch (``fess_log.notification_queue``) cada 30 segundos.
-4. El trabajo programado "Log Notification" lee los eventos de OpenSearch cada 5 minutos, los agrupa por nivel de registro y envia una notificacion por cada nivel.
-5. Despues del envio de la notificacion, los eventos procesados se eliminan del indice.
+2. Los eventos capturados se acumulan en un búfer en memoria (máximo 1,000 eventos por defecto). Si el búfer supera su límite, los eventos se descartan empezando por el más antiguo.
+3. Un temporizador escribe los eventos del búfer en un índice de OpenSearch (``fess_log.notification_queue``) cada 30 segundos.
+4. El trabajo programado "Log Notification" lee los eventos de OpenSearch cada 5 minutos, los agrupa por nivel de registro y envía una notificación por cada nivel.
+5. Después del envío de la notificación, los eventos procesados se eliminan del índice.
 
 .. note::
-   Cada nodo notifica unicamente los registros que el mismo ha generado (los eventos se filtran por ``hostname``).
-   En una configuracion en cluster, se envia una notificacion individual por cada nodo.
+   Cada nodo notifica únicamente los registros que el mismo ha generado (los eventos se filtran por ``hostname``).
+   En una configuración en cluster, se envía una notificación individual por cada nodo.
 
 .. note::
-   Para evitar bucles infinitos, se excluyen de la notificacion los registros de los loggers
-   relacionados con la propia funcionalidad de notificacion
+   Para evitar bucles infinitos, se excluyen de la notificación los registros de los loggers
+   relacionados con la propia funcionalidad de notificación
    (``LogNotificationAppender``, ``LogNotificationHelper``, ``LogNotificationTarget``,
    ``LogNotificationJob``, ``NotificationHelper`` y ``org.codelibs.curl``, utilizado para
-   la comunicacion HTTP).
+   la comunicación HTTP).
 
-Configuracion
+Configuración
 =============
 
-Habilitacion
+Habilitación
 ------------
 
-Habilitacion desde la Pantalla de Administracion
+Habilitación desde la Pantalla de Administración
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Inicie sesion en la pantalla de administracion.
-2. Seleccione "General" del menu "Sistema".
-3. Active la casilla de verificacion "Log Notification".
-4. Seleccione el nivel objetivo de notificacion en "Log Notification Level" (``ERROR``, ``WARN``, ``INFO``, ``DEBUG``, ``TRACE``).
-5. Haga clic en el boton "Actualizar".
+1. Inicie sesión en la pantalla de administración.
+2. Seleccione "General" del menú "Sistema".
+3. Active la casilla de verificación "Log Notification".
+4. Seleccione el nivel objetivo de notificación en "Log Notification Level" (``ERROR``, ``WARN``, ``INFO``, ``DEBUG``, ``TRACE``).
+5. Haga clic en el botón "Actualizar".
 
 .. note::
    Por defecto, solo se notifica el nivel ``ERROR``.
-   Si selecciona ``WARN``, se notificaran tanto ``WARN`` como ``ERROR``.
+   Si selecciona ``WARN``, se notificarán tanto ``WARN`` como ``ERROR``.
 
-Habilitacion mediante Propiedades del Sistema
+Habilitación mediante Propiedades del Sistema
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Tambien puede configurar directamente las propiedades del sistema (``system.properties``) que se guardan en la configuracion "General" de la pantalla de administracion.
+También puede configurar directamente las propiedades del sistema (``system.properties``) que se guardan en la configuración "General" de la pantalla de administración.
 
 ::
 
     log.notification.enabled=true
     fess.log.notification.level=ERROR
 
-Configuracion del Destino de Notificacion
+Configuración del Destino de Notificación
 -----------------------------------------
 
-Los destinos de notificacion (la direccion de correo, las URL de Webhook de Slack / Google Chat) se configuran todos
-en la configuracion "Sistema" -> "General" de la pantalla de administracion. Configure al menos un destino de notificacion.
-Si no se ha configurado ningun destino de notificacion, el trabajo de notificacion de registros finaliza sin enviar nada.
+Los destinos de notificación (la dirección de correo, las URL de Webhook de Slack / Google Chat) se configuran todos
+en la configuración "Sistema" -> "General" de la pantalla de administración. Configure al menos un destino de notificación.
+Si no se ha configurado ningún destino de notificación, el trabajo de notificación de registros finaliza sin enviar nada.
 
-Notificacion por Correo Electronico
+Notificación por Correo Electrónico
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Para utilizar la notificacion por correo electronico, es necesaria la siguiente configuracion.
+Para utilizar la notificación por correo electrónico, es necesaria la siguiente configuración.
 
-1. Configuracion del servidor de correo (``fess_env.properties``):
+1. Configuración del servidor de correo (``fess_env.properties``):
 
    ::
 
        mail.smtp.server.main.host.and.port=smtp.example.com:587
 
-2. Introduzca la direccion de correo electronico en "Correo de notificacion" en la configuracion "General" de la pantalla de administracion.
+2. Introduzca la dirección de correo electrónico en "Correo de notificación" en la configuración "General" de la pantalla de administración.
    Puede especificar varias direcciones separadas por comas.
 
-Notificacion por Slack
+Notificación por Slack
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Introduzca la URL del Incoming Webhook de Slack en "Slack Webhook URLs" en la configuracion "General" de la pantalla de administracion.
+Introduzca la URL del Incoming Webhook de Slack en "Slack Webhook URLs" en la configuración "General" de la pantalla de administración.
 Puede especificar varias URL separadas por comas o espacios.
 Este valor se guarda como la propiedad del sistema ``slack.webhook.urls``.
 
-Notificacion por Google Chat
+Notificación por Google Chat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Introduzca la URL del Webhook de Google Chat en "Google Chat Webhook URLs" en la configuracion "General" de la pantalla de administracion.
+Introduzca la URL del Webhook de Google Chat en "Google Chat Webhook URLs" en la configuración "General" de la pantalla de administración.
 Puede especificar varias URL separadas por comas o espacios.
 Este valor se guarda como la propiedad del sistema ``google.chat.webhook.urls``.
 
 .. note::
-   Si configura unicamente la URL de Webhook de Slack o Google Chat sin configurar "Correo de notificacion",
-   no se enviara correo electronico y solo se realizaran las notificaciones a Slack / Google Chat.
-   A Slack / Google Chat se les envia como mensaje el mismo asunto y cuerpo que la notificacion por correo.
+   Si configura únicamente la URL de Webhook de Slack o Google Chat sin configurar "Correo de notificación",
+   no se enviará correo electrónico y solo se realizarán las notificaciones a Slack / Google Chat.
+   A Slack / Google Chat se les envía como mensaje el mismo asunto y cuerpo que la notificación por correo.
 
-Propiedades de Configuracion
+Propiedades de Configuración
 ============================
 
 Las siguientes propiedades se pueden configurar en ``fess_config.properties``.
 
-.. list-table:: Propiedades de Configuracion de Notificacion de Registros
+.. list-table:: Propiedades de Configuración de Notificación de Registros
    :header-rows: 1
    :widths: 40 15 45
 
    * - Propiedad
      - Valor Predeterminado
-     - Descripcion
+     - Descripción
    * - ``log.notification.flush.interval``
      - ``30``
-     - Intervalo de vaciado del bufer a OpenSearch (segundos)
+     - Intervalo de vaciado del búfer a OpenSearch (segundos)
    * - ``log.notification.buffer.size``
      - ``1000``
-     - Numero maximo de eventos almacenados en el bufer en memoria
+     - Número máximo de eventos almacenados en el búfer en memoria
    * - ``log.notification.interval``
      - ``300``
-     - Periodo de agregacion (segundos) mostrado en el mensaje de notificacion. Es un valor unicamente de visualizacion y no representa el intervalo real de ejecucion del trabajo (vease la nota mas abajo).
+     - Período de agregación (segundos) mostrado en el mensaje de notificación. Es un valor únicamente de visualización y no representa el intervalo real de ejecución del trabajo (véase la nota más abajo).
    * - ``log.notification.search.size``
      - ``1000``
-     - Numero maximo de eventos obtenidos de OpenSearch por ejecucion del trabajo
+     - Número máximo de eventos obtenidos de OpenSearch por ejecución del trabajo
    * - ``log.notification.max.display.events``
      - ``50``
-     - Numero maximo de eventos incluidos en un solo mensaje de notificacion
+     - Número máximo de eventos incluidos en un solo mensaje de notificación
    * - ``log.notification.max.message.length``
      - ``200``
-     - Numero maximo de caracteres por mensaje de registro (el exceso se trunca)
+     - Número máximo de caracteres por mensaje de registro (el exceso se trunca)
    * - ``log.notification.max.details.length``
      - ``3000``
-     - Numero maximo de caracteres en la seccion de detalles del mensaje de notificacion
+     - Número máximo de caracteres en la sección de detalles del mensaje de notificación
 
 .. note::
-   Los cambios en ``log.notification.flush.interval`` se aplican despues de reiniciar |Fess|.
-   El resto de propiedades se aplican a partir del siguiente ciclo de notificacion.
+   Los cambios en ``log.notification.flush.interval`` se aplican después de reiniciar |Fess|.
+   El resto de propiedades se aplican a partir del siguiente ciclo de notificación.
 
 .. note::
-   ``log.notification.interval`` es el valor utilizado para el texto "en los ultimos N segundos" que se
-   muestra dentro del mensaje de notificacion, y no modifica la frecuencia de ejecucion del trabajo.
-   El intervalo real de ejecucion lo determina la configuracion cron del trabajo programado "Log Notification"
-   (por defecto, cada 5 minutos). Si desea cambiar el intervalo de ejecucion del trabajo, modifique la expresion
-   cron de este trabajo en "Sistema" -> "Programador" y ajuste tambien ``log.notification.interval`` para que la
-   visualizacion coincida con la realidad.
+   ``log.notification.interval`` es el valor utilizado para el texto "en los últimos N segundos" que se
+   muestra dentro del mensaje de notificación, y no modifica la frecuencia de ejecución del trabajo.
+   El intervalo real de ejecución lo determina la configuración cron del trabajo programado "Log Notification"
+   (por defecto, cada 5 minutos). Si desea cambiar el intervalo de ejecución del trabajo, modifique la expresión
+   cron de este trabajo en "Sistema" -> "Programador" y ajuste también ``log.notification.interval`` para que la
+   visualización coincida con la realidad.
 
-Formato del Mensaje de Notificacion
+Formato del Mensaje de Notificación
 ===================================
 
-Notificacion por Correo Electronico
+Notificación por Correo Electrónico
 -----------------------------------
 
-La notificacion por correo electronico se envia con el siguiente formato.
+La notificación por correo electrónico se envía con el siguiente formato.
 
 **Asunto:**
 
@@ -185,23 +185,23 @@ La notificacion por correo electronico se envia con el siguiente formato.
     Note: See the log files for full details.
 
 .. note::
-   Los eventos ERROR y WARN se envian como notificaciones separadas por cada nivel.
+   Los eventos ERROR y WARN se envían como notificaciones separadas por cada nivel.
 
 .. note::
-   Si el numero de eventos a mostrar supera ``log.notification.max.display.events``, el inicio de la
-   seccion de detalles sera ``Total: N event(s) (showing M)`` y al final se anadira ``... and X more``.
+   Si el número de eventos a mostrar supera ``log.notification.max.display.events``, el inicio de la
+   sección de detalles será ``Total: N event(s) (showing M)`` y al final se añadirá ``... and X more``.
    Cada mensaje de registro que supere ``log.notification.max.message.length`` se trunca al final con ``...``,
-   y cuando la seccion de detalles completa supera ``log.notification.max.details.length`` el resto se descarta.
+   y cuando la sección de detalles completa supera ``log.notification.max.details.length`` el resto se descarta.
 
-Notificacion por Slack / Google Chat
+Notificación por Slack / Google Chat
 ------------------------------------
 
-Las notificaciones de Slack y Google Chat tambien se envian como mensajes con el mismo contenido.
+Las notificaciones de Slack y Google Chat también se envían como mensajes con el mismo contenido.
 
-Guia de Operacion
+Guía de Operación
 =================
 
-Configuracion Recomendada
+Configuración Recomendada
 -------------------------
 
 .. list-table::
@@ -210,8 +210,8 @@ Configuracion Recomendada
 
    * - Entorno
      - Nivel Recomendado
-     - Razon
-   * - Entorno de Produccion
+     - Razón
+   * - Entorno de Producción
      - ``ERROR``
      - Notificar solo errores importantes y reducir el ruido
    * - Entorno de Staging
@@ -221,49 +221,49 @@ Configuracion Recomendada
      - Deshabilitado
      - Verificar directamente los archivos de registro
 
-Indice de OpenSearch
+Índice de OpenSearch
 --------------------
 
-La funcionalidad de notificacion de registros utiliza el indice ``fess_log.notification_queue`` para el almacenamiento
-temporal de eventos (el nombre del indice se forma anadiendo ``.notification_queue`` al valor de ``index.log``,
-``fess_log`` por defecto). Este indice se crea automaticamente la primera vez que se utiliza la funcionalidad.
-Dado que los eventos se eliminan despues del envio de la notificacion, normalmente el tamano del indice no crece significativamente.
+La funcionalidad de notificación de registros utiliza el índice ``fess_log.notification_queue`` para el almacenamiento
+temporal de eventos (el nombre del índice se forma añadiendo ``.notification_queue`` al valor de ``index.log``,
+``fess_log`` por defecto). Este índice se crea automáticamente la primera vez que se utiliza la funcionalidad.
+Dado que los eventos se eliminan después del envío de la notificación, normalmente el tamaño del índice no crece significativamente.
 
 .. note::
-   El numero de eventos procesados en una sola ejecucion del trabajo tiene como limite ``log.notification.search.size``
-   (1,000 eventos por defecto). Los eventos acumulados que superen este limite se descartan en conjunto despues del envio
-   de la notificacion y no se trasladan a las ejecuciones posteriores. En entornos donde se genera una gran cantidad de
-   registros en poco tiempo, aumente ``log.notification.search.size`` segun sea necesario.
+   El número de eventos procesados en una sola ejecución del trabajo tiene como límite ``log.notification.search.size``
+   (1,000 eventos por defecto). Los eventos acumulados que superen este límite se descartan en conjunto después del envío
+   de la notificación y no se trasladan a las ejecuciones posteriores. En entornos donde se genera una gran cantidad de
+   registros en poco tiempo, aumente ``log.notification.search.size`` según sea necesario.
 
-Resolucion de Problemas
+Resolución de Problemas
 =======================
 
-Las Notificaciones no se Envian
+Las Notificaciones no se Envían
 -------------------------------
 
-1. **Verificar la habilitacion**
+1. **Verificar la habilitación**
 
-   Verifique que "Log Notification" este habilitada en la configuracion "General" de la pantalla de administracion.
+   Verifique que "Log Notification" esté habilitada en la configuración "General" de la pantalla de administración.
 
-2. **Verificar el destino de notificacion**
+2. **Verificar el destino de notificación**
 
-   Verifique que se haya configurado al menos un destino de notificacion ("Correo de notificacion",
-   "Slack Webhook URLs" o "Google Chat Webhook URLs"). Si ninguno esta configurado, el trabajo
-   genera ``No notification targets configured.`` y no envia nada.
+   Verifique que se haya configurado al menos un destino de notificación ("Correo de notificación",
+   "Slack Webhook URLs" o "Google Chat Webhook URLs"). Si ninguno está configurado, el trabajo
+   genera ``No notification targets configured.`` y no envía nada.
 
-3. **Verificar la configuracion del servidor de correo**
+3. **Verificar la configuración del servidor de correo**
 
-   Si utiliza la notificacion por correo electronico, verifique que el servidor de correo este
+   Si utiliza la notificación por correo electrónico, verifique que el servidor de correo esté
    configurado correctamente en ``fess_env.properties``.
 
 4. **Verificar el trabajo programado**
 
-   Verifique que el trabajo "Log Notification" este habilitado en "Sistema" -> "Programador".
-   Si este trabajo esta deshabilitado, no se enviaran notificaciones.
+   Verifique que el trabajo "Log Notification" esté habilitado en "Sistema" -> "Programador".
+   Si este trabajo está deshabilitado, no se enviarán notificaciones.
 
 5. **Verificar los registros**
 
-   Verifique los mensajes de error relacionados con la notificacion en ``fess.log``.
+   Verifique los mensajes de error relacionados con la notificación en ``fess.log``.
 
    ::
 
@@ -274,23 +274,23 @@ Se Reciben Demasiadas Notificaciones
 
 1. **Elevar el nivel de registro**
 
-   Cambie el nivel de notificacion de ``WARN`` a ``ERROR``.
+   Cambie el nivel de notificación de ``WARN`` a ``ERROR``.
 
-2. **Resolver la causa raiz**
+2. **Resolver la causa raíz**
 
-   Si se producen errores con frecuencia, investigue la causa raiz de los errores.
+   Si se producen errores con frecuencia, investigue la causa raíz de los errores.
 
-El Contenido de la Notificacion se Trunca
+El Contenido de la Notificación se Trunca
 -----------------------------------------
 
 Ajuste las siguientes propiedades.
 
-- ``log.notification.max.details.length``: Numero maximo de caracteres en la seccion de detalles
-- ``log.notification.max.display.events``: Numero maximo de eventos a mostrar
-- ``log.notification.max.message.length``: Numero maximo de caracteres por mensaje
+- ``log.notification.max.details.length``: Número máximo de caracteres en la sección de detalles
+- ``log.notification.max.display.events``: Número máximo de eventos a mostrar
+- ``log.notification.max.message.length``: Número máximo de caracteres por mensaje
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`admin-logging` - Configuracion de registros
-- :doc:`setup-memory` - Configuracion de memoria
+- :doc:`admin-logging` - Configuración de registros
+- :doc:`setup-memory` - Configuración de memoria

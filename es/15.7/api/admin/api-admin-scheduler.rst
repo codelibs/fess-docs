@@ -2,11 +2,11 @@
 API de Scheduler
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Scheduler es para gestionar trabajos programados de |Fess|.
-Puede iniciar/detener trabajos de rastreo, crear/actualizar/eliminar configuraciones de programacion.
+Puede iniciar/detener trabajos de rastreo, crear/actualizar/eliminar configuraciones de programación.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de trabajos programados
@@ -57,25 +57,25 @@ Solicitud
 
     GET /api/admin/scheduler/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (por defecto: 25; configurable mediante ``paging.page.size`` en ``fess_config.properties``)
+     - Número de elementos por página (por defecto: 25; configurable mediante ``paging.page.size`` en ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (a partir de 1; por defecto: 1)
+     - Número de página (a partir de 1; por defecto: 1)
 
 Respuesta
 ---------
@@ -108,11 +108,11 @@ Respuesta
 
 .. note::
 
-   El objeto ``response`` siempre incluye ``version`` (version del producto) y ``status`` (codigo de resultado). Consulte la descripcion general de Admin API (:doc:`api-admin-overview`) para conocer el formato de respuesta comun. Los ejemplos posteriores pueden omitir ``version`` por brevedad.
+   El objeto ``response`` siempre incluye ``version`` (versión del producto) y ``status`` (código de resultado). Consulte la descripción general de Admin API (:doc:`api-admin-overview`) para conocer el formato de respuesta común. Los ejemplos posteriores pueden omitir ``version`` por brevedad.
 
 .. note::
 
-   En las respuestas, ``jobLogging`` / ``crawler`` / ``available`` se devuelven como cadenas (``"true"`` / ``"false"``). ``running`` es un campo booleano exclusivo de respuesta que indica si el trabajo se esta ejecutando en ese momento (no puede especificarse en las solicitudes). ``total`` es el numero total de trabajos que coinciden con la consulta.
+   En las respuestas, ``jobLogging`` / ``crawler`` / ``available`` se devuelven como cadenas (``"true"`` / ``"false"``). ``running`` es un campo booleano exclusivo de respuesta que indica si el trabajo se está ejecutando en ese momento (no puede especificarse en las solicitudes). ``total`` es el número total de trabajos que coinciden con la consulta.
 
 Obtener Trabajo Programado
 ==========================
@@ -177,7 +177,7 @@ Cuerpo de la Solicitud
       "sortOrder": 1
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -186,22 +186,22 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
+     - Sí
      - Nombre del trabajo (max. 100 caracteres)
    * - ``target``
-     - Si
-     - Objetivo de ejecucion (max. 100 caracteres). Especifique ``all`` o un nombre de objetivo especifico
+     - Sí
+     - Objetivo de ejecución (max. 100 caracteres). Especifique ``all`` o un nombre de objetivo específico
    * - ``cronExpression``
      - No
-     - Expresion Cron (segundo minuto hora dia mes dia-semana). Max. 100 caracteres, validada como expresion cron. Si esta vacia, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
+     - Expresión Cron (segundo minuto hora día mes día-semana). Max. 100 caracteres, validada como expresión cron. Si está vacía, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
    * - ``scriptType``
-     - Si
+     - Sí
      - Tipo de script (max. 100 caracteres). Actualmente solo se admite ``groovy``
    * - ``scriptData``
      - No
-     - Script de ejecucion. El tamano maximo sigue ``form.admin.max.input.size`` en ``fess_config.properties``
+     - Script de ejecución. El tamaño máximo sigue ``form.admin.max.input.size`` en ``fess_config.properties``
    * - ``jobLogging``
      - No
      - Habilitar registro de trabajos (cadena)
@@ -212,16 +212,16 @@ Descripcion de Campos
      - No
      - Habilitado/Deshabilitado (cadena)
    * - ``sortOrder``
-     - Si
-     - Orden de visualizacion (entero entre 0 y 2147483647)
+     - Sí
+     - Orden de visualización (entero entre 0 y 2147483647)
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` son campos de cadena. En las solicitudes, especificar ``"on"`` o ``"true"`` (sin distincion de mayusculas y minusculas) los habilita; cualquier otro valor (``"false"``, cadena vacia o no especificado) se trata como deshabilitado. En las respuestas se devuelven como ``"true"`` / ``"false"``.
+   ``jobLogging`` / ``crawler`` / ``available`` son campos de cadena. En las solicitudes, especificar ``"on"`` o ``"true"`` (sin distinción de mayúsculas y minúsculas) los habilita; cualquier otro valor (``"false"``, cadena vacía o no especificado) se trata como deshabilitado. En las respuestas se devuelven como ``"true"`` / ``"false"``.
 
 .. note::
 
-   ``crudMode`` se establece automaticamente en el servidor y no es necesario especificarlo en las solicitudes. Los campos de auditoria como ``createdBy`` / ``createdTime`` tambien se establecen en el servidor.
+   ``crudMode`` se establece automáticamente en el servidor y no es necesario especificarlo en las solicitudes. Los campos de auditoría como ``createdBy`` / ``createdTime`` también se establecen en el servidor.
 
 Respuesta
 ---------
@@ -243,8 +243,8 @@ Ejemplos de Expresiones Cron
    :header-rows: 1
    :widths: 40 60
 
-   * - Expresion Cron
-     - Descripcion
+   * - Expresión Cron
+     - Descripción
    * - ``0 0 2 * * ?``
      - Ejecutar diariamente a las 2 AM
    * - ``0 0 0/6 * * ?``
@@ -252,7 +252,7 @@ Ejemplos de Expresiones Cron
    * - ``0 0 2 * * MON``
      - Ejecutar cada lunes a las 2 AM
    * - ``0 0 2 1 * ?``
-     - Ejecutar el dia 1 de cada mes a las 2 AM
+     - Ejecutar el día 1 de cada mes a las 2 AM
 
 Actualizar Trabajo Programado
 =============================
@@ -286,7 +286,7 @@ Cuerpo de la Solicitud
 
 .. note::
 
-   Para las actualizaciones, ``id`` (max. 1000 caracteres) y ``versionNo`` son obligatorios. ``versionNo`` se utiliza para el bloqueo optimista; especifique el valor devuelto en la respuesta de obtencion. Si el valor no coincide, la actualizacion falla. Los demas campos obligatorios (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) son los mismos que para la creacion.
+   Para las actualizaciones, ``id`` (max. 1000 caracteres) y ``versionNo`` son obligatorios. ``versionNo`` se utiliza para el bloqueo optimista; especifique el valor devuelto en la respuesta de obtención. Si el valor no coincide, la actualización falla. Los demás campos obligatorios (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) son los mismos que para la creación.
 
 Respuesta
 ---------
@@ -356,21 +356,21 @@ Campos de Respuesta
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``jobLogId``
-     - ID del registro del trabajo iniciado. Se emite cuando el registro de trabajos esta habilitado. Es ``null`` cuando el registro de trabajos esta deshabilitado.
+     - ID del registro del trabajo iniciado. Se emite cuando el registro de trabajos está habilitado. Es ``null`` cuando el registro de trabajos está deshabilitado.
 
 Notas
 -----
 
-- Si el trabajo ya esta en ejecucion, el inicio falla y se devuelve un error (``status`` distinto de ``0``).
-- Si el trabajo esta deshabilitado (``available`` no esta habilitado), el inicio tambien falla con un error.
-- ``jobLogId`` solo se emite cuando el registro de trabajos esta habilitado (``jobLogging`` esta habilitado).
+- Si el trabajo ya está en ejecución, el inicio falla y se devuelve un error (``status`` distinto de ``0``).
+- Si el trabajo está deshabilitado (``available`` no está habilitado), el inicio también falla con un error.
+- ``jobLogId`` solo se emite cuando el registro de trabajos está habilitado (``jobLogging`` está habilitado).
 
 Detener Trabajo
 ===============
 
-Detiene un trabajo en ejecucion.
+Detiene un trabajo en ejecución.
 
 Solicitud
 ---------
@@ -429,9 +429,9 @@ Verificar Estado del Trabajo
 
     # Puede verificar el estado de ejecucion con el campo running
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-joblog` - API de registro de trabajos
-- :doc:`../../admin/scheduler-guide` - Guia de gestion del programador
+- :doc:`../../admin/scheduler-guide` - Guía de gestión del programador

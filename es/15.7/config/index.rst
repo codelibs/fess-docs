@@ -1,17 +1,17 @@
-Guia de Configuracion de |Fess|
+Guía de Configuración de |Fess|
 ================================
 
-Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por proposito.
+Guía integral sobre la configuración de |Fess|. Cada sección está organizada por propósito.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Introduccion
+   :caption: Introducción
 
    intro
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion Basica
+   :caption: Configuración Básica
 
    setup-port-network
    setup-memory
@@ -19,7 +19,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion del Rastreador
+   :caption: Configuración del Rastreador
 
    crawler-basic
    crawler-advanced
@@ -33,7 +33,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion de Funciones de Busqueda
+   :caption: Configuración de Funciones de Búsqueda
 
    search-basic
    search-advanced
@@ -44,7 +44,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion de Seguridad
+   :caption: Configuración de Seguridad
 
    security-role
    security-virtual-host
@@ -53,7 +53,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion SSO
+   :caption: Configuración SSO
 
    sso-saml
    sso-oidc
@@ -62,7 +62,7 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
 
 .. toctree::
    :maxdepth: 2
-   :caption: Configuracion LLM/Modo de busqueda IA
+   :caption: Configuración LLM/Modo de búsqueda IA
 
    llm-overview
    llm-ollama
@@ -79,14 +79,14 @@ Guia integral sobre la configuracion de |Fess|. Cada seccion esta organizada por
 
 .. toctree::
    :maxdepth: 2
-   :caption: Rendimiento y Operacion
+   :caption: Rendimiento y Operación
 
    rate-limiting
    load-control
 
 .. toctree::
    :maxdepth: 2
-   :caption: Administracion del Sistema
+   :caption: Administración del Sistema
 
    admin-logging
    admin-log-notification

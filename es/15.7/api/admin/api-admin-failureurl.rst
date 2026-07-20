@@ -2,7 +2,7 @@
 API de FailureUrl
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de FailureUrl es para gestionar las URLs de rastreo fallidas de |Fess|.
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /logs
      - Obtener lista de URLs fallidas
@@ -48,25 +48,25 @@ Solicitud
 
     GET /api/admin/failureurl/logs
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``url``
      - String
      - No
@@ -74,11 +74,11 @@ Parametros
    * - ``errorCountMin``
      - Integer
      - No
-     - Limite inferior del numero de errores (mayor o igual al valor especificado)
+     - Límite inferior del número de errores (mayor o igual al valor especificado)
    * - ``errorCountMax``
      - Integer
      - No
-     - Limite superior del numero de errores (menor o igual al valor especificado)
+     - Límite superior del número de errores (menor o igual al valor especificado)
    * - ``errorName``
      - String
      - No
@@ -126,7 +126,7 @@ Campos de Respuesta
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``id``
      - ID de URL fallida
    * - ``url``
@@ -134,19 +134,19 @@ Campos de Respuesta
    * - ``threadName``
      - Nombre del hilo
    * - ``errorName``
-     - Nombre del error (nombre de clase completamente calificado de la excepcion ocurrida; por ejemplo, ``java.net.ConnectException``)
+     - Nombre del error (nombre de clase completamente calificado de la excepción ocurrida; por ejemplo, ``java.net.ConnectException``)
    * - ``errorLog``
-     - Registro de error (mensaje de la excepcion o traza de pila)
+     - Registro de error (mensaje de la excepción o traza de pila)
    * - ``errorCount``
-     - Numero de ocurrencias del error (valor numerico representado como cadena)
+     - Número de ocurrencias del error (valor numérico representado como cadena)
    * - ``lastAccessTime``
-     - Hora del ultimo acceso (milisegundos epoch representados como cadena)
+     - Hora del último acceso (milisegundos epoch representados como cadena)
    * - ``configId``
-     - ID de configuracion de rastreo
+     - ID de configuración de rastreo
 
 .. note::
 
-   Todos los campos de respuesta se devuelven como cadenas (JSON string). ``errorCount`` es un valor numerico representado como cadena y ``lastAccessTime`` son milisegundos epoch representados como cadena.
+   Todos los campos de respuesta se devuelven como cadenas (JSON string). ``errorCount`` es un valor numérico representado como cadena y ``lastAccessTime`` son milisegundos epoch representados como cadena.
 
 Obtener URL Fallida
 ===================
@@ -203,7 +203,7 @@ Respuesta
 Eliminar Todas las URLs Fallidas
 ================================
 
-Elimina todas las URLs fallidas. No tiene parametros.
+Elimina todas las URLs fallidas. No tiene parámetros.
 
 Solicitud
 ---------
@@ -226,28 +226,28 @@ Respuesta
 Tipos de Error
 ==============
 
-``errorName`` almacena el nombre de clase completamente calificado de la excepcion ocurrida durante el rastreo, tal como fue capturado. No es una enumeracion fija; puede aparecer cualquier nombre de clase dependiendo de la excepcion que se haya producido. A continuacion se muestran ejemplos representativos.
+``errorName`` almacena el nombre de clase completamente calificado de la excepción ocurrida durante el rastreo, tal como fue capturado. No es una enumeración fija; puede aparecer cualquier nombre de clase dependiendo de la excepción que se haya producido. A continuación se muestran ejemplos representativos.
 
 .. list-table::
    :header-rows: 1
    :widths: 50 50
 
    * - Nombre de Error (ejemplo)
-     - Descripcion
+     - Descripción
    * - ``java.net.ConnectException``
-     - Conexion rechazada (no se puede conectar al servidor)
+     - Conexión rechazada (no se puede conectar al servidor)
    * - ``java.net.UnknownHostException``
      - No se pudo resolver el nombre de host (error de DNS)
    * - ``java.net.SocketTimeoutException``
-     - Tiempo de espera de conexion o lectura agotado
+     - Tiempo de espera de conexión o lectura agotado
    * - ``javax.net.ssl.SSLException``
      - Error en el protocolo de enlace SSL/TLS o en el certificado
    * - ``java.io.IOException``
      - Error de entrada/salida
    * - ``org.codelibs.fess.exception.ContentNotFoundException``
-     - URL que devolvio un codigo de estado HTTP configurado en ``crawler.failure.url.status.codes`` (predeterminado: 403, 404, 410)
+     - URL que devolvió un código de estado HTTP configurado en ``crawler.failure.url.status.codes`` (predeterminado: 403, 404, 410)
    * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
-     - El contenido supero la longitud maxima
+     - El contenido superó la longitud máxima
 
 Ejemplos de Uso
 ===============
@@ -260,7 +260,7 @@ Obtener Lista de URLs Fallidas
     curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Filtrar por Numero de Errores
+Filtrar por Número de Errores
 -----------------------------
 
 .. code-block:: bash
@@ -302,7 +302,7 @@ Eliminar Todas las URLs Fallidas
     curl -X DELETE "http://localhost:8080/api/admin/failureurl/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Agregacion por Tipo de Error
+Agregación por Tipo de Error
 ----------------------------
 
 .. code-block:: bash
@@ -312,10 +312,10 @@ Agregacion por Tipo de Error
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-crawlinginfo` - API de informacion de rastreo
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-crawlinginfo` - API de información de rastreo
 - :doc:`api-admin-joblog` - API de registro de trabajos
-- :doc:`../../admin/failureurl-guide` - Guia de gestion de URLs fallidas
+- :doc:`../../admin/failureurl-guide` - Guía de gestión de URLs fallidas

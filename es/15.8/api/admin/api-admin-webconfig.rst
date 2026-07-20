@@ -2,11 +2,11 @@
 API de WebConfig
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de WebConfig es para gestionar la configuracion de rastreo web de |Fess|.
-Puede operar configuraciones como URLs de rastreo, profundidad de rastreo y patrones de exclusion.
+La API de WebConfig es para gestionar la configuración de rastreo web de |Fess|.
+Puede operar configuraciones como URLs de rastreo, profundidad de rastreo y patrones de exclusión.
 
 URL Base
 ========
@@ -17,8 +17,8 @@ URL Base
 
 .. note::
 
-   Todos los endpoints requieren privilegios de administrador y un token de acceso valido.
-   Consulte :doc:`api-admin-overview` para obtener informacion sobre la autenticacion.
+   Todos los endpoints requieren privilegios de administrador y un token de acceso válido.
+   Consulte :doc:`api-admin-overview` para obtener información sobre la autenticación.
 
 Lista de Endpoints
 ==================
@@ -27,24 +27,24 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de configuraciones de rastreo web
    * - GET
      - /setting/{id}
-     - Obtener configuracion de rastreo web
+     - Obtener configuración de rastreo web
    * - POST
      - /setting
-     - Crear configuracion de rastreo web
+     - Crear configuración de rastreo web
    * - PUT
      - /setting
-     - Actualizar configuracion de rastreo web
+     - Actualizar configuración de rastreo web
    * - DELETE
      - /setting/{id}
-     - Eliminar configuracion de rastreo web
+     - Eliminar configuración de rastreo web
 
 Obtener Lista de Configuraciones de Rastreo Web
 ===============================================
@@ -58,31 +58,31 @@ Solicitud
 
 .. note::
 
-   El endpoint de lista tambien acepta ``PUT`` ademas de ``GET``.
+   El endpoint de lista también acepta ``PUT`` además de ``GET``.
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 10 55
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 25, segun la configuracion ``paging.page.size``)
+     - Número de elementos por página (predeterminado: 25, según la configuración ``paging.page.size``)
    * - ``name``
      - String
      - No
-     - Filtrar por nombre de configuracion
+     - Filtrar por nombre de configuración
    * - ``urls``
      - String
      - No
@@ -90,7 +90,7 @@ Parametros
    * - ``description``
      - String
      - No
-     - Filtrar por descripcion
+     - Filtrar por descripción
 
 Respuesta
 ---------
@@ -127,9 +127,9 @@ Respuesta
       }
     }
 
-``total`` indica el numero total de configuraciones que coinciden con los criterios de busqueda.
+``total`` indica el número total de configuraciones que coinciden con los criterios de búsqueda.
 
-Obtener Configuracion de Rastreo Web
+Obtener Configuración de Rastreo Web
 =====================================
 
 Solicitud
@@ -178,12 +178,12 @@ Respuesta
 
 .. note::
 
-   La respuesta incluye los campos de auditoria ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automaticamente
-   en el momento del registro o la actualizacion.
-   ``versionNo`` es obligatorio al actualizar (consulte la seccion "Actualizar configuracion de rastreo web" a continuacion).
+   La respuesta incluye los campos de auditoría ``createdBy``, ``createdTime``,
+   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automáticamente
+   en el momento del registro o la actualización.
+   ``versionNo`` es obligatorio al actualizar (consulte la sección "Actualizar configuración de rastreo web" a continuación).
 
-Crear Configuracion de Rastreo Web
+Crear Configuración de Rastreo Web
 ===================================
 
 Solicitud
@@ -213,7 +213,7 @@ Cuerpo de la Solicitud
       "permissions": "{role}admin\n{role}user"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -222,66 +222,66 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre de la configuracion (maximo 200 caracteres)
+     - Sí
+     - Nombre de la configuración (máximo 200 caracteres)
    * - ``description``
      - No
-     - Descripcion de la configuracion (maximo 1000 caracteres)
+     - Descripción de la configuración (máximo 1000 caracteres)
    * - ``urls``
-     - Si
-     - URL de inicio de rastreo (separadas por salto de linea si son multiples). Se especifica con ``http:`` o ``https:``
+     - Sí
+     - URL de inicio de rastreo (separadas por salto de línea si son múltiples). Se especifica con ``http:`` o ``https:``
    * - ``includedUrls``
      - No
-     - Patron de expresion regular para URLs a rastrear
+     - Patrón de expresión regular para URLs a rastrear
    * - ``excludedUrls``
      - No
-     - Patron de expresion regular para URLs a excluir del rastreo
+     - Patrón de expresión regular para URLs a excluir del rastreo
    * - ``includedDocUrls``
      - No
-     - Patron de expresion regular para URLs a indexar
+     - Patrón de expresión regular para URLs a indexar
    * - ``excludedDocUrls``
      - No
-     - Patron de expresion regular para URLs a excluir del indice
+     - Patrón de expresión regular para URLs a excluir del índice
    * - ``configParameter``
      - No
-     - Parametros de configuracion adicionales (formato ``key=value``, un elemento por linea)
+     - Parámetros de configuración adicionales (formato ``key=value``, un elemento por línea)
    * - ``depth``
      - No
-     - Profundidad de rastreo (0 o mas)
+     - Profundidad de rastreo (0 o más)
    * - ``maxAccessCount``
      - No
-     - Numero maximo de accesos (0 o mas)
+     - Número máximo de accesos (0 o más)
    * - ``userAgent``
-     - Si
-     - Cadena User-Agent (maximo 200 caracteres)
+     - Sí
+     - Cadena User-Agent (máximo 200 caracteres)
    * - ``numOfThread``
-     - Si
-     - Numero de hilos paralelos (1 o mas)
+     - Sí
+     - Número de hilos paralelos (1 o más)
    * - ``intervalTime``
-     - Si
-     - Intervalo de acceso (milisegundos, 0 o mas)
+     - Sí
+     - Intervalo de acceso (milisegundos, 0 o más)
    * - ``boost``
-     - Si
-     - Valor de impulso en resultados de busqueda
+     - Sí
+     - Valor de impulso en resultados de búsqueda
    * - ``available``
-     - Si
+     - Sí
      - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
    * - ``sortOrder``
-     - Si
-     - Orden de visualizacion (0 o mas)
+     - Sí
+     - Orden de visualización (0 o más)
    * - ``permissions``
      - No
-     - Roles con permiso de acceso (separados por saltos de linea si son varios)
+     - Roles con permiso de acceso (separados por saltos de línea si son varios)
    * - ``virtualHosts``
      - No
-     - Hosts virtuales (separados por saltos de linea si son varios)
+     - Hosts virtuales (separados por saltos de línea si son varios)
 
 .. note::
 
-   Los campos de auditoria como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
-   son asignados automaticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
+   Los campos de auditoría como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
+   son asignados automáticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
 
 Respuesta
 ---------
@@ -296,7 +296,7 @@ Respuesta
       }
     }
 
-Actualizar Configuracion de Rastreo Web
+Actualizar Configuración de Rastreo Web
 =========================================
 
 Solicitud
@@ -310,8 +310,8 @@ Solicitud
 Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Al actualizar, ademas de los campos de creacion, son obligatorios ``id`` para identificar
-el registro a actualizar y ``versionNo`` como numero de version.
+Al actualizar, además de los campos de creación, son obligatorios ``id`` para identificar
+el registro a actualizar y ``versionNo`` como número de versión.
 En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
 
 .. code-block:: json
@@ -333,7 +333,7 @@ En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de
       "versionNo": 1
     }
 
-Campos Adicionales para la Actualizacion
+Campos Adicionales para la Actualización
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -342,13 +342,13 @@ Campos Adicionales para la Actualizacion
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``id``
-     - Si
-     - ID de la configuracion a actualizar (maximo 1000 caracteres)
+     - Sí
+     - ID de la configuración a actualizar (máximo 1000 caracteres)
    * - ``versionNo``
-     - Si
-     - Numero de version actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
+     - Sí
+     - Número de versión actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
 
 Respuesta
 ---------
@@ -363,7 +363,7 @@ Respuesta
       }
     }
 
-Eliminar Configuracion de Rastreo Web
+Eliminar Configuración de Rastreo Web
 =======================================
 
 Solicitud
@@ -393,8 +393,8 @@ En ``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls
    :header-rows: 1
    :widths: 50 50
 
-   * - Patron
-     - Descripcion
+   * - Patrón
+     - Descripción
    * - ``.*example\\.com.*``
      - Todas las URLs que contienen example.com
    * - ``https://example\\.com/docs/.*``
@@ -402,14 +402,14 @@ En ``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls
    * - ``.*\\.(pdf|doc|docx)$``
      - Archivos PDF, DOC, DOCX
    * - ``.*\\?.*``
-     - URLs con parametros de consulta
+     - URLs con parámetros de consulta
    * - ``.*/(login|logout|admin)/.*``
-     - URLs que contienen rutas especificas
+     - URLs que contienen rutas específicas
 
 Ejemplos de Uso
 ===============
 
-Configuracion de Rastreo de Sitio Corporativo
+Configuración de Rastreo de Sitio Corporativo
 ---------------------------------------------
 
 .. code-block:: bash
@@ -433,7 +433,7 @@ Configuracion de Rastreo de Sitio Corporativo
            "permissions": "{role}guest"
          }'
 
-Configuracion de Rastreo de Sitio de Documentacion
+Configuración de Rastreo de Sitio de Documentación
 ----------------------------------------------------
 
 .. code-block:: bash
@@ -455,10 +455,10 @@ Configuracion de Rastreo de Sitio de Documentacion
            "sortOrder": 0
          }'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-fileconfig` - API de configuracion de rastreo de archivos
-- :doc:`api-admin-dataconfig` - API de configuracion de almacen de datos
-- :doc:`../../admin/webconfig-guide` - Guia de configuracion de rastreo web
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-fileconfig` - API de configuración de rastreo de archivos
+- :doc:`api-admin-dataconfig` - API de configuración de almacén de datos
+- :doc:`../../admin/webconfig-guide` - Guía de configuración de rastreo web

@@ -2,11 +2,11 @@
 Arquitectura de Plugins
 ==================================
 
-Vision General
+Visión General
 ==============
 
 El sistema de plugins de |Fess| permite extender la funcionalidad principal.
-Los plugins se distribuyen como archivos JAR y se cargan dinamicamente.
+Los plugins se distribuyen como archivos JAR y se cargan dinámicamente.
 
 Tipos de Plugins
 ================
@@ -18,20 +18,20 @@ Tipos de Plugins
    :widths: 25 75
 
    * - Tipo
-     - Descripcion
-   * - Almacen de datos
-     - Obtencion de contenido desde nuevas fuentes de datos (Box, Slack, etc.)
+     - Descripción
+   * - Almacén de datos
+     - Obtención de contenido desde nuevas fuentes de datos (Box, Slack, etc.)
    * - Motor de scripts
      - Soporte para nuevos lenguajes de script
-   * - Aplicacion web
-     - Extension de la interfaz web
+   * - Aplicación web
+     - Extensión de la interfaz web
    * - Ingest
-     - Procesamiento de datos durante la indexacion
+     - Procesamiento de datos durante la indexación
 
 Estructura de un Plugin
 =======================
 
-Estructura Basica
+Estructura Básica
 -----------------
 
 ::
@@ -83,7 +83,7 @@ Registro de Plugins
 Registro en el Contenedor DI
 ----------------------------
 
-Los plugins se registran en archivos de configuracion como ``fess_ds.xml``:
+Los plugins se registran en archivos de configuración como ``fess_ds.xml``:
 
 .. code-block:: xml
 
@@ -91,10 +91,10 @@ Los plugins se registran en archivos de configuracion como ``fess_ds.xml``:
         <postConstruct name="register"/>
     </component>
 
-Registro Automatico
+Registro Automático
 -------------------
 
-Muchos plugins se registran automaticamente con la anotacion ``@PostConstruct``:
+Muchos plugins se registran automáticamente con la anotación ``@PostConstruct``:
 
 .. code-block:: java
 
@@ -106,18 +106,18 @@ Muchos plugins se registran automaticamente con la anotacion ``@PostConstruct``:
 Ciclo de Vida del Plugin
 ========================
 
-Inicializacion
+Inicialización
 --------------
 
 1. Se carga el archivo JAR
 2. El contenedor DI inicializa los componentes
-3. Se llama al metodo ``@PostConstruct``
+3. Se llama al método ``@PostConstruct``
 4. El plugin se registra en el gestor
 
-Finalizacion
+Finalización
 ------------
 
-1. Se llama al metodo ``@PreDestroy`` (si esta definido)
+1. Se llama al método ``@PreDestroy`` (si está definido)
 2. Limpieza de recursos
 
 Dependencias
@@ -151,7 +151,7 @@ Los plugins pueden incluir sus propias bibliotecas de dependencia:
 Las bibliotecas de dependencia se distribuyen junto con el JAR del plugin o
 se crea un fat JAR usando Maven Shade Plugin.
 
-Obtencion de Configuracion
+Obtención de Configuración
 ==========================
 
 Obtener desde FessConfig
@@ -180,25 +180,25 @@ Obtener desde FessConfig
         }
     }
 
-Construccion e Instalacion
+Construcción e Instalación
 ==========================
 
-Construccion
+Construcción
 ------------
 
 ::
 
     mvn clean package
 
-Instalacion
+Instalación
 -----------
 
-1. **Desde la pantalla de administracion**:
+1. **Desde la pantalla de administración**:
 
    - "Sistema" -> "Plugins" -> "Instalar"
    - Ingrese el nombre del plugin e instale
 
-2. **Linea de comandos**:
+2. **Línea de comandos**:
 
    ::
 
@@ -209,7 +209,7 @@ Instalacion
    - Copie el archivo JAR al directorio ``plugins/``
    - Reinicie |Fess|
 
-Depuracion
+Depuración
 ==========
 
 Salida de Registros
@@ -229,11 +229,11 @@ Modo de Desarrollo
 
 Durante el desarrollo, puede depurar iniciando |Fess| desde el IDE:
 
-1. Ejecute la clase ``FessBoot`` en modo de depuracion
-2. Incluya el codigo fuente del plugin en el proyecto
-3. Establezca puntos de interrupcion
+1. Ejecute la clase ``FessBoot`` en modo de depuración
+2. Incluya el código fuente del plugin en el proyecto
+3. Establezca puntos de interrupción
 
-Lista de Plugins Publicos
+Lista de Plugins Públicos
 =========================
 
 Principales plugins publicados por el proyecto |Fess|:
@@ -243,7 +243,7 @@ Principales plugins publicados por el proyecto |Fess|:
    :widths: 30 70
 
    * - Plugin
-     - Descripcion
+     - Descripción
    * - fess-ds-box
      - Conector de Box.com
    * - fess-ds-dropbox
@@ -257,13 +257,13 @@ Principales plugins publicados por el proyecto |Fess|:
    * - fess-theme-\*
      - Temas personalizados
 
-Estos plugins estan disponibles como referencia de desarrollo en
+Estos plugins están disponibles como referencia de desarrollo en
 `GitHub <https://github.com/codelibs>`__.
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`datastore-plugin` - Desarrollo de plugins de almacen de datos
+- :doc:`datastore-plugin` - Desarrollo de plugins de almacén de datos
 - :doc:`script-engine-plugin` - Plugins de motor de scripts
-- :doc:`webapp-plugin` - Plugins de aplicacion web
+- :doc:`webapp-plugin` - Plugins de aplicación web
 - :doc:`ingest-plugin` - Plugins Ingest

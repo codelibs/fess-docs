@@ -2,30 +2,30 @@
 Conector de Box
 ===========================
 
-Descripcion general
+Descripción general
 ===================
 
 El conector de Box proporciona la funcionalidad de obtener archivos del almacenamiento
-en la nube Box.com y registrarlos en el indice de |Fess|.
+en la nube Box.com y registrarlos en el índice de |Fess|.
 
 Este conector se conecta a la empresa mediante JWT (Server Authentication) y rastreo
 recursivo de los archivos accesibles para cada usuario de la empresa suplantando su
 identidad (impersonation). Los usuarios a rastrear pueden acotarse mediante el
-parametro ``filter_term``.
+parámetro ``filter_term``.
 
 Esta funcionalidad requiere el plugin ``fess-ds-box``.
 
 Requisitos previos
 ==================
 
-1. Se requiere la instalacion del plugin
-2. Se requiere una cuenta de desarrollador de Box y la creacion de una aplicacion
-3. Se requiere la configuracion de autenticacion JWT (JSON Web Token)
+1. Se requiere la instalación del plugin
+2. Se requiere una cuenta de desarrollador de Box y la creación de una aplicación
+3. Se requiere la configuración de autenticación JWT (JSON Web Token)
 
-Instalacion del plugin
+Instalación del plugin
 ----------------------
 
-Metodo 1: Colocar el archivo JAR directamente
+Método 1: Colocar el archivo JAR directamente
 
 ::
 
@@ -37,18 +37,18 @@ Metodo 1: Colocar el archivo JAR directamente
     # o
     cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
 
-Metodo 2: Instalar desde la consola de administracion
+Método 2: Instalar desde la consola de administración
 
 1. Abra "Sistema" -> "Plugins"
 2. Cargue el archivo JAR
 3. Reinicie |Fess|
 
-Metodo de configuracion
+Método de configuración
 =======================
 
-Configure desde la consola de administracion en "Rastreador" -> "Almacen de datos" -> "Crear nuevo".
+Configure desde la consola de administración en "Rastreador" -> "Almacén de datos" -> "Crear nuevo".
 
-Configuracion basica
+Configuración básica
 --------------------
 
 .. list-table::
@@ -56,7 +56,7 @@ Configuracion basica
    :widths: 25 75
 
    * - Elemento
-     - Ejemplo de configuracion
+     - Ejemplo de configuración
    * - Nombre
      - Company Box Storage
    * - Nombre del manejador
@@ -64,10 +64,10 @@ Configuracion basica
    * - Habilitado
      - Activado
 
-Configuracion de parametros
+Configuración de parámetros
 ----------------------------
 
-Ejemplo de autenticacion JWT:
+Ejemplo de autenticación JWT:
 
 ::
 
@@ -78,103 +78,103 @@ Ejemplo de autenticacion JWT:
     passphrase=7ba8sd9f7a9sd8f7a9sd8f7a9sd8f
     enterprise_id=1923456
 
-Lista de parametros
+Lista de parámetros
 ~~~~~~~~~~~~~~~~~~~
 
-Parametros de autenticacion (obligatorios)
+Parámetros de autenticación (obligatorios)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``client_id``
-     - Si
-     - ID de cliente de la aplicacion Box
+     - Sí
+     - ID de cliente de la aplicación Box
    * - ``client_secret``
-     - Si
-     - Secreto de cliente de la aplicacion Box
+     - Sí
+     - Secreto de cliente de la aplicación Box
    * - ``public_key_id``
-     - Si
-     - ID de la clave publica
+     - Sí
+     - ID de la clave pública
    * - ``private_key``
-     - Si
-     - Clave privada (formato PEM, los saltos de linea se representan con ``\n``)
+     - Sí
+     - Clave privada (formato PEM, los saltos de línea se representan con ``\n``)
    * - ``passphrase``
-     - Si
-     - Frase de contrasena de la clave privada
+     - Sí
+     - Frase de contraseña de la clave privada
    * - ``enterprise_id``
-     - Si
+     - Sí
      - ID de empresa de Box
 
-Parametros de rastreo (opcionales)
+Parámetros de rastreo (opcionales)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
    :widths: 25 20 55
 
-   * - Parametro
+   * - Parámetro
      - Valor predeterminado
-     - Descripcion
+     - Descripción
    * - ``max_size``
      - ``10000000``
-     - Tamano maximo de archivo a rastrear (bytes). El valor predeterminado es 10 MB.
+     - Tamaño máximo de archivo a rastrear (bytes). El valor predeterminado es 10 MB.
    * - ``supported_mimetypes``
      - ``.*``
-     - Tipos MIME a rastrear (expresion regular). Se pueden especificar varios separados por comas.
+     - Tipos MIME a rastrear (expresión regular). Se pueden especificar varios separados por comas.
    * - ``include_pattern``
      - (ninguno)
-     - Patron de URL a incluir en el rastreo
+     - Patrón de URL a incluir en el rastreo
    * - ``exclude_pattern``
      - (ninguno)
-     - Patron de URL a excluir del rastreo
+     - Patrón de URL a excluir del rastreo
    * - ``number_of_threads``
      - ``1``
-     - Numero de hilos del proceso de rastreo
+     - Número de hilos del proceso de rastreo
    * - ``ignore_folder``
      - ``true``
-     - Indica si las carpetas deben quedar fuera del indice. En la implementacion actual, las carpetas en si mismas no se indexan (solo los archivos son el objetivo), por lo que este parametro no tiene efecto.
+     - Indica si las carpetas deben quedar fuera del índice. En la implementación actual, las carpetas en si mismas no se indexan (solo los archivos son el objetivo), por lo que este parámetro no tiene efecto.
    * - ``ignore_error``
      - ``true``
      - Indica si se debe continuar el procesamiento cuando ocurre un error
    * - ``filter_term``
      - (ninguno)
-     - Condicion de filtro para acotar los usuarios de la empresa a rastrear. Si no se especifica, se incluyen todos los usuarios de la empresa.
+     - Condición de filtro para acotar los usuarios de la empresa a rastrear. Si no se especifica, se incluyen todos los usuarios de la empresa.
    * - ``fields``
      - (todos los campos)
-     - Especificacion de los campos a obtener desde la API de Box
+     - Especificación de los campos a obtener desde la API de Box
 
-Parametros de conexion (opcionales)
+Parámetros de conexión (opcionales)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
    :widths: 25 20 55
 
-   * - Parametro
+   * - Parámetro
      - Valor predeterminado
-     - Descripcion
+     - Descripción
    * - ``base_url``
      - ``https://app.box.com``
      - URL base para construir la URL de apertura del archivo en el navegador (``file.url``). No afecta a los endpoints de la API utilizados por el SDK de Box.
    * - ``max_retry_count``
      - ``10``
-     - Numero maximo de reintentos de la llamada a la API
+     - Número máximo de reintentos de la llamada a la API
    * - ``proxy_host``
      - (ninguno)
      - Nombre de host del proxy HTTP
    * - ``proxy_port``
      - (ninguno)
-     - Numero de puerto del proxy HTTP
+     - Número de puerto del proxy HTTP
    * - ``refresh_token_interval``
      - ``3540``
-     - Intervalo de actualizacion del token (segundos). El valor predeterminado es 59 minutos.
+     - Intervalo de actualización del token (segundos). El valor predeterminado es 59 minutos.
 
-Configuracion de script
+Configuración de script
 -----------------------
 
 ::
@@ -200,7 +200,7 @@ Campos principales
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``file.url``
      - Enlace para abrir el archivo en el navegador
    * - ``file.contents``
@@ -212,19 +212,19 @@ Campos principales
    * - ``file.name``
      - Nombre del archivo
    * - ``file.size``
-     - Tamano del archivo (bytes)
+     - Tamaño del archivo (bytes)
    * - ``file.created_at``
-     - Fecha y hora de creacion
+     - Fecha y hora de creación
    * - ``file.modified_at``
-     - Fecha y hora de ultima modificacion
+     - Fecha y hora de última modificación
    * - ``file.download_url``
      - URL de descarga directa de Box
    * - ``file.id``
      - ID de elemento de Box
    * - ``file.description``
-     - Descripcion del archivo
+     - Descripción del archivo
    * - ``file.extension``
-     - Extension del archivo
+     - Extensión del archivo
    * - ``file.sha1``
      - Hash SHA1 del archivo
    * - ``file.path_collection``
@@ -238,11 +238,11 @@ Campos de metadatos
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``file.type``
      - Tipo de elemento ("file" o "folder")
    * - ``file.file_version``
-     - Informacion de version del archivo
+     - Información de versión del archivo
    * - ``file.sequence_id``
      - ID de secuencia
    * - ``file.etag``
@@ -250,66 +250,66 @@ Campos de metadatos
    * - ``file.trashed_at``
      - Fecha y hora de traslado a la papelera
    * - ``file.purged_at``
-     - Fecha y hora de eliminacion definitiva
+     - Fecha y hora de eliminación definitiva
    * - ``file.content_created_at``
-     - Fecha y hora de creacion del contenido
+     - Fecha y hora de creación del contenido
    * - ``file.content_modified_at``
-     - Fecha y hora de modificacion del contenido
+     - Fecha y hora de modificación del contenido
    * - ``file.created_by``
-     - Informacion del creador
+     - Información del creador
    * - ``file.modified_by``
-     - Informacion del modificador
+     - Información del modificador
    * - ``file.owned_by``
-     - Informacion del propietario
+     - Información del propietario
    * - ``file.shared_link``
-     - Informacion del enlace compartido
+     - Información del enlace compartido
    * - ``file.parent``
-     - Informacion de la carpeta padre
+     - Información de la carpeta padre
    * - ``file.item_status``
      - Estado del elemento
    * - ``file.version_number``
-     - Numero de version
+     - Número de versión
    * - ``file.comment_count``
-     - Numero de comentarios
+     - Número de comentarios
    * - ``file.permissions``
-     - Informacion de permisos
+     - Información de permisos
    * - ``file.tags``
-     - Informacion de etiquetas
+     - Información de etiquetas
    * - ``file.lock``
-     - Informacion de bloqueo
+     - Información de bloqueo
    * - ``file.is_package``
      - Indicador de paquete
    * - ``file.is_watermark``
      - Indicador de marca de agua
    * - ``file.collections``
-     - Informacion de colecciones
+     - Información de colecciones
    * - ``file.representations``
-     - Informacion de representaciones
+     - Información de representaciones
    * - ``file.api``
-     - Objeto BoxFileAPI (para obtener informacion de colaboracion y permisos)
+     - Objeto BoxFileAPI (para obtener información de colaboración y permisos)
 
-Para mas detalles, consulte el `Objeto File de Box <https://developer.box.com/reference#file-object>`_.
+Para más detalles, consulte el `Objeto File de Box <https://developer.box.com/reference#file-object>`_.
 
-Configuracion de autenticacion de Box
+Configuración de autenticación de Box
 ======================================
 
-Pasos de configuracion de autenticacion JWT
+Pasos de configuración de autenticación JWT
 --------------------------------------------
 
-1. Crear una aplicacion en Box Developer Console
+1. Crear una aplicación en Box Developer Console
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Acceda a https://app.box.com/developers/console:
 
 1. Haga clic en "Create New App"
 2. Seleccione "Custom App"
-3. Seleccione "Server Authentication (with JWT)" como metodo de autenticacion
-4. Ingrese el nombre de la aplicacion y cree
+3. Seleccione "Server Authentication (with JWT)" como método de autenticación
+4. Ingrese el nombre de la aplicación y cree
 
-2. Configuracion de la aplicacion
+2. Configuración de la aplicación
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Configure en la pestana "Configuration":
+Configure en la pestaña "Configuration":
 
 **Application Scopes**:
 
@@ -327,15 +327,15 @@ Configure en la pestana "Configuration":
 3. Aprobar en la empresa
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-En la consola de administracion de Box:
+En la consola de administración de Box:
 
 1. Abra "Apps" -> "Custom Apps"
-2. Apruebe la aplicacion creada
+2. Apruebe la aplicación creada
 
-4. Obtener las credenciales de autenticacion
+4. Obtener las credenciales de autenticación
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Obtenga la siguiente informacion del archivo JSON descargado:
+Obtenga la siguiente información del archivo JSON descargado:
 
 ::
 
@@ -355,7 +355,7 @@ Obtenga la siguiente informacion del archivo JSON descargado:
 Formato de la clave privada
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Reemplace los saltos de linea de ``private_key`` con ``\n`` para convertirla en una sola linea:
+Reemplace los saltos de línea de ``private_key`` con ``\n`` para convertirla en una sola línea:
 
 ::
 
@@ -367,7 +367,7 @@ Ejemplos de uso
 Rastrear todo el almacenamiento Box de la empresa
 --------------------------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -392,12 +392,12 @@ Script:
     created=file.created_at
     last_modified=file.modified_at
 
-Rastrear solo una carpeta especifica
+Rastrear solo una carpeta específica
 -------------------------------------
 
-Es posible filtrar por ruta de carpeta mediante el parametro ``include_pattern``.
+Es posible filtrar por ruta de carpeta mediante el parámetro ``include_pattern``.
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -426,9 +426,9 @@ Script:
 Rastrear solo archivos PDF
 --------------------------
 
-Es posible filtrar por tipo MIME mediante el parametro ``supported_mimetypes``.
+Es posible filtrar por tipo MIME mediante el parámetro ``supported_mimetypes``.
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -454,30 +454,30 @@ Script:
     created=file.created_at
     last_modified=file.modified_at
 
-Solucion de problemas
+Solución de problemas
 =====================
 
-Errores de autenticacion
+Errores de autenticación
 ------------------------
 
-**Sintoma**: ``Authentication failed`` o ``Invalid grant``
+**Síntoma**: ``Authentication failed`` o ``Invalid grant``
 
 **Verifique**:
 
 1. Verifique que ``client_id`` y ``client_secret`` sean correctos
-2. Verifique que la clave privada se haya copiado correctamente (los saltos de linea esten como ``\n``)
-3. Verifique que la frase de contrasena sea correcta
-4. Verifique que la aplicacion este aprobada en la consola de administracion de Box
+2. Verifique que la clave privada se haya copiado correctamente (los saltos de línea estén como ``\n``)
+3. Verifique que la frase de contraseña sea correcta
+4. Verifique que la aplicación esté aprobada en la consola de administración de Box
 5. Verifique que ``enterprise_id`` sea correcto
 
 Error de formato de clave privada
 ----------------------------------
 
-**Sintoma**: ``Invalid private key format``
+**Síntoma**: ``Invalid private key format``
 
-**Solucion**:
+**Solución**:
 
-Verifique que los saltos de linea de la clave privada esten correctamente convertidos a ``\n``:
+Verifique que los saltos de línea de la clave privada estén correctamente convertidos a ``\n``:
 
 ::
 
@@ -492,38 +492,38 @@ Verifique que los saltos de linea de la clave privada esten correctamente conver
 No se pueden obtener archivos
 ------------------------------
 
-**Sintoma**: El rastreo finaliza con exito pero hay 0 archivos
+**Síntoma**: El rastreo finaliza con éxito pero hay 0 archivos
 
 **Verifique**:
 
-1. Verifique que "Read all files and folders" este habilitado en Application Scopes
+1. Verifique que "Read all files and folders" esté habilitado en Application Scopes
 2. Verifique que App Access Level sea "App + Enterprise Access"
 3. Verifique que realmente existan archivos en el almacenamiento de Box
 4. Verifique que la cuenta de servicio tenga los permisos apropiados
 
-Cuando hay un gran numero de archivos
+Cuando hay un gran número de archivos
 --------------------------------------
 
-**Sintoma**: El rastreo tarda mucho tiempo o se agota el tiempo de espera
+**Síntoma**: El rastreo tarda mucho tiempo o se agota el tiempo de espera
 
-**Solucion**:
+**Solución**:
 
-Divida el procesamiento en la configuracion del almacen de datos:
+Divida el procesamiento en la configuración del almacén de datos:
 
 1. Ajuste el intervalo de rastreo
-2. Configure multiples almacenes de datos (por unidad de carpeta, etc.)
-3. Aumente el numero de hilos con el parametro ``number_of_threads``
-4. Distribuya la carga con la configuracion de programacion
+2. Configure múltiples almacenes de datos (por unidad de carpeta, etc.)
+3. Aumente el número de hilos con el parámetro ``number_of_threads``
+4. Distribuya la carga con la configuración de programación
 
 Permisos y control de acceso
 =============================
 
-Reflejar los permisos de colaboracion de Box
+Reflejar los permisos de colaboración de Box
 ---------------------------------------------
 
 Mediante el objeto ``BoxFileAPI`` proporcionado por el campo ``file.api``, es posible
-asignar la informacion de colaboracion de Box a los roles de busqueda de |Fess|.
-``file.api.collaborationRoles`` devuelve una lista de roles de busqueda correspondientes
+asignar la información de colaboración de Box a los roles de búsqueda de |Fess|.
+``file.api.collaborationRoles`` devuelve una lista de roles de búsqueda correspondientes
 a los usuarios y grupos que tienen acceso al archivo.
 
 Establecer los permisos en el script:
@@ -540,22 +540,22 @@ Establecer los permisos en el script:
     last_modified=file.modified_at
 
 .. note::
-   ``file.api.collaborationRoles`` obtiene la informacion de colaboracion de cada archivo,
-   lo que incrementa el numero de llamadas a la API de Box y puede hacer que el rastreo
-   tarde mas tiempo.
+   ``file.api.collaborationRoles`` obtiene la información de colaboración de cada archivo,
+   lo que incrementa el número de llamadas a la API de Box y puede hacer que el rastreo
+   tarde más tiempo.
 
-Para asignar un rol fijo a todos los archivos, especifiquelo de la siguiente manera:
+Para asignar un rol fijo a todos los archivos, especifíquelo de la siguiente manera:
 
 ::
 
     role="{role}box-users"
 
-Informacion de referencia
+Información de referencia
 ==========================
 
-- :doc:`ds-overview` - Descripcion general de conectores de almacen de datos
+- :doc:`ds-overview` - Descripción general de conectores de almacén de datos
 - :doc:`ds-dropbox` - Conector de Dropbox
 - :doc:`ds-gsuite` - Conector de Google Workspace
-- :doc:`../../admin/dataconfig-guide` - Guia de configuracion de almacen de datos
-- `Documentacion para desarrolladores de Box <https://developer.box.com/>`_
-- `Autenticacion de Box Platform <https://developer.box.com/guides/authentication/>`_
+- :doc:`../../admin/dataconfig-guide` - Guía de configuración de almacén de datos
+- `Documentación para desarrolladores de Box <https://developer.box.com/>`_
+- `Autenticación de Box Platform <https://developer.box.com/guides/authentication/>`_

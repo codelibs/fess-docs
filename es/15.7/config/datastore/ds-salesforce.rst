@@ -2,28 +2,28 @@
 Conector Salesforce
 ==================================
 
-Descripcion general
+Descripción general
 ===================
 
 El conector Salesforce proporciona la funcionalidad para obtener datos de objetos de Salesforce
-(objetos estandar, objetos personalizados) y registrarlos en el indice de |Fess|.
+(objetos estándar, objetos personalizados) y registrarlos en el índice de |Fess|.
 
 Esta funcionalidad requiere el plugin ``fess-ds-salesforce``.
 
 Objetos compatibles
 ===================
 
-- **Objetos estandar**: objetos estandar predefinidos (Account, Contact, Lead, Opportunity, Case, Solution, etc.). El conjunto de objetos estandar es fijo y todos ellos se recuperan en cada crawl.
-- **Objetos personalizados**: objetos definidos por el usuario y especificados mediante el parametro ``custom`` (objetos cuyos nombres de API terminan en ``__c``).
+- **Objetos estándar**: objetos estándar predefinidos (Account, Contact, Lead, Opportunity, Case, Solution, etc.). El conjunto de objetos estándar es fijo y todos ellos se recuperan en cada crawl.
+- **Objetos personalizados**: objetos definidos por el usuario y especificados mediante el parámetro ``custom`` (objetos cuyos nombres de API terminan en ``__c``).
 
 .. note::
 
-   Los objetos estandar se crawlean siempre en su totalidad (no es posible seleccionar individualmente cuales se crawlean). Para excluir objetos no deseados, utilice el filtrado por URL mediante ``include_pattern`` / ``exclude_pattern``.
+   Los objetos estándar se crawlean siempre en su totalidad (no es posible seleccionar individualmente cuales se crawlean). Para excluir objetos no deseados, utilice el filtrado por URL mediante ``include_pattern`` / ``exclude_pattern``.
 
-Lista de objetos estandar
+Lista de objetos estándar
 -------------------------
 
-Los siguientes objetos estandar son crawleados. El "Nombre de objeto" es el identificador que se usa en el mapeo de campos (p. ej. ``<NombreObjeto>.title``); ``object.type`` es el valor del tipo de objeto al que puede hacer referencia en los scripts.
+Los siguientes objetos estándar son crawleados. El "Nombre de objeto" es el identificador que se usa en el mapeo de campos (p. ej. ``<NombreObjeto>.title``); ``object.type`` es el valor del tipo de objeto al que puede hacer referencia en los scripts.
 
 .. list-table::
    :header-rows: 1
@@ -31,7 +31,7 @@ Los siguientes objetos estandar son crawleados. El "Nombre de objeto" es el iden
 
    * - Nombre de objeto
      - ``object.type``
-     - Descripcion
+     - Descripción
    * - ``ACCOUNT``
      - ``Account``
      - Account
@@ -106,23 +106,23 @@ Requisitos previos
 ==================
 
 1. Es necesario instalar el plugin
-2. Es necesario crear una aplicacion conectada (Connected App) en Salesforce
-3. Es necesario configurar la autenticacion OAuth
+2. Es necesario crear una aplicación conectada (Connected App) en Salesforce
+3. Es necesario configurar la autenticación OAuth
 4. Se requiere acceso de lectura a los objetos
 
-Instalacion del plugin
+Instalación del plugin
 ----------------------
 
-Instale desde la pantalla de administracion en "Sistema" -> "Plugins".
+Instale desde la pantalla de administración en "Sistema" -> "Plugins".
 
-O consulte :doc:`../../admin/plugin-guide` para mas detalles.
+O consulte :doc:`../../admin/plugin-guide` para más detalles.
 
-Configuracion
+Configuración
 =============
 
-Configure desde la pantalla de administracion en "Crawler" -> "Data Store" -> "Crear nuevo".
+Configure desde la pantalla de administración en "Crawler" -> "Data Store" -> "Crear nuevo".
 
-Configuracion basica
+Configuración básica
 --------------------
 
 .. list-table::
@@ -138,10 +138,10 @@ Configuracion basica
    * - Habilitado
      - Activado
 
-Configuracion de parametros
+Configuración de parámetros
 ---------------------------
 
-Autenticacion OAuth Token (recomendada):
+Autenticación OAuth Token (recomendada):
 
 ::
 
@@ -158,7 +158,7 @@ Autenticacion OAuth Token (recomendada):
     CustomProduct.title=Product_Name__c
     CustomProduct.contents=Product_Name__c,Product_Description__c
 
-Autenticacion OAuth Password:
+Autenticación OAuth Password:
 
 ::
 
@@ -172,43 +172,43 @@ Autenticacion OAuth Password:
     number_of_threads=1
     ignore_error=true
 
-Lista de parametros
+Lista de parámetros
 ~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``base_url``
      - No
      - URL de Salesforce (predeterminado: ``https://login.salesforce.com``; Sandbox: ``https://test.salesforce.com``)
    * - ``auth_type``
-     - Si
-     - Tipo de autenticacion (``oauth_token`` o ``oauth_password``)
+     - Sí
+     - Tipo de autenticación (``oauth_token`` o ``oauth_password``)
    * - ``username``
-     - Si
+     - Sí
      - Nombre de usuario de Salesforce
    * - ``client_id``
-     - Si
-     - Consumer Key de la aplicacion conectada
+     - Sí
+     - Consumer Key de la aplicación conectada
    * - ``password``
      - Para oauth_password
-     - Contrasena de Salesforce
+     - Contraseña de Salesforce
    * - ``private_key``
      - Para oauth_token
-     - Clave privada (formato PEM, saltos de linea como ``\n``)
+     - Clave privada (formato PEM, saltos de línea como ``\n``)
    * - ``client_secret``
      - Para oauth_password
-     - Consumer Secret de la aplicacion conectada
+     - Consumer Secret de la aplicación conectada
    * - ``security_token``
      - Para oauth_password
      - Token de seguridad del usuario
    * - ``number_of_threads``
      - No
-     - Numero de hilos de procesamiento paralelo (predeterminado: 1)
+     - Número de hilos de procesamiento paralelo (predeterminado: 1)
    * - ``ignore_error``
      - No
      - Continuar procesando en caso de error (predeterminado: true)
@@ -217,33 +217,33 @@ Lista de parametros
      - Nombres de objetos personalizados (separados por comas)
    * - ``<objeto>.title``
      - No
-     - Nombre del campo a usar para el titulo
+     - Nombre del campo a usar para el título
    * - ``<objeto>.contents``
      - No
      - Nombres de campos a usar para el contenido (separados por comas)
    * - ``<objeto>.descriptions``
      - No
-     - Nombres de campos para descripcion (separados por comas)
+     - Nombres de campos para descripción (separados por comas)
    * - ``<objeto>.thumbnail``
      - No
      - Nombre del campo para miniatura
    * - ``include_pattern``
      - No
-     - Patron de inclusion del filtro URL (regex)
+     - Patrón de inclusión del filtro URL (regex)
    * - ``exclude_pattern``
      - No
-     - Patron de exclusion del filtro URL (regex)
+     - Patrón de exclusión del filtro URL (regex)
    * - ``refresh_token_interval``
      - No
-     - Intervalo de actualizacion del token en segundos (predeterminado: 3540)
+     - Intervalo de actualización del token en segundos (predeterminado: 3540)
    * - ``proxy_host``
      - No
      - Nombre del host del proxy HTTP
    * - ``proxy_port``
-     - Si proxy_host esta configurado
-     - Numero de puerto del proxy HTTP
+     - Si proxy_host está configurado
+     - Número de puerto del proxy HTTP
 
-Configuracion de scripts
+Configuración de scripts
 ------------------------
 
 ::
@@ -263,13 +263,13 @@ Campos disponibles
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``object.type``
      - Tipo del objeto (ej: Case, User, Solution)
    * - ``object.title``
      - Nombre del objeto
    * - ``object.description``
-     - Descripcion del objeto
+     - Descripción del objeto
    * - ``object.content``
      - Contenido de texto del objeto
    * - ``object.id``
@@ -277,39 +277,39 @@ Campos disponibles
    * - ``object.content_length``
      - Longitud del contenido
    * - ``object.created``
-     - Fecha y hora de creacion
+     - Fecha y hora de creación
    * - ``object.last_modified``
-     - Fecha y hora de ultima modificacion
+     - Fecha y hora de última modificación
    * - ``object.url``
      - URL del objeto
    * - ``object.thumbnail``
      - URL del thumbnail
 
-Configuracion de aplicacion conectada de Salesforce
+Configuración de aplicación conectada de Salesforce
 ===================================================
 
-1. Crear aplicacion conectada
+1. Crear aplicación conectada
 -----------------------------
 
 En Salesforce Setup:
 
 1. Abrir "Application Manager"
 2. Hacer clic en "New Connected App"
-3. Ingresar informacion basica:
+3. Ingresar información básica:
 
-   - Nombre de aplicacion conectada: Fess Crawler
+   - Nombre de aplicación conectada: Fess Crawler
    - Nombre de API: Fess_Crawler
    - Email de contacto: your-email@example.com
 
 4. Marcar "Enable OAuth Settings"
 
-2. Configuracion de autenticacion OAuth Token (recomendada)
+2. Configuración de autenticación OAuth Token (recomendada)
 -----------------------------------------------------------
 
-En configuracion OAuth:
+En configuración OAuth:
 
 1. Marcar "Use digital signatures"
-2. Subir el certificado (crear segun los pasos a continuacion)
+2. Subir el certificado (crear según los pasos a continuación)
 3. OAuth Scopes seleccionados:
 
    - Full access (full)
@@ -318,7 +318,7 @@ En configuracion OAuth:
 4. Hacer clic en "Save"
 5. Copiar el Consumer Key
 
-Creacion del certificado:
+Creación del certificado:
 
 ::
 
@@ -332,12 +332,12 @@ Creacion del certificado:
     cat private_key.pem
 
 Suba el certificado (certificate.crt) a Salesforce y
-configure el contenido de la clave privada (private_key.pem) en los parametros.
+configure el contenido de la clave privada (private_key.pem) en los parámetros.
 
-3. Configuracion de autenticacion OAuth Password
+3. Configuración de autenticación OAuth Password
 ------------------------------------------------
 
-En configuracion OAuth:
+En configuración OAuth:
 
 1. URL de callback: ``https://localhost`` (no se usa pero es requerido)
 2. OAuth Scopes seleccionados:
@@ -350,27 +350,27 @@ En configuracion OAuth:
 
 Obtener el token de seguridad:
 
-1. Abrir configuracion personal en Salesforce
+1. Abrir configuración personal en Salesforce
 2. Hacer clic en "Reset My Security Token"
 3. Copiar el token enviado por email
 
-4. Aprobacion de aplicacion conectada
+4. Aprobación de aplicación conectada
 -------------------------------------
 
 En "Manage" -> "Manage Connected Apps":
 
-1. Seleccionar la aplicacion conectada creada
+1. Seleccionar la aplicación conectada creada
 2. Hacer clic en "Edit"
 3. Cambiar "Permitted Users" a "Admin approved users are pre-authorized"
 4. Asignar perfiles o conjuntos de permisos
 
-Configuracion de objetos personalizados
+Configuración de objetos personalizados
 =======================================
 
 Crawl de objetos personalizados
 -------------------------------
 
-Especifique los nombres de objetos personalizados en el parametro ``custom``:
+Especifique los nombres de objetos personalizados en el parámetro ``custom``:
 
 ::
 
@@ -392,25 +392,25 @@ Mapeo de campos para cada objeto:
 Reglas de mapeo de campos
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``<nombre_objeto>.title`` - Campo a usar para el titulo (campo unico)
-- ``<nombre_objeto>.contents`` - Campos a usar para el contenido (multiples separados por comas)
-- ``<nombre_objeto>.descriptions`` - Campos a usar para la descripcion (multiples separados por comas)
-- ``<nombre_objeto>.thumbnail`` - Campo a usar para la miniatura (campo unico)
+- ``<nombre_objeto>.title`` - Campo a usar para el título (campo único)
+- ``<nombre_objeto>.contents`` - Campos a usar para el contenido (múltiples separados por comas)
+- ``<nombre_objeto>.descriptions`` - Campos a usar para la descripción (múltiples separados por comas)
+- ``<nombre_objeto>.thumbnail`` - Campo a usar para la miniatura (campo único)
 
 .. note::
 
-   En el mapeo de campos de objetos estandar, el nombre de objeto usa UPPER_SNAKE_CASE
-   (el valor de la columna "Nombre de objeto" de la seccion `Lista de objetos estandar`_)
+   En el mapeo de campos de objetos estándar, el nombre de objeto usa UPPER_SNAKE_CASE
+   (el valor de la columna "Nombre de objeto" de la sección `Lista de objetos estándar`_)
    (p. ej. ``ACCOUNT.title=Name``, ``DAND_B_COMPANY.title=Name``).
    Para objetos personalizados, se usa el nombre de referencia de la API tal cual (p. ej. ``Product__c.title=Name``).
 
 Ejemplos de uso
 ===============
 
-Crawl de objetos estandar
+Crawl de objetos estándar
 -------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -436,7 +436,7 @@ Script:
 Crawl de objetos personalizados
 -------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -466,7 +466,7 @@ Script:
 Crawl de entorno Sandbox
 ------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -489,38 +489,38 @@ Script:
     timestamp=object.last_modified
     url=object.url
 
-Solucion de problemas
+Solución de problemas
 =====================
 
-Error de autenticacion
+Error de autenticación
 ----------------------
 
-**Sintoma**: ``Authentication failed`` o ``invalid_grant``
+**Síntoma**: ``Authentication failed`` o ``invalid_grant``
 
 **Verificaciones**:
 
-1. Para autenticacion OAuth Token:
+1. Para autenticación OAuth Token:
 
    - Verificar que el Consumer Key sea correcto
-   - Verificar que la clave privada este copiada correctamente (saltos de linea como ``\n``)
-   - Confirmar que el certificado este subido a Salesforce
+   - Verificar que la clave privada esté copiada correctamente (saltos de línea como ``\n``)
+   - Confirmar que el certificado esté subido a Salesforce
    - Verificar que el nombre de usuario sea correcto
 
-2. Para autenticacion OAuth Password:
+2. Para autenticación OAuth Password:
 
    - Verificar que Consumer Key y Consumer Secret sean correctos
    - Verificar que el token de seguridad sea correcto
-   - Confirmar que la contrasena y el token de seguridad no esten concatenados (configurar por separado)
+   - Confirmar que la contraseña y el token de seguridad no estén concatenados (configurar por separado)
 
-3. Comun:
+3. Común:
 
-   - Verificar que base_url sea correcta (entorno de produccion o Sandbox)
-   - Confirmar que la aplicacion conectada este aprobada
+   - Verificar que base_url sea correcta (entorno de producción o Sandbox)
+   - Confirmar que la aplicación conectada esté aprobada
 
 No se obtienen objetos
 ----------------------
 
-**Sintoma**: El crawl tiene exito pero hay 0 objetos
+**Síntoma**: El crawl tiene éxito pero hay 0 objetos
 
 **Verificaciones**:
 
@@ -543,7 +543,7 @@ Ejemplo:
 - Label: Product
 - API Name: Product__c (usar este)
 
-Verificacion de nombres de campo
+Verificación de nombres de campo
 --------------------------------
 
 Verificar el API Name del campo personalizado:
@@ -557,26 +557,26 @@ Ejemplo:
 - Field Label: Product Description
 - Field Name: Product_Description__c (usar este)
 
-Limite de tasa de API
+Límite de tasa de API
 ---------------------
 
-**Sintoma**: ``REQUEST_LIMIT_EXCEEDED``
+**Síntoma**: ``REQUEST_LIMIT_EXCEEDED``
 
-**Solucion**:
+**Solución**:
 
 1. Reducir ``number_of_threads`` (configurar a 1)
 2. Aumentar el intervalo de crawl
 3. Verificar el uso de la API de Salesforce
-4. Comprar limite de API adicional si es necesario
+4. Comprar límite de API adicional si es necesario
 
 Gran volumen de datos
 ---------------------
 
-**Sintoma**: El crawl toma mucho tiempo o tiene timeout
+**Síntoma**: El crawl toma mucho tiempo o tiene timeout
 
-**Solucion**:
+**Solución**:
 
-1. Dividir objetos en multiples data stores
+1. Dividir objetos en múltiples data stores
 2. Ajustar ``number_of_threads`` (aproximadamente 2-4)
 3. Distribuir el horario de crawl
 4. Mapear solo los campos necesarios
@@ -584,11 +584,11 @@ Gran volumen de datos
 Error de formato de clave privada
 ---------------------------------
 
-**Sintoma**: ``Invalid private key format``
+**Síntoma**: ``Invalid private key format``
 
-**Solucion**:
+**Solución**:
 
-Verificar que los saltos de linea en la clave privada sean correctamente ``\n``:
+Verificar que los saltos de línea en la clave privada sean correctamente ``\n``:
 
 ::
 
@@ -600,12 +600,12 @@ Verificar que los saltos de linea en la clave privada sean correctamente ``\n``:
     MIIEvgIBADANBgkqhkiG9w0BAQE...
     -----END PRIVATE KEY-----
 
-Informacion de referencia
+Información de referencia
 =========================
 
-- :doc:`ds-overview` - Descripcion general de conectores de Data Store
+- :doc:`ds-overview` - Descripción general de conectores de Data Store
 - :doc:`ds-database` - Conector de base de datos
-- :doc:`../../admin/dataconfig-guide` - Guia de configuracion de Data Store
+- :doc:`../../admin/dataconfig-guide` - Guía de configuración de Data Store
 - `Salesforce REST API <https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/>`_
 - `Salesforce OAuth 2.0 JWT Bearer Flow <https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_jwt_flow.htm>`_
 - `Salesforce Connected Apps <https://help.salesforce.com/s/articleView?id=sf.connected_app_overview.htm>`_
