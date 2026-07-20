@@ -1,43 +1,43 @@
 ==================================
-Vue d'ensemble developpeur
+Vue d'ensemble développeur
 ==================================
 
 Vue d'ensemble
 ==============
 
-Cette section decrit le developpement d'extensions pour |Fess|.
-Elle fournit des informations sur le developpement de plugins, la creation de connecteurs personnalises,
-la personnalisation de themes, etc.
+Cette section décrit le développement d'extensions pour |Fess|.
+Elle fournit des informations sur le développement de plugins, la création de connecteurs personnalisés,
+la personnalisation de thèmes, etc.
 
 Public cible
 ============
 
-- Developpeurs souhaitant creer des fonctionnalites personnalisees pour |Fess|
-- Developpeurs souhaitant creer des plugins
-- Developpeurs souhaitant comprendre le code source de |Fess|
+- Développeurs souhaitant créer des fonctionnalités personnalisées pour |Fess|
+- Développeurs souhaitant créer des plugins
+- Développeurs souhaitant comprendre le code source de |Fess|
 
-Connaissances prealables
+Connaissances préalables
 ------------------------
 
 - Connaissances de base de Java 21
-- Bases de Maven (systeme de build)
-- Experience en developpement d'applications web
+- Bases de Maven (système de build)
+- Expérience en développement d'applications web
 
-Environnement de developpement
+Environnement de développement
 ==============================
 
-Environnement recommande
+Environnement recommandé
 ------------------------
 
-- **JDK**: OpenJDK 21 ou superieur
+- **JDK**: OpenJDK 21 ou supérieur
 - **IDE**: IntelliJ IDEA / Eclipse / VS Code
-- **Outil de build**: Maven 3.9 ou superieur
+- **Outil de build**: Maven 3.9 ou supérieur
 - **Git**: Gestion de versions
 
 Configuration
 -------------
 
-1. Recuperation du code source:
+1. Récupération du code source:
 
 ::
 
@@ -50,16 +50,16 @@ Configuration
 
     mvn package -DskipTests
 
-3. Demarrage du serveur de developpement:
+3. Démarrage du serveur de développement:
 
 ::
 
     ./bin/fess
 
-Apercu de l'architecture
+Aperçu de l'architecture
 ========================
 
-|Fess| est compose des composants principaux suivants:
+|Fess| est composé des composants principaux suivants:
 
 Structure des composants
 ------------------------
@@ -71,13 +71,13 @@ Structure des composants
    * - Composant
      - Description
    * - Couche Web
-     - Implementation MVC avec le framework LastaFlute
+     - Implémentation MVC avec le framework LastaFlute
    * - Couche Service
-     - Logique metier
-   * - Couche d'acces aux donnees
-     - Integration OpenSearch via DBFlute
+     - Logique métier
+   * - Couche d'accès aux données
+     - Intégration OpenSearch via DBFlute
    * - Crawler
-     - Collecte de contenu via la bibliotheque fess-crawler
+     - Collecte de contenu via la bibliothèque fess-crawler
    * - Moteur de recherche
      - Recherche plein texte avec OpenSearch
 
@@ -85,10 +85,10 @@ Frameworks principaux
 ---------------------
 
 - **LastaFlute**: Framework web (actions, formulaires, validation)
-- **DBFlute**: Framework d'acces aux donnees (integration OpenSearch)
-- **Lasta Di**: Conteneur d'injection de dependances
+- **DBFlute**: Framework d'accès aux données (intégration OpenSearch)
+- **Lasta Di**: Conteneur d'injection de dépendances
 
-Structure des repertoires
+Structure des répertoires
 =========================
 
 ::
@@ -119,44 +119,44 @@ Points d'extension
 Plugins
 -------
 
-Vous pouvez ajouter des fonctionnalites via des plugins.
+Vous pouvez ajouter des fonctionnalités via des plugins.
 
-- **Plugins DataStore**: Crawl depuis de nouvelles sources de donnees
+- **Plugins DataStore**: Crawl depuis de nouvelles sources de données
 - **Plugins Script Engine**: Support de nouveaux langages de script
 - **Plugins WebApp**: Extension de l'interface web
-- **Plugins Ingest**: Traitement des donnees lors de l'indexation
+- **Plugins Ingest**: Traitement des données lors de l'indexation
 
-Details: :doc:`plugin-architecture`
+Détails: :doc:`plugin-architecture`
 
-Themes
+Thèmes
 ------
 
-Vous pouvez personnaliser le design de l'ecran de recherche.
+Vous pouvez personnaliser le design de l'écran de recherche.
 
-Details: :doc:`theme-development`
+Détails: :doc:`theme-development`
 
 Configuration
 -------------
 
-De nombreux comportements peuvent etre personnalises via ``fess_config.properties``.
+De nombreux comportements peuvent être personnalisés via ``fess_config.properties``.
 
-Details: :doc:`../config/intro`
+Détails: :doc:`../config/intro`
 
-Developpement de plugins
+Développement de plugins
 ========================
 
-Pour plus de details sur le developpement de plugins, consultez:
+Pour plus de détails sur le développement de plugins, consultez:
 
 - :doc:`plugin-architecture` - Architecture des plugins
-- :doc:`datastore-plugin` - Developpement de plugins DataStore
+- :doc:`datastore-plugin` - Développement de plugins DataStore
 - :doc:`script-engine-plugin` - Plugins Script Engine
 - :doc:`webapp-plugin` - Plugins WebApp
 - :doc:`ingest-plugin` - Plugins Ingest
 
-Developpement de themes
+Développement de thèmes
 =======================
 
-- :doc:`theme-development` - Personnalisation des themes
+- :doc:`theme-development` - Personnalisation des thèmes
 
 Bonnes pratiques
 ================
@@ -166,13 +166,13 @@ Conventions de codage
 
 - Suivre le style de code existant de |Fess|
 - Formater le code avec ``mvn formatter:format``
-- Ajouter les en-tetes de licence avec ``mvn license:format``
+- Ajouter les en-têtes de licence avec ``mvn license:format``
 
 Tests
 -----
 
-- Ecrire des tests unitaires (``*Test.java``)
-- Les tests d'integration sont ``*Tests.java``
+- Écrire des tests unitaires (``*Test.java``)
+- Les tests d'intégration sont ``*Tests.java``
 
 Journalisation
 --------------

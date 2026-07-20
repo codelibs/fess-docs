@@ -5,10 +5,10 @@ Vue d'ensemble de l'API Admin
 Vue d'ensemble
 ==============
 
-L'API d'administration |Fess| est une API RESTful permettant d'acceder aux fonctions d'administration par programmation.
-Les configurations de crawl, la gestion des utilisateurs, le controle du planificateur et la plupart des operations disponibles dans l'interface d'administration peuvent etre executees via l'API.
+L'API d'administration |Fess| est une API RESTful permettant d'accéder aux fonctions d'administration par programmation.
+Les configurations de crawl, la gestion des utilisateurs, le contrôle du planificateur et la plupart des opérations disponibles dans l'interface d'administration peuvent être exécutées via l'API.
 
-En utilisant cette API, vous pouvez automatiser la configuration de |Fess| ou l'integrer a des systemes externes.
+En utilisant cette API, vous pouvez automatiser la configuration de |Fess| ou l'intégrer à des systèmes externes.
 
 URL de base
 ===========
@@ -28,37 +28,37 @@ Par exemple, dans un environnement local :
 Authentification
 ================
 
-L'acces a l'API d'administration necessite une authentification par jeton d'acces.
+L'accès à l'API d'administration nécessite une authentification par jeton d'accès.
 
-Obtention d'un jeton d'acces
+Obtention d'un jeton d'accès
 ----------------------------
 
-1. Connectez-vous a l'interface d'administration
-2. Allez dans "Systeme" -> "Jetons d'acces"
+1. Connectez-vous à l'interface d'administration
+2. Allez dans "Système" -> "Jetons d'accès"
 3. Cliquez sur "Nouveau"
-4. Entrez un nom de jeton et definissez, dans le champ "Permissions", les permissions a accorder au jeton (pour utiliser l'API d'administration, saisissez ``{role}admin-api``)
-5. Cliquez sur "Creer" pour obtenir le jeton
+4. Entrez un nom de jeton et définissez, dans le champ "Permissions", les permissions à accorder au jeton (pour utiliser l'API d'administration, saisissez ``{role}admin-api``)
+5. Cliquez sur "Créer" pour obtenir le jeton
 
 Utilisation du jeton
 --------------------
 
-Incluez le jeton d'acces dans l'en-tete de la requete :
+Incluez le jeton d'accès dans l'en-tête de la requête :
 
 ::
 
-    Authorization: Bearer <jeton d'acces>
+    Authorization: Bearer <jeton d'accès>
 
-Vous pouvez aussi omettre ``Bearer`` et ne specifier que le jeton :
-
-::
-
-    Authorization: <jeton d'acces>
-
-La specification via un parametre de requete est egalement possible, mais elle est desactivee par defaut. Si vous definissez un nom de parametre dans ``api.access.token.request.parameter`` du fichier ``fess_config.properties``, vous pourrez transmettre le jeton sous ce nom (la valeur par defaut etant vide, seule la specification par en-tete est active). Par exemple, si vous definissez ``api.access.token.request.parameter=token`` :
+Vous pouvez aussi omettre ``Bearer`` et ne spécifier que le jeton :
 
 ::
 
-    ?token=<jeton d'acces>
+    Authorization: <jeton d'accès>
+
+La spécification via un paramètre de requête est également possible, mais elle est désactivée par défaut. Si vous définissez un nom de paramètre dans ``api.access.token.request.parameter`` du fichier ``fess_config.properties``, vous pourrez transmettre le jeton sous ce nom (la valeur par défaut étant vide, seule la spécification par en-tête est active). Par exemple, si vous définissez ``api.access.token.request.parameter=token`` :
+
+::
+
+    ?token=<jeton d'accès>
 
 Exemple cURL
 ~~~~~~~~~~~~
@@ -71,52 +71,52 @@ Exemple cURL
 Permissions requises
 --------------------
 
-L'acces a l'API d'administration n'est pas controle par fonction, mais par un unique jeu de permissions. Pour utiliser l'un quelconque des endpoints de l'API d'administration, le jeton d'acces doit s'etre vu accorder l'une des permissions definies dans ``api.admin.access.permissions`` du fichier ``fess_config.properties``.
+L'accès à l'API d'administration n'est pas contrôlé par fonction, mais par un unique jeu de permissions. Pour utiliser l'un quelconque des endpoints de l'API d'administration, le jeton d'accès doit s'être vu accorder l'une des permissions définies dans ``api.admin.access.permissions`` du fichier ``fess_config.properties``.
 
-La valeur par defaut est ``Radmin-api``, qui est la forme encodee du role ``admin-api`` (le ``R`` initial est la valeur de ``role.search.role.prefix``). Lors de la creation du jeton d'acces, si vous saisissez ``{role}admin-api`` dans le champ des permissions, il est enregistre en interne sous la forme ``Radmin-api``.
+La valeur par défaut est ``Radmin-api``, qui est la forme encodée du rôle ``admin-api`` (le ``R`` initial est la valeur de ``role.search.role.prefix``). Lors de la création du jeton d'accès, si vous saisissez ``{role}admin-api`` dans le champ des permissions, il est enregistré en interne sous la forme ``Radmin-api``.
 
 .. note::
 
-   Il n'existe pas de permissions distinctes par ressource (telles que ``admin-scheduler`` ou ``admin-user``), ni de caractere generique (``admin-*``). Un jeton disposant de la permission configuree peut acceder a tous les endpoints de l'API d'administration. Si vous souhaitez modifier les permissions qui autorisent l'acces, changez la valeur de ``api.admin.access.permissions``.
+   Il n'existe pas de permissions distinctes par ressource (telles que ``admin-scheduler`` ou ``admin-user``), ni de caractère générique (``admin-*``). Un jeton disposant de la permission configurée peut accéder à tous les endpoints de l'API d'administration. Si vous souhaitez modifier les permissions qui autorisent l'accès, changez la valeur de ``api.admin.access.permissions``.
 
 Patterns communs
 ================
 
-Les ressources possedant des parametres (webconfig, user, role, etc.) suivent le
+Les ressources possédant des paramètres (webconfig, user, role, etc.) suivent le
 pattern CRUD commun ci-dessous. Toutefois, certaines ressources (systeminfo, stats,
 storage, plugin, log, backup, documents, suggest, racine dict, etc.) disposent d'une
-structure d'endpoints propre, differente de ce pattern commun ; reportez-vous a la
+structure d'endpoints propre, différente de ce pattern commun ; reportez-vous à la
 page de chaque ressource.
 
 Obtention de la liste (GET /settings)
 -------------------------------------
 
-Obtient la liste des parametres.
+Obtient la liste des paramètres.
 
-Requete
+Requête
 ~~~~~~~
 
 ::
 
     GET /api/admin/<resource>/settings
 
-Parametres (pagination) :
+Paramètres (pagination) :
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 65
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Description
    * - ``size``
      - Integer
-     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
+     - Nombre d'éléments par page (par défaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
    * - ``page``
      - Integer
-     - Numero de page (commence a 1 ; par defaut : 1 ; une valeur inferieure ou egale a 0 est traitee comme 1)
+     - Numéro de page (commence à 1 ; par défaut : 1 ; une valeur inférieure ou égale à 0 est traitée comme 1)
 
-Reponse
+Réponse
 ~~~~~~~
 
 .. code-block:: json
@@ -132,23 +132,23 @@ Reponse
 
 .. note::
 
-   L'objet ``response`` de toutes les reponses contient toujours ``version``
+   L'objet ``response`` de toutes les réponses contient toujours ``version``
    (par exemple ``"15.7.0"``), indiquant la version du produit. Dans les exemples
-   suivants, il peut etre omis par souci de concision.
+   suivants, il peut être omis par souci de concision.
 
-Obtention d'un parametre unique (GET /setting/{id})
+Obtention d'un paramètre unique (GET /setting/{id})
 ---------------------------------------------------
 
-Obtient un parametre unique en specifiant son ID.
+Obtient un paramètre unique en spécifiant son ID.
 
-Requete
+Requête
 ~~~~~~~
 
 ::
 
     GET /api/admin/<resource>/setting/{id}
 
-Reponse
+Réponse
 ~~~~~~~
 
 .. code-block:: json
@@ -160,12 +160,12 @@ Reponse
       }
     }
 
-Creation (POST /setting)
+Création (POST /setting)
 ------------------------
 
-Cree un nouveau parametre.
+Crée un nouveau paramètre.
 
-Requete
+Requête
 ~~~~~~~
 
 ::
@@ -178,7 +178,7 @@ Requete
       "...": "..."
     }
 
-Reponse
+Réponse
 ~~~~~~~
 
 .. code-block:: json
@@ -191,12 +191,12 @@ Reponse
       }
     }
 
-Mise a jour (PUT /setting)
+Mise à jour (PUT /setting)
 --------------------------
 
-Met a jour un parametre existant.
+Met à jour un paramètre existant.
 
-Requete
+Requête
 ~~~~~~~
 
 ::
@@ -210,7 +210,7 @@ Requete
       "...": "..."
     }
 
-Reponse
+Réponse
 ~~~~~~~
 
 .. code-block:: json
@@ -226,19 +226,19 @@ Reponse
 Suppression (DELETE /setting/{id})
 ----------------------------------
 
-Supprime un parametre.
+Supprime un paramètre.
 
-Requete
+Requête
 ~~~~~~~
 
 ::
 
     DELETE /api/admin/<resource>/setting/{id}
 
-Reponse
+Réponse
 ~~~~~~~
 
-Le format de la reponse de suppression varie selon la ressource (l'action). De
+Le format de la réponse de suppression varie selon la ressource (l'action). De
 nombreuses ressources ne retournent que ``status``.
 
 .. code-block:: json
@@ -249,8 +249,8 @@ nombreuses ressources ne retournent que ``status``.
       }
     }
 
-Pour certaines ressources, le resultat de la suppression est retourne sous forme
-de ``ApiUpdateResponse``, avec l'``id`` du parametre supprime et ``created``
+Pour certaines ressources, le résultat de la suppression est retourné sous forme
+de ``ApiUpdateResponse``, avec l'``id`` du paramètre supprimé et ``created``
 (``false`` lors d'une suppression).
 
 .. code-block:: json
@@ -264,15 +264,15 @@ de ``ApiUpdateResponse``, avec l'``id`` du parametre supprime et ``created``
     }
 
 De plus, pour les ressources qui retournent un ``ApiDeleteResponse``, un champ
-``count`` indiquant le nombre d'elements supprimes (valeur par defaut ``1``) peut
-etre ajoute. Reportez-vous a la page de chaque ressource pour le format exact.
+``count`` indiquant le nombre d'éléments supprimés (valeur par défaut ``1``) peut
+être ajouté. Reportez-vous à la page de chaque ressource pour le format exact.
 
-Format des reponses
+Format des réponses
 ===================
 
-Toutes les reponses sont encapsulees dans un objet ``response`` et contiennent
+Toutes les réponses sont encapsulées dans un objet ``response`` et contiennent
 toujours ``version``, indiquant la version du produit, ainsi que ``status``,
-indiquant le resultat du traitement.
+indiquant le résultat du traitement.
 
 Les valeurs de ``status`` sont les suivantes.
 
@@ -283,17 +283,17 @@ Les valeurs de ``status`` sont les suivantes.
    * - Valeur
      - Description
    * - ``0``
-     - OK (succes)
+     - OK (succès)
    * - ``1``
-     - BAD_REQUEST (requete invalide)
+     - BAD_REQUEST (requête invalide)
    * - ``2``
-     - SYSTEM_ERROR (erreur systeme)
+     - SYSTEM_ERROR (erreur système)
    * - ``3``
      - UNAUTHORIZED (erreur d'authentification)
    * - ``9``
-     - FAILED (echec du traitement)
+     - FAILED (échec du traitement)
 
-Reponse de succes
+Réponse de succès
 -----------------
 
 .. code-block:: json
@@ -306,12 +306,12 @@ Reponse de succes
       }
     }
 
-``status: 0`` indique un succes.
+``status: 0`` indique un succès.
 
-Reponse d'erreur
+Réponse d'erreur
 ----------------
 
-En cas d'erreur, ``status`` est defini sur une valeur differente de 0 et
+En cas d'erreur, ``status`` est défini sur une valeur différente de 0 et
 ``message`` contient le message d'erreur.
 
 .. code-block:: json
@@ -328,11 +328,11 @@ Codes de statut HTTP
 --------------------
 
 L'API d'administration retourne dans la plupart des cas le statut HTTP ``200``, et
-le resultat du traitement est exprime par le champ ``status`` du corps de la reponse.
-Par consequent, determinez le succes ou l'echec non pas a partir du code de statut HTTP,
-mais a partir de la valeur de ``status`` dans le corps.
+le résultat du traitement est exprimé par le champ ``status`` du corps de la réponse.
+Par conséquent, déterminez le succès ou l'échec non pas à partir du code de statut HTTP,
+mais à partir de la valeur de ``status`` dans le corps.
 
-Les codes de statut HTTP reellement retournes sont les suivants.
+Les codes de statut HTTP réellement retournés sont les suivants.
 
 .. list-table::
    :header-rows: 1
@@ -341,25 +341,25 @@ Les codes de statut HTTP reellement retournes sont les suivants.
    * - Code
      - Description
    * - 200
-     - Reponse normale. Outre les cas de succes (``status: 0``), la plupart des erreurs
-       sont egalement retournees avec ce code. Par exemple, si le jeton d'acces est absent
-       ou invalide, ou si les permissions sont insuffisantes, ``status: 3`` est retourne ;
-       une erreur systeme renvoie ``status: 2`` ; dans tous ces cas avec le statut HTTP ``200``.
+     - Réponse normale. Outre les cas de succès (``status: 0``), la plupart des erreurs
+       sont également retournées avec ce code. Par exemple, si le jeton d'accès est absent
+       ou invalide, ou si les permissions sont insuffisantes, ``status: 3`` est retourné ;
+       une erreur système renvoie ``status: 2`` ; dans tous ces cas avec le statut HTTP ``200``.
    * - 400
-     - Erreur de validation des parametres de requete. Le ``status`` du corps de la reponse
-       est ``1``. Ce code est egalement retourne lorsque l'on tente d'obtenir une ressource
+     - Erreur de validation des paramètres de requête. Le ``status`` du corps de la réponse
+       est ``1``. Ce code est également retourné lorsque l'on tente d'obtenir une ressource
        inexistante.
    * - 401
-     - Lorsqu'une exception liee a l'authentification de connexion se produit. Le ``status``
-       du corps de la reponse est ``3``. A noter que si le jeton d'acces est absent ou
-       invalide, ce n'est pas ce code qui est retourne, mais le statut HTTP ``200`` avec
+     - Lorsqu'une exception liée à l'authentification de connexion se produit. Le ``status``
+       du corps de la réponse est ``3``. À noter que si le jeton d'accès est absent ou
+       invalide, ce n'est pas ce code qui est retourné, mais le statut HTTP ``200`` avec
        ``status: 3``.
 
 .. note::
 
    L'API d'administration ne retourne pas de codes de statut HTTP tels que ``403``,
    ``404`` ou ``500``. L'insuffisance de permissions et l'inexistence d'une ressource
-   sont egalement indiquees par le ``status`` contenu dans le corps de la reponse HTTP
+   sont également indiquées par le ``status`` contenu dans le corps de la réponse HTTP
    ``200`` ou ``400``.
 
 APIs disponibles
@@ -386,11 +386,11 @@ Configuration du crawl
 .. note::
 
    Outre celles-ci, les ressources suivantes relatives aux informations
-   d'authentification et au controle du crawl sont egalement fournies en tant
-   qu'API (pour l'instant, aucune page dediee n'est disponible) : ``webauth``
+   d'authentification et au contrôle du crawl sont également fournies en tant
+   qu'API (pour l'instant, aucune page dédiée n'est disponible) : ``webauth``
    (authentification Web), ``fileauth`` (authentification de fichiers),
-   ``reqheader`` (en-tetes de requete), ``pathmap`` (mappage de chemins),
-   ``duplicatehost`` (hotes en double), ``searchlist`` (operations de
+   ``reqheader`` (en-têtes de requête), ``pathmap`` (mappage de chemins),
+   ``duplicatehost`` (hôtes en double), ``searchlist`` (opérations de
    recherche/liste de documents).
 
 Gestion de l'index
@@ -403,11 +403,11 @@ Gestion de l'index
    * - Endpoint
      - Description
    * - :doc:`api-admin-documents`
-     - Operations groupees sur les documents
+     - Opérations groupées sur les documents
    * - :doc:`api-admin-crawlinginfo`
      - Informations de crawl
    * - :doc:`api-admin-failureurl`
-     - Gestion des URLs en echec
+     - Gestion des URLs en échec
    * - :doc:`api-admin-backup`
      - Sauvegarde/Restauration
 
@@ -421,9 +421,9 @@ Planificateur
    * - Endpoint
      - Description
    * - :doc:`api-admin-scheduler`
-     - Planification des taches
+     - Planification des tâches
    * - :doc:`api-admin-joblog`
-     - Obtention des journaux de taches
+     - Obtention des journaux de tâches
 
 Gestion des utilisateurs et des droits
 --------------------------------------
@@ -437,7 +437,7 @@ Gestion des utilisateurs et des droits
    * - :doc:`api-admin-user`
      - Gestion des utilisateurs
    * - :doc:`api-admin-role`
-     - Gestion des roles
+     - Gestion des rôles
    * - :doc:`api-admin-group`
      - Gestion des groupes
    * - :doc:`api-admin-accesstoken`
@@ -459,17 +459,17 @@ Optimisation de la recherche
    * - :doc:`api-admin-boostdoc`
      - Boost de documents
    * - :doc:`api-admin-elevateword`
-     - Mots eleves
+     - Mots élevés
    * - :doc:`api-admin-badword`
      - Mots interdits
    * - :doc:`api-admin-relatedcontent`
-     - Contenus associes
+     - Contenus associés
    * - :doc:`api-admin-relatedquery`
-     - Requetes associees
+     - Requêtes associées
    * - :doc:`api-admin-suggest`
      - Gestion des suggestions
 
-Systeme
+Système
 -------
 
 .. list-table::
@@ -479,11 +479,11 @@ Systeme
    * - Endpoint
      - Description
    * - :doc:`api-admin-general`
-     - Parametres generaux
+     - Paramètres généraux
    * - :doc:`api-admin-systeminfo`
-     - Informations systeme
+     - Informations système
    * - :doc:`api-admin-stats`
-     - Statistiques systeme
+     - Statistiques système
    * - :doc:`api-admin-log`
      - Obtention des journaux
    * - :doc:`api-admin-searchlist`
@@ -508,7 +508,7 @@ Dictionnaire
 Exemples d'utilisation
 ======================
 
-Creation d'une configuration de crawl Web
+Création d'une configuration de crawl Web
 -----------------------------------------
 
 .. code-block:: bash
@@ -533,13 +533,13 @@ Creation d'une configuration de crawl Web
 
 .. note::
 
-   Pour la creation d'une configuration de crawl Web, les champs ``name``, ``urls``,
+   Pour la création d'une configuration de crawl Web, les champs ``name``, ``urls``,
    ``userAgent``, ``numOfThread``, ``intervalTime``, ``boost``, ``available`` et
    ``sortOrder`` sont obligatoires. Les omettre provoque une erreur de validation
-   (``status: 1``). ``available`` se specifie sous forme de chaine de caracteres,
-   en y placant ``"true"`` ou ``"false"``.
+   (``status: 1``). ``available`` se spécifie sous forme de chaîne de caractères,
+   en y plaçant ``"true"`` ou ``"false"``.
 
-Demarrage d'une tache planifiee
+Démarrage d'une tâche planifiée
 -------------------------------
 
 .. code-block:: bash
@@ -555,8 +555,8 @@ Obtention de la liste des utilisateurs
     curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`../api-overview` - Vue d'ensemble de l'API
-- :doc:`../../admin/accesstoken-guide` - Guide de gestion des jetons d'acces
+- :doc:`../../admin/accesstoken-guide` - Guide de gestion des jetons d'accès

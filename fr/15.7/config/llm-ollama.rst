@@ -2,44 +2,44 @@
 Configuration Ollama
 ==========================
 
-Apercu
+Aperçu
 ======
 
-Ollama est une plateforme open source permettant d'executer des grands modeles de langage (LLM) en local.
-La fonctionnalite d'integration Ollama de |Fess| est fournie sous forme de plugin ``fess-llm-ollama``, et convient a une utilisation en environnement prive.
+Ollama est une plateforme open source permettant d'exécuter des grands modèles de langage (LLM) en local.
+La fonctionnalité d'intégration Ollama de |Fess| est fournie sous forme de plugin ``fess-llm-ollama``, et convient à une utilisation en environnement privé.
 
-L'utilisation d'Ollama permet d'utiliser la fonctionnalite du mode de recherche IA sans envoyer de donnees a l'exterieur.
+L'utilisation d'Ollama permet d'utiliser la fonctionnalité du mode de recherche IA sans envoyer de données à l'extérieur.
 
-Caracteristiques principales
+Caractéristiques principales
 -----------------------------
 
-- **Execution locale** : Les donnees ne sont pas envoyees a l'exterieur, garantissant la confidentialite
-- **Modeles varies** : Prise en charge de nombreux modeles dont Llama, Mistral, Gemma, CodeLlama
-- **Efficacite des couts** : Pas de cout API (seulement les couts materiels)
-- **Personnalisation** : Possibilite d'utiliser des modeles affines independamment
+- **Exécution locale** : Les données ne sont pas envoyées à l'extérieur, garantissant la confidentialité
+- **Modèles variés** : Prise en charge de nombreux modèles dont Llama, Mistral, Gemma, CodeLlama
+- **Efficacité des coûts** : Pas de coût API (seulement les coûts matériels)
+- **Personnalisation** : Possibilité d'utiliser des modèles affinés indépendamment
 
-Modeles pris en charge
+Modèles pris en charge
 -----------------------
 
-Principaux modeles disponibles avec Ollama :
+Principaux modèles disponibles avec Ollama :
 
-- ``llama3.3:70b`` - Llama 3.3 de Meta (70B parametres)
-- ``gemma4:e4b`` - Gemma 4 de Google (E4B parametres, par defaut)
-- ``mistral:7b`` - Mistral de Mistral AI (7B parametres)
-- ``codellama:13b`` - Code Llama de Meta (13B parametres)
-- ``phi3:3.8b`` - Phi-3 de Microsoft (3.8B parametres)
+- ``llama3.3:70b`` - Llama 3.3 de Meta (70B paramètres)
+- ``gemma4:e4b`` - Gemma 4 de Google (E4B paramètres, par défaut)
+- ``mistral:7b`` - Mistral de Mistral AI (7B paramètres)
+- ``codellama:13b`` - Code Llama de Meta (13B paramètres)
+- ``phi3:3.8b`` - Phi-3 de Microsoft (3.8B paramètres)
 
 .. note::
-   Pour la derniere liste des modeles disponibles, consultez `Ollama Library <https://ollama.com/library>`__.
+   Pour la dernière liste des modèles disponibles, consultez `Ollama Library <https://ollama.com/library>`__.
 
-Prerequis
+Prérequis
 =========
 
-Avant d'utiliser Ollama, verifiez les points suivants.
+Avant d'utiliser Ollama, vérifiez les points suivants.
 
-1. **Installation d'Ollama** : Telechargez et installez depuis `https://ollama.com/ <https://ollama.com/>`__
-2. **Telechargement du modele** : Telechargez le modele a utiliser dans Ollama
-3. **Demarrage du serveur Ollama** : Verifiez qu'Ollama fonctionne
+1. **Installation d'Ollama** : Téléchargez et installez depuis `https://ollama.com/ <https://ollama.com/>`__
+2. **Téléchargement du modèle** : Téléchargez le modèle à utiliser dans Ollama
+3. **Démarrage du serveur Ollama** : Vérifiez qu'Ollama fonctionne
 
 Installation d'Ollama
 ---------------------
@@ -54,7 +54,7 @@ Linux/macOS
 Windows
 ~~~~~~~
 
-Telechargez et executez l'installateur depuis le site officiel.
+Téléchargez et exécutez l'installateur depuis le site officiel.
 
 Docker
 ~~~~~~
@@ -63,7 +63,7 @@ Docker
 
     docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 
-Telechargement du modele
+Téléchargement du modèle
 ------------------------
 
 ::
@@ -80,30 +80,30 @@ Telechargement du modele
 Installation du plugin
 ======================
 
-La fonctionnalite d'integration Ollama est fournie sous forme de plugin.
-Pour utiliser Ollama, l'installation du plugin ``fess-llm-ollama`` est necessaire.
+La fonctionnalité d'intégration Ollama est fournie sous forme de plugin.
+Pour utiliser Ollama, l'installation du plugin ``fess-llm-ollama`` est nécessaire.
 
-1. Telechargez `fess-llm-ollama-15.7.0.jar`.
-2. Placez-le dans le repertoire ``app/WEB-INF/plugin/`` du repertoire d'installation de |Fess|.
+1. Téléchargez `fess-llm-ollama-15.7.0.jar`.
+2. Placez-le dans le répertoire ``app/WEB-INF/plugin/`` du répertoire d'installation de |Fess|.
 
 ::
 
     cp fess-llm-ollama-15.7.0.jar /path/to/fess/app/WEB-INF/plugin/
 
-3. Redemarrez |Fess|.
+3. Redémarrez |Fess|.
 
 .. note::
-   La version du plugin doit correspondre a la version de |Fess|.
+   La version du plugin doit correspondre à la version de |Fess|.
 
 Configuration de base
 =====================
 
-Les configurations LLM sont reparties dans plusieurs fichiers de configuration.
+Les configurations LLM sont réparties dans plusieurs fichiers de configuration.
 
 Configuration minimale
 ----------------------
 
-``system.properties`` (configurable egalement via Administration > Systeme > General) :
+``system.properties`` (configurable également via Administration > Système > Général) :
 
 ::
 
@@ -124,12 +124,12 @@ Configuration minimale
     rag.llm.ollama.model=gemma4:e4b
 
 .. note::
-   La configuration du fournisseur LLM peut egalement etre effectuee via l'administration (Administration > Systeme > General) en configurant ``rag.llm.name``.
+   La configuration du fournisseur LLM peut également être effectuée via l'administration (Administration > Système > Général) en configurant ``rag.llm.name``.
 
-Configuration recommandee (environnement de production)
+Configuration recommandée (environnement de production)
 -------------------------------------------------------
 
-``system.properties`` (configurable egalement via Administration > Systeme > General) :
+``system.properties`` (configurable également via Administration > Système > Général) :
 
 ::
 
@@ -155,105 +155,105 @@ Configuration recommandee (environnement de production)
     # Controle du nombre de requetes simultanees
     rag.llm.ollama.max.concurrent.requests=5
 
-Elements de configuration
+Éléments de configuration
 =========================
 
-Tous les elements de configuration disponibles pour le client Ollama. Tous sauf ``rag.llm.name`` se configurent dans ``fess_config.properties``.
+Tous les éléments de configuration disponibles pour le client Ollama. Tous sauf ``rag.llm.name`` se configurent dans ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rag.llm.ollama.api.url``
      - URL de base du serveur Ollama
      - ``http://localhost:11434``
    * - ``rag.llm.ollama.model``
-     - Nom du modele a utiliser (modele telecharge dans Ollama)
+     - Nom du modèle à utiliser (modèle téléchargé dans Ollama)
      - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
-     - Timeout de la requete (millisecondes)
+     - Timeout de la requête (millisecondes)
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
-     - Intervalle de verification de disponibilite (secondes). Une valeur inferieure ou egale a ``0`` desactive la verification periodique de disponibilite
+     - Intervalle de vérification de disponibilité (secondes). Une valeur inférieure ou égale à ``0`` désactive la vérification périodique de disponibilité
      - ``60``
    * - ``rag.llm.ollama.max.concurrent.requests``
-     - Nombre maximum de requetes simultanees
+     - Nombre maximum de requêtes simultanées
      - ``5``
    * - ``rag.llm.ollama.chat.evaluation.max.relevant.docs``
-     - Nombre maximum de documents pertinents lors de l'evaluation
+     - Nombre maximum de documents pertinents lors de l'évaluation
      - ``3``
    * - ``rag.llm.ollama.concurrency.wait.timeout``
-     - Delai d'attente de l'acquisition d'un permis de controle de concurrence (millisecondes)
+     - Délai d'attente de l'acquisition d'un permis de contrôle de concurrence (millisecondes)
      - ``30000``
    * - ``rag.llm.ollama.connect.timeout``
-     - Timeout de connexion TCP (millisecondes). Peut etre specifie separement de ``rag.llm.ollama.timeout``
+     - Timeout de connexion TCP (millisecondes). Peut être spécifié séparément de ``rag.llm.ollama.timeout``
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
      - Nombre maximum de tentatives HTTP (lors d'erreurs ``429`` et ``5xx``)
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
-     - Delai de base du backoff exponentiel (millisecondes)
+     - Délai de base du backoff exponentiel (millisecondes)
      - ``2000``
 
-Configuration avancee
+Configuration avancée
 ---------------------
 
-Elements de configuration avances relatifs a l'historique et a la taille du contexte.
+Éléments de configuration avancés relatifs à l'historique et à la taille du contexte.
 
 .. list-table::
    :header-rows: 1
    :widths: 45 35 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rag.llm.ollama.chat.evaluation.description.max.chars``
-     - Nombre maximum de caracteres de la description lors de l'evaluation
+     - Nombre maximum de caractères de la description lors de l'évaluation
      - ``500``
    * - ``rag.llm.ollama.history.max.chars``
-     - Nombre maximum de caracteres de l'historique de conversation
+     - Nombre maximum de caractères de l'historique de conversation
      - ``4000``
    * - ``rag.llm.ollama.intent.history.max.messages``
-     - Nombre maximum de messages dans l'historique lors de la determination d'intention
+     - Nombre maximum de messages dans l'historique lors de la détermination d'intention
      - ``6``
    * - ``rag.llm.ollama.intent.history.max.chars``
-     - Nombre maximum de caracteres dans l'historique lors de la determination d'intention
+     - Nombre maximum de caractères dans l'historique lors de la détermination d'intention
      - ``3000``
    * - ``rag.llm.ollama.history.assistant.max.chars``
-     - Nombre maximum de caracteres de l'historique des reponses de l'assistant
+     - Nombre maximum de caractères de l'historique des réponses de l'assistant
      - ``500``
    * - ``rag.llm.ollama.history.assistant.summary.max.chars``
-     - Nombre maximum de caracteres de l'historique des resumes de l'assistant
+     - Nombre maximum de caractères de l'historique des résumés de l'assistant
      - ``500``
 
-Controle de la concurrence
+Contrôle de la concurrence
 --------------------------
 
-``rag.llm.ollama.max.concurrent.requests`` permet de controler le nombre de requetes simultanees vers Ollama.
-La valeur par defaut est 5. Ajustez-la en fonction des ressources du serveur Ollama.
-Un nombre trop eleve de requetes simultanees peut surcharger le serveur Ollama et reduire la vitesse de reponse.
+``rag.llm.ollama.max.concurrent.requests`` permet de contrôler le nombre de requêtes simultanées vers Ollama.
+La valeur par défaut est 5. Ajustez-la en fonction des ressources du serveur Ollama.
+Un nombre trop élevé de requêtes simultanées peut surcharger le serveur Ollama et réduire la vitesse de réponse.
 
 Configuration par type de prompt
 =================================
 
-Dans |Fess|, les parametres du LLM peuvent etre personnalises par type de prompt.
-La configuration s'ecrit dans ``fess_config.properties``.
+Dans |Fess|, les paramètres du LLM peuvent être personnalisés par type de prompt.
+La configuration s'écrit dans ``fess_config.properties``.
 
-Les parametres suivants peuvent etre configures par type de prompt :
+Les paramètres suivants peuvent être configurés par type de prompt :
 
-- ``rag.llm.ollama.{promptType}.temperature`` - Temperature lors de la generation
-- ``rag.llm.ollama.{promptType}.max.tokens`` - Nombre maximum de tokens (mappe sur ``num_predict`` dans l'API Ollama)
-- ``rag.llm.ollama.{promptType}.context.max.chars`` - Nombre maximum de caracteres du contexte
-- ``rag.llm.ollama.{promptType}.thinking.budget`` - Budget de reflexion (controle de la reflexion en forme booleenne ; voir « Prise en charge des modeles de reflexion »)
-- ``rag.llm.ollama.{promptType}.thinking.level`` - Niveau de reflexion (chaine de caracteres ``high`` / ``medium`` / ``low`` ; voir « Prise en charge des modeles de reflexion »)
-- ``rag.llm.ollama.{promptType}.top.p`` - Valeur d'echantillonnage Top-P
-- ``rag.llm.ollama.{promptType}.top.k`` - Valeur d'echantillonnage Top-K
-- ``rag.llm.ollama.{promptType}.num.ctx`` - Taille de la fenetre de contexte
+- ``rag.llm.ollama.{promptType}.temperature`` - Température lors de la génération
+- ``rag.llm.ollama.{promptType}.max.tokens`` - Nombre maximum de tokens (mappé sur ``num_predict`` dans l'API Ollama)
+- ``rag.llm.ollama.{promptType}.context.max.chars`` - Nombre maximum de caractères du contexte
+- ``rag.llm.ollama.{promptType}.thinking.budget`` - Budget de réflexion (contrôle de la réflexion en forme booléenne ; voir « Prise en charge des modèles de réflexion »)
+- ``rag.llm.ollama.{promptType}.thinking.level`` - Niveau de réflexion (chaîne de caractères ``high`` / ``medium`` / ``low`` ; voir « Prise en charge des modèles de réflexion »)
+- ``rag.llm.ollama.{promptType}.top.p`` - Valeur d'échantillonnage Top-P
+- ``rag.llm.ollama.{promptType}.top.k`` - Valeur d'échantillonnage Top-K
+- ``rag.llm.ollama.{promptType}.num.ctx`` - Taille de la fenêtre de contexte
 
-Chaque parametre est resolu dans l'ordre suivant : ``rag.llm.ollama.{promptType}.<param>`` (configuration specifique au type de prompt) → ``rag.llm.ollama.default.<param>`` (repli commun a tous les types de prompt) → valeur par defaut codee en dur pour chaque type de prompt. Les valeurs explicitement specifiees dans la requete sont toujours prioritaires.
+Chaque paramètre est résolu dans l'ordre suivant : ``rag.llm.ollama.{promptType}.<param>`` (configuration spécifique au type de prompt) → ``rag.llm.ollama.default.<param>`` (repli commun à tous les types de prompt) → valeur par défaut codée en dur pour chaque type de prompt. Les valeurs explicitement spécifiées dans la requête sont toujours prioritaires.
 
 Types de prompt disponibles :
 
@@ -264,27 +264,27 @@ Types de prompt disponibles :
    * - Type de prompt
      - Description
    * - ``intent``
-     - Prompt pour determiner l'intention de l'utilisateur
+     - Prompt pour déterminer l'intention de l'utilisateur
    * - ``evaluation``
-     - Prompt d'evaluation des resultats de recherche
+     - Prompt d'évaluation des résultats de recherche
    * - ``unclear``
-     - Prompt de reponse pour les requetes peu claires
+     - Prompt de réponse pour les requêtes peu claires
    * - ``noresults``
-     - Prompt pour le cas ou il n'y a pas de resultats de recherche
+     - Prompt pour le cas où il n'y a pas de résultats de recherche
    * - ``docnotfound``
-     - Prompt pour le cas ou le document n'est pas trouve
+     - Prompt pour le cas où le document n'est pas trouvé
    * - ``answer``
-     - Prompt de generation de reponse
+     - Prompt de génération de réponse
    * - ``summary``
-     - Prompt de generation de resume
+     - Prompt de génération de résumé
    * - ``faq``
-     - Prompt de generation de FAQ
+     - Prompt de génération de FAQ
    * - ``direct``
-     - Prompt de reponse directe
+     - Prompt de réponse directe
    * - ``queryregeneration``
-     - Prompt de regeneration de requete
+     - Prompt de régénération de requête
 
-Chaque type de prompt dispose de valeurs par defaut codees en dur qui s'appliquent si aucune configuration n'est fournie.
+Chaque type de prompt dispose de valeurs par défaut codées en dur qui s'appliquent si aucune configuration n'est fournie.
 
 .. list-table::
    :header-rows: 1
@@ -357,44 +357,44 @@ Exemple de configuration ::
     # Configurer le nombre maximum de caracteres du contexte lors de la determination d'intention
     rag.llm.ollama.intent.context.max.chars=4000
 
-Options du modele Ollama
+Options du modèle Ollama
 ========================
 
-Les parametres du modele Ollama peuvent etre configures dans ``fess_config.properties``.
-En utilisant le format ``rag.llm.ollama.default.<param>``, la valeur est utilisee comme repli commun a tous les types de prompt.
-Le repli via ``default`` s'applique non seulement a ``top.p`` / ``top.k`` / ``num.ctx``, mais aussi a ``temperature`` / ``max.tokens`` / ``thinking.budget`` / ``thinking.level``.
+Les paramètres du modèle Ollama peuvent être configurés dans ``fess_config.properties``.
+En utilisant le format ``rag.llm.ollama.default.<param>``, la valeur est utilisée comme repli commun à tous les types de prompt.
+Le repli via ``default`` s'applique non seulement à ``top.p`` / ``top.k`` / ``num.ctx``, mais aussi à ``temperature`` / ``max.tokens`` / ``thinking.budget`` / ``thinking.level``.
 
 .. list-table::
    :header-rows: 1
    :widths: 40 40 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rag.llm.ollama.default.top.p``
-     - Valeur d'echantillonnage Top-P (0.0 a 1.0). Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.top.p``
-     - (non defini)
+     - Valeur d'échantillonnage Top-P (0.0 à 1.0). Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.top.p``
+     - (non défini)
    * - ``rag.llm.ollama.default.top.k``
-     - Valeur d'echantillonnage Top-K. Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.top.k``
-     - (non defini)
+     - Valeur d'échantillonnage Top-K. Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.top.k``
+     - (non défini)
    * - ``rag.llm.ollama.default.num.ctx``
-     - Taille de la fenetre de contexte. Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.num.ctx``
-     - (non defini)
+     - Taille de la fenêtre de contexte. Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.num.ctx``
+     - (non défini)
    * - ``rag.llm.ollama.default.temperature``
-     - Valeur de repli de la temperature de generation. Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.temperature``
-     - (non defini)
+     - Valeur de repli de la température de génération. Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.temperature``
+     - (non défini)
    * - ``rag.llm.ollama.default.max.tokens``
-     - Valeur de repli du nombre maximum de tokens. Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.max.tokens``
-     - (non defini)
+     - Valeur de repli du nombre maximum de tokens. Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.max.tokens``
+     - (non défini)
    * - ``rag.llm.ollama.default.thinking.budget``
-     - Valeur de repli du budget de reflexion. Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.thinking.budget``
-     - (non defini)
+     - Valeur de repli du budget de réflexion. Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.thinking.budget``
+     - (non défini)
    * - ``rag.llm.ollama.default.thinking.level``
-     - Valeur de repli du niveau de reflexion (``high`` / ``medium`` / ``low``). Peut etre remplacee par type de prompt avec ``rag.llm.ollama.{promptType}.thinking.level``
-     - (non defini)
+     - Valeur de repli du niveau de réflexion (``high`` / ``medium`` / ``low``). Peut être remplacée par type de prompt avec ``rag.llm.ollama.{promptType}.thinking.level``
+     - (non défini)
    * - ``rag.llm.ollama.options.*``
-     - Options globales transmises directement a l'API Ollama. Le suffixe est utilise comme nom d'option (ex. : ``rag.llm.ollama.options.repeat_penalty=1.1``). Les valeurs sont automatiquement converties en Integer, Double, Boolean ou String
-     - (non defini)
+     - Options globales transmises directement à l'API Ollama. Le suffixe est utilisé comme nom d'option (ex. : ``rag.llm.ollama.options.repeat_penalty=1.1``). Les valeurs sont automatiquement converties en Integer, Double, Boolean ou String
+     - (non défini)
 
 Exemple de configuration ::
 
@@ -413,12 +413,12 @@ Exemple de configuration ::
     # Options globales (transmises directement a l'API Ollama)
     rag.llm.ollama.options.repeat_penalty=1.1
 
-Prise en charge des modeles de reflexion
+Prise en charge des modèles de réflexion
 =========================================
 
-Lors de l'utilisation de modeles de reflexion (thinking model) tels que gemma4 ou qwen3, |Fess| prend en charge la configuration du budget de reflexion (thinking budget).
+Lors de l'utilisation de modèles de réflexion (thinking model) tels que gemma4 ou qwen3, |Fess| prend en charge la configuration du budget de réflexion (thinking budget).
 
-Le budget de reflexion se configure par type de prompt dans ``fess_config.properties`` :
+Le budget de réflexion se configure par type de prompt dans ``fess_config.properties`` :
 
 ::
 
@@ -428,16 +428,16 @@ Le budget de reflexion se configure par type de prompt dans ``fess_config.proper
     # Configuration du budget de reflexion lors de la generation de resume
     rag.llm.ollama.summary.thinking.budget=1024
 
-La configuration du budget de reflexion permet de controler le nombre de tokens alloues a l'etape de « reflexion » du modele avant la generation de la reponse.
+La configuration du budget de réflexion permet de contrôler le nombre de tokens alloués à l'étape de « réflexion » du modèle avant la génération de la réponse.
 
 .. note::
-   Avec Ollama, le budget de reflexion est converti en indicateur booleen (``think: true`` si la valeur est superieure a 0, ``think: false`` si la valeur est 0). Le controle fin par nombre de tokens n'est pas disponible en raison des contraintes de l'API Ollama.
+   Avec Ollama, le budget de réflexion est converti en indicateur booléen (``think: true`` si la valeur est supérieure à 0, ``think: false`` si la valeur est 0). Le contrôle fin par nombre de tokens n'est pas disponible en raison des contraintes de l'API Ollama.
 
-Niveau de reflexion (thinking level)
+Niveau de réflexion (thinking level)
 --------------------------------------
 
-Certains modeles comme gpt-oss ignorent l'indicateur ``think`` booleen et requierent la specification du niveau de reflexion sous forme de chaine de caracteres ``high`` / ``medium`` / ``low``.
-Pour ces modeles, utilisez ``rag.llm.ollama.{promptType}.thinking.level``.
+Certains modèles comme gpt-oss ignorent l'indicateur ``think`` booléen et requièrent la spécification du niveau de réflexion sous forme de chaîne de caractères ``high`` / ``medium`` / ``low``.
+Pour ces modèles, utilisez ``rag.llm.ollama.{promptType}.thinking.level``.
 
 ::
 
@@ -447,25 +447,25 @@ Pour ces modeles, utilisez ``rag.llm.ollama.{promptType}.thinking.level``.
     # Configuration du niveau de reflexion lors de la generation de resume
     rag.llm.ollama.summary.thinking.level=medium
 
-Les valeurs acceptees pour ``thinking.level`` sont ``high`` / ``medium`` / ``low`` (insensible a la casse). Une valeur non valide est ignoree et un avertissement est emis dans les journaux.
+Les valeurs acceptées pour ``thinking.level`` sont ``high`` / ``medium`` / ``low`` (insensible à la casse). Une valeur non valide est ignorée et un avertissement est émis dans les journaux.
 
 .. note::
-   Si ``thinking.level`` (forme chaine) et ``thinking.budget`` (forme booleenne) sont tous les deux configures, ``thinking.level`` est prioritaire. Utilisez ``thinking.level`` pour les modeles de la famille GPT-OSS, et ``thinking.budget`` pour les autres modeles de reflexion.
+   Si ``thinking.level`` (forme chaîne) et ``thinking.budget`` (forme booléenne) sont tous les deux configurés, ``thinking.level`` est prioritaire. Utilisez ``thinking.level`` pour les modèles de la famille GPT-OSS, et ``thinking.budget`` pour les autres modèles de réflexion.
 
-Configuration reseau
+Configuration réseau
 ====================
 
 Configuration Docker
 --------------------
 
-Le depot officiel `docker-fess <https://github.com/codelibs/docker-fess>`__ de |Fess| inclut un overlay Ollama ``compose-ollama.yaml``. Les etapes minimales sont les suivantes.
+Le dépôt officiel `docker-fess <https://github.com/codelibs/docker-fess>`__ de |Fess| inclut un overlay Ollama ``compose-ollama.yaml``. Les étapes minimales sont les suivantes.
 
 ::
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
     docker exec -it ollama01 ollama pull gemma4:e4b
 
-``compose-ollama.yaml`` est configure pour utiliser un GPU NVIDIA (NVIDIA Container Toolkit requis). Son contenu est le suivant.
+``compose-ollama.yaml`` est configuré pour utiliser un GPU NVIDIA (NVIDIA Container Toolkit requis). Son contenu est le suivant.
 
 .. code-block:: yaml
 
@@ -501,140 +501,140 @@ Le depot officiel `docker-fess <https://github.com/codelibs/docker-fess>`__ de |
 
 Points importants :
 
-- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` fait que le script de demarrage recupere automatiquement le JAR du plugin et le place dans ``app/WEB-INF/plugin/`` (adaptez la version a votre installation |Fess|)
+- ``FESS_PLUGINS=fess-llm-ollama:15.7.0`` fait que le script de démarrage récupère automatiquement le JAR du plugin et le place dans ``app/WEB-INF/plugin/`` (adaptez la version à votre installation |Fess|)
 - ``-Dfess.config.rag.chat.enabled=true`` active le mode de recherche IA
-- ``-Dfess.config.rag.llm.ollama.api.url=...`` specifie l'URL du serveur Ollama (dans le reseau Docker Compose, le nom de service tel que ``ollama01`` est utilise pour la resolution)
-- Le fournisseur LLM par defaut (``rag.llm.name``) etant ``ollama``, aucune specification explicite n'est necessaire si Ollama est le seul fournisseur utilise. En cas de basculement depuis un autre fournisseur, ajoutez ``-Dfess.system.rag.llm.name=ollama`` dans ``FESS_JAVA_OPTS``, ou configurez-le apres le demarrage dans l'administration sous « Systeme > General », section RAG
-- Le bloc ``deploy.resources.reservations.devices`` configure l'utilisation du GPU. Si vous n'utilisez pas de GPU (execution CPU uniquement), supprimez ce bloc
+- ``-Dfess.config.rag.llm.ollama.api.url=...`` spécifie l'URL du serveur Ollama (dans le réseau Docker Compose, le nom de service tel que ``ollama01`` est utilisé pour la résolution)
+- Le fournisseur LLM par défaut (``rag.llm.name``) étant ``ollama``, aucune spécification explicite n'est nécessaire si Ollama est le seul fournisseur utilisé. En cas de basculement depuis un autre fournisseur, ajoutez ``-Dfess.system.rag.llm.name=ollama`` dans ``FESS_JAVA_OPTS``, ou configurez-le après le démarrage dans l'administration sous « Système > Général », section RAG
+- Le bloc ``deploy.resources.reservations.devices`` configure l'utilisation du GPU. Si vous n'utilisez pas de GPU (exécution CPU uniquement), supprimez ce bloc
 
 .. note::
-   Les variables d'environnement en majuscules de type ``RAG_CHAT_ENABLED`` ou ``RAG_LLM_NAME`` ne sont pas reconnues directement par |Fess|. Les valeurs de configuration doivent imperativement etre transmises dans ``FESS_JAVA_OPTS`` sous la forme ``-Dfess.config.<key>`` (famille ``fess_config.properties``) ou ``-Dfess.system.<key>`` (famille ``system.properties``).
+   Les variables d'environnement en majuscules de type ``RAG_CHAT_ENABLED`` ou ``RAG_LLM_NAME`` ne sont pas reconnues directement par |Fess|. Les valeurs de configuration doivent impérativement être transmises dans ``FESS_JAVA_OPTS`` sous la forme ``-Dfess.config.<key>`` (famille ``fess_config.properties``) ou ``-Dfess.system.<key>`` (famille ``system.properties``).
 
 Serveur Ollama distant
 ----------------------
 
-Lorsqu'Ollama s'execute sur un serveur different de Fess :
+Lorsqu'Ollama s'exécute sur un serveur différent de Fess :
 
 ::
 
     rag.llm.ollama.api.url=http://ollama-server.example.com:11434
 
 .. warning::
-   Ollama n'a pas de fonctionnalite d'authentification par defaut. Si vous le rendez accessible de l'exterieur,
-   envisagez des mesures de securite au niveau reseau (pare-feu, VPN, etc.).
+   Ollama n'a pas de fonctionnalité d'authentification par défaut. Si vous le rendez accessible de l'extérieur,
+   envisagez des mesures de sécurité au niveau réseau (pare-feu, VPN, etc.).
 
 Utilisation via un proxy HTTP
 ==============================
 
-Le client Ollama partage la configuration de proxy HTTP commune a |Fess|. Si une connexion au serveur Ollama doit passer par un proxy (par exemple lors de l'utilisation d'un serveur Ollama distant), specifiez les proprietes suivantes dans ``fess_config.properties``.
+Le client Ollama partage la configuration de proxy HTTP commune à |Fess|. Si une connexion au serveur Ollama doit passer par un proxy (par exemple lors de l'utilisation d'un serveur Ollama distant), spécifiez les propriétés suivantes dans ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``http.proxy.host``
-     - Nom d'hote du proxy (chaine vide pour ne pas utiliser de proxy)
+     - Nom d'hôte du proxy (chaîne vide pour ne pas utiliser de proxy)
      - ``""``
    * - ``http.proxy.port``
-     - Numero de port du proxy
+     - Numéro de port du proxy
      - ``8080``
    * - ``http.proxy.username``
-     - Nom d'utilisateur pour l'authentification du proxy (facultatif ; lorsqu'il est renseigne, l'authentification Basic est activee)
+     - Nom d'utilisateur pour l'authentification du proxy (facultatif ; lorsqu'il est renseigné, l'authentification Basic est activée)
      - ``""``
    * - ``http.proxy.password``
      - Mot de passe pour l'authentification du proxy
      - ``""``
 
 .. note::
-   Comme Ollama s'execute generalement en local ou sur un reseau interne, la configuration d'un proxy n'est necessaire que dans des cas limites (par exemple, lors de l'utilisation d'un serveur Ollama distant uniquement accessible via un proxy d'entreprise).
-   Cette configuration s'applique egalement a tous les acces HTTP de |Fess|, notamment ceux du crawler.
+   Comme Ollama s'exécute généralement en local ou sur un réseau interne, la configuration d'un proxy n'est nécessaire que dans des cas limités (par exemple, lors de l'utilisation d'un serveur Ollama distant uniquement accessible via un proxy d'entreprise).
+   Cette configuration s'applique également à tous les accès HTTP de |Fess|, notamment ceux du crawler.
 
-Guide de selection des modeles
+Guide de sélection des modèles
 ================================
 
-Guide pour la selection du modele selon l'usage.
+Guide pour la sélection du modèle selon l'usage.
 
 .. list-table::
    :header-rows: 1
    :widths: 25 20 20 35
 
-   * - Modele
+   * - Modèle
      - Taille
      - VRAM requise
      - Usage
    * - ``phi3:3.8b``
      - Petit
      - 4GB+
-     - Environnement leger, questions-reponses simples
+     - Environnement léger, questions-réponses simples
    * - ``gemma4:e4b``
      - Petit-Moyen
      - 8GB+
-     - Usage general equilibre, support du mode reflexion (par defaut)
+     - Usage général équilibré, support du mode réflexion (par défaut)
    * - ``mistral:7b``
      - Moyen
      - 8GB+
-     - Reponses de haute qualite requises
+     - Réponses de haute qualité requises
    * - ``llama3.3:70b``
      - Grand
      - 48GB+
-     - Reponses de meilleure qualite, raisonnement complexe
+     - Réponses de meilleure qualité, raisonnement complexe
 
 Prise en charge GPU
 -------------------
 
-Ollama prend en charge l'acceleration GPU. L'utilisation d'un GPU NVIDIA
-ameliore considerablement la vitesse d'inference.
+Ollama prend en charge l'accélération GPU. L'utilisation d'un GPU NVIDIA
+améliore considérablement la vitesse d'inférence.
 
 ::
 
     # Verification de la prise en charge GPU
     ollama run gemma4:e4b --verbose
 
-Depannage
+Dépannage
 =========
 
 Erreur de connexion
 -------------------
 
-**Symptome** : Erreur dans la fonctionnalite de chat, LLM affiche comme indisponible
+**Symptôme** : Erreur dans la fonctionnalité de chat, LLM affiche comme indisponible
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si Ollama fonctionne ::
+1. Vérifier si Ollama fonctionne ::
 
     curl http://localhost:11434/api/tags
 
-2. Verifier si le modele est telecharge ::
+2. Vérifier si le modèle est téléchargé ::
 
     ollama list
 
-3. Verifier les parametres du pare-feu
+3. Vérifier les paramètres du pare-feu
 
-4. Verifier si le plugin ``fess-llm-ollama`` est bien place dans ``app/WEB-INF/plugin/``
+4. Vérifier si le plugin ``fess-llm-ollama`` est bien placé dans ``app/WEB-INF/plugin/``
 
-Modele introuvable
+Modèle introuvable
 ------------------
 
-**Symptome** : Le journal affiche « Configured model not found »
+**Symptôme** : Le journal affiche « Configured model not found »
 
 **Solution** :
 
-1. Verifier si le nom du modele est exact (peut necessiter le tag ``:latest``) ::
+1. Vérifier si le nom du modèle est exact (peut nécessiter le tag ``:latest``) ::
 
     # Verifier la liste des modeles
     ollama list
 
-2. Telecharger le modele necessaire ::
+2. Télécharger le modèle nécessaire ::
 
     ollama pull gemma4:e4b
 
 Timeout
 -------
 
-**Symptome** : La requete expire
+**Symptôme** : La requête expire
 
 **Solution** :
 
@@ -642,12 +642,12 @@ Timeout
 
     rag.llm.ollama.timeout=120000
 
-2. Envisager un modele plus petit ou un environnement GPU
+2. Envisager un modèle plus petit ou un environnement GPU
 
-Configuration de debogage
+Configuration de débogage
 --------------------------
 
-Pour investiguer les problemes, ajustez le niveau de log de |Fess| pour afficher des logs detailles lies a Ollama.
+Pour investiguer les problèmes, ajustez le niveau de log de |Fess| pour afficher des logs détaillés liés à Ollama.
 
 ``app/WEB-INF/classes/log4j2.xml`` :
 
@@ -655,11 +655,11 @@ Pour investiguer les problemes, ajustez le niveau de log de |Fess| pour afficher
 
     <Logger name="org.codelibs.fess.llm.ollama" level="DEBUG"/>
 
-Informations de reference
+Informations de référence
 ==========================
 
 - `Site officiel Ollama <https://ollama.com/>`__
-- `Bibliotheque de modeles Ollama <https://ollama.com/library>`__
+- `Bibliothèque de modèles Ollama <https://ollama.com/library>`__
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
-- :doc:`llm-overview` - Apercu de l'integration LLM
-- :doc:`rag-chat` - Details de la fonctionnalite de mode de recherche IA
+- :doc:`llm-overview` - Aperçu de l'intégration LLM
+- :doc:`rag-chat` - Détails de la fonctionnalité de mode de recherche IA

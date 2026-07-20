@@ -2,54 +2,54 @@
 Configuration du mode de recherche IA
 ==========================
 
-Apercu
+Aperçu
 ====
 
-Le mode de recherche IA (RAG: Retrieval-Augmented Generation) est une fonctionnalite qui enrichit les resultats de recherche de |Fess|
-avec un LLM (grand modele de langage) pour fournir des informations sous forme de dialogue.
-Les utilisateurs peuvent poser des questions en langage naturel et obtenir des reponses detaillees basees sur les resultats de recherche.
+Le mode de recherche IA (RAG: Retrieval-Augmented Generation) est une fonctionnalité qui enrichit les résultats de recherche de |Fess|
+avec un LLM (grand modèle de langage) pour fournir des informations sous forme de dialogue.
+Les utilisateurs peuvent poser des questions en langage naturel et obtenir des réponses détaillées basées sur les résultats de recherche.
 
-Dans |Fess| 15.8, la fonctionnalite LLM a ete separee en plugins ``fess-llm-*``.
-La configuration principale et la configuration specifique au fournisseur LLM s'effectuent dans ``fess_config.properties``,
-et la selection du fournisseur LLM (``rag.llm.name``) s'effectue dans ``system.properties`` ou via l'administration.
+Dans |Fess| 15.8, la fonctionnalité LLM a été séparée en plugins ``fess-llm-*``.
+La configuration principale et la configuration spécifique au fournisseur LLM s'effectuent dans ``fess_config.properties``,
+et la sélection du fournisseur LLM (``rag.llm.name``) s'effectue dans ``system.properties`` ou via l'administration.
 
 Pipeline de recherche
 ======================
 
-Le mode de recherche IA recupere ses documents source via le pipeline de recherche standard de |Fess| (rank fusion), avec le controle d'acces habituel de |Fess| par role et par etiquette (label). Par defaut, il s'agit d'une recherche par mots-cles (BM25) ; le LLM ne recherche, ne classe ni n'effectue lui-meme d'embedding des documents.
+Le mode de recherche IA récupère ses documents source via le pipeline de recherche standard de |Fess| (rank fusion), avec le contrôle d'accès habituel de |Fess| par rôle et par étiquette (label). Par défaut, il s'agit d'une recherche par mots-clés (BM25) ; le LLM ne recherche, ne classe ni n'effectue lui-même d'embedding des documents.
 
-Deux types de requetes executent des pipelines legerement differents :
+Deux types de requêtes exécutent des pipelines légèrement différents :
 
-- ``POST /api/v2/chat/stream`` (utilise par l'interface Web) execute le flux complet : **analyse d'intention -> recherche -> evaluation de pertinence par le LLM -> recuperation du contenu -> generation de reponse** (en streaming).
-- ``POST /api/v2/chat`` (non-streaming) execute un flux plus court : **analyse d'intention -> recherche -> generation de reponse** (sans phase d'evaluation de pertinence ni phase distincte de recuperation du contenu).
+- ``POST /api/v2/chat/stream`` (utilisé par l'interface Web) exécute le flux complet : **analyse d'intention -> recherche -> évaluation de pertinence par le LLM -> récupération du contenu -> génération de réponse** (en streaming).
+- ``POST /api/v2/chat`` (non-streaming) exécute un flux plus court : **analyse d'intention -> recherche -> génération de réponse** (sans phase d'évaluation de pertinence ni phase distincte de récupération du contenu).
 
-Dans le flux en streaming, un appel LLM supplementaire **evalue les resultats de recherche** et ne conserve que les documents juges pertinents avant que la reponse ne soit generee.
+Dans le flux en streaming, un appel LLM supplémentaire **évalue les résultats de recherche** et ne conserve que les documents jugés pertinents avant que la réponse ne soit générée.
 
 Fonctionnement du mode de recherche IA
 ================
 
-Le mode de recherche IA fonctionne selon un flux en plusieurs etapes.
+Le mode de recherche IA fonctionne selon un flux en plusieurs étapes.
 
-1. **Phase d'analyse d'intention** : Analyse la question de l'utilisateur et extrait les mots-cles optimaux pour la recherche
-2. **Phase de recherche** : Recherche des documents avec les mots-cles extraits en utilisant le moteur de recherche |Fess|
-3. **Fallback de regeneration de requete** : Lorsqu'aucun resultat n'est trouve, le LLM regenere la requete et reessaie
-4. **Phase d'evaluation** : Evalue la pertinence des resultats de recherche et selectionne les documents les plus appropries
-5. **Phase de generation** : Le LLM genere une reponse basee sur les documents selectionnes
-6. **Phase de sortie** : Retourne la reponse et les informations sources a l'utilisateur (avec rendu Markdown)
+1. **Phase d'analyse d'intention** : Analyse la question de l'utilisateur et extrait les mots-clés optimaux pour la recherche
+2. **Phase de recherche** : Recherche des documents avec les mots-clés extraits en utilisant le moteur de recherche |Fess|
+3. **Fallback de régénération de requête** : Lorsqu'aucun résultat n'est trouvé, le LLM régénère la requête et réessaie
+4. **Phase d'évaluation** : Évalue la pertinence des résultats de recherche et sélectionne les documents les plus appropriés
+5. **Phase de génération** : Le LLM génère une réponse basée sur les documents sélectionnés
+6. **Phase de sortie** : Retourne la réponse et les informations sources à l'utilisateur (avec rendu Markdown)
 
-Ce flux permet des reponses de haute qualite comprenant le contexte, superieur a la simple recherche par mots-cles.
-La regeneration de requete ameliore la couverture des reponses lorsque la requete initiale n'est pas optimale.
+Ce flux permet des réponses de haute qualité comprenant le contexte, supérieur à la simple recherche par mots-clés.
+La régénération de requête améliore la couverture des réponses lorsque la requête initiale n'est pas optimale.
 
 Configuration de base
 ========
 
-La configuration de la fonctionnalite de mode de recherche IA est divisee en configuration principale et en configuration du fournisseur.
+La configuration de la fonctionnalité de mode de recherche IA est divisée en configuration principale et en configuration du fournisseur.
 
 Configuration principale (fess_config.properties)
 ----------------------------------
 
-Configuration de base pour activer la fonctionnalite de mode de recherche IA.
-A configurer dans ``app/WEB-INF/conf/fess_config.properties``.
+Configuration de base pour activer la fonctionnalité de mode de recherche IA.
+À configurer dans ``app/WEB-INF/conf/fess_config.properties``.
 
 ::
 
@@ -59,11 +59,11 @@ A configurer dans ``app/WEB-INF/conf/fess_config.properties``.
 Configuration du fournisseur (system.properties / administration)
 -------------------------------------------------
 
-La selection du fournisseur LLM s'effectue via l'administration ou les proprietes systeme.
+La sélection du fournisseur LLM s'effectue via l'administration ou les propriétés système.
 
 **Via l'administration** :
 
-Depuis l'ecran de configuration Administration > Systeme > General, selectionnez le fournisseur LLM a utiliser.
+Depuis l'écran de configuration Administration > Système > General, sélectionnez le fournisseur LLM à utiliser.
 
 **Via system.properties** :
 
@@ -72,24 +72,24 @@ Depuis l'ecran de configuration Administration > Systeme > General, selectionnez
     # Selectionner le fournisseur LLM (ollama, openai, gemini)
     rag.llm.name=ollama
 
-Pour la configuration detaillee des fournisseurs LLM, consultez :
+Pour la configuration détaillée des fournisseurs LLM, consultez :
 
 - :doc:`llm-ollama` - Configuration Ollama
 - :doc:`llm-openai` - Configuration OpenAI
 - :doc:`llm-gemini` - Configuration Google Gemini
 
-Reference rapide des chemins de configuration
+Référence rapide des chemins de configuration
 =============================================
 
-Dans |Fess| 15.8, les parametres sont separes en deux familles : la famille FessConfig
+Dans |Fess| 15.8, les paramètres sont séparés en deux familles : la famille FessConfig
 (``fess_config.properties``) et la famille SystemProperty (``system.properties``,
-persistee dans OpenSearch). Les chemins de configuration different ; ne pas les confondre.
+persistée dans OpenSearch). Les chemins de configuration diffèrent ; ne pas les confondre.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 18 32 15
 
-   * - Propriete
+   * - Propriété
      - Famille
      - Passage via Docker / options JVM
      - UI Admin
@@ -99,8 +99,8 @@ persistee dans OpenSearch). Les chemins de configuration different ; ne pas les 
      - Non
    * - ``rag.llm.name``
      - SystemProperty
-     - ``-Dfess.system.rag.llm.name=gemini`` (defaut initial uniquement)
-     - Oui (parametres generaux)
+     - ``-Dfess.system.rag.llm.name=gemini`` (défaut initial uniquement)
+     - Oui (paramètres généraux)
    * - ``rag.llm.gemini.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.api.key=...``
@@ -124,8 +124,8 @@ persistee dans OpenSearch). Les chemins de configuration different ; ne pas les 
 
 .. note::
 
-   ``rag.llm.type`` est l'ancien nom de propriete dans |Fess| 15.5 et anterieur.
-   Dans 15.8 et superieur il est renomme en ``rag.llm.name`` ; les valeurs ecrites
+   ``rag.llm.type`` est l'ancien nom de propriété dans |Fess| 15.5 et antérieur.
+   Dans 15.8 et supérieur il est renommé en ``rag.llm.name`` ; les valeurs écrites
    sous ``rag.llm.type`` ne sont pas lues.
 
 Liste des configurations principales
@@ -137,29 +137,29 @@ Liste des configurations principales disponibles dans ``fess_config.properties``
    :header-rows: 1
    :widths: 40 40 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rag.chat.enabled``
-     - Activer la fonctionnalite de mode de recherche IA
+     - Activer la fonctionnalité de mode de recherche IA
      - ``false``
    * - ``rag.chat.context.max.documents``
-     - Nombre maximum de documents a inclure dans le contexte
+     - Nombre maximum de documents à inclure dans le contexte
      - ``5``
    * - ``rag.chat.session.timeout.minutes``
-     - Delai d'expiration de la session (minutes)
+     - Délai d'expiration de la session (minutes)
      - ``30``
    * - ``rag.chat.session.max.size``
-     - Nombre maximum de sessions pouvant etre maintenues simultanement
+     - Nombre maximum de sessions pouvant être maintenues simultanément
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Nombre maximum de messages dans l'historique de conversation
      - ``30``
    * - ``rag.chat.content.fields``
-     - Champs a recuperer des documents
+     - Champs à récupérer des documents
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Nombre maximum de caracteres du message utilisateur. Cette valeur est lue en tant que System Property ; l'entree dans ``fess_config.properties`` n'est pas utilisee. Definissez-la via les System Properties ou ``-Dfess.system.rag.chat.message.max.length``.
+     - Nombre maximum de caractères du message utilisateur. Cette valeur est lue en tant que System Property ; l'entrée dans ``fess_config.properties`` n'est pas utilisée. Définissez-la via les System Properties ou ``-Dfess.system.rag.chat.message.max.length``.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Taille du fragment pour le surlignage de recherche
@@ -168,38 +168,38 @@ Liste des configurations principales disponibles dans ``fess_config.properties``
      - Nombre de fragments pour le surlignage de recherche
      - ``3``
    * - ``rag.chat.content.fulltext.max.length``
-     - Seuil de ``content_length`` au-dela duquel les documents utilisent des extraits en surbrillance plutot que le texte integral dans le contexte de reponse
+     - Seuil de ``content_length`` au-delà duquel les documents utilisent des extraits en surbrillance plutôt que le texte intégral dans le contexte de réponse
      - ``3000``
    * - ``rag.chat.answer.highlight.fragment.size``
-     - Taille du fragment de surlignage lors de l'extraction d'extraits de grands documents pour le contexte de reponse
+     - Taille du fragment de surlignage lors de l'extraction d'extraits de grands documents pour le contexte de réponse
      - ``1000``
    * - ``rag.chat.answer.highlight.number.of.fragments``
-     - Nombre de fragments de surlignage lors de l'extraction d'extraits de grands documents pour le contexte de reponse
+     - Nombre de fragments de surlignage lors de l'extraction d'extraits de grands documents pour le contexte de réponse
      - ``5``
    * - ``rag.chat.history.assistant.content``
-     - Type de contenu a inclure dans l'historique de l'assistant ( ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` )
+     - Type de contenu à inclure dans l'historique de l'assistant ( ``full`` / ``smart_summary`` / ``source_titles`` / ``source_titles_and_urls`` / ``truncated`` / ``none`` )
      - ``smart_summary``
    * - ``rag.chat.history.titles.max.count``
-     - Nombre maximum de titres de documents references conserves par tour en mode ``smart_summary``
+     - Nombre maximum de titres de documents référencés conservés par tour en mode ``smart_summary``
      - ``5``
 
-Parametres de generation
+Paramètres de génération
 ================
 
-Dans |Fess| 15.8, les parametres de generation (nombre maximum de tokens, temperature, etc.) se configurent par fournisseur
-et par type de prompt. Ces configurations sont gerees comme parametres de chaque plugin ``fess-llm-*``
+Dans |Fess| 15.8, les paramètres de génération (nombre maximum de tokens, température, etc.) se configurent par fournisseur
+et par type de prompt. Ces configurations sont gérées comme paramètres de chaque plugin ``fess-llm-*``
 et non comme configurations principales.
 
-Pour les details, consultez la documentation de chaque fournisseur :
+Pour les détails, consultez la documentation de chaque fournisseur :
 
-- :doc:`llm-ollama` - Parametres de generation Ollama
-- :doc:`llm-openai` - Parametres de generation OpenAI
-- :doc:`llm-gemini` - Parametres de generation Google Gemini
+- :doc:`llm-ollama` - Paramètres de génération Ollama
+- :doc:`llm-openai` - Paramètres de génération OpenAI
+- :doc:`llm-gemini` - Paramètres de génération Google Gemini
 
 Configuration du contexte
 ================
 
-Configuration du contexte passe au LLM depuis les resultats de recherche.
+Configuration du contexte passé au LLM depuis les résultats de recherche.
 
 Configuration principale
 --------
@@ -210,35 +210,35 @@ Les configurations suivantes s'effectuent dans ``fess_config.properties``.
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rag.chat.context.max.documents``
-     - Nombre maximum de documents a inclure dans le contexte
+     - Nombre maximum de documents à inclure dans le contexte
      - ``5``
    * - ``rag.chat.content.fields``
-     - Champs a recuperer des documents
+     - Champs à récupérer des documents
      - ``title,url,content,doc_id,content_title,content_description``
 
-Configuration specifique au fournisseur
+Configuration spécifique au fournisseur
 -----------------------
 
 Les configurations suivantes s'effectuent dans ``fess_config.properties`` pour chaque fournisseur.
 
-- ``rag.llm.{provider}.{promptType}.context.max.chars`` - Nombre maximum de caracteres du contexte
-- ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - Nombre maximum de documents pertinents a selectionner lors de la phase d'evaluation
+- ``rag.llm.{provider}.{promptType}.context.max.chars`` - Nombre maximum de caractères du contexte
+- ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - Nombre maximum de documents pertinents à sélectionner lors de la phase d'évaluation
 
 ``{provider}`` contient le nom du fournisseur tel que ``ollama``, ``openai``, ``gemini``, etc.
 ``{promptType}`` contient le type de prompt tel que ``intent``, ``evaluation``, ``answer``, ``summary``, ``faq``, ``queryregeneration``,
 ``unclear``, ``noresults``, ``docnotfound``, ``direct``, etc.
-La liste des types de prompt pris en charge est definie dans l'implementation ``*LlmClient`` de chaque plugin.
+La liste des types de prompt pris en charge est définie dans l'implémentation ``*LlmClient`` de chaque plugin.
 
-Pour les details, consultez la documentation de chaque fournisseur.
+Pour les détails, consultez la documentation de chaque fournisseur.
 
 Champs de contenu
 --------------------
 
-Champs specifiables dans ``rag.chat.content.fields`` :
+Champs spécifiables dans ``rag.chat.content.fields`` :
 
 - ``title`` - Titre du document
 - ``url`` - URL du document
@@ -247,25 +247,25 @@ Champs specifiables dans ``rag.chat.content.fields`` :
 - ``content_title`` - Titre du contenu
 - ``content_description`` - Description du contenu
 
-Prompt systeme
+Prompt système
 ==================
 
-Dans |Fess| 15.8, les prompts systeme sont definis dans le DI XML (``fess_llm++.xml``) de chaque plugin ``fess-llm-*``
-et non dans les fichiers de proprietes.
+Dans |Fess| 15.8, les prompts système sont définis dans le DI XML (``fess_llm++.xml``) de chaque plugin ``fess-llm-*``
+et non dans les fichiers de propriétés.
 
 Personnalisation des prompts
 -------------------------
 
-Pour personnaliser les prompts systeme, surchargez le fichier ``fess_llm++.xml`` dans le JAR du plugin.
+Pour personnaliser les prompts système, surchargez le fichier ``fess_llm++.xml`` dans le JAR du plugin.
 
-1. Recuperez ``fess_llm++.xml`` dans le fichier JAR du plugin utilise
-2. Apportez les modifications necessaires
-3. Placez-le dans l'emplacement approprie sous ``app/WEB-INF/`` pour le surcharger
+1. Récupérez ``fess_llm++.xml`` dans le fichier JAR du plugin utilisé
+2. Apportez les modifications nécessaires
+3. Placez-le dans l'emplacement approprié sous ``app/WEB-INF/`` pour le surcharger
 
-Des prompts systeme differents sont definis pour chaque type de prompt (analyse d'intention, evaluation, generation),
-avec une optimisation adaptee a chaque usage.
+Des prompts système différents sont définis pour chaque type de prompt (analyse d'intention, évaluation, génération),
+avec une optimisation adaptée à chaque usage.
 
-Pour les details, consultez la documentation de chaque fournisseur :
+Pour les détails, consultez la documentation de chaque fournisseur :
 
 - :doc:`llm-ollama` - Configuration des prompts Ollama
 - :doc:`llm-openai` - Configuration des prompts OpenAI
@@ -280,14 +280,14 @@ Configuration de la gestion des sessions de chat.
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rag.chat.session.timeout.minutes``
-     - Delai d'expiration de la session (minutes)
+     - Délai d'expiration de la session (minutes)
      - ``30``
    * - ``rag.chat.session.max.size``
-     - Nombre maximum de sessions pouvant etre maintenues simultanement
+     - Nombre maximum de sessions pouvant être maintenues simultanément
      - ``10000``
    * - ``rag.chat.history.max.messages``
      - Nombre maximum de messages dans l'historique de conversation
@@ -296,15 +296,15 @@ Configuration de la gestion des sessions de chat.
 Comportement des sessions
 ----------------
 
-- Lorsqu'un utilisateur commence un nouveau chat, une nouvelle session est creee
-- L'historique de conversation est sauvegarde dans la session, permettant un dialogue contextuel
-- Les sessions sont automatiquement supprimees apres expiration du delai
-- Lorsque l'historique depasse le nombre maximum de messages, les anciens messages sont supprimes
+- Lorsqu'un utilisateur commence un nouveau chat, une nouvelle session est créée
+- L'historique de conversation est sauvegardé dans la session, permettant un dialogue contextuel
+- Les sessions sont automatiquement supprimées après expiration du délai
+- Lorsque l'historique dépasse le nombre maximum de messages, les anciens messages sont supprimés
 
-Controle de la concurrence
+Contrôle de la concurrence
 ============
 
-Le nombre de requetes simultanees vers le LLM est controle par fournisseur dans ``fess_config.properties``.
+Le nombre de requêtes simultanées vers le LLM est contrôlé par fournisseur dans ``fess_config.properties``.
 
 ::
 
@@ -316,18 +316,18 @@ Le nombre de requetes simultanees vers le LLM est controle par fournisseur dans 
     # Timeout d'attente pour l'obtention d'un permis de concurrence (millisecondes, defaut : 30000)
     rag.llm.ollama.concurrency.wait.timeout=30000
 
-Considerations sur le controle de la concurrence
+Considérations sur le contrôle de la concurrence
 -----------------------
 
-- Tenez compte egalement des limitations de debit cote fournisseur LLM
-- Dans les environnements a forte charge, il est recommande de configurer des valeurs plus petites
-- Lorsque la limite de concurrence est atteinte, les requetes entrent dans une file d'attente et sont traitees sequentiellement
-- Si l'attente d'un permis depasse ``concurrency.wait.timeout``, la requete echoue avec une erreur de timeout
+- Tenez compte également des limitations de débit côté fournisseur LLM
+- Dans les environnements à forte charge, il est recommandé de configurer des valeurs plus petites
+- Lorsque la limite de concurrence est atteinte, les requêtes entrent dans une file d'attente et sont traitées séquentiellement
+- Si l'attente d'un permis dépasse ``concurrency.wait.timeout``, la requête échoue avec une erreur de timeout
 
 Mode d'historique de conversation
 =================================
 
-``rag.chat.history.assistant.content`` controle la maniere dont les reponses de l'assistant sont stockees dans l'historique de conversation.
+``rag.chat.history.assistant.content`` contrôle la manière dont les réponses de l'assistant sont stockées dans l'historique de conversation.
 
 .. list-table::
    :header-rows: 1
@@ -336,50 +336,50 @@ Mode d'historique de conversation
    * - Mode
      - Description
    * - ``smart_summary``
-     - (Par defaut) Le corps de la reponse de l'assistant est omis de l'historique ; seuls la requete de recherche passee et les titres des documents references (au maximum ``rag.chat.history.titles.max.count`` elements) sont conserves par tour
+     - (Par défaut) Le corps de la réponse de l'assistant est omis de l'historique ; seuls la requête de recherche passée et les titres des documents référencés (au maximum ``rag.chat.history.titles.max.count`` éléments) sont conservés par tour
    * - ``full``
-     - Preserve la reponse entiere telle quelle
+     - Préserve la réponse entière telle quelle
    * - ``source_titles``
-     - Preserve uniquement les titres des sources
+     - Préserve uniquement les titres des sources
    * - ``source_titles_and_urls``
-     - Preserve les titres et URLs des sources
+     - Préserve les titres et URLs des sources
    * - ``truncated``
-     - Tronque la reponse a la limite maximale de caracteres
+     - Tronque la réponse à la limite maximale de caractères
    * - ``none``
-     - Ne preserve pas l'historique
+     - Ne préserve pas l'historique
 
 .. note::
 
-   En mode ``smart_summary``, le corps de la reponse est remplace par la requete de recherche et les titres references, ce qui preserve le contexte efficacement tout en reduisant l'utilisation des tokens.
-   Les paires de messages utilisateur et assistant sont groupees en tours et empaquetees de maniere optimale dans un budget de caracteres.
-   Les limites maximales de caracteres pour l'historique et le resume sont controlees par l'implementation ``LlmClient`` de chaque plugin ``fess-llm-*``.
+   En mode ``smart_summary``, le corps de la réponse est remplacé par la requête de recherche et les titres référencés, ce qui préserve le contexte efficacement tout en réduisant l'utilisation des tokens.
+   Les paires de messages utilisateur et assistant sont groupées en tours et empaquetées de manière optimale dans un budget de caractères.
+   Les limites maximales de caractères pour l'historique et le résumé sont contrôlées par l'implémentation ``LlmClient`` de chaque plugin ``fess-llm-*``.
 
-Regeneration de requete
+Régénération de requête
 =======================
 
-Lorsqu'aucun resultat de recherche n'est trouve ou qu'aucun resultat pertinent n'est identifie, le LLM regenere automatiquement la requete et relance la recherche.
+Lorsqu'aucun résultat de recherche n'est trouvé ou qu'aucun résultat pertinent n'est identifié, le LLM régénère automatiquement la requête et relance la recherche.
 
-- Avec zero resultats de recherche : Regeneration de requete avec raison ``no_results``
-- Lorsqu'aucun document pertinent n'est trouve : Regeneration de requete avec raison ``no_relevant_results``
-- Retombe sur la requete originale si la regeneration echoue
+- Avec zéro résultats de recherche : Régénération de requête avec raison ``no_results``
+- Lorsqu'aucun document pertinent n'est trouvé : Régénération de requête avec raison ``no_relevant_results``
+- Retombe sur la requête originale si la régénération échoue
 
-Cette fonctionnalite est activee par defaut et integree dans les flux RAG synchrones et en streaming.
-Les prompts de regeneration de requete sont definis dans chaque plugin ``fess-llm-*``.
+Cette fonctionnalité est activée par défaut et intégrée dans les flux RAG synchrones et en streaming.
+Les prompts de régénération de requête sont définis dans chaque plugin ``fess-llm-*``.
 
 Rendu Markdown
 ==============
 
-Les reponses du mode de recherche IA sont rendues au format Markdown.
+Les réponses du mode de recherche IA sont rendues au format Markdown.
 
-- Les reponses du LLM sont analysees en Markdown et converties en HTML
-- Le HTML converti est assaini, n'autorisant que les balises et attributs surs
+- Les réponses du LLM sont analysées en Markdown et converties en HTML
+- Le HTML converti est assaini, n'autorisant que les balises et attributs sûrs
 - Prend en charge les titres, listes, blocs de code, tableaux, liens et autres syntaxes Markdown
-- Cote client, ``marked.js`` et ``DOMPurify`` sont utilises ; cote serveur, le sanitizer OWASP
+- Côté client, ``marked.js`` et ``DOMPurify`` sont utilisés ; côté serveur, le sanitizer OWASP
 
 Utilisation de l'API
 =========
 
-La fonctionnalite de mode de recherche IA est accessible via API REST (API v2).
+La fonctionnalité de mode de recherche IA est accessible via API REST (API v2).
 L'URL de base est ``http://<nom du serveur>/api/v2/``.
 
 La Chat API fournit les trois points de terminaison suivants.
@@ -391,19 +391,19 @@ La Chat API fournit les trois points de terminaison suivants.
    * - Point de terminaison
      - Description
    * - ``POST /api/v2/chat``
-     - Completion RAG groupee (non-streaming)
+     - Complétion RAG groupée (non-streaming)
    * - ``POST /api/v2/chat/stream``
-     - Completion RAG en streaming (Server-Sent Events)
+     - Complétion RAG en streaming (Server-Sent Events)
    * - ``DELETE /api/v2/chat/sessions/{session_id}``
      - Effacer l'historique de conversation d'une session
 
-Les requetes sont envoyees avec un corps JSON de type ``Content-Type: application/json``.
-Les requetes modifiant l'etat (``POST`` / ``DELETE``) necessitent un jeton CSRF (en-tete ``X-Fess-CSRF-Token``).
-Les reponses sont encapsulees dans l'enveloppe commune ``response``.
+Les requêtes sont envoyées avec un corps JSON de type ``Content-Type: application/json``.
+Les requêtes modifiant l'état (``POST`` / ``DELETE``) nécessitent un jeton CSRF (en-tête ``X-Fess-CSRF-Token``).
+Les réponses sont encapsulées dans l'enveloppe commune ``response``.
 
 .. note::
 
-   Les points de terminaison ``/api/v1/chat`` au format parametres de formulaire disponibles dans |Fess| 15.5 et anterieur ont ete supprimes.
+   Les points de terminaison ``/api/v1/chat`` au format paramètres de formulaire disponibles dans |Fess| 15.5 et antérieur ont été supprimés.
    Dans 15.8, utilisez l'API JSON sous ``/api/v2/``.
 
 API non-streaming
@@ -411,7 +411,7 @@ API non-streaming
 
 Point de terminaison : ``POST /api/v2/chat``
 
-Corps de la requete (JSON) :
+Corps de la requête (JSON) :
 
 .. list-table::
    :header-rows: 1
@@ -425,18 +425,18 @@ Corps de la requete (JSON) :
      - Message de l'utilisateur
    * - ``session_id``
      - Non
-     - ID de session (pour continuer la conversation). Si omis, le serveur le cree et le retourne dans la reponse
+     - ID de session (pour continuer la conversation). Si omis, le serveur le crée et le retourne dans la réponse
    * - ``fields``
      - Non
-     - Champs de filtre optionnels pour l'etape de recuperation (objet)
+     - Champs de filtre optionnels pour l'étape de récupération (objet)
    * - ``fields.label``
      - Non
-     - Filtre de recherche par etiquette
+     - Filtre de recherche par étiquette
    * - ``extra_queries``
      - Non
-     - Expressions de requete supplementaires pour les filtres de facettes
+     - Expressions de requête supplémentaires pour les filtres de facettes
 
-Exemple de requete :
+Exemple de requête :
 
 .. code-block:: bash
 
@@ -445,7 +445,7 @@ Exemple de requete :
          -H "X-Fess-CSRF-Token: <token>" \
          -d '{"message":"Comment installer Fess ?"}'
 
-Exemple de reponse :
+Exemple de réponse :
 
 .. code-block:: json
 
@@ -471,10 +471,10 @@ API streaming
 
 Point de terminaison : ``POST /api/v2/chat/stream``
 
-Le corps de la requete est identique a ``POST /api/v2/chat`` (JSON).
-Les reponses sont streamees au format Server-Sent Events (SSE).
+Le corps de la requête est identique à ``POST /api/v2/chat`` (JSON).
+Les réponses sont streamées au format Server-Sent Events (SSE).
 
-Exemple de requete :
+Exemple de requête :
 
 .. code-block:: bash
 
@@ -485,161 +485,161 @@ Exemple de requete :
          --no-buffer \
          -d '{"message":"Quelles sont les caracteristiques de Fess ?"}'
 
-Evenements SSE :
+Événements SSE :
 
 .. list-table::
    :header-rows: 1
    :widths: 20 80
 
-   * - Evenement
+   * - Événement
      - Description (charge utile)
    * - ``phase``
      - Transition de phase du pipeline (``intent``, ``search``, ``evaluate``, ``fetch``, ``answer``). ``{ phase, status, message?, keywords?, hit_count?, ... }``
    * - ``chunk``
-     - Fragment de texte genere (``{ content }``)
+     - Fragment de texte généré (``{ content }``)
    * - ``retry``
-     - Notifie lorsqu'une requete LLM est reessayee (``{ phase, operation, attempt, max_attempts, sleep_ms, cause? }``)
+     - Notifie lorsqu'une requête LLM est réessayée (``{ phase, operation, attempt, max_attempts, sleep_ms, cause? }``)
    * - ``waiting``
      - Progression d'une phase longue telle que l'attente d'un permis de concurrence (``{ phase, reason, elapsed_ms, timeout_ms }``)
    * - ``fallback``
-     - Notifie lorsque la requete est regeneree suite a l'absence de resultats ou de resultats pertinents (``{ phase, reason, original_query?, new_query? }``, raison : ``no_results`` ou ``no_relevant_results``)
+     - Notifie lorsque la requête est régénérée suite à l'absence de résultats ou de résultats pertinents (``{ phase, reason, original_query?, new_query? }``, raison : ``no_results`` ou ``no_relevant_results``)
    * - ``warning``
-     - Notifie lors d'un avertissement recuperable (``{ phase, code, detail? }``, ex. epuisement des tokens d'un modele de raisonnement)
+     - Notifie lors d'un avertissement récupérable (``{ phase, code, detail? }``, ex. épuisement des tokens d'un modèle de raisonnement)
    * - ``sources``
      - Informations sur les documents sources (``{ sources: [...] }``)
    * - ``done``
-     - Traitement termine (``{ session_id, html_content? }``). ``html_content`` contient la chaine HTML rendue depuis Markdown
+     - Traitement terminé (``{ session_id, html_content? }``). ``html_content`` contient la chaîne HTML rendue depuis Markdown
    * - ``error``
-     - Echec terminal en cours de stream (``{ phase?, message, error_code }``). Timeout, depassement de la longueur de contexte, modele introuvable, reponse invalide, erreur de connexion, etc.
+     - Échec terminal en cours de stream (``{ phase?, message, error_code }``). Timeout, dépassement de la longueur de contexte, modèle introuvable, réponse invalide, erreur de connexion, etc.
 
 Effacer une session
 --------------------
 
 Point de terminaison : ``DELETE /api/v2/chat/sessions/{session_id}``
 
-Efface l'historique de conversation de la session specifiee. En cas de succes, ``cleared: true`` est retourne.
+Efface l'historique de conversation de la session spécifiée. En cas de succès, ``cleared: true`` est retourné.
 
-Pour la documentation API complete (authentification, CSRF, limites de debit, codes HTTP), consultez :doc:`../api/api-chat`.
+Pour la documentation API complète (authentification, CSRF, limites de débit, codes HTTP), consultez :doc:`../api/api-chat`.
 
 Interface Web
 ===================
 
-La fonctionnalite de mode de recherche IA est accessible depuis l'ecran de recherche de l'interface Web |Fess|.
+La fonctionnalité de mode de recherche IA est accessible depuis l'écran de recherche de l'interface Web |Fess|.
 
-Demarrer un chat
+Démarrer un chat
 --------------
 
-1. Accedez a l'ecran de recherche |Fess|
-2. Cliquez sur l'icone de chat
+1. Accédez à l'écran de recherche |Fess|
+2. Cliquez sur l'icône de chat
 3. Le panneau de chat s'affiche
 
 Utiliser le chat
 --------------
 
 1. Entrez votre question dans la zone de texte
-2. Cliquez sur le bouton d'envoi ou appuyez sur Entree
-3. La reponse de l'assistant IA s'affiche
-4. La reponse inclut des liens vers les sources
+2. Cliquez sur le bouton d'envoi ou appuyez sur Entrée
+3. La réponse de l'assistant IA s'affiche
+4. La réponse inclut des liens vers les sources
 
 Continuer la conversation
 ----------
 
-- Vous pouvez continuer la conversation dans la meme session de chat
-- Les reponses tiennent compte du contexte des questions precedentes
-- Cliquez sur "Nouveau chat" pour reinitialiser la session
+- Vous pouvez continuer la conversation dans la même session de chat
+- Les réponses tiennent compte du contexte des questions précédentes
+- Cliquez sur "Nouveau chat" pour réinitialiser la session
 
-Depannage
+Dépannage
 ======================
 
-Le bouton mode IA n'apparait pas sur l'ecran de recherche
+Le bouton mode IA n'apparaît pas sur l'écran de recherche
 ---------------------------------------------------------
 
-**Symptome** : Le bouton mode IA ne s'affiche pas dans l'en-tete des resultats
-de recherche, et acceder a ``/chat`` redirige vers la page d'accueil.
+**Symptôme** : Le bouton mode IA ne s'affiche pas dans l'en-tête des résultats
+de recherche, et accéder à ``/chat`` redirige vers la page d'accueil.
 
-**Liste de verifications** : verifier les points suivants dans l'ordre.
+**Liste de vérifications** : vérifier les points suivants dans l'ordre.
 
-1. ``rag.chat.enabled=true`` est-il defini ?
+1. ``rag.chat.enabled=true`` est-il défini ?
 
    - Docker : ``-Dfess.config.rag.chat.enabled=true`` est-il inclus dans ``FESS_JAVA_OPTS`` ?
-   - Installation par paquet : est-il ecrit dans ``app/WEB-INF/conf/fess_config.properties`` ?
+   - Installation par paquet : est-il écrit dans ``app/WEB-INF/conf/fess_config.properties`` ?
 
-2. Le plugin ``fess-llm-*`` correspondant est-il installe ?
+2. Le plugin ``fess-llm-*`` correspondant est-il installé ?
 
-   - Docker : ``FESS_PLUGINS=fess-llm-gemini:15.8.0`` (ou ``fess-llm-openai`` / ``fess-llm-ollama``) doit etre defini
-   - Installation par paquet : le JAR doit etre place dans ``app/WEB-INF/plugin/``
-   - Le journal de demarrage doit inclure ``Installing fess-llm-XXX-15.8.0.jar``
+   - Docker : ``FESS_PLUGINS=fess-llm-gemini:15.8.0`` (ou ``fess-llm-openai`` / ``fess-llm-ollama``) doit être défini
+   - Installation par paquet : le JAR doit être placé dans ``app/WEB-INF/plugin/``
+   - Le journal de démarrage doit inclure ``Installing fess-llm-XXX-15.8.0.jar``
 
-3. ``rag.llm.name`` correspond-il a un plugin installe ?
+3. ``rag.llm.name`` correspond-il à un plugin installé ?
 
-   - La valeur par defaut est ``ollama``. Si seul le plugin Gemini est installe, vous devez explicitement le definir a ``gemini`` (de meme ``openai`` pour le plugin OpenAI)
-   - Methode (a) : modifier ``rag.llm.name`` depuis Administration > Systeme > General (section RAG) et enregistrer
-   - Methode (b) : inclure ``-Dfess.system.rag.llm.name=gemini`` dans ``FESS_JAVA_OPTS`` au demarrage. N'agit que comme valeur par defaut initiale avant qu'une valeur ne soit persistee dans OpenSearch
+   - La valeur par défaut est ``ollama``. Si seul le plugin Gemini est installé, vous devez explicitement le définir à ``gemini`` (de même ``openai`` pour le plugin OpenAI)
+   - Méthode (a) : modifier ``rag.llm.name`` depuis Administration > Système > General (section RAG) et enregistrer
+   - Méthode (b) : inclure ``-Dfess.system.rag.llm.name=gemini`` dans ``FESS_JAVA_OPTS`` au démarrage. N'agit que comme valeur par défaut initiale avant qu'une valeur ne soit persistée dans OpenSearch
 
-4. Un WARN comme ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` se repete-t-il dans le journal ?
+4. Un WARN comme ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` se répète-t-il dans le journal ?
 
-   - Symptome typique quand ``rag.llm.name`` est encore ``ollama`` mais que le plugin Ollama n'est pas installe
-   - Definir ``rag.llm.name`` au fournisseur reellement utilise resout le probleme
-   - De meme, ``componentName=geminiLlmClient`` indique que ``rag.llm.name=gemini`` est defini mais que le plugin ``fess-llm-gemini`` n'est pas installe
+   - Symptôme typique quand ``rag.llm.name`` est encore ``ollama`` mais que le plugin Ollama n'est pas installé
+   - Définir ``rag.llm.name`` au fournisseur réellement utilisé résout le problème
+   - De même, ``componentName=geminiLlmClient`` indique que ``rag.llm.name=gemini`` est défini mais que le plugin ``fess-llm-gemini`` n'est pas installé
 
-5. La cle d'API specifique au fournisseur est-elle configuree ?
+5. La clé d'API spécifique au fournisseur est-elle configurée ?
 
-   - Quand ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` est vide, ``checkAvailabilityNow`` retourne ``false`` et le mode IA est desactive
-   - Activer DEBUG sur ``org.codelibs.fess.llm.gemini`` dans ``log4j2.xml`` fait apparaitre des messages comme ``[LLM:GEMINI] Gemini is not available. apiKey is blank``
+   - Quand ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` est vide, ``checkAvailabilityNow`` retourne ``false`` et le mode IA est désactivé
+   - Activer DEBUG sur ``org.codelibs.fess.llm.gemini`` dans ``log4j2.xml`` fait apparaître des messages comme ``[LLM:GEMINI] Gemini is not available. apiKey is blank``
 
-6. L'hote Fess peut-il atteindre le fournisseur LLM ?
+6. L'hôte Fess peut-il atteindre le fournisseur LLM ?
 
-   - Pour les API cloud (Gemini / OpenAI), le conteneur doit avoir un acces sortant a Internet
-   - En cas de proxy, definissez ``http.proxy.host`` / ``http.proxy.port`` (et au besoin ``http.proxy.username`` / ``http.proxy.password``) dans ``fess_config.properties``. Dans un environnement Docker, ajoutez ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` a ``FESS_JAVA_OPTS`` (depuis |Fess| 15.8, les clients LLM partagent la configuration de proxy commune a |Fess|)
+   - Pour les API cloud (Gemini / OpenAI), le conteneur doit avoir un accès sortant à Internet
+   - En cas de proxy, définissez ``http.proxy.host`` / ``http.proxy.port`` (et au besoin ``http.proxy.username`` / ``http.proxy.password``) dans ``fess_config.properties``. Dans un environnement Docker, ajoutez ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` à ``FESS_JAVA_OPTS`` (depuis |Fess| 15.8, les clients LLM partagent la configuration de proxy commune à |Fess|)
 
 .. note::
 
-   La page "General" n'expose pas de case a cocher pour ``rag.chat.enabled`` (par conception).
-   Cette propriete de la famille FessConfig ne peut etre definie qu'a travers
+   La page "General" n'expose pas de case à cocher pour ``rag.chat.enabled`` (par conception).
+   Cette propriété de la famille FessConfig ne peut être définie qu'à travers
    ``fess_config.properties`` ou ``-Dfess.config.rag.chat.enabled=true``.
 
 Le mode de recherche IA ne s'active pas
 ------------------------
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si ``rag.chat.enabled=true`` est configure
-2. Verifier si le fournisseur LLM est correctement configure dans ``rag.llm.name``
-3. Verifier si le plugin ``fess-llm-*`` correspondant est installe
-4. Verifier si la connexion au fournisseur LLM est possible
+1. Vérifier si ``rag.chat.enabled=true`` est configuré
+2. Vérifier si le fournisseur LLM est correctement configuré dans ``rag.llm.name``
+3. Vérifier si le plugin ``fess-llm-*`` correspondant est installé
+4. Vérifier si la connexion au fournisseur LLM est possible
 
-Qualite des reponses insuffisante
+Qualité des réponses insuffisante
 ----------------
 
-**Ameliorations** :
+**Améliorations** :
 
-1. Utiliser un modele LLM plus performant
+1. Utiliser un modèle LLM plus performant
 2. Augmenter ``rag.chat.context.max.documents``
-3. Personnaliser le prompt systeme dans le DI XML
-4. Ajuster les parametres de temperature specifiques au fournisseur (consultez la documentation de chaque plugin ``fess-llm-*``)
+3. Personnaliser le prompt système dans le DI XML
+4. Ajuster les paramètres de température spécifiques au fournisseur (consultez la documentation de chaque plugin ``fess-llm-*``)
 
-Reponses lentes
+Réponses lentes
 ----------------
 
-**Ameliorations** :
+**Améliorations** :
 
-1. Utiliser un modele LLM plus rapide (ex : Gemini Flash)
-2. Reduire les parametres max.tokens specifiques au fournisseur (consultez la documentation de chaque plugin ``fess-llm-*``)
-3. Reduire ``rag.chat.context.max.documents``
+1. Utiliser un modèle LLM plus rapide (ex : Gemini Flash)
+2. Réduire les paramètres max.tokens spécifiques au fournisseur (consultez la documentation de chaque plugin ``fess-llm-*``)
+3. Réduire ``rag.chat.context.max.documents``
 
 Sessions non maintenues
 ------------------------
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si le ``session_id`` est correctement envoye cote client
-2. Verifier le parametre ``rag.chat.session.timeout.minutes``
-3. Verifier la capacite de stockage des sessions
+1. Vérifier si le ``session_id`` est correctement envoyé côté client
+2. Vérifier le paramètre ``rag.chat.session.timeout.minutes``
+3. Vérifier la capacité de stockage des sessions
 
-Configuration de debogage
+Configuration de débogage
 ------------
 
-Pour investiguer les problemes, ajustez le niveau de log pour afficher des logs detailles.
+Pour investiguer les problèmes, ajustez le niveau de log pour afficher des logs détaillés.
 
 ``app/WEB-INF/classes/log4j2.xml`` :
 
@@ -649,20 +649,20 @@ Pour investiguer les problemes, ajustez le niveau de log pour afficher des logs 
     <Logger name="org.codelibs.fess.api.v2.handlers" level="DEBUG"/>
     <Logger name="org.codelibs.fess.chat" level="DEBUG"/>
 
-Les messages de log utilisent le prefixe ``[RAG]``, avec des sous-prefixes tels que ``[RAG:INTENT]``, ``[RAG:EVAL]`` et ``[RAG:ANSWER]`` pour chaque phase.
-Au niveau INFO, les logs de fin de chat (duree, nombre de sources) sont emis. Au niveau DEBUG, les details d'utilisation des tokens, de controle de concurrence et d'empaquetage de l'historique sont emis.
+Les messages de log utilisent le préfixe ``[RAG]``, avec des sous-préfixes tels que ``[RAG:INTENT]``, ``[RAG:EVAL]`` et ``[RAG:ANSWER]`` pour chaque phase.
+Au niveau INFO, les logs de fin de chat (durée, nombre de sources) sont émis. Au niveau DEBUG, les détails d'utilisation des tokens, de contrôle de concurrence et d'empaquetage de l'historique sont émis.
 
-Journal de recherche et type d'acces
+Journal de recherche et type d'accès
 -------------------------------------
 
-Les recherches via le mode de recherche IA sont enregistrees avec le nom du fournisseur LLM (par ex. ``ollama``, ``openai``, ``gemini``) comme type d'acces dans les journaux de recherche. Cela permet de distinguer les recherches du mode IA des recherches web ou API regulieres dans les analyses.
+Les recherches via le mode de recherche IA sont enregistrées avec le nom du fournisseur LLM (par ex. ``ollama``, ``openai``, ``gemini``) comme type d'accès dans les journaux de recherche. Cela permet de distinguer les recherches du mode IA des recherches web ou API régulières dans les analyses.
 
-Informations de reference
+Informations de référence
 ========
 
-- :doc:`llm-overview` - Apercu de l'integration LLM
+- :doc:`llm-overview` - Aperçu de l'intégration LLM
 - :doc:`llm-ollama` - Configuration Ollama
 - :doc:`llm-openai` - Configuration OpenAI
 - :doc:`llm-gemini` - Configuration Google Gemini
-- :doc:`../api/api-chat` - Reference API Chat
+- :doc:`../api/api-chat` - Référence API Chat
 - :doc:`../user/chat-search` - Guide de recherche par chat pour les utilisateurs

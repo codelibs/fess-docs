@@ -1,23 +1,23 @@
 ==================================
-Configuration de la limitation de debit
+Configuration de la limitation de débit
 ==================================
 
-Apercu
+Aperçu
 ====
 
-|Fess| dispose d'une fonctionnalite de limitation de debit pour maintenir la stabilite et les performances du systeme.
-Cette fonctionnalite protege le systeme contre les requetes excessives et permet une allocation equitable des ressources.
+|Fess| dispose d'une fonctionnalité de limitation de débit pour maintenir la stabilité et les performances du système.
+Cette fonctionnalité protège le système contre les requêtes excessives et permet une allocation équitable des ressources.
 
-La limitation de debit s'applique dans les situations suivantes :
+La limitation de débit s'applique dans les situations suivantes :
 
-- Toutes les requetes HTTP, y compris l'API de recherche, l'API de mode de recherche IA et les pages d'administration (``RateLimitFilter``)
-- Requetes du crawler (controlees par la configuration du crawl)
+- Toutes les requêtes HTTP, y compris l'API de recherche, l'API de mode de recherche IA et les pages d'administration (``RateLimitFilter``)
+- Requêtes du crawler (contrôlées par la configuration du crawl)
 
-Limitation de debit des requetes HTTP
+Limitation de débit des requêtes HTTP
 ======================================
 
-Vous pouvez limiter le nombre de requetes HTTP vers |Fess| par adresse IP.
-Cette limitation s'applique a toutes les requetes HTTP, y compris l'API de recherche, l'API de mode de recherche IA, les pages d'administration, etc.
+Vous pouvez limiter le nombre de requêtes HTTP vers |Fess| par adresse IP.
+Cette limitation s'applique à toutes les requêtes HTTP, y compris l'API de recherche, l'API de mode de recherche IA, les pages d'administration, etc.
 
 Configuration
 ----
@@ -38,38 +38,38 @@ Configuration
 Comportement
 ----
 
-- Les requetes depassant la limite de debit retournent HTTP 429 (Too Many Requests)
-- Les requetes provenant d'IP figurant dans la liste de blocage retournent HTTP 403 (Forbidden)
-- Les limites sont appliquees par adresse IP
-- Pour chaque IP, la fenetre commence au premier requete et le compteur est reinitialise apres l'expiration de la periode de la fenetre (methode de fenetre fixe)
-- Le depassement de la limite entraine le blocage de l'IP pendant la duree ``rate.limit.block.duration.ms``
+- Les requêtes dépassant la limite de débit retournent HTTP 429 (Too Many Requests)
+- Les requêtes provenant d'IP figurant dans la liste de blocage retournent HTTP 403 (Forbidden)
+- Les limites sont appliquées par adresse IP
+- Pour chaque IP, la fenêtre commence au premier requête et le compteur est réinitialisé après l'expiration de la période de la fenêtre (méthode de fenêtre fixe)
+- Le dépassement de la limite entraîne le blocage de l'IP pendant la durée ``rate.limit.block.duration.ms``
 
-Limitation de debit du mode de recherche IA
+Limitation de débit du mode de recherche IA
 ====================
 
-La fonctionnalite de mode de recherche IA dispose d'une limitation de debit pour controler les couts de l'API LLM et la consommation de ressources.
-Le mode de recherche IA est soumis a la limitation de debit des requetes HTTP decrite ci-dessus, et dispose egalement de parametres de limitation de debit specifiques au mode de recherche IA.
+La fonctionnalité de mode de recherche IA dispose d'une limitation de débit pour contrôler les coûts de l'API LLM et la consommation de ressources.
+Le mode de recherche IA est soumis à la limitation de débit des requêtes HTTP décrite ci-dessus, et dispose également de paramètres de limitation de débit spécifiques au mode de recherche IA.
 
-Pour la configuration specifique de la limitation de debit du mode de recherche IA, consultez :doc:`rag-chat`.
+Pour la configuration spécifique de la limitation de débit du mode de recherche IA, consultez :doc:`rag-chat`.
 
 .. note::
-   La limitation de debit du mode de recherche IA s'applique separement de la limitation de debit cote fournisseur LLM.
+   La limitation de débit du mode de recherche IA s'applique séparément de la limitation de débit côté fournisseur LLM.
    Configurez en tenant compte des deux limites.
 
-Limitation de debit du crawler
+Limitation de débit du crawler
 ======================
 
-Vous pouvez configurer l'intervalle entre les requetes pour eviter que le crawler ne surcharge les sites cibles.
+Vous pouvez configurer l'intervalle entre les requêtes pour éviter que le crawler ne surcharge les sites cibles.
 
 Configuration du crawl Web
 ---------------
 
-Configurez les elements suivants dans l'ecran d'administration "Crawler" -> "Web" :
+Configurez les éléments suivants dans l'écran d'administration "Crawler" -> "Web" :
 
-- **Intervalle de requetes** : Temps d'attente entre les requetes (millisecondes)
-- **Nombre de threads** : Nombre de threads de crawl paralleles
+- **Intervalle de requêtes** : Temps d'attente entre les requêtes (millisecondes)
+- **Nombre de threads** : Nombre de threads de crawl parallèles
 
-Configuration recommandee :
+Configuration recommandée :
 
 ::
 
@@ -84,7 +84,7 @@ Configuration recommandee :
 Respect de robots.txt
 ----------------
 
-|Fess| respecte par defaut la directive Crawl-delay de robots.txt.
+|Fess| respecte par défaut la directive Crawl-delay de robots.txt.
 
 ::
 
@@ -92,70 +92,70 @@ Respect de robots.txt
     User-agent: *
     Crawl-delay: 10
 
-Le traitement de robots.txt est controle par ``crawler.ignore.robots.txt`` dans
-``app/WEB-INF/classes/fess_config.properties`` (defaut : ``false``).
-En le definissant sur ``true``, le traitement de robots.txt, y compris Crawl-delay, est desactive.
+Le traitement de robots.txt est contrôlé par ``crawler.ignore.robots.txt`` dans
+``app/WEB-INF/classes/fess_config.properties`` (défaut : ``false``).
+En le définissant sur ``true``, le traitement de robots.txt, y compris Crawl-delay, est désactivé.
 
 ::
 
     # Ignorer robots.txt (defaut : false)
     crawler.ignore.robots.txt=false
 
-Liste complete des proprietes de limitation de debit
+Liste complète des propriétés de limitation de débit
 ======================
 
-Toutes les proprietes configurables dans ``app/WEB-INF/classes/fess_config.properties``.
+Toutes les propriétés configurables dans ``app/WEB-INF/classes/fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
-   * - Propriete
+   * - Propriété
      - Description
-     - Valeur par defaut
+     - Valeur par défaut
    * - ``rate.limit.enabled``
-     - Activer la limitation de debit
+     - Activer la limitation de débit
      - ``false``
    * - ``rate.limit.requests.per.window``
-     - Nombre maximum de requetes par fenetre
+     - Nombre maximum de requêtes par fenêtre
      - ``100``
    * - ``rate.limit.window.ms``
-     - Taille de la fenetre (millisecondes)
+     - Taille de la fenêtre (millisecondes)
      - ``60000``
    * - ``rate.limit.block.duration.ms``
-     - Duree de blocage de l'IP en cas de depassement (millisecondes)
+     - Durée de blocage de l'IP en cas de dépassement (millisecondes)
      - ``300000``
    * - ``rate.limit.retry.after.seconds``
-     - Valeur de l'en-tete Retry-After (secondes)
+     - Valeur de l'en-tête Retry-After (secondes)
      - ``60``
    * - ``rate.limit.whitelist.ips``
-     - Adresses IP exclues de la limitation de debit (separees par des virgules)
+     - Adresses IP exclues de la limitation de débit (séparées par des virgules)
      - ``127.0.0.1,::1``
    * - ``rate.limit.blocked.ips``
-     - Adresses IP a bloquer (separees par des virgules)
+     - Adresses IP à bloquer (séparées par des virgules)
      - (vide)
    * - ``rate.limit.trusted.proxies``
      - IP de proxies de confiance (pour obtenir l'IP client via X-Forwarded-For/X-Real-IP)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
-     - Intervalle de nettoyage (nombre de requetes, reserve)
+     - Intervalle de nettoyage (nombre de requêtes, réservé)
      - ``1000``
 
 .. note::
-   ``rate.limit.cleanup.interval`` est un parametre reserve pour une utilisation future.
-   Dans l'implementation actuelle, les compteurs de requetes et les informations sur les IP bloquees
-   sont nettoyes automatiquement en fonction de l'expiration du cache interne
+   ``rate.limit.cleanup.interval`` est un paramètre réservé pour une utilisation future.
+   Dans l'implémentation actuelle, les compteurs de requêtes et les informations sur les IP bloquées
+   sont nettoyés automatiquement en fonction de l'expiration du cache interne
    (``rate.limit.window.ms`` et ``rate.limit.block.duration.ms``),
-   de sorte que cette valeur n'est pas utilisee.
+   de sorte que cette valeur n'est pas utilisée.
 
-Configuration avancee de limitation de debit
+Configuration avancée de limitation de débit
 ====================
 
-Limitation de debit personnalisee
+Limitation de débit personnalisée
 ------------------
 
-Pour appliquer des limites differentes selon des conditions specifiques,
-une implementation de composant personnalise est necessaire.
+Pour appliquer des limites différentes selon des conditions spécifiques,
+une implémentation de composant personnalisé est nécessaire.
 
 ::
 
@@ -170,7 +170,7 @@ une implementation de composant personnalise est necessaire.
 Configuration d'exclusion
 ========
 
-Vous pouvez exclure certaines adresses IP de la limitation de debit ou les bloquer.
+Vous pouvez exclure certaines adresses IP de la limitation de débit ou les bloquer.
 
 ::
 
@@ -185,27 +185,27 @@ Vous pouvez exclure certaines adresses IP de la limitation de debit ou les bloqu
 
 .. note::
    Si vous utilisez un reverse proxy, configurez l'adresse IP du proxy dans ``rate.limit.trusted.proxies``.
-   Seules les requetes provenant de proxies de confiance permettent d'obtenir l'IP client
-   via les en-tetes X-Forwarded-For et X-Real-IP.
+   Seules les requêtes provenant de proxies de confiance permettent d'obtenir l'IP client
+   via les en-têtes X-Forwarded-For et X-Real-IP.
 
 Surveillance et alertes
 ==============
 
-Configuration pour surveiller l'etat de la limitation de debit :
+Configuration pour surveiller l'état de la limitation de débit :
 
 Sortie de logs
 --------
 
-Lorsque la limitation de debit est appliquee, elle est enregistree dans les logs :
+Lorsque la limitation de débit est appliquée, elle est enregistrée dans les logs :
 
 ::
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
-Depannage
+Dépannage
 ======================
 
-Les requetes legitimes sont bloquees
+Les requêtes légitimes sont bloquées
 --------------------------------
 
 **Cause** : Les valeurs limites sont trop strictes
@@ -213,31 +213,31 @@ Les requetes legitimes sont bloquees
 **Solution** :
 
 1. Augmenter ``rate.limit.requests.per.window``
-2. Ajouter des IP specifiques a la liste blanche (``rate.limit.whitelist.ips``)
-3. Ajuster la taille de la fenetre (``rate.limit.window.ms``)
+2. Ajouter des IP spécifiques à la liste blanche (``rate.limit.whitelist.ips``)
+3. Ajuster la taille de la fenêtre (``rate.limit.window.ms``)
 
-La limitation de debit ne fonctionne pas
+La limitation de débit ne fonctionne pas
 --------------------
 
-**Cause** : La configuration n'est pas correctement appliquee
+**Cause** : La configuration n'est pas correctement appliquée
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si ``rate.limit.enabled=true`` est configure
-2. Verifier si le fichier de configuration est correctement lu
-3. Verifier si |Fess| a ete redemarre
+1. Vérifier si ``rate.limit.enabled=true`` est configuré
+2. Vérifier si le fichier de configuration est correctement lu
+3. Vérifier si |Fess| a été redémarré
 
 Impact sur les performances
 ----------------------
 
-Si la verification de la limitation de debit affecte les performances :
+Si la vérification de la limitation de débit affecte les performances :
 
-1. Utiliser la liste blanche pour ignorer les verifications sur les IP de confiance
-2. Desactiver la limitation de debit (``rate.limit.enabled=false``)
+1. Utiliser la liste blanche pour ignorer les vérifications sur les IP de confiance
+2. Désactiver la limitation de débit (``rate.limit.enabled=false``)
 
-Informations de reference
+Informations de référence
 ========
 
-- :doc:`rag-chat` - Configuration de la fonctionnalite de mode de recherche IA
+- :doc:`rag-chat` - Configuration de la fonctionnalité de mode de recherche IA
 - :doc:`../admin/webconfig-guide` - Guide de configuration du crawl Web
-- :doc:`../api/api-overview` - Apercu des API
+- :doc:`../api/api-overview` - Aperçu des API
