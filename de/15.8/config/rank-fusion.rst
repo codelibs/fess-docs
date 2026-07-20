@@ -57,7 +57,7 @@ Grundkonfiguration::
     rank.fusion.rank_constant=20
 
     # Anzahl der Threads für parallele Verarbeitung
-    # (bei 0 oder kleiner wird availableProcessors × 1.5 + 1 verwendet)
+    # (bei 0 oder kleiner wird die Anzahl verfügbarer CPU-Kerne × 1.5 + 1 verwendet)
     rank.fusion.threads=-1
 
     # Name des Score-Felds (Feld, in dem der fusionierte Score gespeichert wird)
@@ -78,7 +78,7 @@ Grundkonfiguration::
      - Die Konstante ``k`` in der RRF-Formel. Ein größerer Wert verringert den Score-Unterschied zwischen höher und niedriger platzierten Ergebnissen.
    * - ``rank.fusion.threads``
      - ``-1``
-     - Anzahl der Threads beim parallelen Ausführen mehrerer Sucher. Bei Angabe von ``0`` oder kleiner wird automatisch ``availableProcessors × 1.5 + 1`` verwendet.
+     - Anzahl der Threads beim parallelen Ausführen mehrerer Sucher. Bei Angabe von ``0`` oder kleiner wird automatisch ``Anzahl verfügbarer CPU-Kerne × 1.5 + 1`` verwendet.
    * - ``rank.fusion.score_field``
      - ``rf_score``
      - Name des Ergebnisdokument-Felds, in dem der fusionierte Score gespeichert wird.
@@ -158,7 +158,7 @@ Verarbeitungszeit
 ::
 
     # Anzahl der Threads für parallele Ausführung
-    # (bei 0 oder kleiner wird availableProcessors × 1.5 + 1 verwendet)
+    # (bei 0 oder kleiner wird die Anzahl verfügbarer CPU-Kerne × 1.5 + 1 verwendet)
     rank.fusion.threads=-1
 
 Fehlersuche

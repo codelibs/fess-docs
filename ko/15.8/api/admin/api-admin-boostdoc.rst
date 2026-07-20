@@ -316,7 +316,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
      - 클릭 수에 기반한 로그 스케일 부스트
 
 사용 예
-======
+=======
 
 문서 사이트 부스트
 ------------------
@@ -347,7 +347,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
          }'
 
 참고 정보
-========
+=========
 
 - :doc:`api-admin-overview` - Admin API 개요
 - :doc:`api-admin-elevateword` - 엘리베이트 워드 API

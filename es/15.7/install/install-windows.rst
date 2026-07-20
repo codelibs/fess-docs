@@ -163,7 +163,7 @@ Estado antes del cambio (estado predeterminado)::
     REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
     REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=%SEARCH_ENGINE_HOME%/config/
 
-Elimine el ``REM `` del inicio de las dos líneas inferiores para descommentarlas, y cambie el valor de ``fess.dictionary.path`` a la ruta de sincronización de configuración de OpenSearch.
+Elimine el ``REM `` del inicio de las dos líneas inferiores para descomentarlas, y cambie el valor de ``fess.dictionary.path`` a la ruta de sincronización de configuración de OpenSearch.
 
 Estado después del cambio::
 

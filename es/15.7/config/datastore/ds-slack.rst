@@ -305,6 +305,41 @@ Script:
     created=message.timestamp
     url=message.permalink
 
+Rastrear Incluyendo Archivos
+----------------------------
+
+Parametros:
+
+::
+
+    token=xoxb-your-slack-bot-token-here
+    channels=general,random
+    file_crawl=true
+    include_private=false
+
+Script:
+
+::
+
+    title=message.user + " #" + message.channel
+    content=message.text
+    created=message.timestamp
+    url=message.permalink
+
+Incluir Informacion Detallada de los Mensajes
+---------------------------------------------
+
+Script:
+
+::
+
+    title="[" + message.channel + "] " + message.user
+    content=message.text
+    digest=message.text.substring(0, Math.min(200, message.text.length()))
+    created=message.timestamp
+    timestamp=message.timestamp
+    url=message.permalink
+
 Solucion de Problemas
 =====================
 
@@ -353,6 +388,43 @@ No se Pueden Obtener Mensajes
 3. Verificar que la aplicacion este agregada al canal
 4. Verificar que la Slack App este habilitada
 
+Error de Permisos Insuficientes
+--------------------------------
+
+**Sintoma**: ``missing_scope``
+
+**Solucion**:
+
+1. Agregar los ambitos necesarios en la configuracion de la Slack App:
+
+   **Canales publicos**:
+
+   - ``channels:history``
+   - ``channels:read``
+
+   **Canales privados**:
+
+   - ``groups:history``
+   - ``groups:read``
+
+   **Archivos**:
+
+   - ``files:read``
+
+2. Reinstalar la aplicacion
+3. Reiniciar |Fess|
+
+No se Pueden Rastrear Archivos
+------------------------------
+
+**Sintoma**: No se obtienen archivos incluso con ``file_crawl=true``
+
+**Verificar**:
+
+1. Verificar que el ambito ``files:read`` este otorgado
+2. Verificar que realmente se hayan publicado archivos en el canal
+3. Verificar los permisos de acceso a los archivos
+
 Limite de Tasa de API
 ---------------------
 
@@ -368,6 +440,42 @@ Limites de la API de Slack:
 
 - Metodos de nivel 3: 50+ solicitudes/minuto
 - Metodos de nivel 4: 100+ solicitudes/minuto
+
+Gran Cantidad de Mensajes
+-------------------------
+
+**Sintoma**: El rastreo tarda demasiado o se agota el tiempo de espera
+
+**Solucion**:
+
+1. Dividir los canales y configurar multiples almacenes de datos
+2. Distribuir los horarios de rastreo
+3. Considerar configuraciones para excluir mensajes antiguos
+
+Ejemplos Avanzados de Script
+=============================
+
+Procesamiento de Mensajes
+--------------------------
+
+Resumen de mensajes largos:
+
+::
+
+    title=message.user + " #" + message.channel
+    content=message.text
+    digest=message.text.length() > 100 ? message.text.substring(0, 100) + "..." : message.text
+    created=message.timestamp
+    url=message.permalink
+
+Formato del nombre del canal:
+
+::
+
+    title="[Slack: " + message.channel + "] " + message.user
+    content=message.text
+    created=message.timestamp
+    url=message.permalink
 
 Informacion de Referencia
 =========================

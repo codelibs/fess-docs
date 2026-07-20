@@ -1,12 +1,12 @@
 ==========================
-API ElevateWord
+ElevateWord API
 ==========================
 
 Vue d'ensemble
 ==============
 
-L'API ElevateWord permet de gerer les mots eleves (manipulation du classement de recherche pour des mots-cles specifiques) dans |Fess|.
-Vous pouvez placer des documents specifiques en haut ou en bas des resultats pour certaines requetes de recherche.
+L'API ElevateWord permet de gérer les mots élevés (manipulation du classement de recherche pour des mots-clés spécifiques) dans |Fess|.
+Vous pouvez placer des documents spécifiques en haut ou en bas des résultats pour certaines requêtes de recherche.
 
 URL de base
 ===========
@@ -22,66 +22,66 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des mots eleves
+     - Obtention de la liste des mots élevés
    * - GET
      - /setting/{id}
-     - Obtention d'un mot eleve
+     - Obtention d'un mot élevé
    * - POST
      - /setting
-     - Creation d'un mot eleve
+     - Création d'un mot élevé
    * - PUT
      - /setting
-     - Mise a jour d'un mot eleve
+     - Mise à jour d'un mot élevé
    * - DELETE
      - /setting/{id}
-     - Suppression d'un mot eleve
+     - Suppression d'un mot élevé
    * - PUT
      - /upload
-     - Televersement CSV des mots eleves
+     - Téléversement CSV des mots élevés
    * - GET
      - /download
-     - Telechargement CSV des mots eleves
+     - Téléchargement CSV des mots élevés
 
-Obtention de la liste des mots eleves
-=====================================
+Obtention de la liste des mots élevés
+======================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/elevateword/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'éléments par page (par défaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1, par defaut : 1)
+     - Numéro de page (commence à 1, par défaut : 1)
    * - ``id``
      - String
      - Non
-     - Filtre par correspondance exacte sur l'ID du mot eleve
+     - Filtre par correspondance exacte sur l'ID du mot élevé
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -93,7 +93,7 @@ Reponse
           {
             "id": "elevate_id_1",
             "suggestWord": "fess",
-            "reading": "フェス",
+            "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
             "labelTypeIds": []
@@ -103,17 +103,17 @@ Reponse
       }
     }
 
-Obtention d'un mot eleve
-========================
+Obtention d'un mot élevé
+=========================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/elevateword/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -124,7 +124,7 @@ Reponse
         "setting": {
           "id": "elevate_id_1",
           "suggestWord": "fess",
-          "reading": "フェス",
+          "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
           "labelTypeIds": []
@@ -132,10 +132,10 @@ Reponse
       }
     }
 
-Creation d'un mot eleve
-=======================
+Création d'un mot élevé
+=========================
 
-Requete
+Requête
 -------
 
 ::
@@ -143,21 +143,21 @@ Requete
     POST /api/admin/elevateword/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
     {
       "suggestWord": "documentation",
-      "reading": "ドキュメンテーション",
+      "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
       "labelTypeIds": ["label1"]
     }
 
 Description des champs
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -168,21 +168,21 @@ Description des champs
      - Description
    * - ``suggestWord``
      - Oui
-     - Mot-cle a elever
+     - Mot-clé à élever
    * - ``reading``
      - Non
-     - Lecture phonetique
+     - Lecture phonétique
    * - ``permissions``
      - Non
-     - Permissions d'acces (chaine separee par des sauts de ligne, une par ligne. Valeur initiale du formulaire : permissions d'affichage par defaut de la recherche)
+     - Permissions d'accès (chaîne séparée par des sauts de ligne, une par ligne. Valeur initiale du formulaire : permissions d'affichage par défaut de la recherche)
    * - ``boost``
      - Oui
      - Valeur de boost (valeur initiale du formulaire : 100.0)
    * - ``labelTypeIds``
      - Non
-     - ID des labels cibles (tableau de chaines)
+     - ID des labels cibles (tableau de chaînes)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -195,10 +195,10 @@ Reponse
       }
     }
 
-Mise a jour d'un mot eleve
-==========================
+Mise à jour d'un mot élevé
+============================
 
-Requete
+Requête
 -------
 
 ::
@@ -206,7 +206,7 @@ Requete
     PUT /api/admin/elevateword/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -214,7 +214,7 @@ Corps de la requete
     {
       "id": "existing_elevate_id",
       "suggestWord": "documentation",
-      "reading": "ドキュメンテーション",
+      "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
       "labelTypeIds": ["label1"],
@@ -223,12 +223,12 @@ Corps de la requete
 
 .. note::
 
-   Lors de la mise a jour, les champs suivants sont requis en plus des champs utilises pour la creation :
+   Lors de la mise à jour, les champs suivants sont requis en plus des champs utilisés pour la création :
 
-   - ``id`` - ID du mot eleve a mettre a jour
-   - ``versionNo`` - Numero de version pour le verrouillage optimiste. Indiquez la valeur obtenue via ``GET /setting/{id}``.
+   - ``id`` - ID du mot élevé à mettre à jour
+   - ``versionNo`` - Numéro de version pour le verrouillage optimiste. Indiquez la valeur obtenue via ``GET /setting/{id}``.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -241,17 +241,17 @@ Reponse
       }
     }
 
-Suppression d'un mot eleve
-==========================
+Suppression d'un mot élevé
+============================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/elevateword/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -264,12 +264,12 @@ Reponse
       }
     }
 
-Televersement CSV des mots eleves
-=================================
+Téléversement CSV des mots élevés
+====================================
 
-Enregistre en masse des mots eleves depuis un fichier CSV. Le fichier est envoye en ``multipart/form-data``. L'import est execute de maniere asynchrone cote serveur.
+Enregistre en masse des mots élevés depuis un fichier CSV. Le fichier est envoyé en ``multipart/form-data``. L'import est exécuté de manière asynchrone côté serveur.
 
-Requete
+Requête
 -------
 
 ::
@@ -277,21 +277,21 @@ Requete
     PUT /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametre
+   * - Paramètre
      - Requis
      - Description
    * - ``elevateWordFile``
      - Oui
-     - Fichier CSV des mots eleves a televerser
+     - Fichier CSV des mots élevés à téléverser
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -302,12 +302,12 @@ Reponse
       }
     }
 
-Telechargement CSV des mots eleves
-==================================
+Téléchargement CSV des mots élevés
+=====================================
 
-Telecharge les mots eleves enregistres sous forme de fichier CSV (``elevate.csv``). La reponse est un flux ``application/octet-stream``.
+Télécharge les mots élevés enregistrés sous forme de fichier CSV (``elevate.csv``). La réponse est un flux ``application/octet-stream``.
 
-Requete
+Requête
 -------
 
 ::
@@ -317,8 +317,8 @@ Requete
 Exemples d'utilisation
 ======================
 
-Elevation d'un nom de produit
------------------------------
+Élévation d'un nom de produit
+-------------------------------
 
 .. code-block:: bash
 
@@ -331,8 +331,8 @@ Elevation d'un nom de produit
            "permissions": "{role}guest"
          }'
 
-Elevation vers un label specifique
-----------------------------------
+Élévation vers un label spécifique
+-------------------------------------
 
 .. code-block:: bash
 
@@ -346,8 +346,8 @@ Elevation vers un label specifique
            "permissions": "{role}guest"
          }'
 
-Televersement d'un fichier CSV
-------------------------------
+Téléversement d'un fichier CSV
+---------------------------------
 
 .. code-block:: bash
 
@@ -355,8 +355,8 @@ Televersement d'un fichier CSV
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 
-Telechargement d'un fichier CSV
--------------------------------
+Téléchargement d'un fichier CSV
+----------------------------------
 
 .. code-block:: bash
 
@@ -364,10 +364,10 @@ Telechargement d'un fichier CSV
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o elevate.csv
 
-Informations complementaires
-============================
+Informations complémentaires
+=============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-keymatch` - API KeyMatch
 - :doc:`api-admin-boostdoc` - API BoostDoc
-- :doc:`../../admin/elevateword-guide` - Guide de gestion des mots eleves
+- :doc:`../../admin/elevateword-guide` - Guide de gestion des mots élevés

@@ -161,7 +161,7 @@ Parameterliste
      - URL-Ausschlussmuster (Regex)
    * - ``number_of_threads``
      - Nein
-     - Anzahl der Threads fuer parallele Verarbeitung (Standard: ``1``)
+     - Anzahl der Threads für parallele Verarbeitung (Standard: ``1``)
    * - ``proxy_host``
      - Nein
      - HTTP-Proxy-Hostname

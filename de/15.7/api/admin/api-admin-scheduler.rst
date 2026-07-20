@@ -318,7 +318,9 @@ Response
 
     {
       "response": {
-        "status": 0
+        "status": 0,
+        "id": "deleted_job_id",
+        "created": false
       }
     }
 

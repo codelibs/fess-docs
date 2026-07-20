@@ -30,11 +30,11 @@ Entra ID 인증을 설정하기 전에 다음 전제조건을 확인하십시오
 
 - |Fess| 15.8 이상이 설치되어 있을 것
 - Microsoft Entra ID（Azure AD）테넌트를 사용할 수 있을 것
-- |Fess| 가 HTTPS로 접근 가능할 것（본번 환경에서는 필수）
+- |Fess| 가 HTTPS로 접근 가능할 것（운영 환경에서는 필수）
 - Entra ID 측에서 애플리케이션을 등록할 수 있는 권한이 있을 것
 
 기본 설정
-========
+=========
 
 SSO 기능 활성화
 ---------------
@@ -46,7 +46,7 @@ Entra ID 인증을 활성화하려면 ``app/WEB-INF/conf/system.properties`` 에
     sso.type=entraid
 
 필수 설정
---------
+---------
 
 Entra ID에서 취득한 정보를 설정합니다.
 
@@ -179,7 +179,7 @@ API 접근 권한 설정
    관리자 동의를 부여해야 합니다.
 
 취득하는 정보
-------------
+-------------
 
 다음 정보를 Fess 설정에 사용합니다.
 
@@ -211,7 +211,7 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
     entraid.default.groups=authenticated_users,entra_users
 
 설정 예
-======
+=======
 
 최소 구성（검증 환경용）
 ------------------------
@@ -229,10 +229,10 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
     entraid.client.secret=your-client-secret-value
     entraid.reply.url=http://localhost:8080/sso/
 
-권장 구성（본번 환경용）
+권장 구성（운영 환경용）
 ------------------------
 
-다음은 본번 환경에서 사용할 때의 권장 설정 예입니다.
+다음은 운영 환경에서 사용할 때의 권장 설정 예입니다.
 
 ::
 
@@ -270,10 +270,10 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
 ======================
 
 자주 발생하는 문제와 해결 방법
-----------------------
+------------------------------
 
 인증 후 Fess로 돌아올 수 없음
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Azure Portal의 앱 등록에서 리다이렉트 URI가 올바르게 설정되어 있는지 확인하십시오
 - ``entraid.reply.url`` 의 값이 Azure Portal의 설정과 완전히 일치하는지 확인하십시오
@@ -306,7 +306,7 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
     <Logger name="org.codelibs.fess.sso.entraid" level="DEBUG"/>
 
 참고 정보
-========
+=========
 
 - :doc:`security-role` - 역할 기반 검색 설정에 대하여
 - :doc:`sso-saml` - SAML 인증을 이용한 SSO 설정에 대하여

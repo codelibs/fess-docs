@@ -228,7 +228,7 @@ Da die Art der zu erstellenden App und des Zugriffstokens unterschiedlich ist, �
      - Für persönliche (Nicht-Team)-Konten. Verwendet ein reguläres Zugriffstoken mit Bereichseinschränkung und crawlt Dateien direkt aus diesem Konto.
 
 .. note::
-   Im Standardmodus (``basic_plan=false``) werden Team-Verwaltungs-APIs verwendet (Teammitglieder-Liste, dateizugriff pro Mitglied, Teamordner).
+   Im Standardmodus (``basic_plan=false``) werden Team-Verwaltungs-APIs verwendet (Teammitglieder-Liste, Dateizugriff pro Mitglied, Teamordner).
    Daher sind ein Dropbox Business-Konto und ein Token mit Teamadministrator-Rechten zwingend erforderlich. Wenn Sie ein Einzelkonto verwenden, setzen Sie unbedingt ``basic_plan=true``.
 
 Schritte zum Abrufen des Zugriffstokens

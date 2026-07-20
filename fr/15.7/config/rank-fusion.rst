@@ -2,7 +2,7 @@
 Configuration du Rank Fusion
 ==================================
 
-Apercu
+Aperçu
 ======
 
 La fonctionnalité Rank Fusion de |Fess| intègre plusieurs résultats de recherche pour

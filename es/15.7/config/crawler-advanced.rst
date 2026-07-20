@@ -1019,6 +1019,7 @@ Rastreador S3
 -------------
 
 Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO, etc.).
+Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
 
 .. list-table::
    :header-rows: 1
@@ -1052,8 +1053,6 @@ Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
-
 ::
 
     client.endpoint=https://s3.ap-northeast-1.amazonaws.com
@@ -1065,6 +1064,7 @@ Rastreador GCS
 --------------
 
 Configuración para rastrear Google Cloud Storage.
+Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
 
 .. list-table::
    :header-rows: 1
@@ -1094,8 +1094,6 @@ Configuración para rastrear Google Cloud Storage.
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
 
 ::
 

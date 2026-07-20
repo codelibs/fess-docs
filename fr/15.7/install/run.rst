@@ -1,6 +1,6 @@
-============================
+==========================================
 Démarrage, arrêt et configuration initiale
-============================
+==========================================
 
 Cette page décrit les procédures de démarrage, d'arrêt et de configuration initiale du serveur |Fess|.
 
@@ -216,9 +216,9 @@ Après vous être connecté à l'écran d'administration, effectuez les configur
 1. Connexion à l'écran d'administration (http://localhost:8080/admin)
 2. Cliquez sur « Système » → « Utilisateur » dans le menu de gauche
 3. Cliquez sur l'utilisateur ``admin``
-4. Saisissez un nouveau mot de passe dans le champ [Mot de passe]
-5. Saisissez à nouveau le même mot de passe dans le champ [Mot de passe (confirmer)]
-6. Cliquez sur le bouton [Mettre à jour]
+4. Saisissez un nouveau mot de passe dans le champ « Mot de passe »
+5. Saisissez à nouveau le même mot de passe dans le champ « Mot de passe (confirmer) »
+6. Cliquez sur le bouton « Mettre à jour »
 
 .. important::
 
@@ -253,8 +253,8 @@ Créez une configuration pour explorer les sites ou systèmes de fichiers à rec
 Étape 3 : Exécution de l'exploration
 -------------------------------------
 
-1. Cliquez sur [Système] → [Planificateur] dans le menu de gauche
-2. Ouvrez le job [Default Crawler] et cliquez sur le bouton « Démarrer maintenant »
+1. Cliquez sur « Système » → « Planificateur » dans le menu de gauche
+2. Ouvrez le job « Default Crawler » et cliquez sur le bouton « Démarrer maintenant »
 3. Attendez la fin de l'exploration (la progression peut être vérifiée sur le tableau de bord)
 
 Étape 4 : Vérification de la recherche
@@ -309,10 +309,10 @@ Configuration du serveur de messagerie
 Pour recevoir des notifications d'échec et autres messages par e-mail, configurez le serveur SMTP et l'adresse du destinataire des notifications.
 
 1. Dans le fichier de configuration ``app/WEB-INF/classes/fess_env.properties``, spécifiez l'hôte et le port du serveur SMTP dans ``mail.smtp.server.main.host.and.port`` (valeur par défaut : ``localhost:25``). Un redémarrage de |Fess| est requis après la modification.
-2. Dans l'interface d'administration, cliquez sur [Système] → [Général] dans le menu de gauche.
-3. Saisissez l'adresse e-mail du destinataire dans le champ [E-mail de notification].
-4. Cliquez sur le bouton [Mettre à jour].
-5. Vous pouvez vérifier que l'envoi d'e-mail fonctionne correctement avec le bouton [Envoyer un e-mail de test].
+2. Dans l'interface d'administration, cliquez sur « Système » → « Général » dans le menu de gauche.
+3. Saisissez l'adresse e-mail du destinataire dans le champ « E-mail de notification ».
+4. Cliquez sur le bouton « Mettre à jour ».
+5. Vous pouvez vérifier que l'envoi d'e-mail fonctionne correctement avec le bouton « Envoyer un e-mail de test ».
 
 Configuration du fuseau horaire
 --------------------------------

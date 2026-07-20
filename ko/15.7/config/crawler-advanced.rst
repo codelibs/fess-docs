@@ -13,7 +13,7 @@
    설정을 변경할 때는 충분히 테스트를 수행한 후 운영 환경에 적용하십시오.
 
 전반 설정
-========
+=========
 
 설정 파일 위치
 ------------------
@@ -69,7 +69,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
 ====================
 
 기본 설정
---------
+---------
 
 .. list-table::
    :header-rows: 1
@@ -98,7 +98,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - ``false``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -110,7 +110,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
     crawler.document.append.filename=false
 
 단어 처리 설정
-------------
+--------------
 
 .. list-table::
    :header-rows: 1
@@ -130,7 +130,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - ``false``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -148,7 +148,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
    완전한 형태로 인덱싱할 수 있지만 인덱스 크기가 증가합니다.
 
 문자 처리 설정
-------------
+--------------
 
 .. list-table::
    :header-rows: 1
@@ -165,7 +165,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - ``u002eu06d4...``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -192,18 +192,18 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - ``http,https``
    * - ``crawler.file.protocols``
      - 파일 크롤링 프로토콜
-     - ``file,smb,smb1,ftp,storage``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - 크롤링 데이터 인코딩
      - ``UTF-8``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage
+    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 환경 변수 파라미터
@@ -264,7 +264,7 @@ robots.txt 설정
      - ``true``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -296,7 +296,7 @@ robots.txt 설정
      - ``404,403,410``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -304,7 +304,7 @@ robots.txt 설정
     crawler.failure.url.status.codes=404,403,410,500
 
 시스템 모니터링 설정
-================
+====================
 
 .. list-table::
    :header-rows: 1
@@ -352,7 +352,7 @@ robots.txt 설정
      - ``cpu``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -364,7 +364,7 @@ robots.txt 설정
     crawler.hotthread.type=cpu
 
 메타데이터 설정
-==============
+===============
 
 .. list-table::
    :header-rows: 1
@@ -381,7 +381,7 @@ robots.txt 설정
      - ``title=title:string...``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -423,7 +423,7 @@ HTML 요소를 추출하기 위한 XPath 설정입니다.
      - ``//LINK[@rel='canonical'][1]/@href``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -434,7 +434,7 @@ HTML 요소를 추출하기 위한 XPath 설정입니다.
     crawler.document.html.canonical.xpath=//LINK[@rel='canonical'][1]/@href
 
 사용자 정의 XPath 예
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -445,7 +445,7 @@ HTML 요소를 추출하기 위한 XPath 설정입니다.
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
 HTML 태그 처리
--------------
+--------------
 
 .. list-table::
    :header-rows: 1
@@ -465,7 +465,7 @@ HTML 태그 처리
      - (빈 값)
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -475,8 +475,8 @@ HTML 태그 처리
     # 다이제스트 길이를 200자로
     crawler.document.html.max.digest.length=200
 
-    # 기본 언어를 한국어로
-    crawler.document.html.default.lang=ko
+    # 기본 언어를 일본어로
+    crawler.document.html.default.lang=ja
 
 URL 패턴 필터
 ---------------------
@@ -502,7 +502,7 @@ URL 패턴 필터
      - (빈 값)
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -516,7 +516,7 @@ URL 패턴 필터
 ======================
 
 기본 설정
---------
+---------
 
 .. list-table::
    :header-rows: 1
@@ -542,7 +542,7 @@ URL 패턴 필터
      - ``200``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -580,13 +580,13 @@ URL 패턴 필터
      - (빈 값)
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
     crawler.document.file.append.meta.content=true
     crawler.document.file.append.body.content=true
-    crawler.document.file.default.lang=ko
+    crawler.document.file.default.lang=ja
 
 파일 URL 패턴 필터
 ------------------------------
@@ -612,7 +612,7 @@ URL 패턴 필터
      - (빈 값)
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -693,7 +693,7 @@ MIME 타입 감지 오버라이드
      - ``text/html``
 
 설정 예
-~~~~~~
+~~~~~~~
 
 ::
 
@@ -768,7 +768,7 @@ JVM 옵션
      - OutOfMemory 시 힙 덤프 비활성화
 
 사용자 정의 설정 예
---------------
+-------------------
 
 **큰 파일을 크롤링하는 경우:**
 
@@ -887,7 +887,7 @@ HTTP 크롤의 재시도 횟수(기본값 5회)와 재시도 간격(기본값 50
 ======================
 
 메모리 부족
-----------
+-----------
 
 **증상:**
 
@@ -1013,8 +1013,99 @@ HTTP 크롤의 재시도 횟수(기본값 5회)와 재시도 간격(기본값 50
 
    변경한 설정과 그 이유를 문서화하십시오.
 
+S3/GCS 크롤러 설정
+====================
+
+S3 크롤러
+------------
+
+S3 및 S3 호환 스토리지(MinIO 등)를 크롤링하기 위한 설정입니다.
+파일 크롤 설정의 "설정 파라미터"에 다음을 기술합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 파라미터
+     - 설명
+     - 기본값
+   * - ``client.endpoint``
+     - S3 엔드포인트 URL
+     - (필수)
+   * - ``client.accessKey``
+     - 액세스 키
+     - (필수)
+   * - ``client.secretKey``
+     - 시크릿 키
+     - (필수)
+   * - ``client.region``
+     - AWS 리전
+     - ``us-east-1``
+   * - ``client.maxContentLength``
+     - 가져올 오브젝트의 최대 크기(바이트). 초과한 오브젝트는 건너뜀
+     - (무제한)
+   * - ``client.maxCachedContentSize``
+     - 메모리에 캐시할 최대 크기(바이트). 초과분은 임시 파일을 사용
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - 액세스 타임아웃(초). 미설정 시 무효
+     - (무제한)
+
+설정 예
+~~~~~~~
+
+::
+
+    client.endpoint=https://s3.ap-northeast-1.amazonaws.com
+    client.accessKey=AKIAIOSFODNN7EXAMPLE
+    client.secretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    client.region=ap-northeast-1
+
+GCS 크롤러
+-------------
+
+Google Cloud Storage를 크롤링하기 위한 설정입니다.
+파일 크롤 설정의 "설정 파라미터"에 다음을 기술합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 파라미터
+     - 설명
+     - 기본값
+   * - ``client.projectId``
+     - Google Cloud 프로젝트 ID
+     - (필수)
+   * - ``client.credentialsFile``
+     - 서비스 계정 JSON 파일 경로
+     - (옵션)
+   * - ``client.endpoint``
+     - 커스텀 엔드포인트
+     - (옵션)
+   * - ``client.maxContentLength``
+     - 가져올 오브젝트의 최대 크기(바이트). 초과한 오브젝트는 건너뜀
+     - (무제한)
+   * - ``client.maxCachedContentSize``
+     - 메모리에 캐시할 최대 크기(바이트). 초과분은 임시 파일을 사용
+     - ``1048576`` (1MB)
+   * - ``client.accessTimeout``
+     - 액세스 타임아웃(초). 미설정 시 무효
+     - (무제한)
+
+설정 예
+~~~~~~~
+
+::
+
+    client.projectId=my-gcp-project
+    client.credentialsFile=/etc/fess/gcs-credentials.json
+
+.. note::
+   ``credentialsFile`` 을 생략한 경우, 환경 변수 ``GOOGLE_APPLICATION_CREDENTIALS`` 가 사용됩니다.
+
 참고 정보
-========
+=========
 
 - :doc:`crawler-basic` - 크롤러 기본 설정
 - :doc:`crawler-thumbnail` - 썸네일 설정

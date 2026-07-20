@@ -99,7 +99,7 @@ Slack连接器提供从Slack工作区获取频道消息并注册到
      - 发生错误时继续处理（默认: ``true``）
    * - ``supported_mimetypes``
      - 否
-     - 允许的MIME类型（正则表达式, 默认: ``.*``）
+     - 爬取对象的MIME类型（正则表达式, 默认: ``.*``）
    * - ``include_pattern``
      - 否
      - 包含URL的正则表达式模式
@@ -114,7 +114,7 @@ Slack连接器提供从Slack工作区获取频道消息并注册到
      - HTTP代理端口（指定 ``proxy_host`` 时必需）
    * - ``file_types``
      - 否
-     - Slack API的文件类型筛选器（默认: ``all``）
+     - 爬取对象的文件类型（Slack API的文件类型筛选器，默认: ``all``）
    * - ``channel_count``
      - 否
      - 每页获取的频道数（默认: ``100``）
@@ -192,7 +192,7 @@ Slack App设置
 
 在「OAuth & Permissions」菜单中:
 
-**在Bot Token Scopes中添加以下权限**:
+在 **Bot Token Scopes** 中添加以下内容:
 
 仅公共频道时:
 
@@ -237,7 +237,7 @@ Slack App设置
 5. 添加创建的应用
 
 使用示例
-======
+========
 
 爬取特定频道
 --------------------------

@@ -10,10 +10,10 @@ En |Fess|, la función que descompone los documentos en palabras está registrad
 El Analyzer está compuesto por CharFilter, Tokenizer y TokenFilter.
 
 Básicamente, los elementos más pequeños que las unidades divididas por el Analyzer no generarán resultados en una búsqueda.
-Por ejemplo, consideremos la oración "東京都に住む" (vivir en Tokio).
-Supongamos que esta oración fue dividida por el Analyzer en "東京都" (Tokio), "に" (en), "住む" (vivir).
-En este caso, si se realiza una búsqueda con la palabra "東京都" (Tokio), se obtendrán resultados.
-Sin embargo, si se realiza una búsqueda con la palabra "京都" (Kioto), no se obtendrán resultados.
+Por ejemplo, consideremos la oración "Vivir en Tokio".
+Supongamos que esta oración fue dividida por el Analyzer en "Tokio", "en" y "Vivir".
+En este caso, una búsqueda con la palabra "Tokio" producirá resultados.
+Sin embargo, una búsqueda con la palabra "Kio" no producirá resultados.
 
 |Fess| dispone de un Analyzer dedicado para cada idioma.
 Según el sufijo del nombre de campo dentro del índice (por ejemplo, ``content_ja``, ``content_en``), el Analyzer específico del idioma que se aplica cambia automáticamente.

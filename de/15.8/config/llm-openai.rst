@@ -185,11 +185,11 @@ Alle verfügbaren Einstellungselemente für den OpenAI-Client.
      - ``3``
      - fess_config.properties
    * - ``rag.llm.openai.concurrency.wait.timeout``
-     - Timeout fuer gleichzeitige Anfragewartung (ms)
+     - Timeout für gleichzeitige Anfragewartung (ms)
      - ``30000``
      - fess_config.properties
    * - ``rag.llm.openai.reasoning.token.multiplier``
-     - Max-Tokens-Multiplikator fuer Reasoning-Modelle
+     - Max-Tokens-Multiplikator für Reasoning-Modelle
      - ``4``
      - fess_config.properties
    * - ``rag.llm.openai.retry.max``
@@ -205,27 +205,27 @@ Alle verfügbaren Einstellungselemente für den OpenAI-Client.
      - ``true``
      - fess_config.properties
    * - ``rag.llm.openai.history.max.chars``
-     - Maximale Zeichenzahl fuer Konversationsverlauf
+     - Maximale Zeichenzahl für Konversationsverlauf
      - ``8000``
      - fess_config.properties
    * - ``rag.llm.openai.intent.history.max.messages``
-     - Maximale Verlaufsnachrichten fuer Absichtserkennung
+     - Maximale Verlaufsnachrichten für Absichtserkennung
      - ``8``
      - fess_config.properties
    * - ``rag.llm.openai.intent.history.max.chars``
-     - Maximale Verlaufszeichen fuer Absichtserkennung
+     - Maximale Verlaufszeichen für Absichtserkennung
      - ``4000``
      - fess_config.properties
    * - ``rag.llm.openai.history.assistant.max.chars``
-     - Maximale Zeichenzahl fuer Assistenznachrichten
+     - Maximale Zeichenzahl für Assistenznachrichten
      - ``800``
      - fess_config.properties
    * - ``rag.llm.openai.history.assistant.summary.max.chars``
-     - Maximale Zeichenzahl fuer Assistenzzusammenfassung
+     - Maximale Zeichenzahl für Assistenzzusammenfassung
      - ``800``
      - fess_config.properties
    * - ``rag.llm.openai.chat.evaluation.description.max.chars``
-     - Maximale Zeichenzahl fuer Dokumentbeschreibung bei der Bewertung
+     - Maximale Zeichenzahl für Dokumentbeschreibung bei der Bewertung
      - ``500``
      - fess_config.properties
    * - ``rag.chat.enabled``
@@ -243,9 +243,9 @@ Konfigurationsmuster
 
 Prompttypspezifische Einstellungen werden nach folgendem Muster angegeben:
 
-- ``rag.llm.openai.{promptType}.temperature`` - Zufaelligkeit der Generierung (0.0-2.0). Wird bei Reasoning-Modellen (o1/o3/o4/gpt-5-Serie) ignoriert
+- ``rag.llm.openai.{promptType}.temperature`` - Zufälligkeit der Generierung (0.0-2.0). Wird bei Reasoning-Modellen (o1/o3/o4/gpt-5-Serie) ignoriert
 - ``rag.llm.openai.{promptType}.max.tokens`` - Maximale Token-Anzahl
-- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximale Zeichenzahl des Kontexts (Standard: ``16000`` fuer answer/summary, ``10000`` fuer andere)
+- ``rag.llm.openai.{promptType}.context.max.chars`` - Maximale Zeichenzahl des Kontexts (Standard: ``16000`` für answer/summary, ``10000`` für andere)
 
 Prompttypen
 -----------
@@ -275,14 +275,14 @@ Verfügbare Prompttypen:
    * - ``faq``
      - Prompt zur FAQ-Generierung
    * - ``direct``
-     - Prompt fuer direkte Antworten
+     - Prompt für direkte Antworten
    * - ``queryregeneration``
      - Prompt zur Neugenerierung von Suchanfragen
 
 Standardwerte
 -------------
 
-Standardwerte fuer jeden Prompttyp. Die Temperatureinstellung wird bei Reasoning-Modellen (o1/o3/o4/gpt-5-Serie) ignoriert.
+Standardwerte für jeden Prompttyp. Die Temperatureinstellung wird bei Reasoning-Modellen (o1/o3/o4/gpt-5-Serie) ignoriert.
 
 .. list-table::
    :header-rows: 1
@@ -401,12 +401,12 @@ Der offizielle OpenAI-Endpunkt (``https://api.openai.com``) authentifiziert sich
 Unterstützung für Reasoning-Modelle
 =====================================
 
-Bei Verwendung von Reasoning-Modellen der o1/o3/o4-Serie oder der gpt-5-Serie verwendet |Fess| automatisch den OpenAI-API-Parameter ``max_completion_tokens`` anstelle von ``max_tokens``. Keine zusaetzlichen Konfigurationsaenderungen sind erforderlich.
+Bei Verwendung von Reasoning-Modellen der o1/o3/o4-Serie oder der gpt-5-Serie verwendet |Fess| automatisch den OpenAI-API-Parameter ``max_completion_tokens`` anstelle von ``max_tokens``. Keine zusätzlichen Konfigurationsänderungen sind erforderlich.
 
 .. note::
-   Reasoning-Modelle (o1/o3/o4/gpt-5-Serie) ignorieren die ``temperature``-Einstellung und verwenden einen festen Wert (1). Ausserdem wird bei Reasoning-Modellen der Standard-``max_tokens`` mit ``reasoning.token.multiplier`` (Standard: 4) multipliziert.
+   Reasoning-Modelle (o1/o3/o4/gpt-5-Serie) ignorieren die ``temperature``-Einstellung und verwenden einen festen Wert (1). Außerdem wird bei Reasoning-Modellen der Standard-``max_tokens`` mit ``reasoning.token.multiplier`` (Standard: 4) multipliziert.
 
-Zusaetzliche Parameter fuer Reasoning-Modelle
+Zusätzliche Parameter für Reasoning-Modelle
 --------------------------------------------
 
 Bei Verwendung von Reasoning-Modellen können folgende zusätzliche Parameter in ``fess_config.properties`` konfiguriert werden:
@@ -419,13 +419,13 @@ Bei Verwendung von Reasoning-Modellen können folgende zusätzliche Parameter in
      - Beschreibung
      - Standard
    * - ``rag.llm.openai.{promptType}.reasoning.effort``
-     - Reasoning-Effort-Einstellung fuer o-Modelle (``low``, ``medium``, ``high``)
+     - Reasoning-Effort-Einstellung für o-Modelle (``low``, ``medium``, ``high``)
      - ``low`` (intent/evaluation/docnotfound/unclear/noresults/queryregeneration), nicht gesetzt (andere)
    * - ``rag.llm.openai.{promptType}.top.p``
-     - Wahrscheinlichkeitsschwelle fuer die Token-Auswahl (0.0-1.0)
+     - Wahrscheinlichkeitsschwelle für die Token-Auswahl (0.0-1.0)
      - (nicht gesetzt)
    * - ``rag.llm.openai.{promptType}.frequency.penalty``
-     - Haeufigkeitsstrafe (-2.0-2.0)
+     - Häufigkeitsstrafe (-2.0-2.0)
      - (nicht gesetzt)
    * - ``rag.llm.openai.{promptType}.presence.penalty``
      - Anwesenheitsstrafe (-2.0-2.0)

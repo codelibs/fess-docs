@@ -5,12 +5,12 @@ API Stats
 Vue d'ensemble
 ==============
 
-L'API Stats est une API permettant d'obtenir les metriques systeme du serveur sur lequel |Fess| s'execute.
-Elle permet de consulter les statistiques de la JVM, du systeme d'exploitation, du processus, du cluster du moteur de recherche (OpenSearch) et du systeme de fichiers.
+L'API Stats est une API permettant d'obtenir les métriques système du serveur sur lequel |Fess| s'exécute.
+Elle permet de consulter les statistiques de la JVM, du système d'exploitation, du processus, du cluster du moteur de recherche (OpenSearch) et du système de fichiers.
 
 .. note::
 
-   Cette API ne retourne pas de donnees d'analyse de recherche telles que les requetes de recherche ou les clics.
+   Cette API ne retourne pas de données d'analyse de recherche telles que les requêtes de recherche ou les clics.
    Pour la recherche et la gestion des documents dans l'index, consultez :doc:`api-admin-searchlist`.
 
 URL de base
@@ -20,8 +20,8 @@ URL de base
 
     /api/admin/stats
 
-L'acces a cette API necessite un jeton d'acces disposant de la permission ``Radmin-api``.
-Pour plus de details sur l'authentification, consultez :doc:`api-admin-overview`.
+L'accès à cette API nécessite un jeton d'accès disposant de la permission ``Radmin-api``.
+Pour plus de détails sur l'authentification, consultez :doc:`api-admin-overview`.
 
 Liste des endpoints
 ===================
@@ -30,36 +30,36 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /
-     - Obtention des statistiques systeme
+     - Obtention des statistiques système
 
-Obtention des statistiques systeme
+Obtention des statistiques système
 ===================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/stats
 
-Cet endpoint n'accepte pas de parametres de requete.
+Cet endpoint n'accepte pas de paramètres de requête.
 
-Reponse
+Réponse
 -------
 
-La reponse contient ``version`` indiquant la version du produit, ``status`` indiquant
-le resultat du traitement, et un objet ``stats`` contenant les metriques systeme.
-``stats`` possede cinq cles : ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
+La réponse contient ``version`` indiquant la version du produit, ``status`` indiquant
+le résultat du traitement, et un objet ``stats`` contenant les métriques système.
+``stats`` possède cinq clés : ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
 
 .. note::
 
-   Les noms de champs des objets sous ``stats`` sont ecrits en snake_case (mots en minuscules separes par des tirets bas, par exemple ``non_heap``).
-   Les champs dont la valeur est ``null`` sont omis de la reponse.
+   Les noms de champs des objets sous ``stats`` sont écrits en snake_case (mots en minuscules séparés par des tirets bas, par exemple ``non_heap``).
+   Les champs dont la valeur est ``null`` sont omis de la réponse.
 
 .. code-block:: json
 
@@ -135,8 +135,8 @@ le resultat du traitement, et un objet ``stats`` contenant les metriques systeme
       }
     }
 
-Champs de la reponse (niveau superieur)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Champs de la réponse (niveau supérieur)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -147,9 +147,9 @@ Champs de la reponse (niveau superieur)
    * - ``version``
      - La version du produit |Fess| (par exemple ``15.8.0``).
    * - ``status``
-     - Un code indiquant le resultat du traitement. ``0`` indique un succes.
+     - Un code indiquant le résultat du traitement. ``0`` indique un succès.
    * - ``stats``
-     - Un objet contenant les metriques systeme. Il possede cinq cles : ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
+     - Un objet contenant les métriques système. Il possède cinq clés : ``jvm`` / ``os`` / ``process`` / ``engine`` / ``fs``.
 
 ``jvm`` : Statistiques JVM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,39 +161,39 @@ Champs de la reponse (niveau superieur)
    * - Champ
      - Description
    * - ``memory.heap.used``
-     - Memoire heap utilisee (octets).
+     - Mémoire heap utilisée (octets).
    * - ``memory.heap.committed``
-     - Memoire heap allouee (octets).
+     - Mémoire heap allouée (octets).
    * - ``memory.heap.max``
-     - Memoire heap maximale (octets).
+     - Mémoire heap maximale (octets).
    * - ``memory.heap.percent``
-     - Pourcentage d'utilisation de la memoire heap (%).
+     - Pourcentage d'utilisation de la mémoire heap (%).
    * - ``memory.non_heap.used``
-     - Memoire non-heap utilisee (octets).
+     - Mémoire non-heap utilisée (octets).
    * - ``memory.non_heap.committed``
-     - Memoire non-heap allouee (octets).
+     - Mémoire non-heap allouée (octets).
    * - ``memory.non_heap.max``
-     - Memoire non-heap maximale (octets). Dans l'implementation actuelle, cette valeur n'est pas definie et retourne toujours ``0``.
+     - Mémoire non-heap maximale (octets). Dans l'implémentation actuelle, cette valeur n'est pas définie et retourne toujours ``0``.
    * - ``memory.non_heap.percent``
-     - Pourcentage d'utilisation de la memoire non-heap (%). Dans l'implementation actuelle, cette valeur n'est pas definie et retourne toujours ``0``.
+     - Pourcentage d'utilisation de la mémoire non-heap (%). Dans l'implémentation actuelle, cette valeur n'est pas définie et retourne toujours ``0``.
    * - ``pools``
-     - Tableau des pools de tampons. Chaque element contient ``key`` (nom du pool), ``count`` (nombre de tampons), ``used`` (memoire utilisee, octets) et ``capacity`` (capacite totale, octets).
+     - Tableau des pools de tampons. Chaque élément contient ``key`` (nom du pool), ``count`` (nombre de tampons), ``used`` (mémoire utilisée, octets) et ``capacity`` (capacité totale, octets).
    * - ``gc``
-     - Tableau des ramasse-miettes. Chaque element contient ``key`` (nom du collecteur), ``count`` (nombre de collections) et ``time`` (temps de collection cumule, millisecondes).
+     - Tableau des ramasse-miettes. Chaque élément contient ``key`` (nom du collecteur), ``count`` (nombre de collections) et ``time`` (temps de collection cumulé, millisecondes).
    * - ``threads.count``
      - Nombre actuel de threads.
    * - ``threads.peak``
      - Nombre maximal de threads atteint.
    * - ``classes.loaded``
-     - Nombre de classes actuellement chargees.
+     - Nombre de classes actuellement chargées.
    * - ``classes.total_loaded``
-     - Nombre total de classes chargees depuis le demarrage de la JVM.
+     - Nombre total de classes chargées depuis le démarrage de la JVM.
    * - ``classes.unloaded``
-     - Nombre total de classes dechargees.
+     - Nombre total de classes déchargées.
    * - ``uptime``
-     - Duree de fonctionnement de la JVM (millisecondes).
+     - Durée de fonctionnement de la JVM (millisecondes).
 
-``os`` : Statistiques du systeme d'exploitation
+``os`` : Statistiques du système d'exploitation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -203,17 +203,17 @@ Champs de la reponse (niveau superieur)
    * - Champ
      - Description
    * - ``memory.physical.free``
-     - Memoire physique disponible (octets).
+     - Mémoire physique disponible (octets).
    * - ``memory.physical.total``
-     - Memoire physique totale (octets).
+     - Mémoire physique totale (octets).
    * - ``memory.swap_space.free``
-     - Espace d'echange disponible (octets).
+     - Espace d'échange disponible (octets).
    * - ``memory.swap_space.total``
-     - Espace d'echange total (octets).
+     - Espace d'échange total (octets).
    * - ``cpu.percent``
      - Pourcentage d'utilisation globale du processeur (%).
    * - ``load_averages``
-     - Tableau des charges moyennes (1, 5 et 15 minutes). Les valeurs qui ne peuvent pas etre obtenues peuvent valoir ``-1``.
+     - Tableau des charges moyennes (1, 5 et 15 minutes). Les valeurs qui ne peuvent pas être obtenues peuvent valoir ``-1``.
 
 ``process`` : Statistiques du processus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -227,24 +227,24 @@ Champs de la reponse (niveau superieur)
    * - ``file_fescriptor.open``
      - Nombre de descripteurs de fichiers actuellement ouverts.
    * - ``file_fescriptor.max``
-     - Nombre maximal de descripteurs de fichiers pouvant etre ouverts.
+     - Nombre maximal de descripteurs de fichiers pouvant être ouverts.
    * - ``cpu.percent``
      - Pourcentage d'utilisation du processeur par le processus (%).
    * - ``cpu.total``
-     - Temps CPU cumule utilise par le processus (millisecondes).
+     - Temps CPU cumulé utilisé par le processus (millisecondes).
    * - ``virtual_memory.total``
-     - Taille totale de la memoire virtuelle du processus (octets).
+     - Taille totale de la mémoire virtuelle du processus (octets).
 
 .. note::
 
-   Le nom de cle ``process.file_fescriptor`` est la conversion en snake_case du nom de champ du code source
-   ``fileFescriptor`` (qui provient d'une faute d'orthographe de ``fileDescriptor``). Il correspond a
-   l'implementation et n'est pas une erreur dans ce document.
+   Le nom de clé ``process.file_fescriptor`` est la conversion en snake_case du nom de champ du code source
+   ``fileFescriptor`` (qui provient d'une faute d'orthographe de ``fileDescriptor``). Il correspond à
+   l'implémentation et n'est pas une erreur dans ce document.
 
 ``engine`` : Statistiques du cluster du moteur de recherche
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Informations sur l'etat de sante du cluster du moteur de recherche (OpenSearch).
+Informations sur l'état de santé du cluster du moteur de recherche (OpenSearch).
 
 .. list-table::
    :header-rows: 1
@@ -255,9 +255,9 @@ Informations sur l'etat de sante du cluster du moteur de recherche (OpenSearch).
    * - ``cluster_name``
      - Nom du cluster.
    * - ``number_of_nodes``
-     - Nombre total de noeuds dans le cluster.
+     - Nombre total de nœuds dans le cluster.
    * - ``number_of_data_nodes``
-     - Nombre de noeuds de donnees.
+     - Nombre de nœuds de données.
    * - ``active_primary_shards``
      - Nombre de shards primaires actifs.
    * - ``active_shards``
@@ -265,23 +265,23 @@ Informations sur l'etat de sante du cluster du moteur de recherche (OpenSearch).
    * - ``active_shards_percent``
      - Pourcentage de shards actifs (%).
    * - ``relocating_shards``
-     - Nombre de shards en cours de deplacement.
+     - Nombre de shards en cours de déplacement.
    * - ``initializing_shards``
      - Nombre de shards en cours d'initialisation.
    * - ``unassigned_shards``
-     - Nombre de shards non assignes.
+     - Nombre de shards non assignés.
    * - ``delayed_unassigned_shards``
-     - Nombre de shards non assignes avec delai.
+     - Nombre de shards non assignés avec délai.
    * - ``number_of_pending_tasks``
-     - Nombre de taches en attente.
+     - Nombre de tâches en attente.
    * - ``number_of_in_flight_fetch``
-     - Nombre d'operations de recuperation en cours.
+     - Nombre d'opérations de récupération en cours.
    * - ``status``
-     - Etat de sante du cluster (``green`` / ``yellow`` / ``red``).
+     - État de santé du cluster (``green`` / ``yellow`` / ``red``).
    * - ``exception``
      - Message d'erreur inclus uniquement en cas d'erreur, par exemple lorsque le cluster est inaccessible. Dans ce cas, ``status`` prend la valeur ``red``.
 
-``fs`` : Statistiques du systeme de fichiers
+``fs`` : Statistiques du système de fichiers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Tableau des statistiques pour chaque racine (les racines obtenues par ``File.listRoots()``).
@@ -295,20 +295,20 @@ Tableau des statistiques pour chaque racine (les racines obtenues par ``File.lis
    * - ``path``
      - Chemin absolu de la racine.
    * - ``total``
-     - Capacite totale (octets).
+     - Capacité totale (octets).
    * - ``free``
-     - Capacite disponible (octets).
+     - Capacité disponible (octets).
    * - ``usable``
-     - Capacite utilisable (octets).
+     - Capacité utilisable (octets).
    * - ``used``
-     - Capacite utilisee (octets). Correspond a ``total`` moins ``usable``.
+     - Capacité utilisée (octets). Correspond à ``total`` moins ``usable``.
    * - ``percent``
      - Pourcentage d'utilisation (%).
 
 Exemples d'utilisation
 ======================
 
-Obtention des statistiques systeme
+Obtention des statistiques système
 -----------------------------------
 
 .. code-block:: bash
@@ -316,7 +316,7 @@ Obtention des statistiques systeme
     curl -X GET "http://localhost:8080/api/admin/stats" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Verification du taux d'utilisation du heap JVM
+Vérification du taux d'utilisation du heap JVM
 ------------------------------------------------
 
 .. code-block:: bash
@@ -325,7 +325,7 @@ Verification du taux d'utilisation du heap JVM
          -H "Authorization: Bearer YOUR_TOKEN" \
          | jq '.response.stats.jvm.memory.heap.percent'
 
-Verification de l'etat du cluster du moteur de recherche
+Vérification de l'état du cluster du moteur de recherche
 ---------------------------------------------------------
 
 .. code-block:: bash
@@ -334,9 +334,9 @@ Verification de l'etat du cluster du moteur de recherche
          -H "Authorization: Bearer YOUR_TOKEN" \
          | jq '.response.stats.engine.status'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-systeminfo` - API d'informations systeme
+- :doc:`api-admin-systeminfo` - API d'informations système
 - :doc:`api-admin-searchlist` - API de recherche et de gestion des documents

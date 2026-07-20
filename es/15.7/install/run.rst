@@ -1,6 +1,6 @@
-====================================
+==========================================
 Inicio, Detención y Configuración Inicial
-====================================
+==========================================
 
 Esta página describe los procedimientos de inicio, detención y configuración inicial del servidor |Fess|.
 

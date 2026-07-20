@@ -3,7 +3,7 @@ Connecteur Slack
 ==================================
 
 Apercu
-====
+======
 
 Le connecteur Slack fournit la fonctionnalite permettant de recuperer les messages
 des canaux d'un espace de travail Slack et de les enregistrer dans l'index |Fess|.
@@ -11,14 +11,14 @@ des canaux d'un espace de travail Slack et de les enregistrer dans l'index |Fess
 Cette fonctionnalite necessite le plugin ``fess-ds-slack``.
 
 Contenu pris en charge
-==============
+======================
 
 - Messages des canaux publics
 - Messages des canaux prives
 - Fichiers joints (optionnel)
 
 Prerequis
-========
+=========
 
 1. L'installation du plugin est requise
 2. La creation et la configuration des permissions de l'application Slack sont necessaires
@@ -36,12 +36,12 @@ Installez depuis l'interface d'administration via "Systeme" -> "Plugins" :
 Ou consultez :doc:`../../admin/plugin-guide` pour plus de details.
 
 Configuration
-========
+=============
 
 Configurez depuis l'interface d'administration via "Crawler" -> "Data Store" -> "Nouveau".
 
 Configuration de base
---------
+---------------------
 
 .. list-table::
    :header-rows: 1
@@ -57,7 +57,7 @@ Configuration de base
      - Oui
 
 Configuration des parametres
-----------------
+----------------------------
 
 ::
 
@@ -67,7 +67,7 @@ Configuration des parametres
     include_private=false
 
 Liste des parametres
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -138,7 +138,7 @@ Liste des parametres
      - Nombre maximum d'entrées dans le cache des informations de canal (par défaut : ``10000``)
 
 Configuration du script
---------------
+-----------------------
 
 ::
 
@@ -174,10 +174,10 @@ Champs disponibles
      - Informations de fallback des fichiers joints
 
 Configuration de l'application Slack
-=============
+====================================
 
 1. Creation de l'application Slack
-------------------
+----------------------------------
 
 Accedez a https://api.slack.com/apps :
 
@@ -188,7 +188,7 @@ Accedez a https://api.slack.com/apps :
 5. Cliquez sur "Create App"
 
 2. Configuration OAuth & Permissions
-----------------------------
+------------------------------------
 
 Dans le menu "OAuth & Permissions" :
 
@@ -213,7 +213,7 @@ Pour crawler egalement les fichiers (``file_crawl=true``) :
 - ``files:read`` - Lecture du contenu des fichiers
 
 3. Installation de l'application
------------------------
+--------------------------------
 
 Dans le menu "Install App" :
 
@@ -237,10 +237,10 @@ Ajoutez l'application aux canaux a crawler :
 5. Ajoutez l'application creee
 
 Exemples d'utilisation
-======
+======================
 
 Crawler des canaux specifiques
---------------------------
+------------------------------
 
 Parametres :
 
@@ -301,12 +301,12 @@ Script :
 
     title=message.user + " #" + message.channel
     digest=message.text
-    content=message.text + "\nPiece jointe: " + message.attachments
+    content=message.text + "\nPièce jointe: " + message.attachments
     created=message.timestamp
     url=message.permalink
 
 Crawler en incluant les fichiers
-------------------------
+--------------------------------
 
 Parametres :
 
@@ -327,7 +327,7 @@ Script :
     url=message.permalink
 
 Inclure des informations detaillees sur les messages
-----------------------------
+----------------------------------------------------
 
 Script :
 
@@ -344,7 +344,7 @@ Depannage
 ======================
 
 Erreur d'authentification
-----------
+-------------------------
 
 **Symptome** : ``invalid_auth`` ou ``not_authed``
 
@@ -372,7 +372,7 @@ Canal introuvable
 4. Verifier si le canal existe et n'est pas archive
 
 Impossible de recuperer les messages
-------------------------
+------------------------------------
 
 **Symptome** : Le crawl reussit mais 0 messages
 
@@ -389,7 +389,7 @@ Impossible de recuperer les messages
 4. Verifier si l'application Slack est active
 
 Erreur de permission insuffisante
---------------
+---------------------------------
 
 **Symptome** : ``missing_scope``
 
@@ -415,7 +415,7 @@ Erreur de permission insuffisante
 3. Redemarrer |Fess|
 
 Impossible de crawler les fichiers
---------------------------
+----------------------------------
 
 **Symptome** : Les fichiers ne sont pas recuperes meme avec ``file_crawl=true``
 
@@ -426,7 +426,7 @@ Impossible de crawler les fichiers
 3. Verifier les permissions d'acces aux fichiers
 
 Limitation de debit API
--------------
+-----------------------
 
 **Symptome** : ``rate_limited``
 
@@ -453,10 +453,10 @@ Cas de nombreux messages
 3. Envisager une configuration pour exclure les anciens messages
 
 Exemples d'utilisation avancee des scripts
-========================
+==========================================
 
 Traitement des messages
-----------------
+-----------------------
 
 Resume des messages longs :
 
@@ -478,7 +478,7 @@ Formatage du nom du canal :
     url=message.permalink
 
 Informations de reference
-========
+=========================
 
 - :doc:`ds-overview` - Apercu des connecteurs Data Store
 - :doc:`ds-atlassian` - Connecteur Atlassian

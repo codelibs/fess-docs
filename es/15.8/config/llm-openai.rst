@@ -87,6 +87,13 @@ Los elementos de configuracion se dividen en los siguientes dos archivos segun s
 Configuracion minima
 --------------------
 
+``system.properties`` (tambien configurable en Administracion > Sistema > General):
+
+::
+
+    # Configurar el proveedor LLM como OpenAI
+    rag.llm.name=openai
+
 ``app/WEB-INF/conf/fess_config.properties``:
 
 ::
@@ -100,15 +107,15 @@ Configuracion minima
     # Modelo a usar
     rag.llm.openai.model=gpt-5-mini
 
+Configuracion recomendada (entorno de produccion)
+-------------------------------------------------
+
 ``system.properties`` (tambien configurable en Administracion > Sistema > General):
 
 ::
 
-    # Configurar el proveedor LLM como OpenAI
+    # Configuracion del proveedor LLM
     rag.llm.name=openai
-
-Configuracion recomendada (entorno de produccion)
--------------------------------------------------
 
 ``app/WEB-INF/conf/fess_config.properties``:
 
@@ -131,13 +138,6 @@ Configuracion recomendada (entorno de produccion)
 
     # Limite de solicitudes simultaneas
     rag.llm.openai.max.concurrent.requests=5
-
-``system.properties`` (tambien configurable en Administracion > Sistema > General):
-
-::
-
-    # Configuracion del proveedor LLM
-    rag.llm.name=openai
 
 Elementos de configuracion
 ==========================

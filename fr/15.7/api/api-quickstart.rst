@@ -54,9 +54,9 @@ Les réponses v2 sont encapsulées dans l'enveloppe ``response``.
         "page_number": 1,
         "data": [
           {
-            "title": "Fess - オープンソース全文検索サーバー",
+            "title": "Fess - Serveur de recherche en texte intégral open source",
             "url": "https://fess.codelibs.org/ja/",
-            "content_description": "<strong>Fess</strong>は簡単に構築できる...",
+            "content_description": "<strong>Fess</strong> est facile à mettre en place...",
             "host": "fess.codelibs.org",
             "mimetype": "text/html"
           }
@@ -181,11 +181,11 @@ Python
 
     import requests
 
-    # Fess サーバーのURL
+    # URL du serveur Fess
     FESS_URL = "http://localhost:8080"
 
     def search(query, num=20, start=0):
-        """Fess検索APIを呼び出す"""
+        """Appelle l'API de recherche Fess"""
         params = {
             "q": query,
             "num": num,
@@ -194,9 +194,9 @@ Python
         response = requests.get(f"{FESS_URL}/api/v2/search", params=params)
         return response.json()
 
-    # 使用例
-    results = search("Fess 検索")
-    print(f"ヒット件数: {results['response']['record_count']}")
+    # Exemple d'utilisation
+    results = search("Fess recherche")
+    print(f"Nombre de résultats : {results['response']['record_count']}")
     for doc in results["response"]["data"]:
         print(f"- {doc['title']}")
         print(f"  URL: {doc['url']}")
@@ -216,9 +216,9 @@ JavaScript (Node.js)
       return response.json();
     }
 
-    // 使用例
-    search('Fess 検索').then(results => {
-      console.log(`ヒット件数: ${results.response.record_count}`);
+    // Exemple d'utilisation
+    search('Fess recherche').then(results => {
+      console.log(`Nombre de résultats : ${results.response.record_count}`);
       results.response.data.forEach(doc => {
         console.log(`- ${doc.title}`);
         console.log(`  URL: ${doc.url}`);
@@ -255,7 +255,7 @@ Java
 
         public static void main(String[] args) throws Exception {
             FessApiClient client = new FessApiClient();
-            String result = client.search("Fess 検索");
+            String result = client.search("Fess recherche");
             System.out.println(result);
         }
     }
@@ -269,7 +269,7 @@ Tableau de compatibilité des versions d'API
 
    * - Version de Fess
      - Version d'API
-     - Notes
+     - Remarques
    * - 15.x
      - v2
      - Dernière version. Support de toutes les fonctionnalités

@@ -371,4 +371,3 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 - :doc:`api-admin-keymatch` - 关键词匹配API
 - :doc:`api-admin-boostdoc` - 文档提升API
 - :doc:`../../admin/elevateword-guide` - 提升词管理指南
-

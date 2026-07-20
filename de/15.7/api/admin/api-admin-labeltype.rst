@@ -52,7 +52,7 @@ Endpunktliste
 Label-Typ-Liste abrufen
 =======================
 
-Anfrage
+Request
 -------
 
 ::
@@ -87,8 +87,8 @@ Parameter
      - Nein
      - Eingrenzung nach Label-Wert (Wildcard-Suche).
 
-Antwort
--------
+Response
+--------
 
 .. code-block:: json
 
@@ -127,15 +127,15 @@ Antwort
 Label-Typ abrufen
 =================
 
-Anfrage
+Request
 -------
 
 ::
 
     GET /api/admin/labeltype/setting/{id}
 
-Antwort
--------
+Response
+--------
 
 .. code-block:: json
 
@@ -163,7 +163,7 @@ Antwort
 Label-Typ erstellen
 ===================
 
-Anfrage
+Request
 -------
 
 ::
@@ -171,8 +171,8 @@ Anfrage
     POST /api/admin/labeltype/setting
     Content-Type: application/json
 
-Anfragetext
-~~~~~~~~~~~
+Request-Body
+~~~~~~~~~~~~
 
 .. code-block:: json
 
@@ -185,8 +185,8 @@ Anfragetext
       "permissions": "{role}guest"
     }
 
-Feldbeschreibung
-~~~~~~~~~~~~~~~~
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -230,8 +230,8 @@ Feldbeschreibung
    Audit-Felder wie ``createdBy`` / ``createdTime`` werden serverseitig automatisch gesetzt
    und müssen nicht in der Anfrage angegeben werden.
 
-Antwort
--------
+Response
+--------
 
 .. code-block:: json
 
@@ -248,7 +248,7 @@ Bei erfolgreicher Erstellung ist ``created`` gleich ``true``.
 Label-Typ aktualisieren
 =======================
 
-Anfrage
+Request
 -------
 
 ::
@@ -256,8 +256,8 @@ Anfrage
     PUT /api/admin/labeltype/setting
     Content-Type: application/json
 
-Anfragetext
-~~~~~~~~~~~
+Request-Body
+~~~~~~~~~~~~
 
 .. code-block:: json
 
@@ -291,8 +291,8 @@ Bei der Aktualisierung sind zusätzlich zu den Feldern beim Erstellen folgende F
      - Ja
      - Versionsnummer für optimistisches Sperren. Geben Sie den ``versionNo``-Wert aus der Abrufantwort an. Stimmt die angegebene Version nicht mit der aktuellen überein, schlägt die Aktualisierung fehl.
 
-Antwort
--------
+Response
+--------
 
 .. code-block:: json
 
@@ -309,15 +309,15 @@ Bei einer Aktualisierung ist ``created`` gleich ``false``.
 Label-Typ löschen
 =================
 
-Anfrage
+Request
 -------
 
 ::
 
     DELETE /api/admin/labeltype/setting/{id}
 
-Antwort
--------
+Response
+--------
 
 .. code-block:: json
 
@@ -327,8 +327,8 @@ Antwort
       }
     }
 
-Anwendungsbeispiele
-===================
+Verwendungsbeispiele
+====================
 
 Dokumentations-Label erstellen
 ------------------------------
@@ -362,8 +362,8 @@ Suche mit Label-Typ
     # Mit Label filtern
     curl "http://localhost:8080/json/?q=search&label=tech_docs"
 
-Siehe auch
-==========
+Referenzinformationen
+=====================
 
 - :doc:`api-admin-overview` - Admin API Übersicht
 - :doc:`../api-search` - Such-API

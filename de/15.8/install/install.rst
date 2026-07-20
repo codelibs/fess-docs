@@ -1,6 +1,6 @@
-==============================
+================================
 Auswahl der Installationsmethode
-==============================
+================================
 
 Diese Seite beschreibt eine Übersicht über die Installationsmethoden von |Fess|.
 Bitte wählen Sie die für Ihre Umgebung geeignete Installationsmethode.

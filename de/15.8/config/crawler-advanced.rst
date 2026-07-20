@@ -1,9 +1,9 @@
 ========================
 Erweiterte Crawler-Konfiguration
-========================
+================================
 
 Übersicht
-====
+=========
 
 Dieser Leitfaden beschreibt erweiterte Konfigurationen für den |Fess|-Crawler.
 Für grundlegende Crawler-Konfigurationen siehe :doc:`crawler-basic`.
@@ -13,10 +13,10 @@ Für grundlegende Crawler-Konfigurationen siehe :doc:`crawler-basic`.
    Testen Sie Konfigurationsänderungen gründlich, bevor Sie sie in Produktionsumgebungen anwenden.
 
 Allgemeine Konfiguration
-========
+========================
 
 Speicherort der Konfigurationsdateien
-------------------
+-------------------------------------
 
 Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 
@@ -25,7 +25,7 @@ Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 - **Komponenten-Konfiguration**: ``app/WEB-INF/classes/crawler/container.xml``
 
 Standard-Skriptsprache
---------------------
+----------------------
 
 Legt die Standard-Skriptsprache für den Crawler fest.
 
@@ -66,10 +66,10 @@ Thread-Pool-Konfiguration für den HTTP-Crawler.
     crawler.http.thread_pool.size=0
 
 Dokumentverarbeitungs-Konfiguration
-====================
+===================================
 
 Grundkonfiguration
---------
+------------------
 
 .. list-table::
    :header-rows: 1
@@ -98,7 +98,7 @@ Grundkonfiguration
      - ``false``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -110,7 +110,7 @@ Konfigurationsbeispiel
     crawler.document.append.filename=false
 
 Wortverarbeitungs-Konfiguration
-------------
+-------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -130,7 +130,7 @@ Wortverarbeitungs-Konfiguration
      - ``false``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -147,7 +147,7 @@ Konfigurationsbeispiel
    Das Erhöhen von ``max.alphanum.term.size`` ermöglicht die vollständige Indizierung langer IDs, Tokens, URLs usw., erhöht jedoch die Indexgröße.
 
 Zeichenverarbeitungs-Konfiguration
-------------
+----------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -164,7 +164,7 @@ Zeichenverarbeitungs-Konfiguration
      - ``u002eu06d4...``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -174,10 +174,10 @@ Konfigurationsbeispiel
     crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 Protokoll-Konfiguration
-==============
+=======================
 
 Unterstützte Protokolle
---------------
+-----------------------
 
 .. list-table::
    :header-rows: 1
@@ -206,7 +206,7 @@ Konfigurationsbeispiel
     crawler.crawling.data.encoding=UTF-8
 
 Umgebungsvariablen-Parameter
---------------------
+----------------------------
 
 .. list-table::
    :header-rows: 1
@@ -243,7 +243,7 @@ Daten-Serialisierer
     crawler.data.serializer=kryo
 
 robots.txt-Konfiguration
-===============
+========================
 
 .. list-table::
    :header-rows: 1
@@ -263,7 +263,7 @@ robots.txt-Konfiguration
      - ``true``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -280,7 +280,7 @@ Konfigurationsbeispiel
    Die Einstellung ``crawler.ignore.robots.txt=true`` kann gegen Nutzungsbedingungen von Websites verstoßen. Seien Sie vorsichtig beim Crawlen externer Sites.
 
 Fehlerbehandlungs-Konfiguration
-==============
+===============================
 
 .. list-table::
    :header-rows: 1
@@ -294,7 +294,7 @@ Fehlerbehandlungs-Konfiguration
      - ``404,403,410``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -302,7 +302,7 @@ Konfigurationsbeispiel
     crawler.failure.url.status.codes=404,403,410,500
 
 Systemüberwachungs-Konfiguration
-================
+================================
 
 .. list-table::
    :header-rows: 1
@@ -321,7 +321,7 @@ Systemüberwachungs-Konfiguration
     crawler.system.monitor.interval=30
 
 Hot-Thread-Konfiguration
-------------------
+------------------------
 
 .. list-table::
    :header-rows: 1
@@ -350,7 +350,7 @@ Hot-Thread-Konfiguration
      - ``cpu``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -362,7 +362,7 @@ Konfigurationsbeispiel
     crawler.hotthread.type=cpu
 
 Metadaten-Konfiguration
-==============
+=======================
 
 .. list-table::
    :header-rows: 1
@@ -379,7 +379,7 @@ Metadaten-Konfiguration
      - ``title=title:string...``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -393,10 +393,10 @@ Konfigurationsbeispiel
         dc:title=title:string
 
 HTML-Crawler-Konfiguration
-===================
+==========================
 
 XPath-Konfiguration
-----------
+-------------------
 
 XPath-Konfiguration zum Extrahieren von HTML-Elementen.
 
@@ -421,7 +421,7 @@ XPath-Konfiguration zum Extrahieren von HTML-Elementen.
      - ``//LINK[@rel='canonical'][1]/@href``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -432,7 +432,7 @@ Konfigurationsbeispiel
     crawler.document.html.canonical.xpath=//LINK[@rel='canonical'][1]/@href
 
 Beispiele für benutzerdefinierte XPath
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -443,7 +443,7 @@ Beispiele für benutzerdefinierte XPath
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
 HTML-Tag-Verarbeitung
--------------
+---------------------
 
 .. list-table::
    :header-rows: 1
@@ -463,7 +463,7 @@ HTML-Tag-Verarbeitung
      - (leer)
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -500,7 +500,7 @@ URL-Musterfilter
      - (leer)
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -511,10 +511,10 @@ Konfigurationsbeispiel
     crawler.document.html.default.include.index.patterns=https://example\\.com/docs/.*
 
 Datei-Crawler-Konfiguration
-======================
+===========================
 
 Grundkonfiguration
---------
+------------------
 
 .. list-table::
    :header-rows: 1
@@ -540,7 +540,7 @@ Grundkonfiguration
      - ``200``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -558,7 +558,7 @@ Konfigurationsbeispiel
     crawler.document.file.max.digest.length=500
 
 Inhaltsverarbeitung
---------------
+-------------------
 
 .. list-table::
    :header-rows: 1
@@ -578,7 +578,7 @@ Inhaltsverarbeitung
      - (leer)
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -610,7 +610,7 @@ Datei-URL-Musterfilter
      - (leer)
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -655,7 +655,7 @@ Konfigurationsbeispiel
     .plsql=text/x-plsql\n\
     .pls=text/x-plsql
 
-Jede Zeile enthält eine Zuordnung im Format ``.ext=mime/type``.
+Jede Zeile enthält eine Zuordnung im Format ``.Erweiterung=MIME-Typ``.
 Mehrere Zuordnungen werden durch ``\n`` (Zeilenumbruch) getrennt.
 Der Erweiterungsabgleich unterscheidet nicht zwischen Groß- und Kleinschreibung (``.SQL`` und ``.sql`` werden gleich behandelt).
 
@@ -665,7 +665,7 @@ Der Erweiterungsabgleich unterscheidet nicht zwischen Groß- und Kleinschreibung
    Dateien mit Erweiterungen, die nicht in der Zuordnung enthalten sind, verwenden weiterhin die normale Tika-Erkennung.
 
 Cache-Konfiguration
-==============
+===================
 
 Dokumenten-Cache
 ----------------------
@@ -691,7 +691,7 @@ Dokumenten-Cache
      - ``text/html``
 
 Konfigurationsbeispiel
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -728,7 +728,7 @@ Sie können JVM-Optionen für den Crawler-Prozess konfigurieren.
      - ``-Xms128m -Xmx512m...``
 
 Standardkonfiguration
---------------
+---------------------
 
 ::
 
@@ -744,7 +744,7 @@ Standardkonfiguration
    Ändern Sie bei der Anpassung nur die erforderlichen Optionen und behalten Sie die anderen Standardwerte bei.
 
 Erklärung wichtiger Optionen
-----------------------
+----------------------------
 
 .. list-table::
    :header-rows: 1
@@ -766,7 +766,7 @@ Erklärung wichtiger Optionen
      - Heap-Dumps bei OutOfMemory deaktivieren
 
 Beispiele für benutzerdefinierte Konfiguration
---------------
+----------------------------------------------
 
 **Beim Crawlen großer Dateien:**
 
@@ -793,7 +793,7 @@ Leistungsoptimierung
 ==========================
 
 Optimierung der Crawl-Geschwindigkeit
---------------------
+-------------------------------------
 
 **1. Thread-Anzahl anpassen**
 
@@ -830,7 +830,7 @@ Durch Ausschluss von Bildern, CSS, JavaScript-Dateien usw. wird die Crawl-Geschw
 Die Anzahl der HTTP-Crawl-Wiederholungsversuche (Standard: 5) und das Wiederholungsintervall (Standard: 500 ms) sind fest eingebaut und können nicht über das Feld „Konfigurationsparameter" einer Crawl-Konfiguration geändert werden. Um die Wartezeit bei nicht reagierenden URLs zu verkürzen, passen Sie die oben beschriebenen Timeouts an oder schließen Sie nicht benötigte URLs aus.
 
 Optimierung der Speichernutzung
---------------------
+-------------------------------
 
 **1. Heap-Größe anpassen**
 
@@ -854,7 +854,7 @@ Optimierung der Speichernutzung
 Details siehe :doc:`setup-memory`.
 
 Verbesserung der Indexqualität
-----------------------
+------------------------------
 
 **1. XPath optimieren**
 
@@ -884,7 +884,7 @@ Fehlersuche
 ======================
 
 Speichermangel
-----------
+--------------
 
 **Symptome:**
 
@@ -906,7 +906,7 @@ Speichermangel
 Details siehe :doc:`setup-memory`.
 
 Crawling ist langsam
---------------
+--------------------
 
 **Symptome:**
 
@@ -927,7 +927,7 @@ Crawling ist langsam
 3. Unnötige URLs ausschließen
 
 Bestimmte Inhalte können nicht extrahiert werden
-------------------------------
+------------------------------------------------
 
 **Symptome:**
 
@@ -951,7 +951,7 @@ Bestimmte Inhalte können nicht extrahiert werden
 3. Bei dynamisch durch JavaScript generierten Inhalten alternative Methoden (z. B. API-Crawling) in Betracht ziehen
 
 Zeichenkodierungsprobleme treten auf
-------------------
+------------------------------------
 
 **Symptome:**
 
@@ -1095,7 +1095,7 @@ Konfigurationsbeispiel
 
 ::
 
-    client.projectId=mein-gcp-projekt
+    client.projectId=my-gcp-project
     client.credentialsFile=/etc/fess/gcs-credentials.json
 
 .. note::

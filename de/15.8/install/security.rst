@@ -1,6 +1,6 @@
-==================
+========================
 Sicherheitseinstellungen
-==================
+========================
 
 Diese Seite beschreibt die empfohlenen Sicherheitseinstellungen für den sicheren Betrieb von |Fess| in Produktionsumgebungen.
 

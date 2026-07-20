@@ -11,13 +11,13 @@ Atlassian 커넥터는 Atlassian 제품(Jira, Confluence)에서 데이터를 가
 이 기능에는 ``fess-ds-atlassian`` 플러그인이 필요합니다.
 
 지원 제품
-========
+=========
 
 - Jira (Cloud / Server / Data Center)
 - Confluence (Cloud / Server / Data Center)
 
 전제 조건
-========
+=========
 
 1. 플러그인 설치가 필요합니다
 2. Atlassian 제품에 대한 적절한 인증 정보가 필요합니다
@@ -33,12 +33,12 @@ Atlassian 커넥터는 Atlassian 제품(Jira, Confluence)에서 데이터를 가
 3. |Fess| 재시작
 
 설정 방법
-========
+=========
 
-관리 화면에서 "크롤러" → "데이터스토어" → "신규 작성"으로 설정합니다.
+관리 화면에서 "크롤러" → "데이터 스토어" → "새로 만들기"에서 설정합니다.
 
 기본 설정
---------
+---------
 
 .. list-table::
    :header-rows: 1
@@ -50,8 +50,8 @@ Atlassian 커넥터는 Atlassian 제품(Jira, Confluence)에서 데이터를 가
      - Company Jira/Confluence
    * - 핸들러 이름
      - JiraDataStore 또는 ConfluenceDataStore
-   * - 사용
-     - 켜기
+   * - 활성화
+     - 켬
 
 파라미터 설정
 ----------------
@@ -104,7 +104,7 @@ Server 버전(OAuth 1.0a) 예:
      - 예
      - Atlassian 인스턴스의 URL
    * - ``is_cloud``
-     - 아니요
+     - 아니오
      - Cloud의 경우 ``true``, Server의 경우 ``false`` (기본값: ``true``). OAuth 2.0 인증 시 엔드포인트 선택에만 사용되며, Basic 인증 및 OAuth 1.0a 인증에서는 무시됩니다.
    * - ``auth_type``
      - 예
@@ -131,10 +131,10 @@ Server 버전(OAuth 1.0a) 예:
      - OAuth 2.0의 경우
      - 액세스 토큰
    * - ``oauth2.refresh_token``
-     - 아니요
+     - 아니오
      - 리프레시 토큰 (OAuth 2.0)
    * - ``oauth2.token_url``
-     - 아니요
+     - 아니오
      - 토큰 URL (OAuth 2.0, 기본값: ``https://auth.atlassian.com/oauth/token``)
    * - ``basic.username``
      - Basic 인증의 경우
@@ -143,47 +143,47 @@ Server 버전(OAuth 1.0a) 예:
      - Basic 인증의 경우
      - 비밀번호
    * - ``issue.jql``
-     - 아니요
+     - 아니오
      - JQL (Jira만, 고급 검색 조건). 지정하지 않으면 모든 이슈 (``created is not empty``) 가 대상이 됩니다.
    * - ``issue_max_results``
-     - 아니요
+     - 아니오
      - Jira API 요청당 최대 결과 수 (기본값: ``50``, Jira만)
    * - ``content_limit``
-     - 아니요
+     - 아니오
      - Confluence API 요청당 최대 콘텐츠 수 (기본값: ``25``, Confluence만)
    * - ``ignore_error``
-     - 아니요
+     - 아니오
      - 오류 시 처리를 계속할지 여부 (기본값: ``true``)
    * - ``include_pattern``
-     - 아니요
+     - 아니오
      - URL 포함 패턴 (정규식)
    * - ``exclude_pattern``
-     - 아니요
+     - 아니오
      - URL 제외 패턴 (정규식)
    * - ``number_of_threads``
-     - 아니요
+     - 아니오
      - 병렬 처리 스레드 수 (기본값: ``1``)
    * - ``proxy_host``
-     - 아니요
+     - 아니오
      - HTTP 프록시 호스트명
    * - ``proxy_port``
-     - 아니요
+     - 아니오
      - HTTP 프록시 포트 번호
    * - ``connection_timeout``
-     - 아니요
+     - 아니오
      - HTTP 연결 타임아웃 (밀리초)
    * - ``read_timeout``
-     - 아니요
+     - 아니오
      - HTTP 읽기 타임아웃 (밀리초)
    * - ``readInterval``
-     - 아니요
+     - 아니오
      - 각 문서 처리 사이의 대기 시간 (밀리초, 기본값: ``0``)
 
 스크립트 설정
 --------------
 
 Jira의 경우
-~~~~~~~~~~
+~~~~~~~~~~~
 
 ::
 
@@ -201,7 +201,7 @@ Jira의 경우
 - ``issue.last_modified`` - 최종 업데이트 일시
 
 Confluence의 경우
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -225,7 +225,7 @@ OAuth 2.0 인증 설정
 ===================
 
 Cloud 버전의 경우(권장)
----------------------
+-----------------------
 
 1. Atlassian Developer Console에서 애플리케이션 생성
 2. OAuth 2.0 인증 정보 취득
@@ -240,7 +240,7 @@ OAuth 1.0a 인증 설정
 ====================
 
 Server 버전의 경우
---------------
+------------------
 
 1. Jira 또는 Confluence에서 Application Link 생성
 2. RSA 키 쌍 생성:
@@ -257,7 +257,7 @@ Basic 인증 설정
 ===============
 
 Server 버전의 간단한 설정
-------------------------
+-------------------------
 
 .. warning::
    Basic 인증은 보안상 권장되지 않습니다. 가능한 한 OAuth 인증을 사용하세요.
@@ -269,7 +269,7 @@ Basic 인증을 사용할 경우:
 3. HTTPS를 사용하여 보안 연결 확보
 
 JQL을 통한 고급 검색
-===================
+====================
 
 Jira 이슈를 JQL로 필터링
 --------------------------
@@ -293,7 +293,7 @@ Jira 이슈를 JQL로 필터링
 JQL 자세한 내용은 `Atlassian JQL 문서 <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_ 를 참조하세요.
 
 사용 예
-======
+=======
 
 Jira Cloud 크롤링
 --------------------
@@ -371,7 +371,7 @@ Confluence Server 크롤링
 4. ``is_cloud`` 파라미터가 올바르게 설정되어 있는지 확인
 
 데이터를 가져올 수 없음
---------------------
+-----------------------
 
 **증상**: 크롤링은 성공하지만 문서가 0건
 
@@ -395,12 +395,12 @@ OAuth 2.0의 액세스 토큰은 유효 기간이 있습니다. 리프레시 토
 
     oauth2.refresh_token=your_refresh_token
 
-토큰이 갱신되면 새로운 액세스 토큰과 리프레시 토큰이 자동으로 데이터스토어 설정에 저장되므로, 이후 크롤링에서는 갱신된 토큰이 사용됩니다 (수동 업데이트 불필요).
+토큰이 갱신되면 새로운 액세스 토큰과 리프레시 토큰이 자동으로 데이터 스토어 설정에 저장되므로, 이후 크롤링에서는 갱신된 토큰이 사용됩니다 (수동 업데이트 불필요).
 
 참고 정보
-========
+=========
 
-- :doc:`ds-overview` - 데이터스토어 커넥터 개요
+- :doc:`ds-overview` - 데이터 스토어 커넥터 개요
 - :doc:`ds-database` - 데이터베이스 커넥터
-- :doc:`../../admin/dataconfig-guide` - 데이터스토어 설정 가이드
+- :doc:`../../admin/dataconfig-guide` - 데이터 스토어 설정 가이드
 - `Atlassian Developer <https://developer.atlassian.com/>`_

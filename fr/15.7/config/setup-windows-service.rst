@@ -103,7 +103,7 @@ Ajoutez la clé et la valeur suivantes dans l'éditeur de registre (regedit).
 .. list-table::
 
    * - *Clé*
-     - ``Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
+     - ``Ordinateur\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\fess-service-x64\DependOnService``
    * - *Valeur*
      - ``opensearch-service-x64``
 

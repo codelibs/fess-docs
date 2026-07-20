@@ -1,6 +1,6 @@
-====================================
+==========================================
 Inicio, Detención y Configuración Inicial
-====================================
+==========================================
 
 Esta página describe los procedimientos de inicio, detención y configuración inicial del servidor |Fess|.
 
@@ -214,9 +214,9 @@ Paso 1: Cambio de Contraseña de Administrador
 1. Inicie sesión en la pantalla de administración (http://localhost:8080/admin)
 2. Haga clic en "Sistema" → "Usuario" en el menú izquierdo
 3. Haga clic en el usuario ``admin``
-4. Ingrese una nueva contraseña en el campo [Contraseña]
-5. Vuelva a ingresar la misma contraseña en el campo [Contraseña (confirmar)]
-6. Haga clic en el botón [Actualizar]
+4. Ingrese una nueva contraseña en el campo "Contraseña"
+5. Vuelva a ingresar la misma contraseña en el campo "Contraseña (confirmar)"
+6. Haga clic en el botón "Actualizar"
 
 .. important::
 
@@ -251,8 +251,8 @@ Cree una configuración para rastrear sitios o sistemas de archivos que desee bu
 Paso 3: Ejecución del Rastreo
 ------------------------------
 
-1. Haga clic en [Sistema] → [Programador] en el menú izquierdo
-2. Abra el trabajo [Default Crawler] y haga clic en el botón "Iniciar ahora"
+1. Haga clic en "Sistema" → "Programador" en el menú izquierdo
+2. Abra el trabajo "Default Crawler" y haga clic en el botón "Iniciar ahora"
 3. Espere hasta que se complete el rastreo (puede verificar el progreso en el panel de control)
 
 Paso 4: Verificación de la Búsqueda
@@ -307,10 +307,10 @@ Configuración del Servidor de Correo
 Para recibir notificaciones de fallos y mensajes similares por correo electrónico, configure el servidor SMTP y la dirección del destinatario de notificaciones.
 
 1. En el archivo de configuración ``app/WEB-INF/classes/fess_env.properties``, especifique el host y el puerto del servidor SMTP en ``mail.smtp.server.main.host.and.port`` (predeterminado: ``localhost:25``). Es necesario reiniciar |Fess| tras el cambio.
-2. En la interfaz de administración, haga clic en [Sistema] → [General] en el menú izquierdo.
-3. Ingrese la dirección de correo del destinatario en el campo [Correo de notificación].
-4. Haga clic en el botón [Actualizar].
-5. Puede verificar que el correo se envía correctamente con el botón [Enviar correo de prueba].
+2. En la interfaz de administración, haga clic en "Sistema" → "General" en el menú izquierdo.
+3. Ingrese la dirección de correo del destinatario en el campo "Correo de notificación".
+4. Haga clic en el botón "Actualizar".
+5. Puede verificar que el correo se envía correctamente con el botón "Enviar correo de prueba".
 
 Configuración de Zona Horaria
 ------------------------------
