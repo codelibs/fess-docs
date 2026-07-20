@@ -5,7 +5,7 @@ Open Source Full-Text Search Server Fess
 Overview
 ====
 
-Fess is a **full-text search server that can be easily built in 5 minutes**.
+Fess is an open source **enterprise search server** built on OpenSearch (or Elasticsearch) — a **full-text search server that can be built in 5 minutes**. Fess crawls websites, file servers (SMB/FTP), and databases, and provides keyword, faceted, and role-based search out of the box. Optional plugins add **semantic (vector) search**, **hybrid search**, and an **AI search mode (RAG)** powered by LLMs such as Ollama, OpenAI, and Google Gemini.
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
@@ -53,7 +53,7 @@ Features
 
 -  Provided under Apache License (free software, free to use)
 
--  Crawls Web, file systems, Windows shared folders, and databases
+-  Crawls Web, file systems, Windows shared folders, and databases (web, file server, and database crawling)
 
 -  Supports many file formats including MS Office (Word/Excel/PowerPoint), PDF, and more
 
@@ -98,6 +98,10 @@ Features
 -  External text extraction support including OCR
 
 -  Flexible design for various use cases
+
+-  AI search mode (RAG: Retrieval-Augmented Generation) with LLM integration — Ollama, OpenAI, and Google Gemini (via ``fess-llm-*`` plugins)
+
+-  Hybrid search combining keyword (BM25) and semantic (vector) search via the Semantic Search plugin
 
 News
 ========

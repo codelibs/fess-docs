@@ -1,14 +1,16 @@
-==========================
-LLM Integration Overview
-==========================
+==============================================
+AI Search (RAG) and LLM Integration Overview
+==============================================
 
 Overview
 ========
 
 |Fess| supports AI search mode (RAG: Retrieval-Augmented Generation) functionality powered by Large Language Models (LLM).
-This feature allows users to retrieve information through conversational AI assistance based on search results.
+This feature allows users to retrieve information through conversational AI assistance based on search results, answering natural-language questions directly from your enterprise search index with cited sources.
 
 LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
+
+To combine RAG with **semantic (vector) search**, see :doc:`rank-fusion` and the Semantic Search plugin.
 
 Supported Providers
 ===================
