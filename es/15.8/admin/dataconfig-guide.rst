@@ -1,11 +1,11 @@
-========================================================
-Rastreo de Almacén de Datos (Búsqueda en Bases de Datos)
-========================================================
+===========================
+Rastreo de Almacén de Datos
+===========================
 
 Descripción general
 ===================
 
-El rastreo del almacén de datos permite registrar en el índice de |Fess| fuentes de datos distintas de sitios web o archivos, como bases de datos relacionales (MySQL, PostgreSQL, Oracle, etc.) o archivos CSV, para que puedan localizarse mediante búsqueda de texto completo. Utilice esta función cuando desee implementar la búsqueda en bases de datos.
+El rastreo del almacén de datos registra diversas fuentes de datos distintas de sitios web o archivos, como bases de datos relacionales (MySQL, PostgreSQL, Oracle) y archivos CSV, en el índice de |Fess| para la búsqueda de texto completo. Las fuentes de datos admitidas se pueden ampliar mediante complementos conectores de almacén de datos.
 
 |Fess| puede rastrear fuentes de datos como bases de datos y CSV.
 Aquí se explica la configuración del almacén de datos necesaria para ello.

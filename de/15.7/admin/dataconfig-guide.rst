@@ -1,11 +1,11 @@
-=======================================
-Datenspeicher-Crawl (Datenbank-Suche)
-=======================================
+===================
+Datenspeicher-Crawl
+===================
 
 Übersicht
 =========
 
-Datenspeicher-Crawl ist eine Funktion, mit der Datenquellen jenseits von Websites und Dateien – etwa relationale Datenbanken (MySQL, PostgreSQL, Oracle usw.) oder CSV-Dateien – in den Index von |Fess| aufgenommen und damit volltextsuchbar gemacht werden. Wenn Sie eine Datenbank-Suche realisieren möchten, verwenden Sie diese Funktion.
+Datenspeicher-Crawl registriert verschiedene Datenquellen jenseits von Websites und Dateien – etwa relationale Datenbanken (MySQL, PostgreSQL, Oracle) und CSV-Dateien – im Index von |Fess| für die Volltextsuche. Die unterstützten Datenquellen lassen sich durch Datenspeicher-Konnektor-Plugins erweitern.
 
 Mit |Fess| können Sie Datenquellen wie Datenbanken oder CSV als Crawl-Ziele festlegen.
 Hier wird die erforderliche Datenspeicherkonfiguration dafür erläutert.

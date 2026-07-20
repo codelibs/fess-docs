@@ -1,11 +1,11 @@
-======================================
-Data Store Crawling (Database Search)
-======================================
+===================
+Data Store Crawling
+===================
 
 Overview
 ========
 
-Data Store Crawling registers data sources other than websites and files — such as relational databases (MySQL, PostgreSQL, Oracle, and others) or CSV files — into the |Fess| index, enabling full-text search. Use this feature when you want to implement database search.
+Data Store Crawling registers various data sources other than websites and files — such as relational databases (MySQL, PostgreSQL, Oracle) and CSV files — into the |Fess| index for full-text search. The supported data sources can be extended with data store connector plugins.
 
 |Fess| supports crawling data sources such as databases and CSV files.
 This section describes the data store configuration required for this functionality.

@@ -1,11 +1,11 @@
-==========================================================
-Crawl de magasin de données (recherche de base de données)
-==========================================================
+===========================
+Crawl de magasin de données
+===========================
 
 Présentation
 ============
 
-Le crawl de magasin de données permet d'enregistrer dans l'index de |Fess| des sources de données autres que les sites Web ou les fichiers, telles que les bases de données relationnelles (MySQL, PostgreSQL, Oracle, etc.) ou les fichiers CSV, afin de les rendre disponibles pour la recherche en texte intégral. Utilisez cette fonctionnalité pour mettre en œuvre une recherche de base de données.
+Le crawl de magasin de données permet d'enregistrer dans l'index de |Fess| diverses sources de données autres que les sites Web ou les fichiers, telles que les bases de données relationnelles (MySQL, PostgreSQL, Oracle) et les fichiers CSV, pour la recherche en texte intégral. Les sources de données prises en charge peuvent être étendues à l'aide de plugins connecteurs de magasin de données.
 
 Dans |Fess|, vous pouvez cibler des sources de données telles que des bases de données ou des fichiers CSV pour le crawl.
 Cette section explique la configuration du magasin de données nécessaire à cet effet.

@@ -6,7 +6,7 @@ Grundlegende Crawler-Konfiguration
 ====
 
 Der Crawler von |Fess| ist eine Funktion, die automatisch Inhalte von Websites, Dateisystemen usw. sammelt und im Suchindex registriert.
-Mit dem Web-Crawler für die Website-Suche, dem Datei-Crawler für die Dateiserver-Suche und dem Datenspeicher-Crawler für die Datenbank-Suche lässt sich mit einem einzigen |Fess| eine seitenübergreifende Volltextsuche aufbauen.
+Mit dem Web-Crawler für die Website-Suche, dem Datei-Crawler für die Dateiserver-Suche und dem Datenspeicher-Crawler für die Suche in Datenbanken und anderen Datenquellen lässt sich mit einem einzigen |Fess| eine seitenübergreifende Volltextsuche aufbauen.
 Dieser Leitfaden erläutert die grundlegenden Konzepte und Konfigurationsmethoden des Crawlers.
 
 Grundlegende Crawler-Konzepte
