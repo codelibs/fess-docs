@@ -101,7 +101,7 @@ Default administrator account:
 
    Be sure to change the default password.
    Especially in production environments, we strongly recommend changing the password immediately after the first login.
-   For instructions on changing the password, refer to :doc:`15.6/admin/user-guide`.
+   For instructions on changing the password, refer to :doc:`15.7/admin/user-guide`.
 
 .. note::
 
@@ -139,8 +139,8 @@ Next Steps
 
 After understanding the basic usage, you can refer to the following documents to learn more:
 
-- :doc:`15.6/admin/index` — Details on crawl settings and search settings
-- :doc:`15.6/api/index` — Integration using the REST API
+- :doc:`15.7/admin/index` — Details on crawl settings and search settings
+- :doc:`15.7/api/index` — Integration using the REST API
 - :doc:`dev/index` — Customization and extension development
 
 .. |Browser search results display| image:: ../resources/images/en/fess_search_result.png

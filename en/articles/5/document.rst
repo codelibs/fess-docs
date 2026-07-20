@@ -2,10 +2,7 @@
 Part 5: Tokenizing for Full-Text Search
 =======================================
 
-The search system finds documents that contain words that match the words you are searching for, but what these words look like is an important factor that also affects the quality of the search system.
-This time, I will introduce Analyzer, which is a function to make that word.
-Fess uses Elasticsearch as its search engine, and Elasticsearch uses Apache Lucene as its search library.
-Analyzer introduced this time is a function provided by Apache Lucene.
+In full-text search, a query only matches a document when their **words (tokens)** line up — so how text is broken into tokens directly determines search quality. This article introduces the **Analyzer**, the component that turns text into those tokens. Fess uses OpenSearch (or Elasticsearch) as its search engine, which builds on Apache Lucene; the Analyzer described here is a Lucene feature.
 
 First, let's look at the inverted index in order to consider how the words created by the Analyzer are used.
 
@@ -129,6 +126,11 @@ The tuning of the Analyzer is indispensable if you aim for better search quality
 If you know how Analyzer works, you can define and use your own Analyzer.
 
 Next time, I plan to take a closer look at Analyzer in Japanese documents.
+
+See Also
+========
+
+- :doc:`../6/document` - Part 6: Analyzer in Japanese
 
 .. |image0| image:: ../../../resources/images/en/article/5/inverted-index.png
 .. |image1| image:: ../../../resources/images/en/article/5/fess-index.png

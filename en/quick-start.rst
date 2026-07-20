@@ -70,7 +70,7 @@ Wait a couple of minutes for the services to initialize, then open your browser:
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 For advanced Docker configuration (custom settings, external OpenSearch, Kubernetes),
-see the :doc:`Docker Installation Guide <15.6/install/install-docker>`.
+see the :doc:`Docker Installation Guide <15.7/install/install-docker>`.
 
 ----
 
@@ -186,7 +186,7 @@ What's Next?
 
 - :doc:`Full Documentation <documentation>` - Complete reference guide
 - :doc:`Installation Guide <setup>` - Production deployment options
-- :doc:`Admin Guide <15.6/admin/index>` - Configuration and management
-- :doc:`API Reference <15.6/api/index>` - Integrate search into your applications
+- :doc:`Admin Guide <15.7/admin/index>` - Configuration and management
+- :doc:`API Reference <15.7/api/index>` - Integrate search into your applications
 - `Discussion Forum <https://discuss.codelibs.org/c/fessen/>`__ - Ask questions, share tips
 - `GitHub Issues <https://github.com/codelibs/fess/issues>`__ - Report bugs, request features

@@ -1,12 +1,14 @@
-=========================
-Basic Crawler Configuration
-=========================
+==================================================================
+Crawler Configuration: Web, File Server, and Database Crawling
+==================================================================
 
 Overview
 ========
 
-The |Fess| crawler is a feature that automatically collects content from websites, file systems, and other sources and registers it in the search index.
+The |Fess| crawler automatically collects content from **websites (web crawling)**, **file servers and shared folders (file crawling over SMB/FTP)**, and **databases and other data sources (database crawling via data store connectors)**, then registers it in the search index.
 This guide explains the basic concepts and configuration methods for the crawler.
+
+For database and other data-source crawling, see :doc:`datastore/ds-database` and :doc:`datastore/ds-overview`. To improve relevance across crawled content with hybrid (keyword + semantic) search, see :doc:`rank-fusion`.
 
 Basic Crawler Concepts
 =======================
@@ -722,3 +724,6 @@ References
 - :doc:`crawler-thumbnail` - Thumbnail Configuration
 - :doc:`setup-memory` - Memory Configuration
 - :doc:`admin-logging` - Log Configuration
+- :doc:`datastore/ds-overview` - Data Store Crawling Overview (databases and other data sources)
+- :doc:`datastore/ds-database` - Database Crawling Configuration
+- :doc:`rank-fusion` - Hybrid Search and Rank Fusion
