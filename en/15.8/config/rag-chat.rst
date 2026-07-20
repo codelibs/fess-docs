@@ -13,6 +13,18 @@ In |Fess| 15.8, LLM functionality has been separated as ``fess-llm-*`` plugins.
 Core settings and LLM provider-specific settings are configured in ``fess_config.properties``, while
 the LLM provider selection (``rag.llm.name``) is configured in ``system.properties`` or from the administration screen.
 
+Retrieval Pipeline
+===================
+
+AI search mode retrieves its source documents through the standard |Fess| search pipeline (rank fusion), with |Fess|'s usual role- and label-based access control. By default this is keyword (BM25) search; the LLM does not retrieve, rank, or embed documents itself.
+
+Two request types run slightly different pipelines:
+
+- ``POST /api/v2/chat/stream`` (used by the web UI) runs the full flow: **intent detection → search → LLM relevance evaluation → content fetch → answer generation** (streamed).
+- ``POST /api/v2/chat`` (non-streaming) runs a shorter flow: **intent detection → search → answer generation** (no relevance-evaluation or separate content-fetch phase).
+
+In the streaming flow, an additional LLM call **evaluates the search results** and keeps only the documents it judges relevant before the answer is generated.
+
 How AI Mode Works
 =================
 
@@ -93,23 +105,23 @@ not mix them up.
    * - ``rag.llm.gemini.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.api.key=...``
-     - Yes
+     - No
    * - ``rag.llm.gemini.model``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.model=...``
-     - Yes
+     - No
    * - ``rag.llm.openai.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.openai.api.key=...``
-     - Yes
+     - No
    * - ``rag.llm.openai.model``
      - FessConfig
      - ``-Dfess.config.rag.llm.openai.model=...``
-     - Yes
+     - No
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
-     - Yes
+     - No
 
 .. note::
 
@@ -148,7 +160,7 @@ List of core settings that can be configured in ``fess_config.properties``.
      - Fields to retrieve from documents
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Maximum number of characters in user messages
+     - Maximum number of characters in user messages. This value is read as a System Property; the entry in ``fess_config.properties`` is not used. Set it via System Properties or ``-Dfess.system.rag.chat.message.max.length``.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Search highlight fragment size

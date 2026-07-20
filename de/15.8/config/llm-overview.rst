@@ -1,6 +1,6 @@
-==============================
-Übersicht der LLM-Integration
-==============================
+=======================================================
+Übersicht über KI-Suchmodus (RAG) und LLM-Integration
+=======================================================
 
 Übersicht
 =========
@@ -9,6 +9,8 @@
 Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten Format mit einem KI-Assistenten abrufen, der auf Suchergebnissen basiert.
 
 Die LLM-Integrationsfunktion wird als ``fess-llm-*``-Plugin bereitgestellt. Installieren Sie das Plugin, das dem LLM-Anbieter entspricht, den Sie verwenden möchten.
+
+Der KI-Suchmodus ruft Dokumente über die standardmäßige |Fess|-Suchpipeline (Rank Fusion) ab, nicht über einen separaten Vektorindex — standardmäßig handelt es sich dabei um eine Schlüsselwortsuche (BM25). Da diese Pipeline wiederverwendet wird, nimmt der semantische Sucher (Vektorsuche) des Semantic Search-Plugins, sofern installiert und konfiguriert, an der Rank Fusion für alle Suchen teil, einschließlich des Abrufschritts des KI-Suchmodus; eine KI-Suchmodus-spezifische Konfiguration ist nicht erforderlich. Siehe :doc:`rank-fusion`.
 
 Unterstützte Anbieter
 =====================
@@ -35,6 +37,37 @@ Unterstützte Anbieter
      - ``gemini``
      - ``fess-llm-gemini``
      - Cloud-API von Google. Ermöglicht die Nutzung von Gemini-Modellen.
+
+Anbietervergleich
+------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Anbieter (``rag.llm.name``)
+     - Standardmodell
+     - Endpunkt
+     - Authentifizierung
+     - Datenstandort
+   * - Ollama (``ollama``)
+     - ``gemma4:e4b``
+     - ``http://localhost:11434``
+     - Keine (lokal)
+     - Lokal / selbst gehostet — Fragen und Dokumente verbleiben auf Ihrem Host
+   * - OpenAI (``openai``)
+     - ``gpt-5-mini``
+     - ``https://api.openai.com/v1``
+     - ``Authorization: Bearer`` (``rag.llm.openai.api.key``)
+     - Cloud — die Frage und die abgerufenen Dokumente werden an OpenAI gesendet
+   * - Google Gemini (``gemini``)
+     - ``gemini-3.1-flash-lite-preview``
+     - ``https://generativelanguage.googleapis.com/v1beta``
+     - ``x-goog-api-key`` (``rag.llm.gemini.api.key``)
+     - Cloud — die Frage und die abgerufenen Dokumente werden an Google gesendet
+
+.. note::
+
+   Wenn ``rag.llm.name`` nicht gesetzt ist, ist standardmäßig nur der Ollama-Client aktiv; installieren Sie den gewünschten Anbieter und wählen Sie ihn über ``rag.llm.name`` aus.
 
 Plugin-Installation
 ===================

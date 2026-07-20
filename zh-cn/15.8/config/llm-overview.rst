@@ -1,5 +1,5 @@
 ==============================
-LLM 集成概述
+AI 搜索（RAG）与 LLM 集成概述
 ==============================
 
 概述
@@ -9,6 +9,10 @@ LLM 集成概述
 通过此功能，用户可以以与 AI 助手对话的形式，基于搜索结果获取信息。
 
 LLM 集成功能以 ``fess-llm-*`` 插件的形式提供。请安装与所用 LLM 提供商对应的插件。
+
+AI 搜索模式并非通过专用的向量索引，而是通过标准的 |Fess| 搜索流水线（Rank Fusion）获取文档，默认使用关键词（BM25）检索。
+由于该功能重用了这一标准流水线，安装并配置 Semantic Search 插件后，其语义（向量）搜索器会参与所有搜索（包括 AI 搜索模式的检索步骤）中的
+Rank Fusion，无需进行 AI 搜索模式专属的配置。详情请参阅 :doc:`rank-fusion`。
 
 支持的提供商
 ============
@@ -35,6 +39,37 @@ LLM 集成功能以 ``fess-llm-*`` 插件的形式提供。请安装与所用 LL
      - ``gemini``
      - ``fess-llm-gemini``
      - Google 公司的云 API。可使用 Gemini 模型。
+
+提供商比较
+----------
+
+.. list-table::
+   :header-rows: 1
+
+   * - 提供商（ ``rag.llm.name`` ）
+     - 默认模型
+     - 端点
+     - 认证
+     - 数据存储位置
+   * - Ollama（ ``ollama`` ）
+     - ``gemma4:e4b``
+     - ``http://localhost:11434``
+     - 无（本地）
+     - 本地 / 自托管 — 问题和文档保留在主机内
+   * - OpenAI（ ``openai`` ）
+     - ``gpt-5-mini``
+     - ``https://api.openai.com/v1``
+     - ``Authorization: Bearer`` （ ``rag.llm.openai.api.key`` ）
+     - 云端 — 问题及检索到的文档会被发送至 OpenAI
+   * - Google Gemini（ ``gemini`` ）
+     - ``gemini-3.1-flash-lite-preview``
+     - ``https://generativelanguage.googleapis.com/v1beta``
+     - ``x-goog-api-key`` （ ``rag.llm.gemini.api.key`` ）
+     - 云端 — 问题及检索到的文档会被发送至 Google
+
+.. note::
+
+   当 ``rag.llm.name`` 未设置时，默认情况下仅 Ollama 客户端处于启用状态。请安装您要使用的提供商，并通过 ``rag.llm.name`` 进行选择。
 
 插件安装
 ========

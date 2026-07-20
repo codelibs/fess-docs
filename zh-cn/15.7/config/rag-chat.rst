@@ -13,6 +13,20 @@ AI搜索模式（RAG：检索增强生成）是通过LLM（大型语言模型）
 核心配置及LLM提供商专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）
 在 ``system.properties`` 或管理界面中进行。
 
+检索流水线
+==========
+
+AI搜索模式并非通过专用的向量索引，而是通过标准的 |Fess| 搜索流水线（Rank Fusion）获取源文档，
+同时适用 |Fess| 常规的基于角色和标签的访问控制。
+默认使用关键词（BM25）检索，LLM本身不会执行文档的检索、排名或嵌入（embedding）。
+
+不同的请求类型所执行的流水线略有差异：
+
+- ``POST /api/v2/chat/stream`` （由Web界面使用）执行完整流程：**意图检测 → 搜索 → LLM关联度评估 → 内容获取 → 回答生成**\ （流式）。
+- ``POST /api/v2/chat`` （非流式）执行较短的流程：**意图检测 → 搜索 → 回答生成**\ （不含关联度评估及独立的内容获取阶段）。
+
+在流式流程中，会额外调用一次LLM来**评估搜索结果**，仅保留其判断为相关的文档，然后再生成回答。
+
 AI搜索模式的工作原理
 ================
 
@@ -92,23 +106,23 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
    * - ``rag.llm.gemini.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.api.key=...``
-     - 有
+     - 无
    * - ``rag.llm.gemini.model``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.model=...``
-     - 有
+     - 无
    * - ``rag.llm.openai.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.openai.api.key=...``
-     - 有
+     - 无
    * - ``rag.llm.openai.model``
      - FessConfig
      - ``-Dfess.config.rag.llm.openai.model=...``
-     - 有
+     - 无
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
-     - 有
+     - 无
 
 .. note::
 
@@ -146,7 +160,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
      - 从文档获取的字段
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - 用户消息的最大字符数
+     - 用户消息的最大字符数。此值以 System Property 形式读取，``fess_config.properties`` 中的对应项不会被使用。请通过 System Properties 或 ``-Dfess.system.rag.chat.message.max.length`` 进行设置。
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - 搜索高亮的片段大小

@@ -377,7 +377,7 @@ DELETE /chat/sessions/{session_id}
      - 설명
    * - ``session_id``
      - string
-     - 삭제 대상 세션 ID. minLength 1, maxLength 128, 패턴 ``^[A-Za-z0-9._-]+$`` .
+     - 삭제 대상 세션 ID. minLength 1, maxLength 100, 패턴 ``^[A-Za-z0-9._-]+$`` .
 
 응답
 ----
@@ -424,7 +424,7 @@ HTTP 상태 코드
    * - 200
      - 세션을 삭제했습니다.
    * - 400
-     - 요청이 잘못되었습니다 ( ``session_id`` 가 패턴 ``^[A-Za-z0-9._-]+$`` 또는 길이 제한 (1〜128문자) 에 일치하지 않거나, ``rag.chat.enabled=false`` 등).
+     - 요청이 잘못되었습니다 ( ``session_id`` 가 패턴 ``^[A-Za-z0-9._-]+$`` 또는 길이 제한 (1〜100문자) 에 일치하지 않거나, ``rag.chat.enabled=false`` 등).
    * - 403
      - CSRF 토큰 누락·만료 등.
    * - 404

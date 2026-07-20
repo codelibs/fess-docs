@@ -1,6 +1,6 @@
-========================================
-Descripción general de la integración LLM
-========================================
+================================================================
+Descripción general de la búsqueda IA (RAG) y la integración LLM
+================================================================
 
 Descripción general
 ===================
@@ -9,6 +9,8 @@ Descripción general
 Esta funcionalidad permite a los usuarios obtener información mediante un diálogo interactivo con un asistente de IA basado en los resultados de búsqueda.
 
 La funcionalidad de integración con LLM se proporciona como plugins ``fess-llm-*``. Instale el plugin correspondiente al proveedor LLM que desea utilizar.
+
+El modo de búsqueda IA obtiene los documentos a través del pipeline estándar de búsqueda de |Fess| (rank fusion), no de un índice vectorial independiente; por defecto se utiliza búsqueda por palabras clave (BM25). Como reutiliza este pipeline, si instala y configura el plugin de Búsqueda Semántica, su buscador semántico (vectorial) participa en el rank fusion de todas las búsquedas, incluido el paso de recuperación del modo de búsqueda IA; no se requiere ninguna configuración específica para el modo de búsqueda IA. Consulte :doc:`rank-fusion`.
 
 Proveedores compatibles
 =======================
@@ -35,6 +37,37 @@ Proveedores compatibles
      - ``gemini``
      - ``fess-llm-gemini``
      - API en la nube de Google. Disponible para modelos Gemini.
+
+Comparación de proveedores
+--------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Proveedor (``rag.llm.name``)
+     - Modelo predeterminado
+     - Endpoint
+     - Autenticación
+     - Ubicación de los datos
+   * - Ollama (``ollama``)
+     - ``gemma4:e4b``
+     - ``http://localhost:11434``
+     - Ninguna (local)
+     - Local / autoalojado — la pregunta y los documentos permanecen en su host
+   * - OpenAI (``openai``)
+     - ``gpt-5-mini``
+     - ``https://api.openai.com/v1``
+     - ``Authorization: Bearer`` (``rag.llm.openai.api.key``)
+     - Nube — la pregunta y los documentos recuperados se envían a OpenAI
+   * - Google Gemini (``gemini``)
+     - ``gemini-3.1-flash-lite-preview``
+     - ``https://generativelanguage.googleapis.com/v1beta``
+     - ``x-goog-api-key`` (``rag.llm.gemini.api.key``)
+     - Nube — la pregunta y los documentos recuperados se envían a Google
+
+.. note::
+
+   Si ``rag.llm.name`` no está configurado, de forma predeterminada solo el cliente Ollama está activo; instale y seleccione el proveedor que desee con ``rag.llm.name``.
 
 Instalación del plugin
 ======================
