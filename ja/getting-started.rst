@@ -101,7 +101,7 @@ http://localhost:8080/admin/ にアクセスすると、ログイン画面が表
 
    デフォルトのパスワードは必ず変更してください。
    特に本番環境では、初回ログイン後すぐにパスワードを変更することを強く推奨します。
-   パスワードの変更方法については、:doc:`15.6/admin/user-guide` を参照してください。
+   パスワードの変更方法については、:doc:`15.7/admin/user-guide` を参照してください。
 
 .. note::
 
@@ -139,8 +139,8 @@ http://localhost:8080/admin/ にアクセスすると、ログイン画面が表
 
 基本的な使い方を理解したら、以下のドキュメントを参照してさらに詳しく学ぶことができます：
 
-- :doc:`15.6/admin/index` — クロール設定、検索設定の詳細
-- :doc:`15.6/api/index` — REST API を使用した検索の統合
+- :doc:`15.7/admin/index` — クロール設定、検索設定の詳細
+- :doc:`15.7/api/index` — REST API を使用した検索の統合
 - :doc:`dev/index` — カスタマイズや拡張機能の開発
 
 .. |ブラウザーによる検索結果の表示| image:: ../resources/images/ja/fess_search_result.png

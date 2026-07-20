@@ -6,6 +6,7 @@
 ====
 
 |Fess| 的爬虫会从网站或文件系统等自动收集内容,并注册到搜索索引中。
+借助Web爬虫实现的网站搜索、文件爬虫实现的文件服务器搜索,以及数据存储爬虫实现的数据库等多种数据源搜索,您可以用一个 |Fess| 构建跨数据源的全文搜索。
 本指南介绍爬虫的基本概念和配置方法。
 
 爬虫的基本概念
@@ -728,3 +729,8 @@ Web爬虫有专用的"用户代理"字段。
 - :doc:`crawler-thumbnail` - 缩略图配置
 - :doc:`setup-memory` - 内存配置
 - :doc:`admin-logging` - 日志配置
+- :doc:`../admin/webconfig-guide` - 网页爬取设置指南
+- :doc:`../admin/fileconfig-guide` - 文件抓取设置指南
+- :doc:`../admin/dataconfig-guide` - 数据存储爬取设置指南
+- :doc:`datastore/index` - 数据存储连接器指南
+- :doc:`search-basic` - 搜索功能

@@ -1,12 +1,18 @@
-===============
+===================
 Data Store Crawling
-===============
+===================
 
 Overview
 ========
 
+Data Store Crawling registers various data sources other than websites and files — such as relational databases (MySQL, PostgreSQL, Oracle) and CSV files — into the |Fess| index for full-text search. The supported data sources can be extended with data store connector plugins.
+
 |Fess| supports crawling data sources such as databases and CSV files.
 This section describes the data store configuration required for this functionality.
+
+.. note::
+
+   ``DatabaseDataStore`` is provided by the database connector plugin (``fess-ds-db``), and ``CsvDataStore`` / ``CsvListDataStore`` are provided by the CSV connector plugin (``fess-ds-csv``). See :doc:`../config/datastore/ds-overview` for the list of available connectors.
 
 Configuration Management
 ========================
@@ -421,6 +427,14 @@ If authentication is required at the crawl destination, the following settings a
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+Related Pages
+=============
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.8/admin/dataconfig-2.png

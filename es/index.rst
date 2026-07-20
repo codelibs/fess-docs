@@ -7,6 +7,8 @@ Descripción General
 
 Fess es "\ **un servidor de búsqueda de texto completo que se puede construir fácilmente en 5 minutos**\ ".
 
+Es un software de búsqueda empresarial (búsqueda interna corporativa) de código abierto que permite realizar búsquedas de texto completo de forma transversal en documentos dispersos en su organización, como sitios web, servidores de archivos y bases de datos.
+
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: Demo Estándar

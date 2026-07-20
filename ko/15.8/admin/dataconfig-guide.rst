@@ -1,12 +1,18 @@
-===============
+====================
 데이터 저장소 크롤링
-===============
+====================
 
 개요
 ====
 
+데이터 저장소 크롤링은 웹사이트나 파일이 아닌 관계형 데이터베이스(MySQL・PostgreSQL・Oracle 등)나 CSV 파일을 비롯한 다양한 데이터 소스를 |Fess| 의 인덱스에 등록하여 전문 검색할 수 있도록 하는 기능입니다. 지원하는 데이터 소스는 데이터 저장소 커넥터 플러그인을 통해 확장할 수 있습니다.
+
 |Fess| 에서는 데이터베이스나 CSV 등의 데이터 소스를 크롤링 대상으로 지정할 수 있습니다.
 여기서는 이를 위해 필요한 데이터 저장소 설정에 대해 설명합니다.
+
+.. note::
+
+   ``DatabaseDataStore`` 는 데이터베이스 커넥터 플러그인( ``fess-ds-db`` ), ``CsvDataStore`` / ``CsvListDataStore`` 는 CSV 커넥터 플러그인( ``fess-ds-csv`` )을 통해 제공됩니다. 사용 가능한 커넥터 목록은 :doc:`../config/datastore/ds-overview` 를 참조하십시오.
 
 관리 방법
 ======
@@ -427,6 +433,14 @@ CsvListDataStore
     crawler.file.auth.example.scheme=SAMBA
     crawler.file.auth.example.username=username
     crawler.file.auth.example.password=password
+
+관련 항목
+============
+
+- :doc:`../config/datastore/index`
+- :doc:`../config/datastore/ds-database`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/crawler-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/dataconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.8/admin/dataconfig-2.png

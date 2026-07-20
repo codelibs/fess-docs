@@ -6,6 +6,7 @@ Présentation
 ====
 
 Le robot d'indexation (crawler) de |Fess| est une fonctionnalité qui collecte automatiquement du contenu à partir de sites Web et de systèmes de fichiers, et l'enregistre dans l'index de recherche.
+Du robot Web pour la recherche de site Web, en passant par le robot de fichiers pour la recherche sur serveur de fichiers, jusqu'au robot de magasin de données pour la recherche de bases de données et d'autres sources de données, un seul |Fess| permet de mettre en place une recherche en texte intégral transversale.
 Ce guide explique les concepts de base et les méthodes de configuration du robot d'indexation.
 
 Concepts de base du robot d'indexation
@@ -733,3 +734,8 @@ Informations de référence
 - :doc:`crawler-thumbnail` - Configuration des vignettes
 - :doc:`setup-memory` - Configuration de la mémoire
 - :doc:`admin-logging` - Configuration des journaux
+- :doc:`../admin/webconfig-guide` - Crawl Web (recherche de site Web)
+- :doc:`../admin/fileconfig-guide` - Crawl de système de fichiers (recherche sur serveur de fichiers)
+- :doc:`../admin/dataconfig-guide` - Crawl de magasin de données (recherche de base de données)
+- :doc:`datastore/index` - Guide des connecteurs DataStore
+- :doc:`search-basic` - Fonction de recherche

@@ -1,11 +1,21 @@
-=======================
-Rastreo de Sistema de Archivos
-=======================
+===================================================================
+Rastreo de Sistema de Archivos (Búsqueda en Servidores de Archivos)
+===================================================================
 
 Descripción general
 ===================
 
+El rastreo de archivos (Rastreo de Sistema de Archivos) permite registrar en el índice de |Fess| los documentos almacenados en servidores de archivos corporativos, carpetas compartidas de Windows o almacenamiento en la nube, para que puedan localizarse mediante búsqueda de texto completo (búsqueda en servidores de archivos). Es compatible con numerosos formatos de archivo, como Word, Excel, PowerPoint y PDF.
+
 La página de configuración de rastreo de archivos le permite administrar la configuración para rastrear archivos en el sistema de archivos o en carpetas compartidas en la red.
+
+El objetivo del rastreo se determina según el protocolo especificado en la «Ruta»:
+
+- ``file:/`` … sistema de archivos local o unidad montada
+- ``smb://`` … servidor de archivos o carpeta compartida de Windows (SMB/CIFS)
+- ``ftp://`` / ``ftps://`` … servidor FTP
+- ``s3://`` … bucket de Amazon S3
+- ``gcs://`` … bucket de Google Cloud Storage
 
 Método de gestión
 ==================
@@ -220,6 +230,14 @@ El acceso a GCS requiere credenciales de autenticación. Agregue lo siguiente en
     client.projectId=su-id-de-proyecto
     client.credentialsFile=/ruta/a/service-account.json
 
+Páginas Relacionadas
+====================
+
+- :doc:`../config/crawler-basic`
+- :doc:`fileauth-guide`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/search-basic`
+- :doc:`../user/index`
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/fileconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.8/admin/fileconfig-2.png

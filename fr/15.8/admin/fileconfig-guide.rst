@@ -1,11 +1,21 @@
-==========================
-Crawl de système de fichiers
-============================
+================================================================
+Crawl de système de fichiers (recherche sur serveur de fichiers)
+================================================================
 
 Présentation
 ============
 
+Le crawl de fichiers permet d'enregistrer dans l'index de |Fess| les documents présents sur les serveurs de fichiers internes, les dossiers partagés Windows ou le stockage cloud, afin de les rendre disponibles pour une recherche en texte intégral (recherche sur serveur de fichiers). De nombreux formats de fichiers sont pris en charge, tels que Word, Excel, PowerPoint et PDF.
+
 La page de configuration de crawl de fichiers permet de gérer la configuration pour crawler les fichiers sur le système de fichiers ou les dossiers partagés sur le réseau.
+
+Le crawl cible est déterminé par le protocole spécifié dans le « chemin » :
+
+- ``file:/`` … système de fichiers local ou monté
+- ``smb://`` … serveur de fichiers/dossier partagé Windows (SMB/CIFS)
+- ``ftp://`` / ``ftps://`` … serveur FTP
+- ``s3://`` … bucket Amazon S3
+- ``gcs://`` … bucket Google Cloud Storage
 
 Gestion
 =======
@@ -219,6 +229,15 @@ L'accès à GCS nécessite des identifiants d'authentification. Ajoutez ce qui s
 
     client.projectId=votre-id-projet
     client.credentialsFile=/chemin/vers/service-account.json
+
+Pages associées
+===============
+
+- :doc:`../config/crawler-basic`
+- :doc:`fileauth-guide`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/search-basic`
+- :doc:`../user/index`
 
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/fileconfig-1.png

@@ -1,9 +1,19 @@
-===========
-Datei-Crawl
-===========
+================================
+Datei-Crawl (Dateiserver-Suche)
+================================
 
 Übersicht
 =========
+
+Datei-Crawl ist eine Funktion, mit der Dokumente von internen Dateiservern, freigegebenen Windows-Ordnern oder Cloud-Speichern in den Index von |Fess| aufgenommen werden, sodass sie per Volltextsuche (Dateiserver-Suche) auffindbar sind. Zahlreiche Dateiformate wie Word, Excel, PowerPoint und PDF werden unterstützt.
+
+Welche Pfade gecrawlt werden, richtet sich nach dem im „Pfad" angegebenen Protokoll:
+
+- ``file:/`` … lokales oder eingehängtes Dateisystem
+- ``smb://`` … Windows-Dateiserver/freigegebene Ordner (SMB/CIFS)
+- ``ftp://`` / ``ftps://`` … FTP-Server
+- ``s3://`` … Amazon-S3-Bucket
+- ``gcs://`` … Google-Cloud-Storage-Bucket
 
 Auf der Datei-Crawl-Konfigurationsseite können Sie Konfigurationen zum Crawlen von Dateien im Dateisystem oder in freigegebenen Netzwerkordnern verwalten.
 
@@ -219,6 +229,15 @@ Für den GCS-Zugriff sind Anmeldeinformationen erforderlich. Fügen Sie Folgende
 
     client.projectId=ihre-projekt-id
     client.credentialsFile=/pfad/zu/service-account.json
+
+Verwandte Seiten
+================
+
+- :doc:`../config/crawler-basic`
+- :doc:`fileauth-guide`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/search-basic`
+- :doc:`../user/index`
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/fileconfig-1.png

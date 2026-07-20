@@ -1,11 +1,21 @@
-============
-File Crawling
-============
+==================================
+File Crawling (File Server Search)
+==================================
 
 Overview
 ========
 
+File Crawling registers documents from internal file servers, Windows shared folders, and cloud storage into the |Fess| index, enabling full-text search (file server search). It supports a wide range of file formats, including Word, Excel, PowerPoint, and PDF.
+
 The File Crawling configuration page allows you to configure settings for crawling files in the file system or shared network folders.
+
+Crawl targets are determined by the protocol specified in the path:
+
+- ``file:/`` … local or mounted file system
+- ``smb://`` … Windows file server / shared folder (SMB/CIFS)
+- ``ftp://`` / ``ftps://`` … FTP server
+- ``s3://`` … Amazon S3 bucket
+- ``gcs://`` … Google Cloud Storage bucket
 
 Configuration Management
 ========================
@@ -218,6 +228,15 @@ GCS access requires authentication credentials. Add the following to "Configurat
 
     client.projectId=your-project-id
     client.credentialsFile=/path/to/service-account.json
+
+Related Pages
+=============
+
+- :doc:`../config/crawler-basic`
+- :doc:`fileauth-guide`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/search-basic`
+- :doc:`../user/index`
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/fileconfig-1.png

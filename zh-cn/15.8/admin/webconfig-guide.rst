@@ -1,9 +1,11 @@
-===========
-网页爬取
-===========
+=============================
+网页爬取（网站搜索）
+=============================
 
 概述
 ====
+
+网页爬取通过 Web 爬虫巡回公开网站或企业内网中的网站,将采集到的页面注册到 |Fess| 索引,实现全文搜索(网站搜索)的功能。同时支持对 BASIC、DIGEST、NTLM、表单认证保护的网站进行爬取。
 
 网页爬取配置页面用于配置网页爬取的相关设置。
 
@@ -243,6 +245,14 @@ XWiki
        | login_parameters=j_username=${username}&j_password=${password}
    * - 网页认证
      - XWiki
+
+相关页面
+========
+
+- :doc:`../config/crawler-basic`
+- :doc:`webauth-guide`
+- :doc:`fileconfig-guide`
+- :doc:`../config/search-basic`
 
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/webconfig-1.png

@@ -1,9 +1,11 @@
-==================================
-Conector de Base de Datos
-==================================
+======================================================
+Conector de Base de Datos (Búsqueda en Bases de Datos)
+======================================================
 
 Descripcion General
 ===================
+
+El conector de base de datos permite registrar en el índice de |Fess| los registros de bases de datos relacionales compatibles con JDBC (MySQL, PostgreSQL, Oracle, SQL Server, etc.), haciendo posible la búsqueda en bases de datos (búsqueda de texto completo sobre el contenido de la base de datos). Cada columna obtenida mediante una sentencia SELECT se asigna a un campo de búsqueda durante el registro.
 
 El conector de base de datos proporciona funcionalidad para obtener datos de bases de datos
 relacionales compatibles con JDBC y registrarlos en el indice de |Fess|.
@@ -386,3 +388,5 @@ Informacion de Referencia
 - :doc:`ds-csv` - Conector CSV
 - :doc:`ds-json` - Conector JSON
 - :doc:`../../admin/dataconfig-guide` - Guia de Configuracion de Almacen de Datos
+- :doc:`../crawler-basic`
+- :doc:`../search-basic`

@@ -7,6 +7,8 @@ Open Source Volltextsuchserver Fess
 
 Fess ist ein **"in 5 Minuten einfach zu erstellender Volltextsuchserver"**.
 
+Es handelt sich um eine Open-Source-Software für Enterprise Search (unternehmensinterne Suche), mit der sich im Unternehmen verstreute Dokumente – etwa auf Websites, Dateiservern oder in Datenbanken – seitenübergreifend per Volltextsuche durchsuchen lassen.
+
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: Standard-Demo

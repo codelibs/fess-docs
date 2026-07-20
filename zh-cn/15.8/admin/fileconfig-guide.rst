@@ -1,11 +1,21 @@
-============
-文件抓取
-============
+==============================
+文件抓取（文件服务器搜索）
+==============================
 
 概述
 ====
 
+文件抓取是将企业内部文件服务器、Windows 共享文件夹、云存储中的文档注册到 |Fess| 索引，实现全文搜索（文件服务器搜索）的功能。支持 Word、Excel、PowerPoint、PDF 等多种文件格式。
+
 在文件抓取配置页面中，您可以管理对文件系统或共享网络文件夹中的文件进行抓取的配置。
+
+抓取对象由“路径”中指定的协议决定：
+
+- ``file:/`` … 本地或已挂载的文件系统
+- ``smb://`` … Windows 文件服务器/共享文件夹（SMB/CIFS）
+- ``ftp://`` / ``ftps://`` … FTP 服务器
+- ``s3://`` … Amazon S3 存储桶
+- ``gcs://`` … Google Cloud Storage 存储桶
 
 管理方式
 ======
@@ -219,6 +229,15 @@
 
     client.projectId=您的项目ID
     client.credentialsFile=/path/to/service-account.json
+
+相关页面
+========
+
+- :doc:`../config/crawler-basic`
+- :doc:`fileauth-guide`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/search-basic`
+- :doc:`../user/index`
 
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/fileconfig-1.png

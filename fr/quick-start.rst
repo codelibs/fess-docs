@@ -70,7 +70,7 @@ Attendez quelques minutes que les services s'initialisent, puis accédez à :
 
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-Pour plus de détails sur le déploiement Docker, consultez le :doc:`Guide d'installation Docker <15.6/install/install-docker>`.
+Pour plus de détails sur le déploiement Docker, consultez le :doc:`Guide d'installation Docker <15.7/install/install-docker>`.
 
 ----
 

@@ -1,9 +1,11 @@
-===========
-Web-Crawl
-===========
+===========================
+Web-Crawl (Website-Suche)
+===========================
 
 Übersicht
 =========
+
+Web-Crawl ist eine Funktion, mit der ein Web-Crawler öffentliche Websites oder Websites im Intranet durchsucht und die gesammelten Seiten in den Index von |Fess| aufnimmt, sodass sie per Volltextsuche (Website-Suche) auffindbar sind. Auch das Crawlen von Sites, die durch BASIC-, DIGEST-, NTLM- oder Formular-Authentifizierung geschützt sind, wird unterstützt.
 
 Die Web-Crawl-Konfigurationsseite konfiguriert Web-Crawling.
 
@@ -243,6 +245,14 @@ Erstellen Sie dann eine Web-Authentifizierungskonfiguration mit den folgenden Ko
        | login_parameters=j_username=${username}&j_password=${password}
    * - Web-Authentifizierung
      - XWiki
+
+Verwandte Seiten
+================
+
+- :doc:`../config/crawler-basic`
+- :doc:`webauth-guide`
+- :doc:`fileconfig-guide`
+- :doc:`../config/search-basic`
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/webconfig-1.png

@@ -1,11 +1,21 @@
-============
-파일 크롤링
-============
+=============================
+파일 크롤링(파일 서버 검색)
+=============================
 
 개요
 ====
 
+파일 크롤링은 사내 파일 서버나 Windows 공유 폴더, 클라우드 스토리지에 있는 문서를 |Fess| 의 인덱스에 등록하여 전문 검색(파일 서버 검색)할 수 있도록 하는 기능입니다. Word・Excel・PowerPoint・PDF 등 다양한 파일 형식을 지원합니다.
+
 파일 크롤링 설정 페이지에서는 파일 시스템이나 공유 네트워크의 폴더에 있는 파일을 크롤링하는 설정을 관리할 수 있습니다.
+
+크롤링 대상은 "경로"에 지정하는 프로토콜에 따라 결정됩니다.
+
+- ``file:/`` … 로컬 또는 마운트된 파일 시스템
+- ``smb://`` … Windows 파일 서버/공유 폴더(SMB/CIFS)
+- ``ftp://`` / ``ftps://`` … FTP 서버
+- ``s3://`` … Amazon S3 버킷
+- ``gcs://`` … Google Cloud Storage 버킷
 
 관리 방법
 ======
@@ -172,7 +182,14 @@ Windows 공유 폴더 크롤링
    * - 비밀번호
      - (입력하십시오)
 
+관련 항목
+============
 
+- :doc:`../config/crawler-basic`
+- :doc:`fileauth-guide`
+- :doc:`../config/datastore/ds-overview`
+- :doc:`../config/search-basic`
+- :doc:`../user/index`
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/fileconfig-1.png

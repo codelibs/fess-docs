@@ -7,6 +7,8 @@ Aperçu
 
 Fess est un «\ **serveur de recherche plein texte facile à construire en 5 minutes**\ ».
 
+C'est un logiciel open source de recherche d'entreprise (recherche interne à l'entreprise) permettant d'effectuer une recherche plein texte transversale sur les documents dispersés au sein de l'entreprise, qu'ils proviennent de sites Web, de serveurs de fichiers ou de bases de données.
+
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
    :alt: Démo standard

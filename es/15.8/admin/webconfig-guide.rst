@@ -1,9 +1,11 @@
-================
-Rastreo Web
-================
+====================================
+Rastreo Web (Búsqueda en Sitios Web)
+====================================
 
 Descripción general
 ===================
+
+El rastreo web recorre sitios web públicos o de intranet mediante un rastreador web y registra las páginas recopiladas en el índice de |Fess|, permitiendo su localización mediante búsqueda de texto completo (búsqueda en sitios web). También admite el rastreo de sitios protegidos con autenticación BASIC, DIGEST, NTLM o de formulario.
 
 La página de configuración de rastreo web configura el rastreo web.
 
@@ -244,6 +246,13 @@ Después de eso, cree la configuración de autenticación web con los siguientes
    * - Autenticación web
      - XWiki
 
+Páginas Relacionadas
+====================
+
+- :doc:`../config/crawler-basic`
+- :doc:`webauth-guide`
+- :doc:`fileconfig-guide`
+- :doc:`../config/search-basic`
 
 .. |image0| image:: ../../../resources/images/en/15.8/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.8/admin/webconfig-2.png

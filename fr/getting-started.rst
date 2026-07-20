@@ -101,7 +101,7 @@ Compte administrateur par défaut :
 
    Veuillez absolument changer le mot de passe par défaut.
    En particulier en environnement de production, il est fortement recommandé de changer le mot de passe immédiatement après la première connexion.
-   Pour les instructions de changement de mot de passe, consultez :doc:`15.6/admin/user-guide`.
+   Pour les instructions de changement de mot de passe, consultez :doc:`15.7/admin/user-guide`.
 
 .. note::
 
@@ -139,8 +139,8 @@ Prochaines étapes
 
 Après avoir compris l'utilisation de base, vous pouvez en apprendre davantage en consultant les documents suivants :
 
-- :doc:`15.6/admin/index` — Détails sur la configuration de l'exploration et de la recherche
-- :doc:`15.6/api/index` — Intégration de la recherche via l'API REST
+- :doc:`15.7/admin/index` — Détails sur la configuration de l'exploration et de la recherche
+- :doc:`15.7/api/index` — Intégration de la recherche via l'API REST
 - :doc:`dev/index` — Développement de personnalisations et de fonctionnalités d'extension
 
 .. |Affichage des résultats de recherche dans le navigateur| image:: ../resources/images/en/fess_search_result.png

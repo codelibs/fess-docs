@@ -69,7 +69,7 @@ Docker と Docker Compose がインストールされている場合、以下の
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-より詳細な Docker 環境の設定については、:doc:`Docker インストールガイド <15.6/install/install-docker>` を参照してください。
+より詳細な Docker 環境の設定については、:doc:`Docker インストールガイド <15.7/install/install-docker>` を参照してください。
 
 ----
 

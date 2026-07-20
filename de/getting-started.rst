@@ -101,7 +101,7 @@ Standard-Administratorkonto:
 
    Ändern Sie unbedingt das Standardpasswort.
    Besonders in Produktionsumgebungen wird dringend empfohlen, das Passwort sofort nach der ersten Anmeldung zu ändern.
-   Anleitungen zur Passwortänderung finden Sie unter :doc:`15.6/admin/user-guide`.
+   Anleitungen zur Passwortänderung finden Sie unter :doc:`15.7/admin/user-guide`.
 
 .. note::
 
@@ -139,8 +139,8 @@ Nächste Schritte
 
 Nachdem Sie die grundlegende Nutzung verstanden haben, können Sie die folgenden Dokumente konsultieren, um mehr zu erfahren:
 
-- :doc:`15.6/admin/index` — Details zu Crawl-Einstellungen und Sucheinstellungen
-- :doc:`15.6/api/index` — Integration der Suche über REST-API
+- :doc:`15.7/admin/index` — Details zu Crawl-Einstellungen und Sucheinstellungen
+- :doc:`15.7/api/index` — Integration der Suche über REST-API
 - :doc:`dev/index` — Entwicklung von Anpassungen und Erweiterungen
 
 .. |Browser-basierte Anzeige von Suchergebnissen| image:: ../resources/images/en/fess_search_result.png
