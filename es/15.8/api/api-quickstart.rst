@@ -54,9 +54,9 @@ La respuesta de v2 se devuelve en el sobre ``response``.
         "page_number": 1,
         "data": [
           {
-            "title": "Fess - オープンソース全文検索サーバー",
+            "title": "Fess - Servidor de búsqueda de texto completo de código abierto",
             "url": "https://fess.codelibs.org/ja/",
-            "content_description": "<strong>Fess</strong>は簡単に構築できる...",
+            "content_description": "<strong>Fess</strong> es fácil de implementar...",
             "host": "fess.codelibs.org",
             "mimetype": "text/html"
           }
@@ -195,8 +195,8 @@ Python
         return response.json()
 
     # Ejemplo de uso
-    results = search("Fess 検索")
-    print(f"ヒット件数: {results['response']['record_count']}")
+    results = search("Fess búsqueda")
+    print(f"Número de resultados: {results['response']['record_count']}")
     for doc in results["response"]["data"]:
         print(f"- {doc['title']}")
         print(f"  URL: {doc['url']}")
@@ -216,9 +216,9 @@ JavaScript (Node.js)
       return response.json();
     }
 
-    // 使用例
-    search('Fess 検索').then(results => {
-      console.log(`ヒット件数: ${results.response.record_count}`);
+    // Ejemplo de uso
+    search('Fess búsqueda').then(results => {
+      console.log(`Número de resultados: ${results.response.record_count}`);
       results.response.data.forEach(doc => {
         console.log(`- ${doc.title}`);
         console.log(`  URL: ${doc.url}`);
@@ -255,7 +255,7 @@ Java
 
         public static void main(String[] args) throws Exception {
             FessApiClient client = new FessApiClient();
-            String result = client.search("Fess 検索");
+            String result = client.search("Fess búsqueda");
             System.out.println(result);
         }
     }

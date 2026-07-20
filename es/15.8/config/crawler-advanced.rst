@@ -225,7 +225,7 @@ Parámetros de Variables de Entorno
     # Variables de entorno que comienzan con FESS_ENV_ están disponibles en la configuración de rastreo
     crawler.data.env.param.key.pattern=^FESS_ENV_.*
 
-Serializador de datos
+Serializador de Datos
 ---------------------
 
 .. list-table::
@@ -234,7 +234,7 @@ Serializador de datos
 
    * - Propiedad
      - Descripción
-     - Predeterminado
+     - Valor Predeterminado
    * - ``crawler.data.serializer``
      - Método de serialización para datos de rastreo
      - ``kryo``
@@ -641,7 +641,7 @@ para tipos de archivo específicos.
 
    * - Propiedad
      - Descripción
-     - Predeterminado
+     - Valor Predeterminado
    * - ``crawler.document.mimetype.extension.overrides``
      - Asignaciones de extensión a tipo MIME (una por línea, formato: ``.ext=mime/type``)
      - (vacío)
@@ -1019,6 +1019,7 @@ Rastreador S3
 -------------
 
 Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO, etc.).
+Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
 
 .. list-table::
    :header-rows: 1
@@ -1052,8 +1053,6 @@ Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
-
 ::
 
     client.endpoint=https://s3.ap-northeast-1.amazonaws.com
@@ -1065,6 +1064,7 @@ Rastreador GCS
 --------------
 
 Configuración para rastrear Google Cloud Storage.
+Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
 
 .. list-table::
    :header-rows: 1
@@ -1094,8 +1094,6 @@ Configuración para rastrear Google Cloud Storage.
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.
 
 ::
 

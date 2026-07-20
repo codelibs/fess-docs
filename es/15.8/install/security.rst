@@ -1,6 +1,6 @@
-=======================
+==========================
 Configuración de Seguridad
-=======================
+==========================
 
 Esta página describe la configuración de seguridad recomendada para operar |Fess| de manera segura en entornos de producción.
 

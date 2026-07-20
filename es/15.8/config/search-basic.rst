@@ -27,7 +27,7 @@ Ejemplo de búsqueda
 Visualización del número exacto de coincidencias
 -------------------------------------------------
 
-Para mostrar el número exacto de coincidencias hasta un valor superior, cambie la siguiente configuración en ``fess_config.properties``.
+Para mostrar el número exacto de coincidencias hasta un valor superior, cambie el valor de ``query.track.total.hits`` en ``fess_config.properties``.
 
 ::
 

@@ -30,7 +30,7 @@ Si tiene preguntas técnicas sobre este producto y no encuentra solución en la 
 Soporte comercial
 -----------------
 
-Si necesita soporte comercial para este producto, incluyendo asistencia técnica y mantenimiento, consulte con `N2SM, Inc. <https://www.n2sm.net/>`__
+Si necesita soporte comercial para este producto, incluyendo asistencia técnica y mantenimiento, consulte con `N2SM, Inc. <https://www.n2sm.net/>`__.
 
 Referencias a sitios web de terceros relacionados
 ==================================================
