@@ -377,7 +377,7 @@ DELETE /chat/sessions/{session_id}
      - 说明
    * - ``session_id``
      - string
-     - 要清除的会话 ID。minLength 为 1，maxLength 为 128，格式 ``^[A-Za-z0-9._-]+$``\ 。
+     - 要清除的会话 ID。minLength 为 1，maxLength 为 100，格式 ``^[A-Za-z0-9._-]+$``\ 。
 
 响应
 ----
@@ -424,7 +424,7 @@ HTTP 状态码
    * - 200
      - 会话已清除。
    * - 400
-     - 请求不合法（\ ``session_id`` 不符合格式 ``^[A-Za-z0-9._-]+$`` 或长度限制（1～128 字符）、\ ``rag.chat.enabled=false`` 等）。
+     - 请求不合法（\ ``session_id`` 不符合格式 ``^[A-Za-z0-9._-]+$`` 或长度限制（1～100 字符）、\ ``rag.chat.enabled=false`` 等）。
    * - 403
      - CSRF 令牌缺失或过期等。
    * - 404

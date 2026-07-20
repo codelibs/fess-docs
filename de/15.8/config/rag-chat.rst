@@ -11,6 +11,18 @@ In |Fess| 15.8 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
 Kerneinstellungen und LLM-anbieterspezifische Einstellungen werden in ``fess_config.properties`` vorgenommen,
 während die LLM-Anbieterauswahl (``rag.llm.name``) in ``system.properties`` oder über die Administrationsoberfläche konfiguriert wird.
 
+Suchpipeline
+============
+
+Der AI-Suchmodus ruft seine Quelldokumente über die standardmäßige |Fess|-Suchpipeline (Rank Fusion) ab, wobei die üblichen rollen- und labelbasierten Zugriffskontrollen von |Fess| gelten. Standardmäßig handelt es sich dabei um eine Schlüsselwortsuche (BM25); das LLM sucht, rankt oder erzeugt selbst keine Dokumenten-Embeddings.
+
+Je nach Anfragetyp wird eine leicht unterschiedliche Pipeline ausgeführt:
+
+- ``POST /api/v2/chat/stream`` (von der Weboberfläche verwendet) durchläuft den vollständigen Ablauf: **Absichtsanalyse → Suche → LLM-Bewertung der Relevanz → Inhaltsabruf → Antwortgenerierung** (gestreamt).
+- ``POST /api/v2/chat`` (nicht-streaming) durchläuft einen kürzeren Ablauf: **Absichtsanalyse → Suche → Antwortgenerierung** (ohne Relevanzbewertung oder separaten Inhaltsabruf).
+
+Im Streaming-Ablauf bewertet ein zusätzlicher LLM-Aufruf **die Suchergebnisse** und behält nur die als relevant eingestuften Dokumente, bevor die Antwort generiert wird.
+
 AI-Suchmodus-Funktionsweise
 ========================
 
@@ -90,23 +102,23 @@ in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher ni
    * - ``rag.llm.gemini.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.api.key=...``
-     - Ja
+     - Nein
    * - ``rag.llm.gemini.model``
      - FessConfig
      - ``-Dfess.config.rag.llm.gemini.model=...``
-     - Ja
+     - Nein
    * - ``rag.llm.openai.api.key``
      - FessConfig
      - ``-Dfess.config.rag.llm.openai.api.key=...``
-     - Ja
+     - Nein
    * - ``rag.llm.openai.model``
      - FessConfig
      - ``-Dfess.config.rag.llm.openai.model=...``
-     - Ja
+     - Nein
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
-     - Ja
+     - Nein
 
 .. note::
 
@@ -145,7 +157,7 @@ Liste der Kerneinstellungen, die in ``fess_config.properties`` konfiguriert werd
      - Aus Dokumenten abzurufende Felder
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Maximale Zeichenzahl von Benutzernachrichten
+     - Maximale Zeichenzahl von Benutzernachrichten. Dieser Wert wird als System Property gelesen; der Eintrag in ``fess_config.properties`` wird nicht verwendet. Legen Sie ihn über System Properties oder ``-Dfess.system.rag.chat.message.max.length`` fest.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Fragmentgröße für Such-Hervorhebungen

@@ -377,7 +377,7 @@ Parámetros de ruta
      - Descripción
    * - ``session_id``
      - string
-     - ID de la sesión a borrar. minLength 1, maxLength 128, patrón ``^[A-Za-z0-9._-]+$``.
+     - ID de la sesión a borrar. minLength 1, maxLength 100, patrón ``^[A-Za-z0-9._-]+$``.
 
 Respuesta
 ---------
@@ -424,7 +424,7 @@ Códigos de estado HTTP
    * - 200
      - La sesión fue borrada.
    * - 400
-     - La solicitud no es válida (por ejemplo, ``session_id`` no coincide con el patrón ``^[A-Za-z0-9._-]+$`` o con el límite de longitud de 1–128 caracteres, o ``rag.chat.enabled=false``).
+     - La solicitud no es válida (por ejemplo, ``session_id`` no coincide con el patrón ``^[A-Za-z0-9._-]+$`` o con el límite de longitud de 1–100 caracteres, o ``rag.chat.enabled=false``).
    * - 403
      - Token CSRF ausente o expirado, entre otros motivos.
    * - 404

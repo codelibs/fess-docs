@@ -377,7 +377,7 @@ Pfadparameter
      - Beschreibung
    * - ``session_id``
      - string
-     - Sitzungs-ID, deren Verlauf gelöscht werden soll. minLength 1, maxLength 128, Muster ``^[A-Za-z0-9._-]+$``.
+     - Sitzungs-ID, deren Verlauf gelöscht werden soll. minLength 1, maxLength 100, Muster ``^[A-Za-z0-9._-]+$``.
 
 Antwort
 -------
@@ -424,7 +424,7 @@ HTTP-Statuscodes
    * - 200
      - Sitzung wurde gelöscht.
    * - 400
-     - Ungültige Anfrage (z. B. ``session_id`` entspricht nicht dem Muster ``^[A-Za-z0-9._-]+$`` oder der Längenbegrenzung von 1–128 Zeichen, oder ``rag.chat.enabled=false``).
+     - Ungültige Anfrage (z. B. ``session_id`` entspricht nicht dem Muster ``^[A-Za-z0-9._-]+$`` oder der Längenbegrenzung von 1–100 Zeichen, oder ``rag.chat.enabled=false``).
    * - 403
      - Fehlender oder abgelaufener CSRF-Token.
    * - 404

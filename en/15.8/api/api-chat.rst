@@ -377,7 +377,7 @@ Path Parameters
      - Description
    * - ``session_id``
      - string
-     - ID of the session to clear. minLength 1, maxLength 128, pattern ``^[A-Za-z0-9._-]+$``.
+     - ID of the session to clear. minLength 1, maxLength 100, pattern ``^[A-Za-z0-9._-]+$``.
 
 Response
 --------
@@ -424,7 +424,7 @@ HTTP Status Codes
    * - 200
      - Session cleared.
    * - 400
-     - Invalid request (e.g., ``session_id`` does not match the pattern ``^[A-Za-z0-9._-]+$`` or the length limit of 1–128 characters, or ``rag.chat.enabled=false``).
+     - Invalid request (e.g., ``session_id`` does not match the pattern ``^[A-Za-z0-9._-]+$`` or the length limit of 1–100 characters, or ``rag.chat.enabled=false``).
    * - 403
      - Missing or expired CSRF token.
    * - 404

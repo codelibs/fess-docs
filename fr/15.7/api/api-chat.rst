@@ -377,7 +377,7 @@ Paramètres de chemin
      - Description
    * - ``session_id``
      - string
-     - Identifiant de la session à effacer. minLength 1, maxLength 128, motif ``^[A-Za-z0-9._-]+$``.
+     - Identifiant de la session à effacer. minLength 1, maxLength 100, motif ``^[A-Za-z0-9._-]+$``.
 
 Réponse
 -------
@@ -424,7 +424,7 @@ Codes de statut HTTP
    * - 200
      - Session effacée avec succès.
    * - 400
-     - La requête est incorrecte (par exemple, ``session_id`` ne correspond pas au motif ``^[A-Za-z0-9._-]+$`` ou à la limite de longueur de 1 à 128 caractères, ou ``rag.chat.enabled=false``).
+     - La requête est incorrecte (par exemple, ``session_id`` ne correspond pas au motif ``^[A-Za-z0-9._-]+$`` ou à la limite de longueur de 1 à 100 caractères, ou ``rag.chat.enabled=false``).
    * - 403
      - Jeton CSRF manquant ou expiré, etc.
    * - 404

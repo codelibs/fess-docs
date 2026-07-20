@@ -377,7 +377,7 @@ DELETE /chat/sessions/{session_id}
      - 説明
    * - ``session_id``
      - string
-     - クリア対象のセッションID。minLength 1、maxLength 128、パターン ``^[A-Za-z0-9._-]+$`` 。
+     - クリア対象のセッションID。minLength 1、maxLength 100、パターン ``^[A-Za-z0-9._-]+$`` 。
 
 レスポンス
 ----------
@@ -424,7 +424,7 @@ HTTPステータスコード
    * - 200
      - セッションをクリアしました。
    * - 400
-     - リクエストが不正です（ ``session_id`` がパターン ``^[A-Za-z0-9._-]+$`` または長さ制限（1〜128文字）に一致しない、 ``rag.chat.enabled=false`` など）。
+     - リクエストが不正です（ ``session_id`` がパターン ``^[A-Za-z0-9._-]+$`` または長さ制限（1〜100文字）に一致しない、 ``rag.chat.enabled=false`` など）。
    * - 403
      - CSRF トークンの欠落・失効など。
    * - 404

@@ -10,7 +10,7 @@ This feature allows users to retrieve information through conversational AI assi
 
 LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
 
-To combine RAG with **semantic (vector) search**, see :doc:`rank-fusion` and the Semantic Search plugin.
+AI search mode retrieves documents through the standard |Fess| search pipeline (rank fusion), not a separate vector index — by default this is keyword (BM25) search. Because it reuses that pipeline, if you install and configure the Semantic Search plugin, its semantic (vector) searcher participates in rank fusion for all searches, including the retrieval step of AI search mode; no AI-search-specific configuration is required. See :doc:`rank-fusion`.
 
 Supported Providers
 ===================
@@ -37,6 +37,37 @@ Supported Providers
      - ``gemini``
      - ``fess-llm-gemini``
      - Google's cloud API. Enables use of Gemini models.
+
+Provider Comparison
+--------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Provider (``rag.llm.name``)
+     - Default model
+     - Endpoint
+     - Authentication
+     - Data location
+   * - Ollama (``ollama``)
+     - ``gemma4:e4b``
+     - ``http://localhost:11434``
+     - None (local)
+     - Local / self-hosted — questions and documents stay on your host
+   * - OpenAI (``openai``)
+     - ``gpt-5-mini``
+     - ``https://api.openai.com/v1``
+     - ``Authorization: Bearer`` (``rag.llm.openai.api.key``)
+     - Cloud — the question and retrieved documents are sent to OpenAI
+   * - Google Gemini (``gemini``)
+     - ``gemini-3.1-flash-lite-preview``
+     - ``https://generativelanguage.googleapis.com/v1beta``
+     - ``x-goog-api-key`` (``rag.llm.gemini.api.key``)
+     - Cloud — the question and retrieved documents are sent to Google
+
+.. note::
+
+   If ``rag.llm.name`` is not set, only the Ollama client is active by default; install and select the provider you want with ``rag.llm.name``.
 
 Plugin Installation
 ===================
