@@ -5,6 +5,10 @@ Synonym Dictionary
 Overview
 ========
 
+Synonyms are words that are written differently but have the same (or nearly the same) meaning. For example, "GB" and "gigabyte," "PC" and "personal computer," and "TV" and "television" are synonyms.
+
+Registering synonyms in |Fess|'s synonym dictionary means that a search for either word will also return documents containing the other words registered as its synonyms. This helps prevent missed search results caused by spelling variations and improves the search hit rate.
+
 You can manage synonyms for words with the same meaning (such as GB, gigabyte, etc.).
 
 Management Operations
@@ -75,6 +79,13 @@ In cases like above, you can omit => and write as follows:
 ::
 
     fess,フエス
+
+Related Topics
+==============
+
+- :doc:`../user/search-or` - OR search syntax
+- :doc:`../user/search-field` - Field-specified search
+- :doc:`dict-guide` - Dictionary management overview
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/synonym-1.png
 .. |image1| image:: ../../../resources/images/en/15.7/admin/synonym-2.png

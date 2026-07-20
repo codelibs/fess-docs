@@ -5,6 +5,8 @@ Recherche par champ spécifique
 Recherche par champ spécifique
 ===============================
 
+La recherche par champ (recherche avec champ spécifié) permet de limiter la recherche à un champ particulier, par exemple uniquement le titre ou uniquement l'URL.
+
 Les résultats de l'exploration par |Fess| sont enregistrés pour chaque champ tel que le titre ou le contenu. Vous pouvez effectuer une recherche en spécifiant ces champs. En spécifiant un champ, vous pouvez définir des critères de recherche détaillés tels que le type de document ou la taille.
 
 Champs disponibles
@@ -61,3 +63,10 @@ Pour effectuer une recherche sur le champ url, saisissez ce qui suit :
    url:"https://fess.codelibs.org/fr/15.7/*"
 
 La première méthode permet d'utiliser des requêtes avec caractères génériques, vous pouvez donc écrire par exemple ``url:*\/\/fess.codelibs.org\/*``. Les caractères « : » et « / » dans l'URL sont des caractères réservés et doivent être échappés. La seconde méthode ne permet pas d'utiliser des requêtes avec caractères génériques, mais permet d'utiliser des requêtes de préfixe.
+
+Voir aussi
+==========
+
+- :doc:`search-range`
+- :doc:`search-wildcard`
+- :doc:`special-char`

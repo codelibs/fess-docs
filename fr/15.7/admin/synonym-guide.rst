@@ -5,7 +5,11 @@ Dictionnaire de synonymes
 Présentation
 ============
 
+Un synonyme est un mot dont la graphie diffère mais dont le sens est identique (ou proche). Par exemple, « Go » et « gigaoctet », « PC » et « ordinateur », ou encore « télé » et « TV » sont des synonymes.
+
 Vous pouvez gérer les synonymes de mots ayant la même signification (comme GB, gigabyte, etc.).
+
+En les enregistrant dans le dictionnaire de synonymes de |Fess|, une recherche effectuée avec l'un des mots inclut également, dans les résultats, les documents contenant les autres mots enregistrés comme synonymes. Cela permet d'éviter les recherches infructueuses dues à des variations orthographiques et d'améliorer le taux de succès des recherches.
 
 Gestion
 =======
@@ -76,6 +80,13 @@ Dans le cas ci-dessus, vous pouvez également omettre => et décrire comme suit.
 
     fess,フエス
 
+
+Voir aussi
+==========
+
+- :doc:`../user/search-or`
+- :doc:`../user/search-field`
+- :doc:`dict-guide`
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/synonym-1.png
 .. |image1| image:: ../../../resources/images/en/15.7/admin/synonym-2.png

@@ -5,6 +5,8 @@ Diccionario de Sinónimos
 Descripción general
 ===================
 
+Los sinónimos son palabras que se escriben de forma diferente pero tienen el mismo significado (o un significado similar). Por ejemplo, "GB" y "gigabyte", "PC" y "computadora", o "TV" y "televisión" son sinónimos (palabras de significado equivalente). Si los registra en el diccionario de sinónimos de |Fess|, al buscar con una de estas palabras, los documentos que contengan las otras palabras registradas como sinónimo también se incluirán en los resultados de búsqueda. De este modo, puede evitar omisiones en la búsqueda causadas por variaciones en la escritura y aumentar la tasa de acierto de las búsquedas.
+
 Puede administrar sinónimos de palabras con el mismo significado (GB, gigabyte, etc.).
 
 Método de gestión
@@ -75,6 +77,14 @@ En casos como el anterior, también puede omitir => y describirlo de la siguient
 ::
 
     fess,フエス
+
+
+Véase también
+=============
+
+- :doc:`../user/search-or` - Búsqueda OR
+- :doc:`../user/search-field` - Búsqueda con especificación de campos
+- :doc:`dict-guide` - Diccionario
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/synonym-1.png

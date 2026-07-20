@@ -21,6 +21,8 @@ Endpunkt             ``/api/v2/search``
 Sucht nach Dokumenten, die der Abfrage entsprechen, und gibt die Ergebnisse im gemeinsamen Envelope zurück.
 Alle Feldnamen im Payload verwenden ``snake_case``.
 
+Der Parameter ``q`` unterstützt dieselbe Suchsyntax wie das reguläre Suchformular (z. B. AND-/OR-/NOT-Suche, Feldsuche, Wildcard-Suche, unscharfe Suche). Details zur Suchsyntax finden Sie unter :doc:`../user/index`.
+
 Anfrageparameter
 ~~~~~~~~~~~~~~~~
 
@@ -272,3 +274,10 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
      - Wenn ein interner Serverfehler auftritt.
 
 Tabelle: Fehlerantwort
+
+Siehe auch
+==========
+
+- :doc:`../user/search-field`
+- :doc:`../user/special-char`
+- :doc:`../user/search-wildcard`

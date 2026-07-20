@@ -5,7 +5,7 @@ Unscharfe Suche
 Unscharfe Suche (Fuzzy-Suche)
 ===============================
 
-Wenn Sie auch nach Wörtern suchen möchten, die nicht exakt mit dem Suchbegriff übereinstimmen, können Sie die unscharfe Suche (Fuzzy-Suche) verwenden. Die unscharfe Suche ist eine Suchmethode, bei der ein Wort als Treffer gilt, wenn der Unterschied (die Editierdistanz) zwischen dem Suchbegriff und einem im Index registrierten Wort innerhalb eines bestimmten Bereichs liegt. Die Editierdistanz ist die minimale Anzahl an Einfügungen, Löschungen und Ersetzungen von Zeichen, die notwendig sind, um ein Wort in ein anderes umzuwandeln. |Fess| verwendet standardmäßig zusätzlich zu diesen Operationen die Damerau-Levenshtein-Distanz (optimal string alignment), bei der auch das Vertauschen von 2 benachbarten Zeichen als eine einzelne Änderung gezählt wird.
+Wenn Sie auch nach Wörtern suchen möchten, die nicht exakt mit dem Suchbegriff übereinstimmen, können Sie die unscharfe Suche (Fuzzy-Suche) verwenden. Dies ist beispielsweise bei Tippfehlern, abweichender Schreibweise oder Rechtschreibvarianten hilfreich. Die unscharfe Suche ist eine Suchmethode, bei der ein Wort als Treffer gilt, wenn der Unterschied (die Editierdistanz) zwischen dem Suchbegriff und einem im Index registrierten Wort innerhalb eines bestimmten Bereichs liegt. Die Editierdistanz ist die minimale Anzahl an Einfügungen, Löschungen und Ersetzungen von Zeichen, die notwendig sind, um ein Wort in ein anderes umzuwandeln. |Fess| verwendet standardmäßig zusätzlich zu diesen Operationen die Damerau-Levenshtein-Distanz (optimal string alignment), bei der auch das Vertauschen von 2 benachbarten Zeichen als eine einzelne Änderung gezählt wird.
 
 Verwendung
 -----------
@@ -56,3 +56,9 @@ Beachten Sie bei der Verwendung der unscharfen Suche die folgenden Punkte:
 .. note::
 
     Auch bei einer normalen Suche ohne angehängtes "~" fügt |Fess| für Suchbegriffe ab einer bestimmten Länge (standardmäßig ab 4 Zeichen) automatisch eine leicht gewichtete unscharfe Übereinstimmung als unterstützende Funktion hinzu, um die Relevanz zu erhöhen (``query.boost.fuzzy.*``). Dies dient der Anpassung der Rangfolge der Suchergebnisse und ist ein von der unscharfen Suche mittels "~" unabhängiger Mechanismus.
+
+Siehe auch
+==========
+
+- :doc:`search-wildcard`
+- :doc:`special-char`

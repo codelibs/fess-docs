@@ -5,6 +5,11 @@ Synonym-Wörterbuch
 Übersicht
 =========
 
+Synonyme sind Wörter, die unterschiedlich geschrieben werden, aber dieselbe (oder eine sehr ähnliche) Bedeutung haben.
+Beispiele hierfür sind „GB" und „Gigabyte", „PC" und „Computer" oder „Fernseher" und „TV".
+Wenn Sie solche Wörter im Synonym-Wörterbuch von |Fess| registrieren, werden bei der Suche nach einem dieser Wörter auch Dokumente gefunden, die eines der anderen registrierten Synonyme enthalten.
+Dadurch werden Suchlücken durch unterschiedliche Schreibweisen vermieden und die Trefferquote der Suche erhöht.
+
 Sie können Synonyme für Wörter mit derselben Bedeutung (z. B. GB, Gigabyte) verwalten.
 
 Verwaltung
@@ -75,6 +80,13 @@ In solchen Fällen kann => weggelassen und wie folgt geschrieben werden:
 ::
 
     fess,フエス
+
+Siehe auch
+==========
+
+- :doc:`../user/search-or`
+- :doc:`../user/search-field`
+- :doc:`dict-guide`
 
 
 .. |image0| image:: ../../../resources/images/en/15.7/admin/synonym-1.png

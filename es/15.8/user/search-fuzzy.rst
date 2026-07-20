@@ -56,3 +56,10 @@ Tenga en cuenta los siguientes puntos al utilizar la búsqueda difusa.
 .. note::
 
     Incluso en una búsqueda normal sin "~", |Fess| agrega automáticamente, como ayuda adicional, una ligera coincidencia difusa ponderada (``query.boost.fuzzy.*``) para los términos de búsqueda que tengan una longitud igual o superior a un valor determinado (de forma predeterminada, 4 caracteres o más), con el fin de mejorar la relevancia. Esta es una función para ajustar la clasificación de los resultados de búsqueda y es un mecanismo distinto de la búsqueda difusa mediante "~".
+
+
+Véase también
+=============
+
+- :doc:`search-wildcard` - Búsqueda con comodines
+- :doc:`special-char` - Caracteres especiales

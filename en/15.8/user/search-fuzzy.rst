@@ -56,3 +56,9 @@ Please note the following points when using fuzzy search.
 .. note::
 
     Even in a normal search without "~", |Fess| automatically adds a small amount of weighted fuzzy matching as an auxiliary aid, for the purpose of increasing relevance, for search terms of a certain length or longer (4 characters or more by default) (``query.boost.fuzzy.*``). This is a feature for adjusting the ranking of search results and is a separate mechanism from fuzzy search using "~".
+
+Related Topics
+--------------
+
+- :doc:`search-wildcard` - Wildcard search
+- :doc:`special-char` - Special characters and escaping

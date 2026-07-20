@@ -3,6 +3,7 @@ NOT-Suche
 ===========
 
 Wenn Sie nach Dokumenten suchen möchten, die ein bestimmtes Wort nicht enthalten, können Sie die NOT-Suche verwenden.
+Dies wird auch als Ausschlusssuche bezeichnet und ist hilfreich, wenn Sie bestimmte Schlüsselwörter aus den Suchergebnissen ausschließen und dadurch irrelevante Treffer reduzieren möchten.
 
 Verwendung
 -----------
@@ -31,3 +32,10 @@ Sie können die NOT-Suche auch für ein bestimmtes Feld durchführen. Im folgend
 ::
 
     title:Suchbegriff1 NOT title:Suchbegriff2
+
+Siehe auch
+-----------
+
+- :doc:`search-and`
+- :doc:`search-or`
+- :doc:`special-char`

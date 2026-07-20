@@ -5,7 +5,7 @@ Field-Specified Search
 Field-Specified Search
 ======================
 
-Content crawled by |Fess| is stored in separate fields such as title and body. You can search by specifying these fields. By specifying fields, you can define detailed search conditions such as by document type or size.
+By searching within a specific field (field-specified search), you can narrow your search to just the title, just the URL, and so on. Content crawled by |Fess| is stored in separate fields such as title and body. You can search by specifying these fields. By specifying fields, you can define detailed search conditions such as by document type or size.
 
 Available Fields
 ----------------
@@ -110,3 +110,10 @@ The first format supports wildcard search, so you can also write it as ``url:*\/
 When specifying a field whose value contains "/", such as mimetype, filetype, or site, enclose it in quotes as in ``mimetype:"text/html"``, or escape it as in ``mimetype:text\/html``.
 
 For related search syntax, see also :doc:`Wildcard Search <search-wildcard>`, :doc:`Range-Specified Search <search-range>`, :doc:`Sort Search <search-sort>`, and :doc:`Special Characters <special-char>`.
+
+Related Topics
+--------------
+
+- :doc:`search-range` - Range-specified search
+- :doc:`search-wildcard` - Wildcard search
+- :doc:`special-char` - Special characters and escaping

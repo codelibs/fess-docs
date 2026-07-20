@@ -7,6 +7,8 @@ Pour l'enveloppe de réponse commune, le modèle d'erreur et les jetons CSRF, vo
 
 L'URL de base est ``http://<Server Name>/api/v2/`` (exemple en environnement local : ``http://localhost:8080/api/v2``).
 
+Le paramètre ``q`` accepte la même syntaxe de recherche que l'écran de recherche standard (recherche AND/OR/NOT, spécification de champ, caractères génériques, recherche floue, etc.). Pour plus de détails sur la syntaxe de recherche, consultez :doc:`../user/index`.
+
 Recherche de documents
 ======================
 
@@ -272,3 +274,10 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
      - Une erreur interne s'est produite sur le serveur.
 
 Tableau : Réponses d'erreur
+
+Voir aussi
+==========
+
+- :doc:`../user/search-field`
+- :doc:`../user/special-char`
+- :doc:`../user/search-wildcard`

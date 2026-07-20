@@ -7,6 +7,8 @@
 
 ベースURLは ``http://<Server Name>/api/v2/`` です（ローカル環境の例: ``http://localhost:8080/api/v2`` ）。
 
+``q`` パラメーターには、通常の検索画面と同じ検索構文（AND/OR/NOT 検索、フィールド指定、ワイルドカード、あいまい検索など）を利用できます。検索構文の詳細は :doc:`../user/index` を参照してください。
+
 ドキュメントの検索
 ================
 
@@ -272,3 +274,10 @@ HTTPメソッド         GET
      - サーバー内部エラーが発生した場合。
 
 表: エラーレスポンス
+
+関連項目
+========
+
+- :doc:`../user/search-field`
+- :doc:`../user/special-char`
+- :doc:`../user/search-wildcard`

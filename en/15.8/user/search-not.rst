@@ -2,7 +2,7 @@
 NOT Search
 ==========
 
-NOT search can be used to search for documents that do not contain a specific word.
+NOT search can be used to search for documents that do not contain a specific word. This is also called exclusion search, and it's useful when you want to reduce noise by excluding specific keywords from your search results.
 
 Usage
 -----
@@ -30,3 +30,10 @@ You can also perform a NOT search by specifying a field. In the following exampl
 ::
 
     title:term1 NOT title:term2
+
+Related Topics
+--------------
+
+- :doc:`search-and` - AND search syntax
+- :doc:`search-or` - OR search syntax
+- :doc:`special-char` - Special characters and escaping
