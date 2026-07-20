@@ -212,9 +212,9 @@ Documents API是用于将文档批量注册到 |Fess| 索引的Admin API。
    * - ``items[].result``
      - 处理结果状态名。新建时为 ``CREATED`` ，更新时为 ``OK`` ，失败时为 ``BAD_REQUEST`` 等错误状态名
    * - ``items[].id``
-     - 已注册文档的ID（成功时）
+     - 已注册文档的ID（仅成功时）
    * - ``items[].message``
-     - 失败原因的消息（失败时）
+     - 失败原因的消息（仅失败时）
 
 使用示例
 ========
