@@ -1,9 +1,9 @@
 ========================
 Configuration avancée du robot d'indexation
-========================
+===========================================
 
 Présentation
-====
+============
 
 Ce guide explique les paramètres avancés du robot d'indexation de |Fess|.
 Pour la configuration de base du robot d'indexation, consultez :doc:`crawler-basic`.
@@ -13,10 +13,10 @@ Pour la configuration de base du robot d'indexation, consultez :doc:`crawler-bas
    Lors de la modification des paramètres, testez-les suffisamment avant de les appliquer à l'environnement de production.
 
 Configuration générale
-========
+======================
 
 Emplacement des fichiers de configuration
-------------------
+-----------------------------------------
 
 La configuration détaillée du robot d'indexation s'effectue dans les fichiers suivants.
 
@@ -45,7 +45,7 @@ Configure le langage de script par défaut du robot d'indexation.
     crawler.default.script=groovy
 
 Pool de threads HTTP
-------------------
+--------------------
 
 Configuration du pool de threads du robot d'indexation HTTP.
 
@@ -66,10 +66,10 @@ Configuration du pool de threads du robot d'indexation HTTP.
     crawler.http.thread_pool.size=0
 
 Configuration du traitement des documents
-====================
+=========================================
 
 Configuration de base
---------
+---------------------
 
 .. list-table::
    :header-rows: 1
@@ -98,7 +98,7 @@ Configuration de base
      - ``false``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -110,7 +110,7 @@ Exemple de configuration
     crawler.document.append.filename=false
 
 Configuration du traitement des mots
-------------
+------------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -130,7 +130,7 @@ Configuration du traitement des mots
      - ``false``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -148,7 +148,7 @@ Exemple de configuration
    mais la taille de l'index augmentera.
 
 Configuration du traitement des caractères
-------------
+------------------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -165,7 +165,7 @@ Configuration du traitement des caractères
      - ``u002eu06d4...``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -175,10 +175,10 @@ Exemple de configuration
     crawler.document.fullstop.chars=u002eu06d4u2e3cu3002
 
 Configuration des protocoles
-==============
+============================
 
 Protocoles supportés
---------------
+--------------------
 
 .. list-table::
    :header-rows: 1
@@ -207,7 +207,7 @@ Exemple de configuration
     crawler.crawling.data.encoding=UTF-8
 
 Paramètres de variables d'environnement
---------------------
+---------------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -244,7 +244,7 @@ Sérialiseur de données
     crawler.data.serializer=kryo
 
 Configuration de robots.txt
-===============
+===========================
 
 .. list-table::
    :header-rows: 1
@@ -264,7 +264,7 @@ Configuration de robots.txt
      - ``true``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -282,7 +282,7 @@ Exemple de configuration
    les conditions d'utilisation du site. Soyez prudent lors de l'indexation de sites externes.
 
 Configuration de la gestion des erreurs
-==============
+=======================================
 
 .. list-table::
    :header-rows: 1
@@ -296,7 +296,7 @@ Configuration de la gestion des erreurs
      - ``404,403,410``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -304,7 +304,7 @@ Exemple de configuration
     crawler.failure.url.status.codes=404,403,410,500
 
 Configuration de la surveillance système
-================
+========================================
 
 .. list-table::
    :header-rows: 1
@@ -323,7 +323,7 @@ Configuration de la surveillance système
     crawler.system.monitor.interval=30
 
 Configuration des threads actifs
-------------------
+--------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -352,7 +352,7 @@ Configuration des threads actifs
      - ``cpu``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -364,7 +364,7 @@ Exemple de configuration
     crawler.hotthread.type=cpu
 
 Configuration des métadonnées
-==============
+=============================
 
 .. list-table::
    :header-rows: 1
@@ -381,7 +381,7 @@ Configuration des métadonnées
      - ``title=title:string...``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -395,10 +395,10 @@ Exemple de configuration
         dc:title=title:string
 
 Configuration du robot d'indexation HTML
-===================
+========================================
 
 Configuration XPath
-----------
+-------------------
 
 Configuration XPath pour extraire les éléments HTML.
 
@@ -423,7 +423,7 @@ Configuration XPath pour extraire les éléments HTML.
      - ``//LINK[@rel='canonical'][1]/@href``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -434,7 +434,7 @@ Exemple de configuration
     crawler.document.html.canonical.xpath=//LINK[@rel='canonical'][1]/@href
 
 Exemples de XPath personnalisés
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -445,7 +445,7 @@ Exemples de XPath personnalisés
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
 Traitement des balises HTML
--------------
+---------------------------
 
 .. list-table::
    :header-rows: 1
@@ -465,7 +465,7 @@ Traitement des balises HTML
      - (vide)
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -479,7 +479,7 @@ Exemple de configuration
     crawler.document.html.default.lang=ja
 
 Filtre de motifs d'URL
----------------------
+----------------------
 
 .. list-table::
    :header-rows: 1
@@ -502,7 +502,7 @@ Filtre de motifs d'URL
      - (vide)
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -513,10 +513,10 @@ Exemple de configuration
     crawler.document.html.default.include.index.patterns=https://example\\.com/docs/.*
 
 Configuration du robot d'indexation de fichiers
-======================
+===============================================
 
 Configuration de base
---------
+---------------------
 
 .. list-table::
    :header-rows: 1
@@ -542,7 +542,7 @@ Configuration de base
      - ``200``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -560,7 +560,7 @@ Exemple de configuration
     crawler.document.file.max.digest.length=500
 
 Traitement du contenu
---------------
+---------------------
 
 .. list-table::
    :header-rows: 1
@@ -580,7 +580,7 @@ Traitement du contenu
      - (vide)
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -589,7 +589,7 @@ Exemple de configuration
     crawler.document.file.default.lang=ja
 
 Filtre de motifs d'URL de fichiers
-------------------------------
+----------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -612,7 +612,7 @@ Filtre de motifs d'URL de fichiers
      - (vide)
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -667,7 +667,7 @@ La correspondance des extensions est insensible à la casse (``.SQL`` et ``.sql`
    Les fichiers dont les extensions ne sont pas dans la table continuent d'utiliser la détection Tika normale.
 
 Configuration du cache
-==============
+======================
 
 Cache de documents
 ----------------------
@@ -693,7 +693,7 @@ Cache de documents
      - ``text/html``
 
 Exemple de configuration
-~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -730,7 +730,7 @@ Vous pouvez configurer les options JVM du processus du robot d'indexation.
      - ``-Xms128m -Xmx512m...``
 
 Configuration par défaut
---------------
+------------------------
 
 ::
 
@@ -746,7 +746,7 @@ Configuration par défaut
    Lors de la personnalisation, ne modifiez que les options nécessaires et conservez les autres valeurs par défaut.
 
 Description des principales options
-----------------------
+-----------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -768,7 +768,7 @@ Description des principales options
      - Désactiver le vidage du tas en cas d'OutOfMemory
 
 Exemples de configuration personnalisée
---------------
+---------------------------------------
 
 **Pour indexer des fichiers volumineux :**
 
@@ -792,10 +792,10 @@ Exemples de configuration personnalisée
 Consultez :doc:`setup-memory` pour plus de détails.
 
 Optimisation des performances
-==========================
+=============================
 
 Optimisation de la vitesse d'indexation
---------------------
+---------------------------------------
 
 **1. Ajustement du nombre de threads**
 
@@ -832,7 +832,7 @@ La vitesse d'indexation s'améliore en excluant les images, CSS, fichiers JavaSc
 Le nombre de nouvelles tentatives de crawl HTTP (par défaut 5) et l'intervalle entre les tentatives (par défaut 500 ms) sont des valeurs fixes intégrées et ne peuvent pas être modifiés via le champ « Paramètres de configuration » d'une configuration de crawl. Pour réduire le temps d'attente sur les URLs qui ne répondent pas, ajustez les délais d'expiration décrits ci-dessus ou excluez les URLs inutiles.
 
 Optimisation de l'utilisation de la mémoire
---------------------
+-------------------------------------------
 
 **1. Ajustement de la taille du tas**
 
@@ -856,7 +856,7 @@ Optimisation de l'utilisation de la mémoire
 Consultez :doc:`setup-memory` pour plus de détails.
 
 Amélioration de la qualité de l'index
-----------------------
+-------------------------------------
 
 **1. Optimisation du XPath**
 
@@ -886,7 +886,7 @@ Dépannage
 ======================
 
 Mémoire insuffisante
-----------
+--------------------
 
 **Symptômes :**
 
@@ -908,7 +908,7 @@ Mémoire insuffisante
 Consultez :doc:`setup-memory` pour plus de détails.
 
 L'indexation est lente
---------------
+----------------------
 
 **Symptômes :**
 
@@ -929,7 +929,7 @@ L'indexation est lente
 3. Exclure les URLs inutiles
 
 Impossible d'extraire un contenu spécifique
-------------------------------
+-------------------------------------------
 
 **Symptômes :**
 
@@ -953,7 +953,7 @@ Impossible d'extraire un contenu spécifique
 3. Pour le contenu généré dynamiquement par JavaScript, envisagez une autre méthode (indexation API, etc.)
 
 Des caractères corrompus apparaissent
-------------------
+-------------------------------------
 
 **Symptômes :**
 

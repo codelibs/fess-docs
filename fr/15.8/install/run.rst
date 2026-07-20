@@ -1,6 +1,6 @@
-============================
+==========================================
 Démarrage, arrêt et configuration initiale
-============================
+==========================================
 
 Cette page décrit les procédures de démarrage, d'arrêt et de configuration initiale du serveur |Fess|.
 

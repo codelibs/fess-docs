@@ -5,8 +5,8 @@ API Scheduler
 Vue d'ensemble
 ==============
 
-L'API Scheduler permet de gerer les taches planifiees de |Fess|.
-Vous pouvez demarrer/arreter les taches de crawl, creer/modifier/supprimer des configurations de planification, etc.
+L'API Scheduler permet de gérer les tâches planifiées de |Fess|.
+Vous pouvez démarrer/arrêter les tâches de crawl, créer/modifier/supprimer des configurations de planification, etc.
 
 URL de base
 ===========
@@ -22,62 +22,62 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des taches planifiees
+     - Obtention de la liste des tâches planifiées
    * - GET
      - /setting/{id}
-     - Obtention d'une tache planifiee
+     - Obtention d'une tâche planifiée
    * - POST
      - /setting
-     - Creation d'une tache planifiee
+     - Création d'une tâche planifiée
    * - PUT
      - /setting
-     - Mise a jour d'une tache planifiee
+     - Mise à jour d'une tâche planifiée
    * - DELETE
      - /setting/{id}
-     - Suppression d'une tache planifiee
+     - Suppression d'une tâche planifiée
    * - PUT
      - /{id}/start
-     - Demarrage d'une tache
+     - Démarrage d'une tâche
    * - PUT
      - /{id}/stop
-     - Arret d'une tache
+     - Arrêt d'une tâche
 
-Obtention de la liste des taches planifiees
+Obtention de la liste des tâches planifiées
 ===========================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/scheduler/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (defaut : 25 ; configurable via ``paging.page.size`` dans ``fess_config.properties``)
+     - Nombre d'éléments par page (défaut : 25 ; configurable via ``paging.page.size`` dans ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (base 1 ; defaut : 1)
+     - Numéro de page (base 1 ; défaut : 1)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -108,23 +108,23 @@ Reponse
 
 .. note::
 
-   L'objet ``response`` contient toujours ``version`` (version du produit) et ``status`` (code de resultat). Consultez :doc:`api-admin-overview` pour le format de reponse commun. Les exemples suivants peuvent omettre ``version`` par souci de concision.
+   L'objet ``response`` contient toujours ``version`` (version du produit) et ``status`` (code de résultat). Consultez :doc:`api-admin-overview` pour le format de réponse commun. Les exemples suivants peuvent omettre ``version`` par souci de concision.
 
 .. note::
 
-   Dans les reponses, ``jobLogging`` / ``crawler`` / ``available`` sont retournes sous forme de chaines de caracteres (``"true"`` / ``"false"``). ``running`` est un champ booleen, specifique aux reponses, indiquant si la tache est en cours d'execution (ne peut pas etre specifie dans les requetes). ``total`` est le nombre total de taches correspondant a la requete.
+   Dans les réponses, ``jobLogging`` / ``crawler`` / ``available`` sont retournés sous forme de chaînes de caractères (``"true"`` / ``"false"``). ``running`` est un champ booléen, spécifique aux réponses, indiquant si la tâche est en cours d'exécution (ne peut pas être spécifié dans les requêtes). ``total`` est le nombre total de tâches correspondant à la requête.
 
-Obtention d'une tache planifiee
+Obtention d'une tâche planifiée
 ===============================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/scheduler/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -149,10 +149,10 @@ Reponse
       }
     }
 
-Creation d'une tache planifiee
+Création d'une tâche planifiée
 ==============================
 
-Requete
+Requête
 -------
 
 ::
@@ -160,7 +160,7 @@ Requete
     POST /api/admin/scheduler/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -189,41 +189,41 @@ Description des champs
      - Description
    * - ``name``
      - Oui
-     - Nom de la tache (max 100 caracteres)
+     - Nom de la tâche (max 100 caractères)
    * - ``target``
      - Oui
-     - Cible d'execution (max 100 caracteres). Specifier ``all`` ou un nom de cible specifique
+     - Cible d'exécution (max 100 caractères). Spécifier ``all`` ou un nom de cible spécifique
    * - ``cronExpression``
      - Non
-     - Expression Cron (seconde minute heure jour mois jour-semaine). Max 100 caracteres, validee en tant qu'expression cron. Si vide, la tache n'est pas planifiee et ne peut etre demarree que manuellement
+     - Expression Cron (seconde minute heure jour mois jour-semaine). Max 100 caractères, validée en tant qu'expression cron. Si vide, la tâche n'est pas planifiée et ne peut être démarrée que manuellement
    * - ``scriptType``
      - Oui
-     - Type de script (max 100 caracteres). Actuellement seul ``groovy`` est supporte
+     - Type de script (max 100 caractères). Actuellement seul ``groovy`` est supporté
    * - ``scriptData``
      - Non
-     - Script a executer. La taille maximale est definie par ``form.admin.max.input.size`` dans ``fess_config.properties``
+     - Script à exécuter. La taille maximale est définie par ``form.admin.max.input.size`` dans ``fess_config.properties``
    * - ``jobLogging``
      - Non
-     - Activer la journalisation des taches (chaine)
+     - Activer la journalisation des tâches (chaîne)
    * - ``crawler``
      - Non
-     - S'il s'agit d'une tache de crawl (chaine)
+     - S'il s'agit d'une tâche de crawl (chaîne)
    * - ``available``
      - Non
-     - Active/Desactive (chaine)
+     - Activé/Désactivé (chaîne)
    * - ``sortOrder``
      - Oui
      - Ordre d'affichage (entier entre 0 et 2147483647)
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` sont des champs de type chaine. Dans les requetes, specifier ``"on"`` ou ``"true"`` (insensible a la casse) les active ; toute autre valeur (``"false"``, chaine vide ou non specifie) est traitee comme desactivee. Dans les reponses, ils sont retournes sous la forme ``"true"`` / ``"false"``.
+   ``jobLogging`` / ``crawler`` / ``available`` sont des champs de type chaîne. Dans les requêtes, spécifier ``"on"`` ou ``"true"`` (insensible à la casse) les active ; toute autre valeur (``"false"``, chaîne vide ou non spécifié) est traitée comme désactivée. Dans les réponses, ils sont retournés sous la forme ``"true"`` / ``"false"``.
 
 .. note::
 
-   ``crudMode`` est defini automatiquement cote serveur et n'a pas besoin d'etre specifie dans les requetes. Les champs d'audit tels que ``createdBy`` / ``createdTime`` sont egalement definis cote serveur.
+   ``crudMode`` est défini automatiquement côté serveur et n'a pas besoin d'être spécifié dans les requêtes. Les champs d'audit tels que ``createdBy`` / ``createdTime`` sont également définis côté serveur.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -246,18 +246,18 @@ Exemples d'expressions Cron
    * - Expression Cron
      - Description
    * - ``0 0 2 * * ?``
-     - Execution tous les jours a 2h du matin
+     - Exécution tous les jours à 2h du matin
    * - ``0 0 0/6 * * ?``
-     - Execution toutes les 6 heures
+     - Exécution toutes les 6 heures
    * - ``0 0 2 * * MON``
-     - Execution tous les lundis a 2h du matin
+     - Exécution tous les lundis à 2h du matin
    * - ``0 0 2 1 * ?``
-     - Execution le 1er de chaque mois a 2h du matin
+     - Exécution le 1er de chaque mois à 2h du matin
 
-Mise a jour d'une tache planifiee
+Mise à jour d'une tâche planifiée
 =================================
 
-Requete
+Requête
 -------
 
 ::
@@ -265,7 +265,7 @@ Requete
     PUT /api/admin/scheduler/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -286,9 +286,9 @@ Corps de la requete
 
 .. note::
 
-   Pour les mises a jour, ``id`` (max 1000 caracteres) et ``versionNo`` sont obligatoires. ``versionNo`` est utilise pour le verrouillage optimiste ; specifier la valeur retournee dans la reponse de recuperation. Si la valeur ne correspond pas, la mise a jour echoue. Les autres champs obligatoires (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) sont identiques a ceux de la creation.
+   Pour les mises à jour, ``id`` (max 1000 caractères) et ``versionNo`` sont obligatoires. ``versionNo`` est utilisé pour le verrouillage optimiste ; spécifiez la valeur retournée dans la réponse de récupération. Si la valeur ne correspond pas, la mise à jour échoue. Les autres champs obligatoires (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) sont identiques à ceux de la création.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -301,17 +301,17 @@ Reponse
       }
     }
 
-Suppression d'une tache planifiee
+Suppression d'une tâche planifiée
 =================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/scheduler/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -324,19 +324,19 @@ Reponse
       }
     }
 
-Demarrage d'une tache
+Démarrage d'une tâche
 =====================
 
-Execute immediatement une tache planifiee.
+Exécute immédiatement une tâche planifiée.
 
-Requete
+Requête
 -------
 
 ::
 
     PUT /api/admin/scheduler/{id}/start
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -348,7 +348,7 @@ Reponse
       }
     }
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -358,28 +358,28 @@ Champs de la reponse
    * - Champ
      - Description
    * - ``jobLogId``
-     - ID du journal de la tache demarree. Emis lorsque la journalisation des taches est activee. Vaut ``null`` lorsque la journalisation des taches est desactivee.
+     - ID du journal de la tâche démarrée. Émis lorsque la journalisation des tâches est activée. Vaut ``null`` lorsque la journalisation des tâches est désactivée.
 
 Notes
 -----
 
-- Si la tache est deja en cours d'execution, le demarrage echoue et une erreur est retournee (``status`` different de ``0``).
-- Si la tache est desactivee (``available`` n'est pas active), le demarrage echoue egalement avec une erreur.
-- ``jobLogId`` est emis uniquement lorsque la journalisation des taches est activee (``jobLogging`` est active).
+- Si la tâche est déjà en cours d'exécution, le démarrage échoue et une erreur est retournée (``status`` différent de ``0``).
+- Si la tâche est désactivée (``available`` n'est pas activé), le démarrage échoue également avec une erreur.
+- ``jobLogId`` est émis uniquement lorsque la journalisation des tâches est activée (``jobLogging`` est activé).
 
-Arret d'une tache
+Arrêt d'une tâche
 =================
 
-Arrete une tache en cours d'execution.
+Arrête une tâche en cours d'exécution.
 
-Requete
+Requête
 -------
 
 ::
 
     PUT /api/admin/scheduler/{id}/stop
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -393,12 +393,12 @@ Reponse
 Exemples d'utilisation
 ======================
 
-Creation et execution d'une tache de crawl
+Création et exécution d'une tâche de crawl
 ------------------------------------------
 
 .. code-block:: bash
 
-    # Creer la tache
+    # Créer la tâche
     curl -X POST "http://localhost:8080/api/admin/scheduler/setting" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
@@ -414,24 +414,24 @@ Creation et execution d'une tache de crawl
            "sortOrder": 1
          }'
 
-    # Executer la tache immediatement
+    # Exécuter la tâche immédiatement
     curl -X PUT "http://localhost:8080/api/admin/scheduler/{job_id}/start" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Verification de l'etat des taches
+Vérification de l'état des tâches
 ---------------------------------
 
 .. code-block:: bash
 
-    # Verifier l'etat de toutes les taches
+    # Vérifier l'état de toutes les tâches
     curl "http://localhost:8080/api/admin/scheduler/settings" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-    # Le champ running indique si la tache est en cours d'execution
+    # Le champ running indique si la tâche est en cours d'exécution
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-joblog` - API des journaux de taches
+- :doc:`api-admin-joblog` - API des journaux de tâches
 - :doc:`../../admin/scheduler-guide` - Guide de gestion du planificateur

@@ -5,12 +5,12 @@ API General
 Vue d'ensemble
 ==============
 
-L'API General est une API permettant de gerer les parametres generaux de |Fess|
-(configuration a l'echelle du systeme). Vous pouvez obtenir et mettre a jour les
-parametres relatifs au crawl, aux journaux, a l'affichage des resultats de
-recherche, aux suggestions, aux periodes de conservation des journaux, aux
-notifications, a l'authentification (LDAP / SSO) et a l'integration du stockage
-cloud. Ces parametres correspondent aux reglages « General » de l'interface
+L'API General est une API permettant de gérer les paramètres généraux de |Fess|
+(configuration à l'échelle du système). Vous pouvez obtenir et mettre à jour les
+paramètres relatifs au crawl, aux journaux, à l'affichage des résultats de
+recherche, aux suggestions, aux périodes de conservation des journaux, aux
+notifications, à l'authentification (LDAP / SSO) et à l'intégration du stockage
+cloud. Ces paramètres correspondent aux réglages « General » de l'interface
 d'administration (:doc:`../../admin/general-guide`).
 
 URL de base
@@ -20,8 +20,8 @@ URL de base
 
     /api/admin/general
 
-L'acces a cette API requiert un jeton d'acces disposant de la permission ``Radmin-api``.
-Consultez :doc:`api-admin-overview` pour les details d'authentification.
+L'accès à cette API requiert un jeton d'accès disposant de la permission ``Radmin-api``.
+Consultez :doc:`api-admin-overview` pour les détails d'authentification.
 
 Liste des endpoints
 ===================
@@ -30,36 +30,36 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /
-     - Obtention des parametres generaux
+     - Obtention des paramètres généraux
    * - PUT
      - /
-     - Mise a jour des parametres generaux
+     - Mise à jour des paramètres généraux
 
-Obtention des parametres generaux
+Obtention des paramètres généraux
 ==================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/general
 
-Cet endpoint n'accepte pas de parametres de requete.
+Cet endpoint n'accepte pas de paramètres de requête.
 
-Reponse
+Réponse
 -------
 
-``response.setting`` contient les parametres generaux actuels. La reponse inclut
-tous les champs de parametres modifiables ; l'exemple ci-dessous ne presente que
-les champs representatifs. Les parametres d'activation/desactivation sont exprimes
-sous forme de chaines ``"true"`` / ``"false"``, tandis que les valeurs telles que
-les jours de conservation et les nombres de threads sont exprimes sous forme de
+``response.setting`` contient les paramètres généraux actuels. La réponse inclut
+tous les champs de paramètres modifiables ; l'exemple ci-dessous ne présente que
+les champs représentatifs. Les paramètres d'activation/désactivation sont exprimés
+sous forme de chaînes ``"true"`` / ``"false"``, tandis que les valeurs telles que
+les jours de conservation et les nombres de threads sont exprimées sous forme de
 nombres.
 
 .. code-block:: json
@@ -106,28 +106,28 @@ nombres.
 
 .. note::
 
-   Ce qui precede ne montre que les champs representatifs a titre d'exemple. L'objet
-   ``setting`` reel dans la reponse contient tous les champs des parametres generaux
+   Ce qui précède ne montre que les champs représentatifs à titre d'exemple. L'objet
+   ``setting`` réel dans la réponse contient tous les champs des paramètres généraux
    (crawl, recherche, notification, LDAP, SSO, stockage, etc.). Consultez la page des
-   reglages « General » de l'interface d'administration pour la liste complete des champs.
+   réglages « General » de l'interface d'administration pour la liste complète des champs.
 
 .. note::
 
-   Pour des raisons de securite, les champs contenant des informations
-   d'authentification ne sont pas retournes avec leur valeur reelle.
+   Pour des raisons de sécurité, les champs contenant des informations
+   d'authentification ne sont pas retournés avec leur valeur réelle.
 
    - Le mot de passe de l'administrateur LDAP ``ldapAdminSecurityCredentials`` est
-     toujours retourne sous la forme ``null``.
+     toujours retourné sous la forme ``null``.
    - Les autres secrets (``storageAccessKey`` / ``storageSecretKey`` /
      ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
-     ``entraidClientId`` / ``entraidClientSecret``) sont retournes masques sous la
-     forme ``"**********"`` lorsqu'ils sont definis, ou sous forme de chaine vide
-     (``""``) lorsqu'ils ne sont pas definis.
+     ``entraidClientId`` / ``entraidClientSecret``) sont retournés masqués sous la
+     forme ``"**********"`` lorsqu'ils sont définis, ou sous forme de chaîne vide
+     (``""``) lorsqu'ils ne sont pas définis.
 
-Mise a jour des parametres generaux
+Mise à jour des paramètres généraux
 =====================================
 
-Requete
+Requête
 -------
 
 ::
@@ -135,46 +135,46 @@ Requete
     PUT /api/admin/general
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
-La mise a jour est traitee comme une mise a jour partielle (merge). Le serveur
-charge les parametres actuels, puis ecrase uniquement les champs non ``null``
-inclus dans la requete. Les champs non inclus dans la requete, et les champs
-definis a ``null``, conservent leur valeur existante.
+La mise à jour est traitée comme une mise à jour partielle (merge). Le serveur
+charge les paramètres actuels, puis écrase uniquement les champs non ``null``
+inclus dans la requête. Les champs non inclus dans la requête, et les champs
+définis à ``null``, conservent leur valeur existante.
 
 .. warning::
 
-   Les quatre champs suivants sont obligatoires et **doivent** etre inclus dans
-   **chaque** requete PUT, meme lors d'une mise a jour partielle :
+   Les quatre champs suivants sont obligatoires et **doivent** être inclus dans
+   **chaque** requête PUT, même lors d'une mise à jour partielle :
 
    - ``dayForCleanup``
    - ``crawlingThreadCount``
    - ``failureCountThreshold``
    - ``csvFileEncoding``
 
-   Si l'un d'eux est absent, la requete echoue a la validation et l'API retourne
-   HTTP 400 avec ``status: 1`` et un ``message`` d'erreur. La valeur envoyee ecrase
-   le parametre existant ; si vous ne souhaitez pas modifier une valeur, recuperez
+   Si l'un d'eux est absent, la requête échoue à la validation et l'API retourne
+   HTTP 400 avec ``status: 1`` et un ``message`` d'erreur. La valeur envoyée écrase
+   le paramètre existant ; si vous ne souhaitez pas modifier une valeur, récupérez
    d'abord la valeur actuelle avec ``GET`` et renvoyez-la telle quelle. Tous les
    autres champs sont optionnels ; les champs omis conservent leur valeur existante.
 
 .. note::
 
-   Les champs numeriques font l'objet d'une validation de type et de plage. L'envoi
-   d'une valeur qui ne peut pas etre interpretee comme un entier, ou d'une valeur
-   hors de la plage autorisee, provoque une erreur de validation (HTTP 400 avec
-   ``status: 1``). La plage valide de chaque champ numerique est indiquee dans le
+   Les champs numériques font l'objet d'une validation de type et de plage. L'envoi
+   d'une valeur qui ne peut pas être interprétée comme un entier, ou d'une valeur
+   hors de la plage autorisée, provoque une erreur de validation (HTTP 400 avec
+   ``status: 1``). La plage valide de chaque champ numérique est indiquée dans le
    tableau des champs ci-dessous.
 
 .. note::
 
-   Pour les champs d'activation/desactivation (type ``available``), seuls ``"true"``
+   Pour les champs d'activation/désactivation (type ``available``), seuls ``"true"``
    ou ``"on"`` (les deux sans distinction de casse) signifient l'activation. Toute
-   autre valeur (comme ``"false"`` ou une chaine vide) est traitee comme une
-   desactivation (``false``). La valeur existante n'est conservee que lorsque le
-   champ est omis (non envoye). Dans la reponse GET, ces champs sont retournes sous
-   forme de chaines ``"true"`` / ``"false"``.
+   autre valeur (comme ``"false"`` ou une chaîne vide) est traitée comme une
+   désactivation (``false``). La valeur existante n'est conservée que lorsque le
+   champ est omis (non envoyé). Dans la réponse GET, ces champs sont retournés sous
+   forme de chaînes ``"true"`` / ``"false"``.
 
 .. code-block:: json
 
@@ -190,10 +190,10 @@ definis a ``null``, conservent leur valeur existante.
 Principaux champs
 ~~~~~~~~~~~~~~~~~
 
-Les options de configuration sont nombreuses. Les champs representatifs sont
-indiques ci-dessous (tous les champs correspondent aux reglages « General » de
-l'interface d'administration). Les parametres d'activation/desactivation sont
-specifies sous forme de chaines ``"true"`` / ``"false"``.
+Les options de configuration sont nombreuses. Les champs représentatifs sont
+indiqués ci-dessous (tous les champs correspondent aux réglages « General » de
+l'interface d'administration). Les paramètres d'activation/désactivation sont
+spécifiés sous forme de chaînes ``"true"`` / ``"false"``.
 
 .. list-table::
    :header-rows: 1
@@ -204,106 +204,106 @@ specifies sous forme de chaines ``"true"`` / ``"false"``.
      - Description
    * - ``incrementalCrawling``
      - Non
-     - Activer/desactiver le crawl incremental
+     - Activer/désactiver le crawl incrémental
    * - ``dayForCleanup``
      - Oui
-     - Nombre de jours de conservation des documents crawles (-1 = nettoyage desactive ; plage : -1 a 1000)
+     - Nombre de jours de conservation des documents crawlés (-1 = nettoyage désactivé ; plage : -1 à 1000)
    * - ``crawlingThreadCount``
      - Oui
-     - Nombre de threads utilises pour le crawl (plage : 0 a 100)
+     - Nombre de threads utilisés pour le crawl (plage : 0 à 100)
    * - ``failureCountThreshold``
      - Oui
-     - Seuil du nombre d'echecs pour arreter le crawl d'une URL (-1 = desactive ; plage : -1 a 10000)
+     - Seuil du nombre d'échecs pour arrêter le crawl d'une URL (-1 = désactivé ; plage : -1 à 10000)
    * - ``csvFileEncoding``
      - Oui
      - Encodage de l'export CSV
    * - ``searchLog``
      - Non
-     - Activer/desactiver le journal des requetes de recherche
+     - Activer/désactiver le journal des requêtes de recherche
    * - ``userInfo``
      - Non
-     - Activer/desactiver l'enregistrement des informations utilisateur
+     - Activer/désactiver l'enregistrement des informations utilisateur
    * - ``userFavorite``
      - Non
-     - Activer/desactiver la fonctionnalite de favoris
+     - Activer/désactiver la fonctionnalité de favoris
    * - ``webApiJson``
      - Non
-     - Activer/desactiver l'API Web JSON
+     - Activer/désactiver l'API Web JSON
    * - ``appValue``
      - Non
-     - Valeur de configuration supplementaire specifique a l'application
+     - Valeur de configuration supplémentaire spécifique à l'application
    * - ``virtualHostValue``
      - Non
-     - Configuration d'hote virtuel (pour les configurations multi-locataires)
+     - Configuration d'hôte virtuel (pour les configurations multi-locataires)
    * - ``popularWord``
      - Non
-     - Activer/desactiver l'agregation et l'affichage des mots populaires
+     - Activer/désactiver l'agrégation et l'affichage des mots populaires
    * - ``defaultLabelValue``
      - Non
-     - Valeur de label par defaut
+     - Valeur de label par défaut
    * - ``defaultSortValue``
      - Non
-     - Ordre de tri par defaut
+     - Ordre de tri par défaut
    * - ``appendQueryParameter``
      - Non
-     - Ajout de parametres de requete aux URLs des resultats de recherche
+     - Ajout de paramètres de requête aux URLs des résultats de recherche
    * - ``loginRequired``
      - Non
      - Exiger une connexion pour effectuer une recherche
    * - ``loginLink``
      - Non
-     - Activer/desactiver l'affichage du lien de connexion sur l'ecran de recherche
+     - Activer/désactiver l'affichage du lien de connexion sur l'écran de recherche
    * - ``thumbnail``
      - Non
-     - Activer/desactiver la generation de vignettes
+     - Activer/désactiver la génération de vignettes
    * - ``resultCollapsed``
      - Non
-     - Activer/desactiver le regroupement des documents similaires dans les resultats de recherche
+     - Activer/désactiver le regroupement des documents similaires dans les résultats de recherche
    * - ``ignoreFailureType``
      - Non
-     - Types d'echec de crawl a ignorer
+     - Types d'échec de crawl à ignorer
    * - ``crawlingUserAgent``
      - Non
-     - Chaine User-Agent envoyee lors du crawl
+     - Chaîne User-Agent envoyée lors du crawl
    * - ``purgeSearchLogDay``
      - Non
-     - Nombre de jours de conservation des journaux de recherche (-1 = desactive ; plage : -1 a 100000)
+     - Nombre de jours de conservation des journaux de recherche (-1 = désactivé ; plage : -1 à 100000)
    * - ``purgeJobLogDay``
      - Non
-     - Nombre de jours de conservation des journaux de taches (-1 = desactive ; plage : -1 a 100000)
+     - Nombre de jours de conservation des journaux de tâches (-1 = désactivé ; plage : -1 à 100000)
    * - ``purgeUserInfoDay``
      - Non
-     - Nombre de jours de conservation des informations utilisateur (-1 = desactive ; plage : -1 a 100000)
+     - Nombre de jours de conservation des informations utilisateur (-1 = désactivé ; plage : -1 à 100000)
    * - ``purgeSuggestSearchLogDay``
      - Non
-     - Nombre de jours de conservation des journaux de recherche de suggestion (0 = desactive ; plage : 0 a 100000)
+     - Nombre de jours de conservation des journaux de recherche de suggestion (0 = désactivé ; plage : 0 à 100000)
    * - ``purgeByBots``
      - Non
-     - User-Agents de bots dont les journaux de recherche doivent etre supprimes
+     - User-Agents de bots dont les journaux de recherche doivent être supprimés
    * - ``notificationTo``
      - Non
-     - Adresse e-mail de destination des notifications systeme
+     - Adresse e-mail de destination des notifications système
    * - ``notificationLogin``
      - Non
-     - Message de notification affiche sur la page de connexion
+     - Message de notification affiché sur la page de connexion
    * - ``notificationSearchTop``
      - Non
-     - Message de notification affiche sur la page d'accueil de recherche
+     - Message de notification affiché sur la page d'accueil de recherche
    * - ``notificationAdvanceSearch``
      - Non
-     - Message de notification affiche sur la page de recherche avancee
+     - Message de notification affiché sur la page de recherche avancée
    * - ``suggestSearchLog``
      - Non
-     - Activer/desactiver les suggestions basees sur les journaux de recherche
+     - Activer/désactiver les suggestions basées sur les journaux de recherche
    * - ``suggestDocuments``
      - Non
-     - Activer/desactiver les suggestions basees sur les documents
+     - Activer/désactiver les suggestions basées sur les documents
    * - ``logLevel``
      - Non
-     - Niveau de journalisation du journal systeme
+     - Niveau de journalisation du journal système
    * - ``logNotificationEnabled``
      - Non
-     - Activer/desactiver les notifications de journaux ERROR/WARN
+     - Activer/désactiver les notifications de journaux ERROR/WARN
    * - ``logNotificationLevel``
      - Non
      - Niveau de notification des journaux
@@ -318,17 +318,17 @@ specifies sous forme de chaines ``"true"`` / ``"false"``.
      - Utiliser ou non la locale du navigateur pour la recherche
    * - ``ragLlmName``
      - Non
-     - Nom du fournisseur LLM utilise pour le RAG
+     - Nom du fournisseur LLM utilisé pour le RAG
    * - ``llmLogLevel``
      - Non
-     - Niveau de journalisation des paquets lies au LLM
+     - Niveau de journalisation des paquets liés au LLM
 
-Champs relatifs a l'authentification
+Champs relatifs à l'authentification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les parametres relatifs a LDAP et au SSO (OpenID Connect, SAML, SPNEGO, Entra ID)
-sont egalement geres par cette API. Les champs representatifs sont indiques
-ci-dessous (tous les champs correspondent aux reglages « General » de l'interface
+Les paramètres relatifs à LDAP et au SSO (OpenID Connect, SAML, SPNEGO, Entra ID)
+sont également gérés par cette API. Les champs représentatifs sont indiqués
+ci-dessous (tous les champs correspondent aux réglages « General » de l'interface
 d'administration).
 
 .. list-table::
@@ -342,15 +342,15 @@ d'administration).
    * - ``ldapBaseDn``
      - DN de base LDAP
    * - ``ldapSecurityPrincipal``
-     - Principal de securite pour le bind LDAP
+     - Principal de sécurité pour le bind LDAP
    * - ``ldapAdminSecurityPrincipal``
-     - Principal de securite pour les operations d'administration LDAP
+     - Principal de sécurité pour les opérations d'administration LDAP
    * - ``ldapAdminSecurityCredentials``
-     - Mot de passe de l'administrateur LDAP (remplace par ``null`` dans la reponse)
+     - Mot de passe de l'administrateur LDAP (remplacé par ``null`` dans la réponse)
    * - ``ldapAccountFilter`` / ``ldapGroupFilter``
      - Filtres de recherche d'utilisateurs/groupes
    * - ``ldapMemberofAttribute``
-     - Nom de l'attribut LDAP indiquant l'appartenance a un groupe
+     - Nom de l'attribut LDAP indiquant l'appartenance à un groupe
    * - ``ssoType``
      - Type de SSO (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
    * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` etc.
@@ -365,7 +365,7 @@ d'administration).
 Champs relatifs au stockage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les parametres d'integration du stockage cloud (S3 / GCS) peuvent egalement etre geres.
+Les paramètres d'intégration du stockage cloud (S3 / GCS) peuvent également être gérés.
 
 .. list-table::
    :header-rows: 1
@@ -378,11 +378,11 @@ Les parametres d'integration du stockage cloud (S3 / GCS) peuvent egalement etre
    * - ``storageEndpoint``
      - URL du point de terminaison du stockage
    * - ``storageAccessKey`` / ``storageSecretKey``
-     - Cle d'acces / cle secrete pour l'authentification
+     - Clé d'accès / clé secrète pour l'authentification
    * - ``storageBucket``
      - Nom du bucket
    * - ``storageRegion``
-     - Region S3
+     - Région S3
    * - ``storageProjectId`` / ``storageCredentialsPath``
      - ID de projet GCS / chemin du fichier d'informations d'authentification
 
@@ -391,19 +391,19 @@ Les parametres d'integration du stockage cloud (S3 / GCS) peuvent egalement etre
    Les champs secrets tels que ``ldapAdminSecurityCredentials``,
    ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` /
    ``oicClientSecret``, ``entraidClientId`` / ``entraidClientSecret``, et
-   ``spnegoPreauthPassword`` conservent leur valeur stockee (ne sont pas mis a
-   jour) lorsque la valeur masquee ``"**********"`` est envoyee telle quelle.
-   N'envoyez la valeur reelle que lorsque vous souhaitez la modifier.
+   ``spnegoPreauthPassword`` conservent leur valeur stockée (ne sont pas mis à
+   jour) lorsque la valeur masquée ``"**********"`` est envoyée telle quelle.
+   N'envoyez la valeur réelle que lorsque vous souhaitez la modifier.
 
-   Cette verification etant basee sur le fait que la chaine est vide apres
-   suppression des asterisques, l'envoi d'une chaine vide (``""``) ou d'une valeur
-   composee uniquement d'asterisques laisse egalement la valeur inchangee. Par
-   consequent, ces champs secrets ne peuvent pas etre vides via l'API.
+   Cette vérification étant basée sur le fait que la chaîne est vide après
+   suppression des astérisques, l'envoi d'une chaîne vide (``""``) ou d'une valeur
+   composée uniquement d'astérisques laisse également la valeur inchangée. Par
+   conséquent, ces champs secrets ne peuvent pas être vides via l'API.
 
-Reponse
+Réponse
 -------
 
-En cas de succes de la mise a jour, seuls ``version`` et ``status`` sont retournes
+En cas de succès de la mise à jour, seuls ``version`` et ``status`` sont retournés
 (``id`` et ``created`` ne sont pas inclus).
 
 .. code-block:: json
@@ -415,9 +415,9 @@ En cas de succes de la mise a jour, seuls ``version`` et ``status`` sont retourn
       }
     }
 
-Si la mise a jour echoue (par exemple en raison d'une erreur de validation), l'API
-retourne HTTP 400 et ``status`` est defini a une valeur non nulle (``1`` pour une
-erreur de validation), et ``message`` contient les details de l'erreur. Consultez
+Si la mise à jour échoue (par exemple en raison d'une erreur de validation), l'API
+retourne HTTP 400 et ``status`` est défini à une valeur non nulle (``1`` pour une
+erreur de validation), et ``message`` contient les détails de l'erreur. Consultez
 :doc:`api-admin-overview` pour la liste des valeurs de ``status``.
 
 Exemples d'utilisation
@@ -426,12 +426,12 @@ Exemples d'utilisation
 .. note::
 
    Les exemples ci-dessous incluent les champs obligatoires (``dayForCleanup``,
-   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Etant
-   donne que ceux-ci doivent toujours etre envoyes quelle que soit la modification
-   effectuee, recuperez les valeurs actuelles avec ``GET`` et incluez-les en
-   situation reelle (les exemples ci-dessous utilisent les valeurs par defaut).
+   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Étant
+   donné que ceux-ci doivent toujours être envoyés quelle que soit la modification
+   effectuée, récupérez les valeurs actuelles avec ``GET`` et incluez-les en
+   situation réelle (les exemples ci-dessous utilisent les valeurs par défaut).
 
-Mise a jour des parametres de crawl
+Mise à jour des paramètres de crawl
 -------------------------------------
 
 .. code-block:: bash
@@ -447,7 +447,7 @@ Mise a jour des parametres de crawl
            "csvFileEncoding": "UTF-8"
          }'
 
-Mise a jour des periodes de conservation des journaux
+Mise à jour des périodes de conservation des journaux
 -------------------------------------------------------
 
 .. code-block:: bash
@@ -465,7 +465,7 @@ Mise a jour des periodes de conservation des journaux
            "purgeUserInfoDay": 90
          }'
 
-Mise a jour des parametres de suggestion
+Mise à jour des paramètres de suggestion
 ------------------------------------------
 
 .. code-block:: bash
@@ -482,9 +482,9 @@ Mise a jour des parametres de suggestion
            "suggestDocuments": "true"
          }'
 
-Informations complementaires
+Informations complémentaires
 =============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-systeminfo` - API des informations systeme
-- :doc:`../../admin/general-guide` - Guide des parametres generaux
+- :doc:`api-admin-systeminfo` - API des informations système
+- :doc:`../../admin/general-guide` - Guide des paramètres généraux

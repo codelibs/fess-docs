@@ -1,12 +1,12 @@
 ==========================
-API Log
+Log API
 ==========================
 
 Vue d'ensemble
 ==============
 
-L'API Log permet de consulter et de telecharger les fichiers journaux de |Fess|.
-Vous pouvez obtenir la liste des fichiers journaux generes sur le serveur et telecharger individuellement chaque fichier journal.
+L'API Log permet de consulter et de télécharger les fichiers journaux de |Fess|.
+Vous pouvez obtenir la liste des fichiers journaux générés sur le serveur et télécharger individuellement chaque fichier journal.
 
 URL de base
 ===========
@@ -16,16 +16,16 @@ URL de base
     /api/admin/log
 
 Authentification
-================
+=================
 
-Comme pour les autres API Admin, une authentification par jeton d'acces est requise. Le jeton d'acces doit disposer de la permission ``Radmin-api`` (configuree via ``api.admin.access.permissions``, valeur par defaut : ``Radmin-api``).
-Indiquez le jeton d'acces dans l'en-tete de la requete.
+Comme pour les autres API Admin, une authentification par jeton d'accès est requise. Le jeton d'accès doit disposer de la permission ``Radmin-api`` (configurée via ``api.admin.access.permissions``, valeur par défaut : ``Radmin-api``).
+Indiquez le jeton d'accès dans l'en-tête de la requête.
 
 ::
 
-    Authorization: Bearer <jeton d'acces>
+    Authorization: Bearer <jeton d'accès>
 
-Pour plus de details sur l'authentification et l'obtention d'un jeton d'acces, consultez :doc:`api-admin-overview`.
+Pour plus de détails sur l'authentification et l'obtention d'un jeton d'accès, consultez :doc:`api-admin-overview`.
 
 Liste des endpoints
 ===================
@@ -34,7 +34,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -42,26 +42,26 @@ Liste des endpoints
      - Obtention de la liste des fichiers journaux
    * - GET
      - /file/{id}
-     - Telechargement d'un fichier journal
+     - Téléchargement d'un fichier journal
 
 Obtention de la liste des fichiers journaux
-===========================================
+=============================================
 
-Renvoie la liste des fichiers journaux (``.log`` et ``.log.gz``) presents dans le repertoire de sortie des journaux du serveur.
-Les fichiers sont retournes tries par ordre croissant de nom de fichier.
+Renvoie la liste des fichiers journaux (``.log`` et ``.log.gz``) présents dans le répertoire de sortie des journaux du serveur.
+Les fichiers sont retournés triés par ordre croissant de nom de fichier.
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/log/files
 
-Reponse
+Réponse
 -------
 
-``files`` contient un tableau d'objets representant les informations de chaque fichier journal, et ``total`` contient le nombre d'elements.
-Chaque objet possede les champs suivants.
+``files`` contient un tableau d'objets représentant les informations de chaque fichier journal, et ``total`` contient le nombre d'éléments.
+Chaque objet possède les champs suivants.
 
 .. list-table::
    :header-rows: 1
@@ -70,11 +70,11 @@ Chaque objet possede les champs suivants.
    * - Champ
      - Description
    * - ``id``
-     - Valeur du nom de fichier encode en Base64 URL (utilisee comme ``{id}`` lors du telechargement)
+     - Valeur du nom de fichier encodé en Base64 URL (utilisée comme ``{id}`` lors du téléchargement)
    * - ``name``
      - Nom du fichier journal
    * - ``lastModified``
-     - Date et heure de derniere modification
+     - Date et heure de dernière modification
 
 .. code-block:: json
 
@@ -100,27 +100,27 @@ Chaque objet possede les champs suivants.
 
 .. note::
 
-   ``version`` contient la version du produit |Fess| en cours d'execution. Le contenu de ``files``
-   et le nombre d'elements varient selon les fichiers journaux presents sur le serveur ;
-   l'exemple ci-dessus est fourni a titre indicatif.
+   ``version`` contient la version du produit |Fess| en cours d'exécution. Le contenu de ``files``
+   et le nombre d'éléments varient selon les fichiers journaux présents sur le serveur ;
+   l'exemple ci-dessus est fourni à titre indicatif.
 
-Telechargement d'un fichier journal
-===================================
+Téléchargement d'un fichier journal
+=====================================
 
-Telecharge le contenu du fichier journal specifie.
-Pour ``{id}``, indiquez tel quel l'``id`` retourne lors de l'obtention de la liste (la valeur du nom de fichier encodee en Base64 URL).
-La reponse est renvoyee sous forme de flux ``application/octet-stream``.
-Pour des raisons de securite, seuls les noms se terminant par ``.log`` ou ``.log.gz`` sont acceptes ; les noms contenant des sequences de manipulation de chemin telles que ``..`` sont rejetes.
-Si vous specifiez un nom de fichier inexistant ou un nom non autorise en tant que fichier journal, une reponse vide est renvoyee.
+Télécharge le contenu du fichier journal spécifié.
+Pour ``{id}``, indiquez tel quel l'``id`` retourné lors de l'obtention de la liste (la valeur du nom de fichier encodée en Base64 URL).
+La réponse est renvoyée sous forme de flux ``application/octet-stream``.
+Pour des raisons de sécurité, seuls les noms se terminant par ``.log`` ou ``.log.gz`` sont acceptés ; les noms contenant des séquences de manipulation de chemin telles que ``..`` sont rejetés.
+Si vous spécifiez un nom de fichier inexistant ou un nom non autorisé en tant que fichier journal, une réponse vide est renvoyée.
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/log/file/{id}
 
-Reponse
+Réponse
 -------
 
 Flux binaire du fichier journal (``Content-Type: application/octet-stream``).
@@ -129,15 +129,15 @@ Exemples d'utilisation
 ======================
 
 Obtention de la liste des fichiers journaux
--------------------------------------------
+---------------------------------------------
 
 .. code-block:: bash
 
     curl -X GET "http://localhost:8080/api/admin/log/files" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Telechargement d'un fichier journal
------------------------------------
+Téléchargement d'un fichier journal
+-------------------------------------
 
 .. code-block:: bash
 
@@ -145,8 +145,8 @@ Telechargement d'un fichier journal
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess.log
 
-Informations complementaires
-============================
+Informations complémentaires
+=============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-backup` - API de sauvegarde

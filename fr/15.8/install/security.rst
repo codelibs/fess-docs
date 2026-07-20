@@ -1,6 +1,6 @@
-========================
+============================
 Configuration de la sécurité
-========================
+============================
 
 Cette page décrit les configurations de sécurité recommandées pour exploiter |Fess| en toute sécurité dans un environnement de production.
 
@@ -74,7 +74,7 @@ Activation du plugin de sécurité OpenSearch
    Spécifiez les informations d'authentification via les propriétés suivantes dans ``fess_config.properties`` (il n'existe pas de variables d'environnement ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``) ::
 
        search_engine.username=admin
-       search_engine.password=<mot_de_passe_fort>
+       search_engine.password=<strong_password>
 
 Pour plus de détails, consultez `OpenSearch Security Plugin <https://opensearch.org/docs/latest/security-plugin/>`__.
 
@@ -91,7 +91,7 @@ Exemple de configuration Nginx ::
 
     server {
         listen 443 ssl http2;
-        server_name votre-domaine-fess.com;
+        server_name your-fess-domain.com;
 
         ssl_certificate /path/to/cert.pem;
         ssl_certificate_key /path/to/key.pem;

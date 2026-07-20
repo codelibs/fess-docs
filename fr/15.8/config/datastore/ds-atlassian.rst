@@ -85,7 +85,7 @@ Exemple version Server (OAuth 1.0a) :
     is_cloud=false
     auth_type=oauth
     oauth.consumer_key=OauthKey
-    oauth.private_key=-----BEGIN RSA PRIVATE KEY-----\\nMIIE...=\\n-----END RSA PRIVATE KEY-----
+    oauth.private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...=\n-----END RSA PRIVATE KEY-----
     oauth.secret=verification_code
     oauth.access_token=your_access_token
 
@@ -188,7 +188,7 @@ Pour Jira
 
     url=issue.view_url
     title=issue.summary
-    content=issue.description + "\\n\\n" + issue.comments
+    content=issue.description + "\n\n" + issue.comments
     last_modified=issue.last_modified
 
 Champs disponibles :
@@ -206,7 +206,7 @@ Pour Confluence
 
     url=content.view_url
     title=content.title
-    content=content.body + "\\n\\n" + content.comments
+    content=content.body + "\n\n" + content.comments
     last_modified=content.last_modified
 
 Champs disponibles :
@@ -316,7 +316,7 @@ Script :
 
     url=issue.view_url
     title=issue.summary
-    content=issue.description + "\\n\\nCommentaires:\\n" + issue.comments
+    content=issue.description + "\n\nCommentaires:\n" + issue.comments
     last_modified=issue.last_modified
 
 Exploration de Confluence Server
@@ -338,7 +338,7 @@ Script :
 
     url=content.view_url
     title=content.title
-    content=content.body + "\\n\\nCommentaires:\\n" + content.comments
+    content=content.body + "\n\nCommentaires:\n" + content.comments
     last_modified=content.last_modified
     digest=content.title
 

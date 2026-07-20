@@ -93,7 +93,7 @@ Reponse
           {
             "id": "elevate_id_1",
             "suggestWord": "fess",
-            "reading": "フェス",
+            "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
             "labelTypeIds": []
@@ -124,7 +124,7 @@ Reponse
         "setting": {
           "id": "elevate_id_1",
           "suggestWord": "fess",
-          "reading": "フェス",
+          "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
           "labelTypeIds": []
@@ -150,7 +150,7 @@ Corps de la requete
 
     {
       "suggestWord": "documentation",
-      "reading": "ドキュメンテーション",
+      "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
       "labelTypeIds": ["label1"]
@@ -214,7 +214,7 @@ Corps de la requete
     {
       "id": "existing_elevate_id",
       "suggestWord": "documentation",
-      "reading": "ドキュメンテーション",
+      "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
       "labelTypeIds": ["label1"],
