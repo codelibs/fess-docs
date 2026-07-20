@@ -56,3 +56,9 @@ Lors de l'utilisation de la recherche floue, tenez compte des points suivants :
 .. note::
 
     Même dans une recherche normale sans « ~ », |Fess| ajoute automatiquement, à titre d'appoint, une légère correspondance floue pondérée (``query.boost.fuzzy.*``) pour les termes de recherche d'une longueur supérieure ou égale à un certain seuil (4 caractères par défaut), afin d'améliorer la pertinence. Il s'agit d'une fonctionnalité destinée à ajuster le classement des résultats de recherche, distincte du mécanisme de recherche floue via « ~ ».
+
+Voir aussi
+==========
+
+- :doc:`search-wildcard`
+- :doc:`special-char`

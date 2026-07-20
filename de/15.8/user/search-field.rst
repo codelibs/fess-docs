@@ -5,6 +5,8 @@ Feldspezifische Suche
 Feldspezifische Suche
 =======================
 
+Durch eine feldspezifische Suche (Feldsuche), die sich nur auf ein bestimmtes Feld bezieht, können Sie die Suche gezielt eingrenzen – zum Beispiel nur auf den Titel oder nur auf die URL.
+
 Die von |Fess| gecrawlten Ergebnisse werden in einzelnen Feldern wie Titel oder Haupttext gespeichert. Durch die Angabe dieser Felder bei der Suche können Sie detaillierte Suchkriterien wie Dokumenttyp oder Größe festlegen.
 
 Verfügbare Felder
@@ -110,3 +112,10 @@ Da bei der ersten Variante Wildcard-Suche verwendet werden kann, ist auch eine S
 Wenn Sie Felder wie mimetype, filetype oder site angeben, deren Werte ein „/" enthalten, schließen Sie den Wert in Anführungszeichen ein, wie in ``mimetype:"text/html"``, oder maskieren Sie ihn wie in ``mimetype:text\/html``.
 
 Zu verwandten Suchsyntaxen siehe auch die :doc:`Wildcard-Suche <search-wildcard>`, die :doc:`Bereichssuche <search-range>`, die :doc:`Sortierte Suche <search-sort>` und :doc:`Sonderzeichen <special-char>`.
+
+Siehe auch
+-----------
+
+- :doc:`search-range`
+- :doc:`search-wildcard`
+- :doc:`special-char`

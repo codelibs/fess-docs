@@ -5,7 +5,7 @@ Búsqueda con especificación de campos
 Búsqueda con especificación de campos
 ======================================
 
-Los resultados rastreados por |Fess| se almacenan en campos individuales como título y contenido. Puede buscar especificando estos campos. Al especificar campos, puede definir condiciones de búsqueda detalladas, como por tipo de documento o por tamaño.
+Al realizar una búsqueda con especificación de campos (búsqueda por campo) dirigida únicamente a un campo concreto, puede acotar los resultados, por ejemplo, buscando solo en el título o solo en la URL. Los resultados rastreados por |Fess| se almacenan en campos individuales como título y contenido. Puede buscar especificando estos campos. Al especificar campos, puede definir condiciones de búsqueda detalladas, como por tipo de documento o por tamaño.
 
 Campos disponibles
 ------------------
@@ -110,3 +110,11 @@ El primero permite usar la búsqueda con comodines, por lo que también se puede
 Al especificar campos cuyo valor contiene "/", como mimetype, filetype o site, enciérrelo entre comillas, como en ``mimetype:"text/html"``, o bien escápelo, como en ``mimetype:text\/html``.
 
 Para conocer la sintaxis de búsqueda relacionada, consulte también :doc:`Búsqueda con comodines <search-wildcard>`, :doc:`Búsqueda por rango de valores <search-range>`, :doc:`Búsqueda con ordenamiento <search-sort>` y :doc:`Caracteres especiales <special-char>`.
+
+
+Véase también
+-------------
+
+- :doc:`search-range` - Búsqueda por rango de valores
+- :doc:`search-wildcard` - Búsqueda con comodines
+- :doc:`special-char` - Caracteres especiales

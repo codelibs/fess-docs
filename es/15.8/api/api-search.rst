@@ -7,6 +7,8 @@ Para el sobre de respuesta común, el modelo de errores y CSRF, consulte :doc:`a
 
 La URL base es ``http://<Server Name>/api/v2/`` (ejemplo en entorno local: ``http://localhost:8080/api/v2``).
 
+El parámetro ``q`` admite la misma sintaxis de búsqueda que la pantalla de búsqueda habitual (búsqueda AND/OR/NOT, especificación de campos, comodines, búsqueda difusa, etc.). Para obtener más información sobre la sintaxis de búsqueda, consulte :doc:`../user/index`.
+
 Búsqueda de documentos
 ======================
 
@@ -272,3 +274,10 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
      - Cuando se produce un error interno del servidor.
 
 Tabla: Respuesta de error
+
+Véase también
+=============
+
+- :doc:`../user/search-field` - Búsqueda con especificación de campos
+- :doc:`../user/special-char` - Caracteres especiales
+- :doc:`../user/search-wildcard` - Búsqueda con comodines

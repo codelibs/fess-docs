@@ -21,6 +21,8 @@ Endpoint            ``/api/v2/search``
 Searches for documents matching the query and returns the results in a common envelope.
 All field names in the payload use ``snake_case``.
 
+The ``q`` parameter accepts the same search syntax available on the standard search screen -- AND/OR/NOT search, field-specified search, wildcard search, fuzzy search, and more. For details on the search syntax, see :doc:`../user/index`.
+
 Request Parameters
 ~~~~~~~~~~~~~~~~~~
 
@@ -272,3 +274,10 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
      - An internal server error occurred.
 
 Table: Error Response
+
+Related Topics
+==============
+
+- :doc:`../user/search-field` - Field-specified search
+- :doc:`../user/special-char` - Special characters and escaping
+- :doc:`../user/search-wildcard` - Wildcard search

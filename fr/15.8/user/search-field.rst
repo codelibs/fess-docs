@@ -5,6 +5,8 @@ Recherche par champ spécifique
 Recherche par champ spécifique
 ===============================
 
+La recherche par champ (recherche avec champ spécifié) permet de limiter la recherche à un champ particulier, par exemple uniquement le titre ou uniquement l'URL.
+
 Les résultats de l'exploration par |Fess| sont enregistrés pour chaque champ tel que le titre ou le contenu. Vous pouvez effectuer une recherche en spécifiant ces champs. En spécifiant un champ, vous pouvez définir des critères de recherche détaillés tels que le type de document ou la taille.
 
 Champs disponibles
@@ -110,3 +112,10 @@ La première méthode permet d'utiliser des requêtes avec caractères génériq
 Pour les champs dont la valeur contient « / », comme mimetype, filetype ou site, entourez la valeur de guillemets comme dans ``mimetype:"text/html"``, ou échappez-la comme dans ``mimetype:text\/html``.
 
 Pour la syntaxe de recherche associée, consultez également :doc:`Recherche avec caractères génériques <search-wildcard>`, :doc:`Recherche par plage <search-range>`, :doc:`Recherche avec tri <search-sort>` et :doc:`Caractères spéciaux <special-char>`.
+
+Voir aussi
+==========
+
+- :doc:`search-range`
+- :doc:`search-wildcard`
+- :doc:`special-char`

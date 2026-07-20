@@ -2,7 +2,7 @@
 Búsqueda NOT
 ===========
 
-Puede utilizar la búsqueda NOT cuando desea buscar documentos que no contengan una palabra específica.
+Cuando desea buscar documentos que no contengan una palabra específica (búsqueda de exclusión), puede utilizar la búsqueda NOT. Es útil cuando desea excluir palabras clave concretas de los resultados de búsqueda para reducir el ruido.
 
 Cómo utilizar
 -------------
@@ -15,3 +15,17 @@ Por ejemplo, si desea buscar documentos que contengan "Término1" pero no conten
 ::
 
     Término1 NOT Término2
+
+En lugar de NOT, también puede colocar ``-`` (guion) justo antes de la palabra que desea excluir. Lo siguiente tiene el mismo significado que el ejemplo anterior:
+
+::
+
+    Término1 -Término2
+
+
+Véase también
+-------------
+
+- :doc:`search-and` - Búsqueda AND
+- :doc:`search-or` - Búsqueda OR
+- :doc:`special-char` - Caracteres especiales

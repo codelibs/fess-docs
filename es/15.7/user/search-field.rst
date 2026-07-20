@@ -5,7 +5,7 @@ Búsqueda con especificación de campos
 Búsqueda con especificación de campos
 ======================================
 
-Los resultados rastreados por |Fess| se almacenan en campos individuales como título y contenido. Puede buscar especificando estos campos. Al especificar campos, puede definir condiciones de búsqueda detalladas, como por tipo de documento o por tamaño.
+Al realizar una búsqueda con especificación de campos (búsqueda por campo) dirigida únicamente a un campo concreto, puede acotar los resultados, por ejemplo, buscando solo en el título o solo en la URL. Los resultados rastreados por |Fess| se almacenan en campos individuales como título y contenido. Puede buscar especificando estos campos. Al especificar campos, puede definir condiciones de búsqueda detalladas, como por tipo de documento o por tamaño.
 
 Campos disponibles
 ------------------
@@ -61,3 +61,11 @@ Para buscar en el campo url, ingrese lo siguiente:
    url:"https://fess.codelibs.org/ja/15.7/*"
 
 El primero permite usar consultas con comodines, por lo que también se puede escribir como ``url:*\/\/fess.codelibs.org\/*``. Dado que ":" y "/" en la url son palabras reservadas, deben escaparse. El segundo no permite consultas con comodines, pero permite consultas de prefijo.
+
+
+Véase también
+-------------
+
+- :doc:`search-range` - Búsqueda por rango de valores
+- :doc:`search-wildcard` - Búsqueda con comodines
+- :doc:`special-char` - Caracteres especiales

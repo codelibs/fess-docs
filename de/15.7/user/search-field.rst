@@ -5,6 +5,8 @@ Feldspezifische Suche
 Feldspezifische Suche
 =======================
 
+Durch eine feldspezifische Suche (Feldsuche), die sich nur auf ein bestimmtes Feld bezieht, können Sie die Suche gezielt eingrenzen – zum Beispiel nur auf den Titel oder nur auf die URL.
+
 Die von |Fess| gecrawlten Ergebnisse werden in einzelnen Feldern wie Titel oder Haupttext gespeichert. Sie können nach diesen Feldern suchen. Durch die Angabe von Feldern können Sie detaillierte Suchkriterien wie Dokumenttyp oder Größe festlegen.
 
 Verfügbare Felder
@@ -61,3 +63,10 @@ Um nach dem url-Feld zu suchen, geben Sie Folgendes ein:
    url:"https://fess.codelibs.org/ja/15.7/*"
 
 Ersteres ermöglicht Wildcard-Abfragen, sodass Schreibweisen wie ``url:*\/\/fess.codelibs.org\/*`` möglich sind. ":" und "/" in der URL sind reservierte Zeichen und müssen maskiert werden. Letzteres erlaubt keine Wildcard-Abfragen, aber Präfix-Abfragen sind möglich.
+
+Siehe auch
+-----------
+
+- :doc:`search-range`
+- :doc:`search-wildcard`
+- :doc:`special-char`

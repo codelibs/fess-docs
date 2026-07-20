@@ -5,7 +5,7 @@ Field-Specified Search
 Field-Specified Search
 ======================
 
-Content crawled by |Fess| is stored in separate fields such as title and body. You can search by specifying these fields. By specifying fields, you can define detailed search conditions such as by document type or size.
+By searching within a specific field (field-specified search), you can narrow your search to just the title, just the URL, and so on. Content crawled by |Fess| is stored in separate fields such as title and body. You can search by specifying these fields. By specifying fields, you can define detailed search conditions such as by document type or size.
 
 Available Fields
 ----------------
@@ -61,3 +61,10 @@ To search the url field, enter:
    url:"https://fess.codelibs.org/ja/15.7/*"
 
 The first format allows wildcard queries, so you can also write it as ``url:*\/\/fess.codelibs.org\/*``. The ":" and "/" characters in URLs are reserved words and must be escaped. The second format does not support wildcard queries but supports prefix queries.
+
+Related Topics
+--------------
+
+- :doc:`search-range` - Range-specified search
+- :doc:`search-wildcard` - Wildcard search
+- :doc:`special-char` - Special characters and escaping
