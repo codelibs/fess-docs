@@ -1,9 +1,13 @@
-==================================
-Configuration du Rank Fusion
-==================================
+=============================================================
+Recherche hybride et Rank Fusion (sémantique + mots-clés)
+=============================================================
 
 Aperçu
 ======
+
+La **recherche hybride** dans |Fess| combine la recherche traditionnelle par mots-clés (BM25) avec la **recherche sémantique (vectorielle)**, puis fusionne les deux ensembles de résultats grâce au **Rank Fusion** afin de produire des classements plus précis et plus pertinents. Le Rank Fusion intègre les résultats de plusieurs moteurs de recherche en un classement unique optimisé.
+
+Pour activer la recherche sémantique, installez le plugin Semantic Search (``fess-webapp-semantic-search``) et ajoutez ``semantic`` à ``-Drank.fusion.searchers``.
 
 La fonctionnalité Rank Fusion de |Fess| intègre plusieurs résultats de recherche pour
 fournir des résultats de recherche plus précis.
@@ -12,7 +16,7 @@ Qu'est-ce que le Rank Fusion
 ==============================
 
 Le Rank Fusion est une technique qui combine les résultats de plusieurs algorithmes
-de recherche ou méthodes de notation pour générer un classement unique optimisé.
+de recherche ou méthodes de notation (par exemple mots-clés/BM25 et recherche sémantique/vectorielle) pour générer un classement unique optimisé.
 
 Principaux avantages :
 

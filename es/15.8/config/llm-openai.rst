@@ -1,9 +1,11 @@
-==========================
-Configuracion de OpenAI
-==========================
+===========================================
+Configuración de OpenAI (Búsqueda IA / RAG)
+===========================================
 
 Descripcion general
 ===================
+
+Esta página explica cómo configurar el plugin ``fess-llm-openai`` para que |Fess| pueda usar OpenAI en su **modo de búsqueda IA (RAG: Retrieval-Augmented Generation)** — respondiendo preguntas en lenguaje natural a partir de su índice de búsqueda empresarial con fuentes citadas. |Fess| llama a la API de OpenAI para ejecutar RAG sobre sus documentos rastreados con modelos GPT.
 
 OpenAI es un servicio en la nube que proporciona modelos de lenguaje grandes (LLM) de alto rendimiento, comenzando con GPT-4.
 |Fess| puede utilizar la API de OpenAI para implementar la funcionalidad de modo de búsqueda IA.
@@ -691,3 +693,5 @@ Informacion de referencia
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - Descripcion general de integracion LLM
 - :doc:`rag-chat` - Detalles de la funcionalidad de modo de búsqueda IA
+- :doc:`rank-fusion` - Búsqueda híbrida: combina búsqueda por palabras clave y búsqueda semántica (vectorial)
+- :doc:`../user/chat-search` - Uso del modo de búsqueda IA (guía para el usuario final)

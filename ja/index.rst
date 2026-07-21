@@ -8,6 +8,7 @@
 Fess (フェス) は「\ **5 分で簡単に構築可能な全文検索サーバー**\ 」です。
 
 Web サイトやファイルサーバー、データベースなど社内に散在するドキュメントを横断的に全文検索できる、オープンソースのエンタープライズサーチ（企業内検索）ソフトウェアです。
+検索エンジンには OpenSearch（または Elasticsearch）を採用しており、キーワード検索・ファセット検索・ロールベース検索を標準で提供します。オプションのプラグインにより、セマンティック（ベクトル）検索、ハイブリッド検索、および Ollama・OpenAI・Google Gemini などの LLM を活用した AI 検索モード（RAG）を追加できます。
 
 .. figure:: ../resources/images/ja/demo-1.png
    :scale: 100%
@@ -100,6 +101,10 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 -  OCRなどの外部テキスト抽出対応
 
 -  用途に応じて柔軟に対応可能な設計
+
+-  AI検索モード（RAG: Retrieval-Augmented Generation）によるLLM連携 — Ollama、OpenAI、Google Geminiに対応（``fess-llm-*`` プラグイン経由）
+
+-  Semantic Searchプラグインによる、キーワード（BM25）検索とセマンティック（ベクトル）検索を組み合わせたハイブリッド検索
 
 ニュース
 ========
