@@ -5,8 +5,8 @@ RelatedContent API
 Vue d'ensemble
 ==============
 
-L'API RelatedContent est une API permettant de gerer les contenus associes dans |Fess|.
-Vous pouvez afficher des contenus personnalises associes a des mots-cles specifiques.
+L'API RelatedContent est une API permettant de gérer les contenus associés dans |Fess|.
+Vous pouvez afficher des contenus personnalisés associés à des mots-clés spécifiques.
 
 URL de base
 ===========
@@ -22,64 +22,64 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Lister les contenus associes
+     - Lister les contenus associés
    * - GET
      - /setting/{id}
-     - Obtenir un contenu associe
+     - Obtenir un contenu associé
    * - POST
      - /setting
-     - Creer un contenu associe
+     - Creer un contenu associé
    * - PUT
      - /setting
-     - Mettre a jour un contenu associe
+     - Mettre à jour un contenu associé
    * - DELETE
      - /setting/{id}
-     - Supprimer un contenu associe
+     - Supprimer un contenu associé
 
-Lister les contenus associes
+Lister les contenus associés
 ============================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/relatedcontent/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
+     - Nombre d'éléments par page (par défaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1 ; par defaut : 1 ; une valeur inferieure ou egale a 0 est traitee comme 1)
+     - Numéro de page (commence à 1 ; par défaut : 1 ; une valeur inférieure ou égale à 0 est traitée comme 1)
    * - ``term``
      - String
      - Non
-     - Filtrer par mot-cle de recherche (recherche avec caracteres generiques)
+     - Filtrer par mot-clé de recherche (recherche avec caractères génériques)
    * - ``content``
      - String
      - Non
-     - Filtrer par contenu (recherche avec caracteres generiques)
+     - Filtrer par contenu (recherche avec caractères génériques)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -108,27 +108,27 @@ Reponse
 
 .. note::
 
-   Chaque element de ``settings`` ainsi que l'objet ``setting`` retourne par
-   l'endpoint d'obtention contiennent les champs de l'entite stockee tels quels.
+   Chaque élément de ``settings`` ainsi que l'objet ``setting`` retourné par
+   l'endpoint d'obtention contiennent les champs de l'entité stockée tels quels.
    En plus de ``term``, ``content``, ``sortOrder`` et ``virtualHost``, les champs
    d'audit ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` ainsi que
-   le champ de verrouillage optimiste ``versionNo`` sont egalement retournes.
-   ``createdTime`` et ``updatedTime`` sont exprimes en millisecondes depuis l'epoque
-   (nombres). Les champs non renseignes (null) sont omis de la reponse. De plus,
-   l'objet ``response`` de toutes les reponses contient toujours ``version``, qui
-   indique la version du produit (voir :doc:`api-admin-overview` pour les details).
+   le champ de verrouillage optimiste ``versionNo`` sont également retournés.
+   ``createdTime`` et ``updatedTime`` sont exprimés en millisecondes depuis l'époque
+   (nombres). Les champs non renseignés (null) sont omis de la réponse. De plus,
+   l'objet ``response`` de toutes les réponses contient toujours ``version``, qui
+   indique la version du produit (voir :doc:`api-admin-overview` pour les détails).
 
-Obtenir un contenu associe
+Obtenir un contenu associé
 ==========================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/relatedcontent/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -154,13 +154,13 @@ Reponse
 
 .. note::
 
-   La valeur de ``versionNo`` requise lors d'une mise a jour (PUT) est celle
-   incluse dans cette reponse d'obtention.
+   La valeur de ``versionNo`` requise lors d'une mise à jour (PUT) est celle
+   incluse dans cette réponse d'obtention.
 
-Creer un contenu associe
+Creer un contenu associé
 ========================
 
-Requete
+Requête
 -------
 
 ::
@@ -168,7 +168,7 @@ Requete
     POST /api/admin/relatedcontent/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -192,18 +192,18 @@ Description des champs
      - Description
    * - ``term``
      - **Oui**
-     - Mot-cle de recherche (maximum 10000 caracteres)
+     - Mot-clé de recherche (maximum 10000 caractères)
    * - ``content``
      - **Oui**
-     - Contenu HTML a afficher (maximum 10000 caracteres)
+     - Contenu HTML à afficher (maximum 10000 caractères)
    * - ``sortOrder``
      - **Non**
      - Ordre d'affichage (entier compris entre 0 et 2147483647)
    * - ``virtualHost``
      - **Non**
-     - Hote virtuel (maximum 1000 caracteres)
+     - Hôte virtuel (maximum 1000 caractères)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -217,10 +217,10 @@ Reponse
       }
     }
 
-Mettre a jour un contenu associe
+Mettre à jour un contenu associé
 =================================
 
-Requete
+Requête
 -------
 
 ::
@@ -228,7 +228,7 @@ Requete
     PUT /api/admin/relatedcontent/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -254,24 +254,24 @@ Description des champs
      - Description
    * - ``id``
      - **Oui**
-     - Identifiant du contenu associe a mettre a jour (maximum 1000 caracteres)
+     - Identifiant du contenu associé à mettre à jour (maximum 1000 caractères)
    * - ``term``
      - **Oui**
-     - Mot-cle de recherche (maximum 10000 caracteres)
+     - Mot-clé de recherche (maximum 10000 caractères)
    * - ``content``
      - **Oui**
-     - Contenu HTML a afficher (maximum 10000 caracteres)
+     - Contenu HTML à afficher (maximum 10000 caractères)
    * - ``sortOrder``
      - **Non**
      - Ordre d'affichage (entier compris entre 0 et 2147483647)
    * - ``virtualHost``
      - **Non**
-     - Hote virtuel (maximum 1000 caracteres)
+     - Hôte virtuel (maximum 1000 caractères)
    * - ``versionNo``
      - **Oui**
-     - Numero de version pour le verrouillage optimiste. Specifier la valeur incluse dans la reponse de ``setting/{id}``.
+     - Numéro de version pour le verrouillage optimiste. Specifier la valeur incluse dans la réponse de ``setting/{id}``.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -288,21 +288,21 @@ Reponse
 .. note::
 
    Les champs d'audit tels que ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` et ``crudMode`` sont ignores meme s'ils sont inclus dans le
-   corps de la requete, car ils sont definis automatiquement cote serveur. Il
-   n'est pas necessaire de les specifier lors de la creation ou de la mise a jour.
+   ``updatedTime`` et ``crudMode`` sont ignorés même s'ils sont inclus dans le
+   corps de la requête, car ils sont définis automatiquement côté serveur. Il
+   n'est pas nécessaire de les spécifier lors de la création ou de la mise à jour.
 
-Supprimer un contenu associe
+Supprimer un contenu associé
 ============================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/relatedcontent/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -317,7 +317,7 @@ Reponse
 Exemples d'utilisation
 ======================
 
-Contenu associe pour les informations produit
+Contenu associé pour les informations produit
 ---------------------------------------------
 
 .. code-block:: bash
@@ -331,7 +331,7 @@ Contenu associe pour les informations produit
            "sortOrder": 0
          }'
 
-Contenu associe pour les informations de support
+Contenu associé pour les informations de support
 ------------------------------------------------
 
 .. code-block:: bash
@@ -345,9 +345,9 @@ Contenu associe pour les informations de support
            "sortOrder": 0
          }'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-relatedquery` - API des requetes associees
-- :doc:`../../admin/relatedcontent-guide` - Guide de gestion des contenus associes
+- :doc:`api-admin-relatedquery` - API des requetes associées
+- :doc:`../../admin/relatedcontent-guide` - Guide de gestion des contenus associés

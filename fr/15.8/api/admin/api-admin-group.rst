@@ -5,8 +5,8 @@ API Group
 Vue d'ensemble
 ==============
 
-L'API Group permet de gerer les groupes de |Fess|.
-Vous pouvez creer, mettre a jour et supprimer des groupes.
+L'API Group permet de gérer les groupes de |Fess|.
+Vous pouvez créer, mettre à jour et supprimer des groupes.
 
 URL de base
 ===========
@@ -22,7 +22,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -33,10 +33,10 @@ Liste des endpoints
      - Obtention d'un groupe
    * - POST
      - /setting
-     - Creation d'un groupe
+     - Création d'un groupe
    * - PUT
      - /setting
-     - Mise a jour d'un groupe
+     - Mise à jour d'un groupe
    * - DELETE
      - /setting/{id}
      - Suppression d'un groupe
@@ -44,38 +44,38 @@ Liste des endpoints
 Obtention de la liste des groupes
 =================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/group/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25)
+     - Nombre d'éléments par page (par défaut : 25)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1, par defaut : 1)
+     - Numéro de page (commence à 1, par défaut : 1)
    * - ``id``
      - String
      - Non
-     - Filtre par correspondance exacte sur l'ID de groupe specifie
+     - Filtre par correspondance exacte sur l'ID de groupe spécifié
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -108,14 +108,14 @@ Reponse
 Obtention d'un groupe
 =====================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/group/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -134,10 +134,10 @@ Reponse
       }
     }
 
-Creation d'un groupe
+Création d'un groupe
 ====================
 
-Requete
+Requête
 -------
 
 ::
@@ -145,7 +145,7 @@ Requete
     POST /api/admin/group/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -169,12 +169,12 @@ Description des champs
      - Description
    * - ``name``
      - Oui
-     - Nom du groupe (maximum 100 caracteres)
+     - Nom du groupe (maximum 100 caractères)
    * - ``attributes``
      - Non
-     - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont specifiees sous forme de chaines de caracteres
+     - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont spécifiées sous forme de chaînes de caractères
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -187,10 +187,10 @@ Reponse
       }
     }
 
-Mise a jour d'un groupe
+Mise à jour d'un groupe
 =======================
 
-Requete
+Requête
 -------
 
 ::
@@ -198,7 +198,7 @@ Requete
     PUT /api/admin/group/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -224,18 +224,18 @@ Description des champs
      - Description
    * - ``id``
      - Oui
-     - ID du groupe a mettre a jour
+     - ID du groupe à mettre à jour
    * - ``name``
      - Oui
-     - Nom du groupe (maximum 100 caracteres)
+     - Nom du groupe (maximum 100 caractères)
    * - ``attributes``
      - Non
-     - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont specifiees sous forme de chaines de caracteres
+     - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont spécifiées sous forme de chaînes de caractères
    * - ``versionNo``
      - Oui
-     - Numero de version pour le verrouillage optimiste. Specifiez la valeur de ``versionNo`` obtenue lors de l'obtention du groupe
+     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur de ``versionNo`` obtenue lors de l'obtention du groupe
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -251,14 +251,14 @@ Reponse
 Suppression d'un groupe
 =======================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/group/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -274,7 +274,7 @@ Reponse
 Exemples d'utilisation
 ======================
 
-Creation d'un nouveau groupe
+Création d'un nouveau groupe
 ----------------------------
 
 .. code-block:: bash
@@ -297,10 +297,10 @@ Obtention de la liste des groupes
     curl -X GET "http://localhost:8080/api/admin/group/settings" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-user` - API de gestion des utilisateurs
-- :doc:`api-admin-role` - API de gestion des roles
+- :doc:`api-admin-role` - API de gestion des rôles
 - :doc:`../../admin/group-guide` - Guide de gestion des groupes

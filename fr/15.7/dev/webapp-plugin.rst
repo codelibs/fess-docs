@@ -5,7 +5,7 @@ Plugin WebApp
 Vue d'ensemble
 ==============
 
-Les plugins WebApp permettent d'etendre l'interface web de Fess.
+Les plugins WebApp permettent d'étendre l'interface web de Fess.
 Vous pouvez ajouter de nouvelles pages, personnaliser l'interface d'administration, etc.
 
 Structure de base
@@ -21,7 +21,7 @@ Structure de base
         └── webapp/WEB-INF/view/example/
             └── index.jsp
 
-Implementation de l'Action
+Implémentation de l'Action
 ==========================
 
 .. code-block:: java
@@ -74,8 +74,8 @@ Extension API
         }
     }
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`plugin-architecture` - Architecture des plugins
-- :doc:`overview` - Vue d'ensemble developpeur
+- :doc:`overview` - Vue d'ensemble développeur

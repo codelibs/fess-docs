@@ -2,17 +2,17 @@
 Guide de script Groovy
 ==================================
 
-Apercu
+Aperçu
 ====
 
-Groovy est le langage de script par defaut de |Fess|.
-Il fonctionne sur la machine virtuelle Java (JVM) et, tout en etant hautement compatible avec Java,
-permet d'ecrire des scripts avec une syntaxe plus concise.
+Groovy est le langage de script par défaut de |Fess|.
+Il fonctionne sur la machine virtuelle Java (JVM) et, tout en étant hautement compatible avec Java,
+permet d'écrire des scripts avec une syntaxe plus concise.
 
 Syntaxe de base
 ========
 
-Declaration de variables
+Déclaration de variables
 --------
 
 ::
@@ -25,7 +25,7 @@ Declaration de variables
     String title = "Document Title"
     int pageNum = 1
 
-Manipulation de chaines
+Manipulation de chaînes
 ----------
 
 ::
@@ -52,7 +52,7 @@ Manipulation de chaines
     title.toUpperCase()
     title.toLowerCase()
 
-Operations sur les collections
+Opérations sur les collections
 ----------------
 
 ::
@@ -113,10 +113,10 @@ Scripts de Data Store
 Exemples de scripts pour la configuration Data Store.
 
 .. note::
-   Dans les scripts de data store, chaque ligne ``champ=expression`` est evaluee independamment en tant qu'expression unique.
-   Par consequent, les instructions ``import``, les declarations ``def`` multi-lignes et les structures de controle multi-lignes qui definissent plusieurs champs a la fois (comme les blocs ``if``) ne peuvent pas etre utilisees.
-   Lorsque vous utilisez des classes Java, ecrivez-les en tant qu'expression unique avec le nom de classe complet (FQCN), et utilisez un operateur ternaire par champ pour les valeurs conditionnelles (par exemple, ``url=data.published ? data.url : null`` ).
-   Par ailleurs, le nom de variable ``data`` utilise ici n'est qu'un exemple ; le nom de variable reel depend du connecteur de data store utilise. Consultez :doc:`../admin/dataconfig-guide` pour plus de details.
+   Dans les scripts de data store, chaque ligne ``champ=expression`` est évaluée indépendamment en tant qu'expression unique.
+   Par conséquent, les instructions ``import``, les déclarations ``def`` multi-lignes et les structures de contrôle multi-lignes qui définissent plusieurs champs à la fois (comme les blocs ``if``) ne peuvent pas être utilisées.
+   Lorsque vous utilisez des classes Java, écrivez-les en tant qu'expression unique avec le nom de classe complet (FQCN), et utilisez un opérateur ternaire par champ pour les valeurs conditionnelles (par exemple, ``url=data.published ? data.url : null`` ).
+   Par ailleurs, le nom de variable ``data`` utilisé ici n'est qu'un exemple ; le nom de variable réel dépend du connecteur de data store utilisé. Consultez :doc:`../admin/dataconfig-guide` pour plus de détails.
 
 Mapping de base
 ------------------
@@ -128,7 +128,7 @@ Mapping de base
     content=data.content
     lastModified=data.updated_at
 
-Generation d'URL
+Génération d'URL
 ---------
 
 ::
@@ -170,7 +170,7 @@ Traitement des dates
 Objets disponibles
 ==================
 
-Les objets disponibles dans les scripts varient en fonction du contexte d'execution.
+Les objets disponibles dans les scripts varient en fonction du contexte d'exécution.
 
 .. list-table::
    :header-rows: 1
@@ -181,33 +181,33 @@ Les objets disponibles dans les scripts varient en fonction du contexte d'execut
      - Description
    * - Tous les contextes
      - ``container``
-     - Conteneur DI. Utilise pour acceder aux composants via ``container.getComponent("...")``
-   * - Taches planifiees
+     - Conteneur DI. Utilisé pour accéder aux composants via ``container.getComponent("...")``
+   * - Tâches planifiées
      - ``executor``
-     - Controle d'execution des jobs ( ``JobExecutor`` ). Necessaire pour le support de l'arret des jobs
+     - Contrôle d'exécution des jobs ( ``JobExecutor`` ). Nécessaire pour le support de l'arrêt des jobs
    * - Data Store
-     - (specifique au connecteur)
-     - Variables d'enregistrement de donnees fournies par chaque data store. Le nom de la variable depend du connecteur
+     - (spécifique au connecteur)
+     - Variables d'enregistrement de données fournies par chaque data store. Le nom de la variable dépend du connecteur
    * - Mappage de chemins
      - ``url`` , ``matcher``
-     - La chaine URL a convertir et le resultat de la correspondance par expression reguliere ( ``Matcher`` ). Disponible dans les parametres de remplacement avec le prefixe ``groovy:``
+     - La chaîne URL à convertir et le résultat de la correspondance par expression régulière ( ``Matcher`` ). Disponible dans les paramètres de remplacement avec le préfixe ``groovy:``
    * - Boost de document
      - (champs du document)
-     - Chaque champ du document cible est disponible en tant que variable (utilise dans les expressions de condition et de valeur de boost)
+     - Chaque champ du document cible est disponible en tant que variable (utilisé dans les expressions de condition et de valeur de boost)
 
-Scripts de taches planifiees
+Scripts de tâches planifiées
 ============================
 
-Exemples de scripts Groovy pour les taches planifiees.
-Dans les taches planifiees, ``container`` et ``executor`` sont disponibles.
-Passer ``executor`` a la methode ``execute()`` du job active le controle d'arret du job.
+Exemples de scripts Groovy pour les tâches planifiées.
+Dans les tâches planifiées, ``container`` et ``executor`` sont disponibles.
+Passer ``executor`` à la méthode ``execute()`` du job active le contrôle d'arrêt du job.
 
 .. note::
-   Un script de tache planifiee est evalue en tant que script Groovy unique et complet.
-   Par consequent, contrairement aux scripts de data store, vous pouvez utiliser des instructions ``import``, des declarations ``def`` multi-lignes et des structures de controle multi-lignes.
-   Les exemples ci-dessous « Utilisation des classes Java », « Acces aux composants Fess », « Gestion des erreurs » et « Debogage et journalisation » supposent egalement ce contexte de script complet.
+   Un script de tâche planifiée est évalué en tant que script Groovy unique et complet.
+   Par conséquent, contrairement aux scripts de data store, vous pouvez utiliser des instructions ``import``, des déclarations ``def`` multi-lignes et des structures de contrôle multi-lignes.
+   Les exemples ci-dessous « Utilisation des classes Java », « Accès aux composants Fess », « Gestion des erreurs » et « Débogage et journalisation » supposent également ce contexte de script complet.
 
-Execution d'un job de crawl
+Exécution d'un job de crawl
 --------------------
 
 ::
@@ -230,7 +230,7 @@ Crawl conditionnel
     }
     return "Skipped during business hours"
 
-Execution sequentielle de plusieurs jobs
+Exécution séquentielle de plusieurs jobs
 ------------------------
 
 ::
@@ -248,7 +248,7 @@ Execution sequentielle de plusieurs jobs
 Utilisation des classes Java
 ================
 
-Dans les scripts Groovy, vous pouvez utiliser les bibliotheques standard Java et les classes Fess.
+Dans les scripts Groovy, vous pouvez utiliser les bibliothèques standard Java et les classes Fess.
 
 Date et heure
 ----------
@@ -261,7 +261,7 @@ Date et heure
     def now = LocalDateTime.now()
     def formatted = now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 
-Operations sur les fichiers
+Opérations sur les fichiers
 ------------
 
 ::
@@ -282,13 +282,13 @@ Communication HTTP
     def response = url.text
 
 .. warning::
-   L'acces aux ressources externes affecte les performances,
-   utilisez-le au minimum necessaire.
+   L'accès aux ressources externes affecte les performances,
+   utilisez-le au minimum nécessaire.
 
-Acces aux composants Fess
+Accès aux composants Fess
 ==============================
 
-Utilisez ``container`` pour acceder aux composants Fess.
+Utilisez ``container`` pour accéder aux composants Fess.
 
 System Helper
 ----------------
@@ -298,7 +298,7 @@ System Helper
     def systemHelper = container.getComponent("systemHelper")
     def currentTime = systemHelper.getCurrentTimeAsLong()
 
-Recuperation des valeurs de configuration
+Récupération des valeurs de configuration
 ------------
 
 ::
@@ -306,7 +306,7 @@ Recuperation des valeurs de configuration
     def fessConfig = container.getComponent("fessConfig")
     def indexName = fessConfig.getIndexDocumentUpdateIndex()
 
-Execution de recherche
+Exécution de recherche
 ----------
 
 ::
@@ -317,8 +317,8 @@ Execution de recherche
 Gestion des erreurs
 ==================
 
-Les instructions ``import`` doivent etre placees en haut du script (elles ne peuvent pas etre placees dans des blocs tels que ``try-catch`` ).
-Vous pouvez intercepter les exceptions avec ``try-catch`` pour controler les erreurs de job.
+Les instructions ``import`` doivent être placées en haut du script (elles ne peuvent pas être placées dans des blocs tels que ``try-catch`` ).
+Vous pouvez intercepter les exceptions avec ``try-catch`` pour contrôler les erreurs de job.
 
 ::
 
@@ -333,7 +333,7 @@ Vous pouvez intercepter les exceptions avec ``try-catch`` pour controler les err
         return "Error: " + e.message
     }
 
-Debogage et journalisation
+Débogage et journalisation
 ==================
 
 Sortie de logs
@@ -350,7 +350,7 @@ Sortie de logs
     logger.warn("Warning: {}", message)
     logger.error("Error: {}", e.message, e)
 
-Sortie de debogage
+Sortie de débogage
 ----------------
 
 ::
@@ -362,16 +362,16 @@ Sortie de debogage
 Bonnes pratiques
 ==================
 
-1. **Garder la simplicite** : Eviter les logiques complexes, privilegier un code lisible
-2. **Verification de null** : Utiliser les operateurs ``?.`` et ``?:``
-3. **Gestion des exceptions** : Gerer les erreurs inattendues avec try-catch approprie
-4. **Sortie de logs** : Afficher des logs pour faciliter le debogage
-5. **Performance** : Minimiser les acces aux ressources externes
+1. **Garder la simplicité** : Éviter les logiques complexes, privilégier un code lisible
+2. **Vérification de null** : Utiliser les opérateurs ``?.`` et ``?:``
+3. **Gestion des exceptions** : Gérer les erreurs inattendues avec try-catch approprié
+4. **Sortie de logs** : Afficher des logs pour faciliter le débogage
+5. **Performance** : Minimiser les accès aux ressources externes
 
-Informations de reference
+Informations de référence
 ========
 
 - `Documentation officielle Groovy <https://groovy-lang.org/documentation.html>`__
-- :doc:`scripting-overview` - Apercu du scripting
+- :doc:`scripting-overview` - Aperçu du scripting
 - :doc:`../admin/dataconfig-guide` - Guide de configuration Data Store
 - :doc:`../admin/scheduler-guide` - Guide de configuration du planificateur

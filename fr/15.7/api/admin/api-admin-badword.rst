@@ -5,8 +5,8 @@ API BadWord
 Vue d'ensemble
 ==============
 
-L'API BadWord permet de gerer les mots interdits (exclusion de mots inappropries des suggestions) dans |Fess|.
-Vous pouvez configurer les mots-cles que vous ne souhaitez pas afficher dans la fonction de suggestion.
+L'API BadWord permet de gérer les mots interdits (exclusion de mots inappropriés des suggestions) dans |Fess|.
+Vous pouvez configurer les mots-clés que vous ne souhaitez pas afficher dans la fonction de suggestion.
 
 URL de base
 ===========
@@ -22,7 +22,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -33,55 +33,55 @@ Liste des endpoints
      - Obtention d'un mot interdit
    * - POST
      - /setting
-     - Creation d'un mot interdit
+     - Création d'un mot interdit
    * - PUT
      - /setting
-     - Mise a jour d'un mot interdit
+     - Mise à jour d'un mot interdit
    * - DELETE
      - /setting/{id}
      - Suppression d'un mot interdit
    * - PUT
      - /upload
-     - Televersement CSV des mots interdits
+     - Téléversement CSV des mots interdits
    * - GET
      - /download
-     - Telechargement CSV des mots interdits
+     - Téléchargement CSV des mots interdits
 
 Obtention de la liste des mots interdits
 ========================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/badword/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 20)
+     - Nombre d'éléments par page (par défaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1, par defaut : 1)
+     - Numéro de page (commence à 1, par défaut : 1)
    * - ``id``
      - String
      - Non
-     - Filtrer uniquement sur le mot interdit ayant l'ID specifie
+     - Filtrer uniquement sur le mot interdit ayant l'ID spécifié
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -102,14 +102,14 @@ Reponse
 Obtention d'un mot interdit
 ===========================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/badword/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -124,10 +124,10 @@ Reponse
       }
     }
 
-Creation d'un mot interdit
+Création d'un mot interdit
 ==========================
 
-Requete
+Requête
 -------
 
 ::
@@ -135,7 +135,7 @@ Requete
     POST /api/admin/badword/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -156,9 +156,9 @@ Description des champs
      - Description
    * - ``suggestWord``
      - Oui
-     - Mot-cle a exclure (ne peut pas contenir d'espaces)
+     - Mot-clé à exclure (ne peut pas contenir d'espaces)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -171,10 +171,10 @@ Reponse
       }
     }
 
-Mise a jour d'un mot interdit
+Mise à jour d'un mot interdit
 =============================
 
-Requete
+Requête
 -------
 
 ::
@@ -182,7 +182,7 @@ Requete
     PUT /api/admin/badword/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -193,7 +193,7 @@ Corps de la requete
       "versionNo": 1
     }
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -209,14 +209,14 @@ Reponse
 Suppression d'un mot interdit
 =============================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/badword/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -229,12 +229,12 @@ Reponse
       }
     }
 
-Televersement CSV des mots interdits
+Téléversement CSV des mots interdits
 ====================================
 
-Enregistre en masse des mots interdits depuis un fichier CSV. Le fichier est envoye en ``multipart/form-data``. L'import est execute de maniere asynchrone cote serveur.
+Enregistre en masse des mots interdits depuis un fichier CSV. Le fichier est envoyé en ``multipart/form-data``. L'import est exécuté de manière asynchrone côté serveur.
 
-Requete
+Requête
 -------
 
 ::
@@ -242,35 +242,35 @@ Requete
     PUT /api/admin/badword/upload
     Content-Type: multipart/form-data
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametre
+   * - Paramètre
      - Requis
      - Description
    * - ``badWordFile``
      - Oui
-     - Fichier CSV des mots interdits a televerser
+     - Fichier CSV des mots interdits à téléverser
 
 Format CSV
 ~~~~~~~~~~
 
-- La premiere ligne est ignoree en tant que ligne d'en-tete (le nom de colonne est arbitraire ; ``BadWord`` est ecrit lors du telechargement).
-- A partir de la deuxieme ligne, ecrivez un mot interdit par ligne en tant que ``suggestWord``.
-- Les lignes dont la valeur est vide sont ignorees.
-- Prefixez un mot par ``--`` pour le supprimer (par exemple, ``--spam`` supprime ``spam``).
-- Specifier un mot deja enregistre est traite comme une mise a jour (l'auteur et la date de mise a jour sont reinitialises).
+- La première ligne est ignorée en tant que ligne d'en-tête (le nom de colonne est arbitraire ; ``BadWord`` est écrit lors du téléchargement).
+- À partir de la deuxième ligne, écrivez un mot interdit par ligne en tant que ``suggestWord``.
+- Les lignes dont la valeur est vide sont ignorées.
+- Préfixez un mot par ``--`` pour le supprimer (par exemple, ``--spam`` supprime ``spam``).
+- Spécifier un mot déjà enregistré est traité comme une mise à jour (l'auteur et la date de mise à jour sont réinitialisés).
 
 .. note::
 
-   Comme l'import s'execute de maniere asynchrone cote serveur, une reponse ``status: 0``
-   indique que la requete a ete acceptee, et non que l'import est termine.
+   Comme l'import s'exécute de manière asynchrone côté serveur, une réponse ``status: 0``
+   indique que la requête a été acceptée, et non que l'import est terminé.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -281,13 +281,13 @@ Reponse
       }
     }
 
-Telechargement CSV des mots interdits
+Téléchargement CSV des mots interdits
 =====================================
 
-Telecharge les mots interdits enregistres sous forme de fichier CSV (``badword.csv``). La reponse est un flux ``application/octet-stream``.
-Le CSV comporte une ligne d'en-tete ``BadWord`` sur la premiere ligne, suivie d'un mot interdit enregistre par ligne.
+Télécharge les mots interdits enregistrés sous forme de fichier CSV (``badword.csv``). La réponse est un flux ``application/octet-stream``.
+Le CSV comporte une ligne d'en-tête ``BadWord`` sur la première ligne, suivie d'un mot interdit enregistré par ligne.
 
-Requete
+Requête
 -------
 
 ::
@@ -297,7 +297,7 @@ Requete
 Exemples d'utilisation
 ======================
 
-Exclusion d'un mot-cle spam
+Exclusion d'un mot-clé spam
 ---------------------------
 
 .. code-block:: bash
@@ -309,7 +309,7 @@ Exclusion d'un mot-cle spam
            "suggestWord": "spam"
          }'
 
-Televersement d'un fichier CSV
+Téléversement d'un fichier CSV
 ------------------------------
 
 .. code-block:: bash
@@ -318,7 +318,7 @@ Televersement d'un fichier CSV
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "badWordFile=@badword.csv"
 
-Telechargement d'un fichier CSV
+Téléchargement d'un fichier CSV
 -------------------------------
 
 .. code-block:: bash
@@ -327,7 +327,7 @@ Telechargement d'un fichier CSV
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o badword.csv
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin

@@ -5,8 +5,8 @@ API DataConfig
 Vue d'ensemble
 ==============
 
-L'API DataConfig permet de gerer les configurations de datastore de |Fess|.
-Vous pouvez manipuler les configurations de crawl pour les bases de donnees, les fichiers CSV, JSON et autres sources de donnees.
+L'API DataConfig permet de gérer les configurations de datastore de |Fess|.
+Vous pouvez manipuler les configurations de crawl pour les bases de données, les fichiers CSV, JSON et autres sources de données.
 
 URL de base
 ===========
@@ -22,7 +22,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -33,10 +33,10 @@ Liste des endpoints
      - Obtention d'une configuration datastore
    * - POST
      - /setting
-     - Creation d'une configuration datastore
+     - Création d'une configuration datastore
    * - PUT
      - /setting
-     - Mise a jour d'une configuration datastore
+     - Mise à jour d'une configuration datastore
    * - DELETE
      - /setting/{id}
      - Suppression d'une configuration datastore
@@ -44,32 +44,32 @@ Liste des endpoints
 Obtention de la liste des configurations datastore
 ==================================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/dataconfig/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25)
+     - Nombre d'éléments par page (par défaut : 25)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1, par defaut : 1)
+     - Numéro de page (commence à 1, par défaut : 1)
    * - ``name``
      - String
      - Non
@@ -83,7 +83,7 @@ Parametres
      - Non
      - Filtrer par description
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -113,14 +113,14 @@ Reponse
 Obtention d'une configuration datastore
 =======================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/dataconfig/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -144,10 +144,10 @@ Reponse
       }
     }
 
-Creation d'une configuration datastore
+Création d'une configuration datastore
 ======================================
 
-Requete
+Requête
 -------
 
 ::
@@ -155,7 +155,7 @@ Requete
     POST /api/admin/dataconfig/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -192,27 +192,27 @@ Description des champs
      - Nom du gestionnaire de datastore
    * - ``handlerParameter``
      - Non
-     - Parametres du gestionnaire (informations de connexion, etc.)
+     - Paramètres du gestionnaire (informations de connexion, etc.)
    * - ``handlerScript``
      - Non
-     - Script de transformation des donnees
+     - Script de transformation des données
    * - ``boost``
      - Oui
-     - Valeur de boost des resultats de recherche
+     - Valeur de boost des résultats de recherche
    * - ``available``
      - Oui
-     - Active/Desactive (chaine ``"true"`` / ``"false"``)
+     - Active/Désactivé (chaîne ``"true"`` / ``"false"``)
    * - ``sortOrder``
      - Oui
      - Ordre d'affichage
    * - ``permissions``
      - Non
-     - Roles autorises (separes par des sauts de ligne si plusieurs)
+     - Rôles autorisés (séparés par des sauts de ligne si plusieurs)
    * - ``virtualHosts``
      - Non
-     - Hotes virtuels (separes par des sauts de ligne si plusieurs)
+     - Hôtes virtuels (séparés par des sauts de ligne si plusieurs)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -225,10 +225,10 @@ Reponse
       }
     }
 
-Mise a jour d'une configuration datastore
+Mise à jour d'une configuration datastore
 =========================================
 
-Requete
+Requête
 -------
 
 ::
@@ -236,7 +236,7 @@ Requete
     PUT /api/admin/dataconfig/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -253,7 +253,7 @@ Corps de la requete
       "versionNo": 1
     }
 
-Les requetes de mise a jour necessitent les memes champs obligatoires que la creation (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), ainsi que les champs suivants :
+Les requêtes de mise à jour nécessitent les mêmes champs obligatoires que la création (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), ainsi que les champs suivants :
 
 .. list-table::
    :header-rows: 1
@@ -264,12 +264,12 @@ Les requetes de mise a jour necessitent les memes champs obligatoires que la cre
      - Description
    * - ``id``
      - Oui
-     - ID de la configuration a mettre a jour
+     - ID de la configuration à mettre à jour
    * - ``versionNo``
      - Oui
-     - Numero de version pour le verrouillage optimiste (indiquer la valeur obtenue lors de la recuperation du parametre)
+     - Numéro de version pour le verrouillage optimiste (indiquer la valeur obtenue lors de la récupération du paramètre)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -285,14 +285,14 @@ Reponse
 Suppression d'une configuration datastore
 =========================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/dataconfig/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -313,24 +313,24 @@ Types de gestionnaires
    * - Nom du gestionnaire
      - Description
    * - ``DatabaseDataStore``
-     - Connexion a une base de donnees via JDBC
+     - Connexion à une base de données via JDBC
    * - ``CsvDataStore``
-     - Lecture des donnees depuis un fichier CSV (traitement de chaque ligne comme un document)
+     - Lecture des données depuis un fichier CSV (traitement de chaque ligne comme un document)
    * - ``CsvListDataStore``
-     - Lecture des fichiers CSV avec suppression automatique des fichiers traites (extension de ``CsvDataStore`` avec filtrage par horodatage)
+     - Lecture des fichiers CSV avec suppression automatique des fichiers traités (extension de ``CsvDataStore`` avec filtrage par horodatage)
    * - ``JsonDataStore``
-     - Lecture des donnees depuis un fichier JSON ou une API JSON
+     - Lecture des données depuis un fichier JSON ou une API JSON
 
 .. note::
 
-   Les types de gestionnaires disponibles dependent des plugins de datastore installes.
-   Les gestionnaires ci-dessus sont inclus par defaut. L'installation de plugins de datastore
+   Les types de gestionnaires disponibles dépendent des plugins de datastore installés.
+   Les gestionnaires ci-dessus sont inclus par défaut. L'installation de plugins de datastore
    tels que SharePoint, Slack ou Salesforce rend disponibles leurs noms de gestionnaire respectifs.
 
 Exemples d'utilisation
 ======================
 
-Configuration de crawl de base de donnees
+Configuration de crawl de base de données
 -----------------------------------------
 
 .. code-block:: bash
@@ -348,7 +348,7 @@ Configuration de crawl de base de donnees
            "sortOrder": 0
          }'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin

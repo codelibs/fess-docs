@@ -5,8 +5,8 @@ API Role
 Vue d'ensemble
 ==============
 
-L'API Role permet de gerer les roles de |Fess|.
-Vous pouvez creer, mettre a jour et supprimer des roles.
+L'API Role permet de gérer les rôles de |Fess|.
+Vous pouvez créer, mettre à jour et supprimer des rôles.
 
 URL de base
 ===========
@@ -22,60 +22,60 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des roles
+     - Obtention de la liste des rôles
    * - GET
      - /setting/{id}
-     - Obtention d'un role
+     - Obtention d'un rôle
    * - POST
      - /setting
-     - Creation d'un role
+     - Création d'un rôle
    * - PUT
      - /setting
-     - Mise a jour d'un role
+     - Mise à jour d'un rôle
    * - DELETE
      - /setting/{id}
-     - Suppression d'un role
+     - Suppression d'un rôle
 
-Obtention de la liste des roles
+Obtention de la liste des rôles
 ================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/role/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25. Modifiable via la propriete ``paging.page.size`` dans ``fess_config.properties``)
+     - Nombre d'éléments par page (par défaut : 25. Modifiable via la propriété ``paging.page.size`` dans ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1, par defaut : 1. Les valeurs de 0 ou moins sont traitees comme 1)
+     - Numéro de page (commence à 1, par défaut : 1. Les valeurs de 0 ou moins sont traitées comme 1)
    * - ``id``
      - String
      - Non
-     - Filtre par correspondance exacte sur l'ID de role specifie
+     - Filtre par correspondance exacte sur l'ID de rôle spécifié
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -99,17 +99,17 @@ Reponse
       }
     }
 
-Obtention d'un role
+Obtention d'un rôle
 ===================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/role/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -125,10 +125,10 @@ Reponse
       }
     }
 
-Creation d'un role
+Création d'un rôle
 ==================
 
-Requete
+Requête
 -------
 
 ::
@@ -136,7 +136,7 @@ Requete
     POST /api/admin/role/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -157,12 +157,12 @@ Description des champs
      - Description
    * - ``name``
      - Oui
-     - Nom du role (maximum 100 caracteres)
+     - Nom du rôle (maximum 100 caractères)
    * - ``attributes``
      - Non
-     - Map d'attributs. Les valeurs sont specifiees sous forme de chaines de caracteres
+     - Map d'attributs. Les valeurs sont spécifiées sous forme de chaînes de caractères
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -175,10 +175,10 @@ Reponse
       }
     }
 
-Mise a jour d'un role
+Mise à jour d'un rôle
 =====================
 
-Requete
+Requête
 -------
 
 ::
@@ -186,7 +186,7 @@ Requete
     PUT /api/admin/role/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -209,18 +209,18 @@ Description des champs
      - Description
    * - ``id``
      - Oui
-     - ID du role a mettre a jour
+     - ID du rôle à mettre à jour
    * - ``name``
      - Oui
-     - Nom du role (maximum 100 caracteres)
+     - Nom du rôle (maximum 100 caractères)
    * - ``attributes``
      - Non
-     - Map d'attributs. Les valeurs sont specifiees sous forme de chaines de caracteres
+     - Map d'attributs. Les valeurs sont spécifiées sous forme de chaînes de caractères
    * - ``versionNo``
      - Oui
-     - Numero de version pour le verrouillage optimiste. Specifiez la valeur de ``versionNo`` obtenue lors de l'obtention du role
+     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur de ``versionNo`` obtenue lors de l'obtention du rôle
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -233,17 +233,17 @@ Reponse
       }
     }
 
-Suppression d'un role
+Suppression d'un rôle
 =====================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/role/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -259,7 +259,7 @@ Reponse
 Exemples d'utilisation
 ======================
 
-Creation d'un nouveau role
+Création d'un nouveau rôle
 --------------------------
 
 .. code-block:: bash
@@ -271,7 +271,7 @@ Creation d'un nouveau role
            "name": "content_manager"
          }'
 
-Obtention de la liste des roles
+Obtention de la liste des rôles
 --------------------------------
 
 .. code-block:: bash
@@ -279,10 +279,10 @@ Obtention de la liste des roles
     curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-user` - API de gestion des utilisateurs
 - :doc:`api-admin-group` - API de gestion des groupes
-- :doc:`../../admin/role-guide` - Guide de gestion des roles
+- :doc:`../../admin/role-guide` - Guide de gestion des rôles

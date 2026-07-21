@@ -1,14 +1,14 @@
 ===========================
-Vision General de Admin API
+Visión General de Admin API
 ===========================
 
-Vision General
+Visión General
 ==============
 
-|Fess| Admin API es una API RESTful para acceder programaticamente a las funciones de administracion.
-Puede ejecutar a traves de la API la mayoria de las operaciones disponibles en el panel de administracion, como la configuracion de rastreo, la gestion de usuarios y el control del programador.
+|Fess| Admin API es una API RESTful para acceder programáticamente a las funciones de administración.
+Puede ejecutar a través de la API la mayoría de las operaciones disponibles en el panel de administración, como la configuración de rastreo, la gestión de usuarios y el control del programador.
 
-Al utilizar esta API, puede automatizar la configuracion de |Fess| o integrarse con sistemas externos.
+Al utilizar esta API, puede automatizar la configuración de |Fess| o integrarse con sistemas externos.
 
 URL Base
 ========
@@ -25,15 +25,15 @@ Por ejemplo, en un entorno local:
 
     http://localhost:8080/api/admin/
 
-Autenticacion
+Autenticación
 =============
 
-Para acceder a Admin API, se requiere autenticacion mediante un token de acceso.
+Para acceder a Admin API, se requiere autenticación mediante un token de acceso.
 
-Obtencion del Token de Acceso
+Obtención del Token de Acceso
 -----------------------------
 
-1. Inicie sesion en el panel de administracion
+1. Inicie sesión en el panel de administración
 2. Vaya a "Sistema" -> "Tokens de Acceso"
 3. Haga clic en "Crear Nuevo"
 4. Ingrese el nombre del token y configure en el campo "Permisos" los permisos que desea otorgar al token (para usar Admin API, ingrese ``{role}admin-api``)
@@ -48,15 +48,15 @@ Incluya el token de acceso en el encabezado de la solicitud:
 
     Authorization: Bearer <token de acceso>
 
-Tambien puede omitir ``Bearer`` y especificar solo el token:
+También puede omitir ``Bearer`` y especificar solo el token:
 
 ::
 
     Authorization: <token de acceso>
 
-La especificacion mediante parametro de consulta tambien es posible, pero esta deshabilitada de forma predeterminada. Si configura un nombre de parametro en
-``api.access.token.request.parameter`` de ``fess_config.properties``, podra pasar el
-token con ese nombre (como el valor predeterminado esta vacio, solo es valida la especificacion mediante el encabezado).
+La especificación mediante parámetro de consulta también es posible, pero está deshabilitada de forma predeterminada. Si configura un nombre de parámetro en
+``api.access.token.request.parameter`` de ``fess_config.properties``, podrá pasar el
+token con ese nombre (como el valor predeterminado está vacío, solo es válida la especificación mediante el encabezado).
 Por ejemplo, si configura ``api.access.token.request.parameter=token``:
 
 ::
@@ -74,7 +74,7 @@ Ejemplo con cURL
 Permisos Requeridos
 -------------------
 
-El acceso a Admin API se controla mediante un unico conjunto de permisos, no por funcion. Para utilizar
+El acceso a Admin API se controla mediante un único conjunto de permisos, no por función. Para utilizar
 cualquiera de los endpoints de Admin API, el token de acceso debe tener otorgado alguno de los permisos
 configurados en ``api.admin.access.permissions`` de ``fess_config.properties``.
 
@@ -92,9 +92,9 @@ El valor predeterminado es ``Radmin-api``, que es la forma codificada del rol ``
 Patrones Comunes
 ================
 
-Los recursos que tienen configuraciones (webconfig, user, role, etc.) siguen el siguiente patron CRUD comun.
-Sin embargo, algunos recursos (systeminfo, stats, storage, plugin, log, backup, documents, suggest, la raiz de dict, etc.)
-tienen una estructura de endpoints propia distinta de este patron comun, por lo que debe consultar la pagina de cada recurso.
+Los recursos que tienen configuraciones (webconfig, user, role, etc.) siguen el siguiente patrón CRUD común.
+Sin embargo, algunos recursos (systeminfo, stats, storage, plugin, log, backup, documents, suggest, la raíz de dict, etc.)
+tienen una estructura de endpoints propia distinta de este patrón común, por lo que debe consultar la página de cada recurso.
 
 Obtener Lista (GET /settings)
 -----------------------------
@@ -108,21 +108,21 @@ Solicitud
 
     GET /api/admin/<recurso>/settings
 
-Parametros (paginacion):
+Parámetros (paginación):
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 65
 
-   * - Parametro
+   * - Parámetro
      - Tipo
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
-     - Numero de elementos por pagina (predeterminado: 25. Modificable mediante ``paging.page.size`` de ``fess_config.properties``)
+     - Número de elementos por página (predeterminado: 25. Modificable mediante ``paging.page.size`` de ``fess_config.properties``)
    * - ``page``
      - Integer
-     - Numero de pagina (comienza en 1. Predeterminado: 1. Si se especifica un valor menor o igual a 0, se trata como 1)
+     - Número de página (comienza en 1. Predeterminado: 1. Si se especifica un valor menor o igual a 0, se trata como 1)
 
 Respuesta
 ~~~~~~~~~
@@ -141,13 +141,13 @@ Respuesta
 .. note::
 
    El objeto ``response`` de todas las respuestas incluye siempre ``version``,
-   que indica la version del producto (por ejemplo, ``"15.7.0"``). En los ejemplos siguientes
+   que indica la versión del producto (por ejemplo, ``"15.7.0"``). En los ejemplos siguientes
    puede omitirse por brevedad.
 
-Obtener Configuracion Individual (GET /setting/{id})
+Obtener Configuración Individual (GET /setting/{id})
 ----------------------------------------------------
 
-Obtiene una configuracion individual especificando el ID.
+Obtiene una configuración individual especificando el ID.
 
 Solicitud
 ~~~~~~~~~
@@ -171,7 +171,7 @@ Respuesta
 Crear Nuevo (POST /setting)
 ---------------------------
 
-Crea una nueva configuracion.
+Crea una nueva configuración.
 
 Solicitud
 ~~~~~~~~~
@@ -202,7 +202,7 @@ Respuesta
 Actualizar (PUT /setting)
 -------------------------
 
-Actualiza una configuracion existente.
+Actualiza una configuración existente.
 
 Solicitud
 ~~~~~~~~~
@@ -234,7 +234,7 @@ Respuesta
 Eliminar (DELETE /setting/{id})
 -------------------------------
 
-Elimina una configuracion.
+Elimina una configuración.
 
 Solicitud
 ~~~~~~~~~
@@ -246,7 +246,7 @@ Solicitud
 Respuesta
 ~~~~~~~~~
 
-El formato de la respuesta de eliminacion difiere segun el recurso (accion). Muchos recursos
+El formato de la respuesta de eliminación difiere según el recurso (acción). Muchos recursos
 devuelven solo ``status``.
 
 .. code-block:: json
@@ -257,8 +257,8 @@ devuelven solo ``status``.
       }
     }
 
-En algunos recursos, el resultado de la eliminacion se devuelve como ``ApiUpdateResponse``, con
-el ``id`` de la configuracion eliminada y ``created`` (``false`` al eliminar).
+En algunos recursos, el resultado de la eliminación se devuelve como ``ApiUpdateResponse``, con
+el ``id`` de la configuración eliminada y ``created`` (``false`` al eliminar).
 
 .. code-block:: json
 
@@ -270,14 +270,14 @@ el ``id`` de la configuracion eliminada y ``created`` (``false`` al eliminar).
       }
     }
 
-Ademas, en los recursos que devuelven ``ApiDeleteResponse`` puede agregarse ``count``,
-que indica el numero de elementos eliminados (valor predeterminado ``1``). Consulte la pagina de cada recurso para conocer el formato real.
+Además, en los recursos que devuelven ``ApiDeleteResponse`` puede agregarse ``count``,
+que indica el número de elementos eliminados (valor predeterminado ``1``). Consulte la página de cada recurso para conocer el formato real.
 
 Formato de Respuesta
 ====================
 
 Todas las respuestas se envuelven en un objeto ``response`` que incluye siempre
-``version``, que indica la version del producto, y ``status``, que indica el resultado del procesamiento.
+``version``, que indica la versión del producto, y ``status``, que indica el resultado del procesamiento.
 
 Los valores de ``status`` son los siguientes.
 
@@ -286,15 +286,15 @@ Los valores de ``status`` son los siguientes.
    :widths: 15 85
 
    * - Valor
-     - Descripcion
+     - Descripción
    * - ``0``
-     - OK (exito)
+     - OK (éxito)
    * - ``1``
-     - BAD_REQUEST (solicitud invalida)
+     - BAD_REQUEST (solicitud inválida)
    * - ``2``
      - SYSTEM_ERROR (error del sistema)
    * - ``3``
-     - UNAUTHORIZED (error de autenticacion)
+     - UNAUTHORIZED (error de autenticación)
    * - ``9``
      - FAILED (procesamiento fallido)
 
@@ -311,7 +311,7 @@ Respuesta Exitosa
       }
     }
 
-``status: 0`` indica exito.
+``status: 0`` indica éxito.
 
 Respuesta de Error
 ------------------
@@ -329,36 +329,36 @@ contiene el mensaje de error.
       }
     }
 
-Codigos de Estado HTTP
+Códigos de Estado HTTP
 ----------------------
 
-Admin API devuelve en la mayoria de los casos el estado HTTP ``200``, y el resultado del procesamiento se indica
-en el campo ``status`` del cuerpo de la respuesta. Por lo tanto, no determine el exito o el fallo por el codigo de estado HTTP,
+Admin API devuelve en la mayoría de los casos el estado HTTP ``200``, y el resultado del procesamiento se indica
+en el campo ``status`` del cuerpo de la respuesta. Por lo tanto, no determine el éxito o el fallo por el código de estado HTTP,
 sino por el valor de ``status`` del cuerpo.
 
-Los codigos de estado HTTP que se devuelven realmente son los siguientes.
+Los códigos de estado HTTP que se devuelven realmente son los siguientes.
 
 .. list-table::
    :header-rows: 1
    :widths: 15 85
 
-   * - Codigo
-     - Descripcion
+   * - Código
+     - Descripción
    * - 200
-     - Respuesta normal. Ademas del caso de exito (``status: 0``), la mayoria de los errores tambien se
-       devuelven con este codigo. Por ejemplo, si el token de acceso no se especifica o es invalido, o si los permisos son insuficientes, se devuelve
+     - Respuesta normal. Además del caso de éxito (``status: 0``), la mayoría de los errores también se
+       devuelven con este código. Por ejemplo, si el token de acceso no se especifica o es inválido, o si los permisos son insuficientes, se devuelve
        ``status: 3``; y un error del sistema se devuelve como ``status: 2``, ambos con HTTP ``200``.
    * - 400
-     - Error de validacion de los parametros de la solicitud. El ``status`` del cuerpo de la respuesta sera ``1``.
-       Este codigo tambien se devuelve cuando se intenta obtener un recurso inexistente.
+     - Error de validación de los parámetros de la solicitud. El ``status`` del cuerpo de la respuesta será ``1``.
+       Este código también se devuelve cuando se intenta obtener un recurso inexistente.
    * - 401
-     - Cuando ocurre una excepcion relacionada con la autenticacion de inicio de sesion. El ``status`` del cuerpo de la respuesta sera ``3``.
-       Tenga en cuenta que, si el token de acceso no se especifica o es invalido, no se devuelve este codigo, sino HTTP ``200`` con
+     - Cuando ocurre una excepción relacionada con la autenticación de inicio de sesión. El ``status`` del cuerpo de la respuesta será ``3``.
+       Tenga en cuenta que, si el token de acceso no se especifica o es inválido, no se devuelve este código, sino HTTP ``200`` con
        ``status: 3``.
 
 .. note::
 
-   Admin API no devuelve codigos de estado HTTP como ``403``, ``404`` o ``500``.
+   Admin API no devuelve códigos de estado HTTP como ``403``, ``404`` o ``500``.
    Tanto los permisos insuficientes como la inexistencia de un recurso se indican mediante el
    ``status`` incluido en el cuerpo de la respuesta HTTP ``200`` o ``400``.
 
@@ -367,7 +367,7 @@ APIs Disponibles
 
 |Fess| proporciona las siguientes Admin APIs.
 
-Configuracion de Rastreo
+Configuración de Rastreo
 ------------------------
 
 .. list-table::
@@ -375,22 +375,22 @@ Configuracion de Rastreo
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-webconfig`
-     - Configuracion de rastreo web
+     - Configuración de rastreo web
    * - :doc:`api-admin-fileconfig`
-     - Configuracion de rastreo de archivos
+     - Configuración de rastreo de archivos
    * - :doc:`api-admin-dataconfig`
-     - Configuracion de almacen de datos
+     - Configuración de almacén de datos
 
 .. note::
 
-   Ademas, los siguientes recursos relacionados con credenciales de autenticacion y control de rastreo
-   tambien se ofrecen como API (actualmente no tienen una pagina propia): ``webauth`` (autenticacion web), ``fileauth`` (autenticacion de archivos),
+   Además, los siguientes recursos relacionados con credenciales de autenticación y control de rastreo
+   también se ofrecen como API (actualmente no tienen una página propia): ``webauth`` (autenticación web), ``fileauth`` (autenticación de archivos),
    ``reqheader`` (encabezados de solicitud), ``pathmap`` (mapeo de rutas),
-   ``duplicatehost`` (hosts duplicados), ``searchlist`` (operaciones de busqueda/lista de documentos).
+   ``duplicatehost`` (hosts duplicados), ``searchlist`` (operaciones de búsqueda/lista de documentos).
 
-Gestion de Indices
+Gestión de Índices
 ------------------
 
 .. list-table::
@@ -398,15 +398,15 @@ Gestion de Indices
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-documents`
      - Operaciones masivas de documentos
    * - :doc:`api-admin-crawlinginfo`
-     - Informacion de rastreo
+     - Información de rastreo
    * - :doc:`api-admin-failureurl`
-     - Gestion de URLs fallidas
+     - Gestión de URLs fallidas
    * - :doc:`api-admin-backup`
-     - Copia de seguridad/Restauracion
+     - Copia de seguridad/Restauración
 
 Programador
 -----------
@@ -416,13 +416,13 @@ Programador
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-scheduler`
-     - Programacion de trabajos
+     - Programación de trabajos
    * - :doc:`api-admin-joblog`
-     - Obtencion de registros de trabajos
+     - Obtención de registros de trabajos
 
-Gestion de Usuarios y Permisos
+Gestión de Usuarios y Permisos
 ------------------------------
 
 .. list-table::
@@ -430,17 +430,17 @@ Gestion de Usuarios y Permisos
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-user`
-     - Gestion de usuarios
+     - Gestión de usuarios
    * - :doc:`api-admin-role`
-     - Gestion de roles
+     - Gestión de roles
    * - :doc:`api-admin-group`
-     - Gestion de grupos
+     - Gestión de grupos
    * - :doc:`api-admin-accesstoken`
-     - Gestion de tokens API
+     - Gestión de tokens API
 
-Ajuste de Busqueda
+Ajuste de Búsqueda
 ------------------
 
 .. list-table::
@@ -448,7 +448,7 @@ Ajuste de Busqueda
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-labeltype`
      - Tipos de etiqueta
    * - :doc:`api-admin-keymatch`
@@ -464,7 +464,7 @@ Ajuste de Busqueda
    * - :doc:`api-admin-relatedquery`
      - Consultas relacionadas
    * - :doc:`api-admin-suggest`
-     - Gestion de sugerencias
+     - Gestión de sugerencias
 
 Sistema
 -------
@@ -474,21 +474,21 @@ Sistema
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-general`
-     - Configuracion general
+     - Configuración general
    * - :doc:`api-admin-systeminfo`
-     - Informacion del sistema
+     - Información del sistema
    * - :doc:`api-admin-stats`
-     - Estadisticas del sistema
+     - Estadísticas del sistema
    * - :doc:`api-admin-log`
-     - Obtencion de registros
+     - Obtención de registros
    * - :doc:`api-admin-searchlist`
-     - Busqueda y gestion de documentos
+     - Búsqueda y gestión de documentos
    * - :doc:`api-admin-storage`
-     - Gestion de almacenamiento
+     - Gestión de almacenamiento
    * - :doc:`api-admin-plugin`
-     - Gestion de plugins
+     - Gestión de plugins
 
 Diccionario
 -----------
@@ -498,14 +498,14 @@ Diccionario
    :widths: 30 70
 
    * - Endpoint
-     - Descripcion
+     - Descripción
    * - :doc:`api-admin-dict`
-     - Gestion de diccionarios (sinonimos, palabras vacias, etc.)
+     - Gestión de diccionarios (sinónimos, palabras vacías, etc.)
 
 Ejemplos de Uso
 ===============
 
-Crear Configuracion de Rastreo Web
+Crear Configuración de Rastreo Web
 ----------------------------------
 
 .. code-block:: bash
@@ -530,9 +530,9 @@ Crear Configuracion de Rastreo Web
 
 .. note::
 
-   Al crear una configuracion de rastreo web, son obligatorios ``name``, ``urls``, ``userAgent``, ``numOfThread``,
+   Al crear una configuración de rastreo web, son obligatorios ``name``, ``urls``, ``userAgent``, ``numOfThread``,
    ``intervalTime``, ``boost``, ``available`` y ``sortOrder``. Si se omiten,
-   se produce un error de validacion (``status: 1``). ``available`` se especifica como una cadena de texto y
+   se produce un error de validación (``status: 1``). ``available`` se especifica como una cadena de texto y
    se establece en ``"true"`` o ``"false"``.
 
 Iniciar Trabajo Programado
@@ -551,8 +551,8 @@ Obtener Lista de Usuarios
     curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`../api-overview` - Vision general de API
-- :doc:`../../admin/accesstoken-guide` - Guia de gestion de tokens de acceso
+- :doc:`../api-overview` - Visión general de API
+- :doc:`../../admin/accesstoken-guide` - Guía de gestión de tokens de acceso

@@ -5,7 +5,7 @@ API CrawlingInfo
 Vue d'ensemble
 ==============
 
-L'API CrawlingInfo permet de consulter et de gerer les informations de crawl (sessions de crawl) de |Fess|.
+L'API CrawlingInfo permet de consulter et de gérer les informations de crawl (sessions de crawl) de |Fess|.
 Vous pouvez obtenir la liste des sessions de crawl, les consulter individuellement, les supprimer, etc.
 
 URL de base
@@ -22,7 +22,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -36,43 +36,43 @@ Liste des endpoints
      - Suppression d'une information de crawl
    * - DELETE
      - /all
-     - Suppression groupee des sessions de crawl (hors sessions en cours)
+     - Suppression groupée des sessions de crawl (hors sessions en cours)
 
 Obtention de la liste des informations de crawl
 ===============================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/crawlinginfo/logs
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (defaut : 20)
+     - Nombre d'éléments par page (défaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (base 1, defaut : 1)
+     - Numéro de page (base 1, défaut : 1)
    * - ``sessionId``
      - String
      - Non
      - Filtre par ID de session (correspondance partielle)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -100,7 +100,7 @@ Reponse
       }
     }
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -116,27 +116,27 @@ Champs de la reponse
    * - ``name``
      - Nom de la session
    * - ``expiredTime``
-     - Date d'expiration (millisecondes epoch ; retournee sous forme de chaine)
+     - Date d'expiration (millisecondes epoch ; retournée sous forme de chaîne)
    * - ``createdTime``
-     - Heure de creation (millisecondes epoch ; retournee sous forme de nombre)
+     - Heure de création (millisecondes epoch ; retournée sous forme de nombre)
 
 .. note::
 
-   Chaque objet de journal dans la reponse inclut egalement un champ interne ``crudMode``
-   (un entier indiquant le mode d'operation CRUD, toujours ``0`` pour les operations de lecture).
-   Les clients peuvent l'ignorer en toute securite.
+   Chaque objet de journal dans la réponse inclut également un champ interne ``crudMode``
+   (un entier indiquant le mode d'opération CRUD, toujours ``0`` pour les opérations de lecture).
+   Les clients peuvent l'ignorer en toute sécurité.
 
 Obtention d'une information de crawl
 ====================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/crawlinginfo/log/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -157,14 +157,14 @@ Reponse
 Suppression d'une information de crawl
 ======================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/crawlinginfo/log/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -175,19 +175,19 @@ Reponse
       }
     }
 
-Suppression groupee des sessions de crawl
+Suppression groupée des sessions de crawl
 ==========================================
 
-Supprime toutes les sessions de crawl (ainsi que leurs donnees de parametres), a l'exception de celles qui sont actuellement en cours d'execution. Il n'y a pas de seuil d'age ou de duree ; toute session qui n'est pas en cours d'execution est supprimee.
+Supprime toutes les sessions de crawl (ainsi que leurs données de paramètres), à l'exception de celles qui sont actuellement en cours d'exécution. Il n'y a pas de seuil d'âge ou de durée ; toute session qui n'est pas en cours d'exécution est supprimée.
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/crawlinginfo/all
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -209,7 +209,7 @@ Obtention de la liste des informations de crawl
     curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Filtrage par session specifique
+Filtrage par session spécifique
 -------------------------------
 
 .. code-block:: bash
@@ -233,7 +233,7 @@ Suppression d'une information de crawl
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Suppression groupee des sessions
+Suppression groupée des sessions
 --------------------------------
 
 .. code-block:: bash
@@ -241,10 +241,10 @@ Suppression groupee des sessions
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-failureurl` - API des URLs en echec
-- :doc:`api-admin-joblog` - API des journaux de taches
+- :doc:`api-admin-failureurl` - API des URLs en échec
+- :doc:`api-admin-joblog` - API des journaux de tâches
 - :doc:`../../admin/crawlinginfo-guide` - Guide des informations de crawl

@@ -5,19 +5,19 @@ BoostDoc API
 Vue d'ensemble
 ==============
 
-L'API BoostDoc est une API permettant de gerer les configurations de boost de documents dans |Fess|.
-En configurant le boost de documents, vous pouvez augmenter le score des documents correspondant a certaines conditions
-et les faire apparaitre plus haut dans les resultats de recherche.
+L'API BoostDoc est une API permettant de gérer les configurations de boost de documents dans |Fess|.
+En configurant le boost de documents, vous pouvez augmenter le score des documents correspondant à certaines conditions
+et les faire apparaître plus haut dans les résultats de recherche.
 
-Le boost est applique a chaque document lors de la creation de l'index (au moment du crawl).
-La condition (``urlExpr``) et la valeur de boost (``boostExpr``) sont toutes deux evaluees comme des expressions Groovy.
-Les regles multiples sont evaluees dans l'ordre croissant de ``sortOrder``, et seule la valeur de boost de la premiere regle
-dont la condition correspond est appliquee (une fois qu'une regle correspondante est trouvee, les regles suivantes ne sont pas evaluees).
+Le boost est appliqué à chaque document lors de la création de l'index (au moment du crawl).
+La condition (``urlExpr``) et la valeur de boost (``boostExpr``) sont toutes deux évaluées comme des expressions Groovy.
+Les règles multiples sont évaluées dans l'ordre croissant de ``sortOrder``, et seule la valeur de boost de la première règle
+dont la condition correspond est appliquée (une fois qu'une règle correspondante est trouvée, les règles suivantes ne sont pas évaluées).
 
 .. note::
 
-   Dans l'interface d'administration, ``urlExpr`` est affiche sous le nom « Condition » et ``boostExpr`` sous le nom « Expression de valeur de boost ».
-   Pour plus de details sur les elements de configuration, consultez :doc:`../../admin/boostdoc-guide`.
+   Dans l'interface d'administration, ``urlExpr`` est affiché sous le nom « Condition » et ``boostExpr`` sous le nom « Expression de valeur de boost ».
+   Pour plus de détails sur les éléments de configuration, consultez :doc:`../../admin/boostdoc-guide`.
 
 URL de base
 ===========
@@ -29,8 +29,8 @@ URL de base
 Authentification
 ================
 
-Pour utiliser cette API, un jeton d'acces avec la permission ``Radmin-api`` est requis.
-Pour savoir comment obtenir et specifier un jeton d'acces, consultez :doc:`api-admin-overview`.
+Pour utiliser cette API, un jeton d'accès avec la permission ``Radmin-api`` est requis.
+Pour savoir comment obtenir et spécifier un jeton d'accès, consultez :doc:`api-admin-overview`.
 
 Liste des endpoints
 ===================
@@ -39,7 +39,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -50,10 +50,10 @@ Liste des endpoints
      - Obtention d'un boost de document
    * - POST
      - /setting
-     - Creation d'un boost de document
+     - Création d'un boost de document
    * - PUT
      - /setting
-     - Mise a jour d'un boost de document
+     - Mise à jour d'un boost de document
    * - DELETE
      - /setting/{id}
      - Suppression d'un boost de document
@@ -61,32 +61,32 @@ Liste des endpoints
 Obtention de la liste des boosts de documents
 =============================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/boostdoc/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25)
+     - Nombre d'éléments par page (par défaut : 25)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1. Par defaut : 1)
+     - Numéro de page (commence à 1. Par défaut : 1)
    * - ``urlExpr``
      - String
      - Non
@@ -96,7 +96,7 @@ Parametres
      - Non
      - Filtrage par expression de valeur de boost (correspondance partielle)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -119,20 +119,20 @@ Reponse
 
 .. note::
 
-   En plus des champs presentes ci-dessus, chaque objet de configuration dans la reponse inclut egalement des metadonnees de creation/mise a jour (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``).
-   ``versionNo`` est obligatoire lors d'une mise a jour (PUT) ; recuperez sa valeur actuelle via l'API d'obtention ou de liste avant de proceder a la mise a jour.
+   En plus des champs présentés ci-dessus, chaque objet de configuration dans la réponse inclut également des métadonnées de création/mise à jour (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``).
+   ``versionNo`` est obligatoire lors d'une mise à jour (PUT) ; récupérez sa valeur actuelle via l'API d'obtention ou de liste avant de procéder à la mise à jour.
 
 Obtention d'un boost de document
 ==================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/boostdoc/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -150,10 +150,10 @@ Reponse
       }
     }
 
-Creation d'un boost de document
+Création d'un boost de document
 =================================
 
-Requete
+Requête
 -------
 
 ::
@@ -161,7 +161,7 @@ Requete
     POST /api/admin/boostdoc/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -184,15 +184,15 @@ Description des champs
      - Description
    * - ``urlExpr``
      - Oui
-     - Expression de condition. Expression Groovy retournant un ``Boolean`` permettant de determiner les documents a booster. Correspond au champ « Condition » de l'interface d'administration (maximum 10000 caracteres).
+     - Expression de condition. Expression Groovy retournant un ``Boolean`` permettant de déterminer les documents à booster. Correspond au champ « Condition » de l'interface d'administration (maximum 10000 caractères).
    * - ``boostExpr``
      - Oui
-     - Expression de valeur de boost. Expression Groovy retournant la valeur de boost (numerique). Une valeur fixe telle que ``3.0`` peut egalement etre specifiee. Correspond au champ « Expression de valeur de boost » de l'interface d'administration (maximum 10000 caracteres).
+     - Expression de valeur de boost. Expression Groovy retournant la valeur de boost (numérique). Une valeur fixe telle que ``3.0`` peut également être spécifiée. Correspond au champ « Expression de valeur de boost » de l'interface d'administration (maximum 10000 caractères).
    * - ``sortOrder``
      - Oui
-     - Ordre d'application. Les regles sont evaluees dans l'ordre croissant et la valeur de boost de la premiere regle correspondante est appliquee (valeur initiale du formulaire : 0, entier superieur ou egal a 0).
+     - Ordre d'application. Les règles sont évaluées dans l'ordre croissant et la valeur de boost de la première règle correspondante est appliquée (valeur initiale du formulaire : 0, entier supérieur ou égal à 0).
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -205,10 +205,10 @@ Reponse
       }
     }
 
-Mise a jour d'un boost de document
+Mise à jour d'un boost de document
 ====================================
 
-Requete
+Requête
 -------
 
 ::
@@ -216,7 +216,7 @@ Requete
     PUT /api/admin/boostdoc/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -229,9 +229,9 @@ Corps de la requete
       "versionNo": 1
     }
 
-Lors de la mise a jour, en plus des champs utilises lors de la creation, ``id`` (l'identifiant de la regle cible, 1000 caracteres maximum) et ``versionNo`` (le numero de version pour le verrouillage optimiste) sont obligatoires. Specifiez pour ``versionNo`` la valeur actuelle obtenue depuis la reponse de l'API d'obtention ou de liste. La mise a jour echoue si le numero de version ne correspond pas.
+Lors de la mise à jour, en plus des champs utilisés lors de la création, ``id`` (l'identifiant de la règle cible, 1000 caractères maximum) et ``versionNo`` (le numéro de version pour le verrouillage optimiste) sont obligatoires. Spécifiez pour ``versionNo`` la valeur actuelle obtenue depuis la réponse de l'API d'obtention ou de liste. La mise à jour échoue si le numéro de version ne correspond pas.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -247,14 +247,14 @@ Reponse
 Suppression d'un boost de document
 ====================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/boostdoc/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -268,18 +268,18 @@ Reponse
 Expressions de condition et de valeur de boost
 ===============================================
 
-``urlExpr`` (condition) et ``boostExpr`` (expression de valeur de boost) sont toutes deux evaluees comme des expressions Groovy.
-Dans les expressions, les valeurs des champs du document cible de l'indexation peuvent etre referenciees comme des variables portant le nom du champ.
+``urlExpr`` (condition) et ``boostExpr`` (expression de valeur de boost) sont toutes deux évaluées comme des expressions Groovy.
+Dans les expressions, les valeurs des champs du document cible de l'indexation peuvent être référenciées comme des variables portant le nom du champ.
 
-- ``urlExpr`` doit retourner un ``Boolean`` (exemple : ``url.startsWith("https://docs.example.com/")``). Une simple chaine d'expression reguliere (exemple : ``.*docs\.example\.com.*``) ne retourne pas un ``Boolean`` en tant qu'expression Groovy et ne fonctionne donc pas comme condition. Pour utiliser des expressions regulieres, utilisez ``String#matches`` de Groovy.
-- ``boostExpr`` doit retourner une valeur numerique. Le resultat est converti en ``float`` et le boost n'est applique que si la valeur est superieure a 0.
+- ``urlExpr`` doit retourner un ``Boolean`` (exemple : ``url.startsWith("https://docs.example.com/")``). Une simple chaîne d'expression régulière (exemple : ``.*docs\.example\.com.*``) ne retourne pas un ``Boolean`` en tant qu'expression Groovy et ne fonctionne donc pas comme condition. Pour utiliser des expressions régulières, utilisez ``String#matches`` de Groovy.
+- ``boostExpr`` doit retourner une valeur numérique. Le résultat est converti en ``float`` et le boost n'est appliqué que si la valeur est supérieure à 0.
 
 .. note::
 
-   Principales variables de champs referenciables dans les expressions : ``url``, ``title``, ``content``, ``content_length``, ``last_modified``, etc.
+   Principales variables de champs référenciables dans les expressions : ``url``, ``title``, ``content``, ``content_length``, ``last_modified``, etc.
    ``click_count`` et ``favorite_count`` sont disponibles respectivement lorsque ``indexer.click.count.enabled`` /
-   ``indexer.favorite.count.enabled`` sont actives (toutes deux activees par defaut).
-   La syntaxe de calcul de date OpenSearch telle que ``now - 7d`` ne peut pas etre utilisee en Groovy.
+   ``indexer.favorite.count.enabled`` sont actives (toutes deux activées par défaut).
+   La syntaxe de calcul de date OpenSearch telle que ``now - 7d`` ne peut pas être utilisée en Groovy.
 
 Exemples d'expressions de condition (``urlExpr``)
 --------------------------------------------------
@@ -291,11 +291,11 @@ Exemples d'expressions de condition (``urlExpr``)
    * - Expression de condition
      - Description
    * - ``url.startsWith("https://docs.example.com/")``
-     - Cible les documents dont l'URL commence par la valeur specifiee
+     - Cible les documents dont l'URL commence par la valeur spécifiée
    * - ``url.matches("https://www\\.example\\.com/.*")``
-     - Evalue l'URL avec une expression reguliere (``String#matches`` de Groovy)
+     - Évalue l'URL avec une expression régulière (``String#matches`` de Groovy)
    * - ``title.contains("Notes de version")``
-     - Cible les documents dont le titre contient un mot specifique
+     - Cible les documents dont le titre contient un mot spécifique
 
 Exemples d'expressions de valeur de boost (``boostExpr``)
 ----------------------------------------------------------
@@ -311,7 +311,7 @@ Exemples d'expressions de valeur de boost (``boostExpr``)
    * - ``click_count * 0.1 + 1``
      - Boost proportionnel au nombre de clics
    * - ``Math.log(click_count + 1)``
-     - Boost sur une echelle logarithmique basee sur le nombre de clics
+     - Boost sur une échelle logarithmique basée sur le nombre de clics
 
 Exemples d'utilisation
 ======================
@@ -344,7 +344,7 @@ Boost de contenu populaire
            "sortOrder": 10
          }'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin

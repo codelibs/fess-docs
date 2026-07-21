@@ -1,19 +1,19 @@
 ==================================
-Developpement de plugins DataStore
+Développement de plugins DataStore
 ==================================
 
 Vue d'ensemble
 ==============
 
-En developpant un plugin DataStore, vous pouvez ajouter a |Fess| la capacite
-de recuperer du contenu depuis de nouvelles sources de donnees.
+En développant un plugin DataStore, vous pouvez ajouter à |Fess| la capacité
+de récupérer du contenu depuis de nouvelles sources de données.
 
 Structure de base
 =================
 
-Un plugin DataStore herite de ``AbstractDataStore``.
+Un plugin DataStore hérite de ``AbstractDataStore``.
 
-Implementation minimale
+Implémentation minimale
 -----------------------
 
 .. code-block:: java
@@ -48,34 +48,34 @@ Implementation minimale
 AbstractDataStore
 =================
 
-Methodes principales
+Méthodes principales
 --------------------
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
-   * - Methode
+   * - Méthode
      - Description
    * - ``getName()``
      - Retourne le nom du DataStore (obligatoire)
    * - ``storeData()``
-     - Effectue la recuperation et l'enregistrement dans l'index (obligatoire)
+     - Effectue la récupération et l'enregistrement dans l'index (obligatoire)
    * - ``register()``
      - Enregistre le plugin
 
-Parametres
+Paramètres
 ----------
 
-Parametres passes a la methode ``storeData()``:
+Paramètres passés à la méthode ``storeData()``:
 
 - ``dataConfig``: Configuration du DataStore
-- ``callback``: Callback pour la mise a jour de l'index
-- ``paramMap``: Parametres configures dans l'interface d'administration
+- ``callback``: Callback pour la mise à jour de l'index
+- ``paramMap``: Paramètres configurés dans l'interface d'administration
 - ``scriptMap``: Configuration des scripts
-- ``defaultDataMap``: Map de donnees par defaut
+- ``defaultDataMap``: Map de données par défaut
 
-Exemple d'implementation
+Exemple d'implémentation
 ========================
 
 DataStore simple
@@ -151,7 +151,7 @@ Gestion de la pagination
         }
     }
 
-Implementation de l'authentification
+Implémentation de l'authentification
 ====================================
 
 OAuth 2.0
@@ -181,7 +181,7 @@ OAuth 2.0
         }
     }
 
-Authentification par cle API
+Authentification par clé API
 ----------------------------
 
 .. code-block:: java
@@ -250,7 +250,7 @@ Exemple de configuration
 
 Exemple de configuration dans l'interface d'administration:
 
-Parametres
+Paramètres
 ----------
 
 ::
@@ -271,9 +271,9 @@ Script
     lastModified=data.updated_at
     mimetype=data.content_type
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`plugin-architecture` - Architecture des plugins
 - :doc:`../config/datastore/ds-overview` - Vue d'ensemble des connecteurs DataStore
-- `GitHub: fess-ds-* <https://github.com/codelibs?q=fess-ds>`__ - Exemples de plugins publies
+- `GitHub: fess-ds-* <https://github.com/codelibs?q=fess-ds>`__ - Exemples de plugins publiés

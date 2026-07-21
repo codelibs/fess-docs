@@ -2,11 +2,11 @@
 API de Group
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Group es para gestionar grupos de |Fess|.
-Puede operar creacion, actualizacion y eliminacion de grupos.
+Puede operar creación, actualización y eliminación de grupos.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de grupos
@@ -51,25 +51,25 @@ Solicitud
 
     GET /api/admin/group/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 25)
+     - Número de elementos por página (predeterminado: 25)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``id``
      - String
      - No
@@ -157,7 +157,7 @@ Cuerpo de la Solicitud
       }
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -166,10 +166,10 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre del grupo (maximo 100 caracteres)
+     - Sí
+     - Nombre del grupo (máximo 100 caracteres)
    * - ``attributes``
      - No
      - Mapa de atributos (incluye atributos LDAP como ``gidNumber``). Los valores se especifican como cadenas
@@ -212,7 +212,7 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -221,19 +221,19 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``id``
-     - Si
+     - Sí
      - ID del grupo a actualizar
    * - ``name``
-     - Si
-     - Nombre del grupo (maximo 100 caracteres)
+     - Sí
+     - Nombre del grupo (máximo 100 caracteres)
    * - ``attributes``
      - No
      - Mapa de atributos (incluye atributos LDAP como ``gidNumber``). Los valores se especifican como cadenas
    * - ``versionNo``
-     - Si
-     - Numero de version para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el grupo
+     - Sí
+     - Número de versión para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el grupo
 
 Respuesta
 ---------
@@ -297,10 +297,10 @@ Obtener Lista de Grupos
     curl -X GET "http://localhost:8080/api/admin/group/settings" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-user` - API de gestion de usuarios
-- :doc:`api-admin-role` - API de gestion de roles
-- :doc:`../../admin/group-guide` - Guia de gestion de grupos
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-user` - API de gestión de usuarios
+- :doc:`api-admin-role` - API de gestión de roles
+- :doc:`../../admin/group-guide` - Guía de gestión de grupos

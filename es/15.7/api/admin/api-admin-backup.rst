@@ -2,13 +2,13 @@
 API de Backup
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Backup es una API para consultar y descargar los datos objetivo de copia de seguridad de |Fess|.
-Permite obtener la lista de objetivos de copia de seguridad y descargar archivos de copia de seguridad individuales (propiedades del sistema, datos masivos de cada indice, datos NDJSON de registros).
+Permite obtener la lista de objetivos de copia de seguridad y descargar archivos de copia de seguridad individuales (propiedades del sistema, datos masivos de cada índice, datos NDJSON de registros).
 
-Esta API es exclusivamente de consulta y descarga (solo lectura). La funcionalidad de restauracion para subir archivos de copia de seguridad no esta disponible a traves de la API; si necesita restaurar, utilice Informacion del sistema → Copia de seguridad en la pantalla de administracion.
+Esta API es exclusivamente de consulta y descarga (solo lectura). La funcionalidad de restauración para subir archivos de copia de seguridad no está disponible a través de la API; si necesita restaurar, utilice Información del sistema → Copia de seguridad en la pantalla de administración.
 
 URL Base
 ========
@@ -17,17 +17,17 @@ URL Base
 
     /api/admin/backup
 
-Autenticacion
+Autenticación
 =============
 
-Al igual que con el resto de Admin APIs, se requiere autenticacion mediante token de acceso. El token de acceso debe tener el permiso ``Radmin-api`` (configurado en ``api.admin.access.permissions``; el valor predeterminado es ``Radmin-api``).
+Al igual que con el resto de Admin APIs, se requiere autenticación mediante token de acceso. El token de acceso debe tener el permiso ``Radmin-api`` (configurado en ``api.admin.access.permissions``; el valor predeterminado es ``Radmin-api``).
 El token de acceso se especifica en el encabezado de la solicitud.
 
 ::
 
     Authorization: Bearer <token de acceso>
 
-Para mas detalles sobre la autenticacion y como obtener el token de acceso, consulte :doc:`api-admin-overview`.
+Para más detalles sobre la autenticación y como obtener el token de acceso, consulte :doc:`api-admin-overview`.
 
 Lista de Endpoints
 ==================
@@ -36,9 +36,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /files
      - Obtener lista de objetivos de copia de seguridad
@@ -49,7 +49,7 @@ Lista de Endpoints
 Obtener Lista de Objetivos de Copia de Seguridad
 ================================================
 
-Devuelve la lista de objetivos de copia de seguridad. Los objetivos se determinan en funcion de la configuracion de ``index.backup.targets`` e ``index.backup.log.targets``, y se devuelve una lista combinada de ambos.
+Devuelve la lista de objetivos de copia de seguridad. Los objetivos se determinan en función de la configuración de ``index.backup.targets`` e ``index.backup.log.targets``, y se devuelve una lista combinada de ambos.
 
 Solicitud
 ---------
@@ -61,10 +61,10 @@ Solicitud
 Respuesta
 ---------
 
-En ``files`` se almacena un arreglo de objetos que representan los objetivos de copia de seguridad, y en ``total`` el numero de elementos.
+En ``files`` se almacena un arreglo de objetos que representan los objetivos de copia de seguridad, y en ``total`` el número de elementos.
 Cada objeto tiene ``id`` y ``name``, y en ambos se establece el nombre del objetivo (``fess_config.bulk``, ``system.properties``, ``search_log.ndjson``, etc.).
 
-A continuacion se muestra un ejemplo con la configuracion predeterminada (cuando ``index.backup.targets`` e ``index.backup.log.targets`` tienen sus valores por defecto).
+A continuación se muestra un ejemplo con la configuración predeterminada (cuando ``index.backup.targets`` e ``index.backup.log.targets`` tienen sus valores por defecto).
 
 .. code-block:: json
 
@@ -90,15 +90,15 @@ A continuacion se muestra un ejemplo con la configuracion predeterminada (cuando
 
 .. note::
 
-   En ``version`` se establece la version del producto de |Fess| en ejecucion. El contenido de ``files`` varia
-   segun la configuracion de ``index.backup.targets`` / ``index.backup.log.targets``, por lo que
+   En ``version`` se establece la versión del producto de |Fess| en ejecución. El contenido de ``files`` varía
+   según la configuración de ``index.backup.targets`` / ``index.backup.log.targets``, por lo que
    el ejemplo anterior corresponde a los valores por defecto.
 
 Descargar Archivo de Copia de Seguridad
 =======================================
 
 Descarga el contenido del archivo de copia de seguridad especificado. En ``{id}`` se especifica el ``id`` (nombre del objetivo) obtenido en la lista.
-Segun el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente manera.
+Según el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente manera.
 
 .. list-table::
    :header-rows: 1
@@ -108,18 +108,18 @@ Segun el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente m
      - Contenido
    * - ``system.properties``
      - Contenido de las propiedades del sistema (``application/octet-stream``)
-   * - ``*.bulk`` o nombre de indice sin extension
-     - Datos masivos generados al recorrer el indice con el mismo nombre que el objetivo (``application/octet-stream``). El nombre sin ``.bulk`` se trata como nombre del indice.
+   * - ``*.bulk`` o nombre de índice sin extensión
+     - Datos masivos generados al recorrer el índice con el mismo nombre que el objetivo (``application/octet-stream``). El nombre sin ``.bulk`` se trata como nombre del índice.
    * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
      - Datos NDJSON del registro correspondiente (``application/x-ndjson``)
 
 .. note::
 
-   ``fess.json`` y ``doc.json`` son archivos de definicion de mapeo (esquema) del indice.
+   ``fess.json`` y ``doc.json`` son archivos de definición de mapeo (esquema) del índice.
    Se incluyen en la lista de objetivos (``/files``), pero en la descarga de esta API se tratan
-   como procesamiento de desplazamiento del indice, al igual que ``.bulk``. Para realizar copias de
-   seguridad y restauraciones que incluyan la definicion de mapeo, utilice
-   Informacion del sistema → Copia de seguridad en la pantalla de administracion.
+   como procesamiento de desplazamiento del índice, al igual que ``.bulk``. Para realizar copias de
+   seguridad y restauraciones que incluyan la definición de mapeo, utilice
+   Información del sistema → Copia de seguridad en la pantalla de administración.
 
 Si se especifica un ``{id}`` que no existe entre los objetivos de copia de seguridad, se devuelve una respuesta de error con un valor distinto de 0 en ``status`` y el mensaje de error (``Could not find any backup index.``).
 
@@ -137,7 +137,7 @@ El flujo del archivo de copia de seguridad. En formato NDJSON se devuelve con ``
 
 .. note::
 
-   La exportacion de registros (``*.ndjson``) esta sujeta a la restriccion de ``index.backup.log.load.timeout`` (valor predeterminado ``60000`` milisegundos).
+   La exportación de registros (``*.ndjson``) está sujeta a la restricción de ``index.backup.log.load.timeout`` (valor predeterminado ``60000`` milisegundos).
    Si la salida tarda demasiado, los datos del registro pueden quedar truncados.
 
 Ejemplos de Uso
@@ -151,7 +151,7 @@ Obtener Lista de Objetivos de Copia de Seguridad
     curl -X GET "http://localhost:8080/api/admin/backup/files" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Descargar Indice de Configuracion
+Descargar Índice de Configuración
 ---------------------------------
 
 .. code-block:: bash
@@ -160,7 +160,7 @@ Descargar Indice de Configuracion
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
-Descargar Registro de Busqueda
+Descargar Registro de Búsqueda
 ------------------------------
 
 .. code-block:: bash
@@ -169,8 +169,8 @@ Descargar Registro de Busqueda
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-log` - API de registros

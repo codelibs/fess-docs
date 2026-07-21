@@ -5,13 +5,13 @@ Plugin Script Engine
 Vue d'ensemble
 ==============
 
-En developpant un plugin Script Engine, vous pouvez ajouter le support de nouveaux
-langages de script a |Fess|.
+En développant un plugin Script Engine, vous pouvez ajouter le support de nouveaux
+langages de script à |Fess|.
 
-Implementation de base
+Implémentation de base
 ======================
 
-Implementez l'interface ``ScriptEngine``:
+Implémentez l'interface ``ScriptEngine``:
 
 .. code-block:: java
 
@@ -47,14 +47,14 @@ Enregistrement
 Exemple d'utilisation
 =====================
 
-Selection du type de script dans l'interface d'administration:
+Sélection du type de script dans l'interface d'administration:
 
 ::
 
     scriptType=example
     scriptData=your script here
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`plugin-architecture` - Architecture des plugins

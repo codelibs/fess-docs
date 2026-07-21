@@ -5,8 +5,8 @@ Architecture des plugins
 Vue d'ensemble
 ==============
 
-Le systeme de plugins de |Fess| permet d'etendre les fonctionnalites de base.
-Les plugins sont distribues sous forme de fichiers JAR et charges dynamiquement.
+Le système de plugins de |Fess| permet d'étendre les fonctionnalités de base.
+Les plugins sont distribués sous forme de fichiers JAR et chargés dynamiquement.
 
 Types de plugins
 ================
@@ -20,13 +20,13 @@ Types de plugins
    * - Type
      - Description
    * - DataStore
-     - Recuperation de contenu depuis de nouvelles sources de donnees (Box, Slack, etc.)
+     - Récupération de contenu depuis de nouvelles sources de données (Box, Slack, etc.)
    * - Script Engine
      - Support de nouveaux langages de script
    * - WebApp
      - Extension de l'interface web
    * - Ingest
-     - Traitement des donnees lors de l'indexation
+     - Traitement des données lors de l'indexation
 
 Structure d'un plugin
 =====================
@@ -83,7 +83,7 @@ Enregistrement du plugin
 Enregistrement dans le conteneur DI
 -----------------------------------
 
-Les plugins sont enregistres dans des fichiers de configuration comme ``fess_ds.xml``:
+Les plugins sont enregistrés dans des fichiers de configuration comme ``fess_ds.xml``:
 
 .. code-block:: xml
 
@@ -109,21 +109,21 @@ Cycle de vie du plugin
 Initialisation
 --------------
 
-1. Le fichier JAR est charge
+1. Le fichier JAR est chargé
 2. Le conteneur DI initialise les composants
-3. Les methodes ``@PostConstruct`` sont appelees
-4. Le plugin est enregistre dans le gestionnaire
+3. Les méthodes ``@PostConstruct`` sont appelées
+4. Le plugin est enregistré dans le gestionnaire
 
 Terminaison
 -----------
 
-1. Les methodes ``@PreDestroy`` sont appelees (si definies)
+1. Les méthodes ``@PreDestroy`` sont appelées (si définies)
 2. Nettoyage des ressources
 
-Dependances
+Dépendances
 ===========
 
-Dependance avec Fess
+Dépendance avec Fess
 --------------------
 
 .. code-block:: xml
@@ -135,10 +135,10 @@ Dependance avec Fess
         <scope>provided</scope>
     </dependency>
 
-Bibliotheques externes
+Bibliothèques externes
 ----------------------
 
-Les plugins peuvent inclure leurs propres dependances:
+Les plugins peuvent inclure leurs propres dépendances:
 
 .. code-block:: xml
 
@@ -148,13 +148,13 @@ Les plugins peuvent inclure leurs propres dependances:
         <version>1.0.0</version>
     </dependency>
 
-Les bibliotheques dependantes peuvent etre distribuees avec le JAR du plugin,
-ou vous pouvez creer un fat JAR avec Maven Shade Plugin.
+Les bibliothèques dépendantes peuvent être distribuées avec le JAR du plugin,
+ou vous pouvez créer un fat JAR avec Maven Shade Plugin.
 
-Recuperation de la configuration
+Récupération de la configuration
 ================================
 
-Recuperation depuis FessConfig
+Récupération depuis FessConfig
 ------------------------------
 
 .. code-block:: java
@@ -195,7 +195,7 @@ Installation
 
 1. **Depuis l'interface d'administration**:
 
-   - "Systeme" -> "Plugins" -> "Installer"
+   - "Système" -> "Plugins" -> "Installer"
    - Entrer le nom du plugin et installer
 
 2. **Ligne de commande**:
@@ -206,10 +206,10 @@ Installation
 
 3. **Manuellement**:
 
-   - Copier le fichier JAR dans le repertoire ``plugins/``
-   - Redemarrer |Fess|
+   - Copier le fichier JAR dans le répertoire ``plugins/``
+   - Redémarrer |Fess|
 
-Debogage
+Débogage
 ========
 
 Sortie de logs
@@ -224,19 +224,19 @@ Sortie de logs
         logger.info("Info message");
     }
 
-Mode developpement
+Mode développement
 ------------------
 
-En developpement, vous pouvez lancer |Fess| depuis l'IDE pour deboguer:
+En développement, vous pouvez lancer |Fess| depuis l'IDE pour déboguer:
 
-1. Executer la classe ``FessBoot`` en mode debug
+1. Exécuter la classe ``FessBoot`` en mode debug
 2. Inclure les sources du plugin dans le projet
-3. Definir des points d'arret
+3. Définir des points d'arrêt
 
-Liste des plugins publies
+Liste des plugins publiés
 =========================
 
-Principaux plugins publies par le projet |Fess|:
+Principaux plugins publiés par le projet |Fess|:
 
 .. list-table::
    :header-rows: 1
@@ -253,16 +253,16 @@ Principaux plugins publies par le projet |Fess|:
    * - fess-ds-atlassian
      - Connecteur Confluence/Jira
    * - fess-ds-git
-     - Connecteur de depot Git
+     - Connecteur de dépôt Git
    * - fess-theme-\*
-     - Themes personnalises
+     - Thèmes personnalisés
 
-Ces plugins sont publies sur `GitHub <https://github.com/codelibs>`__ comme reference de developpement.
+Ces plugins sont publiés sur `GitHub <https://github.com/codelibs>`__ comme référence de développement.
 
-Informations complementaires
+Informations complémentaires
 ============================
 
-- :doc:`datastore-plugin` - Developpement de plugins DataStore
+- :doc:`datastore-plugin` - Développement de plugins DataStore
 - :doc:`script-engine-plugin` - Plugins Script Engine
 - :doc:`webapp-plugin` - Plugins WebApp
 - :doc:`ingest-plugin` - Plugins Ingest

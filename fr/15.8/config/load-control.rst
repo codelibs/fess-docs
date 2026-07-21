@@ -1,31 +1,31 @@
 =====================================
-Configuration du controle de charge
+Configuration du contrôle de charge
 =====================================
 
-Apercu
+Aperçu
 ======
 
-|Fess| dispose de deux types de fonctionnalites de controle de charge qui protegent la stabilite du systeme en fonction de l'utilisation CPU.
+|Fess| dispose de deux types de fonctionnalités de contrôle de charge qui protègent la stabilité du système en fonction de l'utilisation CPU.
 
-**Controle de charge des requetes HTTP** (``web.load.control`` / ``api.load.control``) :
+**Contrôle de charge des requêtes HTTP** (``web.load.control`` / ``api.load.control``) :
 
-- Surveillance en temps reel de l'utilisation CPU du cluster OpenSearch
-- Seuils independants configurables pour les requetes web et les requetes API
-- Retourne HTTP 429 (Too Many Requests) lorsque les seuils sont depasses
-- Le panneau d'administration, la connexion et les ressources statiques sont exclus du controle
-- Desactive par defaut (seuil=100)
+- Surveillance en temps réel de l'utilisation CPU du cluster OpenSearch
+- Seuils indépendants configurables pour les requêtes web et les requêtes API
+- Retourne HTTP 429 (Too Many Requests) lorsque les seuils sont dépassés
+- Le panneau d'administration, la connexion et les ressources statiques sont exclus du contrôle
+- Désactivé par défaut (seuil=100)
 
-**Controle de charge adaptatif** (``adaptive.load.control``) :
+**Contrôle de charge adaptatif** (``adaptive.load.control``) :
 
-- Surveille l'utilisation CPU systeme du serveur Fess lui-meme
-- Ralentit automatiquement les taches en arriere-plan telles que le crawling, l'indexation, les mises a jour de suggestions et la generation de vignettes
-- Lorsque l'utilisation CPU atteint ou depasse le seuil, les threads de traitement sont mis en pause et reprennent lorsqu'elle descend en dessous du seuil
-- Active par defaut (seuil=50)
+- Surveille l'utilisation CPU système du serveur Fess lui-même
+- Ralentit automatiquement les tâches en arrière-plan telles que le crawling, l'indexation, les mises à jour de suggestions et la génération de vignettes
+- Lorsque l'utilisation CPU atteint ou dépasse le seuil, les threads de traitement sont mis en pause et reprennent lorsqu'elle descend en dessous du seuil
+- Activé par défaut (seuil=50)
 
-Configuration du controle de charge des requetes HTTP
+Configuration du contrôle de charge des requêtes HTTP
 =====================================================
 
-Definissez les proprietes suivantes dans ``fess_config.properties`` :
+Définissez les propriétés suivantes dans ``fess_config.properties`` :
 
 ::
 
@@ -45,57 +45,57 @@ Definissez les proprietes suivantes dans ``fess_config.properties`` :
     load.control.monitor.interval=1
 
 .. note::
-   Lorsque ``web.load.control`` et ``api.load.control`` sont tous deux definis a 100 (defaut),
-   la surveillance CPU d'OpenSearch ne demarre pas.
+   Lorsque ``web.load.control`` et ``api.load.control`` sont tous deux définis à 100 (défaut),
+   la surveillance CPU d'OpenSearch ne démarre pas.
 
 Fonctionnement
 ==============
 
-Mecanisme de surveillance
+Mécanisme de surveillance
 -------------------------
 
-Lorsque le controle de charge est active (l'un ou l'autre des seuils est inferieur a 100), LoadControlMonitorTarget surveille periodiquement l'utilisation CPU du cluster OpenSearch.
+Lorsque le contrôle de charge est activé (l'un ou l'autre des seuils est inférieur à 100), LoadControlMonitorTarget surveille périodiquement l'utilisation CPU du cluster OpenSearch.
 
-- Recupere les statistiques OS de tous les noeuds du cluster OpenSearch
-- Enregistre l'utilisation CPU la plus elevee parmi tous les noeuds
-- Surveille a l'intervalle specifie par ``load.control.monitor.interval`` (defaut : 1 seconde)
-- La surveillance demarre de maniere differee lors de la premiere requete
+- Récupère les statistiques OS de tous les noeuds du cluster OpenSearch
+- Enregistre l'utilisation CPU la plus élevée parmi tous les noeuds
+- Surveille à l'intervalle spécifié par ``load.control.monitor.interval`` (défaut : 1 seconde)
+- La surveillance démarre de manière différée lors de la première requête
 
 .. note::
-   Si la recuperation des informations de surveillance echoue, l'utilisation CPU est reinitialisee a 0.
-   Les trois premiers echecs consecutifs sont enregistres au niveau WARNING dans les logs ; a partir
-   du quatrieme echec, le niveau passe a DEBUG (afin d'eviter une inflation des logs en cas d'echecs
-   persistants). Le compteur d'echecs est reinitialise des qu'une surveillance reussit.
+   Si la récupération des informations de surveillance échoue, l'utilisation CPU est réinitialisée à 0.
+   Les trois premiers échecs consécutifs sont enregistrés au niveau WARNING dans les logs ; à partir
+   du quatrième échec, le niveau passe à DEBUG (afin d'éviter une inflation des logs en cas d'échecs
+   persistants). Le compteur d'échecs est réinitialisé dès qu'une surveillance réussit.
 
-Controle des requetes
+Contrôle des requêtes
 ---------------------
 
-Lorsqu'une requete arrive, LoadControlFilter la traite dans l'ordre suivant :
+Lorsqu'une requête arrive, LoadControlFilter la traite dans l'ordre suivant :
 
-1. Verifier si le chemin est exclu (si exclu, laisser passer)
-2. Determiner le type de requete (Web / API)
+1. Vérifier si le chemin est exclu (si exclu, laisser passer)
+2. Déterminer le type de requête (Web / API)
 3. Obtenir le seuil correspondant
-4. Si le seuil est de 100 ou plus, ne pas controler (laisser passer)
+4. Si le seuil est de 100 ou plus, ne pas contrôler (laisser passer)
 5. Comparer l'utilisation CPU actuelle avec le seuil
 6. Si l'utilisation CPU >= seuil, retourner HTTP 429
 
-**Requetes exclues :**
+**Requêtes exclues :**
 
-- Chemins commencant par ``/admin`` (panneau d'administration)
-- Chemins commencant par ``/error`` (pages d'erreur)
-- Chemins commencant par ``/login`` (pages de connexion)
+- Chemins commençant par ``/admin`` (panneau d'administration)
+- Chemins commençant par ``/error`` (pages d'erreur)
+- Chemins commençant par ``/login`` (pages de connexion)
 - Ressources statiques (``.css``, ``.js``, ``.png``, ``.jpg``, ``.gif``, ``.ico``, ``.svg``, ``.woff``, ``.woff2``, ``.ttf``, ``.eot``)
 
-**Pour les requetes web :**
+**Pour les requêtes web :**
 
 - Retourne le code de statut HTTP 429
 - Affiche la page d'erreur (``busy.jsp``)
 
-**Pour les requetes API :**
+**Pour les requêtes API :**
 
 - Retourne le code de statut HTTP 429
-- Ajoute l'en-tete de reponse HTTP ``Retry-After: 60``
-- Retourne une reponse JSON :
+- Ajoute l'en-tête de réponse HTTP ``Retry-After: 60``
+- Retourne une réponse JSON :
 
 ::
 
@@ -108,17 +108,17 @@ Lorsqu'une requete arrive, LoadControlFilter la traite dans l'ordre suivant :
     }
 
 .. note::
-   Lorsqu'une requete est rejetee, le message suivant est enregistre au niveau INFO dans les logs du serveur :
+   Lorsqu'une requête est rejetée, le message suivant est enregistré au niveau INFO dans les logs du serveur :
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
-   Cela permet de verifier quel chemin a ete rejete et pour quel seuil.
+   Cela permet de vérifier quel chemin a été rejeté et pour quel seuil.
 
 Exemples de configuration
 =========================
 
-Limiter uniquement les requetes web
+Limiter uniquement les requêtes web
 ------------------------------------
 
-Configuration qui limite uniquement les requetes de recherche web sans restreindre l'API :
+Configuration qui limite uniquement les requêtes de recherche web sans restreindre l'API :
 
 ::
 
@@ -131,10 +131,10 @@ Configuration qui limite uniquement les requetes de recherche web sans restreind
     # Intervalle de surveillance : 1 seconde
     load.control.monitor.interval=1
 
-Limiter a la fois le web et l'API
+Limiter à la fois le web et l'API
 ----------------------------------
 
-Exemple avec des seuils differents pour le web et l'API :
+Exemple avec des seuils différents pour le web et l'API :
 
 ::
 
@@ -148,46 +148,46 @@ Exemple avec des seuils differents pour le web et l'API :
     load.control.monitor.interval=2
 
 .. note::
-   En definissant le seuil API plus haut que le seuil web, vous pouvez realiser un controle progressif
-   ou les requetes web sont restreintes en premier lors d'une charge elevee, et les requetes API sont
-   egalement restreintes lorsque la charge augmente davantage.
+   En définissant le seuil API plus haut que le seuil web, vous pouvez réaliser un contrôle progressif
+   où les requêtes web sont restreintes en premier lors d'une charge élevée, et les requêtes API sont
+   également restreintes lorsque la charge augmente davantage.
 
-Difference avec la limitation de debit
+Différence avec la limitation de débit
 =======================================
 
-|Fess| dispose d'une fonctionnalite de :doc:`rate-limiting` separee du controle de charge.
-Ces deux mecanismes protegent le systeme avec des approches differentes.
+|Fess| dispose d'une fonctionnalité de :doc:`rate-limiting` séparée du contrôle de charge.
+Ces deux mécanismes protègent le système avec des approches différentes.
 
 .. list-table::
    :header-rows: 1
    :widths: 20 40 40
 
    * - Aspect
-     - Limitation de debit
-     - Controle de charge
-   * - Base de controle
-     - Nombre de requetes (par unite de temps)
+     - Limitation de débit
+     - Contrôle de charge
+   * - Base de contrôle
+     - Nombre de requêtes (par unité de temps)
      - Utilisation CPU d'OpenSearch
    * - Objectif
-     - Prevention des requetes excessives
+     - Prévention des requêtes excessives
      - Protection du moteur de recherche contre la surcharge
-   * - Unite de limite
+   * - Unité de limite
      - Par adresse IP
-     - Ensemble du systeme
-   * - Reponse
+     - Ensemble du système
+   * - Réponse
      - HTTP 429
      - HTTP 429
-   * - Portee
-     - Toutes les requetes HTTP
-     - Requetes web / Requetes API (panneau d'administration etc. exclu)
+   * - Portée
+     - Toutes les requêtes HTTP
+     - Requêtes web / Requêtes API (panneau d'administration etc. exclu)
 
-La combinaison des deux fonctionnalites permet une protection systeme plus robuste.
+La combinaison des deux fonctionnalités permet une protection système plus robuste.
 
-Controle de charge adaptatif
+Contrôle de charge adaptatif
 ============================
 
-Le controle de charge adaptatif ajuste automatiquement la vitesse de traitement des taches
-en arriere-plan en fonction de l'utilisation CPU systeme du serveur Fess.
+Le contrôle de charge adaptatif ajuste automatiquement la vitesse de traitement des tâches
+en arrière-plan en fonction de l'utilisation CPU système du serveur Fess.
 
 Configuration
 -------------
@@ -204,58 +204,58 @@ Configuration
 Comportement
 ------------
 
-- Surveille l'utilisation CPU systeme du serveur ou Fess s'execute
-- Lorsque l'utilisation CPU atteint ou depasse le seuil, les threads de traitement concernes attendent que l'utilisation CPU descende en dessous du seuil
+- Surveille l'utilisation CPU système du serveur où Fess s'exécute
+- Lorsque l'utilisation CPU atteint ou dépasse le seuil, les threads de traitement concernés attendent que l'utilisation CPU descende en dessous du seuil
 - Lorsque l'utilisation CPU descend en dessous du seuil, le traitement reprend automatiquement
 
-**Taches en arriere-plan concernees :**
+**Tâches en arrière-plan concernées :**
 
-- Crawling (Web / Systeme de fichiers)
+- Crawling (Web / Système de fichiers)
 - Indexation (enregistrement de documents)
-- Traitement du magasin de donnees
-- Mises a jour des suggestions
-- Generation de vignettes
+- Traitement du magasin de données
+- Mises à jour des suggestions
+- Génération de vignettes
 - Sauvegarde et restauration
 
 .. note::
-   Le controle de charge adaptatif est active par defaut (seuil=50).
-   Il fonctionne independamment du controle de charge des requetes HTTP (``web.load.control`` / ``api.load.control``).
+   Le contrôle de charge adaptatif est activé par défaut (seuil=50).
+   Il fonctionne indépendamment du contrôle de charge des requêtes HTTP (``web.load.control`` / ``api.load.control``).
 
 .. list-table::
    :header-rows: 1
    :widths: 20 40 40
 
    * - Aspect
-     - Controle de charge des requetes HTTP
-     - Controle de charge adaptatif
+     - Contrôle de charge des requêtes HTTP
+     - Contrôle de charge adaptatif
    * - Cible de surveillance
      - Utilisation CPU d'OpenSearch
-     - Utilisation CPU systeme du serveur Fess
-   * - Cible de controle
-     - Requetes HTTP (Web / API)
-     - Taches en arriere-plan
-   * - Methode de controle
-     - Rejette les requetes en retournant HTTP 429
+     - Utilisation CPU système du serveur Fess
+   * - Cible de contrôle
+     - Requêtes HTTP (Web / API)
+     - Tâches en arrière-plan
+   * - Méthode de contrôle
+     - Rejette les requêtes en retournant HTTP 429
      - Met en pause temporairement les threads de traitement
-   * - Defaut
-     - Desactive (seuil=100)
-     - Active (seuil=50)
+   * - Défaut
+     - Désactivé (seuil=100)
+     - Activé (seuil=50)
 
-Depannage
+Dépannage
 =========
 
-Le controle de charge ne s'active pas
+Le contrôle de charge ne s'active pas
 --------------------------------------
 
-**Cause** : La configuration n'est pas correctement appliquee
+**Cause** : La configuration n'est pas correctement appliquée
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si ``web.load.control`` ou ``api.load.control`` est defini en dessous de 100
-2. Verifier si le fichier de configuration est correctement lu
-3. Verifier si |Fess| a ete redemarre
+1. Vérifier si ``web.load.control`` ou ``api.load.control`` est défini en dessous de 100
+2. Vérifier si le fichier de configuration est correctement lu
+3. Vérifier si |Fess| a été redémarré
 
-Les requetes legitimes sont rejetees
+Les requêtes légitimes sont rejetées
 --------------------------------------
 
 **Cause** : Les seuils sont trop bas
@@ -263,30 +263,30 @@ Les requetes legitimes sont rejetees
 **Solution** :
 
 1. Augmenter les valeurs de ``web.load.control`` ou ``api.load.control``
-2. Ajuster ``load.control.monitor.interval`` pour modifier la frequence de surveillance
+2. Ajuster ``load.control.monitor.interval`` pour modifier la fréquence de surveillance
 3. Augmenter les ressources du cluster OpenSearch
 
 .. warning::
-   Definir des seuils trop bas peut entrainer le rejet de requetes meme sous charge normale.
-   Verifiez l'utilisation CPU normale de votre cluster OpenSearch avant de definir des seuils appropries.
+   Définir des seuils trop bas peut entraîner le rejet de requêtes même sous charge normale.
+   Vérifiez l'utilisation CPU normale de votre cluster OpenSearch avant de définir des seuils appropriés.
 
 Le crawling est lent
 --------------------
 
-**Cause** : Les threads sont en etat d'attente en raison du controle de charge adaptatif
+**Cause** : Les threads sont en état d'attente en raison du contrôle de charge adaptatif
 
-**Points a verifier** :
+**Points à vérifier** :
 
-1. Verifier si ``Cpu Load XX% is greater than YY%`` apparait dans les logs
-2. Verifier si le seuil ``adaptive.load.control`` est trop bas
+1. Vérifier si ``Cpu Load XX% is greater than YY%`` apparaît dans les logs
+2. Vérifier si le seuil ``adaptive.load.control`` est trop bas
 
 **Solution** :
 
 1. Augmenter la valeur de ``adaptive.load.control`` (ex : 70)
 2. Augmenter les ressources CPU du serveur Fess
-3. Definir a 0 pour desactiver le controle de charge adaptatif (non recommande)
+3. Définir à 0 pour désactiver le contrôle de charge adaptatif (non recommandé)
 
-Informations de reference
+Informations de référence
 =========================
 
-- :doc:`rate-limiting` - Configuration de la limitation de debit
+- :doc:`rate-limiting` - Configuration de la limitation de débit

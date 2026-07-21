@@ -5,18 +5,18 @@ AccessToken API
 Vue d'ensemble
 ==============
 
-L'API AccessToken est une API permettant de gerer les jetons d'acces API de |Fess|.
-Il est possible de creer, recuperer, mettre a jour et supprimer des jetons.
+L'API AccessToken est une API permettant de gérer les jetons d'accès API de |Fess|.
+Il est possible de créer, récupérer, mettre à jour et supprimer des jetons.
 
-Les jetons d'acces sont utilises pour l'authentification lors d'appels programmatiques a l'API de recherche ou a l'API Admin de |Fess|.
-Pour les specifications communes de l'API Admin incluant cette API (methode d'authentification, format des reponses, valeurs de ``status``, reponses d'erreur,
+Les jetons d'accès sont utilisés pour l'authentification lors d'appels programmatiques à l'API de recherche ou à l'API Admin de |Fess|.
+Pour les spécifications communes de l'API Admin incluant cette API (méthode d'authentification, format des réponses, valeurs de ``status``, réponses d'erreur,
 codes de statut HTTP), consultez :doc:`api-admin-overview`.
 
 .. note::
 
-   Pour acceder a cette API, le jeton d'acces utilise dans la requete doit disposer d'une permission
-   correspondant a ``api.admin.access.permissions``
-   (valeur par defaut : ``{role}admin-api``).
+   Pour accéder à cette API, le jeton d'accès utilisé dans la requête doit disposer d'une permission
+   correspondant à ``api.admin.access.permissions``
+   (valeur par défaut : ``{role}admin-api``).
 
 URL de base
 ===========
@@ -32,60 +32,60 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des jetons d'acces
+     - Obtention de la liste des jetons d'accès
    * - GET
      - /setting/{id}
-     - Obtention d'un jeton d'acces
+     - Obtention d'un jeton d'accès
    * - POST
      - /setting
-     - Creation d'un jeton d'acces
+     - Création d'un jeton d'accès
    * - PUT
      - /setting
-     - Mise a jour d'un jeton d'acces
+     - Mise à jour d'un jeton d'accès
    * - DELETE
      - /setting/{id}
-     - Suppression d'un jeton d'acces
+     - Suppression d'un jeton d'accès
 
-Obtention de la liste des jetons d'acces
+Obtention de la liste des jetons d'accès
 ========================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/accesstoken/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size``)
+     - Nombre d'éléments par page (par défaut : 25 ; modifiable via ``paging.page.size``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1 ; par defaut : 1)
+     - Numéro de page (commence à 1 ; par défaut : 1)
    * - ``id``
      - String
      - Non
-     - Filtre permettant de recuperer uniquement le jeton ayant l'ID specifie
+     - Filtre permettant de récupérer uniquement le jeton ayant l'ID spécifié
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -115,24 +115,24 @@ Reponse
 
 .. note::
 
-   Chaque objet jeton contient egalement des informations d'audit et de version telles que
+   Chaque objet jeton contient également des informations d'audit et de version telles que
    ``createdBy``, ``createdTime``, ``updatedBy``,
    ``updatedTime`` et ``versionNo``.
-   ``createdTime`` et ``updatedTime`` sont exprimes en millisecondes depuis l'epoch (valeur numerique).
-   Les champs dont la valeur est ``null`` sont exclus de la reponse.
-   ``permissions`` est retourne sous forme de chaine separee par des sauts de ligne (``\n``).
+   ``createdTime`` et ``updatedTime`` sont exprimés en millisecondes depuis l'epoch (valeur numérique).
+   Les champs dont la valeur est ``null`` sont exclus de la réponse.
+   ``permissions`` est retourné sous forme de chaîne séparée par des sauts de ligne (``\n``).
 
-Obtention d'un jeton d'acces
+Obtention d'un jeton d'accès
 ============================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/accesstoken/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -156,10 +156,10 @@ Reponse
       }
     }
 
-Creation d'un jeton d'acces
+Création d'un jeton d'accès
 ============================
 
-Requete
+Requête
 -------
 
 ::
@@ -167,7 +167,7 @@ Requete
     POST /api/admin/accesstoken/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -190,24 +190,24 @@ Description des champs
      - Description
    * - ``name``
      - Oui
-     - Nom du jeton (1000 caracteres maximum)
+     - Nom du jeton (1000 caractères maximum)
    * - ``permissions``
      - Non
-     - Permissions accordees a ce jeton. Plusieurs permissions peuvent etre specifiees en les separant par des sauts de ligne (``\n``) (exemple : ``{role}admin-api``). Pour les jetons appelant l'API Admin, une permission correspondant a ``api.admin.access.permissions`` (valeur par defaut : ``{role}admin-api``) est requise.
+     - Permissions accordées à ce jeton. Plusieurs permissions peuvent être spécifiées en les séparant par des sauts de ligne (``\n``) (exemple : ``{role}admin-api``). Pour les jetons appelant l'API Admin, une permission correspondant à ``api.admin.access.permissions`` (valeur par défaut : ``{role}admin-api``) est requise.
    * - ``parameterName``
      - Non
-     - Nom du parametre de requete permettant de transmettre des permissions supplementaires. Si une requete authentifiee par ce jeton contient un parametre portant ce nom, sa valeur est ajoutee aux ``permissions``. Si omis, aucun parametre n'est configure.
+     - Nom du paramètre de requête permettant de transmettre des permissions supplémentaires. Si une requête authentifiée par ce jeton contient un paramètre portant ce nom, sa valeur est ajoutée aux ``permissions``. Si omis, aucun paramètre n'est configuré.
    * - ``expires``
      - Non
-     - Date d'expiration, specifiee sous forme de chaine au format ``YYYY-MM-DDTHH:MM:SS`` (exemple : ``2026-01-01T00:00:00``). Si omis, le jeton n'expire pas.
+     - Date d'expiration, spécifiée sous forme de chaîne au format ``YYYY-MM-DDTHH:MM:SS`` (exemple : ``2026-01-01T00:00:00``). Si omis, le jeton n'expire pas.
 
 .. note::
 
-   La chaine du jeton (``token``) est generee automatiquement cote serveur. Si ``token``
-   est specifie dans le corps de la requete, il est ignore. La reponse de creation ne contient pas la chaine du jeton ;
-   pour recuperer la chaine de jeton generee, utilisez "Obtention d'un jeton d'acces" (``GET /setting/{id}``).
+   La chaîne du jeton (``token``) est générée automatiquement côté serveur. Si ``token``
+   est spécifié dans le corps de la requête, il est ignoré. La réponse de création ne contient pas la chaîne du jeton ;
+   pour récupérer la chaîne de jeton générée, utilisez "Obtention d'un jeton d'accès" (``GET /setting/{id}``).
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -220,10 +220,10 @@ Reponse
       }
     }
 
-Mise a jour d'un jeton d'acces
+Mise à jour d'un jeton d'accès
 ==============================
 
-Requete
+Requête
 -------
 
 ::
@@ -231,7 +231,7 @@ Requete
     PUT /api/admin/accesstoken/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -247,7 +247,7 @@ Corps de la requete
 Description des champs
 ~~~~~~~~~~~~~~~~~~~~~~
 
-En plus des champs utilises lors de la creation, les champs suivants sont employes lors de la mise a jour.
+En plus des champs utilisés lors de la création, les champs suivants sont employés lors de la mise à jour.
 
 .. list-table::
    :header-rows: 1
@@ -258,17 +258,17 @@ En plus des champs utilises lors de la creation, les champs suivants sont employ
      - Description
    * - ``id``
      - Oui
-     - ID du jeton a mettre a jour
+     - ID du jeton à mettre à jour
    * - ``versionNo``
      - Oui
-     - Numero de version pour le verrouillage optimiste. Specifiez le ``versionNo`` du jeton obtenu au prealable.
+     - Numéro de version pour le verrouillage optimiste. Spécifiez le ``versionNo`` du jeton obtenu au préalable.
 
 .. note::
 
-   La chaine du jeton (``token``) ne peut pas etre mise a jour. Si ``token`` est specifie dans le corps de la requete,
-   il est ignore et la valeur existante est conservee.
+   La chaîne du jeton (``token``) ne peut pas être mise à jour. Si ``token`` est spécifié dans le corps de la requête,
+   il est ignoré et la valeur existante est conservée.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -281,17 +281,17 @@ Reponse
       }
     }
 
-Suppression d'un jeton d'acces
+Suppression d'un jeton d'accès
 ==============================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/accesstoken/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -305,7 +305,7 @@ Reponse
 Exemples d'utilisation
 ======================
 
-Creation d'un jeton API
+Création d'un jeton API
 -----------------------
 
 .. code-block:: bash
@@ -321,7 +321,7 @@ Creation d'un jeton API
 Appel API utilisant un jeton
 ----------------------------
 
-Le jeton cree est utilise pour l'authentification lors d'appels a l'API de recherche ou a d'autres APIs.
+Le jeton créé est utilisé pour l'authentification lors d'appels à l'API de recherche ou à d'autres APIs.
 
 .. code-block:: bash
 
@@ -332,9 +332,9 @@ Le jeton cree est utilise pour l'authentification lors d'appels a l'API de reche
     # Utiliser le jeton comme parametre de requete (necessite la configuration de api.access.token.request.parameter)
     curl "http://localhost:8080/api/v2/search?q=test&token=your_token_here"
 
-Informations complementaires
+Informations complémentaires
 ============================
 
-- :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin (authentification, format des reponses, erreurs)
+- :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin (authentification, format des réponses, erreurs)
 - :doc:`../api-search` - API de recherche
-- :doc:`../../admin/accesstoken-guide` - Guide de gestion des jetons d'acces
+- :doc:`../../admin/accesstoken-guide` - Guide de gestion des jetons d'accès

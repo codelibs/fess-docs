@@ -2,11 +2,11 @@
 API de Plugin
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Plugin es para gestionar los plugins (artefactos) de |Fess|.
-Permite obtener la lista de plugins instalados y de plugins instalables, asi como instalar y eliminar plugins.
+Permite obtener la lista de plugins instalados y de plugins instalables, así como instalar y eliminar plugins.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /installed
      - Obtener lista de plugins instalados
@@ -38,7 +38,7 @@ Lista de Endpoints
      - /
      - Eliminar plugin
 
-Campos de Informacion del Plugin
+Campos de Información del Plugin
 =================================
 
 Los endpoints de listado (``/installed`` y ``/available``) devuelven un arreglo ``plugins``
@@ -49,18 +49,18 @@ cuyos elementos son objetos con los siguientes campos.
    :widths: 15 85
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``type``
-     - ID de tipo del artefacto. Puede ser uno de: ``fess-ds`` (almacen de datos), ``fess-theme`` (tema),
-       ``fess-ingest`` (Ingest), ``fess-script`` (script), ``fess-webapp`` (aplicacion web),
+     - ID de tipo del artefacto. Puede ser uno de: ``fess-ds`` (almacén de datos), ``fess-theme`` (tema),
+       ``fess-ingest`` (Ingest), ``fess-script`` (script), ``fess-webapp`` (aplicación web),
        ``fess-thumbnail`` (miniatura), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
-       ``jar`` (JAR de proposito general no incluido en los anteriores).
+       ``jar`` (JAR de propósito general no incluido en los anteriores).
    * - ``id``
      - Identificador con formato ``{name}:{version}``.
    * - ``name``
      - Nombre del plugin.
    * - ``version``
-     - Version del plugin.
+     - Versión del plugin.
    * - ``url``
      - URL de descarga del artefacto. Solo se incluye en la respuesta de ``/available``. En ``/installed``
        el valor no existe, por lo que el campo se omite por completo.
@@ -86,8 +86,8 @@ Solicitud
 Respuesta
 ---------
 
-En ``plugins`` se almacena un arreglo de objetos que representan la informacion de los plugins.
-Consulte `Campos de Informacion del Plugin`_ para conocer los campos de cada objeto.
+En ``plugins`` se almacena un arreglo de objetos que representan la información de los plugins.
+Consulte `Campos de Información del Plugin`_ para conocer los campos de cada objeto.
 En los plugins instalados, ``url`` no se incluye en la salida.
 
 .. code-block:: json
@@ -112,7 +112,7 @@ Obtener Lista de Plugins Instalables
 
 Devuelve la lista de plugins instalables. Obtiene artefactos de todos los tipos desde los repositorios
 configurados en ``plugin.repositories`` de ``fess_config.properties``.
-Los resultados se almacenan en cache durante un tiempo determinado (5 minutos por defecto).
+Los resultados se almacenan en caché durante un tiempo determinado (5 minutos por defecto).
 
 Solicitud
 ---------
@@ -124,8 +124,8 @@ Solicitud
 Respuesta
 ---------
 
-En ``plugins`` se almacena un arreglo de objetos que representan la informacion de los plugins instalables.
-Consulte `Campos de Informacion del Plugin`_ para conocer los campos de cada objeto.
+En ``plugins`` se almacena un arreglo de objetos que representan la información de los plugins instalables.
+Consulte `Campos de Información del Plugin`_ para conocer los campos de cada objeto.
 Los plugins instalables incluyen el campo ``url`` con la URL de descarga.
 
 .. code-block:: json
@@ -149,7 +149,7 @@ Los plugins instalables incluyen el campo ``url`` con la URL de descarga.
 Instalar Plugin
 ===============
 
-Instala el plugin con el nombre y la version especificados.
+Instala el plugin con el nombre y la versión especificados.
 
 Solicitud
 ---------
@@ -169,7 +169,7 @@ Cuerpo de la Solicitud
       "version": "15.8.0"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -178,18 +178,18 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre del plugin (maximo 100 caracteres)
+     - Sí
+     - Nombre del plugin (máximo 100 caracteres)
    * - ``version``
-     - Si
-     - Version del plugin (maximo 100 caracteres)
+     - Sí
+     - Versión del plugin (máximo 100 caracteres)
 
 .. note::
 
    ``name`` y ``version`` deben coincidir con alguno de los plugins instalables obtenidos mediante ``/available``.
-   Si no existe un artefacto que coincida, se devolvera un error.
+   Si no existe un artefacto que coincida, se devolverá un error.
 
 Respuesta
 ---------
@@ -205,8 +205,8 @@ Cuando la solicitud es aceptada, se devuelve una respuesta con ``status`` igual 
       }
     }
 
-Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` sera
-``1`` (BAD_REQUEST) y ``message`` se establecera con ``invalid name or version``.
+Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` será
+``1`` (BAD_REQUEST) y ``message`` se establecerá con ``invalid name or version``.
 
 .. code-block:: json
 
@@ -220,16 +220,16 @@ Si no existe un artefacto que corresponda a ``name`` o ``version``, ``status`` s
 
 .. note::
 
-   El proceso de instalacion se ejecuta de forma asincrona en segundo plano. La respuesta con ``status: 0``
-   indica que la solicitud fue aceptada, pero no garantiza que la instalacion haya finalizado.
-   Una vez completada la instalacion, si ya existian plugins con el mismo nombre pero distinta version,
-   estos se eliminan automaticamente. Si la descarga o la instalacion fallan, el error se registra
+   El proceso de instalación se ejecuta de forma asíncrona en segundo plano. La respuesta con ``status: 0``
+   indica que la solicitud fue aceptada, pero no garantiza que la instalación haya finalizado.
+   Una vez completada la instalación, si ya existían plugins con el mismo nombre pero distinta versión,
+   estos se eliminan automáticamente. Si la descarga o la instalación fallan, el error se registra
    en el log del servidor, pero no se refleja en la respuesta de la API.
 
 Eliminar Plugin
 ===============
 
-Elimina el plugin con el nombre y la version especificados.
+Elimina el plugin con el nombre y la versión especificados.
 
 Solicitud
 ---------
@@ -249,7 +249,7 @@ Cuerpo de la Solicitud
       "version": "15.8.0"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -258,13 +258,13 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre del plugin (maximo 100 caracteres)
+     - Sí
+     - Nombre del plugin (máximo 100 caracteres)
    * - ``version``
      - No
-     - Version del plugin (maximo 100 caracteres). Se recomienda especificarlo para identificar de forma unica el artefacto a eliminar.
+     - Versión del plugin (máximo 100 caracteres). Se recomienda especificarlo para identificar de forma única el artefacto a eliminar.
 
 Respuesta
 ---------
@@ -282,9 +282,9 @@ Cuando la solicitud es aceptada, se devuelve una respuesta con ``status`` igual 
 
 .. note::
 
-   El proceso de eliminacion se ejecuta de forma asincrona en segundo plano. La respuesta con ``status: 0``
-   indica que la solicitud fue aceptada, pero no determina si el plugin existe ni si la eliminacion fue exitosa.
-   Si la eliminacion falla (por ejemplo, si el archivo no existe), el error se registra en el log del servidor,
+   El proceso de eliminación se ejecuta de forma asíncrona en segundo plano. La respuesta con ``status: 0``
+   indica que la solicitud fue aceptada, pero no determina si el plugin existe ni si la eliminación fue exitosa.
+   Si la eliminación falla (por ejemplo, si el archivo no existe), el error se registra en el log del servidor,
    pero no se refleja en la respuesta de la API.
 
 Ejemplos de Uso
@@ -324,7 +324,7 @@ Eliminar un Plugin
            "version": "15.8.0"
          }'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API

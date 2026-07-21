@@ -5,8 +5,8 @@ API FailureUrl
 Vue d'ensemble
 ==============
 
-L'API FailureUrl permet de gerer les URLs en echec lors du crawl de |Fess|.
-Vous pouvez obtenir la liste des URLs ayant provoque une erreur pendant le crawl, les consulter individuellement, les supprimer, etc.
+L'API FailureUrl permet de gérer les URLs en échec lors du crawl de |Fess|.
+Vous pouvez obtenir la liste des URLs ayant provoqué une erreur pendant le crawl, les consulter individuellement, les supprimer, etc.
 
 URL de base
 ===========
@@ -22,69 +22,69 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /logs
-     - Obtention de la liste des URLs en echec
+     - Obtention de la liste des URLs en échec
    * - GET
      - /log/{id}
-     - Obtention d'une URL en echec
+     - Obtention d'une URL en échec
    * - DELETE
      - /log/{id}
-     - Suppression d'une URL en echec
+     - Suppression d'une URL en échec
    * - DELETE
      - /all
-     - Suppression de toutes les URLs en echec
+     - Suppression de toutes les URLs en échec
 
-Obtention de la liste des URLs en echec
+Obtention de la liste des URLs en échec
 =======================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/failureurl/logs
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (defaut : 20)
+     - Nombre d'éléments par page (défaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1, defaut : 1)
+     - Numéro de page (commence à 1, défaut : 1)
    * - ``url``
      - String
      - Non
-     - Filtre par URL (les caracteres generiques ``*`` ``?`` sont supportes)
+     - Filtre par URL (les caractères génériques ``*`` ``?`` sont supportés)
    * - ``errorCountMin``
      - Integer
      - Non
-     - Borne inferieure du nombre d'erreurs (superieur ou egal a la valeur specifiee)
+     - Borne inférieure du nombre d'erreurs (supérieur ou égal à la valeur spécifiée)
    * - ``errorCountMax``
      - Integer
      - Non
-     - Borne superieure du nombre d'erreurs (inferieur ou egal a la valeur specifiee)
+     - Borne supérieure du nombre d'erreurs (inférieur ou égal à la valeur spécifiée)
    * - ``errorName``
      - String
      - Non
-     - Filtre par nom d'erreur (correspondance avec caracteres generiques sur le nom de classe complet stocke ; ``*`` ``?`` supportes)
+     - Filtre par nom d'erreur (correspondance avec caractères génériques sur le nom de classe complet stocké ; ``*`` ``?`` supportés)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -118,7 +118,7 @@ Reponse
       }
     }
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -128,9 +128,9 @@ Champs de la reponse
    * - Champ
      - Description
    * - ``id``
-     - ID de l'URL en echec
+     - ID de l'URL en échec
    * - ``url``
-     - URL en echec
+     - URL en échec
    * - ``threadName``
      - Nom du thread
    * - ``errorName``
@@ -138,27 +138,27 @@ Champs de la reponse
    * - ``errorLog``
      - Journal d'erreur (message de l'exception ou trace de la pile)
    * - ``errorCount``
-     - Nombre d'occurrences de l'erreur (valeur numerique sous forme de chaine)
+     - Nombre d'occurrences de l'erreur (valeur numérique sous forme de chaîne)
    * - ``lastAccessTime``
-     - Heure du dernier acces (millisecondes epoch sous forme de chaine)
+     - Heure du dernier accès (millisecondes epoch sous forme de chaîne)
    * - ``configId``
      - ID de la configuration de crawl
 
 .. note::
 
-   Tous les champs de la reponse sont retournes sous forme de chaines (JSON string). ``errorCount`` est une valeur numerique representee sous forme de chaine, et ``lastAccessTime`` est le nombre de millisecondes epoch represente sous forme de chaine.
+   Tous les champs de la réponse sont retournés sous forme de chaînes (JSON string). ``errorCount`` est une valeur numérique représentée sous forme de chaîne, et ``lastAccessTime`` est le nombre de millisecondes epoch représenté sous forme de chaîne.
 
-Obtention d'une URL en echec
+Obtention d'une URL en échec
 ============================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/failureurl/log/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -179,17 +179,17 @@ Reponse
       }
     }
 
-Suppression d'une URL en echec
+Suppression d'une URL en échec
 ==============================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/failureurl/log/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -200,19 +200,19 @@ Reponse
       }
     }
 
-Suppression de toutes les URLs en echec
+Suppression de toutes les URLs en échec
 =======================================
 
-Supprime toutes les URLs en echec. Cette operation ne prend aucun parametre.
+Supprime toutes les URLs en échec. Cette opération ne prend aucun paramètre.
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/failureurl/all
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -226,7 +226,7 @@ Reponse
 Types d'erreurs
 ===============
 
-``errorName`` contient le nom de classe complet de l'exception survenue pendant le crawl, tel qu'il a ete capture. Il ne s'agit pas d'une enumeration fixe ; tout nom de classe peut apparaitre selon l'exception levee. Voici quelques exemples representatifs.
+``errorName`` contient le nom de classe complet de l'exception survenue pendant le crawl, tel qu'il a été capturé. Il ne s'agit pas d'une énumération fixe ; tout nom de classe peut apparaître selon l'exception levée. Voici quelques exemples représentatifs.
 
 .. list-table::
    :header-rows: 1
@@ -235,24 +235,24 @@ Types d'erreurs
    * - Nom de l'erreur (exemple)
      - Description
    * - ``java.net.ConnectException``
-     - Connexion refusee (impossible de se connecter au serveur)
+     - Connexion refusée (impossible de se connecter au serveur)
    * - ``java.net.UnknownHostException``
-     - Nom d'hote impossible a resoudre (erreur DNS)
+     - Nom d'hôte impossible à résoudre (erreur DNS)
    * - ``java.net.SocketTimeoutException``
-     - Delai de connexion ou de lecture depasse
+     - Délai de connexion ou de lecture dépassé
    * - ``javax.net.ssl.SSLException``
-     - Erreur de negociation SSL/TLS ou de certificat
+     - Erreur de négociation SSL/TLS ou de certificat
    * - ``java.io.IOException``
-     - Erreur d'entree/sortie
+     - Erreur d'entrée/sortie
    * - ``org.codelibs.fess.exception.ContentNotFoundException``
-     - URL ayant retourne un code de statut HTTP configure dans ``crawler.failure.url.status.codes`` (defaut : 403, 404, 410)
+     - URL ayant retourné un code de statut HTTP configuré dans ``crawler.failure.url.status.codes`` (défaut : 403, 404, 410)
    * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
-     - Le contenu a depasse la longueur maximale autorisee
+     - Le contenu a dépassé la longueur maximale autorisée
 
 Exemples d'utilisation
 ======================
 
-Obtention de la liste des URLs en echec
+Obtention de la liste des URLs en échec
 ---------------------------------------
 
 .. code-block:: bash
@@ -278,7 +278,7 @@ Filtrage par nom d'erreur
     curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtention d'une URL en echec
+Obtention d'une URL en échec
 ----------------------------
 
 .. code-block:: bash
@@ -286,7 +286,7 @@ Obtention d'une URL en echec
     curl -X GET "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Suppression d'une URL en echec
+Suppression d'une URL en échec
 ------------------------------
 
 .. code-block:: bash
@@ -294,7 +294,7 @@ Suppression d'une URL en echec
     curl -X DELETE "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Suppression de toutes les URLs en echec
+Suppression de toutes les URLs en échec
 ---------------------------------------
 
 .. code-block:: bash
@@ -302,7 +302,7 @@ Suppression de toutes les URLs en echec
     curl -X DELETE "http://localhost:8080/api/admin/failureurl/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Agregation par type d'erreur
+Agrégation par type d'erreur
 ----------------------------
 
 .. code-block:: bash
@@ -312,10 +312,10 @@ Agregation par type d'erreur
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-crawlinginfo` - API des informations de crawl
-- :doc:`api-admin-joblog` - API des journaux de taches
-- :doc:`../../admin/failureurl-guide` - Guide de gestion des URLs en echec
+- :doc:`api-admin-joblog` - API des journaux de tâches
+- :doc:`../../admin/failureurl-guide` - Guide de gestion des URLs en échec

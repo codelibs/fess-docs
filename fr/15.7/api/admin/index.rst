@@ -1,8 +1,8 @@
 ==================================
-Reference de l'API d'administration
+Référence de l'API d'administration
 ==================================
 
-L'API d'administration |Fess| est une API RESTful permettant d'acceder aux fonctions d'administration par programmation.
+L'API d'administration |Fess| est une API RESTful permettant d'accéder aux fonctions d'administration par programmation.
 
 .. toctree::
    :maxdepth: 2
@@ -58,7 +58,7 @@ L'API d'administration |Fess| est une API RESTful permettant d'acceder aux fonct
 
 .. toctree::
    :maxdepth: 2
-   :caption: Systeme
+   :caption: Système
 
    api-admin-general
    api-admin-systeminfo

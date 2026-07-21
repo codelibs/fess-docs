@@ -5,13 +5,13 @@ API RelatedQuery
 Vue d'ensemble
 ==============
 
-L'API RelatedQuery est une API permettant de gerer les requetes associees dans |Fess|.
-Pour un mot-cle de recherche saisi par l'utilisateur (``term``), vous pouvez enregistrer et
-gerer des suggestions de mots-cles de recherche associes (``queries``). Les requetes associees
-enregistrees sont affichees comme suggestions de recherche associees sur l'ecran de recherche.
+L'API RelatedQuery est une API permettant de gérer les requêtes associées dans |Fess|.
+Pour un mot-clé de recherche saisi par l'utilisateur (``term``), vous pouvez enregistrer et
+gérer des suggestions de mots-clés de recherche associés (``queries``). Les requêtes associées
+enregistrées sont affichées comme suggestions de recherche associées sur l'écran de recherche.
 
-Pour les details sur l'authentification, le format de reponse commun (champ ``version`` et
-codes ``status``), la pagination et les reponses d'erreur, consultez :doc:`api-admin-overview`.
+Pour les détails sur l'authentification, le format de réponse commun (champ ``version`` et
+codes ``status``), la pagination et les réponses d'erreur, consultez :doc:`api-admin-overview`.
 
 URL de base
 ===========
@@ -27,56 +27,56 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /settings
-     - Obtention de la liste des requetes associees
+     - Obtention de la liste des requêtes associées
    * - GET
      - /setting/{id}
-     - Obtention d'une requete associee
+     - Obtention d'une requête associée
    * - POST
      - /setting
-     - Creation d'une requete associee
+     - Création d'une requête associée
    * - PUT
      - /setting
-     - Mise a jour d'une requete associee
+     - Mise à jour d'une requête associée
    * - DELETE
      - /setting/{id}
-     - Suppression d'une requete associee
+     - Suppression d'une requête associée
 
-Obtention de la liste des requetes associees
+Obtention de la liste des requêtes associées
 ============================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/relatedquery/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (par defaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
+     - Nombre d'éléments par page (par défaut : 25 ; modifiable via ``paging.page.size`` du fichier ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a 1 ; par defaut : 1)
+     - Numéro de page (commence à 1 ; par défaut : 1)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -99,22 +99,22 @@ Reponse
 
 .. note::
 
-   Chaque parametre contient ``versionNo`` (numero de version utilise pour le verrouillage
+   Chaque paramètre contient ``versionNo`` (numéro de version utilisé pour le verrouillage
    optimiste). ``virtualHost`` et les champs d'audit (``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime``) ne sont inclus que lorsqu'une valeur est definie.
-   Un ``virtualHost`` vide n'est pas inclus dans la reponse.
+   ``updatedBy``, ``updatedTime``) ne sont inclus que lorsqu'une valeur est définie.
+   Un ``virtualHost`` vide n'est pas inclus dans la réponse.
 
-Obtention d'une requete associee
+Obtention d'une requête associée
 =================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/relatedquery/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -133,10 +133,10 @@ Reponse
       }
     }
 
-Creation d'une requete associee
+Création d'une requête associée
 ================================
 
-Requete
+Requête
 -------
 
 ::
@@ -144,7 +144,7 @@ Requete
     POST /api/admin/relatedquery/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -167,19 +167,19 @@ Description des champs
      - Description
    * - ``term``
      - Oui
-     - Mot-cle de recherche (10 000 caracteres maximum)
+     - Mot-clé de recherche (10 000 caractères maximum)
    * - ``queries``
      - Oui
-     - Requetes associees. Chaine separee par des sauts de ligne, une par ligne (les lignes vides sont ignorees ; 10 000 caracteres maximum)
+     - Requêtes associées. Chaîne séparée par des sauts de ligne, une par ligne (les lignes vides sont ignorées ; 10 000 caractères maximum)
    * - ``virtualHost``
      - Non
-     - Hote virtuel (1 000 caracteres maximum)
+     - Hôte virtuel (1 000 caractères maximum)
 
 .. note::
 
-   ``crudMode`` etant defini automatiquement cote API, il n'est pas necessaire de l'inclure dans le corps de la requete.
+   ``crudMode`` étant défini automatiquement côté API, il n'est pas nécessaire de l'inclure dans le corps de la requête.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -193,10 +193,10 @@ Reponse
       }
     }
 
-Mise a jour d'une requete associee
+Mise à jour d'une requête associée
 ===================================
 
-Requete
+Requête
 -------
 
 ::
@@ -204,7 +204,7 @@ Requete
     PUT /api/admin/relatedquery/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -229,21 +229,21 @@ Description des champs
      - Description
    * - ``id``
      - Oui
-     - ID de la requete associee a mettre a jour (1 000 caracteres maximum)
+     - ID de la requête associée à mettre à jour (1 000 caractères maximum)
    * - ``term``
      - Oui
-     - Mot-cle de recherche (10 000 caracteres maximum)
+     - Mot-clé de recherche (10 000 caractères maximum)
    * - ``queries``
      - Oui
-     - Requetes associees. Chaine separee par des sauts de ligne, une par ligne (les lignes vides sont ignorees ; 10 000 caracteres maximum)
+     - Requêtes associées. Chaîne séparée par des sauts de ligne, une par ligne (les lignes vides sont ignorées ; 10 000 caractères maximum)
    * - ``virtualHost``
      - Non
-     - Hote virtuel (1 000 caracteres maximum)
+     - Hôte virtuel (1 000 caractères maximum)
    * - ``versionNo``
      - Oui
-     - Numero de version utilise pour le verrouillage optimiste. Specifiez la valeur incluse dans la reponse lors de l'obtention du parametre
+     - Numéro de version utilisé pour le verrouillage optimiste. Spécifiez la valeur incluse dans la réponse lors de l'obtention du paramètre
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -257,17 +257,17 @@ Reponse
       }
     }
 
-Suppression d'une requete associee
+Suppression d'une requête associée
 ====================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/relatedquery/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -279,11 +279,11 @@ Reponse
       }
     }
 
-Reponse d'erreur
+Réponse d'erreur
 ================
 
-En cas d'echec de la requete, ``status`` est defini sur une valeur differente de 0 et
-``message`` contient le detail de l'erreur. Par exemple, pour une erreur de validation
+En cas d'échec de la requête, ``status`` est défini sur une valeur différente de 0 et
+``message`` contient le détail de l'erreur. Par exemple, pour une erreur de validation
 telle qu'un champ obligatoire manquant, ``status`` vaut ``1``. Pour la liste des codes
 de statut, consultez :doc:`api-admin-overview`.
 
@@ -300,7 +300,7 @@ de statut, consultez :doc:`api-admin-overview`.
 Exemples d'utilisation
 ======================
 
-Requetes associees pour les produits
+Requêtes associées pour les produits
 -------------------------------------
 
 .. code-block:: bash
@@ -313,7 +313,7 @@ Requetes associees pour les produits
            "queries": "product features\nproduct pricing\nproduct comparison\nproduct reviews"
          }'
 
-Requetes associees pour l'aide
+Requêtes associées pour l'aide
 -------------------------------
 
 .. code-block:: bash
@@ -326,10 +326,10 @@ Requetes associees pour l'aide
            "queries": "help center\nhelp documentation\nhelp contact support"
          }'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
-- :doc:`api-admin-relatedcontent` - API des contenus associes
+- :doc:`api-admin-relatedcontent` - API des contenus associés
 - :doc:`api-admin-suggest` - API de gestion des suggestions
-- :doc:`../../admin/relatedquery-guide` - Guide de gestion des requetes associees
+- :doc:`../../admin/relatedquery-guide` - Guide de gestion des requêtes associées

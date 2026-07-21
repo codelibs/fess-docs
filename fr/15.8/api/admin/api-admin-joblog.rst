@@ -5,8 +5,8 @@ API JobLog
 Vue d'ensemble
 ==============
 
-L'API JobLog permet de consulter et de gerer les journaux d'execution des taches de |Fess|.
-Vous pouvez obtenir l'historique d'execution des taches planifiees et des taches de crawl, les resultats d'execution, les informations d'erreur, et les supprimer.
+L'API JobLog permet de consulter et de gérer les journaux d'exécution des tâches de |Fess|.
+Vous pouvez obtenir l'historique d'exécution des tâches planifiées et des tâches de crawl, les résultats d'exécution, les informations d'erreur, et les supprimer.
 
 URL de base
 ===========
@@ -22,54 +22,54 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /logs
-     - Obtention de la liste des journaux de taches
+     - Obtention de la liste des journaux de tâches
    * - GET
      - /log/{id}
-     - Obtention d'un journal de tache
+     - Obtention d'un journal de tâche
    * - DELETE
      - /log/{id}
-     - Suppression d'un journal de tache
+     - Suppression d'un journal de tâche
 
-Obtention de la liste des journaux de taches
+Obtention de la liste des journaux de tâches
 ============================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/joblog/logs
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page (defaut : 20)
+     - Nombre d'éléments par page (défaut : 20)
    * - ``page``
      - Integer
      - Non
-     - Numero de page (base 1, defaut : 1)
+     - Numéro de page (base 1, défaut : 1)
    * - ``id``
      - String
      - Non
-     - Filtre par ID de journal de tache (correspondance exacte)
+     - Filtre par ID de journal de tâche (correspondance exacte)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -105,7 +105,7 @@ Reponse
       }
     }
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -115,41 +115,41 @@ Champs de la reponse
    * - Champ
      - Description
    * - ``id``
-     - ID du journal de tache
+     - ID du journal de tâche
    * - ``jobName``
-     - Nom de la tache
+     - Nom de la tâche
    * - ``jobStatus``
-     - Statut de la tache (``ok`` : succes, ``fail`` : echec, ``running`` : en cours d'execution)
+     - Statut de la tâche (``ok`` : succès, ``fail`` : échec, ``running`` : en cours d'exécution)
    * - ``target``
-     - Cible d'execution (nom de la cible du planificateur ; valeur par defaut : ``all``)
+     - Cible d'exécution (nom de la cible du planificateur ; valeur par défaut : ``all``)
    * - ``scriptType``
      - Type de script (ex. : ``groovy``)
    * - ``scriptData``
-     - Script execute
+     - Script exécuté
    * - ``scriptResult``
-     - Resultat d'execution
+     - Résultat d'exécution
    * - ``startTime``
-     - Heure de debut (millisecondes epoch ; retournee sous forme de chaine)
+     - Heure de début (millisecondes epoch ; retournée sous forme de chaîne)
    * - ``endTime``
-     - Heure de fin (millisecondes epoch ; retournee sous forme de chaine). Non retournee pour les taches en cours d'execution.
+     - Heure de fin (millisecondes epoch ; retournée sous forme de chaîne). Non retournée pour les tâches en cours d'exécution.
 
 .. note::
 
-   Chaque objet de journal dans la reponse inclut egalement un champ interne ``crudMode``
-   (un entier indiquant le mode d'operation CRUD, toujours ``0`` pour les operations de lecture).
-   Les clients peuvent l'ignorer en toute securite.
+   Chaque objet de journal dans la réponse inclut également un champ interne ``crudMode``
+   (un entier indiquant le mode d'opération CRUD, toujours ``0`` pour les opérations de lecture).
+   Les clients peuvent l'ignorer en toute sécurité.
 
-Obtention d'un journal de tache
+Obtention d'un journal de tâche
 ================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/joblog/log/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -171,20 +171,20 @@ Reponse
       }
     }
 
-Si le journal de tache correspondant a l'ID specifie n'existe pas, une reponse d'erreur
-est retournee avec une valeur differente de 0 dans ``status``.
+Si le journal de tâche correspondant à l'ID spécifié n'existe pas, une réponse d'erreur
+est retournée avec une valeur différente de 0 dans ``status``.
 
-Suppression d'un journal de tache
+Suppression d'un journal de tâche
 ==================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/joblog/log/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -195,13 +195,13 @@ Reponse
       }
     }
 
-Si le journal de tache correspondant a l'ID specifie n'existe pas, une reponse d'erreur
-est retournee avec une valeur differente de 0 dans ``status``.
+Si le journal de tâche correspondant à l'ID spécifié n'existe pas, une réponse d'erreur
+est retournée avec une valeur différente de 0 dans ``status``.
 
 Exemples d'utilisation
 ======================
 
-Obtention de la liste des journaux de taches
+Obtention de la liste des journaux de tâches
 --------------------------------------------
 
 .. code-block:: bash
@@ -209,7 +209,7 @@ Obtention de la liste des journaux de taches
     curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Extraction des taches en echec uniquement
+Extraction des tâches en échec uniquement
 -----------------------------------------
 
 .. code-block:: bash
@@ -219,7 +219,7 @@ Extraction des taches en echec uniquement
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '.response.logs[] | select(.jobStatus=="fail")'
 
-Obtention d'un journal de tache
+Obtention d'un journal de tâche
 --------------------------------
 
 .. code-block:: bash
@@ -227,7 +227,7 @@ Obtention d'un journal de tache
     curl -X GET "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Suppression d'un journal de tache
+Suppression d'un journal de tâche
 ----------------------------------
 
 .. code-block:: bash
@@ -235,7 +235,7 @@ Suppression d'un journal de tache
     curl -X DELETE "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Calcul du taux de reussite des taches
+Calcul du taux de réussite des tâches
 --------------------------------------
 
 .. code-block:: bash
@@ -244,10 +244,10 @@ Calcul du taux de reussite des taches
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-scheduler` - API du planificateur
 - :doc:`api-admin-crawlinginfo` - API des informations de crawl
-- :doc:`../../admin/joblog-guide` - Guide de gestion des journaux de taches
+- :doc:`../../admin/joblog-guide` - Guide de gestion des journaux de tâches

@@ -2,10 +2,10 @@
 API de CrawlingInfo
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de CrawlingInfo es para consultar y gestionar la informacion de rastreo (sesiones de rastreo) de |Fess|.
+La API de CrawlingInfo es para consultar y gestionar la información de rastreo (sesiones de rastreo) de |Fess|.
 Permite operaciones como obtener la lista de sesiones de rastreo, obtenerlas individualmente y eliminarlas.
 
 URL Base
@@ -22,23 +22,23 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /logs
-     - Obtener lista de informacion de rastreo
+     - Obtener lista de información de rastreo
    * - GET
      - /log/{id}
-     - Obtener informacion de rastreo
+     - Obtener información de rastreo
    * - DELETE
      - /log/{id}
-     - Eliminar informacion de rastreo
+     - Eliminar información de rastreo
    * - DELETE
      - /all
      - Eliminar en lote sesiones de rastreo (excepto las activas)
 
-Obtener Lista de Informacion de Rastreo
+Obtener Lista de Información de Rastreo
 =======================================
 
 Solicitud
@@ -48,29 +48,29 @@ Solicitud
 
     GET /api/admin/crawlinginfo/logs
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (basado en 1, predeterminado: 1)
+     - Número de página (basado en 1, predeterminado: 1)
    * - ``sessionId``
      - String
      - No
-     - Filtro por ID de sesion (coincidencia parcial)
+     - Filtro por ID de sesión (coincidencia parcial)
 
 Respuesta
 ---------
@@ -108,25 +108,25 @@ Campos de Respuesta
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``id``
-     - ID de informacion de rastreo
+     - ID de información de rastreo
    * - ``sessionId``
-     - ID de sesion
+     - ID de sesión
    * - ``name``
-     - Nombre de sesion
+     - Nombre de sesión
    * - ``expiredTime``
-     - Fecha de expiracion (milisegundos epoch; devuelto como cadena de texto)
+     - Fecha de expiración (milisegundos epoch; devuelto como cadena de texto)
    * - ``createdTime``
-     - Hora de creacion (milisegundos epoch; devuelto como numero)
+     - Hora de creación (milisegundos epoch; devuelto como número)
 
 .. note::
 
-   Cada objeto de registro en la respuesta incluye tambien un campo interno ``crudMode``
-   (un entero que indica el modo de operacion CRUD, siempre ``0`` para operaciones de lectura).
+   Cada objeto de registro en la respuesta incluye también un campo interno ``crudMode``
+   (un entero que indica el modo de operación CRUD, siempre ``0`` para operaciones de lectura).
    Los clientes pueden ignorarlo sin problema.
 
-Obtener Informacion de Rastreo
+Obtener Información de Rastreo
 ==============================
 
 Solicitud
@@ -154,7 +154,7 @@ Respuesta
       }
     }
 
-Eliminar Informacion de Rastreo
+Eliminar Información de Rastreo
 ===============================
 
 Solicitud
@@ -178,7 +178,7 @@ Respuesta
 Eliminar en Lote Sesiones de Rastreo
 =====================================
 
-Elimina todas las sesiones de rastreo (y sus datos de parametros), excepto las que estan en ejecucion en ese momento. No existe umbral de antiguedad ni de tiempo; se eliminan todas las sesiones que no esten en ejecucion.
+Elimina todas las sesiones de rastreo (y sus datos de parámetros), excepto las que están en ejecución en ese momento. No existe umbral de antigüedad ni de tiempo; se eliminan todas las sesiones que no estén en ejecución.
 
 Solicitud
 ---------
@@ -201,7 +201,7 @@ Respuesta
 Ejemplos de Uso
 ===============
 
-Obtener Lista de Informacion de Rastreo
+Obtener Lista de Información de Rastreo
 ---------------------------------------
 
 .. code-block:: bash
@@ -209,7 +209,7 @@ Obtener Lista de Informacion de Rastreo
     curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Filtrar por Sesion Especifica
+Filtrar por Sesión Específica
 -----------------------------
 
 .. code-block:: bash
@@ -217,7 +217,7 @@ Filtrar por Sesion Especifica
     curl -X GET "http://localhost:8080/api/admin/crawlinginfo/logs?sessionId=20250129100000" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtener Informacion de Rastreo
+Obtener Información de Rastreo
 ------------------------------
 
 .. code-block:: bash
@@ -225,7 +225,7 @@ Obtener Informacion de Rastreo
     curl -X GET "http://localhost:8080/api/admin/crawlinginfo/log/crawling_info_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Eliminar Informacion de Rastreo
+Eliminar Información de Rastreo
 -------------------------------
 
 .. code-block:: bash
@@ -241,10 +241,10 @@ Eliminar en Lote Sesiones
     curl -X DELETE "http://localhost:8080/api/admin/crawlinginfo/all" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-failureurl` - API de URLs fallidas
 - :doc:`api-admin-joblog` - API de registro de trabajos
-- :doc:`../../admin/crawlinginfo-guide` - Guia de informacion de rastreo
+- :doc:`../../admin/crawlinginfo-guide` - Guía de información de rastreo

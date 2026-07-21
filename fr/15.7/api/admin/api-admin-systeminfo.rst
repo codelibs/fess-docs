@@ -5,8 +5,8 @@ API SystemInfo
 Vue d'ensemble
 ==============
 
-L'API SystemInfo permet d'obtenir les informations systeme de |Fess|.
-Vous pouvez consulter les variables d'environnement, les proprietes systeme Java, les proprietes de configuration de |Fess| et les informations destinees aux rapports de bogues.
+L'API SystemInfo permet d'obtenir les informations système de |Fess|.
+Vous pouvez consulter les variables d'environnement, les propriétés système Java, les propriétés de configuration de |Fess| et les informations destinées aux rapports de bogues.
 
 URL de base
 ===========
@@ -15,8 +15,8 @@ URL de base
 
     /api/admin/systeminfo
 
-L'acces a cette API necessite un jeton d'acces disposant de la permission ``Radmin-api``.
-Pour les details sur l'authentification, consultez :doc:`api-admin-overview`.
+L'accès à cette API nécessite un jeton d'accès disposant de la permission ``Radmin-api``.
+Pour les détails sur l'authentification, consultez :doc:`api-admin-overview`.
 
 Liste des endpoints
 ===================
@@ -25,29 +25,29 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
      - /
-     - Obtention des informations systeme
+     - Obtention des informations système
 
-Obtention des informations systeme
+Obtention des informations système
 ==================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/systeminfo
 
-Cet endpoint n'accepte aucun parametre de requete.
+Cet endpoint n'accepte aucun paramètre de requête.
 
-Reponse
+Réponse
 -------
 
-La reponse contient ``version`` indiquant la version du produit, ``status`` indiquant le resultat du traitement, ainsi que les quatre groupes de proprietes suivants. Chaque groupe de proprietes est un tableau d'objets possedant ``label`` et ``value``.
+La réponse contient ``version`` indiquant la version du produit, ``status`` indiquant le résultat du traitement, ainsi que les quatre groupes de propriétés suivants. Chaque groupe de propriétés est un tableau d'objets possédant ``label`` et ``value``.
 
 .. code-block:: json
 
@@ -77,7 +77,7 @@ La reponse contient ``version`` indiquant la version du produit, ``status`` indi
       }
     }
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -89,33 +89,33 @@ Champs de la reponse
    * - ``version``
      - Version du produit |Fess| (ex. : ``15.7.0``).
    * - ``status``
-     - Code indiquant le resultat du traitement. ``0`` signifie une terminaison normale.
+     - Code indiquant le résultat du traitement. ``0`` signifie une terminaison normale.
    * - ``envProps``
-     - Liste des variables d'environnement (tableau de ``label`` / ``value``). Les valeurs retournees sont celles obtenues via ``System.getenv()``, sans modification.
+     - Liste des variables d'environnement (tableau de ``label`` / ``value``). Les valeurs retournées sont celles obtenues via ``System.getenv()``, sans modification.
    * - ``systemProps``
-     - Liste des proprietes systeme Java (tableau de ``label`` / ``value``). Les valeurs retournees sont celles obtenues via ``System.getProperties()``, sans modification.
+     - Liste des propriétés système Java (tableau de ``label`` / ``value``). Les valeurs retournées sont celles obtenues via ``System.getProperties()``, sans modification.
    * - ``fessProps``
-     - Liste des proprietes de configuration de |Fess| (tableau de ``label`` / ``value``). Inclut les valeurs de ``fess_config.properties`` ainsi que les proprietes systeme definies via l'interface d'administration. Les elements sensibles sont masques (voir la note ci-dessous).
+     - Liste des propriétés de configuration de |Fess| (tableau de ``label`` / ``value``). Inclut les valeurs de ``fess_config.properties`` ainsi que les propriétés système définies via l'interface d'administration. Les éléments sensibles sont masqués (voir la note ci-dessous).
    * - ``bugReportProps``
-     - Liste des informations collectees pour les rapports de bogues (tableau de ``label`` / ``value``). Inclut les principales proprietes systeme relatives au systeme d'exploitation et a l'environnement d'execution Java (``os.name``, ``os.version``, ``java.vm.version``, etc.) ainsi que les valeurs des proprietes systeme de |Fess|.
+     - Liste des informations collectées pour les rapports de bogues (tableau de ``label`` / ``value``). Inclut les principales propriétés système relatives au système d'exploitation et à l'environnement d'exécution Java (``os.name``, ``os.version``, ``java.vm.version``, etc.) ainsi que les valeurs des propriétés système de |Fess|.
 
 .. note::
 
-   Dans ``fessProps``, les valeurs de configuration suivantes, jugees sensibles, sont masquees et retournees sous la forme ``XXXXXXXX`` :
+   Dans ``fessProps``, les valeurs de configuration suivantes, jugées sensibles, sont masquées et retournées sous la forme ``XXXXXXXX`` :
    ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
    ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
 
 .. warning::
 
-   ``envProps`` (variables d'environnement) et ``systemProps`` (proprietes systeme Java) ne sont pas masquees :
-   les valeurs configurees sont retournees telles quelles. Si des informations confidentielles (identifiants,
-   mots de passe, etc.) sont stockees dans des variables d'environnement ou des proprietes systeme, elles
-   apparaitront dans la reponse.
+   ``envProps`` (variables d'environnement) et ``systemProps`` (propriétés système Java) ne sont pas masquées :
+   les valeurs configurées sont retournées telles quelles. Si des informations confidentielles (identifiants,
+   mots de passe, etc.) sont stockées dans des variables d'environnement ou des propriétés système, elles
+   apparaîtront dans la réponse.
 
 Exemples d'utilisation
 ======================
 
-Obtention des informations systeme
+Obtention des informations système
 ----------------------------------
 
 .. code-block:: bash
@@ -123,7 +123,7 @@ Obtention des informations systeme
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Extraction d'une propriete systeme specifique
+Extraction d'une propriété système spécifique
 ---------------------------------------------
 
 .. code-block:: bash
@@ -143,10 +143,10 @@ Affichage de la liste des variables d'environnement
          -H "Authorization: Bearer YOUR_TOKEN" \
          | jq -r '.response.envProps[] | "\(.label)=\(.value)"'
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin
 - :doc:`api-admin-stats` - API de statistiques
-- :doc:`api-admin-general` - API de configuration generale
-- :doc:`../../admin/systeminfo-guide` - Guide des informations systeme
+- :doc:`api-admin-general` - API de configuration générale
+- :doc:`../../admin/systeminfo-guide` - Guide des informations système

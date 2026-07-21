@@ -1,19 +1,19 @@
 ==================================
-Desarrollo de Plugins de Almacen de Datos
+Desarrollo de Plugins de Almacén de Datos
 ==================================
 
-Vision General
+Visión General
 ==============
 
-Al desarrollar un plugin de almacen de datos, puede agregar funcionalidad a |Fess|
+Al desarrollar un plugin de almacén de datos, puede agregar funcionalidad a |Fess|
 para obtener contenido desde nuevas fuentes de datos.
 
-Estructura Basica
+Estructura Básica
 =================
 
-El plugin de almacen de datos se implementa heredando de ``AbstractDataStore``.
+El plugin de almacén de datos se implementa heredando de ``AbstractDataStore``.
 
-Implementacion Minima
+Implementación Mínima
 ---------------------
 
 .. code-block:: java
@@ -48,37 +48,37 @@ Implementacion Minima
 AbstractDataStore
 =================
 
-Metodos Principales
+Métodos Principales
 -------------------
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
-   * - Metodo
-     - Descripcion
+   * - Método
+     - Descripción
    * - ``getName()``
-     - Devuelve el nombre del almacen de datos (obligatorio)
+     - Devuelve el nombre del almacén de datos (obligatorio)
    * - ``storeData()``
-     - Realiza la obtencion de datos y registro en el indice (obligatorio)
+     - Realiza la obtención de datos y registro en el índice (obligatorio)
    * - ``register()``
      - Registra el plugin
 
-Parametros
+Parámetros
 ----------
 
-Parametros pasados al metodo ``storeData()``:
+Parámetros pasados al método ``storeData()``:
 
-- ``dataConfig``: Configuracion del almacen de datos
-- ``callback``: Callback para actualizacion del indice
-- ``paramMap``: Parametros configurados en la pantalla de administracion
-- ``scriptMap``: Configuracion de scripts
+- ``dataConfig``: Configuración del almacén de datos
+- ``callback``: Callback para actualización del índice
+- ``paramMap``: Parámetros configurados en la pantalla de administración
+- ``scriptMap``: Configuración de scripts
 - ``defaultDataMap``: Mapa de datos predeterminado
 
-Ejemplo de Implementacion
+Ejemplo de Implementación
 =========================
 
-Almacen de Datos Simple
+Almacén de Datos Simple
 -----------------------
 
 .. code-block:: java
@@ -126,7 +126,7 @@ Almacen de Datos Simple
         }
     }
 
-Soporte de Paginacion
+Soporte de Paginación
 ---------------------
 
 .. code-block:: java
@@ -151,7 +151,7 @@ Soporte de Paginacion
         }
     }
 
-Implementacion de Autenticacion
+Implementación de Autenticación
 ===============================
 
 OAuth 2.0
@@ -181,7 +181,7 @@ OAuth 2.0
         }
     }
 
-Autenticacion con Clave API
+Autenticación con Clave API
 ---------------------------
 
 .. code-block:: java
@@ -245,12 +245,12 @@ Pruebas Unitarias
         }
     }
 
-Ejemplo de Configuracion
+Ejemplo de Configuración
 ========================
 
-Ejemplo de configuracion en la pantalla de administracion:
+Ejemplo de configuración en la pantalla de administración:
 
-Parametros
+Parámetros
 ----------
 
 ::
@@ -271,9 +271,9 @@ Script
     lastModified=data.updated_at
     mimetype=data.content_type
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`../config/datastore/ds-overview` - Vision general de conectores de almacen de datos
-- `GitHub: fess-ds-* <https://github.com/codelibs?q=fess-ds>`__ - Ejemplos de plugins publicos
+- :doc:`../config/datastore/ds-overview` - Visión general de conectores de almacén de datos
+- `GitHub: fess-ds-* <https://github.com/codelibs?q=fess-ds>`__ - Ejemplos de plugins públicos

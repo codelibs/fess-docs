@@ -1,14 +1,14 @@
 ==================================
-Guide de developpement de themes
+Guide de développement de thèmes
 ==================================
 
 Vue d'ensemble
 ==============
 
-Le systeme de themes de |Fess| permet de personnaliser le design de l'ecran de recherche.
-Les themes peuvent etre distribues sous forme de plugins et vous pouvez basculer entre plusieurs themes.
+Le système de thèmes de |Fess| permet de personnaliser le design de l'écran de recherche.
+Les thèmes peuvent être distribués sous forme de plugins et vous pouvez basculer entre plusieurs thèmes.
 
-Structure d'un theme
+Structure d'un thème
 ====================
 
 ::
@@ -27,7 +27,7 @@ Structure d'un theme
             └── templates/
                 └── search.html
 
-Creation d'un theme de base
+Création d'un thème de base
 ===========================
 
 Personnalisation CSS
@@ -57,8 +57,8 @@ Personnalisation CSS
 Changement du logo
 ------------------
 
-1. Placer le logo personnalise dans ``images/logo.png``
-2. Referencer le logo dans le CSS:
+1. Placer le logo personnalisé dans ``images/logo.png``
+2. Référencer le logo dans le CSS:
 
 .. code-block:: css
 
@@ -81,7 +81,7 @@ Les templates sont au format JSP.
         <p>Rechercher dans les documents internes</p>
     </div>
 
-Enregistrement du theme
+Enregistrement du thème
 =======================
 
 pom.xml
@@ -112,19 +112,19 @@ Installation
 
     ./bin/fess-plugin install fess-theme-example
 
-Selection du theme depuis l'interface d'administration:
+Sélection du thème depuis l'interface d'administration:
 
-1. "Systeme" -> "Design"
-2. Selectionner le theme
+1. "Système" -> "Design"
+2. Sélectionner le thème
 3. Sauvegarder et appliquer
 
-Exemples de themes existants
+Exemples de thèmes existants
 ============================
 
 - `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__
 - `fess-theme-minimal <https://github.com/codelibs/fess-theme-minimal>`__
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`plugin-architecture` - Architecture des plugins

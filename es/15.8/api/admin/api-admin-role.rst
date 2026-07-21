@@ -2,11 +2,11 @@
 API de Role
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Role es para gestionar roles de |Fess|.
-Puede operar creacion, actualizacion y eliminacion de roles.
+Puede operar creación, actualización y eliminación de roles.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de roles
@@ -51,25 +51,25 @@ Solicitud
 
     GET /api/admin/role/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 25. Configurable mediante ``paging.page.size`` en ``fess_config.properties``)
+     - Número de elementos por página (predeterminado: 25. Configurable mediante ``paging.page.size`` en ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1. Los valores de 0 o menos se tratan como 1)
+     - Número de página (comienza en 1, predeterminado: 1. Los valores de 0 o menos se tratan como 1)
    * - ``id``
      - String
      - No
@@ -145,7 +145,7 @@ Cuerpo de la Solicitud
       "name": "editor"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -154,10 +154,10 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``name``
-     - Si
-     - Nombre del rol (maximo 100 caracteres)
+     - Sí
+     - Nombre del rol (máximo 100 caracteres)
    * - ``attributes``
      - No
      - Mapa de atributos. Los valores se especifican como cadenas
@@ -197,7 +197,7 @@ Cuerpo de la Solicitud
       "versionNo": 1
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -206,19 +206,19 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``id``
-     - Si
+     - Sí
      - ID del rol a actualizar
    * - ``name``
-     - Si
-     - Nombre del rol (maximo 100 caracteres)
+     - Sí
+     - Nombre del rol (máximo 100 caracteres)
    * - ``attributes``
      - No
      - Mapa de atributos. Los valores se especifican como cadenas
    * - ``versionNo``
-     - Si
-     - Numero de version para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el rol
+     - Sí
+     - Número de versión para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el rol
 
 Respuesta
 ---------
@@ -279,10 +279,10 @@ Obtener Lista de Roles
     curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-user` - API de gestion de usuarios
-- :doc:`api-admin-group` - API de gestion de grupos
-- :doc:`../../admin/role-guide` - Guia de gestion de roles
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-user` - API de gestión de usuarios
+- :doc:`api-admin-group` - API de gestión de grupos
+- :doc:`../../admin/role-guide` - Guía de gestión de roles

@@ -5,10 +5,10 @@ SearchList API
 Vue d'ensemble
 ==============
 
-L'API SearchList est une API d'administration de |Fess| permettant de rechercher et de gerer les documents dans l'index.
-Elle permet de rechercher, obtenir, creer, mettre a jour et supprimer des documents.
+L'API SearchList est une API d'administration de |Fess| permettant de rechercher et de gérer les documents dans l'index.
+Elle permet de rechercher, obtenir, créer, mettre à jour et supprimer des documents.
 
-Tous les noms de champs dans la reponse sont en ``snake_case``. Les champs dont la valeur est ``null`` sont omis de la reponse.
+Tous les noms de champs dans la réponse sont en ``snake_case``. Les champs dont la valeur est ``null`` sont omis de la réponse.
 
 URL de base
 ===========
@@ -20,9 +20,9 @@ URL de base
 Authentification
 ================
 
-Pour appeler cette API, une authentification par jeton d'acces est requise, comme explique dans :doc:`api-admin-overview`.
-Le jeton doit disposer des permissions d'acces a l'API d'administration (par defaut ``Radmin-api``).
-Cette permission peut etre modifiee via la cle de configuration ``api.admin.access.permissions``.
+Pour appeler cette API, une authentification par jeton d'accès est requise, comme expliqué dans :doc:`api-admin-overview`.
+Le jeton doit disposer des permissions d'accès à l'API d'administration (par défaut ``Radmin-api``).
+Cette permission peut être modifiée via la clé de configuration ``api.admin.access.permissions``.
 
 Liste des endpoints
 ===================
@@ -31,7 +31,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET / PUT
@@ -42,23 +42,23 @@ Liste des endpoints
      - Obtention d'un document
    * - POST
      - /doc
-     - Creation d'un document
+     - Création d'un document
    * - PUT
      - /doc
-     - Mise a jour d'un document
+     - Mise à jour d'un document
    * - DELETE
      - /doc/{id}
      - Suppression d'un document (par ID)
    * - DELETE
      - /query
-     - Suppression de documents (par requete)
+     - Suppression de documents (par requête)
 
 Recherche de documents
 ======================
 
-Recherche les documents correspondant aux criteres de recherche.
+Recherche les documents correspondant aux critères de recherche.
 
-Requete
+Requête
 -------
 
 ::
@@ -66,21 +66,21 @@ Requete
     GET /api/admin/searchlist/docs
     PUT /api/admin/searchlist/docs
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``q``
      - String
      - Non
-     - Requete de recherche (1000 caracteres maximum). Si elle n'est pas specifiee, tous les documents sont concernes.
+     - Requête de recherche (1000 caractères maximum). Si elle n'est pas spécifiée, tous les documents sont concernés.
    * - ``sort``
      - String
      - Non
@@ -88,39 +88,39 @@ Parametres
    * - ``start``
      - Integer
      - Non
-     - Position de depart a base zero (par defaut ``0``).
+     - Position de départ à base zéro (par défaut ``0``).
    * - ``offset``
      - Integer
      - Non
-     - Decalage depuis ``start`` (par defaut ``0``).
+     - Décalage depuis ``start`` (par défaut ``0``).
    * - ``pn``
      - Integer
      - Non
-     - Numero de page.
+     - Numéro de page.
    * - ``num``
      - Integer
      - Non
-     - Nombre d'elements a obtenir (par defaut ``10``). Les valeurs depassant le maximum configure (par defaut ``100``) ou les valeurs inferieures ou egales a ``0`` sont ramenees au maximum.
+     - Nombre d'éléments à obtenir (par défaut ``10``). Les valeurs dépassant le maximum configuré (par défaut ``100``) ou les valeurs inférieures ou égales à ``0`` sont ramenées au maximum.
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements a obtenir (alias de ``num``, fourni pour compatibilite avec les autres API d'administration).
+     - Nombre d'éléments à obtenir (alias de ``num``, fourni pour compatibilité avec les autres API d'administration).
    * - ``lang``
      - String[]
      - Non
-     - Langue de recherche. Peut etre specifie plusieurs fois (tableau). Ex. ``en``.
+     - Langue de recherche. Peut être spécifié plusieurs fois (tableau). Ex. ``en``.
    * - ``ex_q``
      - String[]
      - Non
-     - Expressions de requete supplementaires. Peut etre specifie plusieurs fois (tableau).
+     - Expressions de requête supplémentaires. Peut être spécifié plusieurs fois (tableau).
    * - ``fields.<name>``
      - String[]
      - Non
-     - Filtre par valeur de champ. Le cas le plus courant est ``fields.label`` (filtre par nom d'etiquette) ; tout ``fields.<name>`` restreint les resultats aux documents dont le champ ``<name>`` correspond a la valeur donnee. Peut etre specifie plusieurs fois.
+     - Filtre par valeur de champ. Le cas le plus courant est ``fields.label`` (filtre par nom d'étiquette) ; tout ``fields.<name>`` restreint les résultats aux documents dont le champ ``<name>`` correspond à la valeur donnée. Peut être spécifié plusieurs fois.
    * - ``as.<name>``
      - String[]
      - Non
-     - Conditions de recherche avancee. Tout ``as.<name>`` (ex. ``as.q``) est transmis au generateur de conditions de recherche avancee. Peut etre specifie plusieurs fois par nom.
+     - Conditions de recherche avancée. Tout ``as.<name>`` (ex. ``as.q``) est transmis au générateur de conditions de recherche avancée. Peut être spécifié plusieurs fois par nom.
    * - ``sdh``
      - String
      - Non
@@ -128,9 +128,9 @@ Parametres
 
 .. note::
 
-   Cet endpoint ne prend pas en charge les facettes, la mise en evidence ou la recherche geographique. Ces parametres sont ignores s'ils sont specifies.
+   Cet endpoint ne prend pas en charge les facettes, la mise en évidence ou la recherche géographique. Ces paramètres sont ignorés s'ils sont spécifiés.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -166,7 +166,7 @@ Reponse
       }
     }
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -176,75 +176,75 @@ Champs de la reponse
    * - Champ
      - Description
    * - ``version``
-     - Version de |Fess| en cours d'execution (la valeur d'exemple est indicative).
+     - Version de |Fess| en cours d'exécution (la valeur d'exemple est indicative).
    * - ``status``
-     - Code de statut (``0`` en cas de succes ; voir "Codes de statut").
+     - Code de statut (``0`` en cas de succès ; voir "Codes de statut").
    * - ``query_id``
-     - ID de la requete de recherche.
+     - ID de la requête de recherche.
    * - ``docs``
-     - Tableau des documents resultats de la recherche. Chaque document est une carte de noms de champs et de valeurs, utilisant les noms de champs de l'index tels quels (``doc_id``, ``url``, ``title``, ``content_description``, etc.).
+     - Tableau des documents résultats de la recherche. Chaque document est une carte de noms de champs et de valeurs, utilisant les noms de champs de l'index tels quels (``doc_id``, ``url``, ``title``, ``content_description``, etc.).
    * - ``exec_time``
-     - Temps d'execution de la recherche (secondes, chaine de caracteres).
+     - Temps d'exécution de la recherche (secondes, chaîne de caractères).
    * - ``query_time``
-     - Temps de requete du moteur de recherche (millisecondes).
+     - Temps de requête du moteur de recherche (millisecondes).
    * - ``page_size``
-     - Nombre d'elements par page.
+     - Nombre d'éléments par page.
    * - ``page_number``
-     - Numero de la page courante.
+     - Numéro de la page courante.
    * - ``record_count``
-     - Nombre d'elements correspondants.
+     - Nombre d'éléments correspondants.
    * - ``record_count_relation``
-     - Relation du nombre d'elements correspondants. ``eq`` indique un comptage exact, ``gte`` indique que seule la borne inferieure est connue.
+     - Relation du nombre d'éléments correspondants. ``eq`` indique un comptage exact, ``gte`` indique que seule la borne inférieure est connue.
    * - ``page_count``
      - Nombre total de pages.
    * - ``next_page``
      - Indique s'il existe une page suivante (bool).
    * - ``prev_page``
-     - Indique s'il existe une page precedente (bool).
+     - Indique s'il existe une page précédente (bool).
    * - ``start_record_number``
-     - Numero du premier enregistrement de cette page.
+     - Numéro du premier enregistrement de cette page.
    * - ``end_record_number``
-     - Numero du dernier enregistrement de cette page.
+     - Numéro du dernier enregistrement de cette page.
    * - ``page_numbers``
-     - Tableau des numeros de page a afficher dans le paginateur (chaines de caracteres).
+     - Tableau des numéros de page à afficher dans le paginateur (chaînes de caractères).
    * - ``partial``
-     - Indique si les resultats sont partiels (bool).
+     - Indique si les résultats sont partiels (bool).
    * - ``search_query``
-     - Requete de recherche reellement executee.
+     - Requête de recherche réellement exécutée.
    * - ``requested_time``
-     - Horodatage de la requete (epoch en millisecondes).
+     - Horodatage de la requête (epoch en millisecondes).
    * - ``highlight_params``
-     - Chaine de parametres de requete pour la mise en evidence (generalement vide pour cette API d'administration).
+     - Chaîne de paramètres de requête pour la mise en évidence (généralement vide pour cette API d'administration).
 
 Obtention d'un document
 =======================
 
-Obtient un seul document en specifiant son ID de document.
+Obtient un seul document en spécifiant son ID de document.
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/searchlist/doc/{id}
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``id``
      - String
      - Oui
-     - ID du document (valeur de ``doc_id``, parametre de chemin).
+     - ID du document (valeur de ``doc_id``, paramètre de chemin).
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -261,14 +261,14 @@ Reponse
       }
     }
 
-Si aucun document n'existe pour l'ID specifie, une reponse d'erreur (``status`` = ``1``) est retournee.
+Si aucun document n'existe pour l'ID spécifié, une réponse d'erreur (``status`` = ``1``) est retournée.
 
-Creation d'un document
+Création d'un document
 ======================
 
-Cree un nouveau document dans l'index.
+Crée un nouveau document dans l'index.
 
-Requete
+Requête
 -------
 
 ::
@@ -276,7 +276,7 @@ Requete
     POST /api/admin/searchlist/doc
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -303,20 +303,20 @@ Description des champs
      - Description
    * - ``doc``
      - Oui
-     - Document a enregistrer. Specifie sous forme de carte de noms de champs d'index et de valeurs.
+     - Document à enregistrer. Spécifié sous forme de carte de noms de champs d'index et de valeurs.
 
-Parmi les champs specifies dans ``doc``, tous les champs obligatoires configures dans ``index.admin.required.fields`` (par defaut ``url,title,role,boost``) doivent etre fournis.
-Contrairement a l'API :doc:`Documents API <api-admin-documents>` par lot, cet endpoint ne complete pas automatiquement les valeurs par defaut telles que ``role`` ou ``boost``, de sorte que les champs obligatoires doivent etre specifies explicitement dans la requete.
-``doc_id`` est genere automatiquement cote serveur et n'est pas specifie lors de la creation.
+Parmi les champs spécifiés dans ``doc``, tous les champs obligatoires configurés dans ``index.admin.required.fields`` (par défaut ``url,title,role,boost``) doivent être fournis.
+Contrairement à l'API :doc:`Documents API <api-admin-documents>` par lot, cet endpoint ne complète pas automatiquement les valeurs par défaut telles que ``role`` ou ``boost``, de sorte que les champs obligatoires doivent être spécifiés explicitement dans la requête.
+``doc_id`` est généré automatiquement côté serveur et n'est pas spécifié lors de la création.
 
-La valeur de chaque champ est validee en fonction de la configuration du type de champ. Si le type ne correspond pas, une erreur (``status`` = ``1``) est retournee.
+La valeur de chaque champ est validée en fonction de la configuration du type de champ. Si le type ne correspond pas, une erreur (``status`` = ``1``) est retournée.
 
 .. list-table::
    :header-rows: 1
    :widths: 40 60
 
-   * - Cle de configuration
-     - Valeur par defaut
+   * - Clé de configuration
+     - Valeur par défaut
    * - ``index.admin.array.fields``
      - ``lang,role,label,anchor,virtual_host``
    * - ``index.admin.date.fields``
@@ -330,7 +330,7 @@ La valeur de chaque champ est validee en fonction de la configuration du type de
    * - ``index.admin.double.fields``
      - (vide)
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -351,16 +351,16 @@ Reponse
    * - Champ
      - Description
    * - ``id``
-     - Le ``doc_id`` du document enregistre.
+     - Le ``doc_id`` du document enregistré.
    * - ``created``
-     - ``true`` lors de la creation.
+     - ``true`` lors de la création.
 
-Mise a jour d'un document
+Mise à jour d'un document
 =========================
 
-Met a jour un document existant.
+Met à jour un document existant.
 
-Requete
+Requête
 -------
 
 ::
@@ -368,7 +368,7 @@ Requete
     PUT /api/admin/searchlist/doc
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -396,12 +396,12 @@ Description des champs
      - Description
    * - ``doc``
      - Oui
-     - Document a mettre a jour. Specifie sous forme de carte de noms de champs d'index et de valeurs.
+     - Document à mettre à jour. Spécifié sous forme de carte de noms de champs d'index et de valeurs.
 
-Le document a mettre a jour est identifie par ``doc_id`` dans ``doc``. Si ``doc_id`` n'est pas specifie, ou si aucun document correspondant n'existe, une erreur (``status`` = ``1``) est retournee.
-Comme pour la creation, tous les champs obligatoires configures dans ``index.admin.required.fields`` (par defaut ``url,title,role,boost``) doivent etre fournis, et la valeur de chaque champ est validee en fonction de la configuration du type.
+Le document à mettre à jour est identifié par ``doc_id`` dans ``doc``. Si ``doc_id`` n'est pas spécifié, ou si aucun document correspondant n'existe, une erreur (``status`` = ``1``) est retournée.
+Comme pour la création, tous les champs obligatoires configurés dans ``index.admin.required.fields`` (par défaut ``url,title,role,boost``) doivent être fournis, et la valeur de chaque champ est validée en fonction de la configuration du type.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -422,39 +422,39 @@ Reponse
    * - Champ
      - Description
    * - ``id``
-     - Le ``doc_id`` du document mis a jour.
+     - Le ``doc_id`` du document mis à jour.
    * - ``created``
-     - ``false`` lors de la mise a jour.
+     - ``false`` lors de la mise à jour.
 
 Suppression d'un document (par ID)
 ===================================
 
-Supprime un document en specifiant son ID de document.
+Supprime un document en spécifiant son ID de document.
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/searchlist/doc/{id}
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``id``
      - String
      - Oui
-     - ID du document (valeur de ``doc_id``, parametre de chemin).
+     - ID du document (valeur de ``doc_id``, paramètre de chemin).
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -466,40 +466,40 @@ Reponse
       }
     }
 
-Suppression de documents (par requete)
+Suppression de documents (par requête)
 =======================================
 
-Supprime en masse les documents correspondant a une requete de recherche.
+Supprime en masse les documents correspondant à une requête de recherche.
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/searchlist/query
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Requis
      - Description
    * - ``q``
      - String
      - Oui
-     - Requete de recherche des documents a supprimer.
+     - Requête de recherche des documents à supprimer.
 
-La cible de suppression est construite avec la meme requete que "Recherche de documents", de sorte que les parametres de filtrage tels que ``fields.<name>`` et ``ex_q`` peuvent etre utilises conjointement. Si ``q`` n'est pas specifie, une erreur (``status`` = ``1``) est retournee.
+La cible de suppression est construite avec la même requête que "Recherche de documents", de sorte que les paramètres de filtrage tels que ``fields.<name>`` et ``ex_q`` peuvent être utilisés conjointement. Si ``q`` n'est pas spécifié, une erreur (``status`` = ``1``) est retournée.
 
-Reponse
+Réponse
 -------
 
-Retourne le nombre de documents supprimes dans ``count``.
+Retourne le nombre de documents supprimés dans ``count``.
 
 .. code-block:: json
 
@@ -514,7 +514,7 @@ Retourne le nombre de documents supprimes dans ``count``.
 Codes de statut
 ===============
 
-Le champ ``status`` dans la reponse prend l'une des valeurs suivantes.
+Le champ ``status`` dans la réponse prend l'une des valeurs suivantes.
 
 .. list-table::
    :header-rows: 1
@@ -525,19 +525,19 @@ Le champ ``status`` dans la reponse prend l'une des valeurs suivantes.
      - Description
    * - ``0``
      - OK
-     - Succes.
+     - Succès.
    * - ``1``
      - BAD_REQUEST
-     - La requete est invalide (champ obligatoire manquant, type incorrect, document cible introuvable, requete invalide, etc.).
+     - La requête est invalide (champ obligatoire manquant, type incorrect, document cible introuvable, requête invalide, etc.).
    * - ``2``
      - SYSTEM_ERROR
-     - Erreur systeme.
+     - Erreur système.
    * - ``3``
      - UNAUTHORIZED
      - Erreur d'authentification.
    * - ``9``
      - FAILED
-     - Le traitement a echoue.
+     - Le traitement a échoué.
 
 Exemples d'utilisation
 ======================
@@ -558,7 +558,7 @@ Obtention d'un document
     curl -X GET "http://localhost:8080/api/admin/searchlist/doc/abcdef0123456789" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Creation d'un document
+Création d'un document
 ----------------------
 
 .. code-block:: bash
@@ -576,7 +576,7 @@ Creation d'un document
            }
          }'
 
-Suppression de documents par requete
+Suppression de documents par requête
 -------------------------------------
 
 .. code-block:: bash
@@ -584,7 +584,7 @@ Suppression de documents par requete
     curl -X DELETE "http://localhost:8080/api/admin/searchlist/query?q=url:example.com" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Informations complementaires
+Informations complémentaires
 =============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin

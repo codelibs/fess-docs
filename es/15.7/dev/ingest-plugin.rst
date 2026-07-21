@@ -2,21 +2,21 @@
 Plugin Ingest
 ==================================
 
-Vision General
+Visión General
 ==============
 
 Los plugins Ingest proporcionan funcionalidad para procesar y transformar
-datos antes de que los documentos se registren en el indice.
+datos antes de que los documentos se registren en el índice.
 
 Casos de Uso
 ============
 
-- Normalizacion de texto (conversion de ancho completo/medio, etc.)
-- Adicion de metadatos
-- Enmascaramiento de informacion sensible
-- Adicion de campos personalizados
+- Normalización de texto (conversión de ancho completo/medio, etc.)
+- Adición de metadatos
+- Enmascaramiento de información sensible
+- Adición de campos personalizados
 
-Implementacion Basica
+Implementación Básica
 =====================
 
 Implemente la interfaz ``IngestHandler``:
@@ -63,7 +63,7 @@ Registro
         <postConstruct name="register"/>
     </component>
 
-Configuracion
+Configuración
 =============
 
 ``fess_config.properties``:
@@ -72,7 +72,7 @@ Configuracion
 
     ingest.handler.example.enabled=true
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
 - :doc:`plugin-architecture` - Arquitectura de plugins

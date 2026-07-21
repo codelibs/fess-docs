@@ -2,11 +2,11 @@
 API de JobLog
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de JobLog es para consultar y gestionar los registros de ejecucion de trabajos de |Fess|.
-Permite obtener y eliminar el historial de ejecucion, los resultados y la informacion de errores
+La API de JobLog es para consultar y gestionar los registros de ejecución de trabajos de |Fess|.
+Permite obtener y eliminar el historial de ejecución, los resultados y la información de errores
 de trabajos programados y de rastreo.
 
 URL Base
@@ -23,9 +23,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /logs
      - Obtener lista de registros de trabajos
@@ -46,25 +46,25 @@ Solicitud
 
     GET /api/admin/joblog/logs
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (basado en 1, predeterminado: 1)
+     - Número de página (basado en 1, predeterminado: 1)
    * - ``id``
      - String
      - No
@@ -114,30 +114,30 @@ Campos de Respuesta
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``id``
      - ID del registro de trabajo
    * - ``jobName``
      - Nombre del trabajo
    * - ``jobStatus``
-     - Estado del trabajo (``ok``: exitoso, ``fail``: fallido, ``running``: en ejecucion)
+     - Estado del trabajo (``ok``: exitoso, ``fail``: fallido, ``running``: en ejecución)
    * - ``target``
-     - Objetivo de ejecucion (nombre del objetivo del programador; el valor predeterminado es ``all``)
+     - Objetivo de ejecución (nombre del objetivo del programador; el valor predeterminado es ``all``)
    * - ``scriptType``
      - Tipo de script (ejemplo: ``groovy``)
    * - ``scriptData``
      - Script ejecutado
    * - ``scriptResult``
-     - Resultado de la ejecucion
+     - Resultado de la ejecución
    * - ``startTime``
      - Hora de inicio (milisegundos epoch; devuelto como cadena de texto)
    * - ``endTime``
-     - Hora de finalizacion (milisegundos epoch; devuelto como cadena de texto). No se devuelve para trabajos en ejecucion.
+     - Hora de finalización (milisegundos epoch; devuelto como cadena de texto). No se devuelve para trabajos en ejecución.
 
 .. note::
 
-   Cada objeto de registro en la respuesta incluye tambien un campo interno ``crudMode``
-   (un entero que indica el modo de operacion CRUD, siempre ``0`` para operaciones de lectura).
+   Cada objeto de registro en la respuesta incluye también un campo interno ``crudMode``
+   (un entero que indica el modo de operación CRUD, siempre ``0`` para operaciones de lectura).
    Los clientes pueden ignorarlo sin problema.
 
 Obtener Registro de Trabajo
@@ -236,7 +236,7 @@ Eliminar Registro de Trabajo
     curl -X DELETE "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Calcular Tasa de Exito de Trabajos
+Calcular Tasa de Éxito de Trabajos
 ------------------------------------
 
 .. code-block:: bash
@@ -245,10 +245,10 @@ Calcular Tasa de Exito de Trabajos
          -H "Authorization: Bearer YOUR_TOKEN" | \
          jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-scheduler` - API del programador
-- :doc:`api-admin-crawlinginfo` - API de informacion de rastreo
-- :doc:`../../admin/joblog-guide` - Guia de gestion de registros de trabajos
+- :doc:`api-admin-crawlinginfo` - API de información de rastreo
+- :doc:`../../admin/joblog-guide` - Guía de gestión de registros de trabajos

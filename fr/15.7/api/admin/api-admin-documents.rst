@@ -6,8 +6,8 @@ Vue d'ensemble
 ==============
 
 L'API Documents est une API d'administration de |Fess| permettant d'enregistrer en masse des documents dans l'index.
-Elle permet aux systemes externes d'ajouter directement des documents a l'index sans passer par le moteur de crawl.
-Plusieurs documents peuvent etre enregistres en une seule requete.
+Elle permet aux systèmes externes d'ajouter directement des documents à l'index sans passer par le moteur de crawl.
+Plusieurs documents peuvent être enregistrés en une seule requête.
 
 URL de base
 ===========
@@ -19,9 +19,9 @@ URL de base
 Authentification
 ================
 
-Pour appeler cette API, une authentification par jeton d'acces est requise, comme explique dans :doc:`api-admin-overview`.
-Le jeton doit disposer des permissions d'acces a l'API d'administration (par defaut ``Radmin-api``).
-Cette permission peut etre modifiee via la cle de configuration ``api.admin.access.permissions``.
+Pour appeler cette API, une authentification par jeton d'accès est requise, comme expliqué dans :doc:`api-admin-overview`.
+Le jeton doit disposer des permissions d'accès à l'API d'administration (par défaut ``Radmin-api``).
+Cette permission peut être modifiée via la clé de configuration ``api.admin.access.permissions``.
 
 Liste des endpoints
 ===================
@@ -30,7 +30,7 @@ Liste des endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - PUT
@@ -39,14 +39,14 @@ Liste des endpoints
 
 .. note::
 
-   Cet endpoint accepte uniquement la methode ``PUT``.
+   Cet endpoint accepte uniquement la méthode ``PUT``.
 
 Enregistrement en masse de documents
 =====================================
 
 Enregistre plusieurs documents dans l'index en une seule fois.
 
-Requete
+Requête
 -------
 
 ::
@@ -54,7 +54,7 @@ Requete
     PUT /api/admin/documents/bulk
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -86,26 +86,26 @@ Description des champs
      - Description
    * - ``documents``
      - Oui
-     - Tableau des documents a enregistrer. Chaque document est specifie sous forme de correspondance entre nom de champ et valeur. Si la valeur est ``null`` ou un tableau vide, une erreur est retournee (``status`` = ``1``).
+     - Tableau des documents à enregistrer. Chaque document est spécifié sous forme de correspondance entre nom de champ et valeur. Si la valeur est ``null`` ou un tableau vide, une erreur est retournée (``status`` = ``1``).
 
 Champs du document
 ~~~~~~~~~~~~~~~~~~
 
-Chaque document peut specifier librement les champs de l'index sous forme de correspondance entre nom et valeur.
-Au minimum, ``url`` et ``title`` doivent etre specifies (conformement au parametre
-``index.admin.required.fields``. La valeur par defaut est ``url,title,role,boost`` ;
-``role`` et ``boost`` etant completes automatiquement comme indique ci-apres, seuls ``url`` et ``title`` sont en pratique obligatoires).
+Chaque document peut spécifier librement les champs de l'index sous forme de correspondance entre nom et valeur.
+Au minimum, ``url`` et ``title`` doivent être spécifiés (conformément au paramètre
+``index.admin.required.fields``. La valeur par défaut est ``url,title,role,boost`` ;
+``role`` et ``boost`` étant complétés automatiquement comme indiqué ci-après, seuls ``url`` et ``title`` sont en pratique obligatoires).
 
-Les champs suivants sont completes automatiquement lorsqu'ils sont omis :
+Les champs suivants sont complétés automatiquement lorsqu'ils sont omis :
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
    * - Champ
-     - Valeur par defaut en cas d'omission
+     - Valeur par défaut en cas d'omission
    * - ``content_length``
-     - Somme du nombre de caracteres de ``title`` et de ``content``
+     - Somme du nombre de caractères de ``title`` et de ``content``
    * - ``favorite_count``
      - ``0``
    * - ``click_count``
@@ -113,39 +113,39 @@ Les champs suivants sont completes automatiquement lorsqu'ils sont omis :
    * - ``boost``
      - ``1.0``
    * - ``role``
-     - Role de recherche invite (role de recherche configure pour les utilisateurs invites)
+     - Rôle de recherche invité (rôle de recherche configuré pour les utilisateurs invités)
    * - ``last_modified``
      - Heure actuelle
    * - ``timestamp``
      - Heure actuelle
 
-De plus, les champs suivants sont generes automatiquement lors de l'enregistrement :
+De plus, les champs suivants sont générés automatiquement lors de l'enregistrement :
 
-- ``id`` - Genere de facon deterministe a partir de l'``url`` du document (ainsi que de ``role`` et ``virtual_host``),
-  et utilise comme identifiant de document OpenSearch (``_id``). Cette valeur est retournee dans ``items[].id`` de la reponse.
-- ``doc_id`` - Un UUID aleatoire est genere a chaque enregistrement et stocke comme champ du document.
+- ``id`` - Généré de façon déterministe à partir de l'``url`` du document (ainsi que de ``role`` et ``virtual_host``),
+  et utilisé comme identifiant de document OpenSearch (``_id``). Cette valeur est retournée dans ``items[].id`` de la réponse.
+- ``doc_id`` - Un UUID aléatoire est généré à chaque enregistrement et stocké comme champ du document.
 
 .. note::
 
-   Comme ``id`` est genere de facon deterministe a partir de l'``url``, l'enregistrement d'un document
-   avec le meme ``url`` mettra a jour le document existant
+   Comme ``id`` est généré de façon déterministe à partir de l'``url``, l'enregistrement d'un document
+   avec le même ``url`` mettra à jour le document existant
    (``items[].result`` aura la valeur ``OK``).
 
 Remarques
 ~~~~~~~~~
 
-- Si le champ ``lang`` contient ``"auto"``, la langue est detectee automatiquement a partir du contenu.
-- Si ``config_id`` est specifie, le pipeline d'ingestion (ingest pipeline) de la configuration de crawl correspondante est applique.
-- Si la generation de miniatures est activee (``thumbnail.crawler.enabled``), une tentative de generation de miniature est effectuee lors de l'enregistrement.
-- La valeur de chaque champ est validee en fonction du type de champ configure (``index.admin.array.fields``,
+- Si le champ ``lang`` contient ``"auto"``, la langue est détectée automatiquement à partir du contenu.
+- Si ``config_id`` est spécifié, le pipeline d'ingestion (ingest pipeline) de la configuration de crawl correspondante est appliqué.
+- Si la génération de miniatures est activée (``thumbnail.crawler.enabled``), une tentative de génération de miniature est effectuée lors de l'enregistrement.
+- La valeur de chaque champ est validée en fonction du type de champ configuré (``index.admin.array.fields``,
   ``index.admin.date.fields``, ``index.admin.long.fields``, etc.).
-  Si le type ne correspond pas, une erreur est retournee (``status`` = ``1``).
+  Si le type ne correspond pas, une erreur est retournée (``status`` = ``1``).
 
-Reponse
+Réponse
 -------
 
-La reponse retourne le resultat du traitement de chaque document enregistre dans un tableau ``items``.
-Les elements traites avec succes contiennent ``result`` et ``id`` ; les elements en echec contiennent ``result`` et ``message``.
+La réponse retourne le résultat du traitement de chaque document enregistré dans un tableau ``items``.
+Les éléments traités avec succès contiennent ``result`` et ``id`` ; les éléments en échec contiennent ``result`` et ``message``.
 
 .. code-block:: json
 
@@ -166,12 +166,12 @@ Les elements traites avec succes contiennent ``result`` et ``id`` ; les elements
       }
     }
 
-Si ``status`` est ``0``, cela indique que tous les documents ont ete enregistres avec succes.
-``items[].result`` est ``CREATED`` lors d'une creation, et ``OK`` lors de la mise a jour d'un document existant.
+Si ``status`` est ``0``, cela indique que tous les documents ont été enregistrés avec succès.
+``items[].result`` est ``CREATED`` lors d'une création, et ``OK`` lors de la mise à jour d'un document existant.
 
-Si l'enregistrement echoue pour l'un des elements, ``status`` devient ``9`` (FAILED) et
-l'element concerne contient un champ ``message`` (``result`` est alors un nom de statut d'erreur tel que ``CONFLICT`` ou
-``BAD_REQUEST``). Les elements traites avec succes retournent leur ``id`` normalement.
+Si l'enregistrement échoue pour l'un des éléments, ``status`` devient ``9`` (FAILED) et
+l'élément concerné contient un champ ``message`` (``result`` est alors un nom de statut d'erreur tel que ``CONFLICT`` ou
+``BAD_REQUEST``). Les éléments traités avec succès retournent leur ``id`` normalement.
 
 .. code-block:: json
 
@@ -194,12 +194,12 @@ l'element concerne contient un champ ``message`` (``result`` est alors un nom de
 
 .. note::
 
-   Si la requete elle-meme est invalide (``documents`` absent ou vide, champ obligatoire manquant,
-   type de champ incorrect, etc.), le traitement d'enregistrement des documents n'est pas execute et
-   une reponse d'erreur contenant ``status`` = ``1`` (BAD_REQUEST) et ``message`` est retournee.
-   Dans ce cas, le tableau ``items`` n'est pas retourne.
+   Si la requête elle-même est invalide (``documents`` absent ou vide, champ obligatoire manquant,
+   type de champ incorrect, etc.), le traitement d'enregistrement des documents n'est pas exécuté et
+   une réponse d'erreur contenant ``status`` = ``1`` (BAD_REQUEST) et ``message`` est retournée.
+   Dans ce cas, le tableau ``items`` n'est pas retourné.
 
-Champs de la reponse
+Champs de la réponse
 ~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -209,13 +209,13 @@ Champs de la reponse
    * - Champ
      - Description
    * - ``items``
-     - Tableau des resultats de traitement de chaque document
+     - Tableau des résultats de traitement de chaque document
    * - ``items[].result``
-     - Nom du statut du resultat de traitement. ``CREATED`` lors d'une creation, ``OK`` lors d'une mise a jour, ou un nom de statut d'erreur tel que ``BAD_REQUEST`` en cas d'echec
+     - Nom du statut du résultat de traitement. ``CREATED`` lors d'une création, ``OK`` lors d'une mise à jour, ou un nom de statut d'erreur tel que ``BAD_REQUEST`` en cas d'échec
    * - ``items[].id``
-     - ID du document enregistre (en cas de succes uniquement)
+     - ID du document enregistré (en cas de succès uniquement)
    * - ``items[].message``
-     - Message indiquant la raison de l'echec (en cas d'echec uniquement)
+     - Message indiquant la raison de l'échec (en cas d'échec uniquement)
 
 Exemples d'utilisation
 ======================
@@ -238,7 +238,7 @@ Enregistrement en masse de documents
            ]
          }'
 
-Informations complementaires
+Informations complémentaires
 =============================
 
 - :doc:`api-admin-overview` - Vue d'ensemble de l'API Admin

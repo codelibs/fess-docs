@@ -1,14 +1,14 @@
 ==================================
-Plugin de Aplicacion Web
+Plugin de Aplicación Web
 ==================================
 
-Vision General
+Visión General
 ==============
 
-Con los plugins de aplicacion web puede extender la interfaz web de Fess.
-Es posible agregar nuevas paginas, personalizar la pantalla de administracion, etc.
+Con los plugins de aplicación web puede extender la interfaz web de Fess.
+Es posible agregar nuevas páginas, personalizar la pantalla de administración, etc.
 
-Estructura Basica
+Estructura Básica
 =================
 
 ::
@@ -21,7 +21,7 @@ Estructura Basica
         └── webapp/WEB-INF/view/example/
             └── index.jsp
 
-Implementacion de Action
+Implementación de Action
 ========================
 
 .. code-block:: java
@@ -59,7 +59,7 @@ Plantilla JSP
     </body>
     </html>
 
-Extension de API
+Extensión de API
 ================
 
 .. code-block:: java
@@ -74,8 +74,8 @@ Extension de API
         }
     }
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`overview` - Vision general de documentacion para desarrolladores
+- :doc:`overview` - Visión general de documentación para desarrolladores

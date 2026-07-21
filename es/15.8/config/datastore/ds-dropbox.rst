@@ -2,11 +2,11 @@
 Conector de Dropbox
 ==================================
 
-Descripcion General
+Descripción General
 ===================
 
 El conector de Dropbox proporciona funcionalidad para obtener archivos del almacenamiento
-en la nube Dropbox y registrarlos en el indice de |Fess|.
+en la nube Dropbox y registrarlos en el índice de |Fess|.
 
 Esta funcionalidad requiere el plugin ``fess-ds-dropbox``.
 
@@ -19,27 +19,27 @@ Servicios Compatibles
 Requisitos Previos
 ==================
 
-1. Se requiere instalacion del plugin
-2. Se requiere una cuenta de desarrollador de Dropbox y la creacion de una aplicacion
+1. Se requiere instalación del plugin
+2. Se requiere una cuenta de desarrollador de Dropbox y la creación de una aplicación
 3. Se requiere obtener un token de acceso
 
-Instalacion del Plugin
+Instalación del Plugin
 ----------------------
 
-Instale desde la consola de administracion en "Sistema" -> "Plugins":
+Instale desde la consola de administración en "Sistema" -> "Plugins":
 
 1. Descargue ``fess-ds-dropbox-X.X.X.jar`` de Maven Central
-2. Cargue e instale desde la pantalla de administracion de plugins
+2. Cargue e instale desde la pantalla de administración de plugins
 3. Reinicie |Fess|
 
-O consulte :doc:`../../admin/plugin-guide` para mas detalles.
+O consulte :doc:`../../admin/plugin-guide` para más detalles.
 
-Metodo de Configuracion
+Método de Configuración
 =======================
 
-Configure desde la consola de administracion en "Rastreador" -> "Almacen de Datos" -> "Crear Nuevo".
+Configure desde la consola de administración en "Rastreador" -> "Almacén de Datos" -> "Crear Nuevo".
 
-Configuracion Basica
+Configuración Básica
 --------------------
 
 .. list-table::
@@ -47,7 +47,7 @@ Configuracion Basica
    :widths: 25 75
 
    * - Elemento
-     - Ejemplo de Configuracion
+     - Ejemplo de Configuración
    * - Nombre
      - Company Dropbox
    * - Nombre del Manejador
@@ -55,7 +55,7 @@ Configuracion Basica
    * - Habilitado
      - Activado
 
-Configuracion de Parametros
+Configuración de Parámetros
 ----------------------------
 
 ::
@@ -63,54 +63,54 @@ Configuracion de Parametros
     access_token=sl.your-dropbox-token-here
     basic_plan=false
 
-Lista de Parametros
+Lista de Parámetros
 ~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``access_token``
-     - Si
+     - Sí
      - Token de acceso de Dropbox (generado en App Console)
    * - ``basic_plan``
      - No
      - ``true`` para cuenta individual, ``false`` para cuenta de equipo (predeterminado: ``false``)
    * - ``max_size``
      - No
-     - Tamano maximo de archivo para indexacion en bytes (predeterminado: ``10000000``)
+     - Tamaño máximo de archivo para indexación en bytes (predeterminado: ``10000000``)
    * - ``number_of_threads``
      - No
-     - Numero de hilos para rastreo (predeterminado: ``1``)
+     - Número de hilos para rastreo (predeterminado: ``1``)
    * - ``ignore_folder``
      - No
      - Indica si se omiten los metadatos de carpetas (predeterminado: ``true``)
    * - ``ignore_error``
      - No
-     - Indica si se ignoran los errores durante la extraccion de contenido (predeterminado: ``true``)
+     - Indica si se ignoran los errores durante la extracción de contenido (predeterminado: ``true``)
    * - ``supported_mimetypes``
      - No
      - Patrones regex para tipos MIME permitidos, separados por comas (predeterminado: ``.*``)
    * - ``include_pattern``
      - No
-     - Patron de URL a incluir en el rastreo
+     - Patrón de URL a incluir en el rastreo
    * - ``exclude_pattern``
      - No
-     - Patron de URL a excluir del rastreo
+     - Patrón de URL a excluir del rastreo
    * - ``default_permissions``
      - No
      - Permisos predeterminados para documentos indexados, separados por comas
    * - ``max_cached_content_size``
      - No
-     - Tamano maximo de contenido almacenado en cache en memoria en bytes. El contenido que supere este limite se escribe en un archivo temporal (predeterminado: ``1048576``)
+     - Tamaño máximo de contenido almacenado en caché en memoria en bytes. El contenido que supere este límite se escribe en un archivo temporal (predeterminado: ``1048576``)
    * - ``readInterval``
      - No
      - Tiempo de espera en milisegundos entre el procesamiento de cada registro (predeterminado: ``0``)
 
-Configuracion de Script
+Configuración de Script
 -----------------------
 
 Para Archivos de Dropbox
@@ -135,7 +135,7 @@ Campos disponibles:
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``file.url``
      - Enlace de vista previa del archivo
    * - ``file.contents``
@@ -149,7 +149,7 @@ Campos disponibles:
    * - ``file.path_display``
      - Ruta del archivo
    * - ``file.size``
-     - Tamano del archivo (bytes)
+     - Tamaño del archivo (bytes)
    * - ``file.client_modified``
      - Fecha de ultima modificacion del lado del cliente
    * - ``file.server_modified``
@@ -159,13 +159,13 @@ Campos disponibles:
    * - ``file.id``
      - ID del archivo de Dropbox
    * - ``file.path_lower``
-     - Ruta del archivo en minusculas
+     - Ruta del archivo en minúsculas
    * - ``file.parent_shared_folder_id``
      - ID de la carpeta compartida principal
    * - ``file.content_hash``
      - Hash del contenido
    * - ``file.rev``
-     - Revision del archivo
+     - Revisión del archivo
 
 Para Dropbox Paper
 ~~~~~~~~~~~~~~~~~~
@@ -186,7 +186,7 @@ Campos disponibles:
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``paper.url``
      - Enlace de vista previa del documento Paper
    * - ``paper.contents``
@@ -196,22 +196,22 @@ Campos disponibles:
    * - ``paper.filetype``
      - Tipo de archivo
    * - ``paper.title``
-     - Titulo del documento Paper
+     - Título del documento Paper
    * - ``paper.owner``
      - Propietario del documento Paper
    * - ``paper.roles``
      - Permisos de acceso del documento
    * - ``paper.revision``
-     - Revision del documento Paper
+     - Revisión del documento Paper
 
-Configuracion de Autenticacion de Dropbox
+Configuración de Autenticación de Dropbox
 ==========================================
 
 Tipo de Cuenta y Token de Acceso
 ---------------------------------
 
-Este conector alterna entre dos modos de operacion segun el parametro ``basic_plan``.
-Dado que el tipo de aplicacion y de token de acceso que se debe crear difiere, verifiquelo primero.
+Este conector alterna entre dos modos de operación según el parámetro ``basic_plan``.
+Dado que el tipo de aplicación y de token de acceso que se debe crear difiere, verifíquelo primero.
 
 .. list-table::
    :header-rows: 1
@@ -219,24 +219,24 @@ Dado que el tipo de aplicacion y de token de acceso que se debe crear difiere, v
 
    * - Modo
      - ``basic_plan``
-     - Descripcion
+     - Descripción
    * - Cuenta de equipo (predeterminado)
      - ``false``
      - Destinado a cuentas Dropbox Business (equipo). Requiere un token de acceso con permisos de administrador del equipo, y rastrea archivos de los miembros del equipo y carpetas de equipo de forma transversal.
    * - Cuenta individual
      - ``true``
-     - Destinado a cuentas individuales (no de equipo). Utiliza un token de acceso con alcance estandar y rastrea directamente los archivos dentro de esa cuenta.
+     - Destinado a cuentas individuales (no de equipo). Utiliza un token de acceso con alcance estándar y rastrea directamente los archivos dentro de esa cuenta.
 
 .. note::
-   Con la configuracion predeterminada (``basic_plan=false``), se utilizan las API de administracion de equipos
+   Con la configuración predeterminada (``basic_plan=false``), se utilizan las API de administración de equipos
    (lista de miembros, acceso a archivos por miembro, carpetas de equipo), por lo que es obligatorio
    disponer de una cuenta Dropbox Business y un token con permisos de administrador del equipo.
-   Si utiliza una cuenta individual, asegurese de configurar ``basic_plan=true``.
+   Si utiliza una cuenta individual, asegúrese de configurar ``basic_plan=true``.
 
 Pasos para Obtener el Token de Acceso
 --------------------------------------
 
-1. Crear una aplicacion en Dropbox App Console
+1. Crear una aplicación en Dropbox App Console
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Acceda a https://www.dropbox.com/developers/apps:
@@ -244,18 +244,18 @@ Acceda a https://www.dropbox.com/developers/apps:
 1. Haga clic en "Create app"
 2. Seleccione "Scoped access" para el tipo de API
 3. Seleccione el tipo de acceso (se recomienda "Full Dropbox" para rastrear cuentas de equipo de forma transversal)
-4. Ingrese el nombre de la aplicacion y cree
+4. Ingrese el nombre de la aplicación y cree
 
-2. Configuracion de Permisos
+2. Configuración de Permisos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-En la pestana "Permissions", seleccione los permisos requeridos:
+En la pestaña "Permissions", seleccione los permisos requeridos:
 
 **Permisos necesarios para el rastreo de archivos y Paper**:
 
 - ``files.metadata.read`` - Lectura de metadatos de archivos
 - ``files.content.read`` - Lectura de contenido de archivos y documentos Paper
-- ``sharing.read`` - Lectura de informacion de uso compartido
+- ``sharing.read`` - Lectura de información de uso compartido
 
 **Permisos adicionales requeridos para cuentas de equipo (``basic_plan=false``)**:
 
@@ -264,15 +264,15 @@ En la pestana "Permissions", seleccione los permisos requeridos:
 
 .. note::
    En el modo de cuenta de equipo, se accede a cada miembro y carpeta de equipo como administrador del equipo.
-   Habilite los permisos de equipo mencionados en la pestana Permissions y genere un token de administrador del equipo.
+   Habilite los permisos de equipo mencionados en la pestaña Permissions y genere un token de administrador del equipo.
 
 3. Generar Token de Acceso
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-En la pestana "Settings":
+En la pestaña "Settings":
 
-1. Desplacese hasta la seccion "Generated access token"
-2. Haga clic en el boton "Generate"
+1. Desplácese hasta la sección "Generated access token"
+2. Haga clic en el botón "Generate"
 3. Copie el token generado (este token se muestra solo una vez)
 
 .. warning::
@@ -282,20 +282,20 @@ En la pestana "Settings":
 4. Configurar el Token
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Configure el token obtenido en los parametros:
+Configure el token obtenido en los parámetros:
 
 ::
 
     access_token=sl.your-dropbox-token-here
 
-Configuracion para Cuenta Individual
+Configuración para Cuenta Individual
 =====================================
 
 Uso con Cuentas Individuales
 -----------------------------
 
 Para cuentas individuales (no cuentas de equipo),
-configure el parametro ``basic_plan`` como ``true``:
+configure el parámetro ``basic_plan`` como ``true``:
 
 ::
 
@@ -311,7 +311,7 @@ Ejemplos de Uso
 Rastrear Todos los Archivos de Dropbox
 ---------------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -334,7 +334,7 @@ Script:
 Rastrear Documentos de Dropbox Paper
 --------------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -354,7 +354,7 @@ Script:
 Rastrear con Permisos
 ----------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -386,18 +386,18 @@ Script (Dropbox Paper):
     filetype=paper.filetype
     role=paper.roles
 
-Rastrear Solo Tipos de Archivo Especificos
+Rastrear Solo Tipos de Archivo Específicos
 -------------------------------------------
 
-Para indexar unicamente tipos MIME especificos, especifique en el parametro ``supported_mimetypes``
+Para indexar únicamente tipos MIME específicos, especifique en el parámetro ``supported_mimetypes``
 las expresiones regulares de los tipos MIME permitidos, separadas por comas.
 
 .. note::
-   Los scripts del almacen de datos evaluan cada linea como una expresion independiente con el formato ``campo=expresion``.
-   Por ello, no es posible asignar multiples campos en un bloque ``if`` de varias lineas.
-   El filtrado por tipo MIME debe realizarse mediante el parametro ``supported_mimetypes``, no con scripts.
+   Los scripts del almacén de datos evalúan cada línea como una expresión independiente con el formato ``campo=expresion``.
+   Por ello, no es posible asignar múltiples campos en un bloque ``if`` de varias lineas.
+   El filtrado por tipo MIME debe realizarse mediante el parámetro ``supported_mimetypes``, no con scripts.
 
-Parametros (solo PDF y archivos Word):
+Parámetros (solo PDF y archivos Word):
 
 ::
 
@@ -416,34 +416,34 @@ Script:
     filename=file.name
     last_modified=file.client_modified
 
-Solucion de Problemas
+Solución de Problemas
 ======================
 
-Errores de Autenticacion
+Errores de Autenticación
 -------------------------
 
-**Sintoma**: ``Invalid access token`` o ``401 Unauthorized``
+**Síntoma**: ``Invalid access token`` o ``401 Unauthorized``
 
 **Verifique**:
 
 1. Verifique que el token de acceso se haya copiado correctamente
-2. Verifique que el token no haya expirado (use token de larga duracion)
-3. Verifique que los permisos requeridos esten otorgados en Dropbox App Console
-4. Verifique que la aplicacion no este desactivada
+2. Verifique que el token no haya expirado (use token de larga duración)
+3. Verifique que los permisos requeridos estén otorgados en Dropbox App Console
+4. Verifique que la aplicación no esté desactivada
 
 No Se Pueden Obtener Archivos
 ------------------------------
 
-**Sintoma**: El rastreo tiene exito pero hay 0 archivos
+**Síntoma**: El rastreo tiene éxito pero hay 0 archivos
 
 **Verifique**:
 
-1. Verifique que el "Access type" de la aplicacion sea apropiado:
+1. Verifique que el "Access type" de la aplicación sea apropiado:
 
    - "Full Dropbox": Puede acceder a todo Dropbox
-   - "App folder": Solo puede acceder a una carpeta especifica
+   - "App folder": Solo puede acceder a una carpeta específica
 
-2. Verifique que los permisos requeridos esten otorgados:
+2. Verifique que los permisos requeridos estén otorgados:
 
    - ``files.metadata.read``
    - ``files.content.read``
@@ -451,25 +451,25 @@ No Se Pueden Obtener Archivos
 
 3. Verifique que existan archivos en la cuenta de Dropbox
 
-Errores de Limite de Tasa de API
+Errores de Límite de Tasa de API
 ----------------------------------
 
-**Sintoma**: Error ``429 Too Many Requests``
+**Síntoma**: Error ``429 Too Many Requests``
 
-**Solucion**:
+**Solución**:
 
 1. Configure ``readInterval`` para aumentar el intervalo de procesamiento entre archivos
-2. Reduzca ``number_of_threads`` para disminuir el numero de solicitudes simultaneas
-3. Divida el almacen de datos en varios (por carpeta u otro criterio) y escalone los horarios de ejecucion
+2. Reduzca ``number_of_threads`` para disminuir el número de solicitudes simultáneas
+3. Divida el almacén de datos en varios (por carpeta u otro criterio) y escalone los horarios de ejecución
 
 .. note::
-   ``basic_plan`` es un parametro que alterna el tipo de cuenta (equipo/individual)
-   y no afecta al ajuste de los limites de tasa. Configurelo correctamente segun su cuenta.
+   ``basic_plan`` es un parámetro que alterna el tipo de cuenta (equipo/individual)
+   y no afecta al ajuste de los límites de tasa. Configúrelo correctamente según su cuenta.
 
 No Se Pueden Obtener Documentos Paper
 ---------------------------------------
 
-**Sintoma**: Los documentos Paper no se rastrean
+**Síntoma**: Los documentos Paper no se rastrean
 
 **Verifique**:
 
@@ -477,16 +477,16 @@ No Se Pueden Obtener Documentos Paper
 2. Verifique que se incluya el permiso ``files.content.read``
 3. Verifique que realmente existan documentos Paper
 
-Cuando Hay un Gran Numero de Archivos
+Cuando Hay un Gran Número de Archivos
 ---------------------------------------
 
-**Sintoma**: El rastreo toma mucho tiempo o se agota el tiempo
+**Síntoma**: El rastreo toma mucho tiempo o se agota el tiempo
 
-**Solucion**:
+**Solución**:
 
-1. Divida los almacenes de datos en multiples (por unidad de carpeta, etc.)
-2. Distribuya la carga con configuracion de programacion
-3. En el plan Basic, tenga en cuenta los limites de tasa de API
+1. Divida los almacenes de datos en múltiples (por unidad de carpeta, etc.)
+2. Distribuya la carga con configuración de programacion
+3. En el plan Basic, tenga en cuenta los límites de tasa de API
 
 Permisos y Control de Acceso
 ==============================
@@ -494,9 +494,9 @@ Permisos y Control de Acceso
 Reflejar Permisos de Uso Compartido de Dropbox
 ------------------------------------------------
 
-Puede reflejar la configuracion de uso compartido de Dropbox en los permisos de Fess:
+Puede reflejar la configuración de uso compartido de Dropbox en los permisos de Fess:
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -515,14 +515,14 @@ Script:
     filename=file.name
     last_modified=file.client_modified
 
-``file.roles`` o ``paper.roles`` contienen informacion de uso compartido de Dropbox.
+``file.roles`` o ``paper.roles`` contienen información de uso compartido de Dropbox.
 
-Informacion de Referencia
+Información de Referencia
 ==========================
 
-- :doc:`ds-overview` - Descripcion General de Conectores de Almacen de Datos
+- :doc:`ds-overview` - Descripción General de Conectores de Almacén de Datos
 - :doc:`ds-box` - Conector de Box
 - :doc:`ds-gsuite` - Conector de Google Workspace
-- :doc:`../../admin/dataconfig-guide` - Guia de Configuracion de Almacen de Datos
+- :doc:`../../admin/dataconfig-guide` - Guía de Configuración de Almacén de Datos
 - `Desarrolladores de Dropbox <https://www.dropbox.com/developers>`_
-- `Documentacion de API de Dropbox <https://www.dropbox.com/developers/documentation>`_
+- `Documentación de API de Dropbox <https://www.dropbox.com/developers/documentation>`_

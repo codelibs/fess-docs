@@ -5,21 +5,21 @@ Plugin Ingest
 Vue d'ensemble
 ==============
 
-Les plugins Ingest fournissent des fonctionnalites de traitement et de transformation
-des donnees avant leur enregistrement dans l'index.
+Les plugins Ingest fournissent des fonctionnalités de traitement et de transformation
+des données avant leur enregistrement dans l'index.
 
 Cas d'utilisation
 =================
 
 - Normalisation du texte (conversion pleine largeur/demi-largeur, etc.)
-- Ajout de metadonnees
+- Ajout de métadonnées
 - Masquage d'informations sensibles
-- Ajout de champs personnalises
+- Ajout de champs personnalisés
 
-Implementation de base
+Implémentation de base
 ======================
 
-Implementez l'interface ``IngestHandler``:
+Implémentez l'interface ``IngestHandler``:
 
 .. code-block:: java
 
@@ -72,7 +72,7 @@ Configuration
 
     ingest.handler.example.enabled=true
 
-Informations complementaires
+Informations complémentaires
 ============================
 
 - :doc:`plugin-architecture` - Architecture des plugins

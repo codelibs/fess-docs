@@ -2,19 +2,19 @@
 LabelType API
 ==========================
 
-Apercu
+Aperçu
 ======
 
-L'API LabelType permet de gerer les types de labels de |Fess|.
-Les types de labels permettent de classer les resultats de recherche en fonction des chemins
-cibles du crawl et des hotes virtuels, et peuvent etre utilises pour le filtrage
+L'API LabelType permet de gérer les types de labels de |Fess|.
+Les types de labels permettent de classer les résultats de recherche en fonction des chemins
+cibles du crawl et des hôtes virtuels, et peuvent être utilisés pour le filtrage
 (restriction) par label dans l'interface de recherche.
 
-Pour les methodes d'authentification et les specifications communes des reponses
+Pour les méthodes d'authentification et les spécifications communes des réponses
 (code ``status``, champ ``version``, format des erreurs, codes de statut HTTP, etc.),
 consultez :doc:`api-admin-overview`.
-Pour acceder a cette API, un jeton d'acces disposant de la permission d'API d'administration
-(``admin-api``) doit etre specifie dans l'en-tete ``Authorization: Bearer <jeton d'acces>``.
+Pour accéder à cette API, un jeton d'accès disposant de la permission d'API d'administration
+(``admin-api``) doit être spécifié dans l'en-tête ``Authorization: Bearer <jeton d'accès>``.
 
 URL de base
 ===========
@@ -30,7 +30,7 @@ Liste des points de terminaison
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Methode
+   * - Méthode
      - Chemin
      - Description
    * - GET
@@ -41,10 +41,10 @@ Liste des points de terminaison
      - Obtention d'un type de label
    * - POST
      - /setting
-     - Creation d'un type de label
+     - Création d'un type de label
    * - PUT
      - /setting
-     - Mise a jour d'un type de label
+     - Mise à jour d'un type de label
    * - DELETE
      - /setting/{id}
      - Suppression d'un type de label
@@ -52,42 +52,42 @@ Liste des points de terminaison
 Obtention de la liste des types de labels
 ==========================================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/labeltype/settings
 
-Parametres
+Paramètres
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametre
+   * - Paramètre
      - Type
      - Obligatoire
      - Description
    * - ``size``
      - Integer
      - Non
-     - Nombre d'elements par page. La valeur par defaut est celle du parametre ``paging.page.size`` (``25`` par defaut).
+     - Nombre d'éléments par page. La valeur par défaut est celle du paramètre ``paging.page.size`` (``25`` par défaut).
    * - ``page``
      - Integer
      - Non
-     - Numero de page (commence a ``1``). La valeur par defaut est ``1``.
+     - Numéro de page (commence à ``1``). La valeur par défaut est ``1``.
    * - ``name``
      - String
      - Non
-     - Filtrage par nom d'affichage (recherche avec caracteres generiques).
+     - Filtrage par nom d'affichage (recherche avec caractères génériques).
    * - ``value``
      - String
      - Non
-     - Filtrage par valeur de label (recherche avec caracteres generiques).
+     - Filtrage par valeur de label (recherche avec caractères génériques).
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -119,23 +119,23 @@ Reponse
 
 .. note::
 
-   Chaque objet de configuration inclut egalement ``createdBy`` / ``createdTime`` /
-   ``updatedBy`` / ``updatedTime`` a des fins d'audit, ainsi que ``versionNo`` pour le
+   Chaque objet de configuration inclut également ``createdBy`` / ``createdTime`` /
+   ``updatedBy`` / ``updatedTime`` à des fins d'audit, ainsi que ``versionNo`` pour le
    verrouillage optimiste (les champs dont la valeur est ``null`` sont omis). L'objet
    ``response`` contient toujours ``version``, indiquant la version du produit, mais
-   celui-ci peut etre omis dans les exemples suivants par souci de concision.
+   celui-ci peut être omis dans les exemples suivants par souci de concision.
 
 Obtention d'un type de label
 =============================
 
-Requete
+Requête
 -------
 
 ::
 
     GET /api/admin/labeltype/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -161,10 +161,10 @@ Reponse
       }
     }
 
-Creation d'un type de label
+Création d'un type de label
 ============================
 
-Requete
+Requête
 -------
 
 ::
@@ -172,7 +172,7 @@ Requete
     POST /api/admin/labeltype/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -200,38 +200,38 @@ Description des champs
    * - ``name``
      - String
      - Oui
-     - Nom d'affichage du label (100 caracteres maximum).
+     - Nom d'affichage du label (100 caractères maximum).
    * - ``value``
      - String
      - Oui
-     - Valeur du label (utilisee avec le parametre ``label`` lors des recherches). Seuls les caracteres alphanumeriques et les tirets bas (``_``) sont autorises ; la valeur doit correspondre a l'expression reguliere ``^[a-zA-Z0-9_]+$`` (100 caracteres maximum).
+     - Valeur du label (utilisée avec le paramètre ``label`` lors des recherches). Seuls les caractères alphanumériques et les tirets bas (``_``) sont autorisés ; la valeur doit correspondre à l'expression régulière ``^[a-zA-Z0-9_]+$`` (100 caractères maximum).
    * - ``includedPaths``
      - String
      - Non
-     - Expression reguliere des chemins cibles du label. Si plusieurs valeurs sont specifees, elles sont separees par un saut de ligne (``\n``).
+     - Expression régulière des chemins cibles du label. Si plusieurs valeurs sont specifees, elles sont séparées par un saut de ligne (``\n``).
    * - ``excludedPaths``
      - String
      - Non
-     - Expression reguliere des chemins a exclure du label. Si plusieurs valeurs sont specifees, elles sont separees par un saut de ligne (``\n``).
+     - Expression régulière des chemins à exclure du label. Si plusieurs valeurs sont specifees, elles sont séparées par un saut de ligne (``\n``).
    * - ``permissions``
      - String
      - Non
-     - Roles, groupes ou utilisateurs autorises a acceder (ex. : ``{role}admin``). Si plusieurs valeurs sont specifees, elles sont separees par un saut de ligne (``\n``).
+     - Rôles, groupes ou utilisateurs autorisés à accéder (ex. : ``{role}admin``). Si plusieurs valeurs sont specifees, elles sont séparées par un saut de ligne (``\n``).
    * - ``sortOrder``
      - Integer
      - Non
-     - Ordre d'affichage (entier superieur ou egal a 0). La valeur par defaut est ``0``.
+     - Ordre d'affichage (entier supérieur ou égal à 0). La valeur par défaut est ``0``.
    * - ``virtualHost``
      - String
      - Non
-     - Hote virtuel (1000 caracteres maximum).
+     - Hôte virtuel (1000 caractères maximum).
 
 .. note::
 
-   Les champs d'audit tels que ``createdBy`` / ``createdTime`` sont definis
-   automatiquement cote serveur et n'ont pas besoin d'etre specifies dans la requete.
+   Les champs d'audit tels que ``createdBy`` / ``createdTime`` sont définis
+   automatiquement côté serveur et n'ont pas besoin d'être spécifiés dans la requête.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -244,12 +244,12 @@ Reponse
       }
     }
 
-En cas de creation reussie, ``created`` prend la valeur ``true``.
+En cas de création réussie, ``created`` prend la valeur ``true``.
 
-Mise a jour d'un type de label
+Mise à jour d'un type de label
 ================================
 
-Requete
+Requête
 -------
 
 ::
@@ -257,7 +257,7 @@ Requete
     PUT /api/admin/labeltype/setting
     Content-Type: application/json
 
-Corps de la requete
+Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -273,7 +273,7 @@ Corps de la requete
       "versionNo": 1
     }
 
-Lors d'une mise a jour, les champs suivants sont obligatoires en plus de ceux utilises lors de la creation.
+Lors d'une mise à jour, les champs suivants sont obligatoires en plus de ceux utilisés lors de la création.
 
 .. list-table::
    :header-rows: 1
@@ -286,13 +286,13 @@ Lors d'une mise a jour, les champs suivants sont obligatoires en plus de ceux ut
    * - ``id``
      - String
      - Oui
-     - ID du type de label a mettre a jour.
+     - ID du type de label à mettre à jour.
    * - ``versionNo``
      - Integer
      - Oui
-     - Numero de version pour le verrouillage optimiste. Specifiez la valeur ``versionNo`` presente dans la reponse obtenue lors de la lecture. Si la version specifiee ne correspond pas a la version actuelle, la mise a jour echoue.
+     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur ``versionNo`` présente dans la réponse obtenue lors de la lecture. Si la version spécifiée ne correspond pas à la version actuelle, la mise à jour échoue.
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -305,19 +305,19 @@ Reponse
       }
     }
 
-Dans le cas d'une mise a jour, ``created`` prend la valeur ``false``.
+Dans le cas d'une mise à jour, ``created`` prend la valeur ``false``.
 
 Suppression d'un type de label
 ================================
 
-Requete
+Requête
 -------
 
 ::
 
     DELETE /api/admin/labeltype/setting/{id}
 
-Reponse
+Réponse
 -------
 
 .. code-block:: json
@@ -331,7 +331,7 @@ Reponse
 Exemples d'utilisation
 =======================
 
-Creation d'un label pour la documentation
+Création d'un label pour la documentation
 ------------------------------------------
 
 .. code-block:: bash

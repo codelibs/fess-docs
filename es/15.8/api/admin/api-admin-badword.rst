@@ -2,11 +2,11 @@
 API de BadWord
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de BadWord es para gestionar las palabras prohibidas (exclusion de palabras de sugerencia inapropiadas) de |Fess|.
-Puede configurar palabras clave que no desea mostrar en la funcion de sugerencias.
+La API de BadWord es para gestionar las palabras prohibidas (exclusión de palabras de sugerencia inapropiadas) de |Fess|.
+Puede configurar palabras clave que no desea mostrar en la función de sugerencias.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de palabras prohibidas
@@ -57,25 +57,25 @@ Solicitud
 
     GET /api/admin/badword/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``id``
      - String
      - No
@@ -144,7 +144,7 @@ Cuerpo de la Solicitud
       "suggestWord": "spam_keyword"
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -153,9 +153,9 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``suggestWord``
-     - Si
+     - Sí
      - Palabra clave a excluir (no puede contener espacios en blanco)
 
 Respuesta
@@ -232,7 +232,7 @@ Respuesta
 Subir CSV de Palabras Prohibidas
 ================================
 
-Registra palabras prohibidas en bloque a partir de un archivo CSV. El archivo se envia como ``multipart/form-data``. La importacion se ejecuta de forma asincrona en el servidor.
+Registra palabras prohibidas en bloque a partir de un archivo CSV. El archivo se envía como ``multipart/form-data``. La importación se ejecuta de forma asíncrona en el servidor.
 
 Solicitud
 ---------
@@ -242,33 +242,33 @@ Solicitud
     PUT /api/admin/badword/upload
     Content-Type: multipart/form-data
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``badWordFile``
-     - Si
+     - Sí
      - Archivo CSV de palabras prohibidas a subir
 
 Formato CSV
 ~~~~~~~~~~~
 
-- La primera linea se omite como fila de encabezado (el nombre de la columna es arbitrario; al descargar se escribe ``BadWord``).
-- A partir de la segunda linea, escriba una palabra prohibida por linea como ``suggestWord``.
-- Las lineas cuyo valor esta en blanco se ignoran.
+- La primera línea se omite como fila de encabezado (el nombre de la columna es arbitrario; al descargar se escribe ``BadWord``).
+- A partir de la segunda línea, escriba una palabra prohibida por línea como ``suggestWord``.
+- Las líneas cuyo valor está en blanco se ignoran.
 - Anteponga ``--`` a una palabra para eliminarla (por ejemplo, ``--spam`` elimina ``spam``).
-- Especificar una palabra ya registrada se trata como una actualizacion (se restablecen el usuario y la fecha de actualizacion).
+- Especificar una palabra ya registrada se trata como una actualización (se restablecen el usuario y la fecha de actualización).
 
 .. note::
 
-   Dado que la importacion se ejecuta de forma asincrona en el servidor, una respuesta ``status: 0``
-   indica que la solicitud fue aceptada, no que la importacion se haya completado.
+   Dado que la importación se ejecuta de forma asíncrona en el servidor, una respuesta ``status: 0``
+   indica que la solicitud fue aceptada, no que la importación se haya completado.
 
 Respuesta
 ---------
@@ -285,7 +285,7 @@ Descargar CSV de Palabras Prohibidas
 ====================================
 
 Descarga las palabras prohibidas registradas como archivo CSV (``badword.csv``). La respuesta es un flujo ``application/octet-stream``.
-El CSV tiene una fila de encabezado ``BadWord`` en la primera linea, seguida de una palabra prohibida registrada por linea.
+El CSV tiene una fila de encabezado ``BadWord`` en la primera línea, seguida de una palabra prohibida registrada por línea.
 
 Solicitud
 ---------
@@ -327,10 +327,10 @@ Descargar Archivo CSV
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o badword.csv
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`api-admin-suggest` - API de gestion de sugerencias
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-suggest` - API de gestión de sugerencias
 - :doc:`api-admin-elevateword` - API de palabras elevadas
-- :doc:`../../admin/badword-guide` - Guia de gestion de palabras prohibidas
+- :doc:`../../admin/badword-guide` - Guía de gestión de palabras prohibidas

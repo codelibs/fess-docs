@@ -2,11 +2,11 @@
 API de ElevateWord
 ==========================
 
-Vision General
+Visión General
 ==============
 
-La API de ElevateWord es para gestionar las palabras elevadas (manipulacion del orden de busqueda para palabras clave especificas) de |Fess|.
-Puede colocar documentos especificos en posiciones superiores o inferiores para ciertas consultas de busqueda.
+La API de ElevateWord es para gestionar las palabras elevadas (manipulación del orden de búsqueda para palabras clave específicas) de |Fess|.
+Puede colocar documentos específicos en posiciones superiores o inferiores para ciertas consultas de búsqueda.
 
 URL Base
 ========
@@ -22,9 +22,9 @@ Lista de Endpoints
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /settings
      - Obtener lista de palabras elevadas
@@ -57,25 +57,25 @@ Solicitud
 
     GET /api/admin/elevateword/settings
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametro
+   * - Parámetro
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 20)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, predeterminado: 1)
+     - Número de página (comienza en 1, predeterminado: 1)
    * - ``id``
      - String
      - No
@@ -156,7 +156,7 @@ Cuerpo de la Solicitud
       "labelTypeIds": ["label1"]
     }
 
-Descripcion de Campos
+Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -165,18 +165,18 @@ Descripcion de Campos
 
    * - Campo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``suggestWord``
-     - Si
+     - Sí
      - Palabra clave a elevar
    * - ``reading``
      - No
-     - Lectura fonetica
+     - Lectura fonética
    * - ``permissions``
      - No
-     - Permisos de acceso (cadena separada por saltos de linea, uno por linea. Valor inicial del formulario: permisos de visualizacion predeterminados de la busqueda)
+     - Permisos de acceso (cadena separada por saltos de línea, uno por línea. Valor inicial del formulario: permisos de visualización predeterminados de la búsqueda)
    * - ``boost``
-     - Si
+     - Sí
      - Valor de impulso (valor inicial del formulario: 100.0)
    * - ``labelTypeIds``
      - No
@@ -223,10 +223,10 @@ Cuerpo de la Solicitud
 
 .. note::
 
-   Al actualizar, los siguientes campos son obligatorios ademas de los campos utilizados para la creacion:
+   Al actualizar, los siguientes campos son obligatorios además de los campos utilizados para la creación:
 
    - ``id`` - ID de la palabra elevada a actualizar
-   - ``versionNo`` - Numero de version para el bloqueo optimista. Especifique el valor obtenido de ``GET /setting/{id}``.
+   - ``versionNo`` - Número de versión para el bloqueo optimista. Especifique el valor obtenido de ``GET /setting/{id}``.
 
 Respuesta
 ---------
@@ -267,7 +267,7 @@ Respuesta
 Subir CSV de Palabras Elevadas
 ==============================
 
-Registra palabras elevadas en bloque a partir de un archivo CSV. El archivo se envia como ``multipart/form-data``. La importacion se ejecuta de forma asincrona en el servidor.
+Registra palabras elevadas en bloque a partir de un archivo CSV. El archivo se envía como ``multipart/form-data``. La importación se ejecuta de forma asíncrona en el servidor.
 
 Solicitud
 ---------
@@ -277,18 +277,18 @@ Solicitud
     PUT /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``elevateWordFile``
-     - Si
+     - Sí
      - Archivo CSV de palabras elevadas a subir
 
 Respuesta
@@ -331,7 +331,7 @@ Elevar Nombre de Producto
            "permissions": "{role}guest"
          }'
 
-Elevar a Etiqueta Especifica
+Elevar a Etiqueta Específica
 ----------------------------
 
 .. code-block:: bash
@@ -364,10 +364,10 @@ Descargar Archivo CSV
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o elevate.csv
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
+- :doc:`api-admin-overview` - Visión general de Admin API
 - :doc:`api-admin-keymatch` - API de coincidencia de claves
 - :doc:`api-admin-boostdoc` - API de impulso de documentos
-- :doc:`../../admin/elevateword-guide` - Guia de gestion de palabras elevadas
+- :doc:`../../admin/elevateword-guide` - Guía de gestión de palabras elevadas

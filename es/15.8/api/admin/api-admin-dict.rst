@@ -2,12 +2,12 @@
 API de Dict
 ==========================
 
-Vision General
+Visión General
 ==============
 
 La API de Dict es para gestionar los diccionarios de |Fess|.
-En el endpoint raiz se puede obtener la lista de diccionarios disponibles.
-La referencia, creacion, actualizacion y eliminacion de elementos de diccionario individuales, asi como la carga y descarga de archivos de diccionario, se operan mediante los subendpoints por tipo de diccionario (synonym, kuromoji, mapping, protwords, stopwords, stemmeroverride).
+En el endpoint raíz se puede obtener la lista de diccionarios disponibles.
+La referencia, creación, actualización y eliminación de elementos de diccionario individuales, así como la carga y descarga de archivos de diccionario, se operan mediante los subendpoints por tipo de diccionario (synonym, kuromoji, mapping, protwords, stopwords, stemmeroverride).
 
 URL Base
 ========
@@ -19,16 +19,16 @@ URL Base
 Lista de Endpoints
 ==================
 
-Raiz del Diccionario
+Raíz del Diccionario
 --------------------
 
 .. list-table::
    :header-rows: 1
    :widths: 15 35 50
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /
      - Obtener lista de diccionarios
@@ -44,9 +44,9 @@ Estos valores coinciden con el valor del campo ``type`` incluido en la respuesta
    :header-rows: 1
    :widths: 15 50 35
 
-   * - Metodo
+   * - Método
      - Ruta
-     - Descripcion
+     - Descripción
    * - GET
      - /{type}/settings/{dictId}
      - Obtener lista de elementos del diccionario
@@ -116,7 +116,7 @@ Campos de Respuesta
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``settings[].id``
      - ID del diccionario (usado como ``{dictId}`` en las operaciones de diccionario individuales)
    * - ``settings[].type``
@@ -124,9 +124,9 @@ Campos de Respuesta
    * - ``settings[].path``
      - Ruta del archivo de diccionario
    * - ``settings[].timestamp``
-     - Fecha y hora de actualizacion del archivo de diccionario
+     - Fecha y hora de actualización del archivo de diccionario
    * - ``total``
-     - Numero total de archivos de diccionario
+     - Número total de archivos de diccionario
 
 Obtener Lista de Elementos del Diccionario
 ==========================================
@@ -140,34 +140,34 @@ Solicitud
 
     GET /api/admin/dict/{type}/settings/{dictId}
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametros
+   * - Parámetros
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``dictId``
      - String
-     - Si
-     - ID del diccionario (parametro de ruta)
+     - Sí
+     - ID del diccionario (parámetro de ruta)
    * - ``size``
      - Integer
      - No
-     - Numero de elementos por pagina (por defecto: 25)
+     - Número de elementos por página (por defecto: 25)
    * - ``page``
      - Integer
      - No
-     - Numero de pagina (comienza en 1, por defecto: 1)
+     - Número de página (comienza en 1, por defecto: 1)
 
 Respuesta
 ---------
 
-Los campos de cada elemento del arreglo ``settings`` de la respuesta varian segun el tipo de diccionario (consulte "Campos de Elementos por Tipo de Diccionario" mas adelante).
+Los campos de cada elemento del arreglo ``settings`` de la respuesta varían según el tipo de diccionario (consulte "Campos de Elementos por Tipo de Diccionario" más adelante).
 
 .. code-block:: json
 
@@ -192,7 +192,7 @@ El ejemplo anterior corresponde al diccionario ``synonym``.
 Obtener Elemento del Diccionario
 ================================
 
-Obtiene un elemento especifico dentro del diccionario.
+Obtiene un elemento específico dentro del diccionario.
 
 Solicitud
 ---------
@@ -201,25 +201,25 @@ Solicitud
 
     GET /api/admin/dict/{type}/setting/{dictId}/{id}
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametros
+   * - Parámetros
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``dictId``
      - String
-     - Si
-     - ID del diccionario (parametro de ruta)
+     - Sí
+     - ID del diccionario (parámetro de ruta)
    * - ``id``
      - Long
-     - Si
-     - ID del elemento (parametro de ruta)
+     - Sí
+     - ID del elemento (parámetro de ruta)
 
 Respuesta
 ---------
@@ -326,25 +326,25 @@ Solicitud
 
     DELETE /api/admin/dict/{type}/setting/{dictId}/{id}
 
-Parametros
+Parámetros
 ~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
-   * - Parametros
+   * - Parámetros
      - Tipo
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``dictId``
      - String
-     - Si
-     - ID del diccionario (parametro de ruta)
+     - Sí
+     - ID del diccionario (parámetro de ruta)
    * - ``id``
      - Long
-     - Si
-     - ID del elemento (parametro de ruta)
+     - Sí
+     - ID del elemento (parámetro de ruta)
 
 Respuesta
 ---------
@@ -373,7 +373,7 @@ Solicitud
     PUT /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
-El nombre del campo de archivo varia segun el tipo de diccionario (consulte "Campos de Elementos por Tipo de Diccionario" mas adelante).
+El nombre del campo de archivo varía según el tipo de diccionario (consulte "Campos de Elementos por Tipo de Diccionario" más adelante).
 
 Respuesta
 ---------
@@ -404,8 +404,8 @@ La respuesta es el binario del archivo de diccionario ( ``application/octet-stre
 Campos de Elementos por Tipo de Diccionario
 ===========================================
 
-Los campos del cuerpo de la solicitud de creacion y actualizacion de elementos del diccionario, asi como los de la respuesta, varian segun el tipo de diccionario.
-``id`` (ID del elemento) y ``dictId`` (ID del diccionario) se incluyen en comun en la respuesta.
+Los campos del cuerpo de la solicitud de creación y actualización de elementos del diccionario, así como los de la respuesta, varían según el tipo de diccionario.
+``id`` (ID del elemento) y ``dictId`` (ID del diccionario) se incluyen en común en la respuesta.
 
 .. list-table::
    :header-rows: 1
@@ -444,7 +444,7 @@ Obtener Lista de Diccionarios
     curl -X GET "http://localhost:8080/api/admin/dict" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Obtener Lista de Elementos del Diccionario de Sinonimos
+Obtener Lista de Elementos del Diccionario de Sinónimos
 -------------------------------------------------------
 
 .. code-block:: bash
@@ -452,7 +452,7 @@ Obtener Lista de Elementos del Diccionario de Sinonimos
     curl -X GET "http://localhost:8080/api/admin/dict/synonym/settings/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN"
 
-Agregar Elemento al Diccionario de Sinonimos
+Agregar Elemento al Diccionario de Sinónimos
 --------------------------------------------
 
 .. code-block:: bash
@@ -465,7 +465,7 @@ Agregar Elemento al Diccionario de Sinonimos
            "outputs": "busqueda,buscar,investigar"
          }'
 
-Cargar Archivo del Diccionario de Sinonimos
+Cargar Archivo del Diccionario de Sinónimos
 -------------------------------------------
 
 .. code-block:: bash
@@ -474,7 +474,7 @@ Cargar Archivo del Diccionario de Sinonimos
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "synonymFile=@synonym.txt"
 
-Descargar Archivo del Diccionario de Sinonimos
+Descargar Archivo del Diccionario de Sinónimos
 ----------------------------------------------
 
 .. code-block:: bash
@@ -483,8 +483,8 @@ Descargar Archivo del Diccionario de Sinonimos
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o synonym.txt
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`api-admin-overview` - Vision general de Admin API
-- :doc:`../../admin/dict-guide` - Guia de gestion de diccionarios
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`../../admin/dict-guide` - Guía de gestión de diccionarios
