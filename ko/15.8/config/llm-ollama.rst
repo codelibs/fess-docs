@@ -1,9 +1,11 @@
-==========================
-Ollama 설정
-==========================
+===============================
+Ollama 설정 (로컬 LLM / RAG)
+===============================
 
 개요
 ====
+
+이 페이지에서는 |Fess|\ 가 로컬에서 호스팅되는 Ollama 모델을 **AI 검색 모드(RAG: Retrieval-Augmented Generation)** — 데이터를 외부 API로 전송하지 않고 검색 인덱스를 기반으로 자연어 질문에 출처를 인용하여 답변하는 기능 — 에 사용할 수 있도록 ``fess-llm-ollama`` 플러그인을 설정하는 방법을 설명합니다. |Fess|\ 는 로컬 Ollama API를 호출하여 크롤링한 문서에 대해 RAG를 수행합니다.
 
 Ollama는 로컬 환경에서 대규모 언어 모델(LLM)을 실행하기 위한 오픈소스 플랫폼입니다.
 |Fess| 의 Ollama 연계 기능은 플러그인 ``fess-llm-ollama`` 로 제공되며, 프라이빗 환경에서의 사용에 적합합니다.
@@ -663,3 +665,5 @@ Ollama는 GPU 가속을 지원합니다. NVIDIA GPU를 사용하면
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - LLM 통합 개요
 - :doc:`rag-chat` - AI 검색 모드 기능 상세
+- :doc:`rank-fusion` - 하이브리드 검색: 키워드 검색과 시맨틱(벡터) 검색 결합
+- :doc:`../user/chat-search` - AI 검색 모드 사용법(최종 사용자 가이드)
