@@ -112,7 +112,7 @@ DocumentParser
 Indexer
 ~~~~~~~
 
-- **Rôle** : Enregistrement d'index dans OpenSearch/Elasticsearch
+- **Rôle** : Enregistrement d'index dans OpenSearch
 - **Fonctionnalités Principales** :
 
   - Création d'index de documents
@@ -143,7 +143,7 @@ SearchService
 - **Fonctionnalités Principales** :
 
   - Analyse et optimisation des requêtes
-  - Exécution de requêtes sur OpenSearch/Elasticsearch
+  - Exécution de requêtes sur OpenSearch
   - Classement des résultats de recherche
   - Support de la recherche à facettes
   - Surlignage
@@ -296,7 +296,7 @@ SearchEngine
 - **Rôle** : Intégration avec le moteur de recherche
 - **Fonctionnalités Principales** :
 
-  - Communication avec OpenSearch/Elasticsearch
+  - Communication avec OpenSearch
   - Gestion d'index
   - Exécution de requêtes
   - Support du clustering

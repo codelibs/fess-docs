@@ -112,7 +112,7 @@ DocumentParser
 Indexer
 ~~~~~~~
 
-- **역할**: OpenSearch/Elasticsearch에 인덱스 등록
+- **역할**: OpenSearch에 인덱스 등록
 - **주요 기능**:
 
   - 문서 인덱스 생성
@@ -143,7 +143,7 @@ SearchService
 - **주요 기능**:
 
   - 쿼리 분석 및 최적화
-  - OpenSearch/Elasticsearch로의 쿼리 실행
+  - OpenSearch로의 쿼리 실행
   - 검색 결과 랭킹
   - 패싯 검색 지원
   - 하이라이트 표시
@@ -296,7 +296,7 @@ SearchEngine
 - **역할**: 검색 엔진과의 연동
 - **주요 기능**:
 
-  - OpenSearch/Elasticsearch와의 통신
+  - OpenSearch와의 통신
   - 인덱스 관리
   - 쿼리 실행
   - 클러스터링 지원

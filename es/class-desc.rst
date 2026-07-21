@@ -112,7 +112,7 @@ DocumentParser
 Indexer
 ~~~~~~~
 
-- **Rol**: Registro de índices en OpenSearch/Elasticsearch
+- **Rol**: Registro de índices en OpenSearch
 - **Características Principales**:
 
   - Creación de índices de documentos
@@ -143,7 +143,7 @@ SearchService
 - **Características Principales**:
 
   - Análisis y optimización de consultas
-  - Ejecución de consultas en OpenSearch/Elasticsearch
+  - Ejecución de consultas en OpenSearch
   - Clasificación de resultados de búsqueda
   - Soporte para búsqueda por facetas
   - Resaltado
@@ -296,7 +296,7 @@ SearchEngine
 - **Rol**: Integración con motor de búsqueda
 - **Características Principales**:
 
-  - Comunicación con OpenSearch/Elasticsearch
+  - Comunicación con OpenSearch
   - Gestión de índices
   - Ejecución de consultas
   - Soporte para clustering

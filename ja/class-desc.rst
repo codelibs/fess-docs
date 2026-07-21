@@ -112,7 +112,7 @@ DocumentParser
 Indexer
 ~~~~~~~
 
-- **役割**: OpenSearch/Elasticsearchへのインデックス登録
+- **役割**: OpenSearchへのインデックス登録
 - **主な機能**:
 
   - ドキュメントのインデックス作成
@@ -143,7 +143,7 @@ SearchService
 - **主な機能**:
 
   - クエリの解析と最適化
-  - OpenSearch/Elasticsearchへのクエリ実行
+  - OpenSearchへのクエリ実行
   - 検索結果のランキング
   - ファセット検索のサポート
   - ハイライト表示
@@ -296,7 +296,7 @@ SearchEngine
 - **役割**: 検索エンジンとの連携
 - **主な機能**:
 
-  - OpenSearch/Elasticsearchとの通信
+  - OpenSearchとの通信
   - インデックスの管理
   - クエリの実行
   - クラスタリング対応

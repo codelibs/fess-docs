@@ -5,7 +5,7 @@
 概述
 ====
 
-Fess 是一款基于 OpenSearch（或 Elasticsearch）构建的开源**企业搜索服务器**——"**可在5分钟内轻松构建的全文搜索服务器**"。
+Fess 是一款基于 OpenSearch 构建的开源**企业搜索服务器**——"**可在5分钟内轻松构建的全文搜索服务器**"。
 
 这是一款开源的企业搜索（企业内搜索）软件，可以对网站、文件服务器、数据库等分散在企业内部的文档进行横向的全文搜索。
 
@@ -65,7 +65,7 @@ Fess 采用 Apache 许可证提供，可以免费使用（自由软件）。
 
 -  提供用于集成到现有站点的 JavaScript
 
--  使用 OpenSearch 或 Elasticsearch 作为搜索引擎
+-  使用 OpenSearch 作为搜索引擎
 
 -  可搜索 BASIC/DIGEST/NTLM/FORM 认证的站点
 

@@ -112,7 +112,7 @@ DocumentParser
 Indexer
 ~~~~~~~
 
-- **Rolle**: Indexregistrierung in OpenSearch/Elasticsearch
+- **Rolle**: Indexregistrierung in OpenSearch
 - **Hauptfunktionen**:
 
   - Erstellung von Dokumentindizes
@@ -143,7 +143,7 @@ SearchService
 - **Hauptfunktionen**:
 
   - Analyse und Optimierung von Abfragen
-  - Ausführung von Abfragen an OpenSearch/Elasticsearch
+  - Ausführung von Abfragen an OpenSearch
   - Ranking der Suchergebnisse
   - Unterstützung von Facetten-Suche
   - Hervorhebung
@@ -296,7 +296,7 @@ SearchEngine
 - **Rolle**: Integration mit Suchmaschinen
 - **Hauptfunktionen**:
 
-  - Kommunikation mit OpenSearch/Elasticsearch
+  - Kommunikation mit OpenSearch
   - Indexverwaltung
   - Ausführung von Abfragen
   - Clustering-Unterstützung
