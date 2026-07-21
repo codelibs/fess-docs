@@ -1,6 +1,6 @@
-====================
-Configuration de base du robot d'indexation
-====================
+==================================================================================================
+Configuration du robot d'indexation : exploration Web, serveur de fichiers et bases de données
+==================================================================================================
 
 Présentation
 ====
@@ -8,6 +8,8 @@ Présentation
 Le robot d'indexation (crawler) de |Fess| est une fonctionnalité qui collecte automatiquement du contenu à partir de sites Web et de systèmes de fichiers, et l'enregistre dans l'index de recherche.
 Du robot Web pour la recherche de site Web, en passant par le robot de fichiers pour la recherche sur serveur de fichiers, jusqu'au robot de magasin de données pour la recherche de bases de données et d'autres sources de données, un seul |Fess| permet de mettre en place une recherche en texte intégral transversale.
 Ce guide explique les concepts de base et les méthodes de configuration du robot d'indexation.
+
+Pour l'exploration de bases de données et d'autres sources de données, consultez :doc:`datastore/ds-database` et :doc:`datastore/ds-overview`. Pour améliorer la pertinence sur l'ensemble du contenu exploré grâce à la recherche hybride (mots-clés + sémantique), consultez :doc:`rank-fusion`.
 
 Concepts de base du robot d'indexation
 ====================
@@ -734,6 +736,9 @@ Informations de référence
 - :doc:`crawler-thumbnail` - Configuration des vignettes
 - :doc:`setup-memory` - Configuration de la mémoire
 - :doc:`admin-logging` - Configuration des journaux
+- :doc:`datastore/ds-overview` - Aperçu de l'exploration Data Store (bases de données et autres sources de données)
+- :doc:`datastore/ds-database` - Configuration de l'exploration de bases de données
+- :doc:`rank-fusion` - Recherche hybride et Rank Fusion
 - :doc:`../admin/webconfig-guide` - Crawl Web (recherche de site Web)
 - :doc:`../admin/fileconfig-guide` - Crawl de système de fichiers (recherche sur serveur de fichiers)
 - :doc:`../admin/dataconfig-guide` - Crawl de magasin de données (recherche de base de données)

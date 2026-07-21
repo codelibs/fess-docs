@@ -1,9 +1,11 @@
-==========================
-Google Gemini 설정
-==========================
+=====================================
+Google Gemini 설정 (AI 검색 / RAG)
+=====================================
 
 개요
 ====
+
+이 페이지에서는 |Fess|\ 가 Google Gemini를 **AI 검색 모드(RAG: Retrieval-Augmented Generation)** — 검색 인덱스를 기반으로 자연어 질문에 출처를 인용하여 답변하는 기능 — 에 사용할 수 있도록 ``fess-llm-gemini`` 플러그인을 설정하는 방법을 설명합니다. |Fess|\ 는 Google AI API(Generative Language API)를 호출하여 Gemini 모델로 크롤링한 문서에 대해 RAG를 수행합니다.
 
 Google Gemini는 Google사가 제공하는 최첨단 대규모 언어 모델(LLM)입니다.
 |Fess|\ 에서는 Google AI API(Generative Language API)를 사용하여 Gemini 모델을 통한 AI 검색 모드 기능을 구현할 수 있습니다.
@@ -671,3 +673,5 @@ Google AI API를 사용할 때는 다음 보안 사항에 주의하세요.
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - LLM 통합 개요
 - :doc:`rag-chat` - AI 검색 모드 기능 상세
+- :doc:`rank-fusion` - 하이브리드 검색: 키워드 검색과 시맨틱(벡터) 검색 결합
+- :doc:`../user/chat-search` - AI 검색 모드 사용법(최종 사용자 가이드)

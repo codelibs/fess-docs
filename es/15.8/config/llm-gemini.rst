@@ -1,9 +1,11 @@
-==============================
-Configuracion de Google Gemini
-==============================
+===================================================
+Configuración de Google Gemini (Búsqueda IA / RAG)
+===================================================
 
 Descripcion general
 ===================
+
+Esta página explica cómo configurar el plugin ``fess-llm-gemini`` para que |Fess| pueda usar Google Gemini en su **modo de búsqueda IA (RAG: Retrieval-Augmented Generation)** — respondiendo preguntas en lenguaje natural a partir de su índice de búsqueda empresarial con fuentes citadas. |Fess| llama a la API de Google AI (Generative Language API) para ejecutar RAG sobre sus documentos rastreados con modelos Gemini.
 
 Google Gemini es un modelo de lenguaje grande (LLM) de ultima generacion proporcionado por Google.
 |Fess| puede implementar la funcionalidad de modo de búsqueda IA con el modelo Gemini utilizando Google AI API (Generative Language API).
@@ -673,3 +675,5 @@ Informacion de referencia
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
 - :doc:`llm-overview` - Descripcion general de integracion LLM
 - :doc:`rag-chat` - Detalles de la funcionalidad de modo de búsqueda IA
+- :doc:`rank-fusion` - Búsqueda híbrida: combina búsqueda por palabras clave y búsqueda semántica (vectorial)
+- :doc:`../user/chat-search` - Uso del modo de búsqueda IA (guía para el usuario final)

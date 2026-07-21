@@ -7,7 +7,7 @@ Vue d'ensemble
 
 |Fess| prend en charge la fonctionnalité de mode de recherche IA (RAG : Retrieval-Augmented Generation) utilisant
 les grands modèles de langage (LLM). Cette fonctionnalité permet aux utilisateurs d'obtenir des informations
-sous forme de dialogue avec un assistant IA basé sur les résultats de recherche.
+sous forme de dialogue avec un assistant IA basé sur les résultats de recherche, en répondant à des questions en langage naturel directement à partir de votre index de recherche d'entreprise, avec citation des sources.
 
 La fonctionnalité d'intégration LLM est fournie sous forme de plugins ``fess-llm-*``. Installez le plugin correspondant au fournisseur LLM que vous souhaitez utiliser.
 

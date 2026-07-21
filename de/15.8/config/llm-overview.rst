@@ -6,7 +6,7 @@
 =========
 
 |Fess| unterstützt eine KI-Suchmodus-Funktion (RAG: Retrieval-Augmented Generation), die große Sprachmodelle (LLM) nutzt.
-Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten Format mit einem KI-Assistenten abrufen, der auf Suchergebnissen basiert.
+Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten Format mit einem KI-Assistenten abrufen, der auf Suchergebnissen basiert, und erhalten so Antworten auf natürlichsprachliche Fragen direkt aus Ihrem Unternehmens-Suchindex mit zitierten Quellen.
 
 Die LLM-Integrationsfunktion wird als ``fess-llm-*``-Plugin bereitgestellt. Installieren Sie das Plugin, das dem LLM-Anbieter entspricht, den Sie verwenden möchten.
 

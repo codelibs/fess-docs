@@ -1,6 +1,6 @@
-====================
-Grundlegende Crawler-Konfiguration
-====================
+================================================================
+Crawler-Konfiguration: Web-, Dateiserver- und Datenbank-Crawling
+================================================================
 
 Übersicht
 ====
@@ -8,6 +8,8 @@ Grundlegende Crawler-Konfiguration
 Der Crawler von |Fess| ist eine Funktion, die automatisch Inhalte von Websites, Dateisystemen usw. sammelt und im Suchindex registriert.
 Mit dem Web-Crawler für die Website-Suche, dem Datei-Crawler für die Dateiserver-Suche und dem Datenspeicher-Crawler für die Suche in Datenbanken und anderen Datenquellen lässt sich mit einem einzigen |Fess| eine seitenübergreifende Volltextsuche aufbauen.
 Dieser Leitfaden erläutert die grundlegenden Konzepte und Konfigurationsmethoden des Crawlers.
+
+Informationen zum Crawlen von Datenbanken und anderen Datenquellen finden Sie unter :doc:`datastore/ds-database` und :doc:`datastore/ds-overview`. Um die Relevanz über alle gecrawlten Inhalte hinweg mit hybrider (Keyword- + semantischer) Suche zu verbessern, siehe :doc:`rank-fusion`.
 
 Grundlegende Crawler-Konzepte
 ====================
@@ -737,3 +739,6 @@ Referenzinformationen
 - :doc:`../admin/dataconfig-guide` - Datenspeicher-Crawl (Datenbank-Suche)
 - :doc:`datastore/index` - Datenspeicher-Konnektoren Leitfaden
 - :doc:`search-basic` - Suchfunktionen
+- :doc:`datastore/ds-overview` - Übersicht Datenspeicher-Crawling (Datenbanken und andere Datenquellen)
+- :doc:`datastore/ds-database` - Datenbank-Crawling-Konfiguration
+- :doc:`rank-fusion` - Hybride Suche und Rank Fusion

@@ -1,9 +1,11 @@
-==========================
-Configuración de Ollama
-==========================
+=========================================
+Configuración de Ollama (LLM Local / RAG)
+=========================================
 
 Descripción general
 ===================
+
+Esta página explica cómo configurar el plugin ``fess-llm-ollama`` para que |Fess| pueda usar un modelo Ollama alojado localmente en su **modo de búsqueda IA (RAG: Retrieval-Augmented Generation)** — respondiendo preguntas en lenguaje natural a partir de su índice de búsqueda empresarial con fuentes citadas, sin enviar datos a una API externa. |Fess| llama a la API local de Ollama para ejecutar RAG sobre sus documentos rastreados.
 
 Ollama es una plataforma de código abierto para ejecutar modelos de lenguaje grandes (LLM) en entorno local.
 La funcionalidad de integración con Ollama de |Fess| se proporciona como plugin ``fess-llm-ollama`` y es adecuada para uso en entornos privados.
@@ -663,3 +665,5 @@ Información de referencia
 - `Ollama GitHub <https://github.com/ollama/ollama>`__
 - :doc:`llm-overview` - Descripción general de integración LLM
 - :doc:`rag-chat` - Detalles de la funcionalidad de modo de búsqueda IA
+- :doc:`rank-fusion` - Búsqueda híbrida: combina búsqueda por palabras clave y búsqueda semántica (vectorial)
+- :doc:`../user/chat-search` - Uso del modo de búsqueda IA (guía para el usuario final)
