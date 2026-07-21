@@ -5,9 +5,11 @@
 概述
 ====
 
-Fess 是一个"**可在5分钟内轻松构建的全文搜索服务器**"。
+Fess 是一款基于 OpenSearch（或 Elasticsearch）构建的开源**企业搜索服务器**——"**可在5分钟内轻松构建的全文搜索服务器**"。
 
 这是一款开源的企业搜索（企业内搜索）软件，可以对网站、文件服务器、数据库等分散在企业内部的文档进行横向的全文搜索。
+
+可选插件可提供**语义（向量）搜索**、**混合搜索**，以及由 Ollama、OpenAI、Google Gemini 等 LLM 驱动的**AI 搜索模式（RAG）**。
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
@@ -55,7 +57,7 @@ Fess 采用 Apache 许可证提供，可以免费使用（自由软件）。
 
 -  采用 Apache 许可证提供（自由软件，可免费使用）
 
--  可爬取 Web、文件系统、Windows 共享文件夹、数据库
+-  可爬取 Web、文件系统、Windows 共享文件夹、数据库（Web、文件服务器与数据库爬取）
 
 -  支持 MS Office（Word/Excel/PowerPoint）和 PDF 等多种文件格式
 
@@ -100,6 +102,10 @@ Fess 采用 Apache 许可证提供，可以免费使用（自由软件）。
 -  支持 OCR 等外部文本提取
 
 -  可根据用途灵活应对的设计
+
+-  AI 搜索模式（RAG：Retrieval-Augmented Generation），集成 LLM——支持 Ollama、OpenAI、Google Gemini（通过 ``fess-llm-*`` 插件）
+
+-  混合搜索，通过 Semantic Search 插件结合关键词（BM25）与语义（向量）搜索
 
 新闻
 ========

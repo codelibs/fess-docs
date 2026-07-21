@@ -1,9 +1,11 @@
-==========================
-OpenAI配置
-==========================
+===========================
+OpenAI配置（AI 搜索 / RAG）
+===========================
 
 概述
 ====
+
+本页说明如何配置 ``fess-llm-openai`` 插件，以便 |Fess| 使用 OpenAI 实现其**AI搜索模式（RAG：Retrieval-Augmented Generation）** —— 基于引用来源，直接从您的企业搜索索引回答自然语言问题。|Fess| 会调用 OpenAI API，使用 GPT 模型对已爬取的文档执行 RAG。
 
 OpenAI是提供GPT-4等高性能大型语言模型（LLM）的云服务。
 |Fess| 可以使用OpenAI API实现AI搜索模式功能。
@@ -690,3 +692,5 @@ OpenAI API端的限制因账户Tier而异:
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - LLM集成概述
 - :doc:`rag-chat` - AI搜索模式功能详情
+- :doc:`rank-fusion` - 混合搜索：结合关键词与语义（向量）搜索
+- :doc:`../user/chat-search` - 使用 AI 搜索模式（面向普通用户）
