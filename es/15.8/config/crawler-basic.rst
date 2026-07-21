@@ -1,6 +1,6 @@
-===============================
-Configuración Básica del Rastreador
-===============================
+========================================================================================
+Configuración del Rastreador: Rastreo Web, de Servidores de Archivos y de Bases de Datos
+========================================================================================
 
 Descripción General
 ===================
@@ -8,6 +8,8 @@ Descripción General
 El rastreador de |Fess| es una función que recopila automáticamente contenido de sitios web, sistemas de archivos y otros, y lo registra en el índice de búsqueda.
 Desde la búsqueda en sitios web mediante el rastreador web, pasando por la búsqueda en servidores de archivos mediante el rastreador de archivos, hasta la búsqueda en bases de datos y otras fuentes de datos mediante el rastreador de almacén de datos, es posible construir con un único |Fess| una búsqueda de texto completo transversal a todas sus fuentes.
 Esta guía describe los conceptos básicos del rastreador y los métodos de configuración.
+
+Para el rastreo de bases de datos y otras fuentes de datos, consulte :doc:`datastore/ds-database` y :doc:`datastore/ds-overview`. Para mejorar la relevancia en todo el contenido rastreado con búsqueda híbrida (palabras clave + semántica), consulte :doc:`rank-fusion`.
 
 Conceptos Básicos del Rastreador
 =================================
@@ -729,6 +731,9 @@ Información de Referencia
 - :doc:`crawler-thumbnail` - Configuración de Miniaturas
 - :doc:`setup-memory` - Configuración de Memoria
 - :doc:`admin-logging` - Configuración de Logs
+- :doc:`datastore/ds-overview` - Descripción General del Rastreo de Almacén de Datos (bases de datos y otras fuentes de datos)
+- :doc:`datastore/ds-database` - Configuración del Rastreo de Bases de Datos
+- :doc:`rank-fusion` - Búsqueda Híbrida y Rank Fusion
 - :doc:`../admin/webconfig-guide`
 - :doc:`../admin/fileconfig-guide`
 - :doc:`../admin/dataconfig-guide`
