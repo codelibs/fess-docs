@@ -1,9 +1,11 @@
-==========================
-OpenAI-Konfiguration
-==========================
+======================================
+OpenAI-Konfiguration (AI-Suche / RAG)
+======================================
 
 Übersicht
 =========
+
+Diese Seite erläutert, wie Sie das Plugin ``fess-llm-openai`` konfigurieren, damit |Fess| OpenAI für seinen **AI-Suchmodus (RAG: Retrieval-Augmented Generation)** nutzen kann — die Beantwortung natürlichsprachlicher Fragen aus Ihrem Unternehmens-Suchindex mit zitierten Quellen. |Fess| ruft die OpenAI-API auf, um RAG über Ihre gecrawlten Dokumente mit GPT-Modellen auszuführen.
 
 OpenAI ist ein Cloud-Dienst, der leistungsstarke große Sprachmodelle (LLM) wie GPT-4 anbietet.
 |Fess| kann die OpenAI-API verwenden, um die AI-Suchmodus-Funktion zu realisieren.
@@ -691,3 +693,5 @@ Weiterführende Informationen
 - `OpenAI Pricing <https://openai.com/pricing>`__
 - :doc:`llm-overview` - Übersicht LLM-Integration
 - :doc:`rag-chat` - Details zur AI-Suchmodus-Funktion
+- :doc:`rank-fusion` - Hybride Suche: Kombination aus Keyword- und semantischer (Vektor-)Suche
+- :doc:`../user/chat-search` - Verwendung des AI-Suchmodus (Anwenderleitfaden)

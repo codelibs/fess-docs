@@ -7,7 +7,7 @@ Open Source Volltextsuchserver Fess
 
 Fess ist ein **"in 5 Minuten einfach zu erstellender Volltextsuchserver"**.
 
-Es handelt sich um eine Open-Source-Software für Enterprise Search (unternehmensinterne Suche), mit der sich im Unternehmen verstreute Dokumente – etwa auf Websites, Dateiservern oder in Datenbanken – seitenübergreifend per Volltextsuche durchsuchen lassen.
+Es handelt sich um eine Open-Source-Software für Enterprise Search (unternehmensinterne Suche), mit der sich im Unternehmen verstreute Dokumente – etwa auf Websites, Dateiservern oder in Datenbanken – seitenübergreifend per Volltextsuche durchsuchen lassen. Fess basiert auf OpenSearch (oder Elasticsearch) und bietet von Haus aus Schlüsselwort-, Facetten- und rollenbasierte Suche. Optionale Plugins ergänzen **semantische (Vektor-)Suche**, **Hybridsuche** und einen **AI-Suchmodus (RAG)**, der von LLMs wie Ollama, OpenAI und Google Gemini angetrieben wird.
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
@@ -68,7 +68,7 @@ Funktionen
 
 -  Bereitstellung unter Apache-Lizenz (kostenlose Nutzung als Freeware)
 
--  Crawling von Web, Dateisystemen, Windows-Freigabeordnern und Datenbanken
+-  Crawling von Web, Dateisystemen, Windows-Freigabeordnern und Datenbanken (Web-, Dateiserver- und Datenbank-Crawling)
 
 -  Unterstützung vieler Dateiformate wie MS Office (Word/Excel/PowerPoint) und PDF
 
@@ -113,6 +113,10 @@ Funktionen
 -  Unterstützung für externe Textextraktion wie OCR
 
 -  Flexibles Design je nach Verwendungszweck
+
+-  AI-Suchmodus (RAG: Retrieval-Augmented Generation) mit LLM-Integration – Ollama, OpenAI und Google Gemini (über ``fess-llm-*``-Plugins)
+
+-  Hybride Suche, die Schlüsselwortsuche (BM25) und semantische (Vektor-)Suche über das Semantic Search-Plugin kombiniert
 
 Nachrichten
 ===========
