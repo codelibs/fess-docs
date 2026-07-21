@@ -8,6 +8,7 @@ Descripción General
 Fess es "\ **un servidor de búsqueda de texto completo que se puede construir fácilmente en 5 minutos**\ ".
 
 Es un software de búsqueda empresarial (búsqueda interna corporativa) de código abierto que permite realizar búsquedas de texto completo de forma transversal en documentos dispersos en su organización, como sitios web, servidores de archivos y bases de datos.
+Complementos opcionales añaden **búsqueda semántica (vectorial)**, **búsqueda híbrida** y un **modo de búsqueda IA (RAG)** impulsado por modelos LLM como Ollama, OpenAI y Google Gemini.
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
@@ -55,7 +56,7 @@ Características
 
 -  Proporcionado bajo licencia Apache (software gratuito, disponible sin costo)
 
--  Rastreo de web, sistemas de archivos, carpetas compartidas de Windows y bases de datos
+-  Rastreo de web, sistemas de archivos, carpetas compartidas de Windows y bases de datos (rastreo web, de servidores de archivos y de bases de datos)
 
 -  Compatible con muchos formatos de archivo como MS Office (Word/Excel/PowerPoint) y PDF
 
@@ -100,6 +101,10 @@ Características
 -  Compatible con extracción de texto externo como OCR
 
 -  Diseño flexible que se puede adaptar según el caso de uso
+
+-  Modo de búsqueda IA (RAG: Retrieval-Augmented Generation) con integración LLM — Ollama, OpenAI y Google Gemini (mediante los plugins ``fess-llm-*``)
+
+-  Búsqueda híbrida que combina búsqueda por palabras clave (BM25) y búsqueda semántica (vectorial) mediante el plugin de Búsqueda Semántica
 
 Noticias
 ========
