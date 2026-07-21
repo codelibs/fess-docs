@@ -7,7 +7,9 @@ Aperçu
 
 Fess est un «\ **serveur de recherche plein texte facile à construire en 5 minutes**\ ».
 
-C'est un logiciel open source de recherche d'entreprise (recherche interne à l'entreprise) permettant d'effectuer une recherche plein texte transversale sur les documents dispersés au sein de l'entreprise, qu'ils proviennent de sites Web, de serveurs de fichiers ou de bases de données.
+C'est un logiciel open source de recherche d'entreprise (recherche interne à l'entreprise), construit sur OpenSearch (ou Elasticsearch), permettant d'effectuer une recherche plein texte transversale sur les documents dispersés au sein de l'entreprise, qu'ils proviennent de sites Web, de serveurs de fichiers ou de bases de données.
+
+Des plugins optionnels ajoutent la recherche sémantique (vectorielle), la recherche hybride, ainsi qu'un mode de recherche IA (RAG) propulsé par des LLM tels qu'Ollama, OpenAI et Google Gemini.
 
 .. figure:: ../resources/images/en/demo-1.png
    :scale: 100%
@@ -55,7 +57,7 @@ Caractéristiques
 
 -  Fourni sous licence Apache (gratuit car logiciel libre)
 
--  Crawl du Web, des systèmes de fichiers, des dossiers partagés Windows et des bases de données
+-  Crawl du Web, des systèmes de fichiers, des dossiers partagés Windows et des bases de données (exploration Web, serveur de fichiers et base de données)
 
 -  Prise en charge de nombreux formats de fichiers tels que MS Office (Word/Excel/PowerPoint) et PDF
 
@@ -100,6 +102,10 @@ Caractéristiques
 -  Prise en charge de l'extraction de texte externe comme l'OCR
 
 -  Conception flexible pour répondre à divers besoins
+
+-  Mode de recherche IA (RAG : Retrieval-Augmented Generation) avec intégration LLM — Ollama, OpenAI et Google Gemini (via les plugins ``fess-llm-*``)
+
+-  Recherche hybride combinant recherche par mots-clés (BM25) et recherche sémantique (vectorielle) via le plugin Semantic Search
 
 Actualités
 ========
