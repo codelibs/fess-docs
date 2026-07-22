@@ -5,7 +5,7 @@ Query Request
 Overview
 ========
 
-This page sends query request by JSON file to elasticsearch.
+This page sends query request by JSON file to OpenSearch.
 
 |image0|
 
@@ -19,7 +19,7 @@ Send Request
 ------------
 
 Type /admin/esreq/ to URL after logging in as admin user.
-Create JSON file which contains elasticsearch query DSL, select Request File and then click button to send the request to elasticsearch.
+Create JSON file which contains OpenSearch query DSL, select Request File and then click button to send the request to OpenSearch.
 
 Configurations
 --------------

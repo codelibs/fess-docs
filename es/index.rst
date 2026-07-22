@@ -64,7 +64,7 @@ Características
 
 -  Proporciona JavaScript para integración en sitios existentes
 
--  Utiliza OpenSearch o Elasticsearch como motor de búsqueda
+-  Utiliza OpenSearch como motor de búsqueda
 
 -  Puede buscar sitios con autenticación BASIC/DIGEST/NTLM/FORM
 

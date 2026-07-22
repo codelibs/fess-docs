@@ -112,7 +112,7 @@ DocumentParser
 Indexer
 ~~~~~~~
 
-- **Role**: Index registration in OpenSearch/Elasticsearch
+- **Role**: Index registration in OpenSearch
 - **Key Features**:
 
   - Document index creation
@@ -143,7 +143,7 @@ SearchService
 - **Key Features**:
 
   - Query parsing and optimization
-  - Query execution against OpenSearch/Elasticsearch
+  - Query execution against OpenSearch
   - Search result ranking
   - Faceted search support
   - Highlighting
@@ -296,7 +296,7 @@ SearchEngine
 - **Role**: Search engine integration
 - **Key Features**:
 
-  - Communication with OpenSearch/Elasticsearch
+  - Communication with OpenSearch
   - Index management
   - Query execution
   - Clustering support
