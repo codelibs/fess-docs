@@ -41,6 +41,7 @@
    search-scroll
    search-form-integration
    rank-fusion
+   search-semantic
 
 .. toctree::
    :maxdepth: 2
