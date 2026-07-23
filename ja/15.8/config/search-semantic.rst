@@ -44,10 +44,10 @@
      - 説明
    * - ``opensearch``
      - |Fess| 本体（内蔵）
-     - OpenSearch ML Commons にデプロイした埋め込みモデルを使用します。追加プラグイン不要。
+     - OpenSearch ML Commons にデプロイした埋め込みモデルを使用します。追加プラグイン不要。デフォルト設定値。
    * - ``ollama``
      - ``fess-llm-ollama`` プラグイン
-     - Ollama の埋め込みモデル（``nomic-embed-text`` 等）を使用します。デフォルト設定値。
+     - Ollama の埋め込みモデル（``nomic-embed-text`` 等）を使用します。
    * - ``openai``
      - ``fess-llm-openai`` プラグイン
      - OpenAI の埋め込みAPIを使用します。
@@ -82,7 +82,7 @@ system.properties の設定
      - ``false``
      - コンテンツチャンク機能全体のマスタースイッチ
    * - ``content_chunker.embedding.name``
-     - ``ollama``
+     - ``opensearch``
      - 埋め込みプロバイダ（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``）
    * - ``content_chunker.embedding.dimension``
      - （未設定）
