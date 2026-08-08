@@ -5,7 +5,7 @@
 概述
 ====
 
-**混合搜索**在 |Fess| 中结合了传统的关键词搜索（BM25）与**语义（向量）搜索**，并通过 **Rank Fusion** 将两组结果合并，以生成更准确、更相关的排名。Rank Fusion 会将多个搜索器的结果整合为单一的优化排名。
+**混合搜索**\ 在 |Fess| 中结合了传统的关键词搜索（BM25）与\ **语义（向量）搜索**，并通过 **Rank Fusion** 将两组结果合并，以生成更准确、更相关的排名。Rank Fusion 会将多个搜索器的结果整合为单一的优化排名。
 
 要启用语义搜索，请安装 Semantic Search 插件（``fess-webapp-semantic-search``），并在 ``-Drank.fusion.searchers`` 中添加 ``semantic``。
 

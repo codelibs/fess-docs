@@ -2,6 +2,10 @@
 Archives
 ==========
 
+This is an archive of |Fess| documentation for past versions, covering
+installation, search, administration, the API, and configuration. Choose
+the version you want below.
+
 15.6
 ~~~~
 

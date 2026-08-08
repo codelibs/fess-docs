@@ -1,6 +1,6 @@
-===========
-Búsqueda NOT
-===========
+====================================
+Búsqueda NOT (búsqueda de exclusión)
+====================================
 
 Cuando desea buscar documentos que no contengan una palabra específica (búsqueda de exclusión), puede utilizar la búsqueda NOT. Es útil cuando desea excluir palabras clave concretas de los resultados de búsqueda para reducir el ruido.
 

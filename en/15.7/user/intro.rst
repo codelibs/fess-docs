@@ -1,6 +1,6 @@
-============
-Introduction
-============
+=========================
+Introduction to Searching
+=========================
 
 Intended Audience
 =================

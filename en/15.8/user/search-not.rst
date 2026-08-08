@@ -1,6 +1,6 @@
-==========
-NOT Search
-==========
+============================
+NOT Search (Excluding Words)
+============================
 
 NOT search can be used to search for documents that do not contain a specific word. This is also called exclusion search, and it's useful when you want to reduce noise by excluding specific keywords from your search results.
 

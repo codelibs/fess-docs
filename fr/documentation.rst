@@ -1,6 +1,10 @@
-============
+=============
 Documentation
-============
+=============
+
+Voici la documentation actuelle de |Fess| sur l'installation, la recherche,
+l'administration, l'API et la configuration. Choisissez ci-dessous le sujet
+qui vous intéresse.
 
 .. toctree::
 

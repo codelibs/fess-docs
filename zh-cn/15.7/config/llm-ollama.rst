@@ -5,7 +5,7 @@ Ollama配置（本地 LLM / RAG）
 概述
 ====
 
-本页说明如何配置 ``fess-llm-ollama`` 插件，以便 |Fess| 使用本地部署的 Ollama 模型实现其**AI搜索模式（RAG：Retrieval-Augmented Generation）** —— 基于引用来源，直接从您的企业搜索索引回答自然语言问题，且无需将数据发送至外部 API。|Fess| 会调用本地 Ollama API，对已爬取的文档执行 RAG。
+本页说明如何配置 ``fess-llm-ollama`` 插件，以便 |Fess| 使用本地部署的 Ollama 模型实现其\ **AI搜索模式（RAG：Retrieval-Augmented Generation）** —— 基于引用来源，直接从您的企业搜索索引回答自然语言问题，且无需将数据发送至外部 API。|Fess| 会调用本地 Ollama API，对已爬取的文档执行 RAG。
 
 Ollama是用于在本地环境运行大型语言模型（LLM）的开源平台。
 |Fess| 的Ollama集成功能以插件 ``fess-llm-ollama`` 的形式提供，适合在私有环境中使用。

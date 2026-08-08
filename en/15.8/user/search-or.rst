@@ -1,6 +1,6 @@
-=========
-OR Search
-=========
+=============================
+OR Search (Matching Any Word)
+=============================
 
 Use OR search to find documents that contain any of the specified search terms. When multiple words are entered in the search input field, the default is AND search.
 

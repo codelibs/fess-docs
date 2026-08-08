@@ -1,6 +1,6 @@
-=============
-Recherche OR
-=============
+========================================
+Recherche OR (contenant l'un des termes)
+========================================
 
 La recherche OR est utilisée pour rechercher des documents contenant n'importe lequel des termes de recherche. Si vous saisissez plusieurs mots dans le champ de recherche, la recherche sera par défaut de type AND.
 

@@ -1,6 +1,6 @@
-===========
-NOT-Suche
-===========
+===========================
+NOT-Suche (Ausschlusssuche)
+===========================
 
 Wenn Sie nach Dokumenten suchen möchten, die ein bestimmtes Wort nicht enthalten, können Sie die NOT-Suche verwenden.
 Dies wird auch als Ausschlusssuche bezeichnet und ist hilfreich, wenn Sie bestimmte Schlüsselwörter aus den Suchergebnissen ausschließen und dadurch irrelevante Treffer reduzieren möchten.
