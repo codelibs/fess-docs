@@ -107,9 +107,6 @@ Versiones actualmente soportadas
    * - 15.0.x
      - 2026-12-01
      - 🟢 Con soporte
-   * - 14.19.x
-     - 2026-08-01
-     - 🟡 Proximo al fin de soporte
 .. GENERATED-END: supported-versions
 
 Versiones en fin de vida
@@ -121,6 +118,8 @@ Versiones en fin de vida
 
    * - Fess
      - Fecha de EOL
+   * - 14.19.x
+     - 2026-08-01
    * - 14.18.x
      - 2026-05-01
    * - 14.17.x
@@ -222,7 +221,7 @@ Versiones en fin de vida
    * - 10.3.x
      - 2018-05-24
    * - 10.2.x
-     - 2018-02-30
+     - 2018-02-28
    * - 10.1.x
      - 2017-12-09
    * - 10.0.x
