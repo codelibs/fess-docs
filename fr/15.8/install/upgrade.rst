@@ -309,6 +309,15 @@ Version Docker ::
 
 En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 
+.. note::
+
+   Les étapes ci-dessous relancent le crawl ; elles ne mettent pas à jour le mapping de l'index
+   (définitions des champs). Si vous avez besoin d'une réindexation qui met à jour le mapping —
+   par exemple pour activer nouvellement la recherche par vecteurs de chunks (recherche
+   sémantique) —, exécutez séparément la « Réindexation » sous « Informations système » →
+   « Maintenance » dans l'interface d'administration. Voir :ref:`semantic-search-migration`
+   (:doc:`../config/search-semantic`) pour plus de détails.
+
 1. Vérifiez la planification d'exploration existante
 2. Exécutez « Default Crawler » depuis « Système » → « Planificateur »
 3. Attendez la fin de l'exploration
@@ -393,6 +402,10 @@ Q : Est-il nécessaire de recréer l'index ?
 -------------------------------------------
 
 R : Pour une mise à niveau mineure, ce n'est généralement pas nécessaire, mais pour une mise à niveau majeure, la recréation est recommandée.
+Par ailleurs, si vous effectuez une mise à niveau depuis la version 15.7 ou antérieure vers la
+15.8 ou une version ultérieure et que vous souhaitez activer nouvellement la recherche par
+vecteurs de chunks (recherche sémantique), une réindexation est nécessaire, car l'index existant
+n'adopte pas le nouveau mapping. Voir :doc:`../config/search-semantic` pour plus de détails.
 
 Q : Les résultats de recherche ne s'affichent pas après la mise à niveau
 --------------------------------------------------------------------------
@@ -410,4 +423,6 @@ Une fois la mise à niveau terminée :
 
 - :doc:`run` - Vérification du démarrage et de la configuration initiale
 - :doc:`security` - Révision de la configuration de sécurité
+- :doc:`../config/search-semantic` - Configuration et étapes de migration de la recherche par
+  vecteurs de chunks (recherche sémantique)
 - Vérifiez les nouvelles fonctionnalités dans les notes de version

@@ -323,7 +323,7 @@ Sie sind als Referenz für die Entwicklung auf
    * - ``fess-webapp-mcp``
      - MCP-Server (Model Context Protocol)
    * - ``fess-webapp-semantic-search``
-     - Neuronale Suche/Vektorsuche
+     - Neuronale Suche/Vektorsuche (veraltet; abgelöst durch die Kernintegration in 15.8)
    * - ``fess-webapp-multimodal``
      - Multimodale Suche (Bild und Text)
 

@@ -7,7 +7,9 @@ Overview
 
 **Hybrid search** in |Fess| combines traditional keyword search (BM25) with **semantic (vector) search** and merges the two result sets with **Rank Fusion** to produce more accurate, more relevant rankings. Rank Fusion integrates the results of multiple searchers into a single optimized ranking.
 
-To enable semantic search, install the Semantic Search plugin (``fess-webapp-semantic-search``) and add ``semantic`` to ``-Drank.fusion.searchers``.
+In |Fess| 15.8, semantic search (content chunking + vector search) is provided as a core
+feature. Once you enable it, the semantic searcher is registered with Rank Fusion automatically.
+See :doc:`search-semantic` for how to configure it.
 
 The Rank Fusion feature of |Fess| integrates multiple search results to
 provide more accurate search results.
@@ -94,23 +96,39 @@ The searchers to use are specified as a JVM system property. Add the following t
 ``fess.in.sh`` (or ``fess.in.bat``)::
 
     # Specify searchers (comma-separated)
-    -Drank.fusion.searchers=default,semantic
+    -Drank.fusion.searchers=default,semantic_chunk
 
 This property behaves as follows:
 
 - It is set as a JVM option, not in ``fess_config.properties``.
 - ``default`` is the searcher that performs standard keyword search and is always available.
-- ``semantic`` is the searcher that performs semantic (vector) search and is available when the Semantic Search plugin (``fess-webapp-semantic-search``) is installed.
-- If this property is not specified, all registered searchers are used. If none of the specified names match a registered searcher, only the ``default`` searcher is used.
+- A searcher's name is derived from its implementation class name by removing the trailing
+  ``Searcher`` and decamelizing the remainder into lowercase snake_case
+  (``SemanticChunkSearcher`` → ``semantic_chunk``). The core-integrated semantic searcher
+  (:doc:`search-semantic`) is registered under the name ``semantic_chunk``.
+- If this property is not specified, all registered searchers are used. If none of the specified names match a registered searcher, only the ``default`` searcher is used. If you use the core-integrated semantic searcher (:doc:`search-semantic`), you normally do not need to set this property at all.
 - Result fusion is performed only when two or more searchers are available. When only one searcher is available, no fusion is performed and normal search results are returned.
+
+.. warning::
+
+   If you previously used the ``fess-webapp-semantic-search`` plugin from |Fess| 15.7 or earlier,
+   you may have been told to set this property to
+   ``-Drank.fusion.searchers=default,semantic``. That plugin registered its searcher under the
+   name ``semantic``, which is a **different searcher** from the core-integrated searcher's name,
+   ``semantic_chunk``, introduced in 15.8. If you carry that 15.7-era setting forward into 15.8
+   as-is, the allowlist never includes ``semantic_chunk``, so the core-integrated semantic search
+   (content chunking + vector search) **does not work at all** — |Fess| silently keeps returning
+   ordinary keyword search results (a warning is logged at startup, but the per-request exclusion
+   itself is only logged at DEBUG level). If your configuration specifies
+   ``default,semantic``, either remove this setting or add ``semantic_chunk`` to it. See
+   "Migrating from 15.7 or Earlier" in :doc:`search-semantic` for details.
 
 Integration with Hybrid Search
 ===============================
 
 Rank Fusion is particularly effective for hybrid search, which combines keyword
-search and semantic search. To use semantic search, install the Semantic Search
-plugin (``fess-webapp-semantic-search``) and add ``semantic`` to
-``-Drank.fusion.searchers``.
+search and semantic search. To use semantic search, configure the content chunking feature and
+set ``content_chunker.search.enabled=true``. See :doc:`search-semantic` for details.
 
 Usage Examples
 ==============

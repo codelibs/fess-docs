@@ -310,6 +310,15 @@ Paso 7: Recreación del Índice (Recomendado)
 
 Para actualizaciones de versión principal, se recomienda recrear el índice.
 
+.. note::
+
+   Los pasos siguientes vuelven a ejecutar el rastreo; no actualizan el mapeo del índice
+   (definiciones de campos). Si necesita una reindexación que actualice el mapeo — por ejemplo,
+   para habilitar recién la búsqueda por vector de chunks (búsqueda semántica) —, ejecute por
+   separado la "Reindexación" en "Información del sistema" → "Mantenimiento" en la interfaz de
+   administración. Consulte :ref:`semantic-search-migration` (:doc:`../config/search-semantic`)
+   para más detalles.
+
 1. Verifique los programas de rastreo existentes
 2. Ejecute "Default Crawler" desde "Sistema" → "Programador"
 3. Espere hasta que se complete el rastreo
@@ -396,6 +405,10 @@ P: ¿Es necesario recrear el índice?
 ------------------------------------
 
 R: Generalmente no es necesario para actualizaciones de versión menor, pero se recomienda la recreación para actualizaciones de versión principal.
+Además, si está actualizando desde la versión 15.7 o anterior a la 15.8 o posterior y desea
+habilitar recién la búsqueda por vector de chunks (búsqueda semántica), es necesaria la
+reindexación, ya que el índice existente no adopta el nuevo mapeo. Consulte
+:doc:`../config/search-semantic` para más detalles.
 
 P: Después de la actualización, no se muestran los resultados de búsqueda
 --------------------------------------------------------------------------
@@ -413,4 +426,6 @@ Una vez completada la actualización:
 
 - :doc:`run` - Verificación de inicio y configuración inicial
 - :doc:`security` - Revisión de configuración de seguridad
+- :doc:`../config/search-semantic` - Configuración y pasos de migración de la búsqueda por
+  vector de chunks (búsqueda semántica)
 - Verifique las notas de lanzamiento para nuevas funciones

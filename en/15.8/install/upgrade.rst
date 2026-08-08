@@ -307,6 +307,14 @@ Step 7: Recreate Index (Recommended)
 
 For major version upgrades, it is recommended to recreate the index.
 
+.. note::
+
+   The steps below re-run the crawl; they do not update the index mapping (field definitions).
+   If you need a re-index that updates the mapping — for example, to newly enable chunk-vector
+   search (semantic search) — separately run "Re-indexing" under "System Info" → "Maintenance" in
+   the admin UI. See :ref:`semantic-search-migration` (in :doc:`../config/search-semantic`) for
+   details.
+
 1. Verify existing crawl schedules
 2. Execute "Default Crawler" from "System" → "Scheduler"
 3. Wait for crawl to complete
@@ -390,6 +398,9 @@ Q: Do I need to recreate the index?
 ------------------------------------
 
 A: For minor version upgrades, it is usually not necessary, but for major version upgrades, recreation is recommended.
+Also, if you are upgrading from 15.7 or earlier to 15.8 or later and want to newly enable
+chunk-vector search (semantic search), re-indexing is required, since the existing index does not
+pick up the new mapping. See :doc:`../config/search-semantic` for details.
 
 Q: Search results are not displayed after upgrade
 --------------------------------------------------
@@ -407,4 +418,5 @@ After the upgrade is complete:
 
 - :doc:`run` - Verify startup and initial configuration
 - :doc:`security` - Review security configuration
+- :doc:`../config/search-semantic` - Chunk-vector search (semantic search) configuration and migration steps
 - Check release notes for new features

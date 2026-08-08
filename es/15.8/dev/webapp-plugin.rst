@@ -325,7 +325,8 @@ referencia para el desarrollo:
    * - ``fess-webapp-mcp``
      - Servidor MCP (Model Context Protocol)
    * - ``fess-webapp-semantic-search``
-     - Búsqueda neuronal/búsqueda vectorial
+     - Búsqueda neuronal/búsqueda vectorial (obsoleto; reemplazado por la integración en el
+       núcleo en la 15.8)
    * - ``fess-webapp-multimodal``
      - Búsqueda multimodal (imágenes y texto)
 

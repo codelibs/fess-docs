@@ -305,7 +305,7 @@ REST API 추가(fess_api++.xml)
    * - ``fess-webapp-mcp``
      - MCP(Model Context Protocol) 서버
    * - ``fess-webapp-semantic-search``
-     - 뉴럴 검색/벡터 검색
+     - 뉴럴 검색/벡터 검색(사용 중단됨; 15.8의 코어 통합 기능으로 대체됨)
    * - ``fess-webapp-multimodal``
      - 멀티모달(이미지·텍스트) 검색
 

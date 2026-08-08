@@ -5,9 +5,10 @@
 概述
 ====
 
-**混合搜索**在 |Fess| 中结合了传统的关键词搜索（BM25）与**语义（向量）搜索**，并通过 **Rank Fusion** 将两组结果合并，以生成更准确、更相关的排名。Rank Fusion 会将多个搜索器的结果整合为单一的优化排名。
+**混合搜索**\ 在 |Fess| 中结合了传统的关键词搜索（BM25）与\ **语义（向量）搜索**，并通过 **Rank Fusion** 将两组结果合并，以生成更准确、更相关的排名。Rank Fusion 会将多个搜索器的结果整合为单一的优化排名。
 
-要启用语义搜索，请安装 Semantic Search 插件（``fess-webapp-semantic-search``），并在 ``-Drank.fusion.searchers`` 中添加 ``semantic``。
+在 |Fess| 15.8 中，语义搜索（内容分块 + 向量搜索）作为核心功能提供。启用后，语义搜索器会自动
+注册到 Rank Fusion 中。有关如何配置，请参阅 :doc:`search-semantic`。
 
 |Fess| 的 Rank Fusion 功能可以整合多个搜索结果，
 提供更精确的搜索结果。
@@ -92,23 +93,35 @@ JVM 系统属性
 在 ``fess.in.sh``\ （或 ``fess.in.bat``）中添加如下内容::
 
     # 指定使用的搜索器（逗号分隔）
-    -Drank.fusion.searchers=default,semantic
+    -Drank.fusion.searchers=default,semantic_chunk
 
 此属性的行为如下：
 
 - 以 JVM 选项形式设置，而非在 ``fess_config.properties`` 中配置。
 - ``default`` 是执行标准关键词搜索的搜索器，始终可用。
-- ``semantic`` 是执行语义搜索（向量搜索）的搜索器，安装 Semantic Search 插件（``fess-webapp-semantic-search``）后可用。
-- 若未指定此属性，将使用所有已注册的搜索器。若指定的名称与任何已注册搜索器均不匹配，则仅使用 ``default`` 搜索器。
+- 搜索器的名称由其实现类名去掉末尾的 ``Searcher``\ ，再转换为小写蛇形命名（snake_case）得来
+  （``SemanticChunkSearcher`` → ``semantic_chunk``）。核心集成的语义搜索器
+  （:doc:`search-semantic`）注册的名称为 ``semantic_chunk``\ 。
+- 若未指定此属性，将使用所有已注册的搜索器。若指定的名称与任何已注册搜索器均不匹配，则仅使用 ``default`` 搜索器。如果您使用核心集成的语义搜索器（:doc:`search-semantic`），通常完全不需要设置此属性。
 - 结果融合仅在可用搜索器为 2 个或以上时执行。若只有 1 个搜索器可用，则不进行融合，直接返回普通搜索结果。
+
+.. warning::
+
+   如果您此前在 |Fess| 15.7 或更早版本中使用过 ``fess-webapp-semantic-search`` 插件，可能曾被
+   告知要将此属性设置为 ``-Drank.fusion.searchers=default,semantic``\ 。该插件将其搜索器注册为
+   名称 ``semantic``\ ，这与 15.8 中引入的核心集成搜索器名称 ``semantic_chunk`` 是\ **不同的
+   搜索器**\ 。如果您原样将这个 15.7 时代的设置带入 15.8，允许列表中将永远不包含
+   ``semantic_chunk``\ ，导致核心集成的语义搜索（内容分块 + 向量搜索）\ **完全无法工作**\ ——|Fess|
+   会静默地继续返回普通关键词搜索结果（启动时会记录一条警告日志，但每次请求的排除行为本身仅以
+   DEBUG 级别记录）。如果您的配置中指定了 ``default,semantic``\ ，请移除该设置，或为其添加
+   ``semantic_chunk``\ 。详情请参阅 :doc:`search-semantic` 中的“从 15.7 及更早版本迁移”一节。
 
 与混合搜索的集成
 ================
 
 Rank Fusion 在结合关键词搜索与语义搜索的
-混合搜索中尤为有效。
-要使用语义搜索，需安装 Semantic Search 插件（``fess-webapp-semantic-search``），
-并在 ``-Drank.fusion.searchers`` 中添加 ``semantic``\ 。
+混合搜索中尤为有效。要使用语义搜索，请配置内容分块功能并设置
+``content_chunker.search.enabled=true``\ 。详情请参阅 :doc:`search-semantic`\ 。
 
 使用示例
 ========

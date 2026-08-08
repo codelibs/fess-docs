@@ -10,7 +10,7 @@ Esta funcionalidad permite a los usuarios obtener información mediante un diál
 
 La funcionalidad de integración con LLM se proporciona como plugins ``fess-llm-*``. Instale el plugin correspondiente al proveedor LLM que desea utilizar.
 
-El modo de búsqueda IA obtiene los documentos a través del pipeline estándar de búsqueda de |Fess| (rank fusion), no de un índice vectorial independiente; por defecto se utiliza búsqueda por palabras clave (BM25). Como reutiliza este pipeline, si instala y configura el plugin de Búsqueda Semántica, su buscador semántico (vectorial) participa en el rank fusion de todas las búsquedas, incluido el paso de recuperación del modo de búsqueda IA; no se requiere ninguna configuración específica para el modo de búsqueda IA. Consulte :doc:`rank-fusion`.
+El modo de búsqueda IA obtiene los documentos a través del pipeline estándar de búsqueda de |Fess| (rank fusion), no de un índice vectorial independiente; por defecto se utiliza búsqueda por palabras clave (BM25). Como reutiliza este pipeline, si habilita la búsqueda semántica integrada en el núcleo (chunking de contenido + búsqueda vectorial), su buscador semántico participa en el rank fusion de todas las búsquedas, incluido el paso de recuperación del modo de búsqueda IA. Para que el buscador semántico participe no se requiere ninguna configuración específica del modo de búsqueda IA; no obstante, el número de chunks que se pasan a la generación de la respuesta se puede ajustar con ``content_chunker.chat.top_k``. Consulte :doc:`rank-fusion` y :doc:`search-semantic`.
 
 Proveedores compatibles
 =======================
