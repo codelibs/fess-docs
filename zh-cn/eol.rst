@@ -74,6 +74,7 @@ Fess 的 EOL 日期是发布后约 1 年半后的日期。
 当前支持的版本
 ------------------------
 
+.. GENERATED-BEGIN: supported-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{3cm}|p{4cm}|p{3cm}|
 .. list-table::
    :header-rows: 1
@@ -109,10 +110,12 @@ Fess 的 EOL 日期是发布后约 1 年半后的日期。
    * - 14.19.x
      - 2026-08-01
      - 🟡 即将终止支持
+.. GENERATED-END: supported-versions
 
 已终止支持的版本
 ------------------------
 
+.. GENERATED-BEGIN: eol-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
@@ -250,6 +253,7 @@ Fess 的 EOL 日期是发布后约 1 年半后的日期。
      - 2011-07-16
    * - 1.x
      - 2011-04-10
+.. GENERATED-END: eol-versions
 
 常见问题
 ==========================
