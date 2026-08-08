@@ -1,3 +1,5 @@
+:canonical: admin-analyzer
+
 ======================
 Analyzer Configuration
 ======================

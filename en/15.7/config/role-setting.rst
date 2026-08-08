@@ -1,3 +1,5 @@
+:canonical: security-role
+
 ===============================
 Role-Based Search Configuration
 ===============================

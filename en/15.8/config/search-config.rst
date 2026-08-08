@@ -1,3 +1,5 @@
+:canonical: search-advanced
+
 =======================
 Search-Related Settings
 =======================
