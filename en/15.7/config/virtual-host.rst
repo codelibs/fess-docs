@@ -1,3 +1,5 @@
+:canonical: security-virtual-host
+
 ============
 Virtual Host
 ============

@@ -1,3 +1,5 @@
+:canonical: admin-index-backup
+
 ================
 Index Management
 ================
