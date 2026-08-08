@@ -5,7 +5,7 @@ Google Gemini配置（AI 搜索 / RAG）
 概述
 ====
 
-本页说明如何配置 ``fess-llm-gemini`` 插件，以便 |Fess| 使用 Google Gemini 实现其**AI搜索模式（RAG：Retrieval-Augmented Generation）** —— 基于引用来源，直接从您的企业搜索索引回答自然语言问题。|Fess| 会调用 Google AI API（Generative Language API），使用 Gemini 模型对已爬取的文档执行 RAG。
+本页说明如何配置 ``fess-llm-gemini`` 插件，以便 |Fess| 使用 Google Gemini 实现其\ **AI搜索模式（RAG：Retrieval-Augmented Generation）** —— 基于引用来源，直接从您的企业搜索索引回答自然语言问题。|Fess| 会调用 Google AI API（Generative Language API），使用 Gemini 模型对已爬取的文档执行 RAG。
 
 Google Gemini是Google公司提供的最先进的大型语言模型（LLM）。
 |Fess| 可以使用Google AI API（Generative Language API）通过Gemini模型实现AI搜索模式功能。
