@@ -1,6 +1,6 @@
-============================================================
-Teil 13: Multi-Tenant-Suchplattform -- Eine einzelne Fess-Instanz fuer mehrere Organisationen
-============================================================
+===================================
+Teil 13: Multi-Tenant-Suchplattform
+===================================
 
 Einfuehrung
 ============

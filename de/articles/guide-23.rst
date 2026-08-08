@@ -1,5 +1,5 @@
 ============================================================
-Teil 23: Blaupause einer unternehmensweiten Wissensplattform -- Grand Design einer auf Fess basierenden Infrastruktur zur Informationsnutzung
+Teil 23: Blaupause einer unternehmensweiten Wissensplattform
 ============================================================
 
 Einleitung

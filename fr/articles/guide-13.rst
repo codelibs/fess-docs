@@ -1,6 +1,6 @@
-============================================================
-Partie 13 : Plateforme de recherche multi-tenant -- Concevoir une seule instance Fess pour servir plusieurs organisations
-============================================================
+================================================
+Partie 13 : Plateforme de recherche multi-tenant
+================================================
 
 Introduction
 =============

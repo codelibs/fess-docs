@@ -1,6 +1,6 @@
-============================================================
-Parte 13: Plataforma de busqueda multi-tenant -- Diseno de una unica instancia de Fess para servir a multiples organizaciones
-============================================================
+=============================================
+Parte 13: Plataforma de busqueda multi-tenant
+=============================================
 
 Introduccion
 =============

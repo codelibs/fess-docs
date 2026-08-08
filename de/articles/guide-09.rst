@@ -1,6 +1,6 @@
-===========================================================================
-Teil 9: Suchinfrastruktur fuer mehrsprachige Organisationen -- Aufbau einer Umgebung zur korrekten Suche in japanischen, englischen und chinesischen Dokumenten
-===========================================================================
+===========================================================
+Teil 9: Suchinfrastruktur fuer mehrsprachige Organisationen
+===========================================================
 
 Einfuehrung
 ============

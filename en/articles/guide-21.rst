@@ -1,6 +1,6 @@
-============================================================
-Part 21: Cross-Searching Images and Text -- Next-Generation Knowledge Management with Multimodal Search
-============================================================
+========================================
+Part 21: Cross-Searching Images and Text
+========================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Teil 8: Suchqualitat pflegen -- Ein Suchtuning-Zyklus auf Basis von Nutzerverhaltendaten
-============================================================
+============================
+Teil 8: Suchqualitat pflegen
+============================
 
 Einleitung
 ==========

@@ -1,6 +1,6 @@
-============================================================
-Teil 15: Sichere Suchinfrastruktur -- SSO-Integration und Suchzugriffskontrolle in einer Zero-Trust-Umgebung
-============================================================
+==================================
+Teil 15: Sichere Suchinfrastruktur
+==================================
 
 Einleitung
 ==========

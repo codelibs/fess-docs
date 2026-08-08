@@ -1,6 +1,6 @@
-============================================================
-Teil 22: Eine Wissenslandkarte der Organisation aus Suchdaten zeichnen -- Informationsnutzung im Analyse-Dashboard verstehen
-============================================================
+======================================================================
+Teil 22: Eine Wissenslandkarte der Organisation aus Suchdaten zeichnen
+======================================================================
 
 Einleitung
 ==========

@@ -1,6 +1,6 @@
-============================================================
-Parte 4: Buscar archivos dispersos de forma centralizada -- Construir una busqueda transversal en un entorno multiorigen
-============================================================
+========================================================
+Parte 4: Buscar archivos dispersos de forma centralizada
+========================================================
 
 Introduccion
 ============

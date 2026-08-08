@@ -1,6 +1,6 @@
-===========================================================================
-Parte 11: Ampliar sistemas existentes con la API de busqueda -- Patrones de integracion con CRM y sistemas internos
-===========================================================================
+============================================================
+Parte 11: Ampliar sistemas existentes con la API de busqueda
+============================================================
 
 Introduccion
 =============

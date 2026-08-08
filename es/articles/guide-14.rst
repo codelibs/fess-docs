@@ -1,6 +1,6 @@
-============================================================
-Parte 14: Estrategias de escalado para sistemas de busqueda -- Expansion gradual de pequena a gran escala
-============================================================
+===========================================================
+Parte 14: Estrategias de escalado para sistemas de busqueda
+===========================================================
 
 Introduccion
 =============

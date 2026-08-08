@@ -1,6 +1,6 @@
-============================================================
-Teil 4 Verstreute Dateien zentral durchsuchen -- Quellenuebergreifende Suche in Multi-Source-Umgebungen
-============================================================
+=============================================
+Teil 4 Verstreute Dateien zentral durchsuchen
+=============================================
 
 Einfuehrung
 ============

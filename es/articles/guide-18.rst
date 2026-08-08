@@ -1,6 +1,6 @@
-============================================================
-Parte 18: Fundamentos de la busqueda con IA -- Evolucion de la busqueda por palabras clave a la busqueda semantica
-============================================================
+===========================================
+Parte 18: Fundamentos de la busqueda con IA
+===========================================
 
 Introduccion
 =============

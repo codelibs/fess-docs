@@ -1,6 +1,6 @@
-============================================================
-Part 17: Extending Search with Plugins -- Implementing Custom Data Sources and Ingest Pipelines
-============================================================
+======================================
+Part 17: Extending Search with Plugins
+======================================
 
 Introduction
 ============

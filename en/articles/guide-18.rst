@@ -1,6 +1,6 @@
-============================================================
-Part 18: Fundamentals of AI Search -- Evolution from Keyword Search to Semantic Search
-============================================================
+==================================
+Part 18: Fundamentals of AI Search
+==================================
 
 Introduction
 ============

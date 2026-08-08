@@ -1,6 +1,6 @@
-============================================================
-Part 13: Multi-Tenant Search Platform -- Designing a Single Fess Instance to Serve Multiple Organizations
-============================================================
+=====================================
+Part 13: Multi-Tenant Search Platform
+=====================================
 
 Introduction
 ============

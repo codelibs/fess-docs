@@ -1,6 +1,6 @@
-============================================================
-Part 20: Connecting AI Agents with Search -- Integrating Fess into External AI Tools via MCP Server
-============================================================
+=========================================
+Part 20: Connecting AI Agents with Search
+=========================================
 
 Introduction
 ============

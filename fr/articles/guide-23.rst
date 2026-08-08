@@ -1,6 +1,6 @@
-============================================================
-Partie 23 : Plan directeur d'une plateforme de connaissances a l'echelle de l'entreprise -- Grand design d'une infrastructure d'exploitation de l'information centree sur Fess
-============================================================
+========================================================================================
+Partie 23 : Plan directeur d'une plateforme de connaissances a l'echelle de l'entreprise
+========================================================================================
 
 Introduction
 ============

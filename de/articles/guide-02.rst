@@ -1,6 +1,6 @@
-============================================================
-Teil 2: Das Sucherlebnis in 5 Minuten -- Erster Kontakt mit Fess per Docker Compose
-============================================================
+=====================================
+Teil 2: Das Sucherlebnis in 5 Minuten
+=====================================
 
 Einleitung
 ==========

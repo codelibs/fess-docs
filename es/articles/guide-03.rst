@@ -1,6 +1,6 @@
-============================================================
-Parte 3: Integrar la búsqueda en un portal corporativo -- Escenario para agregar funcionalidad de búsqueda a un sitio web existente
-============================================================
+======================================================
+Parte 3: Integrar la búsqueda en un portal corporativo
+======================================================
 
 Introducción
 ============

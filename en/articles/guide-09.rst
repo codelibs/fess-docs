@@ -1,6 +1,6 @@
-===========================================================================
-Part 9: Search Infrastructure for Multilingual Organizations -- Building an Environment to Properly Search Documents in Japanese, English, and Chinese
-===========================================================================
+============================================================
+Part 9: Search Infrastructure for Multilingual Organizations
+============================================================
 
 Introduction
 ============

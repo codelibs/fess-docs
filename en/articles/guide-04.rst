@@ -1,6 +1,6 @@
-============================================================
-Part 4: Unified Search Across Scattered Files -- Building Cross-Search for Multi-Source Environments
-============================================================
+=============================================
+Part 4: Unified Search Across Scattered Files
+=============================================
 
 Introduction
 ============

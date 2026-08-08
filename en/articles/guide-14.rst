@@ -1,6 +1,6 @@
-============================================================
-Part 14: Scaling Strategies for Search Systems -- Gradual Expansion from Small to Large Scale
-============================================================
+==============================================
+Part 14: Scaling Strategies for Search Systems
+==============================================
 
 Introduction
 ============

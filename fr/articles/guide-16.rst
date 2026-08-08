@@ -1,6 +1,6 @@
-============================================================
-Partie 16 : Automatisation de l'infrastructure de recherche -- Gestion avec les pipelines CI/CD et l'Infrastructure as Code
-============================================================
+===========================================================
+Partie 16 : Automatisation de l'infrastructure de recherche
+===========================================================
 
 Introduction
 =============

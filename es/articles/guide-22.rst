@@ -1,6 +1,6 @@
-============================================================
-Parte 22: Dibujando un mapa de conocimiento organizacional a partir de datos de busqueda -- Comprendiendo el uso de la informacion a traves del panel de analisis
-============================================================
+========================================================================================
+Parte 22: Dibujando un mapa de conocimiento organizacional a partir de datos de busqueda
+========================================================================================
 
 Introduccion
 =============

@@ -1,6 +1,6 @@
-============================================================
-Parte 1 Por que las empresas necesitan busqueda -- Desafios del aprovechamiento del conocimiento en la era de la sobrecarga de informacion
-============================================================
+===============================================
+Parte 1 Por que las empresas necesitan busqueda
+===============================================
 
 Introduccion
 ============

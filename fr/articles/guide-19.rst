@@ -1,6 +1,6 @@
-============================================================
-Partie 19 : Construction d'un assistant IA interne -- Un systeme de questions-reponses base sur la recherche avec RAG
-============================================================
+==================================================
+Partie 19 : Construction d'un assistant IA interne
+==================================================
 
 Introduction
 ============

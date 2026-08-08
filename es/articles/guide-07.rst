@@ -1,6 +1,6 @@
-============================================================
-Parte 7: Estrategia de busqueda en la era del almacenamiento en la nube -- Busqueda cruzada en Google Drive, SharePoint y Box
-============================================================
+=======================================================================
+Parte 7: Estrategia de busqueda en la era del almacenamiento en la nube
+=======================================================================
 
 Introduccion
 ============

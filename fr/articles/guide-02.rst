@@ -1,6 +1,6 @@
-============================================================
-Partie 2 : Decouvrir la recherche en 5 minutes -- Premier contact avec Fess via Docker Compose
-============================================================
+==============================================
+Partie 2 : Decouvrir la recherche en 5 minutes
+==============================================
 
 Introduction
 ============

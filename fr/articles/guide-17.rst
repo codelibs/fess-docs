@@ -1,6 +1,6 @@
-============================================================
-Partie 17 : Etendre la recherche avec des plugins -- Implementation de sources de donnees personnalisees et de pipelines Ingest
-============================================================
+=================================================
+Partie 17 : Etendre la recherche avec des plugins
+=================================================
 
 Introduction
 ============

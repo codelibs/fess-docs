@@ -1,6 +1,6 @@
-============================================================
-Part 7: Search Strategy for the Cloud Storage Era -- Cross-Search Across Google Drive, SharePoint, and Box
-============================================================
+=================================================
+Part 7: Search Strategy for the Cloud Storage Era
+=================================================
 
 Introduction
 ============

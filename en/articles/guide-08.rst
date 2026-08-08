@@ -1,6 +1,6 @@
-============================================================
-Part 8: Growing Search Quality -- A Search Tuning Cycle Based on User Behavior Data
-============================================================
+==============================
+Part 8: Growing Search Quality
+==============================
 
 Introduction
 ============

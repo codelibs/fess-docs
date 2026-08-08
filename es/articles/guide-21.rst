@@ -1,6 +1,6 @@
-============================================================
-Parte 21: Busqueda cruzada de imagenes y texto -- Gestion del conocimiento de nueva generacion con busqueda multimodal
-============================================================
+==============================================
+Parte 21: Busqueda cruzada de imagenes y texto
+==============================================
 
 Introduccion
 =============

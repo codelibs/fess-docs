@@ -1,6 +1,6 @@
-============================================================
-Part 3: Embedding Search into an Internal Portal -- Adding Search to Existing Websites
-============================================================
+================================================
+Part 3: Embedding Search into an Internal Portal
+================================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Partie 6 : Hub de connaissances pour les equipes de developpement -- Recherche unifiee dans le code, les wikis et les tickets
-============================================================
+=================================================================
+Partie 6 : Hub de connaissances pour les equipes de developpement
+=================================================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-===========================================================================
-Part 1: Why Enterprises Need Search -- Knowledge Utilization in the Age of Information Overload
-===========================================================================
+===================================
+Part 1: Why Enterprises Need Search
+===================================
 
 Introduction
 ============

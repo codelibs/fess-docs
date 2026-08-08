@@ -1,6 +1,6 @@
-===========================================================================
-Teil 10: Stabiler Betrieb eines Suchsystems -- Monitoring, Backup und Störungsbehebung in der Praxis
-===========================================================================
+===========================================
+Teil 10: Stabiler Betrieb eines Suchsystems
+===========================================
 
 Einleitung
 ==========

@@ -1,6 +1,6 @@
-============================================================
-Partie 15 : Infrastructure de recherche securisee -- Integration SSO et controle d'acces a la recherche dans un environnement Zero Trust
-============================================================
+=================================================
+Partie 15 : Infrastructure de recherche securisee
+=================================================
 
 Introduction
 =============

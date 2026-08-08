@@ -1,6 +1,6 @@
-============================================================
-Partie 14 : Strategies de mise a l'echelle des systemes de recherche -- Extension progressive de la petite a la grande echelle
-============================================================
+====================================================================
+Partie 14 : Strategies de mise a l'echelle des systemes de recherche
+====================================================================
 
 Introduction
 =============

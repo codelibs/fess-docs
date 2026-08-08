@@ -1,6 +1,6 @@
-============================================================
-Part 22: Drawing an Organizational Knowledge Map from Search Data -- Understanding Information Utilization through the Analytics Dashboard
-============================================================
+=================================================================
+Part 22: Drawing an Organizational Knowledge Map from Search Data
+=================================================================
 
 Introduction
 ============

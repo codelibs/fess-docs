@@ -1,6 +1,6 @@
-============================================================
-Teil 20: KI-Agenten mit der Suche verbinden -- Fess über MCP-Server in externe KI-Tools integrieren
-============================================================
+===========================================
+Teil 20: KI-Agenten mit der Suche verbinden
+===========================================
 
 Einführung
 ==========

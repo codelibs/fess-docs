@@ -1,6 +1,6 @@
-============================================================
-Parte 15: Infraestructura de busqueda segura -- Integracion SSO y control de acceso a la busqueda en un entorno de confianza cero
-============================================================
+============================================
+Parte 15: Infraestructura de busqueda segura
+============================================
 
 Introduccion
 =============
