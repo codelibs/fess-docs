@@ -1,6 +1,6 @@
-===========================================================================
-Partie 9 : Infrastructure de recherche pour les organisations multilingues -- Mise en place d'un environnement pour rechercher correctement des documents en japonais, anglais et chinois
-===========================================================================
+==========================================================================
+Partie 9 : Infrastructure de recherche pour les organisations multilingues
+==========================================================================
 
 Introduction
 =============

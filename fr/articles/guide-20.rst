@@ -1,6 +1,6 @@
-============================================================
-Partie 20 : Connecter les agents IA a la recherche -- Integrer Fess dans des outils IA externes via le serveur MCP
-============================================================
+==================================================
+Partie 20 : Connecter les agents IA a la recherche
+==================================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Teil 19: Aufbau eines internen KI-Assistenten -- Ein suchbasiertes Frage-Antwort-System mit RAG
-============================================================
+=============================================
+Teil 19: Aufbau eines internen KI-Assistenten
+=============================================
 
 Einleitung
 ==========

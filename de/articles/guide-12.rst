@@ -1,6 +1,6 @@
-============================================================
-Teil 12: SaaS-Daten durchsuchbar machen -- Integrationsszenarien mit Salesforce und Datenbanken
-============================================================
+=======================================
+Teil 12: SaaS-Daten durchsuchbar machen
+=======================================
 
 Einleitung
 ==========

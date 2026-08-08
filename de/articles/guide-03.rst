@@ -1,6 +1,6 @@
-============================================================
-Teil 3: Suche in ein internes Portal einbetten -- Szenario zur Integration einer Suchfunktion in bestehende Websites
-============================================================
+==============================================
+Teil 3: Suche in ein internes Portal einbetten
+==============================================
 
 Einleitung
 ==========

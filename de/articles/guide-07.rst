@@ -1,6 +1,6 @@
-============================================================
-Teil 7 Suchstrategien im Zeitalter von Cloud-Speicher -- Dienstuebergreifende Suche in Google Drive, SharePoint und Box
-============================================================
+=====================================================
+Teil 7 Suchstrategien im Zeitalter von Cloud-Speicher
+=====================================================
 
 Einfuehrung
 ============

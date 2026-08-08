@@ -1,6 +1,6 @@
-============================================================
-Teil 18: Grundlagen der KI-Suche -- Entwicklung von der Schluesselwortsuche zur semantischen Suche
-============================================================
+================================
+Teil 18: Grundlagen der KI-Suche
+================================
 
 Einfuehrung
 ============

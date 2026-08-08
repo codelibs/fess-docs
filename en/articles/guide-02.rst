@@ -1,6 +1,6 @@
-============================================================
-Part 2: A 5-Minute Search Experience -- First Contact with Fess Using Docker Compose
-============================================================
+====================================
+Part 2: A 5-Minute Search Experience
+====================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Part 12: Making SaaS Data Searchable -- Integration Scenarios with Salesforce and Databases
-============================================================
+====================================
+Part 12: Making SaaS Data Searchable
+====================================
 
 Introduction
 ============

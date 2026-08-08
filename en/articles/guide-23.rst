@@ -1,6 +1,6 @@
-============================================================
-Part 23: Blueprint for a Company-Wide Knowledge Platform -- Grand Design for an Information Utilization Infrastructure Centered on Fess
-============================================================
+========================================================
+Part 23: Blueprint for a Company-Wide Knowledge Platform
+========================================================
 
 Introduction
 ============

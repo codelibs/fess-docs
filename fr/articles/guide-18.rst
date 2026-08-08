@@ -1,6 +1,6 @@
-============================================================
-Partie 18 : Fondamentaux de la recherche IA -- De la recherche par mots-cles a la recherche semantique
-============================================================
+===========================================
+Partie 18 : Fondamentaux de la recherche IA
+===========================================
 
 Introduction
 =============

@@ -1,6 +1,6 @@
-============================================================
-Teil 16: Automatisierung der Suchinfrastruktur -- Verwaltung mit CI/CD-Pipelines und Infrastructure as Code
-============================================================
+==============================================
+Teil 16: Automatisierung der Suchinfrastruktur
+==============================================
 
 Einleitung
 ==========

@@ -1,6 +1,6 @@
-===========================================================================
-Partie 11 : Etendre les systemes existants avec l'API de recherche -- Recueil de patrons d'integration avec CRM et systemes internes
-===========================================================================
+==================================================================
+Partie 11 : Etendre les systemes existants avec l'API de recherche
+==================================================================
 
 Introduction
 =============

@@ -1,6 +1,6 @@
-============================================================
-Partie 8 : Cultiver la qualite de recherche -- Un cycle d'ajustement de recherche base sur les donnees de comportement des utilisateurs
-============================================================
+===========================================
+Partie 8 : Cultiver la qualite de recherche
+===========================================
 
 Introduction
 ============

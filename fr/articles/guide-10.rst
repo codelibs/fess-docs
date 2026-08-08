@@ -1,6 +1,6 @@
-===========================================================================
-Partie 10 : Exploitation stable d'un systeme de recherche -- Surveillance, sauvegarde et gestion des pannes en pratique
-===========================================================================
+=========================================================
+Partie 10 : Exploitation stable d'un systeme de recherche
+=========================================================
 
 Introduction
 =============

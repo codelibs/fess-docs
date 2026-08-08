@@ -1,6 +1,6 @@
-============================================================
-Teil 6: Knowledge-Hub fuer Entwicklungsteams -- Integrierte Suche ueber Code, Wiki und Tickets
-============================================================
+============================================
+Teil 6: Knowledge-Hub fuer Entwicklungsteams
+============================================
 
 Einfuehrung
 ============

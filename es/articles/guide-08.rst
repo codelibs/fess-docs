@@ -1,6 +1,6 @@
-============================================================
-Parte 8: Cultivar la calidad de busqueda -- Un ciclo de ajuste de busqueda basado en datos de comportamiento del usuario
-============================================================
+========================================
+Parte 8: Cultivar la calidad de busqueda
+========================================
 
 Introduccion
 ============

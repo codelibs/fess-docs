@@ -1,6 +1,6 @@
-============================================================
-Partie 12 : Rendre les donnees SaaS recherchables -- Scenarios d'integration avec Salesforce et les bases de donnees
-============================================================
+=================================================
+Partie 12 : Rendre les donnees SaaS recherchables
+=================================================
 
 Introduction
 =============

@@ -1,6 +1,6 @@
-============================================================
-Parte 12: Hacer los datos SaaS buscables -- Escenarios de integracion con Salesforce y bases de datos
-============================================================
+========================================
+Parte 12: Hacer los datos SaaS buscables
+========================================
 
 Introduccion
 =============

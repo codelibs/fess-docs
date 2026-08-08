@@ -1,6 +1,6 @@
-============================================================
-Partie 1 Pourquoi la recherche est-elle essentielle en entreprise -- Les défis de l'exploitation des connaissances à l'ère de la surcharge informationnelle
-============================================================
+=================================================================
+Partie 1 Pourquoi la recherche est-elle essentielle en entreprise
+=================================================================
 
 Introduction
 ============

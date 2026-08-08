@@ -1,6 +1,6 @@
-============================================================
-Part 15: Secure Search Infrastructure -- SSO Integration and Search Access Control in a Zero Trust Environment
-============================================================
+=====================================
+Part 15: Secure Search Infrastructure
+=====================================
 
 Introduction
 ============

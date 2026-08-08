@@ -1,6 +1,6 @@
-============================================================
-Parte 23: Plano de una plataforma de conocimiento empresarial -- Gran diseno de una infraestructura de aprovechamiento de la informacion centrada en Fess
-============================================================
+=============================================================
+Parte 23: Plano de una plataforma de conocimiento empresarial
+=============================================================
 
 Introduccion
 ============

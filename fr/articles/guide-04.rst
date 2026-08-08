@@ -1,6 +1,6 @@
-============================================================
-Partie 4 : Recherche unifiee dans des fichiers disperses -- Construire une recherche transversale dans un environnement multi-sources
-============================================================
+========================================================
+Partie 4 : Recherche unifiee dans des fichiers disperses
+========================================================
 
 Introduction
 ============

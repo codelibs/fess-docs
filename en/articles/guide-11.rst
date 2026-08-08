@@ -1,6 +1,6 @@
-===========================================================================
-Part 11: Extending Existing Systems with the Search API -- Integration Patterns for CRM and Internal Systems
-===========================================================================
+=======================================================
+Part 11: Extending Existing Systems with the Search API
+=======================================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Teil 14: Skalierungsstrategien fuer Suchsysteme -- Schrittweise Erweiterung von klein zu gross
-============================================================
+===============================================
+Teil 14: Skalierungsstrategien fuer Suchsysteme
+===============================================
 
 Einfuehrung
 ============

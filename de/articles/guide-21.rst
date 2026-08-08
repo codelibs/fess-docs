@@ -1,6 +1,6 @@
-============================================================
-Teil 21: Bilder und Text uebergreifend durchsuchen -- Wissensmanagement der naechsten Generation mit multimodaler Suche
-============================================================
+==================================================
+Teil 21: Bilder und Text uebergreifend durchsuchen
+==================================================
 
 Einfuehrung
 ============

@@ -1,6 +1,6 @@
-============================================================
-Parte 6: Hub de conocimiento para equipos de desarrollo -- Entorno de busqueda integrada de codigo, Wiki y tickets
-============================================================
+=======================================================
+Parte 6: Hub de conocimiento para equipos de desarrollo
+=======================================================
 
 Introduccion
 ============

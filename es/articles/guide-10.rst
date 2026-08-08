@@ -1,6 +1,6 @@
-===========================================================================
-Parte 10: Operacion estable de un sistema de busqueda -- Monitorizacion, copias de seguridad y recuperacion ante fallos en la practica
-===========================================================================
+=====================================================
+Parte 10: Operacion estable de un sistema de busqueda
+=====================================================
 
 Introduccion
 =============

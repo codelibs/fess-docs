@@ -1,6 +1,6 @@
-============================================================
-Partie 21 : Recherche croisee d'images et de texte -- Gestion des connaissances de nouvelle generation avec la recherche multimodale
-============================================================
+==================================================
+Partie 21 : Recherche croisee d'images et de texte
+==================================================
 
 Introduction
 =============

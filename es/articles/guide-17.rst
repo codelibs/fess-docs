@@ -1,6 +1,6 @@
-============================================================
-Parte 17: Extender la busqueda con plugins -- Implementacion de fuentes de datos personalizadas y pipelines de Ingest
-============================================================
+==========================================
+Parte 17: Extender la busqueda con plugins
+==========================================
 
 Introduccion
 ============

@@ -1,5 +1,5 @@
 ============================================================
-Partie 7 : Strategies de recherche a l'ere du stockage cloud -- Recherche transversale sur Google Drive, SharePoint et Box
+Partie 7 : Strategies de recherche a l'ere du stockage cloud
 ============================================================
 
 Introduction

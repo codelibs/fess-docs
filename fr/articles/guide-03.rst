@@ -1,6 +1,6 @@
-============================================================
-Partie 3 : Intégrer la recherche dans un portail interne -- Ajout d'une fonction de recherche à un site Web existant
-============================================================
+========================================================
+Partie 3 : Intégrer la recherche dans un portail interne
+========================================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Part 16: Search Infrastructure Automation -- Management with CI/CD Pipelines and Infrastructure as Code
-============================================================
+=========================================
+Part 16: Search Infrastructure Automation
+=========================================
 
 Introduction
 ============

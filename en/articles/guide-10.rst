@@ -1,6 +1,6 @@
-===========================================================================
-Part 10: Stable Operation of a Search System -- Monitoring, Backup, and Failure Recovery in Practice
-===========================================================================
+============================================
+Part 10: Stable Operation of a Search System
+============================================
 
 Introduction
 ============

@@ -1,6 +1,6 @@
-============================================================
-Part 19: Building an Internal AI Assistant -- A Search-Based Q&A System Powered by RAG
-============================================================
+==========================================
+Part 19: Building an Internal AI Assistant
+==========================================
 
 Introduction
 ============

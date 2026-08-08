@@ -1,6 +1,6 @@
-===========================================================================
-Teil 11: Bestehende Systeme mit der Such-API erweitern -- Integrationsmuster fuer CRM und interne Systeme
-===========================================================================
+======================================================
+Teil 11: Bestehende Systeme mit der Such-API erweitern
+======================================================
 
 Einfuehrung
 ============

@@ -1,6 +1,6 @@
-============================================================
-Teil 17: Suche mit Plugins erweitern -- Implementierung benutzerdefinierter Datenquellen und Ingest-Pipelines
-============================================================
+====================================
+Teil 17: Suche mit Plugins erweitern
+====================================
 
 Einleitung
 ==========

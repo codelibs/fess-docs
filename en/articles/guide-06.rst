@@ -1,6 +1,6 @@
-============================================================
-Part 6: A Knowledge Hub for Development Teams -- Unified Search Across Code, Wiki, and Tickets
-============================================================
+=============================================
+Part 6: A Knowledge Hub for Development Teams
+=============================================
 
 Introduction
 ============

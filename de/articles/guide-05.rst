@@ -1,6 +1,6 @@
-===========================================================================
-Teil 5: Informationen personenbezogen bereitstellen -- Abteilungs- und berechtigungsbasierte Steuerung der Suchergebnisse
-===========================================================================
+===================================================
+Teil 5: Informationen personenbezogen bereitstellen
+===================================================
 
 Einleitung
 ==========

@@ -1,6 +1,6 @@
-============================================================
-Teil 1 Warum Unternehmen eine Suchinfrastruktur brauchen -- Herausforderungen der Wissensnutzung im Zeitalter der Informationsflut
-============================================================
+========================================================
+Teil 1 Warum Unternehmen eine Suchinfrastruktur brauchen
+========================================================
 
 Einleitung
 ==========

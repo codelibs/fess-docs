@@ -1,6 +1,6 @@
-============================================================
-Partie 22 : Dessiner une carte des connaissances organisationnelles a partir des donnees de recherche -- Comprendre l'utilisation de l'information via le tableau de bord analytique
-============================================================
+=====================================================================================================
+Partie 22 : Dessiner une carte des connaissances organisationnelles a partir des donnees de recherche
+=====================================================================================================
 
 Introduction
 =============

@@ -1,6 +1,6 @@
-===========================================================================
-Parte 9: Infraestructura de busqueda para organizaciones multilingues -- Construccion de un entorno para buscar correctamente documentos en japones, ingles y chino
-===========================================================================
+=====================================================================
+Parte 9: Infraestructura de busqueda para organizaciones multilingues
+=====================================================================
 
 Introduccion
 =============
