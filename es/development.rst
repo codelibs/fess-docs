@@ -2,6 +2,10 @@
 Desarrollo
 ============================================
 
+Recursos para desarrolladores: la guía del desarrollador, el código
+fuente y las imágenes de Docker, las referencias de API, la hoja de
+ruta y el seguimiento de incidencias.
+
 .. toctree::
 
    Guía del Desarrollador <dev/index>

@@ -2,6 +2,9 @@
 Otros
 ============================================
 
+Noticias, el foro, el fin de soporte, la licencia, los formatos de
+archivo admitidos, el soporte comercial y sitios que usan |Fess|.
+
 .. toctree::
 
    Noticias <news>

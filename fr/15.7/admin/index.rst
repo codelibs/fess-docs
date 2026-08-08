@@ -1,6 +1,10 @@
 Guide de l'administrateur |Fess|
 ================================
 
+L'utilisation de chaque page de l'écran d'administration de |Fess| :
+tableau de bord, paramètres d'exploration, dictionnaires, utilisateurs
+et rôles, journaux et sauvegardes.
+
 .. toctree::
    :maxdepth: 3
 

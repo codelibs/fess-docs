@@ -2,6 +2,9 @@
 Development
 ============================================
 
+Resources for developers: the developer guide, the source code and
+Docker images, the API references, the roadmap, and issue tracking.
+
 .. toctree::
 
    Developer Guide <dev/index>

@@ -1,6 +1,10 @@
 |Fess| Administrator Guide
 ==========================
 
+How to operate every page of the |Fess| administration screen, from
+the dashboard and crawl settings to dictionaries, users and roles,
+logs, and backups.
+
 .. toctree::
    :maxdepth: 3
 

@@ -2,6 +2,9 @@
 Entwicklung
 ============================================
 
+Ressourcen für Entwickler: Entwicklerhandbuch, Quellcode und
+Docker-Images, API-Referenzen, Roadmap und Fehlerverfolgung.
+
 .. toctree::
 
    Entwicklerhandbuch <dev/index>

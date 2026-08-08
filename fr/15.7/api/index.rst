@@ -1,6 +1,10 @@
 Guide de l'API |Fess|
 =====================
 
+L'API de |Fess| : l'API de recherche, l'API d'administration pour la
+configuration, l'API de chat IA, les formats de requête et de réponse,
+et l'authentification.
+
 .. toctree::
    :maxdepth: 2
    :caption: Introduction

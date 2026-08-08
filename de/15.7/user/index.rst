@@ -1,6 +1,10 @@
 |Fess| Benutzerhandbuch
 ========================
 
+Wie Suchanfragen in |Fess| geschrieben werden: UND, ODER und NICHT,
+Feld- und Labelsuche, Sortierung, Platzhalter, Bereiche, Boosting,
+unscharfe Suche und Geo-Suche.
+
 .. toctree::
    :maxdepth: 2
 

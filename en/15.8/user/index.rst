@@ -1,6 +1,10 @@
 |Fess| User Guide
 ==================
 
+How to write search queries in |Fess|: AND, OR and NOT, field and
+label search, sorting, wildcards, ranges, boosting, fuzzy search, and
+geo search.
+
 .. toctree::
    :maxdepth: 2
 
