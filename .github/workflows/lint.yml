@@ -1,0 +1,63 @@
+# Nothing ran these checks automatically before, so a defect they were
+# written to catch could still be merged. They are cheap and need no
+# dependencies beyond the standard library.
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  tools:
+    name: tools
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Unit tests
+        run: python -m unittest discover -s tools -p 'test_*.py' -v
+
+      - name: Every eol.rst matches versions.json
+        run: python tools/update_eol.py --check
+
+  headings:
+    name: section titles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # reStructuredText requires the overline and underline of a section
+      # title to be the same length. Where they differ docutils refuses to
+      # build the section and the next one silently becomes the page title,
+      # without failing the build. Scoped to the versions versions.json
+      # calls current, so it follows a release instead of needing an edit,
+      # and so the archived versions -- which still carry mismatches and are
+      # consolidated by canonical anyway -- do not block unrelated work.
+      - name: Section title rules in the current documentation versions
+        run: |
+          set -eu
+          versions=$(python -c \
+            "import json; d = json.load(open('versions.json')); \
+             print(d['release'], d['development'])")
+          dirs=""
+          for v in $versions; do
+            for d in */"$v"; do
+              [ -d "$d" ] && dirs="$dirs $d"
+            done
+          done
+          if [ -z "$dirs" ]; then
+            echo "versions.json names no directory that exists" >&2
+            exit 1
+          fi
+          echo "linting:$dirs"
+          python tools/check_headings.py $dirs
