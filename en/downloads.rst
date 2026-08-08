@@ -49,9 +49,6 @@ Tested stable releases are available from:
    * - `Fess 15.0.0 <https://github.com/codelibs/fess/releases/tag/fess-15.0.0>`_
      - `21 <https://adoptium.net/temurin/releases?version=21>`_
      - `OpenSearch 3.0.0 <https://opensearch.org/versions/opensearch-3-0-0.html>`_
-   * - `Fess 14.19.2 <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`_
-     - `17 <https://adoptium.net/temurin/releases?version=17>`_
-     - `OpenSearch 2.19.1 <https://opensearch.org/versions/opensearch-2-19-1.html>`_
 
 For installation instructions, please refer to the Installation Guide.
 
@@ -68,6 +65,9 @@ Past Releases (EOL)
    * - Version
      - Java
      - Search Engine
+   * - `Fess 14.19.2 <https://github.com/codelibs/fess/releases/tag/fess-14.19.2>`_
+     - `17 <https://adoptium.net/temurin/releases?version=17>`_
+     - `OpenSearch 2.19.1 <https://opensearch.org/versions/opensearch-2-19-1.html>`_
    * - `Fess 14.18.0 <https://github.com/codelibs/fess/releases/tag/fess-14.18.0>`_
      - `17 <https://adoptium.net/temurin/releases?version=17>`_
      - `OpenSearch 2.18.0 <https://opensearch.org/versions/opensearch-2-18-0.html>`_
