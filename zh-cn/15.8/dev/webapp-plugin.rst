@@ -293,7 +293,7 @@ Web应用插件无法添加 JSP 视图。这是因为 JSP 视图存放在 |Fess|
    * - ``fess-webapp-mcp``
      - MCP（Model Context Protocol）服务器
    * - ``fess-webapp-semantic-search``
-     - 神经搜索/向量搜索
+     - 神经搜索/向量搜索（已弃用；已被 15.8 中的核心集成功能取代）
    * - ``fess-webapp-multimodal``
      - 多模态（图像、文本）搜索
 

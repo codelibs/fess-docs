@@ -10,7 +10,7 @@ Mit dieser Funktion können Benutzer Informationen in einem dialogorientierten F
 
 Die LLM-Integrationsfunktion wird als ``fess-llm-*``-Plugin bereitgestellt. Installieren Sie das Plugin, das dem LLM-Anbieter entspricht, den Sie verwenden möchten.
 
-Der KI-Suchmodus ruft Dokumente über die standardmäßige |Fess|-Suchpipeline (Rank Fusion) ab, nicht über einen separaten Vektorindex — standardmäßig handelt es sich dabei um eine Schlüsselwortsuche (BM25). Da diese Pipeline wiederverwendet wird, nimmt der semantische Sucher (Vektorsuche) des Semantic Search-Plugins, sofern installiert und konfiguriert, an der Rank Fusion für alle Suchen teil, einschließlich des Abrufschritts des KI-Suchmodus; eine KI-Suchmodus-spezifische Konfiguration ist nicht erforderlich. Siehe :doc:`rank-fusion`.
+Der KI-Suchmodus ruft Dokumente über die standardmäßige |Fess|-Suchpipeline (Rank Fusion) ab, nicht über einen separaten Vektorindex — standardmäßig handelt es sich dabei um eine Schlüsselwortsuche (BM25). Da diese Pipeline wiederverwendet wird, nimmt der semantische Sucher der im Kern integrierten semantischen Suche (Content-Chunking + Vektorsuche), sofern aktiviert, an der Rank Fusion für alle Suchen teil, einschließlich des Abrufschritts des KI-Suchmodus; damit der semantische Sucher teilnimmt, ist keine KI-Suchmodus-spezifische Konfiguration erforderlich. Die Anzahl der Chunks, die an die Antwortgenerierung übergeben werden, lässt sich jedoch über ``content_chunker.chat.top_k`` anpassen. Siehe :doc:`rank-fusion` und :doc:`search-semantic`.
 
 Unterstützte Anbieter
 =====================

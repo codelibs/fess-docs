@@ -7,7 +7,10 @@ Aperçu
 
 La **recherche hybride** dans |Fess| combine la recherche traditionnelle par mots-clés (BM25) avec la **recherche sémantique (vectorielle)**, puis fusionne les deux ensembles de résultats grâce au **Rank Fusion** afin de produire des classements plus précis et plus pertinents. Le Rank Fusion intègre les résultats de plusieurs moteurs de recherche en un classement unique optimisé.
 
-Pour activer la recherche sémantique, installez le plugin Semantic Search (``fess-webapp-semantic-search``) et ajoutez ``semantic`` à ``-Drank.fusion.searchers``.
+Dans |Fess| 15.8, la recherche sémantique (chunking de contenu + recherche vectorielle) est
+fournie comme une fonctionnalité du cœur. Une fois activée, le moteur de recherche sémantique est
+enregistré automatiquement auprès du Rank Fusion. Voir :doc:`search-semantic` pour sa
+configuration.
 
 La fonctionnalité Rank Fusion de |Fess| intègre plusieurs résultats de recherche pour
 fournir des résultats de recherche plus précis.
@@ -94,23 +97,42 @@ Les moteurs de recherche à utiliser sont spécifiés en tant que propriété sy
 suivante dans ``fess.in.sh`` (ou ``fess.in.bat``) ::
 
     # Spécifier les moteurs de recherche (séparés par des virgules)
-    -Drank.fusion.searchers=default,semantic
+    -Drank.fusion.searchers=default,semantic_chunk
 
 Ce paramètre se comporte comme suit :
 
 - Il est défini en tant qu'option JVM, et non dans ``fess_config.properties``.
 - ``default`` est le moteur qui effectue la recherche standard par mots-clés ; il est toujours disponible.
-- ``semantic`` est le moteur qui effectue la recherche sémantique (vectorielle) ; il est disponible lorsque le plugin Semantic Search (``fess-webapp-semantic-search``) est installé.
-- Si ce paramètre n'est pas spécifié, tous les moteurs enregistrés sont utilisés. Si aucun des noms spécifiés ne correspond à un moteur enregistré, seul le moteur ``default`` est utilisé.
+- Le nom d'un moteur de recherche est dérivé du nom de sa classe d'implémentation : on en retire
+  le suffixe ``Searcher``, puis on convertit le reste en snake_case minuscule
+  (``SemanticChunkSearcher`` → ``semantic_chunk``). Le moteur de recherche sémantique intégré au
+  cœur (:doc:`search-semantic`) est enregistré sous le nom ``semantic_chunk``.
+- Si ce paramètre n'est pas spécifié, tous les moteurs enregistrés sont utilisés. Si aucun des noms spécifiés ne correspond à un moteur enregistré, seul le moteur ``default`` est utilisé. Si vous utilisez le moteur de recherche sémantique intégré au cœur (:doc:`search-semantic`), vous n'avez normalement pas besoin de définir ce paramètre du tout.
 - La fusion des résultats n'est effectuée que lorsque deux moteurs de recherche ou plus sont disponibles. Lorsqu'un seul moteur est disponible, aucune fusion n'est effectuée et les résultats de recherche normaux sont retournés.
+
+.. warning::
+
+   Si vous utilisiez auparavant le plugin ``fess-webapp-semantic-search`` de |Fess| 15.7 ou
+   antérieur, il vous a peut-être été indiqué de définir ce paramètre sur
+   ``-Drank.fusion.searchers=default,semantic``. Ce plugin enregistrait son moteur de recherche
+   sous le nom ``semantic``, qui est un **moteur de recherche différent** du nom du moteur
+   intégré au cœur, ``semantic_chunk``, introduit en 15.8. Si vous reportez ce réglage datant de
+   la 15.7 tel quel dans la 15.8, la liste blanche n'inclut jamais ``semantic_chunk``, de sorte
+   que la recherche sémantique intégrée au cœur (chunking de contenu + recherche vectorielle) **ne
+   fonctionne pas du tout** — |Fess| continue de renvoyer silencieusement des résultats de
+   recherche par mots-clés ordinaires (un avertissement est consigné au démarrage, mais
+   l'exclusion par requête elle-même n'est consignée qu'au niveau DEBUG). Si votre configuration
+   spécifie ``default,semantic``, supprimez ce réglage ou ajoutez-y ``semantic_chunk``. Voir
+   « Migration depuis la version 15.7 ou antérieure » dans :doc:`search-semantic` pour plus de
+   détails.
 
 Intégration avec la recherche hybride
 =======================================
 
 Le Rank Fusion est particulièrement efficace pour la recherche hybride, qui combine la
 recherche par mots-clés et la recherche sémantique. Pour utiliser la recherche sémantique,
-installez le plugin Semantic Search (``fess-webapp-semantic-search``) et ajoutez ``semantic`` à
-``-Drank.fusion.searchers``.
+configurez la fonctionnalité de chunking de contenu et définissez
+``content_chunker.search.enabled=true``. Voir :doc:`search-semantic` pour plus de détails.
 
 Exemples d'utilisation
 =======================

@@ -7,7 +7,9 @@ Hybride Suche und Rank Fusion (Semantisch + Schlüsselwort)
 
 **Hybride Suche** in |Fess| kombiniert die klassische Schlüsselwortsuche (BM25) mit **semantischer (Vektor-)Suche** und führt beide Ergebnismengen mit **Rank Fusion** zu präziseren, relevanteren Rankings zusammen. Rank Fusion integriert die Ergebnisse mehrerer Sucher zu einem einzigen optimierten Ranking.
 
-Um die semantische Suche zu aktivieren, installieren Sie das Semantic Search-Plugin (``fess-webapp-semantic-search``) und fügen Sie ``semantic`` zu ``-Drank.fusion.searchers`` hinzu.
+In |Fess| 15.8 wird die semantische Suche (Content-Chunking + Vektorsuche) als Kernfunktion
+bereitgestellt. Sobald Sie sie aktivieren, wird der semantische Sucher automatisch bei Rank Fusion
+registriert. Siehe :doc:`search-semantic` zur Konfiguration.
 
 Die Rank Fusion-Funktion von |Fess| integriert mehrere Suchergebnisse,
 um genauere Suchergebnisse zu liefern.
@@ -94,23 +96,42 @@ Die zu verwendenden Sucher werden als JVM-Systemeigenschaft angegeben. Fügen Si
 zu ``fess.in.sh`` (oder ``fess.in.bat``) hinzu::
 
     # Sucher angeben (kommagetrennt)
-    -Drank.fusion.searchers=default,semantic
+    -Drank.fusion.searchers=default,semantic_chunk
 
 Diese Eigenschaft verhält sich wie folgt:
 
 - Sie wird als JVM-Option gesetzt, nicht in ``fess_config.properties``.
 - ``default`` ist der Sucher, der die Standard-Schlüsselwortsuche ausführt, und ist stets verfügbar.
-- ``semantic`` ist der Sucher, der die semantische Suche (Vektorsuche) ausführt, und ist verfügbar, wenn das Semantic Search-Plugin (``fess-webapp-semantic-search``) installiert ist.
-- Wird diese Eigenschaft nicht angegeben, werden alle registrierten Sucher verwendet. Stimmt keiner der angegebenen Namen mit einem registrierten Sucher überein, wird nur der ``default``-Sucher verwendet.
+- Der Name eines Suchers leitet sich vom Namen seiner Implementierungsklasse ab: Das abschließende
+  ``Searcher`` wird entfernt und der Rest in Snake Case in Kleinbuchstaben umgewandelt
+  (``SemanticChunkSearcher`` → ``semantic_chunk``). Der im Kern integrierte semantische Sucher
+  (:doc:`search-semantic`) wird unter dem Namen ``semantic_chunk`` registriert.
+- Wird diese Eigenschaft nicht angegeben, werden alle registrierten Sucher verwendet. Stimmt keiner der angegebenen Namen mit einem registrierten Sucher überein, wird nur der ``default``-Sucher verwendet. Wenn Sie den im Kern integrierten semantischen Sucher (:doc:`search-semantic`) verwenden, müssen Sie diese Eigenschaft normalerweise überhaupt nicht setzen.
 - Die Ergebnisfusion durch Rank Fusion wird nur ausgeführt, wenn zwei oder mehr Sucher verfügbar sind. Bei nur einem verfügbaren Sucher wird keine Fusion durchgeführt und normale Suchergebnisse werden zurückgegeben.
+
+.. warning::
+
+   Wenn Sie zuvor das Plugin ``fess-webapp-semantic-search`` aus |Fess| 15.7 oder früher genutzt
+   haben, wurde Ihnen möglicherweise empfohlen, diese Eigenschaft auf
+   ``-Drank.fusion.searchers=default,semantic`` zu setzen. Dieses Plugin registrierte seinen
+   Sucher unter dem Namen ``semantic``, was ein **anderer Sucher** ist als der in 15.8 eingeführte
+   Name des im Kern integrierten Suchers, ``semantic_chunk``. Wenn Sie diese Einstellung aus der
+   15.7-Ära unverändert nach 15.8 übernehmen, enthält die Allowlist niemals ``semantic_chunk``,
+   sodass die im Kern integrierte semantische Suche (Content-Chunking + Vektorsuche) **überhaupt
+   nicht funktioniert** — |Fess| liefert stillschweigend weiterhin gewöhnliche
+   Schlüsselwortsuchergebnisse (beim Start wird zwar eine Warnung protokolliert, aber der
+   Ausschluss pro Anfrage selbst wird nur auf DEBUG-Ebene protokolliert). Wenn Ihre Konfiguration
+   ``default,semantic`` angibt, entfernen Sie diese Einstellung entweder oder fügen Sie
+   ``semantic_chunk`` hinzu. Siehe „Migration von 15.7 oder früheren Versionen" in
+   :doc:`search-semantic` für Details.
 
 Integration mit Hybridsuche
 ============================
 
 Rank Fusion ist besonders effektiv bei der Hybridsuche, die Schlüsselwortsuche
-und semantische Suche kombiniert. Um die semantische Suche zu nutzen, installieren
-Sie das Semantic Search-Plugin (``fess-webapp-semantic-search``) und fügen Sie
-``semantic`` zu ``-Drank.fusion.searchers`` hinzu.
+und semantische Suche kombiniert. Um die semantische Suche zu nutzen, konfigurieren Sie die
+Content-Chunking-Funktion und setzen Sie ``content_chunker.search.enabled=true``. Siehe
+:doc:`search-semantic` für Details.
 
 Anwendungsbeispiele
 ===================

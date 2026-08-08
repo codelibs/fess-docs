@@ -41,6 +41,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    search-scroll
    search-form-integration
    rank-fusion
+   search-semantic
 
 .. toctree::
    :maxdepth: 2

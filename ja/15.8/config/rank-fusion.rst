@@ -7,7 +7,9 @@
 
 |Fess| の **ハイブリッド検索** は、従来のキーワード検索（BM25）と **セマンティック（ベクトル）検索** を組み合わせ、両方の検索結果を **Rank Fusion** で統合することで、より精度が高く関連性の高いランキングを実現します。Rank Fusionは、複数のサーチャーの検索結果を単一の最適化されたランキングに統合します。
 
-セマンティック検索を有効にするには、Semantic Searchプラグイン（``fess-webapp-semantic-search``）をインストールし、``-Drank.fusion.searchers`` に ``semantic`` を追加してください。
+|Fess| 15.8 では、セマンティック検索（コンテンツチャンク＋ベクトル検索）はコア機能として提供されます。
+有効化すると、セマンティックサーチャーは自動的にRank Fusionに登録されます。
+設定方法は :doc:`search-semantic` を参照してください。
 
 |Fess| のRank Fusion機能は、複数の検索結果を統合して
 より精度の高い検索結果を提供します。
@@ -92,23 +94,39 @@ JVMシステムプロパティ
 ``fess.in.sh`` (または ``fess.in.bat``) に以下のように記述します::
 
     # 使用するサーチャーの指定（カンマ区切り）
-    -Drank.fusion.searchers=default,semantic
+    -Drank.fusion.searchers=default,semantic_chunk
 
 このプロパティの動作は以下のとおりです：
 
 - ``fess_config.properties`` ではなく、JVMオプションとして設定します。
 - ``default`` は標準のキーワード検索を行うサーチャーで、常に利用できます。
-- ``semantic`` はセマンティック検索（ベクトル検索）を行うサーチャーで、Semantic Searchプラグイン（``fess-webapp-semantic-search``）を導入した場合に利用できます。
-- このプロパティを指定しない場合は、登録されているすべてのサーチャーが使用されます。指定した名前がいずれのサーチャーにも一致しない場合は、``default`` サーチャーのみが使用されます。
+- サーチャー名は、実装クラス名から ``Searcher`` を取り除き、スネークケースの小文字に変換した
+  ものです（``SemanticChunkSearcher`` → ``semantic_chunk``）。コア内蔵のセマンティック
+  サーチャー（:doc:`search-semantic`）は ``semantic_chunk`` という名前で登録されます。
+- このプロパティを指定しない場合は、登録されているすべてのサーチャーが使用されます。指定した名前がいずれのサーチャーにも一致しない場合は、``default`` サーチャーのみが使用されます。コア内蔵のセマンティックサーチャー（:doc:`search-semantic`）を利用する場合は、通常このプロパティの指定自体が不要です。
 - Rank Fusionによる結果の融合は、利用可能なサーチャーが2つ以上ある場合に実行されます。サーチャーが1つだけの場合は、融合は行われず通常の検索結果が返されます。
+
+.. warning::
+
+   |Fess| 15.7 以前の ``fess-webapp-semantic-search`` プラグインを使っていた場合、このプロパティに
+   ``-Drank.fusion.searchers=default,semantic`` を指定するよう案内されていました。プラグインが
+   登録していたサーチャー名は ``semantic`` で、15.8 でコアに統合されたセマンティックサーチャーの
+   名前 ``semantic_chunk`` とは **別物** です。この設定を 15.8 でも引き継いだままにすると、
+   allowlist に ``semantic_chunk`` が含まれないため、コア内蔵のセマンティック検索（コンテンツ
+   チャンク＋ベクトル検索）が **一切動作しないまま** 通常のキーワード検索結果だけが返り続けます
+   （起動時に警告ログは出力されますが、個々の検索リクエストでの除外自体は DEBUG ログにしか
+   現れません）。``default,semantic`` を指定している場合は、この設定を削除するか
+   ``semantic_chunk`` を追加してください。詳細は :doc:`search-semantic` の
+   「15.7 以前からアップグレードする場合の移行」を参照してください。
 
 ハイブリッド検索との連携
 ========================
 
 Rank Fusionは、キーワード検索とセマンティック検索を組み合わせた
 ハイブリッド検索で特に効果を発揮します。
-セマンティック検索を利用するには、Semantic Searchプラグイン（``fess-webapp-semantic-search``）を導入し、
-``-Drank.fusion.searchers`` に ``semantic`` を追加する必要があります。
+セマンティック検索を利用するには、コンテンツチャンク機能を設定し、
+``content_chunker.search.enabled=true`` を設定します。詳細は :doc:`search-semantic` を
+参照してください。
 
 使用例
 ======

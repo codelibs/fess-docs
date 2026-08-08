@@ -11,7 +11,7 @@ sous forme de dialogue avec un assistant IA basé sur les résultats de recherch
 
 La fonctionnalité d'intégration LLM est fournie sous forme de plugins ``fess-llm-*``. Installez le plugin correspondant au fournisseur LLM que vous souhaitez utiliser.
 
-Le mode de recherche IA récupère les documents via le pipeline de recherche standard de |Fess| (rank fusion), et non via un index vectoriel dédié ; par défaut, il s'agit d'une recherche par mots-clés (BM25). Comme ce pipeline standard est réutilisé, si vous installez et configurez le plugin Semantic Search, son moteur de recherche sémantique (vectoriel) participe au rank fusion pour toutes les recherches, y compris l'étape de récupération du mode de recherche IA ; aucune configuration spécifique au mode de recherche IA n'est nécessaire. Pour plus de détails, consultez :doc:`rank-fusion`.
+Le mode de recherche IA récupère les documents via le pipeline de recherche standard de |Fess| (rank fusion), et non via un index vectoriel dédié ; par défaut, il s'agit d'une recherche par mots-clés (BM25). Comme ce pipeline standard est réutilisé, si vous activez la recherche sémantique intégrée au cœur (chunking de contenu + recherche vectorielle), son moteur de recherche sémantique participe au rank fusion pour toutes les recherches, y compris l'étape de récupération du mode de recherche IA ; aucune configuration spécifique au mode de recherche IA n'est nécessaire pour que le moteur de recherche sémantique y participe. Vous pouvez toutefois ajuster le nombre de chunks transmis à la génération de la réponse via ``content_chunker.chat.top_k``. Pour plus de détails, consultez :doc:`rank-fusion` et :doc:`search-semantic`.
 
 Fournisseurs pris en charge
 ============================

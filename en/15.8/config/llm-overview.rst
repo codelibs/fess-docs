@@ -10,7 +10,7 @@ This feature allows users to retrieve information through conversational AI assi
 
 LLM integration is provided as ``fess-llm-*`` plugins. Install the plugin corresponding to the LLM provider you wish to use.
 
-AI search mode retrieves documents through the standard |Fess| search pipeline (rank fusion), not a separate vector index — by default this is keyword (BM25) search. Because it reuses that pipeline, if you install and configure the Semantic Search plugin, its semantic (vector) searcher participates in rank fusion for all searches, including the retrieval step of AI search mode; no AI-search-specific configuration is required. See :doc:`rank-fusion`.
+AI search mode retrieves documents through the standard |Fess| search pipeline (rank fusion), not a separate vector index — by default this is keyword (BM25) search. Because it reuses that pipeline, if you enable the core-integrated semantic search (content chunking + vector search), its semantic searcher participates in rank fusion for all searches, including the retrieval step of AI search mode; no AI-search-specific configuration is required to make the semantic searcher participate. You can, however, tune the number of chunks passed to answer generation with ``content_chunker.chat.top_k``. See :doc:`rank-fusion` and :doc:`search-semantic`.
 
 Supported Providers
 ===================

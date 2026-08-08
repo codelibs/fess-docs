@@ -318,7 +318,7 @@ for development:
    * - ``fess-webapp-mcp``
      - MCP (Model Context Protocol) server
    * - ``fess-webapp-semantic-search``
-     - Neural search / vector search
+     - Neural search / vector search (deprecated; superseded by the core integration in 15.8)
    * - ``fess-webapp-multimodal``
      - Multimodal (image/text) search
 

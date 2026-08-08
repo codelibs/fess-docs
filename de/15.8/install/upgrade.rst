@@ -307,6 +307,14 @@ Schritt 7: Neuerstellung des Index (empfohlen)
 
 Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
 
+.. note::
+
+   Die folgenden Schritte führen den Crawl erneut aus; sie aktualisieren nicht das Index-Mapping
+   (Felddefinitionen). Wenn Sie eine Neuindizierung benötigen, die das Mapping aktualisiert — zum
+   Beispiel, um die Chunk-Vektor-Suche (semantische Suche) neu zu aktivieren —, führen Sie separat
+   die „Neuindizierung" unter „Systeminformationen" → „Wartung" in der Admin-Oberfläche aus. Siehe
+   :ref:`semantic-search-migration` (:doc:`../config/search-semantic`) für Details.
+
 1. Überprüfen Sie bestehende Crawl-Zeitpläne
 2. Führen Sie „Default Crawler" unter „System" → „Scheduler" aus
 3. Warten Sie, bis der Crawl abgeschlossen ist
@@ -393,6 +401,9 @@ F: Muss der Index neu erstellt werden?
 ---------------------------------------
 
 A: Bei Minor-Version-Upgrades normalerweise nicht erforderlich, bei Major-Version-Upgrades wird jedoch eine Neuerstellung empfohlen.
+Wenn Sie außerdem von 15.7 oder früher auf 15.8 oder höher aktualisieren und die Chunk-Vektor-Suche
+(semantische Suche) neu aktivieren möchten, ist eine Neuindizierung erforderlich, da der bestehende
+Index das neue Mapping nicht übernimmt. Siehe :doc:`../config/search-semantic` für Details.
 
 F: Nach dem Upgrade werden keine Suchergebnisse angezeigt
 ----------------------------------------------------------
@@ -410,4 +421,6 @@ Nach Abschluss des Upgrades:
 
 - :doc:`run` - Überprüfung von Start und Erstkonfiguration
 - :doc:`security` - Überprüfung der Sicherheitseinstellungen
+- :doc:`../config/search-semantic` - Konfiguration und Migrationsschritte für die
+  Chunk-Vektor-Suche (semantische Suche)
 - Überprüfung neuer Funktionen in den Release Notes
