@@ -143,8 +143,8 @@ Web应用插件中最重要的一点，是在 JAR 清单文件中添加
 -----------------------------------------
 
 如果想要改变 |Fess| 本体组件的行为，需要将目标类子类化，并在名为
-``<baseDicon>+<componentName>.xml`` 的 DI 配置文件中 \*\*以相同的组件名
-重新注册\*\*。例如，由于 ``systemHelper`` 是在 |Fess| 本体的 ``fess.xml``
+``<baseDicon>+<componentName>.xml`` 的 DI 配置文件中 **以相同的组件名
+重新注册**。例如，由于 ``systemHelper`` 是在 |Fess| 本体的 ``fess.xml``
 中声明的，因此替换文件应为 ``fess+systemHelper.xml``\ （而不是
 ``app+systemHelper.xml``）。
 
