@@ -74,6 +74,7 @@ Das EOL-Datum von Fess liegt etwa 18 Monate nach der Veröffentlichung.
 Aktuell unterstützte Versionen
 ------------------------------
 
+.. GENERATED-BEGIN: supported-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{3cm}|p{4cm}|p{3cm}|
 .. list-table::
    :header-rows: 1
@@ -109,10 +110,12 @@ Aktuell unterstützte Versionen
    * - 14.19.x
      - 2026-08-01
      - 🟡 Support-Ende naht
+.. GENERATED-END: supported-versions
 
 Nicht mehr unterstützte Versionen
 ---------------------------------
 
+.. GENERATED-BEGIN: eol-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
@@ -250,6 +253,7 @@ Nicht mehr unterstützte Versionen
      - 2011-07-16
    * - 1.x
      - 2011-04-10
+.. GENERATED-END: eol-versions
 
 Häufig gestellte Fragen
 ========================

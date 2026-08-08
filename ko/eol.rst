@@ -74,6 +74,7 @@ Fess의 EOL 날짜는 릴리스 후 약 1년 반 후의 날짜가 됩니다.
 현재 지원 중인 버전
 ------------------------
 
+.. GENERATED-BEGIN: supported-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{3cm}|p{4cm}|p{3cm}|
 .. list-table::
    :header-rows: 1
@@ -109,10 +110,12 @@ Fess의 EOL 날짜는 릴리스 후 약 1년 반 후의 날짜가 됩니다.
    * - 14.19.x
      - 2026-08-01
      - 🟡 지원 종료 임박
+.. GENERATED-END: supported-versions
 
 지원 종료 버전
 ------------------------
 
+.. GENERATED-BEGIN: eol-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
@@ -250,6 +253,7 @@ Fess의 EOL 날짜는 릴리스 후 약 1년 반 후의 날짜가 됩니다.
      - 2011-07-16
    * - 1.x
      - 2011-04-10
+.. GENERATED-END: eol-versions
 
 자주 묻는 질문
 ==========================
