@@ -1,6 +1,10 @@
 |Fess| API-Leitfaden
 ====================
 
+Die |Fess|-API: die Such-API, die Verwaltungs-API für Einstellungen,
+die KI-Chat-API, die Formate von Anfragen und Antworten sowie die
+Authentifizierung.
+
 .. toctree::
    :maxdepth: 2
    :caption: Einführung

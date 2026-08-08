@@ -2,6 +2,9 @@
 Tutorial
 ============================================
 
+Step-by-step articles that walk through installing |Fess|, using its
+API, and setting it up as a site search server.
+
 .. toctree::
 
    Installation Guide <articles/article-1>

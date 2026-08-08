@@ -1,6 +1,9 @@
 |Fess| API Guide
 ================
 
+The |Fess| API: the search API, the admin API for managing settings,
+the AI chat API, request and response formats, and authentication.
+
 .. toctree::
    :maxdepth: 2
    :caption: Getting Started

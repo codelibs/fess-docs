@@ -1,6 +1,10 @@
 |Fess| Administratorhandbuch
 ============================
 
+Die Bedienung aller Seiten der |Fess|-Verwaltungsoberfläche: vom
+Dashboard und den Crawl-Einstellungen über Wörterbücher, Benutzer und
+Rollen bis zu Protokollen und Sicherungen.
+
 .. toctree::
    :maxdepth: 3
 

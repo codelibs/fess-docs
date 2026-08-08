@@ -2,6 +2,9 @@
 Others
 ============================================
 
+News, the forum, the support lifecycle, the license, supported file
+formats, commercial support, and sites that use |Fess|.
+
 .. toctree::
 
    News <news>

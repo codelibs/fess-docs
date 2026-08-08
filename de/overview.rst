@@ -1,6 +1,9 @@
 ============================================
-Allgemein
+Überblick
 ============================================
+
+Der Einstieg in |Fess|: Downloads, ein Schnellstart, Bildschirmfotos
+der Such- und Verwaltungsoberfläche sowie eine Live-Demo.
 
 .. toctree::
 

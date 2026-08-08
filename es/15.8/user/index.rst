@@ -1,6 +1,10 @@
 Guía de Usuario de |Fess|
 =========================
 
+Cómo escribir consultas de búsqueda en |Fess|: AND, OR y NOT, búsqueda
+por campo y por etiqueta, ordenación, comodines, rangos, boosting,
+búsqueda difusa y búsqueda geográfica.
+
 .. toctree::
    :maxdepth: 2
 

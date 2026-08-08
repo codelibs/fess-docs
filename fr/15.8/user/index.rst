@@ -1,6 +1,10 @@
 Guide utilisateur |Fess|
 ========================
 
+Comment écrire des requêtes dans |Fess| : AND, OR et NOT, recherche
+par champ et par étiquette, tri, jokers, plages, boost, recherche
+floue et recherche géographique.
+
 .. toctree::
    :maxdepth: 2
 

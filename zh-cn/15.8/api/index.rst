@@ -1,6 +1,9 @@
 |Fess| API 指南
 ===============
 
+介绍 |Fess| 的 API，包括搜索 API、用于管理设置的管理 API、\
+AI 聊天 API、请求与响应格式，以及认证方式。
+
 .. toctree::
    :maxdepth: 2
    :caption: 入门

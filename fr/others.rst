@@ -2,6 +2,9 @@
 Autres
 ============================================
 
+Actualités, forum, fin de support, licence, formats de fichiers pris
+en charge, support commercial et sites qui utilisent |Fess|.
+
 .. toctree::
 
    Actualités <news>

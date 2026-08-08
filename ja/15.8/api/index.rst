@@ -1,6 +1,9 @@
 |Fess| APIガイド
 ===============
 
+検索 API、設定を操作する管理 API、AI チャット API、リクエストと\
+レスポンスの形式、認証方法など、|Fess| の API について説明します。
+
 .. toctree::
    :maxdepth: 2
    :caption: はじめに

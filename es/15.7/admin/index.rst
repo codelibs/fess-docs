@@ -1,6 +1,10 @@
 Guía del Administrador de |Fess|
 ===================================
 
+Cómo utilizar cada página de la pantalla de administración de |Fess|: el
+panel, la configuración del rastreo, los diccionarios, los usuarios y
+roles, los registros y las copias de seguridad.
+
 .. toctree::
    :maxdepth: 3
 

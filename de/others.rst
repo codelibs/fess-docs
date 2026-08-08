@@ -2,6 +2,10 @@
 Sonstiges
 ============================================
 
+Neuigkeiten, Forum, Support-Zeitraum, Lizenz, unterstützte
+Dateiformate, kommerzieller Support und Websites, die |Fess|
+einsetzen.
+
 .. toctree::
 
    Nachrichten <news>
