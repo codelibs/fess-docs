@@ -1,6 +1,6 @@
-============
-Introducción
-============
+=============================
+Introducción a la instalación
+=============================
 
 Acerca de este Documento
 =========================

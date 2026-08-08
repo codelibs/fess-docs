@@ -1,6 +1,6 @@
-==========
-OR-Suche
-==========
+=============================================
+OR-Suche (Treffer mit einem der Suchbegriffe)
+=============================================
 
 Wenn Sie nach Dokumenten suchen möchten, die einen der Suchbegriffe enthalten, verwenden Sie die OR-Suche. Wenn Sie mehrere Wörter in das Suchfeld eingeben, wird standardmäßig eine AND-Suche durchgeführt.
 

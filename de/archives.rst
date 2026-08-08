@@ -2,6 +2,10 @@
 Archiv
 ==========
 
+Dies ist ein Archiv der |Fess|-Dokumentation früherer Versionen zu
+Installation, Suche, Verwaltung, API und Konfiguration. Wählen Sie unten
+die gewünschte Version aus.
+
 15.6
 ~~~~
 

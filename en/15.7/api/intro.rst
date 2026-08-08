@@ -1,6 +1,6 @@
-============
-Introduction
-============
+=======================
+Introduction to the API
+=======================
 
 Target Audience
 ===============

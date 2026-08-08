@@ -1,8 +1,8 @@
-==============
-Recherche NOT
-==============
+=======================================
+Recherche NOT (recherche par exclusion)
+=======================================
 
-La recherche NOT peut être utilisée pour rechercher des documents ne contenant pas un mot spécifique.
+La recherche NOT (recherche par exclusion) peut être utilisée pour rechercher des documents ne contenant pas un mot spécifique.
 
 Utilisation
 -----------

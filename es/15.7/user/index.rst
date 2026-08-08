@@ -1,4 +1,4 @@
-Guia de Usuario de |Fess|
+Guía de Usuario de |Fess|
 =========================
 
 .. toctree::

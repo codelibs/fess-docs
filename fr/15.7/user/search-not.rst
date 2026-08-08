@@ -1,6 +1,6 @@
-==============
-Recherche NOT
-==============
+=======================================
+Recherche NOT (recherche par exclusion)
+=======================================
 
 Lorsque vous souhaitez rechercher des documents ne contenant pas un mot donné (recherche par exclusion), vous pouvez utiliser la recherche NOT. Elle est pratique lorsque vous souhaitez exclure des mots-clés spécifiques des résultats de recherche afin de réduire le bruit.
 

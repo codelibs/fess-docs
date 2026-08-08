@@ -2,6 +2,10 @@
 Archivos
 ==========
 
+Este es un archivo de la documentación de versiones anteriores de |Fess|
+sobre instalación, búsqueda, administración, la API y la configuración.
+Elija una versión a continuación.
+
 15.6
 ~~~~
 

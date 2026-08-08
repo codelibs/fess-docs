@@ -1,6 +1,6 @@
-===========
-Búsqueda OR
-===========
+===========================================
+Búsqueda OR (basta con uno de los términos)
+===========================================
 
 Cuando desea buscar documentos que contengan alguno de los términos de búsqueda, puede utilizar la búsqueda OR. Si escribe múltiples palabras en el campo de entrada de búsqueda, por defecto se realizará una búsqueda AND.
 
