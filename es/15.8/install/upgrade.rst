@@ -21,6 +21,13 @@ Estos procedimientos de actualización son compatibles con actualizaciones entre
 - Fess 14.x → Fess 15.8
 - Fess 15.x → Fess 15.8
 
+.. important::
+
+   |Fess| 14.x es compatible con la serie OpenSearch 2.x, mientras que |Fess| 15.8 es compatible
+   con OpenSearch 3.8.0. Los plugins de OpenSearch para |Fess| deben coincidir exactamente con la
+   versión de OpenSearch, por lo que si actualiza desde la versión 14.x también es obligatorio
+   actualizar la versión principal de OpenSearch. Consulte :ref:`upgrade-opensearch`.
+
 .. note::
 
    Si actualiza desde versiones más antiguas (13.x o anteriores), puede ser necesaria una actualización gradual.
@@ -35,7 +42,7 @@ Verificación de Compatibilidad de Versiones
 Verifique la compatibilidad entre la versión de destino de actualización y la versión actual.
 
 - `Notas de Lanzamiento <https://github.com/codelibs/fess/releases>`__
-- `Guía de Actualización <https://fess.codelibs.org/ja/>`__
+- :doc:`prerequisites` - Entorno de ejecución de |Fess| 15.8 (versiones de Java y OpenSearch)
 
 Planificación del Tiempo de Inactividad
 ----------------------------------------
@@ -62,19 +69,31 @@ Respaldo de Datos de Configuración
    Inicie sesión en la pantalla de administración y haga clic en "Información del sistema" → "Copia de seguridad".
 
    En la página de Copia de seguridad se listan los siguientes datos de configuración como elementos individuales.
-   Haga clic en cada enlace para descargarlos (son archivos individuales por elemento, no un único archivo ZIP).
+   Haga clic en cada fila para descargarlos (son archivos individuales por elemento, no un único archivo ZIP.
+   No existe una función de descarga masiva, por lo que debe descargar los elementos necesarios uno por uno).
 
-   - ``fess_basic_config.bulk`` - Configuración básica (ajustes generales)
-   - ``fess_config.bulk`` - Ajustes de rastreo, programador, etiquetas, coincidencias de clave y otra configuración
+   - ``fess_basic_config.bulk`` - Índices de configuración (ajustes de rastreo, programador, etiquetas,
+     coincidencias de clave, roles, autenticación web/de archivos, entre 19 índices)
+   - ``fess_config.bulk`` - Además de los 19 índices anteriores, incluye 25 índices con datos de
+     ejecución, como información de rastreo, URL con errores, registros de tareas y colas de miniaturas
    - ``fess_user.bulk`` - Usuarios, roles y grupos
-   - ``system.properties`` - Configuración del sistema
-   - ``fess.json`` / ``doc.json`` - Configuración del índice (mappings)
+   - ``system.properties`` - Configuración del sistema, incluidos los ajustes generales
+   - ``fess.json`` - Configuración del índice (número de shards, ``index.knn``, etc.)
+   - ``doc.json`` - Mapeo de documentos (definiciones de campos)
+
+   .. note::
+
+      ``fess_config.bulk`` incluye el contenido de ``fess_basic_config.bulk``. Como respaldo de
+      configuración antes de la actualización, basta con ``fess_basic_config.bulk``, ``fess_user.bulk``
+      y ``system.properties``.
 
    .. note::
 
       Los datos de registro como los registros de búsqueda y clics (``search_log.ndjson``, ``click_log.ndjson``,
       ``favorite_log.ndjson``, ``user_info.ndjson``) también pueden descargarse desde la misma página.
-      No son necesarios si solo desea hacer un respaldo de la configuración.
+      No son necesarios si solo desea hacer un respaldo de la configuración. Tenga en cuenta que estos
+      archivos ``*.ndjson`` no se pueden restaurar cargándolos desde la página de copia de seguridad
+      (consulte "Procedimientos de Reversión").
 
 2. **Respaldo de archivos de configuración**
 
@@ -82,17 +101,40 @@ Respaldo de Datos de Configuración
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
+       $ cp /path/to/fess/bin/fess.in.sh /backup/
 
-   Versión RPM/DEB::
+   Versión RPM::
 
        $ sudo cp /etc/fess/system.properties /backup/
        $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/sysconfig/fess /backup/
+
+   Versión DEB::
+
+       $ sudo cp /etc/fess/system.properties /backup/
+       $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/default/fess /backup/
+
+   .. note::
+
+      ``/etc/sysconfig/fess`` (versión RPM) y ``/etc/default/fess`` (versión DEB) son archivos de
+      variables de entorno que especifican ``FESS_PORT``, ``FESS_HEAP_SIZE``, ``SEARCH_ENGINE_HTTP_URL``,
+      ``FESS_DICTIONARY_PATH`` y otros valores. En la versión TAR.GZ/ZIP, la configuración
+      equivalente se encuentra en ``bin/fess.in.sh``.
 
 3. **Archivos de configuración personalizados**
 
    Si tiene archivos de configuración personalizados, también haga un respaldo de ellos::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+
+   .. note::
+
+      ``app/WEB-INF/classes/log4j2.xml`` es la configuración de registro del proceso principal
+      (Web) de |Fess|. Los procesos hijos, como el rastreador, usan archivos independientes
+      (``app/WEB-INF/env/crawler/resources/log4j2.xml``, entre otros: ``crawler``, ``suggest``,
+      ``thumbnail`` y ``chunk``, 4 en total). Si los ha modificado, incluya también estos
+      archivos en el respaldo.
 
 Respaldo de Datos de Índice
 -----------------------------
@@ -153,22 +195,43 @@ de diccionario.
 
        $ docker volume ls
 
-Detenga los contenedores y luego haga un respaldo de los volúmenes::
+Detenga los contenedores y luego haga un respaldo de los volúmenes. En el ``-v`` de ``docker run``,
+especifique el nombre real del volumen, incluido el prefijo::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
-    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v ${PROJECT}_search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
+
+.. warning::
+
+   Si especifica ``search01_data`` sin el prefijo en ``-v``, Docker no hará referencia al volumen
+   existente, sino que creará uno nuevo y vacío con el mismo nombre. El comando no producirá ningún
+   error, pero generará un archivo comprimido vacío, por lo que puede parecer que el respaldo se
+   realizó correctamente cuando en realidad no contiene datos.
+
+.. note::
+
+   El contenedor principal de |Fess| (``fess01``) no tiene un volumen dedicado, por lo que los
+   únicos elementos que deben respaldarse son los dos anteriores. Sin embargo, los ajustes
+   generales modificados desde la pantalla de administración y los plugins instalados desde ella
+   se almacenan únicamente dentro del contenedor y se perderán si este se recrea. Persístalos
+   especificándolos mediante ``FESS_JAVA_OPTS`` o ``FESS_PLUGINS`` en el archivo Compose.
 
 Paso 2: Detención de la Versión Actual
 ========================================
 
 Detenga Fess y OpenSearch.
 
-Versión TAR.GZ/ZIP::
+La versión TAR.GZ/ZIP no incluye un script para detener el servicio. Si inició ``bin/fess`` con
+la opción ``-p``, deténgalo usando el archivo PID::
 
-    $ kill <fess_pid>
+    $ kill $(cat /path/to/fess/fess.pid)
     $ kill <opensearch_pid>
+
+Si lo inició sin especificar ``-p``, verifique el ID del proceso y ejecute ``kill`` manualmente
+(con ``-d`` solo no se crea ningún archivo PID).
 
 Versión RPM/DEB (systemd)::
 
@@ -189,15 +252,42 @@ Versión TAR.GZ/ZIP
 
 1. Descargue y extraiga la nueva versión::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.8.0/fess-15.8.0.tar.gz
-       $ tar -xzf fess-15.8.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.8.0/fess-15.8.0.zip
+       $ unzip fess-15.8.0.zip
+
+   .. note::
+
+      La versión archivo de |Fess| se distribuye únicamente en formato ZIP
+      (no se ofrece ``fess-15.8.0.tar.gz``).
 
 2. Copie la configuración de la versión antigua::
 
        $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.8.0/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.8.0/app/WEB-INF/classes/
        $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.8.0/bin/
 
-3. Verifique las diferencias de configuración y ajuste según sea necesario
+3. Si tiene personalizaciones, copie también lo siguiente::
+
+       # Configuración de registro
+       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.8.0/app/WEB-INF/classes/
+       # Plugins instalados
+       $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.8.0/app/WEB-INF/plugin/
+       # Tema
+       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.8.0/app/themes/
+
+   .. warning::
+
+      No copie directamente los JSP editados desde "Diseño" en la pantalla de administración
+      (``app/WEB-INF/view/``). Si la estructura de los JSP cambió en la nueva versión, la pantalla
+      podría dejar de mostrarse correctamente. Vuelva a aplicar sus cambios sobre los JSP de la
+      nueva versión.
+
+4. Si utiliza OpenSearch integrado (una configuración en la que ``bin/fess`` se inicia sin
+   establecer ``SEARCH_ENGINE_HTTP_URL``), copie también los datos del índice::
+
+       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.8.0/es/data/
+
+5. Verifique las diferencias de configuración y ajuste según sea necesario
 
 Versión RPM/DEB
 ---------------
@@ -212,8 +302,19 @@ Instale el paquete de la nueva versión::
 
 .. note::
 
-   Los archivos de configuración (``/etc/fess/*``) se conservan automáticamente.
-   Sin embargo, si se han agregado nuevas opciones de configuración, es necesario ajustarlas manualmente.
+   En la versión RPM, los archivos de configuración de ``/etc/fess/*`` están registrados como
+   ``%config(noreplace)``, por lo que se conservan durante la actualización (los nuevos archivos
+   predeterminados se colocan junto a ellos con la extensión ``.rpmnew``). Si se han agregado
+   nuevas opciones de configuración, es necesario ajustarlas manualmente.
+
+.. warning::
+
+   En la versión DEB, ``/etc/fess/*`` no está registrado como conffile (los únicos conffile son
+   ``/etc/default/fess``, ``/etc/init.d/fess`` y ``/usr/lib/systemd/system/fess.service``). Por lo
+   tanto, al ejecutar ``dpkg -i``, archivos como ``/etc/fess/fess_config.properties`` se sobrescriben
+   con los de la nueva versión. Vuelva a aplicar la configuración que respaldó en el Paso 1 después
+   de la actualización. Tenga en cuenta que ``/etc/fess/system.properties`` es un archivo generado
+   en tiempo de ejecución que no forma parte del paquete, por lo que no se sobrescribe.
 
 Versión Docker
 --------------
@@ -227,10 +328,13 @@ Versión Docker
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
-Paso 4: Actualización de OpenSearch (Si es Necesario)
-======================================================
+.. _upgrade-opensearch:
 
-Si también actualiza OpenSearch, siga estos procedimientos.
+Paso 4: Actualización de OpenSearch
+====================================
+
+|Fess| 15.8 es compatible con OpenSearch 3.8.0. Si el OpenSearch al que se conecta es una versión
+anterior, actualícelo siguiendo estos procedimientos.
 
 .. note::
 
@@ -238,24 +342,42 @@ Si también actualiza OpenSearch, siga estos procedimientos.
    TAR.GZ/ZIP y RPM/DEB. En la versión Docker, al obtener las nuevas imágenes en el Paso 3, OpenSearch
    y los plugins se actualizan conjuntamente, por lo que este paso no es necesario.
 
+.. important::
+
+   |Fess| 15.8 incluye siempre ``index.knn`` en la configuración del índice de búsqueda y
+   ``content_chunk_vector`` (de tipo ``knn_vector``) en el mapeo, independientemente de si se
+   utiliza la búsqueda por vector de chunks (búsqueda semántica). Por lo tanto, el OpenSearch al
+   que se conecta **debe tener instalado el plugin k-NN**.
+
+   - Viene incluido en la distribución estándar de OpenSearch y en la imagen de la versión Docker.
+   - **No está incluido en la distribución minimal, por lo que la creación del índice fallará y
+     |Fess| no podrá iniciarse.**
+   - La configuración del índice también envía siempre ``knn.derived_source.enabled``. En un
+     OpenSearch antiguo que no reconozca esta opción, la creación del índice fallará
+     independientemente de si el plugin k-NN está instalado.
+
+   Para más detalles, consulte los "Requisitos previos" de :doc:`../config/search-semantic`.
+
 .. warning::
 
    Realice con cuidado las actualizaciones de versión principal de OpenSearch.
    Pueden surgir problemas de compatibilidad del índice.
+   |Fess| 14.x utiliza la serie OpenSearch 2.x, por lo que una actualización desde 14.x siempre
+   corresponde a este caso.
 
 1. Instale la nueva versión de OpenSearch
 
 2. Reinstale los plugins::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
    .. note::
 
       La versión de estos plugins debe coincidir con la versión de OpenSearch que se utiliza.
-      Fess 15.8 es compatible con OpenSearch 3.7.0. Si las versiones no coinciden,
+      |Fess| 15.8 es compatible con OpenSearch 3.8.0. Si las versiones no coinciden,
       la instalación de los plugins fallará.
 
 3. Inicie OpenSearch::
@@ -268,7 +390,12 @@ Paso 5: Inicio de la Nueva Versión
 Versión TAR.GZ/ZIP::
 
     $ cd /path/to/fess-15.8.0
-    $ ./bin/fess -d
+    $ ./bin/fess -d -p /path/to/fess-15.8.0/fess.pid
+
+.. note::
+
+   Si especifica ``-p``, se crea un archivo PID que permite detener el servicio la próxima vez
+   con ``kill $(cat /path/to/fess-15.8.0/fess.pid)``.
 
 Versión RPM/DEB::
 
@@ -284,9 +411,25 @@ Paso 6: Verificación de Funcionamiento
 
 1. **Verificación de registros**
 
-   Verifique que no haya errores::
+   Verifique que no haya errores.
+
+   Versión TAR.GZ/ZIP::
 
        $ tail -f /path/to/fess/logs/fess.log
+
+   Versión RPM/DEB::
+
+       $ sudo tail -f /var/log/fess/fess.log
+
+   Versión Docker::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+   .. note::
+
+      En el mismo directorio de registros también se generan ``fess-crawler.log`` (procesamiento
+      de rastreo), ``audit.log`` (autenticación y operaciones de administración) y
+      ``searchlog.log`` (solicitudes de búsqueda).
 
 2. **Acceso a la interfaz Web**
 
@@ -323,6 +466,42 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 2. Ejecute "Default Crawler" desde "Sistema" → "Programador"
 3. Espere hasta que se complete el rastreo
 4. Verifique los resultados de búsqueda
+
+.. warning::
+
+   Dado que la reindexación reconstruye el índice con el nuevo mapeo, fallará en un OpenSearch
+   sin el plugin k-NN. Consulte las notas del Paso 4.
+
+Migración Específica de 15.8
+==============================
+
+Si actualiza desde la versión 15.7 o anterior a la 15.8, es posible que deba realizar las
+siguientes tareas según las funciones que utilice.
+
+Si Utilizaba la Búsqueda Semántica
+------------------------------------
+
+El plugin ``fess-webapp-semantic-search``, que proporcionaba la búsqueda semántica en las
+versiones 15.7 y anteriores, ya no es necesario (y queda obsoleto) porque se integró en el
+núcleo en la versión 15.8. Debe eliminar el plugin, eliminar ``-Dfess.semantic_search.*`` y
+``-Drank.fusion.searchers=default,semantic``, y separar el antiguo ingest pipeline. Consulte
+:ref:`semantic-search-migration` (:doc:`../config/search-semantic`) para conocer el
+procedimiento.
+
+Si Utilizaba el Modo de Búsqueda con IA (Chat RAG)
+-----------------------------------------------------
+
+A partir de la versión 15.8, la función del modo de búsqueda con IA (chat RAG) se separó en
+plugins independientes, como ``fess-llm-ollama``, ``fess-llm-openai`` y ``fess-llm-gemini``.
+Instale el plugin correspondiente al proveedor que utilice desde "Sistema" → "Plugin" en la
+pantalla de administración.
+
+Actualización de la Versión de los Plugins
+---------------------------------------------
+
+Los plugins instalados en ``app/WEB-INF/plugin/`` deben reemplazarse por los correspondientes a
+la versión de |Fess|. Si utiliza ``FESS_PLUGINS`` en la versión Docker, actualice la parte de
+la versión, por ejemplo a ``fess-ds-wikipedia:15.8.0``.
 
 Procedimientos de Reversión
 =============================
@@ -364,11 +543,43 @@ O restaure el directorio desde el respaldo::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+En la versión Docker, vuelva al archivo Compose de la versión anterior y restaure el contenido
+de los volúmenes::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu \
+        sh -c "rm -rf /data/* && tar xzf /backup/search01-data-backup.tar.gz -C /"
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
 .. note::
 
-   Los datos de configuración descargados desde la pantalla de administración (archivos ``*.bulk``) pueden
-   reimportarse desde la función de carga en la página "Información del sistema" → "Copia de seguridad"
-   después de iniciar Fess.
+   Los datos de configuración descargados desde la pantalla de administración pueden reimportarse
+   desde la función de carga en la página "Información del sistema" → "Copia de seguridad" después
+   de iniciar |Fess|. Solo se pueden cargar archivos ``*.bulk``, archivos ``*.properties`` que
+   comiencen con ``system``, archivos ``*.xml`` que comiencen con ``gsa``, archivos ``*.json`` que
+   comiencen con ``fess`` y archivos ``*.json`` que comiencen con ``doc``, y solo un archivo por
+   operación. Los archivos ``*.ndjson``, como los registros de búsqueda, no se aceptan y producen
+   un error.
+
+.. warning::
+
+   Cargar ``fess.json`` y ``doc.json`` sobrescribe los propios archivos de definición de índice
+   incluidos con |Fess|. Si después de la actualización carga la versión antigua de ``fess.json``
+   o ``doc.json``, se perderán la configuración y el mapeo del índice de la nueva versión. No los
+   cargue salvo con fines de reversión.
+
+.. note::
+
+   El archivo ``system.properties`` cargado se lee únicamente en memoria y no se escribe en disco.
+   Por lo tanto, su contenido se pierde al reiniciar |Fess|. Para restaurarlo de forma fiable,
+   coloque directamente el archivo respaldado en su ubicación correspondiente (``app/WEB-INF/conf/``
+   en la versión TAR.GZ/ZIP, ``/etc/fess/`` en la versión RPM/DEB) antes de iniciar el servicio.
+
+.. note::
+
+   La importación se ejecuta de forma asíncrona y la pantalla solo muestra que se inició el
+   proceso. Para confirmar si realmente se completó con éxito, consulte ``fess.log``.
 
 Paso 4: Inicio y Verificación del Servicio
 -------------------------------------------
@@ -395,20 +606,37 @@ R: La actualización de Fess requiere la detención del servicio. Para minimizar
 P: ¿Es necesario actualizar también OpenSearch?
 ------------------------------------------------
 
-R: Cada versión de Fess requiere una versión específica de OpenSearch.
-Fess 15.8 es compatible con OpenSearch 3.7.0.
-Los plugins de OpenSearch para Fess, como ``opensearch-analysis-fess``, deben coincidir exactamente con
+R: Cada versión de |Fess| requiere una versión específica de OpenSearch.
+|Fess| 15.8 es compatible con OpenSearch 3.8.0.
+Los plugins de OpenSearch para |Fess|, como ``opensearch-analysis-fess``, deben coincidir exactamente con
 la versión de OpenSearch; por lo tanto, si actualiza OpenSearch, actualice también los plugins a la
-versión correspondiente (3.7.0).
+versión correspondiente (3.8.0).
+
+Tenga en cuenta que |Fess| 15.8 requiere el plugin k-NN y siempre envía
+``knn.derived_source.enabled`` en la configuración del índice. Con un OpenSearch antiguo, la
+creación de nuevos índices fallará, por lo que en la práctica es necesario actualizar OpenSearch.
+Para más detalles, consulte el Paso 4.
 
 P: ¿Es necesario recrear el índice?
 ------------------------------------
 
-R: Generalmente no es necesario para actualizaciones de versión menor, pero se recomienda la recreación para actualizaciones de versión principal.
-Además, si está actualizando desde la versión 15.7 o anterior a la 15.8 o posterior y desea
-habilitar recién la búsqueda por vector de chunks (búsqueda semántica), es necesaria la
-reindexación, ya que el índice existente no adopta el nuevo mapeo. Consulte
-:doc:`../config/search-semantic` para más detalles.
+R: Para una actualización de versión menor de |Fess| (15.x → 15.8) en la que no se utilice la
+búsqueda por vector de chunks, generalmente no es necesario. El índice existente puede seguir
+utilizándose tal cual, y como ``content_chunker.enabled`` y otras opciones similares están
+deshabilitadas de forma predeterminada, el comportamiento no cambia.
+
+En los siguientes casos sí es necesario recrear el índice y reindexar:
+
+- **Si habilita recién la búsqueda por vector de chunks (búsqueda semántica)**: el índice
+  existente no adopta el nuevo mapeo, por lo que la reindexación es obligatoria. Para más
+  detalles, consulte :ref:`semantic-search-migration` (:doc:`../config/search-semantic`).
+- **Si actualiza desde 14.x**: dado que OpenSearch pasa de la serie 2.x a la 3.x (actualización
+  de versión principal), se recomienda recrear el índice.
+
+.. warning::
+
+   Las operaciones que crean un índice nuevo (incluida la reindexación) fallarán en un OpenSearch
+   sin el plugin k-NN. Consulte las notas del Paso 4.
 
 P: Después de la actualización, no se muestran los resultados de búsqueda
 --------------------------------------------------------------------------

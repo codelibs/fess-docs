@@ -21,6 +21,13 @@
 - Fess 14.x → Fess 15.8
 - Fess 15.x → Fess 15.8
 
+.. important::
+
+   |Fess| 14.x는 OpenSearch 2.x 계열, |Fess| 15.8은 OpenSearch 3.8.0에 대응합니다.
+   |Fess| 용 OpenSearch 플러그인은 OpenSearch 버전과 완전히 일치해야 하므로,
+   14.x에서 업그레이드하는 경우 OpenSearch의 메이저 버전 업그레이드도 필수입니다.
+   :ref:`upgrade-opensearch` 를 참조하십시오.
+
 .. note::
 
    더 오래된 버전(13.x 이전)에서 업그레이드하는 경우 단계적 업그레이드가 필요할 수 있습니다.
@@ -35,7 +42,7 @@
 업그레이드 대상 버전과 현재 버전의 호환성을 확인하십시오.
 
 - `릴리스 노트 <https://github.com/codelibs/fess/releases>`__
-- `업그레이드 가이드 <https://fess.codelibs.org/ko/>`__
+- :doc:`prerequisites` - |Fess| 15.8의 동작 환경(Java, OpenSearch 버전)
 
 다운타임 계획
 ----------------
@@ -62,19 +69,31 @@
    관리 화면에 로그인하여 「시스템 정보」→「백업」을 클릭합니다.
 
    백업 페이지에는 다음 설정 데이터가 항목별로 목록 표시됩니다.
-   각 링크를 클릭하여 다운로드합니다(단일 ZIP 파일이 아닌 항목별 개별 파일입니다).
+   각 행을 클릭하여 다운로드합니다(단일 ZIP 파일이 아니라 항목별 개별 파일입니다.
+   일괄 다운로드 기능은 없으므로 필요한 항목을 하나씩 다운로드합니다).
 
-   - ``fess_basic_config.bulk`` - 기본 설정(전반 설정)
-   - ``fess_config.bulk`` - 크롤 설정, 스케줄러, 레이블, 키 매치 등의 구성 정보
+   - ``fess_basic_config.bulk`` - 설정 인덱스(크롤 설정, 스케줄러, 레이블,
+     키 매치, 역할, 웹/파일 인증 등 19개 인덱스)
+   - ``fess_config.bulk`` - 위 19개 인덱스에 더해 크롤 정보, 장애 URL, 작업 로그,
+     썸네일 큐 등 실행 시 데이터를 포함하는 25개 인덱스
    - ``fess_user.bulk`` - 사용자, 역할, 그룹
-   - ``system.properties`` - 시스템 설정
-   - ``fess.json`` / ``doc.json`` - 인덱스 설정(매핑)
+   - ``system.properties`` - 전반 설정을 포함하는 시스템 설정
+   - ``fess.json`` - 인덱스 설정(샤드 수, ``index.knn`` 등)
+   - ``doc.json`` - 문서 매핑(필드 정의)
+
+   .. note::
+
+      ``fess_config.bulk`` 는 ``fess_basic_config.bulk`` 를 포함합니다. 업그레이드 전
+      설정 백업으로는 ``fess_basic_config.bulk``, ``fess_user.bulk``,
+      ``system.properties`` 3개면 충분합니다.
 
    .. note::
 
       검색 로그나 클릭 로그 등의 로그 데이터(``search_log.ndjson``, ``click_log.ndjson``,
       ``favorite_log.ndjson``, ``user_info.ndjson``)도 같은 페이지에서 다운로드할 수 있습니다.
-      설정만 백업하는 경우에는 불필요합니다.
+      설정만 백업하는 경우에는 불필요합니다. 또한 이 ``*.ndjson`` 파일들은
+      백업 페이지에서 업로드하여 복원할 수 없습니다
+      (「롤백 절차」 참조).
 
 2. **설정 파일 백업**
 
@@ -82,17 +101,40 @@
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
+       $ cp /path/to/fess/bin/fess.in.sh /backup/
 
-   RPM/DEB 버전::
+   RPM 버전::
 
        $ sudo cp /etc/fess/system.properties /backup/
        $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/sysconfig/fess /backup/
+
+   DEB 버전::
+
+       $ sudo cp /etc/fess/system.properties /backup/
+       $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/default/fess /backup/
+
+   .. note::
+
+      ``/etc/sysconfig/fess`` (RPM 버전)와 ``/etc/default/fess`` (DEB 버전)는
+      ``FESS_PORT``, ``FESS_HEAP_SIZE``, ``SEARCH_ENGINE_HTTP_URL``,
+      ``FESS_DICTIONARY_PATH`` 등을 지정하는 환경 변수 파일입니다.
+      TAR.GZ/ZIP 버전에서 이에 해당하는 설정은 ``bin/fess.in.sh`` 에 있습니다.
 
 3. **커스터마이징한 설정 파일**
 
    커스터마이징한 설정 파일이 있는 경우 해당 파일도 백업합니다::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+
+   .. note::
+
+      ``app/WEB-INF/classes/log4j2.xml`` 은 |Fess| 본체(Web) 프로세스의 로그 설정입니다.
+      크롤러 등의 자식 프로세스는 별도의 파일
+      (``app/WEB-INF/env/crawler/resources/log4j2.xml`` 등 ``crawler``, ``suggest``,
+      ``thumbnail``, ``chunk`` 총 4개)을 사용하므로, 이를 변경한 경우에는
+      함께 백업하십시오.
 
 인덱스 데이터 백업
 ------------------------------
@@ -152,22 +194,41 @@ OpenSearch의 데이터는 Docker 볼륨에 저장됩니다. ``compose-opensearc
 
        $ docker volume ls
 
-컨테이너를 중지한 후 볼륨을 백업합니다::
+컨테이너를 중지한 후 볼륨을 백업합니다. ``docker run`` 의 ``-v`` 에는
+접두사를 포함한 실제 볼륨 이름을 지정합니다::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
-    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v ${PROJECT}_search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
+
+.. warning::
+
+   ``-v`` 에 접두사 없이 ``search01_data`` 를 지정하면 Docker는 기존 볼륨을 참조하지 않고
+   같은 이름의 빈 볼륨을 새로 생성합니다. 명령은 오류 없이 실행되고 내용이 빈 아카이브가
+   생성되므로, 마치 백업이 정상적으로 취득된 것처럼 보일 수 있습니다.
+
+.. note::
+
+   |Fess| 본체(``fess01``) 컨테이너에는 전용 볼륨이 없으므로 백업 대상은
+   위 2개뿐입니다. 다만 관리 화면에서 변경한 전반 설정이나 관리 화면에서 설치한
+   플러그인은 컨테이너 내부에만 저장되며, 컨테이너를 재생성하면 유실됩니다.
+   이러한 항목은 Compose 파일의 ``FESS_JAVA_OPTS`` 나 ``FESS_PLUGINS`` 로 지정하여 영속화하십시오.
 
 단계 2: 현재 버전 중지
 ================================
 
 Fess와 OpenSearch를 중지합니다.
 
-TAR.GZ/ZIP 버전::
+TAR.GZ/ZIP 버전에는 중지용 스크립트가 포함되어 있지 않습니다. ``bin/fess`` 를 ``-p`` 옵션과 함께
+실행한 경우에는 PID 파일을 사용하여 중지합니다::
 
-    $ kill <fess_pid>
+    $ kill $(cat /path/to/fess/fess.pid)
     $ kill <opensearch_pid>
+
+``-p`` 를 지정하지 않고 실행한 경우에는 프로세스 ID를 확인하여 ``kill`` 합니다
+(``-d`` 만으로는 PID 파일이 생성되지 않습니다).
 
 RPM/DEB 버전 (systemd)::
 
@@ -186,17 +247,43 @@ Docker 버전::
 TAR.GZ/ZIP 버전
 ---------------
 
-1. 새 버전 다운로드 및 압축 해제::
+1. 새 버전을 다운로드하여 압축을 해제합니다::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.8.0/fess-15.8.0.tar.gz
-       $ tar -xzf fess-15.8.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.8.0/fess-15.8.0.zip
+       $ unzip fess-15.8.0.zip
 
-2. 이전 버전 설정 복사::
+   .. note::
+
+      |Fess| 의 아카이브 버전은 ZIP 형식으로만 배포됩니다(``fess-15.8.0.tar.gz`` 는
+      제공되지 않습니다).
+
+2. 이전 버전의 설정을 복사합니다::
 
        $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.8.0/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.8.0/app/WEB-INF/classes/
        $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.8.0/bin/
 
-3. 설정 차이를 확인하고 필요에 따라 조정합니다
+3. 커스터마이징한 경우에는 다음도 복사합니다::
+
+       # 로그 설정
+       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.8.0/app/WEB-INF/classes/
+       # 설치된 플러그인
+       $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.8.0/app/WEB-INF/plugin/
+       # 테마
+       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.8.0/app/themes/
+
+   .. warning::
+
+      관리 화면 「디자인」에서 편집한 JSP(``app/WEB-INF/view/``)는 그대로 복사하지 마십시오.
+      새 버전의 JSP와 구조가 달라진 경우 화면이 올바르게 표시되지 않을 수 있습니다.
+      새 버전의 JSP에 변경 내용을 다시 적용하십시오.
+
+4. 임베디드 OpenSearch(``SEARCH_ENGINE_HTTP_URL`` 을 설정하지 않고 ``bin/fess`` 를 실행하는 구성)를
+   사용하는 경우에는 인덱스 데이터도 복사합니다::
+
+       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.8.0/es/data/
+
+5. 설정 차이를 확인하고 필요에 따라 조정합니다
 
 RPM/DEB 버전
 ------------
@@ -211,8 +298,19 @@ RPM/DEB 버전
 
 .. note::
 
-   설정 파일(``/etc/fess/*``)은 자동으로 유지됩니다.
-   단, 새로운 설정 옵션이 추가된 경우 수동으로 조정이 필요합니다.
+   RPM 버전에서는 ``/etc/fess/*`` 의 설정 파일이 ``%config(noreplace)`` 로 등록되어 있으므로
+   업그레이드 시에도 유지됩니다(새 기본 파일은 ``.rpmnew`` 로 함께 배치됩니다).
+   새로운 설정 옵션이 추가된 경우에는 수동으로 조정이 필요합니다.
+
+.. warning::
+
+   DEB 버전에서는 ``/etc/fess/*`` 가 conffile로 등록되어 있지 않습니다(conffile은
+   ``/etc/default/fess``, ``/etc/init.d/fess``, ``/usr/lib/systemd/system/fess.service``
+   3개뿐입니다). 따라서 ``dpkg -i`` 를 실행하면 ``/etc/fess/fess_config.properties`` 등이
+   새 버전의 파일로 덮어써집니다. 단계 1에서 백업한 설정을
+   업그레이드 후에 다시 적용하십시오.
+   또한 ``/etc/fess/system.properties`` 는 패키지에 포함되지 않는 실행 시 생성 파일이므로
+   덮어써지지 않습니다.
 
 Docker 버전
 -----------
@@ -226,10 +324,13 @@ Docker 버전
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
-단계 4: OpenSearch 업그레이드(필요한 경우)
-=================================================
+.. _upgrade-opensearch:
 
-OpenSearch도 업그레이드하는 경우 다음 절차를 따르십시오.
+단계 4: OpenSearch 업그레이드
+====================================
+
+|Fess| 15.8은 OpenSearch 3.8.0에 대응합니다. 연결 대상 OpenSearch가 이보다 오래된 경우
+다음 절차에 따라 업그레이드하십시오.
 
 .. note::
 
@@ -237,24 +338,39 @@ OpenSearch도 업그레이드하는 경우 다음 절차를 따르십시오.
    Docker 버전에서는 단계 3에서 새 이미지를 가져오면 OpenSearch와 플러그인도
    함께 업데이트되므로 이 단계는 불필요합니다.
 
+.. important::
+
+   |Fess| 15.8은 청크 벡터 검색(시맨틱 검색) 사용 여부와 관계없이 검색 인덱스 설정에
+   ``index.knn`` 을, 매핑에 ``content_chunk_vector`` (``knn_vector`` 타입)를 항상
+   포함합니다. 따라서 연결 대상 OpenSearch에는 **k-NN 플러그인이 필수** 입니다.
+
+   - 표준 배포판 OpenSearch 및 Docker 버전의 이미지에는 동봉되어 있습니다.
+   - **minimal 배포판에는 포함되어 있지 않으므로 인덱스를 새로 생성하지 못해 |Fess| 가
+     시작되지 않습니다.**
+   - 인덱스 설정에는 ``knn.derived_source.enabled`` 도 항상 전송됩니다. 이를 인식하지 못하는
+     오래된 OpenSearch에서는 k-NN 플러그인 유무와 관계없이 인덱스 생성에 실패합니다.
+
+   자세한 내용은 :doc:`../config/search-semantic` 의 「전제 조건」을 참조하십시오.
+
 .. warning::
 
    OpenSearch의 메이저 버전 업그레이드는 신중하게 수행하십시오.
    인덱스 호환성에 문제가 발생할 수 있습니다.
+   |Fess| 14.x는 OpenSearch 2.x 계열이므로, 14.x에서의 업그레이드는 반드시 이 경우에 해당합니다.
 
 1. 새 버전의 OpenSearch 설치
 
 2. 플러그인 재설치::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
    .. note::
 
       이러한 플러그인의 버전은 사용하는 OpenSearch의 버전과 일치시켜야 합니다.
-      Fess 15.8은 OpenSearch 3.7.0에 대응합니다. 버전이 일치하지 않으면
+      |Fess| 15.8은 OpenSearch 3.8.0에 대응합니다. 버전이 일치하지 않으면
       플러그인 설치에 실패합니다.
 
 3. OpenSearch 시작::
@@ -267,7 +383,12 @@ OpenSearch도 업그레이드하는 경우 다음 절차를 따르십시오.
 TAR.GZ/ZIP 버전::
 
     $ cd /path/to/fess-15.8.0
-    $ ./bin/fess -d
+    $ ./bin/fess -d -p /path/to/fess-15.8.0/fess.pid
+
+.. note::
+
+   ``-p`` 를 지정하면 PID 파일이 생성되며, 다음 중지 시
+   ``kill $(cat /path/to/fess-15.8.0/fess.pid)`` 로 중지할 수 있습니다.
 
 RPM/DEB 버전::
 
@@ -283,9 +404,24 @@ Docker 버전::
 
 1. **로그 확인**
 
-   오류가 없는지 확인합니다::
+   오류가 없는지 확인합니다.
+
+   TAR.GZ/ZIP 버전::
 
        $ tail -f /path/to/fess/logs/fess.log
+
+   RPM/DEB 버전::
+
+       $ sudo tail -f /var/log/fess/fess.log
+
+   Docker 버전::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+   .. note::
+
+      같은 로그 디렉터리에 크롤 처리의 ``fess-crawler.log``, 인증 및 관리 작업의
+      ``audit.log``, 검색 요청의 ``searchlog.log`` 도 출력됩니다.
 
 2. **웹 인터페이스 액세스**
 
@@ -321,6 +457,39 @@ Docker 버전::
 2. 「시스템」→「스케줄러」에서 "Default Crawler" 실행
 3. 크롤이 완료될 때까지 대기
 4. 검색 결과 확인
+
+.. warning::
+
+   재인덱싱에서는 새로운 매핑으로 인덱스가 다시 생성되므로, k-NN 플러그인이
+   없는 OpenSearch에서는 실패합니다. 단계 4의 주의사항을 확인하십시오.
+
+15.8 전용 마이그레이션 작업
+===========================
+
+15.7 이전 버전에서 15.8로 업그레이드하는 경우, 사용 중인 기능에 따라 다음 작업이 필요합니다.
+
+시맨틱 검색을 사용하고 있었던 경우
+----------------------------------
+
+15.7 이전에 시맨틱 검색을 제공하던 ``fess-webapp-semantic-search`` 플러그인은
+15.8에서 코어로 통합되어 불필요해졌습니다(사용 중단). 플러그인 제거, ``-Dfess.semantic_search.*``
+및 ``-Drank.fusion.searchers=default,semantic`` 의 제거, 기존 인제스트 파이프라인 분리가
+필요합니다. 절차는 :ref:`semantic-search-migration` (:doc:`../config/search-semantic`)를
+참조하십시오.
+
+AI 검색 모드(RAG 채팅)를 사용하고 있었던 경우
+---------------------------------------------
+
+15.8부터 AI 검색 모드(RAG 채팅) 기능은 ``fess-llm-ollama``, ``fess-llm-openai``,
+``fess-llm-gemini`` 등의 플러그인으로 분리되었습니다. 사용 중인 프로바이더에 대응하는
+플러그인을 관리 화면 「시스템」→「플러그인」에서 설치하십시오.
+
+플러그인 버전 갱신
+------------------------
+
+``app/WEB-INF/plugin/`` 에 설치된 플러그인은 |Fess| 버전에 대응하는
+것으로 교체해야 합니다. Docker 버전에서 ``FESS_PLUGINS`` 를 지정하는 경우에는
+``fess-ds-wikipedia:15.8.0`` 처럼 버전 부분을 갱신하십시오.
 
 롤백 절차
 ==============
@@ -362,10 +531,40 @@ RPM/DEB 버전의 경우::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+Docker 버전에서는 이전 버전의 Compose 파일로 되돌린 후 볼륨의 내용을 복원합니다::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu \
+        sh -c "rm -rf /data/* && tar xzf /backup/search01-data-backup.tar.gz -C /"
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
 .. note::
 
-   관리 화면에서 다운로드한 설정 데이터(``*.bulk`` 파일)는 Fess 시작 후
-   「시스템 정보」→「백업」페이지의 업로드 기능으로 다시 임포트하여 복원할 수 있습니다.
+   관리 화면에서 다운로드한 설정 데이터는 |Fess| 시작 후 「시스템 정보」→「백업」
+   페이지의 업로드 기능으로 다시 임포트하여 복원할 수 있습니다. 업로드할 수 있는 것은
+   ``*.bulk``, ``system`` 으로 시작하는 ``*.properties``, ``gsa`` 로 시작하는 ``*.xml``,
+   ``fess`` 로 시작하는 ``*.json``, ``doc`` 으로 시작하는 ``*.json`` 뿐이며, 한 번의 조작에 파일 1개입니다.
+   검색 로그 등의 ``*.ndjson`` 파일은 받아들여지지 않으며 오류가 됩니다.
+
+.. warning::
+
+   ``fess.json`` 과 ``doc.json`` 의 업로드는 |Fess| 에 동봉된 인덱스 정의
+   파일 자체를 덮어씁니다. 업그레이드 후에 이전 버전의 ``fess.json`` 이나
+   ``doc.json`` 을 업로드하면 새 버전의 인덱스 설정·매핑이 유실됩니다.
+   롤백 목적 이외에는 업로드하지 마십시오.
+
+.. note::
+
+   업로드된 ``system.properties`` 는 메모리에만 로드되며 파일로는
+   기록되지 않습니다. 따라서 ``system.properties`` 의 내용은 |Fess| 를 재시작하면 유실됩니다.
+   확실히 복원하려면 백업한 파일을 정해진 위치(TAR.GZ/ZIP 버전은
+   ``app/WEB-INF/conf/``, RPM/DEB 버전은 ``/etc/fess/``)에 직접 배치한 후 시작하십시오.
+
+.. note::
+
+   임포트는 비동기로 실행되며, 화면에는 시작되었다는 내용만 표시됩니다.
+   실제로 성공했는지는 ``fess.log`` 를 확인하십시오.
 
 단계 4: 서비스 시작 및 확인
 ----------------------------
@@ -392,19 +591,35 @@ A: Fess의 업그레이드에는 서비스 중지가 필요합니다. 다운타�
 Q: OpenSearch도 업그레이드해야 합니까?
 -------------------------------------------------
 
-A: Fess 버전마다 대응하는 OpenSearch의 버전이 정해져 있습니다.
-Fess 15.8은 OpenSearch 3.7.0에 대응합니다.
-``opensearch-analysis-fess`` 등의 Fess용 OpenSearch 플러그인은 OpenSearch의 버전과
-완전히 일치해야 하므로 OpenSearch를 업그레이드하는 경우
-대응하는 버전(3.7.0)의 플러그인으로 업데이트하십시오.
+A: |Fess| 버전마다 대응하는 OpenSearch 버전이 정해져 있습니다.
+|Fess| 15.8은 OpenSearch 3.8.0에 대응합니다.
+``opensearch-analysis-fess`` 등의 |Fess| 용 OpenSearch 플러그인은 OpenSearch 버전과
+완전히 일치해야 하므로, OpenSearch를 업그레이드하는 경우
+대응하는 버전(3.8.0)의 플러그인으로 업데이트하십시오.
+
+또한 |Fess| 15.8은 k-NN 플러그인을 필수로 하며, 인덱스 설정에 ``knn.derived_source.enabled``
+를 항상 전송합니다. 오래된 OpenSearch를 그대로 사용하면 새 인덱스 생성에 실패하므로
+사실상 OpenSearch의 업그레이드가 필요합니다. 자세한 내용은 단계 4를 참조하십시오.
 
 Q: 인덱스를 재작성해야 합니까?
 ------------------------------------------
 
-A: 마이너 버전 업그레이드의 경우 일반적으로 불필요하지만 메이저 버전 업그레이드의 경우 재작성을 권장합니다.
-또한 15.7 이전 버전에서 15.8 이상으로 업그레이드하면서 청크 벡터 검색(시맨틱 검색)을 새로
-활성화하려는 경우에는, 기존 인덱스가 새 매핑을 반영하지 않으므로 재인덱싱이 필요합니다.
-자세한 내용은 :doc:`../config/search-semantic` 을 참조하세요.
+A: |Fess| 의 마이너 버전 업그레이드(15.x → 15.8)에서 청크 벡터 검색을 이용하지 않는 경우는
+일반적으로 불필요합니다. 기존 인덱스를 그대로 이용할 수 있으며, ``content_chunker.enabled`` 등은
+기본값이 비활성화이므로 동작은 변하지 않습니다.
+
+다음의 경우에는 재작성·재인덱싱이 필요합니다.
+
+- **새로 청크 벡터 검색(시맨틱 검색)을 활성화하는 경우**: 기존 인덱스에는
+  새 매핑이 반영되지 않으므로 재인덱싱이 필수입니다. 자세한 내용은
+  :ref:`semantic-search-migration` (:doc:`../config/search-semantic`)를 참조하십시오.
+- **14.x에서 업그레이드하는 경우**: OpenSearch가 2.x에서 3.x로 메이저 버전 업그레이드
+  되므로 인덱스 재작성을 권장합니다.
+
+.. warning::
+
+   인덱스를 새로 생성하는 작업(재인덱싱 포함)은 k-NN 플러그인이 없는
+   OpenSearch에서는 실패합니다. 단계 4의 주의사항을 확인하십시오.
 
 Q: 업그레이드 후 검색 결과가 표시되지 않습니다
 ----------------------------------------------
