@@ -1,6 +1,10 @@
 ============================================
-Général
+Aperçu
 ============================================
+
+Le point de départ de |Fess| : téléchargements, démarrage rapide,
+captures des écrans de recherche et d'administration, et une
+démonstration en ligne.
 
 .. toctree::
 
