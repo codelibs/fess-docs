@@ -35,7 +35,7 @@ Rank Fusion，无需为了让语义搜索器参与其中而进行 AI 搜索模�
    * - OpenAI
      - ``openai``
      - ``fess-llm-openai``
-     - OpenAI 公司的云 API。可使用 GPT-4 等模型。
+     - OpenAI 公司的云 API。可使用 GPT-5 等模型。
    * - Google Gemini
      - ``gemini``
      - ``fess-llm-gemini``
@@ -70,20 +70,22 @@ Rank Fusion，无需为了让语义搜索器参与其中而进行 AI 搜索模�
 
 .. note::
 
-   当 ``rag.llm.name`` 未设置时，默认情况下仅 Ollama 客户端处于启用状态。请安装您要使用的提供商，并通过 ``rag.llm.name`` 进行选择。
+   ``rag.llm.name`` 的默认值为 ``ollama`` 。该值用于确定要加载的 DI 组件名称（ ``{rag.llm.name}LlmClient`` ）。因此，如果将 ``rag.llm.name`` 保持为默认值，而仅安装了 ``fess-llm-ollama`` 以外的插件，则不会启用任何 LLM 客户端。此时，日志中会输出警告 ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` ，AI 搜索模式将无法使用。请务必根据所安装的插件设置 ``rag.llm.name`` 。指定 ``none`` 可明确禁用 LLM 集成。
 
 插件安装
 ========
 
-LLM 功能以插件形式提供。需要将与所用提供商对应的 ``fess-llm-{provider}`` 插件 JAR 文件放置到插件目录。
+LLM 功能以插件形式提供。请安装与所用提供商对应的 ``fess-llm-{provider}`` 插件。
 
-以使用 OpenAI 提供商为例，请下载 ``fess-llm-openai-15.8.0.jar`` 并放置到以下目录。
+可从管理界面「系统 > 插件」页面进行安装。 ``fess-llm-*`` 插件会显示在可安装插件列表中。
+
+如需手动安装，请将对应的 JAR 文件（例如 OpenAI 提供商对应的 ``fess-llm-openai-15.8.0.jar`` ）放置到以下目录。
 
 ::
 
     app/WEB-INF/plugin/
 
-放置后，重启 |Fess| 即可加载插件。
+无论采用哪种方式，安装后重启 |Fess| 即可加载插件。
 
 架构
 ====
@@ -101,7 +103,11 @@ AI 搜索模式功能按以下流程运作。
 
 .. note::
 
-   内部处理由 ``intent`` 、 ``search`` 、 ``evaluate`` 、 ``fetch`` 、 ``answer`` 五个阶段构成，各阶段的进度通过流式传输（SSE）通知客户端。
+   内部处理由 ``intent`` 、 ``search`` 、 ``evaluate`` 、 ``fetch`` 、 ``answer`` 五个阶段构成，各阶段的进度通过流式传输（SSE）通知客户端。查询再生成并非独立的阶段，而是作为 ``search`` 阶段的回退（fallback）进行通知，之后会重新执行 ``search`` 。
+
+.. note::
+
+   上述流程是在流式 API 中意图被判定为"搜索"时的情况，实际路径会因意图判定结果而变化。当问题被判定为不明确时，将不经过搜索直接生成响应；当被要求对 URL 进行摘要时，将执行 URL 搜索但不执行评估阶段。此外，非流式的 ``POST /api/v2/chat`` 不执行评估阶段，也不进行按阶段的进度通知。
 
 基本配置
 ========
@@ -121,11 +127,11 @@ LLM 功能的配置在以下两处进行。
 fess_config.properties
 ----------------------
 
-在 ``app/WEB-INF/conf/fess_config.properties`` 中进行配置。用于启用 AI 搜索模式、会话及历史记录相关设置，以及提供商专属配置（连接 URL、API 密钥、生成参数等）。
+在 ``app/WEB-INF/classes/fess_config.properties`` （软件包版中为 ``/etc/fess/fess_config.properties`` ）中进行配置。除启用 AI 搜索模式、配置会话及历史记录相关设置外，提供商专属配置（连接 URL、API 密钥、生成参数等）也记录在此文件中。
 
 ::
 
-    # 启用AI搜索模式功能
+    # 启用AI搜索模式功能（默认为false）
     rag.chat.enabled=true
 
     # 提供商专属配置示例（以OpenAI为例）
@@ -169,7 +175,52 @@ fess_config.properties
 
 系统提示在各插件的 DI XML 文件中进行管理，而非属性文件。
 
-各 ``fess-llm-*`` 插件的 JAR 文件内包含的 ``fess_llm++.xml`` 文件中定义了系统提示。由于该文件是打包在插件 JAR 中的类路径资源，如需自定义提示，需要编辑 JAR 内的 DI XML 文件。
+各 ``fess-llm-*`` 插件的 JAR 文件内包含的 ``fess_llm++.xml`` 文件中定义了系统提示。
+无需解压 JAR 文件重新编辑即可自定义提示词。借助 LastaDi 的组件重定义机制，在
+``app/WEB-INF/classes/`` 下放置名为 ``fess_llm+{组件名}.xml`` 的文件，即可替换插件侧的组件定义。
+
+各提供商对应的组件名称如下。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 提供商
+     - 组件名称
+   * - Ollama
+     - ``ollamaLlmClient``
+   * - OpenAI
+     - ``openaiLlmClient``
+   * - Google Gemini
+     - ``geminiLlmClient``
+
+例如，若要修改 OpenAI 提供商的回答生成提示词，请创建 ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml`` 。
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="openaiLlmClient" class="org.codelibs.fess.llm.openai.OpenAiLlmClient">
+            <postConstruct name="register"/>
+            <postConstruct name="init"/>
+            <preDestroy name="destroy"/>
+            <property name="answerGenerationSystemPrompt">"自定义回答生成提示词"</property>
+            <!-- 未修改的提示属性也需要全部写出 -->
+        </component>
+    </components>
+
+.. warning::
+
+   重定义文件会替换组件定义。因此，请务必包含原始 ``fess_llm++.xml`` 中记述的全部内容（类名、 ``postConstruct`` 、
+   ``preDestroy`` ，以及未修改的提示属性）。未记述的属性将恢复为未设置状态。
+
+.. warning::
+
+   请勿直接复制 ``fess_llm++.xml`` 本身并放置到 ``app/WEB-INF/classes/`` 下。
+   文件名以 ``++`` 结尾的 DI XML 会将类路径上所有同名文件都作为"追加"加载，因此同名组件会被重复注册，
+   导致抛出 ``TooManyRegistrationComponentException`` ，使 |Fess| 无法启动。
 
 可用性检查
 ----------
@@ -182,10 +233,14 @@ fess_config.properties
      - 说明
      - 默认值
    * - ``rag.llm.{provider}.availability.check.interval``
-     - 检查 LLM 可用性的间隔（秒）。设为 0 可禁用
+     - 定期检查 LLM 可用性的间隔（秒）
      - ``60``
 
 此配置在 ``fess_config.properties`` 中进行。 |Fess| 会定期检查 LLM 提供商的连接状态。
+
+.. note::
+
+   如果为该属性指定 ``0`` 以下的值或非数值，则该值将被忽略，转而使用默认值（ ``60`` ）。无法通过该属性禁用可用性检查。此外，当 ``rag.chat.enabled`` 为 ``false`` 时，以及未在 ``rag.llm.name`` 中选中的提供商，均不会执行可用性检查。
 
 会话管理
 ========
@@ -291,7 +346,7 @@ fess_config.properties
      - 生成 FAQ 形式的回答
    * - 直接回答
      - ``direct``
-     - 不经过搜索直接生成回答
+     - 不经过搜索直接生成回答（当前版本不会被调用）
    * - 查询再生成
      - ``queryregeneration``
      - 当没有搜索结果时重新生成查询
@@ -322,7 +377,52 @@ fess_config.properties
 
 .. note::
 
-   ``temperature`` 、 ``max.tokens`` 、 ``context.max.chars`` 可在所有提供商中通用。此外，各提供商还支持 ``thinking.budget`` 、 ``top.p`` 、 ``reasoning.effort`` 等提供商专属参数。详情请参阅各提供商的文档。
+   ``temperature`` 、 ``max.tokens`` 、 ``context.max.chars`` 可在所有提供商中通用。不过，这些参数的默认值因提供商和提示类型而异。
+
+此外，各提供商还支持各自专属的参数。支持情况如下。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 20 20 20
+
+   * - 参数
+     - Ollama
+     - OpenAI
+     - Gemini
+   * - ``thinking.budget``
+     - 支持
+     - 不支持
+     - 支持
+   * - ``thinking.level``
+     - 支持
+     - 不支持
+     - 不支持
+   * - ``top.p``
+     - 支持
+     - 支持
+     - 不支持
+   * - ``top.k`` 、 ``num.ctx``
+     - 支持
+     - 不支持
+     - 不支持
+   * - ``reasoning.effort``
+     - 不支持
+     - 支持
+     - 不支持
+   * - ``frequency.penalty`` 、 ``presence.penalty``
+     - 不支持
+     - 支持
+     - 不支持
+
+.. note::
+
+   即使指定了"不支持"的参数，也不会报错，只是会被忽略。有关各参数的含义及可设置的值，详情请参阅各提供商的文档。
+
+.. note::
+
+   仅 Ollama 提供商在不存在按提示类型分别设置的情况下，具有回退到 ``rag.llm.ollama.default.{参数}`` 的机制
+   （ ``context.max.chars`` 除外）。OpenAI 提供商和 Gemini 提供商没有此回退机制，
+   若不存在按提示类型的设置，则使用插件内置的默认值。
 
 后续步骤
 ========
@@ -332,3 +432,5 @@ fess_config.properties
 - :doc:`llm-gemini` - Google Gemini 详细配置
 - :doc:`rag-chat` - AI 搜索模式功能详细配置
 - :doc:`rank-fusion` - Rank Fusion 配置（混合搜索结果融合）
+- :doc:`../user/chat-search` - AI 搜索模式的使用方法
+- :doc:`../api/api-chat` - 聊天 API 参考
