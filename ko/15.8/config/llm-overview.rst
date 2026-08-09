@@ -37,7 +37,7 @@ AI 검색 모드는 전용 벡터 인덱스가 아닌 |Fess|\ 의 표준 검색 
    * - OpenAI
      - ``openai``
      - ``fess-llm-openai``
-     - OpenAI사의 클라우드 API. GPT-4 등의 모델 이용 가능.
+     - OpenAI사의 클라우드 API. GPT-5 등의 모델 이용 가능.
    * - Google Gemini
      - ``gemini``
      - ``fess-llm-gemini``
@@ -72,21 +72,25 @@ AI 검색 모드는 전용 벡터 인덱스가 아닌 |Fess|\ 의 표준 검색 
 
 .. note::
 
-   ``rag.llm.name`` 이 설정되어 있지 않은 경우, 기본값으로는 Ollama 클라이언트만 활성화됩니다.
-   사용할 프로바이더를 도입하고 ``rag.llm.name`` 으로 선택하세요.
+   ``rag.llm.name`` 의 기본값은 ``ollama`` 입니다. 이 값은 로드할 DI 컴포넌트 이름( ``{rag.llm.name}LlmClient`` )을 결정하는 데 사용됩니다.
+   따라서 ``rag.llm.name`` 을 기본값으로 둔 채 ``fess-llm-ollama`` 이외의 플러그인만 도입한 경우, LLM 클라이언트가 하나도 활성화되지 않습니다.
+   이때 로그에 ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` 라는 경고가 출력되며, AI 검색 모드를 사용할 수 없습니다.
+   도입한 플러그인에 맞춰 반드시 ``rag.llm.name`` 을 설정하세요. ``none`` 을 지정하면 LLM 연계를 명시적으로 비활성화할 수 있습니다.
 
 플러그인 도입
 ==============
 
-LLM 기능은 플러그인으로 제공됩니다. 사용할 프로바이더에 해당하는 ``fess-llm-{provider}`` 플러그인의 JAR 파일을 플러그인 디렉터리에 배치해야 합니다.
+LLM 기능은 플러그인으로 제공됩니다. 사용할 프로바이더에 해당하는 ``fess-llm-{provider}`` 플러그인을 도입하세요.
 
-예로, OpenAI 프로바이더를 사용하는 경우 ``fess-llm-openai-15.8.0.jar`` 를 다운로드하여 다음 디렉터리에 배치합니다.
+관리 화면의 「시스템 > 플러그인」 페이지에서 설치할 수 있습니다. ``fess-llm-*`` 플러그인은 설치 가능한 플러그인 목록에 표시됩니다.
+
+수동으로 도입하는 경우, 해당하는 JAR 파일(예: OpenAI 프로바이더의 경우 ``fess-llm-openai-15.8.0.jar`` )을 다음 디렉터리에 배치합니다.
 
 ::
 
     app/WEB-INF/plugin/
 
-배치 후 |Fess| 를 재시작하면 플러그인이 로드됩니다.
+어느 방법으로 도입하든, 도입 후 |Fess|\ 를 재시작하면 플러그인이 로드됩니다.
 
 아키텍처
 ==============
@@ -105,9 +109,16 @@ AI 검색 모드 기능은 다음 흐름으로 동작합니다.
 .. note::
 
    내부 처리는 ``intent`` 、 ``search`` 、 ``evaluate`` 、 ``fetch`` 、 ``answer`` 의 5단계 페이즈로 구성되며, 각 페이즈의 진행 상황은 스트리밍（SSE）으로 클라이언트에 통보됩니다.
+   쿼리 재생성은 독립된 페이즈가 아니라 ``search`` 페이즈의 폴백으로 통보되며, 이후 ``search`` 가 재실행됩니다.
+
+.. note::
+
+   위 흐름은 스트리밍 API에서 의도가 "검색"으로 판정된 경우의 흐름입니다. 의도 판정 결과에 따라 경로가 달라집니다.
+   질문이 불명확하다고 판정된 경우에는 검색을 수행하지 않고 응답을 생성하며, URL 요약을 요청받은 경우에는 URL 검색을 수행하고 평가 페이즈는 실행하지 않습니다.
+   또한 비스트리밍 방식인 ``POST /api/v2/chat`` 은 평가 페이즈를 실행하지 않으며, 페이즈 단위의 진행 상황 통보도 하지 않습니다.
 
 기본 설정
-========
+=========
 
 LLM 기능의 설정은 다음 두 곳에서 수행합니다.
 
@@ -124,11 +135,11 @@ LLM 기능의 설정은 다음 두 곳에서 수행합니다.
 fess_config.properties
 ----------------------
 
-``app/WEB-INF/conf/fess_config.properties`` 에서 설정합니다. AI 검색 모드 활성화, 세션·이력 관련 설정 외에 프로바이더 고유의 설정（접속 URL, API 키, 생성 파라미터 등）도 이 파일에 기술합니다.
+``app/WEB-INF/classes/fess_config.properties`` (패키지 버전에서는 ``/etc/fess/fess_config.properties`` )에서 설정합니다. AI 검색 모드 활성화, 세션·이력 관련 설정 외에 프로바이더 고유의 설정（접속 URL, API 키, 생성 파라미터 등）도 이 파일에 기술합니다.
 
 ::
 
-    # AI 검색 모드 기능 활성화
+    # AI 검색 모드 기능 활성화（기본값은 false）
     rag.chat.enabled=true
 
     # 프로바이더 고유 설정 예（OpenAI의 경우）
@@ -142,7 +153,7 @@ fess_config.properties
 - :doc:`llm-gemini` - Google Gemini 설정
 
 공통 설정
-========
+=========
 
 모든 LLM 프로바이더에서 공통으로 사용되는 설정 항목입니다. 이 항목들은 ``fess_config.properties`` 에서 설정합니다.
 
@@ -172,7 +183,52 @@ fess_config.properties
 
 시스템 프롬프트는 프로퍼티 파일이 아닌 각 플러그인의 DI XML 파일에서 관리됩니다.
 
-각 ``fess-llm-*`` 플러그인의 JAR 파일 내에 포함된 ``fess_llm++.xml`` 파일에서 시스템 프롬프트가 정의됩니다. 이 파일은 플러그인 JAR에 번들된 클래스패스 리소스이므로, 프롬프트를 커스터마이즈하려면 JAR 내의 DI XML 파일을 편집해야 합니다.
+각 ``fess-llm-*`` 플러그인의 JAR 파일 내에 포함된 ``fess_llm++.xml`` 파일에서 시스템 프롬프트가 정의됩니다.
+프롬프트를 커스터마이즈하기 위해 JAR 파일을 압축 해제하여 다시 편집할 필요는 없습니다. LastaDi의 컴포넌트 재정의 메커니즘을 통해
+``app/WEB-INF/classes/`` 에 ``fess_llm+{컴포넌트 이름}.xml`` 이라는 이름의 파일을 배치하면 플러그인 측의 컴포넌트 정의를 대체할 수 있습니다.
+
+컴포넌트 이름은 프로바이더별로 다음과 같습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 프로바이더
+     - 컴포넌트 이름
+   * - Ollama
+     - ``ollamaLlmClient``
+   * - OpenAI
+     - ``openaiLlmClient``
+   * - Google Gemini
+     - ``geminiLlmClient``
+
+예로, OpenAI 프로바이더의 답변 생성 프롬프트를 변경하는 경우 ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml`` 을 작성합니다.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="openaiLlmClient" class="org.codelibs.fess.llm.openai.OpenAiLlmClient">
+            <postConstruct name="register"/>
+            <postConstruct name="init"/>
+            <preDestroy name="destroy"/>
+            <property name="answerGenerationSystemPrompt">"고유한 답변 생성 프롬프트"</property>
+            <!-- 변경하지 않는 프롬프트 프로퍼티도 모두 기술한다 -->
+        </component>
+    </components>
+
+.. warning::
+
+   재정의 파일은 컴포넌트 정의를 대체합니다. 따라서 원본 ``fess_llm++.xml`` 에 기술되어 있는 내용(클래스명, ``postConstruct`` ,
+   ``preDestroy`` , 그리고 변경하지 않는 프롬프트 프로퍼티)을 모두 포함해야 합니다. 기술하지 않은 프로퍼티는 미설정 상태로 돌아갑니다.
+
+.. warning::
+
+   ``fess_llm++.xml`` 자체를 복사하여 ``app/WEB-INF/classes/`` 에 배치하지 마세요.
+   파일명이 ``++`` 로 끝나는 DI XML은 클래스패스상의 모든 것이 "추가"로 로드되기 때문에 같은 이름의 컴포넌트가 이중으로 등록되어,
+   ``TooManyRegistrationComponentException`` 이 발생하여 |Fess|\ 가 시작되지 않습니다.
 
 가용성 체크
 --------------
@@ -185,10 +241,16 @@ fess_config.properties
      - 설명
      - 기본값
    * - ``rag.llm.{provider}.availability.check.interval``
-     - LLM 가용성을 체크하는 간격（초）. 0으로 비활성화
+     - LLM 가용성을 정기적으로 체크하는 간격(초)
      - ``60``
 
 이 설정은 ``fess_config.properties`` 에서 수행합니다. |Fess| 는 정기적으로 LLM 프로바이더의 연결 상태를 확인합니다.
+
+.. note::
+
+   이 프로퍼티에 ``0`` 이하의 값이나 숫자가 아닌 값을 지정한 경우, 그 값은 무시되고 기본값( ``60`` )이 사용됩니다.
+   이 프로퍼티로는 가용성 체크를 비활성화할 수 없습니다.
+   또한 가용성 체크는 ``rag.chat.enabled`` 가 ``false`` 인 경우, 그리고 ``rag.llm.name`` 에서 선택되지 않은 프로바이더에서는 실행되지 않습니다.
 
 세션 관리
 ==============
@@ -238,7 +300,7 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
     rag.llm.openai.max.concurrent.requests=10
 
 평가 설정
-========
+=========
 
 검색 결과 평가 관련 설정입니다. ``fess_config.properties`` 에서 설정합니다.
 
@@ -294,7 +356,7 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
      - FAQ 형식의 응답을 생성한다
    * - 직접 응답
      - ``direct``
-     - 검색을 거치지 않고 직접 응답을 생성한다
+     - 검색을 거치지 않고 직접 응답을 생성한다(현재 버전에서는 호출되지 않습니다)
    * - 쿼리 재생성
      - ``queryregeneration``
      - 검색 결과가 없는 경우 쿼리를 재생성한다
@@ -325,7 +387,52 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
 
 .. note::
 
-   ``temperature`` 、 ``max.tokens`` 、 ``context.max.chars`` 는 모든 프로바이더에서 공통으로 사용할 수 있습니다. 이 외에도 각 프로바이더는 ``thinking.budget`` 、 ``top.p`` 、 ``reasoning.effort`` 등 프로바이더 고유의 파라미터를 지원합니다. 자세한 내용은 각 프로바이더의 문서를 참조하세요.
+   ``temperature`` , ``max.tokens`` , ``context.max.chars`` 는 모든 프로바이더에서 공통으로 사용할 수 있습니다. 단, 이 값들의 기본값은 프로바이더 및 프롬프트 타입별로 다릅니다.
+
+이 외에도 각 프로바이더는 고유의 파라미터를 지원합니다. 지원 현황은 다음과 같습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 20 20 20
+
+   * - 파라미터
+     - Ollama
+     - OpenAI
+     - Gemini
+   * - ``thinking.budget``
+     - 지원
+     - 미지원
+     - 지원
+   * - ``thinking.level``
+     - 지원
+     - 미지원
+     - 미지원
+   * - ``top.p``
+     - 지원
+     - 지원
+     - 미지원
+   * - ``top.k`` , ``num.ctx``
+     - 지원
+     - 미지원
+     - 미지원
+   * - ``reasoning.effort``
+     - 미지원
+     - 지원
+     - 미지원
+   * - ``frequency.penalty`` , ``presence.penalty``
+     - 미지원
+     - 지원
+     - 미지원
+
+.. note::
+
+   "미지원" 파라미터를 지정해도 오류가 발생하지 않으며 단순히 무시됩니다. 각 파라미터의 의미나 설정 가능한 값에 대한 자세한 내용은 각 프로바이더의 문서를 참조하세요.
+
+.. note::
+
+   Ollama 프로바이더에서만, 프롬프트 타입별 설정이 존재하지 않는 경우 ``rag.llm.ollama.default.{파라미터}`` 를 참조하는 폴백이 있습니다
+   ( ``context.max.chars`` 는 제외). OpenAI 프로바이더와 Gemini 프로바이더에는 이 폴백이 없으며,
+   프롬프트 타입별 설정이 없는 경우 플러그인에 내장된 기본값이 사용됩니다.
 
 다음 단계
 ============
@@ -335,3 +442,5 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
 - :doc:`llm-gemini` - Google Gemini 상세 설정
 - :doc:`rag-chat` - AI 검색 모드 기능 상세 설정
 - :doc:`rank-fusion` - Rank Fusion 설정（하이브리드 검색 결과 통합）
+- :doc:`../user/chat-search` - AI 검색 모드 사용법
+- :doc:`../api/api-chat` - 채팅 API 레퍼런스

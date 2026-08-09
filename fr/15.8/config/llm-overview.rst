@@ -33,7 +33,7 @@ Fournisseurs pris en charge
    * - OpenAI
      - ``openai``
      - ``fess-llm-openai``
-     - API cloud d'OpenAI. Permet d'utiliser des modèles comme GPT-4.
+     - API cloud d'OpenAI. Permet d'utiliser des modèles comme GPT-5.
    * - Google Gemini
      - ``gemini``
      - ``fess-llm-gemini``
@@ -68,20 +68,25 @@ Comparaison des fournisseurs
 
 .. note::
 
-   Si ``rag.llm.name`` n'est pas défini, seul le client Ollama est actif par défaut ; installez et sélectionnez le fournisseur souhaité avec ``rag.llm.name``.
+   La valeur par défaut de ``rag.llm.name`` est ``ollama``. Cette valeur permet de déterminer le nom du composant DI à charger ( ``{rag.llm.name}LlmClient`` ).
+   Ainsi, si vous laissez ``rag.llm.name`` à sa valeur par défaut tout en installant uniquement un plugin autre que ``fess-llm-ollama``, aucun client LLM ne sera actif.
+   Dans ce cas, le journal affiche l'avertissement ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` et le mode de recherche IA n'est pas disponible.
+   Veillez à toujours configurer ``rag.llm.name`` en fonction du plugin installé. La valeur ``none`` permet de désactiver explicitement l'intégration LLM.
 
 Installation du plugin
 =======================
 
-La fonctionnalité LLM est fournie sous forme de plugins. Il est nécessaire de placer le fichier JAR du plugin ``fess-llm-{provider}`` correspondant au fournisseur utilisé dans le répertoire des plugins.
+La fonctionnalité LLM est fournie sous forme de plugins. Installez le plugin ``fess-llm-{provider}`` correspondant au fournisseur utilisé.
 
-Par exemple, pour utiliser le fournisseur OpenAI, téléchargez ``fess-llm-openai-15.8.0.jar`` et placez-le dans le répertoire suivant.
+Vous pouvez l'installer depuis la page « Système > Plugin » de l'interface d'administration. Les plugins ``fess-llm-*`` apparaissent dans la liste des plugins installables.
+
+Pour une installation manuelle, placez le fichier JAR correspondant (par exemple ``fess-llm-openai-15.8.0.jar`` pour le fournisseur OpenAI) dans le répertoire suivant.
 
 ::
 
     app/WEB-INF/plugin/
 
-Après le placement, le plugin sera chargé au redémarrage de |Fess|.
+Quelle que soit la méthode utilisée, le plugin sera chargé au redémarrage de |Fess| après l'installation.
 
 Architecture
 =============
@@ -100,6 +105,13 @@ La fonctionnalité de mode de recherche IA fonctionne selon le flux suivant.
 .. note::
 
    Le traitement interne est composé de cinq phases : ``intent``, ``search``, ``evaluate``, ``fetch`` et ``answer``. La progression de chaque phase est notifiée au client par streaming (SSE).
+   La regénération de requête n'est pas une phase indépendante ; elle est notifiée comme un repli de la phase ``search``, après quoi la phase ``search`` est réexécutée.
+
+.. note::
+
+   Le déroulement décrit ci-dessus correspond au cas où l'API de streaming détermine que l'intention est « recherche ». Le chemin suivi varie selon le résultat de la détection d'intention.
+   Si la question est jugée peu claire, une réponse est générée sans effectuer de recherche ; si un résumé d'URL est demandé, une recherche d'URL est effectuée sans exécuter la phase d'évaluation.
+   Par ailleurs, l'API non-streaming ``POST /api/v2/chat`` n'exécute pas la phase d'évaluation et ne notifie pas non plus la progression phase par phase.
 
 Configuration de base
 ======================
@@ -119,11 +131,12 @@ La configuration s'effectue dans la configuration générale de l'administration
 fess_config.properties
 -----------------------
 
-La configuration s'effectue dans ``app/WEB-INF/conf/fess_config.properties``. Ce fichier permet d'activer le mode de recherche IA, de configurer les sessions et l'historique de conversation, ainsi que les paramètres spécifiques au fournisseur (URL de connexion, clé API, paramètres de génération, etc.).
+La configuration s'effectue dans ``app/WEB-INF/classes/fess_config.properties`` (dans la version paquet : ``/etc/fess/fess_config.properties`` ).
+Ce fichier permet d'activer le mode de recherche IA, de configurer les sessions et l'historique de conversation, ainsi que les paramètres spécifiques au fournisseur (URL de connexion, clé API, paramètres de génération, etc.).
 
 ::
 
-    # Activer la fonctionnalité de mode de recherche IA
+    # Activer la fonctionnalité de mode de recherche IA (par défaut : false)
     rag.chat.enabled=true
 
     # Exemple de configuration spécifique au fournisseur (cas OpenAI)
@@ -167,7 +180,52 @@ Prompt système
 
 Les prompts système sont gérés dans les fichiers DI XML de chaque plugin, et non dans les fichiers de propriétés.
 
-Le prompt système est défini dans le fichier ``fess_llm++.xml`` inclus dans le JAR de chaque plugin ``fess-llm-*``. Ce fichier est une ressource classpath intégrée au JAR du plugin ; pour personnaliser les prompts, il est nécessaire de modifier le fichier DI XML à l'intérieur du JAR.
+Le prompt système est défini dans le fichier ``fess_llm++.xml`` inclus dans le JAR de chaque plugin ``fess-llm-*``.
+Il n'est pas nécessaire d'extraire le fichier JAR pour le modifier afin de personnaliser les prompts. Grâce au mécanisme de redéfinition de composant de LastaDi,
+placer dans ``app/WEB-INF/classes/`` un fichier nommé ``fess_llm+{nom du composant}.xml`` permet de remplacer la définition de composant fournie par le plugin.
+
+Le nom du composant varie selon le fournisseur, comme indiqué ci-dessous.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Fournisseur
+     - Nom du composant
+   * - Ollama
+     - ``ollamaLlmClient``
+   * - OpenAI
+     - ``openaiLlmClient``
+   * - Google Gemini
+     - ``geminiLlmClient``
+
+Par exemple, pour modifier le prompt de génération de réponse du fournisseur OpenAI, créez ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml``.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="openaiLlmClient" class="org.codelibs.fess.llm.openai.OpenAiLlmClient">
+            <postConstruct name="register"/>
+            <postConstruct name="init"/>
+            <preDestroy name="destroy"/>
+            <property name="answerGenerationSystemPrompt">"Mon prompt personnalisé de génération de réponse"</property>
+            <!-- Incluez également toutes les propriétés de prompt que vous ne modifiez pas -->
+        </component>
+    </components>
+
+.. warning::
+
+   Le fichier de redéfinition remplace la définition de composant. Vous devez donc y inclure l'intégralité du contenu défini dans le ``fess_llm++.xml``
+   d'origine (nom de classe, ``postConstruct``, ``preDestroy``, ainsi que les propriétés de prompt que vous ne modifiez pas). Toute propriété omise reviendra à un état non défini.
+
+.. warning::
+
+   Ne copiez pas ``fess_llm++.xml`` tel quel dans ``app/WEB-INF/classes/``.
+   Les fichiers DI XML dont le nom se termine par ``++`` sont tous chargés comme des « ajouts » sur le classpath ; le même composant se retrouve alors enregistré deux fois,
+   ce qui provoque une ``TooManyRegistrationComponentException`` et empêche |Fess| de démarrer.
 
 Vérification de disponibilité
 -------------------------------
@@ -180,10 +238,16 @@ Vérification de disponibilité
      - Description
      - Valeur par défaut
    * - ``rag.llm.{provider}.availability.check.interval``
-     - Intervalle de vérification de disponibilité du LLM (secondes). 0 pour désactiver
+     - Intervalle de vérification périodique de la disponibilité du LLM (secondes)
      - ``60``
 
 Cette configuration s'effectue dans ``fess_config.properties``. |Fess| vérifie périodiquement l'état de connexion au fournisseur LLM.
+
+.. note::
+
+   Si vous spécifiez pour cette propriété une valeur inférieure ou égale à ``0`` ou une valeur non numérique, cette valeur est ignorée et la valeur par défaut ( ``60`` ) est utilisée.
+   Cette propriété ne permet pas de désactiver la vérification de disponibilité.
+   Notez également que la vérification de disponibilité n'est pas exécutée lorsque ``rag.chat.enabled`` vaut ``false``, ni pour les fournisseurs non sélectionnés via ``rag.llm.name``.
 
 Gestion des sessions
 =====================
@@ -289,7 +353,7 @@ Liste des types de prompt
      - Génère une réponse au format FAQ
    * - Réponse directe
      - ``direct``
-     - Génère une réponse directe sans passer par la recherche
+     - Génère une réponse directe sans passer par la recherche (non appelé dans la version actuelle)
    * - Regénération de requête
      - ``queryregeneration``
      - Regénère la requête lorsqu'aucun résultat de recherche n'est trouvé
@@ -320,7 +384,52 @@ Exemple de configuration (cas du fournisseur OpenAI) :
 
 .. note::
 
-   ``temperature``, ``max.tokens`` et ``context.max.chars`` sont utilisables avec tous les fournisseurs. En outre, chaque fournisseur prend en charge des paramètres qui lui sont propres, tels que ``thinking.budget``, ``top.p`` ou ``reasoning.effort``. Consultez la documentation de chaque fournisseur pour plus de détails.
+   ``temperature``, ``max.tokens`` et ``context.max.chars`` sont utilisables avec tous les fournisseurs. Toutefois, leurs valeurs par défaut varient selon le fournisseur et le type de prompt.
+
+En outre, chaque fournisseur prend en charge des paramètres qui lui sont propres. Le tableau suivant indique leur prise en charge.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 20 20 20
+
+   * - Paramètre
+     - Ollama
+     - OpenAI
+     - Gemini
+   * - ``thinking.budget``
+     - Pris en charge
+     - Non pris en charge
+     - Pris en charge
+   * - ``thinking.level``
+     - Pris en charge
+     - Non pris en charge
+     - Non pris en charge
+   * - ``top.p``
+     - Pris en charge
+     - Pris en charge
+     - Non pris en charge
+   * - ``top.k``, ``num.ctx``
+     - Pris en charge
+     - Non pris en charge
+     - Non pris en charge
+   * - ``reasoning.effort``
+     - Non pris en charge
+     - Pris en charge
+     - Non pris en charge
+   * - ``frequency.penalty``, ``presence.penalty``
+     - Non pris en charge
+     - Pris en charge
+     - Non pris en charge
+
+.. note::
+
+   Spécifier un paramètre « Non pris en charge » ne provoque pas d'erreur ; il est simplement ignoré. Pour la signification de chaque paramètre et les valeurs possibles, consultez la documentation de chaque fournisseur.
+
+.. note::
+
+   Seul le fournisseur Ollama dispose d'un repli sur ``rag.llm.ollama.default.{paramètre}`` lorsqu'aucune configuration par type de prompt n'existe
+   (à l'exception de ``context.max.chars``). Les fournisseurs OpenAI et Gemini ne disposent pas de ce repli ;
+   en l'absence de configuration par type de prompt, la valeur par défaut intégrée au plugin est utilisée.
 
 Étapes suivantes
 =================
@@ -330,3 +439,5 @@ Exemple de configuration (cas du fournisseur OpenAI) :
 - :doc:`llm-gemini` - Configuration détaillée de Google Gemini
 - :doc:`rag-chat` - Configuration détaillée de la fonctionnalité de mode de recherche IA
 - :doc:`rank-fusion` - Configuration du Rank Fusion (fusion des résultats de recherche hybride)
+- :doc:`../user/chat-search` - Utilisation du mode de recherche IA
+- :doc:`../api/api-chat` - Référence API Chat
