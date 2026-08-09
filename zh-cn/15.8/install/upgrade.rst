@@ -21,6 +21,13 @@
 - Fess 14.x → Fess 15.8
 - Fess 15.x → Fess 15.8
 
+.. important::
+
+   |Fess| 14.x 对应 OpenSearch 2.x 系列，\ |Fess| 15.8 对应 OpenSearch 3.8.0。
+   由于 |Fess| 专用的 OpenSearch 插件必须与 OpenSearch 版本完全一致，
+   因此从 14.x 升级时，也必须同时对 OpenSearch 进行主版本升级。
+   请参阅 :ref:`upgrade-opensearch`。
+
 .. note::
 
    如果从更旧的版本（13.x 及更早）升级，可能需要逐步升级。
@@ -35,7 +42,7 @@
 请确认升级目标版本与当前版本的兼容性。
 
 - `发布说明 <https://github.com/codelibs/fess/releases>`__
-- `升级指南 <https://fess.codelibs.org/zh-cn/>`__
+- :doc:`prerequisites` - |Fess| 15.8 的系统要求（Java、OpenSearch 版本）
 
 计划停机时间
 ----------------
@@ -62,19 +69,31 @@
    登录管理页面，点击「系统信息」→「备份」。
 
    备份页面按条目列出以下配置数据。
-   点击各链接下载（不是单个 ZIP 文件，而是按条目分别下载的独立文件）。
+   点击各行下载（不是单个 ZIP 文件，而是按条目分别下载的独立文件。
+   由于没有批量下载功能，需要将所需项目逐一下载）。
 
-   - ``fess_basic_config.bulk`` - 基本设置（常规设置）
-   - ``fess_config.bulk`` - 爬取设置、调度器、标签、关键词匹配等配置信息
+   - ``fess_basic_config.bulk`` - 配置索引（爬取设置、调度器、标签、
+     关键词匹配、角色、Web/文件认证等 19 个索引）
+   - ``fess_config.bulk`` - 除上述 19 个索引外，还包含爬取信息、失败 URL、作业日志、
+     缩略图队列等运行时数据，共 25 个索引
    - ``fess_user.bulk`` - 用户、角色、群组
-   - ``system.properties`` - 系统设置
-   - ``fess.json`` / ``doc.json`` - 索引设置（映射）
+   - ``system.properties`` - 包含常规设置的系统设置
+   - ``fess.json`` - 索引设置（分片数、\ ``index.knn`` 等）
+   - ``doc.json`` - 文档映射（字段定义）
+
+   .. note::
+
+      ``fess_config.bulk`` 包含 ``fess_basic_config.bulk``。作为升级前的
+      配置备份，\ ``fess_basic_config.bulk``\ 、\ ``fess_user.bulk``\ 、
+      ``system.properties`` 这 3 个文件就已足够。
 
    .. note::
 
       搜索日志、点击日志等日志数据（``search_log.ndjson``、``click_log.ndjson``、
       ``favorite_log.ndjson``、``user_info.ndjson``）也可从同一页面下载。
-      如果仅备份配置，则不需要下载这些文件。
+      如果仅备份配置，则不需要下载这些文件。另外，这些 ``*.ndjson`` 文件无法
+      通过备份页面的上传功能重新导入恢复
+      （请参阅「回滚步骤」）。
 
 2. **备份配置文件**
 
@@ -82,17 +101,40 @@
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
+       $ cp /path/to/fess/bin/fess.in.sh /backup/
 
-   RPM/DEB 版::
+   RPM 版::
 
        $ sudo cp /etc/fess/system.properties /backup/
        $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/sysconfig/fess /backup/
+
+   DEB 版::
+
+       $ sudo cp /etc/fess/system.properties /backup/
+       $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/default/fess /backup/
+
+   .. note::
+
+      ``/etc/sysconfig/fess``\ （RPM 版）和 ``/etc/default/fess``\ （DEB 版）是
+      用于指定 ``FESS_PORT``\ 、\ ``FESS_HEAP_SIZE``\ 、\ ``SEARCH_ENGINE_HTTP_URL``\ 、
+      ``FESS_DICTIONARY_PATH`` 等内容的环境变量文件。
+      TAR.GZ/ZIP 版中与之对应的设置位于 ``bin/fess.in.sh``。
 
 3. **定制的配置文件**
 
    如有定制的配置文件，也请备份::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+
+   .. note::
+
+      ``app/WEB-INF/classes/log4j2.xml`` 是 |Fess| 本体（Web）进程的日志配置。
+      爬虫等子进程使用各自独立的文件
+      （例如 ``app/WEB-INF/env/crawler/resources/log4j2.xml`` 等，\ ``crawler``\ 、\ ``suggest``\ 、
+      ``thumbnail``\ 、\ ``chunk`` 共 4 个），如果修改过这些文件，
+      请一并备份。
 
 备份索引数据
 ------------------------------
@@ -152,22 +194,41 @@ OpenSearch 的数据保存在 Docker 卷中。\ ``compose-opensearch3.yaml`` 中
 
        $ docker volume ls
 
-停止容器后，备份卷::
+停止容器后，备份卷。\ ``docker run`` 的 ``-v`` 需要指定
+包含前缀的实际卷名::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
-    $ docker run --rm -v search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
-    $ docker run --rm -v search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v ${PROJECT}_search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
+
+.. warning::
+
+   如果在 ``-v`` 中指定不带前缀的 ``search01_data``，Docker 不会引用现有卷，
+   而是会新建一个同名的空卷。命令不会报错，且会生成内容为空的归档文件，
+   看起来就像是已经完成了备份。
+
+.. note::
+
+   |Fess| 本体（``fess01``）的容器没有专用卷，因此备份对象仅为
+   上述 2 个卷。但是，从管理页面更改的常规设置以及从管理页面安装的
+   插件仅保存在容器内部，重新创建容器后会丢失。
+   请通过 Compose 文件的 ``FESS_JAVA_OPTS`` 或 ``FESS_PLUGINS`` 指定这些内容以实现持久化。
 
 步骤 2: 停止当前版本
 ================================
 
 停止 Fess 和 OpenSearch。
 
-TAR.GZ/ZIP 版::
+TAR.GZ/ZIP 版没有附带用于停止的脚本。\ ``bin/fess`` 如果是使用 ``-p`` 选项
+启动的，可以使用 PID 文件停止::
 
-    $ kill <fess_pid>
+    $ kill $(cat /path/to/fess/fess.pid)
     $ kill <opensearch_pid>
+
+如果启动时未指定 ``-p``，请确认进程 ID 后使用 ``kill`` 停止
+（仅使用 ``-d`` 不会创建 PID 文件）。
 
 RPM/DEB 版 (systemd)::
 
@@ -184,22 +245,48 @@ Docker 版::
 根据安装方法，步骤有所不同。
 
 TAR.GZ/ZIP 版
-------------
+-------------
 
 1. 下载并解压新版本::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.8.0/fess-15.8.0.tar.gz
-       $ tar -xzf fess-15.8.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.8.0/fess-15.8.0.zip
+       $ unzip fess-15.8.0.zip
+
+   .. note::
+
+      |Fess| 的归档版仅以 ZIP 格式发布（不提供
+      ``fess-15.8.0.tar.gz``）。
 
 2. 复制旧版本的配置::
 
        $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.8.0/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.8.0/app/WEB-INF/classes/
        $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.8.0/bin/
 
-3. 确认配置差异，根据需要进行调整
+3. 如有定制内容，请同时复制以下文件::
+
+       # 日志配置
+       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.8.0/app/WEB-INF/classes/
+       # 已安装的插件
+       $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.8.0/app/WEB-INF/plugin/
+       # 主题
+       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.8.0/app/themes/
+
+   .. warning::
+
+      在管理页面「页面设计」中编辑过的 JSP（``app/WEB-INF/view/``），请不要直接复制过去。
+      如果新版本的 JSP 结构发生了变化，画面可能无法正常显示。
+      请将修改内容重新应用到新版本的 JSP 上。
+
+4. 如果使用内置 OpenSearch（未设置 ``SEARCH_ENGINE_HTTP_URL`` 而直接启动 ``bin/fess`` 的
+   配置），请同时复制索引数据::
+
+       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.8.0/es/data/
+
+5. 确认配置差异，根据需要进行调整
 
 RPM/DEB 版
----------
+----------
 
 安装新版本的包::
 
@@ -211,11 +298,21 @@ RPM/DEB 版
 
 .. note::
 
-   配置文件（``/etc/fess/*``）会自动保留。
-   但是，如果添加了新的配置选项，需要手动调整。
+   RPM 版中，``/etc/fess/*`` 的配置文件被注册为 ``%config(noreplace)``，
+   因此在升级时会被保留（新的默认文件会以 ``.rpmnew`` 的形式并存）。
+   如果添加了新的配置选项，需要手动调整。
+
+.. warning::
+
+   DEB 版中，``/etc/fess/*`` 并未注册为 conffile（conffile 仅有
+   ``/etc/default/fess``\ 、\ ``/etc/init.d/fess``\ 、\ ``/usr/lib/systemd/system/fess.service``
+   这 3 个）。因此执行 ``dpkg -i`` 时，``/etc/fess/fess_config.properties`` 等文件会被
+   新版本的文件覆盖。请在升级后，重新应用步骤 1 中备份的配置。
+   另外，``/etc/fess/system.properties`` 是不包含在软件包中的运行时生成文件，
+   因此不会被覆盖。
 
 Docker 版
---------
+---------
 
 1. 获取新版本的 Compose 文件::
 
@@ -226,10 +323,13 @@ Docker 版
 
        $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
 
-步骤 4: 升级 OpenSearch（如需要）
-=================================================
+.. _upgrade-opensearch:
 
-如果要升级 OpenSearch，请按照以下步骤操作。
+步骤 4: 升级 OpenSearch
+====================================
+
+|Fess| 15.8 对应 OpenSearch 3.8.0。如果所连接的 OpenSearch 版本比这更旧，
+请按照以下步骤升级。
 
 .. note::
 
@@ -237,24 +337,38 @@ Docker 版
    对于 Docker 版，在步骤 3 中获取新镜像时，OpenSearch 和插件也会一并更新，
    因此无需执行本步骤。
 
+.. important::
+
+   无论是否使用分块向量搜索（语义搜索），\ |Fess| 15.8 都会在搜索索引的设置中始终
+   包含 ``index.knn``，并在映射中始终包含 ``content_chunk_vector``\ （\ ``knn_vector``
+   类型）。因此，所连接的 OpenSearch **必须安装 k-NN 插件**。
+
+   - 标准发行版的 OpenSearch 以及 Docker 版镜像中已包含该插件。
+   - **minimal 发行版不包含该插件，会导致索引新建失败，\ |Fess| 无法启动。**
+   - 索引设置中还会始终发送 ``knn.derived_source.enabled``。无法识别该配置的
+     旧版本 OpenSearch，无论是否安装 k-NN 插件，索引创建都会失败。
+
+   详情请参阅 :doc:`../config/search-semantic` 中的「前提条件」。
+
 .. warning::
 
    OpenSearch 的主版本升级需要谨慎进行。
    可能会出现索引兼容性问题。
+   |Fess| 14.x 对应 OpenSearch 2.x 系列，因此从 14.x 升级时必然属于这种情况。
 
 1. 安装新版本的 OpenSearch
 
 2. 重新安装插件::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
    .. note::
 
       这些插件的版本必须与所使用的 OpenSearch 版本一致。
-      Fess 15.8 对应 OpenSearch 3.7.0。如果版本不一致，
+      |Fess| 15.8 对应 OpenSearch 3.8.0。如果版本不一致，
       插件安装将会失败。
 
 3. 启动 OpenSearch::
@@ -267,7 +381,12 @@ Docker 版
 TAR.GZ/ZIP 版::
 
     $ cd /path/to/fess-15.8.0
-    $ ./bin/fess -d
+    $ ./bin/fess -d -p /path/to/fess-15.8.0/fess.pid
+
+.. note::
+
+   指定 ``-p`` 后会创建 PID 文件，下次停止时可以使用
+   ``kill $(cat /path/to/fess-15.8.0/fess.pid)`` 来停止。
 
 RPM/DEB 版::
 
@@ -283,9 +402,24 @@ Docker 版::
 
 1. **确认日志**
 
-   确认没有错误::
+   确认没有错误。
+
+   TAR.GZ/ZIP 版::
 
        $ tail -f /path/to/fess/logs/fess.log
+
+   RPM/DEB 版::
+
+       $ sudo tail -f /var/log/fess/fess.log
+
+   Docker 版::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+   .. note::
+
+      同一日志目录下，还会输出爬取处理的 ``fess-crawler.log``\ 、认证与管理操作的
+      ``audit.log``\ 、以及检索请求的 ``searchlog.log``。
 
 2. **访问 Web 界面**
 
@@ -319,6 +453,39 @@ Docker 版::
 2. 从「系统」→「调度器」执行「Default Crawler」
 3. 等待爬取完成
 4. 确认搜索结果
+
+.. warning::
+
+   由于重新索引会以新的映射重建索引，在没有 k-NN 插件的 OpenSearch 中会失败。
+   请确认步骤 4 中的注意事项。
+
+15.8 特有的迁移工作
+===================
+
+从 15.7 及更早版本升级到 15.8 时，需要根据所使用的功能执行以下工作。
+
+若此前使用过语义搜索
+----------------------------------
+
+在 |Fess| 15.7 及更早版本中提供语义搜索功能的 ``fess-webapp-semantic-search`` 插件，
+已在 15.8 中并入核心，现已不再需要（已弃用）。需要移除该插件、删除
+``-Dfess.semantic_search.*`` 及 ``-Drank.fusion.searchers=default,semantic``\ ，
+并解除旧的 ingest pipeline。详细步骤请参阅
+:ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）。
+
+若此前使用过 AI 搜索模式（RAG Chat）
+---------------------------------------------
+
+自 15.8 起，AI 搜索模式（RAG Chat）功能已拆分为 ``fess-llm-ollama``\ 、\ ``fess-llm-openai``\ 、
+``fess-llm-gemini`` 等插件。请在管理页面「系统」→「插件」中安装与所使用的
+提供商对应的插件。
+
+插件版本更新
+------------------------
+
+安装在 ``app/WEB-INF/plugin/`` 中的插件，需要替换为与 |Fess| 版本对应的版本。
+如果在 Docker 版中指定了 ``FESS_PLUGINS``，请按照 ``fess-ds-wikipedia:15.8.0``
+的形式更新版本号部分。
 
 回滚步骤
 ==============
@@ -360,10 +527,39 @@ RPM/DEB 版的情况::
     $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
     $ sudo systemctl start opensearch
 
+Docker 版中，请先切换回旧版本的 Compose 文件，再恢复卷中的内容::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu \
+        sh -c "rm -rf /data/* && tar xzf /backup/search01-data-backup.tar.gz -C /"
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
 .. note::
 
-   从管理页面下载的配置数据（``*.bulk`` 文件），可在 Fess 启动后，
-   通过「系统信息」→「备份」页面的上传功能重新导入并恢复。
+   从管理页面下载的配置数据，可在 |Fess| 启动后，通过「系统信息」→「备份」
+   页面的上传功能重新导入并恢复。可以上传的文件仅限于
+   ``*.bulk``\ 、以 ``system``\ 开头的 ``*.properties``\ 、以 ``gsa``\ 开头的 ``*.xml``\ 、
+   以 ``fess``\ 开头的 ``*.json``\ 、以 ``doc``\ 开头的 ``*.json``\ ，且每次操作只能上传 1 个文件。
+   搜索日志等 ``*.ndjson`` 文件不被接受，会导致错误。
+
+.. warning::
+
+   上传 ``fess.json`` 和 ``doc.json`` 会覆盖 |Fess| 自带的索引定义文件本身。
+   升级后如果上传旧版本的 ``fess.json`` 或 ``doc.json``，会导致新版本的索引设置和映射丢失。
+   请勿在回滚以外的目的下上传这些文件。
+
+.. note::
+
+   上传的 ``system.properties`` 仅会加载到内存中，不会写入文件。
+   因此 ``system.properties`` 的内容会在 |Fess| 重启后丢失。
+   如需确保可靠恢复，请将备份的文件直接放置到指定位置（TAR.GZ/ZIP 版为
+   ``app/WEB-INF/conf/``\ ，RPM/DEB 版为 ``/etc/fess/``\ ）后再启动。
+
+.. note::
+
+   导入操作以异步方式执行，画面上仅会显示已开始的提示。
+   请通过 ``fess.log`` 确认是否真正成功。
 
 步骤 4: 启动和确认服务
 ----------------------------
@@ -390,18 +586,34 @@ A: Fess 的升级需要停止服务。要最小化停机时间，请考虑以下
 Q: 需要升级 OpenSearch 吗？
 -------------------------------------------------
 
-A: 每个 Fess 版本对应特定的 OpenSearch 版本。
-Fess 15.8 对应 OpenSearch 3.7.0。
-由于 ``opensearch-analysis-fess`` 等 Fess 专用 OpenSearch 插件必须与 OpenSearch 版本完全一致，
-因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.7.0）。
+A: 每个 |Fess| 版本对应特定的 OpenSearch 版本。
+|Fess| 15.8 对应 OpenSearch 3.8.0。
+由于 ``opensearch-analysis-fess`` 等 |Fess| 专用 OpenSearch 插件必须与 OpenSearch 版本完全一致，
+因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.8.0）。
+
+另外，|Fess| 15.8 强制要求安装 k-NN 插件，并会在索引设置中始终发送
+``knn.derived_source.enabled``。如果 OpenSearch 版本过旧，会导致新索引创建失败，
+因此实质上必须升级 OpenSearch。详情请参阅步骤 4。
 
 Q: 需要重建索引吗？
 ------------------------------------------
 
-A: 小版本升级通常不需要，但主版本升级建议重建。
-另外，如果您正在从 15.7 或更早版本升级到 15.8 或更高版本，并希望新启用分块向量搜索（语义
-搜索），则需要重新索引，因为现有索引不会自动获取新的映射。详情请参阅
-:doc:`../config/search-semantic`。
+A: 对于 |Fess| 的小版本升级（15.x → 15.8），如果不使用分块向量搜索，
+通常不需要重建索引。现有索引可以直接使用，\ ``content_chunker.enabled`` 等选项默认为
+禁用，因此行为不会改变。
+
+以下情况需要重建索引并重新索引。
+
+- **新启用分块向量搜索（语义搜索）时**: 由于现有索引不会反映新的映射，
+  必须进行重新索引。详情请参阅
+  :ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）。
+- **从 14.x 升级时**: 由于 OpenSearch 会从 2.x 主版本升级到 3.x，
+  建议重建索引。
+
+.. warning::
+
+   新建索引的操作（包括重新索引）在没有 k-NN 插件的 OpenSearch 中会失败。
+   请确认步骤 4 中的注意事项。
 
 Q: 升级后搜索结果不显示
 ------------------------------------------
