@@ -83,9 +83,9 @@ Cree ``app/WEB-INF/classes/krb5.conf`` con la configuración de Kerberos.
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -99,6 +99,19 @@ Cree ``app/WEB-INF/classes/krb5.conf`` con la configuración de Kerberos.
 
 .. note::
    Reemplace ``EXAMPLE.LOCAL`` con su nombre de dominio AD (en mayúsculas) y ``AD-SERVER.EXAMPLE.LOCAL`` con el nombre de host de su servidor AD.
+
+.. warning::
+   Un ticket de servicio cifrado con un tipo que no aparece en ``permitted_enctypes`` es rechazado por
+   el aceptador de Kerberos con ``encryption type not in permitted_enctypes list``.
+   Active Directory suele emitir tickets de servicio AES256, por lo que AES256 debe estar incluido.
+
+.. note::
+   RC4 (``rc4-hmac``), 3DES y DES están deshabilitados de forma predeterminada en Java 17 y posteriores,
+   por lo que incluirlos no tiene efecto; el ejemplo anterior especifica solo AES.
+   ``aes256-cts-hmac-sha384-192`` y ``aes128-cts-hmac-sha256-128`` son los tipos AES-SHA2 (RFC 8009)
+   compatibles con Windows Server 2025.
+   Una cuenta de servicio que solo tiene una clave RC4 no puede usarse para la autenticación Kerberos;
+   restablezca su contraseña para que se generen claves AES.
 
 Archivo de configuración de inicio de sesión
 ---------------------------------------------
@@ -119,7 +132,7 @@ Cree ``app/WEB-INF/classes/auth_login.conf`` con la configuración de inicio de 
 
 .. note::
    Los nombres de archivo predeterminados para ``krb5.conf`` y ``auth_login.conf`` están definidos en ``spnego.krb5.conf`` y ``spnego.login.conf`` respectivamente, pero los archivos en sí deben crearse obligatoriamente.
-   Si estos archivos no están presentes en el classpath, la inicialización de SPNEGO fallará y |Fess| no podrá iniciarse.
+   SPNEGO se inicializa en el primer inicio de sesión, por lo que |Fess| arranca aunque falten estos archivos, pero el inicio de sesión SSO falla.
 
 Configuración requerida
 -----------------------
@@ -146,6 +159,23 @@ Agregue la siguiente configuración a ``app/WEB-INF/conf/system.properties``.
      - Ruta del archivo de configuración de inicio de sesión
      - ``auth_login.conf``
 
+.. note::
+   Si deja vacíos tanto ``spnego.preauth.username`` como ``spnego.preauth.password``, el módulo de
+   inicio de sesión del servidor utiliza un keytab.
+   Si no desea almacenar la contraseña de la cuenta de servicio de AD en un archivo de configuración
+   de |Fess|, cree un keytab y configure ``spnego-server`` en ``auth_login.conf`` de la siguiente manera.
+
+   ::
+
+       spnego-server {
+           com.sun.security.auth.module.Krb5LoginModule required
+           useKeyTab=true
+           keyTab="/var/lib/fess/fess.keytab"
+           principal="HTTP/fess-server.example.local@EXAMPLE.LOCAL"
+           storeKey=true
+           isInitiator=false;
+       };
+
 Configuración opcional
 ----------------------
 
@@ -169,18 +199,18 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - ``true``
    * - ``spnego.allow.unsecure.basic``
      - Permitir autenticación Basic no segura
-     - ``true``
+     - ``false``
    * - ``spnego.prompt.ntlm``
      - Retroceder a autenticación Basic cuando se recibe un token NTLM
      - ``true``
    * - ``spnego.allow.localhost``
      - Permitir acceso desde localhost
-     - ``true``
+     - ``false``
    * - ``spnego.allow.delegation``
      - Permitir delegación
      - ``false``
-   * - ``spnego.exclude.dirs``
-     - Directorios excluidos de autenticación (separados por comas)
+   * - ``spnego.allowed.realms``
+     - Reinos Kerberos aceptados además del reino del servidor (separados por comas)
      - (Ninguno)
    * - ``spnego.logger.level``
      - Nivel de log interno de la biblioteca SPNEGO (``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE; cualquier otro valor, incluidos ``0`` y ``5``, se trata como INFO)
@@ -280,9 +310,9 @@ El siguiente es un ejemplo de configuración mínima para un entorno de pruebas.
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -362,6 +392,26 @@ No se puede recuperar la información de grupo
 - Verifique que la configuración LDAP es correcta
 - Verifique que el Bind DN y la contraseña son correctos
 - Verifique que el usuario pertenece a grupos en AD
+
+El inicio de sesión devuelve HTTP 400
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Para un usuario que pertenece a muchos grupos, el ticket Kerberos (PAC) crece y la cabecera
+``Authorization`` puede superar el límite predeterminado de Tomcat de 8 KB, que se responde con 400.
+La petición nunca llega a |Fess|, por lo que no se registra nada en el log.
+Aumente el límite en ``tomcat_config.properties``.
+
+::
+
+    tomcat.maxHttpHeaderSize=65536
+
+La autenticación falla tras cambiar la contraseña de la cuenta de servicio
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La credencial del servidor se obtiene una sola vez en el primer inicio de sesión y se almacena en
+caché durante toda la vida del proceso.
+Reinicie |Fess| después de cambiar la contraseña de la cuenta de servicio en AD o de sustituir el
+keytab. También es necesario reiniciar tras modificar cualquier ajuste ``spnego.*``.
 
 Configuración de depuración
 -----------------------------

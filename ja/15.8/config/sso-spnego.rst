@@ -83,9 +83,9 @@ Kerberos設定ファイル
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -99,6 +99,19 @@ Kerberos設定ファイル
 
 .. note::
    ``EXAMPLE.LOCAL`` はお使いのADドメイン名（大文字）に、 ``AD-SERVER.EXAMPLE.LOCAL`` はADサーバーのホスト名に置き換えてください。
+
+.. warning::
+   ``permitted_enctypes`` に含まれていない暗号化方式のサービスチケットは、Kerberos の受け入れ側で
+   ``encryption type not in permitted_enctypes list`` として拒否されます。
+   Active Directory は通常 AES256 のサービスチケットを発行するため、AES256 を必ず含めてください。
+
+.. note::
+   Java 17 以降では RC4（ ``rc4-hmac`` ）、3DES、DES が既定で無効化されているため、
+   これらを列挙しても使用されません。上記の例では AES のみを指定しています。
+   ``aes256-cts-hmac-sha384-192`` と ``aes128-cts-hmac-sha256-128`` は、Windows Server 2025 が対応する
+   AES-SHA2（RFC 8009）の暗号化方式です。
+   RC4 の鍵しか持たないサービスアカウントでは Kerberos 認証に失敗するため、
+   パスワードを再設定して AES の鍵を生成してください。
 
 ログイン設定ファイル
 --------------------
@@ -119,7 +132,7 @@ Kerberos設定ファイル
 
 .. note::
    ``krb5.conf`` と ``auth_login.conf`` は、 ``spnego.krb5.conf`` / ``spnego.login.conf`` でデフォルトのファイル名が設定されますが、ファイル自体は必ず作成しておく必要があります。
-   これらのファイルがクラスパス上に存在しない場合、SPNEGOの初期化に失敗し |Fess| が起動できません。
+   SPNEGO の初期化は最初のログイン時に行われるため、これらのファイルが存在しなくても |Fess| 自体は起動しますが、SSO ログインが失敗します。
 
 必須設定
 --------
@@ -146,6 +159,23 @@ Kerberos設定ファイル
      - ログイン設定ファイルパス
      - ``auth_login.conf``
 
+.. note::
+   ``spnego.preauth.username`` と ``spnego.preauth.password`` を両方とも空にすると、
+   サーバー側のログインモジュールが keytab を使用します。
+   AD のサービスアカウントのパスワードを |Fess| の設定ファイルに保存したくない場合は、
+   keytab を作成して ``auth_login.conf`` の ``spnego-server`` を次のように設定してください。
+
+   ::
+
+       spnego-server {
+           com.sun.security.auth.module.Krb5LoginModule required
+           useKeyTab=true
+           keyTab="/var/lib/fess/fess.keytab"
+           principal="HTTP/fess-server.example.local@EXAMPLE.LOCAL"
+           storeKey=true
+           isInitiator=false;
+       };
+
 オプション設定
 --------------
 
@@ -169,18 +199,18 @@ Kerberos設定ファイル
      - ``true``
    * - ``spnego.allow.unsecure.basic``
      - 非セキュアなBasic認証を許可
-     - ``true``
+     - ``false``
    * - ``spnego.prompt.ntlm``
      - NTLMトークン受信時にBasic認証へフォールバックする
      - ``true``
    * - ``spnego.allow.localhost``
      - localhostからのアクセスを許可
-     - ``true``
+     - ``false``
    * - ``spnego.allow.delegation``
      - 委任を許可
      - ``false``
-   * - ``spnego.exclude.dirs``
-     - 認証除外ディレクトリ（カンマ区切り）
+   * - ``spnego.allowed.realms``
+     - サーバーのレルムに加えて許可する Kerberos レルム（カンマ区切り）
      - （なし）
    * - ``spnego.logger.level``
      - SPNEGOライブラリ内部のログレベル（``1`` =FINEST、 ``2`` =FINER、 ``3`` =FINE、 ``4`` =CONFIG、 ``6`` =WARNING、 ``7`` =SEVERE。これら以外の値（ ``0`` 、 ``5`` を含む）はINFO扱い）
@@ -280,9 +310,9 @@ Mozilla Firefox
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -362,6 +392,25 @@ Mozilla Firefox
 - LDAP設定が正しいか確認
 - Bind DNとパスワードが正しいか確認
 - ユーザーがADでグループに所属しているか確認
+
+ログインがHTTP 400になる
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+所属グループが多いユーザーはKerberosチケット（PAC）が大きくなり、 ``Authorization`` ヘッダーが
+Tomcatの既定の上限（8KB）を超えて400が返されることがあります。
+このときリクエストは |Fess| に届かないため、ログには何も記録されません。
+``tomcat_config.properties`` で上限を引き上げてください。
+
+::
+
+    tomcat.maxHttpHeaderSize=65536
+
+サービスアカウントのパスワード変更後に認証できない
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+サーバーの資格情報は最初のログイン時に一度だけ取得され、以後プロセスが終了するまでキャッシュされます。
+AD側でサービスアカウントのパスワードを変更した場合やkeytabを差し替えた場合は、 |Fess| を再起動してください。
+``spnego.*`` の設定を変更した場合も同様に再起動が必要です。
 
 デバッグ設定
 ------------
