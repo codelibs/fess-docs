@@ -232,10 +232,22 @@ Ejemplo::
    Si los atributos no pueden obtenerse del IdP, se usarán los valores por defecto.
    Al usar búsqueda basada en roles, configure los grupos o roles apropiados.
 
+.. warning::
+   Cuando se configura ``saml.attribute.role.name``, los valores de atributo enviados por el IdP se
+   convierten directamente en roles de |Fess|. Como ``authentication.admin.roles`` en
+   ``fess_config.properties`` tiene el valor predeterminado ``admin``, cualquier usuario cuyo
+   atributo de rol contenga ``admin`` obtiene privilegios de administrador en |Fess|. Compruebe
+   quién puede controlar el atributo de rol en el IdP y, si es necesario, cambie
+   ``authentication.admin.roles`` por otro nombre.
+
 Configuración de seguridad
 ==========================
 
 Para entornos de producción, se recomienda habilitar las siguientes configuraciones de seguridad.
+
+.. note::
+   Si permanecen configuraciones no recomendadas, se escribe en el registro una advertencia
+   ``Insecure SAML settings: ...`` al cargar la configuración SAML.
 
 Configuración de firma
 ----------------------
@@ -400,6 +412,11 @@ No se puede regresar a Fess después de la autenticación
 
 - Verifique que la URL ACS esté configurada correctamente en el lado del IdP
 - Asegúrese de que el valor de ``saml.sp.base.url`` coincida con la configuración del IdP
+- La aserción SAML llega como un POST entre sitios desde el IdP. Cuando
+  ``tomcat.sameSiteCookies`` en ``tomcat_config.properties`` es ``lax`` (el valor predeterminado), el
+  navegador no envía la cookie de sesión con ella, por lo que |Fess| no encuentra el estado SAML y
+  redirige de nuevo al IdP, entrando en un bucle. En ese caso, configure
+  ``tomcat.sameSiteCookies = none`` (``SameSite=None`` requiere HTTPS)
 
 Error de verificación de firma
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
