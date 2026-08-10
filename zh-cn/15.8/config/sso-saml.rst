@@ -249,10 +249,19 @@ IdP侧配置
    如果无法从IdP获取属性，将使用默认值。
    使用基于角色的搜索时，请配置适当的组或角色。
 
+.. warning::
+   设置\ ``saml.attribute.role.name``\ 后，IdP发送的属性值将直接成为 |Fess| 的角色。
+   由于\ ``fess_config.properties``\ 中\ ``authentication.admin.roles``\ 的默认值为\ ``admin``\ ，
+   角色属性中包含\ ``admin``\ 的用户将获得 |Fess| 的管理员权限。
+   请确认IdP侧可以控制角色属性的范围，必要时将\ ``authentication.admin.roles``\ 更改为其他名称。
+
 安全配置
 ========
 
 对于生产环境，建议启用以下安全设置。
+
+.. note::
+   如果保留了不推荐的设置，在加载SAML设置时会向日志输出\ ``Insecure SAML settings: ...``\ 警告。
 
 签名设置
 --------
@@ -417,6 +426,10 @@ SP证书与私钥配置
 
 - 验证ACS URL是否在IdP侧正确配置
 - 确保\ ``saml.sp.base.url``\ 的值与IdP配置匹配
+- SAML断言以来自IdP的跨站POST方式发送。
+  当\ ``tomcat_config.properties``\ 中的\ ``tomcat.sameSiteCookies``\ 为\ ``lax``\ （默认值）时，
+  浏览器不会随该请求发送会话Cookie，因此 |Fess| 找不到SAML状态并再次重定向到IdP，形成循环。
+  此时请设置\ ``tomcat.sameSiteCookies = none``\ （``SameSite=None``\ 需要HTTPS）
 
 签名验证错误
 ~~~~~~~~~~~~

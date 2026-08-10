@@ -249,10 +249,21 @@ Beispiel::
    Wenn Attribute nicht vom IdP abgerufen werden können, werden Standardwerte verwendet.
    Bei Verwendung der rollenbasierten Suche konfigurieren Sie entsprechende Gruppen oder Rollen.
 
+.. warning::
+   Wenn ``saml.attribute.role.name`` gesetzt ist, werden die vom IdP gesendeten Attributwerte
+   unverändert zu |Fess|-Rollen. Da ``authentication.admin.roles`` in ``fess_config.properties``
+   standardmäßig ``admin`` lautet, erhält jeder Benutzer, dessen Rollenattribut ``admin`` enthält,
+   Administratorrechte in |Fess|. Prüfen Sie, wer das Rollenattribut auf der IdP-Seite steuern kann,
+   und ändern Sie ``authentication.admin.roles`` bei Bedarf in einen anderen Namen.
+
 Sicherheitskonfiguration
 ========================
 
 Für Produktionsumgebungen wird empfohlen, die folgenden Sicherheitseinstellungen zu aktivieren.
+
+.. note::
+   Wenn nicht empfohlene Einstellungen bestehen bleiben, wird beim Laden der SAML-Einstellungen eine
+   Warnung ``Insecure SAML settings: ...`` in das Protokoll geschrieben.
 
 Signatureinstellungen
 ---------------------
@@ -417,6 +428,11 @@ Kann nach der Authentifizierung nicht zu Fess zurückkehren
 
 - Überprüfen Sie, ob die ACS URL auf der IdP-Seite korrekt konfiguriert ist
 - Stellen Sie sicher, dass der Wert von ``saml.sp.base.url`` mit der IdP-Konfiguration übereinstimmt
+- Die SAML-Assertion trifft als seitenübergreifender POST vom IdP ein. Wenn
+  ``tomcat.sameSiteCookies`` in ``tomcat_config.properties`` auf ``lax`` (Standard) steht, sendet der
+  Browser das Sitzungs-Cookie nicht mit, sodass |Fess| keinen SAML-Status findet und erneut zum IdP
+  weiterleitet, was eine Schleife ergibt. Setzen Sie in diesem Fall
+  ``tomcat.sameSiteCookies = none`` (``SameSite=None`` erfordert HTTPS)
 
 Signaturüberprüfungsfehler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

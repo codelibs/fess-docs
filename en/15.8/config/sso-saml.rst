@@ -249,10 +249,21 @@ Example::
    If attributes cannot be obtained from the IdP, default values will be used.
    When using role-based search, configure appropriate groups or roles.
 
+.. warning::
+   When ``saml.attribute.role.name`` is set, the attribute values sent by the IdP become |Fess| roles
+   as they are. Because ``authentication.admin.roles`` in ``fess_config.properties`` defaults to
+   ``admin``, any user whose role attribute contains ``admin`` gains |Fess| administrator privileges.
+   Check who can control the role attribute on the IdP side, and change
+   ``authentication.admin.roles`` to a different name if necessary.
+
 Security Configuration
 ======================
 
 For production environments, it is recommended to enable the following security settings.
+
+.. note::
+   When settings that are not recommended remain in place, an ``Insecure SAML settings: ...``
+   warning is written to the log as the SAML settings are loaded.
 
 Signature Settings
 ------------------
@@ -417,6 +428,10 @@ Cannot return to Fess after authentication
 
 - Verify that the ACS URL is correctly configured on the IdP side
 - Ensure the ``saml.sp.base.url`` value matches the IdP configuration
+- The SAML assertion arrives as a cross-site POST from the IdP. When ``tomcat.sameSiteCookies`` in
+  ``tomcat_config.properties`` is ``lax`` (the default), the browser does not send the session cookie
+  with it, so |Fess| finds no SAML state and redirects to the IdP again, which loops. Set
+  ``tomcat.sameSiteCookies = none`` in that case (``SameSite=None`` requires HTTPS)
 
 Signature verification error
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
