@@ -104,6 +104,28 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Intégration avec le service de domaine. Quand ``true``, pour les valeurs de permission au format ``name@domain``, la partie locale (``name``) sans la partie domaine est également ajoutée comme permission.
      - ``true``
 
+.. note::
+
+   L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, mais seuls les groupes à
+   extension messagerie possèdent une valeur ``mail``. Les groupes Microsoft 365 sont à extension
+   messagerie, leur nom est donc également enregistré comme permission. **Les groupes de sécurité
+   ne sont pas à extension messagerie : avec la valeur par défaut, seul leur GUID devient une
+   permission.** Si les droits d'accès du système de fichiers désignent un groupe de sécurité, les
+   permissions ne correspondent pas et ces documents n'apparaissent pas dans les résultats de
+   recherche.
+
+   Dans ce cas, ajoutez ``displayName``, que tous les groupes possèdent :
+
+   .. code-block:: properties
+
+      entraid.permission.fields=mail,displayName
+
+   ``displayName`` n'est ni qualifié par domaine ni unique, c'est pourquoi il ne figure pas dans la
+   valeur par défaut. Par exemple, si Entra ID contient un groupe nommé ``Administrators``, il
+   correspondra aussi aux documents dont les droits d'accès désignent le groupe Windows intégré
+   ``Administrators``. Avant de l'ajouter, vérifiez que les noms n'entrent pas en conflit avec ceux
+   déjà utilisés dans vos droits d'accès.
+
 Configuration côté Entra ID
 ===========================
 

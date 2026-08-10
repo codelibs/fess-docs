@@ -104,6 +104,27 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Integración con el servicio de dominio. Cuando es ``true``, para los valores de permiso en formato ``name@domain``, la parte local (``name``) con la parte del dominio eliminada también se agrega como permiso.
      - ``true``
 
+.. note::
+
+   El ID de grupo/rol (GUID) siempre se usa como permiso, pero solo los grupos habilitados para
+   correo tienen un valor ``mail``. Los grupos de Microsoft 365 están habilitados para correo, por
+   lo que su nombre también se registra como permiso. **Los grupos de seguridad no están
+   habilitados para correo, por lo que con el valor predeterminado solo su GUID se convierte en un
+   permiso.** Si los derechos de acceso del sistema de archivos indican un grupo de seguridad, los
+   permisos no coinciden y esos documentos no aparecen en los resultados de búsqueda.
+
+   En ese caso, agregue ``displayName``, que todos los grupos tienen:
+
+   .. code-block:: properties
+
+      entraid.permission.fields=mail,displayName
+
+   ``displayName`` no está calificado por dominio ni es único, por lo que no forma parte del valor
+   predeterminado. Por ejemplo, si Entra ID tiene un grupo llamado ``Administrators``, también
+   coincidirá con documentos cuyos derechos de acceso indiquen el grupo integrado de Windows
+   ``Administrators``. Antes de agregarlo, compruebe que los nombres no entren en conflicto con los
+   que ya se usan en sus derechos de acceso.
+
 Configuración del lado de Entra ID
 ==================================
 

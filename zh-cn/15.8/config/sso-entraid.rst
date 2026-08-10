@@ -104,6 +104,23 @@ Entra ID认证的工作原理
      - 域服务集成。设为 ``true`` 时，对于 ``name@domain`` 格式的权限值，会同时将去除域部分后的本地部分（``name``）也添加为权限。
      - ``true``
 
+.. note::
+
+   组/角色的ID（GUID）始终作为权限使用，但只有启用邮件的组才具有 ``mail`` 值。
+   Microsoft 365组启用了邮件，因此组名也会注册为权限。
+   而 **安全组未启用邮件，保持默认值时只有GUID会成为权限**\ 。
+   如果文件系统的访问权限指定的是安全组名称，则权限不匹配，这些文档不会出现在搜索结果中。
+
+   此时请添加所有组都具有的 ``displayName``\ ：
+
+   .. code-block:: properties
+
+      entraid.permission.fields=mail,displayName
+
+   ``displayName`` 不带域限定且不唯一，因此未包含在默认值中。
+   例如，如果Entra ID中存在名为 ``Administrators`` 的组，它也会匹配访问权限指定了Windows内置组
+   ``Administrators`` 的文档。添加前请确认这些名称不会与访问权限中已使用的名称冲突。
+
 Entra ID侧配置
 ==============
 
