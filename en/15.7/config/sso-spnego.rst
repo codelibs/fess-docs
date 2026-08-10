@@ -83,9 +83,9 @@ Create ``app/WEB-INF/classes/krb5.conf`` with the Kerberos configuration.
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -99,6 +99,19 @@ Create ``app/WEB-INF/classes/krb5.conf`` with the Kerberos configuration.
 
 .. note::
    Replace ``EXAMPLE.LOCAL`` with your AD domain name (uppercase) and ``AD-SERVER.EXAMPLE.LOCAL`` with your AD server hostname.
+
+.. warning::
+   A service ticket encrypted with a type that is not listed in ``permitted_enctypes`` is rejected by
+   the Kerberos acceptor as ``encryption type not in permitted_enctypes list``.
+   Active Directory normally issues AES256 service tickets, so AES256 must be listed.
+
+.. note::
+   RC4 (``rc4-hmac``), 3DES and DES are disabled by default in Java 17 and later, so listing them has
+   no effect; the example above specifies AES only.
+   ``aes256-cts-hmac-sha384-192`` and ``aes128-cts-hmac-sha256-128`` are the AES-SHA2 (RFC 8009) types
+   supported by Windows Server 2025.
+   A service account that holds only an RC4 key cannot be used for Kerberos authentication; reset its
+   password so that AES keys are generated.
 
 Login Configuration File
 ------------------------
@@ -119,7 +132,7 @@ Create ``app/WEB-INF/classes/auth_login.conf`` with the JAAS login configuration
 
 .. note::
    ``krb5.conf`` and ``auth_login.conf`` have their default filenames set via ``spnego.krb5.conf`` / ``spnego.login.conf``, but the files themselves must be created.
-   If these files do not exist on the classpath, SPNEGO initialization will fail and |Fess| will not start.
+   SPNEGO is initialized on the first login, so |Fess| itself still starts when these files are missing, but SSO login fails.
 
 Required Settings
 -----------------
@@ -179,9 +192,6 @@ The following settings can be added as needed.
    * - ``spnego.allow.delegation``
      - Allow delegation
      - ``false``
-   * - ``spnego.exclude.dirs``
-     - Directories to exclude from authentication (comma-separated)
-     - (None)
    * - ``spnego.logger.level``
      - Internal log level of the SPNEGO library (``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE; any other value including ``0`` and ``5`` is treated as INFO)
      - (Auto)
@@ -280,9 +290,9 @@ The following is a minimal configuration example for a test environment.
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -362,6 +372,25 @@ Cannot Retrieve Group Information
 - Verify that LDAP settings are correct
 - Check that Bind DN and password are correct
 - Verify that the user belongs to groups in AD
+
+Login returns HTTP 400
+~~~~~~~~~~~~~~~~~~~~~~
+
+For a user who belongs to many groups the Kerberos ticket (PAC) grows large, and the
+``Authorization`` header can exceed Tomcat's default limit of 8KB, which is answered with 400.
+The request never reaches |Fess|, so nothing is written to the log.
+Raise the limit in ``tomcat_config.properties``.
+
+::
+
+    tomcat.maxHttpHeaderSize=65536
+
+Authentication fails after the service account password is changed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The server credential is obtained once on the first login and cached for the lifetime of the process.
+Restart |Fess| after changing the service account password in AD or replacing the keytab.
+A restart is likewise required after changing any ``spnego.*`` setting.
 
 Debug Settings
 --------------

@@ -1,6 +1,6 @@
-=============================================
+============================================================
 SSO-Konfiguration mit Windows-integrierter Authentifizierung
-=============================================
+============================================================
 
 Übersicht
 =========
@@ -83,9 +83,9 @@ Erstellen Sie ``app/WEB-INF/classes/krb5.conf`` mit der Kerberos-Konfiguration.
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -99,6 +99,19 @@ Erstellen Sie ``app/WEB-INF/classes/krb5.conf`` mit der Kerberos-Konfiguration.
 
 .. note::
    Ersetzen Sie ``EXAMPLE.LOCAL`` durch Ihren AD-Domänennamen (Großbuchstaben) und ``AD-SERVER.EXAMPLE.LOCAL`` durch Ihren AD-Server-Hostnamen.
+
+.. warning::
+   Ein Service-Ticket mit einem Verschlüsselungstyp, der nicht in ``permitted_enctypes`` aufgeführt ist,
+   wird von der Kerberos-Gegenstelle mit ``encryption type not in permitted_enctypes list`` abgelehnt.
+   Active Directory stellt in der Regel AES256-Service-Tickets aus, daher muss AES256 enthalten sein.
+
+.. note::
+   RC4 (``rc4-hmac``), 3DES und DES sind ab Java 17 standardmäßig deaktiviert; sie aufzuführen hat
+   keine Wirkung. Das obige Beispiel gibt daher nur AES an.
+   ``aes256-cts-hmac-sha384-192`` und ``aes128-cts-hmac-sha256-128`` sind die von Windows Server 2025
+   unterstützten AES-SHA2-Typen (RFC 8009).
+   Ein Dienstkonto, das nur einen RC4-Schlüssel besitzt, kann nicht für die Kerberos-Authentifizierung
+   verwendet werden. Setzen Sie sein Kennwort zurück, damit AES-Schlüssel erzeugt werden.
 
 Login-Konfigurationsdatei
 -------------------------
@@ -119,7 +132,7 @@ Erstellen Sie ``app/WEB-INF/classes/auth_login.conf`` mit der JAAS-Login-Konfigu
 
 .. note::
    Die Standarddateinamen für ``krb5.conf`` und ``auth_login.conf`` werden über ``spnego.krb5.conf`` bzw. ``spnego.login.conf`` festgelegt, die Dateien selbst müssen jedoch zwingend erstellt werden.
-   Sind diese Dateien nicht im Classpath vorhanden, schlägt die SPNEGO-Initialisierung fehl und |Fess| kann nicht gestartet werden.
+   SPNEGO wird bei der ersten Anmeldung initialisiert. Fehlen diese Dateien, startet |Fess| zwar, die SSO-Anmeldung schlägt jedoch fehl.
 
 Erforderliche Einstellungen
 ---------------------------
@@ -146,6 +159,24 @@ Fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/system.properties``
      - Pfad zur Login-Konfigurationsdatei
      - ``auth_login.conf``
 
+.. note::
+   Bleiben ``spnego.preauth.username`` und ``spnego.preauth.password`` beide leer, verwendet das
+   Server-Login-Modul eine Keytab-Datei.
+   Wenn Sie das Kennwort des AD-Dienstkontos nicht in einer |Fess|-Konfigurationsdatei speichern
+   möchten, erstellen Sie eine Keytab-Datei und konfigurieren Sie ``spnego-server`` in
+   ``auth_login.conf`` wie folgt.
+
+   ::
+
+       spnego-server {
+           com.sun.security.auth.module.Krb5LoginModule required
+           useKeyTab=true
+           keyTab="/var/lib/fess/fess.keytab"
+           principal="HTTP/fess-server.example.local@EXAMPLE.LOCAL"
+           storeKey=true
+           isInitiator=false;
+       };
+
 Optionale Einstellungen
 -----------------------
 
@@ -169,18 +200,18 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - ``true``
    * - ``spnego.allow.unsecure.basic``
      - Unsichere Basic-Authentifizierung erlauben
-     - ``true``
+     - ``false``
    * - ``spnego.prompt.ntlm``
      - Bei Empfang eines NTLM-Tokens auf Basic-Authentifizierung zurückfallen
      - ``true``
    * - ``spnego.allow.localhost``
      - Localhost-Zugriff erlauben
-     - ``true``
+     - ``false``
    * - ``spnego.allow.delegation``
      - Delegierung erlauben
      - ``false``
-   * - ``spnego.exclude.dirs``
-     - Von der Authentifizierung ausgeschlossene Verzeichnisse (kommagetrennt)
+   * - ``spnego.allowed.realms``
+     - Zusätzlich zur Server-Realm akzeptierte Kerberos-Realms (kommagetrennt)
      - (Keine)
    * - ``spnego.logger.level``
      - Interner Protokollierungsgrad der SPNEGO-Bibliothek (``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE; alle anderen Werte einschließlich ``0`` und ``5`` werden als INFO behandelt)
@@ -189,6 +220,22 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
 .. warning::
    ``spnego.allow.unsecure.basic=true`` kann Base64-kodierte Anmeldeinformationen über unverschlüsselte Verbindungen senden.
    Für Produktionsumgebungen wird dringend empfohlen, dies auf ``false`` zu setzen und HTTPS zu verwenden.
+
+.. note::
+   Mit ``spnego.allow.unsecure.basic=false`` (Standard) wird die Basic-Authentifizierung nur für
+   Anfragen angeboten, bei denen ``HttpServletRequest#isSecure()`` ``true`` zurückgibt.
+   Wird TLS an einem Reverse-Proxy terminiert und die Anfrage per HTTP an |Fess| weitergeleitet,
+   ist dieser Wert ``false``. Ein Client, der kein Kerberos-Ticket erhalten kann und auf NTLM
+   zurückfällt, kann sich dann nicht anmelden. Setzen Sie ``tomcat.secure=true`` in
+   ``tomcat_config.properties``, damit |Fess| die Anfrage als über HTTPS eingegangen behandelt.
+
+.. warning::
+   In |Fess| 15.8 wird eine Anmeldung standardmäßig abgelehnt, wenn sich die Realm des
+   Client-Principals von der Realm des Servers unterscheidet. Melden sich Benutzer aus einer
+   untergeordneten Domäne einer AD-Domänenstruktur oder aus einer vertrauten Gesamtstruktur an,
+   tragen Sie diese Realms kommagetrennt in ``spnego.allowed.realms`` ein. Andernfalls werden
+   Benutzer, die sich bis 15.7 anmelden konnten, mit ``Kerberos realm is not allowed``
+   abgewiesen.
 
 .. note::
    Wenn ``spnego.prompt.ntlm=true`` (Standard), muss auch ``spnego.allow.basic`` auf ``true`` gesetzt sein.
@@ -280,9 +327,9 @@ Das Folgende ist ein minimales Konfigurationsbeispiel für eine Testumgebung.
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -362,6 +409,27 @@ Gruppeninformationen können nicht abgerufen werden
 - Überprüfen Sie, ob die LDAP-Einstellungen korrekt sind
 - Überprüfen Sie, ob Bind-DN und Passwort korrekt sind
 - Überprüfen Sie, ob der Benutzer in AD zu Gruppen gehört
+
+Die Anmeldung liefert HTTP 400
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Bei Benutzern mit vielen Gruppenmitgliedschaften wird das Kerberos-Ticket (PAC) groß, und der
+``Authorization``-Header kann Tomcats Standardgrenze von 8 KB überschreiten, was mit 400 beantwortet wird.
+Die Anfrage erreicht |Fess| nie, daher wird nichts protokolliert.
+Erhöhen Sie das Limit in ``tomcat_config.properties``.
+
+::
+
+    tomcat.maxHttpHeaderSize=65536
+
+Nach Änderung des Dienstkonto-Kennworts schlägt die Authentifizierung fehl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Die Server-Anmeldeinformationen werden einmalig bei der ersten Anmeldung ermittelt und für die
+Laufzeit des Prozesses zwischengespeichert.
+Starten Sie |Fess| neu, nachdem Sie das Kennwort des Dienstkontos in AD geändert oder die
+Keytab-Datei ersetzt haben. Ebenso ist nach einer Änderung von ``spnego.*``-Einstellungen ein
+Neustart erforderlich.
 
 Debug-Einstellungen
 --------------------
