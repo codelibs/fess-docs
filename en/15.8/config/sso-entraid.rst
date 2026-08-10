@@ -104,6 +104,25 @@ The following settings can be added as needed.
      - Domain service integration. When ``true``, for permission values in the ``name@domain`` format, the local part (``name``) with the domain part removed is also added as a permission.
      - ``true``
 
+.. note::
+
+   The group/role ID (GUID) is always used as a permission, but only mail-enabled groups have a
+   ``mail`` value. Microsoft 365 groups are mail-enabled, so their name is registered as a
+   permission as well. **Security groups are not mail-enabled, so with the default only their GUID
+   becomes a permission.** If file system access rights name a security group, the permissions do
+   not match and those documents do not appear in search results.
+
+   In that case, add ``displayName``, which every group has:
+
+   .. code-block:: properties
+
+      entraid.permission.fields=mail,displayName
+
+   ``displayName`` is not domain-qualified and is not unique, which is why it is not in the
+   default. For example, if Entra ID has a group named ``Administrators``, it also matches
+   documents whose access rights name the built-in Windows ``Administrators`` group. Before adding
+   it, check that the names do not collide with the ones already used in your access rights.
+
 Entra ID Side Configuration
 ===========================
 
