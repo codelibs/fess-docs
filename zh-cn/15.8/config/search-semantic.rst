@@ -126,10 +126,20 @@ system.properties 配置
      - 分块方式
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - 每个分块的字符数
+     - 每个分块的字符数（目标值，参见下方说明）
    * - ``content_chunker.length.overlap``
      - ``0``
      - 各分块之间重叠的字符数
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - 在搜索窗口内将每次切分移动到最合适的边界：换行或句末优先于分句分隔符或空格，
+       这些又优先于文字系统切换处，而不是恰好在 ``chunk_size`` 个字符处切断
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ （0-50）
+     - 从理想切分点向前，按 ``chunk_size`` 的百分比计算，边界搜索最多可以回退多远
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ （0-25）
+     - 从理想切分点向后，按 ``chunk_size`` 的百分比计算，边界搜索最多可以前进多远
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - 每个文档的最大分块数。超过此值的文档将被标记为 ``skipped``
@@ -186,6 +196,23 @@ system.properties 配置
    * - ``content_chunker.search.knn.param.ef_search``
      - （未设置）
      - ANN 查询的 ``ef_search`` 参数
+
+.. note::
+
+   当 ``content_chunker.length.boundary.enabled=true``\ （默认值）时，
+   ``content_chunker.length.chunk_size`` 会从硬性上限变为一个目标值：
+   每次切分都会移动到搜索窗口内最合适的边界，换行或句末优先于分句分隔符或空格，
+   这些又优先于文字系统切换处。移动的只是切分点本身，不会丢失任何字符，
+   因此将一篇文档的所有分块拼接起来仍会与原文完全一致。向后搜索最多可能使 ``chunk_size`` 按
+   ``content_chunker.length.boundary.lookahead_percent`` 所允许的幅度超出。
+   此外还可能出现第二种、与之独立的超出：当切分点原本会落在一个字素簇（组合符号、变体选择符，
+   或由零宽连接符连接的表情符号序列）内部时，最多会额外超出 32 个字符——这种超出不受
+   ``lookahead_percent`` 控制，即使该值为 ``0`` 也会发生。
+   这两种超出不会同时出现在同一个切分点上；在出厂默认设置下，最坏情况约为 841 个字符。
+   分块也可能因 ``lookback_percent`` 而缩短，因此一篇文档产生的分块数可能会比以前略多（参见
+   ``content_chunker.max_chunks_per_document``\ ）。将
+   ``content_chunker.length.boundary.enabled`` 设为 ``false``\ ，或将两个百分比都设为 ``0``\ ，
+   即可恢复此前精确固定长度的行为。
 
 .. note::
 

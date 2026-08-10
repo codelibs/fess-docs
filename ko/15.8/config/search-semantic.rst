@@ -135,10 +135,23 @@ system.properties 설정
      - 청크 분할 방식
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - 청크당 문자 수
+     - 청크당 문자 수(목표값, 아래 참고)
    * - ``content_chunker.length.overlap``
      - ``0``
      - 청크 간에 중복시킬 문자 수
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - 각 절단 위치를 탐색 범위 내에서 가장 적합한 경계로 이동시키되, 줄바꿈이나 문장 끝을 절
+       구분이나 공백보다 우선하고 이들을 다시 문자 체계 경계보다 우선하여, ``chunk_size`` 문자
+       수에서 정확히 자르지 않도록 합니다
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ (0-50)
+     - 이상적인 절단 위치보다 앞쪽으로, ``chunk_size`` 에 대한 비율로 얼마나 멀리까지 경계를
+       탐색할 수 있는지
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ (0-25)
+     - 이상적인 절단 위치보다 뒤쪽으로, ``chunk_size`` 에 대한 비율로 얼마나 멀리까지 경계를
+       탐색할 수 있는지
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - 문서당 최대 청크 수. 이를 초과하는 문서는 ``skipped`` 로 표시됩니다
@@ -197,6 +210,23 @@ system.properties 설정
    * - ``content_chunker.search.knn.param.ef_search``
      - (미설정)
      - ANN 쿼리의 ``ef_search`` 파라미터
+
+.. note::
+
+   ``content_chunker.length.boundary.enabled=true``\ (기본값)인 경우,
+   ``content_chunker.length.chunk_size`` 는 상한이 아니라 목표값이 됩니다. 각 절단 위치는 탐색
+   범위 내에서 가장 적합한 경계로 이동하되, 줄바꿈이나 문장 끝을 절 구분이나 공백보다 우선하고
+   이들을 다시 문자 체계 경계보다 우선합니다. 이동하는 것은 절단 위치뿐이며 문자는 손실되지
+   않으므로, 문서의 청크를 이어 붙이면 원본 내용과 정확히 일치합니다. 전방 탐색으로 인해
+   ``chunk_size`` 를 최대 ``content_chunker.length.boundary.lookahead_percent`` 만큼 초과할 수
+   있습니다. 이와는 별도로, 절단 위치가 자소 클러스터(결합 문자, 이형 선택자, 너비 없는 접합자로
+   연결된 이모지 시퀀스 등) 내부에 놓이게 될 경우 최대 32자까지 추가로 초과할 수 있습니다. 이
+   초과는 ``lookahead_percent`` 의 영향을 받지 않으며 ``0`` 으로 설정해도 발생할 수 있습니다. 두
+   종류의 초과는 동일한 절단 위치에서 동시에 발생하지 않으며, 기본값 기준 최악의 경우는 약
+   841자입니다. 또한 청크는 ``lookback_percent`` 만큼 짧아질 수 있어 문서가 이전보다 약간 더 많은
+   청크를 생성할 수 있습니다(``content_chunker.max_chunks_per_document`` 참고). 이전의 정확한
+   고정 길이 동작으로 되돌리려면 ``content_chunker.length.boundary.enabled=false`` 로 설정하거나
+   두 비율을 모두 ``0`` 으로 설정하세요.
 
 .. note::
 

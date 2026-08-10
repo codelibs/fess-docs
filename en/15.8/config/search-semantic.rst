@@ -140,10 +140,23 @@ system.properties Settings
      - Chunking method
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Number of characters per chunk
+     - Number of characters per chunk (target, see the note below)
    * - ``content_chunker.length.overlap``
      - ``0``
      - Number of characters to overlap between chunks
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Moves each cut to the nearest suitable break within the search window, preferring a line
+       break or sentence end over a clause separator or space, and those over a script change,
+       instead of landing at exactly ``chunk_size`` characters
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ (0-50)
+     - How far before the ideal cut, as a percentage of ``chunk_size``, the boundary search may
+       look for a break
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ (0-25)
+     - How far after the ideal cut, as a percentage of ``chunk_size``, the boundary search may
+       look for a break
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Maximum number of chunks per document. Documents that exceed this are marked ``skipped``
@@ -208,6 +221,24 @@ system.properties Settings
    * - ``content_chunker.search.knn.param.ef_search``
      - (unset)
      - The ``ef_search`` parameter for ANN queries
+
+.. note::
+
+   With ``content_chunker.length.boundary.enabled=true`` (the default),
+   ``content_chunker.length.chunk_size`` becomes a target rather than a hard ceiling: each cut
+   moves to the nearest suitable break within the search window, preferring a line break or
+   sentence end over a clause separator or space, and those over a script change. Only the cut
+   point ever moves; no character is dropped, so concatenating a document's chunks still
+   reproduces its content exactly. The forward search can overshoot ``chunk_size`` by up to
+   ``content_chunker.length.boundary.lookahead_percent``; a second, independent overshoot of up
+   to 32 characters can occur when a cut would otherwise land inside a grapheme cluster (a
+   combining mark, a variation selector, or a zero-width-joined emoji sequence) — that one
+   ignores ``lookahead_percent`` and can happen even when it is ``0``. The two overshoots never
+   occur on the same cut; the worst case at the shipped defaults is about 841 characters. Chunks
+   can also come in up to ``lookback_percent`` shorter, so a document may produce slightly more
+   chunks than before (see ``content_chunker.max_chunks_per_document``). Set
+   ``content_chunker.length.boundary.enabled=false``, or both percentages to ``0``, to restore
+   the previous exact fixed-length behavior.
 
 .. note::
 

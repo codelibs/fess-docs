@@ -146,10 +146,24 @@ Einstellungen in system.properties
      - Chunking-Methode
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Anzahl der Zeichen pro Chunk
+     - Anzahl der Zeichen pro Chunk (Zielwert, siehe Hinweis unten)
    * - ``content_chunker.length.overlap``
      - ``0``
      - Anzahl der Zeichen, die sich zwischen Chunks überlappen
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Verschiebt jeden Schnitt innerhalb des Suchfensters zur am besten geeigneten Grenze,
+       wobei ein Zeilenumbruch oder Satzende Vorrang vor einem Teilsatztrennzeichen oder
+       Leerzeichen hat und diese ihrerseits Vorrang vor einem Schriftsystemwechsel haben,
+       anstatt genau bei ``chunk_size`` Zeichen zu schneiden
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ (0–50)
+     - Wie weit vor dem idealen Schnittpunkt, als Prozentsatz von ``chunk_size``, nach einer
+       Grenze gesucht werden darf
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ (0–25)
+     - Wie weit nach dem idealen Schnittpunkt, als Prozentsatz von ``chunk_size``, nach einer
+       Grenze gesucht werden darf
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Maximale Anzahl von Chunks pro Dokument. Dokumente, die diesen Wert überschreiten, werden
@@ -220,6 +234,27 @@ Einstellungen in system.properties
    * - ``content_chunker.search.knn.param.ef_search``
      - (nicht gesetzt)
      - Der Parameter ``ef_search`` für ANN-Abfragen
+
+.. note::
+
+   Mit ``content_chunker.length.boundary.enabled=true`` (Standardeinstellung) wird
+   ``content_chunker.length.chunk_size`` zu einem Zielwert statt zu einer harten Obergrenze,
+   wobei jeder Schnitt sich innerhalb des Suchfensters zur am besten geeigneten Grenze
+   verschiebt: ein Zeilenumbruch oder Satzende hat Vorrang vor einem Teilsatztrennzeichen oder
+   Leerzeichen, und diese ihrerseits Vorrang vor einem Schriftsystemwechsel. Verschoben wird
+   dabei nur der Schnittpunkt selbst; es geht kein Zeichen verloren, sodass das Zusammenfügen
+   der Chunks eines Dokuments weiterhin exakt dessen Inhalt ergibt. Die Vorwärtssuche kann
+   ``chunk_size`` um bis zu ``content_chunker.length.boundary.lookahead_percent`` überschreiten.
+   Ein zweites, unabhängiges Überschreiten um bis zu 32 Zeichen kann auftreten, wenn ein Schnitt
+   sonst mitten in einem Graphemcluster (ein kombinierendes Zeichen, ein Variationsselektor oder
+   eine durch Zero-Width-Joiner verbundene Emoji-Sequenz) landen würde — dieses ignoriert
+   ``lookahead_percent`` und kann auch bei ``0`` auftreten. Die beiden Überschreitungen treten
+   nie beim selben Schnitt gemeinsam auf; der ungünstigste Fall liegt bei den Standardwerten bei
+   etwa 841 Zeichen. Chunks können außerdem um bis zu ``lookback_percent`` kürzer ausfallen,
+   sodass ein Dokument etwas mehr Chunks als zuvor erzeugen kann (siehe
+   ``content_chunker.max_chunks_per_document``). Setzen Sie
+   ``content_chunker.length.boundary.enabled=false`` oder beide Prozentsätze auf ``0``, um das
+   bisherige exakte Verhalten mit fester Länge wiederherzustellen.
 
 .. note::
 

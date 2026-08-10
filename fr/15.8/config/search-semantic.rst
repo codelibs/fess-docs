@@ -150,10 +150,24 @@ Réglages dans system.properties
      - Méthode de chunking
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Nombre de caractères par chunk
+     - Nombre de caractères par chunk (valeur cible, voir la note ci-dessous)
    * - ``content_chunker.length.overlap``
      - ``0``
      - Nombre de caractères de chevauchement entre les chunks
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Déplace chaque coupure vers la rupture la plus appropriée dans la fenêtre de recherche, en
+       donnant la priorité à un saut de ligne ou une fin de phrase sur un séparateur de
+       proposition ou un espace, puis à ceux-ci sur un changement d'écriture, au lieu de couper
+       exactement à ``chunk_size`` caractères
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ (0-50)
+     - Jusqu'où, avant le point de coupure idéal et en pourcentage de ``chunk_size``, la
+       recherche de rupture peut remonter
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ (0-25)
+     - Jusqu'où, après le point de coupure idéal et en pourcentage de ``chunk_size``, la
+       recherche de rupture peut avancer
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Nombre maximal de chunks par document. Les documents qui dépassent cette limite sont
@@ -224,6 +238,27 @@ Réglages dans system.properties
    * - ``content_chunker.search.knn.param.ef_search``
      - (non défini)
      - Le paramètre ``ef_search`` pour les requêtes ANN
+
+.. note::
+
+   Avec ``content_chunker.length.boundary.enabled=true`` (valeur par défaut),
+   ``content_chunker.length.chunk_size`` devient un objectif plutôt qu'un plafond strict : chaque
+   coupure se déplace vers la rupture la plus appropriée dans la fenêtre de recherche, en donnant
+   la priorité à un saut de ligne ou une fin de phrase sur un séparateur de proposition ou un
+   espace, puis à ceux-ci sur un changement d'écriture. Seul le point de coupure est déplacé ;
+   aucun caractère n'est perdu, si bien que la concaténation des chunks d'un document reproduit
+   toujours son contenu exact. La recherche vers l'avant peut dépasser ``chunk_size`` d'au plus
+   ``content_chunker.length.boundary.lookahead_percent``. Un second dépassement, indépendant,
+   pouvant aller jusqu'à 32 caractères peut se produire lorsqu'une coupure tomberait autrement au
+   milieu d'un cluster de graphèmes (une marque combinante, un sélecteur de variante ou une
+   séquence d'emojis liée par un jointeur de largeur nulle ; ZWJ) — celui-ci ignore
+   ``lookahead_percent`` et peut survenir même lorsqu'il vaut ``0``. Les deux types de
+   dépassement ne se produisent jamais sur la même coupure ; le pire cas avec les valeurs par
+   défaut est d'environ 841 caractères. Les chunks peuvent aussi être plus courts d'au plus
+   ``lookback_percent``, si bien qu'un document peut produire légèrement plus de chunks qu'avant
+   (voir ``content_chunker.max_chunks_per_document``). Définissez
+   ``content_chunker.length.boundary.enabled=false``, ou les deux pourcentages à ``0``, pour
+   restaurer le comportement précédent à longueur fixe exacte.
 
 .. note::
 
