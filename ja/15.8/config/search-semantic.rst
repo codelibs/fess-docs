@@ -134,13 +134,32 @@ system.properties の設定
      - チャンク分割方式
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - 1チャンクの文字数
+     - 1チャンクの目標文字数。境界考慮分割が有効（既定）の場合、これは上限ではなく目標値です。
+       チャンクは ``boundary.lookback_percent`` の分だけ短くなることがあり、
+       ``max(lookahead, 32)`` 文字だけ長くなることがあります（既定では640〜840文字）。
+       埋め込みモデルのトークン上限に対してこのマージンを見込んでください
    * - ``content_chunker.length.overlap``
      - ``0``
-     - チャンク間で重複させる文字数
+     - チャンク間で重複させる文字数。再開位置も境界にスナップされ、スナップは位置を前方向にしか
+       動かさないため、実効的な重複はこの値以上・この値の2倍以下になります
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - ``chunk_size`` 文字ちょうどで切るのではなく、各切れ目を適切なテキスト境界へ移動します。
+       候補はティア分けされ、存在する最上位ティアの中で最も近いものが選ばれます。改行・文末が
+       最優先、次に節区切り・空白、最後に書字系の変化です。``false`` にすると従来の固定長分割に
+       戻ります
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - 切れ目の理想位置より前方を境界探索する範囲（``chunk_size`` に対する百分率、0〜50）
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - 切れ目の理想位置より後方を文末・改行について探索する範囲（``chunk_size`` に対する
+       百分率、0〜25）。前方に候補が見つからなかった場合にのみ使われます
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
-     - 1ドキュメントあたりの最大チャンク数。超過したドキュメントは ``skipped`` になります
+     - 1ドキュメントあたりの最大チャンク数。超過したドキュメントは ``skipped`` になります。埋め込みも作成されません。境界考慮分割はチャンクを短くするため、
+       固定長分割よりおよそ3〜25%多くのチャンクが生成されます。非常に大きなドキュメントを
+       扱う場合はこの値を大きくしてください
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - 埋め込みプロバイダ（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``）
@@ -199,6 +218,12 @@ system.properties の設定
    * - ``content_chunker.search.knn.param.ef_search``
      - （未設定）
      - ANNクエリの ``ef_search`` パラメーター
+
+.. note::
+   ``content_chunker.length.boundary.enabled`` を ``false`` にするか、2つの百分率をどちらも
+   ``0`` にすると、従来の固定長分割とまったく同じ結果になります。これらの設定変更が影響するのは
+   以降にチャンク化されるドキュメントだけです。すでにチャンク配列として保存されている
+   ドキュメントは、再クロールされるまで元の境界を保持します。
 
 .. note::
 

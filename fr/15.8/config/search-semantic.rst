@@ -150,14 +150,39 @@ Réglages dans system.properties
      - Méthode de chunking
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Nombre de caractères par chunk
+     - Nombre de caractères visé par chunk. Lorsque le découpage aux frontières est activé
+       (valeur par défaut), il s'agit d'une cible et non d'une limite stricte : un chunk peut être
+       plus court de ``boundary.lookback_percent`` et plus long de ``max(lookahead, 32)``
+       caractères, soit de 640 à 840 caractères avec les valeurs par défaut. Conservez cette marge
+       par rapport à la limite de tokens du modèle d'embedding
    * - ``content_chunker.length.overlap``
      - ``0``
-     - Nombre de caractères de chevauchement entre les chunks
+     - Nombre de caractères de chevauchement entre les chunks. Le point de reprise est lui
+       aussi aligné sur une frontière, et cet alignement ne peut que l'avancer : le chevauchement
+       effectif est donc compris entre cette valeur et le double de cette valeur
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Déplace chaque coupure vers une frontière de texte pertinente au lieu de couper
+       exactement à ``chunk_size`` caractères. Les candidats sont hiérarchisés et le plus proche
+       du niveau le plus élevé présent l'emporte : saut de ligne ou fin de phrase, sinon
+       séparateur de proposition ou espace, sinon changement de système d'écriture. ``false``
+       rétablit le comportement précédent à longueur fixe
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - Distance de recherche d'une frontière avant la coupure idéale, en pourcentage de
+       ``chunk_size`` (0-50)
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - Distance de recherche d'une fin de phrase ou d'un saut de ligne après la coupure
+       idéale, en pourcentage de ``chunk_size`` (0-25). Utilisé uniquement si rien n'a été trouvé
+       avant la coupure
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Nombre maximal de chunks par document. Les documents qui dépassent cette limite sont
-       marqués ``skipped``
+       marqués ``skipped`` et ne reçoivent aucun embedding. Comme le découpage aux
+       frontières raccourcit les chunks, un document en produit environ 3 % à 25 % de plus qu'avec
+       une longueur fixe ; un corpus de très gros documents peut donc nécessiter une valeur plus
+       élevée ici
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - Fournisseur d'embedding (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -224,6 +249,12 @@ Réglages dans system.properties
    * - ``content_chunker.search.knn.param.ef_search``
      - (non défini)
      - Le paramètre ``ef_search`` pour les requêtes ANN
+
+.. note::
+   Régler ``content_chunker.length.boundary.enabled`` sur ``false``, ou les deux pourcentages sur
+   ``0``, reproduit exactement le comportement précédent à longueur fixe. La modification de ces
+   paramètres n'affecte que les documents découpés ensuite : un document déjà stocké sous forme de
+   tableau de chunks conserve ses frontières jusqu'à ce qu'il soit à nouveau crawlé.
 
 .. note::
 

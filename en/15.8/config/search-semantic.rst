@@ -140,13 +140,37 @@ system.properties Settings
      - Chunking method
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Number of characters per chunk
+     - Target number of characters per chunk. With boundary-aware splitting enabled (the
+       default) this is a target rather than a hard limit: a chunk may be up to
+       ``boundary.lookback_percent`` of it shorter, and up to ``max(lookahead, 32)`` characters
+       longer -- 640 to 840 characters at the defaults. Leave that margin against the embedding
+       model's token limit
    * - ``content_chunker.length.overlap``
      - ``0``
-     - Number of characters to overlap between chunks
+     - Number of characters to overlap between chunks. The restart point is snapped to a
+       boundary as well, and snapping can only move it earlier, so the effective overlap is
+       between this value and twice this value
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Move each cut to a sensible text boundary instead of cutting at exactly
+       ``chunk_size`` characters. Candidates are tiered and the nearest candidate of the highest
+       tier present wins: a line break or sentence end, otherwise a clause separator or space,
+       otherwise a writing-system change. Set to ``false`` for the previous fixed-length
+       behaviour
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - How far before the ideal cut a boundary may be searched, as a percentage of
+       ``chunk_size`` (0-50)
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - How far after the ideal cut a sentence end or line break may be searched, as a
+       percentage of ``chunk_size`` (0-25). Used only when nothing was found behind the cut
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Maximum number of chunks per document. Documents that exceed this are marked ``skipped``
+       and receive no embeddings. Because boundary-aware splitting makes chunks shorter, a
+       document yields roughly 3% to 25% more chunks than a fixed-length split, so a corpus of
+       very large documents may need a higher value here
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - Embedding provider (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -208,6 +232,12 @@ system.properties Settings
    * - ``content_chunker.search.knn.param.ef_search``
      - (unset)
      - The ``ef_search`` parameter for ANN queries
+
+.. note::
+   Setting ``content_chunker.length.boundary.enabled`` to ``false``, or both percentages to
+   ``0``, reproduces the previous fixed-length behaviour exactly. Changing any of these settings
+   only affects documents chunked afterwards: a document already stored as a chunk array keeps
+   its boundaries until it is re-crawled.
 
 .. note::
 

@@ -147,14 +147,39 @@ Configuraciones en system.properties
      - Método de chunking
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Número de caracteres por chunk
+     - Número objetivo de caracteres por chunk. Con la división consciente de límites activada
+       (valor predeterminado) se trata de un objetivo y no de un máximo estricto: un chunk puede
+       ser hasta ``boundary.lookback_percent`` más corto y hasta ``max(lookahead, 32)`` caracteres
+       más largo (de 640 a 840 caracteres con los valores predeterminados). Reserve ese margen
+       frente al límite de tokens del modelo de embeddings
    * - ``content_chunker.length.overlap``
      - ``0``
-     - Número de caracteres que se superponen entre chunks
+     - Número de caracteres que se superponen entre chunks. El punto de reinicio también se
+       ajusta a un límite, y ese ajuste solo puede adelantarlo, por lo que la superposición
+       efectiva queda entre este valor y el doble de este valor
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Desplaza cada corte a un límite de texto razonable en lugar de cortar exactamente a
+       los ``chunk_size`` caracteres. Los candidatos se agrupan en niveles y gana el más cercano
+       del nivel más alto presente: salto de línea o fin de frase; si no, separador de cláusula o
+       espacio; si no, cambio de sistema de escritura. Con ``false`` se recupera el
+       comportamiento anterior de longitud fija
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - Hasta dónde se puede buscar un límite antes del corte ideal, como porcentaje de
+       ``chunk_size`` (0-50)
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - Hasta dónde se puede buscar un fin de frase o un salto de línea después del corte
+       ideal, como porcentaje de ``chunk_size`` (0-25). Solo se usa si no se encontró nada
+       antes del corte
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Número máximo de chunks por documento. Los documentos que superan este valor se marcan
-       como ``skipped``
+       como ``skipped`` y no reciben embeddings. Como la división consciente de
+       límites acorta los chunks, un documento genera entre un 3 % y un 25 % más de chunks que
+       con longitud fija, por lo que un corpus de documentos muy grandes puede necesitar un valor
+       mayor aquí
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - Proveedor de embedding (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -220,6 +245,12 @@ Configuraciones en system.properties
    * - ``content_chunker.search.knn.param.ef_search``
      - (sin establecer)
      - El parámetro ``ef_search`` para las consultas ANN
+
+.. note::
+   Establecer ``content_chunker.length.boundary.enabled`` en ``false``, o ambos porcentajes en
+   ``0``, reproduce exactamente el comportamiento anterior de longitud fija. Cambiar cualquiera de
+   estos ajustes solo afecta a los documentos divididos a partir de ese momento: un documento ya
+   almacenado como array de chunks conserva sus límites hasta que se vuelve a rastrear.
 
 .. note::
 

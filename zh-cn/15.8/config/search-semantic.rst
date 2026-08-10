@@ -126,13 +126,29 @@ system.properties 配置
      - 分块方式
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - 每个分块的字符数
+     - 每个分块的目标字符数。启用边界感知切分（默认）时，这是目标值而非硬性上限：分块可能比该值短
+       ``boundary.lookback_percent``\ ，也可能长 ``max(lookahead, 32)`` 个字符（默认配置下为
+       640～840 个字符）。请针对嵌入模型的 token 上限预留这一余量
    * - ``content_chunker.length.overlap``
      - ``0``
-     - 各分块之间重叠的字符数
+     - 各分块之间重叠的字符数。重启位置同样会对齐到边界，而对齐只会将其前移，因此实际重叠介于
+       该值与该值的两倍之间
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - 将每个切分点移动到合适的文本边界，而不是恰好在 ``chunk_size`` 个字符处切分。候选项分为
+       多个层级，取所存在的最高层级中距离最近的一个：换行或句末优先，其次是分句符号或空格，最后是
+       书写体系变化。设为 ``false`` 可恢复此前的固定长度行为
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - 在理想切分点之前搜索边界的范围（占 ``chunk_size`` 的百分比，0～50）
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - 在理想切分点之后搜索句末或换行的范围（占 ``chunk_size`` 的百分比，0～25）。仅在切分点
+       之前未找到候选时使用
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
-     - 每个文档的最大分块数。超过此值的文档将被标记为 ``skipped``
+     - 每个文档的最大分块数。超过此值的文档将被标记为 ``skipped``，并且不会生成嵌入。由于边界感知切分会使分块变短，一个文档生成的分块数比固定长度切分
+       约多 3%～25%，因此包含超大文档的语料可能需要调高此值
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - 嵌入提供商（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``）
@@ -186,6 +202,11 @@ system.properties 配置
    * - ``content_chunker.search.knn.param.ef_search``
      - （未设置）
      - ANN 查询的 ``ef_search`` 参数
+
+.. note::
+   将 ``content_chunker.length.boundary.enabled`` 设为 ``false``\ ，或将两个百分比都设为
+   ``0``\ ，可完全复现此前的固定长度行为。修改这些设置只影响之后切分的文档：已经以分块数组形式
+   保存的文档会保留原有边界，直到被重新爬取。
 
 .. note::
 

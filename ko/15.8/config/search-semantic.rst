@@ -135,13 +135,33 @@ system.properties 설정
      - 청크 분할 방식
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - 청크당 문자 수
+     - 청크당 목표 문자 수. 경계 인식 분할이 활성화된 경우(기본값) 이 값은 상한이 아니라
+       목표치입니다. 청크는 ``boundary.lookback_percent`` 만큼 짧아질 수 있고
+       ``max(lookahead, 32)`` 문자만큼 길어질 수 있습니다(기본값에서 640~840자). 임베딩 모델의
+       토큰 상한에 대해 이 여유를 확보해 두세요
    * - ``content_chunker.length.overlap``
      - ``0``
-     - 청크 간에 중복시킬 문자 수
+     - 청크 간에 중복시킬 문자 수. 재시작 지점도 경계에 맞춰지며, 이 보정은 지점을 앞으로만
+       옮기므로 실제 중복은 이 값 이상, 이 값의 2배 이하가 됩니다
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - ``chunk_size`` 문자에서 정확히 자르는 대신 각 절단 지점을 적절한 텍스트 경계로
+       옮깁니다. 후보는 계층으로 나뉘며 존재하는 가장 높은 계층에서 가장 가까운 후보가
+       선택됩니다. 줄바꿈·문장 끝이 최우선이고, 다음이 절 구분자·공백, 마지막이 문자 체계
+       변화입니다. ``false`` 로 설정하면 기존의 고정 길이 동작으로 돌아갑니다
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - 이상적인 절단 지점보다 앞쪽에서 경계를 탐색하는 범위(``chunk_size`` 에 대한 백분율,
+       0~50)
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - 이상적인 절단 지점보다 뒤쪽에서 문장 끝이나 줄바꿈을 탐색하는 범위(``chunk_size``
+       에 대한 백분율, 0~25). 앞쪽에서 아무것도 찾지 못한 경우에만 사용됩니다
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
-     - 문서당 최대 청크 수. 이를 초과하는 문서는 ``skipped`` 로 표시됩니다
+     - 문서당 최대 청크 수. 이를 초과하는 문서는 ``skipped`` 로 표시됩니다. 임베딩도 생성되지 않습니다. 경계 인식 분할은 청크를 짧게 만들기 때문에
+       고정 길이 분할보다 약 3~25% 더 많은 청크가 생성됩니다. 매우 큰 문서를 다루는 경우에는 이
+       값을 늘리세요
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - 임베딩 프로바이더(``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -197,6 +217,12 @@ system.properties 설정
    * - ``content_chunker.search.knn.param.ef_search``
      - (미설정)
      - ANN 쿼리의 ``ef_search`` 파라미터
+
+.. note::
+   ``content_chunker.length.boundary.enabled`` 를 ``false`` 로 설정하거나 두 백분율을 모두
+   ``0`` 으로 설정하면 기존의 고정 길이 동작과 완전히 동일한 결과가 됩니다. 이 설정 변경은 이후에
+   청크화되는 문서에만 영향을 줍니다. 이미 청크 배열로 저장된 문서는 다시 크롤링될 때까지 원래
+   경계를 유지합니다.
 
 .. note::
 

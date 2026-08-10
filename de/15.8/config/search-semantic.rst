@@ -146,14 +146,38 @@ Einstellungen in system.properties
      - Chunking-Methode
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Anzahl der Zeichen pro Chunk
+     - Zielanzahl der Zeichen pro Chunk. Bei aktivierter grenzbewusster Aufteilung (Standard)
+       ist dies ein Zielwert und keine harte Obergrenze: Ein Chunk kann um bis zu
+       ``boundary.lookback_percent`` kürzer und um bis zu ``max(lookahead, 32)`` Zeichen länger
+       sein -- mit den Standardwerten 640 bis 840 Zeichen. Halten Sie diesen Spielraum gegenüber
+       dem Token-Limit des Embedding-Modells frei
    * - ``content_chunker.length.overlap``
      - ``0``
-     - Anzahl der Zeichen, die sich zwischen Chunks überlappen
+     - Anzahl der Zeichen, die sich zwischen Chunks überlappen. Auch der Wiedereinstiegspunkt
+       wird auf eine Grenze gezogen, und zwar ausschließlich nach vorn, sodass die effektive
+       Überlappung zwischen diesem Wert und seinem Doppelten liegt
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Verschiebt jeden Schnitt auf eine sinnvolle Textgrenze, statt exakt bei
+       ``chunk_size`` Zeichen zu schneiden. Die Kandidaten sind gestuft, und der nächstgelegene
+       Kandidat der höchsten vorhandenen Stufe gewinnt: Zeilenumbruch oder Satzende, sonst
+       Teilsatztrenner oder Leerzeichen, sonst Schriftsystemwechsel. ``false`` stellt das
+       bisherige Verhalten mit fester Länge wieder her
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``
+     - Wie weit vor dem idealen Schnitt nach einer Grenze gesucht werden darf, als
+       Prozentsatz von ``chunk_size`` (0-50)
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``
+     - Wie weit nach dem idealen Schnitt nach einem Satzende oder Zeilenumbruch gesucht
+       werden darf, als Prozentsatz von ``chunk_size`` (0-25). Wird nur verwendet, wenn davor
+       nichts gefunden wurde
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Maximale Anzahl von Chunks pro Dokument. Dokumente, die diesen Wert überschreiten, werden
-       als ``skipped`` markiert
+       als ``skipped`` markiert und erhalten keine Embeddings. Da die grenzbewusste
+       Aufteilung die Chunks verkürzt, ergibt ein Dokument etwa 3 % bis 25 % mehr Chunks als bei
+       fester Länge; für sehr große Dokumente kann hier ein höherer Wert nötig sein
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - Embedding-Anbieter (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -220,6 +244,12 @@ Einstellungen in system.properties
    * - ``content_chunker.search.knn.param.ef_search``
      - (nicht gesetzt)
      - Der Parameter ``ef_search`` für ANN-Abfragen
+
+.. note::
+   ``content_chunker.length.boundary.enabled`` auf ``false`` zu setzen -- oder beide Prozentwerte
+   auf ``0`` -- reproduziert exakt das bisherige Verhalten mit fester Länge. Änderungen an diesen
+   Einstellungen wirken sich nur auf danach gechunkte Dokumente aus: Ein bereits als Chunk-Array
+   gespeichertes Dokument behält seine Grenzen, bis es erneut gecrawlt wird.
 
 .. note::
 
