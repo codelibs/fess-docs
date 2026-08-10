@@ -147,10 +147,23 @@ Configuraciones en system.properties
      - Método de chunking
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Número de caracteres por chunk
+     - Número de caracteres por chunk (valor objetivo, véase la nota más abajo)
    * - ``content_chunker.length.overlap``
      - ``0``
      - Número de caracteres que se superponen entre chunks
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - Desplaza cada corte hasta el límite más adecuado dentro de la ventana de búsqueda,
+       priorizando salto de línea o fin de frase sobre separador de cláusula o espacio, y estos
+       sobre cambio de escritura, en lugar de cortar exactamente a los ``chunk_size`` caracteres
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ (0-50)
+     - Hasta dónde, antes del punto de corte ideal y como porcentaje de ``chunk_size``, puede
+       retroceder la búsqueda de un límite
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ (0-25)
+     - Hasta dónde, después del punto de corte ideal y como porcentaje de ``chunk_size``, puede
+       avanzar la búsqueda de un límite
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Número máximo de chunks por documento. Los documentos que superan este valor se marcan
@@ -220,6 +233,26 @@ Configuraciones en system.properties
    * - ``content_chunker.search.knn.param.ef_search``
      - (sin establecer)
      - El parámetro ``ef_search`` para las consultas ANN
+
+.. note::
+
+   Con ``content_chunker.length.boundary.enabled=true`` (valor predeterminado),
+   ``content_chunker.length.chunk_size`` pasa a ser un objetivo en lugar de un límite estricto:
+   cada corte se desplaza hasta el límite más adecuado dentro de la ventana de búsqueda,
+   priorizando salto de línea o fin de frase sobre separador de cláusula o espacio, y estos sobre
+   cambio de escritura. Solo se desplaza el punto de corte; no se pierde ningún carácter, por lo
+   que concatenar los chunks de un documento sigue reproduciendo exactamente su contenido. La
+   búsqueda hacia adelante puede superar ``chunk_size`` en hasta
+   ``content_chunker.length.boundary.lookahead_percent``. Puede producirse un segundo exceso,
+   independiente, de hasta 32 caracteres cuando un corte caería en medio de un clúster de
+   grafemas (una marca combinante, un selector de variación o una secuencia de emojis unida por
+   un conector de ancho cero; ZWJ); este ignora ``lookahead_percent`` y puede ocurrir incluso con
+   ``0``. Los dos tipos de exceso nunca se producen en el mismo corte; el peor caso con los
+   valores predeterminados es de unos 841 caracteres. Los chunks también pueden acortarse hasta
+   en ``lookback_percent``, por lo que un documento puede producir ligeramente más chunks que
+   antes (véase ``content_chunker.max_chunks_per_document``). Establezca
+   ``content_chunker.length.boundary.enabled=false``, o ambos porcentajes a ``0``, para restaurar
+   el comportamiento anterior de longitud fija exacta.
 
 .. note::
 

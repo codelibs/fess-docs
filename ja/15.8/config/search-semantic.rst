@@ -134,10 +134,21 @@ system.properties の設定
      - チャンク分割方式
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - 1チャンクの文字数
+     - 1チャンクの文字数（目標値。下記の注記を参照）
    * - ``content_chunker.length.overlap``
      - ``0``
      - チャンク間で重複させる文字数
+   * - ``content_chunker.length.boundary.enabled``
+     - ``true``
+     - 各分割位置を検索ウィンドウ内で最も適した区切りへ移動します。改行や文末を節区切りや
+       空白より優先し、それらを書字系の変わり目より優先するため、``chunk_size`` ちょうどの
+       文字数では区切りません
+   * - ``content_chunker.length.boundary.lookback_percent``
+     - ``20``\ （0〜50）
+     - 理想の分割位置より手前側に、``chunk_size`` に対する割合でどこまで区切りを探すか
+   * - ``content_chunker.length.boundary.lookahead_percent``
+     - ``5``\ （0〜25）
+     - 理想の分割位置より後ろ側に、``chunk_size`` に対する割合でどこまで区切りを探すか
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - 1ドキュメントあたりの最大チャンク数。超過したドキュメントは ``skipped`` になります
@@ -199,6 +210,24 @@ system.properties の設定
    * - ``content_chunker.search.knn.param.ef_search``
      - （未設定）
      - ANNクエリの ``ef_search`` パラメーター
+
+.. note::
+
+   ``content_chunker.length.boundary.enabled=true``\ （デフォルト）の場合、
+   ``content_chunker.length.chunk_size`` は上限ではなく目標値になります。各分割位置は
+   検索ウィンドウ内で最も適した区切りへ移動します。改行や文末を節区切りや空白より優先し、
+   それらを書字系の変わり目より優先します。移動するのは分割位置だけで文字が
+   失われることはないため、ドキュメントのチャンクを連結すれば元の内容と完全に一致します。
+   前方探索によって、``chunk_size`` を最大 ``content_chunker.length.boundary.lookahead_percent``
+   分だけ超える場合があります。これとは別に、書記素クラスター（結合文字、異体字セレクター、
+   ゼロ幅接合子で連結された絵文字シーケンスなど）の途中で分割されそうになった場合には、
+   最大32文字の超過が発生することがあります。こちらは ``lookahead_percent`` の影響を受けず、
+   ``0`` に設定していても発生します。2種類の超過が同じ分割位置で同時に発生することはなく、
+   標準設定での最悪ケースは約841文字です。また、チャンクは ``lookback_percent`` 分だけ
+   短くなることもあるため、ドキュメントのチャンク数が従来よりわずかに増える場合があります
+   （``content_chunker.max_chunks_per_document`` を参照）。
+   ``content_chunker.length.boundary.enabled=false`` を設定するか、両方の割合を ``0`` にすると、
+   従来の厳密な固定長の挙動に戻ります。
 
 .. note::
 
