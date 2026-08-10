@@ -219,6 +219,19 @@ Kerberos配置文件
    对于生产环境，强烈建议将此设置为 ``false`` 并使用HTTPS。
 
 .. note::
+   当 ``spnego.allow.unsecure.basic=false`` （默认值）时，仅对 ``HttpServletRequest#isSecure()``
+   返回 ``true`` 的请求提供 Basic 认证。
+   如果在反向代理上终止 TLS 并以 HTTP 转发到 |Fess| ，该值为 ``false`` ，
+   因此无法获取 Kerberos 票据而回退到 NTLM 的客户端将无法登录。
+   请在 ``tomcat_config.properties`` 中设置 ``tomcat.secure=true`` ，以告知 |Fess| 该请求来自 HTTPS。
+
+.. warning::
+   在 |Fess| 15.8 中，如果客户端主体的领域与服务器的领域不同，登录将默认被拒绝。
+   如果用户来自 AD 域树的子域或建立了信任关系的林，
+   请在 ``spnego.allowed.realms`` 中以逗号分隔列出这些领域。
+   否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
+
+.. note::
    ``spnego.prompt.ntlm=true``\ （默认值）时，``spnego.allow.basic`` 也必须为 ``true``\ 。
    若要将 ``spnego.allow.basic`` 设为 ``false``，则必须同时将 ``spnego.prompt.ntlm`` 设为 ``false``\ 。
    不满足此条件时，SPNEGO初始化时将发生错误。

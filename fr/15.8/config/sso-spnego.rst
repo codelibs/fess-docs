@@ -222,6 +222,21 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    Pour les environnements de production, il est fortement recommandé de définir cette valeur sur ``false`` et d'utiliser HTTPS.
 
 .. note::
+   Avec ``spnego.allow.unsecure.basic=false`` (valeur par défaut), l'authentification Basic n'est
+   proposée que pour les requêtes dont ``HttpServletRequest#isSecure()`` renvoie ``true``.
+   Lorsque TLS est terminé par un proxy inverse et que la requête est transmise à |Fess| en HTTP,
+   cette valeur est ``false`` : un client qui ne peut pas obtenir de ticket Kerberos et bascule
+   vers NTLM ne peut donc pas se connecter. Définissez ``tomcat.secure=true`` dans
+   ``tomcat_config.properties`` pour indiquer à |Fess| que la requête est arrivée en HTTPS.
+
+.. warning::
+   Dans |Fess| 15.8, une connexion est refusée par défaut lorsque le domaine Kerberos du principal
+   client diffère de celui du serveur. Si des utilisateurs se connectent depuis un domaine enfant
+   d'une arborescence de domaines AD ou depuis une forêt approuvée, indiquez ces domaines dans
+   ``spnego.allowed.realms``, séparés par des virgules. Sinon, les utilisateurs qui pouvaient se
+   connecter jusqu'à la version 15.7 sont refusés avec ``Kerberos realm is not allowed``.
+
+.. note::
    Lorsque ``spnego.prompt.ntlm=true`` (valeur par défaut), ``spnego.allow.basic`` doit également être ``true``.
    Si vous définissez ``spnego.allow.basic=false``, vous devez également définir ``spnego.prompt.ntlm=false``.
    Si cette condition n'est pas respectée, une erreur se produit lors de l'initialisation de SPNEGO.

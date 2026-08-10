@@ -221,6 +221,21 @@ Kerberos設定ファイル
    本番環境では ``false`` に設定し、HTTPSを使用することを強く推奨します。
 
 .. note::
+   ``spnego.allow.unsecure.basic=false`` （デフォルト）の場合、Basic認証は
+   ``HttpServletRequest#isSecure()`` が ``true`` を返すリクエストにのみ提示されます。
+   TLSをリバースプロキシで終端して |Fess| へHTTPで転送している構成ではこの値が ``false`` になるため、
+   Kerberosチケットを取得できずNTLMにフォールバックしたクライアントはログインできません。
+   ``tomcat_config.properties`` で ``tomcat.secure=true`` を設定し、リクエストがHTTPS由来であることを
+   |Fess| に伝えてください。
+
+.. warning::
+   |Fess| 15.8 では、クライアントのプリンシパルのレルムがサーバーのレルムと異なる場合、
+   そのログインは既定で拒否されます。ADのドメインツリーの子ドメインや、信頼関係を結んだフォレストの
+   ユーザーがログインする構成では、 ``spnego.allowed.realms`` に該当するレルムをカンマ区切りで
+   列挙してください。列挙しない場合、15.7 まではログインできていたユーザーが
+   ``Kerberos realm is not allowed`` として拒否されます。
+
+.. note::
    ``spnego.prompt.ntlm=true`` （デフォルト）の場合、 ``spnego.allow.basic`` も ``true`` である必要があります。
    ``spnego.allow.basic=false`` に設定する場合は、 ``spnego.prompt.ntlm=false`` も併せて設定してください。
    この条件を満たさない場合、SPNEGOの初期化時にエラーが発生します。

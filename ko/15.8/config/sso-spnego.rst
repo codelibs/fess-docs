@@ -221,6 +221,21 @@ Kerberos 설정 파일
    프로덕션 환경에서는 ``false`` 로 설정하고 HTTPS를 사용할 것을 강력히 권장합니다.
 
 .. note::
+   ``spnego.allow.unsecure.basic=false`` (기본값)인 경우 Basic 인증은
+   ``HttpServletRequest#isSecure()`` 가 ``true`` 를 반환하는 요청에만 제공됩니다.
+   리버스 프록시에서 TLS를 종료하고 |Fess| 로 HTTP로 전달하는 구성에서는 이 값이 ``false`` 이므로,
+   Kerberos 티켓을 받지 못해 NTLM으로 대체된 클라이언트는 로그인할 수 없습니다.
+   ``tomcat_config.properties`` 에서 ``tomcat.secure=true`` 를 설정하여 요청이 HTTPS로 도착했음을
+   |Fess| 에 알려 주십시오.
+
+.. warning::
+   |Fess| 15.8에서는 클라이언트 주체의 영역이 서버의 영역과 다르면 로그인이 기본적으로 거부됩니다.
+   AD 도메인 트리의 하위 도메인이나 신뢰 관계를 맺은 포리스트의 사용자가 로그인하는 구성에서는
+   ``spnego.allowed.realms`` 에 해당 영역을 쉼표로 구분하여 나열하십시오.
+   나열하지 않으면 15.7까지 로그인할 수 있었던 사용자가 ``Kerberos realm is not allowed`` 로
+   거부됩니다.
+
+.. note::
    ``spnego.prompt.ntlm=true`` (기본값)인 경우, ``spnego.allow.basic`` 도 ``true`` 이어야 합니다.
    ``spnego.allow.basic=false`` 로 설정하는 경우에는 ``spnego.prompt.ntlm=false`` 도 함께 설정하십시오.
    이 조건을 충족하지 않으면 SPNEGO 초기화 시 오류가 발생합니다.
