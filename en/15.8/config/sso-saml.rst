@@ -57,6 +57,23 @@ To enable SAML authentication, add the following setting to ``app/WEB-INF/conf/s
    Settings changed in the admin UI are saved to ``system.properties`` and persist after restart.
    However, security settings such as signing/encryption and the SP certificate/private key cannot be configured in the admin UI, so write them directly in ``system.properties``.
 
+Session Cookie Configuration
+----------------------------
+
+The IdP returns the assertion to |Fess| as a **cross-site POST**. A ``SameSite=Lax`` cookie is not sent on such a request, so SAML login does not complete with the default value shipped with |Fess|.
+
+Change ``tomcat.sameSiteCookies`` to ``none`` in ``tomcat_config.properties``. This file is located in ``lib/classes/`` for the ZIP package and in ``/etc/fess/`` for the DEB/RPM packages.
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   Browsers only accept ``none`` on a cookie that also carries the ``Secure`` attribute, so |Fess| must be served over HTTPS. Over plain HTTP, this setting makes it impossible to log in to |Fess|.
+
+.. note::
+   The default ``lax`` is set for SSO methods whose callback returns as a redirect (GET). SAML's HTTP-POST binding is not one of them, so this change is only needed when using SAML. |Fess| must be restarted after changing the setting.
+
 SP (Service Provider) Configuration
 ------------------------------------
 

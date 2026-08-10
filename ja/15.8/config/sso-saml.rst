@@ -57,6 +57,23 @@ SAML認証を有効にするには、``app/WEB-INF/conf/system.properties`` に�
    管理画面で変更した設定は ``system.properties`` に保存され、再起動後も保持されます。
    ただし、署名・暗号化などのセキュリティ設定やSP証明書・秘密鍵は管理画面では設定できないため、``system.properties`` に直接記述してください。
 
+セッションCookieの設定
+----------------------
+
+IdPはアサーションを |Fess| へ **クロスサイトのPOST** で返します。``SameSite=Lax`` のCookieはこのリクエストに送信されないため、|Fess| が同梱する既定値のままではSAMLログインが完了しません。
+
+``tomcat_config.properties`` の ``tomcat.sameSiteCookies`` を ``none`` に変更してください。このファイルはZIP版では ``lib/classes/`` 、DEB/RPM版では ``/etc/fess/`` に配置されています。
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   ``none`` はブラウザが ``Secure`` 属性付きCookieに対してのみ受け入れます。したがって |Fess| をHTTPSで提供する必要があります。HTTPのままでは |Fess| にログインできなくなります。
+
+.. note::
+   既定値の ``lax`` はリダイレクト（GET）で戻るSSO方式のために設定されています。SAMLのHTTP-POSTバインディングはこれに該当しないため、SAMLを利用する場合のみ変更が必要です。設定変更後は |Fess| の再起動が必要です。
+
 SP（Service Provider）設定
 --------------------------
 
