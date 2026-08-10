@@ -210,7 +210,7 @@ Kerberos 설정 파일
      - 위임 허용
      - ``false``
    * - ``spnego.allowed.realms``
-     - 서버 렘에 더해 허용할 Kerberos 렘(쉼표 구분)
+     - 서버 영역에 더해 허용할 Kerberos 영역(쉼표 구분)
      - (없음)
    * - ``spnego.logger.level``
      - SPNEGO 라이브러리 내부 로그 레벨( ``1`` =FINEST, ``2`` =FINER, ``3`` =FINE, ``4`` =CONFIG, ``6`` =WARNING, ``7`` =SEVERE. 이 외의 값( ``0``, ``5`` 포함)은 INFO로 처리)
