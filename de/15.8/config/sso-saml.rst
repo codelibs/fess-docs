@@ -57,6 +57,23 @@ Um die SAML-Authentifizierung zu aktivieren, fügen Sie die folgende Einstellung
    Im Admin-Bereich vorgenommene Änderungen werden in ``system.properties`` gespeichert und bleiben nach einem Neustart erhalten.
    Sicherheitseinstellungen wie Signierung/Verschlüsselung sowie das SP-Zertifikat und der private Schlüssel können jedoch nicht über die Administrationsseite konfiguriert werden und müssen direkt in ``system.properties`` eingetragen werden.
 
+Konfiguration des Sitzungs-Cookies
+----------------------------------
+
+Der IdP sendet die Assertion als **seitenübergreifenden POST** an |Fess| zurück. Ein ``SameSite=Lax``-Cookie wird bei einer solchen Anfrage nicht mitgesendet, sodass die SAML-Anmeldung mit dem von |Fess| ausgelieferten Standardwert nicht abgeschlossen wird.
+
+Ändern Sie ``tomcat.sameSiteCookies`` in ``tomcat_config.properties`` auf ``none``. Diese Datei liegt beim ZIP-Paket unter ``lib/classes/`` und bei den DEB-/RPM-Paketen unter ``/etc/fess/``.
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   Browser akzeptieren ``none`` nur bei einem Cookie, das auch das Attribut ``Secure`` trägt. |Fess| muss daher über HTTPS bereitgestellt werden. Über einfaches HTTP macht diese Einstellung eine Anmeldung bei |Fess| unmöglich.
+
+.. note::
+   Der Standardwert ``lax`` ist für SSO-Verfahren gedacht, deren Callback als Weiterleitung (GET) zurückkommt. Die HTTP-POST-Bindung von SAML gehört nicht dazu, daher ist diese Änderung nur bei Verwendung von SAML erforderlich. Nach der Änderung muss |Fess| neu gestartet werden.
+
 SP (Service Provider) Konfiguration
 -----------------------------------
 

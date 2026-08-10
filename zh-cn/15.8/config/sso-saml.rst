@@ -57,6 +57,23 @@ SAML认证的工作原理
    在管理界面中更改的设置将保存到 ``system.properties`` 中，重启后也会保留。
    但是，签名/加密等安全设置以及SP证书/私钥无法在管理界面中配置，因此请直接写入 ``system.properties``\ 。
 
+会话Cookie配置
+--------------
+
+IdP 通过 **跨站 POST** 将断言返回给 |Fess| 。``SameSite=Lax`` 的 Cookie 不会随此类请求发送，因此使用 |Fess| 附带的默认值时，SAML 登录无法完成。
+
+请将 ``tomcat_config.properties`` 中的 ``tomcat.sameSiteCookies`` 改为 ``none`` 。该文件在 ZIP 软件包中位于 ``lib/classes/`` ，在 DEB/RPM 软件包中位于 ``/etc/fess/`` 。
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   浏览器仅对同时带有 ``Secure`` 属性的 Cookie 接受 ``none`` ，因此 |Fess| 必须通过 HTTPS 提供服务。在普通 HTTP 下，此设置会导致无法登录 |Fess| 。
+
+.. note::
+   默认值 ``lax`` 是为回调以重定向（GET）返回的 SSO 方式设定的。SAML 的 HTTP-POST 绑定不属于此类，因此仅在使用 SAML 时才需要修改。修改设置后需要重启 |Fess| 。
+
 SP（服务提供者）配置
 --------------------
 
