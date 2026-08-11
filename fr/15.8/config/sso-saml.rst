@@ -19,6 +19,19 @@ Dans l'authentification SAML, |Fess| fonctionne comme un SP (Service Provider) e
 4. L'IdP envoie l'assertion SAML à |Fess|
 5. |Fess| valide l'assertion et connecte l'utilisateur
 
+.. note::
+   Seule la connexion initiée par le SP, qui démarre au point d'accès SSO de |Fess| (``/sso/``) comme
+   décrit ci-dessus, est prise en charge. |Fess| associe chaque réponse SAML à l'identifiant de
+   l'AuthnRequest qu'il a émise ; une réponse initiée par l'IdP (non sollicitée), par exemple depuis
+   une vignette |Fess| dans le tableau de bord Okta ou dans le portail « Mes applications » de
+   Microsoft Entra ID, n'a donc aucune AuthnRequest correspondante et est rejetée. Si vous placez une
+   vignette côté IdP, faites-la pointer vers le point d'accès ``/sso/`` de |Fess|.
+
+   Notez qu'en 15.7, une connexion initiée par l'IdP fonctionnait incidemment lorsque
+   ``tomcat.sameSiteCookies=none`` était défini : |Fess| renvoyait à l'IdP la réponse qu'il ne pouvait
+   pas associer, et l'IdP retournait immédiatement une assertion sollicitée. En 15.8, ce renvoi n'a
+   plus lieu, si bien que la connexion initiée par l'IdP ne fonctionne pas.
+
 Pour l'intégration avec la recherche basée sur les rôles, voir :doc:`security-role`.
 
 Prérequis
@@ -56,6 +69,12 @@ Pour activer l'authentification SAML, ajoutez le paramètre suivant dans ``app/W
    ``sso.type`` ainsi que les paramètres SAML de base (informations IdP, informations SP, mappage des attributs utilisateur) peuvent également être configurés depuis la page « Système > Général » de l'interface d'administration.
    Les paramètres modifiés dans l'interface d'administration sont enregistrés dans ``system.properties`` et persistent après redémarrage.
    Cependant, les paramètres de sécurité tels que la signature/le chiffrement ainsi que le certificat SP et la clé privée ne peuvent pas être configurés dans l'interface d'administration ; écrivez-les directement dans ``system.properties``.
+
+.. note::
+   Les paramètres commençant par ``saml.`` sont lus uniquement depuis ``system.properties``.
+   Les propriétés système de la JVM telles que ``-Dsaml.security....`` ou ``-Dfess.saml.security....`` ne sont pas consultées.
+   En particulier, ``saml.security.*``, ``saml.strict`` et ``saml.debug`` n'ont pas non plus de champ dans l'interface d'administration :
+   les écrire directement dans ``system.properties`` est le seul moyen de les définir.
 
 Configuration du cookie de session
 ----------------------------------
@@ -291,10 +310,32 @@ Paramètres de signature
    * - ``saml.security.logoutresponse_signed``
      - Signer les réponses de déconnexion
      - ``false``
+   * - ``saml.security.reject_deprecated_alg``
+     - Rejeter les algorithmes de signature obsolètes tels que SHA-1
+     - ``false``
 
 .. warning::
    Les fonctionnalités de sécurité sont désactivées par défaut.
    Pour les environnements de production, il est fortement recommandé de définir au moins ``saml.security.want_assertions_signed=true``.
+
+.. note::
+   Tant que ``saml.security.reject_deprecated_alg`` vaut ``false``, les assertions et messages signés
+   avec SHA-1 (``rsa-sha1`` et ``dsa-sha1``) sont également acceptés. Ce paramètre n'est pas activé par
+   défaut, car son activation entraîne le rejet des IdP qui signent encore avec SHA-1.
+   Vérifiez que votre IdP signe avec SHA-256 ou plus fort, puis définissez
+   ``saml.security.reject_deprecated_alg=true``.
+
+.. warning::
+   Lorsque la déconnexion unique est configurée (``saml.idp.single_logout_service.url``), définissez
+   impérativement aussi ``saml.security.want_messages_signed=true``.
+   Tant que ce paramètre vaut ``false``, aucune signature n'est exigée sur une LogoutRequest reçue sur
+   ``/sso/logout``. Les seules vérifications effectuées sont le schéma XML, ``NotOnOrAfter`` (s'il est
+   présent), ``Destination`` (s'il est présent) et la correspondance de l'Issuer avec
+   ``saml.idp.entityid`` ; le NameID de la LogoutRequest n'est jamais comparé à l'utilisateur connecté.
+   Un attaquant qui connaît l'identifiant d'entité de l'IdP, une information publique, peut donc forger
+   une LogoutRequest non signée et mettre fin à la session d'un utilisateur authentifié en l'attirant
+   vers cette URL.
+   L'impact est une déconnexion forcée (déni de service), et non une prise de contrôle du compte.
 
 Paramètres de chiffrement
 -------------------------
@@ -418,6 +459,9 @@ Voici un exemple de configuration recommandée pour les environnements de produc
     saml.security.want_assertions_signed=true
     saml.security.want_messages_signed=true
 
+    # À activer après avoir vérifié que l'IdP signe avec SHA-256 ou plus fort
+    saml.security.reject_deprecated_alg=true
+
 Dépannage
 =========
 
@@ -432,8 +476,51 @@ Impossible de retourner à Fess après l'authentification
 - L'assertion SAML arrive sous forme de POST intersite depuis l'IdP. Lorsque
   ``tomcat.sameSiteCookies`` dans ``tomcat_config.properties`` vaut ``lax`` (la valeur par défaut),
   le navigateur n'envoie pas le cookie de session avec cette requête ; |Fess| ne trouve alors aucun
-  état SAML et redirige à nouveau vers l'IdP, ce qui provoque une boucle. Dans ce cas, définissez
-  ``tomcat.sameSiteCookies = none`` (``SameSite=None`` nécessite HTTPS)
+  identifiant d'AuthnRequest correspondant et fait échouer la connexion une seule fois, sur place. Le
+  navigateur revient à la page de connexion en affichant « Le processus de connexion SSO a échoué. »,
+  et un avertissement commençant par
+  ``Received a SAML response with no matching AuthnRequest ID in the session.`` est écrit dans le
+  journal. Dans ce cas, définissez ``tomcat.sameSiteCookies = none`` (``SameSite=None`` nécessite HTTPS)
+
+.. note::
+   En 15.7, la même situation faisait rediriger |Fess| encore et encore vers l'IdP, mettant la connexion
+   en boucle. En 15.8, elle échoue une seule fois au lieu de boucler. La solution de configuration reste
+   la même.
+
+La validation de Destination échoue derrière un proxy inverse
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Lorsque |Fess| s'exécute derrière un proxy inverse ou un répartiteur de charge qui termine TLS, la
+validation de l'assertion peut échouer même si ``saml.sp.base.url`` est correctement défini.
+
+La cause est que la bibliothèque SAML compare l'attribut ``Destination`` de l'assertion à l'URL de
+requête reconstruite par le conteneur de servlets, et non à l'URL ACS configurée. Lorsque le proxy
+termine HTTPS, l'URL de requête vue par |Fess| est une URL interne telle que
+``http://<hôte-interne>:<port-interne>/sso/``, qui ne correspond pas à
+``https://fess.example.com/sso/`` envoyée par l'IdP. ``saml.sp.base.url`` n'intervient pas dans cette
+comparaison ; le définir seul ne résout donc pas le problème.
+
+Définissez ``saml.debug=true`` pour que la raison soit écrite dans le journal :
+
+::
+
+    The response was received at http://... instead of https://fess.example.com/sso/
+
+Alignez les paramètres du connecteur dans ``tomcat_config.properties`` sur le schéma et le port
+visibles depuis l'extérieur. Ces paramètres sont livrés commentés :
+
+::
+
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.proxyPort=443
+
+Configurez également le proxy inverse pour qu'il transmette l'en-tête ``Host`` d'origine à |Fess|, car
+la partie nom d'hôte de l'URL de requête est construite à partir de cet en-tête. |Fess| doit être
+redémarré après modification de ``tomcat_config.properties``.
+
+La même validation s'applique aux messages de déconnexion unique ; configurez-la également si vous
+utilisez le SLO.
 
 Erreur de vérification de signature
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

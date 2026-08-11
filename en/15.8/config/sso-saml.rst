@@ -19,6 +19,17 @@ In SAML authentication, |Fess| operates as an SP (Service Provider) and collabor
 4. IdP sends SAML assertion to |Fess|
 5. |Fess| validates the assertion and logs in the user
 
+.. note::
+   Only SP-initiated login, which starts at the |Fess| SSO endpoint (``/sso/``) as shown above, is supported.
+   |Fess| binds every SAML response to the ID of the AuthnRequest it sent, so an IdP-initiated
+   (unsolicited) response, for example from a |Fess| tile on an Okta dashboard or in the Microsoft
+   Entra ID "My Apps" portal, has no AuthnRequest to match against and is rejected.
+   If you place a tile on the IdP side, point it at the |Fess| ``/sso/`` endpoint.
+
+   Note that in 15.7 an IdP-initiated login happened to work when ``tomcat.sameSiteCookies=none``
+   was set: |Fess| bounced the unmatched response back to the IdP, and the IdP immediately returned
+   a solicited assertion. 15.8 no longer bounces the response, so IdP-initiated login does not work.
+
 For role-based search integration, see :doc:`security-role`.
 
 Prerequisites
@@ -56,6 +67,12 @@ To enable SAML authentication, add the following setting to ``app/WEB-INF/conf/s
    ``sso.type`` and the basic SAML settings (IdP info, SP info, user attribute mapping) can also be configured from the admin "System > General" page.
    Settings changed in the admin UI are saved to ``system.properties`` and persist after restart.
    However, security settings such as signing/encryption and the SP certificate/private key cannot be configured in the admin UI, so write them directly in ``system.properties``.
+
+.. note::
+   Settings that start with ``saml.`` are read only from ``system.properties``.
+   JVM system properties such as ``-Dsaml.security....`` or ``-Dfess.saml.security....`` are not consulted.
+   In particular, ``saml.security.*``, ``saml.strict`` and ``saml.debug`` have no field in the admin UI either,
+   so writing them directly in ``system.properties`` is the only way to set them.
 
 Session Cookie Configuration
 ----------------------------
@@ -290,10 +307,30 @@ Signature Settings
    * - ``saml.security.logoutresponse_signed``
      - Sign logout responses
      - ``false``
+   * - ``saml.security.reject_deprecated_alg``
+     - Reject deprecated signature algorithms such as SHA-1
+     - ``false``
 
 .. warning::
    Security features are disabled by default.
    For production environments, it is strongly recommended to set at least ``saml.security.want_assertions_signed=true``.
+
+.. note::
+   While ``saml.security.reject_deprecated_alg`` is ``false``, assertions and messages signed with
+   SHA-1 (``rsa-sha1`` and ``dsa-sha1``) are also accepted. It is not enabled by default because
+   turning it on rejects IdPs that still sign with SHA-1.
+   Confirm that your IdP signs with SHA-256 or stronger, then set ``saml.security.reject_deprecated_alg=true``.
+
+.. warning::
+   When Single Logout is configured (``saml.idp.single_logout_service.url``), always set
+   ``saml.security.want_messages_signed=true`` as well.
+   While it is ``false``, no signature is required on a LogoutRequest received at ``/sso/logout``.
+   The only checks performed are the XML schema, ``NotOnOrAfter`` (if present), ``Destination``
+   (if present), and that the Issuer matches ``saml.idp.entityid``; the NameID in the LogoutRequest
+   is never compared against the logged-in user.
+   An attacker who knows the IdP entity ID, which is public information, can therefore craft an
+   unsigned LogoutRequest and terminate an authenticated user's session by luring that user to the URL.
+   The impact is a forced logout (denial of service), not account takeover.
 
 Encryption Settings
 -------------------
@@ -417,6 +454,9 @@ The following is a recommended configuration example for production environments
     saml.security.want_assertions_signed=true
     saml.security.want_messages_signed=true
 
+    # Enable after confirming the IdP signs with SHA-256 or stronger
+    saml.security.reject_deprecated_alg=true
+
 Troubleshooting
 ===============
 
@@ -430,8 +470,48 @@ Cannot return to Fess after authentication
 - Ensure the ``saml.sp.base.url`` value matches the IdP configuration
 - The SAML assertion arrives as a cross-site POST from the IdP. When ``tomcat.sameSiteCookies`` in
   ``tomcat_config.properties`` is ``lax`` (the default), the browser does not send the session cookie
-  with it, so |Fess| finds no SAML state and redirects to the IdP again, which loops. Set
-  ``tomcat.sameSiteCookies = none`` in that case (``SameSite=None`` requires HTTPS)
+  with it, so |Fess| finds no matching AuthnRequest ID and fails the login once, on the spot. The
+  browser returns to the login page showing "SSO login process failed.", and a warning beginning with
+  ``Received a SAML response with no matching AuthnRequest ID in the session.`` is written to the log.
+  Set ``tomcat.sameSiteCookies = none`` in that case (``SameSite=None`` requires HTTPS)
+
+.. note::
+   In 15.7 the same situation caused |Fess| to redirect to the IdP again and again, looping the login.
+   15.8 fails once instead of looping. The configuration remedy is unchanged.
+
+Destination validation fails behind a reverse proxy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When |Fess| runs behind a TLS-terminating reverse proxy or load balancer, assertion validation can
+fail even though ``saml.sp.base.url`` is set correctly.
+
+The cause is that the SAML library compares the ``Destination`` attribute of the assertion against
+the request URL reconstructed by the servlet container, not against the configured ACS URL. When the
+proxy terminates HTTPS, the request URL |Fess| sees is an internal one such as
+``http://<internal-host>:<internal-port>/sso/``, which does not match the
+``https://fess.example.com/sso/`` sent by the IdP. ``saml.sp.base.url`` is not used for this
+comparison, so setting it alone does not fix the problem.
+
+Set ``saml.debug=true`` to have the reason written to the log:
+
+::
+
+    The response was received at http://... instead of https://fess.example.com/sso/
+
+Align the connector settings in ``tomcat_config.properties`` with the externally visible scheme and
+port. These settings ship commented out:
+
+::
+
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.proxyPort=443
+
+Also configure the reverse proxy to pass the original ``Host`` header through to |Fess|, because the
+host part of the request URL is built from that header. |Fess| must be restarted after changing
+``tomcat_config.properties``.
+
+The same validation applies to Single Logout messages, so configure this when using SLO as well.
 
 Signature verification error
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

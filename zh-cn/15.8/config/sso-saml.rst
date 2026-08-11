@@ -19,6 +19,17 @@ SAML认证的工作原理
 4. IdP将SAML断言发送给\ |Fess|
 5. |Fess|\ 验证断言并登录用户
 
+.. note::
+   仅支持如上所述从\ |Fess|\ 的SSO端点（``/sso/``）发起的SP发起（SP-Initiated）登录。
+   |Fess|\ 会将每个SAML响应与自身发出的AuthnRequest的ID进行绑定校验，
+   因此从IdP门户（如Okta仪表板或Microsoft Entra ID的"我的应用"）上的磁贴发起的
+   IdP发起（IdP-Initiated，即未经请求的unsolicited）SSO没有可匹配的AuthnRequest，会被拒绝。
+   如果要在IdP侧放置磁贴，请将其链接指向\ |Fess|\ 的\ ``/sso/``\ 端点。
+
+   请注意，在15.7中，若设置了\ ``tomcat.sameSiteCookies=none``\ ，IdP发起的登录会碰巧可用：
+   |Fess|\ 会将无法匹配的响应退回给IdP，而IdP会立即返回一个经过请求的断言。
+   15.8不再执行这种退回，因此IdP发起的登录无法使用。
+
 有关基于角色的搜索集成，请参阅:doc:`security-role`。
 
 前提条件
@@ -56,6 +67,12 @@ SAML认证的工作原理
    ``sso.type`` 及基本SAML设置（IdP信息、SP信息、用户属性映射）也可以从管理界面的"系统 > 全局"页面进行配置和更改。
    在管理界面中更改的设置将保存到 ``system.properties`` 中，重启后也会保留。
    但是，签名/加密等安全设置以及SP证书/私钥无法在管理界面中配置，因此请直接写入 ``system.properties``\ 。
+
+.. note::
+   以\ ``saml.``\ 开头的设置仅从\ ``system.properties``\ 中读取。
+   通过JVM系统属性（如\ ``-Dsaml.security....``\ 或\ ``-Dfess.saml.security....``\ ）指定不会被读取。
+   特别是\ ``saml.security.*``\ 、\ ``saml.strict``\ 和\ ``saml.debug``\ 在管理界面中也没有对应项，
+   因此只能直接写入\ ``system.properties``\ 。
 
 会话Cookie配置
 --------------
@@ -288,10 +305,28 @@ IdP侧配置
    * - ``saml.security.logoutresponse_signed``
      - 对登出响应签名
      - ``false``
+   * - ``saml.security.reject_deprecated_alg``
+     - 拒绝SHA-1等已弃用的签名算法
+     - ``false``
 
 .. warning::
    安全功能默认是禁用的。
    对于生产环境，强烈建议至少设置\ ``saml.security.want_assertions_signed=true``\ 。
+
+.. note::
+   当\ ``saml.security.reject_deprecated_alg``\ 为\ ``false``\ 时，使用SHA-1（``rsa-sha1``\ 和\ ``dsa-sha1``\ ）
+   签名的断言和消息同样会被接受。之所以默认不启用，是因为启用后会拒绝仍使用SHA-1签名的IdP。
+   请先确认IdP使用SHA-256或更强的算法签名，然后再设置\ ``saml.security.reject_deprecated_alg=true``\ 。
+
+.. warning::
+   配置单点登出（``saml.idp.single_logout_service.url``）时，请务必同时设置\
+   ``saml.security.want_messages_signed=true``\ 。
+   若保持为\ ``false``\ ，则不会对\ ``/sso/logout``\ 收到的LogoutRequest要求签名。
+   此时仅校验XML架构、``NotOnOrAfter``\ （若存在）、``Destination``\ （若存在）以及Issuer是否与\
+   ``saml.idp.entityid``\ 一致；LogoutRequest中的NameID从不与已登录用户进行比对。
+   因此，知晓IdP实体ID（属于公开信息）的攻击者可以构造未签名的LogoutRequest，
+   诱导用户访问该URL，从而终止已认证用户的会话。
+   其影响是强制登出（拒绝服务），而不是账户接管。
 
 加密设置
 --------
@@ -415,6 +450,9 @@ SP证书与私钥配置
     saml.security.want_assertions_signed=true
     saml.security.want_messages_signed=true
 
+    # 确认IdP使用SHA-256或更强的算法签名后再启用
+    saml.security.reject_deprecated_alg=true
+
 故障排除
 ========
 
@@ -428,8 +466,47 @@ SP证书与私钥配置
 - 确保\ ``saml.sp.base.url``\ 的值与IdP配置匹配
 - SAML断言以来自IdP的跨站POST方式发送。
   当\ ``tomcat_config.properties``\ 中的\ ``tomcat.sameSiteCookies``\ 为\ ``lax``\ （默认值）时，
-  浏览器不会随该请求发送会话Cookie，因此 |Fess| 找不到SAML状态并再次重定向到IdP，形成循环。
+  浏览器不会随该请求发送会话Cookie，因此 |Fess| 找不到可匹配的AuthnRequest ID，当场只失败一次。
+  浏览器会返回登录页面并显示"SSO登录处理失败。"，日志中会输出以\
+  ``Received a SAML response with no matching AuthnRequest ID in the session.``\ 开头的警告。
   此时请设置\ ``tomcat.sameSiteCookies = none``\ （``SameSite=None``\ 需要HTTPS）
+
+.. note::
+   在15.7中，同样的情况会导致\ |Fess|\ 反复重定向到IdP，使登录陷入循环。
+   15.8改为只失败一次而不再循环。配置层面的处理方法保持不变。
+
+通过反向代理时Destination验证失败
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+当\ |Fess|\ 运行在终结TLS的反向代理或负载均衡器之后时，
+即使\ ``saml.sp.base.url``\ 设置正确，断言验证也可能失败。
+
+原因在于SAML库将断言的\ ``Destination``\ 属性与Servlet容器重建的请求URL进行比较，
+而不是与配置的ACS URL比较。当代理终结HTTPS时，\ |Fess|\ 看到的请求URL是形如\
+``http://<内部主机名>:<内部端口>/sso/``\ 的内部地址，
+与IdP发送的\ ``https://fess.example.com/sso/``\ 不一致。
+``saml.sp.base.url``\ 不参与该比较，因此仅设置它无法解决问题。
+
+设置\ ``saml.debug=true``\ 后，日志中会输出如下原因：
+
+::
+
+    The response was received at http://... instead of https://fess.example.com/sso/
+
+此时请将\ ``tomcat_config.properties``\ 中的连接器设置调整为对外可见的协议和端口。
+以下设置默认处于注释状态：
+
+::
+
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.proxyPort=443
+
+同时请配置反向代理，将原始的\ ``Host``\ 请求头透传给\ |Fess|\ ，
+因为请求URL中的主机名部分是根据该请求头构建的。
+修改\ ``tomcat_config.properties``\ 后需要重启\ |Fess|\ 。
+
+同样的验证也适用于单点登出消息，因此使用SLO时请一并配置。
 
 签名验证错误
 ~~~~~~~~~~~~
