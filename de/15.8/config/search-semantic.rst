@@ -121,12 +121,11 @@ Start registriert wird, **erfordert diese Änderung einen Neustart, um wirksam z
 
 .. note::
 
-   Die Liste der ``content_chunker.*``-Schlüssel ist auch in ``fess_config.properties`` als
-   Kommentar aufgeführt, gelesen werden diese Schlüssel jedoch ausschließlich über den Kanal
-   ``system.properties``. Einträge in ``fess_config.properties`` oder ``-Dfess.config.<key>``
-   werden ignoriert — konfigurieren Sie sie daher stets in ``system.properties``. Der
-   Admin-Bildschirm **Systeminformationen > Konfigurationsinformationen** zeigt lediglich die
-   aktuellen Werte an und ist **rein lesend**; ``content_chunker.*`` lässt sich dort nicht setzen.
+   Die ``content_chunker.*``-Schlüssel werden ausschließlich über den Kanal ``system.properties``
+   gelesen. Einträge in ``fess_config.properties`` oder ``-Dfess.config.<key>`` werden ignoriert —
+   konfigurieren Sie sie daher stets in ``system.properties``. Der Admin-Bildschirm
+   **Systeminformationen > Konfigurationsinformationen** zeigt lediglich die aktuellen Werte an
+   und ist **rein lesend**; ``content_chunker.*`` lässt sich dort nicht setzen.
 
 Einstellungen in system.properties
 ------------------------------------

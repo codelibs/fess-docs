@@ -116,11 +116,11 @@ registered at startup, **this change requires a restart to take effect**.
 
 .. note::
 
-   The ``content_chunker.*`` keys are also listed as comments in ``fess_config.properties``, but
-   they are only read from the ``system.properties`` channel. Writing them in
-   ``fess_config.properties`` or passing them as ``-Dfess.config.<key>`` has no effect, so always
-   set them in ``system.properties``. Note also that the admin **System Info > Config Info** screen
-   is a **read-only** view of the current values — you cannot set ``content_chunker.*`` from it.
+   The ``content_chunker.*`` keys are only read from the ``system.properties`` channel. Writing
+   them in ``fess_config.properties`` or passing them as ``-Dfess.config.<key>`` has no effect, so
+   always set them in ``system.properties``. Note also that the admin **System Info > Config
+   Info** screen is a **read-only** view of the current values — you cannot set
+   ``content_chunker.*`` from it.
 
 system.properties Settings
 ----------------------------

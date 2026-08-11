@@ -124,13 +124,12 @@ pour prendre effet**.
 
 .. note::
 
-   La liste des clés ``content_chunker.*`` figure également sous forme de commentaires dans
-   ``fess_config.properties``, mais ces clés ne sont lues que depuis le canal
-   ``system.properties``. Les écrire dans ``fess_config.properties`` ou via
-   ``-Dfess.config.<key>`` reste sans effet : définissez-les impérativement dans
-   ``system.properties``. Notez par ailleurs que l'écran d'administration **Informations système
-   > Informations de configuration** affiche les valeurs courantes **en lecture seule** ; il ne
-   permet pas d'y définir les réglages ``content_chunker.*``.
+   Les clés ``content_chunker.*`` ne sont lues que depuis le canal ``system.properties``. Les
+   écrire dans ``fess_config.properties`` ou via ``-Dfess.config.<key>`` reste sans effet :
+   définissez-les impérativement dans ``system.properties``. Notez par ailleurs que l'écran
+   d'administration **Informations système > Informations de configuration** affiche les valeurs
+   courantes **en lecture seule** ; il ne permet pas d'y définir les réglages
+   ``content_chunker.*``.
 
 Réglages dans system.properties
 ----------------------------------
