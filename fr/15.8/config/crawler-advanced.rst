@@ -1103,6 +1103,236 @@ Exemple de configuration
 .. note::
    Si ``credentialsFile`` est omis, la variable d'environnement ``GOOGLE_APPLICATION_CREDENTIALS`` est utilisée.
 
+Indexation du contenu dynamique (Playwright)
+============================================
+
+Les pages rendues par JavaScript (comme les SPA) ne fournissent au robot
+d'indexation HTTP classique que le HTML avant rendu, si bien que leur texte
+n'est pas indexé. Le robot d'indexation Playwright affiche d'abord la page
+dans un navigateur sans interface graphique, puis récupère le contenu.
+
+Activation
+----------
+
+Ajoutez ce qui suit aux « Paramètres de configuration » d'une configuration
+de crawl web.
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+
+La partie qui suit ``playwright:`` est une expression régulière désignant les
+URLs à récupérer avec Playwright. Dans l'exemple ci-dessus, toutes les URLs
+HTTP/HTTPS sont récupérées avec Playwright. Pour n'utiliser Playwright que
+pour certains sites, indiquez-les comme suit.
+
+::
+
+    client.crawlerClients=playwright:https://example\.com/app/.*
+
+.. note::
+   Les binaires du navigateur Playwright ne sont pas inclus dans le paquet
+   |Fess|. Ils sont téléchargés lors de la première indexation ; dans un
+   environnement sans accès au réseau externe, installez-les au préalable
+   avec l'utilisateur OS qui exécute le robot d'indexation.
+
+   ::
+
+       npx playwright install --with-deps
+
+Paramètres de configuration
+---------------------------
+
+Les paramètres suivants s'écrivent dans les « Paramètres de configuration »
+d'une configuration de crawl, avec le préfixe ``client.``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Paramètre
+     - Description
+     - Par défaut
+   * - ``client.renderedState``
+     - État de chargement à attendre avant de récupérer le contenu. Indiquez ``LOAD``, ``DOMCONTENTLOADED`` ou ``NETWORKIDLE`` en majuscules
+     - ``NETWORKIDLE``
+   * - ``client.renderedStateTimeout``
+     - Limite d'attente de ``renderedState`` (millisecondes). Une valeur inférieure ou égale à 0 utilise la valeur par défaut de Playwright (30000)
+     - ``0``
+   * - ``client.navigationTimeout``
+     - Limite pour une navigation de page (millisecondes). Une valeur inférieure ou égale à 0 utilise la valeur par défaut de Playwright (30000)
+     - (non défini)
+   * - ``client.contentWaitDuration``
+     - Attente supplémentaire après avoir atteint ``renderedState`` et avant de récupérer le contenu (millisecondes)
+     - ``0``
+   * - ``client.sharedClient``
+     - Partager le worker (navigateur) Playwright entre tous les clients
+     - ``false``
+   * - ``client.blockedResourceTypes``
+     - Types de ressources que le navigateur ne doit pas récupérer (séparés par des virgules)
+     - (vide)
+   * - ``client.ignoreHttpsErrors``
+     - Ignorer les erreurs de validation des certificats HTTPS
+     - ``false``
+   * - ``client.proxyBypass``
+     - Hôtes qui contournent le proxy (séparés par des virgules)
+     - (vide)
+
+Exemple de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+    client.renderedState=NETWORKIDLE
+    client.renderedStateTimeout=20000
+    client.navigationTimeout=60000
+    client.contentWaitDuration=1000
+    client.blockedResourceTypes=image,media,font
+
+.. note::
+   L'agent utilisateur et les en-têtes de requête définis dans la
+   configuration de crawl sont utilisés tels quels. Les paramètres communs
+   tels que ``client.proxyHost``, ``client.proxyPort`` et
+   ``client.maxContentLength`` s'appliquent également au navigateur.
+
+.. note::
+   Un client Playwright utilise une seule page de navigateur et les requêtes
+   y sont traitées en série. Augmenter le nombre de threads de la
+   configuration de crawl n'accélère pas d'autant la récupération avec
+   Playwright.
+
+Éléments configurables uniquement dans la définition DI
+-------------------------------------------------------
+
+Les éléments suivants ne peuvent pas être modifiés depuis les « Paramètres de
+configuration ». Pour les modifier, créez le fichier
+``app/WEB-INF/classes/crawler/client+playwrightClient.xml`` et redéfinissez le
+composant ``playwrightClient``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``browserName``
+     - Navigateur à utiliser : ``chromium``, ``firefox`` ou ``webkit``
+     - ``chromium``
+   * - ``launchOptions``
+     - Options de démarrage du navigateur (``BrowserType.LaunchOptions``)
+     - ``headless=true``
+   * - ``newContextOptions``
+     - Options du contexte de navigateur (``Browser.NewContextOptions``)
+     - (aucun)
+   * - ``downloadTimeout``
+     - Limite d'attente du téléchargement d'un fichier (secondes)
+     - ``15``
+   * - ``closeTimeout``
+     - Limite d'attente de l'arrêt du navigateur (secondes)
+     - ``15``
+
+Exemple de configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+        <include path="crawler/container.xml" />
+        <component name="playwrightClient"
+            class="org.codelibs.fess.crawler.client.http.PlaywrightClient"
+            instance="prototype">
+            <property name="downloadTimeout">60</property>
+            <property name="closeTimeout">30</property>
+            <property name="launchOptions">
+                <component
+                    class="com.microsoft.playwright.BrowserType$LaunchOptions"
+                    instance="prototype">
+                    <property name="headless">true</property>
+                </component>
+            </property>
+        </component>
+    </components>
+
+.. note::
+   Redéfinir ``playwrightClient`` remplace intégralement la définition du
+   composant fournie par le ``crawler/client++.xml`` du plugin. Les propriétés
+   que vous n'écrivez pas reprennent leur valeur par défaut : indiquez donc
+   toutes celles dont vous avez besoin, comme dans l'exemple ci-dessus. Ne
+   copiez pas non plus ``crawler/client++.xml`` tel quel : le même composant
+   serait alors enregistré deux fois et le démarrage échouerait.
+
+.. warning::
+   ``downloadTimeout`` et ``closeTimeout`` sont exprimés en secondes, alors
+   que ``navigationTimeout``, ``renderedStateTimeout`` et
+   ``contentWaitDuration`` sont exprimés en millisecondes. Veillez à ne pas
+   les confondre.
+
+Blocage des ressources inutiles
+-------------------------------
+
+``client.blockedResourceTypes`` reçoit, séparés par des virgules, les types
+de ressources que le navigateur ne doit pas récupérer. Les valeurs possibles
+sont les types de ressources de Playwright (``image``, ``media``, ``font``,
+``stylesheet``, ``script``, ``xhr``, ``fetch``, ``websocket``, ``manifest``,
+``texttrack``, ``eventsource`` et ``other``). Par défaut, rien n'est bloqué.
+
+::
+
+    client.blockedResourceTypes=image,media,font
+
+Ne spécifiez que les types qu'une indexation ne lit pas. Récupérer moins de
+ressources nécessaires à l'affichage d'une page réduit à la fois la durée de
+l'indexation et le volume de données transféré.
+
+.. warning::
+   N'indiquez pas ``document``. La récupération de la page elle-même serait
+   bloquée et l'indexation échouerait pour toutes les URLs.
+
+.. note::
+   Bloquer ``script`` ou ``xhr`` empêche le rendu par JavaScript, ce qui
+   annule l'intérêt d'utiliser Playwright. C'est utile pour une indexation
+   qui ne vise que des pages rendues côté serveur, mais en règle générale, ne
+   spécifiez que les types qu'une indexation ne lit pas, comme ``image``,
+   ``media`` et ``font``.
+
+Changements dans 15.8
+---------------------
+
+Lors d'une mise à niveau depuis la version 15.7 ou antérieure, le
+comportement du robot d'indexation Playwright a changé comme suit.
+
+- **Agent utilisateur** : l'agent utilisateur de la configuration de crawl
+  est désormais réellement envoyé par le navigateur. Dans les versions 15.7
+  et antérieures, c'est la valeur par défaut du navigateur
+  ``HeadlessChrome/...`` qui était envoyée. Sur les sites qui adaptent leur
+  réponse à l'agent utilisateur, le contenu récupéré peut changer.
+
+- **En-têtes de requête** : les en-têtes de requête de la configuration de
+  crawl sont désormais appliqués au navigateur. Lorsqu'un même nom d'en-tête
+  apparaît plusieurs fois, les valeurs sont regroupées en une seule valeur
+  séparée par des virgules.
+
+- **Téléchargements via une redirection** : l'URL enregistrée est désormais
+  la cible de la redirection (l'URL qui a réellement renvoyé le fichier). Si
+  la cible de la redirection est une URL hors du périmètre de l'indexation,
+  elle est exclue comme hors périmètre.
+
+- **Attente de ``renderedState``** : un dépassement du délai d'attente n'est
+  plus considéré comme un échec ; le contenu chargé à cet instant est utilisé
+  tel quel. Les pages qui n'atteignent jamais ``NETWORKIDLE`` peuvent elles
+  aussi être indexées.
+
+- **Spécification des délais d'expiration** : ``client.navigationTimeout`` et
+  ``client.renderedStateTimeout``, qui limitent le temps de chargement de la
+  page entière, ont été ajoutés. ``client.connectionTimeout`` et
+  ``client.soTimeout`` sont des délais au niveau du socket et ne s'appliquent
+  pas au navigateur.
+
 Informations de référence
 =========================
 

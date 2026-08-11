@@ -1103,6 +1103,227 @@ Configuration Example
 .. note::
    If ``credentialsFile`` is omitted, the ``GOOGLE_APPLICATION_CREDENTIALS`` environment variable is used.
 
+Crawling Dynamic Content (Playwright)
+=====================================
+
+Pages rendered by JavaScript (such as SPAs) return only the pre-rendered HTML to
+the ordinary HTTP crawler, so their body text is never indexed. The Playwright
+crawler renders the page in a headless browser first and then retrieves the
+content.
+
+Enabling
+--------
+
+Add the following to the "Configuration Parameters" of a web crawling
+configuration.
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+
+The part after ``playwright:`` is a regular expression for the URLs to retrieve
+with Playwright. In the example above, every HTTP/HTTPS URL is retrieved with
+Playwright. To use Playwright for specific sites only, specify them as follows.
+
+::
+
+    client.crawlerClients=playwright:https://example\.com/app/.*
+
+.. note::
+   The Playwright browser binaries are not included in the |Fess| package.
+   They are downloaded on the first crawl, so in an environment without
+   external network access, install them in advance as the OS user that runs
+   the crawler.
+
+   ::
+
+       npx playwright install --with-deps
+
+Configuration Parameters
+------------------------
+
+The following parameters are written in the "Configuration Parameters" of a
+crawling configuration with the ``client.`` prefix.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Parameter
+     - Description
+     - Default
+   * - ``client.renderedState``
+     - The load state to wait for before retrieving the content. Specify ``LOAD``, ``DOMCONTENTLOADED`` or ``NETWORKIDLE`` in uppercase
+     - ``NETWORKIDLE``
+   * - ``client.renderedStateTimeout``
+     - The limit for waiting for ``renderedState`` (milliseconds). Zero or less uses the Playwright default (30000)
+     - ``0``
+   * - ``client.navigationTimeout``
+     - The limit for a navigation (milliseconds). Zero or less uses the Playwright default (30000)
+     - (not set)
+   * - ``client.contentWaitDuration``
+     - Additional wait after reaching ``renderedState`` and before retrieving the content (milliseconds)
+     - ``0``
+   * - ``client.sharedClient``
+     - Share the Playwright worker (browser) across all clients
+     - ``false``
+   * - ``client.blockedResourceTypes``
+     - Resource types the browser must not fetch (comma-separated)
+     - (empty)
+   * - ``client.ignoreHttpsErrors``
+     - Ignore HTTPS certificate validation errors
+     - ``false``
+   * - ``client.proxyBypass``
+     - Hosts that bypass the proxy (comma-separated)
+     - (empty)
+
+Configuration Example
+~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+    client.renderedState=NETWORKIDLE
+    client.renderedStateTimeout=20000
+    client.navigationTimeout=60000
+    client.contentWaitDuration=1000
+    client.blockedResourceTypes=image,media,font
+
+.. note::
+   The user agent and the request headers configured in the crawling
+   configuration are used as they are. Common parameters such as
+   ``client.proxyHost``, ``client.proxyPort`` and ``client.maxContentLength``
+   are applied to the browser as well.
+
+.. note::
+   One Playwright client uses one browser page, and requests to it are
+   processed serially. Increasing the number of threads in the crawling
+   configuration does not make retrieval with Playwright proportionally faster.
+
+Items Configurable Only in the DI Definition
+--------------------------------------------
+
+The following items cannot be changed from the "Configuration Parameters". To
+change them, create
+``app/WEB-INF/classes/crawler/client+playwrightClient.xml`` and redefine the
+``playwrightClient`` component.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``browserName``
+     - The browser to use: ``chromium``, ``firefox`` or ``webkit``
+     - ``chromium``
+   * - ``launchOptions``
+     - Browser launch options (``BrowserType.LaunchOptions``)
+     - ``headless=true``
+   * - ``newContextOptions``
+     - Browser context options (``Browser.NewContextOptions``)
+     - (none)
+   * - ``downloadTimeout``
+     - The limit for waiting for a file download (seconds)
+     - ``15``
+   * - ``closeTimeout``
+     - The limit for waiting for the browser teardown (seconds)
+     - ``15``
+
+Configuration Example
+~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+        <include path="crawler/container.xml" />
+        <component name="playwrightClient"
+            class="org.codelibs.fess.crawler.client.http.PlaywrightClient"
+            instance="prototype">
+            <property name="downloadTimeout">60</property>
+            <property name="closeTimeout">30</property>
+            <property name="launchOptions">
+                <component
+                    class="com.microsoft.playwright.BrowserType$LaunchOptions"
+                    instance="prototype">
+                    <property name="headless">true</property>
+                </component>
+            </property>
+        </component>
+    </components>
+
+.. note::
+   Redefining ``playwrightClient`` replaces the component definition from the
+   plugin's ``crawler/client++.xml`` entirely. Properties you do not write
+   revert to their defaults, so write every property you need, as in the
+   example above. Do not simply copy ``crawler/client++.xml`` into place
+   either: the same component would be registered twice and startup would
+   fail.
+
+.. warning::
+   ``downloadTimeout`` and ``closeTimeout`` are in seconds, whereas
+   ``navigationTimeout``, ``renderedStateTimeout`` and ``contentWaitDuration``
+   are in milliseconds. Take care not to confuse them.
+
+Blocking Unnecessary Resources
+------------------------------
+
+``client.blockedResourceTypes`` takes a comma-separated list of the resource
+types the browser must not fetch. The values are Playwright resource types
+(``image``, ``media``, ``font``, ``stylesheet``, ``script``, ``xhr``,
+``fetch``, ``websocket``, ``manifest``, ``texttrack``, ``eventsource`` and
+``other``). By default nothing is blocked.
+
+::
+
+    client.blockedResourceTypes=image,media,font
+
+Specify only the types a crawl does not read. Fetching fewer of the resources
+that a page needs for display reduces both the time a crawl takes and the
+amount of data transferred.
+
+.. warning::
+   Do not specify ``document``. Retrieving the page itself would be blocked,
+   and the crawl would fail for every URL.
+
+.. note::
+   Blocking ``script`` or ``xhr`` stops JavaScript from rendering the page,
+   which defeats the purpose of using Playwright. It is useful for a crawl that
+   targets server-side rendered pages only, but normally specify only the types
+   a crawl does not read, such as ``image``, ``media`` and ``font``.
+
+Changes in 15.8
+---------------
+
+When upgrading from 15.7 or earlier, the behavior of the Playwright crawler has
+changed as follows.
+
+- **User agent**: The user agent of the crawling configuration is now actually
+  sent by the browser. In 15.7 and earlier, the browser default
+  ``HeadlessChrome/...`` was sent. On sites that vary their response by user
+  agent, the retrieved content may change.
+
+- **Request headers**: The request headers of the crawling configuration are
+  now applied to the browser. When the same header name appears more than once,
+  the values are joined into a single comma-separated value.
+
+- **Downloads via a redirect**: The recorded URL is now the redirect target
+  (the URL that actually returned the file). If the redirect target is a URL
+  outside the crawling scope, it is excluded as out of scope.
+
+- **Waiting for ``renderedState``**: A timeout while waiting is no longer
+  treated as a failure; the content that had been loaded at that point is used
+  as it is. Pages that never reach ``NETWORKIDLE`` can also be indexed.
+
+- **Specifying timeouts**: ``client.navigationTimeout`` and
+  ``client.renderedStateTimeout``, which limit the time to load the whole page,
+  have been added. ``client.connectionTimeout`` and ``client.soTimeout`` are
+  per-socket timeouts and are not applied to the browser.
+
 References
 ==========
 

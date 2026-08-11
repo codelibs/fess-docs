@@ -1104,6 +1104,223 @@ Google Cloud Storage를 크롤링하기 위한 설정입니다.
 .. note::
    ``credentialsFile`` 을 생략하면 환경 변수 ``GOOGLE_APPLICATION_CREDENTIALS`` 가 사용됩니다.
 
+동적 콘텐츠 크롤링 (Playwright)
+===============================
+
+JavaScript로 렌더링되는 페이지(SPA 등)는 일반적인 HTTP 크롤러로는
+렌더링 전의 HTML만 가져올 수 있기 때문에 본문이 인덱싱되지 않습니다.
+Playwright 크롤러를 사용하면 헤드리스 브라우저에서 페이지를 렌더링한 후
+콘텐츠를 가져올 수 있습니다.
+
+활성화
+------
+
+웹 크롤 설정의 "설정 파라미터"에 다음을 기술합니다.
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+
+``playwright:`` 에 이어지는 부분은 Playwright로 가져올 URL의 정규 표현식입니다.
+위의 예에서는 모든 HTTP/HTTPS URL이 Playwright로 취득됩니다.
+특정 사이트만 Playwright로 가져오려면 다음과 같이 지정합니다.
+
+::
+
+    client.crawlerClients=playwright:https://example\.com/app/.*
+
+.. note::
+   Playwright의 브라우저 본체는 |Fess| 패키지에 포함되어 있지 않습니다.
+   최초 크롤 시에 다운로드되므로, 외부 네트워크에 연결할 수 없는
+   환경에서는 크롤러를 실행하는 OS 사용자로 미리 설치해 두십시오.
+
+   ::
+
+       npx playwright install --with-deps
+
+설정 파라미터
+-------------
+
+다음 파라미터는 크롤 설정의 "설정 파라미터"에 ``client.`` 를 붙여
+기술합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 파라미터
+     - 설명
+     - 기본값
+   * - ``client.renderedState``
+     - 콘텐츠를 가져오기 전에 대기할 로드 상태. ``LOAD``, ``DOMCONTENTLOADED``, ``NETWORKIDLE`` 중 하나를 대문자로 지정
+     - ``NETWORKIDLE``
+   * - ``client.renderedStateTimeout``
+     - ``renderedState`` 를 대기하는 상한(밀리초). 0 이하이면 Playwright의 기본값(30000)
+     - ``0``
+   * - ``client.navigationTimeout``
+     - 페이지 이동의 상한(밀리초). 0 이하이면 Playwright의 기본값(30000)
+     - (미설정)
+   * - ``client.contentWaitDuration``
+     - ``renderedState`` 에 도달한 후 콘텐츠를 가져올 때까지의 추가 대기 시간(밀리초)
+     - ``0``
+   * - ``client.sharedClient``
+     - Playwright 워커(브라우저)를 모든 클라이언트에서 공유
+     - ``false``
+   * - ``client.blockedResourceTypes``
+     - 브라우저가 가져오지 않을 리소스 종류(쉼표로 구분)
+     - (빈 값)
+   * - ``client.ignoreHttpsErrors``
+     - HTTPS 인증서 검증 오류를 무시
+     - ``false``
+   * - ``client.proxyBypass``
+     - 프록시를 경유하지 않을 호스트(쉼표로 구분)
+     - (빈 값)
+
+설정 예
+~~~~~~~
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+    client.renderedState=NETWORKIDLE
+    client.renderedStateTimeout=20000
+    client.navigationTimeout=60000
+    client.contentWaitDuration=1000
+    client.blockedResourceTypes=image,media,font
+
+.. note::
+   사용자 에이전트와 요청 헤더는 크롤 설정의
+   "사용자 에이전트" 및 요청 헤더 설정이 그대로 사용됩니다.
+   ``client.proxyHost``, ``client.proxyPort``, ``client.maxContentLength`` 등의
+   공통 파라미터도 브라우저에 적용됩니다.
+
+.. note::
+   하나의 Playwright 클라이언트는 하나의 브라우저 페이지를 사용하며,
+   요청은 직렬로 처리됩니다. 크롤 설정의 스레드 수를 늘려도
+   Playwright에서의 취득이 그만큼 빨라지지는 않습니다.
+
+DI 정의에서만 설정할 수 있는 항목
+---------------------------------
+
+다음 항목은 "설정 파라미터"에서는 변경할 수 없습니다. 변경하려면
+``app/WEB-INF/classes/crawler/client+playwrightClient.xml`` 을 생성하고,
+``playwrightClient`` 컴포넌트를 재정의합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 속성
+     - 설명
+     - 기본값
+   * - ``browserName``
+     - 사용할 브라우저. ``chromium``, ``firefox``, ``webkit``
+     - ``chromium``
+   * - ``launchOptions``
+     - 브라우저 시작 옵션(``BrowserType.LaunchOptions``)
+     - ``headless=true``
+   * - ``newContextOptions``
+     - 브라우저 컨텍스트 옵션(``Browser.NewContextOptions``)
+     - (없음)
+   * - ``downloadTimeout``
+     - 파일 다운로드를 대기하는 상한(초)
+     - ``15``
+   * - ``closeTimeout``
+     - 브라우저 종료 처리를 대기하는 상한(초)
+     - ``15``
+
+설정 예
+~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+        <include path="crawler/container.xml" />
+        <component name="playwrightClient"
+            class="org.codelibs.fess.crawler.client.http.PlaywrightClient"
+            instance="prototype">
+            <property name="downloadTimeout">60</property>
+            <property name="closeTimeout">30</property>
+            <property name="launchOptions">
+                <component
+                    class="com.microsoft.playwright.BrowserType$LaunchOptions"
+                    instance="prototype">
+                    <property name="headless">true</property>
+                </component>
+            </property>
+        </component>
+    </components>
+
+.. note::
+   ``playwrightClient`` 을 재정의하면 플러그인이 가지고 있는
+   ``crawler/client++.xml`` 의 컴포넌트 정의는 완전히 대체됩니다.
+   기술하지 않은 속성은 기본값으로 돌아가므로, 위의 예와 같이 필요한
+   속성을 모두 기술하십시오. 또한 ``crawler/client++.xml`` 을
+   그대로 복사하여 배치하면 같은 컴포넌트가 이중으로 등록되어
+   시작에 실패합니다.
+
+.. warning::
+   ``downloadTimeout`` 과 ``closeTimeout`` 의 단위는 초입니다.
+   ``navigationTimeout``, ``renderedStateTimeout``, ``contentWaitDuration`` 은
+   밀리초이므로 혼동하지 않도록 주의하십시오.
+
+불필요한 리소스 차단
+--------------------
+
+``client.blockedResourceTypes`` 에는 브라우저가 가져오지 않을 리소스 종류를
+쉼표로 구분하여 지정합니다. 지정할 수 있는 것은 Playwright의 리소스 종류
+(``image``, ``media``, ``font``, ``stylesheet``, ``script``, ``xhr``,
+``fetch``, ``websocket``, ``manifest``, ``texttrack``, ``eventsource``,
+``other``)입니다. 기본적으로는 아무것도 차단하지 않습니다.
+
+::
+
+    client.blockedResourceTypes=image,media,font
+
+크롤이 읽지 않는 종류만 지정하십시오. 페이지 표시에 필요한 리소스의
+취득을 줄임으로써 크롤 소요 시간과 전송량을 줄일 수 있습니다.
+
+.. warning::
+   ``document`` 는 지정하지 마십시오. 페이지 본체의 취득 자체가 차단되어
+   모든 URL에서 크롤이 실패합니다.
+
+.. note::
+   ``script`` 나 ``xhr`` 을 차단하면 JavaScript에 의한 렌더링이 수행되지 않아
+   Playwright를 사용하는 의미가 없어집니다. 서버 사이드 렌더링만을
+   대상으로 하는 크롤에서는 유효하지만, 일반적으로는 ``image``, ``media``,
+   ``font`` 와 같이 크롤이 읽지 않는 종류만 지정하십시오.
+
+15.8에서의 변경 사항
+--------------------
+
+15.7 이전에서 업그레이드하는 경우, Playwright 크롤러의 동작이
+다음과 같이 변경되었습니다.
+
+- **사용자 에이전트**: 크롤 설정의 "사용자 에이전트"가
+  실제로 브라우저에서 전송되도록 되었습니다. 15.7 이전에서는 브라우저 기본값인
+  ``HeadlessChrome/...`` 이 전송되었습니다. 사용자 에이전트에 따라
+  응답을 다르게 하는 사이트에서는 취득 내용이 달라질 수 있습니다.
+
+- **요청 헤더**: 크롤 설정의 요청 헤더가 브라우저에
+  반영되도록 되었습니다. 같은 이름의 헤더가 여러 개 있는 경우에는
+  쉼표로 구분된 하나의 값으로 통합됩니다.
+
+- **리다이렉트를 경유한 다운로드**: 기록되는 URL이 리다이렉트 대상
+  (실제로 파일을 반환한 URL)이 되었습니다. 리다이렉트 대상이 크롤 대상 외의
+  URL인 경우에는 대상 외로 제외됩니다.
+
+- **``renderedState`` 대기**: 대기가 타임아웃되어도 실패로 간주되지 않고,
+  그 시점에 읽어들인 내용이 그대로 사용되도록 되었습니다.
+  ``NETWORKIDLE`` 에 도달하지 않는 페이지도 인덱싱할 수 있습니다.
+
+- **타임아웃 지정**: 페이지 전체의 읽기 시간을 제한하는
+  ``client.navigationTimeout`` 과 ``client.renderedStateTimeout`` 이
+  추가되었습니다. ``client.connectionTimeout`` 과 ``client.soTimeout`` 은
+  소켓 단위의 타임아웃이며, 브라우저에는 적용되지 않습니다.
+
 참고 정보
 =========
 

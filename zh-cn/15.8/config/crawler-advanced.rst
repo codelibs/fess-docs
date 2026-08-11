@@ -1104,6 +1104,215 @@ GCS 爬虫
 .. note::
    省略 ``credentialsFile`` 时，将使用环境变量 ``GOOGLE_APPLICATION_CREDENTIALS``\ 。
 
+动态内容爬取 (Playwright)
+=========================
+
+由 JavaScript 渲染的页面（例如 SPA）在通常的 HTTP 爬虫中只能获取渲染前的
+HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头浏览器渲染页面，
+然后再获取内容。
+
+启用
+----
+
+在网页爬取配置的"配置参数"中添加以下内容。
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+
+``playwright:`` 之后的部分是使用 Playwright 获取的 URL 的正则表达式。
+在上面的示例中，所有 HTTP/HTTPS 的 URL 都将使用 Playwright 获取。
+如果只对特定网站使用 Playwright 获取，请按如下方式指定。
+
+::
+
+    client.crawlerClients=playwright:https://example\.com/app/.*
+
+.. note::
+   Playwright 的浏览器本体不包含在 |Fess| 的软件包中。
+   由于会在首次爬取时下载，在无法连接外部网络的环境中，
+   请预先以运行爬虫的操作系统用户身份进行安装。
+
+   ::
+
+       npx playwright install --with-deps
+
+配置参数
+--------
+
+以下参数需要加上 ``client.`` 前缀，写入爬取配置的"配置参数"中。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 参数
+     - 说明
+     - 默认值
+   * - ``client.renderedState``
+     - 获取内容前等待的加载状态。以大写指定 ``LOAD``\ 、``DOMCONTENTLOADED``\ 、``NETWORKIDLE`` 中的一个
+     - ``NETWORKIDLE``
+   * - ``client.renderedStateTimeout``
+     - 等待 ``renderedState`` 的上限（毫秒）。为 0 以下时使用 Playwright 的默认值 (30000)
+     - ``0``
+   * - ``client.navigationTimeout``
+     - 页面跳转的上限（毫秒）。为 0 以下时使用 Playwright 的默认值 (30000)
+     - (未设置)
+   * - ``client.contentWaitDuration``
+     - 到达 ``renderedState`` 后至获取内容之前的额外等待时间（毫秒）
+     - ``0``
+   * - ``client.sharedClient``
+     - 在所有客户端之间共享 Playwright 的工作进程（浏览器）
+     - ``false``
+   * - ``client.blockedResourceTypes``
+     - 浏览器不获取的资源类型（逗号分隔）
+     - (空)
+   * - ``client.ignoreHttpsErrors``
+     - 忽略 HTTPS 证书的验证错误
+     - ``false``
+   * - ``client.proxyBypass``
+     - 不经过代理的主机（逗号分隔）
+     - (空)
+
+配置示例
+~~~~~~~~
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+    client.renderedState=NETWORKIDLE
+    client.renderedStateTimeout=20000
+    client.navigationTimeout=60000
+    client.contentWaitDuration=1000
+    client.blockedResourceTypes=image,media,font
+
+.. note::
+   用户代理和请求头将直接使用爬取配置中的"用户代理"以及请求头的设置。
+   ``client.proxyHost``\ 、``client.proxyPort``\ 、``client.maxContentLength``
+   等通用参数也会应用到浏览器。
+
+.. note::
+   一个 Playwright 客户端使用一个浏览器页面，请求将串行处理。
+   即使增加爬取配置的线程数，使用 Playwright 的获取速度也不会相应变快。
+
+仅可在 DI 定义中配置的项目
+--------------------------
+
+以下项目无法在"配置参数"中更改。若要更改，请创建
+``app/WEB-INF/classes/crawler/client+playwrightClient.xml``\ ，
+重新定义 ``playwrightClient`` 组件。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - 属性
+     - 说明
+     - 默认值
+   * - ``browserName``
+     - 使用的浏览器。``chromium``\ 、``firefox``\ 、``webkit``
+     - ``chromium``
+   * - ``launchOptions``
+     - 浏览器的启动选项 (``BrowserType.LaunchOptions``)
+     - ``headless=true``
+   * - ``newContextOptions``
+     - 浏览器上下文的选项 (``Browser.NewContextOptions``)
+     - (无)
+   * - ``downloadTimeout``
+     - 等待文件下载的上限（秒）
+     - ``15``
+   * - ``closeTimeout``
+     - 等待浏览器结束处理的上限（秒）
+     - ``15``
+
+配置示例
+~~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+        <include path="crawler/container.xml" />
+        <component name="playwrightClient"
+            class="org.codelibs.fess.crawler.client.http.PlaywrightClient"
+            instance="prototype">
+            <property name="downloadTimeout">60</property>
+            <property name="closeTimeout">30</property>
+            <property name="launchOptions">
+                <component
+                    class="com.microsoft.playwright.BrowserType$LaunchOptions"
+                    instance="prototype">
+                    <property name="headless">true</property>
+                </component>
+            </property>
+        </component>
+    </components>
+
+.. note::
+   重新定义 ``playwrightClient`` 后，插件所持有的
+   ``crawler/client++.xml`` 的组件定义将被完全替换。
+   未写明的属性会恢复为默认值，因此请像上面的示例那样，将需要的
+   属性全部写明。另外，如果将 ``crawler/client++.xml`` 原样复制放置，
+   同一个组件将被重复注册，从而导致启动失败。
+
+.. warning::
+   ``downloadTimeout`` 和 ``closeTimeout`` 的单位是秒。
+   ``navigationTimeout``\ 、``renderedStateTimeout``\ 、``contentWaitDuration``
+   的单位是毫秒，请注意不要混淆。
+
+屏蔽不需要的资源
+----------------
+
+``client.blockedResourceTypes`` 中以逗号分隔指定浏览器不获取的资源类型。
+可指定的是 Playwright 的资源类型（``image``\ 、``media``\ 、``font``\ 、
+``stylesheet``\ 、``script``\ 、``xhr``\ 、``fetch``\ 、``websocket``\ 、
+``manifest``\ 、``texttrack``\ 、``eventsource``\ 、``other``\ ）。
+默认情况下不屏蔽任何内容。
+
+::
+
+    client.blockedResourceTypes=image,media,font
+
+请仅指定爬取不会读取的类型。通过减少获取页面显示所需的资源，
+可以缩短爬取所需的时间并减少传输量。
+
+.. warning::
+   请不要指定 ``document``\ 。页面本体的获取本身将被屏蔽，
+   所有 URL 的爬取都会失败。
+
+.. note::
+   如果屏蔽 ``script`` 或 ``xhr``\ ，JavaScript 将不再进行渲染，
+   使用 Playwright 也就失去了意义。对于仅以服务器端渲染为对象的爬取虽然有效，
+   但通常请像 ``image``\ 、``media``\ 、``font`` 那样，
+   仅指定爬取不会读取的类型。
+
+15.8 中的变更
+-------------
+
+从 15.7 及更早版本升级时，Playwright 爬虫的行为发生了以下变化。
+
+- **用户代理**: 爬取配置的"用户代理"现在会实际由浏览器发送。
+  15.7 及更早版本发送的是浏览器默认的 ``HeadlessChrome/...``\ 。
+  对于根据用户代理返回不同响应的网站，获取的内容可能会发生变化。
+
+- **请求头**: 爬取配置的请求头现在会应用到浏览器。
+  存在多个同名的请求头时，会合并为一个以逗号分隔的值。
+
+- **经由重定向的下载**: 记录的 URL 现在是重定向目标
+  （实际返回文件的 URL）。如果重定向目标是爬取对象之外的 URL，
+  则会作为对象外被排除。
+
+- **``renderedState`` 的等待**: 等待超时也不再被视为失败，
+  此时已加载的内容将被直接使用。未到达 ``NETWORKIDLE`` 的页面
+  也可以被索引。
+
+- **超时的指定**: 新增了用于限制整个页面加载时间的
+  ``client.navigationTimeout`` 和 ``client.renderedStateTimeout``\ 。
+  ``client.connectionTimeout`` 和 ``client.soTimeout`` 是套接字级别的超时，
+  不会应用到浏览器。
+
 参考信息
 ========
 
