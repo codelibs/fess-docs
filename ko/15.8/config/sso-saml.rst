@@ -328,10 +328,11 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
    ``saml.security.want_messages_signed=true`` 도 반드시 함께 설정하십시오.
    ``false`` 인 상태에서는 ``/sso/logout`` 이 수신하는 LogoutRequest에 서명이 요구되지 않습니다.
    검증되는 것은 XML 스키마, ``NotOnOrAfter``（존재하는 경우）, ``Destination``（존재하는 경우）,
-   그리고 Issuer가 ``saml.idp.entityid`` 와 일치하는지뿐이며,
+   그리고 Issuer가 ``saml.idp.entityid`` 와 일치하는지（존재하는 경우）뿐이며,
    LogoutRequest 안의 NameID가 로그인 중인 사용자와 일치하는지는 검사하지 않습니다.
-   따라서 공개 정보인 IdP의 Entity ID를 아는 공격자는 서명 없는 LogoutRequest를 만들어,
-   해당 URL로 사용자를 유도함으로써 인증된 세션을 종료시킬 수 있습니다.
+   Issuer 요소는 SAML 스키마상 생략 가능하며, 생략된 LogoutRequest에서는 IdP의 Entity ID와의
+   대조 자체가 이루어지지 않습니다. 이 때문에 공격자는 IdP의 Entity ID를 몰라도 서명 없는
+   LogoutRequest를 만들어, 해당 URL로 사용자를 유도함으로써 인증된 세션을 종료시킬 수 있습니다.
    영향은 강제 로그아웃（서비스 거부）이며, 계정 탈취는 아닙니다.
 
 암호화 설정
@@ -410,6 +411,33 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
    조직 정보（``saml.organization.*``）, 연락처 정보（``saml.contacts.*``）와 같은 상세 설정을
    ``system.properties`` 에 지정할 수 있습니다.
 
+AuthnRequest 유효 기간
+======================
+
+|Fess| 는 ``/sso/`` 에 접근할 때마다 AuthnRequest를 1건 IdP로 전송하고, 그 ID를 세션에 기록합니다.
+IdP에서 반환된 SAML 응답은 기록된 ID와 대응시켜 검증됩니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``saml.request.id.ttl``
+     - 응답이 없는 AuthnRequest의 ID를 보관하는 기간（초）
+     - ``3600``
+
+기록된 ID는 이 기간이 지나면 폐기됩니다.
+IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 기간이 지나면 반환된 어서션을 대응시킬 수 없어 그 자리에서 한 번만 로그인에 실패합니다.
+값을 지정하지 않으면 3600초가 사용됩니다.
+숫자로 해석할 수 없는 값을 지정한 경우에도 3600초가 사용되며, ``Invalid saml.request.id.ttl`` 로 시작하는 경고가 출력됩니다.
+0 이하의 값을 지정한 경우에도 IdP로부터 로그인이 돌아오기 전에 AuthnRequest의 ID가 폐기되어 버리므로, 마찬가지로 3600초가 사용되며, 경고가 출력됩니다.
+
+.. note::
+   하나의 세션에서 보관할 수 있는 응답 대기 중인 AuthnRequest는 최대 10건이며, 상한을 초과하면 오래된 것부터 폐기됩니다.
+   이는 여러 탭에서 동시에 로그인을 시작할 수 있도록 하기 위한 것으로, ``saml.`` 로 시작하는 설정으로는 변경할 수 없습니다.
+
 설정 예
 =======
 
@@ -480,9 +508,12 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
   ``tomcat.sameSiteCookies`` 가 ``lax`` (기본값)인 경우 브라우저가 세션 쿠키를 함께 보내지 않으므로
   |Fess| 는 대응하는 AuthnRequest의 ID를 찾지 못하고 그 자리에서 한 번만 로그인에 실패합니다.
   브라우저는 로그인 화면으로 돌아가 「SSO 로그인 프로세스에 실패했습니다.」가 표시되고, 로그에는
-  ``Received a SAML response with no matching AuthnRequest ID in the session.``
+  ``Received a SAML response with no matching AuthnRequest ID in the session``
   으로 시작하는 경고가 출력됩니다. 이 경우
   ``tomcat.sameSiteCookies = none`` 을 설정하십시오 (``SameSite=None`` 은 HTTPS가 필요합니다)
+- IdP 로그인 화면에서 시간이 오래 걸려 ``saml.request.id.ttl`` (기본값 3600초)가 경과한 경우에도
+  기록된 AuthnRequest의 ID가 이미 폐기되어 있어 같은 경고가 출력됩니다.
+  이 경우에는 로그인을 다시 시작하십시오
 
 .. note::
    15.7에서는 같은 상황에서 IdP로의 재리다이렉트가 반복되어 로그인이 루프에 빠졌습니다.

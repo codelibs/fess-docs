@@ -331,10 +331,11 @@ Paramètres de signature
    Tant que ce paramètre vaut ``false``, aucune signature n'est exigée sur une LogoutRequest reçue sur
    ``/sso/logout``. Les seules vérifications effectuées sont le schéma XML, ``NotOnOrAfter`` (s'il est
    présent), ``Destination`` (s'il est présent) et la correspondance de l'Issuer avec
-   ``saml.idp.entityid`` ; le NameID de la LogoutRequest n'est jamais comparé à l'utilisateur connecté.
-   Un attaquant qui connaît l'identifiant d'entité de l'IdP, une information publique, peut donc forger
-   une LogoutRequest non signée et mettre fin à la session d'un utilisateur authentifié en l'attirant
-   vers cette URL.
+   ``saml.idp.entityid`` (s'il est présent) ; le NameID de la LogoutRequest n'est jamais comparé à
+   l'utilisateur connecté. L'élément Issuer est optionnel dans le schéma SAML, si bien qu'une
+   LogoutRequest qui l'omet n'est jamais comparée à l'identifiant d'entité de l'IdP. Un attaquant peut
+   donc, sans avoir besoin de connaître l'identifiant d'entité de l'IdP, forger une LogoutRequest non
+   signée et mettre fin à la session d'un utilisateur authentifié en l'attirant vers cette URL.
    L'impact est une déconnexion forcée (déni de service), et non une prise de contrôle du compte.
 
 Paramètres de chiffrement
@@ -406,6 +407,33 @@ Autres paramètres de sécurité
 .. note::
    |Fess| utilise en interne une bibliothèque SAML (java-saml), et les propriétés commençant par ``saml.`` sont mappées aux paramètres correspondants de la bibliothèque (préfixe ``onelogin.saml2.``).
    Ainsi, en plus de celles répertoriées ici, vous pouvez spécifier des paramètres détaillés dans ``system.properties`` tels que les liaisons (par ex. ``saml.sp.assertion_consumer_service.binding``), les informations d'organisation (``saml.organization.*``) et les informations de contact (``saml.contacts.*``).
+
+Expiration de l'AuthnRequest
+============================
+
+|Fess| envoie une AuthnRequest à l'IdP à chaque accès à ``/sso/`` et enregistre son identifiant dans la session.
+La réponse SAML renvoyée par l'IdP est validée par rapport à l'identifiant enregistré.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``saml.request.id.ttl``
+     - Durée pendant laquelle l'identifiant d'une AuthnRequest restée sans réponse est conservé (secondes)
+     - ``3600``
+
+L'identifiant enregistré est écarté une fois ce délai écoulé.
+S'il expire (par exemple parce que la page de connexion de l'IdP est restée ouverte), l'assertion renvoyée ne peut pas être associée et la connexion échoue une seule fois.
+Si aucune valeur n'est définie, 3600 secondes sont utilisées.
+Si une valeur qui ne peut pas être interprétée comme un nombre est définie, 3600 secondes sont également utilisées et un avertissement commençant par ``Invalid saml.request.id.ttl`` est consigné.
+Une valeur nulle ou négative écarterait l'identifiant de l'AuthnRequest avant qu'une connexion puisse revenir de l'IdP ; dans ce cas également, 3600 secondes sont utilisées et un avertissement est consigné.
+
+.. note::
+   Au maximum 10 AuthnRequest restées sans réponse sont conservées par session ; lorsque cette limite est dépassée, les plus anciennes sont écartées.
+   Cela permet de démarrer des connexions depuis plusieurs onglets à la fois, et ne peut pas être modifié par un paramètre ``saml.``.
 
 Exemples de configuration
 =========================
@@ -479,8 +507,11 @@ Impossible de retourner à Fess après l'authentification
   identifiant d'AuthnRequest correspondant et fait échouer la connexion une seule fois, sur place. Le
   navigateur revient à la page de connexion en affichant « Le processus de connexion SSO a échoué. »,
   et un avertissement commençant par
-  ``Received a SAML response with no matching AuthnRequest ID in the session.`` est écrit dans le
+  ``Received a SAML response with no matching AuthnRequest ID in the session`` est écrit dans le
   journal. Dans ce cas, définissez ``tomcat.sameSiteCookies = none`` (``SameSite=None`` nécessite HTTPS)
+- Si la page de connexion de l'IdP a pris tellement de temps que ``saml.request.id.ttl`` (3600
+  secondes par défaut) a expiré, l'identifiant d'AuthnRequest enregistré a déjà été écarté et le
+  même avertissement est consigné. Dans ce cas, recommencez la connexion
 
 .. note::
    En 15.7, la même situation faisait rediriger |Fess| encore et encore vers l'IdP, mettant la connexion

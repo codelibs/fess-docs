@@ -323,8 +323,9 @@ IdP侧配置
    ``saml.security.want_messages_signed=true``\ 。
    若保持为\ ``false``\ ，则不会对\ ``/sso/logout``\ 收到的LogoutRequest要求签名。
    此时仅校验XML架构、``NotOnOrAfter``\ （若存在）、``Destination``\ （若存在）以及Issuer是否与\
-   ``saml.idp.entityid``\ 一致；LogoutRequest中的NameID从不与已登录用户进行比对。
-   因此，知晓IdP实体ID（属于公开信息）的攻击者可以构造未签名的LogoutRequest，
+   ``saml.idp.entityid``\ 一致（若存在）；LogoutRequest中的NameID从不与已登录用户进行比对。
+   Issuer元素在SAML架构中是可选的，省略该元素的LogoutRequest从不会与IdP的实体ID进行比对。
+   因此，攻击者无需知晓IdP的实体ID，即可构造未签名的LogoutRequest，
    诱导用户访问该URL，从而终止已认证用户的会话。
    其影响是强制登出（拒绝服务），而不是账户接管。
 
@@ -398,6 +399,33 @@ SP证书与私钥配置
    |Fess| 内部使用SAML库（java-saml），以 ``saml.`` 开头的属性将映射到该库对应的设置（``onelogin.saml2.`` 前缀）。
    因此，除此处列出的设置外，还可以在 ``system.properties`` 中指定绑定（例如 ``saml.sp.assertion_consumer_service.binding``）、组织信息（``saml.organization.*``）、联系人信息（``saml.contacts.*``）等详细设置。
 
+AuthnRequest有效期
+==================
+
+|Fess|\ 每次访问\ ``/sso/``\ 都会向IdP发送一个AuthnRequest，并将其ID记录在会话中。
+IdP返回的SAML响应会根据记录的ID进行校验。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 属性
+     - 描述
+     - 默认值
+   * - ``saml.request.id.ttl``
+     - 未收到响应的AuthnRequest的ID保留时长（秒）
+     - ``3600``
+
+记录的ID在超过该时长后会被丢弃。
+如果超出有效期（例如IdP登录页面一直处于打开状态未处理），返回的断言将无法匹配，登录会当场失败一次。
+如果未设置该值，将使用3600秒。
+如果设置的值无法解析为数字，同样会使用3600秒，并在日志中输出以\ ``Invalid saml.request.id.ttl``\ 开头的警告。
+如果设置的值小于或等于0，将会在登录从IdP返回之前就丢弃AuthnRequest的ID，因此同样会使用3600秒，并在日志中输出警告。
+
+.. note::
+   每个会话最多保留10个未收到响应的AuthnRequest，超出上限后将丢弃最旧的。
+   这是为了支持同时从多个标签页发起登录，且无法通过\ ``saml.``\ 开头的设置进行更改。
+
 配置示例
 ========
 
@@ -468,8 +496,10 @@ SP证书与私钥配置
   当\ ``tomcat_config.properties``\ 中的\ ``tomcat.sameSiteCookies``\ 为\ ``lax``\ （默认值）时，
   浏览器不会随该请求发送会话Cookie，因此 |Fess| 找不到可匹配的AuthnRequest ID，当场只失败一次。
   浏览器会返回登录页面并显示"SSO登录处理失败。"，日志中会输出以\
-  ``Received a SAML response with no matching AuthnRequest ID in the session.``\ 开头的警告。
+  ``Received a SAML response with no matching AuthnRequest ID in the session``\ 开头的警告。
   此时请设置\ ``tomcat.sameSiteCookies = none``\ （``SameSite=None``\ 需要HTTPS）
+- 如果IdP登录页面耗时过长，导致\ ``saml.request.id.ttl``\ （默认3600秒）超时，记录的AuthnRequest ID
+  也会被丢弃，从而输出相同的警告。此时请重新开始登录
 
 .. note::
    在15.7中，同样的情况会导致\ |Fess|\ 反复重定向到IdP，使登录陷入循环。

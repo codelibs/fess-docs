@@ -326,10 +326,11 @@ Signature Settings
    ``saml.security.want_messages_signed=true`` as well.
    While it is ``false``, no signature is required on a LogoutRequest received at ``/sso/logout``.
    The only checks performed are the XML schema, ``NotOnOrAfter`` (if present), ``Destination``
-   (if present), and that the Issuer matches ``saml.idp.entityid``; the NameID in the LogoutRequest
-   is never compared against the logged-in user.
-   An attacker who knows the IdP entity ID, which is public information, can therefore craft an
-   unsigned LogoutRequest and terminate an authenticated user's session by luring that user to the URL.
+   (if present), and that the Issuer matches ``saml.idp.entityid`` (if present); the NameID in the
+   LogoutRequest is never compared against the logged-in user. The Issuer element is optional in the
+   SAML schema, so a LogoutRequest that omits it is never compared against the IdP entity ID. An
+   attacker, without needing to know the IdP entity ID, can therefore craft an unsigned LogoutRequest
+   and terminate an authenticated user's session by luring that user to the URL.
    The impact is a forced logout (denial of service), not account takeover.
 
 Encryption Settings
@@ -402,6 +403,33 @@ Other Security Settings
    |Fess| internally uses a SAML library (java-saml), and properties starting with ``saml.`` are mapped to the library's corresponding settings (the ``onelogin.saml2.`` prefix).
    Therefore, in addition to those listed here, you can specify detailed settings in ``system.properties`` such as bindings (e.g., ``saml.sp.assertion_consumer_service.binding``), organization information (``saml.organization.*``), and contact information (``saml.contacts.*``).
 
+AuthnRequest Expiration
+=======================
+
+|Fess| sends one AuthnRequest to the IdP for each access to ``/sso/`` and records its ID in the session.
+The SAML response returned by the IdP is validated against the recorded ID.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``saml.request.id.ttl``
+     - How long an unanswered AuthnRequest ID is retained (seconds)
+     - ``3600``
+
+A recorded ID is discarded once this period passes.
+If it expires (for example the IdP login page was left open), the returned assertion cannot be matched and the login fails once.
+If no value is set, 3600 seconds is used.
+If a value that cannot be parsed as a number is set, 3600 seconds is also used and a warning beginning with ``Invalid saml.request.id.ttl`` is logged.
+A value of zero or less would discard the AuthnRequest ID before a login could return from the IdP, so it is likewise replaced with 3600 seconds and a warning is logged.
+
+.. note::
+   At most 10 unanswered AuthnRequests are kept per session; when the cap is exceeded the oldest are discarded.
+   This exists so that logins can be started from several tabs at once, and it cannot be changed with a ``saml.`` setting.
+
 Configuration Examples
 ======================
 
@@ -472,8 +500,11 @@ Cannot return to Fess after authentication
   ``tomcat_config.properties`` is ``lax`` (the default), the browser does not send the session cookie
   with it, so |Fess| finds no matching AuthnRequest ID and fails the login once, on the spot. The
   browser returns to the login page showing "SSO login process failed.", and a warning beginning with
-  ``Received a SAML response with no matching AuthnRequest ID in the session.`` is written to the log.
+  ``Received a SAML response with no matching AuthnRequest ID in the session`` is written to the log.
   Set ``tomcat.sameSiteCookies = none`` in that case (``SameSite=None`` requires HTTPS)
+- If the IdP login page took long enough for ``saml.request.id.ttl`` (default 3600 seconds) to
+  elapse, the recorded AuthnRequest ID has already been discarded and the same warning is logged.
+  In that case, start the login again.
 
 .. note::
    In 15.7 the same situation caused |Fess| to redirect to the IdP again and again, looping the login.
