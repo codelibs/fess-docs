@@ -508,6 +508,21 @@ Microsoft Entra ID 的「我的应用」）中的 |Fess| 磁贴发起的登录�
 因此即使站点看起来正常，也请确认该设置。15.8 不再循环，而是一次性失败。
 详细内容请参阅 :doc:`../config/sso-saml`\ 。
 
+若此前使用过 Microsoft Entra ID（Azure AD）
+-------------------------------------------
+
+自 15.8 起，向授权端点请求的响应模式默认值由 ``form_post`` 变更为 ``query``\ 。15.7 之前回调以
+跨站 POST 返回，而 |Fess| 的默认值 ``tomcat.sameSiteCookies = lax`` 不会随该请求发送会话
+Cookie，因此需要将其改为 ``tomcat.sameSiteCookies = none``\ 。如果仅为此才设置了 ``none``\ ，
+可以恢复为默认值。若要保持原有行为，请指定 ``entraid.response.mode=form_post`` 并保留
+``tomcat.sameSiteCookies = none``\ 。
+
+15.8 还新增了 ``entraid.require.membership``\ ，用于选择登录时无法从 Microsoft Graph 获取用户的
+组和角色信息时的处理方式。默认值 ``false`` 与 15.7 相同：输出警告日志并继续登录。但此时用户的
+权限仅为 ``entraid.default.groups`` 和 ``entraid.default.roles``\ ，本应可以查看的文档将不会
+出现在搜索结果中。指定 ``true`` 则拒绝此类登录。
+详细内容请参阅 :doc:`../config/sso-entraid`\ 。
+
 插件版本更新
 ------------------------
 

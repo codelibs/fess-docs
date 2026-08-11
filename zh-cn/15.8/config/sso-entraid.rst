@@ -106,6 +106,9 @@ Entra ID认证的工作原理
    * - ``entraid.default.roles``
      - 默认角色（逗号分隔）
      - （无）
+   * - ``entraid.require.membership``
+     - 登录时无法从Microsoft Graph获取用户的组和角色信息时的处理方式。设为 ``true`` 时拒绝登录。设为 ``false`` 时输出警告日志并继续登录，但用户的权限仅为上述默认组和默认角色。
+     - ``false``
    * - ``entraid.permission.fields``
      - 额外用作权限值的组/角色字段（逗号分隔）。组/角色的ID（GUID）始终作为权限使用，此处指定的字段（例如 ``mail``）的值将被追加添加。
      - ``mail``
@@ -196,7 +199,8 @@ Entra ID侧配置
 
 5. 添加以下权限：
 
-   - ``Group.Read.All`` - 获取用户组信息所需
+   - ``User.Read`` - 获取已登录用户的组成员关系（``/me/memberOf``）所需。创建应用注册时默认授予
+   - ``GroupMember.Read.All`` - 读取组名等组属性以及解析嵌套组所需
 
 6. 点击 **添加权限**
 
@@ -206,10 +210,15 @@ Entra ID侧配置
    管理员同意需要租户管理员权限。
 
 .. note::
+   也可以授予 ``Group.Read.All`` 或 ``Directory.Read.All`` 来代替 ``GroupMember.Read.All``\ ，
+   组属性的获取与嵌套组的解析同样可以正常工作。但 ``/me/memberOf`` 无法通过 ``Group.Read.All``
+   授权，因此无论采用哪种方式都需要 ``User.Read``\ 。
+
+.. note::
    |Fess| 在获取令牌时会请求 ``https://graph.microsoft.com/.default`` 作用域。
    15.8 及以后版本还会向授权端点发送 ``openid profile offline_access https://graph.microsoft.com/.default``\ ，以便针对同一组权限请求同意。
    这意味着将使用在应用注册中配置并已授予同意的所有访问权限。
-   因此，若要获取组信息，必须将上述 ``Group.Read.All`` 权限添加到应用注册中，并授予管理员同意。
+   因此，若要获取组信息，必须将上述权限添加到应用注册中，并授予管理员同意。
 
 需要获取的信息
 --------------
@@ -322,9 +331,18 @@ Entra ID侧配置
 无法获取组信息
 ~~~~~~~~~~~~~~
 
-- 验证是否已授予 ``Group.Read.All`` 权限
+- 验证是否已授予 ``User.Read`` 和 ``GroupMember.Read.All`` 权限
+  （``GroupMember.Read.All`` 可以用 ``Group.Read.All`` 或 ``Directory.Read.All`` 代替，
+  但 ``/me/memberOf`` 仍然需要 ``User.Read``\ ）
 - 验证是否已授予管理员同意
 - 检查用户是否在Entra ID中属于组
+- 如果无法解析嵌套的父组，日志中会输出 ``Not allowed to read the parent groups of ...`` 警告。
+  此时请授予 ``GroupMember.Read.All``
+- 使用默认值 ``entraid.require.membership=false`` 时，即使无法获取组信息也会继续登录。
+  此时用户的权限仅为 ``entraid.default.groups`` 和 ``entraid.default.roles``\ ，
+  本应可以查看的文档将不会出现在搜索结果中
+- 如果不希望用户在权限不完整的情况下进行搜索，请指定 ``entraid.require.membership=true``\ ，
+  此时此类登录将被拒绝
 
 调试设置
 --------

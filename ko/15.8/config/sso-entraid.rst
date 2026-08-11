@@ -107,6 +107,9 @@ Entra ID에서 취득한 정보를 설정합니다.
    * - ``entraid.default.roles``
      - 기본 역할（쉼표 구분）
      - （없음）
+   * - ``entraid.require.membership``
+     - 로그인 시 Microsoft Graph에서 사용자의 그룹·역할 정보를 취득하지 못한 경우의 동작. ``true`` 인 경우 로그인을 거부합니다. ``false`` 인 경우 경고를 로그에 출력하고 로그인을 계속하지만, 사용자의 권한은 위의 기본 그룹·기본 역할뿐입니다.
+     - ``false``
    * - ``entraid.permission.fields``
      - 권한 값으로 추가로 사용할 그룹/역할 필드（쉼표 구분）. 그룹/역할의 ID（GUID）는 항상 권한으로 사용되며, 여기서 지정한 필드（예: ``mail``）의 값이 추가됩니다.
      - ``mail``
@@ -200,7 +203,8 @@ API 접근 권한 설정
 
 5. 다음 접근 권한을 추가:
 
-   - ``Group.Read.All`` - 사용자의 그룹 정보를 취득하기 위해 필요
+   - ``User.Read`` - 로그인한 사용자의 소속 그룹（``/me/memberOf``）을 취득하기 위해 필요. 앱 등록 생성 시 기본으로 부여됩니다
+   - ``GroupMember.Read.All`` - 그룹 이름 등 그룹 속성의 취득과 중첩된 그룹의 해결에 필요
 
 6. **권한 추가** 를 클릭
 
@@ -210,11 +214,16 @@ API 접근 권한 설정
    관리자 동의는 테넌트 관리자 권한이 필요합니다.
 
 .. note::
+   ``GroupMember.Read.All`` 대신 ``Group.Read.All`` 이나 ``Directory.Read.All`` 을 부여해도
+   그룹 속성의 취득과 중첩된 그룹의 해결은 동작합니다. 다만 ``/me/memberOf`` 는
+   ``Group.Read.All`` 로는 인가되지 않으므로 어느 경우에도 ``User.Read`` 는 필요합니다.
+
+.. note::
    |Fess| 는 토큰 취득 시 ``https://graph.microsoft.com/.default`` 스코프를 요청합니다.
    15.8 이상에서는 인가 엔드포인트에도 ``openid profile offline_access https://graph.microsoft.com/.default``
    를 요청하여 동일한 범위의 동의를 요구합니다.
    이는 앱 등록에서 구성 및 동의된 모든 접근 권한이 사용됨을 의미합니다.
-   따라서 그룹 정보를 취득하려면 위의 ``Group.Read.All`` 을 앱 등록에 추가하고
+   따라서 그룹 정보를 취득하려면 위의 접근 권한을 앱 등록에 추가하고
    관리자 동의를 부여해야 합니다.
 
 취득하는 정보
@@ -330,9 +339,13 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
 그룹 정보를 취득할 수 없음
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``Group.Read.All`` 의 접근 권한이 부여되어 있는지 확인하십시오
+- ``User.Read`` 와 ``GroupMember.Read.All`` 의 접근 권한이 부여되어 있는지 확인하십시오
+  （``GroupMember.Read.All`` 은 ``Group.Read.All`` 이나 ``Directory.Read.All`` 로 대체할 수 있지만, ``/me/memberOf`` 에는 ``User.Read`` 가 필요합니다）
 - 관리자 동의가 부여되어 있는지 확인하십시오
 - 사용자가 Entra ID에서 그룹에 소속되어 있는지 확인하십시오
+- 중첩된 상위 그룹을 해결할 수 없는 경우에는 ``Not allowed to read the parent groups of ...`` 경고가 로그에 출력됩니다. 이 경우에는 ``GroupMember.Read.All`` 을 부여하십시오
+- 기본값인 ``entraid.require.membership=false`` 에서는 그룹 정보를 취득하지 못해도 로그인은 계속됩니다. 이때 사용자의 권한은 ``entraid.default.groups`` 와 ``entraid.default.roles`` 뿐이므로, 원래 참조할 수 있는 문서가 검색 결과에 나오지 않습니다
+- ``entraid.require.membership=true`` 를 지정하면 이러한 로그인은 거부됩니다. 권한이 부족한 상태로 검색되는 것을 피하려면 지정하십시오
 
 디버그 설정
 ------------

@@ -529,6 +529,25 @@ Weiterleitungsschleife zum IdP; prüfen Sie die Einstellung daher auch bei einer
 zu funktionieren schien. In 15.8 schlägt die Anmeldung einmalig fehl, statt in einer Schleife zu
 laufen. Einzelheiten finden Sie unter :doc:`../config/sso-saml`.
 
+Falls Sie Microsoft Entra ID (Azure AD) genutzt haben
+-----------------------------------------------------
+
+Ab 15.8 lautet der Standardwert des beim Autorisierungsendpunkt angeforderten Response-Modus
+``query`` statt ``form_post``. Bis 15.7 wurde der Callback als websiteübergreifender POST
+zurückgegeben, und beim |Fess|-Standardwert ``tomcat.sameSiteCookies = lax`` wird das
+Sitzungscookie dabei nicht mitgesendet, sodass ``tomcat.sameSiteCookies = none`` erforderlich
+war. Wenn Sie ``none`` nur aus diesem Grund gesetzt haben, können Sie zum Standardwert
+zurückkehren. Um das bisherige Verhalten beizubehalten, setzen Sie
+``entraid.response.mode=form_post`` und belassen ``tomcat.sameSiteCookies = none``.
+
+Außerdem führt 15.8 ``entraid.require.membership`` ein. Damit legen Sie fest, was geschieht, wenn
+Microsoft Graph bei der Anmeldung die Gruppen und Rollen des Benutzers nicht zurückgibt. Der
+Standardwert ``false`` verhält sich wie 15.7: Es wird eine Warnung protokolliert und die
+Anmeldung wird fortgesetzt. Der Benutzer besitzt dann jedoch nur ``entraid.default.groups`` und
+``entraid.default.roles``, sodass Dokumente, die er eigentlich sehen dürfte, in den
+Suchergebnissen fehlen. Mit ``true`` wird eine solche Anmeldung stattdessen abgelehnt.
+Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
+
 Aktualisierung der Plugin-Versionen
 -----------------------------------
 

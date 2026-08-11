@@ -516,6 +516,23 @@ ZIP 版では ``lib/classes/``\ 、DEB/RPM 版では ``/etc/fess/`` に配置さ
 見えていた環境でも設定を確認してください。15.8 ではループせずに 1 回で失敗します。
 詳細は :doc:`../config/sso-saml` を参照してください。
 
+Microsoft Entra ID（Azure AD）を利用していた場合
+------------------------------------------------
+
+15.8 から、認可エンドポイントに要求するレスポンスモードの既定値が ``form_post`` から ``query``
+に変わりました。15.7 まではコールバックがクロスサイトの POST で返るため、\ |Fess| の既定値である
+``tomcat.sameSiteCookies = lax`` ではセッションクッキーが送信されず、\ ``none`` への変更が必要で
+した。この回避策のためだけに ``none`` を設定していた場合は、既定値に戻せます。従来どおり
+``form_post`` を使う場合は ``entraid.response.mode=form_post`` を指定し、
+``tomcat.sameSiteCookies = none`` を維持してください。
+
+また 15.8 では、ログイン時に Microsoft Graph からユーザーのグループ・ロール情報を取得できなかった
+場合の扱いを ``entraid.require.membership`` で選択できます。既定値の ``false`` は 15.7 と同じ動作
+で、警告をログに出力したうえでログインを継続します。ただしこのときユーザーの権限は
+``entraid.default.groups`` と ``entraid.default.roles`` だけになるため、本来参照できる文書が
+検索結果に出なくなります。\ ``true`` を指定すると、この状態でのログインは拒否されます。
+詳細は :doc:`../config/sso-entraid` を参照してください。
+
 プラグインのバージョン更新
 --------------------------
 

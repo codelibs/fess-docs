@@ -534,6 +534,25 @@ net mais une boucle de redirections sans fin vers l'IdP ; vérifiez donc le para
 site qui semblait fonctionner. En 15.8, la connexion échoue une seule fois au lieu de boucler.
 Pour plus de détails, consultez :doc:`../config/sso-saml`.
 
+Si vous utilisiez Microsoft Entra ID (Azure AD)
+-----------------------------------------------
+
+À partir de la 15.8, le mode de réponse demandé au point de terminaison d'autorisation vaut
+``query`` par défaut au lieu de ``form_post``. Jusqu'à la 15.7, le callback était renvoyé par un
+POST intersite, et la valeur par défaut de |Fess| ``tomcat.sameSiteCookies = lax`` n'envoie pas
+le cookie de session avec une telle requête ; ``tomcat.sameSiteCookies = none`` était donc
+nécessaire. Si vous aviez défini ``none`` uniquement pour cette raison, vous pouvez revenir à la
+valeur par défaut. Pour conserver le comportement précédent, définissez
+``entraid.response.mode=form_post`` et laissez ``tomcat.sameSiteCookies = none`` en place.
+
+La 15.8 ajoute également ``entraid.require.membership``, qui détermine ce qui se passe lorsque
+Microsoft Graph ne renvoie pas les groupes et rôles de l'utilisateur lors de la connexion. La
+valeur par défaut ``false`` reproduit le comportement de la 15.7 : un avertissement est
+journalisé et la connexion aboutit. L'utilisateur ne dispose alors que de
+``entraid.default.groups`` et ``entraid.default.roles``, si bien que les documents qu'il devrait
+pouvoir consulter n'apparaissent pas dans les résultats de recherche. Définissez ``true`` pour
+refuser une telle connexion. Pour plus de détails, consultez :doc:`../config/sso-entraid`.
+
 Mise à jour de la version des plugins
 -------------------------------------
 

@@ -108,6 +108,9 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    * - ``entraid.default.roles``
      - Standardrollen (kommagetrennt)
      - (Keine)
+   * - ``entraid.require.membership``
+     - Verhalten, wenn die Gruppen und Rollen des Benutzers bei der Anmeldung nicht von Microsoft Graph abgerufen werden können. Bei ``true`` wird die Anmeldung abgelehnt. Bei ``false`` wird eine Warnung protokolliert und die Anmeldung fortgesetzt; der Benutzer besitzt dann nur die oben genannten Standardgruppen und Standardrollen.
+     - ``false``
    * - ``entraid.permission.fields``
      - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt.
      - ``mail``
@@ -205,7 +208,8 @@ Konfigurieren der API-Berechtigungen
 
 5. Fügen Sie die folgende Berechtigung hinzu:
 
-   - ``Group.Read.All`` - Erforderlich zum Abrufen von Benutzergruppeninformationen
+   - ``User.Read`` - Erforderlich zum Abrufen der Gruppenmitgliedschaften des angemeldeten Benutzers (``/me/memberOf``). Wird beim Erstellen der App-Registrierung standardmäßig erteilt
+   - ``GroupMember.Read.All`` - Erforderlich zum Lesen von Gruppenattributen wie dem Gruppennamen und zum Auflösen verschachtelter Gruppen
 
 6. Klicken Sie auf **Berechtigungen hinzufügen**
 
@@ -215,10 +219,17 @@ Konfigurieren der API-Berechtigungen
    Die Administratorzustimmung erfordert Mandantenadministratorrechte.
 
 .. note::
+   Anstelle von ``GroupMember.Read.All`` können auch ``Group.Read.All`` oder
+   ``Directory.Read.All`` erteilt werden; das Abrufen der Gruppenattribute und das Auflösen
+   verschachtelter Gruppen funktioniert damit ebenfalls. ``/me/memberOf`` wird durch
+   ``Group.Read.All`` jedoch nicht autorisiert, sodass ``User.Read`` in jedem Fall erforderlich
+   ist.
+
+.. note::
    |Fess| fordert beim Token-Abruf den Scope ``https://graph.microsoft.com/.default`` an.
    Ab 15.8 wird zusätzlich ``openid profile offline_access https://graph.microsoft.com/.default`` an den Autorisierungsendpunkt gesendet, sodass die Zustimmung für denselben Umfang eingeholt wird.
    Das bedeutet, dass alle in der App-Registrierung konfigurierten und genehmigten Zugriffsberechtigungen verwendet werden.
-   Um Gruppeninformationen abzurufen, muss daher die oben genannte Berechtigung ``Group.Read.All`` zur App-Registrierung hinzugefügt und die Administratorzustimmung erteilt werden.
+   Um Gruppeninformationen abzurufen, müssen daher die oben genannten Berechtigungen zur App-Registrierung hinzugefügt und die Administratorzustimmung erteilt werden.
 
 Zu erhaltende Informationen
 ---------------------------
@@ -333,9 +344,20 @@ Authentifizierungsfehler treten auf
 Gruppeninformationen können nicht abgerufen werden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Überprüfen Sie, ob die Berechtigung ``Group.Read.All`` erteilt wurde
+- Überprüfen Sie, ob die Berechtigungen ``User.Read`` und ``GroupMember.Read.All`` erteilt wurden
+  (``GroupMember.Read.All`` kann durch ``Group.Read.All`` oder ``Directory.Read.All`` ersetzt
+  werden, ``/me/memberOf`` benötigt jedoch weiterhin ``User.Read``)
 - Überprüfen Sie, ob die Administratorzustimmung erteilt wurde
 - Überprüfen Sie, ob der Benutzer in Entra ID zu Gruppen gehört
+- Wenn verschachtelte übergeordnete Gruppen nicht aufgelöst werden können, wird die Warnung
+  ``Not allowed to read the parent groups of ...`` protokolliert. Erteilen Sie in diesem Fall
+  ``GroupMember.Read.All``
+- Mit dem Standardwert ``entraid.require.membership=false`` wird die Anmeldung auch dann
+  fortgesetzt, wenn die Gruppen nicht abgerufen werden können. Der Benutzer besitzt dann nur
+  ``entraid.default.groups`` und ``entraid.default.roles``, sodass Dokumente, die er eigentlich
+  sehen dürfte, in den Suchergebnissen fehlen
+- Setzen Sie ``entraid.require.membership=true``, um eine solche Anmeldung stattdessen abzulehnen,
+  wenn Benutzer nicht mit unvollständigen Berechtigungen suchen sollen
 
 Debug-Einstellungen
 -------------------

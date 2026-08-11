@@ -532,6 +532,25 @@ al IdP, así que compruebe el ajuste incluso en un sitio que parecía funcionar;
 falla una sola vez en lugar de entrar en bucle. Consulte :doc:`../config/sso-saml` para conocer
 más detalles.
 
+Si Utilizaba Microsoft Entra ID (Azure AD)
+------------------------------------------
+
+A partir de la versión 15.8, el modo de respuesta solicitado al endpoint de autorización es
+``query`` por defecto, en lugar de ``form_post``. Hasta la versión 15.7 el callback se devolvía
+como un POST entre sitios, y con el valor por defecto de |Fess| ``tomcat.sameSiteCookies = lax``
+la cookie de sesión no se envía en esa petición, por lo que era necesario
+``tomcat.sameSiteCookies = none``. Si estableció ``none`` únicamente por ese motivo, puede volver
+al valor por defecto. Para mantener el comportamiento anterior, establezca
+``entraid.response.mode=form_post`` y conserve ``tomcat.sameSiteCookies = none``.
+
+La versión 15.8 también añade ``entraid.require.membership``, que determina qué ocurre cuando
+Microsoft Graph no devuelve los grupos y roles del usuario durante el inicio de sesión. El valor
+por defecto, ``false``, se comporta como en la versión 15.7: se registra una advertencia y el
+inicio de sesión continúa. Sin embargo, el usuario solo dispone entonces de
+``entraid.default.groups`` y ``entraid.default.roles``, por lo que los documentos que debería
+poder ver no aparecen en los resultados de búsqueda. Establézcalo en ``true`` para rechazar ese
+inicio de sesión. Consulte :doc:`../config/sso-entraid` para conocer más detalles.
+
 Actualización de la Versión de los Plugins
 ---------------------------------------------
 
