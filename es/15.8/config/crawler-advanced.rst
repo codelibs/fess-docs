@@ -1103,6 +1103,252 @@ Ejemplo de Configuración
 .. note::
    Si omite ``credentialsFile``, se usará la variable de entorno ``GOOGLE_APPLICATION_CREDENTIALS``.
 
+Rastreo de Contenido Dinámico (Playwright)
+==========================================
+
+Las páginas renderizadas mediante JavaScript (como las SPA) solo devuelven el
+HTML previo al renderizado al rastreador HTTP habitual, por lo que su texto
+principal nunca se indexa. El rastreador Playwright renderiza primero la página
+en un navegador sin interfaz gráfica y después obtiene el contenido.
+
+Habilitación
+------------
+
+Escriba lo siguiente en "Parámetros de configuración" de una configuración de
+rastreo web.
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+
+La parte que sigue a ``playwright:`` es una expresión regular de las URL que se
+obtendrán con Playwright. En el ejemplo anterior, todas las URL HTTP/HTTPS se
+obtienen con Playwright. Para usar Playwright únicamente en determinados
+sitios, especifíquelos de la siguiente manera.
+
+::
+
+    client.crawlerClients=playwright:https://example\.com/app/.*
+
+.. note::
+   Los binarios del navegador de Playwright no se incluyen en el paquete de
+   |Fess|. Se descargan durante el primer rastreo, por lo que en un entorno sin
+   acceso a la red externa debe instalarlos previamente con el usuario del
+   sistema operativo que ejecuta el rastreador.
+
+   ::
+
+       npx playwright install --with-deps
+
+Parámetros de Configuración
+---------------------------
+
+Los siguientes parámetros se escriben en "Parámetros de configuración" de una
+configuración de rastreo con el prefijo ``client.``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Parámetro
+     - Descripción
+     - Valor Predeterminado
+   * - ``client.renderedState``
+     - Estado de carga que se espera antes de obtener el contenido. Especifique ``LOAD``, ``DOMCONTENTLOADED`` o ``NETWORKIDLE`` en mayúsculas
+     - ``NETWORKIDLE``
+   * - ``client.renderedStateTimeout``
+     - Límite de espera de ``renderedState`` (milisegundos). Con un valor menor o igual que cero se usa el valor predeterminado de Playwright (30000)
+     - ``0``
+   * - ``client.navigationTimeout``
+     - Límite de una navegación (milisegundos). Con un valor menor o igual que cero se usa el valor predeterminado de Playwright (30000)
+     - (sin configurar)
+   * - ``client.contentWaitDuration``
+     - Espera adicional tras alcanzar ``renderedState`` y antes de obtener el contenido (milisegundos)
+     - ``0``
+   * - ``client.sharedClient``
+     - Compartir el worker (navegador) de Playwright entre todos los clientes
+     - ``false``
+   * - ``client.blockedResourceTypes``
+     - Tipos de recursos que el navegador no debe obtener (separados por comas)
+     - (vacío)
+   * - ``client.ignoreHttpsErrors``
+     - Ignorar los errores de validación del certificado HTTPS
+     - ``false``
+   * - ``client.proxyBypass``
+     - Hosts que omiten el proxy (separados por comas)
+     - (vacío)
+
+Ejemplo de Configuración
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+    client.renderedState=NETWORKIDLE
+    client.renderedStateTimeout=20000
+    client.navigationTimeout=60000
+    client.contentWaitDuration=1000
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
+
+.. note::
+   El User Agent y los encabezados de solicitud definidos en la configuración
+   de rastreo se utilizan tal cual. Los parámetros comunes como
+   ``client.proxyHost``, ``client.proxyPort`` y ``client.maxContentLength``
+   también se aplican al navegador.
+
+.. note::
+   Un cliente de Playwright utiliza una única página del navegador y sus
+   solicitudes se procesan en serie. Aumentar el número de hilos en la
+   configuración de rastreo no acelera proporcionalmente la obtención con
+   Playwright.
+
+Elementos Configurables Solo en la Definición DI
+------------------------------------------------
+
+Los siguientes elementos no se pueden cambiar desde "Parámetros de
+configuración". Para modificarlos, cree
+``app/WEB-INF/classes/crawler/client+playwrightClient.xml`` y redefina el
+componente ``playwrightClient``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Propiedad
+     - Descripción
+     - Valor Predeterminado
+   * - ``browserName``
+     - Navegador que se utilizará: ``chromium``, ``firefox`` o ``webkit``
+     - ``chromium``
+   * - ``launchOptions``
+     - Opciones de inicio del navegador (``BrowserType.LaunchOptions``)
+     - ``headless=true``
+   * - ``newContextOptions``
+     - Opciones del contexto del navegador (``Browser.NewContextOptions``)
+     - (ninguno)
+   * - ``downloadTimeout``
+     - Límite de espera para la descarga de un archivo (segundos)
+     - ``15``
+   * - ``closeTimeout``
+     - Límite de espera para el cierre del navegador (segundos)
+     - ``15``
+
+Ejemplo de Configuración
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+        <include path="crawler/container.xml" />
+        <component name="playwrightClient"
+            class="org.codelibs.fess.crawler.client.http.PlaywrightClient"
+            instance="prototype">
+            <property name="downloadTimeout">60</property>
+            <property name="closeTimeout">30</property>
+            <property name="launchOptions">
+                <component
+                    class="com.microsoft.playwright.BrowserType$LaunchOptions"
+                    instance="prototype">
+                    <property name="headless">true</property>
+                </component>
+            </property>
+        </component>
+    </components>
+
+.. note::
+   Al redefinir ``playwrightClient``, la definición del componente que el
+   plugin tiene en ``crawler/client++.xml`` se reemplaza por completo. Las
+   propiedades que no escriba vuelven a sus valores predeterminados, por lo
+   que debe escribir todas las propiedades que necesite, como en el ejemplo
+   anterior. Tampoco copie ``crawler/client++.xml`` tal cual en esa
+   ubicación: el mismo componente quedaría registrado dos veces y el inicio
+   fallaría.
+
+.. warning::
+   ``downloadTimeout`` y ``closeTimeout`` se expresan en segundos, mientras que
+   ``navigationTimeout``, ``renderedStateTimeout`` y ``contentWaitDuration`` se
+   expresan en milisegundos. Tenga cuidado de no confundirlos.
+
+Bloqueo de Recursos Innecesarios
+--------------------------------
+
+``client.blockedResourceTypes`` admite una lista separada por comas de los
+tipos de recursos que el navegador no debe obtener. Los valores son los tipos
+de recurso de Playwright (``stylesheet``, ``image``, ``media``, ``font``,
+``script``, ``texttrack``, ``xhr``, ``fetch``, ``eventsource``,
+``websocket``, ``manifest``, ``other``, ``ping``, ``cspreport`` y
+``beacon``). De forma predeterminada no se bloquea nada.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon`` y ``cspreport`` son el
+conjunto que se puede especificar de forma segura. Los tres últimos son
+tráfico de seguimiento de tipo baliza que la página nunca vuelve a leer.
+
+::
+
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
+
+Especifique únicamente los tipos que el rastreo no lee. Obtener menos recursos
+de los que la página necesita para mostrarse reduce tanto el tiempo que tarda
+el rastreo como el volumen de datos transferidos.
+
+.. warning::
+   No especifique ``document``. Se bloquearía la obtención de la propia
+   página y el rastreo no podría llevarse a cabo, por lo que se ignora y se
+   emite una advertencia.
+
+.. note::
+   También se emite una advertencia al especificar un tipo que no figura en
+   la lista anterior. Un error tipográfico en plural como ``images`` no
+   coincide con ninguna solicitud, por lo que no bloquea nada. Además, la
+   lista anterior es la unión de los tipos que informan los tres motores de
+   navegador, por lo que hay tipos que el navegador utilizado nunca informa:
+   ``texttrack`` solo lo informa Chromium, y WebKit no informa ni ``media``
+   ni ``manifest``. Especificar un tipo que no se informa simplemente no
+   bloquea nada.
+
+.. note::
+   Bloquear ``script`` o ``xhr`` impide que JavaScript renderice la página, lo
+   que anula el propósito de usar Playwright. Resulta útil en un rastreo
+   dirigido únicamente a páginas renderizadas en el servidor, pero
+   normalmente debe elegir entre los tipos que se pueden especificar de
+   forma segura indicados anteriormente.
+
+Cambios en 15.8
+---------------
+
+Al actualizar desde la versión 15.7 o anterior, el comportamiento del
+rastreador Playwright ha cambiado de la siguiente manera.
+
+- **User Agent**: el User Agent de la configuración de rastreo ahora se envía
+  realmente desde el navegador. En 15.7 y versiones anteriores se enviaba el
+  valor predeterminado del navegador ``HeadlessChrome/...``. En los sitios
+  que varían su respuesta según el User Agent, el contenido obtenido puede
+  cambiar.
+
+- **Encabezados de solicitud**: los encabezados de solicitud de la
+  configuración de rastreo ahora se aplican al navegador. Cuando el mismo
+  nombre de encabezado aparece más de una vez, los valores se combinan en un
+  único valor separado por comas.
+
+- **Descargas a través de una redirección**: la URL registrada ahora es el
+  destino de la redirección (la URL que devolvió realmente el archivo). Si el
+  destino de la redirección es una URL fuera del alcance del rastreo, se
+  excluye por estar fuera de alcance.
+
+- **Espera de ``renderedState``**: que la espera agote su tiempo límite ya no
+  se considera un fallo; se utiliza tal cual el contenido que se hubiera
+  cargado en ese momento. También se pueden indexar las páginas que nunca
+  alcanzan ``NETWORKIDLE``.
+
+- **Especificación de los tiempos de espera**: se han añadido
+  ``client.navigationTimeout`` y ``client.renderedStateTimeout``, que limitan
+  el tiempo de carga de la página completa. ``client.connectionTimeout`` y
+  ``client.soTimeout`` son tiempos de espera por socket y no se aplican al
+  navegador.
+
 Información de Referencia
 ==========================
 

@@ -1101,6 +1101,252 @@ Konfigurationsbeispiel
 .. note::
    Wenn ``credentialsFile`` weggelassen wird, wird die Umgebungsvariable ``GOOGLE_APPLICATION_CREDENTIALS`` verwendet.
 
+Crawlen dynamischer Inhalte (Playwright)
+========================================
+
+Bei Seiten, die per JavaScript gerendert werden (etwa SPAs), erhält der
+gewöhnliche HTTP-Crawler nur das HTML vor dem Rendern, sodass ihr Fließtext
+nicht indiziert wird. Der Playwright-Crawler rendert die Seite zunächst in
+einem Headless-Browser und ruft anschließend den Inhalt ab.
+
+Aktivierung
+-----------
+
+Fügen Sie Folgendes zu „Konfigurationsparameter" in einer
+Web-Crawl-Konfiguration hinzu.
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+
+Der Teil nach ``playwright:`` ist ein regulärer Ausdruck für die URLs, die mit
+Playwright abgerufen werden sollen. Im obigen Beispiel wird jede
+HTTP/HTTPS-URL mit Playwright abgerufen. Um Playwright nur für bestimmte Sites
+zu verwenden, geben Sie diese wie folgt an.
+
+::
+
+    client.crawlerClients=playwright:https://example\.com/app/.*
+
+.. note::
+   Die Browser-Binärdateien von Playwright sind nicht im |Fess|-Paket
+   enthalten. Sie werden beim ersten Crawl heruntergeladen. Installieren Sie
+   sie daher in einer Umgebung ohne Zugang zu externen Netzwerken vorab als
+   der Betriebssystembenutzer, der den Crawler ausführt.
+
+   ::
+
+       npx playwright install --with-deps
+
+Konfigurationsparameter
+-----------------------
+
+Die folgenden Parameter werden mit dem Präfix ``client.`` in
+„Konfigurationsparameter" einer Crawl-Konfiguration eingetragen.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Parameter
+     - Beschreibung
+     - Standard
+   * - ``client.renderedState``
+     - Ladezustand, auf den vor dem Abrufen des Inhalts gewartet wird. Geben Sie ``LOAD``, ``DOMCONTENTLOADED`` oder ``NETWORKIDLE`` in Großbuchstaben an
+     - ``NETWORKIDLE``
+   * - ``client.renderedStateTimeout``
+     - Obergrenze für das Warten auf ``renderedState`` (Millisekunden). Bei 0 oder kleiner gilt der Playwright-Standardwert (30000)
+     - ``0``
+   * - ``client.navigationTimeout``
+     - Obergrenze für einen Seitenwechsel (Millisekunden). Bei 0 oder kleiner gilt der Playwright-Standardwert (30000)
+     - (nicht gesetzt)
+   * - ``client.contentWaitDuration``
+     - Zusätzliche Wartezeit nach dem Erreichen von ``renderedState`` und vor dem Abrufen des Inhalts (Millisekunden)
+     - ``0``
+   * - ``client.sharedClient``
+     - Den Playwright-Worker (Browser) für alle Clients gemeinsam nutzen
+     - ``false``
+   * - ``client.blockedResourceTypes``
+     - Ressourcentypen, die der Browser nicht abrufen soll (kommagetrennt)
+     - (leer)
+   * - ``client.ignoreHttpsErrors``
+     - Fehler bei der Überprüfung von HTTPS-Zertifikaten ignorieren
+     - ``false``
+   * - ``client.proxyBypass``
+     - Hosts, die den Proxy umgehen (kommagetrennt)
+     - (leer)
+
+Konfigurationsbeispiel
+~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    client.crawlerClients=playwright:http://.*,playwright:https://.*
+    client.renderedState=NETWORKIDLE
+    client.renderedStateTimeout=20000
+    client.navigationTimeout=60000
+    client.contentWaitDuration=1000
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
+
+.. note::
+   Der User-Agent und die Anfrage-Header, die in der Crawl-Konfiguration
+   konfiguriert sind, werden unverändert verwendet. Gemeinsame Parameter wie
+   ``client.proxyHost``, ``client.proxyPort`` und ``client.maxContentLength``
+   werden ebenfalls auf den Browser angewendet.
+
+.. note::
+   Ein Playwright-Client verwendet eine Browser-Seite, und die Anfragen an ihn
+   werden seriell verarbeitet. Eine höhere Thread-Anzahl in der
+   Crawl-Konfiguration beschleunigt den Abruf mit Playwright nicht
+   entsprechend.
+
+Nur in der DI-Definition konfigurierbare Einträge
+-------------------------------------------------
+
+Die folgenden Einträge können nicht über „Konfigurationsparameter" geändert
+werden. Um sie zu ändern, erstellen Sie
+``app/WEB-INF/classes/crawler/client+playwrightClient.xml`` und definieren
+die Komponente ``playwrightClient`` neu.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 40 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``browserName``
+     - Zu verwendender Browser: ``chromium``, ``firefox`` oder ``webkit``
+     - ``chromium``
+   * - ``launchOptions``
+     - Startoptionen des Browsers (``BrowserType.LaunchOptions``)
+     - ``headless=true``
+   * - ``newContextOptions``
+     - Optionen des Browser-Kontexts (``Browser.NewContextOptions``)
+     - (keine)
+   * - ``downloadTimeout``
+     - Obergrenze für das Warten auf einen Dateidownload (Sekunden)
+     - ``15``
+   * - ``closeTimeout``
+     - Obergrenze für das Warten auf das Beenden des Browsers (Sekunden)
+     - ``15``
+
+Konfigurationsbeispiel
+~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+        <include path="crawler/container.xml" />
+        <component name="playwrightClient"
+            class="org.codelibs.fess.crawler.client.http.PlaywrightClient"
+            instance="prototype">
+            <property name="downloadTimeout">60</property>
+            <property name="closeTimeout">30</property>
+            <property name="launchOptions">
+                <component
+                    class="com.microsoft.playwright.BrowserType$LaunchOptions"
+                    instance="prototype">
+                    <property name="headless">true</property>
+                </component>
+            </property>
+        </component>
+    </components>
+
+.. note::
+   Wenn Sie ``playwrightClient`` neu definieren, wird die
+   Komponentendefinition aus der ``crawler/client++.xml`` des Plugins
+   vollständig ersetzt. Eigenschaften, die Sie nicht angeben, kehren zu ihren
+   Standardwerten zurück; geben Sie daher wie im obigen Beispiel alle
+   benötigten Eigenschaften an. Kopieren Sie außerdem die
+   ``crawler/client++.xml`` nicht einfach an diese Stelle: Dieselbe Komponente
+   wäre dann doppelt registriert und der Start würde fehlschlagen.
+
+.. warning::
+   ``downloadTimeout`` und ``closeTimeout`` werden in Sekunden angegeben,
+   ``navigationTimeout``, ``renderedStateTimeout`` und
+   ``contentWaitDuration`` dagegen in Millisekunden. Achten Sie darauf, sie
+   nicht zu verwechseln.
+
+Blockieren unnötiger Ressourcen
+-------------------------------
+
+``client.blockedResourceTypes`` nimmt eine kommagetrennte Liste der
+Ressourcentypen entgegen, die der Browser nicht abrufen soll. Zulässig sind
+die Ressourcentypen von Playwright (``stylesheet``, ``image``, ``media``,
+``font``, ``script``, ``texttrack``, ``xhr``, ``fetch``, ``eventsource``,
+``websocket``, ``manifest``, ``other``, ``ping``, ``cspreport`` und
+``beacon``). Standardmäßig wird nichts blockiert.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon`` und ``cspreport`` sind
+die Typen, die sich gefahrlos angeben lassen. Bei den letzten dreien handelt
+es sich um Tracker-Verkehr nach Beacon-Art, den nichts auf der Seite
+zurückliest.
+
+::
+
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
+
+Geben Sie nur Typen an, die ein Crawl nicht liest. Indem weniger der für die
+Anzeige einer Seite benötigten Ressourcen abgerufen werden, verringern sich
+sowohl die Dauer eines Crawls als auch das übertragene Datenvolumen.
+
+.. warning::
+   Geben Sie ``document`` nicht an. Der Abruf der Seite selbst würde blockiert
+   und der Crawl käme nicht zustande; der Wert wird daher mit einer Warnung
+   ignoriert.
+
+.. note::
+   Auch ein Typ, der nicht in der obigen Liste steht, wird mit einer Warnung
+   gemeldet. Ein Tippfehler im Plural wie ``images`` passt auf keine Anfrage
+   und blockiert daher nichts. Die Liste ist die Vereinigung der Typen, die
+   die drei Browser-Engines melden; einige Typen werden vom jeweils
+   verwendeten Browser deshalb nie gemeldet: ``texttrack`` meldet nur
+   Chromium, und WebKit meldet weder ``media`` noch ``manifest``. Die Angabe
+   eines Typs, der nicht gemeldet wird, blockiert einfach nichts.
+
+.. note::
+   Das Blockieren von ``script`` oder ``xhr`` verhindert das Rendern durch
+   JavaScript, womit der Einsatz von Playwright sinnlos wird. Für einen Crawl,
+   der ausschließlich serverseitig gerenderte Seiten erfasst, ist es nützlich;
+   wählen Sie jedoch normalerweise aus den oben genannten Typen aus, die sich
+   gefahrlos angeben lassen.
+
+Änderungen in 15.8
+------------------
+
+Beim Upgrade von 15.7 oder älter hat sich das Verhalten des
+Playwright-Crawlers wie folgt geändert.
+
+- **User-Agent**: Der User-Agent der Crawl-Konfiguration wird jetzt
+  tatsächlich vom Browser gesendet. In 15.7 und älter wurde der
+  Browser-Standardwert ``HeadlessChrome/...`` gesendet. Bei Sites, die ihre
+  Antwort je nach User-Agent unterschiedlich ausgeben, kann sich der
+  abgerufene Inhalt ändern.
+
+- **Anfrage-Header**: Die Anfrage-Header der Crawl-Konfiguration werden jetzt
+  auf den Browser angewendet. Kommt derselbe Header-Name mehrfach vor, werden
+  die Werte zu einem einzigen kommagetrennten Wert zusammengefasst.
+
+- **Downloads über eine Weiterleitung**: Die aufgezeichnete URL ist jetzt das
+  Weiterleitungsziel (die URL, die die Datei tatsächlich zurückgegeben hat).
+  Ist das Weiterleitungsziel eine URL außerhalb des Crawl-Bereichs, wird sie
+  als außerhalb des Bereichs ausgeschlossen.
+
+- **Warten auf ``renderedState``**: Eine Zeitüberschreitung während des
+  Wartens gilt nicht mehr als Fehler; der zu diesem Zeitpunkt geladene Inhalt
+  wird unverändert verwendet. Auch Seiten, die ``NETWORKIDLE`` nie erreichen,
+  können indiziert werden.
+
+- **Angabe von Timeouts**: ``client.navigationTimeout`` und
+  ``client.renderedStateTimeout``, die die Ladezeit der gesamten Seite
+  begrenzen, wurden hinzugefügt. ``client.connectionTimeout`` und
+  ``client.soTimeout`` sind Timeouts pro Socket und werden nicht auf den
+  Browser angewendet.
+
 Referenzinformationen
 =====================
 
