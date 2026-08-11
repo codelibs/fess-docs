@@ -424,6 +424,7 @@ A recorded ID is discarded once this period passes.
 If it expires (for example the IdP login page was left open), the returned assertion cannot be matched and the login fails once.
 If no value is set, 3600 seconds is used.
 If a value that cannot be parsed as a number is set, 3600 seconds is also used and a warning beginning with ``Invalid saml.request.id.ttl`` is logged.
+A value of zero or less would discard the AuthnRequest ID before a login could return from the IdP, so it is likewise replaced with 3600 seconds and a warning is logged.
 
 .. note::
    At most 10 unanswered AuthnRequests are kept per session; when the cap is exceeded the oldest are discarded.

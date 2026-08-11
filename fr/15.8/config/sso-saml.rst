@@ -429,6 +429,7 @@ L'identifiant enregistré est écarté une fois ce délai écoulé.
 S'il expire (par exemple parce que la page de connexion de l'IdP est restée ouverte), l'assertion renvoyée ne peut pas être associée et la connexion échoue une seule fois.
 Si aucune valeur n'est définie, 3600 secondes sont utilisées.
 Si une valeur qui ne peut pas être interprétée comme un nombre est définie, 3600 secondes sont également utilisées et un avertissement commençant par ``Invalid saml.request.id.ttl`` est consigné.
+Une valeur nulle ou négative écarterait l'identifiant de l'AuthnRequest avant qu'une connexion puisse revenir de l'IdP ; dans ce cas également, 3600 secondes sont utilisées et un avertissement est consigné.
 
 .. note::
    Au maximum 10 AuthnRequest restées sans réponse sont conservées par session ; lorsque cette limite est dépassée, les plus anciennes sont écartées.

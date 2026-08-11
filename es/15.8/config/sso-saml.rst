@@ -429,6 +429,7 @@ El identificador registrado se descarta una vez transcurrido este periodo.
 Si expira (por ejemplo, porque se dejó abierta la página de inicio de sesión del IdP), la aserción devuelta no puede emparejarse y el inicio de sesión falla una sola vez.
 Si no se establece ningún valor, se usan 3600 segundos.
 Si se establece un valor que no puede interpretarse como un número, también se usan 3600 segundos y se registra una advertencia que comienza por ``Invalid saml.request.id.ttl``.
+Un valor igual o menor que cero descartaría el identificador de la AuthnRequest antes de que el inicio de sesión pudiera regresar del IdP, por lo que también en ese caso se usan 3600 segundos y se registra una advertencia.
 
 .. note::
    Como máximo se conservan 10 AuthnRequest sin respuesta por sesión; al superar ese límite, se descartan las más antiguas.

@@ -428,6 +428,7 @@ Eine gespeicherte ID wird verworfen, sobald dieser Zeitraum verstrichen ist.
 Ist die Gültigkeit abgelaufen (zum Beispiel weil die Anmeldeseite des IdP offen gelassen wurde), kann die zurückgegebene Assertion nicht zugeordnet werden, und die Anmeldung schlägt einmalig fehl.
 Wird kein Wert gesetzt, werden 3600 Sekunden verwendet.
 Wird ein Wert gesetzt, der sich nicht als Zahl interpretieren lässt, werden ebenfalls 3600 Sekunden verwendet, und es wird eine mit ``Invalid saml.request.id.ttl`` beginnende Warnung protokolliert.
+Ein Wert von null oder kleiner würde die AuthnRequest-ID verwerfen, bevor eine Anmeldung vom IdP zurückkehren könnte; daher werden auch in diesem Fall 3600 Sekunden verwendet und eine Warnung protokolliert.
 
 .. note::
    Pro Sitzung werden höchstens 10 unbeantwortete AuthnRequests aufbewahrt; wird dieses Limit überschritten, werden die ältesten verworfen.
