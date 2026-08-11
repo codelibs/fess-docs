@@ -110,8 +110,7 @@ Docker 版は ``/opt/fess/system.properties``）に設定するか、起動オ�
 
 .. note::
 
-   ``content_chunker.*`` のキー一覧は ``fess_config.properties`` にもコメントとして記載されて
-   いますが、これらは ``system.properties`` チャネルからのみ読み込まれます。
+   ``content_chunker.*`` の設定は ``system.properties`` チャネルからのみ読み込まれます。
    ``fess_config.properties`` や ``-Dfess.config.<キー名>`` に記述しても無視されるため、必ず
    ``system.properties`` に設定してください。なお 管理画面 > システム情報 > 設定情報 は現在値の
    **閲覧専用** の画面で、この画面から ``content_chunker.*`` を設定することはできません。

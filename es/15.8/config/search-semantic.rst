@@ -121,13 +121,12 @@ registra al iniciar, **este cambio requiere un reinicio para surtir efecto**.
 
 .. note::
 
-   La lista de claves ``content_chunker.*`` también aparece como comentarios en
-   ``fess_config.properties``, pero solo se leen desde el canal ``system.properties``.
-   Escribirlas en ``fess_config.properties`` o en ``-Dfess.config.<key>`` no surte ningún
-   efecto, así que configúrelas siempre en ``system.properties``. Tenga además en cuenta que la
-   pantalla de administración **Información del sistema > Información de configuración** es una
-   vista de **solo lectura** de los valores actuales: desde ella no se pueden establecer las
-   claves ``content_chunker.*``.
+   Las claves ``content_chunker.*`` solo se leen desde el canal ``system.properties``. Escribirlas
+   en ``fess_config.properties`` o en ``-Dfess.config.<key>`` no surte ningún efecto, así que
+   configúrelas siempre en ``system.properties``. Tenga además en cuenta que la pantalla de
+   administración **Información del sistema > Información de configuración** es una vista de
+   **solo lectura** de los valores actuales: desde ella no se pueden establecer las claves
+   ``content_chunker.*``.
 
 Configuraciones en system.properties
 ---------------------------------------

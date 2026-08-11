@@ -111,11 +111,10 @@
 
 .. note::
 
-   ``content_chunker.*`` 의 키 목록은 ``fess_config.properties`` 에도 주석으로 기재되어 있지만,
-   이 값들은 ``system.properties`` 채널에서만 읽힙니다. ``fess_config.properties`` 나
-   ``-Dfess.config.<키>`` 에 기술해도 무시되므로 반드시 ``system.properties`` 에 설정하세요.
-   또한 관리 화면의 「시스템 정보」→「설정 정보」는 현재 값을 **확인만 할 수 있는** 화면이며,
-   이 화면에서 ``content_chunker.*`` 를 설정할 수는 없습니다.
+   ``content_chunker.*`` 설정은 ``system.properties`` 채널에서만 읽힙니다.
+   ``fess_config.properties`` 나 ``-Dfess.config.<키>`` 에 기술해도 무시되므로 반드시
+   ``system.properties`` 에 설정하세요. 또한 관리 화면의 「시스템 정보」→「설정 정보」는 현재 값을
+   **확인만 할 수 있는** 화면이며, 이 화면에서 ``content_chunker.*`` 를 설정할 수는 없습니다.
 
 system.properties 설정
 ------------------------

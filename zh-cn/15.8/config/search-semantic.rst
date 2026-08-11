@@ -102,11 +102,10 @@
 
 .. note::
 
-   ``content_chunker.*`` 的键名也以注释的形式列在 ``fess_config.properties`` 中，但这些配置项
-   只会从 ``system.properties`` 通道读取。写在 ``fess_config.properties`` 或
-   ``-Dfess.config.<键名>`` 中都会被忽略，因此请务必设置在 ``system.properties`` 中。另外，
-   管理界面的「系统信息」→「配置信息」是查看当前值的\ **只读**\ 页面，无法通过该页面设置
-   ``content_chunker.*``\ 。
+   ``content_chunker.*`` 配置项只会从 ``system.properties`` 通道读取。写在
+   ``fess_config.properties`` 或 ``-Dfess.config.<键名>`` 中都会被忽略，因此请务必设置在
+   ``system.properties`` 中。另外，管理界面的「系统信息」→「配置信息」是查看当前值的\ **只读**\ 页面，
+   无法通过该页面设置 ``content_chunker.*``\ 。
 
 system.properties 配置
 ------------------------
