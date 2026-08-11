@@ -229,6 +229,18 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    vers NTLM ne peut donc pas se connecter. Définissez ``tomcat.secure=true`` dans
    ``tomcat_config.properties`` pour indiquer à |Fess| que la requête est arrivée en HTTPS.
 
+.. note::
+   Avec ``spnego.allow.delegation=true``, la bibliothèque SPNEGO accepte les identifiants Kerberos
+   que le client a choisi de déléguer et les associe au principal authentifié. |Fess| n'utilise
+   toutefois ces identifiants nulle part à l'heure actuelle : le crawl, la recherche et les
+   requêtes LDAP reposent uniquement sur le nom d'utilisateur. Ce paramètre est également sans
+   effet sur la négociation SPNEGO elle-même : les identifiants de l'accepteur et les indicateurs
+   du contexte GSS restent inchangés, et c'est le client seul qui décide si des identifiants sont
+   délégués (la configuration du navigateur et le fait que le compte soit approuvé pour la
+   délégation dans Active Directory). Conservez la valeur par défaut ``false`` : l'activer ne fait
+   qu'obliger le JDK à tenter une délégation contrainte à chaque requête authentifiée, sans aucun
+   bénéfice.
+
 .. warning::
    Dans |Fess| 15.8, une connexion est refusée par défaut lorsque le domaine Kerberos du principal
    client diffère de celui du serveur. Si des utilisateurs se connectent depuis un domaine enfant

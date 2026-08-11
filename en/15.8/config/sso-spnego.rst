@@ -228,6 +228,16 @@ The following settings can be added as needed.
    NTLM cannot log in. Set ``tomcat.secure=true`` in ``tomcat_config.properties`` to tell |Fess|
    that the request arrived over HTTPS.
 
+.. note::
+   When ``spnego.allow.delegation=true``, the SPNEGO library accepts the Kerberos credential a
+   client chose to delegate and attaches it to the authenticated principal. |Fess| does not
+   currently use that credential for anything: crawling, search and LDAP lookups all rely on the
+   user name alone. It also has no effect on the SPNEGO handshake itself — the acceptor credential
+   and the GSS context flags are unchanged, and whether a credential is delegated at all is decided
+   entirely by the client (the browser configuration and whether the account is trusted for
+   delegation in Active Directory). Leave this setting at the default ``false``; enabling it only
+   makes the JDK attempt constrained delegation on every authenticated request, with no benefit.
+
 .. warning::
    In |Fess| 15.8, a login is rejected by default when the realm of the client principal differs
    from the server realm. If users log in from a child domain of an AD domain tree or from a

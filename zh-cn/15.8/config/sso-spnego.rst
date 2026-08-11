@@ -225,6 +225,13 @@ Kerberos配置文件
    因此无法获取 Kerberos 票据而回退到 NTLM 的客户端将无法登录。
    请在 ``tomcat_config.properties`` 中设置 ``tomcat.secure=true`` ，以告知 |Fess| 该请求来自 HTTPS。
 
+.. note::
+   将 ``spnego.allow.delegation`` 设为 ``true`` 时，SPNEGO 库会接受客户端选择委托的 Kerberos 凭据，
+   并将其关联到已认证的主体。但目前 |Fess| 并未在任何地方使用该凭据，爬取、搜索和 LDAP 查询都仅使用
+   用户名。该设置对 SPNEGO 握手本身也没有影响：接受方凭据和 GSS 上下文标志保持不变，
+   是否委托凭据完全由客户端决定（浏览器配置以及 Active Directory 中该账户是否被信任用于委托）。
+   请保持默认值 ``false``\ ；启用后只会让 JDK 在每个已认证的请求上尝试受约束委托，而不会带来任何好处。
+
 .. warning::
    在 |Fess| 15.8 中，如果客户端主体的领域与服务器的领域不同，登录将默认被拒绝。
    如果用户来自 AD 域树的子域或建立了信任关系的林，

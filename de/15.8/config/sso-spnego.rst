@@ -229,6 +229,18 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    zurückfällt, kann sich dann nicht anmelden. Setzen Sie ``tomcat.secure=true`` in
    ``tomcat_config.properties``, damit |Fess| die Anfrage als über HTTPS eingegangen behandelt.
 
+.. note::
+   Mit ``spnego.allow.delegation=true`` nimmt die SPNEGO-Bibliothek die vom Client delegierten
+   Kerberos-Anmeldeinformationen entgegen und verknüpft sie mit dem authentifizierten Principal.
+   |Fess| verwendet diese Anmeldeinformationen derzeit jedoch an keiner Stelle: Crawling, Suche und
+   LDAP-Abfragen greifen ausschließlich auf den Benutzernamen zurück. Auf den SPNEGO-Handshake
+   selbst wirkt sich die Einstellung ebenfalls nicht aus — die Acceptor-Anmeldeinformationen und
+   die Flags des GSS-Kontexts bleiben unverändert, und ob überhaupt delegiert wird, entscheidet
+   allein der Client (die Browser-Konfiguration und ob dem Konto in Active Directory für
+   Delegierungszwecke vertraut wird). Belassen Sie die Einstellung beim Standardwert ``false``;
+   ist sie aktiviert, versucht das JDK bei jeder authentifizierten Anfrage eine eingeschränkte
+   Delegierung — ohne jeden Nutzen.
+
 .. warning::
    In |Fess| 15.8 wird eine Anmeldung standardmäßig abgelehnt, wenn sich die Realm des
    Client-Principals von der Realm des Servers unterscheidet. Melden sich Benutzer aus einer
