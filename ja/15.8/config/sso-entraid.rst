@@ -21,6 +21,12 @@ Entra ID認証では、|Fess| がOAuth 2.0/OpenID Connectのクライアント�
 6. |Fess| がMicrosoft Graph APIを使用してユーザーのグループ・ロール情報を取得
 7. ユーザーをログインし、グループ情報をロールベース検索に適用
 
+.. note::
+   |Fess| 15.8 以降は認可エンドポイントに ``response_mode=query`` を要求するため、手順4の認可レスポンスはGETで返されます。
+   15.7 以前はクロスサイトのPOSTで返されており、|Fess| の既定値である ``tomcat.sameSiteCookies = lax``
+   ではセッションクッキーが送信されないため、``tomcat.sameSiteCookies = none`` への変更が回避策として必要でした。
+   この回避策のためだけに ``none`` を設定していた場合は、既定値に戻せます。
+
 ロールベース検索との連携については、:doc:`security-role` を参照してください。
 
 前提条件
@@ -91,6 +97,9 @@ Entra IDから取得した情報を設定します。
    * - ``entraid.state.ttl``
      - State有効期限（秒）
      - ``3600``
+   * - ``entraid.response.mode``
+     - 認可レスポンスの受け取り方法。\ ``query`` または ``form_post`` を指定します。
+     - ``query``
    * - ``entraid.default.groups``
      - デフォルトグループ（カンマ区切り）
      - （なし）
@@ -121,6 +130,15 @@ Entra IDから取得した情報を設定します。
    たとえばEntra ID側に ``Administrators`` という名前のグループがあると、
    Windowsの組み込みグループ ``Administrators`` を指定した文書にも一致します。
    追加する際は、既存のアクセス権で使われている名前と衝突しないことを確認してください。
+
+.. note::
+   既定の ``query`` では、認可コードがコールバックURLのクエリ文字列に含まれます。
+   ``form_post`` を指定すると認可コードはURLに現れないため、ブラウザの履歴や、
+   フロントエンドのプロキシ・WAFのアクセスログにも残りません。
+   ただし ``form_post`` はクロスサイトのPOSTになるため、``tomcat.sameSiteCookies = none`` が必要です。
+   設定していない場合はセッションクッキーが送信されず、ログインに失敗します。
+   通常は既定値のまま使用してください。
+   ``query`` と ``form_post`` 以外を指定した場合は、警告を出力して ``query`` として扱います。
 
 Entra ID側での設定
 ==================
@@ -192,6 +210,8 @@ APIアクセス許可の設定
 
 .. note::
    |Fess| はトークン取得時に ``https://graph.microsoft.com/.default`` スコープを要求します。
+   15.8 以降は、認可エンドポイントにも ``openid profile offline_access https://graph.microsoft.com/.default``
+   を要求し、同じ範囲の同意を求めます。
    これは、アプリ登録で構成・同意済みのすべてのアクセス許可が使用されることを意味します。
    そのため、グループ情報を取得するには、上記の ``Group.Read.All`` をアプリ登録に追加し、
    管理者の同意を与えておく必要があります。
@@ -297,6 +317,7 @@ Entra ID認証では、Microsoft Graph APIを使用してユーザーが所属�
 - ``entraid.reply.url`` の値がAzure Portalの設定と完全に一致しているか確認してください
 - プロトコル（HTTP/HTTPS）が一致しているか確認してください
 - リダイレクトURIの末尾に ``/`` が含まれているか確認してください
+- ``entraid.response.mode`` に ``form_post`` を指定している場合は、``tomcat.sameSiteCookies = none`` が設定されているか確認してください。未設定の場合、コールバック時にセッションクッキーが送信されず、ログイン画面に戻る動作を繰り返します
 
 認証エラーが発生する
 ~~~~~~~~~~~~~~~~~~~~

@@ -21,6 +21,13 @@ Entra ID 인증에서는 |Fess| 가 OAuth 2.0/OpenID Connect의 클라이언트�
 6. |Fess| 가 Microsoft Graph API를 사용하여 사용자의 그룹 및 역할 정보를 취득
 7. 사용자를 로그인하고 그룹 정보를 역할 기반 검색에 적용
 
+.. note::
+   |Fess| 15.8 이상에서는 인가 엔드포인트에 ``response_mode=query`` 를 요청하므로, 4번의 인가
+   응답은 GET으로 반환됩니다. 15.7 이전에는 크로스 사이트 POST로 반환되었고, |Fess| 의 기본값인
+   ``tomcat.sameSiteCookies = lax`` 에서는 세션 쿠키가 전송되지 않기 때문에
+   ``tomcat.sameSiteCookies = none`` 으로 변경하는 우회 방법이 필요했습니다.
+   이 우회 방법을 위해서만 ``none`` 을 설정했다면 기본값으로 되돌릴 수 있습니다.
+
 역할 기반 검색과의 연동에 대해서는 :doc:`security-role` 을 참조하십시오.
 
 전제조건
@@ -91,6 +98,9 @@ Entra ID에서 취득한 정보를 설정합니다.
    * - ``entraid.state.ttl``
      - State 유효 기간（초）
      - ``3600``
+   * - ``entraid.response.mode``
+     - 인가 응답을 받는 방식. ``query`` 또는 ``form_post`` 를 지정합니다.
+     - ``query``
    * - ``entraid.default.groups``
      - 기본 그룹（쉼표 구분）
      - （없음）
@@ -122,6 +132,14 @@ Entra ID에서 취득한 정보를 설정합니다.
    않습니다. 예를 들어 Entra ID에 ``Administrators`` 라는 이름의 그룹이 있으면, Windows 기본 제공
    그룹 ``Administrators`` 를 지정한 문서에도 일치합니다. 추가하기 전에 기존 액세스 권한에서
    사용 중인 이름과 충돌하지 않는지 확인하십시오.
+
+.. note::
+   기본값인 ``query`` 에서는 인가 코드가 콜백 URL의 쿼리 문자열에 포함됩니다.
+   ``form_post`` 를 지정하면 인가 코드가 URL에 나타나지 않으므로 브라우저 기록이나 프런트엔드
+   프록시・WAF의 액세스 로그에도 남지 않습니다. 다만 ``form_post`` 는 콜백이 크로스 사이트
+   POST가 되므로 ``tomcat.sameSiteCookies = none`` 이 필요합니다. 설정하지 않으면 세션 쿠키가
+   전송되지 않아 로그인에 실패하므로, 대부분의 환경에서는 기본값 그대로 사용하십시오.
+   그 외의 값을 지정한 경우에는 경고를 출력하고 ``query`` 로 처리합니다.
 
 Entra ID 측 설정
 ==================
@@ -193,6 +211,8 @@ API 접근 권한 설정
 
 .. note::
    |Fess| 는 토큰 취득 시 ``https://graph.microsoft.com/.default`` 스코프를 요청합니다.
+   15.8 이상에서는 인가 엔드포인트에도 ``openid profile offline_access https://graph.microsoft.com/.default``
+   를 요청하여 동일한 범위의 동의를 요구합니다.
    이는 앱 등록에서 구성 및 동의된 모든 접근 권한이 사용됨을 의미합니다.
    따라서 그룹 정보를 취득하려면 위의 ``Group.Read.All`` 을 앱 등록에 추가하고
    관리자 동의를 부여해야 합니다.
@@ -298,6 +318,7 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
 - ``entraid.reply.url`` 의 값이 Azure Portal의 설정과 완전히 일치하는지 확인하십시오
 - 프로토콜（HTTP/HTTPS）이 일치하는지 확인하십시오
 - 리다이렉트 URI의 끝에 ``/`` 가 포함되어 있는지 확인하십시오
+- ``entraid.response.mode`` 에 ``form_post`` 를 지정한 경우에는 ``tomcat.sameSiteCookies = none`` 이 설정되어 있는지 확인하십시오. 설정되어 있지 않으면 콜백 시 세션 쿠키가 전송되지 않아 로그인 화면으로 되돌아가는 동작이 반복됩니다
 
 인증 오류가 발생함
 ~~~~~~~~~~~~~~~~~~~~
