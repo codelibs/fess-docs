@@ -21,6 +21,12 @@ Entra ID认证的工作原理
 6. |Fess| 使用Microsoft Graph API获取用户的组和角色信息
 7. 用户登录，组信息应用于基于角色的搜索
 
+.. note::
+   |Fess| 15.8 及以后版本会向授权端点请求 ``response_mode=query``\ ，因此步骤4的授权响应以GET方式返回。
+   15.7 及之前版本以跨站POST方式返回，而 |Fess| 的默认值 ``tomcat.sameSiteCookies = lax``
+   在该情况下不会发送会话Cookie，因此需要将其改为 ``tomcat.sameSiteCookies = none`` 作为规避方法。
+   如果您仅出于该原因设置了 ``none``\ ，现在可以恢复为默认值。
+
 有关基于角色的搜索集成，请参阅 :doc:`security-role`。
 
 前提条件
@@ -91,6 +97,9 @@ Entra ID认证的工作原理
    * - ``entraid.state.ttl``
      - State有效期（秒）
      - ``3600``
+   * - ``entraid.response.mode``
+     - 授权响应的返回方式。可指定 ``query`` 或 ``form_post``\ 。
+     - ``query``
    * - ``entraid.default.groups``
      - 默认组（逗号分隔）
      - （无）
@@ -120,6 +129,13 @@ Entra ID认证的工作原理
    ``displayName`` 不带域限定且不唯一，因此未包含在默认值中。
    例如，如果Entra ID中存在名为 ``Administrators`` 的组，它也会匹配访问权限指定了Windows内置组
    ``Administrators`` 的文档。添加前请确认这些名称不会与访问权限中已使用的名称冲突。
+
+.. note::
+   使用默认值 ``query`` 时，授权码会包含在回调URL的查询字符串中。
+   指定 ``form_post`` 后，授权码不会出现在URL中，因此也不会留在浏览器历史记录以及前端代理或WAF的访问日志中。
+   但 ``form_post`` 会使回调成为跨站POST，因此需要 ``tomcat.sameSiteCookies = none``\ 。
+   未进行该设置时，会话Cookie不会被发送，登录将失败，因此大多数环境应保持默认值。
+   指定其他值时，将输出警告并按 ``query`` 处理。
 
 Entra ID侧配置
 ==============
@@ -191,6 +207,7 @@ Entra ID侧配置
 
 .. note::
    |Fess| 在获取令牌时会请求 ``https://graph.microsoft.com/.default`` 作用域。
+   15.8 及以后版本还会向授权端点发送 ``openid profile offline_access https://graph.microsoft.com/.default``\ ，以便针对同一组权限请求同意。
    这意味着将使用在应用注册中配置并已授予同意的所有访问权限。
    因此，若要获取组信息，必须将上述 ``Group.Read.All`` 权限添加到应用注册中，并授予管理员同意。
 
@@ -293,6 +310,7 @@ Entra ID侧配置
 - 确保 ``entraid.reply.url`` 的值与Azure Portal配置完全匹配
 - 验证协议（HTTP/HTTPS）是否匹配
 - 验证重定向URI是否以 ``/`` 结尾
+- 如果将 ``entraid.response.mode`` 设置为 ``form_post``\ ，请确认已配置 ``tomcat.sameSiteCookies = none``\ 。否则回调时不会发送会话Cookie，会反复返回登录页面
 
 发生认证错误
 ~~~~~~~~~~~~

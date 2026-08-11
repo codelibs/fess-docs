@@ -21,6 +21,13 @@ In Entra ID authentication, |Fess| operates as an OAuth 2.0/OpenID Connect clien
 6. |Fess| uses Microsoft Graph API to retrieve user's group and role information
 7. User is logged in and group information is applied to role-based search
 
+.. note::
+   From |Fess| 15.8, the authorization response in step 4 is returned as a GET request, because
+   |Fess| asks the authorization endpoint for ``response_mode=query``. Up to 15.7 it was returned
+   as a cross-site POST, and the shipped default ``tomcat.sameSiteCookies = lax`` does not send the
+   session cookie on such a request, so ``tomcat.sameSiteCookies = none`` was required as a
+   workaround. If you set ``none`` only for that reason, you can restore the default.
+
 For role-based search integration, see :doc:`security-role`.
 
 Prerequisites
@@ -91,6 +98,9 @@ The following settings can be added as needed.
    * - ``entraid.state.ttl``
      - State time-to-live (seconds)
      - ``3600``
+   * - ``entraid.response.mode``
+     - How the authorization response is returned. Either ``query`` or ``form_post``.
+     - ``query``
    * - ``entraid.default.groups``
      - Default groups (comma-separated)
      - (None)
@@ -122,6 +132,14 @@ The following settings can be added as needed.
    default. For example, if Entra ID has a group named ``Administrators``, it also matches
    documents whose access rights name the built-in Windows ``Administrators`` group. Before adding
    it, check that the names do not collide with the ones already used in your access rights.
+
+.. note::
+   With the default ``query``, the authorization code is included in the query string of the
+   callback URL. ``form_post`` keeps the code out of the URL, and therefore out of browser history
+   and the access logs of any front-end proxy or WAF, but it makes the callback a cross-site POST
+   and requires ``tomcat.sameSiteCookies = none``. Without that setting the session cookie is not
+   sent back and login fails, so most deployments should keep the default. Any other value is
+   ignored with a warning and ``query`` is used.
 
 Entra ID Side Configuration
 ===========================
@@ -192,7 +210,7 @@ Configuring API Permissions
    Admin consent requires tenant administrator privileges.
 
 .. note::
-   |Fess| requests the ``https://graph.microsoft.com/.default`` scope when acquiring a token. This means that all access permissions configured and consented to on the app registration are used. Therefore, to retrieve group information, you must add the ``Group.Read.All`` permission above to the app registration and grant administrator consent.
+   |Fess| requests the ``https://graph.microsoft.com/.default`` scope when acquiring a token, and from 15.8 it also sends ``openid profile offline_access https://graph.microsoft.com/.default`` to the authorization endpoint so that consent is requested for the same set. This means that all access permissions configured and consented to on the app registration are used. Therefore, to retrieve group information, you must add the ``Group.Read.All`` permission above to the app registration and grant administrator consent.
 
 Information to Obtain
 ---------------------
@@ -295,6 +313,7 @@ Cannot Return to Fess After Authentication
 - Ensure the ``entraid.reply.url`` value exactly matches the Azure Portal configuration
 - Check that the protocol (HTTP/HTTPS) matches
 - Verify the Redirect URI ends with ``/``
+- If ``entraid.response.mode`` is set to ``form_post``, verify that ``tomcat.sameSiteCookies = none`` is configured. Without it, the session cookie is not sent with the callback and the sign-in screen keeps reappearing
 
 Authentication Errors Occur
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

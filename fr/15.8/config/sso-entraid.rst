@@ -21,6 +21,14 @@ Dans l'authentification Entra ID, |Fess| opère en tant que client OAuth 2.0/Ope
 6. |Fess| utilise l'API Microsoft Graph pour récupérer les informations de groupe et de rôle de l'utilisateur
 7. L'utilisateur est connecté et les informations de groupe sont appliquées à la recherche basée sur les rôles
 
+.. note::
+   À partir de |Fess| 15.8, la réponse d'autorisation de l'étape 4 est renvoyée via une requête
+   GET, car |Fess| demande ``response_mode=query`` au point de terminaison d'autorisation.
+   Jusqu'à la version 15.7, elle était renvoyée via un POST inter-sites, et la valeur par défaut
+   fournie ``tomcat.sameSiteCookies = lax`` n'envoie pas le cookie de session dans ce cas ;
+   ``tomcat.sameSiteCookies = none`` était donc nécessaire comme contournement. Si vous avez
+   défini ``none`` uniquement pour cette raison, vous pouvez revenir à la valeur par défaut.
+
 Pour l'intégration avec la recherche basée sur les rôles, consultez :doc:`security-role`.
 
 Prérequis
@@ -91,6 +99,9 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    * - ``entraid.state.ttl``
      - Durée de vie du state (secondes)
      - ``3600``
+   * - ``entraid.response.mode``
+     - Mode de renvoi de la réponse d'autorisation. Soit ``query``, soit ``form_post``.
+     - ``query``
    * - ``entraid.default.groups``
      - Groupes par défaut (séparés par des virgules)
      - (Aucun)
@@ -125,6 +136,15 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    correspondra aussi aux documents dont les droits d'accès désignent le groupe Windows intégré
    ``Administrators``. Avant de l'ajouter, vérifiez que les noms n'entrent pas en conflit avec ceux
    déjà utilisés dans vos droits d'accès.
+
+.. note::
+   Avec la valeur par défaut ``query``, le code d'autorisation figure dans la chaîne de requête de
+   l'URL de callback. ``form_post`` maintient le code hors de l'URL, et donc hors de l'historique
+   du navigateur et des journaux d'accès des proxys frontaux ou d'un WAF, mais il transforme le
+   callback en un POST inter-sites et nécessite ``tomcat.sameSiteCookies = none``. Sans ce
+   paramètre, le cookie de session n'est pas renvoyé et la connexion échoue : la plupart des
+   installations doivent donc conserver la valeur par défaut. Toute autre valeur est ignorée avec
+   un avertissement et ``query`` est utilisé.
 
 Configuration côté Entra ID
 ===========================
@@ -196,6 +216,7 @@ Configuration des autorisations d'API
 
 .. note::
    |Fess| demande le scope ``https://graph.microsoft.com/.default`` lors de l'acquisition d'un jeton.
+   Depuis la version 15.8, ``openid profile offline_access https://graph.microsoft.com/.default`` est également envoyé au point de terminaison d'autorisation, afin que le consentement soit demandé pour le même ensemble.
    Cela signifie que toutes les autorisations d'accès configurées et consenties sur l'inscription d'application sont utilisées.
    Par conséquent, pour récupérer les informations de groupe, vous devez ajouter l'autorisation ``Group.Read.All`` ci-dessus à l'inscription d'application et accorder le consentement administrateur.
 
@@ -298,6 +319,7 @@ Impossible de revenir à Fess après l'authentification
 - Assurez-vous que la valeur de ``entraid.reply.url`` correspond exactement à la configuration du portail Azure
 - Vérifiez que le protocole (HTTP/HTTPS) correspond
 - Vérifiez que l'URI de redirection se termine par ``/``
+- Si ``entraid.response.mode`` est défini sur ``form_post``, vérifiez que ``tomcat.sameSiteCookies = none`` est configuré. Sinon, le cookie de session n'est pas renvoyé avec le callback et l'écran de connexion réapparaît sans cesse
 
 Des erreurs d'authentification se produisent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
