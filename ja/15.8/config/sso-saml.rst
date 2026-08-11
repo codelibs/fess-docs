@@ -438,6 +438,7 @@ IdPから返されたSAMLレスポンスは、記録されたIDと対応付け�
 .. note::
    1つのセッションで保持できる応答待ちのAuthnRequestは最大10件で、上限を超えると古いものから破棄されます。
    これは複数のタブから同時にログインを開始できるようにするためのもので、``saml.`` で始まる設定では変更できません。
+   上限に0以下の値を指定して上書きした場合は、代わりに10が使われ、警告が出力されます。
 
 設定例
 ======
@@ -512,9 +513,20 @@ IdPから返されたSAMLレスポンスは、記録されたIDと対応付け�
   ``Received a SAML response with no matching AuthnRequest ID in the session``
   で始まる警告が出力されます。この場合は ``tomcat.sameSiteCookies = none`` を設定してください
   （``SameSite=None`` はHTTPSが必須です）
-- IdPのログイン画面で時間がかかり ``saml.request.id.ttl``（既定3600秒）を過ぎた場合も、
-  記録されたAuthnRequestのIDが破棄されているため同じ警告が出力されます。
-  この場合はログインをやり直してください
+- IdPでのログインに時間がかかった場合、アサーションが戻ってきた時点でAuthnRequestのIDは残っていないため、
+  その場で1回だけログインに失敗します。この場合はログインをやり直してください。
+  何が期限切れになったのかは、出力される警告で見分けられます。
+  ``Received a SAML response after the session it belongs to had expired`` で始まる警告は、
+  サーブレットコンテナがセッションごと破棄したことを表します。
+  ``pending AuthnRequest ID(s) of the session had expired`` を含む警告は、セッションは生きたままで
+  ``saml.request.id.ttl`` だけが経過したことを表します。どちらもブラウザがセッションCookieを
+  送信できている場合にのみ出力され、その点が上記のSameSiteのケースとの違いです
+- |Fess| は ``app/WEB-INF/web.xml`` で ``session-timeout`` を指定していないため、
+  サーブレットコンテナの既定値である30分が適用されます。これは ``saml.request.id.ttl`` の3600秒より短く、
+  セッションが先に破棄されて、保持していたAuthnRequestのIDも一緒に失われます。
+  このため ``saml.request.id.ttl`` だけを大きくしても、IdPでログインを完了するまでの猶予は延びません。
+  猶予を延ばしたい場合は、セッションタイムアウトも合わせて延長してください。
+  ``saml.request.id.ttl`` の警告が出力されるのは、TTLをセッションタイムアウトより短く設定した場合だけです
 
 .. note::
    15.7 では同じ状況でIdPへの再リダイレクトが繰り返され、ログインがループしていました。

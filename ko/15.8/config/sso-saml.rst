@@ -437,6 +437,7 @@ IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 �
 .. note::
    하나의 세션에서 보관할 수 있는 응답 대기 중인 AuthnRequest는 최대 10건이며, 상한을 초과하면 오래된 것부터 폐기됩니다.
    이는 여러 탭에서 동시에 로그인을 시작할 수 있도록 하기 위한 것으로, ``saml.`` 로 시작하는 설정으로는 변경할 수 없습니다.
+   상한을 0 이하의 값으로 덮어쓴 경우에는 대신 10이 사용되며 경고가 출력됩니다.
 
 설정 예
 =======
@@ -511,9 +512,19 @@ IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 �
   ``Received a SAML response with no matching AuthnRequest ID in the session``
   으로 시작하는 경고가 출력됩니다. 이 경우
   ``tomcat.sameSiteCookies = none`` 을 설정하십시오 (``SameSite=None`` 은 HTTPS가 필요합니다)
-- IdP 로그인 화면에서 시간이 오래 걸려 ``saml.request.id.ttl`` (기본값 3600초)가 경과한 경우에도
-  기록된 AuthnRequest의 ID가 이미 폐기되어 있어 같은 경고가 출력됩니다.
-  이 경우에는 로그인을 다시 시작하십시오
+- IdP에서 로그인에 시간이 오래 걸리면 어설션이 돌아온 시점에 AuthnRequest의 ID가 남아 있지 않으므로
+  그 자리에서 한 번만 로그인에 실패합니다. 이 경우에는 로그인을 다시 시작하십시오.
+  무엇이 만료되었는지는 출력되는 경고로 구분할 수 있습니다.
+  ``Received a SAML response after the session it belongs to had expired`` 로 시작하는 경고는
+  서블릿 컨테이너가 세션 자체를 폐기했음을 뜻합니다.
+  ``pending AuthnRequest ID(s) of the session had expired`` 를 포함하는 경고는 세션은 살아 있고
+  ``saml.request.id.ttl`` 만 경과했음을 뜻합니다. 두 경고 모두 브라우저가 세션 쿠키를 보낸 경우에만
+  출력되며, 이 점이 위의 SameSite 사례와 다릅니다
+- |Fess| 는 ``app/WEB-INF/web.xml`` 에 ``session-timeout`` 을 지정하지 않으므로 서블릿 컨테이너의
+  기본값인 30분이 적용됩니다. 이는 ``saml.request.id.ttl`` 의 3600초보다 짧아, 세션이 먼저 폐기되면서
+  세션이 보관하던 AuthnRequest의 ID도 함께 사라집니다. 따라서 ``saml.request.id.ttl`` 만 늘려도
+  사용자가 IdP에서 로그인을 마칠 수 있는 시간은 늘어나지 않으므로, 세션 타임아웃도 함께 늘리십시오.
+  ``saml.request.id.ttl`` 경고는 TTL을 세션 타임아웃보다 짧게 설정한 경우에만 출력됩니다
 
 .. note::
    15.7에서는 같은 상황에서 IdP로의 재리다이렉트가 반복되어 로그인이 루프에 빠졌습니다.

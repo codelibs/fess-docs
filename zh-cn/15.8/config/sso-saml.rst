@@ -425,6 +425,7 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 .. note::
    每个会话最多保留10个未收到响应的AuthnRequest，超出上限后将丢弃最旧的。
    这是为了支持同时从多个标签页发起登录，且无法通过\ ``saml.``\ 开头的设置进行更改。
+   如果将上限覆盖为0或更小的值，则会改用10并输出警告。
 
 配置示例
 ========
@@ -498,8 +499,16 @@ IdP返回的SAML响应会根据记录的ID进行校验。
   浏览器会返回登录页面并显示"SSO登录处理失败。"，日志中会输出以\
   ``Received a SAML response with no matching AuthnRequest ID in the session``\ 开头的警告。
   此时请设置\ ``tomcat.sameSiteCookies = none``\ （``SameSite=None``\ 需要HTTPS）
-- 如果IdP登录页面耗时过长，导致\ ``saml.request.id.ttl``\ （默认3600秒）超时，记录的AuthnRequest ID
-  也会被丢弃，从而输出相同的警告。此时请重新开始登录
+- 如果在IdP上的登录耗时过长，断言返回时AuthnRequest ID已经不存在，登录会当场只失败一次，需要重新开始登录。
+  输出哪条警告可以判断是什么超时了：以\
+  ``Received a SAML response after the session it belongs to had expired``\ 开头的警告表示
+  Servlet容器已经丢弃了整个会话；包含\ ``pending AuthnRequest ID(s) of the session had expired``\
+  的警告表示会话仍然存在，只是\ ``saml.request.id.ttl``\ 超时。
+  这两条警告都只在浏览器确实发送了会话Cookie时输出，这一点与上面的SameSite情形不同
+- |Fess| 未在\ ``app/WEB-INF/web.xml``\ 中设置\ ``session-timeout``\ ，因此采用Servlet容器的默认值30分钟。
+  该值短于\ ``saml.request.id.ttl``\ 的3600秒，会话及其保存的AuthnRequest ID会先被丢弃，
+  因此仅调大\ ``saml.request.id.ttl``\ 并不能延长用户在IdP完成登录的时间，还需要同时延长会话超时时间。
+  也正因如此，只有把TTL设置得比会话超时更短时，才会看到\ ``saml.request.id.ttl``\ 的警告
 
 .. note::
    在15.7中，同样的情况会导致\ |Fess|\ 反复重定向到IdP，使登录陷入循环。
