@@ -508,6 +508,30 @@ usuarios que podían iniciar sesión hasta la versión 15.7 son rechazados con
 ``Kerberos realm is not allowed``. Consulte :doc:`../config/sso-spnego` para conocer más
 detalles.
 
+Si Utilizaba la Autenticación SAML (SSO)
+----------------------------------------
+
+A partir de la versión 15.8, |Fess| vincula cada respuesta SAML al identificador de la
+AuthnRequest que envió, por lo que el SSO iniciado por el IdP (no solicitado) ya no funciona. Un
+inicio de sesión que comienza en un icono de |Fess| dentro de un portal del IdP, como el panel de
+Okta o el portal "Mis aplicaciones" de Microsoft Entra ID, no tiene ninguna AuthnRequest con la
+que emparejarse y se rechaza. Hasta la versión 15.7 funcionaba porque |Fess| devolvía al IdP la
+respuesta que no podía emparejar y el IdP entregaba de inmediato una aserción solicitada. Si
+coloca un icono en el lado del IdP, haga que apunte al endpoint ``/sso/`` de |Fess| para que el
+inicio de sesión lo inicie el SP.
+
+Además, el IdP devuelve la aserción mediante un POST entre sitios, por lo que
+``tomcat.sameSiteCookies`` debe establecerse en ``none`` en ``tomcat_config.properties``. Con el
+valor predeterminado ``lax`` que se incluye, la cookie de sesión no se envía en esa petición y el
+inicio de sesión SAML no puede completarse. Este archivo se encuentra en ``lib/classes/`` en el
+paquete ZIP y en ``/etc/fess/`` en los paquetes DEB/RPM, y es necesario reiniciar |Fess| tras el
+cambio. Los navegadores solo aceptan ``none`` en una cookie que además tenga el atributo
+``Secure``, por lo que |Fess| debe servirse mediante HTTPS. Hasta la versión 15.7, esta
+configuración incorrecta no producía un error claro, sino un bucle interminable de redirecciones
+al IdP, así que compruebe el ajuste incluso en un sitio que parecía funcionar; en la versión 15.8
+falla una sola vez en lugar de entrar en bucle. Consulte :doc:`../config/sso-saml` para conocer
+más detalles.
+
 Actualización de la Versión de los Plugins
 ---------------------------------------------
 

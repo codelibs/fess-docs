@@ -489,6 +489,25 @@ Docker 版::
 这些领域。否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
 详细内容请参阅 :doc:`../config/sso-spnego`\ 。
 
+若此前使用过 SAML 认证（SSO）
+-----------------------------
+
+自 15.8 起，|Fess| 会将每个 SAML 响应与自身发出的 AuthnRequest 的 ID 进行绑定校验，
+因此 IdP 发起（未经请求的 unsolicited）的 SSO 无法再使用。从 IdP 门户（如 Okta 仪表板或
+Microsoft Entra ID 的「我的应用」）中的 |Fess| 磁贴发起的登录没有可匹配的 AuthnRequest，
+会被拒绝。在 15.7 之前它之所以可用，是因为 |Fess| 会将无法匹配的响应退回给 IdP，
+而 IdP 会立即返回一个经过请求的断言。如果要在 IdP 侧放置磁贴，请将其链接指向 |Fess| 的
+``/sso/`` 端点，使登录由 SP 发起。
+
+此外，IdP 通过跨站 POST 返回断言，因此必须将 ``tomcat_config.properties`` 中的
+``tomcat.sameSiteCookies`` 设置为 ``none``\ 。使用附带的默认值 ``lax`` 时，会话 Cookie
+不会随该请求发送，SAML 登录无法完成。该文件在 ZIP 软件包中位于 ``lib/classes/``\ ，
+在 DEB/RPM 软件包中位于 ``/etc/fess/``\ ，修改后需要重启 |Fess|\ 。浏览器仅对同时带有
+``Secure`` 属性的 Cookie 接受 ``none``\ ，因此 |Fess| 必须通过 HTTPS 提供服务。
+在 15.7 之前，同样的配置错误不会产生明确的错误，而是表现为不断重定向到 IdP 的死循环，
+因此即使站点看起来正常，也请确认该设置。15.8 不再循环，而是一次性失败。
+详细内容请参阅 :doc:`../config/sso-saml`\ 。
+
 插件版本更新
 ------------------------
 

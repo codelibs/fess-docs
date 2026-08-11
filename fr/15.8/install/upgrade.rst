@@ -511,6 +511,29 @@ qui pouvaient se connecter jusqu'à la version 15.7 sont refusés avec
 ``Kerberos realm is not allowed``. Pour plus de détails, consultez
 :doc:`../config/sso-spnego`.
 
+Si vous utilisiez l'authentification SAML (SSO)
+-----------------------------------------------
+
+À partir de la 15.8, |Fess| associe chaque réponse SAML à l'identifiant de l'AuthnRequest qu'il
+a émise, si bien que le SSO initié par l'IdP (non sollicité) ne fonctionne plus. Une connexion
+démarrée depuis une vignette |Fess| dans un portail IdP, tel que le tableau de bord Okta ou le
+portail « Mes applications » de Microsoft Entra ID, n'a aucune AuthnRequest correspondante et est
+rejetée. Cela fonctionnait jusqu'à la 15.7 parce que |Fess| renvoyait à l'IdP la réponse qu'il ne
+pouvait pas associer et que l'IdP retournait immédiatement une assertion sollicitée. Si vous
+placez une vignette côté IdP, faites-la pointer vers le point d'accès ``/sso/`` de |Fess| afin que
+la connexion soit initiée par le SP.
+
+Par ailleurs, l'IdP renvoie l'assertion via un POST intersites : ``tomcat.sameSiteCookies`` doit
+donc être défini sur ``none`` dans ``tomcat_config.properties``. Avec la valeur par défaut livrée
+``lax``, le cookie de session n'est pas envoyé sur cette requête et la connexion SAML ne peut pas
+aboutir. Ce fichier se trouve dans ``lib/classes/`` pour le paquet ZIP et dans ``/etc/fess/`` pour
+les paquets DEB/RPM, et |Fess| doit être redémarré après la modification. Les navigateurs
+n'acceptent ``none`` que sur un cookie portant également l'attribut ``Secure`` : |Fess| doit donc
+être servi en HTTPS. Jusqu'à la 15.7, la même erreur de configuration ne provoquait pas d'échec
+net mais une boucle de redirections sans fin vers l'IdP ; vérifiez donc le paramètre même sur un
+site qui semblait fonctionner. En 15.8, la connexion échoue une seule fois au lieu de boucler.
+Pour plus de détails, consultez :doc:`../config/sso-saml`.
+
 Mise à jour de la version des plugins
 -------------------------------------
 

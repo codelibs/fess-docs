@@ -499,6 +499,26 @@ from a trusted forest, list those realms in ``spnego.allowed.realms``, separated
 users who could log in up to 15.7 are rejected with ``Kerberos realm is not allowed``. For
 details, see :doc:`../config/sso-spnego`.
 
+If You Were Using SAML Authentication (SSO)
+-------------------------------------------
+
+Starting with 15.8, |Fess| binds every SAML response to the ID of the AuthnRequest it sent, so
+IdP-initiated (unsolicited) SSO no longer works. A login started from a |Fess| tile in an IdP
+portal, such as the Okta dashboard or the Microsoft Entra ID "My Apps" portal, has no AuthnRequest
+to match against and is rejected. It worked up to 15.7 because |Fess| bounced the unmatched
+response back to the IdP and the IdP immediately returned a solicited assertion. If you place a
+tile on the IdP side, point it at the |Fess| ``/sso/`` endpoint so that the login is SP-initiated.
+
+The IdP also returns the assertion as a cross-site POST, so ``tomcat.sameSiteCookies`` in
+``tomcat_config.properties`` must be set to ``none``. With the shipped default ``lax`` the session
+cookie is not sent on that request and the SAML login cannot complete. This file is located in
+``lib/classes/`` for the ZIP package and in ``/etc/fess/`` for the DEB/RPM packages, and |Fess|
+must be restarted after the change. Browsers only accept ``none`` on a cookie that also carries
+the ``Secure`` attribute, so |Fess| must be served over HTTPS. Up to 15.7 the same
+misconfiguration did not produce a clean error but an endless redirect loop back to the IdP, so
+check the setting even on a site that appeared to work; 15.8 fails once instead of looping. For
+details, see :doc:`../config/sso-saml`.
+
 Updating Plugin Versions
 ------------------------
 
