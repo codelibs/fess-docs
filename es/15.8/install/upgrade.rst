@@ -496,6 +496,18 @@ plugins independientes, como ``fess-llm-ollama``, ``fess-llm-openai`` y ``fess-l
 Instale el plugin correspondiente al proveedor que utilice desde "Sistema" → "Plugin" en la
 pantalla de administración.
 
+Si Utilizaba SPNEGO (Autenticación Integrada de Windows)
+--------------------------------------------------------
+
+A partir de la versión 15.8, un inicio de sesión SPNEGO se rechaza cuando el reino Kerberos del
+principal del cliente difiere del reino del servidor. Si sus usuarios inician sesión desde un
+dominio secundario de un árbol de dominios de AD o desde un bosque de confianza, indique esos
+reinos, separados por comas, en ``spnego.allowed.realms`` desde "Sistema" → "General" en la
+pantalla de administración o en ``app/WEB-INF/conf/system.properties``. De lo contrario, los
+usuarios que podían iniciar sesión hasta la versión 15.7 son rechazados con
+``Kerberos realm is not allowed``. Consulte :doc:`../config/sso-spnego` para conocer más
+detalles.
+
 Actualización de la Versión de los Plugins
 ---------------------------------------------
 

@@ -236,6 +236,24 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    podían iniciar sesión hasta la versión 15.7 son rechazados con
    ``Kerberos realm is not allowed``.
 
+.. warning::
+   |Fess| identifica a un usuario por la parte del principal anterior a ``@``, por lo que el reino
+   no forma parte del nombre de usuario. Cuando indica reinos adicionales en
+   ``spnego.allowed.realms``, los usuarios que comparten un nombre de cuenta entre reinos — por
+   ejemplo, ``alice@CORP.EXAMPLE.COM`` y ``alice@PARTNER.EXAMPLE.COM`` — pasan a ser el mismo
+   usuario de |Fess| y comparten sus grupos, roles y permisos sobre los documentos. Añada un reino
+   solo cuando el nombre de cuenta identifique exactamente a una persona en todos los reinos que
+   indique.
+
+.. note::
+   La lista de permitidos también se aplica al retroceso a la autenticación Basic. Si un usuario
+   introduce un nombre con la forma ``user@REALM``, ese reino se comprueba contra
+   ``spnego.allowed.realms`` y el inicio de sesión se rechaza cuando no está permitido. Un nombre
+   de cuenta simple, o la forma ``DOMAIN\user``, no indica ningún reino y se autentica en el reino
+   predeterminado de ``krb5.conf``. Como un inicio de sesión Basic se autentica directamente contra
+   el reino que el usuario escribe, mantenga la lista de permitidos al mínimo y considere
+   establecer ``spnego.allow.basic`` en ``false`` si confía en ella como límite de seguridad.
+
 .. note::
    Cuando ``spnego.prompt.ntlm=true`` (valor predeterminado), ``spnego.allow.basic`` también debe ser ``true``.
    Si establece ``spnego.allow.basic=false``, debe establecer también ``spnego.prompt.ntlm=false``.

@@ -235,6 +235,22 @@ The following settings can be added as needed.
    Otherwise users who could log in up to 15.7 are rejected with
    ``Kerberos realm is not allowed``.
 
+.. warning::
+   |Fess| identifies a user by the part of the principal before ``@``, so the realm is not part of
+   the user name. When you list additional realms in ``spnego.allowed.realms``, users who share an
+   account name across realms — for example ``alice@CORP.EXAMPLE.COM`` and
+   ``alice@PARTNER.EXAMPLE.COM`` — become the same |Fess| user and share that user's groups, roles
+   and document permissions. Add a realm only when the account name identifies exactly one person
+   across every realm you list.
+
+.. note::
+   The allow list also applies to the Basic authentication fallback. If a user enters a name of the
+   form ``user@REALM``, that realm is checked against ``spnego.allowed.realms`` and the login is
+   refused when it is not allowed. A plain account name, or the ``DOMAIN\user`` form, names no realm
+   and is authenticated in the default realm of ``krb5.conf``. Because a Basic login is
+   authenticated directly against the realm the user types, keep the allow list minimal, and
+   consider setting ``spnego.allow.basic`` to ``false`` if you rely on it as a security boundary.
+
 .. note::
    When ``spnego.prompt.ntlm=true`` (the default), ``spnego.allow.basic`` must also be ``true``.
    If you set ``spnego.allow.basic=false``, you must also set ``spnego.prompt.ntlm=false``.

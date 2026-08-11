@@ -480,6 +480,15 @@ Docker 版::
 ``fess-llm-gemini`` 等插件。请在管理页面「系统」→「插件」中安装与所使用的
 提供商对应的插件。
 
+若此前使用过 SPNEGO（Windows 集成认证）
+---------------------------------------
+
+自 15.8 起，如果客户端主体的 Kerberos 领域与服务器的领域不同，SPNEGO 登录将被拒绝。
+如果用户来自 AD 域树的子域或建立了信任关系的林，请在管理页面「系统」→「通用」或
+``app/WEB-INF/conf/system.properties`` 的 ``spnego.allowed.realms`` 中以逗号分隔列出
+这些领域。否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
+详细内容请参阅 :doc:`../config/sso-spnego`\ 。
+
 插件版本更新
 ------------------------
 

@@ -494,6 +494,17 @@ Ab 15.8 wurde die Funktion des KI-Suchmodus (RAG-Chat) in separate Plugins wie `
 ``fess-llm-openai`` und ``fess-llm-gemini`` ausgelagert. Installieren Sie das zu Ihrem verwendeten
 Anbieter passende Plugin über die Verwaltungsseite unter „System" → „Plugins".
 
+Falls Sie SPNEGO (Windows-integrierte Authentifizierung) genutzt haben
+----------------------------------------------------------------------
+
+Ab 15.8 wird eine SPNEGO-Anmeldung abgelehnt, wenn sich die Kerberos-Realm des Client-Principals
+von der Realm des Servers unterscheidet. Melden sich Ihre Benutzer aus einer untergeordneten
+Domäne einer AD-Domänenstruktur oder aus einer vertrauten Gesamtstruktur an, tragen Sie diese
+Realms kommagetrennt in ``spnego.allowed.realms`` ein, entweder über die Verwaltungsseite unter
+„System" → „Allgemein" oder in ``app/WEB-INF/conf/system.properties``. Andernfalls werden
+Benutzer, die sich bis 15.7 anmelden konnten, mit ``Kerberos realm is not allowed`` abgewiesen.
+Einzelheiten finden Sie unter :doc:`../config/sso-spnego`.
+
 Aktualisierung der Plugin-Versionen
 -----------------------------------
 

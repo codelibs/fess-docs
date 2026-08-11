@@ -235,6 +235,21 @@ Kerberos 설정 파일
    나열하지 않으면 15.7까지 로그인할 수 있었던 사용자가 ``Kerberos realm is not allowed`` 로
    거부됩니다.
 
+.. warning::
+   |Fess| 는 주체의 ``@`` 앞부분을 사용자 이름으로 사용하므로 사용자 이름에 영역은 포함되지
+   않습니다. ``spnego.allowed.realms`` 에 영역을 추가하면, 여러 영역에 같은 계정 이름을 가진
+   사용자(예: ``alice@CORP.EXAMPLE.COM`` 과 ``alice@PARTNER.EXAMPLE.COM`` )는 동일한 |Fess|
+   사용자로 취급되어 해당 사용자의 그룹, 역할, 문서 권한을 공유합니다.
+   나열하는 모든 영역에서 계정 이름이 한 사람만 식별하는 경우에만 영역을 추가하십시오.
+
+.. note::
+   허용 목록은 Basic 인증 폴백에도 적용됩니다. 사용자가 ``user@REALM`` 형식으로 입력한 경우
+   해당 영역이 ``spnego.allowed.realms`` 와 대조되어, 허용되지 않으면 로그인이 거부됩니다.
+   단순한 계정 이름이나 ``DOMAIN\user`` 형식은 영역을 지정하지 않으므로 ``krb5.conf`` 의
+   기본 영역에서 인증됩니다. Basic 인증은 사용자가 입력한 영역에 대해 직접 인증하므로 허용
+   목록은 최소한으로 유지하고, 이를 보안 경계로 사용하는 경우에는 ``spnego.allow.basic`` 을
+   ``false`` 로 설정하는 것을 검토하십시오.
+
 .. note::
    ``spnego.prompt.ntlm=true`` (기본값)인 경우, ``spnego.allow.basic`` 도 ``true`` 이어야 합니다.
    ``spnego.allow.basic=false`` 로 설정하는 경우에는 ``spnego.prompt.ntlm=false`` 도 함께 설정하십시오.

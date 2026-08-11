@@ -237,6 +237,25 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    Benutzer, die sich bis 15.7 anmelden konnten, mit ``Kerberos realm is not allowed``
    abgewiesen.
 
+.. warning::
+   |Fess| identifiziert einen Benutzer über den Teil des Principals vor ``@``; die Realm ist damit
+   nicht Teil des Benutzernamens. Wenn Sie in ``spnego.allowed.realms`` weitere Realms eintragen,
+   werden Benutzer, die denselben Kontonamen in mehreren Realms besitzen — zum Beispiel
+   ``alice@CORP.EXAMPLE.COM`` und ``alice@PARTNER.EXAMPLE.COM`` — zu demselben |Fess|-Benutzer
+   und teilen sich dessen Gruppen, Rollen und Dokumentberechtigungen. Tragen Sie eine Realm nur
+   dann ein, wenn der Kontoname über alle aufgeführten Realms hinweg genau eine Person
+   identifiziert.
+
+.. note::
+   Die Zulassungsliste gilt auch für den Rückfall auf die Basic-Authentifizierung. Gibt ein
+   Benutzer einen Namen der Form ``user@REALM`` ein, wird diese Realm gegen
+   ``spnego.allowed.realms`` geprüft und die Anmeldung abgelehnt, wenn sie nicht zulässig ist. Ein
+   einfacher Kontoname oder die Form ``DOMAIN\user`` benennt keine Realm und wird in der
+   Standard-Realm aus ``krb5.conf`` authentifiziert. Da eine Basic-Anmeldung direkt gegen die vom
+   Benutzer eingegebene Realm authentifiziert wird, halten Sie die Zulassungsliste möglichst klein
+   und setzen Sie ``spnego.allow.basic`` auf ``false``, wenn Sie sich auf sie als Sicherheitsgrenze
+   verlassen.
+
 .. note::
    Wenn ``spnego.prompt.ntlm=true`` (Standard), muss auch ``spnego.allow.basic`` auf ``true`` gesetzt sein.
    Wenn Sie ``spnego.allow.basic=false`` setzen, müssen Sie gleichzeitig ``spnego.prompt.ntlm=false`` setzen.
