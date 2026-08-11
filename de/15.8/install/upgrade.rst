@@ -505,6 +505,30 @@ Realms kommagetrennt in ``spnego.allowed.realms`` ein, entweder über die Verwal
 Benutzer, die sich bis 15.7 anmelden konnten, mit ``Kerberos realm is not allowed`` abgewiesen.
 Einzelheiten finden Sie unter :doc:`../config/sso-spnego`.
 
+Falls Sie SAML-Authentifizierung (SSO) genutzt haben
+----------------------------------------------------
+
+Ab 15.8 bindet |Fess| jede SAML-Antwort an die ID der von ihm gesendeten AuthnRequest, sodass
+IdP-initiiertes (unaufgefordertes) SSO nicht mehr funktioniert. Eine Anmeldung, die von einer
+|Fess|-Kachel in einem IdP-Portal wie dem Okta-Dashboard oder dem Portal „Meine Apps" von
+Microsoft Entra ID aus gestartet wird, hat keine zugehörige AuthnRequest und wird abgelehnt. Bis
+15.7 funktionierte dies, weil |Fess| die nicht zuordenbare Antwort an den IdP zurückschickte und
+der IdP sofort eine angeforderte Assertion lieferte. Wenn Sie auf der IdP-Seite eine Kachel
+anlegen, lassen Sie diese auf den |Fess|-Endpunkt ``/sso/`` verweisen, damit die Anmeldung
+SP-initiiert erfolgt.
+
+Zudem sendet der IdP die Assertion als seitenübergreifenden POST zurück, weshalb
+``tomcat.sameSiteCookies`` in ``tomcat_config.properties`` auf ``none`` gesetzt werden muss. Mit
+dem ausgelieferten Standardwert ``lax`` wird das Sitzungs-Cookie bei dieser Anfrage nicht
+mitgesendet und die SAML-Anmeldung kann nicht abgeschlossen werden. Diese Datei liegt beim
+ZIP-Paket unter ``lib/classes/`` und bei den DEB-/RPM-Paketen unter ``/etc/fess/``; nach der
+Änderung muss |Fess| neu gestartet werden. Browser akzeptieren ``none`` nur bei einem Cookie, das
+auch das Attribut ``Secure`` trägt, sodass |Fess| über HTTPS bereitgestellt werden muss. Bis 15.7
+führte dieselbe Fehlkonfiguration nicht zu einem klaren Fehler, sondern zu einer endlosen
+Weiterleitungsschleife zum IdP; prüfen Sie die Einstellung daher auch bei einer Installation, die
+zu funktionieren schien. In 15.8 schlägt die Anmeldung einmalig fehl, statt in einer Schleife zu
+laufen. Einzelheiten finden Sie unter :doc:`../config/sso-saml`.
+
 Aktualisierung der Plugin-Versionen
 -----------------------------------
 

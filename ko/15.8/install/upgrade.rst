@@ -494,6 +494,26 @@ AD 도메인 트리의 하위 도메인이나 신뢰 관계를 맺은 포리스�
 15.7까지 로그인할 수 있었던 사용자가 ``Kerberos realm is not allowed`` 로 거부됩니다.
 자세한 내용은 :doc:`../config/sso-spnego` 를 참조하십시오.
 
+SAML 인증(SSO)을 사용하고 있었던 경우
+-------------------------------------
+
+15.8부터 |Fess| 는 전송한 AuthnRequest의 ID와 SAML 응답을 대응시켜 검증하므로
+IdP-Initiated(미요청·unsolicited) SSO는 동작하지 않습니다. IdP 포털(Okta 대시보드나
+Microsoft Entra ID의 「내 앱」 등)에 배치한 타일에서 시작한 로그인은 대응시킬 AuthnRequest가
+없어 거부됩니다. 15.7까지는 |Fess| 가 대응시키지 못한 응답을 IdP로 되돌려 보내고, IdP가 즉시
+SP-Initiated 어서션을 반환했기 때문에 동작했습니다. IdP 측에 타일을 배치하는 경우에는 링크
+대상을 |Fess| 의 ``/sso/`` 로 지정하여 SP-Initiated 로그인이 되도록 하십시오.
+
+또한 IdP는 어서션을 크로스 사이트 POST로 반환하므로 ``tomcat_config.properties`` 의
+``tomcat.sameSiteCookies`` 를 ``none`` 으로 설정해야 합니다. 포함된 기본값 ``lax`` 그대로는
+세션 쿠키가 이 요청에 전송되지 않아 SAML 로그인을 완료할 수 없습니다. 이 파일은 ZIP 패키지에서는
+``lib/classes/`` , DEB/RPM 패키지에서는 ``/etc/fess/`` 에 있으며, 변경 후에는 |Fess| 를
+재시작해야 합니다. 브라우저는 ``Secure`` 속성이 함께 있는 쿠키에 대해서만 ``none`` 을
+허용하므로 |Fess| 를 HTTPS로 제공해야 합니다. 15.7까지는 같은 설정 오류가 명확한 오류가 아니라
+IdP로의 무한 리다이렉트 루프로 나타났으므로, 동작하는 것처럼 보였던 사이트에서도 설정을
+확인하십시오. 15.8에서는 루프에 빠지지 않고 한 번에 실패합니다.
+자세한 내용은 :doc:`../config/sso-saml` 을 참조하십시오.
+
 플러그인 버전 갱신
 ------------------------
 

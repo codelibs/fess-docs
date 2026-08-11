@@ -495,6 +495,27 @@ SPNEGO ログインは拒否されます。AD のドメインツリーの子ド�
 ``Kerberos realm is not allowed`` として拒否されます。
 詳細は :doc:`../config/sso-spnego` を参照してください。
 
+SAML 認証（SSO）を利用していた場合
+----------------------------------
+
+15.8 から、\ |Fess| は送信した AuthnRequest の ID と SAML レスポンスを対応付けて検証するため、
+IdP-Initiated（未承諾・unsolicited）SSO は動作しなくなりました。IdP のポータル（Okta の
+ダッシュボードや Microsoft Entra ID の「マイアプリ」など）に置いたタイルから開始したログインは、
+対応付ける AuthnRequest が存在せず拒否されます。15.7 では、\ |Fess| が対応付けできないレスポンスを
+IdP へ差し戻し、IdP が即座に SP-Initiated のアサーションを返していたため動作していました。
+IdP 側にタイルを配置する場合は、リンク先を |Fess| の ``/sso/`` に変更し、SP-Initiated の
+ログインにしてください。
+
+また、IdP はアサーションをクロスサイトの POST で返すため、``tomcat_config.properties`` の
+``tomcat.sameSiteCookies`` に ``none`` を設定する必要があります。同梱の既定値 ``lax`` のままでは
+セッション Cookie がこのリクエストに送信されず、SAML ログインが完了しません。このファイルは
+ZIP 版では ``lib/classes/``\ 、DEB/RPM 版では ``/etc/fess/`` に配置されており、変更後は
+|Fess| の再起動が必要です。``none`` はブラウザーが ``Secure`` 属性付きの Cookie に対してのみ
+受け入れるため、\ |Fess| を HTTPS で提供する必要があります。15.7 までは同じ設定不備が明確な
+エラーにならず、IdP への再リダイレクトが繰り返されるループになっていたため、動作しているように
+見えていた環境でも設定を確認してください。15.8 ではループせずに 1 回で失敗します。
+詳細は :doc:`../config/sso-saml` を参照してください。
+
 プラグインのバージョン更新
 --------------------------
 
