@@ -329,11 +329,12 @@ Signatureinstellungen
    auch ``saml.security.want_messages_signed=true``.
    Solange die Option ``false`` ist, wird für eine an ``/sso/logout`` eingehende LogoutRequest keine
    Signatur verlangt. Geprüft werden lediglich das XML-Schema, ``NotOnOrAfter`` (falls vorhanden),
-   ``Destination`` (falls vorhanden) und die Übereinstimmung des Issuers mit ``saml.idp.entityid``;
-   die NameID in der LogoutRequest wird nie mit dem angemeldeten Benutzer verglichen.
-   Ein Angreifer, der die Entity-ID des IdP kennt (eine öffentliche Information), kann daher eine
-   unsignierte LogoutRequest erzeugen und die Sitzung eines authentifizierten Benutzers beenden,
-   indem er diesen auf die entsprechende URL lockt.
+   ``Destination`` (falls vorhanden) und die Übereinstimmung des Issuers mit ``saml.idp.entityid``
+   (falls vorhanden); die NameID in der LogoutRequest wird nie mit dem angemeldeten Benutzer verglichen.
+   Das Issuer-Element ist im SAML-Schema optional, sodass eine LogoutRequest, die es weglässt, nie mit
+   der Entity-ID des IdP verglichen wird. Ein Angreifer kann daher, ohne die Entity-ID des IdP zu
+   kennen, eine unsignierte LogoutRequest erzeugen und die Sitzung eines authentifizierten Benutzers
+   beenden, indem er diesen auf die entsprechende URL lockt.
    Die Auswirkung ist eine erzwungene Abmeldung (Denial of Service), keine Kontoübernahme.
 
 Verschlüsselungseinstellungen
@@ -406,6 +407,32 @@ Weitere Sicherheitseinstellungen
    |Fess| verwendet intern eine SAML-Bibliothek (java-saml), und Eigenschaften mit dem Präfix ``saml.`` werden auf die entsprechenden Einstellungen der Bibliothek (Präfix ``onelogin.saml2.``) abgebildet.
    Daher können in ``system.properties`` neben den hier aufgeführten Einstellungen auch detailliertere Einstellungen vorgenommen werden, wie z. B. Bindings (z. B. ``saml.sp.assertion_consumer_service.binding``), Organisationsinformationen (``saml.organization.*``) und Kontaktinformationen (``saml.contacts.*``).
 
+AuthnRequest-Gültigkeitsdauer
+=============================
+
+|Fess| sendet bei jedem Zugriff auf ``/sso/`` eine AuthnRequest an den IdP und speichert deren ID in der Sitzung.
+Die vom IdP zurückgegebene SAML-Antwort wird anhand der gespeicherten ID validiert.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``saml.request.id.ttl``
+     - Wie lange die ID einer unbeantworteten AuthnRequest aufbewahrt wird (Sekunden)
+     - ``3600``
+
+Eine gespeicherte ID wird verworfen, sobald dieser Zeitraum verstrichen ist.
+Ist die Gültigkeit abgelaufen (zum Beispiel weil die Anmeldeseite des IdP offen gelassen wurde), kann die zurückgegebene Assertion nicht zugeordnet werden, und die Anmeldung schlägt einmalig fehl.
+Wird kein Wert gesetzt, werden 3600 Sekunden verwendet.
+Wird ein Wert gesetzt, der sich nicht als Zahl interpretieren lässt, werden ebenfalls 3600 Sekunden verwendet, und es wird eine mit ``Invalid saml.request.id.ttl`` beginnende Warnung protokolliert.
+
+.. note::
+   Pro Sitzung werden höchstens 10 unbeantwortete AuthnRequests aufbewahrt; wird dieses Limit überschritten, werden die ältesten verworfen.
+   Dies ermöglicht es, Anmeldungen gleichzeitig aus mehreren Tabs zu starten, und lässt sich nicht über eine ``saml.``-Einstellung ändern.
+
 Konfigurationsbeispiele
 =======================
 
@@ -477,8 +504,11 @@ Kann nach der Authentifizierung nicht zu Fess zurückkehren
   Browser das Sitzungs-Cookie nicht mit. |Fess| findet dann keine passende AuthnRequest-ID und lässt
   die Anmeldung an dieser Stelle einmalig fehlschlagen. Der Browser kehrt zur Anmeldeseite mit der
   Meldung „SSO-Anmeldevorgang fehlgeschlagen." zurück, und im Protokoll erscheint eine Warnung, die
-  mit ``Received a SAML response with no matching AuthnRequest ID in the session.`` beginnt.
+  mit ``Received a SAML response with no matching AuthnRequest ID in the session`` beginnt.
   Setzen Sie in diesem Fall ``tomcat.sameSiteCookies = none`` (``SameSite=None`` erfordert HTTPS)
+- Wenn die Anmeldeseite des IdP so lange offen war, dass ``saml.request.id.ttl`` (Standard 3600
+  Sekunden) abgelaufen ist, wurde die gespeicherte AuthnRequest-ID bereits verworfen, und dieselbe
+  Warnung wird protokolliert. Starten Sie in diesem Fall die Anmeldung erneut.
 
 .. note::
    In 15.7 leitete |Fess| in derselben Situation immer wieder zum IdP weiter, sodass die Anmeldung in

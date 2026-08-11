@@ -330,11 +330,12 @@ Configuración de firma
    siempre también ``saml.security.want_messages_signed=true``.
    Mientras sea ``false``, no se exige ninguna firma en una LogoutRequest recibida en ``/sso/logout``.
    Las únicas comprobaciones que se realizan son el esquema XML, ``NotOnOrAfter`` (si está presente),
-   ``Destination`` (si está presente) y que el Issuer coincida con ``saml.idp.entityid``; el NameID de
-   la LogoutRequest nunca se compara con el usuario que ha iniciado sesión.
-   Por tanto, un atacante que conozca el identificador de entidad del IdP, que es información pública,
-   puede crear una LogoutRequest sin firmar y terminar la sesión de un usuario autenticado atrayéndolo
-   a esa URL.
+   ``Destination`` (si está presente) y que el Issuer coincida con ``saml.idp.entityid`` (si está
+   presente); el NameID de la LogoutRequest nunca se compara con el usuario que ha iniciado sesión.
+   El elemento Issuer es opcional en el esquema SAML, por lo que una LogoutRequest que lo omita nunca
+   se compara con el identificador de entidad del IdP. Por tanto, un atacante, sin necesidad de conocer
+   el identificador de entidad del IdP, puede crear una LogoutRequest sin firmar y terminar la sesión
+   de un usuario autenticado atrayéndolo a esa URL.
    El impacto es un cierre de sesión forzado (denegación de servicio), no una apropiación de la cuenta.
 
 Configuración de cifrado
@@ -406,6 +407,32 @@ Otras configuraciones de seguridad
 .. note::
    |Fess| utiliza internamente una biblioteca SAML (java-saml), y las propiedades que comienzan con ``saml.`` se mapean a los ajustes correspondientes de la biblioteca (prefijo ``onelogin.saml2.``).
    Por lo tanto, además de los listados aquí, puede especificar ajustes detallados en ``system.properties``, como bindings (p. ej., ``saml.sp.assertion_consumer_service.binding``), información de organización (``saml.organization.*``) e información de contacto (``saml.contacts.*``).
+
+Expiración del AuthnRequest
+===========================
+
+|Fess| envía una AuthnRequest al IdP por cada acceso a ``/sso/`` y registra su identificador en la sesión.
+La respuesta SAML devuelta por el IdP se valida frente al identificador registrado.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``saml.request.id.ttl``
+     - Tiempo durante el que se conserva el identificador de una AuthnRequest sin respuesta (segundos)
+     - ``3600``
+
+El identificador registrado se descarta una vez transcurrido este periodo.
+Si expira (por ejemplo, porque se dejó abierta la página de inicio de sesión del IdP), la aserción devuelta no puede emparejarse y el inicio de sesión falla una sola vez.
+Si no se establece ningún valor, se usan 3600 segundos.
+Si se establece un valor que no puede interpretarse como un número, también se usan 3600 segundos y se registra una advertencia que comienza por ``Invalid saml.request.id.ttl``.
+
+.. note::
+   Como máximo se conservan 10 AuthnRequest sin respuesta por sesión; al superar ese límite, se descartan las más antiguas.
+   Esto existe para permitir iniciar sesiones desde varias pestañas a la vez, y no se puede cambiar con ningún ajuste ``saml.``.
 
 Ejemplos de configuración
 =========================
@@ -479,8 +506,11 @@ No se puede regresar a Fess después de la autenticación
   con la que emparejar y el inicio de sesión falla una sola vez, en ese momento. El navegador vuelve a
   la página de inicio de sesión mostrando «Error en el proceso de inicio de sesión SSO.» y en el
   registro se escribe una advertencia que empieza por
-  ``Received a SAML response with no matching AuthnRequest ID in the session.``.
+  ``Received a SAML response with no matching AuthnRequest ID in the session``.
   En ese caso, configure ``tomcat.sameSiteCookies = none`` (``SameSite=None`` requiere HTTPS)
+- Si la página de inicio de sesión del IdP tardó tanto que ``saml.request.id.ttl`` (3600 segundos
+  por defecto) expiró, el identificador de AuthnRequest registrado ya se ha descartado y se registra
+  la misma advertencia. En ese caso, inicie sesión de nuevo
 
 .. note::
    En 15.7, la misma situación hacía que |Fess| redirigiera una y otra vez al IdP, dejando el inicio de

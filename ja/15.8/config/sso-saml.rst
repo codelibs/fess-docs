@@ -328,9 +328,10 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
    ``saml.security.want_messages_signed=true`` を必ず併せて設定してください。
    ``false`` のままでは、``/sso/logout`` が受け取るLogoutRequestに署名が要求されません。
    検証されるのはXMLスキーマ、``NotOnOrAfter``（存在する場合）、``Destination``（存在する場合）、
-   および Issuer が ``saml.idp.entityid`` と一致することだけで、
+   および Issuer が ``saml.idp.entityid`` と一致すること（存在する場合）だけで、
    LogoutRequest内のNameIDがログイン中のユーザーと一致するかは検査されません。
-   このため、公開情報であるIdPのEntity IDを知っている攻撃者は、署名のないLogoutRequestを作成し、
+   Issuer要素はSAMLのスキーマ上は省略可能であり、省略されたLogoutRequestではIdPのEntity IDとの
+   照合そのものが行われません。このため攻撃者はIdPのEntity IDを知らなくても、署名のないLogoutRequestを作成し、
    そのURLをユーザーに踏ませることで認証済みセッションを終了させられます。
    影響は強制ログアウト（サービス妨害）であり、アカウントの乗っ取りではありません。
 
@@ -410,6 +411,32 @@ SPの秘密鍵とX.509証明書を設定する必要があります。
    組織情報（``saml.organization.*``）、連絡先情報（``saml.contacts.*``）といった詳細な設定を
    ``system.properties`` で指定できます。
 
+AuthnRequestの有効期限
+======================
+
+|Fess| は ``/sso/`` へのアクセスごとにAuthnRequestを1件IdPへ送信し、そのIDをセッションに記録します。
+IdPから返されたSAMLレスポンスは、記録されたIDと対応付けて検証されます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``saml.request.id.ttl``
+     - 応答のないAuthnRequestのIDを保持する期間（秒）
+     - ``3600``
+
+記録されたIDは、この期間を過ぎると破棄されます。IdPのログイン画面を開いたまま放置するなどして
+有効期限を過ぎた場合、戻ってきたアサーションは対応付けられず、その場で1回だけログインに失敗します。
+値を指定しない場合は3600秒が使われます。数値として解釈できない値を指定した場合も3600秒が使われ、
+``Invalid saml.request.id.ttl`` で始まる警告が出力されます。
+
+.. note::
+   1つのセッションで保持できる応答待ちのAuthnRequestは最大10件で、上限を超えると古いものから破棄されます。
+   これは複数のタブから同時にログインを開始できるようにするためのもので、``saml.`` で始まる設定では変更できません。
+
 設定例
 ======
 
@@ -480,9 +507,12 @@ SPの秘密鍵とX.509証明書を設定する必要があります。
   ``tomcat.sameSiteCookies`` が ``lax``（既定値）の場合、ブラウザはセッションCookieを送信しないため、
   |Fess| は対応するAuthnRequestのIDを見つけられず、その場で1回だけログインに失敗します。
   ブラウザはログイン画面に戻り「SSOログイン処理に失敗しました。」が表示され、ログには
-  ``Received a SAML response with no matching AuthnRequest ID in the session.``
+  ``Received a SAML response with no matching AuthnRequest ID in the session``
   で始まる警告が出力されます。この場合は ``tomcat.sameSiteCookies = none`` を設定してください
   （``SameSite=None`` はHTTPSが必須です）
+- IdPのログイン画面で時間がかかり ``saml.request.id.ttl``（既定3600秒）を過ぎた場合も、
+  記録されたAuthnRequestのIDが破棄されているため同じ警告が出力されます。
+  この場合はログインをやり直してください
 
 .. note::
    15.7 では同じ状況でIdPへの再リダイレクトが繰り返され、ログインがループしていました。
