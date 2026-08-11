@@ -104,6 +104,27 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Domänendienst-Integration. Bei ``true`` wird für Berechtigungswerte im Format ``name@domain`` auch der lokale Teil (``name``) ohne den Domänenanteil als Berechtigung hinzugefügt.
      - ``true``
 
+.. note::
+
+   Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet, aber nur E-Mail-aktivierte
+   Gruppen besitzen einen ``mail``-Wert. Microsoft-365-Gruppen sind E-Mail-aktiviert, daher wird
+   auch ihr Name als Berechtigung registriert. **Sicherheitsgruppen sind nicht E-Mail-aktiviert;
+   mit dem Standardwert wird daher nur ihre GUID zu einer Berechtigung.** Wenn die Zugriffsrechte
+   im Dateisystem eine Sicherheitsgruppe benennen, stimmen die Berechtigungen nicht überein und
+   diese Dokumente erscheinen nicht in den Suchergebnissen.
+
+   Fügen Sie in diesem Fall ``displayName`` hinzu, das jede Gruppe besitzt:
+
+   .. code-block:: properties
+
+      entraid.permission.fields=mail,displayName
+
+   ``displayName`` ist nicht domänenqualifiziert und nicht eindeutig und deshalb nicht Teil des
+   Standardwerts. Existiert in Entra ID beispielsweise eine Gruppe namens ``Administrators``, so
+   passt sie auch auf Dokumente, deren Zugriffsrechte die integrierte Windows-Gruppe
+   ``Administrators`` benennen. Prüfen Sie vor dem Hinzufügen, dass die Namen nicht mit den bereits
+   in Ihren Zugriffsrechten verwendeten kollidieren.
+
 Konfiguration auf der Entra ID-Seite
 ====================================
 

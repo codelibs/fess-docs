@@ -57,6 +57,23 @@ SAML 인증을 활성화하려면 ``app/WEB-INF/conf/system.properties`` 에 다
    관리 화면에서 변경한 설정은 ``system.properties`` 에 저장되며, 재시작 후에도 유지됩니다.
    단, 서명·암호화 등의 보안 설정이나 SP 인증서·비밀 키는 관리 화면에서 설정할 수 없으므로 ``system.properties`` 에 직접 기술하십시오.
 
+세션 쿠키 설정
+--------------
+
+IdP는 어설션을 |Fess| 로 **크로스 사이트 POST** 로 반환합니다. ``SameSite=Lax`` 쿠키는 이러한 요청에 전송되지 않으므로, |Fess| 에 포함된 기본값 그대로는 SAML 로그인이 완료되지 않습니다.
+
+``tomcat_config.properties`` 의 ``tomcat.sameSiteCookies`` 를 ``none`` 으로 변경하십시오. 이 파일은 ZIP 패키지에서는 ``lib/classes/`` , DEB/RPM 패키지에서는 ``/etc/fess/`` 에 있습니다.
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   브라우저는 ``Secure`` 속성이 함께 있는 쿠키에 대해서만 ``none`` 을 허용하므로 |Fess| 를 HTTPS로 제공해야 합니다. 일반 HTTP에서는 이 설정으로 인해 |Fess| 에 로그인할 수 없게 됩니다.
+
+.. note::
+   기본값 ``lax`` 는 콜백이 리디렉션(GET)으로 돌아오는 SSO 방식을 위한 것입니다. SAML의 HTTP-POST 바인딩은 여기에 해당하지 않으므로 SAML을 사용할 때만 변경이 필요합니다. 설정 변경 후에는 |Fess| 를 재시작해야 합니다.
+
 SP（Service Provider）설정
 --------------------------
 
@@ -233,10 +250,21 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
    IdP에서 속성을 취득할 수 없는 경우 기본값이 사용됩니다.
    역할 기반 검색을 사용하는 경우 적절한 그룹 또는 역할을 설정하십시오.
 
+.. warning::
+   ``saml.attribute.role.name`` 을 설정하면 IdP가 보낸 속성 값이 그대로 |Fess| 의 역할이 됩니다.
+   ``fess_config.properties`` 의 ``authentication.admin.roles`` 기본값은 ``admin`` 이므로,
+   IdP가 역할 속성에 ``admin`` 을 포함해 보낸 사용자는 |Fess| 의 관리자 권한을 갖게 됩니다.
+   IdP 측에서 역할 속성 값을 제어할 수 있는 범위를 확인하고, 필요하다면
+   ``authentication.admin.roles`` 를 다른 이름으로 변경하십시오.
+
 보안 설정
 =========
 
 운영 환경에서는 다음 보안 설정을 활성화하는 것을 권장합니다.
+
+.. note::
+   권장되지 않는 설정이 남아 있으면 SAML 설정을 읽어 들일 때 ``Insecure SAML settings: ...``
+   경고가 로그에 출력됩니다.
 
 서명 설정
 ---------
@@ -407,6 +435,10 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
 
 - IdP 측의 ACS URL이 올바르게 설정되어 있는지 확인하십시오
 - ``saml.sp.base.url`` 의 값이 IdP 측의 설정과 일치하는지 확인하십시오
+- SAML 어설션은 IdP에서 교차 사이트 POST로 전송됩니다. ``tomcat_config.properties`` 의
+  ``tomcat.sameSiteCookies`` 가 ``lax`` (기본값)인 경우 브라우저가 세션 쿠키를 함께 보내지 않으므로
+  |Fess| 는 SAML 상태를 찾지 못하고 다시 IdP로 리다이렉트하여 루프가 발생합니다. 이 경우
+  ``tomcat.sameSiteCookies = none`` 을 설정하십시오 (``SameSite=None`` 은 HTTPS가 필요합니다)
 
 서명 검증 오류
 ~~~~~~~~~~~~~~

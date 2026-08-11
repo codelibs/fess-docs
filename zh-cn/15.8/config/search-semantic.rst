@@ -147,8 +147,9 @@ system.properties 配置
        之前未找到候选时使用
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
-     - 每个文档的最大分块数。超过此值的文档将被标记为 ``skipped``，并且不会生成嵌入。由于边界感知切分会使分块变短，一个文档生成的分块数比固定长度切分
-       约多 3%～25%，因此包含超大文档的语料可能需要调高此值
+     - 每个文档的最大分块数。超过此值的文档将被标记为 ``skipped``\ ，并且不会生成嵌入。
+       由于边界感知切分会使分块变短，一个文档生成的分块数比固定长度切分约多 3%～25%\ ，
+       因此包含超大文档的语料可能需要调高此值
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - 嵌入提供商（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``）
@@ -204,8 +205,22 @@ system.properties 配置
      - ANN 查询的 ``ef_search`` 参数
 
 .. note::
-   将 ``content_chunker.length.boundary.enabled`` 设为 ``false``\ ，或将两个百分比都设为
-   ``0``\ ，可完全复现此前的固定长度行为。修改这些设置只影响之后切分的文档：已经以分块数组形式
+
+   当 ``content_chunker.length.boundary.enabled=true``\ （默认值）时，
+   ``content_chunker.length.chunk_size`` 会从硬性上限变为一个目标值：
+   每次切分都会移动到搜索窗口内所存在的最高层级中距离最近的候选项。换行或句末无论回退多远，
+   都优先于分句分隔符或空格，而这些又优先于书写体系变化。移动的只是切分点本身，
+   不会丢失任何字符，因此将一篇文档的所有分块拼接起来仍会与原文完全一致。
+   在切分点之后进行的搜索，最多可能使 ``chunk_size`` 按
+   ``content_chunker.length.boundary.lookahead_percent`` 所允许的幅度超出。
+   此外还可能出现第二种、与之独立的超出：当切分点原本会落在一个字素簇（组合符号、变体选择符，
+   或由零宽连接符连接的表情符号序列）内部时，最多会额外超出 32 个字符——这种超出不受
+   ``lookahead_percent`` 控制，即使该值为 ``0`` 也会发生。
+   这两种超出不会同时出现在同一个切分点上，因此在出厂默认设置下，一个分块的长度介于
+   640～840 个字符之间。由于分块平均变短，一篇文档产生的分块数比固定长度切分约多 3%～25%\ （参见
+   ``content_chunker.max_chunks_per_document``\ ）。将
+   ``content_chunker.length.boundary.enabled`` 设为 ``false``\ ，或将两个百分比都设为 ``0``\ ，
+   可完全复现此前的固定长度行为。修改这些设置只影响之后切分的文档：已经以分块数组形式
    保存的文档会保留原有边界，直到被重新爬取。
 
 .. note::

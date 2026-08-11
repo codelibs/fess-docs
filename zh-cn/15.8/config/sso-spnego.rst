@@ -83,9 +83,9 @@ Kerberos配置文件
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -99,6 +99,18 @@ Kerberos配置文件
 
 .. note::
    将 ``EXAMPLE.LOCAL`` 替换为您的AD域名（大写），将 ``AD-SERVER.EXAMPLE.LOCAL`` 替换为您的AD服务器主机名。
+
+.. warning::
+   使用 ``permitted_enctypes`` 中未列出的加密方式加密的服务票据，会被 Kerberos 接收端以
+   ``encryption type not in permitted_enctypes list`` 拒绝。
+   Active Directory 通常签发 AES256 服务票据，因此必须包含 AES256。
+
+.. note::
+   Java 17 及以后版本默认禁用 RC4（ ``rc4-hmac`` ）、3DES 和 DES，即使列出也不会使用，
+   因此上例仅指定 AES。
+   ``aes256-cts-hmac-sha384-192`` 和 ``aes128-cts-hmac-sha256-128`` 是 Windows Server 2025 支持的
+   AES-SHA2（RFC 8009）加密方式。
+   仅持有 RC4 密钥的服务账户无法用于 Kerberos 认证，请重置其密码以生成 AES 密钥。
 
 登录配置文件
 ------------
@@ -119,7 +131,7 @@ Kerberos配置文件
 
 .. note::
    ``krb5.conf`` 和 ``auth_login.conf`` 的默认文件名分别由 ``spnego.krb5.conf`` / ``spnego.login.conf`` 指定，但这两个文件本身必须事先创建好。
-   如果这些文件不存在于类路径上，SPNEGO初始化将失败，|Fess| 将无法启动。
+   SPNEGO 在首次登录时初始化，因此即使缺少这些文件 |Fess| 本身仍能启动，但 SSO 登录会失败。
 
 必需设置
 --------
@@ -146,6 +158,22 @@ Kerberos配置文件
      - 登录配置文件路径
      - ``auth_login.conf``
 
+.. note::
+   如果 ``spnego.preauth.username`` 和 ``spnego.preauth.password`` 都留空，服务器端登录模块将使用 keytab。
+   如果不希望将 AD 服务账户的密码保存在 |Fess| 的配置文件中，请创建 keytab 并按如下方式配置
+   ``auth_login.conf`` 中的 ``spnego-server`` 。
+
+   ::
+
+       spnego-server {
+           com.sun.security.auth.module.Krb5LoginModule required
+           useKeyTab=true
+           keyTab="/var/lib/fess/fess.keytab"
+           principal="HTTP/fess-server.example.local@EXAMPLE.LOCAL"
+           storeKey=true
+           isInitiator=false;
+       };
+
 可选设置
 --------
 
@@ -169,18 +197,18 @@ Kerberos配置文件
      - ``true``
    * - ``spnego.allow.unsecure.basic``
      - 允许非安全Basic认证
-     - ``true``
+     - ``false``
    * - ``spnego.prompt.ntlm``
      - 收到NTLM令牌时回退到Basic认证
      - ``true``
    * - ``spnego.allow.localhost``
      - 允许localhost访问
-     - ``true``
+     - ``false``
    * - ``spnego.allow.delegation``
      - 允许委托
      - ``false``
-   * - ``spnego.exclude.dirs``
-     - 排除认证的目录（逗号分隔）
+   * - ``spnego.allowed.realms``
+     - 除服务器领域外还允许的 Kerberos 领域（逗号分隔）
      - （无）
    * - ``spnego.logger.level``
      - SPNEGO库内部日志级别（``1`` =FINEST、``2`` =FINER、``3`` =FINE、``4`` =CONFIG、``6`` =WARNING、``7`` =SEVERE。这些值以外的值（包括 ``0`` 和 ``5``）均视为INFO）
@@ -189,6 +217,19 @@ Kerberos配置文件
 .. warning::
    ``spnego.allow.unsecure.basic=true`` 可能通过未加密的连接发送Base64编码的凭据。
    对于生产环境，强烈建议将此设置为 ``false`` 并使用HTTPS。
+
+.. note::
+   当 ``spnego.allow.unsecure.basic=false`` （默认值）时，仅对 ``HttpServletRequest#isSecure()``
+   返回 ``true`` 的请求提供 Basic 认证。
+   如果在反向代理上终止 TLS 并以 HTTP 转发到 |Fess| ，该值为 ``false`` ，
+   因此无法获取 Kerberos 票据而回退到 NTLM 的客户端将无法登录。
+   请在 ``tomcat_config.properties`` 中设置 ``tomcat.secure=true`` ，以告知 |Fess| 该请求来自 HTTPS。
+
+.. warning::
+   在 |Fess| 15.8 中，如果客户端主体的领域与服务器的领域不同，登录将默认被拒绝。
+   如果用户来自 AD 域树的子域或建立了信任关系的林，
+   请在 ``spnego.allowed.realms`` 中以逗号分隔列出这些领域。
+   否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
 
 .. note::
    ``spnego.prompt.ntlm=true``\ （默认值）时，``spnego.allow.basic`` 也必须为 ``true``\ 。
@@ -280,9 +321,9 @@ Mozilla Firefox
 
     [libdefaults]
         default_realm = EXAMPLE.LOCAL
-        default_tkt_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        default_tgs_enctypes = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
-        permitted_enctypes   = aes128-cts rc4-hmac des3-cbc-sha1 des-cbc-md5 des-cbc-crc
+        default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
+        permitted_enctypes   = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128
 
     [realms]
         EXAMPLE.LOCAL = {
@@ -362,6 +403,25 @@ Mozilla Firefox
 - 验证LDAP设置是否正确
 - 检查Bind DN和密码是否正确
 - 验证用户是否在AD中属于组
+
+登录返回 HTTP 400
+~~~~~~~~~~~~~~~~~
+
+对于所属组较多的用户，Kerberos 票据（PAC）会变大， ``Authorization`` 请求头可能超过 Tomcat 的
+默认上限（8KB），从而返回 400。
+此时请求不会到达 |Fess| ，日志中也不会有任何记录。
+请在 ``tomcat_config.properties`` 中提高上限。
+
+::
+
+    tomcat.maxHttpHeaderSize=65536
+
+更改服务账户密码后无法认证
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+服务器凭据仅在首次登录时获取一次，之后会缓存到进程结束为止。
+在 AD 中更改服务账户密码或替换 keytab 后，请重启 |Fess| 。
+更改 ``spnego.*`` 设置后同样需要重启。
 
 调试设置
 --------

@@ -57,6 +57,23 @@ SAML認証を有効にするには、``app/WEB-INF/conf/system.properties`` に�
    管理画面で変更した設定は ``system.properties`` に保存され、再起動後も保持されます。
    ただし、署名・暗号化などのセキュリティ設定やSP証明書・秘密鍵は管理画面では設定できないため、``system.properties`` に直接記述してください。
 
+セッションCookieの設定
+----------------------
+
+IdPはアサーションを |Fess| へ **クロスサイトのPOST** で返します。``SameSite=Lax`` のCookieはこのリクエストに送信されないため、|Fess| が同梱する既定値のままではSAMLログインが完了しません。
+
+``tomcat_config.properties`` の ``tomcat.sameSiteCookies`` を ``none`` に変更してください。このファイルはZIP版では ``lib/classes/`` 、DEB/RPM版では ``/etc/fess/`` に配置されています。
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   ``none`` はブラウザが ``Secure`` 属性付きCookieに対してのみ受け入れます。したがって |Fess| をHTTPSで提供する必要があります。HTTPのままでは |Fess| にログインできなくなります。
+
+.. note::
+   既定値の ``lax`` はリダイレクト（GET）で戻るSSO方式のために設定されています。SAMLのHTTP-POSTバインディングはこれに該当しないため、SAMLを利用する場合のみ変更が必要です。設定変更後は |Fess| の再起動が必要です。
+
 SP（Service Provider）設定
 --------------------------
 
@@ -233,10 +250,21 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
    IdPから属性が取得できない場合は、デフォルト値が使用されます。
    ロールベース検索を使用する場合は、適切なグループまたはロールを設定してください。
 
+.. warning::
+   ``saml.attribute.role.name`` を設定すると、IdPから送信された属性値がそのまま |Fess| のロールになります。
+   ``fess_config.properties`` の ``authentication.admin.roles`` は既定で ``admin`` であるため、
+   IdPがロール属性に ``admin`` を含めて送信したユーザーは |Fess| の管理者権限を得ます。
+   IdP側でロール属性の値を管理できる範囲を確認し、必要に応じて ``authentication.admin.roles`` を
+   別の名前に変更してください。
+
 セキュリティ設定
 ================
 
 本番環境では、以下のセキュリティ設定を有効にすることを推奨します。
+
+.. note::
+   推奨されない設定が残っている場合、SAMLの設定を読み込んだ時点で
+   ``Insecure SAML settings: ...`` という警告がログに出力されます。
 
 署名の設定
 ----------
@@ -407,6 +435,10 @@ SPの秘密鍵とX.509証明書を設定する必要があります。
 
 - IdP側のACS URLが正しく設定されているか確認してください
 - ``saml.sp.base.url`` の値がIdP側の設定と一致しているか確認してください
+- IdPからのSAMLアサーションはクロスサイトのPOSTで送信されます。``tomcat_config.properties`` の
+  ``tomcat.sameSiteCookies`` が ``lax``（既定値）の場合、ブラウザはセッションCookieを送信しないため、
+  |Fess| はSAMLの状態を見つけられず、再びIdPへリダイレクトしてループします。この場合は
+  ``tomcat.sameSiteCookies = none`` を設定してください（``SameSite=None`` はHTTPSが必須です）
 
 署名検証エラー
 ~~~~~~~~~~~~~~

@@ -247,9 +247,26 @@ Configuraciones en system.properties
      - El parámetro ``ef_search`` para las consultas ANN
 
 .. note::
-   Establecer ``content_chunker.length.boundary.enabled`` en ``false``, o ambos porcentajes en
-   ``0``, reproduce exactamente el comportamiento anterior de longitud fija. Cambiar cualquiera de
-   estos ajustes solo afecta a los documentos divididos a partir de ese momento: un documento ya
+
+   Con ``content_chunker.length.boundary.enabled=true`` (valor predeterminado),
+   ``content_chunker.length.chunk_size`` pasa a ser un objetivo en lugar de un límite estricto:
+   cada corte se desplaza hasta el candidato más cercano del nivel más alto presente en la
+   ventana de búsqueda. Un salto de línea o un fin de frase gana a cualquier separador de
+   cláusula o espacio por muy atrás que quede este, y esos ganan a un cambio de sistema de
+   escritura. Solo se desplaza el punto de corte; no se pierde ningún carácter, por lo que
+   concatenar los chunks de un documento sigue reproduciendo exactamente su contenido. La
+   búsqueda hacia adelante puede superar ``chunk_size`` en hasta
+   ``content_chunker.length.boundary.lookahead_percent``. Puede producirse un segundo exceso,
+   independiente, de hasta 32 caracteres cuando un corte caería en medio de un clúster de
+   grafemas (una marca combinante, un selector de variación o una secuencia de emojis unida por
+   un conector de ancho cero; ZWJ); este ignora ``lookahead_percent`` y puede ocurrir incluso con
+   ``0``. Los dos tipos de exceso nunca se producen en el mismo corte, de modo que con los
+   valores predeterminados un chunk va de 640 a 840 caracteres. Como los chunks resultan más
+   cortos en promedio, un documento genera entre un 3 % y un 25 % más de chunks que con longitud
+   fija (véase ``content_chunker.max_chunks_per_document``). Establecer
+   ``content_chunker.length.boundary.enabled`` en ``false``, o ambos porcentajes en ``0``,
+   reproduce exactamente el comportamiento anterior de longitud fija. Cambiar cualquiera de estos
+   ajustes solo afecta a los documentos divididos a partir de ese momento: un documento ya
    almacenado como array de chunks conserva sus límites hasta que se vuelve a rastrear.
 
 .. note::

@@ -57,6 +57,23 @@ Um die SAML-Authentifizierung zu aktivieren, fügen Sie die folgende Einstellung
    Im Admin-Bereich vorgenommene Änderungen werden in ``system.properties`` gespeichert und bleiben nach einem Neustart erhalten.
    Sicherheitseinstellungen wie Signierung/Verschlüsselung sowie das SP-Zertifikat und der private Schlüssel können jedoch nicht über die Administrationsseite konfiguriert werden und müssen direkt in ``system.properties`` eingetragen werden.
 
+Konfiguration des Sitzungs-Cookies
+----------------------------------
+
+Der IdP sendet die Assertion als **seitenübergreifenden POST** an |Fess| zurück. Ein ``SameSite=Lax``-Cookie wird bei einer solchen Anfrage nicht mitgesendet, sodass die SAML-Anmeldung mit dem von |Fess| ausgelieferten Standardwert nicht abgeschlossen wird.
+
+Ändern Sie ``tomcat.sameSiteCookies`` in ``tomcat_config.properties`` auf ``none``. Diese Datei liegt beim ZIP-Paket unter ``lib/classes/`` und bei den DEB-/RPM-Paketen unter ``/etc/fess/``.
+
+::
+
+    tomcat.sameSiteCookies = none
+
+.. warning::
+   Browser akzeptieren ``none`` nur bei einem Cookie, das auch das Attribut ``Secure`` trägt. |Fess| muss daher über HTTPS bereitgestellt werden. Über einfaches HTTP macht diese Einstellung eine Anmeldung bei |Fess| unmöglich.
+
+.. note::
+   Der Standardwert ``lax`` ist für SSO-Verfahren gedacht, deren Callback als Weiterleitung (GET) zurückkommt. Die HTTP-POST-Bindung von SAML gehört nicht dazu, daher ist diese Änderung nur bei Verwendung von SAML erforderlich. Nach der Änderung muss |Fess| neu gestartet werden.
+
 SP (Service Provider) Konfiguration
 -----------------------------------
 
@@ -232,10 +249,21 @@ Beispiel::
    Wenn Attribute nicht vom IdP abgerufen werden können, werden Standardwerte verwendet.
    Bei Verwendung der rollenbasierten Suche konfigurieren Sie entsprechende Gruppen oder Rollen.
 
+.. warning::
+   Wenn ``saml.attribute.role.name`` gesetzt ist, werden die vom IdP gesendeten Attributwerte
+   unverändert zu |Fess|-Rollen. Da ``authentication.admin.roles`` in ``fess_config.properties``
+   standardmäßig ``admin`` lautet, erhält jeder Benutzer, dessen Rollenattribut ``admin`` enthält,
+   Administratorrechte in |Fess|. Prüfen Sie, wer das Rollenattribut auf der IdP-Seite steuern kann,
+   und ändern Sie ``authentication.admin.roles`` bei Bedarf in einen anderen Namen.
+
 Sicherheitskonfiguration
 ========================
 
 Für Produktionsumgebungen wird empfohlen, die folgenden Sicherheitseinstellungen zu aktivieren.
+
+.. note::
+   Wenn nicht empfohlene Einstellungen bestehen bleiben, wird beim Laden der SAML-Einstellungen eine
+   Warnung ``Insecure SAML settings: ...`` in das Protokoll geschrieben.
 
 Signatureinstellungen
 ---------------------
@@ -400,6 +428,11 @@ Kann nach der Authentifizierung nicht zu Fess zurückkehren
 
 - Überprüfen Sie, ob die ACS URL auf der IdP-Seite korrekt konfiguriert ist
 - Stellen Sie sicher, dass der Wert von ``saml.sp.base.url`` mit der IdP-Konfiguration übereinstimmt
+- Die SAML-Assertion trifft als seitenübergreifender POST vom IdP ein. Wenn
+  ``tomcat.sameSiteCookies`` in ``tomcat_config.properties`` auf ``lax`` (Standard) steht, sendet der
+  Browser das Sitzungs-Cookie nicht mit, sodass |Fess| keinen SAML-Status findet und erneut zum IdP
+  weiterleitet, was eine Schleife ergibt. Setzen Sie in diesem Fall
+  ``tomcat.sameSiteCookies = none`` (``SameSite=None`` erfordert HTTPS)
 
 Signaturüberprüfungsfehler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

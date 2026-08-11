@@ -251,10 +251,28 @@ Réglages dans system.properties
      - Le paramètre ``ef_search`` pour les requêtes ANN
 
 .. note::
-   Régler ``content_chunker.length.boundary.enabled`` sur ``false``, ou les deux pourcentages sur
-   ``0``, reproduit exactement le comportement précédent à longueur fixe. La modification de ces
-   paramètres n'affecte que les documents découpés ensuite : un document déjà stocké sous forme de
-   tableau de chunks conserve ses frontières jusqu'à ce qu'il soit à nouveau crawlé.
+
+   Avec ``content_chunker.length.boundary.enabled=true`` (valeur par défaut),
+   ``content_chunker.length.chunk_size`` devient un objectif plutôt qu'un plafond strict : chaque
+   coupure se déplace vers le candidat le plus proche du niveau le plus élevé présent dans la
+   fenêtre de recherche. Un saut de ligne ou une fin de phrase l'emporte sur n'importe quel
+   séparateur de proposition ou espace, aussi loin en arrière soit-il, et ceux-ci l'emportent sur
+   un changement de système d'écriture. Seul le point de coupure est déplacé ; aucun caractère
+   n'est perdu, si bien que la concaténation des chunks d'un document reproduit toujours son
+   contenu exact. La recherche vers l'avant peut dépasser ``chunk_size`` d'au plus
+   ``content_chunker.length.boundary.lookahead_percent``. Un second dépassement, indépendant,
+   pouvant aller jusqu'à 32 caractères peut se produire lorsqu'une coupure tomberait autrement au
+   milieu d'un cluster de graphèmes (une marque combinante, un sélecteur de variante ou une
+   séquence d'emojis liée par un jointeur de largeur nulle ; ZWJ) — celui-ci ignore
+   ``lookahead_percent`` et peut survenir même lorsqu'il vaut ``0``. Les deux types de
+   dépassement ne se produisent jamais sur la même coupure : avec les valeurs par défaut, un
+   chunk fait donc de 640 à 840 caractères. Les chunks étant en moyenne plus courts, un document
+   produit environ 3 % à 25 % de chunks de plus qu'un découpage à longueur fixe (voir
+   ``content_chunker.max_chunks_per_document``). Régler
+   ``content_chunker.length.boundary.enabled`` sur ``false``, ou les deux pourcentages sur ``0``,
+   reproduit exactement le comportement précédent à longueur fixe. La modification de ces
+   paramètres n'affecte que les documents découpés ensuite : un document déjà stocké sous forme
+   de tableau de chunks conserve ses frontières jusqu'à ce qu'il soit à nouveau crawlé.
 
 .. note::
 

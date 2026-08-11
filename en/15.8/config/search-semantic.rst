@@ -234,10 +234,25 @@ system.properties Settings
      - The ``ef_search`` parameter for ANN queries
 
 .. note::
-   Setting ``content_chunker.length.boundary.enabled`` to ``false``, or both percentages to
-   ``0``, reproduces the previous fixed-length behaviour exactly. Changing any of these settings
-   only affects documents chunked afterwards: a document already stored as a chunk array keeps
-   its boundaries until it is re-crawled.
+
+   With ``content_chunker.length.boundary.enabled=true`` (the default),
+   ``content_chunker.length.chunk_size`` becomes a target rather than a hard ceiling: each cut
+   moves to the nearest candidate of the highest tier present in the search window. A line break
+   or sentence end wins over any clause separator or space no matter how much farther back it
+   is, and those win over a writing-system change. Only the cut point ever moves; no character
+   is dropped, so concatenating a document's chunks still reproduces its content exactly. The
+   forward search can overshoot ``chunk_size`` by up to
+   ``content_chunker.length.boundary.lookahead_percent``; a second, independent overshoot of up
+   to 32 characters can occur when a cut would otherwise land inside a grapheme cluster (a
+   combining mark, a variation selector, or a zero-width-joined emoji sequence) — that one
+   ignores ``lookahead_percent`` and can happen even when it is ``0``. The two overshoots never
+   occur on the same cut, so at the shipped defaults a chunk runs from 640 to 840 characters.
+   Because chunks come in shorter on average, a document yields roughly 3% to 25% more chunks
+   than a fixed-length split (see ``content_chunker.max_chunks_per_document``). Setting
+   ``content_chunker.length.boundary.enabled`` to ``false``, or both percentages to ``0``,
+   reproduces the previous fixed-length behaviour exactly. Changing any of these settings only
+   affects documents chunked afterwards: a document already stored as a chunk array keeps its
+   boundaries until it is re-crawled.
 
 .. note::
 

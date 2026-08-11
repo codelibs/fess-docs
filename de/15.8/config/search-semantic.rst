@@ -246,10 +246,28 @@ Einstellungen in system.properties
      - Der Parameter ``ef_search`` für ANN-Abfragen
 
 .. note::
-   ``content_chunker.length.boundary.enabled`` auf ``false`` zu setzen -- oder beide Prozentwerte
-   auf ``0`` -- reproduziert exakt das bisherige Verhalten mit fester Länge. Änderungen an diesen
-   Einstellungen wirken sich nur auf danach gechunkte Dokumente aus: Ein bereits als Chunk-Array
-   gespeichertes Dokument behält seine Grenzen, bis es erneut gecrawlt wird.
+
+   Mit ``content_chunker.length.boundary.enabled=true`` (Standardeinstellung) wird
+   ``content_chunker.length.chunk_size`` zu einem Zielwert statt zu einer harten Obergrenze:
+   Jeder Schnitt verschiebt sich zum nächstgelegenen Kandidaten der höchsten im Suchfenster
+   vorhandenen Stufe. Ein Zeilenumbruch oder Satzende gewinnt gegen jedes Teilsatztrennzeichen
+   und jedes Leerzeichen, gleichgültig wie viel weiter zurück es liegt, und diese gewinnen gegen
+   einen Schriftsystemwechsel. Verschoben wird dabei nur der Schnittpunkt selbst; es geht kein
+   Zeichen verloren, sodass das Zusammenfügen der Chunks eines Dokuments weiterhin exakt dessen
+   Inhalt ergibt. Die Vorwärtssuche kann ``chunk_size`` um bis zu
+   ``content_chunker.length.boundary.lookahead_percent`` überschreiten. Ein zweites, unabhängiges
+   Überschreiten um bis zu 32 Zeichen kann auftreten, wenn ein Schnitt sonst mitten in einem
+   Graphemcluster (ein kombinierendes Zeichen, ein Variationsselektor oder eine durch
+   Zero-Width-Joiner verbundene Emoji-Sequenz) landen würde — dieses ignoriert
+   ``lookahead_percent`` und kann auch bei ``0`` auftreten. Die beiden Überschreitungen treten
+   nie beim selben Schnitt gemeinsam auf, sodass ein Chunk mit den Standardwerten zwischen 640
+   und 840 Zeichen lang ist. Da die Chunks im Mittel kürzer ausfallen, ergibt ein Dokument etwa
+   3 % bis 25 % mehr Chunks als bei fester Länge (siehe
+   ``content_chunker.max_chunks_per_document``). ``content_chunker.length.boundary.enabled`` auf
+   ``false`` zu setzen -- oder beide Prozentwerte auf ``0`` -- reproduziert exakt das bisherige
+   Verhalten mit fester Länge. Änderungen an diesen Einstellungen wirken sich nur auf danach
+   gechunkte Dokumente aus: Ein bereits als Chunk-Array gespeichertes Dokument behält seine
+   Grenzen, bis es erneut gecrawlt wird.
 
 .. note::
 
