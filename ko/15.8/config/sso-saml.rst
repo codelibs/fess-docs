@@ -19,6 +19,18 @@ SAML 인증에서는 |Fess| 가 SP（Service Provider）로 동작하여 외부 
 4. IdP가 SAML 어서션을 |Fess| 에 전송
 5. |Fess| 가 어서션을 검증하고 사용자를 로그인
 
+.. note::
+   지원되는 것은 위와 같이 |Fess| 측（``/sso/``）에서 시작하는 SP-Initiated 로그인뿐입니다.
+   |Fess| 는 전송한 AuthnRequest의 ID와 SAML 응답을 대응시켜 검증하므로,
+   IdP 포털（Okta 대시보드나 Microsoft Entra ID의 「내 앱」 등）에 배치한 타일에서 시작하는
+   IdP-Initiated（미요청·unsolicited）SSO는 대응시킬 AuthnRequest가 없어 거부됩니다.
+   IdP 측에 타일을 배치하는 경우에는 링크 대상을 |Fess| 의 ``/sso/`` 로 지정하십시오.
+
+   참고로 15.7에서는 ``tomcat.sameSiteCookies=none`` 을 설정하면 IdP-Initiated 로그인이 결과적으로
+   동작했습니다. |Fess| 가 대응시키지 못한 응답을 IdP로 되돌려 보내고, IdP가 즉시 SP-Initiated
+   어서션을 반환했기 때문입니다. 15.8에서는 이 되돌려 보내기를 하지 않으므로 IdP-Initiated 로그인은
+   동작하지 않습니다.
+
 역할 기반 검색과의 연동에 대해서는 :doc:`security-role` 을 참조하십시오.
 
 전제 조건
@@ -56,6 +68,12 @@ SAML 인증을 활성화하려면 ``app/WEB-INF/conf/system.properties`` 에 다
    ``sso.type`` 및 기본적인 SAML 설정（IdP 정보, SP 정보, 사용자 속성 매핑）은 관리 화면의 「시스템 > 전체」 페이지에서도 설정·변경할 수 있습니다.
    관리 화면에서 변경한 설정은 ``system.properties`` 에 저장되며, 재시작 후에도 유지됩니다.
    단, 서명·암호화 등의 보안 설정이나 SP 인증서·비밀 키는 관리 화면에서 설정할 수 없으므로 ``system.properties`` 에 직접 기술하십시오.
+
+.. note::
+   ``saml.`` 로 시작하는 설정은 ``system.properties`` 에서만 읽어 들입니다.
+   JVM 시스템 프로퍼티（``-Dsaml.security....`` 나 ``-Dfess.saml.security....``）로 지정해도 참조되지 않습니다.
+   특히 ``saml.security.*`` , ``saml.strict`` , ``saml.debug`` 는 관리 화면에도 항목이 없으므로
+   ``system.properties`` 에 직접 기술하는 것 외에는 설정할 방법이 없습니다.
 
 세션 쿠키 설정
 --------------
@@ -291,10 +309,30 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
    * - ``saml.security.logoutresponse_signed``
      - 로그아웃 응답에 서명한다
      - ``false``
+   * - ``saml.security.reject_deprecated_alg``
+     - SHA-1 등 사용이 권장되지 않는 서명 알고리즘을 거부한다
+     - ``false``
 
 .. warning::
    기본값에서는 보안 기능이 비활성화되어 있습니다.
    운영 환경에서는 최소한 ``saml.security.want_assertions_signed=true`` 를 설정하도록 강력히 권장합니다.
+
+.. note::
+   ``saml.security.reject_deprecated_alg`` 가 ``false`` 인 동안에는 SHA-1（``rsa-sha1`` 및 ``dsa-sha1``）로
+   서명된 어서션이나 메시지도 허용됩니다. 기본적으로 활성화되어 있지 않은 이유는, 활성화하면 아직 SHA-1로
+   서명하는 IdP를 거부하게 되기 때문입니다.
+   IdP가 SHA-256 이상으로 서명하는지 확인한 후 ``saml.security.reject_deprecated_alg=true`` 를 설정하십시오.
+
+.. warning::
+   싱글 로그아웃（``saml.idp.single_logout_service.url``）을 설정하는 경우에는
+   ``saml.security.want_messages_signed=true`` 도 반드시 함께 설정하십시오.
+   ``false`` 인 상태에서는 ``/sso/logout`` 이 수신하는 LogoutRequest에 서명이 요구되지 않습니다.
+   검증되는 것은 XML 스키마, ``NotOnOrAfter``（존재하는 경우）, ``Destination``（존재하는 경우）,
+   그리고 Issuer가 ``saml.idp.entityid`` 와 일치하는지뿐이며,
+   LogoutRequest 안의 NameID가 로그인 중인 사용자와 일치하는지는 검사하지 않습니다.
+   따라서 공개 정보인 IdP의 Entity ID를 아는 공격자는 서명 없는 LogoutRequest를 만들어,
+   해당 URL로 사용자를 유도함으로써 인증된 세션을 종료시킬 수 있습니다.
+   영향은 강제 로그아웃（서비스 거부）이며, 계정 탈취는 아닙니다.
 
 암호화 설정
 -----------
@@ -424,6 +462,9 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
     saml.security.want_assertions_signed=true
     saml.security.want_messages_signed=true
 
+    # IdP가 SHA-256 이상으로 서명하는지 확인한 후 활성화한다
+    saml.security.reject_deprecated_alg=true
+
 문제 해결
 =========
 
@@ -437,8 +478,48 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
 - ``saml.sp.base.url`` 의 값이 IdP 측의 설정과 일치하는지 확인하십시오
 - SAML 어설션은 IdP에서 교차 사이트 POST로 전송됩니다. ``tomcat_config.properties`` 의
   ``tomcat.sameSiteCookies`` 가 ``lax`` (기본값)인 경우 브라우저가 세션 쿠키를 함께 보내지 않으므로
-  |Fess| 는 SAML 상태를 찾지 못하고 다시 IdP로 리다이렉트하여 루프가 발생합니다. 이 경우
+  |Fess| 는 대응하는 AuthnRequest의 ID를 찾지 못하고 그 자리에서 한 번만 로그인에 실패합니다.
+  브라우저는 로그인 화면으로 돌아가 「SSO 로그인 프로세스에 실패했습니다.」가 표시되고, 로그에는
+  ``Received a SAML response with no matching AuthnRequest ID in the session.``
+  으로 시작하는 경고가 출력됩니다. 이 경우
   ``tomcat.sameSiteCookies = none`` 을 설정하십시오 (``SameSite=None`` 은 HTTPS가 필요합니다)
+
+.. note::
+   15.7에서는 같은 상황에서 IdP로의 재리다이렉트가 반복되어 로그인이 루프에 빠졌습니다.
+   15.8에서는 루프 없이 한 번만 실패하도록 변경되었습니다. 설정으로 대처하는 방법은 동일합니다.
+
+리버스 프록시 환경에서 Destination 검증에 실패함
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TLS를 종단하는 리버스 프록시나 로드 밸런서 뒤에 |Fess| 를 배치하면,
+``saml.sp.base.url`` 을 올바르게 설정했더라도 어설션 검증에 실패할 수 있습니다.
+
+원인은 SAML 라이브러리가 어설션의 ``Destination`` 속성을 설정된 ACS URL이 아니라
+서블릿 컨테이너가 조립한 요청 URL과 비교하기 때문입니다. 프록시가 HTTPS를 종단하면
+|Fess| 가 인식하는 요청 URL은 ``http://<내부-호스트명>:<내부-포트>/sso/`` 와 같은 내부용 값이 되어,
+IdP가 보낸 ``https://fess.example.com/sso/`` 와 일치하지 않습니다.
+``saml.sp.base.url`` 은 이 비교에 사용되지 않으므로 이 설정만으로는 해결되지 않습니다.
+
+``saml.debug=true`` 를 설정하면 로그에 다음과 같은 이유가 출력됩니다.
+
+::
+
+    The response was received at http://... instead of https://fess.example.com/sso/
+
+이 경우 ``tomcat_config.properties`` 의 커넥터 설정을 외부에서 보이는 스킴과 포트에 맞추십시오.
+다음 설정은 기본적으로 주석 처리되어 있습니다.
+
+::
+
+    tomcat.secure=true
+    tomcat.scheme=https
+    tomcat.proxyPort=443
+
+아울러 리버스 프록시가 원래의 ``Host`` 헤더를 그대로 |Fess| 로 전달하도록 설정하십시오.
+요청 URL의 호스트명 부분은 ``Host`` 헤더로부터 조립됩니다.
+``tomcat_config.properties`` 를 변경한 후에는 |Fess| 의 재시작이 필요합니다.
+
+같은 검증이 싱글 로그아웃 메시지에도 적용되므로, SLO를 사용하는 경우에도 동일하게 설정하십시오.
 
 서명 검증 오류
 ~~~~~~~~~~~~~~
