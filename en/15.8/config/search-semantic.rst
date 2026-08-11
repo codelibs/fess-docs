@@ -140,26 +140,37 @@ system.properties Settings
      - Chunking method
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Number of characters per chunk (target, see the note below)
+     - Target number of characters per chunk. With boundary-aware splitting enabled (the
+       default) this is a target rather than a hard limit: a chunk may be up to
+       ``boundary.lookback_percent`` of it shorter, and up to ``max(lookahead, 32)`` characters
+       longer -- 640 to 840 characters at the defaults. Leave that margin against the embedding
+       model's token limit
    * - ``content_chunker.length.overlap``
      - ``0``
-     - Number of characters to overlap between chunks
+     - Number of characters to overlap between chunks. The restart point is snapped to a
+       boundary as well, and snapping can only move it earlier, so the effective overlap is
+       between this value and twice this value
    * - ``content_chunker.length.boundary.enabled``
      - ``true``
-     - Moves each cut to the nearest suitable break within the search window, preferring a line
-       break or sentence end over a clause separator or space, and those over a script change,
-       instead of landing at exactly ``chunk_size`` characters
+     - Move each cut to a sensible text boundary instead of cutting at exactly
+       ``chunk_size`` characters. Candidates are tiered and the nearest candidate of the highest
+       tier present wins: a line break or sentence end, otherwise a clause separator or space,
+       otherwise a writing-system change. Set to ``false`` for the previous fixed-length
+       behaviour
    * - ``content_chunker.length.boundary.lookback_percent``
-     - ``20``\ (0-50)
-     - How far before the ideal cut, as a percentage of ``chunk_size``, the boundary search may
-       look for a break
+     - ``20``
+     - How far before the ideal cut a boundary may be searched, as a percentage of
+       ``chunk_size`` (0-50)
    * - ``content_chunker.length.boundary.lookahead_percent``
-     - ``5``\ (0-25)
-     - How far after the ideal cut, as a percentage of ``chunk_size``, the boundary search may
-       look for a break
+     - ``5``
+     - How far after the ideal cut a sentence end or line break may be searched, as a
+       percentage of ``chunk_size`` (0-25). Used only when nothing was found behind the cut
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Maximum number of chunks per document. Documents that exceed this are marked ``skipped``
+       and receive no embeddings. Because boundary-aware splitting makes chunks shorter, a
+       document yields roughly 3% to 25% more chunks than a fixed-length split, so a corpus of
+       very large documents may need a higher value here
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - Embedding provider (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -226,19 +237,22 @@ system.properties Settings
 
    With ``content_chunker.length.boundary.enabled=true`` (the default),
    ``content_chunker.length.chunk_size`` becomes a target rather than a hard ceiling: each cut
-   moves to the nearest suitable break within the search window, preferring a line break or
-   sentence end over a clause separator or space, and those over a script change. Only the cut
-   point ever moves; no character is dropped, so concatenating a document's chunks still
-   reproduces its content exactly. The forward search can overshoot ``chunk_size`` by up to
+   moves to the nearest candidate of the highest tier present in the search window. A line break
+   or sentence end wins over any clause separator or space no matter how much farther back it
+   is, and those win over a writing-system change. Only the cut point ever moves; no character
+   is dropped, so concatenating a document's chunks still reproduces its content exactly. The
+   forward search can overshoot ``chunk_size`` by up to
    ``content_chunker.length.boundary.lookahead_percent``; a second, independent overshoot of up
    to 32 characters can occur when a cut would otherwise land inside a grapheme cluster (a
    combining mark, a variation selector, or a zero-width-joined emoji sequence) — that one
    ignores ``lookahead_percent`` and can happen even when it is ``0``. The two overshoots never
-   occur on the same cut; the worst case at the shipped defaults is about 841 characters. Chunks
-   can also come in up to ``lookback_percent`` shorter, so a document may produce slightly more
-   chunks than before (see ``content_chunker.max_chunks_per_document``). Set
-   ``content_chunker.length.boundary.enabled=false``, or both percentages to ``0``, to restore
-   the previous exact fixed-length behavior.
+   occur on the same cut, so at the shipped defaults a chunk runs from 640 to 840 characters.
+   Because chunks come in shorter on average, a document yields roughly 3% to 25% more chunks
+   than a fixed-length split (see ``content_chunker.max_chunks_per_document``). Setting
+   ``content_chunker.length.boundary.enabled`` to ``false``, or both percentages to ``0``,
+   reproduces the previous fixed-length behaviour exactly. Changing any of these settings only
+   affects documents chunked afterwards: a document already stored as a chunk array keeps its
+   boundaries until it is re-crawled.
 
 .. note::
 

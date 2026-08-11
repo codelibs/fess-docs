@@ -150,28 +150,39 @@ Réglages dans system.properties
      - Méthode de chunking
    * - ``content_chunker.length.chunk_size``
      - ``800``
-     - Nombre de caractères par chunk (valeur cible, voir la note ci-dessous)
+     - Nombre de caractères visé par chunk. Lorsque le découpage aux frontières est activé
+       (valeur par défaut), il s'agit d'une cible et non d'une limite stricte : un chunk peut être
+       plus court de ``boundary.lookback_percent`` et plus long de ``max(lookahead, 32)``
+       caractères, soit de 640 à 840 caractères avec les valeurs par défaut. Conservez cette marge
+       par rapport à la limite de tokens du modèle d'embedding
    * - ``content_chunker.length.overlap``
      - ``0``
-     - Nombre de caractères de chevauchement entre les chunks
+     - Nombre de caractères de chevauchement entre les chunks. Le point de reprise est lui
+       aussi aligné sur une frontière, et cet alignement ne peut que l'avancer : le chevauchement
+       effectif est donc compris entre cette valeur et le double de cette valeur
    * - ``content_chunker.length.boundary.enabled``
      - ``true``
-     - Déplace chaque coupure vers la rupture la plus appropriée dans la fenêtre de recherche, en
-       donnant la priorité à un saut de ligne ou une fin de phrase sur un séparateur de
-       proposition ou un espace, puis à ceux-ci sur un changement d'écriture, au lieu de couper
-       exactement à ``chunk_size`` caractères
+     - Déplace chaque coupure vers une frontière de texte pertinente au lieu de couper
+       exactement à ``chunk_size`` caractères. Les candidats sont hiérarchisés et le plus proche
+       du niveau le plus élevé présent l'emporte : saut de ligne ou fin de phrase, sinon
+       séparateur de proposition ou espace, sinon changement de système d'écriture. ``false``
+       rétablit le comportement précédent à longueur fixe
    * - ``content_chunker.length.boundary.lookback_percent``
-     - ``20``\ (0-50)
-     - Jusqu'où, avant le point de coupure idéal et en pourcentage de ``chunk_size``, la
-       recherche de rupture peut remonter
+     - ``20``
+     - Distance de recherche d'une frontière avant la coupure idéale, en pourcentage de
+       ``chunk_size`` (0-50)
    * - ``content_chunker.length.boundary.lookahead_percent``
-     - ``5``\ (0-25)
-     - Jusqu'où, après le point de coupure idéal et en pourcentage de ``chunk_size``, la
-       recherche de rupture peut avancer
+     - ``5``
+     - Distance de recherche d'une fin de phrase ou d'un saut de ligne après la coupure
+       idéale, en pourcentage de ``chunk_size`` (0-25). Utilisé uniquement si rien n'a été trouvé
+       avant la coupure
    * - ``content_chunker.max_chunks_per_document``
      - ``1000``
      - Nombre maximal de chunks par document. Les documents qui dépassent cette limite sont
-       marqués ``skipped``
+       marqués ``skipped`` et ne reçoivent aucun embedding. Comme le découpage aux
+       frontières raccourcit les chunks, un document en produit environ 3 % à 25 % de plus qu'avec
+       une longueur fixe ; un corpus de très gros documents peut donc nécessiter une valeur plus
+       élevée ici
    * - ``content_chunker.embedding.name``
      - ``opensearch``
      - Fournisseur d'embedding (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
@@ -243,22 +254,25 @@ Réglages dans system.properties
 
    Avec ``content_chunker.length.boundary.enabled=true`` (valeur par défaut),
    ``content_chunker.length.chunk_size`` devient un objectif plutôt qu'un plafond strict : chaque
-   coupure se déplace vers la rupture la plus appropriée dans la fenêtre de recherche, en donnant
-   la priorité à un saut de ligne ou une fin de phrase sur un séparateur de proposition ou un
-   espace, puis à ceux-ci sur un changement d'écriture. Seul le point de coupure est déplacé ;
-   aucun caractère n'est perdu, si bien que la concaténation des chunks d'un document reproduit
-   toujours son contenu exact. La recherche vers l'avant peut dépasser ``chunk_size`` d'au plus
+   coupure se déplace vers le candidat le plus proche du niveau le plus élevé présent dans la
+   fenêtre de recherche. Un saut de ligne ou une fin de phrase l'emporte sur n'importe quel
+   séparateur de proposition ou espace, aussi loin en arrière soit-il, et ceux-ci l'emportent sur
+   un changement de système d'écriture. Seul le point de coupure est déplacé ; aucun caractère
+   n'est perdu, si bien que la concaténation des chunks d'un document reproduit toujours son
+   contenu exact. La recherche vers l'avant peut dépasser ``chunk_size`` d'au plus
    ``content_chunker.length.boundary.lookahead_percent``. Un second dépassement, indépendant,
    pouvant aller jusqu'à 32 caractères peut se produire lorsqu'une coupure tomberait autrement au
    milieu d'un cluster de graphèmes (une marque combinante, un sélecteur de variante ou une
    séquence d'emojis liée par un jointeur de largeur nulle ; ZWJ) — celui-ci ignore
    ``lookahead_percent`` et peut survenir même lorsqu'il vaut ``0``. Les deux types de
-   dépassement ne se produisent jamais sur la même coupure ; le pire cas avec les valeurs par
-   défaut est d'environ 841 caractères. Les chunks peuvent aussi être plus courts d'au plus
-   ``lookback_percent``, si bien qu'un document peut produire légèrement plus de chunks qu'avant
-   (voir ``content_chunker.max_chunks_per_document``). Définissez
-   ``content_chunker.length.boundary.enabled=false``, ou les deux pourcentages à ``0``, pour
-   restaurer le comportement précédent à longueur fixe exacte.
+   dépassement ne se produisent jamais sur la même coupure : avec les valeurs par défaut, un
+   chunk fait donc de 640 à 840 caractères. Les chunks étant en moyenne plus courts, un document
+   produit environ 3 % à 25 % de chunks de plus qu'un découpage à longueur fixe (voir
+   ``content_chunker.max_chunks_per_document``). Régler
+   ``content_chunker.length.boundary.enabled`` sur ``false``, ou les deux pourcentages sur ``0``,
+   reproduit exactement le comportement précédent à longueur fixe. La modification de ces
+   paramètres n'affecte que les documents découpés ensuite : un document déjà stocké sous forme
+   de tableau de chunks conserve ses frontières jusqu'à ce qu'il soit à nouveau crawlé.
 
 .. note::
 
