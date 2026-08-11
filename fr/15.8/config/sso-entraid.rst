@@ -108,6 +108,9 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    * - ``entraid.default.roles``
      - Rôles par défaut (séparés par des virgules)
      - (Aucun)
+   * - ``entraid.require.membership``
+     - Comportement lorsque les groupes et rôles de l'utilisateur ne peuvent pas être récupérés depuis Microsoft Graph lors de la connexion. Avec ``true``, la connexion est refusée. Avec ``false``, un avertissement est journalisé et la connexion aboutit, mais l'utilisateur ne dispose que des groupes et rôles par défaut ci-dessus.
+     - ``false``
    * - ``entraid.permission.fields``
      - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées.
      - ``mail``
@@ -205,7 +208,8 @@ Configuration des autorisations d'API
 
 5. Ajoutez l'autorisation suivante :
 
-   - ``Group.Read.All`` - Requis pour récupérer les informations de groupe de l'utilisateur
+   - ``User.Read`` - Requis pour récupérer les appartenances aux groupes de l'utilisateur connecté (``/me/memberOf``). Accordé par défaut lors de la création de l'inscription d'application
+   - ``GroupMember.Read.All`` - Requis pour lire les attributs de groupe tels que le nom du groupe et pour résoudre les groupes imbriqués
 
 6. Cliquez sur **Ajouter des autorisations**
 
@@ -215,10 +219,16 @@ Configuration des autorisations d'API
    Le consentement administrateur nécessite des privilèges d'administrateur de tenant.
 
 .. note::
+   ``Group.Read.All`` ou ``Directory.Read.All`` peuvent être accordés à la place de
+   ``GroupMember.Read.All`` : la lecture des attributs de groupe et la résolution des groupes
+   imbriqués fonctionnent également. En revanche, ``/me/memberOf`` n'est pas autorisé par
+   ``Group.Read.All``, si bien que ``User.Read`` reste nécessaire dans tous les cas.
+
+.. note::
    |Fess| demande le scope ``https://graph.microsoft.com/.default`` lors de l'acquisition d'un jeton.
    Depuis la version 15.8, ``openid profile offline_access https://graph.microsoft.com/.default`` est également envoyé au point de terminaison d'autorisation, afin que le consentement soit demandé pour le même ensemble.
    Cela signifie que toutes les autorisations d'accès configurées et consenties sur l'inscription d'application sont utilisées.
-   Par conséquent, pour récupérer les informations de groupe, vous devez ajouter l'autorisation ``Group.Read.All`` ci-dessus à l'inscription d'application et accorder le consentement administrateur.
+   Par conséquent, pour récupérer les informations de groupe, vous devez ajouter les autorisations ci-dessus à l'inscription d'application et accorder le consentement administrateur.
 
 Informations à obtenir
 ----------------------
@@ -331,9 +341,20 @@ Des erreurs d'authentification se produisent
 Impossible de récupérer les informations de groupe
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Vérifiez que l'autorisation ``Group.Read.All`` a été accordée
+- Vérifiez que les autorisations ``User.Read`` et ``GroupMember.Read.All`` ont été accordées
+  (``GroupMember.Read.All`` peut être remplacé par ``Group.Read.All`` ou ``Directory.Read.All``,
+  mais ``/me/memberOf`` exige toujours ``User.Read``)
 - Vérifiez que le consentement administrateur a été accordé
 - Vérifiez que l'utilisateur appartient à des groupes dans Entra ID
+- Si les groupes parents imbriqués ne peuvent pas être résolus, l'avertissement
+  ``Not allowed to read the parent groups of ...`` est journalisé. Accordez alors
+  ``GroupMember.Read.All``
+- Avec la valeur par défaut ``entraid.require.membership=false``, la connexion aboutit même si les
+  groupes ne peuvent pas être récupérés. L'utilisateur ne dispose alors que de
+  ``entraid.default.groups`` et ``entraid.default.roles``, si bien que les documents qu'il devrait
+  pouvoir consulter n'apparaissent pas dans les résultats de recherche
+- Définissez ``entraid.require.membership=true`` pour refuser une telle connexion si vous préférez
+  que les utilisateurs ne recherchent pas avec des permissions incomplètes
 
 Paramètres de débogage
 ----------------------

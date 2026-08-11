@@ -108,6 +108,9 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    * - ``entraid.default.roles``
      - Roles por defecto (separados por comas)
      - (Ninguno)
+   * - ``entraid.require.membership``
+     - Qué ocurre cuando los grupos y roles del usuario no se pueden recuperar de Microsoft Graph durante el inicio de sesión. Con ``true``, el inicio de sesión se rechaza. Con ``false``, se registra una advertencia y el inicio de sesión continúa, pero el usuario solo dispone de los grupos y roles por defecto indicados arriba.
+     - ``false``
    * - ``entraid.permission.fields``
      - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan.
      - ``mail``
@@ -204,7 +207,8 @@ Configurar permisos de API
 
 5. Agregue el siguiente permiso:
 
-   - ``Group.Read.All`` - Requerido para recuperar la información de grupo del usuario
+   - ``User.Read`` - Requerido para recuperar las pertenencias a grupos del usuario que ha iniciado sesión (``/me/memberOf``). Se concede por defecto al crear el registro de la aplicación
+   - ``GroupMember.Read.All`` - Requerido para leer atributos del grupo, como su nombre, y para resolver los grupos anidados
 
 6. Haga clic en **Agregar permisos**
 
@@ -214,10 +218,16 @@ Configurar permisos de API
    El consentimiento del administrador requiere privilegios de administrador del tenant.
 
 .. note::
+   En lugar de ``GroupMember.Read.All`` también se pueden conceder ``Group.Read.All`` o
+   ``Directory.Read.All``: la lectura de los atributos del grupo y la resolución de los grupos
+   anidados siguen funcionando. Sin embargo, ``/me/memberOf`` no está autorizado por
+   ``Group.Read.All``, por lo que ``User.Read`` es necesario en cualquier caso.
+
+.. note::
    |Fess| solicita el ámbito ``https://graph.microsoft.com/.default`` al adquirir un token.
    Desde la versión 15.8, también se envía ``openid profile offline_access https://graph.microsoft.com/.default`` al endpoint de autorización, de modo que el consentimiento se solicita para el mismo conjunto.
    Esto significa que se utilizan todos los permisos de acceso configurados y para los que se ha dado consentimiento en el registro de la aplicación.
-   Por lo tanto, para recuperar información de grupos, debe agregar el permiso ``Group.Read.All`` indicado anteriormente al registro de la aplicación y otorgar el consentimiento del administrador.
+   Por lo tanto, para recuperar información de grupos, debe agregar los permisos indicados anteriormente al registro de la aplicación y otorgar el consentimiento del administrador.
 
 Información a obtener
 ---------------------
@@ -332,9 +342,19 @@ Ocurren errores de autenticación
 No se puede recuperar la información de grupo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verifique que se haya otorgado el permiso ``Group.Read.All``
+- Verifique que se hayan otorgado los permisos ``User.Read`` y ``GroupMember.Read.All``
+  (``GroupMember.Read.All`` puede sustituirse por ``Group.Read.All`` o ``Directory.Read.All``,
+  pero ``/me/memberOf`` sigue requiriendo ``User.Read``)
 - Verifique que se haya otorgado el consentimiento del administrador
 - Verifique que el usuario pertenezca a grupos en Entra ID
+- Si no se pueden resolver los grupos padre anidados, se registra la advertencia
+  ``Not allowed to read the parent groups of ...``. En ese caso, otorgue ``GroupMember.Read.All``
+- Con el valor por defecto ``entraid.require.membership=false``, el inicio de sesión continúa
+  aunque no se puedan recuperar los grupos. El usuario solo dispone entonces de
+  ``entraid.default.groups`` y ``entraid.default.roles``, por lo que los documentos que debería
+  poder ver no aparecen en los resultados de búsqueda
+- Establezca ``entraid.require.membership=true`` para rechazar ese inicio de sesión si prefiere que
+  los usuarios no busquen con permisos incompletos
 
 Configuración de depuración
 ---------------------------

@@ -519,6 +519,23 @@ misconfiguration did not produce a clean error but an endless redirect loop back
 check the setting even on a site that appeared to work; 15.8 fails once instead of looping. For
 details, see :doc:`../config/sso-saml`.
 
+If You Were Using Microsoft Entra ID (Azure AD)
+-----------------------------------------------
+
+Starting with 15.8, the response mode requested from the authorization endpoint defaults to
+``query`` instead of ``form_post``. Up to 15.7 the callback was returned as a cross-site POST,
+and the |Fess| default ``tomcat.sameSiteCookies = lax`` does not send the session cookie with
+such a request, so ``tomcat.sameSiteCookies = none`` was required. If you set ``none`` only for
+that reason, you can restore the default. To keep the previous behaviour, set
+``entraid.response.mode=form_post`` and leave ``tomcat.sameSiteCookies = none`` in place.
+
+15.8 also adds ``entraid.require.membership``, which selects what happens when Microsoft Graph
+does not return the user's groups and roles at login. The default, ``false``, behaves as 15.7
+did: a warning is logged and the login completes. The user then holds only
+``entraid.default.groups`` and ``entraid.default.roles``, so documents they should be able to see
+are missing from search results. Set it to ``true`` to reject such a login instead. For details,
+see :doc:`../config/sso-entraid`.
+
 Updating Plugin Versions
 ------------------------
 

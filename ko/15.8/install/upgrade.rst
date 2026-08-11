@@ -514,6 +514,23 @@ IdP로의 무한 리다이렉트 루프로 나타났으므로, 동작하는 것�
 확인하십시오. 15.8에서는 루프에 빠지지 않고 한 번에 실패합니다.
 자세한 내용은 :doc:`../config/sso-saml` 을 참조하십시오.
 
+Microsoft Entra ID(Azure AD)를 사용하고 있었던 경우
+---------------------------------------------------
+
+15.8부터 인가 엔드포인트에 요청하는 응답 모드의 기본값이 ``form_post`` 에서 ``query`` 로
+변경되었습니다. 15.7까지는 콜백이 교차 사이트 POST로 반환되므로, |Fess| 의 기본값인
+``tomcat.sameSiteCookies = lax`` 에서는 세션 쿠키가 전송되지 않아 ``none`` 으로 변경해야
+했습니다. 이 회피책만을 위해 ``none`` 을 설정했다면 기본값으로 되돌릴 수 있습니다. 기존과 같이
+``form_post`` 를 사용하려면 ``entraid.response.mode=form_post`` 를 지정하고
+``tomcat.sameSiteCookies = none`` 을 유지하십시오.
+
+또한 15.8에서는 로그인 시 Microsoft Graph에서 사용자의 그룹·역할 정보를 취득하지 못한 경우의
+동작을 ``entraid.require.membership`` 으로 선택할 수 있습니다. 기본값 ``false`` 는 15.7과 동일
+하게 경고를 로그에 출력하고 로그인을 계속합니다. 다만 이때 사용자의 권한은
+``entraid.default.groups`` 와 ``entraid.default.roles`` 뿐이므로, 원래 참조할 수 있는 문서가
+검색 결과에 나오지 않습니다. ``true`` 를 지정하면 이러한 로그인은 거부됩니다.
+자세한 내용은 :doc:`../config/sso-entraid` 를 참조하십시오.
+
 플러그인 버전 갱신
 ------------------------
 

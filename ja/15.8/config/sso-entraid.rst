@@ -106,6 +106,9 @@ Entra IDから取得した情報を設定します。
    * - ``entraid.default.roles``
      - デフォルトロール（カンマ区切り）
      - （なし）
+   * - ``entraid.require.membership``
+     - ログイン時にMicrosoft Graphからユーザーのグループ・ロール情報を取得できなかった場合の扱い。\ ``true`` の場合はログインを拒否します。\ ``false`` の場合は警告をログに出力してログインを継続しますが、ユーザーの権限は上記のデフォルトグループ・デフォルトロールだけになります。
+     - ``false``
    * - ``entraid.permission.fields``
      - 権限値として追加で使用するグループ/ロールのフィールド（カンマ区切り）。グループ/ロールのID（GUID）は常に権限として使用され、ここで指定したフィールド（例: ``mail``）の値が追加されます。
      - ``mail``
@@ -199,7 +202,8 @@ APIアクセス許可の設定
 
 5. 以下のアクセス許可を追加:
 
-   - ``Group.Read.All`` - ユーザーのグループ情報を取得するために必要
+   - ``User.Read`` - サインインしたユーザーの所属グループ（``/me/memberOf``）の取得に必要。アプリ登録の作成時に既定で付与されます
+   - ``GroupMember.Read.All`` - グループ名などのグループ属性の取得、およびネストされたグループの解決に必要
 
 6. **アクセス許可の追加** をクリック
 
@@ -209,11 +213,17 @@ APIアクセス許可の設定
    管理者の同意は、テナント管理者権限が必要です。
 
 .. note::
+   ``GroupMember.Read.All`` の代わりに ``Group.Read.All`` や ``Directory.Read.All`` を付与しても、
+   グループ属性の取得とネストされたグループの解決は動作します。
+   一方、\ ``/me/memberOf`` は ``Group.Read.All`` では認可されないため、
+   いずれの場合も ``User.Read`` は必要です。
+
+.. note::
    |Fess| はトークン取得時に ``https://graph.microsoft.com/.default`` スコープを要求します。
    15.8 以降は、認可エンドポイントにも ``openid profile offline_access https://graph.microsoft.com/.default``
    を要求し、同じ範囲の同意を求めます。
    これは、アプリ登録で構成・同意済みのすべてのアクセス許可が使用されることを意味します。
-   そのため、グループ情報を取得するには、上記の ``Group.Read.All`` をアプリ登録に追加し、
+   そのため、グループ情報を取得するには、上記のアクセス許可をアプリ登録に追加し、
    管理者の同意を与えておく必要があります。
 
 取得する情報
@@ -329,9 +339,13 @@ Entra ID認証では、Microsoft Graph APIを使用してユーザーが所属�
 グループ情報が取得できない
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``Group.Read.All`` のアクセス許可が付与されているか確認してください
+- ``User.Read`` と ``GroupMember.Read.All`` のアクセス許可が付与されているか確認してください
+  （``GroupMember.Read.All`` は ``Group.Read.All`` や ``Directory.Read.All`` でも代用できますが、\ ``/me/memberOf`` には ``User.Read`` が必要です）
 - 管理者の同意が与えられているか確認してください
 - ユーザーがEntra ID上でグループに所属しているか確認してください
+- ネストされた親グループを解決できない場合は、\ ``Not allowed to read the parent groups of ...`` という警告がログに出力されます。この場合は ``GroupMember.Read.All`` を付与してください
+- 既定の ``entraid.require.membership=false`` では、グループ情報を取得できなくてもログインは継続します。このときユーザーの権限は ``entraid.default.groups`` と ``entraid.default.roles`` だけになるため、本来参照できる文書が検索結果に出なくなります
+- ``entraid.require.membership=true`` を指定すると、この状態でのログインは拒否されます。権限が欠けたまま検索されることを避けたい場合に指定してください
 
 デバッグ設定
 ------------

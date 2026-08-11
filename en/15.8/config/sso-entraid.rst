@@ -107,6 +107,9 @@ The following settings can be added as needed.
    * - ``entraid.default.roles``
      - Default roles (comma-separated)
      - (None)
+   * - ``entraid.require.membership``
+     - What happens when the user's groups and roles cannot be retrieved from Microsoft Graph at login. When ``true``, the login is rejected. When ``false``, a warning is logged and the login continues, but the user holds only the default groups and roles above.
+     - ``false``
    * - ``entraid.permission.fields``
      - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added.
      - ``mail``
@@ -200,7 +203,8 @@ Configuring API Permissions
 
 5. Add the following permission:
 
-   - ``Group.Read.All`` - Required to retrieve user group information
+   - ``User.Read`` - Required to retrieve the signed-in user's group memberships (``/me/memberOf``). Granted by default when the app registration is created
+   - ``GroupMember.Read.All`` - Required to read group attributes such as the group name, and to resolve nested groups
 
 6. Click **Add permissions**
 
@@ -210,7 +214,13 @@ Configuring API Permissions
    Admin consent requires tenant administrator privileges.
 
 .. note::
-   |Fess| requests the ``https://graph.microsoft.com/.default`` scope when acquiring a token, and from 15.8 it also sends ``openid profile offline_access https://graph.microsoft.com/.default`` to the authorization endpoint so that consent is requested for the same set. This means that all access permissions configured and consented to on the app registration are used. Therefore, to retrieve group information, you must add the ``Group.Read.All`` permission above to the app registration and grant administrator consent.
+   ``Group.Read.All`` or ``Directory.Read.All`` can be granted instead of
+   ``GroupMember.Read.All``, and the group attribute lookup and the nested group resolution still
+   work. However, ``/me/memberOf`` is not authorized by ``Group.Read.All``, so ``User.Read`` is
+   required in either case.
+
+.. note::
+   |Fess| requests the ``https://graph.microsoft.com/.default`` scope when acquiring a token, and from 15.8 it also sends ``openid profile offline_access https://graph.microsoft.com/.default`` to the authorization endpoint so that consent is requested for the same set. This means that all access permissions configured and consented to on the app registration are used. Therefore, to retrieve group information, you must add the permissions above to the app registration and grant administrator consent.
 
 Information to Obtain
 ---------------------
@@ -325,9 +335,19 @@ Authentication Errors Occur
 Cannot Retrieve Group Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Verify that ``Group.Read.All`` permission has been granted
+- Verify that the ``User.Read`` and ``GroupMember.Read.All`` permissions have been granted
+  (``Group.Read.All`` or ``Directory.Read.All`` can replace ``GroupMember.Read.All``, but
+  ``/me/memberOf`` still requires ``User.Read``)
 - Verify that admin consent has been granted
 - Check that the user belongs to groups in Entra ID
+- If nested parent groups cannot be resolved, ``Not allowed to read the parent groups of ...`` is
+  logged as a warning. Grant ``GroupMember.Read.All`` in that case
+- With the default ``entraid.require.membership=false``, the login still completes when the groups
+  cannot be retrieved. The user then holds only ``entraid.default.groups`` and
+  ``entraid.default.roles``, so documents they should be able to see are missing from search
+  results
+- Set ``entraid.require.membership=true`` to reject such a login instead, if you would rather not
+  let users search with incomplete permissions
 
 Debug Settings
 --------------
