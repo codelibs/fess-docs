@@ -1186,7 +1186,7 @@ Konfigurationsbeispiel
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    Der User-Agent und die Anfrage-Header, die in der Crawl-Konfiguration
@@ -1276,14 +1276,19 @@ Blockieren unnötiger Ressourcen
 
 ``client.blockedResourceTypes`` nimmt eine kommagetrennte Liste der
 Ressourcentypen entgegen, die der Browser nicht abrufen soll. Zulässig sind
-die Ressourcentypen von Playwright (``image``, ``media``, ``font``,
-``stylesheet``, ``script``, ``xhr``, ``fetch``, ``websocket``, ``manifest``,
-``texttrack``, ``eventsource`` und ``other``). Standardmäßig wird nichts
-blockiert.
+die Ressourcentypen von Playwright (``stylesheet``, ``image``, ``media``,
+``font``, ``script``, ``texttrack``, ``xhr``, ``fetch``, ``eventsource``,
+``websocket``, ``manifest``, ``other``, ``ping``, ``cspreport`` und
+``beacon``). Standardmäßig wird nichts blockiert.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon`` und ``cspreport`` sind
+die Typen, die sich gefahrlos angeben lassen. Bei den letzten dreien handelt
+es sich um Tracker-Verkehr nach Beacon-Art, den nichts auf der Seite
+zurückliest.
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 Geben Sie nur Typen an, die ein Crawl nicht liest. Indem weniger der für die
 Anzeige einer Seite benötigten Ressourcen abgerufen werden, verringern sich
@@ -1291,14 +1296,24 @@ sowohl die Dauer eines Crawls als auch das übertragene Datenvolumen.
 
 .. warning::
    Geben Sie ``document`` nicht an. Der Abruf der Seite selbst würde blockiert
-   und der Crawl würde bei jeder URL fehlschlagen.
+   und der Crawl käme nicht zustande; der Wert wird daher mit einer Warnung
+   ignoriert.
+
+.. note::
+   Auch ein Typ, der nicht in der obigen Liste steht, wird mit einer Warnung
+   gemeldet. Ein Tippfehler im Plural wie ``images`` passt auf keine Anfrage
+   und blockiert daher nichts. Die Liste ist die Vereinigung der Typen, die
+   die drei Browser-Engines melden; einige Typen werden vom jeweils
+   verwendeten Browser deshalb nie gemeldet: ``texttrack`` meldet nur
+   Chromium, und WebKit meldet weder ``media`` noch ``manifest``. Die Angabe
+   eines Typs, der nicht gemeldet wird, blockiert einfach nichts.
 
 .. note::
    Das Blockieren von ``script`` oder ``xhr`` verhindert das Rendern durch
    JavaScript, womit der Einsatz von Playwright sinnlos wird. Für einen Crawl,
    der ausschließlich serverseitig gerenderte Seiten erfasst, ist es nützlich;
-   normalerweise geben Sie jedoch nur Typen an, die ein Crawl nicht liest,
-   etwa ``image``, ``media`` und ``font``.
+   wählen Sie jedoch normalerweise aus den oben genannten Typen aus, die sich
+   gefahrlos angeben lassen.
 
 Änderungen in 15.8
 ------------------

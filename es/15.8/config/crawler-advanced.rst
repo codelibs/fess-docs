@@ -1188,7 +1188,7 @@ Ejemplo de Configuración
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    El User Agent y los encabezados de solicitud definidos en la configuración
@@ -1277,28 +1277,44 @@ Bloqueo de Recursos Innecesarios
 
 ``client.blockedResourceTypes`` admite una lista separada por comas de los
 tipos de recursos que el navegador no debe obtener. Los valores son los tipos
-de recurso de Playwright (``image``, ``media``, ``font``, ``stylesheet``,
-``script``, ``xhr``, ``fetch``, ``websocket``, ``manifest``, ``texttrack``,
-``eventsource`` y ``other``). De forma predeterminada no se bloquea nada.
+de recurso de Playwright (``stylesheet``, ``image``, ``media``, ``font``,
+``script``, ``texttrack``, ``xhr``, ``fetch``, ``eventsource``,
+``websocket``, ``manifest``, ``other``, ``ping``, ``cspreport`` y
+``beacon``). De forma predeterminada no se bloquea nada.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon`` y ``cspreport`` son el
+conjunto que se puede especificar de forma segura. Los tres últimos son
+tráfico de seguimiento de tipo baliza que la página nunca vuelve a leer.
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 Especifique únicamente los tipos que el rastreo no lee. Obtener menos recursos
 de los que la página necesita para mostrarse reduce tanto el tiempo que tarda
 el rastreo como el volumen de datos transferidos.
 
 .. warning::
-   No especifique ``document``. Se bloquearía la obtención de la propia página
-   y el rastreo fallaría en todas las URL.
+   No especifique ``document``. Se bloquearía la obtención de la propia
+   página y el rastreo no podría llevarse a cabo, por lo que se ignora y se
+   emite una advertencia.
+
+.. note::
+   También se emite una advertencia al especificar un tipo que no figura en
+   la lista anterior. Un error tipográfico en plural como ``images`` no
+   coincide con ninguna solicitud, por lo que no bloquea nada. Además, la
+   lista anterior es la unión de los tipos que informan los tres motores de
+   navegador, por lo que hay tipos que el navegador utilizado nunca informa:
+   ``texttrack`` solo lo informa Chromium, y WebKit no informa ni ``media``
+   ni ``manifest``. Especificar un tipo que no se informa simplemente no
+   bloquea nada.
 
 .. note::
    Bloquear ``script`` o ``xhr`` impide que JavaScript renderice la página, lo
    que anula el propósito de usar Playwright. Resulta útil en un rastreo
-   dirigido únicamente a páginas renderizadas en el servidor, pero normalmente
-   debe especificar solo los tipos que el rastreo no lee, como ``image``,
-   ``media`` y ``font``.
+   dirigido únicamente a páginas renderizadas en el servidor, pero
+   normalmente debe elegir entre los tipos que se pueden especificar de
+   forma segura indicados anteriormente.
 
 Cambios en 15.8
 ---------------

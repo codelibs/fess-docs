@@ -1189,7 +1189,7 @@ Playwright クローラーを使用すると、ヘッドレスブラウザーで
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    ユーザーエージェントとリクエストヘッダーは、クロール設定の
@@ -1275,26 +1275,39 @@ DI 定義でのみ設定できる項目
 
 ``client.blockedResourceTypes`` には、ブラウザーが取得しないリソース種別を
 カンマ区切りで指定します。指定できるのは Playwright のリソース種別
-(``image`` 、``media`` 、``font`` 、``stylesheet`` 、``script`` 、``xhr`` 、
-``fetch`` 、``websocket`` 、``manifest`` 、``texttrack`` 、``eventsource`` 、
-``other``) です。既定では何もブロックしません。
+(``stylesheet`` 、``image`` 、``media`` 、``font`` 、``script`` 、
+``texttrack`` 、``xhr`` 、``fetch`` 、``eventsource`` 、``websocket`` 、
+``manifest`` 、``other`` 、``ping`` 、``cspreport`` 、``beacon``) です。
+既定では何もブロックしません。
+
+``image`` 、``media`` 、``font`` 、``ping`` 、``beacon`` 、``cspreport`` は
+安全に指定できる組です。後の 3 つはビーコン系のトラッカー通信であり、
+ページ側が読み返すことはありません。
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 クロールが読み取らない種別だけを指定してください。ページの表示に必要な
 リソースの取得を減らすことで、クロールの所要時間と転送量を削減できます。
 
 .. warning::
-   ``document`` は指定しないでください。ページ本体の取得自体がブロックされ、
-   すべての URL でクロールが失敗します。
+   ``document`` は指定しないでください。ページ本体の取得がブロックされて
+   クロールが成立しないため、警告を出して無視されます。
+
+.. note::
+   一覧にない種別を指定した場合も警告が出ます。``images`` のような複数形の
+   打ち間違いは、どのリクエストにも一致しないため何もブロックしません。
+   また、上記の一覧は 3 つのブラウザーエンジンが報告する種別の和集合であるため、
+   使用するブラウザーによっては報告されない種別があります。``texttrack`` は
+   Chromium のみが報告し、WebKit は ``media`` と ``manifest`` を報告しません。
+   報告されない種別を指定しても、単に何もブロックしないだけです。
 
 .. note::
    ``script`` や ``xhr`` をブロックすると JavaScript による描画が行われなくなり、
    Playwright を使用する意味がなくなります。サーバーサイドレンダリングのみを
-   対象とするクロールでは有効ですが、通常は ``image`` 、``media`` 、``font`` の
-   ように、クロールが読み取らない種別だけを指定してください。
+   対象とするクロールでは有効ですが、通常は上記の安全に指定できる種別の中から
+   選んでください。
 
 15.8 での変更点
 ---------------

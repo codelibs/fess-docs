@@ -1187,7 +1187,7 @@ Configuration Example
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    The user agent and the request headers configured in the crawling
@@ -1274,27 +1274,39 @@ Blocking Unnecessary Resources
 
 ``client.blockedResourceTypes`` takes a comma-separated list of the resource
 types the browser must not fetch. The values are Playwright resource types
-(``image``, ``media``, ``font``, ``stylesheet``, ``script``, ``xhr``,
-``fetch``, ``websocket``, ``manifest``, ``texttrack``, ``eventsource`` and
-``other``). By default nothing is blocked.
+(``stylesheet``, ``image``, ``media``, ``font``, ``script``, ``texttrack``,
+``xhr``, ``fetch``, ``eventsource``, ``websocket``, ``manifest``, ``other``,
+``ping``, ``cspreport`` and ``beacon``). By default nothing is blocked.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon`` and ``cspreport`` are the
+safe set. The last three are beacon-style tracker traffic that nothing on the
+page reads back.
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 Specify only the types a crawl does not read. Fetching fewer of the resources
 that a page needs for display reduces both the time a crawl takes and the
 amount of data transferred.
 
 .. warning::
-   Do not specify ``document``. Retrieving the page itself would be blocked,
-   and the crawl would fail for every URL.
+   Do not specify ``document``. Retrieving the page itself would be blocked and
+   the crawl could not proceed, so it is ignored with a warning.
+
+.. note::
+   A type that is not in the list above is also warned about. A plural typo such
+   as ``images`` matches no request, so it blocks nothing. The list is the union
+   of what the three browser engines report, so some types are never reported by
+   the browser in use: ``texttrack`` is reported by Chromium only, and WebKit
+   reports neither ``media`` nor ``manifest``. Specifying a type that is not
+   reported simply blocks nothing.
 
 .. note::
    Blocking ``script`` or ``xhr`` stops JavaScript from rendering the page,
    which defeats the purpose of using Playwright. It is useful for a crawl that
-   targets server-side rendered pages only, but normally specify only the types
-   a crawl does not read, such as ``image``, ``media`` and ``font``.
+   targets server-side rendered pages only, but normally choose from the safe
+   set listed above.
 
 Changes in 15.8
 ---------------

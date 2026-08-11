@@ -1184,7 +1184,7 @@ HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头�
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    用户代理和请求头将直接使用爬取配置中的"用户代理"以及请求头的设置。
@@ -1266,27 +1266,37 @@ HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头�
 ----------------
 
 ``client.blockedResourceTypes`` 中以逗号分隔指定浏览器不获取的资源类型。
-可指定的是 Playwright 的资源类型（``image``\ 、``media``\ 、``font``\ 、
-``stylesheet``\ 、``script``\ 、``xhr``\ 、``fetch``\ 、``websocket``\ 、
-``manifest``\ 、``texttrack``\ 、``eventsource``\ 、``other``\ ）。
-默认情况下不屏蔽任何内容。
+可指定的是 Playwright 的资源类型（``stylesheet``\ 、``image``\ 、``media``\ 、
+``font``\ 、``script``\ 、``texttrack``\ 、``xhr``\ 、``fetch``\ 、
+``eventsource``\ 、``websocket``\ 、``manifest``\ 、``other``\ 、``ping``\ 、
+``cspreport``\ 、``beacon``\ ）。默认情况下不屏蔽任何内容。
+
+``image``\ 、``media``\ 、``font``\ 、``ping``\ 、``beacon``\ 、``cspreport``
+是可以安全指定的一组。后面 3 个是信标类的跟踪通信，页面一侧不会读取它们。
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 请仅指定爬取不会读取的类型。通过减少获取页面显示所需的资源，
 可以缩短爬取所需的时间并减少传输量。
 
 .. warning::
-   请不要指定 ``document``\ 。页面本体的获取本身将被屏蔽，
-   所有 URL 的爬取都会失败。
+   请不要指定 ``document``\ 。页面本体的获取会被屏蔽，导致爬取无法成立，
+   因此会输出警告并忽略该指定。
+
+.. note::
+   指定了不在上述一览中的类型时同样会输出警告。像 ``images`` 这样的复数形式
+   拼写错误不会与任何请求匹配，因此不会屏蔽任何内容。
+   另外，上述一览是 3 个浏览器引擎所报告的类型的并集，因此根据所使用的浏览器，
+   有些类型不会被报告。``texttrack`` 仅由 Chromium 报告，
+   WebKit 不报告 ``media`` 和 ``manifest``\ 。
+   即使指定了不会被报告的类型，也只是不屏蔽任何内容而已。
 
 .. note::
    如果屏蔽 ``script`` 或 ``xhr``\ ，JavaScript 将不再进行渲染，
    使用 Playwright 也就失去了意义。对于仅以服务器端渲染为对象的爬取虽然有效，
-   但通常请像 ``image``\ 、``media``\ 、``font`` 那样，
-   仅指定爬取不会读取的类型。
+   但通常请从上述可以安全指定的类型中选择。
 
 15.8 中的变更
 -------------

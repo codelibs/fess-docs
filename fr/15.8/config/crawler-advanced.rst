@@ -1188,7 +1188,7 @@ Exemple de configuration
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    L'agent utilisateur et les en-têtes de requête définis dans la
@@ -1277,13 +1277,19 @@ Blocage des ressources inutiles
 
 ``client.blockedResourceTypes`` reçoit, séparés par des virgules, les types
 de ressources que le navigateur ne doit pas récupérer. Les valeurs possibles
-sont les types de ressources de Playwright (``image``, ``media``, ``font``,
-``stylesheet``, ``script``, ``xhr``, ``fetch``, ``websocket``, ``manifest``,
-``texttrack``, ``eventsource`` et ``other``). Par défaut, rien n'est bloqué.
+sont les types de ressources de Playwright (``stylesheet``, ``image``,
+``media``, ``font``, ``script``, ``texttrack``, ``xhr``, ``fetch``,
+``eventsource``, ``websocket``, ``manifest``, ``other``, ``ping``,
+``cspreport`` et ``beacon``). Par défaut, rien n'est bloqué.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon`` et ``cspreport``
+constituent l'ensemble que l'on peut spécifier sans risque. Les trois
+derniers correspondent à du trafic de traceurs de type balise, que rien dans
+la page ne relit.
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 Ne spécifiez que les types qu'une indexation ne lit pas. Récupérer moins de
 ressources nécessaires à l'affichage d'une page réduit à la fois la durée de
@@ -1291,14 +1297,24 @@ l'indexation et le volume de données transféré.
 
 .. warning::
    N'indiquez pas ``document``. La récupération de la page elle-même serait
-   bloquée et l'indexation échouerait pour toutes les URLs.
+   bloquée et l'indexation ne pourrait pas aboutir : cette valeur est donc
+   ignorée avec un avertissement.
+
+.. note::
+   Un type absent de la liste ci-dessus donne également lieu à un
+   avertissement. Une faute de frappe au pluriel telle que ``images`` ne
+   correspond à aucune requête et ne bloque donc rien. La liste est l'union
+   des types signalés par les trois moteurs de navigateur : certains ne sont
+   jamais signalés par le navigateur utilisé. ``texttrack`` n'est signalé que
+   par Chromium, et WebKit ne signale ni ``media`` ni ``manifest``. Spécifier
+   un type qui n'est pas signalé ne bloque tout simplement rien.
 
 .. note::
    Bloquer ``script`` ou ``xhr`` empêche le rendu par JavaScript, ce qui
    annule l'intérêt d'utiliser Playwright. C'est utile pour une indexation
-   qui ne vise que des pages rendues côté serveur, mais en règle générale, ne
-   spécifiez que les types qu'une indexation ne lit pas, comme ``image``,
-   ``media`` et ``font``.
+   qui ne vise que des pages rendues côté serveur, mais en règle générale,
+   choisissez parmi les types que l'on peut spécifier sans risque indiqués
+   ci-dessus.
 
 Changements dans 15.8
 ---------------------

@@ -1186,7 +1186,7 @@ Playwright 크롤러를 사용하면 헤드리스 브라우저에서 페이지�
     client.renderedStateTimeout=20000
     client.navigationTimeout=60000
     client.contentWaitDuration=1000
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 .. note::
    사용자 에이전트와 요청 헤더는 크롤 설정의
@@ -1255,7 +1255,7 @@ DI 정의에서만 설정할 수 있는 항목
     </components>
 
 .. note::
-   ``playwrightClient`` 을 재정의하면 플러그인이 가지고 있는
+   ``playwrightClient`` 를 재정의하면 플러그인이 가지고 있는
    ``crawler/client++.xml`` 의 컴포넌트 정의는 완전히 대체됩니다.
    기술하지 않은 속성은 기본값으로 돌아가므로, 위의 예와 같이 필요한
    속성을 모두 기술하십시오. 또한 ``crawler/client++.xml`` 을
@@ -1272,26 +1272,39 @@ DI 정의에서만 설정할 수 있는 항목
 
 ``client.blockedResourceTypes`` 에는 브라우저가 가져오지 않을 리소스 종류를
 쉼표로 구분하여 지정합니다. 지정할 수 있는 것은 Playwright의 리소스 종류
-(``image``, ``media``, ``font``, ``stylesheet``, ``script``, ``xhr``,
-``fetch``, ``websocket``, ``manifest``, ``texttrack``, ``eventsource``,
-``other``)입니다. 기본적으로는 아무것도 차단하지 않습니다.
+(``stylesheet``, ``image``, ``media``, ``font``, ``script``,
+``texttrack``, ``xhr``, ``fetch``, ``eventsource``, ``websocket``,
+``manifest``, ``other``, ``ping``, ``cspreport``, ``beacon``)입니다.
+기본적으로는 아무것도 차단하지 않습니다.
+
+``image``, ``media``, ``font``, ``ping``, ``beacon``, ``cspreport`` 는
+안전하게 지정할 수 있는 조합입니다. 뒤의 3개는 비콘 계열의 트래커 통신이며,
+페이지 측에서 다시 읽어들이는 일은 없습니다.
 
 ::
 
-    client.blockedResourceTypes=image,media,font
+    client.blockedResourceTypes=image,media,font,ping,beacon,cspreport
 
 크롤이 읽지 않는 종류만 지정하십시오. 페이지 표시에 필요한 리소스의
 취득을 줄임으로써 크롤 소요 시간과 전송량을 줄일 수 있습니다.
 
 .. warning::
-   ``document`` 는 지정하지 마십시오. 페이지 본체의 취득 자체가 차단되어
-   모든 URL에서 크롤이 실패합니다.
+   ``document`` 는 지정하지 마십시오. 페이지 본체의 취득이 차단되어
+   크롤을 진행할 수 없기 때문에, 경고를 출력하고 무시됩니다.
 
 .. note::
-   ``script`` 나 ``xhr`` 을 차단하면 JavaScript에 의한 렌더링이 수행되지 않아
+   목록에 없는 종류를 지정한 경우에도 경고가 출력됩니다. ``images`` 와 같은
+   복수형 오타는 어떤 요청에도 일치하지 않기 때문에 아무것도 차단하지 않습니다.
+   또한 위의 목록은 3개의 브라우저 엔진이 보고하는 종류의 합집합이므로,
+   사용하는 브라우저에 따라서는 보고되지 않는 종류가 있습니다. ``texttrack`` 은
+   Chromium만 보고하며, WebKit은 ``media`` 와 ``manifest`` 를 보고하지 않습니다.
+   보고되지 않는 종류를 지정해도 단순히 아무것도 차단하지 않을 뿐입니다.
+
+.. note::
+   ``script`` 나 ``xhr`` 를 차단하면 JavaScript에 의한 렌더링이 수행되지 않아
    Playwright를 사용하는 의미가 없어집니다. 서버 사이드 렌더링만을
-   대상으로 하는 크롤에서는 유효하지만, 일반적으로는 ``image``, ``media``,
-   ``font`` 와 같이 크롤이 읽지 않는 종류만 지정하십시오.
+   대상으로 하는 크롤에서는 유효하지만, 일반적으로는 위의 안전하게 지정할 수
+   있는 종류 중에서 선택하십시오.
 
 15.8에서의 변경 사항
 --------------------
