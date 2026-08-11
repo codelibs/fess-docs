@@ -494,6 +494,27 @@ AD 도메인 트리의 하위 도메인이나 신뢰 관계를 맺은 포리스�
 15.7까지 로그인할 수 있었던 사용자가 ``Kerberos realm is not allowed`` 로 거부됩니다.
 자세한 내용은 :doc:`../config/sso-spnego` 를 참조하십시오.
 
+또한 15.8에서는 ``spnego.allow.unsecure.basic`` 과 ``spnego.allow.localhost`` 의 코드상 기본값이
+``true`` 에서 ``false`` 로 변경되었습니다. 이 키들이 ``app/WEB-INF/conf/system.properties`` 에
+없는 환경에서는 업그레이드와 함께 더 엄격한 동작이 적용됩니다. 특히
+``spnego.allow.unsecure.basic=false`` 인 경우 SPNEGO 라이브러리는 ``HttpServletRequest#isSecure()``
+가 ``true`` 를 반환하는 요청에만 Basic 인증을 제공하므로, 리버스 프록시에서 TLS를 종료하고 HTTP로
+전달하는 구성에서는 지금까지 Basic 인증으로 대체하던 클라이언트가 로그인할 수 없게 됩니다.
+이 경우 ``tomcat_config.properties`` 에서 ``tomcat.secure=true`` 를 설정하십시오.
+자세한 내용은 :doc:`../config/sso-spnego` 를 참조하십시오.
+
+.. warning::
+
+   코드상의 기본값은 키가 없는 경우에만 적용되며, 관리 화면 「시스템」→「일반」은 저장할 때마다
+   모든 ``spnego.*`` 키를 기록합니다. 따라서 15.7에서 이 화면으로 한 번이라도 갱신한 환경에는
+   ``spnego.allow.unsecure.basic=true`` 와 ``spnego.allow.localhost=true`` 가 저장된 채로 남아
+   있으며, 15.8로 업그레이드해도 설정은 강화되지 않습니다. 느슨한 동작이 조용히 유지되고, 15.8은
+   SPNEGO 초기화 시 ``fess.log`` 에 경고를 기록할 뿐입니다. 관리 화면 「시스템」→「일반」 또는
+   ``system.properties`` 에서 두 가지를 모두 명시적으로 비활성화하십시오. 특히
+   ``spnego.allow.localhost=true`` 는 위험합니다. SPNEGO 라이브러리가 동일 호스트에서 온 요청을
+   Kerberos 검증 없이 서버의 OS 사용자로 인증하므로, 동일 호스트에 리버스 프록시를 두는 구성에서는
+   안전하지 않습니다.
+
 SAML 인증(SSO)을 사용하고 있었던 경우
 -------------------------------------
 

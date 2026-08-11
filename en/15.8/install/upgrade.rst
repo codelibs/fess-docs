@@ -499,6 +499,27 @@ from a trusted forest, list those realms in ``spnego.allowed.realms``, separated
 users who could log in up to 15.7 are rejected with ``Kerberos realm is not allowed``. For
 details, see :doc:`../config/sso-spnego`.
 
+The coded defaults of ``spnego.allow.unsecure.basic`` and ``spnego.allow.localhost`` also changed
+from ``true`` to ``false`` in 15.8. An installation where these keys are absent from
+``app/WEB-INF/conf/system.properties`` inherits the stricter behavior on upgrade. In particular,
+with ``spnego.allow.unsecure.basic=false`` the SPNEGO library only offers Basic authentication for
+requests where ``HttpServletRequest#isSecure()`` returns ``true``, so behind a reverse proxy that
+terminates TLS and forwards plain HTTP, clients that used to fall back to Basic authentication can
+no longer log in. Set ``tomcat.secure=true`` in ``tomcat_config.properties`` in that case; see
+:doc:`../config/sso-spnego` for details.
+
+.. warning::
+
+   A coded default only applies while the key is absent, and "System" → "General" in the admin UI
+   writes every ``spnego.*`` key each time you save. An installation that ever pressed Update on
+   that screen under 15.7 therefore still has ``spnego.allow.unsecure.basic=true`` and
+   ``spnego.allow.localhost=true`` stored, so upgrading to 15.8 does not harden it: the permissive
+   behavior is kept silently, and 15.8 only records a warning in ``fess.log`` when SPNEGO is
+   initialized. Open "System" → "General" in the admin UI (or edit ``system.properties``) and
+   turn both off deliberately. ``spnego.allow.localhost=true`` is the more dangerous of the two,
+   because the SPNEGO library then authenticates same-host requests as the server OS user with no
+   Kerberos verification at all, which is unsafe behind a same-host reverse proxy.
+
 If You Were Using SAML Authentication (SSO)
 -------------------------------------------
 

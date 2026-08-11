@@ -508,6 +508,32 @@ usuarios que podían iniciar sesión hasta la versión 15.7 son rechazados con
 ``Kerberos realm is not allowed``. Consulte :doc:`../config/sso-spnego` para conocer más
 detalles.
 
+Además, en la versión 15.8 los valores predeterminados definidos en el código de
+``spnego.allow.unsecure.basic`` y ``spnego.allow.localhost`` cambiaron de ``true`` a ``false``.
+Una instalación en la que estas claves no estén presentes en
+``app/WEB-INF/conf/system.properties`` adopta el comportamiento más estricto al actualizar. En
+particular, con ``spnego.allow.unsecure.basic=false`` la biblioteca SPNEGO solo ofrece la
+autenticación básica en las peticiones en las que ``HttpServletRequest#isSecure()`` devuelve
+``true``, por lo que, detrás de un proxy inverso que termina TLS y reenvía la petición por HTTP,
+los clientes que antes recurrían a la autenticación básica ya no pueden iniciar sesión. En ese
+caso, establezca ``tomcat.secure=true`` en ``tomcat_config.properties``; consulte
+:doc:`../config/sso-spnego` para conocer más detalles.
+
+.. warning::
+
+   Un valor predeterminado definido en el código solo se aplica mientras la clave está ausente, y
+   "Sistema" → "General" de la pantalla de administración escribe todas las claves ``spnego.*``
+   cada vez que se guarda. Por lo tanto, una instalación en la que alguna vez se pulsó Actualizar
+   en esa pantalla con la versión 15.7 sigue teniendo almacenados
+   ``spnego.allow.unsecure.basic=true`` y ``spnego.allow.localhost=true``, y actualizar a 15.8 no
+   la refuerza: mantiene el comportamiento permisivo de forma silenciosa y 15.8 solo registra una
+   advertencia en ``fess.log`` al inicializar SPNEGO. Abra "Sistema" → "General" (o edite
+   ``system.properties``) y desactive ambas opciones de forma deliberada.
+   ``spnego.allow.localhost=true`` es la más peligrosa de las dos: la biblioteca SPNEGO autentica
+   las peticiones procedentes del mismo host como el usuario del sistema operativo del servidor,
+   sin ninguna verificación de Kerberos, lo que resulta inseguro detrás de un proxy inverso
+   situado en el mismo host.
+
 Si Utilizaba la Autenticación SAML (SSO)
 ----------------------------------------
 

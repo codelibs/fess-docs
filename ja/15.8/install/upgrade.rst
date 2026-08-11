@@ -495,6 +495,28 @@ SPNEGO ログインは拒否されます。AD のドメインツリーの子ド�
 ``Kerberos realm is not allowed`` として拒否されます。
 詳細は :doc:`../config/sso-spnego` を参照してください。
 
+また、15.8 では ``spnego.allow.unsecure.basic`` と ``spnego.allow.localhost`` のコード上の
+既定値が ``true`` から ``false`` へ変更されました。これらのキーが
+``app/WEB-INF/conf/system.properties`` に存在しない環境では、アップグレードによって
+より厳格な挙動が適用されます。特に ``spnego.allow.unsecure.basic=false`` では、SPNEGO ライブラリは
+``HttpServletRequest#isSecure()`` が ``true`` を返すリクエストにのみ Basic 認証を提示するため、
+TLS をリバースプロキシで終端して HTTP で転送している構成では、これまで Basic 認証へ
+フォールバックしていたクライアントがログインできなくなります。その場合は
+``tomcat_config.properties`` で ``tomcat.secure=true`` を設定してください。
+詳細は :doc:`../config/sso-spnego` を参照してください。
+
+.. warning::
+
+   コード上の既定値は、キーが存在しない場合にのみ適用されます。管理画面「システム」→「全般」は
+   保存のたびにすべての ``spnego.*`` キーを書き込むため、15.7 でこの画面から一度でも更新した環境には
+   ``spnego.allow.unsecure.basic=true`` と ``spnego.allow.localhost=true`` が保存されたままです。
+   この場合、15.8 へアップグレードしても設定は強化されず、緩い挙動が黙って引き継がれます。
+   15.8 は SPNEGO の初期化時に ``fess.log`` へ警告を出力するだけです。管理画面「システム」→「全般」
+   または ``system.properties`` で、両方を明示的に無効化してください。特に
+   ``spnego.allow.localhost=true`` は危険です。SPNEGO ライブラリが同一ホストからのリクエストを
+   Kerberos の検証なしにサーバーの OS ユーザーとして認証するため、同一ホスト上にリバースプロキシを
+   置く構成では安全ではありません。
+
 SAML 認証（SSO）を利用していた場合
 ----------------------------------
 

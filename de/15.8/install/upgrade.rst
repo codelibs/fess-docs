@@ -505,6 +505,33 @@ Realms kommagetrennt in ``spnego.allowed.realms`` ein, entweder über die Verwal
 Benutzer, die sich bis 15.7 anmelden konnten, mit ``Kerberos realm is not allowed`` abgewiesen.
 Einzelheiten finden Sie unter :doc:`../config/sso-spnego`.
 
+Außerdem wurden in 15.8 die im Code hinterlegten Standardwerte von
+``spnego.allow.unsecure.basic`` und ``spnego.allow.localhost`` von ``true`` auf ``false``
+geändert. Eine Installation, in der diese Schlüssel in ``app/WEB-INF/conf/system.properties``
+fehlen, übernimmt mit dem Upgrade das strengere Verhalten. Insbesondere bietet die
+SPNEGO-Bibliothek bei ``spnego.allow.unsecure.basic=false`` die Basic-Authentifizierung nur noch
+für Anfragen an, bei denen ``HttpServletRequest#isSecure()`` ``true`` zurückgibt. Hinter einem
+Reverse-Proxy, der TLS terminiert und die Anfrage per HTTP weiterleitet, können sich Clients, die
+bisher auf die Basic-Authentifizierung zurückgefallen sind, dann nicht mehr anmelden. Setzen Sie
+in diesem Fall ``tomcat.secure=true`` in ``tomcat_config.properties``; Einzelheiten finden Sie
+unter :doc:`../config/sso-spnego`.
+
+.. warning::
+
+   Ein im Code hinterlegter Standardwert greift nur, solange der Schlüssel fehlt, und
+   „System" → „Allgemein" auf der Verwaltungsseite schreibt bei jedem Speichern sämtliche
+   ``spnego.*``-Schlüssel. In einer Installation, in der unter 15.7 auf dieser Seite jemals
+   „Aktualisieren" gedrückt wurde, sind daher weiterhin
+   ``spnego.allow.unsecure.basic=true`` und ``spnego.allow.localhost=true`` gespeichert. Das
+   Upgrade auf 15.8 härtet eine solche Installation nicht: Sie behält das freizügige Verhalten
+   stillschweigend bei, und 15.8 protokolliert beim Initialisieren von SPNEGO lediglich eine
+   Warnung in ``fess.log``. Öffnen Sie „System" → „Allgemein" (oder bearbeiten Sie
+   ``system.properties``) und schalten Sie beide Einstellungen bewusst ab.
+   ``spnego.allow.localhost=true`` ist dabei die gefährlichere der beiden Optionen: Die
+   SPNEGO-Bibliothek authentifiziert Anfragen vom selben Host dann als Betriebssystembenutzer des
+   Servers, ganz ohne Kerberos-Prüfung, was hinter einem Reverse-Proxy auf demselben Host unsicher
+   ist.
+
 Falls Sie SAML-Authentifizierung (SSO) genutzt haben
 ----------------------------------------------------
 
