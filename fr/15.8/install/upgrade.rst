@@ -499,6 +499,18 @@ plugins tels que ``fess-llm-ollama``, ``fess-llm-openai`` et ``fess-llm-gemini``
 plugin correspondant au fournisseur que vous utilisez depuis « Système » → « Plugins » dans
 l'écran d'administration.
 
+Si vous utilisiez SPNEGO (authentification intégrée Windows)
+------------------------------------------------------------
+
+À partir de la 15.8, une connexion SPNEGO est refusée lorsque le domaine Kerberos du principal
+client diffère de celui du serveur. Si vos utilisateurs se connectent depuis un domaine enfant
+d'une arborescence de domaines AD ou depuis une forêt approuvée, indiquez ces domaines, séparés
+par des virgules, dans ``spnego.allowed.realms`` depuis « Système » → « Général » dans
+l'écran d'administration ou dans ``app/WEB-INF/conf/system.properties``. Sinon, les utilisateurs
+qui pouvaient se connecter jusqu'à la version 15.7 sont refusés avec
+``Kerberos realm is not allowed``. Pour plus de détails, consultez
+:doc:`../config/sso-spnego`.
+
 Mise à jour de la version des plugins
 -------------------------------------
 

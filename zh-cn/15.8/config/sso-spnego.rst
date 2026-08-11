@@ -231,6 +231,20 @@ Kerberos配置文件
    请在 ``spnego.allowed.realms`` 中以逗号分隔列出这些领域。
    否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
 
+.. warning::
+   |Fess| 以主体中 ``@`` 之前的部分作为用户名，因此用户名中不包含领域。
+   在 ``spnego.allowed.realms`` 中添加领域后，在多个领域中拥有相同账户名的用户
+   （例如 ``alice@CORP.EXAMPLE.COM`` 与 ``alice@PARTNER.EXAMPLE.COM`` ）将被视为同一个
+   |Fess| 用户，并共享该用户的组、角色和文档权限。
+   仅当账户名在所列出的所有领域中都能唯一标识一个人时，才添加该领域。
+
+.. note::
+   允许列表同样适用于 Basic 认证的回退。如果用户输入 ``user@REALM`` 形式的名称，
+   该领域将与 ``spnego.allowed.realms`` 进行比对，未被允许时将拒绝登录。
+   单纯的账户名或 ``DOMAIN\user`` 形式不指定领域，因此在 ``krb5.conf`` 的默认领域中进行认证。
+   由于 Basic 认证直接针对用户输入的领域进行认证，请将允许列表控制在最小范围；
+   若将其作为安全边界使用，请考虑将 ``spnego.allow.basic`` 设为 ``false``\ 。
+
 .. note::
    ``spnego.prompt.ntlm=true``\ （默认值）时，``spnego.allow.basic`` 也必须为 ``true``\ 。
    若要将 ``spnego.allow.basic`` 设为 ``false``，则必须同时将 ``spnego.prompt.ntlm`` 设为 ``false``\ 。

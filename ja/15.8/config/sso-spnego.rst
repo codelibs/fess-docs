@@ -235,6 +235,21 @@ Kerberos設定ファイル
    列挙してください。列挙しない場合、15.7 まではログインできていたユーザーが
    ``Kerberos realm is not allowed`` として拒否されます。
 
+.. warning::
+   |Fess| はプリンシパルの ``@`` より前の部分をユーザー名として扱うため、ユーザー名にレルムは
+   含まれません。 ``spnego.allowed.realms`` にレルムを追加すると、複数のレルムに同じアカウント名
+   を持つユーザー（例: ``alice@CORP.EXAMPLE.COM`` と ``alice@PARTNER.EXAMPLE.COM`` ）は同一の
+   |Fess| ユーザーとして扱われ、そのユーザーのグループ・ロール・文書の権限を共有します。
+   列挙するすべてのレルムを通じてアカウント名が一意に個人を特定できる場合にのみ追加してください。
+
+.. note::
+   許可リストは Basic 認証のフォールバックにも適用されます。ユーザーが ``user@REALM`` の形式で
+   入力した場合、そのレルムが ``spnego.allowed.realms`` と照合され、許可されていなければログインは
+   拒否されます。単純なアカウント名や ``DOMAIN\user`` の形式はレルムを指定しないため、
+   ``krb5.conf`` の既定レルムで認証されます。Basic 認証はユーザーが入力したレルムに対して直接
+   認証を行うため、許可リストは必要最小限にとどめ、これをセキュリティ境界として利用する場合は
+   ``spnego.allow.basic`` を ``false`` に設定することを検討してください。
+
 .. note::
    ``spnego.prompt.ntlm=true`` （デフォルト）の場合、 ``spnego.allow.basic`` も ``true`` である必要があります。
    ``spnego.allow.basic=false`` に設定する場合は、 ``spnego.prompt.ntlm=false`` も併せて設定してください。

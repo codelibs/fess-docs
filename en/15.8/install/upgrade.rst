@@ -489,6 +489,16 @@ Starting with 15.8, AI search mode (RAG) functionality has been split out into p
 ``fess-llm-ollama``, ``fess-llm-openai``, and ``fess-llm-gemini``. Install the plugin that
 corresponds to the provider you use from "System" → "Plugins" in the admin UI.
 
+If You Were Using SPNEGO (Windows Integrated Authentication)
+------------------------------------------------------------
+
+Starting with 15.8, a SPNEGO login is rejected when the Kerberos realm of the client principal
+differs from the server realm. If your users log in from a child domain of an AD domain tree or
+from a trusted forest, list those realms in ``spnego.allowed.realms``, separated by commas, from
+"System" → "General" in the admin UI or in ``app/WEB-INF/conf/system.properties``. Otherwise
+users who could log in up to 15.7 are rejected with ``Kerberos realm is not allowed``. For
+details, see :doc:`../config/sso-spnego`.
+
 Updating Plugin Versions
 ------------------------
 

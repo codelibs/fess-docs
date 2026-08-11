@@ -236,6 +236,25 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    ``spnego.allowed.realms``, séparés par des virgules. Sinon, les utilisateurs qui pouvaient se
    connecter jusqu'à la version 15.7 sont refusés avec ``Kerberos realm is not allowed``.
 
+.. warning::
+   |Fess| identifie un utilisateur par la partie du principal située avant ``@`` ; le domaine
+   Kerberos ne fait donc pas partie du nom d'utilisateur. Lorsque vous indiquez des domaines
+   supplémentaires dans ``spnego.allowed.realms``, les utilisateurs qui partagent un nom de compte
+   entre domaines — par exemple ``alice@CORP.EXAMPLE.COM`` et ``alice@PARTNER.EXAMPLE.COM`` —
+   deviennent le même utilisateur |Fess| et partagent ses groupes, ses rôles et ses autorisations
+   sur les documents. N'ajoutez un domaine que si le nom de compte identifie exactement une
+   personne dans tous les domaines que vous indiquez.
+
+.. note::
+   La liste d'autorisation s'applique également au repli sur l'authentification Basic. Si un
+   utilisateur saisit un nom de la forme ``user@REALM``, ce domaine est comparé à
+   ``spnego.allowed.realms`` et la connexion est refusée lorsqu'il n'est pas autorisé. Un simple
+   nom de compte, ou la forme ``DOMAIN\user``, n'indique aucun domaine et est authentifié dans le
+   domaine par défaut de ``krb5.conf``. Comme une connexion Basic est authentifiée directement
+   auprès du domaine saisi par l'utilisateur, gardez la liste d'autorisation aussi réduite que
+   possible et envisagez de définir ``spnego.allow.basic`` à ``false`` si vous vous en servez comme
+   limite de sécurité.
+
 .. note::
    Lorsque ``spnego.prompt.ntlm=true`` (valeur par défaut), ``spnego.allow.basic`` doit également être ``true``.
    Si vous définissez ``spnego.allow.basic=false``, vous devez également définir ``spnego.prompt.ntlm=false``.
