@@ -489,6 +489,25 @@ Docker 版::
 这些领域。否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
 详细内容请参阅 :doc:`../config/sso-spnego`\ 。
 
+此外，15.8 中 ``spnego.allow.unsecure.basic`` 与 ``spnego.allow.localhost`` 的代码默认值也从
+``true`` 改为了 ``false`` 。在 ``app/WEB-INF/conf/system.properties`` 中不存在这些键的环境中，
+升级后会自动采用更严格的行为。特别是当 ``spnego.allow.unsecure.basic=false`` 时，SPNEGO 库仅对
+``HttpServletRequest#isSecure()`` 返回 ``true`` 的请求提供 Basic 认证，
+因此在反向代理上终止 TLS 并以 HTTP 转发的环境中，此前回退到 Basic 认证的客户端将无法登录。
+此时请在 ``tomcat_config.properties`` 中设置 ``tomcat.secure=true`` 。
+详细内容请参阅 :doc:`../config/sso-spnego`\ 。
+
+.. warning::
+
+   代码默认值仅在该键不存在时才生效，而管理页面「系统」→「通用」每次保存都会写入所有
+   ``spnego.*`` 键。因此，在 15.7 中曾经在该页面上执行过更新的环境，仍然保存着
+   ``spnego.allow.unsecure.basic=true`` 与 ``spnego.allow.localhost=true`` ，
+   升级到 15.8 并不会使其变得更严格：宽松的行为会被静默沿用，15.8 只会在 SPNEGO 初始化时
+   向 ``fess.log`` 输出一条警告。请在管理页面「系统」→「通用」或 ``system.properties`` 中
+   有意识地关闭这两项。其中 ``spnego.allow.localhost=true`` 更为危险：SPNEGO 库会把来自同一
+   主机的请求以服务器的 OS 用户身份进行认证，完全不做 Kerberos 验证，在同一主机上部署反向
+   代理时并不安全。
+
 若此前使用过 SAML 认证（SSO）
 -----------------------------
 

@@ -511,6 +511,31 @@ qui pouvaient se connecter jusqu'à la version 15.7 sont refusés avec
 ``Kerberos realm is not allowed``. Pour plus de détails, consultez
 :doc:`../config/sso-spnego`.
 
+Par ailleurs, en 15.8, les valeurs par défaut codées de ``spnego.allow.unsecure.basic`` et
+``spnego.allow.localhost`` sont passées de ``true`` à ``false``. Une installation dans laquelle
+ces clés sont absentes de ``app/WEB-INF/conf/system.properties`` adopte le comportement plus
+strict lors de la mise à niveau. En particulier, avec ``spnego.allow.unsecure.basic=false``, la
+bibliothèque SPNEGO ne propose l'authentification Basic que pour les requêtes dont
+``HttpServletRequest#isSecure()`` renvoie ``true`` : derrière un proxy inverse qui termine TLS et
+transmet la requête en HTTP, les clients qui basculaient jusqu'ici vers l'authentification Basic
+ne peuvent plus se connecter. Dans ce cas, définissez ``tomcat.secure=true`` dans
+``tomcat_config.properties`` ; pour plus de détails, consultez :doc:`../config/sso-spnego`.
+
+.. warning::
+
+   Une valeur par défaut codée ne s'applique que tant que la clé est absente, et
+   « Système » → « Général » de l'écran d'administration écrit toutes les clés ``spnego.*`` à
+   chaque enregistrement. Une installation sur laquelle « Mettre à jour » a été cliqué au moins
+   une fois depuis cet écran en 15.7 conserve donc ``spnego.allow.unsecure.basic=true`` et
+   ``spnego.allow.localhost=true``, et la mise à niveau vers la 15.8 ne la durcit pas : elle
+   conserve silencieusement le comportement permissif, et la 15.8 se contente de consigner un
+   avertissement dans ``fess.log`` lors de l'initialisation de SPNEGO. Ouvrez
+   « Système » → « Général » (ou modifiez ``system.properties``) et désactivez délibérément les
+   deux options. ``spnego.allow.localhost=true`` est la plus dangereuse des deux : la bibliothèque
+   SPNEGO authentifie alors les requêtes provenant du même hôte en tant qu'utilisateur du système
+   d'exploitation du serveur, sans aucune vérification Kerberos, ce qui n'est pas sûr derrière un
+   proxy inverse situé sur le même hôte.
+
 Si vous utilisiez l'authentification SAML (SSO)
 -----------------------------------------------
 
