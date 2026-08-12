@@ -240,6 +240,11 @@ IdP侧配置
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| 直接使用断言中的组值，不会查询目录，也不会展开嵌套组（父组）。
+   因此，是否包含父组完全取决于IdP侧的声明配置。
+   这与通过Microsoft Graph API解析父组的 :doc:`sso-entraid` 不同。
+
 角色属性配置
 ------------
 
@@ -550,6 +555,9 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 
 - 验证属性是否在IdP侧正确配置
 - 确保\ ``saml.attribute.group.name``\ 的值与IdP发送的属性名匹配
+- 使用Microsoft Entra ID时，除非选择了其他源属性，否则组声明的值为组的\ ``ObjectId``\ （GUID），与组名不一致
+- 当用户所属的组超过150个时，Microsoft Entra ID将完全省略组声明（嵌套组也计入此上限），
+  此时 |Fess| 将回退到\ ``saml.default.groups``
 - 启用调试模式以检查SAML断言内容
 
 调试设置

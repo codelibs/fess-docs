@@ -144,6 +144,12 @@ The user ID, groups, and roles are determined as follows:
 - **Groups**: Obtained from the ``groups`` claim of the ID Token. If the ``groups`` claim is not present, the value of ``oic.default.groups`` is used.
 - **Roles**: Always taken from the value of ``oic.default.roles`` (there is no mechanism to obtain roles from ID Token claims).
 
+.. note::
+   |Fess| uses the values of the ``groups`` claim as they are; it performs no directory lookup and
+   does not expand nested (transitive) groups. Whether parent groups appear is therefore decided
+   entirely by the OP's claim configuration -- unlike :doc:`sso-entraid`, where |Fess| resolves
+   parent groups through the Microsoft Graph API.
+
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
@@ -266,6 +272,11 @@ Cannot Retrieve User Information
 
 - Ensure that the scope includes the required permissions (``email``, ``profile``, etc.)
 - Verify that the required scopes are allowed for the client on the OP side
+- With Microsoft Entra ID, the ``groups`` claim carries group ``ObjectId`` GUIDs unless a different
+  source attribute is selected, so the values will not match group names
+- Microsoft Entra ID omits the ``groups`` claim entirely when the user belongs to more than 200
+  groups (nested groups count toward this limit), and |Fess| then falls back to
+  ``oic.default.groups``
 
 Debug Configuration
 --------------------

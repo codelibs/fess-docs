@@ -240,6 +240,12 @@ Example::
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| uses the group values in the assertion as they are; it performs no directory lookup and
+   does not expand nested (transitive) groups. Whether parent groups appear is therefore decided
+   entirely by the IdP's claim configuration -- unlike :doc:`sso-entraid`, where |Fess| resolves
+   parent groups through the Microsoft Graph API.
+
 Role Attribute Configuration
 ----------------------------
 
@@ -556,6 +562,10 @@ User groups/roles not reflected
 
 - Verify that attributes are correctly configured on the IdP side
 - Ensure the ``saml.attribute.group.name`` value matches the attribute name sent by the IdP
+- With Microsoft Entra ID, the group claim carries group ``ObjectId`` GUIDs unless a different
+  source attribute is selected, so the values will not match group names
+- Microsoft Entra ID omits the group claim entirely when the user belongs to more than 150 groups
+  (nested groups count toward this limit), and |Fess| then falls back to ``saml.default.groups``
 - Enable debug mode to inspect the SAML assertion contents
 
 Debug Settings

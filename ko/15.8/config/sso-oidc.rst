@@ -144,6 +144,11 @@ OIDC로 인증된 사용자에게 할당할 기본 그룹·역할을 설정합�
 - **그룹**: ID Token의 ``groups`` 클레임에서 취득됩니다. ``groups`` 클레임이 존재하지 않는 경우 ``oic.default.groups`` 의 값이 사용됩니다.
 - **역할**: 항상 ``oic.default.roles`` 의 값이 사용됩니다（ID Token의 클레임에서 역할을 취득하는 구조는 없습니다）.
 
+.. note::
+   |Fess| 는 ``groups`` 클레임의 값을 그대로 사용하며, 디렉토리 조회나 중첩 그룹(상위 그룹)의
+   확장은 수행하지 않습니다. 상위 그룹이 포함되는지 여부는 OP 측의 클레임 설정에 따라서만
+   결정됩니다. Microsoft Graph API로 상위 그룹을 해결하는 :doc:`sso-entraid` 의 동작과는 다릅니다.
+
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
@@ -266,6 +271,10 @@ OP의 설정 화면 또는 Discovery 엔드포인트에서 다음 정보를 취�
 
 - 스코프에 필요한 권한（``email``, ``profile`` 등）이 포함되어 있는지 확인하십시오
 - OP 측에서 클라이언트에 필요한 스코프가 허용되어 있는지 확인하십시오
+- Microsoft Entra ID에서는 소스 속성을 변경하지 않는 한 ``groups`` 클레임의 값이 그룹의 ``ObjectId`` (GUID)이므로
+  그룹 이름과 일치하지 않습니다
+- 사용자가 200개를 초과하는 그룹에 소속된 경우 Microsoft Entra ID는 ``groups`` 클레임 자체를 보내지 않으며
+  (중첩 그룹도 이 상한에 포함됩니다), 이때 |Fess| 는 ``oic.default.groups`` 로 폴백합니다
 
 디버그 설정
 -----------

@@ -242,6 +242,12 @@ Ejemplo::
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| utiliza directamente los valores de grupo de la aserción: no realiza ninguna consulta al
+   directorio ni expande los grupos anidados (transitivos). Por lo tanto, que aparezcan los grupos
+   padre depende únicamente de la configuración de claims del IdP, a diferencia de
+   :doc:`sso-entraid`, donde |Fess| resuelve los grupos padre mediante la API de Microsoft Graph.
+
 Configuración de atributos de rol
 ---------------------------------
 
@@ -565,6 +571,12 @@ Grupos/roles de usuario no reflejados
 
 - Verifique que los atributos estén configurados correctamente en el lado del IdP
 - Asegúrese de que el valor de ``saml.attribute.group.name`` coincida con el nombre del atributo enviado por el IdP
+- Con Microsoft Entra ID, el claim de grupos contiene los ``ObjectId`` (GUID) de los grupos salvo
+  que se seleccione otro atributo de origen, por lo que los valores no coincidirán con los nombres
+  de grupo
+- Microsoft Entra ID omite por completo el claim de grupos cuando el usuario pertenece a más de 150
+  grupos (los grupos anidados cuentan para este límite), y entonces |Fess| recurre a
+  ``saml.default.groups``
 - Habilite el modo de depuración para inspeccionar el contenido de la aserción SAML
 
 Configuración de depuración

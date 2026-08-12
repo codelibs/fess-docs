@@ -242,6 +242,13 @@ Exemple ::
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| utilise telles quelles les valeurs de groupe de l'assertion : aucune interrogation de
+   l'annuaire n'est effectuée et les groupes imbriqués (transitifs) ne sont pas développés.
+   La présence des groupes parents dépend donc uniquement de la configuration des claims de l'IdP,
+   contrairement à :doc:`sso-entraid`, où |Fess| résout les groupes parents en utilisant l'API
+   Microsoft Graph.
+
 Configuration des attributs de rôle
 -----------------------------------
 
@@ -565,6 +572,12 @@ Groupes/rôles utilisateur non reflétés
 
 - Vérifiez que les attributs sont correctement configurés côté IdP
 - Assurez-vous que la valeur de ``saml.attribute.group.name`` correspond au nom d'attribut envoyé par l'IdP
+- Avec Microsoft Entra ID, le claim de groupes contient les ``ObjectId`` (GUID) des groupes, sauf
+  si un autre attribut source est sélectionné ; les valeurs ne correspondent donc pas aux noms de
+  groupe
+- Microsoft Entra ID omet entièrement le claim de groupes lorsque l'utilisateur appartient à plus
+  de 150 groupes (les groupes imbriqués comptent dans cette limite) ; |Fess| se rabat alors sur
+  ``saml.default.groups``
 - Activez le mode débogage pour inspecter le contenu de l'assertion SAML
 
 Paramètres de débogage

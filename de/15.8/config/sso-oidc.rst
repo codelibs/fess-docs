@@ -144,6 +144,13 @@ Benutzer-ID, Gruppen und Rollen werden jeweils wie folgt ermittelt:
 - **Gruppen**: Werden aus dem ``groups``-Claim des ID-Tokens bezogen. Ist kein ``groups``-Claim vorhanden, wird der Wert von ``oic.default.groups`` verwendet.
 - **Rollen**: Es wird stets der Wert von ``oic.default.roles`` verwendet (ein Mechanismus zur Übernahme von Rollen aus ID-Token-Claims ist nicht vorhanden).
 
+.. note::
+   |Fess| übernimmt die Werte des ``groups``-Claims unverändert: Es findet keine
+   Verzeichnisabfrage statt, und verschachtelte (transitive) Gruppen werden nicht aufgelöst.
+   Ob übergeordnete Gruppen enthalten sind, hängt daher allein von der Claim-Konfiguration des OP
+   ab -- anders als bei :doc:`sso-entraid`, wo |Fess| übergeordnete Gruppen über die
+   Microsoft Graph API auflöst.
+
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
@@ -266,6 +273,12 @@ Benutzerinformationen können nicht abgerufen werden
 
 - Stellen Sie sicher, dass der Scope die erforderlichen Berechtigungen (``email``, ``profile`` usw.) enthält
 - Überprüfen Sie, ob die erforderlichen Scopes für den Client auf der OP-Seite erlaubt sind
+- Bei Microsoft Entra ID enthält der ``groups``-Claim die ``ObjectId``-GUIDs der Gruppen, sofern
+  kein anderes Quellattribut ausgewählt ist; die Werte stimmen daher nicht mit den Gruppennamen
+  überein
+- Microsoft Entra ID lässt den ``groups``-Claim vollständig weg, wenn ein Benutzer mehr als 200
+  Gruppen angehört (verschachtelte Gruppen zählen mit); |Fess| greift dann auf
+  ``oic.default.groups`` zurück
 
 Debug-Einstellungen
 --------------------

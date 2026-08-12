@@ -242,6 +242,13 @@ Beispiel::
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| übernimmt die Gruppenwerte aus der Assertion unverändert: Es findet keine
+   Verzeichnisabfrage statt, und verschachtelte (transitive) Gruppen werden nicht aufgelöst.
+   Ob übergeordnete Gruppen enthalten sind, hängt daher allein von der Claim-Konfiguration des IdP
+   ab -- anders als bei :doc:`sso-entraid`, wo |Fess| übergeordnete Gruppen über die
+   Microsoft Graph API auflöst.
+
 Rollenattribut-Konfiguration
 ----------------------------
 
@@ -563,6 +570,11 @@ Benutzergruppen/-rollen werden nicht reflektiert
 
 - Überprüfen Sie, ob die Attribute auf der IdP-Seite korrekt konfiguriert sind
 - Stellen Sie sicher, dass der Wert von ``saml.attribute.group.name`` mit dem vom IdP gesendeten Attributnamen übereinstimmt
+- Bei Microsoft Entra ID enthält der Gruppen-Claim die ``ObjectId``-GUIDs der Gruppen, sofern kein
+  anderes Quellattribut ausgewählt ist; die Werte stimmen daher nicht mit den Gruppennamen überein
+- Microsoft Entra ID lässt den Gruppen-Claim vollständig weg, wenn ein Benutzer mehr als 150
+  Gruppen angehört (verschachtelte Gruppen zählen mit); |Fess| greift dann auf
+  ``saml.default.groups`` zurück
 - Aktivieren Sie den Debug-Modus, um den Inhalt der SAML-Assertion zu überprüfen
 
 Debug-Einstellungen
