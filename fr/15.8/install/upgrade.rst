@@ -572,23 +572,39 @@ valeur par défaut. Pour conserver le comportement précédent, définissez
 
 À partir de la 15.8, |Fess| résout également l'appartenance aux groupes et rôles de l'utilisateur
 en arrière-plan une fois la connexion terminée, au lieu de bloquer la connexion en attendant
-Microsoft Graph. Tant que la résolution n'est pas terminée — ou si elle échoue —, il ne manque
-à l'utilisateur que les autorisations associées aux groupes et rôles ; sa propre autorisation au
-niveau utilisateur, ainsi que les groupes et rôles configurés dans ``entraid.default.groups`` et
-``entraid.default.roles``, sont présents dès la première requête. Pendant que la résolution est en
-cours, l'écran de recherche affiche un message à ce sujet, et un autre message si elle échoue. La
-résolution est relancée à chaque renouvellement du jeton d'accès, et une réussite ultérieure fait
-disparaître le message : un échec n'est donc pas définitif pour une session qui dure plus
-longtemps que le jeton. Pour réessayer immédiatement, déconnectez-vous puis reconnectez-vous.
-Pour plus de détails, consultez :doc:`../config/sso-entraid`.
+Microsoft Graph. Tant que la résolution n'est pas terminée — ou si elle n'aboutit pas
+entièrement —, l'utilisateur ne dispose que de sa propre autorisation au niveau utilisateur et de
+ce qu'apportent ``entraid.default.groups`` et ``entraid.default.roles``. Si aucun des deux n'est
+défini — la valeur livrée par défaut —, une recherche effectuée pendant cette fenêtre ne renvoie
+aucun document, car une configuration d'exploration créée avec les valeurs livrées par défaut
+accorde ``{role}guest``, rôle que ne possède pas un utilisateur connecté. Pendant que la
+résolution est en cours, l'écran de recherche l'indique, et il affiche un autre message si elle
+n'a pas entièrement abouti : la résolution n'est considérée comme réussie que si la requête des
+appartenances directes et le parcours des groupes imbriqués ont tous deux abouti. La résolution
+est relancée à chaque renouvellement du jeton d'accès, et une réussite ultérieure fait disparaître
+le message : un échec n'est donc pas définitif pour une session qui dure plus longtemps que le
+jeton. Pour réessayer immédiatement, déconnectez-vous puis reconnectez-vous. Pour plus de détails,
+consultez :doc:`../config/sso-entraid`.
 
-Conséquence de cette résolution en arrière-plan : pendant environ la première seconde qui suit une
-connexion Entra ID, les rôles résolus de l'utilisateur ne sont pas encore connus. Un administrateur
-est donc redirigé vers l'écran de recherche au lieu du tableau de bord de l'administration, et
-l'ouverture d'une page de l'écran d'administration pendant cette fenêtre le ramène à l'écran de
-recherche. Dans cette fenêtre, l'accès n'est jamais accordé, seulement refusé, et une nouvelle
-tentative une fois la résolution terminée fonctionne sans avoir à se reconnecter. Pour éviter
-complètement cette fenêtre, ajoutez le rôle d'administrateur à ``entraid.default.roles``.
+Conséquence de cette résolution en arrière-plan : tant qu'elle n'a pas abouti, les rôles résolus
+de l'utilisateur ne sont pas encore connus. Un administrateur est donc redirigé vers l'écran de
+recherche au lieu du tableau de bord de l'administration, et l'ouverture d'une page de l'écran
+d'administration pendant cette fenêtre le ramène à l'écran de recherche. La fenêtre dure jusqu'à
+environ une seconde de délai de planification, plus les appels à Microsoft Graph eux-mêmes — un
+pour les appartenances directes, puis un de plus pour chacun de ces groupes afin de parcourir les
+groupes imbriqués, émis les uns après les autres avec un cache froid — : elle croît donc avec le
+nombre de groupes auxquels appartient l'utilisateur. Dans cette fenêtre, l'accès n'est jamais
+accordé, seulement refusé, et aucun paramétrage n'est nécessaire pour la franchir : l'autorisation
+est réévaluée à chaque requête de la même session, si bien qu'une fois la résolution terminée les
+écrans d'administration s'ouvrent normalement, sans avoir à se reconnecter.
+
+.. warning::
+
+   Ne raccourcissez pas cette fenêtre en plaçant le rôle d'administrateur |Fess| dans
+   ``entraid.default.roles``. Cette propriété est une valeur globale unique que |Fess| applique à
+   tous les utilisateurs Entra ID lors de la connexion et réapplique à chaque résolution
+   ultérieure : elle donnerait à tous les utilisateurs du locataire des droits d'administrateur
+   |Fess| permanents.
 
 Mise à jour de la version des plugins
 -------------------------------------

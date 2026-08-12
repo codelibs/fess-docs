@@ -569,23 +569,39 @@ zurückkehren. Um das bisherige Verhalten beizubehalten, setzen Sie
 
 Ab 15.8 löst |Fess| außerdem die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund
 auf, nachdem die Anmeldung abgeschlossen ist, statt die Anmeldung auf Microsoft Graph warten zu
-lassen. Bis die Auflösung abgeschlossen ist — oder wenn sie fehlschlägt — fehlen dem Benutzer
-nur die gruppen- und rollenbezogenen Berechtigungen; seine eigene benutzerbezogene Berechtigung
-sowie alle in ``entraid.default.groups`` und ``entraid.default.roles`` konfigurierten Gruppen und
-Rollen sind ab der ersten Anfrage vorhanden. Während die Auflösung läuft, zeigt die Suchseite
-einen entsprechenden Hinweis an, und bei einem Fehlschlag einen anderen Hinweis. Die Auflösung
-wird bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein späterer Erfolg lässt den
-Hinweis verschwinden; für eine Sitzung, die länger als die Gültigkeitsdauer des Tokens besteht,
-ist ein Fehlschlag daher nicht endgültig. Um es sofort erneut zu versuchen, melden Sie sich ab und
-anschließend wieder an. Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
+lassen. Bis die Auflösung abgeschlossen ist — oder wenn sie nicht vollständig gelingt — besitzt
+der Benutzer nur seine eigene benutzerbezogene Berechtigung sowie das, was
+``entraid.default.groups`` und ``entraid.default.roles`` beisteuern. Ist beides nicht gesetzt —
+der ausgelieferte Standard —, liefert eine Suche in diesem Zeitfenster überhaupt keine Dokumente,
+denn eine mit den ausgelieferten Standardwerten angelegte Crawl-Konfiguration vergibt
+``{role}guest``, und diese Rolle besitzt ein angemeldeter Benutzer nicht. Während die Auflösung
+läuft, weist die Suchseite darauf hin, und bei einer nicht vollständig gelungenen Auflösung zeigt
+sie einen anderen Hinweis — die Auflösung gilt nur dann als erfolgreich, wenn sowohl die Abfrage
+der direkten Mitgliedschaften als auch der Durchlauf der verschachtelten Gruppen gelungen ist. Die
+Auflösung wird bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein späterer Erfolg
+lässt den Hinweis verschwinden; für eine Sitzung, die länger als die Gültigkeitsdauer des Tokens
+besteht, ist ein Fehlschlag daher nicht endgültig. Um es sofort erneut zu versuchen, melden Sie
+sich ab und anschließend wieder an. Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
 
-Eine Folge der Auflösung im Hintergrund: Rund eine Sekunde lang nach einer Anmeldung über Entra ID
-sind die aufgelösten Rollen des Benutzers noch nicht bekannt. Ein Administrator wird deshalb zur
-Suchseite statt zum Dashboard der Verwaltungsseite weitergeleitet, und wer in diesem Zeitfenster
-eine Seite der Verwaltungsseite öffnet, landet wieder auf der Suchseite. In diesem Zeitfenster
-wird der Zugriff immer nur verweigert, niemals gewährt, und ein erneuter Versuch nach Abschluss
-der Auflösung funktioniert ohne erneute Anmeldung. Um das Zeitfenster ganz zu vermeiden, fügen Sie
-``entraid.default.roles`` die Administratorrolle hinzu.
+Eine Folge der Auflösung im Hintergrund: Bis die Auflösung eintrifft, sind die aufgelösten Rollen
+des Benutzers noch nicht bekannt. Ein Administrator wird deshalb zur Suchseite statt zum Dashboard
+der Verwaltungsseite weitergeleitet, und wer in diesem Zeitfenster eine Seite der Verwaltungsseite
+öffnet, landet wieder auf der Suchseite. Das Zeitfenster umfasst bis zu etwa eine Sekunde
+Planungsverzögerung zuzüglich der Aufrufe von Microsoft Graph selbst — einer für die direkten
+Mitgliedschaften, dann je einer pro dieser Gruppen für den Durchlauf der verschachtelten Gruppen,
+nacheinander und bei kaltem Cache abgesetzt —, es wächst also mit der Anzahl der Gruppen des
+Benutzers. In diesem Zeitfenster wird der Zugriff immer nur verweigert, niemals gewährt, und es
+ist keine Konfiguration nötig, um es zu überbrücken: Die Autorisierung wird bei jeder Anfrage
+derselben Sitzung erneut ausgewertet, sodass sich die Verwaltungsseiten nach Abschluss der
+Auflösung ohne erneute Anmeldung normal öffnen lassen.
+
+.. warning::
+
+   Verkürzen Sie dieses Zeitfenster nicht, indem Sie die |Fess|-Administratorrolle in
+   ``entraid.default.roles`` eintragen. Diese Eigenschaft ist ein einzelner globaler Wert, den
+   |Fess| bei der Anmeldung auf jeden Entra ID-Benutzer anwendet und bei jeder späteren Auflösung
+   erneut anwendet; sie würde jedem Benutzer im Mandanten dauerhafte
+   |Fess|-Administratorrechte verleihen.
 
 Aktualisierung der Plugin-Versionen
 -----------------------------------

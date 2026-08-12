@@ -102,10 +102,10 @@ The following settings can be added as needed.
      - How the authorization response is returned. Either ``query`` or ``form_post``.
      - ``query``
    * - ``entraid.default.groups``
-     - Default groups (comma-separated)
+     - Default groups (comma-separated). Applied to every Entra ID user.
      - (None)
    * - ``entraid.default.roles``
-     - Default roles (comma-separated)
+     - Default roles (comma-separated). Applied to every Entra ID user.
      - (None)
    * - ``entraid.permission.fields``
      - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added.
@@ -140,6 +140,15 @@ The following settings can be added as needed.
    and requires ``tomcat.sameSiteCookies = none``. Without that setting the session cookie is not
    sent back and login fails, so most deployments should keep the default. Any other value is
    ignored with a warning and ``query`` is used.
+
+.. warning::
+
+   ``entraid.default.groups`` and ``entraid.default.roles`` are single global values with no
+   per-user scoping. |Fess| applies them to every Entra ID user at login and applies them again on
+   every later resolution, so Microsoft Graph never takes them away. In particular, never put the
+   |Fess| administrator role — ``admin`` with the shipped ``authentication.admin.roles`` — in
+   ``entraid.default.roles``: that grants every user in the tenant permanent access to the
+   administration screens.
 
 Entra ID Side Configuration
 ===========================
@@ -340,17 +349,30 @@ Cannot Retrieve Group Information
 - If nested parent groups cannot be resolved, ``Not allowed to read the parent groups of ...`` is
   logged as a warning. Grant ``GroupMember.Read.All`` in that case
 - |Fess| resolves the user's group and role membership in the background after login completes,
-  so login itself never waits on Microsoft Graph. Until resolution finishes, the user is missing
-  only the group- and role-scoped permissions — their own user-level permission, and any groups
-  and roles configured in ``entraid.default.groups`` and ``entraid.default.roles``, are present
-  from the first request — so documents they should be able to see may be temporarily missing
-  from search results. The search screen shows a message while resolution is in progress
-- If resolution fails, the search screen shows a message, and asks the user to contact an
-  administrator if the problem keeps happening. The failure is not necessarily final: resolution
-  is retried whenever the access token is renewed, and a later success clears the message and
-  restores the missing permissions. To retry straight away, the user has to log out and log in
-  again — opening the SSO login URL while still logged in only redirects back to the search
-  screen
+  so login itself never waits on Microsoft Graph. Until resolution finishes, the user holds only
+  their own user-level permission and whatever ``entraid.default.groups`` and
+  ``entraid.default.roles`` provide. With neither of those set, which is the shipped default, a
+  search made in that window returns no documents at all: ``role.search.default.permissions`` is
+  empty out of the box, and a crawling configuration created with the shipped
+  ``role.search.default.display.permissions`` grants ``{role}guest``, which a logged-in user does
+  not hold. The window is up to about a second of scheduling delay plus the Microsoft Graph calls
+  themselves — one for the direct memberships, then one more for each of those groups to walk the
+  nested groups, issued one after another on a cold cache — so it grows with the number of groups
+  the user belongs to. While it lasts, the search screen tells the user that their group and role
+  permissions are still loading and asks them to search again in a moment
+- If resolution does not fully succeed, the search screen tells the user that their group and role
+  permissions could not be fully loaded, asks them to log out and log in again, and to contact an
+  administrator if it keeps happening. "Not fully" is deliberate: the resolution counts as failed
+  unless both the direct membership lookup and the nested group walk succeeded, so a user who
+  holds their direct groups but not their parent groups gets that message too. Throttling is the
+  usual cause of the partial case — a single HTTP 429 or 503 from Microsoft Graph makes |Fess| back
+  off for as long as the ``Retry-After`` header asks (60 seconds when it says nothing usable, 60
+  minutes at most), and every nested group lookup in the whole |Fess| instance is skipped for that
+  time while the direct lookups keep answering. The
+  failure is not necessarily final: resolution is retried whenever the access token is renewed,
+  and a later success clears the message and restores the missing permissions. Logging out and
+  logging in again retries it straight away — opening the SSO login URL while still logged in only
+  redirects back to the search screen
 
 Debug Settings
 --------------

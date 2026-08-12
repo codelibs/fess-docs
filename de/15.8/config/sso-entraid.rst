@@ -103,10 +103,10 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Art, wie die Autorisierungsantwort zurückgegeben wird. Entweder ``query`` oder ``form_post``.
      - ``query``
    * - ``entraid.default.groups``
-     - Standardgruppen (kommagetrennt)
+     - Standardgruppen (kommagetrennt). Werden auf jeden Entra ID-Benutzer angewendet.
      - (Keine)
    * - ``entraid.default.roles``
-     - Standardrollen (kommagetrennt)
+     - Standardrollen (kommagetrennt). Werden auf jeden Entra ID-Benutzer angewendet.
      - (Keine)
    * - ``entraid.permission.fields``
      - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt.
@@ -145,6 +145,15 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    zurückgesendet und die Anmeldung schlägt fehl; die meisten Installationen sollten daher beim
    Standardwert bleiben. Andere Werte werden mit einer Warnung ignoriert und ``query`` wird
    verwendet.
+
+.. warning::
+
+   ``entraid.default.groups`` und ``entraid.default.roles`` sind einzelne globale Werte ohne
+   benutzerbezogene Abgrenzung. |Fess| wendet sie bei der Anmeldung auf jeden Entra ID-Benutzer an
+   und wendet sie bei jeder späteren Auflösung erneut an, sodass Microsoft Graph sie nie wieder
+   entzieht. Tragen Sie insbesondere niemals die |Fess|-Administratorrolle — bei ausgeliefertem
+   ``authentication.admin.roles`` also ``admin`` — in ``entraid.default.roles`` ein: Das gewährt
+   jedem Benutzer im Mandanten dauerhaften Zugriff auf die Verwaltungsseiten.
 
 Konfiguration auf der Entra ID-Seite
 ====================================
@@ -351,19 +360,33 @@ Gruppeninformationen können nicht abgerufen werden
   ``GroupMember.Read.All``
 - |Fess| löst die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund auf, nachdem die
   Anmeldung abgeschlossen ist; die Anmeldung selbst wartet also nie auf Microsoft Graph. Bis die
-  Auflösung abgeschlossen ist, fehlen dem Benutzer nur die gruppen- und rollenbezogenen
-  Berechtigungen — seine eigene benutzerbezogene Berechtigung sowie die in
-  ``entraid.default.groups`` und ``entraid.default.roles`` konfigurierten Gruppen und Rollen sind
-  ab der ersten Anfrage vorhanden —, sodass Dokumente, die er eigentlich sehen dürfte,
-  vorübergehend in den Suchergebnissen fehlen können. Während die Auflösung läuft, zeigt die
-  Suchseite einen entsprechenden Hinweis an
-- Schlägt die Auflösung fehl, zeigt die Suchseite einen Hinweis an und bittet darum, bei
-  wiederholtem Auftreten den Administrator zu kontaktieren. Der Fehlschlag ist nicht zwangsläufig
-  endgültig: Die Auflösung wird bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein
-  späterer Erfolg lässt den Hinweis verschwinden und stellt die fehlenden Berechtigungen wieder
-  her. Um es sofort erneut zu versuchen, muss der Benutzer sich abmelden und erneut anmelden —
-  wird die SSO-Anmelde-URL im angemeldeten Zustand aufgerufen, erfolgt lediglich eine Umleitung
-  zurück zur Suchseite
+  Auflösung abgeschlossen ist, besitzt der Benutzer nur seine eigene benutzerbezogene Berechtigung
+  sowie die in ``entraid.default.groups`` und ``entraid.default.roles`` konfigurierten Gruppen und
+  Rollen. Ist beides nicht gesetzt — der ausgelieferte Standard —, liefert eine Suche in diesem
+  Zeitfenster überhaupt keine Dokumente: ``role.search.default.permissions`` ist ab Werk leer, und
+  eine mit dem ausgelieferten ``role.search.default.display.permissions`` angelegte
+  Crawl-Konfiguration vergibt ``{role}guest``, was ein angemeldeter Benutzer nicht besitzt. Das
+  Zeitfenster umfasst bis zu etwa eine Sekunde Planungsverzögerung zuzüglich der Aufrufe von
+  Microsoft Graph selbst — einer für die direkten Mitgliedschaften, dann je einer pro dieser
+  Gruppen für den Durchlauf der verschachtelten Gruppen, nacheinander und bei kaltem Cache
+  abgesetzt —, es wächst also mit der Anzahl der Gruppen des Benutzers. Währenddessen teilt die
+  Suchseite dem Benutzer mit, dass seine Gruppen- und Rollenberechtigungen noch geladen werden,
+  und bittet ihn, die Suche in einem Moment zu wiederholen
+- Gelingt die Auflösung nicht vollständig, teilt die Suchseite dem Benutzer mit, dass seine
+  Gruppen- und Rollenberechtigungen nicht vollständig geladen werden konnten, und bittet ihn, sich
+  ab- und wieder anzumelden sowie bei wiederholtem Auftreten den Administrator zu kontaktieren.
+  „Nicht vollständig“ ist bewusst gewählt: Die Auflösung gilt nur dann als erfolgreich, wenn sowohl
+  die Abfrage der direkten Mitgliedschaften als auch der Durchlauf der verschachtelten Gruppen
+  gelungen ist — ein Benutzer, der seine direkten Gruppen, aber nicht seine übergeordneten Gruppen
+  besitzt, erhält diesen Hinweis also ebenfalls. Häufigste Ursache des Teilfalls ist Drosselung:
+  Ein einziges HTTP 429 oder 503 von Microsoft Graph lässt |Fess| so lange pausieren, wie es der
+  Header ``Retry-After`` verlangt (60 Sekunden, wenn er nichts Verwertbares nennt, höchstens 60
+  Minuten), und in dieser Zeit wird in der gesamten |Fess|-Instanz jede Abfrage verschachtelter
+  Gruppen übersprungen, während die direkten Abfragen weiter beantwortet werden. Der Fehlschlag ist nicht zwangsläufig endgültig: Die Auflösung wird
+  bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein späterer Erfolg lässt den
+  Hinweis verschwinden und stellt die fehlenden Berechtigungen wieder her. Abmelden und erneut
+  anmelden versucht es sofort erneut — wird die SSO-Anmelde-URL im angemeldeten Zustand
+  aufgerufen, erfolgt lediglich eine Umleitung zurück zur Suchseite
 
 Debug-Einstellungen
 -------------------

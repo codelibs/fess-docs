@@ -103,10 +103,10 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Forma en que se devuelve la respuesta de autorización. Puede ser ``query`` o ``form_post``.
      - ``query``
    * - ``entraid.default.groups``
-     - Grupos por defecto (separados por comas)
+     - Grupos por defecto (separados por comas). Se aplican a todos los usuarios de Entra ID.
      - (Ninguno)
    * - ``entraid.default.roles``
-     - Roles por defecto (separados por comas)
+     - Roles por defecto (separados por comas). Se aplican a todos los usuarios de Entra ID.
      - (Ninguno)
    * - ``entraid.permission.fields``
      - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan.
@@ -144,6 +144,15 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    ``tomcat.sameSiteCookies = none``. Sin esa configuración, la cookie de sesión no se devuelve y
    el inicio de sesión falla, por lo que la mayoría de las instalaciones deberían mantener el valor
    por defecto. Cualquier otro valor se ignora con una advertencia y se utiliza ``query``.
+
+.. warning::
+
+   ``entraid.default.groups`` y ``entraid.default.roles`` son valores globales únicos, sin ámbito
+   por usuario. |Fess| los aplica a todos los usuarios de Entra ID al iniciar sesión y vuelve a
+   aplicarlos en cada resolución posterior, por lo que Microsoft Graph nunca los retira. En
+   particular, no ponga nunca el rol de administrador de |Fess| — ``admin`` con el valor
+   ``authentication.admin.roles`` que se incluye — en ``entraid.default.roles``: eso concede a
+   todos los usuarios del inquilino acceso permanente a las pantallas de administración.
 
 Configuración del lado de Entra ID
 ==================================
@@ -348,17 +357,33 @@ No se puede recuperar la información de grupo
   ``Not allowed to read the parent groups of ...``. En ese caso, otorgue ``GroupMember.Read.All``
 - |Fess| resuelve la pertenencia a grupos y roles del usuario en segundo plano una vez completado
   el inicio de sesión, de modo que este nunca espera a Microsoft Graph. Hasta que la resolución
-  termina, al usuario solo le faltan los permisos asociados a grupos y roles — su propio permiso
-  a nivel de usuario, y los grupos y roles configurados en ``entraid.default.groups`` y
-  ``entraid.default.roles``, están presentes desde la primera petición —, por lo que los
-  documentos que debería poder ver pueden faltar temporalmente en los resultados de búsqueda.
-  Mientras la resolución está en curso, la pantalla de búsqueda muestra un mensaje al respecto
-- Si la resolución falla, la pantalla de búsqueda muestra un mensaje y pide al usuario que
-  contacte con el administrador si el problema persiste. El fallo no es necesariamente
-  definitivo: la resolución se reintenta cada vez que se renueva el token de acceso, y un éxito
-  posterior hace desaparecer el mensaje y restaura los permisos que faltaban. Para reintentarlo
-  de inmediato, el usuario debe cerrar la sesión y volver a iniciarla — abrir la URL de inicio de
-  sesión SSO con la sesión aún iniciada solo redirige de vuelta a la pantalla de búsqueda
+  termina, el usuario solo tiene su propio permiso a nivel de usuario y lo que aporten
+  ``entraid.default.groups`` y ``entraid.default.roles``. Si no se ha configurado ninguno de los
+  dos —el valor por defecto que se incluye—, una búsqueda hecha en esa ventana no devuelve ningún
+  documento: ``role.search.default.permissions`` está vacío de fábrica, y una configuración de
+  rastreo creada con el valor ``role.search.default.display.permissions`` que se incluye concede
+  ``{role}guest``, rol que un usuario con la sesión iniciada no tiene. La ventana dura hasta
+  aproximadamente un segundo de retardo de planificación más las propias llamadas a Microsoft
+  Graph — una para las pertenencias directas y luego una más por cada uno de esos grupos para
+  recorrer los grupos anidados, emitidas una tras otra con la caché fría —, por lo que crece con
+  el número de grupos a los que pertenece el usuario. Mientras tanto, la pantalla de búsqueda
+  indica al usuario que sus permisos de grupo y rol todavía se están cargando y le pide que
+  repita la búsqueda en unos instantes
+- Si la resolución no se completa del todo, la pantalla de búsqueda indica al usuario que sus
+  permisos de grupo y rol no se pudieron cargar por completo, le pide que cierre la sesión y
+  vuelva a iniciarla, y que contacte con el administrador si el problema persiste. Lo de «por
+  completo» es deliberado: la resolución solo se considera correcta si han tenido éxito tanto la
+  consulta de pertenencias directas como el recorrido de los grupos anidados, así que un usuario
+  que tiene sus grupos directos pero no sus grupos padre también recibe ese mensaje. La causa
+  habitual del caso parcial es la limitación de peticiones: un solo HTTP 429 o 503 de Microsoft
+  Graph hace que |Fess| espere el tiempo que pida la cabecera ``Retry-After`` (60 segundos si no
+  indica nada utilizable, 60 minutos como máximo), y durante ese tiempo se omite toda consulta de
+  grupos anidados en la instancia entera de |Fess| mientras las consultas directas siguen
+  respondiendo. El fallo no es necesariamente definitivo:
+  la resolución se reintenta cada vez que se renueva el token de acceso, y un éxito posterior hace
+  desaparecer el mensaje y restaura los permisos que faltaban. Cerrar la sesión y volver a
+  iniciarla lo reintenta de inmediato — abrir la URL de inicio de sesión SSO con la sesión aún
+  iniciada solo redirige de vuelta a la pantalla de búsqueda
 
 Configuración de depuración
 ---------------------------

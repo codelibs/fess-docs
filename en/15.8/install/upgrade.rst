@@ -552,20 +552,33 @@ that reason, you can restore the default. To keep the previous behaviour, set
 
 Starting with 15.8, |Fess| also resolves the user's group and role membership in the background
 after login completes, instead of blocking the login on Microsoft Graph. Until resolution
-finishes — or if it fails — the user is missing only the group- and role-scoped permissions;
-their own user-level permission, and any ``entraid.default.groups`` and ``entraid.default.roles``,
-are present from the first request. The search screen shows a message while resolution is in
-progress, and a different message if it fails. Resolution is retried whenever the access token is
-renewed, and a later success clears the message, so a failure is not final for a session that
-outlives the token; to retry straight away, log out and log in again. For details, see
-:doc:`../config/sso-entraid`.
+finishes — or if it does not fully succeed — the user holds only their own user-level permission
+and whatever ``entraid.default.groups`` and ``entraid.default.roles`` provide. With neither of
+those set, which is the shipped default, a search made in that window returns no documents at all,
+because a crawling configuration created with the shipped defaults grants ``{role}guest`` and a
+logged-in user does not hold that role. The search screen says so while resolution is in progress,
+and says something different if it did not fully succeed — the resolution counts as failed unless
+both the direct membership lookup and the nested group walk succeeded. Resolution is retried
+whenever the access token is renewed, and a later success clears the message, so a failure is not
+final for a session that outlives the token; to retry straight away, log out and log in again. For
+details, see :doc:`../config/sso-entraid`.
 
-One consequence of resolving in the background: for roughly the first second after an Entra ID
-login, the user's resolved roles are not yet known. An administrator is therefore redirected to
-the search screen instead of the admin dashboard, and opening an administration page during that
-window returns them to the search screen. Access is only ever refused, never granted, in that
-window, and retrying once resolution has finished works without logging in again. To avoid the
-window altogether, add the administrator role to ``entraid.default.roles``.
+One consequence of resolving in the background: until it lands, the user's resolved roles are not
+yet known. An administrator is therefore redirected to the search screen instead of the admin
+dashboard, and opening an administration page during that window returns them to the search
+screen. The window is up to about a second of scheduling delay plus the Microsoft Graph calls
+themselves — one for the direct memberships, then one more for each of those groups to walk the
+nested groups, issued one after another on a cold cache — so it grows with the number of groups
+the user belongs to. Access is only ever refused, never granted, in that window, and it needs no
+configuration to get past: authorization is evaluated again on every request of the same session,
+so once resolution has landed the administration screens open normally, without logging in again.
+
+.. warning::
+
+   Do not shorten that window by putting the |Fess| administrator role in
+   ``entraid.default.roles``. That property is a single global value that |Fess| applies to every
+   Entra ID user at login and re-applies on every later resolution, so it would give every user in
+   the tenant permanent |Fess| administrator rights.
 
 Updating Plugin Versions
 ------------------------

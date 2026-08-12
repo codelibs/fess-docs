@@ -103,10 +103,10 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Mode de renvoi de la réponse d'autorisation. Soit ``query``, soit ``form_post``.
      - ``query``
    * - ``entraid.default.groups``
-     - Groupes par défaut (séparés par des virgules)
+     - Groupes par défaut (séparés par des virgules). Appliqués à tous les utilisateurs Entra ID.
      - (Aucun)
    * - ``entraid.default.roles``
-     - Rôles par défaut (séparés par des virgules)
+     - Rôles par défaut (séparés par des virgules). Appliqués à tous les utilisateurs Entra ID.
      - (Aucun)
    * - ``entraid.permission.fields``
      - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées.
@@ -145,6 +145,16 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    paramètre, le cookie de session n'est pas renvoyé et la connexion échoue : la plupart des
    installations doivent donc conserver la valeur par défaut. Toute autre valeur est ignorée avec
    un avertissement et ``query`` est utilisé.
+
+.. warning::
+
+   ``entraid.default.groups`` et ``entraid.default.roles`` sont des valeurs globales uniques, sans
+   portée par utilisateur. |Fess| les applique à tous les utilisateurs Entra ID lors de la
+   connexion et les réapplique à chaque résolution ultérieure, si bien que Microsoft Graph ne les
+   retire jamais. En particulier, ne placez jamais le rôle d'administrateur |Fess| — ``admin`` avec
+   la valeur ``authentication.admin.roles`` livrée — dans ``entraid.default.roles`` : cela
+   accorderait à tous les utilisateurs du locataire un accès permanent aux écrans
+   d'administration.
 
 Configuration côté Entra ID
 ===========================
@@ -348,18 +358,35 @@ Impossible de récupérer les informations de groupe
   ``GroupMember.Read.All``
 - |Fess| résout l'appartenance aux groupes et rôles de l'utilisateur en arrière-plan une fois la
   connexion terminée, si bien que la connexion elle-même n'attend jamais Microsoft Graph. Tant que
-  la résolution n'est pas terminée, il ne manque à l'utilisateur que les autorisations associées
-  aux groupes et rôles — sa propre autorisation au niveau utilisateur, ainsi que les groupes et
-  rôles configurés dans ``entraid.default.groups`` et ``entraid.default.roles``, sont présents dès
-  la première requête —, si bien que des documents qu'il devrait pouvoir consulter peuvent
-  temporairement être absents des résultats de recherche. Pendant que la résolution est en cours,
-  l'écran de recherche affiche un message à ce sujet
-- Si la résolution échoue, l'écran de recherche affiche un message et invite l'utilisateur à
-  contacter l'administrateur si le problème persiste. L'échec n'est pas nécessairement définitif :
-  la résolution est relancée à chaque renouvellement du jeton d'accès, et une réussite ultérieure
-  fait disparaître le message et restaure les autorisations manquantes. Pour réessayer
-  immédiatement, l'utilisateur doit se déconnecter puis se reconnecter — ouvrir l'URL de connexion
-  SSO alors qu'il est encore connecté ne fait que le rediriger vers l'écran de recherche
+  la résolution n'est pas terminée, l'utilisateur ne dispose que de sa propre autorisation au
+  niveau utilisateur et de ce qu'apportent ``entraid.default.groups`` et
+  ``entraid.default.roles``. Si aucun des deux n'est défini — la valeur livrée par défaut —, une
+  recherche effectuée pendant cette fenêtre ne renvoie aucun document :
+  ``role.search.default.permissions`` est vide d'origine, et une configuration d'exploration créée
+  avec la valeur ``role.search.default.display.permissions`` livrée accorde ``{role}guest``, rôle
+  que ne possède pas un utilisateur connecté. La fenêtre dure jusqu'à environ une seconde de délai
+  de planification, plus les appels à Microsoft Graph eux-mêmes — un pour les appartenances
+  directes, puis un de plus pour chacun de ces groupes afin de parcourir les groupes imbriqués,
+  émis les uns après les autres avec un cache froid — : elle croît donc avec le nombre de groupes
+  auxquels appartient l'utilisateur. Pendant ce temps, l'écran de recherche indique à
+  l'utilisateur que ses autorisations de groupe et de rôle sont en cours de chargement et l'invite
+  à relancer la recherche dans un instant
+- Si la résolution n'aboutit pas entièrement, l'écran de recherche indique à l'utilisateur que ses
+  autorisations de groupe et de rôle n'ont pas pu être entièrement chargées, l'invite à se
+  déconnecter puis à se reconnecter, et à contacter l'administrateur si le problème persiste.
+  « Entièrement » est délibéré : la résolution n'est considérée comme réussie que si la requête
+  des appartenances directes et le parcours des groupes imbriqués ont tous deux abouti ; un
+  utilisateur qui possède ses groupes directs mais pas ses groupes parents reçoit donc aussi ce
+  message. La cause habituelle du cas partiel est la limitation de débit : un seul HTTP 429 ou 503
+  de Microsoft Graph fait patienter |Fess| aussi longtemps que l'exige l'en-tête ``Retry-After``
+  (60 secondes s'il n'indique rien d'exploitable, 60 minutes au maximum), et pendant ce temps
+  toute recherche de groupes imbriqués est ignorée dans l'ensemble de l'instance |Fess| alors que
+  les requêtes directes continuent de répondre. L'échec
+  n'est pas nécessairement définitif : la résolution est relancée à chaque renouvellement du jeton
+  d'accès, et une réussite ultérieure fait disparaître le message et restaure les autorisations
+  manquantes. Se déconnecter puis se reconnecter relance la résolution immédiatement — ouvrir
+  l'URL de connexion SSO alors qu'il est encore connecté ne fait que le rediriger vers l'écran de
+  recherche
 
 Paramètres de débogage
 ----------------------
