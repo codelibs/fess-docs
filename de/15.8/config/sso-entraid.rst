@@ -18,8 +18,8 @@ Bei der Entra ID-Authentifizierung fungiert |Fess| als OAuth 2.0/OpenID Connect-
 3. Benutzer authentifiziert sich bei Entra ID (Microsoft-Anmeldung)
 4. Entra ID leitet den Autorisierungscode an |Fess| weiter
 5. |Fess| verwendet den Autorisierungscode, um ein Zugriffstoken zu erhalten
-6. |Fess| verwendet die Microsoft Graph API, um die Gruppen- und Rolleninformationen des Benutzers abzurufen
-7. Benutzer wird angemeldet und Gruppeninformationen werden auf die rollenbasierte Suche angewendet
+6. Benutzer wird angemeldet
+7. Im Hintergrund verwendet |Fess| die Microsoft Graph API, um die Gruppen- und Rolleninformationen des Benutzers abzurufen, und wendet sie nach Abschluss der Auflösung auf die rollenbasierte Suche an
 
 .. note::
    Ab |Fess| 15.8 wird die Autorisierungsantwort in Schritt 4 als GET-Anfrage zurückgegeben, da
@@ -247,9 +247,9 @@ Verschachtelte Gruppen
 ----------------------
 
 |Fess| ruft nicht nur Gruppen ab, zu denen Benutzer direkt gehören, sondern auch übergeordnete Gruppen (verschachtelte Gruppen) rekursiv.
-Diese Verarbeitung wird nach der Anmeldung asynchron ausgeführt, um die Auswirkungen auf die Anmeldezeit zu minimieren.
+Sowohl die direkte Mitgliedschaftsabfrage als auch die Suche nach übergeordneten Gruppen laufen nach der Anmeldung in derselben Hintergrundaufgabe, sodass die Anmeldung selbst nie durch Microsoft Graph verzögert wird.
 Die übergeordneten Gruppen werden bis zu einer bestimmten Hierarchietiefe ermittelt, und die abgerufenen Ergebnisse werden für einen bestimmten Zeitraum zwischengespeichert.
-Sobald die Ermittlung der übergeordneten Gruppen abgeschlossen ist, werden die Berechtigungen des Benutzers neu berechnet.
+Sobald diese Hintergrundaufgabe abgeschlossen ist, werden die Berechtigungen des Benutzers neu berechnet.
 
 Standardgruppeneinstellungen
 ----------------------------

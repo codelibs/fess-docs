@@ -18,8 +18,8 @@ In Entra ID authentication, |Fess| operates as an OAuth 2.0/OpenID Connect clien
 3. User authenticates with Entra ID (Microsoft sign-in)
 4. Entra ID redirects the authorization code to |Fess|
 5. |Fess| uses the authorization code to obtain an access token
-6. |Fess| uses Microsoft Graph API to retrieve user's group and role information
-7. User is logged in and group information is applied to role-based search
+6. User is logged in
+7. In the background, |Fess| uses the Microsoft Graph API to retrieve the user's group and role information and applies it to role-based search once resolution completes
 
 .. note::
    From |Fess| 15.8, the authorization response in step 4 is returned as a GET request, because
@@ -238,9 +238,9 @@ Nested Groups
 -------------
 
 |Fess| retrieves not only groups that users directly belong to, but also parent groups (nested groups) recursively.
-This processing is executed asynchronously after login to minimize impact on login time.
+Both the direct membership lookup and the parent group lookup run in the same background task after login, so login itself is never slowed down by Microsoft Graph.
 The parent group lookup targets up to a certain number of levels, and the retrieved results are cached for a certain period.
-When the parent group retrieval completes, the user's permissions are recalculated.
+When that background task completes, the user's permissions are recalculated.
 
 Default Group Settings
 ----------------------

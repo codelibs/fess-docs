@@ -18,8 +18,8 @@ Dans l'authentification Entra ID, |Fess| opère en tant que client OAuth 2.0/Ope
 3. L'utilisateur s'authentifie auprès d'Entra ID (connexion Microsoft)
 4. Entra ID redirige le code d'autorisation vers |Fess|
 5. |Fess| utilise le code d'autorisation pour obtenir un jeton d'accès
-6. |Fess| utilise l'API Microsoft Graph pour récupérer les informations de groupe et de rôle de l'utilisateur
-7. L'utilisateur est connecté et les informations de groupe sont appliquées à la recherche basée sur les rôles
+6. L'utilisateur est connecté
+7. En arrière-plan, |Fess| utilise l'API Microsoft Graph pour récupérer les informations de groupe et de rôle de l'utilisateur, et les applique à la recherche basée sur les rôles une fois la résolution terminée
 
 .. note::
    À partir de |Fess| 15.8, la réponse d'autorisation de l'étape 4 est renvoyée via une requête
@@ -246,8 +246,8 @@ Groupes imbriqués
 -----------------
 
 |Fess| récupère non seulement les groupes auxquels les utilisateurs appartiennent directement, mais aussi les groupes parents (groupes imbriqués) de manière récursive.
-Ce traitement est exécuté de manière asynchrone après la connexion pour minimiser l'impact sur le temps de connexion.
-La recherche des groupes parents cible un certain nombre de niveaux hiérarchiques, et les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque la récupération des groupes parents est terminée, les permissions de l'utilisateur sont recalculées.
+La recherche de l'appartenance directe et la recherche des groupes parents s'exécutent toutes deux dans la même tâche en arrière-plan après la connexion, si bien que la connexion elle-même n'est jamais ralentie par Microsoft Graph.
+La recherche des groupes parents cible un certain nombre de niveaux hiérarchiques, et les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque cette tâche en arrière-plan est terminée, les permissions de l'utilisateur sont recalculées.
 
 Paramètres de groupe par défaut
 -------------------------------

@@ -18,8 +18,8 @@ En la autenticación de Entra ID, |Fess| opera como un cliente OAuth 2.0/OpenID 
 3. El usuario se autentica con Entra ID (inicio de sesión de Microsoft)
 4. Entra ID redirige el código de autorización a |Fess|
 5. |Fess| utiliza el código de autorización para obtener un token de acceso
-6. |Fess| utiliza la API de Microsoft Graph para recuperar la información de grupo y rol del usuario
-7. El usuario inicia sesión y la información de grupo se aplica a la búsqueda basada en roles
+6. El usuario inicia sesión
+7. En segundo plano, |Fess| utiliza la API de Microsoft Graph para recuperar la información de grupo y rol del usuario, y la aplica a la búsqueda basada en roles en cuanto finaliza la resolución
 
 .. note::
    A partir de |Fess| 15.8, la respuesta de autorización del paso 4 se devuelve como una solicitud
@@ -245,9 +245,9 @@ Grupos anidados
 ---------------
 
 |Fess| recupera no solo los grupos a los que los usuarios pertenecen directamente, sino también los grupos padre (grupos anidados) de forma recursiva.
-Este procesamiento se ejecuta de forma asíncrona después del inicio de sesión para minimizar el impacto en el tiempo de inicio de sesión.
+Tanto la búsqueda de la pertenencia directa como la búsqueda de grupos padre se ejecutan en la misma tarea en segundo plano después del inicio de sesión, de modo que el inicio de sesión nunca se ve retrasado por Microsoft Graph.
 La búsqueda de grupos padre abarca hasta un número determinado de niveles, y los resultados obtenidos se almacenan en caché durante un período determinado.
-Cuando la recuperación de los grupos padre finaliza, los permisos del usuario se recalculan.
+Cuando esa tarea en segundo plano finaliza, los permisos del usuario se recalculan.
 
 Configuración de grupos por defecto
 -----------------------------------
