@@ -550,12 +550,13 @@ such a request, so ``tomcat.sameSiteCookies = none`` was required. If you set ``
 that reason, you can restore the default. To keep the previous behaviour, set
 ``entraid.response.mode=form_post`` and leave ``tomcat.sameSiteCookies = none`` in place.
 
-15.8 also adds ``entraid.require.membership``, which selects what happens when Microsoft Graph
-does not return the user's groups and roles at login. The default, ``false``, behaves as 15.7
-did: a warning is logged and the login completes. The user then holds only
-``entraid.default.groups`` and ``entraid.default.roles``, so documents they should be able to see
-are missing from search results. Set it to ``true`` to reject such a login instead. For details,
-see :doc:`../config/sso-entraid`.
+Starting with 15.8, |Fess| also resolves the user's group and role membership in the background
+after login completes, instead of blocking the login on Microsoft Graph. Until resolution
+finishes — or if it fails — the user is missing only the group- and role-scoped permissions;
+their own user-level permission is always present. The search screen shows a message while
+resolution is in progress, and a different message if it fails, asking the user to log in again.
+There is no automatic retry, so a failure is final for the rest of that session. For details, see
+:doc:`../config/sso-entraid`.
 
 Updating Plugin Versions
 ------------------------

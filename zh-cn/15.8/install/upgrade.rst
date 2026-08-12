@@ -536,10 +536,10 @@ Cookie，因此需要将其改为 ``tomcat.sameSiteCookies = none``\ 。如果�
 可以恢复为默认值。若要保持原有行为，请指定 ``entraid.response.mode=form_post`` 并保留
 ``tomcat.sameSiteCookies = none``\ 。
 
-15.8 还新增了 ``entraid.require.membership``\ ，用于选择登录时无法从 Microsoft Graph 获取用户的
-组和角色信息时的处理方式。默认值 ``false`` 与 15.7 相同：输出警告日志并继续登录。但此时用户的
-权限仅为 ``entraid.default.groups`` 和 ``entraid.default.roles``\ ，本应可以查看的文档将不会
-出现在搜索结果中。指定 ``true`` 则拒绝此类登录。
+自 15.8 起，|Fess| 还会在登录完成后于后台解析用户所属的组和角色，而不再让登录等待 Microsoft
+Graph。在解析完成之前——或解析失败时——用户仅缺少与组、角色相关联的权限；用户自身的用户级权限
+始终存在。解析进行期间，搜索界面会显示相应提示，解析失败时则显示另一条提示，要求用户重新登录。
+系统不会自动重试，一旦失败，该会话在其余时间内将不再重新解析。
 详细内容请参阅 :doc:`../config/sso-entraid`\ 。
 
 插件版本更新

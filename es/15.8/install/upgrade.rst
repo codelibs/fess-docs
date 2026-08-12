@@ -569,13 +569,14 @@ la cookie de sesión no se envía en esa petición, por lo que era necesario
 al valor por defecto. Para mantener el comportamiento anterior, establezca
 ``entraid.response.mode=form_post`` y conserve ``tomcat.sameSiteCookies = none``.
 
-La versión 15.8 también añade ``entraid.require.membership``, que determina qué ocurre cuando
-Microsoft Graph no devuelve los grupos y roles del usuario durante el inicio de sesión. El valor
-por defecto, ``false``, se comporta como en la versión 15.7: se registra una advertencia y el
-inicio de sesión continúa. Sin embargo, el usuario solo dispone entonces de
-``entraid.default.groups`` y ``entraid.default.roles``, por lo que los documentos que debería
-poder ver no aparecen en los resultados de búsqueda. Establézcalo en ``true`` para rechazar ese
-inicio de sesión. Consulte :doc:`../config/sso-entraid` para conocer más detalles.
+A partir de la versión 15.8, |Fess| también resuelve la pertenencia a grupos y roles del usuario
+en segundo plano una vez completado el inicio de sesión, en lugar de bloquear el inicio de sesión
+a la espera de Microsoft Graph. Hasta que la resolución termina — o si falla —, al usuario solo
+le faltan los permisos asociados a grupos y roles; su propio permiso a nivel de usuario siempre
+está presente. Mientras la resolución está en curso, la pantalla de búsqueda muestra un mensaje
+al respecto, y otro distinto si falla, pidiendo al usuario que vuelva a iniciar sesión. No hay
+reintento automático, por lo que un fallo es definitivo durante el resto de esa sesión. Consulte
+:doc:`../config/sso-entraid` para conocer más detalles.
 
 Actualización de la Versión de los Plugins
 ---------------------------------------------

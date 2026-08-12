@@ -570,13 +570,15 @@ nécessaire. Si vous aviez défini ``none`` uniquement pour cette raison, vous p
 valeur par défaut. Pour conserver le comportement précédent, définissez
 ``entraid.response.mode=form_post`` et laissez ``tomcat.sameSiteCookies = none`` en place.
 
-La 15.8 ajoute également ``entraid.require.membership``, qui détermine ce qui se passe lorsque
-Microsoft Graph ne renvoie pas les groupes et rôles de l'utilisateur lors de la connexion. La
-valeur par défaut ``false`` reproduit le comportement de la 15.7 : un avertissement est
-journalisé et la connexion aboutit. L'utilisateur ne dispose alors que de
-``entraid.default.groups`` et ``entraid.default.roles``, si bien que les documents qu'il devrait
-pouvoir consulter n'apparaissent pas dans les résultats de recherche. Définissez ``true`` pour
-refuser une telle connexion. Pour plus de détails, consultez :doc:`../config/sso-entraid`.
+À partir de la 15.8, |Fess| résout également l'appartenance aux groupes et rôles de l'utilisateur
+en arrière-plan une fois la connexion terminée, au lieu de bloquer la connexion en attendant
+Microsoft Graph. Tant que la résolution n'est pas terminée — ou si elle échoue —, il ne manque
+à l'utilisateur que les autorisations associées aux groupes et rôles ; sa propre autorisation au
+niveau utilisateur est toujours présente. Pendant que la résolution est en cours, l'écran de
+recherche affiche un message à ce sujet, et un autre message si elle échoue, invitant
+l'utilisateur à se reconnecter. Il n'y a pas de nouvelle tentative automatique : un échec est
+définitif pour le reste de cette session. Pour plus de détails, consultez
+:doc:`../config/sso-entraid`.
 
 Mise à jour de la version des plugins
 -------------------------------------

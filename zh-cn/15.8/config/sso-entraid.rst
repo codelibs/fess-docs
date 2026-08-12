@@ -106,9 +106,6 @@ Entra ID认证的工作原理
    * - ``entraid.default.roles``
      - 默认角色（逗号分隔）
      - （无）
-   * - ``entraid.require.membership``
-     - 登录时无法从Microsoft Graph获取用户的组和角色信息时的处理方式。设为 ``true`` 时拒绝登录。设为 ``false`` 时输出警告日志并继续登录，但用户的权限仅为上述默认组和默认角色。
-     - ``false``
    * - ``entraid.permission.fields``
      - 额外用作权限值的组/角色字段（逗号分隔）。组/角色的ID（GUID）始终作为权限使用，此处指定的字段（例如 ``mail``）的值将被追加添加。
      - ``mail``
@@ -338,11 +335,11 @@ Entra ID侧配置
 - 检查用户是否在Entra ID中属于组
 - 如果无法解析嵌套的父组，日志中会输出 ``Not allowed to read the parent groups of ...`` 警告。
   此时请授予 ``GroupMember.Read.All``
-- 使用默认值 ``entraid.require.membership=false`` 时，即使无法获取组信息也会继续登录。
-  此时用户的权限仅为 ``entraid.default.groups`` 和 ``entraid.default.roles``\ ，
-  本应可以查看的文档将不会出现在搜索结果中
-- 如果不希望用户在权限不完整的情况下进行搜索，请指定 ``entraid.require.membership=true``\ ，
-  此时此类登录将被拒绝
+- |Fess| 会在登录完成后于后台解析用户所属的组和角色，因此登录本身不会等待Microsoft Graph的响应。
+  在解析完成之前，用户仅缺少与组、角色相关联的权限——用户自身的用户级权限始终存在——因此本应
+  可以查看的文档可能暂时不会出现在搜索结果中。解析进行期间，搜索界面会显示相应提示
+- 如果解析失败，搜索界面会显示提示，要求用户重新登录；如果问题反复出现，请联系管理员。
+  系统不会自动重试，一旦失败，该会话在其余时间内将不再重新解析
 
 调试设置
 --------

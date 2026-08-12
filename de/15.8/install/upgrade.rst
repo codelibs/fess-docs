@@ -567,13 +567,14 @@ war. Wenn Sie ``none`` nur aus diesem Grund gesetzt haben, können Sie zum Stand
 zurückkehren. Um das bisherige Verhalten beizubehalten, setzen Sie
 ``entraid.response.mode=form_post`` und belassen ``tomcat.sameSiteCookies = none``.
 
-Außerdem führt 15.8 ``entraid.require.membership`` ein. Damit legen Sie fest, was geschieht, wenn
-Microsoft Graph bei der Anmeldung die Gruppen und Rollen des Benutzers nicht zurückgibt. Der
-Standardwert ``false`` verhält sich wie 15.7: Es wird eine Warnung protokolliert und die
-Anmeldung wird fortgesetzt. Der Benutzer besitzt dann jedoch nur ``entraid.default.groups`` und
-``entraid.default.roles``, sodass Dokumente, die er eigentlich sehen dürfte, in den
-Suchergebnissen fehlen. Mit ``true`` wird eine solche Anmeldung stattdessen abgelehnt.
-Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
+Ab 15.8 löst |Fess| außerdem die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund
+auf, nachdem die Anmeldung abgeschlossen ist, statt die Anmeldung auf Microsoft Graph warten zu
+lassen. Bis die Auflösung abgeschlossen ist — oder wenn sie fehlschlägt — fehlen dem Benutzer
+nur die gruppen- und rollenbezogenen Berechtigungen; seine eigene benutzerbezogene Berechtigung
+besitzt er immer. Während die Auflösung läuft, zeigt die Suchseite einen entsprechenden Hinweis
+an, und bei einem Fehlschlag einen anderen Hinweis, der zur erneuten Anmeldung auffordert. Es
+gibt keine automatische Wiederholung, ein Fehlschlag bleibt für den Rest dieser Sitzung
+endgültig. Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
 
 Aktualisierung der Plugin-Versionen
 -----------------------------------

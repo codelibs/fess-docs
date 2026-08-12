@@ -108,9 +108,6 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    * - ``entraid.default.roles``
      - Rôles par défaut (séparés par des virgules)
      - (Aucun)
-   * - ``entraid.require.membership``
-     - Comportement lorsque les groupes et rôles de l'utilisateur ne peuvent pas être récupérés depuis Microsoft Graph lors de la connexion. Avec ``true``, la connexion est refusée. Avec ``false``, un avertissement est journalisé et la connexion aboutit, mais l'utilisateur ne dispose que des groupes et rôles par défaut ci-dessus.
-     - ``false``
    * - ``entraid.permission.fields``
      - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées.
      - ``mail``
@@ -349,12 +346,16 @@ Impossible de récupérer les informations de groupe
 - Si les groupes parents imbriqués ne peuvent pas être résolus, l'avertissement
   ``Not allowed to read the parent groups of ...`` est journalisé. Accordez alors
   ``GroupMember.Read.All``
-- Avec la valeur par défaut ``entraid.require.membership=false``, la connexion aboutit même si les
-  groupes ne peuvent pas être récupérés. L'utilisateur ne dispose alors que de
-  ``entraid.default.groups`` et ``entraid.default.roles``, si bien que les documents qu'il devrait
-  pouvoir consulter n'apparaissent pas dans les résultats de recherche
-- Définissez ``entraid.require.membership=true`` pour refuser une telle connexion si vous préférez
-  que les utilisateurs ne recherchent pas avec des permissions incomplètes
+- |Fess| résout l'appartenance aux groupes et rôles de l'utilisateur en arrière-plan une fois la
+  connexion terminée, si bien que la connexion elle-même n'attend jamais Microsoft Graph. Tant que
+  la résolution n'est pas terminée, il ne manque à l'utilisateur que les autorisations associées
+  aux groupes et rôles — sa propre autorisation au niveau utilisateur est toujours présente —,
+  si bien que des documents qu'il devrait pouvoir consulter peuvent temporairement être absents
+  des résultats de recherche. Pendant que la résolution est en cours, l'écran de recherche affiche
+  un message à ce sujet
+- Si la résolution échoue, l'écran de recherche affiche un message invitant l'utilisateur à se
+  reconnecter, et à contacter l'administrateur si le problème persiste. Il n'y a pas de nouvelle
+  tentative automatique : un échec est définitif pour le reste de cette session
 
 Paramètres de débogage
 ----------------------

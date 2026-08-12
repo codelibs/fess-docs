@@ -108,9 +108,6 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    * - ``entraid.default.roles``
      - Standardrollen (kommagetrennt)
      - (Keine)
-   * - ``entraid.require.membership``
-     - Verhalten, wenn die Gruppen und Rollen des Benutzers bei der Anmeldung nicht von Microsoft Graph abgerufen werden können. Bei ``true`` wird die Anmeldung abgelehnt. Bei ``false`` wird eine Warnung protokolliert und die Anmeldung fortgesetzt; der Benutzer besitzt dann nur die oben genannten Standardgruppen und Standardrollen.
-     - ``false``
    * - ``entraid.permission.fields``
      - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt.
      - ``mail``
@@ -352,12 +349,15 @@ Gruppeninformationen können nicht abgerufen werden
 - Wenn verschachtelte übergeordnete Gruppen nicht aufgelöst werden können, wird die Warnung
   ``Not allowed to read the parent groups of ...`` protokolliert. Erteilen Sie in diesem Fall
   ``GroupMember.Read.All``
-- Mit dem Standardwert ``entraid.require.membership=false`` wird die Anmeldung auch dann
-  fortgesetzt, wenn die Gruppen nicht abgerufen werden können. Der Benutzer besitzt dann nur
-  ``entraid.default.groups`` und ``entraid.default.roles``, sodass Dokumente, die er eigentlich
-  sehen dürfte, in den Suchergebnissen fehlen
-- Setzen Sie ``entraid.require.membership=true``, um eine solche Anmeldung stattdessen abzulehnen,
-  wenn Benutzer nicht mit unvollständigen Berechtigungen suchen sollen
+- |Fess| löst die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund auf, nachdem die
+  Anmeldung abgeschlossen ist; die Anmeldung selbst wartet also nie auf Microsoft Graph. Bis die
+  Auflösung abgeschlossen ist, fehlen dem Benutzer nur die gruppen- und rollenbezogenen
+  Berechtigungen — seine eigene benutzerbezogene Berechtigung besitzt er immer —, sodass
+  Dokumente, die er eigentlich sehen dürfte, vorübergehend in den Suchergebnissen fehlen können.
+  Während die Auflösung läuft, zeigt die Suchseite einen entsprechenden Hinweis an
+- Schlägt die Auflösung fehl, zeigt die Suchseite einen Hinweis, sich erneut anzumelden, und bei
+  wiederholtem Auftreten den Administrator zu kontaktieren. Es gibt keine automatische
+  Wiederholung, ein Fehlschlag bleibt für den Rest dieser Sitzung endgültig
 
 Debug-Einstellungen
 -------------------

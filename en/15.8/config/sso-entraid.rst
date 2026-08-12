@@ -107,9 +107,6 @@ The following settings can be added as needed.
    * - ``entraid.default.roles``
      - Default roles (comma-separated)
      - (None)
-   * - ``entraid.require.membership``
-     - What happens when the user's groups and roles cannot be retrieved from Microsoft Graph at login. When ``true``, the login is rejected. When ``false``, a warning is logged and the login continues, but the user holds only the default groups and roles above.
-     - ``false``
    * - ``entraid.permission.fields``
      - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added.
      - ``mail``
@@ -342,12 +339,14 @@ Cannot Retrieve Group Information
 - Check that the user belongs to groups in Entra ID
 - If nested parent groups cannot be resolved, ``Not allowed to read the parent groups of ...`` is
   logged as a warning. Grant ``GroupMember.Read.All`` in that case
-- With the default ``entraid.require.membership=false``, the login still completes when the groups
-  cannot be retrieved. The user then holds only ``entraid.default.groups`` and
-  ``entraid.default.roles``, so documents they should be able to see are missing from search
-  results
-- Set ``entraid.require.membership=true`` to reject such a login instead, if you would rather not
-  let users search with incomplete permissions
+- |Fess| resolves the user's group and role membership in the background after login completes,
+  so login itself never waits on Microsoft Graph. Until resolution finishes, the user is missing
+  only the group- and role-scoped permissions — their own user-level permission is always
+  present — so documents they should be able to see may be temporarily missing from search
+  results. The search screen shows a message while resolution is in progress
+- If resolution fails, the search screen shows a message asking the user to log in again, and to
+  contact an administrator if the problem keeps happening. There is no automatic retry, so a
+  failure is final for the rest of that session
 
 Debug Settings
 --------------

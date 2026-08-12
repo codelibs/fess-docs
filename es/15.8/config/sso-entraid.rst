@@ -108,9 +108,6 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    * - ``entraid.default.roles``
      - Roles por defecto (separados por comas)
      - (Ninguno)
-   * - ``entraid.require.membership``
-     - Qué ocurre cuando los grupos y roles del usuario no se pueden recuperar de Microsoft Graph durante el inicio de sesión. Con ``true``, el inicio de sesión se rechaza. Con ``false``, se registra una advertencia y el inicio de sesión continúa, pero el usuario solo dispone de los grupos y roles por defecto indicados arriba.
-     - ``false``
    * - ``entraid.permission.fields``
      - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan.
      - ``mail``
@@ -349,12 +346,15 @@ No se puede recuperar la información de grupo
 - Verifique que el usuario pertenezca a grupos en Entra ID
 - Si no se pueden resolver los grupos padre anidados, se registra la advertencia
   ``Not allowed to read the parent groups of ...``. En ese caso, otorgue ``GroupMember.Read.All``
-- Con el valor por defecto ``entraid.require.membership=false``, el inicio de sesión continúa
-  aunque no se puedan recuperar los grupos. El usuario solo dispone entonces de
-  ``entraid.default.groups`` y ``entraid.default.roles``, por lo que los documentos que debería
-  poder ver no aparecen en los resultados de búsqueda
-- Establezca ``entraid.require.membership=true`` para rechazar ese inicio de sesión si prefiere que
-  los usuarios no busquen con permisos incompletos
+- |Fess| resuelve la pertenencia a grupos y roles del usuario en segundo plano una vez completado
+  el inicio de sesión, de modo que este nunca espera a Microsoft Graph. Hasta que la resolución
+  termina, al usuario solo le faltan los permisos asociados a grupos y roles — su propio permiso
+  a nivel de usuario siempre está presente —, por lo que los documentos que debería poder ver
+  pueden faltar temporalmente en los resultados de búsqueda. Mientras la resolución está en
+  curso, la pantalla de búsqueda muestra un mensaje al respecto
+- Si la resolución falla, la pantalla de búsqueda muestra un mensaje pidiendo al usuario que
+  vuelva a iniciar sesión, y que contacte con el administrador si el problema persiste. No hay
+  reintento automático, por lo que un fallo es definitivo durante el resto de esa sesión
 
 Configuración de depuración
 ---------------------------
