@@ -341,12 +341,16 @@ Cannot Retrieve Group Information
   logged as a warning. Grant ``GroupMember.Read.All`` in that case
 - |Fess| resolves the user's group and role membership in the background after login completes,
   so login itself never waits on Microsoft Graph. Until resolution finishes, the user is missing
-  only the group- and role-scoped permissions — their own user-level permission is always
-  present — so documents they should be able to see may be temporarily missing from search
-  results. The search screen shows a message while resolution is in progress
-- If resolution fails, the search screen shows a message asking the user to log in again, and to
-  contact an administrator if the problem keeps happening. There is no automatic retry, so a
-  failure is final for the rest of that session
+  only the group- and role-scoped permissions — their own user-level permission, and any groups
+  and roles configured in ``entraid.default.groups`` and ``entraid.default.roles``, are present
+  from the first request — so documents they should be able to see may be temporarily missing
+  from search results. The search screen shows a message while resolution is in progress
+- If resolution fails, the search screen shows a message, and asks the user to contact an
+  administrator if the problem keeps happening. The failure is not necessarily final: resolution
+  is retried whenever the access token is renewed, and a later success clears the message and
+  restores the missing permissions. To retry straight away, the user has to log out and log in
+  again — opening the SSO login URL while still logged in only redirects back to the search
+  screen
 
 Debug Settings
 --------------

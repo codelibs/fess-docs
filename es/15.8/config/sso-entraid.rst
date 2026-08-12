@@ -349,12 +349,16 @@ No se puede recuperar la información de grupo
 - |Fess| resuelve la pertenencia a grupos y roles del usuario en segundo plano una vez completado
   el inicio de sesión, de modo que este nunca espera a Microsoft Graph. Hasta que la resolución
   termina, al usuario solo le faltan los permisos asociados a grupos y roles — su propio permiso
-  a nivel de usuario siempre está presente —, por lo que los documentos que debería poder ver
-  pueden faltar temporalmente en los resultados de búsqueda. Mientras la resolución está en
-  curso, la pantalla de búsqueda muestra un mensaje al respecto
-- Si la resolución falla, la pantalla de búsqueda muestra un mensaje pidiendo al usuario que
-  vuelva a iniciar sesión, y que contacte con el administrador si el problema persiste. No hay
-  reintento automático, por lo que un fallo es definitivo durante el resto de esa sesión
+  a nivel de usuario, y los grupos y roles configurados en ``entraid.default.groups`` y
+  ``entraid.default.roles``, están presentes desde la primera petición —, por lo que los
+  documentos que debería poder ver pueden faltar temporalmente en los resultados de búsqueda.
+  Mientras la resolución está en curso, la pantalla de búsqueda muestra un mensaje al respecto
+- Si la resolución falla, la pantalla de búsqueda muestra un mensaje y pide al usuario que
+  contacte con el administrador si el problema persiste. El fallo no es necesariamente
+  definitivo: la resolución se reintenta cada vez que se renueva el token de acceso, y un éxito
+  posterior hace desaparecer el mensaje y restaura los permisos que faltaban. Para reintentarlo
+  de inmediato, el usuario debe cerrar la sesión y volver a iniciarla — abrir la URL de inicio de
+  sesión SSO con la sesión aún iniciada solo redirige de vuelta a la pantalla de búsqueda
 
 Configuración de depuración
 ---------------------------

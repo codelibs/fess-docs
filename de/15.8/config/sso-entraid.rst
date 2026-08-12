@@ -352,12 +352,18 @@ Gruppeninformationen können nicht abgerufen werden
 - |Fess| löst die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund auf, nachdem die
   Anmeldung abgeschlossen ist; die Anmeldung selbst wartet also nie auf Microsoft Graph. Bis die
   Auflösung abgeschlossen ist, fehlen dem Benutzer nur die gruppen- und rollenbezogenen
-  Berechtigungen — seine eigene benutzerbezogene Berechtigung besitzt er immer —, sodass
-  Dokumente, die er eigentlich sehen dürfte, vorübergehend in den Suchergebnissen fehlen können.
-  Während die Auflösung läuft, zeigt die Suchseite einen entsprechenden Hinweis an
-- Schlägt die Auflösung fehl, zeigt die Suchseite einen Hinweis, sich erneut anzumelden, und bei
-  wiederholtem Auftreten den Administrator zu kontaktieren. Es gibt keine automatische
-  Wiederholung, ein Fehlschlag bleibt für den Rest dieser Sitzung endgültig
+  Berechtigungen — seine eigene benutzerbezogene Berechtigung sowie die in
+  ``entraid.default.groups`` und ``entraid.default.roles`` konfigurierten Gruppen und Rollen sind
+  ab der ersten Anfrage vorhanden —, sodass Dokumente, die er eigentlich sehen dürfte,
+  vorübergehend in den Suchergebnissen fehlen können. Während die Auflösung läuft, zeigt die
+  Suchseite einen entsprechenden Hinweis an
+- Schlägt die Auflösung fehl, zeigt die Suchseite einen Hinweis an und bittet darum, bei
+  wiederholtem Auftreten den Administrator zu kontaktieren. Der Fehlschlag ist nicht zwangsläufig
+  endgültig: Die Auflösung wird bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein
+  späterer Erfolg lässt den Hinweis verschwinden und stellt die fehlenden Berechtigungen wieder
+  her. Um es sofort erneut zu versuchen, muss der Benutzer sich abmelden und erneut anmelden —
+  wird die SSO-Anmelde-URL im angemeldeten Zustand aufgerufen, erfolgt lediglich eine Umleitung
+  zurück zur Suchseite
 
 Debug-Einstellungen
 -------------------

@@ -571,10 +571,21 @@ Ab 15.8 löst |Fess| außerdem die Gruppen- und Rollenmitgliedschaft des Benutze
 auf, nachdem die Anmeldung abgeschlossen ist, statt die Anmeldung auf Microsoft Graph warten zu
 lassen. Bis die Auflösung abgeschlossen ist — oder wenn sie fehlschlägt — fehlen dem Benutzer
 nur die gruppen- und rollenbezogenen Berechtigungen; seine eigene benutzerbezogene Berechtigung
-besitzt er immer. Während die Auflösung läuft, zeigt die Suchseite einen entsprechenden Hinweis
-an, und bei einem Fehlschlag einen anderen Hinweis, der zur erneuten Anmeldung auffordert. Es
-gibt keine automatische Wiederholung, ein Fehlschlag bleibt für den Rest dieser Sitzung
-endgültig. Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
+sowie alle in ``entraid.default.groups`` und ``entraid.default.roles`` konfigurierten Gruppen und
+Rollen sind ab der ersten Anfrage vorhanden. Während die Auflösung läuft, zeigt die Suchseite
+einen entsprechenden Hinweis an, und bei einem Fehlschlag einen anderen Hinweis. Die Auflösung
+wird bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein späterer Erfolg lässt den
+Hinweis verschwinden; für eine Sitzung, die länger als die Gültigkeitsdauer des Tokens besteht,
+ist ein Fehlschlag daher nicht endgültig. Um es sofort erneut zu versuchen, melden Sie sich ab und
+anschließend wieder an. Einzelheiten finden Sie unter :doc:`../config/sso-entraid`.
+
+Eine Folge der Auflösung im Hintergrund: Rund eine Sekunde lang nach einer Anmeldung über Entra ID
+sind die aufgelösten Rollen des Benutzers noch nicht bekannt. Ein Administrator wird deshalb zur
+Suchseite statt zum Dashboard der Verwaltungsseite weitergeleitet, und wer in diesem Zeitfenster
+eine Seite der Verwaltungsseite öffnet, landet wieder auf der Suchseite. In diesem Zeitfenster
+wird der Zugriff immer nur verweigert, niemals gewährt, und ein erneuter Versuch nach Abschluss
+der Auflösung funktioniert ohne erneute Anmeldung. Um das Zeitfenster ganz zu vermeiden, fügen Sie
+``entraid.default.roles`` die Administratorrolle hinzu.
 
 Aktualisierung der Plugin-Versionen
 -----------------------------------

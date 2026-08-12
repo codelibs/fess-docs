@@ -574,11 +574,21 @@ valeur par défaut. Pour conserver le comportement précédent, définissez
 en arrière-plan une fois la connexion terminée, au lieu de bloquer la connexion en attendant
 Microsoft Graph. Tant que la résolution n'est pas terminée — ou si elle échoue —, il ne manque
 à l'utilisateur que les autorisations associées aux groupes et rôles ; sa propre autorisation au
-niveau utilisateur est toujours présente. Pendant que la résolution est en cours, l'écran de
-recherche affiche un message à ce sujet, et un autre message si elle échoue, invitant
-l'utilisateur à se reconnecter. Il n'y a pas de nouvelle tentative automatique : un échec est
-définitif pour le reste de cette session. Pour plus de détails, consultez
-:doc:`../config/sso-entraid`.
+niveau utilisateur, ainsi que les groupes et rôles configurés dans ``entraid.default.groups`` et
+``entraid.default.roles``, sont présents dès la première requête. Pendant que la résolution est en
+cours, l'écran de recherche affiche un message à ce sujet, et un autre message si elle échoue. La
+résolution est relancée à chaque renouvellement du jeton d'accès, et une réussite ultérieure fait
+disparaître le message : un échec n'est donc pas définitif pour une session qui dure plus
+longtemps que le jeton. Pour réessayer immédiatement, déconnectez-vous puis reconnectez-vous.
+Pour plus de détails, consultez :doc:`../config/sso-entraid`.
+
+Conséquence de cette résolution en arrière-plan : pendant environ la première seconde qui suit une
+connexion Entra ID, les rôles résolus de l'utilisateur ne sont pas encore connus. Un administrateur
+est donc redirigé vers l'écran de recherche au lieu du tableau de bord de l'administration, et
+l'ouverture d'une page de l'écran d'administration pendant cette fenêtre le ramène à l'écran de
+recherche. Dans cette fenêtre, l'accès n'est jamais accordé, seulement refusé, et une nouvelle
+tentative une fois la résolution terminée fonctionne sans avoir à se reconnecter. Pour éviter
+complètement cette fenêtre, ajoutez le rôle d'administrateur à ``entraid.default.roles``.
 
 Mise à jour de la version des plugins
 -------------------------------------

@@ -572,11 +572,22 @@ al valor por defecto. Para mantener el comportamiento anterior, establezca
 A partir de la versión 15.8, |Fess| también resuelve la pertenencia a grupos y roles del usuario
 en segundo plano una vez completado el inicio de sesión, en lugar de bloquear el inicio de sesión
 a la espera de Microsoft Graph. Hasta que la resolución termina — o si falla —, al usuario solo
-le faltan los permisos asociados a grupos y roles; su propio permiso a nivel de usuario siempre
-está presente. Mientras la resolución está en curso, la pantalla de búsqueda muestra un mensaje
-al respecto, y otro distinto si falla, pidiendo al usuario que vuelva a iniciar sesión. No hay
-reintento automático, por lo que un fallo es definitivo durante el resto de esa sesión. Consulte
-:doc:`../config/sso-entraid` para conocer más detalles.
+le faltan los permisos asociados a grupos y roles; su propio permiso a nivel de usuario, así como
+los grupos y roles configurados en ``entraid.default.groups`` y ``entraid.default.roles``, están
+presentes desde la primera petición. Mientras la resolución está en curso, la pantalla de búsqueda
+muestra un mensaje al respecto, y otro distinto si falla. La resolución se reintenta cada vez que
+se renueva el token de acceso, y un éxito posterior hace desaparecer el mensaje, por lo que un
+fallo no es definitivo en una sesión que dura más que el token; para reintentarlo de inmediato,
+cierre la sesión y vuelva a iniciarla. Consulte :doc:`../config/sso-entraid` para conocer más
+detalles.
+
+Una consecuencia de resolver en segundo plano: durante aproximadamente el primer segundo tras un
+inicio de sesión con Entra ID, los roles resueltos del usuario todavía no se conocen. Por eso, un
+administrador es redirigido a la pantalla de búsqueda en lugar de al panel de administración, y si
+abre una página del panel de administración durante esa ventana vuelve a la pantalla de búsqueda.
+En esa ventana el acceso solo se deniega, nunca se concede, y reintentarlo una vez terminada la
+resolución funciona sin necesidad de volver a iniciar sesión. Para evitar la ventana por completo,
+añada el rol de administrador a ``entraid.default.roles``.
 
 Actualización de la Versión de los Plugins
 ---------------------------------------------

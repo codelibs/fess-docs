@@ -553,10 +553,19 @@ that reason, you can restore the default. To keep the previous behaviour, set
 Starting with 15.8, |Fess| also resolves the user's group and role membership in the background
 after login completes, instead of blocking the login on Microsoft Graph. Until resolution
 finishes — or if it fails — the user is missing only the group- and role-scoped permissions;
-their own user-level permission is always present. The search screen shows a message while
-resolution is in progress, and a different message if it fails, asking the user to log in again.
-There is no automatic retry, so a failure is final for the rest of that session. For details, see
+their own user-level permission, and any ``entraid.default.groups`` and ``entraid.default.roles``,
+are present from the first request. The search screen shows a message while resolution is in
+progress, and a different message if it fails. Resolution is retried whenever the access token is
+renewed, and a later success clears the message, so a failure is not final for a session that
+outlives the token; to retry straight away, log out and log in again. For details, see
 :doc:`../config/sso-entraid`.
+
+One consequence of resolving in the background: for roughly the first second after an Entra ID
+login, the user's resolved roles are not yet known. An administrator is therefore redirected to
+the search screen instead of the admin dashboard, and opening an administration page during that
+window returns them to the search screen. Access is only ever refused, never granted, in that
+window, and retrying once resolution has finished works without logging in again. To avoid the
+window altogether, add the administrator role to ``entraid.default.roles``.
 
 Updating Plugin Versions
 ------------------------

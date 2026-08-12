@@ -349,13 +349,17 @@ Impossible de récupérer les informations de groupe
 - |Fess| résout l'appartenance aux groupes et rôles de l'utilisateur en arrière-plan une fois la
   connexion terminée, si bien que la connexion elle-même n'attend jamais Microsoft Graph. Tant que
   la résolution n'est pas terminée, il ne manque à l'utilisateur que les autorisations associées
-  aux groupes et rôles — sa propre autorisation au niveau utilisateur est toujours présente —,
-  si bien que des documents qu'il devrait pouvoir consulter peuvent temporairement être absents
-  des résultats de recherche. Pendant que la résolution est en cours, l'écran de recherche affiche
-  un message à ce sujet
-- Si la résolution échoue, l'écran de recherche affiche un message invitant l'utilisateur à se
-  reconnecter, et à contacter l'administrateur si le problème persiste. Il n'y a pas de nouvelle
-  tentative automatique : un échec est définitif pour le reste de cette session
+  aux groupes et rôles — sa propre autorisation au niveau utilisateur, ainsi que les groupes et
+  rôles configurés dans ``entraid.default.groups`` et ``entraid.default.roles``, sont présents dès
+  la première requête —, si bien que des documents qu'il devrait pouvoir consulter peuvent
+  temporairement être absents des résultats de recherche. Pendant que la résolution est en cours,
+  l'écran de recherche affiche un message à ce sujet
+- Si la résolution échoue, l'écran de recherche affiche un message et invite l'utilisateur à
+  contacter l'administrateur si le problème persiste. L'échec n'est pas nécessairement définitif :
+  la résolution est relancée à chaque renouvellement du jeton d'accès, et une réussite ultérieure
+  fait disparaître le message et restaure les autorisations manquantes. Pour réessayer
+  immédiatement, l'utilisateur doit se déconnecter puis se reconnecter — ouvrir l'URL de connexion
+  SSO alors qu'il est encore connecté ne fait que le rediriger vers l'écran de recherche
 
 Paramètres de débogage
 ----------------------
