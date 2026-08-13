@@ -282,6 +282,40 @@ Beispiel::
    Administratorrechte in |Fess|. Prüfen Sie, wer das Rollenattribut auf der IdP-Seite steuern kann,
    und ändern Sie ``authentication.admin.roles`` bei Bedarf in einen anderen Namen.
 
+IdPs mit wiederholten Attributnamen
+-----------------------------------
+
+Wenn der IdP denselben Attributnamen auf mehrere ``<Attribute>``-Elemente verteilt, weist |Fess|
+die Assertion zurück und die Anmeldung selbst schlägt fehl. Die Prüfung der Assertion -- Signatur,
+InResponseTo und Replay -- war zu diesem Zeitpunkt bereits erfolgreich; die Zurückweisung erfolgt
+erst beim Lesen der Attribute. Deshalb schlägt auch eine Konfiguration fehl, die
+``saml.attribute.role.name`` gar nicht setzt.
+
+Keycloak sendet standardmäßig Assertions dieser Form: Seine Rollen- und Gruppen-Mapper geben pro
+Wert ein eigenes ``<Attribute>``-Element aus, solange deren Option ``single`` nicht aktiviert ist,
+und jedes Keycloak-Konto besitzt mehrere Standard-Realm-Rollen.
+
+Es gibt zwei Abhilfen:
+
+- Die Werte auf der IdP-Seite in einem einzigen Element zusammenfassen (bei Keycloak die Option
+  ``single`` der Mapper aktivieren)
+- In |Fess| die Wiederholungen zulassen und die Werte zusammenführen
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - Erlaubt denselben Attributnamen auf mehreren Elementen und führt die Werte zusammen
+     - ``false``
+
+Beispiel::
+
+    saml.security.allow_duplicated_attribute_name=true
+
 Sicherheitskonfiguration
 ========================
 
@@ -578,6 +612,15 @@ Signaturüberprüfungsfehler
 - Überprüfen Sie, ob das IdP-Zertifikat korrekt konfiguriert ist
 - Stellen Sie sicher, dass das Zertifikat nicht abgelaufen ist
 - Das Zertifikat sollte nur als Base64-codierter Inhalt ohne Zeilenumbrüche angegeben werden
+
+Anmeldung schlägt wegen wiederholter Attributnamen fehl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Wenn im Log eine Warnung beginnend mit ``The IdP repeated an attribute name in the SAML
+  assertion`` erscheint, verteilt der IdP denselben Attributnamen auf mehrere ``<Attribute>``-Elemente
+- Die Assertion selbst wurde erfolgreich geprüft; Zertifikat und Zeitabweichung sind nicht die Ursache
+- Fassen Sie die Attribute auf der IdP-Seite zusammen oder setzen Sie
+  ``saml.security.allow_duplicated_attribute_name=true``
 
 Benutzergruppen/-rollen werden nicht reflektiert
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

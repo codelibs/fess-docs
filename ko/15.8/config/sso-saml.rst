@@ -280,6 +280,38 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
    IdP 측에서 역할 속성 값을 제어할 수 있는 범위를 확인하고, 필요하다면
    ``authentication.admin.roles`` 를 다른 이름으로 변경하십시오.
 
+속성 이름이 중복되는 IdP
+------------------------
+
+IdP가 동일한 속성 이름을 여러 ``<Attribute>`` 요소로 나누어 보내면 |Fess| 는 해당 어서션을
+거부하며 로그인 자체가 실패합니다. 어서션 검증(서명, InResponseTo, 재전송)은 이 시점에서 이미
+성공한 상태이며, 거부는 속성을 읽는 단계에서 발생합니다. 따라서 ``saml.attribute.role.name`` 을
+설정하지 않은 구성에서도 동일하게 실패합니다.
+
+Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역할 매퍼와 그룹 매퍼는 ``single``
+옵션을 활성화하지 않는 한 값마다 별도의 ``<Attribute>`` 요소를 출력하며, Keycloak 계정은
+기본적으로 여러 개의 렐름 역할을 가지기 때문입니다.
+
+대처 방법은 다음 중 하나입니다.
+
+- IdP 측에서 속성을 하나의 요소로 합칩니다(Keycloak에서는 매퍼의 ``single`` 옵션을 활성화합니다)
+- |Fess| 측에서 중복을 허용하고 값을 병합합니다
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - 동일한 속성 이름이 여러 요소에 나타나는 것을 허용하고 값을 병합합니다
+     - ``false``
+
+설정 예::
+
+    saml.security.allow_duplicated_attribute_name=true
+
 보안 설정
 =========
 
@@ -574,6 +606,15 @@ IdP가 보낸 ``https://fess.example.com/sso/`` 와 일치하지 않습니다.
 - IdP의 인증서가 올바르게 설정되어 있는지 확인하십시오
 - 인증서의 유효 기간이 만료되지 않았는지 확인하십시오
 - 인증서는 Base64 인코딩된 내용만 줄 바꿈 없이 설정하십시오
+
+속성 이름 중복으로 로그인할 수 없음
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- 로그에 ``The IdP repeated an attribute name in the SAML assertion`` 으로 시작하는 경고가
+  출력된다면, IdP가 동일한 속성 이름을 여러 ``<Attribute>`` 요소로 나누어 보내고 있습니다
+- 어서션 검증 자체는 성공했으므로 인증서나 시각 오차는 원인이 아닙니다
+- IdP 측에서 속성을 하나로 합치거나 ``saml.security.allow_duplicated_attribute_name=true`` 를
+  설정하세요
 
 사용자의 그룹·역할이 반영되지 않음
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -282,6 +282,40 @@ Ejemplo::
    quién puede controlar el atributo de rol en el IdP y, si es necesario, cambie
    ``authentication.admin.roles`` por otro nombre.
 
+IdP que repiten un nombre de atributo
+-------------------------------------
+
+Si el IdP reparte el mismo nombre de atributo entre varios elementos ``<Attribute>``, |Fess|
+rechaza la aserción y el inicio de sesión falla. La validación de la aserción -- firma, InResponseTo
+y repetición -- ya se ha completado correctamente en ese punto; el rechazo ocurre al leer los
+atributos, por lo que una configuración que no establece ``saml.attribute.role.name`` falla
+exactamente igual.
+
+Keycloak envía aserciones con esta forma de manera predeterminada: sus mapeadores de roles y grupos
+emiten un elemento ``<Attribute>`` por cada valor salvo que se active su opción ``single``, y toda
+cuenta de Keycloak tiene varios roles de reino predeterminados.
+
+Hay dos soluciones:
+
+- Agrupar los valores en un solo elemento en el IdP (en Keycloak, active la opción ``single`` de los
+  mapeadores)
+- Aceptar las repeticiones en |Fess| y fusionar sus valores
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - Permite el mismo nombre de atributo en varios elementos y fusiona sus valores
+     - ``false``
+
+Ejemplo::
+
+    saml.security.allow_duplicated_attribute_name=true
+
 Configuración de seguridad
 ==========================
 
@@ -578,6 +612,15 @@ Error de verificación de firma
 - Verifique que el certificado del IdP esté configurado correctamente
 - Asegúrese de que el certificado no haya expirado
 - El certificado debe especificarse solo como contenido codificado en Base64, sin saltos de línea
+
+El inicio de sesión falla por un nombre de atributo repetido
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Si el registro contiene una advertencia que comienza por ``The IdP repeated an attribute name in
+  the SAML assertion``, el IdP está repartiendo el mismo nombre de atributo entre varios elementos
+  ``<Attribute>``
+- La aserción en sí superó la validación, por lo que el certificado y el desfase horario no son la causa
+- Agrupe los atributos en el IdP o establezca ``saml.security.allow_duplicated_attribute_name=true``
 
 Grupos/roles de usuario no reflejados
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
