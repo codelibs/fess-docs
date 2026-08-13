@@ -18,8 +18,8 @@ Bei der Entra ID-Authentifizierung fungiert |Fess| als OAuth 2.0/OpenID Connect-
 3. Benutzer authentifiziert sich bei Entra ID (Microsoft-Anmeldung)
 4. Entra ID leitet den Autorisierungscode an |Fess| weiter
 5. |Fess| verwendet den Autorisierungscode, um ein Zugriffstoken zu erhalten
-6. |Fess| verwendet die Microsoft Graph API, um die Gruppen- und Rolleninformationen des Benutzers abzurufen
-7. Benutzer wird angemeldet und Gruppeninformationen werden auf die rollenbasierte Suche angewendet
+6. Benutzer wird angemeldet
+7. Im Hintergrund verwendet |Fess| die Microsoft Graph API, um die Gruppen- und Rolleninformationen des Benutzers abzurufen, und wendet sie nach Abschluss der Auflösung auf die rollenbasierte Suche an
 
 .. note::
    Ab |Fess| 15.8 wird die Autorisierungsantwort in Schritt 4 als GET-Anfrage zurückgegeben, da
@@ -103,14 +103,11 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Art, wie die Autorisierungsantwort zurückgegeben wird. Entweder ``query`` oder ``form_post``.
      - ``query``
    * - ``entraid.default.groups``
-     - Standardgruppen (kommagetrennt)
+     - Standardgruppen (kommagetrennt). Werden auf jeden Entra ID-Benutzer angewendet.
      - (Keine)
    * - ``entraid.default.roles``
-     - Standardrollen (kommagetrennt)
+     - Standardrollen (kommagetrennt). Werden auf jeden Entra ID-Benutzer angewendet.
      - (Keine)
-   * - ``entraid.require.membership``
-     - Verhalten, wenn die Gruppen und Rollen des Benutzers bei der Anmeldung nicht von Microsoft Graph abgerufen werden können. Bei ``true`` wird die Anmeldung abgelehnt. Bei ``false`` wird eine Warnung protokolliert und die Anmeldung fortgesetzt; der Benutzer besitzt dann nur die oben genannten Standardgruppen und Standardrollen.
-     - ``false``
    * - ``entraid.permission.fields``
      - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt.
      - ``mail``
@@ -148,6 +145,15 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    zurückgesendet und die Anmeldung schlägt fehl; die meisten Installationen sollten daher beim
    Standardwert bleiben. Andere Werte werden mit einer Warnung ignoriert und ``query`` wird
    verwendet.
+
+.. warning::
+
+   ``entraid.default.groups`` und ``entraid.default.roles`` sind einzelne globale Werte ohne
+   benutzerbezogene Abgrenzung. |Fess| wendet sie bei der Anmeldung auf jeden Entra ID-Benutzer an
+   und wendet sie bei jeder späteren Auflösung erneut an, sodass Microsoft Graph sie nie wieder
+   entzieht. Tragen Sie insbesondere niemals die |Fess|-Administratorrolle — bei ausgeliefertem
+   ``authentication.admin.roles`` also ``admin`` — in ``entraid.default.roles`` ein: Das gewährt
+   jedem Benutzer im Mandanten dauerhaften Zugriff auf die Verwaltungsseiten.
 
 Konfiguration auf der Entra ID-Seite
 ====================================
@@ -250,9 +256,9 @@ Verschachtelte Gruppen
 ----------------------
 
 |Fess| ruft nicht nur Gruppen ab, zu denen Benutzer direkt gehören, sondern auch übergeordnete Gruppen (verschachtelte Gruppen) rekursiv.
-Diese Verarbeitung wird nach der Anmeldung asynchron ausgeführt, um die Auswirkungen auf die Anmeldezeit zu minimieren.
+Sowohl die direkte Mitgliedschaftsabfrage als auch die Suche nach übergeordneten Gruppen laufen nach der Anmeldung in derselben Hintergrundaufgabe, sodass die Anmeldung selbst nie durch Microsoft Graph verzögert wird.
 Die übergeordneten Gruppen werden bis zu einer bestimmten Hierarchietiefe ermittelt, und die abgerufenen Ergebnisse werden für einen bestimmten Zeitraum zwischengespeichert.
-Sobald die Ermittlung der übergeordneten Gruppen abgeschlossen ist, werden die Berechtigungen des Benutzers neu berechnet.
+Sobald diese Hintergrundaufgabe abgeschlossen ist, werden die Berechtigungen des Benutzers neu berechnet.
 
 Standardgruppeneinstellungen
 ----------------------------
@@ -352,12 +358,35 @@ Gruppeninformationen können nicht abgerufen werden
 - Wenn verschachtelte übergeordnete Gruppen nicht aufgelöst werden können, wird die Warnung
   ``Not allowed to read the parent groups of ...`` protokolliert. Erteilen Sie in diesem Fall
   ``GroupMember.Read.All``
-- Mit dem Standardwert ``entraid.require.membership=false`` wird die Anmeldung auch dann
-  fortgesetzt, wenn die Gruppen nicht abgerufen werden können. Der Benutzer besitzt dann nur
-  ``entraid.default.groups`` und ``entraid.default.roles``, sodass Dokumente, die er eigentlich
-  sehen dürfte, in den Suchergebnissen fehlen
-- Setzen Sie ``entraid.require.membership=true``, um eine solche Anmeldung stattdessen abzulehnen,
-  wenn Benutzer nicht mit unvollständigen Berechtigungen suchen sollen
+- |Fess| löst die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund auf, nachdem die
+  Anmeldung abgeschlossen ist; die Anmeldung selbst wartet also nie auf Microsoft Graph. Bis die
+  Auflösung abgeschlossen ist, besitzt der Benutzer nur seine eigene benutzerbezogene Berechtigung
+  sowie die in ``entraid.default.groups`` und ``entraid.default.roles`` konfigurierten Gruppen und
+  Rollen. Ist beides nicht gesetzt — der ausgelieferte Standard —, liefert eine Suche in diesem
+  Zeitfenster überhaupt keine Dokumente: ``role.search.default.permissions`` ist ab Werk leer, und
+  eine mit dem ausgelieferten ``role.search.default.display.permissions`` angelegte
+  Crawl-Konfiguration vergibt ``{role}guest``, was ein angemeldeter Benutzer nicht besitzt. Das
+  Zeitfenster umfasst bis zu etwa eine Sekunde Planungsverzögerung zuzüglich der Aufrufe von
+  Microsoft Graph selbst — einer für die direkten Mitgliedschaften, dann je einer pro dieser
+  Gruppen für den Durchlauf der verschachtelten Gruppen, nacheinander und bei kaltem Cache
+  abgesetzt —, es wächst also mit der Anzahl der Gruppen des Benutzers. Währenddessen teilt die
+  Suchseite dem Benutzer mit, dass seine Gruppen- und Rollenberechtigungen noch geladen werden,
+  und bittet ihn, die Suche in einem Moment zu wiederholen
+- Gelingt die Auflösung nicht vollständig, teilt die Suchseite dem Benutzer mit, dass seine
+  Gruppen- und Rollenberechtigungen nicht vollständig geladen werden konnten, und bittet ihn, sich
+  ab- und wieder anzumelden sowie bei wiederholtem Auftreten den Administrator zu kontaktieren.
+  „Nicht vollständig“ ist bewusst gewählt: Die Auflösung gilt nur dann als erfolgreich, wenn sowohl
+  die Abfrage der direkten Mitgliedschaften als auch der Durchlauf der verschachtelten Gruppen
+  gelungen ist — ein Benutzer, der seine direkten Gruppen, aber nicht seine übergeordneten Gruppen
+  besitzt, erhält diesen Hinweis also ebenfalls. Häufigste Ursache des Teilfalls ist Drosselung:
+  Ein einziges HTTP 429 oder 503 von Microsoft Graph lässt |Fess| so lange pausieren, wie es der
+  Header ``Retry-After`` verlangt (60 Sekunden, wenn er nichts Verwertbares nennt, höchstens 60
+  Minuten), und in dieser Zeit wird in der gesamten |Fess|-Instanz jede Abfrage verschachtelter
+  Gruppen übersprungen, während die direkten Abfragen weiter beantwortet werden. Der Fehlschlag ist nicht zwangsläufig endgültig: Die Auflösung wird
+  bei jeder Erneuerung des Zugriffstokens erneut angestoßen, und ein späterer Erfolg lässt den
+  Hinweis verschwinden und stellt die fehlenden Berechtigungen wieder her. Abmelden und erneut
+  anmelden versucht es sofort erneut — wird die SSO-Anmelde-URL im angemeldeten Zustand
+  aufgerufen, erfolgt lediglich eine Umleitung zurück zur Suchseite
 
 Debug-Einstellungen
 -------------------

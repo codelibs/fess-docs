@@ -569,13 +569,40 @@ la cookie de sesión no se envía en esa petición, por lo que era necesario
 al valor por defecto. Para mantener el comportamiento anterior, establezca
 ``entraid.response.mode=form_post`` y conserve ``tomcat.sameSiteCookies = none``.
 
-La versión 15.8 también añade ``entraid.require.membership``, que determina qué ocurre cuando
-Microsoft Graph no devuelve los grupos y roles del usuario durante el inicio de sesión. El valor
-por defecto, ``false``, se comporta como en la versión 15.7: se registra una advertencia y el
-inicio de sesión continúa. Sin embargo, el usuario solo dispone entonces de
-``entraid.default.groups`` y ``entraid.default.roles``, por lo que los documentos que debería
-poder ver no aparecen en los resultados de búsqueda. Establézcalo en ``true`` para rechazar ese
-inicio de sesión. Consulte :doc:`../config/sso-entraid` para conocer más detalles.
+A partir de la versión 15.8, |Fess| también resuelve la pertenencia a grupos y roles del usuario
+en segundo plano una vez completado el inicio de sesión, en lugar de bloquear el inicio de sesión
+a la espera de Microsoft Graph. Hasta que la resolución termina — o si no se completa del todo —,
+el usuario solo tiene su propio permiso a nivel de usuario y lo que aporten
+``entraid.default.groups`` y ``entraid.default.roles``. Si no se ha configurado ninguno de los
+dos —el valor por defecto que se incluye—, una búsqueda hecha en esa ventana no devuelve ningún
+documento, porque una configuración de rastreo creada con los valores por defecto que se incluyen
+concede ``{role}guest`` y un usuario con la sesión iniciada no tiene ese rol. Mientras la
+resolución está en curso, la pantalla de búsqueda lo indica, y muestra otro mensaje distinto si no
+se completó del todo: la resolución solo se considera correcta si han tenido éxito tanto la
+consulta de pertenencias directas como el recorrido de los grupos anidados. La resolución se
+reintenta cada vez que se renueva el token de acceso, y un éxito posterior hace desaparecer el
+mensaje, por lo que un fallo no es definitivo en una sesión que dura más que el token; para
+reintentarlo de inmediato, cierre la sesión y vuelva a iniciarla. Consulte
+:doc:`../config/sso-entraid` para conocer más detalles.
+
+Una consecuencia de resolver en segundo plano: hasta que la resolución llega, los roles resueltos
+del usuario todavía no se conocen. Por eso, un administrador es redirigido a la pantalla de
+búsqueda en lugar de al panel de administración, y si abre una página del panel de administración
+durante esa ventana vuelve a la pantalla de búsqueda. La ventana dura hasta aproximadamente un
+segundo de retardo de planificación más las propias llamadas a Microsoft Graph — una para las
+pertenencias directas y luego una más por cada uno de esos grupos para recorrer los grupos
+anidados, emitidas una tras otra con la caché fría —, por lo que crece con el número de grupos a
+los que pertenece el usuario. En esa ventana el acceso solo se deniega, nunca se concede, y no
+hace falta ninguna configuración para superarla: la autorización se evalúa de nuevo en cada
+petición de la misma sesión, así que una vez terminada la resolución las pantallas de
+administración se abren con normalidad, sin volver a iniciar sesión.
+
+.. warning::
+
+   No acorte esa ventana poniendo el rol de administrador de |Fess| en ``entraid.default.roles``.
+   Esa propiedad es un valor global único que |Fess| aplica a todos los usuarios de Entra ID al
+   iniciar sesión y vuelve a aplicar en cada resolución posterior, por lo que concedería a todos
+   los usuarios del inquilino permisos permanentes de administrador de |Fess|.
 
 Actualización de la Versión de los Plugins
 ---------------------------------------------

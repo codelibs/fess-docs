@@ -18,8 +18,8 @@ Dans l'authentification Entra ID, |Fess| opère en tant que client OAuth 2.0/Ope
 3. L'utilisateur s'authentifie auprès d'Entra ID (connexion Microsoft)
 4. Entra ID redirige le code d'autorisation vers |Fess|
 5. |Fess| utilise le code d'autorisation pour obtenir un jeton d'accès
-6. |Fess| utilise l'API Microsoft Graph pour récupérer les informations de groupe et de rôle de l'utilisateur
-7. L'utilisateur est connecté et les informations de groupe sont appliquées à la recherche basée sur les rôles
+6. L'utilisateur est connecté
+7. En arrière-plan, |Fess| utilise l'API Microsoft Graph pour récupérer les informations de groupe et de rôle de l'utilisateur, et les applique à la recherche basée sur les rôles une fois la résolution terminée
 
 .. note::
    À partir de |Fess| 15.8, la réponse d'autorisation de l'étape 4 est renvoyée via une requête
@@ -103,14 +103,11 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Mode de renvoi de la réponse d'autorisation. Soit ``query``, soit ``form_post``.
      - ``query``
    * - ``entraid.default.groups``
-     - Groupes par défaut (séparés par des virgules)
+     - Groupes par défaut (séparés par des virgules). Appliqués à tous les utilisateurs Entra ID.
      - (Aucun)
    * - ``entraid.default.roles``
-     - Rôles par défaut (séparés par des virgules)
+     - Rôles par défaut (séparés par des virgules). Appliqués à tous les utilisateurs Entra ID.
      - (Aucun)
-   * - ``entraid.require.membership``
-     - Comportement lorsque les groupes et rôles de l'utilisateur ne peuvent pas être récupérés depuis Microsoft Graph lors de la connexion. Avec ``true``, la connexion est refusée. Avec ``false``, un avertissement est journalisé et la connexion aboutit, mais l'utilisateur ne dispose que des groupes et rôles par défaut ci-dessus.
-     - ``false``
    * - ``entraid.permission.fields``
      - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées.
      - ``mail``
@@ -148,6 +145,16 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    paramètre, le cookie de session n'est pas renvoyé et la connexion échoue : la plupart des
    installations doivent donc conserver la valeur par défaut. Toute autre valeur est ignorée avec
    un avertissement et ``query`` est utilisé.
+
+.. warning::
+
+   ``entraid.default.groups`` et ``entraid.default.roles`` sont des valeurs globales uniques, sans
+   portée par utilisateur. |Fess| les applique à tous les utilisateurs Entra ID lors de la
+   connexion et les réapplique à chaque résolution ultérieure, si bien que Microsoft Graph ne les
+   retire jamais. En particulier, ne placez jamais le rôle d'administrateur |Fess| — ``admin`` avec
+   la valeur ``authentication.admin.roles`` livrée — dans ``entraid.default.roles`` : cela
+   accorderait à tous les utilisateurs du locataire un accès permanent aux écrans
+   d'administration.
 
 Configuration côté Entra ID
 ===========================
@@ -249,8 +256,8 @@ Groupes imbriqués
 -----------------
 
 |Fess| récupère non seulement les groupes auxquels les utilisateurs appartiennent directement, mais aussi les groupes parents (groupes imbriqués) de manière récursive.
-Ce traitement est exécuté de manière asynchrone après la connexion pour minimiser l'impact sur le temps de connexion.
-La recherche des groupes parents cible un certain nombre de niveaux hiérarchiques, et les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque la récupération des groupes parents est terminée, les permissions de l'utilisateur sont recalculées.
+La recherche de l'appartenance directe et la recherche des groupes parents s'exécutent toutes deux dans la même tâche en arrière-plan après la connexion, si bien que la connexion elle-même n'est jamais ralentie par Microsoft Graph.
+La recherche des groupes parents cible un certain nombre de niveaux hiérarchiques, et les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque cette tâche en arrière-plan est terminée, les permissions de l'utilisateur sont recalculées.
 
 Paramètres de groupe par défaut
 -------------------------------
@@ -349,12 +356,37 @@ Impossible de récupérer les informations de groupe
 - Si les groupes parents imbriqués ne peuvent pas être résolus, l'avertissement
   ``Not allowed to read the parent groups of ...`` est journalisé. Accordez alors
   ``GroupMember.Read.All``
-- Avec la valeur par défaut ``entraid.require.membership=false``, la connexion aboutit même si les
-  groupes ne peuvent pas être récupérés. L'utilisateur ne dispose alors que de
-  ``entraid.default.groups`` et ``entraid.default.roles``, si bien que les documents qu'il devrait
-  pouvoir consulter n'apparaissent pas dans les résultats de recherche
-- Définissez ``entraid.require.membership=true`` pour refuser une telle connexion si vous préférez
-  que les utilisateurs ne recherchent pas avec des permissions incomplètes
+- |Fess| résout l'appartenance aux groupes et rôles de l'utilisateur en arrière-plan une fois la
+  connexion terminée, si bien que la connexion elle-même n'attend jamais Microsoft Graph. Tant que
+  la résolution n'est pas terminée, l'utilisateur ne dispose que de sa propre autorisation au
+  niveau utilisateur et de ce qu'apportent ``entraid.default.groups`` et
+  ``entraid.default.roles``. Si aucun des deux n'est défini — la valeur livrée par défaut —, une
+  recherche effectuée pendant cette fenêtre ne renvoie aucun document :
+  ``role.search.default.permissions`` est vide d'origine, et une configuration d'exploration créée
+  avec la valeur ``role.search.default.display.permissions`` livrée accorde ``{role}guest``, rôle
+  que ne possède pas un utilisateur connecté. La fenêtre dure jusqu'à environ une seconde de délai
+  de planification, plus les appels à Microsoft Graph eux-mêmes — un pour les appartenances
+  directes, puis un de plus pour chacun de ces groupes afin de parcourir les groupes imbriqués,
+  émis les uns après les autres avec un cache froid — : elle croît donc avec le nombre de groupes
+  auxquels appartient l'utilisateur. Pendant ce temps, l'écran de recherche indique à
+  l'utilisateur que ses autorisations de groupe et de rôle sont en cours de chargement et l'invite
+  à relancer la recherche dans un instant
+- Si la résolution n'aboutit pas entièrement, l'écran de recherche indique à l'utilisateur que ses
+  autorisations de groupe et de rôle n'ont pas pu être entièrement chargées, l'invite à se
+  déconnecter puis à se reconnecter, et à contacter l'administrateur si le problème persiste.
+  « Entièrement » est délibéré : la résolution n'est considérée comme réussie que si la requête
+  des appartenances directes et le parcours des groupes imbriqués ont tous deux abouti ; un
+  utilisateur qui possède ses groupes directs mais pas ses groupes parents reçoit donc aussi ce
+  message. La cause habituelle du cas partiel est la limitation de débit : un seul HTTP 429 ou 503
+  de Microsoft Graph fait patienter |Fess| aussi longtemps que l'exige l'en-tête ``Retry-After``
+  (60 secondes s'il n'indique rien d'exploitable, 60 minutes au maximum), et pendant ce temps
+  toute recherche de groupes imbriqués est ignorée dans l'ensemble de l'instance |Fess| alors que
+  les requêtes directes continuent de répondre. L'échec
+  n'est pas nécessairement définitif : la résolution est relancée à chaque renouvellement du jeton
+  d'accès, et une réussite ultérieure fait disparaître le message et restaure les autorisations
+  manquantes. Se déconnecter puis se reconnecter relance la résolution immédiatement — ouvrir
+  l'URL de connexion SSO alors qu'il est encore connecté ne fait que le rediriger vers l'écran de
+  recherche
 
 Paramètres de débogage
 ----------------------

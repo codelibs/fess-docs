@@ -18,8 +18,8 @@ Entra ID认证的工作原理
 3. 用户在Entra ID进行认证（Microsoft登录）
 4. Entra ID将授权码重定向到 |Fess|
 5. |Fess| 使用授权码获取访问令牌
-6. |Fess| 使用Microsoft Graph API获取用户的组和角色信息
-7. 用户登录，组信息应用于基于角色的搜索
+6. 用户登录
+7. |Fess| 在后台使用Microsoft Graph API获取用户的组和角色信息，解析完成后应用于基于角色的搜索
 
 .. note::
    |Fess| 15.8 及以后版本会向授权端点请求 ``response_mode=query``\ ，因此步骤4的授权响应以GET方式返回。
@@ -101,14 +101,11 @@ Entra ID认证的工作原理
      - 授权响应的返回方式。可指定 ``query`` 或 ``form_post``\ 。
      - ``query``
    * - ``entraid.default.groups``
-     - 默认组（逗号分隔）
+     - 默认组（逗号分隔）。会应用于每一个Entra ID用户。
      - （无）
    * - ``entraid.default.roles``
-     - 默认角色（逗号分隔）
+     - 默认角色（逗号分隔）。会应用于每一个Entra ID用户。
      - （无）
-   * - ``entraid.require.membership``
-     - 登录时无法从Microsoft Graph获取用户的组和角色信息时的处理方式。设为 ``true`` 时拒绝登录。设为 ``false`` 时输出警告日志并继续登录，但用户的权限仅为上述默认组和默认角色。
-     - ``false``
    * - ``entraid.permission.fields``
      - 额外用作权限值的组/角色字段（逗号分隔）。组/角色的ID（GUID）始终作为权限使用，此处指定的字段（例如 ``mail``）的值将被追加添加。
      - ``mail``
@@ -139,6 +136,14 @@ Entra ID认证的工作原理
    但 ``form_post`` 会使回调成为跨站POST，因此需要 ``tomcat.sameSiteCookies = none``\ 。
    未进行该设置时，会话Cookie不会被发送，登录将失败，因此大多数环境应保持默认值。
    指定其他值时，将输出警告并按 ``query`` 处理。
+
+.. warning::
+
+   ``entraid.default.groups`` 和 ``entraid.default.roles`` 是无法按用户区分的单个全局设置。
+   |Fess| 会在登录时将它们应用于每一个Entra ID用户，并在之后每次解析时重新应用，
+   因此Microsoft Graph的结果绝不会将其收回。尤其不要把 |Fess| 的管理员角色
+   （在附带的 ``authentication.admin.roles`` 中为 ``admin``\ ）配置到 ``entraid.default.roles``\ ：
+   这会让租户中的所有用户永久获得管理界面的访问权限。
 
 Entra ID侧配置
 ==============
@@ -239,8 +244,8 @@ Entra ID侧配置
 ------
 
 |Fess| 不仅获取用户直接所属的组，还会递归获取父组（嵌套组）。
-此处理在登录后异步执行，以最大程度地减少对登录时间的影响。
-父组的查找最多涵盖一定层级数，获取结果将被缓存一段时间。父组获取完成后，用户的权限将被重新计算。
+直接所属关系的查找与父组的查找都在登录后的同一个后台任务中执行，因此登录本身不会被Microsoft Graph拖慢。
+父组的查找最多涵盖一定层级数，获取结果将被缓存一段时间。该后台任务完成后，用户的权限将被重新计算。
 
 默认组设置
 ----------
@@ -338,11 +343,23 @@ Entra ID侧配置
 - 检查用户是否在Entra ID中属于组
 - 如果无法解析嵌套的父组，日志中会输出 ``Not allowed to read the parent groups of ...`` 警告。
   此时请授予 ``GroupMember.Read.All``
-- 使用默认值 ``entraid.require.membership=false`` 时，即使无法获取组信息也会继续登录。
-  此时用户的权限仅为 ``entraid.default.groups`` 和 ``entraid.default.roles``\ ，
-  本应可以查看的文档将不会出现在搜索结果中
-- 如果不希望用户在权限不完整的情况下进行搜索，请指定 ``entraid.require.membership=true``\ ，
-  此时此类登录将被拒绝
+- |Fess| 会在登录完成后于后台解析用户所属的组和角色，因此登录本身不会等待Microsoft Graph的响应。
+  在解析完成之前，用户拥有的仅有其自身的用户级权限，以及在 ``entraid.default.groups`` 和
+  ``entraid.default.roles`` 中配置的组和角色。若两者都未配置（即附带的默认值），
+  这段时间内的搜索将一条文档都搜不到：\ ``role.search.default.permissions`` 出厂时为空，
+  而按附带的 ``role.search.default.display.permissions`` 创建的爬取配置会授予 ``{role}guest``\ ，
+  已登录用户并不持有该角色。这段时间为最多约1秒的调度延迟，加上Microsoft Graph调用本身
+  （直接所属查询1次，再为每个直接所属的组各1次以遍历嵌套组，依次串行执行，且缓存为空时），
+  因此会随用户所属组的数量增加而变长。在此期间，搜索界面会提示用户组和角色权限仍在加载中，
+  并请其稍后重新搜索
+- 如果解析未能完全成功，搜索界面会提示用户无法完整加载其组和角色权限，请其注销后重新登录，
+  并在问题反复出现时联系管理员。「完全」是特意的措辞：只有直接所属查询和嵌套组遍历都成功，
+  解析才算成功，因此已取得直接所属的组、但未能取得父组的用户也会看到该提示。
+  部分解析失败最常见的原因是限流：Microsoft Graph只要返回一次HTTP 429或503，\ |Fess| 就会按
+  ``Retry-After`` 标头要求的时间（无可用值时为60秒，最长60分钟）退避，在此期间即使直接所属查询仍能成功，
+  整个 |Fess| 实例也会跳过嵌套组查询。但失败并不一定就是最终结果：
+  每次刷新访问令牌时都会重新解析，之后一旦成功，提示即会消失，缺少的权限也会恢复。
+  先注销再重新登录即可立即重试——在保持登录状态下打开SSO登录URL，只会重定向回搜索界面
 
 调试设置
 --------
