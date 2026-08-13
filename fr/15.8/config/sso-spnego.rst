@@ -148,10 +148,10 @@ Ajoutez les paramètres suivants à ``app/WEB-INF/conf/system.properties``.
      - Valeur par défaut
    * - ``spnego.preauth.username``
      - Nom d'utilisateur de connexion AD
-     - (Requis)
+     - (Requis sauf si un keytab est utilisé)
    * - ``spnego.preauth.password``
      - Mot de passe de connexion AD
-     - (Requis)
+     - (Requis sauf si un keytab est utilisé)
    * - ``spnego.krb5.conf``
      - Chemin du fichier de configuration Kerberos
      - ``krb5.conf``
@@ -228,6 +228,8 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    cette valeur est ``false`` : un client qui ne peut pas obtenir de ticket Kerberos et bascule
    vers NTLM ne peut donc pas se connecter. Définissez ``tomcat.secure=true`` dans
    ``tomcat_config.properties`` pour indiquer à |Fess| que la requête est arrivée en HTTPS.
+   Ce fichier se trouve dans ``lib/classes/`` pour la distribution ZIP et dans ``/etc/fess/`` pour
+   les paquets DEB/RPM ; |Fess| doit être redémarré après sa modification.
 
 .. warning::
    Dans |Fess| 15.8, une connexion est refusée par défaut lorsque le domaine Kerberos du principal
@@ -290,6 +292,15 @@ Configurez les paramètres LDAP dans le panneau d'administration de |Fess| sous 
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - Attribut memberOf
      - ``memberOf``
+
+.. note::
+   |Fess| ne lit l'attribut ``memberOf`` de l'utilisateur que sur un seul niveau : les groupes
+   imbriqués (un groupe membre d'un autre groupe) ne sont donc pas développés par défaut. Pour
+   prendre en compte les groupes imbriqués d'AD, définissez le filtre de groupe
+   (``ldap.group.filter``) sur ``(member:1.2.840.113556.1.4.1941:=%s)`` dans « Système » →
+   « Général » de l'interface d'administration. Ce développement s'exécute de façon asynchrone
+   après la connexion : l'entrée de connexion du journal d'audit ne contient donc que les groupes
+   résolus avant son achèvement.
 
 Paramètres du navigateur
 ========================

@@ -148,10 +148,10 @@ Fügen Sie die folgenden Einstellungen zu ``app/WEB-INF/conf/system.properties``
      - Standard
    * - ``spnego.preauth.username``
      - AD-Verbindungsbenutzername
-     - (Erforderlich)
+     - (Erforderlich, sofern kein Keytab verwendet wird)
    * - ``spnego.preauth.password``
      - AD-Verbindungspasswort
-     - (Erforderlich)
+     - (Erforderlich, sofern kein Keytab verwendet wird)
    * - ``spnego.krb5.conf``
      - Pfad zur Kerberos-Konfigurationsdatei
      - ``krb5.conf``
@@ -228,6 +228,8 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    ist dieser Wert ``false``. Ein Client, der kein Kerberos-Ticket erhalten kann und auf NTLM
    zurückfällt, kann sich dann nicht anmelden. Setzen Sie ``tomcat.secure=true`` in
    ``tomcat_config.properties``, damit |Fess| die Anfrage als über HTTPS eingegangen behandelt.
+   Diese Datei liegt in der ZIP-Distribution unter ``lib/classes/`` und in den DEB/RPM-Paketen
+   unter ``/etc/fess/``; nach einer Änderung muss |Fess| neu gestartet werden.
 
 .. warning::
    In |Fess| 15.8 wird eine Anmeldung standardmäßig abgelehnt, wenn sich die Realm des
@@ -291,6 +293,14 @@ Konfigurieren Sie LDAP-Einstellungen im |Fess|-Administrationsbereich unter "Sys
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - memberOf-Attribut
      - ``memberOf``
+
+.. note::
+   |Fess| liest das Attribut ``memberOf`` des Benutzers nur eine Ebene tief, sodass verschachtelte
+   Gruppen (eine Gruppe als Mitglied einer anderen Gruppe) standardmäßig nicht aufgelöst werden.
+   Um verschachtelte AD-Gruppen abzubilden, setzen Sie unter „System“ → „Allgemein“ in der
+   Administrationsoberfläche den Gruppenfilter (``ldap.group.filter``) auf
+   ``(member:1.2.840.113556.1.4.1941:=%s)``. Die Auflösung läuft nach der Anmeldung asynchron,
+   daher enthält der Anmeldeeintrag im Audit-Log nur die zuvor aufgelösten Gruppen.
 
 Browser-Einstellungen
 =====================

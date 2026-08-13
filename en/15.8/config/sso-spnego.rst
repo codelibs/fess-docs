@@ -148,10 +148,10 @@ Add the following settings to ``app/WEB-INF/conf/system.properties``.
      - Default
    * - ``spnego.preauth.username``
      - AD connection username
-     - (Required)
+     - (Required unless a keytab is used)
    * - ``spnego.preauth.password``
      - AD connection password
-     - (Required)
+     - (Required unless a keytab is used)
    * - ``spnego.krb5.conf``
      - Kerberos configuration file path
      - ``krb5.conf``
@@ -226,7 +226,9 @@ The following settings can be added as needed.
    When TLS is terminated at a reverse proxy and the request is forwarded to |Fess| over HTTP,
    that value is ``false``, so a client that cannot obtain a Kerberos ticket and falls back to
    NTLM cannot log in. Set ``tomcat.secure=true`` in ``tomcat_config.properties`` to tell |Fess|
-   that the request arrived over HTTPS.
+   that the request arrived over HTTPS. That file lives in ``lib/classes/`` in the ZIP
+   distribution and in ``/etc/fess/`` in the DEB/RPM packages, and |Fess| must be restarted
+   after it is changed.
 
 .. warning::
    In |Fess| 15.8, a login is rejected by default when the realm of the client principal differs
@@ -286,6 +288,13 @@ Configure LDAP settings in the |Fess| admin panel under "System" -> "General".
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - memberOf Attribute
      - ``memberOf``
+
+.. note::
+   |Fess| reads the ``memberOf`` attribute of the user one level deep, so nested groups (a group
+   that is a member of another group) are not expanded by default. To reflect AD nested groups,
+   set ``(member:1.2.840.113556.1.4.1941:=%s)`` as the Group Filter (``ldap.group.filter``) under
+   "System" → "General" in the administration UI. The expansion runs asynchronously after login,
+   so the login entry in the audit log records only the groups resolved before it completed.
 
 Browser Settings
 ================

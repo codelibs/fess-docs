@@ -148,10 +148,10 @@ Agregue la siguiente configuración a ``app/WEB-INF/conf/system.properties``.
      - Por defecto
    * - ``spnego.preauth.username``
      - Nombre de usuario de conexión AD
-     - (Requerido)
+     - (Requerido salvo que se use un keytab)
    * - ``spnego.preauth.password``
      - Contraseña de conexión AD
-     - (Requerido)
+     - (Requerido salvo que se use un keytab)
    * - ``spnego.krb5.conf``
      - Ruta del archivo de configuración de Kerberos
      - ``krb5.conf``
@@ -226,7 +226,9 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    Si TLS se termina en un proxy inverso y la petición se reenvía a |Fess| por HTTP, ese valor es
    ``false``, por lo que un cliente que no puede obtener un tique de Kerberos y recurre a NTLM no
    puede iniciar sesión. Establezca ``tomcat.secure=true`` en ``tomcat_config.properties`` para
-   indicar a |Fess| que la petición llegó por HTTPS.
+   indicar a |Fess| que la petición llegó por HTTPS. Ese archivo se encuentra en ``lib/classes/``
+   en la distribución ZIP y en ``/etc/fess/`` en los paquetes DEB/RPM, y hay que reiniciar |Fess|
+   después de modificarlo.
 
 .. warning::
    En |Fess| 15.8, un inicio de sesión se rechaza de forma predeterminada cuando el reino del
@@ -289,6 +291,14 @@ Configure los ajustes LDAP en el panel de administración de |Fess| bajo "Sistem
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - Atributo memberOf
      - ``memberOf``
+
+.. note::
+   |Fess| lee el atributo ``memberOf`` del usuario con un solo nivel de profundidad, por lo que los
+   grupos anidados (un grupo que es miembro de otro grupo) no se expanden de forma predeterminada.
+   Para reflejar los grupos anidados de AD, establezca ``(member:1.2.840.113556.1.4.1941:=%s)`` como
+   Filtro de grupo (``ldap.group.filter``) en «Sistema» → «General» de la interfaz de administración.
+   La expansión se ejecuta de forma asíncrona tras el inicio de sesión, por lo que la entrada de
+   inicio de sesión del registro de auditoría solo contiene los grupos resueltos hasta ese momento.
 
 Configuración del navegador
 ============================
