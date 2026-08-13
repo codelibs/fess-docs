@@ -277,6 +277,36 @@ IdP侧配置
    角色属性中包含\ ``admin``\ 的用户将获得 |Fess| 的管理员权限。
    请确认IdP侧可以控制角色属性的范围，必要时将\ ``authentication.admin.roles``\ 更改为其他名称。
 
+属性名重复的 IdP
+----------------
+
+如果 IdP 将同一个属性名拆分到多个 ``<Attribute>`` 元素中发送，|Fess|\ 会拒绝该断言，登录本身
+随之失败。此时断言的校验（签名、InResponseTo 与重放检查）其实已经通过，拒绝发生在读取属性的
+阶段，因此即使是没有设置 ``saml.attribute.role.name`` 的配置也会同样失败。
+
+Keycloak 默认发送这种形式的断言：除非启用其角色映射器和组映射器的 ``single`` 选项，否则每个值
+都会输出为独立的 ``<Attribute>`` 元素，而每个 Keycloak 账户默认都带有多个领域角色。
+
+有以下两种处理方式：
+
+- 在 IdP 侧将属性合并为单个元素（在 Keycloak 中启用映射器的 ``single`` 选项）
+- 在 |Fess|\ 侧允许重复并合并其值
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - 属性
+     - 描述
+     - 默认值
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - 允许同一属性名出现在多个元素中并合并其值
+     - ``false``
+
+示例::
+
+    saml.security.allow_duplicated_attribute_name=true
+
 安全配置
 ========
 
@@ -558,6 +588,14 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 - 验证IdP证书是否正确配置
 - 确保证书未过期
 - 证书应仅指定为Base64编码的内容，无换行
+
+因属性名重复而无法登录
+~~~~~~~~~~~~~~~~~~~~~~
+
+- 如果日志中出现以 ``The IdP repeated an attribute name in the SAML assertion`` 开头的警告，
+  说明 IdP 将同一个属性名拆分到了多个 ``<Attribute>`` 元素中
+- 断言本身已通过校验，因此证书和时间偏差都不是原因
+- 请在 IdP 侧合并属性，或设置 ``saml.security.allow_duplicated_attribute_name=true``
 
 用户组/角色未生效
 ~~~~~~~~~~~~~~~~~

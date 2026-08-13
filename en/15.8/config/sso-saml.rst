@@ -279,6 +279,40 @@ Example::
    Check who can control the role attribute on the IdP side, and change
    ``authentication.admin.roles`` to a different name if necessary.
 
+IdPs that repeat an attribute name
+----------------------------------
+
+If the IdP splits the same attribute name across several ``<Attribute>`` elements, |Fess| refuses
+the assertion and the login itself fails. Validation of the assertion -- signature, InResponseTo and
+replay -- has already succeeded at that point; the refusal happens while the attributes are being
+read, so a configuration that does not set ``saml.attribute.role.name`` at all fails in exactly the
+same way.
+
+Keycloak sends assertions of this shape by default: its role and group mappers emit one
+``<Attribute>`` element per value unless their ``single`` option is enabled, and every Keycloak
+account carries several default realm roles.
+
+There are two remedies:
+
+- Aggregate the values into a single element at the IdP (in Keycloak, enable the ``single`` option
+  of the mappers)
+- Accept the repeats in |Fess| and merge their values
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - Property
+     - Description
+     - Default
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - Allows the same attribute name on several elements and merges their values
+     - ``false``
+
+Example::
+
+    saml.security.allow_duplicated_attribute_name=true
+
 Security Configuration
 ======================
 
@@ -567,6 +601,14 @@ Signature verification error
 - Verify that the IdP certificate is correctly configured
 - Ensure the certificate has not expired
 - The certificate should be specified as Base64-encoded content only, without line breaks
+
+Login fails because an attribute name is repeated
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- If the log contains a warning beginning with ``The IdP repeated an attribute name in the SAML
+  assertion``, the IdP is splitting the same attribute name across several ``<Attribute>`` elements
+- The assertion itself passed validation, so the certificate and clock skew are not the cause
+- Aggregate the attributes at the IdP, or set ``saml.security.allow_duplicated_attribute_name=true``
 
 User groups/roles not reflected
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

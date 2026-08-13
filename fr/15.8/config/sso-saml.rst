@@ -283,6 +283,39 @@ Exemple ::
    l'attribut de rôle côté IdP et, si nécessaire, remplacez ``authentication.admin.roles`` par un
    autre nom.
 
+IdP qui répètent un nom d'attribut
+----------------------------------
+
+Si l'IdP répartit le même nom d'attribut sur plusieurs éléments ``<Attribute>``, |Fess| refuse
+l'assertion et la connexion échoue. La validation de l'assertion -- signature, InResponseTo et rejeu
+-- a déjà réussi à ce stade ; le refus intervient lors de la lecture des attributs, si bien qu'une
+configuration qui ne définit pas ``saml.attribute.role.name`` échoue exactement de la même façon.
+
+Keycloak envoie par défaut des assertions de cette forme : ses mappeurs de rôles et de groupes
+émettent un élément ``<Attribute>`` par valeur tant que leur option ``single`` n'est pas activée, et
+tout compte Keycloak possède plusieurs rôles de royaume par défaut.
+
+Deux solutions sont possibles :
+
+- Regrouper les valeurs dans un seul élément côté IdP (dans Keycloak, activez l'option ``single``
+  des mappeurs)
+- Accepter les répétitions dans |Fess| et fusionner leurs valeurs
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - Autorise le même nom d'attribut sur plusieurs éléments et fusionne leurs valeurs
+     - ``false``
+
+Exemple ::
+
+    saml.security.allow_duplicated_attribute_name=true
+
 Configuration de sécurité
 =========================
 
@@ -579,6 +612,14 @@ Erreur de vérification de signature
 - Vérifiez que le certificat IdP est correctement configuré
 - Assurez-vous que le certificat n'a pas expiré
 - Le certificat doit être spécifié uniquement comme contenu encodé en Base64, sans sauts de ligne
+
+La connexion échoue en raison d'un nom d'attribut répété
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Si le journal contient un avertissement commençant par ``The IdP repeated an attribute name in the
+  SAML assertion``, l'IdP répartit le même nom d'attribut sur plusieurs éléments ``<Attribute>``
+- L'assertion elle-même a passé la validation : le certificat et le décalage d'horloge ne sont pas en cause
+- Regroupez les attributs côté IdP ou définissez ``saml.security.allow_duplicated_attribute_name=true``
 
 Groupes/rôles utilisateur non reflétés
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
