@@ -433,6 +433,7 @@ Ein Wert von null oder kleiner würde die AuthnRequest-ID verwerfen, bevor eine 
 .. note::
    Pro Sitzung werden höchstens 10 unbeantwortete AuthnRequests aufbewahrt; wird dieses Limit überschritten, werden die ältesten verworfen.
    Dies ermöglicht es, Anmeldungen gleichzeitig aus mehreren Tabs zu starten, und lässt sich nicht über eine ``saml.``-Einstellung ändern.
+   Wird das Limit mit einem Wert von null oder weniger überschrieben, werden stattdessen 10 verwendet und eine Warnung protokolliert.
 
 Konfigurationsbeispiele
 =======================
@@ -507,9 +508,22 @@ Kann nach der Authentifizierung nicht zu Fess zurückkehren
   Meldung „SSO-Anmeldevorgang fehlgeschlagen." zurück, und im Protokoll erscheint eine Warnung, die
   mit ``Received a SAML response with no matching AuthnRequest ID in the session`` beginnt.
   Setzen Sie in diesem Fall ``tomcat.sameSiteCookies = none`` (``SameSite=None`` erfordert HTTPS)
-- Wenn die Anmeldeseite des IdP so lange offen war, dass ``saml.request.id.ttl`` (Standard 3600
-  Sekunden) abgelaufen ist, wurde die gespeicherte AuthnRequest-ID bereits verworfen, und dieselbe
-  Warnung wird protokolliert. Starten Sie in diesem Fall die Anmeldung erneut.
+- Wenn die Anmeldung am IdP zu lange gedauert hat, ist die AuthnRequest-ID nicht mehr vorhanden,
+  sobald die Assertion zurückkommt; die Anmeldung schlägt einmalig fehl und muss neu gestartet
+  werden. Welche Warnung erscheint, zeigt, was abgelaufen ist: Eine Warnung, die mit
+  ``Received a SAML response after the session it belongs to had expired`` beginnt, bedeutet, dass
+  der Servlet-Container die gesamte Sitzung verworfen hat; eine Warnung, die
+  ``pending AuthnRequest ID(s) of the session had expired`` enthält, bedeutet, dass die Sitzung noch
+  besteht und lediglich ``saml.request.id.ttl`` abgelaufen ist. Beide werden nur protokolliert, wenn
+  der Browser sein Sitzungs-Cookie mitgesendet hat, und genau das unterscheidet sie vom
+  SameSite-Fall oben
+- |Fess| setzt in ``app/WEB-INF/web.xml`` kein ``session-timeout``, sodass der Standardwert des
+  Servlet-Containers von 30 Minuten gilt; er ist kürzer als die 3600 Sekunden von
+  ``saml.request.id.ttl``. Die Sitzung wird also samt der darin gehaltenen AuthnRequest-ID zuerst
+  verworfen: Ein höherer Wert für ``saml.request.id.ttl`` allein verlängert nicht die Zeit, die
+  Benutzer für die Anmeldung am IdP haben. Erhöhen Sie dafür auch den Sitzungs-Timeout. Die Warnung
+  zu ``saml.request.id.ttl`` erscheint daher nur dort, wo die TTL kürzer als der Sitzungs-Timeout
+  eingestellt ist
 
 .. note::
    In 15.7 leitete |Fess| in derselben Situation immer wieder zum IdP weiter, sodass die Anmeldung in

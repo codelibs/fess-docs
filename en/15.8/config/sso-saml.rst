@@ -429,6 +429,7 @@ A value of zero or less would discard the AuthnRequest ID before a login could r
 .. note::
    At most 10 unanswered AuthnRequests are kept per session; when the cap is exceeded the oldest are discarded.
    This exists so that logins can be started from several tabs at once, and it cannot be changed with a ``saml.`` setting.
+   If it is overridden with a value of zero or less, 10 is used instead and a warning is logged.
 
 Configuration Examples
 ======================
@@ -502,9 +503,19 @@ Cannot return to Fess after authentication
   browser returns to the login page showing "SSO login process failed.", and a warning beginning with
   ``Received a SAML response with no matching AuthnRequest ID in the session`` is written to the log.
   Set ``tomcat.sameSiteCookies = none`` in that case (``SameSite=None`` requires HTTPS)
-- If the IdP login page took long enough for ``saml.request.id.ttl`` (default 3600 seconds) to
-  elapse, the recorded AuthnRequest ID has already been discarded and the same warning is logged.
-  In that case, start the login again.
+- If the login took too long at the IdP, the AuthnRequest ID is no longer there when the assertion
+  comes back, so the login fails once and has to be started again. Which warning appears says what
+  ran out: one beginning with ``Received a SAML response after the session it belongs to had
+  expired`` means the servlet container discarded the whole session, while one containing
+  ``pending AuthnRequest ID(s) of the session had expired`` means the session is still alive and
+  only ``saml.request.id.ttl`` elapsed. Both are written only when the browser did send its session
+  cookie, which is what separates them from the SameSite case above
+- |Fess| leaves ``session-timeout`` unset in ``app/WEB-INF/web.xml``, so the servlet container's
+  default of 30 minutes applies and is shorter than the 3600 seconds of ``saml.request.id.ttl``. The
+  session, and with it the AuthnRequest ID it holds, is discarded first, so raising
+  ``saml.request.id.ttl`` on its own does not give users longer to finish logging in at the IdP:
+  raise the session timeout as well. The ``saml.request.id.ttl`` warning is therefore only seen
+  where the TTL is set shorter than the session timeout
 
 .. note::
    In 15.7 the same situation caused |Fess| to redirect to the IdP again and again, looping the login.

@@ -434,6 +434,7 @@ Un valor igual o menor que cero descartaría el identificador de la AuthnRequest
 .. note::
    Como máximo se conservan 10 AuthnRequest sin respuesta por sesión; al superar ese límite, se descartan las más antiguas.
    Esto existe para permitir iniciar sesiones desde varias pestañas a la vez, y no se puede cambiar con ningún ajuste ``saml.``.
+   Si el límite se sobrescribe con un valor de cero o menos, se usan 10 en su lugar y se registra una advertencia.
 
 Ejemplos de configuración
 =========================
@@ -509,9 +510,21 @@ No se puede regresar a Fess después de la autenticación
   registro se escribe una advertencia que empieza por
   ``Received a SAML response with no matching AuthnRequest ID in the session``.
   En ese caso, configure ``tomcat.sameSiteCookies = none`` (``SameSite=None`` requiere HTTPS)
-- Si la página de inicio de sesión del IdP tardó tanto que ``saml.request.id.ttl`` (3600 segundos
-  por defecto) expiró, el identificador de AuthnRequest registrado ya se ha descartado y se registra
-  la misma advertencia. En ese caso, inicie sesión de nuevo
+- Si el inicio de sesión tardó demasiado en el IdP, el identificador de AuthnRequest ya no está
+  disponible cuando llega la aserción, por lo que el inicio de sesión falla una sola vez y hay que
+  empezarlo de nuevo. La advertencia que aparece indica qué caducó: una que empieza por
+  ``Received a SAML response after the session it belongs to had expired`` significa que el
+  contenedor de servlets descartó la sesión entera, mientras que una que contiene
+  ``pending AuthnRequest ID(s) of the session had expired`` significa que la sesión sigue activa y
+  que solo expiró ``saml.request.id.ttl``. Ambas se registran únicamente cuando el navegador sí
+  envió su cookie de sesión, que es lo que las distingue del caso SameSite anterior
+- |Fess| no define ``session-timeout`` en ``app/WEB-INF/web.xml``, por lo que se aplica el valor
+  predeterminado del contenedor de servlets, 30 minutos, más corto que los 3600 segundos de
+  ``saml.request.id.ttl``. La sesión, y con ella el identificador de AuthnRequest que guarda, se
+  descarta antes: aumentar solo ``saml.request.id.ttl`` no da a los usuarios más tiempo para
+  completar el inicio de sesión en el IdP, así que amplíe también el tiempo de espera de la sesión.
+  Por eso la advertencia de ``saml.request.id.ttl`` solo aparece donde el TTL se ha configurado por
+  debajo del tiempo de espera de la sesión
 
 .. note::
    En 15.7, la misma situación hacía que |Fess| redirigiera una y otra vez al IdP, dejando el inicio de
