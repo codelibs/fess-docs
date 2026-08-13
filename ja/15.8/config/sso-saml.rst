@@ -242,6 +242,12 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| はアサーションのグループ値をそのまま使用し、ディレクトリへの問い合わせや
+   ネストされたグループ（親グループ）の展開は行いません。
+   親グループが含まれるかどうかは、IdP側のクレーム設定だけで決まります。
+   Microsoft Graph APIで親グループを解決する :doc:`sso-entraid` とは動作が異なります。
+
 ロール属性の設定
 ----------------
 
@@ -577,6 +583,10 @@ IdPが送ってきた ``https://fess.example.com/sso/`` と一致しません。
 
 - IdP側で属性（Attribute）が正しく設定されているか確認してください
 - ``saml.attribute.group.name`` の値がIdPから送信される属性名と一致しているか確認してください
+- Microsoft Entra IDでは、ソース属性を変更しない限りグループクレームの値はグループの ``ObjectId`` （GUID）になるため、
+  グループ名とは一致しません
+- ユーザーが150を超えるグループに所属している場合、Microsoft Entra IDはグループクレーム自体を送信しません
+  （ネストされたグループもこの上限に数えられます）。このとき |Fess| は ``saml.default.groups`` にフォールバックします
 - SAMLアサーションの内容を確認するには、デバッグモードを有効にしてください
 
 デバッグ設定

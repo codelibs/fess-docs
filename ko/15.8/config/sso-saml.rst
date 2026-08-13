@@ -242,6 +242,11 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
     saml.attribute.group.name=groups
     saml.default.groups=user
 
+.. note::
+   |Fess| 는 어서션의 그룹 값을 그대로 사용하며, 디렉토리 조회나 중첩 그룹(상위 그룹)의 확장은
+   수행하지 않습니다. 상위 그룹이 포함되는지 여부는 IdP 측의 클레임 설정에 따라서만 결정됩니다.
+   Microsoft Graph API로 상위 그룹을 해결하는 :doc:`sso-entraid` 의 동작과는 다릅니다.
+
 역할 속성 설정
 --------------
 
@@ -575,6 +580,10 @@ IdP가 보낸 ``https://fess.example.com/sso/`` 와 일치하지 않습니다.
 
 - IdP 측에서 속성（Attribute）이 올바르게 설정되어 있는지 확인하십시오
 - ``saml.attribute.group.name`` 의 값이 IdP에서 전송되는 속성명과 일치하는지 확인하십시오
+- Microsoft Entra ID에서는 소스 속성을 변경하지 않는 한 그룹 클레임의 값이 그룹의 ``ObjectId`` (GUID)이므로
+  그룹 이름과 일치하지 않습니다
+- 사용자가 150개를 초과하는 그룹에 소속된 경우 Microsoft Entra ID는 그룹 클레임 자체를 보내지 않으며
+  (중첩 그룹도 이 상한에 포함됩니다), 이때 |Fess| 는 ``saml.default.groups`` 로 폴백합니다
 - SAML 어서션의 내용을 확인하려면 디버그 모드를 활성화하십시오
 
 디버그 설정

@@ -144,6 +144,13 @@ L'identifiant utilisateur, les groupes et les rôles sont déterminés comme sui
 - **Groupes** : extraits du claim ``groups`` de l'ID Token. Si le claim ``groups`` est absent, la valeur de ``oic.default.groups`` est utilisée.
 - **Rôles** : la valeur de ``oic.default.roles`` est toujours utilisée (il n'existe pas de mécanisme permettant d'extraire les rôles depuis les claims de l'ID Token).
 
+.. note::
+   |Fess| utilise telles quelles les valeurs du claim ``groups`` : aucune interrogation de
+   l'annuaire n'est effectuée et les groupes imbriqués (transitifs) ne sont pas développés.
+   La présence des groupes parents dépend donc uniquement de la configuration des claims de l'OP,
+   contrairement à :doc:`sso-entraid`, où |Fess| résout les groupes parents en utilisant l'API
+   Microsoft Graph.
+
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
@@ -266,6 +273,12 @@ Impossible de récupérer les informations utilisateur
 
 - Assurez-vous que le scope inclut les permissions requises (``email``, ``profile``, etc.)
 - Vérifiez que les scopes requis sont autorisés pour le client côté OP
+- Avec Microsoft Entra ID, le claim ``groups`` contient les ``ObjectId`` (GUID) des groupes, sauf
+  si un autre attribut source est sélectionné ; les valeurs ne correspondent donc pas aux noms de
+  groupe
+- Microsoft Entra ID omet entièrement le claim ``groups`` lorsque l'utilisateur appartient à plus
+  de 200 groupes (les groupes imbriqués comptent dans cette limite) ; |Fess| se rabat alors sur
+  ``oic.default.groups``
 
 Configuration de débogage
 --------------------------

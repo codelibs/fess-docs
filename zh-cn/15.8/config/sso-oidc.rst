@@ -144,6 +144,11 @@ OpenID Connect认证的工作原理
 - **组**：从ID Token的 ``groups`` 声明中获取。如果 ``groups`` 声明不存在，则使用 ``oic.default.groups`` 的值。
 - **角色**：始终使用 ``oic.default.roles`` 的值（不存在从ID Token声明中获取角色的机制）。
 
+.. note::
+   |Fess| 直接使用 ``groups`` 声明中的值，不会查询目录，也不会展开嵌套组（父组）。
+   因此，是否包含父组完全取决于OP侧的声明配置。
+   这与通过Microsoft Graph API解析父组的 :doc:`sso-entraid` 不同。
+
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
@@ -266,6 +271,9 @@ OP侧配置
 
 - 请确认范围中是否包含所需的权限（``email``、``profile`` 等）
 - 请确认OP侧是否为客户端允许了所需的范围
+- 使用Microsoft Entra ID时，除非选择了其他源属性，否则\ ``groups``\ 声明的值为组的\ ``ObjectId``\ （GUID），与组名不一致
+- 当用户所属的组超过200个时，Microsoft Entra ID将完全省略\ ``groups``\ 声明（嵌套组也计入此上限），
+  此时 |Fess| 将回退到\ ``oic.default.groups``
 
 调试设置
 --------
