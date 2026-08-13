@@ -147,10 +147,10 @@ Kerberos配置文件
      - 默认值
    * - ``spnego.preauth.username``
      - AD连接用户名
-     - （必需）
+     - （不使用 keytab 时必需）
    * - ``spnego.preauth.password``
      - AD连接密码
-     - （必需）
+     - （不使用 keytab 时必需）
    * - ``spnego.krb5.conf``
      - Kerberos配置文件路径
      - ``krb5.conf``
@@ -224,6 +224,7 @@ Kerberos配置文件
    如果在反向代理上终止 TLS 并以 HTTP 转发到 |Fess| ，该值为 ``false`` ，
    因此无法获取 Kerberos 票据而回退到 NTLM 的客户端将无法登录。
    请在 ``tomcat_config.properties`` 中设置 ``tomcat.secure=true`` ，以告知 |Fess| 该请求来自 HTTPS。
+   该文件在 ZIP 版中位于 ``lib/classes/`` ，在 DEB/RPM 版中位于 ``/etc/fess/`` ，修改后需要重启 |Fess| 。
 
 .. warning::
    在 |Fess| 15.8 中，如果客户端主体的领域与服务器的领域不同，登录将默认被拒绝。
@@ -280,6 +281,12 @@ LDAP配置
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - memberOf属性
      - ``memberOf``
+
+.. note::
+   |Fess| 只读取用户 ``memberOf`` 属性的一层，因此默认不会展开嵌套组（作为其他组成员的组）。
+   若要反映 AD 的嵌套组，请在管理界面「系统」→「常规」的「组过滤器」( ``ldap.group.filter`` )
+   中设置 ``(member:1.2.840.113556.1.4.1941:=%s)`` 。该展开在登录后异步执行，
+   因此审计日志的登录记录中只包含展开前的组。
 
 浏览器设置
 ==========

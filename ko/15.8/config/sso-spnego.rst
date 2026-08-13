@@ -148,10 +148,10 @@ Kerberos 설정 파일
      - 기본값
    * - ``spnego.preauth.username``
      - AD 접속용 사용자명
-     - (필수)
+     - (keytab을 사용하지 않는 경우 필수)
    * - ``spnego.preauth.password``
      - AD 접속용 비밀번호
-     - (필수)
+     - (keytab을 사용하지 않는 경우 필수)
    * - ``spnego.krb5.conf``
      - Kerberos 설정 파일 경로
      - ``krb5.conf``
@@ -226,7 +226,8 @@ Kerberos 설정 파일
    리버스 프록시에서 TLS를 종료하고 |Fess| 로 HTTP로 전달하는 구성에서는 이 값이 ``false`` 이므로,
    Kerberos 티켓을 받지 못해 NTLM으로 대체된 클라이언트는 로그인할 수 없습니다.
    ``tomcat_config.properties`` 에서 ``tomcat.secure=true`` 를 설정하여 요청이 HTTPS로 도착했음을
-   |Fess| 에 알려 주십시오.
+   |Fess| 에 알려 주십시오. 이 파일은 ZIP 버전에서는 ``lib/classes/`` , DEB/RPM 버전에서는
+   ``/etc/fess/`` 에 있으며, 변경 후에는 |Fess| 를 재시작해야 합니다.
 
 .. warning::
    |Fess| 15.8에서는 클라이언트 주체의 영역이 서버의 영역과 다르면 로그인이 기본적으로 거부됩니다.
@@ -285,6 +286,12 @@ Windows 통합 인증으로 로그인한 사용자의 그룹 정보를 취득하
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - memberOf 속성
      - ``memberOf``
+
+.. note::
+   |Fess| 는 사용자의 ``memberOf`` 속성을 한 단계만 읽으므로 중첩된 그룹(다른 그룹의 멤버인 그룹)은
+   기본적으로 전개되지 않습니다. AD의 중첩 그룹을 반영하려면 관리 화면 「시스템」 → 「일반」의
+   「그룹 필터」( ``ldap.group.filter`` )에 ``(member:1.2.840.113556.1.4.1941:=%s)`` 를 설정하십시오.
+   이 전개는 로그인 후 비동기로 실행되므로 감사 로그의 로그인 항목에는 전개 이전의 그룹만 기록됩니다.
 
 브라우저 설정
 =============

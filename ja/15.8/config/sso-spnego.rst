@@ -148,10 +148,10 @@ Kerberos設定ファイル
      - デフォルト値
    * - ``spnego.preauth.username``
      - AD接続用ユーザー名
-     - （必須）
+     - （keytabを使用しない場合は必須）
    * - ``spnego.preauth.password``
      - AD接続用パスワード
-     - （必須）
+     - （keytabを使用しない場合は必須）
    * - ``spnego.krb5.conf``
      - Kerberos設定ファイルパス
      - ``krb5.conf``
@@ -226,7 +226,8 @@ Kerberos設定ファイル
    TLSをリバースプロキシで終端して |Fess| へHTTPで転送している構成ではこの値が ``false`` になるため、
    Kerberosチケットを取得できずNTLMにフォールバックしたクライアントはログインできません。
    ``tomcat_config.properties`` で ``tomcat.secure=true`` を設定し、リクエストがHTTPS由来であることを
-   |Fess| に伝えてください。
+   |Fess| に伝えてください。このファイルはZIP版では ``lib/classes/`` 、DEB/RPM版では ``/etc/fess/`` に
+   配置されています。変更後は |Fess| の再起動が必要です。
 
 .. warning::
    |Fess| 15.8 では、クライアントのプリンシパルのレルムがサーバーのレルムと異なる場合、
@@ -285,6 +286,13 @@ Windows統合認証でログインしたユーザーのグループ情報を取�
      - ``(&(objectClass=user)(sAMAccountName=%s))``
    * - memberOf属性
      - ``memberOf``
+
+.. note::
+   |Fess| はユーザーの ``memberOf`` 属性を1段だけ読むため、既定では入れ子になったグループ
+   （グループのメンバーであるグループ）は展開されません。ADの入れ子グループを反映するには、
+   管理画面「システム」→「全般」の「グループフィルター」（ ``ldap.group.filter`` ）に
+   ``(member:1.2.840.113556.1.4.1941:=%s)`` を設定してください。この展開はログイン後に
+   非同期で実行されるため、監査ログのログイン行には展開前のグループだけが記録されます。
 
 ブラウザ設定
 ============
