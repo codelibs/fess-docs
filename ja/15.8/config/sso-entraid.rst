@@ -137,6 +137,9 @@ Entra IDから取得した情報を設定します。
    フロントエンドのプロキシ・WAFのアクセスログにも残りません。
    ただし ``form_post`` はクロスサイトのPOSTになるため、``tomcat.sameSiteCookies = none`` が必要です。
    設定していない場合はセッションクッキーが送信されず、ログインに失敗します。
+   さらに ``none`` はブラウザが ``Secure`` 属性付きCookieに対してのみ受け入れるため、
+   ``form_post`` を使うには |Fess| をHTTPSで提供する必要があります。
+   HTTPのままでは、``none`` を設定してもブラウザがセッションCookie自体を保存しないため、やはりログインできません。
    通常は既定値のまま使用してください。
    ``query`` と ``form_post`` 以外を指定した場合は、警告を出力して ``query`` として扱います。
 
@@ -333,7 +336,13 @@ Entra ID認証では、Microsoft Graph APIを使用してユーザーが所属�
 - ``entraid.reply.url`` の値がAzure Portalの設定と完全に一致しているか確認してください
 - プロトコル（HTTP/HTTPS）が一致しているか確認してください
 - リダイレクトURIの末尾に ``/`` が含まれているか確認してください
-- ``entraid.response.mode`` に ``form_post`` を指定している場合は、``tomcat.sameSiteCookies = none`` が設定されているか確認してください。未設定の場合、コールバック時にセッションクッキーが送信されず、ログイン画面に戻る動作を繰り返します
+- ``entraid.response.mode`` に ``form_post`` を指定している場合は、``tomcat.sameSiteCookies = none``
+  が設定されているか、かつ |Fess| をHTTPSで提供しているかを確認してください。既定値の ``lax`` のままでは、
+  コールバックのクロスサイトPOSTにブラウザがセッションCookieを送信しません。``none`` を設定しても
+  HTTPのままでは、``none`` が ``Secure`` 属性を要求するためブラウザがそのCookie自体を保存しません。
+  いずれの場合もその場で1回だけログインに失敗し、ブラウザはログイン画面に戻って
+  「SSOログイン処理に失敗しました。」を表示します。ログには
+  ``Failed to process SSO login: could not validate state`` という警告が出力されます
 
 認証エラーが発生する
 ~~~~~~~~~~~~~~~~~~~~

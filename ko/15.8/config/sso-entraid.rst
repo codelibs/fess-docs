@@ -138,7 +138,10 @@ Entra ID에서 취득한 정보를 설정합니다.
    ``form_post`` 를 지정하면 인가 코드가 URL에 나타나지 않으므로 브라우저 기록이나 프런트엔드
    프록시・WAF의 액세스 로그에도 남지 않습니다. 다만 ``form_post`` 는 콜백이 크로스 사이트
    POST가 되므로 ``tomcat.sameSiteCookies = none`` 이 필요합니다. 설정하지 않으면 세션 쿠키가
-   전송되지 않아 로그인에 실패하므로, 대부분의 환경에서는 기본값 그대로 사용하십시오.
+   전송되지 않아 로그인에 실패합니다. 또한 브라우저는 ``Secure`` 속성이 함께 있는 쿠키에 대해서만
+   ``none`` 을 허용하므로, ``form_post`` 를 사용하려면 |Fess| 를 HTTPS로 제공해야 합니다.
+   일반 HTTP에서는 ``none`` 을 설정해도 브라우저가 세션 쿠키 자체를 저장하지 않아 역시 로그인할 수
+   없습니다. 따라서 대부분의 환경에서는 기본값 그대로 사용하십시오.
    그 외의 값을 지정한 경우에는 경고를 출력하고 ``query`` 로 처리합니다.
 
 .. warning::
@@ -333,7 +336,13 @@ Entra ID 인증에서는 Microsoft Graph API를 사용하여 사용자가 소속
 - ``entraid.reply.url`` 의 값이 Azure Portal의 설정과 완전히 일치하는지 확인하십시오
 - 프로토콜（HTTP/HTTPS）이 일치하는지 확인하십시오
 - 리다이렉트 URI의 끝에 ``/`` 가 포함되어 있는지 확인하십시오
-- ``entraid.response.mode`` 에 ``form_post`` 를 지정한 경우에는 ``tomcat.sameSiteCookies = none`` 이 설정되어 있는지 확인하십시오. 설정되어 있지 않으면 콜백 시 세션 쿠키가 전송되지 않아 로그인 화면으로 되돌아가는 동작이 반복됩니다
+- ``entraid.response.mode`` 에 ``form_post`` 를 지정한 경우에는 ``tomcat.sameSiteCookies = none``
+  이 설정되어 있는지, 그리고 |Fess| 를 HTTPS로 제공하고 있는지 확인하십시오. 기본값인 ``lax`` 에서는
+  콜백의 크로스 사이트 POST에 브라우저가 세션 쿠키를 전송하지 않습니다. ``none`` 을 설정하더라도 일반
+  HTTP에서는 ``none`` 이 ``Secure`` 속성을 요구하기 때문에 브라우저가 해당 쿠키 자체를 저장하지
+  않습니다. 어느 경우든 그 자리에서 한 번만 로그인에 실패하며, 브라우저는 로그인 화면으로 돌아가
+  "SSO 로그인 프로세스에 실패했습니다." 를 표시하고, 로그에는
+  ``Failed to process SSO login: could not validate state`` 경고가 출력됩니다
 
 인증 오류가 발생함
 ~~~~~~~~~~~~~~~~~~~~

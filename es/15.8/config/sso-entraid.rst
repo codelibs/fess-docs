@@ -142,8 +142,11 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    tanto, fuera del historial del navegador y de los registros de acceso de cualquier proxy
    frontal o WAF, pero convierte el callback en un POST entre sitios y requiere
    ``tomcat.sameSiteCookies = none``. Sin esa configuración, la cookie de sesión no se devuelve y
-   el inicio de sesión falla, por lo que la mayoría de las instalaciones deberían mantener el valor
-   por defecto. Cualquier otro valor se ignora con una advertencia y se utiliza ``query``.
+   el inicio de sesión falla. Además, los navegadores solo aceptan ``none`` en una cookie que
+   también tenga el atributo ``Secure``, por lo que ``form_post`` exige servir |Fess| mediante
+   HTTPS: sobre HTTP simple el navegador ni siquiera almacena la cookie de sesión y el inicio de
+   sesión sigue fallando. Por ello, la mayoría de las instalaciones deberían mantener el valor por
+   defecto. Cualquier otro valor se ignora con una advertencia y se utiliza ``query``.
 
 .. warning::
 
@@ -336,7 +339,14 @@ No se puede regresar a Fess después de la autenticación
 - Asegúrese de que el valor de ``entraid.reply.url`` coincida exactamente con la configuración del portal Azure
 - Verifique que el protocolo (HTTP/HTTPS) coincida
 - Verifique que la URI de redirección termine con ``/``
-- Si ``entraid.response.mode`` está establecido en ``form_post``, verifique que ``tomcat.sameSiteCookies = none`` esté configurado. De lo contrario, la cookie de sesión no se envía con el callback y la pantalla de inicio de sesión vuelve a aparecer una y otra vez
+- Si ``entraid.response.mode`` está establecido en ``form_post``, verifique tanto que
+  ``tomcat.sameSiteCookies = none`` esté configurado como que |Fess| se sirva mediante HTTPS. Con el
+  valor por defecto ``lax``, el navegador no envía la cookie de sesión en el POST entre sitios del
+  callback; con ``none`` sobre HTTP simple, el navegador no almacena esa cookie en absoluto, porque
+  ``none`` exige el atributo ``Secure``. En ambos casos el inicio de sesión falla una sola vez: el
+  navegador vuelve a la pantalla de inicio de sesión mostrando "Error en el proceso de inicio de
+  sesión SSO." y en el registro se escribe una advertencia con el texto
+  ``Failed to process SSO login: could not validate state``
 
 Ocurren errores de autenticación
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

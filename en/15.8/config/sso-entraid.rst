@@ -138,8 +138,11 @@ The following settings can be added as needed.
    callback URL. ``form_post`` keeps the code out of the URL, and therefore out of browser history
    and the access logs of any front-end proxy or WAF, but it makes the callback a cross-site POST
    and requires ``tomcat.sameSiteCookies = none``. Without that setting the session cookie is not
-   sent back and login fails, so most deployments should keep the default. Any other value is
-   ignored with a warning and ``query`` is used.
+   sent back and login fails. Browsers also only accept ``none`` on a cookie that carries the
+   ``Secure`` attribute, so ``form_post`` additionally requires |Fess| to be served over HTTPS:
+   over plain HTTP the browser does not store the session cookie at all and login still fails.
+   Most deployments should therefore keep the default. Any other value is ignored with a warning
+   and ``query`` is used.
 
 .. warning::
 
@@ -329,7 +332,13 @@ Cannot Return to Fess After Authentication
 - Ensure the ``entraid.reply.url`` value exactly matches the Azure Portal configuration
 - Check that the protocol (HTTP/HTTPS) matches
 - Verify the Redirect URI ends with ``/``
-- If ``entraid.response.mode`` is set to ``form_post``, verify that ``tomcat.sameSiteCookies = none`` is configured. Without it, the session cookie is not sent with the callback and the sign-in screen keeps reappearing
+- If ``entraid.response.mode`` is set to ``form_post``, check both that
+  ``tomcat.sameSiteCookies = none`` is configured and that |Fess| is served over HTTPS. With the
+  shipped default ``lax`` the browser does not send the session cookie on the callback's
+  cross-site POST; with ``none`` over plain HTTP the browser does not store that cookie at all,
+  because ``none`` requires the ``Secure`` attribute. Either way the login fails once, on the
+  spot: the browser returns to the login page showing "SSO login process failed.", and a warning
+  reading ``Failed to process SSO login: could not validate state`` is written to the log
 
 Authentication Errors Occur
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

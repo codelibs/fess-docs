@@ -134,7 +134,11 @@ Entra ID认证的工作原理
    使用默认值 ``query`` 时，授权码会包含在回调URL的查询字符串中。
    指定 ``form_post`` 后，授权码不会出现在URL中，因此也不会留在浏览器历史记录以及前端代理或WAF的访问日志中。
    但 ``form_post`` 会使回调成为跨站POST，因此需要 ``tomcat.sameSiteCookies = none``\ 。
-   未进行该设置时，会话Cookie不会被发送，登录将失败，因此大多数环境应保持默认值。
+   未进行该设置时，会话Cookie不会被发送，登录将失败。
+   此外，浏览器仅对同时带有 ``Secure`` 属性的Cookie接受 ``none``\ ，
+   因此使用 ``form_post`` 时必须通过HTTPS提供 |Fess| 。
+   在普通HTTP下，即使设置了 ``none``\ ，浏览器也根本不会保存会话Cookie，登录同样会失败。
+   因此大多数环境应保持默认值。
    指定其他值时，将输出警告并按 ``query`` 处理。
 
 .. warning::
@@ -324,7 +328,12 @@ Entra ID侧配置
 - 确保 ``entraid.reply.url`` 的值与Azure Portal配置完全匹配
 - 验证协议（HTTP/HTTPS）是否匹配
 - 验证重定向URI是否以 ``/`` 结尾
-- 如果将 ``entraid.response.mode`` 设置为 ``form_post``\ ，请确认已配置 ``tomcat.sameSiteCookies = none``\ 。否则回调时不会发送会话Cookie，会反复返回登录页面
+- 如果将 ``entraid.response.mode`` 设置为 ``form_post``\ ，请同时确认已配置
+  ``tomcat.sameSiteCookies = none``\ ，并且 |Fess| 通过 HTTPS 提供服务。使用默认值 ``lax`` 时，
+  浏览器不会在回调的跨站 POST 中发送会话 Cookie；设置为 ``none`` 但仍使用普通 HTTP 时，
+  由于 ``none`` 要求 ``Secure`` 属性，浏览器根本不会保存该 Cookie。
+  两种情况下登录都会当场失败一次，浏览器返回登录页面并显示“SSO登录处理失败。”，
+  日志中会输出 ``Failed to process SSO login: could not validate state`` 警告
 
 发生认证错误
 ~~~~~~~~~~~~

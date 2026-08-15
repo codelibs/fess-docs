@@ -142,9 +142,12 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    Browserverlauf und den Zugriffsprotokollen vorgelagerter Proxys oder einer WAF. Allerdings wird
    der Callback dadurch zu einem websiteübergreifenden POST und erfordert
    ``tomcat.sameSiteCookies = none``. Ohne diese Einstellung wird das Sitzungscookie nicht
-   zurückgesendet und die Anmeldung schlägt fehl; die meisten Installationen sollten daher beim
-   Standardwert bleiben. Andere Werte werden mit einer Warnung ignoriert und ``query`` wird
-   verwendet.
+   zurückgesendet und die Anmeldung schlägt fehl. Browser akzeptieren ``none`` zudem nur bei einem
+   Cookie, das auch das Attribut ``Secure`` trägt; ``form_post`` setzt daher voraus, dass |Fess|
+   über HTTPS bereitgestellt wird. Über einfaches HTTP speichert der Browser das Sitzungscookie
+   überhaupt nicht und die Anmeldung schlägt weiterhin fehl. Die meisten Installationen sollten
+   daher beim Standardwert bleiben. Andere Werte werden mit einer Warnung ignoriert und ``query``
+   wird verwendet.
 
 .. warning::
 
@@ -338,7 +341,14 @@ Kann nach der Authentifizierung nicht zu Fess zurückkehren
 - Stellen Sie sicher, dass der Wert von ``entraid.reply.url`` genau mit der Azure Portal-Konfiguration übereinstimmt
 - Überprüfen Sie, ob das Protokoll (HTTP/HTTPS) übereinstimmt
 - Überprüfen Sie, ob die Umleitungs-URI mit ``/`` endet
-- Wenn ``entraid.response.mode`` auf ``form_post`` gesetzt ist, überprüfen Sie, ob ``tomcat.sameSiteCookies = none`` konfiguriert ist. Andernfalls wird das Sitzungscookie beim Callback nicht mitgesendet und die Anmeldeseite erscheint immer wieder
+- Wenn ``entraid.response.mode`` auf ``form_post`` gesetzt ist, prüfen Sie sowohl, ob
+  ``tomcat.sameSiteCookies = none`` konfiguriert ist, als auch, ob |Fess| über HTTPS bereitgestellt
+  wird. Beim ausgelieferten Standardwert ``lax`` sendet der Browser das Sitzungscookie nicht mit dem
+  websiteübergreifenden POST des Callbacks; mit ``none`` über einfaches HTTP speichert der Browser
+  dieses Cookie überhaupt nicht, da ``none`` das Attribut ``Secure`` voraussetzt. In beiden Fällen
+  schlägt die Anmeldung genau einmal fehl: Der Browser kehrt zur Anmeldeseite zurück und zeigt
+  "SSO-Anmeldevorgang fehlgeschlagen.", und im Protokoll erscheint eine Warnung mit dem Wortlaut
+  ``Failed to process SSO login: could not validate state``
 
 Authentifizierungsfehler treten auf
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

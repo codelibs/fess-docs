@@ -543,7 +543,8 @@ Microsoft Entra ID(Azure AD)를 사용하고 있었던 경우
 ``tomcat.sameSiteCookies = lax`` 에서는 세션 쿠키가 전송되지 않아 ``none`` 으로 변경해야
 했습니다. 이 회피책만을 위해 ``none`` 을 설정했다면 기본값으로 되돌릴 수 있습니다. 기존과 같이
 ``form_post`` 를 사용하려면 ``entraid.response.mode=form_post`` 를 지정하고
-``tomcat.sameSiteCookies = none`` 을 유지하십시오.
+``tomcat.sameSiteCookies = none`` 을 유지하십시오. 브라우저는 ``Secure`` 속성이 함께 있는 쿠키에
+대해서만 ``none`` 을 허용하므로, 이 경우에도 |Fess| 를 HTTPS로 제공해야 합니다.
 
 또한 15.8부터 |Fess| 는 로그인이 완료된 후 백그라운드에서 사용자의 그룹·역할 소속을 해결하며,
 로그인이 Microsoft Graph의 응답을 기다리다 멈추는 일은 없어졌습니다. 해결이 완료될 때까지, 또는
