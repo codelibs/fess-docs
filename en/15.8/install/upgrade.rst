@@ -549,6 +549,8 @@ and the |Fess| default ``tomcat.sameSiteCookies = lax`` does not send the sessio
 such a request, so ``tomcat.sameSiteCookies = none`` was required. If you set ``none`` only for
 that reason, you can restore the default. To keep the previous behaviour, set
 ``entraid.response.mode=form_post`` and leave ``tomcat.sameSiteCookies = none`` in place.
+Browsers only accept ``none`` on a cookie that also carries the ``Secure`` attribute, so that
+path requires |Fess| to be served over HTTPS as well.
 
 Starting with 15.8, |Fess| also resolves the user's group and role membership in the background
 after login completes, instead of blocking the login on Microsoft Graph. Until resolution

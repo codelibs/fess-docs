@@ -142,7 +142,10 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    l'URL de callback. ``form_post`` maintient le code hors de l'URL, et donc hors de l'historique
    du navigateur et des journaux d'accès des proxys frontaux ou d'un WAF, mais il transforme le
    callback en un POST inter-sites et nécessite ``tomcat.sameSiteCookies = none``. Sans ce
-   paramètre, le cookie de session n'est pas renvoyé et la connexion échoue : la plupart des
+   paramètre, le cookie de session n'est pas renvoyé et la connexion échoue. Les navigateurs
+   n'acceptent en outre ``none`` que sur un cookie portant également l'attribut ``Secure`` :
+   ``form_post`` impose donc de servir |Fess| en HTTPS. En HTTP simple, le navigateur n'enregistre
+   pas du tout le cookie de session et la connexion échoue malgré tout. La plupart des
    installations doivent donc conserver la valeur par défaut. Toute autre valeur est ignorée avec
    un avertissement et ``query`` est utilisé.
 
@@ -336,7 +339,14 @@ Impossible de revenir à Fess après l'authentification
 - Assurez-vous que la valeur de ``entraid.reply.url`` correspond exactement à la configuration du portail Azure
 - Vérifiez que le protocole (HTTP/HTTPS) correspond
 - Vérifiez que l'URI de redirection se termine par ``/``
-- Si ``entraid.response.mode`` est défini sur ``form_post``, vérifiez que ``tomcat.sameSiteCookies = none`` est configuré. Sinon, le cookie de session n'est pas renvoyé avec le callback et l'écran de connexion réapparaît sans cesse
+- Si ``entraid.response.mode`` est défini sur ``form_post``, vérifiez à la fois que
+  ``tomcat.sameSiteCookies = none`` est configuré et que |Fess| est servi en HTTPS. Avec la valeur
+  par défaut ``lax``, le navigateur n'envoie pas le cookie de session avec le POST inter-sites du
+  callback ; avec ``none`` en HTTP simple, le navigateur n'enregistre pas du tout ce cookie, car
+  ``none`` exige l'attribut ``Secure``. Dans les deux cas, la connexion échoue une seule fois : le
+  navigateur revient à la page de connexion en affichant "Le processus de connexion SSO a échoué."
+  et un avertissement indiquant ``Failed to process SSO login: could not validate state`` est écrit
+  dans le journal
 
 Des erreurs d'authentification se produisent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

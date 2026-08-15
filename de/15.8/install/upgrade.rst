@@ -565,7 +565,9 @@ zurückgegeben, und beim |Fess|-Standardwert ``tomcat.sameSiteCookies = lax`` wi
 Sitzungscookie dabei nicht mitgesendet, sodass ``tomcat.sameSiteCookies = none`` erforderlich
 war. Wenn Sie ``none`` nur aus diesem Grund gesetzt haben, können Sie zum Standardwert
 zurückkehren. Um das bisherige Verhalten beizubehalten, setzen Sie
-``entraid.response.mode=form_post`` und belassen ``tomcat.sameSiteCookies = none``.
+``entraid.response.mode=form_post`` und belassen ``tomcat.sameSiteCookies = none``. Browser
+akzeptieren ``none`` nur bei einem Cookie, das auch das Attribut ``Secure`` trägt; auch dieser Weg
+setzt daher voraus, dass |Fess| über HTTPS bereitgestellt wird.
 
 Ab 15.8 löst |Fess| außerdem die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund
 auf, nachdem die Anmeldung abgeschlossen ist, statt die Anmeldung auf Microsoft Graph warten zu

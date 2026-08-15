@@ -567,7 +567,9 @@ como un POST entre sitios, y con el valor por defecto de |Fess| ``tomcat.sameSit
 la cookie de sesión no se envía en esa petición, por lo que era necesario
 ``tomcat.sameSiteCookies = none``. Si estableció ``none`` únicamente por ese motivo, puede volver
 al valor por defecto. Para mantener el comportamiento anterior, establezca
-``entraid.response.mode=form_post`` y conserve ``tomcat.sameSiteCookies = none``.
+``entraid.response.mode=form_post`` y conserve ``tomcat.sameSiteCookies = none``. Los navegadores
+solo aceptan ``none`` en una cookie que además tenga el atributo ``Secure``, por lo que esa vía
+también exige servir |Fess| mediante HTTPS.
 
 A partir de la versión 15.8, |Fess| también resuelve la pertenencia a grupos y roles del usuario
 en segundo plano una vez completado el inicio de sesión, en lugar de bloquear el inicio de sesión

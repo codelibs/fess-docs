@@ -546,7 +546,8 @@ Microsoft Entra ID（Azure AD）を利用していた場合
 ``tomcat.sameSiteCookies = lax`` ではセッションクッキーが送信されず、\ ``none`` への変更が必要で
 した。この回避策のためだけに ``none`` を設定していた場合は、既定値に戻せます。従来どおり
 ``form_post`` を使う場合は ``entraid.response.mode=form_post`` を指定し、
-``tomcat.sameSiteCookies = none`` を維持してください。
+``tomcat.sameSiteCookies = none`` を維持してください。``none`` はブラウザーが ``Secure`` 属性付きの
+Cookie に対してのみ受け入れるため、この場合も |Fess| を HTTPS で提供する必要があります。
 
 また 15.8 からは、ログイン完了後にユーザーのグループ・ロール権限をバックグラウンドで解決するように
 なり、ログインがMicrosoft Graphの応答を待って止まることはなくなりました。解決が完了するまでの間、

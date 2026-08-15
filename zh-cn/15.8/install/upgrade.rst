@@ -534,7 +534,8 @@ Microsoft Entra ID 的「我的应用」）中的 |Fess| 磁贴发起的登录�
 跨站 POST 返回，而 |Fess| 的默认值 ``tomcat.sameSiteCookies = lax`` 不会随该请求发送会话
 Cookie，因此需要将其改为 ``tomcat.sameSiteCookies = none``\ 。如果仅为此才设置了 ``none``\ ，
 可以恢复为默认值。若要保持原有行为，请指定 ``entraid.response.mode=form_post`` 并保留
-``tomcat.sameSiteCookies = none``\ 。
+``tomcat.sameSiteCookies = none``\ 。浏览器仅对同时带有 ``Secure`` 属性的 Cookie 接受
+``none``\ ，因此这种方式同样要求通过 HTTPS 提供 |Fess| 。
 
 自 15.8 起，|Fess| 还会在登录完成后于后台解析用户所属的组和角色，而不再让登录等待 Microsoft
 Graph。在解析完成之前——或解析未能完全成功时——用户拥有的仅有其自身的用户级权限，以及在
