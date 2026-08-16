@@ -233,6 +233,13 @@ Configurar permisos de API
    ``Group.Read.All``, por lo que ``User.Read`` es necesario en cualquier caso.
 
 .. note::
+   Los permisos anteriores no cubren el ``displayName`` de un rol de directorio: Microsoft Graph
+   lo devuelve como null. Por lo tanto, indicar ``displayName`` en ``entraid.permission.fields``
+   no aporta nada para un rol de directorio y solo el ID (GUID) del rol se convierte en un
+   permiso. Para usar los nombres de rol como valores de permiso, conceda además
+   ``RoleManagement.Read.Directory`` (o ``Directory.Read.All``).
+
+.. note::
    |Fess| solicita el ámbito ``https://graph.microsoft.com/.default`` al adquirir un token.
    Desde la versión 15.8, también se envía ``openid profile offline_access https://graph.microsoft.com/.default`` al endpoint de autorización, de modo que el consentimiento se solicita para el mismo conjunto.
    Esto significa que se utilizan todos los permisos de acceso configurados y para los que se ha dado consentimiento en el registro de la aplicación.

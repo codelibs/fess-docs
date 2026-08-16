@@ -228,6 +228,12 @@ API 접근 권한 설정
    ``Group.Read.All`` 로는 인가되지 않으므로 어느 경우에도 ``User.Read`` 는 필요합니다.
 
 .. note::
+   위의 접근 권한으로는 디렉터리 역할의 ``displayName`` 을 Microsoft Graph가 반환하지 않습니다.
+   따라서 ``entraid.permission.fields`` 에 ``displayName`` 을 지정해도 디렉터리 역할에서
+   권한이 되는 것은 역할의 ID（GUID）뿐입니다. 역할 이름을 권한 값으로 사용하려면
+   ``RoleManagement.Read.Directory``\ （또는 ``Directory.Read.All``\ ）도 부여하십시오.
+
+.. note::
    |Fess| 는 토큰 취득 시 ``https://graph.microsoft.com/.default`` 스코프를 요청합니다.
    15.8 이상에서는 인가 엔드포인트에도 ``openid profile offline_access https://graph.microsoft.com/.default``
    를 요청하여 동일한 범위의 동의를 요구합니다.

@@ -229,6 +229,13 @@ Configuring API Permissions
    required in either case.
 
 .. note::
+   The permissions above do not cover the ``displayName`` of a directory role: Microsoft Graph
+   returns it as null. Naming ``displayName`` in ``entraid.permission.fields`` therefore adds
+   nothing for a directory role, and only the role's ID (GUID) becomes a permission. To use role
+   names as permission values, also grant ``RoleManagement.Read.Directory`` (or
+   ``Directory.Read.All``).
+
+.. note::
    |Fess| requests the ``https://graph.microsoft.com/.default`` scope when acquiring a token, and from 15.8 it also sends ``openid profile offline_access https://graph.microsoft.com/.default`` to the authorization endpoint so that consent is requested for the same set. This means that all access permissions configured and consented to on the app registration are used. Therefore, to retrieve group information, you must add the permissions above to the app registration and grant administrator consent.
 
 Information to Obtain

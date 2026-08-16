@@ -228,6 +228,13 @@ APIアクセス許可の設定
    いずれの場合も ``User.Read`` は必要です。
 
 .. note::
+   上記のアクセス許可では、ディレクトリロールの ``displayName`` はMicrosoft Graphから返されません。
+   そのため、\ ``entraid.permission.fields`` に ``displayName`` を指定しても、
+   ディレクトリロールから権限になるのはロールのID（GUID）だけです。
+   ロール名を権限値として使用する場合は、\ ``RoleManagement.Read.Directory``
+   （または ``Directory.Read.All``\ ）も付与してください。
+
+.. note::
    |Fess| はトークン取得時に ``https://graph.microsoft.com/.default`` スコープを要求します。
    15.8 以降は、認可エンドポイントにも ``openid profile offline_access https://graph.microsoft.com/.default``
    を要求し、同じ範囲の同意を求めます。
