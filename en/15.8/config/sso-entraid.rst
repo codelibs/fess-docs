@@ -108,10 +108,10 @@ The following settings can be added as needed.
      - Default roles (comma-separated). Applied to every Entra ID user.
      - (None)
    * - ``entraid.permission.fields``
-     - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added.
+     - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added. Only a field whose value is a string can be used. Microsoft Graph answers a field such as ``securityEnabled`` with a boolean and ``groupTypes`` with a list, and neither can become a permission value, so such a field is ignored and a warning naming it is written to the log.
      - ``mail``
    * - ``entraid.use.ds``
-     - Domain service integration. When ``true``, for permission values in the ``name@domain`` format, the local part (``name``) with the domain part removed is also added as a permission.
+     - Domain service integration. When ``true``, for permission values in the ``name@domain`` format, the local part (``name``) with the domain part removed is also added as a permission. This applies to the signed-in user as well as to groups and roles: the local part of the user principal name is added as a user-level permission. Setting it to ``false`` therefore removes that user-level permission too, not only the group ones.
      - ``true``
 
 .. note::
@@ -249,9 +249,9 @@ The retrieved group IDs and group names can be used for |Fess| role-based search
 Nested Groups
 -------------
 
-|Fess| retrieves not only groups that users directly belong to, but also parent groups (nested groups) recursively.
+|Fess| retrieves not only groups that users directly belong to, but also the parent groups those belong to (nested groups).
 Both the direct membership lookup and the parent group lookup run in the same background task after login, so login itself is never slowed down by Microsoft Graph.
-The parent group lookup targets up to a certain number of levels, and the retrieved results are cached for a certain period.
+The parent group lookup uses the Microsoft Graph ``getMemberGroups`` operation, which resolves transitively: one call per directly assigned group returns every group above it, however deep the nesting goes. The retrieved results are cached for a certain period.
 When that background task completes, the user's permissions are recalculated.
 
 Default Group Settings
@@ -373,8 +373,15 @@ Cannot Retrieve Group Information
   permissions could not be fully loaded, asks them to log out and log in again, and to contact an
   administrator if it keeps happening. "Not fully" is deliberate: the resolution counts as failed
   unless both the direct membership lookup and the nested group walk succeeded, so a user who
-  holds their direct groups but not their parent groups gets that message too. Throttling is the
-  usual cause of the partial case — a single HTTP 429 or 503 from Microsoft Graph makes |Fess| back
+  holds their direct groups but not their parent groups gets that message too. One case is
+  exempt, and it is the one the previous item describes: when Microsoft Graph refuses the nested
+  group lookup with ``Authorization_RequestDenied`` because ``GroupMember.Read.All`` was never
+  granted, |Fess| takes that as an answer meaning the group has no parents rather than as a
+  failure. Resolution then counts as successful and **no message is shown**, even though the
+  parent group permissions are missing. The only sign is the
+  ``Not allowed to read the parent groups of ...`` warning in the log, so check for it whenever
+  nested groups are in use. Throttling is the usual cause of the partial case — a single HTTP 429
+  or 503 from Microsoft Graph makes |Fess| back
   off for as long as the ``Retry-After`` header asks (60 seconds when it says nothing usable, 60
   minutes at most), and every nested group lookup in the whole |Fess| instance is skipped for that
   time while the direct lookups keep answering. The

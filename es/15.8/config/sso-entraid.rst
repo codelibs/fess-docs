@@ -109,10 +109,10 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Roles por defecto (separados por comas). Se aplican a todos los usuarios de Entra ID.
      - (Ninguno)
    * - ``entraid.permission.fields``
-     - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan.
+     - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan. Solo pueden utilizarse campos cuyo valor sea una cadena de texto. Microsoft Graph devuelve un campo como ``securityEnabled`` en forma de booleano y ``groupTypes`` en forma de lista, y ninguno de los dos puede convertirse en un valor de permiso, por lo que un campo así se ignora y se escribe en el registro una advertencia que indica su nombre.
      - ``mail``
    * - ``entraid.use.ds``
-     - Integración con el servicio de dominio. Cuando es ``true``, para los valores de permiso en formato ``name@domain``, la parte local (``name``) con la parte del dominio eliminada también se agrega como permiso.
+     - Integración con el servicio de dominio. Cuando es ``true``, para los valores de permiso en formato ``name@domain``, la parte local (``name``) con la parte del dominio eliminada también se agrega como permiso. Esto se aplica no solo a los grupos y roles, sino también al propio usuario que ha iniciado sesión: la parte local de su nombre principal de usuario (UPN) se agrega como permiso a nivel de usuario. Por lo tanto, establecerlo en ``false`` elimina también ese permiso a nivel de usuario, no solo los de los grupos.
      - ``true``
 
 .. note::
@@ -256,9 +256,9 @@ Los IDs de grupo y nombres de grupo recuperados pueden usarse para la búsqueda 
 Grupos anidados
 ---------------
 
-|Fess| recupera no solo los grupos a los que los usuarios pertenecen directamente, sino también los grupos padre (grupos anidados) de forma recursiva.
+|Fess| recupera no solo los grupos a los que los usuarios pertenecen directamente, sino también los grupos padre a los que estos pertenecen (grupos anidados).
 Tanto la búsqueda de la pertenencia directa como la búsqueda de grupos padre se ejecutan en la misma tarea en segundo plano después del inicio de sesión, de modo que el inicio de sesión nunca se ve retrasado por Microsoft Graph.
-La búsqueda de grupos padre abarca hasta un número determinado de niveles, y los resultados obtenidos se almacenan en caché durante un período determinado.
+La búsqueda de grupos padre utiliza la operación ``getMemberGroups`` de Microsoft Graph, que resuelve de forma transitiva: una sola llamada por cada grupo asignado directamente devuelve todos los grupos que están por encima de él, sea cual sea la profundidad del anidamiento. Los resultados obtenidos se almacenan en caché durante un período determinado.
 Cuando esa tarea en segundo plano finaliza, los permisos del usuario se recalculan.
 
 Configuración de grupos por defecto
@@ -384,7 +384,14 @@ No se puede recuperar la información de grupo
   vuelva a iniciarla, y que contacte con el administrador si el problema persiste. Lo de «por
   completo» es deliberado: la resolución solo se considera correcta si han tenido éxito tanto la
   consulta de pertenencias directas como el recorrido de los grupos anidados, así que un usuario
-  que tiene sus grupos directos pero no sus grupos padre también recibe ese mensaje. La causa
+  que tiene sus grupos directos pero no sus grupos padre también recibe ese mensaje. Hay un caso
+  exento, y es precisamente el que describe el punto anterior: cuando Microsoft Graph rechaza la
+  consulta de grupos anidados con ``Authorization_RequestDenied`` porque nunca se otorgó
+  ``GroupMember.Read.All``, |Fess| lo interpreta como una respuesta que significa que el grupo no
+  tiene grupos padre, y no como un fallo. La resolución se considera entonces correcta y **no se
+  muestra ningún mensaje**, aunque falten los permisos de los grupos padre. La única señal es la
+  advertencia ``Not allowed to read the parent groups of ...`` en el registro, así que conviene
+  buscarla siempre que se utilicen grupos anidados. La causa
   habitual del caso parcial es la limitación de peticiones: un solo HTTP 429 o 503 de Microsoft
   Graph hace que |Fess| espere el tiempo que pida la cabecera ``Retry-After`` (60 segundos si no
   indica nada utilizable, 60 minutos como máximo), y durante ese tiempo se omite toda consulta de
