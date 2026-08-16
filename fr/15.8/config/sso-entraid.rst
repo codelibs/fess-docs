@@ -109,10 +109,10 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Rôles par défaut (séparés par des virgules). Appliqués à tous les utilisateurs Entra ID.
      - (Aucun)
    * - ``entraid.permission.fields``
-     - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées.
+     - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées. Seuls les champs dont la valeur est une chaîne de caractères peuvent être utilisés. Microsoft Graph renvoie un champ tel que ``securityEnabled`` sous forme de booléen et ``groupTypes`` sous forme de liste ; ni l'un ni l'autre ne peut devenir une valeur de permission, un tel champ est donc ignoré et un avertissement mentionnant son nom est écrit dans le journal.
      - ``mail``
    * - ``entraid.use.ds``
-     - Intégration avec le service de domaine. Quand ``true``, pour les valeurs de permission au format ``name@domain``, la partie locale (``name``) sans la partie domaine est également ajoutée comme permission.
+     - Intégration avec le service de domaine. Quand ``true``, pour les valeurs de permission au format ``name@domain``, la partie locale (``name``) sans la partie domaine est également ajoutée comme permission. Cela s'applique non seulement aux groupes et aux rôles, mais aussi à l'utilisateur connecté lui-même : la partie locale de son nom principal d'utilisateur (UPN) est ajoutée comme permission au niveau utilisateur. Le passage à ``false`` supprime donc également cette permission au niveau utilisateur, et pas seulement celles des groupes.
      - ``true``
 
 .. note::
@@ -258,9 +258,9 @@ Les ID de groupe et noms de groupe récupérés peuvent être utilisés pour la 
 Groupes imbriqués
 -----------------
 
-|Fess| récupère non seulement les groupes auxquels les utilisateurs appartiennent directement, mais aussi les groupes parents (groupes imbriqués) de manière récursive.
+|Fess| récupère non seulement les groupes auxquels les utilisateurs appartiennent directement, mais aussi les groupes parents auxquels ceux-ci appartiennent (groupes imbriqués).
 La recherche de l'appartenance directe et la recherche des groupes parents s'exécutent toutes deux dans la même tâche en arrière-plan après la connexion, si bien que la connexion elle-même n'est jamais ralentie par Microsoft Graph.
-La recherche des groupes parents cible un certain nombre de niveaux hiérarchiques, et les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque cette tâche en arrière-plan est terminée, les permissions de l'utilisateur sont recalculées.
+La recherche des groupes parents utilise l'opération ``getMemberGroups`` de Microsoft Graph, qui résout de manière transitive : un seul appel par groupe directement attribué renvoie tous les groupes situés au-dessus de lui, quelle que soit la profondeur de l'imbrication. Les résultats récupérés sont mis en cache pendant une certaine durée. Lorsque cette tâche en arrière-plan est terminée, les permissions de l'utilisateur sont recalculées.
 
 Paramètres de groupe par défaut
 -------------------------------
@@ -387,7 +387,15 @@ Impossible de récupérer les informations de groupe
   « Entièrement » est délibéré : la résolution n'est considérée comme réussie que si la requête
   des appartenances directes et le parcours des groupes imbriqués ont tous deux abouti ; un
   utilisateur qui possède ses groupes directs mais pas ses groupes parents reçoit donc aussi ce
-  message. La cause habituelle du cas partiel est la limitation de débit : un seul HTTP 429 ou 503
+  message. Un cas fait exception, et c'est celui que décrit le point précédent : lorsque
+  Microsoft Graph refuse la recherche des groupes imbriqués avec ``Authorization_RequestDenied``
+  parce que ``GroupMember.Read.All`` n'a jamais été accordé, |Fess| l'interprète non pas comme un
+  échec, mais comme une réponse signifiant que le groupe n'a pas de groupe parent. La résolution
+  est alors considérée comme réussie et **aucun message n'est affiché**, bien que les
+  autorisations des groupes parents manquent. Le seul indice est l'avertissement
+  ``Not allowed to read the parent groups of ...`` dans le journal ; vérifiez donc sa présence dès
+  que des groupes imbriqués sont utilisés. La cause habituelle du cas partiel est la limitation de
+  débit : un seul HTTP 429 ou 503
   de Microsoft Graph fait patienter |Fess| aussi longtemps que l'exige l'en-tête ``Retry-After``
   (60 secondes s'il n'indique rien d'exploitable, 60 minutes au maximum), et pendant ce temps
   toute recherche de groupes imbriqués est ignorée dans l'ensemble de l'instance |Fess| alors que

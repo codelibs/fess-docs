@@ -109,10 +109,10 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Standardrollen (kommagetrennt). Werden auf jeden Entra ID-Benutzer angewendet.
      - (Keine)
    * - ``entraid.permission.fields``
-     - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt.
+     - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt. Verwendbar sind nur Felder, deren Wert eine Zeichenkette ist. Microsoft Graph liefert ein Feld wie ``securityEnabled`` als booleschen Wert und ``groupTypes`` als Liste; keines von beiden kann ein Berechtigungswert werden, ein solches Feld wird daher ignoriert und eine Warnung mit seinem Namen ins Protokoll geschrieben.
      - ``mail``
    * - ``entraid.use.ds``
-     - Domänendienst-Integration. Bei ``true`` wird für Berechtigungswerte im Format ``name@domain`` auch der lokale Teil (``name``) ohne den Domänenanteil als Berechtigung hinzugefügt.
+     - Domänendienst-Integration. Bei ``true`` wird für Berechtigungswerte im Format ``name@domain`` auch der lokale Teil (``name``) ohne den Domänenanteil als Berechtigung hinzugefügt. Das gilt nicht nur für Gruppen und Rollen, sondern auch für den angemeldeten Benutzer selbst: Der lokale Teil seines Benutzerprinzipalnamens (UPN) wird als benutzerbezogene Berechtigung hinzugefügt. Mit ``false`` entfällt daher auch diese benutzerbezogene Berechtigung, nicht nur die der Gruppen.
      - ``true``
 
 .. note::
@@ -258,9 +258,9 @@ Die abgerufenen Gruppen-IDs und Gruppennamen können für die rollenbasierte Suc
 Verschachtelte Gruppen
 ----------------------
 
-|Fess| ruft nicht nur Gruppen ab, zu denen Benutzer direkt gehören, sondern auch übergeordnete Gruppen (verschachtelte Gruppen) rekursiv.
+|Fess| ruft nicht nur Gruppen ab, zu denen Benutzer direkt gehören, sondern auch die übergeordneten Gruppen, zu denen diese wiederum gehören (verschachtelte Gruppen).
 Sowohl die direkte Mitgliedschaftsabfrage als auch die Suche nach übergeordneten Gruppen laufen nach der Anmeldung in derselben Hintergrundaufgabe, sodass die Anmeldung selbst nie durch Microsoft Graph verzögert wird.
-Die übergeordneten Gruppen werden bis zu einer bestimmten Hierarchietiefe ermittelt, und die abgerufenen Ergebnisse werden für einen bestimmten Zeitraum zwischengespeichert.
+Die Suche nach übergeordneten Gruppen verwendet den Microsoft Graph-Vorgang ``getMemberGroups``, der transitiv auflöst: Ein Aufruf je direkt zugewiesener Gruppe liefert alle darüberliegenden Gruppen, unabhängig davon, wie tief die Verschachtelung reicht. Die abgerufenen Ergebnisse werden für einen bestimmten Zeitraum zwischengespeichert.
 Sobald diese Hintergrundaufgabe abgeschlossen ist, werden die Berechtigungen des Benutzers neu berechnet.
 
 Standardgruppeneinstellungen
@@ -388,7 +388,15 @@ Gruppeninformationen können nicht abgerufen werden
   „Nicht vollständig“ ist bewusst gewählt: Die Auflösung gilt nur dann als erfolgreich, wenn sowohl
   die Abfrage der direkten Mitgliedschaften als auch der Durchlauf der verschachtelten Gruppen
   gelungen ist — ein Benutzer, der seine direkten Gruppen, aber nicht seine übergeordneten Gruppen
-  besitzt, erhält diesen Hinweis also ebenfalls. Häufigste Ursache des Teilfalls ist Drosselung:
+  besitzt, erhält diesen Hinweis also ebenfalls. Ein Fall ist davon ausgenommen, und zwar genau
+  der aus dem vorherigen Punkt: Verweigert Microsoft Graph die Abfrage der verschachtelten Gruppen
+  mit ``Authorization_RequestDenied``, weil ``GroupMember.Read.All`` nie erteilt wurde, wertet
+  |Fess| das nicht als Fehlschlag, sondern als Antwort, die besagt, dass die Gruppe keine
+  übergeordneten Gruppen hat. Die Auflösung gilt dann als erfolgreich und **es wird kein Hinweis
+  angezeigt**, obwohl die Berechtigungen der übergeordneten Gruppen fehlen. Das einzige Anzeichen
+  ist die Warnung ``Not allowed to read the parent groups of ...`` im Protokoll; prüfen Sie das
+  Protokoll deshalb darauf, wann immer verschachtelte Gruppen im Einsatz sind. Häufigste Ursache des
+  Teilfalls ist Drosselung:
   Ein einziges HTTP 429 oder 503 von Microsoft Graph lässt |Fess| so lange pausieren, wie es der
   Header ``Retry-After`` verlangt (60 Sekunden, wenn er nichts Verwertbares nennt, höchstens 60
   Minuten), und in dieser Zeit wird in der gesamten |Fess|-Instanz jede Abfrage verschachtelter
