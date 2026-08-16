@@ -284,9 +284,7 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
 ------------------------
 
 IdP가 동일한 속성 이름을 여러 ``<Attribute>`` 요소로 나누어 보내면 |Fess| 는 해당 어서션을
-거부하며 로그인 자체가 실패합니다. 어서션 검증(서명, InResponseTo, 재전송)은 이 시점에서 이미
-성공한 상태이며, 거부는 속성을 읽는 단계에서 발생합니다. 따라서 ``saml.attribute.role.name`` 을
-설정하지 않은 구성에서도 동일하게 실패합니다.
+거부하며 로그인 자체가 실패합니다.
 
 Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역할 매퍼와 그룹 매퍼는 ``single``
 옵션을 활성화하지 않는 한 값마다 별도의 ``<Attribute>`` 요소를 출력하며, Keycloak 계정은
@@ -363,13 +361,8 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
 .. warning::
    싱글 로그아웃（``saml.idp.single_logout_service.url``）을 설정하는 경우에는
    ``saml.security.want_messages_signed=true`` 도 반드시 함께 설정하십시오.
-   ``false`` 인 상태에서는 ``/sso/logout`` 이 수신하는 LogoutRequest에 서명이 요구되지 않습니다.
-   검증되는 것은 XML 스키마, ``NotOnOrAfter``（존재하는 경우）, ``Destination``（존재하는 경우）,
-   그리고 Issuer가 ``saml.idp.entityid`` 와 일치하는지（존재하는 경우）뿐이며,
-   LogoutRequest 안의 NameID가 로그인 중인 사용자와 일치하는지는 검사하지 않습니다.
-   Issuer 요소는 SAML 스키마상 생략 가능하며, 생략된 LogoutRequest에서는 IdP의 Entity ID와의
-   대조 자체가 이루어지지 않습니다. 이 때문에 공격자는 IdP의 Entity ID를 몰라도 서명 없는
-   LogoutRequest를 만들어, 해당 URL로 사용자를 유도함으로써 인증된 세션을 종료시킬 수 있습니다.
+   ``false`` 인 상태에서는 서명이 없는 LogoutRequest가 수락되므로, 조작된 URL로 인증된 사용자의
+   세션을 종료시킬 수 있습니다.
    영향은 강제 로그아웃（서비스 거부）이며, 계정 탈취는 아닙니다.
 
 암호화 설정
@@ -467,14 +460,6 @@ IdP에서 반환된 SAML 응답은 기록된 ID와 대응시켜 검증됩니다.
 
 기록된 ID는 이 기간이 지나면 폐기됩니다.
 IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 기간이 지나면 반환된 어서션을 대응시킬 수 없어 그 자리에서 한 번만 로그인에 실패합니다.
-값을 지정하지 않으면 3600초가 사용됩니다.
-숫자로 해석할 수 없는 값을 지정한 경우에도 3600초가 사용되며, ``Invalid saml.request.id.ttl`` 로 시작하는 경고가 출력됩니다.
-0 이하의 값을 지정한 경우에도 IdP로부터 로그인이 돌아오기 전에 AuthnRequest의 ID가 폐기되어 버리므로, 마찬가지로 3600초가 사용되며, 경고가 출력됩니다.
-
-.. note::
-   하나의 세션에서 보관할 수 있는 응답 대기 중인 AuthnRequest는 최대 10건이며, 상한을 초과하면 오래된 것부터 폐기됩니다.
-   이는 여러 탭에서 동시에 로그인을 시작할 수 있도록 하기 위한 것으로, ``saml.`` 로 시작하는 설정으로는 변경할 수 없습니다.
-   상한을 0 이하의 값으로 덮어쓴 경우에는 대신 10이 사용되며 경고가 출력됩니다.
 
 설정 예
 =======
@@ -544,28 +529,14 @@ IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 �
 - ``saml.sp.base.url`` 의 값이 IdP 측의 설정과 일치하는지 확인하십시오
 - SAML 어설션은 IdP에서 교차 사이트 POST로 전송됩니다. ``tomcat_config.properties`` 의
   ``tomcat.sameSiteCookies`` 가 ``lax`` (기본값)인 경우 브라우저가 세션 쿠키를 함께 보내지 않으므로
-  |Fess| 는 대응하는 AuthnRequest의 ID를 찾지 못하고 그 자리에서 한 번만 로그인에 실패합니다.
-  브라우저는 로그인 화면으로 돌아가 「SSO 로그인 프로세스에 실패했습니다.」가 표시되고, 로그에는
-  ``Received a SAML response with no matching AuthnRequest ID in the session``
-  으로 시작하는 경고가 출력됩니다. 이 경우
+  그 자리에서 한 번만 로그인에 실패합니다. 이 경우
   ``tomcat.sameSiteCookies = none`` 을 설정하십시오 (``SameSite=None`` 은 HTTPS가 필요합니다)
 - IdP에서 로그인에 시간이 오래 걸리면 어설션이 돌아온 시점에 AuthnRequest의 ID가 남아 있지 않으므로
-  그 자리에서 한 번만 로그인에 실패합니다. 이 경우에는 로그인을 다시 시작하십시오.
-  무엇이 만료되었는지는 출력되는 경고로 구분할 수 있습니다.
-  ``Received a SAML response after the session it belongs to had expired`` 로 시작하는 경고는
-  서블릿 컨테이너가 세션 자체를 폐기했음을 뜻합니다.
-  ``pending AuthnRequest ID(s) of the session had expired`` 를 포함하는 경고는 세션은 살아 있고
-  ``saml.request.id.ttl`` 만 경과했음을 뜻합니다. 두 경고 모두 브라우저가 세션 쿠키를 보낸 경우에만
-  출력되며, 이 점이 위의 SameSite 사례와 다릅니다
+  그 자리에서 한 번만 로그인에 실패합니다. 이 경우에는 로그인을 다시 시작하십시오
 - |Fess| 는 ``app/WEB-INF/web.xml`` 에 ``session-timeout`` 을 지정하지 않으므로 서블릿 컨테이너의
-  기본값인 30분이 적용됩니다. 이는 ``saml.request.id.ttl`` 의 3600초보다 짧아, 세션이 먼저 폐기되면서
-  세션이 보관하던 AuthnRequest의 ID도 함께 사라집니다. 따라서 ``saml.request.id.ttl`` 만 늘려도
-  사용자가 IdP에서 로그인을 마칠 수 있는 시간은 늘어나지 않으므로, 세션 타임아웃도 함께 늘리십시오.
-  ``saml.request.id.ttl`` 경고는 TTL을 세션 타임아웃보다 짧게 설정한 경우에만 출력됩니다
-
-.. note::
-   15.7에서는 같은 상황에서 IdP로의 재리다이렉트가 반복되어 로그인이 루프에 빠졌습니다.
-   15.8에서는 루프 없이 한 번만 실패하도록 변경되었습니다. 설정으로 대처하는 방법은 동일합니다.
+  기본값인 30분이 적용됩니다. 이는 ``saml.request.id.ttl`` 의 3600초보다 짧아 세션이 먼저 폐기됩니다.
+  따라서 ``saml.request.id.ttl`` 만 늘려도 사용자가 IdP에서 로그인을 마칠 수 있는 시간은 늘어나지
+  않으므로, 세션 타임아웃도 함께 늘리십시오
 
 리버스 프록시 환경에서 Destination 검증에 실패함
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -573,10 +544,8 @@ IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 �
 TLS를 종단하는 리버스 프록시나 로드 밸런서 뒤에 |Fess| 를 배치하면,
 ``saml.sp.base.url`` 을 올바르게 설정했더라도 어설션 검증에 실패할 수 있습니다.
 
-원인은 SAML 라이브러리가 어설션의 ``Destination`` 속성을 설정된 ACS URL이 아니라
-서블릿 컨테이너가 조립한 요청 URL과 비교하기 때문입니다. 프록시가 HTTPS를 종단하면
-|Fess| 가 인식하는 요청 URL은 ``http://<내부-호스트명>:<내부-포트>/sso/`` 와 같은 내부용 값이 되어,
-IdP가 보낸 ``https://fess.example.com/sso/`` 와 일치하지 않습니다.
+어설션의 ``Destination`` 속성은 |Fess| 에 도달한 시점의 요청 URL과 비교됩니다.
+TLS를 종단하는 프록시 뒤에서는 이 값이 IdP가 어설션을 보낸 외부 URL이 아니라 내부 ``http://`` URL입니다.
 ``saml.sp.base.url`` 은 이 비교에 사용되지 않으므로 이 설정만으로는 해결되지 않습니다.
 
 ``saml.debug=true`` 를 설정하면 로그에 다음과 같은 이유가 출력됩니다.
