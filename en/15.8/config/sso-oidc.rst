@@ -23,7 +23,7 @@ In OpenID Connect authentication, |Fess| operates as a Relying Party (RP) and co
 
 .. note::
    |Fess| uses the Authorization Code Flow. The ID Token is obtained directly from the token endpoint via a back-channel (server-to-server communication) between |Fess| and the OP, without passing through the browser.
-   |Fess| decodes the ID Token and extracts claims (such as ``email`` and ``groups``) to construct user information, but does NOT cryptographically verify the JWT signature.
+   |Fess| decodes the ID Token and extracts claims (such as ``email`` and ``groups``) to construct user information, but does NOT cryptographically verify the JWT signature. It also does not validate the ``iss`` (issuer), ``aud`` (audience) or ``exp`` (expiry) claims.
    For this reason, ensure that all communication with the token endpoint uses HTTPS and that the communication path between |Fess| and the OP is trusted.
 
 For integration with role-based search, see :doc:`security-role`.
@@ -141,7 +141,7 @@ Configure the default groups and roles to assign to users authenticated via OIDC
 The user ID, groups, and roles are determined as follows:
 
 - **User ID**: Obtained from the ``email`` claim of the ID Token (JWT). For this reason, the ``email`` scope is effectively required (if the ``email`` claim cannot be obtained, login will not work correctly).
-- **Groups**: Obtained from the ``groups`` claim of the ID Token. If the ``groups`` claim is not present, the value of ``oic.default.groups`` is used.
+- **Groups**: Obtained from the ``groups`` claim of the ID Token. If the ``groups`` claim is not present, the value of ``oic.default.groups`` is used. An empty ``groups`` array counts as present, so ``oic.default.groups`` is not used and the user is treated as having no groups.
 - **Roles**: Always taken from the value of ``oic.default.roles`` (there is no mechanism to obtain roles from ID Token claims).
 
 .. note::
@@ -149,6 +149,9 @@ The user ID, groups, and roles are determined as follows:
    does not expand nested (transitive) groups. Whether parent groups appear is therefore decided
    entirely by the OP's claim configuration -- unlike :doc:`sso-entraid`, where |Fess| resolves
    parent groups through the Microsoft Graph API.
+   The claim value becomes the search permission verbatim. A provider configured to emit full group
+   paths therefore sends values such as ``/parent/child``, and those do not match documents tagged
+   with the plain group name.
 
 .. list-table::
    :header-rows: 1
@@ -288,6 +291,11 @@ In ``app/WEB-INF/classes/log4j2.xml``, add the following logger to change the lo
 ::
 
     <Logger name="org.codelibs.fess.sso.oic" level="DEBUG"/>
+
+.. warning::
+   With this logger at DEBUG, the claims of the ID Token (such as ``email`` and ``groups``) are
+   written to the log file. Restore the log level once the investigation is over, and handle the
+   log output accordingly.
 
 Reference
 =========

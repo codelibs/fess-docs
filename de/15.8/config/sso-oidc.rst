@@ -23,7 +23,7 @@ Bei der OpenID Connect Authentifizierung fungiert |Fess| als Relying Party (RP) 
 
 .. note::
    |Fess| verwendet den Authorization Code Flow. Das ID-Token wird nicht über den Browser, sondern direkt vom Token-Endpunkt über einen Backkanal (Server-zu-Server-Kommunikation) zwischen |Fess| und dem OP abgerufen.
-   |Fess| dekodiert das ID-Token und entnimmt daraus Claims (z. B. ``email`` und ``groups``), um die Benutzerinformationen zusammenzustellen, führt jedoch keine kryptografische Überprüfung der JWT-Signatur durch.
+   |Fess| dekodiert das ID-Token und entnimmt daraus Claims (z. B. ``email`` und ``groups``), um die Benutzerinformationen zusammenzustellen, führt jedoch keine kryptografische Überprüfung der JWT-Signatur durch. Ebenso werden die Claims ``iss`` (Aussteller), ``aud`` (Zielgruppe) und ``exp`` (Ablauf) nicht geprüft.
    Daher muss die Kommunikation mit dem Token-Endpunkt zwingend über HTTPS erfolgen; stellen Sie sicher, dass der Kommunikationsweg zwischen |Fess| und dem OP vertrauenswürdig ist.
 
 Für die Integration mit rollenbasierter Suche siehe :doc:`security-role`.
@@ -141,7 +141,7 @@ Konfigurieren Sie die Standardgruppen und -rollen, die OIDC-authentifizierten Be
 Benutzer-ID, Gruppen und Rollen werden jeweils wie folgt ermittelt:
 
 - **Benutzer-ID**: Wird aus dem ``email``-Claim des ID-Tokens (JWT) bezogen. Daher muss der Scope in der Praxis ``email`` enthalten (kann der ``email``-Claim nicht abgerufen werden, ist kein ordnungsgemäßer Login möglich).
-- **Gruppen**: Werden aus dem ``groups``-Claim des ID-Tokens bezogen. Ist kein ``groups``-Claim vorhanden, wird der Wert von ``oic.default.groups`` verwendet.
+- **Gruppen**: Werden aus dem ``groups``-Claim des ID-Tokens bezogen. Ist kein ``groups``-Claim vorhanden, wird der Wert von ``oic.default.groups`` verwendet. Ein leeres ``groups``-Array gilt als vorhanden: ``oic.default.groups`` wird dann nicht verwendet, und der Benutzer wird als Benutzer ohne Gruppen behandelt.
 - **Rollen**: Es wird stets der Wert von ``oic.default.roles`` verwendet (ein Mechanismus zur Übernahme von Rollen aus ID-Token-Claims ist nicht vorhanden).
 
 .. note::
@@ -150,6 +150,9 @@ Benutzer-ID, Gruppen und Rollen werden jeweils wie folgt ermittelt:
    Ob übergeordnete Gruppen enthalten sind, hängt daher allein von der Claim-Konfiguration des OP
    ab -- anders als bei :doc:`sso-entraid`, wo |Fess| übergeordnete Gruppen über die
    Microsoft Graph API auflöst.
+   Der Claim-Wert wird unverändert zur Suchberechtigung. Ist der OP so konfiguriert, dass er
+   vollständige Gruppenpfade ausgibt, lauten die Werte etwa ``/uebergeordnet/untergeordnet`` und
+   passen damit nicht zu Dokumenten, die nur mit dem reinen Gruppennamen versehen sind.
 
 .. list-table::
    :header-rows: 1
@@ -290,6 +293,11 @@ In ``app/WEB-INF/classes/log4j2.xml`` können Sie den folgenden Logger hinzufüg
 ::
 
     <Logger name="org.codelibs.fess.sso.oic" level="DEBUG"/>
+
+.. warning::
+   Steht dieser Logger auf DEBUG, werden die Claims des ID-Tokens (z. B. ``email`` und ``groups``)
+   in die Protokolldatei geschrieben. Setzen Sie die Protokollebene nach der Untersuchung zurück
+   und behandeln Sie die erzeugten Protokolle entsprechend.
 
 Referenz
 ========
