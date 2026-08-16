@@ -23,7 +23,7 @@ OpenID Connect认证的工作原理
 
 .. note::
    |Fess| 使用授权码流程（Authorization Code Flow）。ID Token不经过浏览器，而是通过 |Fess| 与OP之间的后端通道（服务器间通信）直接从令牌端点获取。
-   |Fess| 通过解码ID Token来提取声明（如 ``email`` 和 ``groups``）以构建用户信息，但不对JWT签名进行密码学验证。
+   |Fess| 通过解码ID Token来提取声明（如 ``email`` 和 ``groups``）以构建用户信息，但不对JWT签名进行密码学验证。也不会校验 ``iss``\ （颁发者）、\ ``aud``\ （受众）和 ``exp``\ （过期时间）声明。
    因此，与令牌端点的通信必须使用HTTPS，并请确认 |Fess| 与OP之间的通信路径是可信的。
 
 有关基于角色的搜索集成，请参阅 :doc:`security-role`。
@@ -141,13 +141,15 @@ OpenID Connect认证的工作原理
 用户ID、组和角色分别按如下方式确定：
 
 - **用户ID**：从ID Token（JWT）的 ``email`` 声明中获取。因此，范围中实际上必须包含 ``email``\ （如果无法获取 ``email`` 声明，登录将无法正常完成）。
-- **组**：从ID Token的 ``groups`` 声明中获取。如果 ``groups`` 声明不存在，则使用 ``oic.default.groups`` 的值。
+- **组**：从ID Token的 ``groups`` 声明中获取。如果 ``groups`` 声明不存在，则使用 ``oic.default.groups`` 的值。如果 ``groups`` 声明是空数组，则视为存在，因此不会使用 ``oic.default.groups``，该用户将被视为没有任何组。
 - **角色**：始终使用 ``oic.default.roles`` 的值（不存在从ID Token声明中获取角色的机制）。
 
 .. note::
    |Fess| 直接使用 ``groups`` 声明中的值，不会查询目录，也不会展开嵌套组（父组）。
    因此，是否包含父组完全取决于OP侧的声明配置。
    这与通过Microsoft Graph API解析父组的 :doc:`sso-entraid` 不同。
+   声明的值会原样成为检索权限。如果OP侧配置为输出组的完整路径，
+   则会发送 ``/父组/子组`` 这样的值并原样成为权限名称，与仅标记了组名的文档不匹配。
 
 .. list-table::
    :header-rows: 1
@@ -285,6 +287,10 @@ OP侧配置
 ::
 
     <Logger name="org.codelibs.fess.sso.oic" level="DEBUG"/>
+
+.. warning::
+   将该日志记录器设置为DEBUG后，ID Token的声明（如 ``email`` 和 ``groups``）会被写入日志文件。
+   调查结束后请将日志级别恢复原状，并谨慎处理输出的日志。
 
 参考信息
 ========

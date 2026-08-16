@@ -23,7 +23,7 @@ Dans l'authentification OpenID Connect, |Fess| fonctionne comme une Relying Part
 
 .. note::
    |Fess| utilise le flux de code d'autorisation (Authorization Code Flow). L'ID Token est obtenu directement depuis le endpoint de token via un canal arrière (communication serveur à serveur) entre |Fess| et l'OP, sans passer par le navigateur.
-   |Fess| décode l'ID Token pour extraire les claims (``email``, ``groups``, etc.) et constituer les informations utilisateur, mais ne procède pas à la vérification cryptographique de la signature JWT.
+   |Fess| décode l'ID Token pour extraire les claims (``email``, ``groups``, etc.) et constituer les informations utilisateur, mais ne procède pas à la vérification cryptographique de la signature JWT. Il ne valide pas non plus les claims ``iss`` (émetteur), ``aud`` (audience) ni ``exp`` (expiration).
    Pour cette raison, la communication avec le endpoint de token doit impérativement se faire en HTTPS, et veillez à ce que le chemin de communication entre |Fess| et l'OP soit de confiance.
 
 Pour l'intégration avec la recherche basée sur les rôles, voir :doc:`security-role`.
@@ -141,7 +141,7 @@ Configurez les groupes et rôles par défaut à attribuer aux utilisateurs authe
 L'identifiant utilisateur, les groupes et les rôles sont déterminés comme suit :
 
 - **Identifiant utilisateur** : extrait du claim ``email`` de l'ID Token (JWT). Pour cette raison, le scope doit en pratique inclure ``email`` (si le claim ``email`` ne peut pas être obtenu, la connexion ne s'effectuera pas correctement).
-- **Groupes** : extraits du claim ``groups`` de l'ID Token. Si le claim ``groups`` est absent, la valeur de ``oic.default.groups`` est utilisée.
+- **Groupes** : extraits du claim ``groups`` de l'ID Token. Si le claim ``groups`` est absent, la valeur de ``oic.default.groups`` est utilisée. Un tableau ``groups`` vide est considéré comme présent : ``oic.default.groups`` n'est alors pas utilisé et l'utilisateur est traité comme n'ayant aucun groupe.
 - **Rôles** : la valeur de ``oic.default.roles`` est toujours utilisée (il n'existe pas de mécanisme permettant d'extraire les rôles depuis les claims de l'ID Token).
 
 .. note::
@@ -150,6 +150,9 @@ L'identifiant utilisateur, les groupes et les rôles sont déterminés comme sui
    La présence des groupes parents dépend donc uniquement de la configuration des claims de l'OP,
    contrairement à :doc:`sso-entraid`, où |Fess| résout les groupes parents en utilisant l'API
    Microsoft Graph.
+   La valeur du claim devient telle quelle la permission de recherche. Si l'OP est configuré pour
+   émettre les chemins de groupe complets, il envoie des valeurs comme ``/parent/enfant``, qui ne
+   correspondent pas aux documents étiquetés avec le seul nom du groupe.
 
 .. list-table::
    :header-rows: 1
@@ -290,6 +293,11 @@ Dans ``app/WEB-INF/classes/log4j2.xml``, vous pouvez ajouter le logger suivant p
 ::
 
     <Logger name="org.codelibs.fess.sso.oic" level="DEBUG"/>
+
+.. warning::
+   Avec ce logger en DEBUG, les claims de l'ID Token (``email``, ``groups``, etc.) sont écrits dans
+   le fichier de log. Rétablissez le niveau de log une fois l'investigation terminée et traitez la
+   sortie de log en conséquence.
 
 Référence
 =========
