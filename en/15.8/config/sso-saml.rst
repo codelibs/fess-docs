@@ -382,6 +382,22 @@ Encryption Settings
      - Require NameID encryption
      - ``false``
 
+.. note::
+   Take care when the IdP encrypts with XML Encryption 1.1 algorithms. Current Keycloak, for
+   example, uses ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` and includes an ``<xenc11:MGF>``
+   element in its response. The schema set |Fess| validates against does not cover XML
+   Encryption 1.1, so the whole response is rejected even when the keys and certificates are
+   correct, and the login fails. The log shows:
+
+   .. code-block:: none
+
+      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
+
+   Setting ``saml.security.want_xml_validation=false`` makes such responses acceptable. Only
+   conformance to the XML schema stops being checked: signature validation, the check that the
+   response carries exactly one assertion, and the Destination and Conditions checks all keep
+   working.
+
 SP Certificate and Private Key Configuration
 --------------------------------------------
 

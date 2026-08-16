@@ -383,6 +383,20 @@ Keycloakのアカウントは既定で複数のレルムロールを持つため
      - NameIDの暗号化を要求する
      - ``false``
 
+.. note::
+   IdPがXML Encryption 1.1のアルゴリズムで暗号化する場合、注意が必要です。たとえば現行のKeycloakは
+   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` を使い、応答に ``<xenc11:MGF>`` 要素を含めます。
+   |Fess| が検証に使うスキーマにはXML Encryption 1.1が含まれていないため、鍵や証明書が正しくても
+   応答全体がスキーマ検証で拒否され、ログインに失敗します。ログには次の行が出力されます。
+
+   .. code-block:: none
+
+      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
+
+   この場合は ``saml.security.want_xml_validation=false`` を設定すると受け付けられるようになります。
+   無効になるのはXMLスキーマへの適合検査だけで、署名検証、アサーションが1つであることの検査、
+   DestinationおよびConditionsの検査はそのまま動作します。
+
 SP証明書・秘密鍵の設定
 ----------------------
 

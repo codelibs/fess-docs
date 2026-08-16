@@ -382,6 +382,20 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
      - NameID의 암호화를 요구한다
      - ``false``
 
+.. note::
+   IdP가 XML Encryption 1.1 알고리즘으로 암호화하는 경우 주의가 필요합니다. 예를 들어 최신 Keycloak은
+   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` 를 사용하며 응답에 ``<xenc11:MGF>`` 요소를 포함합니다.
+   |Fess| 가 검증에 사용하는 스키마에는 XML Encryption 1.1이 포함되어 있지 않기 때문에, 키와 인증서가
+   올바르더라도 응답 전체가 거부되어 로그인에 실패합니다. 로그에는 다음이 출력됩니다.
+
+   .. code-block:: none
+
+      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
+
+   이 경우 ``saml.security.want_xml_validation=false`` 를 설정하면 응답을 받아들일 수 있습니다.
+   검사하지 않게 되는 것은 XML 스키마 적합성뿐이며, 서명 검증, 어서션이 하나인지에 대한 검사,
+   Destination 및 Conditions 검사는 그대로 동작합니다.
+
 SP 인증서 및 비밀 키 설정
 --------------------------
 

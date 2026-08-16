@@ -386,6 +386,22 @@ Configuración de cifrado
      - Requerir cifrado de NameID
      - ``false``
 
+.. note::
+   Tenga cuidado cuando el IdP cifra con algoritmos de XML Encryption 1.1. Keycloak actual, por
+   ejemplo, usa ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` e incluye un elemento
+   ``<xenc11:MGF>`` en su respuesta. El conjunto de esquemas que valida |Fess| no cubre XML
+   Encryption 1.1, por lo que se rechaza toda la respuesta aunque las claves y los certificados
+   sean correctos, y el inicio de sesión falla. En el registro aparece:
+
+   .. code-block:: none
+
+      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
+
+   Al establecer ``saml.security.want_xml_validation=false`` se aceptan esas respuestas. Solo
+   deja de comprobarse la conformidad con el esquema XML: la validación de la firma, la
+   comprobación de que hay exactamente una aserción y las comprobaciones de Destination y
+   Conditions siguen funcionando.
+
 Configuración del certificado y clave privada del SP
 ----------------------------------------------------
 

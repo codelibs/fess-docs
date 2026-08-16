@@ -386,6 +386,21 @@ Verschlüsselungseinstellungen
      - NameID-Verschlüsselung erfordern
      - ``false``
 
+.. note::
+   Vorsicht ist geboten, wenn der IdP mit Algorithmen aus XML Encryption 1.1 verschlüsselt. Das
+   aktuelle Keycloak verwendet zum Beispiel ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` und
+   nimmt ein ``<xenc11:MGF>``-Element in seine Antwort auf. Der Schemasatz, gegen den |Fess|
+   prüft, deckt XML Encryption 1.1 nicht ab, sodass die gesamte Antwort auch bei korrekten
+   Schlüsseln und Zertifikaten abgelehnt wird und die Anmeldung fehlschlägt. Im Log erscheint:
+
+   .. code-block:: none
+
+      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
+
+   Mit ``saml.security.want_xml_validation=false`` werden solche Antworten angenommen. Es
+   entfällt allein die Prüfung auf Konformität zum XML-Schema: die Signaturprüfung, die Prüfung
+   auf genau eine Assertion sowie die Destination- und Conditions-Prüfungen bleiben wirksam.
+
 Konfiguration von SP-Zertifikat und privatem Schlüssel
 ------------------------------------------------------
 

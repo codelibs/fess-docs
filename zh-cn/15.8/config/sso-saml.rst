@@ -375,6 +375,19 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
      - 要求NameID加密
      - ``false``
 
+.. note::
+   当IdP使用XML Encryption 1.1的算法加密时需要注意。例如当前的Keycloak使用
+   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` ，并在响应中包含 ``<xenc11:MGF>`` 元素。
+   |Fess| 用于校验的模式集合不包含XML Encryption 1.1，因此即使密钥和证书正确，整个响应也会被拒绝，
+   登录失败。日志中会输出：
+
+   .. code-block:: none
+
+      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
+
+   此时设置 ``saml.security.want_xml_validation=false`` 即可接受这类响应。停止检查的仅是对XML模式的
+   符合性，签名校验、响应必须只含一个断言的检查，以及Destination和Conditions的检查都照常生效。
+
 SP证书与私钥配置
 ----------------
 
