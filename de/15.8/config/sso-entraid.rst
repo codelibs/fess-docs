@@ -235,6 +235,13 @@ Konfigurieren der API-Berechtigungen
    ist.
 
 .. note::
+   Die oben genannten Berechtigungen decken den ``displayName`` einer Verzeichnisrolle nicht ab:
+   Microsoft Graph gibt ihn als null zurück. ``displayName`` in ``entraid.permission.fields``
+   bewirkt daher für eine Verzeichnisrolle nichts, und nur die ID (GUID) der Rolle wird zu einer
+   Berechtigung. Um Rollennamen als Berechtigungswerte zu verwenden, erteilen Sie zusätzlich
+   ``RoleManagement.Read.Directory`` (oder ``Directory.Read.All``).
+
+.. note::
    |Fess| fordert beim Token-Abruf den Scope ``https://graph.microsoft.com/.default`` an.
    Ab 15.8 wird zusätzlich ``openid profile offline_access https://graph.microsoft.com/.default`` an den Autorisierungsendpunkt gesendet, sodass die Zustimmung für denselben Umfang eingeholt wird.
    Das bedeutet, dass alle in der App-Registrierung konfigurierten und genehmigten Zugriffsberechtigungen verwendet werden.

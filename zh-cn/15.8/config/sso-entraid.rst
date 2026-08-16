@@ -224,6 +224,12 @@ Entra ID侧配置
    授权，因此无论采用哪种方式都需要 ``User.Read``\ 。
 
 .. note::
+   上述权限不包含目录角色的 ``displayName``\ ，Microsoft Graph 会将其返回为 null。
+   因此，即使在 ``entraid.permission.fields`` 中指定 ``displayName``\ ，
+   目录角色也只有角色的 ID（GUID）会成为权限。
+   若要将角色名称用作权限值，请同时授予 ``RoleManagement.Read.Directory``\ （或 ``Directory.Read.All``\ ）。
+
+.. note::
    |Fess| 在获取令牌时会请求 ``https://graph.microsoft.com/.default`` 作用域。
    15.8 及以后版本还会向授权端点发送 ``openid profile offline_access https://graph.microsoft.com/.default``\ ，以便针对同一组权限请求同意。
    这意味着将使用在应用注册中配置并已授予同意的所有访问权限。

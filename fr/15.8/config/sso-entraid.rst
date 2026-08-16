@@ -235,6 +235,14 @@ Configuration des autorisations d'API
    ``Group.Read.All``, si bien que ``User.Read`` reste nécessaire dans tous les cas.
 
 .. note::
+   Les autorisations ci-dessus ne couvrent pas le ``displayName`` d'un rôle d'annuaire :
+   Microsoft Graph le renvoie à null. Indiquer ``displayName`` dans
+   ``entraid.permission.fields`` n'apporte donc rien pour un rôle d'annuaire, et seul
+   l'identifiant (GUID) du rôle devient une autorisation. Pour utiliser les noms de rôle comme
+   valeurs d'autorisation, accordez également ``RoleManagement.Read.Directory`` (ou
+   ``Directory.Read.All``).
+
+.. note::
    |Fess| demande le scope ``https://graph.microsoft.com/.default`` lors de l'acquisition d'un jeton.
    Depuis la version 15.8, ``openid profile offline_access https://graph.microsoft.com/.default`` est également envoyé au point de terminaison d'autorisation, afin que le consentement soit demandé pour le même ensemble.
    Cela signifie que toutes les autorisations d'accès configurées et consenties sur l'inscription d'application sont utilisées.
