@@ -357,11 +357,14 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
    配置单点登出（``saml.idp.single_logout_service.url``）时，请务必同时设置\
    ``saml.security.want_messages_signed=true``\ 。
    若保持为\ ``false``\ ，则不会对\ ``/sso/logout``\ 收到的LogoutRequest要求签名。
-   此时仅校验XML架构、``NotOnOrAfter``\ （若存在）、``Destination``\ （若存在）以及Issuer是否与\
-   ``saml.idp.entityid``\ 一致（若存在）；LogoutRequest中的NameID从不与已登录用户进行比对。
-   Issuer元素在SAML架构中是可选的，省略该元素的LogoutRequest从不会与IdP的实体ID进行比对。
-   因此，攻击者无需知晓IdP的实体ID，即可构造未签名的LogoutRequest，
-   诱导用户访问该URL，从而终止已认证用户的会话。
+   此时SAML库仅校验XML架构、``NotOnOrAfter``\ （若存在）、``Destination``\ （若存在）以及Issuer是否与\
+   ``saml.idp.entityid``\ 一致（若存在）。
+   Issuer元素在SAML架构中是可选的，省略该元素的LogoutRequest从不会与IdP的实体ID进行比对，
+   因此发送方无需了解该部署的任何信息即可到达此端点。
+   Fess还会将LogoutRequest中的NameID与当前登录用户进行比对，不一致时保留会话，
+   因此指名他人的LogoutRequest不再会终止会话。
+   剩下的情形有两种：发送方已经知道其NameID的会话（在默认的\ ``emailAddress``\ 格式下，
+   这可能就是用户的邮箱地址），以及并非来自SAML的会话（例如本地登录或LDAP登录），此时没有可供比对的NameID。
    其影响是强制登出（拒绝服务），而不是账户接管。
 
 加密设置

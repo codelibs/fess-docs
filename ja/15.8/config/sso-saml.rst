@@ -365,12 +365,15 @@ Keycloakのアカウントは既定で複数のレルムロールを持つため
    シングルログアウト（``saml.idp.single_logout_service.url``）を設定する場合は、
    ``saml.security.want_messages_signed=true`` を必ず併せて設定してください。
    ``false`` のままでは、``/sso/logout`` が受け取るLogoutRequestに署名が要求されません。
-   検証されるのはXMLスキーマ、``NotOnOrAfter``（存在する場合）、``Destination``（存在する場合）、
-   および Issuer が ``saml.idp.entityid`` と一致すること（存在する場合）だけで、
-   LogoutRequest内のNameIDがログイン中のユーザーと一致するかは検査されません。
+   SAMLライブラリが検証するのはXMLスキーマ、``NotOnOrAfter``（存在する場合）、``Destination``（存在する場合）、
+   および Issuer が ``saml.idp.entityid`` と一致すること（存在する場合）だけです。
    Issuer要素はSAMLのスキーマ上は省略可能であり、省略されたLogoutRequestではIdPのEntity IDとの
-   照合そのものが行われません。このため攻撃者はIdPのEntity IDを知らなくても、署名のないLogoutRequestを作成し、
-   そのURLをユーザーに踏ませることで認証済みセッションを終了させられます。
+   照合そのものが行われないため、送信者は配備について何も知らなくてもこのエンドポイントに到達できます。
+   Fessはこれに加えて、LogoutRequest内のNameIDをログイン中のユーザーと比較し、
+   一致しない場合はセッションを維持します。そのため他人を名指しするLogoutRequestではセッションは終了しません。
+   残るのは、送信者がNameIDを既に知っているセッション（既定の ``emailAddress`` 形式では
+   利用者のメールアドレスそのもののことがあります）と、ローカルログインやLDAPログインなど
+   SAML由来でないセッション（比較すべきNameIDがありません）の2つです。
    影響は強制ログアウト（サービス妨害）であり、アカウントの乗っ取りではありません。
 
 暗号化の設定

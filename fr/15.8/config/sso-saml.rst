@@ -369,13 +369,18 @@ Paramètres de signature
    Lorsque la déconnexion unique est configurée (``saml.idp.single_logout_service.url``), définissez
    impérativement aussi ``saml.security.want_messages_signed=true``.
    Tant que ce paramètre vaut ``false``, aucune signature n'est exigée sur une LogoutRequest reçue sur
-   ``/sso/logout``. Les seules vérifications effectuées sont le schéma XML, ``NotOnOrAfter`` (s'il est
-   présent), ``Destination`` (s'il est présent) et la correspondance de l'Issuer avec
-   ``saml.idp.entityid`` (s'il est présent) ; le NameID de la LogoutRequest n'est jamais comparé à
-   l'utilisateur connecté. L'élément Issuer est optionnel dans le schéma SAML, si bien qu'une
-   LogoutRequest qui l'omet n'est jamais comparée à l'identifiant d'entité de l'IdP. Un attaquant peut
-   donc, sans avoir besoin de connaître l'identifiant d'entité de l'IdP, forger une LogoutRequest non
-   signée et mettre fin à la session d'un utilisateur authentifié en l'attirant vers cette URL.
+   ``/sso/logout``. Les seules vérifications effectuées par la bibliothèque SAML sont le schéma XML,
+   ``NotOnOrAfter`` (s'il est présent), ``Destination`` (s'il est présent) et la correspondance de
+   l'Issuer avec ``saml.idp.entityid`` (s'il est présent).
+   L'élément Issuer est optionnel dans le schéma SAML, si bien qu'une LogoutRequest qui l'omet n'est
+   jamais comparée à l'identifiant d'entité de l'IdP ; son expéditeur n'a donc besoin de rien savoir
+   de l'installation.
+   Fess compare en outre le NameID de la LogoutRequest avec l'utilisateur connecté et conserve la
+   session lorsqu'ils diffèrent : une requête qui nomme quelqu'un d'autre n'y met donc plus fin.
+   Il reste deux cas : une session dont l'expéditeur connaît déjà le NameID -- avec le format
+   ``emailAddress`` par défaut, il peut s'agir simplement de l'adresse e-mail de l'utilisateur -- et
+   toute session qui ne provient pas de SAML, comme une connexion locale ou LDAP, pour laquelle il n'y
+   a pas de NameID à comparer.
    L'impact est une déconnexion forcée (déni de service), et non une prise de contrôle du compte.
 
 Paramètres de chiffrement

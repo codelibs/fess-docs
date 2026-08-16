@@ -369,13 +369,19 @@ Configuración de firma
    Cuando se configura el cierre de sesión único (``saml.idp.single_logout_service.url``), establezca
    siempre también ``saml.security.want_messages_signed=true``.
    Mientras sea ``false``, no se exige ninguna firma en una LogoutRequest recibida en ``/sso/logout``.
-   Las únicas comprobaciones que se realizan son el esquema XML, ``NotOnOrAfter`` (si está presente),
-   ``Destination`` (si está presente) y que el Issuer coincida con ``saml.idp.entityid`` (si está
-   presente); el NameID de la LogoutRequest nunca se compara con el usuario que ha iniciado sesión.
+   Las únicas comprobaciones que realiza la biblioteca SAML son el esquema XML, ``NotOnOrAfter`` (si
+   está presente), ``Destination`` (si está presente) y que el Issuer coincida con
+   ``saml.idp.entityid`` (si está presente).
    El elemento Issuer es opcional en el esquema SAML, por lo que una LogoutRequest que lo omita nunca
-   se compara con el identificador de entidad del IdP. Por tanto, un atacante, sin necesidad de conocer
-   el identificador de entidad del IdP, puede crear una LogoutRequest sin firmar y terminar la sesión
-   de un usuario autenticado atrayéndolo a esa URL.
+   se compara con el identificador de entidad del IdP; su remitente, por tanto, no necesita saber nada
+   sobre la instalación.
+   Fess compara además el NameID de la LogoutRequest con el usuario con el que se ha iniciado la
+   sesión y la mantiene cuando no coinciden, de modo que una solicitud que nombra a otra persona ya no
+   la termina.
+   Quedan dos casos: una sesión cuyo NameID ya conoce el remitente -- con el formato predeterminado
+   ``emailAddress`` puede ser sencillamente la dirección de correo del usuario -- y cualquier sesión
+   que no provenga de SAML, como un inicio de sesión local o LDAP, en la que no hay NameID que
+   comparar.
    El impacto es un cierre de sesión forzado (denegación de servicio), no una apropiación de la cuenta.
 
 Configuración de cifrado

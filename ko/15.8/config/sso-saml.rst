@@ -364,12 +364,15 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
    싱글 로그아웃（``saml.idp.single_logout_service.url``）을 설정하는 경우에는
    ``saml.security.want_messages_signed=true`` 도 반드시 함께 설정하십시오.
    ``false`` 인 상태에서는 ``/sso/logout`` 이 수신하는 LogoutRequest에 서명이 요구되지 않습니다.
-   검증되는 것은 XML 스키마, ``NotOnOrAfter``（존재하는 경우）, ``Destination``（존재하는 경우）,
-   그리고 Issuer가 ``saml.idp.entityid`` 와 일치하는지（존재하는 경우）뿐이며,
-   LogoutRequest 안의 NameID가 로그인 중인 사용자와 일치하는지는 검사하지 않습니다.
+   SAML 라이브러리가 검증하는 것은 XML 스키마, ``NotOnOrAfter``（존재하는 경우）, ``Destination``（존재하는 경우）,
+   그리고 Issuer가 ``saml.idp.entityid`` 와 일치하는지（존재하는 경우）뿐입니다.
    Issuer 요소는 SAML 스키마상 생략 가능하며, 생략된 LogoutRequest에서는 IdP의 Entity ID와의
-   대조 자체가 이루어지지 않습니다. 이 때문에 공격자는 IdP의 Entity ID를 몰라도 서명 없는
-   LogoutRequest를 만들어, 해당 URL로 사용자를 유도함으로써 인증된 세션을 종료시킬 수 있습니다.
+   대조 자체가 이루어지지 않으므로, 보낸 쪽은 해당 설치 환경에 대해 아무것도 알 필요가 없습니다.
+   Fess는 여기에 더해 LogoutRequest 안의 NameID를 로그인 중인 사용자와 비교하고, 일치하지 않으면
+   세션을 유지합니다. 따라서 다른 사람을 지목한 LogoutRequest로는 세션이 종료되지 않습니다.
+   남는 것은 보낸 쪽이 NameID를 이미 알고 있는 세션（기본 ``emailAddress`` 형식에서는 사용자의
+   이메일 주소 그 자체일 수 있습니다）과, 로컬 로그인이나 LDAP 로그인처럼 SAML에서 오지 않아
+   비교할 NameID가 없는 세션의 두 가지입니다.
    영향은 강제 로그아웃（서비스 거부）이며, 계정 탈취는 아닙니다.
 
 암호화 설정

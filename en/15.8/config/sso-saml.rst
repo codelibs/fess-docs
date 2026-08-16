@@ -365,12 +365,16 @@ Signature Settings
    When Single Logout is configured (``saml.idp.single_logout_service.url``), always set
    ``saml.security.want_messages_signed=true`` as well.
    While it is ``false``, no signature is required on a LogoutRequest received at ``/sso/logout``.
-   The only checks performed are the XML schema, ``NotOnOrAfter`` (if present), ``Destination``
-   (if present), and that the Issuer matches ``saml.idp.entityid`` (if present); the NameID in the
-   LogoutRequest is never compared against the logged-in user. The Issuer element is optional in the
-   SAML schema, so a LogoutRequest that omits it is never compared against the IdP entity ID. An
-   attacker, without needing to know the IdP entity ID, can therefore craft an unsigned LogoutRequest
-   and terminate an authenticated user's session by luring that user to the URL.
+   The only checks the SAML library performs are the XML schema, ``NotOnOrAfter`` (if present),
+   ``Destination`` (if present), and that the Issuer matches ``saml.idp.entityid`` (if present).
+   The Issuer element is optional in the SAML schema, so a LogoutRequest that omits it is never
+   compared against the IdP entity ID, and its sender therefore needs to know nothing about the
+   deployment.
+   Fess compares the NameID in the LogoutRequest with the user the session is logged in as and
+   keeps the session when they differ, so a request that names somebody else no longer ends it.
+   What remains is a session whose NameID the sender already knows -- with the default
+   ``emailAddress`` format that may simply be the user's email address -- and any session that did
+   not come from SAML, such as a local or LDAP login, which has no NameID to compare.
    The impact is a forced logout (denial of service), not account takeover.
 
 Encryption Settings

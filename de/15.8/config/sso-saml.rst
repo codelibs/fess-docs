@@ -369,13 +369,18 @@ Signatureinstellungen
    Wenn Single Logout konfiguriert ist (``saml.idp.single_logout_service.url``), setzen Sie unbedingt
    auch ``saml.security.want_messages_signed=true``.
    Solange die Option ``false`` ist, wird für eine an ``/sso/logout`` eingehende LogoutRequest keine
-   Signatur verlangt. Geprüft werden lediglich das XML-Schema, ``NotOnOrAfter`` (falls vorhanden),
-   ``Destination`` (falls vorhanden) und die Übereinstimmung des Issuers mit ``saml.idp.entityid``
-   (falls vorhanden); die NameID in der LogoutRequest wird nie mit dem angemeldeten Benutzer verglichen.
+   Signatur verlangt. Die SAML-Bibliothek prüft lediglich das XML-Schema, ``NotOnOrAfter`` (falls
+   vorhanden), ``Destination`` (falls vorhanden) und die Übereinstimmung des Issuers mit
+   ``saml.idp.entityid`` (falls vorhanden).
    Das Issuer-Element ist im SAML-Schema optional, sodass eine LogoutRequest, die es weglässt, nie mit
-   der Entity-ID des IdP verglichen wird. Ein Angreifer kann daher, ohne die Entity-ID des IdP zu
-   kennen, eine unsignierte LogoutRequest erzeugen und die Sitzung eines authentifizierten Benutzers
-   beenden, indem er diesen auf die entsprechende URL lockt.
+   der Entity-ID des IdP verglichen wird; der Absender muss also nichts über die Installation wissen.
+   Fess vergleicht zusätzlich die NameID in der LogoutRequest mit dem angemeldeten Benutzer und behält
+   die Sitzung bei, wenn beide nicht übereinstimmen. Eine LogoutRequest, die jemand anderen nennt,
+   beendet die Sitzung daher nicht mehr.
+   Es bleiben zwei Fälle: eine Sitzung, deren NameID der Absender bereits kennt -- beim
+   voreingestellten Format ``emailAddress`` kann das schlicht die E-Mail-Adresse des Benutzers sein --
+   und jede Sitzung, die nicht aus SAML stammt, etwa eine lokale oder LDAP-Anmeldung, bei der es keine
+   NameID zum Vergleichen gibt.
    Die Auswirkung ist eine erzwungene Abmeldung (Denial of Service), keine Kontoübernahme.
 
 Verschlüsselungseinstellungen
