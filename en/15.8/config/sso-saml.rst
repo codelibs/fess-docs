@@ -381,22 +381,28 @@ Encryption Settings
    * - ``saml.security.want_nameid_encrypted``
      - Require NameID encryption
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - Key transport algorithms accepted when decrypting an assertion (comma-separated URIs)
+     - (empty: every algorithm is accepted)
 
 .. note::
-   Take care when the IdP encrypts with XML Encryption 1.1 algorithms. Current Keycloak, for
-   example, uses ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` and includes an ``<xenc11:MGF>``
-   element in its response. The schema set |Fess| validates against does not cover XML
-   Encryption 1.1, so the whole response is rejected even when the keys and certificates are
-   correct, and the login fails. The log shows:
+   |Fess| validates responses encrypted with XML Encryption 1.1. Current Keycloak, for
+   example, uses ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` and includes an
+   ``<xenc11:MGF>`` element in its response; such a response is accepted with schema
+   validation left on. Earlier versions rejected it with
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd``. If
+   ``saml.security.want_xml_validation=false`` was set to work around that, remove it.
 
-   .. code-block:: none
+.. note::
+   Set ``saml.security.allowed_key_transport_algorithms`` whenever an SP private key is
+   configured. While it is unset, every key transport algorithm is accepted, including the
+   legacy ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``. The assertion consumer endpoint is
+   anonymous and decryption runs before the response is validated, so an unauthenticated
+   caller can have the SP private key decrypt a ciphertext of their choosing. |Fess| reports
+   ``key_transport_algorithms_not_restricted`` in the ``Insecure SAML settings`` line at
+   start-up while this is the case. Restrict it to what the IdP actually uses::
 
-      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
-
-   Setting ``saml.security.want_xml_validation=false`` makes such responses acceptable. Only
-   conformance to the XML schema stops being checked: signature validation, the check that the
-   response carries exactly one assertion, and the Destination and Conditions checks all keep
-   working.
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 SP Certificate and Private Key Configuration
 --------------------------------------------

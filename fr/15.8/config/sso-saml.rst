@@ -386,21 +386,30 @@ Paramètres de chiffrement
    * - ``saml.security.want_nameid_encrypted``
      - Exiger le chiffrement du NameID
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - Algorithmes de transport de clé acceptés lors du déchiffrement d'une assertion (URI séparés par des virgules)
+     - (vide : tous les algorithmes sont acceptés)
 
 .. note::
-   Soyez attentif lorsque l'IdP chiffre avec des algorithmes XML Encryption 1.1. Keycloak
-   actuel, par exemple, utilise ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` et inclut un
-   élément ``<xenc11:MGF>`` dans sa réponse. Le jeu de schémas utilisé par |Fess| ne couvre pas
-   XML Encryption 1.1 : la réponse entière est donc rejetée même si les clés et les certificats
-   sont corrects, et la connexion échoue. Le journal affiche :
+   |Fess| valide les réponses chiffrées avec XML Encryption 1.1. Keycloak actuel, par exemple,
+   utilise ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` et inclut un élément ``<xenc11:MGF>``
+   dans sa réponse ; une telle réponse est acceptée avec la validation de schéma activée. Les
+   versions antérieures la rejetaient avec
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd``. Si
+   ``saml.security.want_xml_validation=false`` avait été défini pour contourner ce problème,
+   supprimez ce paramètre.
 
-   .. code-block:: none
+.. note::
+   Définissez ``saml.security.allowed_key_transport_algorithms`` dès qu'une clé privée de SP
+   est configurée. Tant qu'il n'est pas défini, tous les algorithmes de transport de clé sont
+   acceptés, y compris l'ancien ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``. Le point de
+   terminaison du consommateur d'assertions est anonyme et le déchiffrement s'exécute avant la
+   validation de la réponse : un appelant non authentifié peut donc faire déchiffrer par la clé
+   privée du SP un texte chiffré de son choix. Dans ce cas, |Fess| signale
+   ``key_transport_algorithms_not_restricted`` dans la ligne ``Insecure SAML settings`` au
+   démarrage. Limitez le paramètre à ce que l'IdP utilise réellement::
 
-      Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd
-
-   Définir ``saml.security.want_xml_validation=false`` permet d'accepter ces réponses. Seule la
-   conformité au schéma XML cesse d'être vérifiée : la validation de la signature, le contrôle
-   d'une assertion unique ainsi que les contrôles Destination et Conditions restent actifs.
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 Configuration du certificat SP et de la clé privée
 ---------------------------------------------------
