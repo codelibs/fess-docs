@@ -605,6 +605,49 @@ Auflösung ohne erneute Anmeldung normal öffnen lassen.
    erneut anwendet; sie würde jedem Benutzer im Mandanten dauerhafte
    |Fess|-Administratorrechte verleihen.
 
+Bei Verwendung von LDAP / Active Directory
+------------------------------------------
+
+Ab 15.8 ist der Berechtigungsname einer Gruppe oder Rolle der Wert des RDN des Eintrags und nicht
+mehr ein Ausschnitt des DN-Textes. Eine Gruppe, deren CN ein im DN maskiertes Zeichen enthält --
+üblicherweise ein Komma --, erhält daher einen anderen Berechtigungsnamen als in 15.7.
+
+.. list-table::
+   :header-rows: 1
+
+   * - DN des Gruppeneintrags
+     - Berechtigungsname bis 15.7
+     - Berechtigungsname in 15.8
+   * - ``CN=Sales\, EMEA,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, EMEA``
+   * - ``CN=Sales\, APAC,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, APAC``
+
+Bis 15.7 fielen mehrere Gruppen, die bis zum Komma übereinstimmen, auf denselben Berechtigungsnamen
+zusammen. Mitglieder von ``Sales, EMEA`` und ``Sales, APAC`` konnten daher die Dokumente der jeweils
+anderen Gruppe und der Gruppe ``Sales`` lesen. In 15.8 erhält jede Gruppe ihren eigenen
+Berechtigungsnamen, und dieser gruppenübergreifende Zugriff tritt nicht mehr auf.
+
+Im Gegenzug sind **Dokumente, die unter dem alten Berechtigungsnamen indexiert wurden, für
+Mitglieder dieser Gruppe nicht mehr sichtbar**. Enthält die Berechtigungseinstellung einer
+Crawl-Konfiguration einen alten Berechtigungsnamen, aktualisieren Sie ihn auf den neuen und crawlen
+(oder reindexieren) Sie erneut. Wenn Sie keine Gruppe verwenden, deren CN ein Komma oder ein anderes
+maskiertes Zeichen enthält, ändert sich kein Berechtigungsname.
+
+Änderung an ``ldap.role.search.user.enabled``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Bis 15.7 wurde die aus dem Benutzernamen abgeleitete Berechtigung (``role.search.user.prefix``
+gefolgt vom Benutzernamen) auch bei ``ldap.role.search.user.enabled=false`` vergeben. Ab 15.8 wird
+die Einstellung wirksam, und die Berechtigung wird bei ``false`` nicht mehr vergeben.
+
+In einer Installation, die sie auf ``false`` setzt, verlieren Benutzer nach dem Upgrade die nach
+ihnen benannte Berechtigung. Dokumente, die einzelnen Benutzern zugewiesen sind, werden für diese
+Benutzer dann nicht mehr gefunden. Um das bisherige Verhalten beizubehalten, stellen Sie den
+mitgelieferten Standardwert ``true`` wieder her.
+
 Aktualisierung der Plugin-Versionen
 -----------------------------------
 

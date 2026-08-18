@@ -608,6 +608,50 @@ est réévaluée à chaque requête de la même session, si bien qu'une fois la 
    ultérieure : elle donnerait à tous les utilisateurs du locataire des droits d'administrateur
    |Fess| permanents.
 
+Si Vous Utilisez LDAP / Active Directory
+-----------------------------------------
+
+À partir de 15.8, le nom de permission d'un groupe ou d'un rôle correspond à la valeur du RDN de
+l'entrée et non plus à une portion du texte du DN. Un groupe dont le CN contient un caractère
+échappé dans le DN -- la virgule est le cas courant -- obtient donc un nom de permission différent
+de celui de 15.7.
+
+.. list-table::
+   :header-rows: 1
+
+   * - DN de l'entrée du groupe
+     - Nom de permission jusqu'à 15.7
+     - Nom de permission en 15.8
+   * - ``CN=Sales\, EMEA,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, EMEA``
+   * - ``CN=Sales\, APAC,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, APAC``
+
+Jusqu'à 15.7, plusieurs groupes identiques jusqu'à la virgule se réduisaient à un même nom de
+permission : les membres de ``Sales, EMEA`` et de ``Sales, APAC`` pouvaient donc lire les documents
+de l'autre groupe ainsi que ceux du groupe ``Sales``. En 15.8, chacun obtient son propre nom de
+permission et cet accès inter-groupes ne se produit plus.
+
+En contrepartie, **les documents indexés sous l'ancien nom de permission ne sont plus visibles par
+les membres de ce groupe**. Si le paramètre de permission d'une configuration d'exploration contient
+un ancien nom de permission, remplacez-le par le nouveau puis relancez l'exploration (ou la
+réindexation). Si vous n'utilisez aucun groupe dont le CN contient une virgule ou un autre caractère
+échappé, aucun nom de permission ne change.
+
+Modification de ``ldap.role.search.user.enabled``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Jusqu'à 15.7, la permission dérivée du nom d'utilisateur (``role.search.user.prefix`` suivi du nom
+d'utilisateur) était accordée même avec ``ldap.role.search.user.enabled=false``. À partir de 15.8,
+le paramètre prend effet et la permission n'est plus accordée lorsqu'il est désactivé.
+
+Dans une installation où il vaut ``false``, les utilisateurs perdent après la mise à niveau la
+permission portant leur propre nom : les documents attribués à un utilisateur donné ne remontent
+plus pour cet utilisateur. Pour conserver le comportement précédent, rétablissez la valeur par
+défaut ``true``.
+
 Mise à jour de la version des plugins
 -------------------------------------
 

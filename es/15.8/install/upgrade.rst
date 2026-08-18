@@ -606,6 +606,48 @@ administración se abren con normalidad, sin volver a iniciar sesión.
    iniciar sesión y vuelve a aplicar en cada resolución posterior, por lo que concedería a todos
    los usuarios del inquilino permisos permanentes de administrador de |Fess|.
 
+Si Utiliza LDAP / Active Directory
+----------------------------------
+
+A partir de 15.8, el nombre de permiso de un grupo o rol es el valor del RDN de la entrada y no un
+fragmento del texto del DN. Por tanto, un grupo cuyo CN contiene un carácter que el DN escapa --la
+coma es el caso habitual-- obtiene un nombre de permiso distinto al de 15.7.
+
+.. list-table::
+   :header-rows: 1
+
+   * - DN de la entrada del grupo
+     - Nombre de permiso hasta 15.7
+     - Nombre de permiso en 15.8
+   * - ``CN=Sales\, EMEA,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, EMEA``
+   * - ``CN=Sales\, APAC,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, APAC``
+
+Hasta 15.7, varios grupos que coincidían hasta la coma se reducían a un mismo nombre de permiso, de
+modo que los miembros de ``Sales, EMEA`` y ``Sales, APAC`` podían leer los documentos del otro grupo
+y los del grupo ``Sales``. En 15.8 cada uno obtiene su propio nombre de permiso y ese acceso entre
+grupos no se produce.
+
+A cambio, **los documentos indexados con el nombre de permiso antiguo dejan de ser visibles para los
+miembros de ese grupo**. Si la configuración de permisos de un rastreo contiene un nombre de permiso
+antiguo, actualícelo al nuevo y vuelva a rastrear (o reindexar). Si no utiliza ningún grupo cuyo CN
+contenga una coma u otro carácter escapado, ningún nombre de permiso cambia.
+
+Cambio en ``ldap.role.search.user.enabled``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Hasta 15.7, el permiso derivado del nombre de usuario (``role.search.user.prefix`` seguido del
+nombre de usuario) se concedía incluso con ``ldap.role.search.user.enabled=false``. A partir de 15.8
+la opción surte efecto y el permiso no se concede cuando está desactivada.
+
+En una instalación que la tenga en ``false``, los usuarios pierden tras la actualización el permiso
+que lleva su propio nombre, por lo que los documentos asignados a un usuario concreto dejan de
+aparecer para ese usuario. Para mantener el comportamiento anterior, restaure el valor
+predeterminado ``true``.
+
 Actualización de la Versión de los Plugins
 ---------------------------------------------
 
