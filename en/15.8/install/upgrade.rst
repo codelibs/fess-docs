@@ -582,6 +582,46 @@ so once resolution has landed the administration screens open normally, without 
    Entra ID user at login and re-applies on every later resolution, so it would give every user in
    the tenant permanent |Fess| administrator rights.
 
+If You Use LDAP / Active Directory
+----------------------------------
+
+From 15.8, the permission name of a group or role is the value of the entry's RDN rather than a
+slice of the DN text. A group whose CN contains a character the DN escapes -- a comma is the
+common one -- therefore gets a different permission name than it did in 15.7.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Group entry DN
+     - Permission name up to 15.7
+     - Permission name in 15.8
+   * - ``CN=Sales\, EMEA,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, EMEA``
+   * - ``CN=Sales\, APAC,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, APAC``
+
+Up to 15.7 several groups agreeing up to the comma collapsed onto one permission name, so members
+of ``Sales, EMEA`` and ``Sales, APAC`` could read each other's documents and those of the ``Sales``
+group. In 15.8 each gets its own permission name and that cross-group access does not happen.
+
+In exchange, **documents indexed under the old permission name are no longer visible to members of
+that group**. If a crawling configuration's permission setting holds an old permission name, update
+it to the new one and crawl (or reindex) again. If you use no group whose CN contains a comma or
+another escaped character, no permission name changes.
+
+Change to ``ldap.role.search.user.enabled``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Up to 15.7 the permission derived from the user name (``role.search.user.prefix`` followed by the
+user name) was granted even with ``ldap.role.search.user.enabled=false``. From 15.8 the setting
+takes effect and the permission is not granted when it is off.
+
+In a deployment that sets it to ``false``, users lose the permission named after themselves after
+the upgrade, so documents permissioned to an individual user stop matching for that user. To keep
+the previous behaviour, restore the shipped default of ``true``.
+
 Updating Plugin Versions
 ------------------------
 
