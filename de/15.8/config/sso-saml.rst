@@ -286,10 +286,7 @@ IdPs mit wiederholten Attributnamen
 -----------------------------------
 
 Wenn der IdP denselben Attributnamen auf mehrere ``<Attribute>``-Elemente verteilt, weist |Fess|
-die Assertion zurück und die Anmeldung selbst schlägt fehl. Die Prüfung der Assertion -- Signatur,
-InResponseTo und Replay -- war zu diesem Zeitpunkt bereits erfolgreich; die Zurückweisung erfolgt
-erst beim Lesen der Attribute. Deshalb schlägt auch eine Konfiguration fehl, die
-``saml.attribute.role.name`` gar nicht setzt.
+die Assertion zurück und die Anmeldung selbst schlägt fehl.
 
 Keycloak sendet standardmäßig Assertions dieser Form: Seine Rollen- und Gruppen-Mapper geben pro
 Wert ein eigenes ``<Attribute>``-Element aus, solange deren Option ``single`` nicht aktiviert ist,
@@ -368,14 +365,8 @@ Signatureinstellungen
 .. warning::
    Wenn Single Logout konfiguriert ist (``saml.idp.single_logout_service.url``), setzen Sie unbedingt
    auch ``saml.security.want_messages_signed=true``.
-   Solange die Option ``false`` ist, wird für eine an ``/sso/logout`` eingehende LogoutRequest keine
-   Signatur verlangt. Geprüft werden lediglich das XML-Schema, ``NotOnOrAfter`` (falls vorhanden),
-   ``Destination`` (falls vorhanden) und die Übereinstimmung des Issuers mit ``saml.idp.entityid``
-   (falls vorhanden); die NameID in der LogoutRequest wird nie mit dem angemeldeten Benutzer verglichen.
-   Das Issuer-Element ist im SAML-Schema optional, sodass eine LogoutRequest, die es weglässt, nie mit
-   der Entity-ID des IdP verglichen wird. Ein Angreifer kann daher, ohne die Entity-ID des IdP zu
-   kennen, eine unsignierte LogoutRequest erzeugen und die Sitzung eines authentifizierten Benutzers
-   beenden, indem er diesen auf die entsprechende URL lockt.
+   Solange die Option ``false`` ist, wird eine LogoutRequest ohne Signatur akzeptiert, sodass eine
+   präparierte URL die Sitzung eines authentifizierten Benutzers beenden kann.
    Die Auswirkung ist eine erzwungene Abmeldung (Denial of Service), keine Kontoübernahme.
 
 Verschlüsselungseinstellungen
@@ -467,14 +458,6 @@ Die vom IdP zurückgegebene SAML-Antwort wird anhand der gespeicherten ID validi
 
 Eine gespeicherte ID wird verworfen, sobald dieser Zeitraum verstrichen ist.
 Ist die Gültigkeit abgelaufen (zum Beispiel weil die Anmeldeseite des IdP offen gelassen wurde), kann die zurückgegebene Assertion nicht zugeordnet werden, und die Anmeldung schlägt einmalig fehl.
-Wird kein Wert gesetzt, werden 3600 Sekunden verwendet.
-Wird ein Wert gesetzt, der sich nicht als Zahl interpretieren lässt, werden ebenfalls 3600 Sekunden verwendet, und es wird eine mit ``Invalid saml.request.id.ttl`` beginnende Warnung protokolliert.
-Ein Wert von null oder kleiner würde die AuthnRequest-ID verwerfen, bevor eine Anmeldung vom IdP zurückkehren könnte; daher werden auch in diesem Fall 3600 Sekunden verwendet und eine Warnung protokolliert.
-
-.. note::
-   Pro Sitzung werden höchstens 10 unbeantwortete AuthnRequests aufbewahrt; wird dieses Limit überschritten, werden die ältesten verworfen.
-   Dies ermöglicht es, Anmeldungen gleichzeitig aus mehreren Tabs zu starten, und lässt sich nicht über eine ``saml.``-Einstellung ändern.
-   Wird das Limit mit einem Wert von null oder weniger überschrieben, werden stattdessen 10 verwendet und eine Warnung protokolliert.
 
 Konfigurationsbeispiele
 =======================
@@ -544,32 +527,15 @@ Kann nach der Authentifizierung nicht zu Fess zurückkehren
 - Stellen Sie sicher, dass der Wert von ``saml.sp.base.url`` mit der IdP-Konfiguration übereinstimmt
 - Die SAML-Assertion trifft als seitenübergreifender POST vom IdP ein. Wenn
   ``tomcat.sameSiteCookies`` in ``tomcat_config.properties`` auf ``lax`` (Standard) steht, sendet der
-  Browser das Sitzungs-Cookie nicht mit. |Fess| findet dann keine passende AuthnRequest-ID und lässt
-  die Anmeldung an dieser Stelle einmalig fehlschlagen. Der Browser kehrt zur Anmeldeseite mit der
-  Meldung „SSO-Anmeldevorgang fehlgeschlagen." zurück, und im Protokoll erscheint eine Warnung, die
-  mit ``Received a SAML response with no matching AuthnRequest ID in the session`` beginnt.
+  Browser das Sitzungs-Cookie nicht mit, und die Anmeldung schlägt einmalig fehl.
   Setzen Sie in diesem Fall ``tomcat.sameSiteCookies = none`` (``SameSite=None`` erfordert HTTPS)
 - Wenn die Anmeldung am IdP zu lange gedauert hat, ist die AuthnRequest-ID nicht mehr vorhanden,
-  sobald die Assertion zurückkommt; die Anmeldung schlägt einmalig fehl und muss neu gestartet
-  werden. Welche Warnung erscheint, zeigt, was abgelaufen ist: Eine Warnung, die mit
-  ``Received a SAML response after the session it belongs to had expired`` beginnt, bedeutet, dass
-  der Servlet-Container die gesamte Sitzung verworfen hat; eine Warnung, die
-  ``pending AuthnRequest ID(s) of the session had expired`` enthält, bedeutet, dass die Sitzung noch
-  besteht und lediglich ``saml.request.id.ttl`` abgelaufen ist. Beide werden nur protokolliert, wenn
-  der Browser sein Sitzungs-Cookie mitgesendet hat, und genau das unterscheidet sie vom
-  SameSite-Fall oben
+  sobald die Assertion zurückkommt; die Anmeldung schlägt einmalig fehl und muss neu gestartet werden
 - |Fess| setzt in ``app/WEB-INF/web.xml`` kein ``session-timeout``, sodass der Standardwert des
   Servlet-Containers von 30 Minuten gilt; er ist kürzer als die 3600 Sekunden von
-  ``saml.request.id.ttl``. Die Sitzung wird also samt der darin gehaltenen AuthnRequest-ID zuerst
-  verworfen: Ein höherer Wert für ``saml.request.id.ttl`` allein verlängert nicht die Zeit, die
-  Benutzer für die Anmeldung am IdP haben. Erhöhen Sie dafür auch den Sitzungs-Timeout. Die Warnung
-  zu ``saml.request.id.ttl`` erscheint daher nur dort, wo die TTL kürzer als der Sitzungs-Timeout
-  eingestellt ist
-
-.. note::
-   In 15.7 leitete |Fess| in derselben Situation immer wieder zum IdP weiter, sodass die Anmeldung in
-   einer Schleife lief. In 15.8 schlägt sie stattdessen einmalig fehl. An der Konfigurationslösung
-   ändert sich nichts.
+  ``saml.request.id.ttl``, sodass die Sitzung zuerst verworfen wird. Ein höherer Wert für
+  ``saml.request.id.ttl`` allein verlängert daher nicht die Zeit, die Benutzer für die Anmeldung am
+  IdP haben. Erhöhen Sie dafür auch den Sitzungs-Timeout
 
 Destination-Validierung schlägt hinter einem Reverse Proxy fehl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -577,12 +543,10 @@ Destination-Validierung schlägt hinter einem Reverse Proxy fehl
 Wenn |Fess| hinter einem TLS-terminierenden Reverse Proxy oder Load Balancer betrieben wird, kann die
 Assertion-Validierung fehlschlagen, obwohl ``saml.sp.base.url`` korrekt gesetzt ist.
 
-Die Ursache: Die SAML-Bibliothek vergleicht das Attribut ``Destination`` der Assertion mit der vom
-Servlet-Container rekonstruierten Anfrage-URL und nicht mit der konfigurierten ACS-URL. Wenn der Proxy
-HTTPS terminiert, sieht |Fess| eine interne Anfrage-URL wie
-``http://<interner-host>:<interner-port>/sso/``, die nicht mit der vom IdP gesendeten URL
-``https://fess.example.com/sso/`` übereinstimmt. ``saml.sp.base.url`` wird für diesen Vergleich nicht
-herangezogen; die Einstellung allein behebt das Problem daher nicht.
+Das Attribut ``Destination`` der Assertion wird mit der URL der Anfrage verglichen, so wie sie bei
+|Fess| ankommt -- hinter einem TLS-terminierenden Proxy also eine interne ``http://``-URL und nicht
+die externe, an die der IdP die Assertion gesendet hat. ``saml.sp.base.url`` wird für diesen
+Vergleich nicht herangezogen; die Einstellung allein behebt das Problem daher nicht.
 
 Setzen Sie ``saml.debug=true``, damit der Grund ins Protokoll geschrieben wird:
 

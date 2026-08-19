@@ -281,8 +281,7 @@ IdP侧配置
 ----------------
 
 如果 IdP 将同一个属性名拆分到多个 ``<Attribute>`` 元素中发送，|Fess|\ 会拒绝该断言，登录本身
-随之失败。此时断言的校验（签名、InResponseTo 与重放检查）其实已经通过，拒绝发生在读取属性的
-阶段，因此即使是没有设置 ``saml.attribute.role.name`` 的配置也会同样失败。
+随之失败。
 
 Keycloak 默认发送这种形式的断言：除非启用其角色映射器和组映射器的 ``single`` 选项，否则每个值
 都会输出为独立的 ``<Attribute>`` 元素，而每个 Keycloak 账户默认都带有多个领域角色。
@@ -356,12 +355,7 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
 .. warning::
    配置单点登出（``saml.idp.single_logout_service.url``）时，请务必同时设置\
    ``saml.security.want_messages_signed=true``\ 。
-   若保持为\ ``false``\ ，则不会对\ ``/sso/logout``\ 收到的LogoutRequest要求签名。
-   此时仅校验XML架构、``NotOnOrAfter``\ （若存在）、``Destination``\ （若存在）以及Issuer是否与\
-   ``saml.idp.entityid``\ 一致（若存在）；LogoutRequest中的NameID从不与已登录用户进行比对。
-   Issuer元素在SAML架构中是可选的，省略该元素的LogoutRequest从不会与IdP的实体ID进行比对。
-   因此，攻击者无需知晓IdP的实体ID，即可构造未签名的LogoutRequest，
-   诱导用户访问该URL，从而终止已认证用户的会话。
+   若保持为\ ``false``\ ，则会接受未签名的LogoutRequest，攻击者可诱导用户访问构造的URL，从而终止其已认证会话。
    其影响是强制登出（拒绝服务），而不是账户接管。
 
 加密设置
@@ -453,14 +447,6 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 
 记录的ID在超过该时长后会被丢弃。
 如果超出有效期（例如IdP登录页面一直处于打开状态未处理），返回的断言将无法匹配，登录会当场失败一次。
-如果未设置该值，将使用3600秒。
-如果设置的值无法解析为数字，同样会使用3600秒，并在日志中输出以\ ``Invalid saml.request.id.ttl``\ 开头的警告。
-如果设置的值小于或等于0，将会在登录从IdP返回之前就丢弃AuthnRequest的ID，因此同样会使用3600秒，并在日志中输出警告。
-
-.. note::
-   每个会话最多保留10个未收到响应的AuthnRequest，超出上限后将丢弃最旧的。
-   这是为了支持同时从多个标签页发起登录，且无法通过\ ``saml.``\ 开头的设置进行更改。
-   如果将上限覆盖为0或更小的值，则会改用10并输出警告。
 
 配置示例
 ========
@@ -530,24 +516,12 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 - 确保\ ``saml.sp.base.url``\ 的值与IdP配置匹配
 - SAML断言以来自IdP的跨站POST方式发送。
   当\ ``tomcat_config.properties``\ 中的\ ``tomcat.sameSiteCookies``\ 为\ ``lax``\ （默认值）时，
-  浏览器不会随该请求发送会话Cookie，因此 |Fess| 找不到可匹配的AuthnRequest ID，当场只失败一次。
-  浏览器会返回登录页面并显示"SSO登录处理失败。"，日志中会输出以\
-  ``Received a SAML response with no matching AuthnRequest ID in the session``\ 开头的警告。
+  浏览器不会随该请求发送会话Cookie，登录会当场只失败一次。
   此时请设置\ ``tomcat.sameSiteCookies = none``\ （``SameSite=None``\ 需要HTTPS）
-- 如果在IdP上的登录耗时过长，断言返回时AuthnRequest ID已经不存在，登录会当场只失败一次，需要重新开始登录。
-  输出哪条警告可以判断是什么超时了：以\
-  ``Received a SAML response after the session it belongs to had expired``\ 开头的警告表示
-  Servlet容器已经丢弃了整个会话；包含\ ``pending AuthnRequest ID(s) of the session had expired``\
-  的警告表示会话仍然存在，只是\ ``saml.request.id.ttl``\ 超时。
-  这两条警告都只在浏览器确实发送了会话Cookie时输出，这一点与上面的SameSite情形不同
+- 如果在IdP上的登录耗时过长，断言返回时AuthnRequest ID已经不存在，登录会当场只失败一次，需要重新开始登录
 - |Fess| 未在\ ``app/WEB-INF/web.xml``\ 中设置\ ``session-timeout``\ ，因此采用Servlet容器的默认值30分钟。
-  该值短于\ ``saml.request.id.ttl``\ 的3600秒，会话及其保存的AuthnRequest ID会先被丢弃，
-  因此仅调大\ ``saml.request.id.ttl``\ 并不能延长用户在IdP完成登录的时间，还需要同时延长会话超时时间。
-  也正因如此，只有把TTL设置得比会话超时更短时，才会看到\ ``saml.request.id.ttl``\ 的警告
-
-.. note::
-   在15.7中，同样的情况会导致\ |Fess|\ 反复重定向到IdP，使登录陷入循环。
-   15.8改为只失败一次而不再循环。配置层面的处理方法保持不变。
+  该值短于\ ``saml.request.id.ttl``\ 的3600秒，会话会先被丢弃，
+  因此仅调大\ ``saml.request.id.ttl``\ 并不能延长用户在IdP完成登录的时间，还需要同时延长会话超时时间
 
 通过反向代理时Destination验证失败
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -555,10 +529,8 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 当\ |Fess|\ 运行在终结TLS的反向代理或负载均衡器之后时，
 即使\ ``saml.sp.base.url``\ 设置正确，断言验证也可能失败。
 
-原因在于SAML库将断言的\ ``Destination``\ 属性与Servlet容器重建的请求URL进行比较，
-而不是与配置的ACS URL比较。当代理终结HTTPS时，\ |Fess|\ 看到的请求URL是形如\
-``http://<内部主机名>:<内部端口>/sso/``\ 的内部地址，
-与IdP发送的\ ``https://fess.example.com/sso/``\ 不一致。
+断言的\ ``Destination``\ 属性会与请求到达\ |Fess|\ 时的URL进行比较。
+在终结TLS的代理之后，该URL是内部的\ ``http://``\ 地址，而不是IdP发送断言时使用的外部地址。
 ``saml.sp.base.url``\ 不参与该比较，因此仅设置它无法解决问题。
 
 设置\ ``saml.debug=true``\ 后，日志中会输出如下原因：

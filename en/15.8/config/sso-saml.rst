@@ -283,10 +283,7 @@ IdPs that repeat an attribute name
 ----------------------------------
 
 If the IdP splits the same attribute name across several ``<Attribute>`` elements, |Fess| refuses
-the assertion and the login itself fails. Validation of the assertion -- signature, InResponseTo and
-replay -- has already succeeded at that point; the refusal happens while the attributes are being
-read, so a configuration that does not set ``saml.attribute.role.name`` at all fails in exactly the
-same way.
+the assertion and the login itself fails.
 
 Keycloak sends assertions of this shape by default: its role and group mappers emit one
 ``<Attribute>`` element per value unless their ``single`` option is enabled, and every Keycloak
@@ -364,13 +361,8 @@ Signature Settings
 .. warning::
    When Single Logout is configured (``saml.idp.single_logout_service.url``), always set
    ``saml.security.want_messages_signed=true`` as well.
-   While it is ``false``, no signature is required on a LogoutRequest received at ``/sso/logout``.
-   The only checks performed are the XML schema, ``NotOnOrAfter`` (if present), ``Destination``
-   (if present), and that the Issuer matches ``saml.idp.entityid`` (if present); the NameID in the
-   LogoutRequest is never compared against the logged-in user. The Issuer element is optional in the
-   SAML schema, so a LogoutRequest that omits it is never compared against the IdP entity ID. An
-   attacker, without needing to know the IdP entity ID, can therefore craft an unsigned LogoutRequest
-   and terminate an authenticated user's session by luring that user to the URL.
+   While it is ``false``, a LogoutRequest that carries no signature is accepted, so a crafted URL
+   can end an authenticated user's session.
    The impact is a forced logout (denial of service), not account takeover.
 
 Encryption Settings
@@ -462,14 +454,6 @@ The SAML response returned by the IdP is validated against the recorded ID.
 
 A recorded ID is discarded once this period passes.
 If it expires (for example the IdP login page was left open), the returned assertion cannot be matched and the login fails once.
-If no value is set, 3600 seconds is used.
-If a value that cannot be parsed as a number is set, 3600 seconds is also used and a warning beginning with ``Invalid saml.request.id.ttl`` is logged.
-A value of zero or less would discard the AuthnRequest ID before a login could return from the IdP, so it is likewise replaced with 3600 seconds and a warning is logged.
-
-.. note::
-   At most 10 unanswered AuthnRequests are kept per session; when the cap is exceeded the oldest are discarded.
-   This exists so that logins can be started from several tabs at once, and it cannot be changed with a ``saml.`` setting.
-   If it is overridden with a value of zero or less, 10 is used instead and a warning is logged.
 
 Configuration Examples
 ======================
@@ -539,27 +523,14 @@ Cannot return to Fess after authentication
 - Ensure the ``saml.sp.base.url`` value matches the IdP configuration
 - The SAML assertion arrives as a cross-site POST from the IdP. When ``tomcat.sameSiteCookies`` in
   ``tomcat_config.properties`` is ``lax`` (the default), the browser does not send the session cookie
-  with it, so |Fess| finds no matching AuthnRequest ID and fails the login once, on the spot. The
-  browser returns to the login page showing "SSO login process failed.", and a warning beginning with
-  ``Received a SAML response with no matching AuthnRequest ID in the session`` is written to the log.
-  Set ``tomcat.sameSiteCookies = none`` in that case (``SameSite=None`` requires HTTPS)
+  with it and the login fails once. Set ``tomcat.sameSiteCookies = none`` in that case
+  (``SameSite=None`` requires HTTPS)
 - If the login took too long at the IdP, the AuthnRequest ID is no longer there when the assertion
-  comes back, so the login fails once and has to be started again. Which warning appears says what
-  ran out: one beginning with ``Received a SAML response after the session it belongs to had
-  expired`` means the servlet container discarded the whole session, while one containing
-  ``pending AuthnRequest ID(s) of the session had expired`` means the session is still alive and
-  only ``saml.request.id.ttl`` elapsed. Both are written only when the browser did send its session
-  cookie, which is what separates them from the SameSite case above
+  comes back, so the login fails once and has to be started again
 - |Fess| leaves ``session-timeout`` unset in ``app/WEB-INF/web.xml``, so the servlet container's
-  default of 30 minutes applies and is shorter than the 3600 seconds of ``saml.request.id.ttl``. The
-  session, and with it the AuthnRequest ID it holds, is discarded first, so raising
-  ``saml.request.id.ttl`` on its own does not give users longer to finish logging in at the IdP:
-  raise the session timeout as well. The ``saml.request.id.ttl`` warning is therefore only seen
-  where the TTL is set shorter than the session timeout
-
-.. note::
-   In 15.7 the same situation caused |Fess| to redirect to the IdP again and again, looping the login.
-   15.8 fails once instead of looping. The configuration remedy is unchanged.
+  default of 30 minutes applies and is shorter than the 3600 seconds of ``saml.request.id.ttl``.
+  Raising ``saml.request.id.ttl`` on its own therefore does not give users longer to finish logging
+  in at the IdP: raise the session timeout as well
 
 Destination validation fails behind a reverse proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -567,12 +538,10 @@ Destination validation fails behind a reverse proxy
 When |Fess| runs behind a TLS-terminating reverse proxy or load balancer, assertion validation can
 fail even though ``saml.sp.base.url`` is set correctly.
 
-The cause is that the SAML library compares the ``Destination`` attribute of the assertion against
-the request URL reconstructed by the servlet container, not against the configured ACS URL. When the
-proxy terminates HTTPS, the request URL |Fess| sees is an internal one such as
-``http://<internal-host>:<internal-port>/sso/``, which does not match the
-``https://fess.example.com/sso/`` sent by the IdP. ``saml.sp.base.url`` is not used for this
-comparison, so setting it alone does not fix the problem.
+The ``Destination`` attribute of the assertion is compared against the URL of the request as it
+reaches |Fess|, which behind a TLS-terminating proxy is an internal ``http://`` URL rather than the
+external one the IdP sent the assertion to. ``saml.sp.base.url`` is not used for this comparison,
+so setting it alone does not fix the problem.
 
 Set ``saml.debug=true`` to have the reason written to the log:
 
