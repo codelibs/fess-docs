@@ -230,6 +230,17 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    en la distribución ZIP y en ``/etc/fess/`` en los paquetes DEB/RPM, y hay que reiniciar |Fess|
    después de modificarlo.
 
+.. note::
+   Con ``spnego.allow.delegation=true``, la biblioteca SPNEGO acepta la credencial de Kerberos que
+   el cliente ha decidido delegar y la asocia al principal autenticado. Sin embargo, |Fess| no
+   utiliza actualmente esa credencial para nada: el rastreo, la búsqueda y las consultas LDAP se
+   basan únicamente en el nombre de usuario. Tampoco afecta al intercambio SPNEGO en sí: la
+   credencial del aceptador y los indicadores del contexto GSS no cambian, y que se delegue o no
+   una credencial lo decide por completo el cliente (la configuración del navegador y si se confía
+   en la cuenta para la delegación en Active Directory). Deje esta opción en su valor
+   predeterminado ``false``; activarla solo hace que el JDK intente una delegación restringida en
+   cada petición autenticada, sin ningún beneficio.
+
 .. warning::
    En |Fess| 15.8, un inicio de sesión se rechaza de forma predeterminada cuando el reino del
    principal del cliente difiere del reino del servidor. Si los usuarios inician sesión desde un
