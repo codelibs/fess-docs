@@ -385,6 +385,29 @@ Configuración de cifrado
    * - ``saml.security.want_nameid_encrypted``
      - Requerir cifrado de NameID
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - Algoritmos de transporte de clave aceptados al descifrar una aserción (URI separados por comas)
+     - (vacío: se acepta cualquier algoritmo)
+
+.. note::
+   |Fess| valida las respuestas cifradas con XML Encryption 1.1. Keycloak actual, por ejemplo,
+   usa ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` e incluye un elemento ``<xenc11:MGF>`` en
+   su respuesta; una respuesta así se acepta con la validación de esquema activada. Las
+   versiones anteriores la rechazaban con
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd``. Si se estableció
+   ``saml.security.want_xml_validation=false`` como solución alternativa, elimínelo.
+
+.. note::
+   Establezca ``saml.security.allowed_key_transport_algorithms`` siempre que haya una clave
+   privada de SP configurada. Mientras no se establezca, se acepta cualquier algoritmo de
+   transporte de clave, incluido el antiguo ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``. El
+   punto final del consumidor de aserciones es anónimo y el descifrado se ejecuta antes de
+   validar la respuesta, por lo que quien llame sin autenticarse puede hacer que la clave
+   privada del SP descifre un texto cifrado de su elección. Mientras sea así, |Fess| informa
+   ``key_transport_algorithms_not_restricted`` en la línea ``Insecure SAML settings`` al
+   arrancar. Restrínjalo a lo que el IdP utiliza realmente::
+
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 Configuración del certificado y clave privada del SP
 ----------------------------------------------------

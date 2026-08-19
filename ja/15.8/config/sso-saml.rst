@@ -382,6 +382,26 @@ Keycloakのアカウントは既定で複数のレルムロールを持つため
    * - ``saml.security.want_nameid_encrypted``
      - NameIDの暗号化を要求する
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - アサーションの復号時に受け付ける鍵輸送アルゴリズム（カンマ区切りのURI）
+     - （空文字：すべて受け付ける）
+
+.. note::
+   |Fess| はXML Encryption 1.1で暗号化された応答を検証できます。たとえば現行のKeycloakは
+   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` を使い応答に ``<xenc11:MGF>`` 要素を含めますが、
+   スキーマ検証を有効にしたまま受け付けられます。以前のバージョンでは
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd`` で拒否されていました。
+   その回避策として ``saml.security.want_xml_validation=false`` を設定していた場合は、削除してください。
+
+.. note::
+   SPの秘密鍵を設定する場合は、``saml.security.allowed_key_transport_algorithms`` も設定してください。
+   未設定の間は、古い ``http://www.w3.org/2001/04/xmlenc#rsa-1_5`` を含むすべての鍵輸送アルゴリズムを
+   受け付けます。アサーションコンシューマのエンドポイントは認証不要であり、復号は応答の検証より前に
+   実行されるため、未認証の相手が任意の暗号文をSPの秘密鍵で復号させることができます。この状態では
+   起動時の ``Insecure SAML settings`` の行に ``key_transport_algorithms_not_restricted`` が出力されます。
+   IdPが実際に使うアルゴリズムだけに限定してください::
+
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 SP証明書・秘密鍵の設定
 ----------------------

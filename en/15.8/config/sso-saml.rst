@@ -381,6 +381,28 @@ Encryption Settings
    * - ``saml.security.want_nameid_encrypted``
      - Require NameID encryption
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - Key transport algorithms accepted when decrypting an assertion (comma-separated URIs)
+     - (empty: every algorithm is accepted)
+
+.. note::
+   |Fess| validates responses encrypted with XML Encryption 1.1. Current Keycloak, for
+   example, uses ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` and includes an
+   ``<xenc11:MGF>`` element in its response; such a response is accepted with schema
+   validation left on. Earlier versions rejected it with
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd``. If
+   ``saml.security.want_xml_validation=false`` was set to work around that, remove it.
+
+.. note::
+   Set ``saml.security.allowed_key_transport_algorithms`` whenever an SP private key is
+   configured. While it is unset, every key transport algorithm is accepted, including the
+   legacy ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``. The assertion consumer endpoint is
+   anonymous and decryption runs before the response is validated, so an unauthenticated
+   caller can have the SP private key decrypt a ciphertext of their choosing. |Fess| reports
+   ``key_transport_algorithms_not_restricted`` in the ``Insecure SAML settings`` line at
+   start-up while this is the case. Restrict it to what the IdP actually uses::
+
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 SP Certificate and Private Key Configuration
 --------------------------------------------

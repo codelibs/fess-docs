@@ -374,6 +374,25 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
    * - ``saml.security.want_nameid_encrypted``
      - 要求NameID加密
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - 解密断言时接受的密钥传输算法（以逗号分隔的 URI）
+     - （空：接受所有算法）
+
+.. note::
+   |Fess| 可以验证使用 XML Encryption 1.1 加密的响应。例如当前的 Keycloak 使用
+   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` 并在响应中包含 ``<xenc11:MGF>`` 元素，
+   在启用架构验证的情况下也能接受此类响应。早期版本会以
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd`` 拒绝。
+   如果为此设置过 ``saml.security.want_xml_validation=false``，请将其删除。
+
+.. note::
+   配置 SP 私钥时，请同时设置 ``saml.security.allowed_key_transport_algorithms``。
+   未设置时会接受所有密钥传输算法，包括旧的 ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``。
+   断言消费端点无需认证，且解密在响应验证之前执行，因此未经认证的调用方可以让 SP 私钥
+   解密其选择的密文。处于这种状态时，|Fess| 会在启动时的 ``Insecure SAML settings``
+   一行中输出 ``key_transport_algorithms_not_restricted``。请将其限制为 IdP 实际使用的算法::
+
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 SP证书与私钥配置
 ----------------

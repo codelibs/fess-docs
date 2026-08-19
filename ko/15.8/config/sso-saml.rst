@@ -381,6 +381,27 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
    * - ``saml.security.want_nameid_encrypted``
      - NameID의 암호화를 요구한다
      - ``false``
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - 어설션을 복호화할 때 허용할 키 전송 알고리즘 (쉼표로 구분된 URI)
+     - (빈 값: 모든 알고리즘을 허용)
+
+.. note::
+   |Fess| 는 XML Encryption 1.1로 암호화된 응답을 검증합니다. 예를 들어 현재 Keycloak은
+   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` 를 사용하고 응답에 ``<xenc11:MGF>`` 요소를
+   포함하지만, 스키마 검증을 켠 상태로도 이러한 응답을 받아들입니다. 이전 버전에서는
+   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd`` 로 거부되었습니다.
+   그 회피책으로 ``saml.security.want_xml_validation=false`` 를 설정했다면 제거하십시오.
+
+.. note::
+   SP 개인 키를 설정할 때는 ``saml.security.allowed_key_transport_algorithms`` 도 함께
+   설정하십시오. 설정하지 않으면 오래된 ``http://www.w3.org/2001/04/xmlenc#rsa-1_5`` 를 포함한
+   모든 키 전송 알고리즘을 허용합니다. 어설션 컨슈머 엔드포인트는 인증이 필요 없고 복호화는
+   응답 검증보다 먼저 실행되므로, 인증되지 않은 호출자가 임의의 암호문을 SP 개인 키로 복호화하게
+   만들 수 있습니다. 이 상태에서는 시작 시 ``Insecure SAML settings`` 줄에
+   ``key_transport_algorithms_not_restricted`` 가 출력됩니다. IdP가 실제로 사용하는 것으로
+   제한하십시오::
+
+      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
 
 SP 인증서 및 비밀 키 설정
 --------------------------
