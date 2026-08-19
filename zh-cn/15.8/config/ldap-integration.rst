@@ -232,6 +232,32 @@ LDAP管理功能与行为设置
      - ``-1``
      - 用户名的最大长度。\ ``-1`` 表示无限制。
 
+保留的管理员用户名
+------------------
+
+``authentication.admin.users`` 中列出的名称由 |Fess| 为自身保留。在SSO中它们作为阻止列表：
+``SpnegoAuthenticator`` 不会为匹配的名称解析凭据，表单登录也不会将该名称交给LDAP。
+
+目录不区分账户名称的大小写——Active Directory 对任何写法都会签发票据——因此按完全一致比较时，
+同一账户只要改变大小写就能登录。``authentication.admin.users.ignore.case`` 决定比较方式。
+
+.. list-table:: 保留名称的比较
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - 属性
+     - 默认值
+     - 说明
+   * - ``authentication.admin.users``
+     - ``admin``
+     - 保留的管理员用户名，以逗号分隔。
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - 保留名称的比较方式。``auto`` 仅在设置了 ``ldap.provider.url`` 时忽略大小写，未设置时按完全一致比较。``true`` 与 ``false`` 直接指定。
+
+.. note::
+   在设置了 ``ldap.provider.url`` 的配置中，``auto`` 会忽略大小写。此时，目录中仅大小写与保留名称不同的账户将无法登录，也不再从管理界面同步到目录。若需按完全一致比较，请设置 ``authentication.admin.users.ignore.case=false``。
+
 属性映射
 --------
 

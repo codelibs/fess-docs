@@ -1420,6 +1420,9 @@ Permission
   * - authentication.admin.users
     - Admin users for authentication
     - admin
+  * - authentication.admin.users.ignore.case
+    - How authentication.admin.users is compared: auto, true or false. auto ignores case when ldap.provider.url is set
+    - auto
   * - authentication.admin.roles
     - Admin roles for authentication
     - admin
