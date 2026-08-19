@@ -235,6 +235,34 @@ LDAP 관리 기능·동작 설정
      - ``-1``
      - 사용자 이름의 최대 길이. ``-1`` 은 제한 없음을 의미합니다.
 
+예약된 관리자 사용자 이름
+-------------------------
+
+``authentication.admin.users`` 에 나열한 이름은 |Fess| 가 자체적으로 예약합니다. SSO에서는 차단 목록으로
+동작하여, 일치하는 이름에 대해 ``SpnegoAuthenticator`` 는 자격 증명을 해결하지 않으며 폼 로그인도 그 이름을
+LDAP로 보내지 않습니다.
+
+디렉터리는 계정 이름의 대소문자를 구분하지 않습니다. Active Directory는 어떤 표기에도 티켓을 발급하므로,
+정확히 비교하면 같은 계정이 표기만 바꾸어 로그인할 수 있습니다. ``authentication.admin.users.ignore.case``
+가 비교 방식을 결정합니다.
+
+.. list-table:: 예약된 이름의 비교
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - 속성
+     - 기본값
+     - 설명
+   * - ``authentication.admin.users``
+     - ``admin``
+     - 예약할 관리자 사용자 이름. 쉼표로 구분합니다.
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - 예약된 이름의 비교 방식. ``auto`` 는 ``ldap.provider.url`` 이 설정된 경우에만 대소문자를 무시하고, 설정되지 않았으면 정확히 비교합니다. ``true`` 와 ``false`` 는 명시적으로 고정합니다.
+
+.. note::
+   ``ldap.provider.url`` 이 설정된 구성에서 ``auto`` 는 대소문자를 무시합니다. 이때 예약된 이름과 대소문자만 다른 디렉터리 계정은 더 이상 로그인할 수 없으며, 관리 화면에서 디렉터리로 동기화되지도 않습니다. 이전처럼 정확히 비교하려면 ``authentication.admin.users.ignore.case=false`` 를 설정하십시오.
+
 속성 매핑
 ---------
 

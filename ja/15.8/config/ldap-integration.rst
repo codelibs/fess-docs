@@ -235,6 +235,33 @@ LDAP管理機能・動作設定
      - ``-1``
      - ユーザー名の最大長。\ ``-1`` は制限なしを意味します。
 
+予約された管理ユーザー名
+------------------------
+
+``authentication.admin.users`` に列挙した名前は |Fess| が自身のために予約します。SSOではブロックリストとして働き、
+一致した名前は ``SpnegoAuthenticator`` が資格情報を解決せず、フォームログインでもLDAP認証に回りません。
+
+ディレクトリはアカウント名の大文字・小文字を区別しません（Active Directoryはどの綴りでもチケットを発行します）。
+そのため比較を完全一致にしていると、同じアカウントが綴りを変えるだけでログインできてしまいます。
+``authentication.admin.users.ignore.case`` がこの比較方法を決めます。
+
+.. list-table:: 予約名の比較
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - プロパティ
+     - デフォルト値
+     - 説明
+   * - ``authentication.admin.users``
+     - ``admin``
+     - 予約する管理ユーザー名。カンマ区切りで指定します。
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - 予約名の比較方法。``auto`` は ``ldap.provider.url`` が設定されている場合のみ大文字・小文字を無視し、未設定なら完全一致で比較します。``true`` / ``false`` は明示的に固定します。
+
+.. note::
+   ``ldap.provider.url`` を設定した構成では ``auto`` は大文字・小文字を無視します。この場合、予約名と大文字・小文字だけが異なるディレクトリ上のアカウントはログインできなくなり、管理画面からディレクトリへ同期されなくなります。従来どおり完全一致で比較するには ``authentication.admin.users.ignore.case=false`` を設定してください。
+
 属性マッピング
 --------------
 

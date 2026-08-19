@@ -232,6 +232,35 @@ Controla el comportamiento de la resolución de roles y grupos tras el inicio de
      - ``-1``
      - Longitud máxima del nombre de usuario. ``-1`` significa sin límite.
 
+Nombres de usuario administrador reservados
+-------------------------------------------
+
+Los nombres indicados en ``authentication.admin.users`` quedan reservados por |Fess| para sí mismo.
+En SSO actúan como lista de bloqueo: ``SpnegoAuthenticator`` no resuelve credenciales para un nombre
+que coincida, y el inicio de sesión por formulario tampoco lleva ese nombre a LDAP.
+
+Un directorio no distingue mayúsculas y minúsculas en un nombre de cuenta -- Active Directory emite
+un ticket para cualquier grafía --, de modo que comparar exactamente permite que la misma cuenta
+inicie sesión solo con cambiar la grafía. ``authentication.admin.users.ignore.case`` decide cómo se
+comparan.
+
+.. list-table:: Comparación de nombres reservados
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Propiedad
+     - Valor predeterminado
+     - Descripción
+   * - ``authentication.admin.users``
+     - ``admin``
+     - Nombres de usuario administrador reservados, separados por comas.
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - Cómo se comparan los nombres reservados. ``auto`` ignora mayúsculas y minúsculas solo cuando ``ldap.provider.url`` está definido; si no lo está, compara exactamente. ``true`` y ``false`` lo deciden de forma explícita.
+
+.. note::
+   Cuando ``ldap.provider.url`` está definido, ``auto`` ignora mayúsculas y minúsculas. Una cuenta del directorio cuyo nombre difiera de uno reservado solo en mayúsculas y minúsculas deja de poder iniciar sesión y ya no se sincroniza con el directorio desde la interfaz de administración. Defina ``authentication.admin.users.ignore.case=false`` para seguir comparando de forma exacta.
+
 Mapeo de atributos
 --------------------
 

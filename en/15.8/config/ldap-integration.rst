@@ -235,6 +235,34 @@ Controls the behavior of role and group resolution after login.
      - ``-1``
      - Maximum length of usernames. ``-1`` means no limit.
 
+Reserved Admin User Names
+-------------------------
+
+The names listed in ``authentication.admin.users`` are reserved by |Fess| for itself. For SSO they act
+as a block list: ``SpnegoAuthenticator`` resolves no credential for a name that matches one, and form
+login does not take such a name to LDAP either.
+
+A directory does not distinguish case in an account name -- Active Directory issues a ticket for any
+casing of one -- so comparing the reserved names exactly lets the same account log in simply by
+changing the spelling. ``authentication.admin.users.ignore.case`` decides how they are compared.
+
+.. list-table:: Comparison of Reserved Names
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Property
+     - Default
+     - Description
+   * - ``authentication.admin.users``
+     - ``admin``
+     - Reserved admin user names, separated by commas.
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - How the reserved names are compared. ``auto`` ignores case only when ``ldap.provider.url`` is set, and compares exactly when it is not. ``true`` and ``false`` decide it outright.
+
+.. note::
+   Where ``ldap.provider.url`` is set, ``auto`` ignores case. A directory account whose name differs from a reserved one only in case can then no longer log in, and is no longer synchronised to the directory from the admin UI. Set ``authentication.admin.users.ignore.case=false`` to keep comparing the names exactly.
+
 Attribute Mapping
 -----------------
 

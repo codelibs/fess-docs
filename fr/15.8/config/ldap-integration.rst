@@ -236,6 +236,34 @@ Contrôle le comportement de la résolution des rôles/groupes après la connexi
      - ``-1``
      - Longueur maximale du nom d'utilisateur. ``-1`` signifie sans limite.
 
+Noms d'utilisateur administrateur réservés
+------------------------------------------
+
+Les noms énumérés dans ``authentication.admin.users`` sont réservés par |Fess| pour lui-même. Pour le
+SSO, ils forment une liste de blocage : ``SpnegoAuthenticator`` ne résout aucune identité pour un nom
+qui y correspond, et la connexion par formulaire ne dirige pas non plus un tel nom vers LDAP.
+
+Un annuaire ne distingue pas la casse dans un nom de compte -- Active Directory délivre un ticket
+pour n'importe quelle graphie --, si bien qu'une comparaison exacte laisse entrer le même compte par
+un simple changement de graphie. ``authentication.admin.users.ignore.case`` décide de la comparaison.
+
+.. list-table:: Comparaison des noms réservés
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Propriété
+     - Valeur par défaut
+     - Description
+   * - ``authentication.admin.users``
+     - ``admin``
+     - Noms d'utilisateur administrateur réservés, séparés par des virgules.
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - Manière de comparer les noms réservés. ``auto`` ignore la casse uniquement lorsque ``ldap.provider.url`` est défini, et compare exactement sinon. ``true`` et ``false`` le décident explicitement.
+
+.. note::
+   Lorsque ``ldap.provider.url`` est défini, ``auto`` ignore la casse. Un compte de l'annuaire dont le nom ne diffère d'un nom réservé que par la casse ne peut alors plus se connecter et n'est plus synchronisé vers l'annuaire depuis l'interface d'administration. Définissez ``authentication.admin.users.ignore.case=false`` pour continuer à comparer exactement.
+
 Correspondance des attributs
 -----------------------------
 

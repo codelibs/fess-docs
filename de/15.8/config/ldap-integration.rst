@@ -236,6 +236,35 @@ Steuert das Verhalten bei der Rollen- und Gruppenauflösung nach der Anmeldung.
      - ``-1``
      - Maximale Länge des Benutzernamens. ``-1`` bedeutet keine Einschränkung.
 
+Reservierte Administrator-Benutzernamen
+---------------------------------------
+
+Die in ``authentication.admin.users`` aufgeführten Namen reserviert |Fess| für sich selbst. Für SSO
+wirken sie als Sperrliste: ``SpnegoAuthenticator`` löst für einen übereinstimmenden Namen keine
+Anmeldeinformationen auf, und auch die Formularanmeldung führt einen solchen Namen nicht zu LDAP.
+
+Ein Verzeichnis unterscheidet bei einem Kontonamen nicht zwischen Groß- und Kleinschreibung --
+Active Directory stellt für jede Schreibweise ein Ticket aus. Ein exakter Vergleich lässt dasselbe
+Konto daher allein durch eine andere Schreibweise herein. ``authentication.admin.users.ignore.case``
+bestimmt, wie verglichen wird.
+
+.. list-table:: Vergleich reservierter Namen
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Eigenschaft
+     - Standardwert
+     - Beschreibung
+   * - ``authentication.admin.users``
+     - ``admin``
+     - Reservierte Administrator-Benutzernamen, durch Kommas getrennt.
+   * - ``authentication.admin.users.ignore.case``
+     - ``auto``
+     - Wie die reservierten Namen verglichen werden. ``auto`` ignoriert die Groß- und Kleinschreibung nur, wenn ``ldap.provider.url`` gesetzt ist, andernfalls wird exakt verglichen. ``true`` und ``false`` legen es unmittelbar fest.
+
+.. note::
+   Ist ``ldap.provider.url`` gesetzt, ignoriert ``auto`` die Groß- und Kleinschreibung. Ein Verzeichniskonto, dessen Name sich von einem reservierten nur in der Schreibweise unterscheidet, kann sich dann nicht mehr anmelden und wird nicht mehr aus der Administrationsoberfläche in das Verzeichnis synchronisiert. Setzen Sie ``authentication.admin.users.ignore.case=false``, um weiterhin exakt zu vergleichen.
+
 Attributzuordnung
 -----------------
 
