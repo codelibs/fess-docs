@@ -5,6 +5,9 @@ Serveur de recherche plein texte open source - Liste des actualités
 Liste des actualités
 ============
 
+2026-08-20
+    `Version Fess 15.8.0 <https://github.com/codelibs/fess/releases/tag/fess-15.8.0>`__
+
 2026-06-25
     `Version Fess 15.7.0 <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`__
 

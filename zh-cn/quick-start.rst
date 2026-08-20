@@ -68,7 +68,7 @@ Docker 提供了最快、最可靠的 Fess 运行方式。所有依赖都已打�
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 关于高级 Docker 配置（自定义设置、外部 OpenSearch、Kubernetes），
-请参阅 :doc:`Docker 安装指南 <15.7/install/install-docker>`。
+请参阅 :doc:`Docker 安装指南 <15.8/install/install-docker>`。
 
 ----
 

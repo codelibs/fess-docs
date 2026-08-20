@@ -83,9 +83,12 @@ Currently Supported Versions
    * - Fess
      - EOL Date
      - Status
+   * - 15.8.x
+     - 2028-02-01
+     - 🟢 Latest (Recommended)
    * - 15.7.x
      - 2027-12-01
-     - 🟢 Latest (Recommended)
+     - 🟢 Supported
    * - 15.6.x
      - 2027-10-01
      - 🟢 Supported

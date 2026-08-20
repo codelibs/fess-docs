@@ -101,7 +101,7 @@ http://localhost:8080/admin/ 에 접속하면 로그인 화면이 표시됩니�
 
    기본 비밀번호는 반드시 변경하세요.
    특히 프로덕션 환경에서는 첫 로그인 후 즉시 비밀번호를 변경할 것을 강력히 권장합니다.
-   비밀번호 변경 방법은 :doc:`15.7/admin/user-guide` 를 참조하세요.
+   비밀번호 변경 방법은 :doc:`15.8/admin/user-guide` 를 참조하세요.
 
 .. note::
 
@@ -139,8 +139,8 @@ http://localhost:8080/admin/ 에 접속하면 로그인 화면이 표시됩니�
 
 기본 사용법을 이해했다면 다음 문서를 참조하여 더 자세히 배울 수 있습니다:
 
-- :doc:`15.7/admin/index` — 크롤 설정, 검색 설정 상세
-- :doc:`15.7/api/index` — REST API를 사용한 검색 통합
+- :doc:`15.8/admin/index` — 크롤 설정, 검색 설정 상세
+- :doc:`15.8/api/index` — REST API를 사용한 검색 통합
 - :doc:`dev/index` — 커스터마이즈 및 확장 기능 개발
 
 .. |브라우저에 의한 검색 결과 표시| image:: ../resources/images/en/fess_search_result.png

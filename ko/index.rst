@@ -50,7 +50,7 @@ Fess는 Apache 라이센스로 제공되며, 무료(프리 소프트웨어)로 �
 다운로드
 ============
 
-- :doc:`Fess 15.7.0 <downloads>` (zip/rpm/deb 패키지)
+- :doc:`Fess 15.8.0 <downloads>` (zip/rpm/deb 패키지)
 
 특징
 ====
@@ -110,6 +110,9 @@ Fess는 Apache 라이센스로 제공되며, 무료(프리 소프트웨어)로 �
 뉴스
 ========
 
+2026-08-20
+    `Fess 15.8.0 릴리스 <https://github.com/codelibs/fess/releases/tag/fess-15.8.0>`__
+
 2026-06-25
     `Fess 15.7.0 릴리스 <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`__
 
@@ -121,9 +124,6 @@ Fess는 Apache 라이센스로 제공되며, 무료(프리 소프트웨어)로 �
 
 2025-12-25
     `Fess 15.4.0 릴리스 <https://github.com/codelibs/fess/releases/tag/fess-15.4.0>`__
-
-2025-10-25
-    `Fess 15.3.0 릴리스 <https://github.com/codelibs/fess/releases/tag/fess-15.3.0>`__
 
 과거 뉴스는 :doc:`여기 <news>` 를 참조하세요.
 

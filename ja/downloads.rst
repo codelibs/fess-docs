@@ -4,7 +4,7 @@
 
 .. tip::
 
-   最新の安定版は **Fess 15.7.0** です ( `リリースノート <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.7.0 <https://opensearch.org/versions/opensearch-3-7-0.html>`_ )。サポート期限は :doc:`eol` を参照してください。
+   最新の安定版は **Fess 15.8.0** です ( `リリースノート <https://github.com/codelibs/fess/releases/tag/fess-15.8.0>`_ / `Java 21 <https://adoptium.net/temurin/releases?version=21>`_ / `OpenSearch 3.8.0 <https://opensearch.org/versions/opensearch-3-8-0.html>`_ )。サポート期限は :doc:`eol` を参照してください。
 
 Docker
 ======
@@ -25,6 +25,9 @@ Dockerイメージは以下を参照してください。
    * - バージョン
      - Java
      - 検索エンジン
+   * - `Fess 15.8.0 <https://github.com/codelibs/fess/releases/tag/fess-15.8.0>`_
+     - `21 <https://adoptium.net/temurin/releases?version=21>`_
+     - `OpenSearch 3.8.0 <https://opensearch.org/versions/opensearch-3-8-0.html>`_
    * - `Fess 15.7.0 <https://github.com/codelibs/fess/releases/tag/fess-15.7.0>`_
      - `21 <https://adoptium.net/temurin/releases?version=21>`_
      - `OpenSearch 3.7.0 <https://opensearch.org/versions/opensearch-3-7-0.html>`_
