@@ -22,7 +22,7 @@ OpenSearch 시작
 
 ::
 
-    $ cd /path/to/opensearch-3.7.0
+    $ cd /path/to/opensearch-3.8.0
     $ ./bin/opensearch
 
 백그라운드에서 시작하는 경우::
@@ -57,8 +57,8 @@ OpenSearch 시작
 
 또는 명령 프롬프트에서::
 
-    C:\> cd C:\opensearch-3.7.0
-    C:\opensearch-3.7.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.8.0
+    C:\opensearch-3.8.0> bin\opensearch.bat
 
 Fess 시작
 ~~~~~~~~~~

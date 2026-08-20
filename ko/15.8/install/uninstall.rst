@@ -77,13 +77,13 @@ TAR.GZ/ZIP 버전 제거
 
 OpenSearch 설치 디렉터리를 삭제합니다::
 
-    $ rm -rf /path/to/opensearch-3.7.0
+    $ rm -rf /path/to/opensearch-3.8.0
 
 단계 3: 데이터 디렉터리 삭제(옵션)
 -------------------------------------------
 
 |Fess| 의 인덱스 데이터는 OpenSearch 에 저장됩니다.
-기본적으로 OpenSearch 의 설치 디렉터리 내(``opensearch-3.7.0/data`` 등)에 저장되지만,
+기본적으로 OpenSearch 의 설치 디렉터리 내(``opensearch-3.8.0/data`` 등)에 저장되지만,
 ``path.data`` 로 다른 위치를 지정한 경우 해당 디렉터리도 삭제하십시오::
 
     $ rm -rf /path/to/data
@@ -94,7 +94,7 @@ OpenSearch 설치 디렉터리를 삭제합니다::
 로그 파일을 삭제합니다::
 
     $ rm -rf /path/to/fess-15.8.0/logs
-    $ rm -rf /path/to/opensearch-3.7.0/logs
+    $ rm -rf /path/to/opensearch-3.8.0/logs
 
 RPM 버전 제거
 ======================
@@ -310,7 +310,7 @@ Docker 이미지를 삭제하여 디스크 공간을 확보하는 경우::
 
     $ docker images | grep fess
     $ docker rmi ghcr.io/codelibs/fess:15.8.0
-    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.8.0
 
 단계 4: Compose 파일 삭제
 --------------------------------

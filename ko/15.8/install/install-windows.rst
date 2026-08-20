@@ -15,7 +15,7 @@ ZIP 패키지를 사용한 설치 방법에 대해 기재하고 있습니다.
 
 - :doc:`prerequisites` 에 기재된 시스템 요구사항을 충족할 것
 - Java 21이 설치되어 있을 것
-- OpenSearch 3.7.0을 사용 가능한 상태로 할 것(또는 신규 설치)
+- OpenSearch 3.8.0을 사용 가능한 상태로 할 것(또는 신규 설치)
 - Windows 환경 변수 ``JAVA_HOME`` 이 적절히 설정되어 있을 것
 
 Java 설치 확인
@@ -69,7 +69,7 @@ OpenSearch 다운로드
 
    예::
 
-       C:\opensearch-3.7.0
+       C:\opensearch-3.8.0
 
    .. note::
 
@@ -82,16 +82,16 @@ OpenSearch 플러그인 설치
 
 ::
 
-    C:\> cd C:\opensearch-3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+    C:\> cd C:\opensearch-3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 .. important::
 
    플러그인 버전은 OpenSearch 버전과 일치시켜야 합니다.
-   위의 예제에서는 모두 3.7.0을 지정하고 있습니다.
+   위의 예제에서는 모두 3.8.0을 지정하고 있습니다.
 
 OpenSearch 설정
 ---------------
@@ -101,7 +101,7 @@ OpenSearch 설정
 ::
 
     # 설정 동기화용 경로(절대 경로로 지정)
-    configsync.config_path: C:/opensearch-3.7.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/data/config/
 
     # 보안 플러그인 비활성화(개발 환경 전용)
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ OpenSearch 설정
 .. note::
 
    Windows의 경우 경로 구분 문자는 ``\`` 가 아닌 ``/`` 를 사용하십시오.
-   ``C:\opensearch-3.7.0\data\config\`` 가 아니라 ``C:/opensearch-3.7.0/data/config/`` 로 기술합니다.
+   ``C:\opensearch-3.8.0\data\config\`` 가 아니라 ``C:/opensearch-3.8.0/data/config/`` 로 기술합니다.
 
 .. tip::
 
@@ -169,7 +169,7 @@ Fess 설정
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.7.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
 
 .. note::
 
@@ -280,7 +280,7 @@ Windows에서는 경로 길이에 제한이 있습니다. 가능한 한 짧은 �
 예::
 
     C:\opensearch  (권장)
-    C:\Program Files\opensearch-3.7.0  (비권장 - 경로가 김)
+    C:\Program Files\opensearch-3.8.0  (비권장 - 경로가 김)
 
 Java가 인식되지 않음
 --------------------

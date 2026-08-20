@@ -77,13 +77,13 @@ Supprimez le répertoire d'installation ::
 
 Supprimez le répertoire d'installation d'OpenSearch ::
 
-    $ rm -rf /path/to/opensearch-3.7.0
+    $ rm -rf /path/to/opensearch-3.8.0
 
 Étape 3 : Suppression du répertoire de données (optionnel)
 ----------------------------------------------------------
 
 Les données d'index de |Fess| sont stockées dans OpenSearch.
-Par défaut, elles sont stockées dans le répertoire d'installation d'OpenSearch (``opensearch-3.7.0/data``, etc.),
+Par défaut, elles sont stockées dans le répertoire d'installation d'OpenSearch (``opensearch-3.8.0/data``, etc.),
 mais si vous avez spécifié un autre emplacement avec ``path.data``, supprimez également ce répertoire ::
 
     $ rm -rf /path/to/data
@@ -94,7 +94,7 @@ mais si vous avez spécifié un autre emplacement avec ``path.data``, supprimez 
 Supprimez les fichiers journaux ::
 
     $ rm -rf /path/to/fess-15.8.0/logs
-    $ rm -rf /path/to/opensearch-3.7.0/logs
+    $ rm -rf /path/to/opensearch-3.8.0/logs
 
 Désinstallation de la version RPM
 =================================
@@ -311,7 +311,7 @@ Pour supprimer les images Docker et libérer de l'espace disque ::
 
     $ docker images | grep fess
     $ docker rmi ghcr.io/codelibs/fess:15.8.0
-    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.8.0
 
 Étape 4 : Suppression des fichiers Compose
 ------------------------------------------
