@@ -1,6 +1,6 @@
 {
   "_comment": "Which Fess documentation versions are current, and when each one reaches end of life. The maintenance tables in <lang>/eol.rst are generated from this file by tools/update_eol.py -- edit here, not there.",
-  "release": "15.7",
+  "release": "15.8",
   "development": "15.8",
   "supported": [
     "15.0",
@@ -10,7 +10,8 @@
     "15.4",
     "15.5",
     "15.6",
-    "15.7"
+    "15.7",
+    "15.8"
   ],
   "nearing": [],
   "eol": [
@@ -84,6 +85,11 @@
     "14.19"
   ],
   "schedule": [
+    {
+      "label": "15.8.x",
+      "dir": "15.8",
+      "eol": "2028-02-01"
+    },
     {
       "label": "15.7.x",
       "dir": "15.7",

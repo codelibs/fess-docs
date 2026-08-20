@@ -77,13 +77,13 @@ Schritt 2: Löschen von OpenSearch
 
 Löschen Sie das OpenSearch-Installationsverzeichnis::
 
-    $ rm -rf /path/to/opensearch-3.7.0
+    $ rm -rf /path/to/opensearch-3.8.0
 
 Schritt 3: Löschen des Datenverzeichnisses (Optional)
 -----------------------------------------------------
 
 Die Indexdaten von |Fess| werden in OpenSearch gespeichert.
-Standardmäßig werden sie innerhalb des OpenSearch-Installationsverzeichnisses gespeichert (z. B. ``opensearch-3.7.0/data``).
+Standardmäßig werden sie innerhalb des OpenSearch-Installationsverzeichnisses gespeichert (z. B. ``opensearch-3.8.0/data``).
 Falls Sie mit ``path.data`` einen anderen Speicherort angegeben haben, löschen Sie auch dieses Verzeichnis::
 
     $ rm -rf /path/to/data
@@ -94,7 +94,7 @@ Schritt 4: Löschen des Protokollverzeichnisses (Optional)
 Löschen Sie die Protokolldateien::
 
     $ rm -rf /path/to/fess-15.8.0/logs
-    $ rm -rf /path/to/opensearch-3.7.0/logs
+    $ rm -rf /path/to/opensearch-3.8.0/logs
 
 Deinstallation der RPM-Version
 ==============================
@@ -310,7 +310,7 @@ Wenn Sie Docker-Images löschen und Festplattenplatz freigeben möchten::
 
     $ docker images | grep fess
     $ docker rmi ghcr.io/codelibs/fess:15.8.0
-    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.8.0
 
 Schritt 4: Löschen der Compose-Dateien
 --------------------------------------

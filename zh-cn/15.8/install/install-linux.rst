@@ -15,7 +15,7 @@
 
 - 满足 :doc:`prerequisites` 中描述的系统要求
 - 已安装 Java 21
-- OpenSearch 3.7.0 可用（或新安装）
+- OpenSearch 3.8.0 可用（或新安装）
 
 选择安装方法
 ================
@@ -85,14 +85,14 @@
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.7.0-linux-x64.tar.gz
-       $ cd opensearch-3.7.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.8.0-linux-x64.tar.gz
+       $ cd opensearch-3.8.0
 
    .. note::
 
-      此示例使用 OpenSearch 3.7.0。
-      |Fess| 15.8 支持 OpenSearch 3.7.0。
+      此示例使用 OpenSearch 3.8.0。
+      |Fess| 15.8 支持 OpenSearch 3.8.0。
 
 2. 安装 OpenSearch 插件
 
@@ -100,16 +100,16 @@
 
    ::
 
-       $ cd /path/to/opensearch-3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ cd /path/to/opensearch-3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
    .. important::
 
       插件版本必须与 OpenSearch 版本一致。
-      在上述示例中，所有版本都指定为 3.7.0。
+      在上述示例中，所有版本都指定为 3.8.0。
 
 3. 配置 OpenSearch
 
@@ -118,7 +118,7 @@
    ::
 
        # 配置同步路径（使用绝对路径指定）
-       configsync.config_path: /path/to/opensearch-3.7.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.8.0/data/config/
 
        # 禁用安全插件（仅限开发环境）
        plugins.security.disabled: true
@@ -181,7 +181,7 @@
 
        # External opensearch cluster
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.7.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
 
    .. note::
 
@@ -219,8 +219,8 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.7.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.8.0-linux-x64.rpm
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__\ 。
@@ -229,10 +229,10 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 3. 配置 OpenSearch
 
@@ -319,8 +319,8 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.7.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.8.0-linux-x64.deb
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__\ 。
@@ -329,10 +329,10 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 3. 配置 OpenSearch
 
@@ -419,7 +419,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    TAR.GZ 版的情况::
 
-       $ ls -ld /path/to/opensearch-3.7.0/data/config/
+       $ ls -ld /path/to/opensearch-3.8.0/data/config/
 
    RPM/DEB 版的情况::
 
@@ -457,7 +457,7 @@ Q: OpenSearch 的其他版本也能工作吗？
 ----------------------------------------
 
 A: |Fess| 依赖于特定版本的 OpenSearch。
-为了确保插件兼容性，强烈建议使用推荐版本（3.7.0）。
+为了确保插件兼容性，强烈建议使用推荐版本（3.8.0）。
 如果使用其他版本，需要适当调整插件版本。
 
 Q: 多个 Fess 实例可以共享同一个 OpenSearch 吗？

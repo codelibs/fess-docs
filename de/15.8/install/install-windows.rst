@@ -15,7 +15,7 @@ Voraussetzungen
 
 - Die in :doc:`prerequisites` beschriebenen Systemanforderungen sind erfüllt
 - Java 21 ist installiert
-- OpenSearch 3.7.0 ist verfügbar (oder wird neu installiert)
+- OpenSearch 3.8.0 ist verfügbar (oder wird neu installiert)
 - Die Windows-Umgebungsvariable ``JAVA_HOME`` ist korrekt konfiguriert
 
 Überprüfung der Java-Installation
@@ -69,7 +69,7 @@ Download von OpenSearch
 
    Beispiel::
 
-       C:\opensearch-3.7.0
+       C:\opensearch-3.8.0
 
    .. note::
 
@@ -82,16 +82,16 @@ Installation der OpenSearch-Plugins
 
 ::
 
-    C:\> cd C:\opensearch-3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+    C:\> cd C:\opensearch-3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 .. important::
 
    Die Plugin-Version muss mit der OpenSearch-Version übereinstimmen.
-   Im obigen Beispiel sind alle auf 3.7.0 gesetzt.
+   Im obigen Beispiel sind alle auf 3.8.0 gesetzt.
 
 Konfiguration von OpenSearch
 -----------------------------
@@ -101,7 +101,7 @@ Konfiguration von OpenSearch
 ::
 
     # Pfad für Konfigurationssynchronisation (als absoluter Pfad angeben)
-    configsync.config_path: C:/opensearch-3.7.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/data/config/
 
     # Deaktivierung des Sicherheits-Plugins (nur Entwicklungsumgebung)
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ Konfiguration von OpenSearch
 .. note::
 
    Bei Windows verwenden Sie ``/`` anstelle von ``\`` als Pfadtrennzeichen.
-   Schreiben Sie ``C:/opensearch-3.7.0/data/config/`` statt ``C:\opensearch-3.7.0\data\config\``.
+   Schreiben Sie ``C:/opensearch-3.8.0/data/config/`` statt ``C:\opensearch-3.8.0\data\config\``.
 
 .. tip::
 
@@ -169,7 +169,7 @@ Zustand nach der Änderung::
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.7.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
 
 .. note::
 
@@ -280,7 +280,7 @@ Windows hat eine Pfadlängenbeschränkung. Es wird empfohlen, in einem möglichs
 Beispiel::
 
     C:\opensearch  (empfohlen)
-    C:\Program Files\opensearch-3.7.0  (nicht empfohlen - Pfad zu lang)
+    C:\Program Files\opensearch-3.8.0  (nicht empfohlen - Pfad zu lang)
 
 Java wird nicht erkannt
 -----------------------

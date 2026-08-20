@@ -77,13 +77,13 @@ TAR.GZ/ZIP 版的卸载
 
 删除 OpenSearch 的安装目录::
 
-    $ rm -rf /path/to/opensearch-3.7.0
+    $ rm -rf /path/to/opensearch-3.8.0
 
 步骤 3: 删除数据目录（可选）
 --------------------------
 
 |Fess| 的索引数据保存在 OpenSearch 中。
-默认情况下保存在 OpenSearch 的安装目录内（如 ``opensearch-3.7.0/data``），
+默认情况下保存在 OpenSearch 的安装目录内（如 ``opensearch-3.8.0/data``），
 但如果通过 ``path.data`` 指定了其他位置，请同时删除该目录::
 
     $ rm -rf /path/to/data
@@ -94,7 +94,7 @@ TAR.GZ/ZIP 版的卸载
 删除日志文件::
 
     $ rm -rf /path/to/fess-15.8.0/logs
-    $ rm -rf /path/to/opensearch-3.7.0/logs
+    $ rm -rf /path/to/opensearch-3.8.0/logs
 
 RPM 版的卸载
 ============
@@ -309,7 +309,7 @@ Docker 版的卸载
 
     $ docker images | grep fess
     $ docker rmi ghcr.io/codelibs/fess:15.8.0
-    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.8.0
 
 步骤 4: 删除 Compose 文件
 -----------------------

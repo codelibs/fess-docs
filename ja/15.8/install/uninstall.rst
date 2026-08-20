@@ -77,13 +77,13 @@ TAR.GZ/ZIP 版のアンインストール
 
 OpenSearch のインストールディレクトリを削除します::
 
-    $ rm -rf /path/to/opensearch-3.7.0
+    $ rm -rf /path/to/opensearch-3.8.0
 
 ステップ 3: データディレクトリの削除（オプション）
 -------------------------------------------
 
 |Fess| のインデックスデータは OpenSearch に保存されます。
-デフォルトでは OpenSearch のインストールディレクトリ内（``opensearch-3.7.0/data`` など）に保存されますが、
+デフォルトでは OpenSearch のインストールディレクトリ内（``opensearch-3.8.0/data`` など）に保存されますが、
 ``path.data`` で別の場所を指定している場合は、そのディレクトリも削除してください::
 
     $ rm -rf /path/to/data
@@ -94,7 +94,7 @@ OpenSearch のインストールディレクトリを削除します::
 ログファイルを削除します::
 
     $ rm -rf /path/to/fess-15.8.0/logs
-    $ rm -rf /path/to/opensearch-3.7.0/logs
+    $ rm -rf /path/to/opensearch-3.8.0/logs
 
 RPM 版のアンインストール
 ======================
@@ -310,7 +310,7 @@ Docker イメージを削除してディスクスペースを解放する場合:
 
     $ docker images | grep fess
     $ docker rmi ghcr.io/codelibs/fess:15.8.0
-    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.7.0
+    $ docker rmi ghcr.io/codelibs/fess-opensearch:3.8.0
 
 ステップ 4: Compose ファイルの削除
 --------------------------------

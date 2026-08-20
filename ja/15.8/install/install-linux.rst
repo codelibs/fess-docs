@@ -15,7 +15,7 @@ TAR.GZ、RPM、DEB の各パッケージ形式に対応しています。
 
 - :doc:`prerequisites` に記載されているシステム要件を満たしていること
 - Java 21 がインストールされていること
-- OpenSearch 3.7.0 を利用可能な状態にすること（または新規インストール）
+- OpenSearch 3.8.0 を利用可能な状態にすること（または新規インストール）
 
 インストール方法の選択
 ======================
@@ -85,14 +85,14 @@ TAR.GZ 版でのインストール
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.7.0-linux-x64.tar.gz
-       $ cd opensearch-3.7.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.8.0-linux-x64.tar.gz
+       $ cd opensearch-3.8.0
 
    .. note::
 
-      この例では OpenSearch 3.7.0 を使用しています。
-      |Fess| 15.8 は OpenSearch 3.7.0 に対応しています。
+      この例では OpenSearch 3.8.0 を使用しています。
+      |Fess| 15.8 は OpenSearch 3.8.0 に対応しています。
 
 2. OpenSearch プラグインのインストール
 
@@ -100,16 +100,16 @@ TAR.GZ 版でのインストール
 
    ::
 
-       $ cd /path/to/opensearch-3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ cd /path/to/opensearch-3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
    .. important::
 
       プラグインのバージョンは OpenSearch のバージョンと一致させる必要があります。
-      上記の例では、すべて 3.7.0 を指定しています。
+      上記の例では、すべて 3.8.0 を指定しています。
 
 3. OpenSearch の設定
 
@@ -118,7 +118,7 @@ TAR.GZ 版でのインストール
    ::
 
        # 設定同期用のパス（絶対パスで指定）
-       configsync.config_path: /path/to/opensearch-3.7.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.8.0/data/config/
 
        # セキュリティプラグインの無効化（開発環境のみ）
        plugins.security.disabled: true
@@ -181,7 +181,7 @@ TAR.GZ 版でのインストール
 
        # External opensearch cluster
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.7.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
 
    .. note::
 
@@ -219,8 +219,8 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.7.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.8.0-linux-x64.rpm
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ を参照してください。
@@ -229,10 +229,10 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 3. OpenSearch の設定
 
@@ -319,8 +319,8 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.7.0/opensearch-3.7.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.7.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.8.0-linux-x64.deb
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ を参照してください。
@@ -329,10 +329,10 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 3. OpenSearch の設定
 
@@ -419,7 +419,7 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    TAR.GZ 版の場合::
 
-       $ ls -ld /path/to/opensearch-3.7.0/data/config/
+       $ ls -ld /path/to/opensearch-3.8.0/data/config/
 
    RPM/DEB 版の場合::
 
@@ -457,7 +457,7 @@ Q: OpenSearch のバージョンは他のバージョンでも動作しますか
 ------------------------------------------------------------------
 
 A: |Fess| は特定のバージョンの OpenSearch に依存しています。
-プラグインの互換性を確保するため、推奨されるバージョン（3.7.0）を使用することを強く推奨します。
+プラグインの互換性を確保するため、推奨されるバージョン（3.8.0）を使用することを強く推奨します。
 他のバージョンを使用する場合は、プラグインのバージョンも適切に調整する必要があります。
 
 Q: 複数の Fess インスタンスで同じ OpenSearch を共有できますか？

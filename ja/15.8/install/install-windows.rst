@@ -15,7 +15,7 @@ ZIP パッケージを使用したインストール方法について記載し�
 
 - :doc:`prerequisites` に記載されているシステム要件を満たしていること
 - Java 21 がインストールされていること
-- OpenSearch 3.7.0 を利用可能な状態にすること（または新規インストール）
+- OpenSearch 3.8.0 を利用可能な状態にすること（または新規インストール）
 - Windows の環境変数 ``JAVA_HOME`` が適切に設定されていること
 
 Java のインストール確認
@@ -69,7 +69,7 @@ OpenSearch のダウンロード
 
    例::
 
-       C:\opensearch-3.7.0
+       C:\opensearch-3.8.0
 
    .. note::
 
@@ -82,16 +82,16 @@ OpenSearch プラグインのインストール
 
 ::
 
-    C:\> cd C:\opensearch-3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.7.0
-    C:\opensearch-3.7.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.7.0
+    C:\> cd C:\opensearch-3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
+    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
 
 .. important::
 
    プラグインのバージョンは OpenSearch のバージョンと一致させる必要があります。
-   上記の例では、すべて 3.7.0 を指定しています。
+   上記の例では、すべて 3.8.0 を指定しています。
 
 OpenSearch の設定
 ---------------
@@ -101,7 +101,7 @@ OpenSearch の設定
 ::
 
     # 設定同期用のパス（絶対パスで指定）
-    configsync.config_path: C:/opensearch-3.7.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/data/config/
 
     # セキュリティプラグインの無効化（開発環境のみ）
     plugins.security.disabled: true
@@ -117,7 +117,7 @@ OpenSearch の設定
 .. note::
 
    Windows の場合、パスの区切り文字は ``\`` ではなく ``/`` を使用してください。
-   ``C:\opensearch-3.7.0\data\config\`` ではなく ``C:/opensearch-3.7.0/data/config/`` と記述します。
+   ``C:\opensearch-3.8.0\data\config\`` ではなく ``C:/opensearch-3.8.0/data/config/`` と記述します。
 
 .. tip::
 
@@ -169,7 +169,7 @@ Fess の設定
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.7.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
 
 .. note::
 
@@ -280,7 +280,7 @@ Windows では、パスの長さに制限があります。可能な限り短い
 例::
 
     C:\opensearch  (推奨)
-    C:\Program Files\opensearch-3.7.0  (非推奨 - パスが長い)
+    C:\Program Files\opensearch-3.8.0  (非推奨 - パスが長い)
 
 Java が認識されない
 -----------------

@@ -5,6 +5,20 @@
 이전 버전의 |Fess| 설치, 검색, 관리, API, 설정에 관한 문서를 버전별로 모아 놓은
 아카이브입니다. 아래에서 원하는 버전을 선택하세요.
 
+15.7
+~~~~
+
+.. toctree::
+
+   15.7/install/index
+   15.7/user/index
+   15.7/api/index
+   15.7/admin/index
+   15.7/config/index
+   JavaDocs <https://fess.codelibs.org/15.7/apidocs/index.html>
+   XRef <https://fess.codelibs.org/15.7/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/15.7/lastadoc-fess.html>
+
 15.6
 ~~~~
 

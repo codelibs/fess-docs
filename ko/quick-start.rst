@@ -70,7 +70,7 @@ Docker는 Fess를 가장 빠르고 안정적으로 실행하는 방법을 제공
     docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
 고급 Docker 설정(커스텀 설정, 외부 OpenSearch, Kubernetes)에 대해서는
-:doc:`Docker 설치 가이드 <15.7/install/install-docker>` 를 참조하세요.
+:doc:`Docker 설치 가이드 <15.8/install/install-docker>` 를 참조하세요.
 
 ----
 
@@ -189,7 +189,7 @@ http://localhost:8080/ 에 접속하여 검색어를 입력하면 검색 결과�
 
 - :doc:`문서 목록 <documentation>` - 종합 참조 가이드
 - :doc:`설치 가이드 <setup>` - 프로덕션 배포 옵션
-- :doc:`관리 가이드 <15.7/admin/index>` - 설정 및 관리
-- :doc:`API 참조 <15.7/api/index>` - 검색을 애플리케이션에 통합
+- :doc:`관리 가이드 <15.8/admin/index>` - 설정 및 관리
+- :doc:`API 참조 <15.8/api/index>` - 검색을 애플리케이션에 통합
 - `디스커션 포럼 <https://discuss.codelibs.org/c/fessja/>`__ - 질문 및 정보 공유
 - `GitHub Issues <https://github.com/codelibs/fess/issues>`__ - 버그 보고, 기능 요청

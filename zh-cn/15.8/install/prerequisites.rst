@@ -73,9 +73,9 @@ TAR.GZ/ZIP/RPM/DEB 版
   - OpenJDK 21 或更高版本
   - Eclipse Temurin 21 或更高版本
 
-- **OpenSearch 3.7.0**: 生产环境必需（不推荐使用内嵌版本）
+- **OpenSearch 3.8.0**: 生产环境必需（不推荐使用内嵌版本）
 
-  - 支持版本: OpenSearch 3.7.0
+  - 支持版本: OpenSearch 3.8.0
   - 其他版本需要注意插件兼容性
 
 Docker 版
