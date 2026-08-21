@@ -648,6 +648,43 @@ ihnen benannte Berechtigung. Dokumente, die einzelnen Benutzern zugewiesen sind,
 Benutzer dann nicht mehr gefunden. Um das bisherige Verhalten beizubehalten, stellen Sie den
 mitgelieferten Standardwert ``true`` wieder her.
 
+Falls Sie die /api/v2-Konfigurationsschlüssel geändert haben
+------------------------------------------------------------
+
+In 15.8 haben vier Konfigurationsschlüssel ihr Präfix ``api.v2.`` verloren. Werte, Standardwerte
+und Verhalten bleiben unverändert, **es gibt jedoch keinen abwärtskompatiblen Aliasnamen**: Eine
+unter dem alten Namen belassene Einstellung wird ohne Warnung ignoriert, und stattdessen greift
+der mitgelieferte Standardwert.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Bis 15.7
+     - 15.8
+     - Standardwert
+   * - ``api.v2.chat.stream.keepalive.interval.ms``
+     - ``api.chat.stream.keepalive.interval.ms``
+     - ``15000``
+   * - ``api.v2.param.max.length``
+     - ``api.param.max.length``
+     - ``1000``
+   * - ``api.v2.param.max.array.size``
+     - ``api.param.max.array.size``
+     - ``100``
+   * - ``api.v2.click.max.rt``
+     - ``api.click.max.timestamp``
+     - ``9999999999999``
+
+Wenn Sie einen dieser Schlüssel in ``fess_config.properties`` oder als JVM-Argument
+``-Dfess.config.<Schlüssel>`` gesetzt haben, benennen Sie ihn um. Betroffen sind nur explizit
+gesetzte Werte; eine Installation, die sie nie geändert hat, erfordert keine Maßnahme.
+
+Der erste Schlüssel bestimmt, wie oft ein Keep-alive-Frame gesendet wird, während
+``POST /api/v2/chat/stream`` auf das Modell wartet - eine verlorene Einstellung fällt daher im
+KI-Suchmodus auf. Der letzte Schlüssel wurde auch aus Gründen der Genauigkeit umbenannt: Er
+begrenzt den Wert ``rt`` eines Klickprotokolls, der ein Zeitstempel und keine Antwortzeit ist.
+
+
 Aktualisierung der Plugin-Versionen
 -----------------------------------
 

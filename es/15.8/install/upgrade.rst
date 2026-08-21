@@ -648,6 +648,44 @@ que lleva su propio nombre, por lo que los documentos asignados a un usuario con
 aparecer para ese usuario. Para mantener el comportamiento anterior, restaure el valor
 predeterminado ``true``.
 
+Si Había Modificado las Claves de Configuración de /api/v2
+----------------------------------------------------------
+
+En 15.8, cuatro claves de configuración perdieron su prefijo ``api.v2.``. Sus valores, valores
+predeterminados y comportamiento no cambian, pero **no se conserva ningún alias retrocompatible**:
+una configuración que permanezca con su nombre antiguo se ignora sin ninguna advertencia y se
+aplica el valor predeterminado incluido.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Hasta 15.7
+     - 15.8
+     - Valor predeterminado
+   * - ``api.v2.chat.stream.keepalive.interval.ms``
+     - ``api.chat.stream.keepalive.interval.ms``
+     - ``15000``
+   * - ``api.v2.param.max.length``
+     - ``api.param.max.length``
+     - ``1000``
+   * - ``api.v2.param.max.array.size``
+     - ``api.param.max.array.size``
+     - ``100``
+   * - ``api.v2.click.max.rt``
+     - ``api.click.max.timestamp``
+     - ``9999999999999``
+
+Si estableció alguna de ellas en ``fess_config.properties`` o como argumento de JVM
+``-Dfess.config.<clave>``, cámbieles el nombre. Solo se ven afectadas las configuraciones
+explícitas; una instalación que nunca las modificó no requiere ninguna acción.
+
+La primera clave controla con qué frecuencia se envía una trama de keep-alive mientras
+``POST /api/v2/chat/stream`` espera al modelo, por lo que el modo de búsqueda con IA es donde se
+nota una configuración perdida. La última clave también se renombró por precisión: limita el
+valor ``rt`` que puede llevar un registro de clic, que es una marca de tiempo y no un tiempo de
+respuesta.
+
+
 Actualización de la Versión de los Plugins
 ---------------------------------------------
 

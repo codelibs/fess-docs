@@ -652,6 +652,44 @@ permission portant leur propre nom : les documents attribués à un utilisateur 
 plus pour cet utilisateur. Pour conserver le comportement précédent, rétablissez la valeur par
 défaut ``true``.
 
+Si vous aviez modifié les clés de configuration /api/v2
+-------------------------------------------------------
+
+En 15.8, quatre clés de configuration ont perdu leur préfixe ``api.v2.``. Leurs valeurs, leurs
+valeurs par défaut et leur comportement sont inchangés, mais **aucun alias rétrocompatible n'est
+conservé** : un paramètre laissé sous son ancien nom est ignoré sans avertissement et la valeur
+par défaut fournie s'applique.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Jusqu'à 15.7
+     - 15.8
+     - Valeur par défaut
+   * - ``api.v2.chat.stream.keepalive.interval.ms``
+     - ``api.chat.stream.keepalive.interval.ms``
+     - ``15000``
+   * - ``api.v2.param.max.length``
+     - ``api.param.max.length``
+     - ``1000``
+   * - ``api.v2.param.max.array.size``
+     - ``api.param.max.array.size``
+     - ``100``
+   * - ``api.v2.click.max.rt``
+     - ``api.click.max.timestamp``
+     - ``9999999999999``
+
+Si vous avez défini l'une de ces clés dans ``fess_config.properties`` ou via l'argument JVM
+``-Dfess.config.<clé>``, renommez-la. Seuls les paramètres explicites sont concernés ; une
+installation qui ne les a jamais modifiés n'a rien à faire.
+
+La première clé détermine la fréquence d'envoi d'une trame keep-alive pendant que
+``POST /api/v2/chat/stream`` attend le modèle : c'est donc dans le mode de recherche IA qu'un
+paramètre perdu se remarque. La dernière clé a également été renommée par souci d'exactitude :
+elle borne la valeur ``rt`` que peut porter un journal de clic, qui est un horodatage et non un
+temps de réponse.
+
+
 Mise à jour de la version des plugins
 -------------------------------------
 

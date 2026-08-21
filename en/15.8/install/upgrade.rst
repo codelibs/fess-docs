@@ -622,6 +622,42 @@ In a deployment that sets it to ``false``, users lose the permission named after
 the upgrade, so documents permissioned to an individual user stop matching for that user. To keep
 the previous behaviour, restore the shipped default of ``true``.
 
+If You Changed the /api/v2 Configuration Keys
+------------------------------------------------
+
+In 15.8, four configuration keys lost their ``api.v2.`` prefix. Their values, defaults and
+behaviour are unchanged, but **no backward-compatible alias is kept**: a setting left under its
+old name is ignored without any warning, and the shipped default takes effect instead.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Up to 15.7
+     - 15.8
+     - Default
+   * - ``api.v2.chat.stream.keepalive.interval.ms``
+     - ``api.chat.stream.keepalive.interval.ms``
+     - ``15000``
+   * - ``api.v2.param.max.length``
+     - ``api.param.max.length``
+     - ``1000``
+   * - ``api.v2.param.max.array.size``
+     - ``api.param.max.array.size``
+     - ``100``
+   * - ``api.v2.click.max.rt``
+     - ``api.click.max.timestamp``
+     - ``9999999999999``
+
+If you set any of these in ``fess_config.properties`` or as a ``-Dfess.config.<key>`` JVM
+argument, rename them. Only an explicit setting is affected; an installation that never changed
+them needs no action.
+
+The first key controls how often a keep-alive frame is sent while ``POST /api/v2/chat/stream``
+is waiting for the model, so AI search mode is where a lost setting becomes visible. The last
+key was renamed for accuracy as well: it bounds the ``rt`` value a click log may carry, which is
+a timestamp rather than a response time.
+
+
 Updating Plugin Versions
 ------------------------
 
