@@ -1,0 +1,57 @@
+|Fess| Administrator Guide
+==========================
+
+How to operate every page of the |Fess| administration screen, from
+the dashboard and crawl settings to dictionaries, users and roles,
+logs, and backups.
+
+.. toctree::
+   :maxdepth: 3
+
+   intro
+   dashboard-guide
+   wizard-guide
+   general-guide
+   scheduler-guide
+   design-guide
+   dict-guide
+   kuromoji-guide
+   synonym-guide
+   mapping-guide
+   protwords-guide
+   stopwords-guide
+   stemmeroverride-guide
+   accesstoken-guide
+   plugin-guide
+   theme-guide
+   storage-guide
+   webconfig-guide
+   fileconfig-guide
+   dataconfig-guide
+   labeltype-guide
+   keymatch-guide
+   boostdoc-guide
+   relatedcontent-guide
+   relatedquery-guide
+   pathmap-guide
+   webauth-guide
+   fileauth-guide
+   reqheader-guide
+   duplicatehost-guide
+   user-guide
+   role-guide
+   group-guide
+   suggest-guide
+   elevateword-guide
+   badword-guide
+   systeminfo-guide
+   searchlog-guide
+   joblog-guide
+   crawlinginfo-guide
+   log-guide
+   failureurl-guide
+   searchlist-guide
+   backup-guide
+   maintenance-guide
+   esreq-guide
+
