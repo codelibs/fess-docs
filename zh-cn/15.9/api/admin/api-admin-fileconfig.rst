@@ -394,9 +394,7 @@ FileConfig API是用于管理 |Fess| 文件爬虫设置的API。
      - ``smb1://server/share/path``
    * - FTP
      - ``ftp://server/path``
-   * - S3兼容对象存储（MinIO等）
-     - ``storage://bucket/path``
-   * - Amazon S3
+   * - Amazon S3／S3兼容对象存储（MinIO等）
      - ``s3://bucket/path``
    * - Google Cloud Storage
      - ``gcs://bucket/path``

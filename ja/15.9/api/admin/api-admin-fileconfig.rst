@@ -394,9 +394,7 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
      - ``smb1://server/share/path``
    * - FTP
      - ``ftp://server/path``
-   * - S3互換オブジェクトストレージ（MinIO等）
-     - ``storage://bucket/path``
-   * - Amazon S3
+   * - Amazon S3／S3互換オブジェクトストレージ（MinIO等）
      - ``s3://bucket/path``
    * - Google Cloud Storage
      - ``gcs://bucket/path``
