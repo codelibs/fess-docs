@@ -1,0 +1,288 @@
+==========================
+Role API
+==========================
+
+Übersicht
+=========
+
+Die Role API dient zur Verwaltung von Rollen in |Fess|.
+Sie können Rollen erstellen, aktualisieren und löschen.
+
+Basis-URL
+=========
+
+::
+
+    /api/admin/role
+
+Endpunktliste
+=============
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 35 50
+
+   * - Methode
+     - Pfad
+     - Beschreibung
+   * - GET
+     - /settings
+     - Rollenliste abrufen
+   * - GET
+     - /setting/{id}
+     - Rolle abrufen
+   * - POST
+     - /setting
+     - Rolle erstellen
+   * - PUT
+     - /setting
+     - Rolle aktualisieren
+   * - DELETE
+     - /setting/{id}
+     - Rolle löschen
+
+Rollenliste abrufen
+===================
+
+Request
+-------
+
+::
+
+    GET /api/admin/role/settings
+
+Parameter
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Typ
+     - Erforderlich
+     - Beschreibung
+   * - ``size``
+     - Integer
+     - Nein
+     - Anzahl der Einträge pro Seite (Standard: 25, konfigurierbar über ``paging.page.size`` in ``fess_config.properties``)
+   * - ``page``
+     - Integer
+     - Nein
+     - Seitennummer (beginnt bei 1, Standard: 1; Werte von 0 oder kleiner werden als 1 behandelt)
+   * - ``id``
+     - String
+     - Nein
+     - Filtert anhand der exakten Übereinstimmung mit der angegebenen Rollen-ID
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "settings": [
+          {
+            "id": "role_id_1",
+            "name": "admin",
+            "versionNo": 1
+          },
+          {
+            "id": "role_id_2",
+            "name": "user",
+            "versionNo": 1
+          }
+        ],
+        "total": 5
+      }
+    }
+
+Rolle abrufen
+=============
+
+Request
+-------
+
+::
+
+    GET /api/admin/role/setting/{id}
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "setting": {
+          "id": "role_id_1",
+          "name": "admin",
+          "versionNo": 1
+        }
+      }
+    }
+
+Rolle erstellen
+===============
+
+Request
+-------
+
+::
+
+    POST /api/admin/role/setting
+    Content-Type: application/json
+
+Request-Body
+~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "name": "editor"
+    }
+
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``name``
+     - Ja
+     - Rollenname (maximal 100 Zeichen)
+   * - ``attributes``
+     - Nein
+     - Attribut-Map. Werte werden als Zeichenketten angegeben
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "id": "new_role_id",
+        "created": true
+      }
+    }
+
+Rolle aktualisieren
+===================
+
+Request
+-------
+
+::
+
+    PUT /api/admin/role/setting
+    Content-Type: application/json
+
+Request-Body
+~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+      "id": "existing_role_id",
+      "name": "editor_updated",
+      "versionNo": 1
+    }
+
+Feldbeschreibungen
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Feld
+     - Erforderlich
+     - Beschreibung
+   * - ``id``
+     - Ja
+     - Zu aktualisierende Rollen-ID
+   * - ``name``
+     - Ja
+     - Rollenname (maximal 100 Zeichen)
+   * - ``attributes``
+     - Nein
+     - Attribut-Map. Werte werden als Zeichenketten angegeben
+   * - ``versionNo``
+     - Ja
+     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``versionNo`` an, der beim Abrufen der Rolle ermittelt wurde
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "id": "existing_role_id",
+        "created": false
+      }
+    }
+
+Rolle löschen
+=============
+
+Request
+-------
+
+::
+
+    DELETE /api/admin/role/setting/{id}
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "id": "deleted_role_id",
+        "created": false
+      }
+    }
+
+Verwendungsbeispiele
+====================
+
+Neue Rolle erstellen
+--------------------
+
+.. code-block:: bash
+
+    curl -X POST "http://localhost:8080/api/admin/role/setting" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "name": "content_manager"
+         }'
+
+Rollenliste abrufen
+-------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/role/settings?size=50&page=1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Referenzinformationen
+=====================
+
+- :doc:`api-admin-overview` - Admin API Übersicht
+- :doc:`api-admin-user` - Benutzerverwaltung API
+- :doc:`api-admin-group` - Gruppenverwaltung API
+- :doc:`../../admin/role-guide` - Rollenverwaltungsanleitung

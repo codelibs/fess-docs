@@ -1,0 +1,33 @@
+=============
+Query Request
+=============
+
+Overview
+========
+
+This page sends query request by JSON file to OpenSearch.
+
+|image0|
+
+This page is not in a menu pane.
+To display this page, type /admin/esreq/ to URL.
+
+Operations
+==========
+
+Send Request
+------------
+
+Type /admin/esreq/ to URL after logging in as admin user.
+Create JSON file which contains OpenSearch query DSL, select Request File and then click button to send the request to OpenSearch.
+
+Configurations
+--------------
+
+Request File
+::::::::::::
+
+JSON file which contains Query DSL.
+
+.. |image0| image:: ../../../resources/images/en/15.9/admin/esreq-1.png
+
