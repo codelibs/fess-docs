@@ -35,37 +35,46 @@ Prerequisites
 Plugin Installation
 -------------------
 
-Method 1: Place the JAR file directly
-
-::
-
-    # Download from Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
-
-    # Place the file
-    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
-    # or
-    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
-
-Method 2: Install from the admin console
+Method 1: Install from the admin console
 
 1. Open "System" -> "Plugin"
 2. Upload the JAR file
 3. Restart |Fess|
 
+Method 2: Place the JAR file directly
+
+::
+
+    # Download from the CodeLibs repository
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # Place the file, in the same directory the admin console installs into
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
+    # or
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
+
 Installing JDBC Drivers
 -----------------------
 
-Place the JDBC driver compatible with your target database in the |Fess| classpath (``app/WEB-INF/lib/`` directory):
+The JDBC driver is not bundled with the plugin. Obtain the driver for your database separately and place it yourself.
+
+Data store crawling runs in the crawler process, so the driver has to be on the **crawler process classpath**. Either of these directories works:
+
+- ``app/WEB-INF/lib/``
+- ``app/WEB-INF/env/crawler/lib/``
 
 ::
 
     # Example: MySQL driver
-    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    cp mysql-connector-j-9.x.x.jar $FESS_HOME/app/WEB-INF/lib/
     # or
-    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
+    cp mysql-connector-j-9.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
 After placing the JDBC driver, restart |Fess| to load it.
+
+.. note::
+   When the driver is missing, the crawl fails with
+   ``The JDBC driver ... is not on the crawler classpath.``
 
 Configuration
 =============
@@ -138,7 +147,10 @@ Parameter List
      - Database password
    * - ``fetch_size``
      - No
-     - JDBC fetch size. Set to ``MIN_VALUE`` for MySQL streaming result sets
+     - JDBC fetch size. ``MIN_VALUE`` asks MySQL to read the result set one row at a time; other drivers reject a negative value, and the crawl continues with the driver default after a warning. A negative or non-numeric value is reported and ignored
+   * - ``query_timeout``
+     - No
+     - Query timeout in seconds. ``0`` means no limit, which is the JDBC default. No timeout is set when the parameter is absent
    * - ``default_mimetype``
      - No
      - Default MIME type used when extracting content from BLOB or binary columns
@@ -158,6 +170,11 @@ Parameter List
      - No
      - Script engine type. Default: groovy
 
+.. note::
+   Stopping the job does not release the crawler thread while a query is hanging.
+   The stop request is only checked between rows, so it cannot interrupt a call
+   blocked inside the driver. Set ``query_timeout`` for queries that may run long.
+
 Script Configuration
 --------------------
 
@@ -173,18 +190,48 @@ Map SQL column names to index fields:
 Available fields:
 
 - ``<column_name>`` - SQL query result columns (accessed directly by the column label name; no prefix such as ``data.`` is used)
+- ``crawlingConfig`` - the data store configuration
+- ``crawlingContext`` - the crawling context; ``crawlingContext.doc`` holds the document being built
 
 .. note::
    Column names must match the column labels (aliases) in the ``SELECT`` clause.
    When using aggregate functions or expressions, assign an explicit alias with ``AS``
    (e.g., ``COUNT(*) AS total``).
 
+.. note::
+   Column label casing differs between databases. PostgreSQL folds unquoted
+   identifiers to lower case, H2 folds them to upper case, and MySQL reports them
+   as declared. A name that does not resolve leaves the field unset rather than
+   raising an error, so assign an explicit alias with ``AS`` when portability
+   matters.
+
+.. warning::
+   Scripts can reference the **entire data store parameter map**, not only the SQL
+   result columns. ``driver``, ``url``, ``username``, ``password`` and ``sql`` are
+   all visible as variables of the same name, so a column can be shadowed
+   unintentionally, or a parameter value can appear where a missing column was
+   expected. When both exist, the column value wins.
+
 Loading BLOB/Binary Data
 ========================
 
-Columns of type BLOB, CLOB, NCLOB, byte array, or binary stream are automatically passed through the
-content extraction process (the same extractor used for file crawling) and ingested as text.
-Array-type columns are converted to space-separated strings. NULL values become empty strings.
+Binary columns (BLOB, ``BYTEA``, byte array, binary stream) are passed through the content
+extraction process - the same extractor used for file crawling - and ingested as text.
+
+CLOB, NCLOB and character streams are **not** passed through an extractor. They are read as
+text as they are, and the MIME type hints described below do not apply to them.
+
+Array-type columns become their elements joined with spaces. NULL values become empty strings.
+
+.. note::
+   Whether a BLOB column arrives as ``java.sql.Blob`` or as a byte array is decided by
+   the JDBC driver - MySQL and PostgreSQL return a byte array. Both are extracted the
+   same way.
+
+.. note::
+   CLOB and NCLOB are read into memory whole, with no size limit. For very large text
+   columns, consider truncating in SQL with ``SUBSTRING`` or similar. The extractor path
+   does honour the crawler's maximum content length.
 
 To correctly extract text from BLOB or binary streams, the data type (MIME type) must be determined.
 The following priority order is used:
@@ -229,6 +276,16 @@ Methods to retrieve only updated records:
     # Specify range by ID
     sql=SELECT * FROM articles WHERE id > 10000
 
+.. warning::
+   Narrowing the query this way does not turn the crawl into an incremental one.
+   When a crawl finishes, |Fess| deletes the documents of this data store
+   configuration that were not part of the crawl that just ran, so a filtered
+   query leaves only the matching rows in the index.
+
+   Add ``delete_old_docs=false`` to the data store parameters to keep the
+   documents indexed by earlier crawls. Rows deleted from the database are then
+   no longer removed from the index either, so run a full crawl periodically.
+
 URL Generation
 --------------
 
@@ -244,6 +301,12 @@ Generate document URLs in the script:
 
     # Use URL stored in database
     url=url
+
+.. warning::
+   ``url=url`` only does what it looks like when the ``SELECT`` result has a column
+   labelled ``url``. With no such column, the data store parameter of the same name -
+   the **JDBC connection URL** - becomes the document URL. Alias the column, as in
+   ``SELECT page_url AS url``, or name it in the script, as in ``url=page_url``.
 
 Multi-byte Character Support
 =============================
@@ -277,9 +340,31 @@ Protecting Database Credentials
 
 Recommended methods:
 
-1. Use environment variables
-2. Use |Fess| encryption features
+1. Rely on automatic encryption
+
+   A parameter whose name matches ``app.encrypt.property.pattern`` (default
+   ``.*password|.*key|.*token|.*secret``) is encrypted when saved from the admin
+   console and stored with a ``{cipher}`` prefix. ``password`` matches that pattern,
+   so it is not stored in cleartext when set from the admin console.
+
+2. Use environment variables
+
+   An environment variable whose name starts with ``FESS_ENV_`` is expanded inside a
+   data store parameter as ``${variable name}``:
+
+   ::
+
+       password=${FESS_ENV_DB_PASSWORD}
+
+   Which names are expanded is controlled by ``crawler.data.env.param.key.pattern``
+   (default ``^FESS_ENV_.*``).
+
 3. Use read-only users
+
+.. note::
+   Raising ``org.codelibs.fess.ds`` to DEBUG does not expose credentials: the values of
+   parameters matching ``app.encrypt.property.pattern``, and credentials embedded in the
+   JDBC URL, are masked in the log.
 
 Principle of Least Privilege
 -----------------------------
@@ -345,21 +430,23 @@ Script:
 Troubleshooting
 ===============
 
+When a crawl fails, the log message identifies which step failed.
+
 JDBC Driver Not Found
 ---------------------
 
-**Symptom**: ``ClassNotFoundException`` or ``No suitable driver``
+**Symptom**: ``The JDBC driver ... is not on the crawler classpath.``
 
 **Resolution**:
 
-1. Verify that the JDBC driver is placed in ``lib/``
-2. Verify that the driver class name is correct
+1. Verify that the JDBC driver is placed in ``app/WEB-INF/lib/`` or ``app/WEB-INF/env/crawler/lib/``
+2. Verify that the class name given in ``driver`` is correct
 3. Restart |Fess|
 
 Connection Errors
 -----------------
 
-**Symptom**: ``Connection refused`` or authentication errors
+**Symptom**: ``Failed to connect to <URL>.``
 
 **Check**:
 
@@ -371,13 +458,34 @@ Connection Errors
 Query Errors
 ------------
 
-**Symptom**: ``SQLException`` or SQL syntax errors
+**Symptom**: ``Failed to execute the query.``
 
 **Check**:
 
 1. Test the SQL query directly on the database
 2. Verify that column names are correct
 3. Verify that table names are correct
+
+Missing Parameters
+------------------
+
+**Symptom**: ``The driver parameter is required.``, ``The url parameter is required.`` or ``The sql parameter is required.``
+
+A required parameter is not set. Check the parameter field.
+
+Only Some Rows Fail
+-------------------
+
+A row that fails does not stop the crawl; it is recorded under "System" -> "Failure URL".
+The document URL is used when the scripts produced one, and
+``datastore://<data store configuration id>/<row number>`` when they did not.
+
+Documents Do Not Appear in Search Results
+-----------------------------------------
+
+1. Verify that the scripts set ``url``, ``title`` and ``content``
+2. Verify that the column label casing matches what the scripts use (see "Script Configuration")
+3. Check the document count in the crawl job log
 
 Reference Information
 =====================
