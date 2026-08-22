@@ -395,9 +395,7 @@ Le champ ``paths`` accepte les protocoles suivants (la liste des protocoles pris
      - ``smb1://server/share/path``
    * - FTP
      - ``ftp://server/path``
-   * - Stockage objet compatible S3 (MinIO, etc.)
-     - ``storage://bucket/path``
-   * - Amazon S3
+   * - Amazon S3 / Stockage objet compatible S3 (MinIO, etc.)
      - ``s3://bucket/path``
    * - Google Cloud Storage
      - ``gcs://bucket/path``
