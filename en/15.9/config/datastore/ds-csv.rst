@@ -71,7 +71,6 @@ Local file:
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 Multiple files:
 
@@ -82,15 +81,15 @@ Multiple files:
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 .. note::
 
-   Quote processing and escape processing are **disabled** by default.
-   If you need to handle CSV files where fields enclosed in quotes contain
-   delimiters or line breaks (RFC 4180 compliant), explicitly set
-   ``quote_disabled=false`` to enable quote processing.
-   See "Enabling Quote and Escape Processing" below for details.
+   Quote processing and escape processing are **enabled by default** in
+   |Fess| 15.9. CSV files (RFC 4180 compliant) where quoted fields contain
+   delimiters or line breaks are parsed correctly without specifying any
+   parameters.
+   For how to revert to the previous behavior (disabling quote processing)
+   and important caveats, see "Disabling Quote and Escape Processing" below.
 
 Parameter List
 ~~~~~~~~~~~~~~
@@ -119,10 +118,10 @@ Parameter List
      - Separator character (default: comma ``,``). Escape sequences such as ``\t`` can be specified (for tab-separated files).
    * - ``quote_character``
      - No
-     - Quote character (default: double quote ``"``). Note that quote processing is disabled by default (see ``quote_disabled``).
+     - Quote character (default: double quote ``"``). Quote processing is enabled by default (see ``quote_disabled``).
    * - ``escape_character``
      - No
-     - Escape character (default: backslash ``\``). Note that escape processing is disabled by default (see ``escape_disabled``).
+     - Escape character (default: same character as ``quote_character``. Per RFC 4180, quotes are escaped by doubling them). Whether escape processing is enabled follows the resolved value of ``quote_disabled`` (see ``escape_disabled``).
 
 .. note::
 
@@ -132,7 +131,7 @@ Parameter List
 Advanced Parameters
 ~~~~~~~~~~~~~~~~~~~
 
-The following parameters provide fine-grained control over CSV parsing behaviour:
+The following parameters provide fine-grained control over CSV parsing and indexing behaviour:
 
 .. list-table::
    :header-rows: 1
@@ -141,9 +140,15 @@ The following parameters provide fine-grained control over CSV parsing behaviour
    * - Parameter
      - Description
    * - ``quote_disabled``
-     - Whether to disable quote processing (default: true). Set to ``false`` to handle RFC 4180 quoted fields.
+     - Whether to disable quote processing (default: false). RFC 4180 compliant quoted fields are parsed correctly by default. Set to ``true`` to revert to the previous behavior (treating quotes as ordinary characters).
    * - ``escape_disabled``
-     - Whether to disable escape processing (default: true). Set to ``false`` to enable escaping via ``escape_character``.
+     - Whether to disable escape processing (default: same as the resolved value of ``quote_disabled``). An explicitly specified value takes precedence.
+   * - ``delete_old_docs``
+     - Whether to delete, after the crawl completes, documents that belong to this data store config and were not re-registered during the current crawl session (default: true). If you feed multiple CSV files into the same data store config at different times, set this to ``false`` -- otherwise documents registered by the earlier files will be deleted (see the troubleshooting section below for details).
+   * - ``keep_expires_docs``
+     - When deleting documents via ``delete_old_docs``, whether to exclude documents whose expiration (the "expires" value set via e.g. ``time_to_live``) has not yet arrived (default: true). Set to ``false`` to delete unregistered documents even within their expiration period.
+   * - ``time_to_live``
+     - How many minutes after registration a document's expiration should be set (in minutes; default: unset, meaning no expiration).
    * - ``skip_lines``
      - Number of leading lines to skip (default: 0)
    * - ``ignore_line_patterns``
@@ -217,32 +222,51 @@ Standard CSV (RFC 4180 compliant)
 .. note::
 
    To include a delimiter inside a field by enclosing it in quotes, as in
-   ``"Book, Programming"`` above, you must set ``quote_disabled=false`` to
-   enable quote processing.
-   When quote processing is disabled (the default), quotes are treated as
-   ordinary characters and fields are split on the delimiter character.
+   ``"Book, Programming"`` above, it is parsed as a single field as-is with
+   the default (quote processing enabled).
+   To revert to the previous behavior (treating quotes as ordinary characters
+   and splitting fields on the delimiter), see "Disabling Quote and Escape
+   Processing" below.
 
-Enabling Quote and Escape Processing
--------------------------------------
+Disabling Quote and Escape Processing
+--------------------------------------
 
-Quote processing and escape processing are disabled by default.
-Enable them explicitly as follows.
+Quote processing and escape processing are enabled by default in |Fess| 15.9.
+The default quote character is double quote ``"``, and the default escape
+character is the same as the quote character (escaped by doubling it, per
+RFC 4180); standard RFC 4180 CSV files can be parsed as-is without any
+parameters.
 
-To enable quote processing:
+.. warning::
+
+   With quote processing enabled, if a CSV file contains even a single ``"``
+   with no matching closing quote, everything in the file from that quote
+   onward (including subsequent lines) is read as a single field value, and
+   no documents are generated from the remaining rows. Because previous
+   versions parsed each line independently, this behavior can surface for the
+   first time only after upgrading.
+   Since ``delete_old_docs`` (described above) is enabled by default, this
+   can delete not only the documents that failed to be generated, but also
+   documents that were already registered by a previous crawl.
+   Before upgrading, check your CSV files for unmatched quotes, or consider
+   setting ``quote_disabled=true`` to revert to the previous parsing method.
+
+To disable quote processing (revert to the previous behavior):
 
 ::
 
     # Parameter
-    quote_disabled=false
-    quote_character="
+    quote_disabled=true
 
-To enable escape processing:
+Setting ``quote_disabled=true`` also disables escape processing at the same
+time (unless you explicitly set ``escape_disabled=false``).
+
+To disable escape processing only:
 
 ::
 
     # Parameter
-    escape_disabled=false
-    escape_character=\
+    escape_disabled=true
 
 Changing Separator
 ------------------
@@ -264,12 +288,11 @@ Semicolon-separated:
 Custom Quote Character
 ----------------------
 
-Single quote (quote processing must be enabled):
+Single quote:
 
 ::
 
     # Parameter
-    quote_disabled=false
     quote_character='
 
 Encoding
@@ -506,13 +529,11 @@ Columns Not Recognized Correctly
        # Semicolon
        separator_character=;
 
-2. To handle quoted fields (fields that contain the delimiter character), enable quote processing:
-
-   ::
-
-       quote_disabled=false
-
-3. Verify the CSV file format (RFC 4180 compliant)
+2. Quoted fields (fields containing the delimiter character) are parsed correctly
+   by default. Check that you have not unintentionally set ``quote_disabled=true``.
+3. Verify the CSV file format (RFC 4180 compliant). If it contains a ``"`` with no
+   matching closing quote, everything in the file from that point onward is read
+   as a single field value.
 
 Header Row Handling
 -------------------
@@ -544,6 +565,34 @@ No Data Retrieved
 2. Verify the script settings are correct (column names and ``cell<N>`` references must be used without a ``data.`` prefix)
 3. Verify the column names are correct (when has_header_line=true)
 4. Check the log for error messages
+5. Check whether the log contains an ``Unknown parameter(s)`` warning (a typo
+   in a parameter name is warned about once at the start of the crawl; any
+   other occurrence is silently ignored)
+
+Index From a Previous Crawl Disappears on a Second CSV Import
+-------------------------------------------------------------
+
+**Symptom**: After crawling a first CSV file, crawling a second CSV file with the
+same data store config on a later day causes the documents registered from the
+first CSV file to disappear from search results.
+
+**Cause**:
+
+After a crawl completes, |Fess| deletes from the index any documents that belong
+to that data store config and were not re-registered during the current session
+(``delete_old_docs``, default: true). If you feed multiple CSV files into the same
+data store config at different times, then at the time the later file is crawled,
+the content registered by the earlier file is treated as "not re-registered during
+the current session" and is deleted.
+
+**Solution**:
+
+If you feed multiple CSV files into the same data store config at different times
+and want their content to accumulate, specify the following.
+
+::
+
+    delete_old_docs=false
 
 Large CSV Files
 ---------------
@@ -561,7 +610,7 @@ Fields with Line Breaks
 -----------------------
 
 In RFC 4180 format, fields containing line breaks can be handled by enclosing them in quotes.
-Since quote processing is disabled by default, ``quote_disabled=false`` must be specified:
+Since quote processing is enabled by default, it is parsed as-is without specifying any parameters:
 
 ::
 
@@ -579,7 +628,6 @@ Parameters:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_disabled=false
     quote_character="
 
 CsvListDataStore
@@ -623,10 +671,109 @@ Additional Parameters
    * - ``numOfThreads``
      - No
      - Number of processing threads (default: 1)
+   * - ``delete_processed_file``
+     - No
+     - Whether to delete the CSV file after processing completes (default: true)
+   * - ``ignore_data_store_exception``
+     - No
+     - Whether to continue the overall crawl even if an exception occurs while processing one CSV file (default: true)
+
+.. warning::
+
+   ``CsvListDataStore`` automatically **deletes** CSV files after processing completes (``delete_processed_file`` defaults to ``true``). If an error occurs during processing, the file is renamed to ``.txt`` instead (if renaming fails, the file is deleted). If you do not want files to be deleted, specify ``delete_processed_file=false``.
+
+CSV Row Format (Event Type)
+-------------------------------------
+
+CSV files passed to ``CsvListDataStore`` must have at least two columns per row: an
+"event type" and a "URL". Additional columns can be added and referenced as
+``cell3``, ``cell4``, ... (for example, to feed a value into ``timestamp.overwrite``).
+
+::
+
+    <event_type>,<URL>
+
+The event type can be one of the following three values.
+
+- ``create`` - a file was created
+- ``modify`` - a file was updated
+- ``delete`` - a file was deleted
+
+``create`` and ``modify`` are treated as the same operation (crawling and indexing
+the target URL). There is no difference in behavior between them.
+
+The column name (when a header row is present) and the value for each event type
+can be changed using the following parameters.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Parameter
+     - Description
+   * - ``field.event_type``
+     - Column name that holds the event type (default: ``event_type``)
+   * - ``event.create``
+     - Value representing "created" (default: ``create``)
+   * - ``event.modify``
+     - Value representing "updated" (default: ``modify``)
+   * - ``event.delete``
+     - Value representing "deleted" (default: ``delete``)
+
+Example CSV file:
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    delete,smb://servername/data/testfile2.txt
+
+Example script (without a header row):
+
+::
+
+    event_type=cell1
+    url=cell2
+
+Overwriting Field Values (.overwrite)
+----------------------------------------
+
+Appending ``.overwrite`` to the name of an indexed field assembled in the script
+causes that field's value to be overwritten with the value set from the CSV,
+instead of the value obtained from the actual crawl of the target file.
+
+::
+
+    timestamp.overwrite=cell3
 
 .. note::
 
-   ``CsvListDataStore`` automatically deletes CSV files after processing is complete. If an error occurs during processing, the file is renamed to ``.txt`` (if renaming fails, the file is deleted).
+   The date facet on the search screen filters using the ``timestamp`` field, not
+   ``created``. If you want to overwrite the timestamp with a value from the CSV,
+   specify ``timestamp.overwrite`` rather than ``created.overwrite``.
+
+Carrying Over Authentication and Proxy Settings
+---------------------------------------------------
+
+``CsvListDataStore`` actually crawls the URLs written in the CSV, but authentication
+and proxy settings configured on a file crawl or web crawl data store config are not
+carried over. Specify any required settings individually as parameters of this data
+store config.
+
+Example SMB authentication:
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
+
+Example proxy settings:
+
+::
+
+    crawler.web.proxyHost=proxy.example.com
+    crawler.web.proxyPort=8080
 
 Advanced Script Examples
 ========================
@@ -652,6 +799,14 @@ Conditional Indexing
     title=Integer.parseInt(price) >= 10000 ? name : null
     content=Integer.parseInt(price) >= 10000 ? description : null
     price=Integer.parseInt(price) >= 10000 ? price : null
+
+.. note::
+
+   As shown above, a row where ``url`` returns ``null`` is silently skipped
+   rather than treated as a failure. The number of skipped rows is tallied per
+   CSV file and is output as a single summary WARN log each time that file's
+   read finishes (individual failed URLs are not logged per row; when
+   processing multiple CSV files, one WARN log is output per file).
 
 Combining Multiple Columns
 --------------------------

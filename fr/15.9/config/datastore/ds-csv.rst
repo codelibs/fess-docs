@@ -71,7 +71,6 @@ Fichier local :
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 Fichiers multiples :
 
@@ -82,15 +81,16 @@ Fichiers multiples :
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 .. note::
 
-   Le traitement des guillemets (quotes) et le traitement des échappements sont **désactivés** par
-   défaut. Pour traiter des CSV conformes à la RFC 4180 (champs entre guillemets pouvant contenir des
-   délimiteurs ou des sauts de ligne), spécifiez explicitement ``quote_disabled=false`` pour activer
-   le traitement des guillemets. Reportez-vous à la section « Activation du traitement des guillemets
-   et des échappements » ci-dessous pour plus de détails.
+   Le traitement des guillemets (quotes) et le traitement des échappements sont **activés par
+   défaut** dans |Fess| 15.9. Les fichiers CSV conformes à la RFC 4180 (champs entre guillemets
+   pouvant contenir des délimiteurs ou des sauts de ligne) sont analysés correctement sans qu'il
+   soit nécessaire de spécifier le moindre paramètre.
+   Pour savoir comment revenir au comportement précédent (désactiver le traitement des guillemets)
+   et connaître les précautions à prendre, reportez-vous à la section « Désactivation du
+   traitement des guillemets et des échappements » ci-dessous.
 
 Liste des paramètres
 ~~~~~~~~~~~~~~~~~~~~
@@ -119,10 +119,10 @@ Liste des paramètres
      - Caractère de séparation (par défaut : virgule ``,``). Les séquences d'échappement telles que ``\t`` peuvent être spécifiées (séparation par tabulation).
    * - ``quote_character``
      - Non
-     - Caractère de guillemet (par défaut : guillemet double ``"``). Notez que le traitement des guillemets est désactivé par défaut (voir ``quote_disabled``).
+     - Caractère de guillemet (par défaut : guillemet double ``"``). Le traitement des guillemets est activé par défaut (voir ``quote_disabled``).
    * - ``escape_character``
      - Non
-     - Caractère d'échappement (par défaut : barre oblique inverse ``\``). Notez que le traitement des échappements est désactivé par défaut (voir ``escape_disabled``).
+     - Caractère d'échappement (par défaut : le même caractère que ``quote_character`` ; conformément à la RFC 4180, les guillemets sont échappés en les doublant). L'activation du traitement des échappements suit la valeur résolue de ``quote_disabled`` (voir ``escape_disabled``).
 
 .. note::
 
@@ -132,7 +132,7 @@ Liste des paramètres
 Paramètres avancés
 ~~~~~~~~~~~~~~~~~~
 
-Les paramètres suivants permettent de contrôler finement le comportement d'analyse du CSV :
+Les paramètres suivants permettent de contrôler finement le comportement d'analyse du CSV et de l'indexation :
 
 .. list-table::
    :header-rows: 1
@@ -141,9 +141,15 @@ Les paramètres suivants permettent de contrôler finement le comportement d'ana
    * - Paramètre
      - Description
    * - ``quote_disabled``
-     - Désactive le traitement des guillemets (par défaut : true). Spécifiez ``false`` pour traiter des champs entre guillemets conformes à la RFC 4180.
+     - Désactive le traitement des guillemets (par défaut : false). Les champs entre guillemets conformes à la RFC 4180 sont analysés correctement par défaut. Spécifiez ``true`` pour revenir au comportement précédent (traiter les guillemets comme des caractères ordinaires).
    * - ``escape_disabled``
-     - Désactive le traitement des échappements (par défaut : true). Spécifiez ``false`` pour activer l'échappement via ``escape_character``.
+     - Désactive le traitement des échappements (par défaut : identique à la valeur résolue de ``quote_disabled``). Une valeur spécifiée explicitement est prioritaire.
+   * - ``delete_old_docs``
+     - Détermine si, une fois le crawl terminé, les documents appartenant à cette configuration Data Store et n'ayant pas été réenregistrés durant la session de crawl en cours doivent être supprimés de l'index (par défaut : true). Si vous injectez plusieurs fichiers CSV dans la même configuration Data Store à des moments différents, spécifiez ``false`` — sinon les documents enregistrés par les fichiers précédents seront supprimés (voir la section de dépannage ci-dessous pour plus de détails).
+   * - ``keep_expires_docs``
+     - Lors de la suppression via ``delete_old_docs``, détermine si les documents dont la date d'expiration (la valeur « expires » définie par exemple via ``time_to_live``) n'est pas encore atteinte doivent être exclus de la suppression (par défaut : true). Avec ``false``, les documents non réenregistrés sont supprimés même s'ils sont encore dans leur période de validité.
+   * - ``time_to_live``
+     - Nombre de minutes après l'enregistrement au bout desquelles la date d'expiration d'un document doit être définie (en minutes ; par défaut : non défini, c'est-à-dire pas d'expiration).
    * - ``skip_lines``
      - Nombre de lignes à ignorer en début de fichier (par défaut : 0)
    * - ``ignore_line_patterns``
@@ -217,32 +223,51 @@ CSV standard (conforme RFC 4180)
 .. note::
 
    Pour inclure un délimiteur dans un champ en l'entourant de guillemets (comme ``"Book, Programming"``
-   ci-dessus), il est nécessaire de spécifier ``quote_disabled=false`` afin d'activer le traitement
-   des guillemets. Lorsque le traitement des guillemets est désactivé (comportement par défaut), les
-   guillemets sont traités comme des caractères ordinaires et les champs sont découpés au niveau du
-   délimiteur.
+   ci-dessus), le champ est déjà analysé correctement comme une seule valeur avec le comportement par
+   défaut (traitement des guillemets activé).
+   Pour savoir comment revenir au comportement précédent (traiter les guillemets comme des caractères
+   ordinaires et découper les champs au niveau du délimiteur), reportez-vous à la section
+   « Désactivation du traitement des guillemets et des échappements » ci-dessous.
 
-Activation du traitement des guillemets et des échappements
-------------------------------------------------------------
+Désactivation du traitement des guillemets et des échappements
+-----------------------------------------------------------------
 
-Le traitement des guillemets et des échappements est désactivé par défaut. Activez-les explicitement
-comme suit.
+Le traitement des guillemets et des échappements est activé par défaut dans |Fess| 15.9. Le
+caractère de guillemet par défaut est le guillemet double ``"``, et le caractère d'échappement par
+défaut est le même que le caractère de guillemet (échappé en le doublant, conformément à la RFC
+4180) ; les fichiers CSV standard conformes à la RFC 4180 peuvent ainsi être analysés tels quels,
+sans aucun paramètre.
 
-Activer le traitement des guillemets :
+.. warning::
+
+   Lorsque le traitement des guillemets est activé, si un fichier CSV contient ne serait-ce qu'un
+   seul ``"`` sans guillemet fermant correspondant, tout le reste du fichier à partir de ce
+   guillemet (y compris les lignes suivantes) est lu comme une seule valeur de champ, et aucun
+   document n'est généré pour les lignes restantes. Comme les versions précédentes analysaient
+   chaque ligne indépendamment, ce comportement peut n'apparaître qu'après une mise à niveau.
+   ``delete_old_docs`` (décrit ci-dessus) étant activé par défaut, cela peut entraîner la
+   suppression non seulement des documents qui n'ont pas pu être générés, mais aussi de documents
+   déjà enregistrés lors d'un crawl précédent.
+   Avant la mise à niveau, vérifiez que vos fichiers CSV ne contiennent pas de guillemets non
+   fermés, ou envisagez de spécifier ``quote_disabled=true`` pour revenir à la méthode d'analyse
+   précédente.
+
+Désactiver le traitement des guillemets (revenir au comportement précédent) :
 
 ::
 
     # Paramètre
-    quote_disabled=false
-    quote_character="
+    quote_disabled=true
 
-Activer le traitement des échappements :
+Spécifier ``quote_disabled=true`` désactive également le traitement des échappements en même
+temps (sauf si vous spécifiez explicitement ``escape_disabled=false``).
+
+Désactiver uniquement le traitement des échappements :
 
 ::
 
     # Paramètre
-    escape_disabled=false
-    escape_character=\
+    escape_disabled=true
 
 Modification du séparateur
 ---------------------------
@@ -264,12 +289,11 @@ Séparation par point-virgule :
 Guillemet personnalisé
 -----------------------
 
-Guillemet simple (l'activation du traitement des guillemets est requise) :
+Guillemet simple :
 
 ::
 
     # Paramètre
-    quote_disabled=false
     quote_character='
 
 Encodage
@@ -507,14 +531,11 @@ guillemets sont découpés
        # Point-virgule
        separator_character=;
 
-2. Pour traiter des champs entre guillemets (champs contenant le délimiteur), activer le traitement
-   des guillemets :
-
-   ::
-
-       quote_disabled=false
-
-3. Vérifier le format du fichier CSV (conformité RFC 4180)
+2. Les champs entre guillemets (champs contenant le délimiteur) sont analysés correctement par
+   défaut. Vérifiez que vous n'avez pas spécifié ``quote_disabled=true`` par inadvertance.
+3. Vérifier le format du fichier CSV (conformité RFC 4180). S'il contient un ``"`` sans guillemet
+   fermant correspondant, tout le reste du fichier à partir de ce point est lu comme une seule
+   valeur de champ.
 
 Gestion de la ligne d'en-tête
 -------------------------------
@@ -547,6 +568,34 @@ Impossible de récupérer les données
    référencés sans préfixe ``data.``)
 3. Vérifier si les noms de colonnes sont corrects (si has_header_line=true)
 4. Vérifier les messages d'erreur dans les logs
+5. Vérifier si le log contient un avertissement ``Unknown parameter(s)`` (une faute de frappe
+   dans un nom de paramètre est signalée une seule fois au début du crawl ; dans tous les
+   autres cas, elle est ignorée silencieusement)
+
+Les documents d'un crawl précédent disparaissent après un second import CSV
+---------------------------------------------------------------------------
+
+**Symptôme** : Après le crawl d'un premier fichier CSV, le crawl d'un second fichier CSV avec la
+même configuration Data Store un jour ultérieur fait disparaître des résultats de recherche les
+documents enregistrés à partir du premier fichier CSV.
+
+**Cause** :
+
+Une fois un crawl terminé, |Fess| supprime de l'index les documents appartenant à cette
+configuration Data Store qui n'ont pas été réenregistrés pendant la session en cours
+(``delete_old_docs``, par défaut : true). Si vous injectez plusieurs fichiers CSV dans la même
+configuration Data Store à des moments différents, alors au moment du crawl du fichier le plus
+récent, le contenu enregistré par le fichier précédent est considéré comme « non réenregistré
+pendant la session en cours » et est supprimé.
+
+**Solution** :
+
+Si vous injectez plusieurs fichiers CSV dans la même configuration Data Store à des moments
+différents et souhaitez que leur contenu s'accumule, spécifiez ce qui suit.
+
+::
+
+    delete_old_docs=false
 
 Fichiers CSV volumineux
 ------------------------
@@ -564,8 +613,8 @@ Champs contenant des sauts de ligne
 -------------------------------------
 
 Le format RFC 4180 permet de gérer les champs contenant des sauts de ligne en les entourant de
-guillemets. Le traitement des guillemets étant désactivé par défaut, il est nécessaire de spécifier
-``quote_disabled=false`` :
+guillemets. Le traitement des guillemets étant activé par défaut, cela est analysé correctement sans qu'il
+soit nécessaire de spécifier le moindre paramètre :
 
 ::
 
@@ -583,7 +632,6 @@ Paramètres :
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_disabled=false
     quote_character="
 
 CsvListDataStore
@@ -627,12 +675,110 @@ Paramètres supplémentaires
    * - ``numOfThreads``
      - Non
      - Nombre de threads de traitement (par défaut : 1)
+   * - ``delete_processed_file``
+     - Non
+     - Détermine si le fichier CSV doit être supprimé une fois le traitement terminé (par défaut : true)
+   * - ``ignore_data_store_exception``
+     - Non
+     - Détermine si le crawl global doit se poursuivre même si une exception se produit pendant le traitement d'un fichier CSV (par défaut : true)
+
+.. warning::
+
+   ``CsvListDataStore`` **supprime** automatiquement les fichiers CSV une fois leur traitement terminé (``delete_processed_file`` vaut ``true`` par défaut). En cas d'erreur pendant le traitement, le fichier est renommé avec l'extension ``.txt`` à la place (s'il est impossible de le renommer, il est supprimé). Si vous ne souhaitez pas que les fichiers soient supprimés, spécifiez ``delete_processed_file=false``.
+
+Format de ligne CSV (type d'événement)
+----------------------------------------
+
+Les fichiers CSV transmis à ``CsvListDataStore`` doivent comporter au moins deux colonnes par
+ligne : un « type d'événement » et une « URL ». Des colonnes supplémentaires peuvent être ajoutées
+et référencées sous la forme ``cell3``, ``cell4``... (par exemple pour alimenter
+``timestamp.overwrite``).
+
+::
+
+    <type_evenement>,<URL>
+
+Le type d'événement peut prendre l'une des trois valeurs suivantes.
+
+- ``create`` — un fichier a été créé
+- ``modify`` — un fichier a été mis à jour
+- ``delete`` — un fichier a été supprimé
+
+``create`` et ``modify`` sont traités comme la même opération (crawl et indexation de l'URL
+cible). Il n'y a aucune différence de comportement entre les deux.
+
+Le nom de colonne (si un en-tête est présent) et la valeur de chaque type d'événement peuvent être
+modifiés à l'aide des paramètres suivants.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Paramètre
+     - Description
+   * - ``field.event_type``
+     - Nom de la colonne contenant le type d'événement (par défaut : ``event_type``)
+   * - ``event.create``
+     - Valeur représentant « créé » (par défaut : ``create``)
+   * - ``event.modify``
+     - Valeur représentant « mis à jour » (par défaut : ``modify``)
+   * - ``event.delete``
+     - Valeur représentant « supprimé » (par défaut : ``delete``)
+
+Exemple de fichier CSV :
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    delete,smb://servername/data/testfile2.txt
+
+Exemple de script (sans en-tête) :
+
+::
+
+    event_type=cell1
+    url=cell2
+
+Écrasement des valeurs de champ (.overwrite)
+----------------------------------------------
+
+Ajouter ``.overwrite`` à la fin du nom d'un champ d'index construit dans le script fait que la
+valeur de ce champ est écrasée par la valeur définie à partir du CSV, au lieu de la valeur obtenue
+par le crawl réel du fichier cible.
+
+::
+
+    timestamp.overwrite=cell3
 
 .. note::
 
-   ``CsvListDataStore`` supprime automatiquement les fichiers CSV après leur traitement. En cas
-   d'erreur pendant le traitement, le fichier est renommé avec l'extension ``.txt`` (s'il est
-   impossible de le renommer, il est supprimé).
+   La facette de date de l'écran de recherche filtre à l'aide du champ ``timestamp``, et non
+   ``created``. Si vous souhaitez écraser l'horodatage avec une valeur du CSV, spécifiez
+   ``timestamp.overwrite`` plutôt que ``created.overwrite``.
+
+Transmission des paramètres d'authentification et de proxy
+------------------------------------------------------------
+
+``CsvListDataStore`` effectue réellement le crawl des URL écrites dans le CSV, mais les paramètres
+d'authentification et de proxy configurés dans la configuration Data Store du crawl de fichiers ou
+du crawl Web ne sont pas transmis. Spécifiez individuellement les paramètres nécessaires en tant
+que paramètres de cette configuration Data Store.
+
+Exemple d'authentification SMB :
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
+
+Exemple de configuration de proxy :
+
+::
+
+    crawler.web.proxyHost=proxy.example.com
+    crawler.web.proxyPort=8080
 
 Exemples d'utilisation avancée des scripts
 ==========================================
@@ -658,6 +804,14 @@ Indexation conditionnelle
     title=Integer.parseInt(price) >= 10000 ? name : null
     content=Integer.parseInt(price) >= 10000 ? description : null
     price=Integer.parseInt(price) >= 10000 ? price : null
+
+.. note::
+
+   Comme indiqué ci-dessus, une ligne pour laquelle ``url`` renvoie ``null`` n'est pas traitée
+   comme un échec, mais est ignorée silencieusement. Le nombre de lignes ignorées est comptabilisé
+   par fichier CSV et affiché sous la forme d'un seul log WARN récapitulatif à la fin de la lecture
+   de chaque fichier (les URL en échec ne sont pas journalisées individuellement ligne par ligne ;
+   lors du traitement de plusieurs fichiers CSV, un log WARN est émis par fichier).
 
 Concaténation de plusieurs colonnes
 -------------------------------------

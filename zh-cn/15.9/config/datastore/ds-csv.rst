@@ -71,7 +71,6 @@ CSV连接器提供从CSV文件获取数据并注册到
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 多个文件:
 
@@ -82,14 +81,13 @@ CSV连接器提供从CSV文件获取数据并注册到
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 .. note::
 
-   引号处理和转义处理默认为 **禁用** 状态。
-   如需处理字段内包含分隔符或换行符的CSV（符合RFC 4180规范），
-   请明确指定 ``quote_disabled=false`` 以启用引号处理。
-   详情请参阅后文的「启用引号与转义处理」。
+   在 |Fess| 15.9 中，引号处理和转义处理默认为 **启用** 状态。
+   字段内包含分隔符或换行符的CSV（符合RFC 4180规范）无需指定任何参数即可正确解析。
+   如需了解如何恢复为以前版本的行为（禁用引号处理）及相关注意事项，
+   请参阅后文的「禁用引号与转义处理」。
 
 参数列表
 ~~~~~~~~~~~~~~~~
@@ -118,10 +116,10 @@ CSV连接器提供从CSV文件获取数据并注册到
      - 分隔符（默认: 逗号 ``,``）。可指定 ``\t`` 等转义序列（制表符分隔）。
    * - ``quote_character``
      - 否
-     - 引号字符（默认: 双引号 ``"``）。但引号处理默认为禁用状态（参见 ``quote_disabled``）。
+     - 引号字符（默认: 双引号 ``"``）。引号处理默认为启用状态（参见 ``quote_disabled``）。
    * - ``escape_character``
      - 否
-     - 转义字符（默认: 反斜杠 ``\``）。但转义处理默认为禁用状态（参见 ``escape_disabled``）。
+     - 转义字符（默认: 与 ``quote_character`` 相同的字符；按照RFC 4180规范，通过将引号重复两次进行转义）。转义处理是否启用取决于 ``quote_disabled`` 的解析结果（参见 ``escape_disabled``）。
 
 .. note::
 
@@ -131,7 +129,7 @@ CSV连接器提供从CSV文件获取数据并注册到
 高级参数
 ~~~~~~~~~~~~~~~~
 
-以下参数用于精细控制CSV的解析行为：
+以下参数用于精细控制CSV的解析行为及索引注册行为：
 
 .. list-table::
    :header-rows: 1
@@ -140,9 +138,15 @@ CSV连接器提供从CSV文件获取数据并注册到
    * - 参数
      - 说明
    * - ``quote_disabled``
-     - 是否禁用引号处理（默认: true）。处理符合RFC 4180规范的带引号字段时，请指定 ``false``\ 。
+     - 是否禁用引号处理（默认: false）。默认情况下，符合RFC 4180规范的带引号字段可被正确解析。若要恢复为以前的行为（将引号视为普通字符），请指定 ``true``\ 。
    * - ``escape_disabled``
-     - 是否禁用转义处理（默认: true）。启用 ``escape_character`` 转义时，请指定 ``false``\ 。
+     - 是否禁用转义处理（默认: 与 ``quote_disabled`` 的解析结果相同）。若明确指定该值，则以指定值为准。
+   * - ``delete_old_docs``
+     - 爬取完成后，是否删除属于该数据存储配置、且在本次爬取会话中未被重新注册的文档（默认: true）。若在不同时间将多个CSV文件投入同一数据存储配置，请指定 ``false``\ ，否则先前投入的文档将被删除（详情参见后文的故障排除部分）。
+   * - ``keep_expires_docs``
+     - 通过 ``delete_old_docs`` 进行删除时，是否将有效期（通过 ``time_to_live`` 等设置的expires）尚未到期的文档排除在删除对象之外（默认: true）。设为 ``false``\ 时，即使在有效期内，未被重新注册的文档也会被删除。
+   * - ``time_to_live``
+     - 文档的有效期设置为注册时刻起的多少分钟后（以分钟为单位。默认: 未设置=无限期）。
    * - ``skip_lines``
      - 跳过的开头行数（默认: 0）
    * - ``ignore_line_patterns``
@@ -213,30 +217,45 @@ CSV格式详情
 
 .. note::
 
-   如上述 ``"Book, Programming"`` 所示，若要在字段内包含分隔符并使用引号包裹，
-   需指定 ``quote_disabled=false`` 以启用引号处理。
-   引号处理禁用时（默认），引号被视为普通字符，字段按分隔符分割。
+   如上述 ``"Book, Programming"`` 所示，即使在字段内包含分隔符并使用引号包裹，
+   在默认设置（引号处理已启用）下也会被正确解析为单个字段。
+   如需恢复为以前的行为（将引号视为普通字符，字段按分隔符分割），
+   请参阅后文的「禁用引号与转义处理」。
 
-启用引号与转义处理
+禁用引号与转义处理
 ------------------
 
-引号处理和转义处理默认为禁用状态。请按以下方式明确启用。
+在 |Fess| 15.9 中，引号处理和转义处理默认为启用状态。默认引号字符为双引号 ``"``，
+默认转义字符与引号字符相同（按照RFC 4180规范，通过将引号重复两次进行转义）；
+符合RFC 4180规范的标准CSV无需任何参数即可直接解析。
 
-启用引号处理:
+.. warning::
+
+   在引号处理启用的状态下，若CSV文件中存在哪怕一个没有对应闭合引号的 ``"``\ ，
+   则从该引号开始之后的整个文件内容（包括后续行）都会被读取为单个字段值，
+   此后的行将不再生成文档。由于以前的版本中每行都是独立解析的，
+   这种行为可能在升级后才首次显现出来。
+   由于 ``delete_old_docs``\ （前文所述）默认为启用状态，这不仅会导致未生成的文档丢失，
+   还可能删除之前爬取时已注册的文档。
+   升级前请检查CSV文件中是否包含未闭合的引号，或考虑指定 ``quote_disabled=true``
+   以恢复为以前的解析方式。
+
+禁用引号处理（恢复为以前的行为）:
 
 ::
 
     # 参数
-    quote_disabled=false
-    quote_character="
+    quote_disabled=true
 
-启用转义处理:
+指定 ``quote_disabled=true`` 后，转义处理也会同时被禁用
+（明确指定 ``escape_disabled=false`` 的情况除外）。
+
+仅禁用转义处理:
 
 ::
 
     # 参数
-    escape_disabled=false
-    escape_character=\
+    escape_disabled=true
 
 更改分隔符
 ------------------
@@ -258,12 +277,11 @@ CSV格式详情
 自定义引号
 --------------
 
-单引号（需启用引号处理）:
+单引号:
 
 ::
 
     # 参数
-    quote_disabled=false
     quote_character='
 
 编码
@@ -500,13 +518,10 @@ TSV文件（data.tsv）:
        # 分号
        separator_character=;
 
-2. 处理带引号字段（字段内含分隔符）时，请启用引号处理:
-
-   ::
-
-       quote_disabled=false
-
-3. 确认CSV文件格式（是否符合RFC 4180）
+2. 带引号字段（字段内含分隔符）默认即可被正确解析。
+   请确认是否无意中指定了 ``quote_disabled=true``\ 。
+3. 确认CSV文件格式（是否符合RFC 4180）。若文件中包含没有对应闭合引号的 ``"``\ ，
+   则从该处开始之后的整个文件内容都会被读取为单个字段值。
 
 标题行处理
 ----------
@@ -538,6 +553,29 @@ TSV文件（data.tsv）:
 2. 确认脚本设置是否正确（列名和 ``cell<N>`` 的引用是否不含 ``data.`` 前缀）
 3. 确认列名是否正确（has_header_line=true 时）
 4. 在日志中确认错误信息
+5. 确认日志中是否出现 ``Unknown parameter(s)``\ 警告（参数名的拼写错误仅在爬取
+   开始时警告一次，除此之外将被静默忽略）
+
+第二次导入CSV会导致之前的索引消失
+---------------------------------
+
+**症状**: 爬取第一个CSV文件后，改天再爬取同一数据存储配置下的第二个CSV文件时，
+从第一个CSV文件注册的文档从搜索结果中消失了。
+
+**原因**:
+
+爬取完成后，|Fess| 会从索引中删除属于该数据存储配置、且在本次会话中未被重新注册的文档
+（ ``delete_old_docs``\ ，默认: true）。若在不同时间将多个CSV文件投入同一数据存储配置，
+则在爬取后投入的文件时，先前投入文件的内容会被视为「本次会话中未被重新注册」的文档而被删除。
+
+**解决方法**:
+
+如果要在不同时间将多个CSV文件投入同一数据存储配置，并希望各自的内容不断累积，
+请指定以下内容。
+
+::
+
+    delete_old_docs=false
 
 大型CSV文件
 -----------
@@ -555,7 +593,7 @@ TSV文件（data.tsv）:
 ----------------
 
 RFC 4180格式中，可通过引号包裹来处理包含换行符的字段。
-由于引号处理默认为禁用状态，需指定 ``quote_disabled=false``：
+由于引号处理默认为启用状态，无需指定任何参数即可正确解析：
 
 ::
 
@@ -573,7 +611,6 @@ RFC 4180格式中，可通过引号包裹来处理包含换行符的字段。
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_disabled=false
     quote_character="
 
 CsvListDataStore
@@ -617,10 +654,103 @@ CsvListDataStore
    * - ``numOfThreads``
      - 否
      - 处理线程数（默认: 1）
+   * - ``delete_processed_file``
+     - 否
+     - 处理完成后是否删除该CSV文件（默认: true）
+   * - ``ignore_data_store_exception``
+     - 否
+     - 处理某个CSV文件时若发生异常，是否继续整体爬取（默认: true）
+
+.. warning::
+
+   ``CsvListDataStore`` 在处理完成后会自动 **删除** CSV文件（ ``delete_processed_file`` 的默认值为 ``true``\ ）。处理过程中发生错误时，文件将被改为重命名为 ``.txt``\ （重命名失败时则直接删除）。若不希望删除文件，请指定 ``delete_processed_file=false``\ 。
+
+CSV行格式（事件类型）
+---------------------
+
+传递给 ``CsvListDataStore`` 的CSV文件，每行至少需要「事件类型」和「URL」两列。
+可以进一步添加列，并以 ``cell3``、``cell4``\ ……的形式引用
+（例如用于向 ``timestamp.overwrite`` 传值）。
+
+::
+
+    <事件类型>,<URL>
+
+事件类型可指定以下三种值。
+
+- ``create`` - 文件已创建
+- ``modify`` - 文件已更新
+- ``delete`` - 文件已删除
+
+``create`` 和 ``modify`` 被视为相同的处理（对目标URL的爬取与索引注册）。两者行为没有区别。
+
+列名（有标题行时）及各事件类型的值，可通过以下参数进行更改。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 参数
+     - 说明
+   * - ``field.event_type``
+     - 存储事件类型的列名（默认: ``event_type``）
+   * - ``event.create``
+     - 表示「创建」的值（默认: ``create``）
+   * - ``event.modify``
+     - 表示「更新」的值（默认: ``modify``）
+   * - ``event.delete``
+     - 表示「删除」的值（默认: ``delete``）
+
+CSV文件示例:
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    delete,smb://servername/data/testfile2.txt
+
+脚本示例（无标题行时）:
+
+::
+
+    event_type=cell1
+    url=cell2
+
+覆盖字段值（.overwrite）
+------------------------
+
+在脚本中构建的索引字段名末尾加上 ``.overwrite``\ ，该字段的值将不再采用爬取结果
+（实际文件爬取所获得的值），而是被CSV中设置的值覆盖。
+
+::
+
+    timestamp.overwrite=cell3
 
 .. note::
 
-   ``CsvListDataStore`` 在处理完成后会自动删除CSV文件。处理过程中发生错误时，文件将被重命名为 ``.txt``\ （重命名失败时则直接删除）。
+   搜索界面的日期分面（facet）是通过 ``timestamp`` 字段而非 ``created`` 字段进行筛选的。
+   如需用CSV中的值覆盖时间戳，请指定 ``timestamp.overwrite`` 而非 ``created.overwrite``\ 。
+
+认证与代理设置的继承
+--------------------
+
+``CsvListDataStore`` 会实际爬取CSV中记载的URL，但文件爬取或网页爬取的数据存储配置中
+注册的认证信息、代理设置不会被继承。请将所需设置单独指定为该数据存储配置的参数。
+
+SMB认证示例:
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
+
+代理设置示例:
+
+::
+
+    crawler.web.proxyHost=proxy.example.com
+    crawler.web.proxyPort=8080
 
 脚本高级使用示例
 ================
@@ -646,6 +776,12 @@ CsvListDataStore
     title=Integer.parseInt(price) >= 10000 ? name : null
     content=Integer.parseInt(price) >= 10000 ? description : null
     price=Integer.parseInt(price) >= 10000 ? price : null
+
+.. note::
+
+   如上所示，``url`` 返回 ``null`` 的行不会被视为失败，而是被静默跳过。
+   跳过的行数按CSV文件分别统计，并在该文件读取结束时，作为一条汇总WARN日志输出
+   （并非每行失败的URL都会被单独记录。处理多个CSV文件时，会按文件数量输出对应的WARN日志）。
 
 多列合并
 --------
