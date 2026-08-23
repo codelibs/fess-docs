@@ -565,9 +565,9 @@ No Data Retrieved
 2. Verify the script settings are correct (column names and ``cell<N>`` references must be used without a ``data.`` prefix)
 3. Verify the column names are correct (when has_header_line=true)
 4. Check the log for error messages
-5. Check whether the log contains an ``Unknown parameter(s)`` warning (a typo
-   in a parameter name is warned about once at the start of the crawl; any
-   other occurrence is silently ignored)
+5. Verify that no parameter name is misspelled (an unrecognized parameter name is
+   ignored without any warning; ``has_headerline=true``, for example, leaves
+   ``has_header_line`` at its default ``false``)
 
 Index From a Previous Crawl Disappears on a Second CSV Import
 -------------------------------------------------------------

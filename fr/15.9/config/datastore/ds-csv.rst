@@ -568,9 +568,9 @@ Impossible de récupérer les données
    référencés sans préfixe ``data.``)
 3. Vérifier si les noms de colonnes sont corrects (si has_header_line=true)
 4. Vérifier les messages d'erreur dans les logs
-5. Vérifier si le log contient un avertissement ``Unknown parameter(s)`` (une faute de frappe
-   dans un nom de paramètre est signalée une seule fois au début du crawl ; dans tous les
-   autres cas, elle est ignorée silencieusement)
+5. Vérifier qu'aucun nom de paramètre n'est mal orthographié (un nom de paramètre non
+   reconnu est ignoré sans aucun avertissement ; ``has_headerline=true`` laisse par
+   exemple ``has_header_line`` à sa valeur par défaut ``false``)
 
 Les documents d'un crawl précédent disparaissent après un second import CSV
 ---------------------------------------------------------------------------

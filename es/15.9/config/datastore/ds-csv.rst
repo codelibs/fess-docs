@@ -565,9 +565,9 @@ No se obtienen datos
 2. Verificar que la configuración del script sea correcta (comprobar que las referencias a nombres de columna o ``cell<N>`` no llevan el prefijo ``data.``)
 3. Verificar que los nombres de columna sean correctos (cuando has_header_line=true)
 4. Revisar los mensajes de error en el log
-5. Comprobar si en el log aparece una advertencia ``Unknown parameter(s)`` (un error de
-   tipeo en el nombre de un parámetro se advierte una sola vez al inicio del crawl; en
-   cualquier otro caso se ignora silenciosamente)
+5. Comprobar que ningún nombre de parámetro esté mal escrito (un nombre de parámetro no
+   reconocido se ignora sin ninguna advertencia; por ejemplo, ``has_headerline=true``
+   deja ``has_header_line`` en su valor predeterminado ``false``)
 
 Los documentos de un crawl anterior desaparecen tras una segunda importación de CSV
 -----------------------------------------------------------------------------------

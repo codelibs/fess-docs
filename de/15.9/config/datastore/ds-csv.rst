@@ -563,9 +563,9 @@ Keine Daten abrufbar
 2. Überprüfen Sie die Skript-Einstellungen (ob Spaltenname- oder ``cell<N>``-Referenzen ohne ``data.``-Präfix angegeben sind)
 3. Überprüfen Sie die Spaltennamen (bei has_header_line=true)
 4. Überprüfen Sie die Logs auf Fehlermeldungen
-5. Prüfen Sie, ob im Log eine Warnung ``Unknown parameter(s)`` erscheint (ein Tippfehler in
-   einem Parameternamen wird einmalig zu Beginn des Crawlings gemeldet; ansonsten wird er
-   stillschweigend ignoriert)
+5. Prüfen Sie, ob ein Parametername falsch geschrieben ist (ein nicht erkannter
+   Parametername wird ohne Warnung ignoriert; ``has_headerline=true`` belässt
+   ``has_header_line`` beispielsweise beim Standardwert ``false``)
 
 Der Index aus einem vorherigen Crawling verschwindet nach einem zweiten CSV-Import
 ----------------------------------------------------------------------------------
