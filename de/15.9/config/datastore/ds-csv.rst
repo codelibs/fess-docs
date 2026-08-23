@@ -70,7 +70,6 @@ Lokale Datei:
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 Mehrere Dateien:
 
@@ -81,15 +80,16 @@ Mehrere Dateien:
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 .. note::
 
-   Die Anführungszeichen- (Quote-) Verarbeitung und die Escape-Verarbeitung sind standardmäßig **deaktiviert**.
-   Wenn Sie CSV-Dateien verarbeiten, bei denen Felder in Anführungszeichen eingeschlossen sind und Trennzeichen oder
-   Zeilenumbrüche enthalten (RFC 4180-konform), geben Sie explizit ``quote_disabled=false`` an, um die
-   Anführungszeichenverarbeitung zu aktivieren.
-   Weitere Details finden Sie im Abschnitt "Aktivierung der Anführungszeichen- und Escape-Verarbeitung" weiter unten.
+   Die Anführungszeichen- (Quote-) Verarbeitung und die Escape-Verarbeitung sind in |Fess| 15.9
+   standardmäßig **aktiviert**. CSV-Dateien (RFC 4180-konform), bei denen Felder in
+   Anführungszeichen eingeschlossen sind und Trennzeichen oder Zeilenumbrüche enthalten, werden
+   ohne zusätzliche Parameter korrekt verarbeitet.
+   Wie Sie zum bisherigen Verhalten (Anführungszeichenverarbeitung deaktivieren) zurückkehren
+   und was dabei zu beachten ist, erfahren Sie im Abschnitt "Deaktivierung der Anführungszeichen-
+   und Escape-Verarbeitung" weiter unten.
 
 Parameterliste
 ~~~~~~~~~~~~~~
@@ -118,10 +118,10 @@ Parameterliste
      - Trennzeichen (Standard: Komma ``,``). Escape-Sequenzen wie ``\t`` können angegeben werden (für Tab-Trennung).
    * - ``quote_character``
      - Nein
-     - Anführungszeichen (Standard: doppeltes Anführungszeichen ``"``). Die Anführungszeichenverarbeitung ist jedoch standardmäßig deaktiviert (siehe ``quote_disabled``).
+     - Anführungszeichen (Standard: doppeltes Anführungszeichen ``"``). Die Anführungszeichenverarbeitung ist standardmäßig aktiviert (siehe ``quote_disabled``).
    * - ``escape_character``
      - Nein
-     - Escape-Zeichen (Standard: Backslash ``\``). Die Escape-Verarbeitung ist jedoch standardmäßig deaktiviert (siehe ``escape_disabled``).
+     - Escape-Zeichen (Standard: dasselbe Zeichen wie ``quote_character``; gemäß RFC 4180 werden Anführungszeichen durch Verdopplung escaped). Ob die Escape-Verarbeitung aktiv ist, richtet sich nach dem aufgelösten Wert von ``quote_disabled`` (siehe ``escape_disabled``).
 
 .. note::
 
@@ -131,7 +131,7 @@ Parameterliste
 Erweiterte Parameter
 ~~~~~~~~~~~~~~~~~~~~
 
-Die folgenden Parameter steuern das CSV-Parsing-Verhalten im Detail:
+Die folgenden Parameter steuern das CSV-Parsing-Verhalten sowie das Indexierungsverhalten im Detail:
 
 .. list-table::
    :header-rows: 1
@@ -140,9 +140,15 @@ Die folgenden Parameter steuern das CSV-Parsing-Verhalten im Detail:
    * - Parameter
      - Beschreibung
    * - ``quote_disabled``
-     - Gibt an, ob die Anführungszeichenverarbeitung deaktiviert ist (Standard: true). Geben Sie ``false`` an, um RFC 4180-konforme Felder mit Anführungszeichen zu verarbeiten.
+     - Gibt an, ob die Anführungszeichenverarbeitung deaktiviert ist (Standard: false). RFC 4180-konforme Felder mit Anführungszeichen werden standardmäßig korrekt verarbeitet. Geben Sie ``true`` an, um zum bisherigen Verhalten (Anführungszeichen als normale Zeichen) zurückzukehren.
    * - ``escape_disabled``
-     - Gibt an, ob die Escape-Verarbeitung deaktiviert ist (Standard: true). Geben Sie ``false`` an, um das Escaping mit ``escape_character`` zu aktivieren.
+     - Gibt an, ob die Escape-Verarbeitung deaktiviert ist (Standard: identisch mit dem aufgelösten Wert von ``quote_disabled``). Ein explizit angegebener Wert hat Vorrang.
+   * - ``delete_old_docs``
+     - Gibt an, ob nach Abschluss des Crawlings Dokumente gelöscht werden, die zu dieser Datenspeicher-Konfiguration gehören und in der aktuellen Crawling-Sitzung nicht erneut registriert wurden (Standard: true). Wenn Sie mehrere CSV-Dateien zu unterschiedlichen Zeitpunkten in dieselbe Datenspeicher-Konfiguration einspeisen, geben Sie ``false`` an -- sonst werden die zuvor eingespeisten Dokumente gelöscht (Details siehe Abschnitt zur Fehlerbehebung weiter unten).
+   * - ``keep_expires_docs``
+     - Gibt an, ob beim Löschen über ``delete_old_docs`` Dokumente ausgenommen werden, deren Ablaufzeitpunkt ("expires", z. B. über ``time_to_live`` gesetzt) noch nicht erreicht ist (Standard: true). Bei ``false`` werden nicht erneut registrierte Dokumente auch innerhalb ihrer Ablaufzeit gelöscht.
+   * - ``time_to_live``
+     - Nach wie vielen Minuten ab dem Registrierungszeitpunkt der Ablaufzeitpunkt eines Dokuments gesetzt wird (in Minuten; Standard: nicht gesetzt, d. h. unbegrenzt).
    * - ``skip_lines``
      - Anzahl der zu überspringenden Kopfzeilen (Standard: 0)
    * - ``ignore_line_patterns``
@@ -215,31 +221,50 @@ Standard-CSV (RFC 4180-konform)
 .. note::
 
    Um wie im obigen Beispiel bei ``"Book, Programming"`` Trennzeichen innerhalb eines Feldes durch
-   Einschließen in Anführungszeichen zu verwenden, muss die Anführungszeichenverarbeitung mit
-   ``quote_disabled=false`` aktiviert werden.
-   Ist die Anführungszeichenverarbeitung deaktiviert (Standard), werden Anführungszeichen als
-   normale Zeichen behandelt und Felder am Trennzeichen aufgeteilt.
+   Einschließen in Anführungszeichen zu verwenden, wird das Feld mit den Standardeinstellungen
+   (Anführungszeichenverarbeitung aktiviert) bereits korrekt als ein einziges Feld verarbeitet.
+   Wie Sie zum bisherigen Verhalten (Anführungszeichen als normale Zeichen, Aufteilung der Felder
+   am Trennzeichen) zurückkehren, erfahren Sie im Abschnitt "Deaktivierung der Anführungszeichen-
+   und Escape-Verarbeitung" weiter unten.
 
-Aktivierung der Anführungszeichen- und Escape-Verarbeitung
------------------------------------------------------------
+Deaktivierung der Anführungszeichen- und Escape-Verarbeitung
+-------------------------------------------------------------
 
-Die Anführungszeichen- und Escape-Verarbeitung ist standardmäßig deaktiviert. Aktivieren Sie sie wie folgt explizit.
+Die Anführungszeichen- und Escape-Verarbeitung ist in |Fess| 15.9 standardmäßig aktiviert.
+Als Anführungszeichen wird standardmäßig das doppelte Anführungszeichen ``"`` verwendet, als
+Escape-Zeichen standardmäßig dasselbe Zeichen wie das Anführungszeichen (gemäß RFC 4180 durch
+Verdopplung escaped); Standard-RFC-4180-CSV-Dateien lassen sich so ohne zusätzliche Parameter
+verarbeiten.
 
-Anführungszeichenverarbeitung aktivieren:
+.. warning::
+
+   Enthält eine CSV-Datei bei aktivierter Anführungszeichenverarbeitung auch nur ein einziges
+   ``"`` ohne passendes schließendes Anführungszeichen, wird der gesamte Rest der Datei ab diesem
+   Anführungszeichen (einschließlich der folgenden Zeilen) als ein einziger Feldwert eingelesen,
+   und für die übrigen Zeilen werden keine Dokumente mehr erzeugt. Da frühere Versionen jede Zeile
+   unabhängig verarbeitet haben, kann dieses Verhalten erst nach einem Upgrade zutage treten.
+   Da ``delete_old_docs`` (siehe oben) standardmäßig aktiviert ist, können dabei nicht nur die
+   nicht erzeugten Dokumente, sondern auch bereits durch ein früheres Crawling registrierte
+   Dokumente gelöscht werden.
+   Prüfen Sie Ihre CSV-Dateien vor dem Upgrade auf nicht geschlossene Anführungszeichen, oder
+   erwägen Sie, mit ``quote_disabled=true`` zur bisherigen Verarbeitungsweise zurückzukehren.
+
+Anführungszeichenverarbeitung deaktivieren (bisheriges Verhalten wiederherstellen):
 
 ::
 
     # Parameter
-    quote_disabled=false
-    quote_character="
+    quote_disabled=true
 
-Escape-Verarbeitung aktivieren:
+Mit ``quote_disabled=true`` wird gleichzeitig auch die Escape-Verarbeitung deaktiviert (außer Sie
+geben explizit ``escape_disabled=false`` an).
+
+Nur die Escape-Verarbeitung deaktivieren:
 
 ::
 
     # Parameter
-    escape_disabled=false
-    escape_character=\
+    escape_disabled=true
 
 Trennzeichen ändern
 -------------------
@@ -261,12 +286,11 @@ Semikolon-getrennt:
 Benutzerdefinierte Anführungszeichen
 -------------------------------------
 
-Einfache Anführungszeichen (Anführungszeichenverarbeitung muss aktiviert sein):
+Einfache Anführungszeichen:
 
 ::
 
     # Parameter
-    quote_disabled=false
     quote_character='
 
 Zeichenkodierung
@@ -503,13 +527,11 @@ Spalten werden nicht korrekt erkannt
        # Semikolon
        separator_character=;
 
-2. Wenn Felder mit Anführungszeichen verarbeitet werden sollen (Felder, die Trennzeichen enthalten), aktivieren Sie die Anführungszeichenverarbeitung:
-
-   ::
-
-       quote_disabled=false
-
-3. Überprüfen Sie das CSV-Dateiformat (RFC 4180-konform?)
+2. Felder mit Anführungszeichen (Felder, die Trennzeichen enthalten) werden standardmäßig korrekt
+   verarbeitet. Prüfen Sie, ob Sie nicht versehentlich ``quote_disabled=true`` gesetzt haben.
+3. Überprüfen Sie das CSV-Dateiformat (RFC 4180-konform?). Enthält die Datei ein ``"`` ohne
+   passendes schließendes Anführungszeichen, wird der gesamte Rest der Datei ab dieser Stelle als
+   ein einziger Feldwert eingelesen.
 
 Kopfzeilen-Behandlung
 ---------------------
@@ -541,6 +563,34 @@ Keine Daten abrufbar
 2. Überprüfen Sie die Skript-Einstellungen (ob Spaltenname- oder ``cell<N>``-Referenzen ohne ``data.``-Präfix angegeben sind)
 3. Überprüfen Sie die Spaltennamen (bei has_header_line=true)
 4. Überprüfen Sie die Logs auf Fehlermeldungen
+5. Prüfen Sie, ob ein Parametername falsch geschrieben ist (ein nicht erkannter
+   Parametername wird ohne Warnung ignoriert; ``has_headerline=true`` belässt
+   ``has_header_line`` beispielsweise beim Standardwert ``false``)
+
+Der Index aus einem vorherigen Crawling verschwindet nach einem zweiten CSV-Import
+----------------------------------------------------------------------------------
+
+**Symptom**: Nachdem eine erste CSV-Datei gecrawlt wurde, verschwinden nach dem Crawling einer
+zweiten CSV-Datei mit derselben Datenspeicher-Konfiguration an einem späteren Tag die aus der
+ersten CSV-Datei registrierten Dokumente aus den Suchergebnissen.
+
+**Ursache**:
+
+Nach Abschluss eines Crawlings löscht |Fess| aus dem Index alle Dokumente, die zu dieser
+Datenspeicher-Konfiguration gehören und in der aktuellen Sitzung nicht erneut registriert wurden
+(``delete_old_docs``, Standard: true). Wenn Sie mehrere CSV-Dateien zu unterschiedlichen
+Zeitpunkten in dieselbe Datenspeicher-Konfiguration einspeisen, gelten beim Crawling der später
+eingespeisten Datei die durch die frühere Datei registrierten Inhalte als "in der aktuellen
+Sitzung nicht erneut registriert" und werden gelöscht.
+
+**Lösung**:
+
+Wenn Sie mehrere CSV-Dateien zu unterschiedlichen Zeitpunkten in dieselbe Datenspeicher-Konfiguration
+einspeisen und deren Inhalte kumulieren möchten, geben Sie Folgendes an.
+
+::
+
+    delete_old_docs=false
 
 Große CSV-Dateien
 -----------------
@@ -558,7 +608,7 @@ Felder mit Zeilenumbrüchen
 ---------------------------
 
 Im RFC 4180-Format können Felder durch Einschließen in Anführungszeichen Zeilenumbrüche enthalten.
-Da die Anführungszeichenverarbeitung standardmäßig deaktiviert ist, muss ``quote_disabled=false`` angegeben werden:
+Da die Anführungszeichenverarbeitung standardmäßig aktiviert ist, wird dies ohne zusätzliche Parameter korrekt verarbeitet:
 
 ::
 
@@ -576,7 +626,6 @@ Parameter:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_disabled=false
     quote_character="
 
 CsvListDataStore
@@ -620,10 +669,109 @@ Zusätzliche Parameter
    * - ``numOfThreads``
      - Nein
      - Anzahl der Verarbeitungs-Threads (Standard: 1)
+   * - ``delete_processed_file``
+     - Nein
+     - Gibt an, ob die CSV-Datei nach Abschluss der Verarbeitung gelöscht wird (Standard: true)
+   * - ``ignore_data_store_exception``
+     - Nein
+     - Gibt an, ob das gesamte Crawling fortgesetzt wird, wenn bei der Verarbeitung einer einzelnen CSV-Datei eine Ausnahme auftritt (Standard: true)
+
+.. warning::
+
+   ``CsvListDataStore`` **löscht** CSV-Dateien nach Abschluss der Verarbeitung automatisch (``delete_processed_file`` ist standardmäßig ``true``). Tritt während der Verarbeitung ein Fehler auf, wird die Datei stattdessen in ``.txt`` umbenannt (schlägt die Umbenennung fehl, wird die Datei gelöscht). Wenn Dateien nicht gelöscht werden sollen, geben Sie ``delete_processed_file=false`` an.
+
+CSV-Zeilenformat (Ereignistyp)
+-----------------------------------
+
+CSV-Dateien, die an ``CsvListDataStore`` übergeben werden, benötigen pro Zeile mindestens zwei
+Spalten: einen "Ereignistyp" und eine "URL". Weitere Spalten können hinzugefügt und als
+``cell3``, ``cell4`` ... referenziert werden (z. B. um einen Wert an ``timestamp.overwrite`` zu übergeben).
+
+::
+
+    <Ereignistyp>,<URL>
+
+Für den Ereignistyp stehen die folgenden drei Werte zur Verfügung.
+
+- ``create`` - eine Datei wurde erstellt
+- ``modify`` - eine Datei wurde geändert
+- ``delete`` - eine Datei wurde gelöscht
+
+``create`` und ``modify`` werden als derselbe Vorgang behandelt (Crawling und Indexierung der
+Ziel-URL). Es gibt keinen Unterschied im Verhalten.
+
+Der Spaltenname (bei vorhandener Kopfzeile) und der Wert für jeden Ereignistyp lassen sich über
+die folgenden Parameter anpassen.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Parameter
+     - Beschreibung
+   * - ``field.event_type``
+     - Spaltenname, in dem der Ereignistyp gespeichert ist (Standard: ``event_type``)
+   * - ``event.create``
+     - Wert für "erstellt" (Standard: ``create``)
+   * - ``event.modify``
+     - Wert für "geändert" (Standard: ``modify``)
+   * - ``event.delete``
+     - Wert für "gelöscht" (Standard: ``delete``)
+
+Beispiel für eine CSV-Datei:
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    delete,smb://servername/data/testfile2.txt
+
+Beispiel-Skript (ohne Kopfzeile):
+
+::
+
+    event_type=cell1
+    url=cell2
+
+Überschreiben von Feldwerten (.overwrite)
+-------------------------------------------
+
+Wird der Name eines im Skript zusammengestellten Indexfelds mit ``.overwrite`` versehen, wird der
+Wert dieses Feldes nicht aus dem tatsächlichen Crawling-Ergebnis der Datei, sondern aus dem in der
+CSV gesetzten Wert überschrieben.
+
+::
+
+    timestamp.overwrite=cell3
 
 .. note::
 
-   ``CsvListDataStore`` löscht CSV-Dateien nach der Verarbeitung automatisch. Tritt während der Verarbeitung ein Fehler auf, wird die Datei in ``.txt`` umbenannt (schlägt die Umbenennung fehl, wird die Datei gelöscht).
+   Das Datumsfacet in der Suchoberfläche filtert nicht über ``created``, sondern über das Feld
+   ``timestamp``. Wenn Sie den Zeitstempel mit einem Wert aus der CSV überschreiben möchten,
+   geben Sie ``timestamp.overwrite`` anstelle von ``created.overwrite`` an.
+
+Übernahme von Authentifizierungs- und Proxy-Einstellungen
+-----------------------------------------------------------
+
+``CsvListDataStore`` crawlt tatsächlich die in der CSV enthaltenen URLs; Authentifizierungs- und
+Proxy-Einstellungen, die in der Datenspeicher-Konfiguration des Datei- oder Web-Crawlings
+konfiguriert sind, werden dabei jedoch nicht übernommen. Geben Sie benötigte Einstellungen
+einzeln als Parameter dieser Datenspeicher-Konfiguration an.
+
+Beispiel für SMB-Authentifizierung:
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
+
+Beispiel für Proxy-Einstellungen:
+
+::
+
+    crawler.web.proxyHost=proxy.example.com
+    crawler.web.proxyPort=8080
 
 Erweiterte Skript-Beispiele
 ============================
@@ -649,6 +797,14 @@ Bedingte Indizierung
     title=Integer.parseInt(price) >= 10000 ? name : null
     content=Integer.parseInt(price) >= 10000 ? description : null
     price=Integer.parseInt(price) >= 10000 ? price : null
+
+.. note::
+
+   Wie oben gezeigt, wird eine Zeile, in der ``url`` den Wert ``null`` liefert, nicht als Fehler
+   behandelt, sondern stillschweigend übersprungen. Die Anzahl der übersprungenen Zeilen wird pro
+   CSV-Datei gezählt und jeweils nach Abschluss der Leseschleife dieser Datei als eine einzelne
+   zusammenfassende WARN-Logzeile ausgegeben (es wird nicht jede fehlgeschlagene URL einzeln
+   protokolliert; werden mehrere CSV-Dateien verarbeitet, erscheint pro Datei eine WARN-Zeile).
 
 Mehrere Spalten kombinieren
 ---------------------------

@@ -71,7 +71,6 @@ Archivo local:
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 Múltiples archivos:
 
@@ -82,15 +81,16 @@ Múltiples archivos:
     has_header_line=true
     separator_character=,
     quote_character="
-    quote_disabled=false
 
 .. note::
 
-   El procesamiento de comillas (quote) y el procesamiento de escape están **deshabilitados** por defecto.
-   Si desea manejar CSV con caracteres separadores o saltos de línea dentro de campos entrecomillados
-   (compatible con RFC 4180), especifique explícitamente ``quote_disabled=false`` para habilitar
-   el procesamiento de comillas.
-   Consulte la sección "Habilitación del procesamiento de comillas y escape" más adelante para más detalles.
+   El procesamiento de comillas (quote) y el procesamiento de escape están **habilitados de
+   forma predeterminada** en |Fess| 15.9. Los CSV (compatibles con RFC 4180) con caracteres
+   separadores o saltos de línea dentro de campos entrecomillados se analizan correctamente sin
+   necesidad de especificar ningún parámetro.
+   Para saber cómo volver al comportamiento anterior (deshabilitar el procesamiento de comillas)
+   y qué precauciones tener en cuenta, consulte la sección "Deshabilitación del procesamiento de
+   comillas y escape" más adelante.
 
 Lista de parámetros
 ~~~~~~~~~~~~~~~~~~~
@@ -119,10 +119,10 @@ Lista de parámetros
      - Carácter separador (predeterminado: coma ``,``). Se pueden especificar secuencias de escape como ``\t`` (separador de tabulador).
    * - ``quote_character``
      - No
-     - Carácter de comillas (predeterminado: comillas dobles ``"``). Sin embargo, el procesamiento de comillas está deshabilitado por defecto (consulte ``quote_disabled``).
+     - Carácter de comillas (predeterminado: comillas dobles ``"``). El procesamiento de comillas está habilitado por defecto (consulte ``quote_disabled``).
    * - ``escape_character``
      - No
-     - Carácter de escape (predeterminado: barra invertida ``\``). Sin embargo, el procesamiento de escape está deshabilitado por defecto (consulte ``escape_disabled``).
+     - Carácter de escape (predeterminado: el mismo carácter que ``quote_character``; según RFC 4180, las comillas se escapan duplicándolas). Si el procesamiento de escape está habilitado depende del valor resuelto de ``quote_disabled`` (consulte ``escape_disabled``).
 
 .. note::
 
@@ -132,7 +132,7 @@ Lista de parámetros
 Parámetros avanzados
 ~~~~~~~~~~~~~~~~~~~~
 
-Los siguientes parámetros controlan de forma detallada el comportamiento del análisis del CSV:
+Los siguientes parámetros controlan de forma detallada el comportamiento del análisis del CSV y de la indexación:
 
 .. list-table::
    :header-rows: 1
@@ -141,9 +141,15 @@ Los siguientes parámetros controlan de forma detallada el comportamiento del an
    * - Parámetro
      - Descripción
    * - ``quote_disabled``
-     - Si deshabilitar el procesamiento de comillas (predeterminado: true). Especifique ``false`` para manejar campos entrecomillados compatibles con RFC 4180.
+     - Si deshabilitar el procesamiento de comillas (predeterminado: false). Los campos entrecomillados compatibles con RFC 4180 se analizan correctamente por defecto. Especifique ``true`` para volver al comportamiento anterior (tratar las comillas como caracteres normales).
    * - ``escape_disabled``
-     - Si deshabilitar el procesamiento de escape (predeterminado: true). Especifique ``false`` para habilitar el escape mediante ``escape_character``.
+     - Si deshabilitar el procesamiento de escape (predeterminado: igual al valor resuelto de ``quote_disabled``). Un valor especificado explícitamente tiene prioridad.
+   * - ``delete_old_docs``
+     - Si eliminar del índice, al finalizar el crawl, los documentos que pertenecen a esta configuración de Data Store y no fueron re-registrados durante la sesión de crawl actual (predeterminado: true). Si envía varios archivos CSV a la misma configuración de Data Store en momentos distintos, especifique ``false``; de lo contrario, se eliminarán los documentos registrados por los archivos anteriores (vea la sección de solución de problemas más adelante para más detalles).
+   * - ``keep_expires_docs``
+     - Al eliminar documentos mediante ``delete_old_docs``, si excluir de la eliminación los documentos cuya fecha de expiración (el valor "expires" establecido, por ejemplo, mediante ``time_to_live``) aún no ha llegado (predeterminado: true). Con ``false``, los documentos no re-registrados se eliminan incluso dentro de su periodo de validez.
+   * - ``time_to_live``
+     - Cuántos minutos después del registro se debe establecer la fecha de expiración de un documento (en minutos; predeterminado: sin definir, es decir, sin expiración).
    * - ``skip_lines``
      - Número de líneas iniciales a omitir (predeterminado: 0)
    * - ``ignore_line_patterns``
@@ -216,31 +222,51 @@ CSV estándar (compatible con RFC 4180)
 .. note::
 
    Para incluir el carácter separador dentro de un campo entrecomillado como ``"Book, Programming"``
-   arriba, es necesario especificar ``quote_disabled=false`` para habilitar el procesamiento de comillas.
-   Cuando el procesamiento de comillas está deshabilitado (valor predeterminado), las comillas se tratan
-   como caracteres normales y los campos se dividen por el carácter separador.
+   arriba, con la configuración predeterminada (procesamiento de comillas habilitado) el campo ya
+   se analiza correctamente como un único valor.
+   Para saber cómo volver al comportamiento anterior (tratar las comillas como caracteres normales
+   y dividir los campos por el carácter separador), consulte la sección "Deshabilitación del
+   procesamiento de comillas y escape" más adelante.
 
-Habilitación del procesamiento de comillas y escape
-----------------------------------------------------
+Deshabilitación del procesamiento de comillas y escape
+--------------------------------------------------------
 
-El procesamiento de comillas y el procesamiento de escape están deshabilitados por defecto.
-Habilítelos explícitamente de la siguiente manera.
+El procesamiento de comillas y el procesamiento de escape están habilitados de forma
+predeterminada en |Fess| 15.9. El carácter de comillas predeterminado es comillas dobles ``"``,
+y el carácter de escape predeterminado es el mismo que el de comillas (escapado duplicándolo,
+según RFC 4180); los CSV estándar compatibles con RFC 4180 pueden analizarse tal cual, sin
+necesidad de ningún parámetro.
 
-Habilitar el procesamiento de comillas:
+.. warning::
+
+   Con el procesamiento de comillas habilitado, si un archivo CSV contiene aunque sea una sola
+   comilla ``"`` sin su comilla de cierre correspondiente, todo el resto del archivo a partir de
+   esa comilla (incluidas las líneas siguientes) se lee como un único valor de campo, y no se
+   generan documentos a partir de las filas restantes. Como las versiones anteriores analizaban
+   cada línea de forma independiente, este comportamiento puede aparecer por primera vez recién
+   después de actualizar.
+   Dado que ``delete_old_docs`` (descrito anteriormente) está habilitado por defecto, esto puede
+   eliminar no solo los documentos que no llegaron a generarse, sino también documentos ya
+   registrados por un crawl anterior.
+   Antes de actualizar, verifique que sus archivos CSV no contengan comillas sin cerrar, o
+   considere especificar ``quote_disabled=true`` para volver al método de análisis anterior.
+
+Deshabilitar el procesamiento de comillas (volver al comportamiento anterior):
 
 ::
 
     # Parametros
-    quote_disabled=false
-    quote_character="
+    quote_disabled=true
 
-Habilitar el procesamiento de escape:
+Especificar ``quote_disabled=true`` también deshabilita el procesamiento de escape al mismo
+tiempo (salvo que especifique explícitamente ``escape_disabled=false``).
+
+Deshabilitar solo el procesamiento de escape:
 
 ::
 
     # Parametros
-    escape_disabled=false
-    escape_character=\
+    escape_disabled=true
 
 Cambiar el separador
 --------------------
@@ -262,12 +288,11 @@ Delimitado por punto y coma:
 Comillas personalizadas
 -----------------------
 
-Comillas simples (requiere habilitar el procesamiento de comillas):
+Comillas simples:
 
 ::
 
     # Parametros
-    quote_disabled=false
     quote_character='
 
 Codificación
@@ -504,13 +529,11 @@ Las columnas no se reconocen correctamente
        # Punto y coma
        separator_character=;
 
-2. Para manejar campos entrecomillados (campos que contienen el carácter separador), habilitar el procesamiento de comillas:
-
-   ::
-
-       quote_disabled=false
-
-3. Verificar el formato del archivo CSV (si cumple con RFC 4180)
+2. Los campos entrecomillados (campos que contienen el carácter separador) se analizan
+   correctamente por defecto. Verifique que no haya especificado ``quote_disabled=true`` sin querer.
+3. Verificar el formato del archivo CSV (si cumple con RFC 4180). Si contiene una comilla ``"``
+   sin su comilla de cierre correspondiente, todo el resto del archivo a partir de ese punto se
+   lee como un único valor de campo.
 
 Manejo de la fila de encabezado
 --------------------------------
@@ -542,6 +565,34 @@ No se obtienen datos
 2. Verificar que la configuración del script sea correcta (comprobar que las referencias a nombres de columna o ``cell<N>`` no llevan el prefijo ``data.``)
 3. Verificar que los nombres de columna sean correctos (cuando has_header_line=true)
 4. Revisar los mensajes de error en el log
+5. Comprobar que ningún nombre de parámetro esté mal escrito (un nombre de parámetro no
+   reconocido se ignora sin ninguna advertencia; por ejemplo, ``has_headerline=true``
+   deja ``has_header_line`` en su valor predeterminado ``false``)
+
+Los documentos de un crawl anterior desaparecen tras una segunda importación de CSV
+-----------------------------------------------------------------------------------
+
+**Síntoma**: Después de hacer crawl de un primer archivo CSV, al hacer crawl de un segundo
+archivo CSV con la misma configuración de Data Store en un día posterior, los documentos
+registrados a partir del primer archivo CSV desaparecen de los resultados de búsqueda.
+
+**Causa**:
+
+Al finalizar un crawl, |Fess| elimina del índice los documentos que pertenecen a esa
+configuración de Data Store y que no fueron re-registrados durante la sesión actual
+(``delete_old_docs``, predeterminado: true). Si envía varios archivos CSV a la misma
+configuración de Data Store en momentos distintos, en el momento del crawl del archivo posterior
+el contenido registrado por el archivo anterior se considera "no re-registrado durante la sesión
+actual" y se elimina.
+
+**Solución**:
+
+Si envía varios archivos CSV a la misma configuración de Data Store en momentos distintos y desea
+que su contenido se acumule, especifique lo siguiente.
+
+::
+
+    delete_old_docs=false
 
 Archivo CSV grande
 ------------------
@@ -559,7 +610,7 @@ Campo con saltos de línea
 --------------------------
 
 En formato RFC 4180, los campos con saltos de línea pueden manejarse entrecomillándolos.
-Como el procesamiento de comillas está deshabilitado por defecto, es necesario especificar ``quote_disabled=false``:
+Como el procesamiento de comillas está habilitado por defecto, se analiza correctamente sin necesidad de especificar ningún parámetro:
 
 ::
 
@@ -577,7 +628,6 @@ Parámetros:
     file_encoding=UTF-8
     has_header_line=true
     separator_character=,
-    quote_disabled=false
     quote_character="
 
 CsvListDataStore
@@ -621,10 +671,109 @@ Parámetros adicionales
    * - ``numOfThreads``
      - No
      - Número de hilos de procesamiento (predeterminado: 1)
+   * - ``delete_processed_file``
+     - No
+     - Si eliminar el archivo CSV una vez finalizado el procesamiento (predeterminado: true)
+   * - ``ignore_data_store_exception``
+     - No
+     - Si continuar todo el crawl aunque ocurra una excepción al procesar un archivo CSV (predeterminado: true)
+
+.. warning::
+
+   ``CsvListDataStore`` **elimina** automáticamente los archivos CSV tras finalizar el procesamiento (``delete_processed_file`` está en ``true`` por defecto). Si se produce un error durante el procesamiento, el archivo se renombra en su lugar con extensión ``.txt`` (si el renombrado falla, el archivo se elimina). Si no desea que se eliminen los archivos, especifique ``delete_processed_file=false``.
+
+Formato de fila del CSV (tipo de evento)
+------------------------------------------
+
+Los archivos CSV que se pasan a ``CsvListDataStore`` deben tener al menos dos columnas por fila:
+un "tipo de evento" y una "URL". Se pueden agregar columnas adicionales y referenciarlas como
+``cell3``, ``cell4``... (por ejemplo, para pasar un valor a ``timestamp.overwrite``).
+
+::
+
+    <tipo_de_evento>,<URL>
+
+El tipo de evento puede ser uno de los siguientes tres valores.
+
+- ``create`` - se creó un archivo
+- ``modify`` - se actualizó un archivo
+- ``delete`` - se eliminó un archivo
+
+``create`` y ``modify`` se tratan como la misma operación (crawl e indexación de la URL de
+destino). No hay diferencia de comportamiento entre ambos.
+
+El nombre de columna (cuando hay encabezado) y el valor de cada tipo de evento pueden cambiarse
+mediante los siguientes parámetros.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Parámetro
+     - Descripción
+   * - ``field.event_type``
+     - Nombre de columna donde se almacena el tipo de evento (predeterminado: ``event_type``)
+   * - ``event.create``
+     - Valor que representa "creado" (predeterminado: ``create``)
+   * - ``event.modify``
+     - Valor que representa "actualizado" (predeterminado: ``modify``)
+   * - ``event.delete``
+     - Valor que representa "eliminado" (predeterminado: ``delete``)
+
+Ejemplo de archivo CSV:
+
+::
+
+    modify,smb://servername/data/testfile1.txt
+    delete,smb://servername/data/testfile2.txt
+
+Ejemplo de script (sin encabezado):
+
+::
+
+    event_type=cell1
+    url=cell2
+
+Sobrescritura de valores de campo (.overwrite)
+------------------------------------------------
+
+Al agregar ``.overwrite`` al final del nombre de un campo de índice construido en el script, el
+valor de ese campo se sobrescribe con el valor establecido desde el CSV, en lugar del valor
+obtenido del crawl real del archivo de destino.
+
+::
+
+    timestamp.overwrite=cell3
 
 .. note::
 
-   ``CsvListDataStore`` elimina automáticamente los archivos CSV tras procesarlos. Si se produce un error durante el procesamiento, el archivo se renombra con extensión ``.txt`` (si el renombrado falla, el archivo se elimina).
+   La faceta de fecha de la pantalla de búsqueda filtra usando el campo ``timestamp``, no
+   ``created``. Si desea sobrescribir la marca de tiempo con un valor del CSV, especifique
+   ``timestamp.overwrite`` en lugar de ``created.overwrite``.
+
+Herencia de la configuración de autenticación y proxy
+-------------------------------------------------------
+
+``CsvListDataStore`` hace crawl real de las URL escritas en el CSV, pero la configuración de
+autenticación y proxy definida en la configuración de Data Store del crawl de archivos o del
+crawl web no se hereda. Especifique los ajustes necesarios individualmente como parámetros de
+esta configuración de Data Store.
+
+Ejemplo de autenticación SMB:
+
+::
+
+    crawler.file.auth=example
+    crawler.file.auth.example.scheme=SAMBA
+    crawler.file.auth.example.username=username
+    crawler.file.auth.example.password=password
+
+Ejemplo de configuración de proxy:
+
+::
+
+    crawler.web.proxyHost=proxy.example.com
+    crawler.web.proxyPort=8080
 
 Ejemplos avanzados de scripts
 ==============================
@@ -650,6 +799,14 @@ Indexado condicional
     title=Integer.parseInt(price) >= 10000 ? name : null
     content=Integer.parseInt(price) >= 10000 ? description : null
     price=Integer.parseInt(price) >= 10000 ? price : null
+
+.. note::
+
+   Como se muestra arriba, una fila en la que ``url`` devuelve ``null`` no se trata como un
+   fallo, sino que se omite silenciosamente. La cantidad de filas omitidas se cuenta por archivo
+   CSV y se muestra como un único log WARN resumen cada vez que finaliza la lectura de ese
+   archivo (no se registra cada URL fallida individualmente; al procesar varios archivos CSV, se
+   genera un log WARN por cada archivo).
 
 Concatenación de múltiples columnas
 ------------------------------------
