@@ -394,9 +394,7 @@ The following protocols can be used in ``paths`` (the supported protocols can be
      - ``smb1://server/share/path``
    * - FTP
      - ``ftp://server/path``
-   * - S3-compatible object storage (MinIO, etc.)
-     - ``storage://bucket/path``
-   * - Amazon S3
+   * - Amazon S3 / S3-compatible object storage (MinIO, etc.)
      - ``s3://bucket/path``
    * - Google Cloud Storage
      - ``gcs://bucket/path``

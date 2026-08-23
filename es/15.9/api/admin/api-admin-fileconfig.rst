@@ -396,9 +396,7 @@ En ``paths`` se pueden utilizar los siguientes protocolos (los protocolos dispon
      - ``smb1://server/share/path``
    * - FTP
      - ``ftp://server/path``
-   * - Almacenamiento de objetos compatible con S3 (MinIO, etc.)
-     - ``storage://bucket/path``
-   * - Amazon S3
+   * - Amazon S3 / Almacenamiento de objetos compatible con S3 (MinIO, etc.)
      - ``s3://bucket/path``
    * - Google Cloud Storage
      - ``gcs://bucket/path``
