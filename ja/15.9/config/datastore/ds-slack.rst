@@ -360,7 +360,9 @@ Slackのメールアドレスから作られるため、|Fess| のログイン�
   全員に公開されます
 - 既に索引済みのワークスペースで ``permission_sync`` を後から有効にしても、過去に索引された
   文書に遡って権限は付与されません。適用するには、``permission_sync=true`` と
-  ``role=message.roles`` を設定した上で再クロールしてください
+  ``role=message.roles`` を設定した上で再クロールしてください。同様に、``permission_sync``
+  を後から無効にしても、既に付与された権限が索引済みの文書から自動的に取り除かれることは
+  ありません
 
 使用例
 ======
@@ -492,6 +494,7 @@ Slackのメールアドレスから作られるため、|Fess| のログイン�
     role=message.roles
 
 .. note::
+
    ``role=message.roles`` を書き忘れると、計算した権限は索引される文書に反映されません。
    詳細は「権限同期（ACL）」を参照してください。
 
@@ -636,7 +639,7 @@ Slack APIのTier（呼び出し可能回数の上限）:
 - Tier 3: 50+ リクエスト/分 — ``conversations.history``、``conversations.replies``、
   ``files.list``
 - Tier 4: 100+ リクエスト/分 — ``conversations.members``\ （``permission_sync=true`` のとき
-  のみ）、``files.info``
+  のみ）、``files.info``\ （このコネクタのクロール処理は現時点でこのAPIを呼び出しません）
 
 .. note::
 

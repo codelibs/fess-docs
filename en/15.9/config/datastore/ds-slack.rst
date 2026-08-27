@@ -365,7 +365,9 @@ Other Notes
   field; if that field is left empty, the content is effectively public to everyone
 - Enabling ``permission_sync`` later does not retroactively secure content already indexed
   by an earlier, unrestricted crawl. To apply roles to that content, set
-  ``permission_sync=true`` and ``role=message.roles``, then re-crawl
+  ``permission_sync=true`` and ``role=message.roles``, then re-crawl. Likewise, disabling
+  ``permission_sync`` afterward does not remove roles already applied to previously indexed
+  documents
 
 Usage Examples
 ==============
@@ -497,6 +499,7 @@ Script:
     role=message.roles
 
 .. note::
+
    If you forget ``role=message.roles``, the computed roles are never reflected in the
    indexed documents. See "Permission Synchronization (ACL)" for details.
 
@@ -642,7 +645,7 @@ Slack API tiers (call-frequency limits):
 - Tier 3: 50+ requests/minute -- ``conversations.history``, ``conversations.replies``,
   ``files.list``
 - Tier 4: 100+ requests/minute -- ``conversations.members`` (only when
-  ``permission_sync=true``), ``files.info``
+  ``permission_sync=true``), ``files.info`` (not currently called by this connector's crawl)
 
 .. note::
 
