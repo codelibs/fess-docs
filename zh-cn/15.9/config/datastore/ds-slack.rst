@@ -498,6 +498,7 @@ Slack连接器可以将私有频道的成员关系转换为 |Fess| 的搜索权�
     role=message.roles
 
 .. note::
+
    若忘记添加 ``role=message.roles``\ ，计算出的权限将不会反映到已索引的文档中。详情参见
    「权限同步（ACL）」。
 
