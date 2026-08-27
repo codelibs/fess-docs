@@ -507,6 +507,7 @@ Script :
     role=message.roles
 
 .. note::
+
    Si vous oubliez ``role=message.roles``, les rôles calculés ne seront jamais répercutés dans
    les documents indexés. Voir « Synchronisation des permissions (ACL) » pour plus de détails.
 

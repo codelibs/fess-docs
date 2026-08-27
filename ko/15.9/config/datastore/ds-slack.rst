@@ -510,6 +510,7 @@ Slack 커넥터는 프라이빗 채널의 멤버십을 |Fess| 의 검색 권한(
     role=message.roles
 
 .. note::
+
    ``role=message.roles`` 를 빠뜨리면 계산된 권한이 색인되는 문서에 반영되지 않습니다.
    자세한 내용은 "권한 동기화(ACL)"를 참조하세요.
 

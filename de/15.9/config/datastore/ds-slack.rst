@@ -505,6 +505,7 @@ Skript:
     role=message.roles
 
 .. note::
+
    Vergessen Sie ``role=message.roles``, werden die berechneten Rollen nie in den indexierten
    Dokumenten übernommen. Details siehe "Berechtigungssynchronisierung (ACL)".
 
