@@ -202,7 +202,7 @@ Verfügbare Felder
 
 .. note::
 
-   Enthält ein Spaltenname Leerzeichen, Bindestriche oder andere Zeichen, die als Groovy-Bezeichner ungültig sind,
+   Enthält ein Spaltenname Leerzeichen, Bindestriche oder andere Zeichen, die als Skript-Bezeichner ungültig sind,
    kann nicht über den Spaltennamen zugegriffen werden. Verwenden Sie in diesem Fall ``cell<N>``.
 
 CSV-Format-Details

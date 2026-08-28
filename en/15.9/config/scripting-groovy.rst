@@ -5,9 +5,25 @@ Groovy Scripting Guide
 Overview
 ========
 
-Groovy is the default scripting language for |Fess|.
+Groovy is one of the scripting languages available in |Fess|.
 It runs on the Java Virtual Machine (JVM) and, while maintaining high compatibility with Java,
 allows you to write scripts with a more concise syntax.
+
+.. important::
+   Starting with |Fess| 15.9, Groovy is provided as the ``fess-script-groovy`` plugin.
+   It is bundled with the 15.9 distribution, so it works out of the box, but
+   **starting with 15.10 the plugin will no longer be bundled**. To keep using Groovy
+   from 15.10 onward, install the plugin from the System > Plugin page in the
+   administration screen. To install manually, place the corresponding JAR file (for
+   example, ``fess-script-groovy-15.10.0.jar``) in ``app/WEB-INF/plugin/`` and restart
+   |Fess| after installation.
+
+   The default scripting language starting with |Fess| 15.9 is JavaScript. A script
+   configuration with no recorded script type is treated as Groovy, so a configuration
+   created before 15.9 keeps working unchanged after the upgrade, with its Groovy-syntax
+   script intact. When creating a new configuration from 15.9 onward that should use
+   Groovy, explicitly set its script type to ``groovy``. See :doc:`scripting-javascript`
+   for JavaScript.
 
 Basic Syntax
 ============
@@ -373,5 +389,6 @@ Reference Information
 
 - `Groovy Official Documentation <https://groovy-lang.org/documentation.html>`__
 - :doc:`scripting-overview` - Scripting Overview
+- :doc:`scripting-javascript` - JavaScript Scripting Guide (the default scripting language)
 - :doc:`../admin/dataconfig-guide` - Data Store Configuration Guide
 - :doc:`../admin/scheduler-guide` - Scheduler Configuration Guide

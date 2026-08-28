@@ -489,7 +489,8 @@ pom.xml
 ----------
 
 "脚本"栏中以 ``左边=右边`` 的形式描述映射关系。左边为索引字段名，右边为引用源记录字段
-的脚本（默认使用 Groovy）。以下是源记录具有 ``url`` / ``title`` / ``content`` /
+的脚本（新建的配置为 JavaScript；未记录脚本类型的配置将被视为 Groovy）。
+以下是源记录具有 ``url`` / ``title`` / ``content`` /
 ``updated_at`` / ``content_type`` 字段时的示例。
 
 ::

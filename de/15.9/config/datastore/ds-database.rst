@@ -155,7 +155,9 @@ Parameterliste
      - Verzögerung in Millisekunden zwischen der Verarbeitung jeder Zeile. Standard: 0
    * - ``script_type``
      - Nein
-     - Skript-Engine-Typ. Standard: groovy
+     - Skript-Engine-Typ. Eine neue Konfiguration ist mit ``javascript`` vorbelegt; eine
+       Konfiguration ohne hinterlegten Wert wird als ``groovy`` behandelt. Siehe
+       :doc:`ds-overview` für Details.
 
 Skript-Einstellungen
 --------------------

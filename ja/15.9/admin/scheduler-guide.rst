@@ -52,8 +52,11 @@
 実行方法
 ::::::
 
-スクリプトの実行環境を指定します。
-現時点では「groovy」だけをサポートしています。
+スクリプトの実行環境を指定します。 ``javascript`` （新規ジョブの既定値。 ``job.default.script``
+プロパティで決まります）と ``groovy`` （ ``fess-script-groovy`` プラグインが必要）を選択できます。
+
+15.9より前は、この項目に保存された値に関わらず、常に製品既定のスクリプト言語でジョブが実行されていました。
+15.9以降はこの項目の値が実際に使用されるようになったため、ジョブごとに異なるスクリプト言語を指定できます。
 
 スクリプト
 ::::::::
@@ -64,7 +67,7 @@
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
 
 ロギング
 ::::::

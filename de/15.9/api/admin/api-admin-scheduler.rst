@@ -92,7 +92,7 @@ Response
             "name": "Default Crawler",
             "target": "all",
             "cronExpression": "0 0 0 * * ?",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "...",
             "jobLogging": "true",
             "crawler": "true",
@@ -137,7 +137,7 @@ Response
           "name": "Default Crawler",
           "target": "all",
           "cronExpression": "0 0 0 * * ?",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "jobLogging": "true",
           "crawler": "true",
@@ -169,7 +169,7 @@ Request-Body
       "name": "Daily Crawler",
       "target": "all",
       "cronExpression": "0 0 2 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
       "jobLogging": "true",
       "crawler": "true",
@@ -198,7 +198,7 @@ Feldbeschreibungen
      - Cron-Ausdruck (Sekunde Minute Stunde Tag Monat Wochentag). Max. 100 Zeichen, wird als Cron-Ausdruck validiert. Ist das Feld leer, wird der Job nicht geplant und kann nur manuell gestartet werden
    * - ``scriptType``
      - Ja
-     - Skript-Typ (max. 100 Zeichen). Derzeit wird nur ``groovy`` unterstützt
+     - Skript-Typ (max. 100 Zeichen). ``javascript`` (Standard für neue Jobs, festgelegt über die Eigenschaft ``job.default.script``) oder ``groovy`` (erfordert das Plugin ``fess-script-groovy``)
    * - ``scriptData``
      - Nein
      - Ausführungsskript. Die maximale Größe richtet sich nach ``form.admin.max.input.size`` in ``fess_config.properties``
@@ -275,7 +275,7 @@ Request-Body
       "name": "Updated Crawler",
       "target": "all",
       "cronExpression": "0 0 3 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "...",
       "jobLogging": "true",
       "crawler": "true",
@@ -406,7 +406,7 @@ Crawl-Job erstellen und ausführen
            "name": "Hourly Crawler",
            "target": "all",
            "cronExpression": "0 0 * * * ?",
-           "scriptType": "groovy",
+           "scriptType": "javascript",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",

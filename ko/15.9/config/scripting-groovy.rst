@@ -5,9 +5,25 @@ Groovy 스크립트 가이드
 개요
 ====
 
-Groovy는 |Fess|\ 의 기본 스크립트 언어입니다.
+Groovy는 |Fess|\ 에서 사용할 수 있는 스크립트 언어 중 하나입니다.
 Java 가상 머신(JVM) 위에서 동작하며, Java와의 높은 호환성을 유지하면서
 더 간결한 구문으로 스크립트를 작성할 수 있습니다.
+
+.. important::
+   |Fess| 15.9부터 Groovy는 ``fess-script-groovy`` 플러그인으로 제공됩니다.
+   15.9에서는 이 플러그인이 배포물에 동봉되어 있어 추가 작업 없이 그대로 사용할
+   수 있지만, **15.10부터는 플러그인이 동봉되지 않습니다**. 15.10 이후에도
+   Groovy를 계속 사용하려면 관리 화면의 「시스템 > 플러그인」 페이지에서
+   플러그인을 설치하세요. 수동으로 설치할 경우, 해당하는 JAR 파일(예:
+   ``fess-script-groovy-15.10.0.jar`` )을 ``app/WEB-INF/plugin/``\ 에 배치하고
+   설치 후 |Fess|\ 를 재시작합니다.
+
+   |Fess| 15.9부터 기본 스크립트 언어는 JavaScript입니다. 스크립트 설정에
+   스크립트 타입이 기록되어 있지 않은 경우에는 Groovy로 취급되므로, 15.9 이전에
+   작성된 설정은 Groovy 구문의 스크립트를 유지한 채 업그레이드 후에도 그대로
+   동작합니다. 15.9 이후에 Groovy를 사용하는 새 설정을 작성할 경우에는 스크립트
+   타입으로 명시적으로 ``groovy``\ 를 지정하세요. JavaScript에 대해서는
+   :doc:`scripting-javascript`\ 를 참조하세요.
 
 기본 구문
 ========
@@ -373,5 +389,6 @@ Fess 컴포넌트 접근
 
 - `Groovy 공식 문서 <https://groovy-lang.org/documentation.html>`__
 - :doc:`scripting-overview` - 스크립팅 개요
+- :doc:`scripting-javascript` - JavaScript 스크립트 가이드(기본 스크립트 언어)
 - :doc:`../admin/dataconfig-guide` - 데이터 스토어 설정 가이드
 - :doc:`../admin/scheduler-guide` - 스케줄러 설정 가이드

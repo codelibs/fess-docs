@@ -27,22 +27,7 @@
 기본 스크립트
 --------------------
 
-크롤러의 기본 스크립트 언어를 설정합니다.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - 속성
-     - 설명
-     - 기본값
-   * - ``crawler.default.script``
-     - 크롤러 스크립트 언어
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+|Fess| 15.9에서 이 속성이 제거되었으므로 문서 부스트의 각 규칙은 :doc:`../admin/boostdoc-guide` 화면에서 스크립트 유형을 개별적으로 선택합니다.
 
 HTTP 스레드 풀
 ------------------

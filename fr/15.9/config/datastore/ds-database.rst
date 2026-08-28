@@ -156,7 +156,9 @@ Liste des paramètres
      - Délai en millisecondes entre le traitement de chaque ligne. Par défaut : 0
    * - ``script_type``
      - Non
-     - Type du moteur de script. Par défaut : groovy
+     - Type du moteur de script. Une nouvelle configuration est préremplie avec ``javascript`` ;
+       une configuration sans valeur enregistrée est traitée comme ``groovy``. Voir
+       :doc:`ds-overview` pour plus de détails.
 
 Configuration du script
 -----------------------

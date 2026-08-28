@@ -157,7 +157,7 @@ Verarbeitung von Array-Elementen:
     url="https://example.com/article/" + id
     title=title
     content=body
-    tags=tags.join(", ")
+    tags=java.lang.String.join(", ", tags)
     categories=categories[0].name
 
 Verfügbare Felder
@@ -166,11 +166,13 @@ Verfügbare Felder
 - ``<Feldname>`` - Felder auf der obersten Ebene des JSON-Objekts werden direkt beim Namen referenziert
 - ``<Elternteil>.<Kind>`` - Felder eines verschachtelten Objekts
 - ``<Array>[<Index>]`` - Array-Element
-- ``<Array>.<Methode>`` - Array-Methoden (``join``, ``collect``, ``size`` usw.)
+- ``<Array>.<Methode>`` - Methoden der übergebenen ``java.util.List`` , etwa ``size()`` .
+  JavaScript-Array-Methoden wie ``join()`` und ``map()`` stehen darauf **nicht** zur
+  Verfügung (siehe "Array-Verknüpfung")
 
 .. note::
 
-   Enthält ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Groovy-Bezeichner
+   Enthält ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Skript-Bezeichner
    ungültig sind, kann dieses Feld nicht direkt als Variablenname referenziert werden.
 
 JSON-Format-Details
@@ -324,8 +326,20 @@ Array-Verknüpfung
     url="https://example.com/article/" + id
     title=title
     content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   Ein JSON-Array wird dem Skript als ``java.util.List`` übergeben, ein verschachteltes
+   JSON-Objekt als ``java.util.Map`` - nicht als JavaScript-Array bzw. -Objekt. Die
+   JavaScript-Array-Methoden existieren darauf daher nicht: ``tags.join(", ")`` schlägt mit
+   ``TypeError: tags.join is not a function`` fehl und das Feld wird verworfen. Verwenden Sie
+   ``java.lang.String.join()`` , um eine Liste von Zeichenketten zu verketten, oder wandeln Sie
+   die Liste mit ``Java.from()`` in ein JavaScript-Array um, wenn Sie ``map()`` und die übrigen
+   Array-Methoden benötigen. Indexzugriff ( ``categories[0]`` ) und Eigenschaftszugriff auf ein
+   verschachteltes Objekt ( ``.name`` ) stehen über die Java-Interoperabilität zur Verfügung und
+   funktionieren wie angegeben.
 
 Standardwerte festlegen
 -------------------------
@@ -333,9 +347,9 @@ Standardwerte festlegen
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Ohne Titel"
-    content=description ?: (summary ?: "Keine Beschreibung")
-    price=price ?: 0
+    title=title || "Ohne Titel"
+    content=description || summary || "Keine Beschreibung"
+    price=price || 0
 
 Datumsformatierung
 --------------------
@@ -356,8 +370,8 @@ Numerische Verarbeitung
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Referenzen
 ==========

@@ -27,22 +27,7 @@ La configuration détaillée du robot d'indexation s'effectue dans les fichiers 
 Script par défaut
 --------------------
 
-Configure le langage de script par défaut du robot d'indexation.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Propriété
-     - Description
-     - Par défaut
-   * - ``crawler.default.script``
-     - Langage de script du robot d'indexation
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+Cette propriété a été supprimée dans |Fess| 15.9, et chaque règle de boost de document sélectionne désormais son propre type de script sur l'écran :doc:`../admin/boostdoc-guide`.
 
 Pool de threads HTTP
 --------------------

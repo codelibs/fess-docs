@@ -81,7 +81,7 @@ Map the retrieved value to the ``location`` field in the data store configuratio
 Adding Location Information via Script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also dynamically add location information to documents using the script feature (Groovy) in crawl configuration.
+You can also dynamically add location information to documents using the script feature in crawl configuration (JavaScript by default; Groovy can also be selected).
 Assign the value directly to the field name.
 
 ::
@@ -89,7 +89,7 @@ Assign the value directly to the field name.
     // Set latitude and longitude in the location field
     location="35.681236,139.767125"
 
-For details on scripting, refer to :doc:`scripting-groovy`.
+For details on scripting, refer to :doc:`scripting-overview`.
 
 Search Settings
 ---------------

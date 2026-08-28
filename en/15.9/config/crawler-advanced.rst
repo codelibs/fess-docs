@@ -27,22 +27,7 @@ Detailed crawler settings are configured in the following files:
 Default Script
 --------------
 
-Configure the default script language for the crawler.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Property
-     - Description
-     - Default
-   * - ``crawler.default.script``
-     - Crawler script language
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+This property was removed in |Fess| 15.9; each document boost rule now selects its own script type on the :doc:`../admin/boostdoc-guide` screen.
 
 HTTP Thread Pool
 ----------------

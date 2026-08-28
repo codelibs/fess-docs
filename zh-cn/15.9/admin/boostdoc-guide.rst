@@ -35,13 +35,26 @@
 
 指定要置于上方的文档的条件。
 例如,如果要将包含 https://www.n2sm.net/ 的 URL 显示在上方,请写入 url.matches("https://www.n2sm.net/.\*")。
-条件可以使用 Groovy 编写。
+条件使用下方"脚本类型"中指定的脚本引擎语法编写。
 
 提升值表达式
 :::::::::
 
 指定文档权重的值。
-表达式可以使用 Groovy 编写。
+表达式使用下方"脚本类型"中指定的脚本引擎语法编写。
+
+脚本类型
+::::::::
+
+指定用于对条件和提升值表达式求值的脚本引擎。
+新建配置时会预填 ``javascript`` 。选择 ``groovy`` 需要 ``fess-script-groovy`` 插件。
+留空时将按 Groovy 求值。
+
+.. warning::
+
+   在 JavaScript 中，请将条件和提升值表达式写成不带末尾分号的纯表达式。只能解析为语句块的
+   文本，除非包含显式的 ``return`` ，否则其求值结果为 ``null`` 。请参阅
+   :ref:`javascript-statement-null` （ :doc:`../config/scripting-javascript` ）。
 
 排序顺序
 ::::::

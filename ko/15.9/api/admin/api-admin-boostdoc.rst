@@ -10,13 +10,18 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
 검색 결과 상위에 표시되기 쉽게 할 수 있습니다.
 
 부스트는 인덱스 생성 시(크롤링 시)에 각 문서에 적용됩니다.
-조건(``urlExpr``)과 부스트 값(``boostExpr``)은 모두 Groovy 식으로 평가됩니다.
+조건(``urlExpr``)과 부스트 값(``boostExpr``)은 ``scriptType`` 필드에서 지정한 스크립트 엔진의 식으로 평가됩니다.
+``scriptType`` 에는 ``javascript`` 와 ``groovy``(``fess-script-groovy`` 플러그인 필요) 중 하나를 지정할 수 있습니다.
+관리 화면의 신규 작성 화면에서는 ``scriptType`` 에 ``javascript`` 가 미리 입력되지만, 이 API의 요청 본문에서
+``scriptType`` 을 생략하면 자동으로 채워지지 않고 Groovy로 평가됩니다.
 여러 규칙은 ``sortOrder`` 의 오름차순으로 평가되며, 처음 조건이 일치한 규칙의 부스트 값만 적용됩니다
 (일치하는 규칙이 발견되면, 이후 규칙은 평가되지 않습니다).
 
 .. note::
 
-   관리 화면에서는 ``urlExpr`` 은 "조건", ``boostExpr`` 은 "부스트 값 식"으로 표시됩니다.
+   관리 화면에서는 ``urlExpr`` 은 "조건", ``boostExpr`` 은 "부스트 값 식", ``scriptType`` 은 "스크립트 종류"로
+   표시됩니다. ``scriptType`` 은 생성·수정·조회(목록·상세)의 요청 본문 및 응답에만 포함되며, 목록 조회의
+   필터 파라미터(``urlExpr``, ``boostExpr``)에는 포함되지 않습니다.
    설정 항목의 자세한 내용은 :doc:`../../admin/boostdoc-guide` 를 참조하십시오.
 
 기본 URL
@@ -109,6 +114,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
             "id": "boostdoc_id_1",
             "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
             "boostExpr": "3.0",
+            "scriptType": "javascript",
             "sortOrder": 1,
             "versionNo": 1
           }
@@ -144,6 +150,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
           "id": "boostdoc_id_1",
           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
           "boostExpr": "3.0",
+          "scriptType": "javascript",
           "sortOrder": 1,
           "versionNo": 1
         }
@@ -169,6 +176,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
     {
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "5.0",
+      "scriptType": "javascript",
       "sortOrder": 0
     }
 
@@ -184,10 +192,13 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
      - 설명
    * - ``urlExpr``
      - 예
-     - 조건식. 부스트 대상 문서를 판별하는 Groovy 식으로, ``Boolean`` 을 반환합니다. 관리 화면의 "조건"에 해당합니다 (최대 10000자).
+     - 조건식. 부스트 대상 문서를 판별하는 스크립트 식으로, ``Boolean`` 을 반환합니다. 관리 화면의 "조건"에 해당합니다 (최대 10000자).
    * - ``boostExpr``
      - 예
-     - 부스트 값 식. 부스트 값(숫자)을 반환하는 Groovy 식입니다. ``3.0`` 과 같은 고정값도 지정할 수 있습니다. 관리 화면의 "부스트 값 식"에 해당합니다 (최대 10000자).
+     - 부스트 값 식. 부스트 값(숫자)을 반환하는 스크립트 식입니다. ``3.0`` 과 같은 고정값도 지정할 수 있습니다. 관리 화면의 "부스트 값 식"에 해당합니다 (최대 10000자).
+   * - ``scriptType``
+     - 아니오
+     - ``urlExpr`` 과 ``boostExpr`` 을 평가하는 스크립트 엔진. ``javascript`` 또는 ``groovy``(``fess-script-groovy`` 플러그인 필요)를 지정합니다. 관리 화면의 "스크립트 종류"에 해당합니다 (최대 100자). 생략하면 Groovy로 평가됩니다.
    * - ``sortOrder``
      - 예
      - 적용 순서. 규칙은 오름차순으로 평가되며, 처음 조건이 일치한 규칙의 부스트 값이 적용됩니다 (폼 초기값: 0, 0 이상의 정수).
@@ -225,6 +236,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
       "id": "existing_boostdoc_id",
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "10.0",
+      "scriptType": "javascript",
       "sortOrder": 0,
       "versionNo": 1
     }
@@ -270,10 +282,11 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
 조건식 및 부스트 값 식에 대하여
 ================================
 
-``urlExpr`` (조건)과 ``boostExpr`` (부스트 값 식)은 모두 Groovy 식으로 평가됩니다.
+``urlExpr`` (조건)과 ``boostExpr`` (부스트 값 식)은 ``scriptType``(기본값: Groovy. 관리 화면의 신규 작성
+화면에서만 ``javascript`` 가 미리 입력됨)에서 지정한 스크립트 엔진의 식으로 평가됩니다.
 식 안에서는 인덱스 대상 문서의 필드 값을 필드명 변수로 참조할 수 있습니다.
 
-- ``urlExpr`` 은 ``Boolean`` 을 반환해야 합니다 (예: ``url.startsWith("https://docs.example.com/")``). 단순 정규식 문자열 (예: ``.*docs\.example\.com.*``)은 Groovy 식으로서 ``Boolean`` 을 반환하지 않으므로 조건으로 동작하지 않습니다. 정규식을 사용하는 경우에는 Groovy의 ``String#matches`` 를 이용합니다.
+- ``urlExpr`` 은 ``Boolean`` 을 반환해야 합니다 (예: ``url.startsWith("https://docs.example.com/")``). 단순 정규식 문자열 (예: ``.*docs\.example\.com.*``)은 스크립트 식으로서 ``Boolean`` 을 반환하지 않으므로 조건으로 동작하지 않습니다. 정규식을 사용하는 경우에는 ``String#matches`` 를 이용합니다(Groovy와 JavaScript 모두 동일한 표기법으로 사용할 수 있습니다).
 - ``boostExpr`` 은 숫자를 반환해야 합니다. 결과는 ``float`` 으로 변환되며, 0보다 큰 경우에만 부스트가 적용됩니다.
 
 .. note::
@@ -281,7 +294,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
    식 안에서 참조할 수 있는 주요 필드 변수: ``url``, ``title``, ``content``, ``content_length``, ``last_modified`` 등.
    ``click_count`` 와 ``favorite_count`` 는 각각 ``indexer.click.count.enabled`` /
    ``indexer.favorite.count.enabled`` (모두 기본적으로 활성화)가 설정된 경우에 참조할 수 있습니다.
-   ``now - 7d`` 와 같은 OpenSearch 날짜 계산 구문은 Groovy에서 사용할 수 없습니다.
+   ``now - 7d`` 와 같은 OpenSearch 날짜 계산 구문은 Groovy와 JavaScript 모두에서 사용할 수 없습니다.
 
 조건식(``urlExpr``) 예시
 -------------------------
@@ -295,7 +308,7 @@ BoostDoc API는 |Fess| 의 문서 부스트 설정을 관리하기 위한 API입
    * - ``url.startsWith("https://docs.example.com/")``
      - 지정한 URL로 시작하는 문서를 대상으로 함
    * - ``url.matches("https://www\\.example\\.com/.*")``
-     - 정규식(Groovy의 ``String#matches``)으로 URL을 판별함
+     - 정규식(``String#matches``)으로 URL을 판별함
    * - ``title.contains("릴리스 노트")``
      - 제목에 특정 단어를 포함하는 문서를 대상으로 함
 

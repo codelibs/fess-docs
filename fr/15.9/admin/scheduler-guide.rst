@@ -52,8 +52,14 @@ Par exemple, « 0 12 \* \* 3 » exécutera la tâche tous les mercredis à 12:00
 Méthode d'exécution
 :::::::::::::::::::
 
-Spécifie l'environnement d'exécution du script.
-Actuellement, seul « groovy » est pris en charge.
+Spécifie l'environnement d'exécution du script. Vous pouvez choisir ``javascript``
+(valeur par défaut pour les nouvelles tâches, déterminée par la propriété
+``job.default.script``) ou ``groovy`` (nécessite le plugin ``fess-script-groovy``).
+
+Avant la 15.9, la tâche s'exécutait toujours dans le langage de script par défaut du
+produit, quelle que soit la valeur enregistrée ici. À partir de la 15.9, cette valeur
+est réellement utilisée, ce qui permet à chaque tâche de s'exécuter dans un langage de
+script différent.
 
 Script
 ::::::
@@ -64,7 +70,7 @@ Par exemple, si vous souhaitez exécuter uniquement trois configurations de craw
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
 
 Journalisation
 ::::::::::::::

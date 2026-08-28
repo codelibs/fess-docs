@@ -52,8 +52,13 @@ Zum Beispiel führt „0 12 \* \* 3" den Job jeden Mittwoch um 12:00 Uhr aus.
 Ausführungsmethode
 ::::::::::::::::::
 
-Geben Sie die Skriptausführungsumgebung an.
-Derzeit wird nur „groovy" unterstützt.
+Geben Sie die Skriptausführungsumgebung an. Sie können zwischen ``javascript``
+(Standard für neue Jobs, festgelegt über die Eigenschaft ``job.default.script``)
+und ``groovy`` (erfordert das Plugin ``fess-script-groovy``) wählen.
+
+Vor 15.9 wurde ein Job unabhängig vom hier gespeicherten Wert immer in der
+Standard-Skriptsprache des Produkts ausgeführt. Ab 15.9 wird dieser Wert tatsächlich
+verwendet, sodass jeder Job in einer anderen Skriptsprache laufen kann.
 
 Skript
 ::::::
@@ -64,7 +69,7 @@ Um beispielsweise nur drei Crawl-Konfigurationen als Crawl-Job auszuführen, sch
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
 
 Protokollierung
 :::::::::::::::

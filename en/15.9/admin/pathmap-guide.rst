@@ -42,6 +42,22 @@ Replacement
 
 Specifies the string to replace the matched regular expression.
 
+When the replacement string starts with ``(engine name):``, the part before the
+colon is read as the name of a scripting engine, and if it matches a registered
+engine, the rest of the string is evaluated as a script by that engine. For
+example, ``groovy:`` selects the Groovy engine (which requires the
+``fess-script-groovy`` plugin), and ``javascript:`` (aliases ``js:``, ``sai:``)
+selects the JavaScript engine. If the part before the colon does not match any
+registered engine name — ``https://`` in an ordinary replacement string, for
+example — the whole string is not treated as a script at all and is instead used
+as-is as a plain regular-expression replacement. When the string is evaluated as a
+script, ``url`` (the URL string being transformed) and ``matcher`` (the
+``java.util.regex.Matcher`` for the regular expression) are available inside it.
+
+::
+
+    javascript:url.replace(/http:\/\//g, "https://")
+
 Process Type
 ::::::::::::
 

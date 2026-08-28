@@ -157,7 +157,7 @@ Array element processing:
     url="https://example.com/article/" + id
     title=title
     content=body
-    tags=tags.join(", ")
+    tags=java.lang.String.join(", ", tags)
     categories=categories[0].name
 
 Available Fields
@@ -166,11 +166,13 @@ Available Fields
 - ``<field_name>`` - Reference a top-level field of the JSON object directly by name
 - ``<parent>.<child>`` - Field of a nested object
 - ``<array>[<index>]`` - Array element
-- ``<array>.<method>`` - Array methods (``join``, ``collect``, ``size``, etc.)
+- ``<array>.<method>`` - Methods of the bound ``java.util.List`` , such as ``size()`` .
+  JavaScript array methods such as ``join()`` and ``map()`` are **not** available on it
+  (see "Joining Arrays")
 
 .. note::
 
-   If a field name contains characters that are invalid as a Groovy identifier,
+   If a field name contains characters that are invalid as a script identifier,
    such as spaces or hyphens, that field cannot be referenced directly as a variable name.
 
 JSON Format Details
@@ -322,8 +324,19 @@ Joining Arrays
     url="https://example.com/article/" + id
     title=title
     content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   A JSON array is bound to the script as a ``java.util.List`` and a nested JSON object as a
+   ``java.util.Map`` - not as a JavaScript array or object. The JavaScript array methods
+   therefore do not exist on them: ``tags.join(", ")`` fails with
+   ``TypeError: tags.join is not a function`` and the field is dropped. Use
+   ``java.lang.String.join()`` to join a list of strings, or convert the list into a JavaScript
+   array with ``Java.from()`` when you need ``map()`` and the other array methods.
+   Index access ( ``categories[0]`` ) and property access on a nested object ( ``.name`` )
+   are provided by Java interoperability and work as written.
 
 Setting Default Values
 ----------------------
@@ -331,9 +344,9 @@ Setting Default Values
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Untitled"
-    content=description ?: (summary ?: "No description")
-    price=price ?: 0
+    title=title || "Untitled"
+    content=description || summary || "No description"
+    price=price || 0
 
 Date Formatting
 ---------------
@@ -354,8 +367,8 @@ Numeric Processing
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Reference
 =========

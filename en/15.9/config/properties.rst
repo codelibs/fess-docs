@@ -205,13 +205,13 @@ Core
     - Data Crawler - {0}
   * - job.template.script
     - The script template for jobs.
-    - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}] as String[]).fileConfigIds([{1}] as String[]).dataConfigIds([{2}] as String[]).jobExecutor(executor).execute();``
+    - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}]).fileConfigIds([{1}]).dataConfigIds([{2}]).jobExecutor(executor).execute();``
   * - job.max.crawler.processes
     - The maximum number of crawler processes.
     - 0
   * - job.default.script
-    - The default script for jobs.
-    - groovy
+    - The default script type for newly created scheduled jobs.
+    - javascript
   * - job.system.property.filter.pattern
     - The pattern for system property filters.
     - (empty)
@@ -357,9 +357,6 @@ Index
   * - Name
     - Description
     - Default
-  * - crawler.default.script
-    - The default script for the crawler.
-    - groovy
   * - crawler.http.thread_pool.size
     - The size of the HTTP thread pool.
     - 0

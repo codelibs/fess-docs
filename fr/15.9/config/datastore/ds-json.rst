@@ -158,7 +158,7 @@ Traitement des elements de tableau :
     url="https://example.com/article/" + id
     title=title
     content=body
-    tags=tags.join(", ")
+    tags=java.lang.String.join(", ", tags)
     categories=categories[0].name
 
 Champs disponibles
@@ -167,11 +167,13 @@ Champs disponibles
 - ``<nom_champ>`` - Reference directe par nom d'un champ de niveau superieur de l'objet JSON
 - ``<parent>.<enfant>`` - Champ d'un objet imbrique
 - ``<tableau>[<indice>]`` - Element de tableau
-- ``<tableau>.<methode>`` - Methodes de tableau (``join``, ``collect``, ``size``, etc.)
+- ``<tableau>.<methode>`` - Methodes du ``java.util.List`` transmis, par exemple ``size()`` .
+  Les methodes de tableau JavaScript telles que ``join()`` et ``map()`` n'y sont **pas**
+  disponibles (voir "Jointure de tableaux")
 
 .. note::
 
-   Si un nom de champ contient des caracteres invalides comme identificateur Groovy
+   Si un nom de champ contient des caracteres invalides comme identificateur de script
    (espaces, tirets, etc.), ce champ ne peut pas etre reference directement comme variable.
 
 Details du format JSON
@@ -325,8 +327,20 @@ Jointure de tableaux
     url="https://example.com/article/" + id
     title=title
     content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   Un tableau JSON est transmis au script sous la forme d'un ``java.util.List`` et un objet
+   JSON imbrique sous la forme d'un ``java.util.Map`` , et non sous la forme d'un tableau ou
+   d'un objet JavaScript. Les methodes de tableau JavaScript n'existent donc pas sur eux :
+   ``tags.join(", ")`` echoue avec ``TypeError: tags.join is not a function`` et le champ est
+   abandonne. Utilisez ``java.lang.String.join()`` pour joindre une liste de chaines, ou
+   convertissez la liste en tableau JavaScript avec ``Java.from()`` lorsque vous avez besoin de
+   ``map()`` et des autres methodes de tableau. L'acces par indice ( ``categories[0]`` ) et
+   l'acces aux proprietes d'un objet imbrique ( ``.name`` ) sont fournis par
+   l'interoperabilite Java et fonctionnent tels quels.
 
 Configuration des valeurs par defaut
 --------------------------------------
@@ -334,9 +348,9 @@ Configuration des valeurs par defaut
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Sans titre"
-    content=description ?: (summary ?: "Sans description")
-    price=price ?: 0
+    title=title || "Sans titre"
+    content=description || summary || "Sans description"
+    price=price || 0
 
 Formatage des dates
 --------------------
@@ -357,8 +371,8 @@ Traitement des nombres
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Informations de reference
 ==========================

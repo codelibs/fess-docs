@@ -52,8 +52,14 @@ Por ejemplo, "0 12 \* \* 3" ejecutará el trabajo todos los miércoles a las 12:
 Tipo de ejecución
 :::::::::::::::::
 
-Especifique el entorno de ejecución del script.
-Actualmente solo se admite "groovy".
+Especifique el entorno de ejecución del script. Puede elegir entre ``javascript``
+(valor predeterminado para trabajos nuevos, determinado por la propiedad
+``job.default.script``) y ``groovy`` (requiere el plugin ``fess-script-groovy``).
+
+Antes de 15.9, el trabajo siempre se ejecutaba en el lenguaje de script predeterminado
+del producto, independientemente del valor almacenado aquí. A partir de 15.9, este valor
+se utiliza realmente, por lo que cada trabajo puede ejecutarse en un lenguaje de script
+diferente.
 
 Script
 ::::::
@@ -64,7 +70,7 @@ Por ejemplo, si desea ejecutar solo tres configuraciones de rastreo como trabajo
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
 
 Registro
 ::::::::

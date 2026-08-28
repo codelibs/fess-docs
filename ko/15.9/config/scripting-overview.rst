@@ -21,14 +21,29 @@
    * - 언어
      - 식별자
      - 설명
+   * - JavaScript
+     - ``javascript``\ （별칭: ``js`` , ``sai`` ）
+     - |Fess|\ 에 기본으로 내장된 스크립트 언어이자 기본 스크립트 언어
+       （ ``Constants.DEFAULT_SCRIPT`` ）입니다. |Fess|\ 가 DI XML 식 판정에도
+       사용하고 있는 CodeLibs의 Nashorn 포크인 Sai 위에서 동작하며, 스크립트는
+       ECMAScript 6로 실행됩니다.
    * - Groovy
      - ``groovy``
-     - 기본으로 등록된 스크립트 언어. Java 호환으로 강력한 기능 제공
+     - ``fess-script-groovy`` 플러그인으로 제공됩니다. 15.9에서는 배포물에
+       동봉되어 있어 추가 작업 없이 이용할 수 있지만, **15.10부터는 동봉되지
+       않으며** 관리 화면에서 설치해야 합니다.
 
 .. note::
-   |Fess|\ 에 기본으로 등록된 스크립트 엔진은 Groovy뿐입니다.
-   기본 스크립트 언어는 ``groovy``\ 입니다（ ``Constants.DEFAULT_SCRIPT`` ）.
-   이 문서의 스크립트 예제는 모두 Groovy 구문으로 작성되어 있습니다.
+   스크립트 설정에 스크립트 타입이 기록되어 있지 않은 경우, 해당 스크립트는
+   Groovy로 취급됩니다. 이는 일시적인 이행 조치가 아니라 영구적인 사양입니다.
+   15.9 이전에 작성된 설정은 Groovy 구문의 스크립트를 유지한 채 스크립트 타입이
+   기록되어 있지 않으므로, 이 기본값 덕분에 업그레이드 후에도 그대로 동작합니다.
+   15.9 이후에 새로 작성되는 설정에는 스크립트 타입으로 ``javascript``\ 가
+   명시적으로 기록됩니다.
+
+   이 문서의 스크립트 예제는 특별한 언급이 없는 한 JavaScript 구문으로
+   작성되어 있습니다. Groovy 구문에 대해서는 :doc:`scripting-groovy`\ 를
+   참조하세요.
 
 스크립트 사용 장면
 ==================
@@ -38,7 +53,7 @@
 
 데이터 스토어 커넥터에서는 가져온 데이터를 인덱스 필드에 매핑하기 위해
 스크립트를 사용합니다. 설정은 ``필드명=식`` 형식으로 한 줄씩 기술하며,
-각 줄은 독립된 하나의 Groovy 식으로 평가됩니다.
+각 줄은 독립된 하나의 스크립트 식으로 평가됩니다（기본값은 JavaScript）.
 
 ::
 
@@ -56,37 +71,51 @@ Slack에서는 ``message.*`` 등 커넥터마다 접두사가 다릅니다.
 
 .. note::
    데이터 스토어의 각 줄은 하나의 식으로 평가되기 때문에, 여러 줄에 걸친
-   ``if`` 블록이나 ``import`` 문, ``def`` 에 의한 변수 선언은 사용할 수 없습니다.
+   ``if`` 블록이나 ``let`` / ``const``\ 에 의한 변수 선언문은 사용할 수 없습니다.
    조건에 따라 값을 변경할 경우에는 필드마다 삼항 연산자를 사용하세요
-   （예: ``title=enabled == "true" ? name : null`` ）. 클래스를 참조할 경우에는
+   （예: ``title=enabled === "true" ? name : null`` ）. 클래스를 참조할 경우에는
    완전 한정 이름（FQCN）을 인라인으로 기술합니다.
 
 경로 매핑
 ---------
 
 경로 매핑은 크롤링 대상 URL을 정규화·변환하기 위한 기능입니다.
-기본적으로는 「정규 표현식」과 「치환 문자열」의 쌍으로 설정하며, Groovy 스크립트가 아닙니다.
+기본적으로는 「정규 표현식」과 「치환 문자열」의 쌍으로 설정하며, 스크립트가 아닙니다.
 예를 들어 정규 표현식에 ``http://``, 치환 문자열에 ``https://``\ 를 지정하면
 URL의 스킴을 교체할 수 있습니다.
 
-치환 문자열 앞에 ``groovy:``\ 를 붙인 경우에 한해, 이후 문자열이 Groovy 스크립트로
-평가됩니다. 이 스크립트 내에서는 변환 대상 URL 문자열을 나타내는 ``url``\ 과,
-정규 표현식의 ``java.util.regex.Matcher``\ 를 나타내는 ``matcher``\ 를 사용할 수 있습니다.
+치환 문자열이 ``（엔진명）:``\ 형식으로 시작하는 경우, 콜론 앞부분이 실행할
+스크립트 엔진의 이름으로 해석되며, 등록된 엔진명과 일치하면 콜론 이후의 문자열이
+해당 엔진의 스크립트로 평가됩니다. 예를 들어 ``groovy:``\ 는 Groovy 엔진（
+``fess-script-groovy`` 플러그인 필요）을 선택하고, ``javascript:``\ （별칭
+``js:`` , ``sai:`` ）은 JavaScript 엔진을 선택합니다. 콜론 앞부분이 등록된
+스크립트 엔진명과 일치하지 않는 경우（예: 일반 치환 문자열에서 콜론 앞이
+``https``\ 처럼 URL 스킴명인 경우 등）에는 스크립트로 취급되지 않고, 문자열
+전체가 그대로 정규 표현식의 치환 문자열로 사용됩니다. 스크립트로 평가되는
+경우, 그 스크립트 내에서는 변환 대상 URL 문자열을 나타내는 ``url``\ 과, 정규
+표현식의 ``java.util.regex.Matcher``\ 를 나타내는 ``matcher``\ 를 사용할 수
+있습니다.
 
 ::
 
-    groovy:url.replaceAll("http://", "https://")
+    javascript:url.replace(/http:\/\//g, "https://")
 
 스케줄 작업
 -----------
 
-스케줄 작업에서는 커스텀 처리 로직을 Groovy 스크립트로 작성할 수 있습니다.
-스크립트 전체가 하나의 Groovy 스크립트로 평가되기 때문에,
-여러 줄 기술이나 ``import`` 문, ``def``\ 에 의한 변수 선언도 사용할 수 있습니다.
+스케줄 작업에서는 커스텀 처리 로직을 스크립트로 작성할 수 있습니다.
+스크립트 전체가 하나의 스크립트로 평가되기 때문에, 여러 줄 기술이나（JavaScript의
+경우）``let`` / ``const``\ 에 의한 변수 선언, 조건 분기 등도 사용할 수 있습니다.
 
 ::
 
     return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
+
+JavaScript에서는 일반적으로 최상위 레벨의 ``return`` 문은 구문 오류가 되지만,
+|Fess|\ 의 스크립트 엔진은 스크립트를 먼저 식으로 해석하려고 시도하고, 그것이
+실패한 경우에만 문（스테이트먼트）블록으로 다시 해석합니다. 위 예제는 식으로는
+해석할 수 없으므로 문 블록으로 처리되어 그대로 동작합니다. 자세한 내용은
+:doc:`scripting-javascript`\ 를 참조하세요.
 
 ``logLevel("info")`` 등의 메서드는 작업 클래스（ ``ExecJob`` 및 그 서브클래스）의
 메서드이며, 메서드 체인으로 기술할 수 있습니다. ``executor`` 변수에 대해서는
@@ -95,8 +124,8 @@ URL의 스킴을 교체할 수 있습니다.
 기본 구문
 =========
 
-다음은 Groovy의 기본 구문 예제입니다. 주석은 ``//``\ （줄 주석）또는
-``/* */``\ （블록 주석）을 사용합니다. ``#``\ 으로 시작하는 주석은 Groovy에서
+다음은 JavaScript의 기본 구문 예제입니다. 주석은 ``//``\ （줄 주석）또는
+``/* */``\ （블록 주석）을 사용합니다. ``#``\ 으로 시작하는 주석은 JavaScript에서도
 사용할 수 없다는 점에 주의하세요.
 
 변수 접근
@@ -118,8 +147,8 @@ URL의 스킴을 교체할 수 있습니다.
     // 연결
     title + " - " + category
 
-    // 치환
-    content.replaceAll("old", "new")
+    // 치환（정규 표현식 사용. ECMAScript 6에는 String#replaceAll이 없습니다）
+    content.replace(/old/g, "new")
 
     // 분할
     tags.split(",")
@@ -130,10 +159,10 @@ URL의 스킴을 교체할 수 있습니다.
 ::
 
     // 삼항 연산자
-    status == "active" ? "유효" : "무효"
+    status === "active" ? "유효" : "무효"
 
-    // null/빈 값인 경우의 기본값（Elvis 연산자）
-    description ?: "설명 없음"
+    // 기본값（논리 OR 연산자. JavaScript에는 Elvis 연산자가 없습니다）
+    description || "설명 없음"
 
 날짜 조작
 ---------
@@ -143,7 +172,7 @@ URL의 스킴을 교체할 수 있습니다.
     // 현재 날짜/시간
     new Date()
 
-    // 포맷
+    // 포맷（Java 상호운용은 Groovy와 동일한 표기법을 사용）
     new java.text.SimpleDateFormat("yyyy-MM-dd").format(updated_at)
 
 실행 컨텍스트와 사용 가능한 객체
@@ -169,7 +198,8 @@ URL의 스킴을 교체할 수 있습니다.
        （변수명·접두사는 커넥터에 따라 다름. CSV/JSON은 필드명이 그대로 변수가 됨）
    * - 경로 매핑
      - ``url`` ``matcher``
-     - 변환 대상 URL 문자열과 정규 표현식의 ``Matcher``\ （ ``groovy:`` 접두사 부가 시의 치환에서만）
+     - 변환 대상 URL 문자열과 정규 표현식의 ``Matcher``\ （치환 문자열이 ``（엔진명）:``
+       형식일 때만. 앞에 붙은 엔진명（ ``groovy`` , ``javascript`` 등）이 실행 언어를 결정）
    * - 스케줄 작업
      - ``executor``
      - 작업 실행 인스턴스（ ``JobExecutor`` ）. 작업의 셧다운 제어에 사용
@@ -205,16 +235,15 @@ URL의 스킴을 교체할 수 있습니다.
 디버그
 ======
 
-스케줄 작업의 스크립트에서는 스크립트 전체가 하나의 Groovy 스크립트로
+스케줄 작업의 스크립트에서는 스크립트 전체가 하나의 스크립트로
 평가되기 때문에 로그 출력을 활용하여 디버깅할 수 있습니다.
-（데이터 스토어 스크립트는 한 줄이 하나의 식으로 평가되기 때문에 ``import`` 문이나
+（데이터 스토어 스크립트는 한 줄이 하나의 식으로 평가되기 때문에
 여러 줄의 처리는 사용할 수 없습니다.）
 
 ::
 
-    import org.apache.logging.log4j.LogManager
-    def logger = LogManager.getLogger("fess.script")
-    logger.info("executor = {}", executor)
+    const logger = org.apache.logging.log4j.LogManager.getLogger("fess.script");
+    logger.info("executor = {}", executor);
 
 위 예제에서는 ``fess.script``\ 라는 이름의 로거를 사용합니다.
 이 로그를 출력하려면 ``app/WEB-INF/classes/log4j2.xml``\ 에 해당 로거 설정을
@@ -234,6 +263,7 @@ URL의 스킴을 교체할 수 있습니다.
 참고 정보
 =========
 
-- :doc:`scripting-groovy` - Groovy 스크립트 가이드
+- :doc:`scripting-javascript` - JavaScript 스크립트 가이드
+- :doc:`scripting-groovy` - Groovy 스크립트 가이드（플러그인）
 - :doc:`../admin/dataconfig-guide` - 데이터 스토어 설정 가이드
 - :doc:`../admin/scheduler-guide` - 스케줄러 설정 가이드

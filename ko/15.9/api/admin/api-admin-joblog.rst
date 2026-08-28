@@ -83,7 +83,7 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
             "jobName": "Default Crawler",
             "jobStatus": "ok",
             "target": "all",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
             "startTime": "1738116000000",
@@ -94,7 +94,7 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
             "jobName": "Default Crawler",
             "jobStatus": "fail",
             "target": "all",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
             "startTime": "1738029600000",
@@ -123,7 +123,7 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
    * - ``target``
      - 실행 대상 (스케줄러의 타겟 이름. 기본값은 ``all``)
    * - ``scriptType``
-     - 스크립트 타입 (예: ``groovy``)
+     - 스크립트 타입 (예: ``javascript``)
    * - ``scriptData``
      - 실행 스크립트
    * - ``scriptResult``
@@ -162,7 +162,7 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
           "jobName": "Default Crawler",
           "jobStatus": "ok",
           "target": "all",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
           "startTime": "1738116000000",

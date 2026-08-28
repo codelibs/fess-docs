@@ -92,7 +92,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
             "name": "Default Crawler",
             "target": "all",
             "cronExpression": "0 0 0 * * ?",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "...",
             "jobLogging": "true",
             "crawler": "true",
@@ -137,7 +137,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
           "name": "Default Crawler",
           "target": "all",
           "cronExpression": "0 0 0 * * ?",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "jobLogging": "true",
           "crawler": "true",
@@ -169,7 +169,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
       "name": "Daily Crawler",
       "target": "all",
       "cronExpression": "0 0 2 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
       "jobLogging": "true",
       "crawler": "true",
@@ -198,7 +198,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
      - Cron 표현식（초 분 시 일 월 요일）。최대 100자이며 Cron 표현식으로 검증됩니다. 비어 있으면 스케줄 실행되지 않고 수동으로만 시작할 수 있습니다
    * - ``scriptType``
      - 예
-     - 스크립트 타입（최대 100자）。현재는 ``groovy`` 만 지원됩니다
+     - 스크립트 타입（최대 100자）。``javascript``（신규 작업의 기본값. ``job.default.script`` 속성으로 결정）또는 ``groovy``（``fess-script-groovy`` 플러그인 필요）를 지정합니다
    * - ``scriptData``
      - 아니오
      - 실행 스크립트。최대 크기는 ``fess_config.properties`` 의 ``form.admin.max.input.size`` 에 따릅니다
@@ -275,7 +275,7 @@ Cron 표현식 예시
       "name": "Updated Crawler",
       "target": "all",
       "cronExpression": "0 0 3 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "...",
       "jobLogging": "true",
       "crawler": "true",
@@ -406,7 +406,7 @@ Cron 표현식 예시
            "name": "Hourly Crawler",
            "target": "all",
            "cronExpression": "0 0 * * * ?",
-           "scriptType": "groovy",
+           "scriptType": "javascript",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",

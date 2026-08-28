@@ -42,6 +42,22 @@ Reemplazo
 
 Especifique la cadena que reemplazará la expresión regular coincidente.
 
+Cuando la cadena de reemplazo comienza con ``(nombre_de_motor):``, la parte anterior a
+los dos puntos se interpreta como el nombre de un motor de scripting; si coincide con
+un motor registrado, el resto de la cadena se evalúa como un script mediante ese motor.
+Por ejemplo, ``groovy:`` selecciona el motor Groovy (requiere el plugin
+``fess-script-groovy``), y ``javascript:`` (alias ``js:``, ``sai:``) selecciona el motor
+JavaScript. Si la parte anterior a los dos puntos no coincide con ningún motor
+registrado — por ejemplo, ``https://`` en una cadena de reemplazo normal —, la cadena
+completa no se trata como un script, sino que se usa tal cual como una cadena de
+reemplazo de expresión regular. Cuando la cadena se evalúa como un script, dentro de
+ella se puede usar ``url`` para la cadena de URL a transformar y ``matcher`` para el
+``java.util.regex.Matcher`` de la expresión regular.
+
+::
+
+    javascript:url.replace(/http:\/\//g, "https://")
+
 Tipo de proceso
 :::::::::::::::
 

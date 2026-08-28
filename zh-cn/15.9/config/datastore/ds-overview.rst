@@ -217,8 +217,11 @@
      - ``0``
      - 各记录处理间的等待时间（毫秒）。在处理大量数据时，用于减轻服务器负载。
    * - ``script_type``
-     - ``groovy``
-     - 用于索引字段映射的脚本引擎类型。默认仅提供 ``groovy`` 。
+     - ``javascript``
+     - 用于索引字段映射的脚本引擎类型。JavaScript 是 |Fess| 内置的脚本引擎，
+       数据存储配置的新建画面会预填 ``script_type=javascript`` 。 ``groovy`` 可通过
+       ``fess-script-groovy`` 插件继续使用。未记录 ``script_type`` 的配置将被视为 Groovy，
+       因此 15.9 之前创建的配置仍能保持原样运行。详情请参阅 :doc:`../scripting-overview` 。
 
 故障排除
 ======================

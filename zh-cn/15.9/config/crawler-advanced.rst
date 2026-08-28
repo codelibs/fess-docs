@@ -27,22 +27,7 @@
 默认脚本
 --------------------
 
-设置爬虫的默认脚本语言。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - 属性
-     - 说明
-     - 默认值
-   * - ``crawler.default.script``
-     - 爬虫脚本语言
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+该属性已在 |Fess| 15.9 中移除，文档提升的每条规则现在可在 :doc:`../admin/boostdoc-guide` 页面单独选择脚本类型。
 
 HTTP 线程池
 ------------------

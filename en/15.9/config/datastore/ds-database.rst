@@ -156,7 +156,8 @@ Parameter List
      - Delay in milliseconds between processing each row. Default: 0
    * - ``script_type``
      - No
-     - Script engine type. Default: groovy
+     - Script engine type. A new configuration is prefilled with ``javascript``; a configuration
+       that records no value is treated as ``groovy``. See :doc:`ds-overview` for details.
 
 Script Configuration
 --------------------

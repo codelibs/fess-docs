@@ -217,8 +217,13 @@ Der folgende Parameter wird von ``AbstractDataStore`` vererbt und steht in allen
      - ``0``
      - Wartezeit in Millisekunden zwischen der Verarbeitung einzelner Datensätze. Kann verwendet werden, um die Last auf die Datenquelle zu begrenzen.
    * - ``script_type``
-     - ``groovy``
-     - Typ der Skript-Engine für das Mapping der Indexfelder. Standardmäßig ist nur ``groovy`` verfügbar.
+     - ``javascript``
+     - Typ der Skript-Engine für das Mapping der Indexfelder. JavaScript ist die in |Fess|
+       eingebaute Skript-Engine, und die Anlegemaske einer neuen Data-Store-Konfiguration ist mit
+       ``script_type=javascript`` vorbelegt. ``groovy`` steht weiterhin über das Plugin
+       ``fess-script-groovy`` zur Verfügung. Eine Konfiguration ohne hinterlegten ``script_type``
+       wird als Groovy behandelt, sodass eine vor 15.9 erstellte Konfiguration unverändert
+       weiterläuft. Siehe :doc:`../scripting-overview` für Details.
 
 Fehlerbehebung
 ==============

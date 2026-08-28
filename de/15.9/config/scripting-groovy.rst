@@ -5,9 +5,24 @@ Groovy-Skripting-Leitfaden
 Übersicht
 ==========
 
-Groovy ist die Standard-Skriptsprache fuer |Fess|.
-Sie laeuft auf der Java Virtual Machine (JVM) und ermoeglicht es Ihnen,
-bei hoher Kompatibilitaet mit Java Skripte mit einer praeganteren Syntax zu schreiben.
+Groovy ist eine der in |Fess| verfügbaren Skriptsprachen.
+Sie läuft auf der Java Virtual Machine (JVM) und ermöglicht es Ihnen,
+bei hoher Kompatibilität mit Java Skripte mit einer prägnanteren Syntax zu schreiben.
+
+.. important::
+   Ab |Fess| 15.9 wird Groovy als ``fess-script-groovy``-Plugin bereitgestellt.
+   In 15.9 liegt das Plugin der Distribution bei und funktioniert daher ohne weitere
+   Schritte, **ab 15.10 wird es jedoch nicht mehr mitgeliefert**. Um Groovy ab 15.10
+   weiter nutzen zu können, installieren Sie das Plugin über die Seite
+   **System > Plugin** in der Administrationsoberfläche. Für eine manuelle Installation
+   legen Sie die entsprechende JAR-Datei (Beispiel: ``fess-script-groovy-15.10.0.jar``)
+   im Verzeichnis ``app/WEB-INF/plugin/`` ab und starten |Fess| nach der Installation neu.
+
+   Die Standard-Skriptsprache ist ab |Fess| 15.9 JavaScript. Eine Skript-Konfiguration
+   ohne hinterlegten Skripttyp wird als Groovy behandelt, sodass eine vor 15.9 erstellte
+   Konfiguration mit ihrem Groovy-Skript nach dem Upgrade unverändert weiterläuft. Wenn
+   Sie ab 15.9 eine neue Konfiguration mit Groovy anlegen, setzen Sie den Skripttyp
+   explizit auf ``groovy``. Für JavaScript siehe :doc:`scripting-javascript`.
 
 Grundlegende Syntax
 ===================
@@ -373,5 +388,6 @@ Referenzinformationen
 
 - `Groovy Offizielle Dokumentation <https://groovy-lang.org/documentation.html>`__
 - :doc:`scripting-overview` - Skripting-Übersicht
+- :doc:`scripting-javascript` - JavaScript-Skripting-Leitfaden (die Standard-Skriptsprache)
 - :doc:`../admin/dataconfig-guide` - Datenspeicher-Konfigurationsleitfaden
 - :doc:`../admin/scheduler-guide` - Scheduler-Konfigurationsleitfaden

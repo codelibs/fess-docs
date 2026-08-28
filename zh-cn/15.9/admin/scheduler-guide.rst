@@ -52,8 +52,11 @@
 执行方法
 ::::::
 
-指定脚本的执行环境。
-目前仅支持"groovy"。
+指定脚本的执行环境。可以选择 ``javascript`` （新建作业的默认值,由 ``job.default.script``
+属性决定）或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。
+
+在 15.9 之前,无论此项保存的值是什么,作业始终以产品默认的脚本语言执行。自 15.9 起,
+该值才会真正生效,因此每个作业可以指定不同的脚本语言。
 
 脚本
 ::::::::
@@ -64,7 +67,7 @@
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
 
 日志记录
 ::::::

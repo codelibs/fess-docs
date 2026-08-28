@@ -157,7 +157,7 @@ JSONオブジェクトのトップレベルのフィールドは、スクリプ�
     url="https://example.com/article/" + id
     title=title
     content=body
-    tags=tags.join(", ")
+    tags=java.lang.String.join(", ", tags)
     categories=categories[0].name
 
 利用可能なフィールド
@@ -166,11 +166,13 @@ JSONオブジェクトのトップレベルのフィールドは、スクリプ�
 - ``<フィールド名>`` - JSONオブジェクトのトップレベルのフィールドを名前で直接参照します
 - ``<親>.<子>`` - ネストしたオブジェクトのフィールド
 - ``<配列>[<インデックス>]`` - 配列要素
-- ``<配列>.<メソッド>`` - 配列のメソッド（ ``join``、``collect``、``size`` など）
+- ``<配列>.<メソッド>`` - 渡される ``java.util.List`` のメソッド（ ``size()`` など）。
+  ``join()`` や ``map()`` などの JavaScript の配列メソッドは利用できません
+  （「配列の結合」を参照）
 
 .. note::
 
-   フィールド名にスペースやハイフンなど、Groovyの識別子として無効な文字が含まれる場合は、
+   フィールド名にスペースやハイフンなど、スクリプトの識別子として無効な文字が含まれる場合は、
    そのフィールドを変数名として直接参照できません。
 
 JSON形式の詳細
@@ -322,8 +324,19 @@ JSON解析エラー
     url="https://example.com/article/" + id
     title=title
     content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   JSON の配列はスクリプトには ``java.util.List`` として、ネストした JSON オブジェクトは
+   ``java.util.Map`` として渡されます。JavaScript の配列・オブジェクトではないため、
+   JavaScript の配列メソッドは存在せず、 ``tags.join(", ")`` は
+   ``TypeError: tags.join is not a function`` で失敗し、そのフィールドは登録されません。
+   文字列のリストを連結する場合は ``java.lang.String.join()`` を使用し、 ``map()`` などの
+   配列メソッドが必要な場合は ``Java.from()`` で JavaScript の配列に変換してください。
+   インデックスアクセス（ ``categories[0]`` ）とネストしたオブジェクトのプロパティ
+   アクセス（ ``.name`` ）は Java 相互運用により利用でき、記載どおりに動作します。
 
 デフォルト値の設定
 ------------------
@@ -331,9 +344,9 @@ JSON解析エラー
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "無題"
-    content=description ?: (summary ?: "説明なし")
-    price=price ?: 0
+    title=title || "無題"
+    content=description || summary || "説明なし"
+    price=price || 0
 
 日付のフォーマット
 ------------------
@@ -354,8 +367,8 @@ JSON解析エラー
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 参考情報
 ========
