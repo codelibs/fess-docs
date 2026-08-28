@@ -210,7 +210,7 @@ Core
     - The maximum number of crawler processes.
     - 0
   * - job.default.script
-    - The default script for jobs.
+    - The default script type for newly created scheduled jobs.
     - javascript
   * - job.system.property.filter.pattern
     - The pattern for system property filters.

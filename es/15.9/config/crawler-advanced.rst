@@ -24,6 +24,11 @@ La configuración avanzada del rastreador se realiza en los siguientes archivos:
 - **Configuración de longitud de contenido**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Configuración de componentes**: ``app/WEB-INF/classes/crawler/container.xml``
 
+Script Predeterminado
+---------------------
+
+La propiedad ``crawler.default.script`` se eliminó en |Fess| 15.9, y cada regla de impulso de documento ahora selecciona su propio tipo de script en la pantalla :doc:`../admin/boostdoc-guide`.
+
 Pool de Hilos HTTP
 ------------------
 
