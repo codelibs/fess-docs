@@ -27,22 +27,7 @@ La configuración avanzada del rastreador se realiza en los siguientes archivos:
 Script Predeterminado
 ---------------------
 
-Configura el lenguaje de script predeterminado del rastreador.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Propiedad
-     - Descripción
-     - Valor Predeterminado
-   * - ``crawler.default.script``
-     - Lenguaje de script del rastreador
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+Esta propiedad se eliminó en |Fess| 15.9, y cada regla de impulso de documento ahora selecciona su propio tipo de script en la pantalla :doc:`../admin/boostdoc-guide`.
 
 Pool de Hilos HTTP
 ------------------

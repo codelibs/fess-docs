@@ -27,22 +27,7 @@
 デフォルトスクリプト
 --------------------
 
-クローラーのデフォルトスクリプト言語を設定します。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - プロパティ
-     - 説明
-     - デフォルト
-   * - ``crawler.default.script``
-     - クローラースクリプトの言語
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+|Fess| 15.9 でこのプロパティは廃止されたため、ドキュメントブーストの各ルールは :doc:`../admin/boostdoc-guide` 画面でスクリプトの種類を個別に選択します。
 
 HTTPスレッドプール
 ------------------

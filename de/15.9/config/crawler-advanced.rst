@@ -27,22 +27,7 @@ Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 Standard-Skriptsprache
 ----------------------
 
-Legt die Standard-Skriptsprache für den Crawler fest.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Eigenschaft
-     - Beschreibung
-     - Standard
-   * - ``crawler.default.script``
-     - Crawler-Skriptsprache
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
+Diese Eigenschaft wurde in |Fess| 15.9 entfernt, und jede Dokument-Boosting-Regel wählt ihren Skripttyp jetzt einzeln auf der Seite :doc:`../admin/boostdoc-guide` aus.
 
 HTTP-Thread-Pool
 ------------------
