@@ -52,10 +52,13 @@ For example, "0 12 \* \* 3" executes the job every Wednesday at 12:00 PM.
 Executor
 ::::::::
 
-Specifies the script execution environment.
-The standard value is "javascript", which is also the default.
-"groovy" becomes selectable once the ``fess-script-groovy`` plugin is installed; Groovy is no
-longer built in.
+Specifies the script execution environment. You can select ``javascript`` (the
+default for new jobs, determined by the ``job.default.script`` property) or
+``groovy`` (requires the ``fess-script-groovy`` plugin).
+
+Before 15.9, the job always ran using the product's default scripting language,
+regardless of the value stored here. From 15.9 onward this value is actually used,
+so each job can run in a different scripting language.
 
 Script
 ::::::

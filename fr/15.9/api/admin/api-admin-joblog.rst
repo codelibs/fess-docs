@@ -83,7 +83,7 @@ Réponse
             "jobName": "Default Crawler",
             "jobStatus": "ok",
             "target": "all",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
             "startTime": "1738116000000",
@@ -94,7 +94,7 @@ Réponse
             "jobName": "Default Crawler",
             "jobStatus": "fail",
             "target": "all",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
             "startTime": "1738029600000",
@@ -123,7 +123,7 @@ Champs de la réponse
    * - ``target``
      - Cible d'exécution (nom de la cible du planificateur ; valeur par défaut : ``all``)
    * - ``scriptType``
-     - Type de script (ex. : ``groovy``)
+     - Type de script (ex. : ``javascript``)
    * - ``scriptData``
      - Script exécuté
    * - ``scriptResult``
@@ -162,7 +162,7 @@ Réponse
           "jobName": "Default Crawler",
           "jobStatus": "ok",
           "target": "all",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
           "startTime": "1738116000000",

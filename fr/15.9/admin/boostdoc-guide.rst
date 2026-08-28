@@ -35,13 +35,20 @@ Condition
 
 Spécifie la condition des documents que vous souhaitez positionner en haut.
 Par exemple, pour afficher en haut les URL contenant https://www.n2sm.net/, décrivez url.matches("https://www.n2sm.net/.\*").
-Les conditions peuvent être écrites en Groovy.
+Les conditions sont écrites dans la syntaxe du moteur de script spécifié dans « Type de Script » ci-dessous.
 
 Expression de boost
 :::::::::::::::::::
 
 Spécifie la valeur de pondération du document.
-L'expression peut être écrite en Groovy.
+L'expression est écrite dans la syntaxe du moteur de script spécifié dans « Type de Script » ci-dessous.
+
+Type de Script
+::::::::::::::
+
+Spécifie le moteur de script utilisé pour évaluer la condition et l'expression de boost.
+Les nouvelles configurations sont préremplies avec ``javascript``. Sélectionner ``groovy`` nécessite
+le plugin ``fess-script-groovy``. Si le champ est laissé vide, les expressions sont évaluées en tant que Groovy.
 
 Ordre de tri
 ::::::::::::

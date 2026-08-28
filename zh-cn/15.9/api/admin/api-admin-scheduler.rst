@@ -92,7 +92,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
             "name": "Default Crawler",
             "target": "all",
             "cronExpression": "0 0 0 * * ?",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "...",
             "jobLogging": "true",
             "crawler": "true",
@@ -137,7 +137,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
           "name": "Default Crawler",
           "target": "all",
           "cronExpression": "0 0 0 * * ?",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "jobLogging": "true",
           "crawler": "true",
@@ -169,7 +169,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
       "name": "Daily Crawler",
       "target": "all",
       "cronExpression": "0 0 2 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
       "jobLogging": "true",
       "crawler": "true",
@@ -198,7 +198,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
      - Cron表达式（秒 分 时 日 月 星期）。最大100字符，将作为Cron表达式进行验证。若为空，则不进行定时执行，只能手动启动
    * - ``scriptType``
      - 是
-     - 脚本类型（最大100字符）。目前仅支持 ``groovy``
+     - 脚本类型（最大100字符）。可指定 ``javascript`` （新建作业的默认值，由 ``job.default.script`` 属性决定）或 ``groovy`` （需要 ``fess-script-groovy`` 插件）
    * - ``scriptData``
      - 否
      - 执行脚本。最大大小遵循 ``fess_config.properties`` 中的 ``form.admin.max.input.size``
@@ -275,7 +275,7 @@ Cron表达式示例
       "name": "Updated Crawler",
       "target": "all",
       "cronExpression": "0 0 3 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "...",
       "jobLogging": "true",
       "crawler": "true",
@@ -406,7 +406,7 @@ Cron表达式示例
            "name": "Hourly Crawler",
            "target": "all",
            "cronExpression": "0 0 * * * ?",
-           "scriptType": "groovy",
+           "scriptType": "javascript",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",

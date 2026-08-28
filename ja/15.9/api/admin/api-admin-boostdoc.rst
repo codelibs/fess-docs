@@ -10,13 +10,18 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 検索結果の上位に表示されやすくできます。
 
 ブーストはインデックス作成時（クロール時）に各ドキュメントへ適用されます。
-条件（``urlExpr``）とブースト値（``boostExpr``）はいずれもGroovyの式として評価されます。
+条件（``urlExpr``）とブースト値（``boostExpr``）は、``scriptType`` フィールドで指定したスクリプトエンジンの式として評価されます。
+``scriptType`` に指定できるのは ``javascript`` と ``groovy``\ （``fess-script-groovy`` プラグインが必要）です。管理画面の新規作成画面では
+``scriptType`` に ``javascript`` があらかじめ入力されますが、このAPIのリクエストボディで ``scriptType`` を省略した場合は
+自動補完されず、Groovyとして評価されます。
 複数のルールは ``sortOrder`` の昇順で評価され、最初に条件が一致したルールのブースト値のみが適用されます
 （一致したルールが見つかると、それ以降のルールは評価されません）。
 
 .. note::
 
-   管理画面では、``urlExpr`` は「条件」、``boostExpr`` は「ブースト値式」として表示されます。
+   管理画面では、``urlExpr`` は「条件」、``boostExpr`` は「ブースト値式」、``scriptType`` は「スクリプト種別」として表示されます。
+   ``scriptType`` は作成・更新・取得（一覧・詳細）のリクエストボディおよびレスポンスにのみ含まれ、
+   一覧取得のフィルタパラメーター（``urlExpr``、``boostExpr``）には含まれません。
    設定項目の詳細は :doc:`../../admin/boostdoc-guide` を参照してください。
 
 ベースURL
@@ -109,6 +114,7 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
             "id": "boostdoc_id_1",
             "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
             "boostExpr": "3.0",
+            "scriptType": "javascript",
             "sortOrder": 1,
             "versionNo": 1
           }
@@ -145,6 +151,7 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
           "id": "boostdoc_id_1",
           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
           "boostExpr": "3.0",
+          "scriptType": "javascript",
           "sortOrder": 1,
           "versionNo": 1
         }
@@ -170,6 +177,7 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
     {
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "5.0",
+      "scriptType": "javascript",
       "sortOrder": 0
     }
 
@@ -185,10 +193,13 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
      - 説明
    * - ``urlExpr``
      - はい
-     - 条件式。ブースト対象のドキュメントを判定するGroovy式で、``Boolean`` を返します。管理画面の「条件」に相当します（最大10000文字）。
+     - 条件式。ブースト対象のドキュメントを判定するスクリプト式で、``Boolean`` を返します。管理画面の「条件」に相当します（最大10000文字）。
    * - ``boostExpr``
      - はい
-     - ブースト値式。ブースト値（数値）を返すGroovy式です。\ ``3.0`` のような固定値も指定できます。管理画面の「ブースト値式」に相当します（最大10000文字）。
+     - ブースト値式。ブースト値（数値）を返すスクリプト式です。\ ``3.0`` のような固定値も指定できます。管理画面の「ブースト値式」に相当します（最大10000文字）。
+   * - ``scriptType``
+     - いいえ
+     - ``urlExpr`` と ``boostExpr`` を評価するスクリプトエンジン。\ ``javascript`` または ``groovy``\ （``fess-script-groovy`` プラグインが必要）を指定します。管理画面の「スクリプト種別」に相当します（最大100文字）。省略した場合はGroovyとして評価されます。
    * - ``sortOrder``
      - はい
      - 適用順序。ルールは昇順で評価され、最初に条件が一致したルールのブースト値が適用されます（フォーム初期値: 0、0以上の整数）。
@@ -226,6 +237,7 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
       "id": "existing_boostdoc_id",
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "10.0",
+      "scriptType": "javascript",
       "sortOrder": 0,
       "versionNo": 1
     }
@@ -270,10 +282,10 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 条件式・ブースト値式について
 ============================
 
-``urlExpr``\ （条件）と ``boostExpr``\ （ブースト値式）は、いずれもGroovyの式として評価されます。
+``urlExpr``\ （条件）と ``boostExpr``\ （ブースト値式）は、``scriptType``\ （既定: Groovy。管理画面の新規作成画面のみ ``javascript`` を事前入力）で指定したスクリプトエンジンの式として評価されます。
 式の中では、インデックス対象ドキュメントのフィールド値をフィールド名の変数として参照できます。
 
-- ``urlExpr`` は ``Boolean`` を返す必要があります（例: ``url.startsWith("https://docs.example.com/")``）。単なる正規表現文字列（例: ``.*docs\.example\.com.*``）はGroovy式として ``Boolean`` を返さないため、条件として機能しません。正規表現を使う場合はGroovyの ``String#matches`` を利用します。
+- ``urlExpr`` は ``Boolean`` を返す必要があります（例: ``url.startsWith("https://docs.example.com/")``）。単なる正規表現文字列（例: ``.*docs\.example\.com.*``）はスクリプト式として ``Boolean`` を返さないため、条件として機能しません。正規表現を使う場合は ``String#matches`` を利用します（GroovyとJavaScriptのいずれでも同じ記法で使用できます）。
 - ``boostExpr`` は数値を返す必要があります。結果は ``float`` に変換され、0より大きい場合にのみブーストが適用されます。
 
 .. note::
@@ -281,7 +293,7 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
    式の中で参照できる主なフィールド変数: ``url``、``title``、``content``、``content_length``、``last_modified`` など。
    ``click_count`` と ``favorite_count`` は、それぞれ ``indexer.click.count.enabled`` /
    ``indexer.favorite.count.enabled``\ （いずれもデフォルトで有効）の場合に参照できます。
-   ``now - 7d`` のようなOpenSearchの日付計算構文はGroovyでは使用できません。
+   ``now - 7d`` のようなOpenSearchの日付計算構文は、GroovyでもJavaScriptでも使用できません。
 
 条件式（``urlExpr``）の例
 -------------------------
@@ -295,7 +307,7 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
    * - ``url.startsWith("https://docs.example.com/")``
      - 指定したURLで始まるドキュメントを対象にする
    * - ``url.matches("https://www\\.example\\.com/.*")``
-     - 正規表現（Groovyの ``String#matches``）でURLを判定する
+     - 正規表現（``String#matches``）でURLを判定する
    * - ``title.contains("リリースノート")``
      - タイトルに特定の語を含むドキュメントを対象にする
 

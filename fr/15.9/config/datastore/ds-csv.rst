@@ -203,7 +203,7 @@ Champs disponibles
 
 .. note::
 
-   Si un nom de colonne contient des caractères non valides comme identifiant Groovy (espaces,
+   Si un nom de colonne contient des caractères non valides comme identifiant de script (espaces,
    tirets, etc.), la référence par nom de colonne n'est pas possible. Dans ce cas, utilisez
    ``cell<N>``.
 

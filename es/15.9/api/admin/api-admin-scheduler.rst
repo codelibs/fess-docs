@@ -92,7 +92,7 @@ Respuesta
             "name": "Default Crawler",
             "target": "all",
             "cronExpression": "0 0 0 * * ?",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "...",
             "jobLogging": "true",
             "crawler": "true",
@@ -137,7 +137,7 @@ Respuesta
           "name": "Default Crawler",
           "target": "all",
           "cronExpression": "0 0 0 * * ?",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "jobLogging": "true",
           "crawler": "true",
@@ -169,7 +169,7 @@ Cuerpo de la Solicitud
       "name": "Daily Crawler",
       "target": "all",
       "cronExpression": "0 0 2 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "return container.getComponent(\"crawlJob\").execute();",
       "jobLogging": "true",
       "crawler": "true",
@@ -198,7 +198,7 @@ Descripción de Campos
      - Expresión Cron (segundo minuto hora día mes día-semana). Max. 100 caracteres, validada como expresión cron. Si está vacía, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
    * - ``scriptType``
      - Sí
-     - Tipo de script (max. 100 caracteres). Actualmente solo se admite ``groovy``
+     - Tipo de script (max. 100 caracteres). ``javascript`` (valor predeterminado para trabajos nuevos, determinado por la propiedad ``job.default.script``) o ``groovy`` (requiere el plugin ``fess-script-groovy``)
    * - ``scriptData``
      - No
      - Script de ejecución. El tamaño máximo sigue ``form.admin.max.input.size`` en ``fess_config.properties``
@@ -275,7 +275,7 @@ Cuerpo de la Solicitud
       "name": "Updated Crawler",
       "target": "all",
       "cronExpression": "0 0 3 * * ?",
-      "scriptType": "groovy",
+      "scriptType": "javascript",
       "scriptData": "...",
       "jobLogging": "true",
       "crawler": "true",
@@ -406,7 +406,7 @@ Crear y Ejecutar Trabajo de Rastreo
            "name": "Hourly Crawler",
            "target": "all",
            "cronExpression": "0 0 * * * ?",
-           "scriptType": "groovy",
+           "scriptType": "javascript",
            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
            "jobLogging": "true",
            "crawler": "true",

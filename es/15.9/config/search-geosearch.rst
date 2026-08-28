@@ -82,7 +82,7 @@ En el script de configuración del almacén de datos, mapee el valor obtenido al
 Adición de Información de Ubicación mediante Script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-También puede agregar dinámicamente información de ubicación a documentos utilizando la funcionalidad de script (Groovy) en la configuración de rastreo.
+También puede agregar dinámicamente información de ubicación a documentos utilizando la funcionalidad de script en la configuración de rastreo (JavaScript de forma predeterminada; también se puede seleccionar Groovy).
 Asigne el valor directamente al nombre del campo.
 
 ::
@@ -90,7 +90,7 @@ Asigne el valor directamente al nombre del campo.
     // Configurar latitud y longitud en el campo location
     location="35.681236,139.767125"
 
-Para más detalles sobre los scripts, consulte :doc:`scripting-groovy`.
+Para más detalles sobre los scripts, consulte :doc:`scripting-overview`.
 
 Configuración Durante la Búsqueda
 ----------------------------------
