@@ -11,6 +11,8 @@ para las expresiones de sus XML de DI), y los scripts se ejecutan como ECMAScrip
 Su identificador es ``javascript``, y también puede indicarse mediante los alias
 ``js`` y ``sai``.
 
+.. _javascript-statement-null:
+
 Cómo se evalúan los scripts
 ============================
 
@@ -41,8 +43,48 @@ donde se evalúa el script completo, como en los trabajos programados, puede usa
 libremente sentencias de varias líneas, declaraciones de variables ``let`` / ``const`` y
 estructuras de control.
 
+.. warning::
+
+   Un script que se compila como bloque de sentencias solo devuelve un valor si contiene un
+   ``return`` explícito. Cuando el texto no se puede analizar como expresión, se envuelve en
+   una función y se ejecuta como un bloque de sentencias, y un bloque sin ``return`` se evalúa
+   como ``null``. Basta con un punto y coma final para cruzar esa línea:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - Script
+        - Resultado
+        - Motivo
+      * - ``content.length()``
+        - ``11``
+        - Se analiza como expresión; el valor de la expresión es el resultado
+      * - ``content.length();``
+        - ``null``
+        - Solo se analiza como bloque de sentencias, que no contiene ``return``
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - Solo se analiza como bloque de sentencias, que no contiene ``return``
+
+   En Groovy los tres devolvían un valor, porque allí el valor de la última sentencia evaluada
+   es el valor de retorno del script. JavaScript no tiene esa regla.
+
+   Esta es la única diferencia de la migración que no produce ningún error, ninguna línea de
+   registro ni ningún síntoma más allá de un campo que se queda vacío en silencio: un mapeo de
+   data store cuyo script devuelve ``null`` simplemente no establece ese campo. Escriba cada
+   línea ``campo=expresion`` de un data store como una expresión pura sin punto y coma final, y
+   dé a todo script de trabajo programado un ``return`` explícito.
+
 Sintaxis básica
 ===============
+
+Una línea sin punto y coma final es a continuación una **expresión** y puede usarse en
+cualquier sitio, incluida una línea ``campo=expresion`` de un data store. Las declaraciones
+( ``let`` / ``const`` ), los bloques ``if`` y los bucles son **sentencias**: solo pueden
+usarse allí donde se evalúa el script completo, como en un trabajo programado, y el script
+debe contener un ``return`` explícito para producir un valor. Consulte "Cómo se evalúan los
+scripts" más arriba.
 
 Declaración de variables
 --------------------------
@@ -73,16 +115,16 @@ Operaciones de cadenas
     `;
 
     // Reemplazo (con expresion regular; ECMAScript 6 no tiene String#replaceAll)
-    title.replace(/old/g, "new");
-    title.replace(/\s+/g, " ");  // Colapsar espacios consecutivos en uno
+    title.replace(/old/g, "new")
+    title.replace(/\s+/g, " ")  // Colapsar espacios consecutivos en uno
 
     // Division y union
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // Conversion de mayusculas/minusculas
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 Operaciones de colecciones
 -----------------------------
@@ -97,8 +139,8 @@ Operaciones de colecciones
 
     // Objetos
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 Estructuras condicionales
 -------------------------
@@ -113,14 +155,14 @@ Estructuras condicionales
     }
 
     // Operador ternario
-    const result = data.count > 0 ? "Hay" : "No hay";
+    data.count > 0 ? "Hay" : "No hay"
 
     // Valor por defecto (operador OR logico; JavaScript no tiene operador Elvis)
-    const value = data.title || "Sin titulo";
+    data.title || "Sin titulo"
 
     // El encadenamiento opcional (?.) es sintaxis de ES2020 y no esta disponible en ES6.
     // Compruebe null explicitamente en su lugar.
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 Bucles
 ------
@@ -153,6 +195,7 @@ Ejemplos de scripts en configuración de data store.
    Por lo tanto, no se pueden usar declaraciones de variables como ``let`` / ``const`` ni estructuras de control multilínea que establezcan varios campos a la vez (como bloques ``if``).
    Al usar clases Java, escríbalas como una única expresión con el nombre de clase completamente calificado (FQCN), y use el operador ternario por campo para los valores condicionales (por ejemplo, ``url=data.published ? data.url : null`` ).
    Además, el nombre de variable ``data`` usado aquí es solo un ejemplo; el nombre de variable real depende del conector de data store utilizado. Consulte :doc:`../admin/dataconfig-guide` para más detalles.
+   Escriba la expresión sin punto y coma final: una línea que solo puede analizarse como bloque de sentencias se evalúa como ``null`` y el campo se queda sin establecer; consulte :ref:`javascript-statement-null`.
 
 Mapeo básico
 ------------

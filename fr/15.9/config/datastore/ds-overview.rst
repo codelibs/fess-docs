@@ -217,8 +217,13 @@ Paramètres communs à tous les connecteurs DataStore :
      - ``0``
      - Délai d'attente entre le traitement de chaque enregistrement (en millisecondes). Utilisez ce paramètre pour réduire la charge du serveur lors du traitement de grandes quantités de données.
    * - ``script_type``
-     - ``groovy``
-     - Type de moteur de script utilisé pour le mappage des champs d'index. Par défaut, seul ``groovy`` est disponible.
+     - ``javascript``
+     - Type de moteur de script utilisé pour le mappage des champs d'index. JavaScript est le
+       moteur de script intégré à |Fess|, et l'écran de création d'une nouvelle configuration de
+       DataStore est prérempli avec ``script_type=javascript``. ``groovy`` reste disponible via
+       le plugin ``fess-script-groovy``. Une configuration sans ``script_type`` enregistré est
+       traitée comme du Groovy, si bien qu'une configuration créée avant la 15.9 continue de
+       fonctionner sans changement. Voir :doc:`../scripting-overview` pour plus de détails.
 
 Dépannage
 =========

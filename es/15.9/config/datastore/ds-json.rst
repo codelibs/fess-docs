@@ -157,7 +157,7 @@ Procesamiento de elementos de array:
     url="https://example.com/article/" + id
     title=title
     content=body
-    tags=tags.join(", ")
+    tags=java.lang.String.join(", ", tags)
     categories=categories[0].name
 
 Campos disponibles
@@ -166,7 +166,9 @@ Campos disponibles
 - ``<nombre_campo>`` - Referencia directa a un campo del nivel superior del objeto JSON por nombre
 - ``<padre>.<hijo>`` - Campo de un objeto anidado
 - ``<array>[<índice>]`` - Elemento de array
-- ``<array>.<método>`` - Métodos de array (``join``, ``collect``, ``size``, etc.)
+- ``<array>.<método>`` - Métodos de la ``java.util.List`` recibida, como ``size()`` .
+  Los métodos de array de JavaScript como ``join()`` y ``map()`` **no** están
+  disponibles sobre ella (consulte "Unión de arrays")
 
 .. note::
 
@@ -322,8 +324,19 @@ Unión de arrays
     url="https://example.com/article/" + id
     title=title
     content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.map(c => c.name).join(", ")
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   Un array JSON se pasa al script como ``java.util.List`` y un objeto JSON anidado como
+   ``java.util.Map`` , no como un array ni un objeto de JavaScript. Por tanto los métodos de
+   array de JavaScript no existen sobre ellos: ``tags.join(", ")`` falla con
+   ``TypeError: tags.join is not a function`` y el campo se descarta. Utilice
+   ``java.lang.String.join()`` para unir una lista de cadenas, o convierta la lista en un array
+   de JavaScript con ``Java.from()`` cuando necesite ``map()`` y los demás métodos de array.
+   El acceso por índice ( ``categories[0]`` ) y el acceso a propiedades de un objeto anidado
+   ( ``.name`` ) los proporciona la interoperabilidad con Java y funcionan tal cual.
 
 Configuración de valores predeterminados
 -----------------------------------------

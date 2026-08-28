@@ -205,7 +205,7 @@ Core
     - Data Crawler - {0}
   * - job.template.script
     - The script template for jobs.
-    - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}] as String[]).fileConfigIds([{1}] as String[]).dataConfigIds([{2}] as String[]).jobExecutor(executor).execute();``
+    - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}]).fileConfigIds([{1}]).dataConfigIds([{2}]).jobExecutor(executor).execute();``
   * - job.max.crawler.processes
     - The maximum number of crawler processes.
     - 0

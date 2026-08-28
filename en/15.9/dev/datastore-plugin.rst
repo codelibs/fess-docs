@@ -524,7 +524,9 @@ Scripts
 
 In the "Scripts" field, describe the mapping in the form
 ``left-hand side=right-hand side``. The left-hand side is the index field
-name, and the right-hand side is a script (Groovy by default) that
+name, and the right-hand side is a script (JavaScript for a newly created
+configuration; a configuration that records no script type is treated as
+Groovy) that
 references a field of the source record. The following is an example where
 the source record has the ``url`` / ``title`` / ``content`` /
 ``updated_at`` / ``content_type`` fields.

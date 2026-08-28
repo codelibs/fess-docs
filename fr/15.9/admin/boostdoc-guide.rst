@@ -50,6 +50,13 @@ Spécifie le moteur de script utilisé pour évaluer la condition et l'expressio
 Les nouvelles configurations sont préremplies avec ``javascript``. Sélectionner ``groovy`` nécessite
 le plugin ``fess-script-groovy``. Si le champ est laissé vide, les expressions sont évaluées en tant que Groovy.
 
+.. warning::
+
+   Avec JavaScript, écrivez la condition et l'expression de boost comme des expressions pures
+   sans point-virgule final. Un texte qui ne peut être analysé qu'en tant que bloc
+   d'instructions est évalué à ``null`` sauf s'il contient un ``return`` explicite. Voir
+   :ref:`javascript-statement-null` (dans :doc:`../config/scripting-javascript`).
+
 Ordre de tri
 ::::::::::::
 

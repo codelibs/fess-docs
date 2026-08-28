@@ -50,6 +50,13 @@
 新規作成時は ``javascript`` があらかじめ入力されています。 ``groovy`` を指定する場合は
 ``fess-script-groovy`` プラグインが必要です。未入力の場合はGroovyとして評価されます。
 
+.. warning::
+
+   JavaScriptでは、条件およびブースト値式を末尾のセミコロンを付けない式として記述してください。
+   文のブロックとしてしか解析できない文字列は、明示的な ``return`` を含まない限り ``null`` と
+   評価されます。 :ref:`javascript-statement-null` （ :doc:`../config/scripting-javascript` ）
+   を参照してください。
+
 ソート順
 ::::::
 

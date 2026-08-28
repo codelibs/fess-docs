@@ -10,6 +10,8 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
 動作し、スクリプトは ECMAScript 6 として実行されます。識別子は ``javascript`` で、
 ``js`` および ``sai`` というエイリアスでも指定できます。
 
+.. _javascript-statement-null:
+
 スクリプトの評価方法
 ====================
 
@@ -37,8 +39,46 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
 スクリプトは使用できません。一方、スケジュールジョブのようにスクリプト全体が評価される
 場面では、複数行の文や ``let`` / ``const`` の変数宣言、制御構文を自由に使用できます。
 
+.. warning::
+
+   文ブロックとしてコンパイルされたスクリプトが値を返すのは、明示的な ``return`` を含む場合
+   だけです。スクリプト文字列が式として解析できなかった場合、その文字列は関数で包まれて文の
+   ブロックとして実行されますが、 ``return`` のないブロックの評価結果は ``null`` になります。
+   末尾にセミコロンを1つ付けるだけで、この境界を越えます。
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - スクリプト
+        - 結果
+        - 理由
+      * - ``content.length()``
+        - ``11``
+        - 式として解析され、式の値がそのまま結果になります
+      * - ``content.length();``
+        - ``null``
+        - 文ブロックとしてしか解析されず、 ``return`` がありません
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - 文ブロックとしてしか解析されず、 ``return`` がありません
+
+   Groovyでは、最後に評価された文の値がスクリプトの戻り値になるため、上記3つはいずれも値を
+   返していました。JavaScriptにはこの規則はありません。
+
+   これは、移行における唯一の「エラーもログも出ず、フィールドが黙って空になること以外に症状が
+   出ない」差異です。スクリプトが ``null`` を返したデータストアのマッピングは、そのフィールドを
+   単に設定しません。データストアの ``フィールド名=式`` の各行は末尾のセミコロンを付けずに式
+   として記述し、スケジュールジョブのスクリプトには必ず明示的な ``return`` を記述してください。
+
 基本構文
 ========
+
+以下で末尾にセミコロンが付いていない行は **式** であり、データストアの ``フィールド名=式``
+の行を含め、どこでも使用できます。 ``let`` / ``const`` による宣言、 ``if`` ブロック、
+ループは **文** であり、スケジュールジョブのようにスクリプト全体が評価される場面でのみ
+使用できます。その場合も値を返すには明示的な ``return`` が必要です。
+上記「スクリプトの評価方法」を参照してください。
 
 変数宣言
 --------
@@ -69,16 +109,16 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
     `;
 
     // 置換（正規表現を使用。ECMAScript 6には String#replaceAll はありません）
-    title.replace(/old/g, "new");
-    title.replace(/\s+/g, " ");  // 連続する空白を1つにまとめる
+    title.replace(/old/g, "new")
+    title.replace(/\s+/g, " ")  // 連続する空白を1つにまとめる
 
     // 分割・結合
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // 大文字/小文字変換
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 コレクション操作
 ----------------
@@ -93,8 +133,8 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
 
     // オブジェクト
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 条件分岐
 --------
@@ -109,14 +149,14 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
     }
 
     // 三項演算子
-    const result = data.count > 0 ? "あり" : "なし";
+    data.count > 0 ? "あり" : "なし"
 
     // デフォルト値（論理OR演算子。JavaScriptにElvis演算子はありません）
-    const value = data.title || "無題";
+    data.title || "無題"
 
     // オプショナルチェイニング（?.）はES2020の構文のためES6では使用できません。
     // 明示的にnullチェックしてください。
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 ループ処理
 ----------
@@ -148,6 +188,7 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
    そのため、 ``let`` / ``const`` による変数宣言文や、複数フィールドをまとめて設定する複数行の制御構文（ ``if`` ブロックなど）は使用できません。
    Javaクラスを利用する場合は完全修飾クラス名（FQCN）を用いて1つの式で記述し、条件分岐はフィールドごとに三項演算子で記述します（例: ``url=data.published ? data.url : null`` ）。
    また、ここで使用している変数名 ``data`` は説明用の例であり、実際の変数名は利用するデータストアコネクタによって異なります。詳細は :doc:`../admin/dataconfig-guide` を参照してください。
+   式は末尾のセミコロンを付けずに記述してください。文ブロックとしてしか解析できない行の評価結果は ``null`` になり、そのフィールドは設定されません。 :ref:`javascript-statement-null` を参照してください。
 
 基本的なマッピング
 ------------------

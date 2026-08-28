@@ -11,6 +11,8 @@ pour les expressions de ses XML de DI), et les scripts sont exécutés en tant q
 6. Son identifiant est ``javascript`` ; il peut également être indiqué via les alias
 ``js`` et ``sai``.
 
+.. _javascript-statement-null:
+
 Comment les scripts sont évalués
 ================================
 
@@ -41,8 +43,49 @@ Aux endroits où l'ensemble du script est évalué, comme dans les tâches plani
 pouvez librement utiliser des instructions multi-lignes, des déclarations de variables
 ``let`` / ``const`` et des structures de contrôle.
 
+.. warning::
+
+   Un script compilé en tant que bloc d'instructions ne renvoie une valeur que s'il contient un
+   ``return`` explicite. Lorsque le texte ne peut pas être analysé en tant qu'expression, il est
+   enveloppé dans une fonction et exécuté comme un bloc d'instructions, et un bloc sans
+   ``return`` est évalué à ``null``. Un simple point-virgule final suffit à franchir cette
+   limite :
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - Script
+        - Résultat
+        - Raison
+      * - ``content.length()``
+        - ``11``
+        - Analysé en tant qu'expression ; la valeur de l'expression est le résultat
+      * - ``content.length();``
+        - ``null``
+        - Analysé uniquement en tant que bloc d'instructions, sans ``return``
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - Analysé uniquement en tant que bloc d'instructions, sans ``return``
+
+   En Groovy, les trois renvoyaient une valeur, car la valeur de la dernière instruction évaluée
+   y est la valeur de retour du script. JavaScript n'a pas cette règle.
+
+   C'est la seule différence de la migration qui ne produit ni erreur, ni ligne de journal, ni
+   symptôme autre qu'un champ qui se vide silencieusement : un mapping de data store dont le
+   script renvoie ``null`` ne définit tout simplement pas ce champ. Écrivez chaque ligne
+   ``champ=expression`` d'un data store comme une expression pure sans point-virgule final, et
+   donnez à chaque script de tâche planifiée un ``return`` explicite.
+
 Syntaxe de base
 ===============
+
+Une ligne sans point-virgule final est ci-dessous une **expression** et peut être utilisée
+partout, y compris dans une ligne ``champ=expression`` d'un data store. Les déclarations
+( ``let`` / ``const`` ), les blocs ``if`` et les boucles sont des **instructions** : elles ne
+peuvent être utilisées que là où l'ensemble du script est évalué, comme dans une tâche
+planifiée, et le script doit contenir un ``return`` explicite pour produire une valeur. Voir
+« Comment les scripts sont évalués » ci-dessus.
 
 Déclaration de variables
 ------------------------
@@ -73,16 +116,16 @@ Manipulation de chaînes
     `;
 
     // Remplacement (avec une expression régulière ; ECMAScript 6 ne possède pas String#replaceAll)
-    title.replace(/old/g, "new");
-    title.replace(/\s+/g, " ");  // Regrouper les espaces consécutifs en un seul
+    title.replace(/old/g, "new")
+    title.replace(/\s+/g, " ")  // Regrouper les espaces consécutifs en un seul
 
     // Division et jointure
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // Conversion majuscules/minuscules
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 Opérations sur les collections
 ------------------------------
@@ -97,8 +140,8 @@ Opérations sur les collections
 
     // Objets
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 Conditions
 ----------
@@ -113,14 +156,14 @@ Conditions
     }
 
     // Opérateur ternaire
-    const result = data.count > 0 ? "Present" : "Absent";
+    data.count > 0 ? "Present" : "Absent"
 
     // Valeur par défaut (opérateur OR logique ; JavaScript n'a pas d'opérateur Elvis)
-    const value = data.title || "Sans titre";
+    data.title || "Sans titre"
 
     // Le chaînage optionnel (?.) est une syntaxe ES2020, indisponible en ES6.
     // Vérifiez explicitement la valeur null à la place.
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 Boucles
 -------
@@ -153,6 +196,7 @@ Exemples de scripts pour la configuration Data Store.
    Par conséquent, les déclarations de variables telles que ``let`` / ``const`` et les structures de contrôle multi-lignes qui définissent plusieurs champs à la fois (comme les blocs ``if``) ne peuvent pas être utilisées.
    Lorsque vous utilisez des classes Java, écrivez-les en tant qu'expression unique avec le nom de classe complet (FQCN), et utilisez un opérateur ternaire par champ pour les valeurs conditionnelles (par exemple, ``url=data.published ? data.url : null`` ).
    Par ailleurs, le nom de variable ``data`` utilisé ici n'est qu'un exemple ; le nom de variable réel dépend du connecteur de data store utilisé. Consultez :doc:`../admin/dataconfig-guide` pour plus de détails.
+   Écrivez l'expression sans point-virgule final : une ligne qui ne peut être analysée qu'en tant que bloc d'instructions est évaluée à ``null`` et le champ reste non défini — voir :ref:`javascript-statement-null`.
 
 Mapping de base
 ----------------

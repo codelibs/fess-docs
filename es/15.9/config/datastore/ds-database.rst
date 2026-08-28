@@ -156,7 +156,9 @@ Lista de Parametros
      - Retardo en milisegundos entre el procesamiento de cada fila. Predeterminado: 0
    * - ``script_type``
      - No
-     - Tipo de motor de scripts. Predeterminado: groovy
+     - Tipo de motor de scripts. Una configuración nueva viene rellenada con ``javascript``; una
+       configuración que no tiene registrado ningún valor se trata como ``groovy``. Consulte
+       :doc:`ds-overview` para más detalles.
 
 Configuracion de Script
 ------------------------

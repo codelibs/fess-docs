@@ -10,6 +10,8 @@ JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
 解析）之上，脚本以 ECMAScript 6 执行。其标识符为 ``javascript`` ，也可使用别名
 ``js`` 和 ``sai`` 指定。
 
+.. _javascript-statement-null:
+
 脚本的求值方式
 ==============
 
@@ -36,8 +38,42 @@ JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
 脚本。而在整个脚本被求值的场景（如计划任务）中，则可以自由使用多行语句、
 ``let`` / ``const`` 变量声明以及控制结构。
 
+.. warning::
+
+   作为语句块编译的脚本，只有在包含显式 ``return`` 时才会返回值。当脚本文本无法解析为表达式
+   时，它会被包装进函数并作为语句块执行，而没有 ``return`` 的块其求值结果为 ``null`` 。
+   仅仅在末尾加一个分号就足以越过这条界线：
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - 脚本
+        - 结果
+        - 原因
+      * - ``content.length()``
+        - ``11``
+        - 解析为表达式，表达式的值即为结果
+      * - ``content.length();``
+        - ``null``
+        - 只能解析为语句块，而其中没有 ``return``
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - 只能解析为语句块，而其中没有 ``return``
+
+   在 Groovy 中这三者都会返回值，因为最后求值的语句的值就是脚本的返回值。JavaScript 没有
+   这条规则。
+
+   这是迁移中唯一一处不产生任何错误、任何日志行，除了字段悄然变空之外没有其他症状的差异：
+   脚本返回 ``null`` 的数据存储映射，只是不设置该字段而已。数据存储的 ``字段名=表达式``
+   每一行请写成不带末尾分号的表达式，并为每个计划任务脚本写上显式的 ``return`` 。
+
 基本语法
 ========
+
+下文中末尾不带分号的行是**表达式**，可在任何位置使用，包括数据存储的 ``字段名=表达式`` 行。
+``let`` / ``const`` 声明、 ``if`` 块和循环是**语句**，只能用于整个脚本被求值的场景（如计划
+任务），并且脚本必须包含显式的 ``return`` 才会产生值。请参阅上文"脚本的求值方式"。
 
 变量声明
 --------
@@ -68,16 +104,16 @@ JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
     `;
 
     // 替换（使用正则表达式；ECMAScript 6 没有 String#replaceAll）
-    title.replace(/old/g, "new");
-    title.replace(/\s+/g, " ");  // 将连续空白合并为一个
+    title.replace(/old/g, "new")
+    title.replace(/\s+/g, " ")  // 将连续空白合并为一个
 
     // 分割与连接
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // 大小写转换
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 集合操作
 --------
@@ -92,8 +128,8 @@ JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
 
     // 对象
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 条件分支
 --------
@@ -108,14 +144,14 @@ JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
     }
 
     // 三元运算符
-    const result = data.count > 0 ? "有" : "无";
+    data.count > 0 ? "有" : "无"
 
     // 默认值（逻辑 OR 运算符；JavaScript 没有 Elvis 运算符）
-    const value = data.title || "无标题";
+    data.title || "无标题"
 
     // 可选链（?.）是 ES2020 语法，ES6 中不可用。
     // 请改为显式检查 null。
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 循环处理
 --------
@@ -148,6 +184,7 @@ JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
    因此，不能使用 ``let`` / ``const`` 变量声明语句，也不能使用一次性设置多个字段的多行控制结构（如 ``if`` 块）。
    使用Java类时，请以完全限定类名（FQCN）写成单一表达式，条件分支则在各字段中使用三元运算符（例如： ``url=data.published ? data.url : null`` ）。
    此外，这里使用的变量名 ``data`` 仅为示例，实际变量名取决于所使用的数据存储连接器。详情请参阅 :doc:`../admin/dataconfig-guide` 。
+   表达式请写成不带末尾分号的形式：只能解析为语句块的行其求值结果为 ``null`` ，该字段将不会被设置。请参阅 :ref:`javascript-statement-null` 。
 
 基本映射
 --------

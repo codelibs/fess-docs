@@ -50,6 +50,12 @@
 新建配置时会预填 ``javascript`` 。选择 ``groovy`` 需要 ``fess-script-groovy`` 插件。
 留空时将按 Groovy 求值。
 
+.. warning::
+
+   在 JavaScript 中，请将条件和提升值表达式写成不带末尾分号的纯表达式。只能解析为语句块的
+   文本，除非包含显式的 ``return`` ，否则其求值结果为 ``null`` 。请参阅
+   :ref:`javascript-statement-null` （ :doc:`../config/scripting-javascript` ）。
+
 排序顺序
 ::::::
 

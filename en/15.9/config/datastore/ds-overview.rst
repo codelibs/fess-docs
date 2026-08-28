@@ -214,8 +214,13 @@ The following parameter is inherited from ``AbstractDataStore`` and available in
      - Delay in milliseconds between processing each record. Increase this value to
        reduce load on the external service.
    * - ``script_type``
-     - ``groovy``
-     - Type of script engine used for index field mapping. Only ``groovy`` is available by default.
+     - ``javascript``
+     - Type of script engine used for index field mapping. JavaScript is the script engine built
+       into |Fess|, and the create screen of a new data store configuration prefills
+       ``script_type=javascript``. ``groovy`` remains available through the
+       ``fess-script-groovy`` plugin. A configuration that records no ``script_type`` is treated
+       as Groovy, so a configuration created before 15.9 keeps working unchanged. See
+       :doc:`../scripting-overview` for details.
 
 Troubleshooting
 ===============

@@ -217,8 +217,14 @@ Parámetros comunes disponibles para todos los conectores de almacén de datos:
      - ``0``
      - Tiempo de espera entre el procesamiento de cada registro (milisegundos). Se utiliza para reducir la carga del servidor al procesar grandes cantidades de datos.
    * - ``script_type``
-     - ``groovy``
-     - Tipo de motor de scripts usado para el mapeo de campos del índice. De forma predeterminada solo está disponible ``groovy``.
+     - ``javascript``
+     - Tipo de motor de scripts usado para el mapeo de campos del índice. JavaScript es el motor
+       de scripts integrado en |Fess|, y la pantalla de creación de una nueva configuración de
+       almacén de datos viene rellenada con ``script_type=javascript``. ``groovy`` sigue estando
+       disponible a través del complemento ``fess-script-groovy``. Una configuración que no tiene
+       registrado un ``script_type`` se trata como Groovy, por lo que una configuración creada
+       antes de 15.9 sigue funcionando sin cambios. Consulte :doc:`../scripting-overview` para
+       más detalles.
 
 Solución de Problemas
 =====================

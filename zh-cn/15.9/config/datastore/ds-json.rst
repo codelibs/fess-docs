@@ -157,7 +157,7 @@ JSON对象顶层字段在脚本中可作为 **无前缀的变量** 直接引用
     url="https://example.com/article/" + id
     title=title
     content=body
-    tags=tags.join(", ")
+    tags=java.lang.String.join(", ", tags)
     categories=categories[0].name
 
 可用字段
@@ -166,7 +166,9 @@ JSON对象顶层字段在脚本中可作为 **无前缀的变量** 直接引用
 - ``<字段名>`` - 通过名称直接引用JSON对象的顶层字段
 - ``<父>.<子>`` - 嵌套对象的字段
 - ``<数组>[<索引>]`` - 数组元素
-- ``<数组>.<方法>`` - 数组的方法（``join``、``collect``、``size`` 等）
+- ``<数组>.<方法>`` - 所传入的 ``java.util.List`` 的方法（如 ``size()`` ）。
+  ``join()`` 、 ``map()`` 等 JavaScript 数组方法在其上**不可用**
+  （参见"数组合并"）
 
 .. note::
 
@@ -322,8 +324,18 @@ JSON解析错误
     url="https://example.com/article/" + id
     title=title
     content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.map(c => c.name).join(", ")
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   JSON 数组以 ``java.util.List`` 、嵌套的 JSON 对象以 ``java.util.Map`` 的形式传递给脚本，
+   而不是 JavaScript 的数组或对象。因此其上不存在 JavaScript 的数组方法，
+   ``tags.join(", ")`` 会以 ``TypeError: tags.join is not a function`` 失败，该字段将被丢弃。
+   连接字符串列表时请使用 ``java.lang.String.join()`` ；需要 ``map()`` 等数组方法时，
+   请先用 ``Java.from()`` 转换为 JavaScript 数组。
+   索引访问（ ``categories[0]`` ）和嵌套对象的属性访问（ ``.name`` ）由 Java 互操作提供，
+   可按原样使用。
 
 设置默认值
 ------------------

@@ -66,6 +66,14 @@
 表达式使用上方 ``script_type`` 参数所指定脚本引擎的语法编写
 （默认使用 JavaScript）。
 
+.. warning::
+
+   在 JavaScript 中，请将每一行写成不带末尾分号的纯表达式。只能解析为语句块的行（带末尾分号
+   的内容，或 ``let`` / ``const`` 声明等），除非包含显式的 ``return`` ，否则其求值结果为
+   ``null`` ；而求值为 ``null`` 的映射只是不设置该字段而已。既不会报错也不会输出日志行，
+   除了字段悄然变空之外没有任何症状。请参阅 :ref:`javascript-statement-null`
+   （ :doc:`../config/scripting-javascript` ）。
+
 权重值
 ::::::::
 

@@ -66,6 +66,16 @@ Spécifie dans quel champ définir les valeurs obtenues du magasin de données.
 Les expressions sont écrites dans la syntaxe du moteur de script sélectionné par
 ``script_type`` ci-dessus (JavaScript par défaut).
 
+.. warning::
+
+   Avec JavaScript, écrivez chaque ligne comme une expression pure sans point-virgule final. Une
+   ligne qui ne peut être analysée qu'en tant que bloc d'instructions — tout ce qui se termine
+   par un point-virgule, ou une déclaration ``let`` / ``const`` — est évaluée à ``null`` sauf si
+   elle contient un ``return`` explicite, et un mapping évalué à ``null`` ne définit tout
+   simplement pas ce champ. Il n'y a ni erreur ni ligne de journal ; le seul symptôme est un
+   champ qui se vide silencieusement. Voir :ref:`javascript-statement-null`
+   (dans :doc:`../config/scripting-javascript`).
+
 Valeur de boost
 :::::::::::::::
 
