@@ -5,9 +5,21 @@ Groovy脚本指南
 概述
 ====
 
-Groovy是 |Fess| 的默认脚本语言。
+Groovy是 |Fess| 中可用的脚本语言之一。
 它运行在Java虚拟机（JVM）上，与Java高度兼容，
 同时可以使用更简洁的语法编写脚本。
+
+.. important::
+   自 |Fess| 15.9 起，Groovy 以 ``fess-script-groovy`` 插件形式提供。15.9 中该插件
+   随发行包一同分发，因此无需额外操作即可使用，但 **自 15.10 起将不再随发行包
+   分发**。若要在 15.10 及以后继续使用 Groovy，请从管理界面的「系统 > 插件」页面
+   安装该插件。如需手动安装，请将对应的 JAR 文件（例如 ``fess-script-groovy-15.10.0.jar``）
+   放置到 ``app/WEB-INF/plugin/`` 目录下，安装后重启 |Fess| 。
+
+   自 |Fess| 15.9 起，默认脚本语言为 JavaScript。未记录脚本类型的脚本配置将被视为
+   Groovy，因此 15.9 之前创建的配置在升级后仍会保留其 Groovy 语法脚本并保持原样
+   运行。若在 15.9 及以后新建需要使用 Groovy 的配置，请将脚本类型显式设置为
+   ``groovy`` 。关于 JavaScript，请参阅 :doc:`scripting-javascript` 。
 
 基本语法
 ========
@@ -373,5 +385,6 @@ HTTP通信
 
 - `Groovy官方文档 <https://groovy-lang.org/documentation.html>`__
 - :doc:`scripting-overview` - 脚本概述
+- :doc:`scripting-javascript` - JavaScript 脚本指南（默认脚本语言）
 - :doc:`../admin/dataconfig-guide` - 数据存储配置指南
 - :doc:`../admin/scheduler-guide` - 调度器配置指南

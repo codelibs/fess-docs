@@ -21,14 +21,29 @@ Unterstützte Skriptsprachen
    * - Sprache
      - Bezeichner
      - Beschreibung
+   * - JavaScript
+     - ``javascript`` (Aliase: ``js`` , ``sai`` )
+     - Die standardmäßig in |Fess| integrierte Skriptsprache und zugleich die
+       Standard-Skriptsprache ( ``Constants.DEFAULT_SCRIPT`` ). Sie läuft auf Sai
+       (einem Nashorn-Fork von CodeLibs, den |Fess| bereits für DI-XML-Ausdrücke
+       verwendet); Skripte werden als ECMAScript 6 ausgeführt.
    * - Groovy
      - ``groovy``
-     - Die standardmäßig registrierte Skriptsprache. Java-kompatibel mit leistungsstarken Funktionen
+     - Wird als ``fess-script-groovy``-Plugin bereitgestellt. In 15.9 liegt es der
+       Distribution bei und funktioniert daher ohne weitere Schritte,
+       **ab 15.10 wird es jedoch nicht mehr mitgeliefert** und muss über die
+       Administrationsoberfläche installiert werden.
 
 .. note::
-   Das einzige standardmäßig in |Fess| registrierte Skript-Engine ist Groovy.
-   Die Standardskriptsprache ist ``groovy`` (``Constants.DEFAULT_SCRIPT``).
-   Alle Skriptbeispiele in dieser Dokumentation sind in Groovy-Syntax verfasst.
+   Eine Skript-Konfiguration ohne hinterlegten Skripttyp wird als Groovy behandelt.
+   Dies ist keine vorübergehende Übergangsmaßnahme, sondern dauerhaftes Verhalten:
+   Eine vor 15.9 erstellte Konfiguration behält ihr Groovy-Skript, ohne dass ein
+   Skripttyp hinterlegt ist — genau dieses Standardverhalten sorgt dafür, dass sie
+   nach einem Upgrade unverändert weiterläuft. Eine ab 15.9 neu erstellte Konfiguration
+   erhält den Skripttyp ``javascript`` explizit hinterlegt.
+
+   Sofern nicht anders angegeben, sind die Skriptbeispiele in dieser Dokumentation in
+   JavaScript-Syntax verfasst. Für Groovy-Syntax siehe :doc:`scripting-groovy`.
 
 Anwendungsfälle für Skripte
 ============================
@@ -38,7 +53,7 @@ Datenspeicher-Konfiguration
 
 Datenspeicher-Konnektoren verwenden Skripte, um abgerufene Daten auf Indexfelder abzubilden.
 Die Konfiguration wird im Format ``Feldname=Ausdruck`` zeilenweise angegeben;
-jede Zeile wird als eigenständiger Groovy-Ausdruck ausgewertet.
+jede Zeile wird als eigenständiger Skript-Ausdruck ausgewertet (standardmäßig JavaScript).
 
 ::
 
@@ -57,10 +72,10 @@ Datenspeicher-Konnektors.
 
 .. note::
    Da jede Zeile eines Datenspeicher-Skripts als einzelner Ausdruck ausgewertet wird, sind
-   mehrzeilige ``if``-Blöcke, ``import``-Anweisungen und ``def``-Variablendeklarationen
+   mehrzeilige ``if``-Blöcke sowie Variablendeklarationen wie ``let`` / ``const``
    nicht zulässig.
    Für wertabhängige Felder verwenden Sie den ternären Operator
-   (z. B. ``title=enabled == "true" ? name : null``). Klassen werden über ihren
+   (z. B. ``title=enabled === "true" ? name : null``). Klassen werden über ihren
    vollständig qualifizierten Namen (FQCN) inline referenziert.
 
 Pfad-Mapping
@@ -68,30 +83,43 @@ Pfad-Mapping
 
 Pfad-Mapping dient zur Normalisierung und Transformation von Crawling-URLs.
 Standardmäßig wird es als Paar aus „Regulärem Ausdruck" und „Ersetzungszeichenkette"
-konfiguriert — dies ist kein Groovy-Skript.
+konfiguriert — dies ist kein Skript.
 Beispielsweise ersetzt der reguläre Ausdruck ``http://`` mit der Ersetzungszeichenkette
 ``https://`` das URL-Schema.
 
-Nur wenn der Ersetzungszeichenkette das Präfix ``groovy:`` vorangestellt wird, wird der
-nachfolgende Teil als Groovy-Skript ausgewertet. In diesem Skript stehen ``url``
-(die zu transformierende URL-Zeichenkette) und ``matcher``
+Beginnt die Ersetzungszeichenkette mit ``(Engine-Name):``, wird der Teil vor dem
+Doppelpunkt als Name einer Skript-Engine gelesen; stimmt er mit einer registrierten
+Engine überein, wird der restliche Teil von dieser Engine als Skript ausgewertet.
+``groovy:`` wählt beispielsweise die Groovy-Engine (erfordert das Plugin
+``fess-script-groovy``), ``javascript:`` (Aliase ``js:``, ``sai:``) wählt die
+JavaScript-Engine. Stimmt der Teil vor dem Doppelpunkt mit keiner registrierten
+Engine überein — etwa ``https://`` in einer gewöhnlichen Ersetzungszeichenkette —,
+wird die gesamte Zeichenkette nicht als Skript behandelt, sondern unverändert als
+regulärer Ersetzungsstring verwendet. Wird die Zeichenkette als Skript ausgewertet,
+stehen darin ``url`` (die zu transformierende URL-Zeichenkette) und ``matcher``
 (der ``java.util.regex.Matcher`` des regulären Ausdrucks) zur Verfügung.
 
 ::
 
-    groovy:url.replaceAll("http://", "https://")
+    javascript:url.replace(/http:\/\//g, "https://")
 
 Geplante Aufgaben
 -----------------
 
-Bei geplanten Aufgaben kann benutzerdefinierte Verarbeitungslogik als Groovy-Skript verfasst
-werden. Das gesamte Skript wird als ein einziges Groovy-Skript ausgewertet, sodass
-mehrzeilige Anweisungen, ``import``-Anweisungen und ``def``-Variablendeklarationen
-verwendet werden können.
+Bei geplanten Aufgaben kann benutzerdefinierte Verarbeitungslogik als Skript verfasst
+werden. Das gesamte Skript wird als ein einziges Skript ausgewertet, sodass mehrzeilige
+Anweisungen möglich sind — bei JavaScript zum Beispiel ``let`` / ``const``-Variablendeklarationen
+und Kontrollstrukturen.
 
 ::
 
     return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
+
+Eine ``return``-Anweisung auf oberster Ebene ist in reinem JavaScript normalerweise ein
+Syntaxfehler. Die Skript-Engine von |Fess| versucht zunächst, das Skript als Ausdruck zu
+kompilieren, und interpretiert es nur dann als Block von Anweisungen, wenn dies
+fehlschlägt. Dieses Beispiel lässt sich nicht als Ausdruck kompilieren und wird daher als
+Anweisungsblock ausgeführt. Details siehe :doc:`scripting-javascript`.
 
 Methoden wie ``logLevel("info")`` gehören zur Job-Klasse (``ExecJob`` und deren
 Unterklassen) und können per Method-Chaining aufgerufen werden. Informationen zur
@@ -100,9 +128,9 @@ Unterklassen) und können per Method-Chaining aufgerufen werden. Informationen z
 Grundlegende Syntax
 ===================
 
-Im Folgenden finden Sie grundlegende Groovy-Syntaxbeispiele. Kommentare werden mit ``//``
-(Zeilenkommentar) oder ``/* */`` (Blockkommentar) angegeben. Beachten Sie, dass Kommentare
-mit ``#`` in Groovy nicht verwendet werden können.
+Im Folgenden finden Sie grundlegende JavaScript-Syntaxbeispiele. Kommentare werden mit
+``//`` (Zeilenkommentar) oder ``/* */`` (Blockkommentar) angegeben. Beachten Sie, dass
+Kommentare mit ``#`` auch in JavaScript nicht verwendet werden können.
 
 Variablenzugriff
 ----------------
@@ -123,8 +151,8 @@ Zeichenkettenoperationen
     // Verkettung
     title + " - " + category
 
-    // Ersetzung
-    content.replaceAll("old", "new")
+    // Ersetzung (mit regulärem Ausdruck; ECMAScript 6 kennt kein String#replaceAll)
+    content.replace(/old/g, "new")
 
     // Aufteilung
     tags.split(",")
@@ -135,10 +163,10 @@ Bedingte Verzweigung
 ::
 
     // Ternärer Operator
-    status == "active" ? "Aktiv" : "Inaktiv"
+    status === "active" ? "Aktiv" : "Inaktiv"
 
-    // Standardwert bei null/leer (Elvis-Operator)
-    description ?: "Keine Beschreibung"
+    // Standardwert bei null/leer (logischer OR-Operator; JavaScript kennt keinen Elvis-Operator)
+    description || "Keine Beschreibung"
 
 Datumsoperationen
 -----------------
@@ -148,7 +176,7 @@ Datumsoperationen
     // Aktuelles Datum/Uhrzeit
     new Date()
 
-    // Formatierung
+    // Formatierung (Java-Interoperabilität nutzt dieselbe Notation wie Groovy)
     new java.text.SimpleDateFormat("yyyy-MM-dd").format(updated_at)
 
 Ausführungskontext und verfügbare Objekte
@@ -177,7 +205,8 @@ Nur ``container`` ist in allen Kontexten verfügbar.
    * - Pfad-Mapping
      - ``url`` ``matcher``
      - Die zu transformierende URL-Zeichenkette und der ``Matcher`` des regulären Ausdrucks
-       (nur bei Ersetzungen mit dem Präfix ``groovy:``)
+       (nur wenn die Ersetzung das Präfix ``(Engine-Name):`` trägt; der vorangestellte
+       Name, z. B. ``groovy`` oder ``javascript``, bestimmt die ausgeführte Sprache)
    * - Geplante Aufgaben
      - ``executor``
      - Job-Ausführungsinstanz (``JobExecutor``). Wird zur Steuerung des Job-Shutdowns verwendet
@@ -214,16 +243,15 @@ Hinweise zur Optimierung der Skript-Leistung:
 Debugging
 =========
 
-Da Skripte für geplante Aufgaben als ein einziges Groovy-Skript ausgewertet werden, können
+Da Skripte für geplante Aufgaben als ein einziges Skript ausgewertet werden, können
 Protokollausgaben zum Debugging eingesetzt werden.
-(Datenspeicher-Skripte werden zeilenweise als einzelne Ausdrücke ausgewertet, daher sind
-``import``-Anweisungen und mehrzeilige Verarbeitungslogik dort nicht möglich.)
+(Datenspeicher-Skripte werden zeilenweise als einzelne Ausdrücke ausgewertet, daher ist
+dort keine mehrzeilige Verarbeitung möglich.)
 
 ::
 
-    import org.apache.logging.log4j.LogManager
-    def logger = LogManager.getLogger("fess.script")
-    logger.info("executor = {}", executor)
+    const logger = org.apache.logging.log4j.LogManager.getLogger("fess.script");
+    logger.info("executor = {}", executor);
 
 Das obige Beispiel verwendet einen Logger mit dem Namen ``fess.script``.
 Um diese Protokollausgabe zu aktivieren, fügen Sie die entsprechende Logger-Konfiguration
@@ -243,6 +271,7 @@ des Pakets ``org.codelibs.fess.script`` auf ``DEBUG``.
 Referenzinformationen
 =====================
 
-- :doc:`scripting-groovy` - Groovy-Skripting-Leitfaden
+- :doc:`scripting-javascript` - JavaScript-Skripting-Leitfaden
+- :doc:`scripting-groovy` - Groovy-Skripting-Leitfaden (Plugin)
 - :doc:`../admin/dataconfig-guide` - Datenspeicher-Konfigurationsleitfaden
 - :doc:`../admin/scheduler-guide` - Scheduler-Konfigurationsleitfaden

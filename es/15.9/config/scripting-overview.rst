@@ -21,14 +21,30 @@ Lenguajes de scripting compatibles
    * - Lenguaje
      - Identificador
      - Descripción
+   * - JavaScript
+     - ``javascript`` (alias: ``js`` , ``sai`` )
+     - El lenguaje de scripting integrado en |Fess| de forma predeterminada, y también el
+       lenguaje de scripting por defecto ( ``Constants.DEFAULT_SCRIPT`` ). Se ejecuta sobre
+       Sai (un fork de Nashorn desarrollado por CodeLibs, que |Fess| ya utiliza para las
+       expresiones de sus XML de DI); los scripts se ejecutan como ECMAScript 6.
    * - Groovy
      - ``groovy``
-     - Lenguaje de scripting registrado de forma predeterminada. Compatible con Java y proporciona funcionalidades potentes
+     - Se proporciona como el plugin ``fess-script-groovy``. En 15.9 viene incluido en la
+       distribución, por lo que funciona sin pasos adicionales, pero **a partir de 15.10
+       dejará de venir incluido** y deberá instalarse desde la pantalla de administración.
 
 .. note::
-   El único motor de scripting registrado de forma predeterminada en |Fess| es Groovy.
-   El lenguaje de scripting por defecto es ``groovy`` ( ``Constants.DEFAULT_SCRIPT`` ).
-   Todos los ejemplos de scripts de este documento están escritos en sintaxis Groovy.
+   Una configuración de script que no tiene registrado un tipo de script se trata como
+   Groovy. Esto no es una medida de transición temporal, sino un comportamiento
+   permanente: una configuración creada antes de 15.9 conserva su script en sintaxis
+   Groovy sin tipo de script registrado, y este valor predeterminado es precisamente lo
+   que hace que siga funcionando sin cambios tras la actualización. Una configuración
+   creada a partir de 15.9 tiene registrado explícitamente el tipo de script
+   ``javascript``.
+
+   Salvo que se indique lo contrario, los ejemplos de scripts de este documento están
+   escritos en sintaxis JavaScript. Para la sintaxis de Groovy, consulte
+   :doc:`scripting-groovy`.
 
 Casos de uso del scripting
 ===========================
@@ -38,7 +54,8 @@ Configuración de data store
 
 En los conectores de data store, se usan scripts para mapear los datos obtenidos
 a los campos del índice. La configuración se escribe en formato ``nombre_de_campo=expresion``
-una línea por entrada, y cada línea se evalúa como una expresión Groovy independiente.
+una línea por entrada, y cada línea se evalúa como una expresión de script independiente
+(JavaScript de forma predeterminada).
 
 ::
 
@@ -56,9 +73,9 @@ Consulte la documentación de cada conector de data store para conocer las varia
 
 .. note::
    Cada línea de un data store se evalúa como una expresión única, por lo que no es posible
-   usar bloques ``if`` de varias líneas, sentencias ``import`` ni declaraciones de variables
-   con ``def``. Para cambiar un valor según una condición, use el operador ternario por campo
-   (por ejemplo: ``title=enabled == "true" ? name : null`` ). Para referenciar clases,
+   usar bloques ``if`` de varias líneas ni sentencias de declaración de variables como
+   ``let`` / ``const``. Para cambiar un valor según una condición, use el operador ternario por campo
+   (por ejemplo: ``title=enabled === "true" ? name : null`` ). Para referenciar clases,
    escriba el nombre completamente cualificado (FQCN) en línea.
 
 Mapeo de rutas
@@ -66,27 +83,43 @@ Mapeo de rutas
 
 El mapeo de rutas es una función para normalizar y transformar las URLs a crawlear.
 De forma predeterminada, se configura mediante un par de "expresión regular" y "cadena de
-reemplazo", y no es un script Groovy. Por ejemplo, si se especifica ``http://`` como
+reemplazo", y no es un script. Por ejemplo, si se especifica ``http://`` como
 expresión regular y ``https://`` como cadena de reemplazo, se sustituye el esquema de la URL.
 
-Solo cuando la cadena de reemplazo comienza con el prefijo ``groovy:``, la cadena restante
-se evalúa como un script Groovy. Dentro de este script, se puede usar ``url`` para la cadena
-de URL a transformar y ``matcher`` para el ``java.util.regex.Matcher`` de la expresión regular.
+Cuando la cadena de reemplazo comienza con ``(nombre_de_motor):``, la parte anterior a
+los dos puntos se interpreta como el nombre de un motor de scripting; si coincide con
+un motor registrado, el resto de la cadena se evalúa como un script mediante ese motor.
+Por ejemplo, ``groovy:`` selecciona el motor Groovy (requiere el plugin
+``fess-script-groovy``), y ``javascript:`` (alias ``js:``, ``sai:``) selecciona el motor
+JavaScript. Si la parte anterior a los dos puntos no coincide con ningún motor
+registrado —por ejemplo, ``https://`` en una cadena de reemplazo normal—, la cadena
+completa no se trata como un script, sino que se usa tal cual como una cadena de
+reemplazo de expresión regular. Cuando la cadena se evalúa como un script, dentro de
+ella se puede usar ``url`` para la cadena de URL a transformar y ``matcher`` para el
+``java.util.regex.Matcher`` de la expresión regular.
 
 ::
 
-    groovy:url.replaceAll("http://", "https://")
+    javascript:url.replace(/http:\/\//g, "https://")
 
 Trabajos programados
 --------------------
 
-En los trabajos programados, puede escribir lógica de procesamiento personalizada en scripts
-Groovy. El script completo se evalúa como un único script Groovy, por lo que es posible
-usar múltiples líneas, sentencias ``import`` y declaraciones de variables con ``def``.
+En los trabajos programados, puede escribir lógica de procesamiento personalizada en un
+script. El script completo se evalúa como un único script, por lo que es posible usar
+sentencias de varias líneas, incluidas —en JavaScript— declaraciones de variables
+``let`` / ``const`` y estructuras de control.
 
 ::
 
     return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
+
+Una sentencia ``return`` de nivel superior normalmente es un error de sintaxis en
+JavaScript. El motor de scripting de |Fess| primero intenta compilar el script como una
+expresión, y solo recurre a compilarlo como un bloque de sentencias cuando eso falla.
+Este ejemplo no se puede compilar como expresión, por lo que se compila como un bloque
+de sentencias y se ejecuta tal como se muestra. Consulte :doc:`scripting-javascript`
+para más detalles.
 
 Los métodos como ``logLevel("info")`` son métodos de la clase del trabajo ( ``ExecJob`` y sus
 subclases) y pueden encadenarse. Consulte "Contexto de ejecución y objetos disponibles" para
@@ -95,9 +128,9 @@ obtener información sobre la variable ``executor``.
 Sintaxis básica
 ===============
 
-A continuación se muestran ejemplos de sintaxis básica de Groovy. Los comentarios se escriben
-con ``//`` (comentario de línea) o ``/* */`` (comentario de bloque). Tenga en cuenta que los
-comentarios que comienzan con ``#`` no son válidos en Groovy.
+A continuación se muestran ejemplos de sintaxis básica de JavaScript. Los comentarios se
+escriben con ``//`` (comentario de línea) o ``/* */`` (comentario de bloque). Tenga en
+cuenta que los comentarios que comienzan con ``#`` tampoco son válidos en JavaScript.
 
 Acceso a variables
 ------------------
@@ -118,8 +151,8 @@ Operaciones de cadenas
     // Concatenacion
     title + " - " + category
 
-    // Reemplazo
-    content.replaceAll("old", "new")
+    // Reemplazo (con expresion regular; ECMAScript 6 no tiene String#replaceAll)
+    content.replace(/old/g, "new")
 
     // Division
     tags.split(",")
@@ -130,10 +163,10 @@ Estructuras condicionales
 ::
 
     // Operador ternario
-    status == "active" ? "Activo" : "Inactivo"
+    status === "active" ? "Activo" : "Inactivo"
 
-    // Valor por defecto cuando es null o vacio (operador Elvis)
-    description ?: "Sin descripcion"
+    // Valor por defecto cuando es null o vacio (operador OR logico; JavaScript no tiene operador Elvis)
+    description || "Sin descripcion"
 
 Operaciones de fecha
 --------------------
@@ -143,7 +176,7 @@ Operaciones de fecha
     // Fecha y hora actual
     new Date()
 
-    // Formato
+    // Formato (la interoperabilidad con Java usa la misma notacion que Groovy)
     new java.text.SimpleDateFormat("yyyy-MM-dd").format(updated_at)
 
 Contexto de ejecución y objetos disponibles
@@ -170,7 +203,7 @@ Solo ``container`` está disponible en todos los contextos.
        (los nombres de variable y prefijos varían según el conector; en CSV/JSON el nombre del campo se usa directamente como variable)
    * - Mapeo de rutas
      - ``url`` ``matcher``
-     - La cadena de URL a transformar y el ``Matcher`` de la expresión regular (solo cuando se usa el prefijo ``groovy:``)
+     - La cadena de URL a transformar y el ``Matcher`` de la expresión regular (solo cuando el reemplazo lleva el prefijo ``(nombre_de_motor):``; el nombre indicado, por ejemplo ``groovy`` o ``javascript``, determina el lenguaje ejecutado)
    * - Trabajos programados
      - ``executor``
      - Instancia de ejecución del trabajo ( ``JobExecutor`` ). Se usa para controlar el apagado del trabajo
@@ -206,16 +239,15 @@ Consejos para optimizar el rendimiento de los scripts:
 Depuración
 ==========
 
-En los scripts de trabajos programados, el script completo se evalúa como un único script
-Groovy, por lo que puede usar la salida de logs para depurar.
+En los scripts de trabajos programados, el script completo se evalúa como un único
+script, por lo que puede usar la salida de logs para depurar.
 (En los scripts de data store, cada línea se evalúa como una expresión individual, por lo que
-no es posible usar sentencias ``import`` ni procesamiento en varias líneas.)
+no es posible usar procesamiento en varias líneas.)
 
 ::
 
-    import org.apache.logging.log4j.LogManager
-    def logger = LogManager.getLogger("fess.script")
-    logger.info("executor = {}", executor)
+    const logger = org.apache.logging.log4j.LogManager.getLogger("fess.script");
+    logger.info("executor = {}", executor);
 
 El ejemplo anterior usa un logger denominado ``fess.script``.
 Para que este log se emita, agregue la configuración del logger correspondiente
@@ -235,6 +267,7 @@ el nivel de log del paquete ``org.codelibs.fess.script`` en ``DEBUG``.
 Información de referencia
 ==========================
 
-- :doc:`scripting-groovy` - Guía de scripting Groovy
+- :doc:`scripting-javascript` - Guía de scripting JavaScript
+- :doc:`scripting-groovy` - Guía de scripting Groovy (plugin)
 - :doc:`../admin/dataconfig-guide` - Guía de configuración de data store
 - :doc:`../admin/scheduler-guide` - Guía de configuración del planificador

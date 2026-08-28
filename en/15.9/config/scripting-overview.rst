@@ -21,14 +21,27 @@ Supported Scripting Languages
    * - Language
      - Identifier
      - Description
+   * - JavaScript
+     - ``javascript`` (aliases: ``js`` , ``sai`` )
+     - The scripting language built into |Fess| by default, and the default scripting
+       language ( ``Constants.DEFAULT_SCRIPT`` ). It runs on Sai (a Nashorn fork by
+       CodeLibs that |Fess| already uses for its DI XML expressions); scripts are
+       executed as ECMAScript 6.
    * - Groovy
      - ``groovy``
-     - The scripting language registered by default. Java-compatible with powerful features
+     - Provided as the ``fess-script-groovy`` plugin. It is bundled with the 15.9
+       distribution, so it works out of the box, but **it will no longer be bundled
+       starting with 15.10**, when it must be installed from the administration screen.
 
 .. note::
-   The only scripting engine registered in |Fess| by default is Groovy.
-   The default scripting language is ``groovy`` (``Constants.DEFAULT_SCRIPT``).
-   All script examples in this documentation are written in Groovy syntax.
+   A script configuration that has no recorded script type is treated as Groovy.
+   This is not a temporary transition measure but a permanent behavior: a configuration
+   created before 15.9 keeps its Groovy-syntax script without a recorded script type, so
+   this default is what keeps it working unchanged after an upgrade. A configuration
+   created from 15.9 onward has its script type explicitly recorded as ``javascript``.
+
+   Unless noted otherwise, the script examples in this documentation are written in
+   JavaScript syntax. For Groovy syntax, see :doc:`scripting-groovy`.
 
 Use Cases for Scripts
 =====================
@@ -38,7 +51,8 @@ Data Store Configuration
 
 Data store connectors use scripts to map retrieved data to index fields.
 Configuration is written one line per entry in the format ``field=expression``,
-and each line is evaluated as a single independent Groovy expression.
+and each line is evaluated as a single independent script expression (JavaScript
+by default).
 
 ::
 
@@ -56,39 +70,52 @@ Refer to the documentation for each data store connector for details on availabl
 
 .. note::
    Because each line in a data store script is evaluated as a single expression,
-   multi-line ``if`` blocks, ``import`` statements, and variable declarations using ``def``
-   cannot be used. To conditionally assign a value, use the ternary operator on a per-field basis
-   (e.g., ``title=enabled == "true" ? name : null``). When referencing a class, write its
-   fully qualified class name (FQCN) inline.
+   multi-line ``if`` blocks and variable-declaration statements such as ``let`` / ``const``
+   cannot be used. To conditionally assign a value, use the ternary operator on a per-field
+   basis (e.g., ``title=enabled === "true" ? name : null``). When referencing a class, write
+   its fully qualified class name (FQCN) inline.
 
 Path Mapping
 ------------
 
 Path mapping is a feature for normalizing and transforming crawl target URLs.
 By default, it is configured as a pair of a regular expression and a replacement string,
-and is not a Groovy script.
+and is not a script.
 For example, specifying ``http://`` as the regular expression and ``https://`` as the
 replacement string replaces the URL scheme.
 
-A replacement string is evaluated as a Groovy script only when it is prefixed with ``groovy:``.
-Inside this script, ``url`` (the URL string being transformed) and ``matcher``
-(the ``java.util.regex.Matcher`` for the regular expression) are available.
+When a replacement string starts with ``(engine name):``, the part before the colon is
+read as the name of a scripting engine, and if it matches a registered engine, the rest
+of the string is evaluated as a script by that engine. For example, ``groovy:`` selects
+the Groovy engine (which requires the ``fess-script-groovy`` plugin), and
+``javascript:`` (aliases ``js:``, ``sai:``) selects the JavaScript engine. If the part
+before the colon does not match any registered engine name — ``https://`` in an ordinary
+replacement string, for example — the whole string is not treated as a script at all and
+is instead used as-is as a plain regular-expression replacement. When the string is
+evaluated as a script, ``url`` (the URL string being transformed) and ``matcher`` (the
+``java.util.regex.Matcher`` for the regular expression) are available inside it.
 
 ::
 
-    groovy:url.replaceAll("http://", "https://")
+    javascript:url.replace(/http:\/\//g, "https://")
 
 Scheduled Jobs
 --------------
 
-Scheduled jobs allow you to write custom processing logic in Groovy scripts.
-Because the entire script is evaluated as a single Groovy script,
-multi-line expressions, ``import`` statements, and variable declarations using ``def``
-are all supported.
+Scheduled jobs allow you to write custom processing logic in a script.
+Because the entire script is evaluated as a single script, multi-line statements are
+supported, including — for JavaScript — ``let`` / ``const`` variable declarations and
+control-flow statements.
 
 ::
 
     return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
+
+A top-level ``return`` statement is normally a syntax error in JavaScript. |Fess|'s
+scripting engine first tries to compile the script as an expression, and only falls back
+to compiling it as a block of statements when that fails. This example cannot be compiled
+as an expression, so it is compiled as a statement block and runs as shown. See
+:doc:`scripting-javascript` for details.
 
 Methods such as ``logLevel("info")`` are methods of the job class (``ExecJob`` and its subclasses)
 and can be chained. For the ``executor`` variable, see "Execution Context and Available Objects".
@@ -96,8 +123,9 @@ and can be chained. For the ``executor`` variable, see "Execution Context and Av
 Basic Syntax
 ============
 
-The following are basic Groovy syntax examples. Comments use ``//`` (line comments) or
-``/* */`` (block comments). Note that comments starting with ``#`` cannot be used in Groovy.
+The following are basic JavaScript syntax examples. Comments use ``//`` (line comments) or
+``/* */`` (block comments). Note that comments starting with ``#`` cannot be used in
+JavaScript either.
 
 Variable Access
 ---------------
@@ -118,8 +146,8 @@ String Operations
     // Concatenation
     title + " - " + category
 
-    // Replacement
-    content.replaceAll("old", "new")
+    // Replacement (using a regular expression; ECMAScript 6 has no String#replaceAll)
+    content.replace(/old/g, "new")
 
     // Splitting
     tags.split(",")
@@ -130,10 +158,10 @@ Conditional Branching
 ::
 
     // Ternary operator
-    status == "active" ? "Active" : "Inactive"
+    status === "active" ? "Active" : "Inactive"
 
-    // Default value when null or empty (Elvis operator)
-    description ?: "No description"
+    // Default value when null or empty (logical OR operator; JavaScript has no Elvis operator)
+    description || "No description"
 
 Date Operations
 ---------------
@@ -143,7 +171,7 @@ Date Operations
     // Current date/time
     new Date()
 
-    // Formatting
+    // Formatting (Java interop uses the same notation as Groovy)
     new java.text.SimpleDateFormat("yyyy-MM-dd").format(updated_at)
 
 Execution Context and Available Objects
@@ -171,7 +199,8 @@ Only ``container`` is available in all contexts.
    * - Path mapping
      - ``url`` ``matcher``
      - The URL string being transformed and the ``Matcher`` for the regular expression
-       (available only when the replacement is prefixed with ``groovy:``)
+       (available only when the replacement is prefixed with ``(engine name):``; the
+       prefixed name, e.g. ``groovy`` or ``javascript``, selects which language runs)
    * - Scheduled jobs
      - ``executor``
      - The job execution instance (``JobExecutor``). Used to control job shutdown
@@ -207,16 +236,15 @@ Tips for optimizing script performance:
 Debugging
 =========
 
-In scheduled job scripts, because the entire script is evaluated as a single Groovy script,
+In scheduled job scripts, because the entire script is evaluated as a single script,
 you can use log output for debugging.
-(Data store scripts evaluate one line as one expression, so ``import`` statements and
-multi-line processing cannot be used.)
+(Data store scripts evaluate one line as one expression, so multi-line processing
+cannot be used.)
 
 ::
 
-    import org.apache.logging.log4j.LogManager
-    def logger = LogManager.getLogger("fess.script")
-    logger.info("executor = {}", executor)
+    const logger = org.apache.logging.log4j.LogManager.getLogger("fess.script");
+    logger.info("executor = {}", executor);
 
 The example above uses a logger named ``fess.script``.
 To output this log, add the corresponding logger configuration to
@@ -236,6 +264,7 @@ To enable debug logging for the scripting engine itself, set the log level of th
 Reference Information
 =====================
 
-- :doc:`scripting-groovy` - Groovy Scripting Guide
+- :doc:`scripting-javascript` - JavaScript Scripting Guide
+- :doc:`scripting-groovy` - Groovy Scripting Guide (plugin)
 - :doc:`../admin/dataconfig-guide` - Data Store Configuration Guide
 - :doc:`../admin/scheduler-guide` - Scheduler Configuration Guide
