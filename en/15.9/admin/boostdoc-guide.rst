@@ -35,13 +35,20 @@ Condition
 
 Specifies the condition for documents to position at the top.
 For example, to display URLs containing https://www.n2sm.net/ at the top, write url.matches("https://www.n2sm.net/.\*").
-Conditions can be written in Groovy.
+Conditions are written in the syntax of the scripting engine specified in "Script Type" below.
 
 Boost Value Expression
 ::::::::::::::::::::::
 
 Specifies the weighting value for documents.
-Expressions can be written in Groovy.
+Expressions are written in the syntax of the scripting engine specified in "Script Type" below.
+
+Script Type
+:::::::::::
+
+Specifies the scripting engine used to evaluate the condition and boost value expression.
+New configurations are prefilled with ``javascript``. Selecting ``groovy`` requires the
+``fess-script-groovy`` plugin. If left blank, the expressions are evaluated as Groovy.
 
 Sort Order
 ::::::::::

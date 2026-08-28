@@ -10,13 +10,19 @@ By configuring document boosts, you can raise the score of documents matching sp
 and make them appear higher in search results.
 
 Boosts are applied to each document at index time (during crawling).
-Both the condition (``urlExpr``) and the boost value (``boostExpr``) are evaluated as Groovy expressions.
+Both the condition (``urlExpr``) and the boost value (``boostExpr``) are evaluated using the scripting
+engine specified in the ``scriptType`` field. ``scriptType`` can be ``javascript`` or ``groovy`` (which
+requires the ``fess-script-groovy`` plugin). The admin console's create screen prefills ``scriptType``
+with ``javascript``, but if this API's request body omits ``scriptType``, it is not auto-filled and the
+expressions are evaluated as Groovy.
 Multiple rules are evaluated in ascending order of ``sortOrder``, and only the boost value of the first
 matching rule is applied (once a matching rule is found, subsequent rules are not evaluated).
 
 .. note::
 
-   In the admin console, ``urlExpr`` is displayed as "Condition" and ``boostExpr`` as "Boost Expression".
+   In the admin console, ``urlExpr`` is displayed as "Condition", ``boostExpr`` as "Boost Expression", and
+   ``scriptType`` as "Script Type". ``scriptType`` appears only in the create/update/detail (list and single)
+   request bodies and responses, not in the list filter parameters (``urlExpr``, ``boostExpr``).
    For details on configuration items, refer to :doc:`../../admin/boostdoc-guide`.
 
 Base URL
@@ -109,6 +115,7 @@ Response
             "id": "boostdoc_id_1",
             "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
             "boostExpr": "3.0",
+            "scriptType": "javascript",
             "sortOrder": 1,
             "versionNo": 1
           }
@@ -145,6 +152,7 @@ Response
           "id": "boostdoc_id_1",
           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
           "boostExpr": "3.0",
+          "scriptType": "javascript",
           "sortOrder": 1,
           "versionNo": 1
         }
@@ -170,6 +178,7 @@ Request Body
     {
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "5.0",
+      "scriptType": "javascript",
       "sortOrder": 0
     }
 
@@ -185,10 +194,13 @@ Field Descriptions
      - Description
    * - ``urlExpr``
      - Yes
-     - Condition expression. A Groovy expression that determines whether a document should be boosted, returning ``Boolean``. Corresponds to "Condition" in the admin console (maximum 10,000 characters).
+     - Condition expression. A script expression that determines whether a document should be boosted, returning ``Boolean``. Corresponds to "Condition" in the admin console (maximum 10,000 characters).
    * - ``boostExpr``
      - Yes
-     - Boost expression. A Groovy expression that returns the boost value (numeric). A fixed value such as ``3.0`` can also be specified. Corresponds to "Boost Expression" in the admin console (maximum 10,000 characters).
+     - Boost expression. A script expression that returns the boost value (numeric). A fixed value such as ``3.0`` can also be specified. Corresponds to "Boost Expression" in the admin console (maximum 10,000 characters).
+   * - ``scriptType``
+     - No
+     - The scripting engine used to evaluate ``urlExpr`` and ``boostExpr``. Either ``javascript`` or ``groovy`` (which requires the ``fess-script-groovy`` plugin). Corresponds to "Script Type" in the admin console (maximum 100 characters). If omitted, the expressions are evaluated as Groovy.
    * - ``sortOrder``
      - Yes
      - Evaluation order. Rules are evaluated in ascending order, and the boost value of the first matching rule is applied (form default value: 0; must be an integer of 0 or greater).
@@ -226,6 +238,7 @@ Request Body
       "id": "existing_boostdoc_id",
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "10.0",
+      "scriptType": "javascript",
       "sortOrder": 0,
       "versionNo": 1
     }
@@ -270,10 +283,12 @@ Response
 Condition and Boost Expressions
 ================================
 
-Both ``urlExpr`` (condition) and ``boostExpr`` (boost expression) are evaluated as Groovy expressions.
+Both ``urlExpr`` (condition) and ``boostExpr`` (boost expression) are evaluated using the scripting engine
+specified by ``scriptType`` (default: Groovy; only the admin console's create screen prefills
+``javascript``).
 Inside an expression, the field values of the document being indexed can be referenced as variables by field name.
 
-- ``urlExpr`` must return ``Boolean`` (e.g., ``url.startsWith("https://docs.example.com/")``). A plain regular expression string (e.g., ``.*docs\.example\.com.*``) does not return ``Boolean`` as a Groovy expression and therefore does not function as a condition. To use regular expressions, use Groovy's ``String#matches``.
+- ``urlExpr`` must return ``Boolean`` (e.g., ``url.startsWith("https://docs.example.com/")``). A plain regular expression string (e.g., ``.*docs\.example\.com.*``) does not return ``Boolean`` as a script expression and therefore does not function as a condition. To use regular expressions, use ``String#matches`` (available with the same notation in both Groovy and JavaScript).
 - ``boostExpr`` must return a numeric value. The result is converted to ``float``, and the boost is applied only when the value is greater than 0.
 
 .. note::
@@ -281,7 +296,7 @@ Inside an expression, the field values of the document being indexed can be refe
    Key field variables available inside expressions: ``url``, ``title``, ``content``, ``content_length``, ``last_modified``, and others.
    ``click_count`` and ``favorite_count`` are available when ``indexer.click.count.enabled`` and
    ``indexer.favorite.count.enabled`` are enabled (both enabled by default), respectively.
-   OpenSearch date-math syntax such as ``now - 7d`` cannot be used in Groovy.
+   OpenSearch date-math syntax such as ``now - 7d`` cannot be used in either Groovy or JavaScript.
 
 urlExpr Examples
 ----------------
@@ -295,7 +310,7 @@ urlExpr Examples
    * - ``url.startsWith("https://docs.example.com/")``
      - Target documents whose URL starts with the specified value
    * - ``url.matches("https://www\\.example\\.com/.*")``
-     - Evaluate the URL with a regular expression (Groovy's ``String#matches``)
+     - Evaluate the URL with a regular expression (``String#matches``)
    * - ``title.contains("Release Notes")``
      - Target documents whose title contains a specific term
 

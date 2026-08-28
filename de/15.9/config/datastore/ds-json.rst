@@ -170,7 +170,7 @@ Verfügbare Felder
 
 .. note::
 
-   Enthält ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Groovy-Bezeichner
+   Enthält ein Feldname Leerzeichen, Bindestriche oder andere Zeichen, die als Skript-Bezeichner
    ungültig sind, kann dieses Feld nicht direkt als Variablenname referenziert werden.
 
 JSON-Format-Details
@@ -325,7 +325,7 @@ Array-Verknüpfung
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 Standardwerte festlegen
 -------------------------
@@ -333,9 +333,9 @@ Standardwerte festlegen
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Ohne Titel"
-    content=description ?: (summary ?: "Keine Beschreibung")
-    price=price ?: 0
+    title=title || "Ohne Titel"
+    content=description || summary || "Keine Beschreibung"
+    price=price || 0
 
 Datumsformatierung
 --------------------
@@ -356,8 +356,8 @@ Numerische Verarbeitung
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Referenzen
 ==========

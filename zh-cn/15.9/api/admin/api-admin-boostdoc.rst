@@ -10,13 +10,18 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 使其更容易出现在搜索结果的靠前位置。
 
 提升在索引创建时（爬取时）应用于每个文档。
-条件（``urlExpr``）和提升值（``boostExpr``）均作为Groovy表达式进行求值。
+条件（``urlExpr``）和提升值（``boostExpr``）按 ``scriptType`` 字段所指定脚本引擎的表达式进行求值。
+``scriptType`` 可指定为 ``javascript`` 或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。管理界面的新建
+画面会预填 ``scriptType`` 为 ``javascript`` ，但如果本API的请求体省略了 ``scriptType`` ，则不会自动补全，
+将按 Groovy 求值。
 多个规则按 ``sortOrder`` 升序依次求值，仅应用第一个条件匹配规则的提升值
 （找到匹配规则后，后续规则将不再求值）。
 
 .. note::
 
-   在管理界面中，``urlExpr`` 显示为"条件"，``boostExpr`` 显示为"提升值表达式"。
+   在管理界面中，``urlExpr`` 显示为"条件"，``boostExpr`` 显示为"提升值表达式"，``scriptType`` 显示为"脚本
+   类型"。``scriptType`` 仅出现在创建、更新、获取（列表与详情）的请求体和响应中，不出现在列表获取的过滤
+   参数（``urlExpr``、``boostExpr``）中。
    有关配置项的详细信息，请参阅 :doc:`../../admin/boostdoc-guide`。
 
 基础URL
@@ -109,6 +114,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
             "id": "boostdoc_id_1",
             "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
             "boostExpr": "3.0",
+            "scriptType": "javascript",
             "sortOrder": 1,
             "versionNo": 1
           }
@@ -144,6 +150,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
           "id": "boostdoc_id_1",
           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
           "boostExpr": "3.0",
+          "scriptType": "javascript",
           "sortOrder": 1,
           "versionNo": 1
         }
@@ -169,6 +176,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
     {
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "5.0",
+      "scriptType": "javascript",
       "sortOrder": 0
     }
 
@@ -184,10 +192,13 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
      - 说明
    * - ``urlExpr``
      - 是
-     - 条件表达式。用于判断提升目标文档的Groovy表达式，返回 ``Boolean`` 值。对应管理界面的"条件"（最多10000个字符）。
+     - 条件表达式。用于判断提升目标文档的脚本表达式，返回 ``Boolean`` 值。对应管理界面的"条件"（最多10000个字符）。
    * - ``boostExpr``
      - 是
-     - 提升值表达式。返回提升值（数值）的Groovy表达式。也可指定如 ``3.0`` 这样的固定值。对应管理界面的"提升值表达式"（最多10000个字符）。
+     - 提升值表达式。返回提升值（数值）的脚本表达式。也可指定如 ``3.0`` 这样的固定值。对应管理界面的"提升值表达式"（最多10000个字符）。
+   * - ``scriptType``
+     - 否
+     - 用于对 ``urlExpr`` 和 ``boostExpr`` 求值的脚本引擎。可指定 ``javascript`` 或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。对应管理界面的"脚本类型"（最多100个字符）。省略时按 Groovy 求值。
    * - ``sortOrder``
      - 是
      - 应用顺序。规则按升序依次求值，应用第一个条件匹配规则的提升值（表单初始值：0，须为0以上的整数）。
@@ -225,6 +236,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
       "id": "existing_boostdoc_id",
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "10.0",
+      "scriptType": "javascript",
       "sortOrder": 0,
       "versionNo": 1
     }
@@ -270,10 +282,11 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 关于条件表达式与提升值表达式
 ============================
 
-``urlExpr``\ （条件）和 ``boostExpr``\ （提升值表达式）均作为Groovy表达式进行求值。
+``urlExpr``\ （条件）和 ``boostExpr``\ （提升值表达式）按 ``scriptType``\ （默认：Groovy；仅管理界面的
+新建画面会预填 ``javascript`` ）所指定脚本引擎的表达式进行求值。
 在表达式中，可以通过字段名变量引用索引目标文档的字段值。
 
-- ``urlExpr`` 必须返回 ``Boolean`` 值（例：``url.startsWith("https://docs.example.com/")``）。单纯的正则表达式字符串（例：``.*docs\.example\.com.*``）作为Groovy表达式不返回 ``Boolean``，因此无法作为条件使用。若需使用正则表达式，请使用Groovy的 ``String#matches`` 方法。
+- ``urlExpr`` 必须返回 ``Boolean`` 值（例：``url.startsWith("https://docs.example.com/")``）。单纯的正则表达式字符串（例：``.*docs\.example\.com.*``）作为脚本表达式不返回 ``Boolean``，因此无法作为条件使用。若需使用正则表达式，请使用 ``String#matches`` 方法（Groovy 与 JavaScript 写法相同）。
 - ``boostExpr`` 必须返回数值。结果将被转换为 ``float``，仅当大于0时才会应用提升。
 
 .. note::
@@ -281,7 +294,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
    表达式中可引用的主要字段变量：``url``、``title``、``content``、``content_length``、``last_modified`` 等。
    ``click_count`` 和 ``favorite_count`` 分别在 ``indexer.click.count.enabled`` /
    ``indexer.favorite.count.enabled``\ （均默认启用）的情况下可引用。
-   OpenSearch的日期计算语法（如 ``now - 7d``）无法在Groovy中使用。
+   OpenSearch的日期计算语法（如 ``now - 7d``）在Groovy和JavaScript中均无法使用。
 
 条件表达式（``urlExpr``）示例
 ------------------------------
@@ -295,7 +308,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
    * - ``url.startsWith("https://docs.example.com/")``
      - 以指定URL开头的文档为目标
    * - ``url.matches("https://www\\.example\\.com/.*")``
-     - 使用正则表达式（Groovy的 ``String#matches``）判断URL
+     - 使用正则表达式（``String#matches``）判断URL
    * - ``title.contains("发布说明")``
      - 以标题中包含特定词语的文档为目标
 

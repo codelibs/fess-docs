@@ -35,13 +35,20 @@ Condición
 
 Especifique la condición de los documentos que desea posicionar en la parte superior.
 Por ejemplo, si desea mostrar en la parte superior las URL que contienen https://www.n2sm.net/, describa url.matches("https://www.n2sm.net/.\*").
-Las condiciones se pueden describir en Groovy.
+Las condiciones se escriben en la sintaxis del motor de scripting especificado en «Tipo de Script» a continuación.
 
 Expresión de impulso
 ::::::::::::::::::::
 
 Especifique el valor de ponderación del documento.
-Las expresiones se pueden describir en Groovy.
+Las expresiones se escriben en la sintaxis del motor de scripting especificado en «Tipo de Script» a continuación.
+
+Tipo de Script
+::::::::::::::
+
+Especifique el motor de scripting utilizado para evaluar la condición y la expresión de impulso.
+Las configuraciones nuevas se rellenan con ``javascript``. Para seleccionar ``groovy`` se requiere
+el plugin ``fess-script-groovy``. Si se deja en blanco, las expresiones se evalúan como Groovy.
 
 Orden de clasificación
 :::::::::::::::::::::::

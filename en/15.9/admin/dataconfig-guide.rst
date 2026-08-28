@@ -55,11 +55,16 @@ Parameters
 
 Specifies parameters related to the data store.
 
+The ``script_type`` parameter selects the scripting engine used to evaluate the
+Script field below. New configurations are prefilled with ``script_type=javascript``.
+If ``script_type`` is not specified, the script is evaluated as Groovy.
+
 Script
 ::::::
 
 Specifies which fields to assign values retrieved from the data store.
-Expressions can be written in Groovy.
+Expressions are written in the syntax of the scripting engine selected by the
+``script_type`` parameter above (JavaScript by default).
 
 Boost Value
 :::::::::::
@@ -181,7 +186,7 @@ An example script configuration is as follows:
 
 Parameters are in "key=value" format. Key descriptions are as follows:
 
-Values are written in Groovy.
+Values are written in the syntax of the scripting engine selected by ``script_type``.
 Enclose strings in double quotation marks. Access database column names to retrieve their values.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

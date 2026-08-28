@@ -171,7 +171,7 @@ Champs disponibles
 
 .. note::
 
-   Si un nom de champ contient des caracteres invalides comme identificateur Groovy
+   Si un nom de champ contient des caracteres invalides comme identificateur de script
    (espaces, tirets, etc.), ce champ ne peut pas etre reference directement comme variable.
 
 Details du format JSON
@@ -326,7 +326,7 @@ Jointure de tableaux
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 Configuration des valeurs par defaut
 --------------------------------------
@@ -334,9 +334,9 @@ Configuration des valeurs par defaut
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Sans titre"
-    content=description ?: (summary ?: "Sans description")
-    price=price ?: 0
+    title=title || "Sans titre"
+    content=description || summary || "Sans description"
+    price=price || 0
 
 Formatage des dates
 --------------------
@@ -357,8 +357,8 @@ Traitement des nombres
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Informations de reference
 ==========================

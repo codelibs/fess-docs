@@ -170,7 +170,7 @@ Campos disponibles
 
 .. note::
 
-   Si el nombre de un campo contiene caracteres inválidos como identificador de Groovy (espacios,
+   Si el nombre de un campo contiene caracteres inválidos como identificador de script (espacios,
    guiones, etc.), ese campo no puede referenciarse directamente como nombre de variable.
 
 Detalles del formato JSON
@@ -323,7 +323,7 @@ Unión de arrays
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 Configuración de valores predeterminados
 -----------------------------------------
@@ -331,9 +331,9 @@ Configuración de valores predeterminados
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Sin titulo"
-    content=description ?: (summary ?: "Sin descripcion")
-    price=price ?: 0
+    title=title || "Sin titulo"
+    content=description || summary || "Sin descripcion"
+    price=price || 0
 
 Formato de fechas
 ------------------
@@ -354,8 +354,8 @@ Procesamiento de números
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Información de referencia
 ==========================

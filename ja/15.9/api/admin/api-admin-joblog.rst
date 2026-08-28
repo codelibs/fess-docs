@@ -83,7 +83,7 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
             "jobName": "Default Crawler",
             "jobStatus": "ok",
             "target": "all",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Job completed successfully",
             "startTime": "1738116000000",
@@ -94,7 +94,7 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
             "jobName": "Default Crawler",
             "jobStatus": "fail",
             "target": "all",
-            "scriptType": "groovy",
+            "scriptType": "javascript",
             "scriptData": "return container.getComponent(\"crawlJob\").execute();",
             "scriptResult": "Error: Connection timeout",
             "startTime": "1738029600000",
@@ -123,7 +123,7 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
    * - ``target``
      - 実行対象（スケジューラーのターゲット名。既定値は ``all``）
    * - ``scriptType``
-     - スクリプトタイプ（例: ``groovy``）
+     - スクリプトタイプ（例: ``javascript``）
    * - ``scriptData``
      - 実行スクリプト
    * - ``scriptResult``
@@ -162,7 +162,7 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
           "jobName": "Default Crawler",
           "jobStatus": "ok",
           "target": "all",
-          "scriptType": "groovy",
+          "scriptType": "javascript",
           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
           "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
           "startTime": "1738116000000",

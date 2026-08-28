@@ -170,7 +170,7 @@ JSON对象顶层字段在脚本中可作为 **无前缀的变量** 直接引用
 
 .. note::
 
-   如果字段名包含空格或连字符等Groovy标识符中无效的字符，
+   如果字段名包含空格或连字符等脚本标识符中无效的字符，
    则无法直接将该字段作为变量名引用。
 
 JSON格式详情
@@ -323,7 +323,7 @@ JSON解析错误
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 设置默认值
 ------------------
@@ -331,9 +331,9 @@ JSON解析错误
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "无标题"
-    content=description ?: (summary ?: "无描述")
-    price=price ?: 0
+    title=title || "无标题"
+    content=description || summary || "无描述"
+    price=price || 0
 
 日期格式化
 ------------------
@@ -354,8 +354,8 @@ JSON解析错误
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 参考信息
 ========

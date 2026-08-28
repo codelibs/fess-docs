@@ -170,7 +170,7 @@ JSON 오브젝트 최상위 레벨의 필드는 스크립트 내에서 **접두�
 
 .. note::
 
-   필드 이름에 공백이나 하이픈 등 Groovy 식별자로 유효하지 않은 문자가 포함된 경우,
+   필드 이름에 공백이나 하이픈 등 스크립트 식별자로 유효하지 않은 문자가 포함된 경우,
    해당 필드를 변수명으로 직접 참조할 수 없습니다.
 
 JSON 형식 상세
@@ -323,7 +323,7 @@ JSON 파싱 오류
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 기본값 설정
 -----------
@@ -331,9 +331,9 @@ JSON 파싱 오류
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "제목 없음"
-    content=description ?: (summary ?: "설명 없음")
-    price=price ?: 0
+    title=title || "제목 없음"
+    content=description || summary || "설명 없음"
+    price=price || 0
 
 날짜 포맷
 ---------
@@ -354,8 +354,8 @@ JSON 파싱 오류
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 참고 정보
 =========

@@ -55,11 +55,16 @@ Paramètres
 
 Spécifie les paramètres relatifs au magasin de données.
 
+Le paramètre ``script_type`` sélectionne le moteur de script utilisé pour évaluer
+le champ Script ci-dessous. Les nouvelles configurations sont préremplies avec
+``script_type=javascript``. Si ``script_type`` n'est pas spécifié, le script est évalué en tant que Groovy.
+
 Script
 ::::::
 
 Spécifie dans quel champ définir les valeurs obtenues du magasin de données.
-Les expressions peuvent être écrites en Groovy.
+Les expressions sont écrites dans la syntaxe du moteur de script sélectionné par
+``script_type`` ci-dessus (JavaScript par défaut).
 
 Valeur de boost
 :::::::::::::::
@@ -182,7 +187,7 @@ Un exemple de configuration du script est le suivant.
 
 Les paramètres sont au format « clé=valeur ». La description des clés est la suivante.
 
-Le côté valeur est écrit en Groovy.
+Le côté valeur est écrit dans la syntaxe du moteur de script sélectionné par ``script_type``.
 Les chaînes doivent être fermées par des guillemets doubles. En accédant par le nom de colonne de la base de données, vous obtenez cette valeur.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

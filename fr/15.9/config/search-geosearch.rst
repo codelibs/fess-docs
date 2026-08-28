@@ -82,7 +82,7 @@ Dans le script de configuration de la source de données, mappez la valeur récu
 Ajout d'informations de géolocalisation via script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Vous pouvez également ajouter dynamiquement des informations de géolocalisation à un document en utilisant la fonctionnalité de script (Groovy) dans la configuration d'exploration.
+Vous pouvez également ajouter dynamiquement des informations de géolocalisation à un document en utilisant la fonctionnalité de script dans la configuration d'exploration (JavaScript par défaut ; Groovy peut également être sélectionné).
 Assignez directement la valeur au nom du champ.
 
 ::
@@ -90,7 +90,7 @@ Assignez directement la valeur au nom du champ.
     // Définir la latitude et la longitude dans le champ location
     location="35.681236,139.767125"
 
-Pour plus de détails sur les scripts, consultez :doc:`scripting-groovy`.
+Pour plus de détails sur les scripts, consultez :doc:`scripting-overview`.
 
 Configuration lors de la recherche
 -----------------------------------

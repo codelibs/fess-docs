@@ -170,7 +170,7 @@ JSONオブジェクトのトップレベルのフィールドは、スクリプ�
 
 .. note::
 
-   フィールド名にスペースやハイフンなど、Groovyの識別子として無効な文字が含まれる場合は、
+   フィールド名にスペースやハイフンなど、スクリプトの識別子として無効な文字が含まれる場合は、
    そのフィールドを変数名として直接参照できません。
 
 JSON形式の詳細
@@ -323,7 +323,7 @@ JSON解析エラー
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 デフォルト値の設定
 ------------------
@@ -331,9 +331,9 @@ JSON解析エラー
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "無題"
-    content=description ?: (summary ?: "説明なし")
-    price=price ?: 0
+    title=title || "無題"
+    content=description || summary || "説明なし"
+    price=price || 0
 
 日付のフォーマット
 ------------------
@@ -354,8 +354,8 @@ JSON解析エラー
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 参考情報
 ========

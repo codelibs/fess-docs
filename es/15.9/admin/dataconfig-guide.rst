@@ -55,11 +55,16 @@ Parámetros
 
 Especifique los parámetros relacionados con el almacén de datos.
 
+El parámetro ``script_type`` selecciona el motor de scripting utilizado para evaluar
+el campo Script descrito a continuación. Las configuraciones nuevas se rellenan con
+``script_type=javascript``. Si no se especifica ``script_type``, el script se evalúa como Groovy.
+
 Script
 ::::::
 
 Especifique en qué campos configurar los valores obtenidos del almacén de datos, etc.
-Las expresiones se pueden describir en Groovy.
+Las expresiones se escriben en la sintaxis del motor de scripting seleccionado mediante
+``script_type`` (JavaScript de forma predeterminada).
 
 Valor de impulso
 ::::::::::::::::
@@ -182,7 +187,7 @@ Un ejemplo de configuración de script sería el siguiente.
 
 Los parámetros están en formato "clave=valor". La descripción de las claves es la siguiente.
 
-En el lado del valor, se describe en Groovy.
+En el lado del valor, se describe en la sintaxis del motor de scripting seleccionado mediante ``script_type``.
 Las cadenas deben encerrarse entre comillas dobles. Si accede por nombre de columna de la base de datos, será ese valor.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

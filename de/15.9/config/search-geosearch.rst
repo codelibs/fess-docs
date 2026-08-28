@@ -85,7 +85,7 @@ Im Konfigurationsskript des Datenspeichers ordnen Sie den abgerufenen Wert dem `
 Hinzufügen von Standortinformationen per Skript
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sie können Standortinformationen auch dynamisch zu Dokumenten hinzufügen, indem Sie die Skriptfunktion (Groovy) der Crawl-Konfiguration verwenden.
+Sie können Standortinformationen auch dynamisch zu Dokumenten hinzufügen, indem Sie die Skriptfunktion der Crawl-Konfiguration verwenden (standardmäßig JavaScript; Groovy kann ebenfalls ausgewählt werden).
 Weisen Sie den Wert direkt dem Feldnamen zu.
 
 ::
@@ -93,7 +93,7 @@ Weisen Sie den Wert direkt dem Feldnamen zu.
     // Breiten- und Längengrad im location-Feld festlegen
     location="35.681236,139.767125"
 
-Weitere Details zu Skripten finden Sie unter :doc:`scripting-groovy`.
+Weitere Details zu Skripten finden Sie unter :doc:`scripting-overview`.
 
 Konfiguration bei der Suche
 ----------------------------

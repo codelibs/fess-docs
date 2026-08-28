@@ -170,7 +170,7 @@ Available Fields
 
 .. note::
 
-   If a field name contains characters that are invalid as a Groovy identifier,
+   If a field name contains characters that are invalid as a script identifier,
    such as spaces or hyphens, that field cannot be referenced directly as a variable name.
 
 JSON Format Details
@@ -323,7 +323,7 @@ Joining Arrays
     title=title
     content=content
     tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+    categories=categories.map(c => c.name).join(", ")
 
 Setting Default Values
 ----------------------
@@ -331,9 +331,9 @@ Setting Default Values
 ::
 
     url="https://example.com/item/" + id
-    title=title ?: "Untitled"
-    content=description ?: (summary ?: "No description")
-    price=price ?: 0
+    title=title || "Untitled"
+    content=description || summary || "No description"
+    price=price || 0
 
 Date Formatting
 ---------------
@@ -354,8 +354,8 @@ Numeric Processing
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=price as Float
-    stock=stock_quantity as Integer
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Reference
 =========
