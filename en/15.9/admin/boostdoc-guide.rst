@@ -50,6 +50,13 @@ Specifies the scripting engine used to evaluate the condition and boost value ex
 New configurations are prefilled with ``javascript``. Selecting ``groovy`` requires the
 ``fess-script-groovy`` plugin. If left blank, the expressions are evaluated as Groovy.
 
+.. warning::
+
+   Under JavaScript, write the condition and the boost value expression as bare expressions
+   with no trailing semicolon. Text that can only be parsed as a block of statements evaluates
+   to ``null`` unless it contains an explicit ``return``. See :ref:`javascript-statement-null`
+   (in :doc:`../config/scripting-javascript`).
+
 Sort Order
 ::::::::::
 

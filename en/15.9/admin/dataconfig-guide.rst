@@ -66,6 +66,15 @@ Specifies which fields to assign values retrieved from the data store.
 Expressions are written in the syntax of the scripting engine selected by the
 ``script_type`` parameter above (JavaScript by default).
 
+.. warning::
+
+   Under JavaScript, write each line as a bare expression with no trailing semicolon. A line
+   that can only be parsed as a block of statements — anything with a trailing semicolon, or a
+   ``let`` / ``const`` declaration — evaluates to ``null`` unless it contains an explicit
+   ``return``, and a mapping that evaluates to ``null`` simply does not set that field. There
+   is no error and no log line; the only symptom is a field that quietly goes empty. See
+   :ref:`javascript-statement-null` (in :doc:`../config/scripting-javascript`).
+
 Boost Value
 :::::::::::
 

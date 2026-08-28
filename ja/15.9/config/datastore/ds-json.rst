@@ -260,6 +260,9 @@ JSONオブジェクトのトップレベルのフィールドは、スクリプ�
 - ``<フィールド名>`` - JSONオブジェクトのトップレベルのフィールドを名前で直接参照します
 - ``<親>.<子>`` - ネストしたオブジェクトのフィールド
 - ``<配列>[<インデックス>]`` - 配列要素
+- ``<配列>.<メソッド>`` - 渡される ``java.util.List`` のメソッド（ ``size()`` など）。
+  ``join()`` や ``map()`` などの JavaScript の配列メソッドは利用できません
+  （「配列の結合」を参照）
 
 .. note::
 
@@ -363,6 +366,75 @@ APIレスポンスを保存したファイル
     max_depth=3
     include_pattern=.*\.jsonl
     file_encoding=UTF-8
+
+スクリプトの高度な使用例
+========================
+
+条件付き処理
+------------
+
+各フィールドは独立した式として評価されます。条件付きの値は三項演算子を使用します:
+
+::
+
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
+
+配列の結合
+----------
+
+::
+
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   JSON の配列はスクリプトには ``java.util.List`` として、ネストした JSON オブジェクトは
+   ``java.util.Map`` として渡されます。JavaScript の配列・オブジェクトではないため、
+   JavaScript の配列メソッドは存在せず、 ``tags.join(", ")`` は
+   ``TypeError: tags.join is not a function`` で失敗し、そのフィールドは登録されません。
+   文字列のリストを連結する場合は ``java.lang.String.join()`` を使用し、 ``map()`` などの
+   配列メソッドが必要な場合は ``Java.from()`` で JavaScript の配列に変換してください。
+   インデックスアクセス（ ``categories[0]`` ）とネストしたオブジェクトのプロパティ
+   アクセス（ ``.name`` ）は Java 相互運用により利用でき、記載どおりに動作します。
+
+デフォルト値の設定
+------------------
+
+::
+
+    url="https://example.com/item/" + id
+    title=title || "無題"
+    content=description || summary || "説明なし"
+    price=price || 0
+
+日付のフォーマット
+------------------
+
+::
+
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
+
+数値の処理
+----------
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 トラブルシューティング
 ======================

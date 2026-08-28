@@ -10,6 +10,8 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
 동작하며, 스크립트는 ECMAScript 6로 실행됩니다. 식별자는 ``javascript``\ 이며,
 ``js`` 및 ``sai``\ 라는 별칭으로도 지정할 수 있습니다.
 
+.. _javascript-statement-null:
+
 스크립트 평가 방식
 ==================
 
@@ -38,8 +40,46 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
 평가되는 경우에는 여러 줄의 문이나 ``let`` / ``const``\ 의 변수 선언, 제어
 구문을 자유롭게 사용할 수 있습니다.
 
+.. warning::
+
+   문 블록으로 컴파일된 스크립트가 값을 반환하는 것은 명시적인 ``return`` 을 포함하는 경우
+   뿐입니다. 스크립트 문자열을 식으로 해석할 수 없는 경우 그 문자열은 함수로 감싸져 문
+   블록으로 실행되는데, ``return`` 이 없는 블록의 평가 결과는 ``null`` 이 됩니다.
+   끝에 세미콜론을 하나 붙이는 것만으로 이 경계를 넘습니다.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - 스크립트
+        - 결과
+        - 이유
+      * - ``content.length()``
+        - ``11``
+        - 식으로 해석되며, 식의 값이 그대로 결과가 됩니다
+      * - ``content.length();``
+        - ``null``
+        - 문 블록으로만 해석되며, ``return`` 이 없습니다
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - 문 블록으로만 해석되며, ``return`` 이 없습니다
+
+   Groovy에서는 마지막으로 평가된 문의 값이 스크립트의 반환값이 되기 때문에 위 세 가지 모두
+   값을 반환했습니다. JavaScript에는 이러한 규칙이 없습니다.
+
+   이는 이행 과정에서 오류도 로그도 남지 않고, 필드가 조용히 비는 것 외에는 아무런 증상도
+   나타나지 않는 유일한 차이입니다. 스크립트가 ``null`` 을 반환한 데이터 스토어 매핑은 해당
+   필드를 단순히 설정하지 않습니다. 데이터 스토어의 ``필드명=식`` 각 행은 끝에 세미콜론을
+   붙이지 않은 식으로 작성하고, 스케줄 작업 스크립트에는 반드시 명시적인 ``return`` 을
+   작성하십시오.
+
 기본 구문
 =========
+
+아래에서 끝에 세미콜론이 붙어 있지 않은 행은 **식** 이며, 데이터 스토어의 ``필드명=식``
+행을 포함해 어디에서든 사용할 수 있습니다. ``let`` / ``const`` 선언, ``if`` 블록, 반복문은
+**문** 이며, 스케줄 작업처럼 스크립트 전체가 평가되는 경우에만 사용할 수 있습니다. 그 경우에도
+값을 반환하려면 명시적인 ``return`` 이 필요합니다. 위의 "스크립트 평가 방식" 을 참조하세요.
 
 변수 선언
 ---------
@@ -70,16 +110,16 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
     `;
 
     // 치환（정규 표현식 사용. ECMAScript 6에는 String#replaceAll이 없습니다）
-    title.replace(/old/g, "new");
-    title.replace(/\s+/g, " ");  // 연속된 공백을 하나로 합침
+    title.replace(/old/g, "new")
+    title.replace(/\s+/g, " ")  // 연속된 공백을 하나로 합침
 
     // 분할/결합
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // 대문자/소문자 변환
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 컬렉션 조작
 -----------
@@ -94,8 +134,8 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
 
     // 객체
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 조건 분기
 ---------
@@ -110,14 +150,14 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
     }
 
     // 삼항 연산자
-    const result = data.count > 0 ? "있음" : "없음";
+    data.count > 0 ? "있음" : "없음"
 
     // 기본값（논리 OR 연산자. JavaScript에는 Elvis 연산자가 없습니다）
-    const value = data.title || "무제";
+    data.title || "무제"
 
     // 옵셔널 체이닝（?.）은 ES2020 구문으로 ES6에서는 사용할 수 없습니다.
     // 대신 명시적으로 null을 확인하세요.
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 반복 처리
 ---------
@@ -150,6 +190,7 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
    따라서 ``let`` / ``const``\ 에 의한 변수 선언문이나, 여러 필드를 한꺼번에 설정하는 복수 행의 제어 구문( ``if`` 블록 등)은 사용할 수 없습니다.
    Java 클래스를 이용하는 경우에는 완전 정규화 클래스명(FQCN)을 사용하여 하나의 식으로 기술하고, 조건 분기는 필드별로 삼항 연산자로 기술합니다(예: ``url=data.published ? data.url : null`` ).
    또한 여기서 사용하는 변수명 ``data`` 는 설명을 위한 예시이며, 실제 변수명은 사용하는 데이터 스토어 커넥터에 따라 다릅니다. 자세한 내용은 :doc:`../admin/dataconfig-guide` 를 참조하세요.
+   식은 끝에 세미콜론을 붙이지 않고 작성하십시오. 문 블록으로만 해석할 수 있는 행의 평가 결과는 ``null`` 이 되어 해당 필드가 설정되지 않습니다. :ref:`javascript-statement-null` 을 참조하세요.
 
 기본 매핑
 ---------

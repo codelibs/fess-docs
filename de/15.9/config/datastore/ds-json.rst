@@ -286,6 +286,9 @@ Verfügbare Felder
   JSON-Objekts über seinen Namen
 - ``<Elternteil>.<Kind>`` - Feld eines verschachtelten Objekts
 - ``<Array>[<Index>]`` - Array-Element
+- ``<Array>.<Methode>`` - Methoden der übergebenen ``java.util.List`` , etwa ``size()`` .
+  JavaScript-Array-Methoden wie ``join()`` und ``map()`` stehen darauf **nicht** zur
+  Verfügung (siehe "Array-Verknüpfung")
 
 .. note::
 
@@ -394,6 +397,77 @@ Parameter:
     max_depth=3
     include_pattern=.*\.jsonl
     file_encoding=UTF-8
+
+Erweiterte Skript-Beispiele
+============================
+
+Bedingte Verarbeitung
+-----------------------
+
+Jedes Feld wird als eigenständiger Ausdruck ausgewertet. Für bedingte Werte verwenden Sie den
+ternären Operator:
+
+::
+
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
+
+Array-Verknüpfung
+-------------------
+
+::
+
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   Ein JSON-Array wird dem Skript als ``java.util.List`` übergeben, ein verschachteltes
+   JSON-Objekt als ``java.util.Map`` - nicht als JavaScript-Array bzw. -Objekt. Die
+   JavaScript-Array-Methoden existieren darauf daher nicht: ``tags.join(", ")`` schlägt mit
+   ``TypeError: tags.join is not a function`` fehl und das Feld wird verworfen. Verwenden Sie
+   ``java.lang.String.join()`` , um eine Liste von Zeichenketten zu verketten, oder wandeln Sie
+   die Liste mit ``Java.from()`` in ein JavaScript-Array um, wenn Sie ``map()`` und die übrigen
+   Array-Methoden benötigen. Indexzugriff ( ``categories[0]`` ) und Eigenschaftszugriff auf ein
+   verschachteltes Objekt ( ``.name`` ) stehen über die Java-Interoperabilität zur Verfügung und
+   funktionieren wie angegeben.
+
+Standardwerte festlegen
+-------------------------
+
+::
+
+    url="https://example.com/item/" + id
+    title=title || "Ohne Titel"
+    content=description || summary || "Keine Beschreibung"
+    price=price || 0
+
+Datumsformatierung
+--------------------
+
+::
+
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
+
+Numerische Verarbeitung
+-------------------------
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Fehlerbehebung
 ================

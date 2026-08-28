@@ -66,6 +66,15 @@
 식은 위의 ``script_type`` 파라미터로 지정한 스크립트 엔진의 구문으로 작성합니다
 （기본값은 JavaScript입니다）。
 
+.. warning::
+
+   JavaScript에서는 각 행을 끝에 세미콜론을 붙이지 않은 식으로 작성하십시오. 문 블록으로만
+   해석할 수 있는 행(끝에 세미콜론이 있는 것, ``let`` / ``const`` 선언 등)은 명시적인
+   ``return`` 을 포함하지 않는 한 ``null`` 로 평가되며, ``null`` 로 평가된 매핑은 해당 필드를
+   설정하지 않습니다. 오류도 로그도 출력되지 않으며, 필드가 조용히 비는 것 외에는 아무런 증상도
+   없습니다. :ref:`javascript-statement-null` ( :doc:`../config/scripting-javascript` )을
+   참조하세요.
+
 부스트 값
 ::::::::
 

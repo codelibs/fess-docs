@@ -517,7 +517,9 @@ Script
 
 Le champ « Script » contient le mapping sous la forme ``membre gauche=membre droit``.
 Le membre gauche est le nom du champ d'index, le membre droit est un script
-(Groovy par défaut) référençant un champ de l'enregistrement source. Voici un
+(JavaScript pour une configuration nouvellement créée ; une configuration sans
+type de script enregistré est traitée comme du Groovy) référençant un champ de
+l'enregistrement source. Voici un
 exemple pour un enregistrement source comportant les champs ``url`` / ``title``
 / ``content`` / ``updated_at`` / ``content_type``.
 

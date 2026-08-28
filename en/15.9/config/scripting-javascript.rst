@@ -10,6 +10,8 @@ It runs on Sai (a Nashorn fork by CodeLibs that |Fess| already uses for its DI X
 expressions), and scripts are executed as ECMAScript 6. Its identifier is
 ``javascript``, and it can also be specified using the aliases ``js`` and ``sai``.
 
+.. _javascript-statement-null:
+
 How Scripts Are Evaluated
 ==========================
 
@@ -38,8 +40,47 @@ scripts, a script consisting of multiple statements cannot be used. In places wh
 the entire script is evaluated, such as scheduled jobs, you can freely use multi-line
 statements, ``let`` / ``const`` variable declarations, and control-flow constructs.
 
+.. warning::
+
+   A script that is compiled as a statement block returns a value only when it contains an
+   explicit ``return``. When the text fails to parse as an expression it is wrapped in a
+   function and run as a block of statements, and a block with no ``return`` evaluates to
+   ``null``. A single trailing semicolon is enough to cross that line:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - Script
+        - Result
+        - Reason
+      * - ``content.length()``
+        - ``11``
+        - Parses as an expression; the value of the expression is the result
+      * - ``content.length();``
+        - ``null``
+        - Parses only as a statement block, which contains no ``return``
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - Parses only as a statement block, which contains no ``return``
+
+   Under Groovy all three returned a value, because the value of the last statement evaluated
+   is the script's return value. JavaScript has no such rule.
+
+   This is the one difference in the migration that produces no error, no log line and no
+   symptom other than a field quietly going empty: a data store mapping whose script returns
+   ``null`` simply does not set that field. Write each data store ``field=expression`` line as
+   a bare expression with no trailing semicolon, and give every scheduled job script an
+   explicit ``return``.
+
 Basic Syntax
 ============
+
+A line with no trailing semicolon below is an **expression** and can be used anywhere,
+including a data store ``field=expression`` line. Declarations ( ``let`` / ``const`` ),
+``if`` blocks and loops are **statements**: they can only be used where the whole script is
+evaluated, such as a scheduled job, and the script must contain an explicit ``return`` to
+produce a value. See "How Scripts Are Evaluated" above.
 
 Variable Declaration
 --------------------
@@ -70,16 +111,16 @@ String Operations
     `;
 
     // Replacement (using a regular expression; ECMAScript 6 has no String#replaceAll)
-    title.replace(/old/g, "new");
-    title.replace(/\s+/g, " ");  // Collapse runs of whitespace into one space
+    title.replace(/old/g, "new")
+    title.replace(/\s+/g, " ")  // Collapse runs of whitespace into one space
 
     // Split and join
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // Case conversion
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 Collection Operations
 ---------------------
@@ -94,8 +135,8 @@ Collection Operations
 
     // Objects
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 Conditional Branching
 ---------------------
@@ -110,14 +151,14 @@ Conditional Branching
     }
 
     // Ternary operator
-    const result = data.count > 0 ? "Present" : "None";
+    data.count > 0 ? "Present" : "None"
 
     // Default value (logical OR operator; JavaScript has no Elvis operator)
-    const value = data.title || "Untitled";
+    data.title || "Untitled"
 
     // Optional chaining (?.) is ES2020 syntax and is not available under ES6.
     // Check for null explicitly instead.
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 Loop Processing
 ---------------
@@ -150,6 +191,7 @@ Examples of scripts for data store configuration.
    Therefore, ``let`` / ``const`` variable-declaration statements and multi-line control structures that set several fields at once (such as ``if`` blocks) cannot be used.
    When using Java classes, write them as a single expression with a fully qualified class name (FQCN), and use a per-field ternary operator for conditional values (for example, ``url=data.published ? data.url : null`` ).
    Also, the variable name ``data`` used here is only an example; the actual variable name depends on the data store connector you use. See :doc:`../admin/dataconfig-guide` for details.
+   Write the expression without a trailing semicolon: a line that can only be parsed as a statement block evaluates to ``null`` and the field is left unset — see :ref:`javascript-statement-null`.
 
 Basic Mapping
 -------------

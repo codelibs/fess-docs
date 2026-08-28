@@ -50,6 +50,13 @@ Geben Sie die Skript-Engine an, mit der die Bedingung und der Boost-Ausdruck aus
 Neue Konfigurationen sind mit ``javascript`` vorausgefüllt. Für ``groovy`` ist das Plugin
 ``fess-script-groovy`` erforderlich. Bleibt das Feld leer, werden die Ausdrücke als Groovy ausgewertet.
 
+.. warning::
+
+   Schreiben Sie unter JavaScript die Bedingung und den Boost-Ausdruck als reine Ausdrücke ohne
+   abschließendes Semikolon. Text, der sich nur als Block von Anweisungen parsen lässt, wird zu
+   ``null`` ausgewertet, sofern er kein explizites ``return`` enthält. Siehe
+   :ref:`javascript-statement-null` (in :doc:`../config/scripting-javascript`).
+
 Sortierreihenfolge
 ::::::::::::::::::
 

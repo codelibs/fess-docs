@@ -279,6 +279,9 @@ Champs disponibles
   JSON
 - ``<parent>.<enfant>`` — Champ d'un objet imbriqué
 - ``<tableau>[<index>]`` — Élément d'un tableau
+- ``<tableau>.<méthode>`` — Méthodes du ``java.util.List`` transmis, par exemple ``size()`` .
+  Les méthodes de tableau JavaScript telles que ``join()`` et ``map()`` n'y sont **pas**
+  disponibles (voir "Jointure de tableaux")
 
 .. note::
 
@@ -387,6 +390,77 @@ Paramètres :
     max_depth=3
     include_pattern=.*\.jsonl
     file_encoding=UTF-8
+
+Utilisation avancée des scripts
+================================
+
+Traitement conditionnel
+------------------------
+
+Chaque champ est évalué comme une expression indépendante. Pour les valeurs conditionnelles,
+utilisez l'opérateur ternaire :
+
+::
+
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
+
+Jointure de tableaux
+---------------------
+
+::
+
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   Un tableau JSON est transmis au script sous la forme d'un ``java.util.List`` et un objet
+   JSON imbriqué sous la forme d'un ``java.util.Map`` , et non sous la forme d'un tableau ou
+   d'un objet JavaScript. Les méthodes de tableau JavaScript n'existent donc pas sur eux :
+   ``tags.join(", ")`` échoue avec ``TypeError: tags.join is not a function`` et le champ est
+   abandonné. Utilisez ``java.lang.String.join()`` pour joindre une liste de chaînes, ou
+   convertissez la liste en tableau JavaScript avec ``Java.from()`` lorsque vous avez besoin de
+   ``map()`` et des autres méthodes de tableau. L'accès par indice ( ``categories[0]`` ) et
+   l'accès aux propriétés d'un objet imbriqué ( ``.name`` ) sont fournis par
+   l'interopérabilité Java et fonctionnent tels quels.
+
+Configuration des valeurs par défaut
+--------------------------------------
+
+::
+
+    url="https://example.com/item/" + id
+    title=title || "Sans titre"
+    content=description || summary || "Sans description"
+    price=price || 0
+
+Formatage des dates
+--------------------
+
+::
+
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
+
+Traitement des nombres
+-----------------------
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Dépannage
 =========

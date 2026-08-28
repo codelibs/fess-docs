@@ -67,6 +67,16 @@ Geben Sie an, in welchen Feldern die vom Datenspeicher abgerufenen Werte festgel
 Ausdrücke werden in der Syntax der mit ``script_type`` ausgewählten Skript-Engine
 geschrieben (standardmäßig JavaScript).
 
+.. warning::
+
+   Schreiben Sie unter JavaScript jede Zeile als reinen Ausdruck ohne abschließendes Semikolon.
+   Eine Zeile, die sich nur als Block von Anweisungen parsen lässt — alles mit abschließendem
+   Semikolon oder eine ``let`` / ``const``-Deklaration — wird zu ``null`` ausgewertet, sofern
+   sie kein explizites ``return`` enthält, und ein Mapping, das zu ``null`` ausgewertet wird,
+   setzt dieses Feld schlicht nicht. Es gibt weder einen Fehler noch eine Logzeile; das einzige
+   Symptom ist ein still leer bleibendes Feld. Siehe :ref:`javascript-statement-null`
+   (in :doc:`../config/scripting-javascript`).
+
 Boost-Wert
 ::::::::::
 

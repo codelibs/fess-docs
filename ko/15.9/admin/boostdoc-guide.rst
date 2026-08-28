@@ -50,6 +50,13 @@
 신규 작성 시에는 ``javascript``\ 가 미리 입력되어 있습니다. ``groovy``\ 를 지정하려면
 ``fess-script-groovy`` 플러그인이 필요합니다. 비워두면 Groovy로 평가됩니다.
 
+.. warning::
+
+   JavaScript에서는 조건 및 부스트 값 식을 끝에 세미콜론을 붙이지 않은 식으로 작성하십시오.
+   문 블록으로만 해석할 수 있는 문자열은 명시적인 ``return`` 을 포함하지 않는 한 ``null`` 로
+   평가됩니다. :ref:`javascript-statement-null`
+   ( :doc:`../config/scripting-javascript` )을 참조하세요.
+
 정렬 순서
 ::::::
 

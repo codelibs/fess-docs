@@ -50,6 +50,13 @@ Especifique el motor de scripting utilizado para evaluar la condición y la expr
 Las configuraciones nuevas se rellenan con ``javascript``. Para seleccionar ``groovy`` se requiere
 el plugin ``fess-script-groovy``. Si se deja en blanco, las expresiones se evalúan como Groovy.
 
+.. warning::
+
+   Con JavaScript, escriba la condición y la expresión de impulso como expresiones puras sin
+   punto y coma final. Un texto que solo puede analizarse como bloque de sentencias se evalúa
+   como ``null`` salvo que contenga un ``return`` explícito. Consulte
+   :ref:`javascript-statement-null` (en :doc:`../config/scripting-javascript`).
+
 Orden de clasificación
 :::::::::::::::::::::::
 

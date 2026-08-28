@@ -168,7 +168,8 @@ PostgreSQL示例：
      - 每行处理之间的延迟（毫秒）。默认值：0
    * - ``script_type``
      - 否
-     - 脚本引擎类型。默认值：groovy
+     - 脚本引擎类型。新建时会预填 ``javascript`` ；未记录值的配置将被视为 ``groovy`` 。
+       详情请参阅 :doc:`ds-overview` 。
 
 .. note::
    查询挂起时，即使停止作业也不会释放爬虫线程。

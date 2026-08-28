@@ -66,6 +66,16 @@ Especifique en qué campos configurar los valores obtenidos del almacén de dato
 Las expresiones se escriben en la sintaxis del motor de scripting seleccionado mediante
 ``script_type`` (JavaScript de forma predeterminada).
 
+.. warning::
+
+   Con JavaScript, escriba cada línea como una expresión pura sin punto y coma final. Una línea
+   que solo puede analizarse como bloque de sentencias —cualquiera con punto y coma final, o una
+   declaración ``let`` / ``const``— se evalúa como ``null`` salvo que contenga un ``return``
+   explícito, y un mapeo que se evalúa como ``null`` simplemente no establece ese campo. No hay
+   ningún error ni ninguna línea de registro; el único síntoma es un campo que se queda vacío en
+   silencio. Consulte :ref:`javascript-statement-null`
+   (en :doc:`../config/scripting-javascript`).
+
 Valor de impulso
 ::::::::::::::::
 

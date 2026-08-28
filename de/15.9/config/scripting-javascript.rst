@@ -10,6 +10,8 @@ Es läuft auf Sai (einem Nashorn-Fork von CodeLibs, den |Fess| bereits für DI-X
 verwendet), und Skripte werden als ECMAScript 6 ausgeführt. Der Bezeichner lautet
 ``javascript``; alternativ können auch die Aliase ``js`` und ``sai`` verwendet werden.
 
+.. _javascript-statement-null:
+
 Wie Skripte ausgewertet werden
 ================================
 
@@ -39,8 +41,50 @@ An Stellen, an denen das gesamte Skript ausgewertet wird — etwa bei geplanten 
 können Sie dagegen frei mehrzeilige Anweisungen, ``let`` / ``const``-Variablendeklarationen
 und Kontrollstrukturen verwenden.
 
+.. warning::
+
+   Ein Skript, das als Anweisungsblock kompiliert wird, liefert nur dann einen Wert zurück,
+   wenn es ein explizites ``return`` enthält. Lässt sich der Text nicht als Ausdruck parsen,
+   wird er in eine Funktion eingebettet und als Block von Anweisungen ausgeführt — und ein
+   Block ohne ``return`` wird zu ``null`` ausgewertet. Ein einziges abschließendes Semikolon
+   genügt, um diese Grenze zu überschreiten:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 15 45
+
+      * - Skript
+        - Ergebnis
+        - Grund
+      * - ``content.length()``
+        - ``11``
+        - Wird als Ausdruck geparst; der Wert des Ausdrucks ist das Ergebnis
+      * - ``content.length();``
+        - ``null``
+        - Wird nur als Anweisungsblock geparst, der kein ``return`` enthält
+      * - ``var x = 1; x + 2``
+        - ``null``
+        - Wird nur als Anweisungsblock geparst, der kein ``return`` enthält
+
+   Unter Groovy lieferten alle drei einen Wert, da dort der Wert der zuletzt ausgewerteten
+   Anweisung der Rückgabewert des Skripts ist. In JavaScript gibt es diese Regel nicht.
+
+   Dies ist der einzige Unterschied bei der Migration, der weder einen Fehler noch eine
+   Logzeile erzeugt und dessen einziges Symptom ein still leer bleibendes Feld ist: Ein
+   Datenspeicher-Mapping, dessen Skript ``null`` zurückgibt, setzt dieses Feld schlicht nicht.
+   Schreiben Sie jede ``Feldname=Ausdruck``-Zeile eines Datenspeichers als reinen Ausdruck ohne
+   abschließendes Semikolon, und geben Sie jedem Skript einer geplanten Aufgabe ein explizites
+   ``return``.
+
 Grundlegende Syntax
 ===================
+
+Eine Zeile ohne abschließendes Semikolon ist im Folgenden ein **Ausdruck** und kann überall
+verwendet werden, auch in einer ``Feldname=Ausdruck``-Zeile eines Datenspeichers.
+Deklarationen ( ``let`` / ``const`` ), ``if``-Blöcke und Schleifen sind **Anweisungen**: Sie
+können nur dort verwendet werden, wo das gesamte Skript ausgewertet wird, etwa in einer
+geplanten Aufgabe, und das Skript muss ein explizites ``return`` enthalten, um einen Wert zu
+liefern. Siehe „Wie Skripte ausgewertet werden" oben.
 
 Variablendeklaration
 --------------------
@@ -71,16 +115,16 @@ Zeichenkettenoperationen
     `;
 
     // Ersetzung (mit regulärem Ausdruck; ECMAScript 6 kennt kein String#replaceAll)
-    title.replace(/alt/g, "neu");
-    title.replace(/\s+/g, " ");  // Aufeinanderfolgende Leerzeichen zusammenfassen
+    title.replace(/alt/g, "neu")
+    title.replace(/\s+/g, " ")  // Aufeinanderfolgende Leerzeichen zusammenfassen
 
     // Teilen und Verbinden
     const tags = "tag1,tag2,tag3".split(",");
     const joined = tags.join(", ");
 
     // Gross-/Kleinschreibung ändern
-    title.toUpperCase();
-    title.toLowerCase();
+    title.toUpperCase()
+    title.toLowerCase()
 
 Collection-Operationen
 -----------------------
@@ -95,8 +139,8 @@ Collection-Operationen
 
     // Objekte
     const map = { name: "Fess", version: "15.9" };
-    map.name;
-    map["version"];
+    map.name
+    map["version"]
 
 Bedingte Verzweigung
 --------------------
@@ -111,14 +155,14 @@ Bedingte Verzweigung
     }
 
     // Ternärer Operator
-    const result = data.count > 0 ? "Vorhanden" : "Keine";
+    data.count > 0 ? "Vorhanden" : "Keine"
 
     // Standardwert (logischer OR-Operator; JavaScript kennt keinen Elvis-Operator)
-    const value = data.title || "Ohne Titel";
+    data.title || "Ohne Titel"
 
     // Optional Chaining (?.) ist ES2020-Syntax und unter ES6 nicht verfügbar.
     // Prüfen Sie stattdessen explizit auf null.
-    const length = (data.content != null) ? data.content.length() : 0;
+    (data.content != null) ? data.content.length() : 0
 
 Schleifenverarbeitung
 ----------------------
@@ -151,6 +195,7 @@ Beispiele für Skripte zur Datenspeicher-Konfiguration.
    Daher können Variablendeklarationen wie ``let`` / ``const`` und mehrzeilige Kontrollstrukturen, die mehrere Felder gleichzeitig setzen (z. B. ``if``-Blöcke), nicht verwendet werden.
    Wenn Sie Java-Klassen verwenden, schreiben Sie diese als einzelnen Ausdruck mit vollständig qualifiziertem Klassennamen (FQCN), und verwenden Sie für bedingte Werte den Ternäroperator pro Feld (zum Beispiel ``url=data.published ? data.url : null`` ).
    Der hier verwendete Variablenname ``data`` ist nur ein Beispiel; der tatsächliche Variablenname hängt vom verwendeten Datenspeicher-Konnektor ab. Details finden Sie unter :doc:`../admin/dataconfig-guide`.
+   Schreiben Sie den Ausdruck ohne abschließendes Semikolon: Eine Zeile, die nur als Anweisungsblock geparst werden kann, wird zu ``null`` ausgewertet und das Feld bleibt ungesetzt — siehe :ref:`javascript-statement-null`.
 
 Grundlegendes Mapping
 ----------------------
