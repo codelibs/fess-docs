@@ -322,11 +322,12 @@ URLパターンによる制限
 クロール順序
 ------------
 
-クロール設定の設定パラメーターに ``crawl.order`` を指定すると、キューから URL を取り出す順序を
+クロール設定の設定パラメーターに ``config.crawl.order`` を指定すると、キューから URL を取り出す順序を
 変更できます。値には以下のコンポーネント名を指定します。
 
 .. list-table::
    :header-rows: 1
+   :widths: 30 70
 
    * - 値
      - 取り出す順序
@@ -341,9 +342,13 @@ URLパターンによる制限
    * - ``weightFirstUrlQueueOrder``
      - 重み降順のみ
 
+既定では重みは一律のため、カスタムの ``UrlQueueWeigher`` を導入しない限り
+``weightFirstUrlQueueOrder`` は効果を持たず、``sequentialUrlQueueOrder`` は実質的に
+発見順での取り出しになります。
+
 ::
 
-    crawl.order=depthFirstUrlQueueOrder
+    config.crawl.order=depthFirstUrlQueueOrder
 
 ``depthFirstUrlQueueOrder`` は厳密な深さ優先探索ではありません。クローラーは URL をまとめて
 取り出し、そのバッチを処理し終えてから次のバッチを取り出すため、処理中に見つかったより深い
@@ -352,7 +357,7 @@ URL は次のバッチに回ります。
 解決できないコンポーネント名を指定した場合は警告をログに出力し、既定の順序で動作します。
 
 .. note::
-   以前のバージョンの ``sequential`` と ``random`` はそのまま指定できます。
+   以前のバージョンの ``config.crawl.order=sequential`` と ``config.crawl.order=random`` はそのまま指定できます。
 
 ファイルサイズの設定
 ====================

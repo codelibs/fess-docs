@@ -319,12 +319,13 @@ Gibt die Häufigkeit der Crawl-Ausführung an.
 Crawl-Reihenfolge
 -----------------
 
-Durch Setzen von ``crawl.order`` in den Konfigurationsparametern einer Crawl-Konfiguration
+Durch Setzen von ``config.crawl.order`` in den Konfigurationsparametern einer Crawl-Konfiguration
 wird die Reihenfolge geändert, in der URLs aus der Warteschlange entnommen werden. Der Wert
 ist einer der folgenden Komponentennamen.
 
 .. list-table::
    :header-rows: 1
+   :widths: 30 70
 
    * - Wert
      - Abrufreihenfolge
@@ -339,9 +340,14 @@ ist einer der folgenden Komponentennamen.
    * - ``weightFirstUrlQueueOrder``
      - Nur nach absteigendem Gewicht
 
+Die Gewichte sind standardmäßig einheitlich, sofern kein benutzerdefinierter
+``UrlQueueWeigher`` installiert ist; daher hat ``weightFirstUrlQueueOrder`` standardmäßig
+keine Wirkung, und ``sequentialUrlQueueOrder`` sortiert in der Praxis nach
+Entdeckungsreihenfolge.
+
 ::
 
-    crawl.order=depthFirstUrlQueueOrder
+    config.crawl.order=depthFirstUrlQueueOrder
 
 ``depthFirstUrlQueueOrder`` ist keine strikte Tiefensuche. Der Crawler ruft einen Stapel von
 URLs ab und arbeitet ihn vollständig ab, bevor er den nächsten abruft. Tiefere URLs, die
@@ -351,7 +357,7 @@ Ein nicht auflösbarer Komponentenname wird als Warnung protokolliert, und die
 Standardreihenfolge wird verwendet.
 
 .. note::
-   Die Werte ``sequential`` und ``random`` aus früheren Versionen funktionieren weiterhin.
+   Die Werte ``config.crawl.order=sequential`` und ``config.crawl.order=random`` aus früheren Versionen funktionieren weiterhin.
 
 Konfiguration der Dateigröße
 ====================

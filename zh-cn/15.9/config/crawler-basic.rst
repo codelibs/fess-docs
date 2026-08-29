@@ -319,11 +319,12 @@ URL模式限制
 爬取顺序
 --------
 
-在爬取配置的配置参数中指定 ``crawl.order``，可以更改从队列中取出 URL 的顺序。值为以下组件名称
+在爬取配置的配置参数中指定 ``config.crawl.order``，可以更改从队列中取出 URL 的顺序。值为以下组件名称
 之一。
 
 .. list-table::
    :header-rows: 1
+   :widths: 30 70
 
    * - 值
      - 取出顺序
@@ -338,9 +339,13 @@ URL模式限制
    * - ``weightFirstUrlQueueOrder``
      - 仅按权重降序
 
+默认情况下权重是统一的，除非安装了自定义的 ``UrlQueueWeigher``，因此
+``weightFirstUrlQueueOrder`` 默认不起作用，``sequentialUrlQueueOrder`` 实际上按发现顺序
+排序。
+
 ::
 
-    crawl.order=depthFirstUrlQueueOrder
+    config.crawl.order=depthFirstUrlQueueOrder
 
 ``depthFirstUrlQueueOrder`` 并非严格的深度优先搜索。爬虫会批量取出 URL 并处理完毕后再取下一批，
 因此处理过程中发现的更深的 URL 会推迟到下一批。
@@ -348,7 +353,7 @@ URL模式限制
 指定无法解析的组件名称时会记录警告日志，并使用默认顺序。
 
 .. note::
-   早期版本的 ``sequential`` 和 ``random`` 值仍然有效。
+   早期版本的 ``config.crawl.order=sequential`` 和 ``config.crawl.order=random`` 值仍然有效。
 
 文件大小配置
 ====================

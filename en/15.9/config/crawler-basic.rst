@@ -317,12 +317,13 @@ Specifies the frequency of crawl execution.
 Crawl Order
 -----------
 
-Setting ``crawl.order`` in the configuration parameters of a crawling config changes the
+Setting ``config.crawl.order`` in the configuration parameters of a crawling config changes the
 order in which URLs are taken from the queue. The value is one of the following component
 names.
 
 .. list-table::
    :header-rows: 1
+   :widths: 30 70
 
    * - Value
      - Fetch order
@@ -337,9 +338,13 @@ names.
    * - ``weightFirstUrlQueueOrder``
      - By descending weight only
 
+Weights are uniform unless a custom ``UrlQueueWeigher`` is installed, so
+``weightFirstUrlQueueOrder`` has no effect by default and ``sequentialUrlQueueOrder`` is, in
+practice, ordered by discovery order.
+
 ::
 
-    crawl.order=depthFirstUrlQueueOrder
+    config.crawl.order=depthFirstUrlQueueOrder
 
 ``depthFirstUrlQueueOrder`` is not a strict depth-first search. The crawler fetches a batch
 of URLs and consumes it before fetching the next one, so deeper URLs found while a batch is
@@ -348,7 +353,7 @@ being consumed wait for the following batch.
 An unresolvable component name is logged as a warning and the default order is used.
 
 .. note::
-   The ``sequential`` and ``random`` values from earlier versions still work.
+   The ``config.crawl.order=sequential`` and ``config.crawl.order=random`` values from earlier versions still work.
 
 File Size Configuration
 =======================
