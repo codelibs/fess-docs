@@ -318,6 +318,43 @@ Especifique la frecuencia de ejecución del rastreo.
     # O configure en el programador
     0 2 * * *  # Todos los días a las 2 AM
 
+Orden de Rastreo
+----------------
+
+Al establecer ``crawl.order`` en los parámetros de configuración de una configuración de
+rastreo se cambia el orden en que se toman las URL de la cola. El valor es uno de los
+siguientes nombres de componente.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Valor
+     - Orden de obtención
+   * - ``sequentialUrlQueueOrder``
+     - Por peso descendente, luego por orden de descubrimiento (predeterminado)
+   * - ``randomUrlQueueOrder``
+     - Aleatorio, con una semilla fija por sesión
+   * - ``depthFirstUrlQueueOrder``
+     - URL más profundas primero
+   * - ``newestFirstUrlQueueOrder``
+     - URL descubiertas más recientemente primero
+   * - ``weightFirstUrlQueueOrder``
+     - Solo por peso descendente
+
+::
+
+    crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` no es una búsqueda en profundidad estricta. El rastreador obtiene
+un lote de URL y lo consume antes de obtener el siguiente, por lo que las URL más profundas
+encontradas mientras se consume un lote esperan al siguiente lote.
+
+Un nombre de componente que no se puede resolver se registra como advertencia y se utiliza el
+orden predeterminado.
+
+.. note::
+   Los valores ``sequential`` y ``random`` de versiones anteriores siguen funcionando.
+
 Configuración de Tamaño de Archivo
 ===================================
 

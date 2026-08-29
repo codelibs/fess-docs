@@ -316,6 +316,40 @@ URL模式限制
     # 或在调度器中设置
     0 2 * * *  # 每天凌晨2点
 
+爬取顺序
+--------
+
+在爬取配置的配置参数中指定 ``crawl.order``，可以更改从队列中取出 URL 的顺序。值为以下组件名称
+之一。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 值
+     - 取出顺序
+   * - ``sequentialUrlQueueOrder``
+     - 权重降序，然后按发现顺序（默认）
+   * - ``randomUrlQueueOrder``
+     - 随机（种子按会话固定）
+   * - ``depthFirstUrlQueueOrder``
+     - 最深的 URL 优先
+   * - ``newestFirstUrlQueueOrder``
+     - 最近发现的 URL 优先
+   * - ``weightFirstUrlQueueOrder``
+     - 仅按权重降序
+
+::
+
+    crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` 并非严格的深度优先搜索。爬虫会批量取出 URL 并处理完毕后再取下一批，
+因此处理过程中发现的更深的 URL 会推迟到下一批。
+
+指定无法解析的组件名称时会记录警告日志，并使用默认顺序。
+
+.. note::
+   早期版本的 ``sequential`` 和 ``random`` 值仍然有效。
+
 文件大小配置
 ====================
 

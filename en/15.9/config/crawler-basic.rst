@@ -314,6 +314,42 @@ Specifies the frequency of crawl execution.
     # Or set in scheduler
     0 2 * * *  # Daily at 2 AM
 
+Crawl Order
+-----------
+
+Setting ``crawl.order`` in the configuration parameters of a crawling config changes the
+order in which URLs are taken from the queue. The value is one of the following component
+names.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Value
+     - Fetch order
+   * - ``sequentialUrlQueueOrder``
+     - By descending weight, then by discovery order (default)
+   * - ``randomUrlQueueOrder``
+     - Random, with a seed fixed per session
+   * - ``depthFirstUrlQueueOrder``
+     - Deepest URLs first
+   * - ``newestFirstUrlQueueOrder``
+     - Most recently discovered URLs first
+   * - ``weightFirstUrlQueueOrder``
+     - By descending weight only
+
+::
+
+    crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` is not a strict depth-first search. The crawler fetches a batch
+of URLs and consumes it before fetching the next one, so deeper URLs found while a batch is
+being consumed wait for the following batch.
+
+An unresolvable component name is logged as a warning and the default order is used.
+
+.. note::
+   The ``sequential`` and ``random`` values from earlier versions still work.
+
 File Size Configuration
 =======================
 

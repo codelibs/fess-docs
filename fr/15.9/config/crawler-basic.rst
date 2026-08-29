@@ -318,6 +318,43 @@ Spécifie la fréquence d'exécution de l'indexation.
     # Ou configuré dans le planificateur
     0 2 * * *  # Tous les jours à 2h du matin
 
+Ordre d'indexation
+------------------
+
+Définir ``crawl.order`` dans les paramètres de configuration d'une configuration
+d'indexation modifie l'ordre dans lequel les URL sont extraites de la file d'attente. La
+valeur est l'un des noms de composant suivants.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Valeur
+     - Ordre de récupération
+   * - ``sequentialUrlQueueOrder``
+     - Par poids décroissant, puis par ordre de découverte (par défaut)
+   * - ``randomUrlQueueOrder``
+     - Aléatoire, avec une graine fixe par session
+   * - ``depthFirstUrlQueueOrder``
+     - URL les plus profondes en premier
+   * - ``newestFirstUrlQueueOrder``
+     - URL découvertes le plus récemment en premier
+   * - ``weightFirstUrlQueueOrder``
+     - Par poids décroissant uniquement
+
+::
+
+    crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` n'est pas un parcours en profondeur strict. Le crawler récupère
+un lot d'URL et le traite entièrement avant d'en récupérer un autre ; les URL plus profondes
+découvertes pendant le traitement attendent donc le lot suivant.
+
+Un nom de composant introuvable est journalisé comme avertissement et l'ordre par défaut est
+utilisé.
+
+.. note::
+   Les valeurs ``sequential`` et ``random`` des versions précédentes fonctionnent toujours.
+
 Configuration de la taille des fichiers
 ====================
 

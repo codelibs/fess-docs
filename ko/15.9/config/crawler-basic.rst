@@ -317,6 +317,40 @@ URL 패턴에 의한 제한
     # 또는 스케줄러에서 설정
     0 2 * * *  # 매일 오전 2시
 
+크롤링 순서
+------------
+
+크롤링 설정의 설정 파라미터에 ``crawl.order``\ 를 지정하면 큐에서 URL을 꺼내는 순서를 변경할 수
+있습니다. 값에는 다음 컴포넌트 이름을 지정합니다.
+
+.. list-table::
+   :header-rows: 1
+
+   * - 값
+     - 가져오는 순서
+   * - ``sequentialUrlQueueOrder``
+     - 가중치 내림차순, 그 다음 발견 순서 (기본값)
+   * - ``randomUrlQueueOrder``
+     - 무작위 (시드는 세션별로 고정)
+   * - ``depthFirstUrlQueueOrder``
+     - 가장 깊은 URL 먼저
+   * - ``newestFirstUrlQueueOrder``
+     - 가장 최근에 발견된 URL 먼저
+   * - ``weightFirstUrlQueueOrder``
+     - 가중치 내림차순만
+
+::
+
+    crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder``\ 는 엄밀한 깊이 우선 탐색이 아닙니다. 크롤러는 URL을 일괄로 가져와
+모두 처리한 후 다음 일괄을 가져오므로, 처리 중에 발견된 더 깊은 URL은 다음 일괄로 넘어갑니다.
+
+확인할 수 없는 컴포넌트 이름을 지정하면 경고를 로그에 출력하고 기본 순서로 동작합니다.
+
+.. note::
+   이전 버전의 ``sequential`` 및 ``random`` 값도 그대로 사용할 수 있습니다.
+
 파일 크기 설정
 ====================
 

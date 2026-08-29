@@ -319,6 +319,41 @@ URLパターンによる制限
     # または、スケジューラーで設定
     0 2 * * *  # 毎日午前2時
 
+クロール順序
+------------
+
+クロール設定の設定パラメーターに ``crawl.order`` を指定すると、キューから URL を取り出す順序を
+変更できます。値には以下のコンポーネント名を指定します。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 値
+     - 取り出す順序
+   * - ``sequentialUrlQueueOrder``
+     - 重み降順、次に発見順（既定値）
+   * - ``randomUrlQueueOrder``
+     - ランダム（シードはセッションごとに固定）
+   * - ``depthFirstUrlQueueOrder``
+     - 深い階層から先に取り出す
+   * - ``newestFirstUrlQueueOrder``
+     - 後から見つかった URL を先に取り出す
+   * - ``weightFirstUrlQueueOrder``
+     - 重み降順のみ
+
+::
+
+    crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` は厳密な深さ優先探索ではありません。クローラーは URL をまとめて
+取り出し、そのバッチを処理し終えてから次のバッチを取り出すため、処理中に見つかったより深い
+URL は次のバッチに回ります。
+
+解決できないコンポーネント名を指定した場合は警告をログに出力し、既定の順序で動作します。
+
+.. note::
+   以前のバージョンの ``sequential`` と ``random`` はそのまま指定できます。
+
 ファイルサイズの設定
 ====================
 
