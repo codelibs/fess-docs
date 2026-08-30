@@ -25,6 +25,7 @@ Los conectores de almacén de datos de |Fess| permiten obtener contenido de dive
 
    ds-atlassian
    ds-slack
+   ds-sharepoint
 
 .. toctree::
    :maxdepth: 2

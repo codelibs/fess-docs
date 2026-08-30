@@ -60,6 +60,9 @@
    * - :doc:`ds-slack`
      - fess-ds-slack
      - 抓取Slack的消息和文件
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - 抓取本地部署（on-premises）SharePoint Server
 
 开发运维工具
 ----------------

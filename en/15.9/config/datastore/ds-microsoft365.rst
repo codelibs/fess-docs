@@ -10,6 +10,12 @@ The Microsoft 365 Connector provides functionality to retrieve data from Microso
 
 This feature requires the ``fess-ds-microsoft365`` plugin.
 
+.. note::
+
+   The SharePoint this connector targets is SharePoint Online (Microsoft 365). To crawl an
+   on-premises SharePoint Server deployment (2013, 2016, 2019, or Subscription Edition), use
+   :doc:`ds-sharepoint` instead.
+
 Supported Services
 ==================
 
@@ -654,6 +660,7 @@ Reference Information
 =====================
 
 - :doc:`ds-overview` - Data Store Connector Overview
+- :doc:`ds-sharepoint` - SharePoint Server Connector (on-premises)
 - :doc:`ds-gsuite` - Google Workspace Connector
 - :doc:`../../admin/dataconfig-guide` - Data Store Configuration Guide
 - `Microsoft Graph API <https://docs.microsoft.com/en-us/graph/>`_

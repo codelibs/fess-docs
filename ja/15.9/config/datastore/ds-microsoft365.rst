@@ -10,6 +10,12 @@ Microsoft 365コネクタは、Microsoft 365サービス（OneDrive、OneNote、
 
 この機能には ``fess-ds-microsoft365`` プラグインが必要です。
 
+.. note::
+
+   このコネクタが対象とするSharePointはSharePoint Online（Microsoft 365）です。オンプレミス版の
+   SharePoint Server（2013、2016、2019、Subscription Edition）をクロールする場合は、
+   :doc:`ds-sharepoint` を使用してください。
+
 対応サービス
 ============
 
@@ -653,6 +659,7 @@ PowerShellで確認:
 ========
 
 - :doc:`ds-overview` - データストアコネクタ概要
+- :doc:`ds-sharepoint` - SharePoint Serverコネクタ（オンプレミス版）
 - :doc:`ds-gsuite` - Google Workspaceコネクタ
 - :doc:`../../admin/dataconfig-guide` - データストア設定ガイド
 - `Microsoft Graph API <https://docs.microsoft.com/en-us/graph/>`_
