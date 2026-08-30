@@ -1,48 +1,71 @@
-==============================
+===============
 Connecteur JSON
-==============================
+===============
 
-Apercu
+Aperçu
 ======
 
-Le connecteur JSON fournit la fonctionnalite permettant de recuperer des donnees
-a partir de fichiers JSONL locaux (format JSON Lines) et de les enregistrer dans
-l'index |Fess|.
+Le connecteur JSON fournit la fonctionnalité permettant de récupérer des données à partir de
+fichiers JSON présents sur le système de fichiers local et de les enregistrer dans l'index
+|Fess|.
 
-Cette fonctionnalite necessite le plugin ``fess-ds-json``.
+Cette fonctionnalité nécessite le plugin ``fess-ds-json``.
 
-Prerequis
+Il prend en charge les trois formats suivants ; par défaut, le format est déterminé
+automatiquement à partir du contenu du fichier.
+
+- Format JSON Lines (un objet JSON par ligne)
+- Tableau d'objets JSON (mis en forme ou tenu sur une seule ligne, les deux étant possibles)
+- Objet JSON unique
+
+Comme les enregistrements sont lus un par un, même un tableau volumineux n'entraîne pas le
+maintien de l'intégralité du fichier en mémoire.
+
+.. note::
+
+   Ce connecteur ne traite que les fichiers JSON présents sur le système de fichiers local.
+   Il ne prend pas en charge la récupération distante via HTTP ou un autre protocole ; si le
+   paramètre ``urls`` est spécifié, cela ne sera pas ignoré mais provoquera une erreur.
+
+Prérequis
 =========
 
 1. L'installation du plugin est requise
-2. L'acces aux fichiers JSON est necessaire
-3. La structure du JSON doit etre comprise
+2. L'accès au fichier JSON est nécessaire
+3. La structure du JSON doit être connue
 
 Installation du plugin
 ----------------------
 
-Methode 1 : Placement direct du fichier JAR
+Méthode 1 : Installation depuis l'interface d'administration
+
+1. Ouvrir « Système » → « Plugins »
+2. Téléverser le fichier JAR
+3. Redémarrer |Fess|
+
+Méthode 2 : Placement direct du fichier JAR
 
 ::
 
-    # Telecharger depuis Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-json/X.X.X/fess-ds-json-X.X.X.jar
+    # Télécharger depuis le dépôt CodeLibs
+    wget https://maven.codelibs.org/org/codelibs/fess/fess-ds-json/X.X.X/fess-ds-json-X.X.X.jar
 
     # Placement
-    cp fess-ds-json-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-json-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # ou
-    cp fess-ds-json-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    cp fess-ds-json-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
-Methode 2 : Installation depuis l'interface d'administration
+.. note::
 
-1. Ouvrir "Systeme" -> "Plugins"
-2. Telecharger le fichier JAR
-3. Redemarrer |Fess|
+   À partir de la version 15.8.0, les fichiers JAR sont distribués via le
+   `dépôt CodeLibs <https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-json/>`_.
+   Pour les versions 15.7.0 et antérieures, ils se trouvent sur
+   `Maven Central <https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-json/>`_.
 
 Configuration
 =============
 
-Configurez depuis l'interface d'administration via "Crawler" -> "Data Store" -> "Nouveau".
+Configurez depuis l'interface d'administration via « Crawler » → « Data Store » → « Nouveau ».
 
 Configuration de base
 ---------------------
@@ -51,97 +74,195 @@ Configuration de base
    :header-rows: 1
    :widths: 25 75
 
-   * - Element
-     - Exemple de configuration
+   * - Élément
+     - Exemple
    * - Nom
      - Products JSON
    * - Nom du gestionnaire
      - JsonDataStore
-   * - Actif
+   * - Activé
      - Oui
 
-Configuration des parametres
------------------------------
+Configuration des paramètres
+----------------------------
 
 Fichier local :
 
 ::
 
-    files=/path/to/data.json
-    fileEncoding=UTF-8
+    files=/var/data/products.jsonl
+    file_encoding=UTF-8
 
 Fichiers multiples :
 
 ::
 
-    files=/path/to/data1.json,/path/to/data2.json
-    fileEncoding=UTF-8
+    files=/var/data/data1.json,/var/data/data2.json
+    file_encoding=UTF-8
 
-Specification de repertoire :
+Spécification d'un répertoire :
 
 ::
 
-    directories=/path/to/json_dir/
-    fileEncoding=UTF-8
+    directories=/var/data/json_dir/
+    file_encoding=UTF-8
 
-Liste des parametres
+Liste des paramètres
 ~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 10 70
+   :widths: 22 12 66
 
-   * - Parametre
-     - Requis
+   * - Paramètre
+     - Valeur par défaut
      - Description
    * - ``files``
-     - Non
-     - Chemin des fichiers JSON a traiter (plusieurs valeurs possibles, separees par des virgules). Seuls les fichiers avec l'extension ``.json`` ou ``.jsonl`` sont traites.
+     -
+     - Chemins des fichiers JSON à traiter (plusieurs fichiers séparés par des virgules). Ils sont traités dans l'ordre indiqué.
    * - ``directories``
-     - Non
-     - Chemin des repertoires contenant les fichiers JSON (plusieurs valeurs possibles, separees par des virgules)
-   * - ``fileEncoding``
-     - Non
-     - Encodage des caracteres (par defaut : UTF-8)
+     -
+     - Chemins des répertoires contenant des fichiers JSON (plusieurs répertoires séparés par des virgules).
+   * - ``recursive``
+     - ``false``
+     - Indique si ``directories`` doit être parcouru y compris ses sous-répertoires.
+   * - ``max_depth``
+     - ``10``
+     - Lorsque ``recursive=true``, nombre de niveaux de sous-répertoires à descendre pour chaque répertoire. La valeur ``0`` produit le même comportement que ``recursive=false``.
+   * - ``include_pattern``
+     -
+     - Expression régulière à laquelle le chemin absolu du fichier doit correspondre entièrement.
+   * - ``exclude_pattern``
+     -
+     - Expression régulière à laquelle le chemin absolu du fichier ne doit pas correspondre.
+   * - ``file_suffixes``
+     - ``.json,.jsonl``
+     - Suffixes des fichiers ciblés (plusieurs suffixes séparés par des virgules). La casse n'est pas prise en compte.
+   * - ``file_encoding``
+     - ``UTF-8``
+     - Encodage des caractères du fichier.
+   * - ``format``
+     - ``auto``
+     - Format du document. L'une des valeurs suivantes : ``auto``, ``jsonl``, ``json``.
+   * - ``root_path``
+     -
+     - JSON Pointer indiquant l'emplacement à partir duquel lire les enregistrements (exemple : ``/data/items``).
+
+.. note::
+
+   Les noms de paramètres sont indiqués ici en snake_case, mais leur équivalent en camelCase
+   (par exemple ``fileEncoding`` pour ``file_encoding``) peut être utilisé de la même manière.
+
+.. note::
+
+   Spécifiez au moins l'un des paramètres ``files`` ou ``directories``.
+   Si les deux sont vides, une erreur se produit.
+   Les deux ne sont pas exclusifs l'un de l'autre : si les deux sont spécifiés, ils sont tous
+   deux traités.
+   Si un même fichier est atteint par les deux, il n'est lu qu'une seule fois.
+
+Ordre d'exploration des fichiers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Les fichiers spécifiés via ``files`` sont traités dans l'ordre indiqué.
+- Les fichiers trouvés sous ``directories`` sont traités par ordre croissant de date de
+  dernière modification.
+- Les fichiers spécifiés via ``files`` sont traités avant ceux trouvés sous ``directories``.
+
+Le filtrage par ``file_suffixes`` s'applique également aux fichiers spécifiés directement via
+``files``. Les fichiers dont le suffixe ne correspond pas sont ignorés, et la raison en est
+indiquée dans le log.
+
+Un chemin inexistant, un répertoire spécifié dans ``files``, ou un fichier spécifié dans
+``directories`` sont, dans tous les cas, consignés dans le log comme avertissement, et le crawl
+lui-même se poursuit.
+
+``format``
+----------
+
+``auto`` lit le début du document et détermine le format à partir de sa syntaxe. Quel que soit
+le format parmi les trois, cette méthode permet de le déterminer correctement dès lors que le
+fichier est correctement écrit.
+
+Il convient de spécifier explicitement ``format=jsonl`` lorsqu'il s'agit d'un fichier au format
+JSON Lines dont les lignes situées près du début risquent d'être corrompues (ligne de bannière,
+log de progression, enregistrement interrompu en cours de transfert, etc.). En effet, la
+détection automatique doit pouvoir ignorer de telles lignes pour effectuer son jugement.
+
+Ce paramètre détermine également l'étendue de l'impact d'un enregistrement invalide.
+
+- **Format JSON Lines** : chaque ligne est analysée indépendamment, de sorte que le coût d'une
+  ligne invalide se limite à cette seule ligne. L'échec est enregistré dans les URL en échec
+  sous la clé ``<chemin absolu du fichier>@<numéro de ligne>``, et le traitement se poursuit
+  normalement à partir de la ligne suivante.
+- **Autres formats** : comme la lecture se fait sous forme de flux de jetons, un seul échec
+  peut entraîner celui des enregistrements suivants. Un document interrompu au milieu d'un
+  objet ne peut pas être récupéré, et si un nombre défini d'échecs consécutifs se produit, le
+  traitement du fichier est interrompu avec un avertissement.
+
+``root_path``
+-------------
+
+Spécifier un JSON Pointer désignant un tableau imbriqué permet d'enregistrer chacun de ses
+éléments comme un enregistrement.
+
+::
+
+    root_path=/data/items
+
+.. code-block:: json
+
+    { "meta": { "count": 2 }, "data": { "items": [ { "id": "1" }, { "id": "2" } ] } }
+
+- Si le pointeur désigne un tableau, chacun de ses éléments constitue un enregistrement.
+- Si le pointeur désigne un objet, cet objet constitue un unique enregistrement.
+- Si aucune correspondance n'est trouvée, il n'y a pas d'erreur ; le nombre d'enregistrements
+  est simplement de 0.
+- Les séquences d'échappement du JSON Pointer sont prises en charge (``~1`` pour ``/``, ``~0``
+  pour ``~``).
+
+``root_path`` est prioritaire sur ``format``. En effet, un document atteint via un JSON Pointer
+n'est pas lu ligne par ligne ; si ``root_path`` est spécifié en même temps que
+``format=jsonl``, un avertissement à ce sujet est consigné dans le log.
 
 .. warning::
-   Il est necessaire de specifier ``files`` ou ``directories``.
-   Si aucun des deux n'est specifie (vide), une ``DataStoreException`` sera levee.
-   Si les deux sont specifies, ``files`` a la priorite et ``directories`` est ignore.
+
+   ``root_path`` doit commencer par ``/``. Si le ``/`` initial est omis, comme dans
+   ``data/items``, la valeur ne peut pas être interprétée comme un JSON Pointer et l'ensemble
+   de la configuration Data Store échoue.
+   Dans ce cas, l'URL en échec est enregistrée non pas sous le nom du paramètre mais sous celui
+   de la configuration Data Store ; déterminez quel paramètre en est la cause à partir du
+   message ``JSON Pointer expression must start with '/'`` figurant dans le log.
 
 .. note::
-   Le nom du parametre est en camelCase : ``fileEncoding`` (et non en snake_case : ``file_encoding``).
 
-Comportement lors de la specification d'un repertoire
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Si vous lisez, sans spécifier ``root_path``, un document mis en forme sur plusieurs lignes
+   dont les enregistrements font partie d'une structure englobante (dite « wrapper »,
+   contenant par exemple des métadonnées ainsi qu'un tableau), l'analyse ligne par ligne est
+   tentée, ce qui empêche d'obtenir les enregistrements attendus et provoque l'enregistrement
+   d'échecs.
+   Pour ce type de document, spécifiez ``root_path``.
 
-Lorsque ``directories`` est specifie, les fichiers directement dans chaque repertoire sont traites selon les regles suivantes.
+Configuration du script
+-----------------------
 
-- **Les sous-repertoires ne sont pas parcourus** (pas d'exploration recursive).
-- Seuls les fichiers avec l'extension ``.json`` ou ``.jsonl`` sont concernes (sans distinction de casse).
-- Les fichiers sont traites dans l'ordre croissant de leur date de modification (date de derniere modification).
-
-.. note::
-   Ce connecteur traite uniquement les fichiers JSON sur le systeme de fichiers local. L'acces HTTP et les fonctions d'authentification API ne sont pas pris en charge.
-
-Configuration des scripts
---------------------------
-
-La valeur de chaque champ est construite en referençant les valeurs des champs de l'objet JSON.
-Les champs de niveau superieur de l'objet JSON sont directement accessibles dans les scripts
-sous forme de **variables sans prefixe** (sans prefixe tel que ``data.``).
+Les valeurs de chaque champ sont construites en référençant les valeurs des champs de l'objet
+JSON. Les champs de premier niveau de l'objet JSON sont accessibles directement dans le script
+en tant que **variables sans préfixe** (sans préfixe ``data.`` ni autre).
 
 Objet JSON simple :
 
 ::
 
-    url="https://example.com/product/" + id
+    url="https://shop.example.com/product/" + id
     title=name
     content=description
-    price=price
-    category=category
+    digest=description
+    host="shop.example.com"
+    site="shop.example.com"
 
-Objet JSON imbrique (les objets imbriques sont references comme des maps) :
+Les objets imbriqués sont accessibles comme des maps, et les tableaux imbriqués comme des
+listes :
 
 ::
 
@@ -149,224 +270,213 @@ Objet JSON imbrique (les objets imbriques sont references comme des maps) :
     title=product.name
     content=product.description
     price=product.pricing.amount
-    author=product.author.name
-
-Traitement des elements de tableau :
-
-::
-
-    url="https://example.com/article/" + id
-    title=title
-    content=body
-    tags=tags.join(", ")
-    categories=categories[0].name
+    first_tag=tags[0]
 
 Champs disponibles
 ~~~~~~~~~~~~~~~~~~
 
-- ``<nom_champ>`` - Reference directe par nom d'un champ de niveau superieur de l'objet JSON
-- ``<parent>.<enfant>`` - Champ d'un objet imbrique
-- ``<tableau>[<indice>]`` - Element de tableau
-- ``<tableau>.<methode>`` - Methodes de tableau (``join``, ``collect``, ``size``, etc.)
+- ``<nom_du_champ>`` — Référence directe par le nom d'un champ de premier niveau de l'objet
+  JSON
+- ``<parent>.<enfant>`` — Champ d'un objet imbriqué
+- ``<tableau>[<index>]`` — Élément d'un tableau
 
 .. note::
 
-   Si un nom de champ contient des caracteres invalides comme identificateur Groovy
-   (espaces, tirets, etc.), ce champ ne peut pas etre reference directement comme variable.
-
-Details du format JSON
-=======================
-
-Format de fichier JSON
------------------------
-
-Le connecteur JSON lit les fichiers au format JSONL (JSON Lines).
-C'est un format ou un objet JSON est ecrit par ligne. Le fichier est lu ligne par ligne,
-et chaque ligne est analysee comme un objet JSON independant.
+   Si la valeur d'un champ vaut ``null``, ce champ n'est pas enregistré dans le document.
 
 .. note::
-   Les fichiers avec l'extension ``.json`` sont egalement traites, mais leur contenu
-   doit etre au format JSONL (un objet par ligne).
-   Les fichiers JSON au format tableau ( ``[{...}, {...}]`` ) ou mis en forme sur plusieurs
-   lignes (pretty-print) ne peuvent pas etre lus directement. Veuillez les convertir
-   au format JSONL.
 
-Fichier au format JSONL :
+   Dans |Fess| 15.9, le moteur de script intégré est devenu JavaScript.
+   Groovy est fourni sous forme de plugin ``fess-script-groovy``.
+   Le moteur à utiliser est indiqué via le paramètre de la configuration Data Store
+   ``script_type`` (par exemple ``script_type=javascript``). Si ce paramètre est omis,
+   ``groovy`` est utilisé.
+   Les références simples et les concaténations de chaînes telles que dans les exemples
+   ci-dessus fonctionnent de la même manière avec les deux moteurs, mais les autres notations
+   diffèrent selon le moteur.
 
-::
+Remarques
+=========
 
-    {"id": 1, "name": "Product A", "description": "Description A"}
-    {"id": 2, "name": "Product B", "description": "Description B"}
+Un paramètre dont le nom correspond à ``app.encrypt.property.pattern`` (par défaut, les
+paramètres se terminant par ``password``, ``key``, ``token`` ou ``secret``) est référencé
+depuis le script comme valant ``null``. Cela permet d'éviter que des identifiants inscrits dans
+les paramètres de la configuration Data Store ne soient copiés dans un champ de l'index.
+
+Si un champ de même nom existe côté enregistrement, la valeur de l'enregistrement est
+prioritaire, comme pour les autres paramètres.
+
+.. note::
+
+   La correspondance porte sur une égalité exacte, sensible à la casse, avec le nom du
+   paramètre. ``access_token`` est concerné, mais pas son équivalent en camelCase
+   ``accessToken``. Si vous inscrivez des identifiants dans un paramètre, utilisez le
+   snake_case.
+
+Paramètres incorrects et erreurs
+================================
+
+Si une valeur non valide est spécifiée pour ``format``, ``include_pattern``,
+``exclude_pattern`` ou ``urls``, le crawl se termine avant même la lecture des fichiers, et une
+URL en échec incluant le nom du paramètre concerné (exemple : ``JsonDataStore:format``) est
+enregistrée.
+
+Si une valeur non numérique est spécifiée pour ``max_depth``, cela est consigné dans le log et
+la valeur par défaut est utilisée.
+
+.. note::
+
+   Le crawl d'une configuration Data Store se termine comme un job normal même si aucun élément
+   n'a pu être récupéré. Si le nombre d'éléments récupérés diffère de ce qui était attendu,
+   vérifiez le nombre de documents dans l'index, les URL en échec, ainsi que le fichier
+   ``fess-crawler.log``.
 
 Exemples d'utilisation
-=======================
+======================
 
 Catalogue de produits
-----------------------
+---------------------
 
-Parametres :
+Paramètres :
 
 ::
 
-    files=/var/data/products.json
-    fileEncoding=UTF-8
+    files=/var/data/products.jsonl
+    file_encoding=UTF-8
 
-Scripts :
+Script :
 
 ::
 
     url="https://shop.example.com/product/" + product_id
     title=name
-    content=description + " Prix : " + price + " yens"
+    content=description
     digest=category
-    price=price
+    host="shop.example.com"
+    site="shop.example.com"
 
-Integration de plusieurs fichiers JSON
----------------------------------------
+Fichier de réponse d'API enregistrée
+------------------------------------
 
-Parametres :
+Paramètres :
 
 ::
 
-    files=/var/data/data1.json,/var/data/data2.json
-    fileEncoding=UTF-8
+    files=/var/data/response.json
+    root_path=/data/items
 
-Scripts :
+Script :
 
 ::
 
     url="https://example.com/item/" + id
     title=title
-    content=content
+    content=body
+    host="example.com"
+    site="example.com"
 
-Depannage
-==========
+Traitement récursif d'un répertoire
+-----------------------------------
+
+Paramètres :
+
+::
+
+    directories=/var/data/exports
+    recursive=true
+    max_depth=3
+    include_pattern=.*\.jsonl
+    file_encoding=UTF-8
+
+Dépannage
+=========
 
 Fichier introuvable
---------------------
+-------------------
 
-**Symptome** : ``... is not found.`` ou ``Source file ... does not exist.`` apparait dans les journaux
+**Symptôme** : le log affiche ``... does not exist.``, ``... is not a file.`` ou
+``... is skipped because its suffix is not one of ...``
 
-**Verifications** :
+**Points à vérifier** :
 
-1. Verifier que le chemin du fichier est correct
-2. Verifier que le fichier existe
-3. Verifier que l'extension du fichier est ``.json`` ou ``.jsonl``
-4. Verifier les permissions de lecture du fichier
+1. Vérifier que le chemin du fichier est correct
+2. Vérifier que le fichier existe
+3. Vérifier que le suffixe du fichier correspond à ``file_suffixes`` (par défaut ``.json`` ou
+   ``.jsonl``)
+4. Vérifier que l'utilisateur exécutant |Fess| dispose des droits de lecture
 
 Erreur d'analyse JSON
-----------------------
+---------------------
 
-**Symptome** : ``Crawling Access Exception`` et ``JsonParseException`` apparaissent dans les journaux
+**Symptôme** : le log affiche ``Failed to parse ...`` ou ``Failed to read ...``, ou une URL en
+échec est enregistrée
 
-Si une ligne invalide est rencontree, seule cette ligne est ignoree et enregistree comme URL
-en echec ; le crawl continue a partir de la ligne suivante.
+**Points à vérifier** :
 
-**Verifications** :
-
-1. Verifier que le fichier JSON est au bon format (JSONL : un objet par ligne) :
+1. Vérifier que le fichier est un JSON valide
 
    ::
 
-       # Valider que chaque ligne est un objet JSON valide
-       cat data.json | jq -c .
+       # Pour un fichier au format JSON Lines, vérifier que chaque ligne est un objet JSON valide
+       cat data.jsonl | jq -c .
 
-2. Verifier l'encodage des caracteres
-3. Verifier qu'un seul objet ne s'etend pas sur plusieurs lignes
-4. Verifier l'absence de commentaires (non autorises dans la norme JSON)
+       # Pour un tableau ou un objet unique
+       jq . data.json
 
-Aucune donnee recuperee
-------------------------
+2. Vérifier que l'encodage des caractères est correct
+3. Vérifier que le fichier n'est pas interrompu en cours de route
+4. Vérifier qu'il ne contient pas de commentaires (les commentaires ne sont pas autorisés par
+   le standard JSON)
 
-**Symptome** : Le crawl reussit mais le nombre de resultats est 0
+Impossible de récupérer les données
+-----------------------------------
 
-**Verifications** :
+**Symptôme** : le crawl réussit mais le nombre d'éléments est 0
 
-1. Verifier la structure JSON
-2. Verifier la configuration des scripts (les references de champs ne doivent pas avoir de prefixe ``data.``)
-3. Verifier les noms de champs (y compris la casse)
-4. Verifier les messages d'erreur dans les journaux
+**Points à vérifier** :
 
-Fichiers JSON volumineux
--------------------------
+1. Si ``root_path`` est spécifié, vérifier que ce JSON Pointer correspond à la structure du
+   document (si ce n'est pas le cas, il n'y a pas d'erreur, mais le nombre d'éléments est de 0)
+2. Vérifier que ``include_pattern``, ``exclude_pattern`` et ``file_suffixes`` n'excluent pas la
+   totalité des fichiers ciblés. Dans ce cas, le log affiche ``No sources to process``
+3. Vérifier que la configuration du script est correcte (les références de champs doivent être
+   sans préfixe ``data.``)
+4. Vérifier que les noms de champs sont corrects (y compris la casse)
+5. Vérifier que ``url`` est bien construit. Si ``url`` est vide, chaque enregistrement concerné
+   est comptabilisé comme un échec
 
-**Symptome** : Memoire insuffisante ou delai d'attente depasse
-
-Les fichiers etant lus ligne par ligne, la taille totale du fichier n'affecte pas directement
-la consommation memoire. Des problemes peuvent toutefois survenir si une seule ligne
-(un objet) est extremement grande ou si la charge d'indexation est elevee.
-
-**Solutions** :
-
-1. Diviser le fichier JSON en plusieurs fichiers
-2. Augmenter la taille du tas (heap) de |Fess|
-
-Utilisation avancee des scripts
-================================
-
-Traitement conditionnel
-------------------------
-
-Chaque champ est evalue comme une expression independante. Pour les valeurs conditionnelles,
-utilisez l'operateur ternaire :
-
-::
-
-    url=status == "published" ? "https://example.com/product/" + id : null
-    title=status == "published" ? name : null
-    content=status == "published" ? description : null
-    price=status == "published" ? price : null
-
-Jointure de tableaux
+Caractères illisibles
 ---------------------
 
-::
+**Symptôme** : les caractères du document enregistré sont corrompus
 
-    url="https://example.com/article/" + id
-    title=title
-    content=content
-    tags=tags ? tags.join(", ") : ""
-    categories=categories.collect { it.name }.join(", ")
+Si vous spécifiez pour ``file_encoding`` un encodage qui existe réellement mais qui est
+incorrect, il n'y a pas d'erreur : le document est enregistré tel quel, avec des caractères
+corrompus. Vérifiez l'encodage réel du fichier. Si vous spécifiez un nom d'encodage qui
+n'existe pas, une URL en échec est enregistrée pour chaque fichier concerné.
 
-Configuration des valeurs par defaut
---------------------------------------
+Fichiers JSON volumineux
+------------------------
 
-::
+**Symptôme** : mémoire insuffisante ou timeout
 
-    url="https://example.com/item/" + id
-    title=title ?: "Sans titre"
-    content=description ?: (summary ?: "Sans description")
-    price=price ?: 0
+Comme les enregistrements sont lus un par un, la taille totale du fichier n'a pas d'impact
+direct sur la consommation de mémoire. Cependant, un problème peut survenir si un enregistrement
+est extrêmement volumineux, ou si la charge liée à l'indexation est élevée.
 
-Formatage des dates
---------------------
+**Solution** :
 
-::
+1. Diviser le fichier JSON en plusieurs fichiers
+2. Augmenter la taille du tas de |Fess|
 
-    url="https://example.com/post/" + id
-    title=title
-    content=body
-    created=created_at
-    last_modified=updated_at
+Informations de référence
+=========================
 
-Traitement des nombres
------------------------
-
-::
-
-    url="https://example.com/product/" + id
-    title=name
-    content=description
-    price=price as Float
-    stock=stock_quantity as Integer
-
-Informations de reference
-==========================
-
-- :doc:`ds-overview` - Apercu des connecteurs Data Store
+- :doc:`ds-overview` - Aperçu des connecteurs Data Store
 - :doc:`ds-csv` - Connecteur CSV
-- :doc:`ds-database` - Connecteur de base de donnees
+- :doc:`ds-database` - Connecteur de base de données
 - :doc:`../../admin/dataconfig-guide` - Guide de configuration Data Store
 - `JSON (JavaScript Object Notation) <https://www.json.org/>`_
 - `JSON Lines <https://jsonlines.org/>`_
+- `JSON Pointer (RFC 6901) <https://datatracker.ietf.org/doc/html/rfc6901>`_
 - `jq - JSON processor <https://stedolan.github.io/jq/>`_
