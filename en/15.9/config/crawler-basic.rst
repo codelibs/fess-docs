@@ -336,11 +336,14 @@ names.
    * - ``newestFirstUrlQueueOrder``
      - Most recently discovered URLs first
    * - ``weightFirstUrlQueueOrder``
-     - By descending weight only
+     - By descending weight only, leaving ties to the search engine
 
-Weights are uniform unless a custom ``UrlQueueWeigher`` is installed, so
-``weightFirstUrlQueueOrder`` has no effect by default and ``sequentialUrlQueueOrder`` is, in
-practice, ordered by discovery order.
+Weights are uniform unless a custom ``UrlQueueWeigher`` is installed, so out of the box every
+entry ties and ``sequentialUrlQueueOrder`` is, in practice, ordered by discovery order. Weight
+is its primary sort key, so installing a weigher changes the fetch order without setting
+``config.crawl.order`` at all. ``weightFirstUrlQueueOrder`` differs only in what happens
+between entries of equal weight: choose it for a large weighted backlog where only the weight
+should decide what is crawled next.
 
 ::
 
@@ -348,7 +351,8 @@ practice, ordered by discovery order.
 
 ``depthFirstUrlQueueOrder`` is not a strict depth-first search. The crawler fetches a batch
 of URLs and consumes it before fetching the next one, so deeper URLs found while a batch is
-being consumed wait for the following batch.
+being consumed wait for the following batch. A crawl small enough for its whole queue to fit
+in one batch therefore proceeds level by level whichever order is selected.
 
 An unresolvable component name is logged as a warning and the default order is used.
 

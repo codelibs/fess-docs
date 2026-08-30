@@ -340,11 +340,14 @@ URLパターンによる制限
    * - ``newestFirstUrlQueueOrder``
      - 後から見つかった URL を先に取り出す
    * - ``weightFirstUrlQueueOrder``
-     - 重み降順のみ
+     - 重み降順のみ（同じ重みの並びは検索エンジンに任せる）
 
-既定では重みは一律のため、カスタムの ``UrlQueueWeigher`` を導入しない限り
-``weightFirstUrlQueueOrder`` は効果を持たず、``sequentialUrlQueueOrder`` は実質的に
-発見順での取り出しになります。
+既定では重みは一律のため、カスタムの ``UrlQueueWeigher`` を導入しない限りすべてが同じ重みになり、
+``sequentialUrlQueueOrder`` は実質的に発見順での取り出しになります。
+``sequentialUrlQueueOrder`` は重みを第一のソートキーとしているため、weigher を導入すれば
+``config.crawl.order`` を設定しなくても取り出し順が変わります。
+``weightFirstUrlQueueOrder`` との違いは同じ重みの場合の扱いだけで、重み付けされた大量のキューに対して
+重みだけで次を決めたい場合に選択します。
 
 ::
 
@@ -352,7 +355,8 @@ URLパターンによる制限
 
 ``depthFirstUrlQueueOrder`` は厳密な深さ優先探索ではありません。クローラーは URL をまとめて
 取り出し、そのバッチを処理し終えてから次のバッチを取り出すため、処理中に見つかったより深い
-URL は次のバッチに回ります。
+URL は次のバッチに回ります。キュー全体が 1 つのバッチに収まる規模のクロールでは、どの順序を
+指定しても階層ごとの取り出しになります。
 
 解決できないコンポーネント名を指定した場合は警告をログに出力し、既定の順序で動作します。
 

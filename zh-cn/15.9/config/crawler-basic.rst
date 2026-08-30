@@ -337,18 +337,20 @@ URL模式限制
    * - ``newestFirstUrlQueueOrder``
      - 最近发现的 URL 优先
    * - ``weightFirstUrlQueueOrder``
-     - 仅按权重降序
+     - 仅按权重降序，同分时交由搜索引擎决定
 
-默认情况下权重是统一的，除非安装了自定义的 ``UrlQueueWeigher``，因此
-``weightFirstUrlQueueOrder`` 默认不起作用，``sequentialUrlQueueOrder`` 实际上按发现顺序
-排序。
+默认情况下权重是统一的，除非安装了自定义的 ``UrlQueueWeigher``，因此所有条目都同分，
+``sequentialUrlQueueOrder`` 实际上按发现顺序排序。由于权重是它的第一排序键，安装 weigher 后，
+即使不设置 ``config.crawl.order`` 取出顺序也会改变。``weightFirstUrlQueueOrder`` 的差别仅在于
+同分条目的处理：当队列中积压了大量已加权的 URL、且希望只由权重决定下一个抓取对象时选用它。
 
 ::
 
     config.crawl.order=depthFirstUrlQueueOrder
 
 ``depthFirstUrlQueueOrder`` 并非严格的深度优先搜索。爬虫会批量取出 URL 并处理完毕后再取下一批，
-因此处理过程中发现的更深的 URL 会推迟到下一批。
+因此处理过程中发现的更深的 URL 会推迟到下一批。如果整个队列都能装进一批，那么无论选择哪种
+顺序，爬取都会按层级逐层进行。
 
 指定无法解析的组件名称时会记录警告日志，并使用默认顺序。
 

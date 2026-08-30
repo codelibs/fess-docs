@@ -338,11 +338,14 @@ URL 패턴에 의한 제한
    * - ``newestFirstUrlQueueOrder``
      - 가장 최근에 발견된 URL 먼저
    * - ``weightFirstUrlQueueOrder``
-     - 가중치 내림차순만
+     - 가중치 내림차순만 (동점은 검색 엔진에 맡김)
 
-기본적으로 가중치는 균일하므로, 사용자 지정 ``UrlQueueWeigher``\ 를 설치하지 않는 한
-``weightFirstUrlQueueOrder``\ 는 효과가 없으며, ``sequentialUrlQueueOrder``\ 는 사실상
-발견 순서로 동작합니다.
+기본적으로 가중치는 균일하므로, 사용자 지정 ``UrlQueueWeigher``\ 를 설치하지 않는 한 모든 항목이
+동점이 되어 ``sequentialUrlQueueOrder``\ 는 사실상 발견 순서로 동작합니다.
+``sequentialUrlQueueOrder``\ 는 가중치를 첫 번째 정렬 키로 사용하므로, weigher를 설치하면
+``config.crawl.order``\ 를 설정하지 않아도 가져오는 순서가 바뀝니다.
+``weightFirstUrlQueueOrder``\ 와의 차이는 동점 항목의 처리뿐이며, 가중치가 부여된 대량의 큐에서
+가중치만으로 다음 대상을 정하고 싶을 때 선택합니다.
 
 ::
 
@@ -350,6 +353,7 @@ URL 패턴에 의한 제한
 
 ``depthFirstUrlQueueOrder``\ 는 엄밀한 깊이 우선 탐색이 아닙니다. 크롤러는 URL을 일괄로 가져와
 모두 처리한 후 다음 일괄을 가져오므로, 처리 중에 발견된 더 깊은 URL은 다음 일괄로 넘어갑니다.
+전체 큐가 한 일괄에 들어갈 정도의 크롤링에서는 어떤 순서를 지정하더라도 계층별로 가져옵니다.
 
 확인할 수 없는 컴포넌트 이름을 지정하면 경고를 로그에 출력하고 기본 순서로 동작합니다.
 

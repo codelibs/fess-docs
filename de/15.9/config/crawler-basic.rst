@@ -338,12 +338,15 @@ ist einer der folgenden Komponentennamen.
    * - ``newestFirstUrlQueueOrder``
      - Zuletzt entdeckte URLs zuerst
    * - ``weightFirstUrlQueueOrder``
-     - Nur nach absteigendem Gewicht
+     - Nur nach absteigendem Gewicht; Gleichstände überlässt sie der Suchmaschine
 
 Die Gewichte sind standardmäßig einheitlich, sofern kein benutzerdefinierter
-``UrlQueueWeigher`` installiert ist; daher hat ``weightFirstUrlQueueOrder`` standardmäßig
-keine Wirkung, und ``sequentialUrlQueueOrder`` sortiert in der Praxis nach
-Entdeckungsreihenfolge.
+``UrlQueueWeigher`` installiert ist; alle Einträge sind dann gleichauf und
+``sequentialUrlQueueOrder`` sortiert in der Praxis nach Entdeckungsreihenfolge. Das Gewicht ist
+ihr primärer Sortierschlüssel, sodass ein Weigher die Abrufreihenfolge ändert, ohne dass
+``config.crawl.order`` überhaupt gesetzt werden muss. ``weightFirstUrlQueueOrder``
+unterscheidet sich nur bei Einträgen mit gleichem Gewicht: Sie ist für einen großen,
+gewichteten Rückstand gedacht, bei dem allein das Gewicht entscheiden soll.
 
 ::
 
@@ -351,7 +354,9 @@ Entdeckungsreihenfolge.
 
 ``depthFirstUrlQueueOrder`` ist keine strikte Tiefensuche. Der Crawler ruft einen Stapel von
 URLs ab und arbeitet ihn vollständig ab, bevor er den nächsten abruft. Tiefere URLs, die
-während der Abarbeitung gefunden werden, warten daher auf den nächsten Stapel.
+während der Abarbeitung gefunden werden, warten daher auf den nächsten Stapel. Bei einem
+Crawl, dessen gesamte Warteschlange in einen Stapel passt, wird daher unabhängig von der
+gewählten Reihenfolge Ebene für Ebene abgearbeitet.
 
 Ein nicht auflösbarer Komponentenname wird als Warnung protokolliert, und die
 Standardreihenfolge wird verwendet.

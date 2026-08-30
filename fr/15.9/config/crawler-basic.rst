@@ -340,11 +340,14 @@ valeur est l'un des noms de composant suivants.
    * - ``newestFirstUrlQueueOrder``
      - URL découvertes le plus récemment en premier
    * - ``weightFirstUrlQueueOrder``
-     - Par poids décroissant uniquement
+     - Par poids décroissant uniquement, les égalités étant laissées au moteur de recherche
 
 Les poids sont uniformes par défaut, sauf si un ``UrlQueueWeigher`` personnalisé est
-installé ; ``weightFirstUrlQueueOrder`` n'a donc aucun effet par défaut, et
-``sequentialUrlQueueOrder`` s'ordonne en pratique par ordre de découverte.
+installé ; toutes les entrées sont alors à égalité et ``sequentialUrlQueueOrder`` s'ordonne en
+pratique par ordre de découverte. Le poids en est la clé de tri principale : installer un
+weigher modifie l'ordre de récupération sans même définir ``config.crawl.order``.
+``weightFirstUrlQueueOrder`` ne diffère que sur les entrées de poids égal ; choisissez-le pour
+un grand arriéré pondéré où seul le poids doit décider de la suite.
 
 ::
 
@@ -352,7 +355,8 @@ installé ; ``weightFirstUrlQueueOrder`` n'a donc aucun effet par défaut, et
 
 ``depthFirstUrlQueueOrder`` n'est pas un parcours en profondeur strict. Le crawler récupère
 un lot d'URL et le traite entièrement avant d'en récupérer un autre ; les URL plus profondes
-découvertes pendant le traitement attendent donc le lot suivant.
+découvertes pendant le traitement attendent donc le lot suivant. Un crawl dont toute la file
+tient dans un seul lot progresse donc niveau par niveau, quel que soit l'ordre choisi.
 
 Un nom de composant introuvable est journalisé comme avertissement et l'ordre par défaut est
 utilisé.

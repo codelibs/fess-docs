@@ -340,12 +340,15 @@ siguientes nombres de componente.
    * - ``newestFirstUrlQueueOrder``
      - URL descubiertas más recientemente primero
    * - ``weightFirstUrlQueueOrder``
-     - Solo por peso descendente
+     - Solo por peso descendente, dejando los empates al motor de búsqueda
 
 Los pesos son uniformes de forma predeterminada a menos que se instale un
-``UrlQueueWeigher`` personalizado, por lo que ``weightFirstUrlQueueOrder`` no tiene efecto de
-forma predeterminada y ``sequentialUrlQueueOrder`` se ordena, en la práctica, por orden de
-descubrimiento.
+``UrlQueueWeigher`` personalizado, por lo que todas las entradas empatan y
+``sequentialUrlQueueOrder`` se ordena, en la práctica, por orden de descubrimiento. El peso es
+su clave de ordenación principal, de modo que instalar un weigher cambia el orden de obtención
+sin necesidad de establecer ``config.crawl.order``. ``weightFirstUrlQueueOrder`` solo difiere
+en el tratamiento de las entradas con el mismo peso: elíjalo para una cola grande y ponderada
+en la que solo el peso deba decidir qué se rastrea a continuación.
 
 ::
 
@@ -353,7 +356,8 @@ descubrimiento.
 
 ``depthFirstUrlQueueOrder`` no es una búsqueda en profundidad estricta. El rastreador obtiene
 un lote de URL y lo consume antes de obtener el siguiente, por lo que las URL más profundas
-encontradas mientras se consume un lote esperan al siguiente lote.
+encontradas mientras se consume un lote esperan al siguiente lote. Por tanto, un rastreo cuya
+cola completa cabe en un solo lote avanza nivel por nivel sea cual sea el orden seleccionado.
 
 Un nombre de componente que no se puede resolver se registra como advertencia y se utiliza el
 orden predeterminado.
