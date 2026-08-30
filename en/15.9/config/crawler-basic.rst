@@ -314,6 +314,51 @@ Specifies the frequency of crawl execution.
     # Or set in scheduler
     0 2 * * *  # Daily at 2 AM
 
+Crawl Order
+-----------
+
+Setting ``config.crawl.order`` in the configuration parameters of a crawling config changes the
+order in which URLs are taken from the queue. The value is one of the following component
+names.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Value
+     - Fetch order
+   * - ``sequentialUrlQueueOrder``
+     - By descending weight, then by discovery order (default)
+   * - ``randomUrlQueueOrder``
+     - Random, with a seed fixed per session
+   * - ``depthFirstUrlQueueOrder``
+     - Deepest URLs first
+   * - ``newestFirstUrlQueueOrder``
+     - Most recently discovered URLs first
+   * - ``weightFirstUrlQueueOrder``
+     - By descending weight only, leaving ties to the search engine
+
+Weights are uniform unless a custom ``UrlQueueWeigher`` is installed, so out of the box every
+entry ties and ``sequentialUrlQueueOrder`` is, in practice, ordered by discovery order. Weight
+is its primary sort key, so installing a weigher changes the fetch order without setting
+``config.crawl.order`` at all. ``weightFirstUrlQueueOrder`` differs only in what happens
+between entries of equal weight: choose it for a large weighted backlog where only the weight
+should decide what is crawled next.
+
+::
+
+    config.crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` is not a strict depth-first search. The crawler fetches a batch
+of URLs and consumes it before fetching the next one, so deeper URLs found while a batch is
+being consumed wait for the following batch. A crawl small enough for its whole queue to fit
+in one batch therefore proceeds level by level whichever order is selected.
+
+An unresolvable component name is logged as a warning and the default order is used.
+
+.. note::
+   The ``config.crawl.order=sequential`` and ``config.crawl.order=random`` values from earlier versions still work.
+
 File Size Configuration
 =======================
 

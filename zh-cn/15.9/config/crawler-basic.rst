@@ -316,6 +316,47 @@ URL模式限制
     # 或在调度器中设置
     0 2 * * *  # 每天凌晨2点
 
+爬取顺序
+--------
+
+在爬取配置的配置参数中指定 ``config.crawl.order``，可以更改从队列中取出 URL 的顺序。值为以下组件名称
+之一。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 值
+     - 取出顺序
+   * - ``sequentialUrlQueueOrder``
+     - 权重降序，然后按发现顺序（默认）
+   * - ``randomUrlQueueOrder``
+     - 随机（种子按会话固定）
+   * - ``depthFirstUrlQueueOrder``
+     - 最深的 URL 优先
+   * - ``newestFirstUrlQueueOrder``
+     - 最近发现的 URL 优先
+   * - ``weightFirstUrlQueueOrder``
+     - 仅按权重降序，同分时交由搜索引擎决定
+
+默认情况下权重是统一的，除非安装了自定义的 ``UrlQueueWeigher``，因此所有条目都同分，
+``sequentialUrlQueueOrder`` 实际上按发现顺序排序。由于权重是它的第一排序键，安装 weigher 后，
+即使不设置 ``config.crawl.order`` 取出顺序也会改变。``weightFirstUrlQueueOrder`` 的差别仅在于
+同分条目的处理：当队列中积压了大量已加权的 URL、且希望只由权重决定下一个抓取对象时选用它。
+
+::
+
+    config.crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` 并非严格的深度优先搜索。爬虫会批量取出 URL 并处理完毕后再取下一批，
+因此处理过程中发现的更深的 URL 会推迟到下一批。如果整个队列都能装进一批，那么无论选择哪种
+顺序，爬取都会按层级逐层进行。
+
+指定无法解析的组件名称时会记录警告日志，并使用默认顺序。
+
+.. note::
+   早期版本的 ``config.crawl.order=sequential`` 和 ``config.crawl.order=random`` 值仍然有效。
+
 文件大小配置
 ====================
 

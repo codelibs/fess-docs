@@ -318,6 +318,53 @@ Especifique la frecuencia de ejecución del rastreo.
     # O configure en el programador
     0 2 * * *  # Todos los días a las 2 AM
 
+Orden de Rastreo
+----------------
+
+Al establecer ``config.crawl.order`` en los parámetros de configuración de una configuración de
+rastreo se cambia el orden en que se toman las URL de la cola. El valor es uno de los
+siguientes nombres de componente.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Valor
+     - Orden de obtención
+   * - ``sequentialUrlQueueOrder``
+     - Por peso descendente, luego por orden de descubrimiento (predeterminado)
+   * - ``randomUrlQueueOrder``
+     - Aleatorio, con una semilla fija por sesión
+   * - ``depthFirstUrlQueueOrder``
+     - URL más profundas primero
+   * - ``newestFirstUrlQueueOrder``
+     - URL descubiertas más recientemente primero
+   * - ``weightFirstUrlQueueOrder``
+     - Solo por peso descendente, dejando los empates al motor de búsqueda
+
+Los pesos son uniformes de forma predeterminada a menos que se instale un
+``UrlQueueWeigher`` personalizado, por lo que todas las entradas empatan y
+``sequentialUrlQueueOrder`` se ordena, en la práctica, por orden de descubrimiento. El peso es
+su clave de ordenación principal, de modo que instalar un weigher cambia el orden de obtención
+sin necesidad de establecer ``config.crawl.order``. ``weightFirstUrlQueueOrder`` solo difiere
+en el tratamiento de las entradas con el mismo peso: elíjalo para una cola grande y ponderada
+en la que solo el peso deba decidir qué se rastrea a continuación.
+
+::
+
+    config.crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` no es una búsqueda en profundidad estricta. El rastreador obtiene
+un lote de URL y lo consume antes de obtener el siguiente, por lo que las URL más profundas
+encontradas mientras se consume un lote esperan al siguiente lote. Por tanto, un rastreo cuya
+cola completa cabe en un solo lote avanza nivel por nivel sea cual sea el orden seleccionado.
+
+Un nombre de componente que no se puede resolver se registra como advertencia y se utiliza el
+orden predeterminado.
+
+.. note::
+   Los valores ``config.crawl.order=sequential`` y ``config.crawl.order=random`` de versiones anteriores siguen funcionando.
+
 Configuración de Tamaño de Archivo
 ===================================
 
