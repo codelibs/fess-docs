@@ -15,7 +15,15 @@ Supported Content
 
 - Public channel messages
 - Private channel messages
+- Thread reply messages (retrieved via ``conversations.replies``)
 - File attachments (optional)
+
+The following are out of scope:
+
+- System event messages (``channel_join``, ``channel_topic``, ``pinned_item``, etc.) are
+  excluded from indexing by default (``ignore_system_events``)
+- Direct messages (DMs) and group DMs
+- Huddle transcripts and Clips (Slack has no public API for these, so they cannot be crawled)
 
 Prerequisites
 =============
@@ -137,6 +145,49 @@ Parameter List
      - No
      - Maximum number of entries in the channel information cache (default: ``10000``)
 
+Advanced Parameters
+~~~~~~~~~~~~~~~~~~~
+
+The following parameters control connection and retry behavior, fine-grained crawl scope, and
+permission synchronization:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Parameter
+     - Description
+   * - ``connection_timeout``
+     - Connection timeout for each Slack API request, in milliseconds (default: ``20000``)
+   * - ``read_timeout``
+     - Read timeout for each Slack API request, in milliseconds (default: ``20000``)
+   * - ``max_retry_count``
+     - Maximum number of retries after a ``429`` (rate limited) or ``5xx`` response (default: ``3``)
+   * - ``retry_interval``
+     - Wait time, in milliseconds, before the first retry when the response carries no ``Retry-After`` header (default: ``3000``). Doubles with each further attempt, capped at ``60000`` milliseconds. When the response has a ``Retry-After`` header, that value (in seconds) is used instead
+   * - ``executor_timeout``
+     - Seconds to wait, at the end of a crawl, for queued work to finish before forcing shutdown (default: ``60``)
+   * - ``exclude_archived``
+     - Whether to exclude archived channels from the ``conversations.list`` results (default: ``false``). When set to ``true``, an archived channel specified by name in ``channels`` can no longer be resolved (see Troubleshooting for details)
+   * - ``ignore_system_events``
+     - Whether to exclude Slack-generated channel administration messages (``channel_join``, ``channel_topic``, ``pinned_item``, etc.) from indexing (default: ``true``)
+   * - ``read_interval``
+     - Wait time, in milliseconds, after processing each message or file (default: ``0`` = no wait). Use this to slow down the crawl against a rate-limited workspace
+   * - ``max_content_length``
+     - Maximum number of characters the content extractor (Tika) may extract from a file (default: unset, deferring to Fess's per-MIME-type limit). ``max_filesize`` is the transfer-side limit that rejects files by size before download, while ``max_content_length`` is the extraction-side limit on the amount of text extracted after download; the two work independently. Lowering ``max_filesize`` does not substitute for ``max_content_length`` (for example, a 1MB archive can expand into far more text once extracted)
+   * - ``permission_sync``
+     - Whether to convert private channel membership into search permissions (roles) (default: ``false``). See "Permission Synchronization (ACL)" below for details
+   * - ``default_permissions``
+     - Additional permissions applied to every indexed document regardless of channel membership (``{user}``/``{group}``/``{role}`` format, comma-separated, default: empty). Applied only when ``permission_sync`` is enabled
+
+.. note::
+
+   ``ignore_system_events`` defaults to ``true``. Even an existing crawl configuration that
+   does not set this parameter will, after upgrading |Fess|, stop indexing system event
+   messages such as ``channel_join`` -- the number of indexed documents will drop with no
+   error or warning. Set ``ignore_system_events=false`` explicitly to keep indexing these
+   messages as before.
+
 Script Configuration
 --------------------
 
@@ -172,6 +223,8 @@ Available Fields
      - Message permalink
    * - ``message.attachments``
      - Attachment fallback information
+   * - ``message.roles``
+     - The list of search permissions (roles) allowed to see this message or file. Present only when ``permission_sync=true``. Unless the script maps ``role=message.roles``, the computed roles are never reflected in the indexed document
 
 Slack App Configuration
 =======================
@@ -194,23 +247,27 @@ In the "OAuth & Permissions" menu:
 
 **Add to Bot Token Scopes**:
 
-For public channels only:
+Base scopes (always required):
 
 - ``channels:history`` - Read public channel messages
 - ``channels:read`` - Read public channel information
 - ``users:read`` - Read user information (required for display name resolution)
+- ``team:read`` - Read workspace information. ``team.info`` is called on every crawl, so this
+  scope is required; without it, this connector falls back to an extra
+  ``chat.getPermalink`` call for every message, greatly increasing the number of API calls
 
-When including private channels (``include_private=true``):
+When also including private channels (``include_private=true``):
 
-- ``channels:history``
-- ``channels:read``
 - ``groups:history`` - Read private channel messages
 - ``groups:read`` - Read private channel information
-- ``users:read``
 
 When also crawling files (``file_crawl=true``):
 
 - ``files:read`` - Read file content
+
+When also synchronizing private channel permissions (``permission_sync=true``):
+
+- ``users:read.email`` - Read member email addresses (required for permission synchronization)
 
 3. Install the App
 ------------------
@@ -235,6 +292,82 @@ Add the app to target channels for crawling:
 3. Select the "Integrations" tab
 4. Click "Add apps"
 5. Add the created app
+
+Permission Synchronization (ACL)
+================================
+
+The Slack Connector can convert a private channel's membership into |Fess| search
+permissions (roles), so that only that channel's members can search its content. This
+feature is disabled by default.
+
+.. note::
+
+   ``permission_sync`` only computes roles; it does not apply them automatically. Only after
+   you add ``role=message.roles`` to the script are the computed roles reflected in indexed
+   documents. Forgetting this mapping still pays for the extra API calls and skipped private
+   channels that ``permission_sync=true`` causes, while providing no access control at all.
+
+Enabling It
+-----------
+
+1. Add the ``users:read.email`` scope to the Slack App (required to resolve member email addresses)
+2. Set ``permission_sync=true`` in the parameters
+3. Add ``role=message.roles`` to the script
+
+Parameters:
+
+::
+
+    include_private=true
+    permission_sync=true
+
+Script:
+
+::
+
+    role=message.roles
+
+Fail-Closed Behavior
+--------------------
+
+A private channel is not indexed at all in a given crawl if any of the following applies
+(this fails closed: the risk is under-indexing, never accidentally exposing content to
+everyone):
+
+- Retrieving the channel's member list failed
+- The member list came back empty (this happens when the crawling token's own bot user is
+  not itself a member of the private channel)
+- The channel has members, but none of their email addresses could be resolved (usually
+  because the ``users:read.email`` scope is missing)
+
+Public channels never call ``conversations.members`` and are always treated as visible to
+everyone.
+
+Principal Name Matching
+-----------------------
+
+Search-time permission checks use the |Fess| login name (the principal name). Because the
+roles this feature computes are derived from Slack email addresses, the |Fess| login name
+must match the Slack email address. Slack normalizes email addresses to lowercase, so keep
+|Fess| login names lowercase as well. A mismatch does not expose another user's content --
+it simply means the affected user's searches always return zero results, which can be easy
+to mistake for an unrelated bug.
+
+Other Notes
+-----------
+
+- Slack user groups are not used; permissions are computed directly from each member's
+  email address
+- ``default_permissions`` lets you grant additional permissions to every document regardless
+  of channel membership (applied only when ``permission_sync=true``)
+- Leaving ``permission_sync=false`` while setting ``include_private=true`` indexes private
+  channel content using only the permissions configured on the data store's "Permission"
+  field; if that field is left empty, the content is effectively public to everyone
+- Enabling ``permission_sync`` later does not retroactively secure content already indexed
+  by an earlier, unrestricted crawl. To apply roles to that content, set
+  ``permission_sync=true`` and ``role=message.roles``, then re-crawl. Likewise, disabling
+  ``permission_sync`` afterward does not remove roles already applied to previously indexed
+  documents
 
 Usage Examples
 ==============
@@ -340,8 +473,56 @@ Script:
     timestamp=message.timestamp
     url=message.permalink
 
+Crawl With Permission Sync
+--------------------------
+
+Restrict private channel content so that only that channel's members can search it. Add the
+``users:read.email`` scope to the Slack App beforehand.
+
+Parameters:
+
+::
+
+    token=xoxb-your-slack-bot-token-here
+    channels=*all
+    include_private=true
+    permission_sync=true
+
+Script:
+
+::
+
+    title=message.user + " #" + message.channel
+    content=message.text
+    created=message.timestamp
+    url=message.permalink
+    role=message.roles
+
+.. note::
+
+   If you forget ``role=message.roles``, the computed roles are never reflected in the
+   indexed documents. See "Permission Synchronization (ACL)" for details.
+
 Troubleshooting
 ===============
+
+How Error Handling Works
+------------------------
+
+The Slack Connector treats Slack API errors as one of three kinds:
+
+- **Fatal errors** (``invalid_auth``, ``token_revoked``, ``account_inactive``,
+  ``missing_scope``, ``not_authed``, ``token_expired``): the token itself cannot be used, so
+  the entire crawl job fails
+- **Transient errors** (``ratelimited``, ``internal_error``, ``fatal_error``,
+  ``service_unavailable``, ``request_timeout``): if retrying does not resolve the error, the
+  entire crawl job fails (see "API Rate Limiting" below for the retry behavior)
+- **Channel-scoped errors** (``channel_not_found``, ``not_in_channel``, etc.): only that
+  channel is skipped with a warning, and crawling continues with the next channel
+
+In earlier versions, a fatal error could still be reported as a "successful" crawl that
+silently indexed zero or only some documents. This three-way split now ensures that fatal
+and transient errors are always reported as a job failure.
 
 Authentication Error
 --------------------
@@ -369,38 +550,47 @@ Channel Not Found
 1. Verify channel name is correct (# is not needed)
 2. Verify app is added to the channel
 3. For private channels, set ``include_private=true``
-4. Verify channel exists and is not archived
+4. Check whether ``exclude_archived=true`` is set. By default (``exclude_archived=false``),
+   archived channels are still listed and crawled; only when set to ``true`` does an archived
+   channel specified by name in ``channels`` fail to resolve
 
 Cannot Retrieve Messages
 ------------------------
 
-**Symptom**: Crawl succeeds but 0 messages found
+**Symptom**: Crawl succeeds, but few or no documents are indexed
 
 **Check**:
 
-1. Verify required scopes are granted:
-
-   - ``channels:history``
-   - ``channels:read``
-   - For private channels: ``groups:history``, ``groups:read``
-
-2. Verify messages exist in the channel
+1. ``ignore_system_events`` defaults to ``true``. If a channel's messages are all system
+   events such as ``channel_join``, zero documents are indexed for it (see "Advanced
+   Parameters")
+2. Verify messages actually exist in the channel
 3. Verify app is added to the channel
-4. Verify Slack app is enabled
+4. With ``permission_sync=true``, a private channel whose membership cannot be resolved is
+   not indexed in that crawl (fail-closed; see "Permission Synchronization (ACL)")
+
+.. note::
+
+   In earlier versions, a missing scope (``missing_scope``) could still let the crawl
+   "succeed" with zero messages. Fatal errors, including ``missing_scope``, now fail the
+   entire crawl job. If your job is failing, check "Insufficient Permissions Error" below
+   instead of this section.
 
 Insufficient Permissions Error
 ------------------------------
 
-**Symptom**: ``missing_scope``
+**Symptom**: ``missing_scope`` (fails the entire crawl job)
 
 **Resolution**:
 
 1. Add required scopes in Slack App settings:
 
-   **Public channels**:
+   **Base** (always required):
 
    - ``channels:history``
    - ``channels:read``
+   - ``users:read``
+   - ``team:read``
 
    **Private channels**:
 
@@ -410,6 +600,10 @@ Insufficient Permissions Error
    **Files**:
 
    - ``files:read``
+
+   **Permission synchronization** (``permission_sync=true``):
+
+   - ``users:read.email``
 
 2. Reinstall the app
 3. Restart |Fess|
@@ -424,22 +618,42 @@ Cannot Crawl Files
 1. Verify ``files:read`` scope is granted
 2. Verify files are actually posted in the channel
 3. Verify file access permissions
+4. A file larger than ``max_filesize`` is not downloaded (check the log for a warning)
 
 API Rate Limiting
 -----------------
 
-**Symptom**: ``rate_limited``
+**Symptom**: ``ratelimited`` (fails the entire crawl job)
 
 **Resolution**:
 
-1. Increase crawl interval
-2. Reduce number of channels
-3. Split into multiple data stores and distribute schedules
+1. If the default ``max_retry_count`` and ``retry_interval`` do not resolve it, increase them
+2. Set ``read_interval`` to slow down the crawl
+3. Reduce the number of channels, or split into multiple data stores and distribute schedules
 
-Slack API limits:
+A Slack API ``ratelimited`` error is retried automatically: using the ``Retry-After``
+header's value, in seconds, when present, or otherwise an exponential backoff starting from
+``retry_interval`` (up to ``max_retry_count`` attempts, capped at 60 seconds). If the error
+persists after every retry is exhausted, the entire crawl job fails.
 
-- Tier 3 methods: 50+ requests/minute
-- Tier 4 methods: 100+ requests/minute
+Slack API tiers (call-frequency limits):
+
+- Tier 1: 1+ requests/minute
+- Tier 2: 20+ requests/minute -- ``conversations.list``, ``users.list`` (fetched
+  unconditionally in full at the start of every crawl, making this the tier most likely to
+  be exhausted)
+- Tier 3: 50+ requests/minute -- ``conversations.history``, ``conversations.replies``,
+  ``files.list``
+- Tier 4: 100+ requests/minute -- ``conversations.members`` (only when
+  ``permission_sync=true``), ``files.info`` (not currently called by this connector's crawl)
+
+.. note::
+
+   Slack's May 29, 2025 rate limit tightening (limiting ``conversations.history`` and
+   ``conversations.replies`` to 50+ requests/minute) applies only to apps distributed outside
+   the workspace that created them, such as through the Slack Marketplace. It does not apply
+   to an internal app created for |Fess| that is installed only in the workspace that created
+   it.
 
 Large Number of Messages
 ------------------------
@@ -450,7 +664,6 @@ Large Number of Messages
 
 1. Split channels and configure multiple data stores
 2. Distribute crawl schedules
-3. Consider settings to exclude old messages
 
 Advanced Script Examples
 ========================
@@ -483,5 +696,7 @@ Reference Information
 - :doc:`ds-overview` - Data Store Connector Overview
 - :doc:`ds-atlassian` - Atlassian Connector
 - :doc:`../../admin/dataconfig-guide` - Data Store Configuration Guide
+- :doc:`../security-role` - Role-Based Search Configuration
 - `Slack API Documentation <https://api.slack.com/>`_
 - `Slack Bot Token Scopes <https://api.slack.com/scopes>`_
+- `Slack API Rate Limits <https://docs.slack.dev/apis/web-api/rate-limits>`_
