@@ -25,6 +25,7 @@ Data Store Connector Guide
 
    ds-atlassian
    ds-slack
+   ds-sharepoint
 
 .. toctree::
    :maxdepth: 2

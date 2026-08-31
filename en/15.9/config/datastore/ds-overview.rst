@@ -60,6 +60,9 @@ Collaboration Tools
    * - :doc:`ds-slack`
      - fess-ds-slack
      - Crawl Slack messages and files
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - Crawl on-premises SharePoint Server sites
 
 Development & Operations Tools
 ------------------------------

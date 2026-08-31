@@ -60,6 +60,9 @@
    * - :doc:`ds-slack`
      - fess-ds-slack
      - Slack의 메시지 및 파일을 크롤링
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - 온프레미스 SharePoint Server 사이트를 크롤링
 
 개발·운영 도구
 ----------------
