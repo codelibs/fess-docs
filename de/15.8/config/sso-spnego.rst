@@ -231,6 +231,18 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    Diese Datei liegt in der ZIP-Distribution unter ``lib/classes/`` und in den DEB/RPM-Paketen
    unter ``/etc/fess/``; nach einer Änderung muss |Fess| neu gestartet werden.
 
+.. note::
+   Mit ``spnego.allow.delegation=true`` nimmt die SPNEGO-Bibliothek die vom Client delegierten
+   Kerberos-Anmeldeinformationen entgegen und verknüpft sie mit dem authentifizierten Principal.
+   |Fess| verwendet diese Anmeldeinformationen derzeit jedoch an keiner Stelle: Crawling, Suche und
+   LDAP-Abfragen greifen ausschließlich auf den Benutzernamen zurück. Auf den SPNEGO-Handshake
+   selbst wirkt sich die Einstellung ebenfalls nicht aus — die Acceptor-Anmeldeinformationen und
+   die Flags des GSS-Kontexts bleiben unverändert, und ob überhaupt delegiert wird, entscheidet
+   allein der Client (die Browser-Konfiguration und ob dem Konto in Active Directory für
+   Delegierungszwecke vertraut wird). Belassen Sie die Einstellung beim Standardwert ``false``;
+   ist sie aktiviert, versucht das JDK bei jeder authentifizierten Anfrage eine eingeschränkte
+   Delegierung — ohne jeden Nutzen.
+
 .. warning::
    In |Fess| 15.8 wird eine Anmeldung standardmäßig abgelehnt, wenn sich die Realm des
    Client-Principals von der Realm des Servers unterscheidet. Melden sich Benutzer aus einer
