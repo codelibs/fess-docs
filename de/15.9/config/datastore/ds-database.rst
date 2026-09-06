@@ -34,37 +34,46 @@ Voraussetzungen
 Plugin-Installation
 -------------------
 
-Methode 1: JAR-Datei direkt platzieren
-
-::
-
-    # Herunterladen von Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
-
-    # Platzieren
-    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
-    # oder
-    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
-
-Methode 2: Installation über die Administrationsoberfläche
+Methode 1: Installation über die Administrationsoberfläche
 
 1. "System" -> "Plugins" öffnen
 2. JAR-Datei hochladen
 3. |Fess| neu starten
 
+Methode 2: JAR-Datei direkt platzieren
+
+::
+
+    # Herunterladen aus dem CodeLibs-Repository
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-db/X.X.X/fess-ds-db-X.X.X.jar
+
+    # Platzieren (dasselbe Verzeichnis, in das auch über die Administrationsoberfläche installiert wird)
+    cp fess-ds-db-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
+    # oder
+    cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
+
 JDBC-Treiber-Installation
 --------------------------
 
-Platzieren Sie den JDBC-Treiber für die Zieldatenbank im Classpath von |Fess| (Verzeichnis ``app/WEB-INF/lib/``):
+Der JDBC-Treiber ist nicht im Plugin enthalten. Beschaffen Sie den Treiber für Ihre Datenbank separat und platzieren Sie ihn selbst.
+
+Das Datenspeicher-Crawling läuft im Crawler-Prozess, daher muss der Treiber im **Classpath des Crawler-Prozesses** liegen. Eines der folgenden Verzeichnisse ist geeignet:
+
+- ``app/WEB-INF/lib/``
+- ``app/WEB-INF/env/crawler/lib/``
 
 ::
 
     # Beispiel: MySQL-Treiber
-    cp mysql-connector-j-8.x.x.jar $FESS_HOME/app/WEB-INF/lib/
+    cp mysql-connector-j-9.x.x.jar $FESS_HOME/app/WEB-INF/lib/
     # oder
-    cp mysql-connector-j-8.x.x.jar /usr/share/fess/app/WEB-INF/lib/
+    cp mysql-connector-j-9.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
 Starten Sie |Fess| neu, um den Treiber zu laden.
+
+.. note::
+   Fehlt der Treiber, schlägt das Crawling mit der Meldung
+   ``The JDBC driver ... is not on the crawler classpath.`` fehl.
 
 Konfiguration
 =============
@@ -137,7 +146,10 @@ Parameterliste
      - Datenbank-Passwort
    * - ``fetch_size``
      - Nein
-     - JDBC-Fetch-Größe. Für MySQL-Streaming-Resultsets kann ``MIN_VALUE`` angegeben werden
+     - JDBC-Fetch-Größe. ``MIN_VALUE`` weist MySQL an, das Resultset zeilenweise zu lesen; andere Treiber lehnen negative Werte ab, und das Crawling wird nach einer Warnung mit dem Standardwert des Treibers fortgesetzt. Negative oder nicht numerische Werte werden gemeldet und ignoriert
+   * - ``query_timeout``
+     - Nein
+     - Query-Timeout in Sekunden. ``0`` bedeutet keine Begrenzung (JDBC-Standard). Ohne Angabe des Parameters wird kein Timeout gesetzt
    * - ``default_mimetype``
      - Nein
      - Standard-MIME-Typ für die Inhaltsextraktion aus BLOB- und Binärspalten
@@ -157,6 +169,12 @@ Parameterliste
      - Nein
      - Skript-Engine-Typ. Standard: groovy
 
+.. note::
+   Hängt eine Query, gibt das Stoppen des Jobs den Crawler-Thread nicht frei.
+   Die Stopp-Anforderung wird nur zwischen den Zeilen geprüft und kann daher einen
+   Aufruf, der im Treiber blockiert, nicht unterbrechen. Setzen Sie ``query_timeout``
+   für Queries, die lange laufen können.
+
 Skript-Einstellungen
 --------------------
 
@@ -172,19 +190,49 @@ Ordnen Sie die SQL-Spaltennamen den Index-Feldern zu:
 Verfügbare Felder:
 
 - ``<column_name>`` - Ergebnisspalten der SQL-Query (direkt über den Spaltenbezeichner zugänglich, ohne Präfix wie ``data.``)
+- ``crawlingConfig`` - die Datenspeicher-Konfiguration
+- ``crawlingContext`` - der Crawling-Kontext; ``crawlingContext.doc`` enthält das gerade erzeugte Dokument
 
 .. note::
    Die Spaltennamen müssen mit den Spaltenbezeichnern (Aliasnamen) in der ``SELECT``-Klausel übereinstimmen.
    Bei Aggregatfunktionen oder Ausdrücken vergeben Sie mit ``AS`` einen expliziten Aliasnamen
    (Beispiel: ``COUNT(*) AS total``).
 
+.. note::
+   Die Groß-/Kleinschreibung der Spaltenbezeichner unterscheidet sich je nach Datenbank.
+   PostgreSQL wandelt nicht in Anführungszeichen gesetzte Bezeichner in Kleinbuchstaben um,
+   H2 in Großbuchstaben, und MySQL liefert sie wie deklariert. Ein Name, der nicht aufgelöst
+   werden kann, lässt das Feld unbesetzt, statt einen Fehler auszulösen - vergeben Sie daher
+   mit ``AS`` einen expliziten Aliasnamen, wenn Portabilität wichtig ist.
+
+.. warning::
+   Skripte können auf die **gesamte Parameterzuordnung des Datenspeichers** zugreifen, nicht
+   nur auf die Ergebnisspalten der SQL-Query. ``driver``, ``url``, ``username``, ``password``
+   und ``sql`` sind alle als gleichnamige Variablen sichtbar, sodass eine Spalte unbeabsichtigt
+   überdeckt werden kann oder ein Parameterwert dort erscheint, wo eine fehlende Spalte
+   erwartet wurde. Existieren beide, gewinnt der Wert der Spalte.
+
 Laden von BLOB- und Binärdaten
 ==============================
 
-Spalten vom Typ BLOB, CLOB, NCLOB, Byte-Array oder Binär-Stream werden automatisch
-einer Inhaltsextraktion unterzogen (derselbe Extraktor wie beim Datei-Crawling) und als
-Text indiziert. Spalten vom Array-Typ werden in leerzeichengetrennte Zeichenketten
-umgewandelt. NULL-Werte werden zu leeren Zeichenketten.
+Binärspalten (BLOB, ``BYTEA``, Byte-Array, Binär-Stream) werden einer Inhaltsextraktion
+unterzogen - derselbe Extraktor wie beim Datei-Crawling - und als Text indiziert.
+
+CLOB, NCLOB und Zeichen-Streams durchlaufen **keinen** Extraktor. Sie werden unverändert als
+Text gelesen; die unten beschriebenen MIME-Typ-Hinweise gelten für sie nicht.
+
+Spalten vom Array-Typ werden zu ihren mit Leerzeichen verbundenen Elementen. NULL-Werte
+werden zu leeren Zeichenketten.
+
+.. note::
+   Ob eine BLOB-Spalte als ``java.sql.Blob`` oder als Byte-Array ankommt, entscheidet der
+   JDBC-Treiber - MySQL und PostgreSQL liefern ein Byte-Array. Beide werden auf dieselbe
+   Weise extrahiert.
+
+.. note::
+   CLOB und NCLOB werden vollständig und ohne Größenbegrenzung in den Speicher gelesen.
+   Bei sehr großen Textspalten sollten Sie im SQL mit ``SUBSTRING`` oder Ähnlichem kürzen.
+   Für den Weg über den Extraktor gilt die maximale Inhaltslänge des Crawlers.
 
 Damit Text aus BLOB- und Binär-Streams korrekt extrahiert werden kann, muss der Datentyp
 (MIME-Typ) bestimmt werden. Die folgende Prioritätsreihenfolge wird verwendet:
@@ -229,6 +277,17 @@ Methode zum Abrufen nur der aktualisierten Datensätze:
     # Bereichsangabe nach ID
     sql=SELECT * FROM articles WHERE id > 10000
 
+.. warning::
+   Die Query auf diese Weise einzuschränken macht aus dem Crawling noch kein
+   inkrementelles Crawling. Wenn ein Crawl endet, löscht |Fess| die Dokumente dieser
+   Datenspeicher-Konfiguration, die nicht Teil des soeben gelaufenen Crawls waren - eine
+   gefilterte Query lässt also nur die passenden Zeilen im Index zurück.
+
+   Fügen Sie ``delete_old_docs=false`` zu den Datenspeicher-Parametern hinzu, um die von
+   früheren Crawls indexierten Dokumente zu behalten. Aus der Datenbank gelöschte Zeilen
+   werden dann allerdings auch nicht mehr aus dem Index entfernt; führen Sie deshalb
+   regelmäßig ein vollständiges Crawling durch.
+
 URL-Generierung
 ---------------
 
@@ -244,6 +303,13 @@ Die Dokument-URL wird im Skript generiert:
 
     # In der Datenbank gespeicherte URL verwenden
     url=url
+
+.. warning::
+   ``url=url`` tut nur dann das Erwartete, wenn das ``SELECT``-Ergebnis eine Spalte mit dem
+   Bezeichner ``url`` enthält. Ohne eine solche Spalte wird der gleichnamige
+   Datenspeicher-Parameter - also die **JDBC-Verbindungs-URL** - zur Dokument-URL. Vergeben
+   Sie einen Aliasnamen für die Spalte, etwa ``SELECT page_url AS url``, oder benennen Sie sie
+   im Skript, etwa ``url=page_url``.
 
 Multibyte-Zeichenunterstützung
 ==============================
@@ -277,9 +343,32 @@ Schutz der Datenbank-Anmeldedaten
 
 Empfohlene Methoden:
 
-1. Umgebungsvariablen verwenden
-2. Verschlüsselungsfunktion von |Fess| verwenden
+1. Automatische Verschlüsselung nutzen
+
+   Der Wert eines Parameters, dessen Name auf ``app.encrypt.property.pattern`` passt
+   (Standard ``.*password|.*key|.*token|.*secret``), wird beim Speichern über die
+   Administrationsoberfläche verschlüsselt und mit dem Präfix ``{cipher}`` abgelegt.
+   ``password`` passt auf dieses Muster und wird daher nicht im Klartext gespeichert,
+   wenn es über die Administrationsoberfläche gesetzt wird.
+
+2. Umgebungsvariablen verwenden
+
+   Eine Umgebungsvariable, deren Name mit ``FESS_ENV_`` beginnt, wird innerhalb eines
+   Datenspeicher-Parameters als ``${Variablenname}`` expandiert:
+
+   ::
+
+       password=${FESS_ENV_DB_PASSWORD}
+
+   Welche Namen expandiert werden, steuert ``crawler.data.env.param.key.pattern``
+   (Standard ``^FESS_ENV_.*``).
+
 3. Nur-Lese-Benutzer verwenden
+
+.. note::
+   Das Anheben von ``org.codelibs.fess.ds`` auf DEBUG legt keine Anmeldedaten offen: Die Werte
+   von Parametern, die auf ``app.encrypt.property.pattern`` passen, sowie in der JDBC-URL
+   eingebettete Anmeldedaten werden im Log maskiert.
 
 Prinzip der minimalen Rechte
 -----------------------------
@@ -345,21 +434,23 @@ Skript:
 Fehlerbehebung
 ==============
 
+Schlägt ein Crawling fehl, gibt die Meldung im Log an, welcher Schritt fehlgeschlagen ist.
+
 JDBC-Treiber nicht gefunden
 ----------------------------
 
-**Symptom**: ``ClassNotFoundException`` oder ``No suitable driver``
+**Symptom**: ``The JDBC driver ... is not on the crawler classpath.``
 
 **Lösung**:
 
-1. Überprüfen Sie, ob der JDBC-Treiber in ``lib/`` platziert ist
-2. Überprüfen Sie, ob der Klassenname des Treibers korrekt ist
+1. Überprüfen Sie, ob der JDBC-Treiber in ``app/WEB-INF/lib/`` oder ``app/WEB-INF/env/crawler/lib/`` platziert ist
+2. Überprüfen Sie, ob der in ``driver`` angegebene Klassenname korrekt ist
 3. Starten Sie |Fess| neu
 
 Verbindungsfehler
 -----------------
 
-**Symptom**: ``Connection refused`` oder Authentifizierungsfehler
+**Symptom**: ``Failed to connect to <URL>.``
 
 **Zu überprüfen**:
 
@@ -371,13 +462,34 @@ Verbindungsfehler
 Query-Fehler
 ------------
 
-**Symptom**: ``SQLException`` oder SQL-Syntaxfehler
+**Symptom**: ``Failed to execute the query.``
 
 **Zu überprüfen**:
 
 1. Testen Sie die SQL-Query direkt in der Datenbank
 2. Überprüfen Sie, ob die Spaltennamen korrekt sind
 3. Überprüfen Sie, ob die Tabellennamen korrekt sind
+
+Fehlende Parameter
+------------------
+
+**Symptom**: ``The driver parameter is required.``, ``The url parameter is required.`` oder ``The sql parameter is required.``
+
+Ein erforderlicher Parameter ist nicht gesetzt. Überprüfen Sie das Parameterfeld.
+
+Nur einzelne Zeilen schlagen fehl
+---------------------------------
+
+Eine fehlgeschlagene Zeile bricht das Crawling nicht ab; sie wird unter "System" -> "Fehlerhafte URL"
+protokolliert. Verwendet wird die Dokument-URL, sofern die Skripte eine erzeugt haben, und
+``datastore://<ID der Datenspeicher-Konfiguration>/<Zeilennummer>``, wenn nicht.
+
+Dokumente erscheinen nicht in den Suchergebnissen
+-------------------------------------------------
+
+1. Überprüfen Sie, ob die Skripte ``url``, ``title`` und ``content`` setzen
+2. Überprüfen Sie, ob die Groß-/Kleinschreibung der Spaltenbezeichner mit der in den Skripten verwendeten übereinstimmt (siehe "Skript-Einstellungen")
+3. Überprüfen Sie die Anzahl der Dokumente im Protokoll des Crawl-Jobs
 
 Weiterführende Informationen
 ============================
