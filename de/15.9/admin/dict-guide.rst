@@ -19,6 +19,75 @@ Um die Übersichtsseite der verwaltbaren Wörterbücher zu öffnen, klicken Sie 
 |image0|
 
 
+Geltungsbereich der Wörterbücher und Zeitpunkt der Wirksamkeit
+==============================================================
+
+Jedes Wörterbuch wirkt auf andere Felder und wird zu einem anderen Zeitpunkt
+wirksam. Wenn Sie ein Wörterbuch bearbeitet haben und sich die Suchergebnisse
+nicht ändern, prüfen Sie zuerst diese Tabelle.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 26 28 24
+
+   * - Wörterbuch
+     - Datei
+     - Betroffene Felder
+     - Zeitpunkt der Wirksamkeit
+   * - Kuromoji
+     - ``ja/kuromoji.txt``
+     - Nur ``_ja``-Felder wie ``content_ja``
+     - Beim Indexieren (erneutes Crawlen erforderlich)
+   * - Synonym
+     - ``synonym.txt``
+     - ``content`` und ``title``
+     - Bei der Suche (kein erneutes Crawlen nötig)
+   * - Mapping (alle Sprachen)
+     - ``mapping.txt``
+     - ``content`` und ``title``
+     - Beim Indexieren (erneutes Crawlen erforderlich)
+   * - Mapping (je Sprache)
+     - ``ja/mapping.txt``
+     - Nur ``_ja``-Felder wie ``content_ja``
+     - Beim Indexieren (erneutes Crawlen erforderlich)
+   * - Protwords
+     - ``en/protwords.txt``
+     - ``content`` und ``title``
+     - Beim Indexieren und bei der Suche
+   * - Stoppwörter
+     - ``en/stopwords.txt``
+     - ``content`` und ``title``
+     - Beim Indexieren und bei der Suche
+   * - Stemmer-Überschreibung
+     - ``en/stemmer_override.txt``
+     - ``content`` und ``title``
+     - Beim Indexieren und bei der Suche
+
+.. note::
+
+   Ein Analyzer wird beim Öffnen des Index aufgebaut. Eine Änderung an einer
+   Wörterbuchdatei wird daher erst wirksam, **wenn der Index geschlossen und
+   wieder geöffnet wird**. Ein Wörterbuch, das beim Indexieren wirkt, wird
+   zudem nicht rückwirkend auf bereits indexierte Dokumente angewendet; diese
+   müssen erneut gecrawlt werden.
+
+.. warning::
+
+   Das Zeichenersetzungs-Wörterbuch, das auf ``content`` wirkt -- das Feld, aus
+   dem die meisten Suchen beantwortet werden -- ist die ``mapping.txt`` im
+   **Wurzelverzeichnis**, nicht ``ja/mapping.txt``. Beide heißen Mapping, sind
+   aber verschiedene Dateien.
+
+Kuromoji-Benutzerwörterbuch und Suchergebnisse
+----------------------------------------------
+
+Das Feld ``content`` wird mit dem Standard-Tokenizer und ``cjk_bigram``
+analysiert und ist deshalb davon unabhängig, wie Kuromoji ein Wort zerlegt.
+Ein japanisches Kompositum im Kuromoji-Benutzerwörterbuch zu registrieren und
+erneut zu crawlen ändert an einer Suche gegen ``content`` also nichts. Wirksam
+wird der Eintrag in ``content_ja``, das je nach Sprache der Anfrage zur Abfrage
+hinzugenommen wird.
+
 Kuromoji
 ========
 

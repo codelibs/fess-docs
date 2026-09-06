@@ -19,6 +19,68 @@
 |image0|
 
 
+各词典的作用范围与生效时机
+==========================
+
+每个词典作用的字段和生效的时机都不同。
+如果编辑了词典但搜索结果没有变化，请先查看下表。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 26 28 24
+
+   * - 词典
+     - 文件
+     - 作用的字段
+     - 生效时机
+   * - Kuromoji
+     - ``ja/kuromoji.txt``
+     - 仅 ``content_ja`` 等 ``_ja`` 字段
+     - 索引时（需要重新爬取）
+   * - 同义词
+     - ``synonym.txt``
+     - ``content`` 和 ``title``
+     - 搜索时（无需重新爬取）
+   * - 映射（各语言通用）
+     - ``mapping.txt``
+     - ``content`` 和 ``title``
+     - 索引时（需要重新爬取）
+   * - 映射（按语言）
+     - ``ja/mapping.txt``
+     - 仅 ``content_ja`` 等 ``_ja`` 字段
+     - 索引时（需要重新爬取）
+   * - Protwords
+     - ``en/protwords.txt``
+     - ``content`` 和 ``title``
+     - 索引时与搜索时
+   * - 停用词
+     - ``en/stopwords.txt``
+     - ``content`` 和 ``title``
+     - 索引时与搜索时
+   * - Stemmer 覆盖
+     - ``en/stemmer_override.txt``
+     - ``content`` 和 ``title``
+     - 索引时与搜索时
+
+.. note::
+
+   分析器是在打开索引时构建的，因此更新词典文件后
+   **在索引 close / open 之前不会生效**\ 。
+   而且在索引时生效的词典不会追溯应用到已经索引的文档，这些文档需要重新爬取。
+
+.. warning::
+
+   对 ``content`` 字段（大多数搜索由该字段作答）生效的字符替换词典是\ **根目录的**
+   ``mapping.txt`` ，而不是 ``ja/mapping.txt`` 。二者同名为映射，但是不同的文件。
+
+Kuromoji 用户词典与搜索结果
+----------------------------
+
+``content`` 字段使用 standard 分词器和 ``cjk_bigram`` 进行分析，因此不受 Kuromoji
+形态素切分结果的影响。将日语复合词注册到 Kuromoji 用户词典后重新爬取，对 ``content``
+的搜索结果仍然不会改变。注册的效果体现在 ``content_ja`` 上，该字段会根据请求的语言
+加入到查询条件中。
+
 Kuromoji
 ========
 

@@ -19,6 +19,75 @@ Para abrir la página de lista de diccionarios administrables que se muestra a c
 |image0|
 
 
+Alcance de cada diccionario y cuándo surte efecto
+=================================================
+
+Cada diccionario se aplica a campos distintos y surte efecto en un momento
+distinto. Si ha editado un diccionario y los resultados de búsqueda no cambian,
+consulte primero esta tabla.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 26 28 24
+
+   * - Diccionario
+     - Archivo
+     - Campos a los que se aplica
+     - Cuándo surte efecto
+   * - Kuromoji
+     - ``ja/kuromoji.txt``
+     - Solo los campos ``_ja``, como ``content_ja``
+     - Al indexar (es necesario volver a rastrear)
+   * - Sinónimos
+     - ``synonym.txt``
+     - ``content`` y ``title``
+     - Al buscar (no es necesario volver a rastrear)
+   * - Mapeo (común a todos los idiomas)
+     - ``mapping.txt``
+     - ``content`` y ``title``
+     - Al indexar (es necesario volver a rastrear)
+   * - Mapeo (por idioma)
+     - ``ja/mapping.txt``
+     - Solo los campos ``_ja``, como ``content_ja``
+     - Al indexar (es necesario volver a rastrear)
+   * - Protwords
+     - ``en/protwords.txt``
+     - ``content`` y ``title``
+     - Al indexar y al buscar
+   * - Palabras vacías
+     - ``en/stopwords.txt``
+     - ``content`` y ``title``
+     - Al indexar y al buscar
+   * - Sobrescritura de stemmer
+     - ``en/stemmer_override.txt``
+     - ``content`` y ``title``
+     - Al indexar y al buscar
+
+.. note::
+
+   Un analizador se construye cuando se abre el índice, de modo que actualizar
+   un archivo de diccionario no surte efecto **hasta que el índice se cierra y
+   se vuelve a abrir**. Además, un diccionario que se aplica al indexar no se
+   aplica de forma retroactiva a los documentos ya indexados: esos documentos
+   deben rastrearse de nuevo.
+
+.. warning::
+
+   El diccionario de sustitución de caracteres que se aplica a ``content``, el
+   campo con el que se responde la mayoría de las búsquedas, es el
+   ``mapping.txt`` de la **raíz**, no ``ja/mapping.txt``. Comparten el nombre
+   Mapeo, pero son archivos distintos.
+
+El diccionario de usuario de Kuromoji y los resultados de búsqueda
+-------------------------------------------------------------------
+
+El campo ``content`` se analiza con el tokenizador estándar y ``cjk_bigram``,
+por lo que no depende de cómo Kuromoji segmente una palabra. Registrar una
+palabra compuesta japonesa en el diccionario de usuario de Kuromoji y volver a
+rastrear no cambia, por tanto, lo que devuelve una búsqueda contra ``content``.
+El registro se refleja en ``content_ja``, que se añade a la consulta según el
+idioma de la petición.
+
 Kuromoji
 ========
 
