@@ -227,7 +227,7 @@ Field Description
      - Configuration description (up to 1000 characters)
    * - ``paths``
      - Yes
-     - Crawl start paths (newline-separated for multiple paths). Specify using one of the following protocols: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``storage:``, ``s3:``, or ``gcs:``
+     - Crawl start paths (newline-separated for multiple paths). Specify using one of the following protocols: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:``, or ``gcs:``
    * - ``includedPaths``
      - No
      - Regex pattern for paths to include in crawling

@@ -228,7 +228,7 @@ Description des champs
      - Description de la configuration (1 000 caractères maximum)
    * - ``paths``
      - Oui
-     - Chemins de départ du crawl (séparés par des sauts de ligne si multiples). Indiquez l'un des protocoles suivants : ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``storage:``, ``s3:``, ``gcs:``
+     - Chemins de départ du crawl (séparés par des sauts de ligne si multiples). Indiquez l'un des protocoles suivants : ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:``, ``gcs:``
    * - ``includedPaths``
      - Non
      - Expression régulière des chemins à crawler

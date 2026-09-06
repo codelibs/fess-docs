@@ -21,14 +21,20 @@
    * - 语言
      - 标识符
      - 说明
+   * - JavaScript
+     - ``javascript``
+     - 默认注册的脚本语言。无需安装插件即可使用
    * - Groovy
      - ``groovy``
-     - 默认注册的脚本语言。与 Java 兼容，提供强大功能
+     - 由 ``fess-script-groovy`` 插件提供。与 Java 兼容，提供强大功能
 
 .. note::
-   |Fess| 默认注册的脚本引擎仅为 Groovy。
-   默认脚本语言为 ``groovy`` （ ``Constants.DEFAULT_SCRIPT`` ）。
-   本文档中的脚本示例均使用 Groovy 语法编写。
+   |Fess| 默认注册的脚本引擎为 JavaScript，默认脚本语言为 ``javascript``
+   （ ``Constants.DEFAULT_SCRIPT`` ）。
+   Groovy 已不再内置。要使用标识符 ``groovy`` ，请在管理页面「系统」→「插件」中安装
+   ``fess-script-groovy`` 插件。
+   本页中的脚本示例均使用 Groovy 语法编写，因此运行这些示例需要该插件，
+   否则需要改写为 JavaScript 引擎的语法。
 
 脚本使用场景
 ============

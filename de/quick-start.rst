@@ -153,7 +153,7 @@ Crawl-Konfiguration und Suche
    - **Name:** Mein erster Crawl
    - **URL:** https://www.example.com/ (URL der zu crawlenden Website)
    - **Max. Zugriffe:** 10 (für erste Tests wird ein kleiner Wert empfohlen)
-   - **Intervall:** 1000 (Millisekunden zwischen Anfragen; der Standardwert ``1000`` ms wird empfohlen)
+   - **Intervall:** 10000 (Millisekunden zwischen Anfragen; der Standardwert ``10000`` ms wird empfohlen)
 
 5. Klicken Sie auf **Erstellen**, um zu speichern
 

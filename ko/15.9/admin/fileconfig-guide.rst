@@ -13,7 +13,8 @@
 
 - ``file:/`` … 로컬 또는 마운트된 파일 시스템
 - ``smb://`` … Windows 파일 서버/공유 폴더(SMB/CIFS)
-- ``ftp://`` / ``ftps://`` … FTP 서버
+- ``smb1://`` … 예전 SMB1 프로토콜을 사용하는 Windows 파일 서버/공유 폴더
+- ``ftp://`` … FTP 서버
 - ``s3://`` … Amazon S3 버킷
 - ``gcs://`` … Google Cloud Storage 버킷
 

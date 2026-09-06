@@ -53,7 +53,9 @@ Méthode d'exécution
 :::::::::::::::::::
 
 Spécifie l'environnement d'exécution du script.
-Actuellement, seul « groovy » est pris en charge.
+La valeur standard est « javascript », qui est aussi la valeur par défaut.
+« groovy » devient sélectionnable une fois le plugin ``fess-script-groovy`` installé ; Groovy
+n'est plus intégré.
 
 Script
 ::::::
@@ -64,7 +66,13 @@ Par exemple, si vous souhaitez exécuter uniquement trois configurations de craw
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   L'exemple ci-dessus est écrit pour le moteur JavaScript ; un littéral de tableau JavaScript est
+   converti automatiquement en ``String[]`` Java. La forme Groovy
+   (``webConfigIds(["1", "2"] as String[])``) nécessite le plugin ``fess-script-groovy``.
 
 Journalisation
 ::::::::::::::

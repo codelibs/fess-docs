@@ -24,26 +24,6 @@ Detailed crawler settings are configured in the following files:
 - **Content length configuration**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Component configuration**: ``app/WEB-INF/classes/crawler/container.xml``
 
-Default Script
---------------
-
-Configure the default script language for the crawler.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Property
-     - Description
-     - Default
-   * - ``crawler.default.script``
-     - Crawler script language
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 HTTP Thread Pool
 ----------------
 
@@ -192,7 +172,7 @@ Supported Protocols
      - ``http,https``
    * - ``crawler.file.protocols``
      - File crawl protocols
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - Crawling data encoding
      - ``UTF-8``
@@ -203,7 +183,7 @@ Configuration Example
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 Environment Variable Parameters

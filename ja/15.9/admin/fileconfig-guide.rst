@@ -11,7 +11,8 @@
 
 - ``file:/`` … ローカルまたはマウント済みのファイルシステム
 - ``smb://`` … Windows ファイルサーバー／共有フォルダー（SMB/CIFS）
-- ``ftp://`` / ``ftps://`` … FTP サーバー
+- ``smb1://`` … 旧来の SMB1 プロトコルを使用する Windows ファイルサーバー／共有フォルダー
+- ``ftp://`` … FTP サーバー
 - ``s3://`` … Amazon S3 バケット
 - ``gcs://`` … Google Cloud Storage バケット
 

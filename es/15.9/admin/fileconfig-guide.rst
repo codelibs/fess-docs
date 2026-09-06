@@ -13,7 +13,8 @@ El objetivo del rastreo se determina según el protocolo especificado en la «Ru
 
 - ``file:/`` … sistema de archivos local o unidad montada
 - ``smb://`` … servidor de archivos o carpeta compartida de Windows (SMB/CIFS)
-- ``ftp://`` / ``ftps://`` … servidor FTP
+- ``smb1://`` … servidor de archivos o carpeta compartida de Windows mediante el antiguo protocolo SMB1
+- ``ftp://`` … servidor FTP
 - ``s3://`` … bucket de Amazon S3
 - ``gcs://`` … bucket de Google Cloud Storage
 

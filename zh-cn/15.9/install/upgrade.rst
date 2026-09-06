@@ -459,6 +459,39 @@ Docker 版::
    由于重新索引会以新的映射重建索引，在没有 k-NN 插件的 OpenSearch 中会失败。
    请确认步骤 4 中的注意事项。
 
+从 15.8 升级到 15.9
+===================
+
+若从 15.8 升级，以下三项为不向后兼容的变更。
+
+内置脚本引擎由 Groovy 改为 JavaScript
+-------------------------------------
+
+15.8 之前内置的脚本引擎为 Groovy， ``job.default.script`` 的默认值也是 ``groovy`` 。15.9 中内置
+引擎为 JavaScript，默认值为 ``javascript`` 。Groovy 已不再内置，改由 ``fess-script-groovy``
+插件提供；要让 ``scriptType`` 的 ``groovy`` 生效，必须在管理页面「系统」→「插件」中安装该插件。
+
+已有的计划任务会保留注册时的 ``scriptType`` ，因此此前以 ``groovy`` 保存的任务在升级后仍为
+``groovy`` ，运行时需要该插件。升级后新建的任务则为 ``javascript`` 。请安装该插件，或在管理
+页面「系统」→「调度器」中将各任务的脚本改写为 JavaScript 引擎的写法。JavaScript 的数组字面量
+会自动转换为 Java 的 ``String[]`` ，因此不再需要 Groovy 写法中的 ``as String[]`` 。
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` 已删除
+---------------------------------
+
+``fess_config.properties`` 中已不存在 ``crawler.default.script`` 。请从配置中删除该项；
+以该名称保留的值不会生效。
+
+爬取协议 ``storage`` 已删除
+---------------------------
+
+``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp,s3,gcs`` 。
+请改用 ``s3`` ，并将路径以 ``storage:`` 开头的文件爬取配置改为 ``s3:`` 路径。
+
 15.9 特有的迁移工作
 ===================
 
@@ -599,14 +632,14 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 若此前修改过 /api/v2 配置键
 ------------------------------------------------
 
-从 15.9 起，有四个配置键去掉了 ``api.v2.`` 前缀。其取值、默认值和行为均未改变，但\
+从 15.8.0 起，有四个配置键去掉了 ``api.v2.`` 前缀。其取值、默认值和行为均未改变，但\
 **没有保留向后兼容的别名**\ ：仍使用旧名称的设置会被静默忽略，实际生效的是随附的默认值。
 
 .. list-table::
    :header-rows: 1
 
    * - 15.7 及以前
-     - 15.9
+     - 15.8.0 及以后
      - 默认值
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``

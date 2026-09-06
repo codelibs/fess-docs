@@ -21,14 +21,21 @@ Langages de script pris en charge
    * - Langage
      - Identifiant
      - Description
+   * - JavaScript
+     - ``javascript``
+     - Langage de script enregistré par défaut. Disponible sans installer de plugin
    * - Groovy
      - ``groovy``
-     - Langage de script enregistre par defaut. Compatible avec Java et offre des fonctionnalites puissantes
+     - Fourni par le plugin ``fess-script-groovy``. Compatible avec Java et offre des fonctionnalites puissantes
 
 .. note::
-   Le seul moteur de script enregistre par defaut dans |Fess| est Groovy.
-   Le langage de script par defaut est ``groovy`` (``Constants.DEFAULT_SCRIPT``).
-   Tous les exemples de scripts de cette documentation sont ecrits en syntaxe Groovy.
+   Le moteur de script enregistré par défaut dans |Fess| est JavaScript, et le langage de script
+   par défaut est ``javascript`` (``Constants.DEFAULT_SCRIPT``).
+   Groovy n'est plus intégré : installez le plugin ``fess-script-groovy`` depuis
+   « Système » → « Plugins » dans l'écran d'administration pour que l'identifiant ``groovy``
+   soit disponible.
+   Tous les exemples de scripts de cette page sont écrits en syntaxe Groovy ; leur exécution
+   nécessite donc ce plugin, sinon ils doivent être réécrits pour le moteur JavaScript.
 
 Cas d'utilisation des scripts
 ==============================

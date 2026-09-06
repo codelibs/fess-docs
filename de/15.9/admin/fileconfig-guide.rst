@@ -11,7 +11,8 @@ Welche Pfade gecrawlt werden, richtet sich nach dem im „Pfad" angegebenen Prot
 
 - ``file:/`` … lokales oder eingehängtes Dateisystem
 - ``smb://`` … Windows-Dateiserver/freigegebene Ordner (SMB/CIFS)
-- ``ftp://`` / ``ftps://`` … FTP-Server
+- ``smb1://`` … Windows-Dateiserver/freigegebene Ordner über das ältere SMB1-Protokoll
+- ``ftp://`` … FTP-Server
 - ``s3://`` … Amazon-S3-Bucket
 - ``gcs://`` … Google-Cloud-Storage-Bucket
 

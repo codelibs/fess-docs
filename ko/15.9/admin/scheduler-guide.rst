@@ -53,7 +53,9 @@
 ::::::
 
 스크립트의 실행 환경을 지정합니다.
-현재 "groovy"만 지원합니다.
+표준은 "javascript"이며 기본값도 이것입니다.
+"groovy"는 ``fess-script-groovy`` 플러그인을 설치하면 선택할 수 있습니다. Groovy는 더 이상
+기본으로 내장되지 않습니다.
 
 스크립트
 ::::::::
@@ -64,7 +66,13 @@
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   위 예제는 JavaScript 엔진용으로 작성한 것입니다. JavaScript 배열 리터럴은 Java의 ``String[]``
+   로 자동 변환됩니다. Groovy 형식(``webConfigIds(["1", "2"] as String[])``)을 사용하려면
+   ``fess-script-groovy`` 플러그인이 필요합니다.
 
 로깅
 ::::::

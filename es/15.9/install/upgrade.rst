@@ -472,6 +472,44 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
    Dado que la reindexación reconstruye el índice con el nuevo mapeo, fallará en un OpenSearch
    sin el plugin k-NN. Consulte las notas del Paso 4.
 
+Actualización de 15.8 a 15.9
+============================
+
+Si actualiza desde 15.8, los tres cambios siguientes no son retrocompatibles.
+
+El motor de scripting integrado pasa de Groovy a JavaScript
+-----------------------------------------------------------
+
+Hasta 15.8 el motor de scripting integrado era Groovy y ``job.default.script`` tenía el valor
+predeterminado ``groovy``. En 15.9 el motor integrado es JavaScript y el valor predeterminado es
+``javascript``. Groovy ya no está integrado: lo proporciona el plugin ``fess-script-groovy``, que
+debe instalarse desde "Sistema" → "Plugin" en la pantalla de administración para que un
+``scriptType`` con valor ``groovy`` se pueda resolver.
+
+Un trabajo programado existente conserva el ``scriptType`` almacenado con él, de modo que un
+trabajo guardado como ``groovy`` sigue indicando ``groovy`` tras la actualización y necesita ese
+plugin para ejecutarse. Los trabajos creados después de la actualización obtienen ``javascript``.
+Instale el plugin o abra cada trabajo en "Sistema" → "Programador" y reescriba su script para el
+motor JavaScript. Un literal de array de JavaScript se convierte automáticamente en un
+``String[]`` de Java, por lo que se omiten las conversiones ``as String[]`` de la forma Groovy.
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` se ha eliminado
+------------------------------------------
+
+``crawler.default.script`` ya no existe en ``fess_config.properties``. Elimínelo de su
+configuración; un valor que permanezca con ese nombre no tiene ningún efecto.
+
+El protocolo de rastreo ``storage`` se ha eliminado
+---------------------------------------------------
+
+``storage`` ya no se admite en ``crawler.file.protocols``; el valor incluido es
+``file,smb,smb1,ftp,s3,gcs``. Utilice ``s3`` en su lugar y cambie a una ruta ``s3:`` cualquier
+configuración de rastreo de archivos cuya ruta empiece por ``storage:``.
+
 Migración Específica de 15.9
 ==============================
 
@@ -651,7 +689,7 @@ predeterminado ``true``.
 Si Había Modificado las Claves de Configuración de /api/v2
 ----------------------------------------------------------
 
-En 15.9, cuatro claves de configuración perdieron su prefijo ``api.v2.``. Sus valores, valores
+En 15.8.0, cuatro claves de configuración perdieron su prefijo ``api.v2.``. Sus valores, valores
 predeterminados y comportamiento no cambian, pero **no se conserva ningún alias retrocompatible**:
 una configuración que permanezca con su nombre antiguo se ignora sin ninguna advertencia y se
 aplica el valor predeterminado incluido.
@@ -660,7 +698,7 @@ aplica el valor predeterminado incluido.
    :header-rows: 1
 
    * - Hasta 15.7
-     - 15.9
+     - 15.8.0 en adelante
      - Valor predeterminado
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``

@@ -24,26 +24,6 @@ La configuración avanzada del rastreador se realiza en los siguientes archivos:
 - **Configuración de longitud de contenido**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Configuración de componentes**: ``app/WEB-INF/classes/crawler/container.xml``
 
-Script Predeterminado
----------------------
-
-Configura el lenguaje de script predeterminado del rastreador.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Propiedad
-     - Descripción
-     - Valor Predeterminado
-   * - ``crawler.default.script``
-     - Lenguaje de script del rastreador
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 Pool de Hilos HTTP
 ------------------
 
@@ -192,7 +172,7 @@ Protocolos Compatibles
      - ``http,https``
    * - ``crawler.file.protocols``
      - Protocolos para rastreo de archivos
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - Codificación de datos de rastreo
      - ``UTF-8``
@@ -203,7 +183,7 @@ Ejemplo de Configuración
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 Parámetros de Variables de Entorno

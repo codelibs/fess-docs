@@ -227,7 +227,7 @@ Feldbeschreibungen
      - Beschreibung der Konfiguration (max. 1000 Zeichen)
    * - ``paths``
      - Ja
-     - Crawl-Startpfade (bei mehreren durch Zeilenumbruch getrennt). Anzugeben mit einem der Protokolle ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``storage:``, ``s3:`` oder ``gcs:``
+     - Crawl-Startpfade (bei mehreren durch Zeilenumbruch getrennt). Anzugeben mit einem der Protokolle ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:`` oder ``gcs:``
    * - ``includedPaths``
      - Nein
      - Regex-Muster für zu crawlende Pfade

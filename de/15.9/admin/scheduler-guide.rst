@@ -53,7 +53,9 @@ Ausführungsmethode
 ::::::::::::::::::
 
 Geben Sie die Skriptausführungsumgebung an.
-Derzeit wird nur „groovy" unterstützt.
+Der Standardwert ist „javascript"; dies ist zugleich die Vorgabe.
+„groovy" ist auswählbar, sobald das Plugin ``fess-script-groovy`` installiert ist; Groovy ist
+nicht mehr fest eingebaut.
 
 Skript
 ::::::
@@ -64,7 +66,13 @@ Um beispielsweise nur drei Crawl-Konfigurationen als Crawl-Job auszuführen, sch
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   Das obige Beispiel ist für die JavaScript-Engine geschrieben; ein JavaScript-Array-Literal wird
+   automatisch in ein Java-``String[]`` umgewandelt. Die Groovy-Schreibweise
+   (``webConfigIds(["1", "2"] as String[])``) setzt das Plugin ``fess-script-groovy`` voraus.
 
 Protokollierung
 :::::::::::::::

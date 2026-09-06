@@ -53,7 +53,9 @@ Executor
 ::::::::
 
 Specifies the script execution environment.
-Currently, only "groovy" is supported.
+The standard value is "javascript", which is also the default.
+"groovy" becomes selectable once the ``fess-script-groovy`` plugin is installed; Groovy is no
+longer built in.
 
 Script
 ::::::
@@ -64,7 +66,13 @@ For example, to execute only three crawl configurations as a crawl job (assuming
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   The example above is written for the JavaScript engine; a JavaScript array literal is converted
+   to a Java ``String[]`` automatically. The Groovy form
+   (``webConfigIds(["1", "2"] as String[])``) requires the ``fess-script-groovy`` plugin.
 
 Logging
 :::::::

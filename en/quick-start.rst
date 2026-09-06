@@ -153,7 +153,7 @@ Crawl Configuration and Search
    - **Name:** My First Crawl
    - **URL:** https://www.example.com/ (URL of the site to crawl)
    - **Max Access Count:** 10 (for initial testing, a small value is recommended)
-   - **Interval:** 1000 (milliseconds between requests; the default 1000 ms is recommended)
+   - **Interval:** 10000 (milliseconds between requests; the default 10000 ms is recommended)
 
 5. Click **Create** to save
 

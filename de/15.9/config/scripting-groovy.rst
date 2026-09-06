@@ -5,7 +5,9 @@ Groovy-Skripting-Leitfaden
 Übersicht
 ==========
 
-Groovy ist die Standard-Skriptsprache fuer |Fess|.
+Groovy wird vom Plugin ``fess-script-groovy`` bereitgestellt und ist nicht mehr die
+Standard-Skriptsprache von |Fess|; fest eingebaut ist JavaScript. Installieren Sie das Plugin
+über die Verwaltungsseite unter „System" → „Plugins", bevor Sie den Skripttyp ``groovy`` wählen.
 Sie laeuft auf der Java Virtual Machine (JVM) und ermoeglicht es Ihnen,
 bei hoher Kompatibilitaet mit Java Skripte mit einer praeganteren Syntax zu schreiben.
 

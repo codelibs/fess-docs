@@ -21,14 +21,21 @@ Lenguajes de scripting compatibles
    * - Lenguaje
      - Identificador
      - Descripción
+   * - JavaScript
+     - ``javascript``
+     - Lenguaje de scripting registrado de forma predeterminada. Disponible sin instalar ningún plugin
    * - Groovy
      - ``groovy``
-     - Lenguaje de scripting registrado de forma predeterminada. Compatible con Java y proporciona funcionalidades potentes
+     - Lo proporciona el plugin ``fess-script-groovy``. Compatible con Java y proporciona funcionalidades potentes
 
 .. note::
-   El único motor de scripting registrado de forma predeterminada en |Fess| es Groovy.
-   El lenguaje de scripting por defecto es ``groovy`` ( ``Constants.DEFAULT_SCRIPT`` ).
-   Todos los ejemplos de scripts de este documento están escritos en sintaxis Groovy.
+   El motor de scripting registrado de forma predeterminada en |Fess| es JavaScript y el lenguaje
+   de scripting por defecto es ``javascript`` ( ``Constants.DEFAULT_SCRIPT`` ).
+   Groovy ya no está integrado: instale el plugin ``fess-script-groovy`` desde
+   "Sistema" → "Plugin" en la pantalla de administración para que el identificador ``groovy``
+   esté disponible.
+   Todos los ejemplos de scripts de esta página están escritos en sintaxis Groovy, por lo que
+   ejecutarlos requiere ese plugin o reescribirlos para el motor JavaScript.
 
 Casos de uso del scripting
 ===========================

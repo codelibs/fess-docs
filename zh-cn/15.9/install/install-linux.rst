@@ -175,7 +175,7 @@
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    修改后::
 
@@ -276,7 +276,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
    设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -376,7 +376,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
    设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 

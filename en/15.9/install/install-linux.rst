@@ -175,7 +175,7 @@ Step 2: Install Fess
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    After::
 
@@ -276,7 +276,7 @@ Step 2: Install Fess
    Configure the connection information to OpenSearch. The default values are as follows. Change them as needed::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -376,7 +376,7 @@ Step 2: Install Fess
    Configure the connection information to OpenSearch. The default values are as follows. Change them as needed::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 

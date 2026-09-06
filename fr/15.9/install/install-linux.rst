@@ -175,7 +175,7 @@ Installation avec la version ZIP
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    Après modification ::
 
@@ -276,7 +276,7 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
    Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -376,7 +376,7 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
    Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 

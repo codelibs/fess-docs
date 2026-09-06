@@ -21,14 +21,20 @@ Supported Scripting Languages
    * - Language
      - Identifier
      - Description
+   * - JavaScript
+     - ``javascript``
+     - The scripting language registered by default. Available without installing any plugin
    * - Groovy
      - ``groovy``
-     - The scripting language registered by default. Java-compatible with powerful features
+     - Provided by the ``fess-script-groovy`` plugin. Java-compatible with powerful features
 
 .. note::
-   The only scripting engine registered in |Fess| by default is Groovy.
-   The default scripting language is ``groovy`` (``Constants.DEFAULT_SCRIPT``).
-   All script examples in this documentation are written in Groovy syntax.
+   The standard scripting engine in |Fess| is JavaScript, and the default scripting language is
+   ``javascript`` (``Constants.DEFAULT_SCRIPT``).
+   Groovy is no longer built in: install the ``fess-script-groovy`` plugin from
+   "System" → "Plugins" in the admin UI to make the identifier ``groovy`` available.
+   All script examples on this page are written in Groovy syntax, so running them requires that
+   plugin; otherwise they have to be rewritten for the JavaScript engine.
 
 Use Cases for Scripts
 =====================

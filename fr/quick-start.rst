@@ -152,7 +152,7 @@ Veuillez saisir les informations suivantes :
 - **Nom** : Nom de la configuration de crawl (exemple : Site Web de l'entreprise)
 - **URL** : URL cible du crawl (exemple : https://www.example.com/)
 - **Nombre maximum d'accès** : Limite du nombre de pages à crawler (pour les débutants, une valeur de ``10`` est recommandée)
-- **Intervalle** : Intervalle de crawl en millisecondes (la valeur par défaut ``1000`` ms est recommandée)
+- **Intervalle** : Intervalle de crawl en millisecondes (la valeur par défaut ``10000`` ms est recommandée)
 
 .. warning::
 

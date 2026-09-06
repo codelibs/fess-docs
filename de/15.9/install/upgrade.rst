@@ -472,6 +472,45 @@ Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
    Da bei der Neuindizierung der Index mit dem neuen Mapping neu erstellt wird, schlägt dieser
    Vorgang bei OpenSearch ohne k-NN-Plugin fehl. Beachten Sie die Hinweise in Schritt 4.
 
+Upgrade von 15.8 auf 15.9
+=========================
+
+Wenn Sie von 15.8 aktualisieren, sind die folgenden drei Änderungen nicht abwärtskompatibel.
+
+Die eingebaute Skript-Engine wechselt von Groovy zu JavaScript
+--------------------------------------------------------------
+
+Bis 15.8 war die eingebaute Skript-Engine Groovy, und ``job.default.script`` hatte den
+Standardwert ``groovy``. In 15.9 ist die eingebaute Engine JavaScript und der Standardwert
+``javascript``. Groovy ist nicht mehr fest eingebaut, sondern wird vom Plugin
+``fess-script-groovy`` bereitgestellt, das über die Verwaltungsseite unter „System" → „Plugins"
+installiert werden muss, damit der ``scriptType`` ``groovy`` aufgelöst werden kann.
+
+Ein bereits vorhandener geplanter Job behält den mit ihm gespeicherten ``scriptType``. Ein zuvor
+als ``groovy`` gespeicherter Job steht daher auch nach dem Upgrade auf ``groovy`` und benötigt zum
+Ausführen dieses Plugin. Nach dem Upgrade angelegte Jobs erhalten ``javascript``. Installieren Sie
+entweder das Plugin, oder öffnen Sie jeden Job unter „System" → „Scheduler" und schreiben Sie
+dessen Skript für die JavaScript-Engine um. Ein JavaScript-Array-Literal wird automatisch in ein
+Java-``String[]`` umgewandelt, sodass die Umwandlungen ``as String[]`` der Groovy-Schreibweise
+entfallen.
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` wurde entfernt
+-----------------------------------------
+
+``crawler.default.script`` gibt es in ``fess_config.properties`` nicht mehr. Entfernen Sie die
+Einstellung; ein unter diesem Namen verbliebener Wert hat keine Wirkung.
+
+Das Crawl-Protokoll ``storage`` wurde entfernt
+----------------------------------------------
+
+``storage`` wird in ``crawler.file.protocols`` nicht mehr akzeptiert; der mitgelieferte Wert
+lautet ``file,smb,smb1,ftp,s3,gcs``. Verwenden Sie stattdessen ``s3`` und stellen Sie jede
+Datei-Crawl-Konfiguration, deren Pfad mit ``storage:`` beginnt, auf einen ``s3:``-Pfad um.
+
 Migrationsaufgaben speziell für 15.9
 ====================================
 
@@ -651,7 +690,7 @@ mitgelieferten Standardwert ``true`` wieder her.
 Falls Sie die /api/v2-Konfigurationsschlüssel geändert haben
 ------------------------------------------------------------
 
-In 15.9 haben vier Konfigurationsschlüssel ihr Präfix ``api.v2.`` verloren. Werte, Standardwerte
+In 15.8.0 haben vier Konfigurationsschlüssel ihr Präfix ``api.v2.`` verloren. Werte, Standardwerte
 und Verhalten bleiben unverändert, **es gibt jedoch keinen abwärtskompatiblen Aliasnamen**: Eine
 unter dem alten Namen belassene Einstellung wird ohne Warnung ignoriert, und stattdessen greift
 der mitgelieferte Standardwert.
@@ -660,7 +699,7 @@ der mitgelieferte Standardwert.
    :header-rows: 1
 
    * - Bis 15.7
-     - 15.9
+     - 15.8.0 und später
      - Standardwert
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``

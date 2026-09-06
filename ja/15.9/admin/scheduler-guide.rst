@@ -53,7 +53,9 @@
 ::::::
 
 スクリプトの実行環境を指定します。
-現時点では「groovy」だけをサポートしています。
+標準は「javascript」で、デフォルトもこちらです。
+「groovy」は ``fess-script-groovy`` プラグインをインストールすると選択できます。
+Groovyは標準では組み込まれていません。
 
 スクリプト
 ::::::::
@@ -64,7 +66,13 @@
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   上記の例はJavaScriptエンジン向けの記述です。JavaScriptの配列リテラルはJavaの ``String[]``
+   に自動的に変換されます。Groovy形式（ ``webConfigIds(["1", "2"] as String[])`` ）を使用する
+   場合は ``fess-script-groovy`` プラグインが必要です。
 
 ロギング
 ::::::

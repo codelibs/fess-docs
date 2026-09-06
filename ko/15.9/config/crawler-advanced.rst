@@ -24,26 +24,6 @@
 - **콘텐츠 길이 설정**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **컴포넌트 설정**: ``app/WEB-INF/classes/crawler/container.xml``
 
-기본 스크립트
---------------------
-
-크롤러의 기본 스크립트 언어를 설정합니다.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - 속성
-     - 설명
-     - 기본값
-   * - ``crawler.default.script``
-     - 크롤러 스크립트 언어
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 HTTP 스레드 풀
 ------------------
 
@@ -192,7 +172,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - ``http,https``
    * - ``crawler.file.protocols``
      - 파일 크롤링 프로토콜
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - 크롤링 데이터 인코딩
      - ``UTF-8``
@@ -203,7 +183,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 환경 변수 파라미터
