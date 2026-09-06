@@ -319,6 +319,50 @@ URLパターンによる制限
     # または、スケジューラーで設定
     0 2 * * *  # 毎日午前2時
 
+クロール順序
+------------
+
+クロール設定の設定パラメーターに ``config.crawl.order`` を指定すると、キューから URL を取り出す順序を
+変更できます。値には以下のコンポーネント名を指定します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 値
+     - 取り出す順序
+   * - ``sequentialUrlQueueOrder``
+     - 重み降順、次に発見順（既定値）
+   * - ``randomUrlQueueOrder``
+     - ランダム（シードはセッションごとに固定）
+   * - ``depthFirstUrlQueueOrder``
+     - 深い階層から先に取り出す
+   * - ``newestFirstUrlQueueOrder``
+     - 後から見つかった URL を先に取り出す
+   * - ``weightFirstUrlQueueOrder``
+     - 重み降順のみ（同じ重みの並びは検索エンジンに任せる）
+
+既定では重みは一律のため、カスタムの ``UrlQueueWeigher`` を導入しない限りすべてが同じ重みになり、
+``sequentialUrlQueueOrder`` は実質的に発見順での取り出しになります。
+``sequentialUrlQueueOrder`` は重みを第一のソートキーとしているため、weigher を導入すれば
+``config.crawl.order`` を設定しなくても取り出し順が変わります。
+``weightFirstUrlQueueOrder`` との違いは同じ重みの場合の扱いだけで、重み付けされた大量のキューに対して
+重みだけで次を決めたい場合に選択します。
+
+::
+
+    config.crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` は厳密な深さ優先探索ではありません。クローラーは URL をまとめて
+取り出し、そのバッチを処理し終えてから次のバッチを取り出すため、処理中に見つかったより深い
+URL は次のバッチに回ります。キュー全体が 1 つのバッチに収まる規模のクロールでは、どの順序を
+指定しても階層ごとの取り出しになります。
+
+解決できないコンポーネント名を指定した場合は警告をログに出力し、既定の順序で動作します。
+
+.. note::
+   以前のバージョンの ``config.crawl.order=sequential`` と ``config.crawl.order=random`` はそのまま指定できます。
+
 ファイルサイズの設定
 ====================
 

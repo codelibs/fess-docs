@@ -318,6 +318,52 @@ Spécifie la fréquence d'exécution de l'indexation.
     # Ou configuré dans le planificateur
     0 2 * * *  # Tous les jours à 2h du matin
 
+Ordre d'indexation
+------------------
+
+Définir ``config.crawl.order`` dans les paramètres de configuration d'une configuration
+d'indexation modifie l'ordre dans lequel les URL sont extraites de la file d'attente. La
+valeur est l'un des noms de composant suivants.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Valeur
+     - Ordre de récupération
+   * - ``sequentialUrlQueueOrder``
+     - Par poids décroissant, puis par ordre de découverte (par défaut)
+   * - ``randomUrlQueueOrder``
+     - Aléatoire, avec une graine fixe par session
+   * - ``depthFirstUrlQueueOrder``
+     - URL les plus profondes en premier
+   * - ``newestFirstUrlQueueOrder``
+     - URL découvertes le plus récemment en premier
+   * - ``weightFirstUrlQueueOrder``
+     - Par poids décroissant uniquement, les égalités étant laissées au moteur de recherche
+
+Les poids sont uniformes par défaut, sauf si un ``UrlQueueWeigher`` personnalisé est
+installé ; toutes les entrées sont alors à égalité et ``sequentialUrlQueueOrder`` s'ordonne en
+pratique par ordre de découverte. Le poids en est la clé de tri principale : installer un
+weigher modifie l'ordre de récupération sans même définir ``config.crawl.order``.
+``weightFirstUrlQueueOrder`` ne diffère que sur les entrées de poids égal ; choisissez-le pour
+un grand arriéré pondéré où seul le poids doit décider de la suite.
+
+::
+
+    config.crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` n'est pas un parcours en profondeur strict. Le crawler récupère
+un lot d'URL et le traite entièrement avant d'en récupérer un autre ; les URL plus profondes
+découvertes pendant le traitement attendent donc le lot suivant. Un crawl dont toute la file
+tient dans un seul lot progresse donc niveau par niveau, quel que soit l'ordre choisi.
+
+Un nom de composant introuvable est journalisé comme avertissement et l'ordre par défaut est
+utilisé.
+
+.. note::
+   Les valeurs ``config.crawl.order=sequential`` et ``config.crawl.order=random`` des versions précédentes fonctionnent toujours.
+
 Configuration de la taille des fichiers
 ====================
 

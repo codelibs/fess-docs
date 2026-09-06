@@ -316,6 +316,54 @@ Gibt die Häufigkeit der Crawl-Ausführung an.
     # Oder im Scheduler konfigurieren
     0 2 * * *  # Täglich um 2 Uhr morgens
 
+Crawl-Reihenfolge
+-----------------
+
+Durch Setzen von ``config.crawl.order`` in den Konfigurationsparametern einer Crawl-Konfiguration
+wird die Reihenfolge geändert, in der URLs aus der Warteschlange entnommen werden. Der Wert
+ist einer der folgenden Komponentennamen.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Wert
+     - Abrufreihenfolge
+   * - ``sequentialUrlQueueOrder``
+     - Nach absteigendem Gewicht, dann nach Entdeckungsreihenfolge (Standard)
+   * - ``randomUrlQueueOrder``
+     - Zufällig, mit einem pro Sitzung festen Seed
+   * - ``depthFirstUrlQueueOrder``
+     - Tiefste URLs zuerst
+   * - ``newestFirstUrlQueueOrder``
+     - Zuletzt entdeckte URLs zuerst
+   * - ``weightFirstUrlQueueOrder``
+     - Nur nach absteigendem Gewicht; Gleichstände überlässt sie der Suchmaschine
+
+Die Gewichte sind standardmäßig einheitlich, sofern kein benutzerdefinierter
+``UrlQueueWeigher`` installiert ist; alle Einträge sind dann gleichauf und
+``sequentialUrlQueueOrder`` sortiert in der Praxis nach Entdeckungsreihenfolge. Das Gewicht ist
+ihr primärer Sortierschlüssel, sodass ein Weigher die Abrufreihenfolge ändert, ohne dass
+``config.crawl.order`` überhaupt gesetzt werden muss. ``weightFirstUrlQueueOrder``
+unterscheidet sich nur bei Einträgen mit gleichem Gewicht: Sie ist für einen großen,
+gewichteten Rückstand gedacht, bei dem allein das Gewicht entscheiden soll.
+
+::
+
+    config.crawl.order=depthFirstUrlQueueOrder
+
+``depthFirstUrlQueueOrder`` ist keine strikte Tiefensuche. Der Crawler ruft einen Stapel von
+URLs ab und arbeitet ihn vollständig ab, bevor er den nächsten abruft. Tiefere URLs, die
+während der Abarbeitung gefunden werden, warten daher auf den nächsten Stapel. Bei einem
+Crawl, dessen gesamte Warteschlange in einen Stapel passt, wird daher unabhängig von der
+gewählten Reihenfolge Ebene für Ebene abgearbeitet.
+
+Ein nicht auflösbarer Komponentenname wird als Warnung protokolliert, und die
+Standardreihenfolge wird verwendet.
+
+.. note::
+   Die Werte ``config.crawl.order=sequential`` und ``config.crawl.order=random`` aus früheren Versionen funktionieren weiterhin.
+
 Konfiguration der Dateigröße
 ====================
 
