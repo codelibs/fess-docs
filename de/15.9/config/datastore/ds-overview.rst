@@ -59,6 +59,9 @@ Kollaborationstools
    * - :doc:`ds-slack`
      - fess-ds-slack
      - Crawlt Slack-Nachrichten und -Dateien
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - Crawlt On-Premises-SharePoint-Server-Sites
 
 Entwicklungs- und Betriebstools
 -------------------------------

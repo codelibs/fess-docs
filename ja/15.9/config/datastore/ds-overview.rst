@@ -60,6 +60,9 @@
    * - :doc:`ds-slack`
      - fess-ds-slack
      - Slackのメッセージとファイルをクロール
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - オンプレミス版 SharePoint Server をクロール
 
 開発・運用ツール
 ----------------
@@ -113,9 +116,6 @@
    * - コネクタ
      - プラグイン
      - 説明
-   * - SharePoint
-     - fess-ds-sharepoint
-     - SharePointリポジトリからデータを取得（レガシー版）
    * - Wikipedia
      - fess-ds-wikipedia
      - Wikipediaのコンテンツを取得

@@ -25,6 +25,7 @@ Die Datenspeicher-Konnektoren von |Fess| ermöglichen es, Inhalte aus verschiede
 
    ds-atlassian
    ds-slack
+   ds-sharepoint
 
 .. toctree::
    :maxdepth: 2

@@ -60,6 +60,9 @@ Outils de collaboration
    * - :doc:`ds-slack`
      - fess-ds-slack
      - Exploration des messages et fichiers Slack
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - Exploration de sites SharePoint Server sur site (on-premises)
 
 Outils de développement et opérations
 -------------------------------------

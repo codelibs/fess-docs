@@ -60,6 +60,9 @@ Herramientas de Colaboración
    * - :doc:`ds-slack`
      - fess-ds-slack
      - Rastrea mensajes y archivos de Slack
+   * - :doc:`ds-sharepoint`
+     - fess-ds-sharepoint
+     - Rastrea sitios de SharePoint Server on-premises
 
 Herramientas de Desarrollo y Operaciones
 ----------------------------------------

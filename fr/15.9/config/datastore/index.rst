@@ -25,6 +25,7 @@ Les connecteurs DataStore de |Fess| permettent de récupérer du contenu depuis 
 
    ds-atlassian
    ds-slack
+   ds-sharepoint
 
 .. toctree::
    :maxdepth: 2
