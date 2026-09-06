@@ -14,7 +14,7 @@ Startup Methods
 
 The startup procedure varies depending on the installation method.
 
-TAR.GZ Version
+ZIP Version
 --------------
 
 Start OpenSearch
@@ -153,7 +153,7 @@ Check Logs
 
 Check the startup logs to ensure there are no errors.
 
-TAR.GZ/ZIP version::
+ZIP version::
 
     $ tail -f /path/to/fess-15.9.0/logs/fess.log
 
@@ -284,7 +284,7 @@ Main Settings via Environment Variables
 
 Settings such as the port number, JVM heap size, and the OpenSearch connection
 URL can be changed via environment variables. Edit ``bin/fess.in.sh`` for the
-TAR.GZ edition, ``/etc/sysconfig/fess`` for the RPM edition, and
+ZIP edition, ``/etc/sysconfig/fess`` for the RPM edition, and
 ``/etc/default/fess`` for the DEB edition. A restart of |Fess| is required after
 making changes.
 
@@ -353,7 +353,7 @@ See :doc:`../admin/index` for details.
 Shutdown Methods
 ================
 
-TAR.GZ/ZIP Version
+ZIP Version
 ------------------
 
 Stop Fess
@@ -412,7 +412,7 @@ Stop and remove containers::
 Restart Methods
 ===============
 
-TAR.GZ/ZIP Version
+ZIP Version
 ------------------
 
 Stop and then start.
@@ -457,7 +457,7 @@ Won't Start
 
    If port 8080 is already in use, change the port number.
 
-   - TAR.GZ edition: change ``FESS_PORT`` in ``bin/fess.in.sh``
+   - ZIP edition: change ``FESS_PORT`` in ``bin/fess.in.sh``
    - ZIP edition (Windows): edit ``-Dfess.port=8080`` directly in ``bin\fess.in.bat``
    - RPM edition: change ``FESS_PORT`` in ``/etc/sysconfig/fess``
    - DEB edition: change ``FESS_PORT`` in ``/etc/default/fess``

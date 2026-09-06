@@ -32,7 +32,7 @@
 - **설치**: 플랫폼별 설치 절차
 
   - 설치 방법 선택 (개요 및 비교)
-  - Linux (TAR.GZ/RPM/DEB) 설치
+  - Linux (ZIP/RPM/DEB) 설치
   - Windows (ZIP) 설치
   - Docker 설치
 

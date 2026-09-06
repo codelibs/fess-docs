@@ -215,7 +215,7 @@ SMB/CIFS(Windows 파일 공유)
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      위 경로는 RPM/DEB 패키지 설치 시의 경로입니다. zip/tar.gz 배포의 경우 ``logs/`` 디렉터리에 로그가 위치합니다.
+      위 경로는 RPM/DEB 패키지 설치 시의 경로입니다. ZIP 배포의 경우 ``logs/`` 디렉터리에 로그가 위치합니다.
 
 기본 설정 항목
 ================

@@ -3,7 +3,7 @@ Linux 설치 (상세 절차)
 ======================
 
 이 페이지에서는 Linux 환경에 |Fess| 를 설치하는 절차를 설명합니다.
-TAR.GZ, RPM, DEB 각 패키지 형식에 대응합니다.
+ZIP, RPM, DEB 각 패키지 형식에 대응합니다.
 
 .. warning::
 
@@ -29,7 +29,7 @@ Linux 환경에서는 다음 설치 방법 중에서 선택할 수 있습니다:
    * - 방식
      - 권장 환경
      - 특징
-   * - TAR.GZ
+   * - ZIP
      - 개발 환경, 커스터마이징이 필요한 환경
      - 임의의 디렉터리에 압축 해제 가능
    * - RPM
@@ -73,7 +73,7 @@ OpenSearch를 수동으로 실행하는 경우(TAR.GZ 버전)에는 OpenSearch�
 
    RPM / DEB 버전에서는 systemd 서비스 정의에서 파일 디스크립터 수 상한이 설정되므로 이 설정은 필요하지 않습니다.
 
-TAR.GZ 버전 설치
+ZIP 버전 설치
 ================
 
 단계 1: OpenSearch 설치
@@ -152,12 +152,12 @@ TAR.GZ 버전 설치
 
 1. Fess 다운로드 및 압축 해제
 
-   `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 TAR.GZ 버전을 다운로드합니다.
+   `다운로드 사이트 <https://fess.codelibs.org/ko/downloads.html>`__ 에서 ZIP 버전을 다운로드합니다.
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.9.0/fess-15.9.0.tar.gz
-       $ tar -xzf fess-15.9.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.9.0/fess-15.9.0.zip
+       $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
 2. Fess 설정
@@ -409,7 +409,7 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
    - OpenSearch 설정 파일(opensearch.yml)
    - |Fess| 설정 파일
 
-     - TAR.GZ 버전: ``bin/fess.in.sh``
+     - ZIP 버전: ``bin/fess.in.sh``
      - RPM 버전: ``/etc/sysconfig/fess``
      - DEB 버전: ``/etc/default/fess``
 
@@ -417,7 +417,7 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
    설정에서 지정한 디렉터리(``configsync.config_path`` / ``FESS_DICTIONARY_PATH``)가 존재하며 적절한 권한이 설정되어 있는지 확인합니다.
 
-   TAR.GZ 버전의 경우::
+   ZIP 버전의 경우::
 
        $ ls -ld /path/to/opensearch-3.8.0/data/config/
 

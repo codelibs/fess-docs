@@ -215,7 +215,7 @@ Um Crawls regelmäßig auszuführen:
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      Der obige Pfad gilt für RPM/DEB-Paketinstallationen. Bei zip/tar.gz-Bereitstellungen befinden sich die Protokolle im Verzeichnis ``logs/``.
+      Der obige Pfad gilt für RPM/DEB-Paketinstallationen. Bei ZIP-Bereitstellungen befinden sich die Protokolle im Verzeichnis ``logs/``.
 
 Grundlegende Konfigurationselemente
 ================

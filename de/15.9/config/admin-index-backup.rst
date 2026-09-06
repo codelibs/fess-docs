@@ -68,7 +68,7 @@ Konfigurieren Sie zunächst ein Repository zum Speichern der Backup-Daten.
     }'
 
 .. note::
-   In der Standardkonfiguration der zip/tar.gz-Version von |Fess| startet OpenSearch auf Port 9201 (``search_engine.http.url`` in ``fess_config.properties``). Bei der RPM/DEB-Paketversion ist standardmäßig eine Verbindung zu Port 9200 konfiguriert (``SEARCH_ENGINE_HTTP_URL`` in der Umgebungskonfigurationsdatei ``/etc/sysconfig/fess`` (RPM) bzw. ``/etc/default/fess`` (DEB)). Passen Sie die Portnummer entsprechend Ihrer Umgebung an.
+   In der Standardkonfiguration der ZIP-Version von |Fess| startet OpenSearch auf Port 9201 (``search_engine.http.url`` in ``fess_config.properties``). Bei der RPM/DEB-Paketversion ist standardmäßig eine Verbindung zu Port 9200 konfiguriert (``SEARCH_ENGINE_HTTP_URL`` in der Umgebungskonfigurationsdatei ``/etc/sysconfig/fess`` (RPM) bzw. ``/etc/default/fess`` (DEB)). Passen Sie die Portnummer entsprechend Ihrer Umgebung an.
 
 **Bei AWS-S3-Repository:**
 
@@ -231,31 +231,31 @@ Zu sichernde Dateien
      - Installationsmethode
      - Beschreibung
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - Systemkonfiguration (allgemeine Einstellungen)
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - Systemkonfiguration (allgemeine Einstellungen)
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - Detaillierte |Fess|-Konfiguration
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - Detaillierte |Fess|-Konfiguration
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - Protokollkonfiguration
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - Protokollkonfiguration
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - Index-Definitionsdateien
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - Index-Definitionsdateien
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - Vorschaubilder (bei Bedarf)
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

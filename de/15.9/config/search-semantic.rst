@@ -50,7 +50,7 @@ Voraussetzungen
 
      * - Konfiguration
        - Unterstützung des k-NN-Plugins
-     * - Eingebettetes OpenSearch (``bin/fess`` oder die TAR.GZ/ZIP-Pakete, wenn
+     * - Eingebettetes OpenSearch (``bin/fess`` oder die ZIP-Pakete, wenn
          ``SEARCH_ENGINE_HTTP_URL`` nicht gesetzt ist — der Standard)
        - Wird mit dem k-NN-Plugin ausgeliefert. Es enthält jedoch nicht die nativen
          JNI-Bibliotheken, sodass ``lucene`` die einzige unterstützte ANN-Engine ist.

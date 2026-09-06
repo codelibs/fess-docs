@@ -97,7 +97,7 @@ Respaldo de Datos de Configuración
 
 2. **Respaldo de archivos de configuración**
 
-   Versión TAR.GZ/ZIP::
+   Versión ZIP::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -119,7 +119,7 @@ Respaldo de Datos de Configuración
 
       ``/etc/sysconfig/fess`` (versión RPM) y ``/etc/default/fess`` (versión DEB) son archivos de
       variables de entorno que especifican ``FESS_PORT``, ``FESS_HEAP_SIZE``, ``SEARCH_ENGINE_HTTP_URL``,
-      ``FESS_DICTIONARY_PATH`` y otros valores. En la versión TAR.GZ/ZIP, la configuración
+      ``FESS_DICTIONARY_PATH`` y otros valores. En la versión ZIP, la configuración
       equivalente se encuentra en ``bin/fess.in.sh``.
 
 3. **Archivos de configuración personalizados**
@@ -224,7 +224,7 @@ Paso 2: Detención de la Versión Actual
 
 Detenga Fess y OpenSearch.
 
-La versión TAR.GZ/ZIP no incluye un script para detener el servicio. Si inició ``bin/fess`` con
+La versión ZIP no incluye un script para detener el servicio. Si inició ``bin/fess`` con
 la opción ``-p``, deténgalo usando el archivo PID::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -247,7 +247,7 @@ Paso 3: Instalación de la Nueva Versión
 
 Los procedimientos varían según el método de instalación.
 
-Versión TAR.GZ/ZIP
+Versión ZIP
 -------------------
 
 1. Descargue y extraiga la nueva versión::
@@ -339,7 +339,7 @@ anterior, actualícelo siguiendo estos procedimientos.
 .. note::
 
    Este procedimiento corresponde a los casos en que OpenSearch se gestiona manualmente en las versiones
-   TAR.GZ/ZIP y RPM/DEB. En la versión Docker, al obtener las nuevas imágenes en el Paso 3, OpenSearch
+   ZIP y RPM/DEB. En la versión Docker, al obtener las nuevas imágenes en el Paso 3, OpenSearch
    y los plugins se actualizan conjuntamente, por lo que este paso no es necesario.
 
 .. important::
@@ -387,7 +387,7 @@ anterior, actualícelo siguiendo estos procedimientos.
 Paso 5: Inicio de la Nueva Versión
 ====================================
 
-Versión TAR.GZ/ZIP::
+Versión ZIP::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -413,7 +413,7 @@ Paso 6: Verificación de Funcionamiento
 
    Verifique que no haya errores.
 
-   Versión TAR.GZ/ZIP::
+   Versión ZIP::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -764,7 +764,7 @@ de los volúmenes::
    El archivo ``system.properties`` cargado se lee únicamente en memoria y no se escribe en disco.
    Por lo tanto, su contenido se pierde al reiniciar |Fess|. Para restaurarlo de forma fiable,
    coloque directamente el archivo respaldado en su ubicación correspondiente (``app/WEB-INF/conf/``
-   en la versión TAR.GZ/ZIP, ``/etc/fess/`` en la versión RPM/DEB) antes de iniciar el servicio.
+   en la versión ZIP, ``/etc/fess/`` en la versión RPM/DEB) antes de iniciar el servicio.
 
 .. note::
 

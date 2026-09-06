@@ -32,7 +32,7 @@ Ce guide d'installation est organisé selon les sections suivantes :
 - **Installation** : Procédures d'installation par plateforme
 
   - Choix d'une méthode d'installation (aperçu et comparaison)
-  - Installation pour Linux (TAR.GZ/RPM/DEB)
+  - Installation pour Linux (ZIP/RPM/DEB)
   - Installation pour Windows (ZIP)
   - Installation pour Docker
 

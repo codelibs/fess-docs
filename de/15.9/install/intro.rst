@@ -32,7 +32,7 @@ Diese Installationsanleitung besteht aus folgenden Abschnitten:
 - **Installation**: Installationsanweisungen für verschiedene Plattformen
 
   - Auswahl der Installationsmethode (Übersicht und Vergleich)
-  - Installation für Linux (TAR.GZ/RPM/DEB)
+  - Installation für Linux (ZIP/RPM/DEB)
   - Installation für Windows (ZIP)
   - Installation für Docker
 

@@ -66,7 +66,7 @@ Logiciels requis
 
 Selon la méthode d'installation, les logiciels suivants sont nécessaires :
 
-Version TAR.GZ/ZIP/RPM/DEB
+Version ZIP/RPM/DEB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **Java 21** : `Eclipse Temurin <https://adoptium.net/temurin>`__ recommandé
@@ -179,7 +179,7 @@ Avant l'installation, veuillez vérifier les éléments suivants :
 
 Après avoir vérifié la configuration requise, passez à la procédure d'installation adaptée à votre environnement :
 
-- :doc:`install-linux` - Installation pour Linux (TAR.GZ/RPM/DEB)
+- :doc:`install-linux` - Installation pour Linux (ZIP/RPM/DEB)
 - :doc:`install-windows` - Installation pour Windows (ZIP)
 - :doc:`install-docker` - Installation pour Docker
 - :doc:`install` - Vue d'ensemble des méthodes d'installation

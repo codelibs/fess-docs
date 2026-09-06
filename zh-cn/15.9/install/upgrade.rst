@@ -97,7 +97,7 @@
 
 2. **备份配置文件**
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -120,7 +120,7 @@
       ``/etc/sysconfig/fess``\ （RPM 版）和 ``/etc/default/fess``\ （DEB 版）是
       用于指定 ``FESS_PORT``\ 、\ ``FESS_HEAP_SIZE``\ 、\ ``SEARCH_ENGINE_HTTP_URL``\ 、
       ``FESS_DICTIONARY_PATH`` 等内容的环境变量文件。
-      TAR.GZ/ZIP 版中与之对应的设置位于 ``bin/fess.in.sh``。
+      ZIP 版中与之对应的设置位于 ``bin/fess.in.sh``。
 
 3. **定制的配置文件**
 
@@ -221,7 +221,7 @@ OpenSearch 的数据保存在 Docker 卷中。\ ``compose-opensearch3.yaml`` 中
 
 停止 Fess 和 OpenSearch。
 
-TAR.GZ/ZIP 版没有附带用于停止的脚本。\ ``bin/fess`` 如果是使用 ``-p`` 选项
+ZIP 版没有附带用于停止的脚本。\ ``bin/fess`` 如果是使用 ``-p`` 选项
 启动的，可以使用 PID 文件停止::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -244,7 +244,7 @@ Docker 版::
 
 根据安装方法，步骤有所不同。
 
-TAR.GZ/ZIP 版
+ZIP 版
 -------------
 
 1. 下载并解压新版本::
@@ -333,7 +333,7 @@ Docker 版
 
 .. note::
 
-   本步骤适用于 TAR.GZ/ZIP 版及 RPM/DEB 版中手动运维 OpenSearch 的情况。
+   本步骤适用于 ZIP 版及 RPM/DEB 版中手动运维 OpenSearch 的情况。
    对于 Docker 版，在步骤 3 中获取新镜像时，OpenSearch 和插件也会一并更新，
    因此无需执行本步骤。
 
@@ -378,7 +378,7 @@ Docker 版
 步骤 5: 启动新版本
 ================================
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -404,7 +404,7 @@ Docker 版::
 
    确认没有错误。
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -702,7 +702,7 @@ Docker 版中，请先切换回旧版本的 Compose 文件，再恢复卷中的�
 
    上传的 ``system.properties`` 仅会加载到内存中，不会写入文件。
    因此 ``system.properties`` 的内容会在 |Fess| 重启后丢失。
-   如需确保可靠恢复，请将备份的文件直接放置到指定位置（TAR.GZ/ZIP 版为
+   如需确保可靠恢复，请将备份的文件直接放置到指定位置（ZIP 版为
    ``app/WEB-INF/conf/``\ ，RPM/DEB 版为 ``/etc/fess/``\ ）后再启动。
 
 .. note::

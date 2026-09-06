@@ -46,7 +46,7 @@
      * - 구성
        - k-NN 플러그인 지원 여부
      * - 임베디드 OpenSearch(``bin/fess``, 또는 ``SEARCH_ENGINE_HTTP_URL``\ 을 설정하지 않은
-         TAR.GZ/ZIP 패키지의 기본 상태)
+         ZIP 패키지의 기본 상태)
        - k-NN 플러그인이 동봉되어 있습니다. 다만 JNI 네이티브 라이브러리는 포함되지 않으므로 지원되는
          ANN 엔진은 ``lucene`` 뿐입니다. ``content_chunker.search.knn.engine`` 은 ``faiss`` 도
          값으로 허용하며, 여기에 설정해도 매핑 자체는 정상적으로 생성되지만 **쓰기가 일어날

@@ -36,7 +36,7 @@
      - Linux, Windows, macOS
      - 開発・評価環境、迅速なセットアップ
      - :doc:`install-docker`
-   * - TAR.GZ
+   * - ZIP
      - Linux, macOS
      - カスタマイズが必要な環境
      - :doc:`install-linux`
@@ -74,7 +74,7 @@ Docker 版
 
 詳細: :doc:`install-docker`
 
-Linux パッケージ版 (TAR.GZ/RPM/DEB)
+Linux パッケージ版 (ZIP/RPM/DEB)
 ---------------------------------
 
 **メリット:**
@@ -175,7 +175,7 @@ OpenSearch
 Java (Docker 版以外)
 -------------------
 
-TAR.GZ/ZIP/RPM/DEB 版の場合、Java 21 以降が必要です。
+ZIP/RPM/DEB 版の場合、Java 21 以降が必要です。
 
 - 推奨: `Eclipse Temurin <https://adoptium.net/temurin>`__
 - OpenJDK 21 以降も使用可能

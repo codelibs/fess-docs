@@ -99,7 +99,7 @@ Sauvegarde des données de configuration
 
 2. **Sauvegarde des fichiers de configuration**
 
-   Version TAR.GZ/ZIP ::
+   Version ZIP ::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -122,7 +122,7 @@ Sauvegarde des données de configuration
       ``/etc/sysconfig/fess`` (version RPM) et ``/etc/default/fess`` (version DEB) sont des
       fichiers de variables d'environnement qui définissent notamment ``FESS_PORT``,
       ``FESS_HEAP_SIZE``, ``SEARCH_ENGINE_HTTP_URL`` et ``FESS_DICTIONARY_PATH``.
-      Pour la version TAR.GZ/ZIP, les réglages équivalents se trouvent dans ``bin/fess.in.sh``.
+      Pour la version ZIP, les réglages équivalents se trouvent dans ``bin/fess.in.sh``.
 
 3. **Fichiers de configuration personnalisés**
 
@@ -225,7 +225,7 @@ indiquez le nom réel du volume, préfixe inclus ::
 
 Arrêtez Fess et OpenSearch.
 
-La version TAR.GZ/ZIP ne fournit pas de script d'arrêt. Si vous aviez démarré ``bin/fess`` avec
+La version ZIP ne fournit pas de script d'arrêt. Si vous aviez démarré ``bin/fess`` avec
 l'option ``-p``, arrêtez-le à l'aide du fichier PID ::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -248,7 +248,7 @@ Version Docker ::
 
 Les procédures diffèrent selon la méthode d'installation.
 
-Version TAR.GZ/ZIP
+Version ZIP
 ------------------
 
 1. Téléchargez et décompressez la nouvelle version ::
@@ -340,7 +340,7 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
 
 .. note::
 
-   Cette procédure s'applique aux cas où OpenSearch est géré manuellement avec les versions TAR.GZ/ZIP et RPM/DEB.
+   Cette procédure s'applique aux cas où OpenSearch est géré manuellement avec les versions ZIP et RPM/DEB.
    Pour la version Docker, l'obtention de la nouvelle image à l'étape 3 met également à jour OpenSearch et ses plugins
    simultanément ; cette étape n'est donc pas nécessaire.
 
@@ -390,7 +390,7 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
 Étape 5 : Démarrage de la nouvelle version
 ============================================
 
-Version TAR.GZ/ZIP ::
+Version ZIP ::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -416,7 +416,7 @@ Version Docker ::
 
    Vérifiez qu'il n'y a pas d'erreurs.
 
-   Version TAR.GZ/ZIP ::
+   Version ZIP ::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -768,7 +768,7 @@ contenu du volume ::
    Le fichier ``system.properties`` téléversé n'est chargé qu'en mémoire et n'est jamais écrit sur
    disque : son contenu est donc perdu au redémarrage de |Fess|. Pour une restauration fiable,
    placez directement le fichier de sauvegarde à l'emplacement approprié (``app/WEB-INF/conf/``
-   pour la version TAR.GZ/ZIP, ``/etc/fess/`` pour la version RPM/DEB) avant de démarrer |Fess|.
+   pour la version ZIP, ``/etc/fess/`` pour la version RPM/DEB) avant de démarrer |Fess|.
 
 .. note::
 

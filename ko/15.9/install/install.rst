@@ -36,7 +36,7 @@
      - Linux, Windows, macOS
      - 개발·평가 환경, 신속한 설정
      - :doc:`install-docker`
-   * - TAR.GZ
+   * - ZIP
      - Linux, macOS
      - 커스터마이징이 필요한 환경
      - :doc:`install-linux`
@@ -74,7 +74,7 @@ Docker 버전
 
 상세: :doc:`install-docker`
 
-Linux 패키지 버전 (TAR.GZ/RPM/DEB)
+Linux 패키지 버전 (ZIP/RPM/DEB)
 ----------------------------------
 
 **장점:**
@@ -175,7 +175,7 @@ OpenSearch
 Java (Docker 버전 제외)
 -----------------------
 
-TAR.GZ/ZIP/RPM/DEB 버전의 경우 Java 21 이상이 필요합니다.
+ZIP/RPM/DEB 버전의 경우 Java 21 이상이 필요합니다.
 
 - 권장: `Eclipse Temurin <https://adoptium.net/temurin>`__
 - OpenJDK 21 이상도 사용 가능

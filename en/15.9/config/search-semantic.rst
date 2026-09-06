@@ -49,7 +49,7 @@ Prerequisites
 
      * - Configuration
        - k-NN Plugin Support
-     * - Embedded OpenSearch (``bin/fess``, or the TAR.GZ/ZIP packages with
+     * - Embedded OpenSearch (``bin/fess``, or the ZIP packages with
          ``SEARCH_ENGINE_HTTP_URL`` left unset — the default)
        - Ships with the k-NN plugin. It does not include the JNI native libraries, however, so
          the only supported ANN engine is ``lucene``. ``content_chunker.search.knn.engine`` also

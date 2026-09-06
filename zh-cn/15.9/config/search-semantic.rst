@@ -42,7 +42,7 @@
 
      * - 配置
        - k-NN 插件支持情况
-     * - 内置 OpenSearch（``bin/fess``，或 ``SEARCH_ENGINE_HTTP_URL`` 未设置时的 TAR.GZ/ZIP
+     * - 内置 OpenSearch（``bin/fess``，或 ``SEARCH_ENGINE_HTTP_URL`` 未设置时的 ZIP
          软件包默认状态）
        - 内置了 k-NN 插件。但不包含 JNI 原生库，因此唯一支持的 ANN 引擎是 ``lucene``\ 。
          ``content_chunker.search.knn.engine`` 也接受 ``faiss`` 作为取值，在此设置后映射仍会

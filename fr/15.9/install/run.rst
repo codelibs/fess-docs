@@ -14,7 +14,7 @@ Méthodes de démarrage
 
 Les procédures de démarrage diffèrent selon la méthode d'installation.
 
-Version TAR.GZ
+Version ZIP
 --------------
 
 Démarrage d'OpenSearch
@@ -150,7 +150,7 @@ Vérification des logs
 
 Vérifiez les logs de démarrage pour confirmer qu'il n'y a pas d'erreurs.
 
-Version TAR.GZ/ZIP ::
+Version ZIP ::
 
     $ tail -f /path/to/fess-15.9.0/logs/fess.log
 
@@ -277,7 +277,7 @@ Pour une exploitation en environnement de production, veuillez également envisa
 Principaux paramètres via les variables d'environnement
 --------------------------------------------------------
 
-Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de connexion à OpenSearch peuvent être modifiés via des variables d'environnement. Modifiez ``bin/fess.in.sh`` pour l'édition TAR.GZ, ``/etc/sysconfig/fess`` pour l'édition RPM, et ``/etc/default/fess`` pour l'édition DEB. Un redémarrage de |Fess| est requis après toute modification.
+Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de connexion à OpenSearch peuvent être modifiés via des variables d'environnement. Modifiez ``bin/fess.in.sh`` pour l'édition ZIP, ``/etc/sysconfig/fess`` pour l'édition RPM, et ``/etc/default/fess`` pour l'édition DEB. Un redémarrage de |Fess| est requis après toute modification.
 
 .. list-table::
    :header-rows: 1
@@ -331,7 +331,7 @@ Pour plus de détails, consultez :doc:`../admin/index`.
 Méthodes d'arrêt
 ================
 
-Version TAR.GZ/ZIP
+Version ZIP
 ------------------
 
 Arrêt de Fess
@@ -390,7 +390,7 @@ Arrêt et suppression des conteneurs ::
 Méthodes de redémarrage
 ========================
 
-Version TAR.GZ/ZIP
+Version ZIP
 ------------------
 
 Arrêtez puis démarrez.
@@ -435,7 +435,7 @@ En cas de non-démarrage
 
    Si le port 8080 est déjà utilisé, modifiez le numéro de port.
 
-   - Édition TAR.GZ : modifiez ``FESS_PORT`` dans ``bin/fess.in.sh``
+   - Édition ZIP : modifiez ``FESS_PORT`` dans ``bin/fess.in.sh``
    - Édition ZIP (Windows) : modifiez ``-Dfess.port=8080`` directement dans ``bin\fess.in.bat``
    - Édition RPM : modifiez ``FESS_PORT`` dans ``/etc/sysconfig/fess``
    - Édition DEB : modifiez ``FESS_PORT`` dans ``/etc/default/fess``

@@ -36,7 +36,7 @@ Installation Method Comparison
      - Linux, Windows, macOS
      - Development/evaluation environments, rapid setup
      - :doc:`install-docker`
-   * - TAR.GZ
+   * - ZIP
      - Linux, macOS
      - Environments requiring customization
      - :doc:`install-linux`
@@ -74,7 +74,7 @@ Docker Version
 
 Details: :doc:`install-docker`
 
-Linux Package Versions (TAR.GZ/RPM/DEB)
+Linux Package Versions (ZIP/RPM/DEB)
 ----------------------------------------
 
 **Advantages:**
@@ -175,7 +175,7 @@ OpenSearch is used as the search engine.
 Java (Non-Docker Versions)
 ---------------------------
 
-For TAR.GZ/ZIP/RPM/DEB versions, Java 21 or later is required.
+For ZIP/RPM/DEB versions, Java 21 or later is required.
 
 - Recommended: `Eclipse Temurin <https://adoptium.net/temurin>`__
 - OpenJDK 21 or later can also be used

@@ -68,7 +68,7 @@ Primero, configure un repositorio para almacenar los datos de respaldo.
     }'
 
 .. note::
-   En la configuración predeterminada de la versión zip/tar.gz de |Fess|, OpenSearch se inicia en el puerto 9201 (``search_engine.http.url`` en ``fess_config.properties``). En la versión de paquete RPM/DEB, la conexión está configurada por defecto al puerto 9200 (``SEARCH_ENGINE_HTTP_URL`` en el archivo de configuración de entorno ``/etc/sysconfig/fess`` (RPM) o ``/etc/default/fess`` (DEB)). Ajuste el número de puerto según su entorno.
+   En la configuración predeterminada de la versión ZIP de |Fess|, OpenSearch se inicia en el puerto 9201 (``search_engine.http.url`` en ``fess_config.properties``). En la versión de paquete RPM/DEB, la conexión está configurada por defecto al puerto 9200 (``SEARCH_ENGINE_HTTP_URL`` en el archivo de configuración de entorno ``/etc/sysconfig/fess`` (RPM) o ``/etc/default/fess`` (DEB)). Ajuste el número de puerto según su entorno.
 
 **Para repositorio AWS S3:**
 
@@ -231,31 +231,31 @@ Archivos a Respaldar
      - Método de instalación
      - Descripción
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - Configuración del sistema (configuración general)
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - Configuración del sistema (configuración general)
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - Configuración detallada de |Fess|
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - Configuración detallada de |Fess|
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - Configuración de registros
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - Configuración de registros
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - Archivos de definición de índices
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - Archivos de definición de índices
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - Imágenes de miniaturas (según sea necesario)
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

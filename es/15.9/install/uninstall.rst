@@ -27,7 +27,7 @@ Haga un respaldo de los datos necesarios:
 
 2. **Archivos de configuración personalizados**
 
-   Versión TAR.GZ/ZIP::
+   Versión ZIP::
 
        $ cp -r /path/to/fess/app/WEB-INF/conf /backup/
        $ cp -r /path/to/fess/app/WEB-INF/classes /backup/
@@ -47,7 +47,7 @@ Detención del Servicio
 
 Antes de desinstalar, detenga todos los servicios.
 
-Versión TAR.GZ/ZIP::
+Versión ZIP::
 
     $ ps aux | grep -E 'fess|opensearch'
     $ kill <fess_pid>
@@ -62,7 +62,7 @@ Versión Docker::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-Desinstalación de Versión TAR.GZ/ZIP
+Desinstalación de Versión ZIP
 ====================================
 
 Paso 1: Eliminación de Fess
@@ -347,7 +347,7 @@ Verifique que los puertos no estén en uso.
 Verificación de Archivos
 ------------------------
 
-Versión TAR.GZ/ZIP::
+Versión ZIP::
 
     $ ls /path/to/fess-15.9.0  # Verifique que el directorio no exista
 
