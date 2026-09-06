@@ -3,7 +3,7 @@
 ==================================
 
 本页面说明在 Linux 环境中安装 |Fess| 的步骤。
-支持 TAR.GZ、RPM、DEB 各种包格式。
+支持 ZIP、RPM、DEB 各种包格式。
 
 .. warning::
 
@@ -29,7 +29,7 @@
    * - 方式
      - 推荐环境
      - 特点
-   * - TAR.GZ
+   * - ZIP
      - 开发环境、需要定制化的环境
      - 可解压到任意目录
    * - RPM
@@ -73,7 +73,7 @@
 
    在 RPM / DEB 版中，由于 systemd 的服务定义中已设置文件描述符数量上限，因此不需要进行此设置。
 
-使用 TAR.GZ 版安装
+使用 ZIP 版安装
 ======================
 
 步骤 1: 安装 OpenSearch
@@ -152,12 +152,12 @@
 
 1. 下载和解压 Fess
 
-   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 TAR.GZ 版。
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 ZIP 版。
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.9.0/fess-15.9.0.tar.gz
-       $ tar -xzf fess-15.9.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.9.0/fess-15.9.0.zip
+       $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
 2. 配置 Fess
@@ -175,7 +175,7 @@
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    修改后::
 
@@ -276,7 +276,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
    设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -376,7 +376,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
    设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -409,7 +409,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
    - OpenSearch 的配置文件（opensearch.yml）
    - |Fess| 的配置文件
 
-     - TAR.GZ 版：``bin/fess.in.sh``
+     - ZIP 版：``bin/fess.in.sh``
      - RPM 版：``/etc/sysconfig/fess``
      - DEB 版：``/etc/default/fess``
 
@@ -417,7 +417,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    确认配置中指定的目录（``configsync.config_path`` / ``FESS_DICTIONARY_PATH``）存在，并且已设置适当的权限。
 
-   TAR.GZ 版的情况::
+   ZIP 版的情况::
 
        $ ls -ld /path/to/opensearch-3.8.0/data/config/
 

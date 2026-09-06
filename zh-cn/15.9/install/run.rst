@@ -14,7 +14,7 @@
 
 根据安装方法的不同，启动步骤也不同。
 
-TAR.GZ 版的情况
+ZIP 版的情况
 -------------
 
 启动 OpenSearch
@@ -152,7 +152,7 @@ Docker 版的情况
 
 确认启动日志，检查是否有错误。
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ tail -f /path/to/fess-15.9.0/logs/fess.log
 
@@ -279,7 +279,7 @@ Docker 版::
 --------------------------
 
 端口号、JVM 堆大小、OpenSearch 连接 URL 等设置可通过环境变量更改。
-TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``，DEB 版请编辑 ``/etc/default/fess``\ 。
+ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``，DEB 版请编辑 ``/etc/default/fess``\ 。
 更改后需要重启 |Fess|\ 。
 
 .. list-table::
@@ -338,7 +338,7 @@ TAR.GZ 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess`
 停止方法
 ========
 
-TAR.GZ/ZIP 版的情况
+ZIP 版的情况
 -----------------
 
 停止 Fess
@@ -397,7 +397,7 @@ Docker 版的情况
 重启方法
 ==========
 
-TAR.GZ/ZIP 版的情况
+ZIP 版的情况
 -----------------
 
 先停止后启动。
@@ -442,7 +442,7 @@ Docker 版的情况
 
    如果端口 8080 已被使用，请更改端口号。
 
-   - TAR.GZ 版：在 ``bin/fess.in.sh`` 中更改 ``FESS_PORT``
+   - ZIP 版：在 ``bin/fess.in.sh`` 中更改 ``FESS_PORT``
    - ZIP 版（Windows）：直接编辑 ``bin\fess.in.bat`` 中的 ``-Dfess.port=8080``
    - RPM 版：在 ``/etc/sysconfig/fess`` 中更改 ``FESS_PORT``
    - DEB 版：在 ``/etc/default/fess`` 中更改 ``FESS_PORT``

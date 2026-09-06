@@ -27,7 +27,7 @@
 
 2. **定制的配置文件**
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ cp -r /path/to/fess/app/WEB-INF/conf /backup/
        $ cp -r /path/to/fess/app/WEB-INF/classes /backup/
@@ -47,7 +47,7 @@
 
 卸载前，停止所有服务。
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ ps aux | grep -E 'fess|opensearch'
     $ kill <fess_pid>
@@ -62,7 +62,7 @@ Docker 版::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-TAR.GZ/ZIP 版的卸载
+ZIP 版的卸载
 ===================
 
 步骤 1: 删除 Fess
@@ -346,7 +346,7 @@ Docker 版的卸载
 确认文件
 --------
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ ls /path/to/fess-15.9.0  # 确认目录不存在
 

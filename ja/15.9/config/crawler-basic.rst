@@ -216,7 +216,7 @@ SMB/CIFS(Windowsファイル共有)
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      上記はRPM/DEBパッケージインストール時のパスです。zip/tar.gz展開の場合は ``logs/`` ディレクトリ配下になります。
+      上記はRPM/DEBパッケージインストール時のパスです。ZIP展開の場合は ``logs/`` ディレクトリ配下になります。
 
 基本的な設定項目
 ================

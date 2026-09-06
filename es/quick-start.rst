@@ -153,7 +153,7 @@ Configuracion de Rastreo y Busqueda
    - **Nombre:** Mi primer rastreo
    - **URL:** https://www.example.com/ (URL del sitio a rastrear)
    - **Maximo de accesos:** 10 (para pruebas iniciales, se recomienda un valor pequeño)
-   - **Intervalo:** 1000 (milisegundos entre solicitudes; se recomienda el valor predeterminado ``1000`` ms)
+   - **Intervalo:** 10000 (milisegundos entre solicitudes; se recomienda el valor predeterminado ``10000`` ms)
 
 5. Haga clic en **Crear** para guardar
 

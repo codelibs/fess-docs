@@ -215,7 +215,7 @@ Para verificar el estado del rastreo en ejecución:
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      La ruta anterior es para instalaciones de paquetes RPM/DEB. Para implementaciones zip/tar.gz, los registros se encuentran en el directorio ``logs/``.
+      La ruta anterior es para instalaciones de paquetes RPM/DEB. Para implementaciones ZIP, los registros se encuentran en el directorio ``logs/``.
 
 Elementos Básicos de Configuración
 ===================================

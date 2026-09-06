@@ -68,7 +68,7 @@ Tout d'abord, configurez un référentiel pour stocker les données de sauvegard
     }'
 
 .. note::
-   Dans la configuration par défaut de la version zip/tar.gz de |Fess|, OpenSearch démarre sur le port 9201 (``search_engine.http.url`` dans ``fess_config.properties``). Pour la version paquet RPM/DEB, la connexion est configurée par défaut sur le port 9200 (variable ``SEARCH_ENGINE_HTTP_URL`` dans le fichier de configuration d'environnement ``/etc/sysconfig/fess`` (RPM) ou ``/etc/default/fess`` (DEB)). Adaptez le numéro de port à votre environnement.
+   Dans la configuration par défaut de la version ZIP de |Fess|, OpenSearch démarre sur le port 9201 (``search_engine.http.url`` dans ``fess_config.properties``). Pour la version paquet RPM/DEB, la connexion est configurée par défaut sur le port 9200 (variable ``SEARCH_ENGINE_HTTP_URL`` dans le fichier de configuration d'environnement ``/etc/sysconfig/fess`` (RPM) ou ``/etc/default/fess`` (DEB)). Adaptez le numéro de port à votre environnement.
 
 **Pour un référentiel AWS S3 :**
 
@@ -231,31 +231,31 @@ Fichiers à sauvegarder
      - Méthode d'installation
      - Description
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - Configuration système (paramètres généraux)
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - Configuration système (paramètres généraux)
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - Configuration détaillée de |Fess|
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - Configuration détaillée de |Fess|
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - Configuration des journaux
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - Configuration des journaux
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - Fichiers de définition d'index
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - Fichiers de définition d'index
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - Images miniatures (si nécessaire)
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

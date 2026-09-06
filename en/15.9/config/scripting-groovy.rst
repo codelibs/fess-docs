@@ -5,7 +5,9 @@ Groovy Scripting Guide
 Overview
 ========
 
-Groovy is the default scripting language for |Fess|.
+Groovy is provided by the ``fess-script-groovy`` plugin and is no longer the default scripting
+language for |Fess|; the built-in default is JavaScript. Install the plugin from "System" →
+"Plugins" in the admin UI before selecting the ``groovy`` script type.
 It runs on the Java Virtual Machine (JVM) and, while maintaining high compatibility with Java,
 allows you to write scripts with a more concise syntax.
 

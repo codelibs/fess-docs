@@ -32,7 +32,7 @@ This installation guide consists of the following sections:
 - **Installation**: Platform-specific installation procedures
 
   - Choosing an installation method (overview and comparison)
-  - Linux (TAR.GZ/RPM/DEB) installation
+  - Linux (ZIP/RPM/DEB) installation
   - Windows (ZIP) installation
   - Docker installation
 

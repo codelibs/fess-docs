@@ -13,7 +13,8 @@ Crawl targets are determined by the protocol specified in the path:
 
 - ``file:/`` … local or mounted file system
 - ``smb://`` … Windows file server / shared folder (SMB/CIFS)
-- ``ftp://`` / ``ftps://`` … FTP server
+- ``smb1://`` … Windows file server / shared folder over the legacy SMB1 protocol
+- ``ftp://`` … FTP server
 - ``s3://`` … Amazon S3 bucket
 - ``gcs://`` … Google Cloud Storage bucket
 

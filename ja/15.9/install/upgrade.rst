@@ -97,7 +97,7 @@
 
 2. **設定ファイルのバックアップ**
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -120,7 +120,7 @@
       ``/etc/sysconfig/fess``\ （RPM 版）と ``/etc/default/fess``\ （DEB 版）は、
       ``FESS_PORT``\ 、\ ``FESS_HEAP_SIZE``\ 、\ ``SEARCH_ENGINE_HTTP_URL``\ 、
       ``FESS_DICTIONARY_PATH`` などを指定する環境変数ファイルです。
-      TAR.GZ/ZIP 版でこれらに相当する設定は ``bin/fess.in.sh`` にあります。
+      ZIP 版でこれらに相当する設定は ``bin/fess.in.sh`` にあります。
 
 3. **カスタマイズした設定ファイル**
 
@@ -221,7 +221,7 @@ OpenSearch のデータは Docker ボリュームに保存されます。\ ``com
 
 Fess と OpenSearch を停止します。
 
-TAR.GZ/ZIP 版には停止用のスクリプトは同梱されていません。\ ``bin/fess`` を ``-p`` オプション付きで
+ZIP 版には停止用のスクリプトは同梱されていません。\ ``bin/fess`` を ``-p`` オプション付きで
 起動していた場合は、PID ファイルを使って停止します::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -244,7 +244,7 @@ Docker 版::
 
 インストール方法により、手順が異なります。
 
-TAR.GZ/ZIP 版
+ZIP 版
 -------------
 
 1. 新しいバージョンをダウンロードして展開::
@@ -334,7 +334,7 @@ Docker 版
 
 .. note::
 
-   この手順は TAR.GZ/ZIP 版および RPM/DEB 版で OpenSearch を手動運用している場合の手順です。
+   この手順は ZIP 版および RPM/DEB 版で OpenSearch を手動運用している場合の手順です。
    Docker 版では、ステップ 3 で新しいイメージを取得すると OpenSearch とプラグインも
    まとめて更新されるため、本ステップは不要です。
 
@@ -379,7 +379,7 @@ Docker 版
 ステップ 5: 新しいバージョンの起動
 ==================================
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -405,7 +405,7 @@ Docker 版::
 
    エラーがないことを確認します。
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -462,6 +462,44 @@ Docker 版::
 
    再インデクシングでは新しいマッピングでインデックスが作り直されるため、k-NN プラグインの
    ない OpenSearch では失敗します。ステップ 4 の注意事項を確認してください。
+
+15.8 から 15.9 へのアップグレード
+=================================
+
+15.8 からアップグレードする場合、以下の 3 点が互換性のない変更です。
+
+標準のスクリプトエンジンが Groovy から JavaScript に変更
+--------------------------------------------------------
+
+15.8 までは標準のスクリプトエンジンが Groovy で、 ``job.default.script`` の既定値も ``groovy``
+でした。15.9 では標準のエンジンが JavaScript になり、既定値は ``javascript`` です。Groovy は
+標準では組み込まれなくなり、 ``fess-script-groovy`` プラグインで提供されます。 ``scriptType``
+に ``groovy`` を指定するには、管理画面「システム」→「プラグイン」からこのプラグインを
+インストールしておく必要があります。
+
+既存のスケジュールジョブは登録時の ``scriptType`` をそのまま保持します。そのため ``groovy``
+として保存済みのジョブはアップグレード後も ``groovy`` のままで、実行するには同プラグインが
+必要です。アップグレード後に作成したジョブは ``javascript`` になります。プラグインを
+インストールするか、管理画面「システム」→「スケジューラ」から各ジョブのスクリプトを
+JavaScript エンジン向けに書き換えてください。JavaScript では配列リテラルが Java の
+``String[]`` へ自動的に変換されるため、Groovy 形式の ``as String[]`` は不要です。
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` の削除
+---------------------------------
+
+``crawler.default.script`` は ``fess_config.properties`` から削除されました。設定に残していても
+効果はないため、削除してください。
+
+クロールプロトコル ``storage`` の削除
+-------------------------------------
+
+``crawler.file.protocols`` で ``storage`` は指定できなくなりました。同梱の値は
+``file,smb,smb1,ftp,s3,gcs`` です。代わりに ``s3`` を使用し、 ``storage:`` で始まるパスを
+指定しているファイルクロール設定は ``s3:`` のパスへ変更してください。
 
 15.9 固有の移行作業
 ===================
@@ -624,7 +662,7 @@ RDN として解析した値になりました。DN の中でエスケープさ�
 /api/v2 の設定キーを変更していた場合
 ------------------------------------------------
 
-15.9 から、4 つの設定キーが ``api.v2.`` の接頭辞を失いました。値・既定値・挙動は変わりませんが、\
+15.8.0 から、4 つの設定キーが ``api.v2.`` の接頭辞を失いました。値・既定値・挙動は変わりませんが、\
 **後方互換のための別名は用意されていません**\ 。古い名前のまま残した設定は警告もなく無視され、\
 同梱の既定値が使われます。
 
@@ -632,7 +670,7 @@ RDN として解析した値になりました。DN の中でエスケープさ�
    :header-rows: 1
 
    * - 15.7 まで
-     - 15.9
+     - 15.8.0 以降
      - 既定値
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``
@@ -731,7 +769,7 @@ Docker 版では、旧バージョンの Compose ファイルに戻したうえ�
 
    アップロードされた ``system.properties`` はメモリー上にのみ読み込まれ、ファイルには
    書き出されません。そのため ``system.properties`` の内容は |Fess| を再起動すると失われます。
-   確実に復元するには、バックアップしたファイルを所定の場所（TAR.GZ/ZIP 版は
+   確実に復元するには、バックアップしたファイルを所定の場所（ZIP 版は
    ``app/WEB-INF/conf/``\ 、RPM/DEB 版は ``/etc/fess/``\ ）へ直接配置してから起動してください。
 
 .. note::

@@ -97,7 +97,7 @@ Respaldo de Datos de Configuración
 
 2. **Respaldo de archivos de configuración**
 
-   Versión TAR.GZ/ZIP::
+   Versión ZIP::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -119,7 +119,7 @@ Respaldo de Datos de Configuración
 
       ``/etc/sysconfig/fess`` (versión RPM) y ``/etc/default/fess`` (versión DEB) son archivos de
       variables de entorno que especifican ``FESS_PORT``, ``FESS_HEAP_SIZE``, ``SEARCH_ENGINE_HTTP_URL``,
-      ``FESS_DICTIONARY_PATH`` y otros valores. En la versión TAR.GZ/ZIP, la configuración
+      ``FESS_DICTIONARY_PATH`` y otros valores. En la versión ZIP, la configuración
       equivalente se encuentra en ``bin/fess.in.sh``.
 
 3. **Archivos de configuración personalizados**
@@ -224,7 +224,7 @@ Paso 2: Detención de la Versión Actual
 
 Detenga Fess y OpenSearch.
 
-La versión TAR.GZ/ZIP no incluye un script para detener el servicio. Si inició ``bin/fess`` con
+La versión ZIP no incluye un script para detener el servicio. Si inició ``bin/fess`` con
 la opción ``-p``, deténgalo usando el archivo PID::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -247,7 +247,7 @@ Paso 3: Instalación de la Nueva Versión
 
 Los procedimientos varían según el método de instalación.
 
-Versión TAR.GZ/ZIP
+Versión ZIP
 -------------------
 
 1. Descargue y extraiga la nueva versión::
@@ -339,7 +339,7 @@ anterior, actualícelo siguiendo estos procedimientos.
 .. note::
 
    Este procedimiento corresponde a los casos en que OpenSearch se gestiona manualmente en las versiones
-   TAR.GZ/ZIP y RPM/DEB. En la versión Docker, al obtener las nuevas imágenes en el Paso 3, OpenSearch
+   ZIP y RPM/DEB. En la versión Docker, al obtener las nuevas imágenes en el Paso 3, OpenSearch
    y los plugins se actualizan conjuntamente, por lo que este paso no es necesario.
 
 .. important::
@@ -387,7 +387,7 @@ anterior, actualícelo siguiendo estos procedimientos.
 Paso 5: Inicio de la Nueva Versión
 ====================================
 
-Versión TAR.GZ/ZIP::
+Versión ZIP::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -413,7 +413,7 @@ Paso 6: Verificación de Funcionamiento
 
    Verifique que no haya errores.
 
-   Versión TAR.GZ/ZIP::
+   Versión ZIP::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -471,6 +471,44 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 
    Dado que la reindexación reconstruye el índice con el nuevo mapeo, fallará en un OpenSearch
    sin el plugin k-NN. Consulte las notas del Paso 4.
+
+Actualización de 15.8 a 15.9
+============================
+
+Si actualiza desde 15.8, los tres cambios siguientes no son retrocompatibles.
+
+El motor de scripting integrado pasa de Groovy a JavaScript
+-----------------------------------------------------------
+
+Hasta 15.8 el motor de scripting integrado era Groovy y ``job.default.script`` tenía el valor
+predeterminado ``groovy``. En 15.9 el motor integrado es JavaScript y el valor predeterminado es
+``javascript``. Groovy ya no está integrado: lo proporciona el plugin ``fess-script-groovy``, que
+debe instalarse desde "Sistema" → "Plugin" en la pantalla de administración para que un
+``scriptType`` con valor ``groovy`` se pueda resolver.
+
+Un trabajo programado existente conserva el ``scriptType`` almacenado con él, de modo que un
+trabajo guardado como ``groovy`` sigue indicando ``groovy`` tras la actualización y necesita ese
+plugin para ejecutarse. Los trabajos creados después de la actualización obtienen ``javascript``.
+Instale el plugin o abra cada trabajo en "Sistema" → "Programador" y reescriba su script para el
+motor JavaScript. Un literal de array de JavaScript se convierte automáticamente en un
+``String[]`` de Java, por lo que se omiten las conversiones ``as String[]`` de la forma Groovy.
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` se ha eliminado
+------------------------------------------
+
+``crawler.default.script`` ya no existe en ``fess_config.properties``. Elimínelo de su
+configuración; un valor que permanezca con ese nombre no tiene ningún efecto.
+
+El protocolo de rastreo ``storage`` se ha eliminado
+---------------------------------------------------
+
+``storage`` ya no se admite en ``crawler.file.protocols``; el valor incluido es
+``file,smb,smb1,ftp,s3,gcs``. Utilice ``s3`` en su lugar y cambie a una ruta ``s3:`` cualquier
+configuración de rastreo de archivos cuya ruta empiece por ``storage:``.
 
 Migración Específica de 15.9
 ==============================
@@ -651,7 +689,7 @@ predeterminado ``true``.
 Si Había Modificado las Claves de Configuración de /api/v2
 ----------------------------------------------------------
 
-En 15.9, cuatro claves de configuración perdieron su prefijo ``api.v2.``. Sus valores, valores
+En 15.8.0, cuatro claves de configuración perdieron su prefijo ``api.v2.``. Sus valores, valores
 predeterminados y comportamiento no cambian, pero **no se conserva ningún alias retrocompatible**:
 una configuración que permanezca con su nombre antiguo se ignora sin ninguna advertencia y se
 aplica el valor predeterminado incluido.
@@ -660,7 +698,7 @@ aplica el valor predeterminado incluido.
    :header-rows: 1
 
    * - Hasta 15.7
-     - 15.9
+     - 15.8.0 en adelante
      - Valor predeterminado
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``
@@ -764,7 +802,7 @@ de los volúmenes::
    El archivo ``system.properties`` cargado se lee únicamente en memoria y no se escribe en disco.
    Por lo tanto, su contenido se pierde al reiniciar |Fess|. Para restaurarlo de forma fiable,
    coloque directamente el archivo respaldado en su ubicación correspondiente (``app/WEB-INF/conf/``
-   en la versión TAR.GZ/ZIP, ``/etc/fess/`` en la versión RPM/DEB) antes de iniciar el servicio.
+   en la versión ZIP, ``/etc/fess/`` en la versión RPM/DEB) antes de iniciar el servicio.
 
 .. note::
 

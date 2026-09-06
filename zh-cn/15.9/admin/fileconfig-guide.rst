@@ -13,7 +13,8 @@
 
 - ``file:/`` … 本地或已挂载的文件系统
 - ``smb://`` … Windows 文件服务器/共享文件夹（SMB/CIFS）
-- ``ftp://`` / ``ftps://`` … FTP 服务器
+- ``smb1://`` … 使用旧版 SMB1 协议的 Windows 文件服务器/共享文件夹
+- ``ftp://`` … FTP 服务器
 - ``s3://`` … Amazon S3 存储桶
 - ``gcs://`` … Google Cloud Storage 存储桶
 

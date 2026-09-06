@@ -97,7 +97,7 @@
 
 2. **备份配置文件**
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -120,7 +120,7 @@
       ``/etc/sysconfig/fess``\ （RPM 版）和 ``/etc/default/fess``\ （DEB 版）是
       用于指定 ``FESS_PORT``\ 、\ ``FESS_HEAP_SIZE``\ 、\ ``SEARCH_ENGINE_HTTP_URL``\ 、
       ``FESS_DICTIONARY_PATH`` 等内容的环境变量文件。
-      TAR.GZ/ZIP 版中与之对应的设置位于 ``bin/fess.in.sh``。
+      ZIP 版中与之对应的设置位于 ``bin/fess.in.sh``。
 
 3. **定制的配置文件**
 
@@ -221,7 +221,7 @@ OpenSearch 的数据保存在 Docker 卷中。\ ``compose-opensearch3.yaml`` 中
 
 停止 Fess 和 OpenSearch。
 
-TAR.GZ/ZIP 版没有附带用于停止的脚本。\ ``bin/fess`` 如果是使用 ``-p`` 选项
+ZIP 版没有附带用于停止的脚本。\ ``bin/fess`` 如果是使用 ``-p`` 选项
 启动的，可以使用 PID 文件停止::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -244,7 +244,7 @@ Docker 版::
 
 根据安装方法，步骤有所不同。
 
-TAR.GZ/ZIP 版
+ZIP 版
 -------------
 
 1. 下载并解压新版本::
@@ -333,7 +333,7 @@ Docker 版
 
 .. note::
 
-   本步骤适用于 TAR.GZ/ZIP 版及 RPM/DEB 版中手动运维 OpenSearch 的情况。
+   本步骤适用于 ZIP 版及 RPM/DEB 版中手动运维 OpenSearch 的情况。
    对于 Docker 版，在步骤 3 中获取新镜像时，OpenSearch 和插件也会一并更新，
    因此无需执行本步骤。
 
@@ -378,7 +378,7 @@ Docker 版
 步骤 5: 启动新版本
 ================================
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -404,7 +404,7 @@ Docker 版::
 
    确认没有错误。
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -458,6 +458,39 @@ Docker 版::
 
    由于重新索引会以新的映射重建索引，在没有 k-NN 插件的 OpenSearch 中会失败。
    请确认步骤 4 中的注意事项。
+
+从 15.8 升级到 15.9
+===================
+
+若从 15.8 升级，以下三项为不向后兼容的变更。
+
+内置脚本引擎由 Groovy 改为 JavaScript
+-------------------------------------
+
+15.8 之前内置的脚本引擎为 Groovy， ``job.default.script`` 的默认值也是 ``groovy`` 。15.9 中内置
+引擎为 JavaScript，默认值为 ``javascript`` 。Groovy 已不再内置，改由 ``fess-script-groovy``
+插件提供；要让 ``scriptType`` 的 ``groovy`` 生效，必须在管理页面「系统」→「插件」中安装该插件。
+
+已有的计划任务会保留注册时的 ``scriptType`` ，因此此前以 ``groovy`` 保存的任务在升级后仍为
+``groovy`` ，运行时需要该插件。升级后新建的任务则为 ``javascript`` 。请安装该插件，或在管理
+页面「系统」→「调度器」中将各任务的脚本改写为 JavaScript 引擎的写法。JavaScript 的数组字面量
+会自动转换为 Java 的 ``String[]`` ，因此不再需要 Groovy 写法中的 ``as String[]`` 。
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` 已删除
+---------------------------------
+
+``fess_config.properties`` 中已不存在 ``crawler.default.script`` 。请从配置中删除该项；
+以该名称保留的值不会生效。
+
+爬取协议 ``storage`` 已删除
+---------------------------
+
+``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp,s3,gcs`` 。
+请改用 ``s3`` ，并将路径以 ``storage:`` 开头的文件爬取配置改为 ``s3:`` 路径。
 
 15.9 特有的迁移工作
 ===================
@@ -599,14 +632,14 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 若此前修改过 /api/v2 配置键
 ------------------------------------------------
 
-从 15.9 起，有四个配置键去掉了 ``api.v2.`` 前缀。其取值、默认值和行为均未改变，但\
+从 15.8.0 起，有四个配置键去掉了 ``api.v2.`` 前缀。其取值、默认值和行为均未改变，但\
 **没有保留向后兼容的别名**\ ：仍使用旧名称的设置会被静默忽略，实际生效的是随附的默认值。
 
 .. list-table::
    :header-rows: 1
 
    * - 15.7 及以前
-     - 15.9
+     - 15.8.0 及以后
      - 默认值
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``
@@ -702,7 +735,7 @@ Docker 版中，请先切换回旧版本的 Compose 文件，再恢复卷中的�
 
    上传的 ``system.properties`` 仅会加载到内存中，不会写入文件。
    因此 ``system.properties`` 的内容会在 |Fess| 重启后丢失。
-   如需确保可靠恢复，请将备份的文件直接放置到指定位置（TAR.GZ/ZIP 版为
+   如需确保可靠恢复，请将备份的文件直接放置到指定位置（ZIP 版为
    ``app/WEB-INF/conf/``\ ，RPM/DEB 版为 ``/etc/fess/``\ ）后再启动。
 
 .. note::

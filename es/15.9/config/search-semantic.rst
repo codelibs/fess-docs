@@ -50,7 +50,7 @@ Requisitos previos
 
      * - Configuración
        - Compatibilidad con el plugin k-NN
-     * - OpenSearch integrado (``bin/fess``, o los paquetes TAR.GZ/ZIP con
+     * - OpenSearch integrado (``bin/fess``, o los paquetes ZIP con
          ``SEARCH_ENGINE_HTTP_URL`` sin definir — el valor predeterminado)
        - Se distribuye con el plugin k-NN. Sin embargo, no incluye las bibliotecas nativas JNI,
          por lo que el único motor ANN compatible es ``lucene``. ``content_chunker.search.knn.engine``

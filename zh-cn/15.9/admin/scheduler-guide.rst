@@ -53,7 +53,8 @@
 ::::::
 
 指定脚本的执行环境。
-目前仅支持"groovy"。
+标准值为"javascript"，默认值也是它。
+安装 ``fess-script-groovy`` 插件后即可选择"groovy"。Groovy 已不再内置。
 
 脚本
 ::::::::
@@ -64,7 +65,13 @@
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   上述示例是针对 JavaScript 引擎编写的，JavaScript 的数组字面量会自动转换为 Java 的
+   ``String[]``\ 。若要使用 Groovy 写法（``webConfigIds(["1", "2"] as String[])``），
+   需要安装 ``fess-script-groovy`` 插件。
 
 日志记录
 ::::::

@@ -99,7 +99,7 @@ Sauvegarde des données de configuration
 
 2. **Sauvegarde des fichiers de configuration**
 
-   Version TAR.GZ/ZIP ::
+   Version ZIP ::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -122,7 +122,7 @@ Sauvegarde des données de configuration
       ``/etc/sysconfig/fess`` (version RPM) et ``/etc/default/fess`` (version DEB) sont des
       fichiers de variables d'environnement qui définissent notamment ``FESS_PORT``,
       ``FESS_HEAP_SIZE``, ``SEARCH_ENGINE_HTTP_URL`` et ``FESS_DICTIONARY_PATH``.
-      Pour la version TAR.GZ/ZIP, les réglages équivalents se trouvent dans ``bin/fess.in.sh``.
+      Pour la version ZIP, les réglages équivalents se trouvent dans ``bin/fess.in.sh``.
 
 3. **Fichiers de configuration personnalisés**
 
@@ -225,7 +225,7 @@ indiquez le nom réel du volume, préfixe inclus ::
 
 Arrêtez Fess et OpenSearch.
 
-La version TAR.GZ/ZIP ne fournit pas de script d'arrêt. Si vous aviez démarré ``bin/fess`` avec
+La version ZIP ne fournit pas de script d'arrêt. Si vous aviez démarré ``bin/fess`` avec
 l'option ``-p``, arrêtez-le à l'aide du fichier PID ::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -248,7 +248,7 @@ Version Docker ::
 
 Les procédures diffèrent selon la méthode d'installation.
 
-Version TAR.GZ/ZIP
+Version ZIP
 ------------------
 
 1. Téléchargez et décompressez la nouvelle version ::
@@ -340,7 +340,7 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
 
 .. note::
 
-   Cette procédure s'applique aux cas où OpenSearch est géré manuellement avec les versions TAR.GZ/ZIP et RPM/DEB.
+   Cette procédure s'applique aux cas où OpenSearch est géré manuellement avec les versions ZIP et RPM/DEB.
    Pour la version Docker, l'obtention de la nouvelle image à l'étape 3 met également à jour OpenSearch et ses plugins
    simultanément ; cette étape n'est donc pas nécessaire.
 
@@ -390,7 +390,7 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
 Étape 5 : Démarrage de la nouvelle version
 ============================================
 
-Version TAR.GZ/ZIP ::
+Version ZIP ::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -416,7 +416,7 @@ Version Docker ::
 
    Vérifiez qu'il n'y a pas d'erreurs.
 
-   Version TAR.GZ/ZIP ::
+   Version ZIP ::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -474,6 +474,45 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 
    La réindexation recrée l'index avec le nouveau mapping ; elle échoue donc sur un OpenSearch
    dépourvu du plugin k-NN. Consultez les remarques de l'étape 4.
+
+Mise à niveau de 15.8 vers 15.9
+===============================
+
+Si vous effectuez une mise à niveau depuis la 15.8, les trois changements suivants ne sont pas
+rétrocompatibles.
+
+Le moteur de script intégré passe de Groovy à JavaScript
+--------------------------------------------------------
+
+Jusqu'à la 15.8, le moteur de script intégré était Groovy et ``job.default.script`` avait pour
+valeur par défaut ``groovy``. En 15.9, le moteur intégré est JavaScript et la valeur par défaut
+est ``javascript``. Groovy n'est plus intégré : il est fourni par le plugin
+``fess-script-groovy``, qui doit être installé depuis « Système » → « Plugins » dans l'écran
+d'administration pour qu'un ``scriptType`` valant ``groovy`` puisse être résolu.
+
+Une tâche planifiée existante conserve le ``scriptType`` enregistré avec elle : une tâche déjà
+enregistrée en ``groovy`` reste en ``groovy`` après la mise à niveau et nécessite ce plugin pour
+s'exécuter. Les tâches créées après la mise à niveau reçoivent ``javascript``. Installez le
+plugin, ou ouvrez chaque tâche sous « Système » → « Planificateur » et réécrivez son script pour
+le moteur JavaScript. Un littéral de tableau JavaScript est converti automatiquement en
+``String[]`` Java, ce qui rend inutiles les conversions ``as String[]`` de la forme Groovy.
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` a été supprimé
+-----------------------------------------
+
+``crawler.default.script`` n'existe plus dans ``fess_config.properties``. Supprimez-le de votre
+configuration ; une valeur laissée sous ce nom n'a aucun effet.
+
+Le protocole de crawl ``storage`` a été supprimé
+------------------------------------------------
+
+``storage`` n'est plus accepté dans ``crawler.file.protocols`` ; la valeur fournie est
+``file,smb,smb1,ftp,s3,gcs``. Utilisez ``s3`` à la place et remplacez par un chemin ``s3:`` toute
+configuration de crawl de fichiers dont le chemin commence par ``storage:``.
 
 Migrations spécifiques à la 15.9
 ================================
@@ -655,7 +694,7 @@ défaut ``true``.
 Si vous aviez modifié les clés de configuration /api/v2
 -------------------------------------------------------
 
-En 15.9, quatre clés de configuration ont perdu leur préfixe ``api.v2.``. Leurs valeurs, leurs
+En 15.8.0, quatre clés de configuration ont perdu leur préfixe ``api.v2.``. Leurs valeurs, leurs
 valeurs par défaut et leur comportement sont inchangés, mais **aucun alias rétrocompatible n'est
 conservé** : un paramètre laissé sous son ancien nom est ignoré sans avertissement et la valeur
 par défaut fournie s'applique.
@@ -664,7 +703,7 @@ par défaut fournie s'applique.
    :header-rows: 1
 
    * - Jusqu'à 15.7
-     - 15.9
+     - 15.8.0 et versions ultérieures
      - Valeur par défaut
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``
@@ -768,7 +807,7 @@ contenu du volume ::
    Le fichier ``system.properties`` téléversé n'est chargé qu'en mémoire et n'est jamais écrit sur
    disque : son contenu est donc perdu au redémarrage de |Fess|. Pour une restauration fiable,
    placez directement le fichier de sauvegarde à l'emplacement approprié (``app/WEB-INF/conf/``
-   pour la version TAR.GZ/ZIP, ``/etc/fess/`` pour la version RPM/DEB) avant de démarrer |Fess|.
+   pour la version ZIP, ``/etc/fess/`` pour la version RPM/DEB) avant de démarrer |Fess|.
 
 .. note::
 

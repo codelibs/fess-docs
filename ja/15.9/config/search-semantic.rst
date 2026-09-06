@@ -46,7 +46,7 @@
      * - 構成
        - k-NN プラグインの対応状況
      * - 組み込み OpenSearch（``bin/fess``、または ``SEARCH_ENGINE_HTTP_URL`` を未設定のままにした
-         場合の TAR.GZ/ZIP 版のデフォルト状態）
+         場合の ZIP 版のデフォルト状態）
        - k-NN プラグインが同梱されています。ただし JNI ネイティブライブラリを含まないため、
          対応する ANN エンジンは ``lucene`` のみです。``content_chunker.search.knn.engine`` は
          ``faiss`` も値として受け付けており、ここで設定してもマッピング自体は正常に作成されます

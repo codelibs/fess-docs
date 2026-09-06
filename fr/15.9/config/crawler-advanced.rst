@@ -24,26 +24,6 @@ La configuration détaillée du robot d'indexation s'effectue dans les fichiers 
 - **Configuration de la longueur du contenu** : ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Configuration des composants** : ``app/WEB-INF/classes/crawler/container.xml``
 
-Script par défaut
---------------------
-
-Configure le langage de script par défaut du robot d'indexation.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Propriété
-     - Description
-     - Par défaut
-   * - ``crawler.default.script``
-     - Langage de script du robot d'indexation
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 Pool de threads HTTP
 --------------------
 
@@ -192,7 +172,7 @@ Protocoles supportés
      - ``http,https``
    * - ``crawler.file.protocols``
      - Protocoles d'indexation de fichiers
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - Encodage des données de crawl
      - ``UTF-8``
@@ -203,7 +183,7 @@ Exemple de configuration
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 Paramètres de variables d'environnement

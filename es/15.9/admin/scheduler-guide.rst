@@ -53,7 +53,9 @@ Tipo de ejecución
 :::::::::::::::::
 
 Especifique el entorno de ejecución del script.
-Actualmente solo se admite "groovy".
+El valor estándar es "javascript", que además es el predeterminado.
+"groovy" se puede seleccionar una vez instalado el plugin ``fess-script-groovy``; Groovy ya no
+está integrado.
 
 Script
 ::::::
@@ -64,7 +66,13 @@ Por ejemplo, si desea ejecutar solo tres configuraciones de rastreo como trabajo
 
 ::
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"] as String[]).fileConfigIds(["1"] as String[]).dataConfigIds([] as String[]).execute(executor);
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+.. note::
+
+   El ejemplo anterior está escrito para el motor JavaScript; un literal de array de JavaScript se
+   convierte automáticamente en un ``String[]`` de Java. La forma Groovy
+   (``webConfigIds(["1", "2"] as String[])``) requiere el plugin ``fess-script-groovy``.
 
 Registro
 ::::::::

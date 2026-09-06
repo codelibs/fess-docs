@@ -24,26 +24,6 @@ Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 - **Inhaltslängen-Konfiguration**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Komponenten-Konfiguration**: ``app/WEB-INF/classes/crawler/container.xml``
 
-Standard-Skriptsprache
-----------------------
-
-Legt die Standard-Skriptsprache für den Crawler fest.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - Eigenschaft
-     - Beschreibung
-     - Standard
-   * - ``crawler.default.script``
-     - Crawler-Skriptsprache
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 HTTP-Thread-Pool
 ------------------
 
@@ -191,7 +171,7 @@ Unterstützte Protokolle
      - ``http,https``
    * - ``crawler.file.protocols``
      - Protokolle für Datei-Crawling
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - Kodierung der Crawling-Daten
      - ``UTF-8``
@@ -202,7 +182,7 @@ Konfigurationsbeispiel
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 Umgebungsvariablen-Parameter

@@ -27,7 +27,7 @@
 
 2. **カスタマイズした設定ファイル**
 
-   TAR.GZ/ZIP 版::
+   ZIP 版::
 
        $ cp -r /path/to/fess/app/WEB-INF/conf /backup/
        $ cp -r /path/to/fess/app/WEB-INF/classes /backup/
@@ -47,7 +47,7 @@
 
 アンインストール前に、すべてのサービスを停止します。
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ ps aux | grep -E 'fess|opensearch'
     $ kill <fess_pid>
@@ -62,7 +62,7 @@ Docker 版::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-TAR.GZ/ZIP 版のアンインストール
+ZIP 版のアンインストール
 =============================
 
 ステップ 1: Fess の削除
@@ -347,7 +347,7 @@ Docker イメージを削除してディスクスペースを解放する場合:
 ファイルの確認
 ------------
 
-TAR.GZ/ZIP 版::
+ZIP 版::
 
     $ ls /path/to/fess-15.9.0  # ディレクトリが存在しないことを確認
 

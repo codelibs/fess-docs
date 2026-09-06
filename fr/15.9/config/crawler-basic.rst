@@ -215,7 +215,7 @@ Pour vérifier l'état de l'indexation en cours :
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      Le chemin ci-dessus correspond aux installations par paquets RPM/DEB. Pour les déploiements zip/tar.gz, les journaux se trouvent dans le répertoire ``logs/``.
+      Le chemin ci-dessus correspond aux installations par paquets RPM/DEB. Pour les déploiements ZIP, les journaux se trouvent dans le répertoire ``logs/``.
 
 Paramètres de configuration de base
 ================

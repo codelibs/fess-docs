@@ -13,7 +13,8 @@ Le crawl cible est déterminé par le protocole spécifié dans le « chemin » 
 
 - ``file:/`` … système de fichiers local ou monté
 - ``smb://`` … serveur de fichiers/dossier partagé Windows (SMB/CIFS)
-- ``ftp://`` / ``ftps://`` … serveur FTP
+- ``smb1://`` … serveur de fichiers/dossier partagé Windows utilisant l'ancien protocole SMB1
+- ``ftp://`` … serveur FTP
 - ``s3://`` … bucket Amazon S3
 - ``gcs://`` … bucket Google Cloud Storage
 

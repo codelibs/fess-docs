@@ -32,7 +32,7 @@
 - **安装**：各平台的安装步骤
 
   - 安装方法的选择（概述与比较）
-  - Linux (TAR.GZ/RPM/DEB) 安装
+  - Linux (ZIP/RPM/DEB) 安装
   - Windows (ZIP) 安装
   - Docker 安装
 

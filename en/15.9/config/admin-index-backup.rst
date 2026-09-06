@@ -68,7 +68,7 @@ First, configure a repository to store backup data.
     }'
 
 .. note::
-   In the default configuration of the |Fess| zip/tar.gz distribution, OpenSearch starts on port 9201 (``search_engine.http.url`` in ``fess_config.properties``). For RPM/DEB packages, the default configuration connects to port 9200 (``SEARCH_ENGINE_HTTP_URL`` in the environment configuration file ``/etc/sysconfig/fess`` (RPM) or ``/etc/default/fess`` (DEB)). Adjust the port number to match your environment.
+   In the default configuration of the |Fess| ZIP distribution, OpenSearch starts on port 9201 (``search_engine.http.url`` in ``fess_config.properties``). For RPM/DEB packages, the default configuration connects to port 9200 (``SEARCH_ENGINE_HTTP_URL`` in the environment configuration file ``/etc/sysconfig/fess`` (RPM) or ``/etc/default/fess`` (DEB)). Adjust the port number to match your environment.
 
 **For AWS S3 repository:**
 
@@ -231,31 +231,31 @@ Files to Back Up
      - Installation Method
      - Description
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - System configuration (general settings)
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - System configuration (general settings)
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - Detailed |Fess| configuration
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - Detailed |Fess| configuration
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - Log configuration
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - Log configuration
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - Index definition files
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - Index definition files
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - Thumbnail images (as needed)
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

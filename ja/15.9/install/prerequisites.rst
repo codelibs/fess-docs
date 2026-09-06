@@ -66,7 +66,7 @@
 
 インストール方法により、以下のソフトウェアが必要です：
 
-TAR.GZ/ZIP/RPM/DEB 版
+ZIP/RPM/DEB 版
 ~~~~~~~~~~~~~~~~~~~~
 
 - **Java 21**: `Eclipse Temurin <https://adoptium.net/temurin>`__ を推奨
@@ -179,7 +179,7 @@ Docker 版
 
 システム要件を確認したら、ご利用の環境に応じたインストール手順に進んでください：
 
-- :doc:`install-linux` - Linux (TAR.GZ/RPM/DEB) 向けインストール
+- :doc:`install-linux` - Linux (ZIP/RPM/DEB) 向けインストール
 - :doc:`install-windows` - Windows (ZIP) 向けインストール
 - :doc:`install-docker` - Docker 向けインストール
 - :doc:`install` - インストール方法の概要

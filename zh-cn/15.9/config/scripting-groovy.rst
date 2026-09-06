@@ -5,7 +5,8 @@ Groovy脚本指南
 概述
 ====
 
-Groovy是 |Fess| 的默认脚本语言。
+Groovy 由 ``fess-script-groovy`` 插件提供，已不再是 |Fess| 的默认脚本语言（内置的默认语言
+为 JavaScript）。在选择 ``groovy`` 脚本类型之前，请在管理页面「系统」→「插件」中安装该插件。
 它运行在Java虚拟机（JVM）上，与Java高度兼容，
 同时可以使用更简洁的语法编写脚本。
 

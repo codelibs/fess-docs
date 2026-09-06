@@ -214,7 +214,7 @@ SMB/CIFS(Windows文件共享)
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      以上路径适用于RPM/DEB软件包安装。对于zip/tar.gz部署，日志位于 ``logs/`` 目录下。
+      以上路径适用于RPM/DEB软件包安装。对于ZIP部署，日志位于 ``logs/`` 目录下。
 
 基本配置项
 ================

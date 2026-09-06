@@ -68,7 +68,7 @@
     }'
 
 .. note::
-   |Fess| zip/tar.gz 版的默认配置中，OpenSearch 在 9201 端口启动（``fess_config.properties`` 的 ``search_engine.http.url``）。RPM/DEB 软件包版默认配置为连接 9200 端口（环境配置文件 ``/etc/sysconfig/fess`` （RPM）或 ``/etc/default/fess`` （DEB）中的 ``SEARCH_ENGINE_HTTP_URL``）。请根据您的实际环境替换相应的端口号。
+   |Fess| ZIP 版的默认配置中，OpenSearch 在 9201 端口启动（``fess_config.properties`` 的 ``search_engine.http.url``）。RPM/DEB 软件包版默认配置为连接 9200 端口（环境配置文件 ``/etc/sysconfig/fess`` （RPM）或 ``/etc/default/fess`` （DEB）中的 ``SEARCH_ENGINE_HTTP_URL``）。请根据您的实际环境替换相应的端口号。
 
 **AWS S3仓库:**
 
@@ -231,31 +231,31 @@
      - 安装方式
      - 说明
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - 系统设置（通用设置）
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - 系统设置（通用设置）
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - |Fess| 详细配置
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - |Fess| 详细配置
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - 日志配置
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - 日志配置
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - 索引定义文件
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - 索引定义文件
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - 缩略图（按需备份）
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

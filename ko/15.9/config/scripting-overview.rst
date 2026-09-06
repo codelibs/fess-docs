@@ -21,14 +21,20 @@
    * - 언어
      - 식별자
      - 설명
+   * - JavaScript
+     - ``javascript``
+     - 기본으로 등록된 스크립트 언어. 플러그인을 추가하지 않아도 사용 가능
    * - Groovy
      - ``groovy``
-     - 기본으로 등록된 스크립트 언어. Java 호환으로 강력한 기능 제공
+     - ``fess-script-groovy`` 플러그인이 제공. Java 호환으로 강력한 기능 제공
 
 .. note::
-   |Fess|\ 에 기본으로 등록된 스크립트 엔진은 Groovy뿐입니다.
-   기본 스크립트 언어는 ``groovy``\ 입니다（ ``Constants.DEFAULT_SCRIPT`` ）.
-   이 문서의 스크립트 예제는 모두 Groovy 구문으로 작성되어 있습니다.
+   |Fess|\ 에 기본으로 등록된 스크립트 엔진은 JavaScript이며, 기본 스크립트 언어는
+   ``javascript``\ 입니다（ ``Constants.DEFAULT_SCRIPT`` ）.
+   Groovy는 더 이상 기본으로 내장되지 않습니다. 식별자 ``groovy``\ 를 사용하려면 관리 화면
+   「시스템」→「플러그인」에서 ``fess-script-groovy`` 플러그인을 설치하십시오.
+   이 페이지의 스크립트 예제는 모두 Groovy 구문으로 작성되어 있으므로, 실행하려면 해당
+   플러그인이 필요하며 그렇지 않으면 JavaScript 엔진에 맞게 다시 작성해야 합니다.
 
 스크립트 사용 장면
 ==================

@@ -24,26 +24,6 @@
 - **コンテンツ長設定**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **コンポーネント設定**: ``app/WEB-INF/classes/crawler/container.xml``
 
-デフォルトスクリプト
---------------------
-
-クローラーのデフォルトスクリプト言語を設定します。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - プロパティ
-     - 説明
-     - デフォルト
-   * - ``crawler.default.script``
-     - クローラースクリプトの言語
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 HTTPスレッドプール
 ------------------
 
@@ -192,7 +172,7 @@ HTTPクローラーのスレッドプール設定です。
      - ``http,https``
    * - ``crawler.file.protocols``
      - ファイルクロールのプロトコル
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - クロールデータのエンコーディング
      - ``UTF-8``
@@ -203,7 +183,7 @@ HTTPクローラーのスレッドプール設定です。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 環境変数パラメーター

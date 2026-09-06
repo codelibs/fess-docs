@@ -27,7 +27,7 @@
 
 2. **커스터마이징한 설정 파일**
 
-   TAR.GZ/ZIP 버전::
+   ZIP 버전::
 
        $ cp -r /path/to/fess/app/WEB-INF/conf /backup/
        $ cp -r /path/to/fess/app/WEB-INF/classes /backup/
@@ -47,7 +47,7 @@
 
 제거하기 전에 모든 서비스를 중지합니다.
 
-TAR.GZ/ZIP 버전::
+ZIP 버전::
 
     $ ps aux | grep -E 'fess|opensearch'
     $ kill <fess_pid>
@@ -62,7 +62,7 @@ Docker 버전::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
-TAR.GZ/ZIP 버전 제거
+ZIP 버전 제거
 =============================
 
 단계 1: Fess 삭제
@@ -347,7 +347,7 @@ Docker 이미지를 삭제하여 디스크 공간을 확보하는 경우::
 파일 확인
 ------------
 
-TAR.GZ/ZIP 버전::
+ZIP 버전::
 
     $ ls /path/to/fess-15.9.0  # 디렉터리가 존재하지 않는지 확인
 

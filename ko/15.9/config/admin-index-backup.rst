@@ -68,7 +68,7 @@ OpenSearch의 스냅샷 기능을 사용하여 인덱스의 백업과 복원을 
     }'
 
 .. note::
-   |Fess| 의 zip/tar.gz 버전의 기본 설정에서는 OpenSearch가 9201 포트로 시작됩니다( ``fess_config.properties`` 의 ``search_engine.http.url`` ). RPM/DEB 패키지 버전에서는 기본적으로 9200 포트에 연결하도록 설정되어 있습니다(환경 설정 파일 ``/etc/sysconfig/fess`` (RPM) 또는 ``/etc/default/fess`` (DEB)의 ``SEARCH_ENGINE_HTTP_URL`` ). 사용하는 환경에 맞게 포트 번호를 변경하십시오.
+   |Fess| 의 ZIP 버전의 기본 설정에서는 OpenSearch가 9201 포트로 시작됩니다( ``fess_config.properties`` 의 ``search_engine.http.url`` ). RPM/DEB 패키지 버전에서는 기본적으로 9200 포트에 연결하도록 설정되어 있습니다(환경 설정 파일 ``/etc/sysconfig/fess`` (RPM) 또는 ``/etc/default/fess`` (DEB)의 ``SEARCH_ENGINE_HTTP_URL`` ). 사용하는 환경에 맞게 포트 번호를 변경하십시오.
 
 **AWS S3 리포지토리의 경우:**
 
@@ -231,31 +231,31 @@ OpenSearch의 인덱스와는 별도로 다음 설정 파일도 백업하십시�
      - 설치 방법
      - 설명
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - 시스템 설정(일반 설정)
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - 시스템 설정(일반 설정)
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - |Fess| 의 상세 설정
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - |Fess| 의 상세 설정
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - 로그 설정
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - 로그 설정
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - 인덱스 정의 파일
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - 인덱스 정의 파일
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - 썸네일 이미지(필요시)
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

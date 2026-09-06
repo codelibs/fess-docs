@@ -97,7 +97,7 @@ Configuration Data Backup
 
 2. **Configuration File Backup**
 
-   TAR.GZ/ZIP version::
+   ZIP version::
 
        $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
        $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
@@ -119,7 +119,7 @@ Configuration Data Backup
 
       ``/etc/sysconfig/fess`` (RPM version) and ``/etc/default/fess`` (DEB version) are
       environment variable files that set values such as ``FESS_PORT``, ``FESS_HEAP_SIZE``,
-      ``SEARCH_ENGINE_HTTP_URL``, and ``FESS_DICTIONARY_PATH``. For the TAR.GZ/ZIP version, the
+      ``SEARCH_ENGINE_HTTP_URL``, and ``FESS_DICTIONARY_PATH``. For the ZIP version, the
       equivalent settings are in ``bin/fess.in.sh``.
 
 3. **Customized Configuration Files**
@@ -222,7 +222,7 @@ Step 2: Stop Current Version
 
 Stop Fess and OpenSearch.
 
-The TAR.GZ/ZIP version does not include a stop script. If you started ``bin/fess`` with the
+The ZIP version does not include a stop script. If you started ``bin/fess`` with the
 ``-p`` option, stop it using the PID file::
 
     $ kill $(cat /path/to/fess/fess.pid)
@@ -245,7 +245,7 @@ Step 3: Install New Version
 
 The procedure varies depending on the installation method.
 
-TAR.GZ/ZIP Version
+ZIP Version
 ------------------
 
 1. Download and extract the new version::
@@ -335,7 +335,7 @@ upgrade it using the following procedure.
 
 .. note::
 
-   This procedure applies when you are managing OpenSearch manually on a TAR.GZ/ZIP or RPM/DEB
+   This procedure applies when you are managing OpenSearch manually on a ZIP or RPM/DEB
    installation. For the Docker version, pulling the new image in Step 3 updates OpenSearch and
    its plugins together, so this step is not required.
 
@@ -383,7 +383,7 @@ upgrade it using the following procedure.
 Step 5: Start New Version
 ==========================
 
-TAR.GZ/ZIP version::
+ZIP version::
 
     $ cd /path/to/fess-15.9.0
     $ ./bin/fess -d -p /path/to/fess-15.9.0/fess.pid
@@ -409,7 +409,7 @@ Step 6: Verify Operation
 
    Verify there are no errors.
 
-   TAR.GZ/ZIP version::
+   ZIP version::
 
        $ tail -f /path/to/fess/logs/fess.log
 
@@ -466,6 +466,43 @@ For major version upgrades, it is recommended to recreate the index.
 
    Re-indexing rebuilds the index with the new mapping, so it fails on an OpenSearch without the
    k-NN plugin. Review the notes in Step 4.
+
+Upgrading from 15.8 to 15.9
+===========================
+
+If you are upgrading from 15.8, the following three changes are not backward compatible.
+
+The Built-in Script Engine Changed from Groovy to JavaScript
+------------------------------------------------------------
+
+Up to 15.8 the built-in script engine was Groovy and ``job.default.script`` defaulted to
+``groovy``. In 15.9 the built-in engine is JavaScript and the default is ``javascript``. Groovy is
+no longer built in: it is provided by the ``fess-script-groovy`` plugin, which has to be installed
+from "System" → "Plugins" in the admin UI before a ``scriptType`` of ``groovy`` can be resolved.
+
+An existing scheduled job keeps the ``scriptType`` stored with it, so a job that was already saved
+as ``groovy`` still says ``groovy`` after the upgrade and needs that plugin in order to run. Jobs
+created after the upgrade get ``javascript``. Either install the plugin, or open each job under
+"System" → "Scheduler" and rewrite its script for the JavaScript engine. A JavaScript array
+literal is converted to a Java ``String[]`` automatically, so the ``as String[]`` casts of the
+Groovy form are dropped.
+
+::
+
+    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+``crawler.default.script`` Was Removed
+--------------------------------------
+
+``crawler.default.script`` no longer exists in ``fess_config.properties``. Remove it from your
+configuration; a value left under that name has no effect.
+
+The ``storage`` Crawl Protocol Was Removed
+------------------------------------------
+
+``storage`` is no longer accepted in ``crawler.file.protocols``; the shipped value is
+``file,smb,smb1,ftp,s3,gcs``. Use ``s3`` instead, and change any file crawling configuration whose
+path begins with ``storage:`` to an ``s3:`` path.
 
 15.9-Specific Migration Tasks
 =============================
@@ -625,7 +662,7 @@ the previous behaviour, restore the shipped default of ``true``.
 If You Changed the /api/v2 Configuration Keys
 ------------------------------------------------
 
-In 15.9, four configuration keys lost their ``api.v2.`` prefix. Their values, defaults and
+In 15.8.0, four configuration keys lost their ``api.v2.`` prefix. Their values, defaults and
 behaviour are unchanged, but **no backward-compatible alias is kept**: a setting left under its
 old name is ignored without any warning, and the shipped default takes effect instead.
 
@@ -633,7 +670,7 @@ old name is ignored without any warning, and the shipped default takes effect in
    :header-rows: 1
 
    * - Up to 15.7
-     - 15.9
+     - 15.8.0 and later
      - Default
    * - ``api.v2.chat.stream.keepalive.interval.ms``
      - ``api.chat.stream.keepalive.interval.ms``
@@ -734,7 +771,7 @@ contents::
    The uploaded ``system.properties`` is loaded into memory only and is not written back to a
    file, so its contents are lost when |Fess| is restarted. To restore it reliably, place the
    backed-up file directly in its proper location before starting |Fess| (``app/WEB-INF/conf/``
-   for the TAR.GZ/ZIP version, ``/etc/fess/`` for the RPM/DEB version).
+   for the ZIP version, ``/etc/fess/`` for the RPM/DEB version).
 
 .. note::
 

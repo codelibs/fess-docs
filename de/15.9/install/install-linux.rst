@@ -3,7 +3,7 @@ Installation unter Linux (Detaillierte Anleitung)
 ======================================================
 
 Diese Seite beschreibt die Installationsschritte von |Fess| in Linux-Umgebungen.
-Sie behandelt die Paketformate TAR.GZ, RPM und DEB.
+Sie behandelt die Paketformate ZIP, RPM und DEB.
 
 .. warning::
 
@@ -29,7 +29,7 @@ In Linux-Umgebungen können Sie aus folgenden Installationsmethoden wählen:
    * - Methode
      - Empfohlene Umgebung
      - Merkmale
-   * - TAR.GZ
+   * - ZIP
      - Entwicklungsumgebung, Umgebungen mit Anpassungsbedarf
      - Kann in beliebiges Verzeichnis entpackt werden
    * - RPM
@@ -73,7 +73,7 @@ Fügen Sie Folgendes zu ``/etc/security/limits.conf`` hinzu (ersetzen Sie ``open
 
    Bei den RPM-/DEB-Versionen wird das Limit für die Anzahl der Dateideskriptoren bereits in der systemd-Dienstdefinition festgelegt, sodass diese Einstellung nicht erforderlich ist.
 
-Installation mit TAR.GZ-Version
+Installation mit ZIP-Version
 ====================================
 
 Schritt 1: Installation von OpenSearch
@@ -152,12 +152,12 @@ Schritt 2: Installation von Fess
 
 1. Download und Entpacken von Fess
 
-   Laden Sie die TAR.GZ-Version von der `Download-Site <https://fess.codelibs.org/de/downloads.html>`__ herunter.
+   Laden Sie die ZIP-Version von der `Download-Site <https://fess.codelibs.org/de/downloads.html>`__ herunter.
 
    ::
 
-       $ wget https://github.com/codelibs/fess/releases/download/fess-15.9.0/fess-15.9.0.tar.gz
-       $ tar -xzf fess-15.9.0.tar.gz
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.9.0/fess-15.9.0.zip
+       $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
 2. Konfiguration von Fess
@@ -175,7 +175,7 @@ Schritt 2: Installation von Fess
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    Nach der Änderung::
 
@@ -276,7 +276,7 @@ Schritt 2: Installation von Fess
    Konfigurieren Sie die Verbindungsinformationen zu OpenSearch. Die Standardwerte sind wie folgt. Ändern Sie diese bei Bedarf::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -376,7 +376,7 @@ Schritt 2: Installation von Fess
    Konfigurieren Sie die Verbindungsinformationen zu OpenSearch. Die Standardwerte sind wie folgt. Ändern Sie diese bei Bedarf::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    .. note::
 
@@ -409,7 +409,7 @@ Die Startanleitung finden Sie unter :doc:`run`.
    - Konfigurationsdatei von OpenSearch (opensearch.yml)
    - Konfigurationsdatei von |Fess|
 
-     - TAR.GZ-Version: ``bin/fess.in.sh``
+     - ZIP-Version: ``bin/fess.in.sh``
      - RPM-Version: ``/etc/sysconfig/fess``
      - DEB-Version: ``/etc/default/fess``
 
@@ -417,7 +417,7 @@ Die Startanleitung finden Sie unter :doc:`run`.
 
    Überprüfen Sie, ob das in der Konfiguration angegebene Verzeichnis (``configsync.config_path`` / ``FESS_DICTIONARY_PATH``) existiert und die entsprechenden Berechtigungen gesetzt sind.
 
-   Bei der TAR.GZ-Version::
+   Bei der ZIP-Version::
 
        $ ls -ld /path/to/opensearch-3.8.0/data/config/
 

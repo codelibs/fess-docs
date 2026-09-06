@@ -213,7 +213,7 @@ To check running crawl status:
        tail -f /var/log/fess/fess-crawler.log
 
    .. note::
-      The above path is for RPM/DEB package installations. For zip/tar.gz deployments, logs are located under the ``logs/`` directory.
+      The above path is for RPM/DEB package installations. For ZIP deployments, logs are located under the ``logs/`` directory.
 
 Basic Configuration Items
 ==========================

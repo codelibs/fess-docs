@@ -24,26 +24,6 @@
 - **内容长度配置**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **组件配置**: ``app/WEB-INF/classes/crawler/container.xml``
 
-默认脚本
---------------------
-
-设置爬虫的默认脚本语言。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 40 40 20
-
-   * - 属性
-     - 说明
-     - 默认值
-   * - ``crawler.default.script``
-     - 爬虫脚本语言
-     - ``groovy``
-
-::
-
-    crawler.default.script=groovy
-
 HTTP 线程池
 ------------------
 
@@ -192,7 +172,7 @@ HTTP 爬虫的线程池配置。
      - ``http,https``
    * - ``crawler.file.protocols``
      - 文件爬取协议
-     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp,s3,gcs``
    * - ``crawler.crawling.data.encoding``
      - 爬取数据编码
      - ``UTF-8``
@@ -203,7 +183,7 @@ HTTP 爬虫的线程池配置。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,storage,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
     crawler.crawling.data.encoding=UTF-8
 
 环境变量参数

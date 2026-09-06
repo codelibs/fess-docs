@@ -14,7 +14,7 @@
 
 설치 방법에 따라 시작 절차가 다릅니다.
 
-TAR.GZ 버전의 경우
+ZIP 버전의 경우
 ------------------
 
 OpenSearch 시작
@@ -152,7 +152,7 @@ Docker Compose를 사용하여 시작::
 
 시작 로그를 확인하여 오류가 없는지 확인합니다.
 
-TAR.GZ/ZIP 버전::
+ZIP 버전::
 
     $ tail -f /path/to/fess-15.9.0/logs/fess.log
 
@@ -280,7 +280,7 @@ Fess의 검색 화면이 표시됩니다. 초기 상태에서는 크롤 설정�
 --------------------------
 
 포트 번호, JVM 힙 크기, OpenSearch 연결 URL 등의 설정은 환경 변수를 통해 변경할 수 있습니다.
-TAR.GZ 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버전은 ``/etc/default/fess`` 를 편집하십시오.
+ZIP 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버전은 ``/etc/default/fess`` 를 편집하십시오.
 변경 후 |Fess| 를 재시작할 필요가 있습니다.
 
 .. list-table::
@@ -339,7 +339,7 @@ TAR.GZ 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 
 중지 방법
 =========
 
-TAR.GZ/ZIP 버전의 경우
+ZIP 버전의 경우
 ----------------------
 
 Fess 중지
@@ -398,7 +398,7 @@ Docker 버전의 경우
 재시작 방법
 ===========
 
-TAR.GZ/ZIP 버전의 경우
+ZIP 버전의 경우
 ----------------------
 
 중지한 후 시작합니다.
@@ -443,7 +443,7 @@ Docker 버전의 경우
 
    포트 8080이 이미 사용되고 있는 경우 포트 번호를 변경하십시오.
 
-   - TAR.GZ 버전: ``bin/fess.in.sh`` 의 ``FESS_PORT`` 를 변경합니다
+   - ZIP 버전: ``bin/fess.in.sh`` 의 ``FESS_PORT`` 를 변경합니다
    - ZIP 버전(Windows): ``bin\fess.in.bat`` 에서 ``-Dfess.port=8080`` 을 직접 편집합니다
    - RPM 버전: ``/etc/sysconfig/fess`` 의 ``FESS_PORT`` 를 변경합니다
    - DEB 버전: ``/etc/default/fess`` 의 ``FESS_PORT`` 를 변경합니다

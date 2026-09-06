@@ -68,7 +68,7 @@ OpenSearch のスナップショット機能を使用して、インデックス
     }'
 
 .. note::
-   |Fess| の zip/tar.gz 版のデフォルト設定では、OpenSearch は 9201 ポートで起動します（ ``fess_config.properties`` の ``search_engine.http.url`` ）。RPM/DEB パッケージ版では、デフォルトで 9200 ポートに接続するよう設定されています（環境設定ファイル ``/etc/sysconfig/fess`` （RPM）または ``/etc/default/fess`` （DEB）の ``SEARCH_ENGINE_HTTP_URL`` ）。お使いの環境に合わせてポート番号を読み替えてください。
+   |Fess| の ZIP 版のデフォルト設定では、OpenSearch は 9201 ポートで起動します（ ``fess_config.properties`` の ``search_engine.http.url`` ）。RPM/DEB パッケージ版では、デフォルトで 9200 ポートに接続するよう設定されています（環境設定ファイル ``/etc/sysconfig/fess`` （RPM）または ``/etc/default/fess`` （DEB）の ``SEARCH_ENGINE_HTTP_URL`` ）。お使いの環境に合わせてポート番号を読み替えてください。
 
 **AWS S3リポジトリの場合:**
 
@@ -231,31 +231,31 @@ OpenSearch のインデックスとは別に、以下の設定ファイルもバ
      - インストール方法
      - 説明
    * - ``app/WEB-INF/conf/system.properties``
-     - zip/tar.gz
+     - ZIP
      - システム設定（全般設定）
    * - ``/etc/fess/system.properties``
      - RPM/DEB
      - システム設定（全般設定）
    * - ``app/WEB-INF/classes/fess_config.properties``
-     - zip/tar.gz
+     - ZIP
      - |Fess| の詳細設定
    * - ``/etc/fess/fess_config.properties``
      - RPM/DEB
      - |Fess| の詳細設定
    * - ``app/WEB-INF/classes/log4j2.xml``
-     - zip/tar.gz
+     - ZIP
      - ログ設定
    * - ``/usr/share/fess/app/WEB-INF/classes/log4j2.xml``
      - RPM/DEB
      - ログ設定
    * - ``app/WEB-INF/classes/fess_indices/``
-     - zip/tar.gz
+     - ZIP
      - インデックス定義ファイル
    * - ``/usr/share/fess/app/WEB-INF/classes/fess_indices/``
      - RPM/DEB
      - インデックス定義ファイル
    * - ``app/WEB-INF/thumbnails/``
-     - zip/tar.gz
+     - ZIP
      - サムネイル画像（必要に応じて）
    * - ``/var/lib/fess/thumbnails/``
      - RPM/DEB

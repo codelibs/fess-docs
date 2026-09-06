@@ -228,7 +228,7 @@ Descripción de Campos
      - Descripción de la configuración (máximo 1000 caracteres)
    * - ``paths``
      - Sí
-     - Ruta de inicio de rastreo (separadas por salto de línea si son múltiples). Se especifica con uno de los protocolos: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``storage:``, ``s3:`` o ``gcs:``
+     - Ruta de inicio de rastreo (separadas por salto de línea si son múltiples). Se especifica con uno de los protocolos: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:`` o ``gcs:``
    * - ``includedPaths``
      - No
      - Patrón de expresión regular para rutas a rastrear

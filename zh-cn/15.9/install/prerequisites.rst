@@ -65,7 +65,7 @@
 
 根据安装方法的不同，需要以下软件：
 
-TAR.GZ/ZIP/RPM/DEB 版
+ZIP/RPM/DEB 版
 ~~~~~~~~~~~~~~~~~~~~
 
 - **Java 21**: 推荐使用 `Eclipse Temurin <https://adoptium.net/temurin>`__
@@ -178,7 +178,7 @@ Docker 版
 
 确认系统要求后，请根据您的环境进行相应的安装：
 
-- :doc:`install-linux` - Linux (TAR.GZ/RPM/DEB) 安装
+- :doc:`install-linux` - Linux (ZIP/RPM/DEB) 安装
 - :doc:`install-windows` - Windows (ZIP) 安装
 - :doc:`install-docker` - Docker 安装
 - :doc:`install` - 安装方法概述

@@ -21,14 +21,21 @@ Unterstützte Skriptsprachen
    * - Sprache
      - Bezeichner
      - Beschreibung
+   * - JavaScript
+     - ``javascript``
+     - Die standardmäßig registrierte Skriptsprache. Ohne zusätzliches Plugin verfügbar
    * - Groovy
      - ``groovy``
-     - Die standardmäßig registrierte Skriptsprache. Java-kompatibel mit leistungsstarken Funktionen
+     - Wird vom Plugin ``fess-script-groovy`` bereitgestellt. Java-kompatibel mit leistungsstarken Funktionen
 
 .. note::
-   Das einzige standardmäßig in |Fess| registrierte Skript-Engine ist Groovy.
-   Die Standardskriptsprache ist ``groovy`` (``Constants.DEFAULT_SCRIPT``).
-   Alle Skriptbeispiele in dieser Dokumentation sind in Groovy-Syntax verfasst.
+   Die standardmäßig in |Fess| registrierte Skript-Engine ist JavaScript, und die
+   Standardskriptsprache ist ``javascript`` (``Constants.DEFAULT_SCRIPT``).
+   Groovy ist nicht mehr fest eingebaut: Installieren Sie das Plugin ``fess-script-groovy`` über
+   die Verwaltungsseite unter „System" → „Plugins", damit der Bezeichner ``groovy`` verfügbar wird.
+   Alle Skriptbeispiele auf dieser Seite sind in Groovy-Syntax verfasst; ihre Ausführung setzt
+   daher dieses Plugin voraus, andernfalls müssen sie für die JavaScript-Engine umgeschrieben
+   werden.
 
 Anwendungsfälle für Skripte
 ============================
