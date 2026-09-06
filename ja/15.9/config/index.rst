@@ -76,6 +76,7 @@
    :caption: スクリプティング
 
    scripting-overview
+   scripting-javascript
    scripting-groovy
 
 .. toctree::

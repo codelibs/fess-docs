@@ -24,6 +24,11 @@ Detailed crawler settings are configured in the following files:
 - **Content length configuration**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Component configuration**: ``app/WEB-INF/classes/crawler/container.xml``
 
+Default Script
+--------------
+
+``crawler.default.script`` was removed in |Fess| 15.9; each document boost rule now selects its own script type on the :doc:`../admin/boostdoc-guide` screen.
+
 HTTP Thread Pool
 ----------------
 

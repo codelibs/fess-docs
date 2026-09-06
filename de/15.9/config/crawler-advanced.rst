@@ -24,6 +24,11 @@ Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 - **Inhaltslängen-Konfiguration**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Komponenten-Konfiguration**: ``app/WEB-INF/classes/crawler/container.xml``
 
+Standard-Skriptsprache
+----------------------
+
+``crawler.default.script`` wurde in |Fess| 15.9 entfernt, und jede Dokument-Boosting-Regel wählt ihren Skripttyp jetzt einzeln auf der Seite :doc:`../admin/boostdoc-guide` aus.
+
 HTTP-Thread-Pool
 ------------------
 

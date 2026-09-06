@@ -42,6 +42,22 @@ Ersetzung
 
 Geben Sie die Zeichenkette an, durch die der übereinstimmende reguläre Ausdruck ersetzt werden soll.
 
+Beginnt die Ersetzungszeichenkette mit ``(Engine-Name):``, wird der Teil vor dem
+Doppelpunkt als Name einer Skript-Engine gelesen; stimmt er mit einer registrierten
+Engine überein, wird der restliche Teil von dieser Engine als Skript ausgewertet.
+``groovy:`` wählt beispielsweise die Groovy-Engine (erfordert das Plugin
+``fess-script-groovy``), ``javascript:`` (Aliase ``js:``, ``sai:``) wählt die
+JavaScript-Engine. Stimmt der Teil vor dem Doppelpunkt mit keiner registrierten
+Engine überein — etwa ``https://`` in einer gewöhnlichen Ersetzungszeichenkette —,
+wird die gesamte Zeichenkette nicht als Skript behandelt, sondern unverändert als
+regulärer Ersetzungsstring verwendet. Wird die Zeichenkette als Skript ausgewertet,
+stehen darin ``url`` (die zu transformierende URL-Zeichenkette) und ``matcher``
+(der ``java.util.regex.Matcher`` des regulären Ausdrucks) zur Verfügung.
+
+::
+
+    javascript:url.replace(/http:\/\//g, "https://")
+
 Prozesstyp
 ::::::::::
 

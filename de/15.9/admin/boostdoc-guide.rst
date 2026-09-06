@@ -35,13 +35,27 @@ Bedingung
 
 Geben Sie die Bedingung für Dokumente an, die höher positioniert werden sollen.
 Wenn Sie beispielsweise URLs mit https://www.n2sm.net/ höher anzeigen möchten, schreiben Sie url.matches("https://www.n2sm.net/.\*").
-Bedingungen können in Groovy geschrieben werden.
+Bedingungen werden in der Syntax der unter „Skripttyp" angegebenen Skript-Engine geschrieben.
 
 Boost-Ausdruck
 ::::::::::::::
 
 Geben Sie den Gewichtungswert für das Dokument an.
-Ausdrücke können in Groovy geschrieben werden.
+Ausdrücke werden in der Syntax der unter „Skripttyp" angegebenen Skript-Engine geschrieben.
+
+Skripttyp
+:::::::::
+
+Geben Sie die Skript-Engine an, mit der die Bedingung und der Boost-Ausdruck ausgewertet werden.
+Neue Konfigurationen sind mit ``javascript`` vorausgefüllt. Für ``groovy`` ist das Plugin
+``fess-script-groovy`` erforderlich. Bleibt das Feld leer, werden die Ausdrücke als Groovy ausgewertet.
+
+.. warning::
+
+   Schreiben Sie unter JavaScript die Bedingung und den Boost-Ausdruck als reine Ausdrücke ohne
+   abschließendes Semikolon. Text, der sich nur als Block von Anweisungen parsen lässt, wird zu
+   ``null`` ausgewertet, sofern er kein explizites ``return`` enthält. Siehe
+   :ref:`javascript-statement-null` (in :doc:`../config/scripting-javascript`).
 
 Sortierreihenfolge
 ::::::::::::::::::

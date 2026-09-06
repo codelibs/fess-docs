@@ -55,11 +55,27 @@ Parameter
 
 Geben Sie Parameter für den Datenspeicher an.
 
+Der Parameter ``script_type`` legt fest, mit welcher Skript-Engine das nachfolgende
+Skript ausgewertet wird. Neue Konfigurationen sind mit ``script_type=javascript``
+vorausgefüllt. Ist ``script_type`` nicht angegeben, wird das Skript als Groovy
+ausgewertet.
+
 Skript
 ::::::
 
 Geben Sie an, in welchen Feldern die vom Datenspeicher abgerufenen Werte festgelegt werden sollen.
-Ausdrücke können in Groovy geschrieben werden.
+Ausdrücke werden in der Syntax der mit ``script_type`` ausgewählten Skript-Engine
+geschrieben (standardmäßig JavaScript).
+
+.. warning::
+
+   Schreiben Sie unter JavaScript jede Zeile als reinen Ausdruck ohne abschließendes Semikolon.
+   Eine Zeile, die sich nur als Block von Anweisungen parsen lässt — alles mit abschließendem
+   Semikolon oder eine ``let`` / ``const``-Deklaration — wird zu ``null`` ausgewertet, sofern
+   sie kein explizites ``return`` enthält, und ein Mapping, das zu ``null`` ausgewertet wird,
+   setzt dieses Feld schlicht nicht. Es gibt weder einen Fehler noch eine Logzeile; das einzige
+   Symptom ist ein still leer bleibendes Feld. Siehe :ref:`javascript-statement-null`
+   (in :doc:`../config/scripting-javascript`).
 
 Boost-Wert
 ::::::::::
@@ -182,7 +198,7 @@ Ein Beispiel für die Skriptkonfiguration ist wie folgt:
 
 Parameter haben das Format „Schlüssel=Wert". Die Schlüsselerklärungen sind wie folgt:
 
-Die Werte werden in Groovy geschrieben.
+Die Werte werden in der Syntax der mit ``script_type`` ausgewählten Skript-Engine geschrieben.
 Schließen Sie Zeichenketten in doppelte Anführungszeichen ein. Durch Zugriff auf den Datenbank-Spaltennamen wird der entsprechende Wert abgerufen.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

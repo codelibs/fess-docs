@@ -42,6 +42,22 @@ Remplacement
 
 Spécifie la chaîne de caractères pour remplacer l'expression régulière correspondante.
 
+Lorsque la chaîne de remplacement commence par ``(nom du moteur):``, la partie avant les
+deux-points est lue comme le nom d'un moteur de script ; si elle correspond à un moteur
+enregistré, le reste de la chaîne est évalué en tant que script par ce moteur. Par
+exemple, ``groovy:`` sélectionne le moteur Groovy (nécessite le plugin
+``fess-script-groovy``), et ``javascript:`` (alias ``js:``, ``sai:``) sélectionne le
+moteur JavaScript. Si la partie avant les deux-points ne correspond à aucun moteur
+enregistré — ``https://`` dans une chaîne de remplacement ordinaire, par exemple —,
+la chaîne entière n'est pas traitée comme un script et est utilisée telle quelle comme
+simple chaîne de remplacement d'expression régulière. Lorsque la chaîne est évaluée en
+tant que script, ``url`` représente la chaîne URL à transformer et ``matcher``
+représente le ``java.util.regex.Matcher`` de l'expression régulière.
+
+::
+
+    javascript:url.replace(/http:\/\//g, "https://")
+
 Type de processus
 ::::::::::::::::::
 

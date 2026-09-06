@@ -76,6 +76,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    :caption: Scripting
 
    scripting-overview
+   scripting-javascript
    scripting-groovy
 
 .. toctree::

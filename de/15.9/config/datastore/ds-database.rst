@@ -167,7 +167,9 @@ Parameterliste
      - Verzögerung in Millisekunden zwischen der Verarbeitung jeder Zeile. Standard: 0
    * - ``script_type``
      - Nein
-     - Skript-Engine-Typ. Standard: groovy
+     - Skript-Engine-Typ. Eine neue Konfiguration ist mit ``javascript`` vorbelegt; eine
+       Konfiguration ohne hinterlegten Wert wird als ``groovy`` behandelt. Siehe
+       :doc:`ds-overview` für Details.
 
 .. note::
    Hängt eine Query, gibt das Stoppen des Jobs den Crawler-Thread nicht frei.

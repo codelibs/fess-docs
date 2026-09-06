@@ -24,6 +24,11 @@
 - **コンテンツ長設定**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **コンポーネント設定**: ``app/WEB-INF/classes/crawler/container.xml``
 
+デフォルトスクリプト
+--------------------
+
+|Fess| 15.9 で ``crawler.default.script`` プロパティは廃止されたため、ドキュメントブーストの各ルールは :doc:`../admin/boostdoc-guide` 画面でスクリプトの種類を個別に選択します。
+
 HTTPスレッドプール
 ------------------
 

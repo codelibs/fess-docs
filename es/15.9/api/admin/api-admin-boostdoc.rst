@@ -11,14 +11,21 @@ coincidan con ciertas condiciones y hacer que aparezcan con mayor facilidad en l
 superiores de los resultados de búsqueda.
 
 El impulso se aplica a cada documento en el momento de la indexación (durante el rastreo).
-La condición (``urlExpr``) y el valor de impulso (``boostExpr``) se evalúan ambos como expresiones Groovy.
+La condición (``urlExpr``) y el valor de impulso (``boostExpr``) se evalúan con el motor de scripting
+especificado en el campo ``scriptType``. En ``scriptType`` puede indicarse ``javascript`` o ``groovy``
+(este último requiere el plugin ``fess-script-groovy``). La pantalla de creación del panel de administración
+rellena ``scriptType`` con ``javascript``, pero si esta API omite ``scriptType`` en el cuerpo de la solicitud,
+no se rellena automáticamente y las expresiones se evalúan como Groovy.
 Las reglas múltiples se evalúan en orden ascendente según ``sortOrder``, y solo se aplica el valor de
 impulso de la primera regla cuya condición coincida (una vez encontrada una regla que coincida,
 las reglas siguientes no se evalúan).
 
 .. note::
 
-   En el panel de administración, ``urlExpr`` se muestra como "Condición" y ``boostExpr`` como "Expresión de valor de impulso".
+   En el panel de administración, ``urlExpr`` se muestra como "Condición", ``boostExpr`` como "Expresión de valor
+   de impulso" y ``scriptType`` como "Tipo de Script". ``scriptType`` solo aparece en los cuerpos de solicitud y
+   respuestas de creación/actualización/obtención (lista y detalle), no en los parámetros de filtro de la lista
+   (``urlExpr``, ``boostExpr``).
    Para más detalles sobre los elementos de configuración, consulte :doc:`../../admin/boostdoc-guide`.
 
 URL Base
@@ -111,6 +118,7 @@ Respuesta
             "id": "boostdoc_id_1",
             "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
             "boostExpr": "3.0",
+            "scriptType": "javascript",
             "sortOrder": 1,
             "versionNo": 1
           }
@@ -146,6 +154,7 @@ Respuesta
           "id": "boostdoc_id_1",
           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
           "boostExpr": "3.0",
+          "scriptType": "javascript",
           "sortOrder": 1,
           "versionNo": 1
         }
@@ -171,6 +180,7 @@ Cuerpo de la Solicitud
     {
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "5.0",
+      "scriptType": "javascript",
       "sortOrder": 0
     }
 
@@ -186,10 +196,13 @@ Descripción de Campos
      - Descripción
    * - ``urlExpr``
      - Sí
-     - Expresión de condición. Expresión Groovy que determina los documentos objetivo del impulso y devuelve ``Boolean``. Corresponde a "Condición" en el panel de administración (máximo 10000 caracteres).
+     - Expresión de condición. Expresión de script que determina los documentos objetivo del impulso y devuelve ``Boolean``. Corresponde a "Condición" en el panel de administración (máximo 10000 caracteres).
    * - ``boostExpr``
      - Sí
-     - Expresión de valor de impulso. Expresión Groovy que devuelve el valor de impulso (numérico). También se puede especificar un valor fijo como ``3.0``. Corresponde a "Expresión de valor de impulso" en el panel de administración (máximo 10000 caracteres).
+     - Expresión de valor de impulso. Expresión de script que devuelve el valor de impulso (numérico). También se puede especificar un valor fijo como ``3.0``. Corresponde a "Expresión de valor de impulso" en el panel de administración (máximo 10000 caracteres).
+   * - ``scriptType``
+     - No
+     - Motor de scripting utilizado para evaluar ``urlExpr`` y ``boostExpr``. Puede ser ``javascript`` o ``groovy`` (requiere el plugin ``fess-script-groovy``). Corresponde a "Tipo de Script" en el panel de administración (máximo 100 caracteres). Si se omite, las expresiones se evalúan como Groovy.
    * - ``sortOrder``
      - Sí
      - Orden de aplicación. Las reglas se evalúan en orden ascendente y se aplica el valor de impulso de la primera regla cuya condición coincida (valor inicial del formulario: 0; entero mayor o igual a 0).
@@ -227,6 +240,7 @@ Cuerpo de la Solicitud
       "id": "existing_boostdoc_id",
       "urlExpr": "url.startsWith(\"https://important.example.com/\")",
       "boostExpr": "10.0",
+      "scriptType": "javascript",
       "sortOrder": 0,
       "versionNo": 1
     }
@@ -270,10 +284,12 @@ Respuesta
 Acerca de las Expresiones de Condición y de Valor de Impulso
 =============================================================
 
-``urlExpr`` (condición) y ``boostExpr`` (expresión de valor de impulso) se evalúan ambas como expresiones Groovy.
+``urlExpr`` (condición) y ``boostExpr`` (expresión de valor de impulso) se evalúan con el motor de scripting
+especificado en ``scriptType`` (valor predeterminado: Groovy; solo la pantalla de creación del panel de
+administración rellena ``javascript``).
 Dentro de la expresión, se pueden referenciar los valores de campo del documento a indexar como variables con el nombre del campo.
 
-- ``urlExpr`` debe devolver ``Boolean`` (ejemplo: ``url.startsWith("https://docs.example.com/")``). Una simple cadena de expresión regular (ejemplo: ``.*docs\.example\.com.*``) no devuelve ``Boolean`` como expresión Groovy y por lo tanto no funciona como condición. Para usar expresiones regulares, utilice ``String#matches`` de Groovy.
+- ``urlExpr`` debe devolver ``Boolean`` (ejemplo: ``url.startsWith("https://docs.example.com/")``). Una simple cadena de expresión regular (ejemplo: ``.*docs\.example\.com.*``) no devuelve ``Boolean`` como expresión de script y por lo tanto no funciona como condición. Para usar expresiones regulares, utilice ``String#matches`` (disponible con la misma notación tanto en Groovy como en JavaScript).
 - ``boostExpr`` debe devolver un valor numérico. El resultado se convierte a ``float`` y el impulso se aplica solo si es mayor que 0.
 
 .. note::
@@ -281,7 +297,7 @@ Dentro de la expresión, se pueden referenciar los valores de campo del document
    Principales variables de campo disponibles dentro de la expresión: ``url``, ``title``, ``content``, ``content_length``, ``last_modified``, entre otros.
    ``click_count`` y ``favorite_count`` están disponibles cuando ``indexer.click.count.enabled`` /
    ``indexer.favorite.count.enabled`` están habilitados (ambos habilitados por defecto).
-   La sintaxis de cálculo de fechas de OpenSearch como ``now - 7d`` no se puede usar en Groovy.
+   La sintaxis de cálculo de fechas de OpenSearch como ``now - 7d`` no se puede usar ni en Groovy ni en JavaScript.
 
 Ejemplos de Expresión de Condición (``urlExpr``)
 -------------------------------------------------
@@ -295,7 +311,7 @@ Ejemplos de Expresión de Condición (``urlExpr``)
    * - ``url.startsWith("https://docs.example.com/")``
      - Aplica a documentos cuya URL comienza con la URL especificada
    * - ``url.matches("https://www\\.example\\.com/.*")``
-     - Evalúa la URL mediante expresión regular (``String#matches`` de Groovy)
+     - Evalúa la URL mediante expresión regular (``String#matches``)
    * - ``title.contains("Notas de la version")``
      - Aplica a documentos que contienen una palabra específica en el título
 

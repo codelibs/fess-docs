@@ -24,6 +24,11 @@
 - **内容长度配置**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **组件配置**: ``app/WEB-INF/classes/crawler/container.xml``
 
+默认脚本
+--------------------
+
+``crawler.default.script`` 属性已在 |Fess| 15.9 中移除，文档提升的每条规则现在可在 :doc:`../admin/boostdoc-guide` 页面单独选择脚本类型。
+
 HTTP 线程池
 ------------------
 

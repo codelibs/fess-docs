@@ -524,7 +524,9 @@ Skript
 
 Im Feld „Skript" wird das Mapping im Format ``linke Seite=rechte Seite``
 angegeben. Die linke Seite ist der Indexfeldname, die rechte Seite ein Skript
-(standardmäßig Groovy), das auf ein Feld des Quelldatensatzes verweist. Das
+(JavaScript bei einer neu erstellten Konfiguration; eine Konfiguration ohne
+hinterlegten Skripttyp wird als Groovy behandelt), das auf ein Feld des
+Quelldatensatzes verweist. Das
 folgende Beispiel gilt für den Fall, dass der Quelldatensatz die Felder
 ``url`` / ``title`` / ``content`` / ``updated_at`` / ``content_type`` besitzt.
 

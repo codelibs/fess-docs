@@ -24,6 +24,11 @@ La configuration détaillée du robot d'indexation s'effectue dans les fichiers 
 - **Configuration de la longueur du contenu** : ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Configuration des composants** : ``app/WEB-INF/classes/crawler/container.xml``
 
+Script par défaut
+--------------------
+
+La propriété ``crawler.default.script`` a été supprimée dans |Fess| 15.9, et chaque règle de boost de document sélectionne désormais son propre type de script sur l'écran :doc:`../admin/boostdoc-guide`.
+
 Pool de threads HTTP
 --------------------
 

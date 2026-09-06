@@ -277,6 +277,9 @@ Campos disponibles
   objeto JSON
 - ``<padre>.<hijo>`` - Campo de un objeto anidado
 - ``<array>[<índice>]`` - Elemento de un array
+- ``<array>.<método>`` - Métodos de la ``java.util.List`` recibida, como ``size()`` .
+  Los métodos de array de JavaScript como ``join()`` y ``map()`` **no** están
+  disponibles sobre ella (consulte "Unión de arrays")
 
 .. note::
 
@@ -383,6 +386,75 @@ Parámetros:
     max_depth=3
     include_pattern=.*\.jsonl
     file_encoding=UTF-8
+
+Uso avanzado de scripts
+========================
+
+Procesamiento condicional
+--------------------------
+
+Cada campo se evalúa como una expresión independiente. Para valores condicionales, utilice el operador ternario:
+
+::
+
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
+
+Unión de arrays
+----------------
+
+::
+
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   Un array JSON se pasa al script como ``java.util.List`` y un objeto JSON anidado como
+   ``java.util.Map`` , no como un array ni un objeto de JavaScript. Por tanto los métodos de
+   array de JavaScript no existen sobre ellos: ``tags.join(", ")`` falla con
+   ``TypeError: tags.join is not a function`` y el campo se descarta. Utilice
+   ``java.lang.String.join()`` para unir una lista de cadenas, o convierta la lista en un array
+   de JavaScript con ``Java.from()`` cuando necesite ``map()`` y los demás métodos de array.
+   El acceso por índice ( ``categories[0]`` ) y el acceso a propiedades de un objeto anidado
+   ( ``.name`` ) los proporciona la interoperabilidad con Java y funcionan tal cual.
+
+Configuración de valores predeterminados
+-----------------------------------------
+
+::
+
+    url="https://example.com/item/" + id
+    title=title || "Sin titulo"
+    content=description || summary || "Sin descripcion"
+    price=price || 0
+
+Formato de fechas
+------------------
+
+::
+
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
+
+Procesamiento de números
+-------------------------
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Solución de problemas
 =====================

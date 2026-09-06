@@ -260,6 +260,9 @@ JSON 오브젝트 최상위 레벨의 필드는 스크립트 내에서 **접두�
 - ``<필드명>`` - JSON 오브젝트 최상위 레벨의 필드를 이름으로 직접 참조합니다
 - ``<부모>.<자식>`` - 중첩된 오브젝트의 필드
 - ``<배열>[<인덱스>]`` - 배열 요소
+- ``<배열>.<메서드>`` - 전달되는 ``java.util.List`` 의 메서드( ``size()`` 등).
+  ``join()`` , ``map()`` 등의 JavaScript 배열 메서드는 사용할 수 **없습니다**
+  ("배열 결합" 참조)
 
 .. note::
 
@@ -363,6 +366,74 @@ API 응답을 저장한 파일
     max_depth=3
     include_pattern=.*\.jsonl
     file_encoding=UTF-8
+
+스크립트 고급 사용 예
+=====================
+
+조건부 처리
+-----------
+
+각 필드는 독립된 식으로 평가됩니다. 조건부 값에는 삼항 연산자를 사용합니다:
+
+::
+
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
+
+배열 결합
+---------
+
+::
+
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   JSON 배열은 스크립트에 ``java.util.List`` 로, 중첩된 JSON 오브젝트는 ``java.util.Map`` 으로
+   전달됩니다. JavaScript의 배열이나 오브젝트가 아니므로 JavaScript 배열 메서드는 존재하지 않으며,
+   ``tags.join(", ")`` 는 ``TypeError: tags.join is not a function`` 으로 실패하고 해당 필드는
+   등록되지 않습니다. 문자열 리스트를 연결할 때는 ``java.lang.String.join()`` 을 사용하고,
+   ``map()`` 등의 배열 메서드가 필요할 때는 ``Java.from()`` 으로 JavaScript 배열로 변환하십시오.
+   인덱스 접근( ``categories[0]`` )과 중첩 오브젝트의 프로퍼티 접근( ``.name`` )은 Java 상호
+   운용성으로 제공되므로 기재된 대로 동작합니다.
+
+기본값 설정
+-----------
+
+::
+
+    url="https://example.com/item/" + id
+    title=title || "제목 없음"
+    content=description || summary || "설명 없음"
+    price=price || 0
+
+날짜 포맷
+---------
+
+::
+
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
+
+숫자 처리
+---------
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 문제 해결
 =========

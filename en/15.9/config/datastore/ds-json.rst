@@ -283,6 +283,9 @@ Available Fields
   directly by name
 - ``<parent>.<child>`` - A field of a nested object
 - ``<array>[<index>]`` - An array element
+- ``<array>.<method>`` - Methods of the bound ``java.util.List`` , such as ``size()`` .
+  JavaScript array methods such as ``join()`` and ``map()`` are **not** available on it
+  (see "Joining Arrays")
 
 .. note::
 
@@ -390,6 +393,75 @@ Parameters:
     max_depth=3
     include_pattern=.*\.jsonl
     file_encoding=UTF-8
+
+Advanced Script Examples
+========================
+
+Conditional Processing
+----------------------
+
+Each field is evaluated as an independent expression. Use ternary operators for conditional values:
+
+::
+
+    url=status == "published" ? "https://example.com/product/" + id : null
+    title=status == "published" ? name : null
+    content=status == "published" ? description : null
+    price=status == "published" ? price : null
+
+Joining Arrays
+--------------
+
+::
+
+    url="https://example.com/article/" + id
+    title=title
+    content=content
+    tags=tags != null ? java.lang.String.join(", ", tags) : ""
+    categories=categories != null ? Java.from(categories).map(c => c.name).join(", ") : ""
+
+.. note::
+
+   A JSON array is bound to the script as a ``java.util.List`` and a nested JSON object as a
+   ``java.util.Map`` - not as a JavaScript array or object. The JavaScript array methods
+   therefore do not exist on them: ``tags.join(", ")`` fails with
+   ``TypeError: tags.join is not a function`` and the field is dropped. Use
+   ``java.lang.String.join()`` to join a list of strings, or convert the list into a JavaScript
+   array with ``Java.from()`` when you need ``map()`` and the other array methods.
+   Index access ( ``categories[0]`` ) and property access on a nested object ( ``.name`` )
+   are provided by Java interoperability and work as written.
+
+Setting Default Values
+----------------------
+
+::
+
+    url="https://example.com/item/" + id
+    title=title || "Untitled"
+    content=description || summary || "No description"
+    price=price || 0
+
+Date Formatting
+---------------
+
+::
+
+    url="https://example.com/post/" + id
+    title=title
+    content=body
+    created=created_at
+    last_modified=updated_at
+
+Numeric Processing
+------------------
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    price=parseFloat(price)
+    stock=parseInt(stock_quantity, 10)
 
 Troubleshooting
 ================

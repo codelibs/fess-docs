@@ -55,11 +55,25 @@ Parameters
 
 Specifies parameters related to the data store.
 
+The ``script_type`` parameter selects the scripting engine used to evaluate the
+Script field below. New configurations are prefilled with ``script_type=javascript``.
+If ``script_type`` is not specified, the script is evaluated as Groovy.
+
 Script
 ::::::
 
 Specifies which fields to assign values retrieved from the data store.
-Expressions can be written in Groovy.
+Expressions are written in the syntax of the scripting engine selected by the
+``script_type`` parameter above (JavaScript by default).
+
+.. warning::
+
+   Under JavaScript, write each line as a bare expression with no trailing semicolon. A line
+   that can only be parsed as a block of statements — anything with a trailing semicolon, or a
+   ``let`` / ``const`` declaration — evaluates to ``null`` unless it contains an explicit
+   ``return``, and a mapping that evaluates to ``null`` simply does not set that field. There
+   is no error and no log line; the only symptom is a field that quietly goes empty. See
+   :ref:`javascript-statement-null` (in :doc:`../config/scripting-javascript`).
 
 Boost Value
 :::::::::::
@@ -181,7 +195,7 @@ An example script configuration is as follows:
 
 Parameters are in "key=value" format. Key descriptions are as follows:
 
-Values are written in Groovy.
+Values are written in the syntax of the scripting engine selected by ``script_type``.
 Enclose strings in double quotation marks. Access database column names to retrieve their values.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

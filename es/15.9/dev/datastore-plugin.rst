@@ -540,7 +540,9 @@ Script
 
 En el campo «Script» se describe el mapeo con el formato
 ``lado izquierdo=lado derecho``. El lado izquierdo es el nombre del campo
-de índice, y el lado derecho es un script (Groovy de forma predeterminada)
+de índice, y el lado derecho es un script (JavaScript en una configuración
+recién creada; una configuración que no tiene registrado un tipo de script se
+trata como Groovy)
 que referencia un campo del registro de origen. A continuación se muestra
 un ejemplo para el caso en que el registro de origen tiene los campos
 ``url``, ``title``, ``content``, ``updated_at`` y ``content_type``.

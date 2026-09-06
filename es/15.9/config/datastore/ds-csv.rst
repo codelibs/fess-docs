@@ -203,7 +203,7 @@ Campos disponibles
 
 .. note::
 
-   Si el nombre de columna contiene caracteres inválidos como identificadores de Groovy (espacios,
+   Si el nombre de columna contiene caracteres inválidos como identificadores de script (espacios,
    guiones, etc.), no se puede referenciar por nombre de columna. En ese caso, use ``cell<N>``.
 
 Detalles del formato CSV

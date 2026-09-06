@@ -55,11 +55,24 @@
 
 指定与数据存储相关的参数。
 
+``script_type`` 参数用于指定对下方脚本求值所使用的脚本引擎。
+新建配置时会预填 ``script_type=javascript`` 。
+如果未指定 ``script_type`` ,脚本将按 Groovy 求值。
+
 脚本
 ::::::::
 
 指定如何将从数据存储获取的值设置到哪些字段。
-表达式可以使用Groovy编写。
+表达式使用上方 ``script_type`` 参数所指定脚本引擎的语法编写
+（默认使用 JavaScript）。
+
+.. warning::
+
+   在 JavaScript 中，请将每一行写成不带末尾分号的纯表达式。只能解析为语句块的行（带末尾分号
+   的内容，或 ``let`` / ``const`` 声明等），除非包含显式的 ``return`` ，否则其求值结果为
+   ``null`` ；而求值为 ``null`` 的映射只是不设置该字段而已。既不会报错也不会输出日志行，
+   除了字段悄然变空之外没有任何症状。请参阅 :ref:`javascript-statement-null`
+   （ :doc:`../config/scripting-javascript` ）。
 
 权重值
 ::::::::
@@ -182,7 +195,7 @@ DatabaseDataStore
 
 参数采用"键=值"格式。键的说明如下。
 
-值的部分使用Groovy编写。
+值的部分使用 ``script_type`` 参数所指定脚本引擎的语法编写。
 字符串请用双引号括起来。通过数据库列名访问即可获取其值。
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|

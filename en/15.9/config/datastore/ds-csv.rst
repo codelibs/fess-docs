@@ -202,7 +202,7 @@ Available Fields
 
 .. note::
 
-   If a column name contains characters that are invalid as a Groovy identifier,
+   If a column name contains characters that are invalid as a script identifier,
    such as spaces or hyphens, the column cannot be referenced by name.
    Use ``cell<N>`` instead.
 
