@@ -2,13 +2,13 @@
 Conector de Base de Datos (Búsqueda en Bases de Datos)
 ======================================================
 
-Descripcion General
+Descripción General
 ===================
 
 El conector de base de datos permite registrar en el índice de |Fess| los registros de bases de datos relacionales compatibles con JDBC (MySQL, PostgreSQL, Oracle, SQL Server, etc.), haciendo posible la búsqueda en bases de datos (búsqueda de texto completo sobre el contenido de la base de datos). Cada columna obtenida mediante una sentencia SELECT se asigna a un campo de búsqueda durante el registro.
 
 El conector de base de datos proporciona funcionalidad para obtener datos de bases de datos
-relacionales compatibles con JDBC y registrarlos en el indice de |Fess|.
+relacionales compatibles con JDBC y registrarlos en el índice de |Fess|.
 
 Esta funcionalidad requiere el plugin ``fess-ds-db``.
 
@@ -30,18 +30,18 @@ Requisitos Previos
 1. Se requiere instalar el plugin ``fess-ds-db``
 2. Se requiere el controlador JDBC correspondiente a la base de datos de destino
 3. Se requiere acceso de lectura a la base de datos
-4. Para grandes volumenes de datos, es importante un diseno de consultas apropiado
+4. Para grandes volúmenes de datos, es importante un diseño de consultas apropiado
 
-Instalacion del Plugin
+Instalación del Plugin
 ----------------------
 
-Metodo 1: Instalar desde la consola de administracion
+Método 1: Instalar desde la consola de administración
 
 1. Abrir "Sistema" -> "Plugins"
 2. Subir el archivo JAR
 3. Reiniciar |Fess|
 
-Metodo 2: Colocar el archivo JAR directamente
+Método 2: Colocar el archivo JAR directamente
 
 ::
 
@@ -53,12 +53,12 @@ Metodo 2: Colocar el archivo JAR directamente
     # o bien
     cp fess-ds-db-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
-Instalacion del Controlador JDBC
+Instalación del Controlador JDBC
 ---------------------------------
 
-El controlador JDBC no se incluye en el plugin. Obtenga por separado el controlador correspondiente a su base de datos y coloquelo usted mismo.
+El controlador JDBC no se incluye en el plugin. Obtenga por separado el controlador correspondiente a su base de datos y colóquelo usted mismo.
 
-El rastreo del almacen de datos se ejecuta en el proceso del rastreador, por lo que el controlador debe estar en el **classpath del proceso del rastreador**. Sirve cualquiera de estos directorios:
+El rastreo del almacén de datos se ejecuta en el proceso del rastreador, por lo que el controlador debe estar en el **classpath del proceso del rastreador**. Sirve cualquiera de estos directorios:
 
 - ``app/WEB-INF/lib/``
 - ``app/WEB-INF/env/crawler/lib/``
@@ -70,18 +70,18 @@ El rastreo del almacen de datos se ejecuta en el proceso del rastreador, por lo 
     # o bien
     cp mysql-connector-j-9.x.x.jar /usr/share/fess/app/WEB-INF/lib/
 
-Despues de colocar el controlador JDBC, reinicie |Fess| para cargarlo.
+Después de colocar el controlador JDBC, reinicie |Fess| para cargarlo.
 
 .. note::
    Cuando falta el controlador, el rastreo falla con el mensaje
    ``The JDBC driver ... is not on the crawler classpath.``
 
-Metodo de Configuracion
+Método de Configuración
 =======================
 
-Configure desde la consola de administracion en "Rastreador" -> "Almacen de Datos" -> "Crear Nuevo".
+Configure desde la consola de administración en "Rastreador" -> "Almacén de Datos" -> "Crear Nuevo".
 
-Configuracion Basica
+Configuración Básica
 --------------------
 
 .. list-table::
@@ -89,7 +89,7 @@ Configuracion Basica
    :widths: 25 75
 
    * - Elemento
-     - Ejemplo de Configuracion
+     - Ejemplo de Configuración
    * - Nombre
      - Products Database
    * - Nombre del Manejador
@@ -97,7 +97,7 @@ Configuracion Basica
    * - Habilitado
      - Activado
 
-Configuracion de Parametros
+Configuración de Parámetros
 ----------------------------
 
 Ejemplo MySQL/MariaDB:
@@ -120,22 +120,22 @@ Ejemplo PostgreSQL:
     password=your_password
     sql=SELECT id, title, content, url, updated_at FROM articles WHERE deleted = false
 
-Lista de Parametros
+Lista de Parámetros
 ~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 20 10 70
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``driver``
      - Si
      - Nombre de la clase del controlador JDBC (si no se especifica, se produce ``DataStoreException``)
    * - ``url``
      - Si
-     - URL de conexion JDBC (obligatorio para la conexion)
+     - URL de conexión JDBC (obligatorio para la conexión)
    * - ``sql``
      - Si
      - Consulta SQL para obtener datos (si no se especifica, se produce ``DataStoreException``)
@@ -144,25 +144,25 @@ Lista de Parametros
      - Nombre de usuario de la base de datos
    * - ``password``
      - No
-     - Contrasena de la base de datos
+     - Contraseña de la base de datos
    * - ``fetch_size``
      - No
-     - Tamano de recuperacion JDBC. ``MIN_VALUE`` indica a MySQL que lea el conjunto de resultados fila a fila; otros controladores rechazan los valores negativos y el rastreo continua con el valor predeterminado del controlador tras emitir una advertencia. Los valores negativos o no numericos se notifican y se ignoran
+     - Tamaño de recuperación JDBC. ``MIN_VALUE`` indica a MySQL que lea el conjunto de resultados fila a fila; otros controladores rechazan los valores negativos y el rastreo continúa con el valor predeterminado del controlador tras emitir una advertencia. Los valores negativos o no numéricos se notifican y se ignoran
    * - ``query_timeout``
      - No
-     - Tiempo de espera de la consulta en segundos. ``0`` significa sin limite (el valor predeterminado de JDBC). Si el parametro no se especifica, no se establece ningun tiempo de espera
+     - Tiempo de espera de la consulta en segundos. ``0`` significa sin límite (el valor predeterminado de JDBC). Si el parámetro no se especifica, no se establece ningún tiempo de espera
    * - ``default_mimetype``
      - No
      - Tipo MIME predeterminado utilizado al extraer contenido de columnas BLOB o binarias
    * - ``column_label.mimetype``
      - No
-     - Nombre de la columna que contiene el tipo MIME utilizado para la extraccion de columnas BLOB o binarias (ej. ``column_label.mimetype=content_type``)
+     - Nombre de la columna que contiene el tipo MIME utilizado para la extracción de columnas BLOB o binarias (ej. ``column_label.mimetype=content_type``)
    * - ``column_label.filename``
      - No
-     - Nombre de la columna que contiene el nombre de archivo utilizado para la extraccion de columnas BLOB o binarias (el tipo MIME se infiere a partir de la extension)
+     - Nombre de la columna que contiene el nombre de archivo utilizado para la extracción de columnas BLOB o binarias (el tipo MIME se infiere a partir de la extensión)
    * - ``info.*``
      - No
-     - Propiedades adicionales de conexion JDBC (ej. ``info.ssl=true``). La clave sin el prefijo ``info.`` se pasa al controlador JDBC
+     - Propiedades adicionales de conexión JDBC (ej. ``info.ssl=true``). La clave sin el prefijo ``info.`` se pasa al controlador JDBC
    * - ``readInterval``
      - No
      - Retardo en milisegundos entre el procesamiento de cada fila. Predeterminado: 0
@@ -176,10 +176,10 @@ Lista de Parametros
    llamada bloqueada dentro del controlador. Establezca ``query_timeout`` para las consultas
    que puedan tardar mucho.
 
-Configuracion de Script
+Configuración de Script
 ------------------------
 
-Mapee los nombres de columnas SQL a campos del indice:
+Mapee los nombres de columnas SQL a campos del índice:
 
 ::
 
@@ -191,26 +191,26 @@ Mapee los nombres de columnas SQL a campos del indice:
 Campos disponibles:
 
 - ``<nombre_columna>`` - Columnas de resultado de la consulta SQL (se accede directamente por el nombre de la etiqueta de columna; no se usa prefijo como ``data.``)
-- ``crawlingConfig`` - la configuracion del almacen de datos
-- ``crawlingContext`` - el contexto del rastreo; ``crawlingContext.doc`` contiene el documento que se esta construyendo
+- ``crawlingConfig`` - la configuración del almacén de datos
+- ``crawlingContext`` - el contexto del rastreo; ``crawlingContext.doc`` contiene el documento que se está construyendo
 
 .. note::
-   Los nombres de columna deben coincidir con la etiqueta de columna (alias) de la clausula ``SELECT``.
-   Cuando se usen funciones de agregacion o expresiones, asigne un alias explicito con ``AS``
+   Los nombres de columna deben coincidir con la etiqueta de columna (alias) de la cláusula ``SELECT``.
+   Cuando se usen funciones de agregación o expresiones, asigne un alias explícito con ``AS``
    (ej. ``COUNT(*) AS total``).
 
 .. note::
-   El uso de mayusculas y minusculas en las etiquetas de columna varia segun la base de datos.
-   PostgreSQL convierte a minusculas los identificadores sin comillas, H2 los convierte a
-   mayusculas y MySQL los devuelve tal como se declararon. Un nombre que no se resuelve deja el
-   campo sin asignar en lugar de generar un error, asi que asigne un alias explicito con ``AS``
+   El uso de mayúsculas y minúsculas en las etiquetas de columna varía según la base de datos.
+   PostgreSQL convierte a minúsculas los identificadores sin comillas, H2 los convierte a
+   mayúsculas y MySQL los devuelve tal como se declararon. Un nombre que no se resuelve deja el
+   campo sin asignar en lugar de generar un error, así que asigne un alias explícito con ``AS``
    cuando la portabilidad sea importante.
 
 .. warning::
-   Los scripts pueden referenciar **todo el mapa de parametros del almacen de datos**, no solo
+   Los scripts pueden referenciar **todo el mapa de parámetros del almacén de datos**, no solo
    las columnas de resultado de la consulta SQL. ``driver``, ``url``, ``username``, ``password``
    y ``sql`` son visibles como variables con el mismo nombre, por lo que una columna puede
-   quedar ocultada de forma involuntaria, o el valor de un parametro puede aparecer donde se
+   quedar ocultada de forma involuntaria, o el valor de un parámetro puede aparecer donde se
    esperaba una columna inexistente. Cuando existen ambos, prevalece el valor de la columna.
 
 Carga de Datos BLOB o Binarios
@@ -220,11 +220,11 @@ Las columnas binarias (BLOB, ``BYTEA``, arrays de bytes y flujos binarios) se pr
 mediante el extractor de contenido (el mismo que se usa en el rastreo de archivos) y se
 incorporan como texto.
 
-CLOB, NCLOB y los flujos de caracteres **no** pasan por ningun extractor. Se leen tal cual
-como texto, y las indicaciones de tipo MIME descritas a continuacion no se les aplican.
+CLOB, NCLOB y los flujos de caracteres **no** pasan por ningún extractor. Se leen tal cual
+como texto, y las indicaciones de tipo MIME descritas a continuación no se les aplican.
 
 Las columnas de tipo array se convierten en sus elementos unidos por espacios. Los valores
-NULL se convierten en cadenas vacias.
+NULL se convierten en cadenas vacías.
 
 .. note::
    Que una columna BLOB llegue como ``java.sql.Blob`` o como array de bytes lo decide el
@@ -232,33 +232,33 @@ NULL se convierten en cadenas vacias.
    misma manera.
 
 .. note::
-   CLOB y NCLOB se leen enteros en memoria, sin limite de tamano. Para columnas de texto muy
+   CLOB y NCLOB se leen enteros en memoria, sin límite de tamaño. Para columnas de texto muy
    grandes, considere truncarlas en el SQL con ``SUBSTRING`` o similar. La ruta que pasa por
-   el extractor si respeta la longitud maxima de contenido del rastreador.
+   el extractor si respeta la longitud máxima de contenido del rastreador.
 
 Para extraer correctamente el texto de datos BLOB o flujos binarios, es necesario
-determinar el tipo de dato (tipo MIME). La determinacion sigue el siguiente orden de
+determinar el tipo de dato (tipo MIME). La determinación sigue el siguiente orden de
 prioridad:
 
 1. ``column_label.mimetype=<nombre_columna>`` - Usa el valor de la columna indicada como tipo MIME
-2. ``column_label.filename=<nombre_columna>`` - Trata el valor de la columna indicada como nombre de archivo e infiere el tipo MIME a partir de la extension
-3. ``default_mimetype`` - Tipo MIME predeterminado usado cuando no se puede determinar con los metodos anteriores
+2. ``column_label.filename=<nombre_columna>`` - Trata el valor de la columna indicada como nombre de archivo e infiere el tipo MIME a partir de la extensión
+3. ``default_mimetype`` - Tipo MIME predeterminado usado cuando no se puede determinar con los métodos anteriores
 
-Ejemplo (extraccion del BLOB de la columna ``file_data`` usando el tipo MIME de la columna ``content_type``):
+Ejemplo (extracción del BLOB de la columna ``file_data`` usando el tipo MIME de la columna ``content_type``):
 
 ::
 
     sql=SELECT id, title, file_data, content_type FROM documents
     column_label.mimetype=content_type
 
-Diseno de Consultas SQL
+Diseño de Consultas SQL
 ========================
 
 Consultas Eficientes
 ---------------------
 
 Al manejar grandes cantidades de datos, el rendimiento de la consulta es importante.
-La consulta SQL se envia tal cual a la base de datos (no se realiza enlace de parametros):
+La consulta SQL se envía tal cual a la base de datos (no se realiza enlace de parámetros):
 
 ::
 
@@ -270,7 +270,7 @@ La consulta SQL se envia tal cual a la base de datos (no se realiza enlace de pa
 Rastreo Incremental
 --------------------
 
-Metodo para obtener solo registros actualizados:
+Método para obtener solo registros actualizados:
 
 ::
 
@@ -291,7 +291,7 @@ Metodo para obtener solo registros actualizados:
    datos dejan entonces de eliminarse también del índice, así que ejecute periódicamente
    un rastreo completo.
 
-Generacion de URLs
+Generación de URLs
 -------------------
 
 Las URLs de documentos se generan en el script:
@@ -309,15 +309,15 @@ Las URLs de documentos se generan en el script:
 
 .. warning::
    ``url=url`` solo hace lo que parece cuando el resultado de ``SELECT`` tiene una columna
-   etiquetada como ``url``. Si no existe esa columna, el parametro del almacen de datos con el
-   mismo nombre, es decir, la **URL de conexion JDBC**, se convierte en la URL del documento.
-   Asigne un alias a la columna, como en ``SELECT page_url AS url``, o indiquela en el script,
+   etiquetada como ``url``. Si no existe esa columna, el parámetro del almacén de datos con el
+   mismo nombre, es decir, la **URL de conexión JDBC**, se convierte en la URL del documento.
+   Asigne un alias a la columna, como en ``SELECT page_url AS url``, o indíquela en el script,
    como en ``url=page_url``.
 
 Soporte de Caracteres Multibyte
 ================================
 
-Al manejar datos con caracteres multibyte como japones u otros idiomas:
+Al manejar datos con caracteres multibyte como japonés u otros idiomas:
 
 MySQL
 -----
@@ -338,45 +338,45 @@ PostgreSQL normalmente usa UTF-8 de forma predeterminada. Si es necesario:
 Seguridad
 =========
 
-Proteccion de Credenciales de Base de Datos
+Protección de Credenciales de Base de Datos
 --------------------------------------------
 
 .. warning::
-   Escribir contrasenas directamente en archivos de configuracion es un riesgo de seguridad.
+   Escribir contraseñas directamente en archivos de configuración es un riesgo de seguridad.
 
-Metodos recomendados:
+Métodos recomendados:
 
-1. Aprovechar el cifrado automatico
+1. Aprovechar el cifrado automático
 
-   El valor de un parametro cuyo nombre coincide con ``app.encrypt.property.pattern``
+   El valor de un parámetro cuyo nombre coincide con ``app.encrypt.property.pattern``
    (predeterminado ``.*password|.*key|.*token|.*secret``) se cifra al guardarlo desde la
-   consola de administracion y se almacena con el prefijo ``{cipher}``. ``password`` coincide
-   con ese patron, por lo que no se almacena en texto plano cuando se establece desde la
-   consola de administracion.
+   consola de administración y se almacena con el prefijo ``{cipher}``. ``password`` coincide
+   con ese patrón, por lo que no se almacena en texto plano cuando se establece desde la
+   consola de administración.
 
 2. Usar variables de entorno
 
    Una variable de entorno cuyo nombre empieza por ``FESS_ENV_`` se expande dentro de un
-   parametro del almacen de datos como ``${nombre de la variable}``:
+   parámetro del almacén de datos como ``${nombre de la variable}``:
 
    ::
 
        password=${FESS_ENV_DB_PASSWORD}
 
-   Que nombres se expanden lo controla ``crawler.data.env.param.key.pattern``
+   Qué nombres se expanden lo controla ``crawler.data.env.param.key.pattern``
    (predeterminado ``^FESS_ENV_.*``).
 
 3. Usar usuarios de solo lectura
 
 .. note::
    Subir ``org.codelibs.fess.ds`` a DEBUG no expone las credenciales: los valores de los
-   parametros que coinciden con ``app.encrypt.property.pattern``, y las credenciales incrustadas
+   parámetros que coinciden con ``app.encrypt.property.pattern``, y las credenciales incrustadas
    en la URL JDBC, se enmascaran en el registro.
 
-Principio de Minimo Privilegio
+Principio de Mínimo Privilegio
 --------------------------------
 
-Otorgue solo los permisos minimos necesarios al usuario de la base de datos:
+Otorgue solo los permisos mínimos necesarios al usuario de la base de datos:
 
 ::
 
@@ -387,10 +387,10 @@ Otorgue solo los permisos minimos necesarios al usuario de la base de datos:
 Ejemplos de Uso
 ===============
 
-Busqueda de Catalogo de Productos
+Búsqueda de Catálogo de Productos
 -----------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -409,10 +409,10 @@ Script:
     content=description + " Categoria: " + category + " Precio: " + price + " EUR"
     lastModified=updated_at
 
-Articulos de Base de Conocimientos
+Artículos de Base de Conocimientos
 -------------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -434,38 +434,38 @@ Script:
     created=created_at
     lastModified=updated_at
 
-Solucion de Problemas
+Solución de Problemas
 ======================
 
-Cuando un rastreo falla, el mensaje del registro identifica que paso ha fallado.
+Cuando un rastreo falla, el mensaje del registro identifica qué paso ha fallado.
 
 Controlador JDBC No Encontrado
 --------------------------------
 
-**Sintoma**: ``The JDBC driver ... is not on the crawler classpath.``
+**Síntoma**: ``The JDBC driver ... is not on the crawler classpath.``
 
-**Solucion**:
+**Solución**:
 
-1. Verifique que el controlador JDBC este colocado en ``app/WEB-INF/lib/`` o ``app/WEB-INF/env/crawler/lib/``
+1. Verifique que el controlador JDBC esté colocado en ``app/WEB-INF/lib/`` o ``app/WEB-INF/env/crawler/lib/``
 2. Verifique que el nombre de clase indicado en ``driver`` sea correcto
 3. Reinicie |Fess|
 
-Error de Conexion
+Error de Conexión
 ------------------
 
-**Sintoma**: ``Failed to connect to <URL>.``
+**Síntoma**: ``Failed to connect to <URL>.``
 
 **Verifique**:
 
-1. La base de datos esta en ejecucion
-2. El nombre del host y numero de puerto son correctos
-3. El nombre de usuario y contrasena son correctos
-4. Configuracion del firewall
+1. La base de datos está en ejecución
+2. El nombre del host y número de puerto son correctos
+3. El nombre de usuario y contraseña son correctos
+4. Configuración del firewall
 
 Error de Consulta
 ------------------
 
-**Sintoma**: ``Failed to execute the query.``
+**Síntoma**: ``Failed to execute the query.``
 
 **Verifique**:
 
@@ -473,12 +473,12 @@ Error de Consulta
 2. Verifique que los nombres de columna sean correctos
 3. Verifique que los nombres de tabla sean correctos
 
-Parametros Faltantes
+Parámetros Faltantes
 ---------------------
 
-**Sintoma**: ``The driver parameter is required.``, ``The url parameter is required.`` o ``The sql parameter is required.``
+**Síntoma**: ``The driver parameter is required.``, ``The url parameter is required.`` o ``The sql parameter is required.``
 
-Falta un parametro obligatorio. Revise el campo de parametros.
+Falta un parámetro obligatorio. Revise el campo de parámetros.
 
 Solo Fallan Algunas Filas
 --------------------------
@@ -487,19 +487,19 @@ Una fila que falla no detiene el rastreo; queda registrada en "Sistema" -> "URL 
 Se usa la URL del documento cuando los scripts la generaron, y
 ``datastore://<id de la configuracion del almacen de datos>/<numero de fila>`` cuando no.
 
-Los Documentos No Aparecen en los Resultados de Busqueda
+Los Documentos No Aparecen en los Resultados de Búsqueda
 ---------------------------------------------------------
 
 1. Verifique que los scripts establezcan ``url``, ``title`` y ``content``
-2. Verifique que el uso de mayusculas y minusculas de las etiquetas de columna coincida con el que usan los scripts (vease "Configuracion de Script")
-3. Revise el numero de documentos en el registro del trabajo de rastreo
+2. Verifique que el uso de mayúsculas y minúsculas de las etiquetas de columna coincida con el que usan los scripts (véase "Configuración de Script")
+3. Revise el número de documentos en el registro del trabajo de rastreo
 
-Informacion de Referencia
+Información de Referencia
 ==========================
 
-- :doc:`ds-overview` - Descripcion General de Conectores de Almacen de Datos
+- :doc:`ds-overview` - Descripción General de Conectores de Almacén de Datos
 - :doc:`ds-csv` - Conector CSV
 - :doc:`ds-json` - Conector JSON
-- :doc:`../../admin/dataconfig-guide` - Guia de Configuracion de Almacen de Datos
+- :doc:`../../admin/dataconfig-guide` - Guía de Configuración de Almacén de Datos
 - :doc:`../crawler-basic`
 - :doc:`../search-basic`

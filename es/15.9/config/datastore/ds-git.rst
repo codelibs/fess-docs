@@ -2,20 +2,20 @@
 Conector Git
 ==================================
 
-Descripcion general
+Descripción general
 ===================
 
 El conector Git proporciona la funcionalidad para obtener archivos de repositorios Git
-y registrarlos en el indice de |Fess|.
+y registrarlos en el índice de |Fess|.
 
 Esta funcionalidad requiere el plugin ``fess-ds-git``.
 
 Repositorios compatibles
 ========================
 
-- GitHub (publico/privado)
-- GitLab (publico/privado)
-- Bitbucket (publico/privado)
+- GitHub (público/privado)
+- GitLab (público/privado)
+- Bitbucket (público/privado)
 - Repositorios Git locales
 - Otros servicios de alojamiento Git
 
@@ -23,22 +23,22 @@ Requisitos previos
 ==================
 
 1. Es necesario instalar el plugin
-2. Para repositorios privados, se requieren credenciales de autenticacion
+2. Para repositorios privados, se requieren credenciales de autenticación
 3. Se necesita acceso de lectura al repositorio
 
-Instalacion del plugin
+Instalación del plugin
 ----------------------
 
-Instale desde la pantalla de administracion en "Sistema" -> "Plugins".
+Instale desde la pantalla de administración en "Sistema" -> "Plugins".
 
-O consulte :doc:`../../admin/plugin-guide` para mas detalles.
+O consulte :doc:`../../admin/plugin-guide` para más detalles.
 
-Configuracion
+Configuración
 =============
 
-Configure desde la pantalla de administracion en "Crawler" -> "Data Store" -> "Crear nuevo".
+Configure desde la pantalla de administración en "Crawler" -> "Data Store" -> "Crear nuevo".
 
-Configuracion basica
+Configuración básica
 --------------------
 
 .. list-table::
@@ -54,10 +54,10 @@ Configuracion basica
    * - Habilitado
      - Activado
 
-Configuracion de parametros
+Configuración de parámetros
 ---------------------------
 
-Ejemplo de repositorio publico:
+Ejemplo de repositorio público:
 
 ::
 
@@ -66,7 +66,7 @@ Ejemplo de repositorio publico:
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
 
-Ejemplo de repositorio privado (con autenticacion):
+Ejemplo de repositorio privado (con autenticación):
 
 ::
 
@@ -75,37 +75,37 @@ Ejemplo de repositorio privado (con autenticacion):
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
 
-Lista de parametros
+Lista de parámetros
 ~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``uri``
      - Si
      - URI del repositorio Git (para clonar)
    * - ``base_url``
      - No
-     - URL base para visualizacion de archivos. Si no se configura, las URL estaran vacias y la eliminacion automatica de archivos borrados estara desactivada
+     - URL base para visualización de archivos. Si no se configura, las URL estarán vacías y la eliminación automática de archivos borrados estará desactivada
    * - ``username``
      - No
-     - Nombre de usuario para autenticacion Git. Se usa con ``password`` como alternativa a incluir credenciales en la URI
+     - Nombre de usuario para autenticación Git. Se usa con ``password`` como alternativa a incluir credenciales en la URI
    * - ``password``
      - No
-     - Contrasena o token para autenticacion Git. Se usa con ``username``
+     - Contraseña o token para autenticación Git. Se usa con ``username``
    * - ``extractors``
      - No
-     - Configuracion de extractores por tipo MIME
+     - Configuración de extractores por tipo MIME
    * - ``default_extractor``
      - No
-     - Extractor de respaldo cuando ningun patron MIME coincide (predeterminado: ``tikaExtractor``)
+     - Extractor de respaldo cuando ningún patrón MIME coincide (predeterminado: ``tikaExtractor``)
    * - ``prev_commit_id``
      - No
-     - ID del commit anterior (para crawl diferencial). Se actualiza automaticamente despues de un crawl exitoso
+     - ID del commit anterior (para crawl diferencial). Se actualiza automáticamente después de un crawl exitoso
    * - ``commit_id``
      - No
      - ID de commit objetivo (predeterminado: HEAD). Se puede especificar rama o etiqueta
@@ -114,16 +114,16 @@ Lista de parametros
      - Git ref specs (predeterminado: ``+refs/heads/*:refs/heads/*``)
    * - ``repository_path``
      - No
-     - Ruta del repositorio local. Si no se configura, se crea un directorio temporal que se elimina despues del crawl
+     - Ruta del repositorio local. Si no se configura, se crea un directorio temporal que se elimina después del crawl
    * - ``include_pattern``
      - No
-     - Filtro de inclusion de rutas de archivo (regex)
+     - Filtro de inclusión de rutas de archivo (regex)
    * - ``exclude_pattern``
      - No
-     - Filtro de exclusion de rutas de archivo (regex)
+     - Filtro de exclusión de rutas de archivo (regex)
    * - ``max_size``
      - No
-     - Tamano maximo de archivo para indexar en bytes (predeterminado: ``10000000``)
+     - Tamaño máximo de archivo para indexar en bytes (predeterminado: ``10000000``)
    * - ``cache_threshold``
      - No
      - Umbral en bytes para cambiar entre buffering en memoria y disco (predeterminado: ``1000000``)
@@ -131,7 +131,7 @@ Lista de parametros
      - No
      - Intervalo de procesamiento entre cada archivo (en milisegundos, predeterminado: ``0``)
 
-Configuracion de scripts
+Configuración de scripts
 ------------------------
 
 ::
@@ -156,7 +156,7 @@ Campos disponibles
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``url``
      - URL del archivo
    * - ``path``
@@ -168,17 +168,17 @@ Campos disponibles
    * - ``contentLength``
      - Longitud del contenido
    * - ``timestamp``
-     - Fecha y hora de ultima modificacion
+     - Fecha y hora de última modificación
    * - ``mimetype``
      - Tipo MIME del archivo
    * - ``author``
-     - Informacion del ultimo autor del commit (PersonIdent)
+     - Información del último autor del commit (PersonIdent)
    * - ``committer``
-     - Informacion del committer (PersonIdent). Puede diferir del autor
+     - Información del committer (PersonIdent). Puede diferir del autor
    * - ``uri``
      - URI del repositorio Git
 
-Autenticacion en repositorios Git
+Autenticación en repositorios Git
 =================================
 
 GitHub Personal Access Token
@@ -222,10 +222,10 @@ En GitLab User Settings -> Access Tokens:
 
     uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
 
-Autenticacion con nombre de usuario y contrasena
+Autenticación con nombre de usuario y contraseña
 -------------------------------------------------
 
-En lugar de incluir credenciales en la URI, tambien puede especificar credenciales usando los parametros ``username`` y ``password``:
+En lugar de incluir credenciales en la URI, también puede especificar credenciales usando los parámetros ``username`` y ``password``:
 
 ::
 
@@ -233,18 +233,18 @@ En lugar de incluir credenciales en la URI, tambien puede especificar credencial
     username=your_username
     password=YOUR_PERSONAL_ACCESS_TOKEN
 
-Las credenciales se usan solo cuando tanto ``username`` como ``password`` estan especificados.
+Las credenciales se usan solo cuando tanto ``username`` como ``password`` están especificados.
 
 .. note::
-   El conector Git admite unicamente autenticacion HTTP/HTTPS (nombre de usuario y contrasena, o un token de acceso). La autenticacion con clave SSH (URI con formato ``git@...``) no esta soportada. Utilice una URI con formato HTTPS.
+   El conector Git admite únicamente autenticación HTTP/HTTPS (nombre de usuario y contraseña, o un token de acceso). La autenticación con clave SSH (URI con formato ``git@...``) no está soportada. Utilice una URI con formato HTTPS.
 
-Configuracion de extractores
+Configuración de extractores
 ============================
 
 Extractores por tipo MIME
 -------------------------
 
-Especifique extractores por tipo de archivo con el parametro ``extractors``:
+Especifique extractores por tipo de archivo con el parámetro ``extractors``:
 
 ::
 
@@ -272,7 +272,7 @@ Todos los archivos
 
     extractors=.*:tikaExtractor,
 
-Solo tipos de archivo especificos
+Solo tipos de archivo específicos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
@@ -283,10 +283,10 @@ Solo tipos de archivo especificos
 Crawl diferencial
 =================
 
-Crawl solo de cambios desde el ultimo commit
+Crawl solo de cambios desde el último commit
 --------------------------------------------
 
-Despues del primer crawl, configure ``prev_commit_id`` con el ID del commit anterior:
+Después del primer crawl, configure ``prev_commit_id`` con el ID del commit anterior:
 
 ::
 
@@ -295,26 +295,26 @@ Despues del primer crawl, configure ``prev_commit_id`` con el ID del commit ante
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
-   ``prev_commit_id`` se actualiza automaticamente al ultimo ID de commit despues de un crawl exitoso.
-   Dejelo vacio para el crawl inicial para procesar todos los archivos; los crawls posteriores solo procesaran los cambios.
+   ``prev_commit_id`` se actualiza automáticamente al último ID de commit después de un crawl exitoso.
+   Déjelo vacío para el crawl inicial para procesar todos los archivos; los crawls posteriores solo procesarán los cambios.
 
 Procesamiento de archivos eliminados
 ------------------------------------
 
 Cuando ``base_url`` está configurado, los archivos detectados como eliminados a través de Git DiffEntry (``ChangeType.DELETE``) se eliminan automáticamente del índice.
 
-Cuando un archivo es renombrado (``ChangeType.RENAME``), el documento en la ruta antigua se elimina del indice y el archivo en la nueva ruta se reindexiza.
+Cuando un archivo es renombrado (``ChangeType.RENAME``), el documento en la ruta antigua se elimina del índice y el archivo en la nueva ruta se reindexiza.
 
 .. note::
-   La eliminacion automatica de archivos eliminados solo es efectiva cuando ``base_url`` esta configurado. Si ``base_url`` no esta configurado, la URL del documento estara vacia y la eliminacion no se realizara.
+   La eliminación automática de archivos eliminados solo es efectiva cuando ``base_url`` está configurado. Si ``base_url`` no está configurado, la URL del documento estará vacía y la eliminación no se realizará.
 
 Ejemplos de uso
 ===============
 
-Repositorio publico de GitHub
+Repositorio público de GitHub
 -----------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -337,7 +337,7 @@ Script:
 Repositorio privado de GitHub
 -----------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -360,7 +360,7 @@ Script:
 GitLab (self-hosted)
 --------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -383,7 +383,7 @@ Script:
 Solo documentos (archivos Markdown)
 -----------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -402,7 +402,7 @@ Script:
         last_modified=timestamp
     }
 
-Solo directorios especificos
+Solo directorios específicos
 ----------------------------
 
 Filtrado con script:
@@ -417,13 +417,13 @@ Filtrado con script:
         mimetype=mimetype
     }
 
-Solucion de problemas
+Solución de problemas
 =====================
 
-Error de autenticacion
+Error de autenticación
 ----------------------
 
-**Sintoma**: ``Authentication failed`` o ``Not authorized``
+**Síntoma**: ``Authentication failed`` o ``Not authorized``
 
 **Verificaciones**:
 
@@ -439,12 +439,12 @@ Error de autenticacion
        # Incorrecto
        uri=https://github.com/company/repo.git?token=...
 
-4. Verificar la fecha de expiracion del token
+4. Verificar la fecha de expiración del token
 
 Repositorio no encontrado
 -------------------------
 
-**Sintoma**: ``Repository not found``
+**Síntoma**: ``Repository not found``
 
 **Verificaciones**:
 
@@ -456,23 +456,23 @@ Repositorio no encontrado
 No se pueden obtener archivos
 -----------------------------
 
-**Sintoma**: El crawl tiene exito pero hay 0 archivos
+**Síntoma**: El crawl tiene éxito pero hay 0 archivos
 
 **Verificaciones**:
 
-1. Verificar que la configuracion de ``extractors`` sea apropiada
+1. Verificar que la configuración de ``extractors`` sea apropiada
 2. Confirmar que existen archivos en el repositorio
-3. Verificar que la configuracion del script sea correcta
+3. Verificar que la configuración del script sea correcta
 4. Confirmar que existen archivos en la rama objetivo
 
 Error de tipo MIME
 ------------------
 
-**Sintoma**: Ciertos archivos no se procesan
+**Síntoma**: Ciertos archivos no se procesan
 
-**Solucion**:
+**Solución**:
 
-Ajustar la configuracion de extractores:
+Ajustar la configuración de extractores:
 
 ::
 
@@ -485,16 +485,16 @@ Ajustar la configuracion de extractores:
 Repositorio grande
 ------------------
 
-**Sintoma**: El crawl toma mucho tiempo o hay memoria insuficiente
+**Síntoma**: El crawl toma mucho tiempo o hay memoria insuficiente
 
-**Solucion**:
+**Solución**:
 
 1. Limitar archivos objetivo con ``extractors``
-2. Filtrar solo directorios especificos con script
+2. Filtrar solo directorios específicos con script
 3. Usar crawl diferencial (configurar ``prev_commit_id``)
 4. Ajustar el intervalo de crawl
 
-Especificacion de rama
+Especificación de rama
 ----------------------
 
 Para rastrear una rama diferente a la predeterminada, especifique el nombre de la rama o etiqueta usando el parámetro ``commit_id``:
@@ -505,10 +505,10 @@ Para rastrear una rama diferente a la predeterminada, especifique el nombre de l
     base_url=https://github.com/company/repo/blob/develop/
     commit_id=develop
 
-Generacion de URL
+Generación de URL
 =================
 
-Patrones de configuracion de base_url
+Patrones de configuración de base_url
 -------------------------------------
 
 **GitHub**:
@@ -529,9 +529,9 @@ Patrones de configuracion de base_url
 
     base_url=https://bitbucket.org/user/repo/src/master/
 
-La URL se genera concatenando directamente ``base_url`` con la ruta del archivo (sin insertar ningun separador). Por lo tanto, ``base_url`` debe terminar con una barra diagonal ``/``.
+La URL se genera concatenando directamente ``base_url`` con la ruta del archivo (sin insertar ningún separador). Por lo tanto, ``base_url`` debe terminar con una barra diagonal ``/``.
 
-Generacion de URL en script
+Generación de URL en script
 ---------------------------
 
 ::
@@ -548,11 +548,11 @@ O con URL personalizada:
     title=name
     content=content
 
-Informacion de referencia
+Información de referencia
 =========================
 
-- :doc:`ds-overview` - Descripcion general de conectores de Data Store
+- :doc:`ds-overview` - Descripción general de conectores de Data Store
 - :doc:`ds-database` - Conector de base de datos
-- :doc:`../../admin/dataconfig-guide` - Guia de configuracion de Data Store
+- :doc:`../../admin/dataconfig-guide` - Guía de configuración de Data Store
 - `GitHub Personal Access Tokens <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
 - `GitLab Personal Access Tokens <https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html>`_

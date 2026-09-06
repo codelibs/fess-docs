@@ -2,37 +2,37 @@
 Configuración de Google Gemini (Búsqueda IA / RAG)
 ===================================================
 
-Descripcion general
+Descripción general
 ===================
 
 Esta página explica cómo configurar el plugin ``fess-llm-gemini`` para que |Fess| pueda usar Google Gemini en su **modo de búsqueda IA (RAG: Retrieval-Augmented Generation)** — respondiendo preguntas en lenguaje natural a partir de su índice de búsqueda empresarial con fuentes citadas. |Fess| llama a la API de Google AI (Generative Language API) para ejecutar RAG sobre sus documentos rastreados con modelos Gemini.
 
-Google Gemini es un modelo de lenguaje grande (LLM) de ultima generacion proporcionado por Google.
+Google Gemini es un modelo de lenguaje grande (LLM) de última generación proporcionado por Google.
 |Fess| puede implementar la funcionalidad de modo de búsqueda IA con el modelo Gemini utilizando Google AI API (Generative Language API).
 
-Al usar Gemini, es posible generar respuestas de alta calidad aprovechando la ultima tecnologia de IA de Google.
+Al usar Gemini, es posible generar respuestas de alta calidad aprovechando la última tecnología de IA de Google.
 
-Caracteristicas principales
+Características principales
 ---------------------------
 
-- **Soporte multimodal**: Capaz de procesar no solo texto sino tambien imagenes
+- **Soporte multimodal**: Capaz de procesar no solo texto sino también imágenes
 - **Contexto largo**: Ventana de contexto larga que puede procesar grandes cantidades de documentos a la vez
-- **Eficiencia de costos**: El modelo Flash es rapido y de bajo costo
-- **Integracion con Google**: Facil integracion con servicios de Google Cloud
+- **Eficiencia de costos**: El modelo Flash es rápido y de bajo costo
+- **Integración con Google**: Fácil integración con servicios de Google Cloud
 
 Modelos compatibles
 -------------------
 
 Principales modelos disponibles en Gemini:
 
-- ``gemini-3.1-flash-lite-preview`` - Modelo rapido ligero y de bajo costo (predeterminado)
-- ``gemini-3-flash-preview`` - Modelo Flash estandar
+- ``gemini-3.1-flash-lite-preview`` - Modelo rápido ligero y de bajo costo (predeterminado)
+- ``gemini-3-flash-preview`` - Modelo Flash estándar
 - ``gemini-3.1-pro`` / ``gemini-3-pro`` - Modelos de alto razonamiento
-- ``gemini-2.5-flash`` - Modelo rapido version estable
-- ``gemini-2.5-pro`` - Modelo de alto razonamiento version estable
+- ``gemini-2.5-flash`` - Modelo rápido versión estable
+- ``gemini-2.5-pro`` - Modelo de alto razonamiento versión estable
 
 .. note::
-   Para la informacion mas reciente sobre modelos disponibles, consulte `Google AI for Developers <https://ai.google.dev/models/gemini>`__.
+   Para la información más reciente sobre modelos disponibles, consulte `Google AI for Developers <https://ai.google.dev/models/gemini>`__.
 
 Requisitos previos
 ==================
@@ -43,7 +43,7 @@ Antes de usar Gemini, prepare lo siguiente.
 2. **Acceso a Google AI Studio**: Acceda a `https://aistudio.google.com/ <https://aistudio.google.com/>`__
 3. **Clave API**: Genere una clave API en Google AI Studio
 
-Obtencion de clave API
+Obtención de clave API
 ----------------------
 
 1. Acceda a `Google AI Studio <https://aistudio.google.com/>`__
@@ -53,20 +53,20 @@ Obtencion de clave API
 5. Guarde la clave API generada de forma segura
 
 .. warning::
-   La clave API es informacion confidencial. Tenga en cuenta lo siguiente:
+   La clave API es información confidencial. Tenga en cuenta lo siguiente:
 
    - No la commita en sistemas de control de versiones
    - No la imprima en logs
-   - Administrela con variables de entorno o archivos de configuracion seguros
+   - Adminístrela con variables de entorno o archivos de configuración seguros
 
-Instalacion del plugin
+Instalación del plugin
 ======================
 
-La funcionalidad de integracion con Gemini se proporciona como plugin ``fess-llm-gemini``.
+La funcionalidad de integración con Gemini se proporciona como plugin ``fess-llm-gemini``.
 Para usar Gemini es necesario instalar el plugin.
 
 1. Descargue `fess-llm-gemini-15.9.0.jar`
-2. Coloquelo en el directorio ``app/WEB-INF/plugin/`` de |Fess|
+2. Colóquelo en el directorio ``app/WEB-INF/plugin/`` de |Fess|
 3. Reinicie |Fess|
 
 ::
@@ -75,32 +75,32 @@ Para usar Gemini es necesario instalar el plugin.
     cp fess-llm-gemini-15.9.0.jar /path/to/fess/app/WEB-INF/plugin/
 
 .. note::
-   La version del plugin debe coincidir con la version de |Fess|.
+   La versión del plugin debe coincidir con la versión de |Fess|.
 
-Configuracion basica
+Configuración básica
 ====================
 
-La habilitacion de la funcionalidad de modo de búsqueda IA y la configuracion especifica de Gemini se realizan en ``fess_config.properties``, y la seleccion del proveedor LLM (``rag.llm.name``) se realiza en la pantalla de administracion o en ``system.properties``.
+La habilitación de la funcionalidad de modo de búsqueda IA y la configuración específica de Gemini se realizan en ``fess_config.properties``, y la selección del proveedor LLM (``rag.llm.name``) se realiza en la pantalla de administración o en ``system.properties``.
 
-Configuracion de fess_config.properties
+Configuración de fess_config.properties
 ----------------------------------------
 
-Agregue la configuracion de habilitacion de la funcionalidad de modo de búsqueda IA en ``app/WEB-INF/conf/fess_config.properties``.
+Agregue la configuración de habilitación de la funcionalidad de modo de búsqueda IA en ``app/WEB-INF/conf/fess_config.properties``.
 
 ::
 
     # Habilitar la funcionalidad de modo de búsqueda IA
     rag.chat.enabled=true
 
-Configuracion del proveedor LLM
+Configuración del proveedor LLM
 --------------------------------
 
-La seleccion del proveedor LLM (``rag.llm.name``) se configura en la pantalla de administracion (Administracion > Sistema > General) o en ``system.properties``. La configuracion especifica de Gemini se realiza en ``fess_config.properties``.
+La selección del proveedor LLM (``rag.llm.name``) se configura en la pantalla de administración (Administración > Sistema > General) o en ``system.properties``. La configuración específica de Gemini se realiza en ``fess_config.properties``.
 
-Configuracion minima
+Configuración mínima
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``system.properties`` (tambien configurable en Administracion > Sistema > General):
+``system.properties`` (también configurable en Administración > Sistema > General):
 
 ::
 
@@ -120,10 +120,10 @@ Configuracion minima
     # Modelo a usar
     rag.llm.gemini.model=gemini-3.1-flash-lite-preview
 
-Configuracion recomendada (entorno de produccion)
+Configuración recomendada (entorno de producción)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``system.properties`` (tambien configurable en Administracion > Sistema > General):
+``system.properties`` (también configurable en Administración > Sistema > General):
 
 ::
 
@@ -149,17 +149,17 @@ Configuracion recomendada (entorno de produccion)
     # Configuracion de timeout
     rag.llm.gemini.timeout=60000
 
-Elementos de configuracion
+Elementos de configuración
 ==========================
 
-Todos los elementos de configuracion disponibles para el cliente de Gemini. Todos se configuran en ``fess_config.properties``.
+Todos los elementos de configuración disponibles para el cliente de Gemini. Todos se configuran en ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``rag.llm.gemini.api.key``
      - Clave API de Google AI (debe configurarse para usar la API de Gemini)
@@ -174,68 +174,68 @@ Todos los elementos de configuracion disponibles para el cliente de Gemini. Todo
      - Timeout de solicitud (milisegundos)
      - ``60000``
    * - ``rag.llm.gemini.availability.check.interval``
-     - Intervalo de verificacion de disponibilidad (segundos)
+     - Intervalo de verificación de disponibilidad (segundos)
      - ``60``
    * - ``rag.llm.gemini.max.concurrent.requests``
-     - Numero maximo de solicitudes simultaneas
+     - Número máximo de solicitudes simultáneas
      - ``5``
    * - ``rag.llm.gemini.chat.evaluation.max.relevant.docs``
-     - Numero maximo de documentos relevantes en la evaluacion
+     - Número máximo de documentos relevantes en la evaluación
      - ``3``
    * - ``rag.llm.gemini.chat.evaluation.description.max.chars``
-     - Numero maximo de caracteres para la descripcion del documento en la evaluacion
+     - Número máximo de caracteres para la descripción del documento en la evaluación
      - ``500``
    * - ``rag.llm.gemini.concurrency.wait.timeout``
-     - Tiempo de espera de solicitudes simultaneas (milisegundos)
+     - Tiempo de espera de solicitudes simultáneas (milisegundos)
      - ``30000``
    * - ``rag.llm.gemini.history.max.chars``
-     - Numero maximo de caracteres del historial de chat
+     - Número máximo de caracteres del historial de chat
      - ``10000``
    * - ``rag.llm.gemini.intent.history.max.messages``
-     - Numero maximo de mensajes del historial para la determinacion de intencion
+     - Número máximo de mensajes del historial para la determinación de intención
      - ``10``
    * - ``rag.llm.gemini.intent.history.max.chars``
-     - Numero maximo de caracteres del historial para la determinacion de intencion
+     - Número máximo de caracteres del historial para la determinación de intención
      - ``5000``
    * - ``rag.llm.gemini.history.assistant.max.chars``
-     - Numero maximo de caracteres del historial del asistente
+     - Número máximo de caracteres del historial del asistente
      - ``1000``
    * - ``rag.llm.gemini.history.assistant.summary.max.chars``
-     - Numero maximo de caracteres del resumen del historial del asistente
+     - Número máximo de caracteres del resumen del historial del asistente
      - ``1000``
    * - ``rag.llm.gemini.retry.max``
-     - Numero maximo de reintentos HTTP (en errores ``429`` y de la familia ``5xx``)
+     - Número máximo de reintentos HTTP (en errores ``429`` y de la familia ``5xx``)
      - ``10``
    * - ``rag.llm.gemini.retry.base.delay.ms``
      - Retardo base del backoff exponencial (milisegundos)
      - ``2000``
 
-Metodo de autenticacion
+Método de autenticación
 =======================
 
-La clave API se envia mediante el encabezado HTTP ``x-goog-api-key`` (metodo recomendado por Google).
-Ya no se anade a la URL como parametro de consulta ``?key=...`` como anteriormente, por lo que la clave API no queda registrada en los logs de acceso.
+La clave API se envía mediante el encabezado HTTP ``x-goog-api-key`` (método recomendado por Google).
+Ya no se añade a la URL como parámetro de consulta ``?key=...`` como anteriormente, por lo que la clave API no queda registrada en los logs de acceso.
 
 Comportamiento de reintentos
 ============================
 
-Las solicitudes a la API de Gemini se reintentan automaticamente para los siguientes codigos de estado HTTP:
+Las solicitudes a la API de Gemini se reintentan automáticamente para los siguientes códigos de estado HTTP:
 
-- ``429`` Resource Exhausted (cuota superada / limite de tasa)
+- ``429`` Resource Exhausted (cuota superada / límite de tasa)
 - ``500`` Internal Server Error
 - ``503`` Service Unavailable
 - ``504`` Gateway Timeout
 
 Durante los reintentos se aplica un backoff exponencial (valor base ``rag.llm.gemini.retry.base.delay.ms`` milisegundos, hasta ``rag.llm.gemini.retry.max`` intentos, con jitter de +/-20%).
-En las solicitudes de streaming, solo la conexion inicial es objeto de reintentos; los errores que ocurren despues de comenzar a recibir el cuerpo de la respuesta se propagan inmediatamente.
+En las solicitudes de streaming, solo la conexión inicial es objeto de reintentos; los errores que ocurren después de comenzar a recibir el cuerpo de la respuesta se propagan inmediatamente.
 
-Configuracion por tipo de prompt
+Configuración por tipo de prompt
 =================================
 
-En |Fess|, se pueden configurar los parametros del LLM en detalle por tipo de prompt.
-La configuracion por tipo de prompt se escribe en ``fess_config.properties``.
+En |Fess|, se pueden configurar los parámetros del LLM en detalle por tipo de prompt.
+La configuración por tipo de prompt se escribe en ``fess_config.properties``.
 
-Formato de configuracion
+Formato de configuración
 ------------------------
 
 ::
@@ -253,32 +253,32 @@ Tipos de prompt disponibles
    :widths: 20 80
 
    * - Tipo de prompt
-     - Descripcion
+     - Descripción
    * - ``intent``
-     - Prompt para determinar la intencion del usuario
+     - Prompt para determinar la intención del usuario
    * - ``evaluation``
      - Prompt para evaluar la relevancia de los documentos
    * - ``unclear``
-     - Prompt para cuando la pregunta no esta clara
+     - Prompt para cuando la pregunta no está clara
    * - ``noresults``
-     - Prompt para cuando no hay resultados de busqueda
+     - Prompt para cuando no hay resultados de búsqueda
    * - ``docnotfound``
      - Prompt para cuando no se encuentra el documento
    * - ``answer``
-     - Prompt de generacion de respuesta
+     - Prompt de generación de respuesta
    * - ``summary``
-     - Prompt de generacion de resumen
+     - Prompt de generación de resumen
    * - ``faq``
-     - Prompt de generacion de FAQ
+     - Prompt de generación de FAQ
    * - ``direct``
      - Prompt de respuesta directa
    * - ``queryregeneration``
-     - Prompt de regeneracion de consulta
+     - Prompt de regeneración de consulta
 
 Valores predeterminados por tipo de prompt
 -------------------------------------------
 
-Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuando no se configuran explicitamente.
+Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuando no se configuran explícitamente.
 
 .. list-table::
    :header-rows: 1
@@ -329,7 +329,7 @@ Valores predeterminados para cada tipo de prompt. Estos valores se utilizan cuan
      - ``256``
      - ``0``
 
-Ejemplo de configuracion
+Ejemplo de configuración
 ------------------------
 
 ::
@@ -350,16 +350,16 @@ Ejemplo de configuracion
     rag.llm.gemini.faq.context.max.chars=10000
 
 .. note::
-   El valor predeterminado de ``context.max.chars`` varia segun el tipo de prompt.
+   El valor predeterminado de ``context.max.chars`` varía según el tipo de prompt.
    ``answer`` y ``summary`` son 16000, ``faq`` es 10000, y otros tipos de prompt son 10000.
 
 Soporte de modelo de pensamiento
 ==================================
 
 Gemini soporta modelos de pensamiento (Thinking Model).
-Al usar un modelo de pensamiento, el modelo ejecuta un proceso de razonamiento interno antes de generar una respuesta, lo que permite generar respuestas con mayor precision.
+Al usar un modelo de pensamiento, el modelo ejecuta un proceso de razonamiento interno antes de generar una respuesta, lo que permite generar respuestas con mayor precisión.
 
-El presupuesto de pensamiento se configura por tipo de prompt en ``fess_config.properties``. |Fess| convierte automaticamente el valor entero (numero de tokens) de ``rag.llm.gemini.{promptType}.thinking.budget`` al campo de API apropiado en funcion de la generacion del modelo resuelta en el momento de la solicitud.
+El presupuesto de pensamiento se configura por tipo de prompt en ``fess_config.properties``. |Fess| convierte automáticamente el valor entero (número de tokens) de ``rag.llm.gemini.{promptType}.thinking.budget`` al campo de API apropiado en función de la generación del modelo resuelta en el momento de la solicitud.
 
 ::
 
@@ -369,10 +369,10 @@ El presupuesto de pensamiento se configura por tipo de prompt en ``fess_config.p
     # Configuracion del presupuesto de pensamiento para generacion de resumenes
     rag.llm.gemini.summary.thinking.budget=1024
 
-Mapeo segun la generacion del modelo
+Mapeo según la generación del modelo
 ------------------------------------
 
-- **Gemini 2.x** (por ejemplo, ``gemini-2.5-flash``): el valor entero configurado se envia tal cual como ``thinkingConfig.thinkingBudget``. Si se especifica ``0``, el pensamiento se desactiva por completo.
+- **Gemini 2.x** (por ejemplo, ``gemini-2.5-flash``): el valor entero configurado se envía tal cual como ``thinkingConfig.thinkingBudget``. Si se especifica ``0``, el pensamiento se desactiva por completo.
 - **Gemini 3.x** (por ejemplo, ``gemini-3.1-flash-lite-preview``): el valor entero se agrupa en los valores enumerados de ``thinkingConfig.thinkingLevel`` (``MINIMAL`` / ``LOW`` / ``MEDIUM`` / ``HIGH``) antes de enviarse.
 
 El mapeo de buckets para Gemini 3.x es el siguiente:
@@ -396,31 +396,31 @@ El mapeo de buckets para Gemini 3.x es el siguiente:
 
 .. note::
    Gemini 3.x siempre consume una cantidad fija de tokens de pensamiento en cualquier bucket (incluso con ``thinkingLevel=MINIMAL`` puede consumir varios cientos de tokens).
-   Por este motivo, |Fess| anade automaticamente un margen adicional (1024 tokens) al ``maxOutputTokens`` predeterminado cuando se utiliza un modelo Gemini 3.x, evitando el truncado de la respuesta por ``finishReason=MAX_TOKENS``.
-   En Gemini 2.x, ``thinkingBudget=0`` desactiva el pensamiento en si, por lo que no se anade margen adicional.
+   Por este motivo, |Fess| añade automáticamente un margen adicional (1024 tokens) al ``maxOutputTokens`` predeterminado cuando se utiliza un modelo Gemini 3.x, evitando el truncado de la respuesta por ``finishReason=MAX_TOKENS``.
+   En Gemini 2.x, ``thinkingBudget=0`` desactiva el pensamiento en sí, por lo que no se añade margen adicional.
 
 .. note::
    Al configurar un presupuesto de pensamiento mayor, el tiempo de respuesta puede aumentar.
-   Configure un valor apropiado segun el uso.
+   Configure un valor apropiado según el uso.
 
-Configuracion via opciones JVM
+Configuración vía opciones JVM
 ==============================
 
-Por razones de seguridad, se recomienda configurar las claves de API a traves del
-entorno de ejecucion (opciones JVM) en lugar de archivos versionados.
+Por razones de seguridad, se recomienda configurar las claves de API a través del
+entorno de ejecución (opciones JVM) en lugar de archivos versionados.
 
 Entorno Docker
 --------------
 
 El repositorio oficial `docker-fess <https://github.com/codelibs/docker-fess>`__
-incluye un overlay Gemini (``compose-gemini.yaml``). Pasos minimos:
+incluye un overlay Gemini (``compose-gemini.yaml``). Pasos mínimos:
 
 ::
 
     export GEMINI_API_KEY="AIzaSy..."
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
 
-Contenido de ``compose-gemini.yaml`` (referencia para una configuracion equivalente):
+Contenido de ``compose-gemini.yaml`` (referencia para una configuración equivalente):
 
 .. code-block:: yaml
 
@@ -432,12 +432,12 @@ Contenido de ``compose-gemini.yaml`` (referencia para una configuracion equivale
 
 Notas:
 
-- ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` hace que el ``run.sh`` del contenedor descargue e instale automaticamente el plugin en ``app/WEB-INF/plugin/``
+- ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` hace que el ``run.sh`` del contenedor descargue e instale automáticamente el plugin en ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` habilita el modo IA
 - ``-Dfess.config.rag.llm.gemini.api.key=...`` define la clave API, ``-Dfess.config.rag.llm.gemini.model=...`` selecciona el modelo
-- ``-Dfess.system.rag.llm.name=gemini`` solo actua como valor inicial por defecto antes de que se persista un valor en OpenSearch. Despues del inicio el ajuste tambien puede modificarse desde Administracion > Sistema > General (seccion RAG)
+- ``-Dfess.system.rag.llm.name=gemini`` solo actúa como valor inicial por defecto antes de que se persista un valor en OpenSearch. Después del inicio el ajuste también puede modificarse desde Administración > Sistema > General (sección RAG)
 
-Si el acceso a Internet pasa por un proxy, especifique la configuracion ``http.proxy.*`` de |Fess| a traves de ``FESS_JAVA_OPTS`` (consulte la seccion "Uso a traves de proxy HTTP" mas adelante).
+Si el acceso a Internet pasa por un proxy, especifique la configuración ``http.proxy.*`` de |Fess| a través de ``FESS_JAVA_OPTS`` (consulte la sección "Uso a través de proxy HTTP" más adelante).
 
 Entorno systemd
 ---------------
@@ -448,29 +448,29 @@ Agregue a ``FESS_JAVA_OPTS`` en ``/etc/sysconfig/fess`` (o ``/etc/default/fess``
 
     FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
 
-Uso a traves de proxy HTTP
+Uso a través de proxy HTTP
 ==========================
 
-El cliente de Gemini comparte la configuracion de proxy HTTP comun de |Fess|. Especifique las siguientes propiedades en ``fess_config.properties``.
+El cliente de Gemini comparte la configuración de proxy HTTP común de |Fess|. Especifique las siguientes propiedades en ``fess_config.properties``.
 
 .. list-table::
    :header-rows: 1
    :widths: 35 45 20
 
    * - Propiedad
-     - Descripcion
+     - Descripción
      - Predeterminado
    * - ``http.proxy.host``
-     - Nombre del host del proxy (si esta vacio, no se usa proxy)
+     - Nombre del host del proxy (si está vacío, no se usa proxy)
      - ``""``
    * - ``http.proxy.port``
-     - Numero de puerto del proxy
+     - Número de puerto del proxy
      - ``8080``
    * - ``http.proxy.username``
-     - Nombre de usuario para autenticacion del proxy (opcional; al especificarlo se habilita la autenticacion Basic)
+     - Nombre de usuario para autenticación del proxy (opcional; al especificarlo se habilita la autenticación Basic)
      - ``""``
    * - ``http.proxy.password``
-     - Contrasena para autenticacion del proxy
+     - Contraseña para autenticación del proxy
      - ``""``
 
 En entornos Docker, especifique en ``FESS_JAVA_OPTS`` de la siguiente forma::
@@ -479,23 +479,23 @@ En entornos Docker, especifique en ``FESS_JAVA_OPTS`` de la siguiente forma::
     -Dfess.config.http.proxy.port=8080
 
 .. note::
-   Esta configuracion tambien afecta el acceso HTTP de todo |Fess|, incluido el crawler.
+   Esta configuración también afecta el acceso HTTP de todo |Fess|, incluido el crawler.
    Las propiedades de sistema Java tradicionales (como ``-Dhttps.proxyHost``) no son consultadas por el cliente de Gemini.
 
-Uso a traves de Vertex AI
+Uso a través de Vertex AI
 =========================
 
-Si esta usando Google Cloud Platform, tambien puede usar Gemini a traves de Vertex AI.
-Al usar Vertex AI, el endpoint de la API y el metodo de autenticacion son diferentes.
+Si está usando Google Cloud Platform, también puede usar Gemini a través de Vertex AI.
+Al usar Vertex AI, el endpoint de la API y el método de autenticación son diferentes.
 
 .. note::
    El |Fess| actual utiliza Google AI API (generativelanguage.googleapis.com).
-   Si se requiere el uso a traves de Vertex AI, puede ser necesaria una implementacion personalizada.
+   Si se requiere el uso a través de Vertex AI, puede ser necesaria una implementación personalizada.
 
-Guia de seleccion de modelos
+Guía de selección de modelos
 ============================
 
-Guia para la seleccion de modelos segun el proposito de uso.
+Guía para la selección de modelos según el propósito de uso.
 
 .. list-table::
    :header-rows: 1
@@ -506,45 +506,45 @@ Guia para la seleccion de modelos segun el proposito de uso.
      - Calidad
      - Uso
    * - ``gemini-3.1-flash-lite-preview``
-     - Rapido
+     - Rápido
      - Alta
      - Ligero y de bajo costo (predeterminado, admite ``thinkingLevel=MINIMAL``)
    * - ``gemini-3-flash-preview``
-     - Rapido
-     - Maxima
+     - Rápido
+     - Máxima
      - Uso general (admite ``thinkingLevel=MINIMAL``)
    * - ``gemini-3.1-pro`` / ``gemini-3-pro``
      - Medio
-     - Maxima
-     - Razonamiento complejo (no admite ``MINIMAL``; minimo ``LOW``)
+     - Máxima
+     - Razonamiento complejo (no admite ``MINIMAL``; mínimo ``LOW``)
    * - ``gemini-2.5-flash``
-     - Rapido
+     - Rápido
      - Alta
-     - Version estable, enfasis en costos
+     - Versión estable, énfasis en costos
    * - ``gemini-2.5-pro``
      - Medio
      - Alta
-     - Version estable, contexto largo
+     - Versión estable, contexto largo
 
 Ventana de contexto
 -------------------
 
 Los modelos Gemini soportan ventanas de contexto muy largas:
 
-- **Gemini 3 Flash / 2.5 Flash**: Hasta 1 millon de tokens
-- **Gemini 3.1 Pro / 2.5 Pro**: Hasta 1 millon de tokens (3.1 Pro) / 2 millones de tokens (2.5 Pro)
+- **Gemini 3 Flash / 2.5 Flash**: Hasta 1 millón de tokens
+- **Gemini 3.1 Pro / 2.5 Pro**: Hasta 1 millón de tokens (3.1 Pro) / 2 millones de tokens (2.5 Pro)
 
-Aprovechando esta caracteristica, puede incluir mas resultados de busqueda en el contexto.
+Aprovechando esta característica, puede incluir más resultados de búsqueda en el contexto.
 
 ::
 
     # Incluir mas documentos en el contexto (configurar en fess_config.properties)
     rag.llm.gemini.answer.context.max.chars=20000
 
-Estimacion de costos
+Estimación de costos
 --------------------
 
-La API de Google AI cobra segun el uso (con cuota gratuita disponible).
+La API de Google AI cobra según el uso (con cuota gratuita disponible).
 
 .. list-table::
    :header-rows: 1
@@ -567,12 +567,12 @@ La API de Google AI cobra segun el uso (con cuota gratuita disponible).
      - $5.00
 
 .. note::
-   Para los precios mas recientes e informacion sobre la cuota gratuita, consulte `Google AI Pricing <https://ai.google.dev/pricing>`__.
+   Para los precios más recientes e información sobre la cuota gratuita, consulte `Google AI Pricing <https://ai.google.dev/pricing>`__.
 
-Control de solicitudes simultaneas
+Control de solicitudes simultáneas
 ====================================
 
-En |Fess|, se puede controlar el numero de solicitudes simultaneas a Gemini.
+En |Fess|, se puede controlar el número de solicitudes simultáneas a Gemini.
 Configure la siguiente propiedad en ``fess_config.properties``.
 
 ::
@@ -580,72 +580,72 @@ Configure la siguiente propiedad en ``fess_config.properties``.
     # Numero maximo de solicitudes simultaneas (predeterminado: 5)
     rag.llm.gemini.max.concurrent.requests=5
 
-Esta configuracion permite prevenir solicitudes excesivas a la API de Google AI y evitar errores de limite de tasa.
+Esta configuración permite prevenir solicitudes excesivas a la API de Google AI y evitar errores de límite de tasa.
 
-Limites de la cuota gratuita (referencia)
+Límites de la cuota gratuita (referencia)
 -----------------------------------------
 
 La API de Google AI tiene una cuota gratuita, pero con las siguientes limitaciones:
 
 - Solicitudes/minuto: 15 RPM
-- Tokens/minuto: 1 millon TPM
-- Solicitudes/dia: 1,500 RPD
+- Tokens/minuto: 1 millón TPM
+- Solicitudes/día: 1,500 RPD
 
 Se recomienda configurar ``rag.llm.gemini.max.concurrent.requests`` a un valor bajo cuando se usa la cuota gratuita.
 
-Solucion de problemas
+Solución de problemas
 =====================
 
-Error de autenticacion
+Error de autenticación
 ----------------------
 
-**Sintoma**: Errores relacionados con la clave API
+**Síntoma**: Errores relacionados con la clave API
 
 **Verificaciones**:
 
-1. Verificar que la clave API este configurada correctamente
-2. Confirmar que la clave API sea valida en Google AI Studio
+1. Verificar que la clave API esté configurada correctamente
+2. Confirmar que la clave API sea válida en Google AI Studio
 3. Confirmar que la clave API tenga los permisos necesarios
-4. Verificar que la API este habilitada en el proyecto
+4. Verificar que la API esté habilitada en el proyecto
 
-Error de limite de tasa
+Error de límite de tasa
 -----------------------
 
-**Sintoma**: Error "429 Resource has been exhausted"
+**Síntoma**: Error "429 Resource has been exhausted"
 
-**Solucion**:
+**Solución**:
 
-1. Reducir el numero de solicitudes simultaneas en ``fess_config.properties``::
+1. Reducir el número de solicitudes simultáneas en ``fess_config.properties``::
 
     rag.llm.gemini.max.concurrent.requests=3
 
 2. Esperar unos minutos y reintentar
 3. Solicitar aumento de cuota si es necesario
 
-Restriccion de region
+Restricción de región
 ---------------------
 
-**Sintoma**: Error de que el servicio no esta disponible
+**Síntoma**: Error de que el servicio no está disponible
 
 **Verificaciones**:
 
-La API de Google AI solo esta disponible en ciertas regiones.
-Consulte la documentacion de Google para las regiones soportadas.
+La API de Google AI solo está disponible en ciertas regiones.
+Consulte la documentación de Google para las regiones soportadas.
 
 Timeout
 -------
 
-**Sintoma**: Las solicitudes tienen timeout
+**Síntoma**: Las solicitudes tienen timeout
 
-**Solucion**:
+**Solución**:
 
 1. Extender el tiempo de timeout::
 
     rag.llm.gemini.timeout=120000
 
-2. Considerar usar el modelo Flash (mas rapido)
+2. Considerar usar el modelo Flash (más rápido)
 
-Configuracion de depuracion
+Configuración de depuración
 ---------------------------
 
 Para investigar problemas, puede ajustar el nivel de log de |Fess| para obtener logs detallados relacionados con Gemini.
@@ -661,19 +661,19 @@ Notas de seguridad
 
 Al usar la API de Google AI, tenga en cuenta los siguientes aspectos de seguridad.
 
-1. **Privacidad de datos**: El contenido de los resultados de busqueda se envia a los servidores de Google
-2. **Gestion de claves API**: La filtracion de claves puede llevar a uso no autorizado
-3. **Cumplimiento**: Si incluye datos confidenciales, verifique las politicas de su organizacion
-4. **Terminos de uso**: Cumpla con los terminos de uso y la Politica de Uso Aceptable de Google
+1. **Privacidad de datos**: El contenido de los resultados de búsqueda se envía a los servidores de Google
+2. **Gestión de claves API**: La filtración de claves puede llevar a uso no autorizado
+3. **Cumplimiento**: Si incluye datos confidenciales, verifique las políticas de su organización
+4. **Términos de uso**: Cumpla con los términos de uso y la Política de Uso Aceptable de Google
 
-Informacion de referencia
+Información de referencia
 =========================
 
 - `Google AI for Developers <https://ai.google.dev/>`__
 - `Google AI Studio <https://aistudio.google.com/>`__
 - `Gemini API Documentation <https://ai.google.dev/docs>`__
 - `Google AI Pricing <https://ai.google.dev/pricing>`__
-- :doc:`llm-overview` - Descripcion general de integracion LLM
+- :doc:`llm-overview` - Descripción general de integración LLM
 - :doc:`rag-chat` - Detalles de la funcionalidad de modo de búsqueda IA
 - :doc:`rank-fusion` - Búsqueda híbrida: combina búsqueda por palabras clave y búsqueda semántica (vectorial)
 - :doc:`../user/chat-search` - Uso del modo de búsqueda IA (guía para el usuario final)

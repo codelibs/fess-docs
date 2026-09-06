@@ -2,45 +2,45 @@
 Conector de Slack
 ==================================
 
-Vision General
+Visión General
 ==============
 
 El conector de Slack proporciona funcionalidad para obtener mensajes de canales del espacio de trabajo de Slack
-y registrarlos en el indice de |Fess|.
+y registrarlos en el índice de |Fess|.
 
 Esta funcionalidad requiere el plugin ``fess-ds-slack``.
 
 Contenido Soportado
 ===================
 
-- Mensajes de canales publicos
+- Mensajes de canales públicos
 - Mensajes de canales privados
 - Archivos adjuntos (opcional)
 
 Requisitos Previos
 ==================
 
-1. Se requiere la instalacion del plugin
-2. Se requiere la creacion de una Slack App y configuracion de permisos
-3. Se requiere la obtencion del OAuth Access Token
+1. Se requiere la instalación del plugin
+2. Se requiere la creación de una Slack App y configuración de permisos
+3. Se requiere la obtención del OAuth Access Token
 
-Instalacion del Plugin
+Instalación del Plugin
 ----------------------
 
-Instale desde "Sistema" -> "Plugins" en la pantalla de administracion:
+Instale desde "Sistema" -> "Plugins" en la pantalla de administración:
 
 1. Descargue ``fess-ds-slack-X.X.X.jar`` desde Maven Central
-2. Cargue e instale desde la pantalla de gestion de plugins
+2. Cargue e instale desde la pantalla de gestión de plugins
 3. Reinicie |Fess|
 
-O consulte :doc:`../../admin/plugin-guide` para mas detalles.
+O consulte :doc:`../../admin/plugin-guide` para más detalles.
 
-Metodo de Configuracion
+Método de Configuración
 =======================
 
-Configure desde la pantalla de administracion en "Rastreador" -> "Almacen de datos" -> "Nuevo".
+Configure desde la pantalla de administración en "Rastreador" -> "Almacén de datos" -> "Nuevo".
 
-Configuracion Basica
+Configuración Básica
 --------------------
 
 .. list-table::
@@ -56,7 +56,7 @@ Configuracion Basica
    * - Habilitado
      - Activado
 
-Configuracion de Parametros
+Configuración de Parámetros
 ---------------------------
 
 ::
@@ -66,16 +66,16 @@ Configuracion de Parametros
     file_crawl=false
     include_private=false
 
-Lista de Parametros
+Lista de Parámetros
 ~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 25 15 60
 
-   * - Parametro
+   * - Parámetro
      - Requerido
-     - Descripcion
+     - Descripción
    * - ``token``
      - Si
      - OAuth Access Token de la Slack App
@@ -84,7 +84,7 @@ Lista de Parametros
      - Canales a rastrear (separados por comas, o ``*all``). Si no se especifica, se obtienen todos los canales (mismo comportamiento que ``*all``)
    * - ``file_crawl``
      - No
-     - Rastrear archivos tambien (predeterminado: ``false``)
+     - Rastrear archivos también (predeterminado: ``false``)
    * - ``include_private``
      - No
      - Incluir canales privados (predeterminado: ``false``)
@@ -137,7 +137,7 @@ Lista de Parametros
      - No
      - Número máximo de entradas en el caché de información de canales (predeterminado: ``10000``)
 
-Configuracion de Script
+Configuración de Script
 -----------------------
 
 ::
@@ -157,7 +157,7 @@ Campos Disponibles
    :widths: 30 70
 
    * - Campo
-     - Descripcion
+     - Descripción
    * - ``message.title``
      - Título (cadena vacía para mensajes, nombre y título del archivo para entradas de archivo)
    * - ``message.text``
@@ -165,15 +165,15 @@ Campos Disponibles
    * - ``message.user``
      - Nombre para mostrar del remitente del mensaje (si no está configurado, se resuelve en el orden de nombre real, nombre de usuario y luego ID de usuario)
    * - ``message.channel``
-     - Nombre del canal donde se envio el mensaje
+     - Nombre del canal donde se envió el mensaje
    * - ``message.timestamp``
-     - Fecha/hora de envio del mensaje
+     - Fecha/hora de envío del mensaje
    * - ``message.permalink``
      - Enlace permanente del mensaje
    * - ``message.attachments``
-     - Informacion de respaldo de archivos adjuntos
+     - Información de respaldo de archivos adjuntos
 
-Configuracion de Slack App
+Configuración de Slack App
 ==========================
 
 1. Crear Slack App
@@ -183,21 +183,21 @@ Acceda a https://api.slack.com/apps:
 
 1. Haga clic en "Create New App"
 2. Seleccione "From scratch"
-3. Ingrese el nombre de la aplicacion (ej: Fess Crawler)
+3. Ingrese el nombre de la aplicación (ej: Fess Crawler)
 4. Seleccione el espacio de trabajo
 5. Haga clic en "Create App"
 
 2. Configurar OAuth & Permissions
 ---------------------------------
 
-En el menu "OAuth & Permissions":
+En el menú "OAuth & Permissions":
 
 **Agregue a Bot Token Scopes**:
 
-Para solo canales publicos:
+Para solo canales públicos:
 
-- ``channels:history`` - Lectura de mensajes de canales publicos
-- ``channels:read`` - Lectura de informacion de canales publicos
+- ``channels:history`` - Lectura de mensajes de canales públicos
+- ``channels:read`` - Lectura de información de canales públicos
 - ``users:read`` - Lectura de información de usuario (requerido para resolución de nombre para mostrar)
 
 Para incluir canales privados (``include_private=true``):
@@ -205,17 +205,17 @@ Para incluir canales privados (``include_private=true``):
 - ``channels:history``
 - ``channels:read``
 - ``groups:history`` - Lectura de mensajes de canales privados
-- ``groups:read`` - Lectura de informacion de canales privados
+- ``groups:read`` - Lectura de información de canales privados
 - ``users:read``
 
-Para rastrear archivos tambien (``file_crawl=true``):
+Para rastrear archivos también (``file_crawl=true``):
 
 - ``files:read`` - Lectura de contenido de archivos
 
-3. Instalar la Aplicacion
+3. Instalar la Aplicación
 -------------------------
 
-En el menu "Install App":
+En el menú "Install App":
 
 1. Haga clic en "Install to Workspace"
 2. Verifique los permisos y haga clic en "Permitir"
@@ -223,7 +223,7 @@ En el menu "Install App":
 
 .. note::
    Normalmente se usa el Bot User OAuth Token que comienza con ``xoxb-``,
-   pero tambien se puede usar el User OAuth Token que comienza con ``xoxp-`` en los parametros.
+   pero también se puede usar el User OAuth Token que comienza con ``xoxp-`` en los parámetros.
 
 4. Agregar a Canales
 --------------------
@@ -232,17 +232,17 @@ Agregue la App a los canales que desea rastrear:
 
 1. Abra el canal en Slack
 2. Haga clic en el nombre del canal
-3. Seleccione la pestana "Integraciones"
-4. Haga clic en "Agregar una aplicacion"
-5. Agregue la aplicacion creada
+3. Seleccione la pestaña "Integraciones"
+4. Haga clic en "Agregar una aplicación"
+5. Agregue la aplicación creada
 
 Ejemplos de Uso
 ===============
 
-Rastrear Canales Especificos
+Rastrear Canales Específicos
 ----------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -265,7 +265,7 @@ Script:
 Rastrear Todos los Canales
 --------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -286,7 +286,7 @@ Script:
 Rastrear Incluyendo Canales Privados
 ------------------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -308,7 +308,7 @@ Script:
 Rastrear Incluyendo Archivos
 -----------------------------
 
-Parametros:
+Parámetros:
 
 ::
 
@@ -326,7 +326,7 @@ Script:
     created=message.timestamp
     url=message.permalink
 
-Incluir Informacion Detallada de Mensajes
+Incluir Información Detallada de Mensajes
 -------------------------------------------
 
 Script:
@@ -340,13 +340,13 @@ Script:
     timestamp=message.timestamp
     url=message.permalink
 
-Solucion de Problemas
+Solución de Problemas
 =====================
 
-Error de Autenticacion
+Error de Autenticación
 ----------------------
 
-**Sintoma**: ``invalid_auth`` o ``not_authed``
+**Síntoma**: ``invalid_auth`` o ``not_authed``
 
 **Verificar**:
 
@@ -356,48 +356,48 @@ Error de Autenticacion
    - Bot User OAuth Token: comienza con ``xoxb-``
    - User OAuth Token: comienza con ``xoxp-``
 
-3. Verificar que la aplicacion este instalada en el espacio de trabajo
+3. Verificar que la aplicación esté instalada en el espacio de trabajo
 4. Verificar que se hayan otorgado los permisos necesarios
 
 Canal No Encontrado
 -------------------
 
-**Sintoma**: ``channel_not_found``
+**Síntoma**: ``channel_not_found``
 
 **Verificar**:
 
 1. Verificar que el nombre del canal sea correcto (sin #)
-2. Verificar que la aplicacion este agregada al canal
+2. Verificar que la aplicación esté agregada al canal
 3. Para canales privados, establecer ``include_private=true``
-4. Verificar que el canal exista y no este archivado
+4. Verificar que el canal exista y no esté archivado
 
 No se Pueden Obtener Mensajes
 -----------------------------
 
-**Sintoma**: El rastreo tiene exito pero hay 0 mensajes
+**Síntoma**: El rastreo tiene éxito pero hay 0 mensajes
 
 **Verificar**:
 
-1. Verificar que se hayan otorgado los ambitos necesarios:
+1. Verificar que se hayan otorgado los ámbitos necesarios:
 
    - ``channels:history``
    - ``channels:read``
    - Para canales privados: ``groups:history``, ``groups:read``
 
 2. Verificar que existan mensajes en el canal
-3. Verificar que la aplicacion este agregada al canal
-4. Verificar que la Slack App este habilitada
+3. Verificar que la aplicación esté agregada al canal
+4. Verificar que la Slack App esté habilitada
 
 Error de Permisos Insuficientes
 --------------------------------
 
-**Sintoma**: ``missing_scope``
+**Síntoma**: ``missing_scope``
 
-**Solucion**:
+**Solución**:
 
-1. Agregar los ambitos necesarios en la configuracion de la Slack App:
+1. Agregar los ámbitos necesarios en la configuración de la Slack App:
 
-   **Canales Publicos**:
+   **Canales Públicos**:
 
    - ``channels:history``
    - ``channels:read``
@@ -411,46 +411,46 @@ Error de Permisos Insuficientes
 
    - ``files:read``
 
-2. Reinstalar la aplicacion
+2. Reinstalar la aplicación
 3. Reiniciar |Fess|
 
 No se Pueden Rastrear Archivos
 -------------------------------
 
-**Sintoma**: No se obtienen archivos aunque ``file_crawl=true``
+**Síntoma**: No se obtienen archivos aunque ``file_crawl=true``
 
 **Verificar**:
 
-1. Verificar que se haya otorgado el ambito ``files:read``
+1. Verificar que se haya otorgado el ámbito ``files:read``
 2. Verificar que realmente se hayan publicado archivos en el canal
 3. Verificar los permisos de acceso a los archivos
 
-Limite de Tasa de API
+Límite de Tasa de API
 ---------------------
 
-**Sintoma**: ``rate_limited``
+**Síntoma**: ``rate_limited``
 
-**Solucion**:
+**Solución**:
 
 1. Aumentar el intervalo de rastreo
-2. Reducir el numero de canales
-3. Dividir en multiples almacenes de datos y distribuir la programacion
+2. Reducir el número de canales
+3. Dividir en múltiples almacenes de datos y distribuir la programación
 
-Limites de la API de Slack:
+Límites de la API de Slack:
 
-- Metodos de nivel 3: 50+ solicitudes/minuto
-- Metodos de nivel 4: 100+ solicitudes/minuto
+- Métodos de nivel 3: 50+ solicitudes/minuto
+- Métodos de nivel 4: 100+ solicitudes/minuto
 
 Gran Volumen de Mensajes
 -------------------------
 
-**Sintoma**: El rastreo tarda mucho tiempo o se agota el tiempo de espera
+**Síntoma**: El rastreo tarda mucho tiempo o se agota el tiempo de espera
 
-**Solucion**:
+**Solución**:
 
-1. Dividir los canales y configurar multiples almacenes de datos
-2. Distribuir la programacion de rastreo
-3. Considerar una configuracion para excluir mensajes antiguos
+1. Dividir los canales y configurar múltiples almacenes de datos
+2. Distribuir la programación de rastreo
+3. Considerar una configuración para excluir mensajes antiguos
 
 Ejemplos Avanzados de Script
 ==============================
@@ -477,11 +477,11 @@ Formato del nombre del canal:
     created=message.timestamp
     url=message.permalink
 
-Informacion de Referencia
+Información de Referencia
 =========================
 
-- :doc:`ds-overview` - Vision general de conectores de almacen de datos
+- :doc:`ds-overview` - Visión general de conectores de almacén de datos
 - :doc:`ds-atlassian` - Conector de Atlassian
-- :doc:`../../admin/dataconfig-guide` - Guia de configuracion de almacen de datos
+- :doc:`../../admin/dataconfig-guide` - Guía de configuración de almacén de datos
 - `Slack API Documentation <https://api.slack.com/>`_
 - `Slack Bot Token Scopes <https://api.slack.com/scopes>`_
