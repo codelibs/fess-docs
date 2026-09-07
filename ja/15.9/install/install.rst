@@ -170,6 +170,8 @@ OpenSearch
    OpenSearch のバージョンとプラグインのバージョンは一致させる必要があります。
    バージョンの不一致は、起動エラーや予期しない動作の原因となります。
 
+``bin/fess-setup install opensearch`` は、これらのプラグインを含めて OpenSearch を用意します。詳細は :doc:`install-linux` を参照してください。
+
 Java (Docker 版以外)
 -------------------
 

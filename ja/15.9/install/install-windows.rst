@@ -60,6 +60,18 @@ Java 21 以降が表示されることを確認してください。
 ステップ 1: OpenSearch のインストール
 ===================================
 
+.. tip::
+
+   |Fess| に同梱の ``bin\fess-setup`` で、以下の手順をまとめて実行できます。
+   OpenSearch の取得と展開、必要なプラグインの導入、 ``configsync`` の設定までを行います。
+
+   ::
+
+       > cd C:\fess-15.9.0
+       > bin\fess-setup install opensearch
+
+   手順を個別に確認したい場合や、既存の OpenSearch を使う場合は、以下に従ってください。
+
 OpenSearch のダウンロード
 -----------------------
 

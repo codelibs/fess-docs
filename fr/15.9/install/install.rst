@@ -170,6 +170,8 @@ OpenSearch est utilisé comme moteur de recherche.
    Les versions d'OpenSearch et des plugins doivent correspondre.
    Une incompatibilité de version peut causer des erreurs de démarrage ou des comportements inattendus.
 
+``bin/fess-setup install opensearch`` met en place OpenSearch avec ces plugins. Voir :doc:`install-linux` pour les détails.
+
 Java (sauf version Docker)
 --------------------------
 

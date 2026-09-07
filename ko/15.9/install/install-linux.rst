@@ -79,6 +79,20 @@ ZIP 버전 설치
 단계 1: OpenSearch 설치
 -----------------------
 
+.. tip::
+
+   |Fess| 에 포함된 ``bin/fess-setup`` 으로 아래 절차를 한 번에 실행할 수 있습니다.
+   OpenSearch 다운로드와 압축 해제, 필요한 플러그인 설치, ``configsync`` 설정까지 수행합니다.
+
+   ::
+
+       $ cd /path/to/fess-15.9.0
+       $ bin/fess-setup install opensearch
+
+   절차를 하나씩 확인하려는 경우나 기존 OpenSearch 를 사용하는 경우에는 아래를 따르십시오.
+   기존 OpenSearch 에 플러그인만 설치하려면
+   ``bin/fess-setup install plugins --opensearch-home /path/to/opensearch`` 를 사용합니다.
+
 1. OpenSearch 다운로드
 
    `Download OpenSearch <https://opensearch.org/downloads.html>`__ 에서 TAR.GZ 버전을 다운로드합니다.

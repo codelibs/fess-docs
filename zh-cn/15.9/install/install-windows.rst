@@ -60,6 +60,18 @@ PowerShell 的情况::
 步骤 1: 安装 OpenSearch
 =======================
 
+.. tip::
+
+   |Fess| 附带的 ``bin\fess-setup`` 可以一条命令完成下面的步骤：下载并解压 OpenSearch、
+   安装所需插件，以及配置 ``configsync``\ 。
+
+   ::
+
+       > cd C:\fess-15.9.0
+       > bin\fess-setup install opensearch
+
+   如果想逐步确认，或者要使用已有的 OpenSearch，请按照下面的步骤操作。
+
 下载 OpenSearch
 ---------------
 

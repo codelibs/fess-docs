@@ -170,6 +170,8 @@ OpenSearch
    OpenSearch 的版本与插件的版本必须一致。
    版本不一致可能导致启动错误或意外行为。
 
+``bin/fess-setup install opensearch`` 会连同这些插件一起准备 OpenSearch。详情请参阅 :doc:`install-linux`\ 。
+
 Java (Docker 版除外)
 -------------------
 

@@ -60,6 +60,20 @@ Configuration des variables d'environnement
 Étape 1 : Installation d'OpenSearch
 ====================================
 
+.. tip::
+
+   ``bin\fess-setup``, fourni avec |Fess|, exécute les étapes ci-dessous en une seule commande :
+   téléchargement et extraction d'OpenSearch, installation des plugins requis et configuration
+   de ``configsync``.
+
+   ::
+
+       > cd C:\fess-15.9.0
+       > bin\fess-setup install opensearch
+
+   Suivez les étapes ci-dessous pour les dérouler une à une, ou lorsque vous utilisez un
+   OpenSearch existant.
+
 Téléchargement d'OpenSearch
 ----------------------------
 
