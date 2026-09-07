@@ -51,6 +51,7 @@ Fess로 실현하는 지식 활용 전략
 
 - :doc:`articles/use-cases` - 업종별, 규모별 활용 사례
 - :doc:`articles/comparison` - Fess와 다른 검색 솔루션 비교 (Elasticsearch, Solr 등)
+- :doc:`articles/file-server-search` - 파일 서버 전문 검색을 도입하기 전에 확인할 점
 
 .. toctree::
    :hidden:
@@ -80,3 +81,4 @@ Fess로 실현하는 지식 활용 전략
    articles/guide-23
    articles/use-cases
    articles/comparison
+   articles/file-server-search

@@ -51,6 +51,7 @@
 
 - :doc:`articles/use-cases` - 按行业和企业规模分类的用例
 - :doc:`articles/comparison` - Fess与其他搜索解决方案的比较（Elasticsearch、Solr等）
+- :doc:`articles/file-server-search` - 在文件服务器上引入全文检索前需要确认的要点
 
 .. toctree::
    :hidden:
@@ -80,3 +81,4 @@
    articles/guide-23
    articles/use-cases
    articles/comparison
+   articles/file-server-search

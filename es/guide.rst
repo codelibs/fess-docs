@@ -51,6 +51,7 @@ Casos de uso y ejemplos
 
 - :doc:`articles/use-cases` - Casos de uso por sector y tamano de empresa
 - :doc:`articles/comparison` - Comparacion de Fess con otras soluciones de busqueda (Elasticsearch, Solr, etc.)
+- :doc:`articles/file-server-search` - Que comprobar antes de buscar en servidores de archivos
 
 .. toctree::
    :hidden:
@@ -80,3 +81,4 @@ Casos de uso y ejemplos
    articles/guide-23
    articles/use-cases
    articles/comparison
+   articles/file-server-search
