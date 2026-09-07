@@ -236,7 +236,7 @@ Directorio de Exportación Vacío
 ::
 
     # Verificar el conteo de documentos en el índice
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 La Exportación Falla a Mitad de Proceso
 -----------------------------------------

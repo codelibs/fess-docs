@@ -41,10 +41,10 @@ OpenSearch Dashboards 是用于可视化 |Fess| 所使用的 OpenSearch 数据�
 
 ::
 
-    opensearch.hosts: ["http://localhost:9201"]
+    opensearch.hosts: ["http://localhost:9200"]
 
 请根据环境将 ``localhost`` 更改为适当的主机名或IP地址。
-|Fess| 的默认配置中，OpenSearch 在 9201 端口启动。
+|Fess| 默认连接 9200 端口的 OpenSearch。
 
 .. note::
    如 OpenSearch 端口号不同，请更改为适当的端口号。

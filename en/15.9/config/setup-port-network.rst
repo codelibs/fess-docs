@@ -25,9 +25,9 @@ Default Ports
    * - Fess Web Application
      - 8080
    * - OpenSearch (HTTP)
-     - 9201
+     - 9200
    * - OpenSearch (Transport)
-     - 9301
+     - 9300
 
 Changing Fess Web Application Port
 -----------------------------------
@@ -237,7 +237,7 @@ You can configure the OpenSearch connection URL and the health-check (heartbeat)
    * - Configuration Item
      - Description
    * - ``search_engine.http.url``
-     - OpenSearch URL (Default: http://localhost:9201)
+     - OpenSearch URL (Default: http://localhost:9200)
    * - ``search_engine.heartbeat_interval``
      - Health check interval in milliseconds (Default: 10000)
 
@@ -397,7 +397,7 @@ using security groups or network ACLs.
 Recommended settings:
 - Inbound: Ports 80/443 (via HTTP reverse proxy)
 - Restrict port 8080 to internal access only
-- Restrict OpenSearch ports 9201/9301 to internal access only
+- Restrict OpenSearch ports 9200/9300 to internal access only
 
 Troubleshooting
 ===============
@@ -422,7 +422,7 @@ Cannot Connect to OpenSearch
 
 1. Verify that OpenSearch is running.
 2. Confirm that the ``search_engine.http.url`` setting is correct.
-3. Verify network connectivity: ``curl http://localhost:9201``
+3. Verify network connectivity: ``curl http://localhost:9200``
 4. Check OpenSearch logs for errors.
 
 Not Working Properly When Accessed via Reverse Proxy

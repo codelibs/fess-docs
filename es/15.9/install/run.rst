@@ -291,8 +291,8 @@ La configuración del número de puerto, el tamaño del montón JVM y la URL de 
      - (sin definir)
      - Tamaño del montón JVM. Establece el mismo valor para el mínimo y el máximo. Cuando no está definido, se utiliza un mínimo de ``256m`` y un máximo de ``2g`` (la edición ZIP para Windows utiliza un máximo de ``1g``); la edición RPM/DEB utiliza ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - (sin definir)
-     - URL del OpenSearch al que conectarse. Cuando no está definido, se utiliza el valor predeterminado integrado ``http://localhost:9201``. Cambie este valor cuando OpenSearch se ejecute en un puerto o host diferente (el procedimiento de :doc:`install-linux` lo establece en ``http://localhost:9200`` para coincidir con el puerto de escucha de OpenSearch). La edición RPM/DEB establece ``http://localhost:9200`` de forma predeterminada mediante el archivo de entorno del paquete.
+     - ``http://localhost:9200``
+     - URL del OpenSearch al que conectarse. En la versión ZIP, ``bin/fess.in.sh`` establece este valor de forma predeterminada. Exporte la variable, o edite ``bin/fess.in.sh``, cuando OpenSearch se ejecute en un puerto o host diferente. La edición RPM/DEB lo establece en el archivo de entorno del paquete.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Nivel de registro de |Fess|.

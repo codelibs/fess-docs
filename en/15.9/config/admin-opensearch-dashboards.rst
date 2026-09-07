@@ -41,10 +41,10 @@ Edit the configuration file ``config/opensearch_dashboards.yml`` to make OpenSea
 
 ::
 
-    opensearch.hosts: ["http://localhost:9201"]
+    opensearch.hosts: ["http://localhost:9200"]
 
 Change ``localhost`` to an appropriate hostname or IP address for your environment.
-In |Fess|'s default configuration, OpenSearch starts on port 9201.
+By default, |Fess| connects to OpenSearch on port 9200.
 
 .. note::
    If the OpenSearch port number is different, change it to the appropriate port number.

@@ -58,7 +58,7 @@
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "fs",
       "settings": {
@@ -68,7 +68,7 @@
     }'
 
 .. note::
-   |Fess| ZIP 版的默认配置中，OpenSearch 在 9201 端口启动（``fess_config.properties`` 的 ``search_engine.http.url``）。RPM/DEB 软件包版默认配置为连接 9200 端口（环境配置文件 ``/etc/sysconfig/fess`` （RPM）或 ``/etc/default/fess`` （DEB）中的 ``SEARCH_ENGINE_HTTP_URL``）。请根据您的实际环境替换相应的端口号。
+   |Fess| 默认连接 9200 端口的 OpenSearch（ZIP 版为 ``bin/fess.in.sh`` 中的 ``SEARCH_ENGINE_HTTP_URL`` ，软件包版为环境配置文件 ``/etc/sysconfig/fess`` （RPM）或 ``/etc/default/fess`` （DEB））。如果 OpenSearch 监听其他端口，请相应替换端口号。
 
 **AWS S3仓库:**
 
@@ -76,7 +76,7 @@
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "s3",
       "settings": {
@@ -96,7 +96,7 @@
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -110,7 +110,7 @@
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess*",
       "ignore_unavailable": true,
@@ -126,7 +126,7 @@
 
     #!/bin/bash
     DATE=$(date +%Y%m%d_%H%M%S)
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -140,13 +140,13 @@
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/_all?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/_all?pretty"
 
 确认特定快照的详情。
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/snapshot_1?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/snapshot_1?pretty"
 
 从快照恢复
 ------------------------------
@@ -156,7 +156,7 @@
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -170,7 +170,7 @@
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "ignore_unavailable": true,
@@ -184,7 +184,7 @@
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "rename_pattern": "fess\\.(.+)",
@@ -198,7 +198,7 @@
 
    ::
 
-       curl -X POST "localhost:9201/_aliases" -H 'Content-Type: application/json' -d'
+       curl -X POST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d'
        {
          "actions": [
            { "add": { "index": "restored_fess.20250101000000000", "alias": "fess.search" } },
@@ -213,7 +213,7 @@
 
 ::
 
-    curl -X DELETE "localhost:9201/_snapshot/fess_backup/snapshot_1"
+    curl -X DELETE "localhost:9200/_snapshot/fess_backup/snapshot_1"
 
 配置文件备份
 ==========================
@@ -350,8 +350,8 @@
 恢复后无法搜索
 ------------------------
 
-1. 请确认索引是否正常恢复：``curl -X GET "localhost:9201/_cat/indices?v"``
-2. 请确认 ``fess.search`` 和 ``fess.update`` 别名是否指向已恢复的索引：``curl -X GET "localhost:9201/_cat/aliases?v"``\ 。若别名未设置，请通过 ``_aliases`` API 重新配置。
+1. 请确认索引是否正常恢复：``curl -X GET "localhost:9200/_cat/indices?v"``
+2. 请确认 ``fess.search`` 和 ``fess.update`` 别名是否指向已恢复的索引：``curl -X GET "localhost:9200/_cat/aliases?v"``\ 。若别名未设置，请通过 ``_aliases`` API 重新配置。
 3. 请在 |Fess| 日志文件中确认是否有错误。
 4. 请确认配置文件是否已正确恢复。
 

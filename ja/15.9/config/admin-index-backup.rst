@@ -58,7 +58,7 @@ OpenSearch のスナップショット機能を使用して、インデックス
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "fs",
       "settings": {
@@ -68,7 +68,7 @@ OpenSearch のスナップショット機能を使用して、インデックス
     }'
 
 .. note::
-   |Fess| の ZIP 版のデフォルト設定では、OpenSearch は 9201 ポートで起動します（ ``fess_config.properties`` の ``search_engine.http.url`` ）。RPM/DEB パッケージ版では、デフォルトで 9200 ポートに接続するよう設定されています（環境設定ファイル ``/etc/sysconfig/fess`` （RPM）または ``/etc/default/fess`` （DEB）の ``SEARCH_ENGINE_HTTP_URL`` ）。お使いの環境に合わせてポート番号を読み替えてください。
+   |Fess| は既定で 9200 ポートの OpenSearch に接続します（ZIP 版は ``bin/fess.in.sh`` の ``SEARCH_ENGINE_HTTP_URL`` 、RPM/DEB 版は環境設定ファイル ``/etc/sysconfig/fess`` （RPM）または ``/etc/default/fess`` （DEB））。別のポートで OpenSearch を稼働させている場合は、ポート番号を読み替えてください。
 
 **AWS S3リポジトリの場合:**
 
@@ -76,7 +76,7 @@ S3をバックアップ先とする場合は、``repository-s3`` プラグイン
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "s3",
       "settings": {
@@ -96,7 +96,7 @@ S3をバックアップ先とする場合は、``repository-s3`` プラグイン
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -110,7 +110,7 @@ S3をバックアップ先とする場合は、``repository-s3`` プラグイン
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess*",
       "ignore_unavailable": true,
@@ -126,7 +126,7 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
     #!/bin/bash
     DATE=$(date +%Y%m%d_%H%M%S)
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -140,13 +140,13 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/_all?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/_all?pretty"
 
 特定のスナップショットの詳細を確認します。
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/snapshot_1?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/snapshot_1?pretty"
 
 スナップショットからのリストア
 ------------------------------
@@ -156,7 +156,7 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -170,7 +170,7 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "ignore_unavailable": true,
@@ -184,7 +184,7 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "rename_pattern": "fess\\.(.+)",
@@ -198,7 +198,7 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
    ::
 
-       curl -X POST "localhost:9201/_aliases" -H 'Content-Type: application/json' -d'
+       curl -X POST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d'
        {
          "actions": [
            { "add": { "index": "restored_fess.20250101000000000", "alias": "fess.search" } },
@@ -213,7 +213,7 @@ cronなどを使用して、定期的にバックアップを実行できます�
 
 ::
 
-    curl -X DELETE "localhost:9201/_snapshot/fess_backup/snapshot_1"
+    curl -X DELETE "localhost:9200/_snapshot/fess_backup/snapshot_1"
 
 設定ファイルのバックアップ
 ==========================
@@ -350,8 +350,8 @@ OpenSearch のインデックスとは別に、以下の設定ファイルもバ
 リストア後に検索できない
 ------------------------
 
-1. インデックスが正常にリストアされたか確認してください: ``curl -X GET "localhost:9201/_cat/indices?v"``
-2. ``fess.search`` および ``fess.update`` エイリアスがリストアしたインデックスを指しているか確認してください: ``curl -X GET "localhost:9201/_cat/aliases?v"`` 。エイリアスが設定されていない場合は、 ``_aliases`` API で再設定してください。
+1. インデックスが正常にリストアされたか確認してください: ``curl -X GET "localhost:9200/_cat/indices?v"``
+2. ``fess.search`` および ``fess.update`` エイリアスがリストアしたインデックスを指しているか確認してください: ``curl -X GET "localhost:9200/_cat/aliases?v"`` 。エイリアスが設定されていない場合は、 ``_aliases`` API で再設定してください。
 3. |Fess| のログファイルでエラーがないか確認してください。
 4. 設定ファイルが正しくリストアされているか確認してください。
 

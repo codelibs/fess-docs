@@ -236,7 +236,7 @@ Empty Export Directory
 ::
 
     # Check index document count
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 Export Fails Midway
 -------------------

@@ -299,8 +299,8 @@ ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
      - （未設定）
      - JVM ヒープサイズ。最小・最大に同じ値を設定します。未設定時は最小 ``256m``・最大 ``2g``\ （ZIP 版（Windows）は最大 ``1g``）、RPM/DEB 版では ``512m`` が使用されます。
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - （未設定）
-     - 接続先 OpenSearch の URL。未設定の場合は内部既定値 ``http://localhost:9201`` が使用されます。OpenSearch を別ポートや別ホストで稼働させる場合に変更します（:doc:`install-linux` の手順では OpenSearch の待ち受けポートに合わせて ``http://localhost:9200`` を設定します）。RPM/DEB 版ではパッケージの環境設定ファイルにより、既定で ``http://localhost:9200`` が設定されます。
+     - ``http://localhost:9200``
+     - 接続先 OpenSearch の URL。ZIP 版では ``bin/fess.in.sh`` が既定でこの値を設定します。OpenSearch を別ポートや別ホストで稼働させる場合は、環境変数として設定するか ``bin/fess.in.sh`` を編集します。RPM/DEB 版ではパッケージの環境設定ファイルで設定されます。
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| のログレベル。

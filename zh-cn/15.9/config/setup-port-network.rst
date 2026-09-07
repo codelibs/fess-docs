@@ -25,9 +25,9 @@
    * - Fess Web 应用程序
      - 8080
    * - OpenSearch (HTTP)
-     - 9201
+     - 9200
    * - OpenSearch (Transport)
-     - 9301
+     - 9300
 
 Fess Web 应用程序端口变更
 --------------------------------------
@@ -241,7 +241,7 @@ OpenSearch 连接配置
    * - 配置项
      - 说明
    * - ``search_engine.http.url``
-     - OpenSearch的URL(默认: http://localhost:9201)
+     - OpenSearch的URL(默认: http://localhost:9200)
    * - ``search_engine.heartbeat_interval``
      - 健康检查间隔(毫秒,默认: 10000)
 
@@ -397,7 +397,7 @@ SSL/TLS 终止
 推荐配置:
 - 入站: 80/443端口(通过 HTTP 反向代理)
 - 8080端口仅限从内部访问
-- OpenSearch 的 9201/9301 端口仅限从内部访问
+- OpenSearch 的 9200/9300 端口仅限从内部访问
 
 故障排除
 ======================
@@ -422,7 +422,7 @@ SSL/TLS 终止
 
 1. 请确认 OpenSearch 是否已启动。
 2. 请确认 ``search_engine.http.url`` 的配置是否正确。
-3. 请确认网络连接: ``curl http://localhost:9201``
+3. 请确认网络连接: ``curl http://localhost:9200``
 4. 请在 OpenSearch 日志中确认错误信息。
 
 通过反向代理访问时无法正常工作

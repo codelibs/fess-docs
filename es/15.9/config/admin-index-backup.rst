@@ -58,7 +58,7 @@ Primero, configure un repositorio para almacenar los datos de respaldo.
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "fs",
       "settings": {
@@ -68,7 +68,7 @@ Primero, configure un repositorio para almacenar los datos de respaldo.
     }'
 
 .. note::
-   En la configuración predeterminada de la versión ZIP de |Fess|, OpenSearch se inicia en el puerto 9201 (``search_engine.http.url`` en ``fess_config.properties``). En la versión de paquete RPM/DEB, la conexión está configurada por defecto al puerto 9200 (``SEARCH_ENGINE_HTTP_URL`` en el archivo de configuración de entorno ``/etc/sysconfig/fess`` (RPM) o ``/etc/default/fess`` (DEB)). Ajuste el número de puerto según su entorno.
+   De forma predeterminada, |Fess| se conecta a OpenSearch en el puerto 9200 (``SEARCH_ENGINE_HTTP_URL`` en ``bin/fess.in.sh`` para la versión ZIP, o en el archivo de configuración de entorno ``/etc/sysconfig/fess`` (RPM) o ``/etc/default/fess`` (DEB) para los paquetes). Ajuste el número de puerto si su OpenSearch escucha en otro.
 
 **Para repositorio AWS S3:**
 
@@ -76,7 +76,7 @@ Si utiliza S3 como destino de respaldo, instale y configure el plugin ``reposito
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "s3",
       "settings": {
@@ -96,7 +96,7 @@ Respalda todos los índices.
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -110,7 +110,7 @@ Respalda solo índices específicos. El siguiente es un ejemplo que tiene como o
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess*",
       "ignore_unavailable": true,
@@ -126,7 +126,7 @@ Puede ejecutar respaldos periódicos utilizando cron u otras herramientas.
 
     #!/bin/bash
     DATE=$(date +%Y%m%d_%H%M%S)
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -140,13 +140,13 @@ Verifique la lista de instantáneas creadas.
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/_all?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/_all?pretty"
 
 Verifique los detalles de una instantánea específica.
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/snapshot_1?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/snapshot_1?pretty"
 
 Restauración desde Instantáneas
 ---------------------------------
@@ -156,7 +156,7 @@ Restauración de Todos los Índices
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -170,7 +170,7 @@ El nombre del índice de documentos de búsqueda tiene el formato ``fess.{yyyyMM
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "ignore_unavailable": true,
@@ -184,7 +184,7 @@ También puede cambiar el nombre del índice durante la restauración.
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "rename_pattern": "fess\\.(.+)",
@@ -198,7 +198,7 @@ También puede cambiar el nombre del índice durante la restauración.
 
    ::
 
-       curl -X POST "localhost:9201/_aliases" -H 'Content-Type: application/json' -d'
+       curl -X POST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d'
        {
          "actions": [
            { "add": { "index": "restored_fess.20250101000000000", "alias": "fess.search" } },
@@ -213,7 +213,7 @@ Puede eliminar instantáneas antiguas para ahorrar capacidad de almacenamiento.
 
 ::
 
-    curl -X DELETE "localhost:9201/_snapshot/fess_backup/snapshot_1"
+    curl -X DELETE "localhost:9200/_snapshot/fess_backup/snapshot_1"
 
 Respaldo de Archivos de Configuración
 ========================================
@@ -350,8 +350,8 @@ Falla en la Restauración
 No es Posible Buscar Después de la Restauración
 -------------------------------------------------
 
-1. Verifique que los índices se hayan restaurado correctamente: ``curl -X GET "localhost:9201/_cat/indices?v"``
-2. Verifique que los alias ``fess.search`` y ``fess.update`` apunten al índice restaurado: ``curl -X GET "localhost:9201/_cat/aliases?v"``. Si los alias no están configurados, vuelva a configurarlos mediante la API ``_aliases``.
+1. Verifique que los índices se hayan restaurado correctamente: ``curl -X GET "localhost:9200/_cat/indices?v"``
+2. Verifique que los alias ``fess.search`` y ``fess.update`` apunten al índice restaurado: ``curl -X GET "localhost:9200/_cat/aliases?v"``. Si los alias no están configurados, vuelva a configurarlos mediante la API ``_aliases``.
 3. Revise los archivos de registro de |Fess| para detectar errores.
 4. Confirme que los archivos de configuración se hayan restaurado correctamente.
 

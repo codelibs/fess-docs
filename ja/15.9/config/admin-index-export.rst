@@ -236,7 +236,7 @@ JSON フォーマットの場合、各ファイルは除外されていない全
 ::
 
     # インデックスのドキュメント数を確認
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 エクスポートが途中で失敗する
 ----------------------------

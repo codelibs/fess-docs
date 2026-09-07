@@ -25,9 +25,9 @@ Ports par défaut
    * - Application web Fess
      - 8080
    * - OpenSearch (HTTP)
-     - 9201
+     - 9200
    * - OpenSearch (Transport)
-     - 9301
+     - 9300
 
 Modification du port de l'application web Fess
 --------------------------------------
@@ -241,7 +241,7 @@ Vous pouvez configurer l'URL de connexion à OpenSearch et l'intervalle de véri
    * - Élément de configuration
      - Description
    * - ``search_engine.http.url``
-     - URL d'OpenSearch (par défaut : http://localhost:9201)
+     - URL d'OpenSearch (par défaut : http://localhost:9200)
    * - ``search_engine.heartbeat_interval``
      - Intervalle de vérification de santé (millisecondes, par défaut : 10000)
 
@@ -397,7 +397,7 @@ avec les groupes de sécurité ou les ACL réseau.
 Configuration recommandée :
 - Entrant : ports 80/443 (via reverse proxy HTTP)
 - Restreindre l'accès au port 8080 uniquement depuis l'interne
-- Restreindre l'accès aux ports 9201/9301 d'OpenSearch uniquement depuis l'interne
+- Restreindre l'accès aux ports 9200/9300 d'OpenSearch uniquement depuis l'interne
 
 Dépannage
 ======================
@@ -422,7 +422,7 @@ Impossible de se connecter à OpenSearch
 
 1. Vérifiez si OpenSearch est démarré.
 2. Vérifiez si la configuration de ``search_engine.http.url`` est correcte.
-3. Vérifiez la connexion réseau : ``curl http://localhost:9201``
+3. Vérifiez la connexion réseau : ``curl http://localhost:9200``
 4. Vérifiez les erreurs dans les journaux d'OpenSearch.
 
 Fonctionnement anormal lors de l'accès via reverse proxy

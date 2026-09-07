@@ -58,7 +58,7 @@ First, configure a repository to store backup data.
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "fs",
       "settings": {
@@ -68,7 +68,7 @@ First, configure a repository to store backup data.
     }'
 
 .. note::
-   In the default configuration of the |Fess| ZIP distribution, OpenSearch starts on port 9201 (``search_engine.http.url`` in ``fess_config.properties``). For RPM/DEB packages, the default configuration connects to port 9200 (``SEARCH_ENGINE_HTTP_URL`` in the environment configuration file ``/etc/sysconfig/fess`` (RPM) or ``/etc/default/fess`` (DEB)). Adjust the port number to match your environment.
+   By default, |Fess| connects to OpenSearch on port 9200 (``SEARCH_ENGINE_HTTP_URL`` in ``bin/fess.in.sh`` for the ZIP distribution, or in the environment configuration file ``/etc/sysconfig/fess`` (RPM) or ``/etc/default/fess`` (DEB) for the packages). Adjust the port number if your OpenSearch listens elsewhere.
 
 **For AWS S3 repository:**
 
@@ -76,7 +76,7 @@ To use S3 as a backup destination, install and configure the ``repository-s3`` p
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "s3",
       "settings": {
@@ -96,7 +96,7 @@ Back up all indexes.
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -110,7 +110,7 @@ Back up only specific indexes. The following example targets only |Fess|-related
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess*",
       "ignore_unavailable": true,
@@ -126,7 +126,7 @@ Periodic backups can be executed using cron or similar tools.
 
     #!/bin/bash
     DATE=$(date +%Y%m%d_%H%M%S)
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -140,13 +140,13 @@ Check the list of created snapshots.
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/_all?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/_all?pretty"
 
 Check details of a specific snapshot.
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/snapshot_1?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/snapshot_1?pretty"
 
 Restoring from Snapshots
 -------------------------
@@ -156,7 +156,7 @@ Restoring All Indexes
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -170,7 +170,7 @@ The search document index name is in the format ``fess.{yyyyMMddHHmmssSSS}``. Ve
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "ignore_unavailable": true,
@@ -184,7 +184,7 @@ You can also change the index name when restoring.
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "rename_pattern": "fess\\.(.+)",
@@ -198,7 +198,7 @@ You can also change the index name when restoring.
 
    ::
 
-       curl -X POST "localhost:9201/_aliases" -H 'Content-Type: application/json' -d'
+       curl -X POST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d'
        {
          "actions": [
            { "add": { "index": "restored_fess.20250101000000000", "alias": "fess.search" } },
@@ -213,7 +213,7 @@ You can delete old snapshots to save storage space.
 
 ::
 
-    curl -X DELETE "localhost:9201/_snapshot/fess_backup/snapshot_1"
+    curl -X DELETE "localhost:9200/_snapshot/fess_backup/snapshot_1"
 
 Configuration File Backup
 ==========================
@@ -350,8 +350,8 @@ Restore Fails
 Cannot Search After Restore
 ----------------------------
 
-1. Verify that indexes were restored correctly: ``curl -X GET "localhost:9201/_cat/indices?v"``
-2. Verify that the ``fess.search`` and ``fess.update`` aliases point to the restored index: ``curl -X GET "localhost:9201/_cat/aliases?v"``. If aliases are not configured, reconfigure them using the ``_aliases`` API.
+1. Verify that indexes were restored correctly: ``curl -X GET "localhost:9200/_cat/indices?v"``
+2. Verify that the ``fess.search`` and ``fess.update`` aliases point to the restored index: ``curl -X GET "localhost:9200/_cat/aliases?v"``. If aliases are not configured, reconfigure them using the ``_aliases`` API.
 3. Check |Fess| log files for errors.
 4. Verify that configuration files were restored correctly.
 

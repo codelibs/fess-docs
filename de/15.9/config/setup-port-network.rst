@@ -25,9 +25,9 @@ Standard-Ports
    * - Fess-Webanwendung
      - 8080
    * - OpenSearch (HTTP)
-     - 9201
+     - 9200
    * - OpenSearch (Transport)
-     - 9301
+     - 9300
 
 Ändern des Ports der Fess-Webanwendung
 --------------------------------------
@@ -240,7 +240,7 @@ Sie können die OpenSearch-Verbindungs-URL und das Intervall der Integritätspr�
    * - Konfigurationselement
      - Beschreibung
    * - ``search_engine.http.url``
-     - OpenSearch-URL (Standard: http://localhost:9201)
+     - OpenSearch-URL (Standard: http://localhost:9200)
    * - ``search_engine.heartbeat_interval``
      - Intervall für Gesundheitsprüfungen (Millisekunden, Standard: 10000)
 
@@ -399,7 +399,7 @@ In Cloud-Umgebungen wie AWS, GCP oder Azure öffnen Sie bitte die entsprechenden
 Empfohlene Konfiguration:
 - Eingehend: Ports 80/443 (über HTTP-Reverse-Proxy)
 - Port 8080 nur intern zugänglich beschränken
-- OpenSearch-Ports 9201/9301 nur intern zugänglich beschränken
+- OpenSearch-Ports 9200/9300 nur intern zugänglich beschränken
 
 Fehlersuche
 ======================
@@ -424,7 +424,7 @@ Keine Verbindung zu OpenSearch möglich
 
 1. Überprüfen Sie, ob OpenSearch läuft.
 2. Überprüfen Sie, ob die Einstellung ``search_engine.http.url`` korrekt ist.
-3. Überprüfen Sie die Netzwerkverbindung: ``curl http://localhost:9201``
+3. Überprüfen Sie die Netzwerkverbindung: ``curl http://localhost:9200``
 4. Überprüfen Sie Fehler im OpenSearch-Protokoll.
 
 Fehlfunktion beim Zugriff über Reverse-Proxy

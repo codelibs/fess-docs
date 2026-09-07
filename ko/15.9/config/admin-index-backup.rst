@@ -58,7 +58,7 @@ OpenSearch의 스냅샷 기능을 사용하여 인덱스의 백업과 복원을 
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "fs",
       "settings": {
@@ -68,7 +68,7 @@ OpenSearch의 스냅샷 기능을 사용하여 인덱스의 백업과 복원을 
     }'
 
 .. note::
-   |Fess| 의 ZIP 버전의 기본 설정에서는 OpenSearch가 9201 포트로 시작됩니다( ``fess_config.properties`` 의 ``search_engine.http.url`` ). RPM/DEB 패키지 버전에서는 기본적으로 9200 포트에 연결하도록 설정되어 있습니다(환경 설정 파일 ``/etc/sysconfig/fess`` (RPM) 또는 ``/etc/default/fess`` (DEB)의 ``SEARCH_ENGINE_HTTP_URL`` ). 사용하는 환경에 맞게 포트 번호를 변경하십시오.
+   |Fess| 는 기본적으로 9200 포트의 OpenSearch에 접속합니다(ZIP 버전은 ``bin/fess.in.sh`` 의 ``SEARCH_ENGINE_HTTP_URL`` , 패키지 버전은 환경 설정 파일 ``/etc/sysconfig/fess`` (RPM) 또는 ``/etc/default/fess`` (DEB)). 다른 포트에서 OpenSearch를 운영하는 경우 포트 번호를 변경하십시오.
 
 **AWS S3 리포지토리의 경우:**
 
@@ -76,7 +76,7 @@ S3를 백업 대상으로 하는 경우 ``repository-s3`` 플러그인을 설치
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_s3_backup" -H 'Content-Type: application/json' -d'
     {
       "type": "s3",
       "settings": {
@@ -96,7 +96,7 @@ S3를 백업 대상으로 하는 경우 ``repository-s3`` 플러그인을 설치
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_1?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -110,7 +110,7 @@ S3를 백업 대상으로 하는 경우 ``repository-s3`` 플러그인을 설치
 
 ::
 
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess*",
       "ignore_unavailable": true,
@@ -126,7 +126,7 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
     #!/bin/bash
     DATE=$(date +%Y%m%d_%H%M%S)
-    curl -X PUT "localhost:9201/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_${DATE}?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -140,13 +140,13 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/_all?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/_all?pretty"
 
 특정 스냅샷의 상세 정보를 확인합니다.
 
 ::
 
-    curl -X GET "localhost:9201/_snapshot/fess_backup/snapshot_1?pretty"
+    curl -X GET "localhost:9200/_snapshot/fess_backup/snapshot_1?pretty"
 
 스냅샷에서 복원
 ------------------------------
@@ -156,7 +156,7 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "*",
       "ignore_unavailable": true,
@@ -170,7 +170,7 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "ignore_unavailable": true,
@@ -184,7 +184,7 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
 ::
 
-    curl -X POST "localhost:9201/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
       "indices": "fess.20250101000000000",
       "rename_pattern": "fess\\.(.+)",
@@ -198,7 +198,7 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
    ::
 
-       curl -X POST "localhost:9201/_aliases" -H 'Content-Type: application/json' -d'
+       curl -X POST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d'
        {
          "actions": [
            { "add": { "index": "restored_fess.20250101000000000", "alias": "fess.search" } },
@@ -213,7 +213,7 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 
 ::
 
-    curl -X DELETE "localhost:9201/_snapshot/fess_backup/snapshot_1"
+    curl -X DELETE "localhost:9200/_snapshot/fess_backup/snapshot_1"
 
 설정 파일 백업
 ==========================
@@ -350,8 +350,8 @@ OpenSearch의 인덱스와는 별도로 다음 설정 파일도 백업하십시�
 복원 후 검색할 수 없음
 ------------------------
 
-1. 인덱스가 정상적으로 복원되었는지 확인하십시오: ``curl -X GET "localhost:9201/_cat/indices?v"``
-2. ``fess.search`` 및 ``fess.update`` 별칭이 복원한 인덱스를 가리키고 있는지 확인하십시오: ``curl -X GET "localhost:9201/_cat/aliases?v"`` . 별칭이 설정되어 있지 않은 경우에는 ``_aliases`` API로 재설정하십시오.
+1. 인덱스가 정상적으로 복원되었는지 확인하십시오: ``curl -X GET "localhost:9200/_cat/indices?v"``
+2. ``fess.search`` 및 ``fess.update`` 별칭이 복원한 인덱스를 가리키고 있는지 확인하십시오: ``curl -X GET "localhost:9200/_cat/aliases?v"`` . 별칭이 설정되어 있지 않은 경우에는 ``_aliases`` API로 재설정하십시오.
 3. |Fess| 의 로그 파일에서 오류가 없는지 확인하십시오.
 4. 설정 파일이 올바르게 복원되었는지 확인하십시오.
 

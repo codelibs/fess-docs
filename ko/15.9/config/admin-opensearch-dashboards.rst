@@ -41,10 +41,10 @@ OpenSearch Dashboards에 |Fess| 에서 사용하는 OpenSearch를 인식시키�
 
 ::
 
-    opensearch.hosts: ["http://localhost:9201"]
+    opensearch.hosts: ["http://localhost:9200"]
 
 ``localhost`` 는 환경에 맞게 적절한 호스트명이나 IP 주소로 변경하십시오.
-|Fess| 의 기본 설정에서는 OpenSearch가 9201 포트에서 시작됩니다.
+|Fess| 는 기본적으로 9200 포트의 OpenSearch에 접속합니다.
 
 .. note::
    OpenSearch의 포트 번호가 다른 경우 적절한 포트 번호로 변경하십시오.
