@@ -461,7 +461,52 @@ Docker 버전::
 15.8에서 15.9로 업그레이드
 ==========================
 
-15.8에서 업그레이드하는 경우 다음 세 가지가 하위 호환되지 않는 변경입니다.
+15.8에서 업그레이드하는 경우 다음 다섯 가지가 하위 호환되지 않는 변경입니다.
+
+내장 OpenSearch 폐지
+--------------------
+
+15.8 까지는 ``SEARCH_ENGINE_HTTP_URL`` 을 설정하지 않고 ``bin/fess`` 를 실행하면 |Fess| 가 자체
+JVM 안에서 OpenSearch 노드를 시작했습니다. 15.9 에서는 이 구성이 없어지고 검색 엔진은 항상 별도의
+서버가 됩니다.
+
+``bin/fess.in.sh`` 는 기본적으로 ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200`` 을 설정합니다.
+접속할 OpenSearch 가 없으면 |Fess| 는 시작되지 않습니다. ``bin/fess-setup install opensearch``
+로 설치할 수 있습니다(Linux 와 Windows 만 지원. macOS 용 OpenSearch 공식 배포판은 없으므로
+Homebrew 또는 Docker 를 사용하십시오).
+
+다음도 함께 폐지되었습니다.
+
+- ``es/`` 디렉터리( ``es/modules`` , ``es/plugins`` , ``es/data`` )
+- ``-Dfess.es.dir`` 와 ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` 과 ``bin/plugin.xml``
+- 이전 ``elasticsearch.*`` 설정 키에 대한 대체 처리
+
+또한 OpenSearch 3 이전 버전에 접속한 경우 15.8 까지는 오류 로그를 남기고 계속 실행했지만 15.9
+에서는 시작에 실패합니다. 해당 버전에는 전체 문서를 순회하는 처리가 사용하는 ``_shard_doc``
+정렬이 구현되어 있지 않아, HTTP 를 통해서는 실패하지 않고 응답이 돌아오지 않기 때문입니다.
+
+.. warning::
+
+   내장 OpenSearch 로 운영한 경우 인덱스 데이터는 이어받을 수 없습니다. 외부 OpenSearch 서버를
+   새로 구축하고 관리 화면의 「백업」에서 설정을 옮긴 뒤 다시 크롤링하십시오. 백업에 포함되는
+   것은 크롤링 설정, 사용자, 로그이며 **크롤링한 문서는 포함되지 않습니다**.
+
+Playwright 용 Node.js 동봉 종료
+-------------------------------
+
+Playwright 크롤러가 사용하는 Node.js 실행 파일은 더 이상 배포물에 포함되지 않습니다.
+이에 따라 ZIP 은 438.5 MiB 에서 218.9 MiB 가 되었습니다.
+
+크롤링 설정의 설정 파라미터에서 ``client.crawlerClients=playwright:http://.*`` 와 같이
+Playwright 클라이언트를 지정한 경우에는 아래 명령으로 Node.js 를 설치하십시오.
+``bin/fess.in.sh`` 가 설치 위치를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다.
+
+::
+
+    $ bin/fess-setup install nodejs
+
+Playwright 크롤러를 사용하지 않는 경우에는 대응이 필요 없습니다.
 
 내장 스크립트 엔진이 Groovy에서 JavaScript로 변경
 -------------------------------------------------

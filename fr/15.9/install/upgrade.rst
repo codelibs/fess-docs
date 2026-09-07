@@ -473,8 +473,56 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 Mise à niveau de 15.8 vers 15.9
 ===============================
 
-Si vous effectuez une mise à niveau depuis la 15.8, les trois changements suivants ne sont pas
+Si vous effectuez une mise à niveau depuis la 15.8, les cinq changements suivants ne sont pas
 rétrocompatibles.
+
+Suppression de l'OpenSearch intégré
+-----------------------------------
+
+Jusqu'à la 15.8, démarrer ``bin/fess`` sans définir ``SEARCH_ENGINE_HTTP_URL`` amenait |Fess| à
+exécuter un nœud OpenSearch dans sa propre JVM. Cette configuration disparaît en 15.9 : le moteur
+de recherche est toujours un serveur distinct.
+
+``bin/fess.in.sh`` définit désormais ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200`` par défaut.
+|Fess| refuse de démarrer si aucun OpenSearch n'est joignable. ``bin/fess-setup install
+opensearch`` en installe un (Linux et Windows uniquement ; OpenSearch ne publie pas de version
+macOS, utilisez donc Homebrew ou Docker).
+
+Sont également supprimés :
+
+- le répertoire ``es/`` (``es/modules``, ``es/plugins`` et ``es/data``)
+- ``-Dfess.es.dir`` et ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` et ``bin/plugin.xml``
+- les valeurs de repli des anciennes clés de configuration ``elasticsearch.*``
+
+Un moteur antérieur à OpenSearch 3 interrompt désormais le démarrage, alors que la 15.8 se
+contentait de journaliser une erreur et de poursuivre. Ces versions n'implémentent pas le tri
+``_shard_doc`` dont dépendent toutes les opérations parcourant l'ensemble des résultats, et via
+HTTP une telle requête reste bloquée au lieu d'échouer.
+
+.. warning::
+
+   Les données d'index d'une installation intégrée ne peuvent pas être reprises. Mettez en place
+   un nouveau serveur OpenSearch externe, transférez les paramètres via la page Sauvegarde de
+   l'administration, puis relancez une exploration. La sauvegarde couvre les paramètres
+   d'exploration, les utilisateurs et les journaux ; elle ne contient **pas** les documents
+   explorés.
+
+Node.js pour Playwright n’est plus fourni
+-----------------------------------------
+
+Les exécutables Node.js utilisés par le robot Playwright ne font plus partie de la distribution.
+L'archive ZIP passe ainsi de 438,5 Mio à 218,9 Mio.
+
+Si une configuration d'exploration désigne le client Playwright, par exemple avec
+``client.crawlerClients=playwright:http://.*`` dans ses paramètres, installez Node.js avec la
+commande ci-dessous. ``bin/fess.in.sh`` le détecte et définit ``PLAYWRIGHT_NODEJS_PATH``.
+
+::
+
+    $ bin/fess-setup install nodejs
+
+Rien à faire si vous n'utilisez pas le robot Playwright.
 
 Le moteur de script intégré passe de Groovy à JavaScript
 --------------------------------------------------------
