@@ -51,6 +51,7 @@ Fess で実現するナレッジ活用戦略
 
 - :doc:`articles/use-cases` - 業種別・規模別の活用事例とユースケース
 - :doc:`articles/comparison` - Fess と他の検索ソリューション（Elasticsearch、Solr 等）の比較
+- :doc:`articles/file-server-search` - ファイルサーバの全文検索を導入する前に確認すべき点
 
 .. toctree::
    :hidden:
@@ -80,3 +81,4 @@ Fess で実現するナレッジ活用戦略
    articles/guide-23
    articles/use-cases
    articles/comparison
+   articles/file-server-search

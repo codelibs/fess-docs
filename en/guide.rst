@@ -51,6 +51,7 @@ Use Cases & Examples
 
 - :doc:`articles/use-cases` - Industry-specific and scale-based use cases
 - :doc:`articles/comparison` - Fess vs other search solutions (Elasticsearch, Solr, etc.)
+- :doc:`articles/file-server-search` - What to check before putting full-text search in front of a file server
 
 .. toctree::
    :hidden:
@@ -80,3 +81,4 @@ Use Cases & Examples
    articles/guide-23
    articles/use-cases
    articles/comparison
+   articles/file-server-search
