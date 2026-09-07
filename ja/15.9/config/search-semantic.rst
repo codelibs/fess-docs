@@ -45,13 +45,6 @@
 
      * - 構成
        - k-NN プラグインの対応状況
-     * - 組み込み OpenSearch（``bin/fess``、または ``SEARCH_ENGINE_HTTP_URL`` を未設定のままにした
-         場合の ZIP 版のデフォルト状態）
-       - k-NN プラグインが同梱されています。ただし JNI ネイティブライブラリを含まないため、
-         対応する ANN エンジンは ``lucene`` のみです。``content_chunker.search.knn.engine`` は
-         ``faiss`` も値として受け付けており、ここで設定してもマッピング自体は正常に作成されます
-         が、**書き込みのたびに文書が黙って失われ、検索結果も0件になります**\ （この組み合わせの
-         まま起動すると、起動時に警告ログが出力されます）。
      * - Docker（``ghcr.io/codelibs/fess-opensearch``）、RPM/DEB 版（常に別途インストールした外部
          OpenSearch に接続します）、または外部 OpenSearch（標準配布）
        - ``faiss`` を含めてフルサポートされます。

@@ -1125,6 +1125,20 @@ pour certains sites, indiquez-les comme suit.
 
        npx playwright install --with-deps
 
+.. note::
+   Depuis la 15.9, l'exécutable Node.js qu'utilise Playwright ne fait plus partie
+   du paquet |Fess| non plus. Installez-le avec la commande ci-dessous ;
+   ``bin/fess.in.sh`` le détecte et transmet ``PLAYWRIGHT_NODEJS_PATH`` au
+   processus du robot d'indexation.
+
+   ::
+
+       $ bin/fess-setup install nodejs
+
+   Pour utiliser un Node.js situé ailleurs, définissez ``PLAYWRIGHT_NODEJS_PATH``
+   dans ``bin/fess.in.sh`` avec le chemin complet de l'exécutable. Playwright ne
+   consulte pas ``PATH``.
+
 Paramètres de configuration
 ---------------------------
 

@@ -1126,6 +1126,19 @@ Playwright クローラーを使用すると、ヘッドレスブラウザーで
 
        npx playwright install --with-deps
 
+.. note::
+   15.9 から、Playwright が使用する Node.js の実行ファイルも |Fess| のパッケージに
+   含まれなくなりました。次のコマンドで導入してください。 ``bin/fess.in.sh`` が
+   導入先を検出し、クローラーのプロセスに ``PLAYWRIGHT_NODEJS_PATH`` を渡します。
+
+   ::
+
+       $ bin/fess-setup install nodejs
+
+   別の場所にある Node.js を使う場合は、 ``bin/fess.in.sh`` で
+   ``PLAYWRIGHT_NODEJS_PATH`` に実行ファイルのフルパスを設定してください。
+   Playwright は ``PATH`` を参照しません。
+
 設定パラメーター
 ----------------
 

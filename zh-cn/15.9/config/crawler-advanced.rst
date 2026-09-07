@@ -1122,6 +1122,19 @@ HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头�
 
        npx playwright install --with-deps
 
+.. note::
+   从 15.9 起，Playwright 使用的 Node.js 可执行文件同样不再包含在 |Fess| 的软件包中。
+   请使用以下命令安装。``bin/fess.in.sh`` 会检测安装位置，并将
+   ``PLAYWRIGHT_NODEJS_PATH`` 传递给爬虫进程。
+
+   ::
+
+       $ bin/fess-setup install nodejs
+
+   如果要使用其他位置的 Node.js，请在 ``bin/fess.in.sh`` 中将
+   ``PLAYWRIGHT_NODEJS_PATH`` 设置为可执行文件的完整路径。Playwright 不会参照
+   ``PATH``\ 。
+
 配置参数
 --------
 

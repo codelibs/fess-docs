@@ -1123,6 +1123,19 @@ Playwright 크롤러를 사용하면 헤드리스 브라우저에서 페이지�
 
        npx playwright install --with-deps
 
+.. note::
+   15.9 부터 Playwright 가 사용하는 Node.js 실행 파일도 |Fess| 패키지에 포함되지
+   않습니다. 아래 명령으로 설치하십시오. ``bin/fess.in.sh`` 가 설치 위치를 찾아
+   크롤러 프로세스에 ``PLAYWRIGHT_NODEJS_PATH`` 를 전달합니다.
+
+   ::
+
+       $ bin/fess-setup install nodejs
+
+   다른 위치의 Node.js 를 사용하려면 ``bin/fess.in.sh`` 에서
+   ``PLAYWRIGHT_NODEJS_PATH`` 에 실행 파일의 전체 경로를 설정하십시오.
+   Playwright 는 ``PATH`` 를 참조하지 않습니다.
+
 설정 파라미터
 -------------
 

@@ -50,14 +50,6 @@ Requisitos previos
 
      * - Configuración
        - Compatibilidad con el plugin k-NN
-     * - OpenSearch integrado (``bin/fess``, o los paquetes ZIP con
-         ``SEARCH_ENGINE_HTTP_URL`` sin definir — el valor predeterminado)
-       - Se distribuye con el plugin k-NN. Sin embargo, no incluye las bibliotecas nativas JNI,
-         por lo que el único motor ANN compatible es ``lucene``. ``content_chunker.search.knn.engine``
-         también acepta ``faiss`` como valor, y establecerlo aquí igualmente crea el mapeo
-         correctamente — pero **los documentos se pierden silenciosamente en cada escritura y las
-         búsquedas no devuelven ningún resultado** (al arrancar con esta combinación, |Fess|
-         registra una advertencia en el inicio).
      * - Docker (``ghcr.io/codelibs/fess-opensearch``), los paquetes RPM/DEB (que siempre se
          conectan a un OpenSearch externo instalado por separado) u otro OpenSearch externo
          (distribución estándar)
