@@ -278,12 +278,7 @@ ZIP 版
       如果新版本的 JSP 结构发生了变化，画面可能无法正常显示。
       请将修改内容重新应用到新版本的 JSP 上。
 
-4. 如果使用内置 OpenSearch（未设置 ``SEARCH_ENGINE_HTTP_URL`` 而直接启动 ``bin/fess`` 的
-   配置），请同时复制索引数据::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. 确认配置差异，根据需要进行调整
+4. 确认配置差异，根据需要进行调整
 
 RPM/DEB 版
 ----------

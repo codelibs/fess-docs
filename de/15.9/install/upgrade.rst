@@ -282,12 +282,7 @@ ZIP-Version
       Version geändert hat, wird die Seite nicht mehr korrekt angezeigt. Wenden Sie Ihre Änderungen
       stattdessen erneut auf die JSPs der neuen Version an.
 
-4. Wenn Sie das eingebettete OpenSearch verwenden (Start von ``bin/fess`` ohne gesetzte
-   ``SEARCH_ENGINE_HTTP_URL``), kopieren Sie zusätzlich die Indexdaten::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. Überprüfen Sie Konfigurationsdifferenzen und passen Sie diese bei Bedarf an
+4. Überprüfen Sie Konfigurationsdifferenzen und passen Sie diese bei Bedarf an
 
 RPM/DEB-Version
 ---------------

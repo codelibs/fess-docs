@@ -279,12 +279,7 @@ ZIP Version
       their structure differs from the JSPs in the new version, pages may not render correctly.
       Reapply your changes to the new version's JSPs instead.
 
-4. If you are using the embedded OpenSearch (starting ``bin/fess`` without setting
-   ``SEARCH_ENGINE_HTTP_URL``), also copy the index data::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. Verify configuration differences and adjust as necessary
+4. Verify configuration differences and adjust as necessary
 
 RPM/DEB Version
 ---------------
