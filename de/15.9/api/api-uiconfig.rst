@@ -203,7 +203,7 @@ Alle Felder sind Pflichtfelder.
      - Gibt an, ob dieser |Fess|-Build das End-of-Life-Datum erreicht hat.
    * - ``development_mode``
      - boolean
-     - Wird ``true``, wenn die eingebettete (Entwicklungs-)Suchmaschine verwendet wird.
+     - Immer ``false``. Das Feld zeigte an, dass die eingebettete (Entwicklungs-)Suchmaschine verwendet wurde – eine Konfiguration, die in 15.9 entfallen ist.
    * - ``search_log_enabled``
      - boolean
      - Gibt an, ob das Suchprotokoll aktiviert ist.

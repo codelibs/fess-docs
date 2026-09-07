@@ -203,7 +203,7 @@ features
      - 이 |Fess| 빌드가 EOL 에 도달했는지 여부.
    * - ``development_mode``
      - boolean
-     - 내장 (개발용) 검색 엔진을 사용 중일 때 ``true`` 가 됩니다.
+     - 항상 ``false`` 입니다. 내장(개발용) 검색 엔진을 사용 중임을 나타내는 항목이었으나, 15.9 에서 해당 구성이 없어졌습니다.
    * - ``search_log_enabled``
      - boolean
      - 검색 로그가 활성화되어 있는지 여부.

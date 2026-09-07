@@ -203,7 +203,7 @@ Todos los campos son obligatorios.
      - Si esta compilación de |Fess| ha alcanzado el fin de vida útil (EOL).
    * - ``development_mode``
      - boolean
-     - ``true`` cuando se utiliza el motor de búsqueda integrado (para desarrollo).
+     - Siempre ``false``. Indicaba que se estaba utilizando el motor de búsqueda integrado (para desarrollo), una configuración eliminada en 15.9.
    * - ``search_log_enabled``
      - boolean
      - Si el registro de búsqueda está habilitado.

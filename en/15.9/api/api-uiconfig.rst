@@ -203,7 +203,7 @@ All fields are required.
      - Whether this |Fess| build has reached EOL.
    * - ``development_mode``
      - boolean
-     - ``true`` when using the embedded (development) search engine.
+     - Always ``false``. It reported that the embedded (development) search engine was in use, a configuration removed in 15.9.
    * - ``search_log_enabled``
      - boolean
      - Whether search logging is enabled.

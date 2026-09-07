@@ -58,7 +58,7 @@ Betriebssystem
 
 **Sonstiges**
 
-- macOS 11 (Big Sur) oder höher (nur für Entwicklungsumgebungen empfohlen)
+- macOS 11 (Big Sur) oder höher (nur für Entwicklungsumgebungen empfohlen; für macOS gibt es keine offizielle OpenSearch-Distribution, verwenden Sie Homebrew oder Docker)
 - Umgebungen, in denen Docker ausgeführt werden kann
 
 Erforderliche Software

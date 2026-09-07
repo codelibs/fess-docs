@@ -58,7 +58,7 @@
 
 **その他**
 
-- macOS 11 (Big Sur) 以降（開発環境のみ推奨）
+- macOS 11 (Big Sur) 以降（開発環境のみ推奨。OpenSearch には macOS 向けの公式配布がないため、Homebrew か Docker で用意します）
 - Docker が実行可能な環境
 
 必須ソフトウェア

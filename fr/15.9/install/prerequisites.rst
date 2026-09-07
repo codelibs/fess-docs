@@ -58,7 +58,7 @@ Système d'exploitation
 
 **Autres**
 
-- macOS 11 (Big Sur) ou ultérieur (recommandé pour les environnements de développement uniquement)
+- macOS 11 (Big Sur) ou ultérieur (recommandé pour les environnements de développement uniquement ; OpenSearch ne publie pas de version macOS, installez-le avec Homebrew ou Docker)
 - Environnement capable d'exécuter Docker
 
 Logiciels requis
