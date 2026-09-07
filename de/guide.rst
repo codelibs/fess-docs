@@ -51,6 +51,7 @@ Anwendungsfaelle und Beispiele
 
 - :doc:`articles/use-cases` - Branchenspezifische und groessenabhaengige Anwendungsfaelle
 - :doc:`articles/comparison` - Fess im Vergleich zu anderen Suchloesungen (Elasticsearch, Solr usw.)
+- :doc:`articles/file-server-search` - Was vor einer Volltextsuche ueber Dateiserver zu pruefen ist
 
 .. toctree::
    :hidden:
@@ -80,3 +81,4 @@ Anwendungsfaelle und Beispiele
    articles/guide-23
    articles/use-cases
    articles/comparison
+   articles/file-server-search
