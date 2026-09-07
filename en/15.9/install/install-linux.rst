@@ -5,10 +5,10 @@ Linux Installation (Detailed Procedure)
 This page describes the installation procedure for |Fess| on Linux environments.
 It covers the ZIP, RPM, and DEB package formats.
 
-.. warning::
+.. note::
 
-   Running with the embedded OpenSearch is not recommended for production environments.
-   Always set up an external OpenSearch server.
+   |Fess| does not bundle a search engine. An OpenSearch server is required, and the
+   steps below set one up.
 
 Prerequisites
 =============

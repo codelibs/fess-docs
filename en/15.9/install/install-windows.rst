@@ -5,10 +5,10 @@ Windows Installation (Detailed Procedure)
 This page describes the installation procedure for |Fess| on Windows environments.
 It covers the installation method using ZIP packages.
 
-.. warning::
+.. note::
 
-   Running with the embedded OpenSearch is not recommended for production environments.
-   Always set up an external OpenSearch server.
+   |Fess| does not bundle a search engine. An OpenSearch server is required, and the
+   steps below set one up.
 
 Prerequisites
 =============

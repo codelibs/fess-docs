@@ -5,10 +5,10 @@
 本页面说明在 Windows 环境中安装 |Fess| 的步骤。
 介绍使用 ZIP 包的安装方法。
 
-.. warning::
+.. note::
 
-   在生产环境中，不推荐使用内嵌 OpenSearch 运行。
-   请务必构建外部的 OpenSearch 服务器。
+   |Fess| 不包含搜索引擎。需要单独准备 OpenSearch 服务器，
+   下面的步骤将进行构建。
 
 前提条件
 ========

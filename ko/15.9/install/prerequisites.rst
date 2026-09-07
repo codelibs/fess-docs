@@ -74,7 +74,7 @@ ZIP/RPM/DEB 버전
   - OpenJDK 21 이상
   - Eclipse Temurin 21 이상
 
-- **OpenSearch 3.8.0**: 운영 환경에서는 필수(내장 버전은 비권장)
+- **OpenSearch 3.8.0**: 필수입니다. OpenSearch 3 이전 버전에서는 |Fess| 가 시작되지 않습니다
 
   - 지원 버전: OpenSearch 3.8.0
   - 기타 버전에서는 플러그인 호환성에 주의 필요

@@ -74,7 +74,7 @@ ZIP/RPM/DEB Version
   - OpenJDK 21 oder höher
   - Eclipse Temurin 21 oder höher
 
-- **OpenSearch 3.8.0**: Erforderlich für Produktionsumgebungen (eingebettete Version nicht empfohlen)
+- **OpenSearch 3.8.0**: Erforderlich. Mit einer älteren Version als OpenSearch 3 startet |Fess| nicht
 
   - Unterstützte Version: OpenSearch 3.8.0
   - Bei anderen Versionen ist auf Plugin-Kompatibilität zu achten

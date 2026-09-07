@@ -73,7 +73,7 @@ ZIP/RPM/DEB 版
   - OpenJDK 21 或更高版本
   - Eclipse Temurin 21 或更高版本
 
-- **OpenSearch 3.8.0**: 生产环境必需（不推荐使用内嵌版本）
+- **OpenSearch 3.8.0**: 必需。使用早于 OpenSearch 3 的引擎时 |Fess| 无法启动
 
   - 支持版本: OpenSearch 3.8.0
   - 其他版本需要注意插件兼容性

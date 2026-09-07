@@ -5,10 +5,10 @@ Installation unter Linux (Detaillierte Anleitung)
 Diese Seite beschreibt die Installationsschritte von |Fess| in Linux-Umgebungen.
 Sie behandelt die Paketformate ZIP, RPM und DEB.
 
-.. warning::
+.. note::
 
-   In Produktionsumgebungen wird der Betrieb mit eingebettetem OpenSearch nicht empfohlen.
-   Bitte richten Sie unbedingt einen externen OpenSearch-Server ein.
+   |Fess| enthält keine Suchmaschine. Ein OpenSearch-Server ist erforderlich; die
+   folgenden Schritte richten ihn ein.
 
 Voraussetzungen
 ====================

@@ -5,12 +5,10 @@ Auswahl der Installationsmethode
 Diese Seite beschreibt eine Übersicht über die Installationsmethoden von |Fess|.
 Bitte wählen Sie die für Ihre Umgebung geeignete Installationsmethode.
 
-.. warning::
+.. note::
 
-   **Wichtiger Hinweis für Produktionsumgebungen**
-
-   In Produktionsumgebungen oder bei Lasttests wird der Betrieb mit eingebettetem OpenSearch nicht empfohlen.
-   Bitte richten Sie unbedingt einen externen OpenSearch-Server ein.
+   |Fess| enthält keine Suchmaschine. Jede der folgenden Installationsmethoden
+   benötigt einen separaten OpenSearch-Server.
 
 Überprüfung der Voraussetzungen
 ================================
@@ -70,7 +68,7 @@ Docker-Version
 
 - Docker-Kenntnisse erforderlich
 
-**Empfohlene Umgebung:** Entwicklungsumgebung, Evaluierungsumgebung, POC (für den Produktionseinsatz konfigurieren Sie bitte einen externen OpenSearch-Server anstelle des eingebetteten OpenSearch)
+**Empfohlene Umgebung:** Entwicklungs-, Evaluierungs-, POC- und Produktionsumgebungen
 
 Details: :doc:`install-docker`
 

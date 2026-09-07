@@ -5,12 +5,10 @@ Choosing an Installation Method
 This page provides an overview of |Fess| installation methods.
 Select the appropriate installation method based on your environment.
 
-.. warning::
+.. note::
 
-   **Important Notice for Production Environments**
-
-   Running with the embedded OpenSearch is not recommended for production environments or load testing.
-   Always set up an external OpenSearch server.
+   |Fess| does not bundle a search engine. Every installation method below needs a
+   separate OpenSearch server.
 
 Verify Prerequisites
 ====================
@@ -70,7 +68,7 @@ Docker Version
 
 - Requires Docker knowledge
 
-**Recommended Environments:** Development environments, evaluation environments, PoC (for production use, configure an external OpenSearch server instead of the embedded OpenSearch)
+**Recommended Environments:** Development, evaluation, PoC, and production environments
 
 Details: :doc:`install-docker`
 

@@ -5,10 +5,10 @@ Installation unter Windows (Detaillierte Anleitung)
 Diese Seite beschreibt die Installationsschritte von |Fess| in Windows-Umgebungen.
 Sie behandelt die Installationsmethode mit dem ZIP-Paket.
 
-.. warning::
+.. note::
 
-   In Produktionsumgebungen wird der Betrieb mit eingebettetem OpenSearch nicht empfohlen.
-   Bitte richten Sie unbedingt einen externen OpenSearch-Server ein.
+   |Fess| enthält keine Suchmaschine. Ein OpenSearch-Server ist erforderlich; die
+   folgenden Schritte richten ihn ein.
 
 Voraussetzungen
 ===============
