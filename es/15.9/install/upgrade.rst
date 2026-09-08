@@ -282,12 +282,7 @@ Versión ZIP
       podría dejar de mostrarse correctamente. Vuelva a aplicar sus cambios sobre los JSP de la
       nueva versión.
 
-4. Si utiliza OpenSearch integrado (una configuración en la que ``bin/fess`` se inicia sin
-   establecer ``SEARCH_ENGINE_HTTP_URL``), copie también los datos del índice::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. Verifique las diferencias de configuración y ajuste según sea necesario
+4. Verifique las diferencias de configuración y ajuste según sea necesario
 
 Versión RPM/DEB
 ---------------
@@ -475,7 +470,55 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 Actualización de 15.8 a 15.9
 ============================
 
-Si actualiza desde 15.8, los tres cambios siguientes no son retrocompatibles.
+Si actualiza desde 15.8, los cinco cambios siguientes no son retrocompatibles.
+
+Eliminación del OpenSearch integrado
+------------------------------------
+
+Hasta 15.8, iniciar ``bin/fess`` sin definir ``SEARCH_ENGINE_HTTP_URL`` hacía que |Fess|
+ejecutara un nodo OpenSearch dentro de su propia JVM. Esa configuración desaparece en 15.9: el
+motor de búsqueda es siempre un servidor independiente.
+
+``bin/fess.in.sh`` ahora establece ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200`` de forma
+predeterminada. |Fess| no se inicia si no hay ningún OpenSearch accesible.
+``bin/fess-setup install opensearch`` instala uno (solo Linux y Windows; OpenSearch no publica
+una versión para macOS, así que utilice Homebrew o Docker en ese caso).
+
+También se han eliminado:
+
+- el directorio ``es/`` (``es/modules``, ``es/plugins`` y ``es/data``)
+- ``-Dfess.es.dir`` y ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` y ``bin/plugin.xml``
+- los valores de reserva de las antiguas claves de configuración ``elasticsearch.*``
+
+Un motor anterior a OpenSearch 3 también detiene el inicio, mientras que 15.8 registraba un error
+y continuaba. Esas versiones no implementan la ordenación ``_shard_doc`` de la que dependen todas
+las operaciones que recorren el conjunto completo de resultados, y por HTTP una petición así se
+queda colgada en lugar de fallar.
+
+.. warning::
+
+   Los datos de índice de una instalación integrada no se pueden conservar. Construya un nuevo
+   servidor OpenSearch externo, traslade la configuración con la página de copia de seguridad de
+   la administración y vuelva a rastrear. La copia de seguridad incluye la configuración de
+   rastreo, los usuarios y los registros; **no** contiene los documentos rastreados.
+
+Node.js para Playwright ya no se incluye
+----------------------------------------
+
+Los ejecutables de Node.js que utiliza el rastreador de Playwright ya no forman parte de la
+distribución. Como consecuencia, el ZIP pasa de 438,5 MiB a 218,9 MiB.
+
+Si alguna configuración de rastreo indica el cliente de Playwright, por ejemplo con
+``client.crawlerClients=playwright:http://.*`` en sus parámetros de configuración, instale
+Node.js con la orden siguiente. ``bin/fess.in.sh`` lo detecta y establece
+``PLAYWRIGHT_NODEJS_PATH``.
+
+::
+
+    $ bin/fess-setup install nodejs
+
+Si no utiliza el rastreador de Playwright, no hay nada que hacer.
 
 El motor de scripting integrado pasa de Groovy a JavaScript
 -----------------------------------------------------------

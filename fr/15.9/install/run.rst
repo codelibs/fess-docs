@@ -293,8 +293,8 @@ Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de co
      - (non défini)
      - Taille du tas JVM. Définit la même valeur pour le minimum et le maximum. Lorsqu'elle n'est pas définie, un minimum de ``256m`` et un maximum de ``2g`` sont utilisés (l'édition ZIP Windows utilise un maximum de ``1g``) ; l'édition RPM/DEB utilise ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - (non défini)
-     - URL de l'OpenSearch auquel se connecter. Lorsqu'elle n'est pas définie, la valeur par défaut intégrée ``http://localhost:9201`` est utilisée. À modifier lorsqu'OpenSearch s'exécute sur un port ou un hôte différent (la procédure :doc:`install-linux` la définit à ``http://localhost:9200`` pour correspondre au port d'écoute d'OpenSearch). L'édition RPM/DEB définit ``http://localhost:9200`` par défaut via le fichier d'environnement du paquet.
+     - ``http://localhost:9200``
+     - URL de l'OpenSearch auquel se connecter. Pour la version ZIP, ``bin/fess.in.sh`` définit cette valeur par défaut. Exportez la variable, ou modifiez ``bin/fess.in.sh``, lorsqu'OpenSearch s'exécute sur un port ou un hôte différent. L'édition RPM/DEB la définit dans le fichier d'environnement du paquet.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Niveau de log de |Fess|.

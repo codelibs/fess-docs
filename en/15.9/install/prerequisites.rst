@@ -58,7 +58,7 @@ Operating Systems
 
 **Others**
 
-- macOS 11 (Big Sur) or later (recommended for development environments only)
+- macOS 11 (Big Sur) or later (recommended for development environments only; OpenSearch publishes no macOS build, so install it with Homebrew or Docker)
 - Environments where Docker can run
 
 Required Software
@@ -74,7 +74,7 @@ ZIP/RPM/DEB Versions
   - OpenJDK 21 or later
   - Eclipse Temurin 21 or later
 
-- **OpenSearch 3.8.0**: Required for production environments (embedded version not recommended)
+- **OpenSearch 3.8.0**: Required. |Fess| refuses to start against an engine older than OpenSearch 3
 
   - Supported Version: OpenSearch 3.8.0
   - Compatibility with plugins must be considered for other versions

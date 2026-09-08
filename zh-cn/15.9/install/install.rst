@@ -5,12 +5,10 @@
 本页面说明 |Fess| 安装方法的概述。
 请根据您的环境选择适当的安装方法。
 
-.. warning::
+.. note::
 
-   **生产环境的重要注意事项**
-
-   在生产环境或负载测试等场景中，不推荐使用内嵌 OpenSearch 运行。
-   请务必构建外部的 OpenSearch 服务器。
+   |Fess| 不包含搜索引擎。以下任何一种安装方式都需要单独的
+   OpenSearch 服务器。
 
 确认前提条件
 ============
@@ -70,7 +68,7 @@ Docker 版
 
 - 需要 Docker 知识
 
-**推荐环境:** 开发环境、评估环境、POC（在生产环境中使用时，请配置外部的 OpenSearch 服务器，而非内嵌 OpenSearch）
+**推荐环境:** 开发环境、评估环境、POC、生产环境
 
 详情: :doc:`install-docker`
 
@@ -171,6 +169,8 @@ OpenSearch
 
    OpenSearch 的版本与插件的版本必须一致。
    版本不一致可能导致启动错误或意外行为。
+
+``bin/fess-setup install opensearch`` 会连同这些插件一起准备 OpenSearch。详情请参阅 :doc:`install-linux`\ 。
 
 Java (Docker 版除外)
 -------------------

@@ -282,12 +282,7 @@ ZIP-Version
       Version geändert hat, wird die Seite nicht mehr korrekt angezeigt. Wenden Sie Ihre Änderungen
       stattdessen erneut auf die JSPs der neuen Version an.
 
-4. Wenn Sie das eingebettete OpenSearch verwenden (Start von ``bin/fess`` ohne gesetzte
-   ``SEARCH_ENGINE_HTTP_URL``), kopieren Sie zusätzlich die Indexdaten::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. Überprüfen Sie Konfigurationsdifferenzen und passen Sie diese bei Bedarf an
+4. Überprüfen Sie Konfigurationsdifferenzen und passen Sie diese bei Bedarf an
 
 RPM/DEB-Version
 ---------------
@@ -475,7 +470,55 @@ Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
 Upgrade von 15.8 auf 15.9
 =========================
 
-Wenn Sie von 15.8 aktualisieren, sind die folgenden drei Änderungen nicht abwärtskompatibel.
+Wenn Sie von 15.8 aktualisieren, sind die folgenden fünf Änderungen nicht abwärtskompatibel.
+
+Entfernung des eingebetteten OpenSearch
+---------------------------------------
+
+Bis 15.8 startete |Fess| einen OpenSearch-Knoten in der eigenen JVM, wenn ``bin/fess`` ohne
+gesetzte ``SEARCH_ENGINE_HTTP_URL`` aufgerufen wurde. Diese Konfiguration entfällt in 15.9: Die
+Suchmaschine ist immer ein eigener Server.
+
+``bin/fess.in.sh`` setzt jetzt standardmäßig ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200``.
+Ist kein OpenSearch erreichbar, startet |Fess| nicht. ``bin/fess-setup install opensearch``
+richtet einen ein (nur Linux und Windows; für macOS gibt es keine offizielle OpenSearch-
+Distribution, verwenden Sie dort Homebrew oder Docker).
+
+Ebenfalls entfallen:
+
+- das Verzeichnis ``es/`` (``es/modules``, ``es/plugins`` und ``es/data``)
+- ``-Dfess.es.dir`` und ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` und ``bin/plugin.xml``
+- die Rückfalloptionen auf die alten ``elasticsearch.*``-Konfigurationsschlüssel
+
+Eine ältere Version als OpenSearch 3 verhindert nun ebenfalls den Start, während 15.8 nur einen
+Fehler protokollierte und fortfuhr. Diese Versionen implementieren die ``_shard_doc``-Sortierung
+nicht, auf die alle Operationen über vollständige Ergebnismengen angewiesen sind, und über HTTP
+hängt eine solche Anfrage, statt fehlzuschlagen.
+
+.. warning::
+
+   Indexdaten aus einer eingebetteten Installation lassen sich nicht übernehmen. Richten Sie
+   einen neuen externen OpenSearch-Server ein, übertragen Sie die Einstellungen über die
+   Sicherungsseite im Administrationsbereich und crawlen Sie erneut. Die Sicherung umfasst
+   Crawl-Einstellungen, Benutzer und Protokolle, **nicht** die gecrawlten Dokumente.
+
+Node.js für Playwright wird nicht mehr mitgeliefert
+---------------------------------------------------
+
+Die Node.js-Programmdateien, die der Playwright-Crawler ausführt, sind nicht mehr Teil der
+Distribution. Das ZIP schrumpft dadurch von 438,5 MiB auf 218,9 MiB.
+
+Wenn eine Crawl-Konfiguration den Playwright-Client benennt, etwa mit
+``client.crawlerClients=playwright:http://.*`` in ihren Konfigurationsparametern, installieren
+Sie Node.js mit dem folgenden Befehl. ``bin/fess.in.sh`` findet es und setzt
+``PLAYWRIGHT_NODEJS_PATH``.
+
+::
+
+    $ bin/fess-setup install nodejs
+
+Ohne den Playwright-Crawler ist nichts zu tun.
 
 Die eingebaute Skript-Engine wechselt von Groovy zu JavaScript
 --------------------------------------------------------------

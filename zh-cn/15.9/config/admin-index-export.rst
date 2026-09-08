@@ -236,7 +236,7 @@ cron 表达式示例：
 ::
 
     # 检查索引文档数
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 导出中途失败
 ------------

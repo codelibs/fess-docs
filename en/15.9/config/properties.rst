@@ -25,7 +25,7 @@ Core
     - default
   * - search_engine.http.url
     - The URL of the search engine.
-    - http://localhost:9201
+    - http://localhost:9200
   * - search_engine.http.ssl.certificate_authorities
     - The path to the certificate authorities file.
     - (empty)

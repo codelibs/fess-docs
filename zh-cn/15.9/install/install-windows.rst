@@ -5,10 +5,10 @@
 本页面说明在 Windows 环境中安装 |Fess| 的步骤。
 介绍使用 ZIP 包的安装方法。
 
-.. warning::
+.. note::
 
-   在生产环境中，不推荐使用内嵌 OpenSearch 运行。
-   请务必构建外部的 OpenSearch 服务器。
+   |Fess| 不包含搜索引擎。需要单独准备 OpenSearch 服务器，
+   下面的步骤将进行构建。
 
 前提条件
 ========
@@ -59,6 +59,18 @@ PowerShell 的情况::
 
 步骤 1: 安装 OpenSearch
 =======================
+
+.. tip::
+
+   |Fess| 附带的 ``bin\fess-setup`` 可以一条命令完成下面的步骤：下载并解压 OpenSearch、
+   安装所需插件，以及配置 ``configsync``\ 。
+
+   ::
+
+       > cd C:\fess-15.9.0
+       > bin\fess-setup install opensearch
+
+   如果想逐步确认，或者要使用已有的 OpenSearch，请按照下面的步骤操作。
 
 下载 OpenSearch
 ---------------

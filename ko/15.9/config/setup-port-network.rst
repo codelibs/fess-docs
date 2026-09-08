@@ -25,9 +25,9 @@
    * - Fess 웹 애플리케이션
      - 8080
    * - OpenSearch (HTTP)
-     - 9201
+     - 9200
    * - OpenSearch (Transport)
-     - 9301
+     - 9300
 
 Fess 웹 애플리케이션의 포트 변경
 --------------------------------------
@@ -242,7 +242,7 @@ OpenSearch 연결 URL과 상태 확인(하트비트) 간격을 설정할 수 있
    * - 설정 항목
      - 설명
    * - ``search_engine.http.url``
-     - OpenSearch의 URL(기본값: http://localhost:9201)
+     - OpenSearch의 URL(기본값: http://localhost:9200)
    * - ``search_engine.heartbeat_interval``
      - 헬스체크 간격(밀리초, 기본값: 10000)
 
@@ -402,7 +402,7 @@ AWS, GCP, Azure 등의 클라우드 환경에서는 보안 그룹이나 네트�
 권장 설정:
 - 인바운드: 80/443 포트(HTTP 리버스 프록시 경유)
 - 8080 포트는 내부에서만 접근 가능하도록 제한
-- OpenSearch의 9201/9301 포트는 내부에서만 접근 가능하도록 제한
+- OpenSearch의 9200/9300 포트는 내부에서만 접근 가능하도록 제한
 
 문제 해결
 ======================
@@ -427,7 +427,7 @@ OpenSearch에 연결할 수 없음
 
 1. OpenSearch가 시작되어 있는지 확인하십시오.
 2. ``search_engine.http.url`` 설정이 올바른지 확인하십시오.
-3. 네트워크 연결을 확인하십시오: ``curl http://localhost:9201``
+3. 네트워크 연결을 확인하십시오: ``curl http://localhost:9200``
 4. OpenSearch의 로그에서 오류를 확인하십시오.
 
 리버스 프록시를 경유하여 접근하면 정상 작동하지 않음

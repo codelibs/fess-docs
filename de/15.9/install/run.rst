@@ -294,8 +294,8 @@ Einstellungen wie Portnummer, JVM-Heap-Größe und die OpenSearch-Verbindungs-UR
      - (nicht gesetzt)
      - JVM-Heap-Größe. Setzt denselben Wert für Minimum und Maximum. Wenn nicht gesetzt, werden mindestens ``256m`` und maximal ``2g`` verwendet (die Windows-ZIP-Version verwendet maximal ``1g``); die RPM/DEB-Version verwendet ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - (nicht gesetzt)
-     - URL des OpenSearch, zu dem eine Verbindung hergestellt wird. Wenn nicht gesetzt, wird der eingebaute Standardwert ``http://localhost:9201`` verwendet. Ändern Sie dies, wenn OpenSearch auf einem anderen Port oder Host läuft (das Verfahren :doc:`install-linux` setzt diesen Wert auf ``http://localhost:9200``, um dem OpenSearch-Lauschport zu entsprechen). Die RPM/DEB-Version setzt ``http://localhost:9200`` standardmäßig über die Paketumgebungsdatei.
+     - ``http://localhost:9200``
+     - URL des OpenSearch, zu dem eine Verbindung hergestellt wird. Bei der ZIP-Version setzt ``bin/fess.in.sh`` diesen Wert standardmäßig. Exportieren Sie die Variable oder bearbeiten Sie ``bin/fess.in.sh``, wenn OpenSearch auf einem anderen Port oder Host läuft. Die RPM/DEB-Version setzt ihn in der Paketumgebungsdatei.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Protokollniveau von |Fess|.

@@ -236,7 +236,7 @@ Répertoire d'exportation vide
 ::
 
     # Vérifier le nombre de documents dans l'index
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 L'exportation échoue en cours de route
 ---------------------------------------

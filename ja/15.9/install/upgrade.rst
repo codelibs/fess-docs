@@ -278,12 +278,7 @@ ZIP 版
       新しいバージョンの JSP と構造が変わっている場合、画面が正しく表示されなくなります。
       新しいバージョンの JSP に対して変更内容を再適用してください。
 
-4. 組み込み OpenSearch（``SEARCH_ENGINE_HTTP_URL`` を設定せずに ``bin/fess`` を起動する構成）を
-   使用している場合は、インデックスデータもコピーします::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. 設定差分を確認し、必要に応じて調整します
+4. 設定差分を確認し、必要に応じて調整します
 
 RPM/DEB 版
 ----------
@@ -466,7 +461,53 @@ Docker 版::
 15.8 から 15.9 へのアップグレード
 =================================
 
-15.8 からアップグレードする場合、以下の 3 点が互換性のない変更です。
+15.8 からアップグレードする場合、以下の 5 点が互換性のない変更です。
+
+組み込み OpenSearch の廃止
+--------------------------
+
+15.8 までは ``SEARCH_ENGINE_HTTP_URL`` を設定せずに ``bin/fess`` を起動すると、|Fess| が自身の
+JVM 内で OpenSearch ノードを起動していました。15.9 ではこの構成がなくなり、検索エンジンは常に
+別のサーバーになります。
+
+``bin/fess.in.sh`` は既定で ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200`` を設定します。
+接続先の OpenSearch がない場合、|Fess| は起動に失敗します。 ``bin/fess-setup install opensearch``
+で導入できます（Linux と Windows のみ。macOS には OpenSearch の公式配布がないため、Homebrew か
+Docker を使用してください）。
+
+あわせて次が廃止されました。
+
+- ``es/`` ディレクトリ（ ``es/modules`` 、 ``es/plugins`` 、 ``es/data`` ）
+- ``-Dfess.es.dir`` と ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` と ``bin/plugin.xml``
+- 旧 ``elasticsearch.*`` 設定キーのフォールバック
+
+また、OpenSearch 3 より前のバージョンに接続した場合、15.8 まではエラーログを出して起動を続行して
+いましたが、15.9 では起動に失敗します。これらのバージョンは全文書を走査する処理が使う
+``_shard_doc`` ソートを実装しておらず、HTTP 経由では失敗せずに応答が返らなくなるためです。
+
+.. warning::
+
+   組み込み OpenSearch で運用していた場合、インデックスデータは引き継げません。外部の
+   OpenSearch サーバーを新しく構築し、管理画面「バックアップ」で設定を移したうえで
+   再クロールしてください。バックアップに含まれるのはクロール設定・ユーザー・ログで、
+   **クロール済みの文書は含まれません**。
+
+Playwright 用 Node.js の同梱を終了
+----------------------------------
+
+Playwright クローラが使用する Node.js の実行ファイルは、配布物に含まれなくなりました。
+これにより ZIP は 438.5 MiB から 218.9 MiB になっています。
+
+クロール設定の設定パラメータで ``client.crawlerClients=playwright:http://.*`` のように
+Playwright クライアントを指定している場合は、次のコマンドで Node.js を導入してください。
+``bin/fess.in.sh`` が導入先を検出し、 ``PLAYWRIGHT_NODEJS_PATH`` を設定します。
+
+::
+
+    $ bin/fess-setup install nodejs
+
+Playwright クローラを使用していない場合、対応は不要です。
 
 標準のスクリプトエンジンが Groovy から JavaScript に変更
 --------------------------------------------------------

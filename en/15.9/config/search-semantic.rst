@@ -49,13 +49,6 @@ Prerequisites
 
      * - Configuration
        - k-NN Plugin Support
-     * - Embedded OpenSearch (``bin/fess``, or the ZIP packages with
-         ``SEARCH_ENGINE_HTTP_URL`` left unset — the default)
-       - Ships with the k-NN plugin. It does not include the JNI native libraries, however, so
-         the only supported ANN engine is ``lucene``. ``content_chunker.search.knn.engine`` also
-         accepts ``faiss`` as a value, and setting it here still creates the mapping successfully
-         — but **documents are then silently lost on every write, and searches return zero
-         hits**. (|Fess| logs a warning at startup when it is started with this combination.)
      * - Docker (``ghcr.io/codelibs/fess-opensearch``), the RPM/DEB packages (which always connect
          to a separately installed external OpenSearch), or another external OpenSearch (standard
          distribution)

@@ -25,9 +25,9 @@
    * - Fess ウェブアプリケーション
      - 8080
    * - OpenSearch (HTTP)
-     - 9201
+     - 9200
    * - OpenSearch (Transport)
-     - 9301
+     - 9300
 
 Fess ウェブアプリケーションのポート変更
 --------------------------------------
@@ -237,7 +237,7 @@ OpenSearchへの接続先URLとヘルスチェック間隔を設定できます�
    * - 設定項目
      - 説明
    * - ``search_engine.http.url``
-     - OpenSearchのURL(デフォルト: http://localhost:9201)
+     - OpenSearchのURL(デフォルト: http://localhost:9200)
    * - ``search_engine.heartbeat_interval``
      - ヘルスチェック間隔(ミリ秒、デフォルト: 10000)
 
@@ -397,7 +397,7 @@ AWS、GCP、Azureなどのクラウド環境では、セキュリティグルー
 推奨設定:
 - インバウンド: 80/443ポート(HTTPリバースプロキシ経由)
 - 8080ポートは内部からのみアクセス可能に制限
-- OpenSearchの9201/9301ポートは内部からのみアクセス可能に制限
+- OpenSearchの9200/9300ポートは内部からのみアクセス可能に制限
 
 トラブルシューティング
 ======================
@@ -422,7 +422,7 @@ OpenSearchに接続できない
 
 1. OpenSearchが起動しているか確認してください。
 2. ``search_engine.http.url`` の設定が正しいか確認してください。
-3. ネットワーク接続を確認してください: ``curl http://localhost:9201``
+3. ネットワーク接続を確認してください: ``curl http://localhost:9200``
 4. OpenSearchのログでエラーを確認してください。
 
 リバースプロキシ経由でアクセスすると正常に動作しない

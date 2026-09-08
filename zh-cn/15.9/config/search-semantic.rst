@@ -42,12 +42,6 @@
 
      * - 配置
        - k-NN 插件支持情况
-     * - 内置 OpenSearch（``bin/fess``，或 ``SEARCH_ENGINE_HTTP_URL`` 未设置时的 ZIP
-         软件包默认状态）
-       - 内置了 k-NN 插件。但不包含 JNI 原生库，因此唯一支持的 ANN 引擎是 ``lucene``\ 。
-         ``content_chunker.search.knn.engine`` 也接受 ``faiss`` 作为取值，在此设置后映射仍会
-         创建成功——但\ **每次写入时文档都会被静默丢失，搜索结果也会变为 0 条**\ （以这种组合
-         启动时，会在启动时输出一条警告日志）。
      * - Docker（``ghcr.io/codelibs/fess-opensearch``）、始终连接到单独安装的外部 OpenSearch 的
          RPM/DEB 软件包，或其他外部 OpenSearch（标准发行版）
        - 完全支持，包括 ``faiss``\ 。

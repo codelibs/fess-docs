@@ -57,7 +57,7 @@
 
 **其他**
 
-- macOS 11 (Big Sur) 或更高版本（仅推荐用于开发环境）
+- macOS 11 (Big Sur) 及以上（仅推荐用于开发环境。OpenSearch 没有官方的 macOS 发行版，请使用 Homebrew 或 Docker 准备）
 - 可运行 Docker 的环境
 
 必需软件
@@ -73,7 +73,7 @@ ZIP/RPM/DEB 版
   - OpenJDK 21 或更高版本
   - Eclipse Temurin 21 或更高版本
 
-- **OpenSearch 3.8.0**: 生产环境必需（不推荐使用内嵌版本）
+- **OpenSearch 3.8.0**: 必需。使用早于 OpenSearch 3 的引擎时 |Fess| 无法启动
 
   - 支持版本: OpenSearch 3.8.0
   - 其他版本需要注意插件兼容性

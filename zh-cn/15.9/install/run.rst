@@ -296,8 +296,8 @@ ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``�
      - （未设置）
      - JVM 堆大小。最小值和最大值设置为相同的值。未设置时，最小值为 ``256m``，最大值为 ``2g``\ （ZIP 版（Windows）最大值为 ``1g``）；RPM/DEB 版使用 ``512m``\ 。
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - （未设置）
-     - 连接的 OpenSearch 的 URL。未设置时，使用内部默认值 ``http://localhost:9201``\ 。当 OpenSearch 在不同端口或主机上运行时请更改此项（:doc:`install-linux` 的安装步骤会将其设置为 ``http://localhost:9200`` 以匹配 OpenSearch 的监听端口）。RPM/DEB 版通过软件包环境配置文件默认设置为 ``http://localhost:9200``\ 。
+     - ``http://localhost:9200``
+     - 连接的 OpenSearch 的 URL。ZIP 版由 ``bin/fess.in.sh`` 默认设置此值。当 OpenSearch 在不同端口或主机上运行时，请设置环境变量或编辑 ``bin/fess.in.sh``\ 。RPM/DEB 版通过软件包环境配置文件设置。
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 的日志级别。

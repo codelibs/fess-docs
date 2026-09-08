@@ -323,8 +323,8 @@ OpenSearch 的内存使用情况
 
 ::
 
-    curl -X GET "localhost:9201/_nodes/stats/jvm?pretty"
-    curl -X GET "localhost:9201/_cat/nodes?v&h=heap.percent,ram.percent"
+    curl -X GET "localhost:9200/_nodes/stats/jvm?pretty"
+    curl -X GET "localhost:9200/_cat/nodes?v&h=heap.percent,ram.percent"
 
 内存不足的征兆
 ----------------

@@ -5,10 +5,10 @@ Linux へのインストール (詳細手順)
 このページでは、Linux 環境への |Fess| のインストール手順を説明します。
 ZIP、RPM、DEB の各パッケージ形式に対応しています。
 
-.. warning::
+.. note::
 
-   本番環境では、組み込み OpenSearch での稼働は推奨しません。
-   必ず外部の OpenSearch サーバーを構築してください。
+   |Fess| は検索エンジンを同梱していません。OpenSearch サーバーを別途用意する必要があり、
+   以下の手順で構築します。
 
 前提条件
 ========
@@ -78,6 +78,20 @@ ZIP 版でのインストール
 
 ステップ 1: OpenSearch のインストール
 -------------------------------------
+
+.. tip::
+
+   |Fess| に同梱の ``bin/fess-setup`` で、以下の手順をまとめて実行できます。
+   OpenSearch の取得と展開、必要なプラグインの導入、 ``configsync`` の設定までを行います。
+
+   ::
+
+       $ cd /path/to/fess-15.9.0
+       $ bin/fess-setup install opensearch
+
+   手順を個別に確認したい場合や、既存の OpenSearch を使う場合は、以下に従ってください。
+   既存の OpenSearch にプラグインだけを入れる場合は
+   ``bin/fess-setup install plugins --opensearch-home /path/to/opensearch`` を使用します。
 
 1. OpenSearch のダウンロード
 

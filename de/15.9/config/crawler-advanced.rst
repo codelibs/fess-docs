@@ -1123,6 +1123,20 @@ zu verwenden, geben Sie diese wie folgt an.
 
        npx playwright install --with-deps
 
+.. note::
+   Seit 15.9 gehört auch die Node.js-Programmdatei, die Playwright ausführt, nicht
+   mehr zum |Fess|-Paket. Installieren Sie sie mit dem folgenden Befehl;
+   ``bin/fess.in.sh`` findet sie und übergibt ``PLAYWRIGHT_NODEJS_PATH`` an den
+   Crawler-Prozess.
+
+   ::
+
+       $ bin/fess-setup install nodejs
+
+   Um ein Node.js von einem anderen Ort zu verwenden, setzen Sie
+   ``PLAYWRIGHT_NODEJS_PATH`` in ``bin/fess.in.sh`` auf den vollständigen Pfad der
+   Programmdatei. Playwright wertet ``PATH`` nicht aus.
+
 Konfigurationsparameter
 -----------------------
 

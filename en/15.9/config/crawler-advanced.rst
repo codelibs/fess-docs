@@ -1124,6 +1124,19 @@ Playwright. To use Playwright for specific sites only, specify them as follows.
 
        npx playwright install --with-deps
 
+.. note::
+   From 15.9, the Node.js executable that Playwright runs is no longer part of the
+   |Fess| package either. Install it with the command below; ``bin/fess.in.sh``
+   discovers it and passes ``PLAYWRIGHT_NODEJS_PATH`` to the crawler process.
+
+   ::
+
+       $ bin/fess-setup install nodejs
+
+   To use a Node.js from elsewhere, set ``PLAYWRIGHT_NODEJS_PATH`` in
+   ``bin/fess.in.sh`` to the full path of the executable. Playwright does not
+   consult ``PATH``.
+
 Configuration Parameters
 ------------------------
 

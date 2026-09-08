@@ -236,7 +236,7 @@ JSON 형식의 경우 각 파일은 제외되지 않은 모든 필드를 포함�
 ::
 
     # 인덱스 문서 수 확인
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 내보내기가 중간에 실패함
 ------------------------

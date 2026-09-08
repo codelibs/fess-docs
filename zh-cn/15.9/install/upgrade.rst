@@ -278,12 +278,7 @@ ZIP 版
       如果新版本的 JSP 结构发生了变化，画面可能无法正常显示。
       请将修改内容重新应用到新版本的 JSP 上。
 
-4. 如果使用内置 OpenSearch（未设置 ``SEARCH_ENGINE_HTTP_URL`` 而直接启动 ``bin/fess`` 的
-   配置），请同时复制索引数据::
-
-       $ cp -r /path/to/old-fess/es/data/. /path/to/fess-15.9.0/es/data/
-
-5. 确认配置差异，根据需要进行调整
+4. 确认配置差异，根据需要进行调整
 
 RPM/DEB 版
 ----------
@@ -462,7 +457,50 @@ Docker 版::
 从 15.8 升级到 15.9
 ===================
 
-若从 15.8 升级，以下三项为不向后兼容的变更。
+若从 15.8 升级，以下五项为不向后兼容的变更。
+
+内嵌 OpenSearch 的移除
+----------------------
+
+15.8 之前，未设置 ``SEARCH_ENGINE_HTTP_URL`` 而启动 ``bin/fess`` 时，|Fess| 会在自身的 JVM 内
+启动 OpenSearch 节点。15.9 移除了该配置，搜索引擎始终是独立的服务器。
+
+``bin/fess.in.sh`` 现在默认设置 ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200``\ 。
+如果没有可连接的 OpenSearch，|Fess| 将无法启动。可以使用 ``bin/fess-setup install opensearch``
+进行安装（仅限 Linux 和 Windows。OpenSearch 没有官方的 macOS 发行版，请使用 Homebrew 或
+Docker）。
+
+以下内容也一并移除：
+
+- ``es/`` 目录（``es/modules``、``es/plugins``、``es/data``）
+- ``-Dfess.es.dir`` 和 ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` 和 ``bin/plugin.xml``
+- 对旧 ``elasticsearch.*`` 配置键的回退处理
+
+此外，连接早于 OpenSearch 3 的版本时，15.8 只记录错误日志并继续运行，而 15.9 将启动失败。
+这些版本未实现遍历全部文档的处理所依赖的 ``_shard_doc`` 排序，通过 HTTP 时此类请求不会失败，
+而是不返回响应。
+
+.. warning::
+
+   使用内嵌 OpenSearch 运行时的索引数据无法继承。请新建外部 OpenSearch 服务器，通过管理界面的
+   「备份」迁移配置后重新爬取。备份包含爬取配置、用户和日志，**不包含已爬取的文档**。
+
+不再随附 Playwright 所需的 Node.js
+----------------------------------
+
+Playwright 爬虫使用的 Node.js 可执行文件不再包含在发行包中。
+因此 ZIP 从 438.5 MiB 减少到 218.9 MiB。
+
+如果爬取配置的设置参数中指定了 Playwright 客户端（例如
+``client.crawlerClients=playwright:http://.*``\ ），请使用以下命令安装 Node.js。
+``bin/fess.in.sh`` 会检测安装位置并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。
+
+::
+
+    $ bin/fess-setup install nodejs
+
+如果不使用 Playwright 爬虫，则无需处理。
 
 内置脚本引擎由 Groovy 改为 JavaScript
 -------------------------------------

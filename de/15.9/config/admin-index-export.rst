@@ -236,7 +236,7 @@ Leeres Export-Verzeichnis
 ::
 
     # Dokumentanzahl im Index prüfen
-    curl -X GET "localhost:9201/fess.search/_count?pretty"
+    curl -X GET "localhost:9200/fess.search/_count?pretty"
 
 Export schlägt mittendrin fehl
 --------------------------------

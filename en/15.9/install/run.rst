@@ -302,8 +302,8 @@ making changes.
      - (unset)
      - JVM heap size. Sets the same value for the minimum and maximum. When unset, a minimum of ``256m`` and a maximum of ``2g`` are used (the Windows ZIP edition uses a maximum of ``1g``); the RPM/DEB edition uses ``512m``.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - (unset)
-     - URL of the OpenSearch to connect to. When unset, the built-in default ``http://localhost:9201`` is used. Change this when OpenSearch runs on a different port or host (the :doc:`install-linux` procedure sets it to ``http://localhost:9200`` to match the OpenSearch listening port). The RPM/DEB edition sets ``http://localhost:9200`` by default via the package environment file.
+     - ``http://localhost:9200``
+     - URL of the OpenSearch to connect to. For the ZIP distribution, ``bin/fess.in.sh`` sets this by default. Export the variable, or edit ``bin/fess.in.sh``, when OpenSearch runs on a different port or host. The RPM/DEB edition sets it in the package environment file.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Log level of |Fess|.

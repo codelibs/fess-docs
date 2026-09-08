@@ -326,8 +326,8 @@ Speichernutzung von OpenSearch
 
 ::
 
-    curl -X GET "localhost:9201/_nodes/stats/jvm?pretty"
-    curl -X GET "localhost:9201/_cat/nodes?v&h=heap.percent,ram.percent"
+    curl -X GET "localhost:9200/_nodes/stats/jvm?pretty"
+    curl -X GET "localhost:9200/_cat/nodes?v&h=heap.percent,ram.percent"
 
 Anzeichen von Speichermangel
 ----------------

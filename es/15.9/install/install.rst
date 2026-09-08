@@ -5,12 +5,10 @@ Selección del Método de Instalación
 Esta página describe una descripción general de los métodos de instalación de |Fess|.
 Seleccione el método de instalación apropiado según su entorno.
 
-.. warning::
+.. note::
 
-   **Nota Importante para Entornos de Producción**
-
-   No se recomienda ejecutar con OpenSearch integrado en entornos de producción o pruebas de carga.
-   Asegúrese de construir un servidor OpenSearch externo.
+   |Fess| no incluye un motor de búsqueda. Todos los métodos de instalación
+   siguientes requieren un servidor OpenSearch independiente.
 
 Verificación de Requisitos Previos
 ===================================
@@ -70,7 +68,7 @@ Versión Docker
 
 - Se requiere conocimiento de Docker
 
-**Entorno Recomendado:** Entorno de desarrollo, entorno de evaluación, POC (para uso en producción, configure un servidor OpenSearch externo en lugar del OpenSearch integrado)
+**Entorno Recomendado:** Entornos de desarrollo, evaluación, POC y producción
 
 Para más detalles: :doc:`install-docker`
 
@@ -171,6 +169,8 @@ Se utiliza OpenSearch como motor de búsqueda.
 
    Es necesario que coincidan las versiones de OpenSearch y los plugins.
    La falta de coincidencia de versiones causa errores de inicio y comportamiento inesperado.
+
+``bin/fess-setup install opensearch`` prepara OpenSearch con estos plugins. Consulte :doc:`install-linux` para más detalles.
 
 Java (excepto versión Docker)
 ------------------------------

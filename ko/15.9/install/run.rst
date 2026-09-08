@@ -297,8 +297,8 @@ ZIP 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버
      - (미설정)
      - JVM 힙 크기입니다. 최솟값과 최댓값에 동일한 값을 설정합니다. 미설정 시 최솟값 ``256m``, 최댓값 ``2g`` 가 사용되며(Windows ZIP 버전은 최댓값 ``1g``), RPM/DEB 버전은 ``512m`` 이 사용됩니다.
    * - ``SEARCH_ENGINE_HTTP_URL``
-     - (미설정)
-     - 접속할 OpenSearch의 URL입니다. 미설정 시 내부 기본값 ``http://localhost:9201`` 이 사용됩니다. OpenSearch를 다른 포트나 호스트에서 실행하는 경우 변경하십시오(:doc:`install-linux` 절차에서는 OpenSearch 수신 포트에 맞춰 ``http://localhost:9200`` 으로 설정합니다). RPM/DEB 버전은 패키지 환경 설정 파일에 의해 기본값으로 ``http://localhost:9200`` 이 설정됩니다.
+     - ``http://localhost:9200``
+     - 접속할 OpenSearch의 URL입니다. ZIP 버전에서는 ``bin/fess.in.sh`` 가 기본적으로 이 값을 설정합니다. OpenSearch를 다른 포트나 호스트에서 실행하는 경우 환경 변수로 설정하거나 ``bin/fess.in.sh`` 를 편집하십시오. RPM/DEB 버전은 패키지 환경 설정 파일에서 설정합니다.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 의 로그 레벨입니다.
