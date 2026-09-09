@@ -29,9 +29,9 @@ Lenguajes de scripting compatibles
        expresiones de sus XML de DI); los scripts se ejecutan como ECMAScript 6.
    * - Groovy
      - ``groovy``
-     - Se proporciona como el plugin ``fess-script-groovy``. En 15.9 viene incluido en la
-       distribución, por lo que funciona sin pasos adicionales, pero **a partir de 15.10
-       dejará de venir incluido** y deberá instalarse desde la pantalla de administración.
+     - Se proporciona como el plugin ``fess-script-groovy``, que **no forma parte de la
+       distribución**. Instálelo desde la pantalla de administración o con
+       ``bin/fess-setup install plugin fess-script-groovy``.
 
 .. note::
    Una configuración de script que no tiene registrado un tipo de script se trata como
