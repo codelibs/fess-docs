@@ -470,7 +470,7 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 Actualización de 15.8 a 15.9
 ============================
 
-Si actualiza desde 15.8, los cinco cambios siguientes no son retrocompatibles.
+Si actualiza desde 15.8, los seis cambios siguientes no son retrocompatibles.
 
 Eliminación del OpenSearch integrado
 ------------------------------------
@@ -507,7 +507,7 @@ Node.js para Playwright ya no se incluye
 ----------------------------------------
 
 Los ejecutables de Node.js que utiliza el rastreador de Playwright ya no forman parte de la
-distribución. Como consecuencia, el ZIP pasa de 438,5 MiB a 218,9 MiB.
+distribución. Como consecuencia, el ZIP pasa de 438,5 MiB a 204,7 MiB.
 
 Si alguna configuración de rastreo indica el cliente de Playwright, por ejemplo con
 ``client.crawlerClients=playwright:http://.*`` en sus parámetros de configuración, instale
@@ -519,6 +519,27 @@ Node.js con la orden siguiente. ``bin/fess.in.sh`` lo detecta y establece
     $ bin/fess-setup install nodejs
 
 Si no utiliza el rastreador de Playwright, no hay nada que hacer.
+
+Google Cloud Storage pasa a un plugin
+-------------------------------------
+
+El SDK de Google Cloud Storage ya no forma parte de la distribución, por lo que el rastreo de
+``gcs://`` y el tipo de almacenamiento ``gcs`` provienen ahora del plugin ``fess-lib-gcs``.
+Instálelo desde la página **Sistema > Plugin** de la pantalla de administración o con la
+orden siguiente.
+
+::
+
+    $ bin/fess-setup install plugin fess-lib-gcs
+
+``gcs`` también ha salido del valor distribuido de ``crawler.file.protocols``, que ahora es
+``file,smb,smb1,ftp,s3``; el plugin lo vuelve a añadir al instalarse. Hasta entonces, una
+configuración de rastreo de archivos cuya ruta empieza por ``gcs:`` se rechaza como protocolo
+no válido, y la página de almacenamiento informa de que no hay ningún cliente registrado para
+``storage.type=gcs``.
+
+Si no utiliza Google Cloud Storage, no hay nada que hacer. Amazon S3 y el almacenamiento
+compatible con S3, como MinIO, siguen en la distribución y no se ven afectados.
 
 El motor de scripting integrado pasa de Groovy a JavaScript
 -----------------------------------------------------------
@@ -550,7 +571,7 @@ El protocolo de rastreo ``storage`` se ha eliminado
 ---------------------------------------------------
 
 ``storage`` ya no se admite en ``crawler.file.protocols``; el valor incluido es
-``file,smb,smb1,ftp,s3,gcs``. Utilice ``s3`` en su lugar y cambie a una ruta ``s3:`` cualquier
+``file,smb,smb1,ftp,s3``. Utilice ``s3`` en su lugar y cambie a una ruta ``s3:`` cualquier
 configuración de rastreo de archivos cuya ruta empiece por ``storage:``.
 
 Migración Específica de 15.9

@@ -47,6 +47,9 @@ Plugin Types
    * - Crawler
      - ``fess-crawler-*``
      - Extends crawler clients
+   * - Library
+     - ``fess-lib-*``
+     - Ships a third-party client and its dependencies that the distribution does not carry
 
 Plugin Structure
 =================

@@ -457,7 +457,7 @@ Docker 版::
 从 15.8 升级到 15.9
 ===================
 
-若从 15.8 升级，以下五项为不向后兼容的变更。
+若从 15.8 升级，以下六项为不向后兼容的变更。
 
 内嵌 OpenSearch 的移除
 ----------------------
@@ -490,7 +490,7 @@ Docker）。
 ----------------------------------
 
 Playwright 爬虫使用的 Node.js 可执行文件不再包含在发行包中。
-因此 ZIP 从 438.5 MiB 减少到 218.9 MiB。
+因此 ZIP 从 438.5 MiB 减少到 204.7 MiB。
 
 如果爬取配置的设置参数中指定了 Playwright 客户端（例如
 ``client.crawlerClients=playwright:http://.*``\ ），请使用以下命令安装 Node.js。
@@ -501,6 +501,23 @@ Playwright 爬虫使用的 Node.js 可执行文件不再包含在发行包中。
     $ bin/fess-setup install nodejs
 
 如果不使用 Playwright 爬虫，则无需处理。
+
+Google Cloud Storage 移至插件
+-----------------------------
+
+Google Cloud Storage 的 SDK 不再包含在发行包中， ``gcs://`` 爬取与 ``gcs`` 存储类型改由
+``fess-lib-gcs`` 插件提供。请从管理界面的「系统 > 插件」页面安装，或执行以下命令。
+
+::
+
+    $ bin/fess-setup install plugin fess-lib-gcs
+
+``crawler.file.protocols`` 的随附取值中也去掉了 ``gcs``\ ，现为
+``file,smb,smb1,ftp,s3``\ 。安装插件后会重新加入。在此之前，路径以 ``gcs:`` 开头的文件
+爬取配置会因协议无效而被拒绝，存储页面则会报告没有为 ``storage.type=gcs`` 注册客户端。
+
+如果不使用 Google Cloud Storage，则无需处理。Amazon S3 以及 MinIO 等兼容 S3 的存储仍在
+发行包中，不受影响。
 
 内置脚本引擎由 Groovy 改为 JavaScript
 -------------------------------------
@@ -527,7 +544,7 @@ Playwright 爬虫使用的 Node.js 可执行文件不再包含在发行包中。
 爬取协议 ``storage`` 已删除
 ---------------------------
 
-``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp,s3,gcs`` 。
+``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp,s3`` 。
 请改用 ``s3`` ，并将路径以 ``storage:`` 开头的文件爬取配置改为 ``s3:`` 路径。
 
 15.9 特有的迁移工作

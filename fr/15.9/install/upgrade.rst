@@ -473,7 +473,7 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 Mise à niveau de 15.8 vers 15.9
 ===============================
 
-Si vous effectuez une mise à niveau depuis la 15.8, les cinq changements suivants ne sont pas
+Si vous effectuez une mise à niveau depuis la 15.8, les six changements suivants ne sont pas
 rétrocompatibles.
 
 Suppression de l'OpenSearch intégré
@@ -512,7 +512,7 @@ Node.js pour Playwright n’est plus fourni
 -----------------------------------------
 
 Les exécutables Node.js utilisés par le robot Playwright ne font plus partie de la distribution.
-L'archive ZIP passe ainsi de 438,5 Mio à 218,9 Mio.
+L'archive ZIP passe ainsi de 438,5 Mio à 204,7 Mio.
 
 Si une configuration d'exploration désigne le client Playwright, par exemple avec
 ``client.crawlerClients=playwright:http://.*`` dans ses paramètres, installez Node.js avec la
@@ -523,6 +523,27 @@ commande ci-dessous. ``bin/fess.in.sh`` le détecte et définit ``PLAYWRIGHT_NOD
     $ bin/fess-setup install nodejs
 
 Rien à faire si vous n'utilisez pas le robot Playwright.
+
+Google Cloud Storage passe dans un plugin
+-----------------------------------------
+
+Le SDK Google Cloud Storage ne fait plus partie de la distribution : l'exploration ``gcs://``
+et le type de stockage ``gcs`` proviennent désormais du plugin ``fess-lib-gcs``.
+Installez-le depuis la page **Système > Plugin** de l'écran d'administration ou avec la
+commande ci-dessous.
+
+::
+
+    $ bin/fess-setup install plugin fess-lib-gcs
+
+``gcs`` a également quitté la valeur fournie de ``crawler.file.protocols``, qui est
+maintenant ``file,smb,smb1,ftp,s3`` ; le plugin la rétablit lors de son installation.
+Jusque-là, une configuration d'exploration de fichiers dont le chemin commence par ``gcs:``
+est rejetée comme protocole invalide, et la page de stockage signale qu'aucun client n'est
+enregistré pour ``storage.type=gcs``.
+
+Rien à faire si vous n'utilisez pas Google Cloud Storage. Amazon S3 et les stockages
+compatibles S3 tels que MinIO restent dans la distribution et ne sont pas concernés.
 
 Le moteur de script intégré passe de Groovy à JavaScript
 --------------------------------------------------------
@@ -554,7 +575,7 @@ Le protocole de crawl ``storage`` a été supprimé
 ------------------------------------------------
 
 ``storage`` n'est plus accepté dans ``crawler.file.protocols`` ; la valeur fournie est
-``file,smb,smb1,ftp,s3,gcs``. Utilisez ``s3`` à la place et remplacez par un chemin ``s3:`` toute
+``file,smb,smb1,ftp,s3``. Utilisez ``s3`` à la place et remplacez par un chemin ``s3:`` toute
 configuration de crawl de fichiers dont le chemin commence par ``storage:``.
 
 Migrations spécifiques à la 15.9

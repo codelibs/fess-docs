@@ -36,6 +36,11 @@ Paramètres GCS
 - ID de projet : ID de projet Google Cloud
 - Chemin des identifiants : Chemin du fichier JSON d'identifiants du compte de service
 
+.. note::
+   La prise en charge de Google Cloud Storage provient du plugin ``fess-lib-gcs``, qui ne
+   fait pas partie de la distribution. Installez-le depuis la page **Système > Plugin** de
+   l'écran d'administration ou avec ``bin/fess-setup install plugin fess-lib-gcs``.
+
 Paramètres MinIO (compatible S3)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

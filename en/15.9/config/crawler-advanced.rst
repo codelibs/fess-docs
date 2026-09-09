@@ -177,7 +177,7 @@ Supported Protocols
      - ``http,https``
    * - ``crawler.file.protocols``
      - File crawl protocols
-     - ``file,smb,smb1,ftp,s3,gcs``
+     - ``file,smb,smb1,ftp,s3``
    * - ``crawler.crawling.data.encoding``
      - Crawling data encoding
      - ``UTF-8``
@@ -188,7 +188,7 @@ Configuration Example
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3
     crawler.crawling.data.encoding=UTF-8
 
 Environment Variable Parameters
@@ -1047,6 +1047,11 @@ Configuration Example
 
 GCS Crawler
 -----------
+
+.. note::
+   Google Cloud Storage support comes from the ``fess-lib-gcs`` plugin, which is not part of
+   the distribution. Install it from the System > Plugin page in the administration screen,
+   or with ``bin/fess-setup install plugin fess-lib-gcs``.
 
 Configuration for crawling Google Cloud Storage.
 Add the following to "Configuration Parameters" in the file crawl settings.

@@ -49,6 +49,9 @@ suivants :
    * - Crawler
      - ``fess-crawler-*``
      - Extension des clients du crawler
+   * - Bibliothèque
+     - ``fess-lib-*``
+     - Fournit un client tiers et ses dépendances que la distribution ne contient pas
 
 Structure d'un plugin
 ======================

@@ -470,7 +470,7 @@ Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
 Upgrade von 15.8 auf 15.9
 =========================
 
-Wenn Sie von 15.8 aktualisieren, sind die folgenden fünf Änderungen nicht abwärtskompatibel.
+Wenn Sie von 15.8 aktualisieren, sind die folgenden sechs Änderungen nicht abwärtskompatibel.
 
 Entfernung des eingebetteten OpenSearch
 ---------------------------------------
@@ -507,7 +507,7 @@ Node.js für Playwright wird nicht mehr mitgeliefert
 ---------------------------------------------------
 
 Die Node.js-Programmdateien, die der Playwright-Crawler ausführt, sind nicht mehr Teil der
-Distribution. Das ZIP schrumpft dadurch von 438,5 MiB auf 218,9 MiB.
+Distribution. Das ZIP schrumpft dadurch von 438,5 MiB auf 204,7 MiB.
 
 Wenn eine Crawl-Konfiguration den Playwright-Client benennt, etwa mit
 ``client.crawlerClients=playwright:http://.*`` in ihren Konfigurationsparametern, installieren
@@ -519,6 +519,26 @@ Sie Node.js mit dem folgenden Befehl. ``bin/fess.in.sh`` findet es und setzt
     $ bin/fess-setup install nodejs
 
 Ohne den Playwright-Crawler ist nichts zu tun.
+
+Google Cloud Storage wird als Plugin ausgeliefert
+-------------------------------------------------
+
+Das Google-Cloud-Storage-SDK ist nicht mehr Teil der Distribution; ``gcs://``-Crawls und der
+Speichertyp ``gcs`` kommen jetzt aus dem Plugin ``fess-lib-gcs``. Installieren Sie es über
+die Seite **System > Plugin** in der Administrationsoberfläche oder mit dem folgenden Befehl.
+
+::
+
+    $ bin/fess-setup install plugin fess-lib-gcs
+
+``gcs`` ist auch aus dem ausgelieferten ``crawler.file.protocols`` verschwunden, das nun
+``file,smb,smb1,ftp,s3`` lautet; das Plugin fügt es bei der Installation wieder hinzu. Bis
+dahin wird eine Datei-Crawl-Konfiguration, deren Pfad mit ``gcs:`` beginnt, als ungültiges
+Protokoll abgewiesen, und die Speicherseite meldet, dass für ``storage.type=gcs`` kein
+Client registriert ist.
+
+Ohne Google Cloud Storage ist nichts zu tun. Amazon S3 und S3-kompatible Speicher wie MinIO
+bleiben in der Distribution und sind nicht betroffen.
 
 Die eingebaute Skript-Engine wechselt von Groovy zu JavaScript
 --------------------------------------------------------------
@@ -551,7 +571,7 @@ Das Crawl-Protokoll ``storage`` wurde entfernt
 ----------------------------------------------
 
 ``storage`` wird in ``crawler.file.protocols`` nicht mehr akzeptiert; der mitgelieferte Wert
-lautet ``file,smb,smb1,ftp,s3,gcs``. Verwenden Sie stattdessen ``s3`` und stellen Sie jede
+lautet ``file,smb,smb1,ftp,s3``. Verwenden Sie stattdessen ``s3`` und stellen Sie jede
 Datei-Crawl-Konfiguration, deren Pfad mit ``storage:`` beginnt, auf einen ``s3:``-Pfad um.
 
 Migrationsaufgaben speziell für 15.9

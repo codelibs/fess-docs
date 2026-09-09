@@ -49,6 +49,9 @@ siguientes:
    * - Rastreador
      - ``fess-crawler-*``
      - Ampliación de clientes de rastreador
+   * - Biblioteca
+     - ``fess-lib-*``
+     - Aporta un cliente de terceros y sus dependencias que la distribución no incluye
 
 Estructura del Plugin
 ======================
