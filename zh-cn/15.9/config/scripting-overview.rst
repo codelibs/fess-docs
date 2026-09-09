@@ -28,8 +28,8 @@
        解析）之上，脚本以 ECMAScript 6 执行。
    * - Groovy
      - ``groovy``
-     - 以 ``fess-script-groovy`` 插件形式提供。15.9 中随发行包一同分发，因此无需
-       额外操作即可使用，但 **自 15.10 起将不再随发行包分发**，需从管理界面安装。
+     - 以 ``fess-script-groovy`` 插件形式提供。**该插件不随发行包分发**，需从管理界面
+       安装，或执行 ``bin/fess-setup install plugin fess-script-groovy`` 。
 
 .. note::
    未记录脚本类型的脚本配置将被视为 Groovy。这并非临时的过渡措施，而是永久性行为：

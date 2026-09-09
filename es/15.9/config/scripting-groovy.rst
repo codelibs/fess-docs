@@ -10,13 +10,13 @@ Se ejecuta en la máquina virtual Java (JVM) y permite escribir scripts con una 
 mientras mantiene alta compatibilidad con Java.
 
 .. important::
-   A partir de |Fess| 15.9, Groovy se proporciona como el plugin ``fess-script-groovy``.
-   En 15.9 el plugin viene incluido en la distribución, por lo que funciona sin pasos
-   adicionales, pero **a partir de 15.10 dejará de venir incluido**. Para seguir usando
-   Groovy desde 15.10, instale el plugin desde la página **Sistema > Plugin** de la
-   pantalla de administración. Para instalarlo manualmente, coloque el archivo JAR
-   correspondiente (por ejemplo, ``fess-script-groovy-15.10.0.jar``) en
-   ``app/WEB-INF/plugin/`` y reinicie |Fess| después de la instalación.
+   A partir de |Fess| 15.9, Groovy se proporciona como el plugin ``fess-script-groovy`` y
+   **el plugin no forma parte de la distribución**. Instálelo desde la página
+   **Sistema > Plugin** de la pantalla de administración o con
+   ``bin/fess-setup install plugin fess-script-groovy``. Para instalarlo manualmente,
+   coloque el archivo JAR correspondiente (por ejemplo,
+   ``fess-script-groovy-15.9.0.jar``) en ``app/WEB-INF/plugin/`` y reinicie |Fess|
+   después de la instalación.
 
    El lenguaje de scripting predeterminado a partir de |Fess| 15.9 es JavaScript. Una
    configuración de script sin tipo de script registrado se trata como Groovy, por lo que

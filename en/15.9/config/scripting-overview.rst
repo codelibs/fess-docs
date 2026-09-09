@@ -29,9 +29,9 @@ Supported Scripting Languages
        executed as ECMAScript 6.
    * - Groovy
      - ``groovy``
-     - Provided as the ``fess-script-groovy`` plugin. It is bundled with the 15.9
-       distribution, so it works out of the box, but **it will no longer be bundled
-       starting with 15.10**, when it must be installed from the administration screen.
+     - Provided as the ``fess-script-groovy`` plugin, which is **not part of the
+       distribution**. Install it from the administration screen or with
+       ``bin/fess-setup install plugin fess-script-groovy``.
 
 .. note::
    A script configuration that has no recorded script type is treated as Groovy.

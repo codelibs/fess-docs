@@ -29,9 +29,9 @@
        ECMAScript 6로 실행됩니다.
    * - Groovy
      - ``groovy``
-     - ``fess-script-groovy`` 플러그인으로 제공됩니다. 15.9에서는 배포물에
-       동봉되어 있어 추가 작업 없이 이용할 수 있지만, **15.10부터는 동봉되지
-       않으며** 관리 화면에서 설치해야 합니다.
+     - ``fess-script-groovy`` 플러그인으로 제공됩니다. **플러그인은 배포물에
+       동봉되지 않으므로** 관리 화면 또는
+       ``bin/fess-setup install plugin fess-script-groovy`` 로 설치해야 합니다.
 
 .. note::
    스크립트 설정에 스크립트 타입이 기록되어 있지 않은 경우, 해당 스크립트는
