@@ -36,6 +36,11 @@ GCS Settings
 - Project ID: Google Cloud project ID
 - Credentials Path: Service account credentials JSON file path
 
+.. note::
+   Google Cloud Storage support comes from the ``fess-lib-gcs`` plugin, which is not part of
+   the distribution. Install it from the System > Plugin page in the administration screen,
+   or with ``bin/fess-setup install plugin fess-lib-gcs``.
+
 MinIO (S3-compatible) Settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

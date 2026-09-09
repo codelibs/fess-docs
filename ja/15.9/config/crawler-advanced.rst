@@ -177,7 +177,7 @@ HTTPクローラーのスレッドプール設定です。
      - ``http,https``
    * - ``crawler.file.protocols``
      - ファイルクロールのプロトコル
-     - ``file,smb,smb1,ftp,s3,gcs``
+     - ``file,smb,smb1,ftp,s3``
    * - ``crawler.crawling.data.encoding``
      - クロールデータのエンコーディング
      - ``UTF-8``
@@ -188,7 +188,7 @@ HTTPクローラーのスレッドプール設定です。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3
     crawler.crawling.data.encoding=UTF-8
 
 環境変数パラメーター
@@ -1050,6 +1050,11 @@ S3およびS3互換ストレージ（MinIO等）をクロールするための�
 
 GCSクローラー
 -------------
+
+.. note::
+   Google Cloud Storage への対応は ``fess-lib-gcs`` プラグインから提供されます。配布物には
+   同梱されていないため、管理画面の「システム > プラグイン」ページ、または
+   ``bin/fess-setup install plugin fess-lib-gcs`` で導入してください。
 
 Google Cloud Storageをクロールするための設定です。
 ファイルクロール設定の「設定パラメーター」に以下を記述します。

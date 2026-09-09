@@ -47,6 +47,9 @@ Artefaktnamens (``PluginHelper.ArtifactType``). Die wichtigsten Typen sind:
    * - Crawler
      - ``fess-crawler-*``
      - Erweiterung des Crawler-Clients
+   * - Bibliothek
+     - ``fess-lib-*``
+     - Liefert einen Fremdanbieter-Client und seine Abhängigkeiten, die die Distribution nicht enthält
 
 Plugin-Struktur
 ===============

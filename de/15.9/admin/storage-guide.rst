@@ -36,6 +36,11 @@ GCS-Einstellungen
 - Projekt-ID: Google Cloud-Projekt-ID
 - Anmeldedaten-Pfad: Pfad zur Dienstkonto-Anmeldedaten-JSON-Datei
 
+.. note::
+   Die Unterstützung für Google Cloud Storage kommt aus dem Plugin ``fess-lib-gcs``, das
+   nicht Teil der Distribution ist. Installieren Sie es über die Seite **System > Plugin** in
+   der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-lib-gcs``.
+
 MinIO (S3-kompatibel) Einstellungen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

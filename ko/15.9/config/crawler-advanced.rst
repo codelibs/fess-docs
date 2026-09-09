@@ -177,7 +177,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
      - ``http,https``
    * - ``crawler.file.protocols``
      - 파일 크롤링 프로토콜
-     - ``file,smb,smb1,ftp,s3,gcs``
+     - ``file,smb,smb1,ftp,s3``
    * - ``crawler.crawling.data.encoding``
      - 크롤링 데이터 인코딩
      - ``UTF-8``
@@ -188,7 +188,7 @@ HTTP 크롤러의 스레드 풀 설정입니다.
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3
     crawler.crawling.data.encoding=UTF-8
 
 환경 변수 파라미터
@@ -1048,6 +1048,11 @@ S3 및 S3 호환 스토리지(MinIO 등)를 크롤링하기 위한 설정입니�
 
 GCS 크롤러
 -------------
+
+.. note::
+   Google Cloud Storage 지원은 ``fess-lib-gcs`` 플러그인에서 제공됩니다. 배포물에 포함되어
+   있지 않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
+   ``bin/fess-setup install plugin fess-lib-gcs`` 로 설치하십시오.
 
 Google Cloud Storage를 크롤링하기 위한 설정입니다.
 파일 크롤 설정의 "설정 파라미터"에 다음을 기술합니다.

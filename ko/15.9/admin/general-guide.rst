@@ -576,7 +576,7 @@ ERROR 및 WARN 레벨의 로그 이벤트를 자동으로 캡처하여 알림을
 
 - **자동**: 엔드포인트에서 자동 판정
 - **S3**: Amazon S3
-- **GCS**: Google Cloud Storage
+- **GCS**: Google Cloud Storage（ ``fess-lib-gcs`` 플러그인 필요）
 
 버킷
 ::::::

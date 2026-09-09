@@ -576,7 +576,7 @@ Google Chat Webhook URLs
 
 - **自动**: 根据端点自动判断
 - **S3**: Amazon S3
-- **GCS**: Google Cloud Storage
+- **GCS**: Google Cloud Storage（需要 ``fess-lib-gcs`` 插件）
 
 存储桶
 ::::::

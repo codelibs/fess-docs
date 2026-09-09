@@ -177,7 +177,7 @@ HTTP 爬虫的线程池配置。
      - ``http,https``
    * - ``crawler.file.protocols``
      - 文件爬取协议
-     - ``file,smb,smb1,ftp,s3,gcs``
+     - ``file,smb,smb1,ftp,s3``
    * - ``crawler.crawling.data.encoding``
      - 爬取数据编码
      - ``UTF-8``
@@ -188,7 +188,7 @@ HTTP 爬虫的线程池配置。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3,gcs
+    crawler.file.protocols=file,smb,smb1,ftp,s3
     crawler.crawling.data.encoding=UTF-8
 
 环境变量参数
@@ -1047,6 +1047,10 @@ S3 爬虫
 
 GCS 爬虫
 --------
+
+.. note::
+   Google Cloud Storage 支持由 ``fess-lib-gcs`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-lib-gcs`` 。
 
 用于爬取 Google Cloud Storage 的配置。
 

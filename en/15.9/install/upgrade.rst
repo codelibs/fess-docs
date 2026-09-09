@@ -465,7 +465,7 @@ For major version upgrades, it is recommended to recreate the index.
 Upgrading from 15.8 to 15.9
 ===========================
 
-If you are upgrading from 15.8, the following five changes are not backward compatible.
+If you are upgrading from 15.8, the following six changes are not backward compatible.
 
 Removal of the embedded OpenSearch
 ----------------------------------
@@ -500,7 +500,7 @@ Node.js for Playwright is no longer bundled
 -------------------------------------------
 
 The Node.js executables that the Playwright crawler runs are no longer part of the
-distribution. The ZIP drops from 438.5 MiB to 218.9 MiB as a result.
+distribution. The ZIP drops from 438.5 MiB to 204.7 MiB as a result.
 
 If a crawl configuration names the Playwright client, for example with
 ``client.crawlerClients=playwright:http://.*`` in its configuration parameters, install Node.js
@@ -511,6 +511,25 @@ with the command below. ``bin/fess.in.sh`` discovers it and sets ``PLAYWRIGHT_NO
     $ bin/fess-setup install nodejs
 
 Nothing is needed if you do not use the Playwright crawler.
+
+Google Cloud Storage Moved to a Plugin
+--------------------------------------
+
+The Google Cloud Storage SDK is no longer part of the distribution, so ``gcs://`` crawling
+and the ``gcs`` storage type now come from the ``fess-lib-gcs`` plugin. Install it from the
+System > Plugin page in the administration screen, or with the command below.
+
+::
+
+    $ bin/fess-setup install plugin fess-lib-gcs
+
+``gcs`` also left the shipped ``crawler.file.protocols``, which is now
+``file,smb,smb1,ftp,s3``; the plugin adds it back when it is installed. Until then a file
+crawl configuration whose path begins with ``gcs:`` is rejected as an invalid protocol, and
+the storage page reports that no client is registered for ``storage.type=gcs``.
+
+Nothing is needed if you do not use Google Cloud Storage. Amazon S3 and S3-compatible
+storage such as MinIO stay in the distribution and are unaffected.
 
 The Built-in Script Engine Changed from Groovy to JavaScript
 ------------------------------------------------------------
@@ -541,7 +560,7 @@ The ``storage`` Crawl Protocol Was Removed
 ------------------------------------------
 
 ``storage`` is no longer accepted in ``crawler.file.protocols``; the shipped value is
-``file,smb,smb1,ftp,s3,gcs``. Use ``s3`` instead, and change any file crawling configuration whose
+``file,smb,smb1,ftp,s3``. Use ``s3`` instead, and change any file crawling configuration whose
 path begins with ``storage:`` to an ``s3:`` path.
 
 15.9-Specific Migration Tasks

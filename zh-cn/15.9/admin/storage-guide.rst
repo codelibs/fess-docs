@@ -36,6 +36,10 @@ GCS 设置
 - 项目ID: Google Cloud 项目 ID
 - 凭证路径: 服务账户凭据 JSON 文件路径
 
+.. note::
+   Google Cloud Storage 支持由 ``fess-lib-gcs`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-lib-gcs`` 。
+
 MinIO（S3 兼容）设置
 ~~~~~~~~~~~~~~~~~~~~
 

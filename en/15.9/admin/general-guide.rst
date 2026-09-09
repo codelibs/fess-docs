@@ -576,7 +576,7 @@ When "Auto" is selected, the storage type is automatically determined from the e
 
 - **Auto**: Auto-detect from endpoint
 - **S3**: Amazon S3
-- **GCS**: Google Cloud Storage
+- **GCS**: Google Cloud Storage (requires the ``fess-lib-gcs`` plugin)
 
 Bucket
 ::::::

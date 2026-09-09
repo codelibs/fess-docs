@@ -461,7 +461,7 @@ Docker 버전::
 15.8에서 15.9로 업그레이드
 ==========================
 
-15.8에서 업그레이드하는 경우 다음 다섯 가지가 하위 호환되지 않는 변경입니다.
+15.8에서 업그레이드하는 경우 다음 여섯 가지가 하위 호환되지 않는 변경입니다.
 
 내장 OpenSearch 폐지
 --------------------
@@ -496,7 +496,7 @@ Playwright 용 Node.js 동봉 종료
 -------------------------------
 
 Playwright 크롤러가 사용하는 Node.js 실행 파일은 더 이상 배포물에 포함되지 않습니다.
-이에 따라 ZIP 은 438.5 MiB 에서 218.9 MiB 가 되었습니다.
+이에 따라 ZIP 은 438.5 MiB 에서 204.7 MiB 가 되었습니다.
 
 크롤링 설정의 설정 파라미터에서 ``client.crawlerClients=playwright:http://.*`` 와 같이
 Playwright 클라이언트를 지정한 경우에는 아래 명령으로 Node.js 를 설치하십시오.
@@ -507,6 +507,25 @@ Playwright 클라이언트를 지정한 경우에는 아래 명령으로 Node.js
     $ bin/fess-setup install nodejs
 
 Playwright 크롤러를 사용하지 않는 경우에는 대응이 필요 없습니다.
+
+Google Cloud Storage 를 플러그인으로 이동
+-----------------------------------------
+
+Google Cloud Storage 의 SDK 는 더 이상 배포물에 포함되지 않으며, ``gcs://`` 크롤링과
+``gcs`` 스토리지 타입은 ``fess-lib-gcs`` 플러그인에서 제공됩니다. 관리 화면의
+「시스템 > 플러그인」 페이지 또는 아래 명령으로 설치하십시오.
+
+::
+
+    $ bin/fess-setup install plugin fess-lib-gcs
+
+``crawler.file.protocols`` 의 기본값에서도 ``gcs`` 가 빠져 ``file,smb,smb1,ftp,s3`` 가
+되었습니다. 플러그인을 설치하면 다시 추가됩니다. 설치 전에는 경로가 ``gcs:`` 로 시작하는
+파일 크롤링 설정이 잘못된 프로토콜로 거부되고, 스토리지 화면은 ``storage.type=gcs`` 에
+등록된 클라이언트가 없다고 보고합니다.
+
+Google Cloud Storage 를 사용하지 않는 경우에는 대응이 필요 없습니다. Amazon S3 와 MinIO
+등 S3 호환 스토리지는 배포물에 그대로 남아 있어 영향이 없습니다.
 
 내장 스크립트 엔진이 Groovy에서 JavaScript로 변경
 -------------------------------------------------
@@ -537,7 +556,7 @@ JavaScript의 배열 리터럴은 Java의 ``String[]`` 로 자동 변환되므�
 ------------------------------
 
 ``crawler.file.protocols`` 에서 ``storage`` 는 더 이상 사용할 수 없으며, 기본 제공 값은
-``file,smb,smb1,ftp,s3,gcs`` 입니다. 대신 ``s3`` 를 사용하고, 경로가 ``storage:`` 로 시작하는
+``file,smb,smb1,ftp,s3`` 입니다. 대신 ``s3`` 를 사용하고, 경로가 ``storage:`` 로 시작하는
 파일 크롤 설정은 ``s3:`` 경로로 변경하십시오.
 
 15.9 전용 마이그레이션 작업
