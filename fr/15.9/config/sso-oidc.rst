@@ -9,6 +9,15 @@ Vue d'ensemble
 OpenID Connect est un protocole d'authentification basé sur OAuth 2.0 qui utilise des ID Tokens (JWT) pour l'authentification des utilisateurs.
 En utilisant l'authentification OpenID Connect, les informations utilisateur authentifiées par un OpenID Provider (OP) peuvent être intégrées avec |Fess|.
 
+.. note::
+   La prise en charge de l'authentification OpenID Connect provient du plugin
+   ``fess-sso-oidc``, qui ne fait pas partie de la distribution. Installez-le depuis la page
+   **Système > Plugin** de l'écran d'administration ou avec
+   ``bin/fess-setup install plugin fess-sso-oidc``. Le plugin s'appelle ``fess-sso-oidc`` alors
+   que la valeur de ``sso.type`` reste ``oic``.
+   Jusque-là, avec ``sso.type=oic``, toute requête vers ``/sso/`` est simplement redirigée vers
+   la page de connexion.
+
 Fonctionnement de l'authentification OpenID Connect
 ----------------------------------------------------
 

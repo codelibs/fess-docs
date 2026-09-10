@@ -9,6 +9,12 @@
 OpenID Connect是基于OAuth 2.0的认证协议，使用ID Token（JWT）进行用户认证。
 通过使用OpenID Connect认证，由OpenID提供者（OP）认证的用户信息可以与 |Fess| 集成。
 
+.. note::
+   OpenID Connect认证的支持由 ``fess-sso-oidc`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-sso-oidc`` 。
+   插件名为 ``fess-sso-oidc``\ ，而 ``sso.type`` 的取值仍为 ``oic``\ 。
+   在安装之前，即使设置 ``sso.type=oic``\ ，对 ``/sso/`` 的请求也只会重定向回登录页面。
+
 OpenID Connect认证的工作原理
 ----------------------------
 

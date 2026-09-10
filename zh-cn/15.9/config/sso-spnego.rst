@@ -8,6 +8,11 @@ Windows集成认证SSO配置
 |Fess| 支持使用Windows集成认证（SPNEGO/Kerberos）进行单点登录（SSO）认证。
 通过使用Windows集成认证，登录到Windows域计算机的用户可以无需额外的登录操作即可访问 |Fess|\ 。
 
+.. note::
+   Windows集成认证的支持由 ``fess-sso-spnego`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-sso-spnego`` 。
+   在安装之前，即使设置 ``sso.type=spnego``\ ，对 ``/sso/`` 的请求也只会重定向回登录页面。
+
 Windows集成认证的工作原理
 -------------------------
 

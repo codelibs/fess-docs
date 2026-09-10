@@ -470,7 +470,7 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 Actualización de 15.8 a 15.9
 ============================
 
-Si actualiza desde 15.8, los siete cambios siguientes no son retrocompatibles.
+Si actualiza desde 15.8, los ocho cambios siguientes no son retrocompatibles.
 
 Eliminación del OpenSearch integrado
 ------------------------------------
@@ -568,6 +568,36 @@ valores ``storage.*`` se conservan, porque están en ``WEB-INF/conf/system.prope
 ``crawler.file.protocols`` existente tampoco se sustituye en la actualización.
 
 Si no utiliza Amazon S3 ni almacenamiento compatible con S3 como MinIO, no hay nada que hacer.
+
+La autenticación SSO pasa a plugins
+-----------------------------------
+
+Ninguno de los cuatro autenticadores SSO forma parte ya de la distribución; cada valor de
+``sso.type`` proviene ahora de su propio plugin, que incluye la biblioteca de identidad que
+necesita: ``saml`` de ``fess-sso-saml``, ``spnego`` de ``fess-sso-spnego``, ``entraid`` (y el
+antiguo ``aad``) de ``fess-sso-entraid`` y ``oic`` de ``fess-sso-oidc``. Fíjese en el último
+par: el plugin se llama ``fess-sso-oidc`` mientras que el valor de ``sso.type`` sigue siendo
+``oic``, el único lugar en el que ambos difieren. Instale el que utilice desde la página
+**Sistema > Plugin** de la pantalla de administración o con la orden siguiente.
+
+::
+
+    $ bin/fess-setup install plugin fess-sso-saml
+
+Sus valores de configuración se conservan, porque ``sso.type`` y las claves ``saml.*``,
+``spnego.*``, ``entraid.*``, ``aad.*`` y ``oic.*`` están en
+``WEB-INF/conf/system.properties``. Además, "Sistema" → "General" de la pantalla de
+administración sigue ofreciendo los cuatro tipos y sigue mostrando sus ajustes, porque un
+plugin no puede proporcionar un JSP, así que nada en esa pantalla indica que falte un plugin.
+
+Hasta que se instala el plugin, una petición a ``/sso/`` se redirige de vuelta a la página de
+inicio de sesión, que informa de que el inicio de sesión SSO ha fallado, y nadie puede iniciar
+sesión mediante SSO. 15.9 registra en ``fess.log`` una advertencia con el nombre del componente
+que ha buscado y el del plugin que lo proporciona, donde hasta 15.8 no se registraba nada en
+ningún nivel.
+
+Si no utiliza SSO, es decir, si ``sso.type`` es ``none`` o no está definido, no hay nada que
+hacer.
 
 El motor de scripting integrado pasa de Groovy a JavaScript
 -----------------------------------------------------------

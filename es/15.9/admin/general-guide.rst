@@ -96,10 +96,10 @@ Tipo de SSO
 Especifica el tipo de inicio de sesión único (Single Sign-On).
 
 - **Ninguno**: No usar SSO
-- **OpenID Connect**: Usar OpenID Connect
-- **SAML**: Usar SAML
-- **SPNEGO**: Usar SPNEGO
-- **Entra ID**: Usar Microsoft Entra ID
+- **OpenID Connect**: Usar OpenID Connect (requiere el plugin ``fess-sso-oidc``)
+- **SAML**: Usar SAML (requiere el plugin ``fess-sso-saml``)
+- **SPNEGO**: Usar SPNEGO (requiere el plugin ``fess-sso-spnego``)
+- **Entra ID**: Usar Microsoft Entra ID (requiere el plugin ``fess-sso-entraid``)
 
 Rastreador
 ----------

@@ -8,6 +8,13 @@ SAML認証によるSSO設定
 |Fess| では、SAML（Security Assertion Markup Language）2.0 を使用したシングルサインオン（SSO）認証をサポートしています。
 SAML認証を使用することで、IdP（Identity Provider）で認証されたユーザー情報を |Fess| に連携し、ロールベース検索と組み合わせることで、ユーザーの権限に応じた検索結果の出し分けが可能になります。
 
+.. note::
+   SAML認証への対応は ``fess-sso-saml`` プラグインから提供されます。配布物には同梱されて
+   いないため、管理画面の「システム > プラグイン」ページ、または
+   ``bin/fess-setup install plugin fess-sso-saml`` で導入してください。
+   導入するまで、 ``sso.type=saml`` を設定しても ``/sso/`` へのリクエストはログインページへ
+   リダイレクトされるだけです。
+
 SAML認証の仕組み
 ----------------
 

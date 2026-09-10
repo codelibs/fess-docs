@@ -8,6 +8,12 @@ Microsoft Entra ID SSO配置
 |Fess| 支持使用Microsoft Entra ID（前Azure AD）进行单点登录（SSO）认证。
 通过使用Entra ID认证，您可以将Microsoft 365环境中的用户信息和组信息与 |Fess| 的基于角色的搜索集成。
 
+.. note::
+   Entra ID认证的支持由 ``fess-sso-entraid`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-sso-entraid`` 。
+   在安装之前，即使设置 ``sso.type=entraid``\ （旧名 ``aad`` 亦同），对 ``/sso/`` 的请求也
+   只会重定向回登录页面。
+
 Entra ID认证的工作原理
 ----------------------
 

@@ -8,6 +8,14 @@ SSO-Konfiguration mit Entra ID
 |Fess| unterstützt Single Sign-On (SSO)-Authentifizierung mit Microsoft Entra ID (ehemals Azure AD).
 Durch die Verwendung der Entra ID-Authentifizierung können Benutzerinformationen und Gruppeninformationen aus Ihrer Microsoft 365-Umgebung mit der rollenbasierten Suche von |Fess| integriert werden.
 
+.. note::
+   Die Unterstützung für die Entra ID-Authentifizierung kommt aus dem Plugin
+   ``fess-sso-entraid``, das nicht Teil der Distribution ist. Installieren Sie es über die
+   Seite **System > Plugin** in der Administrationsoberfläche oder mit
+   ``bin/fess-setup install plugin fess-sso-entraid``.
+   Bis dahin wird eine Anfrage an ``/sso/`` mit ``sso.type=entraid`` (oder dem alten ``aad``)
+   nur zur Anmeldeseite zurückgeleitet.
+
 Wie die Entra ID-Authentifizierung funktioniert
 -----------------------------------------------
 

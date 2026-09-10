@@ -465,7 +465,7 @@ For major version upgrades, it is recommended to recreate the index.
 Upgrading from 15.8 to 15.9
 ===========================
 
-If you are upgrading from 15.8, the following seven changes are not backward compatible.
+If you are upgrading from 15.8, the following eight changes are not backward compatible.
 
 Removal of the embedded OpenSearch
 ----------------------------------
@@ -554,6 +554,33 @@ does not work until the plugin is installed even if you never named ``s3`` yours
 existing ``crawler.file.protocols`` is not replaced by the upgrade either.
 
 Nothing is needed if you do not use Amazon S3 or S3-compatible storage such as MinIO.
+
+SSO Authentication Moved to Plugins
+-----------------------------------
+
+None of the four SSO authenticators is part of the distribution any more. Each ``sso.type``
+value now comes from its own plugin, which carries the identity library it needs: ``saml`` from
+``fess-sso-saml``, ``spnego`` from ``fess-sso-spnego``, ``entraid`` (and the legacy ``aad``)
+from ``fess-sso-entraid``, and ``oic`` from ``fess-sso-oidc``. Note the last pair: the plugin is
+named ``fess-sso-oidc`` while the ``sso.type`` value stays ``oic``, the one place where the two
+differ. Install the one you use from the System > Plugin page in the administration screen, or
+with the command below.
+
+::
+
+    $ bin/fess-setup install plugin fess-sso-saml
+
+Your settings are kept, because ``sso.type`` and the ``saml.*``, ``spnego.*``, ``entraid.*``,
+``aad.*`` and ``oic.*`` keys live in ``WEB-INF/conf/system.properties``. "System" → "General" in
+the admin UI also still offers all four types and still shows their settings, because a plugin
+cannot supply a JSP, so nothing on that screen reports a missing plugin.
+
+Until the plugin is installed, a request to ``/sso/`` is redirected back to the login page,
+which reports that the SSO login failed, and no one can log in through SSO. 15.9 records a
+warning in ``fess.log`` naming the component it looked for and the plugin that provides it,
+where up to 15.8 nothing was logged at any level.
+
+Nothing is needed if you do not use SSO, that is if ``sso.type`` is ``none`` or unset.
 
 The Built-in Script Engine Changed from Groovy to JavaScript
 ------------------------------------------------------------
