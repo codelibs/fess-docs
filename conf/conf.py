@@ -100,7 +100,9 @@ today_fmt = '%Y-%m-%d'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+# The .po files beside a generated properties.rst are translation catalogues, not
+# documents; Sphinx must not try to read them as source.
+exclude_patterns = ['_build', '**/*.po']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.

@@ -8,6 +8,7 @@
    :caption: 简介
 
    intro
+   properties
 
 .. toctree::
    :maxdepth: 2

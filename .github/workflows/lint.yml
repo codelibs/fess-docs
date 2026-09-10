@@ -34,6 +34,12 @@ jobs:
       - name: Every eol.rst matches versions.json
         run: python tools/update_eol.py --check
 
+      # fess_config.properties is not vendored here, so this cannot compare a page
+      # against fess. It checks the seven pages against each other and against their
+      # translation catalogues, which is what catches a page edited by hand.
+      - name: Every properties.rst agrees with its catalogue
+        run: python tools/gen_properties_doc.py --check
+
   headings:
     name: section titles
     runs-on: ubuntu-latest
