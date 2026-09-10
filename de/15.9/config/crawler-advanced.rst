@@ -1047,9 +1047,9 @@ GCS-Crawler
 -----------
 
 .. note::
-   Die Unterstützung für Google Cloud Storage kommt aus dem Plugin ``fess-lib-gcs``, das
+   Die Unterstützung für Google Cloud Storage kommt aus dem Plugin ``fess-storage-gcs``, das
    nicht Teil der Distribution ist. Installieren Sie es über die Seite **System > Plugin** in
-   der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-lib-gcs``.
+   der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-storage-gcs``.
 
 Konfiguration für das Crawlen von Google Cloud Storage.
 Fügen Sie Folgendes zu „Konfigurationsparameter" in den Datei-Crawl-Einstellungen hinzu.

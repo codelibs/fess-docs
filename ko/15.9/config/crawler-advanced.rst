@@ -1050,9 +1050,9 @@ GCS 크롤러
 -------------
 
 .. note::
-   Google Cloud Storage 지원은 ``fess-lib-gcs`` 플러그인에서 제공됩니다. 배포물에 포함되어
+   Google Cloud Storage 지원은 ``fess-storage-gcs`` 플러그인에서 제공됩니다. 배포물에 포함되어
    있지 않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
-   ``bin/fess-setup install plugin fess-lib-gcs`` 로 설치하십시오.
+   ``bin/fess-setup install plugin fess-storage-gcs`` 로 설치하십시오.
 
 Google Cloud Storage를 크롤링하기 위한 설정입니다.
 파일 크롤 설정의 "설정 파라미터"에 다음을 기술합니다.

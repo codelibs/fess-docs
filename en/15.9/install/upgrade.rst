@@ -516,12 +516,12 @@ Google Cloud Storage Moved to a Plugin
 --------------------------------------
 
 The Google Cloud Storage SDK is no longer part of the distribution, so ``gcs://`` crawling
-and the ``gcs`` storage type now come from the ``fess-lib-gcs`` plugin. Install it from the
+and the ``gcs`` storage type now come from the ``fess-storage-gcs`` plugin. Install it from the
 System > Plugin page in the administration screen, or with the command below.
 
 ::
 
-    $ bin/fess-setup install plugin fess-lib-gcs
+    $ bin/fess-setup install plugin fess-storage-gcs
 
 ``gcs`` also left the shipped ``crawler.file.protocols``, which is now
 ``file,smb,smb1,ftp,s3``; the plugin adds it back when it is installed. Until then a file

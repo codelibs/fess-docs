@@ -47,9 +47,12 @@ Plugin Types
    * - Crawler
      - ``fess-crawler-*``
      - Extends crawler clients
-   * - Library
-     - ``fess-lib-*``
-     - Ships a third-party client and its dependencies that the distribution does not carry
+   * - Storage
+     - ``fess-storage-*``
+     - Adds an object storage backend for crawling and for the storage feature
+   * - SSO
+     - ``fess-sso-*``
+     - Adds a single sign-on authenticator selected by ``sso.type``
 
 Plugin Structure
 =================

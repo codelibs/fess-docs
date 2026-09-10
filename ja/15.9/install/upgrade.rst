@@ -513,12 +513,12 @@ Google Cloud Storage をプラグインへ移動
 ---------------------------------------
 
 Google Cloud Storage の SDK は配布物に含まれなくなり、 ``gcs://`` のクロールと ``gcs``
-ストレージタイプは ``fess-lib-gcs`` プラグインから提供されます。管理画面の
+ストレージタイプは ``fess-storage-gcs`` プラグインから提供されます。管理画面の
 「システム > プラグイン」ページ、または次のコマンドで導入してください。
 
 ::
 
-    $ bin/fess-setup install plugin fess-lib-gcs
+    $ bin/fess-setup install plugin fess-storage-gcs
 
 ``crawler.file.protocols`` の既定値からも ``gcs`` が外れ、 ``file,smb,smb1,ftp,s3`` に
 なりました。プラグインを導入すると再び追加されます。導入前は、パスが ``gcs:`` で始まる

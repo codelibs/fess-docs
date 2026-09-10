@@ -1049,8 +1049,8 @@ GCS 爬虫
 --------
 
 .. note::
-   Google Cloud Storage 支持由 ``fess-lib-gcs`` 插件提供，该插件不随发行包分发。请从管理
-   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-lib-gcs`` 。
+   Google Cloud Storage 支持由 ``fess-storage-gcs`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-storage-gcs`` 。
 
 用于爬取 Google Cloud Storage 的配置。
 

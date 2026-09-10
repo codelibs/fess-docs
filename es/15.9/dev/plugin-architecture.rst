@@ -49,9 +49,12 @@ siguientes:
    * - Rastreador
      - ``fess-crawler-*``
      - Ampliación de clientes de rastreador
-   * - Biblioteca
-     - ``fess-lib-*``
-     - Aporta un cliente de terceros y sus dependencias que la distribución no incluye
+   * - Almacenamiento
+     - ``fess-storage-*``
+     - Adición de backends de almacenamiento de objetos para el rastreo y la función de almacenamiento
+   * - SSO
+     - ``fess-sso-*``
+     - Adición de métodos de autenticación Single Sign-On seleccionados mediante ``sso.type``
 
 Estructura del Plugin
 ======================

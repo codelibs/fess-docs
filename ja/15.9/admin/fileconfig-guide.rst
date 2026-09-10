@@ -14,7 +14,7 @@
 - ``smb1://`` … 旧来の SMB1 プロトコルを使用する Windows ファイルサーバー／共有フォルダー
 - ``ftp://`` … FTP サーバー
 - ``s3://`` … Amazon S3 バケット
-- ``gcs://`` … Google Cloud Storage バケット（ ``fess-lib-gcs`` プラグインが必要）
+- ``gcs://`` … Google Cloud Storage バケット（ ``fess-storage-gcs`` プラグインが必要）
 
 管理方法
 ======
@@ -230,9 +230,9 @@ GCSへのアクセスには認証情報が必要です。「設定パラメー�
     client.credentialsFile=/path/to/service-account.json
 
 .. note::
-   Google Cloud Storage への対応は ``fess-lib-gcs`` プラグインから提供されます。配布物には
+   Google Cloud Storage への対応は ``fess-storage-gcs`` プラグインから提供されます。配布物には
    同梱されていないため、管理画面の「システム > プラグイン」ページ、または
-   ``bin/fess-setup install plugin fess-lib-gcs`` で導入してください。
+   ``bin/fess-setup install plugin fess-storage-gcs`` で導入してください。
 
 関連ページ
 ==========

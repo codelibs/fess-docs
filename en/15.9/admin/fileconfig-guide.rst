@@ -16,7 +16,7 @@ Crawl targets are determined by the protocol specified in the path:
 - ``smb1://`` … Windows file server / shared folder over the legacy SMB1 protocol
 - ``ftp://`` … FTP server
 - ``s3://`` … Amazon S3 bucket
-- ``gcs://`` … Google Cloud Storage bucket (requires the ``fess-lib-gcs`` plugin)
+- ``gcs://`` … Google Cloud Storage bucket (requires the ``fess-storage-gcs`` plugin)
 
 Configuration Management
 ========================
@@ -231,9 +231,9 @@ GCS access requires authentication credentials. Add the following to "Configurat
     client.credentialsFile=/path/to/service-account.json
 
 .. note::
-   Google Cloud Storage support comes from the ``fess-lib-gcs`` plugin, which is not part of
+   Google Cloud Storage support comes from the ``fess-storage-gcs`` plugin, which is not part of
    the distribution. Install it from the System > Plugin page in the administration screen,
-   or with ``bin/fess-setup install plugin fess-lib-gcs``.
+   or with ``bin/fess-setup install plugin fess-storage-gcs``.
 
 Related Pages
 =============

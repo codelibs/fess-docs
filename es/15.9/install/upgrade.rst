@@ -524,13 +524,13 @@ Google Cloud Storage pasa a un plugin
 -------------------------------------
 
 El SDK de Google Cloud Storage ya no forma parte de la distribución, por lo que el rastreo de
-``gcs://`` y el tipo de almacenamiento ``gcs`` provienen ahora del plugin ``fess-lib-gcs``.
+``gcs://`` y el tipo de almacenamiento ``gcs`` provienen ahora del plugin ``fess-storage-gcs``.
 Instálelo desde la página **Sistema > Plugin** de la pantalla de administración o con la
 orden siguiente.
 
 ::
 
-    $ bin/fess-setup install plugin fess-lib-gcs
+    $ bin/fess-setup install plugin fess-storage-gcs
 
 ``gcs`` también ha salido del valor distribuido de ``crawler.file.protocols``, que ahora es
 ``file,smb,smb1,ftp,s3``; el plugin lo vuelve a añadir al instalarse. Hasta entonces, una
