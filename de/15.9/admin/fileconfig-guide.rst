@@ -13,7 +13,7 @@ Welche Pfade gecrawlt werden, richtet sich nach dem im „Pfad" angegebenen Prot
 - ``smb://`` … Windows-Dateiserver/freigegebene Ordner (SMB/CIFS)
 - ``smb1://`` … Windows-Dateiserver/freigegebene Ordner über das ältere SMB1-Protokoll
 - ``ftp://`` … FTP-Server
-- ``s3://`` … Amazon-S3-Bucket
+- ``s3://`` … Amazon-S3-Bucket (erfordert das Plugin ``fess-storage-s3``)
 - ``gcs://`` … Google-Cloud-Storage-Bucket (erfordert das Plugin ``fess-storage-gcs``)
 
 Auf der Datei-Crawl-Konfigurationsseite können Sie Konfigurationen zum Crawlen von Dateien im Dateisystem oder in freigegebenen Netzwerkordnern verwalten.
@@ -207,6 +207,12 @@ Für den S3-Zugriff sind Anmeldeinformationen erforderlich. Fügen Sie Folgendes
     client.accessKey=IHR_ZUGRIFFSSCHLÜSSEL
     client.secretKey=IHR_GEHEIMER_SCHLÜSSEL
     client.region=ap-northeast-1
+
+.. note::
+   Die Unterstützung für Amazon S3 und S3-kompatible Speicher kommt aus dem Plugin
+   ``fess-storage-s3``, das nicht Teil der Distribution ist. Installieren Sie es über die
+   Seite **System > Plugin** in der Administrationsoberfläche oder mit
+   ``bin/fess-setup install plugin fess-storage-s3``.
 
 Google Cloud Storage-Buckets crawlen
 ------------------------------------

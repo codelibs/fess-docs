@@ -457,7 +457,7 @@ Docker 版::
 从 15.8 升级到 15.9
 ===================
 
-若从 15.8 升级，以下六项为不向后兼容的变更。
+若从 15.8 升级，以下七项为不向后兼容的变更。
 
 内嵌 OpenSearch 的移除
 ----------------------
@@ -513,11 +513,33 @@ Google Cloud Storage 的 SDK 不再包含在发行包中， ``gcs://`` 爬取与
     $ bin/fess-setup install plugin fess-storage-gcs
 
 ``crawler.file.protocols`` 的随附取值中也去掉了 ``gcs``\ ，现为
-``file,smb,smb1,ftp,s3``\ 。安装插件后会重新加入。在此之前，路径以 ``gcs:`` 开头的文件
-爬取配置会因协议无效而被拒绝，存储页面则会报告没有为 ``storage.type=gcs`` 注册客户端。
+``file,smb,smb1,ftp``\ 。安装插件后会重新加入。在此之前，路径以 ``gcs:`` 开头的文件
+爬取配置只会记录一条警告，且什么都取不到。升级后的现有安装会保留自己的
+``crawler.file.protocols``\ ，因此路径仍被接受，但没有可处理它的爬虫客户端；新安装中
+``gcs:`` 不是已配置的协议，管理界面会拒绝保存该路径，而先前保存的路径会被当作本地文件
+路径处理。存储页面同样会记录警告，并把失败作为错误显示出来，文字中包含需要安装的插件
+名称；此前它只显示一个空的文件列表。
 
-如果不使用 Google Cloud Storage，则无需处理。Amazon S3 以及 MinIO 等兼容 S3 的存储仍在
-发行包中，不受影响。
+如果不使用 Google Cloud Storage，则无需处理。Amazon S3 以及 MinIO 等兼容 S3 的存储也以
+同样的方式移至插件，请参阅下一节。
+
+Amazon S3 移至插件
+------------------
+
+AWS SDK 不再包含在发行包中， ``s3://`` 爬取与 ``s3``\ 、 ``s3_compat`` 存储类型改由
+``fess-storage-s3`` 插件提供。请从管理界面的「系统 > 插件」页面安装，或执行以下命令。
+
+::
+
+    $ bin/fess-setup install plugin fess-storage-s3
+
+``crawler.file.protocols`` 的随附取值中也去掉了 ``s3``\ ，现为 ``file,smb,smb1,ftp``\ 。
+安装插件后会重新加入。 ``storage.type`` 的默认值仍为 ``auto``\ ，未设置端点时会解析为
+S3，因此即使从未显式指定 ``s3``\ ，在安装插件之前管理界面的存储功能也无法使用。
+``storage.*`` 的取值位于 ``WEB-INF/conf/system.properties``\ ，因此会保留下来，现有的
+``crawler.file.protocols`` 也不会被升级覆盖。
+
+如果不使用 Amazon S3 或 MinIO 等兼容 S3 的存储，则无需处理。
 
 内置脚本引擎由 Groovy 改为 JavaScript
 -------------------------------------
@@ -544,8 +566,9 @@ Google Cloud Storage 的 SDK 不再包含在发行包中， ``gcs://`` 爬取与
 爬取协议 ``storage`` 已删除
 ---------------------------
 
-``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp,s3`` 。
-请改用 ``s3`` ，并将路径以 ``storage:`` 开头的文件爬取配置改为 ``s3:`` 路径。
+``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp`` 。
+请改用 ``s3`` ，并将路径以 ``storage:`` 开头的文件爬取配置改为 ``s3:`` 路径。 ``s3`` 需要
+``fess-storage-s3`` 插件。
 
 15.9 特有的迁移工作
 ===================

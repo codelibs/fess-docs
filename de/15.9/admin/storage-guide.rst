@@ -29,6 +29,13 @@ S3-Einstellungen
 - Geheimer Schlüssel: AWS-Geheimschlüssel
 - Region: AWS-Region
 
+.. note::
+   Die Unterstützung für Amazon S3 und S3-kompatible Speicher kommt aus dem Plugin
+   ``fess-storage-s3``, das nicht Teil der Distribution ist. Installieren Sie es über die
+   Seite **System > Plugin** in der Administrationsoberfläche oder mit
+   ``bin/fess-setup install plugin fess-storage-s3``.
+   Bei Auswahl von „Automatisch" wird bei leerem Endpunkt ebenfalls S3 verwendet.
+
 GCS-Einstellungen
 ~~~~~~~~~~~~~~~~~
 

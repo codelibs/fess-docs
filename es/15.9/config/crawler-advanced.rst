@@ -177,7 +177,7 @@ Protocolos Compatibles
      - ``http,https``
    * - ``crawler.file.protocols``
      - Protocolos para rastreo de archivos
-     - ``file,smb,smb1,ftp,s3``
+     - ``file,smb,smb1,ftp``
    * - ``crawler.crawling.data.encoding``
      - Codificación de datos de rastreo
      - ``UTF-8``
@@ -188,7 +188,7 @@ Ejemplo de Configuración
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3
+    crawler.file.protocols=file,smb,smb1,ftp
     crawler.crawling.data.encoding=UTF-8
 
 Parámetros de Variables de Entorno
@@ -1002,6 +1002,12 @@ Configuración del Rastreador S3/GCS
 
 Rastreador S3
 -------------
+
+.. note::
+   La compatibilidad con Amazon S3 y el almacenamiento compatible con S3 proviene del plugin
+   ``fess-storage-s3``, que no forma parte de la distribución. Instálelo desde la página
+   **Sistema > Plugin** de la pantalla de administración o con
+   ``bin/fess-setup install plugin fess-storage-s3``.
 
 Configuración para rastrear Amazon S3 y almacenamiento compatible con S3 (MinIO, etc.).
 Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.

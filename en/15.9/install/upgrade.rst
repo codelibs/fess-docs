@@ -465,7 +465,7 @@ For major version upgrades, it is recommended to recreate the index.
 Upgrading from 15.8 to 15.9
 ===========================
 
-If you are upgrading from 15.8, the following six changes are not backward compatible.
+If you are upgrading from 15.8, the following seven changes are not backward compatible.
 
 Removal of the embedded OpenSearch
 ----------------------------------
@@ -524,12 +524,36 @@ System > Plugin page in the administration screen, or with the command below.
     $ bin/fess-setup install plugin fess-storage-gcs
 
 ``gcs`` also left the shipped ``crawler.file.protocols``, which is now
-``file,smb,smb1,ftp,s3``; the plugin adds it back when it is installed. Until then a file
-crawl configuration whose path begins with ``gcs:`` is rejected as an invalid protocol, and
-the storage page reports that no client is registered for ``storage.type=gcs``.
+``file,smb,smb1,ftp``; the plugin adds it back when it is installed. Until then a file crawl
+configuration whose path begins with ``gcs:`` is logged as a warning and crawls nothing. An
+installation that upgrades keeps its own ``crawler.file.protocols``, so the path is still
+accepted but no crawler client handles it; on a new installation ``gcs:`` is not a configured
+protocol, so the administration screen refuses to save the path and a path saved earlier is
+read as a local file path. The storage page logs a warning as well and shows the failure as an
+error naming the plugin to install, where before it rendered an empty file list.
 
 Nothing is needed if you do not use Google Cloud Storage. Amazon S3 and S3-compatible
-storage such as MinIO stay in the distribution and are unaffected.
+storage such as MinIO moved to a plugin in the same way; see the next section.
+
+Amazon S3 Moved to a Plugin
+---------------------------
+
+The AWS SDK is no longer part of the distribution, so ``s3://`` crawling and the ``s3`` and
+``s3_compat`` storage types now come from the ``fess-storage-s3`` plugin. Install it from the
+System > Plugin page in the administration screen, or with the command below.
+
+::
+
+    $ bin/fess-setup install plugin fess-storage-s3
+
+``s3`` also left the shipped ``crawler.file.protocols``, which is now ``file,smb,smb1,ftp``;
+the plugin adds it back when it is installed. ``storage.type`` still defaults to ``auto``,
+which resolves to S3 when no endpoint is set, so the storage page in the administration screen
+does not work until the plugin is installed even if you never named ``s3`` yourself. Your
+``storage.*`` values are kept, because they live in ``WEB-INF/conf/system.properties``, and an
+existing ``crawler.file.protocols`` is not replaced by the upgrade either.
+
+Nothing is needed if you do not use Amazon S3 or S3-compatible storage such as MinIO.
 
 The Built-in Script Engine Changed from Groovy to JavaScript
 ------------------------------------------------------------
@@ -560,8 +584,8 @@ The ``storage`` Crawl Protocol Was Removed
 ------------------------------------------
 
 ``storage`` is no longer accepted in ``crawler.file.protocols``; the shipped value is
-``file,smb,smb1,ftp,s3``. Use ``s3`` instead, and change any file crawling configuration whose
-path begins with ``storage:`` to an ``s3:`` path.
+``file,smb,smb1,ftp``. Use ``s3`` instead, and change any file crawling configuration whose
+path begins with ``storage:`` to an ``s3:`` path. ``s3`` needs the ``fess-storage-s3`` plugin.
 
 15.9-Specific Migration Tasks
 =============================

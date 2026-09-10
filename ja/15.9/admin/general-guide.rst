@@ -575,7 +575,7 @@ ERROR や WARN レベルのログイベントを自動的に捕捉して通知�
 「自動」を選択すると、エンドポイントから自動的にストレージタイプを判定します。
 
 - **自動**: エンドポイントから自動判定
-- **S3**: Amazon S3
+- **S3**: Amazon S3（ ``fess-storage-s3`` プラグインが必要）
 - **GCS**: Google Cloud Storage（ ``fess-storage-gcs`` プラグインが必要）
 
 バケット

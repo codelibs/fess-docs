@@ -575,7 +575,7 @@ Spécifie le type de stockage.
 Lorsque « Automatique » est sélectionné, le type de stockage est automatiquement déterminé à partir du point de terminaison.
 
 - **Automatique** : Détection automatique à partir du point de terminaison
-- **S3** : Amazon S3
+- **S3** : Amazon S3 (nécessite le plugin ``fess-storage-s3``)
 - **GCS** : Google Cloud Storage (nécessite le plugin ``fess-storage-gcs``)
 
 Compartiment

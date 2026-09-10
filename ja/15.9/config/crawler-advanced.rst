@@ -177,7 +177,7 @@ HTTPクローラーのスレッドプール設定です。
      - ``http,https``
    * - ``crawler.file.protocols``
      - ファイルクロールのプロトコル
-     - ``file,smb,smb1,ftp,s3``
+     - ``file,smb,smb1,ftp``
    * - ``crawler.crawling.data.encoding``
      - クロールデータのエンコーディング
      - ``UTF-8``
@@ -188,7 +188,7 @@ HTTPクローラーのスレッドプール設定です。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3
+    crawler.file.protocols=file,smb,smb1,ftp
     crawler.crawling.data.encoding=UTF-8
 
 環境変数パラメーター
@@ -1005,6 +1005,11 @@ S3/GCSクローラー設定
 
 S3クローラー
 ------------
+
+.. note::
+   Amazon S3 と S3 互換ストレージへの対応は ``fess-storage-s3`` プラグインから提供されます。
+   配布物には同梱されていないため、管理画面の「システム > プラグイン」ページ、または
+   ``bin/fess-setup install plugin fess-storage-s3`` で導入してください。
 
 S3およびS3互換ストレージ（MinIO等）をクロールするための設定です。
 ファイルクロール設定の「設定パラメーター」に以下を記述します。

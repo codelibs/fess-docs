@@ -470,7 +470,7 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
 Actualización de 15.8 a 15.9
 ============================
 
-Si actualiza desde 15.8, los seis cambios siguientes no son retrocompatibles.
+Si actualiza desde 15.8, los siete cambios siguientes no son retrocompatibles.
 
 Eliminación del OpenSearch integrado
 ------------------------------------
@@ -533,13 +533,41 @@ orden siguiente.
     $ bin/fess-setup install plugin fess-storage-gcs
 
 ``gcs`` también ha salido del valor distribuido de ``crawler.file.protocols``, que ahora es
-``file,smb,smb1,ftp,s3``; el plugin lo vuelve a añadir al instalarse. Hasta entonces, una
-configuración de rastreo de archivos cuya ruta empieza por ``gcs:`` se rechaza como protocolo
-no válido, y la página de almacenamiento informa de que no hay ningún cliente registrado para
-``storage.type=gcs``.
+``file,smb,smb1,ftp``; el plugin lo vuelve a añadir al instalarse. Hasta entonces, una
+configuración de rastreo de archivos cuya ruta empieza por ``gcs:`` se registra como
+advertencia y no recupera nada. Una instalación que se actualiza conserva su propio
+``crawler.file.protocols``, por lo que la ruta se sigue aceptando pero ningún cliente de
+rastreo la atiende; en una instalación nueva ``gcs:`` no es un protocolo configurado, así que
+la pantalla de administración rechaza guardar la ruta y una ruta guardada antes se lee como
+ruta de archivo local. La página de almacenamiento también registra una advertencia y muestra
+el fallo como un error con el nombre del plugin que hay que instalar, donde antes solo
+mostraba una lista de archivos vacía.
 
 Si no utiliza Google Cloud Storage, no hay nada que hacer. Amazon S3 y el almacenamiento
-compatible con S3, como MinIO, siguen en la distribución y no se ven afectados.
+compatible con S3, como MinIO, han pasado a un plugin de la misma manera; consulte la sección
+siguiente.
+
+Amazon S3 pasa a un plugin
+--------------------------
+
+El SDK de AWS ya no forma parte de la distribución, por lo que el rastreo de ``s3://`` y los
+tipos de almacenamiento ``s3`` y ``s3_compat`` provienen ahora del plugin
+``fess-storage-s3``. Instálelo desde la página **Sistema > Plugin** de la pantalla de
+administración o con la orden siguiente.
+
+::
+
+    $ bin/fess-setup install plugin fess-storage-s3
+
+``s3`` también ha salido del valor distribuido de ``crawler.file.protocols``, que ahora es
+``file,smb,smb1,ftp``; el plugin lo vuelve a añadir al instalarse. ``storage.type`` sigue
+teniendo el valor predeterminado ``auto``, que se resuelve como S3 cuando no hay ningún punto
+final configurado, así que la página de almacenamiento de la pantalla de administración no
+funciona hasta que se instala el plugin, aunque nunca haya indicado ``s3`` explícitamente. Sus
+valores ``storage.*`` se conservan, porque están en ``WEB-INF/conf/system.properties``, y un
+``crawler.file.protocols`` existente tampoco se sustituye en la actualización.
+
+Si no utiliza Amazon S3 ni almacenamiento compatible con S3 como MinIO, no hay nada que hacer.
 
 El motor de scripting integrado pasa de Groovy a JavaScript
 -----------------------------------------------------------
@@ -571,8 +599,9 @@ El protocolo de rastreo ``storage`` se ha eliminado
 ---------------------------------------------------
 
 ``storage`` ya no se admite en ``crawler.file.protocols``; el valor incluido es
-``file,smb,smb1,ftp,s3``. Utilice ``s3`` en su lugar y cambie a una ruta ``s3:`` cualquier
-configuración de rastreo de archivos cuya ruta empiece por ``storage:``.
+``file,smb,smb1,ftp``. Utilice ``s3`` en su lugar y cambie a una ruta ``s3:`` cualquier
+configuración de rastreo de archivos cuya ruta empiece por ``storage:``. ``s3`` necesita el
+plugin ``fess-storage-s3``.
 
 Migración Específica de 15.9
 ==============================

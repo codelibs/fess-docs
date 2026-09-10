@@ -401,7 +401,7 @@ Index
     - http,http
   * - crawler.file.protocols
     - The protocols for file crawling.
-    - file,smb,smb1,ftp,s3
+    - file,smb,smb1,ftp
   * - crawler.data.env.param.key.pattern
     - The regex pattern for Fess environment parameter keys.
     - ``^FESS_ENV_.*``
