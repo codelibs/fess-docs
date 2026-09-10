@@ -16,7 +16,7 @@
 - ``smb1://`` … 예전 SMB1 프로토콜을 사용하는 Windows 파일 서버/공유 폴더
 - ``ftp://`` … FTP 서버
 - ``s3://`` … Amazon S3 버킷
-- ``gcs://`` … Google Cloud Storage 버킷（ ``fess-lib-gcs`` 플러그인 필요）
+- ``gcs://`` … Google Cloud Storage 버킷（ ``fess-storage-gcs`` 플러그인 필요）
 
 관리 방법
 ======

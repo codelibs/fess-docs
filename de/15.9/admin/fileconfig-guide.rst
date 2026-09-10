@@ -14,7 +14,7 @@ Welche Pfade gecrawlt werden, richtet sich nach dem im „Pfad" angegebenen Prot
 - ``smb1://`` … Windows-Dateiserver/freigegebene Ordner über das ältere SMB1-Protokoll
 - ``ftp://`` … FTP-Server
 - ``s3://`` … Amazon-S3-Bucket
-- ``gcs://`` … Google-Cloud-Storage-Bucket (erfordert das Plugin ``fess-lib-gcs``)
+- ``gcs://`` … Google-Cloud-Storage-Bucket (erfordert das Plugin ``fess-storage-gcs``)
 
 Auf der Datei-Crawl-Konfigurationsseite können Sie Konfigurationen zum Crawlen von Dateien im Dateisystem oder in freigegebenen Netzwerkordnern verwalten.
 
@@ -232,9 +232,9 @@ Für den GCS-Zugriff sind Anmeldeinformationen erforderlich. Fügen Sie Folgende
     client.credentialsFile=/pfad/zu/service-account.json
 
 .. note::
-   Die Unterstützung für Google Cloud Storage kommt aus dem Plugin ``fess-lib-gcs``, das
+   Die Unterstützung für Google Cloud Storage kommt aus dem Plugin ``fess-storage-gcs``, das
    nicht Teil der Distribution ist. Installieren Sie es über die Seite **System > Plugin** in
-   der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-lib-gcs``.
+   der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-storage-gcs``.
 
 Verwandte Seiten
 ================

@@ -1052,9 +1052,9 @@ GCSクローラー
 -------------
 
 .. note::
-   Google Cloud Storage への対応は ``fess-lib-gcs`` プラグインから提供されます。配布物には
+   Google Cloud Storage への対応は ``fess-storage-gcs`` プラグインから提供されます。配布物には
    同梱されていないため、管理画面の「システム > プラグイン」ページ、または
-   ``bin/fess-setup install plugin fess-lib-gcs`` で導入してください。
+   ``bin/fess-setup install plugin fess-storage-gcs`` で導入してください。
 
 Google Cloud Storageをクロールするための設定です。
 ファイルクロール設定の「設定パラメーター」に以下を記述します。

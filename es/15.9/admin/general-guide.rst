@@ -576,7 +576,7 @@ Cuando se selecciona "Automático", el tipo de almacenamiento se determina autom
 
 - **Automático**: Detección automática desde el punto final
 - **S3**: Amazon S3
-- **GCS**: Google Cloud Storage (requiere el plugin ``fess-lib-gcs``)
+- **GCS**: Google Cloud Storage (requiere el plugin ``fess-storage-gcs``)
 
 Cubo
 ::::

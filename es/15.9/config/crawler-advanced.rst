@@ -1049,9 +1049,9 @@ Rastreador GCS
 --------------
 
 .. note::
-   La compatibilidad con Google Cloud Storage proviene del plugin ``fess-lib-gcs``, que no
+   La compatibilidad con Google Cloud Storage proviene del plugin ``fess-storage-gcs``, que no
    forma parte de la distribución. Instálelo desde la página **Sistema > Plugin** de la
-   pantalla de administración o con ``bin/fess-setup install plugin fess-lib-gcs``.
+   pantalla de administración o con ``bin/fess-setup install plugin fess-storage-gcs``.
 
 Configuración para rastrear Google Cloud Storage.
 Escriba lo siguiente en "Parámetros de configuración" de la configuración de rastreo de archivos.

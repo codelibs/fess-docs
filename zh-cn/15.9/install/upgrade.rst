@@ -506,11 +506,11 @@ Google Cloud Storage 移至插件
 -----------------------------
 
 Google Cloud Storage 的 SDK 不再包含在发行包中， ``gcs://`` 爬取与 ``gcs`` 存储类型改由
-``fess-lib-gcs`` 插件提供。请从管理界面的「系统 > 插件」页面安装，或执行以下命令。
+``fess-storage-gcs`` 插件提供。请从管理界面的「系统 > 插件」页面安装，或执行以下命令。
 
 ::
 
-    $ bin/fess-setup install plugin fess-lib-gcs
+    $ bin/fess-setup install plugin fess-storage-gcs
 
 ``crawler.file.protocols`` 的随附取值中也去掉了 ``gcs``\ ，现为
 ``file,smb,smb1,ftp,s3``\ 。安装插件后会重新加入。在此之前，路径以 ``gcs:`` 开头的文件

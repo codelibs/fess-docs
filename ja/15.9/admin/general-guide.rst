@@ -576,7 +576,7 @@ ERROR や WARN レベルのログイベントを自動的に捕捉して通知�
 
 - **自動**: エンドポイントから自動判定
 - **S3**: Amazon S3
-- **GCS**: Google Cloud Storage（ ``fess-lib-gcs`` プラグインが必要）
+- **GCS**: Google Cloud Storage（ ``fess-storage-gcs`` プラグインが必要）
 
 バケット
 ::::::

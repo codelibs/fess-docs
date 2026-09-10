@@ -16,7 +16,7 @@ El objetivo del rastreo se determina según el protocolo especificado en la «Ru
 - ``smb1://`` … servidor de archivos o carpeta compartida de Windows mediante el antiguo protocolo SMB1
 - ``ftp://`` … servidor FTP
 - ``s3://`` … bucket de Amazon S3
-- ``gcs://`` … bucket de Google Cloud Storage (requiere el plugin ``fess-lib-gcs``)
+- ``gcs://`` … bucket de Google Cloud Storage (requiere el plugin ``fess-storage-gcs``)
 
 Método de gestión
 ==================
@@ -232,9 +232,9 @@ El acceso a GCS requiere credenciales de autenticación. Agregue lo siguiente en
     client.credentialsFile=/ruta/a/service-account.json
 
 .. note::
-   La compatibilidad con Google Cloud Storage proviene del plugin ``fess-lib-gcs``, que no
+   La compatibilidad con Google Cloud Storage proviene del plugin ``fess-storage-gcs``, que no
    forma parte de la distribución. Instálelo desde la página **Sistema > Plugin** de la
-   pantalla de administración o con ``bin/fess-setup install plugin fess-lib-gcs``.
+   pantalla de administración o con ``bin/fess-setup install plugin fess-storage-gcs``.
 
 Páginas Relacionadas
 ====================

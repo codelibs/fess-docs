@@ -37,9 +37,9 @@ GCSの設定
 - 認証情報パス: サービスアカウント認証情報JSONファイルパス
 
 .. note::
-   Google Cloud Storage への対応は ``fess-lib-gcs`` プラグインから提供されます。配布物には
+   Google Cloud Storage への対応は ``fess-storage-gcs`` プラグインから提供されます。配布物には
    同梱されていないため、管理画面の「システム > プラグイン」ページ、または
-   ``bin/fess-setup install plugin fess-lib-gcs`` で導入してください。
+   ``bin/fess-setup install plugin fess-storage-gcs`` で導入してください。
 
 MinIO（S3互換）の設定
 ~~~~~~~~~~~~~~~~~~

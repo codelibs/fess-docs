@@ -16,7 +16,7 @@
 - ``smb1://`` … 使用旧版 SMB1 协议的 Windows 文件服务器/共享文件夹
 - ``ftp://`` … FTP 服务器
 - ``s3://`` … Amazon S3 存储桶
-- ``gcs://`` … Google Cloud Storage 存储桶（需要 ``fess-lib-gcs`` 插件）
+- ``gcs://`` … Google Cloud Storage 存储桶（需要 ``fess-storage-gcs`` 插件）
 
 管理方式
 ======
@@ -232,8 +232,8 @@
     client.credentialsFile=/path/to/service-account.json
 
 .. note::
-   Google Cloud Storage 支持由 ``fess-lib-gcs`` 插件提供，该插件不随发行包分发。请从管理
-   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-lib-gcs`` 。
+   Google Cloud Storage 支持由 ``fess-storage-gcs`` 插件提供，该插件不随发行包分发。请从管理
+   界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-storage-gcs`` 。
 
 相关页面
 ========

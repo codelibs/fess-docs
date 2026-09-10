@@ -512,12 +512,12 @@ Google Cloud Storage 를 플러그인으로 이동
 -----------------------------------------
 
 Google Cloud Storage 의 SDK 는 더 이상 배포물에 포함되지 않으며, ``gcs://`` 크롤링과
-``gcs`` 스토리지 타입은 ``fess-lib-gcs`` 플러그인에서 제공됩니다. 관리 화면의
+``gcs`` 스토리지 타입은 ``fess-storage-gcs`` 플러그인에서 제공됩니다. 관리 화면의
 「시스템 > 플러그인」 페이지 또는 아래 명령으로 설치하십시오.
 
 ::
 
-    $ bin/fess-setup install plugin fess-lib-gcs
+    $ bin/fess-setup install plugin fess-storage-gcs
 
 ``crawler.file.protocols`` 의 기본값에서도 ``gcs`` 가 빠져 ``file,smb,smb1,ftp,s3`` 가
 되었습니다. 플러그인을 설치하면 다시 추가됩니다. 설치 전에는 경로가 ``gcs:`` 로 시작하는

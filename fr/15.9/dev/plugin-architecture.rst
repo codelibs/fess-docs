@@ -49,9 +49,12 @@ suivants :
    * - Crawler
      - ``fess-crawler-*``
      - Extension des clients du crawler
-   * - Bibliothèque
-     - ``fess-lib-*``
-     - Fournit un client tiers et ses dépendances que la distribution ne contient pas
+   * - Stockage
+     - ``fess-storage-*``
+     - Ajout d'un backend de stockage d'objets utilisé pour le crawl et la fonction de stockage
+   * - SSO
+     - ``fess-sso-*``
+     - Ajout d'une méthode d'authentification Single Sign-On sélectionnée par ``sso.type``
 
 Structure d'un plugin
 ======================
