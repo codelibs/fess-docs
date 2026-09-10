@@ -84,7 +84,7 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
 创建启动文件
 ------------------
 
-创建一个合适的文件夹，下载 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ 和 `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_\ 。
+创建一个合适的文件夹，下载 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml>`_ 和 `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml>`_\ 。
 
 .. note::
 
@@ -95,8 +95,8 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
 
 .. code-block:: bash
 
-    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 启动 Fess
 ----------

@@ -62,7 +62,7 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
 
@@ -291,7 +291,7 @@ MIME 타입별 추출기
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
@@ -319,7 +319,7 @@ GitHub 퍼블릭 리포지토리
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
 
 스크립트:
@@ -388,7 +388,7 @@ GitLab(셀프 호스팅)
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
 
 스크립트:

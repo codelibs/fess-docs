@@ -417,7 +417,7 @@ html_context = {
     "commit": False,
     "github_user": "codelibs",
     "github_repo": "fess-docs",
-    "github_version": "master",
+    "github_version": "main",
 }
 
 og_site_url = 'https://fess.codelibs.org/'

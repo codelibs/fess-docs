@@ -62,7 +62,7 @@ Git连接器提供从Git仓库获取文件并注册到
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
 
@@ -291,7 +291,7 @@ GitLab的User Settings → Access Tokens:
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 
 .. note::
@@ -319,7 +319,7 @@ GitHub公共仓库
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
 
 脚本:
@@ -388,7 +388,7 @@ GitLab（自托管）
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
 
 脚本:

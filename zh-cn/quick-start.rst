@@ -41,8 +41,8 @@ Docker 提供了最快、最可靠的 Fess 运行方式。所有依赖都已打�
 .. code-block:: bash
 
     mkdir fess-docker && cd fess-docker
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 **2. 启动容器**
 

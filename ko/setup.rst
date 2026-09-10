@@ -84,7 +84,7 @@ Fess 설정
 시작 파일 작성
 ------------------
 
-적당한 폴더를 만들어 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ 과 `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_ 을 다운로드합니다.
+적당한 폴더를 만들어 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml>`_ 과 `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml>`_ 을 다운로드합니다.
 
 .. note::
 
@@ -95,8 +95,8 @@ curl 명령으로 다음과 같이 취득할 수도 있습니다:
 
 .. code-block:: bash
 
-    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 Fess 시작
 ----------

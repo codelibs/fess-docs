@@ -61,7 +61,7 @@ Beispiel für öffentliches Repository:
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
     prev_commit_id=
     delete_old_docs=false
@@ -254,7 +254,7 @@ Nach dem ersten Crawling die ``prev_commit_id`` auf die vorherige Commit-ID setz
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     prev_commit_id=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
     delete_old_docs=true
 
@@ -278,7 +278,7 @@ Parameter:
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     delete_old_docs=false
 
@@ -350,7 +350,7 @@ Parameter:
 ::
 
     uri=https://github.com/codelibs/fess.git
-    base_url=https://github.com/codelibs/fess/blob/master/
+    base_url=https://github.com/codelibs/fess/blob/main/
     extractors=text/markdown:textExtractor,text/plain:textExtractor,
     delete_old_docs=false
 

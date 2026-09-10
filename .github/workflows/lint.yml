@@ -4,9 +4,16 @@
 name: lint
 
 on:
-  pull_request:
   push:
-    branches: [master]
+    branches:
+    - main
+    - "*.x"
+  # No branch filter: `pull_request.branches` matches the BASE branch, so restricting it to
+  # main/*.x means a stacked pull request - one whose base is the previous branch in the
+  # stack - gets no CI at all. `push` keeps its filter so feature-branch pushes do not
+  # double-build.
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read

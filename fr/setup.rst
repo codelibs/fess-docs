@@ -84,7 +84,7 @@ Configuration de Fess
 Création du fichier de démarrage
 ------------------
 
-Créez un dossier approprié et téléchargez `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ et `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_.
+Créez un dossier approprié et téléchargez `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml>`_ et `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml>`_.
 
 .. note::
 
@@ -95,8 +95,8 @@ Vous pouvez également les obtenir avec la commande curl comme suit :
 
 .. code-block:: bash
 
-    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 Démarrage de Fess
 ----------

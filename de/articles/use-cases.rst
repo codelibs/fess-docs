@@ -134,8 +134,8 @@ Kleine Unternehmen (KMU, bis 100 Mitarbeiter)
 
     # Bereitstellung in 5 Minuten
     mkdir fess && cd fess
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
     docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 **Kosten**:

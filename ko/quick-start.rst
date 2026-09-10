@@ -42,8 +42,8 @@ Docker는 Fess를 가장 빠르고 안정적으로 실행하는 방법을 제공
 .. code-block:: bash
 
     mkdir fess-docker && cd fess-docker
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 **Step 2: 컨테이너 시작**
 

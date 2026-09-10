@@ -84,7 +84,7 @@ Setting Up Fess
 Creating Startup Files
 ----------------------
 
-Create a directory and download `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ and `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_.
+Create a directory and download `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml>`_ and `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml>`_.
 
 .. note::
 
@@ -95,8 +95,8 @@ You can also download them using the curl command as follows:
 
 .. code-block:: bash
 
-    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 Starting Fess
 -------------

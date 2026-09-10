@@ -85,7 +85,7 @@ Fessのセットアップ
 起動ファイルの作成
 ------------------
 
-適当なフォルダーを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml>`_ と `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml>`_ をダウンロードします。
+適当なフォルダーを作成して、 `compose.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml>`_ と `compose-opensearch3.yaml <https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml>`_ をダウンロードします。
 
 .. note::
 
@@ -96,8 +96,8 @@ curlコマンドで以下のように取得することもできます。
 
 .. code-block:: bash
 
-    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -o compose.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -o compose-opensearch3.yaml https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 Fessの起動
 ----------

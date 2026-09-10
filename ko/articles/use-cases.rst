@@ -134,8 +134,8 @@ IT·소프트웨어업
 
     # 5분 만에 배포
     mkdir fess && cd fess
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
     docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 **비용**:

@@ -42,8 +42,8 @@ La méthode la plus simple pour essayer Fess est d'utiliser Docker.
 .. code-block:: bash
 
     mkdir fess-docker && cd fess-docker
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
 
 **Étape 2 : Démarrer les conteneurs**
 

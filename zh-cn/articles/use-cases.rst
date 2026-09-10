@@ -134,8 +134,8 @@ IT 和软件行业
 
     # 5 分钟即可完成部署
     mkdir fess && cd fess
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/master/compose/compose-opensearch3.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
+    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
     docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
 **费用**:
