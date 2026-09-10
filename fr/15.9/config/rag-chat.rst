@@ -159,7 +159,7 @@ Liste des configurations principales disponibles dans ``fess_config.properties``
      - Champs à récupérer des documents
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Nombre maximum de caractères du message utilisateur. Cette valeur est lue en tant que System Property ; l'entrée dans ``fess_config.properties`` n'est pas utilisée. Définissez-la via les System Properties ou ``-Dfess.system.rag.chat.message.max.length``.
+     - Nombre maximum de caractères du message utilisateur. Cette valeur est lue en tant que System Property. Définissez-la via les System Properties ou ``-Dfess.system.rag.chat.message.max.length``.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Taille du fragment pour le surlignage de recherche

@@ -160,7 +160,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
      - 从文档获取的字段
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - 用户消息的最大字符数。此值以 System Property 形式读取，``fess_config.properties`` 中的对应项不会被使用。请通过 System Properties 或 ``-Dfess.system.rag.chat.message.max.length`` 进行设置。
+     - 用户消息的最大字符数。此值以 System Property 形式读取。请通过 System Properties 或 ``-Dfess.system.rag.chat.message.max.length`` 进行设置。
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - 搜索高亮的片段大小

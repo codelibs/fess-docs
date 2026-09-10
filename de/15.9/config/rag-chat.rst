@@ -157,7 +157,7 @@ Liste der Kerneinstellungen, die in ``fess_config.properties`` konfiguriert werd
      - Aus Dokumenten abzurufende Felder
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Maximale Zeichenzahl von Benutzernachrichten. Dieser Wert wird als System Property gelesen; der Eintrag in ``fess_config.properties`` wird nicht verwendet. Legen Sie ihn über System Properties oder ``-Dfess.system.rag.chat.message.max.length`` fest.
+     - Maximale Zeichenzahl von Benutzernachrichten. Dieser Wert wird als System Property gelesen. Legen Sie ihn über System Properties oder ``-Dfess.system.rag.chat.message.max.length`` fest.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Fragmentgröße für Such-Hervorhebungen

@@ -2254,9 +2254,6 @@ Web
   * - rag.chat.content.fields
     - Enhanced RAG flow settings. Fields to retrieve for full document content.
     - ``title,url,content,doc_id,content_title,content_description``
-  * - rag.chat.message.max.length
-    - Maximum characters accepted in a chat API message. Read from conf/system.properties, not this file.
-    - ``4000``
   * - rag.chat.highlight.fragment.size
     - Highlight settings for RAG search.
     - ``500``
@@ -2335,15 +2332,6 @@ Web
   * - theme.upload.attic.retention.days
     - Retention (days) for a replaced theme directory before the cleanup sweep removes it.
     - ``7``
-  * - theme.allowed.archive.extensions
-    - Archive extensions accepted for theme upload. Not read: the upload action accepts only .zip.
-    - ``zip``
-  * - theme.assets.cache.max.age
-    - Cache-Control max-age (seconds) for theme assets. Not read: the responder always sends 86400.
-    - ``86400``
-  * - theme.assets.precompressed
-    - Whether to serve precompressed theme assets. Not read: no precompressed asset path exists.
-    - ``true``
   * - theme.api.csrf.server.origins
     - Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-\* headers, then from the servlet request.
     - (empty)

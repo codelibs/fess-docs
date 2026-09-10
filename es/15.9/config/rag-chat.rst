@@ -159,7 +159,7 @@ Lista de configuraciones del núcleo que se pueden configurar en ``fess_config.p
      - Campos a obtener de los documentos
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Número máximo de caracteres del mensaje del usuario. Este valor se lee como System Property; el elemento en ``fess_config.properties`` no se utiliza. Configúrelo mediante System Properties o ``-Dfess.system.rag.chat.message.max.length``.
+     - Número máximo de caracteres del mensaje del usuario. Este valor se lee como System Property. Configúrelo mediante System Properties o ``-Dfess.system.rag.chat.message.max.length``.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Tamaño del fragmento de resaltado de búsqueda

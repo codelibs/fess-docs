@@ -160,7 +160,7 @@ List of core settings that can be configured in ``fess_config.properties``.
      - Fields to retrieve from documents
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - Maximum number of characters in user messages. This value is read as a System Property; the entry in ``fess_config.properties`` is not used. Set it via System Properties or ``-Dfess.system.rag.chat.message.max.length``.
+     - Maximum number of characters in user messages. This value is read as a System Property. Set it via System Properties or ``-Dfess.system.rag.chat.message.max.length``.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - Search highlight fragment size
