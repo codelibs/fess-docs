@@ -96,10 +96,10 @@ SSOタイプ
 シングルサインオンのタイプを指定します。
 
 - **None**: SSOを使用しない
-- **OpenID Connect**: OpenID Connectを使用
-- **SAML**: SAMLを使用
-- **SPNEGO**: SPNEGOを使用
-- **Entra ID**: Microsoft Entra IDを使用
+- **OpenID Connect**: OpenID Connectを使用（ ``fess-sso-oidc`` プラグインが必要）
+- **SAML**: SAMLを使用（ ``fess-sso-saml`` プラグインが必要）
+- **SPNEGO**: SPNEGOを使用（ ``fess-sso-spnego`` プラグインが必要）
+- **Entra ID**: Microsoft Entra IDを使用（ ``fess-sso-entraid`` プラグインが必要）
 
 クローラー
 --------

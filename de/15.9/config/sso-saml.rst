@@ -8,6 +8,13 @@ SAML-Authentifizierung SSO-Einrichtung
 |Fess| unterstützt Single Sign-On (SSO) Authentifizierung mit SAML (Security Assertion Markup Language) 2.0.
 Durch die Verwendung von SAML-Authentifizierung können Benutzerinformationen, die von einem IdP (Identity Provider) authentifiziert wurden, mit |Fess| integriert werden. In Kombination mit rollenbasierter Suche ermöglicht dies die Anzeige von Suchergebnissen basierend auf Benutzerberechtigungen.
 
+.. note::
+   Die Unterstützung für die SAML-Authentifizierung kommt aus dem Plugin ``fess-sso-saml``,
+   das nicht Teil der Distribution ist. Installieren Sie es über die Seite **System > Plugin**
+   in der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-sso-saml``.
+   Bis dahin wird eine Anfrage an ``/sso/`` mit ``sso.type=saml`` nur zur Anmeldeseite
+   zurückgeleitet.
+
 Funktionsweise der SAML-Authentifizierung
 -----------------------------------------
 

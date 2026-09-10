@@ -8,6 +8,13 @@ Windows 통합 인증을 통한 SSO 설정
 |Fess| 는 Windows 통합 인증(SPNEGO/Kerberos)을 사용한 싱글 사인온(SSO) 인증을 지원합니다.
 Windows 통합 인증을 사용하면 Active Directory 도메인에 가입한 Windows에 로그인한 사용자는 추가 로그인 조작 없이 |Fess| 에 접근할 수 있습니다.
 
+.. note::
+   Windows 통합 인증 지원은 ``fess-sso-spnego`` 플러그인에서 제공됩니다. 배포물에 포함되어
+   있지 않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
+   ``bin/fess-setup install plugin fess-sso-spnego`` 로 설치하십시오.
+   설치하기 전에는 ``sso.type=spnego`` 설정만으로는 ``/sso/`` 요청이 로그인 페이지로
+   리디렉션될 뿐입니다.
+
 Windows 통합 인증의 동작 방식
 ------------------------------
 

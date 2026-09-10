@@ -96,10 +96,10 @@ SSO-Typ
 Gibt den Typ der Einmalanmeldung (Single Sign-On) an.
 
 - **Keine**: SSO nicht verwenden
-- **OpenID Connect**: OpenID Connect verwenden
-- **SAML**: SAML verwenden
-- **SPNEGO**: SPNEGO verwenden
-- **Entra ID**: Microsoft Entra ID verwenden
+- **OpenID Connect**: OpenID Connect verwenden (erfordert das Plugin ``fess-sso-oidc``)
+- **SAML**: SAML verwenden (erfordert das Plugin ``fess-sso-saml``)
+- **SPNEGO**: SPNEGO verwenden (erfordert das Plugin ``fess-sso-spnego``)
+- **Entra ID**: Microsoft Entra ID verwenden (erfordert das Plugin ``fess-sso-entraid``)
 
 Crawler
 -------

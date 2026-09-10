@@ -96,10 +96,10 @@ SSO 유형
 싱글 사인온(Single Sign-On) 유형을 지정합니다.
 
 - **None**: SSO를 사용하지 않음
-- **OpenID Connect**: OpenID Connect 사용
-- **SAML**: SAML 사용
-- **SPNEGO**: SPNEGO 사용
-- **Entra ID**: Microsoft Entra ID 사용
+- **OpenID Connect**: OpenID Connect 사용（ ``fess-sso-oidc`` 플러그인 필요）
+- **SAML**: SAML 사용（ ``fess-sso-saml`` 플러그인 필요）
+- **SPNEGO**: SPNEGO 사용（ ``fess-sso-spnego`` 플러그인 필요）
+- **Entra ID**: Microsoft Entra ID 사용（ ``fess-sso-entraid`` 플러그인 필요）
 
 크롤러
 --------

@@ -96,10 +96,10 @@ SSO Type
 Specifies the single sign-on type.
 
 - **None**: Do not use SSO
-- **OpenID Connect**: Use OpenID Connect
-- **SAML**: Use SAML
-- **SPNEGO**: Use SPNEGO
-- **Entra ID**: Use Microsoft Entra ID
+- **OpenID Connect**: Use OpenID Connect (requires the ``fess-sso-oidc`` plugin)
+- **SAML**: Use SAML (requires the ``fess-sso-saml`` plugin)
+- **SPNEGO**: Use SPNEGO (requires the ``fess-sso-spnego`` plugin)
+- **Entra ID**: Use Microsoft Entra ID (requires the ``fess-sso-entraid`` plugin)
 
 Crawler
 -------

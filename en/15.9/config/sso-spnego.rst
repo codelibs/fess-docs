@@ -8,6 +8,13 @@ Overview
 |Fess| supports Single Sign-On (SSO) authentication using Windows Integrated Authentication (SPNEGO/Kerberos).
 By using Windows Integrated Authentication, users who are logged into a Windows domain-joined computer can access |Fess| without additional login operations.
 
+.. note::
+   Windows Integrated Authentication comes from the ``fess-sso-spnego`` plugin, which is not
+   part of the distribution. Install it from the System > Plugin page in the administration
+   screen, or with ``bin/fess-setup install plugin fess-sso-spnego``.
+   Until it is installed, ``sso.type=spnego`` only redirects every request to ``/sso/`` back to
+   the login page.
+
 How Windows Integrated Authentication Works
 -------------------------------------------
 

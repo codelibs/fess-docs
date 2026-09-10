@@ -96,10 +96,10 @@ SSO类型
 指定单点登录(Single Sign-On)类型。
 
 - **无**: 不使用SSO
-- **OpenID Connect**: 使用OpenID Connect
-- **SAML**: 使用SAML
-- **SPNEGO**: 使用SPNEGO
-- **Entra ID**: 使用Microsoft Entra ID
+- **OpenID Connect**: 使用OpenID Connect（需要 ``fess-sso-oidc`` 插件）
+- **SAML**: 使用SAML（需要 ``fess-sso-saml`` 插件）
+- **SPNEGO**: 使用SPNEGO（需要 ``fess-sso-spnego`` 插件）
+- **Entra ID**: 使用Microsoft Entra ID（需要 ``fess-sso-entraid`` 插件）
 
 爬虫
 --------

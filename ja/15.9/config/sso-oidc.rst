@@ -9,6 +9,14 @@ OpenID ConnectによるSSO設定
 OpenID ConnectはOAuth 2.0を基盤とした認証プロトコルで、ID Token（JWT）を使用してユーザー認証を行います。
 OpenID Connect認証を使用することで、OIDCプロバイダー（OP）で認証されたユーザー情報を |Fess| に連携できます。
 
+.. note::
+   OpenID Connect認証への対応は ``fess-sso-oidc`` プラグインから提供されます。配布物には
+   同梱されていないため、管理画面の「システム > プラグイン」ページ、または
+   ``bin/fess-setup install plugin fess-sso-oidc`` で導入してください。プラグイン名は
+   ``fess-sso-oidc`` ですが、 ``sso.type`` の値は ``oic`` のままです。
+   導入するまで、 ``sso.type=oic`` を設定しても ``/sso/`` へのリクエストはログインページへ
+   リダイレクトされるだけです。
+
 OpenID Connect認証の仕組み
 --------------------------
 

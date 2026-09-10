@@ -8,6 +8,13 @@ Microsoft Entra ID를 이용한 SSO 설정
 |Fess| 에서는 Microsoft Entra ID（구 Azure AD）를 사용한 싱글 사인온（SSO）인증을 지원합니다.
 Entra ID 인증을 사용하면 Microsoft 365 환경의 사용자 정보 및 그룹 정보를 |Fess| 의 역할 기반 검색과 연동할 수 있습니다.
 
+.. note::
+   Entra ID 인증 지원은 ``fess-sso-entraid`` 플러그인에서 제공됩니다. 배포물에 포함되어
+   있지 않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
+   ``bin/fess-setup install plugin fess-sso-entraid`` 로 설치하십시오.
+   설치하기 전에는 ``sso.type=entraid`` (이전 이름 ``aad`` 포함) 설정만으로는 ``/sso/`` 요청이
+   로그인 페이지로 리디렉션될 뿐입니다.
+
 Entra ID 인증의 동작 방식
 --------------------------
 

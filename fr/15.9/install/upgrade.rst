@@ -473,7 +473,7 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 Mise à niveau de 15.8 vers 15.9
 ===============================
 
-Si vous effectuez une mise à niveau depuis la 15.8, les sept changements suivants ne sont pas
+Si vous effectuez une mise à niveau depuis la 15.8, les huit changements suivants ne sont pas
 rétrocompatibles.
 
 Suppression de l'OpenSearch intégré
@@ -572,6 +572,36 @@ l'installation du plugin, même si vous n'avez jamais indiqué ``s3`` vous-même
 et un ``crawler.file.protocols`` existant n'est pas non plus remplacé par la mise à niveau.
 
 Rien à faire si vous n'utilisez pas Amazon S3 ni un stockage compatible S3 tel que MinIO.
+
+L'authentification SSO passe dans des plugins
+---------------------------------------------
+
+Aucun des quatre authentificateurs SSO ne fait plus partie de la distribution : chaque valeur
+de ``sso.type`` provient désormais de son propre plugin, qui embarque la bibliothèque
+d'identité dont il a besoin : ``saml`` de ``fess-sso-saml``, ``spnego`` de
+``fess-sso-spnego``, ``entraid`` (et l'ancien ``aad``) de ``fess-sso-entraid`` et ``oic`` de
+``fess-sso-oidc``. Notez la dernière paire : le plugin s'appelle ``fess-sso-oidc`` alors que la
+valeur de ``sso.type`` reste ``oic`` ; c'est le seul endroit où les deux diffèrent. Installez
+celui que vous utilisez depuis la page **Système > Plugin** de l'écran d'administration ou avec
+la commande ci-dessous.
+
+::
+
+    $ bin/fess-setup install plugin fess-sso-saml
+
+Vos paramètres sont conservés, car ``sso.type`` et les clés ``saml.*``, ``spnego.*``,
+``entraid.*``, ``aad.*`` et ``oic.*`` se trouvent dans ``WEB-INF/conf/system.properties``. De
+plus, « Système » → « Général » de l'écran d'administration propose toujours les quatre types
+et affiche toujours leurs paramètres, car un plugin ne peut pas fournir de JSP : rien sur cet
+écran ne signale donc un plugin manquant.
+
+Jusqu'à l'installation du plugin, une requête vers ``/sso/`` est redirigée vers la page de
+connexion, qui signale l'échec de la connexion SSO, et personne ne peut se connecter via le
+SSO. La 15.9 journalise dans ``fess.log`` un avertissement nommant le composant recherché et le
+plugin qui le fournit, là où jusqu'à la 15.8 rien n'était journalisé à aucun niveau.
+
+Rien à faire si vous n'utilisez pas le SSO, c'est-à-dire si ``sso.type`` vaut ``none`` ou n'est
+pas défini.
 
 Le moteur de script intégré passe de Groovy à JavaScript
 --------------------------------------------------------
