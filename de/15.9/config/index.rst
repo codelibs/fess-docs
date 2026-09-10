@@ -8,6 +8,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    :caption: Erste Schritte
 
    intro
+   properties
 
 .. toctree::
    :maxdepth: 2

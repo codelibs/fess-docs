@@ -8,6 +8,7 @@
    :caption: はじめに
 
    intro
+   properties
 
 .. toctree::
    :maxdepth: 2

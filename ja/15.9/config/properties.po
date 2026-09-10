@@ -1,0 +1,1996 @@
+# Translations for the generated configuration properties page.
+#
+# msgid is the English text from fess_config.properties. Leave msgstr empty to
+# render the English. Regenerate with tools/update_properties_doc.sh, which adds
+# new entries and keeps the translations already here.
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Core"
+msgstr ""
+
+msgid "The title of the domain for logging and display."
+msgstr ""
+
+msgid "Search Engine"
+msgstr ""
+
+msgid "The type of search engine backend (e.g., default, opensearch)."
+msgstr ""
+
+msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
+msgstr ""
+
+msgid "Path to SSL certificate authorities for secure HTTP connections."
+msgstr ""
+
+msgid "Username for authenticating to the search engine."
+msgstr ""
+
+msgid "Password for authenticating to the search engine."
+msgstr ""
+
+msgid "Interval (ms) for heartbeat checks to the search engine."
+msgstr ""
+
+msgid "Cipher algorithm used for encryption."
+msgstr ""
+
+msgid "Secret key for encryption (change this value for production)."
+msgstr ""
+
+msgid "Algorithm for digest calculation."
+msgstr ""
+
+msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
+msgstr ""
+
+msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
+msgstr ""
+
+msgid "Lazy re-hashing on successful login for legacy hashes."
+msgstr ""
+
+msgid "NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt."
+msgstr ""
+
+msgid "Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys)."
+msgstr ""
+
+msgid "Extension names for application customization."
+msgstr ""
+
+msgid "Audit log format."
+msgstr ""
+
+msgid "Script audit log settings."
+msgstr ""
+
+msgid "Maximum characters of script text kept in a script audit log entry; longer text is truncated."
+msgstr ""
+
+msgid "JVM options for the crawler process."
+msgstr ""
+
+msgid "JVM options (newline-separated) passed to the suggest creator child process."
+msgstr ""
+
+msgid "JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the \"Content Chunk Vector Indexer\" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension."
+msgstr ""
+
+msgid "JVM options for the thumbnail process."
+msgstr ""
+
+msgid "Job"
+msgstr ""
+
+msgid "System job IDs for scheduled jobs."
+msgstr ""
+
+msgid "Template for web crawler job title."
+msgstr ""
+
+msgid "Template for file crawler job title."
+msgstr ""
+
+msgid "Template for data crawler job title."
+msgstr ""
+
+msgid "Script template for job execution."
+msgstr ""
+
+msgid "Maximum number of crawler processes."
+msgstr ""
+
+msgid "Default script language for jobs."
+msgstr ""
+
+msgid "Pattern to filter system properties for jobs."
+msgstr ""
+
+msgid "Number of processors to use."
+msgstr ""
+
+msgid "Path to Java command."
+msgstr ""
+
+msgid "Path to Python command."
+msgstr ""
+
+msgid "Encoding for file paths."
+msgstr ""
+
+msgid "Whether to use a dedicated temporary directory."
+msgstr ""
+
+msgid "Maximum length of log output."
+msgstr ""
+
+msgid "Adaptive load control value."
+msgstr ""
+
+msgid "CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)"
+msgstr ""
+
+msgid "CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)"
+msgstr ""
+
+msgid "Interval (seconds) for monitoring OpenSearch CPU load."
+msgstr ""
+
+msgid "Supported JavaScript file extensions for upload."
+msgstr ""
+
+msgid "Supported CSS file extensions for upload."
+msgstr ""
+
+msgid "Supported media file extensions for upload."
+msgstr ""
+
+msgid "Supported files for upload."
+msgstr ""
+
+msgid "Supported languages."
+msgstr ""
+
+msgid "Length of API access token."
+msgstr ""
+
+msgid "Whether API access token is required."
+msgstr ""
+
+msgid "API access token request parameter."
+msgstr ""
+
+msgid "Permissions for API admin access."
+msgstr ""
+
+msgid "Accepted referers for API search."
+msgstr ""
+
+msgid "Whether to enable scroll for API search."
+msgstr ""
+
+msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
+msgstr ""
+
+msgid "Whether to include exceptions in API JSON response."
+msgstr ""
+
+msgid "Headers for API GSA response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
+msgstr ""
+
+msgid "Whether to include exceptions in API GSA response."
+msgstr ""
+
+msgid "Headers for API dashboard response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
+msgstr ""
+
+msgid "Allowed origins for CORS. \"*\" returns a literal \"*\" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access."
+msgstr ""
+
+msgid "Allowed HTTP methods for CORS."
+msgstr ""
+
+msgid "Max age for CORS preflight requests."
+msgstr ""
+
+msgid "Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token."
+msgstr ""
+
+msgid "Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is \"*\"."
+msgstr ""
+
+msgid "Whether to enable JSONP for API."
+msgstr ""
+
+msgid "Fields for API ping to search engine."
+msgstr ""
+
+msgid "Rate Limiting"
+msgstr ""
+
+msgid "Whether rate limiting is enabled."
+msgstr ""
+
+msgid "Maximum number of requests allowed per window."
+msgstr ""
+
+msgid "Window size in milliseconds."
+msgstr ""
+
+msgid "Duration in milliseconds to block IP when limit exceeded."
+msgstr ""
+
+msgid "Retry-After header value in seconds."
+msgstr ""
+
+msgid "Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1)."
+msgstr ""
+
+msgid "Comma-separated list of blocked IPs."
+msgstr ""
+
+msgid "Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs."
+msgstr ""
+
+msgid "Number of requests between cleanup operations to prevent memory leaks."
+msgstr ""
+
+msgid "Virtual Host: Host:fess.codelibs.org=fess"
+msgstr ""
+
+msgid "Hostname for the HTTP proxy server."
+msgstr ""
+
+msgid "Port number for the HTTP proxy server (e.g., 8080)."
+msgstr ""
+
+msgid "Username for HTTP proxy authentication."
+msgstr ""
+
+msgid "Password for HTTP proxy authentication."
+msgstr ""
+
+msgid "Maximum size (bytes) for HTTP file uploads."
+msgstr ""
+
+msgid "Threshold size (bytes) for HTTP file upload buffering."
+msgstr ""
+
+msgid "Maximum number of files allowed per HTTP upload."
+msgstr ""
+
+msgid "Index"
+msgstr ""
+
+msgid "Crawler Common"
+msgstr ""
+
+msgid "Number of threads for HTTP crawling."
+msgstr ""
+
+msgid "Serializer type for crawler data (e.g., kryo)."
+msgstr ""
+
+msgid "Maximum length of site name in documents."
+msgstr ""
+
+msgid "Encoding for site names in documents."
+msgstr ""
+
+msgid "Hostname to use when unknown in documents."
+msgstr ""
+
+msgid "Whether to use site encoding for English documents."
+msgstr ""
+
+msgid "Whether to append data to documents."
+msgstr ""
+
+msgid "Whether to append filename to documents."
+msgstr ""
+
+msgid "Maximum size of alphanumeric terms in documents."
+msgstr ""
+
+msgid "Maximum size of symbol terms in documents."
+msgstr ""
+
+msgid "Whether to remove duplicate terms in documents."
+msgstr ""
+
+msgid "Unicode space characters for document parsing."
+msgstr ""
+
+msgid "Unicode full stop characters for document parsing."
+msgstr ""
+
+msgid "Encoding for crawling data."
+msgstr ""
+
+msgid "Supported web protocols for crawling."
+msgstr ""
+
+msgid "Supported file protocols for crawling."
+msgstr ""
+
+msgid "Pattern for environment variable keys in crawling data."
+msgstr ""
+
+msgid "Whether to ignore robots.txt during crawling."
+msgstr ""
+
+msgid "Whether to ignore robots meta tags during crawling."
+msgstr ""
+
+msgid "Whether to ignore content exceptions during crawling."
+msgstr ""
+
+msgid "HTTP status codes considered as failure URLs."
+msgstr ""
+
+msgid "Interval (seconds) for system monitor during crawling."
+msgstr ""
+
+msgid "Whether to ignore idle threads in hot thread monitoring."
+msgstr ""
+
+msgid "Interval for hot thread monitoring (e.g., 500ms)."
+msgstr ""
+
+msgid "Number of snapshots for hot thread monitoring."
+msgstr ""
+
+msgid "Number of threads for hot thread monitoring."
+msgstr ""
+
+msgid "Timeout for hot thread monitoring (e.g., 30s)."
+msgstr ""
+
+msgid "Type of hot thread monitoring (e.g., cpu)."
+msgstr ""
+
+msgid "Metadata fields to exclude from document content."
+msgstr ""
+
+msgid "Mapping for document metadata names."
+msgstr ""
+
+msgid "Crawler HTML"
+msgstr ""
+
+msgid "XPath to extract main content from HTML documents."
+msgstr ""
+
+msgid "XPath to extract language attribute from HTML documents."
+msgstr ""
+
+msgid "XPath to extract digest (description) from HTML documents."
+msgstr ""
+
+msgid "XPath to extract canonical URL from HTML documents."
+msgstr ""
+
+msgid "HTML tags to prune (remove) during document processing."
+msgstr ""
+
+msgid "Maximum length of digest extracted from HTML documents."
+msgstr ""
+
+msgid "Default language for HTML documents."
+msgstr ""
+
+msgid "Patterns to include for HTML index processing."
+msgstr ""
+
+msgid "Patterns to exclude for HTML index processing."
+msgstr ""
+
+msgid "Patterns to include for HTML search processing."
+msgstr ""
+
+msgid "Patterns to exclude for HTML search processing."
+msgstr ""
+
+msgid "Crawler File"
+msgstr ""
+
+msgid "Encoding for file names in documents."
+msgstr ""
+
+msgid "Label to use when a file has no title."
+msgstr ""
+
+msgid "Whether to ignore files with empty content."
+msgstr ""
+
+msgid "Maximum length of file title in documents."
+msgstr ""
+
+msgid "Maximum length of file digest in documents."
+msgstr ""
+
+msgid "Whether to append meta content from files."
+msgstr ""
+
+msgid "Whether to append body content from files."
+msgstr ""
+
+msgid "Default language for file documents."
+msgstr ""
+
+msgid "Patterns to include for file index processing."
+msgstr ""
+
+msgid "Patterns to exclude for file index processing."
+msgstr ""
+
+msgid "Patterns to include for file search processing."
+msgstr ""
+
+msgid "Patterns to exclude for file search processing."
+msgstr ""
+
+msgid "Crawler Cache"
+msgstr ""
+
+msgid "Whether document cache is enabled."
+msgstr ""
+
+msgid "Maximum size (bytes) for document cache."
+msgstr ""
+
+msgid "Supported MIME types for document cache."
+msgstr ""
+
+msgid ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache."
+msgstr ""
+
+msgid "Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type)."
+msgstr ""
+
+msgid "Indexer"
+msgstr ""
+
+msgid "Whether to enable thread dump for the indexer."
+msgstr ""
+
+msgid "Maximum number of unprocessed documents for the indexer."
+msgstr ""
+
+msgid "Whether to enable click count tracking in the indexer."
+msgstr ""
+
+msgid "Whether to enable favorite count tracking in the indexer."
+msgstr ""
+
+msgid "Commit margin time (ms) for webfs in the indexer."
+msgstr ""
+
+msgid "Maximum number of empty lists for webfs in the indexer."
+msgstr ""
+
+msgid "Update interval (ms) for webfs in the indexer."
+msgstr ""
+
+msgid "Maximum document cache size for webfs in the indexer."
+msgstr ""
+
+msgid "Maximum document request size (bytes) for webfs in the indexer."
+msgstr ""
+
+msgid "Maximum document cache size for data in the indexer."
+msgstr ""
+
+msgid "Maximum document request size (bytes) for data in the indexer."
+msgstr ""
+
+msgid "Maximum delete cache size for data in the indexer."
+msgstr ""
+
+msgid "Maximum redirect count for data in the indexer."
+msgstr ""
+
+msgid "Fields used for language detection in the indexer."
+msgstr ""
+
+msgid "Length of text for language detection in the indexer."
+msgstr ""
+
+msgid "Maximum result window size for the indexer."
+msgstr ""
+
+msgid "Maximum number of search documents for the indexer."
+msgstr ""
+
+msgid "Index Settings"
+msgstr ""
+
+msgid "Codec type for the index."
+msgstr ""
+
+msgid "Number of primary shards for the index."
+msgstr ""
+
+msgid "Auto expand replicas setting for the index."
+msgstr ""
+
+msgid "Digest algorithm for index IDs."
+msgstr ""
+
+msgid "Initial password for the index user."
+msgstr ""
+
+msgid "Field Names"
+msgstr ""
+
+msgid "Field name for favorite count in the index."
+msgstr ""
+
+msgid "Field name for click count in the index."
+msgstr ""
+
+msgid "Field name for config ID in the index."
+msgstr ""
+
+msgid "Field name for expiration date in the index."
+msgstr ""
+
+msgid "Field name for URL in the index."
+msgstr ""
+
+msgid "Field name for document ID in the index."
+msgstr ""
+
+msgid "Field name for internal ID in the index."
+msgstr ""
+
+msgid "Field name for version in the index."
+msgstr ""
+
+msgid "Field name for sequence number in the index."
+msgstr ""
+
+msgid "Field name for primary term in the index."
+msgstr ""
+
+msgid "Field name for language in the index."
+msgstr ""
+
+msgid "Field name for cache status in the index."
+msgstr ""
+
+msgid "Field name for last modified date in the index."
+msgstr ""
+
+msgid "Field name for anchor in the index."
+msgstr ""
+
+msgid "Field name for segment in the index."
+msgstr ""
+
+msgid "Field name for role in the index."
+msgstr ""
+
+msgid "Field name for boost value in the index."
+msgstr ""
+
+msgid "Field name for creation date in the index."
+msgstr ""
+
+msgid "Field name for timestamp in the index."
+msgstr ""
+
+msgid "Field name for label in the index."
+msgstr ""
+
+msgid "Field name for MIME type in the index."
+msgstr ""
+
+msgid "Field name for parent ID in the index."
+msgstr ""
+
+msgid "Field name for important content in the index."
+msgstr ""
+
+msgid "Field name for content in the index."
+msgstr ""
+
+msgid "Field name for content minhash bits in the index."
+msgstr ""
+
+msgid "Field name for cache in the index."
+msgstr ""
+
+msgid "Field name for digest in the index."
+msgstr ""
+
+msgid "Field name for title in the index."
+msgstr ""
+
+msgid "Field name for host in the index."
+msgstr ""
+
+msgid "Field name for site in the index."
+msgstr ""
+
+msgid "Field name for content length in the index."
+msgstr ""
+
+msgid "Field name for file type in the index."
+msgstr ""
+
+msgid "Field name for file name in the index."
+msgstr ""
+
+msgid "Field name for thumbnail in the index."
+msgstr ""
+
+msgid "Field name for virtual host in the index."
+msgstr ""
+
+msgid "Field name for content title in the response."
+msgstr ""
+
+msgid "Field name for content description in the response."
+msgstr ""
+
+msgid "Field name for URL link in the response."
+msgstr ""
+
+msgid "Field name for site path in the response."
+msgstr ""
+
+msgid "Maximum length of content title in the response."
+msgstr ""
+
+msgid "Maximum length of site path in the response."
+msgstr ""
+
+msgid "Whether to enable content title highlighting in the response."
+msgstr ""
+
+msgid "Inline MIME types for the response."
+msgstr ""
+
+msgid "HTTP headers for the response. Access-Control-* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary here."
+msgstr ""
+
+msgid "Document Index"
+msgstr ""
+
+msgid "Index name for search documents."
+msgstr ""
+
+msgid "Index name for update documents."
+msgstr ""
+
+msgid "Index name for suggest documents."
+msgstr ""
+
+msgid "Index name for crawler documents."
+msgstr ""
+
+msgid "Number of primary shards for crawler queue index."
+msgstr ""
+
+msgid "Number of primary shards for crawler data index."
+msgstr ""
+
+msgid "Number of primary shards for crawler filter index."
+msgstr ""
+
+msgid "Number of replicas for crawler queue index."
+msgstr ""
+
+msgid "Number of replicas for crawler data index."
+msgstr ""
+
+msgid "Number of replicas for crawler filter index."
+msgstr ""
+
+msgid "Index name for configuration data."
+msgstr ""
+
+msgid "Index name for user data."
+msgstr ""
+
+msgid "Index name for log data."
+msgstr ""
+
+msgid "Prefix for dictionary index names."
+msgstr ""
+
+msgid "Document Management"
+msgstr ""
+
+msgid "Array-type fields for admin in the index."
+msgstr ""
+
+msgid "Date-type fields for admin in the index."
+msgstr ""
+
+msgid "Integer-type fields for admin in the index."
+msgstr ""
+
+msgid "Long-type fields for admin in the index."
+msgstr ""
+
+msgid "Float-type fields for admin in the index."
+msgstr ""
+
+msgid "Double-type fields for admin in the index."
+msgstr ""
+
+msgid "Required fields for admin in the index."
+msgstr ""
+
+msgid "Timeouts"
+msgstr ""
+
+msgid "Timeout for index search operations."
+msgstr ""
+
+msgid "Timeout for scroll search operations."
+msgstr ""
+
+msgid "Timeout for index operations."
+msgstr ""
+
+msgid "Timeout for bulk index operations."
+msgstr ""
+
+msgid "Timeout for delete operations in the index."
+msgstr ""
+
+msgid "Timeout for index health checks."
+msgstr ""
+
+msgid "Timeout for index indices operations."
+msgstr ""
+
+msgid "File Types"
+msgstr ""
+
+msgid "Mapping of MIME types to filetype labels for indexing."
+msgstr ""
+
+msgid "Number of documents to process per reindex operation."
+msgstr ""
+
+msgid "Request body template for reindex operations."
+msgstr ""
+
+msgid "Requests per second for reindex operations (\"adaptive\" for auto)."
+msgstr ""
+
+msgid "Whether to refresh the index after reindexing."
+msgstr ""
+
+msgid "Timeout for reindex operations."
+msgstr ""
+
+msgid "Scroll timeout for reindex operations."
+msgstr ""
+
+msgid "Maximum number of documents for reindex operations."
+msgstr ""
+
+msgid "Query"
+msgstr ""
+
+msgid "Maximum length of search queries."
+msgstr ""
+
+msgid "Timeout (ms) for search queries."
+msgstr ""
+
+msgid "Whether to enable logging for query timeouts."
+msgstr ""
+
+msgid "Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused."
+msgstr ""
+
+msgid "Fields used for geo search queries."
+msgstr ""
+
+msgid "Parameter name for browser language in queries."
+msgstr ""
+
+msgid "Whether to replace term with prefix query."
+msgstr ""
+
+msgid "Minimum hit count for OR search queries."
+msgstr ""
+
+msgid "Unicode terminal characters for query highlighting."
+msgstr ""
+
+msgid "Fragment size for query highlighting."
+msgstr ""
+
+msgid "Number of fragments for query highlighting."
+msgstr ""
+
+msgid "Type of query highlighting."
+msgstr ""
+
+msgid "Tag to use before highlighted text."
+msgstr ""
+
+msgid "Tag to use after highlighted text."
+msgstr ""
+
+msgid "Boundary characters for query highlighting."
+msgstr ""
+
+msgid "Maximum scan for query highlight boundaries."
+msgstr ""
+
+msgid "Scanner type for query highlight boundaries."
+msgstr ""
+
+msgid "Encoder type for query highlighting."
+msgstr ""
+
+msgid "Whether to force source for query highlighting."
+msgstr ""
+
+msgid "Fragmenter type for query highlighting."
+msgstr ""
+
+msgid "Offset for query highlight fragments."
+msgstr ""
+
+msgid "Size for no-match query highlight."
+msgstr ""
+
+msgid "Order for query highlight fragments."
+msgstr ""
+
+msgid "Phrase limit for query highlighting."
+msgstr ""
+
+msgid "Fields for content description in query highlighting."
+msgstr ""
+
+msgid "Whether to detect boundary position in query highlighting."
+msgstr ""
+
+msgid "Type for text fragment in query highlighting."
+msgstr ""
+
+msgid "Size for text fragment in query highlighting."
+msgstr ""
+
+msgid "Prefix length for text fragment in query highlighting."
+msgstr ""
+
+msgid "Suffix length for text fragment in query highlighting."
+msgstr ""
+
+msgid "Maximum search result offset for queries."
+msgstr ""
+
+msgid "Additional default fields for queries."
+msgstr ""
+
+msgid "Additional response fields for queries."
+msgstr ""
+
+msgid "Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only). Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response."
+msgstr ""
+
+msgid "Additional scroll response fields for queries."
+msgstr ""
+
+msgid "Additional cache response fields for queries."
+msgstr ""
+
+msgid "Additional highlighted fields for queries."
+msgstr ""
+
+msgid "Additional search fields for queries."
+msgstr ""
+
+msgid "Additional facet fields for queries."
+msgstr ""
+
+msgid "Additional sort fields for queries."
+msgstr ""
+
+msgid "Additional analyzed fields for queries."
+msgstr ""
+
+msgid "Additional not-analyzed fields for queries."
+msgstr ""
+
+msgid "Fields for GSA response in queries."
+msgstr ""
+
+msgid "Default language for GSA queries."
+msgstr ""
+
+msgid "Default sort for GSA queries."
+msgstr ""
+
+msgid "Meta prefix for GSA queries."
+msgstr ""
+
+msgid "Charset field for GSA index queries."
+msgstr ""
+
+msgid "Content type field for GSA index queries."
+msgstr ""
+
+msgid "Maximum concurrent group results for collapse queries."
+msgstr ""
+
+msgid "Inner hits name for collapse queries."
+msgstr ""
+
+msgid "Inner hits size for collapse queries."
+msgstr ""
+
+msgid "Sorts for inner hits in collapse queries."
+msgstr ""
+
+msgid "Default languages for queries."
+msgstr ""
+
+msgid "Default preference for JSON queries."
+msgstr ""
+
+msgid "Default preference for GSA queries."
+msgstr ""
+
+msgid "Language mapping for queries."
+msgstr ""
+
+msgid "Boost"
+msgstr ""
+
+msgid "Boost value for title field in queries."
+msgstr ""
+
+msgid "Boost value for title field with language in queries."
+msgstr ""
+
+msgid "Boost value for content field in queries."
+msgstr ""
+
+msgid "Boost value for content field with language in queries."
+msgstr ""
+
+msgid "Boost value for important content field in queries."
+msgstr ""
+
+msgid "Boost value for important content field with language in queries."
+msgstr ""
+
+msgid "Minimum length for fuzzy boosting in queries."
+msgstr ""
+
+msgid "Boost value for fuzzy title queries."
+msgstr ""
+
+msgid "Fuzziness for fuzzy title queries."
+msgstr ""
+
+msgid "Number of expansions for fuzzy title queries."
+msgstr ""
+
+msgid "Prefix length for fuzzy title queries."
+msgstr ""
+
+msgid "Whether to allow transpositions in fuzzy title queries."
+msgstr ""
+
+msgid "Boost value for fuzzy content queries."
+msgstr ""
+
+msgid "Fuzziness for fuzzy content queries."
+msgstr ""
+
+msgid "Number of expansions for fuzzy content queries."
+msgstr ""
+
+msgid "Prefix length for fuzzy content queries."
+msgstr ""
+
+msgid "Whether to allow transpositions in fuzzy content queries."
+msgstr ""
+
+msgid "Default query type."
+msgstr ""
+
+msgid "Tie breaker value for dismax queries."
+msgstr ""
+
+msgid "Minimum should match value for boolean queries."
+msgstr ""
+
+msgid "Number of expansions for prefix queries."
+msgstr ""
+
+msgid "Slop value for prefix queries."
+msgstr ""
+
+msgid "Prefix length for fuzzy queries."
+msgstr ""
+
+msgid "Number of expansions for fuzzy queries."
+msgstr ""
+
+msgid "Whether to allow transpositions in fuzzy queries."
+msgstr ""
+
+msgid "Facet"
+msgstr ""
+
+msgid "Fields for facet queries."
+msgstr ""
+
+msgid "Size of facet fields."
+msgstr ""
+
+msgid "Upper clamp for facet.size (applied at the search chokepoint)."
+msgstr ""
+
+msgid "Minimum document count for facet fields."
+msgstr ""
+
+msgid "Upper clamp for facet.minDocCount (applied at the search chokepoint)."
+msgstr ""
+
+msgid "Sort order for facet fields."
+msgstr ""
+
+msgid "Value for missing facet fields."
+msgstr ""
+
+msgid "Facet queries definition."
+msgstr ""
+
+msgid "Ranking"
+msgstr ""
+
+msgid "Window size for rank fusion."
+msgstr ""
+
+msgid "Rank constant for rank fusion."
+msgstr ""
+
+msgid "Number of threads for rank fusion."
+msgstr ""
+
+msgid "Score field for rank fusion."
+msgstr ""
+
+msgid "Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself."
+msgstr ""
+
+msgid "How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean."
+msgstr ""
+
+msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf."
+msgstr ""
+
+msgid "Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally."
+msgstr ""
+
+msgid "How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks."
+msgstr ""
+
+msgid "ACL"
+msgstr ""
+
+msgid "Whether to get SMB roles from a file."
+msgstr ""
+
+msgid "Available SID types for SMB."
+msgstr ""
+
+msgid "Whether to get file roles from a file."
+msgstr ""
+
+msgid "Whether to get FTP roles from a file."
+msgstr ""
+
+msgid "Backup"
+msgstr ""
+
+msgid "Target files for index backup."
+msgstr ""
+
+msgid "Target log files for index backup."
+msgstr ""
+
+msgid "Timeout for loading index backup logs."
+msgstr ""
+
+msgid "Logging"
+msgstr ""
+
+msgid "Application packages for logging."
+msgstr ""
+
+msgid "Whether to enable search docs logging."
+msgstr ""
+
+msgid "Fields to log for search docs."
+msgstr ""
+
+msgid "Whether to use a log file for search logging."
+msgstr ""
+
+msgid "Maximum queue size for search logging."
+msgstr ""
+
+msgid "Maximum queue size for click logging."
+msgstr ""
+
+msgid "Web"
+msgstr ""
+
+msgid "Maximum input size for admin forms."
+msgstr ""
+
+msgid "Whether to enable label in admin config forms."
+msgstr ""
+
+msgid "Default template name for admin forms."
+msgstr ""
+
+msgid "Whether to enable OSDD link (OpenSearch Description Document)."
+msgstr ""
+
+msgid "Whether to enable the clipboard copy icon."
+msgstr ""
+
+msgid "Admin user names for authentication."
+msgstr ""
+
+msgid "Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set."
+msgstr ""
+
+msgid "Admin role names for authentication."
+msgstr ""
+
+msgid "Default permissions for search roles."
+msgstr ""
+
+msgid "Default display permissions for search roles."
+msgstr ""
+
+msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
+msgstr ""
+
+msgid "Prefix for user roles in search."
+msgstr ""
+
+msgid "Prefix for group roles in search."
+msgstr ""
+
+msgid "Prefix for role roles in search."
+msgstr ""
+
+msgid "Prefix for denied roles in search."
+msgstr ""
+
+msgid "The default path of cookie (basically '/' if no context path)"
+msgstr ""
+
+msgid "The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day"
+msgstr ""
+
+msgid "Session tracking modes"
+msgstr ""
+
+msgid "Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart."
+msgstr ""
+
+msgid "Comma-separated list of request parameter keys to store in cookies before SSO login."
+msgstr ""
+
+msgid "Comma-separated list of required parameter keys that must be present to store in cookies."
+msgstr ""
+
+msgid "Maximum length of the encoded search parameters stored in cookies."
+msgstr ""
+
+msgid "Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client."
+msgstr ""
+
+msgid "Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers."
+msgstr ""
+
+msgid "Cookie name used to store encoded search parameters before SSO login."
+msgstr ""
+
+msgid "Whether to set HttpOnly attribute to the search parameter cookie."
+msgstr ""
+
+msgid "Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS."
+msgstr ""
+
+msgid "Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies."
+msgstr ""
+
+msgid "Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com)."
+msgstr ""
+
+msgid "Path attribute for the search parameter cookie. Typically set to \"/\" or the context path of the app."
+msgstr ""
+
+msgid "SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None"
+msgstr ""
+
+msgid "The size of one page for paging"
+msgstr ""
+
+msgid "The size of page range for paging"
+msgstr ""
+
+msgid "The option 'fillLimit' of page range for paging"
+msgstr ""
+
+msgid "Fetch Page Size"
+msgstr ""
+
+msgid "Maximum number of docboost records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of keymatch records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of labeltype records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of roletype records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of user records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of role records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of group records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of crawling info parameters to fetch per page."
+msgstr ""
+
+msgid "Maximum number of crawling info records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of data config records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of web config records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of file config records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of duplicate host records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of failure URL records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of favorite log records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of file auth records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of web auth records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of path mapping records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of request header records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of scheduled job records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of elevate word records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of bad word records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of dictionary records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of related content records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of related query records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of thumbnail queue records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of thumbnail purge records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of score booster records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of search log records to fetch per page."
+msgstr ""
+
+msgid "Whether to track total hits in search list page."
+msgstr ""
+
+msgid "Maximum content length (in characters) rendered on the search list edit page."
+msgstr ""
+
+msgid "Search Page"
+msgstr ""
+
+msgid "Default start page for search results."
+msgstr ""
+
+msgid "Default size of search results per page."
+msgstr ""
+
+msgid "Maximum size of search results per page."
+msgstr ""
+
+msgid "Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023."
+msgstr ""
+
+msgid "Maximum number of values for a v2 API repeatable query parameter."
+msgstr ""
+
+msgid "Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023."
+msgstr ""
+
+msgid "searchlog"
+msgstr ""
+
+msgid "Request headers to include in search log."
+msgstr ""
+
+msgid "Batch size for search log processing."
+msgstr ""
+
+msgid "Minimum width for HTML images in thumbnails."
+msgstr ""
+
+msgid "Minimum height for HTML images in thumbnails."
+msgstr ""
+
+msgid "Maximum aspect ratio for HTML images in thumbnails."
+msgstr ""
+
+msgid "Width of generated thumbnail images."
+msgstr ""
+
+msgid "Height of generated thumbnail images."
+msgstr ""
+
+msgid "Format of generated thumbnail images."
+msgstr ""
+
+msgid "XPath to select images for thumbnails."
+msgstr ""
+
+msgid "File extensions to exclude from thumbnail generation."
+msgstr ""
+
+msgid "Interval for thumbnail generator."
+msgstr ""
+
+msgid "Targets for thumbnail generator (e.g., all)."
+msgstr ""
+
+msgid "Whether the thumbnail crawler is enabled."
+msgstr ""
+
+msgid "Interval for system monitor in thumbnail processing."
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "User code settings"
+msgstr ""
+
+msgid "User code minimum length."
+msgstr ""
+
+msgid "User code maximum length."
+msgstr ""
+
+msgid "User code pattern for validation."
+msgstr ""
+
+msgid "Name to display in the From field of emails."
+msgstr ""
+
+msgid "Email address to use in the From field."
+msgstr ""
+
+msgid "Hostname for the mail server."
+msgstr ""
+
+msgid "Target name for the scheduler."
+msgstr ""
+
+msgid "Job class for the scheduler."
+msgstr ""
+
+msgid "Mode for concurrent execution in the scheduler."
+msgstr ""
+
+msgid "Interval for scheduler monitoring."
+msgstr ""
+
+msgid "Interval (seconds) for polling heartbeats and events."
+msgstr ""
+
+msgid "Time-to-live (ms) for instance heartbeat documents."
+msgstr ""
+
+msgid "Time-to-live (ms) for operation lock documents."
+msgstr ""
+
+msgid "Maximum number of retries for acquiring an operation lock."
+msgstr ""
+
+msgid "Time-to-live (ms) for event notification documents."
+msgstr ""
+
+msgid "Base link for online help."
+msgstr ""
+
+msgid "Installation guide link for online help."
+msgstr ""
+
+msgid "End-of-life information link for online help."
+msgstr ""
+
+msgid "Online help key for failure URL."
+msgstr ""
+
+msgid "Online help key for elevate word."
+msgstr ""
+
+msgid "Online help key for request header."
+msgstr ""
+
+msgid "Online help key for synonym dictionary."
+msgstr ""
+
+msgid "Online help key for dictionary."
+msgstr ""
+
+msgid "Online help key for Kuromoji dictionary."
+msgstr ""
+
+msgid "Online help key for protected words dictionary."
+msgstr ""
+
+msgid "Online help key for stopwords dictionary."
+msgstr ""
+
+msgid "Online help key for stemmer override dictionary."
+msgstr ""
+
+msgid "Online help key for mapping dictionary."
+msgstr ""
+
+msgid "Online help key for web config."
+msgstr ""
+
+msgid "Online help key for search list."
+msgstr ""
+
+msgid "Online help key for log."
+msgstr ""
+
+msgid "Online help key for general settings."
+msgstr ""
+
+msgid "Online help key for role."
+msgstr ""
+
+msgid "Online help key for job log."
+msgstr ""
+
+msgid "Online help key for keymatch."
+msgstr ""
+
+msgid "Online help key for related query."
+msgstr ""
+
+msgid "Online help key for related content."
+msgstr ""
+
+msgid "Online help key for wizard."
+msgstr ""
+
+msgid "Online help key for bad word."
+msgstr ""
+
+msgid "Online help key for path mapping."
+msgstr ""
+
+msgid "Online help key for boost document."
+msgstr ""
+
+msgid "Online help key for data config."
+msgstr ""
+
+msgid "Online help key for system info."
+msgstr ""
+
+msgid "Online help key for user."
+msgstr ""
+
+msgid "Online help key for group."
+msgstr ""
+
+msgid "Online help key for design."
+msgstr ""
+
+msgid "Online help key for dashboard."
+msgstr ""
+
+msgid "Online help key for web authentication."
+msgstr ""
+
+msgid "Online help key for file config."
+msgstr ""
+
+msgid "Online help key for file authentication."
+msgstr ""
+
+msgid "Online help key for label type."
+msgstr ""
+
+msgid "Online help key for duplicate host."
+msgstr ""
+
+msgid "Online help key for scheduler."
+msgstr ""
+
+msgid "Online help key for crawling info."
+msgstr ""
+
+msgid "Online help key for backup."
+msgstr ""
+
+msgid "Online help key for upgrade."
+msgstr ""
+
+msgid "Online help key for search request."
+msgstr ""
+
+msgid "Online help key for access token."
+msgstr ""
+
+msgid "Online help key for suggest."
+msgstr ""
+
+msgid "Online help key for search log."
+msgstr ""
+
+msgid "Online help key for maintenance."
+msgstr ""
+
+msgid "Online help key for plugin."
+msgstr ""
+
+msgid "Online help key for storage."
+msgstr ""
+
+msgid "Supported languages for online help."
+msgstr ""
+
+msgid "Forum link for user support."
+msgstr ""
+
+msgid "Supported languages for the forum."
+msgstr ""
+
+msgid "Seed value for popular word suggestion."
+msgstr ""
+
+msgid "Tags for popular word suggestion."
+msgstr ""
+
+msgid "Fields for popular word suggestion."
+msgstr ""
+
+msgid "Excluded words for popular word suggestion."
+msgstr ""
+
+msgid "Number of popular words to suggest."
+msgstr ""
+
+msgid "Window size for popular word suggestion."
+msgstr ""
+
+msgid "Query frequency for popular word suggestion."
+msgstr ""
+
+msgid "Minimum hit count for suggestion."
+msgstr ""
+
+msgid "Field for suggestion contents."
+msgstr ""
+
+msgid "Field for suggestion tags."
+msgstr ""
+
+msgid "Field for suggestion roles."
+msgstr ""
+
+msgid "Index contents for suggestion."
+msgstr ""
+
+msgid "Interval for suggestion update requests."
+msgstr ""
+
+msgid "Number of documents per suggestion update request."
+msgstr ""
+
+msgid "Percentage limit for suggestion update contents."
+msgstr ""
+
+msgid "Maximum number of suggestion update contents."
+msgstr ""
+
+msgid "Maximum document size for suggestion update."
+msgstr ""
+
+msgid "Scroll size for suggestion source reader."
+msgstr ""
+
+msgid "Cache size for popular word suggestion."
+msgstr ""
+
+msgid "Cache expiration (seconds) for popular word suggestion."
+msgstr ""
+
+msgid "Permissions for suggestion search log."
+msgstr ""
+
+msgid "Interval for system monitor in suggestion."
+msgstr ""
+
+msgid "Whether LDAP admin is enabled."
+msgstr ""
+
+msgid "User filter for LDAP admin."
+msgstr ""
+
+msgid "Base DN for LDAP admin user."
+msgstr ""
+
+msgid "Object classes for LDAP admin user."
+msgstr ""
+
+msgid "Role filter for LDAP admin."
+msgstr ""
+
+msgid "Base DN for LDAP admin role."
+msgstr ""
+
+msgid "Object classes for LDAP admin role."
+msgstr ""
+
+msgid "Group filter for LDAP admin."
+msgstr ""
+
+msgid "Base DN for LDAP admin group."
+msgstr ""
+
+msgid "Object classes for LDAP admin group."
+msgstr ""
+
+msgid "Whether to sync password for LDAP admin."
+msgstr ""
+
+msgid "Whether to validate LDAP authentication."
+msgstr ""
+
+msgid "Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default."
+msgstr ""
+
+msgid "Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely."
+msgstr ""
+
+msgid "Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit."
+msgstr ""
+
+msgid "Maximum username length for LDAP."
+msgstr ""
+
+msgid "Whether to ignore NetBIOS name in LDAP."
+msgstr ""
+
+msgid "Whether to allow underscores in LDAP group names."
+msgstr ""
+
+msgid "Whether to use lowercase for LDAP permission names."
+msgstr ""
+
+msgid "Whether to allow empty permissions in LDAP."
+msgstr ""
+
+msgid "Whether to use samAccountName for LDAP group."
+msgstr ""
+
+msgid "Whether LDAP role search for user is enabled."
+msgstr ""
+
+msgid "Whether LDAP role search for group is enabled."
+msgstr ""
+
+msgid "Whether LDAP role search for role is enabled."
+msgstr ""
+
+msgid "LDAP attribute for surname."
+msgstr ""
+
+msgid "LDAP attribute for given name."
+msgstr ""
+
+msgid "LDAP attribute for employee number."
+msgstr ""
+
+msgid "LDAP attribute for mail."
+msgstr ""
+
+msgid "LDAP attribute for telephone number."
+msgstr ""
+
+msgid "LDAP attribute for home phone."
+msgstr ""
+
+msgid "LDAP attribute for home postal address."
+msgstr ""
+
+msgid "LDAP attribute for labeled URI."
+msgstr ""
+
+msgid "LDAP attribute for room number."
+msgstr ""
+
+msgid "LDAP attribute for description."
+msgstr ""
+
+msgid "LDAP attribute for title."
+msgstr ""
+
+msgid "LDAP attribute for pager."
+msgstr ""
+
+msgid "LDAP attribute for street."
+msgstr ""
+
+msgid "LDAP attribute for postal code."
+msgstr ""
+
+msgid "LDAP attribute for physical delivery office name."
+msgstr ""
+
+msgid "LDAP attribute for destination indicator."
+msgstr ""
+
+msgid "LDAP attribute for international ISDN number."
+msgstr ""
+
+msgid "LDAP attribute for state."
+msgstr ""
+
+msgid "LDAP attribute for employee type."
+msgstr ""
+
+msgid "LDAP attribute for facsimile telephone number."
+msgstr ""
+
+msgid "LDAP attribute for post office box."
+msgstr ""
+
+msgid "LDAP attribute for initials."
+msgstr ""
+
+msgid "LDAP attribute for car license."
+msgstr ""
+
+msgid "LDAP attribute for mobile."
+msgstr ""
+
+msgid "LDAP attribute for postal address."
+msgstr ""
+
+msgid "LDAP attribute for city."
+msgstr ""
+
+msgid "LDAP attribute for teletex terminal identifier."
+msgstr ""
+
+msgid "LDAP attribute for X.121 address."
+msgstr ""
+
+msgid "LDAP attribute for business category."
+msgstr ""
+
+msgid "LDAP attribute for registered address."
+msgstr ""
+
+msgid "LDAP attribute for display name."
+msgstr ""
+
+msgid "LDAP attribute for preferred language."
+msgstr ""
+
+msgid "LDAP attribute for department number."
+msgstr ""
+
+msgid "LDAP attribute for UID number."
+msgstr ""
+
+msgid "LDAP attribute for GID number."
+msgstr ""
+
+msgid "LDAP attribute for home directory."
+msgstr ""
+
+msgid "Plugin repository URLs."
+msgstr ""
+
+msgid "Version filter for plugins."
+msgstr ""
+
+msgid "Maximum number of items per page in storage."
+msgstr ""
+
+msgid "List of invalid admin passwords."
+msgstr ""
+
+msgid "Minimum password length (0 to disable)."
+msgstr ""
+
+msgid "Maximum length of a password field."
+msgstr ""
+
+msgid "Require uppercase letters in password."
+msgstr ""
+
+msgid "Require lowercase letters in password."
+msgstr ""
+
+msgid "Require digits in password."
+msgstr ""
+
+msgid "Require special characters in password."
+msgstr ""
+
+msgid "Whether RAG chat feature is enabled."
+msgstr ""
+
+msgid "Chat generation settings."
+msgstr ""
+
+msgid "Session settings."
+msgstr ""
+
+msgid "Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100)."
+msgstr ""
+
+msgid "Maximum messages kept in one chat session; older turns are trimmed on each new message."
+msgstr ""
+
+msgid "Enhanced RAG flow settings. Fields to retrieve for full document content."
+msgstr ""
+
+msgid "Highlight settings for RAG search."
+msgstr ""
+
+msgid "Number of highlight fragments per document in the RAG chat context search."
+msgstr ""
+
+msgid "Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context."
+msgstr ""
+
+msgid "Highlight settings used when extracting passages from large documents for the answer context."
+msgstr ""
+
+msgid "Number of highlight fragments taken from each oversized document for the answer context."
+msgstr ""
+
+msgid "History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - \"[References: title (url), ...]\" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history"
+msgstr ""
+
+msgid "Maximum number of referenced document titles included per turn in smart_summary history mode."
+msgstr ""
+
+msgid "Index Export"
+msgstr ""
+
+msgid "Comma-separated document fields omitted from files written by the index export job."
+msgstr ""
+
+msgid "Number of documents fetched per scroll request by the index export job."
+msgstr ""
+
+msgid "Output format for exported documents; only html and json are accepted, anything else fails the job."
+msgstr ""
+
+msgid "Log Notification Interval (seconds) for flushing log notification buffer to search engine."
+msgstr ""
+
+msgid "Maximum length of notification details text."
+msgstr ""
+
+msgid "Maximum number of events to display in notification."
+msgstr ""
+
+msgid "Maximum length of each log message in notification."
+msgstr ""
+
+msgid "Maximum number of events to fetch from search engine per notification job."
+msgstr ""
+
+msgid "Maximum number of events to buffer in memory."
+msgstr ""
+
+msgid "Interval (seconds) for the notification job cycle, used in notification messages."
+msgstr ""
+
+msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
+msgstr ""
+
+msgid "Maximum size (bytes) of an uploaded theme archive."
+msgstr ""
+
+msgid "Maximum total extracted size (bytes); extraction aborts once it is exceeded."
+msgstr ""
+
+msgid "Maximum number of entries allowed in an uploaded theme archive."
+msgstr ""
+
+msgid "Maximum uncompressed/compressed ratio for a single theme archive entry."
+msgstr ""
+
+msgid "Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard)."
+msgstr ""
+
+msgid "Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it."
+msgstr ""
+
+msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
+msgstr ""
+
+msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
+msgstr ""
+
+msgid "Login attempts allowed per client IP each minute; 0 or less disables the gate."
+msgstr ""
+
+msgid "Login attempts allowed per client IP and user name each minute; also gates password change."
+msgstr ""
+
+msgid "Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout."
+msgstr ""
+
+msgid "Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap."
+msgstr ""
+
+msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
+msgstr ""

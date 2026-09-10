@@ -162,7 +162,7 @@ OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하�
      - 문서에서 가져올 필드
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - 사용자 메시지의 최대 문자 수. 이 값은 System Property로 읽어들여지며, ``fess_config.properties`` 의 항목은 사용되지 않습니다. System Properties 또는 ``-Dfess.system.rag.chat.message.max.length`` 로 설정합니다.
+     - 사용자 메시지의 최대 문자 수. 이 값은 System Property로 읽어들여집니다. System Properties 또는 ``-Dfess.system.rag.chat.message.max.length`` 로 설정합니다.
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - 검색 하이라이트의 프래그먼트 크기

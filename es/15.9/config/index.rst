@@ -8,6 +8,7 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
    :caption: Introducción
 
    intro
+   properties
 
 .. toctree::
    :maxdepth: 2

@@ -160,7 +160,7 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
      - ドキュメントから取得するフィールド
      - ``title,url,content,doc_id,content_title,content_description``
    * - ``rag.chat.message.max.length``
-     - ユーザーメッセージの最大文字数。この値は System Property として読み込まれ、``fess_config.properties`` の項目は使用されません。System Properties か ``-Dfess.system.rag.chat.message.max.length`` で設定します。
+     - ユーザーメッセージの最大文字数。この値は System Property として読み込まれます。System Properties か ``-Dfess.system.rag.chat.message.max.length`` で設定します。
      - ``4000``
    * - ``rag.chat.highlight.fragment.size``
      - 検索ハイライトのフラグメントサイズ
