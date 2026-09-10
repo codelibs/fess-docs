@@ -575,7 +575,7 @@ ERROR 및 WARN 레벨의 로그 이벤트를 자동으로 캡처하여 알림을
 「자동」을 선택하면 엔드포인트에서 자동으로 스토리지 유형을 판정합니다.
 
 - **자동**: 엔드포인트에서 자동 판정
-- **S3**: Amazon S3
+- **S3**: Amazon S3（ ``fess-storage-s3`` 플러그인 필요）
 - **GCS**: Google Cloud Storage（ ``fess-storage-gcs`` 플러그인 필요）
 
 버킷

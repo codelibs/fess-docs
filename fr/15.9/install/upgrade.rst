@@ -473,7 +473,7 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 Mise à niveau de 15.8 vers 15.9
 ===============================
 
-Si vous effectuez une mise à niveau depuis la 15.8, les six changements suivants ne sont pas
+Si vous effectuez une mise à niveau depuis la 15.8, les sept changements suivants ne sont pas
 rétrocompatibles.
 
 Suppression de l'OpenSearch intégré
@@ -537,13 +537,41 @@ commande ci-dessous.
     $ bin/fess-setup install plugin fess-storage-gcs
 
 ``gcs`` a également quitté la valeur fournie de ``crawler.file.protocols``, qui est
-maintenant ``file,smb,smb1,ftp,s3`` ; le plugin la rétablit lors de son installation.
+maintenant ``file,smb,smb1,ftp`` ; le plugin la rétablit lors de son installation.
 Jusque-là, une configuration d'exploration de fichiers dont le chemin commence par ``gcs:``
-est rejetée comme protocole invalide, et la page de stockage signale qu'aucun client n'est
-enregistré pour ``storage.type=gcs``.
+est signalée par un avertissement et ne récupère rien. Une installation mise à niveau conserve
+son propre ``crawler.file.protocols``, le chemin est donc toujours accepté mais aucun client
+d'exploration ne le prend en charge ; dans une nouvelle installation, ``gcs:`` n'est pas un
+protocole configuré, l'écran d'administration refuse donc d'enregistrer le chemin et un chemin
+enregistré auparavant est lu comme un chemin de fichier local. La page de stockage journalise
+elle aussi un avertissement et affiche l'échec comme une erreur nommant le plugin à installer,
+là où elle n'affichait auparavant qu'une liste de fichiers vide.
 
 Rien à faire si vous n'utilisez pas Google Cloud Storage. Amazon S3 et les stockages
-compatibles S3 tels que MinIO restent dans la distribution et ne sont pas concernés.
+compatibles S3 tels que MinIO sont passés dans un plugin de la même manière ; voir la section
+suivante.
+
+Amazon S3 passe dans un plugin
+------------------------------
+
+Le SDK AWS ne fait plus partie de la distribution : l'exploration ``s3://`` et les types de
+stockage ``s3`` et ``s3_compat`` proviennent désormais du plugin ``fess-storage-s3``.
+Installez-le depuis la page **Système > Plugin** de l'écran d'administration ou avec la
+commande ci-dessous.
+
+::
+
+    $ bin/fess-setup install plugin fess-storage-s3
+
+``s3`` a également quitté la valeur fournie de ``crawler.file.protocols``, qui est maintenant
+``file,smb,smb1,ftp`` ; le plugin la rétablit lors de son installation. ``storage.type`` vaut
+toujours ``auto`` par défaut, ce qui se résout en S3 lorsque aucun point de terminaison n'est
+défini : la page de stockage de l'écran d'administration ne fonctionne donc qu'après
+l'installation du plugin, même si vous n'avez jamais indiqué ``s3`` vous-même. Vos valeurs
+``storage.*`` sont conservées, car elles se trouvent dans ``WEB-INF/conf/system.properties``,
+et un ``crawler.file.protocols`` existant n'est pas non plus remplacé par la mise à niveau.
+
+Rien à faire si vous n'utilisez pas Amazon S3 ni un stockage compatible S3 tel que MinIO.
 
 Le moteur de script intégré passe de Groovy à JavaScript
 --------------------------------------------------------
@@ -575,8 +603,9 @@ Le protocole de crawl ``storage`` a été supprimé
 ------------------------------------------------
 
 ``storage`` n'est plus accepté dans ``crawler.file.protocols`` ; la valeur fournie est
-``file,smb,smb1,ftp,s3``. Utilisez ``s3`` à la place et remplacez par un chemin ``s3:`` toute
-configuration de crawl de fichiers dont le chemin commence par ``storage:``.
+``file,smb,smb1,ftp``. Utilisez ``s3`` à la place et remplacez par un chemin ``s3:`` toute
+configuration de crawl de fichiers dont le chemin commence par ``storage:``. ``s3`` nécessite
+le plugin ``fess-storage-s3``.
 
 Migrations spécifiques à la 15.9
 ================================

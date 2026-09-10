@@ -15,7 +15,7 @@
 - ``smb://`` … Windows 文件服务器/共享文件夹（SMB/CIFS）
 - ``smb1://`` … 使用旧版 SMB1 协议的 Windows 文件服务器/共享文件夹
 - ``ftp://`` … FTP 服务器
-- ``s3://`` … Amazon S3 存储桶
+- ``s3://`` … Amazon S3 存储桶（需要 ``fess-storage-s3`` 插件）
 - ``gcs://`` … Google Cloud Storage 存储桶（需要 ``fess-storage-gcs`` 插件）
 
 管理方式
@@ -207,6 +207,10 @@
     client.accessKey=您的访问密钥
     client.secretKey=您的私密密钥
     client.region=ap-northeast-1
+
+.. note::
+   Amazon S3 与 S3 兼容存储的支持由 ``fess-storage-s3`` 插件提供，该插件不随发行包分发。请从
+   管理界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-storage-s3`` 。
 
 抓取 Google Cloud Storage 存储桶
 ---------------------------------

@@ -575,7 +575,7 @@ Specifies the storage type.
 When "Auto" is selected, the storage type is automatically determined from the endpoint.
 
 - **Auto**: Auto-detect from endpoint
-- **S3**: Amazon S3
+- **S3**: Amazon S3 (requires the ``fess-storage-s3`` plugin)
 - **GCS**: Google Cloud Storage (requires the ``fess-storage-gcs`` plugin)
 
 Bucket

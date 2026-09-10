@@ -15,7 +15,7 @@ Crawl targets are determined by the protocol specified in the path:
 - ``smb://`` … Windows file server / shared folder (SMB/CIFS)
 - ``smb1://`` … Windows file server / shared folder over the legacy SMB1 protocol
 - ``ftp://`` … FTP server
-- ``s3://`` … Amazon S3 bucket
+- ``s3://`` … Amazon S3 bucket (requires the ``fess-storage-s3`` plugin)
 - ``gcs://`` … Google Cloud Storage bucket (requires the ``fess-storage-gcs`` plugin)
 
 Configuration Management
@@ -206,6 +206,11 @@ S3 access requires authentication credentials. Add the following to "Configurati
     client.accessKey=YOUR_ACCESS_KEY
     client.secretKey=YOUR_SECRET_KEY
     client.region=ap-northeast-1
+
+.. note::
+   Amazon S3 and S3-compatible storage support comes from the ``fess-storage-s3`` plugin, which
+   is not part of the distribution. Install it from the System > Plugin page in the
+   administration screen, or with ``bin/fess-setup install plugin fess-storage-s3``.
 
 Crawling Google Cloud Storage Buckets
 -------------------------------------

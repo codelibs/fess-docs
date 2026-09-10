@@ -15,7 +15,7 @@ El objetivo del rastreo se determina según el protocolo especificado en la «Ru
 - ``smb://`` … servidor de archivos o carpeta compartida de Windows (SMB/CIFS)
 - ``smb1://`` … servidor de archivos o carpeta compartida de Windows mediante el antiguo protocolo SMB1
 - ``ftp://`` … servidor FTP
-- ``s3://`` … bucket de Amazon S3
+- ``s3://`` … bucket de Amazon S3 (requiere el plugin ``fess-storage-s3``)
 - ``gcs://`` … bucket de Google Cloud Storage (requiere el plugin ``fess-storage-gcs``)
 
 Método de gestión
@@ -207,6 +207,12 @@ El acceso a S3 requiere credenciales de autenticación. Agregue lo siguiente en 
     client.accessKey=SU_CLAVE_DE_ACCESO
     client.secretKey=SU_CLAVE_SECRETA
     client.region=ap-northeast-1
+
+.. note::
+   La compatibilidad con Amazon S3 y el almacenamiento compatible con S3 proviene del plugin
+   ``fess-storage-s3``, que no forma parte de la distribución. Instálelo desde la página
+   **Sistema > Plugin** de la pantalla de administración o con
+   ``bin/fess-setup install plugin fess-storage-s3``.
 
 Rastrear buckets de Google Cloud Storage
 -----------------------------------------

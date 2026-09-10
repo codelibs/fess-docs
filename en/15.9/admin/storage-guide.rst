@@ -29,6 +29,12 @@ S3 Settings
 - Secret Key: AWS secret key
 - Region: AWS region
 
+.. note::
+   Amazon S3 and S3-compatible storage support comes from the ``fess-storage-s3`` plugin, which
+   is not part of the distribution. Install it from the System > Plugin page in the
+   administration screen, or with ``bin/fess-setup install plugin fess-storage-s3``.
+   The "Auto" type also resolves to S3 when the endpoint is blank.
+
 GCS Settings
 ~~~~~~~~~~~~
 

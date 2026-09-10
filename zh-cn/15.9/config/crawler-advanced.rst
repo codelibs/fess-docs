@@ -177,7 +177,7 @@ HTTP 爬虫的线程池配置。
      - ``http,https``
    * - ``crawler.file.protocols``
      - 文件爬取协议
-     - ``file,smb,smb1,ftp,s3``
+     - ``file,smb,smb1,ftp``
    * - ``crawler.crawling.data.encoding``
      - 爬取数据编码
      - ``UTF-8``
@@ -188,7 +188,7 @@ HTTP 爬虫的线程池配置。
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3
+    crawler.file.protocols=file,smb,smb1,ftp
     crawler.crawling.data.encoding=UTF-8
 
 环境变量参数
@@ -1001,6 +1001,10 @@ S3/GCS 爬虫配置
 
 S3 爬虫
 -------
+
+.. note::
+   Amazon S3 与 S3 兼容存储的支持由 ``fess-storage-s3`` 插件提供，该插件不随发行包分发。请从
+   管理界面的「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-storage-s3`` 。
 
 用于爬取 Amazon S3 和 S3 兼容存储（MinIO 等）的配置。
 

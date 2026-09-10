@@ -29,6 +29,13 @@ Paramètres S3
 - Clé secrète : Clé secrète AWS
 - Région : Région AWS
 
+.. note::
+   La prise en charge d'Amazon S3 et des stockages compatibles S3 provient du plugin
+   ``fess-storage-s3``, qui ne fait pas partie de la distribution. Installez-le depuis la page
+   **Système > Plugin** de l'écran d'administration ou avec
+   ``bin/fess-setup install plugin fess-storage-s3``.
+   Le type « Automatique » se résout aussi en S3 lorsque le point de terminaison est vide.
+
 Paramètres GCS
 ~~~~~~~~~~~~~~
 

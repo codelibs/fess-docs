@@ -177,7 +177,7 @@ Supported Protocols
      - ``http,https``
    * - ``crawler.file.protocols``
      - File crawl protocols
-     - ``file,smb,smb1,ftp,s3``
+     - ``file,smb,smb1,ftp``
    * - ``crawler.crawling.data.encoding``
      - Crawling data encoding
      - ``UTF-8``
@@ -188,7 +188,7 @@ Configuration Example
 ::
 
     crawler.web.protocols=http,https
-    crawler.file.protocols=file,smb,smb1,ftp,s3
+    crawler.file.protocols=file,smb,smb1,ftp
     crawler.crawling.data.encoding=UTF-8
 
 Environment Variable Parameters
@@ -1002,6 +1002,11 @@ S3/GCS Crawler Configuration
 
 S3 Crawler
 ----------
+
+.. note::
+   Amazon S3 and S3-compatible storage support comes from the ``fess-storage-s3`` plugin, which
+   is not part of the distribution. Install it from the System > Plugin page in the
+   administration screen, or with ``bin/fess-setup install plugin fess-storage-s3``.
 
 Configuration for crawling S3 and S3-compatible storage (such as MinIO).
 Add the following to "Configuration Parameters" in the file crawl settings.

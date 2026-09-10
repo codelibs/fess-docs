@@ -29,6 +29,13 @@ Configuración de S3
 - Clave secreta: Clave secreta de AWS
 - Región: Región de AWS
 
+.. note::
+   La compatibilidad con Amazon S3 y el almacenamiento compatible con S3 proviene del plugin
+   ``fess-storage-s3``, que no forma parte de la distribución. Instálelo desde la página
+   **Sistema > Plugin** de la pantalla de administración o con
+   ``bin/fess-setup install plugin fess-storage-s3``.
+   El tipo "Automático" también se resuelve como S3 cuando el punto final está vacío.
+
 Configuración de GCS
 ~~~~~~~~~~~~~~~~~~~~
 

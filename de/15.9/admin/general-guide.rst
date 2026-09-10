@@ -575,7 +575,7 @@ Geben Sie den Speichertyp an.
 Bei Auswahl von „Automatisch" wird der Speichertyp automatisch anhand des Endpunkts bestimmt.
 
 - **Automatisch**: Automatische Erkennung vom Endpunkt
-- **S3**: Amazon S3
+- **S3**: Amazon S3 (erfordert das Plugin ``fess-storage-s3``)
 - **GCS**: Google Cloud Storage (erfordert das Plugin ``fess-storage-gcs``)
 
 Bucket

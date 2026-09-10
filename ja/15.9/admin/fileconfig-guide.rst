@@ -13,7 +13,7 @@
 - ``smb://`` … Windows ファイルサーバー／共有フォルダー（SMB/CIFS）
 - ``smb1://`` … 旧来の SMB1 プロトコルを使用する Windows ファイルサーバー／共有フォルダー
 - ``ftp://`` … FTP サーバー
-- ``s3://`` … Amazon S3 バケット
+- ``s3://`` … Amazon S3 バケット（ ``fess-storage-s3`` プラグインが必要）
 - ``gcs://`` … Google Cloud Storage バケット（ ``fess-storage-gcs`` プラグインが必要）
 
 管理方法
@@ -205,6 +205,11 @@ S3へのアクセスには認証情報が必要です。「設定パラメータ
     client.accessKey=YOUR_ACCESS_KEY
     client.secretKey=YOUR_SECRET_KEY
     client.region=ap-northeast-1
+
+.. note::
+   Amazon S3 と S3 互換ストレージへの対応は ``fess-storage-s3`` プラグインから提供されます。
+   配布物には同梱されていないため、管理画面の「システム > プラグイン」ページ、または
+   ``bin/fess-setup install plugin fess-storage-s3`` で導入してください。
 
 Google Cloud Storageバケットをクロール
 -----------------------------------

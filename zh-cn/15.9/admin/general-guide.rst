@@ -575,7 +575,7 @@ Google Chat Webhook URLs
 选择"自动"时,将根据端点自动判断存储类型。
 
 - **自动**: 根据端点自动判断
-- **S3**: Amazon S3
+- **S3**: Amazon S3（需要 ``fess-storage-s3`` 插件）
 - **GCS**: Google Cloud Storage（需要 ``fess-storage-gcs`` 插件）
 
 存储桶
