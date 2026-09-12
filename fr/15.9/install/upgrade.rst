@@ -508,18 +508,20 @@ HTTP une telle requête reste bloquée au lieu d'échouer.
    d'exploration, les utilisateurs et les journaux ; elle ne contient **pas** les documents
    explorés.
 
-Node.js pour Playwright n’est plus fourni
------------------------------------------
+Le robot Playwright passe dans un plugin
+----------------------------------------
 
-Les exécutables Node.js utilisés par le robot Playwright ne font plus partie de la distribution.
-L'archive ZIP passe ainsi de 438,5 Mio à 204,7 Mio.
+Le robot Playwright, ainsi que les exécutables Node.js qu'il utilise, ne font plus partie de la
+distribution. L'archive ZIP passe ainsi de 438,5 Mio à 204,7 Mio.
 
 Si une configuration d'exploration désigne le client Playwright, par exemple avec
-``client.crawlerClients=playwright:http://.*`` dans ses paramètres, installez Node.js avec la
-commande ci-dessous. ``bin/fess.in.sh`` le détecte et définit ``PLAYWRIGHT_NODEJS_PATH``.
+``client.crawlerClients=playwright:http://.*`` dans ses paramètres, installez à la fois le
+plugin et Node.js. Le plugin s'installe également depuis la page **Système > Plugin** de l'écran
+d'administration. ``bin/fess.in.sh`` détecte Node.js et définit ``PLAYWRIGHT_NODEJS_PATH``.
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 Rien à faire si vous n'utilisez pas le robot Playwright.

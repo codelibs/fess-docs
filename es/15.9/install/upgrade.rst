@@ -503,19 +503,21 @@ queda colgada en lugar de fallar.
    la administración y vuelva a rastrear. La copia de seguridad incluye la configuración de
    rastreo, los usuarios y los registros; **no** contiene los documentos rastreados.
 
-Node.js para Playwright ya no se incluye
-----------------------------------------
+El rastreador de Playwright pasa a un plugin
+--------------------------------------------
 
-Los ejecutables de Node.js que utiliza el rastreador de Playwright ya no forman parte de la
+El rastreador de Playwright, y los ejecutables de Node.js que utiliza, ya no forman parte de la
 distribución. Como consecuencia, el ZIP pasa de 438,5 MiB a 204,7 MiB.
 
 Si alguna configuración de rastreo indica el cliente de Playwright, por ejemplo con
-``client.crawlerClients=playwright:http://.*`` en sus parámetros de configuración, instale
-Node.js con la orden siguiente. ``bin/fess.in.sh`` lo detecta y establece
-``PLAYWRIGHT_NODEJS_PATH``.
+``client.crawlerClients=playwright:http://.*`` en sus parámetros de configuración, instale tanto
+el plugin como Node.js. El plugin también puede instalarse desde la página
+**Sistema > Plugin** de la pantalla de administración. ``bin/fess.in.sh`` detecta Node.js y
+establece ``PLAYWRIGHT_NODEJS_PATH``.
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 Si no utiliza el rastreador de Playwright, no hay nada que hacer.

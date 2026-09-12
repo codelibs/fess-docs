@@ -486,18 +486,20 @@ Docker）。
    使用内嵌 OpenSearch 运行时的索引数据无法继承。请新建外部 OpenSearch 服务器，通过管理界面的
    「备份」迁移配置后重新爬取。备份包含爬取配置、用户和日志，**不包含已爬取的文档**。
 
-不再随附 Playwright 所需的 Node.js
-----------------------------------
+Playwright 爬虫移至插件
+-----------------------
 
-Playwright 爬虫使用的 Node.js 可执行文件不再包含在发行包中。
+Playwright 爬虫及其使用的 Node.js 可执行文件不再包含在发行包中。
 因此 ZIP 从 438.5 MiB 减少到 204.7 MiB。
 
 如果爬取配置的设置参数中指定了 Playwright 客户端（例如
-``client.crawlerClients=playwright:http://.*``\ ），请使用以下命令安装 Node.js。
-``bin/fess.in.sh`` 会检测安装位置并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。
+``client.crawlerClients=playwright:http://.*``\ ），请同时安装插件与 Node.js。
+插件也可以从管理界面的「系统 > 插件」页面安装。 ``bin/fess.in.sh`` 会检测 Node.js
+的安装位置并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 如果不使用 Playwright 爬虫，则无需处理。
