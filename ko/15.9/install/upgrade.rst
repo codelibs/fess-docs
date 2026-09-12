@@ -492,18 +492,20 @@ Homebrew 또는 Docker 를 사용하십시오).
    새로 구축하고 관리 화면의 「백업」에서 설정을 옮긴 뒤 다시 크롤링하십시오. 백업에 포함되는
    것은 크롤링 설정, 사용자, 로그이며 **크롤링한 문서는 포함되지 않습니다**.
 
-Playwright 용 Node.js 동봉 종료
--------------------------------
+Playwright 크롤러를 플러그인으로 이동
+-------------------------------------
 
-Playwright 크롤러가 사용하는 Node.js 실행 파일은 더 이상 배포물에 포함되지 않습니다.
-이에 따라 ZIP 은 438.5 MiB 에서 204.7 MiB 가 되었습니다.
+Playwright 크롤러와 그것이 사용하는 Node.js 실행 파일은 더 이상 배포물에 포함되지
+않습니다. 이에 따라 ZIP 은 438.5 MiB 에서 204.7 MiB 가 되었습니다.
 
 크롤링 설정의 설정 파라미터에서 ``client.crawlerClients=playwright:http://.*`` 와 같이
-Playwright 클라이언트를 지정한 경우에는 아래 명령으로 Node.js 를 설치하십시오.
-``bin/fess.in.sh`` 가 설치 위치를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다.
+Playwright 클라이언트를 지정한 경우에는 플러그인과 Node.js 를 모두 설치하십시오.
+플러그인은 관리 화면의 「시스템 > 플러그인」 페이지에서도 설치할 수 있습니다.
+``bin/fess.in.sh`` 가 Node.js 설치 위치를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다.
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 Playwright 크롤러를 사용하지 않는 경우에는 대응이 필요 없습니다.

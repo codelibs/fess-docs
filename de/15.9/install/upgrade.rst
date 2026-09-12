@@ -503,19 +503,21 @@ hängt eine solche Anfrage, statt fehlzuschlagen.
    Sicherungsseite im Administrationsbereich und crawlen Sie erneut. Die Sicherung umfasst
    Crawl-Einstellungen, Benutzer und Protokolle, **nicht** die gecrawlten Dokumente.
 
-Node.js für Playwright wird nicht mehr mitgeliefert
----------------------------------------------------
+Playwright-Crawler wird als Plugin ausgeliefert
+-----------------------------------------------
 
-Die Node.js-Programmdateien, die der Playwright-Crawler ausführt, sind nicht mehr Teil der
-Distribution. Das ZIP schrumpft dadurch von 438,5 MiB auf 204,7 MiB.
+Der Playwright-Crawler und die Node.js-Programmdateien, die er ausführt, sind nicht mehr Teil
+der Distribution. Das ZIP schrumpft dadurch von 438,5 MiB auf 204,7 MiB.
 
 Wenn eine Crawl-Konfiguration den Playwright-Client benennt, etwa mit
 ``client.crawlerClients=playwright:http://.*`` in ihren Konfigurationsparametern, installieren
-Sie Node.js mit dem folgenden Befehl. ``bin/fess.in.sh`` findet es und setzt
-``PLAYWRIGHT_NODEJS_PATH``.
+Sie sowohl das Plugin als auch Node.js. Das Plugin lässt sich auch über die Seite
+**System > Plugin** im Administrationsbereich installieren. ``bin/fess.in.sh`` findet Node.js
+und setzt ``PLAYWRIGHT_NODEJS_PATH``.
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 Ohne den Playwright-Crawler ist nichts zu tun.

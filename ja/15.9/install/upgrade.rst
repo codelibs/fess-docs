@@ -493,18 +493,20 @@ Docker を使用してください）。
    再クロールしてください。バックアップに含まれるのはクロール設定・ユーザー・ログで、
    **クロール済みの文書は含まれません**。
 
-Playwright 用 Node.js の同梱を終了
-----------------------------------
+Playwright クローラをプラグインへ移動
+-------------------------------------
 
-Playwright クローラが使用する Node.js の実行ファイルは、配布物に含まれなくなりました。
-これにより ZIP は 438.5 MiB から 204.7 MiB になっています。
+Playwright クローラと、それが使用する Node.js の実行ファイルは、配布物に含まれなく
+なりました。これにより ZIP は 438.5 MiB から 204.7 MiB になっています。
 
 クロール設定の設定パラメータで ``client.crawlerClients=playwright:http://.*`` のように
-Playwright クライアントを指定している場合は、次のコマンドで Node.js を導入してください。
-``bin/fess.in.sh`` が導入先を検出し、 ``PLAYWRIGHT_NODEJS_PATH`` を設定します。
+Playwright クライアントを指定している場合は、プラグインと Node.js の両方を導入してください。
+プラグインは管理画面の「システム > プラグイン」ページからも導入できます。 ``bin/fess.in.sh``
+が Node.js の導入先を検出し、 ``PLAYWRIGHT_NODEJS_PATH`` を設定します。
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 Playwright クローラを使用していない場合、対応は不要です。

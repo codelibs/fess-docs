@@ -496,18 +496,20 @@ relies on, and over HTTP such a request hangs rather than failing.
    OpenSearch server, move the settings with the admin Backup page, and re-crawl. The backup
    covers crawl settings, users and logs; it does **not** contain the crawled documents.
 
-Node.js for Playwright is no longer bundled
--------------------------------------------
+Playwright Crawler Moved to a Plugin
+------------------------------------
 
-The Node.js executables that the Playwright crawler runs are no longer part of the
+The Playwright crawler, and the Node.js executables it runs, are no longer part of the
 distribution. The ZIP drops from 438.5 MiB to 204.7 MiB as a result.
 
 If a crawl configuration names the Playwright client, for example with
-``client.crawlerClients=playwright:http://.*`` in its configuration parameters, install Node.js
-with the command below. ``bin/fess.in.sh`` discovers it and sets ``PLAYWRIGHT_NODEJS_PATH``.
+``client.crawlerClients=playwright:http://.*`` in its configuration parameters, install both the
+plugin and Node.js. The plugin is also available from the System > Plugin page in the
+administration screen. ``bin/fess.in.sh`` discovers Node.js and sets ``PLAYWRIGHT_NODEJS_PATH``.
 
 ::
 
+    $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
 
 Nothing is needed if you do not use the Playwright crawler.
