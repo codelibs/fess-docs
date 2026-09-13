@@ -38,7 +38,15 @@ El valor predeterminado es 1000 caracteres.
 Registro de Tiempos de Espera en Búsqueda
 ==========================================
 
-Esta es la configuración de registro para cuando se excede el tiempo de espera durante las búsquedas.
+Indica si se registran las búsquedas cuyos resultados están incompletos porque se agotó el tiempo de espera de la consulta o falló un shard.
+Si está activada, se escribe una línea de registro de nivel WARN en los siguientes casos:
+
+- ``[SEARCH TIMEOUT]``: se agotó el tiempo de espera de la consulta (``query.timeout``) y el motor de búsqueda dejó de recopilar resultados.
+- ``[SEARCH SHARD FAILURE]``: fallaron uno o más shards.
+
+Si ocurren ambos casos, se escriben ambas líneas.
+Cada línea contiene ``exec_time`` (milisegundos), la solicitud y la respuesta completa.
+En caso de fallo de un shard, el motivo se encuentra en ``_shards.failures`` de esa respuesta; el propio motor de búsqueda solo lo registra en el nivel DEBUG.
 El valor predeterminado es ``true`` (activado).
 ::
 

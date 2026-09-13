@@ -96,6 +96,8 @@ HTTP 方法            GET
         "end_record_number": 20,
         "page_numbers": ["1", "2", "3"],
         "partial": false,
+        "timed_out": false,
+        "shard_failed": false,
         "search_query": "title:Fess OR content:Fess",
         "requested_time": 1717142400000,
         "related_query": ["enterprise search"],
@@ -159,7 +161,11 @@ HTTP 方法            GET
    * - ``page_numbers``
      - 分页器中显示的页码数组（字符串）。
    * - ``partial``
-     - 结果是否为部分结果（bool）。
+     - 结果是否可能不完整（bool）。\ ``timed_out`` 或 ``shard_failed`` 为 ``true`` 时始终为 ``true``\ ；两者均为 ``false`` 时，也可能因无法执行搜索等原因而为 ``true``\ 。
+   * - ``timed_out``
+     - 是否超过了搜索超时值 ``query.timeout``\ ，导致搜索引擎停止收集结果（bool）。
+   * - ``shard_failed``
+     - 是否有一个或多个分片搜索失败（bool）。
    * - ``search_query``
      - 实际执行的搜索查询。
    * - ``requested_time``

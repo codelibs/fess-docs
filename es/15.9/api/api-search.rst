@@ -96,6 +96,8 @@ En caso de éxito (200), se devuelven los siguientes campos directamente bajo ``
         "end_record_number": 20,
         "page_numbers": ["1", "2", "3"],
         "partial": false,
+        "timed_out": false,
+        "shard_failed": false,
         "search_query": "title:Fess OR content:Fess",
         "requested_time": 1717142400000,
         "related_query": ["enterprise search"],
@@ -159,7 +161,11 @@ Los campos son los siguientes:
    * - ``page_numbers``
      - Array de números de página para mostrar en el paginador (cadenas de texto).
    * - ``partial``
-     - Si los resultados son parciales (bool).
+     - Si los resultados pueden ser parciales (bool). Siempre es ``true`` cuando ``timed_out`` o ``shard_failed`` es ``true``; también puede ser ``true`` sin que lo sea ninguno de los dos, por ejemplo cuando no se pudo ejecutar la búsqueda.
+   * - ``timed_out``
+     - Si se agotó el tiempo de espera de la consulta (``query.timeout``) y el motor de búsqueda dejó de recopilar resultados (bool).
+   * - ``shard_failed``
+     - Si fallaron uno o más shards (bool).
    * - ``search_query``
      - La consulta de búsqueda que se ejecutó realmente.
    * - ``requested_time``

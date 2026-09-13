@@ -96,6 +96,8 @@ En cas de succès (200), les champs suivants sont retournés directement sous ``
         "end_record_number": 20,
         "page_numbers": ["1", "2", "3"],
         "partial": false,
+        "timed_out": false,
+        "shard_failed": false,
         "search_query": "title:Fess OR content:Fess",
         "requested_time": 1717142400000,
         "related_query": ["enterprise search"],
@@ -159,7 +161,11 @@ Les détails de chaque champ sont les suivants.
    * - ``page_numbers``
      - Tableau des numéros de page à afficher dans le paginateur (chaînes de caractères).
    * - ``partial``
-     - Indique si les résultats sont partiels (bool).
+     - Indique si les résultats peuvent être partiels (bool). Vaut toujours ``true`` lorsque ``timed_out`` ou ``shard_failed`` vaut ``true`` ; peut aussi valoir ``true`` sans que ce soit le cas de l'un ou l'autre, par exemple lorsque la recherche n'a pas pu être exécutée.
+   * - ``timed_out``
+     - Indique si le délai d'expiration de la requête (``query.timeout``) a été dépassé et si le moteur de recherche a cessé de collecter les résultats (bool).
+   * - ``shard_failed``
+     - Indique si un ou plusieurs shards ont échoué (bool).
    * - ``search_query``
      - Requête de recherche réellement exécutée.
    * - ``requested_time``
