@@ -33,7 +33,7 @@ You can specify the maximum character count for searches. The default value is 1
 Search Timeout Logging
 ======================
 
-This setting controls log output when a timeout occurs during a search. The default value is `true (enabled)`.
+This setting controls whether searches whose results are incomplete are logged. A WARN line starting with `[SEARCH TIMEOUT]` is written when the query timed out, and one starting with `[SEARCH SHARD FAILURE]` when one or more shards failed; the reason for a shard failure is in `_shards.failures` of the logged response. The default value is `true (enabled)`.
 ::
 
     query.timeout.logging=true

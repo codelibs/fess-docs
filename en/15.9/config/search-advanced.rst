@@ -38,7 +38,15 @@ The default is 1000 characters.
 Search Timeout Logging
 ======================
 
-Log output setting when a search timeout occurs.
+Whether to log searches whose results are incomplete because the query timed out or a shard failed.
+When enabled, a WARN log line is written in the following cases:
+
+- ``[SEARCH TIMEOUT]``: the query timeout (``query.timeout``) elapsed and the search engine stopped collecting results.
+- ``[SEARCH SHARD FAILURE]``: one or more shards failed.
+
+When both happen, both lines are written.
+Each line contains ``exec_time`` (milliseconds), the request and the full response.
+For a shard failure, the reason is in ``_shards.failures`` of that response; the search engine itself logs it only at DEBUG level.
 The default is ``true`` (enabled).
 ::
 

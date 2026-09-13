@@ -38,7 +38,15 @@ La valeur initiale est de 1000 caractères.
 Journalisation du délai d'expiration lors de la recherche
 ==========================================================
 
-Paramètre de journalisation en cas de délai d'expiration lors de la recherche.
+Indique si les recherches dont les résultats sont incomplets, parce que le délai d'expiration de la requête a été dépassé ou qu'un shard a échoué, sont journalisées.
+Lorsque ce paramètre est activé, une ligne de journal de niveau WARN est écrite dans les cas suivants :
+
+- ``[SEARCH TIMEOUT]`` : le délai d'expiration de la requête (``query.timeout``) a été dépassé et le moteur de recherche a cessé de collecter les résultats.
+- ``[SEARCH SHARD FAILURE]`` : un ou plusieurs shards ont échoué.
+
+Si les deux se produisent, les deux lignes sont écrites.
+Chaque ligne contient ``exec_time`` (millisecondes), la requête et la réponse complète.
+En cas d'échec d'un shard, la cause figure dans ``_shards.failures`` de cette réponse ; le moteur de recherche lui-même ne la journalise qu'au niveau DEBUG.
 La valeur initiale est ``true`` (activé).
 ::
 

@@ -38,7 +38,15 @@ Standardwert ist 1000 Zeichen.
 Protokollierung von Such-Timeouts
 ==================================
 
-Protokollierungseinstellung für den Fall von Such-Timeouts.
+Legt fest, ob Suchen protokolliert werden, deren Ergebnisse unvollständig sind, weil das Such-Timeout abgelaufen ist oder ein Shard fehlgeschlagen ist.
+Ist die Einstellung aktiviert, wird in folgenden Fällen eine Protokollzeile der Stufe WARN ausgegeben:
+
+- ``[SEARCH TIMEOUT]``: Das Such-Timeout (``query.timeout``) ist abgelaufen und die Suchmaschine hat das Sammeln von Treffern abgebrochen.
+- ``[SEARCH SHARD FAILURE]``: Bei einem oder mehreren Shards ist ein Fehler aufgetreten.
+
+Tritt beides auf, werden beide Zeilen ausgegeben.
+Jede Zeile enthält ``exec_time`` (Millisekunden), die Anfrage und die vollständige Antwort.
+Bei einem Shard-Fehler steht die Ursache in ``_shards.failures`` dieser Antwort; die Suchmaschine selbst protokolliert sie nur auf der Stufe DEBUG.
 Standardwert ist ``true`` (aktiviert).
 ::
 

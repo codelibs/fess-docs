@@ -1042,7 +1042,7 @@ Index
     - Timeout (ms) for search queries.
     - ``10000``
   * - query.timeout.logging
-    - Whether to enable logging for query timeouts.
+    - Whether to log searches whose results are incomplete because the query timed out or a shard failed.
     - ``true``
   * - query.track.total.hits
     - Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused.

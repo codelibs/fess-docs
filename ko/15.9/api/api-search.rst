@@ -96,6 +96,8 @@ HTTP 메서드          GET
         "end_record_number": 20,
         "page_numbers": ["1", "2", "3"],
         "partial": false,
+        "timed_out": false,
+        "shard_failed": false,
         "search_query": "title:Fess OR content:Fess",
         "requested_time": 1717142400000,
         "related_query": ["enterprise search"],
@@ -159,7 +161,11 @@ HTTP 메서드          GET
    * - ``page_numbers``
      - 페이지네이션에 표시할 페이지 번호 배열 (문자열).
    * - ``partial``
-     - 결과가 부분적인지 여부 (bool).
+     - 결과가 부분적일 수 있는지 여부 (bool). ``timed_out`` 또는 ``shard_failed`` 가 ``true`` 이면 항상 ``true`` 입니다. 둘 다 ``false`` 여도 검색을 실행할 수 없었던 경우 등에는 ``true`` 가 될 수 있습니다.
+   * - ``timed_out``
+     - 검색 시 타임아웃 값 ``query.timeout`` 을 초과하여 검색 엔진이 결과 수집을 중단했는지 여부 (bool).
+   * - ``shard_failed``
+     - 하나 이상의 샤드에서 검색이 실패했는지 여부 (bool).
    * - ``search_query``
      - 실제로 실행된 검색 쿼리.
    * - ``requested_time``

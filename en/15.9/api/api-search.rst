@@ -96,6 +96,8 @@ On success (200), the following fields are returned directly under ``response`` 
         "end_record_number": 20,
         "page_numbers": ["1", "2", "3"],
         "partial": false,
+        "timed_out": false,
+        "shard_failed": false,
         "search_query": "title:Fess OR content:Fess",
         "requested_time": 1717142400000,
         "related_query": ["enterprise search"],
@@ -159,7 +161,11 @@ Each field is described below.
    * - ``page_numbers``
      - Array of page numbers to display in the pager (strings).
    * - ``partial``
-     - Whether the result is partial (bool).
+     - Whether the result may be incomplete (bool). Always ``true`` when ``timed_out`` or ``shard_failed`` is ``true``; it can also be ``true`` when neither is, for example when the search could not be run.
+   * - ``timed_out``
+     - Whether the query timeout (``query.timeout``) elapsed and the search engine stopped collecting results (bool).
+   * - ``shard_failed``
+     - Whether one or more shards failed (bool).
    * - ``search_query``
      - The actual search query that was executed.
    * - ``requested_time``
