@@ -1,0 +1,168 @@
+====================
+fess-setup コマンド
+====================
+
+``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright クローラが使う Node.js、 |Fess| のプラグインを導入します。インストール状態の診断もできます。
+
+|Fess| のディレクトリで実行します。引数を付けずに実行すると、コマンドの一覧を表示します。
+
+::
+
+    $ cd /path/to/fess-15.9.0
+    $ bin/fess-setup <command> [options]
+
+終了コード
+==========
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - コード
+     - 意味
+   * - ``0``
+     - コマンドが成功しました。
+   * - ``1``
+     - コマンドが失敗しました。ダウンロードに失敗した、指定したバージョンが存在しない、このプラットフォーム向けの OpenSearch が配布されていない、 ``check`` が問題を検出した、などの場合です。
+   * - ``2``
+     - コマンドラインの誤りです。未知のコマンドを指定した、プラグイン名などの引数が不足している、などの場合です。
+
+OpenSearch と Node.js の導入
+============================
+
+install opensearch
+------------------
+
+::
+
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+
+この |Fess| が対応するバージョンの OpenSearch を |Fess| のディレクトリの ``opensearch/`` にダウンロードし、 |Fess| が必要とする 4 つのプラグイン（ ``opensearch-analysis-fess`` 、 ``opensearch-analysis-extension`` 、 ``opensearch-minhash`` 、 ``opensearch-configsync`` ）を導入したうえで、その ``config/opensearch.yml`` に次の設定を追記します。
+
+- ``configsync.config_path`` （値はその OpenSearch の ``config/dictionary`` ディレクトリ）
+- ``plugins.security.disabled: true``
+
+``opensearch.yml`` にすでにある設定は追記しません。また、 ``plugins.security.*`` の設定が 1 つでもある場合は ``plugins.security.disabled: true`` を追記しません。OpenSearch のディレクトリがすでにある場合はダウンロードを省略するため、既存のインストールに対して再実行すると、足りない設定だけが追記されます。
+
+コマンドは追記した設定を表示し、続けて ``bin/fess.in.sh`` がこの OpenSearch を自動で見つけられるかどうかを表示します。 |Fess| のディレクトリの ``opensearch/`` の下で ``config/dictionary`` ディレクトリを持つ OpenSearch がこれ 1 つだけであれば見つけられます。このとき ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）が ``FESS_DICTIONARY_PATH`` をそのディレクトリに設定するため、同じホストで動かす OpenSearch であれば、ほかに設定は必要ありません。見つけられない場合は、設定すべき ``SEARCH_ENGINE_HTTP_URL`` と ``FESS_DICTIONARY_PATH`` の値を表示します。設定方法は :doc:`install-linux` または :doc:`install-windows` を参照してください。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - オプション
+     - 説明
+   * - ``--dest <dir>``
+     - OpenSearch の展開先を、 |Fess| のディレクトリの ``opensearch/`` の代わりに指定します。 ``bin/fess.in.sh`` は、このディレクトリの外にある OpenSearch を探しません。
+   * - ``--version <version>``
+     - 導入する OpenSearch のバージョンです。プラグインも同じバージョンで導入されます。
+
+OpenSearch の公式配布は Linux 向けと Windows 向けだけです。macOS などほかのプラットフォームでは、何もダウンロードせずに終了コード ``1`` で終了し、Homebrew で OpenSearch を導入して ``install opensearch-plugins`` でプラグインを入れる方法か、Docker を使う方法を案内します。
+
+.. warning::
+
+   ``plugins.security.disabled: true`` を設定した OpenSearch は、認証なしでリクエストを受け付けます。OpenSearch は ``network.host`` を設定しない限りループバックアドレスでのみ待ち受けます。それ以外のアドレスで待ち受ける前に、代わりにセキュリティプラグインを設定してください。詳細は :doc:`security` を参照してください。
+
+install opensearch-plugins
+--------------------------
+
+::
+
+    $ bin/fess-setup install opensearch-plugins --opensearch-home <dir> [--version <version>]
+
+すでにある OpenSearch に、 |Fess| が必要とする 4 つのプラグインを導入します。その OpenSearch の ``bin/opensearch-plugin install`` を 4 回実行する代わりに使えます。 ``--opensearch-home`` には OpenSearch のインストールディレクトリを指定します（必須）。 ``--version`` はプラグインのバージョンで、OpenSearch のバージョンと一致させる必要があります。
+
+このコマンドは ``opensearch.yml`` を変更しません。 ``configsync.config_path`` などの設定は、 :doc:`install-linux` または :doc:`install-windows` に従って追加してください。
+
+install nodejs
+--------------
+
+::
+
+    $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
+
+Playwright クローラが必要とする Node.js を、 |Fess| のディレクトリの ``nodejs/`` にダウンロードします。 ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）がこれを見つけて ``PLAYWRIGHT_NODEJS_PATH`` を設定します。 ``--dest`` で |Fess| のディレクトリの外に展開した場合は、代わりに ``bin/fess.in.sh`` に追加する ``PLAYWRIGHT_NODEJS_PATH`` の行を表示します。 ``--version`` で別のバージョンの Node.js を指定できます。Playwright クローラについては :doc:`../config/crawler-advanced` を参照してください。
+
+プラグインの管理
+================
+
+以下のコマンドは、 |Fess| のプラグインディレクトリ ``app/WEB-INF/plugin`` を操作します。プラグインを導入、更新、削除した後は |Fess| を再起動してください。プラグインは管理画面の「システム > プラグイン」ページからも管理できます。 :doc:`../admin/plugin-guide` を参照してください。
+
+``install plugin`` 、 ``list plugins`` 、 ``upgrade plugins`` には ``--repository <url>`` を指定できます。指定すると、バージョンの一覧、jar、チェックサムをすべてその 1 つの Maven リポジトリ（社内のミラーなど）から取得し、既定のリリースリポジトリ、スナップショットリポジトリ、GitHub は使用しません。
+
+install plugin
+--------------
+
+::
+
+    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>]
+
+``fess-script-groovy`` や ``fess-ds-git`` などの |Fess| プラグインを 1 つ以上導入します。バージョンを付けない名前には、この |Fess| 向けにビルドされた最新のバージョンが導入されます。 ``<name>:<version>`` でそのプラグインのバージョンを固定でき、 ``--version`` はバージョンを付けなかった名前すべてに使われます。新しいバージョンの導入が完了した後に、同じプラグインの以前のバージョンが削除されます。
+
+jar はプラグインの GitHub リリースから取得し、リリースに該当するファイルがない場合は Maven リポジトリから取得します。いずれも Maven リポジトリが公開している SHA-1 チェックサムで検証します。 |Fess| の開発版では、同じ系列のスナップショットビルドも導入対象になり、そちらが優先されます。
+
+使用例は :doc:`../admin/plugin-guide` を参照してください。
+
+list plugins
+------------
+
+::
+
+    $ bin/fess-setup list plugins [--repository <url>]
+
+この |Fess| 向けに公開されているプラグインを一覧表示し、導入済みのものには ``(installed: <version>)`` を付けます。導入済みでもリポジトリに公開されていないプラグイン（ローカルでビルドした jar など）は、別に一覧表示します。 |Fess| の開発版では、スナップショットリポジトリも参照します。
+
+list installed
+--------------
+
+::
+
+    $ bin/fess-setup list installed
+
+導入済みのプラグインとそのバージョンを、リポジトリに問い合わせずに一覧表示します。
+
+upgrade plugins
+---------------
+
+::
+
+    $ bin/fess-setup upgrade plugins [--repository <url>]
+
+導入済みのすべてのプラグインを、この |Fess| に合うバージョンで導入し直します。すでにそのバージョンになっているプラグインはそのままです。 ``app/WEB-INF/plugin`` のプラグインは特定の |Fess| のリリース向けにビルドされているため、 |Fess| をアップグレードした後に実行してください。
+
+remove plugin
+-------------
+
+::
+
+    $ bin/fess-setup remove plugin <name>...
+
+指定したプラグインの jar を削除します。導入されていない名前はその旨を表示するだけで、終了コードには影響しません。
+
+インストール状態の確認
+======================
+
+list
+----
+
+::
+
+    $ bin/fess-setup list
+
+``install`` でダウンロードするコンポーネント（ ``opensearch`` と ``nodejs`` ）を、それぞれのバージョンとともに表示します。
+
+check
+-----
+
+::
+
+    $ bin/fess-setup check [--url <engine url>] [--playwright]
+
+インストール状態を診断し、確認項目ごとに ``OK`` 、 ``WARN`` 、 ``FAIL`` のいずれかを付けて 1 行ずつ表示します。
+
+- 検索エンジン: 接続できるか、バージョン（ノード間でバージョンが異なる場合は警告）、 |Fess| が必要とする 4 つのプラグインが導入されているか、 ``configsync`` が応答するか
+- |Fess| : プラグインディレクトリが存在して書き込めるか、導入済みの各プラグイン（別の |Fess| のリリース向けのものは警告、2 つのバージョンが導入されているものは失敗）、 |Fess| のディレクトリの ``nodejs/`` に Node.js が導入されているか
+
+検索エンジンの URL は ``--url`` 、指定がなければ環境変数 ``SEARCH_ENGINE_HTTP_URL`` 、それもなければ ``http://localhost:9200`` です。 ``bin/fess-setup`` は ``bin/fess.in.sh`` を読まないため、OpenSearch がほかの場所にある場合は ``--url`` を指定してください。Node.js がないことは報告されるだけですが、 ``--playwright`` を指定すると失敗として扱われます。
+
+失敗した項目がなければ、警告があっても終了コード ``0`` で終了します。失敗した項目があれば終了コード ``1`` で終了します。

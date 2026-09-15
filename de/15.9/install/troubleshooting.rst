@@ -99,6 +99,15 @@ Beim Ausführen des Fess-Startbefehls tritt ein Fehler auf oder es endet sofort.
 
    Bei normalem Betrieb wird eine JSON-Antwort zurückgegeben.
 
+   Antwortet kein OpenSearch, versucht |Fess| es etwa eine Minute lang erneut und bricht den Start
+   dann mit der folgenden Meldung auf der Konsole und in ``logs/fess.log`` ab::
+
+       The search engine at http://localhost:9200 did not become available within 60221ms. Check that OpenSearch is running and reachable. If there is none yet, run bin/fess-setup install opensearch to set one up.
+
+   Starten Sie OpenSearch, oder überprüfen Sie ``SEARCH_ENGINE_HTTP_URL``. Eine neue
+   ZIP-Installation hat kein OpenSearch, bis eines mit ``bin/fess-setup install opensearch``
+   eingerichtet wurde; siehe :doc:`install-linux`.
+
 2. **Überprüfen Sie Portnummer-Konflikte**::
 
        $ sudo netstat -tuln | grep 8080

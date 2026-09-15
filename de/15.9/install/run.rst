@@ -29,6 +29,21 @@ Für Hintergrundstart::
 
     $ ./bin/opensearch -d
 
+.. note::
+
+   ``bin/fess-setup install opensearch`` legt OpenSearch in ``opensearch/opensearch-3.8.0`` im
+   |Fess|-Verzeichnis ab.
+
+.. important::
+
+   Starten Sie OpenSearch als normaler Benutzer. Als ``root`` verweigert es den Start und beendet
+   sich mit ``can not run opensearch as root``. Der verweigerte Start hinterlässt dennoch Dateien wie
+   ``config/opensearch.keystore`` im Besitz von ``root``, und der nächste Start als normaler
+   Benutzer schlägt dann mit ``AccessDeniedException`` fehl. Übertragen Sie das
+   OpenSearch-Verzeichnis vor dem nächsten Start wieder an diesen Benutzer, zum Beispiel::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.8.0
+
 Start von Fess
 ~~~~~~~~~~~~~~
 

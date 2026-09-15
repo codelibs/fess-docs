@@ -99,6 +99,12 @@ Fess 无法启动
 
    如果正常，会返回 JSON 响应。
 
+   没有 OpenSearch 响应时，|Fess| 会重试约 1 分钟后停止启动，并在控制台和 ``logs/fess.log`` 中输出以下消息::
+
+       The search engine at http://localhost:9200 did not become available within 60221ms. Check that OpenSearch is running and reachable. If there is none yet, run bin/fess-setup install opensearch to set one up.
+
+   请启动 OpenSearch，或确认 ``SEARCH_ENGINE_HTTP_URL``\ 。新安装的 ZIP 版在使用 ``bin/fess-setup install opensearch`` 设置之前没有 OpenSearch；请参阅 :doc:`install-linux`\ 。
+
 2. **确认端口号冲突**::
 
        $ sudo netstat -tuln | grep 8080

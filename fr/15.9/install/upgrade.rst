@@ -509,6 +509,13 @@ de recherche est toujours un serveur distinct.
 opensearch`` en installe un (Linux et Windows uniquement ; OpenSearch ne publie pas de version
 macOS, utilisez donc Homebrew ou Docker).
 
+|Fess| a également besoin que ``FESS_DICTIONARY_PATH`` corresponde à ``configsync.config_path``
+dans le fichier ``opensearch.yml`` de cet OpenSearch ; sans cela, |Fess| ne peut pas créer ses
+index. Le ``bin/fess.in.sh`` de la 15.9 (``bin\fess.in.bat`` sous Windows) le définit par lui-même
+lorsque ``opensearch/`` dans le répertoire de |Fess| contient exactement un OpenSearch installé par
+``bin/fess-setup install opensearch``. Pour tout autre OpenSearch, définissez-le comme décrit dans
+:doc:`install-linux` ou :doc:`install-windows`.
+
 Sont également supprimés :
 
 - le répertoire ``es/`` (``es/modules``, ``es/plugins`` et ``es/data``)

@@ -51,5 +51,7 @@
 
 새 버전의 설치가 완료된 후에 같은 플러그인의 이전 버전이 삭제됩니다. 존재하지 않는 버전을 지정하면 종료 코드 1로 종료되므로, Dockerfile 등의 빌드 단계에 포함하더라도 플러그인이 빠진 채로 진행되지 않습니다.
 
+``bin/fess-setup list plugins`` 는 이 |Fess| 용으로 공개된 플러그인과 설치 여부를, ``list installed`` 는 저장소에 조회하지 않고 설치된 플러그인을 표시합니다. ``upgrade plugins`` 는 설치된 모든 플러그인을 이 |Fess| 에 맞는 버전으로 다시 설치하고, ``remove plugin`` 은 플러그인을 삭제합니다. 플러그인을 설치, 업그레이드, 삭제한 후에는 |Fess| 를 재시작하십시오. 모든 명령과 옵션은 :doc:`../install/fess-setup` 을 참조하십시오.
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/plugin-2.png

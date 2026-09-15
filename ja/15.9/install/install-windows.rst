@@ -62,15 +62,19 @@ Java 21 以降が表示されることを確認してください。
 
 .. tip::
 
-   |Fess| に同梱の ``bin\fess-setup`` で、以下の手順をまとめて実行できます。
-   OpenSearch の取得と展開、必要なプラグインの導入、 ``configsync`` の設定までを行います。
+   |Fess| に同梱の ``bin\fess-setup`` で、以下の手順をまとめて実行できます。OpenSearch を |Fess| のディレクトリの ``opensearch\`` に取得・展開し、必要なプラグインを導入したうえで、その ``config\opensearch.yml`` に ``configsync.config_path`` と ``plugins.security.disabled: true`` を追加します。先にステップ 2 のとおり |Fess| の ZIP を展開しておいてください。
 
    ::
 
        > cd C:\fess-15.9.0
        > bin\fess-setup install opensearch
 
+   この方法で導入した OpenSearch は ``bin\fess.in.bat`` が見つけ、その ``config\dictionary`` ディレクトリを |Fess| に渡すため、OpenSearch を同じホストで動かす限り、ステップ 2 の「Fess の設定」で変更は必要ありません。コマンドは、追加した設定と、 ``bin\fess.in.bat`` がこのインストールを見つけられるかどうかを表示します。OpenSearch を ``localhost`` 以外のアドレスで待ち受けさせる前に、「OpenSearch の設定」の警告を確認してください。
+
    手順を個別に確認したい場合や、既存の OpenSearch を使う場合は、以下に従ってください。
+   既存の OpenSearch にプラグインだけを入れる場合は
+   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.8.0`` を使用します。
+   すべてのコマンドについては :doc:`fess-setup` を参照してください。
 
 OpenSearch のダウンロード
 -----------------------
@@ -166,6 +170,8 @@ Fess のダウンロード
 Fess の設定
 ----------
 
+``bin\fess-setup install opensearch`` で |Fess| のディレクトリの ``opensearch\`` に導入し、同じホストで動かしている OpenSearch であれば、ここでの設定は必要ありません。上記の手順で OpenSearch を導入した場合、OpenSearch を別のホストで実行している場合、 ``opensearch\`` に ``bin\fess-setup`` で導入した OpenSearch が 2 つ以上ある場合などは、以下のとおり接続先を設定します。
+
 ``bin\fess.in.bat`` をテキストエディタで開きます。
 このファイルの末尾付近には、外部 OpenSearch クラスターへ接続するための設定が、あらかじめコメントアウトされた状態で用意されています。
 
@@ -173,7 +179,7 @@ Fess の設定
 
     REM External opensearch cluster
     REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=%SEARCH_ENGINE_HOME%/config/
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch/config/dictionary
 
 下 2 行の先頭にある ``REM `` を削除してコメントを解除し、``fess.dictionary.path`` の値を OpenSearch の設定同期用パスに変更します。
 
@@ -187,7 +193,7 @@ Fess の設定
 
    - ``fess.dictionary.path`` には、OpenSearch の ``opensearch.yml`` で指定した ``configsync.config_path`` と同じパスを設定してください。
    - OpenSearch を別のホストで実行している場合は、``fess.search_engine.http_address`` のホスト名または IP アドレスを適切な値に変更してください。
-   - パスの区切り文字は ``/`` を使用してください。
+   - パスの区切り文字は ``/`` を使用してください。 |Fess| はこのパスをインデックスの設定に埋め込み、その際に ``\`` が失われるため、 ``\`` で書いたパスは見つかりません。
    - 新たに ``set FESS_JAVA_OPTS=...`` の行を追加するのではなく、既存のコメント行を解除して編集してください。同じオプションを重複して指定すると、意図しない動作の原因となる場合があります。
 
 .. tip::

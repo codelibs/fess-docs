@@ -51,5 +51,7 @@
 
 新版本安装完成后,将删除同一插件的旧版本。如果指定的版本不存在,将以退出码 1 结束,因此即使写入 Dockerfile 等构建步骤,也不会在缺少插件的情况下继续。
 
+``bin/fess-setup list plugins`` 显示为此 |Fess| 发布的插件以及其中已安装的插件, ``list installed`` 不访问仓库即可显示已安装的插件, ``upgrade plugins`` 将所有已安装的插件以适合此 |Fess| 的版本重新安装, ``remove plugin`` 删除插件。安装、升级或删除插件后,请重启 |Fess|\ 。所有命令和选项请参阅 :doc:`../install/fess-setup`\ 。
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/plugin-2.png

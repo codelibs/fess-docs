@@ -170,7 +170,7 @@ OpenSearch
    OpenSearch 버전과 플러그인 버전을 일치시켜야 합니다.
    버전 불일치는 시작 오류 또는 예기치 않은 동작의 원인이 됩니다.
 
-``bin/fess-setup install opensearch`` 는 이러한 플러그인을 포함하여 OpenSearch 를 준비합니다. 자세한 내용은 :doc:`install-linux` 를 참조하십시오.
+``bin/fess-setup install opensearch`` 는 Linux 와 Windows 에서 이러한 플러그인을 포함하여 OpenSearch 를 준비합니다. 자세한 내용은 OpenSearch 를 다른 방법으로 설치해야 하는 macOS 의 경우를 포함하여 :doc:`install-linux` 를, 모든 명령에 대해서는 :doc:`fess-setup` 을 참조하십시오.
 
 Java (Docker 버전 제외)
 -----------------------

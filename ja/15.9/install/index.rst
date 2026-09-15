@@ -15,6 +15,7 @@ Linux、Windows、Docker への |Fess| のインストールと起動の方法�
    install-linux
    install-windows
    install-docker
+   fess-setup
    run
    security
    upgrade

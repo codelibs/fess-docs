@@ -504,6 +504,13 @@ Ist kein OpenSearch erreichbar, startet |Fess| nicht. ``bin/fess-setup install o
 richtet einen ein (nur Linux und Windows; für macOS gibt es keine offizielle OpenSearch-
 Distribution, verwenden Sie dort Homebrew oder Docker).
 
+|Fess| benötigt außerdem einen ``FESS_DICTIONARY_PATH``, der mit ``configsync.config_path`` in der
+``opensearch.yml`` dieses OpenSearch übereinstimmt; ohne ihn kann |Fess| seine Indizes nicht
+anlegen. Das ``bin/fess.in.sh`` von 15.9 (unter Windows ``bin\fess.in.bat``) setzt ihn selbst, wenn
+``opensearch/`` im |Fess|-Verzeichnis genau ein von ``bin/fess-setup install opensearch``
+installiertes OpenSearch enthält. Für jedes andere OpenSearch setzen Sie ihn wie in
+:doc:`install-linux` oder :doc:`install-windows` beschrieben.
+
 Ebenfalls entfallen:
 
 - das Verzeichnis ``es/`` (``es/modules``, ``es/plugins`` und ``es/data``)

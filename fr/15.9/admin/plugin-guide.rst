@@ -51,5 +51,7 @@ Les plugins sont publiés séparément : ceux installés ensemble ne sont donc p
 
 La version précédemment installée d'un plugin est supprimée une fois la nouvelle installée. Une version inexistante se termine avec le code de sortie 1 : une étape de build telle qu'un Dockerfile échoue au lieu de continuer sans le plugin.
 
+``bin/fess-setup list plugins`` affiche les plugins publiés pour ce |Fess| et indique lesquels sont installés, ``list installed`` affiche les plugins installés sans contacter le dépôt, ``upgrade plugins`` réinstalle chaque plugin installé dans la version adaptée à ce |Fess|, et ``remove plugin`` supprime un plugin. Redémarrez |Fess| après avoir installé, mis à niveau ou supprimé des plugins. Consultez :doc:`../install/fess-setup` pour toutes les commandes et options.
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/plugin-2.png

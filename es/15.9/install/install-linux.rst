@@ -79,19 +79,50 @@ Instalación con Versión ZIP
 Paso 1: Instalación de OpenSearch
 ------------------------------------
 
+.. important::
+
+   Instale y ejecute OpenSearch con un usuario normal, no como ``root``: OpenSearch se niega a
+   iniciarse como ``root``. Ejecute también ``bin/fess-setup`` con ese usuario, para que los
+   archivos que extrae pertenezcan a ese usuario. Consulte :doc:`run` si ya se ha rechazado un
+   inicio como ``root``.
+
 .. tip::
 
-   ``bin/fess-setup``, incluido con |Fess|, realiza los pasos siguientes en una sola orden:
-   descarga y extrae OpenSearch, instala los plugins necesarios y configura ``configsync``.
+   ``bin/fess-setup``, incluido con |Fess|, realiza los pasos 1 a 3 siguientes en una sola orden.
+   Descarga y extrae OpenSearch en ``opensearch/`` dentro del directorio de |Fess|, instala los
+   plugins necesarios y añade ``configsync.config_path`` y ``plugins.security.disabled: true`` a
+   su ``config/opensearch.yml``. Extraiga primero el ZIP de |Fess|, tal como se describe en el
+   Paso 2.
 
    ::
 
        $ cd /path/to/fess-15.9.0
        $ bin/fess-setup install opensearch
 
+   ``bin/fess.in.sh`` encuentra un OpenSearch instalado de esta forma y establece
+   ``FESS_DICTIONARY_PATH`` por sí mismo, por lo que "Configuración de Fess" en el Paso 2 no
+   requiere cambios mientras OpenSearch se ejecute en el mismo host. El comando muestra la
+   configuración que ha añadido y si ``bin/fess.in.sh`` encuentra la instalación. Lea la
+   advertencia del paso 3 antes de que OpenSearch escuche en cualquier dirección distinta de
+   ``localhost``.
+
    Siga los pasos siguientes para revisarlos uno a uno, o cuando utilice un OpenSearch que ya
    tenga. Para instalar únicamente los plugins en un OpenSearch existente, utilice
-   ``bin/fess-setup install plugins --opensearch-home /path/to/opensearch``.
+   ``bin/fess-setup install opensearch-plugins --opensearch-home /path/to/opensearch``.
+   Consulte :doc:`fess-setup` para ver todos los comandos.
+
+.. note::
+
+   OpenSearch no publica ninguna versión para macOS, por lo que en macOS
+   ``bin/fess-setup install opensearch`` termina con un error. Instale OpenSearch con Homebrew y
+   añada los plugins con ``bin/fess-setup install opensearch-plugins``, o bien utilice
+   :doc:`install-docker`::
+
+       $ brew install opensearch
+       $ bin/fess-setup install opensearch-plugins --opensearch-home $(brew --prefix opensearch)
+
+   A continuación, configure ese OpenSearch como en el paso 3 y establezca
+   ``FESS_DICTIONARY_PATH`` tal como se describe en "Configuración de Fess" en el Paso 2.
 
 1. Descarga de OpenSearch
 
@@ -176,32 +207,44 @@ Paso 2: Instalación de Fess
 
 2. Configuración de Fess
 
-   Edite ``bin/fess.in.sh`` para configurar la información de conexión a OpenSearch.
-   Este archivo incluye, de forma predeterminada, la configuración para conectarse a un clúster externo de OpenSearch, comentada de antemano.
+   La información de conexión a OpenSearch está en ``bin/fess.in.sh``. Con un OpenSearch que
+   ``bin/fess-setup install opensearch`` instaló en ``opensearch/`` dentro del directorio de |Fess|
+   y que se ejecuta en el mismo host, este archivo no requiere cambios: ``SEARCH_ENGINE_HTTP_URL``
+   tiene como valor predeterminado ``http://localhost:9200``, y ``FESS_DICTIONARY_PATH`` se
+   establece en el directorio ``config/dictionary`` de ese OpenSearch.
+
+   Edite ``bin/fess.in.sh`` en cualquiera de los siguientes casos:
+
+   - OpenSearch se instaló de otra forma, como con los pasos 1 a 3 anteriores o con Homebrew, o con
+     ``--dest`` fuera del directorio de |Fess|.
+   - ``opensearch/`` dentro del directorio de |Fess| contiene más de un OpenSearch instalado por
+     ``bin/fess-setup``, por ejemplo dos versiones. ``bin/fess.in.sh`` no puede saber cuál está en
+     uso, así que muestra una advertencia y deja ``FESS_DICTIONARY_PATH`` sin establecer.
+   - OpenSearch se ejecuta en otro host o puerto.
 
    ::
 
        $ vi bin/fess.in.sh
 
-   Descomente (elimine el ``#`` inicial de) las siguientes 2 líneas ubicadas cerca del principio del archivo.
+   Cerca del principio del archivo, elimine el ``#`` inicial de la línea ``FESS_DICTIONARY_PATH`` y
+   establezca la ruta, y cambie la URL de la línea ``SEARCH_ENGINE_HTTP_URL`` si es necesario.
 
-   Antes del cambio (estado predeterminado)::
+   Antes del cambio (estado predeterminado, sin las líneas de comentario)::
 
-       # External opensearch cluster
-       #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
        #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    Después del cambio::
 
-       # External opensearch cluster
-       SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
        FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
 
    .. note::
 
-      - Configure ``FESS_DICTIONARY_PATH`` con la misma ruta que especificó en ``configsync.config_path`` dentro de ``opensearch.yml`` de OpenSearch.
-      - Si ejecuta OpenSearch en otro host, cambie ``SEARCH_ENGINE_HTTP_URL`` al nombre de host o dirección IP apropiados. Ejemplo: ``SEARCH_ENGINE_HTTP_URL=http://192.168.1.100:9200``
-      - No agregue una nueva línea ``SEARCH_ENGINE_HTTP_URL=...``; en su lugar, descomente y edite la línea existente.
+      - Configure ``FESS_DICTIONARY_PATH`` con la misma ruta que especificó en ``configsync.config_path`` dentro de ``opensearch.yml`` de OpenSearch. Sin ella, |Fess| no puede crear sus índices y no se inicia.
+      - Si ejecuta OpenSearch en otro host, cambie la URL de la línea ``SEARCH_ENGINE_HTTP_URL`` por la de ese host. Ejemplo: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``. En ese caso, ``FESS_DICTIONARY_PATH`` es el ``configsync.config_path`` de ese servidor.
+      - En lugar de editar el archivo, puede exportar ambas variables en el entorno desde el que se inicia |Fess|. Un ``SEARCH_ENGINE_HTTP_URL`` exportado tiene prioridad sobre la URL del archivo, y un ``FESS_DICTIONARY_PATH`` exportado se utiliza mientras su línea en el archivo siga comentada.
+      - No agregue una nueva línea ``SEARCH_ENGINE_HTTP_URL=...``; en su lugar, edite la línea existente.
 
    .. tip::
 
@@ -213,6 +256,11 @@ Paso 2: Instalación de Fess
 
        $ grep "SEARCH_ENGINE_HTTP_URL" bin/fess.in.sh
        $ grep "FESS_DICTIONARY_PATH" bin/fess.in.sh
+
+   Una vez que OpenSearch esté en ejecución, ``bin/fess-setup check`` informa de si es accesible,
+   si tiene los plugins que requiere |Fess| y si ``configsync`` responde. Termina con el código
+   ``0`` cuando ninguna comprobación ha fallado. Indique ``--url`` cuando OpenSearch no esté en
+   ``http://localhost:9200``.
 
 Paso 3: Inicio
 ------------------

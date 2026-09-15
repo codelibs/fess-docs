@@ -99,6 +99,15 @@ Une erreur se produit lors de l'exécution de la commande de démarrage de Fess,
 
    Si le démarrage est normal, une réponse JSON est retournée.
 
+   Lorsqu'aucun OpenSearch ne répond, |Fess| réessaie pendant environ une minute, puis interrompt
+   son démarrage avec le message suivant sur la console et dans ``logs/fess.log`` ::
+
+       The search engine at http://localhost:9200 did not become available within 60221ms. Check that OpenSearch is running and reachable. If there is none yet, run bin/fess-setup install opensearch to set one up.
+
+   Démarrez OpenSearch, ou vérifiez ``SEARCH_ENGINE_HTTP_URL``. Une nouvelle installation ZIP ne
+   dispose d'aucun OpenSearch tant qu'il n'a pas été mis en place avec
+   ``bin/fess-setup install opensearch`` ; consultez :doc:`install-linux`.
+
 2. **Vérifiez les conflits de ports** ::
 
        $ sudo netstat -tuln | grep 8080

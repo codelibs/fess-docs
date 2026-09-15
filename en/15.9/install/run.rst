@@ -29,6 +29,21 @@ To start in the background::
 
     $ ./bin/opensearch -d
 
+.. note::
+
+   ``bin/fess-setup install opensearch`` puts OpenSearch in ``opensearch/opensearch-3.8.0`` in the
+   |Fess| directory.
+
+.. important::
+
+   Start OpenSearch as a regular user. It refuses to run as ``root`` and exits with
+   ``can not run opensearch as root``. The refused start still leaves files such as
+   ``config/opensearch.keystore`` owned by ``root``, and the next start as a regular user then
+   fails with ``AccessDeniedException``. Give the OpenSearch directory back to that user before
+   starting it again, for example::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.8.0
+
 Start Fess
 ~~~~~~~~~~
 

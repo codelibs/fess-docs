@@ -170,7 +170,7 @@ Verwendet OpenSearch als Suchmaschine.
    Die Version von OpenSearch und die Version der Plugins müssen übereinstimmen.
    Versionsunterschiede können zu Startfehlern oder unerwartetem Verhalten führen.
 
-``bin/fess-setup install opensearch`` richtet OpenSearch mit diesen Plugins ein. Einzelheiten siehe :doc:`install-linux`.
+``bin/fess-setup install opensearch`` richtet OpenSearch mit diesen Plugins unter Linux und Windows ein. Einzelheiten, auch zu macOS, wo OpenSearch auf andere Weise installiert werden muss, siehe :doc:`install-linux`; alle Befehle siehe :doc:`fess-setup`.
 
 Java (außer Docker-Version)
 ----------------------------

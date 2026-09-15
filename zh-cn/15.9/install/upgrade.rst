@@ -486,6 +486,8 @@ Docker 版::
 进行安装（仅限 Linux 和 Windows。OpenSearch 没有官方的 macOS 发行版，请使用 Homebrew 或
 Docker）。
 
+|Fess| 还需要 ``FESS_DICTIONARY_PATH`` 与该 OpenSearch 的 ``opensearch.yml`` 中的 ``configsync.config_path`` 一致；否则 |Fess| 无法创建索引。当 |Fess| 目录下的 ``opensearch/`` 中恰好只有一个通过 ``bin/fess-setup install opensearch`` 安装的 OpenSearch 时，15.9 的 ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会自动设置该变量。使用其他 OpenSearch 时，请按照 :doc:`install-linux` 或 :doc:`install-windows` 的说明进行设置。
+
 以下内容也一并移除：
 
 - ``es/`` 目录（``es/modules``、``es/plugins``、``es/data``）
