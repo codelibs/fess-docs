@@ -94,7 +94,7 @@ cron 表达式示例：
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.matchAllQuery())
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery())
         .execute()
 
 添加自定义查询过滤器的步骤：
@@ -108,7 +108,7 @@ cron 表达式示例：
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
         .execute()
 
 站点过滤器示例（仅导出特定站点的文档）：
@@ -116,7 +116,7 @@ cron 表达式示例：
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
         .execute()
 
 以 JSON 格式导出的示例：

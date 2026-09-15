@@ -94,7 +94,7 @@ El script predeterminado del trabajo **Index Exporter** exporta todos los docume
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.matchAllQuery())
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery())
         .execute()
 
 Para agregar un filtro de consulta personalizado:
@@ -108,7 +108,7 @@ Ejemplo de filtro por fecha (exportar solo documentos de los últimos 7 días):
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
         .execute()
 
 Ejemplo de filtro por sitio (exportar solo documentos de un sitio específico):
@@ -116,7 +116,7 @@ Ejemplo de filtro por sitio (exportar solo documentos de un sitio específico):
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
         .execute()
 
 Ejemplo de exportación en formato JSON:

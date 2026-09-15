@@ -94,7 +94,7 @@ cron 式の例:
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.matchAllQuery())
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery())
         .execute()
 
 カスタムクエリフィルタを追加するには:
@@ -108,7 +108,7 @@ cron 式の例:
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
         .execute()
 
 サイトフィルタの例（特定サイトのドキュメントのみエクスポート）:
@@ -116,7 +116,7 @@ cron 式の例:
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
         .execute()
 
 JSON フォーマットでエクスポートする例:

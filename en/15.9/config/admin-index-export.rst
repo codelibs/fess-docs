@@ -94,7 +94,7 @@ The default script for the **Index Exporter** job exports all documents:
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.matchAllQuery())
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery())
         .execute()
 
 To add a custom query filter:
@@ -108,7 +108,7 @@ Example date filter (export only documents from the last 7 days):
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.rangeQuery("created").gte("now-7d"))
         .execute()
 
 Example site filter (export only documents from a specific site):
@@ -116,7 +116,7 @@ Example site filter (export only documents from a specific site):
 ::
 
     return new org.codelibs.fess.job.IndexExportJob()
-        .query(org.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
+        .query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.wildcardQuery("url", "*example.com*"))
         .execute()
 
 Example to export in JSON format:

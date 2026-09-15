@@ -267,6 +267,15 @@ Version ZIP
        $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.9.0/app/WEB-INF/classes/
        $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/
 
+   .. warning::
+
+      Copiés tels quels, ``fess_config.properties`` et ``fess.in.sh`` conservent leurs anciennes
+      valeurs, y compris celles dont la valeur par défaut a changé en 15.9 : par exemple, les
+      tâches créées ensuite utilisent Groovy par défaut. Avant d'exécuter les deux dernières
+      commandes, comparez chaque fichier avec celui de ``fess-15.9.0`` et ne reportez que les
+      valeurs que vous avez modifiées vous-même. Voir :ref:`upgrade-159-carried-over-config` pour
+      les éléments à vérifier.
+
 3. Si vous avez des personnalisations, copiez également ce qui suit ::
 
        # Configuration des journaux
@@ -282,6 +291,13 @@ Version ZIP
       d'administration « Design ». Si la structure des JSP de la nouvelle version a changé,
       l'affichage risque d'être incorrect. Réappliquez vos modifications sur les JSP de la
       nouvelle version.
+
+   .. note::
+
+      Les plugins copiés depuis ``app/WEB-INF/plugin/`` ont été construits pour l'ancienne version.
+      Après les avoir copiés, exécutez ``bin/fess-setup upgrade plugins`` dans ``fess-15.9.0`` pour
+      remplacer chacun d'eux par la version construite pour la 15.9 ; voir
+      :ref:`upgrade-plugin-versions`.
 
 4. Vérifiez les différences de configuration et ajustez si nécessaire
 
@@ -301,7 +317,9 @@ Installez le package de la nouvelle version ::
    Dans la version RPM, les fichiers de configuration ``/etc/fess/*`` sont enregistrés en tant que
    ``%config(noreplace)`` et sont donc conservés lors de la mise à niveau (les nouveaux fichiers
    par défaut sont placés à côté avec l'extension ``.rpmnew``). Si de nouvelles options de
-   configuration ont été ajoutées, un ajustement manuel peut être nécessaire.
+   configuration ont été ajoutées, un ajustement manuel peut être nécessaire. Un fichier
+   ``/etc/fess/fess_config.properties`` que vous avez modifié conserve ses anciennes valeurs en
+   15.9, comme un fichier copié dans la procédure ZIP ; voir :ref:`upgrade-159-carried-over-config`.
 
 .. warning::
 
@@ -309,7 +327,10 @@ Installez le package de la nouvelle version ::
    conffiles sont ``/etc/default/fess``, ``/etc/init.d/fess`` et
    ``/usr/lib/systemd/system/fess.service``). Par conséquent, l'exécution de ``dpkg -i`` écrase
    des fichiers tels que ``/etc/fess/fess_config.properties`` avec ceux de la nouvelle version.
-   Réappliquez après la mise à niveau la configuration sauvegardée à l'étape 1.
+   Cela se fait sans confirmation et sans conserver de copie des anciens fichiers : sauvegardez-les
+   donc au préalable (étape 1). Après la mise à niveau, réappliquez vos modifications aux nouveaux
+   fichiers plutôt que de restaurer les anciens fichiers en entier (voir
+   :ref:`upgrade-159-carried-over-config`).
    Notez que ``/etc/fess/system.properties`` n'est pas écrasé, car il s'agit d'un fichier généré
    à l'exécution qui n'est pas inclus dans le paquet.
 
@@ -473,7 +494,7 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 Mise à niveau de 15.8 vers 15.9
 ===============================
 
-Si vous effectuez une mise à niveau depuis la 15.8, les huit changements suivants ne sont pas
+Si vous effectuez une mise à niveau depuis la 15.8, les changements suivants ne sont pas
 rétrocompatibles.
 
 Suppression de l'OpenSearch intégré
@@ -512,7 +533,8 @@ Le robot Playwright passe dans un plugin
 ----------------------------------------
 
 Le robot Playwright, ainsi que les exécutables Node.js qu'il utilise, ne font plus partie de la
-distribution. L'archive ZIP passe ainsi de 438,5 Mio à 204,7 Mio.
+distribution. Dans ``fess-15.8.0.zip`` (457,1 Mio), le paquet de pilotes Playwright qui contenait
+les exécutables Node.js occupait 204,3 Mio.
 
 Si une configuration d'exploration désigne le client Playwright, par exemple avec
 ``client.crawlerClients=playwright:http://.*`` dans ses paramètres, installez à la fois le
@@ -523,6 +545,12 @@ d'administration. ``bin/fess.in.sh`` détecte Node.js et définit ``PLAYWRIGHT_N
 
     $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
+
+Sans le plugin, une telle configuration est toujours explorée, mais avec le client HTTP ordinaire :
+le texte produit uniquement par JavaScript n'est donc pas indexé. La tâche d'exploration se termine
+malgré tout avec succès et aucune URL en échec n'est enregistrée. À chaque exploration,
+``fess-crawler.log`` consigne un avertissement par configuration d'exploration, qui nomme le plugin
+et les deux commandes ci-dessus.
 
 Rien à faire si vous n'utilisez pas le robot Playwright.
 
@@ -611,19 +639,70 @@ Le moteur de script intégré passe de Groovy à JavaScript
 Jusqu'à la 15.8, le moteur de script intégré était Groovy et ``job.default.script`` avait pour
 valeur par défaut ``groovy``. En 15.9, le moteur intégré est JavaScript et la valeur par défaut
 est ``javascript``. Groovy n'est plus intégré : il est fourni par le plugin
-``fess-script-groovy``, qui doit être installé depuis « Système » → « Plugins » dans l'écran
-d'administration pour qu'un ``scriptType`` valant ``groovy`` puisse être résolu.
+``fess-script-groovy``, qui doit être installé pour qu'un ``scriptType`` valant ``groovy`` puisse
+être résolu.
 
-Une tâche planifiée existante conserve le ``scriptType`` enregistré avec elle : une tâche déjà
-enregistrée en ``groovy`` reste en ``groovy`` après la mise à niveau et nécessite ce plugin pour
-s'exécuter. Les tâches créées après la mise à niveau reçoivent ``javascript``. Installez le
-plugin, ou ouvrez chaque tâche sous « Système » → « Planificateur » et réécrivez son script pour
-le moteur JavaScript. Un littéral de tableau JavaScript est converti automatiquement en
-``String[]`` Java, ce qui rend inutiles les conversions ``as String[]`` de la forme Groovy.
+Une mise à niveau ne modifie pas le moteur enregistré avec un paramètre, et un paramètre enregistré
+avant la 15.9 sans moteur compte comme ``groovy``. Sans le plugin, les éléments suivants cessent de
+fonctionner :
 
-::
+- Les tâches planifiées enregistrées en ``groovy``. **Cela concerne aussi les tâches que la 15.8 a
+  créées elle-même :** Default Crawler, Suggest Indexer, Config Reloader, Log Aggregator, Doc
+  Purger et les autres tâches fournies sont toutes enregistrées en ``groovy``, et au démarrage la
+  15.9 n'ajoute que les tâches fournies qui n'existent pas encore : elle ne les modifie donc pas.
+  Chacune d'elles échoue à chaque déclenchement planifié, si bien que Default Crawler n'explore
+  plus rien. La plupart des tâches fournies ont « Journalisation » désactivée : leurs échecs
+  n'apparaissent pas dans le journal des tâches, seulement sous la forme d'avertissements
+  ``Failed to execute job`` dans ``fess.log``.
+- Les configurations d'exploration Web et de fichiers dont les « Paramètres de configuration »
+  contiennent des scripts de champ (``field.script.<nom du champ>``). Chaque document d'une telle
+  configuration échoue avec une ``ScriptEngineException`` et est enregistré comme URL en échec,
+  alors que la tâche d'exploration elle-même se termine avec succès.
+- Les configurations DataStore dotées d'un « Script ». Les valeurs qui ne sont pas un simple nom de
+  paramètre ne peuvent pas être évaluées ; voir :doc:`../config/datastore/ds-overview`.
+- Les règles de boost de document. Une telle règle ne booste rien.
+- Les mappages de chemin dont le « Remplacement » commence par ``groovy:``. Un tel mappage n'est
+  pas appliqué et les URL restent inchangées.
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+Après le premier démarrage, recherchez dans ``fess.log`` un avertissement commençant par
+``Settings use the script engine groovy, which is not registered``. |Fess| vérifie une fois au
+démarrage les paramètres ci-dessus et indique, pour chaque type, combien utilisent un moteur
+qu'aucun plugin ne fournit. Il mentionne aussi ``job.default.script`` lorsqu'un
+``fess_config.properties`` repris de la 15.8 indique encore ``groovy`` ; dans ce cas, les tâches
+créées après la mise à niveau utilisent elles aussi Groovy (voir
+:ref:`upgrade-159-carried-over-config`). Deux solutions sont possibles :
+
+- Installez le plugin et redémarrez |Fess|. Les scripts Groovy enregistrés s'exécutent alors sans
+  modification et l'avertissement n'est plus journalisé. Le plugin peut aussi être installé depuis
+  « Système » → « Plugins » dans l'écran d'administration.
+
+  ::
+
+      $ bin/fess-setup install plugin fess-script-groovy
+
+- Passez chaque paramètre à JavaScript. Réécrivez d'abord toute syntaxe que seul Groovy accepte,
+  puis sélectionnez JavaScript :
+
+  - Tâches planifiées : sous « Système » → « Planificateur », réglez « Méthode d'exécution » sur
+    ``javascript``. Les scripts des tâches fournies sont du JavaScript valide tels quels, à deux
+    exceptions près : Thumbnail Purger utilise le littéral ``long`` Groovy ``1000L``, que
+    JavaScript refuse (écrivez ``1000``), et Index Exporter nécessite la modification décrite dans
+    :ref:`upgrade-159-index-exporter`. Un littéral de tableau JavaScript est converti
+    automatiquement en ``String[]`` Java, ce qui rend inutiles les conversions ``as String[]`` de
+    la forme Groovy :
+
+    ::
+
+        return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+  - Configurations d'exploration Web et de fichiers : ajoutez ``config.script.type=javascript``
+    aux « Paramètres de configuration ».
+  - Configurations DataStore : ajoutez ``script_type=javascript`` aux « Paramètres ».
+  - Règles de boost de document : réglez « Type de Script » sur ``javascript``.
+  - Mappages de chemin : commencez le « Remplacement » par ``javascript:`` au lieu de
+    ``groovy:``.
+  - ``job.default.script`` : définissez-le sur ``javascript`` dans un ``fess_config.properties``
+    repris de la 15.8.
 
 ``crawler.default.script`` a été supprimé
 -----------------------------------------
@@ -638,6 +717,137 @@ Le protocole de crawl ``storage`` a été supprimé
 ``file,smb,smb1,ftp``. Utilisez ``s3`` à la place et remplacez par un chemin ``s3:`` toute
 configuration de crawl de fichiers dont le chemin commence par ``storage:``. ``s3`` nécessite
 le plugin ``fess-storage-s3``.
+
+.. _upgrade-159-index-exporter:
+
+La tâche Index Exporter désigne un paquet supprimé
+--------------------------------------------------
+
+La 15.9 ne contient plus les classes ``org.opensearch`` ; les constructeurs de requêtes utilisés
+par les scripts de tâche se trouvent désormais sous ``org.codelibs.fesen.opensearch``. Le script
+que la 15.8 a enregistré pour la tâche Index Exporter désigne
+``org.opensearch.index.query.QueryBuilders`` et la mise à niveau ne le remplace pas : la tâche
+échoue donc même avec ``fess-script-groovy`` installé. Elle est fournie désactivée et sans
+planification, cela ne vous concerne donc que si vous l'exécutez. Ouvrez-la sous « Système » →
+« Planificateur » et remplacez le paquet dans son script par celui de la 15.9 :
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob().query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery()).execute()
+
+Modifiez de la même manière tout script de votre cru qui désigne ``org.opensearch.index.query``.
+Voir :doc:`../config/admin-index-export` pour d'autres exemples de requêtes.
+
+.. _upgrade-159-carried-over-config:
+
+Fichiers de configuration repris de la 15.8
+-------------------------------------------
+
+La procédure ZIP de l'étape 3 copie ``fess_config.properties`` et ``bin/fess.in.sh`` depuis
+l'ancienne installation, et une mise à niveau RPM conserve un ``/etc/fess/fess_config.properties``
+que vous avez modifié (le fichier de la 15.9 est placé à côté sous le nom
+``fess_config.properties.rpmnew``). Dans les deux cas, la 15.9 fonctionne ensuite avec les valeurs
+de la 15.8, y compris celles dont la valeur fournie a changé en 15.9. Vérifiez au moins les clés
+suivantes.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Clé
+     - 15.8.0
+     - 15.9
+     - Effet si la valeur de la 15.8 est conservée
+   * - ``job.default.script``
+     - ``groovy``
+     - ``javascript``
+     - Les tâches créées sous « Système » → « Planificateur » utilisent ``groovy`` par défaut et
+       échouent sans le plugin ``fess-script-groovy``.
+   * - ``job.template.script``
+     - Forme Groovy avec ``as String[]``
+     - Forme JavaScript
+     - Une tâche créée depuis une configuration d'exploration reçoit un script Groovy.
+   * - ``crawler.file.protocols``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp``
+     - Un chemin commençant par ``s3:`` ou ``gcs:`` est toujours accepté sans son plugin, puis
+       ignoré avec un avertissement lors de l'exploration. ``storage`` n'est plus pris en charge.
+   * - ``search_engine.http.url``
+     - ``http://localhost:9201``
+     - ``http://localhost:9200``
+     - Utilisée lorsque ``SEARCH_ENGINE_HTTP_URL`` n'est pas défini, comme dans un
+       ``bin/fess.in.sh`` copié de la 15.8 où vous ne l'avez pas défini. |Fess| cherche alors
+       OpenSearch sur le port 9201, celui de l'OpenSearch intégré supprimé en 15.9.
+   * - ``jvm.crawler.options``, ``jvm.thumbnail.options``
+     - ``-Djcifs.smb.client.*``, ``-Djcifs.smb1.smb.client.*``
+     - ``-Djcifs.client.*``
+     - Les délais d'attente SMB restent aux valeurs par défaut de jcifs ; voir
+       :ref:`upgrade-159-jcifs`.
+   * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
+       ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
+       ``rag.chat.message.max.length``
+     - Présentes
+     - Supprimées
+     - Aucun effet ; supprimez-les.
+
+Un ``bin/fess.in.sh`` copié de la 15.8 ne contient pas non plus deux éléments présents dans le
+fichier de la 15.9. Il laisse ``SEARCH_ENGINE_HTTP_URL`` non défini, sauf si vous l'avez défini
+vous-même, alors que la 15.9 définit ``http://localhost:9200``, et il ne recherche pas le Node.js
+installé par ``bin/fess-setup install nodejs`` : le robot Playwright ne trouve donc Node.js que si
+vous définissez ``PLAYWRIGHT_NODEJS_PATH``.
+
+Plutôt que de copier l'un ou l'autre fichier en entier, partez du fichier fourni avec la 15.9 et
+réappliquez les valeurs que vous avez modifiées. ``diff`` les affiche ::
+
+    $ diff /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.9.0/app/WEB-INF/classes/fess_config.properties
+    $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
+
+Pour une mise à niveau RPM, comparez de la même manière ``/etc/fess/fess_config.properties`` avec
+``/etc/fess/fess_config.properties.rpmnew``. Une mise à niveau DEB écrase au contraire
+``/etc/fess/fess_config.properties`` (voir l'étape 3) : elle part donc des valeurs de la 15.9 et
+seules vos propres modifications sont à réappliquer.
+
+.. _upgrade-159-jcifs:
+
+Les délais d'attente SMB utilisent les noms de propriétés de jcifs 3
+--------------------------------------------------------------------
+
+jcifs, la bibliothèque qu'utilise |Fess| pour explorer les serveurs de fichiers SMB, a renommé ses
+propriétés dans sa version 3 : ``jcifs.smb.client.*`` est devenu ``jcifs.client.*``, et les noms
+distincts ``jcifs.smb1.smb.client.*`` pour SMB1 ont été regroupés dans ces mêmes propriétés.
+Jusqu'à la 15.8, ``jvm.crawler.options`` et ``jvm.thumbnail.options`` transmettaient encore les
+anciens noms, que jcifs ignore : les explorations SMB fonctionnaient donc avec les valeurs par
+défaut de jcifs. La 15.9 transmet les nouveaux noms :
+
+::
+
+    -Djcifs.client.responseTimeout=30000
+    -Djcifs.client.soTimeout=35000
+    -Djcifs.client.connTimeout=60000
+    -Djcifs.client.sessionTimeout=60000
+
+Les délais de connexion et de session prennent donc effet pour la première fois et passent de la
+valeur par défaut de jcifs, 35 secondes, à 60 secondes : une exploration attend désormais jusqu'à
+60 secondes un serveur SMB qui ne répond pas. Les délais de réponse et de socket sont égaux aux
+valeurs par défaut de jcifs et ne changent donc pas.
+
+Si vous avez modifié ces délais, renommez-les dans les deux options. Sous les anciens noms, ils
+n'avaient pas non plus d'effet en 15.8. Un ``fess_config.properties`` repris de la 15.8 conserve
+les anciens noms, et avec eux les valeurs par défaut de jcifs.
+
+Quatre propriétés sans effet ont été supprimées
+-----------------------------------------------
+
+Les clés suivantes n'existent plus dans ``fess_config.properties``. |Fess| ne les a jamais lues
+dans ce fichier : une valeur laissée sous ces noms reste donc sans effet, comme auparavant.
+
+- ``theme.allowed.archive.extensions``
+- ``theme.assets.cache.max.age``
+- ``theme.assets.precompressed``
+- ``rag.chat.message.max.length``
+
+La limite définie par ``rag.chat.message.max.length`` fonctionne toujours, mais elle est lue comme
+propriété système : définissez-la dans ``app/WEB-INF/conf/system.properties`` ou avec
+``-Dfess.system.rag.chat.message.max.length``, comme décrit dans :doc:`../config/rag-chat`.
 
 Migrations spécifiques à la 15.9
 ================================
@@ -854,12 +1064,28 @@ elle borne la valeur ``rt`` que peut porter un journal de clic, qui est un horod
 temps de réponse.
 
 
+.. _upgrade-plugin-versions:
+
 Mise à jour de la version des plugins
 -------------------------------------
 
 Les plugins installés dans ``app/WEB-INF/plugin/`` doivent être remplacés par ceux correspondant
-à la version de |Fess|. Si vous spécifiez ``FESS_PLUGINS`` pour la version Docker, mettez à jour
-la partie version, par exemple ``fess-ds-wikipedia:15.9.0``.
+à la version de |Fess|. ``bin/fess-setup upgrade plugins`` le fait pour tous les plugins
+installés : il installe la version construite pour ce |Fess| et supprime l'ancienne. Redémarrez
+ensuite |Fess|. ``bin/fess-setup check`` indique alors l'état d'OpenSearch, de ses plugins et des
+plugins |Fess| installés, et se termine avec le code 1 en cas de problème.
+
+::
+
+    $ bin/fess-setup upgrade plugins
+    $ bin/fess-setup check
+
+``upgrade plugins`` ne traite que les plugins déjà installés. Installez avec
+``bin/fess-setup install plugin``, comme indiqué dans les sections précédentes, les plugins qui
+remplacent des éléments retirés de la distribution en 15.9, comme ``fess-script-groovy``.
+
+Si vous spécifiez ``FESS_PLUGINS`` pour la version Docker, mettez à jour la partie version, par
+exemple ``fess-ds-wikipedia:15.9.0``.
 
 Procédure de retour arrière
 ============================
