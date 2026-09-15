@@ -263,6 +263,14 @@ ZIP 버전
        $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.9.0/app/WEB-INF/classes/
        $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/
 
+   .. warning::
+
+      ``fess_config.properties`` 와 ``fess.in.sh`` 를 그대로 복사하면 15.9 에서 기본값이 바뀐 값을
+      포함해 이전 버전의 값이 그대로 이어집니다. 예를 들어 업그레이드 후에 만든 작업의 기본값이
+      Groovy 가 됩니다. 마지막 두 명령을 실행하기 전에 각 파일을 ``fess-15.9.0`` 의 파일과 비교하고,
+      직접 변경한 값만 옮기십시오. 확인할 항목은 :ref:`upgrade-159-carried-over-config` 를
+      참조하십시오.
+
 3. 커스터마이징한 경우에는 다음도 복사합니다::
 
        # 로그 설정
@@ -277,6 +285,12 @@ ZIP 버전
       관리 화면 「디자인」에서 편집한 JSP(``app/WEB-INF/view/``)는 그대로 복사하지 마십시오.
       새 버전의 JSP와 구조가 달라진 경우 화면이 올바르게 표시되지 않을 수 있습니다.
       새 버전의 JSP에 변경 내용을 다시 적용하십시오.
+
+   .. note::
+
+      ``app/WEB-INF/plugin/`` 에서 복사한 플러그인은 이전 버전용으로 빌드된 것입니다. 복사한 뒤
+      ``fess-15.9.0`` 에서 ``bin/fess-setup upgrade plugins`` 를 실행하여 각 플러그인을 15.9 용으로
+      빌드된 버전으로 교체하십시오( :ref:`upgrade-plugin-versions` 참조).
 
 4. 설정 차이를 확인하고 필요에 따라 조정합니다
 
@@ -295,15 +309,18 @@ RPM/DEB 버전
 
    RPM 버전에서는 ``/etc/fess/*`` 의 설정 파일이 ``%config(noreplace)`` 로 등록되어 있으므로
    업그레이드 시에도 유지됩니다(새 기본 파일은 ``.rpmnew`` 로 함께 배치됩니다).
-   새로운 설정 옵션이 추가된 경우에는 수동으로 조정이 필요합니다.
+   새로운 설정 옵션이 추가된 경우에는 수동으로 조정이 필요합니다. 변경한
+   ``/etc/fess/fess_config.properties`` 는 ZIP 버전 절차에서 복사한 파일과 마찬가지로 15.9 에서도
+   이전 값이 그대로 사용됩니다. :ref:`upgrade-159-carried-over-config` 를 참조하십시오.
 
 .. warning::
 
    DEB 버전에서는 ``/etc/fess/*`` 가 conffile로 등록되어 있지 않습니다(conffile은
    ``/etc/default/fess``, ``/etc/init.d/fess``, ``/usr/lib/systemd/system/fess.service``
    3개뿐입니다). 따라서 ``dpkg -i`` 를 실행하면 ``/etc/fess/fess_config.properties`` 등이
-   새 버전의 파일로 덮어써집니다. 단계 1에서 백업한 설정을
-   업그레이드 후에 다시 적용하십시오.
+   새 버전의 파일로 덮어써집니다. 확인 없이 덮어쓰며 이전 파일의 사본도 남기지 않으므로 미리
+   백업하십시오(단계 1). 업그레이드 후에는 이전 파일을 통째로 되돌리지 말고, 새 파일에 변경 내용을
+   다시 적용하십시오( :ref:`upgrade-159-carried-over-config` 참조).
    또한 ``/etc/fess/system.properties`` 는 패키지에 포함되지 않는 실행 시 생성 파일이므로
    덮어써지지 않습니다.
 
@@ -461,7 +478,7 @@ Docker 버전::
 15.8에서 15.9로 업그레이드
 ==========================
 
-15.8에서 업그레이드하는 경우 다음 여덟 가지가 하위 호환되지 않는 변경입니다.
+15.8에서 업그레이드하는 경우 다음 변경 사항은 하위 호환되지 않습니다.
 
 내장 OpenSearch 폐지
 --------------------
@@ -496,7 +513,8 @@ Playwright 크롤러를 플러그인으로 이동
 -------------------------------------
 
 Playwright 크롤러와 그것이 사용하는 Node.js 실행 파일은 더 이상 배포물에 포함되지
-않습니다. 이에 따라 ZIP 은 438.5 MiB 에서 204.7 MiB 가 되었습니다.
+않습니다. ``fess-15.8.0.zip`` (457.1 MiB)에서는 Node.js 실행 파일을 담은 Playwright 드라이버
+번들이 204.3 MiB 를 차지했습니다.
 
 크롤링 설정의 설정 파라미터에서 ``client.crawlerClients=playwright:http://.*`` 와 같이
 Playwright 클라이언트를 지정한 경우에는 플러그인과 Node.js 를 모두 설치하십시오.
@@ -507,6 +525,11 @@ Playwright 클라이언트를 지정한 경우에는 플러그인과 Node.js 를
 
     $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
+
+플러그인이 없어도 이러한 설정은 크롤링되지만 일반 HTTP 클라이언트가 사용되므로, JavaScript 로만
+생성되는 텍스트는 인덱싱되지 않습니다. 크롤 작업은 정상적으로 종료되며 장애 URL 도 기록되지
+않습니다. 크롤링할 때마다 ``fess-crawler.log`` 에는 크롤링 설정마다 1건씩, 플러그인 이름과 위의
+두 명령을 알려 주는 경고가 기록됩니다.
 
 Playwright 크롤러를 사용하지 않는 경우에는 대응이 필요 없습니다.
 
@@ -588,18 +611,64 @@ SSO 를 사용하지 않는 경우, 즉 ``sso.type`` 이 ``none`` 이거나 설�
 15.8까지는 내장 스크립트 엔진이 Groovy였고 ``job.default.script`` 의 기본값도 ``groovy`` 였습니다.
 15.9에서는 내장 엔진이 JavaScript이며 기본값은 ``javascript`` 입니다. Groovy는 더 이상 기본으로
 내장되지 않고 ``fess-script-groovy`` 플러그인이 제공합니다. ``scriptType`` 에 ``groovy`` 를
-지정하려면 관리 화면 「시스템」→「플러그인」에서 이 플러그인을 설치해야 합니다.
+지정하려면 이 플러그인을 설치해야 합니다.
 
-기존 스케줄 작업은 등록 당시의 ``scriptType`` 을 그대로 유지합니다. 따라서 이미 ``groovy`` 로
-저장된 작업은 업그레이드 후에도 ``groovy`` 이며, 실행하려면 해당 플러그인이 필요합니다.
-업그레이드 후에 만든 작업은 ``javascript`` 가 됩니다. 플러그인을 설치하거나, 관리 화면
-「시스템」→「스케줄러」에서 각 작업의 스크립트를 JavaScript 엔진에 맞게 다시 작성하십시오.
-JavaScript의 배열 리터럴은 Java의 ``String[]`` 로 자동 변환되므로 Groovy 형식의
-``as String[]`` 은 필요하지 않습니다.
+업그레이드는 각 설정에 저장된 스크립트 엔진을 바꾸지 않으며, 15.9 이전에 저장되어 엔진이 기록되지
+않은 설정은 ``groovy`` 로 취급됩니다. 플러그인이 없으면 다음이 동작하지 않게 됩니다.
 
-::
+- ``groovy`` 로 저장된 스케줄 작업.
+  **15.8 이 직접 등록한 작업도 여기에 해당합니다.** Default Crawler, Suggest Indexer,
+  Config Reloader, Log Aggregator, Doc Purger 등 기본 제공 작업은 모두 ``groovy`` 로 저장되어
+  있으며, 15.9 는 시작할 때 아직 존재하지 않는 기본 제공 작업만 추가하므로 이 작업들은 바뀌지
+  않습니다. 각 작업은 스케줄에 따라 실행될 때마다 실패하고, Default Crawler 에 의한 크롤링도
+  이루어지지 않습니다. 기본 제공 작업 대부분은 「로깅」이 꺼져 있어 실패가 작업 로그에는 남지
+  않고 ``fess.log`` 에 ``Failed to execute job`` 경고로만 기록됩니다.
+- 「설정 파라미터」에 필드 스크립트( ``field.script.<필드 이름>`` )를 작성한 웹 크롤링 설정과
+  파일 크롤링 설정. 해당 설정의 문서는 모두 ``ScriptEngineException`` 으로 실패하여 장애 URL 로
+  기록되지만, 크롤 작업 자체는 정상적으로 종료됩니다.
+- 「스크립트」를 설정한 데이터스토어 설정. 파라미터 이름 자체가 아닌 값은 평가할 수 없습니다.
+  :doc:`../config/datastore/ds-overview` 를 참조하십시오.
+- 문서 부스트 규칙. 해당 규칙은 아무것도 부스트하지 않습니다.
+- 「치환」이 ``groovy:`` 로 시작하는 경로 매핑. 해당 매핑은 적용되지 않으며 URL 은 바뀌지
+  않습니다.
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+처음 시작한 후 ``fess.log`` 에서
+``Settings use the script engine groovy, which is not registered`` 로 시작하는 경고를
+확인하십시오. |Fess| 는 시작할 때 위의 설정을 한 번 확인하고, 어느 플러그인도 제공하지 않는
+엔진을 사용하는 설정의 수를 종류별로 출력합니다. 15.8 에서 이어받은 ``fess_config.properties``
+에 ``job.default.script=groovy`` 가 남아 있으면 그것도 표시되며, 이 경우 업그레이드 후에 만든
+작업도 Groovy 를 사용합니다( :ref:`upgrade-159-carried-over-config` 참조). 다음 중 하나로
+대응하십시오.
+
+- 플러그인을 설치하고 |Fess| 를 재시작합니다. 저장된 Groovy 스크립트는 그대로 동작하며 경고도
+  더 이상 기록되지 않습니다. 플러그인은 관리 화면 「시스템」→「플러그인」에서도 설치할 수
+  있습니다.
+
+  ::
+
+      $ bin/fess-setup install plugin fess-script-groovy
+
+- 각 설정을 JavaScript 로 전환합니다. Groovy 만 허용하는 구문을 먼저 다시 작성한 뒤
+  JavaScript 를 선택합니다.
+
+  - 스케줄 작업: 관리 화면 「시스템」→「스케줄러」에서 「실행 방법」을 ``javascript`` 로
+    바꿉니다. 기본 제공 작업의 스크립트는 다음 두 가지를 제외하면 그대로 유효한 JavaScript
+    입니다. Thumbnail Purger 는 Groovy 의 ``long`` 리터럴 ``1000L`` 을 사용하는데 JavaScript
+    에서는 구문 오류가 됩니다( ``1000`` 으로 작성합니다). Index Exporter 에는
+    :ref:`upgrade-159-index-exporter` 의 변경이 필요합니다. JavaScript의 배열 리터럴은 Java의
+    ``String[]`` 로 자동 변환되므로 Groovy 형식의 ``as String[]`` 은 필요하지 않습니다.
+
+    ::
+
+        return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+  - 웹 크롤링 설정과 파일 크롤링 설정: 「설정 파라미터」에 ``config.script.type=javascript``
+    를 추가합니다.
+  - 데이터스토어 설정: 「파라미터」에 ``script_type=javascript`` 를 추가합니다.
+  - 문서 부스트 규칙: 「스크립트 종류」를 ``javascript`` 로 바꿉니다.
+  - 경로 매핑: 「치환」을 ``groovy:`` 대신 ``javascript:`` 로 시작합니다.
+  - ``job.default.script``: 15.8 에서 이어받은 ``fess_config.properties`` 에서 ``javascript``
+    로 설정합니다.
 
 ``crawler.default.script`` 삭제
 -------------------------------
@@ -614,6 +683,132 @@ JavaScript의 배열 리터럴은 Java의 ``String[]`` 로 자동 변환되므�
 ``file,smb,smb1,ftp`` 입니다. 대신 ``s3`` 를 사용하고, 경로가 ``storage:`` 로 시작하는
 파일 크롤 설정은 ``s3:`` 경로로 변경하십시오. ``s3`` 에는 ``fess-storage-s3`` 플러그인이
 필요합니다.
+
+.. _upgrade-159-index-exporter:
+
+Index Exporter 작업이 삭제된 패키지를 참조
+------------------------------------------
+
+15.9 에는 ``org.opensearch`` 클래스가 더 이상 포함되지 않으며, 작업 스크립트에서 사용하는 쿼리
+빌더는 ``org.codelibs.fesen.opensearch`` 아래로 옮겨졌습니다. 15.8 이 Index Exporter 작업에
+저장한 스크립트는 ``org.opensearch.index.query.QueryBuilders`` 를 참조하며 업그레이드로도
+교체되지 않으므로, ``fess-script-groovy`` 를 설치해도 이 작업은 실패합니다. 이 작업은
+비활성화되고 스케줄이 없는 상태로 제공되므로 실행하는 경우에만 영향이 있습니다. 관리 화면
+「시스템」→「스케줄러」에서 작업을 열고 스크립트의 패키지를 15.9 의 것으로 변경하십시오.
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob().query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery()).execute()
+
+직접 작성한 스크립트에서 ``org.opensearch.index.query`` 를 참조하는 경우에도 같은 방식으로
+변경하십시오. 쿼리 예는 :doc:`../config/admin-index-export` 를 참조하십시오.
+
+.. _upgrade-159-carried-over-config:
+
+15.8 에서 이어받은 설정 파일
+----------------------------
+
+단계 3의 ZIP 버전 절차에서는 이전 설치의 ``fess_config.properties`` 와 ``bin/fess.in.sh`` 를
+복사합니다. RPM 버전 업그레이드에서는 변경한 ``/etc/fess/fess_config.properties`` 가 그대로
+남습니다(15.9 의 파일은 ``fess_config.properties.rpmnew`` 로 함께 배치됩니다). 어느 경우든
+15.9 는 15.8 의 값으로 동작하며, 15.9 에서 기본 제공 값이 바뀐 키도 예외가 아닙니다. 적어도
+다음 키를 확인하십시오.
+
+.. list-table::
+   :header-rows: 1
+
+   * - 키
+     - 15.8.0
+     - 15.9
+     - 15.8 의 값이 남은 경우의 영향
+   * - ``job.default.script``
+     - ``groovy``
+     - ``javascript``
+     - 관리 화면 「시스템」→「스케줄러」에서 만드는 작업의 기본값이 ``groovy`` 가 되며,
+       ``fess-script-groovy`` 플러그인이 없으면 실패합니다.
+   * - ``job.template.script``
+     - ``as String[]`` 를 포함한 Groovy 형식
+     - JavaScript 형식
+     - 크롤링 설정에서 만든 작업의 스크립트가 Groovy 형식이 됩니다.
+   * - ``crawler.file.protocols``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp``
+     - ``s3:`` 나 ``gcs:`` 로 시작하는 경로가 플러그인이 없어도 허용되며, 크롤링할 때 경고를
+       남기고 처리되지 않습니다. ``storage`` 는 더 이상 지원되지 않습니다.
+   * - ``search_engine.http.url``
+     - ``http://localhost:9201``
+     - ``http://localhost:9200``
+     - ``SEARCH_ENGINE_HTTP_URL`` 이 설정되지 않은 경우에 사용됩니다. 15.8 에서 복사한
+       ``bin/fess.in.sh`` 에서 설정하지 않았다면 여기에 해당하며, |Fess| 는 15.9 에서 폐지된
+       내장 OpenSearch 의 포트인 9201 에서 OpenSearch 를 찾습니다.
+   * - ``jvm.crawler.options``, ``jvm.thumbnail.options``
+     - ``-Djcifs.smb.client.*``, ``-Djcifs.smb1.smb.client.*``
+     - ``-Djcifs.client.*``
+     - SMB 타임아웃이 jcifs 의 기본값 그대로 남습니다. :ref:`upgrade-159-jcifs` 를 참조하십시오.
+   * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
+       ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
+       ``rag.chat.message.max.length``
+     - 있음
+     - 삭제됨
+     - 효과가 없습니다. 제거하십시오.
+
+15.8 에서 복사한 ``bin/fess.in.sh`` 에는 15.9 의 파일에 있는 다음 두 가지도 없습니다. 15.9 는
+``SEARCH_ENGINE_HTTP_URL`` 에 ``http://localhost:9200`` 을 설정하지만, 15.8 의 파일은 직접
+설정하지 않는 한 설정되지 않은 상태로 둡니다. 또한 ``bin/fess-setup install nodejs`` 로 설치한
+Node.js 를 찾지 않으므로, ``PLAYWRIGHT_NODEJS_PATH`` 를 직접 설정하지 않는 한 Playwright
+크롤러는 Node.js 를 찾을 수 없습니다.
+
+어느 파일이든 통째로 복사하지 말고, 15.9 에 포함된 파일을 바탕으로 변경한 값을 다시
+적용하십시오. 변경한 값은 ``diff`` 로 확인할 수 있습니다::
+
+    $ diff /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.9.0/app/WEB-INF/classes/fess_config.properties
+    $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
+
+RPM 버전에서는 같은 방식으로 ``/etc/fess/fess_config.properties`` 와
+``/etc/fess/fess_config.properties.rpmnew`` 를 비교하십시오. DEB 버전 업그레이드에서는
+``/etc/fess/fess_config.properties`` 가 덮어써지므로(단계 3 참조) 15.9 의 값에서 시작하며,
+다시 적용해야 하는 것은 직접 변경한 값뿐입니다.
+
+.. _upgrade-159-jcifs:
+
+SMB 타임아웃은 jcifs 3 의 속성 이름을 사용
+------------------------------------------
+
+|Fess| 가 SMB 파일 서버를 크롤링할 때 사용하는 jcifs 는 버전 3 에서 속성 이름을 변경했습니다.
+``jcifs.smb.client.*`` 는 ``jcifs.client.*`` 가 되었고, SMB1 용의 ``jcifs.smb1.smb.client.*``
+도 같은 속성으로 통합되었습니다. 15.8 까지의 ``jvm.crawler.options`` 와
+``jvm.thumbnail.options`` 는 이전 이름을 전달했고 jcifs 는 이를 읽지 않으므로, SMB 크롤링은
+jcifs 의 기본값으로 동작했습니다. 15.9 는 새 이름을 전달합니다.
+
+::
+
+    -Djcifs.client.responseTimeout=30000
+    -Djcifs.client.soTimeout=35000
+    -Djcifs.client.connTimeout=60000
+    -Djcifs.client.sessionTimeout=60000
+
+따라서 연결 타임아웃과 세션 타임아웃이 처음으로 적용되어 jcifs 의 기본값인 35초에서 60초로
+늘어납니다. 응답하지 않는 SMB 서버에 대해 크롤링은 최대 60초 동안 기다리게 됩니다. 응답
+타임아웃과 소켓 타임아웃은 jcifs 의 기본값과 같으므로 바뀌지 않습니다.
+
+이 타임아웃들을 변경했다면 두 옵션 모두에서 이름을 바꾸십시오. 이전 이름으로는 15.8 에서도
+효과가 없었습니다. 15.8 에서 이어받은 ``fess_config.properties`` 에는 이전 이름이 남아 jcifs 의
+기본값이 그대로 사용됩니다.
+
+효과가 없던 네 가지 속성 삭제
+-----------------------------
+
+다음 키는 ``fess_config.properties`` 에서 삭제되었습니다. |Fess| 는 이 파일에서 이 키들을 읽지
+않았으므로, 이 이름으로 남겨 둔 값은 이전과 마찬가지로 효과가 없습니다.
+
+- ``theme.allowed.archive.extensions``
+- ``theme.assets.cache.max.age``
+- ``theme.assets.precompressed``
+- ``rag.chat.message.max.length``
+
+``rag.chat.message.max.length`` 가 정하는 상한은 계속 유효하지만 시스템 속성으로 읽힙니다.
+:doc:`../config/rag-chat` 에 설명된 대로 ``app/WEB-INF/conf/system.properties`` 또는
+``-Dfess.system.rag.chat.message.max.length`` 로 설정하십시오.
 
 15.9 전용 마이그레이션 작업
 ===========================
@@ -803,11 +998,27 @@ LDAP / Active Directory 연동을 사용하던 경우
 타임스탬프를 가리킵니다.
 
 
+.. _upgrade-plugin-versions:
+
 플러그인 버전 갱신
 ------------------------
 
 ``app/WEB-INF/plugin/`` 에 설치된 플러그인은 |Fess| 버전에 대응하는
-것으로 교체해야 합니다. Docker 버전에서 ``FESS_PLUGINS`` 를 지정하는 경우에는
+것으로 교체해야 합니다. ``bin/fess-setup upgrade plugins`` 는 설치된 모든 플러그인에 대해 이
+|Fess| 용으로 빌드된 버전을 설치하고 이전 버전을 삭제합니다. 그 후 |Fess| 를 재시작하십시오.
+``bin/fess-setup check`` 는 OpenSearch 와 그 플러그인, 설치된 |Fess| 플러그인의 상태를 보고하며,
+문제가 있으면 종료 코드 1 로 종료합니다.
+
+::
+
+    $ bin/fess-setup upgrade plugins
+    $ bin/fess-setup check
+
+``upgrade plugins`` 의 대상은 이미 설치된 플러그인뿐입니다. ``fess-script-groovy`` 등 15.9 에서
+배포물에서 빠진 부분을 보완하는 플러그인은 앞의 각 절에 설명된 대로
+``bin/fess-setup install plugin`` 으로 설치하십시오.
+
+Docker 버전에서 ``FESS_PLUGINS`` 를 지정하는 경우에는
 ``fess-ds-wikipedia:15.9.0`` 처럼 버전 부분을 갱신하십시오.
 
 롤백 절차

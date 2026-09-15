@@ -263,6 +263,13 @@ ZIP 版
        $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.9.0/app/WEB-INF/classes/
        $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/
 
+   .. warning::
+
+      如果原样复制 ``fess_config.properties`` 与 ``fess.in.sh`` ，旧版本的值会被沿用，其中也包括
+      15.9 中默认值已变更的项。例如，升级后新建的作业默认将使用 Groovy。执行最后两条命令之前，
+      请将各文件与 ``fess-15.9.0`` 中的文件进行比较，只迁移自己修改过的值。需要确认的项目请参阅
+      :ref:`upgrade-159-carried-over-config` 。
+
 3. 如有定制内容，请同时复制以下文件::
 
        # 日志配置
@@ -277,6 +284,12 @@ ZIP 版
       在管理页面「页面设计」中编辑过的 JSP（``app/WEB-INF/view/``），请不要直接复制过去。
       如果新版本的 JSP 结构发生了变化，画面可能无法正常显示。
       请将修改内容重新应用到新版本的 JSP 上。
+
+   .. note::
+
+      从 ``app/WEB-INF/plugin/`` 复制的插件是为旧版本构建的。复制后，请在 ``fess-15.9.0`` 中执行
+      ``bin/fess-setup upgrade plugins`` ，将各插件替换为针对 15.9 构建的版本（参阅
+      :ref:`upgrade-plugin-versions` ）。
 
 4. 确认配置差异，根据需要进行调整
 
@@ -295,14 +308,17 @@ RPM/DEB 版
 
    RPM 版中，``/etc/fess/*`` 的配置文件被注册为 ``%config(noreplace)``，
    因此在升级时会被保留（新的默认文件会以 ``.rpmnew`` 的形式并存）。
-   如果添加了新的配置选项，需要手动调整。
+   如果添加了新的配置选项，需要手动调整。修改过的 ``/etc/fess/fess_config.properties`` 与 ZIP 版
+   步骤中复制的文件一样，在 15.9 中仍使用旧值。请参阅 :ref:`upgrade-159-carried-over-config` 。
 
 .. warning::
 
    DEB 版中，``/etc/fess/*`` 并未注册为 conffile（conffile 仅有
    ``/etc/default/fess``\ 、\ ``/etc/init.d/fess``\ 、\ ``/usr/lib/systemd/system/fess.service``
    这 3 个）。因此执行 ``dpkg -i`` 时，``/etc/fess/fess_config.properties`` 等文件会被
-   新版本的文件覆盖。请在升级后，重新应用步骤 1 中备份的配置。
+   新版本的文件覆盖。覆盖时不会确认，也不会保留旧文件的副本，因此请事先备份（步骤 1）。升级后，
+   请不要原样恢复旧文件，而是将修改内容重新应用到新文件中（参阅
+   :ref:`upgrade-159-carried-over-config` ）。
    另外，``/etc/fess/system.properties`` 是不包含在软件包中的运行时生成文件，
    因此不会被覆盖。
 
@@ -457,7 +473,7 @@ Docker 版::
 从 15.8 升级到 15.9
 ===================
 
-若从 15.8 升级，以下八项为不向后兼容的变更。
+若从 15.8 升级，以下为不向后兼容的变更。
 
 内嵌 OpenSearch 的移除
 ----------------------
@@ -490,7 +506,7 @@ Playwright 爬虫移至插件
 -----------------------
 
 Playwright 爬虫及其使用的 Node.js 可执行文件不再包含在发行包中。
-因此 ZIP 从 438.5 MiB 减少到 204.7 MiB。
+在 ``fess-15.8.0.zip``\ （457.1 MiB）中，收纳 Node.js 可执行文件的 Playwright 驱动包占用了 204.3 MiB。
 
 如果爬取配置的设置参数中指定了 Playwright 客户端（例如
 ``client.crawlerClients=playwright:http://.*``\ ），请同时安装插件与 Node.js。
@@ -501,6 +517,10 @@ Playwright 爬虫及其使用的 Node.js 可执行文件不再包含在发行包
 
     $ bin/fess-setup install plugin fess-crawler-playwright
     $ bin/fess-setup install nodejs
+
+没有插件时，此类配置仍会被爬取，但使用的是普通 HTTP 客户端，因此只有 JavaScript 才会生成的
+文本不会被索引。爬取作业仍会正常结束，也不会记录失败 URL。每次爬取时， ``fess-crawler.log``
+会按每个爬取配置记录一条警告，其中给出插件名称和上面的两条命令。
 
 如果不使用 Playwright 爬虫，则无需处理。
 
@@ -573,16 +593,57 @@ SSO 认证移至插件
 
 15.8 之前内置的脚本引擎为 Groovy， ``job.default.script`` 的默认值也是 ``groovy`` 。15.9 中内置
 引擎为 JavaScript，默认值为 ``javascript`` 。Groovy 已不再内置，改由 ``fess-script-groovy``
-插件提供；要让 ``scriptType`` 的 ``groovy`` 生效，必须在管理页面「系统」→「插件」中安装该插件。
+插件提供；要让 ``scriptType`` 的 ``groovy`` 生效，必须安装该插件。
 
-已有的计划任务会保留注册时的 ``scriptType`` ，因此此前以 ``groovy`` 保存的任务在升级后仍为
-``groovy`` ，运行时需要该插件。升级后新建的任务则为 ``javascript`` 。请安装该插件，或在管理
-页面「系统」→「调度器」中将各任务的脚本改写为 JavaScript 引擎的写法。JavaScript 的数组字面量
-会自动转换为 Java 的 ``String[]`` ，因此不再需要 Groovy 写法中的 ``as String[]`` 。
+升级不会更改各设置中保存的脚本引擎，而 15.9 之前保存且未记录引擎的设置会被视为 ``groovy`` 。
+没有该插件时，以下内容将无法正常工作：
 
-::
+- 以 ``groovy`` 保存的计划任务。
+  **15.8 自行注册的任务也属于这种情况。**\ Default Crawler、Suggest Indexer、Config Reloader、
+  Log Aggregator、Doc Purger 等随附任务都以 ``groovy`` 保存，而 15.9 启动时只会添加尚不存在的
+  随附任务，因此不会改动它们。这些任务每次按计划触发都会失败，Default Crawler 也不再进行爬取。
+  大多数随附任务的「日志记录」处于关闭状态，因此失败不会出现在作业日志中，只会在 ``fess.log``
+  中留下 ``Failed to execute job`` 警告。
+- 在「配置参数」中编写了字段脚本（ ``field.script.<字段名>`` ）的 Web 爬取配置和文件爬取配置。
+  该配置的所有文档都会因 ``ScriptEngineException`` 失败并记录为失败 URL，而爬取作业本身仍会
+  正常结束。
+- 设置了「脚本」的数据存储配置。除参数名本身以外的值无法求值。请参阅
+  :doc:`../config/datastore/ds-overview` 。
+- 文档提升规则。该规则不会提升任何文档。
+- 「替换」以 ``groovy:`` 开头的路径映射。该映射不会被应用，URL 保持不变。
 
-    return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+首次启动后，请在 ``fess.log`` 中查找以
+``Settings use the script engine groovy, which is not registered`` 开头的警告。\ |Fess| 会在
+启动时检查一次上述设置，并按类型输出使用了没有任何插件提供的引擎的设置数量。如果从 15.8 沿用的
+``fess_config.properties`` 中仍为 ``job.default.script=groovy`` ，警告中也会列出该项，此时升级后
+新建的任务同样会使用 Groovy（参阅 :ref:`upgrade-159-carried-over-config` ）。请采用以下任一方式
+处理：
+
+- 安装该插件并重启 |Fess| 。已保存的 Groovy 脚本可原样运行，警告也不再输出。也可以在管理页面
+  「系统」→「插件」中安装该插件。
+
+  ::
+
+      $ bin/fess-setup install plugin fess-script-groovy
+
+- 将各设置改用 JavaScript。先改写只有 Groovy 才接受的语法，再选择 JavaScript：
+
+  - 计划任务：在管理页面「系统」→「调度器」中将「执行方法」改为 ``javascript`` 。随附任务的
+    脚本除以下两项外，原样即是有效的 JavaScript：Thumbnail Purger 使用了 Groovy 的 ``long``
+    字面量 ``1000L`` ，在 JavaScript 中会成为语法错误（请写成 ``1000`` ）；Index Exporter
+    需要进行 :ref:`upgrade-159-index-exporter` 中所述的修改。JavaScript 的数组字面量会自动转换为
+    Java 的 ``String[]`` ，因此不再需要 Groovy 写法中的 ``as String[]`` 。
+
+    ::
+
+        return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+  - Web 爬取配置和文件爬取配置：在「配置参数」中添加 ``config.script.type=javascript`` 。
+  - 数据存储配置：在「参数」中添加 ``script_type=javascript`` 。
+  - 文档提升规则：将「脚本类型」改为 ``javascript`` 。
+  - 路径映射：将「替换」的开头由 ``groovy:`` 改为 ``javascript:`` 。
+  - ``job.default.script`` ：在从 15.8 沿用的 ``fess_config.properties`` 中将其设置为
+    ``javascript`` 。
 
 ``crawler.default.script`` 已删除
 ---------------------------------
@@ -596,6 +657,126 @@ SSO 认证移至插件
 ``crawler.file.protocols`` 中不再接受 ``storage`` ，随附的值为 ``file,smb,smb1,ftp`` 。
 请改用 ``s3`` ，并将路径以 ``storage:`` 开头的文件爬取配置改为 ``s3:`` 路径。 ``s3`` 需要
 ``fess-storage-s3`` 插件。
+
+.. _upgrade-159-index-exporter:
+
+Index Exporter 作业引用了已删除的包
+-----------------------------------
+
+15.9 不再包含 ``org.opensearch`` 的类，作业脚本使用的查询构建器已移至
+``org.codelibs.fesen.opensearch`` 下。15.8 为 Index Exporter 作业保存的脚本引用了
+``org.opensearch.index.query.QueryBuilders`` ，而升级不会替换该脚本，因此即使安装了
+``fess-script-groovy`` ，该作业仍会失败。该作业随附时处于禁用状态且没有计划，因此只有在运行它时
+才会受到影响。请在管理页面「系统」→「调度器」中打开该作业，将脚本中的包改为 15.9 所用的包：
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob().query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery()).execute()
+
+如果自行编写的脚本中引用了 ``org.opensearch.index.query`` ，也请以同样方式修改。更多查询示例请
+参阅 :doc:`../config/admin-index-export` 。
+
+.. _upgrade-159-carried-over-config:
+
+从 15.8 沿用的配置文件
+----------------------
+
+步骤 3 的 ZIP 版步骤会从旧安装中复制 ``fess_config.properties`` 与 ``bin/fess.in.sh`` ；RPM 版
+升级则会保留修改过的 ``/etc/fess/fess_config.properties`` （15.9 的文件以
+``fess_config.properties.rpmnew`` 的形式并存）。无论哪种情况，15.9 都会以 15.8 的值运行，15.9
+中随附值已变更的键也不例外。请至少确认以下各键。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 键
+     - 15.8.0
+     - 15.9
+     - 保留 15.8 的值时的影响
+   * - ``job.default.script``
+     - ``groovy``
+     - ``javascript``
+     - 在管理页面「系统」→「调度器」中新建的作业默认使用 ``groovy`` ，没有
+       ``fess-script-groovy`` 插件时会失败。
+   * - ``job.template.script``
+     - 含 ``as String[]`` 的 Groovy 写法
+     - JavaScript 写法
+     - 从爬取配置创建的作业会得到 Groovy 脚本。
+   * - ``crawler.file.protocols``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp``
+     - 以 ``s3:`` 或 ``gcs:`` 开头的路径即使没有对应插件也会被接受，爬取时记录警告并跳过。
+       ``storage`` 已不再受支持。
+   * - ``search_engine.http.url``
+     - ``http://localhost:9201``
+     - ``http://localhost:9200``
+     - 在未设置 ``SEARCH_ENGINE_HTTP_URL`` 时使用。从 15.8 复制的 ``bin/fess.in.sh`` 中未设置
+       该变量时即属于这种情况，此时 |Fess| 会在 9201 端口查找 OpenSearch，即 15.9 已移除的内嵌
+       OpenSearch 所用的端口。
+   * - ``jvm.crawler.options``\ 、\ ``jvm.thumbnail.options``
+     - ``-Djcifs.smb.client.*``\ 、\ ``-Djcifs.smb1.smb.client.*``
+     - ``-Djcifs.client.*``
+     - SMB 超时保持为 jcifs 的默认值。请参阅 :ref:`upgrade-159-jcifs` 。
+   * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
+       ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
+       ``rag.chat.message.max.length``
+     - 存在
+     - 已删除
+     - 不起作用，请删除。
+
+从 15.8 复制的 ``bin/fess.in.sh`` 还缺少 15.9 文件中的以下两点。15.9 会将
+``SEARCH_ENGINE_HTTP_URL`` 设置为 ``http://localhost:9200`` ，而 15.8 的文件除非自行设置，否则
+保持未设置状态。此外，它不会查找通过 ``bin/fess-setup install nodejs`` 安装的 Node.js，因此除非
+自行设置 ``PLAYWRIGHT_NODEJS_PATH`` ，否则 Playwright 爬虫找不到 Node.js。
+
+请不要整体复制这两个文件，而是以 15.9 随附的文件为基础，重新应用自己修改过的值。可以用
+``diff`` 查看这些值::
+
+    $ diff /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.9.0/app/WEB-INF/classes/fess_config.properties
+    $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
+
+RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
+``/etc/fess/fess_config.properties.rpmnew`` 。DEB 版升级则会覆盖
+``/etc/fess/fess_config.properties`` （参阅步骤 3），因此从 15.9 的值开始，只需重新应用自己的
+修改。
+
+.. _upgrade-159-jcifs:
+
+SMB 超时改用 jcifs 3 的属性名
+-----------------------------
+
+|Fess| 爬取 SMB 文件服务器时使用的 jcifs 在版本 3 中更改了属性名： ``jcifs.smb.client.*`` 改为
+``jcifs.client.*`` ，SMB1 专用的 ``jcifs.smb1.smb.client.*`` 也合并到了相同的属性中。15.8 之前，
+``jvm.crawler.options`` 与 ``jvm.thumbnail.options`` 仍传递旧名称，而 jcifs 不读取这些名称，因此
+SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
+
+::
+
+    -Djcifs.client.responseTimeout=30000
+    -Djcifs.client.soTimeout=35000
+    -Djcifs.client.connTimeout=60000
+    -Djcifs.client.sessionTimeout=60000
+
+因此，连接超时与会话超时首次生效，从 jcifs 默认的 35 秒延长到 60 秒：对于没有响应的 SMB
+服务器，爬取现在最多会等待 60 秒。响应超时与套接字超时与 jcifs 的默认值相同，因此不会变化。
+
+如果修改过这些超时，请在两个选项中改用新名称。使用旧名称时，它们在 15.8 中同样不起作用。从 15.8
+沿用的 ``fess_config.properties`` 会保留旧名称，也就仍使用 jcifs 的默认值。
+
+删除了四个不起作用的属性
+------------------------
+
+以下键已从 ``fess_config.properties`` 中删除。\ |Fess| 从未从该文件读取它们，因此以这些名称保留的
+值与以前一样不起作用。
+
+- ``theme.allowed.archive.extensions``
+- ``theme.assets.cache.max.age``
+- ``theme.assets.precompressed``
+- ``rag.chat.message.max.length``
+
+``rag.chat.message.max.length`` 设定的上限仍然有效，但会作为系统属性读取：请按照
+:doc:`../config/rag-chat` 中的说明，在 ``app/WEB-INF/conf/system.properties`` 中或通过
+``-Dfess.system.rag.chat.message.max.length`` 进行设置。
 
 15.9 特有的迁移工作
 ===================
@@ -767,10 +948,24 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 ``rt`` 的取值上限，而该值是时间戳而非响应时间。
 
 
+.. _upgrade-plugin-versions:
+
 插件版本更新
 ------------------------
 
 安装在 ``app/WEB-INF/plugin/`` 中的插件，需要替换为与 |Fess| 版本对应的版本。
+``bin/fess-setup upgrade plugins`` 会针对所有已安装的插件，安装为此 |Fess| 构建的版本并删除旧版本。
+之后请重启 |Fess| 。 ``bin/fess-setup check`` 会报告 OpenSearch 及其插件、已安装的 |Fess| 插件的
+状态，出现问题时以退出码 1 结束。
+
+::
+
+    $ bin/fess-setup upgrade plugins
+    $ bin/fess-setup check
+
+``upgrade plugins`` 只处理已安装的插件。 ``fess-script-groovy`` 等用于补充 15.9 从发行包中移除
+部分的插件，请按照前面各节的说明，使用 ``bin/fess-setup install plugin`` 安装。
+
 如果在 Docker 版中指定了 ``FESS_PLUGINS``，请按照 ``fess-ds-wikipedia:15.9.0``
 的形式更新版本号部分。
 
