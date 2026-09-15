@@ -79,19 +79,34 @@
 步骤 1: 安装 OpenSearch
 ---------------------------
 
+.. important::
+
+   请以普通用户而非 ``root`` 安装和运行 OpenSearch：OpenSearch 拒绝以 ``root`` 身份启动。下面的 ``bin/fess-setup`` 也请以该用户运行，以使其解压的文件归该用户所有。如果以 ``root`` 启动已经被拒绝，请参阅 :doc:`run`\ 。
+
 .. tip::
 
-   |Fess| 附带的 ``bin/fess-setup`` 可以一条命令完成下面的步骤：下载并解压 OpenSearch、
-   安装所需插件，以及配置 ``configsync``\ 。
+   |Fess| 附带的 ``bin/fess-setup`` 可以一条命令完成下面的步骤 1 到 3：将 OpenSearch 下载并解压到 |Fess| 目录下的 ``opensearch/`` 中，安装所需插件，并向其 ``config/opensearch.yml`` 添加 ``configsync.config_path`` 和 ``plugins.security.disabled: true``\ 。请先按照步骤 2 的说明解压 |Fess| 的 ZIP。
 
    ::
 
        $ cd /path/to/fess-15.9.0
        $ bin/fess-setup install opensearch
 
+   ``bin/fess.in.sh`` 会找到以这种方式安装的 OpenSearch 并自动设置 ``FESS_DICTIONARY_PATH``\ ，因此只要 OpenSearch 在同一主机上运行，步骤 2 的「配置 Fess」就无需修改。命令会显示它添加的配置，以及 ``bin/fess.in.sh`` 能否找到该安装。在让 OpenSearch 监听 ``localhost`` 以外的地址之前，请阅读第 3 步中的警告。
+
    如果想逐步确认，或者要使用已有的 OpenSearch，请按照下面的步骤操作。
    若只需向已有的 OpenSearch 安装插件，请使用
-   ``bin/fess-setup install plugins --opensearch-home /path/to/opensearch``\ 。
+   ``bin/fess-setup install opensearch-plugins --opensearch-home /path/to/opensearch``\ 。
+   所有命令请参阅 :doc:`fess-setup`\ 。
+
+.. note::
+
+   OpenSearch 没有官方的 macOS 发行版，因此在 macOS 上 ``bin/fess-setup install opensearch`` 会以错误结束。请使用 Homebrew 安装 OpenSearch 并通过 ``bin/fess-setup install opensearch-plugins`` 添加插件，或者改用 :doc:`install-docker`::
+
+       $ brew install opensearch
+       $ bin/fess-setup install opensearch-plugins --opensearch-home $(brew --prefix opensearch)
+
+   然后按照第 3 步配置该 OpenSearch，并按照步骤 2 的「配置 Fess」设置 ``FESS_DICTIONARY_PATH``\ 。
 
 1. 下载 OpenSearch
 
@@ -176,32 +191,36 @@
 
 2. 配置 Fess
 
-   编辑 ``bin/fess.in.sh``，设置到 OpenSearch 的连接信息。
-   该文件中预先以注释状态提供了用于连接外部 OpenSearch 集群的配置。
+   到 OpenSearch 的连接信息位于 ``bin/fess.in.sh`` 中。对于通过 ``bin/fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch/`` 中、并在同一主机上运行的 OpenSearch，无需修改此文件：\ ``SEARCH_ENGINE_HTTP_URL`` 默认为 ``http://localhost:9200``\ ，\ ``FESS_DICTIONARY_PATH`` 会被设置为该 OpenSearch 的 ``config/dictionary`` 目录。
+
+   在以下任一情况下，请编辑 ``bin/fess.in.sh``\ ：
+
+   - 通过其他方式安装了 OpenSearch，例如按照上面的第 1 到 3 步或使用 Homebrew，或者使用 ``--dest`` 安装到了 |Fess| 目录之外。
+   - |Fess| 目录下的 ``opensearch/`` 中有多个通过 ``bin/fess-setup`` 安装的 OpenSearch，例如两个版本。\ ``bin/fess.in.sh`` 无法判断正在使用哪一个，因此会显示警告，并且不设置 ``FESS_DICTIONARY_PATH``\ 。
+   - OpenSearch 在其他主机或端口上运行。
 
    ::
 
        $ vi bin/fess.in.sh
 
-   取消文件开头附近以下 2 行的注释（行首的 ``#``）。
+   在文件开头附近，删除 ``FESS_DICTIONARY_PATH`` 行行首的 ``#`` 并设置路径，必要时更改 ``SEARCH_ENGINE_HTTP_URL`` 行中的 URL。
 
-   修改前（默认状态）::
+   修改前（默认状态，省略注释行）::
 
-       # External opensearch cluster
-       #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
        #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    修改后::
 
-       # External opensearch cluster
-       SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
        FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
 
    .. note::
 
-      - ``FESS_DICTIONARY_PATH`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。
-      - 如果 OpenSearch 在其他主机上运行，请将 ``SEARCH_ENGINE_HTTP_URL`` 更改为适当的主机名或 IP 地址。例: ``SEARCH_ENGINE_HTTP_URL=http://192.168.1.100:9200``
-      - 请勿新增 ``SEARCH_ENGINE_HTTP_URL=...`` 行，而应取消注释已有的注释行并进行编辑。
+      - ``FESS_DICTIONARY_PATH`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。未设置时，|Fess| 无法创建索引，也无法启动。
+      - 如果 OpenSearch 在其他主机上运行，请将 ``SEARCH_ENGINE_HTTP_URL`` 行中的 URL 更改为该主机。例: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``\ 。此时 ``FESS_DICTIONARY_PATH`` 为该服务器的 ``configsync.config_path``\ 。
+      - 也可以不编辑文件，而在启动 |Fess| 的环境中 export 这两个变量。export 的 ``SEARCH_ENGINE_HTTP_URL`` 优先于文件中的 URL；只要文件中的对应行保持注释状态，就会使用 export 的 ``FESS_DICTIONARY_PATH``\ 。
+      - 请勿新增 ``SEARCH_ENGINE_HTTP_URL=...`` 行，而应编辑已有的行。
 
    .. tip::
 
@@ -213,6 +232,8 @@
 
        $ grep "SEARCH_ENGINE_HTTP_URL" bin/fess.in.sh
        $ grep "FESS_DICTIONARY_PATH" bin/fess.in.sh
+
+   OpenSearch 启动后，\ ``bin/fess-setup check`` 会报告能否连接到 OpenSearch、是否安装了 |Fess| 所需的插件，以及 ``configsync`` 是否响应。没有检查项失败时，它以退出码 ``0`` 结束。当 OpenSearch 不在 ``http://localhost:9200`` 时，请指定 ``--url``\ 。
 
 步骤 3: 启动
 ----------------

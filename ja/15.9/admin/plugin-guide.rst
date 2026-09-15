@@ -51,5 +51,7 @@
 
 新しいバージョンのインストールが完了した後に、同じプラグインの以前のバージョンが削除されます。存在しないバージョンを指定した場合は終了コード 1 で終了するため、Dockerfile などのビルド手順に組み込んでも、プラグインが欠けたまま処理が進むことはありません。
 
+``bin/fess-setup list plugins`` はこの |Fess| 向けに公開されているプラグインと導入状況を、 ``list installed`` はリポジトリに問い合わせずに導入済みのプラグインを表示します。 ``upgrade plugins`` は導入済みのすべてのプラグインをこの |Fess| に合うバージョンで導入し直し、 ``remove plugin`` はプラグインを削除します。プラグインを導入、更新、削除した後は |Fess| を再起動してください。すべてのコマンドとオプションについては :doc:`../install/fess-setup` を参照してください。
+
 .. |image0| image:: ../../../resources/images/ja/15.9/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/ja/15.9/admin/plugin-2.png

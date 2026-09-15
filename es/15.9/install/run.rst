@@ -29,6 +29,21 @@ Para iniciar en segundo plano::
 
     $ ./bin/opensearch -d
 
+.. note::
+
+   ``bin/fess-setup install opensearch`` coloca OpenSearch en ``opensearch/opensearch-3.8.0``
+   dentro del directorio de |Fess|.
+
+.. important::
+
+   Inicie OpenSearch con un usuario normal. Se niega a ejecutarse como ``root`` y termina con
+   ``can not run opensearch as root``. Aun así, el inicio rechazado deja archivos como
+   ``config/opensearch.keystore`` con ``root`` como propietario, y el siguiente inicio con un
+   usuario normal falla con ``AccessDeniedException``. Devuelva el directorio de OpenSearch a ese
+   usuario antes de volver a iniciarlo, por ejemplo::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.8.0
+
 Inicio de Fess
 ~~~~~~~~~~~~~~
 

@@ -475,6 +475,13 @@ JVM 안에서 OpenSearch 노드를 시작했습니다. 15.9 에서는 이 구성
 로 설치할 수 있습니다(Linux 와 Windows 만 지원. macOS 용 OpenSearch 공식 배포판은 없으므로
 Homebrew 또는 Docker 를 사용하십시오).
 
+또한 ``FESS_DICTIONARY_PATH`` 를 해당 OpenSearch 의 ``opensearch.yml`` 에 있는 ``configsync.config_path``
+와 일치시켜야 합니다. 설정되지 않았거나 일치하지 않으면 |Fess| 는 인덱스를 생성할 수 없습니다. 15.9 의
+``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )는 |Fess| 디렉터리의 ``opensearch/`` 에
+``bin/fess-setup install opensearch`` 로 설치한 OpenSearch 가 하나만 있을 때 이를 자동으로 설정합니다.
+그 밖의 OpenSearch 를 사용하는 경우에는 :doc:`install-linux` 또는 :doc:`install-windows` 에 따라
+설정하십시오.
+
 다음도 함께 폐지되었습니다.
 
 - ``es/`` 디렉터리( ``es/modules`` , ``es/plugins`` , ``es/data`` )

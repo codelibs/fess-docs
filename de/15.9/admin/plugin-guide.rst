@@ -51,5 +51,7 @@ Plug-ins werden einzeln veröffentlicht, daher haben gemeinsam installierte Plug
 
 Die zuvor installierte Version eines Plug-ins wird gelöscht, nachdem die neue installiert wurde. Eine nicht vorhandene Version beendet den Befehl mit dem Exit-Code 1, sodass ein Build-Schritt wie ein Dockerfile fehlschlägt, statt ohne das Plug-in fortzufahren.
 
+``bin/fess-setup list plugins`` zeigt die für dieses |Fess| veröffentlichten Plug-ins und welche davon installiert sind, ``list installed`` zeigt die installierten Plug-ins, ohne das Repository abzufragen, ``upgrade plugins`` installiert jedes installierte Plug-in in der Version neu, die zu diesem |Fess| passt, und ``remove plugin`` löscht ein Plug-in. Starten Sie |Fess| neu, nachdem Sie Plug-ins installiert, aktualisiert oder entfernt haben. Alle Befehle und Optionen finden Sie unter :doc:`../install/fess-setup`.
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/plugin-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/plugin-2.png

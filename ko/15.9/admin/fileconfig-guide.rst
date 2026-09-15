@@ -18,6 +18,11 @@
 - ``s3://`` … Amazon S3 버킷（ ``fess-storage-s3`` 플러그인 필요）
 - ``gcs://`` … Google Cloud Storage 버킷（ ``fess-storage-gcs`` 플러그인 필요）
 
+.. note::
+   ``fess-storage-s3`` 플러그인과 ``fess-storage-gcs`` 플러그인은 배포물에 포함되어 있지 않으므로
+   관리 화면의 「시스템 > 플러그인」 페이지 또는 ``bin/fess-setup install plugin fess-storage-s3`` ,
+   ``bin/fess-setup install plugin fess-storage-gcs`` 로 설치하십시오.
+
 관리 방법
 ======
 

@@ -14,6 +14,7 @@ prerequisites, security settings, upgrading, and troubleshooting.
    install-linux
    install-windows
    install-docker
+   fess-setup
    run
    security
    upgrade

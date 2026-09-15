@@ -14,6 +14,7 @@ Linux, Windows, Docker에 |Fess|\ 를 설치하고 실행하는 방법을 동작
    install-linux
    install-windows
    install-docker
+   fess-setup
    run
    security
    upgrade

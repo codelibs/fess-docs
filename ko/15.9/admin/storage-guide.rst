@@ -25,6 +25,11 @@
    포함되어 있지 않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
    ``bin/fess-setup install plugin fess-storage-s3`` 로 설치하십시오.
 
+.. note::
+   Google Cloud Storage 지원은 ``fess-storage-gcs`` 플러그인에서 제공됩니다. 배포물에
+   포함되어 있지 않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
+   ``bin/fess-setup install plugin fess-storage-gcs`` 로 설치하십시오.
+
 
 표시 방법
 ------

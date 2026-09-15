@@ -63,16 +63,27 @@ Configuration des variables d'environnement
 .. tip::
 
    ``bin\fess-setup``, fourni avec |Fess|, exécute les étapes ci-dessous en une seule commande :
-   téléchargement et extraction d'OpenSearch, installation des plugins requis et configuration
-   de ``configsync``.
+   il télécharge et extrait OpenSearch dans ``opensearch\`` du répertoire de |Fess|, installe les
+   plugins requis, puis ajoute ``configsync.config_path`` et ``plugins.security.disabled: true``
+   à son ``config\opensearch.yml``. Décompressez d'abord le ZIP de |Fess|, comme décrit à
+   l'Étape 2.
 
    ::
 
        > cd C:\fess-15.9.0
        > bin\fess-setup install opensearch
 
+   ``bin\fess.in.bat`` trouve un OpenSearch installé de cette façon et transmet son répertoire
+   ``config\dictionary`` à |Fess| : « Configuration de Fess » à l'Étape 2 ne nécessite donc aucune
+   modification tant qu'OpenSearch s'exécute sur le même hôte. La commande affiche les paramètres
+   ajoutés et indique si ``bin\fess.in.bat`` trouve l'installation. Lisez l'avertissement de
+   « Configuration d'OpenSearch » avant qu'OpenSearch n'écoute sur une autre adresse que
+   ``localhost``.
+
    Suivez les étapes ci-dessous pour les dérouler une à une, ou lorsque vous utilisez un
-   OpenSearch existant.
+   OpenSearch existant. Pour n'installer que les plugins dans un OpenSearch existant, utilisez
+   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.8.0``.
+   Consultez :doc:`fess-setup` pour toutes les commandes.
 
 Téléchargement d'OpenSearch
 ----------------------------
@@ -168,6 +179,12 @@ Téléchargement de Fess
 Configuration de Fess
 ----------------------
 
+Avec un OpenSearch que ``bin\fess-setup install opensearch`` a installé dans ``opensearch\`` du
+répertoire de |Fess| et qui s'exécute sur le même hôte, aucune configuration n'est nécessaire ici.
+Dans les autres cas, par exemple lorsqu'OpenSearch a été installé avec les étapes ci-dessus,
+s'exécute sur un autre hôte, ou lorsque ``opensearch\`` contient plus d'un OpenSearch installé par
+``bin\fess-setup``, configurez la connexion comme suit.
+
 Ouvrez ``bin\fess.in.bat`` avec un éditeur de texte.
 Vers la fin de ce fichier, les paramètres de connexion à un cluster OpenSearch externe sont préparés à l'avance sous forme de lignes commentées.
 
@@ -175,7 +192,7 @@ Avant modification (état par défaut) ::
 
     REM External opensearch cluster
     REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=%SEARCH_ENGINE_HOME%/config/
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch/config/dictionary
 
 Supprimez le préfixe ``REM `` en début des 2 dernières lignes pour décommenter, puis modifiez la valeur de ``fess.dictionary.path`` avec le chemin de synchronisation de configuration d'OpenSearch.
 
@@ -189,7 +206,7 @@ Après modification ::
 
    - Pour ``fess.dictionary.path``, spécifiez le même chemin que ``configsync.config_path`` défini dans le fichier ``opensearch.yml`` d'OpenSearch.
    - Si vous exécutez OpenSearch sur un autre hôte, modifiez le nom d'hôte ou l'adresse IP de ``fess.search_engine.http_address`` avec la valeur appropriée.
-   - Utilisez ``/`` comme séparateur de chemin.
+   - Utilisez ``/`` comme séparateur de chemin. |Fess| insère le chemin dans les paramètres de l'index, où un ``\`` est perdu : un chemin écrit avec ``\`` n'est donc pas trouvé.
    - Ne pas ajouter de nouvelles lignes ``set FESS_JAVA_OPTS=...`` ; décommentez et éditez les lignes existantes. La spécification dupliquée d'une même option peut provoquer un comportement inattendu.
 
 .. tip::

@@ -62,15 +62,19 @@ PowerShell 的情况::
 
 .. tip::
 
-   |Fess| 附带的 ``bin\fess-setup`` 可以一条命令完成下面的步骤：下载并解压 OpenSearch、
-   安装所需插件，以及配置 ``configsync``\ 。
+   |Fess| 附带的 ``bin\fess-setup`` 可以一条命令完成下面的步骤：将 OpenSearch 下载并解压到 |Fess| 目录下的 ``opensearch\`` 中，安装所需插件，并向其 ``config\opensearch.yml`` 添加 ``configsync.config_path`` 和 ``plugins.security.disabled: true``\ 。请先按照步骤 2 的说明解压 |Fess| 的 ZIP。
 
    ::
 
        > cd C:\fess-15.9.0
        > bin\fess-setup install opensearch
 
+   ``bin\fess.in.bat`` 会找到以这种方式安装的 OpenSearch，并将其 ``config\dictionary`` 目录传递给 |Fess|\ ，因此只要 OpenSearch 在同一主机上运行，步骤 2 的「配置 Fess」就无需修改。命令会显示它添加的配置，以及 ``bin\fess.in.bat`` 能否找到该安装。在让 OpenSearch 监听 ``localhost`` 以外的地址之前，请阅读「配置 OpenSearch」中的警告。
+
    如果想逐步确认，或者要使用已有的 OpenSearch，请按照下面的步骤操作。
+   若只需向已有的 OpenSearch 安装插件，请使用
+   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.8.0``\ 。
+   所有命令请参阅 :doc:`fess-setup`\ 。
 
 下载 OpenSearch
 ---------------
@@ -166,6 +170,8 @@ PowerShell 的情况::
 配置 Fess
 ---------
 
+对于通过 ``bin\fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch\`` 中、并在同一主机上运行的 OpenSearch，此处无需任何配置。否则，例如按照上面的步骤安装了 OpenSearch、OpenSearch 在其他主机上运行，或 ``opensearch\`` 中有多个通过 ``bin\fess-setup`` 安装的 OpenSearch 时，请按以下方式配置连接。
+
 使用文本编辑器打开 ``bin\fess.in.bat``\ 。
 该文件末尾附近已预先以注释状态提供了用于连接外部 OpenSearch 集群的配置。
 
@@ -173,7 +179,7 @@ PowerShell 的情况::
 
     REM External opensearch cluster
     REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=%SEARCH_ENGINE_HOME%/config/
+    REM set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch/config/dictionary
 
 删除下面两行行首的 ``REM `` 以取消注释，并将 ``fess.dictionary.path`` 的值更改为 OpenSearch 配置同步路径。
 
@@ -187,7 +193,7 @@ PowerShell 的情况::
 
    - ``fess.dictionary.path`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。
    - 如果 OpenSearch 在其他主机上运行，请将 ``fess.search_engine.http_address`` 中的主机名或 IP 地址更改为适当的值。
-   - 路径分隔符请使用 ``/``\ 。
+   - 路径分隔符请使用 ``/``\ 。\ |Fess| 会将该路径插入索引设置中，其中的 ``\`` 会丢失，因此用 ``\`` 书写的路径将无法找到。
    - 请勿新增 ``set FESS_JAVA_OPTS=...`` 行，而应取消注释已有的注释行并进行编辑。重复指定相同选项可能导致意外行为。
 
 .. tip::

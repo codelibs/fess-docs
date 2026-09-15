@@ -29,6 +29,21 @@ Pour un démarrage en arrière-plan ::
 
     $ ./bin/opensearch -d
 
+.. note::
+
+   ``bin/fess-setup install opensearch`` place OpenSearch dans ``opensearch/opensearch-3.8.0`` du
+   répertoire de |Fess|.
+
+.. important::
+
+   Démarrez OpenSearch avec un utilisateur ordinaire. Il refuse de s'exécuter en tant que ``root``
+   et se termine avec ``can not run opensearch as root``. Ce démarrage refusé laisse néanmoins des
+   fichiers tels que ``config/opensearch.keystore`` appartenant à ``root``, et le démarrage suivant
+   avec un utilisateur ordinaire échoue alors avec ``AccessDeniedException``. Rendez le répertoire
+   d'OpenSearch à cet utilisateur avant de le démarrer à nouveau, par exemple ::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.8.0
+
 Démarrage de Fess
 ~~~~~~~~~~~~~~~~~
 

@@ -79,19 +79,34 @@ ZIP 버전 설치
 단계 1: OpenSearch 설치
 -----------------------
 
+.. important::
+
+   OpenSearch 는 ``root`` 로는 시작되지 않으므로 일반 사용자로 설치하고 실행하십시오. 아래의 ``bin/fess-setup`` 도 같은 사용자로 실행하여, 압축 해제되는 파일의 소유자가 그 사용자가 되도록 하십시오. ``root`` 로 시작하려다 이미 거부된 경우에는 :doc:`run` 을 참조하십시오.
+
 .. tip::
 
-   |Fess| 에 포함된 ``bin/fess-setup`` 으로 아래 절차를 한 번에 실행할 수 있습니다.
-   OpenSearch 다운로드와 압축 해제, 필요한 플러그인 설치, ``configsync`` 설정까지 수행합니다.
+   |Fess| 에 포함된 ``bin/fess-setup`` 으로 아래 절차 1~3을 한 번에 실행할 수 있습니다. OpenSearch 를 |Fess| 디렉터리의 ``opensearch/`` 에 다운로드하여 압축 해제하고, 필요한 플러그인을 설치한 다음, 해당 ``config/opensearch.yml`` 에 ``configsync.config_path`` 와 ``plugins.security.disabled: true`` 를 추가합니다. 먼저 단계 2 에 설명된 대로 |Fess| 의 ZIP 을 압축 해제해 두십시오.
 
    ::
 
        $ cd /path/to/fess-15.9.0
        $ bin/fess-setup install opensearch
 
+   이 방법으로 설치한 OpenSearch 는 ``bin/fess.in.sh`` 가 찾아서 ``FESS_DICTIONARY_PATH`` 를 자동으로 설정하므로, OpenSearch 를 같은 호스트에서 실행하는 한 단계 2 의 「Fess 설정」은 변경할 필요가 없습니다. 명령은 추가한 설정과, ``bin/fess.in.sh`` 가 이 설치를 찾을 수 있는지를 표시합니다. OpenSearch 가 ``localhost`` 이외의 주소에서 수신 대기하기 전에 절차 3의 경고를 확인하십시오.
+
    절차를 하나씩 확인하려는 경우나 기존 OpenSearch 를 사용하는 경우에는 아래를 따르십시오.
    기존 OpenSearch 에 플러그인만 설치하려면
-   ``bin/fess-setup install plugins --opensearch-home /path/to/opensearch`` 를 사용합니다.
+   ``bin/fess-setup install opensearch-plugins --opensearch-home /path/to/opensearch`` 를 사용합니다.
+   모든 명령에 대해서는 :doc:`fess-setup` 을 참조하십시오.
+
+.. note::
+
+   OpenSearch 는 macOS 용 공식 배포판이 없으므로, macOS 에서는 ``bin/fess-setup install opensearch`` 가 오류로 종료됩니다. Homebrew 로 OpenSearch 를 설치하고 ``bin/fess-setup install opensearch-plugins`` 로 플러그인을 넣거나, 대신 :doc:`install-docker` 를 사용하십시오::
+
+       $ brew install opensearch
+       $ bin/fess-setup install opensearch-plugins --opensearch-home $(brew --prefix opensearch)
+
+   그런 다음 절차 3과 같이 OpenSearch 를 설정하고, 단계 2 의 「Fess 설정」에 따라 ``FESS_DICTIONARY_PATH`` 를 설정하십시오.
 
 1. OpenSearch 다운로드
 
@@ -176,32 +191,36 @@ ZIP 버전 설치
 
 2. Fess 설정
 
-   ``bin/fess.in.sh`` 를 편집하여 OpenSearch 연결 정보를 설정합니다.
-   이 파일에는 외부 OpenSearch 클러스터에 연결하기 위한 설정이 미리 주석 처리된 상태로 준비되어 있습니다.
+   OpenSearch 연결 정보는 ``bin/fess.in.sh`` 에 있습니다. ``bin/fess-setup install opensearch`` 로 |Fess| 디렉터리의 ``opensearch/`` 에 설치하고 같은 호스트에서 실행하는 OpenSearch 라면 이 파일을 변경할 필요가 없습니다. ``SEARCH_ENGINE_HTTP_URL`` 의 기본값은 ``http://localhost:9200`` 이며, ``FESS_DICTIONARY_PATH`` 에는 해당 OpenSearch 의 ``config/dictionary`` 디렉터리가 설정됩니다.
+
+   다음 중 하나에 해당하는 경우에는 ``bin/fess.in.sh`` 를 편집합니다.
+
+   - OpenSearch 를 위의 절차 1~3이나 Homebrew 등 다른 방법으로 설치한 경우, 또는 ``--dest`` 로 |Fess| 디렉터리 밖에 설치한 경우
+   - |Fess| 디렉터리의 ``opensearch/`` 에 ``bin/fess-setup`` 으로 설치한 OpenSearch 가 두 개 이상 있는 경우(예: 두 버전). ``bin/fess.in.sh`` 는 어느 것을 사용하는지 판단할 수 없으므로 경고를 표시하고 ``FESS_DICTIONARY_PATH`` 를 설정하지 않습니다
+   - OpenSearch 를 다른 호스트나 포트에서 실행하는 경우
 
    ::
 
        $ vi bin/fess.in.sh
 
-   파일 앞부분에 있는 다음 두 줄의 주석(``#``)을 해제합니다.
+   파일 앞부분에 있는 ``FESS_DICTIONARY_PATH`` 줄의 주석(``#``)을 해제하여 경로를 설정하고, 필요에 따라 ``SEARCH_ENGINE_HTTP_URL`` 줄의 URL 을 변경합니다.
 
-   변경 전(기본 상태)::
+   변경 전(기본 상태, 주석 줄은 생략)::
 
-       # External opensearch cluster
-       #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
        #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    변경 후::
 
-       # External opensearch cluster
-       SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
        FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
 
    .. note::
 
-      - ``FESS_DICTIONARY_PATH`` 에는 OpenSearch의 ``opensearch.yml`` 에서 지정한 ``configsync.config_path`` 와 동일한 경로를 설정하십시오.
-      - OpenSearch를 다른 호스트에서 실행하는 경우 ``SEARCH_ENGINE_HTTP_URL`` 을 적절한 호스트 이름 또는 IP 주소로 변경하십시오. 예: ``SEARCH_ENGINE_HTTP_URL=http://192.168.1.100:9200``
-      - 새로 ``SEARCH_ENGINE_HTTP_URL=...`` 줄을 추가하지 말고, 기존 주석 줄의 주석을 해제하여 편집하십시오.
+      - ``FESS_DICTIONARY_PATH`` 에는 OpenSearch의 ``opensearch.yml`` 에서 지정한 ``configsync.config_path`` 와 동일한 경로를 설정하십시오. 설정하지 않으면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
+      - OpenSearch를 다른 호스트에서 실행하는 경우 ``SEARCH_ENGINE_HTTP_URL`` 줄의 URL 을 그 호스트로 변경하십시오. 예: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}`` . 이때 ``FESS_DICTIONARY_PATH`` 에는 그 서버의 ``configsync.config_path`` 를 설정합니다.
+      - 파일을 편집하는 대신 |Fess| 를 시작하는 환경에서 두 변수를 export 할 수도 있습니다. export 한 ``SEARCH_ENGINE_HTTP_URL`` 은 파일의 URL 보다 우선하며, export 한 ``FESS_DICTIONARY_PATH`` 는 파일의 해당 줄이 주석 상태로 남아 있으면 사용됩니다.
+      - 새로 ``SEARCH_ENGINE_HTTP_URL=...`` 줄을 추가하지 말고 기존 줄을 편집하십시오.
 
    .. tip::
 
@@ -213,6 +232,8 @@ ZIP 버전 설치
 
        $ grep "SEARCH_ENGINE_HTTP_URL" bin/fess.in.sh
        $ grep "FESS_DICTIONARY_PATH" bin/fess.in.sh
+
+   OpenSearch 를 시작한 후에는 ``bin/fess-setup check`` 로 OpenSearch 에 접속할 수 있는지, |Fess| 가 필요로 하는 플러그인이 설치되어 있는지, ``configsync`` 가 응답하는지 확인할 수 있습니다. 실패한 항목이 없으면 종료 코드 ``0`` 으로 종료합니다. OpenSearch 가 ``http://localhost:9200`` 에 있지 않은 경우에는 ``--url`` 을 지정하십시오.
 
 단계 3: 시작
 ------------

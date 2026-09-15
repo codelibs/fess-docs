@@ -475,6 +475,8 @@ JVM 内で OpenSearch ノードを起動していました。15.9 ではこの�
 で導入できます（Linux と Windows のみ。macOS には OpenSearch の公式配布がないため、Homebrew か
 Docker を使用してください）。
 
+また、 ``FESS_DICTIONARY_PATH`` をその OpenSearch の ``opensearch.yml`` にある ``configsync.config_path`` と一致させる必要があります。設定されていないか一致していないと、 |Fess| はインデックスを作成できません。15.9 の ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）は、 |Fess| のディレクトリの ``opensearch/`` に ``bin/fess-setup install opensearch`` で導入した OpenSearch が 1 つだけある場合に、これを自動で設定します。それ以外の OpenSearch を使う場合は、 :doc:`install-linux` または :doc:`install-windows` のとおりに設定してください。
+
 あわせて次が廃止されました。
 
 - ``es/`` ディレクトリ（ ``es/modules`` 、 ``es/plugins`` 、 ``es/data`` ）

@@ -14,6 +14,7 @@
    install-linux
    install-windows
    install-docker
+   fess-setup
    run
    security
    upgrade

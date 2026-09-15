@@ -29,6 +29,16 @@ OpenSearch の起動
 
     $ ./bin/opensearch -d
 
+.. note::
+
+   ``bin/fess-setup install opensearch`` で導入した OpenSearch は、 |Fess| のディレクトリの ``opensearch/opensearch-3.8.0`` にあります。
+
+.. important::
+
+   OpenSearch は一般ユーザーで起動してください。 ``root`` で起動すると ``can not run opensearch as root`` と表示して終了します。拒否された起動でも ``config/opensearch.keystore`` などのファイルが ``root`` の所有で残り、次に一般ユーザーで起動すると ``AccessDeniedException`` で失敗します。再度起動する前に、OpenSearch のディレクトリの所有者をそのユーザーに戻してください。例::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.8.0
+
 Fess の起動
 ~~~~~~~~~~
 
