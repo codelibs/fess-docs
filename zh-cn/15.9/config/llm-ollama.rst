@@ -176,7 +176,7 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 以外的所有配�
      - 使用的模型名称（已下载到Ollama的模型）
      - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
-     - 请求超时时间（毫秒）
+     - 响应（读取）超时时间（毫秒）。达到该超时的请求不会重试（详见"重试"）
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
      - 可用性检查间隔（秒）。指定 ``0`` 或以下时禁用定期可用性检查
@@ -194,7 +194,7 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 以外的所有配�
      - TCP连接超时（毫秒）。可独立于 ``rag.llm.ollama.timeout`` 单独指定
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
-     - HTTP重试的最大尝试次数（ ``429`` 及 ``5xx`` 系错误时）
+     - 对Ollama的每个请求的最大尝试次数（含首次。详见"重试"）
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
      - 指数退避的基准延迟时间（毫秒）
@@ -237,6 +237,35 @@ Ollama客户端可用的所有配置项。 ``rag.llm.name`` 以外的所有配�
 使用 ``rag.llm.ollama.max.concurrent.requests`` 可以控制对Ollama的并发请求数。
 默认值为5。请根据Ollama服务器的资源进行调整。
 并发请求数过多时，会给Ollama服务器增加负担，导致响应速度下降。
+
+重试
+----
+
+对Ollama的每个请求最多尝试 ``rag.llm.ollama.retry.max`` 次，包含首次尝试（指定 ``1`` 时不重试）。在以下情况下会再次尝试请求：
+
+- Ollama返回HTTP ``429`` 、 ``500`` 、 ``502`` 、 ``503`` 或 ``504``
+- 在收到响应之前请求失败，例如连接被拒绝或重置、服务器未响应就关闭了连接，或者在 ``rag.llm.ollama.connect.timeout`` 内未能建立连接
+
+第二次尝试前等待 ``rag.llm.ollama.retry.base.delay.ms`` ，之后每次尝试的等待时间翻倍。等待时间会加上最多为基准延迟时间±20%的随机抖动，单次等待不会超过60秒。
+
+以下失败不会重试：
+
+- 响应超时：Ollama已接受请求，但未在 ``rag.llm.ollama.timeout`` 内响应。再次尝试也只会再等待完整的超时时间
+- 其他HTTP错误状态，例如 ``400`` 或 ``404``
+- Ollama在流式响应中报告的错误
+
+使用默认值（ ``retry.max`` 为 ``3`` ， ``retry.base.delay.ms`` 为 ``2000`` ， ``connect.timeout`` 为 ``5000`` ， ``timeout`` 为 ``60000`` ）时，尝试之间的等待约为2秒和4秒，因此持续失败的请求会在以下时间后放弃：
+
+- 连接被拒绝时：约6秒（尝试3次）
+- 每次连接都超时时：约21秒（5秒×3次加上等待时间）
+- 返回可重试的HTTP状态时：约6秒加上Ollama每次返回错误所需的时间（尝试3次）
+- 响应超时时：60秒（尝试1次）
+
+这些限制适用于对Ollama的每个请求。AI搜索模式下的一次提问会发送多个请求（例如用于意图判定和回答生成），每个请求都有各自的尝试次数和超时。
+
+如果模型响应较慢（例如首次请求时模型仍在加载），请参照"推荐配置（生产环境）"增大 ``rag.llm.ollama.timeout`` 。由于响应超时不会重试，增大 ``rag.llm.ollama.retry.max`` 并无帮助。
+
+语义搜索使用的Ollama嵌入客户端（ ``content_chunker.embedding.name=ollama`` ）也以相同方式重试。其设置为 ``system.properties`` 中的 ``content_chunker.embedding.ollama.timeout`` 、 ``content_chunker.embedding.ollama.retry.max`` 和 ``content_chunker.embedding.ollama.retry.base.delay.ms`` ，默认值与上述相同（参见 :doc:`search-semantic` ）。
 
 按提示词类型配置
 ================

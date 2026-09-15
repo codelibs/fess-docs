@@ -176,7 +176,7 @@ Ollama 클라이언트에서 사용 가능한 모든 설정 항목입니다. ``r
      - 사용할 모델명(Ollama에 다운로드된 모델)
      - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
-     - 요청 타임아웃 시간(밀리초)
+     - 응답(읽기) 타임아웃 시간(밀리초). 이 타임아웃에 도달한 요청은 재시도하지 않습니다(「재시도」 참조)
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
      - 가용성 체크 간격(초). ``0`` 이하를 지정하면 정기적인 가용성 체크를 비활성화합니다
@@ -194,7 +194,7 @@ Ollama 클라이언트에서 사용 가능한 모든 설정 항목입니다. ``r
      - TCP 연결 타임아웃(밀리초). ``rag.llm.ollama.timeout`` 과는 별도로 지정 가능
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
-     - HTTP 재시도의 최대 시도 횟수( ``429`` 및 ``5xx`` 계열 오류 시)
+     - Ollama로의 요청 1건당 최대 시도 횟수(첫 시도 포함. 「재시도」 참조)
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
      - 지수 백오프의 기준 지연 시간(밀리초)
@@ -237,6 +237,35 @@ Ollama 클라이언트에서 사용 가능한 모든 설정 항목입니다. ``r
 ``rag.llm.ollama.max.concurrent.requests`` 를 사용하여 Ollama로의 동시 요청 수를 제어할 수 있습니다.
 기본값은 5입니다. Ollama 서버의 리소스에 따라 조정하세요.
 동시 요청 수가 너무 많으면 Ollama 서버에 부하가 걸려 응답 속도가 저하될 수 있습니다.
+
+재시도
+------
+
+Ollama로의 각 요청은 첫 시도를 포함하여 최대 ``rag.llm.ollama.retry.max`` 회 시도됩니다( ``1`` 을 지정하면 재시도하지 않습니다). 다음의 경우 요청을 다시 시도합니다.
+
+- Ollama가 HTTP ``429``, ``500``, ``502``, ``503``, ``504`` 를 반환한 경우
+- 응답을 받기 전에 요청이 실패한 경우(연결이 거부 또는 리셋됨, 서버가 응답 없이 연결을 닫음, ``rag.llm.ollama.connect.timeout`` 이내에 연결되지 않음 등)
+
+두 번째 시도 전에 ``rag.llm.ollama.retry.base.delay.ms`` 만큼 대기하며, 이후 시도할 때마다 대기 시간이 2배가 됩니다. 대기 시간에는 기준 지연 시간의 최대 ±20%의 무작위 편차(지터)가 더해지며, 한 번의 대기는 60초를 넘지 않습니다.
+
+다음 실패는 재시도하지 않습니다.
+
+- 응답 타임아웃: Ollama가 요청을 받아들였지만 ``rag.llm.ollama.timeout`` 이내에 응답하지 않은 경우. 다시 시도해도 타임아웃 시간만큼 다시 기다릴 뿐입니다
+- 그 밖의 HTTP 오류 상태(예: ``400``, ``404``)
+- 스트리밍 응답 안에서 Ollama가 보고한 오류
+
+기본값( ``retry.max`` 가 ``3``, ``retry.base.delay.ms`` 가 ``2000``, ``connect.timeout`` 이 ``5000``, ``timeout`` 이 ``60000`` )에서는 시도 간 대기가 약 2초와 약 4초이므로, 계속 실패하는 요청은 다음 시간 후에 중단됩니다.
+
+- 연결이 거부되는 경우: 약 6초(3회 시도)
+- 매번 연결 타임아웃이 발생하는 경우: 약 21초(5초×3회와 대기 시간)
+- 재시도 대상 HTTP 상태가 반환되는 경우: 약 6초와 Ollama가 각 오류를 반환하는 데 걸리는 시간의 합(3회 시도)
+- 응답 타임아웃의 경우: 60초(1회 시도)
+
+이 한도는 Ollama로의 요청마다 적용됩니다. AI 검색 모드에서 질문 한 번에 의도 판정이나 답변 생성 등을 위해 여러 요청이 전송되며, 각 요청에 시도 횟수와 타임아웃이 따로 적용됩니다.
+
+모델의 응답이 느린 경우(첫 요청에서 모델을 로드하는 중인 경우 등)에는 「권장 구성(프로덕션 환경)」과 같이 ``rag.llm.ollama.timeout`` 을 늘리세요. 응답 타임아웃은 재시도되지 않으므로 ``rag.llm.ollama.retry.max`` 를 늘려도 효과가 없습니다.
+
+시맨틱 검색에서 사용하는 Ollama 임베딩 클라이언트( ``content_chunker.embedding.name=ollama`` )도 같은 방식으로 재시도합니다. 설정은 ``system.properties`` 의 ``content_chunker.embedding.ollama.timeout``, ``content_chunker.embedding.ollama.retry.max``, ``content_chunker.embedding.ollama.retry.base.delay.ms`` 이며, 기본값은 위와 같습니다( :doc:`search-semantic` 참조).
 
 프롬프트 타입별 설정
 ======================

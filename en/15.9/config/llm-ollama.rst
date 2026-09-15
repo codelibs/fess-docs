@@ -176,7 +176,7 @@ All configuration options available for the Ollama client. All settings except `
      - Model name to use (must be already downloaded to Ollama)
      - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
-     - Request timeout (in milliseconds)
+     - Response (read) timeout (in milliseconds). A request that runs into it is not retried (see "Retries")
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
      - Availability check interval (in seconds). Setting a value of ``0`` or lower disables periodic availability checks
@@ -194,7 +194,7 @@ All configuration options available for the Ollama client. All settings except `
      - TCP connect timeout (in milliseconds). Configurable separately from ``rag.llm.ollama.timeout``
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
-     - Maximum number of HTTP retry attempts (on ``429`` and ``5xx`` errors)
+     - Maximum number of attempts per request to Ollama, including the first (see "Retries")
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
      - Base delay for exponential backoff (in milliseconds)
@@ -237,6 +237,35 @@ Concurrency Control
 Use ``rag.llm.ollama.max.concurrent.requests`` to control the number of concurrent requests to Ollama.
 The default is 5. Adjust according to the resources of your Ollama server.
 Too many concurrent requests may overload the Ollama server and degrade response speed.
+
+Retries
+-------
+
+Each request to Ollama is attempted at most ``rag.llm.ollama.retry.max`` times, including the first attempt (``1`` disables retries). The request is attempted again when:
+
+- Ollama returns HTTP ``429``, ``500``, ``502``, ``503`` or ``504``
+- The request fails before a response arrives, for example because the connection is refused or reset, the server closes the connection without answering, or no connection is established within ``rag.llm.ollama.connect.timeout``
+
+Before the second attempt the client waits ``rag.llm.ollama.retry.base.delay.ms``, and the wait doubles for each further attempt. A random jitter of up to ±20% of the base delay is added, and a single wait never exceeds 60 seconds.
+
+The following failures are not retried:
+
+- A response timeout: Ollama accepted the request but did not answer within ``rag.llm.ollama.timeout``. Another attempt would only wait the full timeout again
+- Any other HTTP error status, such as ``400`` or ``404``
+- An error that Ollama reports inside a streamed response
+
+With the defaults (``retry.max`` ``3``, ``retry.base.delay.ms`` ``2000``, ``connect.timeout`` ``5000``, ``timeout`` ``60000``), the waits between attempts are about 2 and 4 seconds, so a request that keeps failing gives up after:
+
+- About 6 seconds when the connection is refused (3 attempts)
+- About 21 seconds when every connection attempt times out (3 × 5 seconds plus the waits)
+- About 6 seconds plus the time Ollama takes to return each error, for a retryable HTTP status (3 attempts)
+- 60 seconds for a response timeout (1 attempt)
+
+These limits apply to each request to Ollama. One question in AI search mode sends several requests, for example for intent detection and for answer generation, and each has its own attempts and timeout.
+
+If a model answers slowly, for example while it is still being loaded for its first request, raise ``rag.llm.ollama.timeout`` as in "Recommended Configuration (Production)". Raising ``rag.llm.ollama.retry.max`` does not help, because a response timeout is not retried.
+
+The Ollama embedding client for semantic search (``content_chunker.embedding.name=ollama``) retries the same way. Its settings are ``content_chunker.embedding.ollama.timeout``, ``content_chunker.embedding.ollama.retry.max`` and ``content_chunker.embedding.ollama.retry.base.delay.ms`` in ``system.properties``, with the same defaults (see :doc:`search-semantic`).
 
 Per-Prompt-Type Settings
 ========================

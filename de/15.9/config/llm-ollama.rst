@@ -176,7 +176,7 @@ Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellunge
      - Zu verwendendes Modell (muss in Ollama heruntergeladen sein)
      - ``gemma4:e4b``
    * - ``rag.llm.ollama.timeout``
-     - Anfrage-Timeout (Millisekunden)
+     - Antwort-Timeout (Lese-Timeout, Millisekunden). Eine Anfrage, die in dieses Timeout läuft, wird nicht wiederholt (siehe „Wiederholungsversuche")
      - ``60000``
    * - ``rag.llm.ollama.availability.check.interval``
      - Intervall der Verfügbarkeitsprüfung (Sekunden). Bei einem Wert von ``0`` oder kleiner wird die regelmäßige Verfügbarkeitsprüfung deaktiviert
@@ -194,7 +194,7 @@ Alle verfügbaren Einstellungselemente für den Ollama-Client. Alle Einstellunge
      - TCP-Verbindungs-Timeout (Millisekunden). Kann unabhängig von ``rag.llm.ollama.timeout`` angegeben werden
      - ``5000``
    * - ``rag.llm.ollama.retry.max``
-     - Maximale Anzahl von HTTP-Wiederholungsversuchen (bei ``429``- und ``5xx``-Fehlern)
+     - Maximale Anzahl der Versuche pro Anfrage an Ollama, einschließlich des ersten (siehe „Wiederholungsversuche")
      - ``3``
    * - ``rag.llm.ollama.retry.base.delay.ms``
      - Basisverzögerung des exponentiellen Backoffs (Millisekunden)
@@ -237,6 +237,35 @@ Gleichzeitigkeitssteuerung
 Mit ``rag.llm.ollama.max.concurrent.requests`` kann die Anzahl gleichzeitiger Anfragen an Ollama gesteuert werden.
 Der Standardwert ist 5. Passen Sie diesen Wert entsprechend den Ressourcen des Ollama-Servers an.
 Bei zu vielen gleichzeitigen Anfragen kann der Ollama-Server überlastet werden und die Antwortgeschwindigkeit sinken.
+
+Wiederholungsversuche
+---------------------
+
+Jede Anfrage an Ollama wird höchstens ``rag.llm.ollama.retry.max``-mal versucht, der erste Versuch eingeschlossen (``1`` deaktiviert Wiederholungen). Die Anfrage wird erneut versucht, wenn:
+
+- Ollama HTTP ``429``, ``500``, ``502``, ``503`` oder ``504`` zurückgibt
+- die Anfrage fehlschlägt, bevor eine Antwort eintrifft, zum Beispiel weil die Verbindung abgelehnt oder zurückgesetzt wird, der Server die Verbindung ohne Antwort schließt oder innerhalb von ``rag.llm.ollama.connect.timeout`` keine Verbindung zustande kommt
+
+Vor dem zweiten Versuch wartet der Client ``rag.llm.ollama.retry.base.delay.ms``, und die Wartezeit verdoppelt sich mit jedem weiteren Versuch. Dazu kommt ein zufälliger Jitter von bis zu ±20 % der Basisverzögerung; eine einzelne Wartezeit beträgt nie mehr als 60 Sekunden.
+
+Folgende Fehler werden nicht wiederholt:
+
+- Ein Antwort-Timeout: Ollama hat die Anfrage angenommen, aber nicht innerhalb von ``rag.llm.ollama.timeout`` geantwortet. Ein weiterer Versuch würde nur erneut das volle Timeout abwarten
+- Jeder andere HTTP-Fehlerstatus, etwa ``400`` oder ``404``
+- Ein Fehler, den Ollama innerhalb einer gestreamten Antwort meldet
+
+Mit den Standardwerten (``retry.max`` ``3``, ``retry.base.delay.ms`` ``2000``, ``connect.timeout`` ``5000``, ``timeout`` ``60000``) betragen die Wartezeiten zwischen den Versuchen etwa 2 und 4 Sekunden. Eine Anfrage, die immer wieder fehlschlägt, wird daher abgebrochen nach:
+
+- etwa 6 Sekunden, wenn die Verbindung abgelehnt wird (3 Versuche)
+- etwa 21 Sekunden, wenn jeder Verbindungsaufbau in das Timeout läuft (3 × 5 Sekunden plus Wartezeiten)
+- etwa 6 Sekunden plus der Zeit, die Ollama für jede Fehlerantwort braucht, bei einem wiederholbaren HTTP-Status (3 Versuche)
+- 60 Sekunden bei einem Antwort-Timeout (1 Versuch)
+
+Diese Grenzen gelten für jede einzelne Anfrage an Ollama. Eine Frage im AI-Suchmodus sendet mehrere Anfragen, etwa zur Absichtserkennung und zur Antwortgenerierung, und jede hat eigene Versuche und ein eigenes Timeout.
+
+Antwortet ein Modell langsam, etwa weil es für die erste Anfrage noch geladen wird, erhöhen Sie ``rag.llm.ollama.timeout`` wie in „Empfohlene Konfiguration (Produktionsumgebung)". Ein höheres ``rag.llm.ollama.retry.max`` hilft nicht, da ein Antwort-Timeout nicht wiederholt wird.
+
+Der Ollama-Embedding-Client der semantischen Suche (``content_chunker.embedding.name=ollama``) wiederholt Anfragen auf dieselbe Weise. Seine Einstellungen sind ``content_chunker.embedding.ollama.timeout``, ``content_chunker.embedding.ollama.retry.max`` und ``content_chunker.embedding.ollama.retry.base.delay.ms`` in ``system.properties``, mit denselben Standardwerten (siehe :doc:`search-semantic`).
 
 Prompttypspezifische Einstellungen
 ===================================
