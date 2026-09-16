@@ -216,9 +216,9 @@ Informa sobre la instalación, con una línea por comprobación, marcada como ``
 - El motor de búsqueda: si es accesible, su versión (una advertencia si los nodos indican versiones
   distintas), si los cuatro plugins que requiere |Fess| están instalados en él y si ``configsync``
   responde.
-- |Fess|: si el directorio de plugins existe y admite escritura, cada plugin instalado (una
-  advertencia para un plugin compilado para otra versión de |Fess|, un fallo para un plugin
-  instalado en dos versiones) y si Node.js está instalado en ``nodejs/`` dentro del directorio de
+- |Fess|: si el directorio de plugins existe y admite escritura, cada plugin instalado (un fallo
+  para un plugin compilado para otra versión de |Fess| y para un plugin instalado en dos
+  versiones) y si Node.js está instalado en ``nodejs/`` dentro del directorio de
   |Fess|.
 
 La URL del motor es ``--url``; si no se indica, la variable de entorno ``SEARCH_ENGINE_HTTP_URL``;

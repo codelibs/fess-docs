@@ -221,9 +221,9 @@ Prüft die Installation und gibt je Prüfung eine Zeile aus, gekennzeichnet mit 
 - Die Suchmaschine: ob sie erreichbar ist, ihre Version (eine Warnung, wenn die Knoten
   unterschiedliche Versionen melden), ob die vier von |Fess| benötigten Plugins darin installiert
   sind und ob ``configsync`` antwortet.
-- |Fess|: ob das Plugin-Verzeichnis existiert und beschreibbar ist, jedes installierte Plugin (eine
-  Warnung für ein Plugin, das für ein anderes |Fess|-Release gebaut wurde, ein Fehler für ein
-  Plugin, das in zwei Versionen installiert ist) und ob Node.js in ``nodejs/`` im
+- |Fess|: ob das Plugin-Verzeichnis existiert und beschreibbar ist, jedes installierte Plugin (ein
+  Fehler für ein Plugin, das für ein anderes |Fess|-Release gebaut wurde, und für ein Plugin, das
+  in zwei Versionen installiert ist) und ob Node.js in ``nodejs/`` im
   |Fess|-Verzeichnis installiert ist.
 
 Die URL der Suchmaschine ist ``--url``, andernfalls die Umgebungsvariable
