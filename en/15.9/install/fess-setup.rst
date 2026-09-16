@@ -207,8 +207,8 @@ Reports on the installation, one line per check, each marked ``OK``, ``WARN`` or
 - The search engine: whether it is reachable, its version (a warning when the nodes report
   different versions), whether the four plugins |Fess| requires are installed in it, and whether
   ``configsync`` responds.
-- |Fess|: whether the plugin directory exists and is writable, each installed plugin (a warning for
-  a plugin built for another |Fess| release, a failure for a plugin installed in two versions), and
+- |Fess|: whether the plugin directory exists and is writable, each installed plugin (a failure for
+  a plugin built for another |Fess| release and for a plugin installed in two versions), and
   whether Node.js is installed in ``nodejs/`` in the |Fess| directory.
 
 The engine URL is ``--url``, otherwise the ``SEARCH_ENGINE_HTTP_URL`` environment variable,

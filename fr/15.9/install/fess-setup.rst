@@ -218,8 +218,8 @@ check
   indiquent des versions différentes), si les quatre plugins requis par |Fess| y sont installés, et
   si ``configsync`` répond.
 - |Fess| : si le répertoire des plugins existe et est accessible en écriture, chaque plugin installé
-  (un avertissement pour un plugin compilé pour une autre version de |Fess|, un échec pour un plugin
-  installé en deux versions), et si Node.js est installé dans ``nodejs/`` du répertoire de |Fess|.
+  (un échec pour un plugin compilé pour une autre version de |Fess| et pour un plugin installé en
+  deux versions), et si Node.js est installé dans ``nodejs/`` du répertoire de |Fess|.
 
 L'URL du moteur est ``--url``, sinon la variable d'environnement ``SEARCH_ENGINE_HTTP_URL``, sinon
 ``http://localhost:9200``. ``bin/fess-setup`` ne lit pas ``bin/fess.in.sh`` : indiquez donc
