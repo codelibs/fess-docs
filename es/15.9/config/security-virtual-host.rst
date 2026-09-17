@@ -55,7 +55,7 @@ Defina un host virtual por línea con el siguiente formato:
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
 Una vez guardada la configuración, los archivos JSP de las páginas de búsqueda se generan en ``WEB-INF/view/nombre_host_virtual``.
-Editando estos archivos, puede cambiar el diseño de las páginas para cada host virtual. Los archivos JSP también pueden editarse desde la pantalla :doc:`Guía del Administrador > Diseño <../admin/design-guide>`.
+Editando estos archivos, puede cambiar el diseño de las páginas para cada host virtual.
 
 
 Configuración de Rastreo

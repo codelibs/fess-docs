@@ -21,8 +21,7 @@ JAR 主题插件（旧版）
 .. note::
 
    静态主题可在 |Fess| 15.7 及以上版本中使用。如果目标版本为 15.6 及更早版本，
-   请使用 JAR 主题插件。关于从管理界面直接编辑搜索界面的 JSP、CSS、图像的方法，
-   请参考 :doc:`../admin/design-guide`。
+   请使用 JAR 主题插件。
 
 静态主题
 ========
@@ -295,5 +294,4 @@ JAR 主题通过虚拟主机功能来启用。如果使虚拟主机的键与主�
 ========
 
 - :doc:`plugin-architecture` - 插件架构
-- :doc:`../admin/design-guide` - 页面设计（直接编辑 JSP、CSS、图片）
 - :doc:`../admin/plugin-guide` - 插件安装

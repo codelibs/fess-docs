@@ -24,9 +24,7 @@ Plugin de thème JAR (legacy)
 .. note::
 
    Les thèmes statiques sont disponibles à partir de |Fess| 15.7. Pour cibler
-   les versions 15.6 et antérieures, utilisez un plugin de thème JAR. Pour
-   modifier directement les JSP, CSS et images de l'écran de recherche depuis
-   l'écran d'administration, reportez-vous à :doc:`../admin/design-guide`.
+   les versions 15.6 et antérieures, utilisez un plugin de thème JAR.
 
 Thème statique
 ==============
@@ -332,6 +330,4 @@ Informations complémentaires
 =============================
 
 - :doc:`plugin-architecture` - Architecture des plugins
-- :doc:`../admin/design-guide` - Conception de la page (modification directe
-  des JSP, CSS et images)
 - :doc:`../admin/plugin-guide` - Installation des plugins

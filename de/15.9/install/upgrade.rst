@@ -782,7 +782,9 @@ mindestens die folgenden Schlüssel.
      - Die SMB-Timeouts bleiben auf den Standardwerten von jcifs; siehe :ref:`upgrade-159-jcifs`.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
-       ``rag.chat.message.max.length``
+       ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
+       ``supported.uploaded.css.extentions``, ``supported.uploaded.media.extentions``,
+       ``supported.uploaded.files``, ``online.help.name.design``
      - Vorhanden
      - Entfernt
      - Keine Wirkung; entfernen Sie sie.
@@ -846,6 +848,25 @@ dieser Datei gelesen; ein unter diesen Namen verbliebener Wert hat also wie bish
 Die Grenze, die ``rag.chat.message.max.length`` festlegt, gilt weiterhin, wird aber als
 Systemeigenschaft gelesen: Setzen Sie sie in ``app/WEB-INF/conf/system.properties`` oder mit
 ``-Dfess.system.rag.chat.message.max.length``, wie in :doc:`../config/rag-chat` beschrieben.
+
+Die Seitengestaltung wurde entfernt
+-----------------------------------
+
+[System > Seitengestaltung] ist nicht mehr Teil der Verwaltungsoberfläche. JSP-, CSS- und
+Bilddateien der Suchoberfläche lassen sich dort nicht mehr bearbeiten. Um das Aussehen der
+Suchoberfläche zu ändern, verwenden Sie ein statisches Theme (siehe :doc:`../dev/theme-development`).
+
+Außerdem wurden die folgenden Schlüssel aus ``fess_config.properties`` entfernt. Ein unter diesen
+Namen verbliebener Wert wird nicht verwendet.
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+Die Rollen ``admin-design`` und ``admin-design-view`` gewähren keine Rechte mehr. Ein Benutzer, der
+nur diese Rollen hat, gelangt nach der Anmeldung zur Suchoberfläche statt zur Verwaltungsoberfläche.
 
 Migrationsaufgaben speziell für 15.9
 ====================================

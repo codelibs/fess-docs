@@ -13,7 +13,6 @@ roles, los registros y las copias de seguridad.
    wizard-guide
    general-guide
    scheduler-guide
-   design-guide
    dict-guide
    kuromoji-guide
    synonym-guide

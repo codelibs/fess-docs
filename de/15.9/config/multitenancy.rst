@@ -121,13 +121,13 @@ Themes anwenden
 
 Wenden Sie verschiedene Themes für jeden virtuellen Host an:
 
-1. Richten Sie Themes unter „System" → „Design" ein
+1. Richten Sie Themes unter „System" → „Theme" ein
 2. Geben Sie das Theme in der Konfiguration des virtuellen Hosts an
 
 Benutzerdefiniertes CSS
 -----------------------
 
-Um benutzerdefiniertes CSS pro virtuellem Host anzuwenden, bearbeiten Sie CSS-Dateien in der Verwaltungsoberfläche unter „System" → „Design". Sie können auch benutzerdefinierte Templates im View-Verzeichnis des entsprechenden virtuellen Host-Keys ablegen.
+Um benutzerdefiniertes CSS pro virtuellem Host anzuwenden, legen Sie benutzerdefinierte Templates im View-Verzeichnis des entsprechenden virtuellen Host-Keys ab.
 
 Label-Einstellungen
 -------------------
@@ -245,4 +245,3 @@ Referenzinformationen
 
 - :doc:`security-role` - Rollenbasierte Zugriffskontrolle
 - :doc:`security-virtual-host` - Details zur Konfiguration virtueller Hosts
-- :doc:`../admin/design-guide` - Design-Anpassung

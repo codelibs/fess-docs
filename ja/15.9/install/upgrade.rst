@@ -752,7 +752,9 @@ Index Exporter ジョブが削除されたパッケージを参照
        参照してください。
    * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
        ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
-       ``rag.chat.message.max.length``
+       ``rag.chat.message.max.length``\ 、\ ``supported.uploaded.js.extentions``\ 、
+       ``supported.uploaded.css.extentions``\ 、\ ``supported.uploaded.media.extentions``\ 、
+       ``supported.uploaded.files``\ 、\ ``online.help.name.design``
      - あり
      - 削除
      - 効果はありません。削除してください。
@@ -814,6 +816,24 @@ jcifs の既定値のままになります。
 ``rag.chat.message.max.length`` による上限は引き続き有効ですが、システムプロパティとして
 読み込まれます。 :doc:`../config/rag-chat` のとおり、 ``app/WEB-INF/conf/system.properties``
 または ``-Dfess.system.rag.chat.message.max.length`` で設定してください。
+
+管理画面の「ページのデザイン」を削除
+------------------------------------
+
+管理画面の [システム > ページのデザイン] を削除しました。検索画面の JSP、CSS、画像を管理画面から
+編集することはできません。検索画面の見た目は静的テーマで変更してください（ :doc:`../dev/theme-development`
+を参照）。
+
+次のキーも ``fess_config.properties`` から削除しました。この名前で残した値は使われません。
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+``admin-design`` と ``admin-design-view`` のロールは、何の権限も与えなくなりました。これらのロールだけを
+持つユーザーは、ログインすると管理画面ではなく検索画面に移動します。
 
 15.9 固有の移行作業
 ===================

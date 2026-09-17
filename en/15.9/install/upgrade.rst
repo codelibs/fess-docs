@@ -754,7 +754,9 @@ the following keys.
      - The SMB timeouts stay at the jcifs defaults; see :ref:`upgrade-159-jcifs`.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
-       ``rag.chat.message.max.length``
+       ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
+       ``supported.uploaded.css.extentions``, ``supported.uploaded.media.extentions``,
+       ``supported.uploaded.files``, ``online.help.name.design``
      - Present
      - Removed
      - No effect; remove them.
@@ -817,6 +819,25 @@ file, so a value left under these names has no effect, as before.
 The limit that ``rag.chat.message.max.length`` sets still works, but it is read as a system
 property: set it in ``app/WEB-INF/conf/system.properties`` or with
 ``-Dfess.system.rag.chat.message.max.length``, as described in :doc:`../config/rag-chat`.
+
+The Page Design Editor Was Removed
+----------------------------------
+
+[System > Page Design] is no longer in the admin UI, so the JSP, CSS and image files of the search
+screen can no longer be edited there. Use a static theme to change how the search screen looks (see
+:doc:`../dev/theme-development`).
+
+The following keys were removed from ``fess_config.properties`` as well. A value left under these
+names is not used.
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+The ``admin-design`` and ``admin-design-view`` roles no longer grant anything. A user who has only
+these roles is taken to the search screen instead of the admin UI after logging in.
 
 15.9-Specific Migration Tasks
 =============================

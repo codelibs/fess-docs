@@ -55,7 +55,7 @@ Specify one virtual host per line using the following format.
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
 After saving the configuration, search page JSPs are generated under ``WEB-INF/view/virtual_host_name``.
-By editing these files you can change the page design for each virtual host. The JSPs can also be edited from the :doc:`Administrator Guide > Design <../admin/design-guide>` screen.
+By editing these files you can change the page design for each virtual host.
 
 
 Crawl Configuration

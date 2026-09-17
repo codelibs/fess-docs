@@ -754,7 +754,9 @@ Index Exporter 작업이 삭제된 패키지를 참조
      - SMB 타임아웃이 jcifs 의 기본값 그대로 남습니다. :ref:`upgrade-159-jcifs` 를 참조하십시오.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
-       ``rag.chat.message.max.length``
+       ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
+       ``supported.uploaded.css.extentions``, ``supported.uploaded.media.extentions``,
+       ``supported.uploaded.files``, ``online.help.name.design``
      - 있음
      - 삭제됨
      - 효과가 없습니다. 제거하십시오.
@@ -816,6 +818,24 @@ jcifs 의 기본값으로 동작했습니다. 15.9 는 새 이름을 전달합�
 ``rag.chat.message.max.length`` 가 정하는 상한은 계속 유효하지만 시스템 속성으로 읽힙니다.
 :doc:`../config/rag-chat` 에 설명된 대로 ``app/WEB-INF/conf/system.properties`` 또는
 ``-Dfess.system.rag.chat.message.max.length`` 로 설정하십시오.
+
+관리 화면의 「페이지 디자인」 삭제
+----------------------------------
+
+관리 화면의 [시스템 > 페이지 디자인] 을 삭제했습니다. 검색 화면의 JSP, CSS, 이미지를 관리 화면에서
+편집할 수 없습니다. 검색 화면의 모양은 정적 테마로 변경하십시오 (:doc:`../dev/theme-development`
+참조).
+
+다음 키도 ``fess_config.properties`` 에서 삭제되었습니다. 이 이름으로 남겨 둔 값은 사용되지 않습니다.
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+``admin-design`` 과 ``admin-design-view`` 롤은 더 이상 아무 권한도 부여하지 않습니다. 이 롤만 가진
+사용자는 로그인하면 관리 화면이 아니라 검색 화면으로 이동합니다.
 
 15.9 전용 마이그레이션 작업
 ===========================
