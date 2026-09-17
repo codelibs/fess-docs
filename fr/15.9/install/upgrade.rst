@@ -791,7 +791,9 @@ suivantes.
        :ref:`upgrade-159-jcifs`.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
-       ``rag.chat.message.max.length``
+       ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
+       ``supported.uploaded.css.extentions``, ``supported.uploaded.media.extentions``,
+       ``supported.uploaded.files``, ``online.help.name.design``
      - Présentes
      - Supprimées
      - Aucun effet ; supprimez-les.
@@ -855,6 +857,26 @@ dans ce fichier : une valeur laissée sous ces noms reste donc sans effet, comme
 La limite définie par ``rag.chat.message.max.length`` fonctionne toujours, mais elle est lue comme
 propriété système : définissez-la dans ``app/WEB-INF/conf/system.properties`` ou avec
 ``-Dfess.system.rag.chat.message.max.length``, comme décrit dans :doc:`../config/rag-chat`.
+
+L'éditeur de conception de page a été supprimé
+----------------------------------------------
+
+[Système > Conception de la page] ne fait plus partie de l'écran d'administration : les fichiers
+JSP, CSS et images de l'écran de recherche ne peuvent plus y être modifiés. Pour changer
+l'apparence de l'écran de recherche, utilisez un thème statique (voir :doc:`../dev/theme-development`).
+
+Les clés suivantes ont également été supprimées de ``fess_config.properties``. Une valeur laissée
+sous ces noms n'est pas utilisée.
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+Les rôles ``admin-design`` et ``admin-design-view`` n'accordent plus aucun droit. Un utilisateur qui
+n'a que ces rôles arrive sur l'écran de recherche, et non sur l'écran d'administration, après
+s'être connecté.
 
 Migrations spécifiques à la 15.9
 ================================

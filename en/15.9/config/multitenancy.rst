@@ -127,13 +127,13 @@ Applying Themes
 
 Apply different themes for each virtual host:
 
-1. Set up themes under "System" -> "Design"
+1. Set up themes under "System" -> "Theme"
 2. Specify the theme in the virtual host configuration
 
 Custom CSS
 ----------
 
-To apply custom CSS per virtual host, edit CSS files in the admin UI under "System" -> "Design". You can also place custom templates in the view directory corresponding to the virtual host key.
+To apply custom CSS per virtual host, place custom templates in the view directory corresponding to the virtual host key.
 
 Label Settings
 --------------
@@ -259,4 +259,3 @@ Reference
 
 - :doc:`security-role` - Role-Based Access Control
 - :doc:`security-virtual-host` - Virtual Host Configuration Details
-- :doc:`../admin/design-guide` - Design Customization

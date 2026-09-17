@@ -55,7 +55,7 @@ Décrivez un hôte virtuel par ligne selon le format suivant.
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
 Lorsque la configuration est enregistrée, des JSP de page de recherche sont générés dans ``WEB-INF/view/nom_hôte_virtuel``.
-En les modifiant, il est possible de changer le design de page pour chaque hôte virtuel. Les JSP peuvent également être modifiés depuis l'écran :doc:`Guide administrateur > Design <../admin/design-guide>`.
+En les modifiant, il est possible de changer le design de page pour chaque hôte virtuel.
 
 
 Configuration de l'exploration

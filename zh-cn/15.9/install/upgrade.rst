@@ -721,7 +721,9 @@ Index Exporter 作业引用了已删除的包
      - SMB 超时保持为 jcifs 的默认值。请参阅 :ref:`upgrade-159-jcifs` 。
    * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
        ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
-       ``rag.chat.message.max.length``
+       ``rag.chat.message.max.length``\ 、\ ``supported.uploaded.js.extentions``\ 、
+       ``supported.uploaded.css.extentions``\ 、\ ``supported.uploaded.media.extentions``\ 、
+       ``supported.uploaded.files``\ 、\ ``online.help.name.design``
      - 存在
      - 已删除
      - 不起作用，请删除。
@@ -779,6 +781,23 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
 ``rag.chat.message.max.length`` 设定的上限仍然有效，但会作为系统属性读取：请按照
 :doc:`../config/rag-chat` 中的说明，在 ``app/WEB-INF/conf/system.properties`` 中或通过
 ``-Dfess.system.rag.chat.message.max.length`` 进行设置。
+
+删除了管理界面的「页面设计」
+----------------------------
+
+删除了管理界面中的 [系统 > 页面设计]。无法再从管理界面编辑搜索界面的 JSP、CSS 和图片。
+如需更改搜索界面的外观，请使用静态主题（参见 :doc:`../dev/theme-development`）。
+
+以下键也已从 ``fess_config.properties`` 中删除。以这些名称保留的值不会被使用。
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+``admin-design`` 和 ``admin-design-view`` 角色不再授予任何权限。仅拥有这些角色的用户登录后会进入
+搜索界面，而不是管理界面。
 
 15.9 特有的迁移工作
 ===================

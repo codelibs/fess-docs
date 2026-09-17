@@ -13,7 +13,6 @@ et rôles, journaux et sauvegardes.
    wizard-guide
    general-guide
    scheduler-guide
-   design-guide
    dict-guide
    kuromoji-guide
    synonym-guide

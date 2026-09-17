@@ -26,9 +26,7 @@ JAR-Theme-Plugin (Legacy)
 
    Statische Themes stehen ab |Fess| 15.7 zur Verfügung. Wenn Sie
    Version 15.6 oder älter einsetzen, verwenden Sie ein
-   JAR-Theme-Plugin. Wie Sie JSP, CSS und Bilder der Suchoberfläche
-   direkt über die Administrationsoberfläche bearbeiten, erfahren Sie
-   unter :doc:`../admin/design-guide`.
+   JAR-Theme-Plugin.
 
 Statisches Theme
 ================
@@ -345,6 +343,4 @@ Referenzinformationen
 =========================
 
 - :doc:`plugin-architecture` - Plugin-Architektur
-- :doc:`../admin/design-guide` - Seitengestaltung (direkte Bearbeitung
-  von JSP, CSS und Bildern)
 - :doc:`../admin/plugin-guide` - Plugin-Installation

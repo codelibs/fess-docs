@@ -55,7 +55,7 @@ Tragen Sie einen virtuellen Host pro Zeile im folgenden Format ein:
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
 Nach dem Speichern der Konfiguration werden JSPs der Suchseite unter ``WEB-INF/view/VirtuellerHostname`` generiert.
-Durch das Bearbeiten dieser Dateien können Sie das Seitendesign für jeden virtuellen Host anpassen. Die JSPs können auch über den Bildschirm :doc:`Administratorhandbuch > Design <../admin/design-guide>` bearbeitet werden.
+Durch das Bearbeiten dieser Dateien können Sie das Seitendesign für jeden virtuellen Host anpassen.
 
 
 Crawl-Konfiguration

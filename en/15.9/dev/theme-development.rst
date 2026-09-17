@@ -23,9 +23,7 @@ JAR Theme Plugin (Legacy)
 .. note::
 
    Static themes are available in |Fess| 15.7 and later. If you are
-   targeting 15.6 or earlier, use a JAR theme plugin instead. For how
-   to directly edit the search screen's JSP, CSS, and images from the
-   admin console, see :doc:`../admin/design-guide`.
+   targeting 15.6 or earlier, use a JAR theme plugin instead.
 
 Static Theme
 ============
@@ -322,6 +320,4 @@ Reference
 =========
 
 - :doc:`plugin-architecture` - Plugin architecture
-- :doc:`../admin/design-guide` - Page Design (direct editing of JSP,
-  CSS, and images)
 - :doc:`../admin/plugin-guide` - Plugin installation

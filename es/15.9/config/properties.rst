@@ -284,18 +284,6 @@ Core
   * - load.control.monitor.interval
     - Interval (seconds) for monitoring OpenSearch CPU load.
     - ``1``
-  * - supported.uploaded.js.extentions
-    - Supported JavaScript file extensions for upload.
-    - ``js``
-  * - supported.uploaded.css.extentions
-    - Supported CSS file extensions for upload.
-    - ``css``
-  * - supported.uploaded.media.extentions
-    - Supported media file extensions for upload.
-    - ``jpg,jpeg,gif,png,swf``
-  * - supported.uploaded.files
-    - Supported files for upload.
-    - ``license.properties``
   * - supported.languages
     - Supported languages.
     - ``ar,bg,bn,ca,ckb_IQ,cs,da,de,el,en_IE,en,es,et,eu,fa,fi,fr,gl,gu,he,hi,hr,hu,hy,id,it,ja,ko,lt,lv,mk,ml,nl,no,pa,pl,pt_BR,pt,ro,ru,si,sq,sv,ta,te,th,tl,tr,uk,ur,vi,zh_CN,zh_TW,zh``
@@ -1392,6 +1380,9 @@ Index
   * - rank.fusion.threads
     - Number of threads for rank fusion.
     - ``-1``
+  * - rank.fusion.timeout
+    - Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit.
+    - ``10000``
   * - rank.fusion.score_field
     - Score field for rank fusion.
     - ``rf_score``
@@ -1897,9 +1888,6 @@ Web
   * - online.help.name.group
     - Online help key for group.
     - ``group``
-  * - online.help.name.design
-    - Online help key for design.
-    - ``design``
   * - online.help.name.dashboard
     - Online help key for dashboard.
     - ``dashboard``

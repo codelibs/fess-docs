@@ -26,9 +26,7 @@ Plugin de Tema JAR (heredado)
 
    Los temas estáticos están disponibles a partir de |Fess| 15.7. Si el
    objetivo son las versiones 15.6 o anteriores, utilice el plugin de
-   tema JAR. Para el método de edición directa de las JSP, el CSS y las
-   imágenes de la pantalla de búsqueda desde la consola de
-   administración, consulte :doc:`../admin/design-guide`.
+   tema JAR.
 
 Tema Estático
 =============
@@ -343,6 +341,4 @@ Información de Referencia
 =========================
 
 - :doc:`plugin-architecture` - Arquitectura de plugins
-- :doc:`../admin/design-guide` - Diseño de página (edición directa de
-  JSP, CSS e imágenes)
 - :doc:`../admin/plugin-guide` - Instalación de plugins

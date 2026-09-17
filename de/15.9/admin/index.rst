@@ -13,7 +13,6 @@ Rollen bis zu Protokollen und Sicherungen.
    wizard-guide
    general-guide
    scheduler-guide
-   design-guide
    dict-guide
    kuromoji-guide
    synonym-guide
