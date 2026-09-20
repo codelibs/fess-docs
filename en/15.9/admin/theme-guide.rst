@@ -11,6 +11,28 @@ The Theme feature manages "static themes" — a bundled set of static assets (HT
    JSP-based themes are managed through Plugin Management and are outside the scope of this page.
    The ``admin-theme`` role is required to perform operations on this page (the ``admin-theme-view`` role is sufficient for read-only access).
 
+Obtaining a Theme
+=================
+
+The themes developed by the |Fess| project are published as ZIP archives under
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ , at
+``<name>/<version>/<name>-<version>.zip`` with a ``.sha1`` checksum beside each one.
+
+A theme's version states the |Fess| line it targets: ``15.9.0`` is a theme for |Fess| 15.9, and
+its ``minFessVersion`` says the same. There is no upper-bound field. A published archive never
+changes, so an upper bound could not be added afterwards for a theme that stops working on a later
+|Fess|; that a theme is not published for a line says the same thing, at the point it is known.
+
+There are two ways to install one.
+
+* ``bin/fess-setup install theme <name>`` downloads the theme built for this |Fess|, checks it
+  against the published checksum and installs it. See :doc:`../install/fess-setup`.
+* Download the ZIP and upload it on this page, as described in `Uploading a Theme`_ below.
+
+A theme can also be packaged from a checkout of the
+`fess-themes <https://github.com/codelibs/fess-themes>`__ repository, which always matches the
+source you are looking at; see :doc:`../dev/theme-development`.
+
 Management Operations
 =====================
 

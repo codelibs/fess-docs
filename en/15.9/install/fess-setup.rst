@@ -4,7 +4,8 @@ fess-setup Command
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` on Windows) is included with the |Fess| ZIP package.
 It installs what |Fess| needs but does not bundle: OpenSearch with the plugins |Fess| requires,
-Node.js for the Playwright crawler, and |Fess| plugins. It also reports on an installation.
+Node.js for the Playwright crawler, |Fess| plugins, and static themes. It also reports on an
+installation.
 
 Run it from the |Fess| directory. Without arguments, it prints the list of commands.
 
@@ -181,6 +182,65 @@ remove plugin
 
 Deletes the installed jars of the named plugins. A name that is not installed is reported, and does
 not change the exit code.
+
+Managing Themes
+===============
+
+These commands work on the theme directory ``app/themes`` of the |Fess| installation. Restart
+|Fess| after installing or removing a theme, or click [Reload] on the System > Theme page. Themes
+can also be uploaded from that page; see :doc:`../admin/theme-guide`.
+
+A theme's version is the |Fess| line it targets, so ``15.9.0`` is a theme for |Fess| 15.9. A name
+without a version therefore resolves to the theme built for this |Fess|, the same way a plugin
+version does.
+
+install theme
+-------------
+
+::
+
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+
+Installs one or more static themes, for example ``docuforge`` or ``voicebox``. A name without a
+version installs the newest one built for this |Fess|. ``<name>:<version>`` pins the version of
+that theme, and ``--version`` is the version for every name that has none of its own.
+
+The archive is checked against the SHA-1 checksum the Maven repository publishes, and extracted
+into ``app/themes/<name>``. A theme already installed under that name is kept as a backup for the
+same period as one replaced from the administration screen (default 7 days,
+``theme.upload.attic.retention.days``).
+
+The download, the extraction and the manifest check all happen before anything installed is
+touched, so a theme that is already there survives a failed install. An archive whose
+``theme.yml`` names a different theme is rejected.
+
+list themes
+-----------
+
+::
+
+    $ bin/fess-setup list themes [--repository <url>]
+
+Lists the themes published for this |Fess|, and marks the installed ones with
+``(installed: <version>)``. Themes that are installed but not listed by the repository are shown
+separately.
+
+The list is read from the repository's directory index, which is generated periodically. When it
+cannot be read, the command reports the URL it tried and still lists the installed themes: a theme
+can be installed by naming it whether or not the index lists it.
+
+remove theme
+------------
+
+::
+
+    $ bin/fess-setup remove theme <name>...
+
+Deletes the named themes from ``app/themes``, keeping each as a backup for the retention period. A
+name that is not installed is reported, and does not change the exit code.
+
+If a removed theme was the default, |Fess| falls back to the bundled ``bootstrap`` theme until
+another one is chosen.
 
 Checking an Installation
 ========================

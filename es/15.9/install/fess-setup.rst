@@ -4,7 +4,7 @@ Comando fess-setup
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` en Windows) se incluye con el paquete ZIP de |Fess|.
 Instala lo que |Fess| necesita pero no incluye: OpenSearch con los plugins que requiere |Fess|,
-Node.js para el rastreador de Playwright y los plugins de |Fess|. También informa sobre el estado
+Node.js para el rastreador de Playwright, los plugins de |Fess| y los temas estáticos. También informa sobre el estado
 de una instalación.
 
 Ejecútelo desde el directorio de |Fess|. Sin argumentos, muestra la lista de comandos.
@@ -189,6 +189,67 @@ remove plugin
 
 Elimina los jar instalados de los plugins indicados. Un nombre que no está instalado se notifica y
 no cambia el código de salida.
+
+Gestión de Temas
+================
+
+Estos comandos actúan sobre el directorio de temas ``app/themes`` de la instalación de |Fess|.
+Reinicie |Fess| después de instalar o eliminar un tema, o pulse [Recargar] en la página
+Sistema > Tema. Los temas también pueden subirse desde esa página; consulte
+:doc:`../admin/theme-guide`.
+
+La versión de un tema indica la línea de |Fess| a la que está destinado: ``15.9.0`` es un tema
+para |Fess| 15.9. Por eso un nombre sin versión se resuelve al tema construido para este |Fess|,
+igual que ocurre con un plugin.
+
+install theme
+-------------
+
+::
+
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+
+Instala uno o varios temas estáticos, por ejemplo ``docuforge`` o ``voicebox``. Un nombre sin
+versión instala la más reciente construida para este |Fess|. ``<name>:<version>`` fija la versión
+de ese tema, y ``--version`` es la versión para todos los nombres que no lleven una propia.
+
+El archivo se comprueba contra la suma SHA-1 que publica el repositorio Maven y se extrae en
+``app/themes/<name>``. Un tema ya instalado con ese nombre se conserva como copia de seguridad
+durante el mismo periodo que uno reemplazado desde la pantalla de administración (7 días por
+omisión, ``theme.upload.attic.retention.days``).
+
+La descarga, la extracción y la comprobación del manifiesto ocurren antes de tocar nada
+instalado, de modo que un tema que ya esté ahí sobrevive a una instalación fallida. Se rechaza un
+archivo cuyo ``theme.yml`` nombre un tema distinto.
+
+list themes
+-----------
+
+::
+
+    $ bin/fess-setup list themes [--repository <url>]
+
+Lista los temas publicados para este |Fess| y marca los instalados con
+``(installed: <version>)``. Los temas instalados que el repositorio no lista aparecen por
+separado.
+
+La lista se lee del índice de directorio del repositorio, que se genera periódicamente. Cuando no
+puede leerse, el comando informa de la URL que intentó y sigue listando los temas instalados: un
+tema puede instalarse nombrándolo, figure o no en el índice.
+
+remove theme
+------------
+
+::
+
+    $ bin/fess-setup remove theme <name>...
+
+Elimina de ``app/themes`` los temas indicados y conserva cada uno como copia de seguridad durante
+el periodo de retención. Un nombre que no esté instalado se informa y no cambia el código de
+salida.
+
+Si el tema eliminado era el predeterminado, |Fess| vuelve al tema ``bootstrap`` incluido hasta que
+se elija otro.
 
 Comprobación de una Instalación
 ===============================

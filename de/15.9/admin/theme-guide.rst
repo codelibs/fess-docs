@@ -11,6 +11,29 @@ Die Theme-Funktion verwaltet „statische Themes" – Pakete aus statischen Asse
    JSP-basierte Themes werden über die Plug-in-Verwaltung behandelt und sind nicht Gegenstand dieser Seite.
    Für die hier beschriebenen Operationen ist die Rolle ``admin-theme`` erforderlich (für reinen Lesezugriff genügt die Rolle ``admin-theme-view``).
 
+Ein Theme beziehen
+==================
+
+Die vom |Fess|-Projekt entwickelten Themes werden als ZIP-Archive unter
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ veröffentlicht, als
+``<name>/<version>/<name>-<version>.zip`` mit einer ``.sha1``-Prüfsumme daneben.
+
+Die Version eines Themes benennt die |Fess|-Linie, für die es gebaut ist: ``15.9.0`` ist ein Theme
+für |Fess| 15.9, und ``minFessVersion`` sagt dasselbe. Ein Feld für eine Obergrenze gibt es nicht.
+Ein veröffentlichtes Archiv ändert sich nie, eine Obergrenze ließe sich also nachträglich nicht
+ergänzen, wenn ein Theme auf einem neueren |Fess| nicht mehr läuft. Es für diese Linie nicht zu
+veröffentlichen sagt dasselbe -- zu dem Zeitpunkt, an dem man es weiß.
+
+Es gibt zwei Wege, eines zu installieren.
+
+* ``bin/fess-setup install theme <name>`` lädt das für dieses |Fess| gebaute Theme herunter, prüft
+  es gegen die veröffentlichte Prüfsumme und installiert es. Siehe :doc:`../install/fess-setup`.
+* Das ZIP herunterladen und auf dieser Seite hochladen, wie unter `Theme hochladen`_ beschrieben.
+
+Ein Theme lässt sich auch aus einem Checkout des Repositorys
+`fess-themes <https://github.com/codelibs/fess-themes>`__ paketieren, was immer zu dem Quellstand
+passt, den Sie vor sich haben; siehe :doc:`../dev/theme-development`.
+
 Verwaltung
 ==========
 

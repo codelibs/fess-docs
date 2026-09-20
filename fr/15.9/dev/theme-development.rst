@@ -63,8 +63,8 @@ un exemple de configuration minimale.
     kind: StaticTheme
     name: example
     displayName: "Example Theme"
-    version: "1.0.0"
-    minFessVersion: "15.7"
+    version: "15.9.0"
+    minFessVersion: "15.9"
     entry: index.html
     spaFallback: true
 
@@ -94,8 +94,10 @@ Les champs pouvant être spécifiés sont les suivants.
      - Nom affiché dans l'écran d'administration.
    * - ``version``
      - Obligatoire
-     - Format de gestion sémantique des versions (exemple : ``1.0.0``,
-       ``1.2.3-beta.1``).
+     - Format de gestion sémantique des versions (exemple : ``15.9.0``,
+       ``15.9.1-beta.1``). Par convention, ``major.minor`` est la ligne |Fess| que
+       le thème vise, de sorte que la version seule indique pour quel |Fess| un
+       thème est prévu.
    * - ``author``
      - Facultatif
      - Nom de l'auteur.
@@ -110,7 +112,9 @@ Les champs pouvant être spécifiés sont les suivants.
      - URL de la page d'accueil.
    * - ``minFessVersion``
      - Facultatif
-     - Version minimale de |Fess| prise en charge par le thème.
+     - Version minimale de |Fess| prise en charge par le thème. Gardez-la égale au
+       ``major.minor`` de ``version``. Il n'existe pas de ``maxFessVersion`` :
+       voir `Publication`_.
    * - ``supportedLocales``
      - Facultatif
      - Liste des locales prises en charge (exemple : ``[en, ja, de]``).
@@ -171,12 +175,39 @@ dans un fichier ZIP destiné à la distribution.
    ``theme.yml`` doit être placé à la racine du ZIP. S'il se trouve dans un
    sous-répertoire, il ne sera pas reconnu lors du téléversement.
 
+Publication
+-----------
+
+Les thèmes développés par le projet |Fess| sont publiés sous
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ , en
+``<name>/<version>/<name>-<version>.zip`` avec un ``.sha1`` à côté, et un
+``maven-metadata.xml`` par thème qui liste les versions publiées.
+``bin/fess-setup install theme <name>`` lit ces métadonnées pour choisir la version construite
+pour le |Fess| en cours d'exécution.
+
+Versionnez un thème sur la ligne |Fess| qu'il vise et augmentez la version dès que ce que livre
+l'archive change. Une version publiée n'est jamais écrasée : une modification qui conserve sa
+version n'est donc tout simplement jamais distribuée.
+
+C'est aussi pourquoi le manifeste n'a pas de champ de borne supérieure. Une archive publiée ne
+changeant jamais, une borne ne pourrait pas être ajoutée plus tard pour un thème qui cesse de
+fonctionner sur un |Fess| plus récent. Ne pas publier ce thème pour la nouvelle ligne dit la même
+chose, au moment où on le sait.
+
+.. note::
+
+   Énumérez les versions publiées à partir de ``maven-metadata.xml`` plutôt que d'un listage de
+   répertoire. L'index de répertoire est généré périodiquement : un thème fraîchement publié est
+   lisible via ses métadonnées avant d'apparaître dans un listage.
+
 Installation et activation
 ---------------------------
 
 1. Ouvrez « Système » → « Thème » (``/admin/theme/``) dans l'écran
    d'administration.
-2. Téléversez le fichier ZIP créé.
+2. Téléversez le fichier ZIP créé. Un thème publié peut aussi être installé depuis
+   la ligne de commande avec ``bin/fess-setup install theme <name>`` ; voir
+   :doc:`../install/fess-setup`.
 3. Sur la page de liste, sélectionnez le thème souhaité dans le menu
    déroulant « Thème par défaut », puis cliquez sur le bouton « Définir »
    pour l'activer.

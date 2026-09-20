@@ -11,6 +11,29 @@ La función de temas gestiona los «temas estáticos», que agrupan el aspecto v
    Los temas basados en JSP se gestionan desde la administración de complementos y quedan fuera del ámbito de esta página.
    Para realizar las operaciones de esta página se requiere el rol ``admin-theme`` (o el rol ``admin-theme-view`` si solo se necesita acceso de lectura).
 
+Obtención de un tema
+====================
+
+Los temas desarrollados por el proyecto |Fess| se publican como archivos ZIP en
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ , en
+``<name>/<version>/<name>-<version>.zip`` con una suma ``.sha1`` junto a cada uno.
+
+La versión de un tema indica la línea de |Fess| a la que está destinado: ``15.9.0`` es un tema
+para |Fess| 15.9, y ``minFessVersion`` dice lo mismo. No hay ningún campo de límite superior. Un
+archivo publicado no cambia nunca, así que no podría añadirse después un límite para un tema que
+deja de funcionar en un |Fess| más nuevo; no publicarlo para esa línea dice lo mismo, en el
+momento en que se sabe.
+
+Hay dos formas de instalarlo.
+
+* ``bin/fess-setup install theme <name>`` descarga el tema construido para este |Fess|, lo
+  comprueba contra la suma publicada y lo instala. Consulte :doc:`../install/fess-setup`.
+* Descargar el ZIP y subirlo en esta página, como se describe en `Subir un tema`_.
+
+También puede empaquetarse un tema desde una copia del repositorio
+`fess-themes <https://github.com/codelibs/fess-themes>`__, que siempre coincide con el código que
+tiene delante; consulte :doc:`../dev/theme-development`.
+
 Método de gestión
 ==================
 

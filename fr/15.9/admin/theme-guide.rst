@@ -11,6 +11,30 @@ La fonctionnalité de thèmes permet de gérer les « thèmes statiques », c'es
    Les thèmes basés sur JSP sont gérés via la page de configuration des plugins et ne font pas l'objet de cette page.
    Pour effectuer les opérations décrites sur cette page, le rôle ``admin-theme`` est requis (le rôle ``admin-theme-view`` suffit pour la consultation seule).
 
+Obtenir un thème
+================
+
+Les thèmes développés par le projet |Fess| sont publiés sous forme d'archives ZIP sous
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ , en
+``<name>/<version>/<name>-<version>.zip``, avec une somme ``.sha1`` à côté de chacune.
+
+La version d'un thème indique la ligne |Fess| qu'il vise : ``15.9.0`` est un thème pour
+|Fess| 15.9, et ``minFessVersion`` dit la même chose. Il n'existe pas de champ de borne
+supérieure. Une archive publiée ne change jamais : une borne supérieure ne pourrait donc pas être
+ajoutée après coup pour un thème qui cesse de fonctionner sur un |Fess| plus récent. Ne pas le
+publier pour cette ligne dit la même chose, au moment où on le sait.
+
+Il y a deux façons d'en installer un.
+
+* ``bin/fess-setup install theme <name>`` télécharge le thème construit pour ce |Fess|, le
+  vérifie contre la somme publiée et l'installe. Voir :doc:`../install/fess-setup`.
+* Télécharger le ZIP et le téléverser depuis cette page, comme décrit dans
+  `Téléversement d'un thème`_.
+
+Un thème peut aussi être empaqueté depuis une copie du dépôt
+`fess-themes <https://github.com/codelibs/fess-themes>`__, qui correspond toujours aux sources que
+vous avez sous les yeux ; voir :doc:`../dev/theme-development`.
+
 Gestion
 =======
 

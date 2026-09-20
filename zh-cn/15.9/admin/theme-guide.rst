@@ -11,6 +11,20 @@
    基于 JSP 的主题通过插件管理进行处理，不在本页的介绍范围内。
    执行本页的操作需要 ``admin-theme`` 角色（仅查看时需要 ``admin-theme-view`` 角色）。
 
+获取主题
+========
+
+|Fess| 项目开发的主题以 ZIP 归档的形式公开在 https://maven.codelibs.org/release/org/codelibs/fess/themes/ 之下，路径为 ``<name>/<version>/<name>-<version>.zip``\ ，每个归档旁都有 ``.sha1`` 校验和。
+
+主题的版本表示该主题面向的 |Fess| 系列。 ``15.9.0`` 是面向 |Fess| 15.9 的主题， ``minFessVersion`` 表达的是同一件事。没有表示上限的字段：公开的归档不会再改变，因此无法事后为在更新的 |Fess| 上不再可用的主题补加上限；不为该系列发布，就在知道的那一刻表达了同样的意思。
+
+安装方式有两种。
+
+* ``bin/fess-setup install theme <name>`` 会下载为当前 |Fess| 构建的主题，与公开的校验和比对后安装。参见 :doc:`../install/fess-setup`\ 。
+* 下载 ZIP，按本页 `上传主题`_ 的步骤上传。
+
+也可以从 `fess-themes <https://github.com/codelibs/fess-themes>`__ 仓库的检出中打包主题，它始终与手中的源码一致。参见 :doc:`../dev/theme-development`\ 。
+
 管理方法
 ======
 
