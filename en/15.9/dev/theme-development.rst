@@ -62,8 +62,8 @@ file. The following is an example of a minimal configuration.
     kind: StaticTheme
     name: example
     displayName: "Example Theme"
-    version: "1.0.0"
-    minFessVersion: "15.7"
+    version: "15.9.0"
+    minFessVersion: "15.9"
     entry: index.html
     spaFallback: true
 
@@ -93,7 +93,9 @@ The fields that can be specified are as follows.
      - The name displayed in the admin console.
    * - ``version``
      - Required
-     - Semantic versioning format (e.g., ``1.0.0``, ``1.2.3-beta.1``).
+     - Semantic versioning format (e.g., ``15.9.0``, ``15.9.1-beta.1``). By convention the
+       ``major.minor`` is the |Fess| line the theme targets, so that the version alone answers
+       which |Fess| a theme is for.
    * - ``author``
      - Optional
      - The author's name.
@@ -108,7 +110,8 @@ The fields that can be specified are as follows.
      - The homepage URL.
    * - ``minFessVersion``
      - Optional
-     - The minimum |Fess| version the theme supports.
+     - The minimum |Fess| version the theme supports. Keep it equal to the ``major.minor`` of
+       ``version``. There is no ``maxFessVersion``: see `Publishing`_.
    * - ``supportedLocales``
      - Optional
      - A list of supported locales (e.g., ``[en, ja, de]``).
@@ -169,11 +172,35 @@ you can package a theme into a ZIP for distribution.
    ``theme.yml`` must be placed at the root of the ZIP. If it is
    placed in a subdirectory, it will not be recognized when uploaded.
 
+Publishing
+----------
+
+The themes the |Fess| project develops are published under
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ , at
+``<name>/<version>/<name>-<version>.zip`` with a ``.sha1`` beside it, and a per-theme
+``maven-metadata.xml`` listing the published versions. ``bin/fess-setup install theme <name>``
+reads that metadata to pick the version built for the running |Fess|.
+
+Version a theme on the |Fess| line it targets and raise the version whenever you change what the
+archive ships. A published version is never overwritten, so a change that keeps its version is
+simply never distributed.
+
+This is also why there is no upper-bound field in the manifest. Because a published archive never
+changes, an upper bound could not be added later for a theme that stops working on a newer |Fess|.
+Not publishing that theme for the newer line says the same thing, at the point it is known.
+
+.. note::
+
+   Enumerate the published versions from ``maven-metadata.xml`` rather than from a directory
+   listing. The directory index is generated periodically, so a newly published theme is readable
+   through its metadata before it appears in any listing.
+
 Installation and Activation
 ----------------------------
 
 1. In the admin console, open "System" -> "Theme" (``/admin/theme/``).
-2. Upload the ZIP file you created.
+2. Upload the ZIP file you created. A published theme can instead be installed from the command
+   line with ``bin/fess-setup install theme <name>``; see :doc:`../install/fess-setup`.
 3. On the list page, select the target theme from the "Default Theme"
    drop-down and click the "Set" button to enable it.
 

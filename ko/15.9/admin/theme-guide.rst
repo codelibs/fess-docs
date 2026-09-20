@@ -11,6 +11,20 @@
    JSP 기반 테마는 플러그인 관리에서 취급하므로, 이 페이지의 대상 외입니다.
    이 페이지의 작업을 수행하려면 ``admin-theme`` 역할(참조만 하는 경우는 ``admin-theme-view`` 역할)이 필요합니다.
 
+테마 입수
+=========
+
+|Fess| 프로젝트가 개발하는 테마는 https://maven.codelibs.org/release/org/codelibs/fess/themes/ 아래에 ZIP 아카이브로 공개되어 있습니다. 배치는 ``<name>/<version>/<name>-<version>.zip`` 이며 각각에 ``.sha1`` 체크섬이 함께 있습니다.
+
+테마의 버전은 그 테마가 대상으로 하는 |Fess| 계열을 나타냅니다. ``15.9.0`` 은 |Fess| 15.9 용 테마이고 ``minFessVersion`` 도 같은 것을 나타냅니다. 상한을 나타내는 필드는 없습니다. 공개된 아카이브는 변경되지 않으므로 새로운 |Fess| 에서 동작하지 않게 된 테마에 나중에 상한을 추가할 수 없기 때문입니다. 그 계열용으로 공개하지 않음으로써 알게 된 시점에 같은 것을 나타낼 수 있습니다.
+
+설치 방법은 두 가지입니다.
+
+* ``bin/fess-setup install theme <name>`` 은 이 |Fess| 용으로 만들어진 테마를 내려받아 공개된 체크섬과 대조한 뒤 설치합니다. :doc:`../install/fess-setup` 를 참조하십시오.
+* ZIP 을 내려받아 이 페이지의 `테마 업로드`_ 절차로 업로드합니다.
+
+`fess-themes <https://github.com/codelibs/fess-themes>`__ 저장소의 체크아웃에서 테마를 패키징할 수도 있습니다. 손에 있는 소스와 반드시 일치합니다. :doc:`../dev/theme-development` 를 참조하십시오.
+
 관리 방법
 ======
 

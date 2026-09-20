@@ -60,8 +60,8 @@ JAR 테마 플러그인(레거시)
     kind: StaticTheme
     name: example
     displayName: "Example Theme"
-    version: "1.0.0"
-    minFessVersion: "15.7"
+    version: "15.9.0"
+    minFessVersion: "15.9"
     entry: index.html
     spaFallback: true
 
@@ -91,7 +91,9 @@ JAR 테마 플러그인(레거시)
      - 관리 화면에 표시되는 이름.
    * - ``version``
      - 필수
-     - 시맨틱 버저닝 형식(예: ``1.0.0``, ``1.2.3-beta.1``).
+     - 시맨틱 버저닝 형식(예: ``15.9.0``, ``15.9.1-beta.1``). 관례로
+       ``major.minor`` 는 테마가 대상으로 하는 |Fess| 계열에 맞춥니다. 그러면
+       버전만으로 어느 |Fess| 용 테마인지 알 수 있습니다.
    * - ``author``
      - 선택
      - 작성자 이름.
@@ -106,7 +108,8 @@ JAR 테마 플러그인(레거시)
      - 홈페이지 URL.
    * - ``minFessVersion``
      - 선택
-     - 테마가 지원하는 |Fess| 의 최소 버전.
+     - 테마가 지원하는 |Fess| 의 최소 버전. ``version`` 의 ``major.minor`` 와
+       같은 값으로 둡니다. ``maxFessVersion`` 은 없습니다. `공개`_ 를 참조하십시오.
    * - ``supportedLocales``
      - 선택
      - 지원 로케일 목록(예: ``[en, ja, de]``).
@@ -160,11 +163,26 @@ JAR 테마 플러그인(레거시)
    ``theme.yml`` 은 ZIP 의 루트에 배치해야 합니다. 하위 디렉터리에
    넣으면 업로드 시 인식되지 않습니다.
 
+공개
+----
+
+|Fess| 프로젝트가 개발하는 테마는 https://maven.codelibs.org/release/org/codelibs/fess/themes/ 아래에 공개됩니다. 배치는 ``<name>/<version>/<name>-<version>.zip`` 이고 그 옆에 ``.sha1`` 이, 테마마다 공개된 버전을 나열한 ``maven-metadata.xml`` 이 놓입니다. ``bin/fess-setup install theme <name>`` 은 이 메타데이터를 읽어 실행 중인 |Fess| 용으로 만들어진 버전을 고릅니다.
+
+테마의 버전은 대상으로 하는 |Fess| 계열에 맞추고, 아카이브가 담는 내용을 바꿀 때마다 버전을 올리십시오. 공개된 버전이 덮어써지는 일은 없으므로 버전을 그대로 둔 변경은 배포되지 않습니다.
+
+매니페스트에 상한 필드가 없는 것도 같은 이유입니다. 공개된 아카이브는 변경되지 않으므로 새로운 |Fess| 에서 동작하지 않게 된 테마에 나중에 상한을 추가할 수 없습니다. 그 계열용으로 공개하지 않음으로써 알게 된 시점에 같은 것을 나타낼 수 있습니다.
+
+.. note::
+
+   공개된 버전을 조사할 때는 디렉터리 목록이 아니라 ``maven-metadata.xml`` 을 사용하십시오. 디렉터리 색인은 주기적으로 생성되므로 새로 공개한 테마는 목록에 나타나기 전에 메타데이터에서 읽을 수 있습니다.
+
 설치와 활성화
 --------------------
 
 1. 관리 화면에서 [시스템 > 테마](``/admin/theme/``)를 엽니다.
-2. 작성한 ZIP 파일을 업로드합니다.
+2. 작성한 ZIP 파일을 업로드합니다. 공개된 테마는 명령줄에서
+   ``bin/fess-setup install theme <name>`` 으로 설치할 수도 있습니다.
+   :doc:`../install/fess-setup` 를 참조하십시오.
 3. 목록 페이지의 「기본 테마」 드롭다운에서 대상 테마를 선택하고, 「설정」 버튼을
    눌러 활성화합니다.
 

@@ -2,7 +2,7 @@
 fess-setup 명령
 ====================
 
-``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 크롤러가 사용하는 Node.js, |Fess| 플러그인을 설치합니다. 설치 상태를 진단할 수도 있습니다.
+``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 크롤러가 사용하는 Node.js, |Fess| 플러그인, 정적 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
 
 |Fess| 디렉터리에서 실행합니다. 인수 없이 실행하면 명령 목록을 표시합니다.
 
@@ -138,6 +138,48 @@ remove plugin
     $ bin/fess-setup remove plugin <name>...
 
 지정한 플러그인의 설치된 jar 를 삭제합니다. 설치되지 않은 이름은 그 사실을 표시할 뿐이며, 종료 코드에는 영향을 주지 않습니다.
+
+테마 관리
+=========
+
+이 명령들은 |Fess| 설치 디렉터리의 ``app/themes`` 를 대상으로 합니다. 테마를 설치하거나 삭제한 뒤에는 |Fess| 를 재시작하거나 [시스템 > 테마] 페이지에서 [다시 읽기] 를 클릭하십시오. 테마는 같은 페이지에서 업로드할 수도 있습니다. :doc:`../admin/theme-guide` 를 참조하십시오.
+
+테마의 버전은 그 테마가 대상으로 하는 |Fess| 계열을 나타냅니다. 즉 ``15.9.0`` 은 |Fess| 15.9 용 테마입니다. 따라서 버전 없이 이름만 지정하면 플러그인과 마찬가지로 이 |Fess| 용으로 만들어진 테마가 선택됩니다.
+
+install theme
+-------------
+
+::
+
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+
+``docuforge`` 나 ``voicebox`` 같은 정적 테마를 설치합니다. 버전이 없는 이름은 이 |Fess| 용으로 만들어진 최신 버전을 설치합니다. ``<name>:<version>`` 은 그 테마의 버전을 고정하고, ``--version`` 은 자체 버전이 없는 모든 이름에 적용됩니다.
+
+아카이브는 Maven 저장소가 공개한 SHA-1 체크섬과 대조된 뒤 ``app/themes/<name>`` 에 전개됩니다. 같은 이름으로 이미 설치된 테마는 관리 화면에서 교체한 경우와 같은 기간 동안 백업으로 보관됩니다(기본 7일, ``theme.upload.attic.retention.days`` ).
+
+다운로드, 전개, 매니페스트 검사는 모두 이미 설치된 것에 손대기 전에 이루어집니다. 따라서 설치에 실패해도 기존 테마는 그대로 남습니다. ``theme.yml`` 이 다른 테마 이름을 가리키는 아카이브는 거부됩니다.
+
+list themes
+-----------
+
+::
+
+    $ bin/fess-setup list themes [--repository <url>]
+
+이 |Fess| 용으로 공개된 테마를 표시하고, 설치된 것에는 ``(installed: <version>)`` 을 붙입니다. 설치되어 있으나 저장소 목록에 없는 테마는 따로 표시됩니다.
+
+이 목록은 저장소의 디렉터리 색인에서 읽습니다. 색인은 주기적으로 생성되므로 읽지 못할 때가 있습니다. 그런 경우에는 시도한 URL 을 알린 뒤 설치된 테마는 계속 표시합니다. 색인에 있든 없든 이름을 지정하면 테마를 설치할 수 있습니다.
+
+remove theme
+------------
+
+::
+
+    $ bin/fess-setup remove theme <name>...
+
+지정한 테마를 ``app/themes`` 에서 삭제합니다. 각각은 보관 기간 동안 백업으로 남습니다. 설치되어 있지 않은 이름은 보고되지만 종료 코드는 달라지지 않습니다.
+
+삭제한 테마가 기본 테마였던 경우, 다른 테마를 선택할 때까지 |Fess| 는 내장된 ``bootstrap`` 테마로 대체합니다.
 
 설치 상태 확인
 ================

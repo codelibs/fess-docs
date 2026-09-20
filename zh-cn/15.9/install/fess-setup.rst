@@ -2,7 +2,7 @@
 fess-setup 命令
 ====================
 
-``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 爬虫所需的 Node.js，以及 |Fess| 插件。它还可以检查安装状态。
+``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 爬虫所需的 Node.js、 |Fess| 插件以及静态主题。它还可以检查安装状态。
 
 请在 |Fess| 目录中运行。不带参数运行时，会显示命令列表。
 
@@ -138,6 +138,48 @@ remove plugin
     $ bin/fess-setup remove plugin <name>...
 
 删除指定插件已安装的 jar。未安装的名称只会给出提示，不影响退出码。
+
+管理主题
+========
+
+这些命令作用于 |Fess| 安装目录下的 ``app/themes``\ 。安装或删除主题后，请重启 |Fess|\ ，或在 [系统 > 主题] 页面点击 [重新加载]。主题也可以从该页面上传，参见 :doc:`../admin/theme-guide`\ 。
+
+主题的版本表示该主题面向的 |Fess| 系列，即 ``15.9.0`` 是面向 |Fess| 15.9 的主题。因此只指定名称而不带版本时，与插件一样会选择为当前 |Fess| 构建的主题。
+
+install theme
+-------------
+
+::
+
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+
+安装一个或多个静态主题，例如 ``docuforge`` 或 ``voicebox``\ 。不带版本的名称会安装为当前 |Fess| 构建的最新版本。 ``<name>:<version>`` 固定该主题的版本， ``--version`` 适用于所有没有自带版本的名称。
+
+归档会与 Maven 仓库公开的 SHA-1 校验和比对，并解压到 ``app/themes/<name>``\ 。同名主题若已安装，会作为备份保留，保留期与从管理界面替换时相同（默认 7 天， ``theme.upload.attic.retention.days``\ ）。
+
+下载、解压和清单检查都在触碰已安装内容之前完成，因此即使安装失败，已有的主题也会原样保留。 ``theme.yml`` 中名称不符的归档会被拒绝。
+
+list themes
+-----------
+
+::
+
+    $ bin/fess-setup list themes [--repository <url>]
+
+列出为当前 |Fess| 公开的主题，并为已安装的主题标注 ``(installed: <version>)``\ 。已安装但未出现在仓库列表中的主题会单独显示。
+
+该列表读取自仓库的目录索引，索引是定期生成的，因此可能无法读取。此时命令会报告尝试过的 URL，并继续显示已安装的主题：无论索引中是否列出，只要指定名称就可以安装主题。
+
+remove theme
+------------
+
+::
+
+    $ bin/fess-setup remove theme <name>...
+
+从 ``app/themes`` 中删除指定的主题，每个都会在保留期内作为备份保留。未安装的名称会被报告，但不会改变退出码。
+
+如果被删除的主题是默认主题，在选择其他主题之前， |Fess| 会回退到内置的 ``bootstrap`` 主题。
 
 检查安装状态
 ============

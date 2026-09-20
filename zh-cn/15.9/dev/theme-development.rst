@@ -59,8 +59,8 @@ JAR 主题插件（旧版）
     kind: StaticTheme
     name: example
     displayName: "Example Theme"
-    version: "1.0.0"
-    minFessVersion: "15.7"
+    version: "15.9.0"
+    minFessVersion: "15.9"
     entry: index.html
     spaFallback: true
 
@@ -89,7 +89,9 @@ JAR 主题插件（旧版）
      - 显示在管理界面中的名称。
    * - ``version``
      - 必需
-     - 语义化版本格式（例如：``1.0.0``、``1.2.3-beta.1``）。
+     - 语义化版本格式（例如：``15.9.0``、``15.9.1-beta.1``）。按惯例
+       ``major.minor`` 与主题面向的 |Fess| 系列一致，这样仅凭版本就能知道
+       该主题是为哪个 |Fess| 准备的。
    * - ``author``
      - 可选
      - 作者姓名。
@@ -104,7 +106,8 @@ JAR 主题插件（旧版）
      - 主页 URL。
    * - ``minFessVersion``
      - 可选
-     - 主题所支持的 |Fess| 最低版本。
+     - 主题所支持的 |Fess| 最低版本。请与 ``version`` 的 ``major.minor``
+       保持一致。没有 ``maxFessVersion``\ ，参见 `发布`_\ 。
    * - ``supportedLocales``
      - 可选
      - 支持的区域设置列表（例如：``[en, ja, de]``）。
@@ -158,11 +161,26 @@ JAR 主题插件（旧版）
    ``theme.yml`` 必须放置在 ZIP 的根目录下。如果放在子目录中，
    上传时将无法被识别。
 
+发布
+----
+
+|Fess| 项目开发的主题公开在 https://maven.codelibs.org/release/org/codelibs/fess/themes/ 之下，路径为 ``<name>/<version>/<name>-<version>.zip``\ ，旁边是 ``.sha1``\ ，每个主题还有一份列出已公开版本的 ``maven-metadata.xml``\ 。 ``bin/fess-setup install theme <name>`` 会读取该元数据，挑选为正在运行的 |Fess| 构建的版本。
+
+请让主题的版本与其面向的 |Fess| 系列一致，并在归档内容发生变化时提升版本。已公开的版本不会被覆盖，因此保持版本不变的修改根本不会被分发。
+
+清单中没有上限字段也是同样的原因。公开的归档不会再改变，因此无法事后为在更新的 |Fess| 上不再可用的主题补加上限；不为该系列发布，就在知道的那一刻表达了同样的意思。
+
+.. note::
+
+   查询已公开的版本时，请使用 ``maven-metadata.xml`` 而不是目录列表。目录索引是定期生成的，新公开的主题在出现在列表中之前就已经可以通过元数据读取。
+
 安装与启用
 ----------
 
 1. 在管理界面打开"系统"→"主题"（``/admin/theme/``）。
-2. 上传创建好的 ZIP 文件。
+2. 上传创建好的 ZIP 文件。已公开的主题也可以在命令行用
+   ``bin/fess-setup install theme <name>`` 安装，参见
+   :doc:`../install/fess-setup`\\ 。
 3. 在列表页面的"默认主题"下拉菜单中选择目标主题，点击"设置"按钮启用。
 
 启用机制如下所述。

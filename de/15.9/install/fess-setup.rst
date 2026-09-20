@@ -4,7 +4,7 @@ Der Befehl fess-setup
 
 ``bin/fess-setup`` (unter Windows ``bin\fess-setup.bat``) liegt dem ZIP-Paket von |Fess| bei.
 Es installiert, was |Fess| benötigt, aber nicht mitliefert: OpenSearch mit den von |Fess|
-benötigten Plugins, Node.js für den Playwright-Crawler und |Fess|-Plugins. Außerdem prüft es eine
+benötigten Plugins, Node.js für den Playwright-Crawler, |Fess|-Plugins und statische Themes. Außerdem prüft es eine
 Installation.
 
 Führen Sie es im |Fess|-Verzeichnis aus. Ohne Argumente gibt es die Liste der Befehle aus.
@@ -194,6 +194,66 @@ remove plugin
 
 Löscht die installierten JARs der angegebenen Plugins. Ein Name, der nicht installiert ist, wird
 gemeldet und ändert den Exit-Code nicht.
+
+Themes verwalten
+================
+
+Diese Befehle arbeiten auf dem Theme-Verzeichnis ``app/themes`` der |Fess|-Installation. Starten
+Sie |Fess| nach dem Installieren oder Entfernen eines Themes neu, oder klicken Sie auf der Seite
+System > Theme auf [Neu laden]. Themes lassen sich auch dort hochladen; siehe
+:doc:`../admin/theme-guide`.
+
+Die Version eines Themes benennt die |Fess|-Linie, für die es gebaut ist: ``15.9.0`` ist ein Theme
+für |Fess| 15.9. Ein Name ohne Version wird deshalb zu dem Theme aufgelöst, das für dieses |Fess|
+gebaut wurde -- genau wie bei einem Plugin.
+
+install theme
+-------------
+
+::
+
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+
+Installiert ein oder mehrere statische Themes, zum Beispiel ``docuforge`` oder ``voicebox``. Ein
+Name ohne Version installiert die neueste für dieses |Fess| gebaute Version. ``<name>:<version>``
+legt die Version dieses Themes fest, und ``--version`` gilt für jeden Namen, der keine eigene hat.
+
+Das Archiv wird gegen die SHA-1-Prüfsumme geprüft, die das Maven-Repository veröffentlicht, und
+nach ``app/themes/<name>`` entpackt. Ein unter diesem Namen bereits installiertes Theme wird
+ebenso lange als Sicherung aufbewahrt wie eines, das über die Administrationsoberfläche ersetzt
+wurde (Standard 7 Tage, ``theme.upload.attic.retention.days``).
+
+Herunterladen, Entpacken und die Prüfung des Manifests geschehen alle, bevor etwas Installiertes
+angefasst wird: Ein bereits vorhandenes Theme übersteht eine fehlgeschlagene Installation
+unverändert. Ein Archiv, dessen ``theme.yml`` ein anderes Theme nennt, wird abgelehnt.
+
+list themes
+-----------
+
+::
+
+    $ bin/fess-setup list themes [--repository <url>]
+
+Listet die für dieses |Fess| veröffentlichten Themes auf und kennzeichnet die installierten mit
+``(installed: <version>)``. Themes, die installiert sind, aber nicht im Repository gelistet werden,
+erscheinen getrennt.
+
+Die Liste stammt aus dem Verzeichnisindex des Repositorys, der periodisch erzeugt wird. Lässt er
+sich nicht lesen, nennt der Befehl die versuchte URL und listet die installierten Themes trotzdem
+auf: Ein Theme lässt sich über seinen Namen installieren, ob der Index es führt oder nicht.
+
+remove theme
+------------
+
+::
+
+    $ bin/fess-setup remove theme <name>...
+
+Löscht die genannten Themes aus ``app/themes`` und bewahrt jedes für die Aufbewahrungsfrist als
+Sicherung auf. Ein nicht installierter Name wird gemeldet und ändert den Exit-Code nicht.
+
+War ein entferntes Theme das Standard-Theme, fällt |Fess| auf das mitgelieferte
+``bootstrap``-Theme zurück, bis ein anderes gewählt wird.
 
 Prüfen einer Installation
 =========================
