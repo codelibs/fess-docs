@@ -176,6 +176,33 @@ System configuration does not meet OpenSearch requirements.
 
        $ sudo systemctl restart opensearch
 
+Index Cannot Be Created (Dictionary File Path)
+----------------------------------------------
+
+**Symptoms:**
+
+Accessing |Fess| returns HTTP 404, and the following error is written to ``fess.log``::
+
+    Failed to create index: index=fess, path=fess_indices/fess.json
+    ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt
+
+**Cause:**
+
+OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the OpenSearch configuration directory.
+``configsync.config_path`` and ``FESS_DICTIONARY_PATH`` point outside the configuration directory (such as ``data/config/``).
+
+**Solution:**
+
+1. Change ``configsync.config_path`` and ``FESS_DICTIONARY_PATH`` to a directory under the OpenSearch configuration directory.
+
+   - RPM/DEB version: ``/etc/opensearch/dictionary/``
+   - ZIP version: ``/path/to/opensearch-3.8.0/config/dictionary/``
+
+2. If you have existing dictionary files, copy them to the new directory.
+3. Restart OpenSearch, then |Fess|.
+
+For details, see :doc:`install-linux`.
+
 Port Conflict
 -------------
 

@@ -393,7 +393,21 @@ Docker 版
       |Fess| 15.9 は OpenSearch 3.8.0 に対応しています。バージョンが一致しない場合、
       プラグインのインストールに失敗します。
 
-3. OpenSearch を起動::
+3. 辞書ディレクトリを OpenSearch の設定ディレクトリの下へ移動
+
+   OpenSearch 3.8.0 以降は、辞書ファイルが OpenSearch の設定ディレクトリの外にあるとインデックスの作成を拒否します。
+   以前の手順どおり ``configsync.config_path`` に ``/var/lib/opensearch/data/config/`` （ZIP 版では ``/path/to/opensearch/data/config/``）など設定ディレクトリの外を指定している場合、
+   |Fess| はインデックスを作成できず、起動しません。
+   RPM/DEB 版では、次のように辞書ファイルを ``/etc/opensearch/dictionary/`` へコピーします::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+       $ sudo cp -a /var/lib/opensearch/data/config/. /etc/opensearch/dictionary/
+       $ sudo chown -R opensearch:opensearch /etc/opensearch/dictionary
+
+   そのうえで、 ``/etc/opensearch/opensearch.yml`` の ``configsync.config_path`` と、 |Fess| の ``FESS_DICTIONARY_PATH`` （RPM 版は ``/etc/sysconfig/fess`` 、DEB 版は ``/etc/default/fess``）を、どちらも ``/etc/opensearch/dictionary/`` に変更します。
+   ZIP 版では、OpenSearch の ``config/dictionary/`` を使用します。詳細は :doc:`install-linux` を参照してください。
+
+4. OpenSearch を起動::
 
        $ sudo systemctl start opensearch.service
 

@@ -117,7 +117,7 @@ OpenSearch の設定
 ::
 
     # 設定同期用のパス（絶対パスで指定）
-    configsync.config_path: C:/opensearch-3.8.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
 
     # セキュリティプラグインの無効化（開発環境のみ）
     plugins.security.disabled: true
@@ -133,7 +133,13 @@ OpenSearch の設定
 .. note::
 
    Windows の場合、パスの区切り文字は ``\`` ではなく ``/`` を使用してください。
-   ``C:\opensearch-3.8.0\data\config\`` ではなく ``C:/opensearch-3.8.0/data/config/`` と記述します。
+   ``C:\opensearch-3.8.0\config\dictionary\`` ではなく ``C:/opensearch-3.8.0/config/dictionary/`` と記述します。
+
+.. important::
+
+   ``configsync.config_path`` には、OpenSearch の設定ディレクトリ（この例では ``C:/opensearch-3.8.0/config/``）の下のディレクトリを指定してください。
+   OpenSearch 3.8.0 以降は、辞書ファイルが設定ディレクトリの外にあるとインデックスの作成を拒否します。
+   ``C:/opensearch-3.8.0/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
 
 .. tip::
 
@@ -187,7 +193,7 @@ Fess の設定
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
 
 .. note::
 

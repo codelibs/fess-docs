@@ -174,6 +174,33 @@ OpenSearch が起動しない
 
        $ sudo systemctl restart opensearch
 
+インデックスを作成できない（辞書ファイルのパス）
+------------------------------------------------
+
+**症状:**
+
+|Fess| にアクセスすると HTTP 404 が返り、 ``fess.log`` に次のエラーが出力される::
+
+    Failed to create index: index=fess, path=fess_indices/fess.json
+    ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt
+
+**原因:**
+
+OpenSearch 3.8.0 以降は、辞書ファイルが OpenSearch の設定ディレクトリの外にあるとインデックスの作成を拒否します。
+``configsync.config_path`` と ``FESS_DICTIONARY_PATH`` が、設定ディレクトリの外（ ``data/config/`` など）を指しています。
+
+**解決方法:**
+
+1. ``configsync.config_path`` と ``FESS_DICTIONARY_PATH`` を、OpenSearch の設定ディレクトリの下のディレクトリに変更します。
+
+   - RPM/DEB 版: ``/etc/opensearch/dictionary/``
+   - ZIP 版: ``/path/to/opensearch-3.8.0/config/dictionary/``
+
+2. 既存の辞書ファイルがある場合は、新しいディレクトリへコピーします。
+3. OpenSearch、 |Fess| の順に再起動します。
+
+詳細は :doc:`install-linux` を参照してください。
+
 ポート番号の競合
 --------------
 

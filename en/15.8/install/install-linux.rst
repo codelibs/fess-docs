@@ -118,10 +118,16 @@ Step 1: Install OpenSearch
    ::
 
        # Path for configuration synchronization (specify an absolute path)
-       configsync.config_path: /path/to/opensearch-3.8.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.8.0/config/dictionary/
 
        # Disable the security plugin (development environments only)
        plugins.security.disabled: true
+
+   .. important::
+
+      Set ``configsync.config_path`` to a directory under the OpenSearch configuration directory (``/path/to/opensearch-3.8.0/config/`` in this example).
+      OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the configuration directory.
+      If you specify a directory outside the configuration directory, such as ``/path/to/opensearch-3.8.0/data/config/``, |Fess| cannot create its indices and does not start.
 
    .. warning::
 
@@ -175,13 +181,13 @@ Step 2: Install Fess
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    After::
 
        # External opensearch cluster
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/config/dictionary/
 
    .. note::
 
@@ -244,8 +250,18 @@ Step 1: Install OpenSearch
 
    Settings to add::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   Create the directory for dictionary files::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      Set ``configsync.config_path`` to a directory under the OpenSearch configuration directory ``/etc/opensearch/``.
+      OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the configuration directory.
+      If you specify a directory outside the configuration directory, such as ``/var/lib/opensearch/data/config/``, |Fess| cannot create its indices and does not start.
 
    .. warning::
 
@@ -273,10 +289,10 @@ Step 2: Install Fess
 
        $ sudo vi /etc/sysconfig/fess
 
-   Configure the connection information to OpenSearch. The default values are as follows. Change them as needed::
+   Configure the connection information to OpenSearch. The default value of ``FESS_DICTIONARY_PATH``, ``/var/lib/opensearch/config/``, differs from ``configsync.config_path`` in step 3, so change it as follows. Change ``SEARCH_ENGINE_HTTP_URL`` as needed::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -344,8 +360,18 @@ Step 1: Install OpenSearch
 
    Settings to add::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   Create the directory for dictionary files::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      Set ``configsync.config_path`` to a directory under the OpenSearch configuration directory ``/etc/opensearch/``.
+      OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the configuration directory.
+      If you specify a directory outside the configuration directory, such as ``/var/lib/opensearch/data/config/``, |Fess| cannot create its indices and does not start.
 
    .. warning::
 
@@ -373,10 +399,10 @@ Step 2: Install Fess
 
        $ sudo vi /etc/default/fess
 
-   Configure the connection information to OpenSearch. The default values are as follows. Change them as needed::
+   Configure the connection information to OpenSearch. The default value of ``FESS_DICTIONARY_PATH``, ``/var/lib/opensearch/config/``, differs from ``configsync.config_path`` in step 3, so change it as follows. Change ``SEARCH_ENGINE_HTTP_URL`` as needed::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -419,11 +445,11 @@ After the installation is complete, verify the following:
 
    For the TAR.GZ version::
 
-       $ ls -ld /path/to/opensearch-3.8.0/data/config/
+       $ ls -ld /path/to/opensearch-3.8.0/config/dictionary/
 
    For the RPM/DEB versions::
 
-       $ sudo ls -ld /var/lib/opensearch/data/config/
+       $ sudo ls -ld /etc/opensearch/dictionary/
 
 3. **Verify Kernel Parameters**
 

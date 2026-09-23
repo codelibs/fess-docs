@@ -373,7 +373,21 @@ Docker 버전
       |Fess| 15.8은 OpenSearch 3.8.0에 대응합니다. 버전이 일치하지 않으면
       플러그인 설치에 실패합니다.
 
-3. OpenSearch 시작::
+3. 사전 디렉터리를 OpenSearch 설정 디렉터리 아래로 이동
+
+   OpenSearch 3.8.0 이상에서는 사전 파일이 OpenSearch 설정 디렉터리 밖에 있으면 인덱스 생성을 거부합니다.
+   이전 절차대로 ``configsync.config_path`` 에 ``/var/lib/opensearch/data/config/`` (ZIP 버전에서는 ``/path/to/opensearch/data/config/``) 등 설정 디렉터리 밖을 지정한 경우,
+   |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
+   RPM/DEB 버전에서는 다음과 같이 사전 파일을 ``/etc/opensearch/dictionary/`` 로 복사합니다::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+       $ sudo cp -a /var/lib/opensearch/data/config/. /etc/opensearch/dictionary/
+       $ sudo chown -R opensearch:opensearch /etc/opensearch/dictionary
+
+   그런 다음 ``/etc/opensearch/opensearch.yml`` 의 ``configsync.config_path`` 와 |Fess| 의 ``FESS_DICTIONARY_PATH`` (RPM 버전은 ``/etc/sysconfig/fess``, DEB 버전은 ``/etc/default/fess``)를 모두 ``/etc/opensearch/dictionary/`` 로 변경합니다.
+   ZIP 버전에서는 OpenSearch 의 ``config/dictionary/`` 를 사용합니다. 자세한 내용은 :doc:`install-linux` 를 참조하십시오.
+
+4. OpenSearch 시작::
 
        $ sudo systemctl start opensearch.service
 

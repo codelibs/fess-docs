@@ -117,7 +117,7 @@ PowerShell 的情况::
 ::
 
     # 配置同步路径（使用绝对路径指定）
-    configsync.config_path: C:/opensearch-3.8.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
 
     # 禁用安全插件（仅限开发环境）
     plugins.security.disabled: true
@@ -133,7 +133,13 @@ PowerShell 的情况::
 .. note::
 
    在 Windows 中，路径分隔符请使用 ``/`` 而不是 ``\``\ 。
-   应写为 ``C:/opensearch-3.8.0/data/config/`` 而不是 ``C:\opensearch-3.8.0\data\config\``\ 。
+   应写为 ``C:/opensearch-3.8.0/config/dictionary/`` 而不是 ``C:\opensearch-3.8.0\config\dictionary\``\ 。
+
+.. important::
+
+   ``configsync.config_path`` 请指定 OpenSearch 配置目录（本例中为 ``C:/opensearch-3.8.0/config/``\ ）下的目录。
+   从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+   如果指定 ``C:/opensearch-3.8.0/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
 
 .. tip::
 
@@ -187,7 +193,7 @@ PowerShell 的情况::
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
 
 .. note::
 

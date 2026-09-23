@@ -40,7 +40,7 @@
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/config/dictionary/
 
 .. note::
    - ``fess.search_engine.http_address`` 用于指定已注册的 OpenSearch 服务的连接地址。若不进行此配置，|Fess| 将无法找到连接目标，并会启动不推荐在生产环境中使用的内嵌版 OpenSearch。

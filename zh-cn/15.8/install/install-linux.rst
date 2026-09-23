@@ -118,10 +118,16 @@
    ::
 
        # 配置同步路径（使用绝对路径指定）
-       configsync.config_path: /path/to/opensearch-3.8.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.8.0/config/dictionary/
 
        # 禁用安全插件（仅限开发环境）
        plugins.security.disabled: true
+
+   .. important::
+
+      ``configsync.config_path`` 请指定 OpenSearch 配置目录（本例中为 ``/path/to/opensearch-3.8.0/config/``\ ）下的目录。
+      从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+      如果指定 ``/path/to/opensearch-3.8.0/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
 
    .. warning::
 
@@ -175,13 +181,13 @@
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    修改后::
 
        # External opensearch cluster
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/config/dictionary/
 
    .. note::
 
@@ -244,8 +250,18 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
    要添加的配置::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   创建用于存放词典文件的目录::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      ``configsync.config_path`` 请指定 OpenSearch 配置目录 ``/etc/opensearch/`` 下的目录。
+      从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+      如果指定 ``/var/lib/opensearch/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
 
    .. warning::
 
@@ -273,10 +289,10 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
        $ sudo vi /etc/sysconfig/fess
 
-   设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
+   设置到 OpenSearch 的连接信息。\ ``FESS_DICTIONARY_PATH`` 的默认值 ``/var/lib/opensearch/config/`` 与步骤 3 中的 ``configsync.config_path`` 不同，因此请按如下方式进行更改。\ ``SEARCH_ENGINE_HTTP_URL`` 请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -344,8 +360,18 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    要添加的配置::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   创建用于存放词典文件的目录::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      ``configsync.config_path`` 请指定 OpenSearch 配置目录 ``/etc/opensearch/`` 下的目录。
+      从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+      如果指定 ``/var/lib/opensearch/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
 
    .. warning::
 
@@ -373,10 +399,10 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
        $ sudo vi /etc/default/fess
 
-   设置到 OpenSearch 的连接信息。默认值如下所示，请根据需要进行更改::
+   设置到 OpenSearch 的连接信息。\ ``FESS_DICTIONARY_PATH`` 的默认值 ``/var/lib/opensearch/config/`` 与步骤 3 中的 ``configsync.config_path`` 不同，因此请按如下方式进行更改。\ ``SEARCH_ENGINE_HTTP_URL`` 请根据需要进行更改::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -419,11 +445,11 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
    TAR.GZ 版的情况::
 
-       $ ls -ld /path/to/opensearch-3.8.0/data/config/
+       $ ls -ld /path/to/opensearch-3.8.0/config/dictionary/
 
    RPM/DEB 版的情况::
 
-       $ sudo ls -ld /var/lib/opensearch/data/config/
+       $ sudo ls -ld /etc/opensearch/dictionary/
 
 3. **确认内核参数**
 

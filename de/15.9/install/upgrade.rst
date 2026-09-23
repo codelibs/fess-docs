@@ -405,7 +405,21 @@ Sie es anhand der folgenden Schritte.
       |Fess| 15.9 ist kompatibel mit OpenSearch 3.8.0. Bei Versionsabweichungen schlägt die
       Plugin-Installation fehl.
 
-3. OpenSearch starten::
+3. Wörterbuchverzeichnis unter das OpenSearch-Konfigurationsverzeichnis verschieben
+
+   Ab OpenSearch 3.8.0 wird die Erstellung eines Index verweigert, wenn sich Wörterbuchdateien außerhalb des OpenSearch-Konfigurationsverzeichnisses befinden.
+   Wenn ``configsync.config_path`` gemäß der früheren Anleitung auf ein Verzeichnis außerhalb des Konfigurationsverzeichnisses zeigt, z. B. ``/var/lib/opensearch/data/config/`` (bei der ZIP-Version ``/path/to/opensearch/data/config/``),
+   kann |Fess| seine Indizes nicht erstellen und startet nicht.
+   Kopieren Sie bei der RPM/DEB-Version die Wörterbuchdateien wie folgt nach ``/etc/opensearch/dictionary/``::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+       $ sudo cp -a /var/lib/opensearch/data/config/. /etc/opensearch/dictionary/
+       $ sudo chown -R opensearch:opensearch /etc/opensearch/dictionary
+
+   Ändern Sie anschließend sowohl ``configsync.config_path`` in ``/etc/opensearch/opensearch.yml`` als auch ``FESS_DICTIONARY_PATH`` von |Fess| (``/etc/sysconfig/fess`` bei der RPM-Version, ``/etc/default/fess`` bei der DEB-Version) auf ``/etc/opensearch/dictionary/``.
+   Verwenden Sie bei der ZIP-Version ``config/dictionary/`` von OpenSearch. Details finden Sie unter :doc:`install-linux`.
+
+4. OpenSearch starten::
 
        $ sudo systemctl start opensearch.service
 
