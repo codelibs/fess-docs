@@ -237,36 +237,58 @@ OpenSearchへの接続先URLとヘルスチェック間隔を設定できます�
    * - 設定項目
      - 説明
    * - ``search_engine.http.url``
-     - OpenSearchのURL(デフォルト: http://localhost:9200)
+     - OpenSearchのURL(デフォルト: http://localhost:9200)。環境変数 ``SEARCH_ENGINE_HTTP_URL`` が優先されます(下記参照)。
    * - ``search_engine.heartbeat_interval``
      - ヘルスチェック間隔(ミリ秒、デフォルト: 10000)
 
 OpenSearchの接続先変更
 ----------------------
 
-外部のOpenSearchクラスタに接続する場合:
+接続先の URL は環境変数 ``SEARCH_ENGINE_HTTP_URL`` で指定します。この環境変数は
+``fess_config.properties`` の ``search_engine.http.url`` より優先されます。ZIP 版の
+``bin/fess.in.sh`` と RPM/DEB 版の環境設定ファイルはこの環境変数に既定で
+``http://localhost:9200`` を設定するため、 ``search_engine.http.url`` を変更しても接続先は
+変わりません。
+
+設定する場所は、インストール方法によって異なります。
+
+- ZIP 版: ``bin/fess.in.sh`` の ``SEARCH_ENGINE_HTTP_URL`` の行を編集するか、 |Fess| を
+  起動する環境で ``SEARCH_ENGINE_HTTP_URL`` を export します(:doc:`../install/install-linux`
+  を参照)。
+- RPM/DEB 版: ``/etc/sysconfig/fess`` (RPM)または ``/etc/default/fess`` (DEB)の
+  ``SEARCH_ENGINE_HTTP_URL``
+- Docker: コンテナの環境変数 ``SEARCH_ENGINE_HTTP_URL`` (:doc:`../install/install-docker`
+  を参照)
+- Windows の ZIP 版: ``bin\fess.in.bat`` の ``-Dfess.search_engine.http_address`` の行
+  (:doc:`../install/install-windows` を参照)
 
 ::
 
-    search_engine.http.url=http://opensearch-cluster.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=http://opensearch-cluster.example.com:9200
 
 複数ノードへの接続
 ~~~~~~~~~~~~~~~~~~
 
-複数のOpenSearchノードに接続する場合は、カンマ区切りで指定します。
+複数の OpenSearch ノードに接続する場合は、URL をカンマ区切りで指定します。一部のノードが
+停止していても、 |Fess| は残りのノードに接続します。
 
 ::
 
-    search_engine.http.url=http://node1:9200,http://node2:9200,http://node3:9200
+    SEARCH_ENGINE_HTTP_URL=http://node1:9200,http://node2:9200,http://node3:9200
 
 SSL/TLS接続の設定
 -----------------
 
-OpenSearchへHTTPSで接続する場合:
+OpenSearch へ HTTPS で接続する場合は、上記と同じ方法で ``https://`` の URL を指定します。
 
 ::
 
-    search_engine.http.url=https://opensearch.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=https://opensearch.example.com:9200
+
+CA 証明書と認証情報は ``fess_config.properties`` に設定します。
+
+::
+
     search_engine.http.ssl.certificate_authorities=/path/to/ca.crt
     search_engine.username=admin
     search_engine.password=admin_password

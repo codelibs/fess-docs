@@ -240,36 +240,62 @@ Sie können die OpenSearch-Verbindungs-URL und das Intervall der Integritätspr�
    * - Konfigurationselement
      - Beschreibung
    * - ``search_engine.http.url``
-     - OpenSearch-URL (Standard: http://localhost:9200)
+     - OpenSearch-URL (Standard: http://localhost:9200). Die Umgebungsvariable ``SEARCH_ENGINE_HTTP_URL`` hat Vorrang (siehe unten).
    * - ``search_engine.heartbeat_interval``
      - Intervall für Gesundheitsprüfungen (Millisekunden, Standard: 10000)
 
 Ändern der OpenSearch-Verbindung
 ----------------------
 
-Für die Verbindung zu einem externen OpenSearch-Cluster:
+Die URL, zu der |Fess| sich verbindet, legen Sie mit der Umgebungsvariablen
+``SEARCH_ENGINE_HTTP_URL`` fest. Sie hat Vorrang vor ``search_engine.http.url``
+in ``fess_config.properties``. ``bin/fess.in.sh`` des ZIP-Pakets und die
+Umgebungsdatei der RPM/DEB-Pakete setzen diese Variable standardmäßig auf
+``http://localhost:9200``. Eine Änderung von ``search_engine.http.url`` ändert
+das Verbindungsziel daher nicht.
+
+Wo Sie sie setzen, hängt von der Installationsart ab:
+
+- ZIP-Paket: Bearbeiten Sie die Zeile ``SEARCH_ENGINE_HTTP_URL`` in
+  ``bin/fess.in.sh``, oder exportieren Sie ``SEARCH_ENGINE_HTTP_URL`` in der
+  Umgebung, in der |Fess| gestartet wird (siehe :doc:`../install/install-linux`).
+- RPM/DEB-Paket: ``SEARCH_ENGINE_HTTP_URL`` in ``/etc/sysconfig/fess`` (RPM)
+  oder ``/etc/default/fess`` (DEB).
+- Docker: die Container-Umgebungsvariable ``SEARCH_ENGINE_HTTP_URL`` (siehe
+  :doc:`../install/install-docker`).
+- ZIP-Paket unter Windows: die Zeile ``-Dfess.search_engine.http_address`` in
+  ``bin\fess.in.bat`` (siehe :doc:`../install/install-windows`).
 
 ::
 
-    search_engine.http.url=http://opensearch-cluster.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=http://opensearch-cluster.example.com:9200
 
 Verbindung zu mehreren Knoten
 ~~~~~~~~~~~~~~~~~~
 
-Um eine Verbindung zu mehreren OpenSearch-Knoten herzustellen, geben Sie diese durch Kommas getrennt an.
+Um eine Verbindung zu mehreren OpenSearch-Knoten herzustellen, trennen Sie die
+URLs durch Kommas. Sind einige der Knoten ausgefallen, verbindet sich |Fess| mit
+den übrigen.
 
 ::
 
-    search_engine.http.url=http://node1:9200,http://node2:9200,http://node3:9200
+    SEARCH_ENGINE_HTTP_URL=http://node1:9200,http://node2:9200,http://node3:9200
 
 Konfiguration von SSL/TLS-Verbindungen
 -----------------
 
-Für HTTPS-Verbindungen zu OpenSearch:
+Für HTTPS-Verbindungen zu OpenSearch geben Sie auf dieselbe Weise wie oben eine
+``https://``-URL an:
 
 ::
 
-    search_engine.http.url=https://opensearch.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=https://opensearch.example.com:9200
+
+Das CA-Zertifikat und die Anmeldedaten legen Sie in ``fess_config.properties``
+fest:
+
+::
+
     search_engine.http.ssl.certificate_authorities=/path/to/ca.crt
     search_engine.username=admin
     search_engine.password=admin_password

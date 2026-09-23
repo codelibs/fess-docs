@@ -237,36 +237,60 @@ You can configure the OpenSearch connection URL and the health-check (heartbeat)
    * - Configuration Item
      - Description
    * - ``search_engine.http.url``
-     - OpenSearch URL (Default: http://localhost:9200)
+     - OpenSearch URL (Default: http://localhost:9200). The ``SEARCH_ENGINE_HTTP_URL`` environment variable takes precedence (see below).
    * - ``search_engine.heartbeat_interval``
      - Health check interval in milliseconds (Default: 10000)
 
 Changing OpenSearch Connection
 -------------------------------
 
-To connect to an external OpenSearch cluster:
+Set the URL to connect to with the ``SEARCH_ENGINE_HTTP_URL`` environment
+variable. It takes precedence over ``search_engine.http.url`` in
+``fess_config.properties``. The ZIP package's ``bin/fess.in.sh`` and the
+RPM/DEB packages' environment file set this variable to
+``http://localhost:9200`` by default, so changing ``search_engine.http.url``
+does not change where |Fess| connects.
+
+Where to set it depends on how |Fess| is installed:
+
+- ZIP package: edit the ``SEARCH_ENGINE_HTTP_URL`` line in
+  ``bin/fess.in.sh``, or export ``SEARCH_ENGINE_HTTP_URL`` in the
+  environment that starts |Fess| (see :doc:`../install/install-linux`).
+- RPM/DEB package: ``SEARCH_ENGINE_HTTP_URL`` in ``/etc/sysconfig/fess``
+  (RPM) or ``/etc/default/fess`` (DEB).
+- Docker: the container environment variable ``SEARCH_ENGINE_HTTP_URL``
+  (see :doc:`../install/install-docker`).
+- ZIP package on Windows: the ``-Dfess.search_engine.http_address`` line in
+  ``bin\fess.in.bat`` (see :doc:`../install/install-windows`).
 
 ::
 
-    search_engine.http.url=http://opensearch-cluster.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=http://opensearch-cluster.example.com:9200
 
 Connecting to Multiple Nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To connect to multiple OpenSearch nodes, specify them separated by commas.
+To connect to multiple OpenSearch nodes, separate the URLs with commas.
+If some of the nodes are down, |Fess| connects to the remaining ones.
 
 ::
 
-    search_engine.http.url=http://node1:9200,http://node2:9200,http://node3:9200
+    SEARCH_ENGINE_HTTP_URL=http://node1:9200,http://node2:9200,http://node3:9200
 
 SSL/TLS Connection Configuration
 ---------------------------------
 
-To connect to OpenSearch via HTTPS:
+To connect to OpenSearch via HTTPS, specify an ``https://`` URL in the
+same way as above:
 
 ::
 
-    search_engine.http.url=https://opensearch.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=https://opensearch.example.com:9200
+
+Set the CA certificate and the credentials in ``fess_config.properties``:
+
+::
+
     search_engine.http.ssl.certificate_authorities=/path/to/ca.crt
     search_engine.username=admin
     search_engine.password=admin_password

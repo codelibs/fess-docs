@@ -242,36 +242,58 @@ OpenSearch 연결 URL과 상태 확인(하트비트) 간격을 설정할 수 있
    * - 설정 항목
      - 설명
    * - ``search_engine.http.url``
-     - OpenSearch의 URL(기본값: http://localhost:9200)
+     - OpenSearch의 URL(기본값: http://localhost:9200). 환경 변수 ``SEARCH_ENGINE_HTTP_URL`` 이 우선합니다(아래 참조).
    * - ``search_engine.heartbeat_interval``
      - 헬스체크 간격(밀리초, 기본값: 10000)
 
 OpenSearch 연결 대상 변경
 ----------------------
 
-외부 OpenSearch 클러스터에 연결하는 경우:
+연결 대상 URL 은 환경 변수 ``SEARCH_ENGINE_HTTP_URL`` 로 지정합니다. 이 환경 변수는
+``fess_config.properties`` 의 ``search_engine.http.url`` 보다 우선합니다. ZIP 버전의
+``bin/fess.in.sh`` 와 RPM/DEB 버전의 환경 설정 파일은 이 환경 변수를 기본적으로
+``http://localhost:9200`` 으로 설정하므로, ``search_engine.http.url`` 을 변경해도 연결
+대상은 바뀌지 않습니다.
+
+설정하는 위치는 설치 방법에 따라 다릅니다.
+
+- ZIP 버전: ``bin/fess.in.sh`` 의 ``SEARCH_ENGINE_HTTP_URL`` 행을 편집하거나, |Fess| 를
+  시작하는 환경에서 ``SEARCH_ENGINE_HTTP_URL`` 을 export 합니다
+  (:doc:`../install/install-linux` 참조).
+- RPM/DEB 버전: ``/etc/sysconfig/fess`` (RPM) 또는 ``/etc/default/fess`` (DEB)의
+  ``SEARCH_ENGINE_HTTP_URL``
+- Docker: 컨테이너의 환경 변수 ``SEARCH_ENGINE_HTTP_URL``
+  (:doc:`../install/install-docker` 참조)
+- Windows 의 ZIP 버전: ``bin\fess.in.bat`` 의 ``-Dfess.search_engine.http_address`` 행
+  (:doc:`../install/install-windows` 참조)
 
 ::
 
-    search_engine.http.url=http://opensearch-cluster.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=http://opensearch-cluster.example.com:9200
 
 여러 노드에 연결
 ~~~~~~~~~~~~~~~~~~
 
-여러 OpenSearch 노드에 연결하는 경우 쉼표로 구분하여 지정합니다.
+여러 OpenSearch 노드에 연결하는 경우 URL 을 쉼표로 구분하여 지정합니다. 일부 노드가
+중지되어 있어도 |Fess| 는 나머지 노드에 연결합니다.
 
 ::
 
-    search_engine.http.url=http://node1:9200,http://node2:9200,http://node3:9200
+    SEARCH_ENGINE_HTTP_URL=http://node1:9200,http://node2:9200,http://node3:9200
 
 SSL/TLS 연결 설정
 -----------------
 
-OpenSearch에 HTTPS로 연결하는 경우:
+OpenSearch 에 HTTPS 로 연결하는 경우, 위와 같은 방법으로 ``https://`` URL 을 지정합니다.
 
 ::
 
-    search_engine.http.url=https://opensearch.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=https://opensearch.example.com:9200
+
+CA 인증서와 인증 정보는 ``fess_config.properties`` 에 설정합니다.
+
+::
+
     search_engine.http.ssl.certificate_authorities=/path/to/ca.crt
     search_engine.username=admin
     search_engine.password=admin_password
