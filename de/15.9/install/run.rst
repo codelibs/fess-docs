@@ -203,6 +203,11 @@ Suchseite
 
 Die Fess-Suchseite wird angezeigt. Im Ausgangszustand werden keine Suchergebnisse angezeigt, da noch keine Crawl-Konfiguration vorgenommen wurde.
 
+Die Suchseite ist ``bootstrap``, das mit |Fess| mitgelieferte statische Theme. Um ihr Aussehen zu
+ändern, installieren Sie ein anderes Theme über „System" → „Theme" in der Verwaltungsseite oder mit
+``bin/fess-setup install theme <name>`` (siehe :doc:`fess-setup`), oder kopieren Sie das mitgelieferte
+Theme und ändern Sie die Kopie (siehe :ref:`theme-customize-bundled`).
+
 Verwaltungsseite
 ----------------
 

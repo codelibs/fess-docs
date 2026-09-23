@@ -157,6 +157,9 @@ Une fois le démarrage terminé, accédez aux URL suivantes :
 - **Écran de recherche** : http://localhost:8080/
 - **Écran d'administration** : http://localhost:8080/admin
 
+L'écran de recherche est ``bootstrap``, le thème statique fourni avec |Fess|. Pour modifier son apparence,
+consultez :doc:`../admin/theme-guide`.
+
 Compte administrateur par défaut :
 
 - Nom d'utilisateur : ``admin``

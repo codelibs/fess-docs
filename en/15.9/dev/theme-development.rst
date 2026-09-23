@@ -5,25 +5,23 @@ Theme Development Guide
 Overview
 ========
 
-In |Fess|, you can customize the design of the search screen using the
-following two methods.
+In |Fess| 15.9, the search screen is always a static theme. A static
+theme is an independent SPA (Single Page Application) that uses the
+``/api/v2/*`` API. Themes are distributed as ZIP files, uploaded
+through the admin console, and enabled there. When no theme is
+selected, |Fess| uses ``bootstrap``, the static theme bundled with it.
 
-Static Theme
-    A mechanism introduced in |Fess| 15.7. Themes are distributed as
-    ZIP files, uploaded through the admin console, and enabled there.
-    The theme itself is an independent SPA (Single Page Application)
-    that uses the ``/api/v2/*`` API and does not depend on the |Fess|
-    core's JSP. This approach is recommended when creating a new theme.
-
-JAR Theme Plugin (Legacy)
-    A traditional plugin that overrides ``view`` / ``css`` / ``js`` /
-    ``images``. It is built as a JAR and installed as a plugin. Use
-    this when you want to partially replace existing JSP-based screens.
+To change how the search screen looks, either install another theme
+(see :doc:`../admin/theme-guide`) or make your own: the quickest way
+is to copy the bundled theme and change the copy, as described in
+`Customizing the Bundled Theme`_.
 
 .. note::
 
-   Static themes are available in |Fess| 15.7 and later. If you are
-   targeting 15.6 or earlier, use a JAR theme plugin instead.
+   Static themes are available in |Fess| 15.7 and later, and became the
+   default search screen in 15.9. JAR theme plugins, which replace the
+   JSPs of the search screen, no longer change the search screen in
+   15.9; see `JAR Theme Plugin (Legacy)`_.
 
 Static Theme
 ============
@@ -120,7 +118,8 @@ The fields that can be specified are as follows.
      - The SPA entry HTML. Defaults to ``index.html``.
    * - ``spaFallback``
      - Optional
-     - Whether the SPA fallback is enabled. Defaults to ``true``.
+     - Deprecated. Accepted for compatibility but no longer read: since
+       15.9 the entry HTML is always served for the search screen paths.
 
 .. note::
 
@@ -143,13 +142,22 @@ Serving and API
 
 - A static theme is served under ``/themes/<name>/`` (``<name>`` is
   the ``name`` in ``theme.yml``).
-- When ``spaFallback`` is enabled, the entry HTML (``index.html`` by
-  default) is returned for the paths ``/``, ``/search``, ``/help``,
-  ``/error``, ``/profile``, ``/cache``, and ``/chat``, and subsequent
-  routing is handled by the SPA.
+- The entry HTML (``index.html`` by default) is returned for the paths
+  ``/``, ``/search``, ``/advance``, ``/help``, ``/error``, ``/profile``,
+  ``/cache``, and ``/chat``, and subsequent routing is handled by the
+  SPA. Since 15.9 this happens whatever ``spaFallback`` says; the field
+  is no longer read.
+- Errors are rendered by the theme as well: when a request fails, a
+  browser receives the theme's entry HTML at the requested URL, with the
+  real HTTP status.
 - The admin console (``/admin/*``), ``/api/*``, the login screen, and
   similar are not covered by the static theme and are handled by the
   |Fess| core.
+- The entry HTML is served with a ``Content-Security-Policy`` header that
+  allows scripts, styles, images and connections only from |Fess|
+  itself (inline styles are allowed; inline scripts are not). Fonts or
+  scripts from an external CDN are therefore not loaded; ship them in the
+  theme.
 - The theme's SPA retrieves data such as search results and chat from
   the ``/api/v2/*`` API.
 
@@ -224,8 +232,73 @@ The activation mechanism works as follows.
    ``theme.directory.path`` defaults to ``themes``). During extraction,
    validation is performed to prevent ZIP Slip and zip bomb attacks.
 
+.. _theme-customize-bundled:
+
+Customizing the Bundled Theme
+-----------------------------
+
+The bundled theme ``bootstrap`` is in ``app/themes/bootstrap/`` of the
+|Fess| installation (``/usr/share/fess/app/themes/bootstrap/`` for the
+RPM/DEB packages). Do not edit it in place: an upgrade replaces it, and
+the name ``bootstrap`` is reserved for it, so it can be neither deleted
+nor replaced by an upload. Copy it under a new name instead.
+
+1. Copy the directory, for example to ``mytheme``::
+
+       $ cp -r app/themes/bootstrap /tmp/mytheme
+
+2. In ``theme.yml``, change ``name`` to ``mytheme`` and change
+   ``displayName``. ``name`` must match the directory name.
+
+3. In ``index.html``, replace every ``themes/bootstrap/`` with
+   ``themes/mytheme/``. The bundled ``index.html`` names its own
+   directory in four places: the stylesheet (``assets/styles.css``), the
+   two logos (``assets/logo-head.png`` and ``assets/logo.png``) and the
+   script (``assets/app.js``). If they are left unchanged, the copy keeps
+   loading the files of ``bootstrap``, and none of your changes to the
+   CSS, the logos or the messages show. The other files are loaded
+   relative to ``assets/app.js``, so these four are the only ones to
+   change.
+
+   ::
+
+       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+
+4. Make your changes:
+
+   - Colors and layout: ``assets/styles.css``.
+   - Logos: ``assets/logo-head.png`` (header) and ``assets/logo.png``
+     (search top page).
+   - Texts, such as the footer (``footer.copyright_org``): the
+     ``i18n/messages.<locale>.json`` files, one per language.
+   - Page structure: ``index.html``.
+
+5. Package the directory as a ZIP with ``theme.yml`` at its root, and
+   upload it on "System" > "Theme" in the admin console::
+
+       $ cd /tmp/mytheme && zip -r ../mytheme.zip .
+
+   Alternatively, place the directory in ``app/themes/`` and click
+   "Reload" on the same page.
+
+6. Select ``mytheme`` as the default theme on that page.
+
+.. note::
+
+   Replace the copy with a fresh one from the bundled theme after each
+   |Fess| upgrade and reapply your changes, as the bundled theme follows
+   the ``/api/v2/*`` API of its |Fess| version.
+
 JAR Theme Plugin (Legacy)
 =========================
+
+.. warning::
+
+   Since |Fess| 15.9, the search screen is always served by a static
+   theme, so a JAR theme plugin no longer changes it. Of the JSPs a JAR
+   theme provides, only those of the login screen (``/login/``) are
+   still used. Move the design to a static theme; see
+   `Customizing the Bundled Theme`_.
 
 A JAR theme plugin overrides the |Fess| core's ``view`` / ``css`` /
 ``js`` / ``images`` directories on a per-theme-name basis. For the
@@ -282,10 +355,10 @@ declare additional dependencies.
 Customizing CSS and Images
 ---------------------------
 
-The search screen is built with Bootstrap-based JSPs. You can override
-the CSS to change colors and layout, or replace ``images/logo.png`` to
-change the logo. For the target class names and markup, check the
-actual JSPs (``view/index.jsp``, ``view/search.jsp``, etc.).
+The JSPs are Bootstrap-based. You can override the CSS to change colors
+and layout, or replace ``images/logo.png`` to change the logo. Since
+15.9 this affects only the login screen; the search screen is a static
+theme (see `Customizing the Bundled Theme`_).
 
 Build and Installation
 -----------------------

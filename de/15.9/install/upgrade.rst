@@ -280,15 +280,24 @@ ZIP-Version
        $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
        # Installierte Plugins
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # Theme
-       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.9.0/app/themes/
+       # Selbst hochgeladene statische Themes (ein Verzeichnis pro Theme; nie bootstrap)
+       $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
 
-      Kopieren Sie JSPs, die Sie über „Design" in der Verwaltungsseite bearbeitet haben
-      (``app/WEB-INF/view/``), nicht unverändert. Wenn sich die Struktur der JSPs in der neuen
-      Version geändert hat, wird die Seite nicht mehr korrekt angezeigt. Wenden Sie Ihre Änderungen
-      stattdessen erneut auf die JSPs der neuen Version an.
+      Kopieren Sie nicht das gesamte Verzeichnis ``app/themes/``. Es enthält auch ``bootstrap``, das
+      mit |Fess| mitgelieferte Theme, und wenn Sie es über das von 15.9 kopieren, wird die
+      Suchoberfläche von 15.9 durch die 15.8-Version des Themes ersetzt. Kopieren Sie nur die
+      Verzeichnisse von Themes, die Sie selbst erstellt haben. Für ein vom |Fess|-Projekt
+      veröffentlichtes Theme installieren Sie stattdessen die Version für 15.9 mit
+      ``bin/fess-setup install theme <name>`` (siehe :doc:`fess-setup`).
+
+   .. warning::
+
+      Kopieren Sie keine JSPs (``app/WEB-INF/view/``), die Sie über „Design" in der
+      Verwaltungsseite bearbeitet haben. Die Suchoberfläche von 15.9 ist ein statisches Theme und
+      verwendet diese JSPs nicht mehr; wohin solche Änderungen jetzt gehören, beschreibt
+      :ref:`upgrade-159-static-theme`.
 
    .. note::
 
@@ -849,12 +858,87 @@ Die Grenze, die ``rag.chat.message.max.length`` festlegt, gilt weiterhin, wird a
 Systemeigenschaft gelesen: Setzen Sie sie in ``app/WEB-INF/conf/system.properties`` oder mit
 ``-Dfess.system.rag.chat.message.max.length``, wie in :doc:`../config/rag-chat` beschrieben.
 
+.. _upgrade-159-static-theme:
+
+Die Suchoberfläche ist jetzt ein statisches Theme
+-------------------------------------------------
+
+Die Suchoberfläche wird vom statischen Theme ``bootstrap`` ausgeliefert, das mit |Fess| mitgeliefert
+wird, sofern kein anderes Theme ausgewählt ist. Das gilt für ``/``, ``/search``, ``/advance``,
+``/help``, ``/profile``, ``/cache``, ``/chat`` und die Fehlerseiten. Bis 15.8 waren diese Seiten
+JSPs, sofern kein Standard-Theme festgelegt war.
+
+Die Umstellung erfolgt auch beim Upgrade. Eine 15.8-Installation, die nie ein Standard-Theme
+festgelegt hat, hat kein ``theme.default`` in ``system.properties`` und zeigt daher nach dem Upgrade
+das statische Theme; dabei wird nichts in die Konfiguration geschrieben und nichts protokolliert. Es
+gibt keine Einstellung, die die JSP-Suchoberfläche zurückbringt. Wenn Sie in 15.8 ein Standard-Theme
+festgelegt hatten, bleibt diese Einstellung erhalten; installieren Sie die 15.9-Version des Themes
+(``bin/fess-setup install theme <name>``), denn ein Standard, der ein nicht installiertes Theme nennt,
+fällt mit einer Warnung in ``fess.log`` auf ``bootstrap`` zurück.
+
+Wenn Sie die JSPs, CSS oder Bilder der Suchoberfläche geändert haben, über „Seitengestaltung" in der
+Verwaltungsoberfläche oder in einem JAR-Theme-Plugin, sind diese Änderungen nicht mehr sichtbar.
+Nehmen Sie sie in einem statischen Theme vor: Kopieren Sie das mitgelieferte Theme und ändern Sie
+die Kopie, wie unter :ref:`theme-customize-bundled` beschrieben, oder installieren Sie ein
+veröffentlichtes Theme über „System" → „Theme" in der Verwaltungsoberfläche oder mit
+``bin/fess-setup install theme <name>``. Ein eigenes Aussehen pro virtuellem Host ist jetzt ein
+statisches Theme, das nach dem virtuellen Host benannt ist; siehe
+:doc:`../config/security-virtual-host`. Die Anmeldeseite (``/login/``) ist weiterhin eine JSP.
+
+Was Clients sehen
+~~~~~~~~~~~~~~~~~
+
+Fehler werden jetzt direkt dargestellt, unter der angeforderten URL und mit dem tatsächlichen
+HTTP-Status. Ein Browser (eine Anfrage, deren ``Accept``-Header ``text/html`` enthält) erhält die
+Fehlerseite des Themes; jeder andere Client erhält einen einzeiligen ``text/plain``-Body (zum
+Beispiel ``Not Found.`` für ``404``). Bis 15.8 antworteten die meisten Fehler mit einer
+``302``-Weiterleitung auf eine ``/error/...``-Seite, die selbst ``200`` zurückgab. Überprüfen Sie
+Monitoring, Health-Checks und Clients, die ``Location``-Headern folgen oder ``/error/``-URLs
+erwarten.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Anfrage
+     - Bis 15.8
+     - 15.9
+   * - ``/go/`` mit fehlendem Parameter oder für ein nicht vorhandenes Dokument
+     - ``200`` oder ``302`` auf ``/error/``
+     - ``400`` oder ``404``
+   * - ``/thumbnail/`` mit fehlendem Parameter, für ein unbekanntes Dokument oder ohne Vorschaubild
+     - ``200`` oder ``302``
+     - ``400`` oder ``404``
+   * - ``/sso/metadata`` und ``/sso/logout``, wenn der konfigurierte SSO-Typ sie nicht verarbeitet
+     - ``302`` auf ``/error/badrequest/``
+     - ``400``
+   * - ``/api/v1/*``, ``/json`` und jede unbekannte URL
+     - ``302`` auf ``/error/notfound/``
+     - ``404``
+   * - Eine nicht abgefangene Ausnahme, auch in der Admin-API
+     - ``302`` auf ``/error/systemerror/``
+     - ``500`` mit dem Body ``System Error.`` (kein JSON)
+   * - ``/error/notfound/``, ``/error/badrequest/``, ``/error/systemerror/`` selbst
+     - ``200``
+     - ``404``, ``400``, ``500``
+
+Mit ``login.required=true`` leiten die Suchseiten einen anonymen Benutzer nicht mehr weiter. Sie
+geben ``200`` mit dem Theme zurück, das den Benutzer zur Anmeldung auffordert, und stattdessen werden
+die dahinterliegenden Daten verweigert: Jeder ``/api/v2/``-Endpunkt außer ``/health``, ``/auth/*``
+und ``/ui/config``, einschließlich ``/api/v2/search``, antwortet mit ``401``, bis sich der Benutzer
+anmeldet. ``/go/``, ``/thumbnail/`` und ``/osdd`` leiten weiterhin zur Anmeldung weiter. Eine
+Prüfung, die für eine anonyme Anfrage an ``/`` eine Weiterleitung erwartet, muss stattdessen
+``/api/v2/search`` auf ``401`` testen.
+
+Die Suchoberfläche sucht außerdem über ``/api/v2/search``, sodass eine Suche protokolliert wird,
+wenn diese API aufgerufen wird, nicht wenn ``/search`` angefordert wird. Ein Client, der kein
+JavaScript ausführt, erhält die Seite ohne Ergebnisse.
+
 Die Seitengestaltung wurde entfernt
 -----------------------------------
 
 [System > Seitengestaltung] ist nicht mehr Teil der Verwaltungsoberfläche. JSP-, CSS- und
 Bilddateien der Suchoberfläche lassen sich dort nicht mehr bearbeiten. Um das Aussehen der
-Suchoberfläche zu ändern, verwenden Sie ein statisches Theme (siehe :doc:`../dev/theme-development`).
+Suchoberfläche zu ändern, verwenden Sie ein statisches Theme (siehe :ref:`theme-customize-bundled`).
 
 Außerdem wurden die folgenden Schlüssel aus ``fess_config.properties`` entfernt. Ein unter diesen
 Namen verbliebener Wert wird nicht verwendet.

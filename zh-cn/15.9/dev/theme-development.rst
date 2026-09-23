@@ -5,23 +5,20 @@
 概述
 ====
 
-通过 |Fess|，可以使用以下两种方法自定义搜索界面的设计。
+在 |Fess| 15.9 中，搜索界面始终是静态主题。静态主题是使用
+``/api/v2/*`` API 的独立 SPA（单页应用程序）。主题以 ZIP 文件的形式
+分发，从管理界面上传后在管理界面中启用。未选择任何主题时， |Fess|
+使用其内置的静态主题 ``bootstrap`` 。
 
-静态主题（Static Theme）
-    这是 |Fess| 15.7 中引入的机制。将主题以 ZIP 文件的形式分发，
-    从管理界面上传后即可启用。主题本体是使用 ``/api/v2/*`` API 的独立 SPA
-    （单页应用程序），不依赖于 |Fess| 本体的 JSP。如果要新建主题，
-    推荐使用这种方法。
-
-JAR 主题插件（旧版）
-    这是一种覆盖 ``view`` / ``css`` / ``js`` / ``images`` 的传统类型插件。
-    构建为 JAR 后作为插件安装。适用于希望对现有的基于 JSP 的界面进行
-    部分替换的场景。
+要更改搜索界面的外观，可以安装其他主题（参见 :doc:`../admin/theme-guide` ），
+也可以自行制作：最快捷的方法是复制内置主题并修改副本，具体步骤参见
+`自定义内置主题`_ 。
 
 .. note::
 
-   静态主题可在 |Fess| 15.7 及以上版本中使用。如果目标版本为 15.6 及更早版本，
-   请使用 JAR 主题插件。
+   静态主题可在 |Fess| 15.7 及以上版本中使用，并在 15.9 中成为默认的
+   搜索界面。替换搜索界面 JSP 的 JAR 主题插件在 15.9 中不再改变搜索界面；
+   参见 `JAR 主题插件（旧版）`_ 。
 
 静态主题
 ========
@@ -116,7 +113,8 @@ JAR 主题插件（旧版）
      - SPA 的入口 HTML。默认值为 ``index.html``\ 。
    * - ``spaFallback``
      - 可选
-     - 是否启用 SPA 回退。默认值为 ``true``\ 。
+     - 已弃用。为保持兼容仍可指定，但不再读取：自 15.9 起，搜索界面的
+       路径始终返回入口 HTML。
 
 .. note::
 
@@ -136,11 +134,17 @@ JAR 主题插件（旧版）
 
 - 静态主题在 ``/themes/<name>/`` 下分发（``<name>`` 为 ``theme.yml``
   中的 ``name``）。
-- 当 ``spaFallback`` 启用时，在 ``/``、``/search``、``/help``、``/error``、
-  ``/profile``、``/cache``、``/chat`` 等各个路径下都会返回入口 HTML
-  （默认是 ``index.html``），此后的路由由 SPA 处理。
+- 在 ``/``、``/search``、``/advance``、``/help``、``/error``、
+  ``/profile``、``/cache``、``/chat`` 各个路径下都会返回入口 HTML
+  （默认是 ``index.html``），此后的路由由 SPA 处理。自 15.9 起，无论
+  ``spaFallback`` 如何设置都会这样处理；该字段不再被读取。
+- 错误也由主题渲染：请求失败时，浏览器会在所请求的 URL 上收到主题的
+  入口 HTML，并附带真实的 HTTP 状态码。
 - 管理界面（``/admin/*``）、``/api/*``、登录界面等不属于静态主题的处理
   范围，而是由 |Fess| 本体处理。
+- 入口 HTML 在返回时附带 ``Content-Security-Policy`` 头，仅允许来自
+  |Fess| 自身的脚本、样式、图片和连接（允许内联样式，不允许内联脚本）。
+  因此，来自外部 CDN 的字体或脚本不会被加载；请将它们包含在主题中。
 - 主题的 SPA 会通过 ``/api/v2/*`` API 获取搜索结果、聊天等数据。
 
 打包
@@ -199,8 +203,66 @@ JAR 主题插件（旧版）
    ``theme.upload.max.size`` 默认为 50MB，``theme.directory.path`` 默认为
    ``themes``）。展开时会执行防止 ZIP Slip 和 zip bomb 的校验。
 
+.. _theme-customize-bundled:
+
+自定义内置主题
+--------------
+
+内置主题 ``bootstrap`` 位于 |Fess| 安装目录的 ``app/themes/bootstrap/``
+（RPM/DEB 软件包为 ``/usr/share/fess/app/themes/bootstrap/`` ）。请不要
+直接编辑它：升级时它会被替换，而且 ``bootstrap`` 这一名称为其保留，
+既无法删除，也无法通过上传替换。请以新名称复制后再修改。
+
+1. 复制该目录，例如复制为 ``mytheme`` ::
+
+       $ cp -r app/themes/bootstrap /tmp/mytheme
+
+2. 在 ``theme.yml`` 中，将 ``name`` 改为 ``mytheme`` ，并修改
+   ``displayName`` 。 ``name`` 必须与目录名一致。
+
+3. 在 ``index.html`` 中，将所有 ``themes/bootstrap/`` 替换为
+   ``themes/mytheme/`` 。内置的 ``index.html`` 在四处引用了自身的目录：
+   样式表（ ``assets/styles.css`` ）、两个徽标（ ``assets/logo-head.png``
+   和 ``assets/logo.png`` ）以及脚本（ ``assets/app.js`` ）。如果不修改，
+   副本将继续加载 ``bootstrap`` 的文件，对 CSS、徽标或消息所做的修改都
+   不会显示。其他文件是相对于 ``assets/app.js`` 加载的，因此只需修改这
+   四处。
+
+   ::
+
+       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+
+4. 进行修改：
+
+   - 配色和布局： ``assets/styles.css`` 。
+   - 徽标： ``assets/logo-head.png`` （页眉）和 ``assets/logo.png``
+     （搜索首页）。
+   - 页脚（ ``footer.copyright_org`` ）等文本：每种语言一个的
+     ``i18n/messages.<locale>.json`` 文件。
+   - 页面结构： ``index.html`` 。
+
+5. 将该目录打包为根目录下包含 ``theme.yml`` 的 ZIP，并在管理界面的
+   "系统"→"主题"中上传::
+
+       $ cd /tmp/mytheme && zip -r ../mytheme.zip .
+
+   也可以将该目录放到 ``app/themes/`` 中，然后在同一页面点击"重新加载"。
+
+6. 在该页面将 ``mytheme`` 选为默认主题。
+
+.. note::
+
+   由于内置主题遵循其所属 |Fess| 版本的 ``/api/v2/*`` API，每次升级
+   |Fess| 后，请用内置主题的新副本替换原副本，并重新应用您的修改。
+
 JAR 主题插件（旧版）
 ====================
+
+.. warning::
+
+   自 |Fess| 15.9 起，搜索界面始终由静态主题提供，因此 JAR 主题插件不再
+   改变搜索界面。JAR 主题提供的 JSP 中，只有登录界面（ ``/login/`` ）的
+   JSP 仍会被使用。请将设计迁移到静态主题；参见 `自定义内置主题`_ 。
 
 JAR 主题插件是按主题名称覆盖 |Fess| 本体的 ``view`` / ``css`` / ``js`` /
 ``images`` 目录的插件。关于插件的一般结构和构建方法，也请参考
@@ -254,9 +316,9 @@ pom.xml
 CSS 与图片的自定义
 ------------------
 
-搜索界面由基于 Bootstrap 的 JSP 构成。可以通过覆盖 CSS 来更改配色和
-布局，或者替换 ``images/logo.png`` 来更改徽标。关于具体的类名和标记，
-请查看实际的 JSP（``view/index.jsp`` / ``view/search.jsp`` 等）。
+JSP 基于 Bootstrap 构建。可以通过覆盖 CSS 来更改配色和布局，或者替换
+``images/logo.png`` 来更改徽标。自 15.9 起，这只影响登录界面；搜索界面
+是静态主题（参见 `自定义内置主题`_ ）。
 
 构建与安装
 ----------

@@ -278,14 +278,22 @@ ZIP Version
        $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
        # Installed plugins
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # Theme
-       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.9.0/app/themes/
+       # Static themes you uploaded yourself (one directory per theme; never bootstrap)
+       $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
 
-      Do not copy JSPs (``app/WEB-INF/view/``) edited via "Design" in the admin UI as-is. If
-      their structure differs from the JSPs in the new version, pages may not render correctly.
-      Reapply your changes to the new version's JSPs instead.
+      Do not copy the whole ``app/themes/`` directory. It also holds ``bootstrap``, the theme
+      bundled with |Fess|, and copying it over the 15.9 one replaces the 15.9 search screen with
+      the 15.8 version of the theme. Copy only the directories of themes you created yourself.
+      For a theme published by the |Fess| project, install the build for 15.9 instead, with
+      ``bin/fess-setup install theme <name>`` (see :doc:`fess-setup`).
+
+   .. warning::
+
+      Do not copy JSPs (``app/WEB-INF/view/``) edited via "Design" in the admin UI. The search
+      screen of 15.9 is a static theme and no longer uses those JSPs; see
+      :ref:`upgrade-159-static-theme` for where such changes go now.
 
    .. note::
 
@@ -820,12 +828,81 @@ The limit that ``rag.chat.message.max.length`` sets still works, but it is read 
 property: set it in ``app/WEB-INF/conf/system.properties`` or with
 ``-Dfess.system.rag.chat.message.max.length``, as described in :doc:`../config/rag-chat`.
 
+.. _upgrade-159-static-theme:
+
+The Search Screen Is Now a Static Theme
+---------------------------------------
+
+The search screen is served by the static theme ``bootstrap``, which is bundled with |Fess|, unless
+another theme is selected. This applies to ``/``, ``/search``, ``/advance``, ``/help``,
+``/profile``, ``/cache``, ``/chat`` and the error pages. Up to 15.8, these pages were JSPs unless a
+default theme was set.
+
+The switch happens on upgrade as well. A 15.8 installation that never set a default theme has no
+``theme.default`` in ``system.properties``, so after the upgrade it shows the static theme; nothing is
+written to the configuration and nothing is logged. There is no setting that brings back the JSP
+search screen. If you had set a default theme in 15.8, that setting is kept; install the 15.9 build
+of the theme (``bin/fess-setup install theme <name>``), because a default that names a theme that is
+not installed falls back to ``bootstrap`` with a warning in ``fess.log``.
+
+If you changed the JSPs, CSS or images of the search screen, through "Page Design" in the admin UI
+or in a JAR theme plugin, those changes no longer show. Make them in a static theme: copy the bundled
+theme and change the copy, as described in :ref:`theme-customize-bundled`, or install a published
+theme from "System" > "Theme" in the admin UI or with ``bin/fess-setup install theme <name>``. A
+per-virtual-host look is now a static theme named after the virtual host; see
+:doc:`../config/security-virtual-host`. The login screen (``/login/``) is still a JSP.
+
+What Clients See
+~~~~~~~~~~~~~~~~
+
+Errors are now rendered in place, at the URL that was requested and with the real HTTP status. A
+browser (a request whose ``Accept`` header includes ``text/html``) gets the theme's error page; any
+other client gets a one-line ``text/plain`` body (for example ``Not Found.`` for ``404``). Up to 15.8, most errors
+answered with a ``302`` redirect to an ``/error/...`` page that itself returned ``200``. Review
+monitoring, health checks and clients that follow ``Location`` headers or expect ``/error/`` URLs.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Request
+     - Up to 15.8
+     - 15.9
+   * - ``/go/`` with a missing parameter, or for a document that does not exist
+     - ``200``, or ``302`` to ``/error/``
+     - ``400`` or ``404``
+   * - ``/thumbnail/`` with a missing parameter, for an unknown document, or with no thumbnail
+     - ``200`` or ``302``
+     - ``400`` or ``404``
+   * - ``/sso/metadata`` and ``/sso/logout`` when the configured SSO type does not handle them
+     - ``302`` to ``/error/badrequest/``
+     - ``400``
+   * - ``/api/v1/*``, ``/json`` and any unknown URL
+     - ``302`` to ``/error/notfound/``
+     - ``404``
+   * - An uncaught exception, including in the admin API
+     - ``302`` to ``/error/systemerror/``
+     - ``500`` with the body ``System Error.`` (not JSON)
+   * - ``/error/notfound/``, ``/error/badrequest/``, ``/error/systemerror/`` themselves
+     - ``200``
+     - ``404``, ``400``, ``500``
+
+With ``login.required=true``, the search pages no longer redirect an anonymous user. They return
+``200`` with the theme, which asks the user to log in, and the data behind them is refused instead:
+every ``/api/v2/`` endpoint other than ``/health``, ``/auth/*`` and ``/ui/config``, including
+``/api/v2/search``, answers ``401`` until the user logs in. ``/go/``, ``/thumbnail/`` and ``/osdd`` still
+redirect to the login. A check that expects a redirect for an anonymous request to ``/`` has to test
+``/api/v2/search`` for ``401`` instead.
+
+The search screen also searches through ``/api/v2/search``, so a search is logged when that API is
+called, not when ``/search`` is requested. A client that does not run JavaScript receives the page
+without results.
+
 The Page Design Editor Was Removed
 ----------------------------------
 
 [System > Page Design] is no longer in the admin UI, so the JSP, CSS and image files of the search
 screen can no longer be edited there. Use a static theme to change how the search screen looks (see
-:doc:`../dev/theme-development`).
+:ref:`theme-customize-bundled`).
 
 The following keys were removed from ``fess_config.properties`` as well. A value left under these
 names is not used.

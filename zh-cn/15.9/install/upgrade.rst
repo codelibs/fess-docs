@@ -276,14 +276,21 @@ ZIP 版
        $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
        # 已安装的插件
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # 主题
-       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.9.0/app/themes/
+       # 自己上传的静态主题（每个主题一个目录；不要复制 bootstrap）
+       $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
 
-      在管理页面「页面设计」中编辑过的 JSP（``app/WEB-INF/view/``），请不要直接复制过去。
-      如果新版本的 JSP 结构发生了变化，画面可能无法正常显示。
-      请将修改内容重新应用到新版本的 JSP 上。
+      请不要复制整个 ``app/themes/`` 目录。其中还包含 |Fess| 内置的主题 ``bootstrap`` ，
+      将其覆盖到 15.9 的主题上，会使 15.9 的搜索界面被 15.8 版本的主题替换。
+      只复制自己创建的主题目录。对于 |Fess| 项目发布的主题，请改为使用
+      ``bin/fess-setup install theme <name>`` 安装面向 15.9 的构建（参阅 :doc:`fess-setup` ）。
+
+   .. warning::
+
+      请不要复制在管理页面「页面设计」中编辑过的 JSP（``app/WEB-INF/view/``）。15.9 的搜索
+      界面是静态主题，不再使用这些 JSP；此类修改现在应放在何处，请参阅
+      :ref:`upgrade-159-static-theme` 。
 
    .. note::
 
@@ -782,11 +789,75 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
 :doc:`../config/rag-chat` 中的说明，在 ``app/WEB-INF/conf/system.properties`` 中或通过
 ``-Dfess.system.rag.chat.message.max.length`` 进行设置。
 
+.. _upgrade-159-static-theme:
+
+搜索界面现已改为静态主题
+------------------------
+
+除非选择了其他主题，搜索界面由 |Fess| 内置的静态主题 ``bootstrap`` 提供。这适用于 ``/``、
+``/search``、``/advance``、``/help``、``/profile``、``/cache``、``/chat`` 以及错误页面。在 15.8
+及之前的版本中，除非设置了默认主题，这些页面都是 JSP。
+
+升级时同样会进行切换。从未设置过默认主题的 15.8 环境， ``system.properties`` 中没有
+``theme.default`` ，因此升级后会显示静态主题；不会向配置写入任何内容，也不会输出任何日志。
+没有可以恢复 JSP 搜索界面的设置。如果在 15.8 中设置了默认主题，该设置会被保留；请安装该主题
+面向 15.9 的构建（ ``bin/fess-setup install theme <name>`` ），因为若默认主题指定的是未安装的
+主题，将回退到 ``bootstrap`` ，并在 ``fess.log`` 中输出警告。
+
+如果通过管理界面的「页面设计」或 JAR 主题插件修改过搜索界面的 JSP、CSS 或图片，这些修改将
+不再显示。请在静态主题中进行修改：按照 :ref:`theme-customize-bundled` 的说明复制内置主题并
+修改副本，或者从管理界面的「系统」→「主题」或使用 ``bin/fess-setup install theme <name>``
+安装已发布的主题。按虚拟主机区分的外观现在是以虚拟主机命名的静态主题；参阅
+:doc:`../config/security-virtual-host` 。登录界面（ ``/login/`` ）仍然是 JSP。
+
+客户端看到的变化
+~~~~~~~~~~~~~~~~
+
+错误现在会在所请求的 URL 上直接渲染，并返回真实的 HTTP 状态码。浏览器（ ``Accept`` 头中包含
+``text/html`` 的请求）会收到主题的错误页面；其他客户端会收到一行 ``text/plain`` 正文（例如
+``404`` 时为 ``Not Found.`` ）。在 15.8 及之前的版本中，大多数错误会以 ``302`` 重定向到
+``/error/...`` 页面，而该页面本身返回 ``200`` 。请检查监控、健康检查，以及跟随 ``Location``
+头或期望 ``/error/`` URL 的客户端。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 请求
+     - 15.8 及之前
+     - 15.9
+   * - 缺少参数，或针对不存在的文档的 ``/go/``
+     - ``200`` ，或 ``302`` 到 ``/error/``
+     - ``400`` 或 ``404``
+   * - 缺少参数、针对未知文档或没有缩略图的 ``/thumbnail/``
+     - ``200`` 或 ``302``
+     - ``400`` 或 ``404``
+   * - 所配置的 SSO 类型不处理时的 ``/sso/metadata`` 和 ``/sso/logout``
+     - ``302`` 到 ``/error/badrequest/``
+     - ``400``
+   * - ``/api/v1/*``、``/json`` 以及任何未知 URL
+     - ``302`` 到 ``/error/notfound/``
+     - ``404``
+   * - 未捕获的异常（包括管理 API 中的异常）
+     - ``302`` 到 ``/error/systemerror/``
+     - ``500`` ，正文为 ``System Error.`` （不是 JSON）
+   * - ``/error/notfound/``、``/error/badrequest/``、``/error/systemerror/`` 本身
+     - ``200``
+     - ``404``、``400``、``500``
+
+在 ``login.required=true`` 时，搜索页面不再重定向匿名用户。它们会返回 ``200`` 和主题，由主题提示
+用户登录，而其背后的数据则会被拒绝：除 ``/health``、``/auth/*`` 和 ``/ui/config`` 以外的所有
+``/api/v2/`` 端点（包括 ``/api/v2/search`` ）在用户登录之前都会返回 ``401`` 。 ``/go/``、
+``/thumbnail/`` 和 ``/osdd`` 仍会重定向到登录页面。期望匿名请求 ``/`` 时发生重定向的检查，需要改为
+检查 ``/api/v2/search`` 是否返回 ``401`` 。
+
+搜索界面也通过 ``/api/v2/search`` 进行搜索，因此搜索日志是在调用该 API 时记录的，而不是在请求
+``/search`` 时记录。不执行 JavaScript 的客户端会收到没有搜索结果的页面。
+
 删除了管理界面的「页面设计」
 ----------------------------
 
 删除了管理界面中的 [系统 > 页面设计]。无法再从管理界面编辑搜索界面的 JSP、CSS 和图片。
-如需更改搜索界面的外观，请使用静态主题（参见 :doc:`../dev/theme-development`）。
+如需更改搜索界面的外观，请使用静态主题（参见 :ref:`theme-customize-bundled`）。
 
 以下键也已从 ``fess_config.properties`` 中删除。以这些名称保留的值不会被使用。
 

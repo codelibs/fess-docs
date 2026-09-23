@@ -198,6 +198,11 @@ Docker 版::
 
 显示 Fess 的搜索页面。初始状态下，由于未进行爬取配置，不会显示搜索结果。
 
+搜索页面使用 |Fess| 内置的静态主题 ``bootstrap`` 。要更改其外观，
+可以在管理页面的「系统」→「主题」中或使用
+``bin/fess-setup install theme <name>`` （参见 :doc:`fess-setup` ）安装其他主题，
+也可以复制内置主题并修改副本（参见 :ref:`theme-customize-bundled` ）。
+
 管理页面
 --------
 

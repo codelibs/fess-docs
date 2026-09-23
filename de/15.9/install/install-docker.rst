@@ -157,6 +157,9 @@ Nach Abschluss des Starts greifen Sie auf folgende URL zu:
 - **Suchseite**: http://localhost:8080/
 - **Verwaltungsseite**: http://localhost:8080/admin
 
+Die Suchseite ist ``bootstrap``, das mit |Fess| mitgelieferte statische Theme. Wie Sie ihr Aussehen
+ändern, lesen Sie unter :doc:`../admin/theme-guide`.
+
 Standard-Administratorkonto:
 
 - Benutzername: ``admin``

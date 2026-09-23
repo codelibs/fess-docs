@@ -7,7 +7,7 @@ Virtueller Host
 
 |Fess| kann Suchergebnisse basierend auf dem Hostnamen (dem Wert des HTTP-``Host``-Headers) differenzieren, mit dem auf |Fess| zugegriffen wird.
 Ein einzelner |Fess|-Server kann unter mehreren Hostnamen veröffentlicht werden, wobei je nach Hostname unterschiedliche Suchziele (Crawl-Konfigurationen) und Seitendesigns bereitgestellt werden können.
-Da Suchergebnisse in den jeweiligen JSPs des virtuellen Hosts angezeigt werden, kann auch das Design geändert werden.
+Auch der Suchbildschirm kann für jeden Host anders aussehen: Für einen Host wird das statische Theme verwendet, dessen Name mit dem virtuellen Hostnamen übereinstimmt.
 
 Die Funktion für virtuelle Hosts ist standardmäßig deaktiviert (nicht konfiguriert). Die Einrichtung erfolgt mit den folgenden Schritten.
 
@@ -54,8 +54,17 @@ Tragen Sie einen virtuellen Host pro Zeile im folgenden Format ein:
    Die folgenden Namen sind reserviert und können nicht als virtuelle Hostnamen verwendet werden:
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
-Nach dem Speichern der Konfiguration werden JSPs der Suchseite unter ``WEB-INF/view/VirtuellerHostname`` generiert.
-Durch das Bearbeiten dieser Dateien können Sie das Seitendesign für jeden virtuellen Host anpassen.
+Seitendesign pro virtuellem Host
+--------------------------------
+
+Um einem virtuellen Host einen eigenen Suchbildschirm zu geben, installieren Sie ein statisches Theme, dessen ``name`` in ``theme.yml`` der virtuelle Hostname in Kleinbuchstaben ist (zum Beispiel ``host1``).
+Eine Anfrage, die dem virtuellen Host entspricht, wird mit diesem Theme ausgeliefert; jede andere Anfrage mit dem Standardtheme.
+Das Theme muss nicht als Standard festgelegt werden. Wie Sie ein Theme aus dem mitgelieferten erstellen, lesen Sie unter :ref:`theme-customize-bundled`; wie Sie es installieren, unter :doc:`../admin/theme-guide`.
+
+.. note::
+
+   Beim Speichern der Konfiguration werden weiterhin JSPs unter ``WEB-INF/view/VirtuellerHostname`` generiert, aber seit |Fess| 15.9 verwendet der Suchbildschirm sie nicht mehr.
+   Nur der Anmeldebildschirm (``/login/``) wird noch aus ihnen gerendert.
 
 
 Crawl-Konfiguration

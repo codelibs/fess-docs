@@ -7,8 +7,10 @@ Theme
 
 Die Theme-Funktion verwaltet „statische Themes" – Pakete aus statischen Assets (HTML / CSS / JavaScript usw.), die das Erscheinungsbild des Suchbildschirms bestimmen. Statische Themes werden als ZIP-Archiv hochgeladen und in das Theme-Verzeichnis auf dem Server entpackt (Standard: ``themes``, änderbar über ``theme.directory.path``). Im Stammverzeichnis jedes Themes muss sich das ``theme.yml``-Manifest mit den Theme-Metadaten befinden.
 
+Der Suchbildschirm ist immer ein statisches Theme. Ist kein Standardtheme festgelegt, verwendet |Fess| ``bootstrap``, das mitgelieferte statische Theme. Das mitgelieferte Theme kann weder gelöscht noch ersetzt werden; um es zu ändern, kopieren Sie es unter einem neuen Namen (siehe :ref:`theme-customize-bundled`).
+
 .. note::
-   JSP-basierte Themes werden über die Plug-in-Verwaltung behandelt und sind nicht Gegenstand dieser Seite.
+   JSP-basierte (JAR-)Themes werden über die Plug-in-Verwaltung behandelt und sind nicht Gegenstand dieser Seite. Seit 15.9 ändern sie den Suchbildschirm nicht mehr.
    Für die hier beschriebenen Operationen ist die Rolle ``admin-theme`` erforderlich (für reinen Lesezugriff genügt die Rolle ``admin-theme-view``).
 
 Ein Theme beziehen
@@ -24,8 +26,10 @@ Ein veröffentlichtes Archiv ändert sich nie, eine Obergrenze ließe sich also 
 ergänzen, wenn ein Theme auf einem neueren |Fess| nicht mehr läuft. Es für diese Linie nicht zu
 veröffentlichen sagt dasselbe -- zu dem Zeitpunkt, an dem man es weiß.
 
-Es gibt zwei Wege, eines zu installieren.
+Es gibt drei Wege, eines zu installieren.
 
+* Aus dem Repository auf dieser Seite installieren, wie unten unter `Aus dem Repository installieren`_
+  beschrieben.
 * ``bin/fess-setup install theme <name>`` lädt das für dieses |Fess| gebaute Theme herunter, prüft
   es gegen die veröffentlichte Prüfsumme und installiert es. Siehe :doc:`../install/fess-setup`.
 * Das ZIP herunterladen und auf dieser Seite hochladen, wie unter `Theme hochladen`_ beschrieben.
@@ -69,7 +73,19 @@ Tabelle: Spalten der Themenliste
 Standardtheme festlegen
 -----------------------
 
-Wählen Sie im Dropdown-Menü oben auf der Übersichtsseite ein Theme aus und klicken Sie auf die Schaltfläche [Als Standard festlegen], um das Standardtheme für den Suchbildschirm festzulegen. Wenn Sie [(kein Standard)] auswählen und bestätigen, wird die Standardtheme-Zuweisung aufgehoben. Nach dem Speichern werden die Theme-Informationen neu geladen und die Änderung tritt sofort in Kraft.
+Wählen Sie im Dropdown-Menü oben auf der Übersichtsseite ein Theme aus und klicken Sie auf die Schaltfläche [Als Standard festlegen], um das Standardtheme für den Suchbildschirm festzulegen. Wenn Sie [(kein Standard)] auswählen und bestätigen, wird die Standardtheme-Zuweisung aufgehoben, und das mitgelieferte Theme ``bootstrap`` wird wieder verwendet. Nach dem Speichern werden die Theme-Informationen neu geladen und die Änderung tritt sofort in Kraft.
+
+
+
+Aus dem Repository installieren
+-------------------------------
+
+Die Übersichtsseite installiert auch Themes, die im Theme-Repository veröffentlicht sind (``theme.repositories``, standardmäßig https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
+
+* [Verfügbare Themes] listet die vom Repository veröffentlichten Themes mit jeweils einer Version auf. Klicken Sie in einer Zeile auf [Installieren], um diese Version zu installieren.
+* [Nach Name installieren] installiert ein Theme anhand seines Namens und seiner Version, unabhängig davon, ob es in dieser Liste erscheint. Geben Sie [Name] und [Version] ein und klicken Sie auf [Installieren].
+
+Das ZIP wird aus dem Repository heruntergeladen, gegen seine veröffentlichte ``.sha1``-Prüfsumme geprüft und dann auf dieselbe Weise wie ein Upload installiert, sodass dieselben Prüfungen gelten. Legen Sie das Theme anschließend als Standard fest, um es zu verwenden.
 
 
 Theme hochladen
@@ -136,7 +152,7 @@ Im Stammverzeichnis eines statischen Themes muss die Datei ``theme.yml`` (YAML-F
      - Einstiegspunktdatei des Themes (Standard: ``index.html``).
    * - ``spaFallback``
      - Optional
-     - Aktiviert oder deaktiviert den SPA-Fallback-Modus (Standard: ``true``).
+     - Veraltet und wird nicht mehr gelesen. Seit 15.9 wird für die Pfade des Suchbildschirms immer die Einstiegsdatei ausgeliefert.
 
 Tabelle: Felder der theme.yml
 
@@ -195,5 +211,8 @@ Die wichtigsten Einstellungen der Theme-Funktion können in ``fess_config.proper
    * - ``theme.upload.attic.retention.days``
      - ``7``
      - Anzahl der Tage, für die Sicherungen ersetzter oder gelöschter Themes aufbewahrt werden.
+   * - ``theme.repositories``
+     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+     - Die Repository-URLs (kommagetrennt), aus denen Themes installiert werden.
 
 Tabelle: Konfigurationseigenschaften der Theme-Funktion

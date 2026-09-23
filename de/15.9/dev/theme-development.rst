@@ -5,28 +5,24 @@ Theme-Entwicklungsleitfaden
 Übersicht
 =========
 
-Mit |Fess| können Sie das Design der Suchoberfläche auf die folgenden
-zwei Arten anpassen.
+In |Fess| 15.9 ist die Suchoberfläche immer ein statisches Theme. Ein
+statisches Theme ist eine eigenständige SPA (Single-Page-Anwendung),
+die die ``/api/v2/*`` API nutzt. Themes werden als ZIP-Dateien
+verteilt, über die Administrationsoberfläche hochgeladen und dort
+aktiviert. Ist kein Theme ausgewählt, verwendet |Fess| ``bootstrap``,
+das mitgelieferte statische Theme.
 
-Statisches Theme (Static Theme)
-    Dieser Mechanismus wurde in |Fess| 15.7 eingeführt. Das Theme wird
-    als ZIP-Datei verteilt, über die Administrationsoberfläche
-    hochgeladen und aktiviert. Das Theme selbst ist eine eigenständige
-    SPA (Single-Page-Anwendung), die die ``/api/v2/*`` API nutzt, und
-    ist nicht von den JSPs des |Fess|-Kerns abhängig. Für die
-    Neuentwicklung von Themes wird diese Methode empfohlen.
-
-JAR-Theme-Plugin (Legacy)
-    Dies ist der herkömmliche Plugin-Typ, der ``view`` / ``css`` /
-    ``js`` / ``images`` überschreibt. Es wird als JAR gebaut und als
-    Plugin installiert. Es wird verwendet, wenn Teile der bestehenden
-    JSP-basierten Oberfläche ersetzt werden sollen.
+Um das Aussehen der Suchoberfläche zu ändern, installieren Sie entweder
+ein anderes Theme (siehe :doc:`../admin/theme-guide`) oder erstellen ein
+eigenes: Am schnellsten kopieren Sie das mitgelieferte Theme und ändern
+die Kopie, wie unter `Mitgeliefertes Theme anpassen`_ beschrieben.
 
 .. note::
 
-   Statische Themes stehen ab |Fess| 15.7 zur Verfügung. Wenn Sie
-   Version 15.6 oder älter einsetzen, verwenden Sie ein
-   JAR-Theme-Plugin.
+   Statische Themes stehen ab |Fess| 15.7 zur Verfügung und wurden in
+   15.9 zur Standard-Suchoberfläche. JAR-Theme-Plugins, die die JSPs
+   der Suchoberfläche ersetzen, ändern die Suchoberfläche in 15.9 nicht
+   mehr; siehe `JAR-Theme-Plugin (Legacy)`_.
 
 Statisches Theme
 ================
@@ -128,8 +124,9 @@ Die folgenden Felder können angegeben werden.
      - Einstiegs-HTML der SPA. Standardwert ist ``index.html``.
    * - ``spaFallback``
      - Optional
-     - Aktivierung/Deaktivierung des SPA-Fallbacks. Standardwert ist
-       ``true``.
+     - Veraltet. Wird aus Kompatibilitätsgründen akzeptiert, aber nicht
+       mehr gelesen: Seit 15.9 wird für die Pfade der Suchoberfläche
+       immer das Einstiegs-HTML ausgeliefert.
 
 .. note::
 
@@ -152,13 +149,23 @@ Auslieferung und API
 
 - Statische Themes werden unter ``/themes/<name>/`` ausgeliefert
   (``<name>`` ist der Wert von ``name`` in ``theme.yml``).
-- Wenn ``spaFallback`` aktiviert ist, wird für die Pfade ``/``,
-  ``/search``, ``/help``, ``/error``, ``/profile``, ``/cache`` und
-  ``/chat`` jeweils das Einstiegs-HTML (Standard: ``index.html``)
-  zurückgegeben, und das weitere Routing übernimmt die SPA.
+- Für die Pfade ``/``, ``/search``, ``/advance``, ``/help``,
+  ``/error``, ``/profile``, ``/cache`` und ``/chat`` wird jeweils das
+  Einstiegs-HTML (Standard: ``index.html``) zurückgegeben, und das
+  weitere Routing übernimmt die SPA. Seit 15.9 geschieht dies
+  unabhängig davon, was ``spaFallback`` angibt; das Feld wird nicht
+  mehr gelesen.
+- Auch Fehler werden vom Theme dargestellt: Schlägt eine Anfrage fehl,
+  erhält ein Browser das Einstiegs-HTML des Themes unter der
+  angeforderten URL, mit dem tatsächlichen HTTP-Status.
 - Die Administrationsoberfläche (``/admin/*``), ``/api/*``, die
   Anmeldeseite und Ähnliches fallen nicht unter das statische Theme und
   werden vom |Fess|-Kern selbst verarbeitet.
+- Das Einstiegs-HTML wird mit einem ``Content-Security-Policy``-Header
+  ausgeliefert, der Skripte, Stylesheets, Bilder und Verbindungen nur
+  von |Fess| selbst zulässt (Inline-Styles sind erlaubt, Inline-Skripte
+  nicht). Schriften oder Skripte von einem externen CDN werden daher
+  nicht geladen; liefern Sie sie im Theme mit.
 - Die SPA des Themes ruft Daten wie Suchergebnisse und Chat über die
   ``/api/v2/*`` API ab.
 
@@ -244,8 +251,77 @@ Der Aktivierungsmechanismus funktioniert wie folgt.
    Entpacken werden Prüfungen durchgeführt, um Angriffe durch ZIP Slip
    und Zip Bombs zu verhindern.
 
+.. _theme-customize-bundled:
+
+Mitgeliefertes Theme anpassen
+-----------------------------
+
+Das mitgelieferte Theme ``bootstrap`` liegt in ``app/themes/bootstrap/``
+der |Fess|-Installation (``/usr/share/fess/app/themes/bootstrap/`` bei
+den RPM/DEB-Paketen). Bearbeiten Sie es nicht direkt: Ein Upgrade
+ersetzt es, und der Name ``bootstrap`` ist dafür reserviert, sodass es
+weder gelöscht noch durch einen Upload ersetzt werden kann. Kopieren
+Sie es stattdessen unter einem neuen Namen.
+
+1. Kopieren Sie das Verzeichnis, zum Beispiel nach ``mytheme``::
+
+       $ cp -r app/themes/bootstrap /tmp/mytheme
+
+2. Ändern Sie in ``theme.yml`` den Wert ``name`` in ``mytheme`` und
+   ändern Sie ``displayName``. ``name`` muss mit dem Verzeichnisnamen
+   übereinstimmen.
+
+3. Ersetzen Sie in ``index.html`` jedes ``themes/bootstrap/`` durch
+   ``themes/mytheme/``. Die mitgelieferte ``index.html`` nennt ihr
+   eigenes Verzeichnis an vier Stellen: das Stylesheet
+   (``assets/styles.css``), die beiden Logos (``assets/logo-head.png``
+   und ``assets/logo.png``) und das Skript (``assets/app.js``). Bleiben
+   sie unverändert, lädt die Kopie weiterhin die Dateien von
+   ``bootstrap``, und keine Ihrer Änderungen an CSS, Logos oder
+   Meldungen wird sichtbar. Die übrigen Dateien werden relativ zu
+   ``assets/app.js`` geladen, daher sind nur diese vier zu ändern.
+
+   ::
+
+       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+
+4. Nehmen Sie Ihre Änderungen vor:
+
+   - Farben und Layout: ``assets/styles.css``.
+   - Logos: ``assets/logo-head.png`` (Kopfzeile) und ``assets/logo.png``
+     (Startseite der Suche).
+   - Texte, etwa die Fußzeile (``footer.copyright_org``): die Dateien
+     ``i18n/messages.<locale>.json``, eine pro Sprache.
+   - Seitenstruktur: ``index.html``.
+
+5. Packen Sie das Verzeichnis als ZIP mit ``theme.yml`` im
+   Stammverzeichnis und laden Sie es in der Administrationsoberfläche
+   unter „System" → „Theme" hoch::
+
+       $ cd /tmp/mytheme && zip -r ../mytheme.zip .
+
+   Alternativ legen Sie das Verzeichnis in ``app/themes/`` ab und
+   klicken auf derselben Seite auf „Neu laden".
+
+6. Wählen Sie auf dieser Seite ``mytheme`` als Standard-Theme aus.
+
+.. note::
+
+   Ersetzen Sie die Kopie nach jedem |Fess|-Upgrade durch eine neue
+   Kopie des mitgelieferten Themes und wenden Sie Ihre Änderungen
+   erneut an, da das mitgelieferte Theme der ``/api/v2/*`` API seiner
+   |Fess|-Version folgt.
+
 JAR-Theme-Plugin (Legacy)
 ============================
+
+.. warning::
+
+   Seit |Fess| 15.9 wird die Suchoberfläche immer von einem statischen
+   Theme ausgeliefert, daher ändert ein JAR-Theme-Plugin sie nicht mehr.
+   Von den JSPs, die ein JAR-Theme bereitstellt, werden nur noch die der
+   Anmeldeseite (``/login/``) verwendet. Übertragen Sie das Design in ein
+   statisches Theme; siehe `Mitgeliefertes Theme anpassen`_.
 
 Ein JAR-Theme-Plugin ist ein Plugin, das die Verzeichnisse ``view`` /
 ``css`` / ``js`` / ``images`` des |Fess|-Kerns pro Theme-Name
@@ -303,11 +379,11 @@ der Regel keine zusätzlichen Abhängigkeiten deklariert werden.
 Anpassung von CSS und Bildern
 --------------------------------
 
-Die Suchoberfläche besteht aus JSPs auf Bootstrap-Basis. Sie können CSS
-überschreiben, um Farbschema und Layout zu ändern, oder
-``images/logo.png`` ersetzen, um das Logo zu ändern. Welche
-Klassennamen und welches Markup betroffen sind, entnehmen Sie den
-tatsächlichen JSPs (``view/index.jsp`` / ``view/search.jsp`` usw.).
+Die JSPs basieren auf Bootstrap. Sie können CSS überschreiben, um
+Farbschema und Layout zu ändern, oder ``images/logo.png`` ersetzen, um
+das Logo zu ändern. Seit 15.9 wirkt sich dies nur auf die Anmeldeseite
+aus; die Suchoberfläche ist ein statisches Theme (siehe
+`Mitgeliefertes Theme anpassen`_).
 
 Build und Installation
 ------------------------

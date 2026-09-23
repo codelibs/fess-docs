@@ -205,6 +205,11 @@ Search Screen
 
 The Fess search screen will be displayed. In the initial state, no search results will be displayed because no crawl configuration has been performed.
 
+The search screen is ``bootstrap``, the static theme bundled with |Fess|. To change how it looks,
+install another theme from "System" > "Theme" in the admin screen or with
+``bin/fess-setup install theme <name>`` (see :doc:`fess-setup`), or copy the bundled theme and
+change the copy (see :ref:`theme-customize-bundled`).
+
 Admin Screen
 ------------
 

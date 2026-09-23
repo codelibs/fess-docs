@@ -159,6 +159,9 @@ Una vez completado el inicio, acceda a las siguientes URL:
 - **Pantalla de búsqueda**: http://localhost:8080/
 - **Pantalla de administración**: http://localhost:8080/admin
 
+La pantalla de búsqueda es ``bootstrap``, el tema estático incluido con |Fess|. Para cambiar su aspecto,
+consulte :doc:`../admin/theme-guide`.
+
 Cuenta de administrador predeterminada:
 
 - Nombre de usuario: ``admin``

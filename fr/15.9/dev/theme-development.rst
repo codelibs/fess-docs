@@ -5,26 +5,24 @@ Guide de développement des thèmes
 Aperçu
 ======
 
-Avec |Fess|, vous pouvez personnaliser le design de l'écran de recherche de deux façons :
+Dans |Fess| 15.9, l'écran de recherche est toujours un thème statique. Un
+thème statique est une SPA (Single Page Application, application monopage)
+indépendante qui utilise l'API ``/api/v2/*``. Les thèmes sont distribués sous
+forme de fichiers ZIP, téléversés puis activés depuis l'écran
+d'administration. Lorsqu'aucun thème n'est sélectionné, |Fess| utilise
+``bootstrap``, le thème statique fourni avec lui.
 
-Thème statique (Static Theme)
-    Mécanisme introduit dans |Fess| 15.7. Le thème est distribué sous forme de
-    fichier ZIP, téléversé puis activé depuis l'écran d'administration. Le
-    thème lui-même est une SPA (Single Page Application, application
-    monopage) indépendante qui utilise l'API ``/api/v2/*`` et ne dépend pas
-    des JSP du cœur de |Fess|. Cette méthode est recommandée pour créer un
-    nouveau thème.
-
-Plugin de thème JAR (legacy)
-    Plugin de type traditionnel qui remplace les répertoires ``view`` /
-    ``css`` / ``js`` / ``images``. Il est construit sous forme de JAR et
-    installé comme un plugin. Utilisez-le lorsque vous souhaitez remplacer
-    partiellement les écrans existants basés sur JSP.
+Pour modifier l'apparence de l'écran de recherche, installez un autre thème
+(voir :doc:`../admin/theme-guide`) ou créez le vôtre : le plus rapide est de
+copier le thème fourni et de modifier la copie, comme décrit dans
+`Personnalisation du thème fourni`_.
 
 .. note::
 
-   Les thèmes statiques sont disponibles à partir de |Fess| 15.7. Pour cibler
-   les versions 15.6 et antérieures, utilisez un plugin de thème JAR.
+   Les thèmes statiques sont disponibles à partir de |Fess| 15.7 et sont
+   devenus l'écran de recherche par défaut en 15.9. Les plugins de thème JAR,
+   qui remplacent les JSP de l'écran de recherche, ne modifient plus l'écran
+   de recherche en 15.9 ; voir `Plugin de thème JAR (legacy)`_.
 
 Thème statique
 ==============
@@ -123,7 +121,9 @@ Les champs pouvant être spécifiés sont les suivants.
      - HTML d'entrée de la SPA. Valeur par défaut : ``index.html``.
    * - ``spaFallback``
      - Facultatif
-     - Active ou désactive le fallback SPA. Valeur par défaut : ``true``.
+     - Obsolète. Accepté pour des raisons de compatibilité mais n'est plus
+       lu : depuis la version 15.9, le HTML d'entrée est toujours servi pour
+       les chemins de l'écran de recherche.
 
 .. note::
 
@@ -146,13 +146,22 @@ Diffusion et API
 
 - Un thème statique est diffusé sous ``/themes/<name>/`` (``<name>``
   correspond au ``name`` défini dans ``theme.yml``).
-- Lorsque ``spaFallback`` est activé, le HTML d'entrée (par défaut
-  ``index.html``) est renvoyé pour chacun des chemins ``/``, ``/search``,
-  ``/help``, ``/error``, ``/profile``, ``/cache`` et ``/chat``, et le routage
-  ultérieur est assuré par la SPA.
+- Le HTML d'entrée (par défaut ``index.html``) est renvoyé pour chacun des
+  chemins ``/``, ``/search``, ``/advance``, ``/help``, ``/error``,
+  ``/profile``, ``/cache`` et ``/chat``, et le routage ultérieur est assuré
+  par la SPA. Depuis la version 15.9, c'est le cas quelle que soit la valeur
+  de ``spaFallback`` ; ce champ n'est plus lu.
+- Les erreurs sont également rendues par le thème : lorsqu'une requête
+  échoue, le navigateur reçoit le HTML d'entrée du thème à l'URL demandée,
+  avec le véritable statut HTTP.
 - L'écran d'administration (``/admin/*``), ``/api/*``, l'écran de connexion,
   etc. ne sont pas concernés par le thème statique et sont traités par le
   cœur de |Fess|.
+- Le HTML d'entrée est servi avec un en-tête ``Content-Security-Policy`` qui
+  n'autorise les scripts, les styles, les images et les connexions que depuis
+  |Fess| lui-même (les styles en ligne sont autorisés ; les scripts en ligne
+  ne le sont pas). Les polices ou scripts provenant d'un CDN externe ne sont
+  donc pas chargés ; incluez-les dans le thème.
 - La SPA du thème récupère les données telles que les résultats de recherche
   ou le chat depuis l'API ``/api/v2/*``.
 
@@ -233,8 +242,79 @@ Le mécanisme d'activation est le suivant.
    Lors de la décompression, des vérifications sont effectuées pour empêcher
    les attaques de type ZIP Slip et zip bomb.
 
+.. _theme-customize-bundled:
+
+Personnalisation du thème fourni
+--------------------------------
+
+Le thème fourni ``bootstrap`` se trouve dans ``app/themes/bootstrap/`` de
+l'installation de |Fess| (``/usr/share/fess/app/themes/bootstrap/`` pour les
+paquets RPM/DEB). Ne le modifiez pas sur place : une mise à niveau le
+remplace, et le nom ``bootstrap`` lui est réservé, de sorte qu'il ne peut être
+ni supprimé ni remplacé par un téléversement. Copiez-le plutôt sous un nouveau
+nom.
+
+1. Copiez le répertoire, par exemple vers ``mytheme`` :
+
+   ::
+
+       $ cp -r app/themes/bootstrap /tmp/mytheme
+
+2. Dans ``theme.yml``, remplacez ``name`` par ``mytheme`` et modifiez
+   ``displayName``. ``name`` doit correspondre au nom du répertoire.
+
+3. Dans ``index.html``, remplacez chaque ``themes/bootstrap/`` par
+   ``themes/mytheme/``. Le ``index.html`` fourni désigne son propre
+   répertoire à quatre endroits : la feuille de style
+   (``assets/styles.css``), les deux logos (``assets/logo-head.png`` et
+   ``assets/logo.png``) et le script (``assets/app.js``). S'ils restent
+   inchangés, la copie continue de charger les fichiers de ``bootstrap``, et
+   aucune de vos modifications du CSS, des logos ou des messages n'apparaît.
+   Les autres fichiers sont chargés relativement à ``assets/app.js`` : ces
+   quatre-là sont donc les seuls à modifier.
+
+   ::
+
+       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+
+4. Apportez vos modifications :
+
+   - Couleurs et mise en page : ``assets/styles.css``.
+   - Logos : ``assets/logo-head.png`` (en-tête) et ``assets/logo.png``
+     (page d'accueil de la recherche).
+   - Textes, comme le pied de page (``footer.copyright_org``) : les fichiers
+     ``i18n/messages.<locale>.json``, un par langue.
+   - Structure de la page : ``index.html``.
+
+5. Empaquetez le répertoire dans un ZIP avec ``theme.yml`` à sa racine, puis
+   téléversez-le depuis « Système » → « Thème » dans l'écran
+   d'administration :
+
+   ::
+
+       $ cd /tmp/mytheme && zip -r ../mytheme.zip .
+
+   Vous pouvez aussi placer le répertoire dans ``app/themes/`` et cliquer sur
+   « Recharger » sur la même page.
+
+6. Sélectionnez ``mytheme`` comme thème par défaut sur cette page.
+
+.. note::
+
+   Après chaque mise à niveau de |Fess|, remplacez la copie par une nouvelle
+   copie du thème fourni et réappliquez vos modifications, car le thème
+   fourni suit l'API ``/api/v2/*`` de sa version de |Fess|.
+
 Plugin de thème JAR (legacy)
 ============================
+
+.. warning::
+
+   Depuis |Fess| 15.9, l'écran de recherche est toujours servi par un thème
+   statique ; un plugin de thème JAR ne le modifie donc plus. Parmi les JSP
+   fournies par un thème JAR, seules celles de l'écran de connexion
+   (``/login/``) sont encore utilisées. Transférez le design vers un thème
+   statique ; voir `Personnalisation du thème fourni`_.
 
 Un plugin de thème JAR est un plugin qui remplace les répertoires ``view`` /
 ``css`` / ``js`` / ``images`` du cœur de |Fess| pour chaque nom de thème.
@@ -292,11 +372,11 @@ pas nécessaire de déclarer de dépendances supplémentaires.
 Personnalisation du CSS et des images
 ---------------------------------------
 
-L'écran de recherche est constitué de JSP basées sur Bootstrap. Vous pouvez
-modifier les couleurs et la mise en page en remplaçant le CSS, ou changer le
-logo en remplaçant ``images/logo.png``. Pour connaître les noms de classes et
-le balisage concernés, consultez les JSP réelles (``view/index.jsp`` /
-``view/search.jsp``, etc.).
+Les JSP sont basées sur Bootstrap. Vous pouvez modifier les couleurs et la
+mise en page en remplaçant le CSS, ou changer le logo en remplaçant
+``images/logo.png``. Depuis la version 15.9, cela ne concerne que l'écran de
+connexion ; l'écran de recherche est un thème statique (voir
+`Personnalisation du thème fourni`_).
 
 Build et installation
 -----------------------

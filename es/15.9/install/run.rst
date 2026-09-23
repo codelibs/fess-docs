@@ -201,6 +201,11 @@ Pantalla de Búsqueda
 
 Se mostrará la pantalla de búsqueda de Fess. En el estado inicial, como no se ha realizado ninguna configuración de rastreo, no se mostrarán resultados de búsqueda.
 
+La pantalla de búsqueda es ``bootstrap``, el tema estático incluido con |Fess|. Para cambiar su aspecto,
+instale otro tema desde "Sistema" > "Tema" en la pantalla de administración o con
+``bin/fess-setup install theme <name>`` (consulte :doc:`fess-setup`), o copie el tema incluido y
+modifique la copia (consulte :ref:`theme-customize-bundled`).
+
 Pantalla de Administración
 ---------------------------
 

@@ -127,13 +127,17 @@ Aplicación de tema
 
 Aplicar un tema diferente para cada host virtual:
 
-1. Configurar tema en "Sistema" -> "Tema"
-2. Especificar tema en la configuración del host virtual
+1. Crear un tema estático cuyo nombre sea la clave del host virtual en minúsculas, por ejemplo ``tenant1``
+   (consulte :ref:`theme-customize-bundled`)
+2. Instalarlo en "Sistema" -> "Tema"
+
+Las solicitudes a ese host virtual se sirven entonces con ese tema. Para más detalles, consulte
+:doc:`security-virtual-host`.
 
 CSS personalizado
 -----------------
 
-Para aplicar CSS personalizado por host virtual, coloque plantillas personalizadas en el directorio de vista correspondiente a la clave del host virtual.
+Para aplicar CSS personalizado por host virtual, modifique ``assets/styles.css`` en el tema de ese host virtual.
 
 Configuración de etiquetas
 --------------------------

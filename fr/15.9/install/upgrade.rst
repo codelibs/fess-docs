@@ -282,15 +282,24 @@ Version ZIP
        $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
        # Plugins installés
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # Thème
-       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.9.0/app/themes/
+       # Thèmes statiques que vous avez téléversés vous-même (un répertoire par thème ; jamais bootstrap)
+       $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
 
-      Ne copiez pas tel quel les JSP (``app/WEB-INF/view/``) modifiés depuis l'écran
-      d'administration « Design ». Si la structure des JSP de la nouvelle version a changé,
-      l'affichage risque d'être incorrect. Réappliquez vos modifications sur les JSP de la
-      nouvelle version.
+      Ne copiez pas l'intégralité du répertoire ``app/themes/``. Il contient aussi ``bootstrap``,
+      le thème fourni avec |Fess|, et le copier par-dessus celui de la 15.9 remplace l'écran de
+      recherche de la 15.9 par la version 15.8 du thème. Copiez uniquement les répertoires des
+      thèmes que vous avez créés vous-même. Pour un thème publié par le projet |Fess|, installez
+      plutôt la version construite pour la 15.9, avec ``bin/fess-setup install theme <name>``
+      (voir :doc:`fess-setup`).
+
+   .. warning::
+
+      Ne copiez pas les JSP (``app/WEB-INF/view/``) modifiés depuis l'écran d'administration
+      « Design ». L'écran de recherche de la 15.9 est un thème statique et n'utilise plus ces JSP ;
+      voir :ref:`upgrade-159-static-theme` pour savoir où ces modifications doivent désormais être
+      faites.
 
    .. note::
 
@@ -858,12 +867,87 @@ La limite définie par ``rag.chat.message.max.length`` fonctionne toujours, mais
 propriété système : définissez-la dans ``app/WEB-INF/conf/system.properties`` ou avec
 ``-Dfess.system.rag.chat.message.max.length``, comme décrit dans :doc:`../config/rag-chat`.
 
+.. _upgrade-159-static-theme:
+
+L'écran de recherche est désormais un thème statique
+----------------------------------------------------
+
+L'écran de recherche est servi par le thème statique ``bootstrap``, fourni avec |Fess|, sauf si un
+autre thème est sélectionné. Cela s'applique à ``/``, ``/search``, ``/advance``, ``/help``,
+``/profile``, ``/cache``, ``/chat`` et aux pages d'erreur. Jusqu'à la 15.8, ces pages étaient des
+JSP, sauf si un thème par défaut était défini.
+
+Le basculement a également lieu lors de la mise à niveau. Une installation 15.8 qui n'a jamais
+défini de thème par défaut n'a pas de ``theme.default`` dans ``system.properties`` : après la mise
+à niveau, elle affiche donc le thème statique ; rien n'est écrit dans la configuration et rien
+n'est journalisé. Aucun paramètre ne permet de revenir à l'écran de recherche JSP. Si vous aviez
+défini un thème par défaut en 15.8, ce paramètre est conservé ; installez la version 15.9 du thème
+(``bin/fess-setup install theme <name>``), car un thème par défaut qui désigne un thème non
+installé se rabat sur ``bootstrap``, avec un avertissement dans ``fess.log``.
+
+Si vous avez modifié les JSP, le CSS ou les images de l'écran de recherche, via « Conception de la
+page » dans l'écran d'administration ou dans un plugin de thème JAR, ces modifications ne
+s'affichent plus. Reportez-les dans un thème statique : copiez le thème fourni et modifiez la
+copie, comme décrit dans :ref:`theme-customize-bundled`, ou installez un thème publié depuis
+« Système » → « Thème » dans l'écran d'administration ou avec
+``bin/fess-setup install theme <name>``. Une apparence propre à un hôte virtuel est désormais un thème statique portant le nom de
+cet hôte virtuel ; voir :doc:`../config/security-virtual-host`. L'écran de connexion (``/login/``)
+reste une JSP.
+
+Ce que voient les clients
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les erreurs sont désormais rendues sur place, à l'URL demandée et avec le véritable statut HTTP.
+Un navigateur (une requête dont l'en-tête ``Accept`` contient ``text/html``) reçoit la page
+d'erreur du thème ; tout autre client reçoit un corps ``text/plain`` d'une ligne (par exemple
+``Not Found.`` pour ``404``). Jusqu'à la 15.8, la plupart des erreurs répondaient par une
+redirection ``302`` vers une page ``/error/...`` qui renvoyait elle-même ``200``. Vérifiez la
+supervision, les contrôles de santé et les clients qui suivent les en-têtes ``Location`` ou
+attendent des URL ``/error/``.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Requête
+     - Jusqu'à la 15.8
+     - 15.9
+   * - ``/go/`` avec un paramètre manquant, ou pour un document qui n'existe pas
+     - ``200``, ou ``302`` vers ``/error/``
+     - ``400`` ou ``404``
+   * - ``/thumbnail/`` avec un paramètre manquant, pour un document inconnu, ou sans vignette
+     - ``200`` ou ``302``
+     - ``400`` ou ``404``
+   * - ``/sso/metadata`` et ``/sso/logout`` lorsque le type SSO configuré ne les prend pas en charge
+     - ``302`` vers ``/error/badrequest/``
+     - ``400``
+   * - ``/api/v1/*``, ``/json`` et toute URL inconnue
+     - ``302`` vers ``/error/notfound/``
+     - ``404``
+   * - Une exception non interceptée, y compris dans l'API d'administration
+     - ``302`` vers ``/error/systemerror/``
+     - ``500`` avec le corps ``System Error.`` (pas du JSON)
+   * - ``/error/notfound/``, ``/error/badrequest/``, ``/error/systemerror/`` eux-mêmes
+     - ``200``
+     - ``404``, ``400``, ``500``
+
+Avec ``login.required=true``, les pages de recherche ne redirigent plus un utilisateur anonyme.
+Elles renvoient ``200`` avec le thème, qui demande à l'utilisateur de se connecter, et ce sont les
+données sous-jacentes qui sont refusées : tous les points de terminaison ``/api/v2/`` autres que
+``/health``, ``/auth/*`` et ``/ui/config``, y compris ``/api/v2/search``, répondent ``401`` tant
+que l'utilisateur ne s'est pas connecté. ``/go/``, ``/thumbnail/`` et ``/osdd`` redirigent toujours
+vers la connexion. Un contrôle qui attend une redirection pour une requête anonyme vers ``/`` doit
+plutôt vérifier que ``/api/v2/search`` renvoie ``401``.
+
+L'écran de recherche effectue aussi ses recherches via ``/api/v2/search`` : une recherche est donc
+journalisée lorsque cette API est appelée, et non lorsque ``/search`` est demandé. Un client qui
+n'exécute pas JavaScript reçoit la page sans résultats.
+
 L'éditeur de conception de page a été supprimé
 ----------------------------------------------
 
 [Système > Conception de la page] ne fait plus partie de l'écran d'administration : les fichiers
 JSP, CSS et images de l'écran de recherche ne peuvent plus y être modifiés. Pour changer
-l'apparence de l'écran de recherche, utilisez un thème statique (voir :doc:`../dev/theme-development`).
+l'apparence de l'écran de recherche, utilisez un thème statique (voir :ref:`theme-customize-bundled`).
 
 Les clés suivantes ont également été supprimées de ``fess_config.properties``. Une valeur laissée
 sous ces noms n'est pas utilisée.

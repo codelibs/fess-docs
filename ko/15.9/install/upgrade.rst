@@ -277,14 +277,22 @@ ZIP 버전
        $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
        # 설치된 플러그인
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # 테마
-       $ cp -r /path/to/old-fess/app/themes/. /path/to/fess-15.9.0/app/themes/
+       # 직접 업로드한 정적 테마(테마마다 하나의 디렉터리. bootstrap 은 제외)
+       $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
 
-      관리 화면 「디자인」에서 편집한 JSP(``app/WEB-INF/view/``)는 그대로 복사하지 마십시오.
-      새 버전의 JSP와 구조가 달라진 경우 화면이 올바르게 표시되지 않을 수 있습니다.
-      새 버전의 JSP에 변경 내용을 다시 적용하십시오.
+      ``app/themes/`` 디렉터리 전체를 복사하지 마십시오. 이 디렉터리에는 |Fess| 에 번들된 테마
+      ``bootstrap`` 도 들어 있으며, 이를 15.9 의 것 위에 복사하면 15.9 의 검색 화면이 15.8 버전의
+      테마로 바뀝니다. 직접 만든 테마의 디렉터리만 복사하십시오. |Fess| 프로젝트가 공개하는 테마는
+      대신 ``bin/fess-setup install theme <name>`` 으로 15.9 용 빌드를 설치하십시오
+      ( :doc:`fess-setup` 참조).
+
+   .. warning::
+
+      관리 화면 「디자인」에서 편집한 JSP(``app/WEB-INF/view/``)는 복사하지 마십시오. 15.9 의 검색
+      화면은 정적 테마이며 더 이상 이 JSP들을 사용하지 않습니다. 이러한 변경을 이제 어디에서 하는지는
+      :ref:`upgrade-159-static-theme` 를 참조하십시오.
 
    .. note::
 
@@ -819,11 +827,80 @@ jcifs 의 기본값으로 동작했습니다. 15.9 는 새 이름을 전달합�
 :doc:`../config/rag-chat` 에 설명된 대로 ``app/WEB-INF/conf/system.properties`` 또는
 ``-Dfess.system.rag.chat.message.max.length`` 로 설정하십시오.
 
+.. _upgrade-159-static-theme:
+
+검색 화면이 정적 테마로 변경됨
+------------------------------
+
+다른 테마를 선택하지 않는 한, 검색 화면은 |Fess| 에 번들된 정적 테마 ``bootstrap`` 으로 제공됩니다.
+이는 ``/``, ``/search``, ``/advance``, ``/help``, ``/profile``, ``/cache``, ``/chat`` 및 오류
+페이지에 적용됩니다. 15.8 까지는 기본 테마를 설정하지 않으면 이 페이지들은 JSP 였습니다.
+
+이 전환은 업그레이드 시에도 일어납니다. 기본 테마를 한 번도 설정하지 않은 15.8 환경에는
+``system.properties`` 에 ``theme.default`` 가 없으므로, 업그레이드 후에는 정적 테마가 표시됩니다.
+설정에 아무것도 기록되지 않으며 로그도 출력되지 않습니다. JSP 검색 화면으로 되돌리는 설정은
+없습니다. 15.8 에서 기본 테마를 설정했다면 그 설정은 유지됩니다. 해당 테마의 15.9 용 빌드를
+설치하십시오( ``bin/fess-setup install theme <name>`` ). 설치되지 않은 테마를 지정한 기본값은
+``fess.log`` 에 경고를 남기고 ``bootstrap`` 으로 대체되기 때문입니다.
+
+관리 화면의 「페이지 디자인」이나 JAR 테마 플러그인으로 검색 화면의 JSP, CSS, 이미지를 변경했다면
+그 변경은 더 이상 표시되지 않습니다. 정적 테마에서 변경하십시오. :ref:`theme-customize-bundled` 에
+설명된 대로 번들 테마를 복사하여 그 복사본을 변경하거나, 관리 화면의 「시스템」 > 「테마」 또는
+``bin/fess-setup install theme <name>`` 으로 공개된 테마를 설치합니다. 가상 호스트별 외관은 이제
+가상 호스트 이름을 딴 정적 테마로 제공됩니다. :doc:`../config/security-virtual-host` 를
+참조하십시오. 로그인 화면( ``/login/`` )은 여전히 JSP 입니다.
+
+클라이언트에서 보이는 변화
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+오류는 이제 요청한 URL 에서 실제 HTTP 상태와 함께 그 자리에서 표시됩니다. 브라우저( ``Accept``
+헤더에 ``text/html`` 을 포함하는 요청)는 테마의 오류 페이지를 받고, 그 외의 클라이언트는 한 줄의
+``text/plain`` 본문(예: ``404`` 의 경우 ``Not Found.`` )을 받습니다. 15.8 까지는 대부분의 오류가
+``/error/...`` 페이지로의 ``302`` 리디렉트로 응답했고, 그 페이지 자체는 ``200`` 을 반환했습니다.
+모니터링, 헬스 체크, 그리고 ``Location`` 헤더를 따라가거나 ``/error/`` URL 을 기대하는
+클라이언트를 점검하십시오.
+
+.. list-table::
+   :header-rows: 1
+
+   * - 요청
+     - 15.8 까지
+     - 15.9
+   * - 파라미터가 없거나 존재하지 않는 문서에 대한 ``/go/``
+     - ``200``, 또는 ``/error/`` 로의 ``302``
+     - ``400`` 또는 ``404``
+   * - 파라미터가 없거나, 알 수 없는 문서이거나, 썸네일이 없는 ``/thumbnail/``
+     - ``200`` 또는 ``302``
+     - ``400`` 또는 ``404``
+   * - 설정된 SSO 유형이 처리하지 않는 경우의 ``/sso/metadata`` 와 ``/sso/logout``
+     - ``/error/badrequest/`` 로의 ``302``
+     - ``400``
+   * - ``/api/v1/*``, ``/json`` 및 알 수 없는 모든 URL
+     - ``/error/notfound/`` 로의 ``302``
+     - ``404``
+   * - 관리 API 를 포함하여 포착되지 않은 예외
+     - ``/error/systemerror/`` 로의 ``302``
+     - 본문이 ``System Error.`` 인 ``500`` (JSON 아님)
+   * - ``/error/notfound/``, ``/error/badrequest/``, ``/error/systemerror/`` 자체
+     - ``200``
+     - ``404``, ``400``, ``500``
+
+``login.required=true`` 인 경우, 검색 페이지는 더 이상 익명 사용자를 리디렉트하지 않습니다. 테마와
+함께 ``200`` 을 반환하고 테마가 사용자에게 로그인을 요청하며, 대신 그 뒤의 데이터가 거부됩니다.
+``/health``, ``/auth/*``, ``/ui/config`` 이외의 모든 ``/api/v2/`` 엔드포인트는 ``/api/v2/search``
+를 포함하여 사용자가 로그인할 때까지 ``401`` 을 반환합니다. ``/go/``, ``/thumbnail/``, ``/osdd`` 는
+여전히 로그인으로 리디렉트합니다. ``/`` 에 대한 익명 요청이 리디렉트될 것을 기대하는 점검은
+대신 ``/api/v2/search`` 가 ``401`` 을 반환하는지 확인해야 합니다.
+
+검색 화면은 ``/api/v2/search`` 를 통해 검색하므로, 검색은 ``/search`` 가 요청될 때가 아니라 이
+API 가 호출될 때 로그에 기록됩니다. JavaScript 를 실행하지 않는 클라이언트는 결과가 없는 페이지를
+받습니다.
+
 관리 화면의 「페이지 디자인」 삭제
 ----------------------------------
 
 관리 화면의 [시스템 > 페이지 디자인] 을 삭제했습니다. 검색 화면의 JSP, CSS, 이미지를 관리 화면에서
-편집할 수 없습니다. 검색 화면의 모양은 정적 테마로 변경하십시오 (:doc:`../dev/theme-development`
+편집할 수 없습니다. 검색 화면의 모양은 정적 테마로 변경하십시오 (:ref:`theme-customize-bundled`
 참조).
 
 다음 키도 ``fess_config.properties`` 에서 삭제되었습니다. 이 이름으로 남겨 둔 값은 사용되지 않습니다.

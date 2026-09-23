@@ -5,28 +5,25 @@ Guía de Desarrollo de Temas
 Visión General
 ==============
 
-En |Fess|, el diseño de la pantalla de búsqueda se puede personalizar
-mediante los dos métodos siguientes.
+En |Fess| 15.9, la pantalla de búsqueda es siempre un tema estático.
+Un tema estático es una SPA (Single Page Application, aplicación de
+página única) independiente que utiliza la API ``/api/v2/*``. El tema
+se distribuye como un archivo ZIP, que se sube y se activa desde la
+consola de administración. Cuando no hay ningún tema seleccionado,
+|Fess| utiliza ``bootstrap``, el tema estático incluido con él.
 
-Tema Estático (Static Theme)
-    Es el mecanismo introducido en |Fess| 15.7. El tema se distribuye
-    como un archivo ZIP, que se sube y se activa desde la consola de
-    administración. El propio tema es una SPA (Single Page Application,
-    aplicación de página única) independiente que utiliza la API
-    ``/api/v2/*`` y no depende de las JSP del propio |Fess|. Se
-    recomienda este método para crear temas nuevos.
-
-Plugin de Tema JAR (heredado)
-    Es el plugin de tipo tradicional que sobrescribe ``view`` / ``css``
-    / ``js`` / ``images``. Se construye como JAR y se instala como
-    plugin. Se utiliza cuando se desea sustituir parcialmente las
-    pantallas basadas en JSP existentes.
+Para cambiar el aspecto de la pantalla de búsqueda, instale otro tema
+(consulte :doc:`../admin/theme-guide`) o cree el suyo propio: la forma
+más rápida es copiar el tema incluido y modificar la copia, como se
+describe en `Personalización del Tema Incluido`_.
 
 .. note::
 
-   Los temas estáticos están disponibles a partir de |Fess| 15.7. Si el
-   objetivo son las versiones 15.6 o anteriores, utilice el plugin de
-   tema JAR.
+   Los temas estáticos están disponibles a partir de |Fess| 15.7 y se
+   convirtieron en la pantalla de búsqueda predeterminada en 15.9. Los
+   plugins de tema JAR, que sustituyen las JSP de la pantalla de
+   búsqueda, ya no modifican la pantalla de búsqueda en 15.9; consulte
+   `Plugin de Tema JAR (heredado)`_.
 
 Tema Estático
 =============
@@ -129,8 +126,9 @@ Los campos que se pueden especificar son los siguientes.
        ``index.html``.
    * - ``spaFallback``
      - Opcional
-     - Habilita o deshabilita el fallback de la SPA. El valor
-       predeterminado es ``true``.
+     - Obsoleto. Se acepta por compatibilidad, pero ya no se lee: desde
+       15.9 el HTML de entrada se sirve siempre para las rutas de la
+       pantalla de búsqueda.
 
 .. note::
 
@@ -155,13 +153,23 @@ Distribución y API
 
 - Los temas estáticos se distribuyen bajo ``/themes/<name>/`` (donde
   ``<name>`` es el ``name`` de ``theme.yml``).
-- Cuando ``spaFallback`` está habilitado, se devuelve el HTML de
-  entrada (por defecto ``index.html``) en cada una de las rutas ``/``,
-  ``/search``, ``/help``, ``/error``, ``/profile``, ``/cache`` y
-  ``/chat``, y el enrutamiento posterior lo gestiona la SPA.
+- Se devuelve el HTML de entrada (por defecto ``index.html``) en cada
+  una de las rutas ``/``, ``/search``, ``/advance``, ``/help``,
+  ``/error``, ``/profile``, ``/cache`` y ``/chat``, y el enrutamiento
+  posterior lo gestiona la SPA. Desde 15.9 esto ocurre sea cual sea el
+  valor de ``spaFallback``; el campo ya no se lee.
+- Los errores también los muestra el tema: cuando una solicitud falla,
+  el navegador recibe el HTML de entrada del tema en la URL solicitada,
+  con el código de estado HTTP real.
 - La consola de administración (``/admin/*``), ``/api/*``, la pantalla
   de inicio de sesión, etc., quedan fuera del alcance de los temas
   estáticos y son gestionados por el propio |Fess|.
+- El HTML de entrada se sirve con un encabezado
+  ``Content-Security-Policy`` que solo permite scripts, estilos,
+  imágenes y conexiones procedentes del propio |Fess| (se permiten los
+  estilos en línea, pero no los scripts en línea). Por lo tanto, las
+  fuentes o los scripts de una CDN externa no se cargan; inclúyalos en
+  el tema.
 - La SPA del tema obtiene datos como los resultados de búsqueda y el
   chat a través de la API ``/api/v2/*``.
 
@@ -243,8 +251,77 @@ El mecanismo de activación es el siguiente.
    se realizan comprobaciones para prevenir ataques de tipo ZIP Slip y
    zip bomb.
 
+.. _theme-customize-bundled:
+
+Personalización del Tema Incluido
+---------------------------------
+
+El tema incluido ``bootstrap`` se encuentra en ``app/themes/bootstrap/``
+de la instalación de |Fess| (``/usr/share/fess/app/themes/bootstrap/``
+en los paquetes RPM/DEB). No lo edite directamente: una actualización
+lo reemplaza, y el nombre ``bootstrap`` está reservado para él, por lo
+que no se puede eliminar ni reemplazar mediante una subida. En su
+lugar, cópielo con otro nombre.
+
+1. Copie el directorio, por ejemplo a ``mytheme``::
+
+       $ cp -r app/themes/bootstrap /tmp/mytheme
+
+2. En ``theme.yml``, cambie ``name`` a ``mytheme`` y cambie
+   ``displayName``. ``name`` debe coincidir con el nombre del
+   directorio.
+
+3. En ``index.html``, sustituya cada ``themes/bootstrap/`` por
+   ``themes/mytheme/``. El ``index.html`` incluido menciona su propio
+   directorio en cuatro lugares: la hoja de estilos
+   (``assets/styles.css``), los dos logotipos (``assets/logo-head.png``
+   y ``assets/logo.png``) y el script (``assets/app.js``). Si se dejan
+   sin cambiar, la copia sigue cargando los archivos de ``bootstrap`` y
+   no se ve ninguno de sus cambios en el CSS, los logotipos o los
+   mensajes. Los demás archivos se cargan de forma relativa a
+   ``assets/app.js``, así que estos cuatro son los únicos que hay que
+   cambiar.
+
+   ::
+
+       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+
+4. Realice sus cambios:
+
+   - Colores y diseño: ``assets/styles.css``.
+   - Logotipos: ``assets/logo-head.png`` (encabezado) y
+     ``assets/logo.png`` (página inicial de búsqueda).
+   - Textos, como el pie de página (``footer.copyright_org``): los
+     archivos ``i18n/messages.<locale>.json``, uno por idioma.
+   - Estructura de la página: ``index.html``.
+
+5. Empaquete el directorio como un ZIP con ``theme.yml`` en su raíz y
+   súbalo en «Sistema» → «Tema» de la consola de administración::
+
+       $ cd /tmp/mytheme && zip -r ../mytheme.zip .
+
+   Como alternativa, coloque el directorio en ``app/themes/`` y pulse
+   «Recargar» en la misma página.
+
+6. Seleccione ``mytheme`` como tema predeterminado en esa página.
+
+.. note::
+
+   Después de cada actualización de |Fess|, sustituya la copia por una
+   nueva copia del tema incluido y vuelva a aplicar sus cambios, ya que
+   el tema incluido sigue la API ``/api/v2/*`` de su versión de |Fess|.
+
 Plugin de Tema JAR (heredado)
 =============================
+
+.. warning::
+
+   Desde |Fess| 15.9, la pantalla de búsqueda se sirve siempre con un
+   tema estático, por lo que un plugin de tema JAR ya no la modifica.
+   De las JSP que proporciona un tema JAR, solo se siguen utilizando
+   las de la pantalla de inicio de sesión (``/login/``). Traslade el
+   diseño a un tema estático; consulte
+   `Personalización del Tema Incluido`_.
 
 El plugin de tema JAR es un plugin que sobrescribe los directorios
 ``view`` / ``css`` / ``js`` / ``images`` del propio |Fess| para cada
@@ -302,11 +379,11 @@ necesario declarar dependencias adicionales.
 Personalización de CSS e Imágenes
 ----------------------------------
 
-La pantalla de búsqueda está compuesta por JSP basadas en Bootstrap.
-Puede sobrescribir el CSS para cambiar los colores y el diseño, o
-sustituir ``images/logo.png`` para cambiar el logotipo. Para conocer
-los nombres de clase y el marcado correspondientes, consulte las JSP
-reales (``view/index.jsp``, ``view/search.jsp``, etc.).
+Las JSP están basadas en Bootstrap. Puede sobrescribir el CSS para
+cambiar los colores y el diseño, o sustituir ``images/logo.png`` para
+cambiar el logotipo. Desde 15.9 esto solo afecta a la pantalla de
+inicio de sesión; la pantalla de búsqueda es un tema estático
+(consulte `Personalización del Tema Incluido`_).
 
 Compilación e Instalación
 --------------------------

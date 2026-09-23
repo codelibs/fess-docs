@@ -127,13 +127,17 @@ Applying Themes
 
 Apply different themes for each virtual host:
 
-1. Set up themes under "System" -> "Theme"
-2. Specify the theme in the virtual host configuration
+1. Create a static theme whose name is the virtual host key in lowercase, for example ``tenant1``
+   (see :ref:`theme-customize-bundled`)
+2. Install it under "System" -> "Theme"
+
+A request for that virtual host is then served with the theme. See :doc:`security-virtual-host` for
+details.
 
 Custom CSS
 ----------
 
-To apply custom CSS per virtual host, place custom templates in the view directory corresponding to the virtual host key.
+To apply custom CSS per virtual host, change ``assets/styles.css`` in the theme of that virtual host.
 
 Label Settings
 --------------

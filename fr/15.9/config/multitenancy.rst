@@ -129,14 +129,18 @@ Application de thèmes
 
 Appliquer différents thèmes par hôte virtuel :
 
-1. Configurez le thème dans « Système » → « Thème »
-2. Spécifiez le thème dans la configuration de l'hôte virtuel
+1. Créez un thème statique dont le nom est la clé de l'hôte virtuel en minuscules, par exemple ``tenant1``
+   (voir :ref:`theme-customize-bundled`)
+2. Installez-le dans « Système » → « Thème »
+
+Une requête pour cet hôte virtuel est alors servie avec ce thème. Pour plus de détails, consultez
+:doc:`security-virtual-host`.
 
 CSS personnalisé
 ----------------
 
-Pour appliquer un CSS personnalisé par hôte virtuel, placez des templates personnalisés dans le
-répertoire de vue correspondant à la clé de l'hôte virtuel.
+Pour appliquer un CSS personnalisé par hôte virtuel, modifiez ``assets/styles.css`` dans le thème de
+cet hôte virtuel.
 
 Configuration des labels
 -------------------------
