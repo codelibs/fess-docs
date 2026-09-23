@@ -20,23 +20,38 @@ Requisitos previos
 Instalación del plugin
 ----------------------
 
-Método 1: Colocar el archivo JAR directamente
+Método 1: Instalar con ``fess-setup``
 
 ::
 
-    # Descargar desde Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-csv/X.X.X/fess-ds-csv-X.X.X.jar
+    $ bin/fess-setup install plugin fess-ds-csv
 
-    # Colocar
-    cp fess-ds-csv-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
-    # o
-    cp fess-ds-csv-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+Esto instala la versión construida para su |Fess| en ``app/WEB-INF/plugin/``; reinicie |Fess|
+después. Consulte :doc:`../../install/fess-setup`.
 
 Método 2: Instalar desde la pantalla de administración
 
 1. Abrir "Sistema" -> "Plugins"
-2. Subir el archivo JAR
+2. Instalar ``fess-ds-csv``, o subir el archivo JAR
 3. Reiniciar |Fess|
+
+Método 3: Colocar el archivo JAR directamente
+
+::
+
+    # Descargar desde el repositorio de CodeLibs
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-csv/X.X.X/fess-ds-csv-X.X.X.jar
+
+    # Colocar, en el mismo directorio en el que instala la pantalla de administración
+    cp fess-ds-csv-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
+    # o
+    cp fess-ds-csv-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
+
+.. note::
+
+   A partir de 15.8.0, el plugin se publica solo en el
+   `repositorio de CodeLibs <https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-csv/>`_;
+   Maven Central tiene 15.7.0 y anteriores.
 
 Configuración
 =============
@@ -778,6 +793,9 @@ Ejemplo de configuración de proxy:
 Ejemplos avanzados de scripts
 ==============================
 
+Los ejemplos siguientes utilizan el motor JavaScript (``script_type=javascript``), que es el que
+usa de forma predeterminada una configuración de Data Store creada en 15.9.
+
 Procesamiento de datos
 -----------------------
 
@@ -786,8 +804,14 @@ Procesamiento de datos
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=Integer.parseInt(price)
+    price=parseInt(price, 10)
     category=category.toLowerCase()
+
+``parseInt(price, 10)`` almacena el precio como un número, de modo que se puede ordenar y buscar por
+rango. ``Integer.parseInt(price)`` de Java es sintaxis de Groovy: en JavaScript ``Integer`` no está
+definido y todas las filas fallan. Para que ``price`` se pueda ordenar o usar como objetivo de
+búsqueda por rango, o para usar ``category`` como faceta, consulte
+:ref:`search-custom-field-facet-sort-range`.
 
 Indexado condicional
 --------------------
@@ -795,10 +819,10 @@ Indexado condicional
 ::
 
     // Solo productos con precio mayor o igual a 10000
-    url=Integer.parseInt(price) >= 10000 ? "https://example.com/product/" + id : null
-    title=Integer.parseInt(price) >= 10000 ? name : null
-    content=Integer.parseInt(price) >= 10000 ? description : null
-    price=Integer.parseInt(price) >= 10000 ? price : null
+    url=parseInt(price, 10) >= 10000 ? "https://example.com/product/" + id : null
+    title=parseInt(price, 10) >= 10000 ? name : null
+    content=parseInt(price, 10) >= 10000 ? description : null
+    price=parseInt(price, 10) >= 10000 ? parseInt(price, 10) : null
 
 .. note::
 

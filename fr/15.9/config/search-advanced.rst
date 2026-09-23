@@ -262,6 +262,84 @@ La signification de chaque paramètre est la suivante :
    * - ``query.additional.not.analyzed.fields``
      - Ajoute aux champs non soumis à l'analyse par l'Analyzer.
 
+.. _search-custom-field-facet-sort-range:
+
+Utiliser un champ personnalisé pour les facettes, le tri et la recherche par plage
+----------------------------------------------------------------------------------
+
+Un champ ajouté par un script de banque de données ou par une configuration d'exploration, comme
+``category`` ou ``price``, n'a pas de définition dans le mapping de l'index. OpenSearch en crée
+une à partir de la première valeur qu'il indexe pour ce champ :
+
+- Une chaîne devient un champ ``text``, avec un sous-champ ``keyword`` nommé ``<field>.keyword``
+  (les chaînes de plus de 256 caractères ne sont pas stockées dans le sous-champ).
+- Un nombre devient un champ numérique.
+
+Chaque usage nécessite le bon champ :
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - Usage
+     - Champ à utiliser
+     - Paramètre
+   * - Facette
+     - ``<field>.keyword``. Une facette sur le champ ``text`` lui-même échoue avec ``400``.
+     - ``query.additional.facet.fields``
+   * - Tri
+     - Un champ numérique (ou date). La valeur de tri est ``<field>.asc`` ou ``<field>.desc`` : un
+       nom de champ contenant un point, comme ``<field>.keyword``, ne peut donc pas servir au tri,
+       et un tri sur un champ ``text`` échoue avec ``400``.
+     - ``query.additional.sort.fields``
+   * - Recherche par plage
+     - Un champ numérique (ou date). Sur un champ de type chaîne, les bornes sont comparées comme du
+       texte : ``price:[1000 TO 5000]`` correspond aussi à ``120000``, sans erreur.
+     - ``query.additional.search.fields``. Un champ qui n'y figure pas n'est pas du tout recherché
+       par plage.
+
+Une valeur lue depuis un CSV, du JSON ou une base de données est une chaîne, sauf si le script la
+convertit : convertissez donc les valeurs que vous souhaitez trier ou rechercher par plage. Avec le
+moteur JavaScript, utilisé par défaut par les configurations de banque de données créées en 15.9
+(``script_type=javascript``) :
+
+::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+Listez ensuite les champs dans ``fess_config.properties`` et redémarrez |Fess| :
+
+::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+Les champs peuvent alors être utilisés via l'API de recherche :
+
+::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   Le type d'un champ est fixé lors de l'indexation du premier document qui le contient. Si un
+   champ a déjà été indexé comme chaîne, le convertir dans le script ne le modifie pas : stockez la
+   valeur convertie sous un nouveau nom de champ (par exemple ``price_num``), ou recréez l'index.
+
+.. note::
+
+   L'écran de recherche fourni avec |Fess| (le thème statique ``bootstrap``) n'affiche que la
+   facette ``label`` (et les requêtes de facettes de ``query.facet.queries``), et son menu de tri ne
+   propose que les champs standard. Les facettes sur d'autres champs sont disponibles via l'API ou
+   dans votre propre thème. Une recherche par plage, ainsi qu'un tri écrit dans la zone de
+   recherche sous la forme ``sort:price.desc``, fonctionnent également sur l'écran de recherche.
+
 Regroupement (collapse) des documents similaires
 =================================================
 
@@ -358,6 +436,9 @@ Spécifie le comportement par défaut de la recherche par facettes.
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+L'écran de recherche fourni avec |Fess| ne demande que la facette ``label``, quelle que soit la
+valeur de ``query.facet.fields`` ; voir :ref:`search-custom-field-facet-sort-range`.
 
 Paramètres pour obtenir les résultats de recherche au format XML compatible GSA
 ================================================================================

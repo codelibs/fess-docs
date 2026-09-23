@@ -20,23 +20,38 @@ CSV连接器提供从CSV文件获取数据并注册到
 插件安装
 ------------------------
 
-方法1: 直接放置JAR文件
+方法1: 使用 ``fess-setup`` 安装
 
 ::
 
-    # 从Maven Central下载
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-csv/X.X.X/fess-ds-csv-X.X.X.jar
+    $ bin/fess-setup install plugin fess-ds-csv
 
-    # 放置
-    cp fess-ds-csv-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
-    # 或者
-    cp fess-ds-csv-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+这会将为当前 |Fess| 构建的版本安装到 ``app/WEB-INF/plugin/`` 中；安装后请重启 |Fess|\ 。
+参见 :doc:`../../install/fess-setup`\ 。
 
 方法2: 从管理界面安装
 
 1. 打开「系统」→「插件」
-2. 上传JAR文件
+2. 安装 ``fess-ds-csv``\ ，或上传JAR文件
 3. 重启 |Fess|
+
+方法3: 直接放置JAR文件
+
+::
+
+    # 从CodeLibs仓库下载
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-csv/X.X.X/fess-ds-csv-X.X.X.jar
+
+    # 放置（与管理界面安装到的目录相同）
+    cp fess-ds-csv-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
+    # 或者
+    cp fess-ds-csv-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
+
+.. note::
+
+   自 15.8.0 起，该插件仅发布在
+   `CodeLibs仓库 <https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-csv/>`_
+   中；Maven Central 上只有 15.7.0 及更早的版本。
 
 配置方法
 ========
@@ -755,6 +770,9 @@ SMB认证示例:
 脚本高级使用示例
 ================
 
+以下示例使用 JavaScript 引擎（ ``script_type=javascript`` ），这是在 15.9 中创建的数据存储配置
+的默认引擎。
+
 数据加工
 --------
 
@@ -763,8 +781,13 @@ SMB认证示例:
     url="https://example.com/product/" + id
     title=name
     content=description
-    price=Integer.parseInt(price)
+    price=parseInt(price, 10)
     category=category.toLowerCase()
+
+``parseInt(price, 10)`` 会将价格作为数值存储，因此可以对其排序和进行范围搜索。
+Java 的 ``Integer.parseInt(price)`` 是 Groovy 的写法：在 JavaScript 中 ``Integer`` 未定义，
+所有行都会失败。要使 ``price`` 可排序、可作为范围搜索的对象，或将 ``category`` 用作分面，请参见
+:ref:`search-custom-field-facet-sort-range`\ 。
 
 条件索引
 --------
@@ -772,10 +795,10 @@ SMB认证示例:
 ::
 
     // 仅索引价格10000以上的商品
-    url=Integer.parseInt(price) >= 10000 ? "https://example.com/product/" + id : null
-    title=Integer.parseInt(price) >= 10000 ? name : null
-    content=Integer.parseInt(price) >= 10000 ? description : null
-    price=Integer.parseInt(price) >= 10000 ? price : null
+    url=parseInt(price, 10) >= 10000 ? "https://example.com/product/" + id : null
+    title=parseInt(price, 10) >= 10000 ? name : null
+    content=parseInt(price, 10) >= 10000 ? description : null
+    price=parseInt(price, 10) >= 10000 ? parseInt(price, 10) : null
 
 .. note::
 

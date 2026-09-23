@@ -29,13 +29,13 @@ Boxコネクタは、Box.comのクラウドストレージからファイルを�
 
 ::
 
-    # Maven Centralからダウンロード
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-box/X.X.X/fess-ds-box-X.X.X.jar
+    # CodeLibsリポジトリからダウンロード（15.8.0 以降は Maven Central にありません）
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-box/X.X.X/fess-ds-box-X.X.X.jar
 
     # 配置
-    cp fess-ds-box-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-box-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # または
-    cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 方法2: 管理画面からインストール
 

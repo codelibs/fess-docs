@@ -262,6 +262,71 @@ OR搜索再搜索阈值
    * - ``query.additional.not.analyzed.fields``
      - 添加到不由Analyzer进行解析的字段。
 
+.. _search-custom-field-facet-sort-range:
+
+将自定义字段用于分面、排序和范围搜索
+------------------------------------
+
+由数据存储脚本或爬取配置添加的字段（例如 ``category`` 或 ``price`` ）在索引映射中没有定义。
+OpenSearch 会根据该字段首次被索引的值来创建定义：
+
+- 字符串会成为 ``text`` 字段，并带有名为 ``<字段名>.keyword`` 的 ``keyword`` 子字段
+  （超过 256 个字符的字符串不会存储在子字段中）。
+- 数值会成为数值字段。
+
+不同用途需要使用对应的字段：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - 用途
+     - 要使用的字段
+     - 设置
+   * - 分面
+     - ``<字段名>.keyword`` 。直接对 ``text`` 字段本身进行分面会返回 ``400`` 。
+     - ``query.additional.facet.fields``
+   * - 排序
+     - 数值（或日期）字段。排序值为 ``<字段名>.asc`` 或 ``<字段名>.desc`` ，因此无法对
+       ``<字段名>.keyword`` 这类包含点号的字段名进行排序；对 ``text`` 字段排序会返回 ``400`` 。
+     - ``query.additional.sort.fields``
+   * - 范围搜索
+     - 数值（或日期）字段。对字符串字段，边界值会按文本进行比较：
+       ``price:[1000 TO 5000]`` 也会匹配 ``120000`` ，且不会报错。
+     - ``query.additional.search.fields`` 。未列在其中的字段根本不会作为范围进行搜索。
+
+从 CSV、JSON 或数据库读取的值，除非在脚本中进行转换，否则都是字符串，因此请转换要用于排序或
+范围搜索的值。使用 JavaScript 引擎（在 15.9 中创建的数据存储配置的默认引擎，
+``script_type=javascript`` ）时::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+然后在 ``fess_config.properties`` 中列出这些字段，并重启 |Fess|::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+之后即可通过搜索 API 使用这些字段::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   字段的类型在首个包含该字段的文档被索引时即已确定。如果某字段已作为字符串被索引，在脚本中
+   转换它并不会改变其类型：请将转换后的值存储到新的字段名下（例如 ``price_num`` ），或重新创建索引。
+
+.. note::
+
+   |Fess| 内置的搜索界面（静态主题 ``bootstrap`` ）只显示 ``label`` 分面（以及
+   ``query.facet.queries`` 的分面查询），其排序菜单也只提供标准字段。其他字段的分面可通过 API
+   或自己的主题使用。范围搜索以及在搜索框中写成 ``sort:price.desc`` 的排序，在搜索界面上同样可用。
+
 相似文档折叠（collapse）
 ========================
 
@@ -358,6 +423,9 @@ OR搜索再搜索阈值
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+|Fess| 内置的搜索界面无论 ``query.facet.fields`` 如何设置，都只请求 ``label`` 分面；参见
+:ref:`search-custom-field-facet-sort-range`\ 。
 
 以GSA兼容XML格式获取搜索结果的配置
 ===================================

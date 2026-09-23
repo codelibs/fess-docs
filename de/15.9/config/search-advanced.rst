@@ -262,6 +262,79 @@ Die Bedeutung der einzelnen Einstellungen ist wie folgt:
    * - ``query.additional.not.analyzed.fields``
      - Fügt Felder hinzu, die nicht durch den Analyzer analysiert werden.
 
+.. _search-custom-field-facet-sort-range:
+
+Benutzerdefinierte Felder für Facetten, Sortierung und Bereichssuche verwenden
+------------------------------------------------------------------------------
+
+Ein Feld, das ein Datenspeicher-Skript oder eine Crawl-Konfiguration hinzufügt, etwa ``category``
+oder ``price``, hat keine Definition im Index-Mapping. OpenSearch legt eine anhand des ersten Werts
+an, den es für dieses Feld indiziert:
+
+- Eine Zeichenkette wird zu einem ``text``-Feld mit einem ``keyword``-Unterfeld namens
+  ``<field>.keyword`` (Zeichenketten mit mehr als 256 Zeichen werden nicht im Unterfeld gespeichert).
+- Eine Zahl wird zu einem numerischen Feld.
+
+Jede Verwendung benötigt das passende:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - Verwendung
+     - Zu verwendendes Feld
+     - Einstellung
+   * - Facette
+     - ``<field>.keyword``. Eine Facette auf dem ``text``-Feld selbst schlägt mit ``400`` fehl.
+     - ``query.additional.facet.fields``
+   * - Sortierung
+     - Ein numerisches Feld (oder Datumsfeld). Der Sortierwert ist ``<field>.asc`` oder
+       ``<field>.desc``, daher kann nach einem Feldnamen mit Punkt wie ``<field>.keyword`` nicht
+       sortiert werden, und eine Sortierung nach einem ``text``-Feld schlägt mit ``400`` fehl.
+     - ``query.additional.sort.fields``
+   * - Bereichssuche
+     - Ein numerisches Feld (oder Datumsfeld). Bei einem Zeichenkettenfeld werden die Grenzen als
+       Text verglichen: ``price:[1000 TO 5000]`` trifft ohne Fehler auch auf ``120000`` zu.
+     - ``query.additional.search.fields``. Ein nicht aufgeführtes Feld wird überhaupt nicht als
+       Bereich durchsucht.
+
+Ein aus CSV, JSON oder einer Datenbank gelesener Wert ist eine Zeichenkette, sofern das Skript ihn
+nicht umwandelt; wandeln Sie also die Werte um, nach denen Sie sortieren oder per Bereich suchen
+möchten. Mit der JavaScript-Engine, dem Standard für in 15.9 erstellte
+Datenspeicher-Konfigurationen (``script_type=javascript``)::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+Führen Sie die Felder anschließend in ``fess_config.properties`` auf und starten Sie |Fess| neu::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+Danach lassen sich die Felder über die Such-API verwenden::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   Der Typ eines Felds wird festgelegt, wenn das erste Dokument indiziert wird, das es enthält.
+   Wurde ein Feld bereits als Zeichenkette indiziert, ändert eine Umwandlung im Skript daran
+   nichts: Speichern Sie den umgewandelten Wert unter einem neuen Feldnamen (zum Beispiel
+   ``price_num``), oder erstellen Sie den Index neu.
+
+.. note::
+
+   Die mit |Fess| mitgelieferte Suchoberfläche (das statische Theme ``bootstrap``) zeigt nur die
+   Facette ``label`` an (sowie die Facettenabfragen von ``query.facet.queries``), und ihr
+   Sortiermenü bietet nur die Standardfelder. Facetten auf anderen Feldern stehen über die API
+   oder in einem eigenen Theme zur Verfügung. Eine Bereichssuche und eine im Suchfeld als
+   ``sort:price.desc`` geschriebene Sortierung funktionieren auch in der Suchoberfläche.
+
 Zusammenfassen ähnlicher Dokumente (Collapse)
 ===============================================
 
@@ -358,6 +431,9 @@ Gibt das Standardverhalten der Facettensuche an.
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+Die mit |Fess| mitgelieferte Suchoberfläche fordert unabhängig von ``query.facet.fields`` nur die
+Facette ``label`` an; siehe :ref:`search-custom-field-facet-sort-range`.
 
 Konfiguration für GSA-kompatibles XML-Format bei Suchergebnissen
 =================================================================

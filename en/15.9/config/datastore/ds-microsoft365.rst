@@ -41,13 +41,13 @@ Method 1: Direct JAR file placement
 
 ::
 
-    # Download from Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
+    # Download from the CodeLibs repository (15.8.0 and later are not on Maven Central)
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
 
     # Place the file
-    cp fess-ds-microsoft365-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-microsoft365-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # or
-    sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 Method 2: Build from source
 
@@ -56,7 +56,7 @@ Method 2: Build from source
     git clone https://github.com/codelibs/fess-ds-microsoft365.git
     cd fess-ds-microsoft365
     mvn clean package
-    cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/lib/
+    cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/plugin/
 
 Restart |Fess| after installation.
 

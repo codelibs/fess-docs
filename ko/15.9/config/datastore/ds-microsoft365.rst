@@ -35,13 +35,13 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
 
 ::
 
-    # Maven Central에서 다운로드
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
+    # CodeLibs 저장소에서 다운로드 (15.8.0 이후는 Maven Central 에 없음)
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
 
     # 배치
-    cp fess-ds-microsoft365-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-microsoft365-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # 또는
-    sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 방법 2: 소스에서 빌드
 
@@ -50,7 +50,7 @@ Microsoft 365 커넥터는 Microsoft 365 서비스(OneDrive, OneNote, Teams, Sha
     git clone https://github.com/codelibs/fess-ds-microsoft365.git
     cd fess-ds-microsoft365
     mvn clean package
-    cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/lib/
+    cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/plugin/
 
 설치 후 |Fess|\ 를 재시작하세요.
 

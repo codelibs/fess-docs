@@ -100,13 +100,13 @@ Método 1: Colocar el archivo JAR directamente
 
 ::
 
-    # Descargar desde Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-gsuite/X.X.X/fess-ds-gsuite-X.X.X.jar
+    # Descargar desde el repositorio de CodeLibs (15.8.0 y posteriores no están en Maven Central)
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-gsuite/X.X.X/fess-ds-gsuite-X.X.X.jar
 
     # Colocar
-    cp fess-ds-gsuite-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-gsuite-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # o
-    cp fess-ds-gsuite-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    cp fess-ds-gsuite-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 Método 2: Instalar desde la pantalla de administración
 
