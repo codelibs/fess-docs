@@ -7,7 +7,7 @@ About Virtual Host
 
 |Fess| can serve different search results depending on the hostname (the value of the HTTP ``Host`` header) used to access it.
 A single |Fess| server can be published under multiple hostnames, providing a different set of crawl targets and page design for each hostname.
-Search results are displayed using per-virtual-host JSPs, so the design can be customised for each host.
+The search screen can also look different for each host: a static theme whose name matches the virtual host name is used for that host.
 
 The virtual host feature is disabled (unconfigured) by default. Configure it using the steps below.
 
@@ -54,8 +54,17 @@ Specify one virtual host per line using the following format.
    The following names are reserved and cannot be used as virtual host names:
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
-After saving the configuration, search page JSPs are generated under ``WEB-INF/view/virtual_host_name``.
-By editing these files you can change the page design for each virtual host.
+Page Design per Virtual Host
+-----------------------------
+
+To give a virtual host its own search screen, install a static theme whose ``name`` in ``theme.yml`` is the virtual host name in lowercase (for example ``host1``).
+A request that matches the virtual host is served with that theme; any other request is served with the default theme.
+The theme does not have to be set as the default. See :ref:`theme-customize-bundled` for how to create a theme from the bundled one, and :doc:`../admin/theme-guide` for how to install it.
+
+.. note::
+
+   Saving the configuration still generates JSPs under ``WEB-INF/view/virtual_host_name``, but since |Fess| 15.9 the search screen no longer uses them.
+   Only the login screen (``/login/``) is still rendered from them.
 
 
 Crawl Configuration

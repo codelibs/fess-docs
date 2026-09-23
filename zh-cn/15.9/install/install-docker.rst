@@ -157,6 +157,9 @@ Compose 文件及启动步骤由 `docker-fess <https://github.com/codelibs/docke
 - **搜索页面**：http://localhost:8080/
 - **管理页面**：http://localhost:8080/admin
 
+搜索页面使用 |Fess| 内置的静态主题 ``bootstrap`` 。要更改其外观，
+请参阅 :doc:`../admin/theme-guide` 。
+
 默认管理员账号：
 
 - 用户名：``admin``

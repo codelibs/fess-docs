@@ -7,7 +7,7 @@ Hôtes virtuels
 
 |Fess| peut différencier les résultats de recherche en fonction du nom d'hôte (valeur de l'en-tête HTTP ``Host``) lors de l'accès.
 Il est possible de publier un seul serveur |Fess| sous plusieurs noms d'hôte et de fournir des cibles de recherche (configurations d'exploration) et des designs de page différents pour chaque nom d'hôte.
-Les résultats de recherche étant affichés via des JSP propres à chaque hôte virtuel, il est également possible de personnaliser le design.
+L'écran de recherche peut aussi avoir une apparence différente pour chaque hôte : un thème statique dont le nom correspond au nom de l'hôte virtuel est utilisé pour cet hôte.
 
 La fonctionnalité d'hôte virtuel est désactivée par défaut (non configurée). Suivez les étapes ci-dessous pour la configurer.
 
@@ -54,8 +54,17 @@ Décrivez un hôte virtuel par ligne selon le format suivant.
    De plus, les noms suivants sont réservés et ne peuvent pas être utilisés comme noms d'hôtes virtuels :
    ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
 
-Lorsque la configuration est enregistrée, des JSP de page de recherche sont générés dans ``WEB-INF/view/nom_hôte_virtuel``.
-En les modifiant, il est possible de changer le design de page pour chaque hôte virtuel.
+Design de page par hôte virtuel
+-------------------------------
+
+Pour doter un hôte virtuel de son propre écran de recherche, installez un thème statique dont le ``name`` dans ``theme.yml`` est le nom de l'hôte virtuel en minuscules (par exemple ``host1``).
+Une requête correspondant à l'hôte virtuel est servie avec ce thème ; toute autre requête est servie avec le thème par défaut.
+Il n'est pas nécessaire de définir ce thème comme thème par défaut. Consultez :ref:`theme-customize-bundled` pour savoir comment créer un thème à partir du thème fourni, et :doc:`../admin/theme-guide` pour savoir comment l'installer.
+
+.. note::
+
+   L'enregistrement de la configuration génère toujours des JSP dans ``WEB-INF/view/nom_hôte_virtuel``, mais depuis |Fess| 15.9, l'écran de recherche ne les utilise plus.
+   Seul l'écran de connexion (``/login/``) est encore rendu à partir de ceux-ci.
 
 
 Configuration de l'exploration

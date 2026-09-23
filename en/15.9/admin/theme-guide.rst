@@ -7,8 +7,10 @@ Overview
 
 The Theme feature manages "static themes" — a bundled set of static assets (HTML / CSS / JavaScript, etc.) that define the appearance of the search interface. A static theme is uploaded as a ZIP archive and extracted into the theme directory on the server (default: ``themes``, configurable via ``theme.directory.path``). Each theme root must contain a ``theme.yml`` manifest that describes the theme's metadata.
 
+The search interface is always a static theme. When no default theme is set, |Fess| uses ``bootstrap``, the static theme bundled with it. The bundled theme cannot be deleted or replaced; to change it, copy it under a new name (see :ref:`theme-customize-bundled`).
+
 .. note::
-   JSP-based themes are managed through Plugin Management and are outside the scope of this page.
+   JSP-based (JAR) themes are managed through Plugin Management and are outside the scope of this page. Since 15.9 they no longer change the search interface.
    The ``admin-theme`` role is required to perform operations on this page (the ``admin-theme-view`` role is sufficient for read-only access).
 
 Obtaining a Theme
@@ -23,8 +25,10 @@ its ``minFessVersion`` says the same. There is no upper-bound field. A published
 changes, so an upper bound could not be added afterwards for a theme that stops working on a later
 |Fess|; that a theme is not published for a line says the same thing, at the point it is known.
 
-There are two ways to install one.
+There are three ways to install one.
 
+* Install it from the repository on this page, as described in `Installing from the Repository`_
+  below.
 * ``bin/fess-setup install theme <name>`` downloads the theme built for this |Fess|, checks it
   against the published checksum and installs it. See :doc:`../install/fess-setup`.
 * Download the ZIP and upload it on this page, as described in `Uploading a Theme`_ below.
@@ -68,7 +72,18 @@ Table: Theme List Columns
 Setting the Default Theme
 --------------------------
 
-Select a theme from the pull-down menu at the top of the list page and click the [Set Default] button to set the default theme applied to the search interface. Selecting [(no default)] and clicking [Set Default] clears the default theme assignment. After saving, the theme information is reloaded and the change takes effect immediately.
+Select a theme from the pull-down menu at the top of the list page and click the [Set Default] button to set the default theme applied to the search interface. Selecting [(no default)] and clicking [Set Default] clears the default theme assignment, and the bundled ``bootstrap`` theme is used again. After saving, the theme information is reloaded and the change takes effect immediately.
+
+
+Installing from the Repository
+------------------------------
+
+The list page also installs themes published in the theme repository (``theme.repositories``, by default https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
+
+* [Available Themes] lists the themes the repository publishes, with a version for each. Click [Install] on a row to install that version.
+* [Install by Name] installs a theme by its name and version, whether or not it appears in that list. Enter the [Name] and [Version] and click [Install].
+
+The ZIP is downloaded from the repository, checked against its published ``.sha1`` checksum and then installed in the same way as an upload, so the same checks apply. Set the theme as the default afterwards to use it.
 
 
 Uploading a Theme
@@ -135,7 +150,7 @@ Place a ``theme.yml`` file (YAML format) at the root of the static theme to desc
      - The entry point file (default: ``index.html``).
    * - ``spaFallback``
      - Optional
-     - Enables or disables SPA-style fallback (default: ``true``).
+     - Deprecated and no longer read. Since 15.9 the entry file is always served for the search interface paths.
 
 Table: theme.yml Fields
 
@@ -194,5 +209,8 @@ The main configuration settings for the Theme feature can be changed in ``fess_c
    * - ``theme.upload.attic.retention.days``
      - ``7``
      - The number of days to retain backups of replaced or deleted themes.
+   * - ``theme.repositories``
+     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+     - The repository URLs (comma separated) that themes are installed from.
 
 Table: Theme Configuration Properties

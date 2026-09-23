@@ -198,6 +198,11 @@ Docker 버전::
 
 Fess의 검색 화면이 표시됩니다. 초기 상태에서는 크롤 설정이 수행되지 않았기 때문에 검색 결과가 표시되지 않습니다.
 
+검색 화면은 |Fess| 에 번들된 정적 테마 ``bootstrap`` 입니다. 외관을 변경하려면
+관리 화면의 "시스템" > "테마"에서 또는 ``bin/fess-setup install theme <name>`` 으로
+다른 테마를 설치하거나( :doc:`fess-setup` 참조), 번들 테마를 복사하여 그 복사본을
+변경하십시오( :ref:`theme-customize-bundled` 참조).
+
 관리 화면
 ---------
 

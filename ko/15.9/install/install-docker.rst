@@ -157,6 +157,9 @@ Git이 설치되어 있는 경우 리포지토리 전체를 클론할 수도 있
 - **검색 화면**: http://localhost:8080/
 - **관리 화면**: http://localhost:8080/admin
 
+검색 화면은 |Fess| 에 번들된 정적 테마 ``bootstrap`` 입니다. 외관을 변경하려면
+:doc:`../admin/theme-guide` 를 참조하십시오.
+
 기본 관리자 계정:
 
 - 사용자 이름: ``admin``

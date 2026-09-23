@@ -7,8 +7,10 @@ Descripción general
 
 La función de temas gestiona los «temas estáticos», que agrupan el aspecto visual de la pantalla de búsqueda (conjunto de activos estáticos como HTML, CSS y JavaScript). Los temas estáticos se suben como archivos ZIP y se extraen en el directorio de temas del servidor (predeterminado: ``themes``, modificable con ``theme.directory.path``). En la raíz de cada tema debe colocarse el manifiesto ``theme.yml``, que describe los metadatos del tema.
 
+La pantalla de búsqueda es siempre un tema estático. Cuando no hay ningún tema predeterminado configurado, |Fess| utiliza ``bootstrap``, el tema estático incluido con él. El tema incluido no se puede eliminar ni reemplazar; para modificarlo, cópielo con otro nombre (consulte :ref:`theme-customize-bundled`).
+
 .. note::
-   Los temas basados en JSP se gestionan desde la administración de complementos y quedan fuera del ámbito de esta página.
+   Los temas basados en JSP (JAR) se gestionan desde la administración de complementos y quedan fuera del ámbito de esta página. Desde la versión 15.9 ya no modifican la pantalla de búsqueda.
    Para realizar las operaciones de esta página se requiere el rol ``admin-theme`` (o el rol ``admin-theme-view`` si solo se necesita acceso de lectura).
 
 Obtención de un tema
@@ -24,8 +26,10 @@ archivo publicado no cambia nunca, así que no podría añadirse después un lí
 deja de funcionar en un |Fess| más nuevo; no publicarlo para esa línea dice lo mismo, en el
 momento en que se sabe.
 
-Hay dos formas de instalarlo.
+Hay tres formas de instalarlo.
 
+* Instalarlo desde el repositorio en esta página, como se describe en `Instalar desde el repositorio`_
+  más abajo.
 * ``bin/fess-setup install theme <name>`` descarga el tema construido para este |Fess|, lo
   comprueba contra la suma publicada y lo instala. Consulte :doc:`../install/fess-setup`.
 * Descargar el ZIP y subirlo en esta página, como se describe en `Subir un tema`_.
@@ -69,7 +73,18 @@ Tabla: Columnas de la lista de temas
 Establecer el tema predeterminado
 ----------------------------------
 
-Seleccione un tema en el menú desplegable de la parte superior de la página de lista y haga clic en el botón [Establecer como predeterminado] para configurar el tema predeterminado que se aplica a la pantalla de búsqueda. Al seleccionar [(sin predeterminado)] y confirmar la configuración, se cancela la asignación del tema predeterminado. Una vez guardado, la información del tema se recarga y los cambios se aplican de inmediato.
+Seleccione un tema en el menú desplegable de la parte superior de la página de lista y haga clic en el botón [Establecer como predeterminado] para configurar el tema predeterminado que se aplica a la pantalla de búsqueda. Al seleccionar [(sin predeterminado)] y confirmar la configuración, se cancela la asignación del tema predeterminado y se vuelve a utilizar el tema incluido ``bootstrap``. Una vez guardado, la información del tema se recarga y los cambios se aplican de inmediato.
+
+
+Instalar desde el repositorio
+-----------------------------
+
+La página de lista también instala los temas publicados en el repositorio de temas (``theme.repositories``, de forma predeterminada https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
+
+* [Temas disponibles] muestra los temas que publica el repositorio, con una versión para cada uno. Haga clic en [Instalar] en una fila para instalar esa versión.
+* [Instalar por nombre] instala un tema por su nombre y versión, aparezca o no en esa lista. Introduzca el [Nombre] y la [Versión] y haga clic en [Instalar].
+
+El ZIP se descarga del repositorio, se comprueba contra su suma de verificación ``.sha1`` publicada y después se instala de la misma forma que una subida, por lo que se aplican las mismas comprobaciones. Después, establezca el tema como predeterminado para utilizarlo.
 
 
 Subir un tema
@@ -136,7 +151,7 @@ En la raíz del tema estático debe colocarse el archivo ``theme.yml`` (formato 
      - Archivo de punto de entrada (predeterminado: ``index.html``).
    * - ``spaFallback``
      - Opcional
-     - Activa o desactiva el fallback de tipo SPA (predeterminado: ``true``).
+     - Obsoleto; ya no se lee. Desde la versión 15.9 el archivo de entrada se sirve siempre para las rutas de la pantalla de búsqueda.
 
 Tabla: Campos de theme.yml
 
@@ -195,5 +210,8 @@ Las principales configuraciones relacionadas con la función de temas se pueden 
    * - ``theme.upload.attic.retention.days``
      - ``7``
      - Número de días que se conserva la copia de seguridad de un tema reemplazado o eliminado.
+   * - ``theme.repositories``
+     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+     - URL de los repositorios (separadas por comas) desde los que se instalan los temas.
 
 Tabla: Propiedades de configuración de la función de temas

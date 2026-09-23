@@ -7,8 +7,10 @@ Présentation
 
 La fonctionnalité de thèmes permet de gérer les « thèmes statiques », c'est-à-dire des ensembles d'éléments statiques (HTML / CSS / JavaScript, etc.) qui définissent l'apparence de l'écran de recherche. Un thème statique est téléversé sous forme d'archive ZIP, puis décompressé dans le répertoire de thèmes sur le serveur (par défaut : ``themes``, modifiable via ``theme.directory.path``). À la racine de chaque thème doit se trouver un manifeste ``theme.yml`` décrivant les métadonnées du thème.
 
+L'écran de recherche est toujours un thème statique. Lorsqu'aucun thème par défaut n'est défini, |Fess| utilise ``bootstrap``, le thème statique fourni avec lui. Le thème fourni ne peut être ni supprimé ni remplacé ; pour le modifier, copiez-le sous un nouveau nom (voir :ref:`theme-customize-bundled`).
+
 .. note::
-   Les thèmes basés sur JSP sont gérés via la page de configuration des plugins et ne font pas l'objet de cette page.
+   Les thèmes basés sur JSP (JAR) sont gérés via la page de configuration des plugins et ne font pas l'objet de cette page. Depuis la version 15.9, ils ne modifient plus l'écran de recherche.
    Pour effectuer les opérations décrites sur cette page, le rôle ``admin-theme`` est requis (le rôle ``admin-theme-view`` suffit pour la consultation seule).
 
 Obtenir un thème
@@ -24,8 +26,10 @@ supérieure. Une archive publiée ne change jamais : une borne supérieure ne po
 ajoutée après coup pour un thème qui cesse de fonctionner sur un |Fess| plus récent. Ne pas le
 publier pour cette ligne dit la même chose, au moment où on le sait.
 
-Il y a deux façons d'en installer un.
+Il y a trois façons d'en installer un.
 
+* L'installer depuis le dépôt sur cette page, comme décrit dans `Installation depuis le dépôt`_
+  ci-dessous.
 * ``bin/fess-setup install theme <name>`` télécharge le thème construit pour ce |Fess|, le
   vérifie contre la somme publiée et l'installe. Voir :doc:`../install/fess-setup`.
 * Télécharger le ZIP et le téléverser depuis cette page, comme décrit dans
@@ -70,7 +74,18 @@ Tableau : Colonnes de la liste des thèmes
 Définition du thème par défaut
 -------------------------------
 
-Sélectionnez un thème dans le menu déroulant situé en haut de la page de liste, puis cliquez sur le bouton [Définir par défaut] pour définir le thème par défaut appliqué à l'écran de recherche. En sélectionnant [(aucun par défaut)] et en confirmant, vous annulez la désignation du thème par défaut. Après la mise à jour, les informations de thème sont rechargées et les modifications prennent effet immédiatement.
+Sélectionnez un thème dans le menu déroulant situé en haut de la page de liste, puis cliquez sur le bouton [Définir par défaut] pour définir le thème par défaut appliqué à l'écran de recherche. En sélectionnant [(aucun par défaut)] et en confirmant, vous annulez la désignation du thème par défaut, et le thème fourni ``bootstrap`` est de nouveau utilisé. Après la mise à jour, les informations de thème sont rechargées et les modifications prennent effet immédiatement.
+
+
+Installation depuis le dépôt
+----------------------------
+
+La page de liste installe aussi les thèmes publiés dans le dépôt de thèmes (``theme.repositories``, par défaut https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
+
+* [Thèmes disponibles] liste les thèmes publiés par le dépôt, avec une version pour chacun. Cliquez sur [Installer] sur une ligne pour installer cette version.
+* [Installer par nom] installe un thème à partir de son nom et de sa version, qu'il figure ou non dans cette liste. Saisissez le [Nom] et la [Version], puis cliquez sur [Installer].
+
+Le ZIP est téléchargé depuis le dépôt, vérifié contre sa somme ``.sha1`` publiée, puis installé de la même manière qu'un téléversement ; les mêmes vérifications s'appliquent donc. Définissez ensuite le thème comme thème par défaut pour l'utiliser.
 
 
 Téléversement d'un thème
@@ -137,7 +152,7 @@ Manifeste theme.yml
      - Fichier servant de point d'entrée (par défaut : ``index.html``).
    * - ``spaFallback``
      - Optionnel
-     - Active ou désactive le fallback en mode SPA (par défaut : ``true``).
+     - Obsolète et n'est plus lu. Depuis la version 15.9, le fichier d'entrée est toujours servi pour les chemins de l'écran de recherche.
 
 Tableau : Champs du fichier theme.yml
 
@@ -196,5 +211,8 @@ Les principaux paramètres liés à la fonctionnalité de thèmes peuvent être 
    * - ``theme.upload.attic.retention.days``
      - ``7``
      - Nombre de jours de conservation de la sauvegarde des thèmes remplacés ou supprimés.
+   * - ``theme.repositories``
+     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+     - URL des dépôts (séparées par des virgules) depuis lesquels les thèmes sont installés.
 
 Tableau : Propriétés de configuration de la fonctionnalité de thèmes

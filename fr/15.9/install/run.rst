@@ -203,6 +203,11 @@ Accédez aux URL suivantes pour vérifier l'interface Web.
 
 L'écran de recherche de Fess s'affiche. Dans l'état initial, aucun résultat de recherche ne s'affiche car aucune configuration d'exploration n'a été effectuée.
 
+L'écran de recherche est ``bootstrap``, le thème statique fourni avec |Fess|. Pour modifier son apparence,
+installez un autre thème depuis « Système » → « Thème » dans l'écran d'administration ou avec
+``bin/fess-setup install theme <name>`` (voir :doc:`fess-setup`), ou copiez le thème fourni et
+modifiez la copie (voir :ref:`theme-customize-bundled`).
+
 Écran d'administration
 -----------------------
 
