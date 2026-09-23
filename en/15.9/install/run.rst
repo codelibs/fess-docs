@@ -340,9 +340,13 @@ Configure Mail Server
 To receive failure notifications and similar messages by email, configure the
 SMTP server and the notification recipient address.
 
-1. In the config file ``app/WEB-INF/classes/fess_env.properties``, specify the
+1. In ``fess_env_web.properties`` and ``fess_env_crawler.properties``, specify the
    SMTP server host and port in ``mail.smtp.server.main.host.and.port``
-   (default: ``localhost:25``). A restart of |Fess| is required after the change.
+   (default: ``localhost:25``). The files are in ``app/WEB-INF/classes/`` for the
+   ZIP package and in ``/etc/fess/`` for the RPM/DEB packages. The |Fess| web
+   process reads the first, and the crawler, which sends the crawl completion
+   mail, reads the second; ``fess_env.properties`` is not used. A restart of
+   |Fess| is required after the change.
 2. In the admin UI, click [System] → [General] in the left menu.
 3. Enter the recipient email address in the [Notification Mail] field.
 4. Click the [Update] button.

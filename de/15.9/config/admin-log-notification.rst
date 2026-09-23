@@ -54,6 +54,13 @@ Aktivierung über die Verwaltungsoberfläche
    Standardmäßig wird nur die Ebene ``ERROR`` benachrichtigt.
    Bei Auswahl von ``WARN`` werden sowohl ``WARN`` als auch ``ERROR`` benachrichtigt.
 
+.. important::
+   Ein geplanter Job, der fehlschlägt (im Job-Protokoll mit dem Status ``fail`` erfasst), wird auf
+   der Ebene ``WARN`` (``Failed to execute job: ...``) protokolliert, nicht auf ``ERROR``. Ist die
+   Ebene auf ``ERROR`` gesetzt, werden fehlgeschlagene geplante Jobs daher **nicht benachrichtigt**.
+   Um darüber benachrichtigt zu werden, setzen Sie die Ebene auf ``WARN``; dann wird auch jedes
+   andere ``WARN``-Ereignis benachrichtigt.
+
 Aktivierung über Systemeigenschaften
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -76,11 +83,19 @@ E-Mail-Benachrichtigung
 
 Für die E-Mail-Benachrichtigung sind folgende Einstellungen erforderlich.
 
-1. Konfiguration des Mailservers (``fess_env.properties``):
+1. Konfiguration des Mailservers:
 
    ::
 
        mail.smtp.server.main.host.and.port=smtp.example.com:587
+
+   Setzen Sie dies in ``fess_env_web.properties``, die vom Web-Prozess von |Fess| gelesen wird, der
+   die Protokollbenachrichtigung und die Test-E-Mail der **Allgemein**-Einstellungen sendet. Der
+   Crawler läuft als separater Prozess, der ``fess_env_crawler.properties`` liest und die
+   E-Mail zum Abschluss des Crawlings sendet; setzen Sie denselben Wert daher auch dort. Die Dateien
+   liegen beim ZIP-Paket in ``app/WEB-INF/classes/`` und bei den RPM/DEB-Paketen in ``/etc/fess/``.
+   Ein nur in ``fess_env.properties`` gesetzter Wert wird nicht verwendet, da ``bin/fess`` |Fess|
+   mit ``-Dlasta.env=web`` startet. Starten Sie |Fess| nach der Änderung neu.
 
 2. Geben Sie in den **Allgemein**-Einstellungen der Verwaltungsoberfläche unter **Benachrichtigungs-E-Mail** die E-Mail-Adresse ein.
    Mehrere Adressen können durch Komma getrennt angegeben werden.
@@ -213,7 +228,8 @@ Empfohlene Einstellungen
      - Begründung
    * - Produktionsumgebung
      - ``ERROR``
-     - Nur kritische Fehler benachrichtigen, um Störgeräusche zu reduzieren
+     - Nur kritische Fehler benachrichtigen, um Störgeräusche zu reduzieren. Fehlgeschlagene geplante
+       Jobs werden auf dieser Ebene nicht benachrichtigt; verwenden Sie ``WARN``, wenn Sie sie benötigen
    * - Staging-Umgebung
      - ``WARN``
      - Auch potenzielle Probleme einbeziehen
@@ -253,8 +269,9 @@ Benachrichtigungen werden nicht gesendet
 
 3. **Mailserver-Einstellungen überprüfen**
 
-   Überprüfen Sie bei Verwendung der E-Mail-Benachrichtigung in ``fess_env.properties``, ob der Mailserver korrekt
-   konfiguriert ist.
+   Überprüfen Sie bei Verwendung der E-Mail-Benachrichtigung in ``fess_env_web.properties``, ob der Mailserver korrekt
+   konfiguriert ist (siehe „E-Mail-Benachrichtigung" unter „Einrichtung"). Die Schaltfläche [Test-E-Mail senden] in den
+   **Allgemein**-Einstellungen sendet eine E-Mail über dieselbe Konfiguration.
 
 4. **Geplanten Job überprüfen**
 

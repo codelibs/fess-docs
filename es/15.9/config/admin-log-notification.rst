@@ -55,6 +55,13 @@ Habilitación desde la Pantalla de Administración
    Por defecto, solo se notifica el nivel ``ERROR``.
    Si selecciona ``WARN``, se notificarán tanto ``WARN`` como ``ERROR``.
 
+.. important::
+   Un trabajo programado que falla (registrado con el estado ``fail`` en el registro de trabajos) se
+   registra con el nivel ``WARN`` (``Failed to execute job: ...``), no con ``ERROR``. Por lo tanto,
+   con el nivel configurado en ``ERROR``, los trabajos programados fallidos **no se notifican**. Para
+   recibir notificaciones de ellos, configure el nivel en ``WARN``; en ese caso también se notifican
+   todos los demás eventos ``WARN``.
+
 Habilitación mediante Propiedades del Sistema
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -77,11 +84,19 @@ Notificación por Correo Electrónico
 
 Para utilizar la notificación por correo electrónico, es necesaria la siguiente configuración.
 
-1. Configuración del servidor de correo (``fess_env.properties``):
+1. Configuración del servidor de correo:
 
    ::
 
        mail.smtp.server.main.host.and.port=smtp.example.com:587
+
+   Configúrelo en ``fess_env_web.properties``, que lee el proceso web de |Fess| que envía la
+   notificación de registros y el correo de prueba de la configuración "General". El rastreador se
+   ejecuta como un proceso independiente que lee ``fess_env_crawler.properties`` y envía el correo de
+   finalización del rastreo, así que configure también allí el mismo valor. Los archivos se encuentran
+   en ``app/WEB-INF/classes/`` en el paquete ZIP y en ``/etc/fess/`` en los paquetes RPM/DEB. Un valor
+   configurado solo en ``fess_env.properties`` no se utiliza, porque ``bin/fess`` inicia |Fess| con
+   ``-Dlasta.env=web``. Reinicie |Fess| después del cambio.
 
 2. Introduzca la dirección de correo electrónico en "Correo de notificación" en la configuración "General" de la pantalla de administración.
    Puede especificar varias direcciones separadas por comas.
@@ -213,7 +228,8 @@ Configuración Recomendada
      - Razón
    * - Entorno de Producción
      - ``ERROR``
-     - Notificar solo errores importantes y reducir el ruido
+     - Notificar solo errores importantes y reducir el ruido. Con este nivel no se notifican los
+       trabajos programados fallidos; utilice ``WARN`` si los necesita
    * - Entorno de Staging
      - ``WARN``
      - Notificar incluyendo problemas potenciales
@@ -254,7 +270,9 @@ Las Notificaciones no se Envían
 3. **Verificar la configuración del servidor de correo**
 
    Si utiliza la notificación por correo electrónico, verifique que el servidor de correo esté
-   configurado correctamente en ``fess_env.properties``.
+   configurado correctamente en ``fess_env_web.properties`` (consulte "Notificación por Correo
+   Electrónico" en "Configuración"). El botón "Enviar correo de prueba" de la configuración "General"
+   envía un correo mediante la misma configuración.
 
 4. **Verificar el trabajo programado**
 

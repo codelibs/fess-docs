@@ -330,9 +330,12 @@ ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
 
 障害通知などをメールで受信するには、SMTP サーバーと通知先メールアドレスを設定します。
 
-1. 設定ファイル ``app/WEB-INF/classes/fess_env.properties`` の
+1. ``fess_env_web.properties`` と ``fess_env_crawler.properties`` の
    ``mail.smtp.server.main.host.and.port`` に SMTP サーバーのホストとポートを
-   指定します（デフォルト：``localhost:25``）。変更後は |Fess| の再起動が必要です。
+   指定します（デフォルト：``localhost:25``）。これらのファイルは、ZIP 版では
+   ``app/WEB-INF/classes/`` に、RPM/DEB 版では ``/etc/fess/`` にあります。
+   |Fess| の Web プロセスが前者を、クロール完了のメールを送信するクローラーが後者を読み、
+   ``fess_env.properties`` は使われません。変更後は |Fess| の再起動が必要です。
 2. 管理画面の左メニューから「システム」→「全般」をクリックします。
 3. 「通知メール」フィールドに通知先のメールアドレスを入力します。
 4. 「更新」ボタンをクリックします。

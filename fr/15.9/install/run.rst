@@ -328,7 +328,7 @@ Configuration du serveur de messagerie
 
 Pour recevoir des notifications d'échec et autres messages par e-mail, configurez le serveur SMTP et l'adresse du destinataire des notifications.
 
-1. Dans le fichier de configuration ``app/WEB-INF/classes/fess_env.properties``, spécifiez l'hôte et le port du serveur SMTP dans ``mail.smtp.server.main.host.and.port`` (valeur par défaut : ``localhost:25``). Un redémarrage de |Fess| est requis après la modification.
+1. Dans ``fess_env_web.properties`` et ``fess_env_crawler.properties``, spécifiez l'hôte et le port du serveur SMTP dans ``mail.smtp.server.main.host.and.port`` (valeur par défaut : ``localhost:25``). Les fichiers se trouvent dans ``app/WEB-INF/classes/`` pour le paquet ZIP et dans ``/etc/fess/`` pour les paquets RPM/DEB. Le processus web de |Fess| lit le premier, et le crawler, qui envoie l'e-mail de fin d'exploration, lit le second ; ``fess_env.properties`` n'est pas utilisé. Un redémarrage de |Fess| est requis après la modification.
 2. Dans l'interface d'administration, cliquez sur [Système] → [Général] dans le menu de gauche.
 3. Saisissez l'adresse e-mail du destinataire dans le champ [E-mail de notification].
 4. Cliquez sur le bouton [Mettre à jour].
