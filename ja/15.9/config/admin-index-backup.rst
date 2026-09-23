@@ -177,11 +177,16 @@ cronなどを使用して、定期的にバックアップを実行できます�
       "include_global_state": false
     }'
 
-2. リストアした辞書の内容を OpenSearch の ``config/dictionary`` 配下へ書き出します。
+2. OpenSearch を再起動し（複数ノードのクラスタではすべてのノード）、 ``configsync`` インデックスが利用可能になったら、リストアした辞書の内容を OpenSearch の ``config/dictionary`` 配下へ書き出します。
 
 ::
 
+    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
+
     curl -X POST "localhost:9200/_configsync/flush"
+
+.. note::
+   configsync プラグイン 3.8.0 以前では、 ``_configsync/flush`` は、そのノードが前回書き出し処理（定期実行または ``_configsync/flush`` ）を開始した時点より後に登録されたファイルだけを書き出します。リストアした ``configsync`` のファイルはスナップショットを取得したクラスタで登録された時刻を持つため、OpenSearch の起動から約 1 分後に最初の定期書き出しが済んだ後では、再起動せずに ``_configsync/flush`` を実行しても辞書ファイルは書き出されず、手順 3 の後でクラスタが red になります。再起動するとこの時点が初期化されるため、再起動後の ``_configsync/flush`` ですべての辞書ファイルが書き出されます。書き出したファイルごとに、OpenSearch のログに ``ConfigSyncService`` の ``Updated {ファイルのパス}`` が出力されます。
 
 3. |Fess| のインデックスをリストアします。
 
@@ -398,7 +403,7 @@ OpenSearch のインデックスとは別に、以下の設定ファイルもバ
 
 ``_cluster/reroute?retry_failed=true`` を実行しても、また辞書ファイルを配置しただけでも回復しません。リストアに失敗したシャードは、そのインデックスをクローズまたは削除して、もう一度リストアするまで割り当てられないためです。次の手順で回復します。
 
-1. 「全インデックスのリストア」の手順 1 と 2 に従い、 ``configsync`` をリストアして辞書ファイルを書き出します。
+1. 「全インデックスのリストア」の手順 1 と 2 に従い、 ``configsync`` をリストアし、OpenSearch を再起動して辞書ファイルを書き出します。
 2. ``red`` のインデックスを確認します。
 
    ::

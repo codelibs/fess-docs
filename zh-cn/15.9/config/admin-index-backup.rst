@@ -177,11 +177,16 @@
       "include_global_state": false
     }'
 
-2. 将恢复的词典内容写出到 OpenSearch 的 ``config/dictionary`` 下。
+2. 重启 OpenSearch（多节点集群中为所有节点），待 ``configsync`` 索引可用后，将恢复的词典内容写出到 OpenSearch 的 ``config/dictionary`` 下。
 
 ::
 
+    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
+
     curl -X POST "localhost:9200/_configsync/flush"
+
+.. note::
+   在 configsync 插件 3.8.0 及更早版本中， ``_configsync/flush`` 只写出在该节点上次开始写出处理（定期执行或 ``_configsync/flush`` ）之后登记的文件。恢复的 ``configsync`` 文件带有在拍摄快照的集群上登记时的时间，因此在 OpenSearch 启动约 1 分钟后首次定期写出完成之后，不重启而执行 ``_configsync/flush`` 不会写出任何词典文件，步骤 3 之后集群会变为 red。重启会重置该时间点，因此重启后执行 ``_configsync/flush`` 即可写出所有词典文件。每写出一个文件，OpenSearch 日志中都会输出 ``ConfigSyncService`` 的 ``Updated {文件路径}``。
 
 3. 恢复 |Fess| 的索引。
 
@@ -398,7 +403,7 @@
 
 执行 ``_cluster/reroute?retry_failed=true`` 或仅放置词典文件都无法恢复。恢复失败的分片在其索引被关闭或删除并重新恢复之前不会被分配。请按以下步骤恢复。
 
-1. 按照“恢复所有索引”的步骤 1 和 2，恢复 ``configsync`` 并写出词典文件。
+1. 按照“恢复所有索引”的步骤 1 和 2，恢复 ``configsync``，重启 OpenSearch 并写出词典文件。
 2. 确认 ``red`` 状态的索引。
 
    ::

@@ -177,11 +177,16 @@ Tampoco basta con restaurar solo ``fess*``: sin los archivos de diccionario, ``f
       "include_global_state": false
     }'
 
-2. Escriba los diccionarios restaurados en ``config/dictionary`` de OpenSearch.
+2. Reinicie OpenSearch (todos los nodos en un clúster de varios nodos). Cuando el índice ``configsync`` esté disponible, escriba los diccionarios restaurados en ``config/dictionary`` de OpenSearch.
 
 ::
 
+    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
+
     curl -X POST "localhost:9200/_configsync/flush"
+
+.. note::
+   Con el plugin configsync 3.8.0 y anteriores, ``_configsync/flush`` solo escribe los archivos registrados después de la última vez que el nodo inició una escritura (programada o ``_configsync/flush``). Los archivos de ``configsync`` restaurados conservan la hora en que se registraron en el clúster del que se tomó la instantánea, por lo que, una vez que se ha ejecutado la primera escritura programada, aproximadamente un minuto después de iniciar OpenSearch, ejecutar ``_configsync/flush`` sin reiniciar no escribe ningún archivo de diccionario y el clúster pasa a red después del paso 3. El reinicio restablece ese punto, de modo que ``_configsync/flush`` tras el reinicio escribe todos los archivos de diccionario. Por cada archivo que escribe, OpenSearch registra ``Updated {ruta del archivo}`` desde ``ConfigSyncService``.
 
 3. Restaure los índices de |Fess|.
 
@@ -398,7 +403,7 @@ Si el estado del clúster es ``red`` después de restaurar ``fess*`` y observa l
 
 Ni ``_cluster/reroute?retry_failed=true`` ni colocar los archivos de diccionario lo resuelven: un shard cuya restauración falló no se vuelve a asignar hasta que su índice se cierra o se elimina y se restaura de nuevo. Recupérelo de la siguiente manera.
 
-1. Siga los pasos 1 y 2 de «Restauración de Todos los Índices» para restaurar ``configsync`` y escribir los archivos de diccionario.
+1. Siga los pasos 1 y 2 de «Restauración de Todos los Índices» para restaurar ``configsync``, reiniciar OpenSearch y escribir los archivos de diccionario.
 2. Liste los índices en estado ``red``.
 
    ::

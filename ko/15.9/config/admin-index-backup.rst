@@ -177,11 +177,16 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
       "include_global_state": false
     }'
 
-2. 복원한 사전 내용을 OpenSearch의 ``config/dictionary`` 아래에 기록합니다.
+2. OpenSearch를 재시작하고(여러 노드로 구성된 클러스터에서는 모든 노드), ``configsync`` 인덱스를 사용할 수 있게 되면 복원한 사전 내용을 OpenSearch의 ``config/dictionary`` 아래에 기록합니다.
 
 ::
 
+    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
+
     curl -X POST "localhost:9200/_configsync/flush"
+
+.. note::
+   configsync 플러그인 3.8.0 이하에서는 ``_configsync/flush`` 가 해당 노드가 마지막으로 기록 처리(정기 실행 또는 ``_configsync/flush`` )를 시작한 시점 이후에 등록된 파일만 기록합니다. 복원한 ``configsync`` 의 파일은 스냅샷을 생성한 클러스터에서 등록된 시각을 가지고 있으므로, OpenSearch 시작 후 약 1분 뒤에 첫 번째 정기 기록이 실행된 후에는 재시작하지 않고 ``_configsync/flush`` 를 실행해도 사전 파일이 기록되지 않으며, 3단계 후에 클러스터가 red가 됩니다. 재시작하면 이 시점이 초기화되므로, 재시작 후의 ``_configsync/flush`` 로 모든 사전 파일이 기록됩니다. 기록된 파일마다 OpenSearch 로그에 ``ConfigSyncService`` 의 ``Updated {파일 경로}`` 가 출력됩니다.
 
 3. |Fess| 인덱스를 복원합니다.
 
@@ -398,7 +403,7 @@ OpenSearch의 인덱스와는 별도로 다음 설정 파일도 백업하십시�
 
 ``_cluster/reroute?retry_failed=true`` 를 실행하거나 사전 파일을 배치하는 것만으로는 복구되지 않습니다. 복원에 실패한 샤드는 해당 인덱스를 닫거나 삭제한 뒤 다시 복원할 때까지 할당되지 않기 때문입니다. 다음 절차로 복구합니다.
 
-1. “모든 인덱스 복원”의 1단계와 2단계에 따라 ``configsync`` 를 복원하여 사전 파일을 기록합니다.
+1. “모든 인덱스 복원”의 1단계와 2단계에 따라 ``configsync`` 를 복원하고 OpenSearch를 재시작하여 사전 파일을 기록합니다.
 2. ``red`` 인덱스를 확인합니다.
 
    ::
