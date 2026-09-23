@@ -33,6 +33,12 @@
      - 검색 로그 및 클릭 로그 등( ``fess_log.search_log`` , ``fess_log.click_log`` , ``fess_log.favorite_log`` , ``fess_log.user_info`` , ``fess_log.notification_queue`` )
    * - ``fess_crawler.*``
      - 크롤링 처리 중 사용되는 임시 인덱스( ``fess_crawler.queue`` , ``fess_crawler.data`` , ``fess_crawler.filter`` ). 크롤링 완료 후에는 불필요하므로 통상적으로 백업 대상에 포함할 필요가 없습니다.
+   * - ``configsync``
+     - 사전 파일(동의어, 불용어, 매핑 등)의 내용. OpenSearch의 configsync 플러그인이 관리하며, OpenSearch의 ``config/dictionary`` 아래에 파일로 기록합니다. 검색 대상 문서의 인덱스와 서제스트용 인덱스는 이 파일들을 참조하므로 반드시 백업 대상에 포함하십시오.
+
+.. warning::
+   스냅샷에는 인덱스만 포함되며, OpenSearch의 ``config/dictionary`` 아래에 있는 사전 파일 자체는 포함되지 않습니다.
+   ``configsync`` 인덱스를 백업하지 않으면 새 OpenSearch로 복원할 때 사전 파일이 존재하지 않아 ``fess.{타임스탬프}`` 와 ``fess_suggest_analyzer`` 가 ``IOException while reading ..._path: file not readable`` 로 열리지 않습니다(클러스터 상태가 red가 됩니다).
 
 인덱스 백업 및 복원
 ====================================
@@ -106,13 +112,13 @@ S3를 백업 대상으로 하는 경우 ``repository-s3`` 플러그인을 설치
 특정 인덱스 백업
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-특정 인덱스만 백업합니다. 다음은 |Fess| 관련 인덱스( ``fess`` 로 시작하는 인덱스)만을 대상으로 하는 예입니다.
+특정 인덱스만 백업합니다. 다음은 |Fess| 관련 인덱스( ``fess`` 로 시작하는 인덱스)와 사전 파일을 보관하는 ``configsync`` 인덱스를 대상으로 하는 예입니다. ``configsync`` 를 빼면 사전 파일을 복원할 수 없습니다.
 
 ::
 
     curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess*",
+      "indices": "fess*,configsync",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
@@ -154,14 +160,48 @@ cron 등을 사용하여 정기적으로 백업을 실행할 수 있습니다.
 모든 인덱스 복원
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+먼저 ``configsync`` 인덱스를 복원하여 사전 파일을 기록한 다음, |Fess| 인덱스( ``fess*`` )를 복원합니다. 복원은 |Fess| 를 중지한 상태에서 실행하십시오.
+
+``"indices": "*"`` 로 한 번에 복원할 수는 없습니다. OpenSearch는 시작 시 ``configsync`` 등의 인덱스를 스스로 생성하므로, 새 OpenSearch에서도 ``cannot restore index [configsync] because an open index with same name already exists in the cluster`` 로 실패합니다.
+또한 ``fess*`` 만 복원하면 사전 파일이 없기 때문에 ``fess.{타임스탬프}`` 와 ``fess_suggest_analyzer`` 가 열리지 않아 클러스터가 red가 되며, 그대로 |Fess| 를 시작하면 시작에 실패합니다(모든 페이지가 404가 됩니다).
+
+1. configsync 플러그인이 시작 시 생성한 빈 ``configsync`` 인덱스를 삭제하고, 스냅샷에서 ``configsync`` 를 복원합니다.
+
+::
+
+    curl -X DELETE "localhost:9200/configsync"
+
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    {
+      "indices": "configsync",
+      "include_global_state": false
+    }'
+
+2. 복원한 사전 내용을 OpenSearch의 ``config/dictionary`` 아래에 기록합니다.
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+
+3. |Fess| 인덱스를 복원합니다.
+
 ::
 
     curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "*",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
+
+4. 클러스터 상태가 ``green`` (레플리카를 할당할 수 없는 구성에서는 ``yellow`` )이 된 것을 확인한 후 |Fess| 를 시작합니다.
+
+::
+
+    curl -X GET "localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&pretty"
+
+.. note::
+   실행 중인 클러스터에 같은 이름으로 다시 복원하는 경우, 복원할 인덱스가 열려 있으면 실패합니다. 3단계 전에 대상 인덱스를 닫으십시오( ``_close`` ).
 
 특정 인덱스 복원
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +351,9 @@ OpenSearch의 인덱스와는 별도로 다음 설정 파일도 백업하십시�
 4. **인덱스 복원**
 
    - 스냅샷 리포지토리를 설정합니다.
-   - 스냅샷에서 인덱스를 복원합니다.
+   - “모든 인덱스 복원”의 절차에 따라 ``configsync`` 를 복원하여 사전 파일을 기록한 다음, |Fess| 인덱스를 복원합니다.
    - 복원 후, ``fess.search`` 및 ``fess.update`` 별칭이 복원한 인덱스를 가리키고 있는지 확인합니다.
+   - 클러스터 상태가 ``green`` (또는 ``yellow`` )인지 확인합니다. ``red`` 상태에서 |Fess| 를 시작하면 시작에 실패합니다.
 
 5. **동작 확인**
 
@@ -346,6 +387,35 @@ OpenSearch의 인덱스와는 별도로 다음 설정 파일도 백업하십시�
 1. 동일한 이름의 인덱스가 이미 존재하지 않는지 확인하십시오. OpenSearch에서는 열려 있는 상태의 동일 이름 인덱스로는 복원할 수 없습니다. 복원 전에 대상 인덱스를 닫기( ``_close`` ) 또는 삭제하거나, ``rename_pattern`` 으로 다른 이름으로 복원하십시오.
 2. OpenSearch의 버전이 호환되는지 확인하십시오.
 3. 스냅샷이 손상되지 않았는지 확인하십시오.
+
+복원 후 클러스터가 red가 됨
+---------------------------
+
+``fess*`` 를 복원한 후 클러스터 상태가 ``red`` 가 되고 다음과 같은 상태라면 사전 파일이 없는 것입니다.
+
+- ``_cluster/allocation/explain`` 에 ``IOException while reading mappings_path: file not readable`` ( ``keywords_path`` 등인 경우도 있음)가 표시됨
+- |Fess| 를 시작하면 ``fess.log`` 에 ``Failed to initialize Lasta Di`` ( ``SuggestHelper`` 의 ``init`` 에서의 ``NullPointerException`` )가 출력되고 모든 페이지가 404가 됨
+
+``_cluster/reroute?retry_failed=true`` 를 실행하거나 사전 파일을 배치하는 것만으로는 복구되지 않습니다. 복원에 실패한 샤드는 해당 인덱스를 닫거나 삭제한 뒤 다시 복원할 때까지 할당되지 않기 때문입니다. 다음 절차로 복구합니다.
+
+1. “모든 인덱스 복원”의 1단계와 2단계에 따라 ``configsync`` 를 복원하여 사전 파일을 기록합니다.
+2. ``red`` 인덱스를 확인합니다.
+
+   ::
+
+       curl -X GET "localhost:9200/_cat/indices?v&health=red"
+
+3. ``red`` 인덱스를 닫고 스냅샷에서 다시 복원합니다(인덱스 이름은 실제 이름으로 바꾸십시오).
+
+   ::
+
+       curl -X POST "localhost:9200/fess.20250101000000000,fess_suggest_analyzer/_close"
+
+       curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+       {
+         "indices": "fess.20250101000000000,fess_suggest_analyzer",
+         "include_global_state": false
+       }'
 
 복원 후 검색할 수 없음
 ------------------------
