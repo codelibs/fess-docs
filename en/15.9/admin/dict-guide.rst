@@ -68,12 +68,47 @@ this table first.
    A dictionary that applies at index time is not applied retroactively to
    documents that are already indexed either, so those documents have to be
    crawled again.
+   See :ref:`dict-apply-changes` for how to apply a change.
 
 .. warning::
 
    The character mapping dictionary that applies to ``content``, the field most
    searches are answered from, is the **root** ``mapping.txt``, not
    ``ja/mapping.txt``. They share the name Mapping but they are different files.
+
+.. _dict-apply-changes:
+
+Applying Dictionary Changes
+---------------------------
+
+Saving a dictionary does not change search results, however long you wait. The configsync plugin
+of OpenSearch writes the saved dictionaries to their files about once a minute, but an analyzer
+reads its dictionaries only when the index is opened, so an index that is already open keeps
+using the old ones. After editing dictionaries, reload the document index:
+
+1. Open [System Info > Maintenance] in the left menu.
+2. Click [Reload] under Reload Document Index.
+
+The button writes the saved dictionaries to their files first, then closes and reopens the index
+that the ``fess.update`` alias points to, so there is no need to wait for the periodic write. A
+dictionary that applies at search time, such as a synonym, takes effect as soon as the index is
+open again. For a dictionary that applies at index time, crawl the affected documents again as
+well.
+
+.. warning::
+
+   While the index is closed, and until its shards are assigned again after it is opened, the
+   index cannot be searched: searches fail or return no results. The larger the index, the longer
+   this takes, so reload it at a quiet time.
+
+To do the same from a script without the admin screen, send the same operations to OpenSearch::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+    curl -X POST "localhost:9200/fess.update/_close"
+    curl -X POST "localhost:9200/fess.update/_open"
+
+``_configsync/flush`` writes the saved dictionaries to their files immediately. Without it, wait
+at least a minute after saving before closing the index.
 
 The Kuromoji User Dictionary and Search Results
 -----------------------------------------------

@@ -69,6 +69,9 @@ OpenSearch의 최대 복제본 수(index.auto_expand_replicas)를 지정할 수 
 --------------------------
 
 인덱스 설정을 반영하기 위해 문서 인덱스를 리로드할 수 있습니다.
+사전 변경을 검색에 반영할 때도 사용합니다. 저장된 사전을 OpenSearch 의 파일에 기록한 다음
+``fess.update`` 별칭이 가리키는 인덱스를 close 하고 open 합니다. close 하는 동안에는 그 인덱스를
+검색할 수 없습니다. 자세한 내용은 :ref:`dict-apply-changes` 를 참조하십시오.
 
 
 Crawler 인덱스

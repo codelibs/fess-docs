@@ -53,6 +53,11 @@ Ziel
 Erweitern Sie das in der Quelle eingegebene Wort mit dem Zielwort.
 Wenn Sie beispielsweise „TV" sowohl als „TV" als auch als „テレビ" behandeln möchten, geben Sie „TV" in der Quelle ein und „TV" und „テレビ" im Ziel.
 
+.. note::
+
+   Das Hinzufügen oder Ändern eines Synonyms wirkt sich allein noch nicht auf die Suchergebnisse aus.
+   Laden Sie den Dokumentindex wie unter :ref:`dict-apply-changes` beschrieben neu.
+
 Download
 ========
 

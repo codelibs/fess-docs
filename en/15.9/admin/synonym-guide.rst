@@ -52,6 +52,11 @@ Target
 Expands the word entered in the source field with the converted word.
 For example, to treat "TV" as both "TV" and "テレビ", enter "TV" in the source field and enter "TV" and "テレビ" in the target field.
 
+.. note::
+
+   Adding or changing a synonym does not affect search results by itself. Reload the document index
+   as described in :ref:`dict-apply-changes`.
+
 Download
 ========
 
