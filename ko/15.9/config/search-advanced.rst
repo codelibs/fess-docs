@@ -262,6 +262,75 @@ OpenSearch 하이라이터에 전달할 값을 지정합니다.
    * - ``query.additional.not.analyzed.fields``
      - Analyzer 에 의한 분석을 수행하지 않는 필드에 추가합니다.
 
+.. _search-custom-field-facet-sort-range:
+
+사용자 정의 필드를 패싯, 정렬, 범위 검색에 사용하기
+---------------------------------------------------
+
+데이터 스토어 스크립트나 크롤 설정이 추가하는 ``category`` 나 ``price`` 같은 필드는 인덱스 매핑에
+정의가 없습니다. OpenSearch 는 그 필드에 대해 처음 인덱싱하는 값으로부터 정의를 만듭니다.
+
+- 문자열은 ``text`` 필드가 되며, ``<field>.keyword`` 라는 ``keyword`` 서브 필드를 가집니다
+  (256자보다 긴 문자열은 서브 필드에 저장되지 않습니다).
+- 숫자는 숫자형 필드가 됩니다.
+
+용도마다 알맞은 필드를 사용해야 합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - 용도
+     - 사용할 필드
+     - 설정
+   * - 패싯
+     - ``<field>.keyword``. ``text`` 필드 자체에 대한 패싯은 ``400`` 으로 실패합니다.
+     - ``query.additional.facet.fields``
+   * - 정렬
+     - 숫자형(또는 날짜형) 필드. 정렬 값은 ``<field>.asc`` 또는 ``<field>.desc`` 이므로,
+       ``<field>.keyword`` 처럼 점을 포함하는 필드명으로는 정렬할 수 없으며, ``text`` 필드에
+       대한 정렬은 ``400`` 으로 실패합니다.
+     - ``query.additional.sort.fields``
+   * - 범위 검색
+     - 숫자형(또는 날짜형) 필드. 문자열 필드에서는 범위의 경계가 텍스트로 비교되어
+       ``price:[1000 TO 5000]`` 이 오류 없이 ``120000`` 에도 일치합니다.
+     - ``query.additional.search.fields``. 여기에 나열되지 않은 필드는 범위 검색 자체가
+       수행되지 않습니다.
+
+CSV, JSON, 데이터베이스에서 읽은 값은 스크립트가 변환하지 않는 한 문자열이므로, 정렬이나 범위
+검색에 사용할 값은 변환하십시오. 15.9 에서 만든 데이터 스토어 설정의 기본값인 JavaScript 엔진
+( ``script_type=javascript`` )에서는 다음과 같습니다::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+그런 다음 ``fess_config.properties`` 에 필드를 나열하고 |Fess| 를 재시작합니다::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+이제 검색 API 에서 이 필드들을 사용할 수 있습니다::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   필드의 유형은 그 필드를 가진 첫 번째 문서가 인덱싱될 때 고정됩니다. 이미 문자열로 인덱싱된
+   필드는 스크립트에서 변환해도 바뀌지 않습니다. 변환한 값을 새 필드명(예: ``price_num`` )으로
+   저장하거나 인덱스를 다시 만드십시오.
+
+.. note::
+
+   |Fess| 에 번들된 검색 화면(정적 테마 ``bootstrap`` )은 ``label`` 패싯(과
+   ``query.facet.queries`` 의 패싯 쿼리)만 표시하며, 정렬 메뉴에는 표준 필드만 있습니다.
+   다른 필드의 패싯은 API 또는 직접 만든 테마에서 사용할 수 있습니다. 범위 검색과, 검색창에
+   ``sort:price.desc`` 처럼 입력한 정렬은 검색 화면에서도 동작합니다.
+
 유사 문서 접기(collapse)
 ================================
 
@@ -358,6 +427,9 @@ JSON 형식의 API 검색 시 OpenSearch 에 전달하는 프리퍼런스(검색
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+|Fess| 에 번들된 검색 화면은 ``query.facet.fields`` 의 값과 관계없이 ``label`` 패싯만 요청합니다.
+:ref:`search-custom-field-facet-sort-range` 를 참조하십시오.
 
 검색 결과를 GSA 호환 XML 형식으로 가져올 때의 설정
 ===================================

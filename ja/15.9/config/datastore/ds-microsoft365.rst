@@ -41,13 +41,13 @@ Microsoft 365コネクタは、Microsoft 365サービス（OneDrive、OneNote、
 
 ::
 
-    # Maven Centralからダウンロード
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
+    # CodeLibsリポジトリからダウンロード（15.8.0 以降は Maven Central にありません）
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-microsoft365/X.X.X/fess-ds-microsoft365-X.X.X.jar
 
     # 配置
-    cp fess-ds-microsoft365-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-microsoft365-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # または
-    sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    sudo cp fess-ds-microsoft365-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 方法2: ソースからビルド
 
@@ -56,7 +56,7 @@ Microsoft 365コネクタは、Microsoft 365サービス（OneDrive、OneNote、
     git clone https://github.com/codelibs/fess-ds-microsoft365.git
     cd fess-ds-microsoft365
     mvn clean package
-    cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/lib/
+    cp target/fess-ds-microsoft365-*.jar $FESS_HOME/app/WEB-INF/plugin/
 
 インストール後、|Fess| を再起動してください。
 

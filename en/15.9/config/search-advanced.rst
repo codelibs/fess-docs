@@ -263,6 +263,77 @@ The meaning of each setting is as follows:
    * - ``query.additional.not.analyzed.fields``
      - Adds fields that are not analyzed by the analyzer.
 
+.. _search-custom-field-facet-sort-range:
+
+Using a Custom Field for Facets, Sorting and Range Search
+---------------------------------------------------------
+
+A field that a data store script or a crawl configuration adds, such as ``category`` or ``price``,
+has no definition in the index mapping. OpenSearch creates one from the first value it indexes for
+that field:
+
+- A string becomes a ``text`` field, with a ``keyword`` sub-field named ``<field>.keyword``
+  (strings longer than 256 characters are not stored in the sub-field).
+- A number becomes a numeric field.
+
+Each use needs the right one:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - Use
+     - Field to use
+     - Setting
+   * - Facet
+     - ``<field>.keyword``. A facet on the ``text`` field itself fails with ``400``.
+     - ``query.additional.facet.fields``
+   * - Sort
+     - A numeric (or date) field. The sort value is ``<field>.asc`` or ``<field>.desc``, so a field
+       name containing a dot, such as ``<field>.keyword``, cannot be sorted on, and a sort on a
+       ``text`` field fails with ``400``.
+     - ``query.additional.sort.fields``
+   * - Range search
+     - A numeric (or date) field. On a string field the bounds are compared as text:
+       ``price:[1000 TO 5000]`` also matches ``120000``, without an error.
+     - ``query.additional.search.fields``. A field that is not listed is not searched as a
+       range at all.
+
+A value read from CSV, JSON or a database is a string unless the script converts it, so convert the
+values you want to sort or search by range. With the JavaScript engine, the default for data store
+configurations created in 15.9 (``script_type=javascript``)::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+Then list the fields in ``fess_config.properties`` and restart |Fess|::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+The fields can then be used through the search API::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   The type of a field is fixed when the first document that has it is indexed. If a field was
+   already indexed as a string, converting it in the script does not change it: store the
+   converted value under a new field name (for example ``price_num``), or re-create the index.
+
+.. note::
+
+   The search screen bundled with |Fess| (the static theme ``bootstrap``) draws only the ``label``
+   facet (and the facet queries of ``query.facet.queries``), and its sort menu offers only the
+   standard fields. Facets on other fields are available through the API or in a theme of your
+   own. A range search, and a sort written in the search box as ``sort:price.desc``, work on the
+   search screen as well.
+
 Similar Document Collapsing (collapse)
 =======================================
 
@@ -359,6 +430,9 @@ Specifies the default behavior of faceted search.
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+The search screen bundled with |Fess| requests only the ``label`` facet, whatever
+``query.facet.fields`` says; see :ref:`search-custom-field-facet-sort-range`.
 
 Settings for Retrieving Search Results in GSA-Compatible XML Format
 ====================================================================

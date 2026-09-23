@@ -29,13 +29,13 @@ Box 커넥터는 Box.com의 클라우드 스토리지에서 파일을 가져와
 
 ::
 
-    # Maven Central에서 다운로드
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-box/X.X.X/fess-ds-box-X.X.X.jar
+    # CodeLibs 저장소에서 다운로드 (15.8.0 이후는 Maven Central 에 없음)
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-box/X.X.X/fess-ds-box-X.X.X.jar
 
     # 배치
-    cp fess-ds-box-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-box-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # 또는
-    cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 방법2: 관리 화면에서 설치
 

@@ -29,13 +29,13 @@ Méthode 1 : Placement direct du fichier JAR
 
 ::
 
-    # Télécharger depuis Maven Central
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-box/X.X.X/fess-ds-box-X.X.X.jar
+    # Télécharger depuis le dépôt CodeLibs (les versions 15.8.0 et ultérieures ne sont pas sur Maven Central)
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-box/X.X.X/fess-ds-box-X.X.X.jar
 
     # Placement
-    cp fess-ds-box-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-box-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # ou
-    cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    cp fess-ds-box-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 Méthode 2 : Installation depuis l'interface d'administration
 

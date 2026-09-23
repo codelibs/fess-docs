@@ -92,13 +92,13 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
 
 ::
 
-    # 从Maven Central下载
-    wget https://repo1.maven.org/maven2/org/codelibs/fess/fess-ds-gsuite/X.X.X/fess-ds-gsuite-X.X.X.jar
+    # 从CodeLibs仓库下载（15.8.0 及以后的版本不在 Maven Central 上）
+    wget https://maven.codelibs.org/release/org/codelibs/fess/fess-ds-gsuite/X.X.X/fess-ds-gsuite-X.X.X.jar
 
     # 放置
-    cp fess-ds-gsuite-X.X.X.jar $FESS_HOME/app/WEB-INF/lib/
+    cp fess-ds-gsuite-X.X.X.jar $FESS_HOME/app/WEB-INF/plugin/
     # 或者
-    cp fess-ds-gsuite-X.X.X.jar /usr/share/fess/app/WEB-INF/lib/
+    cp fess-ds-gsuite-X.X.X.jar /usr/share/fess/app/WEB-INF/plugin/
 
 方法2: 从管理界面安装
 

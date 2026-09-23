@@ -262,6 +262,78 @@ El significado de cada configuración es el siguiente:
    * - ``query.additional.not.analyzed.fields``
      - Agrega campos que no serán analizados por el Analyzer.
 
+.. _search-custom-field-facet-sort-range:
+
+Uso de un Campo Personalizado para Facetas, Ordenación y Búsqueda por Rango
+---------------------------------------------------------------------------
+
+Un campo que añade un script de almacén de datos o una configuración de rastreo, como ``category`` o
+``price``, no tiene definición en el mapeo del índice. OpenSearch crea una a partir del primer valor
+que indexa para ese campo:
+
+- Una cadena se convierte en un campo ``text``, con un subcampo ``keyword`` llamado
+  ``<field>.keyword`` (las cadenas de más de 256 caracteres no se almacenan en el subcampo).
+- Un número se convierte en un campo numérico.
+
+Cada uso necesita el adecuado:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - Uso
+     - Campo que se debe usar
+     - Configuración
+   * - Faceta
+     - ``<field>.keyword``. Una faceta sobre el propio campo ``text`` falla con ``400``.
+     - ``query.additional.facet.fields``
+   * - Ordenación
+     - Un campo numérico (o de fecha). El valor de ordenación es ``<field>.asc`` o ``<field>.desc``,
+       por lo que no se puede ordenar por un nombre de campo que contenga un punto, como
+       ``<field>.keyword``, y una ordenación sobre un campo ``text`` falla con ``400``.
+     - ``query.additional.sort.fields``
+   * - Búsqueda por rango
+     - Un campo numérico (o de fecha). En un campo de cadena, los límites se comparan como texto:
+       ``price:[1000 TO 5000]`` también coincide con ``120000``, sin ningún error.
+     - ``query.additional.search.fields``. Un campo que no figura en la lista no se busca como
+       rango en absoluto.
+
+Un valor leído de CSV, JSON o una base de datos es una cadena salvo que el script lo convierta, así
+que convierta los valores por los que desee ordenar o buscar por rango. Con el motor JavaScript, el
+predeterminado para las configuraciones de almacén de datos creadas en 15.9
+(``script_type=javascript``)::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+A continuación, enumere los campos en ``fess_config.properties`` y reinicie |Fess|::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+Después, los campos se pueden utilizar a través de la API de búsqueda::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   El tipo de un campo queda fijado cuando se indexa el primer documento que lo contiene. Si un
+   campo ya se indexó como cadena, convertirlo en el script no lo cambia: almacene el valor
+   convertido con un nombre de campo nuevo (por ejemplo ``price_num``) o vuelva a crear el índice.
+
+.. note::
+
+   La pantalla de búsqueda incluida con |Fess| (el tema estático ``bootstrap``) solo muestra la
+   faceta ``label`` (y las consultas de faceta de ``query.facet.queries``), y su menú de ordenación
+   solo ofrece los campos estándar. Las facetas sobre otros campos están disponibles a través de la
+   API o en un tema propio. Una búsqueda por rango, y una ordenación escrita en el cuadro de búsqueda
+   como ``sort:price.desc``, también funcionan en la pantalla de búsqueda.
+
 Agrupación de Documentos Similares (collapse)
 ==============================================
 
@@ -358,6 +430,9 @@ Especifica el comportamiento predeterminado de la búsqueda por facetas.
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+La pantalla de búsqueda incluida con |Fess| solo solicita la faceta ``label``, independientemente de
+lo que indique ``query.facet.fields``; consulte :ref:`search-custom-field-facet-sort-range`.
 
 Configuración para Obtener Resultados en Formato XML Compatible con GSA
 ========================================================================

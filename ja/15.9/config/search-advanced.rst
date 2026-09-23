@@ -262,6 +262,75 @@ OpenSearchのハイライターに渡す値を指定します。
    * - ``query.additional.not.analyzed.fields``
      - Analyzer による解析を行わないフィールドに追加します。
 
+.. _search-custom-field-facet-sort-range:
+
+独自フィールドをファセット・ソート・範囲検索に使う
+--------------------------------------------------
+
+データストアのスクリプトやクロール設定で追加したフィールド（ ``category`` や ``price`` など）は、
+インデックスのマッピングに定義がありません。OpenSearch は、そのフィールドで最初に登録した値から
+定義を作ります。
+
+- 文字列は ``text`` 型のフィールドになり、 ``<フィールド名>.keyword`` という ``keyword`` 型の
+  サブフィールドが付きます（256 文字を超える文字列はサブフィールドに格納されません）。
+- 数値は数値型のフィールドになります。
+
+用途ごとに使うフィールドが違います。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - 用途
+     - 使うフィールド
+     - 設定
+   * - ファセット
+     - ``<フィールド名>.keyword`` 。 ``text`` 型のフィールドそのものでファセットを取ると ``400`` になります。
+     - ``query.additional.facet.fields``
+   * - ソート
+     - 数値型（または日付型）のフィールド。ソートの値は ``<フィールド名>.asc`` または
+       ``<フィールド名>.desc`` なので、 ``<フィールド名>.keyword`` のようにドットを含む名前では
+       ソートできません。 ``text`` 型のフィールドでソートすると ``400`` になります。
+     - ``query.additional.sort.fields``
+   * - 範囲検索
+     - 数値型（または日付型）のフィールド。文字列のフィールドでは境界が文字列として比較され、
+       ``price:[1000 TO 5000]`` が ``120000`` にも一致します。エラーは出ません。
+     - ``query.additional.search.fields`` 。ここに無いフィールドは範囲検索になりません。
+
+CSV、JSON、データベースから読んだ値は、スクリプトで変換しない限り文字列です。ソートや範囲検索に
+使う値は変換してください。15.9 で作成したデータストア設定の既定である JavaScript エンジン
+（ ``script_type=javascript`` ）では次のようにします::
+
+    url="https://example.com/product/" + id
+    title=name
+    content=description
+    category=category
+    price=parseInt(price, 10)
+
+そのうえで ``fess_config.properties`` にフィールドを追加し、 |Fess| を再起動します::
+
+    query.additional.search.fields=price
+    query.additional.facet.fields=category.keyword
+    query.additional.sort.fields=price
+
+これで検索 API からフィールドを使えます::
+
+    $ curl -G http://localhost:8080/api/v2/search --data-urlencode 'q=price:[1000 TO 5000]' \
+        --data-urlencode 'facet.field=category.keyword' --data-urlencode 'sort=price.desc'
+
+.. note::
+
+   フィールドの型は、そのフィールドを持つ最初の文書を登録したときに決まります。すでに文字列として
+   登録したフィールドは、スクリプトで変換しても型が変わりません。変換した値を新しいフィールド名
+   （例: ``price_num`` ）で登録するか、インデックスを作り直してください。
+
+.. note::
+
+   |Fess| に同梱の検索画面（静的テーマ ``bootstrap`` ）が表示するファセットは ``label`` （と
+   ``query.facet.queries`` のファセットクエリー）だけで、ソートのメニューにも標準のフィールドしか
+   ありません。ほかのフィールドのファセットは、API または独自のテーマで使ってください。範囲検索と、
+   検索ボックスに ``sort:price.desc`` と書いたソートは、検索画面でも使えます。
+
 類似ドキュメントの折りたたみ(collapse)
 ================================
 
@@ -358,6 +427,9 @@ JSON形式のAPI検索時に、OpenSearchへ渡すプリファレンス(検索�
     query.facet.fields.min_doc_count=1
     query.facet.fields.sort=count.desc
     query.facet.fields.missing=
+
+|Fess| に同梱の検索画面は、 ``query.facet.fields`` の値にかかわらず ``label`` のファセットだけを要求します。
+:ref:`search-custom-field-facet-sort-range` を参照してください。
 
 検索結果をGSA互換のXML形式で取得する際の設定
 ===================================
