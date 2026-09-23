@@ -33,6 +33,12 @@
      - 検索ログやクリックログなど（ ``fess_log.search_log`` 、 ``fess_log.click_log`` 、 ``fess_log.favorite_log`` 、 ``fess_log.user_info`` 、 ``fess_log.notification_queue`` ）
    * - ``fess_crawler.*``
      - クロール処理中に使用される一時インデックス（ ``fess_crawler.queue`` 、 ``fess_crawler.data`` 、 ``fess_crawler.filter`` ）。クロール完了後は不要なため、通常はバックアップ対象に含める必要はありません。
+   * - ``configsync``
+     - 辞書ファイル（同義語、ストップワード、マッピングなど）の内容。OpenSearch の configsync プラグインが管理し、OpenSearch の ``config/dictionary`` 配下のファイルへ書き出します。検索対象ドキュメントのインデックスやサジェスト用のインデックスはこれらのファイルを参照しているため、必ずバックアップ対象に含めてください。
+
+.. warning::
+   スナップショットに含まれるのはインデックスだけで、OpenSearch の ``config/dictionary`` 配下の辞書ファイルそのものは含まれません。
+   ``configsync`` インデックスをバックアップしていないと、新しい OpenSearch へリストアしたときに辞書ファイルが存在せず、 ``fess.{タイムスタンプ}`` と ``fess_suggest_analyzer`` が ``IOException while reading ..._path: file not readable`` で開けません（クラスタの状態が red になります）。
 
 インデックスのバックアップとリストア
 ====================================
@@ -106,13 +112,13 @@ S3をバックアップ先とする場合は、``repository-s3`` プラグイン
 特定のインデックスのバックアップ
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-特定のインデックスのみをバックアップします。以下は、|Fess| 関連のインデックス（ ``fess`` で始まるインデックス）のみを対象とする例です。
+特定のインデックスのみをバックアップします。以下は、|Fess| 関連のインデックス（ ``fess`` で始まるインデックス）と、辞書ファイルを保持する ``configsync`` インデックスを対象とする例です。 ``configsync`` を省くと、辞書ファイルを復元できません。
 
 ::
 
     curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess*",
+      "indices": "fess*,configsync",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
@@ -154,14 +160,48 @@ cronなどを使用して、定期的にバックアップを実行できます�
 全インデックスのリストア
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+先に ``configsync`` インデックスをリストアして辞書ファイルを書き出し、その後で |Fess| のインデックス（ ``fess*`` ）をリストアします。リストアは |Fess| を停止した状態で実行してください。
+
+``"indices": "*"`` で一度にリストアすることはできません。OpenSearch は起動時に ``configsync`` などのインデックスを自身で作成するため、新しい OpenSearch に対しても ``cannot restore index [configsync] because an open index with same name already exists in the cluster`` で失敗します。
+また、 ``fess*`` だけをリストアすると辞書ファイルが存在しないため、 ``fess.{タイムスタンプ}`` と ``fess_suggest_analyzer`` が開けずクラスタが red になり、そのまま |Fess| を起動しても起動に失敗します（すべてのページが 404 になります）。
+
+1. configsync プラグインが起動時に作成した空の ``configsync`` インデックスを削除し、スナップショットから ``configsync`` をリストアします。
+
+::
+
+    curl -X DELETE "localhost:9200/configsync"
+
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    {
+      "indices": "configsync",
+      "include_global_state": false
+    }'
+
+2. リストアした辞書の内容を OpenSearch の ``config/dictionary`` 配下へ書き出します。
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+
+3. |Fess| のインデックスをリストアします。
+
 ::
 
     curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "*",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
+
+4. クラスタの状態が ``green`` （レプリカを割り当てられない構成では ``yellow`` ）になったことを確認してから、 |Fess| を起動します。
+
+::
+
+    curl -X GET "localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&pretty"
+
+.. note::
+   稼働中のクラスタへ同じ名前のままリストアし直す場合は、リストアするインデックスがオープン状態だと失敗します。手順 3 の前に、対象のインデックスをクローズ（ ``_close`` ）してください。
 
 特定のインデックスのリストア
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +351,9 @@ OpenSearch のインデックスとは別に、以下の設定ファイルもバ
 4. **インデックスのリストア**
 
    - スナップショットリポジトリを設定します。
-   - スナップショットからインデックスをリストアします。
+   - 「全インデックスのリストア」の手順に従い、 ``configsync`` をリストアして辞書ファイルを書き出してから、 |Fess| のインデックスをリストアします。
    - リストア後、 ``fess.search`` および ``fess.update`` エイリアスがリストアしたインデックスを指しているか確認します。
+   - クラスタの状態が ``green`` （または ``yellow`` ）であることを確認します。 ``red`` のまま |Fess| を起動すると、 |Fess| は起動に失敗します。
 
 5. **動作確認**
 
@@ -346,6 +387,35 @@ OpenSearch のインデックスとは別に、以下の設定ファイルもバ
 1. 同名のインデックスが既に存在していないか確認してください。OpenSearch では、オープン状態の同名インデックスへはリストアできません。リストア前に対象のインデックスをクローズ（ ``_close`` ）または削除するか、 ``rename_pattern`` で別名にリストアしてください。
 2. OpenSearch のバージョンが互換性のあるものか確認してください。
 3. スナップショットが破損していないか確認してください。
+
+リストア後にクラスタが red になる
+---------------------------------
+
+``fess*`` をリストアした後にクラスタの状態が ``red`` になり、次のような状態になる場合は、辞書ファイルがありません。
+
+- ``_cluster/allocation/explain`` に ``IOException while reading mappings_path: file not readable`` （ ``keywords_path`` などの場合もあります）が出ている
+- |Fess| を起動すると ``fess.log`` に ``Failed to initialize Lasta Di`` （ ``SuggestHelper`` の ``init`` での ``NullPointerException`` ）が出て、すべてのページが 404 になる
+
+``_cluster/reroute?retry_failed=true`` を実行しても、また辞書ファイルを配置しただけでも回復しません。リストアに失敗したシャードは、そのインデックスをクローズまたは削除して、もう一度リストアするまで割り当てられないためです。次の手順で回復します。
+
+1. 「全インデックスのリストア」の手順 1 と 2 に従い、 ``configsync`` をリストアして辞書ファイルを書き出します。
+2. ``red`` のインデックスを確認します。
+
+   ::
+
+       curl -X GET "localhost:9200/_cat/indices?v&health=red"
+
+3. ``red`` のインデックスをクローズし、スナップショットからもう一度リストアします（インデックス名は実際のものに置き換えてください）。
+
+   ::
+
+       curl -X POST "localhost:9200/fess.20250101000000000,fess_suggest_analyzer/_close"
+
+       curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+       {
+         "indices": "fess.20250101000000000,fess_suggest_analyzer",
+         "include_global_state": false
+       }'
 
 リストア後に検索できない
 ------------------------

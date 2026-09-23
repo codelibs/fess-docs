@@ -33,6 +33,12 @@ Index-Struktur
      - Such- und Klickprotokolle sowie weitere Protokolle (``fess_log.search_log``, ``fess_log.click_log``, ``fess_log.favorite_log``, ``fess_log.user_info``, ``fess_log.notification_queue``)
    * - ``fess_crawler.*``
      - Temporäre Indizes, die während der Crawl-Verarbeitung verwendet werden (``fess_crawler.queue``, ``fess_crawler.data``, ``fess_crawler.filter``). Da diese nach Abschluss des Crawlings nicht mehr benötigt werden, müssen sie normalerweise nicht in das Backup einbezogen werden.
+   * - ``configsync``
+     - Inhalt der Wörterbuchdateien (Synonyme, Stoppwörter, Mappings usw.). Wird vom OpenSearch-Plugin configsync verwaltet, das ihn als Dateien unter ``config/dictionary`` von OpenSearch ausschreibt. Der Index für Suchdokumente und die Suggest-Indizes verweisen auf diese Dateien; nehmen Sie diesen Index daher immer in die Sicherung auf.
+
+.. warning::
+   Ein Snapshot enthält nur Indizes, nicht die Wörterbuchdateien unter ``config/dictionary`` von OpenSearch.
+   Wurde der Index ``configsync`` nicht gesichert, fehlen die Wörterbuchdateien bei der Wiederherstellung in ein neues OpenSearch, und ``fess.{Zeitstempel}`` sowie ``fess_suggest_analyzer`` können wegen ``IOException while reading ..._path: file not readable`` nicht geöffnet werden (der Clusterstatus wird red).
 
 Index-Backup und -Wiederherstellung
 =====================================
@@ -106,13 +112,13 @@ Alle Indizes sichern.
 Backup bestimmter Indizes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Nur bestimmte Indizes sichern. Das folgende Beispiel bezieht sich ausschließlich auf |Fess|-bezogene Indizes (Indizes, die mit ``fess`` beginnen).
+Nur bestimmte Indizes sichern. Das folgende Beispiel bezieht sich auf die |Fess|-bezogenen Indizes (Indizes, die mit ``fess`` beginnen) und den Index ``configsync``, der die Wörterbuchdateien enthält. Ohne ``configsync`` lassen sich die Wörterbuchdateien nicht wiederherstellen.
 
 ::
 
     curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess*",
+      "indices": "fess*,configsync",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
@@ -154,14 +160,48 @@ Wiederherstellung aus Snapshot
 Wiederherstellung aller Indizes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Stellen Sie zuerst den Index ``configsync`` wieder her und schreiben Sie die Wörterbuchdateien aus; stellen Sie danach die |Fess|-Indizes (``fess*``) wieder her. Führen Sie die Wiederherstellung bei gestopptem |Fess| aus.
+
+Eine Wiederherstellung aller Indizes auf einmal mit ``"indices": "*"`` ist nicht möglich. OpenSearch legt Indizes wie ``configsync`` beim Start selbst an, daher schlägt die Wiederherstellung auch auf einem neuen OpenSearch mit ``cannot restore index [configsync] because an open index with same name already exists in the cluster`` fehl.
+Nur ``fess*`` wiederherzustellen genügt ebenfalls nicht: Ohne die Wörterbuchdateien können ``fess.{Zeitstempel}`` und ``fess_suggest_analyzer`` nicht geöffnet werden, der Cluster wird red, und ein dagegen gestartetes |Fess| startet nicht (jede Seite liefert 404).
+
+1. Löschen Sie den leeren Index ``configsync``, den das configsync-Plugin beim Start angelegt hat, und stellen Sie ``configsync`` aus dem Snapshot wieder her.
+
+::
+
+    curl -X DELETE "localhost:9200/configsync"
+
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    {
+      "indices": "configsync",
+      "include_global_state": false
+    }'
+
+2. Schreiben Sie die wiederhergestellten Wörterbücher nach ``config/dictionary`` von OpenSearch aus.
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+
+3. Stellen Sie die |Fess|-Indizes wieder her.
+
 ::
 
     curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "*",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
+
+4. Vergewissern Sie sich, dass der Clusterstatus ``green`` ist (``yellow``, wenn Replikate nicht zugewiesen werden können), und starten Sie dann |Fess|.
+
+::
+
+    curl -X GET "localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&pretty"
+
+.. note::
+   Wenn Sie in einem laufenden Cluster unter denselben Indexnamen wiederherstellen, schlägt die Wiederherstellung für jeden geöffneten Index fehl. Schließen Sie die Zielindizes (``_close``) vor Schritt 3.
 
 Wiederherstellung bestimmter Indizes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +351,9 @@ Migrationsverfahren in eine andere Umgebung
 4. **Indizes wiederherstellen**
 
    - Konfigurieren Sie das Snapshot-Repository.
-   - Stellen Sie die Indizes aus dem Snapshot wieder her.
+   - Stellen Sie gemäß „Wiederherstellung aller Indizes“ zuerst ``configsync`` wieder her und schreiben Sie die Wörterbuchdateien aus; stellen Sie danach die |Fess|-Indizes wieder her.
    - Vergewissern Sie sich nach der Wiederherstellung, dass die Aliase ``fess.search`` und ``fess.update`` auf den wiederhergestellten Index zeigen.
+   - Vergewissern Sie sich, dass der Clusterstatus ``green`` (oder ``yellow``) ist. Wird |Fess| bei Clusterstatus ``red`` gestartet, schlägt der Start fehl.
 
 5. **Funktionstest**
 
@@ -346,6 +387,35 @@ Wiederherstellung schlägt fehl
 1. Überprüfen Sie, ob bereits ein Index mit demselben Namen vorhanden ist. In OpenSearch kann keine Wiederherstellung auf einen geöffneten Index mit demselben Namen durchgeführt werden. Schließen Sie den betreffenden Index vor der Wiederherstellung (``_close``) oder löschen Sie ihn, oder stellen Sie ihn über ``rename_pattern`` unter einem anderen Namen wieder her.
 2. Überprüfen Sie, ob die OpenSearch-Version kompatibel ist.
 3. Überprüfen Sie, ob der Snapshot beschädigt ist.
+
+Cluster ist nach der Wiederherstellung red
+------------------------------------------
+
+Wenn der Clusterstatus nach der Wiederherstellung von ``fess*`` ``red`` ist und Folgendes auftritt, fehlen die Wörterbuchdateien.
+
+- ``_cluster/allocation/explain`` meldet ``IOException while reading mappings_path: file not readable`` (oder ``keywords_path`` usw.)
+- Beim Start von |Fess| zeigt ``fess.log`` ``Failed to initialize Lasta Di`` (eine ``NullPointerException`` in ``init`` von ``SuggestHelper``), und jede Seite liefert 404
+
+Weder ``_cluster/reroute?retry_failed=true`` noch das Bereitstellen der Wörterbuchdateien behebt das: Ein Shard, dessen Wiederherstellung fehlgeschlagen ist, wird erst wieder zugewiesen, wenn sein Index geschlossen oder gelöscht und erneut wiederhergestellt wird. Gehen Sie wie folgt vor.
+
+1. Folgen Sie den Schritten 1 und 2 unter „Wiederherstellung aller Indizes“, um ``configsync`` wiederherzustellen und die Wörterbuchdateien auszuschreiben.
+2. Listen Sie die Indizes mit Status ``red`` auf.
+
+   ::
+
+       curl -X GET "localhost:9200/_cat/indices?v&health=red"
+
+3. Schließen Sie die Indizes mit Status ``red`` und stellen Sie sie erneut aus dem Snapshot wieder her (ersetzen Sie die Indexnamen durch die tatsächlichen).
+
+   ::
+
+       curl -X POST "localhost:9200/fess.20250101000000000,fess_suggest_analyzer/_close"
+
+       curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+       {
+         "indices": "fess.20250101000000000,fess_suggest_analyzer",
+         "include_global_state": false
+       }'
 
 Nach der Wiederherstellung ist keine Suche möglich
 ----------------------------------------------------

@@ -33,6 +33,12 @@ Index Structure
      - Search logs, click logs, etc. (``fess_log.search_log``, ``fess_log.click_log``, ``fess_log.favorite_log``, ``fess_log.user_info``, ``fess_log.notification_queue``)
    * - ``fess_crawler.*``
      - Temporary indexes used during crawling (``fess_crawler.queue``, ``fess_crawler.data``, ``fess_crawler.filter``). These are not needed after crawling completes and generally do not need to be included in backups.
+   * - ``configsync``
+     - Contents of the dictionary files (synonyms, stopwords, mappings, etc.). Managed by the OpenSearch configsync plugin, which writes them out as files under OpenSearch's ``config/dictionary``. The search document index and the suggest indexes refer to these files, so always include this index in backups.
+
+.. warning::
+   A snapshot contains indexes only; it does not contain the dictionary files under OpenSearch's ``config/dictionary``.
+   If the ``configsync`` index is not backed up, the dictionary files do not exist when you restore onto a new OpenSearch, and ``fess.{timestamp}`` and ``fess_suggest_analyzer`` cannot be opened with ``IOException while reading ..._path: file not readable`` (the cluster status becomes red).
 
 Index Backup and Restore
 =========================
@@ -106,13 +112,13 @@ Back up all indexes.
 Backing Up Specific Indexes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Back up only specific indexes. The following example targets only |Fess|-related indexes (indexes starting with ``fess``).
+Back up only specific indexes. The following example targets the |Fess|-related indexes (indexes starting with ``fess``) and the ``configsync`` index that holds the dictionary files. Without ``configsync``, the dictionary files cannot be restored.
 
 ::
 
     curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess*",
+      "indices": "fess*,configsync",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
@@ -154,14 +160,48 @@ Restoring from Snapshots
 Restoring All Indexes
 ~~~~~~~~~~~~~~~~~~~~~~
 
+Restore the ``configsync`` index and write out the dictionary files first, then restore the |Fess| indexes (``fess*``). Run the restore while |Fess| is stopped.
+
+You cannot restore everything at once with ``"indices": "*"``. OpenSearch creates indexes such as ``configsync`` itself at startup, so even on a new OpenSearch the restore fails with ``cannot restore index [configsync] because an open index with same name already exists in the cluster``.
+Restoring only ``fess*`` does not work either: without the dictionary files, ``fess.{timestamp}`` and ``fess_suggest_analyzer`` cannot be opened, the cluster turns red, and |Fess| started against it fails to start (every page returns 404).
+
+1. Delete the empty ``configsync`` index that the configsync plugin created at startup, and restore ``configsync`` from the snapshot.
+
+::
+
+    curl -X DELETE "localhost:9200/configsync"
+
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    {
+      "indices": "configsync",
+      "include_global_state": false
+    }'
+
+2. Write the restored dictionaries out to OpenSearch's ``config/dictionary``.
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+
+3. Restore the |Fess| indexes.
+
 ::
 
     curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "*",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
+
+4. Confirm that the cluster status is ``green`` (``yellow`` if replicas cannot be allocated), then start |Fess|.
+
+::
+
+    curl -X GET "localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&pretty"
+
+.. note::
+   When restoring over the same index names on a running cluster, the restore fails for any index that is open. Close (``_close``) the target indexes before step 3.
 
 Restoring Specific Indexes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +351,9 @@ Migration Procedure to a Different Environment
 4. **Restore Indexes**
 
    - Configure the snapshot repository.
-   - Restore indexes from the snapshot.
+   - Following "Restoring All Indexes", restore ``configsync`` and write out the dictionary files, then restore the |Fess| indexes.
    - After restoring, verify that the ``fess.search`` and ``fess.update`` aliases point to the restored index.
+   - Verify that the cluster status is ``green`` (or ``yellow``). If |Fess| is started while the cluster is ``red``, it fails to start.
 
 5. **Verify Operation**
 
@@ -346,6 +387,35 @@ Restore Fails
 1. Verify that an index with the same name does not already exist. In OpenSearch, you cannot restore to an open index with the same name. Before restoring, either close (``_close``) or delete the target index, or restore under a different name using ``rename_pattern``.
 2. Verify that the OpenSearch version is compatible.
 3. Verify that the snapshot is not corrupted.
+
+Cluster Is Red After Restore
+----------------------------
+
+If the cluster status is ``red`` after restoring ``fess*`` and you see the following, the dictionary files are missing.
+
+- ``_cluster/allocation/explain`` reports ``IOException while reading mappings_path: file not readable`` (or ``keywords_path`` and so on)
+- When |Fess| starts, ``fess.log`` shows ``Failed to initialize Lasta Di`` (a ``NullPointerException`` in ``SuggestHelper`` ``init``) and every page returns 404
+
+Neither ``_cluster/reroute?retry_failed=true`` nor putting the dictionary files in place recovers it: a shard that failed to restore is not allocated again until its index is closed or deleted and restored once more. Recover as follows.
+
+1. Follow steps 1 and 2 of "Restoring All Indexes" to restore ``configsync`` and write out the dictionary files.
+2. List the ``red`` indexes.
+
+   ::
+
+       curl -X GET "localhost:9200/_cat/indices?v&health=red"
+
+3. Close the ``red`` indexes and restore them from the snapshot again (replace the index names with the actual ones).
+
+   ::
+
+       curl -X POST "localhost:9200/fess.20250101000000000,fess_suggest_analyzer/_close"
+
+       curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+       {
+         "indices": "fess.20250101000000000,fess_suggest_analyzer",
+         "include_global_state": false
+       }'
 
 Cannot Search After Restore
 ----------------------------

@@ -33,6 +33,12 @@
      - 搜索日志及点击日志等（``fess_log.search_log``、``fess_log.click_log``、``fess_log.favorite_log``、``fess_log.user_info``、``fess_log.notification_queue``）
    * - ``fess_crawler.*``
      - 爬取过程中使用的临时索引（``fess_crawler.queue``、``fess_crawler.data``、``fess_crawler.filter``）。爬取完成后不再需要，通常无需纳入备份范围。
+   * - ``configsync``
+     - 词典文件（同义词、停用词、映射等）的内容。由 OpenSearch 的 configsync 插件管理，并以文件形式写出到 OpenSearch 的 ``config/dictionary`` 下。搜索文档索引和建议（Suggest）索引引用这些文件，因此请务必将此索引纳入备份。
+
+.. warning::
+   快照只包含索引，不包含 OpenSearch ``config/dictionary`` 下的词典文件本身。
+   如果未备份 ``configsync`` 索引，恢复到新的 OpenSearch 时词典文件不存在， ``fess.{时间戳}`` 和 ``fess_suggest_analyzer`` 会因 ``IOException while reading ..._path: file not readable`` 而无法打开（集群状态变为 red）。
 
 索引备份与恢复
 ====================================
@@ -106,13 +112,13 @@
 备份特定索引
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-仅备份特定索引。以下是仅针对 |Fess| 相关索引（以 ``fess`` 开头的索引）的示例。
+仅备份特定索引。以下是针对 |Fess| 相关索引（以 ``fess`` 开头的索引）以及保存词典文件的 ``configsync`` 索引的示例。若省略 ``configsync``，将无法恢复词典文件。
 
 ::
 
     curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess*",
+      "indices": "fess*,configsync",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
@@ -154,14 +160,48 @@
 恢复所有索引
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+请先恢复 ``configsync`` 索引并写出词典文件，然后再恢复 |Fess| 的索引（``fess*``）。请在 |Fess| 停止的状态下执行恢复。
+
+无法使用 ``"indices": "*"`` 一次性恢复。OpenSearch 启动时会自行创建 ``configsync`` 等索引，因此即使是新的 OpenSearch，恢复也会以 ``cannot restore index [configsync] because an open index with same name already exists in the cluster`` 失败。
+另外，如果只恢复 ``fess*``，由于词典文件不存在， ``fess.{时间戳}`` 和 ``fess_suggest_analyzer`` 无法打开，集群变为 red，此时启动 |Fess| 也会启动失败（所有页面都返回 404）。
+
+1. 删除 configsync 插件启动时创建的空 ``configsync`` 索引，然后从快照恢复 ``configsync``。
+
+::
+
+    curl -X DELETE "localhost:9200/configsync"
+
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    {
+      "indices": "configsync",
+      "include_global_state": false
+    }'
+
+2. 将恢复的词典内容写出到 OpenSearch 的 ``config/dictionary`` 下。
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+
+3. 恢复 |Fess| 的索引。
+
 ::
 
     curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "*",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
+
+4. 确认集群状态变为 ``green`` （无法分配副本的配置下为 ``yellow`` ）后，再启动 |Fess|。
+
+::
+
+    curl -X GET "localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&pretty"
+
+.. note::
+   在运行中的集群上以相同名称重新恢复时，如果要恢复的索引处于打开状态则会失败。请在步骤 3 之前关闭（``_close``）目标索引。
 
 恢复特定索引
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +351,9 @@
 4. **恢复索引**
 
    - 配置快照仓库。
-   - 从快照恢复索引。
+   - 按照“恢复所有索引”的步骤，先恢复 ``configsync`` 并写出词典文件，然后再恢复 |Fess| 的索引。
    - 恢复后，确认 ``fess.search`` 和 ``fess.update`` 别名是否指向已恢复的索引。
+   - 确认集群状态为 ``green`` （或 ``yellow`` ）。如果在 ``red`` 状态下启动 |Fess|，将启动失败。
 
 5. **运行确认**
 
@@ -346,6 +387,35 @@
 1. 请确认是否已存在同名索引。OpenSearch 无法恢复至已处于打开状态的同名索引。请在恢复前关闭（``_close``）或删除目标索引，或使用 ``rename_pattern`` 以其他名称恢复。
 2. 请确认 OpenSearch 版本是否兼容。
 3. 请确认快照是否损坏。
+
+恢复后集群变为 red
+------------------
+
+如果在恢复 ``fess*`` 后集群状态变为 ``red``，并出现以下情况，说明缺少词典文件。
+
+- ``_cluster/allocation/explain`` 中出现 ``IOException while reading mappings_path: file not readable`` （也可能是 ``keywords_path`` 等）
+- 启动 |Fess| 时， ``fess.log`` 中出现 ``Failed to initialize Lasta Di`` （``SuggestHelper`` 的 ``init`` 中的 ``NullPointerException``），所有页面都返回 404
+
+执行 ``_cluster/reroute?retry_failed=true`` 或仅放置词典文件都无法恢复。恢复失败的分片在其索引被关闭或删除并重新恢复之前不会被分配。请按以下步骤恢复。
+
+1. 按照“恢复所有索引”的步骤 1 和 2，恢复 ``configsync`` 并写出词典文件。
+2. 确认 ``red`` 状态的索引。
+
+   ::
+
+       curl -X GET "localhost:9200/_cat/indices?v&health=red"
+
+3. 关闭 ``red`` 状态的索引，并从快照重新恢复（请将索引名替换为实际名称）。
+
+   ::
+
+       curl -X POST "localhost:9200/fess.20250101000000000,fess_suggest_analyzer/_close"
+
+       curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+       {
+         "indices": "fess.20250101000000000,fess_suggest_analyzer",
+         "include_global_state": false
+       }'
 
 恢复后无法搜索
 ------------------------

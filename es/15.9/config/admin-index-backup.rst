@@ -33,6 +33,12 @@ Estructura de Índices
      - Registros de búsqueda, clics y otros (``fess_log.search_log``, ``fess_log.click_log``, ``fess_log.favorite_log``, ``fess_log.user_info``, ``fess_log.notification_queue``)
    * - ``fess_crawler.*``
      - Índices temporales utilizados durante el proceso de rastreo (``fess_crawler.queue``, ``fess_crawler.data``, ``fess_crawler.filter``). No son necesarios una vez completado el rastreo, por lo que normalmente no es preciso incluirlos en el respaldo.
+   * - ``configsync``
+     - Contenido de los archivos de diccionario (sinónimos, palabras vacías, mapeos, etc.). Lo gestiona el plugin configsync de OpenSearch, que lo escribe como archivos en ``config/dictionary`` de OpenSearch. El índice de documentos de búsqueda y los índices de sugerencias hacen referencia a estos archivos, por lo que debe incluir siempre este índice en las copias de seguridad.
+
+.. warning::
+   Una instantánea contiene solo índices; no contiene los archivos de diccionario de ``config/dictionary`` de OpenSearch.
+   Si no se respalda el índice ``configsync``, los archivos de diccionario no existen al restaurar en un OpenSearch nuevo, y ``fess.{marca_de_tiempo}`` y ``fess_suggest_analyzer`` no se pueden abrir por ``IOException while reading ..._path: file not readable`` (el estado del clúster pasa a red).
 
 Respaldo y Restauración de Índices
 ====================================
@@ -106,13 +112,13 @@ Respalda todos los índices.
 Respaldo de Índices Específicos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Respalda solo índices específicos. El siguiente es un ejemplo que tiene como objetivo únicamente los índices relacionados con |Fess| (índices que comienzan con ``fess``).
+Respalda solo índices específicos. El siguiente es un ejemplo que tiene como objetivo los índices relacionados con |Fess| (índices que comienzan con ``fess``) y el índice ``configsync``, que contiene los archivos de diccionario. Sin ``configsync``, los archivos de diccionario no se pueden restaurar.
 
 ::
 
     curl -X PUT "localhost:9200/_snapshot/fess_backup/snapshot_fess_only?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "fess*",
+      "indices": "fess*,configsync",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
@@ -154,14 +160,48 @@ Restauración desde Instantáneas
 Restauración de Todos los Índices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Restaure primero el índice ``configsync`` y escriba los archivos de diccionario; después, restaure los índices de |Fess| (``fess*``). Realice la restauración con |Fess| detenido.
+
+No es posible restaurar todo de una vez con ``"indices": "*"``. OpenSearch crea por sí mismo índices como ``configsync`` al iniciarse, por lo que incluso en un OpenSearch nuevo la restauración falla con ``cannot restore index [configsync] because an open index with same name already exists in the cluster``.
+Tampoco basta con restaurar solo ``fess*``: sin los archivos de diccionario, ``fess.{marca_de_tiempo}`` y ``fess_suggest_analyzer`` no se pueden abrir, el clúster pasa a red y |Fess| no logra iniciarse contra él (todas las páginas devuelven 404).
+
+1. Elimine el índice ``configsync`` vacío que el plugin configsync creó al iniciarse y restaure ``configsync`` desde la instantánea.
+
+::
+
+    curl -X DELETE "localhost:9200/configsync"
+
+    curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+    {
+      "indices": "configsync",
+      "include_global_state": false
+    }'
+
+2. Escriba los diccionarios restaurados en ``config/dictionary`` de OpenSearch.
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+
+3. Restaure los índices de |Fess|.
+
 ::
 
     curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
     {
-      "indices": "*",
+      "indices": "fess*",
       "ignore_unavailable": true,
       "include_global_state": false
     }'
+
+4. Confirme que el estado del clúster es ``green`` (``yellow`` si no se pueden asignar réplicas) y, a continuación, inicie |Fess|.
+
+::
+
+    curl -X GET "localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&pretty"
+
+.. note::
+   Si restaura sobre los mismos nombres de índice en un clúster en funcionamiento, la restauración falla para cualquier índice abierto. Cierre (``_close``) los índices de destino antes del paso 3.
 
 Restauración de Índices Específicos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +351,9 @@ Procedimiento de Migración a Otro Entorno
 4. **Restauración de índices**
 
    - Configure el repositorio de instantáneas.
-   - Restaure los índices desde la instantánea.
+   - Siguiendo «Restauración de Todos los Índices», restaure ``configsync`` y escriba los archivos de diccionario; después, restaure los índices de |Fess|.
    - Tras la restauración, verifique que los alias ``fess.search`` y ``fess.update`` apunten al índice restaurado.
+   - Verifique que el estado del clúster es ``green`` (o ``yellow``). Si inicia |Fess| con el clúster en ``red``, no logra iniciarse.
 
 5. **Verificación de funcionamiento**
 
@@ -346,6 +387,35 @@ Falla en la Restauración
 1. Verifique que no exista ya un índice con el mismo nombre. En OpenSearch no es posible restaurar sobre un índice con el mismo nombre que esté abierto. Antes de restaurar, cierre (``_close``) o elimine el índice en cuestión, o bien restáurelo con un nombre diferente mediante ``rename_pattern``.
 2. Confirme que la versión de OpenSearch sea compatible.
 3. Verifique que la instantánea no esté dañada.
+
+El Clúster Queda en Red Después de la Restauración
+--------------------------------------------------
+
+Si el estado del clúster es ``red`` después de restaurar ``fess*`` y observa lo siguiente, faltan los archivos de diccionario.
+
+- ``_cluster/allocation/explain`` informa ``IOException while reading mappings_path: file not readable`` (o ``keywords_path``, etc.)
+- Al iniciar |Fess|, ``fess.log`` muestra ``Failed to initialize Lasta Di`` (una ``NullPointerException`` en ``init`` de ``SuggestHelper``) y todas las páginas devuelven 404
+
+Ni ``_cluster/reroute?retry_failed=true`` ni colocar los archivos de diccionario lo resuelven: un shard cuya restauración falló no se vuelve a asignar hasta que su índice se cierra o se elimina y se restaura de nuevo. Recupérelo de la siguiente manera.
+
+1. Siga los pasos 1 y 2 de «Restauración de Todos los Índices» para restaurar ``configsync`` y escribir los archivos de diccionario.
+2. Liste los índices en estado ``red``.
+
+   ::
+
+       curl -X GET "localhost:9200/_cat/indices?v&health=red"
+
+3. Cierre los índices en estado ``red`` y restáurelos de nuevo desde la instantánea (reemplace los nombres de índice por los reales).
+
+   ::
+
+       curl -X POST "localhost:9200/fess.20250101000000000,fess_suggest_analyzer/_close"
+
+       curl -X POST "localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" -H 'Content-Type: application/json' -d'
+       {
+         "indices": "fess.20250101000000000,fess_suggest_analyzer",
+         "include_global_state": false
+       }'
 
 No es Posible Buscar Después de la Restauración
 -------------------------------------------------
