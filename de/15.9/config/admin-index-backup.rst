@@ -177,11 +177,16 @@ Nur ``fess*`` wiederherzustellen genügt ebenfalls nicht: Ohne die Wörterbuchda
       "include_global_state": false
     }'
 
-2. Schreiben Sie die wiederhergestellten Wörterbücher nach ``config/dictionary`` von OpenSearch aus.
+2. Starten Sie OpenSearch neu (in einem Cluster mit mehreren Knoten alle Knoten). Sobald der Index ``configsync`` verfügbar ist, schreiben Sie die wiederhergestellten Wörterbücher nach ``config/dictionary`` von OpenSearch aus.
 
 ::
 
+    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
+
     curl -X POST "localhost:9200/_configsync/flush"
+
+.. note::
+   Mit dem configsync-Plugin 3.8.0 und älter schreibt ``_configsync/flush`` nur die Dateien aus, die registriert wurden, nachdem der Knoten zuletzt einen Schreibvorgang (planmäßig oder ``_configsync/flush``) gestartet hat. Die wiederhergestellten ``configsync``-Dateien tragen den Zeitpunkt, zu dem sie auf dem Cluster registriert wurden, von dem der Snapshot stammt. Sobald der erste planmäßige Schreibvorgang etwa eine Minute nach dem Start von OpenSearch gelaufen ist, schreibt ``_configsync/flush`` ohne Neustart daher keine Wörterbuchdateien aus, und der Cluster wird nach Schritt 3 red. Ein Neustart setzt diesen Zeitpunkt zurück, sodass ``_configsync/flush`` nach dem Neustart alle Wörterbuchdateien ausschreibt. Für jede ausgeschriebene Datei protokolliert OpenSearch ``Updated {Dateipfad}`` von ``ConfigSyncService``.
 
 3. Stellen Sie die |Fess|-Indizes wieder her.
 
@@ -398,7 +403,7 @@ Wenn der Clusterstatus nach der Wiederherstellung von ``fess*`` ``red`` ist und 
 
 Weder ``_cluster/reroute?retry_failed=true`` noch das Bereitstellen der Wörterbuchdateien behebt das: Ein Shard, dessen Wiederherstellung fehlgeschlagen ist, wird erst wieder zugewiesen, wenn sein Index geschlossen oder gelöscht und erneut wiederhergestellt wird. Gehen Sie wie folgt vor.
 
-1. Folgen Sie den Schritten 1 und 2 unter „Wiederherstellung aller Indizes“, um ``configsync`` wiederherzustellen und die Wörterbuchdateien auszuschreiben.
+1. Folgen Sie den Schritten 1 und 2 unter „Wiederherstellung aller Indizes“, um ``configsync`` wiederherzustellen, OpenSearch neu zu starten und die Wörterbuchdateien auszuschreiben.
 2. Listen Sie die Indizes mit Status ``red`` auf.
 
    ::

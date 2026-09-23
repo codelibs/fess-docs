@@ -177,11 +177,16 @@ Restaurer uniquement ``fess*`` ne suffit pas non plus : sans les fichiers de dic
       "include_global_state": false
     }'
 
-2. Écrivez les dictionnaires restaurés dans ``config/dictionary`` d'OpenSearch.
+2. Redémarrez OpenSearch (tous les nœuds dans un cluster à plusieurs nœuds). Une fois l'index ``configsync`` disponible, écrivez les dictionnaires restaurés dans ``config/dictionary`` d'OpenSearch.
 
 ::
 
+    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
+
     curl -X POST "localhost:9200/_configsync/flush"
+
+.. note::
+   Avec le plugin configsync 3.8.0 et antérieur, ``_configsync/flush`` n'écrit que les fichiers enregistrés après le dernier démarrage d'une écriture par le nœud (planifiée ou ``_configsync/flush``). Les fichiers ``configsync`` restaurés conservent l'heure à laquelle ils ont été enregistrés sur le cluster d'où provient le snapshot : une fois la première écriture planifiée exécutée, environ une minute après le démarrage d'OpenSearch, ``_configsync/flush`` sans redémarrage n'écrit donc aucun fichier de dictionnaire et le cluster passe à red après l'étape 3. Le redémarrage réinitialise ce point, de sorte que ``_configsync/flush`` après le redémarrage écrit tous les fichiers de dictionnaire. Pour chaque fichier écrit, OpenSearch journalise ``Updated {chemin du fichier}`` depuis ``ConfigSyncService``.
 
 3. Restaurez les index de |Fess|.
 
@@ -398,7 +403,7 @@ Si l'état du cluster est ``red`` après la restauration de ``fess*`` et que vou
 
 Ni ``_cluster/reroute?retry_failed=true`` ni la mise en place des fichiers de dictionnaire ne suffisent : un shard dont la restauration a échoué n'est plus alloué tant que son index n'a pas été fermé ou supprimé puis restauré à nouveau. Procédez comme suit.
 
-1. Suivez les étapes 1 et 2 de « Restauration de tous les index » pour restaurer ``configsync`` et écrire les fichiers de dictionnaire.
+1. Suivez les étapes 1 et 2 de « Restauration de tous les index » pour restaurer ``configsync``, redémarrer OpenSearch et écrire les fichiers de dictionnaire.
 2. Listez les index à l'état ``red``.
 
    ::
