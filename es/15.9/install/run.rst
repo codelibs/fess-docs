@@ -321,7 +321,7 @@ Configuración del Servidor de Correo
 
 Para recibir notificaciones de fallos y mensajes similares por correo electrónico, configure el servidor SMTP y la dirección del destinatario de notificaciones.
 
-1. En el archivo de configuración ``app/WEB-INF/classes/fess_env.properties``, especifique el host y el puerto del servidor SMTP en ``mail.smtp.server.main.host.and.port`` (predeterminado: ``localhost:25``). Es necesario reiniciar |Fess| tras el cambio.
+1. En ``fess_env_web.properties`` y ``fess_env_crawler.properties``, especifique el host y el puerto del servidor SMTP en ``mail.smtp.server.main.host.and.port`` (predeterminado: ``localhost:25``). Los archivos se encuentran en ``app/WEB-INF/classes/`` en el paquete ZIP y en ``/etc/fess/`` en los paquetes RPM/DEB. El proceso web de |Fess| lee el primero, y el rastreador, que envía el correo de finalización del rastreo, lee el segundo; ``fess_env.properties`` no se utiliza. Es necesario reiniciar |Fess| tras el cambio.
 2. En la interfaz de administración, haga clic en "Sistema" → "General" en el menú izquierdo.
 3. Ingrese la dirección de correo del destinatario en el campo "Correo de notificación".
 4. Haga clic en el botón "Actualizar".

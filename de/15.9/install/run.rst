@@ -324,7 +324,7 @@ Konfiguration des Mail-Servers
 
 Um Fehlermeldungen und ähnliche Nachrichten per E-Mail zu erhalten, konfigurieren Sie den SMTP-Server und die Empfängeradresse für Benachrichtigungen.
 
-1. Geben Sie in der Konfigurationsdatei ``app/WEB-INF/classes/fess_env.properties`` den SMTP-Serverhost und -port in ``mail.smtp.server.main.host.and.port`` an (Standard: ``localhost:25``). Nach der Änderung ist ein Neustart von |Fess| erforderlich.
+1. Geben Sie in ``fess_env_web.properties`` und ``fess_env_crawler.properties`` den SMTP-Serverhost und -port in ``mail.smtp.server.main.host.and.port`` an (Standard: ``localhost:25``). Die Dateien liegen beim ZIP-Paket in ``app/WEB-INF/classes/`` und bei den RPM/DEB-Paketen in ``/etc/fess/``. Der Web-Prozess von |Fess| liest die erste, der Crawler, der die E-Mail zum Abschluss des Crawlings sendet, die zweite; ``fess_env.properties`` wird nicht verwendet. Nach der Änderung ist ein Neustart von |Fess| erforderlich.
 2. Klicken Sie in der Administrator-Oberfläche im linken Menü auf [System] → [Allgemein].
 3. Geben Sie die Empfänger-E-Mail-Adresse in das Feld [Benachrichtigungs-E-Mail] ein.
 4. Klicken Sie auf die Schaltfläche [Aktualisieren].

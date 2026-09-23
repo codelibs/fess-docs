@@ -322,7 +322,7 @@ ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``�
 
 为了通过邮件接收故障通知等消息，请配置 SMTP 服务器和通知收件人地址。
 
-1. 在配置文件 ``app/WEB-INF/classes/fess_env.properties`` 中，通过 ``mail.smtp.server.main.host.and.port``\ （默认值：``localhost:25``）指定 SMTP 服务器的主机名和端口。更改后需要重启 |Fess|\ 。
+1. 在 ``fess_env_web.properties`` 和 ``fess_env_crawler.properties`` 中，通过 ``mail.smtp.server.main.host.and.port``\ （默认值：``localhost:25``）指定 SMTP 服务器的主机名和端口。ZIP 包的这些文件位于 ``app/WEB-INF/classes/`` 中，RPM/DEB 包则位于 ``/etc/fess/`` 中。|Fess| Web 进程读取前者，发送爬取完成邮件的爬虫读取后者；不使用 ``fess_env.properties``\ 。更改后需要重启 |Fess|\ 。
 2. 在管理界面中，点击左侧菜单的 [系统] → [通用]。
 3. 在 [通知邮件] 字段输入收件人邮件地址。
 4. 点击 [更新] 按钮。

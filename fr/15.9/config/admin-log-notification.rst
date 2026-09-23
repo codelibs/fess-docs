@@ -54,6 +54,13 @@ Activation depuis l'interface d'administration
    Par défaut, seul le niveau ``ERROR`` est ciblé pour la notification.
    Si vous sélectionnez ``WARN``, les niveaux ``WARN`` et ``ERROR`` seront tous deux notifiés.
 
+.. important::
+   Un job planifié qui échoue (enregistré avec le statut ``fail`` dans le journal des jobs) est
+   journalisé au niveau ``WARN`` (``Failed to execute job: ...``), et non au niveau ``ERROR``. Avec le
+   niveau réglé sur ``ERROR``, les jobs planifiés en échec ne sont donc **pas notifiés**. Pour en être
+   notifié, réglez le niveau sur ``WARN`` ; tous les autres événements ``WARN`` sont alors également
+   notifiés.
+
 Activation via les propriétés système
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -77,11 +84,19 @@ Notification par e-mail
 
 Pour utiliser la notification par e-mail, la configuration suivante est nécessaire.
 
-1. Configuration du serveur de messagerie (``fess_env.properties``) :
+1. Configuration du serveur de messagerie :
 
    ::
 
        mail.smtp.server.main.host.and.port=smtp.example.com:587
+
+   Définissez-la dans ``fess_env_web.properties``, lu par le processus web de |Fess| qui envoie la
+   notification des journaux et l'e-mail de test des paramètres **Général**. Le crawler s'exécute
+   dans un processus distinct qui lit ``fess_env_crawler.properties`` et envoie l'e-mail de fin
+   d'exploration : définissez donc aussi la même valeur dans ce fichier. Les fichiers se trouvent dans
+   ``app/WEB-INF/classes/`` pour le paquet ZIP et dans ``/etc/fess/`` pour les paquets RPM/DEB. Une
+   valeur définie uniquement dans ``fess_env.properties`` n'est pas utilisée, car ``bin/fess`` démarre
+   |Fess| avec ``-Dlasta.env=web``. Redémarrez |Fess| après la modification.
 
 2. Dans les paramètres « Général » de l'interface d'administration, saisissez les adresses e-mail dans le champ « E-mail de notification ».
    Plusieurs adresses peuvent être séparées par des virgules.
@@ -214,7 +229,8 @@ Configuration recommandée
      - Raison
    * - Environnement de production
      - ``ERROR``
-     - Notifier uniquement les erreurs critiques et réduire le bruit
+     - Notifier uniquement les erreurs critiques et réduire le bruit. Les jobs planifiés en échec ne
+       sont pas notifiés à ce niveau ; utilisez ``WARN`` si vous en avez besoin
    * - Environnement de staging
      - ``WARN``
      - Inclure les problèmes potentiels dans les notifications
@@ -256,7 +272,9 @@ Les notifications ne sont pas envoyées
 3. **Vérifier la configuration du serveur de messagerie**
 
    Si vous utilisez la notification par e-mail, vérifiez que le serveur de messagerie est correctement
-   configuré dans ``fess_env.properties``.
+   configuré dans ``fess_env_web.properties`` (voir « Notification par e-mail » sous « Configuration »).
+   Le bouton « Envoyer un e-mail de test » des paramètres **Général** envoie un e-mail via la même
+   configuration.
 
 4. **Vérifier le job planifié**
 

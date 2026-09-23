@@ -54,6 +54,12 @@ Enabling from the Administration Screen
    By default, only ``ERROR`` level events are targeted for notification.
    If you select ``WARN``, both ``WARN`` and ``ERROR`` events will be notified.
 
+.. important::
+   A scheduled job that fails (recorded with the status ``fail`` in the job log) is logged at
+   ``WARN`` (``Failed to execute job: ...``), not at ``ERROR``. With the level set to ``ERROR``,
+   failed scheduled jobs are therefore **not notified**. To be notified of them, set the level to
+   ``WARN``; every other ``WARN`` event is then notified as well.
+
 Enabling via System Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -76,11 +82,19 @@ Email Notification
 
 To use email notification, the following configuration is required.
 
-1. Mail server configuration (``fess_env.properties``):
+1. Mail server configuration:
 
    ::
 
        mail.smtp.server.main.host.and.port=smtp.example.com:587
+
+   Set this in ``fess_env_web.properties``, which is read by the |Fess| web process that sends the
+   log notification and the test mail of the **General** settings. The crawler runs as a separate
+   process that reads ``fess_env_crawler.properties`` and sends the crawl completion mail, so set
+   the same value there as well. The files are in ``app/WEB-INF/classes/`` for the ZIP package and
+   in ``/etc/fess/`` for the RPM/DEB packages. A value set only in ``fess_env.properties`` is not
+   used, because ``bin/fess`` starts |Fess| with ``-Dlasta.env=web``. Restart |Fess| after the
+   change.
 
 2. Enter email addresses in **Notification Mail** in the **General** settings of the administration screen.
    Multiple addresses can be specified separated by commas.
@@ -213,7 +227,8 @@ Recommended Settings
      - Reason
    * - Production
      - ``ERROR``
-     - Notify only on critical errors and reduce noise
+     - Notify only on critical errors and reduce noise. Failed scheduled jobs are not notified at
+       this level; use ``WARN`` if you need them
    * - Staging
      - ``WARN``
      - Include potential issues in notifications
@@ -254,7 +269,8 @@ Notifications Are Not Being Sent
 3. **Verify mail server configuration**
 
    When using email notification, verify that the mail server is correctly configured in
-   ``fess_env.properties``.
+   ``fess_env_web.properties`` (see "Email Notification" under "Setup"). The [Send Test Mail] button in the
+   **General** settings sends a mail through the same configuration.
 
 4. **Verify the scheduled job**
 

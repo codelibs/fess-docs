@@ -323,7 +323,7 @@ ZIP 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버
 
 장애 알림 등을 메일로 수신하려면 SMTP 서버와 알림 수신 주소를 설정합니다.
 
-1. 설정 파일 ``app/WEB-INF/classes/fess_env.properties`` 의 ``mail.smtp.server.main.host.and.port`` (기본값: ``localhost:25``) 에 SMTP 서버 호스트와 포트를 지정합니다. 변경 후 |Fess| 를 재시작할 필요가 있습니다.
+1. ``fess_env_web.properties`` 와 ``fess_env_crawler.properties`` 의 ``mail.smtp.server.main.host.and.port`` (기본값: ``localhost:25``) 에 SMTP 서버 호스트와 포트를 지정합니다. 파일은 ZIP 패키지의 경우 ``app/WEB-INF/classes/`` 에, RPM/DEB 패키지의 경우 ``/etc/fess/`` 에 있습니다. 앞의 파일은 |Fess| 웹 프로세스가 읽고, 뒤의 파일은 크롤 완료 메일을 전송하는 크롤러가 읽습니다. ``fess_env.properties`` 는 사용되지 않습니다. 변경 후 |Fess| 를 재시작할 필요가 있습니다.
 2. 관리 UI에서 왼쪽 메뉴의 [시스템] → [일반] 을 클릭합니다.
 3. [알림 메일] 필드에 수신자 메일 주소를 입력합니다.
 4. [갱신] 버튼을 클릭합니다.
