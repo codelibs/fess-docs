@@ -273,7 +273,9 @@ que indexa para ese campo:
 
 - Una cadena se convierte en un campo ``text``, con un subcampo ``keyword`` llamado
   ``<field>.keyword`` (las cadenas de más de 256 caracteres no se almacenan en el subcampo).
-- Un número se convierte en un campo numérico.
+- Un número se convierte en un campo numérico: ``long`` para un número entero, ``float`` para un
+  número con decimales. El motor JavaScript entrega todos los números como valores de coma flotante,
+  por lo que un valor convertido con ``parseInt`` también se convierte en ``float``.
 
 Cada uso necesita el adecuado:
 
@@ -309,6 +311,36 @@ predeterminado para las configuraciones de almacén de datos creadas en 15.9
     category=category
     price=parseInt(price, 10)
 
+Defina un campo numérico en el mapeo del índice antes de indexar el primer documento que lo contiene.
+El tipo ``float`` que se crea en caso contrario conserva solo unas siete cifras significativas, y un
+número entero mayor que 16.777.216 puede redondearse a un valor cercano: un documento cuyo ``price`` es
+``20000001`` coincide con ``price:[20000000 TO 20000000]``, y la ordenación no puede distinguirlos.
+Use ``long`` para números enteros y ``double`` para decimales.
+
+1. Añada el campo al índice de documentos actual a través del alias ``fess.update``.
+
+   ::
+
+       $ curl -X PUT http://localhost:9200/fess.update/_mapping -H 'Content-Type: application/json' \
+           -d '{"properties":{"price":{"type":"long"}}}'
+
+2. Añada la misma definición en ``properties`` de ``app/WEB-INF/classes/fess_indices/fess/doc.json``
+   de la instalación, para que también la tenga un índice de documentos que |Fess| cree más adelante
+   (en el primer arranque con un clúster vacío, o mediante una reindexación en la página
+   :doc:`../admin/maintenance-guide`). Una actualización reemplaza ``doc.json`` por el archivo de la
+   nueva versión, así que vuelva a añadir la definición después de actualizar.
+
+   ::
+
+       "properties": {
+         "price": {
+           "type": "long"
+         },
+         "anchor": {
+           "type": "keyword"
+         },
+         ...
+
 A continuación, enumere los campos en ``fess_config.properties`` y reinicie |Fess|::
 
     query.additional.search.fields=price
@@ -322,9 +354,11 @@ Después, los campos se pueden utilizar a través de la API de búsqueda::
 
 .. note::
 
-   El tipo de un campo queda fijado cuando se indexa el primer documento que lo contiene. Si un
-   campo ya se indexó como cadena, convertirlo en el script no lo cambia: almacene el valor
-   convertido con un nombre de campo nuevo (por ejemplo ``price_num``) o vuelva a crear el índice.
+   El tipo de un campo queda fijado cuando se indexa el primer documento que lo contiene, y la API
+   de mapeo no puede cambiarlo después. Para cambiar el tipo de un campo ya indexado, como cadena
+   o como ``float``, añada la definición a ``doc.json`` como en el paso 2 anterior y ejecute una
+   reindexación en la página :doc:`../admin/maintenance-guide` con «Actualizar alias» habilitado.
+   Los documentos se copian a un índice nuevo creado a partir de ``doc.json``.
 
 .. note::
 

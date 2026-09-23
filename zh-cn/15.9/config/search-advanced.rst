@@ -272,7 +272,8 @@ OpenSearch 会根据该字段首次被索引的值来创建定义：
 
 - 字符串会成为 ``text`` 字段，并带有名为 ``<字段名>.keyword`` 的 ``keyword`` 子字段
   （超过 256 个字符的字符串不会存储在子字段中）。
-- 数值会成为数值字段。
+- 数值会成为数值字段：整数为 ``long`` 类型，小数为 ``float`` 类型。JavaScript 引擎会将所有数值
+  作为浮点数传递，因此用 ``parseInt`` 转换的值也会成为 ``float`` 类型。
 
 不同用途需要使用对应的字段：
 
@@ -305,6 +306,34 @@ OpenSearch 会根据该字段首次被索引的值来创建定义：
     category=category
     price=parseInt(price, 10)
 
+请在索引第一个包含数值字段的文档之前，在索引映射中定义该字段。否则自动创建的 ``float`` 类型只有
+约 7 位有效数字，大于 16,777,216 的整数可能会被舍入为相近的值。例如 ``price`` 为 ``20000001`` 的文档会
+匹配 ``price:[20000000 TO 20000000]``\ ，排序时也无法区分二者。整数请使用 ``long`` 类型，小数请使用
+``double`` 类型。
+
+1. 通过 ``fess.update`` 别名，将字段添加到当前的文档索引。
+
+   ::
+
+       $ curl -X PUT http://localhost:9200/fess.update/_mapping -H 'Content-Type: application/json' \
+           -d '{"properties":{"price":{"type":"long"}}}'
+
+2. 将相同的定义也添加到安装目录中 ``app/WEB-INF/classes/fess_indices/fess/doc.json`` 的
+   ``properties`` 下。这样 |Fess| 之后创建的文档索引（在空集群上首次启动时，以及在
+   :doc:`../admin/maintenance-guide` 中重新索引时）也会包含该定义。升级时 ``doc.json`` 会被替换为
+   新版本的文件，因此升级后请再次添加。
+
+   ::
+
+       "properties": {
+         "price": {
+           "type": "long"
+         },
+         "anchor": {
+           "type": "keyword"
+         },
+         ...
+
 然后在 ``fess_config.properties`` 中列出这些字段，并重启 |Fess|::
 
     query.additional.search.fields=price
@@ -318,8 +347,10 @@ OpenSearch 会根据该字段首次被索引的值来创建定义：
 
 .. note::
 
-   字段的类型在首个包含该字段的文档被索引时即已确定。如果某字段已作为字符串被索引，在脚本中
-   转换它并不会改变其类型：请将转换后的值存储到新的字段名下（例如 ``price_num`` ），或重新创建索引。
+   字段的类型在首个包含该字段的文档被索引时即已确定，之后无法通过映射 API 更改。要更改已作为
+   字符串或 ``float`` 类型索引的字段的类型，请按上述第 2 步将定义添加到 ``doc.json``\ ，然后在
+   :doc:`../admin/maintenance-guide` 中启用“更新别名”并执行重新索引。文档会被复制到根据
+   ``doc.json`` 创建的新索引中。
 
 .. note::
 

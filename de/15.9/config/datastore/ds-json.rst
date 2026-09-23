@@ -469,6 +469,10 @@ Numerische Verarbeitung
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` und ``parseInt`` liefern beide eine Gleitkommazahl, aus der OpenSearch ein
+``float``-Feld anlegt. Definieren Sie ``price`` (``double``) und ``stock`` (``long``) vor dem ersten
+Crawl im Index-Mapping, wie unter :ref:`search-custom-field-facet-sort-range` beschrieben.
+
 Fehlerbehebung
 ================
 

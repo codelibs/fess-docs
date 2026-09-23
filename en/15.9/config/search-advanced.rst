@@ -274,7 +274,9 @@ that field:
 
 - A string becomes a ``text`` field, with a ``keyword`` sub-field named ``<field>.keyword``
   (strings longer than 256 characters are not stored in the sub-field).
-- A number becomes a numeric field.
+- A number becomes a numeric field: ``long`` for a whole number, ``float`` for a number with a
+  fraction. The JavaScript engine hands every number over as a floating-point value, so a value
+  converted with ``parseInt`` becomes ``float`` as well.
 
 Each use needs the right one:
 
@@ -309,6 +311,36 @@ configurations created in 15.9 (``script_type=javascript``)::
     category=category
     price=parseInt(price, 10)
 
+Define a numeric field in the index mapping before the first document that has it is indexed. The
+``float`` type that is created otherwise keeps only about seven significant digits, and a whole
+number above 16,777,216 may be rounded to a nearby value: a document whose ``price`` is ``20000001``
+matches ``price:[20000000 TO 20000000]``, and sorting cannot tell the two apart. Use ``long`` for
+whole numbers and ``double`` for decimals.
+
+1. Add the field to the current document index through the ``fess.update`` alias.
+
+   ::
+
+       $ curl -X PUT http://localhost:9200/fess.update/_mapping -H 'Content-Type: application/json' \
+           -d '{"properties":{"price":{"type":"long"}}}'
+
+2. Add the same definition under ``properties`` in ``app/WEB-INF/classes/fess_indices/fess/doc.json``
+   of the installation, so that a document index |Fess| creates later (on the first start against an
+   empty cluster, or by a reindex on the :doc:`../admin/maintenance-guide` page) has it too. An
+   upgrade replaces ``doc.json`` with the file of the new version, so add the definition again
+   after upgrading.
+
+   ::
+
+       "properties": {
+         "price": {
+           "type": "long"
+         },
+         "anchor": {
+           "type": "keyword"
+         },
+         ...
+
 Then list the fields in ``fess_config.properties`` and restart |Fess|::
 
     query.additional.search.fields=price
@@ -322,9 +354,11 @@ The fields can then be used through the search API::
 
 .. note::
 
-   The type of a field is fixed when the first document that has it is indexed. If a field was
-   already indexed as a string, converting it in the script does not change it: store the
-   converted value under a new field name (for example ``price_num``), or re-create the index.
+   The type of a field is fixed when the first document that has it is indexed, and the mapping
+   API cannot change it afterwards. To change the type of a field that is already indexed, as a
+   string or as ``float``, add the definition to ``doc.json`` as in step 2 above, then run Reindex
+   on the :doc:`../admin/maintenance-guide` page with Update Aliases enabled. The documents are
+   copied into a new index created from ``doc.json``.
 
 .. note::
 

@@ -798,6 +798,10 @@ Java の ``Integer.parseInt(price)`` は Groovy の書き方です。JavaScript 
 おらず、すべての行が失敗します。 ``price`` をソートや範囲検索の対象に、 ``category`` をファセットに
 するには :ref:`search-custom-field-facet-sort-range` を参照してください。
 
+JavaScript の数値は浮動小数点数なので、最初のクロールの前にインデックスのマッピングで ``price`` を定
+義しておかないと、OpenSearch は ``float`` 型のフィールドを作り、16,777,216 を超える整数が丸められる
+ことがあります。 ``long`` 型で定義する方法も同じ節にあります。
+
 条件付きインデックス
 --------------------
 

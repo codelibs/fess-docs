@@ -818,6 +818,10 @@ JavaScript, ``Integer`` n'est pas défini et chaque ligne échoue. Pour rendre `
 recherchable par plage, ou pour faire de ``category`` une facette, voir
 :ref:`search-custom-field-facet-sort-range`.
 
+Les nombres JavaScript sont à virgule flottante : si ``price`` n'est pas défini dans le mapping de
+l'index avant la première exploration, OpenSearch le crée en ``float`` et un nombre entier supérieur
+à 16 777 216 peut être arrondi. La même section explique comment le définir en ``long``.
+
 Indexation conditionnelle
 --------------------------
 

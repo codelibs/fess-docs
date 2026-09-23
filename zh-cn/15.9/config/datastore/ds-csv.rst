@@ -789,6 +789,10 @@ Java 的 ``Integer.parseInt(price)`` 是 Groovy 的写法：在 JavaScript 中 `
 所有行都会失败。要使 ``price`` 可排序、可作为范围搜索的对象，或将 ``category`` 用作分面，请参见
 :ref:`search-custom-field-facet-sort-range`\ 。
 
+JavaScript 的数值是浮点数，如果在首次爬取之前没有在索引映射中定义 ``price``\ ，OpenSearch 会将其创建
+为 ``float`` 类型的字段，大于 16,777,216 的整数可能会被舍入。以 ``long`` 类型定义的方法也在同一节
+中。
+
 条件索引
 --------
 

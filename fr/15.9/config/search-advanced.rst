@@ -273,7 +273,9 @@ une à partir de la première valeur qu'il indexe pour ce champ :
 
 - Une chaîne devient un champ ``text``, avec un sous-champ ``keyword`` nommé ``<field>.keyword``
   (les chaînes de plus de 256 caractères ne sont pas stockées dans le sous-champ).
-- Un nombre devient un champ numérique.
+- Un nombre devient un champ numérique : ``long`` pour un nombre entier, ``float`` pour un nombre à
+  virgule. Le moteur JavaScript transmet tous les nombres sous forme de valeurs à virgule flottante :
+  une valeur convertie avec ``parseInt`` devient donc elle aussi ``float``.
 
 Chaque usage nécessite le bon champ :
 
@@ -311,6 +313,37 @@ moteur JavaScript, utilisé par défaut par les configurations de banque de donn
     category=category
     price=parseInt(price, 10)
 
+Définissez un champ numérique dans le mapping de l'index avant d'indexer le premier document qui le
+contient. Le type ``float`` créé sinon ne conserve qu'environ sept chiffres significatifs, et un
+nombre entier supérieur à 16 777 216 peut être arrondi à une valeur voisine : un document dont le
+``price`` vaut ``20000001`` correspond à ``price:[20000000 TO 20000000]``, et le tri ne peut pas les
+distinguer. Utilisez ``long`` pour les nombres entiers et ``double`` pour les nombres décimaux.
+
+1. Ajoutez le champ à l'index de documents actuel via l'alias ``fess.update``.
+
+   ::
+
+       $ curl -X PUT http://localhost:9200/fess.update/_mapping -H 'Content-Type: application/json' \
+           -d '{"properties":{"price":{"type":"long"}}}'
+
+2. Ajoutez la même définition sous ``properties`` dans
+   ``app/WEB-INF/classes/fess_indices/fess/doc.json`` de l'installation, afin qu'un index de
+   documents que |Fess| crée plus tard (au premier démarrage sur un cluster vide, ou par une
+   réindexation depuis la page :doc:`../admin/maintenance-guide`) la contienne aussi. Une mise à
+   niveau remplace ``doc.json`` par le fichier de la nouvelle version : ajoutez de nouveau la
+   définition après la mise à niveau.
+
+   ::
+
+       "properties": {
+         "price": {
+           "type": "long"
+         },
+         "anchor": {
+           "type": "keyword"
+         },
+         ...
+
 Listez ensuite les champs dans ``fess_config.properties`` et redémarrez |Fess| :
 
 ::
@@ -328,9 +361,12 @@ Les champs peuvent alors être utilisés via l'API de recherche :
 
 .. note::
 
-   Le type d'un champ est fixé lors de l'indexation du premier document qui le contient. Si un
-   champ a déjà été indexé comme chaîne, le convertir dans le script ne le modifie pas : stockez la
-   valeur convertie sous un nouveau nom de champ (par exemple ``price_num``), ou recréez l'index.
+   Le type d'un champ est fixé lors de l'indexation du premier document qui le contient, et l'API
+   de mapping ne peut plus le modifier ensuite. Pour changer le type d'un champ déjà indexé, comme
+   chaîne ou comme ``float``, ajoutez la définition à ``doc.json`` comme à l'étape 2 ci-dessus,
+   puis lancez une réindexation depuis la page :doc:`../admin/maintenance-guide` avec « Mise à jour
+   de l'alias » activée. Les documents sont copiés dans un nouvel index créé à partir de
+   ``doc.json``.
 
 .. note::
 

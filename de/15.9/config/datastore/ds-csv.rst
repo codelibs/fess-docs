@@ -811,6 +811,10 @@ gesucht werden kann. Javas ``Integer.parseInt(price)`` ist Groovy-Syntax: In Jav
 einer Bereichssuche und ``category`` zu einer Facette machen, lesen Sie unter
 :ref:`search-custom-field-facet-sort-range`.
 
+JavaScript-Zahlen sind Gleitkommazahlen: Ist ``price`` vor dem ersten Crawl nicht im Index-Mapping
+definiert, legt OpenSearch das Feld als ``float`` an, und eine ganze Zahl über 16.777.216 kann
+gerundet werden. Wie Sie es als ``long`` definieren, steht im selben Abschnitt.
+
 Bedingte Indizierung
 --------------------
 

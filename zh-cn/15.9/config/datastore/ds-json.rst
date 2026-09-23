@@ -433,6 +433,10 @@ JSON对象的顶层字段在脚本中可作为 **无前缀的变量**
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` 和 ``parseInt`` 都会返回浮点数，OpenSearch 会据此创建 ``float`` 类型的字段。请在首次
+爬取之前，在索引映射中定义 ``price``\ （ ``double`` 类型）和 ``stock``\ （ ``long`` 类型）。步骤请参
+见 :ref:`search-custom-field-facet-sort-range`\ 。
+
 故障排除
 ======================
 

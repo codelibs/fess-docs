@@ -812,6 +812,10 @@ Java's ``Integer.parseInt(price)`` is Groovy syntax: in JavaScript ``Integer`` i
 every row fails. To make ``price`` sortable, a range-search target, or ``category`` a facet, see
 :ref:`search-custom-field-facet-sort-range`.
 
+JavaScript numbers are floating-point, so if ``price`` is not defined in the index mapping before
+the first crawl, OpenSearch creates it as ``float`` and a whole number above 16,777,216 may be
+rounded. The same section shows how to define it as ``long``.
+
 Conditional Indexing
 --------------------
 

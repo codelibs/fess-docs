@@ -463,6 +463,10 @@ Numeric Processing
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` and ``parseInt`` both return a floating-point number, from which OpenSearch creates a
+``float`` field. Define ``price`` (``double``) and ``stock`` (``long``) in the index mapping before
+the first crawl, as described in :ref:`search-custom-field-facet-sort-range`.
+
 Troubleshooting
 ================
 
