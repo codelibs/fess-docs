@@ -146,6 +146,10 @@
   |Fess| 本体が処理します。
 - テーマの SPA は、検索結果やチャットなどのデータを ``/api/v2/*`` API から取得
   します。
+- エントリー HTML の ``{{themePath}}`` は、配信時に ``themes/<name>`` に置き換えられます。
+  テーマのファイルを ``index.html`` から参照するときは ``{{themePath}}/assets/styles.css``
+  のように書きます。テーマ名を直接書かないので、別の名前でインストールしても自分の
+  ファイルを読み込めます。
 - エントリー HTML には、スクリプト・スタイル・画像・通信の取得元を |Fess| 自身に限る
   ``Content-Security-Policy`` ヘッダーが付きます(インラインのスタイルは許可され、
   インラインのスクリプトは許可されません)。そのため外部の CDN のフォントやスクリプトは
@@ -226,17 +230,12 @@
 2. ``theme.yml`` の ``name`` を ``mytheme`` に変え、``displayName`` も変えます。
    ``name`` はディレクトリ名と一致させます。
 
-3. ``index.html`` の ``themes/bootstrap/`` をすべて ``themes/mytheme/`` に置き換えます。
-   同梱の ``index.html`` は、スタイルシート(``assets/styles.css``)、2 つのロゴ
-   (``assets/logo-head.png`` と ``assets/logo.png``)、スクリプト(``assets/app.js``)の
-   4 か所で自分のディレクトリ名を指しています。置き換えないと、複製したテーマは
-   ``bootstrap`` のファイルを読み込み続け、CSS・ロゴ・メッセージの変更が画面に
-   反映されません。ほかのファイルは ``assets/app.js`` からの相対パスで読み込まれるので、
-   置き換えるのはこの 4 か所だけです。
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. ``index.html`` は変更しません。同梱の ``index.html`` は、スタイルシート・ロゴ・
+   スクリプトなど自分のファイルを ``{{themePath}}/assets/...`` で参照しており、|Fess| は
+   配信時に ``{{themePath}}`` を ``themes/<name>`` (``theme.yml`` の ``name``)に
+   置き換えます。そのため、名前を変えるだけで複製したテーマは自分のファイルを読み込みます。
+   ``index.html`` から参照するファイルを追加するときも、``{{themePath}}/assets/...`` の
+   形で書いてください。
 
 4. 変更を加えます。
 

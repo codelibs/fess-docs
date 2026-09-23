@@ -161,6 +161,11 @@ Auslieferung und API
 - Die Administrationsoberfläche (``/admin/*``), ``/api/*``, die
   Anmeldeseite und Ähnliches fallen nicht unter das statische Theme und
   werden vom |Fess|-Kern selbst verarbeitet.
+- ``{{themePath}}`` im Einstiegs-HTML wird bei der Auslieferung durch
+  ``themes/<name>`` ersetzt. Verweisen Sie in ``index.html`` auf die
+  eigenen Dateien des Themes als ``{{themePath}}/assets/styles.css`` usw.
+  Der Theme-Name steht dann nicht in der Seite, sodass das Theme unter
+  jedem Namen, unter dem es installiert ist, seine eigenen Dateien lädt.
 - Das Einstiegs-HTML wird mit einem ``Content-Security-Policy``-Header
   ausgeliefert, der Skripte, Stylesheets, Bilder und Verbindungen nur
   von |Fess| selbst zulässt (Inline-Styles sind erlaubt, Inline-Skripte
@@ -271,19 +276,14 @@ Sie es stattdessen unter einem neuen Namen.
    ändern Sie ``displayName``. ``name`` muss mit dem Verzeichnisnamen
    übereinstimmen.
 
-3. Ersetzen Sie in ``index.html`` jedes ``themes/bootstrap/`` durch
-   ``themes/mytheme/``. Die mitgelieferte ``index.html`` nennt ihr
-   eigenes Verzeichnis an vier Stellen: das Stylesheet
-   (``assets/styles.css``), die beiden Logos (``assets/logo-head.png``
-   und ``assets/logo.png``) und das Skript (``assets/app.js``). Bleiben
-   sie unverändert, lädt die Kopie weiterhin die Dateien von
-   ``bootstrap``, und keine Ihrer Änderungen an CSS, Logos oder
-   Meldungen wird sichtbar. Die übrigen Dateien werden relativ zu
-   ``assets/app.js`` geladen, daher sind nur diese vier zu ändern.
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. Lassen Sie ``index.html`` unverändert. Die mitgelieferte
+   ``index.html`` verweist auf ihre eigenen Dateien, etwa das Stylesheet,
+   die Logos und das Skript, als ``{{themePath}}/assets/...``, und |Fess|
+   ersetzt ``{{themePath}}`` bei der Auslieferung durch ``themes/<name>``
+   (den ``name`` in ``theme.yml``). Das Umbenennen genügt daher, damit die
+   Kopie ihre eigenen Dateien lädt. Wenn Sie eine Datei hinzufügen, auf die
+   ``index.html`` verweist, schreiben Sie ihre URL ebenfalls als
+   ``{{themePath}}/assets/...``.
 
 4. Nehmen Sie Ihre Änderungen vor:
 

@@ -164,6 +164,12 @@ Distribución y API
 - La consola de administración (``/admin/*``), ``/api/*``, la pantalla
   de inicio de sesión, etc., quedan fuera del alcance de los temas
   estáticos y son gestionados por el propio |Fess|.
+- ``{{themePath}}`` en el HTML de entrada se sustituye por
+  ``themes/<name>`` al servir la página. Haga referencia a los archivos
+  del propio tema desde ``index.html`` como
+  ``{{themePath}}/assets/styles.css``, etc. Así el nombre del tema no
+  aparece en la página y el tema carga sus propios archivos con
+  cualquier nombre con el que se instale.
 - El HTML de entrada se sirve con un encabezado
   ``Content-Security-Policy`` que solo permite scripts, estilos,
   imágenes y conexiones procedentes del propio |Fess| (se permiten los
@@ -271,20 +277,14 @@ lugar, cópielo con otro nombre.
    ``displayName``. ``name`` debe coincidir con el nombre del
    directorio.
 
-3. En ``index.html``, sustituya cada ``themes/bootstrap/`` por
-   ``themes/mytheme/``. El ``index.html`` incluido menciona su propio
-   directorio en cuatro lugares: la hoja de estilos
-   (``assets/styles.css``), los dos logotipos (``assets/logo-head.png``
-   y ``assets/logo.png``) y el script (``assets/app.js``). Si se dejan
-   sin cambiar, la copia sigue cargando los archivos de ``bootstrap`` y
-   no se ve ninguno de sus cambios en el CSS, los logotipos o los
-   mensajes. Los demás archivos se cargan de forma relativa a
-   ``assets/app.js``, así que estos cuatro son los únicos que hay que
-   cambiar.
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. Deje ``index.html`` como está. El ``index.html`` incluido hace
+   referencia a sus propios archivos, como la hoja de estilos, los
+   logotipos y el script, como ``{{themePath}}/assets/...``, y |Fess|
+   sustituye ``{{themePath}}`` por ``themes/<name>`` (el ``name`` de
+   ``theme.yml``) al servir la página. Por eso basta con cambiar el nombre
+   para que la copia cargue sus propios archivos. Si añade un archivo al
+   que hace referencia ``index.html``, escriba también su URL como
+   ``{{themePath}}/assets/...``.
 
 4. Realice sus cambios:
 

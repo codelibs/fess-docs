@@ -147,6 +147,10 @@
   실제 HTTP 상태와 함께 테마의 엔트리 HTML 을 받습니다.
 - 관리 화면(``/admin/*``), ``/api/*``, 로그인 화면 등은 정적 테마의 대상 외이며,
   |Fess| 본체가 처리합니다.
+- 엔트리 HTML 의 ``{{themePath}}`` 는 반환될 때 ``themes/<name>`` 으로 치환됩니다.
+  ``index.html`` 에서 테마 자신의 파일을 참조할 때는 ``{{themePath}}/assets/styles.css``
+  처럼 작성합니다. 테마 이름을 직접 쓰지 않으므로, 어떤 이름으로 설치해도 테마는 자신의
+  파일을 로드합니다.
 - 엔트리 HTML 은 스크립트, 스타일, 이미지, 접속을 |Fess| 자신으로부터만
   허용하는 ``Content-Security-Policy`` 헤더와 함께 반환됩니다(인라인 스타일은
   허용되지만 인라인 스크립트는 허용되지 않습니다). 따라서 외부 CDN 의 폰트나
@@ -229,17 +233,11 @@
 2. ``theme.yml`` 에서 ``name`` 을 ``mytheme`` 으로 변경하고 ``displayName`` 도
    변경합니다. ``name`` 은 디렉터리 이름과 일치해야 합니다.
 
-3. ``index.html`` 에서 모든 ``themes/bootstrap/`` 을 ``themes/mytheme/`` 으로
-   바꿉니다. 번들된 ``index.html`` 은 자신의 디렉터리를 네 곳에서 지정합니다.
-   스타일시트(``assets/styles.css``), 두 개의 로고(``assets/logo-head.png`` 와
-   ``assets/logo.png``), 스크립트(``assets/app.js``)입니다. 이를 그대로 두면
-   복사본은 계속 ``bootstrap`` 의 파일을 로드하므로, CSS·로고·메시지에 대한
-   변경이 하나도 반영되지 않습니다. 그 외의 파일은 ``assets/app.js`` 를 기준으로
-   한 상대 경로로 로드되므로, 변경해야 하는 것은 이 네 곳뿐입니다.
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. ``index.html`` 은 변경하지 않습니다. 번들된 ``index.html`` 은 스타일시트, 로고,
+   스크립트 등 자신의 파일을 ``{{themePath}}/assets/...`` 로 참조하며, |Fess| 는
+   반환할 때 ``{{themePath}}`` 를 ``themes/<name>`` (``theme.yml`` 의 ``name``)으로
+   치환합니다. 따라서 이름만 바꾸면 복사본은 자신의 파일을 로드합니다. ``index.html`` 에서
+   참조하는 파일을 추가할 때도 URL 을 ``{{themePath}}/assets/...`` 형식으로 작성하십시오.
 
 4. 원하는 대로 변경합니다.
 

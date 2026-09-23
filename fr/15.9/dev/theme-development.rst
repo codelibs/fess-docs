@@ -157,6 +157,12 @@ Diffusion et API
 - L'écran d'administration (``/admin/*``), ``/api/*``, l'écran de connexion,
   etc. ne sont pas concernés par le thème statique et sont traités par le
   cœur de |Fess|.
+- ``{{themePath}}`` dans le HTML d'entrée est remplacé par
+  ``themes/<name>`` lorsque la page est servie. Faites référence aux
+  fichiers du thème depuis ``index.html`` sous la forme
+  ``{{themePath}}/assets/styles.css``, etc. Le nom du thème n'apparaît
+  alors pas dans la page, et le thème charge ses propres fichiers quel que
+  soit le nom sous lequel il est installé.
 - Le HTML d'entrée est servi avec un en-tête ``Content-Security-Policy`` qui
   n'autorise les scripts, les styles, les images et les connexions que depuis
   |Fess| lui-même (les styles en ligne sont autorisés ; les scripts en ligne
@@ -263,19 +269,14 @@ nom.
 2. Dans ``theme.yml``, remplacez ``name`` par ``mytheme`` et modifiez
    ``displayName``. ``name`` doit correspondre au nom du répertoire.
 
-3. Dans ``index.html``, remplacez chaque ``themes/bootstrap/`` par
-   ``themes/mytheme/``. Le ``index.html`` fourni désigne son propre
-   répertoire à quatre endroits : la feuille de style
-   (``assets/styles.css``), les deux logos (``assets/logo-head.png`` et
-   ``assets/logo.png``) et le script (``assets/app.js``). S'ils restent
-   inchangés, la copie continue de charger les fichiers de ``bootstrap``, et
-   aucune de vos modifications du CSS, des logos ou des messages n'apparaît.
-   Les autres fichiers sont chargés relativement à ``assets/app.js`` : ces
-   quatre-là sont donc les seuls à modifier.
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. Laissez ``index.html`` tel quel. Le ``index.html`` fourni fait
+   référence à ses propres fichiers, comme la feuille de style, les logos
+   et le script, sous la forme ``{{themePath}}/assets/...``, et |Fess|
+   remplace ``{{themePath}}`` par ``themes/<name>`` (le ``name`` de
+   ``theme.yml``) lorsqu'il sert la page. Il suffit donc de renommer la
+   copie pour qu'elle charge ses propres fichiers. Si vous ajoutez un
+   fichier auquel ``index.html`` fait référence, écrivez aussi son URL sous
+   la forme ``{{themePath}}/assets/...``.
 
 4. Apportez vos modifications :
 
