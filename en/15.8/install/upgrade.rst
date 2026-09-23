@@ -376,7 +376,21 @@ upgrade it using the following procedure.
       The version of these plugins must match the version of OpenSearch you use. |Fess| 15.8
       supports OpenSearch 3.8.0. Installation fails if the versions do not match.
 
-3. Start OpenSearch::
+3. Move the dictionary directory under the OpenSearch configuration directory
+
+   OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the OpenSearch configuration directory.
+   If, following the earlier instructions, ``configsync.config_path`` points outside the configuration directory, such as ``/var/lib/opensearch/data/config/`` (``/path/to/opensearch/data/config/`` for the ZIP version),
+   |Fess| cannot create its indices and does not start.
+   For the RPM/DEB version, copy the dictionary files to ``/etc/opensearch/dictionary/`` as follows::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+       $ sudo cp -a /var/lib/opensearch/data/config/. /etc/opensearch/dictionary/
+       $ sudo chown -R opensearch:opensearch /etc/opensearch/dictionary
+
+   Then change both ``configsync.config_path`` in ``/etc/opensearch/opensearch.yml`` and ``FESS_DICTIONARY_PATH`` of |Fess| (``/etc/sysconfig/fess`` for the RPM version, ``/etc/default/fess`` for the DEB version) to ``/etc/opensearch/dictionary/``.
+   For the ZIP version, use ``config/dictionary/`` of OpenSearch. For details, see :doc:`install-linux`.
+
+4. Start OpenSearch::
 
        $ sudo systemctl start opensearch.service
 

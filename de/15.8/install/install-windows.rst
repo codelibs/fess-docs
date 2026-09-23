@@ -101,7 +101,7 @@ Konfiguration von OpenSearch
 ::
 
     # Pfad für Konfigurationssynchronisation (als absoluter Pfad angeben)
-    configsync.config_path: C:/opensearch-3.8.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
 
     # Deaktivierung des Sicherheits-Plugins (nur Entwicklungsumgebung)
     plugins.security.disabled: true
@@ -117,7 +117,13 @@ Konfiguration von OpenSearch
 .. note::
 
    Bei Windows verwenden Sie ``/`` anstelle von ``\`` als Pfadtrennzeichen.
-   Schreiben Sie ``C:/opensearch-3.8.0/data/config/`` statt ``C:\opensearch-3.8.0\data\config\``.
+   Schreiben Sie ``C:/opensearch-3.8.0/config/dictionary/`` statt ``C:\opensearch-3.8.0\config\dictionary\``.
+
+.. important::
+
+   Geben Sie für ``configsync.config_path`` ein Verzeichnis unterhalb des OpenSearch-Konfigurationsverzeichnisses an (in diesem Beispiel ``C:/opensearch-3.8.0/config/``).
+   Ab OpenSearch 3.8.0 wird die Erstellung eines Index verweigert, wenn sich Wörterbuchdateien außerhalb des Konfigurationsverzeichnisses befinden.
+   Wenn Sie ein Verzeichnis außerhalb des Konfigurationsverzeichnisses angeben, z. B. ``C:/opensearch-3.8.0/data/config/``, kann |Fess| seine Indizes nicht erstellen und startet nicht.
 
 .. tip::
 
@@ -169,7 +175,7 @@ Zustand nach der Änderung::
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
 
 .. note::
 

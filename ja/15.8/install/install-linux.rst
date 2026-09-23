@@ -118,10 +118,16 @@ TAR.GZ 版でのインストール
    ::
 
        # 設定同期用のパス（絶対パスで指定）
-       configsync.config_path: /path/to/opensearch-3.8.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.8.0/config/dictionary/
 
        # セキュリティプラグインの無効化（開発環境のみ）
        plugins.security.disabled: true
+
+   .. important::
+
+      ``configsync.config_path`` には、OpenSearch の設定ディレクトリ（この例では ``/path/to/opensearch-3.8.0/config/``）の下のディレクトリを指定してください。
+      OpenSearch 3.8.0 以降は、辞書ファイルが設定ディレクトリの外にあるとインデックスの作成を拒否します。
+      ``/path/to/opensearch-3.8.0/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
 
    .. warning::
 
@@ -175,13 +181,13 @@ TAR.GZ 版でのインストール
 
        # External opensearch cluster
        #SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       #FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
 
    変更後::
 
        # External opensearch cluster
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/config/dictionary/
 
    .. note::
 
@@ -244,8 +250,18 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
    追加する設定::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   辞書ファイル用のディレクトリを作成します::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      ``configsync.config_path`` には、OpenSearch の設定ディレクトリ ``/etc/opensearch/`` の下のディレクトリを指定してください。
+      OpenSearch 3.8.0 以降は、辞書ファイルが設定ディレクトリの外にあるとインデックスの作成を拒否します。
+      ``/var/lib/opensearch/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
 
    .. warning::
 
@@ -273,10 +289,10 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
        $ sudo vi /etc/sysconfig/fess
 
-   OpenSearch への接続情報を設定します。既定値は以下のとおりです。必要に応じて変更してください::
+   OpenSearch への接続情報を設定します。 ``FESS_DICTIONARY_PATH`` の既定値 ``/var/lib/opensearch/config/`` は手順 3 の ``configsync.config_path`` と異なるため、次のように変更します。 ``SEARCH_ENGINE_HTTP_URL`` は必要に応じて変更してください::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -344,8 +360,18 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    追加する設定::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   辞書ファイル用のディレクトリを作成します::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      ``configsync.config_path`` には、OpenSearch の設定ディレクトリ ``/etc/opensearch/`` の下のディレクトリを指定してください。
+      OpenSearch 3.8.0 以降は、辞書ファイルが設定ディレクトリの外にあるとインデックスの作成を拒否します。
+      ``/var/lib/opensearch/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
 
    .. warning::
 
@@ -373,10 +399,10 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
        $ sudo vi /etc/default/fess
 
-   OpenSearch への接続情報を設定します。既定値は以下のとおりです。必要に応じて変更してください::
+   OpenSearch への接続情報を設定します。 ``FESS_DICTIONARY_PATH`` の既定値 ``/var/lib/opensearch/config/`` は手順 3 の ``configsync.config_path`` と異なるため、次のように変更します。 ``SEARCH_ENGINE_HTTP_URL`` は必要に応じて変更してください::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/data/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -419,11 +445,11 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    TAR.GZ 版の場合::
 
-       $ ls -ld /path/to/opensearch-3.8.0/data/config/
+       $ ls -ld /path/to/opensearch-3.8.0/config/dictionary/
 
    RPM/DEB 版の場合::
 
-       $ sudo ls -ld /var/lib/opensearch/data/config/
+       $ sudo ls -ld /etc/opensearch/dictionary/
 
 3. **カーネルパラメーターの確認**
 

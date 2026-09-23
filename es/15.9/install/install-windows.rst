@@ -126,7 +126,7 @@ Abra ``config\opensearch.yml`` con un editor de texto y agregue la siguiente con
 ::
 
     # Ruta para sincronización de configuración (especificar ruta absoluta)
-    configsync.config_path: C:/opensearch-3.8.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
 
     # Desactivación del plugin de seguridad (solo entorno de desarrollo)
     plugins.security.disabled: true
@@ -142,7 +142,13 @@ Abra ``config\opensearch.yml`` con un editor de texto y agregue la siguiente con
 .. note::
 
    En Windows, use ``/`` en lugar de ``\`` como separador de ruta.
-   Escriba ``C:/opensearch-3.8.0/data/config/`` en lugar de ``C:\opensearch-3.8.0\data\config\``.
+   Escriba ``C:/opensearch-3.8.0/config/dictionary/`` en lugar de ``C:\opensearch-3.8.0\config\dictionary\``.
+
+.. important::
+
+   Especifique en ``configsync.config_path`` un directorio dentro del directorio de configuración de OpenSearch (``C:/opensearch-3.8.0/config/`` en este ejemplo).
+   OpenSearch 3.8.0 y versiones posteriores rechazan la creación de índices cuando los archivos de diccionario están fuera del directorio de configuración.
+   Si especifica un directorio fuera del directorio de configuración, como ``C:/opensearch-3.8.0/data/config/``, |Fess| no puede crear sus índices y no se inicia.
 
 .. tip::
 
@@ -200,7 +206,7 @@ Estado después del cambio::
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
 
 .. note::
 

@@ -389,7 +389,21 @@ Docker 版
       |Fess| 15.9 对应 OpenSearch 3.8.0。如果版本不一致，
       插件安装将会失败。
 
-3. 启动 OpenSearch::
+3. 将词典目录移至 OpenSearch 配置目录下
+
+   从 OpenSearch 3.8.0 开始，如果词典文件位于 OpenSearch 配置目录之外，OpenSearch 会拒绝创建索引。
+   如果按照以前的步骤在 ``configsync.config_path`` 中指定了 ``/var/lib/opensearch/data/config/``\ （ZIP 版为 ``/path/to/opensearch/data/config/``\ ）等配置目录之外的位置，
+   |Fess| 将无法创建索引，也无法启动。
+   对于 RPM/DEB 版，请按如下方式将词典文件复制到 ``/etc/opensearch/dictionary/``::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+       $ sudo cp -a /var/lib/opensearch/data/config/. /etc/opensearch/dictionary/
+       $ sudo chown -R opensearch:opensearch /etc/opensearch/dictionary
+
+   然后，将 ``/etc/opensearch/opensearch.yml`` 中的 ``configsync.config_path`` 和 |Fess| 的 ``FESS_DICTIONARY_PATH``\ （RPM 版为 ``/etc/sysconfig/fess``\ ，DEB 版为 ``/etc/default/fess``\ ）都更改为 ``/etc/opensearch/dictionary/``\ 。
+   对于 ZIP 版，请使用 OpenSearch 的 ``config/dictionary/``\ 。详情请参阅 :doc:`install-linux`。
+
+4. 启动 OpenSearch::
 
        $ sudo systemctl start opensearch.service
 

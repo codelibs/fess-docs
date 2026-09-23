@@ -40,7 +40,7 @@ Fügen Sie die Verbindungseinstellungen für OpenSearch in ``c:\opt\fess\bin\fes
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/config/dictionary/
 
 .. note::
    - Geben Sie unter ``fess.search_engine.http_address`` die Verbindungsadresse des registrierten OpenSearch-Dienstes an. Ohne diese Einstellung kann |Fess| die Verbindungsadresse nicht ermitteln und startet die eingebettete OpenSearch-Version, die in Produktionsumgebungen nicht empfohlen wird.

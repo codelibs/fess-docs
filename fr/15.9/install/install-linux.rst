@@ -162,10 +162,16 @@ Installation avec la version ZIP
    ::
 
        # Chemin pour la synchronisation de configuration (spécifier en chemin absolu)
-       configsync.config_path: /path/to/opensearch-3.8.0/data/config/
+       configsync.config_path: /path/to/opensearch-3.8.0/config/dictionary/
 
        # Désactivation du plugin de sécurité (environnement de développement uniquement)
        plugins.security.disabled: true
+
+   .. important::
+
+      Indiquez pour ``configsync.config_path`` un répertoire situé sous le répertoire de configuration d'OpenSearch (``/path/to/opensearch-3.8.0/config/`` dans cet exemple).
+      À partir d'OpenSearch 3.8.0, la création d'un index est refusée si les fichiers de dictionnaire se trouvent en dehors du répertoire de configuration.
+      Si vous indiquez un emplacement situé en dehors du répertoire de configuration, comme ``/path/to/opensearch-3.8.0/data/config/``, |Fess| ne peut pas créer ses index et ne démarre pas.
 
    .. warning::
 
@@ -228,7 +234,7 @@ Installation avec la version ZIP
    Après modification ::
 
        SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/data/config/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/config/dictionary/
 
    .. note::
 
@@ -294,8 +300,18 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    Paramètres à ajouter ::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   Créez le répertoire des fichiers de dictionnaire ::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      Indiquez pour ``configsync.config_path`` un répertoire situé sous le répertoire de configuration d'OpenSearch ``/etc/opensearch/``.
+      À partir d'OpenSearch 3.8.0, la création d'un index est refusée si les fichiers de dictionnaire se trouvent en dehors du répertoire de configuration.
+      Si vous indiquez un emplacement situé en dehors du répertoire de configuration, comme ``/var/lib/opensearch/data/config/``, |Fess| ne peut pas créer ses index et ne démarre pas.
 
    .. warning::
 
@@ -323,10 +339,10 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
        $ sudo vi /etc/sysconfig/fess
 
-   Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
+   Configurez les informations de connexion à OpenSearch. La valeur par défaut de ``FESS_DICTIONARY_PATH``, ``/var/lib/opensearch/config/``, diffère de ``configsync.config_path`` défini à l'étape 3 : modifiez-la comme suit. Modifiez ``SEARCH_ENGINE_HTTP_URL`` si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -394,8 +410,18 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    Paramètres à ajouter ::
 
-       configsync.config_path: /var/lib/opensearch/data/config/
+       configsync.config_path: /etc/opensearch/dictionary/
        plugins.security.disabled: true
+
+   Créez le répertoire des fichiers de dictionnaire ::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      Indiquez pour ``configsync.config_path`` un répertoire situé sous le répertoire de configuration d'OpenSearch ``/etc/opensearch/``.
+      À partir d'OpenSearch 3.8.0, la création d'un index est refusée si les fichiers de dictionnaire se trouvent en dehors du répertoire de configuration.
+      Si vous indiquez un emplacement situé en dehors du répertoire de configuration, comme ``/var/lib/opensearch/data/config/``, |Fess| ne peut pas créer ses index et ne démarre pas.
 
    .. warning::
 
@@ -423,10 +449,10 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
        $ sudo vi /etc/default/fess
 
-   Configurez les informations de connexion à OpenSearch. Les valeurs par défaut sont les suivantes. Modifiez-les si nécessaire ::
+   Configurez les informations de connexion à OpenSearch. La valeur par défaut de ``FESS_DICTIONARY_PATH``, ``/var/lib/opensearch/config/``, diffère de ``configsync.config_path`` défini à l'étape 3 : modifiez-la comme suit. Modifiez ``SEARCH_ENGINE_HTTP_URL`` si nécessaire ::
 
        SEARCH_ENGINE_HTTP_URL=http://localhost:9200
-       FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
 
    .. note::
 
@@ -469,11 +495,11 @@ Une fois l'installation terminée, veuillez vérifier les éléments suivants :
 
    Pour la version ZIP ::
 
-       $ ls -ld /path/to/opensearch-3.8.0/data/config/
+       $ ls -ld /path/to/opensearch-3.8.0/config/dictionary/
 
    Pour les versions RPM/DEB ::
 
-       $ sudo ls -ld /var/lib/opensearch/data/config/
+       $ sudo ls -ld /etc/opensearch/dictionary/
 
 3. **Vérification des paramètres du noyau**
 

@@ -40,7 +40,7 @@ OpenSearch へ接続するための設定を ``c:\opt\fess\bin\fess.in.bat`` に
 ::
 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/config/dictionary/
 
 .. note::
    - ``fess.search_engine.http_address`` には、登録した OpenSearch サービスの接続先を指定します。この設定を行わない場合、|Fess| は接続先を見つけられず、本番環境では非推奨の埋め込み版 OpenSearch を起動します。

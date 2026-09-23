@@ -101,7 +101,7 @@ OpenSearch 설정
 ::
 
     # 설정 동기화용 경로(절대 경로로 지정)
-    configsync.config_path: C:/opensearch-3.8.0/data/config/
+    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
 
     # 보안 플러그인 비활성화(개발 환경 전용)
     plugins.security.disabled: true
@@ -117,7 +117,13 @@ OpenSearch 설정
 .. note::
 
    Windows의 경우 경로 구분 문자는 ``\`` 가 아닌 ``/`` 를 사용하십시오.
-   ``C:\opensearch-3.8.0\data\config\`` 가 아니라 ``C:/opensearch-3.8.0/data/config/`` 로 기술합니다.
+   ``C:\opensearch-3.8.0\config\dictionary\`` 가 아니라 ``C:/opensearch-3.8.0/config/dictionary/`` 로 기술합니다.
+
+.. important::
+
+   ``configsync.config_path`` 에는 OpenSearch 설정 디렉터리(이 예에서는 ``C:/opensearch-3.8.0/config/``) 아래의 디렉터리를 지정하십시오.
+   OpenSearch 3.8.0 이상에서는 사전 파일이 설정 디렉터리 밖에 있으면 인덱스 생성을 거부합니다.
+   ``C:/opensearch-3.8.0/data/config/`` 등 설정 디렉터리 밖을 지정하면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
 
 .. tip::
 
@@ -169,7 +175,7 @@ Fess 설정
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/data/config/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
 
 .. note::
 

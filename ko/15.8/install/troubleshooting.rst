@@ -168,6 +168,33 @@ OpenSearch가 시작되지 않음
 
        $ sudo systemctl restart opensearch
 
+인덱스를 생성할 수 없음(사전 파일 경로)
+---------------------------------------
+
+**증상:**
+
+|Fess| 에 액세스하면 HTTP 404 가 반환되고 ``fess.log`` 에 다음 오류가 출력됩니다::
+
+    Failed to create index: index=fess, path=fess_indices/fess.json
+    ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt
+
+**원인:**
+
+OpenSearch 3.8.0 이상에서는 사전 파일이 OpenSearch 설정 디렉터리 밖에 있으면 인덱스 생성을 거부합니다.
+``configsync.config_path`` 와 ``FESS_DICTIONARY_PATH`` 가 설정 디렉터리 밖(``data/config/`` 등)을 가리키고 있습니다.
+
+**해결 방법:**
+
+1. ``configsync.config_path`` 와 ``FESS_DICTIONARY_PATH`` 를 OpenSearch 설정 디렉터리 아래의 디렉터리로 변경합니다.
+
+   - RPM/DEB 버전: ``/etc/opensearch/dictionary/``
+   - ZIP 버전: ``/path/to/opensearch-3.8.0/config/dictionary/``
+
+2. 기존 사전 파일이 있는 경우 새 디렉터리로 복사합니다.
+3. OpenSearch, |Fess| 순서로 재시작합니다.
+
+자세한 내용은 :doc:`install-linux` 를 참조하십시오.
+
 포트 번호 충돌
 --------------
 
