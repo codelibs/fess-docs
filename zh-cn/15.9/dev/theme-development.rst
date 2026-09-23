@@ -142,6 +142,9 @@
   入口 HTML，并附带真实的 HTTP 状态码。
 - 管理界面（``/admin/*``）、``/api/*``、登录界面等不属于静态主题的处理
   范围，而是由 |Fess| 本体处理。
+- 入口 HTML 中的 ``{{themePath}}`` 在返回时会被替换为 ``themes/<name>`` 。
+  在 ``index.html`` 中引用主题自身的文件时，请写成 ``{{themePath}}/assets/styles.css``
+  这样的形式。由于页面中不直接写主题名，无论以什么名称安装，主题都会加载自身的文件。
 - 入口 HTML 在返回时附带 ``Content-Security-Policy`` 头，仅允许来自
   |Fess| 自身的脚本、样式、图片和连接（允许内联样式，不允许内联脚本）。
   因此，来自外部 CDN 的字体或脚本不会被加载；请将它们包含在主题中。
@@ -220,17 +223,11 @@
 2. 在 ``theme.yml`` 中，将 ``name`` 改为 ``mytheme`` ，并修改
    ``displayName`` 。 ``name`` 必须与目录名一致。
 
-3. 在 ``index.html`` 中，将所有 ``themes/bootstrap/`` 替换为
-   ``themes/mytheme/`` 。内置的 ``index.html`` 在四处引用了自身的目录：
-   样式表（ ``assets/styles.css`` ）、两个徽标（ ``assets/logo-head.png``
-   和 ``assets/logo.png`` ）以及脚本（ ``assets/app.js`` ）。如果不修改，
-   副本将继续加载 ``bootstrap`` 的文件，对 CSS、徽标或消息所做的修改都
-   不会显示。其他文件是相对于 ``assets/app.js`` 加载的，因此只需修改这
-   四处。
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. 无需修改 ``index.html`` 。内置的 ``index.html`` 以 ``{{themePath}}/assets/...``
+   引用样式表、徽标和脚本等自身的文件，|Fess| 在返回页面时会将 ``{{themePath}}``
+   替换为 ``themes/<name>`` （ ``theme.yml`` 中的 ``name`` ）。因此只需改名，副本就会
+   加载自身的文件。添加由 ``index.html`` 引用的文件时，也请将其 URL 写成
+   ``{{themePath}}/assets/...`` 的形式。
 
 4. 进行修改：
 

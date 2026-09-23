@@ -153,6 +153,11 @@ Serving and API
 - The admin console (``/admin/*``), ``/api/*``, the login screen, and
   similar are not covered by the static theme and are handled by the
   |Fess| core.
+- ``{{themePath}}`` in the entry HTML is replaced with ``themes/<name>``
+  when the page is served. Refer to the theme's own files from
+  ``index.html`` as ``{{themePath}}/assets/styles.css`` and so on. The
+  theme name is then not written into the page, so the theme loads its
+  own files under whatever name it is installed.
 - The entry HTML is served with a ``Content-Security-Policy`` header that
   allows scripts, styles, images and connections only from |Fess|
   itself (inline styles are allowed; inline scripts are not). Fonts or
@@ -250,19 +255,13 @@ nor replaced by an upload. Copy it under a new name instead.
 2. In ``theme.yml``, change ``name`` to ``mytheme`` and change
    ``displayName``. ``name`` must match the directory name.
 
-3. In ``index.html``, replace every ``themes/bootstrap/`` with
-   ``themes/mytheme/``. The bundled ``index.html`` names its own
-   directory in four places: the stylesheet (``assets/styles.css``), the
-   two logos (``assets/logo-head.png`` and ``assets/logo.png``) and the
-   script (``assets/app.js``). If they are left unchanged, the copy keeps
-   loading the files of ``bootstrap``, and none of your changes to the
-   CSS, the logos or the messages show. The other files are loaded
-   relative to ``assets/app.js``, so these four are the only ones to
-   change.
-
-   ::
-
-       $ sed -i 's#themes/bootstrap/#themes/mytheme/#g' /tmp/mytheme/index.html
+3. Leave ``index.html`` as it is. The bundled ``index.html`` refers to
+   its own files, such as the stylesheet, the logos and the script, as
+   ``{{themePath}}/assets/...``, and |Fess| replaces ``{{themePath}}``
+   with ``themes/<name>`` (the ``name`` in ``theme.yml``) when it serves
+   the page. Renaming the copy is therefore enough for it to load its own
+   files. When you add a file that ``index.html`` refers to, write its
+   URL as ``{{themePath}}/assets/...`` as well.
 
 4. Make your changes:
 
