@@ -241,36 +241,63 @@ Vous pouvez configurer l'URL de connexion à OpenSearch et l'intervalle de véri
    * - Élément de configuration
      - Description
    * - ``search_engine.http.url``
-     - URL d'OpenSearch (par défaut : http://localhost:9200)
+     - URL d'OpenSearch (par défaut : http://localhost:9200). La variable d'environnement ``SEARCH_ENGINE_HTTP_URL`` est prioritaire (voir ci-dessous).
    * - ``search_engine.heartbeat_interval``
      - Intervalle de vérification de santé (millisecondes, par défaut : 10000)
 
 Modification de la destination de connexion OpenSearch
 ----------------------
 
-Pour se connecter à un cluster OpenSearch externe :
+L'URL à laquelle |Fess| se connecte se définit avec la variable
+d'environnement ``SEARCH_ENGINE_HTTP_URL``. Elle est prioritaire sur
+``search_engine.http.url`` dans ``fess_config.properties``. Le
+``bin/fess.in.sh`` du paquet ZIP et le fichier d'environnement des paquets
+RPM/DEB définissent cette variable à ``http://localhost:9200`` par défaut ;
+modifier ``search_engine.http.url`` ne change donc pas la destination de la
+connexion.
+
+L'endroit où la définir dépend du mode d'installation :
+
+- Paquet ZIP : modifiez la ligne ``SEARCH_ENGINE_HTTP_URL`` de
+  ``bin/fess.in.sh``, ou exportez ``SEARCH_ENGINE_HTTP_URL`` dans
+  l'environnement qui démarre |Fess| (voir :doc:`../install/install-linux`).
+- Paquet RPM/DEB : ``SEARCH_ENGINE_HTTP_URL`` dans ``/etc/sysconfig/fess``
+  (RPM) ou ``/etc/default/fess`` (DEB).
+- Docker : la variable d'environnement du conteneur ``SEARCH_ENGINE_HTTP_URL``
+  (voir :doc:`../install/install-docker`).
+- Paquet ZIP sous Windows : la ligne ``-Dfess.search_engine.http_address`` de
+  ``bin\fess.in.bat`` (voir :doc:`../install/install-windows`).
 
 ::
 
-    search_engine.http.url=http://opensearch-cluster.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=http://opensearch-cluster.example.com:9200
 
 Connexion à plusieurs nœuds
 ~~~~~~~~~~~~~~~~~~
 
-Pour se connecter à plusieurs nœuds OpenSearch, spécifiez-les séparés par des virgules.
+Pour se connecter à plusieurs nœuds OpenSearch, séparez les URL par des
+virgules. Si certains nœuds sont arrêtés, |Fess| se connecte aux nœuds
+restants.
 
 ::
 
-    search_engine.http.url=http://node1:9200,http://node2:9200,http://node3:9200
+    SEARCH_ENGINE_HTTP_URL=http://node1:9200,http://node2:9200,http://node3:9200
 
 Configuration de la connexion SSL/TLS
 -----------------
 
-Pour se connecter à OpenSearch via HTTPS :
+Pour se connecter à OpenSearch via HTTPS, indiquez une URL ``https://`` de la
+même manière que ci-dessus :
 
 ::
 
-    search_engine.http.url=https://opensearch.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=https://opensearch.example.com:9200
+
+Définissez le certificat de l'autorité de certification et les identifiants
+dans ``fess_config.properties`` :
+
+::
+
     search_engine.http.ssl.certificate_authorities=/path/to/ca.crt
     search_engine.username=admin
     search_engine.password=admin_password

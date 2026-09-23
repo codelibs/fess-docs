@@ -241,36 +241,55 @@ OpenSearch 连接配置
    * - 配置项
      - 说明
    * - ``search_engine.http.url``
-     - OpenSearch的URL(默认: http://localhost:9200)
+     - OpenSearch的URL(默认: http://localhost:9200)。环境变量 ``SEARCH_ENGINE_HTTP_URL`` 优先(见下文)。
    * - ``search_engine.heartbeat_interval``
      - 健康检查间隔(毫秒,默认: 10000)
 
 OpenSearch 连接目标变更
 ----------------------
 
-连接到外部 OpenSearch 集群时:
+连接目标的 URL 通过环境变量 ``SEARCH_ENGINE_HTTP_URL`` 指定。该环境变量优先于
+``fess_config.properties`` 中的 ``search_engine.http.url`` 。ZIP 版的 ``bin/fess.in.sh``
+和 RPM/DEB 版的环境配置文件默认将该环境变量设置为 ``http://localhost:9200`` ，因此即使
+修改 ``search_engine.http.url`` ，连接目标也不会改变。
+
+设置位置因安装方式而异。
+
+- ZIP 版：编辑 ``bin/fess.in.sh`` 中 ``SEARCH_ENGINE_HTTP_URL`` 所在的行，或在启动
+  |Fess| 的环境中 export ``SEARCH_ENGINE_HTTP_URL`` （参见 :doc:`../install/install-linux` ）。
+- RPM/DEB 版： ``/etc/sysconfig/fess`` （RPM）或 ``/etc/default/fess`` （DEB）中的
+  ``SEARCH_ENGINE_HTTP_URL``
+- Docker：容器的环境变量 ``SEARCH_ENGINE_HTTP_URL`` （参见 :doc:`../install/install-docker` ）
+- Windows 上的 ZIP 版： ``bin\fess.in.bat`` 中 ``-Dfess.search_engine.http_address``
+  所在的行（参见 :doc:`../install/install-windows` ）
 
 ::
 
-    search_engine.http.url=http://opensearch-cluster.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=http://opensearch-cluster.example.com:9200
 
 连接多个节点
 ~~~~~~~~~~~~~~~~~~
 
-连接多个 OpenSearch 节点时,请用逗号分隔指定。
+连接多个 OpenSearch 节点时，请用逗号分隔各个 URL。即使部分节点已停止， |Fess| 也会
+连接到其余节点。
 
 ::
 
-    search_engine.http.url=http://node1:9200,http://node2:9200,http://node3:9200
+    SEARCH_ENGINE_HTTP_URL=http://node1:9200,http://node2:9200,http://node3:9200
 
 SSL/TLS 连接配置
 -----------------
 
-通过 HTTPS 连接到 OpenSearch 时:
+通过 HTTPS 连接到 OpenSearch 时，请按与上文相同的方法指定 ``https://`` 的 URL。
 
 ::
 
-    search_engine.http.url=https://opensearch.example.com:9200
+    SEARCH_ENGINE_HTTP_URL=https://opensearch.example.com:9200
+
+CA 证书和认证信息在 ``fess_config.properties`` 中设置。
+
+::
+
     search_engine.http.ssl.certificate_authorities=/path/to/ca.crt
     search_engine.username=admin
     search_engine.password=admin_password
