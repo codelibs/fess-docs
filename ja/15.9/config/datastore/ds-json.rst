@@ -436,6 +436,11 @@ APIレスポンスを保存したファイル
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` も ``parseInt`` も浮動小数点数を返すので、OpenSearch はそこから ``float`` 型のフィー
+ルドを作ります。最初のクロールの前に、 ``price`` （ ``double`` 型）と ``stock`` （ ``long`` 型）をイ
+ンデックスのマッピングに定義してください。手順は :ref:`search-custom-field-facet-sort-range` を参照
+してください。
+
 トラブルシューティング
 ======================
 

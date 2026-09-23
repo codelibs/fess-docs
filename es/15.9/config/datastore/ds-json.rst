@@ -456,6 +456,10 @@ Procesamiento de números
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` y ``parseInt`` devuelven un número de coma flotante, a partir del cual OpenSearch
+crea un campo ``float``. Defina ``price`` (``double``) y ``stock`` (``long``) en el mapeo del índice
+antes del primer rastreo, como se describe en :ref:`search-custom-field-facet-sort-range`.
+
 Solución de problemas
 =====================
 

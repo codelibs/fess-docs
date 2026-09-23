@@ -813,6 +813,10 @@ definido y todas las filas fallan. Para que ``price`` se pueda ordenar o usar co
 búsqueda por rango, o para usar ``category`` como faceta, consulte
 :ref:`search-custom-field-facet-sort-range`.
 
+Los números de JavaScript son de coma flotante: si ``price`` no está definido en el mapeo del índice
+antes del primer rastreo, OpenSearch lo crea como ``float`` y un número entero mayor que 16.777.216
+puede redondearse. La misma sección explica cómo definirlo como ``long``.
+
 Indexado condicional
 --------------------
 

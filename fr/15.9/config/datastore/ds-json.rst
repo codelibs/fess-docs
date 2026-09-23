@@ -462,6 +462,11 @@ Traitement des nombres
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` et ``parseInt`` renvoient tous deux un nombre à virgule flottante, à partir duquel
+OpenSearch crée un champ ``float``. Définissez ``price`` (``double``) et ``stock`` (``long``) dans
+le mapping de l'index avant la première exploration, comme décrit dans
+:ref:`search-custom-field-facet-sort-range`.
+
 Dépannage
 =========
 

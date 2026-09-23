@@ -273,7 +273,9 @@ an, den es für dieses Feld indiziert:
 
 - Eine Zeichenkette wird zu einem ``text``-Feld mit einem ``keyword``-Unterfeld namens
   ``<field>.keyword`` (Zeichenketten mit mehr als 256 Zeichen werden nicht im Unterfeld gespeichert).
-- Eine Zahl wird zu einem numerischen Feld.
+- Eine Zahl wird zu einem numerischen Feld: ``long`` für eine ganze Zahl, ``float`` für eine Zahl
+  mit Nachkommastellen. Die JavaScript-Engine übergibt jede Zahl als Gleitkommawert, daher wird auch
+  ein mit ``parseInt`` umgewandelter Wert zu ``float``.
 
 Jede Verwendung benötigt das passende:
 
@@ -309,6 +311,37 @@ Datenspeicher-Konfigurationen (``script_type=javascript``)::
     category=category
     price=parseInt(price, 10)
 
+Definieren Sie ein numerisches Feld im Index-Mapping, bevor das erste Dokument indiziert wird, das es
+enthält. Der sonst angelegte Typ ``float`` hat nur etwa sieben signifikante Stellen, und eine ganze
+Zahl über 16.777.216 kann auf einen benachbarten Wert gerundet werden: Ein Dokument, dessen ``price``
+``20000001`` ist, trifft auf ``price:[20000000 TO 20000000]`` zu, und die Sortierung kann die beiden
+nicht unterscheiden. Verwenden Sie ``long`` für ganze Zahlen und ``double`` für Dezimalzahlen.
+
+1. Fügen Sie das Feld über den Alias ``fess.update`` dem aktuellen Dokumentindex hinzu.
+
+   ::
+
+       $ curl -X PUT http://localhost:9200/fess.update/_mapping -H 'Content-Type: application/json' \
+           -d '{"properties":{"price":{"type":"long"}}}'
+
+2. Fügen Sie dieselbe Definition unter ``properties`` in
+   ``app/WEB-INF/classes/fess_indices/fess/doc.json`` der Installation hinzu, damit auch ein
+   Dokumentindex, den |Fess| später anlegt (beim ersten Start mit einem leeren Cluster oder durch eine
+   Neuindizierung auf der Seite :doc:`../admin/maintenance-guide`), sie enthält. Ein Upgrade ersetzt
+   ``doc.json`` durch die Datei der neuen Version; fügen Sie die Definition nach dem Upgrade erneut
+   hinzu.
+
+   ::
+
+       "properties": {
+         "price": {
+           "type": "long"
+         },
+         "anchor": {
+           "type": "keyword"
+         },
+         ...
+
 Führen Sie die Felder anschließend in ``fess_config.properties`` auf und starten Sie |Fess| neu::
 
     query.additional.search.fields=price
@@ -322,10 +355,12 @@ Danach lassen sich die Felder über die Such-API verwenden::
 
 .. note::
 
-   Der Typ eines Felds wird festgelegt, wenn das erste Dokument indiziert wird, das es enthält.
-   Wurde ein Feld bereits als Zeichenkette indiziert, ändert eine Umwandlung im Skript daran
-   nichts: Speichern Sie den umgewandelten Wert unter einem neuen Feldnamen (zum Beispiel
-   ``price_num``), oder erstellen Sie den Index neu.
+   Der Typ eines Felds wird festgelegt, wenn das erste Dokument indiziert wird, das es enthält,
+   und die Mapping-API kann ihn danach nicht mehr ändern. Um den Typ eines bereits indizierten
+   Felds zu ändern, etwa einer Zeichenkette oder eines ``float``, fügen Sie die Definition wie in
+   Schritt 2 oben zu ``doc.json`` hinzu und führen Sie auf der Seite
+   :doc:`../admin/maintenance-guide` eine Neuindizierung mit aktiviertem „Alias aktualisieren“ aus.
+   Die Dokumente werden in einen neuen Index kopiert, der aus ``doc.json`` erstellt wird.
 
 .. note::
 

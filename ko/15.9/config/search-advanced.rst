@@ -272,7 +272,9 @@ OpenSearch 하이라이터에 전달할 값을 지정합니다.
 
 - 문자열은 ``text`` 필드가 되며, ``<field>.keyword`` 라는 ``keyword`` 서브 필드를 가집니다
   (256자보다 긴 문자열은 서브 필드에 저장되지 않습니다).
-- 숫자는 숫자형 필드가 됩니다.
+- 숫자는 숫자형 필드가 됩니다. 정수는 ``long`` 유형, 소수는 ``float`` 유형입니다. JavaScript
+  엔진은 모든 숫자를 부동소수점 값으로 넘기므로 ``parseInt`` 로 변환한 값도 ``float`` 유형이
+  됩니다.
 
 용도마다 알맞은 필드를 사용해야 합니다.
 
@@ -307,6 +309,35 @@ CSV, JSON, 데이터베이스에서 읽은 값은 스크립트가 변환하지 �
     category=category
     price=parseInt(price, 10)
 
+숫자 필드는 그 필드를 가진 첫 번째 문서를 인덱싱하기 전에 인덱스 매핑에 정의하십시오. 그렇지 않으면
+만들어지는 ``float`` 유형은 유효 자릿수가 7자리 정도이며, 16,777,216 보다 큰 정수는 가까운 값으로
+반올림될 수 있습니다. 예를 들어 ``price`` 가 ``20000001`` 인 문서가 ``price:[20000000 TO 20000000]`` 에
+일치하고, 정렬에서도 둘을 구별하지 못합니다. 정수에는 ``long`` 유형, 소수에는 ``double`` 유형을
+사용합니다.
+
+1. ``fess.update`` 별칭을 통해 현재 문서 인덱스에 필드를 추가합니다.
+
+   ::
+
+       $ curl -X PUT http://localhost:9200/fess.update/_mapping -H 'Content-Type: application/json' \
+           -d '{"properties":{"price":{"type":"long"}}}'
+
+2. 같은 정의를 설치 위치의 ``app/WEB-INF/classes/fess_indices/fess/doc.json`` 의 ``properties`` 에도
+   추가합니다. 그러면 |Fess| 가 나중에 만드는 문서 인덱스(빈 클러스터로 처음 시작할 때, 그리고
+   :doc:`../admin/maintenance-guide` 의 재인덱싱)에도 정의가 들어갑니다. 업그레이드하면
+   ``doc.json`` 이 새 버전의 파일로 바뀌므로 업그레이드 후에 다시 추가하십시오.
+
+   ::
+
+       "properties": {
+         "price": {
+           "type": "long"
+         },
+         "anchor": {
+           "type": "keyword"
+         },
+         ...
+
 그런 다음 ``fess_config.properties`` 에 필드를 나열하고 |Fess| 를 재시작합니다::
 
     query.additional.search.fields=price
@@ -320,9 +351,10 @@ CSV, JSON, 데이터베이스에서 읽은 값은 스크립트가 변환하지 �
 
 .. note::
 
-   필드의 유형은 그 필드를 가진 첫 번째 문서가 인덱싱될 때 고정됩니다. 이미 문자열로 인덱싱된
-   필드는 스크립트에서 변환해도 바뀌지 않습니다. 변환한 값을 새 필드명(예: ``price_num`` )으로
-   저장하거나 인덱스를 다시 만드십시오.
+   필드의 유형은 그 필드를 가진 첫 번째 문서가 인덱싱될 때 고정되며, 나중에 매핑 API 로 바꿀 수
+   없습니다. 이미 문자열이나 ``float`` 유형으로 인덱싱된 필드의 유형을 바꾸려면 위의 2단계처럼
+   ``doc.json`` 에 정의를 추가한 다음, :doc:`../admin/maintenance-guide` 에서 "별칭 업데이트"를
+   활성화하고 재인덱싱을 실행합니다. ``doc.json`` 으로 만든 새 인덱스에 문서가 복사됩니다.
 
 .. note::
 

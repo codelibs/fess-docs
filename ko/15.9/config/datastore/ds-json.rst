@@ -435,6 +435,10 @@ API 응답을 저장한 파일
     price=parseFloat(price)
     stock=parseInt(stock_quantity, 10)
 
+``parseFloat`` 와 ``parseInt`` 는 모두 부동소수점 수를 반환하므로 OpenSearch 는 이로부터 ``float``
+유형의 필드를 만듭니다. 첫 크롤 전에 ``price`` ( ``double`` 유형)와 ``stock`` ( ``long`` 유형)을
+인덱스 매핑에 정의하십시오. 절차는 :ref:`search-custom-field-facet-sort-range` 를 참조하십시오.
+
 문제 해결
 =========
 
