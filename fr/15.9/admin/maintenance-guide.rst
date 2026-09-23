@@ -66,6 +66,10 @@ Rechargement de l'index de documents
 ------------------------------------
 
 Vous pouvez recharger l'index de documents pour appliquer la configuration de l'index.
+C'est aussi ainsi que les modifications de dictionnaire sont appliquées aux recherches : les
+dictionnaires enregistrés sont écrits dans leurs fichiers dans OpenSearch, puis l'index vers lequel
+pointe l'alias ``fess.update`` est fermé et rouvert. Tant que l'index est fermé, il ne peut pas être
+interrogé. Voir :ref:`dict-apply-changes`.
 
 
 Index Crawler

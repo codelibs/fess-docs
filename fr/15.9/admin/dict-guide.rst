@@ -70,6 +70,7 @@ recherche ne changent pas, commencez par consulter ce tableau.
    réouverture de l'index**. De plus, un dictionnaire qui s'applique à
    l'indexation n'est pas appliqué rétroactivement aux documents déjà indexés ;
    ceux-ci doivent être crawlés de nouveau.
+   Pour appliquer une modification, voir :ref:`dict-apply-changes`.
 
 .. warning::
 
@@ -77,6 +78,44 @@ recherche ne changent pas, commencez par consulter ce tableau.
    le champ auquel répondent la plupart des recherches, est le ``mapping.txt``
    de la **racine**, et non ``ja/mapping.txt``. Ils portent le même nom Mappage
    mais ce sont deux fichiers distincts.
+
+.. _dict-apply-changes:
+
+Appliquer les modifications d'un dictionnaire
+---------------------------------------------
+
+Enregistrer un dictionnaire ne modifie pas les résultats de recherche, quel que soit le temps
+d'attente. Le plugin configsync d'OpenSearch écrit les dictionnaires enregistrés dans leurs fichiers
+environ une fois par minute, mais un analyseur ne lit ses dictionnaires qu'à l'ouverture de
+l'index : un index déjà ouvert continue donc d'utiliser les anciens. Après avoir modifié des
+dictionnaires, rechargez l'index de documents :
+
+1. Ouvrez [Informations système > Maintenance] dans le menu de gauche.
+2. Cliquez sur [Recharger] sous « Recharger l'index des documents ».
+
+Le bouton écrit d'abord les dictionnaires enregistrés dans leurs fichiers, puis ferme et rouvre
+l'index vers lequel pointe l'alias ``fess.update`` ; il n'est donc pas nécessaire d'attendre
+l'écriture périodique. Un dictionnaire qui s'applique à la recherche, comme un synonyme, prend
+effet dès que l'index est de nouveau ouvert. Pour un dictionnaire qui s'applique à l'indexation,
+crawlez également de nouveau les documents concernés.
+
+.. warning::
+
+   Tant que l'index est fermé, et jusqu'à ce que ses shards soient de nouveau affectés après son
+   ouverture, l'index ne peut pas être interrogé : les recherches échouent ou ne renvoient aucun
+   résultat. Plus l'index est volumineux, plus cela dure ; rechargez-le donc à un moment calme.
+
+Pour faire la même chose depuis un script, sans l'écran d'administration, envoyez les mêmes
+opérations à OpenSearch :
+
+::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+    curl -X POST "localhost:9200/fess.update/_close"
+    curl -X POST "localhost:9200/fess.update/_open"
+
+``_configsync/flush`` écrit immédiatement les dictionnaires enregistrés dans leurs fichiers. Sans
+cet appel, attendez au moins une minute après l'enregistrement avant de fermer l'index.
 
 Le dictionnaire utilisateur Kuromoji et les résultats de recherche
 --------------------------------------------------------------------

@@ -52,6 +52,11 @@ Après conversion
 Développe le mot entré dans la source de conversion avec le mot après conversion.
 Par exemple, si vous souhaitez traiter « TV » comme « TV » et « テレビ », entrez « TV » dans la source de conversion et entrez « TV » et « テレビ » dans l'après conversion.
 
+.. note::
+
+   L'ajout ou la modification d'un synonyme n'a pas d'effet à lui seul sur les résultats de recherche.
+   Rechargez l'index de documents comme décrit dans :ref:`dict-apply-changes`.
+
 Téléchargement
 ==============
 

@@ -70,6 +70,7 @@ nicht ändern, prüfen Sie zuerst diese Tabelle.
    wieder geöffnet wird**. Ein Wörterbuch, das beim Indexieren wirkt, wird
    zudem nicht rückwirkend auf bereits indexierte Dokumente angewendet; diese
    müssen erneut gecrawlt werden.
+   Wie Sie eine Änderung übernehmen, steht unter :ref:`dict-apply-changes`.
 
 .. warning::
 
@@ -77,6 +78,42 @@ nicht ändern, prüfen Sie zuerst diese Tabelle.
    dem die meisten Suchen beantwortet werden -- ist die ``mapping.txt`` im
    **Wurzelverzeichnis**, nicht ``ja/mapping.txt``. Beide heißen Mapping, sind
    aber verschiedene Dateien.
+
+.. _dict-apply-changes:
+
+Wörterbuchänderungen übernehmen
+-------------------------------
+
+Das Speichern eines Wörterbuchs ändert die Suchergebnisse nicht, egal wie lange Sie warten. Das
+configsync-Plugin von OpenSearch schreibt die gespeicherten Wörterbücher etwa einmal pro Minute in
+ihre Dateien, ein Analyzer liest seine Wörterbücher aber nur beim Öffnen des Index, sodass ein
+bereits geöffneter Index weiter die alten verwendet. Laden Sie den Dokumentindex nach dem
+Bearbeiten von Wörterbüchern neu:
+
+1. Öffnen Sie im linken Menü [Systeminformationen > Wartung].
+2. Klicken Sie unter „Dokumentenindex neu laden“ auf [Neu laden].
+
+Die Schaltfläche schreibt zuerst die gespeicherten Wörterbücher in ihre Dateien und schließt und
+öffnet dann den Index, auf den der Alias ``fess.update`` zeigt; auf das regelmäßige Schreiben
+müssen Sie nicht warten. Ein Wörterbuch, das bei der Suche wirkt, etwa ein Synonym, wird wirksam,
+sobald der Index wieder geöffnet ist. Bei einem Wörterbuch, das beim Indexieren wirkt, crawlen Sie
+die betroffenen Dokumente zusätzlich erneut.
+
+.. warning::
+
+   Solange der Index geschlossen ist und bis seine Shards nach dem Öffnen wieder zugewiesen sind,
+   kann der Index nicht durchsucht werden: Suchen schlagen fehl oder liefern keine Ergebnisse. Je
+   größer der Index, desto länger dauert das; laden Sie ihn daher zu einer ruhigen Zeit neu.
+
+Um dasselbe ohne die Verwaltungsoberfläche aus einem Skript heraus zu tun, senden Sie dieselben
+Operationen an OpenSearch::
+
+    curl -X POST "localhost:9200/_configsync/flush"
+    curl -X POST "localhost:9200/fess.update/_close"
+    curl -X POST "localhost:9200/fess.update/_open"
+
+``_configsync/flush`` schreibt die gespeicherten Wörterbücher sofort in ihre Dateien. Ohne diesen
+Aufruf warten Sie nach dem Speichern mindestens eine Minute, bevor Sie den Index schließen.
 
 Kuromoji-Benutzerwörterbuch und Suchergebnisse
 ----------------------------------------------

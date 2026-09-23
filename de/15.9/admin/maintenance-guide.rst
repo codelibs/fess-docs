@@ -66,6 +66,10 @@ Dokumentindex neu laden
 -----------------------
 
 Sie können den Dokumentindex neu laden, um die Indexkonfiguration zu übernehmen.
+Auf diesem Weg werden auch Wörterbuchänderungen für die Suche übernommen: Die gespeicherten
+Wörterbücher werden in ihre Dateien in OpenSearch geschrieben, dann wird der Index, auf den der
+Alias ``fess.update`` zeigt, geschlossen und geöffnet. Solange der Index geschlossen ist, kann er
+nicht durchsucht werden. Siehe :ref:`dict-apply-changes`.
 
 
 Crawler-Index

@@ -50,6 +50,11 @@ Después de la conversión
 Expanda la palabra ingresada en el origen de la conversión con la palabra después de la conversión.
 Por ejemplo, si desea tratar "TV" como "TV" y "テレビ", ingrese "TV" en el origen de la conversión e ingrese "TV" y "テレビ" en después de la conversión.
 
+.. note::
+
+   Añadir o cambiar un sinónimo no afecta por sí solo a los resultados de búsqueda. Recargue el índice
+   de documentos como se describe en :ref:`dict-apply-changes`.
+
 Descarga
 ========
 

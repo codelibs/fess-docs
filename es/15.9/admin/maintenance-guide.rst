@@ -66,6 +66,10 @@ Recargar índice de documentos
 ------------------------------
 
 Puede recargar el índice de documentos para reflejar la configuración del índice.
+También es la forma de aplicar a las búsquedas los cambios de diccionario: los diccionarios
+guardados se escriben en sus archivos de OpenSearch y, a continuación, se cierra y se abre el
+índice al que apunta el alias ``fess.update``. Mientras el índice está cerrado no se puede buscar
+en él. Consulte :ref:`dict-apply-changes`.
 
 
 Índice de Rastreador
