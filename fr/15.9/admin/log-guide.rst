@@ -57,8 +57,8 @@ fess-urls.log
 
 Le temps nécessaire pour un crawl est enregistré.
 
-search.log
-::::::::::
+searchlog.log
+:::::::::::::
 
 Les journaux de recherche sont enregistrés.
 

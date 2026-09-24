@@ -223,6 +223,20 @@ Correspond respectivement à la réponse lors d'une recherche normale, d'une rec
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` ne fait qu'ajouter des champs à la liste des champs
+   autorisés dans la réponse de l'API de recherche (``/api/v2/search``). À lui seul, il ne fait pas
+   apparaître un champ dans la réponse. L'API de recherche récupère auprès du moteur de recherche les
+   mêmes champs qu'une recherche normale, y compris ceux de ``query.additional.response.fields``, et ne
+   renvoie que les champs récupérés qui figurent dans cette liste. Pour inclure un champ personnalisé
+   dans la réponse de l'API de recherche, indiquez le même nom de champ dans les deux paramètres.
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 Pour plus de détails sur les champs de réponse de la recherche par défilement, consultez :doc:`search-scroll`.
 
 Ajout de noms de champs

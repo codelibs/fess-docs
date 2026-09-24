@@ -145,7 +145,7 @@ Response
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ Response Fields
    * - ``record_count``
      - Number of matching items.
    * - ``record_count_relation``
-     - Relation of the matching count. ``eq`` means an exact count, ``gte`` means only a lower bound is known.
+     - Relation of the matching count. ``EQUAL_TO`` means an exact count, ``GREATER_THAN_OR_EQUAL_TO`` means only a lower bound is known.
    * - ``page_count``
      - Total number of pages.
    * - ``next_page``

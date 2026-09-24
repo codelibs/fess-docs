@@ -129,6 +129,14 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
     GET /api/admin/backup/file/{id}
 
+.. note::
+
+   ``{id}`` 에 점( ``.`` )이 포함된 경우( ``fess_config.bulk`` , ``system.properties`` ,
+   ``search_log.ndjson`` 등)에는 URL 끝에 ``/`` 를 붙이십시오
+   (예: ``/api/admin/backup/file/fess_config.bulk/`` ). ``/`` 로 끝나지 않고 마지막 요소에 점이
+   포함된 경로는 확장자가 있는 파일에 대한 요청으로 취급되어 API에 도달하지 않으며,
+   404 Not Found 가 반환됩니다.
+
 응답
 ----
 
@@ -155,7 +163,7 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
@@ -164,7 +172,7 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 

@@ -50,7 +50,7 @@ Paramètres de requête
    * - ``as.*``
      - Conditions de recherche avancée. Tout paramètre ``as.<name>`` (ex. : ``as.q``, ``as.filetype``) est transmis au générateur de conditions de recherche avancée. Peut être répété pour chaque nom.
    * - ``track_total_hits``
-     - Transmis au moteur de recherche pour contrôler le comptage précis des résultats (ex. : ``true`` ou un seuil entier). Influence la valeur de ``record_count_relation`` (``eq`` ou ``gte``).
+     - Transmis au moteur de recherche pour contrôler le comptage précis des résultats (ex. : ``true`` ou un seuil entier). Influence la valeur de ``record_count_relation`` (``EQUAL_TO`` ou ``GREATER_THAN_OR_EQUAL_TO``).
    * - ``facet.field``
      - Champ de facette. Peut être répété (tableau).
    * - ``facet.query``
@@ -87,7 +87,7 @@ En cas de succès (200), les champs suivants sont retournés directement sous ``
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ Les détails de chaque champ sont les suivants.
    * - ``record_count``
      - Nombre de résultats (int64).
    * - ``record_count_relation``
-     - ``eq`` indique un comptage exact ; ``gte`` indique que seule la borne inférieure est connue.
+     - ``EQUAL_TO`` indique un comptage exact ; ``GREATER_THAN_OR_EQUAL_TO`` indique que seule la borne inférieure est connue.
    * - ``page_count``
      - Nombre total de pages.
    * - ``highlight_params``

@@ -145,7 +145,7 @@ SearchList API는 |Fess| 인덱스의 문서를 검색·관리하기 위한 Admi
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ SearchList API는 |Fess| 인덱스의 문서를 검색·관리하기 위한 Admi
    * - ``record_count``
      - 일치하는 건수.
    * - ``record_count_relation``
-     - 일치 건수의 관계. ``eq`` 는 정확한 건수, ``gte`` 는 하한만 확인된 것을 나타냅니다.
+     - 일치 건수의 관계. ``EQUAL_TO`` 는 정확한 건수, ``GREATER_THAN_OR_EQUAL_TO`` 는 하한만 확인된 것을 나타냅니다.
    * - ``page_count``
      - 총 페이지 수.
    * - ``next_page``

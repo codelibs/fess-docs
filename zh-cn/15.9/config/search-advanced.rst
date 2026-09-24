@@ -223,6 +223,19 @@ OR搜索再搜索阈值
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` 只是将字段添加到允许输出到搜索 API（ ``/api/v2/search`` ）
+   响应中的字段列表，仅靠它字段并不会出现在响应中。
+   搜索 API 从搜索引擎获取与普通搜索相同的字段（包括 ``query.additional.response.fields`` 中的字段），
+   然后只返回其中位于该列表中的字段。
+   要在搜索 API 的响应中包含自定义字段，请在两个设置中指定相同的字段名。
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 滚动搜索响应字段的详细信息请参阅 :doc:`search-scroll`。
 
 添加字段名

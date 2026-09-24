@@ -66,7 +66,11 @@ Para ordenar por múltiples campos, especifíquelos separados por comas como se 
     fess sort:content_length.desc,last_modified
 
 .. note::
-   Si especifica un nombre de campo que no está en la lista de campos de ordenamiento, o un orden de ordenamiento distinto de ``asc`` o ``desc``, la búsqueda producirá un error.
+   Especificar en ``sort:`` dentro de los términos de búsqueda un nombre de campo que no está en la lista de campos de ordenamiento, o un orden distinto de ``asc`` o ``desc``, no produce un error.
+   En su lugar, ``sort:`` no se trata como condición de ordenamiento, y la búsqueda se vuelve a ejecutar tratando los símbolos de todo el término de búsqueda (como ``:``) como caracteres normales.
+   Los resultados no se ordenan y, en la mayoría de los casos, no se encuentra ningún documento.
+
+   Si se especifica el mismo valor en el parámetro ``sort`` de la API de búsqueda, se produce un error (400 Bad Request).
 
 .. |image0| image:: ../../../resources/images/en/15.9/user/search-sort-1.png
 .. pdf            :width: 300 px

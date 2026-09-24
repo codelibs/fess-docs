@@ -130,6 +130,14 @@ Requête
 
     GET /api/admin/backup/file/{id}
 
+.. note::
+
+   Si ``{id}`` contient un point (``.``), comme ``fess_config.bulk``, ``system.properties`` et
+   ``search_log.ndjson``, terminez l'URL par ``/`` (par exemple
+   ``/api/admin/backup/file/fess_config.bulk/``). Un chemin qui ne se termine pas par ``/`` et dont
+   le dernier segment contient un point est traité comme la demande d'un fichier avec extension. Il
+   n'atteint pas l'API et une erreur 404 Not Found est renvoyée.
+
 Réponse
 -------
 
@@ -157,7 +165,7 @@ Téléchargement de l'index de configuration
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
@@ -166,7 +174,7 @@ Téléchargement des journaux de recherche
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 

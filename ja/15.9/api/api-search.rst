@@ -50,7 +50,7 @@ HTTPメソッド         GET
    * - ``as.*``
      - 高度な検索条件。任意の ``as.<name>`` （例: ``as.q`` , ``as.filetype`` ）が高度な検索条件ビルダーに渡されます。name ごとに繰り返し指定可能です。
    * - ``track_total_hits``
-     - 検索エンジンに転送され、正確なヒット数カウントを制御します（例: ``true`` または整数しきい値）。 ``record_count_relation`` が ``eq`` か ``gte`` かに影響します。
+     - 検索エンジンに転送され、正確なヒット数カウントを制御します（例: ``true`` または整数しきい値）。 ``record_count_relation`` が ``EQUAL_TO`` か ``GREATER_THAN_OR_EQUAL_TO`` かに影響します。
    * - ``facet.field``
      - ファセットフィールド。繰り返し指定可能（配列）。
    * - ``facet.query``
@@ -87,7 +87,7 @@ HTTPメソッド         GET
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ HTTPメソッド         GET
    * - ``record_count``
      - ヒット件数（int64）。
    * - ``record_count_relation``
-     - ``eq`` のときは正確なカウント、 ``gte`` のときは下限のみ判明していることを示します。
+     - ``EQUAL_TO`` のときは正確なカウント、 ``GREATER_THAN_OR_EQUAL_TO`` のときは下限のみ判明していることを示します。
    * - ``page_count``
      - 総ページ数。
    * - ``highlight_params``

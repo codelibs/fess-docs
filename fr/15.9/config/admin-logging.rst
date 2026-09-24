@@ -259,8 +259,29 @@ Rotation automatique avec Log4j2
 Configuration par défaut
 ~~~~~~~~~~~~~~~~
 
-- **Taille du fichier** : Rotation lorsque 10 Mo sont dépassés
-- **Nombre de générations conservées** : Maximum 10 fichiers
+- **Taille du fichier** : Rotation lorsque 100 Mo sont dépassés
+- **Nombre de générations conservées** : Maximum 10 fichiers pour une même date
+- **Durée de conservation** : Les fichiers compressés (``*.log.gz``) sont supprimés lors de la rotation
+  une fois écoulé le nombre de jours indiqué depuis leur dernière modification
+
+Les durées de conservation par défaut sont les suivantes. Vous pouvez les modifier avec les valeurs de
+``<Properties>`` dans ``log4j2.xml``.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Fichier journal
+     - Durée de conservation
+     - Propriété
+   * - ``fess.log``, ``fess-llm.log``
+     - 90 jours
+     - ``backup.max.age``
+   * - ``searchlog.log``
+     - 90 jours
+     - ``backup.searchlog.max.age``
+   * - ``audit.log``
+     - 360 jours
+     - ``backup.audit.max.age``
 
 Exemple de fichier de configuration (``log4j2.xml``) :
 

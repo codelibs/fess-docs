@@ -50,7 +50,7 @@ HTTP 메서드          GET
    * - ``as.*``
      - 고급 검색 조건. 임의의 ``as.<name>`` (예: ``as.q`` , ``as.filetype`` ) 이 고급 검색 조건 빌더에 전달됩니다. name 별로 반복 지정 가능합니다.
    * - ``track_total_hits``
-     - 검색 엔진에 전달되어 정확한 히트 수 계산을 제어합니다 (예: ``true`` 또는 정수 임계값). ``record_count_relation`` 이 ``eq`` 인지 ``gte`` 인지에 영향을 줍니다.
+     - 검색 엔진에 전달되어 정확한 히트 수 계산을 제어합니다 (예: ``true`` 또는 정수 임계값). ``record_count_relation`` 이 ``EQUAL_TO`` 인지 ``GREATER_THAN_OR_EQUAL_TO`` 인지에 영향을 줍니다.
    * - ``facet.field``
      - 패싯 필드. 반복 지정 가능 (배열).
    * - ``facet.query``
@@ -87,7 +87,7 @@ HTTP 메서드          GET
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ HTTP 메서드          GET
    * - ``record_count``
      - 히트 건수 (int64).
    * - ``record_count_relation``
-     - ``eq`` 일 때는 정확한 카운트, ``gte`` 일 때는 하한만 확인된 것을 나타냅니다.
+     - ``EQUAL_TO`` 일 때는 정확한 카운트, ``GREATER_THAN_OR_EQUAL_TO`` 일 때는 하한만 확인된 것을 나타냅니다.
    * - ``page_count``
      - 총 페이지 수.
    * - ``highlight_params``

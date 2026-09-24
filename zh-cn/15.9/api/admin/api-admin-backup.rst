@@ -128,6 +128,13 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
     GET /api/admin/backup/file/{id}
 
+.. note::
+
+   如果 ``{id}`` 中包含点（ ``.`` ），例如 ``fess_config.bulk`` 、 ``system.properties`` 、
+   ``search_log.ndjson`` ，请在 URL 末尾加上 ``/`` （例如
+   ``/api/admin/backup/file/fess_config.bulk/`` ）。不以 ``/`` 结尾且最后一段包含点的路径会被视为
+   对带扩展名文件的请求，不会到达 API，并返回 404 Not Found。
+
 响应
 ----
 
@@ -154,7 +161,7 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
@@ -163,7 +170,7 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 

@@ -57,8 +57,8 @@ fess-urls.log
 
 Protokolliert wird die Zeit, die für einen einzelnen Crawl benötigt wurde.
 
-search.log
-::::::::::
+searchlog.log
+:::::::::::::
 
 Protokolliert werden die Suchprotokolle.
 

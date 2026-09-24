@@ -66,7 +66,11 @@ Pour trier sur plusieurs champs, spécifiez-les séparés par des virgules (,) c
     fess sort:content_length.desc,last_modified
 
 .. note::
-   Si vous indiquez un nom de champ absent de la liste des champs de tri disponibles, ou un ordre de tri autre que ``asc`` ou ``desc``, la recherche se soldera par une erreur.
+   Indiquer dans ``sort:`` au sein des termes de recherche un nom de champ absent de la liste des champs de tri disponibles, ou un ordre de tri autre que ``asc`` ou ``desc``, ne provoque pas d'erreur.
+   ``sort:`` n'est alors pas traité comme une condition de tri, et la recherche est relancée en traitant les symboles de l'ensemble du terme de recherche (comme ``:``) comme des caractères ordinaires.
+   Les résultats ne sont pas triés et, dans la plupart des cas, aucun document n'est trouvé.
+
+   Indiquer la même valeur dans le paramètre ``sort`` de l'API de recherche provoque une erreur (400 Bad Request).
 
 .. |image0| image:: ../../../resources/images/en/15.9/user/search-sort-1.png
 .. pdf            :width: 300 px

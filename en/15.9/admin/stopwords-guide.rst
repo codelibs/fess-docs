@@ -5,7 +5,19 @@ Stopwords Dictionary
 Overview
 ========
 
-You can map specific characters (symbols, character codes, full-width/half-width) to stopwords.
+Stopwords are words that the analyzer removes when documents are indexed and when searches are run.
+The stopwords dictionary lets you manage the words to remove.
+
+.. note::
+
+   Stopwords dictionaries are per-language files (``en/stopwords.txt``, ``ja/stopwords.txt`` and so
+   on), and each one is used only by the analyzer for its language. ``en/stopwords.txt`` is used to
+   analyze the ``content`` and ``title`` fields and ``_en`` fields such as ``content_en``, while
+   ``content_ja`` and ``title_ja`` of documents detected as Japanese are analyzed with
+   ``ja/stopwords.txt``. Language-specific fields such as ``content_ja`` are added to the query
+   according to the request language, so a word added only to ``en/stopwords.txt`` can still match
+   through a language-specific field. To keep a word from matching, also add it to the stopwords
+   dictionary for the language of the documents.
 
 Management Operations
 =====================
@@ -29,25 +41,20 @@ To open the stopwords configuration page, click the New button.
 Configuration Items
 -------------------
 
-Source
-::::::
+Word Info
+:::::::::
 
-Enters the characters (symbols, character codes, full-width/half-width) to be stopwords.
-
-Target
-::::::
-
-Expands the characters entered in the source field with the converted characters.
+Enter the word to remove as a stopword.
 
 Download
 ========
 
-You can download in stopwords dictionary format.
+You can download the stopwords dictionary as a text file with one word per line.
 
 Upload
 ======
 
-You can upload in stopwords dictionary format.
+You can upload a text file with one word per line. Lines starting with ``#`` are treated as comments.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/stopwords-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/stopwords-2.png

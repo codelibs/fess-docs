@@ -145,7 +145,7 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ SearchList API是用于在 |Fess| 索引中搜索和管理文档的Admin API。
    * - ``record_count``
      - 命中条数。
    * - ``record_count_relation``
-     - 命中数的关系。\ ``eq`` 表示精确计数，``gte`` 表示仅知下限。
+     - 命中数的关系。\ ``EQUAL_TO`` 表示精确计数，``GREATER_THAN_OR_EQUAL_TO`` 表示仅知下限。
    * - ``page_count``
      - 总页数。
    * - ``next_page``

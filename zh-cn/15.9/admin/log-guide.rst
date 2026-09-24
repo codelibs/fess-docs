@@ -57,8 +57,8 @@ fess-urls.log
 
 记录单次爬虫所需的时间。
 
-search.log
-::::::::::
+searchlog.log
+:::::::::::::
 
 记录搜索日志。
 

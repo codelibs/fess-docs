@@ -50,7 +50,7 @@ HTTP 方法            GET
    * - ``as.*``
      - 高级搜索条件。任意 ``as.<name>``\ （例：\ ``as.q``\ 、\ ``as.filetype``\ ）均会传递给高级搜索条件构建器。每个 name 可重复指定。
    * - ``track_total_hits``
-     - 转发给搜索引擎，用于控制精确命中数统计（例：\ ``true`` 或整数阈值）。影响 ``record_count_relation`` 是 ``eq`` 还是 ``gte``\ 。
+     - 转发给搜索引擎，用于控制精确命中数统计（例：\ ``true`` 或整数阈值）。影响 ``record_count_relation`` 是 ``EQUAL_TO`` 还是 ``GREATER_THAN_OR_EQUAL_TO``\ 。
    * - ``facet.field``
      - 分面字段。可重复指定（数组）。
    * - ``facet.query``
@@ -87,7 +87,7 @@ HTTP 方法            GET
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ HTTP 方法            GET
    * - ``record_count``
      - 命中数量（int64）。
    * - ``record_count_relation``
-     - ``eq`` 表示精确计数，\ ``gte`` 表示仅知下限。
+     - ``EQUAL_TO`` 表示精确计数，\ ``GREATER_THAN_OR_EQUAL_TO`` 表示仅知下限。
    * - ``page_count``
      - 总页数。
    * - ``highlight_params``

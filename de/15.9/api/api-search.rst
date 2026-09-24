@@ -50,7 +50,7 @@ Anfrageparameter
    * - ``as.*``
      - Erweiterte Suchbedingungen. Beliebige ``as.<name>``-Parameter (z. B. ``as.q``, ``as.filetype``) werden an den erweiterten Suchbedingungsgenerator übergeben. Pro Name können mehrere Werte angegeben werden.
    * - ``track_total_hits``
-     - Wird an die Suchmaschine weitergeleitet und steuert die genaue Trefferanzahl (z. B. ``true`` oder ein ganzzahliger Schwellenwert). Beeinflusst, ob ``record_count_relation`` ``eq`` oder ``gte`` ist.
+     - Wird an die Suchmaschine weitergeleitet und steuert die genaue Trefferanzahl (z. B. ``true`` oder ein ganzzahliger Schwellenwert). Beeinflusst, ob ``record_count_relation`` ``EQUAL_TO`` oder ``GREATER_THAN_OR_EQUAL_TO`` ist.
    * - ``facet.field``
      - Facettenfeld. Kann mehrfach angegeben werden (Array).
    * - ``facet.query``
@@ -87,7 +87,7 @@ Bei Erfolg (200) werden die folgenden Felder direkt unter ``response`` im gemein
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ Die einzelnen Felder sind wie folgt beschrieben:
    * - ``record_count``
      - Anzahl der Treffer (int64).
    * - ``record_count_relation``
-     - Bei ``eq`` ist die Anzahl exakt; bei ``gte`` ist nur eine Untergrenze bekannt.
+     - Bei ``EQUAL_TO`` ist die Anzahl exakt; bei ``GREATER_THAN_OR_EQUAL_TO`` ist nur eine Untergrenze bekannt.
    * - ``page_count``
      - Gesamtanzahl der Seiten.
    * - ``highlight_params``

@@ -66,7 +66,11 @@ Um nach mehreren Feldern zu sortieren, geben Sie diese wie folgt durch Kommas (,
     fess sort:content_length.desc,last_modified
 
 .. note::
-   Wenn Sie einen Feldnamen angeben, der nicht in der Liste der sortierbaren Felder enthalten ist, oder eine andere Sortierreihenfolge als ``asc`` oder ``desc``, führt die Suche zu einem Fehler.
+   Wenn Sie in ``sort:`` in den Suchbegriffen einen Feldnamen angeben, der nicht in der Liste der sortierbaren Felder enthalten ist, oder eine andere Sortierreihenfolge als ``asc`` oder ``desc``, führt das nicht zu einem Fehler.
+   Stattdessen wird ``sort:`` nicht als Sortierbedingung behandelt, und die Suche wird erneut ausgeführt, wobei die Sonderzeichen im gesamten Suchbegriff (etwa ``:``) als gewöhnliche Zeichen behandelt werden.
+   Die Ergebnisse werden nicht sortiert, und in den meisten Fällen werden keine Dokumente gefunden.
+
+   Wird derselbe Wert im Parameter ``sort`` der Such-API angegeben, führt das zu einem Fehler (400 Bad Request).
 
 .. |image0| image:: ../../../resources/images/en/15.9/user/search-sort-1.png
 .. pdf            :width: 300 px
