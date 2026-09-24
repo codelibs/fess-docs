@@ -48,10 +48,11 @@ Fórmula::
 
 .. note::
 
-   El algoritmo de fusión es siempre RRF; no existe ningún ajuste para cambiar a otro algoritmo.
-   Tampoco se admite la ponderación por buscador: la contribución de cada buscador se suma con
-   el mismo peso. El único ajuste que permite modificar la tendencia del ranking es
-   ``rank.fusion.rank_constant``.
+   Cuando la fusión la realiza |Fess| (el comportamiento predeterminado), el algoritmo es siempre
+   RRF y no se admite la ponderación por buscador: la contribución de cada buscador se suma con el
+   mismo peso, y ``rank.fusion.rank_constant`` es el único ajuste que permite modificar la
+   tendencia del ranking. Cuando la fusión la realiza el motor de búsqueda, se dispone de otras
+   técnicas de combinación y de pesos por buscador (consulte :ref:`rank-fusion-engine`).
 
 Configuración
 =============
@@ -157,6 +158,100 @@ Esta propiedad se comporta de la siguiente manera:
    ``default,semantic``, elimine este ajuste o añada ``semantic_chunk``. Consulte "Migración
    desde la versión 15.7 o anterior" en :doc:`search-semantic` para más detalles.
 
+.. _rank-fusion-engine:
+
+Rank Fusion en el motor de búsqueda
+===================================
+
+Si establece ``rank.fusion.engine.enabled=true``, la fusión la realiza OpenSearch en lugar de
+|Fess|. Las consultas de los buscadores se combinan en una única solicitud de búsqueda (una
+consulta ``hybrid``), y un search pipeline de OpenSearch normaliza y combina las puntuaciones.
+Como la fusión se realiza en una sola solicitud, el número total de resultados y los recuentos de
+las facetas también corresponden al conjunto de resultados fusionado.
+
+Esto requiere el plugin neural-search de OpenSearch. Está incluido en la distribución estándar de
+OpenSearch y en la imagen ``ghcr.io/codelibs/fess-opensearch``, pero no en la distribución
+mínima.
+
+Los ajustes se escriben en ``fess_config.properties`` (un cambio requiere reiniciar |Fess|)::
+
+    rank.fusion.engine.enabled=true
+    rank.fusion.combination.technique=rrf
+    rank.fusion.normalization.technique=min_max
+    rank.fusion.combination.weights=
+    rank.fusion.pagination_depth=200
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - Propiedad
+     - Valor predeterminado
+     - Descripción
+   * - ``rank.fusion.engine.enabled``
+     - ``false``
+     - ``true`` hace que la fusión la realice el motor de búsqueda.
+   * - ``rank.fusion.combination.technique``
+     - ``rrf``
+     - Cómo se combinan las puntuaciones: ``rrf``, ``arithmetic_mean``, ``geometric_mean`` o ``harmonic_mean``. Con ``rrf``, se utiliza ``rank.fusion.rank_constant`` como la constante ``k``, lo que da la misma fórmula que cuando la fusión la realiza |Fess|.
+   * - ``rank.fusion.normalization.technique``
+     - ``min_max``
+     - Cómo se normalizan las puntuaciones antes de combinarlas: ``min_max``, ``l2`` o ``z_score``. No se utiliza con ``rrf``.
+   * - ``rank.fusion.combination.weights``
+     - (vacío)
+     - Peso de cada buscador, como pares ``nombre:peso`` separados por comas (por ejemplo, ``default:0.7,semantic_chunk:0.3``). Cada peso debe estar entre ``0.0`` y ``1.0``, los pesos deben sumar ``1.0`` y deben indicarse todos los buscadores que participan en la fusión. Si está vacío, los buscadores tienen el mismo peso. Un valor que no cumple estas reglas se notifica con un registro ERROR, y esa búsqueda la fusiona |Fess|.
+   * - ``rank.fusion.pagination_depth``
+     - ``200``
+     - Cuántos resultados aporta cada buscador a la fusión por shard. Limita la profundidad hasta la que un cliente puede paginar y el conjunto de documentos que se fusionan.
+
+.. note::
+
+   La normalización ``z_score`` solo puede combinarse con ``arithmetic_mean``. Se trata de una
+   restricción del plugin neural-search. Si se combina con ``geometric_mean`` o ``harmonic_mean``,
+   |Fess| rechaza la combinación, escribe un registro ERROR que nombra ambas configuraciones y
+   fusiona esa búsqueda por sí mismo.
+
+En los siguientes casos el motor de búsqueda no realiza la fusión, y |Fess| fusiona los
+resultados en su lugar.
+
+- Una búsqueda que incluye parámetros de búsqueda avanzada (``as.*``)
+- Una búsqueda que especifica un criterio de ordenación, una búsqueda por geolocalización o una
+  búsqueda de documentos similares. Estas omiten por completo la búsqueda semántica, por lo que
+  los resultados provienen solo de la búsqueda por palabras clave (consulte :doc:`search-semantic`).
+- Una página cuya posición de inicio más el tamaño de página supera
+  ``rank.fusion.pagination_depth`` (se escribe un registro DEBUG en cada una de esas búsquedas). En ese caso, la
+  fusión en |Fess| aplica el límite de ``rank.fusion.window_size``, por lo que con los ajustes
+  predeterminados los resultados provienen solo de la búsqueda por palabras clave.
+- Un valor de ``rank.fusion.combination.weights`` que no cumple las reglas anteriores
+- La normalización ``z_score`` combinada con ``geometric_mean`` o ``harmonic_mean`` (un registro
+  ERROR nombra ambas configuraciones)
+- El motor de búsqueda no puede ejecutar solicitudes fusionadas en absoluto: no reconoce la consulta
+  ``hybrid`` o el procesador del pipeline de búsqueda, por ejemplo porque falta el plugin
+  neural-search o es demasiado antiguo. Se escribe un registro WARN en cada una de esas búsquedas, y
+  la siguiente búsqueda vuelve a pedírselo al motor de búsqueda, de modo que la fusión en el motor se
+  reanuda por sí sola, sin reiniciar |Fess|, en cuanto se instala o actualiza el plugin.
+
+Cualquier otro fallo de una solicitud fusionada (una consulta no válida, un índice cerrado, un fallo
+de shard, etc.) se notifica solo para esa búsqueda, igual que sin la fusión en el motor de búsqueda,
+y la siguiente búsqueda vuelve a fusionarla el motor de búsqueda.
+
+Tenga en cuenta lo siguiente cuando la fusión la realiza el motor de búsqueda.
+
+- ``rank.fusion.timeout`` no se aplica. El embedding de la consulta se calcula de forma síncrona
+  antes de enviar la solicitud de búsqueda, por lo que un proveedor de embeddings lento o que no
+  responde retrasa la búsqueda hasta el tiempo de espera propio del proveedor (por ejemplo,
+  ``content_chunker.embedding.ollama.timeout``).
+- ``rank.fusion.window_size`` y ``rank.fusion.threads`` solo se utilizan cuando la fusión la
+  realiza |Fess|.
+- El ``k`` de la consulta knn del buscador semántico (el número de vecinos por shard) pasa a ser
+  el mayor entre ``content_chunker.search.knn.k`` y ``rank.fusion.pagination_depth``. Una búsqueda
+  vectorial devuelve vecinos aunque su similitud sea baja, por lo que, sin
+  ``content_chunker.search.min_score``, el número total de resultados incluye esos resultados
+  vectoriales y, en un índice pequeño, puede abarcar la mayoría de los documentos que el usuario
+  puede ver. Establezca ``content_chunker.search.min_score`` para acotarlo (consulte
+  :doc:`search-semantic`).
+- El campo ``searcher`` se añade a los resultados como de costumbre, pero ``rf_score`` no.
+
 Integración con la búsqueda híbrida
 =====================================
 
@@ -210,7 +305,7 @@ por lo que, para consultarlos, establezca lo siguiente en ``fess_config.properti
 Impacto en el número de resultados
 ==================================
 
-Cuando se ejecuta Rank Fusion, el número total de resultados devuelto no es sin más el del
+Cuando Rank Fusion lo realiza |Fess|, el número total de resultados devuelto no es sin más el del
 buscador principal (el buscador ``default`` registrado en primer lugar), sino que se corrige de
 la siguiente manera::
 
@@ -225,6 +320,8 @@ híbrida está habilitada o no.
 
 Tenga en cuenta que, si el número total de resultados del buscador principal se devuelve como un
 valor aproximado (un límite inferior), esta corrección no se aplica.
+Cuando la fusión la realiza el motor de búsqueda, el número total de resultados es el del conjunto
+de resultados fusionado (consulte :ref:`rank-fusion-engine`).
 
 Ejemplos de uso
 ===============
@@ -293,8 +390,12 @@ Tiempo de procesamiento
 
 .. note::
 
-   La ejecución de los buscadores no tiene ningún tiempo de espera configurado. Si algún buscador
-   no devuelve respuesta, la solicitud de búsqueda espera hasta que este finalice.
+   Cuando la fusión la realiza |Fess|, se espera a los buscadores distintos del principal un
+   máximo de ``rank.fusion.timeout`` milisegundos (predeterminado ``10000``). Un buscador que no
+   ha respondido en ese plazo queda excluido de esa búsqueda, y los resultados se marcan como
+   parciales (tiempo de espera agotado). Al buscador principal siempre se le espera. Con ``0`` o
+   menos, se espera sin límite. Este ajuste no se aplica cuando la fusión la realiza el motor de
+   búsqueda (consulte :ref:`rank-fusion-engine`).
 
 Comportamiento cuando falla un buscador
 =======================================
@@ -327,17 +428,20 @@ Los resultados de búsqueda difieren de lo esperado
 1. Verificar el campo ``searcher`` (consulte "Verificación de los resultados de la fusión"). Si
    todos los documentos muestran únicamente ``["default"]``, el buscador semántico no está
    devolviendo resultados.
-2. Comprobar si la búsqueda semántica se está omitiendo. Además de las consultas que contienen
-   sintaxis de búsqueda (``"``, ``:``, ``AND``, etc.), en los filtrados por etiqueta, orden o
-   faceta, en la búsqueda por ubicación y en la búsqueda de documentos similares, el buscador
-   semántico no devuelve resultados y solo se obtienen los de la búsqueda por palabras clave.
-   Consulte :doc:`search-semantic` para más detalles sobre las condiciones de omisión.
+2. Comprobar si la búsqueda semántica se está omitiendo. En las consultas que contienen sintaxis
+   de búsqueda como frases o comodines, así como en las búsquedas con ordenación, la búsqueda por
+   ubicación y la búsqueda de documentos similares, el buscador semántico no devuelve resultados
+   y solo se obtienen los de la búsqueda por palabras clave. Consulte :doc:`search-semantic` para
+   más detalles sobre las condiciones de omisión.
 3. Verificar los resultados de cada tipo de búsqueda individualmente
 4. Ajustar el valor de ``rank.fusion.rank_constant``
 5. En páginas profundas (donde ``posición de inicio × 2`` es mayor o igual que
    ``rank.fusion.window_size``; de forma predeterminada, a partir del resultado 101), la fusión
    no se realiza y solo se utiliza el buscador principal. Si desea resultados fusionados en más
-   páginas, aumente ``rank.fusion.window_size``.
+   páginas, aumente ``rank.fusion.window_size``. Cuando la fusión la realiza el motor de
+   búsqueda, una página cuya posición de inicio más el tamaño de página supera
+   ``rank.fusion.pagination_depth`` la fusiona |Fess| en su lugar, por lo que aumente también
+   ``rank.fusion.pagination_depth``.
 
 La búsqueda es lenta
 --------------------

@@ -49,10 +49,12 @@ Formule ::
 
 .. note::
 
-   L'algorithme de fusion est fixé à RRF : aucun réglage ne permet de basculer vers un autre
-   algorithme. La pondération par moteur de recherche n'est pas non plus prise en charge — la
-   contribution de chaque moteur est additionnée avec le même poids. Le seul paramètre permettant
-   d'ajuster la tendance du classement est ``rank.fusion.rank_constant``.
+   Lorsque |Fess| effectue la fusion (par défaut), l'algorithme est fixé à RRF et la pondération
+   par moteur de recherche n'est pas prise en charge : la contribution de chaque moteur est
+   additionnée avec le même poids, et le seul paramètre permettant d'ajuster la tendance du
+   classement est ``rank.fusion.rank_constant``. Lorsque la fusion est effectuée côté moteur de
+   recherche, d'autres techniques de combinaison et une pondération par moteur sont disponibles
+   (voir :ref:`rank-fusion-engine`).
 
 Configuration
 =============
@@ -160,6 +162,101 @@ Ce paramètre se comporte comme suit :
    « Migration depuis la version 15.7 ou antérieure » dans :doc:`search-semantic` pour plus de
    détails.
 
+.. _rank-fusion-engine:
+
+Rank Fusion dans le moteur de recherche
+=======================================
+
+Définir ``rank.fusion.engine.enabled=true`` confie la fusion à OpenSearch plutôt qu'à |Fess|. Les
+requêtes des moteurs sont combinées en une seule requête de recherche (une requête ``hybrid``),
+et un pipeline de recherche OpenSearch normalise et combine les scores. La fusion ayant lieu en
+une seule requête, le nombre total de résultats et le nombre de résultats des facettes portent
+eux aussi sur l'ensemble de résultats fusionné.
+
+Cette fonctionnalité nécessite le plugin neural-search d'OpenSearch. Il est inclus dans la
+distribution standard d'OpenSearch et dans l'image ``ghcr.io/codelibs/fess-opensearch``, mais pas
+dans la distribution minimale.
+
+Les réglages se placent dans ``fess_config.properties`` (toute modification nécessite un
+redémarrage de |Fess|) ::
+
+    rank.fusion.engine.enabled=true
+    rank.fusion.combination.technique=rrf
+    rank.fusion.normalization.technique=min_max
+    rank.fusion.combination.weights=
+    rank.fusion.pagination_depth=200
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - Propriété
+     - Défaut
+     - Description
+   * - ``rank.fusion.engine.enabled``
+     - ``false``
+     - ``true`` confie la fusion au moteur de recherche.
+   * - ``rank.fusion.combination.technique``
+     - ``rrf``
+     - Méthode de combinaison des scores : ``rrf``, ``arithmetic_mean``, ``geometric_mean`` ou ``harmonic_mean``. Avec ``rrf``, ``rank.fusion.rank_constant`` est utilisé comme constante ``k``, ce qui donne la même formule que lorsque |Fess| effectue la fusion.
+   * - ``rank.fusion.normalization.technique``
+     - ``min_max``
+     - Méthode de normalisation des scores avant leur combinaison : ``min_max``, ``l2`` ou ``z_score``. Non utilisé par ``rrf``.
+   * - ``rank.fusion.combination.weights``
+     - (vide)
+     - Poids de chaque moteur de recherche, sous forme de paires ``nom:poids`` séparées par des virgules (par exemple ``default:0.7,semantic_chunk:0.3``). Chaque poids doit être compris entre ``0.0`` et ``1.0``, la somme des poids doit valoir ``1.0``, et chaque moteur participant à la fusion doit être nommé. Si la valeur est vide, les moteurs ont tous le même poids. Une valeur qui ne respecte pas ces règles est signalée par un journal ERROR, et la recherche concernée est fusionnée par |Fess|.
+   * - ``rank.fusion.pagination_depth``
+     - ``200``
+     - Nombre de résultats que chaque moteur de recherche fournit à la fusion, par shard. Cette valeur borne la profondeur de pagination accessible à un client ainsi que l'ensemble des documents fusionnés.
+
+.. note::
+
+   La normalisation ``z_score`` ne peut être combinée qu'avec ``arithmetic_mean``. Il s'agit d'une
+   restriction du plugin neural-search. Si elle est combinée avec ``geometric_mean`` ou
+   ``harmonic_mean``, |Fess| refuse cette combinaison, consigne un journal ERROR qui nomme les deux
+   paramètres et fusionne lui-même la recherche concernée.
+
+Dans les cas suivants, la fusion n'est pas effectuée côté moteur de recherche, et c'est |Fess|
+qui fusionne les résultats à la place.
+
+- Une recherche comportant des paramètres de recherche avancée (``as.*``)
+- Une recherche qui spécifie un critère de tri, une recherche par géolocalisation ou une recherche
+  de documents similaires. Celles-ci ignorent entièrement la recherche sémantique, de sorte que
+  les résultats proviennent uniquement de la recherche par mots-clés (voir :doc:`search-semantic`).
+- Une page dont la position de début plus la taille de page dépasse
+  ``rank.fusion.pagination_depth`` (un journal DEBUG est consigné pour chacune de ces recherches). La fusion par
+  |Fess| applique alors la limite ``rank.fusion.window_size`` : avec les réglages par défaut, les
+  résultats proviennent donc uniquement de la recherche par mots-clés.
+- Une valeur de ``rank.fusion.combination.weights`` qui ne respecte pas les règles ci-dessus
+- La normalisation ``z_score`` combinée avec ``geometric_mean`` ou ``harmonic_mean`` (un journal
+  ERROR nomme les deux paramètres)
+- OpenSearch ne peut pas du tout exécuter de requêtes fusionnées : il ne connaît pas la requête
+  ``hybrid`` ou le processeur du pipeline de recherche, par exemple parce que le plugin
+  neural-search est absent ou trop ancien. Un journal WARN est consigné pour chacune de ces
+  recherches, et la recherche suivante interroge de nouveau le moteur de recherche : la fusion par le
+  moteur reprend d'elle-même, sans redémarrer |Fess|, dès que le plugin est installé ou mis à jour.
+
+Tout autre échec d'une requête fusionnée (requête invalide, index fermé, défaillance d'un shard,
+etc.) n'est signalé que pour la recherche concernée, comme sans fusion côté moteur de recherche, et
+la recherche suivante est de nouveau fusionnée côté moteur de recherche.
+
+Gardez les points suivants à l'esprit lorsque la fusion est effectuée côté moteur de recherche.
+
+- ``rank.fusion.timeout`` ne s'applique pas. L'embedding de la requête est calculé de manière
+  synchrone avant l'envoi de la requête de recherche : un fournisseur d'embedding lent ou qui ne
+  répond pas retarde donc la recherche jusqu'au délai d'expiration propre à ce fournisseur (par
+  exemple ``content_chunker.embedding.ollama.timeout``).
+- ``rank.fusion.window_size`` et ``rank.fusion.threads`` ne sont utilisés que lorsque |Fess|
+  effectue la fusion.
+- Le ``k`` de la requête knn du moteur de recherche sémantique (le nombre de voisins par shard)
+  devient la plus grande des deux valeurs ``content_chunker.search.knn.k`` et
+  ``rank.fusion.pagination_depth``. Une recherche vectorielle renvoie des voisins même lorsque
+  leur similarité est faible : sans ``content_chunker.search.min_score``, le nombre total de
+  résultats inclut donc ces résultats vectoriels et, sur un petit index, il peut couvrir la plupart
+  des documents visibles par l'utilisateur. Définissez ``content_chunker.search.min_score`` pour
+  le restreindre (voir :doc:`search-semantic`).
+- Le champ ``searcher`` est ajouté aux résultats comme d'habitude, mais pas ``rf_score``.
+
 Intégration avec la recherche hybride
 =======================================
 
@@ -214,7 +311,7 @@ pour les consulter, ajoutez la ligne suivante dans ``fess_config.properties``, p
 Impact sur le nombre de résultats
 ===================================
 
-Lorsque le Rank Fusion est exécuté, le nombre total de résultats retourné n'est pas celui du
+Lorsque |Fess| exécute le Rank Fusion, le nombre total de résultats retourné n'est pas celui du
 moteur principal (le moteur ``default``, enregistré en tête de liste) tel quel : il est corrigé
 comme suit ::
 
@@ -228,6 +325,8 @@ recherche hybride est activée ou non.
 
 À noter : lorsque le nombre total de résultats du moteur principal est retourné sous forme de
 valeur approchée (borne inférieure), cette correction n'est pas appliquée.
+Lorsque la fusion est effectuée côté moteur de recherche, le nombre total de résultats est celui de
+l'ensemble de résultats fusionné (voir :ref:`rank-fusion-engine`).
 
 Exemples d'utilisation
 =======================
@@ -297,8 +396,12 @@ Temps de traitement
 
 .. note::
 
-   Aucun délai d'expiration n'est appliqué à l'exécution des moteurs de recherche. Si l'un d'eux
-   ne répond pas, la requête de recherche attend qu'il ait terminé.
+   Lorsque |Fess| effectue la fusion, les moteurs de recherche autres que le moteur principal
+   sont attendus au plus ``rank.fusion.timeout`` millisecondes (par défaut ``10000``). Un moteur
+   qui n'a pas répondu dans ce délai est écarté de cette recherche, et les résultats sont marqués
+   comme partiels (délai dépassé). Le moteur principal est toujours attendu. Une valeur de ``0``
+   ou moins attend sans limite. Ce réglage ne s'applique pas lorsque la fusion est effectuée côté
+   moteur de recherche (voir :ref:`rank-fusion-engine`).
 
 Comportement en cas d'échec d'un moteur de recherche
 ======================================================
@@ -332,17 +435,20 @@ Les résultats de recherche diffèrent des attentes
    documents ne contiennent que ``["default"]``, le moteur de recherche sémantique ne retourne
    aucun résultat.
 2. Vérifier que la recherche sémantique n'est pas ignorée. Outre les requêtes contenant une
-   syntaxe de recherche (``"``, ``:``, ``AND``, etc.), le filtrage par label, par tri ou par
-   facette, la recherche par géolocalisation et la recherche de documents similaires font que le
-   moteur de recherche sémantique ne retourne aucun résultat : seuls les résultats de la
-   recherche par mots-clés sont alors renvoyés. Voir :doc:`search-semantic` pour le détail des
-   conditions d'exclusion.
+   syntaxe de recherche telle que des phrases ou des caractères génériques, les recherches triées,
+   la recherche par géolocalisation et la recherche de documents similaires font que le moteur de
+   recherche sémantique ne retourne aucun résultat : seuls les résultats de la recherche par
+   mots-clés sont alors renvoyés. Voir :doc:`search-semantic` pour le détail des conditions
+   d'exclusion.
 3. Vérifier les résultats de chaque type de recherche individuellement
 4. Ajuster la valeur de ``rank.fusion.rank_constant``
 5. Sur les pages profondes (où ``position de début × 2`` est supérieur ou égal à
    ``rank.fusion.window_size``, soit à partir du 101e résultat avec les valeurs par défaut), la
    fusion n'est pas effectuée et seul le moteur principal est utilisé. Pour obtenir des résultats
-   fusionnés sur davantage de pages, augmentez ``rank.fusion.window_size``.
+   fusionnés sur davantage de pages, augmentez ``rank.fusion.window_size``. Lorsque la fusion est
+   effectuée côté moteur de recherche, une page dont la position de début plus la taille de page
+   dépasse ``rank.fusion.pagination_depth`` est fusionnée par |Fess| à la place : augmentez donc
+   également ``rank.fusion.pagination_depth``.
 
 La recherche est lente
 -----------------------

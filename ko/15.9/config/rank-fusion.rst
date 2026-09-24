@@ -47,9 +47,10 @@ RRF는 각 검색 결과에서 문서의 순위 역수를 합산하여 스코어
 
 .. note::
 
-   융합 알고리즘은 RRF로 고정되어 있으며, 다른 알고리즘으로 전환하는 설정은 없습니다.
-   또한 검색기별 가중치도 지원하지 않습니다. 각 검색기의 기여도는 동일한 가중치로
-   합산됩니다. 랭킹 경향을 조정할 수 있는 것은 ``rank.fusion.rank_constant`` 뿐입니다.
+   |Fess| 측에서 융합하는 경우(기본값), 융합 알고리즘은 RRF로 고정되어 있으며 검색기별 가중치도
+   지원하지 않습니다. 각 검색기의 기여도는 동일한 가중치로 합산되며, 랭킹 경향을 조정할 수 있는
+   것은 ``rank.fusion.rank_constant`` 뿐입니다. 검색 엔진 측에서 융합하는 경우에는 다른 결합
+   방식이나 검색기별 가중치를 지정할 수 있습니다(:ref:`rank-fusion-engine` 참조).
 
 설정
 ====
@@ -149,6 +150,93 @@ JVM 시스템 프로퍼티
    :doc:`search-semantic` 의 "15.7 이전 버전에서 업그레이드하는 경우의 마이그레이션"을
    참조하세요.
 
+.. _rank-fusion-engine:
+
+검색 엔진 측에서의 Rank Fusion
+================================
+
+``rank.fusion.engine.enabled=true`` 를 설정하면 융합을 |Fess|\ 가 아닌 OpenSearch가 수행합니다.
+각 검색기의 쿼리를 하나의 검색 요청(``hybrid`` 쿼리)으로 묶고, OpenSearch의 검색 파이프라인에서
+스코어를 정규화·결합합니다. 한 번의 요청으로 융합하므로 총 히트 건수와 패싯 건수도 융합 후의
+결과 집합을 나타냅니다.
+
+이 기능에는 OpenSearch의 neural-search 플러그인이 필요합니다. 표준 배포판 OpenSearch와
+``ghcr.io/codelibs/fess-opensearch`` 이미지에는 포함되어 있지만, minimal 배포판에는 포함되어 있지
+않습니다.
+
+설정은 ``fess_config.properties`` 에 작성합니다(변경 사항을 반영하려면 |Fess|\ 를 재시작해야 합니다)::
+
+    rank.fusion.engine.enabled=true
+    rank.fusion.combination.technique=rrf
+    rank.fusion.normalization.technique=min_max
+    rank.fusion.combination.weights=
+    rank.fusion.pagination_depth=200
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - 프로퍼티
+     - 기본값
+     - 설명
+   * - ``rank.fusion.engine.enabled``
+     - ``false``
+     - ``true`` 로 설정하면 검색 엔진 측에서 융합합니다.
+   * - ``rank.fusion.combination.technique``
+     - ``rrf``
+     - 스코어 결합 방식. ``rrf``, ``arithmetic_mean``, ``geometric_mean``, ``harmonic_mean`` 중 하나. ``rrf`` 의 상수 ``k`` 에는 ``rank.fusion.rank_constant`` 가 사용되며, |Fess| 측에서 융합하는 경우와 동일한 계산식이 됩니다.
+   * - ``rank.fusion.normalization.technique``
+     - ``min_max``
+     - 결합 전 스코어의 정규화 방식. ``min_max``, ``l2``, ``z_score`` 중 하나. ``rrf`` 에서는 사용되지 않습니다.
+   * - ``rank.fusion.combination.weights``
+     - (비어 있음)
+     - 검색기별 가중치를 ``이름:가중치`` 의 쉼표 구분 형식으로 지정합니다(예: ``default:0.7,semantic_chunk:0.3``). 각 가중치는 ``0.0``\ ~\ ``1.0`` 이어야 하고 합계가 ``1.0`` 이 되어야 하며, 융합에 참여하는 모든 검색기를 지정해야 합니다. 비어 있으면 균등하게 취급됩니다. 조건을 충족하지 않는 경우에는 ERROR 로그를 출력하고, 해당 검색은 |Fess| 측에서 융합됩니다.
+   * - ``rank.fusion.pagination_depth``
+     - ``200``
+     - 각 검색기가 샤드별로 융합에 제공하는 결과 건수. 페이징할 수 있는 깊이와 융합 대상이 되는 문서의 범위를 결정합니다.
+
+.. note::
+
+   ``z_score`` 정규화는 ``arithmetic_mean`` 과만 조합할 수 있습니다(neural-search 플러그인의
+   제약입니다). ``geometric_mean`` 또는 ``harmonic_mean`` 과 조합한 경우 |Fess|\ 는 이 조합을
+   사용하지 않고, 두 설정 이름을 나타내는 ERROR 로그를 출력한 뒤 해당 검색을 |Fess| 측에서
+   융합합니다.
+
+다음 경우에는 검색 엔진 측에서의 융합이 수행되지 않고 |Fess| 측에서의 융합으로 처리됩니다.
+
+- 상세 검색 파라미터(``as.*``)를 포함하는 검색
+- 정렬, 위치 정보 검색, 유사 문서 검색을 지정한 검색. 이들에서는 시맨틱 검색 자체가 건너뛰어지므로
+  키워드 검색만의 결과가 됩니다(:doc:`search-semantic` 참조).
+- 시작 위치+페이지 크기가 ``rank.fusion.pagination_depth`` 를 초과하는 페이지(해당 검색마다 DEBUG
+  로그를 출력합니다). |Fess| 측에서의 융합에서는 ``rank.fusion.window_size`` 경계가 적용되므로,
+  기본 설정에서는 키워드 검색만의 결과가 됩니다.
+- ``rank.fusion.combination.weights`` 가 조건을 충족하지 않는 경우
+- ``z_score`` 정규화를 ``geometric_mean`` 또는 ``harmonic_mean`` 과 조합한 경우(두 설정 이름을
+  나타내는 ERROR 로그를 출력합니다)
+- OpenSearch가 융합 요청을 전혀 실행할 수 없는 경우(``hybrid`` 쿼리나 검색 파이프라인의
+  프로세서를 인식하지 못하는 경우. neural-search 플러그인이 없거나 오래된 경우 등). 해당 검색마다
+  WARN 로그를 출력합니다. 다음 검색에서는 다시 OpenSearch에 융합을 요청하므로, 플러그인을 설치하거나
+  업데이트하면 |Fess|\ 를 재시작하지 않아도 OpenSearch 측 융합으로 돌아갑니다.
+
+그 밖의 이유로 융합 요청이 실패한 경우(잘못된 쿼리, 닫힌 인덱스, 샤드 장애 등)는 검색 엔진 측에서
+융합하지 않는 경우와 마찬가지로 해당 검색에 한해 보고되며, 다음 검색은 다시 검색 엔진 측에서
+융합됩니다.
+
+검색 엔진 측에서 융합하는 경우의 주의 사항은 다음과 같습니다.
+
+- ``rank.fusion.timeout`` 은 적용되지 않습니다. 쿼리 임베딩은 검색 요청을 보내기 전에 동기적으로
+  계산되므로, 임베딩 프로바이더의 응답이 느리거나 응답하지 않는 경우에는 검색이 프로바이더 측의
+  타임아웃(예: ``content_chunker.embedding.ollama.timeout``)까지 대기하게 됩니다.
+- ``rank.fusion.window_size`` 와 ``rank.fusion.threads`` 는 |Fess| 측에서 융합하는 경우에만
+  사용됩니다.
+- 시맨틱 서처의 knn 쿼리의 ``k``\ (샤드별 이웃 수)는 ``content_chunker.search.knn.k`` 와
+  ``rank.fusion.pagination_depth`` 중 큰 값이 됩니다. 벡터 검색은 유사도가 낮은 문서도 이웃으로
+  반환하므로, ``content_chunker.search.min_score`` 를 설정하지 않은 경우 총 히트 건수에는 그만큼의
+  벡터 검색 히트가 더해지며, 소규모 인덱스에서는 열람할 수 있는 문서의 대부분이 건수에 포함될 수
+  있습니다. 건수를 줄이려면 ``content_chunker.search.min_score`` 를 설정하세요
+  (:doc:`search-semantic` 참조).
+- 검색 결과의 ``searcher`` 필드는 동일하게 부여되지만, ``rf_score`` 는 부여되지 않습니다.
+
 하이브리드 검색과의 연계
 ==========================
 
@@ -201,7 +289,7 @@ Rank Fusion이 실제로 동작하고 있는지는 검색 결과에 부여되는
 히트 건수에 대한 영향
 ======================
 
-Rank Fusion이 실행되면 반환되는 총 히트 건수는 메인 검색기(맨 앞에 등록된
+|Fess| 측에서 Rank Fusion이 실행되면 반환되는 총 히트 건수는 메인 검색기(맨 앞에 등록된
 ``default`` 검색기)의 건수 그대로가 아니라 다음과 같이 보정됩니다::
 
     총 히트 건수 = 메인 검색기의 총 히트 건수 + 보정값
@@ -212,6 +300,7 @@ Rank Fusion이 실행되면 반환되는 총 히트 건수는 메인 검색기(�
 그래서 같은 쿼리라도 하이브리드 검색의 활성화 여부에 따라 히트 건수가 달라질 수 있습니다.
 
 또한 메인 검색기의 총 히트 건수가 개략값(하한값)으로 반환되는 경우에는 이 보정이 수행되지 않습니다.
+검색 엔진 측에서 융합하는 경우, 총 히트 건수는 융합 후 결과 집합의 건수입니다(:ref:`rank-fusion-engine` 참조).
 
 사용 예
 ========
@@ -278,8 +367,11 @@ Rank Fusion이 실행되면 반환되는 총 히트 건수는 메인 검색기(�
 
 .. note::
 
-   검색기 실행에는 타임아웃이 설정되어 있지 않습니다. 응답을 반환하지 않는 검색기가 있으면
-   검색 요청은 그 검색기가 완료될 때까지 대기합니다.
+   |Fess| 측에서 융합하는 경우, 메인 검색기 이외의 검색기는 ``rank.fusion.timeout``\ (밀리초,
+   기본값 ``10000``)까지 대기합니다. 그때까지 응답하지 않는 검색기는 해당 검색에서 제외되고,
+   검색 결과는 부분 결과(타임아웃)로 취급됩니다. 메인 검색기는 항상 완료될 때까지 대기합니다.
+   ``0`` 이하를 지정하면 무제한으로 대기합니다. 검색 엔진 측에서 융합하는 경우에는 이 설정이
+   적용되지 않습니다(:ref:`rank-fusion-engine` 참조).
 
 검색기 장애 시 동작
 ====================
@@ -308,15 +400,17 @@ WARN 로그를 출력한 뒤 나머지 검색기의 결과만으로 융합이 �
 
 1. ``searcher`` 필드를 확인합니다("융합 결과 확인" 참조). 모든 문서가 ``["default"]`` 만
    포함하고 있다면 시맨틱 서처가 결과를 반환하지 않은 것입니다.
-2. 시맨틱 검색이 건너뛰어지지 않았는지 확인합니다. 검색 구문(``"`` ``:`` ``AND`` 등)을
-   포함하는 쿼리 외에, 라벨·정렬·패싯에 의한 필터링, 위치 정보 검색, 유사 문서 검색에서는
-   시맨틱 서처가 결과를 반환하지 않고 키워드 검색만의 결과가 됩니다.
-   건너뛰는 조건에 대한 자세한 내용은 :doc:`search-semantic` 을 참조하세요.
+2. 시맨틱 검색이 건너뛰어지지 않았는지 확인합니다. 구문이나 와일드카드 등의 검색 구문을
+   포함하는 쿼리 외에, 정렬, 위치 정보 검색, 유사 문서 검색에서는 시맨틱 서처가 결과를 반환하지
+   않고 키워드 검색만의 결과가 됩니다. 건너뛰는 조건에 대한 자세한 내용은 :doc:`search-semantic`
+   을 참조하세요.
 3. 각 검색 유형의 결과를 개별적으로 확인
 4. ``rank.fusion.rank_constant`` 값을 조정
 5. 깊은 페이지(``시작 위치 × 2`` 가 ``rank.fusion.window_size`` 이상이 되는 위치. 기본값에서는
    101번째 이후)에서는 융합이 수행되지 않고 메인 검색기만으로 검색됩니다. 더 많은 페이지에서
-   융합 결과를 사용하려면 ``rank.fusion.window_size`` 를 크게 늘려 주세요.
+   융합 결과를 사용하려면 ``rank.fusion.window_size`` 를 크게 늘려 주세요. 검색 엔진 측에서
+   융합하는 경우에는 시작 위치+페이지 크기가 ``rank.fusion.pagination_depth`` 를 초과하는 페이지가
+   |Fess| 측에서의 융합으로 전환되므로, ``rank.fusion.pagination_depth`` 도 함께 크게 늘려 주세요.
 
 검색이 느림
 ------------

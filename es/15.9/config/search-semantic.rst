@@ -232,7 +232,8 @@ Configuraciones en system.properties
    * - ``content_chunker.search.knn.k``
      - ``100``
      - Número de vecinos recuperados por consulta ANN (se amplía automáticamente para paginación
-       profunda)
+       profunda; como mínimo ``rank.fusion.pagination_depth`` cuando la fusión la realiza el motor
+       de búsqueda)
    * - ``content_chunker.search.knn.param.ef_search``
      - (sin establecer)
      - El parámetro ``ef_search`` para las consultas ANN
@@ -528,6 +529,9 @@ Comportamiento de la búsqueda semántica
 Establecer ``content_chunker.search.enabled=true`` registra el buscador semántico con Rank
 Fusion, que luego fusiona los resultados de la búsqueda por palabras clave con los resultados de
 la búsqueda vectorial. (Consulte :doc:`rank-fusion` para saber cómo funciona Rank Fusion.)
+De forma predeterminada, |Fess| realiza la fusión por sí mismo; si establece
+``rank.fusion.engine.enabled=true``, la realiza OpenSearch en su lugar (consulte
+:ref:`rank-fusion-engine`).
 En el momento de la búsqueda también se consulta ``content_chunker.enabled``: si
 ``content_chunker.enabled=false`` o ``content_chunker.embedding.name=none``, la búsqueda
 semántica no se ejecuta aunque el buscador ya esté registrado (esta comprobación se realiza en
@@ -589,36 +593,50 @@ modo ``ann`` (internamente se convierte a la escala de puntuación de cada modo)
    Este corte solo se aplica cuando ``content_chunker.search.knn.space_type`` es
    ``cosinesimil`` (el valor predeterminado). En un índice en modo ``ann`` configurado con
    ``innerproduct`` o ``l2`` no se puede definir la similitud de coseno, por lo que el corte se
-   omite después de registrar una advertencia una sola vez.
+   omite y se registra una advertencia en cada una de esas búsquedas.
 
 Limitaciones
 --------------
 
-- **La búsqueda semántica se omite para las consultas que contienen sintaxis de búsqueda** y
-  solo se ejecuta la búsqueda por palabras clave. La comprobación se realiza sobre la cadena de
-  consulta ya **ensamblada**, y se activa cuando esta contiene alguno de estos elementos: ``"``
-  ``(`` ``)`` ``:`` ``[`` ``]`` ``{`` ``}`` ``^`` ``~`` ``*`` ``?`` ``\``, ``&&``, ``||``, un
-  ``+`` o un ``-`` al principio o justo después de un espacio, o las palabras en mayúsculas
-  ``AND`` / ``OR`` / ``NOT`` / ``TO``. Por eso, aunque el usuario no escriba ninguna sintaxis de
-  búsqueda, las siguientes operaciones también se omiten:
+- Las condiciones con campo de la consulta (``label:``, ``site:``, ``filetype:``, rangos sobre
+  ``timestamp`` / ``last_modified``, etc.) se separan del texto que se convierte en embedding y se
+  aplican a la búsqueda vectorial como filtros. La consulta se examina ya **ensamblada**, por lo
+  que las operaciones que añaden internamente este tipo de condiciones - seleccionar una etiqueta,
+  filtrar mediante facetas, o el tipo de archivo, el sitio y el rango de fechas de la búsqueda
+  avanzada, incluidas las condiciones pasadas mediante los parámetros ``ex_q`` y ``fields.*`` -
+  siguen ejecutando la búsqueda semántica, acotada por las mismas condiciones que la búsqueda por
+  palabras clave.
+- **La búsqueda semántica se omite** para las siguientes consultas, y solo se ejecuta la búsqueda
+  por palabras clave.
 
-  - Seleccionar una etiqueta (internamente se añade ``label:"..."``)
-  - Especificar un criterio de ordenación (internamente se añade ``sort:...``)
-  - Filtrar mediante facetas (internamente se añade ``filetype:...``, etc.)
-  - En la búsqueda avanzada: búsqueda de frase, términos excluidos, tipo de archivo, sitio y
-    rango de fechas
-  - Un término de búsqueda que tiene consultas relacionadas configuradas (internamente se
-    expande a ``("A" OR "B")``)
+  - Un criterio de ordenación (el pseudocampo ``sort:``, o el parámetro ``sort``, que también se
+    añade internamente como ``sort:...``)
+  - Una frase (``"..."``), un comodín (``*`` ``?``), una búsqueda difusa (``~``) o un rango sobre
+    palabras que no indican ningún campo, incluida la frase de la búsqueda avanzada. El ``?`` de
+    medio ancho (ASCII) se interpreta como comodín, por lo que una pregunta en lenguaje natural
+    terminada en signo de interrogación ASCII, como «¿Qué es …?», también se omite (el ``？`` de
+    ancho completo no se ve afectado).
+  - Excluir una palabra (``-palabra``, ``NOT palabra``, incluidos los términos excluidos de la
+    búsqueda avanzada) o potenciarla (``palabra^2``)
+  - Una consulta cuyas condiciones no pueden separarse como filtro, como una palabra y una
+    condición unidas con ``OR``
+  - ``allintitle:`` / ``allinurl:``
+  - Una consulta que solo tiene condiciones, sin palabras que convertir en embedding
+  - Una consulta que no se puede analizar
 
-  El ``?`` de medio ancho (ASCII) también está incluido, por lo que una frase en lenguaje
-  natural terminada en signo de interrogación, como «¿Qué es …?», se omite (el ``？`` de ancho
-  completo no cuenta).
 - También se omite cuando se combina con la búsqueda por geolocalización (un filtro geo) o la
   búsqueda de documentos similares.
-- En las páginas profundas se desactiva el propio Rank Fusion y los resultados provienen solo de
-  la búsqueda por palabras clave. El límite lo determina ``rank.fusion.window_size``
-  (predeterminado ``200``), lo que con los valores predeterminados corresponde a los resultados a
-  partir del número 101.
+- En las páginas profundas se desactiva el propio Rank Fusion.
+
+  - Cuando la fusión la realiza |Fess| (el comportamiento predeterminado), el límite lo determina
+    ``rank.fusion.window_size`` (predeterminado ``200``); con los valores predeterminados, todos
+    los resultados a partir del número 101 provienen solo de la búsqueda por palabras clave.
+  - Cuando la fusión la realiza el motor de búsqueda (``rank.fusion.engine.enabled=true``), el
+    límite es ``rank.fusion.pagination_depth`` (predeterminado ``200``). Una página cuya posición
+    de inicio más el tamaño de página lo supera la fusiona |Fess| en su lugar, y se aplica el
+    límite de ``rank.fusion.window_size`` descrito arriba.
+
+  Consulte :doc:`rank-fusion` para más detalles.
 - Si el proveedor de embedding no está disponible o se produce un error de búsqueda, |Fess|
   vuelve automáticamente a los resultados basados solo en palabras clave (la búsqueda en sí nunca
   falla como resultado).

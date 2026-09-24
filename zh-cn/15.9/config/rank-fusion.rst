@@ -46,9 +46,10 @@ RRF 通过对每个搜索结果中文档排名的倒数求和来计算分数。
 
 .. note::
 
-   融合算法固定为 RRF，没有可切换到其他算法的设置。
-   此外，也不支持按搜索器设置权重。各搜索器的贡献会以相同的权重进行合计。
-   唯一能够调整排名倾向的设置是 ``rank.fusion.rank_constant``\ 。
+   由 |Fess| 执行融合时（默认），融合算法固定为 RRF，也不支持按搜索器设置权重。各搜索器的贡献
+   会以相同的权重进行合计，唯一能够调整排名倾向的设置是 ``rank.fusion.rank_constant``\ 。
+   由搜索引擎执行融合时，可以使用其他组合方式，并可按搜索器指定权重（请参阅
+   :ref:`rank-fusion-engine`\ ）。
 
 配置
 ====
@@ -143,6 +144,86 @@ JVM 系统属性
    DEBUG 级别记录）。如果您的配置中指定了 ``default,semantic``\ ，请移除该设置，或为其添加
    ``semantic_chunk``\ 。详情请参阅 :doc:`search-semantic` 中的“从 15.7 及更早版本迁移”一节。
 
+.. _rank-fusion-engine:
+
+在搜索引擎中执行 Rank Fusion
+============================
+
+设置 ``rank.fusion.engine.enabled=true`` 后，融合将由 OpenSearch 而非 |Fess| 执行。
+各搜索器的查询会合并为一个搜索请求（``hybrid`` 查询），并由 OpenSearch 的搜索管道对分数进行
+归一化和组合。由于融合在一次请求中完成，总命中数量和分面数量也反映融合后的结果集。
+
+此功能需要 OpenSearch 的 neural-search 插件。标准发行版的 OpenSearch 和
+``ghcr.io/codelibs/fess-opensearch`` 镜像中已包含该插件，但 minimal 发行版中不包含。
+
+配置写入 ``fess_config.properties``\ （更改后需要重启 |Fess| 才能生效）::
+
+    rank.fusion.engine.enabled=true
+    rank.fusion.combination.technique=rrf
+    rank.fusion.normalization.technique=min_max
+    rank.fusion.combination.weights=
+    rank.fusion.pagination_depth=200
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - 属性
+     - 默认值
+     - 说明
+   * - ``rank.fusion.engine.enabled``
+     - ``false``
+     - 设为 ``true`` 时由搜索引擎执行融合。
+   * - ``rank.fusion.combination.technique``
+     - ``rrf``
+     - 分数的组合方式：\ ``rrf``\ 、\ ``arithmetic_mean``\ 、\ ``geometric_mean`` 或 ``harmonic_mean``\ 。对于 ``rrf``\ ，\ ``rank.fusion.rank_constant`` 会用作常数 ``k``\ ，计算公式与由 |Fess| 执行融合时相同。
+   * - ``rank.fusion.normalization.technique``
+     - ``min_max``
+     - 组合前对分数进行归一化的方式：\ ``min_max``\ 、\ ``l2`` 或 ``z_score``\ 。\ ``rrf`` 不使用此设置。
+   * - ``rank.fusion.combination.weights``
+     - （空）
+     - 各搜索器的权重，以逗号分隔的 ``名称:权重`` 对指定（例如 ``default:0.7,semantic_chunk:0.3``）。每个权重必须在 ``0.0`` 到 ``1.0`` 之间，权重之和必须为 ``1.0``\ ，并且必须指定参与融合的所有搜索器。为空时各搜索器权重相等。不满足这些规则的值会输出 ERROR 日志，该次搜索将由 |Fess| 执行融合。
+   * - ``rank.fusion.pagination_depth``
+     - ``200``
+     - 每个搜索器在每个分片上提供给融合的结果数量。它限制了客户端可以翻页的深度，以及参与融合的文档范围。
+
+.. note::
+
+   ``z_score`` 归一化只能与 ``arithmetic_mean`` 组合使用。这是 neural-search 插件的限制。
+   如果与 ``geometric_mean`` 或 ``harmonic_mean`` 组合，|Fess| 会拒绝该组合，输出指明这两个设置的
+   ERROR 日志，并由 |Fess| 对该次搜索执行融合。
+
+在以下情况下，不会由搜索引擎执行融合，而是改由 |Fess| 融合结果。
+
+- 包含高级搜索参数（``as.*``）的搜索
+- 指定了排序、位置信息搜索或相似文档搜索的搜索。这些搜索会完全跳过语义搜索，因此结果仅来自
+  关键词搜索（请参阅 :doc:`search-semantic`\ ）。
+- 起始位置加上每页大小超过 ``rank.fusion.pagination_depth`` 的页面（每次这样的搜索都会输出 DEBUG 日志）。
+  此时由 |Fess| 执行的融合会适用 ``rank.fusion.window_size`` 的分界，因此在默认配置下结果仅来自
+  关键词搜索。
+- ``rank.fusion.combination.weights`` 的值不满足上述规则时
+- ``z_score`` 归一化与 ``geometric_mean`` 或 ``harmonic_mean`` 组合时（会输出指明这两个设置的
+  ERROR 日志）
+- 搜索引擎完全无法执行融合请求时（无法识别 ``hybrid`` 查询或搜索管道的处理器，例如缺少
+  neural-search 插件或其版本过旧）。每次这样的搜索都会输出 WARN 日志。下一次搜索会再次请求
+  OpenSearch 执行融合，因此安装或升级插件后，无需重启 |Fess| 即可恢复由 OpenSearch 执行融合。
+
+融合请求因其他原因失败时（无效的查询、已关闭的索引、分片故障等），与不由搜索引擎执行融合时一样，
+仅针对该次搜索进行报告，下一次搜索会再次由搜索引擎执行融合。
+
+由搜索引擎执行融合时，请注意以下几点。
+
+- ``rank.fusion.timeout`` 不适用。查询的嵌入会在发送搜索请求之前同步计算，因此如果嵌入提供商
+  响应缓慢或无响应，搜索会一直等待，最长直到提供商自身的超时时间（例如
+  ``content_chunker.embedding.ollama.timeout``\ ）。
+- ``rank.fusion.window_size`` 和 ``rank.fusion.threads`` 仅在由 |Fess| 执行融合时使用。
+- 语义搜索器 knn 查询的 ``k``\ （每个分片的近邻数量）取 ``content_chunker.search.knn.k`` 与
+  ``rank.fusion.pagination_depth`` 中较大的值。向量搜索即使在相似度较低时也会返回近邻，因此在未设置
+  ``content_chunker.search.min_score`` 的情况下，总命中数量会包含这些向量搜索的命中，在小规模索引中
+  可能涵盖用户可见的大部分文档。若要缩小范围，请设置 ``content_chunker.search.min_score``\ （请参阅
+  :doc:`search-semantic`\ ）。
+- 搜索结果中照常附加 ``searcher`` 字段，但不会附加 ``rf_score``\ 。
+
 与混合搜索的集成
 ================
 
@@ -192,7 +273,7 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 对命中数量的影响
 ================
 
-执行 Rank Fusion 时，返回的总命中数量并非直接使用主搜索器（注册在首位的 ``default``
+由 |Fess| 执行 Rank Fusion 时，返回的总命中数量并非直接使用主搜索器（注册在首位的 ``default``
 搜索器）的数量，而是按如下方式进行修正::
 
     总命中数量 = 主搜索器的总命中数量 + 修正值
@@ -203,6 +284,7 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 因此，即使是相同的查询，启用与不启用混合搜索时的命中数量也可能不同。
 
 另外，当主搜索器的总命中数量以概算值（下限值）返回时，不会进行此修正。
+由搜索引擎执行融合时，总命中数量为融合后结果集的数量（请参阅 :ref:`rank-fusion-engine`\ ）。
 
 使用示例
 ========
@@ -268,7 +350,10 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 
 .. note::
 
-   搜索器的执行没有设置超时。如果存在不返回响应的搜索器，搜索请求将一直等待其完成。
+   由 |Fess| 执行融合时，主搜索器以外的搜索器最多等待 ``rank.fusion.timeout`` 毫秒（默认
+   ``10000``\ ）。届时仍未响应的搜索器会从该次搜索中排除，搜索结果会被标记为部分结果（超时）。
+   主搜索器始终会等待至完成。指定 ``0`` 或以下时将无限制地等待。由搜索引擎执行融合时，此设置
+   不适用（请参阅 :ref:`rank-fusion-engine`\ ）。
 
 搜索器故障时的行为
 ==================
@@ -296,15 +381,16 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 
 1. 确认 ``searcher`` 字段（请参阅“融合结果的确认”）。如果所有文档都仅为
    ``["default"]``\ ，则说明语义搜索器没有返回结果。
-2. 确认语义搜索是否被跳过。除了包含搜索语法（如 ``"`` ``:`` ``AND`` 等）的查询之外，
-   在通过标签、排序、分面进行筛选，以及位置信息搜索、相似文档搜索时，语义搜索器也不会返回
-   结果，仅返回关键词搜索的结果。
+2. 确认语义搜索是否被跳过。除了包含短语、通配符等搜索语法的查询之外，在排序搜索、位置信息搜索、
+   相似文档搜索时，语义搜索器也不会返回结果，仅返回关键词搜索的结果。
    跳过条件的详细信息请参阅 :doc:`search-semantic`\ 。
 3. 分别确认各搜索类型的结果
 4. 调整 ``rank.fusion.rank_constant`` 的值
 5. 在翻页较深的页面（``起始位置 × 2`` 大于等于 ``rank.fusion.window_size`` 的位置，默认情况下
    为第 101 条之后）不会执行融合，仅使用主搜索器进行搜索。若希望在更多页面上获得融合结果，
-   请增大 ``rank.fusion.window_size``\ 。
+   请增大 ``rank.fusion.window_size``\ 。由搜索引擎执行融合时，起始位置加上每页大小超过
+   ``rank.fusion.pagination_depth`` 的页面会改由 |Fess| 执行融合，因此请同时增大
+   ``rank.fusion.pagination_depth``\ 。
 
 搜索缓慢
 --------

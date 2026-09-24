@@ -236,7 +236,8 @@ Réglages dans system.properties
    * - ``content_chunker.search.knn.k``
      - ``100``
      - Nombre de voisins récupérés par requête ANN (agrandi automatiquement pour la pagination
-       profonde)
+       profonde ; au moins ``rank.fusion.pagination_depth`` lorsque la fusion est effectuée côté
+       moteur de recherche)
    * - ``content_chunker.search.knn.param.ef_search``
      - (non défini)
      - Le paramètre ``ef_search`` pour les requêtes ANN
@@ -532,6 +533,8 @@ Comportement de la recherche sémantique
 Définir ``content_chunker.search.enabled=true`` enregistre le moteur de recherche sémantique
 auprès du Rank Fusion, qui fusionne ensuite les résultats de la recherche par mots-clés avec ceux
 de la recherche vectorielle. (Voir :doc:`rank-fusion` pour le fonctionnement du Rank Fusion.)
+Par défaut, |Fess| effectue lui-même la fusion ; définir ``rank.fusion.engine.enabled=true``
+la confie plutôt à OpenSearch (voir :ref:`rank-fusion-engine`).
 Au moment de la recherche, ``content_chunker.enabled`` est également consulté : si
 ``content_chunker.enabled=false`` ou ``content_chunker.embedding.name=none``, la recherche
 sémantique n'est pas exécutée, même lorsque le moteur est enregistré (cette évaluation ayant lieu
@@ -594,36 +597,51 @@ comme ``ann`` (elle est convertie en interne vers l'échelle de score propre à 
    Cette coupure ne s'applique que lorsque ``content_chunker.search.knn.space_type`` vaut
    ``cosinesimil`` (la valeur par défaut). Sur un index en mode ``ann`` configuré avec
    ``innerproduct`` ou ``l2``, aucune similarité cosinus ne peut être définie : la coupure est
-   ignorée après consignation d'un unique avertissement dans le journal.
+   ignorée et un avertissement est consigné pour chacune de ces recherches.
 
 Limitations
 -------------
 
-- **La recherche sémantique est ignorée pour les requêtes contenant une syntaxe de recherche**,
-  et seule la recherche par mots-clés est exécutée. La détection porte sur la chaîne de requête
-  **après** son assemblage, et se déclenche dès que celle-ci contient l'un des éléments
-  suivants : ``"`` ``(`` ``)`` ``:`` ``[`` ``]`` ``{`` ``}`` ``^`` ``~`` ``*`` ``?`` ``\``,
-  ``&&``, ``||``, un ``+`` ou un ``-`` en début de chaîne ou juste après une espace, ou encore
-  les mots en majuscules ``AND`` / ``OR`` / ``NOT`` / ``TO``. Les opérations suivantes sont donc
-  elles aussi ignorées, même si l'utilisateur n'a saisi aucune syntaxe de recherche.
+- Les conditions portant sur un champ dans la requête (``label:``, ``site:``, ``filetype:``,
+  plages sur ``timestamp`` / ``last_modified``, etc.) sont séparées du texte à vectoriser et
+  appliquées à la recherche vectorielle sous forme de filtres. La requête est examinée **après**
+  son assemblage : les opérations qui ajoutent de telles conditions en interne — la sélection
+  d'un label, le filtrage par facette, ou le type de fichier, le site et la plage de dates de la
+  recherche avancée, y compris les conditions transmises via les paramètres ``ex_q`` et
+  ``fields.*`` — exécutent donc toujours la recherche sémantique, restreinte par les mêmes
+  conditions que la recherche par mots-clés.
+- **La recherche sémantique est ignorée** pour les requêtes suivantes, et seule la recherche par
+  mots-clés est exécutée.
 
-  - La sélection d'un label (``label:"..."`` est ajouté en interne)
-  - La définition d'un critère de tri (``sort:...`` est ajouté en interne)
-  - Le filtrage par facette (``filetype:...`` et similaires sont ajoutés en interne)
-  - La recherche de phrase, les termes exclus, le type de fichier, le site et la plage de dates
-    de la recherche avancée
-  - Un terme de recherche auquel des requêtes associées sont attachées (développé en interne en
-    ``("A" OR "B")``)
+  - Un critère de tri (le pseudo-champ ``sort:``, ou le paramètre ``sort``, qui est lui aussi
+    ajouté en interne sous la forme ``sort:...``)
+  - Une phrase (``"..."``), un caractère générique (``*`` ``?``), une recherche floue (``~``) ou
+    une plage sur des mots qui ne désignent aucun champ, y compris la phrase de la recherche
+    avancée. Le ``?`` ASCII étant interprété comme un caractère générique, une phrase en langage
+    naturel qui se termine par un point d'interrogation ASCII est elle aussi ignorée (le point
+    d'interrogation pleine chasse ``？`` n'est pas concerné).
+  - L'exclusion d'un mot (``-mot``, ``NOT mot``, y compris les termes exclus de la recherche
+    avancée) ou son renforcement (``mot^2``)
+  - Une requête dont les conditions ne peuvent pas être séparées sous forme de filtre, comme un
+    mot et une condition reliés par ``OR``
+  - ``allintitle:`` / ``allinurl:``
+  - Une requête ne contenant que des conditions, sans aucun mot à vectoriser
+  - Une requête qui ne peut pas être analysée
 
-  Le ``?`` ASCII faisant partie des caractères détectés, une phrase en langage naturel qui se
-  termine par un point d'interrogation ASCII est elle aussi ignorée (le point d'interrogation
-  pleine chasse ``？`` n'est pas concerné).
 - Elle est également ignorée lorsqu'elle est combinée à une recherche par géolocalisation (un
   filtre géo) ou à une recherche de documents similaires.
-- Sur les pages profondes, le Rank Fusion lui-même est désactivé et les résultats proviennent
-  uniquement de la recherche par mots-clés. La limite est déterminée par
-  ``rank.fusion.window_size`` (par défaut ``200``), ce qui correspond, avec les valeurs par
-  défaut, aux résultats à partir du 101e.
+- Sur les pages profondes, le Rank Fusion lui-même est désactivé.
+
+  - Lorsque |Fess| effectue la fusion (par défaut), la limite est déterminée par
+    ``rank.fusion.window_size`` (par défaut ``200``) ; avec les valeurs par défaut, tous les
+    résultats à partir du 101e proviennent uniquement de la recherche par mots-clés.
+  - Lorsque la fusion est effectuée côté moteur de recherche
+    (``rank.fusion.engine.enabled=true``), la limite est ``rank.fusion.pagination_depth`` (par
+    défaut ``200``). Une page dont la position de début plus la taille de page dépasse cette
+    valeur est fusionnée par |Fess| à la place, et la limite ``rank.fusion.window_size``
+    ci-dessus s'applique.
+
+  Voir :doc:`rank-fusion` pour plus de détails.
 - Si le fournisseur d'embedding est inaccessible ou qu'une erreur de recherche survient, |Fess|
   bascule automatiquement vers des résultats basés uniquement sur les mots-clés (la recherche
   elle-même n'échoue jamais de ce fait).
