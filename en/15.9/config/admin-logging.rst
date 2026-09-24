@@ -257,7 +257,28 @@ Default Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
 - **File Size**: Rotate when exceeding 100MB
-- **Generations to Keep**: Maximum 10 files
+- **Generations to Keep**: Maximum 10 files for the same date
+- **Retention Period**: Compressed files (``*.log.gz``) are deleted at rollover once the specified
+  number of days has passed since they were last modified
+
+The default retention periods are as follows. You can change them with the values in
+``<Properties>`` in ``log4j2.xml``.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Log File
+     - Retention Period
+     - Property
+   * - ``fess.log``, ``fess-llm.log``
+     - 90 days
+     - ``backup.max.age``
+   * - ``searchlog.log``
+     - 90 days
+     - ``backup.searchlog.max.age``
+   * - ``audit.log``
+     - 360 days
+     - ``backup.audit.max.age``
 
 Configuration file example (``log4j2.xml``):
 

@@ -66,7 +66,11 @@
     fess sort:content_length.desc,last_modified
 
 .. note::
-   如果指定了排序对象字段列表中不存在的字段名,或指定了 ``asc``,\ ``desc`` 以外的排序顺序,则搜索会出现错误。
+   在搜索词的 ``sort:`` 中指定排序对象字段列表中不存在的字段名,或指定 ``asc``,\ ``desc`` 以外的排序顺序,不会出现错误。
+   此时 ``sort:`` 不会被当作排序条件,而是将整个搜索词中的符号(如 ``:``)当作普通字符重新搜索。
+   结果不会被排序,而且在大多数情况下搜索结果为0件。
+
+   在搜索 API 的 ``sort`` 参数中指定相同的值时,会出现错误(400 Bad Request)。
 
 .. |image0| image:: ../../../resources/images/en/15.9/user/search-sort-1.png
 .. pdf            :width: 300 px

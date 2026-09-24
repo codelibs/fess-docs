@@ -63,12 +63,15 @@
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 複数のフィールドを指定する場合は、カンマ区切りで列挙します。
 
 .. note::
-   ``content`` フィールドはデフォルトのレスポンスには含まれません。
-   全文を取得する場合は上記設定で追加してください。
+   ``content`` フィールドはデフォルトのレスポンスには含まれません。全文を取得するには、
+   上記の2つの設定が両方とも必要です。\ ``query.additional.scroll.response.fields`` はインデックスから取得する
+   フィールドを追加し、\ ``query.additional.api.response.fields`` はAPIレスポンスへの出力を許可するフィールドを
+   追加します。どちらか一方だけでは ``content`` は出力されません。
 
 使用方法
 ========
@@ -253,7 +256,8 @@ Content-Type は ``application/x-ndjson; charset=UTF-8`` です。
 
 .. note::
    ``content`` (全文)はデフォルトでは含まれません。
-   ``query.additional.scroll.response.fields`` で追加できます。
+   ``query.additional.scroll.response.fields`` と ``query.additional.api.response.fields`` の
+   両方に追加すると出力されます（「レスポンスフィールドの設定」を参照）。
 
 データ処理例
 ============

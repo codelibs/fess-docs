@@ -57,8 +57,8 @@ fess-urls.log
 
 Se registra el tiempo que tardó un rastreo.
 
-search.log
-::::::::::
+searchlog.log
+:::::::::::::
 
 Se registran los registros de búsqueda.
 

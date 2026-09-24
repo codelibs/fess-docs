@@ -50,7 +50,7 @@ Request Parameters
    * - ``as.*``
      - Advanced search conditions. Any ``as.<name>`` (e.g., ``as.q``, ``as.filetype``) is passed to the advanced search condition builder. Can be specified multiple times per name.
    * - ``track_total_hits``
-     - Forwarded to the search engine to control accurate hit count (e.g., ``true`` or an integer threshold). Affects whether ``record_count_relation`` is ``eq`` or ``gte``.
+     - Forwarded to the search engine to control accurate hit count (e.g., ``true`` or an integer threshold). Affects whether ``record_count_relation`` is ``EQUAL_TO`` or ``GREATER_THAN_OR_EQUAL_TO``.
    * - ``facet.field``
      - Facet field. Can be specified multiple times (array).
    * - ``facet.query``
@@ -87,7 +87,7 @@ On success (200), the following fields are returned directly under ``response`` 
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ Each field is described below.
    * - ``record_count``
      - Number of hits (int64).
    * - ``record_count_relation``
-     - When ``eq``, the count is exact; when ``gte``, only the lower bound is known.
+     - When ``EQUAL_TO``, the count is exact; when ``GREATER_THAN_OR_EQUAL_TO``, only the lower bound is known.
    * - ``page_count``
      - Total number of pages.
    * - ``highlight_params``

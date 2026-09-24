@@ -223,6 +223,20 @@ Corresponden respectivamente a los resultados de búsqueda normal, búsqueda API
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` solo añade campos a la lista de campos que se pueden
+   incluir en la respuesta de la API de búsqueda (``/api/v2/search``). Por sí solo, no hace que un
+   campo aparezca en la respuesta. La API de búsqueda obtiene del motor de búsqueda los mismos campos
+   que una búsqueda normal, incluidos los de ``query.additional.response.fields``, y devuelve solo los
+   campos obtenidos que están en esa lista. Para incluir un campo propio en la respuesta de la API de
+   búsqueda, especifique el mismo nombre de campo en ambos ajustes.
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 Para obtener más detalles sobre los campos de respuesta de la búsqueda scroll, consulte :doc:`search-scroll`.
 
 Adición de Nombres de Campo

@@ -145,7 +145,7 @@ Response
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ Response-Felder
    * - ``record_count``
      - Anzahl der Treffer.
    * - ``record_count_relation``
-     - Beziehung der Trefferanzahl. ``eq`` bedeutet eine exakte Anzahl, ``gte`` bedeutet, dass nur eine Untergrenze bekannt ist.
+     - Beziehung der Trefferanzahl. ``EQUAL_TO`` bedeutet eine exakte Anzahl, ``GREATER_THAN_OR_EQUAL_TO`` bedeutet, dass nur eine Untergrenze bekannt ist.
    * - ``page_count``
      - Gesamtanzahl der Seiten.
    * - ``next_page``

@@ -145,7 +145,7 @@ Respuesta
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ Campos de Respuesta
    * - ``record_count``
      - Número de elementos coincidentes.
    * - ``record_count_relation``
-     - Relación del recuento de coincidencias. ``eq`` indica un recuento exacto; ``gte`` indica que solo se conoce el límite inferior.
+     - Relación del recuento de coincidencias. ``EQUAL_TO`` indica un recuento exacto; ``GREATER_THAN_OR_EQUAL_TO`` indica que solo se conoce el límite inferior.
    * - ``page_count``
      - Número total de páginas.
    * - ``next_page``

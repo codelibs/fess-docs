@@ -224,6 +224,20 @@ Each setting corresponds to the response for normal search, API (JSON/GSA) searc
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` only adds fields to the list of fields that may be
+   written to the search API (``/api/v2/search``) response. On its own, it does not make a field
+   appear in the response. The search API fetches the same fields from the search engine as a normal
+   search, including those in ``query.additional.response.fields``, and returns only the fetched fields
+   that are on that list. To include a custom field in the search API response, specify the same field
+   name in both settings.
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 For details on scroll search response fields, refer to :doc:`search-scroll`.
 
 Adding Field Names

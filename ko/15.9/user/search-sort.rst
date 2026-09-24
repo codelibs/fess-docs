@@ -66,7 +66,11 @@
     fess sort:content_length.desc,last_modified
 
 .. note::
-   정렬 대상 필드 목록에 없는 필드명이나 ``asc`` · ``desc`` 이외의 정렬 순서를 지정한 경우에는 검색이 오류가 됩니다.
+   검색어의 ``sort:`` 에 정렬 대상 필드 목록에 없는 필드명이나 ``asc`` · ``desc`` 이외의 정렬 순서를 지정해도 오류가 되지 않습니다.
+   이 경우 ``sort:`` 는 정렬 조건으로 취급되지 않으며, 검색어 전체의 기호( ``:`` 등)를 일반 문자로 취급하여 다시 검색합니다.
+   정렬되지 않을 뿐 아니라 대부분의 경우 검색 결과가 0건이 됩니다.
+
+   검색 API의 ``sort`` 파라미터에 같은 값을 지정한 경우에는 오류(400 Bad Request)가 됩니다.
 
 .. |image0| image:: ../../../resources/images/en/15.9/user/search-sort-1.png
 .. pdf            :width: 300 px

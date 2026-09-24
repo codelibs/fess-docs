@@ -63,11 +63,14 @@
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 指定多个字段时，请用逗号分隔。
 
 .. note::
-   ``content`` 字段默认不包含在响应中。如需获取正文全文，请通过上述配置追加。
+   ``content`` 字段默认不包含在响应中。如需获取正文全文，需要同时使用上述两项配置：
+   ``query.additional.scroll.response.fields`` 用于追加从索引中获取的字段，
+   ``query.additional.api.response.fields`` 用于追加允许 API 响应输出的字段。只配置其中一项时，不会输出 ``content``。
 
 使用方法
 ========
@@ -252,7 +255,8 @@ Content-Type 为 ``application/x-ndjson; charset=UTF-8``\ 。
 
 .. note::
    ``content`` （正文全文）默认不包含在响应中。
-   可通过 ``query.additional.scroll.response.fields`` 追加。
+   同时追加到 ``query.additional.scroll.response.fields`` 和
+   ``query.additional.api.response.fields`` 后才会输出（参见“响应字段配置”）。
 
 数据处理示例
 ============

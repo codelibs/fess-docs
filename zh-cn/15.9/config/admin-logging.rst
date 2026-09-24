@@ -259,7 +259,26 @@ Log4j2 自动轮转
 ~~~~~~~~~~~~~~~~
 
 - **文件大小**: 超过 100MB 时轮转
-- **保留世代数**: 最多10个文件
+- **保留世代数**: 同一日期的文件最多10个
+- **保留期限**: 压缩后的文件( ``*.log.gz`` )自最后修改起超过指定天数后，会在轮转时被删除
+
+保留期限的默认值如下。可以通过 ``log4j2.xml`` 中 ``<Properties>`` 的值进行更改。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 日志文件
+     - 保留期限
+     - 属性
+   * - ``fess.log`` 、 ``fess-llm.log``
+     - 90天
+     - ``backup.max.age``
+   * - ``searchlog.log``
+     - 90天
+     - ``backup.searchlog.max.age``
+   * - ``audit.log``
+     - 360天
+     - ``backup.audit.max.age``
 
 配置文件示例(``log4j2.xml``):
 

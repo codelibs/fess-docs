@@ -260,7 +260,28 @@ Configuración Predeterminada
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **Tamaño de archivo**: Rotación cuando se superan los 100MB
-- **Número de generaciones conservadas**: Máximo 10 archivos
+- **Número de generaciones conservadas**: Máximo 10 archivos con la misma fecha
+- **Periodo de conservación**: Los archivos comprimidos (``*.log.gz``) se eliminan en la rotación una
+  vez transcurrido el número de días especificado desde su última modificación
+
+Los periodos de conservación predeterminados son los siguientes. Puede cambiarlos con los valores de
+``<Properties>`` en ``log4j2.xml``.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Archivo de registro
+     - Periodo de conservación
+     - Propiedad
+   * - ``fess.log``, ``fess-llm.log``
+     - 90 días
+     - ``backup.max.age``
+   * - ``searchlog.log``
+     - 90 días
+     - ``backup.searchlog.max.age``
+   * - ``audit.log``
+     - 360 días
+     - ``backup.audit.max.age``
 
 Ejemplo de archivo de configuración (``log4j2.xml``):
 

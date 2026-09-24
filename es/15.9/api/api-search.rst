@@ -50,7 +50,7 @@ Parámetros de solicitud
    * - ``as.*``
      - Condiciones de búsqueda avanzada. Cualquier ``as.<name>`` (ejemplo: ``as.q``, ``as.filetype``) se pasa al constructor de condiciones de búsqueda avanzada. Se puede repetir por nombre.
    * - ``track_total_hits``
-     - Se reenvía al motor de búsqueda para controlar el recuento exacto de resultados (ejemplo: ``true`` o un umbral entero). Afecta si ``record_count_relation`` es ``eq`` o ``gte``.
+     - Se reenvía al motor de búsqueda para controlar el recuento exacto de resultados (ejemplo: ``true`` o un umbral entero). Afecta si ``record_count_relation`` es ``EQUAL_TO`` o ``GREATER_THAN_OR_EQUAL_TO``.
    * - ``facet.field``
      - Campo de faceta. Se puede repetir (array).
    * - ``facet.query``
@@ -87,7 +87,7 @@ En caso de éxito (200), se devuelven los siguientes campos directamente bajo ``
         "page_size": 20,
         "page_number": 1,
         "record_count": 42,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 3,
         "highlight_params": "&hq=Fess",
         "next_page": true,
@@ -145,7 +145,7 @@ Los campos son los siguientes:
    * - ``record_count``
      - Número de resultados encontrados (int64).
    * - ``record_count_relation``
-     - Cuando es ``eq``, indica un recuento exacto; cuando es ``gte``, indica que solo se conoce el límite inferior.
+     - Cuando es ``EQUAL_TO``, indica un recuento exacto; cuando es ``GREATER_THAN_OR_EQUAL_TO``, indica que solo se conoce el límite inferior.
    * - ``page_count``
      - Número total de páginas.
    * - ``highlight_params``

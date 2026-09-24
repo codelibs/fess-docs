@@ -108,6 +108,8 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
      - 내용
    * - ``system.properties``
      - 시스템 프로퍼티의 내용 (``application/octet-stream``)
+   * - ``fess.json`` / ``doc.json``
+     - 인덱스의 매핑 정의 파일 (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``) 그 자체 (``application/octet-stream``)
    * - ``*.bulk`` 또는 확장자 없는 인덱스 이름
      - 대상 이름과 동일한 인덱스를 스크롤하여 생성한 벌크 데이터 (``application/octet-stream``). ``.bulk`` 를 제거한 이름을 인덱스 이름으로 처리합니다.
    * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
@@ -115,10 +117,8 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
 .. note::
 
-   ``fess.json`` 과 ``doc.json`` 은 인덱스의 매핑 정의 (스키마) 파일입니다.
-   백업 대상 목록 (``/files``) 에는 포함되지만, 이 API의 다운로드에서는 ``.bulk`` 와 마찬가지로
-   인덱스 스크롤 처리로 취급됩니다. 매핑 정의를 포함한 백업/
-   리스토어는 관리 화면의 시스템 정보 → 백업 을 이용해 주십시오.
+   이 API는 다운로드만 제공합니다. ``fess.json`` / ``doc.json`` 을 포함한 백업 파일의
+   리스토어 (업로드) 는 관리 화면의 시스템 정보 → 백업 을 이용해 주십시오.
 
 백업 대상에 존재하지 않는 ``{id}`` 를 지정한 경우에는, ``status`` 에 0 이외의 값과 오류 메시지 (``Could not find any backup index.``)를 포함한 오류 응답이 반환됩니다.
 
@@ -128,6 +128,14 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 ::
 
     GET /api/admin/backup/file/{id}
+
+.. note::
+
+   ``{id}`` 에 점( ``.`` )이 포함된 경우( ``fess_config.bulk`` , ``system.properties`` , ``fess.json`` ,
+   ``search_log.ndjson`` 등)에는 URL 끝에 ``/`` 를 붙이십시오
+   (예: ``/api/admin/backup/file/fess_config.bulk/`` ). ``/`` 로 끝나지 않고 마지막 요소에 점이
+   포함된 경로는 확장자가 있는 파일에 대한 요청으로 취급되어 API에 도달하지 않으며,
+   404 Not Found 가 반환됩니다.
 
 응답
 ----
@@ -155,7 +163,7 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
@@ -164,7 +172,7 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 

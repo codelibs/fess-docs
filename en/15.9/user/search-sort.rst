@@ -66,7 +66,11 @@ To sort by multiple fields, specify them separated by commas as follows. The fie
     fess sort:content_length.desc,last_modified
 
 .. note::
-   If you specify a field name that is not in the sort target field list, or a sort order other than ``asc`` or ``desc``, the search will result in an error.
+   Specifying a field name that is not in the sort target field list, or a sort order other than ``asc`` or ``desc``, in ``sort:`` in the search terms does not cause an error.
+   Instead, ``sort:`` is not treated as a sort condition, and the search is run again with the symbols in the whole search term (such as ``:``) treated as ordinary characters.
+   The results are not sorted, and in most cases no documents are found.
+
+   Specifying the same value in the ``sort`` parameter of the search API results in an error (400 Bad Request).
 
 .. |image0| image:: ../../../resources/images/en/15.9/user/search-sort-1.png
 .. pdf            :width: 300 px

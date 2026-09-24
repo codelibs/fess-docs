@@ -108,6 +108,8 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
      - 内容
    * - ``system.properties``
      - 系统属性的内容（``application/octet-stream``）
+   * - ``fess.json`` / ``doc.json``
+     - 索引的映射定义文件（``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``）本身，按原样返回（``application/octet-stream``）
    * - ``*.bulk`` 或不带扩展名的索引名
      - 对与对象名同名的索引进行滚动（scroll）生成的批量数据（``application/octet-stream``）。去除 ``.bulk`` 后的名称作为索引名处理。
    * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``）
@@ -115,9 +117,8 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. note::
 
-   ``fess.json`` 和 ``doc.json`` 是索引的映射定义（Schema）文件。
-   它们包含在对象列表（``/files``）中，但通过此API下载时，与 ``.bulk`` 相同，
-   作为索引的滚动处理来处理。包含映射定义的备份和还原请使用管理界面的系统信息 → 备份。
+   此API仅提供下载。包括 ``fess.json`` 和 ``doc.json`` 在内的备份文件的还原（上传）
+   请使用管理界面的系统信息 → 备份。
 
 如果指定了不存在于备份对象中的 ``{id}``，将返回 ``status`` 为非0值且包含错误消息（``Could not find any backup index.``）的错误响应。
 
@@ -127,6 +128,13 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 ::
 
     GET /api/admin/backup/file/{id}
+
+.. note::
+
+   如果 ``{id}`` 中包含点（ ``.`` ），例如 ``fess_config.bulk`` 、 ``system.properties`` 、 ``fess.json`` 、
+   ``search_log.ndjson`` ，请在 URL 末尾加上 ``/`` （例如
+   ``/api/admin/backup/file/fess_config.bulk/`` ）。不以 ``/`` 结尾且最后一段包含点的路径会被视为
+   对带扩展名文件的请求，不会到达 API，并返回 404 Not Found。
 
 响应
 ----
@@ -154,7 +162,7 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
@@ -163,7 +171,7 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 

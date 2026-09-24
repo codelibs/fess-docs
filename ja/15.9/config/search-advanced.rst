@@ -223,6 +223,19 @@ OpenSearchのハイライターに渡す値を指定します。
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` は、検索API（ ``/api/v2/search`` ）のレスポンスに出力してよい
+   フィールドの一覧に追加するだけで、それだけではフィールドはレスポンスに現れません。
+   検索APIは ``query.additional.response.fields`` を含む通常の検索と同じフィールドを検索エンジンから取得し、
+   その中から出力してよい一覧にあるフィールドだけを返します。
+   独自のフィールドを検索APIのレスポンスに含めるには、両方に同じフィールド名を指定してください。
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 スクロール検索のレスポンスフィールドの詳細については :doc:`search-scroll` を参照してください。
 
 フィールド名の追加

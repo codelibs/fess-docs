@@ -223,6 +223,19 @@ OpenSearch 하이라이터에 전달할 값을 지정합니다.
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` 는 검색 API( ``/api/v2/search`` )의 응답에 출력해도 되는
+   필드 목록에 추가할 뿐이며, 이것만으로는 필드가 응답에 나타나지 않습니다.
+   검색 API는 ``query.additional.response.fields`` 를 포함하여 일반 검색과 같은 필드를 검색 엔진에서
+   가져온 뒤, 그중 이 목록에 있는 필드만 반환합니다.
+   독자적인 필드를 검색 API의 응답에 포함하려면 두 설정에 같은 필드명을 지정하십시오.
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 스크롤 검색의 응답 필드에 대한 자세한 내용은 :doc:`search-scroll` 을 참조하십시오.
 
 필드명 추가

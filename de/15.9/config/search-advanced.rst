@@ -223,6 +223,20 @@ Jeweils entsprechend für normale Suche, API-(JSON/GSA-)Suche, Scroll-Suche und 
     query.additional.scroll.response.fields=
     query.additional.cache.response.fields=
 
+.. note::
+
+   ``query.additional.api.response.fields`` fügt Felder nur zur Liste der Felder hinzu, die in die
+   Response der Such-API (``/api/v2/search``) geschrieben werden dürfen. Allein damit erscheint ein Feld
+   nicht in der Response. Die Such-API ruft dieselben Felder aus der Suchmaschine ab wie eine normale
+   Suche, einschließlich derer in ``query.additional.response.fields``, und gibt davon nur die Felder
+   zurück, die in dieser Liste stehen. Um ein eigenes Feld in die Response der Such-API aufzunehmen,
+   geben Sie denselben Feldnamen in beiden Einstellungen an.
+
+   ::
+
+       query.additional.response.fields=category
+       query.additional.api.response.fields=category
+
 Weitere Details zu den Response-Feldern der Scroll-Suche finden Sie unter :doc:`search-scroll`.
 
 Hinzufügen von Feldnamen

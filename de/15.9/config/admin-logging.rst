@@ -214,7 +214,28 @@ Standardkonfiguration
 ~~~~~~~~~~~~~~~~
 
 - **Dateigröße**: Rotation bei über 100 MB
-- **Aufbewahrungsgenerationen**: Maximal 10 Dateien
+- **Aufbewahrungsgenerationen**: Maximal 10 Dateien mit demselben Datum
+- **Aufbewahrungsdauer**: Komprimierte Dateien (``*.log.gz``) werden bei der Rotation gelöscht, sobald
+  seit ihrer letzten Änderung die angegebene Anzahl von Tagen vergangen ist
+
+Die Standardwerte der Aufbewahrungsdauer sind wie folgt. Sie können sie mit den Werten unter
+``<Properties>`` in ``log4j2.xml`` ändern.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Protokolldatei
+     - Aufbewahrungsdauer
+     - Eigenschaft
+   * - ``fess.log``, ``fess-llm.log``
+     - 90 Tage
+     - ``backup.max.age``
+   * - ``searchlog.log``
+     - 90 Tage
+     - ``backup.searchlog.max.age``
+   * - ``audit.log``
+     - 360 Tage
+     - ``backup.audit.max.age``
 
 Beispiel für Konfigurationsdatei (``log4j2.xml``):
 

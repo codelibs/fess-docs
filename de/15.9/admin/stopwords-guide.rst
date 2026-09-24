@@ -5,7 +5,19 @@ Stoppwort-Wörterbuch
 Übersicht
 =========
 
-Bestimmte Zeichen (Symbole, Zeichencodes, Vollbreite/Halbbreite) können als Stoppwörter konfiguriert werden.
+Stoppwörter sind Wörter, die der Analyzer beim Indexieren von Dokumenten und bei der Suche entfernt.
+Im Stoppwort-Wörterbuch können Sie die zu entfernenden Wörter verwalten.
+
+.. note::
+
+   Stoppwort-Wörterbücher sind Dateien pro Sprache (``en/stopwords.txt``, ``ja/stopwords.txt`` usw.),
+   und jede wird nur vom Analyzer der jeweiligen Sprache verwendet. ``en/stopwords.txt`` wird für die
+   Analyse der Felder ``content`` und ``title`` sowie der ``_en``-Felder wie ``content_en`` verwendet,
+   während ``content_ja`` und ``title_ja`` von Dokumenten, die als Japanisch erkannt wurden, mit
+   ``ja/stopwords.txt`` analysiert werden. Sprachspezifische Felder wie ``content_ja`` werden je nach
+   Sprache der Anfrage zur Abfrage hinzugefügt. Ein Wort, das nur zu ``en/stopwords.txt`` hinzugefügt
+   wurde, kann daher über ein sprachspezifisches Feld weiterhin gefunden werden. Damit ein Wort nicht
+   mehr gefunden wird, fügen Sie es auch dem Stoppwort-Wörterbuch der Sprache der Dokumente hinzu.
 
 Verwaltung
 ==========
@@ -29,25 +41,20 @@ Um die Stoppwort-Konfigurationsseite zu öffnen, klicken Sie auf die Schaltfläc
 Konfigurationsparameter
 -----------------------
 
-Quelle
-::::::
+Wortinformationen
+:::::::::::::::::
 
-Geben Sie die Zeichen (Symbole, Zeichencodes, Vollbreite/Halbbreite) ein, die als Stoppwörter konfiguriert werden sollen.
-
-Ziel
-::::
-
-Erweitern Sie die in der Quelle eingegebenen Zeichen mit den Zielzeichen.
+Geben Sie das Wort ein, das als Stoppwort entfernt werden soll.
 
 Download
 ========
 
-Sie können im Stoppwort-Wörterbuchformat herunterladen.
+Sie können das Stoppwort-Wörterbuch als Textdatei mit einem Wort pro Zeile herunterladen.
 
 Upload
 ======
 
-Sie können im Stoppwort-Wörterbuchformat hochladen.
+Sie können eine Textdatei mit einem Wort pro Zeile hochladen. Zeilen, die mit ``#`` beginnen, werden als Kommentare behandelt.
 
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/stopwords-1.png

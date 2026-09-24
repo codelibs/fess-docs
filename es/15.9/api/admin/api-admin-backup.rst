@@ -108,6 +108,8 @@ Según el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente 
      - Contenido
    * - ``system.properties``
      - Contenido de las propiedades del sistema (``application/octet-stream``)
+   * - ``fess.json`` / ``doc.json``
+     - El propio archivo de definición de mapeo del índice (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``), sin modificar (``application/octet-stream``)
    * - ``*.bulk`` o nombre de índice sin extensión
      - Datos masivos generados al recorrer el índice con el mismo nombre que el objetivo (``application/octet-stream``). El nombre sin ``.bulk`` se trata como nombre del índice.
    * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
@@ -115,11 +117,9 @@ Según el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente 
 
 .. note::
 
-   ``fess.json`` y ``doc.json`` son archivos de definición de mapeo (esquema) del índice.
-   Se incluyen en la lista de objetivos (``/files``), pero en la descarga de esta API se tratan
-   como procesamiento de desplazamiento del índice, al igual que ``.bulk``. Para realizar copias de
-   seguridad y restauraciones que incluyan la definición de mapeo, utilice
-   Información del sistema → Copia de seguridad en la pantalla de administración.
+   Esta API solo permite descargar. Para restaurar (subir) archivos de copia de seguridad, incluidos
+   ``fess.json`` y ``doc.json``, utilice Información del sistema → Copia de seguridad en la pantalla
+   de administración.
 
 Si se especifica un ``{id}`` que no existe entre los objetivos de copia de seguridad, se devuelve una respuesta de error con un valor distinto de 0 en ``status`` y el mensaje de error (``Could not find any backup index.``).
 
@@ -129,6 +129,14 @@ Solicitud
 ::
 
     GET /api/admin/backup/file/{id}
+
+.. note::
+
+   Si ``{id}`` contiene un punto (``.``), como ``fess_config.bulk``, ``system.properties``, ``fess.json`` y
+   ``search_log.ndjson``, termine la URL con ``/`` (por ejemplo,
+   ``/api/admin/backup/file/fess_config.bulk/``). Una ruta que no termina en ``/`` y cuyo último
+   segmento contiene un punto se trata como una solicitud de un archivo con extensión. No llega a la
+   API y se devuelve 404 Not Found.
 
 Respuesta
 ---------
@@ -156,7 +164,7 @@ Descargar Índice de Configuración
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/fess_config.bulk/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o fess_config.bulk
 
@@ -165,7 +173,7 @@ Descargar Registro de Búsqueda
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson" \
+    curl -X GET "http://localhost:8080/api/admin/backup/file/search_log.ndjson/" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -o search_log.ndjson
 

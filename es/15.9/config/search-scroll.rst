@@ -59,12 +59,15 @@ Por defecto, se devuelven muchos campos, pero puede especificar campos adicional
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 Al especificar múltiples campos, enumérelos separados por comas.
 
 .. note::
-   El campo ``content`` no está incluido en la respuesta predeterminada.
-   Si necesita el texto completo, agréguelo mediante la configuración indicada anteriormente.
+   El campo ``content`` no está incluido en la respuesta predeterminada. Para obtener el texto
+   completo se necesitan las dos configuraciones anteriores. ``query.additional.scroll.response.fields``
+   añade el campo a los que se obtienen del índice, y ``query.additional.api.response.fields`` lo añade a los
+   campos que la API puede devolver. Con solo una de ellas, ``content`` no se emite.
 
 Método de Uso
 =============
@@ -250,7 +253,8 @@ Campos incluidos por defecto:
 
 .. note::
    ``content`` (texto completo) no está incluido por defecto.
-   Puede agregarse mediante ``query.additional.scroll.response.fields``.
+   Se emite si se agrega tanto a ``query.additional.scroll.response.fields`` como a
+   ``query.additional.api.response.fields`` (consulte Configuración de Campos de Respuesta).
 
 Ejemplos de Procesamiento de Datos
 ====================================

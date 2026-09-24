@@ -145,7 +145,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
    * - ``record_count``
      - 該当件数。
    * - ``record_count_relation``
-     - 該当件数の関係。 ``eq`` は正確な件数、 ``gte`` は下限のみ判明していることを示します。
+     - 該当件数の関係。 ``EQUAL_TO`` は正確な件数、 ``GREATER_THAN_OR_EQUAL_TO`` は下限のみ判明していることを示します。
    * - ``page_count``
      - 総ページ数。
    * - ``next_page``

@@ -63,12 +63,15 @@
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 여러 필드를 지정하는 경우 쉼표로 구분하여 나열합니다.
 
 .. note::
-   ``content`` 필드는 기본 응답에 포함되지 않습니다.
-   전문을 취득하려면 위 설정으로 추가하십시오.
+   ``content`` 필드는 기본 응답에 포함되지 않습니다. 전문을 취득하려면 위의 두 설정이
+   모두 필요합니다. ``query.additional.scroll.response.fields`` 는 인덱스에서 가져올 필드를 추가하고,
+   ``query.additional.api.response.fields`` 는 API 응답으로 출력이 허용되는 필드를 추가합니다.
+   어느 한쪽만으로는 ``content`` 가 출력되지 않습니다.
 
 사용 방법
 =========
@@ -253,7 +256,8 @@ Content-Type 은 ``application/x-ndjson; charset=UTF-8`` 입니다.
 
 .. note::
    ``content`` (전문)은 기본적으로 포함되지 않습니다.
-   ``query.additional.scroll.response.fields`` 로 추가할 수 있습니다.
+   ``query.additional.scroll.response.fields`` 와 ``query.additional.api.response.fields`` 양쪽에
+   추가하면 출력됩니다 (응답 필드 설정 참조).
 
 데이터 처리 예
 ==============

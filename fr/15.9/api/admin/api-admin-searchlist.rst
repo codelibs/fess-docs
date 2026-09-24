@@ -145,7 +145,7 @@ Réponse
         "page_size": 20,
         "page_number": 1,
         "record_count": 234,
-        "record_count_relation": "eq",
+        "record_count_relation": "EQUAL_TO",
         "page_count": 12,
         "next_page": true,
         "prev_page": false,
@@ -194,7 +194,7 @@ Champs de la réponse
    * - ``record_count``
      - Nombre d'éléments correspondants.
    * - ``record_count_relation``
-     - Relation du nombre d'éléments correspondants. ``eq`` indique un comptage exact, ``gte`` indique que seule la borne inférieure est connue.
+     - Relation du nombre d'éléments correspondants. ``EQUAL_TO`` indique un comptage exact, ``GREATER_THAN_OR_EQUAL_TO`` indique que seule la borne inférieure est connue.
    * - ``page_count``
      - Nombre total de pages.
    * - ``next_page``
