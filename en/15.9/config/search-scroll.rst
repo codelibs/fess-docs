@@ -63,12 +63,15 @@ By default, many fields are returned, but you can also specify additional fields
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 When specifying multiple fields, list them separated by commas.
 
 .. note::
-   The ``content`` field is not included in the default response.
-   To retrieve full text, add it using the setting above.
+   The ``content`` field is not included in the default response. To retrieve full text, you
+   need both settings above. ``query.additional.scroll.response.fields`` adds the field to what is fetched
+   from the index, and ``query.additional.api.response.fields`` adds it to the fields the API is allowed to
+   return. With only one of them, ``content`` is not output.
 
 Usage
 =====
@@ -254,7 +257,8 @@ Fields included by default:
 
 .. note::
    ``content`` (full text) is not included by default.
-   It can be added via ``query.additional.scroll.response.fields``.
+   It is output when added to both ``query.additional.scroll.response.fields`` and
+   ``query.additional.api.response.fields`` (see Response Field Configuration).
 
 Data Processing Examples
 ========================

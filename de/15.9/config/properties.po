@@ -867,13 +867,13 @@ msgstr ""
 msgid "Additional default fields for queries."
 msgstr ""
 
-msgid "Additional response fields for queries."
+msgid "Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields."
 msgstr ""
 
-msgid "Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only). Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response."
+msgid "Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response."
 msgstr ""
 
-msgid "Additional scroll response fields for queries."
+msgid "Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields."
 msgstr ""
 
 msgid "Additional cache response fields for queries."

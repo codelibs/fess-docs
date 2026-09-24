@@ -108,6 +108,8 @@ Je nach Art von ``{id}`` wechselt der Antwortinhalt wie folgt.
      - Inhalt
    * - ``system.properties``
      - Inhalt der Systemeigenschaften (``application/octet-stream``)
+   * - ``fess.json`` / ``doc.json``
+     - Die Mapping-Definitionsdatei des Index selbst (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``), unverändert (``application/octet-stream``)
    * - ``*.bulk`` oder Indexname ohne Erweiterung
      - Durch Scrollen des gleichnamigen Index erzeugte Bulk-Daten (``application/octet-stream``). Der Name ohne ``.bulk`` wird als Indexname behandelt.
    * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
@@ -115,11 +117,9 @@ Je nach Art von ``{id}`` wechselt der Antwortinhalt wie folgt.
 
 .. note::
 
-   ``fess.json`` und ``doc.json`` sind Mapping-Definitionsdateien (Schema) für Indizes.
-   Sie sind in der Zielliste (``/files``) enthalten, werden beim Herunterladen über diese API
-   jedoch wie ``.bulk``-Dateien als Scroll-Verarbeitung des Index behandelt. Für Sicherung
-   und Wiederherstellung einschließlich Mapping-Definitionen verwenden Sie bitte
-   Systeminformationen → Sicherung in der Verwaltungsoberfläche.
+   Diese API bietet nur das Herunterladen. Zur Wiederherstellung (Hochladen) von Sicherungsdateien,
+   einschließlich ``fess.json`` und ``doc.json``, verwenden Sie bitte Systeminformationen → Sicherung
+   in der Verwaltungsoberfläche.
 
 Wird eine ``{id}`` angegeben, die nicht unter den Sicherungszielen existiert, wird eine Fehlerantwort zurückgegeben, die in ``status`` einen Wert ungleich 0 und eine Fehlermeldung (``Could not find any backup index.``) enthält.
 
@@ -132,7 +132,7 @@ Request
 
 .. note::
 
-   Enthält ``{id}`` einen Punkt (``.``), wie ``fess_config.bulk``, ``system.properties`` und
+   Enthält ``{id}`` einen Punkt (``.``), wie ``fess_config.bulk``, ``system.properties``, ``fess.json`` und
    ``search_log.ndjson``, schließen Sie die URL mit ``/`` ab (zum Beispiel
    ``/api/admin/backup/file/fess_config.bulk/``). Ein Pfad, der nicht auf ``/`` endet und dessen
    letztes Segment einen Punkt enthält, wird als Anfrage nach einer Datei mit Dateiendung behandelt.

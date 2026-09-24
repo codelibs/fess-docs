@@ -108,6 +108,8 @@ Backup APIは、|Fess| のバックアップ対象データを参照・ダウン
      - 内容
    * - ``system.properties``
      - システムプロパティの内容（``application/octet-stream``）
+   * - ``fess.json`` / ``doc.json``
+     - インデックスのマッピング定義ファイル（``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``）そのもの（``application/octet-stream``）
    * - ``*.bulk`` または拡張子なしのインデックス名
      - 対象名と同名のインデックスをスクロールして生成したバルクデータ（``application/octet-stream``）。\ ``.bulk`` を取り除いた名前をインデックス名として扱います。
    * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``）
@@ -115,10 +117,8 @@ Backup APIは、|Fess| のバックアップ対象データを参照・ダウン
 
 .. note::
 
-   ``fess.json`` と ``doc.json`` はインデックスのマッピング定義（スキーマ）ファイルです。
-   対象一覧（``/files``）には含まれますが、このAPIのダウンロードでは ``.bulk`` と同様に
-   インデックスのスクロール処理として扱われます。マッピング定義を含むバックアップ／
-   リストアは管理画面の「システム情報」→「バックアップ」を利用してください。
+   このAPIが提供するのはダウンロードのみです。\ ``fess.json`` / ``doc.json`` を含むバックアップファイルの
+   リストア（アップロード）は、管理画面の「システム情報」→「バックアップ」から行ってください。
 
 バックアップ対象に存在しない ``{id}`` を指定した場合は、``status`` に 0 以外の値とエラーメッセージ（``Could not find any backup index.``）を含むエラーレスポンスが返されます。
 
@@ -131,7 +131,7 @@ Backup APIは、|Fess| のバックアップ対象データを参照・ダウン
 
 .. note::
 
-   ``{id}`` にドット（ ``.`` ）が含まれる場合（ ``fess_config.bulk`` 、 ``system.properties`` 、
+   ``{id}`` にドット（ ``.`` ）が含まれる場合（ ``fess_config.bulk`` 、 ``system.properties`` 、 ``fess.json`` 、
    ``search_log.ndjson`` など）は、URL の末尾に ``/`` を付けてください
    （例: ``/api/admin/backup/file/fess_config.bulk/`` ）。末尾が ``/`` でなく、最後の要素に
    ドットを含むパスは拡張子付きのファイルへのリクエストとして扱われてAPIに届かず、

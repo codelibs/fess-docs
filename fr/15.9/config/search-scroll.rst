@@ -63,12 +63,15 @@ Par défaut, de nombreux champs sont renvoyés, mais vous pouvez spécifier des 
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 Pour spécifier plusieurs champs, énumérez-les séparés par des virgules.
 
 .. note::
-   Le champ ``content`` n'est pas inclus par défaut dans la réponse.
-   Ajoutez-le via le paramètre ci-dessus si vous souhaitez récupérer le texte intégral.
+   Le champ ``content`` n'est pas inclus par défaut dans la réponse. Pour récupérer le texte
+   intégral, les deux paramètres ci-dessus sont nécessaires. ``query.additional.scroll.response.fields``
+   ajoute le champ à ceux lus dans l'index, et ``query.additional.api.response.fields`` l'ajoute aux champs
+   que l'API est autorisée à renvoyer. Avec un seul des deux, ``content`` n'est pas émis.
 
 Méthode d'utilisation
 =====================
@@ -257,7 +260,8 @@ Champs inclus par défaut :
 
 .. note::
    Le champ ``content`` (texte intégral) n'est pas inclus par défaut.
-   Vous pouvez l'ajouter via ``query.additional.scroll.response.fields``.
+   Il est émis lorsqu'il est ajouté à la fois à ``query.additional.scroll.response.fields`` et à
+   ``query.additional.api.response.fields`` (voir Configuration des champs de réponse).
 
 Exemples de traitement de données
 ==================================

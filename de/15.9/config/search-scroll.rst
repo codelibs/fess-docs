@@ -68,13 +68,16 @@ angeben.
 ::
 
     query.additional.scroll.response.fields=content
+    query.additional.api.response.fields=content
 
 Mehrere Felder werden durch Komma getrennt aufgelistet.
 
 .. note::
-   Das Feld ``content`` ist standardmäßig nicht in den Response-Feldern enthalten.
-   Fügen Sie es mit der obigen Einstellung hinzu, wenn Sie den vollständigen Text abrufen
-   möchten.
+   Das Feld ``content`` ist standardmäßig nicht in den Response-Feldern enthalten. Um den
+   vollständigen Text abzurufen, sind beide obigen Einstellungen erforderlich.
+   ``query.additional.scroll.response.fields`` fügt das Feld zu den aus dem Index abgerufenen Feldern
+   hinzu, ``query.additional.api.response.fields`` zu den Feldern, die die API ausgeben darf. Mit nur
+   einer der beiden Einstellungen wird ``content`` nicht ausgegeben.
 
 Verwendung
 ==========
@@ -263,7 +266,8 @@ Standardmäßig enthaltene Felder:
 
 .. note::
    ``content`` (Volltext) ist standardmäßig nicht enthalten.
-   Er kann über ``query.additional.scroll.response.fields`` hinzugefügt werden.
+   Er wird ausgegeben, wenn er sowohl zu ``query.additional.scroll.response.fields`` als auch zu
+   ``query.additional.api.response.fields`` hinzugefügt wird (siehe Konfiguration der Response-Felder).
 
 Datenverarbeitungsbeispiele
 ============================

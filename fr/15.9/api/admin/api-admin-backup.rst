@@ -108,6 +108,8 @@ Selon le type de ``{id}``, le contenu de la réponse change comme suit.
      - Contenu
    * - ``system.properties``
      - Contenu des propriétés système (``application/octet-stream``)
+   * - ``fess.json`` / ``doc.json``
+     - Le fichier de définition de mapping de l'index lui-même (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``), tel quel (``application/octet-stream``)
    * - ``*.bulk`` ou nom d'index sans extension
      - Données en masse générées en parcourant (scroll) l'index du même nom que la cible (``application/octet-stream``). Le nom sans ``.bulk`` est traité comme le nom de l'index.
    * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
@@ -115,11 +117,9 @@ Selon le type de ``{id}``, le contenu de la réponse change comme suit.
 
 .. note::
 
-   ``fess.json`` et ``doc.json`` sont des fichiers de définition de mapping (schéma) d'index.
-   Ils figurent dans la liste des cibles (``/files``), mais lors du téléchargement via cette API,
-   ils sont traités comme un parcours (scroll) d'index, de la même manière que ``.bulk``.
-   Pour la sauvegarde et la restauration incluant les définitions de mapping, utilisez
-   Informations système → Sauvegarde dans la console d'administration.
+   Cette API permet uniquement le téléchargement. Pour restaurer (téléverser) des fichiers de
+   sauvegarde, y compris ``fess.json`` et ``doc.json``, utilisez Informations système → Sauvegarde
+   dans la console d'administration.
 
 Si vous spécifiez un ``{id}`` inexistant parmi les cibles de sauvegarde, une réponse d'erreur est renvoyée avec une valeur différente de 0 dans ``status`` et le message d'erreur (``Could not find any backup index.``).
 
@@ -132,7 +132,7 @@ Requête
 
 .. note::
 
-   Si ``{id}`` contient un point (``.``), comme ``fess_config.bulk``, ``system.properties`` et
+   Si ``{id}`` contient un point (``.``), comme ``fess_config.bulk``, ``system.properties``, ``fess.json`` et
    ``search_log.ndjson``, terminez l'URL par ``/`` (par exemple
    ``/api/admin/backup/file/fess_config.bulk/``). Un chemin qui ne se termine pas par ``/`` et dont
    le dernier segment contient un point est traité comme la demande d'un fichier avec extension. Il
