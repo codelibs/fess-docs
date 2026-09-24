@@ -231,7 +231,8 @@ Einstellungen in system.properties
    * - ``content_chunker.search.knn.k``
      - ``100``
      - Anzahl der pro ANN-Abfrage abgerufenen Nachbarn (wird für Deep Paging automatisch
-       vergrößert)
+       vergrößert; mindestens ``rank.fusion.pagination_depth``, wenn die Suchmaschine die Fusion
+       durchführt)
    * - ``content_chunker.search.knn.param.ef_search``
      - (nicht gesetzt)
      - Der Parameter ``ef_search`` für ANN-Abfragen
@@ -526,7 +527,9 @@ Verhalten der semantischen Suche
 
 Das Setzen von ``content_chunker.search.enabled=true`` registriert den semantischen Sucher bei
 Rank Fusion, das dann die Ergebnisse der Schlüsselwortsuche mit denen der Vektorsuche
-zusammenführt. (Siehe :doc:`rank-fusion` für die Funktionsweise von Rank Fusion.)
+zusammenführt. (Siehe :doc:`rank-fusion` für die Funktionsweise von Rank Fusion.) Standardmäßig
+führt |Fess| die Fusion selbst durch; mit ``rank.fusion.engine.enabled=true`` übernimmt dies
+stattdessen OpenSearch (siehe :ref:`rank-fusion-engine`).
 Zur Suchzeit wird zusätzlich ``content_chunker.enabled`` ausgewertet: Bei
 ``content_chunker.enabled=false`` oder ``content_chunker.embedding.name=none`` findet keine
 semantische Suche statt, auch wenn der Sucher registriert ist (diese Prüfung erfolgt pro Anfrage,
@@ -589,34 +592,50 @@ umgerechnet).
    Dieser Cutoff wird nur angewendet, wenn ``content_chunker.search.knn.space_type`` auf
    ``cosinesimil`` (dem Standard) steht. Bei einem Index im Modus ``ann`` mit ``innerproduct``
    oder ``l2`` lässt sich keine Kosinusähnlichkeit definieren; der Cutoff wird dann übersprungen,
-   nachdem einmalig eine Warnung protokolliert wurde.
+   und für jede solche Suche wird eine Warnung protokolliert.
 
 Einschränkungen
 ------------------
 
-- **Die semantische Suche wird bei Anfragen mit Suchsyntax übersprungen**, und es läuft nur die
-  Schlüsselwortsuche. Die Prüfung erfolgt an der **fertig zusammengesetzten** Anfragezeichenkette
-  und greift, sobald diese eines der Zeichen ``"`` ``(`` ``)`` ``:`` ``[`` ``]`` ``{`` ``}``
-  ``^`` ``~`` ``*`` ``?`` ``\``, die Folgen ``&&`` oder ``||``, ein ``+`` bzw. ``-`` am Anfang
-  oder direkt nach einem Leerzeichen oder eines der Großbuchstabenwörter ``AND`` / ``OR`` /
-  ``NOT`` / ``TO`` enthält. Auch ohne dass Nutzende selbst Suchsyntax eingeben, wird die
-  semantische Suche daher bei den folgenden Vorgängen übersprungen.
+- Feldbezogene Bedingungen in der Anfrage (``label:``, ``site:``, ``filetype:``, Bereiche auf
+  ``timestamp`` / ``last_modified`` usw.) werden vom einzubettenden Text getrennt und als Filter
+  auf die Vektorsuche angewendet. Die Anfrage wird **nach** ihrer Zusammensetzung untersucht;
+  Vorgänge, die solche Bedingungen intern anhängen — die Auswahl eines Labels, die Eingrenzung
+  über Facetten oder Dateityp, Site und Zeitraum der erweiterten Suche, einschließlich
+  Bedingungen, die über die Parameter ``ex_q`` und ``fields.*`` übergeben werden —, führen die
+  semantische Suche daher weiterhin aus, eingegrenzt durch dieselben Bedingungen wie die
+  Schlüsselwortsuche.
+- **Die semantische Suche wird** bei den folgenden Anfragen **übersprungen**, und es läuft nur die
+  Schlüsselwortsuche.
 
-  - Auswahl eines Labels (intern wird ``label:"..."`` angehängt)
-  - Angabe einer Sortierbedingung (intern wird ``sort:...`` angehängt)
-  - Eingrenzung über Facetten (intern wird z. B. ``filetype:...`` angehängt)
-  - Phrasensuche, Ausschlusswörter, Dateityp, Site und Zeitraum in der erweiterten Suche
-  - Suchbegriffe mit hinterlegten verwandten Anfragen (intern zu ``("A" OR "B")`` expandiert)
+  - Eine Sortierbedingung (das Pseudofeld ``sort:`` oder der Parameter ``sort``, der intern
+    ebenfalls als ``sort:...`` angehängt wird)
+  - Eine Phrase (``"..."``), ein Platzhalter (``*`` ``?``), eine unscharfe Suche (``~``) oder ein
+    Bereich auf Wörtern ohne Feldangabe, einschließlich der Phrase der erweiterten Suche. Das
+    ASCII-Zeichen ``?`` wird als Platzhalter gelesen, daher wird auch ein natürlichsprachlicher
+    Satz, der mit einem ASCII-Fragezeichen endet (etwa „Was ist ...?"), übersprungen (das
+    Vollbreiten-``？`` zählt nicht dazu).
+  - Das Ausschließen eines Wortes (``-wort``, ``NOT wort``, einschließlich der Ausschlusswörter
+    der erweiterten Suche) oder dessen Gewichtung (``wort^2``)
+  - Eine Anfrage, deren Bedingungen sich nicht als Filter abtrennen lassen, etwa ein Wort und eine
+    Bedingung, die mit ``OR`` verknüpft sind
+  - ``allintitle:`` / ``allinurl:``
+  - Eine Anfrage, die nur Bedingungen und keine einzubettenden Wörter enthält
+  - Eine Anfrage, die sich nicht parsen lässt
 
-  Da auch das ASCII-Zeichen ``?`` dazugehört, wird ein natürlichsprachlicher Satz, der mit einem
-  ASCII-Fragezeichen endet (etwa „Was ist ...?"), übersprungen (das Vollbreiten-``？`` zählt
-  nicht dazu).
 - Sie wird ebenfalls übersprungen, wenn sie mit der Geolokalisierungssuche (einem Geo-Filter)
   oder der Suche nach ähnlichen Dokumenten kombiniert wird.
-- Auf tiefen Ergebnisseiten wird Rank Fusion selbst deaktiviert, sodass nur Ergebnisse der
-  Schlüsselwortsuche zurückgegeben werden. Die Grenze bestimmt
-  ``rank.fusion.window_size`` (Standard ``200``); damit betrifft dies standardmäßig alle Treffer
-  ab dem 101. Suchergebnis.
+- Auf tiefen Ergebnisseiten wird Rank Fusion selbst deaktiviert.
+
+  - Führt |Fess| die Fusion durch (Standard), bestimmt ``rank.fusion.window_size`` (Standard
+    ``200``) die Grenze; standardmäßig werden alle Treffer ab dem 101. Suchergebnis nur aus der
+    Schlüsselwortsuche geliefert.
+  - Führt die Suchmaschine die Fusion durch (``rank.fusion.engine.enabled=true``), ist die Grenze
+    ``rank.fusion.pagination_depth`` (Standard ``200``). Eine Seite, bei der Startposition plus
+    Seitengröße diesen Wert überschreitet, wird stattdessen von |Fess| fusioniert, und es gilt die
+    obige Grenze von ``rank.fusion.window_size``.
+
+  Siehe :doc:`rank-fusion` für Details.
 - Ist der Embedding-Anbieter nicht erreichbar oder tritt ein Suchfehler auf, fällt |Fess|
   automatisch auf reine Schlüsselwortergebnisse zurück (die Suche selbst schlägt dadurch nie
   fehl).

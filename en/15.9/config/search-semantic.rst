@@ -221,7 +221,8 @@ system.properties Settings
        requires recreating the index)
    * - ``content_chunker.search.knn.k``
      - ``100``
-     - Number of neighbors retrieved per ANN query (automatically enlarged for deep paging)
+     - Number of neighbors retrieved per ANN query (automatically enlarged for deep paging; at
+       least ``rank.fusion.pagination_depth`` when the search engine performs the fusion)
    * - ``content_chunker.search.knn.param.ef_search``
      - (unset)
      - The ``ef_search`` parameter for ANN queries
@@ -497,7 +498,9 @@ How Semantic Search Behaves
 
 Setting ``content_chunker.search.enabled=true`` registers the semantic searcher with Rank Fusion,
 which then merges keyword search results with vector search results. (See :doc:`rank-fusion` for
-how Rank Fusion works.)
+how Rank Fusion works.) By default |Fess| performs the fusion itself; setting
+``rank.fusion.engine.enabled=true`` has OpenSearch perform it instead (see
+:ref:`rank-fusion-engine`).
 Note that ``content_chunker.enabled`` is also consulted at search time: when
 ``content_chunker.enabled=false`` or ``content_chunker.embedding.name=none``, semantic search does
 not run even though the searcher is registered. (This is evaluated per request, so no restart is
@@ -556,31 +559,47 @@ converted internally to each mode's score scale.
 
    This cutoff is applied only when ``content_chunker.search.knn.space_type`` is ``cosinesimil``
    (the default). On an ``ann``-mode index that uses ``innerproduct`` or ``l2``, a cosine
-   similarity cannot be defined, so the cutoff is skipped after logging a warning once.
+   similarity cannot be defined, so the cutoff is skipped and a warning is logged for each such search.
 
 Limitations
 -------------
 
-- **Semantic search is skipped for queries that contain search syntax**, and only keyword search
-  runs. The check is performed on the query string **after** it has been assembled, and it trips
-  whenever that string contains any of ``"`` ``(`` ``)`` ``:`` ``[`` ``]`` ``{`` ``}`` ``^`` ``~``
-  ``*`` ``?`` ``\``, ``&&``, ``||``, a ``+`` or ``-`` at the start or immediately after
-  whitespace, or the uppercase words ``AND`` / ``OR`` / ``NOT`` / ``TO``. As a result, the
-  following operations are skipped too, even when the user typed no search syntax at all.
+- Field-qualified conditions in the query (``label:``, ``site:``, ``filetype:``, ranges on
+  ``timestamp`` / ``last_modified``, and so on) are separated from the text to embed and applied
+  to the vector search as filters. The query is examined **after** it has been assembled, so
+  operations that append such conditions internally - specifying a label, drilling down with a
+  facet, or the file type, site and date range of advanced search, including conditions passed
+  through the ``ex_q`` and ``fields.*`` parameters - still run semantic search, narrowed by the
+  same conditions as the keyword search.
+- **Semantic search is skipped** for the following queries, and only keyword search runs.
 
-  - Specifying a label (``label:"..."`` is appended internally)
-  - Specifying a sort order (``sort:...`` is appended internally)
-  - Drilling down with a facet (``filetype:...`` and the like are appended internally)
-  - Advanced search: phrase search, excluded terms, file type, site, and date range
-  - A search term that has related queries configured (expanded internally to ``("A" OR "B")``)
+  - A sort order (the ``sort:`` pseudo field, or the ``sort`` parameter, which is also appended
+    internally as ``sort:...``)
+  - A phrase (``"..."``), wildcard (``*`` ``?``), fuzzy search (``~``) or range on words that name
+    no field, including the phrase of advanced search. The ASCII ``?`` is read as a wildcard, so a
+    natural-language question ending in an ASCII question mark - "what is ...?" - is skipped as
+    well. (The full-width ``？`` is not affected.)
+  - Excluding a word (``-word``, ``NOT word``, including the excluded words of advanced search) or
+    boosting one (``word^2``)
+  - A query whose conditions cannot be separated out as a filter, such as a word and a condition
+    joined with ``OR``
+  - ``allintitle:`` / ``allinurl:``
+  - A query that has conditions only, with no words to embed
+  - A query that cannot be parsed
 
-  The ASCII ``?`` is on that list, so a natural-language question ending in an ASCII question mark
-  — "what is ...?" — is skipped as well. (The full-width ``？`` is not affected.)
 - It is also skipped when combined with geolocation search (a geo filter) or similar-document
   search.
-- On deep result pages, Rank Fusion itself is disabled and you get keyword-only results. The
-  boundary is determined by ``rank.fusion.window_size`` (default ``200``), which by default means
-  everything from result 101 onward.
+- On deep result pages, Rank Fusion itself is disabled.
+
+  - When |Fess| performs the fusion (the default), the boundary is determined by
+    ``rank.fusion.window_size`` (default ``200``); by default everything from result 101 onward
+    is keyword-only.
+  - When the search engine performs the fusion (``rank.fusion.engine.enabled=true``), the
+    boundary is ``rank.fusion.pagination_depth`` (default ``200``). A page whose start position
+    plus page size exceeds it is fused by |Fess| instead, and the ``rank.fusion.window_size``
+    boundary above applies.
+
+  See :doc:`rank-fusion` for details.
 - If the embedding provider is unreachable or a search error occurs, |Fess| automatically falls
   back to keyword-only results (the search itself never fails as a result).
 - Role- and virtual-host-based access control applies to semantic search results as well.
