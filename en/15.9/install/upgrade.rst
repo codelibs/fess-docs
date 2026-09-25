@@ -930,6 +930,20 @@ names is not used.
 The ``admin-design`` and ``admin-design-view`` roles no longer grant anything. A user who has only
 these roles is taken to the search screen instead of the admin UI after logging in.
 
+``api.access.token.required`` Was Removed
+-----------------------------------------
+
+``api.access.token.required`` no longer exists in ``fess_config.properties``. A value left under
+that name, including in a ``fess_config.properties`` carried over from 15.8, has no effect. With
+``true`` it refused every API request from a user who was not logged in. Because the search screen
+now searches through ``/api/v2/search``, it would also have left anonymous users with a search
+screen that shows no results.
+
+An installation that set it to ``true`` now answers API requests from anonymous users with the
+guest roles, as it does the search screen. To keep anonymous users from searching, set
+``login.required=true``. Access tokens work as before: a request with a registered access token is
+given the token's permissions, and a request with an unregistered or expired token is refused.
+
 15.9-Specific Migration Tasks
 =============================
 
