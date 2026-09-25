@@ -39,7 +39,7 @@ install opensearch
 
 ::
 
-    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
 
 Downloads the OpenSearch version this |Fess| supports into ``opensearch/`` in the |Fess| directory,
 installs the four plugins |Fess| requires (``opensearch-analysis-fess``,
@@ -48,6 +48,10 @@ appends the following settings to its ``config/opensearch.yml``:
 
 - ``configsync.config_path``, set to the ``config/dictionary`` directory of that OpenSearch
 - ``plugins.security.disabled: true``
+
+It also removes ``opensearch-security-analytics`` and ``opensearch-performance-analyzer``,
+bundled plugins that |Fess| does not use, as the OpenSearch in the Docker image does not have them
+either. A plugin the download does not include is skipped.
 
 A setting that ``opensearch.yml`` already has is not added again, and
 ``plugins.security.disabled: true`` is not added when the file has any ``plugins.security.*``
@@ -73,6 +77,8 @@ OpenSearch on the same host. Otherwise the command prints the ``SEARCH_ENGINE_HT
        directory. ``bin/fess.in.sh`` does not look for OpenSearch outside that directory.
    * - ``--version <version>``
      - The OpenSearch version to install. The plugins are installed at the same version.
+   * - ``--keep-bundled-plugins``
+     - Keeps the bundled plugins (``opensearch-security-analytics`` and ``opensearch-performance-analyzer``) instead of removing them, leaving the download as shipped.
 
 OpenSearch publishes official builds for Linux and Windows only. On other platforms, such as macOS,
 the command exits with code ``1`` before downloading anything and suggests installing OpenSearch

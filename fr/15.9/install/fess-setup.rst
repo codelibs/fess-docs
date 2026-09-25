@@ -41,7 +41,7 @@ install opensearch
 
 ::
 
-    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
 
 Télécharge la version d'OpenSearch prise en charge par ce |Fess| dans ``opensearch/`` du répertoire
 de |Fess|, y installe les quatre plugins requis par |Fess| (``opensearch-analysis-fess``,
@@ -50,6 +50,10 @@ les paramètres suivants à son ``config/opensearch.yml`` :
 
 - ``configsync.config_path``, défini sur le répertoire ``config/dictionary`` de cet OpenSearch
 - ``plugins.security.disabled: true``
+
+La commande supprime également les plugins fournis ``opensearch-security-analytics`` et
+``opensearch-performance-analyzer``, que |Fess| n'utilise pas ; l'OpenSearch de l'image Docker ne
+les contient pas non plus. Un plugin absent du téléchargement est ignoré.
 
 Un paramètre déjà présent dans ``opensearch.yml`` n'est pas ajouté une seconde fois, et
 ``plugins.security.disabled: true`` n'est pas ajouté lorsque le fichier contient un paramètre
@@ -76,6 +80,8 @@ comme décrit dans :doc:`install-linux` ou :doc:`install-windows`.
        |Fess|. ``bin/fess.in.sh`` ne recherche pas OpenSearch en dehors de ce répertoire.
    * - ``--version <version>``
      - Version d'OpenSearch à installer. Les plugins sont installés dans la même version.
+   * - ``--keep-bundled-plugins``
+     - Conserve les plugins fournis (``opensearch-security-analytics`` et ``opensearch-performance-analyzer``) au lieu de les supprimer, et laisse le téléchargement tel quel.
 
 OpenSearch ne publie de versions officielles que pour Linux et Windows. Sur les autres plateformes,
 comme macOS, la commande se termine avec le code ``1`` avant tout téléchargement et suggère
