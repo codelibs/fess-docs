@@ -47,4 +47,19 @@ fess-suggest.log
 
 Suggest log file.
 
+fess-urls.log
+:::::::::::::
+
+Crawl statistics for each URL, such as the time each processing step took.
+
+searchlog.log
+:::::::::::::
+
+Search log file.
+
+gc-crawler.log
+::::::::::::::
+
+Garbage collection log file of the crawler.
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/log-1.png
