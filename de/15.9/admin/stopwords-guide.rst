@@ -19,6 +19,11 @@ Im Stoppwort-Wörterbuch können Sie die zu entfernenden Wörter verwalten.
    wurde, kann daher über ein sprachspezifisches Feld weiterhin gefunden werden. Damit ein Wort nicht
    mehr gefunden wird, fügen Sie es auch dem Stoppwort-Wörterbuch der Sprache der Dokumente hinzu.
 
+   Stoppwörter werden mit jedem Token verglichen, das der Analyzer erzeugt. Ein Wort, das der Analyzer
+   in mehrere Token zerlegt, etwa ein Wort aus Buchstaben und Ziffern, wird nicht entfernt, wenn es
+   unverändert hinzugefügt wird. Wie ein Wort zerlegt wird, können Sie mit der ``_analyze``-API von
+   OpenSearch prüfen.
+
 Verwaltung
 ==========
 
