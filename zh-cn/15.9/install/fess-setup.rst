@@ -35,7 +35,7 @@ install opensearch
 
 ::
 
-    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
 
 将此 |Fess| 支持的 OpenSearch 版本下载到 |Fess| 目录下的 ``opensearch/`` 中，安装 |Fess| 所需的 4 个插件（\ ``opensearch-analysis-fess``\ 、\ ``opensearch-analysis-extension``\ 、\ ``opensearch-minhash`` 和 ``opensearch-configsync``\ ），并向其 ``config/opensearch.yml`` 追加以下配置：
 
@@ -58,6 +58,8 @@ install opensearch
      - 指定 OpenSearch 的解压目录，以代替 |Fess| 目录下的 ``opensearch/``\ 。\ ``bin/fess.in.sh`` 不会在该目录之外查找 OpenSearch。
    * - ``--version <version>``
      - 要安装的 OpenSearch 版本。插件也会以相同版本安装。
+   * - ``--keep-bundled-plugins``
+     - 保留内置插件（\ ``opensearch-security-analytics``\ 、\ ``opensearch-performance-analyzer``\ ），不删除，保持下载包原样。
 
 OpenSearch 仅为 Linux 和 Windows 发布官方发行版。在 macOS 等其他平台上，该命令不会下载任何内容，而是以退出码 ``1`` 结束，并建议使用 Homebrew 安装 OpenSearch 后通过 ``install opensearch-plugins`` 添加插件，或者使用 Docker。
 

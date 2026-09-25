@@ -40,7 +40,7 @@ install opensearch
 
 ::
 
-    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
 
 Descarga la versión de OpenSearch compatible con este |Fess| en ``opensearch/`` dentro del
 directorio de |Fess|, instala los cuatro plugins que requiere |Fess| (``opensearch-analysis-fess``,
@@ -78,6 +78,8 @@ que debe establecer, tal como se describe en :doc:`install-linux` o :doc:`instal
        directorio de |Fess|. ``bin/fess.in.sh`` no busca OpenSearch fuera de ese directorio.
    * - ``--version <version>``
      - La versión de OpenSearch que se instala. Los plugins se instalan en la misma versión.
+   * - ``--keep-bundled-plugins``
+     - Conserva los plugins incluidos (``opensearch-security-analytics`` y ``opensearch-performance-analyzer``) en lugar de eliminarlos, y deja la descarga tal como se distribuye.
 
 OpenSearch publica versiones oficiales solo para Linux y Windows. En otras plataformas, como macOS,
 el comando termina con el código ``1`` antes de descargar nada y sugiere instalar OpenSearch con

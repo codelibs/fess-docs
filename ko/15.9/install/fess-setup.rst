@@ -35,7 +35,7 @@ install opensearch
 
 ::
 
-    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
 
 이 |Fess| 가 지원하는 버전의 OpenSearch 를 |Fess| 디렉터리의 ``opensearch/`` 에 다운로드하고, |Fess| 가 필요로 하는 4개의 플러그인( ``opensearch-analysis-fess`` , ``opensearch-analysis-extension`` , ``opensearch-minhash`` , ``opensearch-configsync`` )을 설치한 다음, 해당 OpenSearch 의 ``config/opensearch.yml`` 에 다음 설정을 추가합니다.
 
@@ -58,6 +58,8 @@ install opensearch
      - OpenSearch 를 압축 해제할 디렉터리를 |Fess| 디렉터리의 ``opensearch/`` 대신 지정합니다. ``bin/fess.in.sh`` 는 이 디렉터리 밖에 있는 OpenSearch 를 찾지 않습니다.
    * - ``--version <version>``
      - 설치할 OpenSearch 버전입니다. 플러그인도 같은 버전으로 설치됩니다.
+   * - ``--keep-bundled-plugins``
+     - 번들 플러그인( ``opensearch-security-analytics`` , ``opensearch-performance-analyzer`` )을 제거하지 않고 배포본 그대로 둡니다.
 
 OpenSearch 공식 배포판은 Linux 용과 Windows 용뿐입니다. macOS 등 그 밖의 플랫폼에서는 아무것도 다운로드하지 않고 종료 코드 ``1`` 로 종료하며, Homebrew 로 OpenSearch 를 설치하고 ``install opensearch-plugins`` 로 플러그인을 넣는 방법 또는 Docker 를 사용하는 방법을 안내합니다.
 

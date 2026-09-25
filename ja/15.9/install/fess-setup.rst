@@ -35,7 +35,7 @@ install opensearch
 
 ::
 
-    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>]
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
 
 この |Fess| が対応するバージョンの OpenSearch を |Fess| のディレクトリの ``opensearch/`` にダウンロードし、 |Fess| が必要とする 4 つのプラグイン（ ``opensearch-analysis-fess`` 、 ``opensearch-analysis-extension`` 、 ``opensearch-minhash`` 、 ``opensearch-configsync`` ）を導入したうえで、その ``config/opensearch.yml`` に次の設定を追記します。
 
@@ -58,6 +58,8 @@ install opensearch
      - OpenSearch の展開先を、 |Fess| のディレクトリの ``opensearch/`` の代わりに指定します。 ``bin/fess.in.sh`` は、このディレクトリの外にある OpenSearch を探しません。
    * - ``--version <version>``
      - 導入する OpenSearch のバージョンです。プラグインも同じバージョンで導入されます。
+   * - ``--keep-bundled-plugins``
+     - 同梱プラグイン（ ``opensearch-security-analytics`` 、 ``opensearch-performance-analyzer`` ）を削除せず、配布物のまま残します。
 
 OpenSearch の公式配布は Linux 向けと Windows 向けだけです。macOS などほかのプラットフォームでは、何もダウンロードせずに終了コード ``1`` で終了し、Homebrew で OpenSearch を導入して ``install opensearch-plugins`` でプラグインを入れる方法か、Docker を使う方法を案内します。
 
