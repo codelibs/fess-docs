@@ -976,6 +976,21 @@ Les rôles ``admin-design`` et ``admin-design-view`` n'accordent plus aucun droi
 n'a que ces rôles arrive sur l'écran de recherche, et non sur l'écran d'administration, après
 s'être connecté.
 
+``api.access.token.required`` a été supprimé
+--------------------------------------------
+
+``api.access.token.required`` n'existe plus dans ``fess_config.properties``. Une valeur laissée sous
+ce nom n'a aucun effet, y compris dans un ``fess_config.properties`` repris de la 15.8. Avec
+``true``, ce paramètre refusait toute requête API d'un utilisateur non connecté. Comme l'écran de
+recherche effectue désormais ses recherches via ``/api/v2/search``, il aurait en outre présenté aux
+utilisateurs anonymes un écran de recherche sans résultats.
+
+Une installation qui l'avait réglé sur ``true`` répond désormais aux requêtes API des utilisateurs
+anonymes avec les rôles invités, comme pour l'écran de recherche. Pour empêcher les utilisateurs
+anonymes de rechercher, définissez ``login.required=true``. Les jetons d'accès fonctionnent comme
+avant : une requête munie d'un jeton d'accès enregistré reçoit les permissions de ce jeton, et une
+requête munie d'un jeton non enregistré ou expiré est refusée.
+
 Migrations spécifiques à la 15.9
 ================================
 

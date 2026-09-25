@@ -147,9 +147,6 @@ msgstr ""
 msgid "Length of API access token."
 msgstr ""
 
-msgid "Whether API access token is required."
-msgstr ""
-
 msgid "API access token request parameter."
 msgstr ""
 

@@ -290,9 +290,6 @@ Core
   * - api.access.token.length
     - Length of API access token.
     - ``60``
-  * - api.access.token.required
-    - Whether API access token is required.
-    - ``false``
   * - api.access.token.request.parameter
     - API access token request parameter.
     - (empty)

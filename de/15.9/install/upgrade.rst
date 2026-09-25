@@ -966,6 +966,21 @@ Namen verbliebener Wert wird nicht verwendet.
 Die Rollen ``admin-design`` und ``admin-design-view`` gewähren keine Rechte mehr. Ein Benutzer, der
 nur diese Rollen hat, gelangt nach der Anmeldung zur Suchoberfläche statt zur Verwaltungsoberfläche.
 
+``api.access.token.required`` wurde entfernt
+--------------------------------------------
+
+``api.access.token.required`` gibt es in ``fess_config.properties`` nicht mehr. Ein unter diesem
+Namen verbliebener Wert hat keine Wirkung, auch in einer aus 15.8 übernommenen
+``fess_config.properties``. Mit ``true`` lehnte die Einstellung jede API-Anfrage eines nicht
+angemeldeten Benutzers ab. Da die Suchoberfläche jetzt über ``/api/v2/search`` sucht, hätte sie
+anonymen Benutzern zudem eine Suchoberfläche ohne Ergebnisse gezeigt.
+
+Eine Installation, die sie auf ``true`` gesetzt hatte, beantwortet API-Anfragen anonymer Benutzer
+jetzt wie die Suchoberfläche mit den Gastrollen. Um anonyme Benutzer von der Suche auszuschließen,
+setzen Sie ``login.required=true``. Zugriffstoken funktionieren wie bisher: Eine Anfrage mit einem
+registrierten Zugriffstoken erhält dessen Berechtigungen, eine Anfrage mit einem nicht registrierten
+oder abgelaufenen Token wird abgelehnt.
+
 Migrationsaufgaben speziell für 15.9
 ====================================
 

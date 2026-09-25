@@ -968,6 +968,21 @@ permanezca con estos nombres no se utiliza.
 Los roles ``admin-design`` y ``admin-design-view`` ya no otorgan ningún permiso. Un usuario que solo
 tenga estos roles llega a la pantalla de búsqueda, y no a la de administración, al iniciar sesión.
 
+``api.access.token.required`` se ha eliminado
+---------------------------------------------
+
+``api.access.token.required`` ya no existe en ``fess_config.properties``. Un valor que permanezca con
+ese nombre no tiene ningún efecto, incluso en un ``fess_config.properties`` conservado de la 15.8.
+Con ``true``, rechazaba toda solicitud a la API de un usuario que no hubiera iniciado sesión. Como
+la pantalla de búsqueda ahora busca a través de ``/api/v2/search``, además habría mostrado a los
+usuarios anónimos una pantalla de búsqueda sin resultados.
+
+Una instalación que lo tenía en ``true`` responde ahora a las solicitudes a la API de usuarios
+anónimos con los roles de invitado, igual que en la pantalla de búsqueda. Para impedir que los
+usuarios anónimos busquen, establezca ``login.required=true``. Los tokens de acceso funcionan como
+antes: una solicitud con un token de acceso registrado recibe los permisos de ese token, y una
+solicitud con un token no registrado o caducado se rechaza.
+
 Migración Específica de 15.9
 ==============================
 
