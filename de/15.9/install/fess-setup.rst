@@ -52,6 +52,10 @@ Einstellungen hinzu:
 - ``configsync.config_path``, gesetzt auf das Verzeichnis ``config/dictionary`` dieses OpenSearch
 - ``plugins.security.disabled: true``
 
+Außerdem entfernt der Befehl die mitgelieferten Plugins ``opensearch-security-analytics`` und
+``opensearch-performance-analyzer``, die |Fess| nicht verwendet; auch das OpenSearch im Docker-Image
+enthält sie nicht. Ein Plugin, das im Download nicht enthalten ist, wird übersprungen.
+
 Eine Einstellung, die ``opensearch.yml`` bereits enthält, wird nicht erneut hinzugefügt, und
 ``plugins.security.disabled: true`` wird nicht hinzugefügt, wenn die Datei irgendeine
 ``plugins.security.*``-Einstellung enthält. Existiert das OpenSearch-Verzeichnis bereits, wird der

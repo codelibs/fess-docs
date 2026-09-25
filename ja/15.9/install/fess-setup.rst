@@ -42,6 +42,8 @@ install opensearch
 - ``configsync.config_path`` （値はその OpenSearch の ``config/dictionary`` ディレクトリ）
 - ``plugins.security.disabled: true``
 
+また、 |Fess| が使用しない同梱プラグイン ``opensearch-security-analytics`` と ``opensearch-performance-analyzer`` を削除します。Docker イメージの OpenSearch と同じ構成です。配布物に含まれないプラグインは何もせずに進みます。
+
 ``opensearch.yml`` にすでにある設定は追記しません。また、 ``plugins.security.*`` の設定が 1 つでもある場合は ``plugins.security.disabled: true`` を追記しません。OpenSearch のディレクトリがすでにある場合はダウンロードを省略するため、既存のインストールに対して再実行すると、足りない設定だけが追記されます。
 
 コマンドは追記した設定を表示し、続けて ``bin/fess.in.sh`` がこの OpenSearch を自動で見つけられるかどうかを表示します。 |Fess| のディレクトリの ``opensearch/`` の下で ``config/dictionary`` ディレクトリを持つ OpenSearch がこれ 1 つだけであれば見つけられます。このとき ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）が ``FESS_DICTIONARY_PATH`` をそのディレクトリに設定するため、同じホストで動かす OpenSearch であれば、ほかに設定は必要ありません。見つけられない場合は、設定すべき ``SEARCH_ENGINE_HTTP_URL`` と ``FESS_DICTIONARY_PATH`` の値を表示します。設定方法は :doc:`install-linux` または :doc:`install-windows` を参照してください。

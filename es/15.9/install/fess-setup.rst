@@ -50,6 +50,10 @@ siguiente configuración a su ``config/opensearch.yml``:
 - ``configsync.config_path``, con el directorio ``config/dictionary`` de ese OpenSearch como valor
 - ``plugins.security.disabled: true``
 
+Además, elimina los plugins incluidos ``opensearch-security-analytics`` y
+``opensearch-performance-analyzer``, que |Fess| no utiliza; el OpenSearch de la imagen Docker
+tampoco los incluye. Si la descarga no incluye alguno de ellos, se omite.
+
 Una opción que ``opensearch.yml`` ya contiene no se vuelve a añadir, y
 ``plugins.security.disabled: true`` no se añade si el archivo contiene cualquier opción
 ``plugins.security.*``. Si el directorio de OpenSearch ya existe, se omite la descarga, de modo que

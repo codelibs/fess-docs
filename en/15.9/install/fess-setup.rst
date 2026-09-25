@@ -49,6 +49,10 @@ appends the following settings to its ``config/opensearch.yml``:
 - ``configsync.config_path``, set to the ``config/dictionary`` directory of that OpenSearch
 - ``plugins.security.disabled: true``
 
+It also removes ``opensearch-security-analytics`` and ``opensearch-performance-analyzer``,
+bundled plugins that |Fess| does not use, as the OpenSearch in the Docker image does not have them
+either. A plugin the download does not include is skipped.
+
 A setting that ``opensearch.yml`` already has is not added again, and
 ``plugins.security.disabled: true`` is not added when the file has any ``plugins.security.*``
 setting. When the OpenSearch directory already exists, the download is skipped, so running the
