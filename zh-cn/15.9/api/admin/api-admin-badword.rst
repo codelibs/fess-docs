@@ -40,7 +40,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
    * - DELETE
      - /setting/{id}
      - 删除屏蔽词
-   * - PUT
+   * - POST
      - /upload
      - 上传屏蔽词CSV
    * - GET
@@ -239,7 +239,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
 
 ::
 
-    PUT /api/admin/badword/upload
+    POST /api/admin/badword/upload
     Content-Type: multipart/form-data
 
 参数
@@ -314,7 +314,7 @@ CSV格式
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "badWordFile=@badword.csv"
 

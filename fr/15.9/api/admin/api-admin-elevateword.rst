@@ -40,7 +40,7 @@ Liste des endpoints
    * - DELETE
      - /setting/{id}
      - Suppression d'un mot élevé
-   * - PUT
+   * - POST
      - /upload
      - Téléversement CSV des mots élevés
    * - GET
@@ -274,7 +274,7 @@ Requête
 
 ::
 
-    PUT /api/admin/elevateword/upload
+    POST /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
 Paramètres
@@ -351,7 +351,7 @@ Téléversement d'un fichier CSV
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/elevateword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 

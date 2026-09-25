@@ -63,7 +63,7 @@ Diese Werte entsprechen dem Wert des Felds ``type``, das in der Antwort der Wör
    * - DELETE
      - /{type}/setting/{dictId}/{id}
      - Wörterbucheintrag löschen
-   * - PUT
+   * - POST
      - /{type}/upload/{dictId}
      - Wörterbuchdatei hochladen
    * - GET
@@ -371,7 +371,7 @@ Request
 
 ::
 
-    PUT /api/admin/dict/{type}/upload/{dictId}
+    POST /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
 Der Name des Dateifelds unterscheidet sich je Wörterbuchtyp (siehe weiter unten „Eintragsfelder je Wörterbuchtyp“).
@@ -471,7 +471,7 @@ Synonymwörterbuchdatei hochladen
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "synonymFile=@synonym.txt"
 

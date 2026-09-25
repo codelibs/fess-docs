@@ -62,7 +62,7 @@ Ces valeurs correspondent à la valeur du champ ``type`` inclus dans la réponse
    * - DELETE
      - /{type}/setting/{dictId}/{id}
      - Suppression d'une entrée de dictionnaire
-   * - PUT
+   * - POST
      - /{type}/upload/{dictId}
      - Téléversement d'un fichier de dictionnaire
    * - GET
@@ -370,7 +370,7 @@ Requête
 
 ::
 
-    PUT /api/admin/dict/{type}/upload/{dictId}
+    POST /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
 Le nom du champ de fichier varie selon le type de dictionnaire (voir « Champs des entrées par type de dictionnaire » ci-dessous).
@@ -470,7 +470,7 @@ Téléversement du fichier de dictionnaire de synonymes
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "synonymFile=@synonym.txt"
 

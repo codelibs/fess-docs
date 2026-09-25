@@ -63,7 +63,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
    * - DELETE
      - /{type}/setting/{dictId}/{id}
      - 辞書項目削除
-   * - PUT
+   * - POST
      - /{type}/upload/{dictId}
      - 辞書ファイルアップロード
    * - GET
@@ -371,7 +371,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
 ::
 
-    PUT /api/admin/dict/{type}/upload/{dictId}
+    POST /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
 ファイルフィールドの名前は辞書種別ごとに異なります（後述の「辞書種別ごとの項目フィールド」を参照）。
@@ -471,7 +471,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "synonymFile=@synonym.txt"
 

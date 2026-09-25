@@ -40,7 +40,7 @@ BadWord API는 |Fess| 의 NG 워드(부적절한 서제스트 워드 제외)를 
    * - DELETE
      - /setting/{id}
      - NG 워드 삭제
-   * - PUT
+   * - POST
      - /upload
      - NG 워드 CSV 업로드
    * - GET
@@ -239,7 +239,7 @@ CSV 파일에서 NG 워드를 일괄 등록합니다. 파일은 ``multipart/form
 
 ::
 
-    PUT /api/admin/badword/upload
+    POST /api/admin/badword/upload
     Content-Type: multipart/form-data
 
 파라미터
@@ -314,7 +314,7 @@ CSV 파일 업로드
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "badWordFile=@badword.csv"
 

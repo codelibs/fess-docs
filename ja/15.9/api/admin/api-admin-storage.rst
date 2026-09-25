@@ -47,7 +47,7 @@ Storage APIを含む Admin API のすべてのエンドポイントには、ア�
    * - DELETE
      - /delete/{id}
      - ファイルの削除
-   * - PUT
+   * - POST
      - /upload
      - ファイルのアップロード
 
@@ -177,7 +177,7 @@ Storage APIを含む Admin API のすべてのエンドポイントには、ア�
 
 ::
 
-    PUT /api/admin/storage/upload
+    POST /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 フィールド説明
@@ -265,7 +265,7 @@ Storage APIを含む Admin API のすべてのエンドポイントには、ア�
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
+    curl -X POST "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "path=subdir" \
          -F "file=@sample.txt"

@@ -40,7 +40,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - DELETE
      - /setting/{id}
      - 删除提升词
-   * - PUT
+   * - POST
      - /upload
      - 上传提升词CSV
    * - GET
@@ -274,7 +274,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 
 ::
 
-    PUT /api/admin/elevateword/upload
+    POST /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
 参数
@@ -351,7 +351,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/elevateword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 

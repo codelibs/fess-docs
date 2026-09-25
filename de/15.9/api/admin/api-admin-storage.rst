@@ -47,7 +47,7 @@ Endpunktliste
    * - DELETE
      - /delete/{id}
      - Datei löschen
-   * - PUT
+   * - POST
      - /upload
      - Datei hochladen
 
@@ -177,7 +177,7 @@ Request
 
 ::
 
-    PUT /api/admin/storage/upload
+    POST /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 Feldbeschreibungen
@@ -265,7 +265,7 @@ Datei hochladen
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
+    curl -X POST "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "path=subdir" \
          -F "file=@sample.txt"

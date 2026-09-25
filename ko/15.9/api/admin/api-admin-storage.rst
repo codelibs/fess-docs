@@ -47,7 +47,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
    * - DELETE
      - /delete/{id}
      - 파일 삭제
-   * - PUT
+   * - POST
      - /upload
      - 파일 업로드
 
@@ -177,7 +177,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
 
 ::
 
-    PUT /api/admin/storage/upload
+    POST /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 필드 설명
@@ -265,7 +265,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
+    curl -X POST "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "path=subdir" \
          -F "file=@sample.txt"

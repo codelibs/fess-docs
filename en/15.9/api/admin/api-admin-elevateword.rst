@@ -40,7 +40,7 @@ Endpoint List
    * - DELETE
      - /setting/{id}
      - Delete elevate word
-   * - PUT
+   * - POST
      - /upload
      - Upload elevate word CSV
    * - GET
@@ -274,7 +274,7 @@ Request
 
 ::
 
-    PUT /api/admin/elevateword/upload
+    POST /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
 Parameters
@@ -351,7 +351,7 @@ Upload CSV File
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/elevateword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 

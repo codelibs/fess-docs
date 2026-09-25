@@ -40,7 +40,7 @@ Lista de Endpoints
    * - DELETE
      - /setting/{id}
      - Eliminar palabra elevada
-   * - PUT
+   * - POST
      - /upload
      - Subir CSV de palabras elevadas
    * - GET
@@ -274,7 +274,7 @@ Solicitud
 
 ::
 
-    PUT /api/admin/elevateword/upload
+    POST /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
 Parámetros
@@ -351,7 +351,7 @@ Subir Archivo CSV
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/elevateword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 
