@@ -63,7 +63,7 @@ These values match the value of the ``type`` field included in the dictionary li
    * - DELETE
      - /{type}/setting/{dictId}/{id}
      - Delete dictionary item
-   * - PUT
+   * - POST
      - /{type}/upload/{dictId}
      - Upload dictionary file
    * - GET
@@ -371,7 +371,7 @@ Request
 
 ::
 
-    PUT /api/admin/dict/{type}/upload/{dictId}
+    POST /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
 The name of the file field differs by dictionary type (see "Item Fields per Dictionary Type" below).
@@ -471,7 +471,7 @@ Upload a Synonym Dictionary File
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "synonymFile=@synonym.txt"
 

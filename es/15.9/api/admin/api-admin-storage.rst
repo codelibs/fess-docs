@@ -47,7 +47,7 @@ Lista de Endpoints
    * - DELETE
      - /delete/{id}
      - Eliminar un archivo
-   * - PUT
+   * - POST
      - /upload
      - Subir un archivo
 
@@ -177,7 +177,7 @@ Solicitud
 
 ::
 
-    PUT /api/admin/storage/upload
+    POST /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 Descripción de los Campos
@@ -265,7 +265,7 @@ Subir un Archivo
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
+    curl -X POST "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "path=subdir" \
          -F "file=@sample.txt"

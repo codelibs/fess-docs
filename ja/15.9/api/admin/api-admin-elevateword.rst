@@ -40,7 +40,7 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
    * - DELETE
      - /setting/{id}
      - エレベートワード削除
-   * - PUT
+   * - POST
      - /upload
      - エレベートワードCSVアップロード
    * - GET
@@ -274,7 +274,7 @@ CSVファイルからエレベートワードを一括登録します。ファ�
 
 ::
 
-    PUT /api/admin/elevateword/upload
+    POST /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
 パラメーター
@@ -351,7 +351,7 @@ CSVファイルのアップロード
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/elevateword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 

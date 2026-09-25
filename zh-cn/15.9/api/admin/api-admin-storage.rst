@@ -47,7 +47,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
    * - DELETE
      - /delete/{id}
      - 删除文件
-   * - PUT
+   * - POST
      - /upload
      - 上传文件
 
@@ -177,7 +177,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
 
 ::
 
-    PUT /api/admin/storage/upload
+    POST /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 字段说明
@@ -265,7 +265,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
+    curl -X POST "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "path=subdir" \
          -F "file=@sample.txt"

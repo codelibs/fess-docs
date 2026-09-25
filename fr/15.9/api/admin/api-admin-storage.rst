@@ -46,7 +46,7 @@ Liste des endpoints
    * - DELETE
      - /delete/{id}
      - Suppression d'un fichier
-   * - PUT
+   * - POST
      - /upload
      - Envoi d'un fichier
 
@@ -176,7 +176,7 @@ Requête
 
 ::
 
-    PUT /api/admin/storage/upload
+    POST /api/admin/storage/upload
     Content-Type: multipart/form-data
 
 Description des champs
@@ -264,7 +264,7 @@ Envoi d'un fichier
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/storage/upload" \
+    curl -X POST "http://localhost:8080/api/admin/storage/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "path=subdir" \
          -F "file=@sample.txt"

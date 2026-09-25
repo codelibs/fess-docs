@@ -63,7 +63,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
    * - DELETE
      - /{type}/setting/{dictId}/{id}
      - 사전 항목 삭제
-   * - PUT
+   * - POST
      - /{type}/upload/{dictId}
      - 사전 파일 업로드
    * - GET
@@ -371,7 +371,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
 ::
 
-    PUT /api/admin/dict/{type}/upload/{dictId}
+    POST /api/admin/dict/{type}/upload/{dictId}
     Content-Type: multipart/form-data
 
 파일 필드의 이름은 사전 종류별로 다릅니다(후술하는 "사전 종류별 항목 필드" 참조).
@@ -471,7 +471,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
+    curl -X POST "http://localhost:8080/api/admin/dict/synonym/upload/{dictId}" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "synonymFile=@synonym.txt"
 

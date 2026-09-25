@@ -40,7 +40,7 @@ Liste des endpoints
    * - DELETE
      - /setting/{id}
      - Suppression d'un mot interdit
-   * - PUT
+   * - POST
      - /upload
      - Téléversement CSV des mots interdits
    * - GET
@@ -239,7 +239,7 @@ Requête
 
 ::
 
-    PUT /api/admin/badword/upload
+    POST /api/admin/badword/upload
     Content-Type: multipart/form-data
 
 Paramètres
@@ -314,7 +314,7 @@ Téléversement d'un fichier CSV
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/badword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/badword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "badWordFile=@badword.csv"
 

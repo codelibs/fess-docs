@@ -40,7 +40,7 @@ Endpunktliste
    * - DELETE
      - /setting/{id}
      - Elevate Word löschen
-   * - PUT
+   * - POST
      - /upload
      - Elevate Word CSV hochladen
    * - GET
@@ -274,7 +274,7 @@ Request
 
 ::
 
-    PUT /api/admin/elevateword/upload
+    POST /api/admin/elevateword/upload
     Content-Type: multipart/form-data
 
 Parameter
@@ -351,7 +351,7 @@ CSV-Datei hochladen
 
 .. code-block:: bash
 
-    curl -X PUT "http://localhost:8080/api/admin/elevateword/upload" \
+    curl -X POST "http://localhost:8080/api/admin/elevateword/upload" \
          -H "Authorization: Bearer YOUR_TOKEN" \
          -F "elevateWordFile=@elevate.csv"
 
