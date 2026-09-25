@@ -20,6 +20,10 @@ recherches. Le dictionnaire de mots vides permet de gérer les mots à supprimer
    langue. Pour qu'un mot ne corresponde plus, ajoutez-le aussi au dictionnaire de mots vides de la
    langue des documents.
 
+   Les mots vides sont comparés à chaque jeton produit par l'analyseur. Un mot que l'analyseur découpe
+   en plusieurs jetons, comme un mot mêlant lettres et chiffres, n'est pas supprimé s'il est ajouté tel
+   quel. Vous pouvez vérifier le découpage d'un mot avec l'API ``_analyze`` d'OpenSearch.
+
 Gestion
 =======
 

@@ -20,6 +20,10 @@ búsquedas. El diccionario de palabras vacías le permite administrar las palabr
    una palabra deje de coincidir, añádala también al diccionario de palabras vacías del idioma de los
    documentos.
 
+   Las palabras vacías se comparan con cada token que genera el analizador. Una palabra que el
+   analizador divide en varios tokens, como una palabra que mezcla letras y dígitos, no se elimina si
+   se añade tal cual. Puede comprobar cómo se divide una palabra con la API ``_analyze`` de OpenSearch.
+
 Método de gestión
 ==================
 

@@ -19,6 +19,10 @@ The stopwords dictionary lets you manage the words to remove.
    through a language-specific field. To keep a word from matching, also add it to the stopwords
    dictionary for the language of the documents.
 
+   Stopwords are compared with each token that the analyzer produces. A word that the analyzer
+   splits into several tokens, such as a word that mixes letters and digits, is not removed when it
+   is added as it is. You can check how a word is split with the ``_analyze`` API of OpenSearch.
+
 Management Operations
 =====================
 
