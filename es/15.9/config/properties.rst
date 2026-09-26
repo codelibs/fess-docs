@@ -1396,8 +1396,8 @@ Index
     - Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally.
     - (empty)
   * - rank.fusion.pagination_depth
-    - How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks.
-    - ``200``
+    - How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size.
+    - ``1000``
 
 .. list-table:: ACL
   :header-rows: 1

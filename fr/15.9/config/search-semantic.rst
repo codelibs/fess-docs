@@ -236,8 +236,8 @@ Réglages dans system.properties
    * - ``content_chunker.search.knn.k``
      - ``100``
      - Nombre de voisins récupérés par requête ANN (agrandi automatiquement pour la pagination
-       profonde ; au moins ``rank.fusion.pagination_depth`` lorsque la fusion est effectuée côté
-       moteur de recherche)
+       profonde lorsque |Fess| effectue la fusion ; utilisé tel quel lorsque la fusion est
+       effectuée côté moteur de recherche)
    * - ``content_chunker.search.knn.param.ef_search``
      - (non défini)
      - Le paramètre ``ef_search`` pour les requêtes ANN
@@ -630,16 +630,15 @@ Limitations
 
 - Elle est également ignorée lorsqu'elle est combinée à une recherche par géolocalisation (un
   filtre géo) ou à une recherche de documents similaires.
-- Sur les pages profondes, le Rank Fusion lui-même est désactivé.
+- Le traitement des pages profondes dépend de l'endroit où la fusion est effectuée.
 
   - Lorsque |Fess| effectue la fusion (par défaut), la limite est déterminée par
     ``rank.fusion.window_size`` (par défaut ``200``) ; avec les valeurs par défaut, tous les
     résultats à partir du 101e proviennent uniquement de la recherche par mots-clés.
   - Lorsque la fusion est effectuée côté moteur de recherche
-    (``rank.fusion.engine.enabled=true``), la limite est ``rank.fusion.pagination_depth`` (par
-    défaut ``200``). Une page dont la position de début plus la taille de page dépasse cette
-    valeur est fusionnée par |Fess| à la place, et la limite ``rank.fusion.window_size``
-    ci-dessus s'applique.
+    (``rank.fusion.engine.enabled=true``), toutes les pages sont fusionnées, mais la pagination
+    s'arrête à ``rank.fusion.pagination_depth`` résultats (par défaut ``1000``) ; une page
+    au-delà ne peut pas être demandée.
 
   Voir :doc:`rank-fusion` pour plus de détails.
 - Si le fournisseur d'embedding est inaccessible ou qu'une erreur de recherche survient, |Fess|

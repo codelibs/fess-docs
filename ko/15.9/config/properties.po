@@ -1071,7 +1071,7 @@ msgstr ""
 msgid "Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally."
 msgstr ""
 
-msgid "How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks."
+msgid "How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size."
 msgstr ""
 
 msgid "ACL"

@@ -170,7 +170,7 @@ JVM 시스템 프로퍼티
     rank.fusion.combination.technique=rrf
     rank.fusion.normalization.technique=min_max
     rank.fusion.combination.weights=
-    rank.fusion.pagination_depth=200
+    rank.fusion.pagination_depth=1000
 
 .. list-table::
    :header-rows: 1
@@ -192,8 +192,8 @@ JVM 시스템 프로퍼티
      - (비어 있음)
      - 검색기별 가중치를 ``이름:가중치`` 의 쉼표 구분 형식으로 지정합니다(예: ``default:0.7,semantic_chunk:0.3``). 각 가중치는 ``0.0``\ ~\ ``1.0`` 이어야 하고 합계가 ``1.0`` 이 되어야 하며, 융합에 참여하는 모든 검색기를 지정해야 합니다. 비어 있으면 균등하게 취급됩니다. 조건을 충족하지 않는 경우에는 ERROR 로그를 출력하고, 해당 검색은 |Fess| 측에서 융합됩니다.
    * - ``rank.fusion.pagination_depth``
-     - ``200``
-     - 각 검색기가 샤드별로 융합에 제공하는 결과 건수. 페이징할 수 있는 깊이와 융합 대상이 되는 문서의 범위를 결정합니다.
+     - ``1000``
+     - 각 검색기가 샤드별로 융합에 제공하는 결과 건수. 페이징할 수 있는 깊이와 융합 대상이 되는 문서의 범위를 결정합니다. 검색 엔진 측에서 융합한 검색은 최대 이 건수까지 페이징할 수 있습니다. 검색 엔진에 보내는 값은 ``indexer.max.result.window.size`` 를 넘지 않습니다.
 
 .. note::
 
@@ -207,9 +207,6 @@ JVM 시스템 프로퍼티
 - 상세 검색 파라미터(``as.*``)를 포함하는 검색
 - 정렬, 위치 정보 검색, 유사 문서 검색을 지정한 검색. 이들에서는 시맨틱 검색 자체가 건너뛰어지므로
   키워드 검색만의 결과가 됩니다(:doc:`search-semantic` 참조).
-- 시작 위치+페이지 크기가 ``rank.fusion.pagination_depth`` 를 초과하는 페이지(해당 검색마다 DEBUG
-  로그를 출력합니다). |Fess| 측에서의 융합에서는 ``rank.fusion.window_size`` 경계가 적용되므로,
-  기본 설정에서는 키워드 검색만의 결과가 됩니다.
 - ``rank.fusion.combination.weights`` 가 조건을 충족하지 않는 경우
 - ``z_score`` 정규화를 ``geometric_mean`` 또는 ``harmonic_mean`` 과 조합한 경우(두 설정 이름을
   나타내는 ERROR 로그를 출력합니다)
@@ -229,8 +226,20 @@ JVM 시스템 프로퍼티
   타임아웃(예: ``content_chunker.embedding.ollama.timeout``)까지 대기하게 됩니다.
 - ``rank.fusion.window_size`` 와 ``rank.fusion.threads`` 는 |Fess| 측에서 융합하는 경우에만
   사용됩니다.
-- 시맨틱 서처의 knn 쿼리의 ``k``\ (샤드별 이웃 수)는 ``content_chunker.search.knn.k`` 와
-  ``rank.fusion.pagination_depth`` 중 큰 값이 됩니다. 벡터 검색은 유사도가 낮은 문서도 이웃으로
+- 검색 엔진 측에서 융합한 검색은 최대 ``rank.fusion.pagination_depth`` 건까지 페이징할 수
+  있습니다. 검색 엔진은 각 검색기의 샤드별 상위 ``rank.fusion.pagination_depth`` 건만 융합하기
+  때문입니다. 페이지 수, 다음 페이지 여부, 페이지 번호는 이 건수에서 끝나며, 이를 넘는 위치에서
+  시작하는 페이지를 요청하면 다른 검색에서 ``index.max_result_window`` 를 넘는 페이지를 요청한
+  경우와 같은 오류가 됩니다. 이 범위 안이라도 융합 결과의 마지막 건 이후에서 시작하는
+  페이지(오래된 링크 등)는 빈 페이지가 됩니다. 검색 엔진 측에서 융합하지 않는 검색은 지금까지와
+  마찬가지로 ``index.max_result_window`` 까지 페이징할 수 있습니다.
+- 총 히트 건수는 ``rank.fusion.pagination_depth`` 미만이면 정확합니다. 이 값 이상이 되면 검색
+  엔진이 실제로 일치하는 건수보다 적게 셀 수 있으므로 하한값으로 취급됩니다(검색 API의
+  ``record_count_relation`` 은 ``GREATER_THAN_OR_EQUAL_TO`` 가 됩니다).
+- ``rank.fusion.pagination_depth`` 를 크게 하면 더 깊은 페이지까지 볼 수 있지만, 융합하는 모든
+  검색이 검색기별·샤드별로 그 건수를 수집하므로 깊은 페이지뿐 아니라 모든 검색이 느려집니다.
+- 시맨틱 서처의 knn 쿼리의 ``k``\ (샤드별 이웃 수)는 ``content_chunker.search.knn.k`` 입니다.
+  벡터 검색은 유사도가 낮은 문서도 이웃으로
   반환하므로, ``content_chunker.search.min_score`` 를 설정하지 않은 경우 총 히트 건수에는 그만큼의
   벡터 검색 히트가 더해지며, 소규모 인덱스에서는 열람할 수 있는 문서의 대부분이 건수에 포함될 수
   있습니다. 건수를 줄이려면 ``content_chunker.search.min_score`` 를 설정하세요
@@ -409,8 +418,8 @@ WARN 로그를 출력한 뒤 나머지 검색기의 결과만으로 융합이 �
 5. 깊은 페이지(``시작 위치 × 2`` 가 ``rank.fusion.window_size`` 이상이 되는 위치. 기본값에서는
    101번째 이후)에서는 융합이 수행되지 않고 메인 검색기만으로 검색됩니다. 더 많은 페이지에서
    융합 결과를 사용하려면 ``rank.fusion.window_size`` 를 크게 늘려 주세요. 검색 엔진 측에서
-   융합하는 경우에는 시작 위치+페이지 크기가 ``rank.fusion.pagination_depth`` 를 초과하는 페이지가
-   |Fess| 측에서의 융합으로 전환되므로, ``rank.fusion.pagination_depth`` 도 함께 크게 늘려 주세요.
+   융합하는 경우에는 이 경계가 없으며, 최대 ``rank.fusion.pagination_depth`` 건까지의 모든 페이지가
+   융합됩니다(:ref:`rank-fusion-engine` 참조).
 
 검색이 느림
 ------------
@@ -430,6 +439,9 @@ WARN 로그를 출력한 뒤 나머지 검색기의 결과만으로 융합이 �
        rank.fusion.window_size=100
 
    한 페이지에 요청할 수 있는 최대 건수도 함께 낮아진다는 점에 주의하세요. 설정 후에는 재시작이 필요합니다.
+
+3. 검색 엔진 측에서 융합하는 경우에는 ``rank.fusion.pagination_depth`` 를 줄이기. 융합 결과를
+   페이징할 수 있는 깊이도 함께 얕아진다는 점에 주의하세요. 설정 후에는 재시작이 필요합니다.
 
 메모리 부족
 ------------

@@ -192,8 +192,8 @@ system.properties 配置
        ``cosinesimil``\ （会反映到映射中；更改需要重新创建索引）
    * - ``content_chunker.search.knn.k``
      - ``100``
-     - 每次 ANN 查询检索的邻居数量（深分页时会自动放大；由搜索引擎执行融合时，至少为
-       ``rank.fusion.pagination_depth``\ ）
+     - 每次 ANN 查询检索的邻居数量（由 |Fess| 执行融合时，深分页会自动放大；由搜索引擎执行
+       融合时按原值使用）
    * - ``content_chunker.search.knn.param.ef_search``
      - （未设置）
      - ANN 查询的 ``ef_search`` 参数
@@ -525,13 +525,12 @@ exact 模式与 ann 模式
   - 无法解析的查询
 
 - 与地理位置搜索（地理过滤）或相似文档搜索结合使用时，同样会被跳过。
-- 在较深的页码上，Rank Fusion 本身会被禁用。
+- 较深页码的处理方式取决于在何处执行融合。
 
   - 由 |Fess| 执行融合时（默认），分界由 ``rank.fusion.window_size``\ （默认 ``200``）决定；
     默认情况下，搜索结果的第 101 条及以后仅来自关键词搜索。
-  - 由搜索引擎执行融合时（``rank.fusion.engine.enabled=true``），分界为
-    ``rank.fusion.pagination_depth``\ （默认 ``200``）。起始位置加上每页大小超过该值的页面改由
-    |Fess| 执行融合，并适用上述 ``rank.fusion.window_size`` 的分界。
+  - 由搜索引擎执行融合时（``rank.fusion.engine.enabled=true``），所有页面都会被融合，但翻页
+    止于 ``rank.fusion.pagination_depth``\ （默认 ``1000``）条结果，无法请求其后的页面。
 
   详情请参阅 :doc:`rank-fusion`\ 。
 - 如果嵌入提供商不可访问，或发生搜索错误，|Fess| 会自动回退为仅使用关键词搜索的结果（搜索本身

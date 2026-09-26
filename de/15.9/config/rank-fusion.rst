@@ -180,7 +180,7 @@ von |Fess|)::
     rank.fusion.combination.technique=rrf
     rank.fusion.normalization.technique=min_max
     rank.fusion.combination.weights=
-    rank.fusion.pagination_depth=200
+    rank.fusion.pagination_depth=1000
 
 .. list-table::
    :header-rows: 1
@@ -202,8 +202,8 @@ von |Fess|)::
      - (leer)
      - Gewicht pro Sucher als kommagetrennte ``name:weight``-Paare (zum Beispiel ``default:0.7,semantic_chunk:0.3``). Jedes Gewicht muss zwischen ``0.0`` und ``1.0`` liegen, die Gewichte müssen in der Summe ``1.0`` ergeben, und jeder an der Fusion beteiligte Sucher muss genannt werden. Bei leerem Wert werden die Sucher gleich gewichtet. Ein Wert, der diese Regeln nicht erfüllt, wird mit einer ERROR-Meldung protokolliert, und diese Suche wird von |Fess| fusioniert.
    * - ``rank.fusion.pagination_depth``
-     - ``200``
-     - Wie viele Ergebnisse jeder Sucher pro Shard zur Fusion beiträgt. Der Wert begrenzt, wie tief ein Client blättern kann, sowie die Menge der fusionierten Dokumente.
+     - ``1000``
+     - Wie viele Ergebnisse jeder Sucher pro Shard zur Fusion beiträgt. Der Wert begrenzt, wie tief ein Client blättern kann, sowie die Menge der fusionierten Dokumente: Eine in der Suchmaschine fusionierte Suche kann höchstens so viele Ergebnisse durchblättern. Der an die Suchmaschine gesendete Wert überschreitet nie ``indexer.max.result.window.size``.
 
 .. note::
 
@@ -219,10 +219,6 @@ In den folgenden Fällen führt die Suchmaschine die Fusion nicht durch, und sta
 - Eine Suche mit Angabe einer Sortierreihenfolge, eine Geolokalisierungssuche oder eine Suche nach
   ähnlichen Dokumenten. Diese überspringen die semantische Suche vollständig, sodass nur
   Ergebnisse der Schlüsselwortsuche zurückgegeben werden (siehe :doc:`search-semantic`).
-- Eine Seite, bei der Startposition plus Seitengröße ``rank.fusion.pagination_depth`` überschreitet
-  (für jede solche Suche wird eine DEBUG-Meldung protokolliert). Die Fusion durch |Fess| wendet dann die
-  Grenze von ``rank.fusion.window_size`` an, sodass mit den Standardeinstellungen nur Ergebnisse
-  der Schlüsselwortsuche zurückgegeben werden.
 - Ein Wert von ``rank.fusion.combination.weights``, der die obigen Regeln nicht erfüllt
 - Die Normalisierung ``z_score`` in Kombination mit ``geometric_mean`` oder ``harmonic_mean`` (eine
   ERROR-Meldung nennt beide Einstellungen)
@@ -244,8 +240,23 @@ Beachten Sie Folgendes, wenn die Suchmaschine die Fusion durchführt.
   ``content_chunker.embedding.ollama.timeout``).
 - ``rank.fusion.window_size`` und ``rank.fusion.threads`` werden nur verwendet, wenn |Fess| die
   Fusion durchführt.
-- Das ``k`` der knn-Abfrage des semantischen Suchers (die Anzahl der Nachbarn pro Shard) wird zum
-  größeren der Werte ``content_chunker.search.knn.k`` und ``rank.fusion.pagination_depth``. Eine
+- Eine fusionierte Suche kann höchstens ``rank.fusion.pagination_depth`` Ergebnisse durchblättern,
+  weil die Suchmaschine nur die ersten ``rank.fusion.pagination_depth`` Ergebnisse jedes Suchers pro
+  Shard fusioniert. Seitenanzahl, Link zur nächsten Seite und Seitennummern enden dort, und eine
+  Seite, die dahinter beginnt, wird mit demselben Fehler abgelehnt wie bei jeder anderen Suche eine
+  Seite jenseits von ``index.max_result_window``. Eine Seite, die nach dem letzten fusionierten
+  Ergebnis, aber innerhalb dieser Grenze beginnt (zum Beispiel über einen veralteten Link), wird
+  leer zurückgegeben. Suchen, die nicht in der Suchmaschine fusioniert werden, lassen sich wie
+  bisher bis ``index.max_result_window`` durchblättern.
+- Die Gesamttrefferzahl ist exakt, solange sie unter ``rank.fusion.pagination_depth`` liegt. Ab
+  diesem Wert kann die Suchmaschine weniger Treffer zählen, als tatsächlich übereinstimmen; die
+  Zahl wird daher als Untergrenze gemeldet (in der Such-API ist ``record_count_relation`` dann
+  ``GREATER_THAN_OR_EQUAL_TO``).
+- Ein höherer Wert für ``rank.fusion.pagination_depth`` erlaubt tieferes Blättern, aber jede
+  fusionierte Suche sammelt so viele Ergebnisse pro Sucher und Shard; das verlangsamt jede Suche,
+  nicht nur tiefe Seiten.
+- Das ``k`` der knn-Abfrage des semantischen Suchers (die Anzahl der Nachbarn pro Shard) ist
+  ``content_chunker.search.knn.k``. Eine
   Vektorsuche liefert Nachbarn auch dann, wenn ihre Ähnlichkeit gering ist; ohne
   ``content_chunker.search.min_score`` enthält die Gesamttrefferzahl daher diese Vektortreffer,
   und bei einem kleinen Index kann sie die meisten für den Benutzer sichtbaren Dokumente umfassen.
@@ -439,9 +450,9 @@ Suchergebnisse weichen von Erwartungen ab
 5. Bei tiefen Seiten (wo ``Startposition × 2`` größer oder gleich ``rank.fusion.window_size``
    ist, standardmäßig also ab dem 101. Ergebnis) wird keine Fusion durchgeführt und nur der
    Hauptsucher wird verwendet. Wenn Sie auf mehr Seiten fusionierte Ergebnisse wünschen, erhöhen
-   Sie ``rank.fusion.window_size``. Führt die Suchmaschine die Fusion durch, wird eine Seite, bei
-   der Startposition plus Seitengröße ``rank.fusion.pagination_depth`` überschreitet, stattdessen
-   von |Fess| fusioniert; erhöhen Sie daher auch ``rank.fusion.pagination_depth``.
+   Sie ``rank.fusion.window_size``. Führt die Suchmaschine die Fusion durch, gibt
+   es diese Grenze nicht: Jede Seite wird fusioniert, bis zu ``rank.fusion.pagination_depth``
+   Ergebnisse (siehe :ref:`rank-fusion-engine`).
 
 Suche ist langsam
 -----------------
@@ -463,6 +474,10 @@ Suche ist langsam
 
    Beachten Sie, dass dadurch auch die maximale Anzahl an Ergebnissen sinkt, die pro Seite
    angefordert werden kann. Nach der Änderung ist ein Neustart erforderlich.
+
+3. Führt die Suchmaschine die Fusion durch, reduzieren Sie ``rank.fusion.pagination_depth``.
+   Dadurch sinkt auch, wie tief fusionierte Ergebnisse durchblättert werden können. Nach der
+   Änderung ist ein Neustart erforderlich.
 
 Speichermangel
 --------------

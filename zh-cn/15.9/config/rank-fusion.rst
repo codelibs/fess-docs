@@ -162,7 +162,7 @@ JVM 系统属性
     rank.fusion.combination.technique=rrf
     rank.fusion.normalization.technique=min_max
     rank.fusion.combination.weights=
-    rank.fusion.pagination_depth=200
+    rank.fusion.pagination_depth=1000
 
 .. list-table::
    :header-rows: 1
@@ -184,8 +184,8 @@ JVM 系统属性
      - （空）
      - 各搜索器的权重，以逗号分隔的 ``名称:权重`` 对指定（例如 ``default:0.7,semantic_chunk:0.3``）。每个权重必须在 ``0.0`` 到 ``1.0`` 之间，权重之和必须为 ``1.0``\ ，并且必须指定参与融合的所有搜索器。为空时各搜索器权重相等。不满足这些规则的值会输出 ERROR 日志，该次搜索将由 |Fess| 执行融合。
    * - ``rank.fusion.pagination_depth``
-     - ``200``
-     - 每个搜索器在每个分片上提供给融合的结果数量。它限制了客户端可以翻页的深度，以及参与融合的文档范围。
+     - ``1000``
+     - 每个搜索器在每个分片上提供给融合的结果数量。它限制了客户端可以翻页的深度，以及参与融合的文档范围。由搜索引擎融合的搜索最多可以翻页到这么多条结果。发送给搜索引擎的值不会超过 ``indexer.max.result.window.size``\ 。
 
 .. note::
 
@@ -198,9 +198,6 @@ JVM 系统属性
 - 包含高级搜索参数（``as.*``）的搜索
 - 指定了排序、位置信息搜索或相似文档搜索的搜索。这些搜索会完全跳过语义搜索，因此结果仅来自
   关键词搜索（请参阅 :doc:`search-semantic`\ ）。
-- 起始位置加上每页大小超过 ``rank.fusion.pagination_depth`` 的页面（每次这样的搜索都会输出 DEBUG 日志）。
-  此时由 |Fess| 执行的融合会适用 ``rank.fusion.window_size`` 的分界，因此在默认配置下结果仅来自
-  关键词搜索。
 - ``rank.fusion.combination.weights`` 的值不满足上述规则时
 - ``z_score`` 归一化与 ``geometric_mean`` 或 ``harmonic_mean`` 组合时（会输出指明这两个设置的
   ERROR 日志）
@@ -217,8 +214,19 @@ JVM 系统属性
   响应缓慢或无响应，搜索会一直等待，最长直到提供商自身的超时时间（例如
   ``content_chunker.embedding.ollama.timeout``\ ）。
 - ``rank.fusion.window_size`` 和 ``rank.fusion.threads`` 仅在由 |Fess| 执行融合时使用。
-- 语义搜索器 knn 查询的 ``k``\ （每个分片的近邻数量）取 ``content_chunker.search.knn.k`` 与
-  ``rank.fusion.pagination_depth`` 中较大的值。向量搜索即使在相似度较低时也会返回近邻，因此在未设置
+- 由搜索引擎融合的搜索最多只能翻页到 ``rank.fusion.pagination_depth`` 条结果，因为搜索引擎
+  只融合每个搜索器在每个分片上排名前 ``rank.fusion.pagination_depth`` 的结果。总页数、是否有
+  下一页以及页码都止于此，请求从其之后开始的页面时，会返回与其他搜索请求超过
+  ``index.max_result_window`` 的页面时相同的错误。即使在此范围内，从最后一条融合结果之后开始的
+  页面（例如过时的链接）也会返回空页面。不由搜索引擎融合的搜索仍与以前一样，可以翻页到
+  ``index.max_result_window``\ 。
+- 总命中数量低于 ``rank.fusion.pagination_depth`` 时是精确的。达到或超过该值时，搜索引擎统计的
+  命中数量可能少于实际匹配的数量，因此会作为下限报告（搜索 API 的 ``record_count_relation`` 为
+  ``GREATER_THAN_OR_EQUAL_TO``\ ）。
+- 增大 ``rank.fusion.pagination_depth`` 可以翻到更深的页面，但每次融合搜索都会按搜索器和分片收集
+  这么多条结果，因此不仅是深层页面，所有搜索都会变慢。
+- 语义搜索器 knn 查询的 ``k``\ （每个分片的近邻数量）为 ``content_chunker.search.knn.k``\ 。
+  向量搜索即使在相似度较低时也会返回近邻，因此在未设置
   ``content_chunker.search.min_score`` 的情况下，总命中数量会包含这些向量搜索的命中，在小规模索引中
   可能涵盖用户可见的大部分文档。若要缩小范围，请设置 ``content_chunker.search.min_score``\ （请参阅
   :doc:`search-semantic`\ ）。
@@ -388,9 +396,9 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 4. 调整 ``rank.fusion.rank_constant`` 的值
 5. 在翻页较深的页面（``起始位置 × 2`` 大于等于 ``rank.fusion.window_size`` 的位置，默认情况下
    为第 101 条之后）不会执行融合，仅使用主搜索器进行搜索。若希望在更多页面上获得融合结果，
-   请增大 ``rank.fusion.window_size``\ 。由搜索引擎执行融合时，起始位置加上每页大小超过
-   ``rank.fusion.pagination_depth`` 的页面会改由 |Fess| 执行融合，因此请同时增大
-   ``rank.fusion.pagination_depth``\ 。
+   请增大 ``rank.fusion.window_size``\ 。由搜索引擎执行融合时没有此分界，
+   最多 ``rank.fusion.pagination_depth`` 条结果以内的所有页面都会被融合（请参阅
+   :ref:`rank-fusion-engine`\ ）。
 
 搜索缓慢
 --------
@@ -410,6 +418,9 @@ Rank Fusion 在结合关键词搜索与语义搜索的
        rank.fusion.window_size=100
 
    请注意，每页可请求的最大结果数量也会随之下降。设置后需要重启。
+
+3. 由搜索引擎执行融合时，减小 ``rank.fusion.pagination_depth``\ 。请注意，融合结果可以翻页的
+   深度也会随之变浅。设置后需要重启。
 
 内存不足
 --------

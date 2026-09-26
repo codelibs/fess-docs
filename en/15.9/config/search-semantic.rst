@@ -221,8 +221,8 @@ system.properties Settings
        requires recreating the index)
    * - ``content_chunker.search.knn.k``
      - ``100``
-     - Number of neighbors retrieved per ANN query (automatically enlarged for deep paging; at
-       least ``rank.fusion.pagination_depth`` when the search engine performs the fusion)
+     - Number of neighbors retrieved per ANN query (automatically enlarged for deep paging when
+       |Fess| performs the fusion; used as is when the search engine performs the fusion)
    * - ``content_chunker.search.knn.param.ef_search``
      - (unset)
      - The ``ef_search`` parameter for ANN queries
@@ -589,15 +589,14 @@ Limitations
 
 - It is also skipped when combined with geolocation search (a geo filter) or similar-document
   search.
-- On deep result pages, Rank Fusion itself is disabled.
+- How deep result pages are handled depends on where the fusion is performed.
 
   - When |Fess| performs the fusion (the default), the boundary is determined by
     ``rank.fusion.window_size`` (default ``200``); by default everything from result 101 onward
     is keyword-only.
-  - When the search engine performs the fusion (``rank.fusion.engine.enabled=true``), the
-    boundary is ``rank.fusion.pagination_depth`` (default ``200``). A page whose start position
-    plus page size exceeds it is fused by |Fess| instead, and the ``rank.fusion.window_size``
-    boundary above applies.
+  - When the search engine performs the fusion (``rank.fusion.engine.enabled=true``), every
+    page is fused, but paging stops at ``rank.fusion.pagination_depth`` results (default
+    ``1000``); a page beyond that cannot be requested.
 
   See :doc:`rank-fusion` for details.
 - If the embedding provider is unreachable or a search error occurs, |Fess| automatically falls
