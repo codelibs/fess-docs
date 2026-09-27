@@ -143,6 +143,19 @@ remove plugin
 
 删除指定插件已安装的 jar。未安装的名称只会给出提示，不影响退出码。
 
+.. _fess-setup-offline:
+
+无法连接互联网的环境
+--------------------
+
+``install plugin`` 、 ``list plugins`` 、 ``upgrade plugins`` 从互联网上的仓库获取插件。管理界面「系统 > 插件」的安装页面也从仓库（ ``plugin.repositories`` ）获取可安装插件的列表，因此在无法连接外部的环境中无法显示该列表。
+
+在这种环境中，请带入插件的 jar 进行安装。
+
+1. 在可以连接互联网的环境中，下载 |Fess| 的 ZIP 包和所需插件的 jar。jar 可以从 ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar`` 获取。请选择与此 |Fess| 对应的版本（ |Fess| 15.9 则为 15.9.x）。
+2. 在目标环境中解压 ZIP，并将 jar 放入 ``app/WEB-INF/plugin/``\ 。也可以在 |Fess| 启动后，从管理界面插件安装页面的「本地」选项卡上传（参见 :doc:`../admin/plugin-guide` ）。
+3. 启动 |Fess|\ 。如果在运行中放入了 jar，请重启。
+
 管理主题
 ========
 

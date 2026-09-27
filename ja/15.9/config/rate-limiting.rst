@@ -39,7 +39,8 @@ HTTPリクエストのレート制限
 ----
 
 - レート制限を超えたリクエストは HTTP 429 (Too Many Requests) を返します
-- ブロックIPリストに含まれるIPからのリクエストは HTTP 403 (Forbidden) を返します
+- 制限超過によってブロックされているIP、およびブロックIPリストに含まれるIPからのリクエストは HTTP 403 (Forbidden) を返します
+- 応答の本文は JSON です（429 は ``{"error":"rate_limit_exceeded",...,"retry_after":60}`` 、403 は ``{"error":"ip_blocked",...}`` ）。429 には ``Retry-After`` ヘッダーが付きます
 - 制限はIPアドレス単位で適用されます
 - IPごとに最初のリクエストからウィンドウが開始し、ウィンドウ期間経過後にカウントがリセットされます（固定ウィンドウ方式）
 - 制限超過時はIPが ``rate.limit.block.duration.ms`` の期間ブロックされます

@@ -429,6 +429,24 @@ XPath 配置
     # 摘要中也包含 meta keywords
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+这些是系统整体的设置，会应用于所有 Web 爬取配置。
+
+.. note::
+
+   更改会从下次被爬取并注册到索引的文档开始生效。
+   当系统设置的「检查上次修改时间」（差分爬取）启用时，自上次爬取以来未更新
+   （ ``Last-Modified`` 不比索引中的最后修改时间新）的文档即使重新爬取也不会被重新获取，
+   因此仍保留用以前的 XPath 提取的内容。要使更改应用于已爬取的文档，
+   请从索引中删除目标文档后重新爬取等，重建索引。
+
+要按爬取配置更改 XPath，请在 Web 爬取配置的「配置参数」中按如下方式指定。
+在指定的爬取配置中，其优先于 ``crawler.document.html.*.xpath`` 的值。
+语言和摘要也可以分别通过 ``field.xpath.default.lang`` 、 ``field.xpath.default.digest`` 指定。
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 HTML 标签处理
 -------------
 

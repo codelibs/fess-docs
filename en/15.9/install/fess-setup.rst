@@ -189,6 +189,27 @@ remove plugin
 Deletes the installed jars of the named plugins. A name that is not installed is reported, and does
 not change the exit code.
 
+.. _fess-setup-offline:
+
+Without Internet Access
+-----------------------
+
+``install plugin``, ``list plugins`` and ``upgrade plugins`` get plugins from repositories on the
+Internet. The install page under System > Plugin in the administration screen also gets the list of
+installable plugins from the repositories (``plugin.repositories``), so it cannot show the list where
+there is no outside access.
+
+In such an environment, bring in the plugin jars:
+
+1. Where there is Internet access, download the |Fess| ZIP package and the jars of the plugins you need.
+   A jar can be downloaded from
+   ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar``.
+   Choose the version for this |Fess| (15.9.x for |Fess| 15.9).
+2. In the target environment, extract the ZIP and put the jars in ``app/WEB-INF/plugin/``. After |Fess|
+   starts, you can also upload them on the "Local" tab of the plugin install page in the administration
+   screen; see :doc:`../admin/plugin-guide`.
+3. Start |Fess|. If you put the jars there while it was running, restart it.
+
 Managing Themes
 ===============
 

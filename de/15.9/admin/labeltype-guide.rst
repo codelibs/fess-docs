@@ -72,6 +72,14 @@ Virtueller Host
 Geben Sie den Hostnamen des virtuellen Hosts an.
 Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
 
+Ein über einen virtuellen Host aufgerufener Suchbildschirm zeigt nur die Labels an, in deren Feld dieser virtuelle Host angegeben ist.
+Ein Label mit leerem Feld wird nicht angezeigt, wenn der Suchbildschirm über einen virtuellen Host aufgerufen wird.
+Bei einem Zugriff, der keinem virtuellen Host entspricht, werden unabhängig von diesem Feld alle Labels angezeigt.
+
+Pro Label kann nur ein virtueller Host angegeben werden.
+Um dasselbe Label auf mehreren virtuellen Hosts anzuzeigen, erstellen Sie für jeden virtuellen Host ein Label mit demselben Namen und Wert und tragen im Feld „Virtueller Host" jeweils dessen Namen ein.
+Da der Wert gleich ist, grenzt jedes dieser Labels auf dieselben Dokumente ein.
+
 Anzeigereihenfolge
 ::::::::::::::::::
 

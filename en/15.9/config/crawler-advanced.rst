@@ -429,6 +429,26 @@ Custom XPath Examples
     # Include meta keywords in digest
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+These are system-wide settings and apply to every web crawl configuration.
+
+.. note::
+
+   A change applies to documents from the next time they are crawled and indexed.
+   When "Check Last Modified" (incremental crawling) is enabled in the General settings, a document
+   that has not changed since the last crawl (its ``Last-Modified`` is not newer than the last-modified
+   time in the index) is not fetched again on a recrawl, and keeps the content extracted with the old
+   XPath. To apply the change to documents already crawled, rebuild the index, for example by deleting
+   those documents from the index and crawling again.
+
+To use a different XPath for one crawl configuration, set it in "Configuration Parameters" of the web
+crawl configuration as follows. For that crawl configuration, it takes precedence over
+``crawler.document.html.*.xpath``. The language and digest can be set the same way with
+``field.xpath.default.lang`` and ``field.xpath.default.digest``.
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 HTML Tag Processing
 -------------------
 

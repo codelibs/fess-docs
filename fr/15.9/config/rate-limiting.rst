@@ -39,7 +39,8 @@ Comportement
 ----
 
 - Les requêtes dépassant la limite de débit retournent HTTP 429 (Too Many Requests)
-- Les requêtes provenant d'IP figurant dans la liste de blocage retournent HTTP 403 (Forbidden)
+- Les requêtes provenant d'IP bloquées pour dépassement de la limite ou figurant dans la liste de blocage retournent HTTP 403 (Forbidden)
+- Le corps de la réponse est du JSON (429 : ``{"error":"rate_limit_exceeded",...,"retry_after":60}`` ; 403 : ``{"error":"ip_blocked",...}``). La réponse 429 comporte l'en-tête ``Retry-After``
 - Les limites sont appliquées par adresse IP
 - Pour chaque IP, la fenêtre commence au premier requête et le compteur est réinitialisé après l'expiration de la période de la fenêtre (méthode de fenêtre fixe)
 - Le dépassement de la limite entraîne le blocage de l'IP pendant la durée ``rate.limit.block.duration.ms``

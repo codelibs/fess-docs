@@ -134,7 +134,7 @@ v2 의 모든 JSON 응답은 공통 엔벨로프 구조로 반환됩니다.
      - 지원되지 않는 ``Content-Type`` 입니다 (대부분의 엔드포인트는 ``application/json`` 을 요구합니다).
    * - ``rate_limited``
      - 429
-     - 속도 제한을 초과했습니다. ``Retry-After`` 헤더에 대기해야 할 초 단위 시간이 표시됩니다.
+     - 로그인, 비밀번호 변경, 채팅 등 엔드포인트별 시도 횟수 상한을 초과했습니다. ``Retry-After`` 헤더에 대기해야 할 초 단위 시간이 표시됩니다.
    * - ``internal_error``
      - 500
      - 서버 내부에서 오류가 발생했습니다.
@@ -148,6 +148,25 @@ v2 의 모든 JSON 응답은 공통 엔벨로프 구조로 반환됩니다.
 
    ``method_not_allowed`` 응답에는 대응하는 HTTP 메서드를 나열한
    ``Allow`` 헤더가 부여됩니다.
+
+.. note::
+
+   서버 전체의 HTTP 요청 속도 제한( ``rate.limit.enabled=true`` , :doc:`../config/rate-limiting` 참조)은
+   v2 API 보다 앞 단계에서 적용되므로, 그 응답은 위의 엔벨로프 형식이 아닙니다.
+   제한을 초과한 요청에는 HTTP 429 와 ``Retry-After`` 헤더( ``rate.limit.retry.after.seconds`` , 기본값 ``60`` )가 붙으며,
+   본문은 다음과 같습니다.
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   제한을 초과한 IP 주소는 ``rate.limit.block.duration.ms`` 동안 블록되며, 그동안의 요청
+   ( ``rate.limit.blocked.ips`` 에 포함된 IP 주소의 요청도 마찬가지)에는 HTTP 403 과 다음 본문이 반환됩니다.
+   이 응답에는 ``Retry-After`` 헤더가 붙지 않습니다.
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 인증과 세션
 ===========

@@ -143,6 +143,19 @@ remove plugin
 
 지정한 플러그인의 설치된 jar 를 삭제합니다. 설치되지 않은 이름은 그 사실을 표시할 뿐이며, 종료 코드에는 영향을 주지 않습니다.
 
+.. _fess-setup-offline:
+
+인터넷에 연결할 수 없는 환경
+----------------------------
+
+``install plugin`` , ``list plugins`` , ``upgrade plugins`` 는 플러그인을 인터넷상의 저장소에서 가져옵니다. 관리 화면의 「시스템 > 플러그인」 설치 화면도 설치할 수 있는 플러그인 목록을 저장소( ``plugin.repositories`` )에서 가져오므로, 외부에 연결할 수 없는 환경에서는 목록을 표시할 수 없습니다.
+
+이러한 환경에서는 플러그인 jar 를 반입하여 설치합니다.
+
+1. 인터넷에 연결할 수 있는 환경에서 |Fess| ZIP 패키지와 필요한 플러그인 jar 를 다운로드합니다. jar 는 ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar`` 에서 가져올 수 있습니다. 이 |Fess| 에 대응하는 버전( |Fess| 15.9 라면 15.9.x)을 선택하십시오.
+2. 대상 환경에서 ZIP 을 압축 해제하고, jar 를 ``app/WEB-INF/plugin/`` 에 둡니다. |Fess| 시작 후에 관리 화면 플러그인 설치 화면의 「로컬」 탭에서 업로드할 수도 있습니다( :doc:`../admin/plugin-guide` 참조).
+3. |Fess| 를 시작합니다. 실행 중에 jar 를 둔 경우에는 재시작하십시오.
+
 테마 관리
 =========
 

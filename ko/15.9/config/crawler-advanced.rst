@@ -429,6 +429,24 @@ HTML 요소를 추출하기 위한 XPath 설정입니다.
     # meta keywords도 다이제스트에 포함
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+이들은 시스템 전체 설정이며, 모든 웹 크롤 설정에 적용됩니다.
+
+.. note::
+
+   변경 사항은 다음에 크롤되어 인덱스에 등록되는 문서부터 반영됩니다.
+   시스템 설정의 「최종 갱신 일시 확인」(차분 크롤)이 활성화된 경우, 이전 크롤 이후 갱신되지 않은
+   ( ``Last-Modified`` 가 인덱스의 최종 갱신 일시보다 새롭지 않은) 문서는 재크롤에서도 다시 가져오지 않으므로,
+   이전 XPath 로 추출한 내용 그대로 남습니다. 이미 크롤된 문서에 반영하려면
+   대상 문서를 인덱스에서 삭제한 후 다시 크롤하는 등 인덱스를 다시 작성하십시오.
+
+크롤 설정별로 XPath 를 바꾸려면 웹 크롤 설정의 「설정 파라미터」에 다음과 같이 지정합니다.
+지정한 크롤 설정에서는 ``crawler.document.html.*.xpath`` 값보다 우선합니다.
+언어와 다이제스트도 각각 ``field.xpath.default.lang`` , ``field.xpath.default.digest`` 로 지정할 수 있습니다.
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 HTML 태그 처리
 --------------
 

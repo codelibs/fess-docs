@@ -26,7 +26,14 @@ To install a new plugin, click the Install button.
 
 |image1|
 
-Select the plugin you want to install from the pull-down menu and click the Install button to start the installation.
+Select the plugin you want to install from the pull-down menu on the "Remote" tab and click the Install button to start the installation.
+The pull-down menu lists the plugins in the plugin repositories (``plugin.repositories``). If they cannot be reached, "Could not find available plugins." is shown.
+
+To install a jar file you have, choose it in "Jar File" on the "Local" tab and click the Install button. Only files with the ``.jar`` extension are accepted.
+Leave the pull-down menu on the "Remote" tab at its first entry (``-``); if another plugin is selected there, that plugin is installed instead.
+To install plugins where there is no Internet access, see :ref:`fess-setup-offline`.
+
+Restart |Fess| after installing a plugin.
 
 Installing from the Command Line
 ================================

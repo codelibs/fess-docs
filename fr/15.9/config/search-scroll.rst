@@ -100,8 +100,10 @@ Paramètres de requête
 Les paramètres suivants peuvent être utilisés pour la recherche par défilement.
 
 .. note::
-   La recherche par défilement ne prend en charge que la méthode GET. Si vous accédez avec
-   une méthode autre que GET, ``405 Method Not Allowed`` est renvoyé.
+   La recherche par défilement ne prend en charge que la méthode GET. Pour les méthodes qui modifient
+   l'état, comme ``POST``, la vérification du jeton CSRF a lieu en premier : une requête sans en-tête
+   ``X-Fess-CSRF-Token`` valide reçoit ``403 Forbidden`` (``forbidden``) (voir :doc:`../api/api-overview`).
+   Avec un jeton valide, ``405 Method Not Allowed`` (``method_not_allowed``) est renvoyé.
 
 .. list-table::
    :header-rows: 1

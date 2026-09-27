@@ -100,8 +100,10 @@
 스크롤 검색에서는 다음 파라미터를 사용할 수 있습니다.
 
 .. note::
-   스크롤 검색은 GET 메서드만 지원합니다. GET 이외의 메서드로 접근하면
-   ``405 Method Not Allowed`` 가 반환됩니다.
+   스크롤 검색은 GET 메서드만 지원합니다. ``POST`` 등 상태를 변경하는 메서드에서는
+   CSRF 토큰 검증이 먼저 수행되므로, 유효한 ``X-Fess-CSRF-Token`` 헤더가 없는 요청에는
+   ``403 Forbidden`` ( ``forbidden`` )이 반환됩니다( :doc:`../api/api-overview` 참조).
+   유효한 토큰을 붙인 경우에는 ``405 Method Not Allowed`` ( ``method_not_allowed`` )가 반환됩니다.
 
 .. list-table::
    :header-rows: 1

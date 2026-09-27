@@ -26,7 +26,14 @@ Pour installer un nouveau plugin, cliquez sur le bouton Installer.
 
 |image1|
 
-Sélectionnez le plugin que vous souhaitez installer dans le menu déroulant et cliquez sur le bouton Installer pour démarrer l'installation.
+Sélectionnez le plugin que vous souhaitez installer dans le menu déroulant de l'onglet « Distant » et cliquez sur le bouton Installer pour démarrer l'installation.
+La liste du menu déroulant est obtenue depuis les dépôts de plugins (``plugin.repositories``). Si les dépôts sont inaccessibles, « Impossible de trouver les plugins disponibles. » s'affiche.
+
+Pour installer un fichier jar local, sélectionnez-le dans « Fichier Jar » de l'onglet « Local » et cliquez sur le bouton Installer. Seuls les fichiers portant l'extension ``.jar`` sont acceptés.
+Laissez alors le menu déroulant de l'onglet « Distant » sur sa première entrée (``-``). Si un autre plugin y est sélectionné, c'est ce plugin qui est installé.
+Pour l'installation dans un environnement sans accès à Internet, consultez :ref:`fess-setup-offline`.
+
+Redémarrez |Fess| après avoir installé un plugin.
 
 Installation en ligne de commande
 =================================

@@ -39,7 +39,8 @@ Comportamiento
 --------------
 
 - Las solicitudes que excedan el límite de tasa devuelven HTTP 429 (Too Many Requests)
-- Las solicitudes de IPs incluidas en la lista de bloqueo devuelven HTTP 403 (Forbidden)
+- Las solicitudes de IPs bloqueadas por superar el límite y de IPs incluidas en la lista de bloqueo devuelven HTTP 403 (Forbidden)
+- El cuerpo de la respuesta es JSON (429: ``{"error":"rate_limit_exceeded",...,"retry_after":60}``; 403: ``{"error":"ip_blocked",...}``). La respuesta 429 incluye la cabecera ``Retry-After``
 - El límite se aplica por dirección IP
 - La ventana se inicia con la primera solicitud de cada IP y el contador se reinicia después de que expire el período de ventana (método de ventana fija)
 - Cuando se excede el límite, la IP se bloquea durante el período definido en ``rate.limit.block.duration.ms``

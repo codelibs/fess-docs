@@ -100,8 +100,10 @@
 スクロール検索では、以下のパラメータを使用できます。
 
 .. note::
-   スクロール検索は GET メソッドのみ対応しています。GET 以外のメソッドでアクセスした場合は
-   ``405 Method Not Allowed`` が返されます。
+   スクロール検索は GET メソッドのみ対応しています。 ``POST`` などの状態を変更するメソッドでは
+   CSRF トークンの検証が先に行われるため、有効な ``X-Fess-CSRF-Token`` ヘッダーが無いリクエストには
+   ``403 Forbidden`` （ ``forbidden`` ）が返されます（ :doc:`../api/api-overview` を参照）。
+   有効なトークンを付けた場合は ``405 Method Not Allowed`` （ ``method_not_allowed`` ）が返されます。
 
 .. list-table::
    :header-rows: 1

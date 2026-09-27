@@ -99,8 +99,10 @@
 滚动搜索可使用以下参数。
 
 .. note::
-   滚动搜索仅支持 GET 方法。使用 GET 以外的方法访问时，将返回
-   ``405 Method Not Allowed``\ 。
+   滚动搜索仅支持 GET 方法。对于 ``POST`` 等会改变状态的方法，会先进行 CSRF 令牌的验证，
+   因此没有有效 ``X-Fess-CSRF-Token`` 头的请求将返回 ``403 Forbidden`` （ ``forbidden`` ）
+   （参见 :doc:`../api/api-overview` ）。附带有效令牌时，将返回
+   ``405 Method Not Allowed`` （ ``method_not_allowed`` ）。
 
 .. list-table::
    :header-rows: 1

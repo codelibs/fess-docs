@@ -71,6 +71,14 @@ Virtual Host
 Specifies the virtual host hostname.
 For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/security-virtual-host>`.
 
+A search screen accessed through a virtual host shows only the labels whose field names that virtual host.
+A label with this field empty is not shown when the search screen is accessed through a virtual host.
+An access that matches no virtual host shows all labels, whatever this field holds.
+
+A label can name only one virtual host.
+To show the same label on several virtual hosts, create a label with the same name and value for each virtual host, and put that virtual host name in its Virtual Host field.
+Because the value is the same, each of those labels narrows the results to the same documents.
+
 Display Order
 :::::::::::::
 

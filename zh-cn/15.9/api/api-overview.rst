@@ -134,7 +134,7 @@ v2 的所有 JSON 响应均以公共信封结构返回。
      - 不支持的 ``Content-Type``\ （大多数端点要求 ``application/json``\ ）。
    * - ``rate_limited``
      - 429
-     - 超过速率限制。\ ``Retry-After`` 头中会指示需要等待的秒数。
+     - 超过了登录、密码更改、聊天等各端点的尝试次数上限。\ ``Retry-After`` 头中会指示需要等待的秒数。
    * - ``internal_error``
      - 500
      - 服务器内部发生了错误。
@@ -148,6 +148,25 @@ v2 的所有 JSON 响应均以公共信封结构返回。
 
    ``method_not_allowed`` 的响应中，会附带列举了支持 HTTP 方法的
    ``Allow`` 头。
+
+.. note::
+
+   服务器整体的 HTTP 请求速率限制（ ``rate.limit.enabled=true`` ，参见 :doc:`../config/rate-limiting` ）
+   在 v2 API 之前的阶段应用，因此其响应不是上述的信封格式。
+   超过限制的请求会返回 HTTP 429 并附带 ``Retry-After`` 头（ ``rate.limit.retry.after.seconds`` ，默认 ``60`` ），
+   响应体如下。
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   超过限制的 IP 地址会在 ``rate.limit.block.duration.ms`` 期间被阻止，在此期间的请求
+   （来自 ``rate.limit.blocked.ips`` 中所列 IP 地址的请求也一样）会返回 HTTP 403 和以下响应体。
+   该响应不附带 ``Retry-After`` 头。
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 认证与会话
 ==========

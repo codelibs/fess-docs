@@ -429,6 +429,26 @@ Exemples de XPath personnalisés
     # Inclure également les mots-clés meta dans le résumé
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+Ces paramètres valent pour tout le système et s'appliquent à toutes les configurations de crawl web.
+
+.. note::
+
+   Les modifications s'appliquent aux documents au fur et à mesure qu'ils sont de nouveau crawlés et indexés.
+   Si « Vérifier la dernière modification » (crawl incrémental) est activé dans les paramètres généraux,
+   les documents qui n'ont pas changé depuis le crawl précédent (dont le ``Last-Modified`` n'est pas plus
+   récent que la date de dernière modification de l'index) ne sont pas récupérés à nouveau et conservent le
+   contenu extrait avec l'ancien XPath. Pour appliquer la modification aux documents déjà crawlés,
+   reconstruisez l'index, par exemple en supprimant ces documents de l'index puis en relançant le crawl.
+
+Pour utiliser un XPath différent dans une configuration de crawl, indiquez-le dans les « Paramètres de
+configuration » de la configuration de crawl web comme ci-dessous.
+Pour cette configuration de crawl, il est prioritaire sur la valeur de ``crawler.document.html.*.xpath``.
+La langue et le résumé peuvent aussi être indiqués avec ``field.xpath.default.lang`` et ``field.xpath.default.digest``.
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 Traitement des balises HTML
 ---------------------------
 
