@@ -134,7 +134,7 @@ The default HTTP status code is determined by ``error.code``.
      - The ``Content-Type`` is not supported (most endpoints require ``application/json``).
    * - ``rate_limited``
      - 429
-     - The rate limit has been exceeded. The ``Retry-After`` header indicates the number of seconds to wait.
+     - A per-endpoint attempt limit, such as for login, password change or chat, has been exceeded. The ``Retry-After`` header indicates the number of seconds to wait.
    * - ``internal_error``
      - 500
      - An internal server error occurred.
@@ -148,6 +148,25 @@ Table: Error Code List
 
    Responses with ``method_not_allowed`` include an ``Allow`` header listing
    the supported HTTP methods.
+
+.. note::
+
+   The server-wide HTTP request rate limit (``rate.limit.enabled=true``; see :doc:`../config/rate-limiting`)
+   is applied before the v2 API, so its responses do not use the envelope above.
+   A request over the limit gets HTTP 429 with a ``Retry-After`` header (``rate.limit.retry.after.seconds``,
+   default ``60``) and this body:
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   An IP address over the limit is blocked for ``rate.limit.block.duration.ms``. Requests during that time
+   (and requests from IP addresses in ``rate.limit.blocked.ips``) get HTTP 403 with this body.
+   This response has no ``Retry-After`` header.
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 Authentication and Sessions
 ===========================

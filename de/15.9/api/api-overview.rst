@@ -135,7 +135,7 @@ Abhängig von ``error.code`` wird ein standardmäßiger HTTP-Statuscode zurückg
      - Nicht unterstützter ``Content-Type`` (die meisten Endpunkte erfordern ``application/json``).
    * - ``rate_limited``
      - 429
-     - Rate-Limit überschritten. Der ``Retry-After``-Header gibt die Wartezeit in Sekunden an.
+     - Das Versuchslimit eines Endpunkts, etwa für Anmeldung, Passwortänderung oder Chat, wurde überschritten. Der ``Retry-After``-Header gibt die Wartezeit in Sekunden an.
    * - ``internal_error``
      - 500
      - Interner Serverfehler aufgetreten.
@@ -149,6 +149,25 @@ Tabelle: Liste der Fehlercodes
 
    Bei einer ``method_not_allowed``-Antwort wird ein ``Allow``-Header
    beigefügt, der die unterstützten HTTP-Methoden auflistet.
+
+.. note::
+
+   Das serverweite Rate-Limit für HTTP-Anfragen (``rate.limit.enabled=true``, siehe :doc:`../config/rate-limiting`)
+   greift vor der v2-API; seine Antworten verwenden daher nicht das obige Envelope-Format.
+   Eine Anfrage über dem Limit erhält HTTP 429 mit einem ``Retry-After``-Header (``rate.limit.retry.after.seconds``,
+   Standard ``60``) und diesem Body:
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   Eine IP-Adresse über dem Limit wird für ``rate.limit.block.duration.ms`` blockiert. Anfragen in dieser Zeit
+   (ebenso Anfragen von IP-Adressen in ``rate.limit.blocked.ips``) erhalten HTTP 403 mit diesem Body.
+   Diese Antwort hat keinen ``Retry-After``-Header.
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 Authentifizierung und Sitzung
 ==============================

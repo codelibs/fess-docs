@@ -429,6 +429,26 @@ Ejemplos de XPath Personalizados
     # Incluir también meta keywords en el resumen
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+Estas son opciones de todo el sistema y se aplican a todas las configuraciones de rastreo web.
+
+.. note::
+
+   Los cambios se aplican a los documentos a medida que se vuelven a rastrear y registrar en el índice.
+   Si «Comprobar fecha de última modificación» (rastreo incremental) está habilitado en la configuración general,
+   los documentos que no han cambiado desde el rastreo anterior (cuyo ``Last-Modified`` no es posterior a la
+   fecha de última modificación del índice) no se vuelven a obtener y conservan el contenido extraído con el
+   XPath anterior. Para aplicar el cambio a los documentos ya rastreados, reconstruya el índice, por ejemplo
+   eliminando esos documentos del índice y volviendo a rastrear.
+
+Para usar un XPath distinto en una configuración de rastreo, indíquelo en los «Parámetros de configuración»
+de la configuración de rastreo web como se muestra a continuación.
+En esa configuración de rastreo tiene prioridad sobre el valor de ``crawler.document.html.*.xpath``.
+El idioma y el resumen también se pueden indicar con ``field.xpath.default.lang`` y ``field.xpath.default.digest``.
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 Procesamiento de Etiquetas HTML
 --------------------------------
 

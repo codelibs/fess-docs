@@ -429,6 +429,24 @@ HTML要素を抽出するためのXPath設定です。
     # meta keywordsもダイジェストに含める
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+これらはシステム全体の設定で、すべてのウェブクロール設定に適用されます。
+
+.. note::
+
+   変更は、次にクロールされて索引に登録されるドキュメントから反映されます。
+   システム設定の「最終更新日時の確認」（差分クロール）が有効な場合、前回のクロールから更新されていない
+   （ ``Last-Modified`` が索引の最終更新日時より新しくない）ドキュメントは再クロールでも取得し直されないため、
+   以前の XPath で抽出した内容のまま残ります。すでにクロール済みのドキュメントに反映するには、
+   対象のドキュメントを索引から削除してからクロールし直すなど、索引を作り直してください。
+
+クロール設定ごとに XPath を変えるには、ウェブクロール設定の「設定パラメーター」に次のように指定します。
+指定したクロール設定では、 ``crawler.document.html.*.xpath`` の値より優先されます。
+言語とダイジェストも、それぞれ ``field.xpath.default.lang`` 、 ``field.xpath.default.digest`` で指定できます。
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 HTML タグ処理
 -------------
 

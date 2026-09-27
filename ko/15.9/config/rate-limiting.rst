@@ -39,7 +39,8 @@ HTTP 요청 속도 제한
 ----
 
 - 속도 제한을 초과한 요청은 HTTP 429 (Too Many Requests)를 반환합니다
-- 블록 IP 목록에 포함된 IP의 요청은 HTTP 403 (Forbidden)을 반환합니다
+- 제한 초과로 블록된 IP, 그리고 블록 IP 목록에 포함된 IP의 요청은 HTTP 403 (Forbidden)을 반환합니다
+- 응답 본문은 JSON 입니다(429 는 ``{"error":"rate_limit_exceeded",...,"retry_after":60}`` , 403 은 ``{"error":"ip_blocked",...}`` ). 429 에는 ``Retry-After`` 헤더가 붙습니다
 - 제한은 IP 주소 단위로 적용됩니다
 - IP별로 최초 요청부터 윈도우가 시작되며, 윈도우 기간 경과 후 카운트가 리셋됩니다(고정 윈도우 방식)
 - 제한 초과 시 IP가 ``rate.limit.block.duration.ms`` 기간 동안 블록됩니다

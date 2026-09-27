@@ -96,8 +96,10 @@ Parámetros de Solicitud
 En la búsqueda scroll, puede utilizar los siguientes parámetros.
 
 .. note::
-   La búsqueda scroll solo admite el método GET. Si se accede con un método distinto a GET,
-   se devuelve ``405 Method Not Allowed``.
+   La búsqueda scroll solo admite el método GET. Con los métodos que modifican el estado, como ``POST``,
+   la validación del token CSRF se realiza primero, por lo que una solicitud sin una cabecera
+   ``X-Fess-CSRF-Token`` válida recibe ``403 Forbidden`` (``forbidden``) (consulte :doc:`../api/api-overview`).
+   Con un token válido se devuelve ``405 Method Not Allowed`` (``method_not_allowed``).
 
 .. list-table::
    :header-rows: 1

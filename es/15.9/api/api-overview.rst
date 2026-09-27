@@ -134,7 +134,7 @@ El código de estado HTTP predeterminado se determina según ``error.code``.
      - ``Content-Type`` no admitido (la mayoría de los endpoints requieren ``application/json``).
    * - ``rate_limited``
      - 429
-     - Se superó el límite de velocidad. La cabecera ``Retry-After`` indica los segundos que se deben esperar.
+     - Se superó el límite de intentos propio de un endpoint, como el inicio de sesión, el cambio de contraseña o el chat. La cabecera ``Retry-After`` indica los segundos que se deben esperar.
    * - ``internal_error``
      - 500
      - Se produjo un error interno en el servidor.
@@ -148,6 +148,25 @@ Tabla: Lista de códigos de error
 
    La respuesta ``method_not_allowed`` incluye una cabecera ``Allow`` que enumera
    los métodos HTTP admitidos.
+
+.. note::
+
+   El límite de velocidad de solicitudes HTTP de todo el servidor (``rate.limit.enabled=true``, consulte
+   :doc:`../config/rate-limiting`) se aplica antes que la API v2, por lo que su respuesta no usa el
+   formato de sobre anterior. Una solicitud que supera el límite recibe HTTP 429 con la cabecera
+   ``Retry-After`` (``rate.limit.retry.after.seconds``, por defecto ``60``) y este cuerpo:
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   La dirección IP que supera el límite queda bloqueada durante ``rate.limit.block.duration.ms``, y las
+   solicitudes durante ese tiempo (igual que las de las direcciones IP incluidas en ``rate.limit.blocked.ips``)
+   reciben HTTP 403 con el cuerpo siguiente. Esta respuesta no incluye la cabecera ``Retry-After``.
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 Autenticación y sesión
 ======================

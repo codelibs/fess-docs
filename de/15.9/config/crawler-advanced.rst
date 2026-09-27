@@ -427,6 +427,26 @@ Beispiele für benutzerdefinierte XPath
     # Auch Meta-Keywords in Digest einbeziehen
     crawler.document.html.digest.xpath=//META[@name='description']/@content|//META[@name='keywords']/@content
 
+Dies sind systemweite Einstellungen, die für alle Web-Crawl-Konfigurationen gelten.
+
+.. note::
+
+   Eine Änderung wirkt sich auf Dokumente aus, sobald sie das nächste Mal gecrawlt und indexiert werden.
+   Ist in den allgemeinen Einstellungen „Letzte Änderung prüfen" (inkrementelles Crawling) aktiviert, wird
+   ein Dokument, das sich seit dem letzten Crawl nicht geändert hat (sein ``Last-Modified`` ist nicht neuer
+   als der Zeitpunkt der letzten Änderung im Index), beim erneuten Crawlen nicht wieder abgerufen und behält
+   den mit dem alten XPath extrahierten Inhalt. Um die Änderung auf bereits gecrawlte Dokumente anzuwenden,
+   bauen Sie den Index neu auf, zum Beispiel indem Sie diese Dokumente aus dem Index löschen und erneut crawlen.
+
+Um für eine einzelne Crawl-Konfiguration einen anderen XPath zu verwenden, geben Sie ihn in den
+„Konfigurationsparametern" der Web-Crawl-Konfiguration wie folgt an. Für diese Crawl-Konfiguration hat er
+Vorrang vor ``crawler.document.html.*.xpath``. Sprache und Digest lassen sich ebenso mit
+``field.xpath.default.lang`` und ``field.xpath.default.digest`` festlegen.
+
+::
+
+    field.xpath.default.content=//DIV[@id='main-content']
+
 HTML-Tag-Verarbeitung
 ---------------------
 

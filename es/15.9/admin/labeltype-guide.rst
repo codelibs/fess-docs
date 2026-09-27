@@ -72,6 +72,14 @@ Host virtual
 Especifique el nombre de host del host virtual.
 Para más detalles, consulte :doc:`Host virtual en la guía de configuración <../config/security-virtual-host>`.
 
+En una pantalla de búsqueda a la que se accede mediante un host virtual solo se muestran las etiquetas cuyo campo especifica el nombre de ese host virtual.
+Las etiquetas con este campo vacío no se muestran cuando se accede mediante un host virtual.
+En los accesos que no coinciden con ningún host virtual se muestran todas las etiquetas, independientemente de este campo.
+
+Cada etiqueta admite un solo host virtual.
+Para mostrar la misma etiqueta en varios hosts virtuales, cree una etiqueta con el mismo nombre y valor para cada host virtual e indique en el campo de host virtual de cada una el nombre de ese host virtual.
+Como el valor es el mismo, cualquiera de las etiquetas filtra los mismos documentos.
+
 Orden de clasificación
 ::::::::::::::::::::::
 

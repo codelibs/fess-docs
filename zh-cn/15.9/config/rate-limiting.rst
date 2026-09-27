@@ -39,7 +39,8 @@ HTTP请求的速率限制
 ----
 
 - 超过速率限制的请求返回HTTP 429 (Too Many Requests)
-- 被阻止的IP地址的请求返回HTTP 403 (Forbidden)
+- 因超过限制而被阻止的IP地址，以及阻止IP列表中的IP地址的请求返回HTTP 403 (Forbidden)
+- 响应体为JSON（429 为 ``{"error":"rate_limit_exceeded",...,"retry_after":60}`` ，403 为 ``{"error":"ip_blocked",...}`` ）。429 附带 ``Retry-After`` 头
 - 限制按IP地址单位应用
 - 每个IP从首次请求开始计算窗口，窗口期间过后计数重置（固定窗口方式）
 - 超过限制时，IP会被阻止 ``rate.limit.block.duration.ms`` 的期间

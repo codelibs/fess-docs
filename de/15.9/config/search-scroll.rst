@@ -106,8 +106,10 @@ Request-Parameter
 Für die Scroll-Suche können folgende Parameter verwendet werden:
 
 .. note::
-   Die Scroll-Suche unterstützt nur die GET-Methode. Bei Verwendung einer anderen HTTP-Methode
-   wird ``405 Method Not Allowed`` zurückgegeben.
+   Die Scroll-Suche unterstützt nur die GET-Methode. Bei zustandsändernden Methoden wie ``POST``
+   wird zuerst das CSRF-Token geprüft; eine Anfrage ohne gültigen ``X-Fess-CSRF-Token``-Header
+   erhält daher ``403 Forbidden`` (``forbidden``), siehe :doc:`../api/api-overview`.
+   Mit einem gültigen Token wird ``405 Method Not Allowed`` (``method_not_allowed``) zurückgegeben.
 
 .. list-table::
    :header-rows: 1

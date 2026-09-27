@@ -26,7 +26,14 @@ Para instalar un nuevo complemento, haga clic en el botón de instalación.
 
 |image1|
 
-Seleccione el complemento que desea instalar en el menú desplegable y haga clic en el botón de instalación para comenzar la instalación.
+Seleccione el complemento que desea instalar en el menú desplegable de la pestaña «Remoto» y haga clic en el botón de instalación para comenzar la instalación.
+La lista del menú desplegable se obtiene de los repositorios de plugins (``plugin.repositories``). Si no se puede conectar con los repositorios, se muestra «No se encontraron plugins disponibles.».
+
+Para instalar un archivo jar local, selecciónelo en «Archivo Jar» de la pestaña «Local» y haga clic en el botón de instalación. Solo se pueden indicar archivos con la extensión ``.jar``.
+Deje el menú desplegable de la pestaña «Remoto» en su primera opción (``-``). Si hay otro complemento seleccionado, se instala ese en su lugar.
+Para instalar en un entorno sin conexión a Internet, consulte :ref:`fess-setup-offline`.
+
+Reinicie |Fess| después de instalar un complemento.
 
 Instalación desde la línea de comandos
 ======================================

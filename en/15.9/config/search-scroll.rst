@@ -100,8 +100,10 @@ Request Parameters
 The following parameters can be used with scroll search:
 
 .. note::
-   Scroll search only supports the GET method. Accessing with any method other than GET returns
-   ``405 Method Not Allowed``.
+   Scroll search only supports the GET method. For a state-changing method such as ``POST``,
+   the CSRF token is checked first, so a request without a valid ``X-Fess-CSRF-Token`` header
+   gets ``403 Forbidden`` (``forbidden``); see :doc:`../api/api-overview`.
+   With a valid token, it gets ``405 Method Not Allowed`` (``method_not_allowed``).
 
 .. list-table::
    :header-rows: 1

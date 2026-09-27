@@ -39,7 +39,8 @@ Verhalten
 ---------
 
 - Anfragen, die das Rate-Limit überschreiten, geben HTTP 429 (Too Many Requests) zurück
-- Anfragen von IPs auf der Blockliste geben HTTP 403 (Forbidden) zurück
+- Anfragen von IPs, die wegen Überschreitung des Limits blockiert sind, sowie von IPs auf der Blockliste geben HTTP 403 (Forbidden) zurück
+- Der Antwort-Body ist JSON (``{"error":"rate_limit_exceeded",...,"retry_after":60}`` bei 429, ``{"error":"ip_blocked",...}`` bei 403). Eine 429-Antwort hat einen ``Retry-After``-Header
 - Limits werden pro IP-Adresse angewendet
 - Pro IP-Adresse beginnt das Fenster mit der ersten Anfrage; nach Ablauf der Fensterperiode wird der Zähler zurückgesetzt (Festes-Fenster-Verfahren)
 - Bei Überschreitung wird die IP für die Dauer von ``rate.limit.block.duration.ms`` blockiert

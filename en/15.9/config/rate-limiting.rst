@@ -39,7 +39,8 @@ Behavior
 --------
 
 - Requests exceeding the rate limit return HTTP 429 (Too Many Requests)
-- Requests from IPs on the blocked IP list return HTTP 403 (Forbidden)
+- Requests from IPs blocked for exceeding the limit, and from IPs on the blocked IP list, return HTTP 403 (Forbidden)
+- The response body is JSON (``{"error":"rate_limit_exceeded",...,"retry_after":60}`` for 429, ``{"error":"ip_blocked",...}`` for 403). A 429 response has a ``Retry-After`` header
 - Limits are applied per IP address
 - For each IP, the counting window starts from the first request and resets after the window period expires (fixed window algorithm)
 - When the limit is exceeded, the IP is blocked for the duration specified by ``rate.limit.block.duration.ms``

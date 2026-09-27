@@ -134,7 +134,7 @@ v2 のすべての JSON レスポンスは、共通のエンベロープ構造�
      - サポートされていない ``Content-Type`` です（多くのエンドポイントは ``application/json`` を要求します）。
    * - ``rate_limited``
      - 429
-     - レート制限を超えました。 ``Retry-After`` ヘッダーに待機すべき秒数が示されます。
+     - ログイン、パスワード変更、チャットなどのエンドポイントごとの試行回数の上限を超えました。 ``Retry-After`` ヘッダーに待機すべき秒数が示されます。
    * - ``internal_error``
      - 500
      - サーバー内部でエラーが発生しました。
@@ -148,6 +148,25 @@ v2 のすべての JSON レスポンスは、共通のエンベロープ構造�
 
    ``method_not_allowed`` のレスポンスには、対応する HTTP メソッドを列挙した
    ``Allow`` ヘッダーが付与されます。
+
+.. note::
+
+   サーバー全体の HTTP リクエストのレート制限（ ``rate.limit.enabled=true`` 、 :doc:`../config/rate-limiting` を参照）
+   は v2 API より前の段階で適用されるため、その応答は上記のエンベロープ形式ではありません。
+   制限を超えたリクエストには HTTP 429 と ``Retry-After`` ヘッダー（ ``rate.limit.retry.after.seconds`` 、既定 ``60`` ）が付き、
+   本文は次のとおりです。
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   制限を超えた IP アドレスは ``rate.limit.block.duration.ms`` の間ブロックされ、その間のリクエスト
+   （ ``rate.limit.blocked.ips`` に含まれる IP アドレスからのリクエストも同様）には HTTP 403 と次の本文が返されます。
+   この応答には ``Retry-After`` ヘッダーは付きません。
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 認証とセッション
 ==============

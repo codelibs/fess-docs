@@ -26,7 +26,14 @@ Um ein neues Plug-in zu installieren, klicken Sie auf die Schaltfläche „Insta
 
 |image1|
 
-Wählen Sie im Dropdown-Menü das zu installierende Plug-in aus und klicken Sie auf die Schaltfläche „Installieren", um die Installation zu starten.
+Wählen Sie im Dropdown-Menü auf der Registerkarte „Remote" das zu installierende Plug-in aus und klicken Sie auf die Schaltfläche „Installieren", um die Installation zu starten.
+Das Dropdown-Menü listet die Plug-ins aus den Plug-in-Repositorys (``plugin.repositories``) auf. Sind diese nicht erreichbar, wird „Keine verfügbaren Plugins gefunden." angezeigt.
+
+Um eine vorhandene JAR-Datei zu installieren, wählen Sie sie auf der Registerkarte „Lokal" unter „Jar-Datei" aus und klicken Sie auf die Schaltfläche „Installieren". Es werden nur Dateien mit der Endung ``.jar`` akzeptiert.
+Lassen Sie dabei das Dropdown-Menü auf der Registerkarte „Remote" auf dem ersten Eintrag (``-``); ist dort ein anderes Plug-in ausgewählt, wird stattdessen dieses installiert.
+Wie Sie Plug-ins ohne Internetzugang installieren, lesen Sie unter :ref:`fess-setup-offline`.
+
+Starten Sie |Fess| nach der Installation eines Plug-ins neu.
 
 Installation über die Befehlszeile
 ==================================

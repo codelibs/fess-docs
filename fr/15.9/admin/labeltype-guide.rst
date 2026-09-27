@@ -72,6 +72,14 @@ Hôte virtuel
 Spécifie le nom d'hôte de l'hôte virtuel.
 Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le guide de configuration <../config/security-virtual-host>`.
 
+Sur un écran de recherche consulté via un hôte virtuel, seules les étiquettes dont ce champ indique le nom de cet hôte virtuel sont affichées.
+Les étiquettes dont ce champ est vide ne sont pas affichées lors d'un accès via un hôte virtuel.
+Lors d'un accès qui ne correspond à aucun hôte virtuel, toutes les étiquettes sont affichées, quel que soit ce champ.
+
+Une étiquette n'accepte qu'un seul hôte virtuel.
+Pour afficher la même étiquette sur plusieurs hôtes virtuels, créez pour chaque hôte virtuel une étiquette ayant le même nom et la même valeur, et indiquez dans le champ d'hôte virtuel de chacune le nom de cet hôte virtuel.
+La valeur étant identique, chacune de ces étiquettes filtre les mêmes documents.
+
 Ordre de tri
 ::::::::::::
 

@@ -134,7 +134,7 @@ Le code de statut HTTP par défaut est déterminé en fonction de ``error.code``
      - ``Content-Type`` non pris en charge (la plupart des points de terminaison requièrent ``application/json``).
    * - ``rate_limited``
      - 429
-     - Limite de débit dépassée. L'en-tête ``Retry-After`` indique le nombre de secondes d'attente.
+     - Limite de tentatives propre à un endpoint (connexion, changement de mot de passe, chat, etc.) dépassée. L'en-tête ``Retry-After`` indique le nombre de secondes d'attente.
    * - ``internal_error``
      - 500
      - Une erreur interne s'est produite sur le serveur.
@@ -148,6 +148,25 @@ Tableau : Liste des codes d'erreur
 
    La réponse ``method_not_allowed`` est accompagnée d'un en-tête ``Allow``
    listant les méthodes HTTP acceptées.
+
+.. note::
+
+   La limitation de débit des requêtes HTTP de l'ensemble du serveur (``rate.limit.enabled=true``, voir
+   :doc:`../config/rate-limiting`) s'applique avant l'API v2 ; sa réponse n'utilise donc pas le format
+   d'enveloppe ci-dessus. Une requête qui dépasse la limite reçoit HTTP 429 avec l'en-tête
+   ``Retry-After`` (``rate.limit.retry.after.seconds``, ``60`` par défaut) et ce corps :
+
+   ::
+
+       {"error":"rate_limit_exceeded","message":"Too many requests. Please retry after 60 seconds.","retry_after":60}
+
+   L'adresse IP qui a dépassé la limite est bloquée pendant ``rate.limit.block.duration.ms`` ; les
+   requêtes reçues pendant ce temps (comme celles des adresses IP listées dans ``rate.limit.blocked.ips``)
+   reçoivent HTTP 403 avec le corps suivant. Cette réponse ne comporte pas d'en-tête ``Retry-After``.
+
+   ::
+
+       {"error":"ip_blocked","message":"Access denied."}
 
 Authentification et session
 ===========================
