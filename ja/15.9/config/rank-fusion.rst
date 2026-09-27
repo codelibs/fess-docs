@@ -168,7 +168,7 @@ JVMシステムプロパティ
     rank.fusion.combination.technique=rrf
     rank.fusion.normalization.technique=min_max
     rank.fusion.combination.weights=
-    rank.fusion.pagination_depth=200
+    rank.fusion.pagination_depth=1000
 
 .. list-table::
    :header-rows: 1
@@ -190,8 +190,8 @@ JVMシステムプロパティ
      - （空）
      - サーチャーごとの重みを ``名前:重み`` のカンマ区切りで指定します（例: ``default:0.7,semantic_chunk:0.3``）。重みは ``0.0``\ 〜\ ``1.0`` で合計が ``1.0`` になる必要があり、融合に参加するすべてのサーチャーを指定する必要があります。空の場合は均等に扱われます。条件を満たさない場合はERRORログを出力し、その検索は |Fess| 側で融合されます。
    * - ``rank.fusion.pagination_depth``
-     - ``200``
-     - 各サーチャーがシャードごとに融合へ提供する結果の件数。ページングできる深さと、融合の対象になるドキュメントの範囲を決めます。
+     - ``1000``
+     - 各サーチャーがシャードごとに融合へ提供する結果の件数。ページングできる深さと、融合の対象になるドキュメントの範囲を決めます。検索エンジン側で融合した検索は、最大でこの件数までページングできます。検索エンジンに送る値は ``indexer.max.result.window.size`` を超えません。
 
 .. note::
 
@@ -205,9 +205,6 @@ JVMシステムプロパティ
 - 詳細検索のパラメーター（``as.*``）を含む検索
 - ソート、位置情報検索、類似ドキュメント検索を指定した検索。これらではセマンティック検索自体が
   スキップされるため、キーワード検索のみの結果になります（:doc:`search-semantic` を参照）。
-- 開始位置＋ページサイズが ``rank.fusion.pagination_depth`` を超えるページ（該当する検索ごとに
-  DEBUGログを出力します）。|Fess| 側での融合では ``rank.fusion.window_size`` の境界が適用されるため、
-  既定の設定ではキーワード検索のみの結果になります。
 - ``rank.fusion.combination.weights`` が条件を満たさない場合
 - ``z_score`` 正規化と ``geometric_mean`` または ``harmonic_mean`` を組み合わせた場合（両方の
   設定名を示すERRORログを出力します）
@@ -227,8 +224,21 @@ JVMシステムプロパティ
   タイムアウト（例: ``content_chunker.embedding.ollama.timeout``）まで待たされます。
 - ``rank.fusion.window_size`` と ``rank.fusion.threads`` は、|Fess| 側で融合する場合にのみ
   使われます。
-- セマンティックサーチャーの knn クエリの ``k``\ （シャードごとの近傍数）は、
-  ``content_chunker.search.knn.k`` と ``rank.fusion.pagination_depth`` の大きい方になります。
+- 検索エンジン側で融合した検索は、最大で ``rank.fusion.pagination_depth`` 件までページング
+  できます。検索エンジンは各サーチャーのシャードごとの上位 ``rank.fusion.pagination_depth`` 件
+  だけを融合するためです。ページ数、次ページの有無、ページ番号はこの件数で打ち切られ、これを
+  超えた位置から始まるページを要求すると、ほかの検索で ``index.max_result_window`` を超えた
+  ページを要求した場合と同じエラーになります。この範囲内でも、融合結果の最後の件より後から
+  始まるページ（古いリンクなど）は空のページになります。検索エンジン側で融合しない検索は、
+  これまでどおり ``index.max_result_window`` までページングできます。
+- 総ヒット件数は ``rank.fusion.pagination_depth`` 未満であれば正確です。この値以上になると、
+  検索エンジンが実際に一致する件数より少なく数えることがあるため、下限値として扱われます
+  （検索APIの ``record_count_relation`` は ``GREATER_THAN_OR_EQUAL_TO`` になります）。
+- ``rank.fusion.pagination_depth`` を大きくすると深いページまで参照できますが、融合するすべての
+  検索がサーチャーごと・シャードごとにその件数を収集するため、深いページに限らずすべての検索が
+  遅くなります。
+- セマンティックサーチャーの knn クエリの ``k``\ （シャードごとの近傍数）は
+  ``content_chunker.search.knn.k`` です。
   ベクトル検索は類似度が低いドキュメントも近傍として返すため、\ ``content_chunker.search.min_score``
   を設定していない場合、総ヒット件数にはその分のベクトル検索のヒットが加わり、小規模な
   インデックスでは閲覧できるドキュメントのほとんどが件数に含まれることがあります。件数を絞る
@@ -406,9 +416,8 @@ WARNログを出力したうえで、残りのサーチャーの結果だけで�
 5. 深いページ（``開始位置 × 2`` が ``rank.fusion.window_size`` 以上になる位置。既定では
    101件目以降）では融合が行われず、メインサーチャーのみで検索されます。より多くのページで
    融合結果を利用したい場合は ``rank.fusion.window_size`` を大きくしてください。検索エンジン側で
-   融合する場合は、開始位置＋ページサイズが ``rank.fusion.pagination_depth`` を超えるページが
-   |Fess| 側での融合に切り替わるため、あわせて ``rank.fusion.pagination_depth`` も大きくして
-   ください。
+   融合する場合はこの境界はなく、最大 ``rank.fusion.pagination_depth`` 件までのすべてのページが
+   融合されます（:ref:`rank-fusion-engine` を参照）。
 
 検索が遅い
 ----------
@@ -428,6 +437,9 @@ WARNログを出力したうえで、残りのサーチャーの結果だけで�
        rank.fusion.window_size=100
 
    1ページに要求できる最大件数も下がる点に注意してください。設定後は再起動が必要です。
+
+3. 検索エンジン側で融合する場合は ``rank.fusion.pagination_depth`` を減らす。融合結果を
+   ページングできる深さも浅くなる点に注意してください。設定後は再起動が必要です。
 
 メモリ不足
 ----------

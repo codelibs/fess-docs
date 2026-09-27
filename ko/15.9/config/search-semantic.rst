@@ -205,8 +205,8 @@ system.properties 설정
        경고와 함께 ``cosinesimil`` 로 대체됩니다(매핑에 반영됨. 변경하려면 인덱스 재작성이 필요)
    * - ``content_chunker.search.knn.k``
      - ``100``
-     - ANN 쿼리당 검색할 이웃 수(딥 페이징 시 자동으로 확대됨. 검색 엔진 측에서 융합하는 경우에는
-       ``rank.fusion.pagination_depth`` 이상이 됨)
+     - ANN 쿼리당 검색할 이웃 수(|Fess| 측에서 융합하는 경우 딥 페이징 시 자동으로 확대됨. 검색 엔진
+       측에서 융합하는 경우에는 이 값이 그대로 사용됨)
    * - ``content_chunker.search.knn.param.ef_search``
      - (미설정)
      - ANN 쿼리의 ``ef_search`` 파라미터
@@ -557,14 +557,13 @@ exact 모드와 ann 모드
   - 구문 분석할 수 없는 쿼리
 
 - 위치 정보 검색(지오 필터) 또는 유사 문서 검색과 조합된 경우에도 스킵됩니다.
-- 깊은 페이지에서는 Rank Fusion 자체가 비활성화됩니다.
+- 깊은 페이지의 처리는 융합을 수행하는 위치에 따라 다릅니다.
 
   - |Fess| 측에서 융합하는 경우(기본값)에는 경계가 ``rank.fusion.window_size``\ (기본값
     ``200``)로 결정되며, 기본 설정에서는 검색 결과의 101번째 이후가 키워드 검색만의 결과가 됩니다.
-  - 검색 엔진 측에서 융합하는 경우(``rank.fusion.engine.enabled=true``)에는 경계가
-    ``rank.fusion.pagination_depth``\ (기본값 ``200``)입니다. 시작 위치+페이지 크기가 이 값을
-    초과하는 페이지는 |Fess| 측의 융합으로 처리되며, 위의 ``rank.fusion.window_size`` 경계가
-    적용됩니다.
+  - 검색 엔진 측에서 융합하는 경우(``rank.fusion.engine.enabled=true``)에는 모든 페이지가
+    융합되지만, 페이징은 ``rank.fusion.pagination_depth``\ (기본값 ``1000``)건에서 끝나며 그
+    이후의 페이지는 요청할 수 없습니다.
 
   자세한 내용은 :doc:`rank-fusion` 을 참조하세요.
 - 임베딩 프로바이더에 연결할 수 없거나 검색 오류가 발생한 경우, |Fess|\ 는 자동으로 키워드

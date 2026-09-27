@@ -175,7 +175,7 @@ The settings go in ``fess_config.properties`` (a change requires a restart of |F
     rank.fusion.combination.technique=rrf
     rank.fusion.normalization.technique=min_max
     rank.fusion.combination.weights=
-    rank.fusion.pagination_depth=200
+    rank.fusion.pagination_depth=1000
 
 .. list-table::
    :header-rows: 1
@@ -197,8 +197,8 @@ The settings go in ``fess_config.properties`` (a change requires a restart of |F
      - (empty)
      - Weight per searcher, as comma-separated ``name:weight`` pairs (for example ``default:0.7,semantic_chunk:0.3``). Each weight must be between ``0.0`` and ``1.0``, the weights must sum to ``1.0``, and every searcher taking part in the fusion must be named. Empty weights the searchers equally. A value that does not meet these rules is reported with an ERROR log, and that search is fused by |Fess|.
    * - ``rank.fusion.pagination_depth``
-     - ``200``
-     - How many results each searcher contributes to the fusion per shard. It bounds how deep a client can page and the set of documents that are fused.
+     - ``1000``
+     - How many results each searcher contributes to the fusion per shard. It bounds how deep a client can page and the set of documents that are fused: a search fused in the search engine pages through at most this many results. The value sent to the search engine never exceeds ``indexer.max.result.window.size``.
 
 .. note::
 
@@ -212,9 +212,6 @@ instead.
 - A search that includes advanced search parameters (``as.*``)
 - A search that specifies a sort order, a geolocation search or a similar-document search. These
   skip semantic search altogether, so the results are keyword-only (see :doc:`search-semantic`).
-- A page whose start position plus page size exceeds ``rank.fusion.pagination_depth`` (a DEBUG log
-  is written for each such search). Fusion in |Fess| then applies the ``rank.fusion.window_size``
-  boundary, so with the default settings the results are keyword-only.
 - A ``rank.fusion.combination.weights`` value that does not meet the rules above
 - ``z_score`` normalization combined with ``geometric_mean`` or ``harmonic_mean`` (an ERROR log
   names both settings)
@@ -235,8 +232,20 @@ Keep the following in mind when the search engine performs the fusion.
   provider's own timeout (for example ``content_chunker.embedding.ollama.timeout``).
 - ``rank.fusion.window_size`` and ``rank.fusion.threads`` are used only when |Fess| performs the
   fusion.
-- The ``k`` of the semantic searcher's knn query (the number of neighbors per shard) becomes the
-  larger of ``content_chunker.search.knn.k`` and ``rank.fusion.pagination_depth``. A vector search
+- A fused search pages through at most ``rank.fusion.pagination_depth`` results, because the
+  search engine fuses only the top ``rank.fusion.pagination_depth`` results of each searcher per
+  shard. The page count, the next-page link and the page numbers stop there, and a page that
+  starts beyond it is refused with the same error as a page beyond ``index.max_result_window`` in
+  any other search. A page that starts after the last fused result but within that limit (for
+  example, from an outdated link) is returned empty. Searches that are not fused in the search
+  engine page up to ``index.max_result_window`` as before.
+- The total hit count is exact while it is below ``rank.fusion.pagination_depth``. At or above it,
+  the search engine can count fewer hits than actually match, so the count is reported as a lower
+  bound (in the search API, ``record_count_relation`` is ``GREATER_THAN_OR_EQUAL_TO``).
+- Raising ``rank.fusion.pagination_depth`` lets users page deeper, but every fused search collects
+  that many results per searcher and shard, so it makes every search slower, not only deep pages.
+- The ``k`` of the semantic searcher's knn query (the number of neighbors per shard) is
+  ``content_chunker.search.knn.k``. A vector search
   returns neighbors even when their similarity is low, so without
   ``content_chunker.search.min_score`` the total hit count includes those vector hits, and on a
   small index it can cover most of the documents the user can see. Set
@@ -419,9 +428,9 @@ Search Results Differ from Expectations
 5. On deep pages (where ``start position × 2`` is greater than or equal to
    ``rank.fusion.window_size``, which by default means from the 101st result onward), fusion is
    not performed and only the main searcher is used. If you want fused results on more pages,
-   increase ``rank.fusion.window_size``. When the search engine performs the fusion, a page whose
-   start position plus page size exceeds ``rank.fusion.pagination_depth`` is fused by |Fess|
-   instead, so increase ``rank.fusion.pagination_depth`` as well.
+   increase ``rank.fusion.window_size``. This boundary does not exist when the search
+   engine performs the fusion: every page is fused, up to ``rank.fusion.pagination_depth``
+   results (see :ref:`rank-fusion-engine`).
 
 Slow Search
 -----------
@@ -443,6 +452,10 @@ Slow Search
 
    Note that this also lowers the maximum number of results that can be requested per page. A
    restart is required after changing these settings.
+
+3. When the search engine performs the fusion, reduce ``rank.fusion.pagination_depth``. This
+   also lowers how deep users can page through fused results. A restart is required after
+   changing it.
 
 Out of Memory
 -------------

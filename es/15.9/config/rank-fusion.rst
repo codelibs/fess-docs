@@ -179,7 +179,7 @@ Los ajustes se escriben en ``fess_config.properties`` (un cambio requiere reinic
     rank.fusion.combination.technique=rrf
     rank.fusion.normalization.technique=min_max
     rank.fusion.combination.weights=
-    rank.fusion.pagination_depth=200
+    rank.fusion.pagination_depth=1000
 
 .. list-table::
    :header-rows: 1
@@ -201,8 +201,8 @@ Los ajustes se escriben en ``fess_config.properties`` (un cambio requiere reinic
      - (vacío)
      - Peso de cada buscador, como pares ``nombre:peso`` separados por comas (por ejemplo, ``default:0.7,semantic_chunk:0.3``). Cada peso debe estar entre ``0.0`` y ``1.0``, los pesos deben sumar ``1.0`` y deben indicarse todos los buscadores que participan en la fusión. Si está vacío, los buscadores tienen el mismo peso. Un valor que no cumple estas reglas se notifica con un registro ERROR, y esa búsqueda la fusiona |Fess|.
    * - ``rank.fusion.pagination_depth``
-     - ``200``
-     - Cuántos resultados aporta cada buscador a la fusión por shard. Limita la profundidad hasta la que un cliente puede paginar y el conjunto de documentos que se fusionan.
+     - ``1000``
+     - Cuántos resultados aporta cada buscador a la fusión por shard. Limita la profundidad hasta la que un cliente puede paginar y el conjunto de documentos que se fusionan: una búsqueda fusionada en el motor de búsqueda puede paginar como máximo esta cantidad de resultados. El valor enviado al motor de búsqueda nunca supera ``indexer.max.result.window.size``.
 
 .. note::
 
@@ -218,10 +218,6 @@ resultados en su lugar.
 - Una búsqueda que especifica un criterio de ordenación, una búsqueda por geolocalización o una
   búsqueda de documentos similares. Estas omiten por completo la búsqueda semántica, por lo que
   los resultados provienen solo de la búsqueda por palabras clave (consulte :doc:`search-semantic`).
-- Una página cuya posición de inicio más el tamaño de página supera
-  ``rank.fusion.pagination_depth`` (se escribe un registro DEBUG en cada una de esas búsquedas). En ese caso, la
-  fusión en |Fess| aplica el límite de ``rank.fusion.window_size``, por lo que con los ajustes
-  predeterminados los resultados provienen solo de la búsqueda por palabras clave.
 - Un valor de ``rank.fusion.combination.weights`` que no cumple las reglas anteriores
 - La normalización ``z_score`` combinada con ``geometric_mean`` o ``harmonic_mean`` (un registro
   ERROR nombra ambas configuraciones)
@@ -243,8 +239,23 @@ Tenga en cuenta lo siguiente cuando la fusión la realiza el motor de búsqueda.
   ``content_chunker.embedding.ollama.timeout``).
 - ``rank.fusion.window_size`` y ``rank.fusion.threads`` solo se utilizan cuando la fusión la
   realiza |Fess|.
-- El ``k`` de la consulta knn del buscador semántico (el número de vecinos por shard) pasa a ser
-  el mayor entre ``content_chunker.search.knn.k`` y ``rank.fusion.pagination_depth``. Una búsqueda
+- Una búsqueda fusionada puede paginar como máximo ``rank.fusion.pagination_depth`` resultados,
+  porque el motor de búsqueda solo fusiona los primeros ``rank.fusion.pagination_depth``
+  resultados de cada buscador por shard. El número de páginas, el enlace a la página siguiente y
+  los números de página se detienen ahí, y una página que empieza más allá se rechaza con el mismo
+  error que, en cualquier otra búsqueda, una página más allá de ``index.max_result_window``. Una
+  página que empieza después del último resultado fusionado pero dentro de ese límite (por
+  ejemplo, desde un enlace obsoleto) se devuelve vacía. Las búsquedas que no se fusionan en el
+  motor de búsqueda pueden paginar hasta ``index.max_result_window``, como antes.
+- El número total de resultados es exacto mientras sea inferior a
+  ``rank.fusion.pagination_depth``. A partir de ese valor, el motor de búsqueda puede contar menos
+  resultados de los que realmente coinciden, por lo que el número se informa como un límite
+  inferior (en la API de búsqueda, ``record_count_relation`` es ``GREATER_THAN_OR_EQUAL_TO``).
+- Aumentar ``rank.fusion.pagination_depth`` permite paginar más a fondo, pero cada búsqueda
+  fusionada recopila esa cantidad de resultados por buscador y shard, por lo que todas las
+  búsquedas se vuelven más lentas, no solo las páginas profundas.
+- El ``k`` de la consulta knn del buscador semántico (el número de vecinos por shard) es
+  ``content_chunker.search.knn.k``. Una búsqueda
   vectorial devuelve vecinos aunque su similitud sea baja, por lo que, sin
   ``content_chunker.search.min_score``, el número total de resultados incluye esos resultados
   vectoriales y, en un índice pequeño, puede abarcar la mayoría de los documentos que el usuario
@@ -439,9 +450,8 @@ Los resultados de búsqueda difieren de lo esperado
    ``rank.fusion.window_size``; de forma predeterminada, a partir del resultado 101), la fusión
    no se realiza y solo se utiliza el buscador principal. Si desea resultados fusionados en más
    páginas, aumente ``rank.fusion.window_size``. Cuando la fusión la realiza el motor de
-   búsqueda, una página cuya posición de inicio más el tamaño de página supera
-   ``rank.fusion.pagination_depth`` la fusiona |Fess| en su lugar, por lo que aumente también
-   ``rank.fusion.pagination_depth``.
+   búsqueda, este límite no existe: se fusionan todas las páginas, hasta
+   ``rank.fusion.pagination_depth`` resultados (consulte :ref:`rank-fusion-engine`).
 
 La búsqueda es lenta
 --------------------
@@ -463,6 +473,10 @@ La búsqueda es lenta
 
    Tenga en cuenta que el número máximo de resultados que se pueden solicitar por página también
    se reduce. Tras aplicar la configuración es necesario reiniciar.
+
+3. Cuando la fusión la realiza el motor de búsqueda, reducir ``rank.fusion.pagination_depth``.
+   Esto también reduce la profundidad hasta la que se pueden paginar los resultados fusionados.
+   Tras cambiarlo es necesario reiniciar.
 
 Memoria insuficiente
 --------------------
