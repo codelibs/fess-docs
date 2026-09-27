@@ -17,8 +17,8 @@
 .. note::
 
    静态主题可在 |Fess| 15.7 及以上版本中使用，并在 15.9 中成为默认的
-   搜索界面。替换搜索界面 JSP 的 JAR 主题插件在 15.9 中不再改变搜索界面；
-   参见 `JAR 主题插件（旧版）`_ 。
+   搜索界面。替换搜索界面 JSP 的 JAR 主题插件已在 15.9 中删除；
+   参见 `JAR 主题插件（已在 15.9 中删除）`_ 。
 
 静态主题
 ========
@@ -252,120 +252,29 @@
    由于内置主题遵循其所属 |Fess| 版本的 ``/api/v2/*`` API，每次升级
    |Fess| 后，请用内置主题的新副本替换原副本，并重新应用您的修改。
 
-JAR 主题插件（旧版）
-====================
+JAR 主题插件（已在 15.9 中删除）
+==================================
 
-.. warning::
+将 JSP、CSS、图片放入 ``fess-theme-*`` 的 JAR 中，并作为与虚拟主机的键同名的主题来应用的
+JAR 主题插件种类，已在 |Fess| 15.9 中删除。15.9 不会展开 JAR 主题，也不会在任何界面中使用它。
 
-   自 |Fess| 15.9 起，搜索界面始终由静态主题提供，因此 JAR 主题插件不再
-   改变搜索界面。JAR 主题提供的 JSP 中，只有登录界面（ ``/login/`` ）的
-   JSP 仍会被使用。请将设计迁移到静态主题；参见 `自定义内置主题`_ 。
+- 即使从管理界面的「系统」→「插件」安装，它也只会作为种类为 ``jar`` 的通用 JAR 放入
+  ``app/WEB-INF/plugin/`` ，界面不会有任何变化。从旧版本遗留下来的 ``fess-theme-*.jar``
+  也会以同样的方式显示，可以在该界面或使用 ``bin/fess-setup remove plugin <name>`` 删除。
+- ``bin/fess-setup`` 不会在列表中显示 ``fess-theme-*`` ，也不会安装它。
 
-JAR 主题插件是按主题名称覆盖 |Fess| 本体的 ``view`` / ``css`` / ``js`` /
-``images`` 目录的插件。关于插件的一般结构和构建方法，也请参考
-:doc:`plugin-architecture`。
+请将在 JAR 主题中所做的修改迁移到静态主题。
 
-结构
-----
-
-::
-
-    fess-theme-example/
-    ├── pom.xml
-    └── src/main/resources/
-        ├── view/      # JSP 文件(search.jsp, index.jsp, header.jsp 等)
-        ├── css/       # CSS 文件(style.css 等)
-        ├── js/        # JavaScript 文件
-        └── images/    # 图片文件(logo.png 等)
-
-.. note::
-
-   视图（模板）为 JSP 格式。资源的顶层目录仅识别 ``view`` / ``css`` /
-   ``js`` / ``images`` 这 4 个。构件名称必须以 ``fess-theme-`` 开头。
-
-pom.xml
--------
-
-插件以 ``fess-parent`` 作为父 POM，构建为 jar。由于主题仅由资源构成，
-通常不需要声明额外的依赖关系。
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                                 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-
-        <artifactId>fess-theme-example</artifactId>
-        <version>15.9.0</version>
-        <packaging>jar</packaging>
-
-        <parent>
-            <groupId>org.codelibs.fess</groupId>
-            <artifactId>fess-parent</artifactId>
-            <version>15.9.0</version>
-            <relativePath />
-        </parent>
-    </project>
-
-CSS 与图片的自定义
-------------------
-
-JSP 基于 Bootstrap 构建。可以通过覆盖 CSS 来更改配色和布局，或者替换
-``images/logo.png`` 来更改徽标。自 15.9 起，这只影响登录界面；搜索界面
-是静态主题（参见 `自定义内置主题`_ ）。
-
-构建与安装
-----------
-
-::
-
-    mvn clean package
-
-会在 ``target/`` 目录下生成 JAR 文件（例如：``fess-theme-example-15.9.0.jar``）。
-可以从管理界面的"系统"→"插件"进行安装。安装步骤的详细信息请参考
-:doc:`../admin/plugin-guide`。
-
-安装后，JAR 内的各个目录会按主题名称展开到以下位置（主题名称是从构件
-名称中去掉 ``fess-theme-`` 后的部分。在上述示例中为 ``example``）。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - JAR 内的目录
-     - 展开位置
-   * - ``view/``
-     - ``WEB-INF/view/<theme>/``
-   * - ``css/``
-     - ``css/<theme>/``
-   * - ``js/``
-     - ``js/<theme>/``
-   * - ``images/``
-     - ``images/<theme>/``
-
-启用
-----
-
-JAR 主题通过虚拟主机功能来启用。如果使虚拟主机的键与主题名称一致，
-则访问该主机时会应用该主题。
-
-1. 在"系统"→"通用"的虚拟主机设置中，按照 ``Host:localhost:8080=example``
-   这样的格式，将请求的 ``Host`` 请求头与主题名称（虚拟主机的键）对应
-   起来。
-2. 根据需要，也在爬取的 Web 设置等虚拟主机中设置相同的名称（``example``）。
-
-关于虚拟主机的设置方法详情，请参考 :doc:`../admin/general-guide`。
+- 搜索界面的配色、布局和徽标，可以复制内置主题后进行修改（参见 `自定义内置主题`_ ）。
+- 如果曾按虚拟主机更改外观，请安装与虚拟主机名同名的静态主题
+  （参见 :doc:`../config/security-virtual-host` ）。
+- 登录界面（``/login/``）是所有虚拟主机共用的界面，无法通过主题更改。
 
 现有主题示例
 ============
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - 静态主题集
   （收录了 ``codesearch``、``docsearch`` 等多个静态主题）
-- `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__ - JAR 主题
-- `fess-theme-classic <https://github.com/codelibs/fess-theme-classic>`__ - JAR 主题
 
 参考信息
 ========

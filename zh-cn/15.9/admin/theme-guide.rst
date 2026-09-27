@@ -10,7 +10,7 @@
 搜索界面始终是静态主题。未设置默认主题时， |Fess| 使用其内置的静态主题 ``bootstrap`` 。内置主题无法删除或替换；如需修改，请以新名称复制后再修改（参见 :ref:`theme-customize-bundled` ）。
 
 .. note::
-   基于 JSP 的（JAR）主题通过插件管理进行处理，不在本页的介绍范围内。自 15.9 起，它们不再改变搜索界面。
+   基于 JSP 的主题（ ``fess-theme-*`` JAR 主题插件）已在 15.9 中删除。要更改外观，请使用静态主题（参见 :ref:`upgrade-159-static-theme` ）。
    执行本页的操作需要 ``admin-theme`` 角色（仅查看时需要 ``admin-theme-view`` 角色）。
 
 获取主题

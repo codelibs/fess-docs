@@ -35,9 +35,6 @@ DI コンテナ(Lasta Di)によってコンポーネントが読み込まれ、�
    * - Ingest
      - ``fess-ingest-*``
      - インデックス登録時のドキュメント加工
-   * - テーマ
-     - ``fess-theme-*``
-     - 検索画面デザインのカスタマイズ
    * - サムネイル
      - ``fess-thumbnail-*``
      - サムネイル生成方式の追加
@@ -53,6 +50,11 @@ DI コンテナ(Lasta Di)によってコンポーネントが読み込まれ、�
    * - SSO
      - ``fess-sso-*``
      - ``sso.type`` で選択されるシングルサインオン認証方式の追加
+
+.. note::
+
+   JSP を提供する ``fess-theme-*`` (JAR テーマ)の種類は 15.9 で削除されました。
+   検索画面の見た目は、プラグインではなく静的テーマで変えます(:doc:`theme-development` を参照)。
 
 プラグイン構造
 ==============
@@ -347,8 +349,6 @@ Fess本体との依存
      - Git リポジトリコネクター
    * - ``fess-llm-openai``
      - OpenAI LLM プロバイダー
-   * - ``fess-theme-*``
-     - カスタムテーマ
 
 このほかにも、``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint`` などのデータストアコネクターや、

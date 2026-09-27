@@ -51,10 +51,12 @@ is an object with the following fields.
    * - Field
      - Description
    * - ``type``
-     - The artifact type ID. One of ``fess-ds`` (data store), ``fess-theme`` (theme),
+     - The artifact type ID. One of ``fess-ds`` (data store),
        ``fess-ingest`` (ingest), ``fess-script`` (script), ``fess-webapp`` (web app),
        ``fess-thumbnail`` (thumbnail), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
-       or ``jar`` (generic JAR not matching any of the above).
+       ``fess-storage`` (storage), ``fess-sso`` (SSO),
+       or ``jar`` (generic JAR not matching any of the above). ``fess-theme`` was removed
+       in 15.9, and a ``fess-theme-*`` JAR is reported as ``jar``.
    * - ``id``
      - Identifier in ``{name}:{version}`` format.
    * - ``name``

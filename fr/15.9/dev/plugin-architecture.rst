@@ -37,9 +37,6 @@ suivants :
    * - Ingest
      - ``fess-ingest-*``
      - Traitement des documents lors de leur enregistrement dans l'index
-   * - Thème
-     - ``fess-theme-*``
-     - Personnalisation du design de l'écran de recherche
    * - Miniature
      - ``fess-thumbnail-*``
      - Ajout de méthodes de génération de miniatures
@@ -55,6 +52,12 @@ suivants :
    * - SSO
      - ``fess-sso-*``
      - Ajout d'une méthode d'authentification Single Sign-On sélectionnée par ``sso.type``
+
+.. note::
+
+   Le type ``fess-theme-*`` (thème JAR), qui fournissait des JSP, a été supprimé en 15.9.
+   L'apparence de l'écran de recherche se modifie avec un thème statique, et non avec un
+   plugin (voir :doc:`theme-development`).
 
 Structure d'un plugin
 ======================
@@ -366,8 +369,6 @@ exemples représentatifs (cette liste n'est pas exhaustive) :
      - Connecteur de dépôt Git
    * - ``fess-llm-openai``
      - Fournisseur LLM OpenAI
-   * - ``fess-theme-*``
-     - Thèmes personnalisés
 
 D'autres connecteurs DataStore tels que ``fess-ds-csv`` / ``fess-ds-db`` /
 ``fess-ds-json`` / ``fess-ds-microsoft365`` / ``fess-ds-sharepoint``, ainsi

@@ -34,9 +34,6 @@
    * - Ingest
      - ``fess-ingest-*``
      - 索引注册时对文档进行加工处理
-   * - 主题
-     - ``fess-theme-*``
-     - 自定义搜索界面设计
    * - 缩略图
      - ``fess-thumbnail-*``
      - 添加缩略图生成方式
@@ -52,6 +49,11 @@
    * - SSO
      - ``fess-sso-*``
      - 添加由 ``sso.type`` 选择的单点登录认证方式
+
+.. note::
+
+   提供 JSP 的 ``fess-theme-*`` （JAR 主题）种类已在 15.9 中删除。
+   搜索界面的外观不是通过插件，而是通过静态主题来更改（参见 :doc:`theme-development` ）。
 
 插件结构
 ========
@@ -343,8 +345,6 @@ DI容器注册
      - Git 仓库连接器
    * - ``fess-llm-openai``
      - OpenAI LLM 提供方
-   * - ``fess-theme-*``
-     - 自定义主题
 
 除此之外，还公开了 ``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint`` 等数据存储连接器，以及

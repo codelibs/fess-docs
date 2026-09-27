@@ -10,7 +10,7 @@ La fonctionnalité de thèmes permet de gérer les « thèmes statiques », c'es
 L'écran de recherche est toujours un thème statique. Lorsqu'aucun thème par défaut n'est défini, |Fess| utilise ``bootstrap``, le thème statique fourni avec lui. Le thème fourni ne peut être ni supprimé ni remplacé ; pour le modifier, copiez-le sous un nouveau nom (voir :ref:`theme-customize-bundled`).
 
 .. note::
-   Les thèmes basés sur JSP (JAR) sont gérés via la page de configuration des plugins et ne font pas l'objet de cette page. Depuis la version 15.9, ils ne modifient plus l'écran de recherche.
+   Les thèmes basés sur JSP (plugins de thème JAR ``fess-theme-*``) ont été supprimés en 15.9. Pour modifier l'apparence, utilisez un thème statique (voir :ref:`upgrade-159-static-theme`).
    Pour effectuer les opérations décrites sur cette page, le rôle ``admin-theme`` est requis (le rôle ``admin-theme-view`` suffit pour la consultation seule).
 
 Obtenir un thème

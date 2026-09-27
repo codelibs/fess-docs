@@ -63,8 +63,9 @@ No es necesario establecer el tema como predeterminado. Consulte :ref:`theme-cus
 
 .. note::
 
-   Al guardar la configuración se siguen generando archivos JSP en ``WEB-INF/view/nombre_host_virtual``, pero desde |Fess| 15.9 la pantalla de búsqueda ya no los utiliza.
-   Solo la pantalla de inicio de sesión (``/login/``) se sigue generando a partir de ellos.
+   Desde |Fess| 15.9, al guardar la configuración ya no se generan archivos JSP en ``WEB-INF/view/nombre_host_virtual``.
+   La pantalla de inicio de sesión (``/login/``) es la misma para todos los hosts virtuales (``WEB-INF/view/admin/login/``) y no se puede cambiar por host virtual.
+   El aspecto de cada host virtual se cambia con un tema estático con el mismo nombre que el host virtual, como se describe arriba.
 
 
 Configuración de Rastreo

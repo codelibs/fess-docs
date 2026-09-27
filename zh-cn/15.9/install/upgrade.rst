@@ -822,7 +822,23 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
 不再显示。请在静态主题中进行修改：按照 :ref:`theme-customize-bundled` 的说明复制内置主题并
 修改副本，或者从管理界面的「系统」→「主题」或使用 ``bin/fess-setup install theme <name>``
 安装已发布的主题。按虚拟主机区分的外观现在是以虚拟主机命名的静态主题；参阅
-:doc:`../config/security-virtual-host` 。登录界面（ ``/login/`` ）仍然是 JSP。
+:doc:`../config/security-virtual-host` 。
+
+以下两项也已不再提供。
+
+- 按虚拟主机区分的登录界面。在 15.8 之前，保存「系统」→「常规」时，包括登录界面在内的 JSP
+  会被复制到 ``WEB-INF/view/<虚拟主机名>/`` ，可以按虚拟主机分别编辑。15.9 不再创建这些副本。
+  登录界面（ ``/login/`` ）仍然是 JSP，但所有虚拟主机都显示共用的 ``WEB-INF/view/admin/login/``
+  中的界面。以前复制的 JSP 不会被使用。
+- JAR 主题插件（ ``fess-theme-*`` ）。即使安装，它也只会作为种类为 ``jar`` 的通用 JAR 放置，
+  界面不会改变。遗留的 JAR 可以在「系统」→「插件」页面或使用
+  ``bin/fess-setup remove plugin <name>`` 删除（参见 :doc:`../dev/theme-development` ）。
+
+如果在 15.8 中曾在 JSP 的搜索结果中显示自定义字段，除了 ``query.additional.response.fields``
+之外，还请在 ``query.additional.api.response.fields`` 中添加相同的字段。静态主题从
+``/api/v2/search`` 获取搜索结果。 ``query.additional.response.fields`` 只是增加从搜索引擎
+获取的字段，而该 API 在响应中只包含 ``query.additional.api.response.fields`` 中列出的字段
+（参见 :doc:`../config/search-advanced` ）。另外，请修改主题以显示该字段。
 
 客户端看到的变化
 ~~~~~~~~~~~~~~~~

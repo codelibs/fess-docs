@@ -63,8 +63,9 @@ Das Theme muss nicht als Standard festgelegt werden. Wie Sie ein Theme aus dem m
 
 .. note::
 
-   Beim Speichern der Konfiguration werden weiterhin JSPs unter ``WEB-INF/view/VirtuellerHostname`` generiert, aber seit |Fess| 15.9 verwendet der Suchbildschirm sie nicht mehr.
-   Nur der Anmeldebildschirm (``/login/``) wird noch aus ihnen gerendert.
+   Seit |Fess| 15.9 werden beim Speichern der Konfiguration keine JSPs mehr unter ``WEB-INF/view/VirtuellerHostname`` generiert.
+   Der Anmeldebildschirm (``/login/``) ist für alle virtuellen Hosts derselbe (``WEB-INF/view/admin/login/``) und kann nicht pro virtuellem Host geändert werden.
+   Ein eigenes Aussehen pro virtuellem Host erhalten Sie, wie oben beschrieben, mit einem statischen Theme, das nach dem virtuellen Host benannt ist.
 
 
 Crawl-Konfiguration

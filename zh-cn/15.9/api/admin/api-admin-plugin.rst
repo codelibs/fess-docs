@@ -51,10 +51,12 @@ Plugin API是用于管理 |Fess| 插件（构件）的API。
    * - 字段
      - 说明
    * - ``type``
-     - 构件的种类ID。取值为 ``fess-ds`` （数据存储）、``fess-theme`` （主题）、
+     - 构件的种类ID。取值为 ``fess-ds`` （数据存储）、
        ``fess-ingest`` （Ingest）、``fess-script`` （脚本）、``fess-webapp`` （Web应用）、
        ``fess-thumbnail`` （缩略图）、``fess-crawler`` （爬虫）、``fess-llm`` （LLM）、
-       ``jar`` （上述以外的通用JAR）之一。
+       ``fess-storage`` （存储）、``fess-sso`` （SSO）、
+       ``jar`` （上述以外的通用JAR）之一。 ``fess-theme`` 已在 15.9 中删除，
+       ``fess-theme-*`` 的 JAR 将作为 ``jar`` 处理。
    * - ``id``
      - 格式为 ``{name}:{version}`` 的标识符。
    * - ``name``

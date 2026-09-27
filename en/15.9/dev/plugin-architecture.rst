@@ -35,9 +35,6 @@ Plugin Types
    * - Ingest
      - ``fess-ingest-*``
      - Processes documents during index registration
-   * - Theme
-     - ``fess-theme-*``
-     - Customizes the design of the search screen
    * - Thumbnail
      - ``fess-thumbnail-*``
      - Adds new thumbnail generation methods
@@ -53,6 +50,12 @@ Plugin Types
    * - SSO
      - ``fess-sso-*``
      - Adds a single sign-on authenticator selected by ``sso.type``
+
+.. note::
+
+   The ``fess-theme-*`` (JAR theme) type, which supplied JSPs, was removed in 15.9.
+   Change the look of the search screen with a static theme, not a plugin
+   (see :doc:`theme-development`).
 
 Plugin Structure
 =================
@@ -364,8 +367,6 @@ representative examples (this is not an exhaustive list):
      - Git repository connector
    * - ``fess-llm-openai``
      - OpenAI LLM provider
-   * - ``fess-theme-*``
-     - Custom themes
 
 In addition, Data Store connectors such as ``fess-ds-csv`` /
 ``fess-ds-db`` / ``fess-ds-json`` / ``fess-ds-microsoft365`` /

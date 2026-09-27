@@ -89,7 +89,7 @@ Lorsqu'une requête arrive, LoadControlFilter la traite dans l'ordre suivant :
 **Pour les requêtes web :**
 
 - Retourne le code de statut HTTP 429
-- Affiche la page d'erreur (``busy.jsp``)
+- Affiche la page d'erreur du thème
 
 **Pour les requêtes API :**
 

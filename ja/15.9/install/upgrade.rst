@@ -859,8 +859,24 @@ jcifs の既定値のままになります。
 その変更は表示されなくなります。変更は静的テーマで行ってください。同梱のテーマを複製して変更するか
 （ :ref:`theme-customize-bundled` を参照）、公開されているテーマを管理画面の「システム」>「テーマ」または
 ``bin/fess-setup install theme <name>`` でインストールします。仮想ホストごとの見た目は、仮想ホスト名と
-同じ名前の静的テーマで変えます（ :doc:`../config/security-virtual-host` を参照）。ログイン画面
-（ ``/login/`` ）は引き続き JSP です。
+同じ名前の静的テーマで変えます（ :doc:`../config/security-virtual-host` を参照）。
+
+次の 2 つも無くなりました。
+
+- 仮想ホストごとのログイン画面。15.8 までは「システム」>「全般」を保存すると、ログイン画面を含む
+  JSP が ``WEB-INF/view/<仮想ホスト名>/`` にコピーされ、仮想ホストごとに編集できました。15.9 は
+  このコピーを作りません。ログイン画面（ ``/login/`` ）は引き続き JSP ですが、すべての仮想ホストで
+  共通の ``WEB-INF/view/admin/login/`` のものが表示されます。以前にコピーされた JSP は使われません。
+- JAR テーマプラグイン（ ``fess-theme-*`` ）。インストールしても種類 ``jar`` の汎用 JAR として
+  置かれるだけで、画面は変わりません。残っている JAR は「システム」>「プラグイン」ページ、または
+  ``bin/fess-setup remove plugin <name>`` で削除できます（ :doc:`../dev/theme-development` を参照）。
+
+15.8 で JSP の検索結果に独自のフィールドを表示していた場合は、 ``query.additional.response.fields``
+に加えて ``query.additional.api.response.fields`` にも同じフィールドを追加してください。静的テーマは
+検索結果を ``/api/v2/search`` から取得します。 ``query.additional.response.fields`` は検索エンジンから
+取得するフィールドを追加するだけで、この API が応答に含めるのは ``query.additional.api.response.fields``
+に列挙されたフィールドだけです（ :doc:`../config/search-advanced` を参照）。そのフィールドを表示するように
+テーマも変更してください。
 
 クライアントから見た変化
 ~~~~~~~~~~~~~~~~~~~~~~~~

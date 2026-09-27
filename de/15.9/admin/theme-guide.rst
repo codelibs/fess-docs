@@ -10,7 +10,7 @@ Die Theme-Funktion verwaltet „statische Themes" – Pakete aus statischen Asse
 Der Suchbildschirm ist immer ein statisches Theme. Ist kein Standardtheme festgelegt, verwendet |Fess| ``bootstrap``, das mitgelieferte statische Theme. Das mitgelieferte Theme kann weder gelöscht noch ersetzt werden; um es zu ändern, kopieren Sie es unter einem neuen Namen (siehe :ref:`theme-customize-bundled`).
 
 .. note::
-   JSP-basierte (JAR-)Themes werden über die Plug-in-Verwaltung behandelt und sind nicht Gegenstand dieser Seite. Seit 15.9 ändern sie den Suchbildschirm nicht mehr.
+   JSP-basierte Themes (``fess-theme-*``-JAR-Theme-Plugins) wurden in 15.9 entfernt. Verwenden Sie ein statisches Theme, um das Aussehen zu ändern (siehe :ref:`upgrade-159-static-theme`).
    Für die hier beschriebenen Operationen ist die Rolle ``admin-theme`` erforderlich (für reinen Lesezugriff genügt die Rolle ``admin-theme-view``).
 
 Ein Theme beziehen

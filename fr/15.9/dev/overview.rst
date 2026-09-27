@@ -160,7 +160,7 @@ Structure des répertoires
     │   ├── fess_config.properties  # Configuration
     │   └── fess_*.xml              # Configuration DI (app.xml, fess_ds.xml, etc.)
     └── src/main/webapp/
-        └── WEB-INF/view/    # Templates JSP
+        └── WEB-INF/view/    # JSP de l'administration et de la connexion
 
 Points d'extension
 ====================

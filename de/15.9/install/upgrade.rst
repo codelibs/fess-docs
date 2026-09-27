@@ -897,7 +897,26 @@ die Kopie, wie unter :ref:`theme-customize-bundled` beschrieben, oder installier
 veröffentlichtes Theme über „System" → „Theme" in der Verwaltungsoberfläche oder mit
 ``bin/fess-setup install theme <name>``. Ein eigenes Aussehen pro virtuellem Host ist jetzt ein
 statisches Theme, das nach dem virtuellen Host benannt ist; siehe
-:doc:`../config/security-virtual-host`. Die Anmeldeseite (``/login/``) ist weiterhin eine JSP.
+:doc:`../config/security-virtual-host`.
+
+Zwei weitere Dinge entfallen:
+
+- Die Anmeldeseite pro virtuellem Host. Bis 15.8 kopierte das Speichern von „System" → „Allgemein"
+  JSPs einschließlich der Anmeldeseite nach ``WEB-INF/view/<Name des virtuellen Hosts>/``, wo jeder
+  virtuelle Host seine eigene Kopie bearbeiten konnte. 15.9 erstellt diese Kopien nicht mehr. Die
+  Anmeldeseite (``/login/``) ist weiterhin eine JSP, aber alle virtuellen Hosts erhalten dieselbe aus
+  ``WEB-INF/view/admin/login/``. Früher kopierte JSPs werden nicht verwendet.
+- JAR-Theme-Plugins (``fess-theme-*``). Bei der Installation wird ein solches nur als allgemeines JAR
+  vom Typ ``jar`` abgelegt; kein Bildschirm ändert sich. Ein verbliebenes JAR löschen Sie auf der
+  Seite „System" → „Plugin" oder mit ``bin/fess-setup remove plugin <name>`` (siehe
+  :doc:`../dev/theme-development`).
+
+Wenn die JSP-Suchergebnisse in 15.8 ein eigenes Feld anzeigten, fügen Sie dieses Feld zusätzlich zu
+``query.additional.response.fields`` auch zu ``query.additional.api.response.fields`` hinzu. Das
+statische Theme bezieht seine Ergebnisse von ``/api/v2/search``. ``query.additional.response.fields``
+fügt ein Feld nur zu den aus der Suchmaschine abgerufenen Feldern hinzu; die API gibt nur die Felder
+zurück, die in ``query.additional.api.response.fields`` aufgeführt sind (siehe
+:doc:`../config/search-advanced`). Ändern Sie außerdem das Theme so, dass es das Feld anzeigt.
 
 Was Clients sehen
 ~~~~~~~~~~~~~~~~~

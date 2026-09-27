@@ -35,9 +35,6 @@ Artefaktnamens (``PluginHelper.ArtifactType``). Die wichtigsten Typen sind:
    * - Ingest
      - ``fess-ingest-*``
      - Dokumentverarbeitung bei der Index-Registrierung
-   * - Theme
-     - ``fess-theme-*``
-     - Anpassung des Erscheinungsbilds der Suchoberfläche
    * - Thumbnail
      - ``fess-thumbnail-*``
      - Hinzufügen von Verfahren zur Thumbnail-Erzeugung
@@ -53,6 +50,12 @@ Artefaktnamens (``PluginHelper.ArtifactType``). Die wichtigsten Typen sind:
    * - SSO
      - ``fess-sso-*``
      - Hinzufügen eines über ``sso.type`` ausgewählten Single-Sign-On-Verfahrens
+
+.. note::
+
+   Der Typ ``fess-theme-*`` (JAR-Theme), der JSPs bereitstellte, wurde in 15.9 entfernt.
+   Das Aussehen der Suchoberfläche ändern Sie mit einem statischen Theme, nicht mit
+   einem Plugin (siehe :doc:`theme-development`).
 
 Plugin-Struktur
 ===============
@@ -370,8 +373,6 @@ finden Sie repräsentative Beispiele (diese Liste ist nicht vollständig):
      - Git-Repository-Konnektor
    * - ``fess-llm-openai``
      - OpenAI-LLM-Anbieter
-   * - ``fess-theme-*``
-     - Benutzerdefinierte Themes
 
 Darüber hinaus sind DataStore-Konnektoren wie ``fess-ds-csv`` /
 ``fess-ds-db`` / ``fess-ds-json`` / ``fess-ds-microsoft365`` /

@@ -50,10 +50,12 @@ Jedes Element des ``plugins``-Arrays, das von den Auflistungs-Endpunkten (``/ins
    * - Feld
      - Beschreibung
    * - ``type``
-     - Typ-ID des Artefakts. Einer der folgenden Werte: ``fess-ds`` (Datenspeicher), ``fess-theme`` (Theme),
+     - Typ-ID des Artefakts. Einer der folgenden Werte: ``fess-ds`` (Datenspeicher),
        ``fess-ingest`` (Ingest), ``fess-script`` (Skript), ``fess-webapp`` (Web-App),
        ``fess-thumbnail`` (Thumbnail), ``fess-crawler`` (Crawler), ``fess-llm`` (LLM),
-       ``jar`` (allgemeine JAR-Datei für alle anderen Fälle).
+       ``fess-storage`` (Speicher), ``fess-sso`` (SSO),
+       ``jar`` (allgemeine JAR-Datei für alle anderen Fälle). ``fess-theme`` wurde in 15.9
+       entfernt; ein ``fess-theme-*``-JAR wird als ``jar`` behandelt.
    * - ``id``
      - Bezeichner im Format ``{name}:{version}``.
    * - ``name``

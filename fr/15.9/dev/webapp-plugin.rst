@@ -195,13 +195,14 @@ remplacement sera ``fess+systemHelper.xml`` (et non
    Le remplacement (un seul ``+``) remplace **entièrement** la définition
    du composant. Pour cette raison, le fichier de remplacement doit
    contenir tous les éléments ``<postConstruct>`` définis par la définition
-   du cœur. Par exemple, pour remplacer ``systemHelper``, vous devez copier
-   intégralement le mapping des noms de JSP de design
-   (``addDesignJspFileName``) depuis le ``fess.xml`` du cœur. Ces éléments
-   doivent être synchronisés à chaque nouvelle version de |Fess|, et tout
-   oubli empêchera la résolution de certains écrans (``chat``, ``login``,
-   etc.). Ce coût de maintenance explique pourquoi l'ajout est recommandé
-   plutôt que le remplacement.
+   du cœur (par exemple ``queryHelper`` dans ``app.xml``). Ces éléments
+   doivent être synchronisés à chaque nouvelle version de |Fess|. Si le
+   fichier continue d'appeler une méthode supprimée du cœur,
+   l'initialisation de cette définition de composant échoue avec
+   ``BeanMethodNotFoundException``. Par exemple, ``addDesignJspFileName``
+   de ``systemHelper`` a été supprimé en 15.9, si bien qu'un fichier de
+   remplacement qui l'appelle échoue. Ce coût de maintenance explique
+   pourquoi l'ajout est recommandé plutôt que le remplacement.
 
 Ajout d'une API REST (fess_api++.xml)
 ---------------------------------------
@@ -281,14 +282,9 @@ Les plugins d'application Web ne peuvent pas ajouter de vues JSP. En effet,
 les vues JSP sont placées dans ``WEB-INF/view/`` du WAR de |Fess|
 lui-même, alors que le JAR du plugin est monté dans le classpath
 (``WEB-INF/classes``). Pour modifier le design de l'écran de recherche,
-utilisez l'une des approches suivantes :
-
-- **Thème** : personnalise le design (HTML/CSS/JavaScript) de l'écran de
-  recherche. Reportez-vous à :doc:`theme-development`.
-- **Remplacement de systemHelper** : comme décrit ci-dessus dans
-  « Remplacement d'un composant du cœur », vous pouvez modifier le mapping
-  des noms de JSP de design (les fichiers JSP eux-mêmes restent toutefois
-  fournis par |Fess| lui-même).
+utilisez un thème statique. Le thème statique personnalise le design
+(HTML/CSS/JavaScript) de l'écran de recherche. Reportez-vous à
+:doc:`theme-development`.
 
 Build et installation
 ======================

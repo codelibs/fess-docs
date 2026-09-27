@@ -149,7 +149,7 @@ Directory Structure
     │   ├── fess_config.properties  # Configuration
     │   └── fess_*.xml              # DI configuration (app.xml, fess_ds.xml, etc.)
     └── src/main/webapp/
-        └── WEB-INF/view/    # JSP templates
+        └── WEB-INF/view/    # JSPs of the admin and login screens
 
 Extension Points
 =================

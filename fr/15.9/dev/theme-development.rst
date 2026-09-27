@@ -21,8 +21,8 @@ copier le thème fourni et de modifier la copie, comme décrit dans
 
    Les thèmes statiques sont disponibles à partir de |Fess| 15.7 et sont
    devenus l'écran de recherche par défaut en 15.9. Les plugins de thème JAR,
-   qui remplacent les JSP de l'écran de recherche, ne modifient plus l'écran
-   de recherche en 15.9 ; voir `Plugin de thème JAR (legacy)`_.
+   qui remplaçaient les JSP de l'écran de recherche, ont été supprimés en
+   15.9 ; voir `Plugin de thème JAR (supprimé en 15.9)`_.
 
 Thème statique
 ==============
@@ -306,126 +306,35 @@ nom.
    copie du thème fourni et réappliquez vos modifications, car le thème
    fourni suit l'API ``/api/v2/*`` de sa version de |Fess|.
 
-Plugin de thème JAR (legacy)
-============================
+Plugin de thème JAR (supprimé en 15.9)
+======================================
 
-.. warning::
+Le type de plugin de thème JAR, qui regroupait des JSP, du CSS et des
+images dans un JAR ``fess-theme-*`` et les appliquait comme le thème
+portant le même nom que la clé de l'hôte virtuel, a été supprimé dans
+|Fess| 15.9. 15.9 ne déploie plus les thèmes JAR et ne les utilise pour
+aucun écran.
 
-   Depuis |Fess| 15.9, l'écran de recherche est toujours servi par un thème
-   statique ; un plugin de thème JAR ne le modifie donc plus. Parmi les JSP
-   fournies par un thème JAR, seules celles de l'écran de connexion
-   (``/login/``) sont encore utilisées. Transférez le design vers un thème
-   statique ; voir `Personnalisation du thème fourni`_.
+- Si vous en installez un depuis « Système » → « Plugin » dans l'écran
+  d'administration, il est seulement placé dans ``app/WEB-INF/plugin/``
+  comme un JAR générique de type ``jar`` et ne modifie aucun écran. Un
+  ``fess-theme-*.jar`` laissé par une version antérieure s'affiche de la
+  même manière et peut être supprimé depuis cet écran ou avec
+  ``bin/fess-setup remove plugin <name>``.
+- ``bin/fess-setup`` n'affiche pas ``fess-theme-*`` dans ses listes et ne
+  l'installe pas.
 
-Un plugin de thème JAR est un plugin qui remplace les répertoires ``view`` /
-``css`` / ``js`` / ``images`` du cœur de |Fess| pour chaque nom de thème.
-Pour la structure générale des plugins et la méthode de build, reportez-vous
-également à :doc:`plugin-architecture`.
+Reportez dans un thème statique les modifications que vous faisiez avec
+un thème JAR.
 
-Structure
----------
-
-::
-
-    fess-theme-example/
-    ├── pom.xml
-    └── src/main/resources/
-        ├── view/      # Fichiers JSP (search.jsp, index.jsp, header.jsp, etc.)
-        ├── css/       # Fichiers CSS (style.css, etc.)
-        ├── js/        # Fichiers JavaScript
-        └── images/    # Fichiers image (logo.png, etc.)
-
-.. note::
-
-   Les vues (templates) sont au format JSP. Seuls les quatre répertoires de
-   premier niveau ``view`` / ``css`` / ``js`` / ``images`` sont reconnus
-   comme ressources. Le nom de l'artefact doit commencer par
-   ``fess-theme-``.
-
-pom.xml
--------
-
-Le plugin est construit comme un jar ayant ``fess-parent`` pour POM parent.
-Comme le thème est constitué uniquement de ressources, il n'est généralement
-pas nécessaire de déclarer de dépendances supplémentaires.
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                                 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-
-        <artifactId>fess-theme-example</artifactId>
-        <version>15.9.0</version>
-        <packaging>jar</packaging>
-
-        <parent>
-            <groupId>org.codelibs.fess</groupId>
-            <artifactId>fess-parent</artifactId>
-            <version>15.9.0</version>
-            <relativePath />
-        </parent>
-    </project>
-
-Personnalisation du CSS et des images
----------------------------------------
-
-Les JSP sont basées sur Bootstrap. Vous pouvez modifier les couleurs et la
-mise en page en remplaçant le CSS, ou changer le logo en remplaçant
-``images/logo.png``. Depuis la version 15.9, cela ne concerne que l'écran de
-connexion ; l'écran de recherche est un thème statique (voir
-`Personnalisation du thème fourni`_).
-
-Build et installation
------------------------
-
-::
-
-    mvn clean package
-
-Le fichier JAR (par exemple ``fess-theme-example-15.9.0.jar``) est généré
-dans le répertoire ``target/``. Vous pouvez l'installer depuis « Système » →
-« Plugin » dans l'écran d'administration. Pour plus de détails sur la
-procédure d'installation, reportez-vous à :doc:`../admin/plugin-guide`.
-
-Après l'installation, chaque répertoire du JAR est déployé pour le nom de
-thème correspondant aux emplacements suivants (le nom du thème correspond à
-la partie de l'artefact restant après avoir retiré ``fess-theme-`` ; dans
-l'exemple ci-dessus, il s'agit de ``example``).
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Répertoire dans le JAR
-     - Emplacement de déploiement
-   * - ``view/``
-     - ``WEB-INF/view/<theme>/``
-   * - ``css/``
-     - ``css/<theme>/``
-   * - ``js/``
-     - ``js/<theme>/``
-   * - ``images/``
-     - ``images/<theme>/``
-
-Activation
-----------
-
-Un thème JAR s'active à l'aide de la fonctionnalité d'hôte virtuel. Si la clé
-de l'hôte virtuel correspond au nom du thème, le thème est appliqué lors de
-l'accès à cet hôte.
-
-1. Dans les paramètres d'hôte virtuel de « Système » → « Général », associez
-   l'en-tête ``Host`` de la requête au nom du thème (clé de l'hôte virtuel),
-   par exemple ``Host:localhost:8080=example``.
-2. Si nécessaire, définissez également le même nom (``example``) pour
-   l'hôte virtuel des paramètres Web de crawl, entre autres.
-
-Pour plus de détails sur la configuration des hôtes virtuels, reportez-vous à
-:doc:`../admin/general-guide`.
+- Pour les couleurs, la mise en page et le logo de l'écran de recherche,
+  copiez le thème fourni et modifiez-le (voir
+  `Personnalisation du thème fourni`_).
+- Si vous changiez l'apparence par hôte virtuel, installez un thème
+  statique portant le même nom que l'hôte virtuel (voir
+  :doc:`../config/security-virtual-host`).
+- L'écran de connexion (``/login/``) est le même pour tous les hôtes
+  virtuels et ne peut pas être modifié par un thème.
 
 Exemples de thèmes existants
 =============================
@@ -433,10 +342,6 @@ Exemples de thèmes existants
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - Collection de
   thèmes statiques (regroupe plusieurs thèmes statiques tels que
   ``codesearch`` et ``docsearch``)
-- `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__ -
-  Thème JAR
-- `fess-theme-classic <https://github.com/codelibs/fess-theme-classic>`__ -
-  Thème JAR
 
 Informations complémentaires
 =============================

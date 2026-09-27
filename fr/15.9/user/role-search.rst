@@ -34,7 +34,8 @@ En cliquant sur « Changer le mot de passe » dans le menu, l'écran de modifica
 |image1|
 
 Saisissez le mot de passe actuel dans le champ « Mot de passe actuel », le nouveau mot de passe dans le champ « Nouveau mot de passe », confirmez-le dans le champ « Confirmer le nouveau mot de passe », puis cliquez sur le bouton « Mettre à jour » pour mettre à jour le mot de passe.
-Après avoir modifié le mot de passe, vous pouvez revenir à l'écran de recherche en cliquant sur le bouton « Retour ».
+La modification du mot de passe ferme la session : reconnectez-vous avec le nouveau mot de passe.
+Cet écran est la page ``/profile`` du thème de l'écran de recherche, et le mot de passe est modifié via ``POST /api/v2/auth/password`` (voir :doc:`../api/api-auth`).
 
 .. note::
     Le menu « Changer le mot de passe » ne s'affiche que pour les utilisateurs gérés par |Fess| (ainsi que pour les utilisateurs LDAP autorisés à modifier leur mot de passe). Il ne s'affiche pas pour les utilisateurs authentifiés via l'authentification unique.

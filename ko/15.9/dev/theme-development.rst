@@ -18,9 +18,9 @@
 .. note::
 
    정적 테마는 |Fess| 15.7 이후 버전에서 사용할 수 있으며, 15.9 에서 기본
-   검색 화면이 되었습니다. 검색 화면의 JSP 를 교체하는 JAR 테마 플러그인으로는
-   15.9 에서 더 이상 검색 화면을 변경할 수 없습니다.
-   `JAR 테마 플러그인(레거시)`_ 을 참조하십시오.
+   검색 화면이 되었습니다. 검색 화면의 JSP 를 교체하는 JAR 테마 플러그인은
+   15.9 에서 삭제되었습니다.
+   `JAR 테마 플러그인(15.9 에서 삭제)`_ 을 참조하십시오.
 
 정적 테마
 ==========
@@ -264,124 +264,33 @@
    |Fess| 를 업그레이드할 때마다 번들 테마에서 새로 복사본을 만들어 변경 사항을
    다시 적용하십시오.
 
-JAR 테마 플러그인(레거시)
-================================
+JAR 테마 플러그인(15.9 에서 삭제)
+====================================
 
-.. warning::
+JSP·CSS·이미지를 ``fess-theme-*`` JAR 에 넣고, 가상 호스트의 키와 같은 이름의 테마로
+적용하는 JAR 테마 플러그인 종류는 |Fess| 15.9 에서 삭제되었습니다. 15.9 는 JAR 테마를
+전개하지 않으며, 어떤 화면에도 사용하지 않습니다.
 
-   |Fess| 15.9 부터 검색 화면은 항상 정적 테마로 제공되므로, JAR 테마 플러그인으로는
-   더 이상 검색 화면을 변경할 수 없습니다. JAR 테마가 제공하는 JSP 중 여전히
-   사용되는 것은 로그인 화면(``/login/``)의 JSP 뿐입니다. 디자인은 정적 테마로
-   옮기십시오. `번들 테마 커스터마이징`_ 을 참조하십시오.
+- 관리 화면의 「시스템」→「플러그인」에서 설치해도, 종류 ``jar`` 의 범용 JAR 로
+  ``app/WEB-INF/plugin/`` 에 놓일 뿐이며 화면은 아무것도 바뀌지 않습니다. 이전 버전에서
+  남은 ``fess-theme-*.jar`` 도 같은 방식으로 표시되며, 이 화면 또는
+  ``bin/fess-setup remove plugin <name>`` 으로 삭제할 수 있습니다.
+- ``bin/fess-setup`` 은 ``fess-theme-*`` 를 목록에 표시하지 않으며, 설치하지도 않습니다.
 
-JAR 테마 플러그인은 |Fess| 본체의 ``view`` / ``css`` / ``js`` / ``images``
-디렉터리를 테마 이름별로 덮어쓰는 플러그인입니다. 플러그인의 일반적인 구조나
-빌드 방법에 대해서는 :doc:`plugin-architecture` 도 참조하십시오.
+JAR 테마에서 하던 변경은 정적 테마로 옮기십시오.
 
-구조
-----
-
-::
-
-    fess-theme-example/
-    ├── pom.xml
-    └── src/main/resources/
-        ├── view/      # JSP 파일(search.jsp, index.jsp, header.jsp 등)
-        ├── css/       # CSS 파일(style.css 등)
-        ├── js/        # JavaScript 파일
-        └── images/    # 이미지 파일(logo.png 등)
-
-.. note::
-
-   뷰(템플릿)는 JSP 형식입니다. 리소스의 최상위 디렉터리는
-   ``view`` / ``css`` / ``js`` / ``images`` 의 4 가지만 인식됩니다.
-   아티팩트 이름은 ``fess-theme-`` 로 시작해야 합니다.
-
-pom.xml
--------
-
-플러그인은 ``fess-parent`` 를 부모 POM 으로 하는 jar 로 빌드합니다. 테마는
-리소스만으로 구성되므로, 일반적으로 추가 의존 관계를 선언할 필요는 없습니다.
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                                 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-
-        <artifactId>fess-theme-example</artifactId>
-        <version>15.9.0</version>
-        <packaging>jar</packaging>
-
-        <parent>
-            <groupId>org.codelibs.fess</groupId>
-            <artifactId>fess-parent</artifactId>
-            <version>15.9.0</version>
-            <relativePath />
-        </parent>
-    </project>
-
-CSS·이미지 커스터마이징
------------------------
-
-JSP 는 Bootstrap 기반입니다. CSS 를 덮어써서 배색이나 레이아웃을 변경하거나,
-``images/logo.png`` 를 교체하여 로고를 변경할 수 있습니다. 15.9 부터 이는
-로그인 화면에만 영향을 줍니다. 검색 화면은 정적 테마입니다
-(`번들 테마 커스터마이징`_ 참조).
-
-빌드와 설치
---------------------
-
-::
-
-    mvn clean package
-
-``target/`` 디렉터리에 JAR 파일(예: ``fess-theme-example-15.9.0.jar``)이
-생성됩니다. 관리 화면의 [시스템 > 플러그인]에서 설치할 수 있습니다.
-설치 절차의 자세한 내용은 :doc:`../admin/plugin-guide` 를 참조하십시오.
-
-설치하면 JAR 내의 각 디렉터리는 테마 이름별로 다음 위치에 전개됩니다
-(테마 이름은 아티팩트 이름에서 ``fess-theme-`` 를 제외한 부분입니다. 위 예에서는
-``example``).
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - JAR 내 디렉터리
-     - 전개 위치
-   * - ``view/``
-     - ``WEB-INF/view/<theme>/``
-   * - ``css/``
-     - ``css/<theme>/``
-   * - ``js/``
-     - ``js/<theme>/``
-   * - ``images/``
-     - ``images/<theme>/``
-
-활성화
-------
-
-JAR 테마는 가상 호스트 기능을 사용하여 활성화합니다. 가상 호스트의 키를 테마
-이름과 일치시키면, 해당 호스트로의 접속 시 테마가 적용됩니다.
-
-1. [시스템 > 일반]의 가상 호스트 설정에서 ``Host:localhost:8080=example`` 과
-   같이, 요청의 ``Host`` 헤더와 테마 이름(가상 호스트의 키)을 대응시킵니다.
-2. 필요에 따라 크롤링의 웹 설정 등의 가상 호스트에도 같은 이름(``example``)을
-   설정합니다.
-
-가상 호스트 설정 방법의 자세한 내용은 :doc:`../admin/general-guide` 를 참조하십시오.
+- 검색 화면의 배색·레이아웃·로고는 번들 테마를 복사하여 변경합니다
+  (`번들 테마 커스터마이징`_ 참조).
+- 가상 호스트별로 외관을 바꾸던 경우에는 가상 호스트 이름과 같은 이름의 정적 테마를
+  설치합니다(:doc:`../config/security-virtual-host` 참조).
+- 로그인 화면(``/login/``)은 모든 가상 호스트에서 공통인 화면입니다. 테마로 변경할 수
+  없습니다.
 
 기존 테마 예시
 ==============
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - 정적 테마 모음집
   (``codesearch``, ``docsearch`` 등 여러 정적 테마 수록)
-- `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__ - JAR 테마
-- `fess-theme-classic <https://github.com/codelibs/fess-theme-classic>`__ - JAR 테마
 
 참고 정보
 =========

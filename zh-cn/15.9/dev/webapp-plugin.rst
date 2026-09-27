@@ -172,12 +172,12 @@ Web应用插件中最重要的一点，是在 JAR 清单文件中添加
 .. warning::
 
    替换（单个 ``+``）会 **整体** 替换组件定义。因此，替换文件中必须写出
-   核心定义所进行的所有 ``<postConstruct>``\ 。例如，在替换
-   ``systemHelper`` 时，必须将设计 JSP 名称的映射
-   （``addDesignJspFileName``）从核心的 ``fess.xml`` 中全部复制过来并
-   写入。这些内容需要随 |Fess| 的每次发布进行同步，一旦有遗漏，部分画面
-   （如 ``chat`` / ``login`` 等）将无法解析。这一维护成本，正是相比替换
-   更推荐使用添加方式的原因。
+   核心定义所进行的所有 ``<postConstruct>``\ （例如 ``app.xml`` 中的
+   ``queryHelper``）。这些内容需要随 |Fess| 的每次发布进行同步。如果继续
+   调用已从核心中删除的方法，该组件定义将因 ``BeanMethodNotFoundException``
+   而初始化失败。例如，15.9 删除了 ``systemHelper`` 的
+   ``addDesignJspFileName``\ ，因此调用它的替换文件会失败。这一维护成本，
+   正是相比替换更推荐使用添加方式的原因。
 
 REST API的添加（fess_api++.xml）
 ---------------------------------
@@ -253,12 +253,8 @@ REST API的添加（fess_api++.xml）
 
 Web应用插件无法添加 JSP 视图。这是因为 JSP 视图存放在 |Fess| 本体 WAR 的
 ``WEB-INF/view/`` 中，而插件 JAR 是挂载到类路径（``WEB-INF/classes``）
-上的。如果需要修改搜索界面的设计，请使用以下方式之一：
-
-- **主题**：自定义搜索界面的设计（HTML/CSS/JavaScript）。请参考
-  :doc:`theme-development`。
-- **替换 systemHelper**：通过上述"核心组件的替换"方式，可以更改设计
-  JSP 名称的映射（但 JSP 文件本身仍由 |Fess| 本体提供）。
+上的。如果需要修改搜索界面的设计，请使用静态主题。静态主题用于自定义
+搜索界面的设计（HTML/CSS/JavaScript）。请参考 :doc:`theme-development`。
 
 构建与安装
 ==========

@@ -88,7 +88,7 @@ Wenn eine Anfrage eintrifft, verarbeitet LoadControlFilter sie in folgender Reih
 **Für Web-Anfragen:**
 
 - Gibt HTTP 429-Statuscode zurück
-- Zeigt die Fehlerseite (``busy.jsp``) an
+- Zeigt die Fehlerseite des Themes an
 
 **Für API-Anfragen:**
 

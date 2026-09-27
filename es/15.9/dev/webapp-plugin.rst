@@ -195,13 +195,14 @@ propio |Fess|, el archivo de sustitución será ``fess+systemHelper.xml``
    La sustitución (con un único ``+``) reemplaza **por completo** la
    definición del componente. Por ello, el archivo de sustitución debe
    incluir todos los elementos ``<postConstruct>`` que realiza la
-   definición del núcleo. Por ejemplo, al sustituir ``systemHelper``, es
-   necesario copiar y describir todo el mapeo de nombres de JSP de
-   diseño (``addDesignJspFileName``) desde el ``fess.xml`` del núcleo.
-   Esto debe sincronizarse en cada versión de |Fess|, y cualquier
-   omisión hará que algunas pantallas (como ``chat`` o ``login``) no
-   puedan resolverse. Este coste de mantenimiento es la razón por la
-   que se recomienda la adición en lugar de la sustitución.
+   definición del núcleo (por ejemplo, ``queryHelper`` en ``app.xml``).
+   Esto debe sincronizarse en cada versión de |Fess|. Si el archivo
+   sigue llamando a un método que se eliminó del núcleo, la
+   inicialización de esa definición de componente falla con
+   ``BeanMethodNotFoundException``. Por ejemplo, en 15.9 se eliminó
+   ``addDesignJspFileName`` de ``systemHelper``, por lo que un archivo
+   de sustitución que lo llame falla. Este coste de mantenimiento es la
+   razón por la que se recomienda la adición en lugar de la sustitución.
 
 Adición de una API REST (fess_api++.xml)
 -------------------------------------------
@@ -281,14 +282,9 @@ Los plugins de aplicación web no pueden añadir vistas JSP. Esto se debe
 a que las vistas JSP se ubican en ``WEB-INF/view/`` del WAR del propio
 |Fess|, mientras que el JAR del plugin se monta en el classpath
 (``WEB-INF/classes``). Si desea modificar el diseño de la pantalla de
-búsqueda, utilice una de las siguientes opciones:
-
-- **Tema**: personaliza el diseño de la pantalla de búsqueda
-  (HTML/CSS/JavaScript). Consulte :doc:`theme-development`.
-- **Sustitución de systemHelper**: mediante la «sustitución de
-  componentes del núcleo» descrita anteriormente, puede cambiar el
-  mapeo de nombres de JSP de diseño (aunque los propios archivos JSP
-  los proporciona el núcleo de |Fess|).
+búsqueda, utilice un tema estático. El tema estático personaliza el
+diseño de la pantalla de búsqueda (HTML/CSS/JavaScript). Consulte
+:doc:`theme-development`.
 
 Construcción e Instalación
 ============================
