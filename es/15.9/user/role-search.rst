@@ -34,7 +34,8 @@ Al hacer clic en «Cambiar contraseña» dentro del menú, se muestra la pantall
 |image1|
 
 Introduzca la contraseña actual, la nueva contraseña y la confirmación de la nueva contraseña (reintroducida), y haga clic en el botón «Actualizar» para actualizar la contraseña.
-Después de cambiar la contraseña, puede volver a la pantalla de búsqueda haciendo clic en el botón «Volver».
+Al cambiar la contraseña se cierra la sesión, así que vuelva a iniciar sesión con la nueva contraseña.
+Esta pantalla es la página ``/profile`` del tema de la pantalla de búsqueda, y la contraseña se cambia con ``POST /api/v2/auth/password`` (consulte :doc:`../api/api-auth`).
 
 .. note::
     El menú «Cambiar contraseña» solo se muestra para los usuarios administrados por |Fess| (y para los usuarios LDAP a los que se les ha permitido editar). No se muestra para los usuarios autenticados mediante inicio de sesión único.

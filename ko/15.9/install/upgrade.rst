@@ -862,7 +862,25 @@ jcifs 의 기본값으로 동작했습니다. 15.9 는 새 이름을 전달합�
 설명된 대로 번들 테마를 복사하여 그 복사본을 변경하거나, 관리 화면의 「시스템」 > 「테마」 또는
 ``bin/fess-setup install theme <name>`` 으로 공개된 테마를 설치합니다. 가상 호스트별 외관은 이제
 가상 호스트 이름을 딴 정적 테마로 제공됩니다. :doc:`../config/security-virtual-host` 를
-참조하십시오. 로그인 화면( ``/login/`` )은 여전히 JSP 입니다.
+참조하십시오.
+
+다음 2가지도 없어졌습니다.
+
+- 가상 호스트별 로그인 화면. 15.8 까지는 「시스템」 > 「일반」을 저장하면 로그인 화면을 포함한
+  JSP 가 ``WEB-INF/view/<가상 호스트 이름>/`` 에 복사되어, 가상 호스트별로 편집할 수 있었습니다.
+  15.9 는 이 복사본을 만들지 않습니다. 로그인 화면( ``/login/`` )은 여전히 JSP 이지만, 모든 가상
+  호스트에서 공통인 ``WEB-INF/view/admin/login/`` 의 것이 표시됩니다. 이전에 복사된 JSP 는
+  사용되지 않습니다.
+- JAR 테마 플러그인( ``fess-theme-*`` ). 설치해도 종류 ``jar`` 의 범용 JAR 로 놓일 뿐이며,
+  화면은 바뀌지 않습니다. 남아 있는 JAR 는 「시스템」 > 「플러그인」 페이지, 또는
+  ``bin/fess-setup remove plugin <name>`` 으로 삭제할 수 있습니다( :doc:`../dev/theme-development` 참조).
+
+15.8 에서 JSP 검색 결과에 독자적인 필드를 표시하고 있었다면, ``query.additional.response.fields``
+에 더해 ``query.additional.api.response.fields`` 에도 같은 필드를 추가하십시오. 정적 테마는
+검색 결과를 ``/api/v2/search`` 에서 가져옵니다. ``query.additional.response.fields`` 는 검색 엔진에서
+가져오는 필드를 추가할 뿐이며, 이 API 가 응답에 포함하는 것은 ``query.additional.api.response.fields``
+에 나열된 필드뿐입니다( :doc:`../config/search-advanced` 참조). 그 필드를 표시하도록 테마도
+변경하십시오.
 
 클라이언트에서 보이는 변화
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

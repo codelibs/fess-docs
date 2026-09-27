@@ -180,11 +180,12 @@ pom.xml 전체 구성(부모 POM·의존 관계 선언 방법 등)은
 
    교체(단일 ``+``)는 컴포넌트 정의를 **통째로** 교체합니다. 이 때문에
    교체 파일에는 코어 정의가 수행하고 있는 ``<postConstruct>`` 를 모두
-   기술해야 합니다. 예를 들어 ``systemHelper`` 를 교체하는 경우, 디자인
-   JSP 이름 매핑(``addDesignJspFileName``)을 코어의 ``fess.xml`` 로부터
-   전부 복사하여 기술해야 합니다. 이는 |Fess| 릴리스마다 동기화해야 하며,
-   누락이 있으면 일부 화면(``chat`` / ``login`` 등)을 해결할 수 없게
-   됩니다. 이러한 유지보수 비용이 교체보다 추가가 권장되는 이유입니다.
+   기술해야 합니다(예: ``app.xml`` 의 ``queryHelper``). 이는 |Fess|
+   릴리스마다 동기화해야 합니다. 코어에서 삭제된 메서드를 계속 호출하면, 그
+   컴포넌트 정의는 ``BeanMethodNotFoundException`` 으로 초기화에 실패합니다.
+   예를 들어 15.9 에서는 ``systemHelper`` 의 ``addDesignJspFileName`` 이
+   삭제되었기 때문에, 이를 호출하는 교체 파일은 실패합니다. 이러한 유지보수
+   비용이 교체보다 추가가 권장되는 이유입니다.
 
 REST API 추가(fess_api++.xml)
 -------------------------------
@@ -263,13 +264,9 @@ REST API 추가(fess_api++.xml)
 웹앱 플러그인은 JSP 뷰를 추가할 수 없습니다. JSP 뷰는 |Fess| 본체 WAR 의
 ``WEB-INF/view/`` 에 배치되어 있으며, 플러그인 JAR 는 클래스패스
 (``WEB-INF/classes``)에 마운트되기 때문입니다. 검색 화면의 디자인을
-변경하려면 다음 중 하나를 사용합니다:
-
-- **테마**: 검색 화면의 디자인(HTML/CSS/JavaScript)을 커스터마이즈합니다.
-  :doc:`theme-development` 를 참조하십시오.
-- **systemHelper 교체**: 위의 「코어 컴포넌트 교체」를 통해 디자인 JSP
-  이름 매핑을 변경할 수 있습니다(단, JSP 파일 자체는 |Fess| 본체가
-  제공합니다).
+변경하려면 정적 테마를 사용합니다. 정적 테마는 검색 화면의 디자인
+(HTML/CSS/JavaScript)을 커스터마이즈합니다. :doc:`theme-development` 를
+참조하십시오.
 
 빌드와 설치
 ===========

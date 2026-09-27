@@ -864,7 +864,25 @@ or in a JAR theme plugin, those changes no longer show. Make them in a static th
 theme and change the copy, as described in :ref:`theme-customize-bundled`, or install a published
 theme from "System" > "Theme" in the admin UI or with ``bin/fess-setup install theme <name>``. A
 per-virtual-host look is now a static theme named after the virtual host; see
-:doc:`../config/security-virtual-host`. The login screen (``/login/``) is still a JSP.
+:doc:`../config/security-virtual-host`.
+
+Two more things are gone:
+
+- The per-virtual-host login screen. Up to 15.8, saving "System" > "General" copied JSPs,
+  including the login screen, into ``WEB-INF/view/<virtual host name>/``, where each virtual host
+  could edit its own copy. 15.9 no longer makes these copies. The login screen (``/login/``) is
+  still a JSP, but every virtual host gets the same one from ``WEB-INF/view/admin/login/``. JSPs
+  copied earlier are not used.
+- JAR theme plugins (``fess-theme-*``). Installing one only places it as a generic JAR of type
+  ``jar``; no screen changes. Delete a leftover JAR on the "System" > "Plugin" page or with
+  ``bin/fess-setup remove plugin <name>`` (see :doc:`../dev/theme-development`).
+
+If the JSP search results showed a field of your own in 15.8, add that field to
+``query.additional.api.response.fields`` as well as ``query.additional.response.fields``. The static
+theme gets its results from ``/api/v2/search``. ``query.additional.response.fields`` only adds a field
+to what is fetched from the search engine; the API returns only the fields listed in
+``query.additional.api.response.fields`` (see :doc:`../config/search-advanced`). Change the theme to
+show the field as well.
 
 What Clients See
 ~~~~~~~~~~~~~~~~

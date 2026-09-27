@@ -149,7 +149,7 @@
     │   ├── fess_config.properties  # 설정
     │   └── fess_*.xml              # DI 설정(app.xml, fess_ds.xml 등)
     └── src/main/webapp/
-        └── WEB-INF/view/    # JSP 템플릿
+        └── WEB-INF/view/    # 관리 화면과 로그인 화면의 JSP
 
 확장 포인트
 ============

@@ -63,8 +63,9 @@ The theme does not have to be set as the default. See :ref:`theme-customize-bund
 
 .. note::
 
-   Saving the configuration still generates JSPs under ``WEB-INF/view/virtual_host_name``, but since |Fess| 15.9 the search screen no longer uses them.
-   Only the login screen (``/login/``) is still rendered from them.
+   Since |Fess| 15.9, saving the configuration no longer generates JSPs under ``WEB-INF/view/virtual_host_name``.
+   The login screen (``/login/``) is the same page for every virtual host (``WEB-INF/view/admin/login/``) and cannot be changed per virtual host.
+   To give a virtual host its own look, use a static theme named after the virtual host, as described above.
 
 
 Crawl Configuration

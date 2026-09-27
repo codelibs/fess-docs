@@ -149,7 +149,7 @@
     │   ├── fess_config.properties  # 配置
     │   └── fess_*.xml              # DI配置（如app.xml、fess_ds.xml）
     └── src/main/webapp/
-        └── WEB-INF/view/    # JSP模板
+        └── WEB-INF/view/    # 管理界面和登录界面的JSP
 
 扩展点
 ======

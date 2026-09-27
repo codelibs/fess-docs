@@ -10,7 +10,7 @@ La función de temas gestiona los «temas estáticos», que agrupan el aspecto v
 La pantalla de búsqueda es siempre un tema estático. Cuando no hay ningún tema predeterminado configurado, |Fess| utiliza ``bootstrap``, el tema estático incluido con él. El tema incluido no se puede eliminar ni reemplazar; para modificarlo, cópielo con otro nombre (consulte :ref:`theme-customize-bundled`).
 
 .. note::
-   Los temas basados en JSP (JAR) se gestionan desde la administración de complementos y quedan fuera del ámbito de esta página. Desde la versión 15.9 ya no modifican la pantalla de búsqueda.
+   Los temas basados en JSP (plugins de tema JAR ``fess-theme-*``) se eliminaron en 15.9. Para cambiar el aspecto, utilice un tema estático (consulte :ref:`upgrade-159-static-theme`).
    Para realizar las operaciones de esta página se requiere el rol ``admin-theme`` (o el rol ``admin-theme-view`` si solo se necesita acceso de lectura).
 
 Obtención de un tema

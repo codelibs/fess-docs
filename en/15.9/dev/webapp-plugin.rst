@@ -188,14 +188,14 @@ is declared in the |Fess| core's ``fess.xml``, the replacement file is
 
    Replacement (a single ``+``) replaces the component definition
    **in its entirety**. This means the replacement file must include
-   every ``<postConstruct>`` entry that the core definition performs.
-   For example, when replacing ``systemHelper``, you must copy and
-   describe all of the design JSP name mappings
-   (``addDesignJspFileName``) from the core's ``fess.xml``. These must
-   be kept in sync with each |Fess| release, and any omission will
-   make some screens (such as ``chat`` / ``login``) impossible to
-   resolve. This maintenance cost is why addition is recommended over
-   replacement.
+   every ``<postConstruct>`` entry that the core definition performs
+   (for example, ``queryHelper`` in ``app.xml``). These must be kept in
+   sync with each |Fess| release. If the file keeps calling a method
+   that the core removed, the component definition fails to initialize
+   with a ``BeanMethodNotFoundException``. For example, 15.9 removed
+   ``addDesignJspFileName`` from ``systemHelper``, so a replacement file
+   that still calls it fails. This maintenance cost is why addition is
+   recommended over replacement.
 
 Adding a REST API (fess_api++.xml)
 ------------------------------------
@@ -274,14 +274,8 @@ Customizing the Search Screen
 Web App plugins cannot add JSP views. JSP views are located under
 ``WEB-INF/view/`` in the |Fess| core WAR, while plugin JARs are mounted
 onto the classpath (``WEB-INF/classes``). To change the design of the
-search screen, use one of the following:
-
-- **Theme**: Customizes the design (HTML/CSS/JavaScript) of the
-  search screen. See :doc:`theme-development`.
-- **Replacing systemHelper**: Using the "Replacing Core Components"
-  approach described above, you can change the design JSP name
-  mapping (however, the JSP files themselves are still provided by the
-  |Fess| core).
+search screen, use a static theme, which customizes the design
+(HTML/CSS/JavaScript) of the search screen. See :doc:`theme-development`.
 
 Build and Installation
 ========================

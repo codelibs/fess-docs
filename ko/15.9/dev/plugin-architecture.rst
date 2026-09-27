@@ -35,9 +35,6 @@
    * - Ingest
      - ``fess-ingest-*``
      - 인덱스 등록 시 문서 가공
-   * - 테마
-     - ``fess-theme-*``
-     - 검색 화면 디자인 커스터마이징
    * - 썸네일
      - ``fess-thumbnail-*``
      - 썸네일 생성 방식 추가
@@ -53,6 +50,11 @@
    * - SSO
      - ``fess-sso-*``
      - ``sso.type`` 으로 선택되는 싱글 사인온 인증 방식 추가
+
+.. note::
+
+   JSP 를 제공하는 ``fess-theme-*`` (JAR 테마) 종류는 15.9 에서 삭제되었습니다.
+   검색 화면의 외관은 플러그인이 아니라 정적 테마로 변경합니다(:doc:`theme-development` 참조).
 
 플러그인 구조
 ==============
@@ -347,8 +349,6 @@ Fess 본체 의존성
      - Git 리포지토리 커넥터
    * - ``fess-llm-openai``
      - OpenAI LLM 프로바이더
-   * - ``fess-theme-*``
-     - 커스텀 테마
 
 이 밖에도 ``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint`` 등의 데이터스토어 커넥터나,

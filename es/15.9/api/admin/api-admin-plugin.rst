@@ -51,10 +51,12 @@ cuyos elementos son objetos con los siguientes campos.
    * - Campo
      - Descripción
    * - ``type``
-     - ID de tipo del artefacto. Puede ser uno de: ``fess-ds`` (almacén de datos), ``fess-theme`` (tema),
+     - ID de tipo del artefacto. Puede ser uno de: ``fess-ds`` (almacén de datos),
        ``fess-ingest`` (Ingest), ``fess-script`` (script), ``fess-webapp`` (aplicación web),
        ``fess-thumbnail`` (miniatura), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
-       ``jar`` (JAR de propósito general no incluido en los anteriores).
+       ``fess-storage`` (almacenamiento), ``fess-sso`` (SSO),
+       ``jar`` (JAR de propósito general no incluido en los anteriores). ``fess-theme`` se eliminó en
+       15.9, y un JAR ``fess-theme-*`` se trata como ``jar``.
    * - ``id``
      - Identificador con formato ``{name}:{version}``.
    * - ``name``

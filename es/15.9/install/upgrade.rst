@@ -897,8 +897,26 @@ Aplíquelos en un tema estático: copie el tema incluido y modifique la copia, c
 :ref:`theme-customize-bundled`, o instale un tema publicado desde "Sistema" > "Tema" en la pantalla
 de administración o con ``bin/fess-setup install theme <name>``. Un aspecto distinto por host
 virtual es ahora un tema estático con el nombre del host virtual; consulte
-:doc:`../config/security-virtual-host`. La pantalla de inicio de sesión (``/login/``) sigue siendo
-un JSP.
+:doc:`../config/security-virtual-host`.
+
+También desaparecieron estas dos funciones:
+
+- La pantalla de inicio de sesión por host virtual. Hasta 15.8, al guardar "Sistema" > "General" se
+  copiaban los JSP, incluida la pantalla de inicio de sesión, en ``WEB-INF/view/<nombre del host virtual>/``,
+  y se podían editar por host virtual. 15.9 ya no crea esas copias. La pantalla de inicio de sesión
+  (``/login/``) sigue siendo un JSP, pero todos los hosts virtuales muestran el mismo, el de
+  ``WEB-INF/view/admin/login/``. Los JSP copiados anteriormente no se utilizan.
+- Los plugins de tema JAR (``fess-theme-*``). Si instala uno, solo se coloca como un JAR de propósito
+  general del tipo ``jar`` y no cambia ninguna pantalla. Los JAR que queden se pueden eliminar en la
+  página "Sistema" > "Plugin" o con ``bin/fess-setup remove plugin <name>`` (consulte
+  :doc:`../dev/theme-development`).
+
+Si en 15.8 mostraba campos propios en los resultados de búsqueda JSP, añada los mismos campos a
+``query.additional.api.response.fields`` además de a ``query.additional.response.fields``. El tema
+estático obtiene los resultados de búsqueda de ``/api/v2/search``. ``query.additional.response.fields``
+solo añade los campos que se obtienen del motor de búsqueda, y esta API incluye en la respuesta únicamente
+los campos enumerados en ``query.additional.api.response.fields`` (consulte :doc:`../config/search-advanced`).
+Modifique también el tema para que muestre esos campos.
 
 Lo que ven los clientes
 ~~~~~~~~~~~~~~~~~~~~~~~

@@ -192,12 +192,13 @@ die Ersetzungsdatei ``fess+systemHelper.xml`` (nicht
    Das Ersetzen (einzelnes ``+``) ersetzt die Komponentendefinition
    **vollständig**. Aus diesem Grund müssen in der Ersetzungsdatei alle
    ``<postConstruct>``-Einträge, die in der Kerndefinition vorhanden sind,
-   erneut angegeben werden. Wenn Sie beispielsweise ``systemHelper``
-   ersetzen, müssen Sie die Zuordnung der Design-JSP-Namen
-   (``addDesignJspFileName``) vollständig aus der ``fess.xml`` des Kerns
-   kopieren und übernehmen. Diese müssen mit jedem |Fess|-Release
-   synchronisiert werden; fehlt ein Eintrag, können bestimmte Bildschirme
-   (z. B. ``chat`` / ``login``) nicht mehr aufgelöst werden. Dieser
+   erneut angegeben werden (z. B. ``queryHelper`` in ``app.xml``). Diese
+   müssen mit jedem |Fess|-Release synchronisiert werden. Ruft die Datei
+   weiterhin eine Methode auf, die aus dem Kern entfernt wurde, schlägt die
+   Initialisierung der Komponentendefinition mit einer
+   ``BeanMethodNotFoundException`` fehl. So wurde in 15.9
+   ``addDesignJspFileName`` aus ``systemHelper`` entfernt; eine
+   Ersetzungsdatei, die sie noch aufruft, schlägt fehl. Dieser
    Wartungsaufwand ist der Grund, warum das Hinzufügen dem Ersetzen
    vorgezogen werden sollte.
 
@@ -278,15 +279,9 @@ Anpassung der Suchoberfläche
 Webanwendungs-Plugins können keine JSP-Views hinzufügen. JSP-Views befinden
 sich unter ``WEB-INF/view/`` im WAR des |Fess|-Kerns, während das
 Plugin-JAR in den Klassenpfad (``WEB-INF/classes``) gemountet wird. Wenn
-Sie das Design der Suchoberfläche ändern möchten, nutzen Sie eine der
-folgenden Möglichkeiten:
-
-- **Theme**: Passt das Design der Suchoberfläche (HTML/CSS/JavaScript) an.
-  Siehe :doc:`theme-development`.
-- **Ersetzen von systemHelper**: Über das oben beschriebene „Ersetzen von
-  Kernkomponenten" lässt sich die Zuordnung der Design-JSP-Namen ändern
-  (die JSP-Dateien selbst werden jedoch weiterhin vom |Fess|-Kern
-  bereitgestellt).
+Sie das Design der Suchoberfläche ändern möchten, nutzen Sie ein statisches
+Theme. Es passt das Design der Suchoberfläche (HTML/CSS/JavaScript) an.
+Siehe :doc:`theme-development`.
 
 Build und Installation
 =======================

@@ -10,7 +10,7 @@ The Theme feature manages "static themes" — a bundled set of static assets (HT
 The search interface is always a static theme. When no default theme is set, |Fess| uses ``bootstrap``, the static theme bundled with it. The bundled theme cannot be deleted or replaced; to change it, copy it under a new name (see :ref:`theme-customize-bundled`).
 
 .. note::
-   JSP-based (JAR) themes are managed through Plugin Management and are outside the scope of this page. Since 15.9 they no longer change the search interface.
+   JSP-based themes (``fess-theme-*`` JAR theme plugins) were removed in 15.9. Use a static theme to change the look (see :ref:`upgrade-159-static-theme`).
    The ``admin-theme`` role is required to perform operations on this page (the ``admin-theme-view`` role is sufficient for read-only access).
 
 Obtaining a Theme

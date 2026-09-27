@@ -34,7 +34,8 @@ Clicking "Change Password" in the menu displays the password change screen.
 |image1|
 
 Enter your Current Password, New Password, and Confirm New Password (re-enter), then click the Update button to update your password.
-After changing your password, click the Back button to return to the search screen.
+Changing your password logs you out, so log in again with the new password.
+This screen is the ``/profile`` page of the search screen's theme, and the password is changed with ``POST /api/v2/auth/password`` (see :doc:`../api/api-auth`).
 
 .. note::
     The "Change Password" menu item is displayed only for users managed by |Fess| (and LDAP users permitted to edit their password). It is not displayed for users authenticated via single sign-on.

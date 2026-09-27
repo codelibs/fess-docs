@@ -34,7 +34,8 @@ Wenn Sie im Menü auf „Passwort ändern“ klicken, wird der Bildschirm zur Pa
 |image1|
 
 Geben Sie im Feld „Aktuelles Passwort“ Ihr aktuelles Passwort, im Feld „Neues Passwort“ das neue Passwort und im Feld „Neues Passwort bestätigen“ das neue Passwort zur Bestätigung (erneut) ein und klicken Sie auf die Schaltfläche „Aktualisieren“, um das Passwort zu aktualisieren.
-Nach der Passwortänderung können Sie durch Klicken auf die Schaltfläche „Zurück“ zum Suchbildschirm zurückkehren.
+Durch die Passwortänderung werden Sie abgemeldet; melden Sie sich mit dem neuen Passwort erneut an.
+Dieser Bildschirm ist die Seite ``/profile`` des Themes der Suchoberfläche, und das Passwort wird mit ``POST /api/v2/auth/password`` geändert (siehe :doc:`../api/api-auth`).
 
 .. note::
     Das Menü „Passwort ändern“ wird nur für Benutzer angezeigt, die von |Fess| verwaltet werden (sowie für LDAP-Benutzer, deren Bearbeitung erlaubt ist). Für Benutzer, die per Single Sign-On authentifiziert wurden, wird es nicht angezeigt.

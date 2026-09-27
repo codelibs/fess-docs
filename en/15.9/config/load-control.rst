@@ -89,7 +89,7 @@ When a request arrives, LoadControlFilter processes it in the following order:
 **For web requests:**
 
 - Returns HTTP 429 status code
-- Displays the error page (``busy.jsp``)
+- Displays the theme's error page
 
 **For API requests:**
 

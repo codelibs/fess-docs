@@ -19,9 +19,9 @@ is to copy the bundled theme and change the copy, as described in
 .. note::
 
    Static themes are available in |Fess| 15.7 and later, and became the
-   default search screen in 15.9. JAR theme plugins, which replace the
-   JSPs of the search screen, no longer change the search screen in
-   15.9; see `JAR Theme Plugin (Legacy)`_.
+   default search screen in 15.9. JAR theme plugins, which replaced the
+   JSPs of the search screen, were removed in 15.9; see
+   `JAR Theme Plugin (Removed in 15.9)`_.
 
 Static Theme
 ============
@@ -288,123 +288,27 @@ nor replaced by an upload. Copy it under a new name instead.
    |Fess| upgrade and reapply your changes, as the bundled theme follows
    the ``/api/v2/*`` API of its |Fess| version.
 
-JAR Theme Plugin (Legacy)
-=========================
+JAR Theme Plugin (Removed in 15.9)
+==================================
 
-.. warning::
+The JAR theme plugin type, which put JSPs, CSS and images in a ``fess-theme-*`` JAR and
+applied them as the theme named after a virtual host key, was removed in |Fess| 15.9.
+15.9 does not extract a JAR theme and does not use it for any screen.
 
-   Since |Fess| 15.9, the search screen is always served by a static
-   theme, so a JAR theme plugin no longer changes it. Of the JSPs a JAR
-   theme provides, only those of the login screen (``/login/``) are
-   still used. Move the design to a static theme; see
-   `Customizing the Bundled Theme`_.
+- Installing one from "System" > "Plugin" in the admin UI only places it in
+  ``app/WEB-INF/plugin/`` as a generic JAR of type ``jar``; no screen changes. A
+  ``fess-theme-*.jar`` left over from an earlier version is listed the same way, and can be
+  deleted on that page or with ``bin/fess-setup remove plugin <name>``.
+- ``bin/fess-setup`` neither lists nor installs ``fess-theme-*``.
 
-A JAR theme plugin overrides the |Fess| core's ``view`` / ``css`` /
-``js`` / ``images`` directories on a per-theme-name basis. For the
-general plugin structure and build process, also see
-:doc:`plugin-architecture`.
+Move the changes you made in a JAR theme to a static theme:
 
-Structure
----------
-
-::
-
-    fess-theme-example/
-    ├── pom.xml
-    └── src/main/resources/
-        ├── view/      # JSP files (search.jsp, index.jsp, header.jsp, etc.)
-        ├── css/       # CSS files (style.css, etc.)
-        ├── js/        # JavaScript files
-        └── images/    # Image files (logo.png, etc.)
-
-.. note::
-
-   Views (templates) are in JSP format. Only the four top-level
-   resource directories ``view`` / ``css`` / ``js`` / ``images`` are
-   recognized. The artifact name must start with ``fess-theme-``.
-
-pom.xml
--------
-
-The plugin is built as a jar with ``fess-parent`` as the parent POM.
-Since a theme consists only of resources, there is usually no need to
-declare additional dependencies.
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                                 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-
-        <artifactId>fess-theme-example</artifactId>
-        <version>15.9.0</version>
-        <packaging>jar</packaging>
-
-        <parent>
-            <groupId>org.codelibs.fess</groupId>
-            <artifactId>fess-parent</artifactId>
-            <version>15.9.0</version>
-            <relativePath />
-        </parent>
-    </project>
-
-Customizing CSS and Images
----------------------------
-
-The JSPs are Bootstrap-based. You can override the CSS to change colors
-and layout, or replace ``images/logo.png`` to change the logo. Since
-15.9 this affects only the login screen; the search screen is a static
-theme (see `Customizing the Bundled Theme`_).
-
-Build and Installation
------------------------
-
-::
-
-    mvn clean package
-
-A JAR file (e.g., ``fess-theme-example-15.9.0.jar``) is generated in
-the ``target/`` directory. You can install it from "System" ->
-"Plugin" in the admin console. For details on the installation
-procedure, see :doc:`../admin/plugin-guide`.
-
-Once installed, each directory in the JAR is expanded to the following
-locations, per theme name (the theme name is the artifact name with
-the ``fess-theme-`` prefix removed; in the example above, ``example``).
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Directory in the JAR
-     - Expansion destination
-   * - ``view/``
-     - ``WEB-INF/view/<theme>/``
-   * - ``css/``
-     - ``css/<theme>/``
-   * - ``js/``
-     - ``js/<theme>/``
-   * - ``images/``
-     - ``images/<theme>/``
-
-Activation
-----------
-
-A JAR theme is activated using the virtual host feature. If you match
-a virtual host key to the theme name, the theme is applied when that
-host is accessed.
-
-1. In the virtual host settings under "System" -> "General", map the
-   request's ``Host`` header to a theme name (virtual host key), for
-   example ``Host:localhost:8080=example``.
-2. If needed, also set the same name (``example``) for the virtual
-   host in the crawling web configuration, etc.
-
-For details on how to configure virtual hosts, see
-:doc:`../admin/general-guide`.
+- For the colors, layout and logo of the search screen, copy the bundled theme and change
+  the copy (see `Customizing the Bundled Theme`_).
+- If you changed the look per virtual host, install a static theme named after the
+  virtual host (see :doc:`../config/security-virtual-host`).
+- The login screen (``/login/``) is the same for every virtual host. A theme cannot
+  change it.
 
 Examples of Existing Themes
 ============================
@@ -412,8 +316,6 @@ Examples of Existing Themes
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - A
   collection of static themes (includes multiple static themes such as
   ``codesearch`` and ``docsearch``)
-- `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__ - JAR theme
-- `fess-theme-classic <https://github.com/codelibs/fess-theme-classic>`__ - JAR theme
 
 Reference
 =========

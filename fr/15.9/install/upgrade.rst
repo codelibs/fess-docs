@@ -905,8 +905,27 @@ s'affichent plus. Reportez-les dans un thème statique : copiez le thème fourni
 copie, comme décrit dans :ref:`theme-customize-bundled`, ou installez un thème publié depuis
 « Système » → « Thème » dans l'écran d'administration ou avec
 ``bin/fess-setup install theme <name>``. Une apparence propre à un hôte virtuel est désormais un thème statique portant le nom de
-cet hôte virtuel ; voir :doc:`../config/security-virtual-host`. L'écran de connexion (``/login/``)
-reste une JSP.
+cet hôte virtuel ; voir :doc:`../config/security-virtual-host`.
+
+Ces deux fonctionnalités ont également disparu :
+
+- L'écran de connexion par hôte virtuel. Jusqu'en 15.8, l'enregistrement de « Système » → « Général »
+  copiait les JSP, y compris l'écran de connexion, dans ``WEB-INF/view/<nom de l'hôte virtuel>/``, et
+  on pouvait les modifier par hôte virtuel. 15.9 ne crée plus ces copies. L'écran de connexion
+  (``/login/``) reste une JSP, mais tous les hôtes virtuels affichent la même, celle de
+  ``WEB-INF/view/admin/login/``. Les JSP copiées auparavant ne sont pas utilisées.
+- Les plugins de thème JAR (``fess-theme-*``). S'il est installé, un tel plugin est seulement placé
+  comme un JAR générique de type ``jar`` et ne modifie aucun écran. Les JAR restants peuvent être
+  supprimés depuis la page « Système » → « Plugin » ou avec ``bin/fess-setup remove plugin <name>``
+  (voir :doc:`../dev/theme-development`).
+
+Si, en 15.8, vous affichiez vos propres champs dans les résultats de recherche JSP, ajoutez les mêmes
+champs à ``query.additional.api.response.fields`` en plus de ``query.additional.response.fields``.
+Le thème statique obtient les résultats de recherche depuis ``/api/v2/search``.
+``query.additional.response.fields`` ajoute seulement les champs récupérés depuis le moteur de
+recherche, et cette API n'inclut dans sa réponse que les champs listés dans
+``query.additional.api.response.fields`` (voir :doc:`../config/search-advanced`). Modifiez aussi le
+thème pour qu'il affiche ces champs.
 
 Ce que voient les clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~

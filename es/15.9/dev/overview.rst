@@ -151,7 +151,7 @@ Estructura de Directorios
     │   ├── fess_config.properties  # Configuración
     │   └── fess_*.xml              # Configuración DI (app.xml, fess_ds.xml, etc.)
     └── src/main/webapp/
-        └── WEB-INF/view/    # Plantillas JSP
+        └── WEB-INF/view/    # JSP de la administración y del inicio de sesión
 
 Puntos de Extensión
 ===================

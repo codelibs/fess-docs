@@ -17,8 +17,8 @@
 .. note::
 
    静的テーマは |Fess| 15.7 以降で利用でき、15.9 で既定の検索画面になりました。検索画面の
-   JSP を差し替える JAR テーマプラグインは、15.9 では検索画面を変えません。
-   `JAR テーマプラグイン(レガシー)`_ を参照してください。
+   JSP を差し替える JAR テーマプラグインは、15.9 で削除されました。
+   `JAR テーマプラグイン(15.9 で削除)`_ を参照してください。
 
 静的テーマ
 ==========
@@ -259,124 +259,33 @@
    同梱のテーマは、その |Fess| のバージョンの ``/api/v2/*`` API に合わせてあります。
    |Fess| をアップグレードしたら、新しい同梱テーマから複製し直して変更を再適用してください。
 
-JAR テーマプラグイン(レガシー)
-================================
+JAR テーマプラグイン(15.9 で削除)
+==================================
 
-.. warning::
+JSP・CSS・画像を ``fess-theme-*`` の JAR に入れ、仮想ホストのキーと同じ名前のテーマとして
+適用する JAR テーマプラグインの種類は、|Fess| 15.9 で削除されました。15.9 は JAR テーマを
+展開せず、どの画面にも使いません。
 
-   |Fess| 15.9 からは検索画面が常に静的テーマで表示されるため、JAR テーマプラグインでは
-   検索画面を変えられません。JAR テーマが提供する JSP のうち、使われるのはログイン画面
-   (``/login/``)のものだけです。デザインは静的テーマに移してください。
-   `同梱テーマのカスタマイズ`_ を参照してください。
+- 管理画面の「システム」→「プラグイン」からインストールしても、種類 ``jar`` の汎用 JAR として
+  ``app/WEB-INF/plugin/`` に置かれるだけで、画面は何も変わりません。以前のバージョンから
+  残った ``fess-theme-*.jar`` も同じように表示され、この画面または
+  ``bin/fess-setup remove plugin <name>`` で削除できます。
+- ``bin/fess-setup`` は ``fess-theme-*`` を一覧に表示せず、インストールもしません。
 
-JAR テーマプラグインは、|Fess| 本体の ``view`` / ``css`` / ``js`` / ``images``
-ディレクトリをテーマ名ごとに上書きするプラグインです。プラグインの一般的な構造や
-ビルド方法については :doc:`plugin-architecture` も参照してください。
+JAR テーマで行っていた変更は、静的テーマに移してください。
 
-構造
-----
-
-::
-
-    fess-theme-example/
-    ├── pom.xml
-    └── src/main/resources/
-        ├── view/      # JSP ファイル(search.jsp, index.jsp, header.jsp など)
-        ├── css/       # CSS ファイル(style.css など)
-        ├── js/        # JavaScript ファイル
-        └── images/    # 画像ファイル(logo.png など)
-
-.. note::
-
-   ビュー(テンプレート)は JSP 形式です。リソースの最上位ディレクトリは
-   ``view`` / ``css`` / ``js`` / ``images`` の 4 つのみが認識されます。
-   アーティファクト名は ``fess-theme-`` で始まる必要があります。
-
-pom.xml
--------
-
-プラグインは ``fess-parent`` を親 POM とする jar としてビルドします。テーマは
-リソースのみで構成されるため、通常は追加の依存関係を宣言する必要はありません。
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                                 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-
-        <artifactId>fess-theme-example</artifactId>
-        <version>15.9.0</version>
-        <packaging>jar</packaging>
-
-        <parent>
-            <groupId>org.codelibs.fess</groupId>
-            <artifactId>fess-parent</artifactId>
-            <version>15.9.0</version>
-            <relativePath />
-        </parent>
-    </project>
-
-CSS・画像のカスタマイズ
------------------------
-
-JSP は Bootstrap ベースです。CSS を上書きして配色やレイアウトを変更したり、
-``images/logo.png`` を差し替えてロゴを変更したりできます。15.9 では、この変更が
-反映されるのはログイン画面だけです。検索画面は静的テーマです
-(`同梱テーマのカスタマイズ`_ を参照)。
-
-ビルドとインストール
---------------------
-
-::
-
-    mvn clean package
-
-``target/`` ディレクトリに JAR ファイル(例: ``fess-theme-example-15.9.0.jar``)が
-生成されます。管理画面の「システム」→「プラグイン」からインストールできます。
-インストール手順の詳細は :doc:`../admin/plugin-guide` を参照してください。
-
-インストールすると、JAR 内の各ディレクトリはテーマ名ごとに以下の場所へ展開されます
-(テーマ名はアーティファクト名から ``fess-theme-`` を除いた部分。上記の例では
-``example``)。
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - JAR 内のディレクトリ
-     - 展開先
-   * - ``view/``
-     - ``WEB-INF/view/<theme>/``
-   * - ``css/``
-     - ``css/<theme>/``
-   * - ``js/``
-     - ``js/<theme>/``
-   * - ``images/``
-     - ``images/<theme>/``
-
-有効化
-------
-
-JAR テーマは、仮想ホスト機能を使って有効化します。仮想ホストのキーをテーマ名に
-一致させると、そのホストへのアクセスでテーマが適用されます。
-
-1. 「システム」→「全般」の仮想ホスト設定で、``Host:localhost:8080=example`` の
-   ように、リクエストの ``Host`` ヘッダーとテーマ名(仮想ホストのキー)を対応付けます。
-2. 必要に応じて、クローリングの Web 設定などの仮想ホストにも同じ名前(``example``)を
-   設定します。
-
-仮想ホストの設定方法の詳細は :doc:`../admin/general-guide` を参照してください。
+- 検索画面の配色・レイアウト・ロゴは、同梱のテーマを複製して変更します
+  (`同梱テーマのカスタマイズ`_ を参照)。
+- 仮想ホストごとに見た目を変えていた場合は、仮想ホスト名と同じ名前の静的テーマを
+  インストールします(:doc:`../config/security-virtual-host` を参照)。
+- ログイン画面(``/login/``)は、すべての仮想ホストで共通の画面です。テーマで変えることは
+  できません。
 
 既存テーマの例
 ==============
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - 静的テーマ集
   (``codesearch``、``docsearch`` など複数の静的テーマを収録)
-- `fess-theme-simple <https://github.com/codelibs/fess-theme-simple>`__ - JAR テーマ
-- `fess-theme-classic <https://github.com/codelibs/fess-theme-classic>`__ - JAR テーマ
 
 参考情報
 ========

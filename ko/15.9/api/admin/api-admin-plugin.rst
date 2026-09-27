@@ -51,10 +51,12 @@ Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API�
    * - 필드
      - 설명
    * - ``type``
-     - 아티팩트의 종별 ID. ``fess-ds`` (데이터 스토어), ``fess-theme`` (테마),
+     - 아티팩트의 종별 ID. ``fess-ds`` (데이터 스토어),
        ``fess-ingest`` (Ingest), ``fess-script`` (스크립트), ``fess-webapp`` (웹 앱),
        ``fess-thumbnail`` (썸네일), ``fess-crawler`` (크롤러), ``fess-llm`` (LLM),
-       ``jar`` (위 이외의 범용 JAR) 중 하나입니다.
+       ``fess-storage`` (스토리지), ``fess-sso`` (SSO),
+       ``jar`` (위 이외의 범용 JAR) 중 하나입니다. 15.9 에서 ``fess-theme`` 은 삭제되었으며,
+       ``fess-theme-*`` JAR 는 ``jar`` 로 취급됩니다.
    * - ``id``
      - ``{name}:{version}`` 형식의 식별자.
    * - ``name``

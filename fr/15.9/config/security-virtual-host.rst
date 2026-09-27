@@ -63,8 +63,9 @@ Il n'est pas nécessaire de définir ce thème comme thème par défaut. Consult
 
 .. note::
 
-   L'enregistrement de la configuration génère toujours des JSP dans ``WEB-INF/view/nom_hôte_virtuel``, mais depuis |Fess| 15.9, l'écran de recherche ne les utilise plus.
-   Seul l'écran de connexion (``/login/``) est encore rendu à partir de ceux-ci.
+   Depuis |Fess| 15.9, l'enregistrement de la configuration ne génère plus de JSP dans ``WEB-INF/view/nom_hôte_virtuel``.
+   L'écran de connexion (``/login/``) est le même pour tous les hôtes virtuels (``WEB-INF/view/admin/login/``) et ne peut pas être modifié par hôte virtuel.
+   L'apparence de chaque hôte virtuel se modifie avec un thème statique portant le même nom que l'hôte virtuel, comme décrit ci-dessus.
 
 
 Configuration de l'exploration

@@ -149,7 +149,7 @@ Verzeichnisstruktur
     │   ├── fess_config.properties  # Konfiguration
     │   └── fess_*.xml              # DI-Konfiguration (app.xml, fess_ds.xml usw.)
     └── src/main/webapp/
-        └── WEB-INF/view/    # JSP-Templates
+        └── WEB-INF/view/    # JSPs der Verwaltungs- und Anmeldebildschirme
 
 Erweiterungspunkte
 ====================
