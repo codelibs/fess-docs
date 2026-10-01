@@ -41,7 +41,7 @@ Condiciones de uso
 
 Tenga en cuenta los siguientes puntos al utilizar la búsqueda difusa.
 
-* La búsqueda difusa se aplica a nivel de palabra. No se puede aplicar a frases entre comillas. Además, un número agregado después de una frase (por ejemplo, ``"Fess Search"~2``) no corresponde a una búsqueda difusa, sino a una búsqueda de proximidad que indica la distancia entre palabras.
+* La búsqueda difusa se aplica a nivel de palabra. No se puede aplicar a frases entre comillas. Además, un número agregado después de una frase (por ejemplo, ``"Fess Search"~2``) no corresponde a una búsqueda difusa, sino a una :doc:`búsqueda de proximidad <search-proximity>` que indica la distancia entre palabras.
 * La búsqueda difusa se realiza sobre las palabras registradas en el índice y el término de búsqueda no se vuelve a analizar. Por ello, es posible que no funcione como se espera en textos como el japonés, que se tokeniza mediante bi-gramas o análisis morfológico. La búsqueda difusa es eficaz principalmente con palabras alfanuméricas.
 * En el caso de palabras muy cortas, de 1 o 2 caracteres, la distancia de edición debe ser menor que la longitud de la palabra para que se produzca una coincidencia, por lo que, aunque se agregue "~", el comportamiento puede acercarse al de una coincidencia exacta.
 
@@ -62,4 +62,5 @@ Véase también
 =============
 
 - :doc:`search-wildcard` - Búsqueda con comodines
+- :doc:`search-proximity` - Búsqueda de proximidad
 - :doc:`special-char` - Caracteres especiales

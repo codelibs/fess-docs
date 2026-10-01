@@ -3,7 +3,7 @@
 
 Wie Suchanfragen in |Fess| geschrieben werden: UND, ODER und NICHT,
 Feld- und Labelsuche, Sortierung, Platzhalter, Bereiche, Boosting,
-unscharfe Suche und Geo-Suche.
+unscharfe Suche, Näherungssuche und Geo-Suche.
 
 .. toctree::
    :maxdepth: 2
@@ -19,6 +19,7 @@ unscharfe Suche und Geo-Suche.
    search-range
    search-boost
    search-fuzzy
+   search-proximity
    search-geo
    search-additional
    role-search

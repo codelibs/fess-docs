@@ -41,7 +41,7 @@ Usage Conditions
 
 Please note the following points when using fuzzy search.
 
-* Fuzzy search is applied on a per-word basis. It cannot be applied to phrases enclosed in quotation marks. Note that a number placed after a phrase (for example, ``"Fess Search"~2``) is not a fuzzy search but a proximity search that represents the distance between words.
+* Fuzzy search is applied on a per-word basis. It cannot be applied to phrases enclosed in quotation marks. Note that a number placed after a phrase (for example, ``"Fess Search"~2``) is not a fuzzy search but a :doc:`proximity search <search-proximity>` that represents the distance between words.
 * Fuzzy search targets words that have been registered in the index, and the search term is not re-analyzed. As a result, it may not work as expected for text such as Japanese, which is tokenized using bi-grams or morphological analysis. Fuzzy search is mainly effective for alphanumeric words.
 * For very short words of one or two characters, since the edit distance must be smaller than the length of the word for a match to occur, adding "~" may result in behavior close to an exact match.
 
@@ -61,4 +61,5 @@ Related Topics
 --------------
 
 - :doc:`search-wildcard` - Wildcard search
+- :doc:`search-proximity` - Proximity search
 - :doc:`special-char` - Special characters and escaping

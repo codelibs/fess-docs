@@ -3,7 +3,7 @@ Guía de Usuario de |Fess|
 
 Cómo escribir consultas de búsqueda en |Fess|: AND, OR y NOT, búsqueda
 por campo y por etiqueta, ordenación, comodines, rangos, boosting,
-búsqueda difusa y búsqueda geográfica.
+búsqueda difusa, búsqueda de proximidad y búsqueda geográfica.
 
 .. toctree::
    :maxdepth: 2
@@ -19,6 +19,7 @@ búsqueda difusa y búsqueda geográfica.
    search-range
    search-boost
    search-fuzzy
+   search-proximity
    search-geo
    search-additional
    role-search

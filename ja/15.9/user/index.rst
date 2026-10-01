@@ -2,7 +2,7 @@
 ==================
 
 AND・OR・NOT、フィールド検索やラベル検索、並び替え、ワイルドカード、\
-範囲指定、ブースト、あいまい検索、位置情報検索など、|Fess| での\
+範囲指定、ブースト、あいまい検索、近接検索、位置情報検索など、|Fess| での\
 検索の書き方を説明します。
 
 .. toctree::
@@ -19,6 +19,7 @@ AND・OR・NOT、フィールド検索やラベル検索、並び替え、ワイ
    search-range
    search-boost
    search-fuzzy
+   search-proximity
    search-geo
    search-additional
    role-search
