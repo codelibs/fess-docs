@@ -25,6 +25,7 @@
    crawler-basic
    crawler-advanced
    crawler-thumbnail
+   crawler-ocr
 
 .. toctree::
    :maxdepth: 2
