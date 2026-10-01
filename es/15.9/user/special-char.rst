@@ -8,7 +8,7 @@ Los siguientes caracteres tienen un significado especial en la sintaxis de las c
 
     + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
 
-Estos caracteres se utilizan para invocar funciones de búsqueda como términos obligatorios/prohibidos (``+`` ``-``), operadores booleanos (``&&`` ``||`` ``!``), agrupación (``( )``), búsqueda por rango (``[ ]`` ``{ }``), búsqueda con impulso (boost) (``^``), búsqueda de frases (``"``), búsqueda difusa (fuzzy) (``~``), búsqueda con comodines (``*`` ``?``) y búsqueda por campo (``:``).
+Estos caracteres se utilizan para invocar funciones de búsqueda como términos obligatorios/prohibidos (``+`` ``-``), operadores booleanos (``&&`` ``||`` ``!``), agrupación (``( )``), búsqueda por rango (``[ ]`` ``{ }``), búsqueda con impulso (boost) (``^``), búsqueda de frases (``"``), búsqueda difusa (fuzzy) y búsqueda de proximidad (``~``), búsqueda con comodines (``*`` ``?``) y búsqueda por campo (``:``).
 
 Por ejemplo, si busca directamente símbolos como "/" o ":" incluidos en una URL o ruta de archivo, o "+" o "-" que aparecen en código de programación, puede obtener resultados de búsqueda no deseados. Consulte a continuación el método de escape.
 
@@ -44,8 +44,8 @@ Lista de caracteres especiales y su significado
      - Búsqueda de frases (trata el texto entre comillas como una sola unidad; también puede usarse en lugar del escape)
      - :doc:`advanced-search`
    * - ``~``
-     - Búsqueda difusa (búsqueda aproximada)
-     - :doc:`search-fuzzy`
+     - Búsqueda difusa (tras una palabra) / búsqueda de proximidad (tras una frase)
+     - :doc:`search-fuzzy` / :doc:`search-proximity`
    * - ``*`` ``?``
      - Búsqueda con comodines
      - :doc:`search-wildcard`
@@ -87,4 +87,5 @@ Véase también
 - :doc:`search-field` - Búsqueda con especificación de campos
 - :doc:`search-wildcard` - Búsqueda con comodines
 - :doc:`search-fuzzy` - Búsqueda difusa
+- :doc:`search-proximity` - Búsqueda de proximidad
 - :doc:`advanced-search` - Búsqueda avanzada

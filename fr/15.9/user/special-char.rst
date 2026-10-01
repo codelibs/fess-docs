@@ -8,7 +8,7 @@ Les caractères suivants ont une signification particulière dans la syntaxe des
 
     + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
 
-Ces caractères permettent d'invoquer des fonctionnalités de recherche telles que les termes obligatoires/interdits (``+`` ``-``), les opérateurs booléens (``&&`` ``||`` ``!``), le regroupement (``( )``), la recherche par plage (``[ ]`` ``{ }``), la recherche avec pondération (``^``), la recherche de phrase (``"``), la recherche floue (``~``), la recherche par caractère générique (``*`` ``?``) et la recherche par champ (``:``).
+Ces caractères permettent d'invoquer des fonctionnalités de recherche telles que les termes obligatoires/interdits (``+`` ``-``), les opérateurs booléens (``&&`` ``||`` ``!``), le regroupement (``( )``), la recherche par plage (``[ ]`` ``{ }``), la recherche avec pondération (``^``), la recherche de phrase (``"``), la recherche floue et la recherche de proximité (``~``), la recherche par caractère générique (``*`` ``?``) et la recherche par champ (``:``).
 
 Par exemple, si vous recherchez tels quels des caractères comme ``/`` ou ``:`` présents dans une URL ou un chemin de fichier, ou encore ``+`` ou ``-`` utilisés dans du code, vous risquez d'obtenir des résultats de recherche inattendus. Reportez-vous à la section ci-dessous pour la méthode d'échappement à utiliser.
 
@@ -43,8 +43,8 @@ Liste des caractères spéciaux et leur signification
      - Recherche de phrase (le texte entouré de guillemets est traité comme une seule expression ; peut aussi servir à échapper des caractères spéciaux)
      - :doc:`advanced-search`
    * - ``~``
-     - Recherche floue (recherche approximative)
-     - :doc:`search-fuzzy`
+     - Recherche floue (après un mot) / recherche de proximité (après une phrase)
+     - :doc:`search-fuzzy` / :doc:`search-proximity`
    * - ``*`` ``?``
      - Recherche avec caractères génériques
      - :doc:`search-wildcard`
@@ -84,4 +84,5 @@ Voir aussi
 - :doc:`search-field`
 - :doc:`search-wildcard`
 - :doc:`search-fuzzy`
+- :doc:`search-proximity`
 - :doc:`advanced-search`

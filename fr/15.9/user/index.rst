@@ -3,7 +3,7 @@ Guide utilisateur |Fess|
 
 Comment écrire des requêtes dans |Fess| : AND, OR et NOT, recherche
 par champ et par étiquette, tri, jokers, plages, boost, recherche
-floue et recherche géographique.
+floue, recherche de proximité et recherche géographique.
 
 .. toctree::
    :maxdepth: 2
@@ -19,6 +19,7 @@ floue et recherche géographique.
    search-range
    search-boost
    search-fuzzy
+   search-proximity
    search-geo
    search-additional
    role-search

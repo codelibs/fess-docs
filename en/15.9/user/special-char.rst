@@ -8,7 +8,7 @@ The following characters have a special meaning in the search query syntax, so t
 
     + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
 
-These characters are used to invoke search features such as required/prohibited terms (``+`` ``-``), boolean operators (``&&`` ``||`` ``!``), grouping (``( )``), range search (``[ ]`` ``{ }``), boost search (``^``), phrase search (``"``), fuzzy search (``~``), wildcard search (``*`` ``?``), and field search (``:``).
+These characters are used to invoke search features such as required/prohibited terms (``+`` ``-``), boolean operators (``&&`` ``||`` ``!``), grouping (``( )``), range search (``[ ]`` ``{ }``), boost search (``^``), phrase search (``"``), fuzzy search and proximity search (``~``), wildcard search (``*`` ``?``), and field search (``:``).
 
 For example, searching directly for a "/" or ":" in a URL or file path, or a "+" or "-" in program code, can produce unexpected search results. See below for how to escape these characters.
 
@@ -43,8 +43,8 @@ List of Special Characters
      - Phrase search (treats the enclosed text as a single phrase; can also be used instead of escaping)
      - :doc:`advanced-search`
    * - ``~``
-     - Fuzzy search
-     - :doc:`search-fuzzy`
+     - Fuzzy search (after a word) / proximity search (after a phrase)
+     - :doc:`search-fuzzy` / :doc:`search-proximity`
    * - ``*`` ``?``
      - Wildcard search
      - :doc:`search-wildcard`
@@ -85,4 +85,5 @@ Related Topics
 - :doc:`search-field` - Field-specified search
 - :doc:`search-wildcard` - Wildcard search
 - :doc:`search-fuzzy` - Fuzzy search
+- :doc:`search-proximity` - Proximity search
 - :doc:`advanced-search` - Advanced search options

@@ -41,7 +41,7 @@ Nutzungsbedingungen
 
 Beachten Sie bei der Verwendung der unscharfen Suche die folgenden Punkte:
 
-* Die unscharfe Suche wird auf einzelne Wörter angewendet. Sie kann nicht auf Phrasen angewendet werden, die in Anführungszeichen eingeschlossen sind. Eine Zahl, die einer Phrase angehängt wird (zum Beispiel ``"Fess Search"~2``), stellt dabei keine unscharfe Suche dar, sondern eine Näherungssuche (proximity search), die den Abstand zwischen den Wörtern angibt.
+* Die unscharfe Suche wird auf einzelne Wörter angewendet. Sie kann nicht auf Phrasen angewendet werden, die in Anführungszeichen eingeschlossen sind. Eine Zahl, die einer Phrase angehängt wird (zum Beispiel ``"Fess Search"~2``), stellt dabei keine unscharfe Suche dar, sondern eine :doc:`Näherungssuche <search-proximity>` (proximity search), die den Abstand zwischen den Wörtern angibt.
 * Die unscharfe Suche erfolgt auf Basis der im Index registrierten Wörter, wobei der Suchbegriff nicht erneut analysiert wird. Daher funktioniert sie möglicherweise nicht wie erwartet bei Texten wie Japanisch, die per Bi-Gramm oder morphologischer Analyse in Token zerlegt werden. Die unscharfe Suche ist vor allem bei alphanumerischen Wörtern wirksam.
 * Bei sehr kurzen Wörtern mit 1 bis 2 Zeichen kann das Verhalten trotz angehängtem "~" einer exakten Übereinstimmung nahekommen, da ein Treffer nur zustande kommt, wenn die Editierdistanz kleiner als die Wortlänge ist.
 
@@ -61,4 +61,5 @@ Siehe auch
 ==========
 
 - :doc:`search-wildcard`
+- :doc:`search-proximity`
 - :doc:`special-char`

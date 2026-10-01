@@ -2,7 +2,7 @@
 ==================
 
 说明在 |Fess| 中编写搜索条件的方法，涵盖 AND、OR、NOT、\
-字段搜索与标签搜索、排序、通配符、范围、加权、模糊搜索和地理搜索。
+字段搜索与标签搜索、排序、通配符、范围、加权、模糊搜索、邻近搜索和地理搜索。
 
 .. toctree::
    :maxdepth: 2
@@ -18,6 +18,7 @@
    search-range
    search-boost
    search-fuzzy
+   search-proximity
    search-geo
    search-additional
    role-search

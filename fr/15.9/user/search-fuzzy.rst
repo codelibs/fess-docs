@@ -41,7 +41,7 @@ Conditions d'utilisation
 
 Lors de l'utilisation de la recherche floue, tenez compte des points suivants :
 
-* La recherche floue s'applique au niveau du mot. Elle ne peut pas être appliquée à une phrase entourée de guillemets. Notez que le chiffre placé après une phrase (par exemple ``"Fess Search"~2``) ne correspond pas à une recherche floue, mais à une recherche de proximité indiquant la distance entre les mots.
+* La recherche floue s'applique au niveau du mot. Elle ne peut pas être appliquée à une phrase entourée de guillemets. Notez que le chiffre placé après une phrase (par exemple ``"Fess Search"~2``) ne correspond pas à une recherche floue, mais à une :doc:`recherche de proximité <search-proximity>` indiquant la distance entre les mots.
 * La recherche floue porte sur les mots enregistrés dans l'index, et le terme de recherche n'est pas réanalysé. Par conséquent, elle peut ne pas fonctionner comme prévu pour des textes tels que le japonais, qui sont tokenisés par bi-gramme ou par analyse morphologique. La recherche floue est principalement efficace pour les mots alphanumériques.
 * Pour les mots très courts, comme ceux de 1 à 2 caractères, la correspondance n'est possible que si la distance d'édition est inférieure à la longueur du mot ; l'ajout de « ~ » peut donc se comporter presque comme une correspondance exacte.
 
@@ -61,4 +61,5 @@ Voir aussi
 ==========
 
 - :doc:`search-wildcard`
+- :doc:`search-proximity`
 - :doc:`special-char`
