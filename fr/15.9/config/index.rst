@@ -25,6 +25,7 @@ Ce guide complet couvre la configuration de |Fess|. Chaque section est organisé
    crawler-basic
    crawler-advanced
    crawler-thumbnail
+   crawler-ocr
 
 .. toctree::
    :maxdepth: 2
