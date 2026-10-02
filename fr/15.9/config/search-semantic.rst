@@ -96,6 +96,9 @@ Prérequis
    * - ``gemini``
      - Plugin ``fess-llm-gemini``
      - Utilise l'API d'embeddings de Google Gemini.
+   * - ``bedrock``
+     - Plugin ``fess-llm-bedrock``
+     - Utilise Amazon Titan Text Embeddings V2 ou Cohere Embed via Amazon Bedrock.
    * - ``none``
      - Cœur de |Fess| (intégré)
      - Découpe les documents en chunks uniquement ; aucun vecteur n'est généré (mode chunking
@@ -176,7 +179,7 @@ Réglages dans system.properties
        élevée ici
    * - ``content_chunker.embedding.name``
      - ``opensearch``
-     - Fournisseur d'embedding (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
+     - Fournisseur d'embedding (``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``bedrock`` / ``none``)
    * - ``content_chunker.embedding.dimension``
      - ``768``
      - Dimension du vecteur d'embedding. Cette valeur est utilisée lors de la création du
@@ -326,8 +329,8 @@ Ceux-ci sont définis dans le même fichier ``system.properties`` que ci-dessus.
    système** du même écran : renseignez donc les identifiants dans ``system.properties`` plutôt
    que dans les options de démarrage.
 
-Autres fournisseurs (ollama / openai / gemini)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Autres fournisseurs (ollama / openai / gemini / bedrock)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Le fournisseur ``ollama`` (plugin ``fess-llm-ollama``) utilise le même style de réglages sous le
 préfixe ``content_chunker.embedding.ollama.`` (``api.url`` vaut par défaut
@@ -342,7 +345,9 @@ Pensez à cette espace de séparation si vous définissez un préfixe vous-même
 Les fournisseurs ``openai`` et ``gemini`` se
 configurent de la même manière, sous les préfixes ``content_chunker.embedding.openai.`` et
 ``content_chunker.embedding.gemini.`` respectivement. Consultez la documentation de chaque plugin
-pour la liste complète des réglages.
+pour la liste complète des réglages. Le fournisseur ``bedrock`` utilise le préfixe
+``content_chunker.embedding.bedrock.``, et ``content_chunker.embedding.dimension`` doit être une
+taille que le modèle configuré produit ; voir :doc:`llm-bedrock`.
 
 Procédure de configuration (exemple avec le fournisseur opensearch)
 ========================================================================
@@ -745,7 +750,7 @@ suivantes sont donc requises.
    Si vous appliquez dès l'étape 1 le réglage ``content_chunker.search.enabled=true``, alors
    entre le redémarrage de l'étape 2 et l'achèvement de l'étape 4, chaque recherche calcule
    l'embedding de la requête sans que cela se répercute sur les résultats. Avec un fournisseur
-   facturé à l'usage comme ``openai`` ou ``gemini``, appliquez
+   facturé à l'usage comme ``openai``, ``gemini`` ou ``bedrock``, appliquez
    ``content_chunker.search.enabled=true`` et redémarrez seulement une fois l'étape 4 terminée.
 
 Si vous utilisiez le plugin fess-webapp-semantic-search
@@ -879,7 +884,7 @@ traitement en plusieurs exécutions. ``jvm.chunk.options`` se redéfinit dans
 paquets RPM/DEB) ; voir :doc:`setup-memory` pour la configuration des options JVM.
 
 Cette même valeur par défaut illimitée a aussi une conséquence financière avec un fournisseur
-d'embedding facturé à l'usage (``openai``, ``gemini``) : la première exécution de la tâche
+d'embedding facturé à l'usage (``openai``, ``gemini``, ``bedrock``) : la première exécution de la tâche
 d'indexation génère les embeddings de tout le corpus existant en une seule fois et facture le
 tout d'un coup. Définissez une valeur finie pour ``content_chunker.job.max_documents_per_run``
 afin de répartir ce coût sur plusieurs exécutions.

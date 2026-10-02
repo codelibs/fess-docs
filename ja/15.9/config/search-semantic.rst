@@ -86,6 +86,9 @@
    * - ``gemini``
      - ``fess-llm-gemini`` プラグイン
      - Google Gemini の埋め込みAPIを使用します。
+   * - ``bedrock``
+     - ``fess-llm-bedrock`` プラグイン
+     - Amazon Bedrock 経由で Amazon Titan Text Embeddings V2 または Cohere Embed を使用します。
    * - ``none``
      - |Fess| 本体（内蔵）
      - チャンク分割のみ実行し、ベクトルは生成しません（chunk-onlyモード）。
@@ -155,7 +158,7 @@ system.properties の設定
        この値を大きくしてください
    * - ``content_chunker.embedding.name``
      - ``opensearch``
-     - 埋め込みプロバイダ（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``）
+     - 埋め込みプロバイダ（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``bedrock`` / ``none``）
    * - ``content_chunker.embedding.dimension``
      - ``768``
      - 埋め込みベクトルの次元数。マッピング作成時にこの値が使われるため、使用する埋め込みモデルの
@@ -290,8 +293,8 @@ opensearch プロバイダの接続設定
    指定した値は同じ画面の「システムのプロパティ」に **マスクされずに** 表示されるため、認証情報は
    起動オプションではなく ``system.properties`` に記述してください。
 
-その他のプロバイダ（ollama / openai / gemini）
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+その他のプロバイダ（ollama / openai / gemini / bedrock）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``ollama`` プロバイダ（``fess-llm-ollama`` プラグイン）は、
 ``content_chunker.embedding.ollama.`` プレフィックスで同様の設定を行います
@@ -305,7 +308,9 @@ opensearch プロバイダの接続設定
 区切りの半角スペースを忘れないでください。
 ``openai`` / ``gemini`` プロバイダも同様に、それぞれ ``content_chunker.embedding.openai.`` /
 ``content_chunker.embedding.gemini.`` プレフィックスで設定します。設定キーの詳細は各プラグインの
-ドキュメントを参照してください。
+ドキュメントを参照してください。 ``bedrock`` プロバイダは ``content_chunker.embedding.bedrock.``
+プレフィックスで設定し、 ``content_chunker.embedding.dimension`` にはモデルが出力できる次元数を
+指定します。詳細は :doc:`llm-bedrock` を参照してください。
 
 セットアップ手順（opensearch プロバイダの例）
 =============================================
@@ -663,7 +668,7 @@ Rank Fusion に登録されません（このジョブは起動のたびに登�
 
    手順1で ``content_chunker.search.enabled=true`` まで投入すると、手順2の再起動から手順4の完了
    までの間、検索のたびにクエリの埋め込みだけが実行され、結果には反映されない状態になります。
-   ``openai`` / ``gemini`` など従量課金のプロバイダを使用する場合は、
+   ``openai`` / ``gemini`` / ``bedrock`` など従量課金のプロバイダを使用する場合は、
    ``content_chunker.search.enabled=true`` の投入と再起動を手順4の完了後に行ってください。
 
 fess-webapp-semantic-search プラグインを利用していた場合
@@ -784,7 +789,7 @@ chunk-only モード
 ``/etc/fess/fess_config.properties``）で上書きします（JVMオプションの考え方は
 :doc:`setup-memory` を参照してください）。
 
-同じく既定値が無制限になったことで、``openai`` や ``gemini`` など従量課金制の埋め込みプロバイダを
+同じく既定値が無制限になったことで、``openai`` 、 ``gemini`` 、 ``bedrock`` など従量課金制の埋め込みプロバイダを
 使用している場合はコスト面の影響もあります。初回のインデクサジョブ実行で既存コーパス全体の
 埋め込みが一度に生成され、その分の利用料金も一度に発生します。費用を複数回の実行に分散させたい
 場合は、``content_chunker.job.max_documents_per_run`` に有限の値を設定してください。

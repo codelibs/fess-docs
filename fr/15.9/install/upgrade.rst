@@ -1032,7 +1032,7 @@ Si vous utilisiez le mode de recherche IA (chat RAG)
 À partir de la 15.9, la fonctionnalité du mode de recherche IA (chat RAG) a été séparée en
 plugins tels que ``fess-llm-ollama``, ``fess-llm-openai`` et ``fess-llm-gemini``. Installez le
 plugin correspondant au fournisseur que vous utilisez depuis « Système » → « Plugins » dans
-l'écran d'administration.
+l'écran d'administration. La 15.9 ajoute également ``fess-llm-bedrock`` pour Amazon Bedrock.
 
 Si vous utilisiez SPNEGO (authentification intégrée Windows)
 ------------------------------------------------------------

@@ -42,6 +42,10 @@ AI 검색 모드는 전용 벡터 인덱스가 아닌 |Fess|\ 의 표준 검색 
      - ``gemini``
      - ``fess-llm-gemini``
      - Google사의 클라우드 API. Gemini 모델 이용 가능.
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - AWS의 관리형 모델 서비스. Amazon Nova, Anthropic Claude 등의 모델 이용 가능.
 
 프로바이더 비교
 ----------------
@@ -69,6 +73,11 @@ AI 검색 모드는 전용 벡터 인덱스가 아닌 |Fess|\ 의 표준 검색 
      - ``https://generativelanguage.googleapis.com/v1beta``
      - ``x-goog-api-key`` ( ``rag.llm.gemini.api.key`` )
      - 클라우드 — 질문과 취득된 문서가 Google로 전송됩니다
+   * - Amazon Bedrock( ``bedrock`` )
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``https://bedrock-runtime.<region>.amazonaws.com``
+     - ``Authorization: Bearer`` ( ``rag.llm.bedrock.api.key`` ) 또는 AWS SigV4(AWS 인증 정보)
+     - 클라우드 — 질문과 취득된 문서가 설정된 AWS 리전의 Amazon Bedrock으로 전송됩니다
 
 .. note::
 
@@ -129,7 +138,7 @@ LLM 기능의 설정은 다음 두 곳에서 수행합니다.
 
 ::
 
-    # LLM 프로바이더 지정（ollama, openai, gemini）
+    # LLM 프로바이더 지정（ollama, openai, gemini, bedrock）
     rag.llm.name=ollama
 
 fess_config.properties
@@ -151,6 +160,7 @@ fess_config.properties
 - :doc:`llm-ollama` - Ollama 설정
 - :doc:`llm-openai` - OpenAI 설정
 - :doc:`llm-gemini` - Google Gemini 설정
+- :doc:`llm-bedrock` - Amazon Bedrock 설정
 
 공통 설정
 =========
@@ -201,6 +211,8 @@ fess_config.properties
      - ``openaiLlmClient``
    * - Google Gemini
      - ``geminiLlmClient``
+   * - Amazon Bedrock
+     - ``bedrockLlmClient``
 
 예로, OpenAI 프로바이더의 답변 생성 프롬프트를 변경하는 경우 ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml`` 을 작성합니다.
 
@@ -393,36 +405,48 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 20 20 20
+   :widths: 32 17 17 17 17
 
    * - 파라미터
      - Ollama
      - OpenAI
      - Gemini
+     - Bedrock
    * - ``thinking.budget``
      - 지원
      - 미지원
      - 지원
+     - 미지원
    * - ``thinking.level``
      - 지원
+     - 미지원
      - 미지원
      - 미지원
    * - ``top.p``
      - 지원
      - 지원
      - 미지원
+     - 미지원
    * - ``top.k`` , ``num.ctx``
      - 지원
+     - 미지원
      - 미지원
      - 미지원
    * - ``reasoning.effort``
      - 미지원
      - 지원
      - 미지원
+     - 미지원
    * - ``frequency.penalty`` , ``presence.penalty``
      - 미지원
      - 지원
      - 미지원
+     - 미지원
+   * - ``additional.model.request.fields``
+     - 미지원
+     - 미지원
+     - 미지원
+     - 지원
 
 .. note::
 
@@ -431,7 +455,7 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
 .. note::
 
    Ollama 프로바이더에서만, 프롬프트 타입별 설정이 존재하지 않는 경우 ``rag.llm.ollama.default.{파라미터}`` 를 참조하는 폴백이 있습니다
-   ( ``context.max.chars`` 는 제외). OpenAI 프로바이더와 Gemini 프로바이더에는 이 폴백이 없으며,
+   ( ``context.max.chars`` 는 제외). OpenAI, Gemini, Bedrock 프로바이더에는 이 폴백이 없으며,
    프롬프트 타입별 설정이 없는 경우 플러그인에 내장된 기본값이 사용됩니다.
 
 다음 단계
@@ -440,6 +464,7 @@ LLM으로의 요청 동시 실행 수를 제어하는 설정입니다. ``fess_co
 - :doc:`llm-ollama` - Ollama 상세 설정
 - :doc:`llm-openai` - OpenAI 상세 설정
 - :doc:`llm-gemini` - Google Gemini 상세 설정
+- :doc:`llm-bedrock` - Amazon Bedrock 상세 설정
 - :doc:`rag-chat` - AI 검색 모드 기능 상세 설정
 - :doc:`rank-fusion` - Rank Fusion 설정（하이브리드 검색 결과 통합）
 - :doc:`../user/chat-search` - AI 검색 모드 사용법

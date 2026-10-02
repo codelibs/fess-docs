@@ -37,6 +37,10 @@ Proveedores compatibles
      - ``gemini``
      - ``fess-llm-gemini``
      - API en la nube de Google. Disponible para modelos Gemini.
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - Servicio de modelos administrado de AWS. Disponible para modelos como Amazon Nova y Anthropic Claude.
 
 Comparación de proveedores
 --------------------------
@@ -64,6 +68,11 @@ Comparación de proveedores
      - ``https://generativelanguage.googleapis.com/v1beta``
      - ``x-goog-api-key`` (``rag.llm.gemini.api.key``)
      - Nube — la pregunta y los documentos recuperados se envían a Google
+   * - Amazon Bedrock (``bedrock``)
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``https://bedrock-runtime.<region>.amazonaws.com``
+     - ``Authorization: Bearer`` (``rag.llm.bedrock.api.key``) o AWS SigV4 (credenciales de AWS)
+     - Nube — la pregunta y los documentos recuperados se envían a Amazon Bedrock en la región de AWS configurada
 
 .. note::
 
@@ -124,7 +133,7 @@ Se configura en la configuración general de la pantalla de administración o en
 
 ::
 
-    # Especificar el proveedor LLM (ollama, openai, gemini)
+    # Especificar el proveedor LLM (ollama, openai, gemini, bedrock)
     rag.llm.name=ollama
 
 fess_config.properties
@@ -147,6 +156,7 @@ Para la configuración detallada de cada proveedor, consulte los siguientes docu
 - :doc:`llm-ollama` - Configuración de Ollama
 - :doc:`llm-openai` - Configuración de OpenAI
 - :doc:`llm-gemini` - Configuración de Google Gemini
+- :doc:`llm-bedrock` - Configuración de Amazon Bedrock
 
 Configuración común
 ===================
@@ -197,6 +207,8 @@ Los nombres de componente para cada proveedor son los siguientes.
      - ``openaiLlmClient``
    * - Google Gemini
      - ``geminiLlmClient``
+   * - Amazon Bedrock
+     - ``bedrockLlmClient``
 
 Por ejemplo, para cambiar el prompt de generación de respuesta del proveedor OpenAI, cree ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml``.
 
@@ -389,36 +401,48 @@ Además, cada proveedor soporta parámetros específicos propios. El estado de c
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 20 20 20
+   :widths: 32 17 17 17 17
 
    * - Parámetro
      - Ollama
      - OpenAI
      - Gemini
+     - Bedrock
    * - ``thinking.budget``
      - Compatible
      - No compatible
      - Compatible
+     - No compatible
    * - ``thinking.level``
      - Compatible
+     - No compatible
      - No compatible
      - No compatible
    * - ``top.p``
      - Compatible
      - Compatible
      - No compatible
+     - No compatible
    * - ``top.k``, ``num.ctx``
      - Compatible
+     - No compatible
      - No compatible
      - No compatible
    * - ``reasoning.effort``
      - No compatible
      - Compatible
      - No compatible
+     - No compatible
    * - ``frequency.penalty``, ``presence.penalty``
      - No compatible
      - Compatible
      - No compatible
+     - No compatible
+   * - ``additional.model.request.fields``
+     - No compatible
+     - No compatible
+     - No compatible
+     - Compatible
 
 .. note::
 
@@ -427,7 +451,7 @@ Además, cada proveedor soporta parámetros específicos propios. El estado de c
 .. note::
 
    Solo el proveedor Ollama dispone de un mecanismo de reserva (fallback) que, cuando no existe una configuración específica por tipo de prompt, recurre a ``rag.llm.ollama.default.{parámetro}``
-   (excepto para ``context.max.chars``). Los proveedores OpenAI y Gemini no disponen de este mecanismo de reserva; cuando no hay configuración específica por tipo de prompt,
+   (excepto para ``context.max.chars``). Los proveedores OpenAI, Gemini y Bedrock no disponen de este mecanismo de reserva; cuando no hay configuración específica por tipo de prompt,
    se utiliza el valor predeterminado incorporado en el plugin.
 
 Siguientes pasos
@@ -436,6 +460,7 @@ Siguientes pasos
 - :doc:`llm-ollama` - Configuración detallada de Ollama
 - :doc:`llm-openai` - Configuración detallada de OpenAI
 - :doc:`llm-gemini` - Configuración detallada de Google Gemini
+- :doc:`llm-bedrock` - Configuración detallada de Amazon Bedrock
 - :doc:`rag-chat` - Configuración detallada de la funcionalidad de modo de búsqueda IA
 - :doc:`rank-fusion` - Configuración de Rank Fusion (fusión de resultados de búsqueda híbrida)
 - :doc:`../user/chat-search` - Cómo usar el modo de búsqueda IA

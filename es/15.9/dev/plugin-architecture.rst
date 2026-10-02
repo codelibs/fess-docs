@@ -376,7 +376,7 @@ muestran algunos ejemplos representativos (esta lista no es exhaustiva):
 Además de estos, también se publican conectores de almacén de datos como
 ``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint``, y proveedores de LLM
-como ``fess-llm-ollama`` / ``fess-llm-gemini``. Estos plugins se
+como ``fess-llm-ollama`` / ``fess-llm-gemini`` / ``fess-llm-bedrock``. Estos plugins se
 publican en `GitHub <https://github.com/codelibs>`__ como referencia
 para el desarrollo.
 

@@ -87,6 +87,9 @@
    * - ``gemini``
      - ``fess-llm-gemini`` 플러그인
      - Google Gemini 임베딩 API를 사용합니다.
+   * - ``bedrock``
+     - ``fess-llm-bedrock`` 플러그인
+     - Amazon Bedrock을 통해 Amazon Titan Text Embeddings V2 또는 Cohere Embed를 사용합니다.
    * - ``none``
      - |Fess| 코어(내장)
      - 문서를 청크로 분할만 하고 벡터는 생성하지 않습니다(chunk-only 모드).
@@ -156,7 +159,7 @@ system.properties 설정
        청크가 생성됩니다. 매우 큰 문서를 다루는 경우에는 이 값을 늘리세요
    * - ``content_chunker.embedding.name``
      - ``opensearch``
-     - 임베딩 프로바이더(``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``)
+     - 임베딩 프로바이더(``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``bedrock`` / ``none``)
    * - ``content_chunker.embedding.dimension``
      - ``768``
      - 임베딩 벡터의 차원 수. 매핑 생성 시 이 값이 사용되므로 사용하는 임베딩 모델의 차원 수와
@@ -288,8 +291,8 @@ opensearch 프로바이더 연결 설정
    지정한 값은 같은 화면의 「시스템 속성」 패널에 **마스킹되지 않은 채** 표시되므로, 인증 정보는
    시작 옵션이 아니라 ``system.properties`` 에 기술하세요.
 
-기타 프로바이더(ollama / openai / gemini)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+기타 프로바이더(ollama / openai / gemini / bedrock)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``ollama`` 프로바이더(``fess-llm-ollama`` 플러그인)는 ``content_chunker.embedding.ollama.``
 접두사 아래에 동일한 형식의 설정을 사용합니다(``api.url`` 기본값은 ``http://localhost:11434``,
@@ -303,6 +306,9 @@ opensearch 프로바이더 연결 설정
 ``openai`` 와 ``gemini`` 프로바이더도 각각
 ``content_chunker.embedding.openai.`` 및 ``content_chunker.embedding.gemini.`` 접두사 아래에
 동일한 방식으로 설정합니다. 전체 설정 항목은 각 플러그인의 문서를 참조하세요.
+``bedrock`` 프로바이더는 ``content_chunker.embedding.bedrock.`` 접두사를 사용하며,
+``content_chunker.embedding.dimension`` 은 설정한 모델이 생성하는 크기여야 합니다.
+:doc:`llm-bedrock` 을 참조하세요.
 
 설정 절차(opensearch 프로바이더 예시)
 =======================================
@@ -654,7 +660,7 @@ LLM에 전달되는 문자 수는 이 상한을 넘지 않습니다.
 
    1단계에서 ``content_chunker.search.enabled=true`` 까지 함께 적용하면, 2단계의 재시작부터
    4단계가 완료될 때까지 검색할 때마다 쿼리의 임베딩만 실행되고 그 결과는 반영되지 않는 상태가
-   됩니다. ``openai`` 나 ``gemini`` 처럼 종량제 프로바이더를 사용하는 경우에는
+   됩니다. ``openai``, ``gemini``, ``bedrock`` 처럼 종량제 프로바이더를 사용하는 경우에는
    ``content_chunker.search.enabled=true`` 의 적용과 재시작을 4단계 완료 후에 수행하세요.
 
 fess-webapp-semantic-search 플러그인을 사용하고 있었던 경우
@@ -772,7 +778,7 @@ chunk-only 모드
 ``/etc/fess/fess_config.properties``)에서 재정의합니다(JVM 옵션의 개념은 :doc:`setup-memory` 를
 참조하세요).
 
-동일한 무제한 기본값은 ``openai``, ``gemini`` 와 같은 종량제 임베딩 프로바이더를 사용할 때
+동일한 무제한 기본값은 ``openai``, ``gemini``, ``bedrock`` 과 같은 종량제 임베딩 프로바이더를 사용할 때
 비용 측면에도 영향을 줍니다. 첫 인덱서 실행에서 기존 코퍼스 전체가 한 번에 임베딩되어
 그만큼의 비용이 한꺼번에 청구됩니다. 비용을 여러 번의 실행에 분산시키려면
 ``content_chunker.job.max_documents_per_run`` 에 유한한 값을 설정하세요.

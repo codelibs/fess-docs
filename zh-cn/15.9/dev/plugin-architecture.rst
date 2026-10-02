@@ -348,7 +348,7 @@ DI容器注册
 
 除此之外，还公开了 ``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint`` 等数据存储连接器，以及
-``fess-llm-ollama`` / ``fess-llm-gemini`` 等 LLM 提供方。这些插件已在
+``fess-llm-ollama`` / ``fess-llm-gemini`` / ``fess-llm-bedrock`` 等 LLM 提供方。这些插件已在
 `GitHub <https://github.com/codelibs>`__ 上公开，可作为开发参考。
 
 参考信息

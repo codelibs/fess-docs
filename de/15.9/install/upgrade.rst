@@ -1020,7 +1020,8 @@ Falls Sie den KI-Suchmodus (RAG-Chat) genutzt haben
 
 Ab 15.9 wurde die Funktion des KI-Suchmodus (RAG-Chat) in separate Plugins wie ``fess-llm-ollama``,
 ``fess-llm-openai`` und ``fess-llm-gemini`` ausgelagert. Installieren Sie das zu Ihrem verwendeten
-Anbieter passende Plugin über die Verwaltungsseite unter „System" → „Plugins".
+Anbieter passende Plugin über die Verwaltungsseite unter „System" → „Plugins". 15.9 fügt außerdem
+``fess-llm-bedrock`` für Amazon Bedrock hinzu.
 
 Falls Sie SPNEGO (Windows-integrierte Authentifizierung) genutzt haben
 ----------------------------------------------------------------------

@@ -72,7 +72,7 @@ LLMプロバイダーの選択は、管理画面またはシステムプロパ�
 
 ::
 
-    # LLMプロバイダーを選択（ollama, openai, gemini）
+    # LLMプロバイダーを選択（ollama, openai, gemini, bedrock）
     rag.llm.name=ollama
 
 LLMプロバイダーの詳細設定については、以下を参照してください:
@@ -80,6 +80,7 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
 - :doc:`llm-ollama` - Ollamaの設定
 - :doc:`llm-openai` - OpenAIの設定
 - :doc:`llm-gemini` - Google Geminiの設定
+- :doc:`llm-bedrock` - Amazon Bedrockの設定
 
 設定経路の早見表
 ================
@@ -122,6 +123,14 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - ×
+   * - ``rag.llm.bedrock.region``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.region=...``
+     - ×
+   * - ``rag.llm.bedrock.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.model=...``
      - ×
 
 .. note::
@@ -196,6 +205,7 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
 - :doc:`llm-ollama` - Ollamaの生成パラメーター設定
 - :doc:`llm-openai` - OpenAIの生成パラメーター設定
 - :doc:`llm-gemini` - Google Geminiの生成パラメーター設定
+- :doc:`llm-bedrock` - Amazon Bedrockの生成パラメーター設定
 
 コンテキスト設定
 ================
@@ -229,7 +239,7 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
 - ``rag.llm.{provider}.{promptType}.context.max.chars`` - コンテキストの最大文字数
 - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - 評価フェーズで選択する最大関連ドキュメント数
 
-``{provider}`` には ``ollama``、``openai``、``gemini`` 等のプロバイダー名が入ります。
+``{provider}`` には ``ollama``、``openai``、``gemini``、``bedrock`` 等のプロバイダー名が入ります。
 ``{promptType}`` には ``intent``、``evaluation``、``answer``、``summary``、``faq``、``queryregeneration``、
 ``unclear``、``noresults``、``docnotfound``、``direct`` 等のプロンプトタイプが入ります。
 サポートされるプロンプトタイプの一覧は各プラグインの ``*LlmClient`` 実装に定義されています。
@@ -272,6 +282,7 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
 - :doc:`llm-ollama` - Ollamaのプロンプト設定
 - :doc:`llm-openai` - OpenAIのプロンプト設定
 - :doc:`llm-gemini` - Google Geminiのプロンプト設定
+- :doc:`llm-bedrock` - Amazon Bedrockのプロンプト設定
 
 セッション管理
 ==============
@@ -568,7 +579,7 @@ AI検索モードボタンが検索画面に表示されない
 
 2. 対応する ``fess-llm-*`` プラグインがインストールされているか
 
-   - Docker の場合: ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` （または ``fess-llm-openai`` / ``fess-llm-ollama``）が指定されているか
+   - Docker の場合: ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` （または ``fess-llm-openai`` / ``fess-llm-ollama`` / ``fess-llm-bedrock``）が指定されているか
    - パッケージインストールの場合: ``app/WEB-INF/plugin/`` に該当の JAR ファイルが配置されているか
    - 起動ログに ``Installing fess-llm-XXX-15.9.0.jar`` が出力されているか
 
@@ -588,10 +599,11 @@ AI検索モードボタンが検索画面に表示されない
 
    - ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` 等が空の場合、 ``checkAvailabilityNow`` が ``false`` を返すため AIモードは利用できません
    - 設定後、``log4j2.xml`` で ``org.codelibs.fess.llm.gemini`` を ``DEBUG`` にすると、``[LLM:GEMINI] Gemini is not available. apiKey is blank`` のようなログで確認できます
+   - ``bedrock`` の場合は ``rag.llm.bedrock.api.key`` またはAWS認証情報のどちらかが必要です。``org.codelibs.fess.llm.bedrock`` を ``DEBUG`` にすると、AWS認証情報を解決できなかった理由をログで確認できます
 
 6. LLMプロバイダーへのネットワーク接続が可能か
 
-   - クラウドAPI（Gemini / OpenAI）の場合、コンテナから外部に到達できる必要があります
+   - クラウドAPI（Gemini / OpenAI / Bedrock）の場合、コンテナから外部に到達できる必要があります
    - Proxy 経由が必要なら、 ``fess_config.properties`` の ``http.proxy.host`` / ``http.proxy.port`` （必要に応じて ``http.proxy.username`` / ``http.proxy.password`` ）を設定してください。Docker環境では ``FESS_JAVA_OPTS`` に ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` を追加します（ |Fess| 15.9 以降、LLMクライアントは |Fess| 共通のプロキシ設定を参照します）
 
 .. note::
@@ -658,7 +670,7 @@ INFOレベルではチャット完了ログ（所要時間、ソース数）が�
 検索ログとアクセスタイプ
 ------------------------
 
-AI検索モードを通じた検索は、検索ログのアクセスタイプとしてLLMプロバイダー名（例: ``ollama``、``openai``、``gemini``）が
+AI検索モードを通じた検索は、検索ログのアクセスタイプとしてLLMプロバイダー名（例: ``ollama``、``openai``、``gemini``、``bedrock``）が
 記録されます。これにより、通常のWeb検索やAPI検索とAI検索モード経由の検索を区別して分析できます。
 
 参考情報
@@ -668,5 +680,6 @@ AI検索モードを通じた検索は、検索ログのアクセスタイプと
 - :doc:`llm-ollama` - Ollamaの設定
 - :doc:`llm-openai` - OpenAIの設定
 - :doc:`llm-gemini` - Google Geminiの設定
+- :doc:`llm-bedrock` - Amazon Bedrockの設定
 - :doc:`../api/api-chat` - Chat API リファレンス
 - :doc:`../user/chat-search` - エンドユーザー向けチャット検索ガイド

@@ -69,7 +69,7 @@ Depuis l'écran de configuration Administration > Système > General, sélection
 
 ::
 
-    # Selectionner le fournisseur LLM (ollama, openai, gemini)
+    # Selectionner le fournisseur LLM (ollama, openai, gemini, bedrock)
     rag.llm.name=ollama
 
 Pour la configuration détaillée des fournisseurs LLM, consultez :
@@ -77,6 +77,7 @@ Pour la configuration détaillée des fournisseurs LLM, consultez :
 - :doc:`llm-ollama` - Configuration Ollama
 - :doc:`llm-openai` - Configuration OpenAI
 - :doc:`llm-gemini` - Configuration Google Gemini
+- :doc:`llm-bedrock` - Configuration Amazon Bedrock
 
 Référence rapide des chemins de configuration
 =============================================
@@ -120,6 +121,14 @@ persistée dans OpenSearch). Les chemins de configuration diffèrent ; ne pas le
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - Non
+   * - ``rag.llm.bedrock.region``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.region=...``
+     - Non
+   * - ``rag.llm.bedrock.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.model=...``
      - Non
 
 .. note::
@@ -195,6 +204,7 @@ Pour les détails, consultez la documentation de chaque fournisseur :
 - :doc:`llm-ollama` - Paramètres de génération Ollama
 - :doc:`llm-openai` - Paramètres de génération OpenAI
 - :doc:`llm-gemini` - Paramètres de génération Google Gemini
+- :doc:`llm-bedrock` - Paramètres de génération Amazon Bedrock
 
 Configuration du contexte
 ================
@@ -228,7 +238,7 @@ Les configurations suivantes s'effectuent dans ``fess_config.properties`` pour c
 - ``rag.llm.{provider}.{promptType}.context.max.chars`` - Nombre maximum de caractères du contexte
 - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - Nombre maximum de documents pertinents à sélectionner lors de la phase d'évaluation
 
-``{provider}`` contient le nom du fournisseur tel que ``ollama``, ``openai``, ``gemini``, etc.
+``{provider}`` contient le nom du fournisseur tel que ``ollama``, ``openai``, ``gemini``, ``bedrock``, etc.
 ``{promptType}`` contient le type de prompt tel que ``intent``, ``evaluation``, ``answer``, ``summary``, ``faq``, ``queryregeneration``,
 ``unclear``, ``noresults``, ``docnotfound``, ``direct``, etc.
 La liste des types de prompt pris en charge est définie dans l'implémentation ``*LlmClient`` de chaque plugin.
@@ -270,6 +280,7 @@ Pour les détails, consultez la documentation de chaque fournisseur :
 - :doc:`llm-ollama` - Configuration des prompts Ollama
 - :doc:`llm-openai` - Configuration des prompts OpenAI
 - :doc:`llm-gemini` - Configuration des prompts Google Gemini
+- :doc:`llm-bedrock` - Configuration des prompts Amazon Bedrock
 
 Gestion des sessions
 ==============
@@ -566,7 +577,7 @@ de recherche, et accéder à ``/chat`` redirige vers la page d'accueil.
 
 2. Le plugin ``fess-llm-*`` correspondant est-il installé ?
 
-   - Docker : ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` (ou ``fess-llm-openai`` / ``fess-llm-ollama``) doit être défini
+   - Docker : ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` (ou ``fess-llm-openai`` / ``fess-llm-ollama`` / ``fess-llm-bedrock``) doit être défini
    - Installation par paquet : le JAR doit être placé dans ``app/WEB-INF/plugin/``
    - Le journal de démarrage doit inclure ``Installing fess-llm-XXX-15.9.0.jar``
 
@@ -586,10 +597,11 @@ de recherche, et accéder à ``/chat`` redirige vers la page d'accueil.
 
    - Quand ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` est vide, ``checkAvailabilityNow`` retourne ``false`` et le mode IA est désactivé
    - Activer DEBUG sur ``org.codelibs.fess.llm.gemini`` dans ``log4j2.xml`` fait apparaître des messages comme ``[LLM:GEMINI] Gemini is not available. apiKey is blank``
+   - Pour ``bedrock``, soit ``rag.llm.bedrock.api.key``, soit des identifiants AWS doivent être disponibles ; activer DEBUG sur ``org.codelibs.fess.llm.bedrock`` montre pourquoi les identifiants n'ont pas pu être résolus
 
 6. L'hôte Fess peut-il atteindre le fournisseur LLM ?
 
-   - Pour les API cloud (Gemini / OpenAI), le conteneur doit avoir un accès sortant à Internet
+   - Pour les API cloud (Gemini / OpenAI / Bedrock), le conteneur doit avoir un accès sortant à Internet
    - En cas de proxy, définissez ``http.proxy.host`` / ``http.proxy.port`` (et au besoin ``http.proxy.username`` / ``http.proxy.password``) dans ``fess_config.properties``. Dans un environnement Docker, ajoutez ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` à ``FESS_JAVA_OPTS`` (depuis |Fess| 15.9, les clients LLM partagent la configuration de proxy commune à |Fess|)
 
 .. note::
@@ -655,7 +667,7 @@ Au niveau INFO, les logs de fin de chat (durée, nombre de sources) sont émis. 
 Journal de recherche et type d'accès
 -------------------------------------
 
-Les recherches via le mode de recherche IA sont enregistrées avec le nom du fournisseur LLM (par ex. ``ollama``, ``openai``, ``gemini``) comme type d'accès dans les journaux de recherche. Cela permet de distinguer les recherches du mode IA des recherches web ou API régulières dans les analyses.
+Les recherches via le mode de recherche IA sont enregistrées avec le nom du fournisseur LLM (par ex. ``ollama``, ``openai``, ``gemini``, ``bedrock``) comme type d'accès dans les journaux de recherche. Cela permet de distinguer les recherches du mode IA des recherches web ou API régulières dans les analyses.
 
 Informations de référence
 ========
@@ -664,5 +676,6 @@ Informations de référence
 - :doc:`llm-ollama` - Configuration Ollama
 - :doc:`llm-openai` - Configuration OpenAI
 - :doc:`llm-gemini` - Configuration Google Gemini
+- :doc:`llm-bedrock` - Configuration Amazon Bedrock
 - :doc:`../api/api-chat` - Référence API Chat
 - :doc:`../user/chat-search` - Guide de recherche par chat pour les utilisateurs

@@ -80,6 +80,9 @@
    * - ``gemini``
      - ``fess-llm-gemini`` 插件
      - 使用 Google Gemini 嵌入 API。
+   * - ``bedrock``
+     - ``fess-llm-bedrock`` 插件
+     - 通过 Amazon Bedrock 使用 Amazon Titan Text Embeddings V2 或 Cohere Embed。
    * - ``none``
      - |Fess| 核心（内置）
      - 仅将文档拆分为分块，不生成向量（仅分块模式）。
@@ -145,7 +148,7 @@ system.properties 配置
        因此包含超大文档的语料可能需要调高此值
    * - ``content_chunker.embedding.name``
      - ``opensearch``
-     - 嵌入提供商（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``none``）
+     - 嵌入提供商（``opensearch`` / ``ollama`` / ``openai`` / ``gemini`` / ``bedrock`` / ``none``）
    * - ``content_chunker.embedding.dimension``
      - ``768``
      - 嵌入向量的维度。创建映射时会使用该值，因此它\ **必须**\ 与您所用嵌入模型的维度一致。该值有
@@ -273,8 +276,8 @@ opensearch 提供商的连接配置
    在同一页面的「系统属性」面板中\ **不加掩码地**\ 显示，因此凭据请写入 ``system.properties``\ ，
    而不要放在启动选项中。
 
-其他提供商（ollama / openai / gemini）
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+其他提供商（ollama / openai / gemini / bedrock）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``ollama`` 提供商（``fess-llm-ollama`` 插件）在 ``content_chunker.embedding.ollama.`` 前缀下
 使用同样风格的配置（``api.url`` 默认值为 ``http://localhost:11434``\ ，``model`` 默认值为
@@ -287,7 +290,9 @@ opensearch 提供商的连接配置
 
 ``openai`` 与 ``gemini`` 提供商的配置方式相同，
 分别对应 ``content_chunker.embedding.openai.`` 和 ``content_chunker.embedding.gemini.`` 前缀。
-完整的配置项列表请参阅各插件自身的文档。
+完整的配置项列表请参阅各插件自身的文档。 ``bedrock`` 提供商使用 ``content_chunker.embedding.bedrock.``
+前缀，并且 ``content_chunker.embedding.dimension`` 必须是所配置模型能够生成的大小，
+请参阅 :doc:`llm-bedrock` 。
 
 配置步骤（以 opensearch 提供商为例）
 =====================================
@@ -613,7 +618,7 @@ Vector Indexer** 会在启动时自动注册，但由于默认处于禁用状态
 
    如果在步骤 1 中就一并写入 ``content_chunker.search.enabled=true``\ ，那么从步骤 2 的重启到
    步骤 4 完成之前，每次搜索都只会执行查询侧的嵌入，而结果中并不会体现出来。使用 ``openai`` /
-   ``gemini`` 等按量计费的提供商时，请在步骤 4 完成之后再写入
+   ``gemini`` / ``bedrock`` 等按量计费的提供商时，请在步骤 4 完成之后再写入
    ``content_chunker.search.enabled=true`` 并重启。
 
 若您之前使用 fess-webapp-semantic-search 插件
@@ -722,7 +727,7 @@ chunk-only 模式
 ``/etc/fess/fess_config.properties``）中覆盖（有关 JVM 选项的概念，请参阅
 :doc:`setup-memory`）。
 
-同样的无限制默认值，在使用按量计费的嵌入提供商（``openai``、``gemini``）时还会带来成本上的
+同样的无限制默认值，在使用按量计费的嵌入提供商（ ``openai`` 、 ``gemini`` 、 ``bedrock`` ）时还会带来成本上的
 影响：首次索引器运行会一次性为现有语料库全部生成嵌入，相应的费用也会一次性产生。如果希望
 将费用分摊到多次运行中，请为 ``content_chunker.job.max_documents_per_run`` 设置一个有限值。
 

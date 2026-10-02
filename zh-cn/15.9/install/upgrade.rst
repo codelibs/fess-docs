@@ -930,7 +930,8 @@ API 请求。由于搜索界面现在通过 ``/api/v2/search`` 进行搜索，�
 
 自 15.9 起，AI 搜索模式（RAG Chat）功能已拆分为 ``fess-llm-ollama``\ 、\ ``fess-llm-openai``\ 、
 ``fess-llm-gemini`` 等插件。请在管理页面「系统」→「插件」中安装与所使用的
-提供商对应的插件。
+提供商对应的插件。15.9 还新增了面向 Amazon Bedrock 的
+``fess-llm-bedrock`` 。
 
 若此前使用过 SPNEGO（Windows 集成认证）
 ---------------------------------------
