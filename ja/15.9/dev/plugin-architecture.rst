@@ -352,7 +352,7 @@ Fess本体との依存
 
 このほかにも、``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint`` などのデータストアコネクターや、
-``fess-llm-ollama`` / ``fess-llm-gemini`` などの LLM プロバイダーが公開されています。
+``fess-llm-ollama`` / ``fess-llm-gemini`` / ``fess-llm-bedrock`` などの LLM プロバイダーが公開されています。
 これらのプラグインは、開発の参考として
 `GitHub <https://github.com/codelibs>`__ で公開されています。
 

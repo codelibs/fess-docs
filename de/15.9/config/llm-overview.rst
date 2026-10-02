@@ -37,6 +37,10 @@ Unterstützte Anbieter
      - ``gemini``
      - ``fess-llm-gemini``
      - Cloud-API von Google. Ermöglicht die Nutzung von Gemini-Modellen.
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - Verwalteter Modelldienst von AWS. Ermöglicht die Nutzung von Modellen wie Amazon Nova und Anthropic Claude.
 
 Anbietervergleich
 ------------------
@@ -64,6 +68,11 @@ Anbietervergleich
      - ``https://generativelanguage.googleapis.com/v1beta``
      - ``x-goog-api-key`` (``rag.llm.gemini.api.key``)
      - Cloud — die Frage und die abgerufenen Dokumente werden an Google gesendet
+   * - Amazon Bedrock (``bedrock``)
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``https://bedrock-runtime.<region>.amazonaws.com``
+     - ``Authorization: Bearer`` (``rag.llm.bedrock.api.key``) oder AWS SigV4 (AWS-Zugangsdaten)
+     - Cloud — die Frage und die abgerufenen Dokumente werden an Amazon Bedrock in der konfigurierten AWS-Region gesendet
 
 .. note::
 
@@ -124,7 +133,7 @@ Konfiguration über die allgemeinen Einstellungen der Administrationsoberfläche
 
 ::
 
-    # LLM-Anbieter angeben (ollama, openai, gemini)
+    # LLM-Anbieter angeben (ollama, openai, gemini, bedrock)
     rag.llm.name=ollama
 
 fess_config.properties
@@ -147,6 +156,7 @@ Detaillierte Einstellungen für jeden Anbieter finden Sie in den folgenden Dokum
 - :doc:`llm-ollama` - Ollama-Konfiguration
 - :doc:`llm-openai` - OpenAI-Konfiguration
 - :doc:`llm-gemini` - Google Gemini-Konfiguration
+- :doc:`llm-bedrock` - Amazon Bedrock-Konfiguration
 
 Gemeinsame Einstellungen
 ========================
@@ -198,6 +208,8 @@ Die Komponentennamen sind je nach Anbieter wie folgt:
      - ``openaiLlmClient``
    * - Google Gemini
      - ``geminiLlmClient``
+   * - Amazon Bedrock
+     - ``bedrockLlmClient``
 
 Um beispielsweise den Antwortgenerierungs-Prompt des OpenAI-Anbieters zu ändern, erstellen Sie ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml``.
 
@@ -391,36 +403,48 @@ Darüber hinaus unterstützt jeder Anbieter eigene Parameter. Die Unterstützung
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 20 20 20
+   :widths: 32 17 17 17 17
 
    * - Parameter
      - Ollama
      - OpenAI
      - Gemini
+     - Bedrock
    * - ``thinking.budget``
      - Unterstützt
      - Nicht unterstützt
      - Unterstützt
+     - Nicht unterstützt
    * - ``thinking.level``
      - Unterstützt
+     - Nicht unterstützt
      - Nicht unterstützt
      - Nicht unterstützt
    * - ``top.p``
      - Unterstützt
      - Unterstützt
      - Nicht unterstützt
+     - Nicht unterstützt
    * - ``top.k``, ``num.ctx``
      - Unterstützt
+     - Nicht unterstützt
      - Nicht unterstützt
      - Nicht unterstützt
    * - ``reasoning.effort``
      - Nicht unterstützt
      - Unterstützt
      - Nicht unterstützt
+     - Nicht unterstützt
    * - ``frequency.penalty``, ``presence.penalty``
      - Nicht unterstützt
      - Unterstützt
      - Nicht unterstützt
+     - Nicht unterstützt
+   * - ``additional.model.request.fields``
+     - Nicht unterstützt
+     - Nicht unterstützt
+     - Nicht unterstützt
+     - Unterstützt
 
 .. note::
 
@@ -429,7 +453,7 @@ Darüber hinaus unterstützt jeder Anbieter eigene Parameter. Die Unterstützung
 .. note::
 
    Nur beim Ollama-Anbieter gibt es einen Fallback, der bei fehlender prompttypspezifischer Einstellung auf ``rag.llm.ollama.default.{Parameter}`` zurückgreift
-   (mit Ausnahme von ``context.max.chars``). Für die Anbieter OpenAI und Gemini gibt es diesen Fallback nicht; fehlt eine prompttypspezifische Einstellung,
+   (mit Ausnahme von ``context.max.chars``). Für die Anbieter OpenAI, Gemini und Bedrock gibt es diesen Fallback nicht; fehlt eine prompttypspezifische Einstellung,
    wird stattdessen der im Plugin fest hinterlegte Standardwert verwendet.
 
 Nächste Schritte
@@ -438,6 +462,7 @@ Nächste Schritte
 - :doc:`llm-ollama` - Detaillierte Ollama-Konfiguration
 - :doc:`llm-openai` - Detaillierte OpenAI-Konfiguration
 - :doc:`llm-gemini` - Detaillierte Google Gemini-Konfiguration
+- :doc:`llm-bedrock` - Detaillierte Amazon Bedrock-Konfiguration
 - :doc:`rag-chat` - Detaillierte Konfiguration der KI-Suchmodus-Funktion
 - :doc:`rank-fusion` - Rank Fusion Konfiguration (Zusammenführung hybrider Suchergebnisse)
 - :doc:`../user/chat-search` - Verwendung des KI-Suchmodus

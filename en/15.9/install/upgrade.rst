@@ -982,7 +982,8 @@ If You Were Using AI Search Mode (RAG)
 
 Starting with 15.9, AI search mode (RAG) functionality has been split out into plugins such as
 ``fess-llm-ollama``, ``fess-llm-openai``, and ``fess-llm-gemini``. Install the plugin that
-corresponds to the provider you use from "System" → "Plugins" in the admin UI.
+corresponds to the provider you use from "System" → "Plugins" in the admin UI. 15.9 also adds
+``fess-llm-bedrock`` for Amazon Bedrock.
 
 If You Were Using SPNEGO (Windows Integrated Authentication)
 ------------------------------------------------------------

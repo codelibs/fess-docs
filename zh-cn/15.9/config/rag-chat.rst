@@ -71,7 +71,7 @@ LLM提供商的选择在管理界面或系统属性中进行。
 
 ::
 
-    # 选择LLM提供商（ollama, openai, gemini）
+    # 选择LLM提供商（ollama, openai, gemini, bedrock）
     rag.llm.name=ollama
 
 有关LLM提供商的详细配置，请参阅以下内容:
@@ -79,6 +79,7 @@ LLM提供商的选择在管理界面或系统属性中进行。
 - :doc:`llm-ollama` - Ollama配置
 - :doc:`llm-openai` - OpenAI配置
 - :doc:`llm-gemini` - Google Gemini配置
+- :doc:`llm-bedrock` - Amazon Bedrock配置
 
 配置路径快速参考
 ================
@@ -122,6 +123,14 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - 无
+   * - ``rag.llm.bedrock.region``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.region=...``
+     - 无
+   * - ``rag.llm.bedrock.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.model=...``
      - 无
 
 .. note::
@@ -196,6 +205,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 - :doc:`llm-ollama` - Ollama生成参数配置
 - :doc:`llm-openai` - OpenAI生成参数配置
 - :doc:`llm-gemini` - Google Gemini生成参数配置
+- :doc:`llm-bedrock` - Amazon Bedrock生成参数配置
 
 上下文配置
 ================
@@ -229,7 +239,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 - ``rag.llm.{provider}.{promptType}.context.max.chars`` - 上下文最大字符数
 - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - 评估阶段选择的最大相关文档数
 
-``{provider}`` 处填入 ``ollama``、``openai``、``gemini`` 等提供商名称。
+``{provider}`` 处填入 ``ollama``、``openai``、``gemini``、``bedrock`` 等提供商名称。
 ``{promptType}`` 处填入 ``intent``、``evaluation``、``answer``、``summary``、``faq``、``queryregeneration``、
 ``unclear``、``noresults``、``docnotfound``、``direct`` 等提示词类型。
 支持的提示词类型列表在各插件的 ``*LlmClient`` 实现中定义。
@@ -271,6 +281,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 - :doc:`llm-ollama` - Ollama提示词配置
 - :doc:`llm-openai` - OpenAI提示词配置
 - :doc:`llm-gemini` - Google Gemini提示词配置
+- :doc:`llm-bedrock` - Amazon Bedrock提示词配置
 
 会话管理
 ==============
@@ -566,7 +577,7 @@ Web界面
 
 2. 对应的 ``fess-llm-*`` 插件是否已安装
 
-   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama``）
+   - Docker: 是否指定了 ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` （或 ``fess-llm-openai`` / ``fess-llm-ollama`` / ``fess-llm-bedrock`` ）
    - 软件包安装: 对应的 JAR 文件是否放置在 ``app/WEB-INF/plugin/``
    - 启动日志中是否输出 ``Installing fess-llm-XXX-15.9.0.jar``
 
@@ -586,10 +597,11 @@ Web界面
 
    - 当 ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` 为空时，``checkAvailabilityNow`` 返回 ``false``，AI 模式不可用
    - 在 ``log4j2.xml`` 中将 ``org.codelibs.fess.llm.gemini`` 设为 ``DEBUG`` 后，可以看到 ``[LLM:GEMINI] Gemini is not available. apiKey is blank`` 类似日志
+   - 对于 ``bedrock`` ，必须提供 ``rag.llm.bedrock.api.key`` 或 AWS 凭据；对 ``org.codelibs.fess.llm.bedrock`` 启用 DEBUG 后，可以看到无法解析凭据的原因
 
 6. 是否能连接到 LLM 提供商
 
-   - 对于云端 API（Gemini / OpenAI），容器需要能访问外网
+   - 对于云端 API（Gemini / OpenAI / Bedrock），容器需要能访问外网
    - 如需经代理，请在 ``fess_config.properties`` 中设置 ``http.proxy.host`` / ``http.proxy.port`` （必要时设置 ``http.proxy.username`` / ``http.proxy.password`` ）。在Docker环境中，于 ``FESS_JAVA_OPTS`` 中追加 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` （自 |Fess| 15.9 起，LLM客户端会引用 |Fess| 通用的代理配置）
 
 .. note::
@@ -657,7 +669,7 @@ INFO级别输出聊天完成日志（耗时、来源数），DEBUG级别输出to
 搜索日志与访问类型
 ------------------
 
-通过AI搜索模式进行的搜索，会在搜索日志中以LLM提供商名称（如 ``ollama``、``openai``、``gemini``）作为访问类型记录。
+通过AI搜索模式进行的搜索，会在搜索日志中以LLM提供商名称（如 ``ollama``、``openai``、``gemini``、``bedrock`` ）作为访问类型记录。
 这样可以在分析中区分AI搜索模式的搜索与普通Web搜索或API搜索。
 
 参考信息
@@ -667,5 +679,6 @@ INFO级别输出聊天完成日志（耗时、来源数），DEBUG级别输出to
 - :doc:`llm-ollama` - Ollama配置
 - :doc:`llm-openai` - OpenAI配置
 - :doc:`llm-gemini` - Google Gemini配置
+- :doc:`llm-bedrock` - Amazon Bedrock配置
 - :doc:`../api/api-chat` - Chat API参考
 - :doc:`../user/chat-search` - 终端用户聊天搜索指南

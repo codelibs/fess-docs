@@ -42,6 +42,10 @@ AI検索モードの検索ステップを含むすべての検索でRank Fusion�
      - ``gemini``
      - ``fess-llm-gemini``
      - Google社のクラウドAPI。Geminiモデルを利用可能。
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - AWSのマネージドモデルサービス。Amazon NovaやAnthropic Claudeなどのモデルを利用可能。
 
 プロバイダー比較
 ----------------
@@ -69,6 +73,11 @@ AI検索モードの検索ステップを含むすべての検索でRank Fusion�
      - ``https://generativelanguage.googleapis.com/v1beta``
      - ``x-goog-api-key`` （ ``rag.llm.gemini.api.key`` ）
      - クラウド — 質問と取得されたドキュメントがGoogleに送信されます
+   * - Amazon Bedrock（ ``bedrock`` ）
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``https://bedrock-runtime.<region>.amazonaws.com``
+     - ``Authorization: Bearer`` （ ``rag.llm.bedrock.api.key`` ）またはAWS SigV4（AWS認証情報）
+     - クラウド — 質問と取得されたドキュメントが設定したAWSリージョンのAmazon Bedrockに送信されます
 
 .. note::
 
@@ -129,7 +138,7 @@ LLM機能の設定は、以下の2つの場所で行います。
 
 ::
 
-    # LLMプロバイダーを指定（ollama, openai, gemini）
+    # LLMプロバイダーを指定（ollama, openai, gemini, bedrock）
     rag.llm.name=ollama
 
 fess_config.properties
@@ -152,6 +161,7 @@ AI検索モードの有効化、セッション・履歴関連の設定に加え
 - :doc:`llm-ollama` - Ollamaの設定
 - :doc:`llm-openai` - OpenAIの設定
 - :doc:`llm-gemini` - Google Geminiの設定
+- :doc:`llm-bedrock` - Amazon Bedrockの設定
 
 共通設定
 ========
@@ -202,6 +212,8 @@ AI検索モードの有効化、セッション・履歴関連の設定に加え
      - ``openaiLlmClient``
    * - Google Gemini
      - ``geminiLlmClient``
+   * - Amazon Bedrock
+     - ``bedrockLlmClient``
 
 例として、OpenAIプロバイダーの回答生成プロンプトを変更する場合は、 ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml`` を作成します。
 
@@ -394,36 +406,48 @@ LLMへのリクエストの同時実行数を制御する設定です。 ``fess_
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 20 20 20
+   :widths: 32 17 17 17 17
 
    * - パラメーター
      - Ollama
      - OpenAI
      - Gemini
+     - Bedrock
    * - ``thinking.budget``
      - 対応
      - 非対応
      - 対応
+     - 非対応
    * - ``thinking.level``
      - 対応
+     - 非対応
      - 非対応
      - 非対応
    * - ``top.p``
      - 対応
      - 対応
      - 非対応
+     - 非対応
    * - ``top.k`` 、 ``num.ctx``
      - 対応
+     - 非対応
      - 非対応
      - 非対応
    * - ``reasoning.effort``
      - 非対応
      - 対応
      - 非対応
+     - 非対応
    * - ``frequency.penalty`` 、 ``presence.penalty``
      - 非対応
      - 対応
      - 非対応
+     - 非対応
+   * - ``additional.model.request.fields``
+     - 非対応
+     - 非対応
+     - 非対応
+     - 対応
 
 .. note::
 
@@ -432,7 +456,7 @@ LLMへのリクエストの同時実行数を制御する設定です。 ``fess_
 .. note::
 
    Ollamaプロバイダーのみ、プロンプトタイプ別の設定が存在しない場合に ``rag.llm.ollama.default.{パラメーター}`` を参照するフォールバックがあります
-   （ ``context.max.chars`` を除く）。OpenAIプロバイダーとGeminiプロバイダーにはこのフォールバックはなく、
+   （ ``context.max.chars`` を除く）。OpenAI、Gemini、Bedrockの各プロバイダーにはこのフォールバックはなく、
    プロンプトタイプ別の設定がない場合はプラグイン組み込みのデフォルト値が使用されます。
 
 次のステップ
@@ -441,6 +465,7 @@ LLMへのリクエストの同時実行数を制御する設定です。 ``fess_
 - :doc:`llm-ollama` - Ollamaの詳細設定
 - :doc:`llm-openai` - OpenAIの詳細設定
 - :doc:`llm-gemini` - Google Geminiの詳細設定
+- :doc:`llm-bedrock` - Amazon Bedrockの詳細設定
 - :doc:`rag-chat` - AI検索モード機能の詳細設定
 - :doc:`rank-fusion` - Rank Fusion設定（ハイブリッド検索の結果統合）
 - :doc:`../user/chat-search` - AI検索モードの使い方

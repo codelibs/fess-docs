@@ -40,6 +40,10 @@ Rank Fusion，无需为了让语义搜索器参与其中而进行 AI 搜索模�
      - ``gemini``
      - ``fess-llm-gemini``
      - Google 公司的云 API。可使用 Gemini 模型。
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - AWS 的托管模型服务。可使用 Amazon Nova、Anthropic Claude 等模型。
 
 提供商比较
 ----------
@@ -67,6 +71,11 @@ Rank Fusion，无需为了让语义搜索器参与其中而进行 AI 搜索模�
      - ``https://generativelanguage.googleapis.com/v1beta``
      - ``x-goog-api-key`` （ ``rag.llm.gemini.api.key`` ）
      - 云端 — 问题及检索到的文档会被发送至 Google
+   * - Amazon Bedrock（ ``bedrock`` ）
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``https://bedrock-runtime.<region>.amazonaws.com``
+     - ``Authorization: Bearer`` （ ``rag.llm.bedrock.api.key`` ）或 AWS SigV4（AWS 凭据）
+     - 云端 — 问题及检索到的文档会被发送至所配置 AWS 区域中的 Amazon Bedrock
 
 .. note::
 
@@ -121,7 +130,7 @@ LLM 功能的配置在以下两处进行。
 
 ::
 
-    # 指定LLM提供商（ollama, openai, gemini）
+    # 指定LLM提供商（ollama, openai, gemini, bedrock）
     rag.llm.name=ollama
 
 fess_config.properties
@@ -143,6 +152,7 @@ fess_config.properties
 - :doc:`llm-ollama` - Ollama 的配置
 - :doc:`llm-openai` - OpenAI 的配置
 - :doc:`llm-gemini` - Google Gemini 的配置
+- :doc:`llm-bedrock` - Amazon Bedrock 的配置
 
 通用配置
 ========
@@ -193,6 +203,8 @@ fess_config.properties
      - ``openaiLlmClient``
    * - Google Gemini
      - ``geminiLlmClient``
+   * - Amazon Bedrock
+     - ``bedrockLlmClient``
 
 例如，若要修改 OpenAI 提供商的回答生成提示词，请创建 ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml`` 。
 
@@ -383,36 +395,48 @@ fess_config.properties
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 20 20 20
+   :widths: 32 17 17 17 17
 
    * - 参数
      - Ollama
      - OpenAI
      - Gemini
+     - Bedrock
    * - ``thinking.budget``
      - 支持
      - 不支持
      - 支持
+     - 不支持
    * - ``thinking.level``
      - 支持
+     - 不支持
      - 不支持
      - 不支持
    * - ``top.p``
      - 支持
      - 支持
      - 不支持
+     - 不支持
    * - ``top.k`` 、 ``num.ctx``
      - 支持
+     - 不支持
      - 不支持
      - 不支持
    * - ``reasoning.effort``
      - 不支持
      - 支持
      - 不支持
+     - 不支持
    * - ``frequency.penalty`` 、 ``presence.penalty``
      - 不支持
      - 支持
      - 不支持
+     - 不支持
+   * - ``additional.model.request.fields``
+     - 不支持
+     - 不支持
+     - 不支持
+     - 支持
 
 .. note::
 
@@ -421,7 +445,7 @@ fess_config.properties
 .. note::
 
    仅 Ollama 提供商在不存在按提示类型分别设置的情况下，具有回退到 ``rag.llm.ollama.default.{参数}`` 的机制
-   （ ``context.max.chars`` 除外）。OpenAI 提供商和 Gemini 提供商没有此回退机制，
+   （ ``context.max.chars`` 除外）。OpenAI 提供商、Gemini 提供商和 Bedrock 提供商没有此回退机制，
    若不存在按提示类型的设置，则使用插件内置的默认值。
 
 后续步骤
@@ -430,6 +454,7 @@ fess_config.properties
 - :doc:`llm-ollama` - Ollama 详细配置
 - :doc:`llm-openai` - OpenAI 详细配置
 - :doc:`llm-gemini` - Google Gemini 详细配置
+- :doc:`llm-bedrock` - Amazon Bedrock 详细配置
 - :doc:`rag-chat` - AI 搜索模式功能详细配置
 - :doc:`rank-fusion` - Rank Fusion 配置（混合搜索结果融合）
 - :doc:`../user/chat-search` - AI 搜索模式的使用方法

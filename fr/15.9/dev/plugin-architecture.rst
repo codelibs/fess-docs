@@ -372,7 +372,7 @@ exemples représentatifs (cette liste n'est pas exhaustive) :
 
 D'autres connecteurs DataStore tels que ``fess-ds-csv`` / ``fess-ds-db`` /
 ``fess-ds-json`` / ``fess-ds-microsoft365`` / ``fess-ds-sharepoint``, ainsi
-que des fournisseurs LLM tels que ``fess-llm-ollama`` / ``fess-llm-gemini``,
+que des fournisseurs LLM tels que ``fess-llm-ollama`` / ``fess-llm-gemini`` / ``fess-llm-bedrock``,
 sont également publiés. Ces plugins sont disponibles sur
 `GitHub <https://github.com/codelibs>`__ comme référence pour le
 développement.

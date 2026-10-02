@@ -37,6 +37,10 @@ Supported Providers
      - ``gemini``
      - ``fess-llm-gemini``
      - Google's cloud API. Enables use of Gemini models.
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - AWS's managed model service. Enables use of models such as Amazon Nova and Anthropic Claude.
 
 Provider Comparison
 --------------------
@@ -64,6 +68,11 @@ Provider Comparison
      - ``https://generativelanguage.googleapis.com/v1beta``
      - ``x-goog-api-key`` (``rag.llm.gemini.api.key``)
      - Cloud — the question and retrieved documents are sent to Google
+   * - Amazon Bedrock (``bedrock``)
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``https://bedrock-runtime.<region>.amazonaws.com``
+     - ``Authorization: Bearer`` (``rag.llm.bedrock.api.key``) or AWS SigV4 (AWS credentials)
+     - Cloud — the question and retrieved documents are sent to Amazon Bedrock in the configured AWS region
 
 .. note::
 
@@ -124,7 +133,7 @@ Configure in the administration screen general settings or in ``system.propertie
 
 ::
 
-    # Specify LLM provider (ollama, openai, gemini)
+    # Specify LLM provider (ollama, openai, gemini, bedrock)
     rag.llm.name=ollama
 
 fess_config.properties
@@ -147,6 +156,7 @@ For detailed configuration of each provider, please refer to the following docum
 - :doc:`llm-ollama` - Ollama configuration
 - :doc:`llm-openai` - OpenAI configuration
 - :doc:`llm-gemini` - Google Gemini configuration
+- :doc:`llm-bedrock` - Amazon Bedrock configuration
 
 Common Settings
 ===============
@@ -197,6 +207,8 @@ The component names for each provider are as follows.
      - ``openaiLlmClient``
    * - Google Gemini
      - ``geminiLlmClient``
+   * - Amazon Bedrock
+     - ``bedrockLlmClient``
 
 For example, to change the answer generation prompt for the OpenAI provider, create ``app/WEB-INF/classes/fess_llm+openaiLlmClient.xml``.
 
@@ -389,36 +401,48 @@ In addition, each provider supports its own provider-specific parameters. Suppor
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 20 20 20
+   :widths: 32 17 17 17 17
 
    * - Parameter
      - Ollama
      - OpenAI
      - Gemini
+     - Bedrock
    * - ``thinking.budget``
      - Supported
      - Not supported
      - Supported
+     - Not supported
    * - ``thinking.level``
      - Supported
+     - Not supported
      - Not supported
      - Not supported
    * - ``top.p``
      - Supported
      - Supported
      - Not supported
+     - Not supported
    * - ``top.k``, ``num.ctx``
      - Supported
+     - Not supported
      - Not supported
      - Not supported
    * - ``reasoning.effort``
      - Not supported
      - Supported
      - Not supported
+     - Not supported
    * - ``frequency.penalty``, ``presence.penalty``
      - Not supported
      - Supported
      - Not supported
+     - Not supported
+   * - ``additional.model.request.fields``
+     - Not supported
+     - Not supported
+     - Not supported
+     - Supported
 
 .. note::
 
@@ -427,7 +451,7 @@ In addition, each provider supports its own provider-specific parameters. Suppor
 .. note::
 
    Only the Ollama provider has a fallback that references ``rag.llm.ollama.default.{parameter}`` when no per-prompt-type setting exists
-   (except for ``context.max.chars``). The OpenAI and Gemini providers have no such fallback; when no per-prompt-type setting exists,
+   (except for ``context.max.chars``). The OpenAI, Gemini and Bedrock providers have no such fallback; when no per-prompt-type setting exists,
    the plugin's built-in default value is used instead.
 
 Next Steps
@@ -436,6 +460,7 @@ Next Steps
 - :doc:`llm-ollama` - Detailed Ollama configuration
 - :doc:`llm-openai` - Detailed OpenAI configuration
 - :doc:`llm-gemini` - Detailed Google Gemini configuration
+- :doc:`llm-bedrock` - Detailed Amazon Bedrock configuration
 - :doc:`rag-chat` - Detailed AI search mode configuration
 - :doc:`rank-fusion` - Rank Fusion settings (hybrid search result merging)
 - :doc:`../user/chat-search` - How to use AI search mode

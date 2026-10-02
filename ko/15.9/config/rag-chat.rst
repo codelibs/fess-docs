@@ -72,7 +72,7 @@ LLM 프로바이더 선택은 관리 화면 또는 시스템 프로퍼티에서 
 
 ::
 
-    # LLM 프로바이더 선택(ollama, openai, gemini)
+    # LLM 프로바이더 선택(ollama, openai, gemini, bedrock)
     rag.llm.name=ollama
 
 LLM 프로바이더의 상세 설정은 다음을 참조하세요:
@@ -80,6 +80,7 @@ LLM 프로바이더의 상세 설정은 다음을 참조하세요:
 - :doc:`llm-ollama` - Ollama 설정
 - :doc:`llm-openai` - OpenAI 설정
 - :doc:`llm-gemini` - Google Gemini 설정
+- :doc:`llm-bedrock` - Amazon Bedrock 설정
 
 설정 경로 빠른 참조
 ================
@@ -123,6 +124,14 @@ OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하�
    * - ``rag.llm.ollama.api.url``
      - FessConfig
      - ``-Dfess.config.rag.llm.ollama.api.url=...``
+     - 없음
+   * - ``rag.llm.bedrock.region``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.region=...``
+     - 없음
+   * - ``rag.llm.bedrock.model``
+     - FessConfig
+     - ``-Dfess.config.rag.llm.bedrock.model=...``
      - 없음
 
 .. note::
@@ -198,6 +207,7 @@ OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하�
 - :doc:`llm-ollama` - Ollama 생성 파라미터 설정
 - :doc:`llm-openai` - OpenAI 생성 파라미터 설정
 - :doc:`llm-gemini` - Google Gemini 생성 파라미터 설정
+- :doc:`llm-bedrock` - Amazon Bedrock 생성 파라미터 설정
 
 컨텍스트 설정
 ================
@@ -231,7 +241,7 @@ OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하�
 - ``rag.llm.{provider}.{promptType}.context.max.chars`` - 컨텍스트의 최대 문자 수
 - ``rag.llm.{provider}.chat.evaluation.max.relevant.docs`` - 평가 단계에서 선택할 최대 관련 문서 수
 
-``{provider}`` 에는 ``ollama``, ``openai``, ``gemini`` 등의 프로바이더명이 들어갑니다.
+``{provider}`` 에는 ``ollama``, ``openai``, ``gemini``, ``bedrock`` 등의 프로바이더명이 들어갑니다.
 ``{promptType}`` 에는 ``intent``, ``evaluation``, ``answer``, ``summary``, ``faq``, ``queryregeneration``,
 ``unclear``, ``noresults``, ``docnotfound``, ``direct`` 등의 프롬프트 타입이 들어갑니다.
 지원되는 프롬프트 타입 목록은 각 플러그인의 ``*LlmClient`` 구현에 정의되어 있습니다.
@@ -274,6 +284,7 @@ OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하�
 - :doc:`llm-ollama` - Ollama 프롬프트 설정
 - :doc:`llm-openai` - OpenAI 프롬프트 설정
 - :doc:`llm-gemini` - Google Gemini 프롬프트 설정
+- :doc:`llm-bedrock` - Amazon Bedrock 프롬프트 설정
 
 세션 관리
 ==============
@@ -570,7 +581,7 @@ SSE 이벤트:
 
 2. 해당 ``fess-llm-*`` 플러그인이 설치되어 있는가
 
-   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` (또는 ``fess-llm-openai`` / ``fess-llm-ollama`` )가 지정되어 있는가
+   - Docker: ``FESS_PLUGINS=fess-llm-gemini:15.9.0`` (또는 ``fess-llm-openai`` / ``fess-llm-ollama`` / ``fess-llm-bedrock`` )가 지정되어 있는가
    - 패키지 설치: JAR 파일이 ``app/WEB-INF/plugin/`` 에 배치되어 있는가
    - 시작 로그에 ``Installing fess-llm-XXX-15.9.0.jar`` 이 출력되고 있는가
 
@@ -590,10 +601,11 @@ SSE 이벤트:
 
    - ``rag.llm.gemini.api.key`` / ``rag.llm.openai.api.key`` 등이 비어 있으면 ``checkAvailabilityNow`` 가 ``false`` 를 반환하므로 AI 모드를 이용할 수 없습니다
    - ``log4j2.xml`` 에서 ``org.codelibs.fess.llm.gemini`` 를 ``DEBUG`` 로 설정하면 ``[LLM:GEMINI] Gemini is not available. apiKey is blank`` 와 같은 로그로 확인할 수 있습니다
+   - ``bedrock`` 의 경우 ``rag.llm.bedrock.api.key`` 또는 AWS 인증 정보 중 하나를 사용할 수 있어야 합니다. ``org.codelibs.fess.llm.bedrock`` 을 ``DEBUG`` 로 설정하면 인증 정보를 확인하지 못한 이유가 출력됩니다
 
 6. LLM 프로바이더로의 네트워크 연결이 가능한가
 
-   - 클라우드 API(Gemini / OpenAI)의 경우 컨테이너에서 외부로 도달할 수 있어야 합니다
+   - 클라우드 API(Gemini / OpenAI / Bedrock)의 경우 컨테이너에서 외부로 도달할 수 있어야 합니다
    - 프록시 경유가 필요한 경우, ``fess_config.properties`` 의 ``http.proxy.host`` / ``http.proxy.port`` (필요에 따라 ``http.proxy.username`` / ``http.proxy.password`` )를 설정하세요. Docker 환경에서는 ``FESS_JAVA_OPTS`` 에 ``-Dfess.config.http.proxy.host=... -Dfess.config.http.proxy.port=...`` 를 추가합니다( |Fess| 15.9 이후, LLM 클라이언트는 |Fess| 공통의 프록시 설정을 참조합니다)
 
 .. note::
@@ -661,7 +673,7 @@ INFO 레벨에서는 채팅 완료 로그(소요 시간, 소스 수)가 출력�
 검색 로그와 액세스 타입
 ------------------------
 
-AI 검색 모드를 통한 검색은 검색 로그의 액세스 타입으로 LLM 프로바이더명(예: ``ollama``, ``openai``, ``gemini``)이
+AI 검색 모드를 통한 검색은 검색 로그의 액세스 타입으로 LLM 프로바이더명(예: ``ollama``, ``openai``, ``gemini``, ``bedrock``)이
 기록됩니다. 이를 통해 일반 웹 검색이나 API 검색과 AI 검색 모드 경유 검색을 구분하여 분석할 수 있습니다.
 
 참고 정보
@@ -671,5 +683,6 @@ AI 검색 모드를 통한 검색은 검색 로그의 액세스 타입으로 LLM
 - :doc:`llm-ollama` - Ollama 설정
 - :doc:`llm-openai` - OpenAI 설정
 - :doc:`llm-gemini` - Google Gemini 설정
+- :doc:`llm-bedrock` - Amazon Bedrock 설정
 - :doc:`../api/api-chat` - Chat API 레퍼런스
 - :doc:`../user/chat-search` - 최종 사용자용 채팅 검색 가이드

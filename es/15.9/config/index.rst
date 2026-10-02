@@ -71,6 +71,7 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
    llm-ollama
    llm-openai
    llm-gemini
+   llm-bedrock
    rag-chat
 
 .. toctree::

@@ -71,6 +71,7 @@
    llm-ollama
    llm-openai
    llm-gemini
+   llm-bedrock
    rag-chat
 
 .. toctree::

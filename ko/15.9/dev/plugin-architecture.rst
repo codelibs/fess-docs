@@ -352,7 +352,7 @@ Fess 본체 의존성
 
 이 밖에도 ``fess-ds-csv`` / ``fess-ds-db`` / ``fess-ds-json`` /
 ``fess-ds-microsoft365`` / ``fess-ds-sharepoint`` 등의 데이터스토어 커넥터나,
-``fess-llm-ollama`` / ``fess-llm-gemini`` 등의 LLM 프로바이더가 공개되어 있습니다.
+``fess-llm-ollama`` / ``fess-llm-gemini`` / ``fess-llm-bedrock`` 등의 LLM 프로바이더가 공개되어 있습니다.
 이들 플러그인은 개발 참고용으로
 `GitHub <https://github.com/codelibs>`__ 에 공개되어 있습니다.
 

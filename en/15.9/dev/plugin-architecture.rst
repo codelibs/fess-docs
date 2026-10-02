@@ -371,7 +371,7 @@ representative examples (this is not an exhaustive list):
 In addition, Data Store connectors such as ``fess-ds-csv`` /
 ``fess-ds-db`` / ``fess-ds-json`` / ``fess-ds-microsoft365`` /
 ``fess-ds-sharepoint``, and LLM providers such as ``fess-llm-ollama`` /
-``fess-llm-gemini``, are also published. These plugins are published
+``fess-llm-gemini`` / ``fess-llm-bedrock``, are also published. These plugins are published
 on `GitHub <https://github.com/codelibs>`__ as a reference for
 development.
 

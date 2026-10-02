@@ -1023,7 +1023,7 @@ Si Utilizaba el Modo de Búsqueda con IA (Chat RAG)
 A partir de la versión 15.9, la función del modo de búsqueda con IA (chat RAG) se separó en
 plugins independientes, como ``fess-llm-ollama``, ``fess-llm-openai`` y ``fess-llm-gemini``.
 Instale el plugin correspondiente al proveedor que utilice desde "Sistema" → "Plugin" en la
-pantalla de administración.
+pantalla de administración. La versión 15.9 añade además ``fess-llm-bedrock`` para Amazon Bedrock.
 
 Si Utilizaba SPNEGO (Autenticación Integrada de Windows)
 --------------------------------------------------------
