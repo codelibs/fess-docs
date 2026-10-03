@@ -168,6 +168,16 @@ Diffusion et API
   |Fess| lui-même (les styles en ligne sont autorisés ; les scripts en ligne
   ne le sont pas). Les polices ou scripts provenant d'un CDN externe ne sont
   donc pas chargés ; incluez-les dans le thème.
+- La ``Content-Security-Policy`` du HTML d'entrée contient
+  ``frame-ancestors 'none'`` et la réponse porte aussi
+  ``X-Frame-Options: DENY`` ; la page n'est donc pas affichée dans un cadre
+  d'une autre page. La valeur de ``frame-ancestors`` se modifie avec
+  ``theme.index.frame.ancestors`` dans ``fess_config.properties``
+  (par défaut : ``'none'``). Une valeur vide retire ``frame-ancestors``
+  (``X-Frame-Options: DENY`` est toujours envoyé). Avec
+  ``frame-ancestors 'none'``, les navigateurs basés sur WebKit, comme Safari,
+  laissent vides les cadres qu'un thème affiche depuis une URL ``blob:``
+  (aperçu d'un PDF ou copie en cache). Videz la valeur pour les afficher.
 - La SPA du thème récupère les données telles que les résultats de recherche
   ou le chat depuis l'API ``/api/v2/*``.
 

@@ -154,6 +154,13 @@
   ``Content-Security-Policy`` ヘッダーが付きます(インラインのスタイルは許可され、
   インラインのスクリプトは許可されません)。そのため外部の CDN のフォントやスクリプトは
   読み込まれません。テーマに同梱してください。
+- エントリー HTML の ``Content-Security-Policy`` には ``frame-ancestors 'none'`` が含まれ、
+  ``X-Frame-Options: DENY`` ヘッダーも付くため、ページは他のページのフレームに表示されません。
+  ``frame-ancestors`` の値は ``fess_config.properties`` の ``theme.index.frame.ancestors``
+  （デフォルト: ``'none'`` ）で変更できます。空にすると ``frame-ancestors`` を付けません
+  （ ``X-Frame-Options: DENY`` は付いたままです）。WebKit 系のブラウザー（Safari など）は、
+  ``frame-ancestors 'none'`` のもとではテーマが ``blob:`` URL で表示するフレーム
+  （PDF のプレビューやキャッシュの表示）を空にします。これらを表示するには値を空にします。
 
 パッケージング
 --------------

@@ -163,6 +163,16 @@ Serving and API
   itself (inline styles are allowed; inline scripts are not). Fonts or
   scripts from an external CDN are therefore not loaded; ship them in the
   theme.
+- The ``Content-Security-Policy`` of the entry HTML contains
+  ``frame-ancestors 'none'``, and the response also carries
+  ``X-Frame-Options: DENY``, so the page is not shown in a frame of
+  another page. The ``frame-ancestors`` value can be changed with
+  ``theme.index.frame.ancestors`` in ``fess_config.properties``
+  (default: ``'none'``). An empty value drops ``frame-ancestors``
+  (``X-Frame-Options: DENY`` is still sent). Under
+  ``frame-ancestors 'none'``, WebKit-based browsers such as Safari leave
+  blank the frames that a theme shows from a ``blob:`` URL (a PDF
+  preview or a cached copy). Set the value to empty to show them.
 - The theme's SPA retrieves data such as search results and chat from
   the ``/api/v2/*`` API.
 

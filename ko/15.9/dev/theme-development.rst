@@ -155,6 +155,14 @@
   허용하는 ``Content-Security-Policy`` 헤더와 함께 반환됩니다(인라인 스타일은
   허용되지만 인라인 스크립트는 허용되지 않습니다). 따라서 외부 CDN 의 폰트나
   스크립트는 로드되지 않으므로 테마에 포함하십시오.
+- 엔트리 HTML 의 ``Content-Security-Policy`` 에는 ``frame-ancestors 'none'`` 이
+  포함되고 ``X-Frame-Options: DENY`` 헤더도 붙으므로, 페이지는 다른 페이지의
+  프레임에 표시되지 않습니다. ``frame-ancestors`` 의 값은 ``fess_config.properties``
+  의 ``theme.index.frame.ancestors`` (기본값: ``'none'`` )로 변경할 수 있습니다.
+  값을 비우면 ``frame-ancestors`` 를 붙이지 않습니다( ``X-Frame-Options: DENY`` 는
+  그대로 붙습니다). WebKit 계열 브라우저(Safari 등)는 ``frame-ancestors 'none'``
+  에서 테마가 ``blob:`` URL 로 표시하는 프레임(PDF 미리보기나 캐시 표시)을 비워 둡니다.
+  이를 표시하려면 값을 비우십시오.
 - 테마의 SPA 는 검색 결과나 채팅 등의 데이터를 ``/api/v2/*`` API 에서 가져옵니다.
 
 패키징
