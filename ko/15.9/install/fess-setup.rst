@@ -94,6 +94,14 @@ Playwright 크롤러가 필요로 하는 Node.js 를 |Fess| 디렉터리의 ``no
 
 ``install plugin`` , ``list plugins`` , ``upgrade plugins`` 에는 ``--repository <url>`` 을 지정할 수 있습니다. 지정하면 버전 목록, jar, 체크섬을 모두 그 하나의 Maven 저장소(사내 미러 등)에서 가져오며, 기본 릴리스 저장소, 스냅숏 저장소, GitHub 은 사용하지 않습니다.
 
+``--repository`` 에는 ``file:///`` 로 시작하는 URL 도 지정할 수 있습니다. 인터넷에 연결할 수 없는 서버에서는 Maven 저장소의 사본을 서버에 두고 그 디렉터리를 지정합니다. 지정하는 것은 각 플러그인의 디렉터리( ``<name>/maven-metadata.xml`` 등)를 포함하는 디렉터리로, 기본 저장소의 ``https://maven.codelibs.org/release/org/codelibs/fess/`` 에 해당하는 위치입니다. 버전 확인과 체크섬 검증은 HTTP 저장소와 같은 방식으로 이루어집니다.
+
+::
+
+    $ bin/fess-setup install plugin fess-ds-csv --repository file:///opt/maven-repo/org/codelibs/fess/
+
+``http`` , ``https`` , ``file`` 이외의 스킴이나 스킴이 없는 URL 은 한 줄의 오류로 거부됩니다.
+
 install plugin
 --------------
 
@@ -106,6 +114,8 @@ install plugin
 jar 는 플러그인의 GitHub 릴리스에서 가져오며, 릴리스에 해당 파일이 없으면 Maven 저장소에서 가져옵니다. 어느 경우든 Maven 저장소가 공개하는 SHA-1 체크섬으로 검증합니다. |Fess| 의 개발 빌드에서는 같은 계열의 스냅숏 빌드도 설치 대상이 되며, 스냅숏이 우선됩니다.
 
 사용 예는 :doc:`../admin/plugin-guide` 를 참조하십시오.
+
+설치할 수 있는 것은 |Fess| 가 읽어 들이는 종류의 플러그인(이름이 ``fess-ds-`` , ``fess-ingest-`` , ``fess-script-`` , ``fess-webapp-`` , ``fess-thumbnail-`` , ``fess-crawler-`` , ``fess-llm-`` , ``fess-storage-`` , ``fess-sso-`` 로 시작하는 것)뿐입니다. ``list plugins`` 에 표시되는 것과 같습니다. 그 밖의 이름( ``fess-theme-*`` , ``fess`` , ``fess-crawler`` 등의 라이브러리)을 지정하면 아무것도 다운로드하지 않고 한 줄의 오류를 표시한 후 종료 코드 2로 종료합니다. 여러 이름 중 하나라도 해당하면 아무것도 설치하지 않습니다. 정적 테마는 ``install theme`` 으로 설치하십시오.
 
 list plugins
 ------------
@@ -155,6 +165,8 @@ remove plugin
 1. 인터넷에 연결할 수 있는 환경에서 |Fess| ZIP 패키지와 필요한 플러그인 jar 를 다운로드합니다. jar 는 ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar`` 에서 가져올 수 있습니다. 이 |Fess| 에 대응하는 버전( |Fess| 15.9 라면 15.9.x)을 선택하십시오.
 2. 대상 환경에서 ZIP 을 압축 해제하고, jar 를 ``app/WEB-INF/plugin/`` 에 둡니다. |Fess| 시작 후에 관리 화면 플러그인 설치 화면의 「로컬」 탭에서 업로드할 수도 있습니다( :doc:`../admin/plugin-guide` 참조).
 3. |Fess| 를 시작합니다. 실행 중에 jar 를 둔 경우에는 재시작하십시오.
+
+플러그인 jar 를 하나씩 가져오는 대신, Maven 저장소의 필요한 부분( ``org/codelibs/fess/<name>/`` 디렉터리)을 복사해 가져온 후 ``--repository file:///...`` 를 지정하여 ``install plugin`` 으로 설치할 수도 있습니다. 이 경우에도 체크섬이 검증됩니다.
 
 테마 관리
 =========

@@ -94,6 +94,14 @@ install nodejs
 
 ``install plugin``\ 、\ ``list plugins`` 和 ``upgrade plugins`` 可以指定 ``--repository <url>``\ 。指定后，版本列表、jar 及其校验和都从该单个 Maven 仓库（例如内部镜像）获取，而不使用默认的发布仓库、快照仓库和 GitHub。
 
+``--repository`` 也可以指定以 ``file:///`` 开头的 URL。在无法连接互联网的服务器上，可以将 Maven 仓库的副本放到服务器上，并指定该目录。应指定包含各插件目录（ ``<name>/maven-metadata.xml`` 等）的目录，即与默认仓库的 ``https://maven.codelibs.org/release/org/codelibs/fess/`` 相对应的位置。版本解析和校验和验证与 HTTP 仓库相同。
+
+::
+
+    $ bin/fess-setup install plugin fess-ds-csv --repository file:///opt/maven-repo/org/codelibs/fess/
+
+``http``\ 、\ ``https``\ 、\ ``file`` 以外的协议，或没有协议的 URL，会以一行错误信息被拒绝。
+
 install plugin
 --------------
 
@@ -106,6 +114,8 @@ install plugin
 jar 从插件的 GitHub 发布获取；发布中没有对应文件时，则从 Maven 仓库获取，并使用 Maven 仓库公布的 SHA-1 校验和进行校验。\ |Fess| 的开发版还会安装其同一版本系列的快照构建，并优先使用快照构建。
 
 使用示例请参阅 :doc:`../admin/plugin-guide`\ 。
+
+只能安装 |Fess| 会加载的插件类型，即名称以 ``fess-ds-``\ 、\ ``fess-ingest-``\ 、\ ``fess-script-``\ 、\ ``fess-webapp-``\ 、\ ``fess-thumbnail-``\ 、\ ``fess-crawler-``\ 、\ ``fess-llm-``\ 、\ ``fess-storage-`` 或 ``fess-sso-`` 开头的插件，与 ``list plugins`` 显示的相同。指定其他名称（ ``fess-theme-*``\ ，或 ``fess``\ 、\ ``fess-crawler`` 等库）时，不会下载任何内容，而是显示一行错误并以退出码 2 结束。多个名称中只要有一个被拒绝，就不会安装任何插件。静态主题请使用 ``install theme`` 安装。
 
 list plugins
 ------------
@@ -155,6 +165,8 @@ remove plugin
 1. 在可以连接互联网的环境中，下载 |Fess| 的 ZIP 包和所需插件的 jar。jar 可以从 ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar`` 获取。请选择与此 |Fess| 对应的版本（ |Fess| 15.9 则为 15.9.x）。
 2. 在目标环境中解压 ZIP，并将 jar 放入 ``app/WEB-INF/plugin/``\ 。也可以在 |Fess| 启动后，从管理界面插件安装页面的「本地」选项卡上传（参见 :doc:`../admin/plugin-guide` ）。
 3. 启动 |Fess|\ 。如果在运行中放入了 jar，请重启。
+
+也可以不逐个带入插件的 jar，而是复制 Maven 仓库中所需的部分（ ``org/codelibs/fess/<name>/`` 目录）带入服务器，然后指定 ``--repository file:///...`` 使用 ``install plugin`` 安装。这种情况下同样会验证校验和。
 
 管理主题
 ========
