@@ -167,6 +167,7 @@ Notas operativas
 - En las configuraciones de rastreo web nuevas, el patrón de URL excluidas predeterminado excluye las URL de imágenes (jpg, png, gif, etc.). Para rastrear imágenes de un sitio web, elimínelas de "URL excluidas del rastreo". El rastreo de archivos incluye las imágenes.
 - También se aplican los límites de tamaño del rastreador. Para el límite de tamaño de indexación por tipo de archivo (predeterminado: 10 MB), consulte :doc:`crawler-basic`.
 - La precisión del OCR depende de la calidad del escaneo. En general, la escritura a mano no se reconoce bien.
+- Los archivos indexados antes de activar el OCR no se procesan con OCR por sí solos. Con el rastreo incremental activado ("Comprobar fecha de última modificación" en :doc:`../admin/general-guide`), un archivo cuya fecha de modificación no ha cambiado no se vuelve a obtener al rastrear de nuevo. Para aplicar el OCR a esos archivos, desactive "Comprobar fecha de última modificación" durante un rastreo, o elimine los documentos del índice y vuelva a rastrear.
 
 Notas de actualización
 ======================
