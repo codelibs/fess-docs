@@ -45,6 +45,11 @@ doc.json
 
 doc.json enthält die Mapping-Informationen des Fess-Index.
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjson enthält die Nutzungsprotokolle des KI-Chats.
+
 click_log.ndjson
 ::::::::::::::::
 

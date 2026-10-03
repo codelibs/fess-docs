@@ -79,12 +79,13 @@ Voici un exemple avec la configuration par défaut (valeurs par défaut de ``ind
           { "id": "system.properties", "name": "system.properties" },
           { "id": "fess.json", "name": "fess.json" },
           { "id": "doc.json", "name": "doc.json" },
+          { "id": "chat_log.ndjson", "name": "chat_log.ndjson" },
           { "id": "click_log.ndjson", "name": "click_log.ndjson" },
           { "id": "favorite_log.ndjson", "name": "favorite_log.ndjson" },
           { "id": "search_log.ndjson", "name": "search_log.ndjson" },
           { "id": "user_info.ndjson", "name": "user_info.ndjson" }
         ],
-        "total": 10
+        "total": 11
       }
     }
 
@@ -112,7 +113,7 @@ Selon le type de ``{id}``, le contenu de la réponse change comme suit.
      - Le fichier de définition de mapping de l'index lui-même (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``), tel quel (``application/octet-stream``)
    * - ``*.bulk`` ou nom d'index sans extension
      - Données en masse générées en parcourant (scroll) l'index du même nom que la cible (``application/octet-stream``). Le nom sans ``.bulk`` est traité comme le nom de l'index.
-   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
+   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log`` / ``chat_log``)
      - Données NDJSON du journal correspondant (``application/x-ndjson``)
 
 .. note::

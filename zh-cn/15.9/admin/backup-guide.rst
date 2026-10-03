@@ -45,6 +45,11 @@ doc.json
 
 doc.json包含fess索引的映射信息。
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjson包含AI聊天使用日志信息。
+
 click_log.ndjson
 ::::::::::::::::
 

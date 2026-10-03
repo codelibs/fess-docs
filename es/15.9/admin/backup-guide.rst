@@ -45,6 +45,11 @@ doc.json
 
 doc.json contiene información de mapeo del índice fess.
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjson contiene información de los registros de uso del chat con IA.
+
 click_log.ndjson
 ::::::::::::::::
 

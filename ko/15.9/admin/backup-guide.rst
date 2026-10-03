@@ -45,6 +45,11 @@ doc.json
 
 doc.json은 fess 인덱스의 매핑 정보를 포함합니다.
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjson은 AI 채팅 이용 로그 정보를 포함합니다.
+
 click_log.ndjson
 ::::::::::::::::
 

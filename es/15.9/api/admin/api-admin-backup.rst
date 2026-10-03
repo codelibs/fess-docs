@@ -79,12 +79,13 @@ A continuación se muestra un ejemplo con la configuración predeterminada (cuan
           { "id": "system.properties", "name": "system.properties" },
           { "id": "fess.json", "name": "fess.json" },
           { "id": "doc.json", "name": "doc.json" },
+          { "id": "chat_log.ndjson", "name": "chat_log.ndjson" },
           { "id": "click_log.ndjson", "name": "click_log.ndjson" },
           { "id": "favorite_log.ndjson", "name": "favorite_log.ndjson" },
           { "id": "search_log.ndjson", "name": "search_log.ndjson" },
           { "id": "user_info.ndjson", "name": "user_info.ndjson" }
         ],
-        "total": 10
+        "total": 11
       }
     }
 
@@ -112,7 +113,7 @@ Según el tipo de ``{id}``, el contenido de la respuesta cambia de la siguiente 
      - El propio archivo de definición de mapeo del índice (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``), sin modificar (``application/octet-stream``)
    * - ``*.bulk`` o nombre de índice sin extensión
      - Datos masivos generados al recorrer el índice con el mismo nombre que el objetivo (``application/octet-stream``). El nombre sin ``.bulk`` se trata como nombre del índice.
-   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
+   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log`` / ``chat_log``)
      - Datos NDJSON del registro correspondiente (``application/x-ndjson``)
 
 .. note::

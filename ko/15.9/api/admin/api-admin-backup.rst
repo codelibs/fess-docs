@@ -79,12 +79,13 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
           { "id": "system.properties", "name": "system.properties" },
           { "id": "fess.json", "name": "fess.json" },
           { "id": "doc.json", "name": "doc.json" },
+          { "id": "chat_log.ndjson", "name": "chat_log.ndjson" },
           { "id": "click_log.ndjson", "name": "click_log.ndjson" },
           { "id": "favorite_log.ndjson", "name": "favorite_log.ndjson" },
           { "id": "search_log.ndjson", "name": "search_log.ndjson" },
           { "id": "user_info.ndjson", "name": "user_info.ndjson" }
         ],
-        "total": 10
+        "total": 11
       }
     }
 
@@ -112,7 +113,7 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
      - 인덱스의 매핑 정의 파일 (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``) 그 자체 (``application/octet-stream``)
    * - ``*.bulk`` 또는 확장자 없는 인덱스 이름
      - 대상 이름과 동일한 인덱스를 스크롤하여 생성한 벌크 데이터 (``application/octet-stream``). ``.bulk`` 를 제거한 이름을 인덱스 이름으로 처리합니다.
-   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
+   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log`` / ``chat_log``)
      - 대응하는 로그의 NDJSON 데이터 (``application/x-ndjson``)
 
 .. note::
