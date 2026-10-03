@@ -102,6 +102,38 @@ Setting it to ``true`` disables robots.txt handling, including Crawl-delay.
     # Ignore robots.txt (default: false)
     crawler.ignore.robots.txt=false
 
+Crawl-delay applies per origin and is capped at 60 seconds. It paces URLs, not requests, so in an
+incremental crawl the HEAD and the GET of one URL are sent back to back. The interval of a crawl
+configuration still works separately, as the wait before the next URL.
+
+robots.txt is interpreted according to RFC 9309. Between ``Allow:`` and ``Disallow:``, the longest
+matching rule wins, and the start URLs are checked against robots.txt too. A URL that robots.txt
+disallows is logged at INFO in ``fess-crawler.log`` and is not recorded as a failure URL.
+
+Backoff after 429/503 responses
+-------------------------------
+
+When a server answers ``429 Too Many Requests`` or ``503 Service Unavailable``, |Fess| pauses
+requests to that origin and retries the URL up to three times. The wait is the ``Retry-After``
+header when it is present, otherwise an exponential wait that starts at 10 seconds (up to 5
+minutes). When the last retry fails too, a WARN is written to ``fess-crawler.log``.
+
+When robots.txt cannot be fetched
+---------------------------------
+
+When fetching robots.txt fails with a 5xx, a 429 or a timeout, the URLs of that origin are put back
+into the queue until the backoff ends. If three retries after the first failure also fail, no URL of
+that origin is crawled for the rest of the crawl, and one WARN is written to ``fess-crawler.log``.
+Up to 15.8, a robots.txt that could not be fetched meant "allow all". To restore that behavior,
+set the following in the "Config Parameters" of the web crawl configuration:
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+To turn robots.txt handling off entirely, use ``client.robotsTxtEnabled=false`` (per crawl
+configuration) or ``crawler.ignore.robots.txt=true``.
+
 All Rate Limiting Properties
 ============================
 

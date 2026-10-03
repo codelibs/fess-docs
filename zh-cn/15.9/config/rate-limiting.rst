@@ -101,6 +101,26 @@ robots.txt的处理由 ``app/WEB-INF/classes/fess_config.properties`` 中的 ``c
     # 忽略robots.txt（默认: false）
     crawler.ignore.robots.txt=false
 
+Crawl-delay 按访问目标（源）分别应用，上限为 60 秒。等待以 URL 为单位进行，因此在增量爬取中，对同一个 URL 发送的 HEAD 和 GET 会连续发送。爬取配置的“间隔”与此分开，作为到下一个 URL 之前的等待时间生效。
+
+robots.txt 按照 RFC 9309 解释。 ``Allow:`` 和 ``Disallow:`` 以最长匹配的规则优先，起始 URL 也会根据 robots.txt 进行检查。被 robots.txt 禁止的 URL 会以 INFO 级别记录到 ``fess-crawler.log``\ ，不会登记为故障 URL。
+
+429/503 响应时的退避
+--------------------
+
+当服务器返回 ``429 Too Many Requests`` 或 ``503 Service Unavailable`` 时，会暂时停止对该源的访问，并最多重试该 URL 3 次。等待时间在有 ``Retry-After`` 头时为该值，否则为从 10 秒开始的指数增长时间（最长 5 分钟）。最后一次重试也失败时，会在 ``fess-crawler.log`` 中输出 WARN。
+
+无法获取 robots.txt 时
+----------------------
+
+当获取 robots.txt 因 5xx、429 或超时等失败时，该源的 URL 会被放回队列，直到退避结束。首次失败后再重试 3 次仍失败时，在本次爬取期间该源的所有 URL 都不会被爬取，并会在 ``fess-crawler.log`` 中输出一次 WARN。15.8 及更早版本会将无法获取的 robots.txt 一律视为允许。要恢复该行为，请在 Web 爬取配置的“配置参数”中指定以下内容。
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+要完全禁用 robots.txt 处理，请使用 ``client.robotsTxtEnabled=false`` （按爬取配置）或 ``crawler.ignore.robots.txt=true``\ 。
+
 速率限制的全部配置项
 ======================
 

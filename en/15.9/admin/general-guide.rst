@@ -111,6 +111,13 @@ Check Last Modified
 
 Enable to perform differential crawling.
 
+For HTTP/HTTPS URLs, when the ``Last-Modified`` of the HEAD response cannot decide (no last
+modified date is indexed, the HEAD response has no ``Last-Modified``, or the HEAD returns a status
+other than 200/404), the GET is sent as a conditional GET with ``If-None-Match`` (the indexed
+``ETag``) and/or ``If-Modified-Since``. A page answered with ``304 Not Modified`` is handled like an
+unchanged page and is not fetched again. To fetch everything again, for example after changing crawl
+settings, turn this setting off for a crawl.
+
 Concurrent Crawler Config
 :::::::::::::::::::::::::
 
