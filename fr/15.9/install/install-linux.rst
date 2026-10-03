@@ -15,7 +15,7 @@ Prérequis
 
 - La configuration requise décrite dans :doc:`prerequisites` doit être satisfaite
 - Java 21 doit être installé
-- OpenSearch 3.8.0 doit être disponible (ou nouvelle installation)
+- OpenSearch 3.9.0 doit être disponible (ou nouvelle installation)
 
 Choix de la méthode d'installation
 ===================================
@@ -129,14 +129,14 @@ Installation avec la version ZIP
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.8.0-linux-x64.tar.gz
-       $ cd opensearch-3.8.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
+       $ cd opensearch-3.9.0
 
    .. note::
 
-      Cet exemple utilise OpenSearch 3.8.0.
-      |Fess| 15.9 est compatible avec OpenSearch 3.8.0.
+      Cet exemple utilise OpenSearch 3.9.0.
+      |Fess| 15.9 est compatible avec OpenSearch 3.9.0.
 
 2. Installation des plugins OpenSearch
 
@@ -144,16 +144,20 @@ Installation avec la version ZIP
 
    ::
 
-       $ cd /path/to/opensearch-3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ cd /path/to/opensearch-3.9.0
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
    .. important::
 
       Les versions des plugins doivent correspondre à la version d'OpenSearch.
-      Dans l'exemple ci-dessus, toutes sont spécifiées en 3.8.0.
+      Dans l'exemple ci-dessus, toutes sont spécifiées en 3.9.0.
+
+      Les quatre plugins de |Fess| sont publiés sur maven.codelibs.org ; ils s'installent donc par
+      leur URL. La forme ``groupId:artifactId:version`` de ``opensearch-plugin install`` ne cherche
+      que dans Maven Central.
 
 3. Configuration d'OpenSearch
 
@@ -162,16 +166,16 @@ Installation avec la version ZIP
    ::
 
        # Chemin pour la synchronisation de configuration (spécifier en chemin absolu)
-       configsync.config_path: /path/to/opensearch-3.8.0/config/dictionary/
+       configsync.config_path: /path/to/opensearch-3.9.0/config/dictionary/
 
        # Désactivation du plugin de sécurité (environnement de développement uniquement)
        plugins.security.disabled: true
 
    .. important::
 
-      Indiquez pour ``configsync.config_path`` un répertoire situé sous le répertoire de configuration d'OpenSearch (``/path/to/opensearch-3.8.0/config/`` dans cet exemple).
+      Indiquez pour ``configsync.config_path`` un répertoire situé sous le répertoire de configuration d'OpenSearch (``/path/to/opensearch-3.9.0/config/`` dans cet exemple).
       À partir d'OpenSearch 3.8.0, la création d'un index est refusée si les fichiers de dictionnaire se trouvent en dehors du répertoire de configuration.
-      Si vous indiquez un emplacement situé en dehors du répertoire de configuration, comme ``/path/to/opensearch-3.8.0/data/config/``, |Fess| ne peut pas créer ses index et ne démarre pas.
+      Si vous indiquez un emplacement situé en dehors du répertoire de configuration, comme ``/path/to/opensearch-3.9.0/data/config/``, |Fess| ne peut pas créer ses index et ne démarre pas.
 
    .. warning::
 
@@ -234,7 +238,7 @@ Installation avec la version ZIP
    Après modification ::
 
        SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/config/dictionary/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.9.0/config/dictionary/
 
    .. note::
 
@@ -275,8 +279,8 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.8.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
    Vous pouvez également ajouter un dépôt pour l'installation.
    Pour plus de détails, consultez `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
@@ -285,10 +289,10 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 3. Configuration d'OpenSearch
 
@@ -385,8 +389,8 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.8.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
 
    Vous pouvez également ajouter un dépôt pour l'installation.
    Pour plus de détails, consultez `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.
@@ -395,10 +399,10 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 3. Configuration d'OpenSearch
 
@@ -495,7 +499,7 @@ Une fois l'installation terminée, veuillez vérifier les éléments suivants :
 
    Pour la version ZIP ::
 
-       $ ls -ld /path/to/opensearch-3.8.0/config/dictionary/
+       $ ls -ld /path/to/opensearch-3.9.0/config/dictionary/
 
    Pour les versions RPM/DEB ::
 
@@ -533,7 +537,7 @@ Q : D'autres versions d'OpenSearch fonctionnent-elles ?
 ------------------------------------------------------------------
 
 R : |Fess| dépend d'une version spécifique d'OpenSearch.
-Pour garantir la compatibilité des plugins, il est fortement recommandé d'utiliser la version recommandée (3.8.0).
+Pour garantir la compatibilité des plugins, il est fortement recommandé d'utiliser la version recommandée (3.9.0).
 Si vous utilisez une autre version, vous devrez également ajuster les versions des plugins de manière appropriée.
 
 Q : Peut-on partager le même OpenSearch avec plusieurs instances Fess ?

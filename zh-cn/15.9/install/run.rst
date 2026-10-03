@@ -22,7 +22,7 @@ ZIP 版的情况
 
 ::
 
-    $ cd /path/to/opensearch-3.8.0
+    $ cd /path/to/opensearch-3.9.0
     $ ./bin/opensearch
 
 在后台启动::
@@ -31,13 +31,13 @@ ZIP 版的情况
 
 .. note::
 
-   ``bin/fess-setup install opensearch`` 会将 OpenSearch 放在 |Fess| 目录下的 ``opensearch/opensearch-3.8.0`` 中。
+   ``bin/fess-setup install opensearch`` 会将 OpenSearch 放在 |Fess| 目录下的 ``opensearch/opensearch-3.9.0`` 中。
 
 .. important::
 
    请以普通用户启动 OpenSearch。它拒绝以 ``root`` 身份运行，并以 ``can not run opensearch as root`` 结束。被拒绝的启动仍会留下 ``config/opensearch.keystore`` 等归 ``root`` 所有的文件，之后以普通用户启动时会因 ``AccessDeniedException`` 而失败。再次启动之前，请将 OpenSearch 目录的所有者改回该用户，例如::
 
-       $ sudo chown -R <user> /path/to/opensearch-3.8.0
+       $ sudo chown -R <user> /path/to/opensearch-3.9.0
 
 启动 Fess
 ~~~~~~~~~~
@@ -67,8 +67,8 @@ ZIP 版的情况（Windows）
 
 或者，从命令提示符::
 
-    C:\> cd C:\opensearch-3.8.0
-    C:\opensearch-3.8.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.9.0
+    C:\opensearch-3.9.0> bin\opensearch.bat
 
 启动 Fess
 ~~~~~~~~~~

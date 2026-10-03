@@ -15,7 +15,7 @@ ZIP, RPM, DEB 각 패키지 형식에 대응합니다.
 
 - :doc:`prerequisites` 에 기재된 시스템 요구사항을 충족할 것
 - Java 21이 설치되어 있을 것
-- OpenSearch 3.8.0을 사용 가능한 상태로 할 것(또는 신규 설치)
+- OpenSearch 3.9.0을 사용 가능한 상태로 할 것(또는 신규 설치)
 
 설치 방법 선택
 ==============
@@ -114,14 +114,14 @@ ZIP 버전 설치
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.8.0-linux-x64.tar.gz
-       $ cd opensearch-3.8.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
+       $ cd opensearch-3.9.0
 
    .. note::
 
-      이 예제에서는 OpenSearch 3.8.0을 사용하고 있습니다.
-      |Fess| 15.9은 OpenSearch 3.8.0에 대응합니다.
+      이 예제에서는 OpenSearch 3.9.0을 사용하고 있습니다.
+      |Fess| 15.9은 OpenSearch 3.9.0에 대응합니다.
 
 2. OpenSearch 플러그인 설치
 
@@ -129,16 +129,18 @@ ZIP 버전 설치
 
    ::
 
-       $ cd /path/to/opensearch-3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ ./bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ cd /path/to/opensearch-3.9.0
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
    .. important::
 
       플러그인 버전은 OpenSearch 버전과 일치시켜야 합니다.
-      위의 예제에서는 모두 3.8.0을 지정하고 있습니다.
+      위의 예제에서는 모두 3.9.0을 지정하고 있습니다.
+
+      |Fess| 용 플러그인 4개는 maven.codelibs.org 에 공개되어 있으므로 URL로 지정합니다. ``opensearch-plugin install`` 의 ``groupId:artifactId:version`` 형식은 Maven Central만 참조합니다.
 
 3. OpenSearch 설정
 
@@ -147,16 +149,16 @@ ZIP 버전 설치
    ::
 
        # 설정 동기화용 경로(절대 경로로 지정)
-       configsync.config_path: /path/to/opensearch-3.8.0/config/dictionary/
+       configsync.config_path: /path/to/opensearch-3.9.0/config/dictionary/
 
        # 보안 플러그인 비활성화(개발 환경 전용)
        plugins.security.disabled: true
 
    .. important::
 
-      ``configsync.config_path`` 에는 OpenSearch 설정 디렉터리(이 예에서는 ``/path/to/opensearch-3.8.0/config/``) 아래의 디렉터리를 지정하십시오.
+      ``configsync.config_path`` 에는 OpenSearch 설정 디렉터리(이 예에서는 ``/path/to/opensearch-3.9.0/config/``) 아래의 디렉터리를 지정하십시오.
       OpenSearch 3.8.0 이상에서는 사전 파일이 설정 디렉터리 밖에 있으면 인덱스 생성을 거부합니다.
-      ``/path/to/opensearch-3.8.0/data/config/`` 등 설정 디렉터리 밖을 지정하면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
+      ``/path/to/opensearch-3.9.0/data/config/`` 등 설정 디렉터리 밖을 지정하면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
 
    .. warning::
 
@@ -219,7 +221,7 @@ ZIP 버전 설치
    변경 후::
 
        SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.8.0/config/dictionary/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.9.0/config/dictionary/
 
    .. note::
 
@@ -260,8 +262,8 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.8.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ 를 참조하십시오.
@@ -270,10 +272,10 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 3. OpenSearch 설정
 
@@ -370,8 +372,8 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.8.0/opensearch-3.8.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.8.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ 를 참조하십시오.
@@ -380,10 +382,10 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 3. OpenSearch 설정
 
@@ -480,7 +482,7 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
    ZIP 버전의 경우::
 
-       $ ls -ld /path/to/opensearch-3.8.0/config/dictionary/
+       $ ls -ld /path/to/opensearch-3.9.0/config/dictionary/
 
    RPM/DEB 버전의 경우::
 
@@ -518,7 +520,7 @@ Q: OpenSearch 버전은 다른 버전에서도 작동합니까?
 ------------------------------------------------
 
 A: |Fess| 는 특정 버전의 OpenSearch에 의존합니다.
-플러그인 호환성을 보장하기 위해 권장 버전(3.8.0)을 사용할 것을 강력히 권장합니다.
+플러그인 호환성을 보장하기 위해 권장 버전(3.9.0)을 사용할 것을 강력히 권장합니다.
 다른 버전을 사용하는 경우 플러그인 버전도 적절히 조정해야 합니다.
 
 Q: 여러 Fess 인스턴스에서 동일한 OpenSearch를 공유할 수 있습니까?

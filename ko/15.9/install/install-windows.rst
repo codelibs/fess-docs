@@ -15,7 +15,7 @@ ZIP 패키지를 사용한 설치 방법에 대해 기재하고 있습니다.
 
 - :doc:`prerequisites` 에 기재된 시스템 요구사항을 충족할 것
 - Java 21이 설치되어 있을 것
-- OpenSearch 3.8.0을 사용 가능한 상태로 할 것(또는 신규 설치)
+- OpenSearch 3.9.0을 사용 가능한 상태로 할 것(또는 신규 설치)
 - Windows 환경 변수 ``JAVA_HOME`` 이 적절히 설정되어 있을 것
 
 Java 설치 확인
@@ -73,7 +73,7 @@ Java 21 이상이 표시되는지 확인하십시오.
 
    절차를 하나씩 확인하려는 경우나 기존 OpenSearch 를 사용하는 경우에는 아래를 따르십시오.
    기존 OpenSearch 에 플러그인만 설치하려면
-   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.8.0`` 을 사용합니다.
+   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.9.0`` 을 사용합니다.
    모든 명령에 대해서는 :doc:`fess-setup` 을 참조하십시오.
 
 OpenSearch 다운로드
@@ -85,7 +85,7 @@ OpenSearch 다운로드
 
    예::
 
-       C:\opensearch-3.8.0
+       C:\opensearch-3.9.0
 
    .. note::
 
@@ -98,16 +98,18 @@ OpenSearch 플러그인 설치
 
 ::
 
-    C:\> cd C:\opensearch-3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+    C:\> cd C:\opensearch-3.9.0
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 .. important::
 
    플러그인 버전은 OpenSearch 버전과 일치시켜야 합니다.
-   위의 예제에서는 모두 3.8.0을 지정하고 있습니다.
+   위의 예제에서는 모두 3.9.0을 지정하고 있습니다.
+
+   |Fess| 용 플러그인 4개는 maven.codelibs.org 에 공개되어 있으므로 URL로 지정합니다. ``opensearch-plugin install`` 의 ``groupId:artifactId:version`` 형식은 Maven Central만 참조합니다.
 
 OpenSearch 설정
 ---------------
@@ -117,7 +119,7 @@ OpenSearch 설정
 ::
 
     # 설정 동기화용 경로(절대 경로로 지정)
-    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
+    configsync.config_path: C:/opensearch-3.9.0/config/dictionary/
 
     # 보안 플러그인 비활성화(개발 환경 전용)
     plugins.security.disabled: true
@@ -133,13 +135,13 @@ OpenSearch 설정
 .. note::
 
    Windows의 경우 경로 구분 문자는 ``\`` 가 아닌 ``/`` 를 사용하십시오.
-   ``C:\opensearch-3.8.0\config\dictionary\`` 가 아니라 ``C:/opensearch-3.8.0/config/dictionary/`` 로 기술합니다.
+   ``C:\opensearch-3.9.0\config\dictionary\`` 가 아니라 ``C:/opensearch-3.9.0/config/dictionary/`` 로 기술합니다.
 
 .. important::
 
-   ``configsync.config_path`` 에는 OpenSearch 설정 디렉터리(이 예에서는 ``C:/opensearch-3.8.0/config/``) 아래의 디렉터리를 지정하십시오.
+   ``configsync.config_path`` 에는 OpenSearch 설정 디렉터리(이 예에서는 ``C:/opensearch-3.9.0/config/``) 아래의 디렉터리를 지정하십시오.
    OpenSearch 3.8.0 이상에서는 사전 파일이 설정 디렉터리 밖에 있으면 인덱스 생성을 거부합니다.
-   ``C:/opensearch-3.8.0/data/config/`` 등 설정 디렉터리 밖을 지정하면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
+   ``C:/opensearch-3.9.0/data/config/`` 등 설정 디렉터리 밖을 지정하면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
 
 .. tip::
 
@@ -193,7 +195,7 @@ Fess 설정
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.9.0/config/dictionary/
 
 .. note::
 
@@ -304,7 +306,7 @@ Windows에서는 경로 길이에 제한이 있습니다. 가능한 한 짧은 �
 예::
 
     C:\opensearch  (권장)
-    C:\Program Files\opensearch-3.8.0  (비권장 - 경로가 김)
+    C:\Program Files\opensearch-3.9.0  (비권장 - 경로가 김)
 
 Java가 인식되지 않음
 --------------------

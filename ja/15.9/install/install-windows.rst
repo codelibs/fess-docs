@@ -15,7 +15,7 @@ ZIP パッケージを使用したインストール方法について記載し�
 
 - :doc:`prerequisites` に記載されているシステム要件を満たしていること
 - Java 21 がインストールされていること
-- OpenSearch 3.8.0 を利用可能な状態にすること（または新規インストール）
+- OpenSearch 3.9.0 を利用可能な状態にすること（または新規インストール）
 - Windows の環境変数 ``JAVA_HOME`` が適切に設定されていること
 
 Java のインストール確認
@@ -73,7 +73,7 @@ Java 21 以降が表示されることを確認してください。
 
    手順を個別に確認したい場合や、既存の OpenSearch を使う場合は、以下に従ってください。
    既存の OpenSearch にプラグインだけを入れる場合は
-   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.8.0`` を使用します。
+   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.9.0`` を使用します。
    すべてのコマンドについては :doc:`fess-setup` を参照してください。
 
 OpenSearch のダウンロード
@@ -85,7 +85,7 @@ OpenSearch のダウンロード
 
    例::
 
-       C:\opensearch-3.8.0
+       C:\opensearch-3.9.0
 
    .. note::
 
@@ -98,16 +98,18 @@ OpenSearch プラグインのインストール
 
 ::
 
-    C:\> cd C:\opensearch-3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+    C:\> cd C:\opensearch-3.9.0
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 .. important::
 
    プラグインのバージョンは OpenSearch のバージョンと一致させる必要があります。
-   上記の例では、すべて 3.8.0 を指定しています。
+   上記の例では、すべて 3.9.0 を指定しています。
+
+   |Fess| 用の 4 つのプラグインは maven.codelibs.org で公開しているため、URL で指定します。 ``opensearch-plugin install`` の ``groupId:artifactId:version`` 形式は Maven Central だけを参照します。
 
 OpenSearch の設定
 ---------------
@@ -117,7 +119,7 @@ OpenSearch の設定
 ::
 
     # 設定同期用のパス（絶対パスで指定）
-    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
+    configsync.config_path: C:/opensearch-3.9.0/config/dictionary/
 
     # セキュリティプラグインの無効化（開発環境のみ）
     plugins.security.disabled: true
@@ -133,13 +135,13 @@ OpenSearch の設定
 .. note::
 
    Windows の場合、パスの区切り文字は ``\`` ではなく ``/`` を使用してください。
-   ``C:\opensearch-3.8.0\config\dictionary\`` ではなく ``C:/opensearch-3.8.0/config/dictionary/`` と記述します。
+   ``C:\opensearch-3.9.0\config\dictionary\`` ではなく ``C:/opensearch-3.9.0/config/dictionary/`` と記述します。
 
 .. important::
 
-   ``configsync.config_path`` には、OpenSearch の設定ディレクトリ（この例では ``C:/opensearch-3.8.0/config/``）の下のディレクトリを指定してください。
+   ``configsync.config_path`` には、OpenSearch の設定ディレクトリ（この例では ``C:/opensearch-3.9.0/config/``）の下のディレクトリを指定してください。
    OpenSearch 3.8.0 以降は、辞書ファイルが設定ディレクトリの外にあるとインデックスの作成を拒否します。
-   ``C:/opensearch-3.8.0/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
+   ``C:/opensearch-3.9.0/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
 
 .. tip::
 
@@ -193,7 +195,7 @@ Fess の設定
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.9.0/config/dictionary/
 
 .. note::
 
@@ -304,7 +306,7 @@ Windows では、パスの長さに制限があります。可能な限り短い
 例::
 
     C:\opensearch  (推奨)
-    C:\Program Files\opensearch-3.8.0  (非推奨 - パスが長い)
+    C:\Program Files\opensearch-3.9.0  (非推奨 - パスが長い)
 
 Java が認識されない
 -----------------

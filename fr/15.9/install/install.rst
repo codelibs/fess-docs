@@ -126,7 +126,7 @@ Pour toutes les méthodes d'installation, le flux de base est le même.
 
    Pour les versions autres que Docker, vous devez configurer OpenSearch séparément.
 
-   - Installation d'OpenSearch 3.8.0
+   - Installation d'OpenSearch 3.9.0
    - Installation des plugins requis
    - Modification des fichiers de configuration
 
@@ -157,7 +157,7 @@ OpenSearch
 
 OpenSearch est utilisé comme moteur de recherche.
 
-- **Version compatible** : OpenSearch 3.8.0
+- **Version compatible** : OpenSearch 3.9.0
 - **Plugins requis** :
 
   - opensearch-analysis-fess
@@ -235,7 +235,7 @@ Informations de version
 Cette documentation concerne les versions suivantes :
 
 - **Fess** : 15.9.0
-- **OpenSearch** : 3.8.0
+- **OpenSearch** : 3.9.0
 - **Java** : 21 ou ultérieur
 - **Docker** : 20.10 ou ultérieur
 - **Docker Compose** : 2.0 ou ultérieur

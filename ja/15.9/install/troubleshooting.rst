@@ -70,7 +70,7 @@ Java がインストールされていない、またはPATH環境変数が正�
 
 2. プラグインのバージョンを OpenSearch のバージョンに合わせる::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
+       $ /path/to/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
 
 3. 権限を確認::
 
@@ -194,7 +194,7 @@ OpenSearch 3.8.0 以降は、辞書ファイルが OpenSearch の設定ディレ
 1. ``configsync.config_path`` と ``FESS_DICTIONARY_PATH`` を、OpenSearch の設定ディレクトリの下のディレクトリに変更します。
 
    - RPM/DEB 版: ``/etc/opensearch/dictionary/``
-   - ZIP 版: ``/path/to/opensearch-3.8.0/config/dictionary/``
+   - ZIP 版: ``/path/to/opensearch-3.9.0/config/dictionary/``
 
 2. 既存の辞書ファイルがある場合は、新しいディレクトリへコピーします。
 3. OpenSearch、 |Fess| の順に再起動します。
