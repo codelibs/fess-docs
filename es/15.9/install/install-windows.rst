@@ -15,7 +15,7 @@ Requisitos Previos
 
 - Cumplir con los requisitos del sistema descritos en :doc:`prerequisites`
 - Java 21 instalado
-- OpenSearch 3.8.0 disponible (o nueva instalación)
+- OpenSearch 3.9.0 disponible (o nueva instalación)
 - Variable de entorno ``JAVA_HOME`` de Windows configurada apropiadamente
 
 Verificación de la Instalación de Java
@@ -82,7 +82,7 @@ Paso 1: Instalación de OpenSearch
 
    Siga los pasos siguientes para revisarlos uno a uno, o cuando utilice un OpenSearch que ya
    tenga. Para instalar únicamente los plugins en un OpenSearch existente, utilice
-   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.8.0``.
+   ``bin\fess-setup install opensearch-plugins --opensearch-home C:\opensearch-3.9.0``.
    Consulte :doc:`fess-setup` para ver todos los comandos.
 
 Descarga de OpenSearch
@@ -94,7 +94,7 @@ Descarga de OpenSearch
 
    Ejemplo::
 
-       C:\opensearch-3.8.0
+       C:\opensearch-3.9.0
 
    .. note::
 
@@ -107,16 +107,20 @@ Abra el Símbolo del sistema **con privilegios de administrador** y ejecute los 
 
 ::
 
-    C:\> cd C:\opensearch-3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-    C:\opensearch-3.8.0> bin\opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+    C:\> cd C:\opensearch-3.9.0
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+    C:\opensearch-3.9.0> bin\opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
 .. important::
 
    Las versiones de los plugins deben coincidir con la versión de OpenSearch.
-   En el ejemplo anterior, se especifica 3.8.0 para todos.
+   En el ejemplo anterior, se especifica 3.9.0 para todos.
+
+   Los cuatro plugins de |Fess| se publican en maven.codelibs.org, por lo que se instalan mediante
+   su URL. La forma ``groupId:artifactId:version`` de ``opensearch-plugin install`` solo busca en
+   Maven Central.
 
 Configuración de OpenSearch
 -----------------------------
@@ -126,7 +130,7 @@ Abra ``config\opensearch.yml`` con un editor de texto y agregue la siguiente con
 ::
 
     # Ruta para sincronización de configuración (especificar ruta absoluta)
-    configsync.config_path: C:/opensearch-3.8.0/config/dictionary/
+    configsync.config_path: C:/opensearch-3.9.0/config/dictionary/
 
     # Desactivación del plugin de seguridad (solo entorno de desarrollo)
     plugins.security.disabled: true
@@ -142,13 +146,13 @@ Abra ``config\opensearch.yml`` con un editor de texto y agregue la siguiente con
 .. note::
 
    En Windows, use ``/`` en lugar de ``\`` como separador de ruta.
-   Escriba ``C:/opensearch-3.8.0/config/dictionary/`` en lugar de ``C:\opensearch-3.8.0\config\dictionary\``.
+   Escriba ``C:/opensearch-3.9.0/config/dictionary/`` en lugar de ``C:\opensearch-3.9.0\config\dictionary\``.
 
 .. important::
 
-   Especifique en ``configsync.config_path`` un directorio dentro del directorio de configuración de OpenSearch (``C:/opensearch-3.8.0/config/`` en este ejemplo).
+   Especifique en ``configsync.config_path`` un directorio dentro del directorio de configuración de OpenSearch (``C:/opensearch-3.9.0/config/`` en este ejemplo).
    OpenSearch 3.8.0 y versiones posteriores rechazan la creación de índices cuando los archivos de diccionario están fuera del directorio de configuración.
-   Si especifica un directorio fuera del directorio de configuración, como ``C:/opensearch-3.8.0/data/config/``, |Fess| no puede crear sus índices y no se inicia.
+   Si especifica un directorio fuera del directorio de configuración, como ``C:/opensearch-3.9.0/data/config/``, |Fess| no puede crear sus índices y no se inicia.
 
 .. tip::
 
@@ -206,7 +210,7 @@ Estado después del cambio::
 
     REM External opensearch cluster
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.search_engine.http_address=http://localhost:9200
-    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.8.0/config/dictionary/
+    set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=C:/opensearch-3.9.0/config/dictionary/
 
 .. note::
 
@@ -317,7 +321,7 @@ En Windows, existe una limitación en la longitud de la ruta. Se recomienda inst
 Ejemplo::
 
     C:\opensearch  (recomendado)
-    C:\Program Files\opensearch-3.8.0  (no recomendado - ruta larga)
+    C:\Program Files\opensearch-3.9.0  (no recomendado - ruta larga)
 
 Java no Reconocido
 ------------------

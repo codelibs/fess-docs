@@ -23,7 +23,7 @@
 
 .. important::
 
-   |Fess| 14.x は OpenSearch 2.x 系、\ |Fess| 15.9 は OpenSearch 3.8.0 に対応しています。
+   |Fess| 14.x は OpenSearch 2.x 系、\ |Fess| 15.9 は OpenSearch 3.9.0 に対応しています。
    |Fess| 用の OpenSearch プラグインは OpenSearch のバージョンと完全に一致している必要があるため、
    14.x からアップグレードする場合は OpenSearch のメジャーバージョンアップも必須です。
    :ref:`upgrade-opensearch` を参照してください。
@@ -350,7 +350,7 @@ Docker 版
 ステップ 4: OpenSearch のアップグレード
 =======================================
 
-|Fess| 15.9 は OpenSearch 3.8.0 に対応しています。接続先の OpenSearch がこれより古い場合は、
+|Fess| 15.9 は OpenSearch 3.9.0 に対応しています。接続先の OpenSearch がこれより古い場合は、
 以下の手順でアップグレードしてください。
 
 .. note::
@@ -378,20 +378,24 @@ Docker 版
    インデックスの互換性に問題が発生する可能性があります。
    |Fess| 14.x は OpenSearch 2.x 系のため、14.x からのアップグレードでは必ずこのケースに該当します。
 
+   OpenSearch 3.9.0 で取得したスナップショットは、3.8.0 以前の OpenSearch には復元できません。切り戻しに備えて、アップグレード前に取得したスナップショットを残しておいてください。
+
 1. 新しいバージョンの OpenSearch をインストール
 
 2. プラグインを再インストール::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
    .. note::
 
       これらのプラグインのバージョンは、使用する OpenSearch のバージョンと一致させる必要があります。
-      |Fess| 15.9 は OpenSearch 3.8.0 に対応しています。バージョンが一致しない場合、
+      |Fess| 15.9 は OpenSearch 3.9.0 に対応しています。バージョンが一致しない場合、
       プラグインのインストールに失敗します。
+
+      |Fess| 用の 4 つのプラグインは maven.codelibs.org で公開しているため、URL で指定します。 ``opensearch-plugin install`` の ``groupId:artifactId:version`` 形式は Maven Central だけを参照します。
 
 3. 辞書ディレクトリを OpenSearch の設定ディレクトリの下へ移動
 
@@ -487,6 +491,8 @@ Docker 版::
    「再インデクシング」を別途実行してください。詳細は
    :ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）を
    参照してください。
+
+   15.8 以前で作成した文書インデックスを引き続き使う場合は、 :ref:`upgrade-reindex-new-fields` も参照してください。
 
 1. 既存のクロールスケジュールを確認
 2. 「システム」→「スケジューラ」から「Default Crawler」を実行
@@ -956,6 +962,40 @@ jcifs の既定値のままになります。
 アクセストークンの動作は変わりません。登録済みのアクセストークンを付けたリクエストにはそのトークンの
 権限が与えられ、未登録または期限切れのトークンを付けたリクエストは拒否されます。
 
+.. _upgrade-reindex-new-fields:
+
+既存の文書インデックスへの新しいフィールドとかなの正規化の反映
+--------------------------------------------------------------
+
+15.9 は起動時に、設定・ログ・ユーザーのインデックスへ新しいフィールドを追加しますが、文書の
+インデックスのマッピングと解析の設定は変更しません。15.8 以前で作成した文書インデックスを
+そのまま使うと、次の 15.9 の変更が効きません。
+
+- **ファイルの所有者と最終更新者**\ （\ ``owner``\ ・\ ``last_modifier``\ ）: ファイルシステム・SMB・FTP の
+  クロールで新たに索引されるフィールドです。既存の文書インデックスには定義がないため、最初に
+  クロールした値から ``text`` 型として自動でマッピングされ、\ ``owner:alice`` のような検索や
+  ``facet.field=owner`` が期待どおりに動きません。
+- **かなの表記ゆれと、長音符の代わりに書かれたダッシュの正規化**\ （例: ``サ―バ－`` を ``サーバー`` と
+  同じ語として扱う）: 規則は文書インデックスの解析の設定と辞書 ``mapping.txt`` にあるため、
+  既存のインデックスには反映されません。
+
+両方を反映するには、管理画面の「システム情報」→「メンテナンス」で「エイリアスの更新」と
+「辞書の初期化」を有効にして「再インデクシング」を実行します。再インデクシングは既存の文書を
+新しいインデックスへコピーするため、クロールし直す必要はありません。
+
+.. warning::
+
+   「辞書の初期化」は、同梱の辞書ファイルで OpenSearch 側の辞書を上書きします。管理画面の「辞書」で
+   同義語などを編集している場合は、事前にダウンロードしておき、再インデクシングの後に反映し直して
+   ください。
+
+.. note::
+
+   15.8 以前に索引したファイルには、所有者と最終更新者の値がありません。差分クロールでは変更のない
+   ファイルは取得し直されないため、値を付けるには「システム」→「全般」の「最終更新日時の確認」を
+   一時的に無効にしてクロールしてください。
+
+
 15.9 固有の移行作業
 ===================
 
@@ -1276,10 +1316,10 @@ Q: OpenSearch もアップグレードする必要がありますか？
 ----------------------------------------------------
 
 A: |Fess| のバージョンごとに対応する OpenSearch のバージョンが決まっています。
-|Fess| 15.9 は OpenSearch 3.8.0 に対応しています。
+|Fess| 15.9 は OpenSearch 3.9.0 に対応しています。
 ``opensearch-analysis-fess`` などの |Fess| 用 OpenSearch プラグインは OpenSearch のバージョンと
 完全に一致している必要があるため、OpenSearch をアップグレードする場合は、
-対応するバージョン（3.8.0）のプラグインに更新してください。
+対応するバージョン（3.9.0）のプラグインに更新してください。
 
 なお |Fess| 15.9 は k-NN プラグインを必須とし、インデックス設定に ``knn.derived_source.enabled``
 を常に送信します。古い OpenSearch のままでは新しいインデックスの作成に失敗するため、
@@ -1299,6 +1339,8 @@ A: |Fess| のマイナーバージョンアップ（15.x → 15.9）で、チャ
   :ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）を参照してください。
 - **14.x からアップグレードする場合**: OpenSearch が 2.x から 3.x へメジャーバージョンアップ
   するため、インデックスの再作成を推奨します。
+- **15.8 以前で作成した文書インデックスで、所有者での検索やかなの正規化を使う場合**: 再インデクシングが
+  必要です。詳細は :ref:`upgrade-reindex-new-fields` を参照してください。
 
 .. warning::
 

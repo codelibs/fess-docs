@@ -70,7 +70,7 @@ Falla la Instalación de Plugin
 
 2. Hacer coincidir la versión del plugin con la versión de OpenSearch::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
+       $ /path/to/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
 
 3. Verificar permisos::
 
@@ -197,7 +197,7 @@ OpenSearch 3.8.0 y versiones posteriores rechazan la creación de índices cuand
 1. Cambie ``configsync.config_path`` y ``FESS_DICTIONARY_PATH`` a un directorio dentro del directorio de configuración de OpenSearch.
 
    - Versión RPM/DEB: ``/etc/opensearch/dictionary/``
-   - Versión ZIP: ``/path/to/opensearch-3.8.0/config/dictionary/``
+   - Versión ZIP: ``/path/to/opensearch-3.9.0/config/dictionary/``
 
 2. Si tiene archivos de diccionario existentes, cópielos al nuevo directorio.
 3. Reinicie OpenSearch y, a continuación, |Fess|.

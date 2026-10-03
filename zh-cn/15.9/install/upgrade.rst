@@ -23,7 +23,7 @@
 
 .. important::
 
-   |Fess| 14.x 对应 OpenSearch 2.x 系列，\ |Fess| 15.9 对应 OpenSearch 3.8.0。
+   |Fess| 14.x 对应 OpenSearch 2.x 系列，\ |Fess| 15.9 对应 OpenSearch 3.9.0。
    由于 |Fess| 专用的 OpenSearch 插件必须与 OpenSearch 版本完全一致，
    因此从 14.x 升级时，也必须同时对 OpenSearch 进行主版本升级。
    请参阅 :ref:`upgrade-opensearch`。
@@ -346,7 +346,7 @@ Docker 版
 步骤 4: 升级 OpenSearch
 ====================================
 
-|Fess| 15.9 对应 OpenSearch 3.8.0。如果所连接的 OpenSearch 版本比这更旧，
+|Fess| 15.9 对应 OpenSearch 3.9.0。如果所连接的 OpenSearch 版本比这更旧，
 请按照以下步骤升级。
 
 .. note::
@@ -374,20 +374,24 @@ Docker 版
    可能会出现索引兼容性问题。
    |Fess| 14.x 对应 OpenSearch 2.x 系列，因此从 14.x 升级时必然属于这种情况。
 
+   在 OpenSearch 3.9.0 上创建的快照无法恢复到 OpenSearch 3.8.0 及更早版本。请保留升级前创建的快照，以备回滚。
+
 1. 安装新版本的 OpenSearch
 
 2. 重新安装插件::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
    .. note::
 
       这些插件的版本必须与所使用的 OpenSearch 版本一致。
-      |Fess| 15.9 对应 OpenSearch 3.8.0。如果版本不一致，
+      |Fess| 15.9 对应 OpenSearch 3.9.0。如果版本不一致，
       插件安装将会失败。
+
+      |Fess| 的 4 个插件发布在 maven.codelibs.org 上，因此通过 URL 指定。 ``opensearch-plugin install`` 的 ``groupId:artifactId:version`` 形式只查找 Maven Central。
 
 3. 将词典目录移至 OpenSearch 配置目录下
 
@@ -480,6 +484,8 @@ Docker 版::
    以下步骤只是重新执行爬取，并不会更新索引映射（字段定义）。如果需要进行会更新映射的重新
    索引——例如要新启用分块向量搜索（语义搜索）时——请在管理界面的「系统信息」→「维护」中
    单独运行「重新索引」。详情请参阅 :ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）。
+
+   如果继续使用由 15.8 或更早版本创建的文档索引，另请参阅 :ref:`upgrade-reindex-new-fields`\ 。
 
 1. 确认现有爬取计划
 2. 从「系统」→「调度器」执行「Default Crawler」
@@ -911,6 +917,34 @@ API 请求。由于搜索界面现在通过 ``/api/v2/search`` 进行搜索，�
 如需禁止匿名用户搜索，请设置 ``login.required=true`` 。访问令牌的行为不变：带有已注册访问令牌的请求
 会获得该令牌的权限，带有未注册或已过期令牌的请求会被拒绝。
 
+.. _upgrade-reindex-new-fields:
+
+将新字段和假名规范化应用到现有文档索引
+--------------------------------------
+
+15.9 在启动时会向配置、日志和用户索引添加新字段，但不会更改文档索引的映射和分析设置。如果继续使用
+由 15.8 或更早版本创建的文档索引，以下 15.9 的变更不会生效。
+
+- **文件的所有者和最后修改者**\ （\ ``owner``\ 、\ ``last_modifier``\ ）: 文件系统、SMB 和 FTP 爬取时新索引的
+  字段。现有文档索引中没有它们的定义，因此会根据首次爬取的值被自动映射为 ``text`` 类型，
+  ``owner:alice`` 之类的搜索和 ``facet.field=owner`` 无法按预期工作。
+- **假名异体和代替长音符号书写的破折号的规范化**\ （例如将 ``サ―バ－`` 视为与 ``サーバー`` 相同的词）:
+  规则位于文档索引的分析设置和词典 ``mapping.txt`` 中，因此不会应用到现有索引。
+
+要同时应用两者，请在管理界面的「系统信息」→「维护」中启用「更新别名」和「重置字典」，然后运行
+「重新索引」。重新索引会将现有文档复制到新索引，因此无需重新爬取。
+
+.. warning::
+
+   「重置字典」会用随附的词典文件覆盖 OpenSearch 端的词典。如果在管理界面的「字典」中编辑过同义词等，
+   请事先下载，并在重新索引后重新应用。
+
+.. note::
+
+   由 15.8 或更早版本索引的文件没有所有者和最后修改者的值。增量爬取不会重新获取未更改的文件，
+   因此要添加这些值，请暂时禁用「系统」→「常规」中的「检查上次修改时间」后再进行爬取。
+
+
 15.9 特有的迁移工作
 ===================
 
@@ -1203,9 +1237,9 @@ Q: 需要升级 OpenSearch 吗？
 -------------------------------------------------
 
 A: 每个 |Fess| 版本对应特定的 OpenSearch 版本。
-|Fess| 15.9 对应 OpenSearch 3.8.0。
+|Fess| 15.9 对应 OpenSearch 3.9.0。
 由于 ``opensearch-analysis-fess`` 等 |Fess| 专用 OpenSearch 插件必须与 OpenSearch 版本完全一致，
-因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.8.0）。
+因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.9.0）。
 
 另外，|Fess| 15.9 强制要求安装 k-NN 插件，并会在索引设置中始终发送
 ``knn.derived_source.enabled``。如果 OpenSearch 版本过旧，会导致新索引创建失败，
@@ -1225,6 +1259,8 @@ A: 对于 |Fess| 的小版本升级（15.x → 15.9），如果不使用分块�
   :ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）。
 - **从 14.x 升级时**: 由于 OpenSearch 会从 2.x 主版本升级到 3.x，
   建议重建索引。
+- **在由 15.8 或更早版本创建的文档索引上使用所有者搜索或假名规范化时**: 需要重新索引。
+  详情请参阅 :ref:`upgrade-reindex-new-fields`\ 。
 
 .. warning::
 

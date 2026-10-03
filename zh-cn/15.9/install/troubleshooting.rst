@@ -70,7 +70,7 @@ Java 未安装，或 PATH 环境变量未正确设置。
 
 2. 将插件版本与 OpenSearch 版本匹配::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.6.0
+       $ /path/to/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
 
 3. 确认权限::
 
@@ -194,7 +194,7 @@ OpenSearch 无法启动
 1. 将 ``configsync.config_path`` 和 ``FESS_DICTIONARY_PATH`` 更改为 OpenSearch 配置目录下的目录。
 
    - RPM/DEB 版：``/etc/opensearch/dictionary/``
-   - ZIP 版：``/path/to/opensearch-3.8.0/config/dictionary/``
+   - ZIP 版：``/path/to/opensearch-3.9.0/config/dictionary/``
 
 2. 如果已有词典文件，请将其复制到新目录。
 3. 按 OpenSearch、|Fess| 的顺序重新启动。

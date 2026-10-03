@@ -24,7 +24,7 @@ Cette procédure de mise à niveau est compatible avec les mises à niveau entre
 .. important::
 
    |Fess| 14.x est compatible avec la série OpenSearch 2.x, tandis que |Fess| 15.9 est compatible
-   avec OpenSearch 3.8.0. Les plugins OpenSearch pour |Fess| doivent correspondre exactement à la
+   avec OpenSearch 3.9.0. Les plugins OpenSearch pour |Fess| doivent correspondre exactement à la
    version d'OpenSearch ; une mise à niveau depuis la 14.x implique donc obligatoirement une mise
    à niveau majeure d'OpenSearch également. Voir :ref:`upgrade-opensearch`.
 
@@ -360,7 +360,7 @@ Version Docker
 Étape 4 : Mise à niveau d'OpenSearch
 ====================================
 
-|Fess| 15.9 est compatible avec OpenSearch 3.8.0. Si l'OpenSearch auquel vous vous connectez est
+|Fess| 15.9 est compatible avec OpenSearch 3.9.0. Si l'OpenSearch auquel vous vous connectez est
 antérieur à cette version, effectuez la mise à niveau en suivant la procédure ci-dessous.
 
 .. note::
@@ -393,20 +393,28 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    |Fess| 14.x utilise la série OpenSearch 2.x ; une mise à niveau depuis la 14.x correspond donc
    toujours à ce cas de figure.
 
+   Un snapshot pris avec OpenSearch 3.9.0 ne peut pas être restauré dans OpenSearch 3.8.0 ou
+   antérieur. Conservez le snapshot pris avant la mise à niveau au cas où vous devriez revenir en
+   arrière.
+
 1. Installez la nouvelle version d'OpenSearch
 
 2. Réinstallez les plugins ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-fess:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-analysis-extension:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-minhash:3.8.0
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install org.codelibs.opensearch:opensearch-configsync:3.8.0
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
 
    .. note::
 
       La version de ces plugins doit correspondre à la version d'OpenSearch utilisée.
-      |Fess| 15.9 est compatible avec OpenSearch 3.8.0. Si les versions ne correspondent pas,
+      |Fess| 15.9 est compatible avec OpenSearch 3.9.0. Si les versions ne correspondent pas,
       l'installation du plugin échouera.
+
+      Les quatre plugins de |Fess| sont publiés sur maven.codelibs.org ; ils s'installent donc par
+      leur URL. La forme ``groupId:artifactId:version`` de ``opensearch-plugin install`` ne cherche
+      que dans Maven Central.
 
 3. Déplacez le répertoire des dictionnaires sous le répertoire de configuration d'OpenSearch
 
@@ -503,6 +511,9 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
    sémantique) —, exécutez séparément la « Réindexation » sous « Informations système » →
    « Maintenance » dans l'interface d'administration. Voir :ref:`semantic-search-migration`
    (:doc:`../config/search-semantic`) pour plus de détails.
+
+   Si vous conservez un index de documents créé avec la 15.8 ou antérieure, consultez aussi
+   :ref:`upgrade-reindex-new-fields`.
 
 1. Vérifiez la planification d'exploration existante
 2. Exécutez « Default Crawler » depuis « Système » → « Planificateur »
@@ -1010,6 +1021,45 @@ anonymes de rechercher, définissez ``login.required=true``. Les jetons d'accès
 avant : une requête munie d'un jeton d'accès enregistré reçoit les permissions de ce jeton, et une
 requête munie d'un jeton non enregistré ou expiré est refusée.
 
+.. _upgrade-reindex-new-fields:
+
+Appliquer les nouveaux champs et la normalisation des kana à un index de documents existant
+-------------------------------------------------------------------------------------------
+
+Au démarrage, la 15.9 ajoute de nouveaux champs aux index de configuration, de journaux et
+d'utilisateurs, mais ne modifie ni le mapping ni les paramètres d'analyse de l'index de documents.
+Si vous conservez un index de documents créé avec la 15.8 ou antérieure, les changements suivants de
+la 15.9 ne prennent pas effet.
+
+- **Propriétaire et dernier modificateur d'un fichier** (``owner``, ``last_modifier``) : nouveaux
+  champs indexés par les crawls du système de fichiers, SMB et FTP. L'index de documents existant ne
+  les définit pas ; la première valeur crawlée les mappe donc dynamiquement en ``text``, et les
+  recherches comme ``owner:alice`` ou ``facet.field=owner`` ne fonctionnent pas comme prévu.
+- **Normalisation des variantes de kana et des tirets écrits à la place de la marque de voyelle
+  longue** (par exemple, ``サ―バ－`` est traité comme le même mot que ``サーバー``) : les règles se
+  trouvent dans les paramètres d'analyse de l'index de documents et dans le dictionnaire
+  ``mapping.txt`` ; un index existant ne les reçoit donc pas.
+
+Pour appliquer les deux, activez « Remplacer les alias » et « Réinitialiser les dictionnaires » sous
+« Informations système » → « Maintenance » dans l'interface d'administration, puis lancez la
+« Réindexation ». La réindexation copie les documents existants dans un nouvel index ; il n'est pas
+nécessaire de recrawler.
+
+.. warning::
+
+   « Réinitialiser les dictionnaires » écrase les dictionnaires côté OpenSearch avec les fichiers de
+   dictionnaire fournis. Si vous avez modifié des synonymes ou d'autres dictionnaires sous
+   « Dictionnaire » dans l'interface d'administration, téléchargez-les d'abord et réappliquez-les
+   après la réindexation.
+
+.. note::
+
+   Les fichiers indexés avec la 15.8 ou antérieure n'ont pas de valeur de propriétaire ni de dernier
+   modificateur. Le crawl incrémental ne récupère pas à nouveau les fichiers inchangés ; pour ajouter
+   les valeurs, désactivez temporairement « Vérifier la dernière modification » sous « Système » →
+   « Général » et lancez un crawl.
+
+
 Migrations spécifiques à la 15.9
 ================================
 
@@ -1352,9 +1402,9 @@ Q : Est-il nécessaire de mettre à niveau OpenSearch également ?
 ----------------------------------------------------------------
 
 R : La version d'OpenSearch compatible est déterminée pour chaque version de |Fess|.
-|Fess| 15.9 est compatible avec OpenSearch 3.8.0.
+|Fess| 15.9 est compatible avec OpenSearch 3.9.0.
 Les plugins OpenSearch pour |Fess| tels que ``opensearch-analysis-fess`` doivent correspondre exactement à la version d'OpenSearch ;
-si vous mettez à niveau OpenSearch, mettez également à jour les plugins vers la version correspondante (3.8.0).
+si vous mettez à niveau OpenSearch, mettez également à jour les plugins vers la version correspondante (3.9.0).
 
 Notez par ailleurs que |Fess| 15.9 rend le plugin k-NN obligatoire et envoie toujours
 ``knn.derived_source.enabled`` dans les réglages de l'index. Avec un OpenSearch ancien, la
@@ -1376,6 +1426,8 @@ Une recréation et une réindexation sont nécessaires dans les cas suivants :
   :ref:`semantic-search-migration` (:doc:`../config/search-semantic`) pour plus de détails.
 - **Mise à niveau depuis la 14.x** : OpenSearch passant de la série 2.x à la série 3.x (mise à
   niveau majeure), la recréation de l'index est recommandée.
+- **Recherche par propriétaire ou normalisation des kana avec un index de documents créé avec la 15.8
+  ou antérieure** : une réindexation est nécessaire. Voir :ref:`upgrade-reindex-new-fields`.
 
 .. warning::
 
