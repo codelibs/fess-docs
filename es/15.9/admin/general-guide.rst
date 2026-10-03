@@ -111,6 +111,13 @@ Comprobar fecha de última modificación
 
 Habilite esto para realizar rastreo diferencial.
 
+Para las URL HTTP/HTTPS, cuando el ``Last-Modified`` de la respuesta HEAD no permite decidir (no hay
+fecha de modificación en el índice, la respuesta HEAD no tiene ``Last-Modified`` o el HEAD devuelve un
+estado distinto de 200/404), el GET se envía como GET condicional con ``If-None-Match`` (el ``ETag``
+indexado) y/o ``If-Modified-Since``. Una página que responde ``304 Not Modified`` se trata como una
+página sin cambios y no se vuelve a obtener. Para obtener todo de nuevo, por ejemplo tras cambiar la
+configuración de rastreo, desactive esta opción durante un rastreo.
+
 Configuración de rastreadores simultáneos
 ::::::::::::::::::::::::::::::::::::::::::
 

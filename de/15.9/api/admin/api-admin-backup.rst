@@ -79,12 +79,13 @@ Im Folgenden ein Beispiel bei den Standardeinstellungen (``index.backup.targets`
           { "id": "system.properties", "name": "system.properties" },
           { "id": "fess.json", "name": "fess.json" },
           { "id": "doc.json", "name": "doc.json" },
+          { "id": "chat_log.ndjson", "name": "chat_log.ndjson" },
           { "id": "click_log.ndjson", "name": "click_log.ndjson" },
           { "id": "favorite_log.ndjson", "name": "favorite_log.ndjson" },
           { "id": "search_log.ndjson", "name": "search_log.ndjson" },
           { "id": "user_info.ndjson", "name": "user_info.ndjson" }
         ],
-        "total": 10
+        "total": 11
       }
     }
 
@@ -112,7 +113,7 @@ Je nach Art von ``{id}`` wechselt der Antwortinhalt wie folgt.
      - Die Mapping-Definitionsdatei des Index selbst (``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``), unverändert (``application/octet-stream``)
    * - ``*.bulk`` oder Indexname ohne Erweiterung
      - Durch Scrollen des gleichnamigen Index erzeugte Bulk-Daten (``application/octet-stream``). Der Name ohne ``.bulk`` wird als Indexname behandelt.
-   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``)
+   * - ``*.ndjson`` (``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log`` / ``chat_log``)
      - NDJSON-Daten des entsprechenden Protokolls (``application/x-ndjson``)
 
 .. note::

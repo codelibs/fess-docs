@@ -68,6 +68,12 @@ Par défaut, vous pouvez effectuer une recherche en spécifiant les champs suiva
    * - favorite_count
      - Nombre de fois où le document a été ajouté aux favoris
      - Numérique
+   * - owner
+     - Nom de compte du propriétaire du fichier
+     - Mot-clé
+   * - last_modifier
+     - Dernier modificateur du fichier
+     - Mot-clé
 
 Table : Liste des champs disponibles
 
@@ -81,6 +87,16 @@ Si aucun champ n'est spécifié, la recherche porte sur les champs title et cont
 
 .. note::
     Selon la cible du crawl, certains champs peuvent ne pas être renseignés. Par exemple, anchor n'est enregistré que lors d'un crawl Web, et lang uniquement lorsque le document HTML possède un attribut de langue. Par ailleurs, des champs tels que segment (identifiant de session représentant une exécution de crawl) ou doc_id (identifiant interne attribué par le système) peuvent également être spécifiés, mais ils ne sont pas utilisés dans le cadre d'une recherche normale.
+
+owner et last_modifier sont enregistrés lors du crawl de serveurs de fichiers et autres. owner
+contient le nom de compte du propriétaire du fichier obtenu par les crawls SMB, système de fichiers
+et FTP (une valeur comme ``DOMAIN\alice`` devient ``alice``). last_modifier contient le dernier
+auteur extrait d'un document Office ou similaire, à défaut le propriétaire. Aucun owner n'est
+enregistré pour le HTML issu d'un crawl Web. Recherchez par exemple avec ``owner:alice`` ou
+``last_modifier:"Taro Yamada"``. Dans le thème fourni, la recherche avancée permet d'indiquer le
+propriétaire et le dernier modificateur. Les administrateurs peuvent activer ou désactiver ces
+champs avec ``crawler.document.file.owner.enabled`` et
+``crawler.document.file.last.modifier.enabled`` (``true`` par défaut tous les deux).
 
 Lorsque des fichiers HTML sont ciblés par la recherche, le contenu de la balise title est enregistré dans le champ title, et le texte situé sous la balise body est enregistré dans le champ content.
 

@@ -176,6 +176,17 @@ Distribución y API
   estilos en línea, pero no los scripts en línea). Por lo tanto, las
   fuentes o los scripts de una CDN externa no se cargan; inclúyalos en
   el tema.
+- La ``Content-Security-Policy`` del HTML de entrada contiene
+  ``frame-ancestors 'none'`` y la respuesta incluye también
+  ``X-Frame-Options: DENY``, por lo que la página no se muestra dentro del
+  marco de otra página. El valor de ``frame-ancestors`` se puede cambiar con
+  ``theme.index.frame.ancestors`` en ``fess_config.properties``
+  (predeterminado: ``'none'``). Un valor vacío omite ``frame-ancestors``
+  (``X-Frame-Options: DENY`` se sigue enviando). Con
+  ``frame-ancestors 'none'``, los navegadores basados en WebKit, como Safari,
+  dejan en blanco los marcos que un tema muestra desde una URL ``blob:``
+  (la vista previa de un PDF o la copia en caché). Deje el valor vacío para
+  mostrarlos.
 - La SPA del tema obtiene datos como los resultados de búsqueda y el
   chat a través de la API ``/api/v2/*``.
 

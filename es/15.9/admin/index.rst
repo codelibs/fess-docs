@@ -50,6 +50,7 @@ roles, los registros y las copias de seguridad.
    log-guide
    failureurl-guide
    searchlist-guide
+   docreport-guide
    backup-guide
    maintenance-guide
    esreq-guide

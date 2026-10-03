@@ -102,6 +102,26 @@ robots.txtの処理は ``app/WEB-INF/classes/fess_config.properties`` の
     # robots.txtを無視する（デフォルト: false）
     crawler.ignore.robots.txt=false
 
+Crawl-delay は接続先（オリジン）ごとに適用され、上限は 60 秒です。待機は URL 単位で行われるため、差分クロールで 1 つの URL に送る HEAD と GET は続けて送信されます。クロール設定の「間隔」は、これとは別に次の URL までの待機時間として働きます。
+
+robots.txt は RFC 9309 に従って解釈されます。 ``Allow:`` と ``Disallow:`` は最も長く一致した規則が優先され、開始 URL も robots.txt で確認されます。robots.txt で拒否された URL は ``fess-crawler.log`` に INFO で記録され、障害 URL には登録されません。
+
+429/503 応答時のバックオフ
+--------------------------
+
+サーバーが ``429 Too Many Requests`` または ``503 Service Unavailable`` を返した場合、そのオリジンへのアクセスを一時的に止め、その URL を最大 3 回まで再試行します。待機時間は、 ``Retry-After`` ヘッダーがあればその値、なければ 10 秒から始まる指数関数的な時間（最大 5 分）です。最後の再試行にも失敗すると、 ``fess-crawler.log`` に WARN が出力されます。
+
+robots.txt を取得できない場合
+-----------------------------
+
+robots.txt の取得が 5xx、429、タイムアウトなどで失敗した場合、そのオリジンの URL はバックオフが終わるまでキューに戻されます。最初の失敗の後、3 回の再試行にも失敗すると、そのクロールの間はそのオリジンのすべての URL がクロール対象外になり、 ``fess-crawler.log`` に WARN が 1 回出力されます。15.8 以前は、取得できなかった robots.txt はすべて許可として扱われていました。この動作に戻すには、ウェブクロール設定の「設定パラメーター」に次を指定します。
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+robots.txt の処理そのものを無効にするには、 ``client.robotsTxtEnabled=false`` （クロール設定ごと）または ``crawler.ignore.robots.txt=true`` を使います。
+
 レート制限の全設定項目
 ======================
 

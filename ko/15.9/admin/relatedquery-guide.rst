@@ -54,6 +54,63 @@
 목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
+검색 로그에서 생성
+------------------
+
+목록 페이지의 [검색 로그에서 생성] 버튼을 클릭하면 최근 검색 로그에서 관련 쿼리를 만듭니다.
+같은 사용자 세션에서 어떤 검색 직후 짧은 간격으로 이어서 수행된 검색(오타 다음의 올바른 단어나, 넓은 단어 다음의 보다 구체적인 단어 등)을 바꿔 말하기로 보고, 자주 검색되는 검색어에 대해 가장 많은 바꿔 말하기를 그 검색어의 관련 쿼리로 만듭니다.
+
+관련 쿼리는 모든 사용자에게 적용되고 그 검색어의 검색을 모두 넓히므로, 생성은 신중하게 이루어집니다.
+
+- 게스트가 볼 수 있는 검색만 사용합니다. 검색 로그의 역할이 모두 ``suggest.search.log.permissions`` (추천과 같은 설정)를 만족하는 경우에만 읽어 들입니다.
+- ``label:"x"`` 등의 필드 지정, 연산자, 와일드카드, ``sort:`` , 앞에 붙은 ``+`` / ``-`` 를 포함한 검색어는 사용하지 않습니다.
+- [추천 > 제외 단어] 에 등록한 단어는 검색어로도 관련 쿼리로도 사용하지 않습니다.
+- 검색어와 그 관련 쿼리는 각각 ``related_query.generate.min.sessions`` 이상의 세션에서 얻은 것으로 한정합니다. 바꿔 말한 후의 검색은 히트가 있는 것으로 한정합니다.
+- 가상 호스트별로 생성합니다. 가상 호스트가 없는 검색 로그는 기본 호스트로 취급합니다.
+- 이미 관련 쿼리가 있는 검색어는 변경하지 않습니다(건너뛴 건수가 결과에 표시됩니다). 또한 관련 쿼리 캐시에 읽어 들일 수 있는 건수( ``page.relatedquery.max.fetch.size`` )를 넘어서 생성하지 않습니다.
+
+생성된 관련 쿼리는 직접 등록한 것과 마찬가지로 편집, 삭제할 수 있습니다.
+[시스템 > 일반] 의 「검색 로그」 또는 「사용자 로그」가 비활성화되어 있으면 생성할 수 없습니다. 생성이 실행 중일 때는 다시 실행할 수 없습니다.
+
+생성 동작은 ``fess_config.properties`` 의 다음 설정으로 조정할 수 있습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 40 15
+
+   * - 속성
+     - 설명
+     - 기본값
+   * - ``related_query.generate.days``
+     - 읽어 들이는 검색 로그의 일수
+     - ``30``
+   * - ``related_query.generate.term.size``
+     - 가상 호스트별 검색어의 최대 수
+     - ``100``
+   * - ``related_query.generate.query.size``
+     - 검색어 하나에 만드는 관련 쿼리의 최대 수
+     - ``5``
+   * - ``related_query.generate.min.sessions``
+     - 검색어와 관련 쿼리가 나타나야 하는 최소 세션 수
+     - ``3``
+   * - ``related_query.generate.session.interval``
+     - 바꿔 말하기로 간주하는 간격(분)
+     - ``10``
+   * - ``related_query.generate.seed.log.size``
+     - 검색어 하나에 대해 읽어 들이는 검색 로그의 최대 수
+     - ``1000``
+   * - ``related_query.generate.seed.session.size``
+     - 검색어 하나에 대해 읽어 들이는 세션의 최대 수
+     - ``200``
+   * - ``related_query.generate.log.fetch.size``
+     - 검색어 하나에 대해 읽어 들이는 후속 검색 로그의 최대 수
+     - ``2000``
+   * - ``related_query.generate.query.min.length``
+     - 검색어와 관련 쿼리의 최소 길이(문자 수)
+     - ``2``
+   * - ``related_query.generate.query.max.length``
+     - 검색어와 관련 쿼리의 최대 길이(문자 수)
+     - ``50``
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/relatedquery-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/relatedquery-2.png

@@ -68,6 +68,12 @@ Standardmäßig können die folgenden Felder für die Suche angegeben werden.
    * - favorite_count
      - Anzahl der Favorisierungen des Dokuments
      - Numerisch
+   * - owner
+     - Kontoname des Dateibesitzers
+     - Keyword
+   * - last_modifier
+     - Letzter Bearbeiter der Datei
+     - Keyword
 
 Tabelle: Liste der verfügbaren Felder
 
@@ -81,6 +87,16 @@ Wenn kein Feld angegeben wird, erfolgt die Suche über title und content. Je nac
 
 .. note::
     Je nach Crawling-Ziel werden manche Felder nicht mit einem Wert belegt. So wird anchor beispielsweise nur beim Web-Crawling registriert, und lang nur, wenn das HTML ein Sprachattribut enthält. Außerdem lassen sich Felder wie segment (eine Sitzungs-ID, die den jeweiligen Crawling-Lauf kennzeichnet) oder doc_id (eine vom System vergebene interne ID) angeben, diese werden jedoch bei der normalen Suche in der Regel nicht verwendet.
+
+owner und last_modifier werden beim Crawlen von Dateiservern und Ähnlichem registriert. owner
+enthält den Kontonamen des Dateibesitzers aus SMB-, Dateisystem- und FTP-Crawls (ein Wert wie
+``DOMAIN\alice`` wird zu ``alice``). last_modifier enthält den letzten Bearbeiter, der aus einem
+Office-Dokument o. Ä. extrahiert wird, ersatzweise den Besitzer. Für HTML aus einem Web-Crawl wird
+kein owner registriert. Suchen Sie zum Beispiel mit ``owner:alice`` oder
+``last_modifier:"Taro Yamada"``. Im mitgelieferten Theme lassen sich Besitzer und letzter Bearbeiter
+in der erweiterten Suche angeben. Administratoren können die Felder mit
+``crawler.document.file.owner.enabled`` und ``crawler.document.file.last.modifier.enabled``
+(beide standardmäßig ``true``) ein- und ausschalten.
 
 Wenn HTML-Dateien als Suchziel verwendet werden, wird das title-Tag im title-Feld und die Zeichenkette unter dem body-Tag im content-Feld registriert.
 

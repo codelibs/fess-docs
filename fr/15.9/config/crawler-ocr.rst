@@ -167,6 +167,7 @@ Remarques d'exploitation
 - Pour les nouvelles configurations de crawl Web, le motif d'URL exclues par défaut exclut les URL d'images (jpg, png, gif, etc.). Pour explorer les images d'un site Web, supprimez-les de « URL exclues du crawl ». Le crawl de fichiers inclut les images.
 - Les limites de taille du crawler s'appliquent également. Pour la limite de taille d'indexation par type de fichier (par défaut : 10 Mo), consultez :doc:`crawler-basic`.
 - La précision de l'OCR dépend de la qualité de la numérisation. L'écriture manuscrite n'est en général pas bien reconnue.
+- Les fichiers indexés avant l'activation de l'OCR ne sont pas traités par l'OCR tels quels. Avec le crawl incrémental activé (« Vérifier la dernière modification » dans :doc:`../admin/general-guide`), un fichier dont la date de modification n'a pas changé n'est pas récupéré à nouveau lors d'un nouveau crawl. Pour appliquer l'OCR à ces fichiers, désactivez « Vérifier la dernière modification » le temps d'un crawl, ou supprimez les documents de l'index puis relancez le crawl.
 
 Remarques sur la mise à niveau
 ==============================

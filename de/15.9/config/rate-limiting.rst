@@ -102,6 +102,39 @@ Bei Setzen auf ``true`` wird die robots.txt-Verarbeitung einschließlich Crawl-d
     # robots.txt ignorieren (Standard: false)
     crawler.ignore.robots.txt=false
 
+Crawl-delay gilt je Origin und ist auf 60 Sekunden begrenzt. Es taktet URLs, nicht Anfragen; bei
+einem inkrementellen Crawl werden HEAD und GET einer URL daher direkt nacheinander gesendet. Das
+Intervall einer Crawl-Konfiguration wirkt weiterhin getrennt davon als Wartezeit vor der nächsten URL.
+
+robots.txt wird gemäß RFC 9309 ausgewertet. Zwischen ``Allow:`` und ``Disallow:`` gewinnt die längste
+passende Regel, und auch die Start-URLs werden gegen robots.txt geprüft. Eine von robots.txt
+verbotene URL wird in ``fess-crawler.log`` auf INFO protokolliert und nicht als Fehler-URL erfasst.
+
+Backoff nach 429/503-Antworten
+------------------------------
+
+Antwortet ein Server mit ``429 Too Many Requests`` oder ``503 Service Unavailable``, pausiert |Fess|
+die Anfragen an diesen Origin und wiederholt die URL bis zu dreimal. Gewartet wird gemäß dem
+``Retry-After``-Header, falls vorhanden, sonst exponentiell ab 10 Sekunden (höchstens 5 Minuten).
+Schlägt auch der letzte Versuch fehl, wird ein WARN in ``fess-crawler.log`` geschrieben.
+
+Wenn robots.txt nicht abgerufen werden kann
+-------------------------------------------
+
+Schlägt der Abruf von robots.txt mit 5xx, 429 oder einer Zeitüberschreitung fehl, werden die URLs
+dieses Origins bis zum Ende des Backoffs wieder in die Warteschlange gestellt. Scheitern nach dem
+ersten Fehler auch drei weitere Versuche, wird für den Rest des Crawls keine URL dieses Origins
+gecrawlt, und ein einzelnes WARN wird in ``fess-crawler.log`` geschrieben. Bis 15.8 bedeutete eine
+nicht abrufbare robots.txt „alles erlaubt“. Um dieses Verhalten wiederherzustellen, geben Sie in den
+„Konfigurationsparametern“ der Web-Crawl-Konfiguration Folgendes an:
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+Um die robots.txt-Verarbeitung ganz abzuschalten, verwenden Sie ``client.robotsTxtEnabled=false``
+(je Crawl-Konfiguration) oder ``crawler.ignore.robots.txt=true``.
+
 Alle Rate-Limiting-Einstellungen
 =================================
 

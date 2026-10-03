@@ -111,6 +111,8 @@ SSO类型
 
 执行差分爬取时启用。
 
+对于 HTTP/HTTPS 的 URL，当无法通过 HEAD 响应的 ``Last-Modified`` 判断时（索引中没有最后修改时间、HEAD 响应中没有 ``Last-Modified``\ 、或 HEAD 返回 200/404 以外的状态），会在 GET 中附加 ``If-None-Match`` （索引中保存的 ``ETag`` ）或 ``If-Modified-Since``\ ，进行条件 GET。服务器返回 ``304 Not Modified`` 的页面与未更新的页面一样，不会被重新获取。修改设置后等需要重新获取全部内容时，请禁用此设置后再爬取。
+
 同时爬虫设置
 ::::::::::::::
 

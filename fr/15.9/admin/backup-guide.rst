@@ -45,6 +45,11 @@ doc.json
 
 doc.json contient les informations de mapping de l'index fess.
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjson contient les informations du journal d'utilisation du chat IA.
+
 click_log.ndjson
 ::::::::::::::::
 

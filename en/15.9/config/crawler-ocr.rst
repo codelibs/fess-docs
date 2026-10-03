@@ -167,6 +167,7 @@ Operational Notes
 - For new web crawl configurations, the default excluded URL pattern excludes image URLs (jpg, png, gif, etc.). To crawl images on a web site, remove these from "Excluded URLs for Crawling". File crawls include images.
 - The crawler's size limits also apply. For the indexing size limit per file type (default: 10 MB), see :doc:`crawler-basic`.
 - OCR accuracy depends on the quality of the scan. Handwriting is generally not recognized well.
+- Files that were indexed before OCR was enabled are not OCR'd as they are. With incremental crawling ("Check Last Modified" in :doc:`../admin/general-guide`) on, a file whose modification time has not changed is not fetched again by a re-crawl. To OCR those files, turn "Check Last Modified" off for one crawl, or delete the documents from the index and crawl again.
 
 Upgrade Notes
 =============

@@ -48,6 +48,11 @@ doc.json
 
 doc.json contains mapping information for the fess index.
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjson includes AI chat usage log information.
+
 click_log.ndjson
 ::::::::::::::::
 

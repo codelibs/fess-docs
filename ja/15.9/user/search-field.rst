@@ -68,6 +68,12 @@
    * - favorite_count
      - ドキュメントがお気に入り登録された回数
      - 数値
+   * - owner
+     - ファイルの所有者のアカウント名
+     - キーワード
+   * - last_modifier
+     - ファイルの最終更新者
+     - キーワード
 
 表: 利用可能なフィールド一覧
 
@@ -81,6 +87,8 @@
 
 .. note::
     クロール対象によっては値が登録されないフィールドもあります。たとえば anchor は Web クロール時のみ、lang は HTML に言語属性がある場合のみ登録されます。また、segment（クロール実行単位を表すセッション ID）や doc_id（システムが採番する内部 ID）などのフィールドも指定できますが、通常の検索では利用しません。
+
+owner と last_modifier は、ファイルサーバーなどのクロールで登録されます。owner には SMB、ファイルシステム、FTP のクロールで取得したファイルの所有者のアカウント名が入ります（ ``DOMAIN\alice`` のような値は ``alice`` になります）。last_modifier には Office 文書などから抽出した最終更新者が入り、取得できない場合は所有者が入ります。Web クロールした HTML には owner は登録されません。たとえば ``owner:alice`` や ``last_modifier:"Taro Yamada"`` のように検索します。同梱のテーマでは、詳細検索で所有者と最終更新者を指定できます。登録するかどうかは、管理者が ``crawler.document.file.owner.enabled`` と ``crawler.document.file.last.modifier.enabled`` （どちらもデフォルトは ``true`` ）で切り替えられます。
 
 HTML ファイルを検索対象としている場合、title タグが title フィールドに、body タグ以下の文字列が content フィールドに登録されます。
 

@@ -111,6 +111,13 @@ Vérifier la dernière modification
 
 Active le crawl différentiel.
 
+Pour les URL HTTP/HTTPS, quand le ``Last-Modified`` de la réponse HEAD ne permet pas de décider
+(aucune date de modification dans l'index, pas de ``Last-Modified`` dans la réponse HEAD, ou un statut
+HEAD autre que 200/404), le GET est envoyé comme GET conditionnel avec ``If-None-Match`` (l'``ETag``
+indexé) et/ou ``If-Modified-Since``. Une page qui répond ``304 Not Modified`` est traitée comme une
+page inchangée et n'est pas récupérée à nouveau. Pour tout récupérer à nouveau, par exemple après
+avoir modifié les paramètres de crawl, désactivez ce réglage le temps d'un crawl.
+
 Configuration du robot d'exploration simultané
 :::::::::::::::::::::::::::::::::::::::::::::::
 

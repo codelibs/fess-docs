@@ -148,6 +148,13 @@
 - 入口 HTML 在返回时附带 ``Content-Security-Policy`` 头，仅允许来自
   |Fess| 自身的脚本、样式、图片和连接（允许内联样式，不允许内联脚本）。
   因此，来自外部 CDN 的字体或脚本不会被加载；请将它们包含在主题中。
+- 入口 HTML 的 ``Content-Security-Policy`` 中包含 ``frame-ancestors 'none'``\ ，
+  并且还带有 ``X-Frame-Options: DENY`` 头，因此页面不会显示在其他页面的框架中。
+  ``frame-ancestors`` 的值可以通过 ``fess_config.properties`` 中的
+  ``theme.index.frame.ancestors`` （默认值： ``'none'`` ）更改。设为空值时不再附加
+  ``frame-ancestors`` （ ``X-Frame-Options: DENY`` 仍会附加）。在 ``frame-ancestors 'none'``
+  下，基于 WebKit 的浏览器（如 Safari）会将主题通过 ``blob:`` URL 显示的框架
+  （PDF 预览或缓存显示）显示为空白。要显示这些内容，请将该值设为空。
 - 主题的 SPA 会通过 ``/api/v2/*`` API 获取搜索结果、聊天等数据。
 
 打包

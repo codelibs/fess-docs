@@ -102,6 +102,42 @@ En le définissant sur ``true``, le traitement de robots.txt, y compris Crawl-de
     # Ignorer robots.txt (defaut : false)
     crawler.ignore.robots.txt=false
 
+Crawl-delay s'applique par origine et est plafonné à 60 secondes. Il espace les URL, pas les
+requêtes : lors d'un crawl incrémental, le HEAD et le GET d'une même URL partent donc l'un après
+l'autre. L'intervalle d'une configuration de crawl agit toujours séparément, comme attente avant
+l'URL suivante.
+
+robots.txt est interprété selon la RFC 9309. Entre ``Allow:`` et ``Disallow:``, la règle
+correspondante la plus longue l'emporte, et les URL de départ sont elles aussi vérifiées. Une URL
+interdite par robots.txt est journalisée au niveau INFO dans ``fess-crawler.log`` et n'est pas
+enregistrée comme URL en échec.
+
+Attente après les réponses 429/503
+----------------------------------
+
+Quand un serveur répond ``429 Too Many Requests`` ou ``503 Service Unavailable``, |Fess| suspend
+les requêtes vers cette origine et réessaie l'URL jusqu'à trois fois. L'attente est la valeur de
+l'en-tête ``Retry-After`` s'il est présent, sinon une attente exponentielle qui commence à
+10 secondes (5 minutes au plus). Si la dernière tentative échoue aussi, un WARN est écrit dans
+``fess-crawler.log``.
+
+Quand robots.txt ne peut pas être récupéré
+------------------------------------------
+
+Quand la récupération de robots.txt échoue avec un 5xx, un 429 ou un délai dépassé, les URL de cette
+origine sont remises dans la file jusqu'à la fin de l'attente. Si trois nouvelles tentatives
+échouent après le premier échec, aucune URL de cette origine n'est crawlée jusqu'à la fin du crawl,
+et un seul WARN est écrit dans ``fess-crawler.log``. Jusqu'à la version 15.8, un robots.txt
+impossible à récupérer valait « tout autoriser ». Pour retrouver ce comportement, indiquez ceci dans
+les « Paramètres de configuration » de la configuration de crawl web :
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+Pour désactiver entièrement le traitement de robots.txt, utilisez ``client.robotsTxtEnabled=false``
+(par configuration de crawl) ou ``crawler.ignore.robots.txt=true``.
+
 Liste complète des propriétés de limitation de débit
 ======================
 

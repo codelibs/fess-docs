@@ -50,6 +50,7 @@ Rollen bis zu Protokollen und Sicherungen.
    log-guide
    failureurl-guide
    searchlist-guide
+   docreport-guide
    backup-guide
    maintenance-guide
    esreq-guide

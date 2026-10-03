@@ -23,6 +23,7 @@ et l'authentification.
    :caption: API de recherche
 
    api-search
+   api-export
    api-label
    api-popularword
    api-suggest
@@ -41,6 +42,8 @@ et l'authentification.
    :caption: API des fonctions utilisateur
 
    api-favorite
+   api-search-history
+   api-tag
    api-click
    api-cache
 

@@ -111,6 +111,13 @@ Letzte Änderung prüfen
 
 Aktivieren Sie dies für differenzielles Crawling.
 
+Bei HTTP/HTTPS-URLs wird, wenn der ``Last-Modified``-Wert der HEAD-Antwort keine Entscheidung
+erlaubt (kein Änderungsdatum im Index, kein ``Last-Modified`` in der HEAD-Antwort oder ein anderer
+Status als 200/404), der GET als bedingter GET mit ``If-None-Match`` (dem indexierten ``ETag``)
+und/oder ``If-Modified-Since`` gesendet. Eine mit ``304 Not Modified`` beantwortete Seite wird wie
+eine unveränderte Seite behandelt und nicht erneut abgerufen. Um alles erneut abzurufen, etwa nach
+einer Änderung der Crawl-Einstellungen, deaktivieren Sie diese Einstellung für einen Crawl.
+
 Gleichzeitige Crawler-Konfiguration
 :::::::::::::::::::::::::::::::::::::
 

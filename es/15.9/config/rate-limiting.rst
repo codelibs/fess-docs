@@ -102,6 +102,39 @@ Al establecerlo en ``true``, se deshabilita el manejo de robots.txt, incluyendo 
     # Ignorar robots.txt (predeterminado: false)
     crawler.ignore.robots.txt=false
 
+Crawl-delay se aplica por origen y tiene un máximo de 60 segundos. Espacia URL, no solicitudes, por
+lo que en un rastreo incremental el HEAD y el GET de una URL se envían uno tras otro. El intervalo de
+una configuración de rastreo sigue actuando por separado, como espera antes de la siguiente URL.
+
+robots.txt se interpreta según RFC 9309. Entre ``Allow:`` y ``Disallow:`` prevalece la regla
+coincidente más larga, y las URL iniciales también se comprueban con robots.txt. Una URL que
+robots.txt no permite se registra en INFO en ``fess-crawler.log`` y no se registra como URL fallida.
+
+Espera tras respuestas 429/503
+------------------------------
+
+Cuando un servidor responde ``429 Too Many Requests`` o ``503 Service Unavailable``, |Fess| detiene
+temporalmente las solicitudes a ese origen y reintenta la URL hasta tres veces. La espera es el valor
+de la cabecera ``Retry-After`` si existe; si no, una espera exponencial que empieza en 10 segundos
+(hasta 5 minutos). Si el último reintento también falla, se escribe un WARN en ``fess-crawler.log``.
+
+Cuando no se puede obtener robots.txt
+-------------------------------------
+
+Cuando la obtención de robots.txt falla con un 5xx, un 429 o un tiempo de espera agotado, las URL de
+ese origen vuelven a la cola hasta que termina la espera. Si tras el primer fallo también fallan tres
+reintentos, no se rastrea ninguna URL de ese origen durante el resto del rastreo y se escribe un único
+WARN en ``fess-crawler.log``. Hasta la versión 15.8, un robots.txt que no se podía obtener significaba
+"permitir todo". Para recuperar ese comportamiento, indique lo siguiente en los "Parámetros de
+configuración" de la configuración de rastreo web:
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+Para desactivar por completo el tratamiento de robots.txt, use ``client.robotsTxtEnabled=false``
+(por configuración de rastreo) o ``crawler.ignore.robots.txt=true``.
+
 Todas las opciones de configuración de límite de tasa
 =====================================================
 

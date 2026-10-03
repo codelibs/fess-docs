@@ -66,6 +66,12 @@ Por defecto, puede buscar especificando los siguientes campos:
    * - favorite_count
      - Número de veces que el documento se agregó a favoritos
      - Numérico
+   * - owner
+     - Nombre de cuenta del propietario del archivo
+     - Palabra clave
+   * - last_modifier
+     - Última persona que modificó el archivo
+     - Palabra clave
 
 Tabla: Lista de campos disponibles
 
@@ -79,6 +85,16 @@ Si no se especifica ningún campo, la búsqueda se realiza sobre los campos titl
 
 .. note::
     Según el objetivo del rastreo, hay campos en los que no se registra ningún valor. Por ejemplo, anchor solo se registra durante el rastreo web, y lang solo cuando el HTML tiene un atributo de idioma. Además, también se pueden especificar campos como segment (el ID de sesión que representa la unidad de ejecución del rastreo) o doc_id (el ID interno asignado por el sistema), aunque normalmente no se utilizan en las búsquedas habituales.
+
+owner y last_modifier se registran al rastrear servidores de archivos y similares. owner contiene el
+nombre de cuenta del propietario del archivo obtenido en rastreos SMB, de sistema de archivos y FTP
+(un valor como ``DOMAIN\alice`` pasa a ser ``alice``). last_modifier contiene el último autor
+extraído de un documento de Office o similar y, si no existe, el propietario. No se registra owner
+para el HTML de un rastreo web. Busque, por ejemplo, con ``owner:alice`` o
+``last_modifier:"Taro Yamada"``. En el tema incluido, la búsqueda avanzada permite indicar el
+propietario y el último modificador. Los administradores pueden activar y desactivar estos campos
+con ``crawler.document.file.owner.enabled`` y ``crawler.document.file.last.modifier.enabled``
+(ambos ``true`` de forma predeterminada).
 
 Cuando los archivos HTML son el objetivo de búsqueda, la etiqueta title se registra en el campo title, y el texto debajo de la etiqueta body se registra en el campo content.
 

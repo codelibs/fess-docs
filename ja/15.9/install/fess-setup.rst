@@ -94,6 +94,14 @@ Playwright クローラが必要とする Node.js を、 |Fess| のディレク�
 
 ``install plugin`` 、 ``list plugins`` 、 ``upgrade plugins`` には ``--repository <url>`` を指定できます。指定すると、バージョンの一覧、jar、チェックサムをすべてその 1 つの Maven リポジトリ（社内のミラーなど）から取得し、既定のリリースリポジトリ、スナップショットリポジトリ、GitHub は使用しません。
 
+``--repository`` には ``file:///`` で始まる URL も指定できます。インターネットに接続できないサーバーでは、Maven リポジトリのコピーをサーバー上に置き、そのディレクトリを指定します。指定するのは、各プラグインのディレクトリ（ ``<name>/maven-metadata.xml`` など）を含むディレクトリで、既定のリポジトリの ``https://maven.codelibs.org/release/org/codelibs/fess/`` に当たる場所です。バージョンの解決とチェックサムの検証は、HTTP のリポジトリと同じように行われます。
+
+::
+
+    $ bin/fess-setup install plugin fess-ds-csv --repository file:///opt/maven-repo/org/codelibs/fess/
+
+``http`` 、 ``https`` 、 ``file`` 以外のスキームや、スキームのない URL は 1 行のエラーで拒否されます。
+
 install plugin
 --------------
 
@@ -106,6 +114,8 @@ install plugin
 jar はプラグインの GitHub リリースから取得し、リリースに該当するファイルがない場合は Maven リポジトリから取得します。いずれも Maven リポジトリが公開している SHA-1 チェックサムで検証します。 |Fess| の開発版では、同じ系列のスナップショットビルドも導入対象になり、そちらが優先されます。
 
 使用例は :doc:`../admin/plugin-guide` を参照してください。
+
+導入できるのは、 |Fess| が読み込む種類のプラグイン（名前が ``fess-ds-`` 、 ``fess-ingest-`` 、 ``fess-script-`` 、 ``fess-webapp-`` 、 ``fess-thumbnail-`` 、 ``fess-crawler-`` 、 ``fess-llm-`` 、 ``fess-storage-`` 、 ``fess-sso-`` で始まるもの）だけです。 ``list plugins`` に表示されるものと同じです。それ以外の名前（ ``fess-theme-*`` 、 ``fess`` 、 ``fess-crawler`` などのライブラリ）を指定すると、何もダウンロードせずに 1 行のエラーを表示し、終了コード 2 で終了します。複数の名前のうち 1 つでも該当すると、どれも導入しません。静的テーマは ``install theme`` で導入してください。
 
 list plugins
 ------------
@@ -155,6 +165,8 @@ remove plugin
 1. インターネットに接続できる環境で、 |Fess| の ZIP パッケージと、必要なプラグインの jar をダウンロードします。jar は ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar`` から取得できます。この |Fess| に対応するバージョン（ |Fess| 15.9 なら 15.9.x）を選んでください。
 2. 対象の環境で ZIP を展開し、jar を ``app/WEB-INF/plugin/`` に置きます。 |Fess| の起動後に、管理画面のプラグインのインストール画面の「ローカル」タブからアップロードすることもできます（ :doc:`../admin/plugin-guide` を参照）。
 3. |Fess| を起動します。起動中に jar を置いた場合は再起動してください。
+
+プラグインの jar を個別に持ち込む代わりに、Maven リポジトリの必要な部分（ ``org/codelibs/fess/<name>/`` のディレクトリ）をコピーして持ち込み、 ``--repository file:///...`` を指定して ``install plugin`` で導入することもできます。この場合も、チェックサムが検証されます。
 
 テーマの管理
 ============

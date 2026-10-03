@@ -79,12 +79,13 @@ Backup APIは、|Fess| のバックアップ対象データを参照・ダウン
           { "id": "system.properties", "name": "system.properties" },
           { "id": "fess.json", "name": "fess.json" },
           { "id": "doc.json", "name": "doc.json" },
+          { "id": "chat_log.ndjson", "name": "chat_log.ndjson" },
           { "id": "click_log.ndjson", "name": "click_log.ndjson" },
           { "id": "favorite_log.ndjson", "name": "favorite_log.ndjson" },
           { "id": "search_log.ndjson", "name": "search_log.ndjson" },
           { "id": "user_info.ndjson", "name": "user_info.ndjson" }
         ],
-        "total": 10
+        "total": 11
       }
     }
 
@@ -112,7 +113,7 @@ Backup APIは、|Fess| のバックアップ対象データを参照・ダウン
      - インデックスのマッピング定義ファイル（``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``）そのもの（``application/octet-stream``）
    * - ``*.bulk`` または拡張子なしのインデックス名
      - 対象名と同名のインデックスをスクロールして生成したバルクデータ（``application/octet-stream``）。\ ``.bulk`` を取り除いた名前をインデックス名として扱います。
-   * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``）
+   * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log`` / ``chat_log``）
      - 対応するログのNDJSONデータ（``application/x-ndjson``）
 
 .. note::

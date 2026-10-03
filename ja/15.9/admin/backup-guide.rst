@@ -45,6 +45,11 @@ doc.json
 
 doc.jsonはfessインデックスのマッピング情報を含みます。
 
+chat_log.ndjson
+:::::::::::::::
+
+chat_log.ndjsonはAIチャットの利用ログの情報を含みます。
+
 click_log.ndjson
 ::::::::::::::::
 

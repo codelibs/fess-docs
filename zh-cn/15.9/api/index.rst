@@ -22,6 +22,7 @@ AI 聊天 API、请求与响应格式，以及认证方式。
    :caption: 搜索 API
 
    api-search
+   api-export
    api-label
    api-popularword
    api-suggest
@@ -40,6 +41,8 @@ AI 聊天 API、请求与响应格式，以及认证方式。
    :caption: 用户功能 API
 
    api-favorite
+   api-search-history
+   api-tag
    api-click
    api-cache
 

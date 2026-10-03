@@ -44,6 +44,9 @@ SPA が必要とする初期設定を返します。
         },
         "features": {
           "user_favorite": false,
+          "search_history": true,
+          "search_export": false,
+          "user_tag": false,
           "popular_word": true,
           "suggest_search_log": true,
           "suggest_documents": true,
@@ -186,6 +189,15 @@ features
    * - ``user_favorite``
      - boolean
      - ユーザーお気に入り機能が有効かどうか。
+   * - ``search_history``
+     - boolean
+     - 検索履歴（ ``GET /api/v2/search-history`` ）が利用できるかどうか（ ``search.history.enabled`` と検索ログの両方が有効な場合に ``true`` ）。
+   * - ``search_export``
+     - boolean
+     - 検索結果のエクスポート（ ``GET /api/v2/documents/export`` ）が有効かどうか（ ``api.search.export`` ）。
+   * - ``user_tag``
+     - boolean
+     - タグ機能（ ``/api/v2/documents/{docId}/tags`` ）が有効かどうか（ ``user.tag.enabled`` ）。
    * - ``popular_word``
      - boolean
      - 人気ワード機能が有効かどうか。

@@ -102,6 +102,32 @@ robots.txt 처리는 ``app/WEB-INF/classes/fess_config.properties`` 의
     # robots.txt를 무시한다(기본값: false)
     crawler.ignore.robots.txt=false
 
+Crawl-delay 는 접속 대상(오리진)별로 적용되며 상한은 60초입니다. 대기는 URL 단위로 이루어지므로, 증분 크롤링에서 하나의 URL 에 보내는 HEAD 와 GET 은 연이어 전송됩니다.
+크롤링 설정의 「간격」은 이와 별도로 다음 URL 까지의 대기 시간으로 동작합니다.
+
+robots.txt 는 RFC 9309 에 따라 해석됩니다. ``Allow:`` 와 ``Disallow:`` 는 가장 길게 일치한 규칙이 우선하며, 시작 URL 도 robots.txt 로 확인합니다. robots.txt 로 거부된 URL 은 ``fess-crawler.log`` 에 INFO 로 기록되며 장애 URL 에는 등록되지 않습니다.
+
+429/503 응답 시 백오프
+----------------------
+
+서버가 ``429 Too Many Requests`` 또는 ``503 Service Unavailable`` 을 반환하면 해당 오리진에 대한 접근을 일시적으로 멈추고 그 URL 을 최대 3회까지 재시도합니다.
+대기 시간은 ``Retry-After`` 헤더가 있으면 그 값, 없으면 10초부터 시작하는 지수적 시간(최대 5분)입니다.
+마지막 재시도도 실패하면 ``fess-crawler.log`` 에 WARN 이 출력됩니다.
+
+robots.txt 를 가져올 수 없는 경우
+---------------------------------
+
+robots.txt 를 가져오는 것이 5xx, 429, 타임아웃 등으로 실패하면, 해당 오리진의 URL 은 백오프가 끝날 때까지 큐로 되돌려집니다.
+첫 실패 후 3회의 재시도도 실패하면, 그 크롤링 동안 해당 오리진의 모든 URL 이 크롤링 대상에서 제외되고 ``fess-crawler.log`` 에 WARN 이 한 번 출력됩니다.
+15.8 이전에는 가져올 수 없었던 robots.txt 는 모두 허용으로 취급되었습니다.
+이 동작으로 되돌리려면 웹 크롤링 설정의 「설정 파라미터」에 다음을 지정합니다.
+
+::
+
+    client.robotsTxtAllowOnUnavailable=true
+
+robots.txt 처리 자체를 비활성화하려면 ``client.robotsTxtEnabled=false`` (크롤링 설정별) 또는 ``crawler.ignore.robots.txt=true`` 를 사용합니다.
+
 속도 제한 전체 설정 항목
 =========================
 

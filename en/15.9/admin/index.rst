@@ -50,6 +50,7 @@ logs, and backups.
    log-guide
    failureurl-guide
    searchlist-guide
+   docreport-guide
    backup-guide
    maintenance-guide
    esreq-guide

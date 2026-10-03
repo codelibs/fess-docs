@@ -79,12 +79,13 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
           { "id": "system.properties", "name": "system.properties" },
           { "id": "fess.json", "name": "fess.json" },
           { "id": "doc.json", "name": "doc.json" },
+          { "id": "chat_log.ndjson", "name": "chat_log.ndjson" },
           { "id": "click_log.ndjson", "name": "click_log.ndjson" },
           { "id": "favorite_log.ndjson", "name": "favorite_log.ndjson" },
           { "id": "search_log.ndjson", "name": "search_log.ndjson" },
           { "id": "user_info.ndjson", "name": "user_info.ndjson" }
         ],
-        "total": 10
+        "total": 11
       }
     }
 
@@ -112,7 +113,7 @@ Backup API是用于参照和下载 |Fess| 备份对象数据的API。
      - 索引的映射定义文件（``fess_indices/fess.json`` / ``fess_indices/fess/doc.json``）本身，按原样返回（``application/octet-stream``）
    * - ``*.bulk`` 或不带扩展名的索引名
      - 对与对象名同名的索引进行滚动（scroll）生成的批量数据（``application/octet-stream``）。去除 ``.bulk`` 后的名称作为索引名处理。
-   * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log``）
+   * - ``*.ndjson`` （``search_log`` / ``user_info`` / ``click_log`` / ``favorite_log`` / ``chat_log``）
      - 对应日志的NDJSON数据（``application/x-ndjson``）
 
 .. note::

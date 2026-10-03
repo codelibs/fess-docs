@@ -139,6 +139,20 @@ Damit werden die Versionsliste, die JARs und ihre Prüfsummen aus diesem einen M
 bezogen, etwa einem internen Mirror, statt aus den standardmäßigen Release- und
 Snapshot-Repositories und von GitHub.
 
+``--repository`` akzeptiert auch eine URL, die mit ``file:///`` beginnt. Legen Sie auf einem Server
+ohne Internetzugang eine Kopie des Maven-Repositorys ab und geben Sie dieses Verzeichnis an. Anzugeben
+ist das Verzeichnis, das die Verzeichnisse der einzelnen Plugins enthält (``<name>/maven-metadata.xml``
+usw.), also die Stelle, die ``https://maven.codelibs.org/release/org/codelibs/fess/`` des
+Standard-Repositorys entspricht. Versionen werden wie bei einem HTTP-Repository aufgelöst und
+Prüfsummen ebenso geprüft.
+
+::
+
+    $ bin/fess-setup install plugin fess-ds-csv --repository file:///opt/maven-repo/org/codelibs/fess/
+
+Ein anderes Schema als ``http``, ``https`` und ``file`` oder eine URL ohne Schema wird mit einer
+einzeiligen Fehlermeldung abgelehnt.
+
 install plugin
 --------------
 
@@ -158,6 +172,14 @@ Maven-Repository veröffentlicht. Ein Entwicklungs-Build von |Fess| installiert 
 Snapshot-Builds seiner eigenen Versionslinie und bevorzugt diese.
 
 Beispiele finden Sie unter :doc:`../admin/plugin-guide`.
+
+Installiert werden können nur die Plugin-Typen, die |Fess| lädt: Namen, die mit ``fess-ds-``,
+``fess-ingest-``, ``fess-script-``, ``fess-webapp-``, ``fess-thumbnail-``, ``fess-crawler-``,
+``fess-llm-``, ``fess-storage-`` oder ``fess-sso-`` beginnen, also dieselben, die ``list plugins``
+anzeigt. Jeder andere Name (``fess-theme-*`` oder eine Bibliothek wie ``fess`` oder ``fess-crawler``)
+wird vor jedem Download mit einer einzeiligen Fehlermeldung und Exit-Code 2 abgelehnt. Wird einer von
+mehreren Namen abgelehnt, wird keiner installiert. Ein statisches Theme installieren Sie mit
+``install theme``.
 
 list plugins
 ------------
@@ -221,6 +243,10 @@ Bringen Sie in einer solchen Umgebung die JARs der Plugins selbst mit:
    Nach dem Start von |Fess| können Sie sie auch auf der Registerkarte „Lokal" der
    Plugin-Installationsseite in der Administrationsoberfläche hochladen; siehe :doc:`../admin/plugin-guide`.
 3. Starten Sie |Fess|. Wenn Sie die JARs während des Betriebs abgelegt haben, starten Sie es neu.
+
+Statt jedes JAR einzeln mitzubringen, können Sie auch den benötigten Teil des Maven-Repositorys (die
+Verzeichnisse ``org/codelibs/fess/<name>/``) auf den Server kopieren und mit ``install plugin`` und
+``--repository file:///...`` installieren. Auch dabei werden die Prüfsummen geprüft.
 
 Themes verwalten
 ================

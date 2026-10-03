@@ -44,6 +44,9 @@ En caso de éxito (HTTP 200, UiConfigResponse), se devuelve una respuesta con el
         },
         "features": {
           "user_favorite": false,
+          "search_history": true,
+          "search_export": false,
+          "user_tag": false,
           "popular_word": true,
           "suggest_search_log": true,
           "suggest_documents": true,
@@ -186,6 +189,15 @@ Todos los campos son obligatorios.
    * - ``user_favorite``
      - boolean
      - Si la función de favoritos de usuario está habilitada.
+   * - ``search_history``
+     - boolean
+     - Si el historial de búsqueda (``GET /api/v2/search-history``) está disponible (``true`` cuando ``search.history.enabled`` y el registro de búsqueda están habilitados).
+   * - ``search_export``
+     - boolean
+     - Si la exportación de resultados de búsqueda (``GET /api/v2/documents/export``) está habilitada (``api.search.export``).
+   * - ``user_tag``
+     - boolean
+     - Si las etiquetas de usuario (``/api/v2/documents/{docId}/tags``) están habilitadas (``user.tag.enabled``).
    * - ``popular_word``
      - boolean
      - Si la función de palabras populares está habilitada.
