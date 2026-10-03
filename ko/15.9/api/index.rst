@@ -22,6 +22,7 @@
    :caption: 검색 API
 
    api-search
+   api-export
    api-label
    api-popularword
    api-suggest
@@ -40,6 +41,8 @@
    :caption: 사용자 기능 API
 
    api-favorite
+   api-search-history
+   api-tag
    api-click
    api-cache
 

@@ -22,6 +22,7 @@ the AI chat API, request and response formats, and authentication.
    :caption: Search APIs
 
    api-search
+   api-export
    api-label
    api-popularword
    api-suggest
@@ -40,6 +41,8 @@ the AI chat API, request and response formats, and authentication.
    :caption: User Feature APIs
 
    api-favorite
+   api-search-history
+   api-tag
    api-click
    api-cache
 

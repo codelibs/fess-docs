@@ -44,6 +44,9 @@ HTTP 方法            GET
         },
         "features": {
           "user_favorite": false,
+          "search_history": true,
+          "search_export": false,
+          "user_tag": false,
           "popular_word": true,
           "suggest_search_log": true,
           "suggest_documents": true,
@@ -186,6 +189,15 @@ features
    * - ``user_favorite``
      - boolean
      - 用户收藏功能是否启用。
+   * - ``search_history``
+     - boolean
+     - 搜索历史（ ``GET /api/v2/search-history`` ）是否可用（ ``search.history.enabled`` 和搜索日志都启用时为 ``true`` ）。
+   * - ``search_export``
+     - boolean
+     - 搜索结果导出（ ``GET /api/v2/documents/export`` ）是否启用（ ``api.search.export`` ）。
+   * - ``user_tag``
+     - boolean
+     - 用户标签功能（ ``/api/v2/documents/{docId}/tags`` ）是否启用（ ``user.tag.enabled`` ）。
    * - ``popular_word``
      - boolean
      - 热门词功能是否启用。

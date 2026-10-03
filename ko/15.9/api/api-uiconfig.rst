@@ -44,6 +44,9 @@ SPA 가 필요로 하는 초기 설정을 반환합니다.
         },
         "features": {
           "user_favorite": false,
+          "search_history": true,
+          "search_export": false,
+          "user_tag": false,
           "popular_word": true,
           "suggest_search_log": true,
           "suggest_documents": true,
@@ -186,6 +189,15 @@ features
    * - ``user_favorite``
      - boolean
      - 사용자 즐겨찾기 기능이 활성화되어 있는지 여부.
+   * - ``search_history``
+     - boolean
+     - 검색 기록( ``GET /api/v2/search-history`` )을 사용할 수 있는지 여부( ``search.history.enabled`` 와 검색 로그가 모두 활성화된 경우 ``true`` ).
+   * - ``search_export``
+     - boolean
+     - 검색 결과 내보내기( ``GET /api/v2/documents/export`` )가 활성화되어 있는지 여부( ``api.search.export`` ).
+   * - ``user_tag``
+     - boolean
+     - 태그 기능( ``/api/v2/documents/{docId}/tags`` )이 활성화되어 있는지 여부( ``user.tag.enabled`` ).
    * - ``popular_word``
      - boolean
      - 인기 검색어 기능이 활성화되어 있는지 여부.

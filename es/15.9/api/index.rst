@@ -23,6 +23,7 @@ petición y respuesta, y la autenticación.
    :caption: API de búsqueda
 
    api-search
+   api-export
    api-label
    api-popularword
    api-suggest
@@ -41,6 +42,8 @@ petición y respuesta, y la autenticación.
    :caption: API de funciones de usuario
 
    api-favorite
+   api-search-history
+   api-tag
    api-click
    api-cache
 

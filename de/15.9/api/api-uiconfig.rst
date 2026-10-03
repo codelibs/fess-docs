@@ -44,6 +44,9 @@ Bei Erfolg (HTTP 200, UiConfigResponse) wird eine Antwort im gemeinsamen Envelop
         },
         "features": {
           "user_favorite": false,
+          "search_history": true,
+          "search_export": false,
+          "user_tag": false,
           "popular_word": true,
           "suggest_search_log": true,
           "suggest_documents": true,
@@ -186,6 +189,15 @@ Alle Felder sind Pflichtfelder.
    * - ``user_favorite``
      - boolean
      - Gibt an, ob die Benutzerfavoriten-Funktion aktiviert ist.
+   * - ``search_history``
+     - boolean
+     - Ob der Suchverlauf (``GET /api/v2/search-history``) verfügbar ist (``true``, wenn ``search.history.enabled`` und das Suchprotokoll aktiviert sind).
+   * - ``search_export``
+     - boolean
+     - Ob der Export von Suchergebnissen (``GET /api/v2/documents/export``) aktiviert ist (``api.search.export``).
+   * - ``user_tag``
+     - boolean
+     - Ob Tags (``/api/v2/documents/{docId}/tags``) aktiviert sind (``user.tag.enabled``).
    * - ``popular_word``
      - boolean
      - Gibt an, ob die Beliebte-Wörter-Funktion aktiviert ist.
