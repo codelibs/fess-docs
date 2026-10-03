@@ -66,6 +66,12 @@ By default, you can search using the following fields:
    * - favorite_count
      - Number of times the document has been added as a favorite
      - Numeric
+   * - owner
+     - Account name of the file owner
+     - Keyword
+   * - last_modifier
+     - Last modifier of the file
+     - Keyword
 
 Table: Available Field List
 
@@ -79,6 +85,15 @@ If no field is specified, the search targets the title and content fields. Depen
 
 .. note::
     Depending on the crawl target, some fields may not have values registered. For example, anchor is registered only during web crawling, and lang is registered only when the HTML has a language attribute. Fields such as segment (a session ID representing the crawl execution unit) and doc_id (an internal ID assigned by the system) can also be specified, but they are not used in normal searches.
+
+owner and last_modifier are registered when crawling file servers and the like. owner holds the
+account name of the file owner obtained by SMB, file system and FTP crawls (a value such as
+``DOMAIN\alice`` becomes ``alice``). last_modifier holds the last author extracted from an Office
+document or similar, and falls back to the owner. No owner is registered for HTML from a web crawl.
+Search them as ``owner:alice`` or ``last_modifier:"Taro Yamada"``. In the bundled theme, the
+advanced search can specify the owner and the last modifier. Administrators can turn the fields on
+and off with ``crawler.document.file.owner.enabled`` and
+``crawler.document.file.last.modifier.enabled`` (both ``true`` by default).
 
 For HTML files, the title tag is stored in the title field, and the text under the body tag is stored in the content field.
 
