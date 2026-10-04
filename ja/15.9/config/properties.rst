@@ -302,6 +302,18 @@ Core
   * - api.search.scroll
     - Whether to enable scroll for API search.
     - ``false``
+  * - api.search.export
+    - Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export.
+    - ``false``
+  * - api.search.export.max.size
+    - Maximum number of documents written by one search result export.
+    - ``1000``
+  * - api.search.export.fields
+    - Fields written by the search result export (comma-separated). A field that is not an API response field is ignored.
+    - ``title,url_link,last_modified,content_length,filetype``
+  * - api.search.export.rate.limit.per.minute
+    - Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit.
+    - ``10``
   * - api.json.response.headers
     - Headers for API JSON response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
@@ -501,6 +513,7 @@ Index
     - | ``title=title:string``
       | ``Title=title:string``
       | ``dc:title=title:string``
+      | ``frontmatter.title=title:string``
 
 .. list-table:: Crawler HTML
   :header-rows: 1
@@ -584,6 +597,12 @@ Index
   * - crawler.document.file.default.exclude.search.patterns
     - Patterns to exclude for file search processing.
     - (empty)
+  * - crawler.document.file.owner.enabled
+    - Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it.
+    - ``true``
+  * - crawler.document.file.last.modifier.enabled
+    - Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it.
+    - ``true``
 
 .. list-table:: Crawler Cache
   :header-rows: 1
@@ -606,6 +625,15 @@ Index
   * - crawler.document.mimetype.extension.overrides
     - Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type).
     - (empty)
+  * - crawler.document.ocr.enabled
+    - Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command).
+    - ``false``
+  * - crawler.document.ocr.language
+    - Tesseract OCR languages, joined with '+' (e.g. jpn+eng).
+    - ``eng``
+  * - crawler.document.ocr.timeout
+    - Timeout in seconds for one Tesseract OCR run.
+    - ``120``
 
 .. list-table:: Indexer
   :header-rows: 1
@@ -732,6 +760,15 @@ Index
   * - index.field.last_modified
     - Field name for last modified date in the index.
     - ``last_modified``
+  * - index.field.etag
+    - Field name for the ETag response header of the crawled document in the index.
+    - ``etag``
+  * - index.field.owner
+    - Field name for the owner of the crawled file in the index.
+    - ``owner``
+  * - index.field.last_modifier
+    - Field name for the last modifier of the crawled file in the index.
+    - ``last_modifier``
   * - index.field.anchor
     - Field name for anchor in the index.
     - ``anchor``
@@ -1393,7 +1430,7 @@ Index
     - How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean.
     - ``rrf``
   * - rank.fusion.normalization.technique
-    - How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf.
+    - How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself.
     - ``min_max``
   * - rank.fusion.combination.weights
     - Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally.
@@ -1432,7 +1469,7 @@ Index
     - ``fess_basic_config.bulk,fess_config.bulk,fess_user.bulk,system.properties,fess.json,doc.json``
   * - index.backup.log.targets
     - Target log files for index backup.
-    - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+    - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
   * - index.backup.log.load.timeout
     - Timeout for loading index backup logs.
     - ``60000``
@@ -1461,6 +1498,15 @@ Index
   * - logging.click.max.queue.size
     - Maximum queue size for click logging.
     - ``10000``
+  * - logging.chat.max.queue.size
+    - Maximum queue size for chat usage logging.
+    - ``10000``
+  * - search.history.enabled
+    - Whether to record the search conditions of logged-in users for the search history.
+    - ``true``
+  * - search.history.size
+    - Maximum number of search history entries returned per user.
+    - ``10``
   * - user.tag.enabled
     - Whether logged-in users can tag documents. Each tag belongs to the user who created it.
     - ``false``
@@ -1731,6 +1777,48 @@ Web
   * - searchlog.process.batch_size
     - Batch size for search log processing.
     - ``100``
+  * - related_query.generate.days
+    - Number of days of search logs read when generating related queries from search logs.
+    - ``30``
+  * - related_query.generate.term.size
+    - Maximum number of terms generated per virtual host.
+    - ``100``
+  * - related_query.generate.query.size
+    - Maximum number of related queries generated per term.
+    - ``5``
+  * - related_query.generate.min.sessions
+    - Minimum number of distinct user sessions required for a term and for each of its related queries.
+    - ``3``
+  * - related_query.generate.session.interval
+    - Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement.
+    - ``10``
+  * - related_query.generate.seed.log.size
+    - Maximum number of search logs of a term read to find the sessions that searched it.
+    - ``1000``
+  * - related_query.generate.seed.session.size
+    - Maximum number of sessions per term whose follow-up searches are read.
+    - ``200``
+  * - related_query.generate.log.fetch.size
+    - Maximum number of follow-up search logs read per term.
+    - ``2000``
+  * - related_query.generate.query.min.length
+    - Minimum length (in characters) of a generated term or related query.
+    - ``2``
+  * - related_query.generate.query.max.length
+    - Maximum length (in characters) of a generated term or related query.
+    - ``50``
+  * - docreport.duplicate.group.size
+    - docreport Maximum number of duplicate groups the document report screen shows, largest first.
+    - ``100``
+  * - docreport.duplicate.docs.size
+    - Maximum number of documents the document report screen lists for each duplicate group.
+    - ``10``
+  * - docreport.duplicate.export.page.size
+    - Number of content signatures read per request when the duplicate report is downloaded as CSV.
+    - ``10000``
+  * - docreport.dormant.days
+    - Default number of days since the last modification after which a document counts as dormant.
+    - ``365``
   * - thumbnail.html.image.min.width
     - Minimum width for HTML images in thumbnails.
     - ``100``
@@ -2254,9 +2342,15 @@ Web
   * - rag.chat.enabled
     - Whether RAG chat feature is enabled.
     - ``false``
+  * - rag.chat.log.enabled
+    - Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded.
+    - ``true``
   * - rag.chat.context.max.documents
     - Chat generation settings.
     - ``5``
+  * - rag.chat.query.regeneration.max.count
+    - Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables).
+    - ``2``
   * - rag.chat.session.timeout.minutes
     - Session settings.
     - ``30``
@@ -2290,6 +2384,12 @@ Web
   * - rag.chat.history.titles.max.count
     - Maximum number of referenced document titles included per turn in smart_summary history mode.
     - ``5``
+  * - rag.chat.document.max.parts
+    - Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn.
+    - ``10``
+  * - rag.chat.response.language
+    - Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language
+    - ``browser``
   * - index.export.path
     - Index Export
     - ``/var/lib/fess/export``
@@ -2347,6 +2447,12 @@ Web
   * - theme.upload.attic.retention.days
     - Retention (days) for a replaced theme directory before the cleanup sweep removes it.
     - ``7``
+  * - theme.repositories
+    - Repository URLs (comma separated) that static themes are downloaded from.
+    - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+  * - theme.index.frame.ancestors
+    - Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header).
+    - ``'none'``
   * - theme.api.csrf.server.origins
     - Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-\* headers, then from the servlet request.
     - (empty)

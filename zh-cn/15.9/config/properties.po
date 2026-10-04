@@ -159,6 +159,18 @@ msgstr ""
 msgid "Whether to enable scroll for API search."
 msgstr ""
 
+msgid "Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export."
+msgstr ""
+
+msgid "Maximum number of documents written by one search result export."
+msgstr ""
+
+msgid "Fields written by the search result export (comma-separated). A field that is not an API response field is ignored."
+msgstr ""
+
+msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
+msgstr ""
+
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
 msgstr ""
 
@@ -420,6 +432,12 @@ msgstr ""
 msgid "Patterns to exclude for file search processing."
 msgstr ""
 
+msgid "Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it."
+msgstr ""
+
+msgid "Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it."
+msgstr ""
+
 msgid "Crawler Cache"
 msgstr ""
 
@@ -436,6 +454,15 @@ msgid ",text/plain,application/xml,application/pdf,application/msword,applicatio
 msgstr ""
 
 msgid "Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type)."
+msgstr ""
+
+msgid "Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command)."
+msgstr ""
+
+msgid "Tesseract OCR languages, joined with '+' (e.g. jpn+eng)."
+msgstr ""
+
+msgid "Timeout in seconds for one Tesseract OCR run."
 msgstr ""
 
 msgid "Indexer"
@@ -550,6 +577,15 @@ msgid "Field name for cache status in the index."
 msgstr ""
 
 msgid "Field name for last modified date in the index."
+msgstr ""
+
+msgid "Field name for the ETag response header of the crawled document in the index."
+msgstr ""
+
+msgid "Field name for the owner of the crawled file in the index."
+msgstr ""
+
+msgid "Field name for the last modifier of the crawled file in the index."
 msgstr ""
 
 msgid "Field name for anchor in the index."
@@ -1068,7 +1104,7 @@ msgstr ""
 msgid "How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean."
 msgstr ""
 
-msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf."
+msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself."
 msgstr ""
 
 msgid "Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally."
@@ -1123,6 +1159,15 @@ msgid "Maximum queue size for search logging."
 msgstr ""
 
 msgid "Maximum queue size for click logging."
+msgstr ""
+
+msgid "Maximum queue size for chat usage logging."
+msgstr ""
+
+msgid "Whether to record the search conditions of logged-in users for the search history."
+msgstr ""
+
+msgid "Maximum number of search history entries returned per user."
 msgstr ""
 
 msgid "Whether logged-in users can tag documents. Each tag belongs to the user who created it."
@@ -1378,6 +1423,48 @@ msgid "Request headers to include in search log."
 msgstr ""
 
 msgid "Batch size for search log processing."
+msgstr ""
+
+msgid "Number of days of search logs read when generating related queries from search logs."
+msgstr ""
+
+msgid "Maximum number of terms generated per virtual host."
+msgstr ""
+
+msgid "Maximum number of related queries generated per term."
+msgstr ""
+
+msgid "Minimum number of distinct user sessions required for a term and for each of its related queries."
+msgstr ""
+
+msgid "Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement."
+msgstr ""
+
+msgid "Maximum number of search logs of a term read to find the sessions that searched it."
+msgstr ""
+
+msgid "Maximum number of sessions per term whose follow-up searches are read."
+msgstr ""
+
+msgid "Maximum number of follow-up search logs read per term."
+msgstr ""
+
+msgid "Minimum length (in characters) of a generated term or related query."
+msgstr ""
+
+msgid "Maximum length (in characters) of a generated term or related query."
+msgstr ""
+
+msgid "docreport Maximum number of duplicate groups the document report screen shows, largest first."
+msgstr ""
+
+msgid "Maximum number of documents the document report screen lists for each duplicate group."
+msgstr ""
+
+msgid "Number of content signatures read per request when the duplicate report is downloaded as CSV."
+msgstr ""
+
+msgid "Default number of days since the last modification after which a document counts as dormant."
 msgstr ""
 
 msgid "Minimum width for HTML images in thumbnails."
@@ -1899,7 +1986,13 @@ msgstr ""
 msgid "Whether RAG chat feature is enabled."
 msgstr ""
 
+msgid "Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded."
+msgstr ""
+
 msgid "Chat generation settings."
+msgstr ""
+
+msgid "Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables)."
 msgstr ""
 
 msgid "Session settings."
@@ -1933,6 +2026,12 @@ msgid "History content mode for assistant messages. smart_summary           - dr
 msgstr ""
 
 msgid "Maximum number of referenced document titles included per turn in smart_summary history mode."
+msgstr ""
+
+msgid "Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn."
+msgstr ""
+
+msgid "Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language"
 msgstr ""
 
 msgid "Index Export"
@@ -1990,6 +2089,12 @@ msgid "Compressed bytes read before the cumulative zip ratio check applies; smal
 msgstr ""
 
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
+msgstr ""
+
+msgid "Repository URLs (comma separated) that static themes are downloaded from."
+msgstr ""
+
+msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
 msgstr ""
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
